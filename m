@@ -2,118 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0EF2C432BE
-	for <linux-media@archiver.kernel.org>; Sat, 31 Jul 2021 08:13:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AB83C432BE
+	for <linux-media@archiver.kernel.org>; Sat, 31 Jul 2021 16:18:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A883660F94
-	for <linux-media@archiver.kernel.org>; Sat, 31 Jul 2021 08:13:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0316160EFF
+	for <linux-media@archiver.kernel.org>; Sat, 31 Jul 2021 16:18:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbhGaINf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 31 Jul 2021 04:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
+        id S229997AbhGaQSo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 31 Jul 2021 12:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbhGaINe (ORCPT
+        with ESMTP id S229449AbhGaQSn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 31 Jul 2021 04:13:34 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB19C06175F;
-        Sat, 31 Jul 2021 01:13:28 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id t3so11731463plg.9;
-        Sat, 31 Jul 2021 01:13:28 -0700 (PDT)
+        Sat, 31 Jul 2021 12:18:43 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C7CC06175F;
+        Sat, 31 Jul 2021 09:18:36 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id e25-20020a05600c4b99b0290253418ba0fbso8368107wmp.1;
+        Sat, 31 Jul 2021 09:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pSqWDBwjSHpo0CpUmYzJgqTp6C8xaprSXoTH68RUk9A=;
-        b=uByXvFJLrQigPJrd54cWKzjfeHhmv/59d2ORQVsOva+5sc8NUkvICieZBg18ItO2Bl
-         H+jyxMqxtR0naDcAwKzLvkcaHmdzHLlTRV2Qd5tSi0sHOfJJSg7jY/ebFfZeOmmti3qi
-         1vVVuxwkQwYobrzkHkFpnjjzAjyaH6FXU2fi77dkQQkKugCrqjK1T9MFCse+PXzQRtIY
-         XP0TZajX/Rxe7SI2zQ5gYjE3+38td6o/gj0n5cl9efRbBGYGQYjXqzIiEadVQx9HQlGx
-         ta+9+0HadNRRG8JvzJnzj1NnY2ljjQUf+MbJ1vsR007GS4MkFmVY6+qUL3xODTt8ppuZ
-         CEMw==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=yI/Wr23MR+W9LloBnzrB0gA6UsVFeoNhI++2eqGHMQs=;
+        b=DzjBCpnxG5fSnrBM0ecHkKe45c5GsfpvnutWMo9x5KVtbDE85p5+Qe5bDfS6n4p5Pr
+         20SC++mfP42lzuRZ+A+CKRzPWVjpABAtXOn0C1D1k8fCKef4S+8ea0Xc6WgpVjmNACSq
+         /oVZv5X9vYkPLmjozqvOc1mZ5ykDt2AQ6qzuY3d4TZOBSlO/BiVZL277lv13Awt1m5Md
+         EQ0UksMUbqzGLwLNSfxYNBetc4BdwWufCAILStDr2yTJ4no+febvt4rcW/5gs5wlYC6T
+         YbVxRwig2xX4h0rg1LG6fuUu6OFC2KWJdK50aj7j1BieEh49oHi4LUqH3Q/WQCoZXpq6
+         KGSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pSqWDBwjSHpo0CpUmYzJgqTp6C8xaprSXoTH68RUk9A=;
-        b=STnuAzggIMj5UrjyYlZ1U99BvLdaKf9JGUJjJINNIpX9V9+IrmX+JeDwRajezaNLm2
-         F9dF6VrAyDrqRbtisLEgWV90ZaDhmd5tsS4IQWaq9Q3cAmsZMUvPoEamMAH0fzFtQiAy
-         yqR4Ec2gmHpUTvArVtnHQr1iP6ngsdHXdcSP+fNX/QHynTocRugN5nPkEFUJG53sVml2
-         e1JgcDIvebXjFQh1ac3kgBv8CMI3uPArlqtBQUt3cdbEh4G4BXmQakWnKJ1LdkWqPve5
-         xTzHrnHhCqAbMYrV0W2+/MD3cPVC7cYFndFNHbVJaw1hc+jvlnSbMDR9OE6HpKXmZLu3
-         GNKQ==
-X-Gm-Message-State: AOAM531W/XkuHX44ZXHZx6oQazFRqr4nlVaBK8W3cirYk4CGsRqsxwUn
-        /Wk3iMHeJDo/WQ/ZrV1tWwc=
-X-Google-Smtp-Source: ABdhPJw3sUv7SWXCtHAKD2+0aZD/9TU7DS9fJq1J3MW2qhUDFcv1S/rMnj/DfvR5PrG6iihq7vzA3Q==
-X-Received: by 2002:a62:30c5:0:b029:31e:fa6d:1738 with SMTP id w188-20020a6230c50000b029031efa6d1738mr6786010pfw.55.1627719207841;
-        Sat, 31 Jul 2021 01:13:27 -0700 (PDT)
-Received: from localhost.localdomain ([45.135.186.29])
-        by smtp.gmail.com with ESMTPSA id c7sm5314475pgq.22.2021.07.31.01.13.23
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=yI/Wr23MR+W9LloBnzrB0gA6UsVFeoNhI++2eqGHMQs=;
+        b=nX+eWT5PEXgmcZ1EJJDbzpQ5/ciTDALwqhRHR65UC5uwCt9Of4n9Dpn5ZFuDVW7fld
+         u45ekqEqXatbEjEK+lH5u6TtsL9QyKcMa5ok0o29+SJpxKdwJ2sYgKtQohtJROWd4C37
+         8MJmso8MKsqqkZZTYzdoPoY80GZvsU3SxXRvkL1BKgA2sJN/Vm2YTDirIaupJpcxZWoM
+         cQXHa4xkLdopeCqI61oEdDu4Rk2C/05vfyVc9C+znoXAixWwvE0KxNAR19/Xh3pkA9SL
+         NDiCokQ/fx9lEelLPHDwDnjP8guXS3etZgJW/9Y50X4BrSfcD7g8GWF5O9PH9GJAjuiM
+         gRNw==
+X-Gm-Message-State: AOAM53193OWpntqtFGS2p+2eUYxGqOFuI+ApFdArm94h+PhQpMPKPpQN
+        CPouwrbsVA0b01WKI8eFMDU=
+X-Google-Smtp-Source: ABdhPJx0EowHpW03FyJV6F7pFvb/agrGmB0WrAXANSei9+VyNZBwJEDvB3BAPZECe5vokFR843ZE/Q==
+X-Received: by 2002:a1c:a98f:: with SMTP id s137mr8825029wme.40.1627748314781;
+        Sat, 31 Jul 2021 09:18:34 -0700 (PDT)
+Received: from pc ([196.235.233.206])
+        by smtp.gmail.com with ESMTPSA id u11sm5163842wrp.26.2021.07.31.09.18.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Jul 2021 01:13:27 -0700 (PDT)
-From:   Tuo Li <islituo@gmail.com>
-To:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        sumit.semwal@linaro.org, airlied@redhat.com,
-        Felix.Kuehling@amd.com, Oak.Zeng@amd.com, nirmoy.das@amd.com,
-        tzimmermann@suse.de, Philip.Yang@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, baijiaju1990@gmail.com,
-        Tuo Li <islituo@gmail.com>, TOTE Robot <oslab@tsinghua.edu.cn>
-Subject: [PATCH] drm/amdgpu: fix possible null-pointer dereference in amdgpu_ttm_tt_unpopulate()
-Date:   Sat, 31 Jul 2021 01:13:06 -0700
-Message-Id: <20210731081306.86523-1-islituo@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 31 Jul 2021 09:18:34 -0700 (PDT)
+Date:   Sat, 31 Jul 2021 17:18:31 +0100
+From:   Salah Triki <salah.triki@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        gregkh@linuxfoundation.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: stkwebcam: update the reference count of the usb
+ device structure
+Message-ID: <20210731161831.GA909851@pc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The variable ttm is assigned to the variable gtt, and the variable gtt
-is checked in:
-  if (gtt && gtt->userptr)
+Use usb_get_dev() to increment the reference count of the usb device
+structure in order to avoid releasing the structure while it is still in
+use. And use usb_put_dev() to decrement the reference count and thus,
+when it will be equal to 0 the structure will be released.
 
-This indicates that both ttm and gtt can be NULL.
-If so, a null-pointer dereference will occur:
-  if (ttm->page_flags & TTM_PAGE_FLAG_SG)
-
-Also, some null-pointer dereferences will occur in the function
-ttm_pool_free() which is called in:
-  return ttm_pool_free(&adev->mman.bdev.pool, ttm);
-
-To fix these possible null-pointer dereferences, the function returns
-when ttm is NULL.
-
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Tuo Li <islituo@gmail.com>
+Signed-off-by: Salah Triki <salah.triki@gmail.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Change since v1:
+	Modification of the description
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index 3a55f08e00e1..0216ca085f11 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -1146,7 +1146,10 @@ static void amdgpu_ttm_tt_unpopulate(struct ttm_device *bdev,
- 	struct amdgpu_ttm_tt *gtt = (void *)ttm;
- 	struct amdgpu_device *adev;
+ drivers/media/usb/stkwebcam/stk-webcam.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/stkwebcam/stk-webcam.c b/drivers/media/usb/stkwebcam/stk-webcam.c
+index a45d464427c4..3b14679829ed 100644
+--- a/drivers/media/usb/stkwebcam/stk-webcam.c
++++ b/drivers/media/usb/stkwebcam/stk-webcam.c
+@@ -1309,7 +1309,7 @@ static int stk_camera_probe(struct usb_interface *interface,
+ 	init_waitqueue_head(&dev->wait_frame);
+ 	dev->first_init = 1; /* webcam LED management */
  
--	if (gtt && gtt->userptr) {
-+	if (ttm == NULL)
-+		return;
-+
-+	if (gtt->userptr) {
- 		amdgpu_ttm_tt_set_user_pages(ttm, NULL);
- 		kfree(ttm->sg);
- 		ttm->sg = NULL;
+-	dev->udev = udev;
++	dev->udev = usb_get_dev(udev);
+ 	dev->interface = interface;
+ 	usb_get_intf(interface);
+ 
+@@ -1376,6 +1376,7 @@ static void stk_camera_disconnect(struct usb_interface *interface)
+ 
+ 	usb_set_intfdata(interface, NULL);
+ 	unset_present(dev);
++	usb_put_dev(interface_to_usbdev(interface));
+ 
+ 	wake_up_interruptible(&dev->wait_frame);
+ 
 -- 
 2.25.1
 
