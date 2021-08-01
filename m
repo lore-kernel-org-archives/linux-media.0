@@ -2,94 +2,181 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E868CC4338F
-	for <linux-media@archiver.kernel.org>; Sun,  1 Aug 2021 14:41:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 450DAC4338F
+	for <linux-media@archiver.kernel.org>; Sun,  1 Aug 2021 17:19:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BDF7E60F48
-	for <linux-media@archiver.kernel.org>; Sun,  1 Aug 2021 14:41:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2914760F5A
+	for <linux-media@archiver.kernel.org>; Sun,  1 Aug 2021 17:19:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbhHAOmC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 1 Aug 2021 10:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbhHAOmB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 1 Aug 2021 10:42:01 -0400
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00516C06175F
-        for <linux-media@vger.kernel.org>; Sun,  1 Aug 2021 07:41:53 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 67BD5C636F; Sun,  1 Aug 2021 15:41:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1627828910; bh=m7ZlxCJqizc2sVd5PaLC0jlI6IySpBaTvoyJ5LCgbE4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rhn9ZiJFLBZs6GzCSD4BvqXAxTAZAGHHB+r07zPIL+AOLPT1u/yVf7gzWjZoyezuX
-         T7ZZlUSpygJWuRvQkKCz9g1SLlAgz5Z+uao5HgcSl0ZmGXzDGKS1YRJZLj3tmORb0N
-         N4Z3+P0xqVY2QLsve7lJlM4D9CDjndPGixPvxbvHpo5Q2F4I23DJ1I+KaL+Z3BbkwW
-         XOySSZcgG4Cvg8VpsOLin9H7U2pdVimfd3kH0X6Nob3g+McVzK8z9kdGHtsVSRW4/J
-         g0dBmswqoTAtMambEejPWEyCjEZplEgJYEyerbOWYPOnN/paMPcvUi0qqgqtPW0F4+
-         t8S2nmk0jPuIg==
-Date:   Sun, 1 Aug 2021 15:41:50 +0100
-From:   Sean Young <sean@mess.org>
-To:     nil Yi <teroincn@gmail.com>
-Cc:     crope@iki.fi, linux-media@vger.kernel.org
-Subject: Re: [BUG]: drivers: media: dvb-frontends: rtl2832_sdr.c: a dangling
- pointer may cause double free
-Message-ID: <20210801144150.GA17214@gofer.mess.org>
-References: <CANTwqXCapbBTXEx1ow9QBw_h0mqCq_myRvmTN=2KpsEEBBJFKg@mail.gmail.com>
+        id S229748AbhHARTZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 1 Aug 2021 13:19:25 -0400
+Received: from mail-sn1anam02on2082.outbound.protection.outlook.com ([40.107.96.82]:35798
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229592AbhHARTW (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 1 Aug 2021 13:19:22 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZZMOOb5j41esWGAMoc7uWwlxMHlIojAH2JXJ/hk2waa6WjnoQgvxjAlipR5LuN1Hd/2OxGNOtNKAW0+94AwnqNBAze/Seb3XDRAZKZ2FZODbwKQHW2haXdSzWf7oRMvDb9aL1wEuj34DDM3ptaHTw0qUR0aShndeibjLH3JwxN3qEtYGBZ78UVZHR7ev6wDSUhnvRNw+aEXDOPV/jIipB3VEaSI3p7/WlzpsgKVeVqhgJDeVLIzKi1M4MBOqo5SxaUYYmq212XS2N0JXNoC88UZ+WziIGgnWBB3rYNC3aOCYLnRf9ZFlxjYfJTs3zIXFx0fgUZAqEPOEB0P30BbXBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p+goaxgEZ8Go68mPw8QgvPAfymMsoCOssqgo+tCkIoU=;
+ b=eONv179FTyCrzgTAXpCq8RNIqilk2+nRu1ILNbbAVf2osED2MxCQGpIL5z30tU2LnroeoKzpLiUwu7hlntMtvq7F/1kwIB/9HSK9B+EDXVE5yLpUhjMgssk02dSXCY+5Ew7wYdSCH3zeKeIBO6SyKJOTeqt3VeZQwvfSXQKVfdpyz7rV0jg8h1Eg4KOuItaV1vrs8SFS/kD1G2ZW8PHPkSU3QJVAIsmuWZK5UGVM+fq2GaUh8no+OfflGhPpswHiVg34CE/CtjdcQ+BcKlInOiGpNQWcmiT9JfZMVqJsNSDXOV1Q08a+maARWkjUf1Q4VRgaYK7mo8+rZ7SOec4bWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p+goaxgEZ8Go68mPw8QgvPAfymMsoCOssqgo+tCkIoU=;
+ b=q0xf4RNdxPCybuUa8pIOalClL4lnlIs3D55eRohf+huAWKkvSNS0ZGFG+UDQcJ1eXWnA9wCdbbqOm4jmBDtMelqyYigFD9rCp1XIjjDOj2UNNdbTNTUkIsDZ8G/FfXSf6UeSEOFmFrWi4Tr7SD1igvGO6oZ632wAwzKVtVslAzI=
+Authentication-Results: tsinghua.edu.cn; dkim=none (message not signed)
+ header.d=none;tsinghua.edu.cn; dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB3775.namprd12.prod.outlook.com (2603:10b6:208:159::19)
+ by MN2PR12MB3903.namprd12.prod.outlook.com (2603:10b6:208:15a::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.21; Sun, 1 Aug
+ 2021 17:19:08 +0000
+Received: from MN2PR12MB3775.namprd12.prod.outlook.com
+ ([fe80::6c9e:1e08:7617:f756]) by MN2PR12MB3775.namprd12.prod.outlook.com
+ ([fe80::6c9e:1e08:7617:f756%5]) with mapi id 15.20.4373.026; Sun, 1 Aug 2021
+ 17:19:08 +0000
+Subject: Re: [PATCH] drm/amdgpu: fix possible null-pointer dereference in
+ amdgpu_ttm_tt_populate()
+To:     Tuo Li <islituo@gmail.com>, alexander.deucher@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        sumit.semwal@linaro.org, airlied@redhat.com,
+        Felix.Kuehling@amd.com, Oak.Zeng@amd.com, nirmoy.das@amd.com,
+        tzimmermann@suse.de, Philip.Yang@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, baijiaju1990@gmail.com,
+        TOTE Robot <oslab@tsinghua.edu.cn>
+References: <20210731080437.74539-1-islituo@gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Message-ID: <53ef6ff7-f793-5de4-4ab4-0efbfbfc0a54@amd.com>
+Date:   Sun, 1 Aug 2021 19:19:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+In-Reply-To: <20210731080437.74539-1-islituo@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-ClientProxiedBy: PR3P189CA0043.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:102:53::18) To MN2PR12MB3775.namprd12.prod.outlook.com
+ (2603:10b6:208:159::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANTwqXCapbBTXEx1ow9QBw_h0mqCq_myRvmTN=2KpsEEBBJFKg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2a02:908:1252:fb60:5926:2d3e:756a:8d42] (2a02:908:1252:fb60:5926:2d3e:756a:8d42) by PR3P189CA0043.EURP189.PROD.OUTLOOK.COM (2603:10a6:102:53::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.20 via Frontend Transport; Sun, 1 Aug 2021 17:19:05 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d2910e0e-6e03-4ff8-a515-08d955107858
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3903:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3903706BA39E51121C48DF2283EE9@MN2PR12MB3903.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TgQZERCJp6PkOZ35ESf4dUYb1HmZL0u0ek8E/7ieEfmIUD9wg6dOCI6sk9k/TsD6U59C3N3F5rTqqKhp8AzU+/jueLNktpdbxrg27OzUX3hJ2zuX9BZgOa0Qz9ldba3PqDbsICa+0Ou2gISxV6UrBkwC0KON3t1hqYUuaaz5hqzC253EGjZi13iwyYOZrQmykBL4zuD56ik5V4GMV2ChqlEqBuomG2RhU5N9yUUUh9iUW33hK/jjM1wi/KNB1nNeN6CKbSJKpDY4f/KXSoTH4+GLtK1Phte0wh2bJth8FqZPypxjjdN3V2iqRlMcIedQAElvn40Z5e02xiPQkyXsVuekLZ8RcP+Hv1TRSyUkraqNlrT6o6UyTlDuNqb6rKVJJBSeMNtduyz3x8rpjTXJzL8MF9pYFBL5bVEF2uNwxl8u4Zx6B+EmO8b94n6avbHJ3yOYvznDcZ9zEsjsfBAXB5vf7fFWmJ7ysClFzMtYC4phhPaRKxLtbOzcLqQGhSlDkFFGclKrTob8A1rRxeOw8TVaPqb/5sz7IjRYQe1EoKbVchIFkPj2MNtYWZAtm5p3BxRg6thZtm5kGoxJL/Gi4Ft9pPHLgera9D4UyurZtbFqTyUl/UXV7YslN6DM5pzQtzn4sHdV+WajPgM/64gN6El93vHwNLpv2E7DSyxwQQnXUNg9Ek9SVI1ZVscEullil7V694Oojhv+OIRWL8a7sRUszeRDtmdxP2yZC9JIylkg8MX0itoBGHIPiBX5MF5n
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3775.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(39860400002)(366004)(136003)(396003)(346002)(2616005)(5660300002)(316002)(2906002)(31696002)(6636002)(66946007)(31686004)(478600001)(186003)(83380400001)(8676002)(36756003)(6486002)(7416002)(8936002)(921005)(38100700002)(66476007)(66556008)(4326008)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MXhXVmgrNks1azNOME9ST3dJTUNnSXpSMFpxNXFGd2E0a294SUd0QmtFeTRE?=
+ =?utf-8?B?ZVdpMkZCVjJBMEZrcGdUK2FBUUwza1dubzNiSU9hUTdqbkxFaWVxcWlUckw5?=
+ =?utf-8?B?R1FGOHYveS80bW5peUtmNnhKd2dNM3d6emgrek1NNllmVmhmdmFrRHJuWEV4?=
+ =?utf-8?B?Rk40aElHUm96RnlrVncrVWROTGlCZ1orc2JzVXNMVDh1UkdlVkdORE8yTko4?=
+ =?utf-8?B?K1gwRHAvYWtNWHVBSG1mcVdJQVlydWRlUnd2OVMzRENaRVUwT0tCd0lTNzhR?=
+ =?utf-8?B?bURpcHpQQWJCbnNVc0w4MVo4ektEMVRlZVNxbUZFQ0ovWlB1ajkvdEFCZTVR?=
+ =?utf-8?B?T21tUVFOeGpDWFdhaEZBVmQxdGNjTmMxUTgrSXhEQzJ0OVhITW0yYXU0em82?=
+ =?utf-8?B?MytGWjVoSHBKSHhMRi9qbDlGL2lxWWJjeUlKd0JpWEE0bCtiQkxmaW5vOW54?=
+ =?utf-8?B?Zk14SkFvZmFBYnQybEh6cVdsRDZDQ0RIQm01Q1N1ZERpbmhaN3ZEYVZoZVNY?=
+ =?utf-8?B?OGo5Z05qTUhlZ0ZKM2VVWGcvaGJmK3VVNWZvL0JNRDdabS9vQ2oyVzU1Rnov?=
+ =?utf-8?B?c005RmpSNmo1cGphVzRLOWlQd2l2ejBmVFpPL2I2ajJUYzJObWxFaEl2NUN1?=
+ =?utf-8?B?ZkorRXZjK21GVDd5YzM3QkZUZnBMUnQ1RHV6YzJjZnVrUEdsY1c4L1FQSmZR?=
+ =?utf-8?B?NEtjY0RYbnZwa2JDUVlBbzZ4cGo1bTFtclBMYU9qeWpaZVZPREprb0lVbkdM?=
+ =?utf-8?B?a1p3aytxUTliOG0yNEQxZ0crY1dGSW1YaWhPR0JJNFBWb3JNVHM3U0NDazZZ?=
+ =?utf-8?B?N1IwdnVVR2xCNE95SENBVC9hSFFrMk9xbmw3bU9YQ09OMFF2OHhKNDlOcW5Q?=
+ =?utf-8?B?NlIxRDNmbmxLN0U1MGFlc2xZdTJMVm1xcVFmWjMxbmo1VDE5WC9rRW5YUGdt?=
+ =?utf-8?B?dlFyblVwSnMxWFk5TDYreGNzUk05SG1XQUduYmZlaTk2dmFvRTNzYmQ4c1Z1?=
+ =?utf-8?B?aUo2dWp4Mjkzd21PNm9neE5jVVlwa2VsaXRWM0UvdWZxNXR5RjBYQ21JZURE?=
+ =?utf-8?B?TzdNSExQVHlBL1lEcVcyQXZxbFozQnhXL01XcjQ0MDVwTDdEcURnYkZKNU0y?=
+ =?utf-8?B?ZzBTSXg3TjlZSHlsZFVGekUydk9nWEpOQjIwNHlvZDYrK0dLbEgvQVc0L3JT?=
+ =?utf-8?B?bHROWjJCOFhrdGtiS0FMbUtscFNObUM3cUJIeHZqMmxRak1WM2dGM3BGeTZq?=
+ =?utf-8?B?Sk5JUHdKY1BjMHJFWXBMTVloM1RHSnhVbnZnelJ0TFNqUnhFK01TS21QckxK?=
+ =?utf-8?B?WHBFb3g4aFlQcC9KQVdJdFc5ZWpaMGlBanozcGxTVnliK0FpaEJFeUR3aGg5?=
+ =?utf-8?B?MkhHR3V2T0ExWldOSEZyL1NndjVHWUFhR2lrNTE2bjNLT3B1am03amh6ZS9j?=
+ =?utf-8?B?WGpDZHgrM2czTGhYdHFtT3NSTENZbkM5M2NTMFZpbkpkelhKUTVXZThvYW0x?=
+ =?utf-8?B?Vmo0c0RKU2xyN2RPZFNRNngxNjdIeFk3L1RmcXZCNlJvbTV0Uy9rem4rS2xq?=
+ =?utf-8?B?OTFRUVExYmZOdXc2RDA5NFRDcWJ3NWhMR1MxQVlWT2U2NUxSeUJhNXFLeWs1?=
+ =?utf-8?B?amJsc1ZjVUZRNmpsZkdKcXA2NnNiaDNKbm5vVWNhc3F6ZkNQM0w3WGUyY2xx?=
+ =?utf-8?B?ODcwMnplZGlxYWswWVZURXlBMzRDd25OSnJoYTVlYThBYmg0NFJlZDVLQ3BP?=
+ =?utf-8?B?SXlyeHBocm1tVnkzandWaTF4NmVDMzBxWGh4VFE2cTR6S2p6WjUzeUVqRGh6?=
+ =?utf-8?B?b0JuSE15K1ppTXhtWVIyTjZ2YWM4Rm55cW9iQTA4dVFrTlpVUTA4cUdOZjh6?=
+ =?utf-8?Q?i3yefkGydU7BO?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2910e0e-6e03-4ff8-a515-08d955107858
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3775.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2021 17:19:07.8737
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gZpsHNRmksJQEgwDc51E7nHOJPAvcGBda8I/bvdWONeqFldTYFqxQLbjdH58xDdt
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3903
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Am 31.07.21 um 10:04 schrieb Tuo Li:
+> The variable ttm is assigned to the variable gtt, and the variable gtt
+> is checked in:
+>    if (gtt && gtt->userptr)
+>
+> This indicates that both ttm and gtt can be NULL.
+> If so, a null-pointer dereference will occur:
+>    if (ttm->page_flags & TTM_PAGE_FLAG_SG)
+>
+> Also, some null-pointer dereferences will occur in the function
+> ttm_pool_alloc() which is called in:
+>    return ttm_pool_alloc(&adev->mman.bdev.pool, ttm, ctx);
+>
+> To fix these possible null-pointer dereferences, the function returns
+> -EINVAL when ttm is NULL.
 
-On Sun, Aug 01, 2021 at 03:08:16PM +0800, nil Yi wrote:
-> Hi,
-> I found there is a dangling pointer in  rtl2832_sdr_alloc_urbs which
-> may cause double free in v5.14-rc3
-> 
-> in rtl2832_sdr_alloc_urbs:
-> 
-> 379: for (j = 0; j < i; j++)
-> 380:    usb_free_urb(dev->urb_list[j]);
-> it frees all the urbs but forgets to set the dev->urbs_initialized to
-> zero, which will be used in function  rtl2832_sdr_free_urbs:
-> 
-> 357: for (i = dev->urbs_initialized - 1; i >= 0; i--) {
-> 358:     if (dev->urb_list[i]) {
-> 359:          dev_dbg(&pdev->dev, "free urb=%d\n", i);
-> 360:                /* free the URBs */
-> 361:              usb_free_urb(dev->urb_list[i]);
-> 362: }
-> 363: }
-> 364:    dev->urbs_initialized = 0;
-> 
-> 
-> I'm not sure whether this double free would be triggered or not,
-> similar issue happened in commit b7f870510384 <media: tm6000: double
-> free if usb disconnect while streaming>
-> 
-> Any feedback would be appreciated, thanks :)
+NAK, the NULL test is just a leftover from when the objects where distinct.
 
-I am not quite sure how this bug could be triggered, since this would involve
-rtl2832_sdr_start_streaming() being called and then failing, and then
-rtl2832_sdr_stop_streaming() being called even though start failed (I don't
-think that happens).
+Please remove the NULL test instead.
 
-Note that the code around this is pretty ugly; it might be nicer to remove
-urbs_initialized and simply rely on the fact the the urb_list[i] entry
-is non-null if it needs to be freed. That would be a great patch. :-)
+Regards,
+Christian.
 
-For discussion it is best if you post a patch and then we can discuss the
-patch itself rather than "is there a possible way this could go wrong".
+>
+> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+> Signed-off-by: Tuo Li <islituo@gmail.com>
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> index 3a55f08e00e1..80440f799c09 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> @@ -1120,8 +1120,11 @@ static int amdgpu_ttm_tt_populate(struct ttm_device *bdev,
+>   	struct amdgpu_device *adev = amdgpu_ttm_adev(bdev);
+>   	struct amdgpu_ttm_tt *gtt = (void *)ttm;
+>   
+> +	if (ttm == NULL)
+> +		return -EINVAL;
+> +
+>   	/* user pages are bound by amdgpu_ttm_tt_pin_userptr() */
+> -	if (gtt && gtt->userptr) {
+> +	if (gtt->userptr) {
+>   		ttm->sg = kzalloc(sizeof(struct sg_table), GFP_KERNEL);
+>   		if (!ttm->sg)
+>   			return -ENOMEM;
 
-
-Sean
