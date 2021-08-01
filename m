@@ -2,219 +2,167 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3E3BC4338F
-	for <linux-media@archiver.kernel.org>; Sat, 31 Jul 2021 17:28:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9F25C4338F
+	for <linux-media@archiver.kernel.org>; Sun,  1 Aug 2021 03:45:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BFD0061042
-	for <linux-media@archiver.kernel.org>; Sat, 31 Jul 2021 17:28:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD78060F55
+	for <linux-media@archiver.kernel.org>; Sun,  1 Aug 2021 03:45:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbhGaR25 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 31 Jul 2021 13:28:57 -0400
-Received: from mga06.intel.com ([134.134.136.31]:24693 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231380AbhGaR2w (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 31 Jul 2021 13:28:52 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10062"; a="274324351"
-X-IronPort-AV: E=Sophos;i="5.84,284,1620716400"; 
-   d="scan'208";a="274324351"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2021 10:28:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,284,1620716400"; 
-   d="scan'208";a="519434552"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 31 Jul 2021 10:28:40 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1m9smu-000BO2-0D; Sat, 31 Jul 2021 17:28:40 +0000
-Date:   Sun, 01 Aug 2021 01:27:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org
-Subject: [ragnatech:media-next] BUILD SUCCESS
- 8028b7a2157efb09b134461856689347958f88b7
-Message-ID: <6105880e.TyJA0B1+w8MEySVl%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S231452AbhHADpv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 31 Jul 2021 23:45:51 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:56771 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229761AbhHADpu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 31 Jul 2021 23:45:50 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id A2Q0mNUCzW9QyA2Q1mGp7p; Sun, 01 Aug 2021 05:45:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1627789542; bh=D18KuHKzSUdpwYHzZiZsw09KMvYtZntTuJ01hmbqiOA=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=gvjqSr9qnkUj4sJGepkeA+uEWspCHAjQSbvSEQJgneEsPFzrWhXHXa0MBMVL6p/Ap
+         jx461tyFcuIVb2fKSJZVtuIl4tgi+mhYiXGstrdAEcWNPc3hULz3EalOz9SJSGf49i
+         uyP1VspP9hJbFssuKh+0rP6aC/SLc4vsXAVNpxHXsa6PdpEnyorPGGWv+biLAv2GC1
+         geJzSP4KlWxnYKMKPqlFcwDhIYTwcrNn+yIpUYm9r6kLvLBn+xhm8SJABD7REnzEHC
+         XNyIBymaWQsp744uQVUIYtQxw/509SxHx9ku3JAY1/RJ7L0NQgNIYHJwK6DPWqnaVp
+         XRhmRINFwGRSA==
+Message-ID: <3f188ffca792ee069c129e6e0a14ea1e@smtp-cloud7.xs4all.net>
+Date:   Sun, 01 Aug 2021 05:45:40 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4xfJanQMotXa9Y5Q/be5xt3G+aUrDIGyMmHf/BRvZTSlGl2HZAfArSpmIaECs2/jpGKIzhWPCMkr/R34LCDKSp1dZpLB+lQjcJHUw7kS5WbWuvElkyt+DM
+ eOfnHO/a+QOa9qDRjFPlSeEtbHmBmg1kxxj8HEPRgm6FpShRIDgrkUC2/OyC8A2Qzcsh3FKuW8Q+xgLLFn+Ic3ee8b6vhT6C3XIHYT+h31RS5xKnw8enZHod
+ nKB1Bd0O58YZ6Jh4Ti/I7w==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tree/branch: git://git.ragnatech.se/linux media-next
-branch HEAD: 8028b7a2157efb09b134461856689347958f88b7  media: imx258: Limit the max analogue gain to 480
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-elapsed time: 1516m
+Results of the daily build of media_tree:
 
-configs tested: 153
-configs skipped: 4
+date:			Sun Aug  1 05:00:13 CEST 2021
+media-tree git hash:	c27479d762de4eda72ba9e0aa150d439970f2077
+media_build git hash:	bdc3294781a89c69fc05acefd95842b88ffcb4b9
+v4l-utils git hash:	c86aab9cc7f1f001502c70a5e342f7816de3a3d6
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.3-342-g92ace436
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-7505-gb2467b103
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 6703700d637a73d66e094bc62d34c826f353efaa
+host hardware:		x86_64
+host os:		5.13.1-marune
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-arm64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-4.4.258-i686: OK
+linux-4.4.258-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.258-i686: OK
+linux-4.9.258-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.222-i686: OK
+linux-4.14.222-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.177-i686: OK
+linux-4.19.177-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.100-i686: OK
+linux-5.4.100-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.13-i686: OK
+linux-5.8.13-x86_64: OK
+linux-5.9.1-i686: OK
+linux-5.9.1-x86_64: OK
+linux-5.10.18-i686: OK
+linux-5.10.18-x86_64: OK
+linux-5.11.1-i686: OK
+linux-5.11.1-x86_64: OK
+linux-5.12.1-i686: OK
+linux-5.12.1-x86_64: OK
+linux-5.13.1-i686: OK
+linux-5.13.1-x86_64: OK
+linux-5.14-rc1-i686: OK
+linux-5.14-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: ERRORS
+virtme-32: ERRORS
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: WARNINGS
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210730
-xtensa                generic_kc705_defconfig
-sh                               allmodconfig
-sh                             espt_defconfig
-powerpc                      katmai_defconfig
-arm                        magician_defconfig
-powerpc                 mpc8315_rdb_defconfig
-parisc                           alldefconfig
-sh                           se7751_defconfig
-sh                           se7724_defconfig
-powerpc                      bamboo_defconfig
-powerpc                         wii_defconfig
-mips                            e55_defconfig
-nios2                         3c120_defconfig
-powerpc                 mpc8540_ads_defconfig
-mips                     loongson1b_defconfig
-m68k                          amiga_defconfig
-powerpc                        cell_defconfig
-arm                       aspeed_g5_defconfig
-powerpc                        warp_defconfig
-m68k                                defconfig
-mips                           ip27_defconfig
-m68k                        m5307c3_defconfig
-powerpc                    socrates_defconfig
-arm                       cns3420vb_defconfig
-um                             i386_defconfig
-sh                        apsh4ad0a_defconfig
-mips                      pic32mzda_defconfig
-mips                          malta_defconfig
-h8300                            alldefconfig
-arm                          collie_defconfig
-powerpc                     ppa8548_defconfig
-arm                           sunxi_defconfig
-h8300                     edosk2674_defconfig
-arm                       mainstone_defconfig
-arm                            dove_defconfig
-sh                        edosk7705_defconfig
-powerpc                     tqm5200_defconfig
-sh                          sdk7780_defconfig
-mips                        qi_lb60_defconfig
-powerpc                     kilauea_defconfig
-powerpc               mpc834x_itxgp_defconfig
-sh                   secureedge5410_defconfig
-csky                             alldefconfig
-powerpc                     sbc8548_defconfig
-arm                          simpad_defconfig
-riscv                    nommu_virt_defconfig
-powerpc                      mgcoge_defconfig
-nios2                         10m50_defconfig
-arm                           h3600_defconfig
-powerpc                       eiger_defconfig
-s390                       zfcpdump_defconfig
-arm                  colibri_pxa300_defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-xtensa                  audio_kc705_defconfig
-powerpc                    gamecube_defconfig
-sh                           se7705_defconfig
-mips                           mtx1_defconfig
-x86_64                           alldefconfig
-powerpc                   currituck_defconfig
-s390                          debug_defconfig
-sh                                  defconfig
-arm                      footbridge_defconfig
-mips                             allmodconfig
-mips                     loongson2k_defconfig
-openrisc                  or1klitex_defconfig
-sh                          urquell_defconfig
-powerpc                 xes_mpc85xx_defconfig
-sparc64                          alldefconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20210730
-i386                 randconfig-a004-20210730
-i386                 randconfig-a003-20210730
-i386                 randconfig-a002-20210730
-i386                 randconfig-a006-20210730
-i386                 randconfig-a001-20210730
-i386                 randconfig-a005-20210731
-i386                 randconfig-a004-20210731
-i386                 randconfig-a003-20210731
-i386                 randconfig-a002-20210731
-i386                 randconfig-a006-20210731
-i386                 randconfig-a001-20210731
-x86_64               randconfig-a015-20210730
-x86_64               randconfig-a014-20210730
-x86_64               randconfig-a013-20210730
-x86_64               randconfig-a011-20210730
-x86_64               randconfig-a012-20210730
-x86_64               randconfig-a016-20210730
-i386                 randconfig-a013-20210730
-i386                 randconfig-a016-20210730
-i386                 randconfig-a012-20210730
-i386                 randconfig-a011-20210730
-i386                 randconfig-a014-20210730
-i386                 randconfig-a015-20210730
-x86_64               randconfig-a001-20210731
-x86_64               randconfig-a006-20210731
-x86_64               randconfig-a005-20210731
-x86_64               randconfig-a004-20210731
-x86_64               randconfig-a002-20210731
-x86_64               randconfig-a003-20210731
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+Detailed results are available here:
 
-clang tested configs:
-x86_64               randconfig-c001-20210730
-x86_64               randconfig-c001-20210731
-x86_64               randconfig-a001-20210730
-x86_64               randconfig-a006-20210730
-x86_64               randconfig-a005-20210730
-x86_64               randconfig-a004-20210730
-x86_64               randconfig-a002-20210730
-x86_64               randconfig-a003-20210730
+http://www.xs4all.nl/~hverkuil/logs/Sunday.log
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
