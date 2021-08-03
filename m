@@ -2,93 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DA18C43216
-	for <linux-media@archiver.kernel.org>; Tue,  3 Aug 2021 19:46:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 926BAC4338F
+	for <linux-media@archiver.kernel.org>; Tue,  3 Aug 2021 21:39:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 48C0A60F38
-	for <linux-media@archiver.kernel.org>; Tue,  3 Aug 2021 19:46:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 734B060F8F
+	for <linux-media@archiver.kernel.org>; Tue,  3 Aug 2021 21:39:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240302AbhHCTqa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Aug 2021 15:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
+        id S232707AbhHCVkI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Aug 2021 17:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240300AbhHCTq1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Aug 2021 15:46:27 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1EAC06175F
-        for <linux-media@vger.kernel.org>; Tue,  3 Aug 2021 12:46:15 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id g23-20020a17090a5797b02901765d605e14so237617pji.5
-        for <linux-media@vger.kernel.org>; Tue, 03 Aug 2021 12:46:15 -0700 (PDT)
+        with ESMTP id S232384AbhHCVkH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Aug 2021 17:40:07 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD37C061757
+        for <linux-media@vger.kernel.org>; Tue,  3 Aug 2021 14:39:56 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id j77so973465ybj.3
+        for <linux-media@vger.kernel.org>; Tue, 03 Aug 2021 14:39:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3nOLous5BdC2Vwigd/sUxTARBcIKorC+Yem2YG2Kcf8=;
-        b=ALpY5IpDWS2MrWYntcIGb9kIypcJpfYpKe/1l+O7Rh1J3Z8RoYbskNmDyWQF5z9zKZ
-         hUahgFDcfylZ+MPgVFqc6eMt7hWs46rEdhFhWBHuzcy/Wk1nYPr4N8chNYNwKLByzOqa
-         IxQdMMxBo6PyH5C5h2Tjct7UA1sfiXTvCBJi8=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eH7F2c4Hn9egywDlY45TqR5QW7h6BJhJpVKajFn/Dvg=;
+        b=frGpZAuU0TNGycNOUwSntnWTwUNXJjKhM/djmFxpOw4RLjxj4ZIMH/kWc6KmsJtmzd
+         5DZZF1XvLkwEjfV0d1g/+qd7fYu4p3IcXqxRh2+j2cEJmx1zwJZD59Hk+1HpT49HtK7X
+         Uqge3z5MMAj3GqdriP0bGY+4uxvfDwPHI/8AUaTv/dYUqCfItsy4CzgGG4YcVxQ2W+3k
+         8yFws8bfEWrZyIXSyrNOM13JM5LbYjDmUdpWEgK5q3XHMwmDZUH16Fn3Lcmdkk1kJ+tR
+         5f+ICl8eIJ74PX6+7FzayWfSiwsOc3t/1lDkBGqzyqADZbXQ5H4FBtmOqjk757mpLOmy
+         DCGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3nOLous5BdC2Vwigd/sUxTARBcIKorC+Yem2YG2Kcf8=;
-        b=QabD4LlM534vMegNcyVxd7GGZgSf5z9tWafRA/MSs4/2O2W1gGPxw8SMfGbC+I3Sgl
-         DLS9hwfcqRWYKNJFGlrJIuC6j4tmO2VLzX66t9xpEQVIN4uSb7KCdDWIf1jM87IGTS7Q
-         IS1/woI/v9fTr/l1AZ1ivHLsENlwOnQElZijhE8HNq6NjPtx4kQ0qeCLxgWfMj5dCSI5
-         JUPLh9pmSN/zJnHvQ1Sp2stRLBcB1nh9fguOhizjWUWvOzN7b5h4y0+F0TIhlaJByCG/
-         8Z6Mp80SuthSiLEH2lrsxu77D1uZP6Wv4WhKiWeR1HomXj7n0OzyyQIwggyWi2DQGJ5r
-         vLNQ==
-X-Gm-Message-State: AOAM533Zj6JfzjZunJogDFwgX8scDyAYGaM8Tr8uEVUYKbIl4xOgUmL9
-        uFnbSTD1NA3DjmHpMbx0MsvQIg==
-X-Google-Smtp-Source: ABdhPJzQM8n3oBv1SALPP2DogMCvLv3YaBFoOhEF9vQXfThEJaNepHkbMYB/9GSb/lPpS/siqyxbNQ==
-X-Received: by 2002:a17:90a:fb85:: with SMTP id cp5mr25018189pjb.214.1628019975609;
-        Tue, 03 Aug 2021 12:46:15 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x26sm899pfm.77.2021.08.03.12.46.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Aug 2021 12:46:13 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH 0/3] Avoid card name truncation
-Date:   Tue,  3 Aug 2021 12:46:07 -0700
-Message-Id: <20210803194610.326030-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eH7F2c4Hn9egywDlY45TqR5QW7h6BJhJpVKajFn/Dvg=;
+        b=eHWCWJSs4icw52c5KxYEIwqiVzwdLITiDZf6RMTDoKyZLefjSqXD9m5wNom/jAfdtj
+         USQ5ceOG9i/9Uc14cP41+YBqSroHEmAP7l5OLJu0LURaBD1Mz8RYU/zfoMugUylV3cSu
+         yK5cy3cRIFa1v4iz9lpLHArmYsDL73KuRIAReTK6M7YqcISwVNzM9ybWOyZX1HlCRF4E
+         dmWh7ewk4f92r6M0LQzsrUQmIBTrxEFGB8ukyF7tXp0ITNUuI1gxAedkKYRV6v8wNmYU
+         xdLl/NFkmPysJrkFcVR0d3+6oVuWJx9ZohrI5ecPweYHtcsOrwznwBZZwLHxavdjYsBY
+         Hm5A==
+X-Gm-Message-State: AOAM530SPTpenNlqfM7zLQk7hA+PMzK+QRFaKWRostV7tjchZIVIBjTo
+        OxdLBVTSYpkPZv+D8r3Sir+1I2c7xE/qGQUPGgzIfg==
+X-Google-Smtp-Source: ABdhPJynfd6Tp5fx5X/8PoqmW8udIcLQViQbJXvKzToG91Bonke+UV5rO2Ua9gr8hn4ZJodP/4n3mFpQcnCzz5bXHoo=
+X-Received: by 2002:a25:cac7:: with SMTP id a190mr14975276ybg.290.1628026795438;
+ Tue, 03 Aug 2021 14:39:55 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=643; h=from:subject; bh=3ySFWN7x+E+djXwffG2kD4zxO+GbdUjCLq52ZOvMYts=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhCZ0BdgR/6zF0CascMWcvz0eErdrVyXoO4eBsApKl PohlUQuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYQmdAQAKCRCJcvTf3G3AJmAGEA CJUXU17ndoMBDiOfv3kT6KOmZmv+5N5j0AzwjoTAuCSYV3KjeKsjmfCb1Q9iBnwNqf9brAIdkzLK0T 9r8VqM1hzXxCWvoEA1DswYtsdtIO27GiWPtpemkk8kzxwQsGLT0Sl5BS3dmrf8QogSONbLJmvtrZWh Awq1vhrGWHOkUDYbB7x5keiqhDxEPpVejxN/BZzbnbNnPf0oghUNyZp1G9j2IlSrBHUGuysLYAPwg6 WYAvNYk0OuVBQZYzNKjr3Dy+TzcRUtiJPGN/bcIa8e6J6dWBEN8vhGY5UOKI26Db+oU0ZJpk1Y2u/S kPMNNlYgQf0VZlpPmc2INwFWPglkL22vZium3sr89lt51B4zcKWZVxtSZxcZRW/UM0xtdtMX11KSkF NghOCXgg60MEC9UEN9CHsTel1aBozu98KbTM7GZB/2qFXFqMJvAWfhGrVjnndg2NLMkIYu58CZ1kbw BJY09ymG4R4xr4VNOXxEm/JwxEhlYNGSBzIRBNydMIKUBZaDvr5grB1NKCldTn0OBdaix3t3lHmQNl mm3fwlnIqdDhvkpaX8SCqYNWQumKlOOUTT5rErAx+kxZdhB9IWMH+oF4V9eHP1Kg7UMlFi1zRHcM0M BRrZOIiYbOKzYhtN3SiYHeJbMlBRRZscl0Eau+Oaxx6ciSlUk8dBb2aJdPwg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20210722190747.1986614-1-hridya@google.com> <CALAqxLVLMt7rbJBQtFBw-ikBAjKrVgfS8=Nu6NFQbp_gq1m22Q@mail.gmail.com>
+In-Reply-To: <CALAqxLVLMt7rbJBQtFBw-ikBAjKrVgfS8=Nu6NFQbp_gq1m22Q@mail.gmail.com>
+From:   Hridya Valsaraju <hridya@google.com>
+Date:   Tue, 3 Aug 2021 14:39:19 -0700
+Message-ID: <CA+wgaPOQmY4H9n302YspKuLk9iq9vBzdWBTu19EUUsiQYTUOzQ@mail.gmail.com>
+Subject: Re: [PATCH] dma-buf: heaps: Set allocation limit for system heap
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+On Mon, Aug 2, 2021 at 7:18 PM John Stultz <john.stultz@linaro.org> wrote:
+>
+> On Thu, Jul 22, 2021 at 12:07 PM Hridya Valsaraju <hridya@google.com> wrote:
+> > This patch limits the size of total memory that can be requested in a
+> > single allocation from the system heap. This would prevent a
+> > buggy/malicious client from depleting system memory by requesting for an
+> > extremely large allocation which might destabilize the system.
+> >
+> > The limit is set to half the size of the device's total RAM which is the
+> > same as what was set by the deprecated ION system heap.
+> >
+> > Signed-off-by: Hridya Valsaraju <hridya@google.com>
+>
+> Seems sane to me, unless folks have better suggestions for allocation limits.
+>
+> Reviewed-by: John Stultz <john.stultz@linaro.org>
 
-While fixing some missing compile-time overflow warnings, I found a few
-media devices that had their card description silently truncated. Fix
-them using Hans's suggested text.
+Thank you for taking a look John!
 
--Kees
+Regards,
+Hridya
 
-Kees Cook (3):
-  media: radio-wl1273: Avoid card name truncation
-  media: si470x: Avoid card name truncation
-  media: tm6000: Avoid card name truncation
-
- drivers/media/radio/radio-wl1273.c            | 2 +-
- drivers/media/radio/si470x/radio-si470x-i2c.c | 2 +-
- drivers/media/radio/si470x/radio-si470x-usb.c | 2 +-
- drivers/media/usb/tm6000/tm6000-video.c       | 3 +--
- 4 files changed, 4 insertions(+), 5 deletions(-)
-
--- 
-2.30.2
-
+>
+> thanks
+> -john
