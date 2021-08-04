@@ -5,36 +5,36 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 171DFC4338F
-	for <linux-media@archiver.kernel.org>; Wed,  4 Aug 2021 13:49:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D923C4338F
+	for <linux-media@archiver.kernel.org>; Wed,  4 Aug 2021 13:49:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0031D60F43
-	for <linux-media@archiver.kernel.org>; Wed,  4 Aug 2021 13:49:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4630660F43
+	for <linux-media@archiver.kernel.org>; Wed,  4 Aug 2021 13:49:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238450AbhHDNtc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Aug 2021 09:49:32 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:7780 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbhHDNtb (ORCPT
+        id S238570AbhHDNtt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Aug 2021 09:49:49 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:12446 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238408AbhHDNtb (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 4 Aug 2021 09:49:31 -0400
-Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GftPx5C8vzYl0R;
-        Wed,  4 Aug 2021 21:49:09 +0800 (CST)
+Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GftKz1z7bzckq3;
+        Wed,  4 Aug 2021 21:45:43 +0800 (CST)
 Received: from SZX1000464847.huawei.com (10.21.59.169) by
  dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Wed, 4 Aug 2021 21:49:15 +0800
+ 15.1.2176.2; Wed, 4 Aug 2021 21:49:17 +0800
 From:   Dongdong Liu <liudongdong3@huawei.com>
 To:     <helgaas@kernel.org>, <hch@infradead.org>, <kw@linux.com>,
         <logang@deltatee.com>, <leon@kernel.org>,
         <linux-pci@vger.kernel.org>, <rajur@chelsio.com>,
         <hverkuil-cisco@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: [PATCH V7 2/9] PCI: Use cached Device Capabilities 2 Register
-Date:   Wed, 4 Aug 2021 21:47:01 +0800
-Message-ID: <1628084828-119542-3-git-send-email-liudongdong3@huawei.com>
+Subject: [PATCH V7 9/9] PCI/P2PDMA: Add a 10-Bit Tag check in P2PDMA
+Date:   Wed, 4 Aug 2021 21:47:08 +0800
+Message-ID: <1628084828-119542-10-git-send-email-liudongdong3@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1628084828-119542-1-git-send-email-liudongdong3@huawei.com>
 References: <1628084828-119542-1-git-send-email-liudongdong3@huawei.com>
@@ -48,139 +48,84 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It will make sense to store the pcie_devcap2 value in the pci_dev
-structure instead of reading Device Capabilities 2 Register multiple
-times. Get the pcie_devcap2 value set_pcie_port_type(), then use
-cached pcie_devcap2 in the needed place.
+Add a 10-Bit Tag check in the P2PDMA code to ensure that a device with
+10-Bit Tag Requester doesn't interact with a device that does not
+support 10-BIT Tag Completer. Before that happens, the kernel should
+emit a warning. "echo 0 > /sys/bus/pci/devices/.../10bit_tag" to
+disable 10-BIT Tag Requester for PF device.
+"echo 0 > /sys/bus/pci/devices/.../sriov_vf_10bit_tag_ctl" to disable
+10-BIT Tag Requester for VF device.
 
 Signed-off-by: Dongdong Liu <liudongdong3@huawei.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c |  4 +---
- drivers/pci/pci.c                               |  9 ++++-----
- drivers/pci/probe.c                             | 10 ++++------
- include/linux/pci.h                             |  2 ++
- 4 files changed, 11 insertions(+), 14 deletions(-)
+ drivers/pci/p2pdma.c | 40 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c
-index dbf9a0e..a8e1e22 100644
---- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c
-+++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c
-@@ -6304,7 +6304,6 @@ static int cxgb4_iov_configure(struct pci_dev *pdev, int num_vfs)
- 		struct pci_dev *pbridge;
- 		struct port_info *pi;
- 		char name[IFNAMSIZ];
--		u32 devcap2;
- 		u16 flags;
+diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
+index 50cdde3..948f2be 100644
+--- a/drivers/pci/p2pdma.c
++++ b/drivers/pci/p2pdma.c
+@@ -19,6 +19,7 @@
+ #include <linux/random.h>
+ #include <linux/seq_buf.h>
+ #include <linux/xarray.h>
++#include "pci.h"
  
- 		/* If we want to instantiate Virtual Functions, then our
-@@ -6314,10 +6313,9 @@ static int cxgb4_iov_configure(struct pci_dev *pdev, int num_vfs)
- 		 */
- 		pbridge = pdev->bus->self;
- 		pcie_capability_read_word(pbridge, PCI_EXP_FLAGS, &flags);
--		pcie_capability_read_dword(pbridge, PCI_EXP_DEVCAP2, &devcap2);
+ enum pci_p2pdma_map_type {
+ 	PCI_P2PDMA_MAP_UNKNOWN = 0,
+@@ -410,6 +411,41 @@ static unsigned long map_types_idx(struct pci_dev *client)
+ 		(client->bus->number << 8) | client->devfn;
+ }
  
- 		if ((flags & PCI_EXP_FLAGS_VERS) < 2 ||
--		    !(devcap2 & PCI_EXP_DEVCAP2_ARI)) {
-+		    !(pbridge->pcie_devcap2 & PCI_EXP_DEVCAP2_ARI)) {
- 			/* Our parent bridge does not support ARI so issue a
- 			 * warning and skip instantiating the VFs.  They
- 			 * won't be reachable.
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index dc3bfb2..d14c573 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -3700,7 +3700,7 @@ int pci_enable_atomic_ops_to_root(struct pci_dev *dev, u32 cap_mask)
- {
- 	struct pci_bus *bus = dev->bus;
- 	struct pci_dev *bridge;
--	u32 cap, ctl2;
-+	u32 ctl2;
- 
- 	if (!pci_is_pcie(dev))
- 		return -EINVAL;
-@@ -3724,19 +3724,18 @@ int pci_enable_atomic_ops_to_root(struct pci_dev *dev, u32 cap_mask)
- 	while (bus->parent) {
- 		bridge = bus->self;
- 
--		pcie_capability_read_dword(bridge, PCI_EXP_DEVCAP2, &cap);
--
- 		switch (pci_pcie_type(bridge)) {
- 		/* Ensure switch ports support AtomicOp routing */
- 		case PCI_EXP_TYPE_UPSTREAM:
- 		case PCI_EXP_TYPE_DOWNSTREAM:
--			if (!(cap & PCI_EXP_DEVCAP2_ATOMIC_ROUTE))
-+			if (!(bridge->pcie_devcap2 &
-+			      PCI_EXP_DEVCAP2_ATOMIC_ROUTE))
- 				return -EINVAL;
- 			break;
- 
- 		/* Ensure root port supports all the sizes we care about */
- 		case PCI_EXP_TYPE_ROOT_PORT:
--			if ((cap & cap_mask) != cap_mask)
-+			if ((bridge->pcie_devcap2 & cap_mask) != cap_mask)
- 				return -EINVAL;
- 			break;
- 		}
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index cc700f6..c83245b 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -1500,6 +1500,7 @@ void set_pcie_port_type(struct pci_dev *pdev)
- 	pdev->pcie_flags_reg = reg16;
- 	pci_read_config_dword(pdev, pos + PCI_EXP_DEVCAP, &pdev->pcie_devcap);
- 	pdev->pcie_mpss = pdev->pcie_devcap & PCI_EXP_DEVCAP_PAYLOAD;
-+	pci_read_config_dword(pdev, pos + PCI_EXP_DEVCAP2, &pdev->pcie_devcap2);
- 
- 	parent = pci_upstream_bridge(pdev);
- 	if (!parent)
-@@ -2116,7 +2117,7 @@ static void pci_configure_ltr(struct pci_dev *dev)
- #ifdef CONFIG_PCIEASPM
- 	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
- 	struct pci_dev *bridge;
--	u32 cap, ctl;
-+	u32 ctl;
- 
- 	if (!pci_is_pcie(dev))
- 		return;
-@@ -2124,8 +2125,7 @@ static void pci_configure_ltr(struct pci_dev *dev)
- 	/* Read L1 PM substate capabilities */
- 	dev->l1ss = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1SS);
- 
--	pcie_capability_read_dword(dev, PCI_EXP_DEVCAP2, &cap);
--	if (!(cap & PCI_EXP_DEVCAP2_LTR))
-+	if (!(dev->pcie_devcap2 & PCI_EXP_DEVCAP2_LTR))
- 		return;
- 
- 	pcie_capability_read_dword(dev, PCI_EXP_DEVCTL2, &ctl);
-@@ -2165,13 +2165,11 @@ static void pci_configure_eetlp_prefix(struct pci_dev *dev)
- #ifdef CONFIG_PCI_PASID
- 	struct pci_dev *bridge;
- 	int pcie_type;
--	u32 cap;
- 
- 	if (!pci_is_pcie(dev))
- 		return;
- 
--	pcie_capability_read_dword(dev, PCI_EXP_DEVCAP2, &cap);
--	if (!(cap & PCI_EXP_DEVCAP2_EE_PREFIX))
-+	if (!(dev->pcie_devcap2 & PCI_EXP_DEVCAP2_EE_PREFIX))
- 		return;
- 
- 	pcie_type = pci_pcie_type(dev);
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index aee7c85..9aab67f 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -341,6 +341,8 @@ struct pci_dev {
- 	u8		pin;		/* Interrupt pin this device uses */
- 	u16		pcie_flags_reg;	/* Cached PCIe Capabilities Register */
- 	u32		pcie_devcap;	/* Cached Device Capabilities Register */
-+	u32		pcie_devcap2;	/* Cached Device Capabilities 2
-+					   Register */
- 	unsigned long	*dma_alias_mask;/* Mask of enabled devfn aliases */
- 
- 	struct pci_driver *driver;	/* Driver bound to this device */
++static bool check_10bit_tags_vaild(struct pci_dev *a, struct pci_dev *b,
++				   bool verbose)
++{
++	bool req;
++	bool comp;
++	u16 ctl2;
++
++	if (a->is_virtfn) {
++#ifdef CONFIG_PCI_IOV
++		req = !!(a->physfn->sriov->ctrl &
++			 PCI_SRIOV_CTRL_VF_10BIT_TAG_REQ_EN);
++#endif
++	} else {
++		pcie_capability_read_word(a, PCI_EXP_DEVCTL2, &ctl2);
++		req = !!(ctl2 & PCI_EXP_DEVCTL2_10BIT_TAG_REQ_EN);
++	}
++
++	comp = !!(b->pcie_devcap2 & PCI_EXP_DEVCAP2_10BIT_TAG_COMP);
++	if (req && (!comp)) {
++		if (verbose) {
++			pci_warn(a, "cannot be used for peer-to-peer DMA as 10-Bit Tag Requester enable is set in device (%s), but peer device (%s) does not support the 10-Bit Tag Completer\n",
++				 pci_name(a), pci_name(b));
++			if (a->is_virtfn)
++				pci_warn(a, "to disable 10-Bit Tag Requester for this device, echo 0 > /sys/bus/pci/devices/%s/sriov_vf_10bit_tag_ctl\n",
++					 pci_name(a));
++			else
++				pci_warn(a, "to disable 10-Bit Tag Requester for this device, echo 0 > /sys/bus/pci/devices/%s/10bit_tag\n",
++					 pci_name(a));
++		}
++		return false;
++	}
++
++	return true;
++}
++
+ /*
+  * Calculate the P2PDMA mapping type and distance between two PCI devices.
+  *
+@@ -532,6 +568,10 @@ calc_map_type_and_dist(struct pci_dev *provider, struct pci_dev *client,
+ 		map_type = PCI_P2PDMA_MAP_NOT_SUPPORTED;
+ 	}
+ done:
++	if (!check_10bit_tags_vaild(client, provider, verbose) ||
++	    !check_10bit_tags_vaild(provider, client, verbose))
++		map_type = PCI_P2PDMA_MAP_NOT_SUPPORTED;
++
+ 	rcu_read_lock();
+ 	p2pdma = rcu_dereference(provider->p2pdma);
+ 	if (p2pdma)
 -- 
 2.7.4
 
