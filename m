@@ -2,199 +2,189 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 599C4C432BE
-	for <linux-media@archiver.kernel.org>; Wed,  4 Aug 2021 13:49:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E81BC4338F
+	for <linux-media@archiver.kernel.org>; Wed,  4 Aug 2021 13:53:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4686560F43
-	for <linux-media@archiver.kernel.org>; Wed,  4 Aug 2021 13:49:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8656060F58
+	for <linux-media@archiver.kernel.org>; Wed,  4 Aug 2021 13:53:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238587AbhHDNtu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 Aug 2021 09:49:50 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16043 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238406AbhHDNtb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 Aug 2021 09:49:31 -0400
-Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GftKz1gBpzZwdc;
-        Wed,  4 Aug 2021 21:45:43 +0800 (CST)
-Received: from SZX1000464847.huawei.com (10.21.59.169) by
- dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Wed, 4 Aug 2021 21:49:16 +0800
-From:   Dongdong Liu <liudongdong3@huawei.com>
-To:     <helgaas@kernel.org>, <hch@infradead.org>, <kw@linux.com>,
-        <logang@deltatee.com>, <leon@kernel.org>,
-        <linux-pci@vger.kernel.org>, <rajur@chelsio.com>,
-        <hverkuil-cisco@xs4all.nl>
-CC:     <linux-media@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: [PATCH V7 8/9] PCI/IOV: Add 10-Bit Tag sysfs files for VF devices
-Date:   Wed, 4 Aug 2021 21:47:07 +0800
-Message-ID: <1628084828-119542-9-git-send-email-liudongdong3@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1628084828-119542-1-git-send-email-liudongdong3@huawei.com>
-References: <1628084828-119542-1-git-send-email-liudongdong3@huawei.com>
+        id S238377AbhHDNx7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 Aug 2021 09:53:59 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:36781 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237800AbhHDNx6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 4 Aug 2021 09:53:58 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id BHL5mKNk14JsbBHL6moiDs; Wed, 04 Aug 2021 15:53:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1628085224; bh=XZx/51YuZg9AyML1XLnSfIRcYqEjDnYo65rTyvBPMvs=;
+        h=From:Subject:To:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=aEdDyRhQ4Hlnmscjvl57xufGhRdu6/IGZ0dTnP4IGlpsApcCXCNMwZe+S2y3ugDsC
+         r1nFcwDB+aD+h0PQiMGezMjwNZ/KW3J/uP+vNCFObmiPl6+N9CQv1NscDvELuBeReT
+         9ka8r2Uip3nJZilBFnluZZuNHrayHAVbqHPob/r/LdNPOPuKTT9hZDGAnE8ZrDd8o+
+         LtCCDv1hZFW8eTMWzHOHftIQAsdJzTmeqxTxiyt06eD/WJxJGh6bMiKRae3dVfV38Z
+         4cH4/kp6i4Z9KJB8yiEZWyCmsT1XWo41WglTpaErBt3qy8/sa44w53cbM/rGgBKcTo
+         88nnJhmft02+Q==
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH] staging/media/meson: vdec.h: fix kerneldoc warnings
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>
+Message-ID: <2c2914d0-288c-3e0e-a343-fc1b856ce5e3@xs4all.nl>
+Date:   Wed, 4 Aug 2021 15:53:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.21.59.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggeme758-chm.china.huawei.com (10.3.19.104)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfKrmKmRRDlZfcqi73qFdNIurvKtABzb2oqyPfIC2IZDKhbqhBmpUB0I7OsAge4ewZvAkoByaDbkSMil65IEKMWTwl8fmtJeuEbNjgIS9FGELzxO5Mkzh
+ A1k/AiblkghNwgXDgybjd9/v3CkcFRx/uvHYNTTKt490qMdhAGKZ+/1Qz6mJFiFzNtginXfYCiaKESktDQ/CfL8Lj4udQnuY5+3znfyaCbvktYwLu4Z2XRFO
+ 3wV4NQxdmD6TqVrp9QyZYXTAprd2EXxPbyO+5r6V+ag4Z3uddytfLryJ9HKSKtf/5Zy6rhO8LMd2bBeR5QCdz7BP0haHDvIudkGt3vfdUQA=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-PCIe spec 5.0 r1.0 section 2.2.6.2 says that if an Endpoint supports
-sending Requests to other Endpoints (as opposed to host memory), the
-Endpoint must not send 10-Bit Tag Requests to another given Endpoint
-unless an implementation-specific mechanism determines that the
-Endpoint supports 10-Bit Tag Completer capability.
-Add sriov_vf_10bit_tag file to query the status of VF 10-Bit Tag
-Requester Enable. Add sriov_vf_10bit_tag_ctl file to disable the VF
-10-Bit Tag Requester. The typical use case is for p2pdma when the peer
-device does not support 10-BIT Tag Completer.
+Fix a bunch of kernel-doc warnings:
 
-Signed-off-by: Dongdong Liu <liudongdong3@huawei.com>
+drivers/staging/media/meson/vdec/esparser.h:22: warning: Function parameter or member 'core' not described in 'esparser_queue_eos'
+drivers/staging/media/meson/vdec/esparser.h:22: warning: Function parameter or member 'data' not described in 'esparser_queue_eos'
+drivers/staging/media/meson/vdec/esparser.h:22: warning: Function parameter or member 'len' not described in 'esparser_queue_eos'
+drivers/staging/media/meson/vdec/esparser.h:28: warning: Function parameter or member 'work' not described in 'esparser_queue_all_src'
+drivers/staging/media/meson/vdec/vdec.h:92: warning: Function parameter or member 'vdec_hevcf_clk' not described in 'amvdec_core'
+drivers/staging/media/meson/vdec/vdec.h:92: warning: Function parameter or member 'vdev_dec' not described in 'amvdec_core'
+drivers/staging/media/meson/vdec/vdec.h:92: warning: Function parameter or member 'lock' not described in 'amvdec_core'
+drivers/staging/media/meson/vdec/vdec.h:141: warning: Function parameter or member 'resume' not described in 'amvdec_codec_ops'
+drivers/staging/media/meson/vdec/vdec.h:274: warning: Function parameter or member 'lock' not described in 'amvdec_session'
+drivers/staging/media/meson/vdec/vdec.h:274: warning: Function parameter or member 'sequence_out' not described in 'amvdec_session'
+drivers/staging/media/meson/vdec/vdec.h:274: warning: Function parameter or member 'num_dst_bufs' not described in 'amvdec_session'
+drivers/staging/media/meson/vdec/vdec.h:274: warning: Function parameter or member 'changed_format' not described in 'amvdec_session'
+drivers/staging/media/meson/vdec/vdec.h:274: warning: Function parameter or member 'last_offset' not described in 'amvdec_session'
+drivers/staging/media/meson/vdec/vdec.h:274: warning: Function parameter or member 'wrap_count' not described in 'amvdec_session'
+drivers/staging/media/meson/vdec/vdec.h:274: warning: Function parameter or member 'fw_idx_to_vb2_idx' not described in 'amvdec_session'
+drivers/staging/media/meson/vdec/vdec_helpers.h:59: warning: Function parameter or member 'tc' not described in 'amvdec_add_ts'
+drivers/staging/media/meson/vdec/vdec_helpers.h:59: warning: Function parameter or member 'flags' not described in 'amvdec_add_ts'
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- Documentation/ABI/testing/sysfs-bus-pci | 20 +++++++++++++
- drivers/pci/iov.c                       | 50 +++++++++++++++++++++++++++++++++
- 2 files changed, 70 insertions(+)
+diff --git a/drivers/staging/media/meson/vdec/esparser.h b/drivers/staging/media/meson/vdec/esparser.h
+index ff51fe7fda66..9351e62c70e6 100644
+--- a/drivers/staging/media/meson/vdec/esparser.h
++++ b/drivers/staging/media/meson/vdec/esparser.h
+@@ -17,13 +17,17 @@ int esparser_power_up(struct amvdec_session *sess);
+ /**
+  * esparser_queue_eos() - write End Of Stream sequence to the ESPARSER
+  *
+- * @core vdec core struct
++ * @core: vdec core struct
++ * @data: EOS sequence
++ * @len: length of EOS sequence
+  */
+ int esparser_queue_eos(struct amvdec_core *core, const u8 *data, u32 len);
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-pci b/Documentation/ABI/testing/sysfs-bus-pci
-index 0e0c97d..8fdbfae 100644
---- a/Documentation/ABI/testing/sysfs-bus-pci
-+++ b/Documentation/ABI/testing/sysfs-bus-pci
-@@ -421,3 +421,23 @@ Description:
- 		to disable 10-Bit Tag Requester when the driver does not bind
- 		the deivce. The typical use case is for p2pdma when the peer
- 		device does not support 10-BIT Tag Completer.
-+
-+What:		/sys/bus/pci/devices/.../sriov_vf_10bit_tag
-+Date:		August 2021
-+Contact:	Dongdong Liu <liudongdong3@huawei.com>
-+Description:
-+		This file is associated with a SR-IOV physical function (PF).
-+		It is visible when the device has VF 10-Bit Tag Requester
-+		Supported. It contains the status of VF 10-Bit Tag Requester
-+		Enable. The file is only readable.
-+
-+What:		/sys/bus/pci/devices/.../sriov_vf_10bit_tag_ctl
-+Date:		August 2021
-+Contact:	Dongdong Liu <liudongdong3@huawei.com>
-+Description:
-+		This file is associated with a SR-IOV virtual function (VF).
-+		It is visible when the device has VF 10-Bit Tag Requester
-+		Supported. It only allows to write 0 to disable VF 10-Bit
-+		Tag Requester. The file is only writeable when the vf driver
-+		does not bind to a dirver. The typical use case is for p2pdma
-+		when the peer device does not support 10-BIT Tag Completer.
-diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-index 0d0bed1..04c1298 100644
---- a/drivers/pci/iov.c
-+++ b/drivers/pci/iov.c
-@@ -220,10 +220,38 @@ static ssize_t sriov_vf_msix_count_store(struct device *dev,
- static DEVICE_ATTR_WO(sriov_vf_msix_count);
- #endif
- 
-+static ssize_t sriov_vf_10bit_tag_ctl_store(struct device *dev,
-+					    struct device_attribute *attr,
-+					    const char *buf, size_t count)
-+{
-+	struct pci_dev *vf_dev = to_pci_dev(dev);
-+	struct pci_dev *pdev = pci_physfn(vf_dev);
-+	struct pci_sriov *iov;
-+	bool enable;
-+
-+	if (kstrtobool(buf, &enable) < 0)
-+		return -EINVAL;
-+
-+	if (enable != false)
-+		return -EINVAL;
-+
-+	if (vf_dev->driver)
-+		return -EBUSY;
-+
-+	iov = pdev->sriov;
-+	iov->ctrl &= ~PCI_SRIOV_CTRL_VF_10BIT_TAG_REQ_EN;
-+	pci_write_config_word(pdev, iov->pos + PCI_SRIOV_CTRL, iov->ctrl);
-+	pci_info(pdev, "disabled SRIOV 10-Bit Tag Requester\n");
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(sriov_vf_10bit_tag_ctl);
-+
- static struct attribute *sriov_vf_dev_attrs[] = {
- #ifdef CONFIG_PCI_MSI
- 	&dev_attr_sriov_vf_msix_count.attr,
- #endif
-+	&dev_attr_sriov_vf_10bit_tag_ctl.attr,
- 	NULL,
+ /**
+  * esparser_queue_all_src() - work handler that writes as many src buffers
+  * as possible to the ESPARSER
++ *
++ * @work: work struct
+  */
+ void esparser_queue_all_src(struct work_struct *work);
+
+diff --git a/drivers/staging/media/meson/vdec/vdec.h b/drivers/staging/media/meson/vdec/vdec.h
+index f95445ac0658..0906b8fb5cc6 100644
+--- a/drivers/staging/media/meson/vdec/vdec.h
++++ b/drivers/staging/media/meson/vdec/vdec.h
+@@ -60,10 +60,12 @@ struct amvdec_session;
+  * @dos_clk: DOS clock
+  * @vdec_1_clk: VDEC_1 clock
+  * @vdec_hevc_clk: VDEC_HEVC clock
++ * @vdec_hevcf_clk: VDEC_HEVCF clock
+  * @esparser_reset: RESET for the PARSER
+- * @vdec_dec: video device for the decoder
++ * @vdev_dec: video device for the decoder
+  * @v4l2_dev: v4l2 device
+  * @cur_sess: current decoding session
++ * @lock: video device lock
+  */
+ struct amvdec_core {
+ 	void __iomem *dos_base;
+@@ -88,7 +90,7 @@ struct amvdec_core {
+ 	struct v4l2_device v4l2_dev;
+
+ 	struct amvdec_session *cur_sess;
+-	struct mutex lock; /* video device lock */
++	struct mutex lock;
  };
- 
-@@ -236,6 +264,11 @@ static umode_t sriov_vf_attrs_are_visible(struct kobject *kobj,
- 	if (!pdev->is_virtfn)
- 		return 0;
- 
-+	pdev = pci_physfn(pdev);
-+	if ((a == &dev_attr_sriov_vf_10bit_tag_ctl.attr) &&
-+	     !(pdev->sriov->cap & PCI_SRIOV_CAP_VF_10BIT_TAG_REQ))
-+		return 0;
-+
- 	return a->mode;
- }
- 
-@@ -487,12 +520,23 @@ static ssize_t sriov_drivers_autoprobe_store(struct device *dev,
- 	return count;
- }
- 
-+static ssize_t sriov_vf_10bit_tag_show(struct device *dev,
-+				       struct device_attribute *attr,
-+				       char *buf)
-+{
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+
-+	return sysfs_emit(buf, "%u\n",
-+		!!(pdev->sriov->ctrl & PCI_SRIOV_CTRL_VF_10BIT_TAG_REQ_EN));
-+}
-+
- static DEVICE_ATTR_RO(sriov_totalvfs);
- static DEVICE_ATTR_RW(sriov_numvfs);
- static DEVICE_ATTR_RO(sriov_offset);
- static DEVICE_ATTR_RO(sriov_stride);
- static DEVICE_ATTR_RO(sriov_vf_device);
- static DEVICE_ATTR_RW(sriov_drivers_autoprobe);
-+static DEVICE_ATTR_RO(sriov_vf_10bit_tag);
- 
- static struct attribute *sriov_pf_dev_attrs[] = {
- 	&dev_attr_sriov_totalvfs.attr,
-@@ -501,6 +545,7 @@ static struct attribute *sriov_pf_dev_attrs[] = {
- 	&dev_attr_sriov_stride.attr,
- 	&dev_attr_sriov_vf_device.attr,
- 	&dev_attr_sriov_drivers_autoprobe.attr,
-+	&dev_attr_sriov_vf_10bit_tag.attr,
- #ifdef CONFIG_PCI_MSI
- 	&dev_attr_sriov_vf_total_msix.attr,
- #endif
-@@ -511,10 +556,15 @@ static umode_t sriov_pf_attrs_are_visible(struct kobject *kobj,
- 					  struct attribute *a, int n)
- {
- 	struct device *dev = kobj_to_dev(kobj);
-+	struct pci_dev *pdev = to_pci_dev(dev);
- 
- 	if (!dev_is_pf(dev))
- 		return 0;
- 
-+	if ((a == &dev_attr_sriov_vf_10bit_tag.attr) &&
-+	     !(pdev->sriov->cap & PCI_SRIOV_CAP_VF_10BIT_TAG_REQ))
-+		return 0;
-+
- 	return a->mode;
- }
- 
--- 
-2.7.4
+
+ /**
+@@ -120,6 +122,7 @@ struct amvdec_ops {
+  * @recycle: optional call to tell the codec to recycle a dst buffer. Must go
+  *	     in pair with @can_recycle
+  * @drain: optional call if the codec has a custom way of draining
++ * @resume: optional call to resume after a resolution change
+  * @eos_sequence: optional call to get an end sequence to send to esparser
+  *		  for flush. Mutually exclusive with @drain.
+  * @isr: mandatory call when the ISR triggers
+@@ -185,6 +188,7 @@ enum amvdec_status {
+  * @m2m_ctx: v4l2 m2m context
+  * @ctrl_handler: V4L2 control handler
+  * @ctrl_min_buf_capture: V4L2 control V4L2_CID_MIN_BUFFERS_FOR_CAPTURE
++ * @lock: cap & out queues lock
+  * @fmt_out: vdec pixel format for the OUTPUT queue
+  * @pixfmt_cap: V4L2 pixel format for the CAPTURE queue
+  * @src_buffer_size: size in bytes of the OUTPUT buffers' only plane
+@@ -200,9 +204,12 @@ enum amvdec_status {
+  * @streamon_cap: stream on flag for capture queue
+  * @streamon_out: stream on flag for output queue
+  * @sequence_cap: capture sequence counter
++ * @sequence_out: output sequence counter
+  * @should_stop: flag set if userspace signaled EOS via command
+  *		 or empty buffer
+  * @keyframe_found: flag set once a keyframe has been parsed
++ * @num_dst_bufs: number of destination buffers
++ * @changed_format: the format changed
+  * @canvas_alloc: array of all the canvas IDs allocated
+  * @canvas_num: number of canvas IDs allocated
+  * @vififo_vaddr: virtual address for the VIFIFO
+@@ -214,6 +221,9 @@ enum amvdec_status {
+  * @timestamps: chronological list of src timestamps
+  * @ts_spinlock: spinlock for the timestamps list
+  * @last_irq_jiffies: tracks last time the vdec triggered an IRQ
++ * @last_offset: tracks last offset of vififo
++ * @wrap_count: number of times the vififo wrapped around
++ * @fw_idx_to_vb2_idx: firmware buffer index to vb2 buffer index
+  * @status: current decoding status
+  * @priv: codec private data
+  */
+@@ -225,7 +235,7 @@ struct amvdec_session {
+ 	struct v4l2_m2m_ctx *m2m_ctx;
+ 	struct v4l2_ctrl_handler ctrl_handler;
+ 	struct v4l2_ctrl *ctrl_min_buf_capture;
+-	struct mutex lock; /* cap & out queues lock */
++	struct mutex lock;
+
+ 	const struct amvdec_format *fmt_out;
+ 	u32 pixfmt_cap;
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
+index cfaed52ab526..88137d15aa3a 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.h
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
+@@ -52,8 +52,9 @@ void amvdec_dst_buf_done_offset(struct amvdec_session *sess,
+  *
+  * @sess: current session
+  * @ts: timestamp to add
++ * @tc: timecode to add
+  * @offset: offset in the VIFIFO where the associated packet was written
+- * @flags the vb2_v4l2_buffer flags
++ * @flags: the vb2_v4l2_buffer flags
+  */
+ void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+ 		   struct v4l2_timecode tc, u32 offset, u32 flags);
 
