@@ -2,153 +2,179 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82E65C4320A
-	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 10:08:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFECFC4338F
+	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 10:18:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6B180610CC
-	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 10:08:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 969106104F
+	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 10:18:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240316AbhHEKIs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Aug 2021 06:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240284AbhHEKIr (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Aug 2021 06:08:47 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F224DC0613C1
-        for <linux-media@vger.kernel.org>; Thu,  5 Aug 2021 03:08:32 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id x14so7518242edr.12
-        for <linux-media@vger.kernel.org>; Thu, 05 Aug 2021 03:08:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=k6wqR5Bdo/hf86YR+lFfIEge3bTc/2js1IYHLxrLWkI=;
-        b=gkUdbiWszms/iCP7GRNJEKiA9CoyKB3GuGPnTB/iOuh/XcRtGT3ITC1QjwvnNRI3ny
-         6yFoK1cP3Lzdf7MusUBiAPJDuecdEFRCrXhpUB2v2MKhjdlC4uzptD/84LAgqoH5Ppw/
-         MzTV2RNZFpMDF6aU1LC9leQ2AHLdrputXIk9Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=k6wqR5Bdo/hf86YR+lFfIEge3bTc/2js1IYHLxrLWkI=;
-        b=HTpQEcL4jKyBTAi2FFSkG9Q9KNgXQDyzSYJGw2XR//CVuTTUcUQ4Dr19xoin6B0ZGB
-         Bcu91eQH5hnEARFvIL4U3KyFHO73foQIm+Jp68v+YTcJfDunmsxCL9KX6BM1NAjfdspD
-         OwMi1iTscII1knOl5zFaLyECmtQXagGIG/TOTxC8RcKtChwa2NCx9YSo3ncq1EZtoqp4
-         ddVJIHBqZXBzFIqlL+4Ef1EQ4FrYHyopfgZKdR2mv2FDHJxR1v1F/BnAN19xTl8pZFCZ
-         n6raJmQE4eGfxT6I0rfnqpmu0r/yna6858CX2uZoe9B45/zAaLH7ZO3Pq4sPMyYM6EdK
-         iPmQ==
-X-Gm-Message-State: AOAM530uIa646MLVOKatQrjIn3ViqNPuUhIB487Jc6bRLIIKnZ8e7XIT
-        heNDXgC6i3SL817Ys/Hq3caSEw==
-X-Google-Smtp-Source: ABdhPJzJzNr2yGRkeakCzfK1k4PTnOjG5zboYz+WBO25moyiJhKeEGmc8cFnax2qMfHn/lgN8Q1BvQ==
-X-Received: by 2002:a05:6402:40c4:: with SMTP id z4mr5435513edb.120.1628158111607;
-        Thu, 05 Aug 2021 03:08:31 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id p23sm1550407ejc.19.2021.08.05.03.08.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Aug 2021 03:08:31 -0700 (PDT)
-Date:   Thu, 5 Aug 2021 12:08:29 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>
-Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        longman@redhat.com, boqun.feng@gmail.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        skhan@linuxfoundation.org, gregkh@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [RESEND PATCH v2 2/2] drm: add lockdep assert to
- drm_is_current_master_locked
-Message-ID: <YQu4nfxtxyTCVGhn@phenom.ffwll.local>
-Mail-Followup-To: Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, longman@redhat.com,
-        boqun.feng@gmail.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        skhan@linuxfoundation.org, gregkh@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <20210802105957.77692-1-desmondcheongzx@gmail.com>
- <20210802105957.77692-3-desmondcheongzx@gmail.com>
+        id S240012AbhHEKSt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Aug 2021 06:18:49 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:56815 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239866AbhHEKSt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 5 Aug 2021 06:18:49 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id BaSPmOidw4JsbBaSQmqIQY; Thu, 05 Aug 2021 12:18:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1628158714; bh=VLMci+fahUEvPcVlCq2dHMDDfeYryUWll6p6VzQubYs=;
+        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=tO4RdOh/eaxQbjqV/aQeSy69tWXTbZmhr5bv2Tkk2ZpbkhnJj6O2Qs1X0wpkooCyC
+         TtYyLua+unQJi9l2ZdqHV7RtgHhMiMT2Bxsw2N6N/3SNKNGWzF4QyEJroyx+5d4s9T
+         o83FRVWQH/Nu6rGoAxlHTAfgsO5Uq/Z+QcWuRGwzdzSgE3Thvs1wB8IW1aGLL6v86T
+         UW0LHRvB2gk8VLvD8HEVgwa1gHmqokOSZtOm5o0GaYo5dhFiyeD+70sjxVBf9XpJIP
+         c75BafCrgxSYljOwlcjd/BV6oYkDrKrmuUYPdgjwevXJfWDuicLqrmL68wpCFg+sBT
+         Pb6c/omEtRnrQ==
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.15] v2: Various fixes and enhancements
+Message-ID: <71026122-e9bc-a481-70ab-fde4e89af571@xs4all.nl>
+Date:   Thu, 5 Aug 2021 12:18:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210802105957.77692-3-desmondcheongzx@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-7-amd64 
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfD0lhZABqfpSbdvh3wBT7U91/XbBftMHsdG4ceyNNRrEf7F7oVu05f2Txygh1lp7dkwnL5rx/e5pQNSqDR/5i0/1DLJvy8/uYrZEYLv76KxCJnMJC0ft
+ NXjlleuBh/wqp7OQwMtvX6GA2s/Ry5H8fYhAA5FnqENQ++eSa8cQBF2Pi1Ai99NyORFWTpqbTJQFA4rKIFDdzHvdL7t57a1qpNWMM7aXy9PXRAUqarYtf9aQ
+ A7KCV7Omj3QXM4CQQlAmTSSRShomxOy+wMhwEfhEFmGCfAzrIiGWHw9hqwh4m49KY6BvwsC5HlvkrNZy4g8ENS09qLmdBczc9fAPo2McNOYGiypXHHQQcwG1
+ 6bPXW0F6XxvYOqi+wJus0CwkN0Bk63hMo/Z9vQrLgqiq4Y717oWWESmtgVBwFvrl6E7fQ19YbyKKX3fAPyIfbVcazhaxJWmrMKnXgKnxYhkn/030mO6GajhN
+ FpmZGaREe0VK9s82
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Aug 02, 2021 at 06:59:57PM +0800, Desmond Cheong Zhi Xi wrote:
-> In drm_is_current_master_locked, accessing drm_file.master should be
-> protected by either drm_file.master_lookup_lock or
-> drm_device.master_mutex. This was previously awkward to assert with
-> lockdep.
-> 
-> Following patch ("locking/lockdep: Provide lockdep_assert{,_once}()
-> helpers"), this assertion is now convenient. So we add in the
-> assertion and explain this lock design in the kerneldoc.
-> 
-> Signed-off-by: Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>
-> Acked-by: Boqun Feng <boqun.feng@gmail.com>
-> Acked-by: Waiman Long <longman@redhat.com>
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Compared to v1 this adds five new patches:
 
-Both patches pushed to drm-misc-next, thanks.
--Daniel
+      media: cedrus: hevc: Add support for scaling lists
+      media: Rename V4L2_PIX_FMT_SUNXI_TILED_NV12 to V4L2_PIX_FMT_NV12_32L32
+      media: Rename V4L2_PIX_FMT_HM12 to V4L2_PIX_FMT_NV12_16L16
+      media: Add NV12_4L4 tiled format
+      media: Clean V4L2_PIX_FMT_NV12MT documentation
 
-> ---
->  drivers/gpu/drm/drm_auth.c | 6 +++---
->  include/drm/drm_file.h     | 4 ++++
->  2 files changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_auth.c b/drivers/gpu/drm/drm_auth.c
-> index 9c24b8cc8e36..6f4d7ff23c80 100644
-> --- a/drivers/gpu/drm/drm_auth.c
-> +++ b/drivers/gpu/drm/drm_auth.c
-> @@ -63,9 +63,9 @@
->  
->  static bool drm_is_current_master_locked(struct drm_file *fpriv)
->  {
-> -	/* Either drm_device.master_mutex or drm_file.master_lookup_lock
-> -	 * should be held here.
-> -	 */
-> +	lockdep_assert_once(lockdep_is_held(&fpriv->master_lookup_lock) ||
-> +			    lockdep_is_held(&fpriv->minor->dev->master_mutex));
-> +
->  	return fpriv->is_master && drm_lease_owner(fpriv->master) == fpriv->minor->dev->master;
->  }
->  
-> diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
-> index 726cfe0ff5f5..a3acb7ac3550 100644
-> --- a/include/drm/drm_file.h
-> +++ b/include/drm/drm_file.h
-> @@ -233,6 +233,10 @@ struct drm_file {
->  	 * this only matches &drm_device.master if the master is the currently
->  	 * active one.
->  	 *
-> +	 * To update @master, both &drm_device.master_mutex and
-> +	 * @master_lookup_lock need to be held, therefore holding either of
-> +	 * them is safe and enough for the read side.
-> +	 *
->  	 * When dereferencing this pointer, either hold struct
->  	 * &drm_device.master_mutex for the duration of the pointer's use, or
->  	 * use drm_file_get_master() if struct &drm_device.master_mutex is not
-> -- 
-> 2.25.1
-> 
+And it fixes a typo (mt8192 -> mt8195) in the commit log of:
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+      dt-bindings: media: mtk-vcodec: Add binding for MT8195 VENC
+
+Regards,
+
+	Hans
+
+The following changes since commit bfee75f73c37a2f46a6326eaa06f5db701f76f01:
+
+  media: venus: venc: add support for V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM control (2021-08-04 14:43:52 +0200)
+
+
+are available in the Git repository at:
+
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.15f
+
+for you to fetch changes up to b44234e9ac7997271f3412a2a2bb57f0cdc4ee06:
+
+  media: Clean V4L2_PIX_FMT_NV12MT documentation (2021-08-05 11:01:29 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Benjamin Gaignard (2):
+      media: hevc: Add scaling matrix control
+      media: hantro: Add scaling lists feature
+
+Christophe JAILLET (1):
+      media: meson-ge2d: Fix rotation parameter changes detection in 'ge2d_s_ctrl()'
+
+Ezequiel Garcia (4):
+      media: Rename V4L2_PIX_FMT_SUNXI_TILED_NV12 to V4L2_PIX_FMT_NV12_32L32
+      media: Rename V4L2_PIX_FMT_HM12 to V4L2_PIX_FMT_NV12_16L16
+      media: Add NV12_4L4 tiled format
+      media: Clean V4L2_PIX_FMT_NV12MT documentation
+
+Hans Verkuil (3):
+      cedrus: drop min_buffers_needed.
+      vivid: add module option to set request support mode
+      videobuf2-core: sanity checks for requests and qbuf
+
+Irui Wang (3):
+      media: mtk-vcodec: Clean redundant encoder format definition
+      dt-bindings: media: mtk-vcodec: Add binding for MT8195 VENC
+      media: mtk-vcodec: Add MT8195 H264 venc driver
+
+Jernej Skrabec (1):
+      media: cedrus: hevc: Add support for scaling lists
+
+Krzysztof Hałasa (1):
+      TDA1997x: fix tda1997x_remove()
+
+Pavel Skripkin (1):
+      media: em28xx: add missing em28xx_close_extension
+
+Pete Hemery (1):
+      media: gspca/sn9c20x: Add ability to control built-in webcam LEDs
+
+Robert Foss (4):
+      media: camss: vfe: Don't read hardware version needlessly
+      media: camss: vfe: Decrease priority of of VFE HW version to 'dbg'
+      media: camss: vfe: Remove vfe_hw_version_read() argument
+      media: camss: vfe: Rework vfe_hw_version_read() function definition
+
+ Documentation/admin-guide/media/ivtv.rst                     |  2 +-
+ Documentation/devicetree/bindings/media/mediatek-vcodec.txt  |  1 +
+ Documentation/userspace-api/media/drivers/cx2341x-uapi.rst   |  8 ++---
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst    | 57 +++++++++++++++++++++++++++++++++++
+ Documentation/userspace-api/media/v4l/pixfmt-reserved.rst    | 22 --------------
+ Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst  | 50 +++++++++++++++++++++----------
+ Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst   |  6 ++++
+ Documentation/userspace-api/media/videodev2.h.rst.exceptions |  2 ++
+ drivers/media/common/videobuf2/videobuf2-core.c              | 23 +++++++++++++-
+ drivers/media/i2c/tda1997x.c                                 |  4 +--
+ drivers/media/pci/cx18/cx18-ioctl.c                          |  4 +--
+ drivers/media/pci/cx18/cx18-streams.c                        |  8 ++---
+ drivers/media/pci/ivtv/ivtv-ioctl.c                          |  8 ++---
+ drivers/media/platform/meson/ge2d/ge2d.c                     |  6 +---
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h           |  1 +
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c       | 63 +++++++++++++++++++-------------------
+ drivers/media/platform/qcom/camss/camss-vfe-170.c            |  9 ++++--
+ drivers/media/platform/qcom/camss/camss-vfe-4-1.c            |  8 +++--
+ drivers/media/platform/qcom/camss/camss-vfe-4-7.c            |  8 +++--
+ drivers/media/platform/qcom/camss/camss-vfe-4-8.c            |  8 +++--
+ drivers/media/platform/qcom/camss/camss-vfe.c                |  3 +-
+ drivers/media/platform/qcom/camss/camss-vfe.h                |  2 +-
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c           | 10 +++----
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h           |  2 +-
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c         |  2 +-
+ drivers/media/test-drivers/vivid/vivid-core.c                | 14 +++++++--
+ drivers/media/usb/em28xx/em28xx-cards.c                      |  5 +++-
+ drivers/media/usb/gspca/sn9c20x.c                            | 22 +++++++++++++-
+ drivers/media/v4l2-core/v4l2-common.c                        |  3 ++
+ drivers/media/v4l2-core/v4l2-ctrls-core.c                    |  6 ++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c                    |  4 +++
+ drivers/media/v4l2-core/v4l2-ioctl.c                         |  5 ++--
+ drivers/staging/media/hantro/hantro_drv.c                    |  8 +++--
+ drivers/staging/media/hantro/hantro_g2_hevc_dec.c            | 52 ++++++++++++++++++++++++++++++++
+ drivers/staging/media/hantro/hantro_hevc.c                   | 21 +++++++++++++
+ drivers/staging/media/hantro/hantro_hw.h                     |  4 +++
+ drivers/staging/media/sunxi/cedrus/cedrus.c                  |  8 ++++-
+ drivers/staging/media/sunxi/cedrus/cedrus.h                  |  1 +
+ drivers/staging/media/sunxi/cedrus/cedrus_dec.c              |  2 ++
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c             | 70 ++++++++++++++++++++++++++++++++++++++++++-
+ drivers/staging/media/sunxi/cedrus/cedrus_hw.c               |  2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_regs.h             |  2 ++
+ drivers/staging/media/sunxi/cedrus/cedrus_video.c            |  6 ++--
+ include/media/hevc-ctrls.h                                   | 11 +++++++
+ include/uapi/linux/videodev2.h                               | 19 +++++++++---
+ 45 files changed, 449 insertions(+), 133 deletions(-)
