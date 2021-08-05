@@ -5,23 +5,26 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6231DC432BE
-	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:45:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32255C4320E
+	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:45:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A41961102
-	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:45:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1CC4D61159
+	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:45:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242019AbhHEOp6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Aug 2021 10:45:58 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:59184 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241996AbhHEOnR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Aug 2021 10:43:17 -0400
+        id S229892AbhHEOp7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Aug 2021 10:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242005AbhHEOnT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Aug 2021 10:43:19 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35264C06179B;
+        Thu,  5 Aug 2021 07:43:05 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: andrzej.p)
-        with ESMTPSA id 56B761F440C8
+        with ESMTPSA id F40061F440D0
 From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
@@ -41,10 +44,11 @@ Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, kernel@collabora.com
-Subject: [PATCH v3 08/10] media: hantro: Prepare for other G2 codecs
-Date:   Thu,  5 Aug 2021 16:42:44 +0200
-Message-Id: <20210805144246.11998-9-andrzej.p@collabora.com>
+        Shawn Guo <shawnguo@kernel.org>, kernel@collabora.com,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v3 10/10] media: hantro: Support NV12 on the G2 core
+Date:   Thu,  5 Aug 2021 16:42:46 +0200
+Message-Id: <20210805144246.11998-11-andrzej.p@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210805144246.11998-1-andrzej.p@collabora.com>
 References: <20210805144246.11998-1-andrzej.p@collabora.com>
@@ -52,161 +56,163 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-VeriSilicon Hantro G2 core supports other codecs besides hevc.
-Factor out some common code in preparation for vp9 support.
+From: Ezequiel Garcia <ezequiel@collabora.com>
 
+The G2 decoder block produces NV12 4x4 tiled format (NV12_4L4).
+Enable the G2 post-processor block, in order to produce regular NV12.
+
+The logic in hantro_postproc.c is leveraged to take care of allocating
+the extra buffers and configure the post-processor, which is
+significantly simpler than the one on the G1.
+
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 ---
- drivers/staging/media/hantro/Makefile         |  1 +
- drivers/staging/media/hantro/hantro.h         |  7 +++++
- drivers/staging/media/hantro/hantro_g2.c      | 27 ++++++++++++++++
- .../staging/media/hantro/hantro_g2_hevc_dec.c | 31 -------------------
- drivers/staging/media/hantro/hantro_g2_regs.h |  7 +++++
- drivers/staging/media/hantro/hantro_hw.h      |  2 ++
- 6 files changed, 44 insertions(+), 31 deletions(-)
- create mode 100644 drivers/staging/media/hantro/hantro_g2.c
+ .../staging/media/hantro/hantro_g2_vp9_dec.c  |  6 ++--
+ drivers/staging/media/hantro/hantro_hw.h      |  1 +
+ .../staging/media/hantro/hantro_postproc.c    | 31 +++++++++++++++++++
+ drivers/staging/media/hantro/imx8m_vpu_hw.c   | 11 +++++++
+ 4 files changed, 46 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/Makefile b/drivers/staging/media/hantro/Makefile
-index 90036831fec4..fe6d84871d07 100644
---- a/drivers/staging/media/hantro/Makefile
-+++ b/drivers/staging/media/hantro/Makefile
-@@ -12,6 +12,7 @@ hantro-vpu-y += \
- 		hantro_g1_mpeg2_dec.o \
- 		hantro_g2_hevc_dec.o \
- 		hantro_g1_vp8_dec.o \
-+		hantro_g2.o \
- 		rockchip_vpu2_hw_jpeg_enc.o \
- 		rockchip_vpu2_hw_h264_dec.o \
- 		rockchip_vpu2_hw_mpeg2_dec.o \
-diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-index dd5e56765d4e..d91eb2b1c509 100644
---- a/drivers/staging/media/hantro/hantro.h
-+++ b/drivers/staging/media/hantro/hantro.h
-@@ -369,6 +369,13 @@ static inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
- 	writel(val, vpu->dec_base + reg);
- }
+diff --git a/drivers/staging/media/hantro/hantro_g2_vp9_dec.c b/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
+index 45a7be4a43fa..23463f2c10f4 100644
+--- a/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
++++ b/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
+@@ -152,7 +152,7 @@ static void config_output(struct hantro_ctx *ctx,
+ 	hantro_reg_write(ctx->dev, &g2_out_dis, 0);
+ 	hantro_reg_write(ctx->dev, &g2_output_format, 0);
  
-+static inline void hantro_write_addr(struct hantro_dev *vpu,
-+				     unsigned long offset,
-+				     dma_addr_t addr)
-+{
-+	vdpu_write(vpu, addr & 0xffffffff, offset);
-+}
-+
- static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
- {
- 	u32 val = readl(vpu->dec_base + reg);
-diff --git a/drivers/staging/media/hantro/hantro_g2.c b/drivers/staging/media/hantro/hantro_g2.c
-new file mode 100644
-index 000000000000..5f7bb27913de
---- /dev/null
-+++ b/drivers/staging/media/hantro/hantro_g2.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Hantro VPU codec driver
-+ *
-+ * Copyright (C) 2021 Collabora Ltd, Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-+ */
-+
-+#include "hantro_hw.h"
-+#include "hantro_g2_regs.h"
-+
-+void hantro_g2_check_idle(struct hantro_dev *vpu)
-+{
-+	int i;
-+
-+	for (i = 0; i < 3; i++) {
-+		u32 status;
-+
-+		/* Make sure the VPU is idle */
-+		status = vdpu_read(vpu, G2_REG_INTERRUPT);
-+		if (status & G2_REG_INTERRUPT_DEC_E) {
-+			dev_warn(vpu->dev, "device still running, aborting");
-+			status |= G2_REG_INTERRUPT_DEC_ABORT_E | G2_REG_INTERRUPT_DEC_IRQ_DIS;
-+			vdpu_write(vpu, status, G2_REG_INTERRUPT);
-+		}
-+	}
-+}
-+
-diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-index 340efb57fd18..226cecda9495 100644
---- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-@@ -8,20 +8,6 @@
- #include "hantro_hw.h"
- #include "hantro_g2_regs.h"
+-	luma_addr = vb2_dma_contig_plane_dma_addr(&dst->base.vb.vb2_buf, 0);
++	luma_addr = hantro_get_dec_buf_addr(ctx, &dst->base.vb.vb2_buf);
+ 	hantro_write_addr(ctx->dev, G2_ADDR_DST, luma_addr);
  
--#define HEVC_DEC_MODE	0xC
--
--#define BUS_WIDTH_32		0
--#define BUS_WIDTH_64		1
--#define BUS_WIDTH_128		2
--#define BUS_WIDTH_256		3
--
--static inline void hantro_write_addr(struct hantro_dev *vpu,
--				     unsigned long offset,
--				     dma_addr_t addr)
--{
--	vdpu_write(vpu, addr & 0xffffffff, offset);
--}
--
- static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
-@@ -516,23 +502,6 @@ static void set_buffers(struct hantro_ctx *ctx)
- 	hantro_write_addr(vpu, G2_TILE_BSD, ctx->hevc_dec.tile_bsd.dma);
- }
+ 	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
+@@ -191,7 +191,7 @@ static void config_ref(struct hantro_ctx *ctx,
+ 	hantro_reg_write(ctx->dev, &ref_reg->hor_scale, (refw << 14) / dst->vp9.width);
+ 	hantro_reg_write(ctx->dev, &ref_reg->ver_scale, (refh << 14) / dst->vp9.height);
  
--static void hantro_g2_check_idle(struct hantro_dev *vpu)
--{
--	int i;
--
--	for (i = 0; i < 3; i++) {
--		u32 status;
--
--		/* Make sure the VPU is idle */
--		status = vdpu_read(vpu, G2_REG_INTERRUPT);
--		if (status & G2_REG_INTERRUPT_DEC_E) {
--			dev_warn(vpu->dev, "device still running, aborting");
--			status |= G2_REG_INTERRUPT_DEC_ABORT_E | G2_REG_INTERRUPT_DEC_IRQ_DIS;
--			vdpu_write(vpu, status, G2_REG_INTERRUPT);
--		}
--	}
--}
--
- int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
-diff --git a/drivers/staging/media/hantro/hantro_g2_regs.h b/drivers/staging/media/hantro/hantro_g2_regs.h
-index bb22fa921914..0ac0ba375e80 100644
---- a/drivers/staging/media/hantro/hantro_g2_regs.h
-+++ b/drivers/staging/media/hantro/hantro_g2_regs.h
-@@ -27,6 +27,13 @@
- #define G2_REG_INTERRUPT_DEC_IRQ_DIS	BIT(4)
- #define G2_REG_INTERRUPT_DEC_E		BIT(0)
+-	luma_addr = vb2_dma_contig_plane_dma_addr(&buf->base.vb.vb2_buf, 0);
++	luma_addr = hantro_get_dec_buf_addr(ctx, &buf->base.vb.vb2_buf);
+ 	hantro_write_addr(ctx->dev, ref_reg->y_base, luma_addr);
  
-+#define HEVC_DEC_MODE			0xc
-+
-+#define BUS_WIDTH_32			0
-+#define BUS_WIDTH_64			1
-+#define BUS_WIDTH_128			2
-+#define BUS_WIDTH_256			3
-+
- #define g2_strm_swap		G2_DEC_REG(2, 28, 0xf)
- #define g2_dirmv_swap		G2_DEC_REG(2, 20, 0xf)
+ 	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
+@@ -236,7 +236,7 @@ static void config_ref_registers(struct hantro_ctx *ctx,
+ 	config_ref(ctx, dst, &ref_regs[1], dec_params, dec_params->golden_frame_ts);
+ 	config_ref(ctx, dst, &ref_regs[2], dec_params, dec_params->alt_frame_ts);
+ 
+-	mv_addr = vb2_dma_contig_plane_dma_addr(&mv_ref->base.vb.vb2_buf, 0) +
++	mv_addr = hantro_get_dec_buf_addr(ctx, &mv_ref->base.vb.vb2_buf) +
+ 		  mv_offset(ctx, dec_params);
+ 	hantro_write_addr(ctx->dev, G2_REG_DMV_REF(0), mv_addr);
  
 diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 4323e63dfbfc..42b3f3961f75 100644
+index 2961d399fd60..3d4a5dc1e6d5 100644
 --- a/drivers/staging/media/hantro/hantro_hw.h
 +++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -308,4 +308,6 @@ void hantro_vp8_dec_exit(struct hantro_ctx *ctx);
- void hantro_vp8_prob_update(struct hantro_ctx *ctx,
- 			    const struct v4l2_ctrl_vp8_frame *hdr);
+@@ -274,6 +274,7 @@ extern const struct hantro_variant rk3399_vpu_variant;
+ extern const struct hantro_variant sama5d4_vdec_variant;
  
-+void hantro_g2_check_idle(struct hantro_dev *vpu);
+ extern const struct hantro_postproc_ops hantro_g1_postproc_ops;
++extern const struct hantro_postproc_ops hantro_g2_postproc_ops;
+ 
+ extern const u32 hantro_vp8_dec_mc_filter[8][6];
+ 
+diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
+index 4549aec08feb..bc94bf46d218 100644
+--- a/drivers/staging/media/hantro/hantro_postproc.c
++++ b/drivers/staging/media/hantro/hantro_postproc.c
+@@ -11,6 +11,7 @@
+ #include "hantro.h"
+ #include "hantro_hw.h"
+ #include "hantro_g1_regs.h"
++#include "hantro_g2_regs.h"
+ 
+ #define HANTRO_PP_REG_WRITE(vpu, reg_name, val) \
+ { \
+@@ -99,6 +100,21 @@ static void hantro_postproc_g1_enable(struct hantro_ctx *ctx)
+ 	HANTRO_PP_REG_WRITE(vpu, display_width, ctx->dst_fmt.width);
+ }
+ 
++static void hantro_postproc_g2_enable(struct hantro_ctx *ctx)
++{
++	struct hantro_dev *vpu = ctx->dev;
++	struct vb2_v4l2_buffer *dst_buf;
++	size_t chroma_offset = ctx->dst_fmt.width * ctx->dst_fmt.height;
++	dma_addr_t dst_dma;
 +
- #endif /* HANTRO_HW_H_ */
++	dst_buf = hantro_get_dst_buf(ctx);
++	dst_dma = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
++
++	hantro_write_addr(vpu, G2_RASTER_SCAN, dst_dma);
++	hantro_write_addr(vpu, G2_RASTER_SCAN_CHR, dst_dma + chroma_offset);
++	hantro_reg_write(vpu, &g2_out_rs_e, 1);
++}
++
+ void hantro_postproc_free(struct hantro_ctx *ctx)
+ {
+ 	struct hantro_dev *vpu = ctx->dev;
+@@ -127,6 +143,9 @@ int hantro_postproc_alloc(struct hantro_ctx *ctx)
+ 	if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_H264_SLICE)
+ 		buf_size += hantro_h264_mv_size(ctx->dst_fmt.width,
+ 						ctx->dst_fmt.height);
++	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_VP9_FRAME)
++		buf_size += hantro_vp9_mv_size(ctx->dst_fmt.width,
++					       ctx->dst_fmt.height);
+ 
+ 	for (i = 0; i < num_buffers; ++i) {
+ 		struct hantro_aux_buf *priv = &ctx->postproc.dec_q[i];
+@@ -152,6 +171,13 @@ static void hantro_postproc_g1_disable(struct hantro_ctx *ctx)
+ 	HANTRO_PP_REG_WRITE_S(vpu, pipeline_en, 0x0);
+ }
+ 
++static void hantro_postproc_g2_disable(struct hantro_ctx *ctx)
++{
++	struct hantro_dev *vpu = ctx->dev;
++
++	hantro_reg_write(vpu, &g2_out_rs_e, 0);
++}
++
+ void hantro_postproc_disable(struct hantro_ctx *ctx)
+ {
+ 	struct hantro_dev *vpu = ctx->dev;
+@@ -172,3 +198,8 @@ const struct hantro_postproc_ops hantro_g1_postproc_ops = {
+ 	.enable = hantro_postproc_g1_enable,
+ 	.disable = hantro_postproc_g1_disable,
+ };
++
++const struct hantro_postproc_ops hantro_g2_postproc_ops = {
++	.enable = hantro_postproc_g2_enable,
++	.disable = hantro_postproc_g2_disable,
++};
+diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+index 455a107ffb02..1a43f6fceef9 100644
+--- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
++++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+@@ -132,6 +132,14 @@ static const struct hantro_fmt imx8m_vpu_dec_fmts[] = {
+ 	},
+ };
+ 
++static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
++	{
++		.fourcc = V4L2_PIX_FMT_NV12,
++		.codec_mode = HANTRO_MODE_NONE,
++		.postprocessed = true,
++	},
++};
++
+ static const struct hantro_fmt imx8m_vpu_g2_dec_fmts[] = {
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_NV12_4L4,
+@@ -301,6 +309,9 @@ const struct hantro_variant imx8mq_vpu_g2_variant = {
+ 	.dec_offset = 0x0,
+ 	.dec_fmts = imx8m_vpu_g2_dec_fmts,
+ 	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_g2_dec_fmts),
++	.postproc_fmts = imx8m_vpu_g2_postproc_fmts,
++	.num_postproc_fmts = ARRAY_SIZE(imx8m_vpu_g2_postproc_fmts),
++	.postproc_ops = &hantro_g2_postproc_ops,
+ 	.codec = HANTRO_HEVC_DECODER | HANTRO_VP9_DECODER,
+ 	.codec_ops = imx8mq_vpu_g2_codec_ops,
+ 	.init = imx8mq_vpu_hw_init,
 -- 
 2.17.1
 
