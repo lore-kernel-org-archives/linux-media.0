@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76530C4338F
-	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:45:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81BD0C432BE
+	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:45:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 53EDA61159
-	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:45:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5BC9961157
+	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:45:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242038AbhHEOp4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Aug 2021 10:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S242048AbhHEOp7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Aug 2021 10:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241985AbhHEOnP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Aug 2021 10:43:15 -0400
+        with ESMTP id S242001AbhHEOnT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Aug 2021 10:43:19 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D66C061798;
-        Thu,  5 Aug 2021 07:43:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B08BC06179A;
+        Thu,  5 Aug 2021 07:43:04 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: andrzej.p)
-        with ESMTPSA id 95B641F4409F
+        with ESMTPSA id 2BE321F4409D
 From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
@@ -44,11 +44,10 @@ Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, kernel@collabora.com,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v3 06/10] media: Add VP9 v4l2 library
-Date:   Thu,  5 Aug 2021 16:42:42 +0200
-Message-Id: <20210805144246.11998-7-andrzej.p@collabora.com>
+        Shawn Guo <shawnguo@kernel.org>, kernel@collabora.com
+Subject: [PATCH v3 09/10] media: hantro: Support VP9 on the G2 core
+Date:   Thu,  5 Aug 2021 16:42:45 +0200
+Message-Id: <20210805144246.11998-10-andrzej.p@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210805144246.11998-1-andrzej.p@collabora.com>
 References: <20210805144246.11998-1-andrzej.p@collabora.com>
@@ -56,2090 +55,1845 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Provide code common to vp9 drivers in one central location.
+VeriSilicon Hantro G2 core supports VP9 codec.
 
 Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/media/v4l2-core/Kconfig    |    4 +
- drivers/media/v4l2-core/Makefile   |    1 +
- drivers/media/v4l2-core/v4l2-vp9.c | 1850 ++++++++++++++++++++++++++++
- include/media/v4l2-vp9.h           |  182 +++
- 4 files changed, 2037 insertions(+)
- create mode 100644 drivers/media/v4l2-core/v4l2-vp9.c
- create mode 100644 include/media/v4l2-vp9.h
+ drivers/staging/media/hantro/Kconfig          |   1 +
+ drivers/staging/media/hantro/Makefile         |   6 +-
+ drivers/staging/media/hantro/hantro.h         |  26 +
+ drivers/staging/media/hantro/hantro_drv.c     |  18 +-
+ drivers/staging/media/hantro/hantro_g2_regs.h |  97 ++
+ .../staging/media/hantro/hantro_g2_vp9_dec.c  | 978 ++++++++++++++++++
+ drivers/staging/media/hantro/hantro_hw.h      |  67 ++
+ drivers/staging/media/hantro/hantro_v4l2.c    |   6 +
+ drivers/staging/media/hantro/hantro_vp9.c     | 240 +++++
+ drivers/staging/media/hantro/hantro_vp9.h     | 103 ++
+ drivers/staging/media/hantro/imx8m_vpu_hw.c   |  22 +-
+ 11 files changed, 1560 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/staging/media/hantro/hantro_g2_vp9_dec.c
+ create mode 100644 drivers/staging/media/hantro/hantro_vp9.c
+ create mode 100644 drivers/staging/media/hantro/hantro_vp9.h
 
-diff --git a/drivers/media/v4l2-core/Kconfig b/drivers/media/v4l2-core/Kconfig
-index 02dc1787e953..6ee75c6c820e 100644
---- a/drivers/media/v4l2-core/Kconfig
-+++ b/drivers/media/v4l2-core/Kconfig
-@@ -52,6 +52,10 @@ config V4L2_JPEG_HELPER
- config V4L2_H264
- 	tristate
+diff --git a/drivers/staging/media/hantro/Kconfig b/drivers/staging/media/hantro/Kconfig
+index 20b1f6d7b69c..00a57d88c92e 100644
+--- a/drivers/staging/media/hantro/Kconfig
++++ b/drivers/staging/media/hantro/Kconfig
+@@ -9,6 +9,7 @@ config VIDEO_HANTRO
+ 	select VIDEOBUF2_VMALLOC
+ 	select V4L2_MEM2MEM_DEV
+ 	select V4L2_H264
++	select V4L2_VP9
+ 	help
+ 	  Support for the Hantro IP based Video Processing Units present on
+ 	  Rockchip and NXP i.MX8M SoCs, which accelerate video and image
+diff --git a/drivers/staging/media/hantro/Makefile b/drivers/staging/media/hantro/Makefile
+index fe6d84871d07..28af0a1ee4bf 100644
+--- a/drivers/staging/media/hantro/Makefile
++++ b/drivers/staging/media/hantro/Makefile
+@@ -10,9 +10,10 @@ hantro-vpu-y += \
+ 		hantro_g1.o \
+ 		hantro_g1_h264_dec.o \
+ 		hantro_g1_mpeg2_dec.o \
+-		hantro_g2_hevc_dec.o \
+ 		hantro_g1_vp8_dec.o \
+ 		hantro_g2.o \
++		hantro_g2_hevc_dec.o \
++		hantro_g2_vp9_dec.o \
+ 		rockchip_vpu2_hw_jpeg_enc.o \
+ 		rockchip_vpu2_hw_h264_dec.o \
+ 		rockchip_vpu2_hw_mpeg2_dec.o \
+@@ -21,7 +22,8 @@ hantro-vpu-y += \
+ 		hantro_h264.o \
+ 		hantro_hevc.o \
+ 		hantro_mpeg2.o \
+-		hantro_vp8.o
++		hantro_vp8.o \
++		hantro_vp9.o
  
-+# Used by drivers that need v4l2-vp9.ko
-+config V4L2_VP9
-+	tristate
+ hantro-vpu-$(CONFIG_VIDEO_HANTRO_IMX8M) += \
+ 		imx8m_vpu_hw.o
+diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
+index d91eb2b1c509..1e8c1a6e3eb0 100644
+--- a/drivers/staging/media/hantro/hantro.h
++++ b/drivers/staging/media/hantro/hantro.h
+@@ -36,6 +36,7 @@ struct hantro_postproc_ops;
+ #define HANTRO_VP8_DECODER	BIT(17)
+ #define HANTRO_H264_DECODER	BIT(18)
+ #define HANTRO_HEVC_DECODER	BIT(19)
++#define HANTRO_VP9_DECODER	BIT(20)
+ #define HANTRO_DECODERS		0xffff0000
+ 
+ /**
+@@ -110,6 +111,7 @@ enum hantro_codec_mode {
+ 	HANTRO_MODE_MPEG2_DEC,
+ 	HANTRO_MODE_VP8_DEC,
+ 	HANTRO_MODE_HEVC_DEC,
++	HANTRO_MODE_VP9_DEC,
+ };
+ 
+ /*
+@@ -223,6 +225,7 @@ struct hantro_dev {
+  * @mpeg2_dec:		MPEG-2-decoding context.
+  * @vp8_dec:		VP8-decoding context.
+  * @hevc_dec:		HEVC-decoding context.
++ * @vp9_dec:		VP9-decoding context.
+  */
+ struct hantro_ctx {
+ 	struct hantro_dev *dev;
+@@ -250,6 +253,7 @@ struct hantro_ctx {
+ 		struct hantro_mpeg2_dec_hw_ctx mpeg2_dec;
+ 		struct hantro_vp8_dec_hw_ctx vp8_dec;
+ 		struct hantro_hevc_dec_hw_ctx hevc_dec;
++		struct hantro_vp9_dec_hw_ctx vp9_dec;
+ 	};
+ };
+ 
+@@ -299,6 +303,22 @@ struct hantro_postproc_regs {
+ 	struct hantro_reg display_width;
+ };
+ 
++struct hantro_vp9_decoded_buffer_info {
++	/* Info needed when the decoded frame serves as a reference frame. */
++	unsigned short width;
++	unsigned short height;
++	u32 bit_depth : 4;
++};
 +
- # Used by drivers that need v4l2-mem2mem.ko
- config V4L2_MEM2MEM_DEV
- 	tristate
-diff --git a/drivers/media/v4l2-core/Makefile b/drivers/media/v4l2-core/Makefile
-index 66a78c556c98..83fac5c746f5 100644
---- a/drivers/media/v4l2-core/Makefile
-+++ b/drivers/media/v4l2-core/Makefile
-@@ -24,6 +24,7 @@ obj-$(CONFIG_VIDEO_TUNER) += tuner.o
++struct hantro_decoded_buffer {
++	/* Must be the first field in this struct. */
++	struct v4l2_m2m_buffer base;
++
++	union {
++		struct hantro_vp9_decoded_buffer_info vp9;
++	};
++};
++
+ /* Logging helpers */
  
- obj-$(CONFIG_V4L2_MEM2MEM_DEV) += v4l2-mem2mem.o
- obj-$(CONFIG_V4L2_H264) += v4l2-h264.o
-+obj-$(CONFIG_V4L2_VP9) += v4l2-vp9.o
+ /**
+@@ -436,6 +456,12 @@ hantro_get_dec_buf_addr(struct hantro_ctx *ctx, struct vb2_buffer *vb)
+ 	return vb2_dma_contig_plane_dma_addr(vb, 0);
+ }
  
- obj-$(CONFIG_V4L2_FLASH_LED_CLASS) += v4l2-flash-led-class.o
++static inline struct hantro_decoded_buffer *
++vb2_to_hantro_decoded_buf(struct vb2_buffer *buf)
++{
++	return container_of(buf, struct hantro_decoded_buffer, base.vb.vb2_buf);
++}
++
+ void hantro_postproc_disable(struct hantro_ctx *ctx);
+ void hantro_postproc_enable(struct hantro_ctx *ctx);
+ void hantro_postproc_free(struct hantro_ctx *ctx);
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index 8a2edd67f2c6..0d1f3914f670 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -232,7 +232,7 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
+ 	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
+ 	dst_vq->drv_priv = ctx;
+ 	dst_vq->ops = &hantro_queue_ops;
+-	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
++	dst_vq->buf_struct_size = sizeof(struct hantro_decoded_buffer);
+ 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+ 	dst_vq->lock = &ctx->dev->vpu_mutex;
+ 	dst_vq->dev = ctx->dev->v4l2_dev.dev;
+@@ -266,6 +266,12 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+ 		if (sps->flags & V4L2_HEVC_SPS_FLAG_SCALING_LIST_ENABLED)
+ 			/* No scaling support */
+ 			return -EINVAL;
++	} else if (ctrl->id == V4L2_CID_STATELESS_VP9_FRAME) {
++		const struct v4l2_ctrl_vp9_frame *dec_params = ctrl->p_new.p_vp9_frame;
++
++		/* We only support profile 0 */
++		if (dec_params->profile != 0)
++			return -EINVAL;
+ 	}
+ 	return 0;
+ }
+@@ -459,6 +465,16 @@ static const struct hantro_ctrl controls[] = {
+ 			.step = 1,
+ 			.ops = &hantro_hevc_ctrl_ops,
+ 		},
++	}, {
++		.codec = HANTRO_VP9_DECODER,
++		.cfg = {
++			.id = V4L2_CID_STATELESS_VP9_FRAME,
++		},
++	}, {
++		.codec = HANTRO_VP9_DECODER,
++		.cfg = {
++			.id = V4L2_CID_STATELESS_VP9_COMPRESSED_HDR_PROBS,
++		},
+ 	},
+ };
  
-diff --git a/drivers/media/v4l2-core/v4l2-vp9.c b/drivers/media/v4l2-core/v4l2-vp9.c
+diff --git a/drivers/staging/media/hantro/hantro_g2_regs.h b/drivers/staging/media/hantro/hantro_g2_regs.h
+index 0ac0ba375e80..21ca21648614 100644
+--- a/drivers/staging/media/hantro/hantro_g2_regs.h
++++ b/drivers/staging/media/hantro/hantro_g2_regs.h
+@@ -28,6 +28,7 @@
+ #define G2_REG_INTERRUPT_DEC_E		BIT(0)
+ 
+ #define HEVC_DEC_MODE			0xc
++#define VP9_DEC_MODE			0xd
+ 
+ #define BUS_WIDTH_32			0
+ #define BUS_WIDTH_64			1
+@@ -49,6 +50,7 @@
+ #define g2_pic_height_in_cbs	G2_DEC_REG(4, 6,  0x1fff)
+ #define g2_num_ref_frames	G2_DEC_REG(4, 0,  0x1f)
+ 
++#define g2_start_bit		G2_DEC_REG(5, 25, 0x7f)
+ #define g2_scaling_list_e	G2_DEC_REG(5, 24, 0x1)
+ #define g2_cb_qp_offset		G2_DEC_REG(5, 19, 0x1f)
+ #define g2_cr_qp_offset		G2_DEC_REG(5, 14, 0x1f)
+@@ -84,6 +86,7 @@
+ #define g2_bit_depth_y_minus8	G2_DEC_REG(8, 6,  0x3)
+ #define g2_bit_depth_c_minus8	G2_DEC_REG(8, 4,  0x3)
+ #define g2_output_8_bits	G2_DEC_REG(8, 3,  0x1)
++#define g2_output_format	G2_DEC_REG(8, 0,  0x7)
+ 
+ #define g2_refidx1_active	G2_DEC_REG(9, 19, 0x1f)
+ #define g2_refidx0_active	G2_DEC_REG(9, 14, 0x1f)
+@@ -96,6 +99,14 @@
+ #define g2_tile_e		G2_DEC_REG(10, 1,  0x1)
+ #define g2_entropy_sync_e	G2_DEC_REG(10, 0,  0x1)
+ 
++#define vp9_transform_mode	G2_DEC_REG(11, 27, 0x7)
++#define vp9_filt_sharpness	G2_DEC_REG(11, 21, 0x7)
++#define vp9_mcomp_filt_type	G2_DEC_REG(11,  8, 0x7)
++#define vp9_high_prec_mv_e	G2_DEC_REG(11,  7, 0x1)
++#define vp9_comp_pred_mode	G2_DEC_REG(11,  4, 0x3)
++#define vp9_gref_sign_bias	G2_DEC_REG(11,  2, 0x1)
++#define vp9_aref_sign_bias	G2_DEC_REG(11,  0, 0x1)
++
+ #define g2_refer_lterm_e	G2_DEC_REG(12, 16, 0xffff)
+ #define g2_min_cb_size		G2_DEC_REG(12, 13, 0x7)
+ #define g2_max_cb_size		G2_DEC_REG(12, 10, 0x7)
+@@ -154,6 +165,50 @@
+ #define g2_partial_ctb_y	G2_DEC_REG(20, 30, 0x1)
+ #define g2_pic_width_4x4	G2_DEC_REG(20, 16, 0xfff)
+ #define g2_pic_height_4x4	G2_DEC_REG(20, 0,  0xfff)
++
++#define vp9_qp_delta_y_dc	G2_DEC_REG(13, 23, 0x3f)
++#define vp9_qp_delta_ch_dc	G2_DEC_REG(13, 17, 0x3f)
++#define vp9_qp_delta_ch_ac	G2_DEC_REG(13, 11, 0x3f)
++#define vp9_last_sign_bias	G2_DEC_REG(13, 10, 0x1)
++#define vp9_lossless_e		G2_DEC_REG(13,  9, 0x1)
++#define vp9_comp_pred_var_ref1	G2_DEC_REG(13,  7, 0x3)
++#define vp9_comp_pred_var_ref0	G2_DEC_REG(13,  5, 0x3)
++#define vp9_comp_pred_fixed_ref	G2_DEC_REG(13,  3, 0x3)
++#define vp9_segment_temp_upd_e	G2_DEC_REG(13,  2, 0x1)
++#define vp9_segment_upd_e	G2_DEC_REG(13,  1, 0x1)
++#define vp9_segment_e		G2_DEC_REG(13,  0, 0x1)
++
++#define vp9_filt_level		G2_DEC_REG(14, 18, 0x3f)
++#define vp9_refpic_seg0		G2_DEC_REG(14, 15, 0x7)
++#define vp9_skip_seg0		G2_DEC_REG(14, 14, 0x1)
++#define vp9_filt_level_seg0	G2_DEC_REG(14,  8, 0x3f)
++#define vp9_quant_seg0		G2_DEC_REG(14,  0, 0xff)
++
++#define vp9_refpic_seg1		G2_DEC_REG(15, 15, 0x7)
++#define vp9_skip_seg1		G2_DEC_REG(15, 14, 0x1)
++#define vp9_filt_level_seg1	G2_DEC_REG(15,  8, 0x3f)
++#define vp9_quant_seg1		G2_DEC_REG(15,  0, 0xff)
++
++#define vp9_refpic_seg2		G2_DEC_REG(16, 15, 0x7)
++#define vp9_skip_seg2		G2_DEC_REG(16, 14, 0x1)
++#define vp9_filt_level_seg2	G2_DEC_REG(16,  8, 0x3f)
++#define vp9_quant_seg2		G2_DEC_REG(16,  0, 0xff)
++
++#define vp9_refpic_seg3		G2_DEC_REG(17, 15, 0x7)
++#define vp9_skip_seg3		G2_DEC_REG(17, 14, 0x1)
++#define vp9_filt_level_seg3	G2_DEC_REG(17,  8, 0x3f)
++#define vp9_quant_seg3		G2_DEC_REG(17,  0, 0xff)
++
++#define vp9_refpic_seg4		G2_DEC_REG(18, 15, 0x7)
++#define vp9_skip_seg4		G2_DEC_REG(18, 14, 0x1)
++#define vp9_filt_level_seg4	G2_DEC_REG(18,  8, 0x3f)
++#define vp9_quant_seg4		G2_DEC_REG(18,  0, 0xff)
++
++#define vp9_refpic_seg5		G2_DEC_REG(19, 15, 0x7)
++#define vp9_skip_seg5		G2_DEC_REG(19, 14, 0x1)
++#define vp9_filt_level_seg5	G2_DEC_REG(19,  8, 0x3f)
++#define vp9_quant_seg5		G2_DEC_REG(19,  0, 0xff)
++
+ #define hevc_cur_poc_00		G2_DEC_REG(46, 24, 0xff)
+ #define hevc_cur_poc_01		G2_DEC_REG(46, 16, 0xff)
+ #define hevc_cur_poc_02		G2_DEC_REG(46, 8,  0xff)
+@@ -174,6 +229,44 @@
+ #define hevc_cur_poc_14		G2_DEC_REG(49, 8,  0xff)
+ #define hevc_cur_poc_15		G2_DEC_REG(49, 0,  0xff)
+ 
++#define vp9_refpic_seg6		G2_DEC_REG(31, 15, 0x7)
++#define vp9_skip_seg6		G2_DEC_REG(31, 14, 0x1)
++#define vp9_filt_level_seg6	G2_DEC_REG(31,  8, 0x3f)
++#define vp9_quant_seg6		G2_DEC_REG(31,  0, 0xff)
++
++#define vp9_refpic_seg7		G2_DEC_REG(32, 15, 0x7)
++#define vp9_skip_seg7		G2_DEC_REG(32, 14, 0x1)
++#define vp9_filt_level_seg7	G2_DEC_REG(32,  8, 0x3f)
++#define vp9_quant_seg7		G2_DEC_REG(32,  0, 0xff)
++
++#define vp9_lref_width		G2_DEC_REG(33, 16, 0xffff)
++#define vp9_lref_height		G2_DEC_REG(33,  0, 0xffff)
++
++#define vp9_gref_width		G2_DEC_REG(34, 16, 0xffff)
++#define vp9_gref_height		G2_DEC_REG(34,  0, 0xffff)
++
++#define vp9_aref_width		G2_DEC_REG(35, 16, 0xffff)
++#define vp9_aref_height		G2_DEC_REG(35,  0, 0xffff)
++
++#define vp9_lref_hor_scale	G2_DEC_REG(36, 16, 0xffff)
++#define vp9_lref_ver_scale	G2_DEC_REG(36,  0, 0xffff)
++
++#define vp9_gref_hor_scale	G2_DEC_REG(37, 16, 0xffff)
++#define vp9_gref_ver_scale	G2_DEC_REG(37,  0, 0xffff)
++
++#define vp9_aref_hor_scale	G2_DEC_REG(38, 16, 0xffff)
++#define vp9_aref_ver_scale	G2_DEC_REG(38,  0, 0xffff)
++
++#define vp9_filt_ref_adj_0	G2_DEC_REG(46, 24, 0x7f)
++#define vp9_filt_ref_adj_1	G2_DEC_REG(46, 16, 0x7f)
++#define vp9_filt_ref_adj_2	G2_DEC_REG(46,  8, 0x7f)
++#define vp9_filt_ref_adj_3	G2_DEC_REG(46,  0, 0x7f)
++
++#define vp9_filt_mb_adj_0	G2_DEC_REG(47, 24, 0x7f)
++#define vp9_filt_mb_adj_1	G2_DEC_REG(47, 16, 0x7f)
++#define vp9_filt_mb_adj_2	G2_DEC_REG(47,  8, 0x7f)
++#define vp9_filt_mb_adj_3	G2_DEC_REG(47,  0, 0x7f)
++
+ #define g2_apf_threshold	G2_DEC_REG(55, 0, 0xffff)
+ 
+ #define g2_clk_gate_e		G2_DEC_REG(58, 16, 0x1)
+@@ -186,6 +279,8 @@
+ 
+ #define G2_ADDR_DST		(G2_SWREG(65))
+ #define G2_REG_ADDR_REF(i)	(G2_SWREG(67)  + ((i) * 0x8))
++#define VP9_ADDR_SEGMENT_WRITE	(G2_SWREG(79))
++#define VP9_ADDR_SEGMENT_READ	(G2_SWREG(81))
+ #define G2_ADDR_DST_CHR		(G2_SWREG(99))
+ #define G2_REG_CHR_REF(i)	(G2_SWREG(101) + ((i) * 0x8))
+ #define G2_ADDR_DST_MV		(G2_SWREG(133))
+@@ -193,6 +288,8 @@
+ #define G2_ADDR_TILE_SIZE	(G2_SWREG(167))
+ #define G2_ADDR_STR		(G2_SWREG(169))
+ #define HEVC_SCALING_LIST	(G2_SWREG(171))
++#define VP9_ADDR_CTR		(G2_SWREG(171))
++#define VP9_ADDR_PROBS		(G2_SWREG(173))
+ #define G2_RASTER_SCAN		(G2_SWREG(175))
+ #define G2_RASTER_SCAN_CHR	(G2_SWREG(177))
+ #define G2_TILE_FILTER		(G2_SWREG(179))
+diff --git a/drivers/staging/media/hantro/hantro_g2_vp9_dec.c b/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
 new file mode 100644
-index 000000000000..3fbb8649dd9b
+index 000000000000..45a7be4a43fa
 --- /dev/null
-+++ b/drivers/media/v4l2-core/v4l2-vp9.c
-@@ -0,0 +1,1850 @@
++++ b/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
+@@ -0,0 +1,978 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * V4L2 VP9 helpers.
++ * Hantro VP9 codec driver
 + *
-+ * Copyright (C) 2021 Collabora, Ltd.
-+ *
-+ * Author: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
++ * Copyright (C) 2021 Collabora Ltd.
 + */
-+
-+#include <linux/module.h>
-+
++#include "media/videobuf2-core.h"
++#include "media/videobuf2-dma-contig.h"
++#include "media/videobuf2-v4l2.h"
++#include <linux/kernel.h>
++#include <linux/vmalloc.h>
++#include <media/v4l2-mem2mem.h>
 +#include <media/v4l2-vp9.h>
 +
-+const u8 v4l2_vp9_kf_y_mode_prob[10][10][9] = {
-+	{
-+		/* above = dc */
-+		{ 137,  30,  42, 148, 151, 207,  70,  52,  91 }, /*left = dc  */
-+		{  92,  45, 102, 136, 116, 180,  74,  90, 100 }, /*left = v   */
-+		{  73,  32,  19, 187, 222, 215,  46,  34, 100 }, /*left = h   */
-+		{  91,  30,  32, 116, 121, 186,  93,  86,  94 }, /*left = d45 */
-+		{  72,  35,  36, 149,  68, 206,  68,  63, 105 }, /*left = d135*/
-+		{  73,  31,  28, 138,  57, 124,  55, 122, 151 }, /*left = d117*/
-+		{  67,  23,  21, 140, 126, 197,  40,  37, 171 }, /*left = d153*/
-+		{  86,  27,  28, 128, 154, 212,  45,  43,  53 }, /*left = d207*/
-+		{  74,  32,  27, 107,  86, 160,  63, 134, 102 }, /*left = d63 */
-+		{  59,  67,  44, 140, 161, 202,  78,  67, 119 }, /*left = tm  */
-+	}, {  /* above = v */
-+		{  63,  36, 126, 146, 123, 158,  60,  90,  96 }, /*left = dc  */
-+		{  43,  46, 168, 134, 107, 128,  69, 142,  92 }, /*left = v   */
-+		{  44,  29,  68, 159, 201, 177,  50,  57,  77 }, /*left = h   */
-+		{  58,  38,  76, 114,  97, 172,  78, 133,  92 }, /*left = d45 */
-+		{  46,  41,  76, 140,  63, 184,  69, 112,  57 }, /*left = d135*/
-+		{  38,  32,  85, 140,  46, 112,  54, 151, 133 }, /*left = d117*/
-+		{  39,  27,  61, 131, 110, 175,  44,  75, 136 }, /*left = d153*/
-+		{  52,  30,  74, 113, 130, 175,  51,  64,  58 }, /*left = d207*/
-+		{  47,  35,  80, 100,  74, 143,  64, 163,  74 }, /*left = d63 */
-+		{  36,  61, 116, 114, 128, 162,  80, 125,  82 }, /*left = tm  */
-+	}, {  /* above = h */
-+		{  82,  26,  26, 171, 208, 204,  44,  32, 105 }, /*left = dc  */
-+		{  55,  44,  68, 166, 179, 192,  57,  57, 108 }, /*left = v   */
-+		{  42,  26,  11, 199, 241, 228,  23,  15,  85 }, /*left = h   */
-+		{  68,  42,  19, 131, 160, 199,  55,  52,  83 }, /*left = d45 */
-+		{  58,  50,  25, 139, 115, 232,  39,  52, 118 }, /*left = d135*/
-+		{  50,  35,  33, 153, 104, 162,  64,  59, 131 }, /*left = d117*/
-+		{  44,  24,  16, 150, 177, 202,  33,  19, 156 }, /*left = d153*/
-+		{  55,  27,  12, 153, 203, 218,  26,  27,  49 }, /*left = d207*/
-+		{  53,  49,  21, 110, 116, 168,  59,  80,  76 }, /*left = d63 */
-+		{  38,  72,  19, 168, 203, 212,  50,  50, 107 }, /*left = tm  */
-+	}, {  /* above = d45 */
-+		{ 103,  26,  36, 129, 132, 201,  83,  80,  93 }, /*left = dc  */
-+		{  59,  38,  83, 112, 103, 162,  98, 136,  90 }, /*left = v   */
-+		{  62,  30,  23, 158, 200, 207,  59,  57,  50 }, /*left = h   */
-+		{  67,  30,  29,  84,  86, 191, 102,  91,  59 }, /*left = d45 */
-+		{  60,  32,  33, 112,  71, 220,  64,  89, 104 }, /*left = d135*/
-+		{  53,  26,  34, 130,  56, 149,  84, 120, 103 }, /*left = d117*/
-+		{  53,  21,  23, 133, 109, 210,  56,  77, 172 }, /*left = d153*/
-+		{  77,  19,  29, 112, 142, 228,  55,  66,  36 }, /*left = d207*/
-+		{  61,  29,  29,  93,  97, 165,  83, 175, 162 }, /*left = d63 */
-+		{  47,  47,  43, 114, 137, 181, 100,  99,  95 }, /*left = tm  */
-+	}, {  /* above = d135 */
-+		{  69,  23,  29, 128,  83, 199,  46,  44, 101 }, /*left = dc  */
-+		{  53,  40,  55, 139,  69, 183,  61,  80, 110 }, /*left = v   */
-+		{  40,  29,  19, 161, 180, 207,  43,  24,  91 }, /*left = h   */
-+		{  60,  34,  19, 105,  61, 198,  53,  64,  89 }, /*left = d45 */
-+		{  52,  31,  22, 158,  40, 209,  58,  62,  89 }, /*left = d135*/
-+		{  44,  31,  29, 147,  46, 158,  56, 102, 198 }, /*left = d117*/
-+		{  35,  19,  12, 135,  87, 209,  41,  45, 167 }, /*left = d153*/
-+		{  55,  25,  21, 118,  95, 215,  38,  39,  66 }, /*left = d207*/
-+		{  51,  38,  25, 113,  58, 164,  70,  93,  97 }, /*left = d63 */
-+		{  47,  54,  34, 146, 108, 203,  72, 103, 151 }, /*left = tm  */
-+	}, {  /* above = d117 */
-+		{  64,  19,  37, 156,  66, 138,  49,  95, 133 }, /*left = dc  */
-+		{  46,  27,  80, 150,  55, 124,  55, 121, 135 }, /*left = v   */
-+		{  36,  23,  27, 165, 149, 166,  54,  64, 118 }, /*left = h   */
-+		{  53,  21,  36, 131,  63, 163,  60, 109,  81 }, /*left = d45 */
-+		{  40,  26,  35, 154,  40, 185,  51,  97, 123 }, /*left = d135*/
-+		{  35,  19,  34, 179,  19,  97,  48, 129, 124 }, /*left = d117*/
-+		{  36,  20,  26, 136,  62, 164,  33,  77, 154 }, /*left = d153*/
-+		{  45,  18,  32, 130,  90, 157,  40,  79,  91 }, /*left = d207*/
-+		{  45,  26,  28, 129,  45, 129,  49, 147, 123 }, /*left = d63 */
-+		{  38,  44,  51, 136,  74, 162,  57,  97, 121 }, /*left = tm  */
-+	}, {  /* above = d153 */
-+		{  75,  17,  22, 136, 138, 185,  32,  34, 166 }, /*left = dc  */
-+		{  56,  39,  58, 133, 117, 173,  48,  53, 187 }, /*left = v   */
-+		{  35,  21,  12, 161, 212, 207,  20,  23, 145 }, /*left = h   */
-+		{  56,  29,  19, 117, 109, 181,  55,  68, 112 }, /*left = d45 */
-+		{  47,  29,  17, 153,  64, 220,  59,  51, 114 }, /*left = d135*/
-+		{  46,  16,  24, 136,  76, 147,  41,  64, 172 }, /*left = d117*/
-+		{  34,  17,  11, 108, 152, 187,  13,  15, 209 }, /*left = d153*/
-+		{  51,  24,  14, 115, 133, 209,  32,  26, 104 }, /*left = d207*/
-+		{  55,  30,  18, 122,  79, 179,  44,  88, 116 }, /*left = d63 */
-+		{  37,  49,  25, 129, 168, 164,  41,  54, 148 }, /*left = tm  */
-+	}, {  /* above = d207 */
-+		{  82,  22,  32, 127, 143, 213,  39,  41,  70 }, /*left = dc  */
-+		{  62,  44,  61, 123, 105, 189,  48,  57,  64 }, /*left = v   */
-+		{  47,  25,  17, 175, 222, 220,  24,  30,  86 }, /*left = h   */
-+		{  68,  36,  17, 106, 102, 206,  59,  74,  74 }, /*left = d45 */
-+		{  57,  39,  23, 151,  68, 216,  55,  63,  58 }, /*left = d135*/
-+		{  49,  30,  35, 141,  70, 168,  82,  40, 115 }, /*left = d117*/
-+		{  51,  25,  15, 136, 129, 202,  38,  35, 139 }, /*left = d153*/
-+		{  68,  26,  16, 111, 141, 215,  29,  28,  28 }, /*left = d207*/
-+		{  59,  39,  19, 114,  75, 180,  77, 104,  42 }, /*left = d63 */
-+		{  40,  61,  26, 126, 152, 206,  61,  59,  93 }, /*left = tm  */
-+	}, {  /* above = d63 */
-+		{  78,  23,  39, 111, 117, 170,  74, 124,  94 }, /*left = dc  */
-+		{  48,  34,  86, 101,  92, 146,  78, 179, 134 }, /*left = v   */
-+		{  47,  22,  24, 138, 187, 178,  68,  69,  59 }, /*left = h   */
-+		{  56,  25,  33, 105, 112, 187,  95, 177, 129 }, /*left = d45 */
-+		{  48,  31,  27, 114,  63, 183,  82, 116,  56 }, /*left = d135*/
-+		{  43,  28,  37, 121,  63, 123,  61, 192, 169 }, /*left = d117*/
-+		{  42,  17,  24, 109,  97, 177,  56,  76, 122 }, /*left = d153*/
-+		{  58,  18,  28, 105, 139, 182,  70,  92,  63 }, /*left = d207*/
-+		{  46,  23,  32,  74,  86, 150,  67, 183,  88 }, /*left = d63 */
-+		{  36,  38,  48,  92, 122, 165,  88, 137,  91 }, /*left = tm  */
-+	}, {  /* above = tm */
-+		{  65,  70,  60, 155, 159, 199,  61,  60,  81 }, /*left = dc  */
-+		{  44,  78, 115, 132, 119, 173,  71, 112,  93 }, /*left = v   */
-+		{  39,  38,  21, 184, 227, 206,  42,  32,  64 }, /*left = h   */
-+		{  58,  47,  36, 124, 137, 193,  80,  82,  78 }, /*left = d45 */
-+		{  49,  50,  35, 144,  95, 205,  63,  78,  59 }, /*left = d135*/
-+		{  41,  53,  52, 148,  71, 142,  65, 128,  51 }, /*left = d117*/
-+		{  40,  36,  28, 143, 143, 202,  40,  55, 137 }, /*left = d153*/
-+		{  52,  34,  29, 129, 183, 227,  42,  35,  43 }, /*left = d207*/
-+		{  42,  44,  44, 104, 105, 164,  64, 130,  80 }, /*left = d63 */
-+		{  43,  81,  53, 140, 169, 204,  68,  84,  72 }, /*left = tm  */
-+	}
++#include "hantro.h"
++#include "hantro_vp9.h"
++#include "hantro_g2_regs.h"
++
++#define G2_ALIGN 16
++
++enum hantro_ref_frames {
++	INTRA_FRAME = 0,
++	LAST_FRAME = 1,
++	GOLDEN_FRAME = 2,
++	ALTREF_FRAME = 3,
++	MAX_REF_FRAMES = 4
 +};
-+EXPORT_SYMBOL_GPL(v4l2_vp9_kf_y_mode_prob);
 +
-+const u8 v4l2_vp9_kf_partition_probs[16][3] = {
-+	/* 8x8 -> 4x4 */
-+	{ 158,  97,  94 },	/* a/l both not split   */
-+	{  93,  24,  99 },	/* a split, l not split */
-+	{  85, 119,  44 },	/* l split, a not split */
-+	{  62,  59,  67 },	/* a/l both split       */
-+	/* 16x16 -> 8x8 */
-+	{ 149,  53,  53 },	/* a/l both not split   */
-+	{  94,  20,  48 },	/* a split, l not split */
-+	{  83,  53,  24 },	/* l split, a not split */
-+	{  52,  18,  18 },	/* a/l both split       */
-+	/* 32x32 -> 16x16 */
-+	{ 150,  40,  39 },	/* a/l both not split   */
-+	{  78,  12,  26 },	/* a split, l not split */
-+	{  67,  33,  11 },	/* l split, a not split */
-+	{  24,   7,   5 },	/* a/l both split       */
-+	/* 64x64 -> 32x32 */
-+	{ 174,  35,  49 },	/* a/l both not split   */
-+	{  68,  11,  27 },	/* a split, l not split */
-+	{  57,  15,   9 },	/* l split, a not split */
-+	{  12,   3,   3 },	/* a/l both split       */
-+};
-+EXPORT_SYMBOL_GPL(v4l2_vp9_kf_partition_probs);
-+
-+const u8 v4l2_vp9_kf_uv_mode_prob[10][9] = {
-+	{ 144,  11,  54, 157, 195, 130,  46,  58, 108 },  /* y = dc   */
-+	{ 118,  15, 123, 148, 131, 101,  44,  93, 131 },  /* y = v    */
-+	{ 113,  12,  23, 188, 226, 142,  26,  32, 125 },  /* y = h    */
-+	{ 120,  11,  50, 123, 163, 135,  64,  77, 103 },  /* y = d45  */
-+	{ 113,   9,  36, 155, 111, 157,  32,  44, 161 },  /* y = d135 */
-+	{ 116,   9,  55, 176,  76,  96,  37,  61, 149 },  /* y = d117 */
-+	{ 115,   9,  28, 141, 161, 167,  21,  25, 193 },  /* y = d153 */
-+	{ 120,  12,  32, 145, 195, 142,  32,  38,  86 },  /* y = d207 */
-+	{ 116,  12,  64, 120, 140, 125,  49, 115, 121 },  /* y = d63  */
-+	{ 102,  19,  66, 162, 182, 122,  35,  59, 128 }   /* y = tm   */
-+};
-+EXPORT_SYMBOL_GPL(v4l2_vp9_kf_uv_mode_prob);
-+
-+const struct v4l2_vp9_frame_context v4l2_vp9_default_probs = {
-+	.tx8 = {
-+		{ 100 },
-+		{  66 },
-+	},
-+	.tx16 = {
-+		{ 20, 152 },
-+		{ 15, 101 },
-+	},
-+	.tx32 = {
-+		{ 3, 136, 37 },
-+		{ 5,  52, 13 },
-+	},
-+	.coef = {
-+		{ /* tx = 4x4 */
-+			{ /* block Type 0 */
-+				{ /* Intra */
-+					{ /* Coeff Band 0 */
-+						{ 195,  29, 183 },
-+						{  84,  49, 136 },
-+						{   8,  42,  71 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  31, 107, 169 },
-+						{  35,  99, 159 },
-+						{  17,  82, 140 },
-+						{   8,  66, 114 },
-+						{   2,  44,  76 },
-+						{   1,  19,  32 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  40, 132, 201 },
-+						{  29, 114, 187 },
-+						{  13,  91, 157 },
-+						{   7,  75, 127 },
-+						{   3,  58,  95 },
-+						{   1,  28,  47 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  69, 142, 221 },
-+						{  42, 122, 201 },
-+						{  15,  91, 159 },
-+						{   6,  67, 121 },
-+						{   1,  42,  77 },
-+						{   1,  17,  31 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{ 102, 148, 228 },
-+						{  67, 117, 204 },
-+						{  17,  82, 154 },
-+						{   6,  59, 114 },
-+						{   2,  39,  75 },
-+						{   1,  15,  29 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{ 156,  57, 233 },
-+						{ 119,  57, 212 },
-+						{  58,  48, 163 },
-+						{  29,  40, 124 },
-+						{  12,  30,  81 },
-+						{   3,  12,  31 }
-+					},
-+				},
-+				{ /* Inter */
-+					{ /* Coeff Band 0 */
-+						{ 191, 107, 226 },
-+						{ 124, 117, 204 },
-+						{  25,  99, 155 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  29, 148, 210 },
-+						{  37, 126, 194 },
-+						{   8,  93, 157 },
-+						{   2,  68, 118 },
-+						{   1,  39,  69 },
-+						{   1,  17,  33 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  41, 151, 213 },
-+						{  27, 123, 193 },
-+						{   3,  82, 144 },
-+						{   1,  58, 105 },
-+						{   1,  32,  60 },
-+						{   1,  13,  26 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  59, 159, 220 },
-+						{  23, 126, 198 },
-+						{   4,  88, 151 },
-+						{   1,  66, 114 },
-+						{   1,  38,  71 },
-+						{   1,  18,  34 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{ 114, 136, 232 },
-+						{  51, 114, 207 },
-+						{  11,  83, 155 },
-+						{   3,  56, 105 },
-+						{   1,  33,  65 },
-+						{   1,  17,  34 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{ 149,  65, 234 },
-+						{ 121,  57, 215 },
-+						{  61,  49, 166 },
-+						{  28,  36, 114 },
-+						{  12,  25,  76 },
-+						{   3,  16,  42 },
-+					},
-+				},
-+			},
-+			{ /* block Type 1 */
-+				{ /* Intra */
-+					{ /* Coeff Band 0 */
-+						{ 214,  49, 220 },
-+						{ 132,  63, 188 },
-+						{  42,  65, 137 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  85, 137, 221 },
-+						{ 104, 131, 216 },
-+						{  49, 111, 192 },
-+						{  21,  87, 155 },
-+						{   2,  49,  87 },
-+						{   1,  16,  28 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  89, 163, 230 },
-+						{  90, 137, 220 },
-+						{  29, 100, 183 },
-+						{  10,  70, 135 },
-+						{   2,  42,  81 },
-+						{   1,  17,  33 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{ 108, 167, 237 },
-+						{  55, 133, 222 },
-+						{  15,  97, 179 },
-+						{   4,  72, 135 },
-+						{   1,  45,  85 },
-+						{   1,  19,  38 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{ 124, 146, 240 },
-+						{  66, 124, 224 },
-+						{  17,  88, 175 },
-+						{   4,  58, 122 },
-+						{   1,  36,  75 },
-+						{   1,  18,  37 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{ 141,  79, 241 },
-+						{ 126,  70, 227 },
-+						{  66,  58, 182 },
-+						{  30,  44, 136 },
-+						{  12,  34,  96 },
-+						{   2,  20,  47 },
-+					},
-+				},
-+				{ /* Inter */
-+					{ /* Coeff Band 0 */
-+						{ 229,  99, 249 },
-+						{ 143, 111, 235 },
-+						{  46, 109, 192 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  82, 158, 236 },
-+						{  94, 146, 224 },
-+						{  25, 117, 191 },
-+						{   9,  87, 149 },
-+						{   3,  56,  99 },
-+						{   1,  33,  57 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  83, 167, 237 },
-+						{  68, 145, 222 },
-+						{  10, 103, 177 },
-+						{   2,  72, 131 },
-+						{   1,  41,  79 },
-+						{   1,  20,  39 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  99, 167, 239 },
-+						{  47, 141, 224 },
-+						{  10, 104, 178 },
-+						{   2,  73, 133 },
-+						{   1,  44,  85 },
-+						{   1,  22,  47 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{ 127, 145, 243 },
-+						{  71, 129, 228 },
-+						{  17,  93, 177 },
-+						{   3,  61, 124 },
-+						{   1,  41,  84 },
-+						{   1,  21,  52 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{ 157,  78, 244 },
-+						{ 140,  72, 231 },
-+						{  69,  58, 184 },
-+						{  31,  44, 137 },
-+						{  14,  38, 105 },
-+						{   8,  23,  61 },
-+					},
-+				},
-+			},
-+		},
-+		{ /* tx = 8x8 */
-+			{ /* block Type 0 */
-+				{ /* Intra */
-+					{ /* Coeff Band 0 */
-+						{ 125,  34, 187 },
-+						{  52,  41, 133 },
-+						{   6,  31,  56 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  37, 109, 153 },
-+						{  51, 102, 147 },
-+						{  23,  87, 128 },
-+						{   8,  67, 101 },
-+						{   1,  41,  63 },
-+						{   1,  19,  29 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  31, 154, 185 },
-+						{  17, 127, 175 },
-+						{   6,  96, 145 },
-+						{   2,  73, 114 },
-+						{   1,  51,  82 },
-+						{   1,  28,  45 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  23, 163, 200 },
-+						{  10, 131, 185 },
-+						{   2,  93, 148 },
-+						{   1,  67, 111 },
-+						{   1,  41,  69 },
-+						{   1,  14,  24 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{  29, 176, 217 },
-+						{  12, 145, 201 },
-+						{   3, 101, 156 },
-+						{   1,  69, 111 },
-+						{   1,  39,  63 },
-+						{   1,  14,  23 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{  57, 192, 233 },
-+						{  25, 154, 215 },
-+						{   6, 109, 167 },
-+						{   3,  78, 118 },
-+						{   1,  48,  69 },
-+						{   1,  21,  29 },
-+					},
-+				},
-+				{ /* Inter */
-+					{ /* Coeff Band 0 */
-+						{ 202, 105, 245 },
-+						{ 108, 106, 216 },
-+						{  18,  90, 144 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  33, 172, 219 },
-+						{  64, 149, 206 },
-+						{  14, 117, 177 },
-+						{   5,  90, 141 },
-+						{   2,  61,  95 },
-+						{   1,  37,  57 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  33, 179, 220 },
-+						{  11, 140, 198 },
-+						{   1,  89, 148 },
-+						{   1,  60, 104 },
-+						{   1,  33,  57 },
-+						{   1,  12,  21 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  30, 181, 221 },
-+						{   8, 141, 198 },
-+						{   1,  87, 145 },
-+						{   1,  58, 100 },
-+						{   1,  31,  55 },
-+						{   1,  12,  20 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{  32, 186, 224 },
-+						{   7, 142, 198 },
-+						{   1,  86, 143 },
-+						{   1,  58, 100 },
-+						{   1,  31,  55 },
-+						{   1,  12,  22 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{  57, 192, 227 },
-+						{  20, 143, 204 },
-+						{   3,  96, 154 },
-+						{   1,  68, 112 },
-+						{   1,  42,  69 },
-+						{   1,  19,  32 },
-+					},
-+				},
-+			},
-+			{ /* block Type 1 */
-+				{ /* Intra */
-+					{ /* Coeff Band 0 */
-+						{ 212,  35, 215 },
-+						{ 113,  47, 169 },
-+						{  29,  48, 105 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  74, 129, 203 },
-+						{ 106, 120, 203 },
-+						{  49, 107, 178 },
-+						{  19,  84, 144 },
-+						{   4,  50,  84 },
-+						{   1,  15,  25 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  71, 172, 217 },
-+						{  44, 141, 209 },
-+						{  15, 102, 173 },
-+						{   6,  76, 133 },
-+						{   2,  51,  89 },
-+						{   1,  24,  42 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  64, 185, 231 },
-+						{  31, 148, 216 },
-+						{   8, 103, 175 },
-+						{   3,  74, 131 },
-+						{   1,  46,  81 },
-+						{   1,  18,  30 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{  65, 196, 235 },
-+						{  25, 157, 221 },
-+						{   5, 105, 174 },
-+						{   1,  67, 120 },
-+						{   1,  38,  69 },
-+						{   1,  15,  30 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{  65, 204, 238 },
-+						{  30, 156, 224 },
-+						{   7, 107, 177 },
-+						{   2,  70, 124 },
-+						{   1,  42,  73 },
-+						{   1,  18,  34 },
-+					},
-+				},
-+				{ /* Inter */
-+					{ /* Coeff Band 0 */
-+						{ 225,  86, 251 },
-+						{ 144, 104, 235 },
-+						{  42,  99, 181 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  85, 175, 239 },
-+						{ 112, 165, 229 },
-+						{  29, 136, 200 },
-+						{  12, 103, 162 },
-+						{   6,  77, 123 },
-+						{   2,  53,  84 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  75, 183, 239 },
-+						{  30, 155, 221 },
-+						{   3, 106, 171 },
-+						{   1,  74, 128 },
-+						{   1,  44,  76 },
-+						{   1,  17,  28 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  73, 185, 240 },
-+						{  27, 159, 222 },
-+						{   2, 107, 172 },
-+						{   1,  75, 127 },
-+						{   1,  42,  73 },
-+						{   1,  17,  29 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{  62, 190, 238 },
-+						{  21, 159, 222 },
-+						{   2, 107, 172 },
-+						{   1,  72, 122 },
-+						{   1,  40,  71 },
-+						{   1,  18,  32 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{  61, 199, 240 },
-+						{  27, 161, 226 },
-+						{   4, 113, 180 },
-+						{   1,  76, 129 },
-+						{   1,  46,  80 },
-+						{   1,  23,  41 },
-+					},
-+				},
-+			},
-+		},
-+		{ /* tx = 16x16 */
-+			{ /* block Type 0 */
-+				{ /* Intra */
-+					{ /* Coeff Band 0 */
-+						{   7,  27, 153 },
-+						{   5,  30,  95 },
-+						{   1,  16,  30 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  50,  75, 127 },
-+						{  57,  75, 124 },
-+						{  27,  67, 108 },
-+						{  10,  54,  86 },
-+						{   1,  33,  52 },
-+						{   1,  12,  18 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  43, 125, 151 },
-+						{  26, 108, 148 },
-+						{   7,  83, 122 },
-+						{   2,  59,  89 },
-+						{   1,  38,  60 },
-+						{   1,  17,  27 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  23, 144, 163 },
-+						{  13, 112, 154 },
-+						{   2,  75, 117 },
-+						{   1,  50,  81 },
-+						{   1,  31,  51 },
-+						{   1,  14,  23 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{  18, 162, 185 },
-+						{   6, 123, 171 },
-+						{   1,  78, 125 },
-+						{   1,  51,  86 },
-+						{   1,  31,  54 },
-+						{   1,  14,  23 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{  15, 199, 227 },
-+						{   3, 150, 204 },
-+						{   1,  91, 146 },
-+						{   1,  55,  95 },
-+						{   1,  30,  53 },
-+						{   1,  11,  20 },
-+					}
-+				},
-+				{ /* Inter */
-+					{ /* Coeff Band 0 */
-+						{  19,  55, 240 },
-+						{  19,  59, 196 },
-+						{   3,  52, 105 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  41, 166, 207 },
-+						{ 104, 153, 199 },
-+						{  31, 123, 181 },
-+						{  14, 101, 152 },
-+						{   5,  72, 106 },
-+						{   1,  36,  52 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  35, 176, 211 },
-+						{  12, 131, 190 },
-+						{   2,  88, 144 },
-+						{   1,  60, 101 },
-+						{   1,  36,  60 },
-+						{   1,  16,  28 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  28, 183, 213 },
-+						{   8, 134, 191 },
-+						{   1,  86, 142 },
-+						{   1,  56,  96 },
-+						{   1,  30,  53 },
-+						{   1,  12,  20 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{  20, 190, 215 },
-+						{   4, 135, 192 },
-+						{   1,  84, 139 },
-+						{   1,  53,  91 },
-+						{   1,  28,  49 },
-+						{   1,  11,  20 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{  13, 196, 216 },
-+						{   2, 137, 192 },
-+						{   1,  86, 143 },
-+						{   1,  57,  99 },
-+						{   1,  32,  56 },
-+						{   1,  13,  24 },
-+					},
-+				},
-+			},
-+			{ /* block Type 1 */
-+				{ /* Intra */
-+					{ /* Coeff Band 0 */
-+						{ 211,  29, 217 },
-+						{  96,  47, 156 },
-+						{  22,  43,  87 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  78, 120, 193 },
-+						{ 111, 116, 186 },
-+						{  46, 102, 164 },
-+						{  15,  80, 128 },
-+						{   2,  49,  76 },
-+						{   1,  18,  28 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  71, 161, 203 },
-+						{  42, 132, 192 },
-+						{  10,  98, 150 },
-+						{   3,  69, 109 },
-+						{   1,  44,  70 },
-+						{   1,  18,  29 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  57, 186, 211 },
-+						{  30, 140, 196 },
-+						{   4,  93, 146 },
-+						{   1,  62, 102 },
-+						{   1,  38,  65 },
-+						{   1,  16,  27 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{  47, 199, 217 },
-+						{  14, 145, 196 },
-+						{   1,  88, 142 },
-+						{   1,  57,  98 },
-+						{   1,  36,  62 },
-+						{   1,  15,  26 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{  26, 219, 229 },
-+						{   5, 155, 207 },
-+						{   1,  94, 151 },
-+						{   1,  60, 104 },
-+						{   1,  36,  62 },
-+						{   1,  16,  28 },
-+					}
-+				},
-+				{ /* Inter */
-+					{ /* Coeff Band 0 */
-+						{ 233,  29, 248 },
-+						{ 146,  47, 220 },
-+						{  43,  52, 140 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{ 100, 163, 232 },
-+						{ 179, 161, 222 },
-+						{  63, 142, 204 },
-+						{  37, 113, 174 },
-+						{  26,  89, 137 },
-+						{  18,  68,  97 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  85, 181, 230 },
-+						{  32, 146, 209 },
-+						{   7, 100, 164 },
-+						{   3,  71, 121 },
-+						{   1,  45,  77 },
-+						{   1,  18,  30 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  65, 187, 230 },
-+						{  20, 148, 207 },
-+						{   2,  97, 159 },
-+						{   1,  68, 116 },
-+						{   1,  40,  70 },
-+						{   1,  14,  29 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{  40, 194, 227 },
-+						{   8, 147, 204 },
-+						{   1,  94, 155 },
-+						{   1,  65, 112 },
-+						{   1,  39,  66 },
-+						{   1,  14,  26 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{  16, 208, 228 },
-+						{   3, 151, 207 },
-+						{   1,  98, 160 },
-+						{   1,  67, 117 },
-+						{   1,  41,  74 },
-+						{   1,  17,  31 },
-+					},
-+				},
-+			},
-+		},
-+		{ /* tx = 32x32 */
-+			{ /* block Type 0 */
-+				{ /* Intra */
-+					{ /* Coeff Band 0 */
-+						{  17,  38, 140 },
-+						{   7,  34,  80 },
-+						{   1,  17,  29 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  37,  75, 128 },
-+						{  41,  76, 128 },
-+						{  26,  66, 116 },
-+						{  12,  52,  94 },
-+						{   2,  32,  55 },
-+						{   1,  10,  16 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  50, 127, 154 },
-+						{  37, 109, 152 },
-+						{  16,  82, 121 },
-+						{   5,  59,  85 },
-+						{   1,  35,  54 },
-+						{   1,  13,  20 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  40, 142, 167 },
-+						{  17, 110, 157 },
-+						{   2,  71, 112 },
-+						{   1,  44,  72 },
-+						{   1,  27,  45 },
-+						{   1,  11,  17 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{  30, 175, 188 },
-+						{   9, 124, 169 },
-+						{   1,  74, 116 },
-+						{   1,  48,  78 },
-+						{   1,  30,  49 },
-+						{   1,  11,  18 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{  10, 222, 223 },
-+						{   2, 150, 194 },
-+						{   1,  83, 128 },
-+						{   1,  48,  79 },
-+						{   1,  27,  45 },
-+						{   1,  11,  17 },
-+					},
-+				},
-+				{ /* Inter */
-+					{ /* Coeff Band 0 */
-+						{  36,  41, 235 },
-+						{  29,  36, 193 },
-+						{  10,  27, 111 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  85, 165, 222 },
-+						{ 177, 162, 215 },
-+						{ 110, 135, 195 },
-+						{  57, 113, 168 },
-+						{  23,  83, 120 },
-+						{  10,  49,  61 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  85, 190, 223 },
-+						{  36, 139, 200 },
-+						{   5,  90, 146 },
-+						{   1,  60, 103 },
-+						{   1,  38,  65 },
-+						{   1,  18,  30 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  72, 202, 223 },
-+						{  23, 141, 199 },
-+						{   2,  86, 140 },
-+						{   1,  56,  97 },
-+						{   1,  36,  61 },
-+						{   1,  16,  27 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{  55, 218, 225 },
-+						{  13, 145, 200 },
-+						{   1,  86, 141 },
-+						{   1,  57,  99 },
-+						{   1,  35,  61 },
-+						{   1,  13,  22 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{  15, 235, 212 },
-+						{   1, 132, 184 },
-+						{   1,  84, 139 },
-+						{   1,  57,  97 },
-+						{   1,  34,  56 },
-+						{   1,  14,  23 },
-+					},
-+				},
-+			},
-+			{ /* block Type 1 */
-+				{ /* Intra */
-+					{ /* Coeff Band 0 */
-+						{ 181,  21, 201 },
-+						{  61,  37, 123 },
-+						{  10,  38,  71 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{  47, 106, 172 },
-+						{  95, 104, 173 },
-+						{  42,  93, 159 },
-+						{  18,  77, 131 },
-+						{   4,  50,  81 },
-+						{   1,  17,  23 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{  62, 147, 199 },
-+						{  44, 130, 189 },
-+						{  28, 102, 154 },
-+						{  18,  75, 115 },
-+						{   2,  44,  65 },
-+						{   1,  12,  19 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{  55, 153, 210 },
-+						{  24, 130, 194 },
-+						{   3,  93, 146 },
-+						{   1,  61,  97 },
-+						{   1,  31,  50 },
-+						{   1,  10,  16 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{  49, 186, 223 },
-+						{  17, 148, 204 },
-+						{   1,  96, 142 },
-+						{   1,  53,  83 },
-+						{   1,  26,  44 },
-+						{   1,  11,  17 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{  13, 217, 212 },
-+						{   2, 136, 180 },
-+						{   1,  78, 124 },
-+						{   1,  50,  83 },
-+						{   1,  29,  49 },
-+						{   1,  14,  23 },
-+					},
-+				},
-+				{ /* Inter */
-+					{ /* Coeff Band 0 */
-+						{ 197,  13, 247 },
-+						{  82,  17, 222 },
-+						{  25,  17, 162 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+						{   0,   0,   0 },
-+					},
-+					{ /* Coeff Band 1 */
-+						{ 126, 186, 247 },
-+						{ 234, 191, 243 },
-+						{ 176, 177, 234 },
-+						{ 104, 158, 220 },
-+						{  66, 128, 186 },
-+						{  55,  90, 137 },
-+					},
-+					{ /* Coeff Band 2 */
-+						{ 111, 197, 242 },
-+						{  46, 158, 219 },
-+						{   9, 104, 171 },
-+						{   2,  65, 125 },
-+						{   1,  44,  80 },
-+						{   1,  17,  91 },
-+					},
-+					{ /* Coeff Band 3 */
-+						{ 104, 208, 245 },
-+						{  39, 168, 224 },
-+						{   3, 109, 162 },
-+						{   1,  79, 124 },
-+						{   1,  50, 102 },
-+						{   1,  43, 102 },
-+					},
-+					{ /* Coeff Band 4 */
-+						{  84, 220, 246 },
-+						{  31, 177, 231 },
-+						{   2, 115, 180 },
-+						{   1,  79, 134 },
-+						{   1,  55,  77 },
-+						{   1,  60,  79 },
-+					},
-+					{ /* Coeff Band 5 */
-+						{  43, 243, 240 },
-+						{   8, 180, 217 },
-+						{   1, 115, 166 },
-+						{   1,  84, 121 },
-+						{   1,  51,  67 },
-+						{   1,  16,   6 },
-+					},
-+				},
-+			},
-+		},
-+	},
-+
-+	.skip = { 192, 128, 64 },
-+	.inter_mode = {
-+		{  2, 173, 34 },
-+		{  7, 145, 85 },
-+		{  7, 166, 63 },
-+		{  7,  94, 66 },
-+		{  8,  64, 46 },
-+		{ 17,  81, 31 },
-+		{ 25,  29, 30 },
-+	},
-+	.interp_filter = {
-+		{ 235, 162 },
-+		{  36, 255 },
-+		{  34,   3 },
-+		{ 149, 144 },
-+	},
-+	.is_inter = { 9, 102, 187, 225 },
-+	.comp_mode = { 239, 183, 119, 96, 41 },
-+	.single_ref = {
-+		{  33,  16 },
-+		{  77,  74 },
-+		{ 142, 142 },
-+		{ 172, 170 },
-+		{ 238, 247 },
-+	},
-+	.comp_ref = { 50, 126, 123, 221, 226 },
-+	.y_mode = {
-+		{  65,  32, 18, 144, 162, 194, 41, 51, 98 },
-+		{ 132,  68, 18, 165, 217, 196, 45, 40, 78 },
-+		{ 173,  80, 19, 176, 240, 193, 64, 35, 46 },
-+		{ 221, 135, 38, 194, 248, 121, 96, 85, 29 },
-+	},
-+	.uv_mode = {
-+		{ 120,   7,  76, 176, 208, 126,  28,  54, 103 } /* y = dc */,
-+		{  48,  12, 154, 155, 139,  90,  34, 117, 119 } /* y = v */,
-+		{  67,   6,  25, 204, 243, 158,  13,  21,  96 } /* y = h */,
-+		{  97,   5,  44, 131, 176, 139,  48,  68,  97 } /* y = d45 */,
-+		{  83,   5,  42, 156, 111, 152,  26,  49, 152 } /* y = d135 */,
-+		{  80,   5,  58, 178,  74,  83,  33,  62, 145 } /* y = d117 */,
-+		{  86,   5,  32, 154, 192, 168,  14,  22, 163 } /* y = d153 */,
-+		{  85,   5,  32, 156, 216, 148,  19,  29,  73 } /* y = d207 */,
-+		{  77,   7,  64, 116, 132, 122,  37, 126, 120 } /* y = d63 */,
-+		{ 101,  21, 107, 181, 192, 103,  19,  67, 125 } /* y = tm */
-+	},
-+	.partition = {
-+		/* 8x8 -> 4x4 */
-+		{ 199, 122, 141 } /* a/l both not split */,
-+		{ 147,  63, 159 } /* a split, l not split */,
-+		{ 148, 133, 118 } /* l split, a not split */,
-+		{ 121, 104, 114 } /* a/l both split */,
-+		/* 16x16 -> 8x8 */
-+		{ 174,  73,  87 } /* a/l both not split */,
-+		{  92,  41,  83 } /* a split, l not split */,
-+		{  82,  99,  50 } /* l split, a not split */,
-+		{  53,  39,  39 } /* a/l both split */,
-+		/* 32x32 -> 16x16 */
-+		{ 177,  58,  59 } /* a/l both not split */,
-+		{  68,  26,  63 } /* a split, l not split */,
-+		{  52,  79,  25 } /* l split, a not split */,
-+		{  17,  14,  12 } /* a/l both split */,
-+		/* 64x64 -> 32x32 */
-+		{ 222,  34,  30 } /* a/l both not split */,
-+		{  72,  16,  44 } /* a split, l not split */,
-+		{  58,  32,  12 } /* l split, a not split */,
-+		{  10,   7,   6 } /* a/l both split */,
-+	},
-+
-+	.mv = {
-+		.joint = { 32, 64, 96 },
-+		.sign = { 128, 128 },
-+		.classes = {
-+			{ 224, 144, 192, 168, 192, 176, 192, 198, 198, 245 },
-+			{ 216, 128, 176, 160, 176, 176, 192, 198, 198, 208 },
-+		},
-+		.class0_bit = { 216, 208 },
-+		.bits = {
-+			{ 136, 140, 148, 160, 176, 192, 224, 234, 234, 240},
-+			{ 136, 140, 148, 160, 176, 192, 224, 234, 234, 240},
-+		},
-+		.class0_fr = {
-+			{
-+				{ 128, 128, 64 },
-+				{  96, 112, 64 },
-+			},
-+			{
-+				{ 128, 128, 64 },
-+				{  96, 112, 64 },
-+			},
-+		},
-+		.fr = {
-+			{ 64, 96, 64 },
-+			{ 64, 96, 64 },
-+		},
-+		.class0_hp = { 160, 160 },
-+		.hp = { 128, 128 },
-+	},
-+};
-+EXPORT_SYMBOL_GPL(v4l2_vp9_default_probs);
-+
-+static u32 fastdiv(u32 dividend, u16 divisor)
++static int start_prepare_run(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_frame **dec_params)
 +{
-+#define DIV_INV(d)	((u32)(((1ULL << 32) + ((d) - 1)) / (d)))
-+#define DIVS_INV(d0, d1, d2, d3, d4, d5, d6, d7, d8, d9)	\
-+	DIV_INV(d0), DIV_INV(d1), DIV_INV(d2), DIV_INV(d3),	\
-+	DIV_INV(d4), DIV_INV(d5), DIV_INV(d6), DIV_INV(d7),	\
-+	DIV_INV(d8), DIV_INV(d9)
-+
-+	static const u32 inv[] = {
-+		DIV_INV(2), DIV_INV(3), DIV_INV(4), DIV_INV(5),
-+		DIV_INV(6), DIV_INV(7), DIV_INV(8), DIV_INV(9),
-+		DIVS_INV(10, 11, 12, 13, 14, 15, 16, 17, 18, 19),
-+		DIVS_INV(20, 21, 22, 23, 24, 25, 26, 27, 28, 29),
-+		DIVS_INV(30, 31, 32, 33, 34, 35, 36, 37, 38, 39),
-+		DIVS_INV(40, 41, 42, 43, 44, 45, 46, 47, 48, 49),
-+		DIVS_INV(50, 51, 52, 53, 54, 55, 56, 57, 58, 59),
-+		DIVS_INV(60, 61, 62, 63, 64, 65, 66, 67, 68, 69),
-+		DIVS_INV(70, 71, 72, 73, 74, 75, 76, 77, 78, 79),
-+		DIVS_INV(80, 81, 82, 83, 84, 85, 86, 87, 88, 89),
-+		DIVS_INV(90, 91, 92, 93, 94, 95, 96, 97, 98, 99),
-+		DIVS_INV(100, 101, 102, 103, 104, 105, 106, 107, 108, 109),
-+		DIVS_INV(110, 111, 112, 113, 114, 115, 116, 117, 118, 119),
-+		DIVS_INV(120, 121, 122, 123, 124, 125, 126, 127, 128, 129),
-+		DIVS_INV(130, 131, 132, 133, 134, 135, 136, 137, 138, 139),
-+		DIVS_INV(140, 141, 142, 143, 144, 145, 146, 147, 148, 149),
-+		DIVS_INV(150, 151, 152, 153, 154, 155, 156, 157, 158, 159),
-+		DIVS_INV(160, 161, 162, 163, 164, 165, 166, 167, 168, 169),
-+		DIVS_INV(170, 171, 172, 173, 174, 175, 176, 177, 178, 179),
-+		DIVS_INV(180, 181, 182, 183, 184, 185, 186, 187, 188, 189),
-+		DIVS_INV(190, 191, 192, 193, 194, 195, 196, 197, 198, 199),
-+		DIVS_INV(200, 201, 202, 203, 204, 205, 206, 207, 208, 209),
-+		DIVS_INV(210, 211, 212, 213, 214, 215, 216, 217, 218, 219),
-+		DIVS_INV(220, 221, 222, 223, 224, 225, 226, 227, 228, 229),
-+		DIVS_INV(230, 231, 232, 233, 234, 235, 236, 237, 238, 239),
-+		DIVS_INV(240, 241, 242, 243, 244, 245, 246, 247, 248, 249),
-+		DIV_INV(250), DIV_INV(251), DIV_INV(252), DIV_INV(253),
-+		DIV_INV(254), DIV_INV(255), DIV_INV(256),
-+	};
-+
-+	if (divisor == 0)
-+		return 0;
-+	else if (divisor == 1)
-+		return dividend;
-+
-+	if (WARN_ON(divisor - 2 >= ARRAY_SIZE(inv)))
-+		return dividend;
-+
-+	return ((u64)dividend * inv[divisor - 2]) >> 32;
-+}
-+
-+/* 6.3.6 inv_recenter_nonneg(v, m) */
-+static int inv_recenter_nonneg(int v, int m)
-+{
-+	if (v > 2 * m)
-+		return v;
-+
-+	if (v & 1)
-+		return m - ((v + 1) >> 1);
-+
-+	return m + (v >> 1);
-+}
-+
-+/*
-+ * part of 6.3.5 inv_remap_prob(deltaProb, prob)
-+ * delta = inv_map_table[deltaProb] done by userspace
-+ */
-+static int update_prob(int delta, int prob)
-+{
-+	if (!delta)
-+		return prob;
-+
-+	return prob <= 128 ?
-+		1 + inv_recenter_nonneg(delta, prob - 1) :
-+		255 - inv_recenter_nonneg(delta, 255 - prob);
-+}
-+
-+/* Counterpart to 6.3.2 tx_mode_probs() */
-+static void update_tx_probs(struct v4l2_vp9_frame_context *probs,
-+			    const struct v4l2_ctrl_vp9_compressed_hdr_probs *deltas)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->tx8); i++) {
-+		u8 *p8x8 = probs->tx8[i];
-+		u8 *p16x16 = probs->tx16[i];
-+		u8 *p32x32 = probs->tx32[i];
-+		const u8 *d8x8 = deltas->tx8[i];
-+		const u8 *d16x16 = deltas->tx16[i];
-+		const u8 *d32x32 = deltas->tx32[i];
-+
-+		p8x8[0] = update_prob(d8x8[0], p8x8[0]);
-+		p16x16[0] = update_prob(d16x16[0], p16x16[0]);
-+		p16x16[1] = update_prob(d16x16[1], p16x16[1]);
-+		p32x32[0] = update_prob(d32x32[0], p32x32[0]);
-+		p32x32[1] = update_prob(d32x32[1], p32x32[1]);
-+		p32x32[2] = update_prob(d32x32[2], p32x32[2]);
-+	}
-+}
-+
-+#define BAND_6(band) ((band) == 0 ? 3 : 6)
-+
-+static void update_coeff(const u8 deltas[6][6][3], u8 probs[6][6][3])
-+{
-+	int l, m, n;
-+
-+	for (l = 0; l < 6; l++)
-+		for (m = 0; m < BAND_6(l); m++) {
-+			u8 *p = probs[l][m];
-+			const u8 *d = deltas[l][m];
-+
-+			for (n = 0; n < 3; n++)
-+				p[n] = update_prob(d[n], p[n]);
-+		}
-+}
-+
-+/* Counterpart to 6.3.7 read_coef_probs() */
-+static void update_coef_probs(struct v4l2_vp9_frame_context *probs,
-+			      const struct v4l2_ctrl_vp9_compressed_hdr_probs *deltas,
-+			      const struct v4l2_ctrl_vp9_frame *dec_params)
-+{
-+	int i, j, k;
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->coef); i++) {
-+		for (j = 0; j < ARRAY_SIZE(probs->coef[0]); j++)
-+			for (k = 0; k < ARRAY_SIZE(probs->coef[0][0]); k++)
-+				update_coeff(deltas->coef[i][j][k], probs->coef[i][j][k]);
-+
-+		if (dec_params->tx_mode == i)
-+			break;
-+	}
-+}
-+
-+/* Counterpart to 6.3.8 read_skip_prob() */
-+static void update_skip_probs(struct v4l2_vp9_frame_context *probs,
-+			      const struct v4l2_ctrl_vp9_compressed_hdr_probs *deltas)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->skip); i++)
-+		probs->skip[i] = update_prob(deltas->skip[i], probs->skip[i]);
-+}
-+
-+/* Counterpart to 6.3.9 read_inter_mode_probs() */
-+static void update_inter_mode_probs(struct v4l2_vp9_frame_context *probs,
-+				    const struct v4l2_ctrl_vp9_compressed_hdr_probs *deltas)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->inter_mode); i++) {
-+		u8 *p = probs->inter_mode[i];
-+		const u8 *d = deltas->inter_mode[i];
-+
-+		p[0] = update_prob(d[0], p[0]);
-+		p[1] = update_prob(d[1], p[1]);
-+		p[2] = update_prob(d[2], p[2]);
-+	}
-+}
-+
-+/* Counterpart to 6.3.10 read_interp_filter_probs() */
-+static void update_interp_filter_probs(struct v4l2_vp9_frame_context *probs,
-+				       const struct v4l2_ctrl_vp9_compressed_hdr_probs *deltas)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->interp_filter); i++) {
-+		u8 *p = probs->interp_filter[i];
-+		const u8 *d = deltas->interp_filter[i];
-+
-+		p[0] = update_prob(d[0], p[0]);
-+		p[1] = update_prob(d[1], p[1]);
-+	}
-+}
-+
-+/* Counterpart to 6.3.11 read_is_inter_probs() */
-+static void update_is_inter_probs(struct v4l2_vp9_frame_context *probs,
-+				  const struct v4l2_ctrl_vp9_compressed_hdr_probs *deltas)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->is_inter); i++)
-+		probs->is_inter[i] = update_prob(deltas->is_inter[i], probs->is_inter[i]);
-+}
-+
-+/* 6.3.12 frame_reference_mode() done entirely in userspace */
-+
-+/* Counterpart to 6.3.13 frame_reference_mode_probs() */
-+static void
-+update_frame_reference_mode_probs(enum v4l2_vp9_reference_mode reference_mode,
-+				  struct v4l2_vp9_frame_context *probs,
-+				  const struct v4l2_ctrl_vp9_compressed_hdr_probs *deltas)
-+{
-+	int i;
-+
-+	if (reference_mode == V4L2_VP9_REFERENCE_MODE_SELECT)
-+		for (i = 0; i < ARRAY_SIZE(probs->comp_mode); i++)
-+			probs->comp_mode[i] = update_prob(deltas->comp_mode[i],
-+							  probs->comp_mode[i]);
-+
-+	if (reference_mode != V4L2_VP9_REFERENCE_MODE_COMPOUND_REFERENCE)
-+		for (i = 0; i < ARRAY_SIZE(probs->single_ref); i++) {
-+			u8 *p = probs->single_ref[i];
-+			const u8 *d = deltas->single_ref[i];
-+
-+			p[0] = update_prob(d[0], p[0]);
-+			p[1] = update_prob(d[1], p[1]);
-+		}
-+
-+	if (reference_mode != V4L2_VP9_REFERENCE_MODE_SINGLE_REFERENCE)
-+		for (i = 0; i < ARRAY_SIZE(probs->comp_ref); i++)
-+			probs->comp_ref[i] = update_prob(deltas->comp_ref[i], probs->comp_ref[i]);
-+}
-+
-+/* Counterpart to 6.3.14 read_y_mode_probs() */
-+static void update_y_mode_probs(struct v4l2_vp9_frame_context *probs,
-+				const struct v4l2_ctrl_vp9_compressed_hdr_probs *deltas)
-+{
-+	int i, j;
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->y_mode); i++)
-+		for (j = 0; j < ARRAY_SIZE(probs->y_mode[0]); ++j)
-+			probs->y_mode[i][j] =
-+				update_prob(deltas->y_mode[i][j], probs->y_mode[i][j]);
-+}
-+
-+/* Counterpart to 6.3.15 read_partition_probs() */
-+static void update_partition_probs(struct v4l2_vp9_frame_context *probs,
-+				   const struct v4l2_ctrl_vp9_compressed_hdr_probs *deltas)
-+{
-+	int i, j;
-+
-+	for (i = 0; i < 4; i++)
-+		for (j = 0; j < 4; j++) {
-+			u8 *p = probs->partition[i * 4 + j];
-+			const u8 *d = deltas->partition[i * 4 + j];
-+
-+			p[0] = update_prob(d[0], p[0]);
-+			p[1] = update_prob(d[1], p[1]);
-+			p[2] = update_prob(d[2], p[2]);
-+		}
-+}
-+
-+static inline int update_mv_prob(int delta, int prob)
-+{
-+	if (!delta)
-+		return prob;
-+
-+	return delta;
-+}
-+
-+/* Counterpart to 6.3.16 mv_probs() */
-+static void update_mv_probs(struct v4l2_vp9_frame_context *probs,
-+			    const struct v4l2_ctrl_vp9_compressed_hdr_probs *deltas,
-+			    const struct v4l2_ctrl_vp9_frame *dec_params)
-+{
-+	u8 *p = probs->mv.joint;
-+	const u8 *d = deltas->mv.joint;
-+	unsigned int i, j;
-+
-+	p[0] = update_mv_prob(d[0], p[0]);
-+	p[1] = update_mv_prob(d[1], p[1]);
-+	p[2] = update_mv_prob(d[2], p[2]);
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->mv.sign); i++) {
-+		p = probs->mv.sign;
-+		d = deltas->mv.sign;
-+		p[i] = update_mv_prob(d[i], p[i]);
-+
-+		p = probs->mv.classes[i];
-+		d = deltas->mv.classes[i];
-+		for (j = 0; j < ARRAY_SIZE(probs->mv.classes[0]); j++)
-+			p[j] = update_mv_prob(d[j], p[j]);
-+
-+		p = probs->mv.class0_bit;
-+		d = deltas->mv.class0_bit;
-+		p[i] = update_mv_prob(d[i], p[i]);
-+
-+		p = probs->mv.bits[i];
-+		d = deltas->mv.bits[i];
-+		for (j = 0; j < ARRAY_SIZE(probs->mv.bits[0]); j++)
-+			p[j] = update_mv_prob(d[j], p[j]);
-+
-+		for (j = 0; j < ARRAY_SIZE(probs->mv.class0_fr[0]); j++) {
-+			p = probs->mv.class0_fr[i][j];
-+			d = deltas->mv.class0_fr[i][j];
-+
-+			p[0] = update_mv_prob(d[0], p[0]);
-+			p[1] = update_mv_prob(d[1], p[1]);
-+			p[2] = update_mv_prob(d[2], p[2]);
-+		}
-+
-+		p = probs->mv.fr[i];
-+		d = deltas->mv.fr[i];
-+		for (j = 0; j < ARRAY_SIZE(probs->mv.fr[i]); j++)
-+			p[j] = update_mv_prob(d[j], p[j]);
-+
-+		if (dec_params->flags & V4L2_VP9_FRAME_FLAG_ALLOW_HIGH_PREC_MV) {
-+			p = probs->mv.class0_hp;
-+			d = deltas->mv.class0_hp;
-+			p[i] = update_mv_prob(d[i], p[i]);
-+
-+			p = probs->mv.hp;
-+			d = deltas->mv.hp;
-+			p[i] = update_mv_prob(d[i], p[i]);
-+		}
-+	}
-+}
-+
-+/* Counterpart to 6.3 compressed_header(), but parsing has been done in userspace. */
-+void v4l2_vp9_fw_update_probs(struct v4l2_vp9_frame_context *probs,
-+			      const struct v4l2_ctrl_vp9_compressed_hdr_probs *deltas,
-+			      const struct v4l2_ctrl_vp9_frame *dec_params)
-+{
-+	if (dec_params->tx_mode == V4L2_VP9_TX_MODE_SELECT)
-+		update_tx_probs(probs, deltas);
-+
-+	update_coef_probs(probs, deltas, dec_params);
-+
-+	update_skip_probs(probs, deltas);
-+
-+	if (dec_params->flags & V4L2_VP9_FRAME_FLAG_KEY_FRAME ||
-+	    dec_params->flags & V4L2_VP9_FRAME_FLAG_INTRA_ONLY)
-+		return;
-+
-+	update_inter_mode_probs(probs, deltas);
-+
-+	if (dec_params->interpolation_filter == V4L2_VP9_INTERP_FILTER_SWITCHABLE)
-+		update_interp_filter_probs(probs, deltas);
-+
-+	update_is_inter_probs(probs, deltas);
-+
-+	update_frame_reference_mode_probs(dec_params->reference_mode, probs, deltas);
-+
-+	update_y_mode_probs(probs, deltas);
-+
-+	update_partition_probs(probs, deltas);
-+
-+	update_mv_probs(probs, deltas, dec_params);
-+}
-+EXPORT_SYMBOL_GPL(v4l2_vp9_fw_update_probs);
-+
-+u8 v4l2_vp9_reset_frame_ctx(const struct v4l2_ctrl_vp9_frame *dec_params,
-+			    struct v4l2_vp9_frame_context *frame_context)
-+{
-+	int i;
-+
-+	u8 fctx_idx = dec_params->frame_context_idx;
-+
-+	if (dec_params->flags & V4L2_VP9_FRAME_FLAG_KEY_FRAME ||
-+	    dec_params->flags & V4L2_VP9_FRAME_FLAG_INTRA_ONLY ||
-+	    dec_params->flags & V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT) {
-+		/*
-+		 * setup_past_independence()
-+		 * We do nothing here. Instead of storing default probs in some intermediate
-+		 * location and then copying from that location to appropriate contexts
-+		 * in save_probs() below, we skip that step and save default probs directly
-+		 * to appropriate contexts.
-+		 */
-+		if (dec_params->flags & V4L2_VP9_FRAME_FLAG_KEY_FRAME ||
-+		    dec_params->flags & V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT ||
-+		    dec_params->reset_frame_context == V4L2_VP9_RESET_FRAME_CTX_ALL)
-+			for (i = 0; i < 4; ++i)
-+				/* save_probs(i) */
-+				memcpy(&frame_context[i], &v4l2_vp9_default_probs,
-+				       sizeof(v4l2_vp9_default_probs));
-+		else if (dec_params->reset_frame_context == V4L2_VP9_RESET_FRAME_CTX_SPEC)
-+			/* save_probs(fctx_idx) */
-+			memcpy(&frame_context[fctx_idx], &v4l2_vp9_default_probs,
-+			       sizeof(v4l2_vp9_default_probs));
-+		fctx_idx = 0;
-+	}
-+
-+	return fctx_idx;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_vp9_reset_frame_ctx);
-+
-+/* 8.4.1 Merge prob process */
-+static u8 merge_prob(u8 pre_prob, u32 ct0, u32 ct1, u16 count_sat, u32 max_update_factor)
-+{
-+	u32 den, prob, count, factor;
-+
-+	den = ct0 + ct1;
-+	if (!den) {
-+		/*
-+		 * prob = 128, count = 0, update_factor = 0
-+		 * Round2's argument: pre_prob * 256
-+		 * (pre_prob * 256 + 128) >> 8 == pre_prob
-+		 */
-+		return pre_prob;
-+	}
-+
-+	prob = clamp(((ct0 << 8) + (den >> 1)) / den, (u32)1, (u32)255);
-+	count = min_t(u32, den, count_sat);
-+	factor = fastdiv(max_update_factor * count, count_sat);
++	const struct v4l2_ctrl_vp9_compressed_hdr_probs *prob_updates;
++	struct hantro_vp9_dec_hw_ctx *vp9_ctx = &ctx->vp9_dec;
++	struct v4l2_ctrl *ctrl;
++	unsigned int fctx_idx;
++
++	/* v4l2-specific stuff */
++	hantro_start_prepare_run(ctx);
++
++	ctrl = v4l2_ctrl_find(&ctx->ctrl_handler, V4L2_CID_STATELESS_VP9_FRAME);
++	if (WARN_ON(!ctrl))
++		return -EINVAL;
++	*dec_params = ctrl->p_cur.p;
++
++	ctrl = v4l2_ctrl_find(&ctx->ctrl_handler, V4L2_CID_STATELESS_VP9_COMPRESSED_HDR_PROBS);
++	if (WARN_ON(!ctrl))
++		return -EINVAL;
++	prob_updates = ctrl->p_cur.p;
 +
 +	/*
-+	 * Round2(pre_prob * (256 - factor) + prob * factor, 8)
-+	 * Round2(pre_prob * 256 + (prob - pre_prob) * factor, 8)
-+	 * (pre_prob * 256 >> 8) + (((prob - pre_prob) * factor + 128) >> 8)
++	 * vp9 stuff
++	 *
++	 * by this point the userspace has done all parts of 6.2 uncompressed_header()
++	 * except this fragment:
++	 * if ( FrameIsIntra || error_resilient_mode ) {
++	 *	setup_past_independence ( )
++	 *	if ( frame_type == KEY_FRAME || error_resilient_mode == 1 ||
++	 *	     reset_frame_context == 3 ) {
++	 *		for ( i = 0; i < 4; i ++ ) {
++	 *			save_probs( i )
++	 *		}
++	 *	} else if ( reset_frame_context == 2 ) {
++	 *		save_probs( frame_context_idx )
++	 *	}
++	 *	frame_context_idx = 0
++	 * }
 +	 */
-+	return pre_prob + (((prob - pre_prob) * factor + 128) >> 8);
++	fctx_idx = v4l2_vp9_reset_frame_ctx(*dec_params, vp9_ctx->frame_context);
++	vp9_ctx->cur.frame_context_idx = fctx_idx;
++
++	/* 6.1 frame(sz): load_probs() and load_probs2() */
++	vp9_ctx->probability_tables = vp9_ctx->frame_context[fctx_idx];
++
++	/*
++	 * The userspace has also performed 6.3 compressed_header(), but handling the
++	 * probs in a special way. All probs which need updating, except MV-related,
++	 * have been read from the bitstream and translated through inv_map_table[],
++	 * but no 6.3.6 inv_recenter_nonneg(v, m) has been performed. The values passed
++	 * by userspace are either translated values (there are no 0 values in
++	 * inv_map_table[]), or zero to indicate no update. All MV-related probs which need
++	 * updating have been read from the bitstream and (mv_prob << 1) | 1 has been
++	 * performed. The values passed by userspace are either new values
++	 * to replace old ones (the above mentioned shift and bitwise or never result in
++	 * a zero) or zero to indicate no update.
++	 * fw_update_probs() performs actual probs updates or leaves probs as-is
++	 * for values for which a zero was passed from userspace.
++	 */
++	v4l2_vp9_fw_update_probs(&vp9_ctx->probability_tables, prob_updates, *dec_params);
++
++	return 0;
 +}
 +
-+static inline u8 noncoef_merge_prob(u8 pre_prob, u32 ct0, u32 ct1)
++static size_t chroma_offset(const struct hantro_ctx *ctx,
++			    const struct v4l2_ctrl_vp9_frame *dec_params)
 +{
-+	return merge_prob(pre_prob, ct0, ct1, 20, 128);
++	int bytes_per_pixel = dec_params->bit_depth == 8 ? 1 : 2;
++
++	return ctx->src_fmt.width * ctx->src_fmt.height * bytes_per_pixel;
 +}
 +
-+/* 8.4.2 Merge probs process */
-+/*
-+ * merge_probs() is a recursive function in the spec. We avoid recursion in the kernel.
-+ * That said, the "tree" parameter of merge_probs() controls how deep the recursion goes.
-+ * It turns out that in all cases the recursive calls boil down to a short-ish series
-+ * of merge_prob() invocations (note no "s").
-+ *
-+ * Variant A
-+ * ---------
-+ * merge_probs(small_token_tree, 2):
-+ *	merge_prob(p[1], c[0], c[1] + c[2])
-+ *	merge_prob(p[2], c[1], c[2])
-+ *
-+ * Variant B
-+ * ---------
-+ * merge_probs(binary_tree, 0) or
-+ * merge_probs(tx_size_8_tree, 0):
-+ *	merge_prob(p[0], c[0], c[1])
-+ *
-+ * Variant C
-+ * ---------
-+ * merge_probs(inter_mode_tree, 0):
-+ *	merge_prob(p[0], c[2], c[1] + c[0] + c[3])
-+ *	merge_prob(p[1], c[0], c[1] + c[3])
-+ *	merge_prob(p[2], c[1], c[3])
-+ *
-+ * Variant D
-+ * ---------
-+ * merge_probs(intra_mode_tree, 0):
-+ *	merge_prob(p[0], c[0], c[1] + ... + c[9])
-+ *	merge_prob(p[1], c[9], c[1] + ... + c[8])
-+ *	merge_prob(p[2], c[1], c[2] + ... + c[8])
-+ *	merge_prob(p[3], c[2] + c[4] + c[5], c[3] + c[8] + c[6] + c[7])
-+ *	merge_prob(p[4], c[2], c[4] + c[5])
-+ *	merge_prob(p[5], c[4], c[5])
-+ *	merge_prob(p[6], c[3], c[8] + c[6] + c[7])
-+ *	merge_prob(p[7], c[8], c[6] + c[7])
-+ *	merge_prob(p[8], c[6], c[7])
-+ *
-+ * Variant E
-+ * ---------
-+ * merge_probs(partition_tree, 0) or
-+ * merge_probs(tx_size_32_tree, 0) or
-+ * merge_probs(mv_joint_tree, 0) or
-+ * merge_probs(mv_fr_tree, 0):
-+ *	merge_prob(p[0], c[0], c[1] + c[2] + c[3])
-+ *	merge_prob(p[1], c[1], c[2] + c[3])
-+ *	merge_prob(p[2], c[2], c[3])
-+ *
-+ * Variant F
-+ * ---------
-+ * merge_probs(interp_filter_tree, 0) or
-+ * merge_probs(tx_size_16_tree, 0):
-+ *	merge_prob(p[0], c[0], c[1] + c[2])
-+ *	merge_prob(p[1], c[1], c[2])
-+ *
-+ * Variant G
-+ * ---------
-+ * merge_probs(mv_class_tree, 0):
-+ *	merge_prob(p[0], c[0], c[1] + ... + c[10])
-+ *	merge_prob(p[1], c[1], c[2] + ... + c[10])
-+ *	merge_prob(p[2], c[2] + c[3], c[4] + ... + c[10])
-+ *	merge_prob(p[3], c[2], c[3])
-+ *	merge_prob(p[4], c[4] + c[5], c[6] + ... + c[10])
-+ *	merge_prob(p[5], c[4], c[5])
-+ *	merge_prob(p[6], c[6], c[7] + ... + c[10])
-+ *	merge_prob(p[7], c[7] + c[8], c[9] + c[10])
-+ *	merge_prob(p[8], c[7], c[8])
-+ *	merge_prob(p[9], c[9], [10])
-+ */
-+
-+static inline void merge_probs_variant_a(u8 *p, const u32 *c, u16 count_sat, u32 update_factor)
++static size_t mv_offset(const struct hantro_ctx *ctx,
++			const struct v4l2_ctrl_vp9_frame *dec_params)
 +{
-+	p[1] = merge_prob(p[1], c[0], c[1] + c[2], count_sat, update_factor);
-+	p[2] = merge_prob(p[2], c[1], c[2], count_sat, update_factor);
++	size_t cr_offset = chroma_offset(ctx, dec_params);
++
++	return ALIGN((cr_offset * 3) / 2, G2_ALIGN);
 +}
 +
-+static inline void merge_probs_variant_b(u8 *p, const u32 *c, u16 count_sat, u32 update_factor)
++static struct hantro_decoded_buffer *
++get_ref_buf(struct hantro_ctx *ctx, struct vb2_v4l2_buffer *dst, u64 timestamp)
 +{
-+	p[0] = merge_prob(p[0], c[0], c[1], count_sat, update_factor);
++	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
++	struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
++	int buf_idx;
++
++	/*
++	 * If a ref is unused or invalid, address of current destination
++	 * buffer is returned.
++	 */
++	buf_idx = vb2_find_timestamp(cap_q, timestamp, 0);
++	if (buf_idx < 0)
++		return vb2_to_hantro_decoded_buf(&dst->vb2_buf);
++
++	return vb2_to_hantro_decoded_buf(vb2_get_buffer(cap_q, buf_idx));
 +}
 +
-+static inline void merge_probs_variant_c(u8 *p, const u32 *c)
++static void update_dec_buf_info(struct hantro_decoded_buffer *buf,
++				const struct v4l2_ctrl_vp9_frame *dec_params)
 +{
-+	p[0] = noncoef_merge_prob(p[0], c[2], c[1] + c[0] + c[3]);
-+	p[1] = noncoef_merge_prob(p[1], c[0], c[1] + c[3]);
-+	p[2] = noncoef_merge_prob(p[2], c[1], c[3]);
++	buf->vp9.width = dec_params->frame_width_minus_1 + 1;
++	buf->vp9.height = dec_params->frame_height_minus_1 + 1;
++	buf->vp9.bit_depth = dec_params->bit_depth;
 +}
 +
-+static void merge_probs_variant_d(u8 *p, const u32 *c)
++static void update_ctx_cur_info(struct hantro_vp9_dec_hw_ctx *vp9_ctx,
++				struct hantro_decoded_buffer *buf,
++				const struct v4l2_ctrl_vp9_frame *dec_params)
 +{
-+	u32 sum = 0, s2;
-+
-+	sum = c[1] + c[2] + c[3] + c[4] + c[5] + c[6] + c[7] + c[8] + c[9];
-+
-+	p[0] = noncoef_merge_prob(p[0], c[0], sum);
-+	sum -= c[9];
-+	p[1] = noncoef_merge_prob(p[1], c[9], sum);
-+	sum -= c[1];
-+	p[2] = noncoef_merge_prob(p[2], c[1], sum);
-+	s2 = c[2] + c[4] + c[5];
-+	sum -= s2;
-+	p[3] = noncoef_merge_prob(p[3], s2, sum);
-+	s2 -= c[2];
-+	p[4] = noncoef_merge_prob(p[4], c[2], s2);
-+	p[5] = noncoef_merge_prob(p[5], c[4], c[5]);
-+	sum -= c[3];
-+	p[6] = noncoef_merge_prob(p[6], c[3], sum);
-+	sum -= c[8];
-+	p[7] = noncoef_merge_prob(p[7], c[8], sum);
-+	p[8] = noncoef_merge_prob(p[8], c[6], c[7]);
++	vp9_ctx->cur.valid = true;
++	vp9_ctx->cur.reference_mode = dec_params->reference_mode;
++	vp9_ctx->cur.tx_mode = dec_params->tx_mode;
++	vp9_ctx->cur.interpolation_filter = dec_params->interpolation_filter;
++	vp9_ctx->cur.flags = dec_params->flags;
++	vp9_ctx->cur.timestamp = buf->base.vb.vb2_buf.timestamp;
 +}
 +
-+static inline void merge_probs_variant_e(u8 *p, const u32 *c)
++static void config_output(struct hantro_ctx *ctx,
++			  struct hantro_decoded_buffer *dst,
++			  const struct v4l2_ctrl_vp9_frame *dec_params)
 +{
-+	p[0] = noncoef_merge_prob(p[0], c[0], c[1] + c[2] + c[3]);
-+	p[1] = noncoef_merge_prob(p[1], c[1], c[2] + c[3]);
-+	p[2] = noncoef_merge_prob(p[2], c[2], c[3]);
++	dma_addr_t luma_addr, chroma_addr, mv_addr;
++
++	hantro_reg_write(ctx->dev, &g2_out_dis, 0);
++	hantro_reg_write(ctx->dev, &g2_output_format, 0);
++
++	luma_addr = vb2_dma_contig_plane_dma_addr(&dst->base.vb.vb2_buf, 0);
++	hantro_write_addr(ctx->dev, G2_ADDR_DST, luma_addr);
++
++	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
++	hantro_write_addr(ctx->dev, G2_ADDR_DST_CHR, chroma_addr);
++
++	mv_addr = luma_addr + mv_offset(ctx, dec_params);
++	hantro_write_addr(ctx->dev, G2_ADDR_DST_MV, mv_addr);
 +}
 +
-+static inline void merge_probs_variant_f(u8 *p, const u32 *c)
++struct hantro_vp9_ref_reg {
++	const struct hantro_reg width;
++	const struct hantro_reg height;
++	const struct hantro_reg hor_scale;
++	const struct hantro_reg ver_scale;
++	u32 y_base;
++	u32 c_base;
++};
++
++static void config_ref(struct hantro_ctx *ctx,
++		       struct hantro_decoded_buffer *dst,
++		       const struct hantro_vp9_ref_reg *ref_reg,
++		       const struct v4l2_ctrl_vp9_frame *dec_params,
++		       u64 ref_ts)
 +{
-+	p[0] = noncoef_merge_prob(p[0], c[0], c[1] + c[2]);
-+	p[1] = noncoef_merge_prob(p[1], c[1], c[2]);
++	struct hantro_decoded_buffer *buf;
++	dma_addr_t luma_addr, chroma_addr;
++	u32 refw, refh;
++
++	buf = get_ref_buf(ctx, &dst->base.vb, ref_ts);
++	refw = buf->vp9.width;
++	refh = buf->vp9.height;
++
++	hantro_reg_write(ctx->dev, &ref_reg->width, refw);
++	hantro_reg_write(ctx->dev, &ref_reg->height, refh);
++
++	hantro_reg_write(ctx->dev, &ref_reg->hor_scale, (refw << 14) / dst->vp9.width);
++	hantro_reg_write(ctx->dev, &ref_reg->ver_scale, (refh << 14) / dst->vp9.height);
++
++	luma_addr = vb2_dma_contig_plane_dma_addr(&buf->base.vb.vb2_buf, 0);
++	hantro_write_addr(ctx->dev, ref_reg->y_base, luma_addr);
++
++	chroma_addr = luma_addr + chroma_offset(ctx, dec_params);
++	hantro_write_addr(ctx->dev, ref_reg->c_base, chroma_addr);
 +}
 +
-+static void merge_probs_variant_g(u8 *p, const u32 *c)
++static void config_ref_registers(struct hantro_ctx *ctx,
++				 const struct v4l2_ctrl_vp9_frame *dec_params,
++				 struct hantro_decoded_buffer *dst,
++				 struct hantro_decoded_buffer *mv_ref)
 +{
-+	u32 sum;
++	static const struct hantro_vp9_ref_reg ref_regs[] = {
++		{
++			/* Last */
++			.width = vp9_lref_width,
++			.height = vp9_lref_height,
++			.hor_scale = vp9_lref_hor_scale,
++			.ver_scale = vp9_lref_ver_scale,
++			.y_base = G2_REG_ADDR_REF(0),
++			.c_base = G2_REG_CHR_REF(0),
++		}, {
++			/* Golden */
++			.width = vp9_gref_width,
++			.height = vp9_gref_height,
++			.hor_scale = vp9_gref_hor_scale,
++			.ver_scale = vp9_gref_ver_scale,
++			.y_base = G2_REG_ADDR_REF(4),
++			.c_base = G2_REG_CHR_REF(4),
++		}, {
++			/* Altref */
++			.width = vp9_aref_width,
++			.height = vp9_aref_height,
++			.hor_scale = vp9_aref_hor_scale,
++			.ver_scale = vp9_aref_ver_scale,
++			.y_base = G2_REG_ADDR_REF(5),
++			.c_base = G2_REG_CHR_REF(5),
++		},
++	};
++	dma_addr_t mv_addr;
 +
-+	sum = c[1] + c[2] + c[3] + c[4] + c[5] + c[6] + c[7] + c[8] + c[9] + c[10];
-+	p[0] = noncoef_merge_prob(p[0], c[0], sum);
-+	sum -= c[1];
-+	p[1] = noncoef_merge_prob(p[1], c[1], sum);
-+	sum -= c[2] + c[3];
-+	p[2] = noncoef_merge_prob(p[2], c[2] + c[3], sum);
-+	p[3] = noncoef_merge_prob(p[3], c[2], c[3]);
-+	sum -= c[4] + c[5];
-+	p[4] = noncoef_merge_prob(p[4], c[4] + c[5], sum);
-+	p[5] = noncoef_merge_prob(p[5], c[4], c[5]);
-+	sum -= c[6];
-+	p[6] = noncoef_merge_prob(p[6], c[6], sum);
-+	p[7] = noncoef_merge_prob(p[7], c[7] + c[8], c[9] + c[10]);
-+	p[8] = noncoef_merge_prob(p[8], c[7], c[8]);
-+	p[9] = noncoef_merge_prob(p[9], c[9], c[10]);
++	config_ref(ctx, dst, &ref_regs[0], dec_params, dec_params->last_frame_ts);
++	config_ref(ctx, dst, &ref_regs[1], dec_params, dec_params->golden_frame_ts);
++	config_ref(ctx, dst, &ref_regs[2], dec_params, dec_params->alt_frame_ts);
++
++	mv_addr = vb2_dma_contig_plane_dma_addr(&mv_ref->base.vb.vb2_buf, 0) +
++		  mv_offset(ctx, dec_params);
++	hantro_write_addr(ctx->dev, G2_REG_DMV_REF(0), mv_addr);
++
++	hantro_reg_write(ctx->dev, &vp9_last_sign_bias,
++			 dec_params->ref_frame_sign_bias & V4L2_VP9_SIGN_BIAS_LAST ? 1 : 0);
++
++	hantro_reg_write(ctx->dev, &vp9_gref_sign_bias,
++			 dec_params->ref_frame_sign_bias & V4L2_VP9_SIGN_BIAS_GOLDEN ? 1 : 0);
++
++	hantro_reg_write(ctx->dev, &vp9_aref_sign_bias,
++			 dec_params->ref_frame_sign_bias & V4L2_VP9_SIGN_BIAS_ALT ? 1 : 0);
 +}
 +
-+/* 8.4.3 Coefficient probability adaptation process */
-+static inline void adapt_probs_variant_a_coef(u8 *p, const u32 *c, u32 update_factor)
++static void recompute_tile_info(unsigned short *tile_info, unsigned int tiles, unsigned int sbs)
 +{
-+	merge_probs_variant_a(p, c, 24, update_factor);
-+}
++	int i;
++	unsigned int accumulated = 0;
++	unsigned int next_accumulated;
 +
-+static inline void adapt_probs_variant_b_coef(u8 *p, const u32 *c, u32 update_factor)
-+{
-+	merge_probs_variant_b(p, c, 24, update_factor);
-+}
-+
-+static void _adapt_coeff(unsigned int i, unsigned int j, unsigned int k,
-+			 struct v4l2_vp9_frame_context *probs,
-+			 const struct v4l2_vp9_frame_symbol_counts *counts,
-+			 u32 uf)
-+{
-+	s32 l, m;
-+
-+	for (l = 0; l < ARRAY_SIZE(probs->coef[0][0][0]); l++) {
-+		for (m = 0; m < BAND_6(l); m++) {
-+			u8 *p = probs->coef[i][j][k][l][m];
-+			const u32 counts_more_coefs[2] = {
-+				*counts->eob[i][j][k][l][m][1],
-+				*counts->eob[i][j][k][l][m][0] - *counts->eob[i][j][k][l][m][1],
-+			};
-+
-+			adapt_probs_variant_a_coef(p, *counts->coeff[i][j][k][l][m], uf);
-+			adapt_probs_variant_b_coef(p, counts_more_coefs, uf);
-+		}
++	for (i = 1; i <= tiles; ++i) {
++		next_accumulated = i * sbs / tiles;
++		*tile_info++ = next_accumulated - accumulated;
++		accumulated = next_accumulated;
 +	}
 +}
 +
-+static void _adapt_coef_probs(struct v4l2_vp9_frame_context *probs,
-+			      const struct v4l2_vp9_frame_symbol_counts *counts,
-+			      unsigned int uf)
++static void
++recompute_tile_rc_info(struct hantro_ctx *ctx,
++		       unsigned int tile_r, unsigned int tile_c,
++		       unsigned int sbs_r, unsigned int sbs_c)
 +{
-+	unsigned int i, j, k;
++	struct hantro_vp9_dec_hw_ctx *vp9_ctx = &ctx->vp9_dec;
 +
-+	for (i = 0; i < ARRAY_SIZE(probs->coef); i++)
-+		for (j = 0; j < ARRAY_SIZE(probs->coef[0]); j++)
-+			for (k = 0; k < ARRAY_SIZE(probs->coef[0][0]); k++)
-+				_adapt_coeff(i, j, k, probs, counts, uf);
++	recompute_tile_info(vp9_ctx->tile_r_info, tile_r, sbs_r);
++	recompute_tile_info(vp9_ctx->tile_c_info, tile_c, sbs_c);
++
++	vp9_ctx->last_tile_r = tile_r;
++	vp9_ctx->last_tile_c = tile_c;
++	vp9_ctx->last_sbs_r = sbs_r;
++	vp9_ctx->last_sbs_c = sbs_c;
 +}
 +
-+void v4l2_vp9_adapt_coef_probs(struct v4l2_vp9_frame_context *probs,
-+			       struct v4l2_vp9_frame_symbol_counts *counts,
-+			       bool use_128,
-+			       bool frame_is_intra)
++static inline unsigned int first_tile_row(unsigned int tile_r, unsigned int sbs_r)
 +{
-+	if (frame_is_intra) {
-+		_adapt_coef_probs(probs, counts, 112);
-+	} else {
-+		if (use_128)
-+			_adapt_coef_probs(probs, counts, 128);
-+		else
-+			_adapt_coef_probs(probs, counts, 112);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(v4l2_vp9_adapt_coef_probs);
++	if (tile_r == sbs_r + 1)
++		return 1;
 +
-+/* 8.4.4 Non coefficient probability adaptation process, adapt_probs() */
-+static inline void adapt_probs_variant_b(u8 *p, const u32 *c)
-+{
-+	merge_probs_variant_b(p, c, 20, 128);
++	if (tile_r == sbs_r + 2)
++		return 2;
++
++	return 0;
 +}
 +
-+static inline void adapt_probs_variant_c(u8 *p, const u32 *c)
++static void
++fill_tile_info(struct hantro_ctx *ctx,
++	       unsigned int tile_r, unsigned int tile_c,
++	       unsigned int sbs_r, unsigned int sbs_c,
++	       unsigned short *tile_mem)
 +{
-+	merge_probs_variant_c(p, c);
-+}
-+
-+static inline void adapt_probs_variant_d(u8 *p, const u32 *c)
-+{
-+	merge_probs_variant_d(p, c);
-+}
-+
-+static inline void adapt_probs_variant_e(u8 *p, const u32 *c)
-+{
-+	merge_probs_variant_e(p, c);
-+}
-+
-+static inline void adapt_probs_variant_f(u8 *p, const u32 *c)
-+{
-+	merge_probs_variant_f(p, c);
-+}
-+
-+static inline void adapt_probs_variant_g(u8 *p, const u32 *c)
-+{
-+	merge_probs_variant_g(p, c);
-+}
-+
-+/* 8.4.4 Non coefficient probability adaptation process, adapt_prob() */
-+static inline u8 adapt_prob(u8 prob, const u32 counts[2])
-+{
-+	return noncoef_merge_prob(prob, counts[0], counts[1]);
-+}
-+
-+/* 8.4.4 Non coefficient probability adaptation process */
-+void v4l2_vp9_adapt_noncoef_probs(struct v4l2_vp9_frame_context *probs,
-+				  struct v4l2_vp9_frame_symbol_counts *counts,
-+				  u8 reference_mode, u8 interpolation_filter, u8 tx_mode,
-+				  u32 flags)
-+{
++	struct hantro_vp9_dec_hw_ctx *vp9_ctx = &ctx->vp9_dec;
 +	unsigned int i, j;
++	bool first = true;
 +
-+	for (i = 0; i < ARRAY_SIZE(probs->is_inter); i++)
-+		probs->is_inter[i] = adapt_prob(probs->is_inter[i], (*counts->intra_inter)[i]);
++	for (i = first_tile_row(tile_r, sbs_r); i < tile_r; ++i) {
++		unsigned short r_info = vp9_ctx->tile_r_info[i];
 +
-+	for (i = 0; i < ARRAY_SIZE(probs->comp_mode); i++)
-+		probs->comp_mode[i] = adapt_prob(probs->comp_mode[i], (*counts->comp)[i]);
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->comp_ref); i++)
-+		probs->comp_ref[i] = adapt_prob(probs->comp_ref[i], (*counts->comp_ref)[i]);
-+
-+	if (reference_mode != V4L2_VP9_REFERENCE_MODE_COMPOUND_REFERENCE)
-+		for (i = 0; i < ARRAY_SIZE(probs->single_ref); i++)
-+			for (j = 0; j < ARRAY_SIZE(probs->single_ref[0]); j++)
-+				probs->single_ref[i][j] = adapt_prob(probs->single_ref[i][j],
-+								     (*counts->single_ref)[i][j]);
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->inter_mode); i++)
-+		adapt_probs_variant_c(probs->inter_mode[i], (*counts->mv_mode)[i]);
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->y_mode); i++)
-+		adapt_probs_variant_d(probs->y_mode[i], (*counts->y_mode)[i]);
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->uv_mode); i++)
-+		adapt_probs_variant_d(probs->uv_mode[i], (*counts->uv_mode)[i]);
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->partition); i++)
-+		adapt_probs_variant_e(probs->partition[i], (*counts->partition)[i]);
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->skip); i++)
-+		probs->skip[i] = adapt_prob(probs->skip[i], (*counts->skip)[i]);
-+
-+	if (interpolation_filter == V4L2_VP9_INTERP_FILTER_SWITCHABLE)
-+		for (i = 0; i < ARRAY_SIZE(probs->interp_filter); i++)
-+			adapt_probs_variant_f(probs->interp_filter[i], (*counts->filter)[i]);
-+
-+	if (tx_mode == V4L2_VP9_TX_MODE_SELECT)
-+		for (i = 0; i < ARRAY_SIZE(probs->tx8); i++) {
-+			adapt_probs_variant_b(probs->tx8[i], (*counts->tx8p)[i]);
-+			adapt_probs_variant_f(probs->tx16[i], (*counts->tx16p)[i]);
-+			adapt_probs_variant_e(probs->tx32[i], (*counts->tx32p)[i]);
++		if (first) {
++			if (i > 0)
++				r_info += vp9_ctx->tile_r_info[0];
++			if (i == 2)
++				r_info += vp9_ctx->tile_r_info[1];
++			first = false;
 +		}
-+
-+	adapt_probs_variant_e(probs->mv.joint, *counts->mv_joint);
-+
-+	for (i = 0; i < ARRAY_SIZE(probs->mv.sign); i++) {
-+		probs->mv.sign[i] = adapt_prob(probs->mv.sign[i], (*counts->sign)[i]);
-+
-+		adapt_probs_variant_g(probs->mv.classes[i], (*counts->classes)[i]);
-+
-+		probs->mv.class0_bit[i] = adapt_prob(probs->mv.class0_bit[i], (*counts->class0)[i]);
-+
-+		for (j = 0; j < ARRAY_SIZE(probs->mv.bits[0]); j++)
-+			probs->mv.bits[i][j] = adapt_prob(probs->mv.bits[i][j],
-+							  (*counts->bits)[i][j]);
-+
-+		for (j = 0; j < ARRAY_SIZE(probs->mv.class0_fr[0]); j++)
-+			adapt_probs_variant_e(probs->mv.class0_fr[i][j],
-+					      (*counts->class0_fp)[i][j]);
-+
-+		adapt_probs_variant_e(probs->mv.fr[i], (*counts->fp)[i]);
-+
-+		if (!(flags & V4L2_VP9_FRAME_FLAG_ALLOW_HIGH_PREC_MV))
-+			continue;
-+
-+		probs->mv.class0_hp[i] = adapt_prob(probs->mv.class0_hp[i],
-+						    (*counts->class0_hp)[i]);
-+
-+		probs->mv.hp[i] = adapt_prob(probs->mv.hp[i], (*counts->hp)[i]);
++		for (j = 0; j < tile_c; ++j) {
++			*tile_mem++ = vp9_ctx->tile_c_info[j];
++			*tile_mem++ = r_info;
++		}
 +	}
 +}
-+EXPORT_SYMBOL_GPL(v4l2_vp9_adapt_noncoef_probs);
 +
-+bool
-+v4l2_vp9_seg_feat_enabled(const u8 *feature_enabled,
-+			  enum v4l2_vp9_segment_feature feature,
-+			  unsigned int segid)
++static void
++config_tiles(struct hantro_ctx *ctx,
++	     const struct v4l2_ctrl_vp9_frame *dec_params,
++	     struct hantro_decoded_buffer *dst)
++{
++	struct hantro_vp9_dec_hw_ctx *vp9_ctx = &ctx->vp9_dec;
++	struct hantro_aux_buf *misc = &vp9_ctx->misc;
++	struct hantro_aux_buf *tile_edge = &vp9_ctx->tile_edge;
++	dma_addr_t addr;
++	unsigned short *tile_mem;
++
++	addr = misc->dma + vp9_ctx->tile_info_offset;
++	hantro_write_addr(ctx->dev, G2_ADDR_TILE_SIZE, addr);
++
++	tile_mem = misc->cpu + vp9_ctx->tile_info_offset;
++	if (dec_params->tile_cols_log2 || dec_params->tile_rows_log2) {
++		unsigned int tile_r = (1 << dec_params->tile_rows_log2);
++		unsigned int tile_c = (1 << dec_params->tile_cols_log2);
++		unsigned int sbs_r = hantro_vp9_num_sbs(dst->vp9.height);
++		unsigned int sbs_c = hantro_vp9_num_sbs(dst->vp9.width);
++
++		if (tile_r != vp9_ctx->last_tile_r || tile_c != vp9_ctx->last_tile_c ||
++		    sbs_r != vp9_ctx->last_sbs_r || sbs_c != vp9_ctx->last_sbs_c)
++			recompute_tile_rc_info(ctx, tile_r, tile_c, sbs_r, sbs_c);
++
++		fill_tile_info(ctx, tile_r, tile_c, sbs_r, sbs_c, tile_mem);
++
++		hantro_reg_write(ctx->dev, &g2_tile_e, 1);
++		hantro_reg_write(ctx->dev, &g2_num_tile_cols, tile_c);
++		hantro_reg_write(ctx->dev, &g2_num_tile_rows, tile_r);
++
++		addr = tile_edge->dma;
++		hantro_write_addr(ctx->dev, G2_TILE_FILTER, addr);
++
++		addr = tile_edge->dma + vp9_ctx->bsd_ctrl_offset;
++		hantro_write_addr(ctx->dev, G2_TILE_BSD, addr);
++	} else {
++		tile_mem[0] = hantro_vp9_num_sbs(dst->vp9.width);
++		tile_mem[1] = hantro_vp9_num_sbs(dst->vp9.height);
++
++		hantro_reg_write(ctx->dev, &g2_tile_e, 0);
++		hantro_reg_write(ctx->dev, &g2_num_tile_cols, 1);
++		hantro_reg_write(ctx->dev, &g2_num_tile_rows, 1);
++	}
++}
++
++static void
++update_feat_and_flag(struct hantro_vp9_dec_hw_ctx *vp9_ctx,
++		     const struct v4l2_vp9_segmentation *seg,
++		     enum v4l2_vp9_segment_feature feature,
++		     unsigned int segid)
 +{
 +	u8 mask = V4L2_VP9_SEGMENT_FEATURE_ENABLED(feature);
 +
-+	return !!(feature_enabled[segid] & mask);
++	vp9_ctx->feature_data[segid][feature] = seg->feature_data[segid][feature];
++	vp9_ctx->feature_enabled[segid] &= ~mask;
++	vp9_ctx->feature_enabled[segid] |= (seg->feature_enabled[segid] & mask);
 +}
-+EXPORT_SYMBOL_GPL(v4l2_vp9_seg_feat_enabled);
 +
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("V4L2 VP9 Helpers");
-+MODULE_AUTHOR("Andrzej Pietrasiewicz <andrzej.p@collabora.com>");
-diff --git a/include/media/v4l2-vp9.h b/include/media/v4l2-vp9.h
-new file mode 100644
-index 000000000000..920a8533360d
---- /dev/null
-+++ b/include/media/v4l2-vp9.h
-@@ -0,0 +1,182 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Helper functions for vp9 codecs.
-+ *
-+ * Copyright (c) 2021 Collabora, Ltd.
-+ *
-+ * Author: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-+ */
++static inline s16 clip3(s16 x, s16 y, s16 z)
++{
++	return (z < x) ? x : (z > y) ? y : z;
++}
 +
-+#ifndef _MEDIA_V4L2_VP9_H
-+#define _MEDIA_V4L2_VP9_H
++static s16 feat_val_clip3(s16 feat_val, s16 feature_data, bool absolute, u8 clip)
++{
++	if (absolute)
++		return feature_data;
 +
-+#include <media/v4l2-ctrls.h>
++	return clip3(0, 255, feat_val + feature_data);
++}
++
++static void config_segment(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_frame *dec_params)
++{
++	struct hantro_vp9_dec_hw_ctx *vp9_ctx = &ctx->vp9_dec;
++	const struct v4l2_vp9_segmentation *seg;
++	s16 feat_val;
++	unsigned char feat_id;
++	unsigned int segid;
++	bool segment_enabled, absolute, update_data;
++
++	static const struct hantro_reg seg_regs[8][V4L2_VP9_SEG_LVL_MAX] = {
++		{ vp9_quant_seg0, vp9_filt_level_seg0, vp9_refpic_seg0, vp9_skip_seg0 },
++		{ vp9_quant_seg1, vp9_filt_level_seg1, vp9_refpic_seg1, vp9_skip_seg1 },
++		{ vp9_quant_seg2, vp9_filt_level_seg2, vp9_refpic_seg2, vp9_skip_seg2 },
++		{ vp9_quant_seg3, vp9_filt_level_seg3, vp9_refpic_seg3, vp9_skip_seg3 },
++		{ vp9_quant_seg4, vp9_filt_level_seg4, vp9_refpic_seg4, vp9_skip_seg4 },
++		{ vp9_quant_seg5, vp9_filt_level_seg5, vp9_refpic_seg5, vp9_skip_seg5 },
++		{ vp9_quant_seg6, vp9_filt_level_seg6, vp9_refpic_seg6, vp9_skip_seg6 },
++		{ vp9_quant_seg7, vp9_filt_level_seg7, vp9_refpic_seg7, vp9_skip_seg7 },
++	};
++
++	segment_enabled = !!(dec_params->seg.flags & V4L2_VP9_SEGMENTATION_FLAG_ENABLED);
++	hantro_reg_write(ctx->dev, &vp9_segment_e, segment_enabled);
++	hantro_reg_write(ctx->dev, &vp9_segment_upd_e,
++			 !!(dec_params->seg.flags & V4L2_VP9_SEGMENTATION_FLAG_UPDATE_MAP));
++	hantro_reg_write(ctx->dev, &vp9_segment_temp_upd_e,
++			 !!(dec_params->seg.flags & V4L2_VP9_SEGMENTATION_FLAG_TEMPORAL_UPDATE));
++
++	seg = &dec_params->seg;
++	absolute = !!(seg->flags & V4L2_VP9_SEGMENTATION_FLAG_ABS_OR_DELTA_UPDATE);
++	update_data = !!(seg->flags & V4L2_VP9_SEGMENTATION_FLAG_UPDATE_DATA);
++
++	for (segid = 0; segid < 8; ++segid) {
++		/* Quantizer segment feature */
++		feat_id = V4L2_VP9_SEG_LVL_ALT_Q;
++		feat_val = dec_params->quant.base_q_idx;
++		if (segment_enabled) {
++			if (update_data)
++				update_feat_and_flag(vp9_ctx, seg, feat_id, segid);
++			if (v4l2_vp9_seg_feat_enabled(vp9_ctx->feature_enabled, feat_id, segid))
++				feat_val = feat_val_clip3(feat_val,
++							  vp9_ctx->feature_data[segid][feat_id],
++							  absolute, 255);
++		}
++		hantro_reg_write(ctx->dev, &seg_regs[segid][feat_id], feat_val);
++
++		/* Loop filter segment feature */
++		feat_id = V4L2_VP9_SEG_LVL_ALT_L;
++		feat_val = dec_params->lf.level;
++		if (segment_enabled) {
++			if (update_data)
++				update_feat_and_flag(vp9_ctx, seg, feat_id, segid);
++			if (v4l2_vp9_seg_feat_enabled(vp9_ctx->feature_enabled, feat_id, segid))
++				feat_val = feat_val_clip3(feat_val,
++							  vp9_ctx->feature_data[segid][feat_id],
++							  absolute, 63);
++		}
++		hantro_reg_write(ctx->dev, &seg_regs[segid][feat_id], feat_val);
++
++		/* Reference frame segment feature */
++		feat_id = V4L2_VP9_SEG_LVL_REF_FRAME;
++		feat_val = 0;
++		if (segment_enabled) {
++			if (update_data)
++				update_feat_and_flag(vp9_ctx, seg, feat_id, segid);
++			if (!(dec_params->flags & V4L2_VP9_FRAME_FLAG_KEY_FRAME) &&
++			    v4l2_vp9_seg_feat_enabled(vp9_ctx->feature_enabled, feat_id, segid))
++				feat_val = vp9_ctx->feature_data[segid][feat_id] + 1;
++		}
++		hantro_reg_write(ctx->dev, &seg_regs[segid][feat_id], feat_val);
++
++		/* Skip segment feature */
++		feat_id = V4L2_VP9_SEG_LVL_SKIP;
++		feat_val = 0;
++		if (segment_enabled) {
++			if (update_data)
++				update_feat_and_flag(vp9_ctx, seg, feat_id, segid);
++			feat_val = v4l2_vp9_seg_feat_enabled(vp9_ctx->feature_enabled,
++							     feat_id, segid) ? 1 : 0;
++		}
++		hantro_reg_write(ctx->dev, &seg_regs[segid][feat_id], feat_val);
++	}
++}
++
++static void config_loop_filter(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_frame *dec_params)
++{
++	bool d = dec_params->lf.flags & V4L2_VP9_LOOP_FILTER_FLAG_DELTA_ENABLED;
++
++	hantro_reg_write(ctx->dev, &vp9_filt_level, dec_params->lf.level);
++	hantro_reg_write(ctx->dev, &g2_out_filtering_dis, dec_params->lf.level == 0);
++	hantro_reg_write(ctx->dev, &vp9_filt_sharpness, dec_params->lf.sharpness);
++
++	hantro_reg_write(ctx->dev, &vp9_filt_ref_adj_0, d ? dec_params->lf.ref_deltas[0] : 0);
++	hantro_reg_write(ctx->dev, &vp9_filt_ref_adj_1, d ? dec_params->lf.ref_deltas[1] : 0);
++	hantro_reg_write(ctx->dev, &vp9_filt_ref_adj_2, d ? dec_params->lf.ref_deltas[2] : 0);
++	hantro_reg_write(ctx->dev, &vp9_filt_ref_adj_3, d ? dec_params->lf.ref_deltas[3] : 0);
++	hantro_reg_write(ctx->dev, &vp9_filt_mb_adj_0, d ? dec_params->lf.mode_deltas[0] : 0);
++	hantro_reg_write(ctx->dev, &vp9_filt_mb_adj_1, d ? dec_params->lf.mode_deltas[1] : 0);
++}
++
++static void config_picture_dimensions(struct hantro_ctx *ctx, struct hantro_decoded_buffer *dst)
++{
++	u32 pic_w_4x4, pic_h_4x4;
++
++	hantro_reg_write(ctx->dev, &g2_pic_width_in_cbs, (dst->vp9.width + 7) / 8);
++	hantro_reg_write(ctx->dev, &g2_pic_height_in_cbs, (dst->vp9.height + 7) / 8);
++	pic_w_4x4 = roundup(dst->vp9.width, 8) >> 2;
++	pic_h_4x4 = roundup(dst->vp9.height, 8) >> 2;
++	hantro_reg_write(ctx->dev, &g2_pic_width_4x4, pic_w_4x4);
++	hantro_reg_write(ctx->dev, &g2_pic_height_4x4, pic_h_4x4);
++}
++
++static void
++config_bit_depth(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_frame *dec_params)
++{
++	hantro_reg_write(ctx->dev, &g2_bit_depth_y_minus8, dec_params->bit_depth - 8);
++	hantro_reg_write(ctx->dev, &g2_bit_depth_c_minus8, dec_params->bit_depth - 8);
++}
++
++static inline bool is_lossless(const struct v4l2_vp9_quantization *quant)
++{
++	return quant->base_q_idx == 0 && quant->delta_q_uv_ac == 0 &&
++	       quant->delta_q_uv_dc == 0 && quant->delta_q_y_dc == 0;
++}
++
++static void
++config_quant(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_frame *dec_params)
++{
++	hantro_reg_write(ctx->dev, &vp9_qp_delta_y_dc, dec_params->quant.delta_q_y_dc);
++	hantro_reg_write(ctx->dev, &vp9_qp_delta_ch_dc, dec_params->quant.delta_q_uv_dc);
++	hantro_reg_write(ctx->dev, &vp9_qp_delta_ch_ac, dec_params->quant.delta_q_uv_ac);
++	hantro_reg_write(ctx->dev, &vp9_lossless_e, is_lossless(&dec_params->quant));
++}
++
++static u32
++hantro_interp_filter_from_v4l2(enum v4l2_vp9_interpolation_filter interpolation_filter)
++{
++	switch (interpolation_filter) {
++	case V4L2_VP9_INTERP_FILTER_EIGHTTAP:
++		return 0x1;
++	case V4L2_VP9_INTERP_FILTER_EIGHTTAP_SMOOTH:
++		return 0;
++	case V4L2_VP9_INTERP_FILTER_EIGHTTAP_SHARP:
++		return 0x2;
++	case V4L2_VP9_INTERP_FILTER_BILINEAR:
++		return 0x3;
++	case V4L2_VP9_INTERP_FILTER_SWITCHABLE:
++		return 0x4;
++	}
++
++	return 0;
++}
++
++static void
++config_others(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_frame *dec_params,
++	      bool intra_only, bool resolution_change)
++{
++	struct hantro_vp9_dec_hw_ctx *vp9_ctx = &ctx->vp9_dec;
++
++	hantro_reg_write(ctx->dev, &g2_idr_pic_e, intra_only);
++
++	hantro_reg_write(ctx->dev, &vp9_transform_mode, dec_params->tx_mode);
++
++	hantro_reg_write(ctx->dev, &vp9_mcomp_filt_type, intra_only ?
++		0 : hantro_interp_filter_from_v4l2(dec_params->interpolation_filter));
++
++	hantro_reg_write(ctx->dev, &vp9_high_prec_mv_e,
++			 !!(dec_params->flags & V4L2_VP9_FRAME_FLAG_ALLOW_HIGH_PREC_MV));
++
++	hantro_reg_write(ctx->dev, &vp9_comp_pred_mode, dec_params->reference_mode);
++
++	hantro_reg_write(ctx->dev, &g2_tempor_mvp_e,
++			 !(dec_params->flags & V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT) &&
++			 !(dec_params->flags & V4L2_VP9_FRAME_FLAG_KEY_FRAME) &&
++			 !(vp9_ctx->last.flags & V4L2_VP9_FRAME_FLAG_KEY_FRAME) &&
++			 !(dec_params->flags & V4L2_VP9_FRAME_FLAG_INTRA_ONLY) &&
++			 !resolution_change &&
++			 vp9_ctx->last.flags & V4L2_VP9_FRAME_FLAG_SHOW_FRAME
++	);
++
++	hantro_reg_write(ctx->dev, &g2_write_mvs_e,
++			 !(dec_params->flags & V4L2_VP9_FRAME_FLAG_KEY_FRAME));
++}
++
++static void
++config_compound_reference(struct hantro_ctx *ctx,
++			  const struct v4l2_ctrl_vp9_frame *dec_params)
++{
++	u32 comp_fixed_ref, comp_var_ref[2];
++	bool last_ref_frame_sign_bias;
++	bool golden_ref_frame_sign_bias;
++	bool alt_ref_frame_sign_bias;
++	bool comp_ref_allowed = 0;
++
++	comp_fixed_ref = 0;
++	comp_var_ref[0] = 0;
++	comp_var_ref[1] = 0;
++
++	last_ref_frame_sign_bias = dec_params->ref_frame_sign_bias & V4L2_VP9_SIGN_BIAS_LAST;
++	golden_ref_frame_sign_bias = dec_params->ref_frame_sign_bias & V4L2_VP9_SIGN_BIAS_GOLDEN;
++	alt_ref_frame_sign_bias = dec_params->ref_frame_sign_bias & V4L2_VP9_SIGN_BIAS_ALT;
++
++	/* 6.3.12 Frame reference mode syntax */
++	comp_ref_allowed |= golden_ref_frame_sign_bias != last_ref_frame_sign_bias;
++	comp_ref_allowed |= alt_ref_frame_sign_bias != last_ref_frame_sign_bias;
++
++	if (comp_ref_allowed) {
++		if (last_ref_frame_sign_bias ==
++		    golden_ref_frame_sign_bias) {
++			comp_fixed_ref = ALTREF_FRAME;
++			comp_var_ref[0] = LAST_FRAME;
++			comp_var_ref[1] = GOLDEN_FRAME;
++		} else if (last_ref_frame_sign_bias ==
++			   alt_ref_frame_sign_bias) {
++			comp_fixed_ref = GOLDEN_FRAME;
++			comp_var_ref[0] = LAST_FRAME;
++			comp_var_ref[1] = ALTREF_FRAME;
++		} else {
++			comp_fixed_ref = LAST_FRAME;
++			comp_var_ref[0] = GOLDEN_FRAME;
++			comp_var_ref[1] = ALTREF_FRAME;
++		}
++	}
++
++	hantro_reg_write(ctx->dev, &vp9_comp_pred_fixed_ref, comp_fixed_ref);
++	hantro_reg_write(ctx->dev, &vp9_comp_pred_var_ref0, comp_var_ref[0]);
++	hantro_reg_write(ctx->dev, &vp9_comp_pred_var_ref1, comp_var_ref[1]);
++}
++
++#define INNER_LOOP \
++do {									\
++	for (m = 0; m < ARRAY_SIZE(adaptive->coef[0][0][0][0]); ++m) {	\
++		memcpy(adaptive->coef[i][j][k][l][m],			\
++		       probs->coef[i][j][k][l][m],			\
++		       sizeof(probs->coef[i][j][k][l][m]));		\
++									\
++		adaptive->coef[i][j][k][l][m][3] = 0;			\
++	}								\
++} while (0)
++
++static void config_probs(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_frame *dec_params)
++{
++	struct hantro_vp9_dec_hw_ctx *vp9_ctx = &ctx->vp9_dec;
++	struct hantro_aux_buf *misc = &vp9_ctx->misc;
++	struct hantro_g2_all_probs *all_probs = misc->cpu;
++	struct hantro_g2_probs *adaptive;
++	struct hantro_g2_mv_probs *mv;
++	const struct v4l2_vp9_segmentation *seg = &dec_params->seg;
++	const struct v4l2_vp9_frame_context *probs = &vp9_ctx->probability_tables;
++	int i, j, k, l, m;
++
++	for (i = 0; i < ARRAY_SIZE(all_probs->kf_y_mode_prob); ++i)
++		for (j = 0; j < ARRAY_SIZE(all_probs->kf_y_mode_prob[0]); ++j) {
++			memcpy(all_probs->kf_y_mode_prob[i][j],
++			       v4l2_vp9_kf_y_mode_prob[i][j],
++			       ARRAY_SIZE(all_probs->kf_y_mode_prob[i][j]));
++
++			all_probs->kf_y_mode_prob_tail[i][j][0] =
++				v4l2_vp9_kf_y_mode_prob[i][j][8];
++		}
++
++	memcpy(all_probs->mb_segment_tree_probs, seg->tree_probs,
++	       sizeof(all_probs->mb_segment_tree_probs));
++
++	memcpy(all_probs->segment_pred_probs, seg->pred_probs,
++	       sizeof(all_probs->segment_pred_probs));
++
++	for (i = 0; i < ARRAY_SIZE(all_probs->kf_uv_mode_prob); ++i) {
++		memcpy(all_probs->kf_uv_mode_prob[i], v4l2_vp9_kf_uv_mode_prob[i],
++		       ARRAY_SIZE(all_probs->kf_uv_mode_prob[i]));
++
++		all_probs->kf_uv_mode_prob_tail[i][0] = v4l2_vp9_kf_uv_mode_prob[i][8];
++	}
++
++	adaptive = &all_probs->probs;
++
++	for (i = 0; i < ARRAY_SIZE(adaptive->inter_mode); ++i) {
++		memcpy(adaptive->inter_mode[i], probs->inter_mode[i],
++		       sizeof(probs->inter_mode));
++
++		adaptive->inter_mode[i][3] = 0;
++	}
++
++	memcpy(adaptive->is_inter, probs->is_inter, sizeof(adaptive->is_inter));
++
++	for (i = 0; i < ARRAY_SIZE(adaptive->uv_mode); ++i) {
++		memcpy(adaptive->uv_mode[i], probs->uv_mode[i],
++		       sizeof(adaptive->uv_mode[i]));
++		adaptive->uv_mode_tail[i][0] = probs->uv_mode[i][8];
++	}
++
++	memcpy(adaptive->tx8, probs->tx8, sizeof(adaptive->tx8));
++	memcpy(adaptive->tx16, probs->tx16, sizeof(adaptive->tx16));
++	memcpy(adaptive->tx32, probs->tx32, sizeof(adaptive->tx32));
++
++	for (i = 0; i < ARRAY_SIZE(adaptive->y_mode); ++i) {
++		memcpy(adaptive->y_mode[i], probs->y_mode[i],
++		       ARRAY_SIZE(adaptive->y_mode[i]));
++
++		adaptive->y_mode_tail[i][0] = probs->y_mode[i][8];
++	}
++
++	for (i = 0; i < ARRAY_SIZE(adaptive->partition[0]); ++i) {
++		memcpy(adaptive->partition[0][i], v4l2_vp9_kf_partition_probs[i],
++		       sizeof(v4l2_vp9_kf_partition_probs[i]));
++
++		adaptive->partition[0][i][3] = 0;
++	}
++
++	for (i = 0; i < ARRAY_SIZE(adaptive->partition[1]); ++i) {
++		memcpy(adaptive->partition[1][i], probs->partition[i],
++		       sizeof(probs->partition[i]));
++
++		adaptive->partition[1][i][3] = 0;
++	}
++
++	memcpy(adaptive->interp_filter, probs->interp_filter,
++	       sizeof(adaptive->interp_filter));
++
++	memcpy(adaptive->comp_mode, probs->comp_mode, sizeof(adaptive->comp_mode));
++
++	memcpy(adaptive->skip, probs->skip, sizeof(adaptive->skip));
++
++	mv = &adaptive->mv;
++
++	memcpy(mv->joint, probs->mv.joint, sizeof(mv->joint));
++	memcpy(mv->sign, probs->mv.sign, sizeof(mv->sign));
++	memcpy(mv->class0_bit, probs->mv.class0_bit, sizeof(mv->class0_bit));
++	memcpy(mv->fr, probs->mv.fr, sizeof(mv->fr));
++	memcpy(mv->class0_hp, probs->mv.class0_hp, sizeof(mv->class0_hp));
++	memcpy(mv->hp, probs->mv.hp, sizeof(mv->hp));
++	memcpy(mv->classes, probs->mv.classes, sizeof(mv->classes));
++	memcpy(mv->class0_fr, probs->mv.class0_fr, sizeof(mv->class0_fr));
++	memcpy(mv->bits, probs->mv.bits, sizeof(mv->bits));
++
++	memcpy(adaptive->single_ref, probs->single_ref, sizeof(adaptive->single_ref));
++
++	memcpy(adaptive->comp_ref, probs->comp_ref, sizeof(adaptive->comp_ref));
++
++	for (i = 0; i < ARRAY_SIZE(adaptive->coef); ++i)
++		for (j = 0; j < ARRAY_SIZE(adaptive->coef[0]); ++j)
++			for (k = 0; k < ARRAY_SIZE(adaptive->coef[0][0]); ++k)
++				for (l = 0; l < ARRAY_SIZE(adaptive->coef[0][0][0]); ++l)
++					INNER_LOOP;
++
++	hantro_write_addr(ctx->dev, VP9_ADDR_PROBS, misc->dma);
++}
++
++static void config_counts(struct hantro_ctx *ctx)
++{
++	struct hantro_vp9_dec_hw_ctx *vp9_dec = &ctx->vp9_dec;
++	struct hantro_aux_buf *misc = &vp9_dec->misc;
++	dma_addr_t addr = misc->dma + vp9_dec->ctx_counters_offset;
++
++	hantro_write_addr(ctx->dev, VP9_ADDR_CTR, addr);
++}
++
++static void config_seg_map(struct hantro_ctx *ctx,
++			   const struct v4l2_ctrl_vp9_frame *dec_params,
++			   bool intra_only, bool update_map)
++{
++	struct hantro_vp9_dec_hw_ctx *vp9_ctx = &ctx->vp9_dec;
++	struct hantro_aux_buf *segment_map = &vp9_ctx->segment_map;
++	dma_addr_t addr;
++
++	if (intra_only ||
++	    (dec_params->flags & V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT)) {
++		memset(segment_map->cpu, 0, segment_map->size);
++		memset(vp9_ctx->feature_data, 0, sizeof(vp9_ctx->feature_data));
++		memset(vp9_ctx->feature_enabled, 0, sizeof(vp9_ctx->feature_enabled));
++	}
++
++	addr = segment_map->dma + vp9_ctx->active_segment * vp9_ctx->segment_map_size;
++	hantro_write_addr(ctx->dev, VP9_ADDR_SEGMENT_READ, addr);
++
++	addr = segment_map->dma + (1 - vp9_ctx->active_segment) * vp9_ctx->segment_map_size;
++	hantro_write_addr(ctx->dev, VP9_ADDR_SEGMENT_WRITE, addr);
++
++	if (update_map)
++		vp9_ctx->active_segment = 1 - vp9_ctx->active_segment;
++}
++
++static void
++config_source(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_frame *dec_params,
++	      struct vb2_v4l2_buffer *vb2_src)
++{
++	dma_addr_t stream_base, tmp_addr;
++	unsigned int headres_size;
++	u32 src_len, start_bit, src_buf_len;
++
++	headres_size = dec_params->uncompressed_header_size
++		     + dec_params->compressed_header_size;
++
++	stream_base = vb2_dma_contig_plane_dma_addr(&vb2_src->vb2_buf, 0);
++	hantro_write_addr(ctx->dev, G2_ADDR_STR, stream_base);
++
++	tmp_addr = stream_base + headres_size;
++	start_bit = (tmp_addr & 0xf) * 8;
++	hantro_reg_write(ctx->dev, &g2_start_bit, start_bit);
++
++	src_len = vb2_get_plane_payload(&vb2_src->vb2_buf, 0);
++	src_len += start_bit / 8 - headres_size;
++	hantro_reg_write(ctx->dev, &g2_stream_len, src_len);
++
++	tmp_addr &= ~0xf;
++	hantro_reg_write(ctx->dev, &g2_strm_start_offset, tmp_addr - stream_base);
++	src_buf_len = vb2_plane_size(&vb2_src->vb2_buf, 0);
++	hantro_reg_write(ctx->dev, &g2_strm_buffer_len, src_buf_len);
++}
++
++static void
++config_registers(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_frame *dec_params,
++		 struct vb2_v4l2_buffer *vb2_src, struct vb2_v4l2_buffer *vb2_dst)
++{
++	struct hantro_decoded_buffer *dst, *last, *mv_ref;
++	struct hantro_vp9_dec_hw_ctx *vp9_ctx = &ctx->vp9_dec;
++	const struct v4l2_vp9_segmentation *seg;
++	bool intra_only, resolution_change;
++
++	/* vp9 stuff */
++	dst = vb2_to_hantro_decoded_buf(&vb2_dst->vb2_buf);
++
++	if (vp9_ctx->last.valid)
++		last = get_ref_buf(ctx, &dst->base.vb, vp9_ctx->last.timestamp);
++	else
++		last = dst;
++
++	update_dec_buf_info(dst, dec_params);
++	update_ctx_cur_info(vp9_ctx, dst, dec_params);
++	seg = &dec_params->seg;
++
++	intra_only = !!(dec_params->flags &
++			(V4L2_VP9_FRAME_FLAG_KEY_FRAME |
++			V4L2_VP9_FRAME_FLAG_INTRA_ONLY));
++
++	if (!intra_only &&
++	    !(dec_params->flags & V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT) &&
++	    vp9_ctx->last.valid)
++		mv_ref = last;
++	else
++		mv_ref = dst;
++
++	resolution_change = dst->vp9.width != last->vp9.width ||
++			    dst->vp9.height != last->vp9.height;
++
++	/* configure basic registers */
++	hantro_reg_write(ctx->dev, &g2_mode, VP9_DEC_MODE);
++	hantro_reg_write(ctx->dev, &g2_strm_swap, 0xf);
++	hantro_reg_write(ctx->dev, &g2_dirmv_swap, 0xf);
++	hantro_reg_write(ctx->dev, &g2_compress_swap, 0xf);
++	hantro_reg_write(ctx->dev, &g2_buswidth, BUS_WIDTH_128);
++	hantro_reg_write(ctx->dev, &g2_max_burst, 16);
++	hantro_reg_write(ctx->dev, &g2_apf_threshold, 8);
++	hantro_reg_write(ctx->dev, &g2_ref_compress_bypass, 1);
++	hantro_reg_write(ctx->dev, &g2_clk_gate_e, 1);
++	hantro_reg_write(ctx->dev, &g2_max_cb_size, 6);
++	hantro_reg_write(ctx->dev, &g2_min_cb_size, 3);
++
++	config_output(ctx, dst, dec_params);
++
++	if (!intra_only)
++		config_ref_registers(ctx, dec_params, dst, mv_ref);
++
++	config_tiles(ctx, dec_params, dst);
++	config_segment(ctx, dec_params);
++	config_loop_filter(ctx, dec_params);
++	config_picture_dimensions(ctx, dst);
++	config_bit_depth(ctx, dec_params);
++	config_quant(ctx, dec_params);
++	config_others(ctx, dec_params, intra_only, resolution_change);
++	config_compound_reference(ctx, dec_params);
++	config_probs(ctx, dec_params);
++	config_counts(ctx);
++	config_seg_map(ctx, dec_params, intra_only,
++		       seg->flags & V4L2_VP9_SEGMENTATION_FLAG_UPDATE_MAP);
++	config_source(ctx, dec_params, vb2_src);
++}
++
++int hantro_g2_vp9_dec_run(struct hantro_ctx *ctx)
++{
++	const struct v4l2_ctrl_vp9_frame *decode_params;
++	struct vb2_v4l2_buffer *src;
++	struct vb2_v4l2_buffer *dst;
++	int ret;
++
++	hantro_g2_check_idle(ctx->dev);
++
++	ret = start_prepare_run(ctx, &decode_params);
++	if (ret) {
++		hantro_end_prepare_run(ctx);
++		return ret;
++	}
++
++	src = hantro_get_src_buf(ctx);
++	dst = hantro_get_dst_buf(ctx);
++
++	config_registers(ctx, decode_params, src, dst);
++
++	hantro_end_prepare_run(ctx);
++
++	vdpu_write(ctx->dev, G2_REG_INTERRUPT_DEC_E, G2_REG_INTERRUPT);
++
++	return 0;
++}
++
++#define copy_tx_and_skip(p1, p2)				\
++do {								\
++	memcpy((p1)->tx8, (p2)->tx8, sizeof((p1)->tx8));	\
++	memcpy((p1)->tx16, (p2)->tx16, sizeof((p1)->tx16));	\
++	memcpy((p1)->tx32, (p2)->tx32, sizeof((p1)->tx32));	\
++	memcpy((p1)->skip, (p2)->skip, sizeof((p1)->skip));	\
++} while (0)
++
++void hantro_g2_vp9_dec_done(struct hantro_ctx *ctx)
++{
++	struct hantro_vp9_dec_hw_ctx *vp9_ctx = &ctx->vp9_dec;
++	unsigned int fctx_idx;
++
++	if (!(vp9_ctx->cur.flags & V4L2_VP9_FRAME_FLAG_REFRESH_FRAME_CTX))
++		goto out_update_last;
++
++	fctx_idx = vp9_ctx->cur.frame_context_idx;
++
++	if (!(vp9_ctx->cur.flags & V4L2_VP9_FRAME_FLAG_PARALLEL_DEC_MODE)) {
++		/* error_resilient_mode == 0 && frame_parallel_decoding_mode == 0 */
++		struct v4l2_vp9_frame_context *probs = &vp9_ctx->probability_tables;
++		bool frame_is_intra = vp9_ctx->cur.flags &
++		    (V4L2_VP9_FRAME_FLAG_KEY_FRAME | V4L2_VP9_FRAME_FLAG_INTRA_ONLY);
++		struct tx_and_skip {
++			u8 tx8[2][1];
++			u8 tx16[2][2];
++			u8 tx32[2][3];
++			u8 skip[3];
++		} _tx_skip, *tx_skip = &_tx_skip;
++		struct v4l2_vp9_frame_symbol_counts *counts;
++		struct symbol_counts *hantro_cnts;
++		u32 tx16p[2][4];
++		int i;
++
++		/* buffer the forward-updated TX and skip probs */
++		if (frame_is_intra)
++			copy_tx_and_skip(tx_skip, probs);
++
++		/* 6.1.2 refresh_probs(): load_probs() and load_probs2() */
++		*probs = vp9_ctx->frame_context[fctx_idx];
++
++		/* if FrameIsIntra then undo the effect of load_probs2() */
++		if (frame_is_intra)
++			copy_tx_and_skip(probs, tx_skip);
++
++		counts = &vp9_ctx->cnts;
++		hantro_cnts = vp9_ctx->misc.cpu + vp9_ctx->ctx_counters_offset;
++		for (i = 0; i < ARRAY_SIZE(tx16p); ++i) {
++			memcpy(tx16p[i],
++			       hantro_cnts->tx16x16_count[i],
++			       sizeof(hantro_cnts->tx16x16_count[0]));
++			tx16p[i][3] = 0;
++		}
++		counts->tx16p = &tx16p;
++
++		v4l2_vp9_adapt_coef_probs(probs, counts,
++					  !vp9_ctx->last.valid ||
++					  vp9_ctx->last.flags & V4L2_VP9_FRAME_FLAG_KEY_FRAME,
++					  frame_is_intra);
++
++		if (!frame_is_intra) {
++			/* load_probs2() already done */
++			u32 mv_mode[7][4];
++
++			for (i = 0; i < ARRAY_SIZE(mv_mode); ++i) {
++				mv_mode[i][0] = hantro_cnts->inter_mode_counts[i][1][0];
++				mv_mode[i][1] = hantro_cnts->inter_mode_counts[i][2][0];
++				mv_mode[i][2] = hantro_cnts->inter_mode_counts[i][0][0];
++				mv_mode[i][3] = hantro_cnts->inter_mode_counts[i][2][1];
++			}
++			counts->mv_mode = &mv_mode;
++			v4l2_vp9_adapt_noncoef_probs(&vp9_ctx->probability_tables, counts,
++						     vp9_ctx->cur.reference_mode,
++						     vp9_ctx->cur.interpolation_filter,
++						     vp9_ctx->cur.tx_mode, vp9_ctx->cur.flags);
++		}
++	}
++
++	vp9_ctx->frame_context[fctx_idx] = vp9_ctx->probability_tables;
++
++out_update_last:
++	vp9_ctx->last = vp9_ctx->cur;
++}
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 42b3f3961f75..2961d399fd60 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -12,6 +12,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/v4l2-controls.h>
+ #include <media/v4l2-ctrls.h>
++#include <media/v4l2-vp9.h>
+ #include <media/videobuf2-core.h>
+ 
+ #define DEC_8190_ALIGN_MASK	0x07U
+@@ -161,6 +162,50 @@ struct hantro_vp8_dec_hw_ctx {
+ 	struct hantro_aux_buf prob_tbl;
+ };
+ 
++struct hantro_vp9_frame_info {
++	u32 valid : 1;
++	u32 frame_context_idx : 2;
++	u32 reference_mode : 2;
++	u32 tx_mode : 3;
++	u32 interpolation_filter : 3;
++	u32 flags;
++	u64 timestamp;
++};
++
++#define MAX_SB_COLS	64
++#define MAX_SB_ROWS	34
 +
 +/**
-+ * struct v4l2_vp9_frame_mv_context - motion vector-related probabilities
++ * struct hantro_vp9_dec_hw_ctx
 + *
-+ * A member of v4l2_vp9_frame_context.
 + */
-+struct v4l2_vp9_frame_mv_context {
++struct hantro_vp9_dec_hw_ctx {
++	struct hantro_aux_buf tile_edge;
++	struct hantro_aux_buf segment_map;
++	struct hantro_aux_buf misc;
++	struct v4l2_vp9_frame_symbol_counts cnts;
++	struct v4l2_vp9_frame_context probability_tables;
++	struct v4l2_vp9_frame_context frame_context[4];
++	struct hantro_vp9_frame_info cur;
++	struct hantro_vp9_frame_info last;
++
++	unsigned int bsd_ctrl_offset;
++	unsigned int segment_map_size;
++	unsigned int ctx_counters_offset;
++	unsigned int tile_info_offset;
++
++	unsigned short tile_r_info[MAX_SB_ROWS];
++	unsigned short tile_c_info[MAX_SB_COLS];
++	unsigned int last_tile_r;
++	unsigned int last_tile_c;
++	unsigned int last_sbs_r;
++	unsigned int last_sbs_c;
++
++	unsigned int active_segment;
++	u8 feature_enabled[8];
++	s16 feature_data[8][4];
++};
++
+ /**
+  * struct hantro_postproc_ctx
+  *
+@@ -267,6 +312,24 @@ void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx);
+ size_t hantro_hevc_chroma_offset(const struct v4l2_ctrl_hevc_sps *sps);
+ size_t hantro_hevc_motion_vectors_offset(const struct v4l2_ctrl_hevc_sps *sps);
+ 
++static inline unsigned short hantro_vp9_num_sbs(unsigned short dimension)
++{
++	return (dimension + 63) / 64;
++}
++
++static inline size_t
++hantro_vp9_mv_size(unsigned int width, unsigned int height)
++{
++	int num_ctbs;
++
++	/*
++	 * There can be up to (CTBs x 64) number of blocks,
++	 * and the motion vector for each block needs 16 bytes.
++	 */
++	num_ctbs = hantro_vp9_num_sbs(width) * hantro_vp9_num_sbs(height);
++	return (num_ctbs * 64) * 16;
++}
++
+ static inline size_t
+ hantro_h264_mv_size(unsigned int width, unsigned int height)
+ {
+@@ -308,6 +371,10 @@ void hantro_vp8_dec_exit(struct hantro_ctx *ctx);
+ void hantro_vp8_prob_update(struct hantro_ctx *ctx,
+ 			    const struct v4l2_ctrl_vp8_frame *hdr);
+ 
++int hantro_g2_vp9_dec_run(struct hantro_ctx *ctx);
++void hantro_g2_vp9_dec_done(struct hantro_ctx *ctx);
++int hantro_vp9_dec_init(struct hantro_ctx *ctx);
++void hantro_vp9_dec_exit(struct hantro_ctx *ctx);
+ void hantro_g2_check_idle(struct hantro_dev *vpu);
+ 
+ #endif /* HANTRO_HW_H_ */
+diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
+index d1f060c55fed..e4b0645ba6fc 100644
+--- a/drivers/staging/media/hantro/hantro_v4l2.c
++++ b/drivers/staging/media/hantro/hantro_v4l2.c
+@@ -299,6 +299,11 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
+ 			pix_mp->plane_fmt[0].sizeimage +=
+ 				hantro_h264_mv_size(pix_mp->width,
+ 						    pix_mp->height);
++		else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_VP9_FRAME &&
++			 !hantro_needs_postproc(ctx, fmt))
++			pix_mp->plane_fmt[0].sizeimage +=
++				hantro_vp9_mv_size(pix_mp->width,
++						   pix_mp->height);
+ 	} else if (!pix_mp->plane_fmt[0].sizeimage) {
+ 		/*
+ 		 * For coded formats the application can specify
+@@ -407,6 +412,7 @@ hantro_update_requires_request(struct hantro_ctx *ctx, u32 fourcc)
+ 	case V4L2_PIX_FMT_VP8_FRAME:
+ 	case V4L2_PIX_FMT_H264_SLICE:
+ 	case V4L2_PIX_FMT_HEVC_SLICE:
++	case V4L2_PIX_FMT_VP9_FRAME:
+ 		ctx->fh.m2m_ctx->out_q_ctx.q.requires_requests = true;
+ 		break;
+ 	default:
+diff --git a/drivers/staging/media/hantro/hantro_vp9.c b/drivers/staging/media/hantro/hantro_vp9.c
+new file mode 100644
+index 000000000000..566cd376c097
+--- /dev/null
++++ b/drivers/staging/media/hantro/hantro_vp9.c
+@@ -0,0 +1,240 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Hantro VP9 codec driver
++ *
++ * Copyright (C) 2021 Collabora Ltd.
++ */
++
++#include <linux/types.h>
++#include <media/v4l2-mem2mem.h>
++
++#include "hantro.h"
++#include "hantro_hw.h"
++#include "hantro_vp9.h"
++
++#define POW2(x) (1 << (x))
++
++#define MAX_LOG2_TILE_COLUMNS 6
++#define MAX_NUM_TILE_COLS POW2(MAX_LOG2_TILE_COLUMNS)
++#define MAX_TILE_COLS 20
++#define MAX_TILE_ROWS 22
++
++static size_t hantro_vp9_tile_filter_size(unsigned int height)
++{
++	u32 h, height32, size;
++
++	h = roundup(height, 8);
++
++	height32 = roundup(h, 64);
++	size = 24 * height32 * (MAX_NUM_TILE_COLS - 1); /* luma: 8, chroma: 8 + 8 */
++
++	return size;
++}
++
++static size_t hantro_vp9_bsd_control_size(unsigned int height)
++{
++	u32 h, height32;
++
++	h = roundup(height, 8);
++	height32 = roundup(h, 64);
++
++	return 16 * (height32 / 4) * (MAX_NUM_TILE_COLS - 1);
++}
++
++static size_t hantro_vp9_segment_map_size(unsigned int width, unsigned int height)
++{
++	u32 w, h;
++	int num_ctbs;
++
++	w = roundup(width, 8);
++	h = roundup(height, 8);
++	num_ctbs = ((w + 63) / 64) * ((h + 63) / 64);
++
++	return num_ctbs * 32;
++}
++
++static inline size_t hantro_vp9_prob_tab_size(void)
++{
++	return roundup(sizeof(struct hantro_g2_all_probs), 16);
++}
++
++static inline size_t hantro_vp9_count_tab_size(void)
++{
++	return roundup(sizeof(struct symbol_counts), 16);
++}
++
++static inline size_t hantro_vp9_tile_info_size(void)
++{
++	return roundup((MAX_TILE_COLS * MAX_TILE_ROWS * 4 * sizeof(u16) + 15 + 16) & ~0xf, 16);
++}
++
++static void *get_coeffs_arr(struct symbol_counts *cnts, int i, int j, int k, int l, int m)
++{
++	if (i == 0)
++		return &cnts->count_coeffs[j][k][l][m];
++
++	if (i == 1)
++		return &cnts->count_coeffs8x8[j][k][l][m];
++
++	if (i == 2)
++		return &cnts->count_coeffs16x16[j][k][l][m];
++
++	if (i == 3)
++		return &cnts->count_coeffs32x32[j][k][l][m];
++
++	return NULL;
++}
++
++static void *get_eobs1(struct symbol_counts *cnts, int i, int j, int k, int l, int m)
++{
++	if (i == 0)
++		return &cnts->count_coeffs[j][k][l][m][3];
++
++	if (i == 1)
++		return &cnts->count_coeffs8x8[j][k][l][m][3];
++
++	if (i == 2)
++		return &cnts->count_coeffs16x16[j][k][l][m][3];
++
++	if (i == 3)
++		return &cnts->count_coeffs32x32[j][k][l][m][3];
++
++	return NULL;
++}
++
++#define INNER_LOOP \
++	do {										\
++		for (m = 0; m < ARRAY_SIZE(vp9_ctx->cnts.coeff[i][0][0][0]); ++m) {	\
++			vp9_ctx->cnts.coeff[i][j][k][l][m] =				\
++				get_coeffs_arr(cnts, i, j, k, l, m);			\
++			vp9_ctx->cnts.eob[i][j][k][l][m][0] =				\
++				&cnts->count_eobs[i][j][k][l][m];			\
++			vp9_ctx->cnts.eob[i][j][k][l][m][1] =				\
++				get_eobs1(cnts, i, j, k, l, m);				\
++		}									\
++	} while (0)
++
++static void init_v4l2_vp9_count_tbl(struct hantro_ctx *ctx)
++{
++	struct hantro_vp9_dec_hw_ctx *vp9_ctx = &ctx->vp9_dec;
++	struct symbol_counts *cnts = vp9_ctx->misc.cpu + vp9_ctx->ctx_counters_offset;
++	int i, j, k, l, m;
++
++	vp9_ctx->cnts.partition = &cnts->partition_counts;
++	vp9_ctx->cnts.skip = &cnts->mbskip_count;
++	vp9_ctx->cnts.intra_inter = &cnts->intra_inter_count;
++	vp9_ctx->cnts.tx32p = &cnts->tx32x32_count;
++	/*
++	 * g2 hardware uses tx16x16_count[2][3], while the api
++	 * expects tx16p[2][4], so this must be explicitly copied
++	 * into vp9_ctx->cnts.tx16p when passing the data to the
++	 * vp9 library function
++	 */
++	vp9_ctx->cnts.tx8p = &cnts->tx8x8_count;
++
++	vp9_ctx->cnts.y_mode = &cnts->sb_ymode_counts;
++	vp9_ctx->cnts.uv_mode = &cnts->uv_mode_counts;
++	vp9_ctx->cnts.comp = &cnts->comp_inter_count;
++	vp9_ctx->cnts.comp_ref = &cnts->comp_ref_count;
++	vp9_ctx->cnts.single_ref = &cnts->single_ref_count;
++	vp9_ctx->cnts.filter = &cnts->switchable_interp_counts;
++	vp9_ctx->cnts.mv_joint = &cnts->mv_counts.joints;
++	vp9_ctx->cnts.sign = &cnts->mv_counts.sign;
++	vp9_ctx->cnts.classes = &cnts->mv_counts.classes;
++	vp9_ctx->cnts.class0 = &cnts->mv_counts.class0;
++	vp9_ctx->cnts.bits = &cnts->mv_counts.bits;
++	vp9_ctx->cnts.class0_fp = &cnts->mv_counts.class0_fp;
++	vp9_ctx->cnts.fp = &cnts->mv_counts.fp;
++	vp9_ctx->cnts.class0_hp = &cnts->mv_counts.class0_hp;
++	vp9_ctx->cnts.hp = &cnts->mv_counts.hp;
++
++	for (i = 0; i < ARRAY_SIZE(vp9_ctx->cnts.coeff); ++i)
++		for (j = 0; j < ARRAY_SIZE(vp9_ctx->cnts.coeff[i]); ++j)
++			for (k = 0; k < ARRAY_SIZE(vp9_ctx->cnts.coeff[i][0]); ++k)
++				for (l = 0; l < ARRAY_SIZE(vp9_ctx->cnts.coeff[i][0][0]); ++l)
++					INNER_LOOP;
++}
++
++int hantro_vp9_dec_init(struct hantro_ctx *ctx)
++{
++	struct hantro_dev *vpu = ctx->dev;
++	const struct hantro_variant *variant = vpu->variant;
++	struct hantro_vp9_dec_hw_ctx *vp9_dec = &ctx->vp9_dec;
++	struct hantro_aux_buf *tile_edge = &vp9_dec->tile_edge;
++	struct hantro_aux_buf *segment_map = &vp9_dec->segment_map;
++	struct hantro_aux_buf *misc = &vp9_dec->misc;
++	u32 i, max_width, max_height, size;
++
++	if (variant->num_dec_fmts < 1)
++		return -EINVAL;
++
++	for (i = 0; i < variant->num_dec_fmts; ++i)
++		if (variant->dec_fmts[i].fourcc == V4L2_PIX_FMT_VP9_FRAME)
++			break;
++
++	if (i == variant->num_dec_fmts)
++		return -EINVAL;
++
++	max_width = vpu->variant->dec_fmts[i].frmsize.max_width;
++	max_height = vpu->variant->dec_fmts[i].frmsize.max_height;
++
++	size = hantro_vp9_tile_filter_size(max_height);
++	vp9_dec->bsd_ctrl_offset = size;
++	size += hantro_vp9_bsd_control_size(max_height);
++
++	tile_edge->cpu = dma_alloc_coherent(vpu->dev, size, &tile_edge->dma, GFP_KERNEL);
++	if (!tile_edge->cpu)
++		return -ENOMEM;
++
++	tile_edge->size = size;
++	memset(tile_edge->cpu, 0, size);
++
++	size = hantro_vp9_segment_map_size(max_width, max_height);
++	vp9_dec->segment_map_size = size;
++	size *= 2; /* we need two areas of this size, used alternately */
++
++	segment_map->cpu = dma_alloc_coherent(vpu->dev, size, &segment_map->dma, GFP_KERNEL);
++	if (!segment_map->cpu)
++		goto err_segment_map;
++
++	segment_map->size = size;
++	memset(segment_map->cpu, 0, size);
++
++	size = hantro_vp9_prob_tab_size();
++	vp9_dec->ctx_counters_offset = size;
++	size += hantro_vp9_count_tab_size();
++	vp9_dec->tile_info_offset = size;
++	size += hantro_vp9_tile_info_size();
++
++	misc->cpu = dma_alloc_coherent(vpu->dev, size, &misc->dma, GFP_KERNEL);
++	if (!misc->cpu)
++		goto err_misc;
++
++	misc->size = size;
++	memset(misc->cpu, 0, size);
++
++	init_v4l2_vp9_count_tbl(ctx);
++
++	return 0;
++
++err_misc:
++	dma_free_coherent(vpu->dev, segment_map->size, segment_map->cpu, segment_map->dma);
++
++err_segment_map:
++	dma_free_coherent(vpu->dev, tile_edge->size, tile_edge->cpu, tile_edge->dma);
++
++	return -ENOMEM;
++}
++
++void hantro_vp9_dec_exit(struct hantro_ctx *ctx)
++{
++	struct hantro_dev *vpu = ctx->dev;
++	struct hantro_vp9_dec_hw_ctx *vp9_dec = &ctx->vp9_dec;
++	struct hantro_aux_buf *tile_edge = &vp9_dec->tile_edge;
++	struct hantro_aux_buf *segment_map = &vp9_dec->segment_map;
++	struct hantro_aux_buf *misc = &vp9_dec->misc;
++
++	dma_free_coherent(vpu->dev, misc->size, misc->cpu, misc->dma);
++	dma_free_coherent(vpu->dev, segment_map->size, segment_map->cpu, segment_map->dma);
++	dma_free_coherent(vpu->dev, tile_edge->size, tile_edge->cpu, tile_edge->dma);
++}
+diff --git a/drivers/staging/media/hantro/hantro_vp9.h b/drivers/staging/media/hantro/hantro_vp9.h
+new file mode 100644
+index 000000000000..c7f4bd3ff8dd
+--- /dev/null
++++ b/drivers/staging/media/hantro/hantro_vp9.h
+@@ -0,0 +1,103 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Hantro VP9 codec driver
++ *
++ * Copyright (C) 2021 Collabora Ltd.
++ */
++
++struct hantro_g2_mv_probs {
 +	u8 joint[3];
 +	u8 sign[2];
-+	u8 classes[2][10];
-+	u8 class0_bit[2];
-+	u8 bits[2][10];
-+	u8 class0_fr[2][2][3];
++	u8 class0_bit[2][1];
 +	u8 fr[2][3];
 +	u8 class0_hp[2];
 +	u8 hp[2];
++	u8 classes[2][10];
++	u8 class0_fr[2][2][3];
++	u8 bits[2][10];
 +};
 +
-+/**
-+ * struct v4l2_vp9_frame_context - frame probabilities, including motion-vector related
-+ *
-+ * Drivers which need to keep track of frame context(s) can use this struct.
-+ * The members correspond to probability tables, which are specified only implicitly in the
-+ * vp9 spec. Section 10.5 "Default probability tables" contains all the types of involved
-+ * tables, i.e. the actual tables are of the same kind, and when they are reset (which is
-+ * mandated by the spec sometimes) they are overwritten with values from the default tables.
-+ */
-+struct v4l2_vp9_frame_context {
++struct hantro_g2_probs {
++	u8 inter_mode[7][4];
++	u8 is_inter[4];
++	u8 uv_mode[10][8];
 +	u8 tx8[2][1];
 +	u8 tx16[2][2];
 +	u8 tx32[2][3];
-+	u8 coef[4][2][2][6][6][3];
-+	u8 skip[3];
-+	u8 inter_mode[7][3];
++	u8 y_mode_tail[4][1];
++	u8 y_mode[4][8];
++	u8 partition[2][16][4]; /* [keyframe][][], [inter][][] */
++	u8 uv_mode_tail[10][1];
 +	u8 interp_filter[4][2];
-+	u8 is_inter[4];
 +	u8 comp_mode[5];
++	u8 skip[3];
++
++	u8 pad1[1];
++
++	struct hantro_g2_mv_probs mv;
++
 +	u8 single_ref[5][2];
 +	u8 comp_ref[5];
-+	u8 y_mode[4][9];
-+	u8 uv_mode[10][9];
-+	u8 partition[16][3];
 +
-+	struct v4l2_vp9_frame_mv_context mv;
++	u8 pad2[17];
++
++	u8 coef[4][2][2][6][6][4];
 +};
 +
-+/**
-+ * struct v4l2_vp9_frame_symbol_counts - pointers to arrays of symbol counts
-+ *
-+ * The fields correspond to what is specified in section 8.3 "Clear counts process" of the spec.
-+ * Different pieces of hardware can report the counts in different order, so we cannot rely on
-+ * simply overlaying a struct on a relevant block of memory. Instead we provide pointers to
-+ * arrays or array of pointers to arrays in case of coeff, or array of pointers for eob.
-+ */
-+struct v4l2_vp9_frame_symbol_counts {
-+	u32 (*partition)[16][4];
-+	u32 (*skip)[3][2];
-+	u32 (*intra_inter)[4][2];
-+	u32 (*tx32p)[2][4];
-+	u32 (*tx16p)[2][4];
-+	u32 (*tx8p)[2][2];
-+	u32 (*y_mode)[4][10];
-+	u32 (*uv_mode)[10][10];
-+	u32 (*comp)[5][2];
-+	u32 (*comp_ref)[5][2];
-+	u32 (*single_ref)[5][2][2];
-+	u32 (*mv_mode)[7][4];
-+	u32 (*filter)[4][3];
-+	u32 (*mv_joint)[4];
-+	u32 (*sign)[2][2];
-+	u32 (*classes)[2][11];
-+	u32 (*class0)[2][2];
-+	u32 (*bits)[2][10][2];
-+	u32 (*class0_fp)[2][2][4];
-+	u32 (*fp)[2][4];
-+	u32 (*class0_hp)[2][2];
-+	u32 (*hp)[2][2];
-+	u32 (*coeff[4][2][2][6][6])[3];
-+	u32 *eob[4][2][2][6][6][2];
++struct hantro_g2_all_probs {
++	u8 kf_y_mode_prob[10][10][8];
++
++	u8 kf_y_mode_prob_tail[10][10][1];
++	u8 ref_pred_probs[3];
++	u8 mb_segment_tree_probs[7];
++	u8 segment_pred_probs[3];
++	u8 ref_scores[4];
++	u8 prob_comppred[2];
++
++	u8 pad1[9];
++
++	u8 kf_uv_mode_prob[10][8];
++	u8 kf_uv_mode_prob_tail[10][1];
++
++	u8 pad2[6];
++
++	struct hantro_g2_probs probs;
 +};
 +
-+extern const u8 v4l2_vp9_kf_y_mode_prob[10][10][9]; /* Section 10.4 of the spec */
-+extern const u8 v4l2_vp9_kf_partition_probs[16][3]; /* Section 10.4 of the spec */
-+extern const u8 v4l2_vp9_kf_uv_mode_prob[10][9]; /* Section 10.4 of the spec */
-+extern const struct v4l2_vp9_frame_context v4l2_vp9_default_probs; /* Section 10.5 of the spec */
++struct mv_counts {
++	u32 joints[4];
++	u32 sign[2][2];
++	u32 classes[2][11];
++	u32 class0[2][2];
++	u32 bits[2][10][2];
++	u32 class0_fp[2][2][4];
++	u32 fp[2][4];
++	u32 class0_hp[2][2];
++	u32 hp[2][2];
++};
 +
-+/**
-+ * v4l2_vp9_fw_update_probs() - Perform forward update of vp9 probabilities
-+ *
-+ * @probs: current probabilities values
-+ * @deltas: delta values from compressed header
-+ * @dec_params: vp9 frame decoding parameters
-+ *
-+ * This function performs forward updates of probabilities for the vp9 boolean decoder.
-+ * The frame header can contain a directive to update the probabilities (deltas), if so, then
-+ * the deltas are provided in the header, too. The userspace parses those and passes the said
-+ * deltas struct to the kernel.
-+ */
-+void v4l2_vp9_fw_update_probs(struct v4l2_vp9_frame_context *probs,
-+			      const struct v4l2_ctrl_vp9_compressed_hdr_probs *deltas,
-+			      const struct v4l2_ctrl_vp9_frame *dec_params);
++struct symbol_counts {
++	u32 inter_mode_counts[7][3][2];
++	u32 sb_ymode_counts[4][10];
++	u32 uv_mode_counts[10][10];
++	u32 partition_counts[16][4];
++	u32 switchable_interp_counts[4][3];
++	u32 intra_inter_count[4][2];
++	u32 comp_inter_count[5][2];
++	u32 single_ref_count[5][2][2];
++	u32 comp_ref_count[5][2];
++	u32 tx32x32_count[2][4];
++	u32 tx16x16_count[2][3];
++	u32 tx8x8_count[2][2];
++	u32 mbskip_count[3][2];
 +
-+/**
-+ * v4l2_vp9_reset_frame_ctx() - Reset appropriate frame context
-+ *
-+ * @dec_params: vp9 frame decoding parameters
-+ * @frame_context: array of the 4 frame contexts
-+ *
-+ * This function resets appropriate frame contexts, based on what's in dec_params.
-+ *
-+ * Returns the frame context index after the update, which might be reset to zero if
-+ * mandated by the spec.
-+ */
-+u8 v4l2_vp9_reset_frame_ctx(const struct v4l2_ctrl_vp9_frame *dec_params,
-+			    struct v4l2_vp9_frame_context *frame_context);
++	struct mv_counts mv_counts;
 +
-+/**
-+ * v4l2_vp9_adapt_coef_probs() - Perform backward update of vp9 coefficients probabilities
-+ *
-+ * @probs: current probabilities values
-+ * @counts: values of symbol counts after the current frame has been decoded
-+ * @use_128: flag to request that 128 is used as update factor if true, otherwise 112 is used
-+ * @frame_is_intra: flag indicating that FrameIsIntra is true
-+ *
-+ * This function performs backward updates of coefficients probabilities for the vp9 boolean
-+ * decoder. After a frame has been decoded the counts of how many times a given symbol has
-+ * occurred are known and are used to update the probability of each symbol.
-+ */
-+void v4l2_vp9_adapt_coef_probs(struct v4l2_vp9_frame_context *probs,
-+			       struct v4l2_vp9_frame_symbol_counts *counts,
-+			       bool use_128,
-+			       bool frame_is_intra);
++	u32 count_coeffs[2][2][6][6][4];
++	u32 count_coeffs8x8[2][2][6][6][4];
++	u32 count_coeffs16x16[2][2][6][6][4];
++	u32 count_coeffs32x32[2][2][6][6][4];
 +
-+/**
-+ * v4l2_vp9_adapt_coef_probs() - Perform backward update of vp9 non-coefficients probabilities
-+ *
-+ * @probs: current probabilities values
-+ * @counts: values of symbol counts after the current frame has been decoded
-+ * @reference_mode: specifies the type of inter prediction to be used. See
-+ *	&v4l2_vp9_reference_mode for more details
-+ * @interpolation_filter: specifies the filter selection used for performing inter prediction.
-+ *	See &v4l2_vp9_interpolation_filter for more details
-+ * @tx_mode: specifies the TX mode. See &v4l2_vp9_tx_mode for more details
-+ * @flags: combination of V4L2_VP9_FRAME_FLAG_* flags
-+ *
-+ * This function performs backward updates of non-coefficients probabilities for the vp9 boolean
-+ * decoder. After a frame has been decoded the counts of how many times a given symbol has
-+ * occurred are known and are used to update the probability of each symbol.
-+ */
-+void v4l2_vp9_adapt_noncoef_probs(struct v4l2_vp9_frame_context *probs,
-+				  struct v4l2_vp9_frame_symbol_counts *counts,
-+				  u8 reference_mode, u8 interpolation_filter, u8 tx_mode,
-+				  u32 flags);
++	u32 count_eobs[4][2][2][6][6];
++};
 +
-+/**
-+ * v4l2_vp9_seg_feat_enabled() - Check if a segmentation feature is enabled
-+ *
-+ * @feature_enabled: array of 8-bit flags (for all segments)
-+ * @feature: id of the feature to check
-+ * @segid: id of the segment to look up
-+ *
-+ * This function returns true if a given feature is active in a given segment.
-+ */
-+bool
-+v4l2_vp9_seg_feat_enabled(const u8 *feature_enabled,
-+			  enum v4l2_vp9_segment_feature feature,
-+			  unsigned int segid);
-+
-+#endif /* _MEDIA_V4L2_VP9_H */
+diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+index a40b161e5956..455a107ffb02 100644
+--- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
++++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+@@ -150,6 +150,19 @@ static const struct hantro_fmt imx8m_vpu_g2_dec_fmts[] = {
+ 			.step_height = MB_DIM,
+ 		},
+ 	},
++	{
++		.fourcc = V4L2_PIX_FMT_VP9_FRAME,
++		.codec_mode = HANTRO_MODE_VP9_DEC,
++		.max_depth = 2,
++		.frmsize = {
++			.min_width = 48,
++			.max_width = 3840,
++			.step_width = MB_DIM,
++			.min_height = 48,
++			.max_height = 2160,
++			.step_height = MB_DIM,
++		},
++	},
+ };
+ 
+ static irqreturn_t imx8m_vpu_g1_irq(int irq, void *dev_id)
+@@ -241,6 +254,13 @@ static const struct hantro_codec_ops imx8mq_vpu_g2_codec_ops[] = {
+ 		.init = hantro_hevc_dec_init,
+ 		.exit = hantro_hevc_dec_exit,
+ 	},
++	[HANTRO_MODE_VP9_DEC] = {
++		.run = hantro_g2_vp9_dec_run,
++		.done = hantro_g2_vp9_dec_done,
++		.reset = imx8m_vpu_g2_reset,
++		.init = hantro_vp9_dec_init,
++		.exit = hantro_vp9_dec_exit,
++	},
+ };
+ 
+ /*
+@@ -281,7 +301,7 @@ const struct hantro_variant imx8mq_vpu_g2_variant = {
+ 	.dec_offset = 0x0,
+ 	.dec_fmts = imx8m_vpu_g2_dec_fmts,
+ 	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_g2_dec_fmts),
+-	.codec = HANTRO_HEVC_DECODER,
++	.codec = HANTRO_HEVC_DECODER | HANTRO_VP9_DECODER,
+ 	.codec_ops = imx8mq_vpu_g2_codec_ops,
+ 	.init = imx8mq_vpu_hw_init,
+ 	.runtime_resume = imx8mq_runtime_resume,
 -- 
 2.17.1
 
