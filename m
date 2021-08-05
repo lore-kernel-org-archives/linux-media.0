@@ -2,108 +2,280 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1ED2C4338F
-	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:07:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DC83C432BE
+	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:43:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B78B861155
-	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:07:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 139C561151
+	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:43:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241867AbhHEOIH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Aug 2021 10:08:07 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:60116 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239887AbhHEOIH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 5 Aug 2021 10:08:07 -0400
-Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1mBe2K-002ZxF-DF; Thu, 05 Aug 2021 14:07:52 +0000
-Received: from ip6-localhost ([::1] helo=localhost.localdomain)
-        by slave0 with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1mBe2I-0000JX-GN; Thu, 05 Aug 2021 14:07:50 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.15] rkisp1 support for px30 (#76158)
-Date:   Thu,  5 Aug 2021 14:07:50 +0000
-Message-Id: <20210805140750.1165-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <55ef358a-1173-7b4c-a238-e74ee80d5459@xs4all.nl>
-References: 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S241969AbhHEOnM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Aug 2021 10:43:12 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:59076 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241639AbhHEOnL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Aug 2021 10:43:11 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 65F421F4409E
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev
+Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Ezequiel Garcia <elezegarcia@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, kernel@collabora.com,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v3 02/10] hantro: postproc: Introduce struct hantro_postproc_ops
+Date:   Thu,  5 Aug 2021 16:42:38 +0200
+Message-Id: <20210805144246.11998-3-andrzej.p@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210805144246.11998-1-andrzej.p@collabora.com>
+References: <20210805144246.11998-1-andrzej.p@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+From: Ezequiel Garcia <ezequiel@collabora.com>
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/55ef358a-1173-7b4c-a238-e74ee80d5459@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/129674/
-Build time: 00:17:57
-Link: https://lore.kernel.org/linux-media/55ef358a-1173-7b4c-a238-e74ee80d5459@xs4all.nl
+Turns out the post-processor block on the G2 core is substantially
+different from the one on the G1 core. Introduce hantro_postproc_ops
+with .enable and .disable methods, which will allow to support
+the G2 post-processor cleanly.
 
-gpg: Signature made Wed 04 Aug 2021 01:26:38 PM UTC
-gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
-gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
-gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [unknown]
-gpg: Note: This key has expired!
-Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
-     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+---
+ drivers/staging/media/hantro/hantro.h         |  5 +--
+ drivers/staging/media/hantro/hantro_hw.h      | 13 +++++++-
+ .../staging/media/hantro/hantro_postproc.c    | 33 ++++++++++++++-----
+ drivers/staging/media/hantro/imx8m_vpu_hw.c   |  2 +-
+ .../staging/media/hantro/rockchip_vpu_hw.c    |  6 ++--
+ .../staging/media/hantro/sama5d4_vdec_hw.c    |  2 +-
+ 6 files changed, 44 insertions(+), 17 deletions(-)
 
-Summary: got 3/10 patches with issues, being 1 at build time
-
-Error/warnings:
-
-patches/0001-media-rockchip-rkisp1-remove-unused-irq-variable.patch:
-
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-
-    allyesconfig: return code #0:
-	SPARSE:../drivers/media/cec/core/cec-core.c ../include/asm-generic/bitops/find.h:90:32:  warning: shift count is negative (-192)
-	SPARSE:../drivers/media/mc/mc-devnode.c ../include/asm-generic/bitops/find.h:90:32:  warning: shift count is negative (-192)
-	SPARSE:../drivers/media/v4l2-core/v4l2-dev.c ../include/asm-generic/bitops/find.h:132:46:  warning: shift count is negative (-192)
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:268 v4l_print_fmtdesc() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:292 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:302 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:328 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:347 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:352 v4l_print_format() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:362 v4l_print_framebuffer() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:735 v4l_print_frmsizeenum() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:762 v4l_print_frmivalenum() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/v4l2-core/v4l2-ioctl.c: ../drivers/media/v4l2-core/v4l2-ioctl.c:1424 v4l_fill_fmtdesc() error: unrecognized %p extension '4', treated as normal %p
-	../drivers/media/rc/meson-ir-tx.c:22: warning: expecting prototype for meson(). Prototype was for DEVICE_NAME() instead
-	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1969 vivid_create_instance() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2856 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-
-patches/0007-media-rockchip-rkisp1-add-prefixes-for-v10-specific-.patch:
-
-   checkpatch.pl:
-	$ cat patches/0007-media-rockchip-rkisp1-add-prefixes-for-v10-specific-.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:314: CHECK: Alignment should match open parenthesis
-
-patches/0008-media-rockchip-rkisp1-add-support-for-v12-isp-varian.patch:
-
-   checkpatch.pl:
-	$ cat patches/0008-media-rockchip-rkisp1-add-support-for-v12-isp-varian.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:24: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-	-:135: CHECK: Lines should not end with a '('
-	-:141: CHECK: Lines should not end with a '('
-	-:147: CHECK: Lines should not end with a '('
-	-:153: CHECK: Lines should not end with a '('
-	-:201: CHECK: Lines should not end with a '('
-	-:319: CHECK: Alignment should match open parenthesis
-	-:402: CHECK: Lines should not end with a '('
-	-:408: CHECK: Alignment should match open parenthesis
-	-:412: CHECK: Alignment should match open parenthesis
-	-:581: WARNING: line length of 102 exceeds 100 columns
+diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
+index c2e2dca38628..c2e01959dc00 100644
+--- a/drivers/staging/media/hantro/hantro.h
++++ b/drivers/staging/media/hantro/hantro.h
+@@ -28,6 +28,7 @@
+ 
+ struct hantro_ctx;
+ struct hantro_codec_ops;
++struct hantro_postproc_ops;
+ 
+ #define HANTRO_JPEG_ENCODER	BIT(0)
+ #define HANTRO_ENCODERS		0x0000ffff
+@@ -59,6 +60,7 @@ struct hantro_irq {
+  * @num_dec_fmts:		Number of decoder formats.
+  * @postproc_fmts:		Post-processor formats.
+  * @num_postproc_fmts:		Number of post-processor formats.
++ * @postproc_ops:		Post-processor ops.
+  * @codec:			Supported codecs
+  * @codec_ops:			Codec ops.
+  * @init:			Initialize hardware, optional.
+@@ -69,7 +71,6 @@ struct hantro_irq {
+  * @num_clocks:			number of clocks in the array
+  * @reg_names:			array of register range names
+  * @num_regs:			number of register range names in the array
+- * @postproc_regs:		&struct hantro_postproc_regs pointer
+  */
+ struct hantro_variant {
+ 	unsigned int enc_offset;
+@@ -80,6 +81,7 @@ struct hantro_variant {
+ 	unsigned int num_dec_fmts;
+ 	const struct hantro_fmt *postproc_fmts;
+ 	unsigned int num_postproc_fmts;
++	const struct hantro_postproc_ops *postproc_ops;
+ 	unsigned int codec;
+ 	const struct hantro_codec_ops *codec_ops;
+ 	int (*init)(struct hantro_dev *vpu);
+@@ -90,7 +92,6 @@ struct hantro_variant {
+ 	int num_clocks;
+ 	const char * const *reg_names;
+ 	int num_regs;
+-	const struct hantro_postproc_regs *postproc_regs;
+ };
+ 
+ /**
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index df7b5e3a57b9..4323e63dfbfc 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -170,6 +170,17 @@ struct hantro_postproc_ctx {
+ 	struct hantro_aux_buf dec_q[VB2_MAX_FRAME];
+ };
+ 
++/**
++ * struct hantro_postproc_ops - post-processor operations
++ *
++ * @enable:	Enable the post-processor block. Optional.
++ * @disable:	Disable the post-processor block. Optional.
++ */
++struct hantro_postproc_ops {
++	void (*enable)(struct hantro_ctx *ctx);
++	void (*disable)(struct hantro_ctx *ctx);
++};
++
+ /**
+  * struct hantro_codec_ops - codec mode specific operations
+  *
+@@ -217,7 +228,7 @@ extern const struct hantro_variant rk3328_vpu_variant;
+ extern const struct hantro_variant rk3399_vpu_variant;
+ extern const struct hantro_variant sama5d4_vdec_variant;
+ 
+-extern const struct hantro_postproc_regs hantro_g1_postproc_regs;
++extern const struct hantro_postproc_ops hantro_g1_postproc_ops;
+ 
+ extern const u32 hantro_vp8_dec_mc_filter[8][6];
+ 
+diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
+index 07842152003f..882fb8bc5ddd 100644
+--- a/drivers/staging/media/hantro/hantro_postproc.c
++++ b/drivers/staging/media/hantro/hantro_postproc.c
+@@ -15,14 +15,14 @@
+ #define HANTRO_PP_REG_WRITE(vpu, reg_name, val) \
+ { \
+ 	hantro_reg_write(vpu, \
+-			 &(vpu)->variant->postproc_regs->reg_name, \
++			 &hantro_g1_postproc_regs.reg_name, \
+ 			 val); \
+ }
+ 
+ #define HANTRO_PP_REG_WRITE_S(vpu, reg_name, val) \
+ { \
+ 	hantro_reg_write_s(vpu, \
+-			   &(vpu)->variant->postproc_regs->reg_name, \
++			   &hantro_g1_postproc_regs.reg_name, \
+ 			   val); \
+ }
+ 
+@@ -64,16 +64,13 @@ bool hantro_needs_postproc(const struct hantro_ctx *ctx,
+ 	return fmt->fourcc != V4L2_PIX_FMT_NV12;
+ }
+ 
+-void hantro_postproc_enable(struct hantro_ctx *ctx)
++static void hantro_postproc_g1_enable(struct hantro_ctx *ctx)
+ {
+ 	struct hantro_dev *vpu = ctx->dev;
+ 	struct vb2_v4l2_buffer *dst_buf;
+ 	u32 src_pp_fmt, dst_pp_fmt;
+ 	dma_addr_t dst_dma;
+ 
+-	if (!vpu->variant->postproc_regs)
+-		return;
+-
+ 	/* Turn on pipeline mode. Must be done first. */
+ 	HANTRO_PP_REG_WRITE_S(vpu, pipeline_en, 0x1);
+ 
+@@ -154,12 +151,30 @@ int hantro_postproc_alloc(struct hantro_ctx *ctx)
+ 	return 0;
+ }
+ 
++static void hantro_postproc_g1_disable(struct hantro_ctx *ctx)
++{
++	struct hantro_dev *vpu = ctx->dev;
++
++	HANTRO_PP_REG_WRITE_S(vpu, pipeline_en, 0x0);
++}
++
+ void hantro_postproc_disable(struct hantro_ctx *ctx)
+ {
+ 	struct hantro_dev *vpu = ctx->dev;
+ 
+-	if (!vpu->variant->postproc_regs)
+-		return;
++	if (vpu->variant->postproc_ops && vpu->variant->postproc_ops->disable)
++		vpu->variant->postproc_ops->disable(ctx);
++}
+ 
+-	HANTRO_PP_REG_WRITE_S(vpu, pipeline_en, 0x0);
++void hantro_postproc_enable(struct hantro_ctx *ctx)
++{
++	struct hantro_dev *vpu = ctx->dev;
++
++	if (vpu->variant->postproc_ops && vpu->variant->postproc_ops->enable)
++		vpu->variant->postproc_ops->enable(ctx);
+ }
++
++const struct hantro_postproc_ops hantro_g1_postproc_ops = {
++	.enable = hantro_postproc_g1_enable,
++	.disable = hantro_postproc_g1_disable,
++};
+diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+index ea919bfb9891..22fa7d2f3b64 100644
+--- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
++++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+@@ -262,7 +262,7 @@ const struct hantro_variant imx8mq_vpu_variant = {
+ 	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_dec_fmts),
+ 	.postproc_fmts = imx8m_vpu_postproc_fmts,
+ 	.num_postproc_fmts = ARRAY_SIZE(imx8m_vpu_postproc_fmts),
+-	.postproc_regs = &hantro_g1_postproc_regs,
++	.postproc_ops = &hantro_g1_postproc_ops,
+ 	.codec = HANTRO_MPEG2_DECODER | HANTRO_VP8_DECODER |
+ 		 HANTRO_H264_DECODER,
+ 	.codec_ops = imx8mq_vpu_codec_ops,
+diff --git a/drivers/staging/media/hantro/rockchip_vpu_hw.c b/drivers/staging/media/hantro/rockchip_vpu_hw.c
+index d4f52957cc53..6c1ad5534ce5 100644
+--- a/drivers/staging/media/hantro/rockchip_vpu_hw.c
++++ b/drivers/staging/media/hantro/rockchip_vpu_hw.c
+@@ -460,7 +460,7 @@ const struct hantro_variant rk3036_vpu_variant = {
+ 	.num_dec_fmts = ARRAY_SIZE(rk3066_vpu_dec_fmts),
+ 	.postproc_fmts = rockchip_vpu1_postproc_fmts,
+ 	.num_postproc_fmts = ARRAY_SIZE(rockchip_vpu1_postproc_fmts),
+-	.postproc_regs = &hantro_g1_postproc_regs,
++	.postproc_ops = &hantro_g1_postproc_ops,
+ 	.codec = HANTRO_MPEG2_DECODER | HANTRO_VP8_DECODER |
+ 		 HANTRO_H264_DECODER,
+ 	.codec_ops = rk3036_vpu_codec_ops,
+@@ -485,7 +485,7 @@ const struct hantro_variant rk3066_vpu_variant = {
+ 	.num_dec_fmts = ARRAY_SIZE(rk3066_vpu_dec_fmts),
+ 	.postproc_fmts = rockchip_vpu1_postproc_fmts,
+ 	.num_postproc_fmts = ARRAY_SIZE(rockchip_vpu1_postproc_fmts),
+-	.postproc_regs = &hantro_g1_postproc_regs,
++	.postproc_ops = &hantro_g1_postproc_ops,
+ 	.codec = HANTRO_JPEG_ENCODER | HANTRO_MPEG2_DECODER |
+ 		 HANTRO_VP8_DECODER | HANTRO_H264_DECODER,
+ 	.codec_ops = rk3066_vpu_codec_ops,
+@@ -505,7 +505,7 @@ const struct hantro_variant rk3288_vpu_variant = {
+ 	.num_dec_fmts = ARRAY_SIZE(rk3288_vpu_dec_fmts),
+ 	.postproc_fmts = rockchip_vpu1_postproc_fmts,
+ 	.num_postproc_fmts = ARRAY_SIZE(rockchip_vpu1_postproc_fmts),
+-	.postproc_regs = &hantro_g1_postproc_regs,
++	.postproc_ops = &hantro_g1_postproc_ops,
+ 	.codec = HANTRO_JPEG_ENCODER | HANTRO_MPEG2_DECODER |
+ 		 HANTRO_VP8_DECODER | HANTRO_H264_DECODER,
+ 	.codec_ops = rk3288_vpu_codec_ops,
+diff --git a/drivers/staging/media/hantro/sama5d4_vdec_hw.c b/drivers/staging/media/hantro/sama5d4_vdec_hw.c
+index 9c3b8cd0b239..f3fecc7248c4 100644
+--- a/drivers/staging/media/hantro/sama5d4_vdec_hw.c
++++ b/drivers/staging/media/hantro/sama5d4_vdec_hw.c
+@@ -100,7 +100,7 @@ const struct hantro_variant sama5d4_vdec_variant = {
+ 	.num_dec_fmts = ARRAY_SIZE(sama5d4_vdec_fmts),
+ 	.postproc_fmts = sama5d4_vdec_postproc_fmts,
+ 	.num_postproc_fmts = ARRAY_SIZE(sama5d4_vdec_postproc_fmts),
+-	.postproc_regs = &hantro_g1_postproc_regs,
++	.postproc_ops = &hantro_g1_postproc_ops,
+ 	.codec = HANTRO_MPEG2_DECODER | HANTRO_VP8_DECODER |
+ 		 HANTRO_H264_DECODER,
+ 	.codec_ops = sama5d4_vdec_codec_ops,
+-- 
+2.17.1
 
