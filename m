@@ -7,66 +7,67 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8114EC432BE
-	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 10:47:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78AD2C00143
+	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 10:48:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C47361102
-	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 10:47:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E922610A2
+	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 10:48:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240554AbhHEKsL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Aug 2021 06:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
+        id S240596AbhHEKsN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Aug 2021 06:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232508AbhHEKrz (ORCPT
+        with ESMTP id S240563AbhHEKrz (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 5 Aug 2021 06:47:55 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F51C06179A
-        for <linux-media@vger.kernel.org>; Thu,  5 Aug 2021 03:47:22 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id k9so7694900edr.10
-        for <linux-media@vger.kernel.org>; Thu, 05 Aug 2021 03:47:22 -0700 (PDT)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36C6C06179E
+        for <linux-media@vger.kernel.org>; Thu,  5 Aug 2021 03:47:24 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id o5so8830255ejy.2
+        for <linux-media@vger.kernel.org>; Thu, 05 Aug 2021 03:47:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RNtq6hCIBFIpKrgTS3fF+5pLM27NieV8t2gZ4HTzwW8=;
-        b=Wc15l1UemZE3M9THOYbK3HTsSSrCJw3WbK6TMe03c3Qb7kNg+6cSO3ftgu3lFwygb3
-         8IdfKkq+wGKfBxcmexsVEKYc1JvAuqlFbAsgpu9Ixu4GnAWgVEXiic1BQBjHBEBNlcSl
-         N+hPLcftdUAx6Wf+ckeDQCY7Sj+L0NScYLw1c=
+        bh=jSzJFH8CtxTJYEXcCZZIbr2vCkG9eURdQPO2UTEKnBM=;
+        b=ayI8hGndL92HshvSFXNFZ0Lc8C4Aysey6TTy9xUBOIGjEiQywtqJB6PF96tdkgDZ2l
+         wibdOONFuc1ptidH5N9sZf+EOc+VO64/5FoMngFp+wDvf6rNgBZOE87s+ZA2LgYHKrot
+         11rc7PxMuWEcdU0tdJjtMlYmDpYdWg750L3K8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RNtq6hCIBFIpKrgTS3fF+5pLM27NieV8t2gZ4HTzwW8=;
-        b=Uo0dDeF0foL8igFeqBFIp52kYQq2kuY9Rup5lIC3r9VhJ3O0L8PoazRwwehC6iWgvG
-         TA9aIjTZ0jMeU4j4Ad+C7rPqgBNuhbwRSiZznu0BRX5FGUphoZ7L7AVWdGwCw7Q/AmpC
-         zLmedZ7bdqsp1oeOkNmTPy6y3S3zq/ftF+GJT0hYlFaFngWiCTRRm+i9LytoHe2v/aNg
-         e4flbavo59mPLoUqObbUKcHm66LxPLXxJXkGsSVYgbH9GMQzW0jwoNI1yOJVIYLRYGaD
-         qb8FQGZ2EIhrp55INX01t4DabNN5eeCX0R2u5xj5HgQIDLJR03ZohlW/O3wYwZ55fC2S
-         aLBw==
-X-Gm-Message-State: AOAM532i5XTPVmf9FXHChuHYPIWdpAwlhfUuMHPzB2l4KmtuJmCNISGT
-        ge648yJhM+Lg8qJuPMNBmA0n5A==
-X-Google-Smtp-Source: ABdhPJyi03Vr6QQ78F9N7ACtlZUpWcUyU35iHMBs996IL7VwAHRgK4eZAKaCXC/G6FRI1bBGkuxaLg==
-X-Received: by 2002:aa7:d144:: with SMTP id r4mr5641668edo.111.1628160441604;
-        Thu, 05 Aug 2021 03:47:21 -0700 (PDT)
+        bh=jSzJFH8CtxTJYEXcCZZIbr2vCkG9eURdQPO2UTEKnBM=;
+        b=tdjfzOaIO3HVzILpCrTuK0CO+6TNARYVPWTaBwY+Xm/RavOjwyX0noyG9XTNEBnwk/
+         /iC+jGwkTBo8MUy0hHe4hGfAmbDXYW+Ya6K6E0gThe0ZLz4RJA/KTkXFPpTdk2+n5Vft
+         3IZe5wc33x8vr3AiY/2eOS17/EWad4GMwOsc6aG7xGtJsqjkTYMOnInPS0/xmCPL1v8U
+         244T0qzBSjyvwrxAV3ldVlBlC5/FgAd5S9NQRCYXGTTm5B8mNWBBpahvCbg7D+hONKHV
+         Cbm4AwlUeulVBGFCmQJJaLvOjq78G96fbnjz7jCjymecNWQTB41TSzFCP9ZjtzPu6ViF
+         m3dw==
+X-Gm-Message-State: AOAM530AbhnovemaUdmw9+JgDmzmMHlOjoS909Fiir5aQWeyEUi0Q/op
+        /VMg4nXtt6gY6p+jseczQ886xg==
+X-Google-Smtp-Source: ABdhPJxpyljfbXPxATlcHpARHjEIH7oeB91EwoMvWsvYfgqp1K5k09Ko2eLFP/1UgvQ1s0WMr1+EkA==
+X-Received: by 2002:a17:906:e089:: with SMTP id gh9mr4309138ejb.80.1628160443331;
+        Thu, 05 Aug 2021 03:47:23 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id p5sm1578809ejl.73.2021.08.05.03.47.20
+        by smtp.gmail.com with ESMTPSA id p5sm1578809ejl.73.2021.08.05.03.47.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Aug 2021 03:47:21 -0700 (PDT)
+        Thu, 05 Aug 2021 03:47:22 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     DRI Development <dri-devel@lists.freedesktop.org>
 Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
         Daniel Vetter <daniel.vetter@intel.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Sumit Semwal <sumit.semwal@linaro.org>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        etnaviv@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH v5 11/20] drm/etnaviv: Use scheduler dependency handling
-Date:   Thu,  5 Aug 2021 12:46:56 +0200
-Message-Id: <20210805104705.862416-12-daniel.vetter@ffwll.ch>
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: [PATCH v5 13/20] drm/gem: Delete gem array fencing helpers
+Date:   Thu,  5 Aug 2021 12:46:58 +0200
+Message-Id: <20210805104705.862416-14-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210805104705.862416-1-daniel.vetter@ffwll.ch>
 References: <20210805104705.862416-1-daniel.vetter@ffwll.ch>
@@ -77,301 +78,143 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We need to pull the drm_sched_job_init much earlier, but that's very
-minor surgery.
-
-v2: Actually fix up cleanup paths by calling drm_sched_job_init, which
-I wanted to to in the previous round (and did, for all other drivers).
-Spotted by Lucas.
-
-v3: Rebase over renamed functions to add dependencies.
+Integrated into the scheduler now and all users converted over.
 
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Russell King <linux+etnaviv@armlinux.org.uk>
-Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
 Cc: Sumit Semwal <sumit.semwal@linaro.org>
 Cc: "Christian König" <christian.koenig@amd.com>
-Cc: etnaviv@lists.freedesktop.org
 Cc: linux-media@vger.kernel.org
 Cc: linaro-mm-sig@lists.linaro.org
 ---
- drivers/gpu/drm/etnaviv/etnaviv_gem.h        |  5 +-
- drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c | 60 ++++++++++---------
- drivers/gpu/drm/etnaviv/etnaviv_sched.c      | 63 +-------------------
- drivers/gpu/drm/etnaviv/etnaviv_sched.h      |  3 +-
- 4 files changed, 37 insertions(+), 94 deletions(-)
+ drivers/gpu/drm/drm_gem.c | 96 ---------------------------------------
+ include/drm/drm_gem.h     |  5 --
+ 2 files changed, 101 deletions(-)
 
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.h b/drivers/gpu/drm/etnaviv/etnaviv_gem.h
-index 98e60df882b6..63688e6e4580 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gem.h
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.h
-@@ -80,9 +80,6 @@ struct etnaviv_gem_submit_bo {
- 	u64 va;
- 	struct etnaviv_gem_object *obj;
- 	struct etnaviv_vram_mapping *mapping;
--	struct dma_fence *excl;
--	unsigned int nr_shared;
--	struct dma_fence **shared;
- };
- 
- /* Created per submit-ioctl, to track bo's and cmdstream bufs, etc,
-@@ -95,7 +92,7 @@ struct etnaviv_gem_submit {
- 	struct etnaviv_file_private *ctx;
- 	struct etnaviv_gpu *gpu;
- 	struct etnaviv_iommu_context *mmu_context, *prev_mmu_context;
--	struct dma_fence *out_fence, *in_fence;
-+	struct dma_fence *out_fence;
- 	int out_fence_id;
- 	struct list_head node; /* GPU active submit list */
- 	struct etnaviv_cmdbuf cmdbuf;
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
-index 4dd7d9d541c0..e3d43678eb09 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
-@@ -188,16 +188,11 @@ static int submit_fence_sync(struct etnaviv_gem_submit *submit)
- 		if (submit->flags & ETNA_SUBMIT_NO_IMPLICIT)
- 			continue;
- 
--		if (bo->flags & ETNA_SUBMIT_BO_WRITE) {
--			ret = dma_resv_get_fences(robj, &bo->excl,
--						  &bo->nr_shared,
--						  &bo->shared);
--			if (ret)
--				return ret;
--		} else {
--			bo->excl = dma_resv_get_excl_unlocked(robj);
--		}
--
-+		ret = drm_sched_job_add_implicit_dependencies(&submit->sched_job,
-+							      &bo->obj->base,
-+							      bo->flags & ETNA_SUBMIT_BO_WRITE);
-+		if (ret)
-+			return ret;
- 	}
- 
- 	return ret;
-@@ -403,8 +398,6 @@ static void submit_cleanup(struct kref *kref)
- 
- 	wake_up_all(&submit->gpu->fence_event);
- 
--	if (submit->in_fence)
--		dma_fence_put(submit->in_fence);
- 	if (submit->out_fence) {
- 		/* first remove from IDR, so fence can not be found anymore */
- 		mutex_lock(&submit->gpu->fence_lock);
-@@ -529,7 +522,7 @@ int etnaviv_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	ret = etnaviv_cmdbuf_init(priv->cmdbuf_suballoc, &submit->cmdbuf,
- 				  ALIGN(args->stream_size, 8) + 8);
- 	if (ret)
--		goto err_submit_objects;
-+		goto err_submit_put;
- 
- 	submit->ctx = file->driver_priv;
- 	etnaviv_iommu_context_get(submit->ctx->mmu);
-@@ -537,51 +530,62 @@ int etnaviv_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	submit->exec_state = args->exec_state;
- 	submit->flags = args->flags;
- 
-+	ret = drm_sched_job_init(&submit->sched_job,
-+				 &ctx->sched_entity[args->pipe],
-+				 submit->ctx);
-+	if (ret)
-+		goto err_submit_put;
-+
- 	ret = submit_lookup_objects(submit, file, bos, args->nr_bos);
- 	if (ret)
--		goto err_submit_objects;
-+		goto err_submit_job;
- 
- 	if ((priv->mmu_global->version != ETNAVIV_IOMMU_V2) &&
- 	    !etnaviv_cmd_validate_one(gpu, stream, args->stream_size / 4,
- 				      relocs, args->nr_relocs)) {
- 		ret = -EINVAL;
--		goto err_submit_objects;
-+		goto err_submit_job;
- 	}
- 
- 	if (args->flags & ETNA_SUBMIT_FENCE_FD_IN) {
--		submit->in_fence = sync_file_get_fence(args->fence_fd);
--		if (!submit->in_fence) {
-+		struct dma_fence *in_fence = sync_file_get_fence(args->fence_fd);
-+		if (!in_fence) {
- 			ret = -EINVAL;
--			goto err_submit_objects;
-+			goto err_submit_job;
- 		}
-+
-+		ret = drm_sched_job_add_dependency(&submit->sched_job,
-+						   in_fence);
-+		if (ret)
-+			goto err_submit_job;
- 	}
- 
- 	ret = submit_pin_objects(submit);
- 	if (ret)
--		goto err_submit_objects;
-+		goto err_submit_job;
- 
- 	ret = submit_reloc(submit, stream, args->stream_size / 4,
- 			   relocs, args->nr_relocs);
- 	if (ret)
--		goto err_submit_objects;
-+		goto err_submit_job;
- 
- 	ret = submit_perfmon_validate(submit, args->exec_state, pmrs);
- 	if (ret)
--		goto err_submit_objects;
-+		goto err_submit_job;
- 
- 	memcpy(submit->cmdbuf.vaddr, stream, args->stream_size);
- 
- 	ret = submit_lock_objects(submit, &ticket);
- 	if (ret)
--		goto err_submit_objects;
-+		goto err_submit_job;
- 
- 	ret = submit_fence_sync(submit);
- 	if (ret)
--		goto err_submit_objects;
-+		goto err_submit_job;
- 
--	ret = etnaviv_sched_push_job(&ctx->sched_entity[args->pipe], submit);
-+	ret = etnaviv_sched_push_job(submit);
- 	if (ret)
--		goto err_submit_objects;
-+		goto err_submit_job;
- 
- 	submit_attach_object_fences(submit);
- 
-@@ -595,7 +599,7 @@ int etnaviv_ioctl_gem_submit(struct drm_device *dev, void *data,
- 		sync_file = sync_file_create(submit->out_fence);
- 		if (!sync_file) {
- 			ret = -ENOMEM;
--			goto err_submit_objects;
-+			goto err_submit_job;
- 		}
- 		fd_install(out_fence_fd, sync_file->file);
- 	}
-@@ -603,7 +607,9 @@ int etnaviv_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	args->fence_fd = out_fence_fd;
- 	args->fence = submit->out_fence_id;
- 
--err_submit_objects:
-+err_submit_job:
-+	drm_sched_job_cleanup(&submit->sched_job);
-+err_submit_put:
- 	etnaviv_submit_put(submit);
- 
- err_submit_ww_acquire:
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_sched.c b/drivers/gpu/drm/etnaviv/etnaviv_sched.c
-index 180bb633d5c5..2bbbd6ccc95e 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_sched.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_sched.c
-@@ -17,58 +17,6 @@ module_param_named(job_hang_limit, etnaviv_job_hang_limit, int , 0444);
- static int etnaviv_hw_jobs_limit = 4;
- module_param_named(hw_job_limit, etnaviv_hw_jobs_limit, int , 0444);
- 
--static struct dma_fence *
--etnaviv_sched_dependency(struct drm_sched_job *sched_job,
--			 struct drm_sched_entity *entity)
--{
--	struct etnaviv_gem_submit *submit = to_etnaviv_submit(sched_job);
--	struct dma_fence *fence;
--	int i;
--
--	if (unlikely(submit->in_fence)) {
--		fence = submit->in_fence;
--		submit->in_fence = NULL;
--
--		if (!dma_fence_is_signaled(fence))
--			return fence;
--
--		dma_fence_put(fence);
--	}
--
--	for (i = 0; i < submit->nr_bos; i++) {
--		struct etnaviv_gem_submit_bo *bo = &submit->bos[i];
--		int j;
--
--		if (bo->excl) {
--			fence = bo->excl;
--			bo->excl = NULL;
--
--			if (!dma_fence_is_signaled(fence))
--				return fence;
--
--			dma_fence_put(fence);
--		}
--
--		for (j = 0; j < bo->nr_shared; j++) {
--			if (!bo->shared[j])
--				continue;
--
--			fence = bo->shared[j];
--			bo->shared[j] = NULL;
--
--			if (!dma_fence_is_signaled(fence))
--				return fence;
--
--			dma_fence_put(fence);
--		}
--		kfree(bo->shared);
--		bo->nr_shared = 0;
--		bo->shared = NULL;
--	}
--
--	return NULL;
--}
--
- static struct dma_fence *etnaviv_sched_run_job(struct drm_sched_job *sched_job)
- {
- 	struct etnaviv_gem_submit *submit = to_etnaviv_submit(sched_job);
-@@ -140,29 +88,22 @@ static void etnaviv_sched_free_job(struct drm_sched_job *sched_job)
+diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+index 09c820045859..37e2e2820f08 100644
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -1272,99 +1272,3 @@ drm_gem_unlock_reservations(struct drm_gem_object **objs, int count,
+ 	ww_acquire_fini(acquire_ctx);
  }
- 
- static const struct drm_sched_backend_ops etnaviv_sched_ops = {
--	.dependency = etnaviv_sched_dependency,
- 	.run_job = etnaviv_sched_run_job,
- 	.timedout_job = etnaviv_sched_timedout_job,
- 	.free_job = etnaviv_sched_free_job,
- };
- 
--int etnaviv_sched_push_job(struct drm_sched_entity *sched_entity,
--			   struct etnaviv_gem_submit *submit)
-+int etnaviv_sched_push_job(struct etnaviv_gem_submit *submit)
- {
- 	int ret = 0;
- 
- 	/*
- 	 * Hold the fence lock across the whole operation to avoid jobs being
- 	 * pushed out of order with regard to their sched fence seqnos as
--	 * allocated in drm_sched_job_init.
-+	 * allocated in drm_sched_job_arm.
- 	 */
- 	mutex_lock(&submit->gpu->fence_lock);
- 
--	ret = drm_sched_job_init(&submit->sched_job, sched_entity,
--				 submit->ctx);
--	if (ret)
--		goto out_unlock;
+ EXPORT_SYMBOL(drm_gem_unlock_reservations);
 -
- 	drm_sched_job_arm(&submit->sched_job);
+-/**
+- * drm_gem_fence_array_add - Adds the fence to an array of fences to be
+- * waited on, deduplicating fences from the same context.
+- *
+- * @fence_array: array of dma_fence * for the job to block on.
+- * @fence: the dma_fence to add to the list of dependencies.
+- *
+- * This functions consumes the reference for @fence both on success and error
+- * cases.
+- *
+- * Returns:
+- * 0 on success, or an error on failing to expand the array.
+- */
+-int drm_gem_fence_array_add(struct xarray *fence_array,
+-			    struct dma_fence *fence)
+-{
+-	struct dma_fence *entry;
+-	unsigned long index;
+-	u32 id = 0;
+-	int ret;
+-
+-	if (!fence)
+-		return 0;
+-
+-	/* Deduplicate if we already depend on a fence from the same context.
+-	 * This lets the size of the array of deps scale with the number of
+-	 * engines involved, rather than the number of BOs.
+-	 */
+-	xa_for_each(fence_array, index, entry) {
+-		if (entry->context != fence->context)
+-			continue;
+-
+-		if (dma_fence_is_later(fence, entry)) {
+-			dma_fence_put(entry);
+-			xa_store(fence_array, index, fence, GFP_KERNEL);
+-		} else {
+-			dma_fence_put(fence);
+-		}
+-		return 0;
+-	}
+-
+-	ret = xa_alloc(fence_array, &id, fence, xa_limit_32b, GFP_KERNEL);
+-	if (ret != 0)
+-		dma_fence_put(fence);
+-
+-	return ret;
+-}
+-EXPORT_SYMBOL(drm_gem_fence_array_add);
+-
+-/**
+- * drm_gem_fence_array_add_implicit - Adds the implicit dependencies tracked
+- * in the GEM object's reservation object to an array of dma_fences for use in
+- * scheduling a rendering job.
+- *
+- * This should be called after drm_gem_lock_reservations() on your array of
+- * GEM objects used in the job but before updating the reservations with your
+- * own fences.
+- *
+- * @fence_array: array of dma_fence * for the job to block on.
+- * @obj: the gem object to add new dependencies from.
+- * @write: whether the job might write the object (so we need to depend on
+- * shared fences in the reservation object).
+- */
+-int drm_gem_fence_array_add_implicit(struct xarray *fence_array,
+-				     struct drm_gem_object *obj,
+-				     bool write)
+-{
+-	int ret;
+-	struct dma_fence **fences;
+-	unsigned int i, fence_count;
+-
+-	if (!write) {
+-		struct dma_fence *fence =
+-			dma_resv_get_excl_unlocked(obj->resv);
+-
+-		return drm_gem_fence_array_add(fence_array, fence);
+-	}
+-
+-	ret = dma_resv_get_fences(obj->resv, NULL,
+-						&fence_count, &fences);
+-	if (ret || !fence_count)
+-		return ret;
+-
+-	for (i = 0; i < fence_count; i++) {
+-		ret = drm_gem_fence_array_add(fence_array, fences[i]);
+-		if (ret)
+-			break;
+-	}
+-
+-	for (; i < fence_count; i++)
+-		dma_fence_put(fences[i]);
+-	kfree(fences);
+-	return ret;
+-}
+-EXPORT_SYMBOL(drm_gem_fence_array_add_implicit);
+diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
+index 35e7f44c2a75..e55a767188af 100644
+--- a/include/drm/drm_gem.h
++++ b/include/drm/drm_gem.h
+@@ -407,11 +407,6 @@ int drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+ 			      struct ww_acquire_ctx *acquire_ctx);
+ void drm_gem_unlock_reservations(struct drm_gem_object **objs, int count,
+ 				 struct ww_acquire_ctx *acquire_ctx);
+-int drm_gem_fence_array_add(struct xarray *fence_array,
+-			    struct dma_fence *fence);
+-int drm_gem_fence_array_add_implicit(struct xarray *fence_array,
+-				     struct drm_gem_object *obj,
+-				     bool write);
+ int drm_gem_dumb_map_offset(struct drm_file *file, struct drm_device *dev,
+ 			    u32 handle, u64 *offset);
  
- 	submit->out_fence = dma_fence_get(&submit->sched_job.s_fence->finished);
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_sched.h b/drivers/gpu/drm/etnaviv/etnaviv_sched.h
-index c0a6796e22c9..baebfa069afc 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_sched.h
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_sched.h
-@@ -18,7 +18,6 @@ struct etnaviv_gem_submit *to_etnaviv_submit(struct drm_sched_job *sched_job)
- 
- int etnaviv_sched_init(struct etnaviv_gpu *gpu);
- void etnaviv_sched_fini(struct etnaviv_gpu *gpu);
--int etnaviv_sched_push_job(struct drm_sched_entity *sched_entity,
--			   struct etnaviv_gem_submit *submit);
-+int etnaviv_sched_push_job(struct etnaviv_gem_submit *submit);
- 
- #endif /* __ETNAVIV_SCHED_H__ */
 -- 
 2.32.0
 
