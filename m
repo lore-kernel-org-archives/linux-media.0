@@ -5,26 +5,26 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65D2BC43214
-	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:45:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD0F0C43216
+	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:45:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C6B861154
-	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:45:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C031B61155
+	for <linux-media@archiver.kernel.org>; Thu,  5 Aug 2021 14:45:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242009AbhHEOpn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Aug 2021 10:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S242014AbhHEOpz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Aug 2021 10:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241982AbhHEOnN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Aug 2021 10:43:13 -0400
+        with ESMTP id S241994AbhHEOnQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Aug 2021 10:43:16 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7656BC0613D5;
-        Thu,  5 Aug 2021 07:42:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1997C061799;
+        Thu,  5 Aug 2021 07:43:01 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: andrzej.p)
-        with ESMTPSA id 8C90E1F440B4
+        with ESMTPSA id 92E6D1F440BE
 From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
@@ -46,11 +46,10 @@ Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, kernel@collabora.com,
         Ezequiel Garcia <ezequiel@collabora.com>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>
-Subject: [PATCH v3 05/10] media: uapi: Add VP9 stateless decoder controls
-Date:   Thu,  5 Aug 2021 16:42:41 +0200
-Message-Id: <20210805144246.11998-6-andrzej.p@collabora.com>
+        Adrian Ratiu <adrian.ratiu@collabora.com>
+Subject: [PATCH v3 07/10] media: rkvdec: Add the VP9 backend
+Date:   Thu,  5 Aug 2021 16:42:43 +0200
+Message-Id: <20210805144246.11998-8-andrzej.p@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210805144246.11998-1-andrzej.p@collabora.com>
 References: <20210805144246.11998-1-andrzej.p@collabora.com>
@@ -58,1424 +57,1250 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the VP9 stateless decoder controls plus the documentation that goes
-with it.
+From: Boris Brezillon <boris.brezillon@collabora.com>
+
+The Rockchip VDEC supports VP9 profile 0 up to 4096x2304@30fps. Add
+a backend for this new format.
 
 Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-Co-developed-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
+Co-developed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Co-developed-by: Daniel Almeida <daniel.almeida@collabora.com>
-Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
 ---
- .../userspace-api/media/v4l/biblio.rst        |  10 +
- .../media/v4l/ext-ctrls-codec-stateless.rst   | 545 ++++++++++++++++++
- .../media/v4l/pixfmt-compressed.rst           |  15 +
- .../media/v4l/vidioc-g-ext-ctrls.rst          |   8 +
- .../media/v4l/vidioc-queryctrl.rst            |  12 +
- .../media/videodev2.h.rst.exceptions          |   2 +
- drivers/media/v4l2-core/v4l2-ctrls-core.c     | 174 ++++++
- drivers/media/v4l2-core/v4l2-ctrls-defs.c     |   8 +
- drivers/media/v4l2-core/v4l2-ioctl.c          |   1 +
- include/media/v4l2-ctrls.h                    |   4 +
- include/uapi/linux/v4l2-controls.h            | 433 ++++++++++++++
- include/uapi/linux/videodev2.h                |   6 +
- 12 files changed, 1218 insertions(+)
+ drivers/staging/media/rkvdec/Kconfig      |    1 +
+ drivers/staging/media/rkvdec/Makefile     |    2 +-
+ drivers/staging/media/rkvdec/rkvdec-vp9.c | 1078 +++++++++++++++++++++
+ drivers/staging/media/rkvdec/rkvdec.c     |   52 +-
+ drivers/staging/media/rkvdec/rkvdec.h     |   12 +-
+ 5 files changed, 1137 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/staging/media/rkvdec/rkvdec-vp9.c
 
-diff --git a/Documentation/userspace-api/media/v4l/biblio.rst b/Documentation/userspace-api/media/v4l/biblio.rst
-index 7b8e6738ff9e..9cd18c153d19 100644
---- a/Documentation/userspace-api/media/v4l/biblio.rst
-+++ b/Documentation/userspace-api/media/v4l/biblio.rst
-@@ -417,3 +417,13 @@ VP8
- :title:     RFC 6386: "VP8 Data Format and Decoding Guide"
+diff --git a/drivers/staging/media/rkvdec/Kconfig b/drivers/staging/media/rkvdec/Kconfig
+index c02199b5e0fd..dc7292f346fa 100644
+--- a/drivers/staging/media/rkvdec/Kconfig
++++ b/drivers/staging/media/rkvdec/Kconfig
+@@ -9,6 +9,7 @@ config VIDEO_ROCKCHIP_VDEC
+ 	select VIDEOBUF2_VMALLOC
+ 	select V4L2_MEM2MEM_DEV
+ 	select V4L2_H264
++	select V4L2_VP9
+ 	help
+ 	  Support for the Rockchip Video Decoder IP present on Rockchip SoCs,
+ 	  which accelerates video decoding.
+diff --git a/drivers/staging/media/rkvdec/Makefile b/drivers/staging/media/rkvdec/Makefile
+index c08fed0a39f9..cb86b429cfaa 100644
+--- a/drivers/staging/media/rkvdec/Makefile
++++ b/drivers/staging/media/rkvdec/Makefile
+@@ -1,3 +1,3 @@
+ obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC) += rockchip-vdec.o
  
- :author:    J. Bankoski et al.
-+
-+.. _vp9:
-+
-+VP9
-+===
-+
-+
-+:title:     VP9 Bitstream & Decoding Process Specification
-+
-+:author:    Adrian Grange (Google), Peter de Rivaz (Argon Design), Jonathan Hunt (Argon Design)
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-index 72f5e85b4f34..af06d46e5993 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-@@ -1458,3 +1458,548 @@ FWHT Flags
- .. raw:: latex
- 
-     \normalsize
-+
-+.. _v4l2-codec-stateless-vp9:
-+
-+``V4L2_CID_STATELESS_VP9_COMPRESSED_HDR_PROBS (struct)``
-+    Stores VP9 probabilities updates as parsed from the current compressed frame
-+    header. A value of zero in an array element means no update of the relevant
-+    probability. Motion vector-related updates contain a new value or zero. All
-+    other updates contain values translated with inv_map_table[] (see 6.3.5 in
-+    :ref:`vp9`).
-+
-+.. c:type:: v4l2_ctrl_vp9_compressed_hdr_probs
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{5.8cm}|p{4.8cm}|p{6.6cm}|
-+
-+.. flat-table:: struct v4l2_ctrl_vp9_compressed_hdr_probs
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __u8
-+      - ``tx8[2][1]``
-+      - TX 8x8 probabilities delta.
-+    * - __u8
-+      - ``tx16[2][2]``
-+      - TX 16x16 probabilities delta.
-+    * - __u8
-+      - ``tx32[2][3]``
-+      - TX 32x32 probabilities delta.
-+    * - __u8
-+      - ``coef[4][2][2][6][6][3]``
-+      - Coefficient probabilities delta.
-+    * - __u8
-+      - ``skip[3]``
-+      - Skip probabilities delta.
-+    * - __u8
-+      - ``inter_mode[7][3]``
-+      - Inter prediction mode probabilities delta.
-+    * - __u8
-+      - ``interp_filter[4][2]``
-+      - Interpolation filter probabilities delta.
-+    * - __u8
-+      - ``is_inter[4]``
-+      - Is inter-block probabilities delta.
-+    * - __u8
-+      - ``comp_mode[5]``
-+      - Compound prediction mode probabilities delta.
-+    * - __u8
-+      - ``single_ref[5][2]``
-+      - Single reference probabilities delta.
-+    * - __u8
-+      - ``comp_ref[5]``
-+      - Compound reference probabilities delta.
-+    * - __u8
-+      - ``y_mode[4][9]``
-+      - Y prediction mode probabilities delta.
-+    * - __u8
-+      - ``uv_mode[10][9]``
-+      - UV prediction mode probabilities delta.
-+    * - __u8
-+      - ``partition[16][3]``
-+      - Partition probabilities delta.
-+    * - __u8
-+      - ``mv.joint[3]``
-+      - Motion vector joint probabilities delta.
-+    * - __u8
-+      - ``mv.sign[2]``
-+      - Motion vector sign probabilities delta.
-+    * - __u8
-+      - ``mv.classes[2][10]``
-+      - Motion vector class probabilities delta.
-+    * - __u8
-+      - ``mv.class0_bit[2]``
-+      - Motion vector class0 bit probabilities delta.
-+    * - __u8
-+      - ``mv.bits[2][10]``
-+      - Motion vector bits probabilities delta.
-+    * - __u8
-+      - ``mv.class0_fr[2][2][3]``
-+      - Motion vector class0 fractional bit probabilities delta.
-+    * - __u8
-+      - ``mv.fr[2][3]``
-+      - Motion vector fractional bit probabilities delta.
-+    * - __u8
-+      - ``mv.class0_hp[2]``
-+      - Motion vector class0 high precision fractional bit probabilities delta.
-+    * - __u8
-+      - ``mv.hp[2]``
-+      - Motion vector high precision fractional bit probabilities delta.
-+
-+``V4L2_CID_STATELESS_VP9_FRAME (struct)``
-+    Specifies the frame parameters for the associated VP9 frame decode request.
-+    This includes the necessary parameters for configuring a stateless hardware
-+    decoding pipeline for VP9. The bitstream parameters are defined according
-+    to :ref:`vp9`.
-+
-+.. c:type:: v4l2_ctrl_vp9_frame
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: struct v4l2_ctrl_vp9_frame
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - struct :c:type:`v4l2_vp9_loop_filter`
-+      - ``lf``
-+      - Loop filter parameters. See struct :c:type:`v4l2_vp9_loop_filter` for more details.
-+    * - struct :c:type:`v4l2_vp9_quantization`
-+      - ``quant``
-+      - Quantization parameters. See :c:type:`v4l2_vp9_quantization` for more details.
-+    * - struct :c:type:`v4l2_vp9_segmentation`
-+      - ``seg``
-+      - Segmentation parameters. See :c:type:`v4l2_vp9_segmentation` for more details.
-+    * - __u32
-+      - ``flags``
-+      - Combination of V4L2_VP9_FRAME_FLAG_* flags. See :c:type:`v4l2_vp9_frame_flags`.
-+    * - __u16
-+      - ``compressed_header_size``
-+      - Compressed header size in bytes.
-+    * - __u16
-+      - ``uncompressed_header_size``
-+      - Uncompressed header size in bytes.
-+    * - __u16
-+      - ``frame_width_minus_1``
-+      - Add 1 to get the frame width expressed in pixels. See section 7.2.3 in :ref:`vp9`.
-+    * - __u16
-+      - ``frame_height_minus_1``
-+      - Add 1 to get the frame height expressed in pixels. See section 7.2.3 in :ref:`vp9`.
-+    * - __u16
-+      - ``render_width_minus_1``
-+      - Add 1 to get the expected render width expressed in pixels. This is
-+        not used during the decoding process but might be used by HW scalers to
-+        prepare a frame that's ready for scanout. See section 7.2.4 in :ref:`vp9`.
-+    * - __u16
-+      - render_height_minus_1
-+      - Add 1 to get the expected render height expressed in pixels. This is
-+        not used during the decoding process but might be used by HW scalers to
-+        prepare a frame that's ready for scanout. See section 7.2.4 in :ref:`vp9`.
-+    * - __u64
-+      - ``last_frame_ts``
-+      - "last" reference buffer timestamp.
-+	The timestamp refers to the ``timestamp`` field in
-+        struct :c:type:`v4l2_buffer`. Use the :c:func:`v4l2_timeval_to_ns()`
-+        function to convert the struct :c:type:`timeval` in struct
-+        :c:type:`v4l2_buffer` to a __u64.
-+    * - __u64
-+      - ``golden_frame_ts``
-+      - "golden" reference buffer timestamp.
-+	The timestamp refers to the ``timestamp`` field in
-+        struct :c:type:`v4l2_buffer`. Use the :c:func:`v4l2_timeval_to_ns()`
-+        function to convert the struct :c:type:`timeval` in struct
-+        :c:type:`v4l2_buffer` to a __u64.
-+    * - __u64
-+      - ``alt_frame_ts``
-+      - "alt" reference buffer timestamp.
-+	The timestamp refers to the ``timestamp`` field in
-+        struct :c:type:`v4l2_buffer`. Use the :c:func:`v4l2_timeval_to_ns()`
-+        function to convert the struct :c:type:`timeval` in struct
-+        :c:type:`v4l2_buffer` to a __u64.
-+    * - __u8
-+      - ``ref_frame_sign_bias``
-+      - a bitfield specifying whether the sign bias is set for a given
-+        reference frame. See :c:type:`v4l2_vp9_ref_frame_sign_bias` for more details.
-+    * - __u8
-+      - ``reset_frame_context``
-+      - specifies whether the frame context should be reset to default values. See
-+        :c:type:`v4l2_vp9_reset_frame_context` for more details.
-+    * - __u8
-+      - ``frame_context_idx``
-+      - Frame context that should be used/updated.
-+    * - __u8
-+      - ``profile``
-+      - VP9 profile. Can be 0, 1, 2 or 3.
-+    * - __u8
-+      - ``bit_depth``
-+      - Component depth in bits. Can be 8, 10 or 12. Note that not all profiles
-+        support 10 and/or 12 bits depths.
-+    * - __u8
-+      - ``interpolation_filter``
-+      - Specifies the filter selection used for performing inter prediction. See
-+        :c:type:`v4l2_vp9_interpolation_filter` for more details.
-+    * - __u8
-+      - ``tile_cols_log2``
-+      - Specifies the base 2 logarithm of the width of each tile (where the
-+        width is measured in units of 8x8 blocks). Shall be less than or equal
-+        to 6.
-+    * - __u8
-+      - ``tile_rows_log2``
-+      - Specifies the base 2 logarithm of the height of each tile (where the
-+        height is measured in units of 8x8 blocks).
-+    * - __u8
-+      - ``tx_mode``
-+      - Specifies the TX mode. See :c:type:`v4l2_vp9_tx_mode` for more details.
-+    * - __u8
-+      - ``reference_mode``
-+      - Specifies the type of inter prediction to be used. See
-+        :c:type:`v4l2_vp9_reference_mode` for more details.
-+    * - __u8
-+      - ``reserved[6]``
-+      - Applications and drivers must set this to zero.
-+
-+.. c:type:: v4l2_vp9_frame_flags
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: enum v4l2_vp9_frame_flags
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 2
-+
-+    * - ``V4L2_VP9_FRAME_FLAG_KEY_FRAME``
-+      - The frame is a key frame.
-+    * - ``V4L2_VP9_FRAME_FLAG_SHOW_FRAME``
-+      - The frame should be displayed.
-+    * - ``V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT``
-+      - The decoding should be error resilient.
-+    * - ``V4L2_VP9_FRAME_FLAG_INTRA_ONLY``
-+      - The frame does not reference other frames.
-+    * - ``V4L2_VP9_FRAME_FLAG_ALLOW_HIGH_PREC_MV``
-+      - The frame can use high precision motion vectors.
-+    * - ``V4L2_VP9_FRAME_FLAG_REFRESH_FRAME_CTX``
-+      - Frame context should be updated after decoding.
-+    * - ``V4L2_VP9_FRAME_FLAG_PARALLEL_DEC_MODE``
-+      - Parallel decoding is used.
-+    * - ``V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING``
-+      - Vertical subsampling is enabled.
-+    * - ``V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING``
-+      - Horizontal subsampling is enabled.
-+    * - ``V4L2_VP9_FRAME_FLAG_COLOR_RANGE_FULL_SWING``
-+      - The full UV range is used.
-+
-+.. c:type:: v4l2_vp9_tx_mode
-+
-+See section '7.3.1 Tx mode semantics' of the VP9 specification for more details.
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: enum v4l2_vp9_tx_mode
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 2
-+
-+    * - ``V4L2_VP9_TX_MODE_ONLY_4X4``
-+      - Transform size is 4x4.
-+    * - ``V4L2_VP9_TX_MODE_ALLOW_8X8``
-+      - Transform size can be up to 8x8.
-+    * - ``V4L2_VP9_TX_MODE_ALLOW_16X16``
-+      - Transform size can be up to 16x16.
-+    * - ``V4L2_VP9_TX_MODE_ALLOW_32X32``
-+      - transform size can be up to 32x32.
-+    * - ``V4L2_VP9_TX_MODE_SELECT``
-+      - Bitstream contains the transform size for each block.
-+
-+.. c:type:: v4l2_vp9_reference_mode
-+
-+See section '7.3.6 Frame reference mode semantics' of the VP9 specification for more details.
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: enum v4l2_vp9_reference_mode
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 2
-+
-+    * - ``V4L2_VP9_REFERENCE_MODE_SINGLE_REFERENCE``
-+      - Indicates that all the inter blocks use only a single reference frame
-+        to generate motion compensated prediction.
-+    * - ``V4L2_VP9_REFERENCE_MODE_COMPOUND_REFERENCE``
-+      - Requires all the inter blocks to use compound mode. Single reference
-+        frame prediction is not allowed.
-+    * - ``V4L2_VP9_REFERENCE_MODE_SELECT``
-+      - Allows each individual inter block to select between single and
-+        compound prediction modes.
-+
-+.. c:type:: v4l2_vp9_interpolation_filter
-+
-+See section '7.2.7 Interpolation filter semantics' of the VP9 specification
-+for more details.
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: enum v4l2_vp9_interpolation_filter
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 2
-+
-+    * - ``V4L2_VP9_INTERP_FILTER_EIGHTTAP``
-+      - Eight tap filter.
-+    * - ``V4L2_VP9_INTERP_FILTER_EIGHTTAP_SMOOTH``
-+      - Eight tap smooth filter.
-+    * - ``V4L2_VP9_INTERP_FILTER_EIGHTTAP_SHARP``
-+      - Eeight tap sharp filter.
-+    * - ``V4L2_VP9_INTERP_FILTER_BILINEAR``
-+      - Bilinear filter.
-+    * - ``V4L2_VP9_INTERP_FILTER_SWITCHABLE``
-+      - Filter selection is signaled at the block level.
-+
-+.. c:type:: v4l2_vp9_reset_frame_context
-+
-+See section '7.2 Uncompressed header semantics' of the VP9 specification
-+for more details.
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: enum v4l2_vp9_reset_frame_context
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 2
-+
-+    * - ``V4L2_VP9_RESET_FRAME_CTX_NONE``
-+      - Do not reset any frame context.
-+    * - ``V4L2_VP9_RESET_FRAME_CTX_SPEC``
-+      - Reset the frame context pointed to by
-+        :c:type:`v4l2_ctrl_vp9_frame`.frame_context_idx.
-+    * - ``V4L2_VP9_RESET_FRAME_CTX_ALL``
-+      - Reset all frame contexts.
-+
-+.. c:type:: v4l2_vp9_intra_prediction_mode
-+
-+See section '7.4.5 Intra frame mode info semantics' for more details.
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: enum v4l2_vp9_intra_prediction_mode
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 2
-+
-+    * - ``V4L2_VP9_INTRA_PRED_MODE_DC_PRED``
-+      - DC intra prediction.
-+    * - ``V4L2_VP9_INTRA_PRED_MODE_V_PRED``
-+      - Vertical intra prediction.
-+    * - ``V4L2_VP9_INTRA_PRED_MODE_H_PRED``
-+      - Horizontal intra prediction.
-+    * - ``V4L2_VP9_INTRA_PRED_MODE_D45_PRED``
-+      - D45 intra prediction.
-+    * - ``V4L2_VP9_INTRA_PRED_MODE_D135_PRED``
-+      - D135 intra prediction.
-+    * - ``V4L2_VP9_INTRA_PRED_MODE_D117_PRED``
-+      - D117 intra prediction.
-+    * - ``V4L2_VP9_INTRA_PRED_MODE_D153_PRED``
-+      - D153 intra prediction.
-+    * - ``V4L2_VP9_INTRA_PRED_MODE_D207_PRED``
-+      - D207 intra prediction.
-+    * - ``V4L2_VP9_INTRA_PRED_MODE_D63_PRED``
-+      - D63 intra prediction.
-+    * - ``V4L2_VP9_INTRA_PRED_MODE_TM_PRED``
-+      - True motion intra prediction.
-+
-+.. c:type:: v4l2_vp9_segmentation
-+
-+Encodes the quantization parameters. See section '7.2.10 Segmentation
-+params syntax' of the VP9 specification for more details.
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: struct v4l2_vp9_segmentation
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __u8
-+      - ``feature_data[8][4]``
-+      - Data attached to each feature. Data entry is only valid if the feature
-+        is enabled.
-+    * - __u8
-+      - ``feature_enabled[8]``
-+      - Bitmask defining which features are enabled in each segment.
-+    * - __u8
-+      - ``tree_probs[7]``
-+      - Specifies the probability values to be used when decoding a Segment-ID.
-+        See '5.15. Segmentation map' section of :ref:`vp9` for more details.
-+    * - __u8
-+      - ``pred_probs[3]``
-+      - Specifies the probability values to be used when decoding a
-+        Predicted-Segment-ID. See '6.4.14. Get segment id syntax'
-+        section of :ref:`vp9` for more details.
-+    * - __u8
-+      - ``flags``
-+      - Combination of V4L2_VP9_SEGMENTATION_FLAG_* flags. See
-+        :c:type:`v4l2_vp9_segmentation_flags`.
-+    * - __u8
-+      - ``reserved[5]``
-+      - Applications and drivers must set this to zero.
-+
-+.. c:type:: v4l2_vp9_segment_feature
-+
-+Segment feature IDs. See section '7.2.10 Segmentation params syntax' of the
-+VP9 specification for more details.
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: enum v4l2_vp9_segment_feature
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 2
-+
-+    * - ``V4L2_VP9_SEG_LVL_ALT_Q``
-+      - Quantizer segment feature.
-+    * - ``V4L2_VP9_SEG_LVL_ALT_L``
-+      - Loop filter segment feature.
-+    * - ``V4L2_VP9_SEG_LVL_REF_FRAME``
-+      - Reference frame segment feature.
-+    * - ``V4L2_VP9_SEG_LVL_SKIP``
-+      - Skip segment feature.
-+    * - ``V4L2_VP9_SEG_LVL_MAX``
-+      - Number of segment features.
-+
-+.. c:type:: v4l2_vp9_segmentation_flags
-+
-+Those are the flags that may be passed to &v4l2_vp9_segmentation.flags. See
-+section '7.2.10 Segmentation params syntax' of the VP9 specification for
-+more details.
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: enum v4l2_vp9_segmentation_flags
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 2
-+
-+    * - ``V4L2_VP9_SEGMENTATION_FLAG_ENABLED``
-+      - Indicates that this frame makes use of the segmentation tool.
-+    * - ``V4L2_VP9_SEGMENTATION_FLAG_UPDATE_MAP``
-+      - Indicates that the segmentation map should be updated during the
-+        decoding of this frame.
-+    * - ``V4L2_VP9_SEGMENTATION_FLAG_TEMPORAL_UPDATE``
-+      - Indicates that the updates to the segmentation map are coded
-+        relative to the existing segmentation map.
-+    * - ``V4L2_VP9_SEGMENTATION_FLAG_UPDATE_DATA``
-+      - Indicates that new parameters are about to be specified for each
-+        segment.
-+    * - ``V4L2_VP9_SEGMENTATION_FLAG_ABS_OR_DELTA_UPDATE``
-+      - Indicates that the segmentation parameters represent the actual values
-+        to be used.
-+
-+.. c:type:: v4l2_vp9_quantization
-+
-+Encodes the quantization parameters. See section '7.2.9 Quantization params
-+syntax' of the VP9 specification for more details.
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: struct v4l2_vp9_quantization
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __u8
-+      - ``base_q_idx``
-+      - Indicates the base frame qindex.
-+    * - __s8
-+      - ``delta_q_y_dc``
-+      - Indicates the Y DC quantizer relative to base_q_idx.
-+    * - __s8
-+      - ``delta_q_uv_dc``
-+      - Indicates the UV DC quantizer relative to base_q_idx.
-+    * - __s8
-+      - ``delta_q_uv_ac``
-+      - Indicates the UV AC quantizer relative to base_q_idx.
-+    * - __u8
-+      - ``reserved[4]``
-+      - Applications and drivers must set this to zero.
-+
-+.. c:type:: v4l2_vp9_loop_filter
-+
-+This structure contains all loop filter related parameters. See sections
-+'7.2.8 Loop filter semantics' of the VP9 specification for more details.
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: struct v4l2_vp9_loop_filter
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __s8
-+      - ``ref_deltas[4]``
-+      - Contains the adjustment needed for the filter level based on the chosen
-+        reference frame.
-+    * - __s8
-+      - ``mode_deltas[2]``
-+      - Contains the adjustment needed for the filter level based on the chosen
-+        mode.
-+    * - __u8
-+      - ``level``
-+      - Indicates the loop filter strength.
-+    * - __u8
-+      - ``sharpness``
-+      - Indicates the sharpness level.
-+    * - __u8
-+      - ``flags``
-+      - Combination of V4L2_VP9_LOOP_FILTER_FLAG_* flags.
-+        See :c:type:`v4l2_vp9_loop_filter_flags`.
-+    * - __u8
-+      - ``reserved[7]``
-+      - Applications and drivers must set this to zero.
-+
-+
-+.. c:type:: v4l2_vp9_loop_filter_flags
-+
-+Those are the flags that may be passed. See section '7.2.8 Loop filter
-+semantics' of the VP9 specification for more details.
-+
-+.. cssclass:: longtable
-+
-+.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
-+
-+.. flat-table:: enum v4l2_vp9_loop_filter_flags
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 2
-+
-+    * - ``V4L2_VP9_LOOP_FILTER_FLAG_DELTA_ENABLED``
-+      - When set, the filter level depends on the mode and reference frame used
-+        to predict a block.
-+    * - ``V4L2_VP9_LOOP_FILTER_FLAG_DELTA_UPDATE``
-+      - When set, the bitstream contains additional syntax elements that
-+        specify which mode and reference frame deltas are to be updated.
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-index 0ede39907ee2..1b20f48a24b9 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-@@ -172,6 +172,21 @@ Compressed Formats
-       - VP9 compressed video frame. The encoder generates one
- 	compressed frame per buffer, and the decoder requires one
- 	compressed frame per buffer.
-+    * .. _V4L2-PIX-FMT-VP9-FRAME:
-+
-+      - ``V4L2_PIX_FMT_VP9_FRAME``
-+      - 'VP9F'
-+      - VP9 parsed frame, including the frame header, as extracted from the container.
-+	This format is adapted for stateless video decoders that implement a
-+	VP9 pipeline with the :ref:`stateless_decoder`.
-+	Metadata associated with the frame to decode is required to be passed
-+	through the ``V4L2_CID_STATELESS_VP9_FRAME`` and
-+	the ``V4L2_CID_STATELESS_VP9_COMPRESSED_HDR_PROBS`` controls.
-+	See the :ref:`associated Codec Control IDs <v4l2-codec-stateless-vp9>`.
-+	Exactly one output and one capture buffer must be provided for use with
-+	this pixel format. The output buffer must contain the appropriate number
-+	of macroblocks to decode a full corresponding frame to the matching
-+	capture buffer.
-     * .. _V4L2-PIX-FMT-HEVC:
- 
-       - ``V4L2_PIX_FMT_HEVC``
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-index 2d6bc8d94380..258895ff0c71 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-@@ -233,6 +233,14 @@ still cause this situation.
-       - ``p_mpeg2_quantisation``
-       - A pointer to a struct :c:type:`v4l2_ctrl_mpeg2_quantisation`. Valid if this control is
-         of type ``V4L2_CTRL_TYPE_MPEG2_QUANTISATION``.
-+    * - struct :c:type:`v4l2_ctrl_vp9_compressed_hdr_probs` *
-+      - ``p_vp9_compressed_hdr_probs``
-+      - A pointer to a struct :c:type:`v4l2_ctrl_vp9_compressed_hdr_probs`. Valid if this
-+        control is of type ``V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR_PROBS``.
-+    * - struct :c:type:`v4l2_ctrl_vp9_frame` *
-+      - ``p_vp9_frame``
-+      - A pointer to a struct :c:type:`v4l2_ctrl_vp9_frame`. Valid if this
-+        control is of type ``V4L2_CTRL_TYPE_VP9_FRAME``.
-     * - struct :c:type:`v4l2_ctrl_hdr10_cll_info` *
-       - ``p_hdr10_cll``
-       - A pointer to a struct :c:type:`v4l2_ctrl_hdr10_cll_info`. Valid if this control is
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-index f9ecf6276129..e0c6a5d9ff6b 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-@@ -507,6 +507,18 @@ See also the examples in :ref:`control`.
-       - n/a
-       - A struct :c:type:`v4l2_ctrl_hevc_decode_params`, containing HEVC
- 	decoding parameters for stateless video decoders.
-+    * - ``V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR_PROBS``
-+      - n/a
-+      - n/a
-+      - n/a
-+      - A struct :c:type:`v4l2_ctrl_vp9_compressed_hdr_probs`, containing VP9
-+	probabilities updates for stateless video decoders.
-+    * - ``V4L2_CTRL_TYPE_VP9_FRAME``
-+      - n/a
-+      - n/a
-+      - n/a
-+      - A struct :c:type:`v4l2_ctrl_vp9_frame`, containing VP9
-+	frame decode parameters for stateless video decoders.
- 
- .. raw:: latex
- 
-diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-index eb0b1cd37abd..129ef3edfa73 100644
---- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-@@ -149,6 +149,8 @@ replace symbol V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_AREA :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_FWHT_PARAMS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_VP8_FRAME :c:type:`v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR_PROBS :c:type:`v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_VP9_FRAME :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HDR10_CLL_INFO :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HDR10_MASTERING_DISPLAY :c:type:`v4l2_ctrl_type`
- 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index c4b5082849b6..ed9cf298a83a 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -283,6 +283,12 @@ static void std_log(const struct v4l2_ctrl *ctrl)
- 	case V4L2_CTRL_TYPE_MPEG2_PICTURE:
- 		pr_cont("MPEG2_PICTURE");
- 		break;
-+	case V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR_PROBS:
-+		pr_cont("VP9_COMPRESSED_HDR_PROBS");
-+		break;
-+	case V4L2_CTRL_TYPE_VP9_FRAME:
-+		pr_cont("VP9_FRAME");
-+		break;
- 	default:
- 		pr_cont("unknown type %d", ctrl->type);
- 		break;
-@@ -317,6 +323,162 @@ static void std_log(const struct v4l2_ctrl *ctrl)
- #define zero_reserved(s) \
- 	memset(&(s).reserved, 0, sizeof((s).reserved))
- 
-+static int
-+validate_vp9_lf_params(struct v4l2_vp9_loop_filter *lf)
+-rockchip-vdec-y += rkvdec.o rkvdec-h264.o
++rockchip-vdec-y += rkvdec.o rkvdec-h264.o rkvdec-vp9.o
+diff --git a/drivers/staging/media/rkvdec/rkvdec-vp9.c b/drivers/staging/media/rkvdec/rkvdec-vp9.c
+new file mode 100644
+index 000000000000..e8b3a5c3d0f4
+--- /dev/null
++++ b/drivers/staging/media/rkvdec/rkvdec-vp9.c
+@@ -0,0 +1,1078 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Rockchip Video Decoder VP9 backend
++ *
++ * Copyright (C) 2019 Collabora, Ltd.
++ *	Boris Brezillon <boris.brezillon@collabora.com>
++ * Copyright (C) 2021 Collabora, Ltd.
++ *	Andrzej Pietrasiewicz <andrzej.p@collabora.com>
++ *
++ * Copyright (C) 2016 Rockchip Electronics Co., Ltd.
++ *	Alpha Lin <Alpha.Lin@rock-chips.com>
++ */
++
++/*
++ * For following the vp9 spec please start reading this driver
++ * code from rkvdec_vp9_run() followed by rkvdec_vp9_done().
++ */
++
++#include <linux/kernel.h>
++#include <linux/vmalloc.h>
++#include <media/v4l2-mem2mem.h>
++#include <media/v4l2-vp9.h>
++
++#include "rkvdec.h"
++#include "rkvdec-regs.h"
++
++#define RKVDEC_VP9_PROBE_SIZE		4864
++#define RKVDEC_VP9_COUNT_SIZE		13232
++#define RKVDEC_VP9_MAX_SEGMAP_SIZE	73728
++
++struct rkvdec_vp9_intra_mode_probs {
++	u8 y_mode[105];
++	u8 uv_mode[23];
++};
++
++struct rkvdec_vp9_intra_only_frame_probs {
++	u8 coef_intra[4][2][128];
++	struct rkvdec_vp9_intra_mode_probs intra_mode[10];
++};
++
++struct rkvdec_vp9_inter_frame_probs {
++	u8 y_mode[4][9];
++	u8 comp_mode[5];
++	u8 comp_ref[5];
++	u8 single_ref[5][2];
++	u8 inter_mode[7][3];
++	u8 interp_filter[4][2];
++	u8 padding0[11];
++	u8 coef[2][4][2][128];
++	u8 uv_mode_0_2[3][9];
++	u8 padding1[5];
++	u8 uv_mode_3_5[3][9];
++	u8 padding2[5];
++	u8 uv_mode_6_8[3][9];
++	u8 padding3[5];
++	u8 uv_mode_9[9];
++	u8 padding4[7];
++	u8 padding5[16];
++	struct {
++		u8 joint[3];
++		u8 sign[2];
++		u8 classes[2][10];
++		u8 class0_bit[2];
++		u8 bits[2][10];
++		u8 class0_fr[2][2][3];
++		u8 fr[2][3];
++		u8 class0_hp[2];
++		u8 hp[2];
++	} mv;
++};
++
++struct rkvdec_vp9_probs {
++	u8 partition[16][3];
++	u8 pred[3];
++	u8 tree[7];
++	u8 skip[3];
++	u8 tx32[2][3];
++	u8 tx16[2][2];
++	u8 tx8[2][1];
++	u8 is_inter[4];
++	/* 128 bit alignment */
++	u8 padding0[3];
++	union {
++		struct rkvdec_vp9_inter_frame_probs inter;
++		struct rkvdec_vp9_intra_only_frame_probs intra_only;
++	};
++};
++
++/* Data structure describing auxiliary buffer format. */
++struct rkvdec_vp9_priv_tbl {
++	struct rkvdec_vp9_probs probs;
++	u8 segmap[2][RKVDEC_VP9_MAX_SEGMAP_SIZE];
++};
++
++struct rkvdec_vp9_refs_counts {
++	u32 eob[2];
++	u32 coeff[3];
++};
++
++struct rkvdec_vp9_inter_frame_symbol_counts {
++	u32 partition[16][4];
++	u32 skip[3][2];
++	u32 inter[4][2];
++	u32 tx32p[2][4];
++	u32 tx16p[2][4];
++	u32 tx8p[2][2];
++	u32 y_mode[4][10];
++	u32 uv_mode[10][10];
++	u32 comp[5][2];
++	u32 comp_ref[5][2];
++	u32 single_ref[5][2][2];
++	u32 mv_mode[7][4];
++	u32 filter[4][3];
++	u32 mv_joint[4];
++	u32 sign[2][2];
++	/* add 1 element for align */
++	u32 classes[2][11 + 1];
++	u32 class0[2][2];
++	u32 bits[2][10][2];
++	u32 class0_fp[2][2][4];
++	u32 fp[2][4];
++	u32 class0_hp[2][2];
++	u32 hp[2][2];
++	struct rkvdec_vp9_refs_counts ref_cnt[2][4][2][6][6];
++};
++
++struct rkvdec_vp9_intra_frame_symbol_counts {
++	u32 partition[4][4][4];
++	u32 skip[3][2];
++	u32 intra[4][2];
++	u32 tx32p[2][4];
++	u32 tx16p[2][4];
++	u32 tx8p[2][2];
++	struct rkvdec_vp9_refs_counts ref_cnt[2][4][2][6][6];
++};
++
++struct rkvdec_vp9_run {
++	struct rkvdec_run base;
++	const struct v4l2_ctrl_vp9_frame *decode_params;
++};
++
++struct rkvdec_vp9_frame_info {
++	u32 valid : 1;
++	u32 segmapid : 1;
++	u32 frame_context_idx : 2;
++	u32 reference_mode : 2;
++	u32 tx_mode : 3;
++	u32 interpolation_filter : 3;
++	u32 flags;
++	u64 timestamp;
++	struct v4l2_vp9_segmentation seg;
++	struct v4l2_vp9_loop_filter lf;
++};
++
++struct rkvdec_vp9_ctx {
++	struct rkvdec_aux_buf priv_tbl;
++	struct rkvdec_aux_buf count_tbl;
++	struct v4l2_vp9_frame_symbol_counts inter_cnts;
++	struct v4l2_vp9_frame_symbol_counts intra_cnts;
++	struct v4l2_vp9_frame_context probability_tables;
++	struct v4l2_vp9_frame_context frame_context[4];
++	struct rkvdec_vp9_frame_info cur;
++	struct rkvdec_vp9_frame_info last;
++};
++
++static void write_coeff_plane(const u8 coef[6][6][3], u8 *coeff_plane)
 +{
-+	unsigned int i;
++	unsigned int idx = 0, byte_count = 0;
++	int k, m, n;
++	u8 p;
 +
-+	if (lf->flags & ~(V4L2_VP9_LOOP_FILTER_FLAG_DELTA_ENABLED |
-+			  V4L2_VP9_LOOP_FILTER_FLAG_DELTA_UPDATE))
-+		return -EINVAL;
-+
-+	/* That all values are in the accepted range. */
-+	if (lf->level > GENMASK(5, 0))
-+		return -EINVAL;
-+
-+	if (lf->sharpness > GENMASK(2, 0))
-+		return -EINVAL;
-+
-+	for (i = 0; i < ARRAY_SIZE(lf->ref_deltas); i++)
-+		if (lf->ref_deltas[i] < -63 || lf->ref_deltas[i] > 63)
-+			return -EINVAL;
-+
-+	for (i = 0; i < ARRAY_SIZE(lf->mode_deltas); i++)
-+		if (lf->mode_deltas[i] < -63 || lf->mode_deltas[i] > 63)
-+			return -EINVAL;
-+
-+	zero_reserved(*lf);
-+	return 0;
++	for (k = 0; k < 6; k++) {
++		for (m = 0; m < 6; m++) {
++			for (n = 0; n < 3; n++) {
++				p = coef[k][m][n];
++				coeff_plane[idx++] = p;
++				byte_count++;
++				if (byte_count == 27) {
++					idx += 5;
++					byte_count = 0;
++				}
++			}
++		}
++	}
 +}
 +
-+static int
-+validate_vp9_quant_params(struct v4l2_vp9_quantization *quant)
++static void init_intra_only_probs(struct rkvdec_ctx *ctx,
++				  const struct rkvdec_vp9_run *run)
 +{
-+	if (quant->delta_q_y_dc < -15 || quant->delta_q_y_dc > 15 ||
-+	    quant->delta_q_uv_dc < -15 || quant->delta_q_uv_dc > 15 ||
-+	    quant->delta_q_uv_ac < -15 || quant->delta_q_uv_ac > 15)
-+		return -EINVAL;
++	const struct v4l2_ctrl_vp9_frame *dec_params;
++	struct rkvdec_vp9_ctx *vp9_ctx = ctx->priv;
++	struct rkvdec_vp9_priv_tbl *tbl = vp9_ctx->priv_tbl.cpu;
++	struct rkvdec_vp9_intra_only_frame_probs *rkprobs;
++	const struct v4l2_vp9_frame_context *probs;
++	unsigned int i, j, k, m;
 +
-+	zero_reserved(*quant);
-+	return 0;
-+}
++	rkprobs = &tbl->probs.intra_only;
++	dec_params = run->decode_params;
++	probs = &vp9_ctx->probability_tables;
 +
-+static int
-+validate_vp9_seg_params(struct v4l2_vp9_segmentation *seg)
-+{
-+	unsigned int i, j;
-+
-+	if (seg->flags & ~(V4L2_VP9_SEGMENTATION_FLAG_ENABLED |
-+			   V4L2_VP9_SEGMENTATION_FLAG_UPDATE_MAP |
-+			   V4L2_VP9_SEGMENTATION_FLAG_TEMPORAL_UPDATE |
-+			   V4L2_VP9_SEGMENTATION_FLAG_UPDATE_DATA |
-+			   V4L2_VP9_SEGMENTATION_FLAG_ABS_OR_DELTA_UPDATE))
-+		return -EINVAL;
-+
-+	for (i = 0; i < ARRAY_SIZE(seg->feature_enabled); i++) {
-+		if (seg->feature_enabled[i] &
-+		    ~V4L2_VP9_SEGMENT_FEATURE_ENABLED_MASK)
-+			return -EINVAL;
++	/*
++	 * intra only 149 x 128 bits ,aligned to 152 x 128 bits coeff related
++	 * prob 64 x 128 bits
++	 */
++	for (i = 0; i < ARRAY_SIZE(probs->coef); i++) {
++		for (j = 0; j < ARRAY_SIZE(probs->coef[0]); j++)
++			write_coeff_plane(probs->coef[i][j][0],
++					  rkprobs->coef_intra[i][j]);
 +	}
 +
-+	for (i = 0; i < ARRAY_SIZE(seg->feature_data); i++) {
-+		const int range[] = { 255, 63, 3, 0 };
++	/* intra mode prob  80 x 128 bits */
++	for (i = 0; i < ARRAY_SIZE(v4l2_vp9_kf_y_mode_prob); i++) {
++		unsigned int byte_count = 0;
++		int idx = 0;
 +
-+		for (j = 0; j < ARRAY_SIZE(seg->feature_data[j]); j++) {
-+			if (seg->feature_data[i][j] < -range[j] ||
-+			    seg->feature_data[i][j] > range[j])
-+				return -EINVAL;
++		/* vp9_kf_y_mode_prob */
++		for (j = 0; j < ARRAY_SIZE(v4l2_vp9_kf_y_mode_prob[0]); j++) {
++			for (k = 0; k < ARRAY_SIZE(v4l2_vp9_kf_y_mode_prob[0][0]);
++			     k++) {
++				u8 val = v4l2_vp9_kf_y_mode_prob[i][j][k];
++
++				rkprobs->intra_mode[i].y_mode[idx++] = val;
++				byte_count++;
++				if (byte_count == 27) {
++					byte_count = 0;
++					idx += 5;
++				}
++			}
++		}
++
++		idx = 0;
++		if (i < 4) {
++			for (m = 0; m < (i < 3 ? 23 : 21); m++) {
++				const u8 *ptr = (const u8 *)v4l2_vp9_kf_uv_mode_prob;
++
++				rkprobs->intra_mode[i].uv_mode[idx++] = ptr[i * 23 + m];
++			}
++		}
++	}
++}
++
++static void init_inter_probs(struct rkvdec_ctx *ctx,
++			     const struct rkvdec_vp9_run *run)
++{
++	const struct v4l2_ctrl_vp9_frame *dec_params;
++	struct rkvdec_vp9_ctx *vp9_ctx = ctx->priv;
++	struct rkvdec_vp9_priv_tbl *tbl = vp9_ctx->priv_tbl.cpu;
++	struct rkvdec_vp9_inter_frame_probs *rkprobs;
++	const struct v4l2_vp9_frame_context *probs;
++	unsigned int i, j, k;
++
++	rkprobs = &tbl->probs.inter;
++	dec_params = run->decode_params;
++	probs = &vp9_ctx->probability_tables;
++
++	/*
++	 * inter probs
++	 * 151 x 128 bits, aligned to 152 x 128 bits
++	 * inter only
++	 * intra_y_mode & inter_block info 6 x 128 bits
++	 */
++
++	memcpy(rkprobs->y_mode, probs->y_mode, sizeof(rkprobs->y_mode));
++	memcpy(rkprobs->comp_mode, probs->comp_mode,
++	       sizeof(rkprobs->comp_mode));
++	memcpy(rkprobs->comp_ref, probs->comp_ref,
++	       sizeof(rkprobs->comp_ref));
++	memcpy(rkprobs->single_ref, probs->single_ref,
++	       sizeof(rkprobs->single_ref));
++	memcpy(rkprobs->inter_mode, probs->inter_mode,
++	       sizeof(rkprobs->inter_mode));
++	memcpy(rkprobs->interp_filter, probs->interp_filter,
++	       sizeof(rkprobs->interp_filter));
++
++	/* 128 x 128 bits coeff related */
++	for (i = 0; i < ARRAY_SIZE(probs->coef); i++) {
++		for (j = 0; j < ARRAY_SIZE(probs->coef[0]); j++) {
++			for (k = 0; k < ARRAY_SIZE(probs->coef[0][0]); k++)
++				write_coeff_plane(probs->coef[i][j][k],
++						  rkprobs->coef[k][i][j]);
 +		}
 +	}
 +
-+	zero_reserved(*seg);
++	/* intra uv mode 6 x 128 */
++	memcpy(rkprobs->uv_mode_0_2, &probs->uv_mode[0],
++	       sizeof(rkprobs->uv_mode_0_2));
++	memcpy(rkprobs->uv_mode_3_5, &probs->uv_mode[3],
++	       sizeof(rkprobs->uv_mode_3_5));
++	memcpy(rkprobs->uv_mode_6_8, &probs->uv_mode[6],
++	       sizeof(rkprobs->uv_mode_6_8));
++	memcpy(rkprobs->uv_mode_9, &probs->uv_mode[9],
++	       sizeof(rkprobs->uv_mode_9));
++
++	/* mv related 6 x 128 */
++	memcpy(rkprobs->mv.joint, probs->mv.joint,
++	       sizeof(rkprobs->mv.joint));
++	memcpy(rkprobs->mv.sign, probs->mv.sign,
++	       sizeof(rkprobs->mv.sign));
++	memcpy(rkprobs->mv.classes, probs->mv.classes,
++	       sizeof(rkprobs->mv.classes));
++	memcpy(rkprobs->mv.class0_bit, probs->mv.class0_bit,
++	       sizeof(rkprobs->mv.class0_bit));
++	memcpy(rkprobs->mv.bits, probs->mv.bits,
++	       sizeof(rkprobs->mv.bits));
++	memcpy(rkprobs->mv.class0_fr, probs->mv.class0_fr,
++	       sizeof(rkprobs->mv.class0_fr));
++	memcpy(rkprobs->mv.fr, probs->mv.fr,
++	       sizeof(rkprobs->mv.fr));
++	memcpy(rkprobs->mv.class0_hp, probs->mv.class0_hp,
++	       sizeof(rkprobs->mv.class0_hp));
++	memcpy(rkprobs->mv.hp, probs->mv.hp,
++	       sizeof(rkprobs->mv.hp));
++}
++
++static void init_probs(struct rkvdec_ctx *ctx,
++		       const struct rkvdec_vp9_run *run)
++{
++	const struct v4l2_ctrl_vp9_frame *dec_params;
++	struct rkvdec_vp9_ctx *vp9_ctx = ctx->priv;
++	struct rkvdec_vp9_priv_tbl *tbl = vp9_ctx->priv_tbl.cpu;
++	struct rkvdec_vp9_probs *rkprobs = &tbl->probs;
++	const struct v4l2_vp9_segmentation *seg;
++	const struct v4l2_vp9_frame_context *probs;
++	bool intra_only;
++
++	dec_params = run->decode_params;
++	probs = &vp9_ctx->probability_tables;
++	seg = &dec_params->seg;
++
++	memset(rkprobs, 0, sizeof(*rkprobs));
++
++	intra_only = !!(dec_params->flags &
++			(V4L2_VP9_FRAME_FLAG_KEY_FRAME |
++			 V4L2_VP9_FRAME_FLAG_INTRA_ONLY));
++
++	/* sb info  5 x 128 bit */
++	memcpy(rkprobs->partition,
++	       intra_only ? v4l2_vp9_kf_partition_probs : probs->partition,
++	       sizeof(rkprobs->partition));
++
++	memcpy(rkprobs->pred, seg->pred_probs, sizeof(rkprobs->pred));
++	memcpy(rkprobs->tree, seg->tree_probs, sizeof(rkprobs->tree));
++	memcpy(rkprobs->skip, probs->skip, sizeof(rkprobs->skip));
++	memcpy(rkprobs->tx32, probs->tx32, sizeof(rkprobs->tx32));
++	memcpy(rkprobs->tx16, probs->tx16, sizeof(rkprobs->tx16));
++	memcpy(rkprobs->tx8, probs->tx8, sizeof(rkprobs->tx8));
++	memcpy(rkprobs->is_inter, probs->is_inter, sizeof(rkprobs->is_inter));
++
++	if (intra_only)
++		init_intra_only_probs(ctx, run);
++	else
++		init_inter_probs(ctx, run);
++}
++
++struct rkvdec_vp9_ref_reg {
++	u32 reg_frm_size;
++	u32 reg_hor_stride;
++	u32 reg_y_stride;
++	u32 reg_yuv_stride;
++	u32 reg_ref_base;
++};
++
++static struct rkvdec_vp9_ref_reg ref_regs[] = {
++	{
++		.reg_frm_size = RKVDEC_REG_VP9_FRAME_SIZE(0),
++		.reg_hor_stride = RKVDEC_VP9_HOR_VIRSTRIDE(0),
++		.reg_y_stride = RKVDEC_VP9_LAST_FRAME_YSTRIDE,
++		.reg_yuv_stride = RKVDEC_VP9_LAST_FRAME_YUVSTRIDE,
++		.reg_ref_base = RKVDEC_REG_VP9_LAST_FRAME_BASE,
++	},
++	{
++		.reg_frm_size = RKVDEC_REG_VP9_FRAME_SIZE(1),
++		.reg_hor_stride = RKVDEC_VP9_HOR_VIRSTRIDE(1),
++		.reg_y_stride = RKVDEC_VP9_GOLDEN_FRAME_YSTRIDE,
++		.reg_yuv_stride = 0,
++		.reg_ref_base = RKVDEC_REG_VP9_GOLDEN_FRAME_BASE,
++	},
++	{
++		.reg_frm_size = RKVDEC_REG_VP9_FRAME_SIZE(2),
++		.reg_hor_stride = RKVDEC_VP9_HOR_VIRSTRIDE(2),
++		.reg_y_stride = RKVDEC_VP9_ALTREF_FRAME_YSTRIDE,
++		.reg_yuv_stride = 0,
++		.reg_ref_base = RKVDEC_REG_VP9_ALTREF_FRAME_BASE,
++	}
++};
++
++static struct rkvdec_decoded_buffer *
++get_ref_buf(struct rkvdec_ctx *ctx, struct vb2_v4l2_buffer *dst, u64 timestamp)
++{
++	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
++	struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
++	int buf_idx;
++
++	/*
++	 * If a ref is unused or invalid, address of current destination
++	 * buffer is returned.
++	 */
++	buf_idx = vb2_find_timestamp(cap_q, timestamp, 0);
++	if (buf_idx < 0)
++		return vb2_to_rkvdec_decoded_buf(&dst->vb2_buf);
++
++	return vb2_to_rkvdec_decoded_buf(vb2_get_buffer(cap_q, buf_idx));
++}
++
++static dma_addr_t get_mv_base_addr(struct rkvdec_decoded_buffer *buf)
++{
++	unsigned int aligned_pitch, aligned_height, yuv_len;
++
++	aligned_height = round_up(buf->vp9.height, 64);
++	aligned_pitch = round_up(buf->vp9.width * buf->vp9.bit_depth, 512) / 8;
++	yuv_len = (aligned_height * aligned_pitch * 3) / 2;
++
++	return vb2_dma_contig_plane_dma_addr(&buf->base.vb.vb2_buf, 0) +
++	       yuv_len;
++}
++
++static void config_ref_registers(struct rkvdec_ctx *ctx,
++				 const struct rkvdec_vp9_run *run,
++				 struct rkvdec_decoded_buffer *ref_buf,
++				 struct rkvdec_vp9_ref_reg *ref_reg)
++{
++	unsigned int aligned_pitch, aligned_height, y_len, yuv_len;
++	struct rkvdec_dev *rkvdec = ctx->dev;
++
++	aligned_height = round_up(ref_buf->vp9.height, 64);
++	writel_relaxed(RKVDEC_VP9_FRAMEWIDTH(ref_buf->vp9.width) |
++		       RKVDEC_VP9_FRAMEHEIGHT(ref_buf->vp9.height),
++		       rkvdec->regs + ref_reg->reg_frm_size);
++
++	writel_relaxed(vb2_dma_contig_plane_dma_addr(&ref_buf->base.vb.vb2_buf, 0),
++		       rkvdec->regs + ref_reg->reg_ref_base);
++
++	if (&ref_buf->base.vb == run->base.bufs.dst)
++		return;
++
++	aligned_pitch = round_up(ref_buf->vp9.width * ref_buf->vp9.bit_depth, 512) / 8;
++	y_len = aligned_height * aligned_pitch;
++	yuv_len = (y_len * 3) / 2;
++
++	writel_relaxed(RKVDEC_HOR_Y_VIRSTRIDE(aligned_pitch / 16) |
++		       RKVDEC_HOR_UV_VIRSTRIDE(aligned_pitch / 16),
++		       rkvdec->regs + ref_reg->reg_hor_stride);
++	writel_relaxed(RKVDEC_VP9_REF_YSTRIDE(y_len / 16),
++		       rkvdec->regs + ref_reg->reg_y_stride);
++
++	if (!ref_reg->reg_yuv_stride)
++		return;
++
++	writel_relaxed(RKVDEC_VP9_REF_YUVSTRIDE(yuv_len / 16),
++		       rkvdec->regs + ref_reg->reg_yuv_stride);
++}
++
++static void config_seg_registers(struct rkvdec_ctx *ctx, unsigned int segid)
++{
++	struct rkvdec_vp9_ctx *vp9_ctx = ctx->priv;
++	const struct v4l2_vp9_segmentation *seg;
++	struct rkvdec_dev *rkvdec = ctx->dev;
++	s16 feature_val;
++	int feature_id;
++	u32 val = 0;
++
++	seg = vp9_ctx->last.valid ? &vp9_ctx->last.seg : &vp9_ctx->cur.seg;
++	feature_id = V4L2_VP9_SEG_LVL_ALT_Q;
++	if (v4l2_vp9_seg_feat_enabled(seg->feature_enabled, feature_id, segid)) {
++		feature_val = seg->feature_data[segid][feature_id];
++		val |= RKVDEC_SEGID_FRAME_QP_DELTA_EN(1) |
++		       RKVDEC_SEGID_FRAME_QP_DELTA(feature_val);
++	}
++
++	feature_id = V4L2_VP9_SEG_LVL_ALT_L;
++	if (v4l2_vp9_seg_feat_enabled(seg->feature_enabled, feature_id, segid)) {
++		feature_val = seg->feature_data[segid][feature_id];
++		val |= RKVDEC_SEGID_FRAME_LOOPFILTER_VALUE_EN(1) |
++		       RKVDEC_SEGID_FRAME_LOOPFILTER_VALUE(feature_val);
++	}
++
++	feature_id = V4L2_VP9_SEG_LVL_REF_FRAME;
++	if (v4l2_vp9_seg_feat_enabled(seg->feature_enabled, feature_id, segid)) {
++		feature_val = seg->feature_data[segid][feature_id];
++		val |= RKVDEC_SEGID_REFERINFO_EN(1) |
++		       RKVDEC_SEGID_REFERINFO(feature_val);
++	}
++
++	feature_id = V4L2_VP9_SEG_LVL_SKIP;
++	if (v4l2_vp9_seg_feat_enabled(seg->feature_enabled, feature_id, segid))
++		val |= RKVDEC_SEGID_FRAME_SKIP_EN(1);
++
++	if (!segid &&
++	    (seg->flags & V4L2_VP9_SEGMENTATION_FLAG_ABS_OR_DELTA_UPDATE))
++		val |= RKVDEC_SEGID_ABS_DELTA(1);
++
++	writel_relaxed(val, rkvdec->regs + RKVDEC_VP9_SEGID_GRP(segid));
++}
++
++static void update_dec_buf_info(struct rkvdec_decoded_buffer *buf,
++				const struct v4l2_ctrl_vp9_frame *dec_params)
++{
++	buf->vp9.width = dec_params->frame_width_minus_1 + 1;
++	buf->vp9.height = dec_params->frame_height_minus_1 + 1;
++	buf->vp9.bit_depth = dec_params->bit_depth;
++}
++
++static void update_ctx_cur_info(struct rkvdec_vp9_ctx *vp9_ctx,
++				struct rkvdec_decoded_buffer *buf,
++				const struct v4l2_ctrl_vp9_frame *dec_params)
++{
++	vp9_ctx->cur.valid = true;
++	vp9_ctx->cur.reference_mode = dec_params->reference_mode;
++	vp9_ctx->cur.tx_mode = dec_params->tx_mode;
++	vp9_ctx->cur.interpolation_filter = dec_params->interpolation_filter;
++	vp9_ctx->cur.flags = dec_params->flags;
++	vp9_ctx->cur.timestamp = buf->base.vb.vb2_buf.timestamp;
++	vp9_ctx->cur.seg = dec_params->seg;
++	vp9_ctx->cur.lf = dec_params->lf;
++}
++
++static void update_ctx_last_info(struct rkvdec_vp9_ctx *vp9_ctx)
++{
++	vp9_ctx->last = vp9_ctx->cur;
++}
++
++static void config_registers(struct rkvdec_ctx *ctx,
++			     const struct rkvdec_vp9_run *run)
++{
++	unsigned int y_len, uv_len, yuv_len, bit_depth, aligned_height, aligned_pitch, stream_len;
++	const struct v4l2_ctrl_vp9_frame *dec_params;
++	struct rkvdec_decoded_buffer *ref_bufs[3];
++	struct rkvdec_decoded_buffer *dst, *last, *mv_ref;
++	struct rkvdec_vp9_ctx *vp9_ctx = ctx->priv;
++	u32 val, last_frame_info = 0;
++	const struct v4l2_vp9_segmentation *seg;
++	struct rkvdec_dev *rkvdec = ctx->dev;
++	dma_addr_t addr;
++	bool intra_only;
++	unsigned int i;
++
++	dec_params = run->decode_params;
++	dst = vb2_to_rkvdec_decoded_buf(&run->base.bufs.dst->vb2_buf);
++	ref_bufs[0] = get_ref_buf(ctx, &dst->base.vb, dec_params->last_frame_ts);
++	ref_bufs[1] = get_ref_buf(ctx, &dst->base.vb, dec_params->golden_frame_ts);
++	ref_bufs[2] = get_ref_buf(ctx, &dst->base.vb, dec_params->alt_frame_ts);
++
++	if (vp9_ctx->last.valid)
++		last = get_ref_buf(ctx, &dst->base.vb, vp9_ctx->last.timestamp);
++	else
++		last = dst;
++
++	update_dec_buf_info(dst, dec_params);
++	update_ctx_cur_info(vp9_ctx, dst, dec_params);
++	seg = &dec_params->seg;
++
++	intra_only = !!(dec_params->flags &
++			(V4L2_VP9_FRAME_FLAG_KEY_FRAME |
++			 V4L2_VP9_FRAME_FLAG_INTRA_ONLY));
++
++	writel_relaxed(RKVDEC_MODE(RKVDEC_MODE_VP9),
++		       rkvdec->regs + RKVDEC_REG_SYSCTRL);
++
++	bit_depth = dec_params->bit_depth;
++	aligned_height = round_up(ctx->decoded_fmt.fmt.pix_mp.height, 64);
++
++	aligned_pitch = round_up(ctx->decoded_fmt.fmt.pix_mp.width *
++				 bit_depth,
++				 512) / 8;
++	y_len = aligned_height * aligned_pitch;
++	uv_len = y_len / 2;
++	yuv_len = y_len + uv_len;
++
++	writel_relaxed(RKVDEC_Y_HOR_VIRSTRIDE(aligned_pitch / 16) |
++		       RKVDEC_UV_HOR_VIRSTRIDE(aligned_pitch / 16),
++		       rkvdec->regs + RKVDEC_REG_PICPAR);
++	writel_relaxed(RKVDEC_Y_VIRSTRIDE(y_len / 16),
++		       rkvdec->regs + RKVDEC_REG_Y_VIRSTRIDE);
++	writel_relaxed(RKVDEC_YUV_VIRSTRIDE(yuv_len / 16),
++		       rkvdec->regs + RKVDEC_REG_YUV_VIRSTRIDE);
++
++	stream_len = vb2_get_plane_payload(&run->base.bufs.src->vb2_buf, 0);
++	writel_relaxed(RKVDEC_STRM_LEN(stream_len),
++		       rkvdec->regs + RKVDEC_REG_STRM_LEN);
++
++	/*
++	 * Reset count buffer, because decoder only output intra related syntax
++	 * counts when decoding intra frame, but update entropy need to update
++	 * all the probabilities.
++	 */
++	if (intra_only)
++		memset(vp9_ctx->count_tbl.cpu, 0, vp9_ctx->count_tbl.size);
++
++	vp9_ctx->cur.segmapid = vp9_ctx->last.segmapid;
++	if (!intra_only &&
++	    !(dec_params->flags & V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT) &&
++	    (!(seg->flags & V4L2_VP9_SEGMENTATION_FLAG_ENABLED) ||
++	     (seg->flags & V4L2_VP9_SEGMENTATION_FLAG_UPDATE_MAP)))
++		vp9_ctx->cur.segmapid++;
++
++	for (i = 0; i < ARRAY_SIZE(ref_bufs); i++)
++		config_ref_registers(ctx, run, ref_bufs[i], &ref_regs[i]);
++
++	for (i = 0; i < 8; i++)
++		config_seg_registers(ctx, i);
++
++	writel_relaxed(RKVDEC_VP9_TX_MODE(dec_params->tx_mode) |
++		       RKVDEC_VP9_FRAME_REF_MODE(dec_params->reference_mode),
++		       rkvdec->regs + RKVDEC_VP9_CPRHEADER_CONFIG);
++
++	if (!intra_only) {
++		const struct v4l2_vp9_loop_filter *lf;
++		s8 delta;
++
++		if (vp9_ctx->last.valid)
++			lf = &vp9_ctx->last.lf;
++		else
++			lf = &vp9_ctx->cur.lf;
++
++		val = 0;
++		for (i = 0; i < ARRAY_SIZE(lf->ref_deltas); i++) {
++			delta = lf->ref_deltas[i];
++			val |= RKVDEC_REF_DELTAS_LASTFRAME(i, delta);
++		}
++
++		writel_relaxed(val,
++			       rkvdec->regs + RKVDEC_VP9_REF_DELTAS_LASTFRAME);
++
++		for (i = 0; i < ARRAY_SIZE(lf->mode_deltas); i++) {
++			delta = lf->mode_deltas[i];
++			last_frame_info |= RKVDEC_MODE_DELTAS_LASTFRAME(i,
++									delta);
++		}
++	}
++
++	if (vp9_ctx->last.valid && !intra_only &&
++	    vp9_ctx->last.seg.flags & V4L2_VP9_SEGMENTATION_FLAG_ENABLED)
++		last_frame_info |= RKVDEC_SEG_EN_LASTFRAME;
++
++	if (vp9_ctx->last.valid &&
++	    vp9_ctx->last.flags & V4L2_VP9_FRAME_FLAG_SHOW_FRAME)
++		last_frame_info |= RKVDEC_LAST_SHOW_FRAME;
++
++	if (vp9_ctx->last.valid &&
++	    vp9_ctx->last.flags &
++	    (V4L2_VP9_FRAME_FLAG_KEY_FRAME | V4L2_VP9_FRAME_FLAG_INTRA_ONLY))
++		last_frame_info |= RKVDEC_LAST_INTRA_ONLY;
++
++	if (vp9_ctx->last.valid &&
++	    last->vp9.width == dst->vp9.width &&
++	    last->vp9.height == dst->vp9.height)
++		last_frame_info |= RKVDEC_LAST_WIDHHEIGHT_EQCUR;
++
++	writel_relaxed(last_frame_info,
++		       rkvdec->regs + RKVDEC_VP9_INFO_LASTFRAME);
++
++	writel_relaxed(stream_len - dec_params->compressed_header_size -
++		       dec_params->uncompressed_header_size,
++		       rkvdec->regs + RKVDEC_VP9_LASTTILE_SIZE);
++
++	for (i = 0; !intra_only && i < ARRAY_SIZE(ref_bufs); i++) {
++		unsigned int refw = ref_bufs[i]->vp9.width;
++		unsigned int refh = ref_bufs[i]->vp9.height;
++		u32 hscale, vscale;
++
++		hscale = (refw << 14) /	dst->vp9.width;
++		vscale = (refh << 14) / dst->vp9.height;
++		writel_relaxed(RKVDEC_VP9_REF_HOR_SCALE(hscale) |
++			       RKVDEC_VP9_REF_VER_SCALE(vscale),
++			       rkvdec->regs + RKVDEC_VP9_REF_SCALE(i));
++	}
++
++	addr = vb2_dma_contig_plane_dma_addr(&dst->base.vb.vb2_buf, 0);
++	writel_relaxed(addr, rkvdec->regs + RKVDEC_REG_DECOUT_BASE);
++	addr = vb2_dma_contig_plane_dma_addr(&run->base.bufs.src->vb2_buf, 0);
++	writel_relaxed(addr, rkvdec->regs + RKVDEC_REG_STRM_RLC_BASE);
++	writel_relaxed(vp9_ctx->priv_tbl.dma +
++		       offsetof(struct rkvdec_vp9_priv_tbl, probs),
++		       rkvdec->regs + RKVDEC_REG_CABACTBL_PROB_BASE);
++	writel_relaxed(vp9_ctx->count_tbl.dma,
++		       rkvdec->regs + RKVDEC_REG_VP9COUNT_BASE);
++
++	writel_relaxed(vp9_ctx->priv_tbl.dma +
++		       offsetof(struct rkvdec_vp9_priv_tbl, segmap) +
++		       (RKVDEC_VP9_MAX_SEGMAP_SIZE * vp9_ctx->cur.segmapid),
++		       rkvdec->regs + RKVDEC_REG_VP9_SEGIDCUR_BASE);
++	writel_relaxed(vp9_ctx->priv_tbl.dma +
++		       offsetof(struct rkvdec_vp9_priv_tbl, segmap) +
++		       (RKVDEC_VP9_MAX_SEGMAP_SIZE * (!vp9_ctx->cur.segmapid)),
++		       rkvdec->regs + RKVDEC_REG_VP9_SEGIDLAST_BASE);
++
++	if (!intra_only &&
++	    !(dec_params->flags & V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT) &&
++	    vp9_ctx->last.valid)
++		mv_ref = last;
++	else
++		mv_ref = dst;
++
++	writel_relaxed(get_mv_base_addr(mv_ref),
++		       rkvdec->regs + RKVDEC_VP9_REF_COLMV_BASE);
++
++	writel_relaxed(ctx->decoded_fmt.fmt.pix_mp.width |
++		       (ctx->decoded_fmt.fmt.pix_mp.height << 16),
++		       rkvdec->regs + RKVDEC_REG_PERFORMANCE_CYCLE);
++}
++
++static int validate_dec_params(struct rkvdec_ctx *ctx,
++			       const struct v4l2_ctrl_vp9_frame *dec_params)
++{
++	unsigned int aligned_width, aligned_height;
++
++	/* We only support profile 0. */
++	if (dec_params->profile != 0) {
++		dev_err(ctx->dev->dev, "unsupported profile %d\n",
++			dec_params->profile);
++		return -EINVAL;
++	}
++
++	aligned_width = round_up(dec_params->frame_width_minus_1 + 1, 64);
++	aligned_height = round_up(dec_params->frame_height_minus_1 + 1, 64);
++
++	/*
++	 * Userspace should update the capture/decoded format when the
++	 * resolution changes.
++	 */
++	if (aligned_width != ctx->decoded_fmt.fmt.pix_mp.width ||
++	    aligned_height != ctx->decoded_fmt.fmt.pix_mp.height) {
++		dev_err(ctx->dev->dev,
++			"unexpected bitstream resolution %dx%d\n",
++			dec_params->frame_width_minus_1 + 1,
++			dec_params->frame_height_minus_1 + 1);
++		return -EINVAL;
++	}
++
 +	return 0;
 +}
 +
-+static int
-+validate_vp9_frame(struct v4l2_ctrl_vp9_frame *frame)
++static int rkvdec_vp9_run_preamble(struct rkvdec_ctx *ctx,
++				   struct rkvdec_vp9_run *run)
 +{
++	const struct v4l2_ctrl_vp9_frame *dec_params;
++	const struct v4l2_ctrl_vp9_compressed_hdr_probs *prob_updates;
++	struct rkvdec_vp9_ctx *vp9_ctx = ctx->priv;
++	struct v4l2_ctrl *ctrl;
++	unsigned int fctx_idx;
 +	int ret;
 +
-+	/* Make sure we're not passed invalid flags. */
-+	if (frame->flags & ~(V4L2_VP9_FRAME_FLAG_KEY_FRAME |
-+		  V4L2_VP9_FRAME_FLAG_SHOW_FRAME |
-+		  V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT |
-+		  V4L2_VP9_FRAME_FLAG_INTRA_ONLY |
-+		  V4L2_VP9_FRAME_FLAG_ALLOW_HIGH_PREC_MV |
-+		  V4L2_VP9_FRAME_FLAG_REFRESH_FRAME_CTX |
-+		  V4L2_VP9_FRAME_FLAG_PARALLEL_DEC_MODE |
-+		  V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING |
-+		  V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING |
-+		  V4L2_VP9_FRAME_FLAG_COLOR_RANGE_FULL_SWING))
-+		return -EINVAL;
++	/* v4l2-specific stuff */
++	rkvdec_run_preamble(ctx, &run->base);
 +
-+	if (frame->flags & V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT &&
-+	    frame->flags & V4L2_VP9_FRAME_FLAG_REFRESH_FRAME_CTX)
++	ctrl = v4l2_ctrl_find(&ctx->ctrl_hdl,
++			      V4L2_CID_STATELESS_VP9_FRAME);
++	if (WARN_ON(!ctrl))
 +		return -EINVAL;
++	dec_params = ctrl->p_cur.p;
 +
-+	if (frame->profile > V4L2_VP9_PROFILE_MAX)
-+		return -EINVAL;
++	ret = validate_dec_params(ctx, dec_params);
++	if (ret)
++		return ret;
 +
-+	if (frame->reset_frame_context > V4L2_VP9_RESET_FRAME_CTX_ALL)
-+		return -EINVAL;
++	run->decode_params = dec_params;
 +
-+	if (frame->frame_context_idx >= V4L2_VP9_NUM_FRAME_CTX)
++	ctrl = v4l2_ctrl_find(&ctx->ctrl_hdl, V4L2_CID_STATELESS_VP9_COMPRESSED_HDR_PROBS);
++	if (WARN_ON(!ctrl))
 +		return -EINVAL;
++	prob_updates = ctrl->p_cur.p;
 +
 +	/*
-+	 * Profiles 0 and 1 only support 8-bit depth, profiles 2 and 3 only 10
-+	 * and 12 bit depths.
++	 * vp9 stuff
++	 *
++	 * by this point the userspace has done all parts of 6.2 uncompressed_header()
++	 * except this fragment:
++	 * if ( FrameIsIntra || error_resilient_mode ) {
++	 *	setup_past_independence ( )
++	 *	if ( frame_type == KEY_FRAME || error_resilient_mode == 1 ||
++	 *	     reset_frame_context == 3 ) {
++	 *		for ( i = 0; i < 4; i ++ ) {
++	 *			save_probs( i )
++	 *		}
++	 *	} else if ( reset_frame_context == 2 ) {
++	 *		save_probs( frame_context_idx )
++	 *	}
++	 *	frame_context_idx = 0
++	 * }
 +	 */
-+	if ((frame->profile < 2 && frame->bit_depth != 8) ||
-+	    (frame->profile >= 2 &&
-+	     (frame->bit_depth != 10 && frame->bit_depth != 12)))
-+		return -EINVAL;
++	fctx_idx = v4l2_vp9_reset_frame_ctx(dec_params, vp9_ctx->frame_context);
++	vp9_ctx->cur.frame_context_idx = fctx_idx;
 +
-+	/* Profile 0 and 2 only accept YUV 4:2:0. */
-+	if ((frame->profile == 0 || frame->profile == 2) &&
-+	    (!(frame->flags & V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING) ||
-+	     !(frame->flags & V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING)))
-+		return -EINVAL;
-+
-+	/* Profile 1 and 3 only accept YUV 4:2:2, 4:4:0 and 4:4:4. */
-+	if ((frame->profile == 1 || frame->profile == 3) &&
-+	    ((frame->flags & V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING) &&
-+	     (frame->flags & V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING)))
-+		return -EINVAL;
-+
-+	if (frame->interpolation_filter > V4L2_VP9_INTERP_FILTER_SWITCHABLE)
-+		return -EINVAL;
++	/* 6.1 frame(sz): load_probs() and load_probs2() */
++	vp9_ctx->probability_tables = vp9_ctx->frame_context[fctx_idx];
 +
 +	/*
-+	 * According to the spec, tile_cols_log2 shall be less than or equal
-+	 * to 6.
++	 * The userspace has also performed 6.3 compressed_header(), but handling the
++	 * probs in a special way. All probs which need updating, except MV-related,
++	 * have been read from the bitstream and translated through inv_map_table[],
++	 * but no 6.3.6 inv_recenter_nonneg(v, m) has been performed. The values passed
++	 * by userspace are either translated values (there are no 0 values in
++	 * inv_map_table[]), or zero to indicate no update. All MV-related probs which need
++	 * updating have been read from the bitstream and (mv_prob << 1) | 1 has been
++	 * performed. The values passed by userspace are either new values
++	 * to replace old ones (the above mentioned shift and bitwise or never result in
++	 * a zero) or zero to indicate no update.
++	 * fw_update_probs() performs actual probs updates or leaves probs as-is
++	 * for values for which a zero was passed from userspace.
 +	 */
-+	if (frame->tile_cols_log2 > 6)
-+		return -EINVAL;
++	v4l2_vp9_fw_update_probs(&vp9_ctx->probability_tables, prob_updates, dec_params);
 +
-+	if (frame->tx_mode > V4L2_VP9_TX_MODE_SELECT)
-+		return -EINVAL;
-+
-+	if (frame->reference_mode > V4L2_VP9_REFERENCE_MODE_SELECT)
-+		return -EINVAL;
-+
-+	ret = validate_vp9_lf_params(&frame->lf);
-+	if (ret)
-+		return ret;
-+
-+	ret = validate_vp9_quant_params(&frame->quant);
-+	if (ret)
-+		return ret;
-+
-+	ret = validate_vp9_seg_params(&frame->seg);
-+	if (ret)
-+		return ret;
-+
-+	zero_reserved(*frame);
 +	return 0;
 +}
 +
- /*
-  * Compound controls validation requires setting unused fields/flags to zero
-  * in order to properly detect unchanged controls with std_equal's memcmp.
-@@ -687,6 +849,12 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 
- 		break;
- 
-+	case V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR_PROBS:
-+		break;
++static int rkvdec_vp9_run(struct rkvdec_ctx *ctx)
++{
++	struct rkvdec_dev *rkvdec = ctx->dev;
++	struct rkvdec_vp9_run run = { };
++	int ret;
 +
-+	case V4L2_CTRL_TYPE_VP9_FRAME:
-+		return validate_vp9_frame(p);
++	ret = rkvdec_vp9_run_preamble(ctx, &run);
++	if (ret) {
++		rkvdec_run_postamble(ctx, &run.base);
++		return ret;
++	}
 +
- 	case V4L2_CTRL_TYPE_AREA:
- 		area = p;
- 		if (!area->width || !area->height)
-@@ -1249,6 +1417,12 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 	case V4L2_CTRL_TYPE_HDR10_MASTERING_DISPLAY:
- 		elem_size = sizeof(struct v4l2_ctrl_hdr10_mastering_display);
- 		break;
-+	case V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR_PROBS:
-+		elem_size = sizeof(struct v4l2_ctrl_vp9_compressed_hdr_probs);
-+		break;
-+	case V4L2_CTRL_TYPE_VP9_FRAME:
-+		elem_size = sizeof(struct v4l2_ctrl_vp9_frame);
-+		break;
- 	case V4L2_CTRL_TYPE_AREA:
- 		elem_size = sizeof(struct v4l2_area);
- 		break;
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-index 421300e13a41..d383c438156f 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-@@ -1175,6 +1175,8 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_STATELESS_MPEG2_SEQUENCE:			return "MPEG-2 Sequence Header";
- 	case V4L2_CID_STATELESS_MPEG2_PICTURE:			return "MPEG-2 Picture Header";
- 	case V4L2_CID_STATELESS_MPEG2_QUANTISATION:		return "MPEG-2 Quantisation Matrices";
-+	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR_PROBS:	return "VP9 Probabilities Updates";
-+	case V4L2_CID_STATELESS_VP9_FRAME:			return "VP9 Frame Decode Parameters";
- 
- 	/* Colorimetry controls */
- 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-@@ -1493,6 +1495,12 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_MPEG_VIDEO_HEVC_DECODE_PARAMS:
- 		*type = V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
- 		break;
-+	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR_PROBS:
-+		*type = V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR_PROBS;
-+		break;
-+	case V4L2_CID_STATELESS_VP9_FRAME:
-+		*type = V4L2_CTRL_TYPE_VP9_FRAME;
-+		break;
- 	case V4L2_CID_UNIT_CELL_SIZE:
- 		*type = V4L2_CTRL_TYPE_AREA;
- 		*flags |= V4L2_CTRL_FLAG_READ_ONLY;
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index ec6fc1ef291e..7a5e8120d733 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1394,6 +1394,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 		case V4L2_PIX_FMT_VP8:		descr = "VP8"; break;
- 		case V4L2_PIX_FMT_VP8_FRAME:    descr = "VP8 Frame"; break;
- 		case V4L2_PIX_FMT_VP9:		descr = "VP9"; break;
-+		case V4L2_PIX_FMT_VP9_FRAME:    descr = "VP9 Frame"; break;
- 		case V4L2_PIX_FMT_HEVC:		descr = "HEVC"; break; /* aka H.265 */
- 		case V4L2_PIX_FMT_HEVC_SLICE:	descr = "HEVC Parsed Slice Data"; break;
- 		case V4L2_PIX_FMT_FWHT:		descr = "FWHT"; break; /* used in vicodec */
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index 575b59fbac77..3ea4386ebd91 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -50,6 +50,8 @@ struct video_device;
-  * @p_h264_decode_params:	Pointer to a struct v4l2_ctrl_h264_decode_params.
-  * @p_h264_pred_weights:	Pointer to a struct v4l2_ctrl_h264_pred_weights.
-  * @p_vp8_frame:		Pointer to a VP8 frame params structure.
-+ * @p_vp9_compressed_hdr_probs:	Pointer to a VP9 frame compressed header probs structure.
-+ * @p_vp9_frame:		Pointer to a VP9 frame params structure.
-  * @p_hevc_sps:			Pointer to an HEVC sequence parameter set structure.
-  * @p_hevc_pps:			Pointer to an HEVC picture parameter set structure.
-  * @p_hevc_slice_params:	Pointer to an HEVC slice parameters structure.
-@@ -80,6 +82,8 @@ union v4l2_ctrl_ptr {
- 	struct v4l2_ctrl_hevc_sps *p_hevc_sps;
- 	struct v4l2_ctrl_hevc_pps *p_hevc_pps;
- 	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
-+	struct v4l2_ctrl_vp9_compressed_hdr_probs *p_vp9_compressed_hdr_probs;
-+	struct v4l2_ctrl_vp9_frame *p_vp9_frame;
- 	struct v4l2_ctrl_hdr10_cll_info *p_hdr10_cll;
- 	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
- 	struct v4l2_area *p_area;
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 5532b5f68493..8f8c3c1ad885 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -2010,6 +2010,439 @@ struct v4l2_ctrl_hdr10_mastering_display {
- 	__u32 min_display_mastering_luminance;
++	/* Prepare probs. */
++	init_probs(ctx, &run);
++
++	/* Configure hardware registers. */
++	config_registers(ctx, &run);
++
++	rkvdec_run_postamble(ctx, &run.base);
++
++	schedule_delayed_work(&rkvdec->watchdog_work, msecs_to_jiffies(2000));
++
++	writel(1, rkvdec->regs + RKVDEC_REG_PREF_LUMA_CACHE_COMMAND);
++	writel(1, rkvdec->regs + RKVDEC_REG_PREF_CHR_CACHE_COMMAND);
++
++	writel(0xe, rkvdec->regs + RKVDEC_REG_STRMD_ERR_EN);
++	/* Start decoding! */
++	writel(RKVDEC_INTERRUPT_DEC_E | RKVDEC_CONFIG_DEC_CLK_GATE_E |
++	       RKVDEC_TIMEOUT_E | RKVDEC_BUF_EMPTY_E,
++	       rkvdec->regs + RKVDEC_REG_INTERRUPT);
++
++	return 0;
++}
++
++#define copy_tx_and_skip(p1, p2)				\
++do {								\
++	memcpy((p1)->tx8, (p2)->tx8, sizeof((p1)->tx8));	\
++	memcpy((p1)->tx16, (p2)->tx16, sizeof((p1)->tx16));	\
++	memcpy((p1)->tx32, (p2)->tx32, sizeof((p1)->tx32));	\
++	memcpy((p1)->skip, (p2)->skip, sizeof((p1)->skip));	\
++} while (0)
++
++static void rkvdec_vp9_done(struct rkvdec_ctx *ctx,
++			    struct vb2_v4l2_buffer *src_buf,
++			    struct vb2_v4l2_buffer *dst_buf,
++			    enum vb2_buffer_state result)
++{
++	struct rkvdec_vp9_ctx *vp9_ctx = ctx->priv;
++	unsigned int fctx_idx;
++
++	/* v4l2-specific stuff */
++	if (result == VB2_BUF_STATE_ERROR)
++		goto out_update_last;
++
++	/*
++	 * vp9 stuff
++	 *
++	 * 6.1.2 refresh_probs()
++	 *
++	 * In the spec a complementary condition goes last in 6.1.2 refresh_probs(),
++	 * but it makes no sense to perform all the activities from the first "if"
++	 * there if we actually are not refreshing the frame context. On top of that,
++	 * because of 6.2 uncompressed_header() whenever error_resilient_mode == 1,
++	 * refresh_frame_context == 0. Consequently, if we don't jump to out_update_last
++	 * it means error_resilient_mode must be 0.
++	 */
++	if (!(vp9_ctx->cur.flags & V4L2_VP9_FRAME_FLAG_REFRESH_FRAME_CTX))
++		goto out_update_last;
++
++	fctx_idx = vp9_ctx->cur.frame_context_idx;
++
++	if (!(vp9_ctx->cur.flags & V4L2_VP9_FRAME_FLAG_PARALLEL_DEC_MODE)) {
++		/* error_resilient_mode == 0 && frame_parallel_decoding_mode == 0 */
++		struct v4l2_vp9_frame_context *probs = &vp9_ctx->probability_tables;
++		bool frame_is_intra = vp9_ctx->cur.flags &
++		    (V4L2_VP9_FRAME_FLAG_KEY_FRAME | V4L2_VP9_FRAME_FLAG_INTRA_ONLY);
++		struct tx_and_skip {
++			u8 tx8[2][1];
++			u8 tx16[2][2];
++			u8 tx32[2][3];
++			u8 skip[3];
++		} _tx_skip, *tx_skip = &_tx_skip;
++		struct v4l2_vp9_frame_symbol_counts *counts;
++
++		/* buffer the forward-updated TX and skip probs */
++		if (frame_is_intra)
++			copy_tx_and_skip(tx_skip, probs);
++
++		/* 6.1.2 refresh_probs(): load_probs() and load_probs2() */
++		*probs = vp9_ctx->frame_context[fctx_idx];
++
++		/* if FrameIsIntra then undo the effect of load_probs2() */
++		if (frame_is_intra)
++			copy_tx_and_skip(probs, tx_skip);
++
++		counts = frame_is_intra ? &vp9_ctx->intra_cnts : &vp9_ctx->inter_cnts;
++		v4l2_vp9_adapt_coef_probs(probs, counts,
++					  !vp9_ctx->last.valid ||
++					  vp9_ctx->last.flags & V4L2_VP9_FRAME_FLAG_KEY_FRAME,
++					  frame_is_intra);
++		if (!frame_is_intra) {
++			const struct rkvdec_vp9_inter_frame_symbol_counts *inter_cnts;
++			u32 classes[2][11];
++			int i;
++
++			inter_cnts = vp9_ctx->count_tbl.cpu;
++			for (i = 0; i < ARRAY_SIZE(classes); ++i)
++				memcpy(classes[i], inter_cnts->classes[i], sizeof(classes[0]));
++			counts->classes = &classes;
++
++			/* load_probs2() already done */
++			v4l2_vp9_adapt_noncoef_probs(&vp9_ctx->probability_tables, counts,
++						     vp9_ctx->cur.reference_mode,
++						     vp9_ctx->cur.interpolation_filter,
++						     vp9_ctx->cur.tx_mode, vp9_ctx->cur.flags);
++		}
++	}
++
++	/* 6.1.2 refresh_probs(): save_probs(fctx_idx) */
++	vp9_ctx->frame_context[fctx_idx] = vp9_ctx->probability_tables;
++
++out_update_last:
++	update_ctx_last_info(vp9_ctx);
++}
++
++static void rkvdec_init_v4l2_vp9_count_tbl(struct rkvdec_ctx *ctx)
++{
++	struct rkvdec_vp9_ctx *vp9_ctx = ctx->priv;
++	struct rkvdec_vp9_intra_frame_symbol_counts *intra_cnts = vp9_ctx->count_tbl.cpu;
++	struct rkvdec_vp9_inter_frame_symbol_counts *inter_cnts = vp9_ctx->count_tbl.cpu;
++	int i, j, k, l, m;
++
++	vp9_ctx->inter_cnts.partition = &inter_cnts->partition;
++	vp9_ctx->inter_cnts.skip = &inter_cnts->skip;
++	vp9_ctx->inter_cnts.intra_inter = &inter_cnts->inter;
++	vp9_ctx->inter_cnts.tx32p = &inter_cnts->tx32p;
++	vp9_ctx->inter_cnts.tx16p = &inter_cnts->tx16p;
++	vp9_ctx->inter_cnts.tx8p = &inter_cnts->tx8p;
++
++	vp9_ctx->intra_cnts.partition = (u32 (*)[16][4])(&intra_cnts->partition);
++	vp9_ctx->intra_cnts.skip = &intra_cnts->skip;
++	vp9_ctx->intra_cnts.intra_inter = &intra_cnts->intra;
++	vp9_ctx->intra_cnts.tx32p = &intra_cnts->tx32p;
++	vp9_ctx->intra_cnts.tx16p = &intra_cnts->tx16p;
++	vp9_ctx->intra_cnts.tx8p = &intra_cnts->tx8p;
++
++	vp9_ctx->inter_cnts.y_mode = &inter_cnts->y_mode;
++	vp9_ctx->inter_cnts.uv_mode = &inter_cnts->uv_mode;
++	vp9_ctx->inter_cnts.comp = &inter_cnts->comp;
++	vp9_ctx->inter_cnts.comp_ref = &inter_cnts->comp_ref;
++	vp9_ctx->inter_cnts.single_ref = &inter_cnts->single_ref;
++	vp9_ctx->inter_cnts.mv_mode = &inter_cnts->mv_mode;
++	vp9_ctx->inter_cnts.filter = &inter_cnts->filter;
++	vp9_ctx->inter_cnts.mv_joint = &inter_cnts->mv_joint;
++	vp9_ctx->inter_cnts.sign = &inter_cnts->sign;
++	/*
++	 * rk hardware actually uses "u32 classes[2][11 + 1];"
++	 * instead of "u32 classes[2][11];", so this must be explicitly
++	 * copied into vp9_ctx->classes when passing the data to the
++	 * vp9 library function
++	 */
++	vp9_ctx->inter_cnts.class0 = &inter_cnts->class0;
++	vp9_ctx->inter_cnts.bits = &inter_cnts->bits;
++	vp9_ctx->inter_cnts.class0_fp = &inter_cnts->class0_fp;
++	vp9_ctx->inter_cnts.fp = &inter_cnts->fp;
++	vp9_ctx->inter_cnts.class0_hp = &inter_cnts->class0_hp;
++	vp9_ctx->inter_cnts.hp = &inter_cnts->hp;
++
++#define INNERMOST_LOOP \
++	do {										\
++		for (m = 0; m < ARRAY_SIZE(vp9_ctx->inter_cnts.coeff[0][0][0][0]); ++m) {\
++			vp9_ctx->inter_cnts.coeff[i][j][k][l][m] =			\
++				&inter_cnts->ref_cnt[k][i][j][l][m].coeff;		\
++			vp9_ctx->inter_cnts.eob[i][j][k][l][m][0] =			\
++				&inter_cnts->ref_cnt[k][i][j][l][m].eob[0];		\
++			vp9_ctx->inter_cnts.eob[i][j][k][l][m][1] =			\
++				&inter_cnts->ref_cnt[k][i][j][l][m].eob[1];		\
++											\
++			vp9_ctx->intra_cnts.coeff[i][j][k][l][m] =			\
++				&intra_cnts->ref_cnt[k][i][j][l][m].coeff;		\
++			vp9_ctx->intra_cnts.eob[i][j][k][l][m][0] =			\
++				&intra_cnts->ref_cnt[k][i][j][l][m].eob[0];		\
++			vp9_ctx->intra_cnts.eob[i][j][k][l][m][1] =			\
++				&intra_cnts->ref_cnt[k][i][j][l][m].eob[1];		\
++		}									\
++	} while (0)
++
++	for (i = 0; i < ARRAY_SIZE(vp9_ctx->inter_cnts.coeff); ++i)
++		for (j = 0; j < ARRAY_SIZE(vp9_ctx->inter_cnts.coeff[0]); ++j)
++			for (k = 0; k < ARRAY_SIZE(vp9_ctx->inter_cnts.coeff[0][0]); ++k)
++				for (l = 0; l < ARRAY_SIZE(vp9_ctx->inter_cnts.coeff[0][0][0]); ++l)
++					INNERMOST_LOOP;
++#undef INNERMOST_LOOP
++}
++
++static int rkvdec_vp9_start(struct rkvdec_ctx *ctx)
++{
++	struct rkvdec_dev *rkvdec = ctx->dev;
++	struct rkvdec_vp9_priv_tbl *priv_tbl;
++	struct rkvdec_vp9_ctx *vp9_ctx;
++	unsigned char *count_tbl;
++	int ret;
++
++	vp9_ctx = kzalloc(sizeof(*vp9_ctx), GFP_KERNEL);
++	if (!vp9_ctx)
++		return -ENOMEM;
++
++	ctx->priv = vp9_ctx;
++
++	priv_tbl = dma_alloc_coherent(rkvdec->dev, sizeof(*priv_tbl),
++				      &vp9_ctx->priv_tbl.dma, GFP_KERNEL);
++	if (!priv_tbl) {
++		ret = -ENOMEM;
++		goto err_free_ctx;
++	}
++
++	vp9_ctx->priv_tbl.size = sizeof(*priv_tbl);
++	vp9_ctx->priv_tbl.cpu = priv_tbl;
++	memset(priv_tbl, 0, sizeof(*priv_tbl));
++
++	count_tbl = dma_alloc_coherent(rkvdec->dev, RKVDEC_VP9_COUNT_SIZE,
++				       &vp9_ctx->count_tbl.dma, GFP_KERNEL);
++	if (!count_tbl) {
++		ret = -ENOMEM;
++		goto err_free_priv_tbl;
++	}
++
++	vp9_ctx->count_tbl.size = RKVDEC_VP9_COUNT_SIZE;
++	vp9_ctx->count_tbl.cpu = count_tbl;
++	memset(count_tbl, 0, sizeof(*count_tbl));
++	rkvdec_init_v4l2_vp9_count_tbl(ctx);
++
++	return 0;
++
++err_free_priv_tbl:
++	dma_free_coherent(rkvdec->dev, vp9_ctx->priv_tbl.size,
++			  vp9_ctx->priv_tbl.cpu, vp9_ctx->priv_tbl.dma);
++
++err_free_ctx:
++	kfree(vp9_ctx);
++	return ret;
++}
++
++static void rkvdec_vp9_stop(struct rkvdec_ctx *ctx)
++{
++	struct rkvdec_vp9_ctx *vp9_ctx = ctx->priv;
++	struct rkvdec_dev *rkvdec = ctx->dev;
++
++	dma_free_coherent(rkvdec->dev, vp9_ctx->count_tbl.size,
++			  vp9_ctx->count_tbl.cpu, vp9_ctx->count_tbl.dma);
++	dma_free_coherent(rkvdec->dev, vp9_ctx->priv_tbl.size,
++			  vp9_ctx->priv_tbl.cpu, vp9_ctx->priv_tbl.dma);
++	kfree(vp9_ctx);
++}
++
++static int rkvdec_vp9_adjust_fmt(struct rkvdec_ctx *ctx,
++				 struct v4l2_format *f)
++{
++	struct v4l2_pix_format_mplane *fmt = &f->fmt.pix_mp;
++
++	fmt->num_planes = 1;
++	if (!fmt->plane_fmt[0].sizeimage)
++		fmt->plane_fmt[0].sizeimage = fmt->width * fmt->height * 2;
++	return 0;
++}
++
++const struct rkvdec_coded_fmt_ops rkvdec_vp9_fmt_ops = {
++	.adjust_fmt = rkvdec_vp9_adjust_fmt,
++	.start = rkvdec_vp9_start,
++	.stop = rkvdec_vp9_stop,
++	.run = rkvdec_vp9_run,
++	.done = rkvdec_vp9_done,
++};
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index 7131156c1f2c..9553d66e6325 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -99,10 +99,30 @@ static const struct rkvdec_ctrls rkvdec_h264_ctrls = {
+ 	.num_ctrls = ARRAY_SIZE(rkvdec_h264_ctrl_descs),
  };
  
-+/* Stateless VP9 controls */
-+
-+/**
-+ * enum v4l2_vp9_loop_filter_flags - VP9 loop filter flags
-+ *
-+ * @V4L2_VP9_LOOP_FILTER_FLAG_DELTA_ENABLED: the filter level depends on
-+ *	the mode and reference frame used to predict a block
-+ * @V4L2_VP9_LOOP_FILTER_FLAG_DELTA_UPDATE: the bitstream contains additional
-+ *	syntax elements that specify which mode and reference frame deltas are to be updated
-+ *
-+ * Those are the flags that may be passed to &v4l2_vp9_loop_filter.flags. See
-+ * section '7.2.8 Loop filter semantics' of the VP9 specification for more
-+ * details.
-+ */
-+enum v4l2_vp9_loop_filter_flags {
-+	V4L2_VP9_LOOP_FILTER_FLAG_DELTA_ENABLED = 1 << 0,
-+	V4L2_VP9_LOOP_FILTER_FLAG_DELTA_UPDATE = 1 << 1,
-+};
-+
-+/**
-+ * struct v4l2_vp9_loop_filter - VP9 loop filter parameters
-+ *
-+ * @ref_deltas: contains the adjustment needed for the filter level based on the chosen
-+ *	reference frame. If this syntax element is not present in the bitstream, users
-+ *	should pass its last value.
-+ * @mode_deltas: contains the adjustment needed for the filter level based on the chosen mode.
-+ *	If this syntax element is not present in the bitstream, users
-+ *	should pass its last value.
-+ * @level: indicates the loop filter strength
-+ * @sharpness: indicates the sharpness level
-+ * @flags: combination of V4L2_VP9_LOOP_FILTER_FLAG_* flags
-+ * @reserved: padding field. Should be zeroed by applications.
-+ *
-+ * This structure contains all loop filter related parameters. See sections
-+ * '7.2.8 Loop filter semantics' of the VP9 specification for more details.
-+ */
-+struct v4l2_vp9_loop_filter {
-+	__s8 ref_deltas[4];
-+	__s8 mode_deltas[2];
-+	__u8 level;
-+	__u8 sharpness;
-+	__u8 flags;
-+	__u8 reserved[7];
-+};
-+
-+/**
-+ * struct v4l2_vp9_quantization - VP9 quantization parameters
-+ *
-+ * @base_q_idx: indicates the base frame qindex
-+ * @delta_q_y_dc: indicates the Y DC quantizer relative to base_q_idx
-+ * @delta_q_uv_dc: indicates the UV DC quantizer relative to base_q_idx
-+ * @delta_q_uv_ac: indicates the UV AC quantizer relative to base_q_idx
-+ * @reserved: padding field. Should be zeroed by applications.
-+ *
-+ * Encodes the quantization parameters. See section '7.2.9 Quantization params
-+ * syntax' of the VP9 specification for more details.
-+ */
-+struct v4l2_vp9_quantization {
-+	__u8 base_q_idx;
-+	__s8 delta_q_y_dc;
-+	__s8 delta_q_uv_dc;
-+	__s8 delta_q_uv_ac;
-+	__u8 reserved[4];
-+};
-+
-+/**
-+ * enum v4l2_vp9_segmentation_flags - VP9 segmentation flags
-+ *
-+ * @V4L2_VP9_SEGMENTATION_FLAG_ENABLED: indicates that this frame makes use of
-+ *	the segmentation tool
-+ * @V4L2_VP9_SEGMENTATION_FLAG_UPDATE_MAP: indicates that the segmentation map
-+ *	should be updated during the decoding of this frame
-+ * @V4L2_VP9_SEGMENTATION_FLAG_TEMPORAL_UPDATE: indicates that the updates to
-+ *	the segmentation map are coded relative to the existing segmentation map
-+ * @V4L2_VP9_SEGMENTATION_FLAG_UPDATE_DATA: indicates that new parameters are
-+ *	about to be specified for each segment
-+ * @V4L2_VP9_SEGMENTATION_FLAG_ABS_OR_DELTA_UPDATE: indicates that the
-+ *	segmentation parameters represent the actual values to be used
-+ *
-+ * Those are the flags that may be passed to &v4l2_vp9_segmentation.flags. See
-+ * section '7.2.10 Segmentation params syntax' of the VP9 specification for
-+ * more details.
-+ */
-+enum v4l2_vp9_segmentation_flags {
-+	V4L2_VP9_SEGMENTATION_FLAG_ENABLED = 1 << 0,
-+	V4L2_VP9_SEGMENTATION_FLAG_UPDATE_MAP = 1 << 1,
-+	V4L2_VP9_SEGMENTATION_FLAG_TEMPORAL_UPDATE = 1 << 2,
-+	V4L2_VP9_SEGMENTATION_FLAG_UPDATE_DATA = 1 << 3,
-+	V4L2_VP9_SEGMENTATION_FLAG_ABS_OR_DELTA_UPDATE = 1 << 4,
-+};
-+
-+#define V4L2_VP9_SEGMENT_FEATURE_ENABLED(id)	(1 << (id))
-+#define V4L2_VP9_SEGMENT_FEATURE_ENABLED_MASK	0xf
-+
-+/**
-+ * enum v4l2_vp9_segment_feature - VP9 segment feature IDs
-+ *
-+ * @V4L2_VP9_SEG_LVL_ALT_Q: quantizer segment feature
-+ * @V4L2_VP9_SEG_LVL_ALT_L: loop filter segment feature
-+ * @V4L2_VP9_SEG_LVL_REF_FRAME reference frame segment feature
-+ * @V4L2_VP9_SEG_LVL_SKIP: skip segment feature
-+ * @V4L2_VP9_SEG_LVV_MAX: number of segment features
-+ *
-+ * Segment feature IDs. See section '7.2.10 Segmentation params syntax' of the
-+ * VP9 specification for more details.
-+ */
-+enum v4l2_vp9_segment_feature {
-+	V4L2_VP9_SEG_LVL_ALT_Q,
-+	V4L2_VP9_SEG_LVL_ALT_L,
-+	V4L2_VP9_SEG_LVL_REF_FRAME,
-+	V4L2_VP9_SEG_LVL_SKIP,
-+	V4L2_VP9_SEG_LVL_MAX,
-+};
-+
-+/**
-+ * struct v4l2_vp9_segmentation - VP9 segmentation parameters
-+ *
-+ * @feature_data: data attached to each feature. Data entry is only valid if the feature is enabled
-+ * @feature_enabled: bitmask defining which features are enabled in each segment
-+ * @tree_probs: specifies the probability values to be used when
-+ *	decoding a Segment-ID. See '5.15. Segmentation map' section of the VP9 specification
-+ *	for more details.
-+ * @pred_probs: specifies the probability values to be used when decoding a
-+ *	Predicted-Segment-ID. See '6.4.14. Get segment id syntax' section of :ref:`vp9`
-+ *	for more details.
-+ * @flags: combination of V4L2_VP9_SEGMENTATION_FLAG_* flags
-+ * @reserved: padding field. Should be zeroed by applications.
-+ *
-+ * Encodes the quantization parameters. See section '7.2.10 Segmentation params syntax' of
-+ * the VP9 specification for more details.
-+ */
-+struct v4l2_vp9_segmentation {
-+	__s16 feature_data[8][4];
-+	__u8 feature_enabled[8];
-+	__u8 tree_probs[7];
-+	__u8 pred_probs[3];
-+	__u8 flags;
-+	__u8 reserved[5];
-+};
-+
-+/**
-+ * enum v4l2_vp9_intra_prediction_mode - VP9 Intra prediction modes
-+ *
-+ * @V4L2_VP9_INTRA_PRED_MODE_DC_PRED: DC intra prediction
-+ * @V4L2_VP9_INTRA_PRED_MODE_V_PRED: vertical intra prediction
-+ * @V4L2_VP9_INTRA_PRED_MODE_H_PRED: horizontal intra prediction
-+ * @V4L2_VP9_INTRA_PRED_MODE_D45_PRED: D45 intra prediction
-+ * @V4L2_VP9_INTRA_PRED_MODE_D135_PRED: D135 intra prediction
-+ * @V4L2_VP9_INTRA_PRED_MODE_D117_PRED: D117 intra prediction
-+ * @V4L2_VP9_INTRA_PRED_MODE_D153_PRED: D153 intra prediction
-+ * @V4L2_VP9_INTRA_PRED_MODE_D207_PRED: D207 intra prediction
-+ * @V4L2_VP9_INTRA_PRED_MODE_D63_PRED: D63 intra prediction
-+ * @V4L2_VP9_INTRA_PRED_MODE_TM_PRED: True Motion intra prediction
-+ *
-+ * See section '7.4.5 Intra frame mode info semantics' for more details.
-+ */
-+enum v4l2_vp9_intra_prediction_mode {
-+	V4L2_VP9_INTRA_PRED_MODE_DC_PRED,
-+	V4L2_VP9_INTRA_PRED_MODE_V_PRED,
-+	V4L2_VP9_INTRA_PRED_MODE_H_PRED,
-+	V4L2_VP9_INTRA_PRED_MODE_D45_PRED,
-+	V4L2_VP9_INTRA_PRED_MODE_D135_PRED,
-+	V4L2_VP9_INTRA_PRED_MODE_D117_PRED,
-+	V4L2_VP9_INTRA_PRED_MODE_D153_PRED,
-+	V4L2_VP9_INTRA_PRED_MODE_D207_PRED,
-+	V4L2_VP9_INTRA_PRED_MODE_D63_PRED,
-+	V4L2_VP9_INTRA_PRED_MODE_TM_PRED,
-+};
-+
-+/**
-+ * enum v4l2_vp9_reset_frame_context - Valid values for
-+ *			&v4l2_ctrl_vp9_frame->reset_frame_context
-+ *
-+ * @V4L2_VP9_RESET_FRAME_CTX_NONE: don't reset any frame context
-+ * @V4L2_VP9_RESET_FRAME_CTX_SPEC: reset the frame context pointed by
-+ *	&v4l2_ctrl_vp9_frame.frame_context_idx
-+ * @V4L2_VP9_RESET_FRAME_CTX_ALL: reset all frame contexts
-+ *
-+ * See section '7.2 Uncompressed header semantics' of the VP9 specification for more details.
-+ */
-+enum v4l2_vp9_reset_frame_context {
-+	V4L2_VP9_RESET_FRAME_CTX_NONE,
-+	V4L2_VP9_RESET_FRAME_CTX_SPEC,
-+	V4L2_VP9_RESET_FRAME_CTX_ALL,
-+};
-+
-+/**
-+ * enum v4l2_vp9_interpolation_filter - VP9 interpolation filter types
-+ *
-+ * @V4L2_VP9_INTERP_FILTER_EIGHTTAP: eight tap filter
-+ * @V4L2_VP9_INTERP_FILTER_EIGHTTAP_SMOOTH: eight tap smooth filter
-+ * @V4L2_VP9_INTERP_FILTER_EIGHTTAP_SHARP: eight tap sharp filter
-+ * @V4L2_VP9_INTERP_FILTER_BILINEAR: bilinear filter
-+ * @V4L2_VP9_INTERP_FILTER_SWITCHABLE: filter selection is signaled at the block level
-+ *
-+ * See section '7.2.7 Interpolation filter semantics' of the VP9 specification
-+ * for more details.
-+ */
-+enum v4l2_vp9_interpolation_filter {
-+	V4L2_VP9_INTERP_FILTER_EIGHTTAP,
-+	V4L2_VP9_INTERP_FILTER_EIGHTTAP_SMOOTH,
-+	V4L2_VP9_INTERP_FILTER_EIGHTTAP_SHARP,
-+	V4L2_VP9_INTERP_FILTER_BILINEAR,
-+	V4L2_VP9_INTERP_FILTER_SWITCHABLE,
-+};
-+
-+/**
-+ * enum v4l2_vp9_reference_mode - VP9 reference modes
-+ *
-+ * @V4L2_VP9_REFERENCE_MODE_SINGLE_REFERENCE: indicates that all the inter blocks use only a
-+ *	single reference frame to generate motion compensated prediction
-+ * @V4L2_VP9_REFERENCE_MODE_COMPOUND_REFERENCE: requires all the inter blocks to use compound mode.
-+ *	Single reference frame prediction is not allowed
-+ * @V4L2_VP9_REFERENCE_MODE_SELECT: allows each individual inter block to select between single
-+ *	and compound prediction modes
-+ *
-+ * See section '7.3.6 Frame reference mode semantics' of the VP9 specification
-+ * for more details.
-+ */
-+enum v4l2_vp9_reference_mode {
-+	V4L2_VP9_REFERENCE_MODE_SINGLE_REFERENCE,
-+	V4L2_VP9_REFERENCE_MODE_COMPOUND_REFERENCE,
-+	V4L2_VP9_REFERENCE_MODE_SELECT,
-+};
-+
-+/**
-+ * enum v4l2_vp9_tx_mode - VP9 TX modes
-+ *
-+ * @V4L2_VP9_TX_MODE_ONLY_4X4: transform size is 4x4
-+ * @V4L2_VP9_TX_MODE_ALLOW_8X8: transform size can be up to 8x8
-+ * @V4L2_VP9_TX_MODE_ALLOW_16X16: transform size can be up to 16x16
-+ * @V4L2_VP9_TX_MODE_ALLOW_32X32: transform size can be up to 32x32
-+ * @V4L2_VP9_TX_MODE_SELECT: bitstream contains the transform size for each block
-+ *
-+ * See section '7.3.1 Tx mode semantics' of the VP9 specification for more details.
-+ */
-+enum v4l2_vp9_tx_mode {
-+	V4L2_VP9_TX_MODE_ONLY_4X4,
-+	V4L2_VP9_TX_MODE_ALLOW_8X8,
-+	V4L2_VP9_TX_MODE_ALLOW_16X16,
-+	V4L2_VP9_TX_MODE_ALLOW_32X32,
-+	V4L2_VP9_TX_MODE_SELECT,
-+};
-+
-+/**
-+ * enum v4l2_vp9_frame_flags - VP9 frame flags
-+ * @V4L2_VP9_FRAME_FLAG_KEY_FRAME: the frame is a key frame
-+ * @V4L2_VP9_FRAME_FLAG_SHOW_FRAME: the frame should be displayed
-+ * @V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT: the decoding should be error resilient
-+ * @V4L2_VP9_FRAME_FLAG_INTRA_ONLY: the frame does not reference other frames
-+ * @V4L2_VP9_FRAME_FLAG_ALLOW_HIGH_PREC_MV: the frame can use high precision motion vectors
-+ * @V4L2_VP9_FRAME_FLAG_REFRESH_FRAME_CTX: frame context should be updated after decoding
-+ * @V4L2_VP9_FRAME_FLAG_PARALLEL_DEC_MODE: parallel decoding is used
-+ * @V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING: vertical subsampling is enabled
-+ * @V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING: horizontal subsampling is enabled
-+ * @V4L2_VP9_FRAME_FLAG_COLOR_RANGE_FULL_SWING: full UV range is used
-+ *
-+ * Check the VP9 specification for more details.
-+ */
-+enum v4l2_vp9_frame_flags {
-+	V4L2_VP9_FRAME_FLAG_KEY_FRAME = 1 << 0,
-+	V4L2_VP9_FRAME_FLAG_SHOW_FRAME = 1 << 1,
-+	V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT = 1 << 2,
-+	V4L2_VP9_FRAME_FLAG_INTRA_ONLY = 1 << 3,
-+	V4L2_VP9_FRAME_FLAG_ALLOW_HIGH_PREC_MV = 1 << 4,
-+	V4L2_VP9_FRAME_FLAG_REFRESH_FRAME_CTX = 1 << 5,
-+	V4L2_VP9_FRAME_FLAG_PARALLEL_DEC_MODE = 1 << 6,
-+	V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING = 1 << 7,
-+	V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING = 1 << 8,
-+	V4L2_VP9_FRAME_FLAG_COLOR_RANGE_FULL_SWING = 1 << 9,
-+};
-+
-+/**
-+ * enum v4l2_vp9_ref_frame_sign_bias - Whether ref_frame_sign_bias is 1 for a given reference frame
-+ * @V4L2_VP9_SIGN_BIAS_LAST: ref_frame_sign_bias is 1 for the "last" reference frame
-+ * @V4L2_VP9_SIGN_BIAS_GOLDEN: ref_frame_sign_bias is 1 for the "golden" reference frame
-+ * @V4L2_VP9_SIGN_BIAS_ALT: ref_frame_sign_bias is 1 for the "alt" reference frame
-+ */
-+
-+enum v4l2_vp9_ref_frame_sign_bias {
-+	V4L2_VP9_SIGN_BIAS_LAST,
-+	V4L2_VP9_SIGN_BIAS_GOLDEN,
-+	V4L2_VP9_SIGN_BIAS_ALT,
-+};
-+
-+#define V4L2_VP9_PROFILE_MAX		3
-+
-+#define V4L2_CID_STATELESS_VP9_FRAME	(V4L2_CID_CODEC_STATELESS_BASE + 300)
-+/**
-+ * struct v4l2_ctrl_vp9_frame - VP9 frame decoding control
-+ *
-+ * @lf: loop filter parameters. See &v4l2_vp9_loop_filter for more details
-+ * @quant: quantization parameters. See &v4l2_vp9_quantization for more details
-+ * @seg: segmentation parameters. See &v4l2_vp9_segmentation for more details
-+ * @flags: combination of V4L2_VP9_FRAME_FLAG_* flags
-+ * @compressed_header_size: compressed header size in bytes
-+ * @uncompressed_header_size: uncompressed header size in bytes
-+ * @frame_width_minus_1: add 1 to it and you'll get the frame width expressed in pixels
-+ * @frame_height_minus_1: add 1 to it and you'll get the frame height expressed in pixels
-+ * @render_width_minus_1: add 1 to it and you'll get the expected render width expressed in
-+ *	pixels. This is not used during the decoding process but might be used by HW scalers
-+ *	to prepare a frame that's ready for scanout
-+ * @render_height_minus_1: add 1 to it and you'll get the expected render height expressed in
-+ *	pixels. This is not used during the decoding process but might be used by HW scalers
-+ *	to prepare a frame that's ready for scanout
-+ * @last_frame_ts: "last" reference buffer timestamp.
-+ * The timestamp refers to the timestamp field in struct v4l2_buffer.
-+ * Use v4l2_timeval_to_ns() to convert the struct timeval to a __u64.
-+ * @golden_frame_ts: "golden" reference buffer timestamp.
-+ * The timestamp refers to the timestamp field in struct v4l2_buffer.
-+ * Use v4l2_timeval_to_ns() to convert the struct timeval to a __u64.
-+ * @alt_frame_ts: "alt" reference buffer timestamp.
-+ * The timestamp refers to the timestamp field in struct v4l2_buffer.
-+ * Use v4l2_timeval_to_ns() to convert the struct timeval to a __u64.
-+ * @ref_frame_sign_bias: a bitfield specifying whether the sign bias is set for a given
-+ *	reference frame. See &v4l2_vp9_ref_frame_sign_bias for more details.
-+ * @reset_frame_context: specifies whether the frame context should be reset to default values.
-+ *	See &v4l2_vp9_reset_frame_context for more details
-+ * @frame_context_idx: frame context that should be used/updated
-+ * @profile: VP9 profile. Can be 0, 1, 2 or 3
-+ * @bit_depth: bits per components. Can be 8, 10 or 12. Note that not all profiles support
-+ *	10 and/or 12 bits depths
-+ * @interpolation_filter: specifies the filter selection used for performing inter prediction.
-+ *	See &v4l2_vp9_interpolation_filter for more details
-+ * @tile_cols_log2: specifies the base 2 logarithm of the width of each tile (where the width
-+ *	is measured in units of 8x8 blocks). Shall be less than or equal to 6
-+ * @tile_rows_log2: specifies the base 2 logarithm of the height of each tile (where the height
-+ *	is measured in units of 8x8 blocks)
-+ * @tx_mode: specifies the TX mode. See &v4l2_vp9_tx_mode for more details
-+ * @reference_mode: specifies the type of inter prediction to be used. See
-+ *	&v4l2_vp9_reference_mode for more details
-+ * @reserved: padding field. Should be zeroed by applications.
-+ */
-+struct v4l2_ctrl_vp9_frame {
-+	struct v4l2_vp9_loop_filter lf;
-+	struct v4l2_vp9_quantization quant;
-+	struct v4l2_vp9_segmentation seg;
-+	__u32 flags;
-+	__u16 compressed_header_size;
-+	__u16 uncompressed_header_size;
-+	__u16 frame_width_minus_1;
-+	__u16 frame_height_minus_1;
-+	__u16 render_width_minus_1;
-+	__u16 render_height_minus_1;
-+	__u64 last_frame_ts;
-+	__u64 golden_frame_ts;
-+	__u64 alt_frame_ts;
-+	__u8 ref_frame_sign_bias;
-+	__u8 reset_frame_context;
-+	__u8 frame_context_idx;
-+	__u8 profile;
-+	__u8 bit_depth;
-+	__u8 interpolation_filter;
-+	__u8 tile_cols_log2;
-+	__u8 tile_rows_log2;
-+	__u8 tx_mode;
-+	__u8 reference_mode;
-+	__u8 reserved[6];
-+};
-+
-+#define V4L2_VP9_NUM_FRAME_CTX	4
-+
-+/**
-+ * struct v4l2_vp9_mv_compressed_hdr_probs - VP9 Motion vector probability updates
-+ * @joint: motion vector joint probability updates
-+ * @sign: motion vector sign probability updates
-+ * @classes: motion vector class probability updates
-+ * @class0_bit: motion vector class0 bit probability updates
-+ * @bits: motion vector bits probability updates
-+ * @class0_fr: motion vector class0 fractional bit probability updates
-+ * @fr: motion vector fractional bit probability updates
-+ * @class0_hp: motion vector class0 high precision fractional bit probability updates
-+ * @hp: motion vector high precision fractional bit probability updates
-+ *
-+ * This structure contains new values of motion vector probabilities.
-+ * A value of zero in an array element means there is no update of the relevant probability.
-+ * See `struct v4l2_vp9_prob_updates` for details.
-+ */
-+struct v4l2_vp9_mv_compressed_hdr_probs {
-+	__u8 joint[3];
-+	__u8 sign[2];
-+	__u8 classes[2][10];
-+	__u8 class0_bit[2];
-+	__u8 bits[2][10];
-+	__u8 class0_fr[2][2][3];
-+	__u8 fr[2][3];
-+	__u8 class0_hp[2];
-+	__u8 hp[2];
-+};
-+
-+#define V4L2_CID_STATELESS_VP9_COMPRESSED_HDR_PROBS	(V4L2_CID_CODEC_STATELESS_BASE + 301)
-+/**
-+ * struct v4l2_ctrl_vp9_compressed_hdr_probs - VP9 probability updates control
-+ * @tx8: TX 8x8 probability updates
-+ * @tx16: TX 16x16 probability updates
-+ * @tx32: TX 32x32 probability updates
-+ * @coef: coefficient probability updates
-+ * @skip: skip probability updates
-+ * @inter_mode: inter mode probability updates
-+ * @interp_filter: interpolation filter probability updates
-+ * @is_inter: is inter-block probability updates
-+ * @comp_mode: compound prediction mode probability updates
-+ * @single_ref: single ref probability updates
-+ * @comp_ref: compound ref probability updates
-+ * @y_mode: Y prediction mode probability updates
-+ * @uv_mode: UV prediction mode probability updates
-+ * @partition: partition probability updates
-+ * @mv: motion vector probability updates
-+ *
-+ * This structure holds the probabilities update as parsed in the compressed
-+ * header (Spec 6.3). These values represent the value of probability update after
-+ * being translated with inv_map_table[] (see 6.3.5). A value of zero in an array element
-+ * means that there is no update of the relevant probability.
-+ */
-+struct v4l2_ctrl_vp9_compressed_hdr_probs {
-+	__u8 tx8[2][1];
-+	__u8 tx16[2][2];
-+	__u8 tx32[2][3];
-+	__u8 coef[4][2][2][6][6][3];
-+	__u8 skip[3];
-+	__u8 inter_mode[7][3];
-+	__u8 interp_filter[4][2];
-+	__u8 is_inter[4];
-+	__u8 comp_mode[5];
-+	__u8 single_ref[5][2];
-+	__u8 comp_ref[5];
-+	__u8 y_mode[4][9];
-+	__u8 uv_mode[10][9];
-+	__u8 partition[16][3];
-+
-+	struct v4l2_vp9_mv_compressed_hdr_probs mv;
-+};
-+
- /* MPEG-compression definitions kept for backwards compatibility */
- #ifndef __KERNEL__
- #define V4L2_CTRL_CLASS_MPEG            V4L2_CTRL_CLASS_CODEC
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 58392dcd3bf5..4abe4362519e 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -703,6 +703,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_VP8      v4l2_fourcc('V', 'P', '8', '0') /* VP8 */
- #define V4L2_PIX_FMT_VP8_FRAME v4l2_fourcc('V', 'P', '8', 'F') /* VP8 parsed frame */
- #define V4L2_PIX_FMT_VP9      v4l2_fourcc('V', 'P', '9', '0') /* VP9 */
-+#define V4L2_PIX_FMT_VP9_FRAME v4l2_fourcc('V', 'P', '9', 'F') /* VP9 parsed frame */
- #define V4L2_PIX_FMT_HEVC     v4l2_fourcc('H', 'E', 'V', 'C') /* HEVC aka H.265 */
- #define V4L2_PIX_FMT_FWHT     v4l2_fourcc('F', 'W', 'H', 'T') /* Fast Walsh Hadamard Transform (vicodec) */
- #define V4L2_PIX_FMT_FWHT_STATELESS     v4l2_fourcc('S', 'F', 'W', 'H') /* Stateless FWHT (vicodec) */
-@@ -1755,6 +1756,8 @@ struct v4l2_ext_control {
- 		struct v4l2_ctrl_mpeg2_sequence __user *p_mpeg2_sequence;
- 		struct v4l2_ctrl_mpeg2_picture __user *p_mpeg2_picture;
- 		struct v4l2_ctrl_mpeg2_quantisation __user *p_mpeg2_quantisation;
-+		struct v4l2_ctrl_vp9_compressed_hdr_probs __user *p_vp9_compressed_hdr_probs;
-+		struct v4l2_ctrl_vp9_frame __user *p_vp9_frame;
- 		void __user *ptr;
- 	};
- } __attribute__ ((packed));
-@@ -1819,6 +1822,9 @@ enum v4l2_ctrl_type {
- 	V4L2_CTRL_TYPE_MPEG2_QUANTISATION   = 0x0250,
- 	V4L2_CTRL_TYPE_MPEG2_SEQUENCE       = 0x0251,
- 	V4L2_CTRL_TYPE_MPEG2_PICTURE        = 0x0252,
-+
-+	V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR_PROBS	= 0x0260,
-+	V4L2_CTRL_TYPE_VP9_FRAME		= 0x0261,
+-static const u32 rkvdec_h264_decoded_fmts[] = {
++static const u32 rkvdec_h264_vp9_decoded_fmts[] = {
+ 	V4L2_PIX_FMT_NV12,
  };
  
- /*  Used in the VIDIOC_QUERYCTRL ioctl for querying controls */
++static const struct rkvdec_ctrl_desc rkvdec_vp9_ctrl_descs[] = {
++	{
++		.cfg.id = V4L2_CID_STATELESS_VP9_FRAME,
++	},
++	{
++		.cfg.id = V4L2_CID_STATELESS_VP9_COMPRESSED_HDR_PROBS,
++	},
++	{
++		.cfg.id = V4L2_CID_MPEG_VIDEO_VP9_PROFILE,
++		.cfg.min = V4L2_MPEG_VIDEO_VP9_PROFILE_0,
++		.cfg.max = V4L2_MPEG_VIDEO_VP9_PROFILE_0,
++		.cfg.def = V4L2_MPEG_VIDEO_VP9_PROFILE_0,
++	},
++};
++
++static const struct rkvdec_ctrls rkvdec_vp9_ctrls = {
++	.ctrls = rkvdec_vp9_ctrl_descs,
++	.num_ctrls = ARRAY_SIZE(rkvdec_vp9_ctrl_descs),
++};
++
+ static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_H264_SLICE,
+@@ -116,8 +136,23 @@ static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
+ 		},
+ 		.ctrls = &rkvdec_h264_ctrls,
+ 		.ops = &rkvdec_h264_fmt_ops,
+-		.num_decoded_fmts = ARRAY_SIZE(rkvdec_h264_decoded_fmts),
+-		.decoded_fmts = rkvdec_h264_decoded_fmts,
++		.num_decoded_fmts = ARRAY_SIZE(rkvdec_h264_vp9_decoded_fmts),
++		.decoded_fmts = rkvdec_h264_vp9_decoded_fmts,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_VP9_FRAME,
++		.frmsize = {
++			.min_width = 64,
++			.max_width = 4096,
++			.step_width = 64,
++			.min_height = 64,
++			.max_height = 2304,
++			.step_height = 64,
++		},
++		.ctrls = &rkvdec_vp9_ctrls,
++		.ops = &rkvdec_vp9_fmt_ops,
++		.num_decoded_fmts = ARRAY_SIZE(rkvdec_h264_vp9_decoded_fmts),
++		.decoded_fmts = rkvdec_h264_vp9_decoded_fmts,
+ 	}
+ };
+ 
+@@ -319,7 +354,7 @@ static int rkvdec_s_output_fmt(struct file *file, void *priv,
+ 	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
+ 	const struct rkvdec_coded_fmt_desc *desc;
+ 	struct v4l2_format *cap_fmt;
+-	struct vb2_queue *peer_vq;
++	struct vb2_queue *peer_vq, *vq;
+ 	int ret;
+ 
+ 	/*
+@@ -331,6 +366,15 @@ static int rkvdec_s_output_fmt(struct file *file, void *priv,
+ 	if (vb2_is_busy(peer_vq))
+ 		return -EBUSY;
+ 
++	/*
++	 * Some codecs like VP9 can contain dynamic resolution changes which
++	 * are currently not supported by the V4L2 API or driver, so return
++	 * an error if userspace tries to reconfigure the output format.
++	 */
++	vq = v4l2_m2m_get_vq(m2m_ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
++	if (vb2_is_busy(vq))
++		return -EINVAL;
++
+ 	ret = rkvdec_s_fmt(file, priv, f, rkvdec_try_output_fmt);
+ 	if (ret)
+ 		return ret;
+diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
+index 52ac3874c5e5..2f4ea1786b93 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.h
++++ b/drivers/staging/media/rkvdec/rkvdec.h
+@@ -42,14 +42,18 @@ struct rkvdec_run {
+ 
+ struct rkvdec_vp9_decoded_buffer_info {
+ 	/* Info needed when the decoded frame serves as a reference frame. */
+-	u16 width;
+-	u16 height;
+-	u32 bit_depth : 4;
++	unsigned short width;
++	unsigned short height;
++	unsigned int bit_depth : 4;
+ };
+ 
+ struct rkvdec_decoded_buffer {
+ 	/* Must be the first field in this struct. */
+ 	struct v4l2_m2m_buffer base;
++
++	union {
++		struct rkvdec_vp9_decoded_buffer_info vp9;
++	};
+ };
+ 
+ static inline struct rkvdec_decoded_buffer *
+@@ -116,4 +120,6 @@ void rkvdec_run_preamble(struct rkvdec_ctx *ctx, struct rkvdec_run *run);
+ void rkvdec_run_postamble(struct rkvdec_ctx *ctx, struct rkvdec_run *run);
+ 
+ extern const struct rkvdec_coded_fmt_ops rkvdec_h264_fmt_ops;
++extern const struct rkvdec_coded_fmt_ops rkvdec_vp9_fmt_ops;
++
+ #endif /* RKVDEC_H_ */
 -- 
 2.17.1
 
