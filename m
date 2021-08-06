@@ -2,71 +2,97 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80837C4338F
-	for <linux-media@archiver.kernel.org>; Fri,  6 Aug 2021 13:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9403DC4338F
+	for <linux-media@archiver.kernel.org>; Fri,  6 Aug 2021 14:14:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5FCE660F70
-	for <linux-media@archiver.kernel.org>; Fri,  6 Aug 2021 13:55:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73C6161186
+	for <linux-media@archiver.kernel.org>; Fri,  6 Aug 2021 14:14:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234469AbhHFNzV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Aug 2021 09:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233195AbhHFNzU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Aug 2021 09:55:20 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5A8C0613CF
-        for <linux-media@vger.kernel.org>; Fri,  6 Aug 2021 06:55:05 -0700 (PDT)
+        id S237023AbhHFOOS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Aug 2021 10:14:18 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:47552 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237233AbhHFOOL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Aug 2021 10:14:11 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: daniels)
-        with ESMTPSA id 396251F44A76
-Message-ID: <08df38bda028bde4d566b89fae266d0e9f424cd6.camel@collabora.com>
-Subject: Re: [PATCH v3 3/4] media: Add NV12_4L4 tiled format
-From:   Daniel Stone <daniels@collabora.com>
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Yong Deng <yong.deng@magewell.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        kernel@collabora.com
-In-Reply-To: <20210805024752.8755-4-ezequiel@collabora.com>
-References: <20210805024752.8755-1-ezequiel@collabora.com>
-         <20210805024752.8755-4-ezequiel@collabora.com>
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id D545C1F44A85
+Message-ID: <79673df0562db410753c90f9957125f202c5a1b2.camel@collabora.com>
+Subject: Re: [PATCH] media: hantro: Fix check for single irq
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        p.zabel@pengutronix.de
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, emil.velikov@collabora.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Date:   Fri, 06 Aug 2021 11:13:46 -0300
+In-Reply-To: <8101406.vZ8PxZ7URt@jernej-laptop>
+References: <20210805190416.332563-1-jernej.skrabec@gmail.com>
+         <6761bb11f4554e9f9cbe468b5ff8f851c57515ef.camel@collabora.com>
+         <8101406.vZ8PxZ7URt@jernej-laptop>
 Organization: Collabora
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Date:   Fri, 06 Aug 2021 13:42:47 +0100
-User-Agent: Evolution 3.40.3 (by Flathub.org) 
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 2021-08-04 at 23:47 -0300, Ezequiel Garcia wrote:
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -275,6 +275,9 @@ const struct v4l2_format_info
-> *v4l2_format_info(u32 format)
->                 { .format = V4L2_PIX_FMT_YUV422P, .pixel_enc =
-> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1,
-> 1, 0 }, .hdiv = 2, .vdiv = 1 },
->                 { .format = V4L2_PIX_FMT_GREY,    .pixel_enc =
-> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0,
-> 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  
-> +               /* Tiled YUV formats */
-> +               { .format = V4L2_PIX_FMT_NV12_4L4, .pixel_enc =
-> V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2,
-> 0, 0 }, .hdiv = 2, .vdiv = 2 },
+On Fri, 2021-08-06 at 06:44 +0200, Jernej Škrabec wrote:
+> Dne petek, 06. avgust 2021 ob 00:03:36 CEST je Ezequiel Garcia napisal(a):
+> > Hi Jernej,
+> > 
+> > On Thu, 2021-08-05 at 21:04 +0200, Jernej Skrabec wrote:
+> > > Some cores use only one interrupt and in such case interrupt name in DT
+> > > is not needed. Driver supposedly accounted that, but due to the wrong
+> > > field check it never worked. Fix that.
+> > > 
+> > > Fixes: 18d6c8b7b4c9 ("media: hantro: add fallback handling for single
+> > > irq/clk") Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > > ---
+> > >  drivers/staging/media/hantro/hantro_drv.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/staging/media/hantro/hantro_drv.c
+> > > b/drivers/staging/media/hantro/hantro_drv.c index
+> > > 8a2edd67f2c6..20e508158871 100644
+> > > --- a/drivers/staging/media/hantro/hantro_drv.c
+> > > +++ b/drivers/staging/media/hantro/hantro_drv.c
+> > > @@ -919,7 +919,7 @@ static int hantro_probe(struct platform_device *pdev)
+> > >                 if (!vpu->variant->irqs[i].handler)
+> > >                         continue;
+> > >  
+> > > -               if (vpu->variant->num_clocks > 1) {
+> > > +               if (vpu->variant->num_irqs > 1) {
+> > 
+> > Oops, thanks for spotting this.
+> > 
+> > How about this instead?
+> 
+> No, original solution is more robust. With solution below, you're assuming 
+> that irq order in driver array is same as in DT. That doesn't matter if there 
+> is only one name or if names match. However, if there is a typo, either in DT 
+> node or in driver, driver will still happily assign clock based on index and 
+> that might not be correct one. Even if it works out, you can easily miss that 
+> you have a typo. Driver doesn't tell you which irq is used, if it is 
+> successfully acquired.
+> 
 
-Still no movement on modifiers, I guess ... :(
+I find it odd to iterate up to num_irqs but then
+have a case for num_irqs == 1, and call
+platform_get_irq(vpu->pdev, 0).
 
-Cheers,
-Daniel
+But OTOH, your fix is correct and it's a oneliner.
+
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+
+Thanks,
+Ezequiel
 
