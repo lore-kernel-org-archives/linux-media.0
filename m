@@ -2,100 +2,145 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14925C4320E
-	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 12:20:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF301C432BE
+	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 12:31:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBE8261019
-	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 12:20:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D49B360EFF
+	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 12:31:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239470AbhHJMUa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Aug 2021 08:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbhHJMU3 (ORCPT
+        id S240571AbhHJMb4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Aug 2021 08:31:56 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:17001 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238518AbhHJMbz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Aug 2021 08:20:29 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E669C0613D3
-        for <linux-media@vger.kernel.org>; Tue, 10 Aug 2021 05:20:02 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 6so760670wme.5
-        for <linux-media@vger.kernel.org>; Tue, 10 Aug 2021 05:20:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kynesim-co-uk.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:references:in-reply-to
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=8C61os9vOikF5WRkEQgKVhZfsvet6MRMjjcgwSxYueU=;
-        b=kw9FOf5ZHWkU8gNkImhhYYudbhOBsHcAUaJ7w91TXM9d/2ij30njFPE4PkLrTB4PRx
-         vdxGvIVPEuvMd15iBcAoB5MY8i26K4SWjvg1xZ5uChrtfaTCUzA7delUZ4R7IW81Nft9
-         ohY2GwVH6M3e2bXipojQFcvwl7G1fpqCff1pFxER2DoRoTQ0ooPWWjWqAy8XZd2rXK3d
-         MgRdIdNujgW6Eazz0sVImYr1IymXDm8D8o/0oyn7XsRvjPraWajacEzPSbp48xkbeInx
-         hlopnFEB5sDz2YMzh9HHe7mpxLTbMVxlDR08uM4U2lFUPh+gBNUct0szTSLIGOKT7ZWy
-         FeEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:references
-         :in-reply-to:user-agent:mime-version:content-transfer-encoding;
-        bh=8C61os9vOikF5WRkEQgKVhZfsvet6MRMjjcgwSxYueU=;
-        b=T/4JturR8N6L1VrsgL9kK81YwAHTrC47J7nhKg7CmH65YzZrHc6ULOB2QdY3sjYr5O
-         4//KKxaWst/DemNzxqKC0APK0IAHj9lruEjF13sr/61ZTEP6Jyl0DF57qh+F+00AW63v
-         P0RxepjW7ZtfbdM0D594p/8zDQAhbCNHeYGCLgOytBTBUm+LeQS/M2rqukMB/WP0/FEW
-         5NTGqjV3+SZ9fVBCUmtR+zA8pH255SVo1USG/pmS/7mjKQHkSjTMyTmD4vdK2AQvOoUI
-         hjNK8ulnRDEXq3/grWultzs/zjQ1SMNAcO3XlhzArY0EXMEf0xFSMAEhm6yZPtArBN43
-         TDAQ==
-X-Gm-Message-State: AOAM530mQ+MBdhoxd1ZTBv/fdSkQG5VCwC0s9HV/NcB2IoKibsl/oO4H
-        reZL/C+4MvoUbCDQz4Md/7487w==
-X-Google-Smtp-Source: ABdhPJzMsOcFoTO8QkCUTXVuEaz+Vc8WhclEot0/wMwP7lY67cQGo7dCOZFh9p+AjWsQVkgvXJlpSA==
-X-Received: by 2002:a1c:a90d:: with SMTP id s13mr12282142wme.132.1628598000649;
-        Tue, 10 Aug 2021 05:20:00 -0700 (PDT)
-Received: from CTHALPA.outer.uphall.net (cpc1-cmbg20-2-0-cust759.5-4.cable.virginm.net. [86.21.218.248])
-        by smtp.gmail.com with ESMTPSA id e3sm9513495wro.15.2021.08.10.05.19.59
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Tue, 10 Aug 2021 05:20:00 -0700 (PDT)
-From:   John Cox <jc@kynesim.co.uk>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Subject: Re: Dynamic array control support: please test!
-Date:   Tue, 10 Aug 2021 13:19:59 +0100
-Message-ID: <59r4hglra4lvi1m3o6oa9mubf41uikqc81@4ax.com>
-References: <c423e924-9380-0806-b9dd-26cb2caf9fa7@xs4all.nl>
-In-Reply-To: <c423e924-9380-0806-b9dd-26cb2caf9fa7@xs4all.nl>
-User-Agent: ForteAgent/8.00.32.1272
+        Tue, 10 Aug 2021 08:31:55 -0400
+Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GkXKN6PHnzb0VN;
+        Tue, 10 Aug 2021 20:27:52 +0800 (CST)
+Received: from [10.67.103.235] (10.67.103.235) by
+ dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Tue, 10 Aug 2021 20:31:31 +0800
+Subject: Re: [PATCH V7 9/9] PCI/P2PDMA: Add a 10-Bit Tag check in P2PDMA
+To:     Bjorn Helgaas <helgaas@kernel.org>
+References: <20210809173113.GA2166744@bjorn-Precision-5520>
+CC:     <hch@infradead.org>, <kw@linux.com>, <logang@deltatee.com>,
+        <leon@kernel.org>, <linux-pci@vger.kernel.org>,
+        <rajur@chelsio.com>, <hverkuil-cisco@xs4all.nl>,
+        <linux-media@vger.kernel.org>, <netdev@vger.kernel.org>
+From:   Dongdong Liu <liudongdong3@huawei.com>
+Message-ID: <d113a3f3-6098-314b-32d3-b944daf1186c@huawei.com>
+Date:   Tue, 10 Aug 2021 20:31:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210809173113.GA2166744@bjorn-Precision-5520>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.235]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggeme758-chm.china.huawei.com (10.3.19.104)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi
 
->Hi Ezequiel, John,
->
->After creating extensive new compliance tests for this feature I am now
->confident enough about the implementation.
->
->You can find it here:
->
->https://git.linuxtv.org/hverkuil/media_tree.git/log/?h=3Dctrl-refactor
->
->There are two items that I want to fix before I will post this:
->
->1) The new flag needs to be documented
->2) I think there are some simplifications possible w.r.t. storing the
->   size of the new array, I want to look at that a bit more.
->
->In the meantime it would be great if some testing of this series can be
->done with real drivers instead of just vivid.
 
-Have dynamic arrays got lost or have they made it in under another name?
-The ctrl split made it, but dynamic arrays less obviously.
+On 2021/8/10 1:31, Bjorn Helgaas wrote:
+> On Sat, Aug 07, 2021 at 03:11:34PM +0800, Dongdong Liu wrote:
+>>
+>> On 2021/8/6 2:12, Bjorn Helgaas wrote:
+>>> On Wed, Aug 04, 2021 at 09:47:08PM +0800, Dongdong Liu wrote:
+>>>> Add a 10-Bit Tag check in the P2PDMA code to ensure that a device with
+>>>> 10-Bit Tag Requester doesn't interact with a device that does not
+>>>> support 10-BIT Tag Completer. Before that happens, the kernel should
+>>>> emit a warning. "echo 0 > /sys/bus/pci/devices/.../10bit_tag" to
+>>>> disable 10-BIT Tag Requester for PF device.
+>>>> "echo 0 > /sys/bus/pci/devices/.../sriov_vf_10bit_tag_ctl" to disable
+>>>> 10-BIT Tag Requester for VF device.
+>>>
+>>> s/10-BIT/10-Bit/ several times.
+>> Will fix.
+>>>
+>>> Add blank lines between paragraphs.
+>> Will fix.
+>>>
+>>>> Signed-off-by: Dongdong Liu <liudongdong3@huawei.com>
+>>>> ---
+>>>>  drivers/pci/p2pdma.c | 40 ++++++++++++++++++++++++++++++++++++++++
+>>>>  1 file changed, 40 insertions(+)
+>>>>
+>>>> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
+>>>> index 50cdde3..948f2be 100644
+>>>> --- a/drivers/pci/p2pdma.c
+>>>> +++ b/drivers/pci/p2pdma.c
+>>>> @@ -19,6 +19,7 @@
+>>>>  #include <linux/random.h>
+>>>>  #include <linux/seq_buf.h>
+>>>>  #include <linux/xarray.h>
+>>>> +#include "pci.h"
+>>>>
+>>>>  enum pci_p2pdma_map_type {
+>>>>  	PCI_P2PDMA_MAP_UNKNOWN = 0,
+>>>> @@ -410,6 +411,41 @@ static unsigned long map_types_idx(struct pci_dev *client)
+>>>>  		(client->bus->number << 8) | client->devfn;
+>>>>  }
+>>>>
+>>>> +static bool check_10bit_tags_vaild(struct pci_dev *a, struct pci_dev *b,
+>>>
+>>> s/vaild/valid/
+>>>
+>>> Or maybe s/valid/safe/ or s/valid/supported/, since "valid" isn't
+>>> quite the right word here.  We want to know whether the source is
+>>> enabled to generate 10-bit tags, and if so, whether the destination
+>>> can handle them.
+>>>
+>>> "if (check_10bit_tags_valid())" does not make sense because
+>>> "check_10bit_tags_valid()" is not a question with a yes/no answer.
+>>>
+>>> "10bit_tags_valid()" *might* be, because "if (10bit_tags_valid())"
+>>> makes sense.  But I don't think you can start with a digit.
+>>>
+>>> Or maybe you want to invert the sense, e.g.,
+>>> "10bit_tags_unsupported()", since that avoids negation at the caller:
+>>>
+>>>   if (10bit_tags_unsupported(a, b) ||
+>>>       10bit_tags_unsupported(b, a))
+>>>         map_type = PCI_P2PDMA_MAP_NOT_SUPPORTED;
+>> Good suggestion. add a pci_ prefix.
+>>
+>> if (pci_10bit_tags_unsupported(a, b) ||
+>>     pci_10bit_tags_unsupported(b, a))
+>> 	map_type = PCI_P2PDMA_MAP_NOT_SUPPORTED;
+>
+> This treats both directions as equally important.  I don't know P2PDMA
+> very well, but that doesn't seem like it would necessarily be the
+> case.  I would think a common case would be device A doing DMA to B,
+> but B *not* doing DMA to A.  So can you tell which direction you're
+> setting up here, and can you take advantage of any asymmetry, e.g., by
+> enabling 10-bit tags in the direction that supports it even if the
+> other direction does not?
 
-Regards
+Documentation/driver-api/pci/p2pdma.rst
+* Provider - A driver which provides or publishes P2P resources like
+   memory or doorbell registers to other drivers.
+* Client - A driver which makes use of a resource by setting up a
+   DMA transaction to or from it.
 
-John Cox
+So we may just check as below.
+if (10bit_tags_unsupported(client, provider, verbose)
+	map_type = PCI_P2PDMA_MAP_NOT_SUPPORTED;
+
+@Logan What's your opinion?
+
+Thanks,
+Dongdong
+> .
+>
