@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4418C432BE
-	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 08:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59CA1C4338F
+	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 08:31:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4A40610A4
-	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 08:31:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 42547610A4
+	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 08:31:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238318AbhHJIcA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Aug 2021 04:32:00 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:57838 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238278AbhHJIbw (ORCPT
+        id S238354AbhHJIcJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Aug 2021 04:32:09 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:46362 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S238334AbhHJIcC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Aug 2021 04:31:52 -0400
-X-UUID: 57ba857e6c134c359040915a8ffa1b92-20210810
-X-UUID: 57ba857e6c134c359040915a8ffa1b92-20210810
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        Tue, 10 Aug 2021 04:32:02 -0400
+X-UUID: 3bbf215a9f8642069b3074a1d806d3a0-20210810
+X-UUID: 3bbf215a9f8642069b3074a1d806d3a0-20210810
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 921923750; Tue, 10 Aug 2021 16:31:28 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1443491433; Tue, 10 Aug 2021 16:31:35 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 10 Aug 2021 16:31:27 +0800
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 10 Aug 2021 16:31:33 +0800
 Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 10 Aug 2021 16:31:27 +0800
+ Transport; Tue, 10 Aug 2021 16:31:32 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -53,9 +53,9 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         George Sun <george.sun@mediatek.com>
-Subject: [PATCH v4, 06/15] media: mtk-vcodec: Use pure single core for MT8183
-Date:   Tue, 10 Aug 2021 16:30:38 +0800
-Message-ID: <20210810083047.16693-7-yunfei.dong@mediatek.com>
+Subject: [PATCH v4, 10/15] media: mtk-vcodec: Add new interface to lock different hardware
+Date:   Tue, 10 Aug 2021 16:30:42 +0800
+Message-ID: <20210810083047.16693-11-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20210810083047.16693-1-yunfei.dong@mediatek.com>
 References: <20210810083047.16693-1-yunfei.dong@mediatek.com>
@@ -66,75 +66,75 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Separates different architecture for hardware: pure_sin_core
-and lat_sin_core. MT8183 is pure single core. Uses .hw_arch to
-distinguish.
+For add new hardware, not only need to lock lat hardware, also
+need to lock core hardware in case of different instance start
+to decoder at the same time.
 
-Change-Id: Ie771c7f7233ff9caa8c7aac0c787bdff757f7b0e
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
 v4: no change
 ---
- .../platform/mtk-vcodec/mtk_vcodec_dec_stateful.c      |  1 +
- .../platform/mtk-vcodec/mtk_vcodec_dec_stateless.c     |  1 +
- drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h     | 10 ++++++++++
- 3 files changed, 12 insertions(+)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c     | 4 ++--
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 6 +++---
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h     | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-index 4f9a80ce15d8..138f6fcb36bb 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-@@ -624,4 +624,5 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata = {
- 	.worker = mtk_vdec_worker,
- 	.flush_decoder = mtk_vdec_flush_decoder,
- 	.is_comp_supported = false,
-+	.hw_arch = MTK_VDEC_PURE_SINGLE_CORE,
- };
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-index 762633572b49..12c243d6dff3 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-@@ -358,4 +358,5 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
- 	.worker = mtk_vdec_worker,
- 	.flush_decoder = mtk_vdec_flush_decoder,
- 	.is_comp_supported = false,
-+	.hw_arch = MTK_VDEC_PURE_SINGLE_CORE,
- };
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+index 2b334a8a81c6..130ecef2e766 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+@@ -105,12 +105,12 @@ static int vidioc_decoder_cmd(struct file *file, void *priv,
+ 
+ void mtk_vdec_unlock(struct mtk_vcodec_ctx *ctx)
+ {
+-	mutex_unlock(&ctx->dev->dec_mutex);
++	mutex_unlock(&ctx->dev->dec_mutex[ctx->hw_id]);
+ }
+ 
+ void mtk_vdec_lock(struct mtk_vcodec_ctx *ctx)
+ {
+-	mutex_lock(&ctx->dev->dec_mutex);
++	mutex_lock(&ctx->dev->dec_mutex[ctx->hw_id]);
+ }
+ 
+ void mtk_vcodec_dec_release(struct mtk_vcodec_ctx *ctx)
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+index 2c62543a5328..37ecb8252955 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+@@ -374,7 +374,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 	struct video_device *vfd_dec;
+ 	phandle rproc_phandle;
+ 	enum mtk_vcodec_fw_type fw_type;
+-	int ret;
++	int i, ret;
+ 
+ 	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
+ 	if (!dev)
+@@ -406,8 +406,8 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		goto err_dec_pm;
+ 	}
+ 
+-	mutex_init(&dev->dec_mutex);
+-	mutex_init(&dev->dev_mutex);
++	for (i = 0; i < MTK_VDEC_HW_MAX; i++)
++		mutex_init(&dev->dec_mutex[i]);
+ 	spin_lock_init(&dev->irqlock);
+ 
+ 	snprintf(dev->v4l2_dev.name, sizeof(dev->v4l2_dev.name), "%s",
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index e530757a9b5a..1d0798fd9adf 100644
+index a8242389ad24..f1e63acaec76 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -323,6 +323,14 @@ enum mtk_chip {
- 	MTK_MT8192,
- };
+@@ -496,7 +496,7 @@ struct mtk_vcodec_dev {
+ 	int dec_irq;
+ 	int enc_irq;
  
-+/**
-+ * struct mtk_vdec_hw_arch - Used to separate different hardware architecture
-+ */
-+enum mtk_vdec_hw_arch {
-+	MTK_VDEC_PURE_SINGLE_CORE,
-+	MTK_VDEC_LAT_SINGLE_CORE,
-+};
-+
- /**
-  * struct mtk_vcodec_dec_pdata - compatible data for each IC
-  * @init_vdec_params: init vdec params
-@@ -341,6 +349,7 @@ enum mtk_chip {
-  * @num_framesizes: count of video decoder frame sizes
-  *
-  * @chip: chip this decoder is compatible with
-+ * @hw_arch: hardware arch is used to separate pure_sin_core and lat_sin_core
-  *
-  * @is_comp_supported: true: using compoent framework, false: not support
-  * @uses_stateless_api: whether the decoder uses the stateless API with requests
-@@ -363,6 +372,7 @@ struct mtk_vcodec_dec_pdata {
- 	const int num_framesizes;
+-	struct mutex dec_mutex;
++	struct mutex dec_mutex[MTK_VDEC_HW_MAX];
+ 	struct mutex enc_mutex;
  
- 	enum mtk_chip chip;
-+	enum mtk_vdec_hw_arch hw_arch;
- 
- 	bool is_comp_supported;
- 	bool uses_stateless_api;
+ 	struct mtk_vcodec_pm pm;
 -- 
 2.25.1
 
