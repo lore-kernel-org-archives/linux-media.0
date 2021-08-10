@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61F00C43216
-	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 08:32:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 480E5C4320A
+	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 08:32:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4169161179
-	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 08:32:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 23B0C61075
+	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 08:32:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238291AbhHJIcU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Aug 2021 04:32:20 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:46110 "EHLO
+        id S238319AbhHJIcW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Aug 2021 04:32:22 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:45840 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238288AbhHJIb5 (ORCPT
+        with ESMTP id S238290AbhHJIb5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 10 Aug 2021 04:31:57 -0400
-X-UUID: ddcf9cf38e31446f8ece563e67a46b33-20210810
-X-UUID: ddcf9cf38e31446f8ece563e67a46b33-20210810
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+X-UUID: afacf2dcc5a648fcb4f8392a3da7473f-20210810
+X-UUID: afacf2dcc5a648fcb4f8392a3da7473f-20210810
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 587115545; Tue, 10 Aug 2021 16:31:31 +0800
+        with ESMTP id 1580659104; Tue, 10 Aug 2021 16:31:33 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 10 Aug 2021 16:31:28 +0800
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 10 Aug 2021 16:31:32 +0800
 Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 10 Aug 2021 16:31:28 +0800
+ Transport; Tue, 10 Aug 2021 16:31:30 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -53,9 +53,9 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         George Sun <george.sun@mediatek.com>
-Subject: [PATCH v4, 07/15] media: mtk-vcodec: Add irq interface for multi hardware
-Date:   Tue, 10 Aug 2021 16:30:39 +0800
-Message-ID: <20210810083047.16693-8-yunfei.dong@mediatek.com>
+Subject: [PATCH v4, 09/15] media: mtk-vcodec: Generalize power and clock on/off interfaces
+Date:   Tue, 10 Aug 2021 16:30:41 +0800
+Message-ID: <20210810083047.16693-10-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20210810083047.16693-1-yunfei.dong@mediatek.com>
 References: <20210810083047.16693-1-yunfei.dong@mediatek.com>
@@ -66,328 +66,448 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds irq interface for multi hardware.
+Generalizes power and clock on/off interfaces to support different hardware.
 
-Change-Id: I9ed8f9538c83d9376a70bc125f77686ac85cedb9
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
 v4: no change
 ---
- .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  | 33 +++++++++++++++++--
+ .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |  6 +-
  .../platform/mtk-vcodec/mtk_vcodec_dec_hw.c   |  2 +-
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      | 25 ++++++++++----
- .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  |  4 +--
- .../platform/mtk-vcodec/mtk_vcodec_intr.c     | 27 +++++++--------
- .../platform/mtk-vcodec/mtk_vcodec_intr.h     |  4 +--
- .../platform/mtk-vcodec/vdec/vdec_h264_if.c   |  2 +-
- .../mtk-vcodec/vdec/vdec_h264_req_if.c        |  2 +-
- .../platform/mtk-vcodec/vdec/vdec_vp8_if.c    |  2 +-
- .../platform/mtk-vcodec/vdec/vdec_vp9_if.c    |  2 +-
- .../platform/mtk-vcodec/venc/venc_h264_if.c   |  2 +-
- .../platform/mtk-vcodec/venc/venc_vp8_if.c    |  2 +-
- 12 files changed, 71 insertions(+), 36 deletions(-)
+ .../platform/mtk-vcodec/mtk_vcodec_dec_hw.h   |  4 +
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   | 76 ++++++++++++++--
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.h   |  8 +-
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  2 +
+ .../platform/mtk-vcodec/mtk_vcodec_util.c     | 87 ++++++++++++++++---
+ .../platform/mtk-vcodec/mtk_vcodec_util.h     |  8 +-
+ .../media/platform/mtk-vcodec/vdec_drv_if.c   | 21 ++---
+ 9 files changed, 174 insertions(+), 40 deletions(-)
 
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index d93ea5c63e1e..d52e975292dc 100644
+index d52e975292dc..2c62543a5328 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -68,6 +68,20 @@ static const struct component_master_ops mtk_vdec_ops = {
-    .unbind = mtk_vdec_unbind,
- };
+@@ -126,7 +126,7 @@ static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
+ 	void __iomem *vdec_misc_addr = dev->reg_base[VDEC_MISC] +
+ 					VDEC_IRQ_CFG_REG;
  
-+static int mtk_vcodec_get_hw_count(struct mtk_vcodec_dev *dev)
-+{
-+	switch (dev->vdec_pdata->hw_arch) {
-+	case MTK_VDEC_PURE_SINGLE_CORE:
-+		return MTK_VDEC_ONE_CORE;
-+	case MTK_VDEC_LAT_SINGLE_CORE:
-+		return MTK_VDEC_ONE_LAT_ONE_CORE;
-+	default:
-+		mtk_v4l2_err("not support hw arch:%d",
-+			dev->vdec_pdata->hw_arch);
-+		return MTK_VDEC_NO_HW;
-+	}
-+}
-+
- static struct component_match *mtk_vcodec_match_add(
- 	struct mtk_vcodec_dev *vdec_dev)
-  {
-@@ -134,7 +148,7 @@ static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
- 	writel((readl(vdec_misc_addr) & ~VDEC_IRQ_CLR),
- 		dev->reg_base[VDEC_MISC] + VDEC_IRQ_CFG_REG);
+-	ctx = mtk_vcodec_get_curr_ctx(dev);
++	ctx = mtk_vcodec_get_curr_ctx(dev, MTK_VDEC_CORE);
  
--	wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED);
-+	wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED, 0);
+ 	/* check if HW active or not */
+ 	cg_status = readl(dev->reg_base[0]);
+@@ -287,7 +287,7 @@ static int fops_vcodec_open(struct file *file)
+ 	mtk_vcodec_dec_set_default_params(ctx);
  
- 	mtk_v4l2_debug(3,
- 			"mtk_vcodec_dec_irq_handler :wake up ctx %d, dec_done_status=%x",
-@@ -224,7 +238,7 @@ static int fops_vcodec_open(struct file *file)
- {
- 	struct mtk_vcodec_dev *dev = video_drvdata(file);
- 	struct mtk_vcodec_ctx *ctx = NULL;
--	int ret = 0;
-+	int ret = 0, i, hw_count;
- 	struct vb2_queue *src_vq;
+ 	if (v4l2_fh_is_singular(&ctx->fh)) {
+-		ret = mtk_vcodec_dec_pw_on(&dev->pm);
++		ret = mtk_vcodec_dec_pw_on(dev, MTK_VDEC_LAT0);
+ 		if (ret < 0)
+ 			goto err_load_fw;
+ 		/*
+@@ -348,7 +348,7 @@ static int fops_vcodec_release(struct file *file)
+ 	mtk_vcodec_dec_release(ctx);
  
- 	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-@@ -238,7 +252,19 @@ static int fops_vcodec_open(struct file *file)
- 	v4l2_fh_add(&ctx->fh);
- 	INIT_LIST_HEAD(&ctx->list);
- 	ctx->dev = dev;
--	init_waitqueue_head(&ctx->queue);
-+
-+	if (ctx->dev->vdec_pdata->is_comp_supported) {
-+		hw_count = mtk_vcodec_get_hw_count(dev);
-+		if (!hw_count) {
-+			ret = -EINVAL;
-+			goto err_init_queue;
-+		}
-+		for (i = 0; i < hw_count; i++)
-+			init_waitqueue_head(&ctx->queue[i]);
-+	} else {
-+		init_waitqueue_head(&ctx->queue[0]);
-+	}
-+
- 	mutex_init(&ctx->lock);
- 
- 	ctx->type = MTK_INST_DECODER;
-@@ -295,6 +321,7 @@ static int fops_vcodec_open(struct file *file)
- err_m2m_ctx_init:
- 	v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
- err_ctrls_setup:
-+err_init_queue:
+ 	if (v4l2_fh_is_singular(&ctx->fh))
+-		mtk_vcodec_dec_pw_off(&dev->pm);
++		mtk_vcodec_dec_pw_off(dev, MTK_VDEC_LAT0);
  	v4l2_fh_del(&ctx->fh);
  	v4l2_fh_exit(&ctx->fh);
- 	kfree(ctx);
+ 	v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
-index 5e1b7670ba5b..7a31afd294ba 100644
+index 7a31afd294ba..714df68ffb19 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
-@@ -87,7 +87,7 @@ static irqreturn_t mtk_vdec_comp_irq_handler(int irq, void *priv)
- 	writel(dec_done_status | VDEC_IRQ_CFG, vdec_misc_addr);
- 	writel(dec_done_status & ~VDEC_IRQ_CLR, vdec_misc_addr);
+@@ -68,7 +68,7 @@ static irqreturn_t mtk_vdec_comp_irq_handler(int irq, void *priv)
+ 	void __iomem *vdec_misc_addr = dev->reg_base[VDEC_COMP_MISC] +
+ 					VDEC_IRQ_CFG_REG;
  
--	wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED);
-+	wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED, dev->comp_idx);
+-	ctx = mtk_vcodec_get_curr_ctx(dev->master_dev);
++	ctx = mtk_vcodec_get_curr_ctx(dev->master_dev, dev->comp_idx);
  
- 	mtk_v4l2_debug(3, "wake up ctx %d, dec_done_status=%x",
- 		ctx->id, dec_done_status);
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index 1d0798fd9adf..08fd43106fc7 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -104,6 +104,16 @@ enum mtk_vdec_hw_id {
- 	MTK_VDEC_HW_MAX,
- };
+ 	/* check if HW active or not */
+ 	cg_status = readl(dev->reg_base[VDEC_COMP_SYS]);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.h
+index 8d6e818a3474..0a4c2e6f5df2 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.h
+@@ -32,6 +32,8 @@ enum mtk_comp_hw_reg_idx {
+  * @master_dev: master device
+  * @reg_base: Mapped address of MTK Vcodec registers.
+  *
++ * @curr_ctx: The context that is waiting for codec hardware
++ *
+  * @dec_irq: decoder irq resource
+  * @pm: power management control
+  * @comp_idx: component index
+@@ -41,6 +43,8 @@ struct mtk_vdec_comp_dev {
+ 	struct mtk_vcodec_dev *master_dev;
+ 	void __iomem *reg_base[VDEC_COMP_MAX];
  
-+/**
-+ * struct mtk_vdec_hw_count - Supported hardware count
-+ */
-+enum mtk_vdec_hw_count {
-+	MTK_VDEC_NO_HW = 0,
-+	MTK_VDEC_ONE_CORE,
-+	MTK_VDEC_ONE_LAT_ONE_CORE,
-+	MTK_VDEC_MAX_HW_COUNT,
-+};
++	struct mtk_vcodec_ctx *curr_ctx;
 +
- /*
-  * struct mtk_video_fmt - Structure used to store information about pixelformats
+ 	int dec_irq;
+ 	struct mtk_vcodec_pm pm;
+ 	int comp_idx;
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+index 20bd157a855c..c2de88bb8092 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+@@ -5,11 +5,13 @@
   */
-@@ -293,9 +303,9 @@ struct mtk_vcodec_ctx {
- 	struct vdec_pic_info picinfo;
- 	int dpb_size;
  
--	int int_cond;
--	int int_type;
--	wait_queue_head_t queue;
-+	int int_cond[MTK_VDEC_HW_MAX];
-+	int int_type[MTK_VDEC_HW_MAX];
-+	wait_queue_head_t queue[MTK_VDEC_HW_MAX];
- 	unsigned int irq_status;
+ #include <linux/clk.h>
++#include <linux/interrupt.h>
+ #include <linux/of_address.h>
+ #include <linux/of_platform.h>
+ #include <linux/pm_runtime.h>
+ #include <soc/mediatek/smi.h>
  
- 	struct v4l2_ctrl_handler ctrl_hdl;
-@@ -501,11 +511,12 @@ static inline struct mtk_vcodec_ctx *ctrl_to_ctx(struct v4l2_ctrl *ctrl)
- }
- 
- /* Wake up context wait_queue */
--static inline void wake_up_ctx(struct mtk_vcodec_ctx *ctx, unsigned int reason)
-+static inline void wake_up_ctx(struct mtk_vcodec_ctx *ctx, unsigned int reason,
-+	unsigned int hw_id)
- {
--	ctx->int_cond = 1;
--	ctx->int_type = reason;
--	wake_up_interruptible(&ctx->queue);
-+	ctx->int_cond[hw_id] = 1;
-+	ctx->int_type[hw_id] = reason;
-+	wake_up_interruptible(&ctx->queue[hw_id]);
- }
- 
- #endif /* _MTK_VCODEC_DRV_H_ */
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-index 2828df77020c..c7540c0cdcea 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-@@ -114,7 +114,7 @@ static irqreturn_t mtk_vcodec_enc_irq_handler(int irq, void *priv)
- 
- 	clean_irq_status(ctx->irq_status, addr);
- 
--	wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED);
-+	wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED, 0);
- 	return IRQ_HANDLED;
- }
- 
-@@ -140,7 +140,7 @@ static int fops_vcodec_open(struct file *file)
- 	v4l2_fh_add(&ctx->fh);
- 	INIT_LIST_HEAD(&ctx->list);
- 	ctx->dev = dev;
--	init_waitqueue_head(&ctx->queue);
-+	init_waitqueue_head(&ctx->queue[0]);
- 
- 	ctx->type = MTK_INST_ENCODER;
- 	ret = mtk_vcodec_enc_ctrls_setup(ctx);
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.c
-index 70580c2525ba..8147533da98b 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.c
-@@ -11,34 +11,31 @@
- #include "mtk_vcodec_intr.h"
++#include "mtk_vcodec_dec_hw.h"
+ #include "mtk_vcodec_dec_pm.h"
  #include "mtk_vcodec_util.h"
  
--int mtk_vcodec_wait_for_done_ctx(struct mtk_vcodec_ctx  *ctx, int command,
--				 unsigned int timeout_ms)
-+int mtk_vcodec_wait_for_done_ctx(struct mtk_vcodec_ctx *ctx,
-+	int command, unsigned int timeout_ms, unsigned hw_id)
- {
--	wait_queue_head_t *waitqueue;
- 	long timeout_jiff, ret;
- 	int status = 0;
- 
--	waitqueue = (wait_queue_head_t *)&ctx->queue;
- 	timeout_jiff = msecs_to_jiffies(timeout_ms);
--
--	ret = wait_event_interruptible_timeout(*waitqueue,
--				ctx->int_cond,
-+	ret = wait_event_interruptible_timeout(ctx->queue[hw_id],
-+				ctx->int_cond[hw_id],
- 				timeout_jiff);
- 
- 	if (!ret) {
- 		status = -1;	/* timeout */
--		mtk_v4l2_err("[%d] ctx->type=%d, cmd=%d, wait_event_interruptible_timeout time=%ums out %d %d!",
--			     ctx->id, ctx->type, command, timeout_ms,
--			     ctx->int_cond, ctx->int_type);
-+		mtk_v4l2_err("[%d] cmd=%d, type=%d, dec timeout=%ums (%d %d)",
-+				ctx->id, command, ctx->type, timeout_ms,
-+				ctx->int_cond[hw_id], ctx->int_type[hw_id]);
- 	} else if (-ERESTARTSYS == ret) {
--		mtk_v4l2_err("[%d] ctx->type=%d, cmd=%d, wait_event_interruptible_timeout interrupted by a signal %d %d",
--			     ctx->id, ctx->type, command, ctx->int_cond,
--			     ctx->int_type);
- 		status = -1;
-+		mtk_v4l2_err("[%d] cmd=%d, type=%d, dec inter fail (%d %d)",
-+				ctx->id, command, ctx->type,
-+				ctx->int_cond[hw_id], ctx->int_type[hw_id]);
- 	}
- 
--	ctx->int_cond = 0;
--	ctx->int_type = 0;
-+	ctx->int_cond[hw_id] = 0;
-+	ctx->int_type[hw_id] = 0;
- 
- 	return status;
+@@ -84,10 +86,23 @@ void mtk_vcodec_release_dec_pm(struct mtk_vcodec_pm *pm)
+ 	put_device(pm->larbvdec);
  }
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.h
-index 638cd1f3526a..2bf4cabfaa43 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.h
-@@ -12,7 +12,7 @@
- struct mtk_vcodec_ctx;
  
- /* timeout is ms */
--int mtk_vcodec_wait_for_done_ctx(struct mtk_vcodec_ctx *data, int command,
--				unsigned int timeout_ms);
-+int mtk_vcodec_wait_for_done_ctx(struct mtk_vcodec_ctx *ctx,
-+				int command, unsigned int timeout_ms, unsigned int hw_id);
+-int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
++int mtk_vcodec_dec_pw_on(struct mtk_vcodec_dev *vdec_dev, int comp_idx)
+ {
++	struct mtk_vdec_comp_dev *comp_dev;
++	struct mtk_vcodec_pm *pm;
+ 	int ret;
  
- #endif /* _MTK_VCODEC_INTR_H_ */
-diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
-index 40d6e6c5ac7a..481655bb6016 100644
---- a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
-@@ -413,7 +413,7 @@ static int vdec_h264_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 		/* wait decoder done interrupt */
- 		err = mtk_vcodec_wait_for_done_ctx(inst->ctx,
- 						   MTK_INST_IRQ_RECEIVED,
--						   WAIT_INTR_TIMEOUT_MS);
-+						   WAIT_INTR_TIMEOUT_MS, 0);
- 		if (err)
- 			goto err_free_fb_out;
++	if (vdec_dev->is_comp_supported) {
++		comp_dev = mtk_vcodec_get_hw_dev(vdec_dev, comp_idx);
++		if (!comp_dev) {
++			mtk_v4l2_err("Failed to get hw dev\n");
++			return -EINVAL;
++		}
++		pm = &comp_dev->pm;
++	} else {
++		pm = &vdec_dev->pm;
++	}
++
+ 	ret = pm_runtime_resume_and_get(pm->dev);
+ 	if (ret)
+ 		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
+@@ -95,20 +110,49 @@ int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
+ 	return ret;
+ }
  
-diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_if.c
-index 4dde9ee786b4..d23baa364246 100644
---- a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_if.c
-@@ -724,7 +724,7 @@ static int vdec_h264_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	/* wait decoder done interrupt */
- 	err = mtk_vcodec_wait_for_done_ctx(inst->ctx,
- 					   MTK_INST_IRQ_RECEIVED,
--					   WAIT_INTR_TIMEOUT_MS);
-+					   WAIT_INTR_TIMEOUT_MS, 0);
- 	if (err)
- 		goto err_free_fb_out;
- 	vpu_dec_end(vpu);
-diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
-index e5393f841080..88c046731754 100644
---- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
-@@ -488,7 +488,7 @@ static int vdec_vp8_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+-void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
++void mtk_vcodec_dec_pw_off(struct mtk_vcodec_dev *vdec_dev, int comp_idx)
+ {
++	struct mtk_vdec_comp_dev *comp_dev;
++	struct mtk_vcodec_pm *pm;
+ 	int ret;
  
- 	/* wait decoder done interrupt */
- 	mtk_vcodec_wait_for_done_ctx(inst->ctx, MTK_INST_IRQ_RECEIVED,
--				     WAIT_INTR_TIMEOUT_MS);
-+				     WAIT_INTR_TIMEOUT_MS, 0);
++	if (vdec_dev->is_comp_supported) {
++		comp_dev = mtk_vcodec_get_hw_dev(vdec_dev, comp_idx);
++		if (!comp_dev) {
++			mtk_v4l2_err("Failed to get hw dev\n");
++			return;
++		}
++		pm = &comp_dev->pm;
++	} else {
++		pm = &vdec_dev->pm;
++	}
++
+ 	ret = pm_runtime_put_sync(pm->dev);
+ 	if (ret)
+ 		mtk_v4l2_err("pm_runtime_put_sync fail %d", ret);
+ }
  
- 	if (inst->vsi->load_data)
- 		load_dec_table(inst);
-diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-index 71cdc3ddafcb..70b8383f7c8e 100644
---- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-@@ -539,7 +539,7 @@ static bool vp9_wait_dec_end(struct vdec_vp9_inst *inst)
+-void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
++void mtk_vcodec_dec_clock_on(struct mtk_vcodec_dev *vdec_dev, int comp_idx)
+ {
+-	struct mtk_vcodec_clk *dec_clk = &pm->vdec_clk;
+-	int ret, i = 0;
++	struct mtk_vdec_comp_dev *comp_dev;
++	struct mtk_vcodec_pm *pm;
++	struct mtk_vcodec_clk *dec_clk;
++	int ret, i;
++
++	if (vdec_dev->is_comp_supported) {
++		comp_dev = mtk_vcodec_get_hw_dev(vdec_dev, comp_idx);
++		if (!comp_dev) {
++			mtk_v4l2_err("Failed to get hw dev\n");
++			return;
++		}
++		pm = &comp_dev->pm;
++		enable_irq(comp_dev->dec_irq);
++	} else {
++		pm = &vdec_dev->pm;
++		enable_irq(vdec_dev->dec_irq);
++	}
  
- 	mtk_vcodec_wait_for_done_ctx(inst->ctx,
- 			MTK_INST_IRQ_RECEIVED,
--			WAIT_INTR_TIMEOUT_MS);
-+			WAIT_INTR_TIMEOUT_MS, 0);
++	dec_clk = &pm->vdec_clk;
+ 	for (i = 0; i < dec_clk->clk_num; i++) {
+ 		ret = clk_prepare_enable(dec_clk->clk_info[i].vcodec_clk);
+ 		if (ret) {
+@@ -130,11 +174,27 @@ void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
+ 		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
+ }
  
- 	if (ctx->irq_status & MTK_VDEC_IRQ_STATUS_DEC_SUCCESS)
- 		return true;
-diff --git a/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c b/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
-index b6a4f2074fa5..9ae1bd8dbc32 100644
---- a/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
-+++ b/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
-@@ -335,7 +335,7 @@ static unsigned int h264_enc_wait_venc_done(struct venc_h264_inst *inst)
- 	struct mtk_vcodec_ctx *ctx = (struct mtk_vcodec_ctx *)inst->ctx;
+-void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm)
++void mtk_vcodec_dec_clock_off(struct mtk_vcodec_dev *vdec_dev, int comp_idx)
+ {
+-	struct mtk_vcodec_clk *dec_clk = &pm->vdec_clk;
+-	int i = 0;
++	struct mtk_vdec_comp_dev *comp_dev;
++	struct mtk_vcodec_pm *pm;
++	struct mtk_vcodec_clk *dec_clk;
++	int i;
  
- 	if (!mtk_vcodec_wait_for_done_ctx(ctx, MTK_INST_IRQ_RECEIVED,
--					  WAIT_INTR_TIMEOUT_MS)) {
-+					  WAIT_INTR_TIMEOUT_MS, 0)) {
- 		irq_status = ctx->irq_status;
- 		mtk_vcodec_debug(inst, "irq_status %x <-", irq_status);
++	if (vdec_dev->is_comp_supported) {
++		comp_dev = mtk_vcodec_get_hw_dev(vdec_dev, comp_idx);
++		if (!comp_dev) {
++			mtk_v4l2_err("Failed to get hw dev\n");
++			return;
++		}
++		pm = &comp_dev->pm;
++		disable_irq(comp_dev->dec_irq);
++	} else {
++		pm = &vdec_dev->pm;
++		disable_irq(vdec_dev->dec_irq);
++	}
++
++	dec_clk = &pm->vdec_clk;
+ 	mtk_smi_larb_put(pm->larbvdec);
+ 	for (i = dec_clk->clk_num - 1; i >= 0; i--)
+ 		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+index a3df6aef6cb9..698750572b57 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+@@ -13,9 +13,9 @@ int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
+ 	struct mtk_vcodec_pm *pm);
+ void mtk_vcodec_release_dec_pm(struct mtk_vcodec_pm *pm);
+ 
+-int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm);
+-void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm);
+-void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm);
+-void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm);
++int mtk_vcodec_dec_pw_on(struct mtk_vcodec_dev *vdec_dev, int comp_idx);
++void mtk_vcodec_dec_pw_off(struct mtk_vcodec_dev *vdec_dev, int comp_idx);
++void mtk_vcodec_dec_clock_on(struct mtk_vcodec_dev *vdec_dev, int comp_idx);
++void mtk_vcodec_dec_clock_off(struct mtk_vcodec_dev *vdec_dev, int comp_idx);
+ 
+ #endif /* _MTK_VCODEC_DEC_PM_H_ */
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index 4ad0566e715d..a8242389ad24 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -284,6 +284,7 @@ struct vdec_pic_info {
+  * @decoded_frame_cnt: number of decoded frames
+  * @lock: protect variables accessed by V4L2 threads and worker thread such as
+  *	  mtk_video_dec_buf.
++ * @hw_id: hardware index used to identify different hardware.
+  *
+  * @msg_queue: msg queue used to store lat buffer information.
+  */
+@@ -328,6 +329,7 @@ struct mtk_vcodec_ctx {
+ 
+ 	int decoded_frame_cnt;
+ 	struct mutex lock;
++	int hw_id;
+ 
+ 	struct vdec_msg_queue msg_queue;
+ };
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.c
+index ac5973b6735f..bee0f22db36e 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.c
+@@ -6,7 +6,10 @@
+ */
+ 
+ #include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
+ 
++#include "mtk_vcodec_dec_hw.h"
+ #include "mtk_vcodec_drv.h"
+ #include "mtk_vcodec_util.h"
+ 
+@@ -81,25 +84,87 @@ void mtk_vcodec_mem_free(struct mtk_vcodec_ctx *data,
+ }
+ EXPORT_SYMBOL(mtk_vcodec_mem_free);
+ 
+-void mtk_vcodec_set_curr_ctx(struct mtk_vcodec_dev *dev,
+-	struct mtk_vcodec_ctx *ctx)
++void *mtk_vcodec_get_hw_dev(struct mtk_vcodec_dev *dev, int comp_idx)
+ {
+-	unsigned long flags;
++	struct platform_device *hw_pdev;
++	struct device_node *node;
++	struct mtk_vdec_comp_dev *master_dev;
++
++	if (comp_idx >= MTK_VDEC_HW_MAX || comp_idx < 0) {
++		mtk_v4l2_err("Comp idx is out of range:%d", comp_idx);
++		return NULL;
++	}
++
++	if (dev->comp_dev[comp_idx])
++		return dev->comp_dev[comp_idx];
++
++	node = dev->component_node[comp_idx];
++	if (!node) {
++		mtk_v4l2_err("Get lat node fail:%d", comp_idx);
++		return NULL;
++	}
++
++	hw_pdev = of_find_device_by_node(node);
++	of_node_put(node);
++
++	if (WARN_ON(!hw_pdev)) {
++		mtk_v4l2_err("Get hw id(%d) node fail", comp_idx);
++		return NULL;
++	}
++
++	master_dev = platform_get_drvdata(hw_pdev);
++	if (!master_dev) {
++		mtk_v4l2_err("Get hw id(%d) pdev fail", comp_idx);
++		return NULL;
++	}
+ 
+-	spin_lock_irqsave(&dev->irqlock, flags);
+-	dev->curr_ctx = ctx;
+-	spin_unlock_irqrestore(&dev->irqlock, flags);
++	dev->comp_dev[master_dev->comp_idx] = master_dev;
++	return master_dev;
++}
++EXPORT_SYMBOL(mtk_vcodec_get_hw_dev);
++
++void mtk_vcodec_set_curr_ctx(struct mtk_vcodec_dev *vdec_dev,
++	struct mtk_vcodec_ctx *ctx, int comp_idx)
++{
++	unsigned long flags;
++	struct mtk_vdec_comp_dev *comp_dev;
++
++	spin_lock_irqsave(&vdec_dev->irqlock, flags);
++	if (vdec_dev->is_comp_supported) {
++		comp_dev = mtk_vcodec_get_hw_dev(vdec_dev, comp_idx);
++		if (!comp_dev) {
++			mtk_v4l2_err("Failed to get hw dev");
++			spin_unlock_irqrestore(&vdec_dev->irqlock, flags);
++			return;
++		}
++		comp_dev->curr_ctx = ctx;
++	} else {
++		vdec_dev->curr_ctx = ctx;
++	}
++	spin_unlock_irqrestore(&vdec_dev->irqlock, flags);
+ }
+ EXPORT_SYMBOL(mtk_vcodec_set_curr_ctx);
+ 
+-struct mtk_vcodec_ctx *mtk_vcodec_get_curr_ctx(struct mtk_vcodec_dev *dev)
++struct mtk_vcodec_ctx *mtk_vcodec_get_curr_ctx(struct mtk_vcodec_dev *vdec_dev,
++	unsigned int comp_idx)
+ {
+ 	unsigned long flags;
+ 	struct mtk_vcodec_ctx *ctx;
+-
+-	spin_lock_irqsave(&dev->irqlock, flags);
+-	ctx = dev->curr_ctx;
+-	spin_unlock_irqrestore(&dev->irqlock, flags);
++	struct mtk_vdec_comp_dev *comp_dev;
++
++	spin_lock_irqsave(&vdec_dev->irqlock, flags);
++	if (vdec_dev->is_comp_supported) {
++		comp_dev = mtk_vcodec_get_hw_dev(vdec_dev, comp_idx);
++		if (!comp_dev) {
++			mtk_v4l2_err("Failed to get hw dev");
++			spin_unlock_irqrestore(&vdec_dev->irqlock, flags);
++			return NULL;
++		}
++		ctx = comp_dev->curr_ctx;
++	} else {
++		ctx = vdec_dev->curr_ctx;
++	}
++	spin_unlock_irqrestore(&vdec_dev->irqlock, flags);
+ 	return ctx;
+ }
+ EXPORT_SYMBOL(mtk_vcodec_get_curr_ctx);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.h
+index b999d7b84ed1..4cb0fc60c94f 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.h
+@@ -79,8 +79,10 @@ int mtk_vcodec_mem_alloc(struct mtk_vcodec_ctx *data,
+ 				struct mtk_vcodec_mem *mem);
+ void mtk_vcodec_mem_free(struct mtk_vcodec_ctx *data,
+ 				struct mtk_vcodec_mem *mem);
+-void mtk_vcodec_set_curr_ctx(struct mtk_vcodec_dev *dev,
+-	struct mtk_vcodec_ctx *ctx);
+-struct mtk_vcodec_ctx *mtk_vcodec_get_curr_ctx(struct mtk_vcodec_dev *dev);
++void mtk_vcodec_set_curr_ctx(struct mtk_vcodec_dev *vdec_dev,
++				struct mtk_vcodec_ctx *ctx, int comp_idx);
++struct mtk_vcodec_ctx *mtk_vcodec_get_curr_ctx(struct mtk_vcodec_dev *vdec_dev,
++	unsigned int comp_idx);
++void *mtk_vcodec_get_hw_dev(struct mtk_vcodec_dev *dev, int comp_idx);
+ 
+ #endif /* _MTK_VCODEC_UTIL_H_ */
+diff --git a/drivers/media/platform/mtk-vcodec/vdec_drv_if.c b/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
+index 42008243ceac..05a5b240e906 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
++++ b/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
+@@ -24,21 +24,24 @@ int vdec_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
+ 		break;
+ 	case V4L2_PIX_FMT_H264:
+ 		ctx->dec_if = &vdec_h264_if;
++		ctx->hw_id = MTK_VDEC_CORE;
+ 		break;
+ 	case V4L2_PIX_FMT_VP8:
+ 		ctx->dec_if = &vdec_vp8_if;
++		ctx->hw_id = MTK_VDEC_CORE;
+ 		break;
+ 	case V4L2_PIX_FMT_VP9:
+ 		ctx->dec_if = &vdec_vp9_if;
++		ctx->hw_id = MTK_VDEC_CORE;
+ 		break;
+ 	default:
+ 		return -EINVAL;
  	}
-diff --git a/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c b/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c
-index 8267a9c4fd25..f96564277577 100644
---- a/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c
-+++ b/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c
-@@ -222,7 +222,7 @@ static unsigned int vp8_enc_wait_venc_done(struct venc_vp8_inst *inst)
- 	struct mtk_vcodec_ctx *ctx = (struct mtk_vcodec_ctx *)inst->ctx;
  
- 	if (!mtk_vcodec_wait_for_done_ctx(ctx, MTK_INST_IRQ_RECEIVED,
--					  WAIT_INTR_TIMEOUT_MS)) {
-+					  WAIT_INTR_TIMEOUT_MS, 0)) {
- 		irq_status = ctx->irq_status;
- 		mtk_vcodec_debug(inst, "isr return %x", irq_status);
- 	}
+ 	mtk_vdec_lock(ctx);
+-	mtk_vcodec_dec_clock_on(&ctx->dev->pm);
++	mtk_vcodec_dec_clock_on(ctx->dev, ctx->hw_id);
+ 	ret = ctx->dec_if->init(ctx);
+-	mtk_vcodec_dec_clock_off(&ctx->dev->pm);
++	mtk_vcodec_dec_clock_off(ctx->dev, ctx->hw_id);
+ 	mtk_vdec_unlock(ctx);
+ 
+ 	return ret;
+@@ -69,13 +72,11 @@ int vdec_if_decode(struct mtk_vcodec_ctx *ctx, struct mtk_vcodec_mem *bs,
+ 
+ 	mtk_vdec_lock(ctx);
+ 
+-	mtk_vcodec_set_curr_ctx(ctx->dev, ctx);
+-	mtk_vcodec_dec_clock_on(&ctx->dev->pm);
+-	enable_irq(ctx->dev->dec_irq);
++	mtk_vcodec_set_curr_ctx(ctx->dev, ctx, ctx->hw_id);
++	mtk_vcodec_dec_clock_on(ctx->dev, ctx->hw_id);
+ 	ret = ctx->dec_if->decode(ctx->drv_handle, bs, fb, res_chg);
+-	disable_irq(ctx->dev->dec_irq);
+-	mtk_vcodec_dec_clock_off(&ctx->dev->pm);
+-	mtk_vcodec_set_curr_ctx(ctx->dev, NULL);
++	mtk_vcodec_dec_clock_off(ctx->dev, ctx->hw_id);
++	mtk_vcodec_set_curr_ctx(ctx->dev, NULL, ctx->hw_id);
+ 
+ 	mtk_vdec_unlock(ctx);
+ 
+@@ -103,9 +104,9 @@ void vdec_if_deinit(struct mtk_vcodec_ctx *ctx)
+ 		return;
+ 
+ 	mtk_vdec_lock(ctx);
+-	mtk_vcodec_dec_clock_on(&ctx->dev->pm);
++	mtk_vcodec_dec_clock_on(ctx->dev, ctx->hw_id);
+ 	ctx->dec_if->deinit(ctx->drv_handle);
+-	mtk_vcodec_dec_clock_off(&ctx->dev->pm);
++	mtk_vcodec_dec_clock_off(ctx->dev, ctx->hw_id);
+ 	mtk_vdec_unlock(ctx);
+ 
+ 	ctx->drv_handle = NULL;
 -- 
 2.25.1
 
