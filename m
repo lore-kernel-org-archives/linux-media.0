@@ -2,81 +2,138 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FECAC4320E
-	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 09:48:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21EFCC43216
+	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 09:48:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0026E61076
-	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 09:48:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EEB6F6115C
+	for <linux-media@archiver.kernel.org>; Tue, 10 Aug 2021 09:48:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239275AbhHJJsz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Aug 2021 05:48:55 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:61815 "EHLO
+        id S239279AbhHJJs5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Aug 2021 05:48:57 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:65165 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238232AbhHJJss (ORCPT
+        with ESMTP id S239248AbhHJJsu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Aug 2021 05:48:48 -0400
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 10 Aug 2021 02:48:27 -0700
+        Tue, 10 Aug 2021 05:48:50 -0400
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 10 Aug 2021 02:48:28 -0700
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 10 Aug 2021 02:48:25 -0700
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 10 Aug 2021 02:48:27 -0700
 X-QCInternal: smtphost
 Received: from dikshita-linux.qualcomm.com ([10.204.65.237])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 10 Aug 2021 15:18:08 +0530
+  by ironmsg02-blr.qualcomm.com with ESMTP; 10 Aug 2021 15:18:14 +0530
 Received: by dikshita-linux.qualcomm.com (Postfix, from userid 347544)
-        id B959221CA3; Tue, 10 Aug 2021 15:18:07 +0530 (IST)
+        id D202E21CA3; Tue, 10 Aug 2021 15:18:13 +0530 (IST)
 From:   Dikshita Agarwal <dikshita@codeaurora.org>
 To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         vgarodia@codeaurora.org, Dikshita Agarwal <dikshita@codeaurora.org>
-Subject: [PATCH v4 0/7] media: venus: Enable venus support on sc7280
-Date:   Tue, 10 Aug 2021 15:17:48 +0530
-Message-Id: <1628588875-23790-1-git-send-email-dikshita@codeaurora.org>
+Subject: [PATCH v4 5/7] venus: vdec: set work route to fw
+Date:   Tue, 10 Aug 2021 15:17:53 +0530
+Message-Id: <1628588875-23790-6-git-send-email-dikshita@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1628588875-23790-1-git-send-email-dikshita@codeaurora.org>
+References: <1628588875-23790-1-git-send-email-dikshita@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series enables support for 6xx venus encode/decode on sc7280.
+Set work route to FW based on num of vpp pipes.
 
-The driver changes are dependent on [1]yaml and [2]dts patches.
+Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+---
+ drivers/media/platform/qcom/venus/hfi_cmds.c   |  7 +++++++
+ drivers/media/platform/qcom/venus/hfi_helper.h |  5 +++++
+ drivers/media/platform/qcom/venus/vdec.c       | 22 ++++++++++++++++++++++
+ 3 files changed, 34 insertions(+)
 
-[1] https://patchwork.kernel.org/project/linux-arm-msm/list/?series=484019
-[2] https://patchwork.kernel.org/project/linux-arm-msm/list/?series=484727
-
-Changes since v3:
- - addressed comments on v3 (stanimir).
- - rebased the changes on latest media tree.
-
-Dikshita Agarwal (7):
-  venus: firmware: enable no tz fw loading for sc7280
-  media: venus: core: Add sc7280 DT compatible and resource data
-  media: venus: Add num_vpp_pipes to resource structure
-  media: venus: hfi: Skip AON register programming for V6 1pipe
-  venus: vdec: set work route to fw
-  media: venus: helpers: update NUM_MBS macro calculation
-  media: venus: Set buffer to FW based on FW min count requirement.
-
- drivers/media/platform/qcom/venus/core.c           | 54 ++++++++++++++++++++++
- drivers/media/platform/qcom/venus/core.h           |  2 +
- drivers/media/platform/qcom/venus/firmware.c       | 42 ++++++++++++-----
- drivers/media/platform/qcom/venus/helpers.c        | 23 +++++----
- drivers/media/platform/qcom/venus/hfi_cmds.c       |  7 +++
- drivers/media/platform/qcom/venus/hfi_helper.h     | 14 ++++++
- drivers/media/platform/qcom/venus/hfi_msgs.c       |  7 +++
- .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   |  6 ++-
- drivers/media/platform/qcom/venus/hfi_platform.c   | 13 ------
- drivers/media/platform/qcom/venus/hfi_platform.h   |  2 -
- .../media/platform/qcom/venus/hfi_platform_v6.c    |  6 ---
- drivers/media/platform/qcom/venus/hfi_venus.c      |  4 ++
- drivers/media/platform/qcom/venus/hfi_venus_io.h   |  2 +
- drivers/media/platform/qcom/venus/vdec.c           | 42 ++++++++++++++---
- 14 files changed, 175 insertions(+), 49 deletions(-)
-
+diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
+index f510247..de41072 100644
+--- a/drivers/media/platform/qcom/venus/hfi_cmds.c
++++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+@@ -1291,6 +1291,13 @@ pkt_session_set_property_6xx(struct hfi_session_set_property_pkt *pkt,
+ 		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*cq);
+ 		break;
+ 	}
++	case HFI_PROPERTY_PARAM_WORK_ROUTE: {
++		struct hfi_video_work_route *in = pdata, *wr = prop_data;
++
++		wr->video_work_route = in->video_work_route;
++		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*wr);
++		break;
++	}
+ 	default:
+ 		return pkt_session_set_property_4xx(pkt, cookie, ptype, pdata);
+ 	}
+diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
+index b0a9beb..dc9f992 100644
+--- a/drivers/media/platform/qcom/venus/hfi_helper.h
++++ b/drivers/media/platform/qcom/venus/hfi_helper.h
+@@ -448,6 +448,7 @@
+ #define HFI_PROPERTY_PARAM_MVC_BUFFER_LAYOUT			0x100f
+ #define HFI_PROPERTY_PARAM_MAX_SESSIONS_SUPPORTED		0x1010
+ #define HFI_PROPERTY_PARAM_WORK_MODE				0x1015
++#define HFI_PROPERTY_PARAM_WORK_ROUTE				0x1017
+ 
+ /*
+  * HFI_PROPERTY_CONFIG_COMMON_START
+@@ -868,6 +869,10 @@ struct hfi_video_work_mode {
+ 	u32 video_work_mode;
+ };
+ 
++struct hfi_video_work_route {
++	u32 video_work_route;
++};
++
+ struct hfi_h264_vui_timing_info {
+ 	u32 enable;
+ 	u32 fixed_framerate;
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index 198e47e..4e7b9e5 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -653,6 +653,24 @@ static int vdec_set_properties(struct venus_inst *inst)
+ 	return 0;
+ }
+ 
++static int vdec_set_work_route(struct venus_inst *inst)
++{
++	struct hfi_video_work_route wr;
++	u32 ptype;
++	int ret;
++
++	if(!IS_V6(inst->core))
++		return 0;
++
++	wr.video_work_route = inst->core->res->num_vpp_pipes;
++
++	ptype = HFI_PROPERTY_PARAM_WORK_ROUTE;
++	ret = hfi_session_set_property(inst, ptype, &wr);
++	if (ret)
++		return ret;
++	return 0;
++}
++
+ #define is_ubwc_fmt(fmt) (!!((fmt) & HFI_COLOR_FORMAT_UBWC_BASE))
+ 
+ static int vdec_output_conf(struct venus_inst *inst)
+@@ -1039,6 +1057,10 @@ static int vdec_start_output(struct venus_inst *inst)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = vdec_set_work_route(inst);
++	if (ret)
++		return ret;
++
+ 	ret = vdec_output_conf(inst);
+ 	if (ret)
+ 		return ret;
 -- 
 2.7.4
 
