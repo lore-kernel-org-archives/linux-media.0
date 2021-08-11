@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB07AC43216
-	for <linux-media@archiver.kernel.org>; Wed, 11 Aug 2021 02:59:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E543C43214
+	for <linux-media@archiver.kernel.org>; Wed, 11 Aug 2021 02:59:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9EF4D60230
-	for <linux-media@archiver.kernel.org>; Wed, 11 Aug 2021 02:59:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4012A60F11
+	for <linux-media@archiver.kernel.org>; Wed, 11 Aug 2021 02:59:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233001AbhHKC71 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 Aug 2021 22:59:27 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:49634 "EHLO
+        id S233329AbhHKC72 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 Aug 2021 22:59:28 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:49560 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232964AbhHKC7Q (ORCPT
+        with ESMTP id S232184AbhHKC7O (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 Aug 2021 22:59:16 -0400
-X-UUID: 431b03e7e122404f8139dc304fd73d12-20210811
-X-UUID: 431b03e7e122404f8139dc304fd73d12-20210811
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        Tue, 10 Aug 2021 22:59:14 -0400
+X-UUID: 63d2133adb9b4011a188ccf9173ae07f-20210811
+X-UUID: 63d2133adb9b4011a188ccf9173ae07f-20210811
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 203783980; Wed, 11 Aug 2021 10:58:49 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1962693669; Wed, 11 Aug 2021 10:58:47 +0800
 Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 11 Aug 2021 10:58:48 +0800
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 11 Aug 2021 10:58:45 +0800
 Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 11 Aug 2021 10:58:46 +0800
+ Transport; Wed, 11 Aug 2021 10:58:44 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -53,9 +53,9 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         George Sun <george.sun@mediatek.com>
-Subject: [PATCH v5, 12/15] media: mtk-vcodec: Support 34bits dma address for vdec
-Date:   Wed, 11 Aug 2021 10:57:58 +0800
-Message-ID: <20210811025801.21597-13-yunfei.dong@mediatek.com>
+Subject: [PATCH v5, 10/15] media: mtk-vcodec: Add new interface to lock different hardware
+Date:   Wed, 11 Aug 2021 10:57:56 +0800
+Message-ID: <20210811025801.21597-11-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20210811025801.21597-1-yunfei.dong@mediatek.com>
 References: <20210811025801.21597-1-yunfei.dong@mediatek.com>
@@ -66,35 +66,75 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the dma_set_mask_and_coherent helper to set vdec
-DMA bit mask to support 34bits iova space(16GB) that
-the mt8192 iommu HW support.
-
-Whole the iova range separate to 0~4G/4G~8G/8G~12G/12G~16G,
-regarding which iova range VDEC actually locate, it
-depends on the dma-ranges property of vdec dtsi node.
+For add new hardware, not only need to lock lat hardware, also
+need to lock core hardware in case of different instance start
+to decoder at the same time.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
 v5: no changes
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c     | 4 ++--
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 6 +++---
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h     | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+index 2b334a8a81c6..130ecef2e766 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+@@ -105,12 +105,12 @@ static int vidioc_decoder_cmd(struct file *file, void *priv,
+ 
+ void mtk_vdec_unlock(struct mtk_vcodec_ctx *ctx)
+ {
+-	mutex_unlock(&ctx->dev->dec_mutex);
++	mutex_unlock(&ctx->dev->dec_mutex[ctx->hw_id]);
+ }
+ 
+ void mtk_vdec_lock(struct mtk_vcodec_ctx *ctx)
+ {
+-	mutex_lock(&ctx->dev->dec_mutex);
++	mutex_lock(&ctx->dev->dec_mutex[ctx->hw_id]);
+ }
+ 
+ void mtk_vcodec_dec_release(struct mtk_vcodec_ctx *ctx)
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index 002352fcf8de..1a8d9308327d 100644
+index 109f7de126a1..e448cb238c7f 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -417,6 +417,9 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		}
+@@ -373,7 +373,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 	struct video_device *vfd_dec;
+ 	phandle rproc_phandle;
+ 	enum mtk_vcodec_fw_type fw_type;
+-	int ret;
++	int i, ret;
+ 
+ 	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
+ 	if (!dev)
+@@ -405,8 +405,8 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		goto err_dec_pm;
  	}
  
-+	if (of_get_property(pdev->dev.of_node, "dma-ranges", NULL))
-+		dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(34));
-+
- 	for (i = 0; i < MTK_VDEC_HW_MAX; i++)
- 		mutex_init(&dev->dec_mutex[i]);
+-	mutex_init(&dev->dec_mutex);
+-	mutex_init(&dev->dev_mutex);
++	for (i = 0; i < MTK_VDEC_HW_MAX; i++)
++		mutex_init(&dev->dec_mutex[i]);
  	spin_lock_init(&dev->irqlock);
+ 
+ 	snprintf(dev->v4l2_dev.name, sizeof(dev->v4l2_dev.name), "%s",
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index a8242389ad24..f1e63acaec76 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -496,7 +496,7 @@ struct mtk_vcodec_dev {
+ 	int dec_irq;
+ 	int enc_irq;
+ 
+-	struct mutex dec_mutex;
++	struct mutex dec_mutex[MTK_VDEC_HW_MAX];
+ 	struct mutex enc_mutex;
+ 
+ 	struct mtk_vcodec_pm pm;
 -- 
 2.25.1
 
