@@ -2,230 +2,235 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 390B7C4338F
-	for <linux-media@archiver.kernel.org>; Wed, 11 Aug 2021 10:00:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9497CC4338F
+	for <linux-media@archiver.kernel.org>; Wed, 11 Aug 2021 10:15:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F56760E9B
-	for <linux-media@archiver.kernel.org>; Wed, 11 Aug 2021 10:00:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B11860D07
+	for <linux-media@archiver.kernel.org>; Wed, 11 Aug 2021 10:15:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236726AbhHKKBN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Aug 2021 06:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
+        id S236904AbhHKKQN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Aug 2021 06:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236700AbhHKKBA (ORCPT
+        with ESMTP id S237080AbhHKKOv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Aug 2021 06:01:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE71C061765
-        for <linux-media@vger.kernel.org>; Wed, 11 Aug 2021 03:00:37 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1mDl2H-0002SZ-1U; Wed, 11 Aug 2021 12:00:33 +0200
-Received: from mtr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1mDl2F-00044X-ON; Wed, 11 Aug 2021 12:00:31 +0200
-Date:   Wed, 11 Aug 2021 12:00:31 +0200
-From:   Michael Tretter <m.tretter@pengutronix.de>
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, kernel@pengutronix.de
-Subject: Re: [PATCH v2] media: vivid: drop CONFIG_FB dependency
-Message-ID: <20210811100031.GB27204@pengutronix.de>
-Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, kernel@pengutronix.de
-References: <8615e9e583173652894889afd492022683389621.1628177586.git.guillaume.tucker@collabora.com>
+        Wed, 11 Aug 2021 06:14:51 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6A6C0617A2
+        for <linux-media@vger.kernel.org>; Wed, 11 Aug 2021 03:14:06 -0700 (PDT)
+Received: from [IPv6:2a02:810a:880:f54:2882:6431:6b83:8ffa] (unknown [IPv6:2a02:810a:880:f54:2882:6431:6b83:8ffa])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 8382D1F42465;
+        Wed, 11 Aug 2021 11:14:04 +0100 (BST)
+Subject: =?UTF-8?B?UmU6IOetlOWkjTog562U5aSNOiBbUEFUQ0ggNC81XSBtZWRpYTogbXRr?=
+ =?UTF-8?Q?-vcodec=3a_Add_two_error_cases_upon_vpu_irq_handling?=
+To:     =?UTF-8?B?SXJ1aSBXYW5nICjnjovnkZ4p?= <Irui.Wang@mediatek.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+References: <20210804142729.7231-1-dafna.hirschfeld@collabora.com>
+ <20210804142729.7231-5-dafna.hirschfeld@collabora.com>
+ <81524c608e9ef640e71d969aa83d1a383e687b0a.camel@mediatek.com>
+ <f343f406-111b-326f-3671-094e699a3aa6@collabora.com>
+ <HK0PR03MB302713CFF1F1E79AD99737679DF69@HK0PR03MB3027.apcprd03.prod.outlook.com>
+ <18e477a2-60c7-3e18-730d-ab0cb5e5821a@collabora.com>
+ <HK0PR03MB30274F4B532D52E775687E069DF69@HK0PR03MB3027.apcprd03.prod.outlook.com>
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Message-ID: <29274c52-22d3-b17b-6278-04c298272e0f@collabora.com>
+Date:   Wed, 11 Aug 2021 12:14:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8615e9e583173652894889afd492022683389621.1628177586.git.guillaume.tucker@collabora.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 11:49:31 up 174 days, 13:13, 93 users,  load average: 0.01, 0.05,
- 0.07
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mtr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+In-Reply-To: <HK0PR03MB30274F4B532D52E775687E069DF69@HK0PR03MB3027.apcprd03.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 05 Aug 2021 16:36:31 +0100, Guillaume Tucker wrote:
-> Drop the vivid dependency on CONFIG_FB by compiling out parts of the
-> code that make use of the framebuffer API when not enabled.  This is
-> particularly useful as CONFIG_FB is not selected any more by
-> DRM_FBDEV_EMULATION.
 
-I like this a lot.
+
+On 09.08.21 11:12, Irui Wang (王瑞) wrote:
+> Hi Dafna,
+> 
+>>> 2. Always happened  issue ?  timeout at the beginning or  in processing ?
+> 
+>> The commands that I run is:
+> 
+>>> sudo --user=#1000 /usr/local/libexec/chrome-binary-tests/video_encode_accelerator_tests --gtest_filter=-*NV12Dmabuf*  -->>codec=vp8 >/usr/local/share/tast/data/chromiumos/tast/local/bundles/cros/video/data/tulip2-320x180.yuv --disable_validator
+> 
+>>> The command sometime succeed but when I run it sequentially then at some point after few attempts I start to get those timeout errors.
+> 
+> It seems mean VP8 encoding function OK, but failed sometimes, did you have check VENC clock info during encoding:
+> 
+> cat /sys/kernel/debug/clk/clk_summary | grep venc:
+> 
+> venc_sel   > it's H.264 clock
+> venclt_sel  > it's VP8 clock
+> 
+> the enable&prepare count is not 0 during encoding process.
+
+I see that the values are indeed incremented while streaming.
+When timeout occurs it is always in the beginning of the encoding. So upon the first call to vp8_enc_wait_venc_done.
+
+Thanks,
+Dafna
+
 
 > 
-> Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-> ---
+> Thanks
+> Best Regards
 > 
-> Notes:
->     Changes in v2:
->     * fix Makefile conditional for when CONFIG_FB=m
->     * compile-out bit 16 (framebuffer) when no CONFIG_FB
-> 
->  drivers/media/test-drivers/vivid/Kconfig       | 5 +----
->  drivers/media/test-drivers/vivid/Makefile      | 5 ++++-
->  drivers/media/test-drivers/vivid/vivid-core.c  | 9 +++++++++
->  drivers/media/test-drivers/vivid/vivid-ctrls.c | 4 ++++
->  4 files changed, 18 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/media/test-drivers/vivid/Kconfig b/drivers/media/test-drivers/vivid/Kconfig
-> index c3abde2986b2..06ad350f1903 100644
-> --- a/drivers/media/test-drivers/vivid/Kconfig
-> +++ b/drivers/media/test-drivers/vivid/Kconfig
-> @@ -1,13 +1,10 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  config VIDEO_VIVID
->  	tristate "Virtual Video Test Driver"
-> -	depends on VIDEO_DEV && VIDEO_V4L2 && !SPARC32 && !SPARC64 && FB
-> +	depends on VIDEO_DEV && VIDEO_V4L2 && !SPARC32 && !SPARC64
->  	depends on HAS_DMA
->  	select FONT_SUPPORT
->  	select FONT_8x16
-> -	select FB_CFB_FILLRECT
-> -	select FB_CFB_COPYAREA
-> -	select FB_CFB_IMAGEBLIT
->  	select VIDEOBUF2_VMALLOC
->  	select VIDEOBUF2_DMA_CONTIG
->  	select VIDEO_V4L2_TPG
-> diff --git a/drivers/media/test-drivers/vivid/Makefile b/drivers/media/test-drivers/vivid/Makefile
-> index b12ad0152a3e..2ad634da7f88 100644
-> --- a/drivers/media/test-drivers/vivid/Makefile
-> +++ b/drivers/media/test-drivers/vivid/Makefile
-> @@ -3,10 +3,13 @@ vivid-objs := vivid-core.o vivid-ctrls.o vivid-vid-common.o vivid-vbi-gen.o \
->  		vivid-vid-cap.o vivid-vid-out.o vivid-kthread-cap.o vivid-kthread-out.o \
->  		vivid-radio-rx.o vivid-radio-tx.o vivid-radio-common.o \
->  		vivid-rds-gen.o vivid-sdr-cap.o vivid-vbi-cap.o vivid-vbi-out.o \
-> -		vivid-osd.o vivid-meta-cap.o vivid-meta-out.o \
-> +		vivid-meta-cap.o vivid-meta-out.o \
->  		vivid-kthread-touch.o vivid-touch-cap.o
->  ifeq ($(CONFIG_VIDEO_VIVID_CEC),y)
->    vivid-objs += vivid-cec.o
->  endif
-> +ifneq ($(CONFIG_FB),)
-> +  vivid-objs += vivid-osd.o
-
-vivid-osd depends on FB_CFB_FILLRECT, FB_CFB_COPYAREA, and FB_CFB_IMAGEBLIT,
-which are not selected anymore, and linking fails if CONFIG_FB is enabled, but
-the others are disabled.
-
-Michael
-
-> +endif
->  
->  obj-$(CONFIG_VIDEO_VIVID) += vivid.o
-> diff --git a/drivers/media/test-drivers/vivid/vivid-core.c b/drivers/media/test-drivers/vivid/vivid-core.c
-> index d2bd2653cf54..7675962b9e93 100644
-> --- a/drivers/media/test-drivers/vivid/vivid-core.c
-> +++ b/drivers/media/test-drivers/vivid/vivid-core.c
-> @@ -126,7 +126,9 @@ MODULE_PARM_DESC(node_types, " node types, default is 0xe1d3d. Bitmask with the
->  			     "\t\t    bit 8: Video Output node\n"
->  			     "\t\t    bit 10-11: VBI Output node: 0 = none, 1 = raw vbi, 2 = sliced vbi, 3 = both\n"
->  			     "\t\t    bit 12: Radio Transmitter node\n"
-> +#if IS_ENABLED(CONFIG_FB)
->  			     "\t\t    bit 16: Framebuffer for testing overlays\n"
-> +#endif
->  			     "\t\t    bit 17: Metadata Capture node\n"
->  			     "\t\t    bit 18: Metadata Output node\n"
->  			     "\t\t    bit 19: Touch Capture node\n");
-> @@ -1021,9 +1023,11 @@ static int vivid_detect_feature_set(struct vivid_dev *dev, int inst,
->  	/* do we have a modulator? */
->  	*has_modulator = dev->has_radio_tx;
->  
-> +#if IS_ENABLED(CONFIG_FB)
->  	if (dev->has_vid_cap)
->  		/* do we have a framebuffer for overlay testing? */
->  		dev->has_fb = node_type & 0x10000;
-> +#endif
->  
->  	/* can we do crop/compose/scaling while capturing? */
->  	if (no_error_inj && *ccs_cap == -1)
-> @@ -1355,6 +1359,7 @@ static int vivid_create_queues(struct vivid_dev *dev)
->  			return ret;
->  	}
->  
-> +#if IS_ENABLED(CONFIG_FB)
->  	if (dev->has_fb) {
->  		/* Create framebuffer for testing capture/output overlay */
->  		ret = vivid_fb_init(dev);
-> @@ -1363,6 +1368,8 @@ static int vivid_create_queues(struct vivid_dev *dev)
->  		v4l2_info(&dev->v4l2_dev, "Framebuffer device registered as fb%d\n",
->  			  dev->fb_info.node);
->  	}
-> +#endif
-> +
->  	return 0;
->  }
->  
-> @@ -2069,12 +2076,14 @@ static int vivid_remove(struct platform_device *pdev)
->  				video_device_node_name(&dev->radio_tx_dev));
->  			video_unregister_device(&dev->radio_tx_dev);
->  		}
-> +#if IS_ENABLED(CONFIG_FB)
->  		if (dev->has_fb) {
->  			v4l2_info(&dev->v4l2_dev, "unregistering fb%d\n",
->  				dev->fb_info.node);
->  			unregister_framebuffer(&dev->fb_info);
->  			vivid_fb_release_buffers(dev);
->  		}
-> +#endif
->  		if (dev->has_meta_cap) {
->  			v4l2_info(&dev->v4l2_dev, "unregistering %s\n",
->  				  video_device_node_name(&dev->meta_cap_dev));
-> diff --git a/drivers/media/test-drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
-> index 8dc50fe22972..081470a1d88a 100644
-> --- a/drivers/media/test-drivers/vivid/vivid-ctrls.c
-> +++ b/drivers/media/test-drivers/vivid/vivid-ctrls.c
-> @@ -305,6 +305,7 @@ static const struct v4l2_ctrl_config vivid_ctrl_ro_int32 = {
->  
->  /* Framebuffer Controls */
->  
-> +#if IS_ENABLED(CONFIG_FB)
->  static int vivid_fb_s_ctrl(struct v4l2_ctrl *ctrl)
->  {
->  	struct vivid_dev *dev = container_of(ctrl->handler,
-> @@ -328,6 +329,7 @@ static const struct v4l2_ctrl_config vivid_ctrl_clear_fb = {
->  	.name = "Clear Framebuffer",
->  	.type = V4L2_CTRL_TYPE_BUTTON,
->  };
-> +#endif /* IS_ENABLED(CONFIG_FB) */
->  
->  
->  /* Video User Controls */
-> @@ -1761,8 +1763,10 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
->  	    (dev->has_vbi_cap && dev->has_vbi_out))
->  		v4l2_ctrl_new_custom(hdl_loop_cap, &vivid_ctrl_loop_video, NULL);
->  
-> +#if IS_ENABLED(CONFIG_FB)
->  	if (dev->has_fb)
->  		v4l2_ctrl_new_custom(hdl_fb, &vivid_ctrl_clear_fb, NULL);
-> +#endif
->  
->  	if (dev->has_radio_rx) {
->  		v4l2_ctrl_new_custom(hdl_radio_rx, &vivid_ctrl_radio_hw_seek_mode, NULL);
-> -- 
-> 2.20.1
+> -----邮件原件-----
+> 发件人: Dafna Hirschfeld [mailto:dafna.hirschfeld@collabora.com]
+> 发送时间: 2021年8月9日 16:27
+> 收件人: Irui Wang (王瑞)
+> 抄送: Linux Media Mailing List; moderated list:ARM/Mediatek SoC support; Enric Balletbo i Serra
+> 主题: Re: 答复: [PATCH 4/5] media: mtk-vcodec: Add two error cases upon vpu irq handling
 > 
 > 
+> 
+> On 09.08.21 09:37, Irui Wang (王瑞) wrote:
+>> Hi Dafna,
+>>
+>>>> I am testing the vp8 encoder on chromeos and at some point the encoder interrupts stop arriving so I try to figure out why and report any possible error.
+>> 1. Log shows wait IRQ timeout ?
+> 
+> Hi, yes, I get timeout when waiting to the encoder interrupt. The timeout is on vp8_enc_wait_venc_done
+> 
+> 
+>> 2. Always happened  issue ?  timeout at the beginning or  in processing ?
+> 
+> The commands that I run is:
+> 
+> sudo --user=#1000 /usr/local/libexec/chrome-binary-tests/video_encode_accelerator_tests --gtest_filter=-*NV12Dmabuf*  --codec=vp8 /usr/local/share/tast/data/chromiumos/tast/local/bundles/cros/video/data/tulip2-320x180.yuv --disable_validator
+> 
+> The command sometime succeed but when I run it sequentially then at some point after few attempts I start to get those timeout errors.
+> 
+>> 3. how about IRQ infos?
+>> cat /proc/interrupts | grep vcodec
+>> 18002000.vcodec   >> it's H.264 encoder
+>> 19002000.vcodec  >> it's  VP8 encoder
+>>
+>> I was told you have  met another H.264 encoding failed before, did you find reasons about that ?
+> 
+> No,
+> But since I see that the google meetup uses the vp8 encoder I decided to test the vp8 first.
+> 
+>>> [   81.918747] [MTK_V4L2][ERROR] mtk_vcodec_wait_for_done_ctx:32: [3] ctx->type=1, cmd=1, wait_event_interruptible_timeout time=1000ms out 0 0!
+>>> [   81.931392] [MTK_VCODEC][ERROR][3]: h264_encode_frame() irq_status=0 failed
+>>> [   81.938470] [MTK_V4L2][ERROR] mtk_venc_worker:1219: venc_if_encode failed=-5
+> 
+> 
+>>
+>> MT8173 latest VPUD firmware:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmwar
+>> e.git/commit/?id=aaed4a8bf9a77ec68376e8d92fb218d5fdd88b59
+>>
+> 
+> I uses the latest firmware.
+> 
+> Thanks,
+> Dafna
+> 
+>> Thanks
+>> Best Regards
+>>
+>> -----邮件原件-----
+>> 发件人: Dafna Hirschfeld [mailto:dafna.hirschfeld@collabora.com]
+>> 发送时间: 2021年8月6日 15:49
+>> 收件人: Irui Wang (王瑞); linux-kernel@vger.kernel.org;
+>> linux-media@vger.kernel.org; linux-mediatek@lists.infradead.org
+>> 抄送: dafna3@gmail.com; tfiga@chromium.org; Tiffany Lin (林慧珊);
+>> eizan@chromium.org; Maoguang Meng (孟毛广); kernel@collabora.com;
+>> mchehab@kernel.org; hverkuil@xs4all.nl; Yunfei Dong (董云飞); Yong Wu
+>> (吴勇); hsinyi@chromium.org; matthias.bgg@gmail.com; Andrew-CT Chen
+>> (陳智迪); acourbot@chromium.org
+>> 主题: Re: [PATCH 4/5] media: mtk-vcodec: Add two error cases upon vpu
+>> irq handling
+>>
+>>
+>>
+>> On 06.08.21 08:58, Irui Wang (王瑞) wrote:
+>>> On Wed, 2021-08-04 at 16:27 +0200, Dafna Hirschfeld wrote:
+>>>> 1. Fail if the function mtk_vcodec_fw_map_dm_addr returns ERR
+>>>> pointer.
+>>>> 2. Fail if the state from the vpu msg is either
+>>>> VEN_IPI_MSG_ENC_STATE_ERROR or VEN_IPI_MSG_ENC_STATE_PART
+>>>>
+>>>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+>>>> ---
+>>>>    drivers/media/platform/mtk-vcodec/venc_vpu_if.c | 8 ++++++++
+>>>>    1 file changed, 8 insertions(+)
+>>>>
+>>>> diff --git a/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
+>>>> b/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
+>>>> index 32dc844d16f9..234705ba7cd6 100644
+>>>> --- a/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
+>>>> +++ b/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
+>>>> @@ -17,6 +17,8 @@ static int handle_enc_init_msg(struct
+>>>> venc_vpu_inst *vpu, const void *data)
+>>>>    vpu->vsi = mtk_vcodec_fw_map_dm_addr(vpu->ctx->dev->fw_handler,
+>>>>         msg->vpu_inst_addr);
+>>>>    
+>>>> +if (IS_ERR(vpu->vsi))
+>>>> +return PTR_ERR(vpu->vsi);
+>>>>    /* Firmware version field value is unspecified on MT8173. */
+>>>>    if (vpu->ctx->dev->venc_pdata->chip == MTK_MT8173)
+>>>>    return 0;
+>>>> @@ -42,6 +44,12 @@ static int handle_enc_encode_msg(struct
+>>>> venc_vpu_inst *vpu, const void *data)
+>>>>    vpu->state = msg->state;
+>>>>    vpu->bs_size = msg->bs_size;
+>>>>    vpu->is_key_frm = msg->is_key_frm;
+>>>> +if (vpu->state == VEN_IPI_MSG_ENC_STATE_ERROR ||
+>>>> +    vpu->state == VEN_IPI_MSG_ENC_STATE_PART) { mtk_vcodec_err(vpu,
+>>>> +"bad ipi-enc-state: %s",
+>>>> +       vpu->state ==
+>>>> VEN_IPI_MSG_ENC_STATE_ERROR ? "ERR" : "PART");
+>>>> +return -EINVAL;
+>>>> +}
+>>>
+>>> Hi Dafna,
+>>>
+>>> This state check is useless, the enc result will check in
+>>> "vpu_enc_ipi_handler".
+>>>
+>>
+>> Hi, thanks for reviewing. I see that the vpu_enc_ipi_handler only test the msg->status and I see that the states are not tested anywhere except of "skip" state in the h264 enc.
+>>
+>> Can't there be a scenario where msg->status is ok but the state is error?
+>> I am testing the vp8 encoder on chromeos and at some point the encoder interrupts stop arriving so I try to figure out why and report any possible error.
+>>
+>> Thanks,
+>> Dafna
+>>
+>>> Thanks
+>>>
+>>>>    return 0;
+>>>>    }
+>>>>    
+>>
+>> ************* MEDIATEK Confidentiality Notice ******************** The
+>> information contained in this e-mail message (including any
+>> attachments) may be confidential, proprietary, privileged, or
+>> otherwise exempt from disclosure under applicable laws. It is intended
+>> to be conveyed only to the designated recipient(s). Any use,
+>> dissemination, distribution, printing, retaining or copying of this
+>> e-mail (including its
+>> attachments) by unintended recipient(s) is strictly prohibited and may
+>> be unlawful. If you are not an intended recipient of this e-mail, or
+>> believe that you have received this e-mail in error, please notify the
+>> sender immediately (by replying to this e-mail), delete any and all
+>> copies of this e-mail (including any attachments) from your system,
+>> and do not disclose the content of this e-mail to any other person. Thank you!
+>>
