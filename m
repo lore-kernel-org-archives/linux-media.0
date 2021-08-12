@@ -2,185 +2,130 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64330C432BE
-	for <linux-media@archiver.kernel.org>; Thu, 12 Aug 2021 13:14:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B19A3C4320A
+	for <linux-media@archiver.kernel.org>; Thu, 12 Aug 2021 17:01:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F170610A3
-	for <linux-media@archiver.kernel.org>; Thu, 12 Aug 2021 13:14:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 872D560F57
+	for <linux-media@archiver.kernel.org>; Thu, 12 Aug 2021 17:01:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237043AbhHLNOq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Aug 2021 09:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236439AbhHLNOp (ORCPT
+        id S234166AbhHLRCX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Aug 2021 13:02:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54453 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234110AbhHLRCW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Aug 2021 09:14:45 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B16CC061765
-        for <linux-media@vger.kernel.org>; Thu, 12 Aug 2021 06:14:20 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 203-20020a1c00d40000b02902e6a4e244e4so4537070wma.4
-        for <linux-media@vger.kernel.org>; Thu, 12 Aug 2021 06:14:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dmErGBV7VXck18Gc2qFrnojMPrzyI2EPrDXNv3U1XmY=;
-        b=CYOg+LUjp256t2um90jzwNbIMAWQqkmOEyFN5EaBp2h4O1nKvX8H8o+CpGJVu0cvra
-         Bi59H593zFqTO0Tjipd0y7gxXb6Ue/uv7MOnvMvMSbigvqtdo3oKpION6K2wkaAQM/Ot
-         psaWaQkhb4+YONaercPJtRtGxTcp9kDY4zUv0=
+        Thu, 12 Aug 2021 13:02:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1628787716;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fA6rYJ8jGaz9Q7oV+LT1wgeqyltB1zkMp7DyaXUnHo4=;
+        b=R/XL/vbahcAGoGV1yKnXowfFodjdFifHtPl3Xw/SotzF1om48yHdfSc4tTgQLsGBRbs1Ef
+        f2kDXZYGt1txNUPbuFweDvDimG/SGEihF9sojLkDGIDkaWEWEF+vekdWPSqPbavC4DIiHf
+        AbxspytdKLg+hYiLN1PnQDIGVY3ZLW8=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-439-PN3kqZuPOQKRmtz0Al7vjQ-1; Thu, 12 Aug 2021 13:01:55 -0400
+X-MC-Unique: PN3kqZuPOQKRmtz0Al7vjQ-1
+Received: by mail-oo1-f69.google.com with SMTP id v3-20020a4ae0430000b029028735f9d900so2372929oos.12
+        for <linux-media@vger.kernel.org>; Thu, 12 Aug 2021 10:01:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=dmErGBV7VXck18Gc2qFrnojMPrzyI2EPrDXNv3U1XmY=;
-        b=XMqzgEMniEoNv9yj4TIdtBPZuQooxaQ4GIGs489Y3TAhi/xbzA8MXNrdbBU+4pkI0S
-         qJ1+NORaxLiq7nuCUitQo9w9LueZxKg+jTYYGjY7j2aIbWxe1SIRa5WtfNETD2sJtJr9
-         Mv6uiO4C4XpOzSDBOd1trUTnFOBxla+c3pyPbdXPeUDd9gAXclJu0xsb8MVj2tld6Y1s
-         1riib/EW1/ykoiwdv8k3qf0cAUAz6kzSB7JXFLwLQb89rF0U0vX2/QNESjWOnc5JRYfp
-         CM/3311IXU81sxTXyt0OYL2nZOFH433v700aOrkdy8fjKDiBSBi8WlSGOUi4I+PA3Dzz
-         k79A==
-X-Gm-Message-State: AOAM530RQ7s4EZoq7xDKCilAWN/4xox70mVJWpHRAFV79pahEd7ejdgF
-        AS5v9LcI93zq+bNef/AQ1Eui1A==
-X-Google-Smtp-Source: ABdhPJwkvxrgUNLDCUG2WS460z2SKSCQl05C+7mRo54qZ58QNtO0XiYEVEgB1vN4eNSqQUwqOsYJGA==
-X-Received: by 2002:a1c:4e02:: with SMTP id g2mr15899917wmh.150.1628774059127;
-        Thu, 12 Aug 2021 06:14:19 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id h4sm2914957wru.2.2021.08.12.06.14.18
+        bh=fA6rYJ8jGaz9Q7oV+LT1wgeqyltB1zkMp7DyaXUnHo4=;
+        b=cOOUqU9+U25+sBxgXGL5HOdMPXeYySc74gWfxumkcQTJDsxYMdfW5vPQQXQ/Av+m/V
+         0Px2IjSU57dSGwit8Mt2UFAZiK87PCIwOMjPC6hPaF5cIq7c6O3IK05djEXHUCaJS4ia
+         X9kdh6EDMsAXBJ2334xXM2V7V8KcynLAqB/eHwQ7crVaufzKW24FIt7Q4WrML3LJKRMu
+         G/tcueOZ+bjpHKeI5sH1VJXAvZ+zwuQu9LcfmY/doUJ6lH8H08wK9Go+BVhhUtn8fTYX
+         eC8C0ow7s7UpjzZ+th/DrN6RJ2hGMPTdfQ1nYySYxFZcxOSIcUmU4NrPOfSpzNTXDw5o
+         eNyA==
+X-Gm-Message-State: AOAM531TpNnB/SzkQVFLmUTtD7Gmq/2CqVwSGVl0LxuFdeL6hcfWi/Ol
+        Fsn6FnMWNmcxY6Q546Iml1CNYV5DYv8VdRpQTknrMa/NHOiY8nZ4rw7ke8ZVz2EK5HE5cgnHAYw
+        rPoE3tWe3HpGQPRlzeIV7RzE=
+X-Received: by 2002:aca:34c4:: with SMTP id b187mr4171749oia.139.1628787714954;
+        Thu, 12 Aug 2021 10:01:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwfv3Cg/zLBaCtKA1k94ILYil5i/BhCl7FUKSc481O7mxH6K3v5j81NvUZQFAfzy+CDHmaQiw==
+X-Received: by 2002:aca:34c4:: with SMTP id b187mr4171739oia.139.1628787714820;
+        Thu, 12 Aug 2021 10:01:54 -0700 (PDT)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id f8sm321336oos.4.2021.08.12.10.01.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Aug 2021 06:14:18 -0700 (PDT)
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-To:     DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 1/4] dma-buf: Require VM_PFNMAP vma for mmap
-Date:   Thu, 12 Aug 2021 15:14:09 +0200
-Message-Id: <20210812131412.2487363-1-daniel.vetter@ffwll.ch>
-X-Mailer: git-send-email 2.32.0
+        Thu, 12 Aug 2021 10:01:54 -0700 (PDT)
+From:   trix@redhat.com
+To:     hverkuil-cisco@xs4all.nl, mchehab@kernel.org,
+        ville.syrjala@linux.intel.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] video/hdmi: handle short reads of hdmi info frame.
+Date:   Thu, 12 Aug 2021 10:01:46 -0700
+Message-Id: <20210812170146.1046885-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tldr; DMA buffers aren't normal memory, expecting that you can use
-them like that (like calling get_user_pages works, or that they're
-accounting like any other normal memory) cannot be guaranteed.
+From: Tom Rix <trix@redhat.com>
 
-Since some userspace only runs on integrated devices, where all
-buffers are actually all resident system memory, there's a huge
-temptation to assume that a struct page is always present and useable
-like for any more pagecache backed mmap. This has the potential to
-result in a uapi nightmare.
+Calling hdmi_infoframe_unpack() with static sizeof(buffer) skips all
+the size checking done later in hdmi_infoframe_unpack().  A better
+value is the amount of data read into buffer.
 
-To stop this gap require that DMA buffer mmaps are VM_PFNMAP, which
-blocks get_user_pages and all the other struct page based
-infrastructure for everyone. In spirit this is the uapi counterpart to
-the kernel-internal CONFIG_DMABUF_DEBUG.
-
-Motivated by a recent patch which wanted to swich the system dma-buf
-heap to vm_insert_page instead of vm_insert_pfn.
-
-v2:
-
-Jason brought up that we also want to guarantee that all ptes have the
-pte_special flag set, to catch fast get_user_pages (on architectures
-that support this). Allowing VM_MIXEDMAP (like VM_SPECIAL does) would
-still allow vm_insert_page, but limiting to VM_PFNMAP will catch that.
-
-From auditing the various functions to insert pfn pte entires
-(vm_insert_pfn_prot, remap_pfn_range and all it's callers like
-dma_mmap_wc) it looks like VM_PFNMAP is already required anyway, so
-this should be the correct flag to check for.
-
-v3: Change to WARN_ON_ONCE (Thomas Zimmermann)
-
-References: https://lore.kernel.org/lkml/CAKMK7uHi+mG0z0HUmNt13QCCvutuRVjpcR0NjRL12k-WbWzkRg@mail.gmail.com/
-Acked-by: Christian König <christian.koenig@amd.com>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: John Stultz <john.stultz@linaro.org>
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
---
-Resending this so I can test the next patches for vgem/shmem in
-intel-gfx-ci.
-
-No immediate plans to merge this patch here since ttm isn't addressed
-yet (and there we have the hugepte issue, for which I don't think we
-have a clear consensus yet).
--Daniel
+Fixes: 480b8b3e42c3 ("video/hdmi: Pass buffer size to infoframe unpack functions")
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/dma-buf/dma-buf.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/media/i2c/adv7511-v4l2.c | 2 +-
+ drivers/media/i2c/adv7604.c      | 2 +-
+ drivers/media/i2c/adv7842.c      | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 63d32261b63f..d19b1cf6c34f 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -130,6 +130,7 @@ static struct file_system_type dma_buf_fs_type = {
- static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
- {
- 	struct dma_buf *dmabuf;
-+	int ret;
+diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
+index 41f4e749a859c..2217004264e4b 100644
+--- a/drivers/media/i2c/adv7511-v4l2.c
++++ b/drivers/media/i2c/adv7511-v4l2.c
+@@ -544,7 +544,7 @@ static void log_infoframe(struct v4l2_subdev *sd, const struct adv7511_cfg_read_
+ 	buffer[3] = 0;
+ 	buffer[3] = hdmi_infoframe_checksum(buffer, len + 4);
  
- 	if (!is_dma_buf_file(file))
- 		return -EINVAL;
-@@ -145,7 +146,11 @@ static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
- 	    dmabuf->size >> PAGE_SHIFT)
- 		return -EINVAL;
+-	if (hdmi_infoframe_unpack(&frame, buffer, sizeof(buffer)) < 0) {
++	if (hdmi_infoframe_unpack(&frame, buffer, len + 4) < 0) {
+ 		v4l2_err(sd, "%s: unpack of %s infoframe failed\n", __func__, cri->desc);
+ 		return;
+ 	}
+diff --git a/drivers/media/i2c/adv7604.c b/drivers/media/i2c/adv7604.c
+index 122e1fdccd962..d688ffff7a074 100644
+--- a/drivers/media/i2c/adv7604.c
++++ b/drivers/media/i2c/adv7604.c
+@@ -2484,7 +2484,7 @@ static int adv76xx_read_infoframe(struct v4l2_subdev *sd, int index,
+ 		buffer[i + 3] = infoframe_read(sd,
+ 				       adv76xx_cri[index].payload_addr + i);
  
--	return dmabuf->ops->mmap(dmabuf, vma);
-+	ret = dmabuf->ops->mmap(dmabuf, vma);
-+
-+	WARN_ON_ONCE(!(vma->vm_flags & VM_PFNMAP));
-+
-+	return ret;
- }
+-	if (hdmi_infoframe_unpack(frame, buffer, sizeof(buffer)) < 0) {
++	if (hdmi_infoframe_unpack(frame, buffer, len + 3) < 0) {
+ 		v4l2_err(sd, "%s: unpack of %s infoframe failed\n", __func__,
+ 			 adv76xx_cri[index].desc);
+ 		return -ENOENT;
+diff --git a/drivers/media/i2c/adv7842.c b/drivers/media/i2c/adv7842.c
+index 7f8acbdf0db4a..8ab4c63839b49 100644
+--- a/drivers/media/i2c/adv7842.c
++++ b/drivers/media/i2c/adv7842.c
+@@ -2593,7 +2593,7 @@ static void log_infoframe(struct v4l2_subdev *sd, const struct adv7842_cfg_read_
+ 	for (i = 0; i < len; i++)
+ 		buffer[i + 3] = infoframe_read(sd, cri->payload_addr + i);
  
- static loff_t dma_buf_llseek(struct file *file, loff_t offset, int whence)
-@@ -1260,6 +1265,8 @@ EXPORT_SYMBOL_GPL(dma_buf_end_cpu_access);
- int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
- 		 unsigned long pgoff)
- {
-+	int ret;
-+
- 	if (WARN_ON(!dmabuf || !vma))
- 		return -EINVAL;
- 
-@@ -1280,7 +1287,11 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
- 	vma_set_file(vma, dmabuf->file);
- 	vma->vm_pgoff = pgoff;
- 
--	return dmabuf->ops->mmap(dmabuf, vma);
-+	ret = dmabuf->ops->mmap(dmabuf, vma);
-+
-+	WARN_ON_ONCE(!(vma->vm_flags & VM_PFNMAP));
-+
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(dma_buf_mmap);
- 
+-	if (hdmi_infoframe_unpack(&frame, buffer, sizeof(buffer)) < 0) {
++	if (hdmi_infoframe_unpack(&frame, buffer, len + 3) < 0) {
+ 		v4l2_err(sd, "%s: unpack of %s infoframe failed\n", __func__, cri->desc);
+ 		return;
+ 	}
 -- 
-2.32.0
+2.26.3
 
