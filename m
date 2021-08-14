@@ -2,221 +2,111 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88571C4338F
-	for <linux-media@archiver.kernel.org>; Sat, 14 Aug 2021 19:54:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19608C4338F
+	for <linux-media@archiver.kernel.org>; Sat, 14 Aug 2021 20:56:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5DC7A60F51
-	for <linux-media@archiver.kernel.org>; Sat, 14 Aug 2021 19:54:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E250260EB5
+	for <linux-media@archiver.kernel.org>; Sat, 14 Aug 2021 20:56:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbhHNTzS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 14 Aug 2021 15:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S231956AbhHNU4m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 14 Aug 2021 16:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbhHNTzS (ORCPT
+        with ESMTP id S229532AbhHNU4l (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 14 Aug 2021 15:55:18 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF02C061764;
-        Sat, 14 Aug 2021 12:54:49 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id qe12-20020a17090b4f8c00b00179321cbae7so10455818pjb.2;
-        Sat, 14 Aug 2021 12:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZwyWUeyXG8fg6irLvuiEugsOVJBFRc7EQfmplXnmw84=;
-        b=VeFRMhPUpKgvC57pC96tpSIPSIgKXEpWy3CWSV73rpvmy54wdMEKxF3FFIlHD8KgDr
-         2sH4nN0+W9FDh/nNvRRrfGD/eXPXrFv6tOxlylDAZfrUOCEYBG5o8qEKRRwHxVrPuVxf
-         SoSPtramZaNp9b02D+a4anuHwx2p9O7XyXKNeF8Y9HAKDj6Pc2H1M49Fg81my6JXfAJQ
-         fo9cvSxTR49ulvGNY7ZiqWpOcNqYnQ/jB7lOaT2xyQu1etmyPHHZAlMu0SxCc6jYTMUI
-         sMJHQbO8N2G7mZALcPtriVvVF4U5TtNqTe7CrKNVfy+eCS9H+f9p8aO/84ia1mF7hF+O
-         sMBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZwyWUeyXG8fg6irLvuiEugsOVJBFRc7EQfmplXnmw84=;
-        b=hZsqbesZhzKPjf7TNBMLqcWJ6CD64sXK5m7Xp0btSPMTlC6HFAXgYbvXoyzgmIaxbp
-         MSDM7hlbxZagcbrso5LMk+74MK2K4Vh6myJ8GKTtGRMHudZsxvhHkihkJdQvrdaKMV/1
-         LOz3bHaKfj4WTYbBWstlKtyHte0HcpBoho7YCVfAN7rRQuqq00XrGh1IXvRw5XAuA2rs
-         F7n1zgknDyutJsfIvPFrpv0fYOwlc4O13J2hjX5XKLFU0ozgA5t/v2Ry2hTz+aV6FNRN
-         g3Qr0tVezwCORfnNNb0dEm5JB8NsU5lPqMHyADgVg6oIC1RlZ/YPdSpMu0pcg8n3+USE
-         jl2A==
-X-Gm-Message-State: AOAM533/6hfFNyOmBD2/bwaaNb1LVQ8kYFty2hMhQANiZ6xVcI/ZYw4l
-        J+dgjk/n1ghPv1ZcrLP5uhuv+1xeNHvzjvllTXA=
-X-Google-Smtp-Source: ABdhPJyJ4W1qyU1Zdy8gzE429sAUaIl9BZ83fhF9zUPbekk3FlQmwv/D1UfE1VnswdUU8b17xmyrjy6EMb3AxGSwM24=
-X-Received: by 2002:a17:90b:33c5:: with SMTP id lk5mr8774888pjb.129.1628970889047;
- Sat, 14 Aug 2021 12:54:49 -0700 (PDT)
+        Sat, 14 Aug 2021 16:56:41 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF97AC061764
+        for <linux-media@vger.kernel.org>; Sat, 14 Aug 2021 13:56:12 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 34BE03F0;
+        Sat, 14 Aug 2021 22:56:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1628974570;
+        bh=E7uy894Me6nun4fEBJRDIgIXVbYy6rvddst1VziMlOc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ExEonD4pUWp0FqsCBw5qE3ZtC/QM5OVmcfsqMYj/YaxLCsAjOXVvzoWQuCX++FEW5
+         pFUyez+b5V0Hkf9K8WUTGu5QfhqgJulOHOUICrJ4iUDKdNu3Z49fWp6iMYZ9mlfDtP
+         Cc/9+4gzVgKRgOOs96UTP5PJVPeq3Qqwi/xIPUPQ=
+Date:   Sat, 14 Aug 2021 23:56:04 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Daniel Scally <djrscally@gmail.com>, paul.kocialkowski@bootlin.com
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        ezequiel@collabora.com, hverkuil-cisco@xs4all.nl,
+        linux-media@vger.kernel.org, yong.zhi@intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com,
+        kevin.lhopital@bootlin.com, yang.lee@linux.alibaba.com,
+        andy.shevchenko@gmail.com, kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v2 08/12] media: i2c: Add hblank control to ov8865
+Message-ID: <YRgt5B5IyBZiA1pG@pendragon.ideasonboard.com>
+References: <20210809225845.916430-1-djrscally@gmail.com>
+ <20210809225845.916430-9-djrscally@gmail.com>
+ <20210810142934.GE3@paasikivi.fi.intel.com>
+ <74125e27-abe3-c596-53e6-4416cabfcc63@gmail.com>
+ <YRXhYP7H639DuQUK@pendragon.ideasonboard.com>
+ <189aa86c-68ec-e3a0-9804-209f3d4b1f08@gmail.com>
 MIME-Version: 1.0
-References: <20210814155742.11392-1-novikov@ispras.ru>
-In-Reply-To: <20210814155742.11392-1-novikov@ispras.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 14 Aug 2021 22:54:12 +0300
-Message-ID: <CAHp75Vdgt=HAK6Cd886AQ+BK-HAJjq0aqf_gkdcpefW5UMBnXg@mail.gmail.com>
-Subject: Re: [PATCH v2] media: pt3: Switch to using functions pcim_* and devm_*
-To:     Evgeny Novikov <novikov@ispras.ru>
-Cc:     Akihiro Tsukada <tskd08@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kirill Shilimanov <kirill.shilimanov@huawei.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ldv-project@linuxtesting.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <189aa86c-68ec-e3a0-9804-209f3d4b1f08@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Aug 14, 2021 at 6:57 PM Evgeny Novikov <novikov@ispras.ru> wrote:
->
-> pt3_probe() did not free one of IO mappings in case when one of them was
-> successful while another one failed. The patch fixed that by using
-> functions pcim_*. Also, it simplifies error handling through switching
-> to devm_* functions.
->
-> Found by Linux Driver Verification project (linuxtesting.org).
+Hi Daniel,
 
-Looks good to me, though I can't test this myself either (I have no hardware).
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+On Fri, Aug 13, 2021 at 10:45:48AM +0100, Daniel Scally wrote:
+> On 13/08/2021 04:05, Laurent Pinchart wrote:
+> > On Tue, Aug 10, 2021 at 11:07:22PM +0100, Daniel Scally wrote:
+> >> On 10/08/2021 15:29, Sakari Ailus wrote:
+> >>> On Mon, Aug 09, 2021 at 11:58:41PM +0100, Daniel Scally wrote:
+> >>>> @@ -2542,6 +2544,13 @@ static int ov8865_ctrls_init(struct ov8865_sensor *sensor)
+> >>>>  				     0, 0, ov8865_test_pattern_menu);
+> >>>>  
+> >>>>  	/* Blanking */
+> >>>> +	hblank = mode->hts < mode->output_size_x ? 0 : mode->hts - mode->output_size_x;
+> >>>
+> >>> Is the result in relation with the analogue crop size? Based on the above
+> >>> it wouldn't seem like that.
+> >>
+> >> This was a weird one actually. My understanding was that HTS should
+> >> always be >= the horizontal crop plus hblank...but that doesn't hold
+> >> true for some of this driver's modes and nor does it hold true when
+> >> running the camera in Windows (I checked the registers whilst running
+> >> it). So I went with setting hblank to 0 if the mode's HTS exceeded the
+> >> horizontal crop as the only way I could see to reconcile that.
+> >
+> > There's something very fishy here, HTS is, by definition, equal to the
+> > analog crop width plus the horizontal blanking. I suspect that the
+> > values in ov8865_modes are wrong.
+> 
+> I thought that initially too but confirming that the same thing happened
+> running windows switched me into "you're probably wrong" mode. If we're
+> confident that the HTS is likely wrong though I can add an extra patch
+> to bring those into lining with that definition.
 
-> Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-> Co-developed-by: Kirill Shilimanov <kirill.shilimanov@huawei.com>
-> Signed-off-by: Kirill Shilimanov <kirill.shilimanov@huawei.com>
-> ---
-> v2: Use functions pcim_* and devm_* to simplify code (Andy Shevchenko)
-> ---
->  drivers/media/pci/pt3/pt3.c | 58 +++++++++----------------------------
->  1 file changed, 14 insertions(+), 44 deletions(-)
->
-> diff --git a/drivers/media/pci/pt3/pt3.c b/drivers/media/pci/pt3/pt3.c
-> index c0bc86793355..0d51bdf01f43 100644
-> --- a/drivers/media/pci/pt3/pt3.c
-> +++ b/drivers/media/pci/pt3/pt3.c
-> @@ -685,12 +685,6 @@ static void pt3_remove(struct pci_dev *pdev)
->         for (i = PT3_NUM_FE - 1; i >= 0; i--)
->                 pt3_cleanup_adapter(pt3, i);
->         i2c_del_adapter(&pt3->i2c_adap);
-> -       kfree(pt3->i2c_buf);
-> -       pci_iounmap(pt3->pdev, pt3->regs[0]);
-> -       pci_iounmap(pt3->pdev, pt3->regs[1]);
-> -       pci_release_regions(pdev);
-> -       pci_disable_device(pdev);
-> -       kfree(pt3);
->  }
->
->  static int pt3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
-> @@ -704,14 +698,14 @@ static int pt3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->         if (pci_read_config_byte(pdev, PCI_REVISION_ID, &rev) || rev != 1)
->                 return -ENODEV;
->
-> -       ret = pci_enable_device(pdev);
-> +       ret = pcim_enable_device(pdev);
->         if (ret < 0)
->                 return -ENODEV;
->         pci_set_master(pdev);
->
-> -       ret = pci_request_regions(pdev, DRV_NAME);
-> +       ret = pcim_iomap_regions(pdev, BIT(0) | BIT(2), DRV_NAME);
->         if (ret < 0)
-> -               goto err_disable_device;
-> +               return ret;
->
->         ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
->         if (ret == 0)
-> @@ -722,42 +716,32 @@ static int pt3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->                         dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
->                 else {
->                         dev_err(&pdev->dev, "Failed to set DMA mask\n");
-> -                       goto err_release_regions;
-> +                       return ret;
->                 }
->                 dev_info(&pdev->dev, "Use 32bit DMA\n");
->         }
->
-> -       pt3 = kzalloc(sizeof(*pt3), GFP_KERNEL);
-> -       if (!pt3) {
-> -               ret = -ENOMEM;
-> -               goto err_release_regions;
-> -       }
-> +       pt3 = devm_kzalloc(&pdev->dev, sizeof(*pt3), GFP_KERNEL);
-> +       if (!pt3)
-> +               return -ENOMEM;
->         pci_set_drvdata(pdev, pt3);
->         pt3->pdev = pdev;
->         mutex_init(&pt3->lock);
-> -       pt3->regs[0] = pci_ioremap_bar(pdev, 0);
-> -       pt3->regs[1] = pci_ioremap_bar(pdev, 2);
-> -       if (pt3->regs[0] == NULL || pt3->regs[1] == NULL) {
-> -               dev_err(&pdev->dev, "Failed to ioremap\n");
-> -               ret = -ENOMEM;
-> -               goto err_kfree;
-> -       }
-> +       pt3->regs[0] = pcim_iomap_table(pdev)[0];
-> +       pt3->regs[1] = pcim_iomap_table(pdev)[2];
->
->         ver = ioread32(pt3->regs[0] + REG_VERSION);
->         if ((ver >> 16) != 0x0301) {
->                 dev_warn(&pdev->dev, "PT%d, I/F-ver.:%d not supported\n",
->                          ver >> 24, (ver & 0x00ff0000) >> 16);
-> -               ret = -ENODEV;
-> -               goto err_iounmap;
-> +               return -ENODEV;
->         }
->
->         pt3->num_bufs = clamp_val(num_bufs, MIN_DATA_BUFS, MAX_DATA_BUFS);
->
-> -       pt3->i2c_buf = kmalloc(sizeof(*pt3->i2c_buf), GFP_KERNEL);
-> -       if (pt3->i2c_buf == NULL) {
-> -               ret = -ENOMEM;
-> -               goto err_iounmap;
-> -       }
-> +       pt3->i2c_buf = devm_kmalloc(&pdev->dev, sizeof(*pt3->i2c_buf), GFP_KERNEL);
-> +       if (!pt3->i2c_buf)
-> +               return -ENOMEM;
->         i2c = &pt3->i2c_adap;
->         i2c->owner = THIS_MODULE;
->         i2c->algo = &pt3_i2c_algo;
-> @@ -767,7 +751,7 @@ static int pt3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->         i2c_set_adapdata(i2c, pt3);
->         ret = i2c_add_adapter(i2c);
->         if (ret < 0)
-> -               goto err_i2cbuf;
-> +               return ret;
->
->         for (i = 0; i < PT3_NUM_FE; i++) {
->                 ret = pt3_alloc_adapter(pt3, i);
-> @@ -799,21 +783,7 @@ static int pt3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->         while (i >= 0)
->                 pt3_cleanup_adapter(pt3, i--);
->         i2c_del_adapter(i2c);
-> -err_i2cbuf:
-> -       kfree(pt3->i2c_buf);
-> -err_iounmap:
-> -       if (pt3->regs[0])
-> -               pci_iounmap(pdev, pt3->regs[0]);
-> -       if (pt3->regs[1])
-> -               pci_iounmap(pdev, pt3->regs[1]);
-> -err_kfree:
-> -       kfree(pt3);
-> -err_release_regions:
-> -       pci_release_regions(pdev);
-> -err_disable_device:
-> -       pci_disable_device(pdev);
->         return ret;
-> -
->  }
->
->  static const struct pci_device_id pt3_id_table[] = {
-> --
-> 2.26.2
->
+I think it's worth investigating this. The hblank computed here is
+clearly incorrect, and would thus be useless for all practical purposes.
+As usual with OmniVision, the datasheet is also quite useless.
 
+Paul, do you have any information about this ?
+
+> >>>> +	ctrls->hblank = v4l2_ctrl_new_std(handler, ops, V4L2_CID_HBLANK, hblank,
+> >>>> +					  hblank, 1, hblank);
+> >>>> +
+> >>>> +	if (ctrls->hblank)
+> >>>> +		ctrls->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> >>>> +
+> >>>>  	vblank_max = OV8865_TIMING_MAX_VTS - mode->output_size_y;
+> >>>>  	vblank_def = mode->vts - mode->output_size_y;
+> >>>>  	ctrls->vblank = v4l2_ctrl_new_std(handler, ops, V4L2_CID_VBLANK,
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards,
+
+Laurent Pinchart
