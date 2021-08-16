@@ -2,125 +2,171 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95A70C432BE
-	for <linux-media@archiver.kernel.org>; Mon, 16 Aug 2021 11:39:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A64C3C4320E
+	for <linux-media@archiver.kernel.org>; Mon, 16 Aug 2021 15:01:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6EDA16324A
-	for <linux-media@archiver.kernel.org>; Mon, 16 Aug 2021 11:39:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8AD9460F39
+	for <linux-media@archiver.kernel.org>; Mon, 16 Aug 2021 15:01:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236179AbhHPLjz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Aug 2021 07:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
+        id S232608AbhHPPCR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Aug 2021 11:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236131AbhHPLjy (ORCPT
+        with ESMTP id S232467AbhHPPCQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Aug 2021 07:39:54 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D76C0613C1
-        for <linux-media@vger.kernel.org>; Mon, 16 Aug 2021 04:39:23 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id i10-20020a05600c354ab029025a0f317abfso14761779wmq.3
-        for <linux-media@vger.kernel.org>; Mon, 16 Aug 2021 04:39:23 -0700 (PDT)
+        Mon, 16 Aug 2021 11:02:16 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB900C0613C1
+        for <linux-media@vger.kernel.org>; Mon, 16 Aug 2021 08:01:44 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id q11-20020a7bce8b0000b02902e6880d0accso15309671wmj.0
+        for <linux-media@vger.kernel.org>; Mon, 16 Aug 2021 08:01:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=am3po7tFFKOjxreZAMFOikHzx21vo4EVP5N25KRWOrw=;
-        b=SeNit5wJj4nBjC8V1JWGep2DMexTz3r3vajG5EF+GYq3qodNf3FC9zqafjztHtFkYF
-         bWwjEWWM5Y3gdFSjRiL/AN0flbhD9XsvwFphW5a43JM8qJt8rbQZLoe5kULfJZmVfHfN
-         2pIbkL0DCyBKIVTqeE1ncJKq18ZUtmaBo7U3oFeRcPPeysNopZvvHyQBUTSLHq8PkTNA
-         kkiaGKfTybzStUrXDESHLJgv4fMNF+NlZV616fLYMC5WWCNO4aR1GP1d0rMUhAn1+gb1
-         s9jl0SCAUB+h6s3yYpjahzRsDDkNzSAuyjLpOmZ9AVX2VhVvH2/FPMulFwnw2I5nAbXT
-         XTCQ==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EIvyFOw8mvTuFM5hQZVVCU0qrPNdbh5I2Bj4X1kA7WQ=;
+        b=gaIEOtqqYuS833blYihl+7Iw8shk8qt6AL+mzGViyi8f8QC+lwDDgt2IPH0q/+dU1H
+         7bt+Sommo3MR9FY/VLoTpOo31XeUdpFogGaA5qZ+DqMM99khdni6FgnfyUVd+TFjIo38
+         JMiVpBCDkbCHGobEnCzL8wiQge+z3+GJsAPmo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=am3po7tFFKOjxreZAMFOikHzx21vo4EVP5N25KRWOrw=;
-        b=KzTu2HoD1adcKkv8WiWvvUw7lpTJJWCCwyrCfZE2ir4PGi40HTgVNUPFp120E/SRDk
-         SKddbDl+AjB4DpU84MiTWWpapJ+qcRj3xIiv/1Ww9U8W756NCJRZWhoEfU0V3jHxKI3E
-         VmJJY81y5+MSJGax/VBWLHhXVv0xDzIvCbwDqJ9I86F9zYNeyeMbVeN1cRV9rcK54XBY
-         aqthXqi7ic62Vd+lrzEpSg9u/oTLiLiIwAo5nhSKJ6I28EFQFSdpn2xdBQHJAwePeBpw
-         p7NmNpP31YzgQ6Y5fwHq+8IywH3CCTBY697KCzlP0YSaBomayZjSskiry5Z3yZJszeMp
-         xC6w==
-X-Gm-Message-State: AOAM533urDaBQ/ppn5MJe8uSsrQm5WE66f2t2l4kvg0v0HN25vi3ru50
-        EfbwAf64wzIJtuXPPFyXj0nnA6xjrbxwag==
-X-Google-Smtp-Source: ABdhPJycgAuGkRrGoCARbjoLrUD9iYcGipJ2CcLlm1dOsSv7NS83BethlJrIZ8hCzDpTeFOHLnhDtg==
-X-Received: by 2002:a1c:cc05:: with SMTP id h5mr14974909wmb.5.1629113961724;
-        Mon, 16 Aug 2021 04:39:21 -0700 (PDT)
-Received: from davidp-xps-13.lan (plowpeople3.plus.com. [80.229.223.72])
-        by smtp.gmail.com with ESMTPSA id g9sm10356548wmk.34.2021.08.16.04.39.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=EIvyFOw8mvTuFM5hQZVVCU0qrPNdbh5I2Bj4X1kA7WQ=;
+        b=HtkfRko9wrZcgwtPMCI3FWpQAbnzctqti9KTGP5rMzg5uH2YYonkkWCGoumAG2fgel
+         NMikufnfH8HECZ1kB6Ew2mXtOQJThR7U/8cmq6cmUUny8IkG1orV8wTJXmg9BTkH0EPo
+         5jEgvoJkfk+wmGX3ZkFxFdS/Zni+npHsosJXZ7jjDm1HDcwJOtj4T1aGmUhdt/8vKAtX
+         L9LkWOp+n94fJMJh7jZ4V+30tMFKs1UWv+zyA34zi3fGlvgyfCZ0M3QQMKp+2LKuK6tT
+         ofj05j0MSnGfk7sXxLiGQnyFuTxf1ThgVuBXDuOFEV+mo6B3B3Nxp58CHFMhZ4+ZE/ur
+         8oqw==
+X-Gm-Message-State: AOAM531HnHmp0fPi3wvWwLvfyPbDcC6SfDBI6W8MhdhqWiMW+CoZlECF
+        IDUsU1YCVxYwpRrPtnsz6IrDHQ==
+X-Google-Smtp-Source: ABdhPJzDF9KrfED8TEN39f2b9tbP/JkFe6bbQZq2+vcczHGvaS+YoEUQW9Mj8qPAjLla1rzX+sS+zA==
+X-Received: by 2002:a1c:9ace:: with SMTP id c197mr15858085wme.170.1629126103289;
+        Mon, 16 Aug 2021 08:01:43 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id y3sm11936525wma.32.2021.08.16.08.01.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Aug 2021 04:39:21 -0700 (PDT)
-From:   David Plowman <david.plowman@raspberrypi.com>
-To:     linux-media@vger.kernel.org, sakari.ailus@iki.fi,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     David Plowman <david.plowman@raspberrypi.com>
-Subject: [PATCH v6 1/2] media: v4l2-ctrls: Add V4L2_CID_NOTIFY_GAINS control
-Date:   Mon, 16 Aug 2021 12:39:08 +0100
-Message-Id: <20210816113909.234872-2-david.plowman@raspberrypi.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210816113909.234872-1-david.plowman@raspberrypi.com>
-References: <20210816113909.234872-1-david.plowman@raspberrypi.com>
+        Mon, 16 Aug 2021 08:01:42 -0700 (PDT)
+Date:   Mon, 16 Aug 2021 17:01:40 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        io-uring@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: Re: [Linaro-mm-sig] IIO, dmabuf, io_uring
+Message-ID: <YRp91OUTpjpw7rnE@phenom.ffwll.local>
+Mail-Followup-To: Christoph Hellwig <hch@lst.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        io-uring@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        linux-media@vger.kernel.org
+References: <2H0SXQ.2KIK2PBVRFWH2@crapouillou.net>
+ <20210814073019.GC21175@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210814073019.GC21175@lst.de>
+X-Operating-System: Linux phenom 5.10.0-7-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We add a new control V4L2_CID_NOTIFY_GAINS which allows the sensor to
-be notified what gains will be applied to the different colour
-channels by subsequent processing (such as by an ISP), even though the
-sensor will not apply any of these gains itself.
+On Sat, Aug 14, 2021 at 09:30:19AM +0200, Christoph Hellwig wrote:
+> On Fri, Aug 13, 2021 at 01:41:26PM +0200, Paul Cercueil wrote:
+> > Hi,
+> >
+> > A few months ago we (ADI) tried to upstream the interface we use with our 
+> > high-speed ADCs and DACs. It is a system with custom ioctls on the iio 
+> > device node to dequeue and enqueue buffers (allocated with 
+> > dma_alloc_coherent), that can then be mmap'd by userspace applications. 
+> > Anyway, it was ultimately denied entry [1]; this API was okay in ~2014 when 
+> > it was designed but it feels like re-inventing the wheel in 2021.
+> >
+> > Back to the drawing table, and we'd like to design something that we can 
+> > actually upstream. This high-speed interface looks awfully similar to 
+> > DMABUF, so we may try to implement a DMABUF interface for IIO, unless 
+> > someone has a better idea.
+> 
+> To me this does sound a lot like a dma buf use case.  The interesting
+> question to me is how to signal arrival of new data, or readyness to
+> consume more data.  I suspect that people that are actually using
+> dmabuf heavily at the moment (dri/media folks) might be able to chime
+> in a little more on that.
 
-For Bayer sensors this will be an array control taking 4 values which
-are the 4 gains arranged in the fixed order B, Gb, Gr and R,
-irrespective of the exact Bayer order of the sensor itself. The use of
-an array makes it straightforward to extend this control to non-Bayer
-sensors (for example, sensors with an RGBW pattern) in future.
+One option is to just block in userspace (on poll, or an ioctl, or
+whatever) and then latch the next stage in the pipeline. That's what media
+does right now (because the dma-fence proposal never got anywhere).
 
-The units are in all cases linear with the default value indicating a
-gain of exactly 1.0. For example, if the default value were reported as
-128 then the value 192 would represent a gain of exactly 1.5.
+In drm we use dma_fences to tie up the stages, and the current
+recommendation for uapi is to use the drm_syncobj container (not the
+sync_file container, that was a bit an awkward iteration on that problem).
+With that you can tie together all the pipeline stages within the kernel
+(and at least sometimes directly in hw).
 
-Signed-off-by: David Plowman <david.plowman@raspberrypi.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/v4l2-core/v4l2-ctrls-defs.c | 1 +
- include/uapi/linux/v4l2-controls.h        | 1 +
- 2 files changed, 2 insertions(+)
+The downside is (well imo it's not a downside, but some people see it as
+hta) that once you use dma-fence dri-devel folks really consider your
+stuff a gpu driver and expect all the gpu driver review/merge criteria to
+be fulfilled. Specifically about the userspace side too:
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-index 421300e13a41..f87053c83249 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-@@ -1107,6 +1107,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_TEST_PATTERN_GREENR:	return "Green (Red) Pixel Value";
- 	case V4L2_CID_TEST_PATTERN_BLUE:	return "Blue Pixel Value";
- 	case V4L2_CID_TEST_PATTERN_GREENB:	return "Green (Blue) Pixel Value";
-+	case V4L2_CID_NOTIFY_GAINS:		return "Notify Gains";
- 
- 	/* Image processing controls */
- 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 5532b5f68493..133e20444939 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -1118,6 +1118,7 @@ enum v4l2_jpeg_chroma_subsampling {
- #define V4L2_CID_TEST_PATTERN_BLUE		(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 6)
- #define V4L2_CID_TEST_PATTERN_GREENB		(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 7)
- #define V4L2_CID_UNIT_CELL_SIZE			(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 8)
-+#define V4L2_CID_NOTIFY_GAINS			(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 9)
- 
- 
- /* Image processing controls */
+https://dri.freedesktop.org/docs/drm/gpu/drm-uapi.html#open-source-userspace-requirements
+
+At least one driver is trying to play some very clever games here and
+that's not a solid way to make friends ...
+-Daniel
+
+> 
+> > Our first usecase is, we want userspace applications to be able to dequeue 
+> > buffers of samples (from ADCs), and/or enqueue buffers of samples (for 
+> > DACs), and to be able to manipulate them (mmapped buffers). With a DMABUF 
+> > interface, I guess the userspace application would dequeue a dma buffer 
+> > from the driver, mmap it, read/write the data, unmap it, then enqueue it to 
+> > the IIO driver again so that it can be disposed of. Does that sound sane?
+> >
+> > Our second usecase is - and that's where things get tricky - to be able to 
+> > stream the samples to another computer for processing, over Ethernet or 
+> > USB. Our typical setup is a high-speed ADC/DAC on a dev board with a FPGA 
+> > and a weak soft-core or low-power CPU; processing the data in-situ is not 
+> > an option. Copying the data from one buffer to another is not an option 
+> > either (way too slow), so we absolutely want zero-copy.
+> >
+> > Usual userspace zero-copy techniques (vmsplice+splice, MSG_ZEROCOPY etc) 
+> > don't really work with mmapped kernel buffers allocated for DMA [2] and/or 
+> > have a huge overhead, so the way I see it, we would also need DMABUF 
+> > support in both the Ethernet stack and USB (functionfs) stack. However, as 
+> > far as I understood, DMABUF is mostly a DRM/V4L2 thing, so I am really not 
+> > sure we have the right idea here.
+> >
+> > And finally, there is the new kid in town, io_uring. I am not very literate 
+> > about the topic, but it does not seem to be able to handle DMA buffers 
+> > (yet?). The idea that we could dequeue a buffer of samples from the IIO 
+> > device and send it over the network in one single syscall is appealing, 
+> > though.
+> 
+> Think of io_uring really just as an async syscall layer.  It doesn't
+> replace DMA buffers, but can be used as a different and for some
+> workloads more efficient way to dispatch syscalls.
+> _______________________________________________
+> Linaro-mm-sig mailing list
+> Linaro-mm-sig@lists.linaro.org
+> https://lists.linaro.org/mailman/listinfo/linaro-mm-sig
+
 -- 
-2.30.2
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
