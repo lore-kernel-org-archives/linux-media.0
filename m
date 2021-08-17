@@ -2,303 +2,225 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF63BC4338F
-	for <linux-media@archiver.kernel.org>; Tue, 17 Aug 2021 01:29:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1A74C432BE
+	for <linux-media@archiver.kernel.org>; Tue, 17 Aug 2021 01:30:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 952E360F38
-	for <linux-media@archiver.kernel.org>; Tue, 17 Aug 2021 01:29:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF20B60F55
+	for <linux-media@archiver.kernel.org>; Tue, 17 Aug 2021 01:30:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbhHQBaF convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Aug 2021 21:30:05 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:59768 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230304AbhHQBaF (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Aug 2021 21:30:05 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1mFnv1-0025w3-P3; Tue, 17 Aug 2021 01:29:31 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1mFnv1-000LkH-2K; Tue, 17 Aug 2021 01:29:30 +0000
-Date:   Tue, 17 Aug 2021 01:29:29 +0000 (UTC)
-From:   Jenkins Builder Robot <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org
-Message-ID: <1908260298.9.1629163769990@builder.linuxtv.org>
-In-Reply-To: <306011361.2.1629163194966@builder.linuxtv.org>
-References: <306011361.2.1629163194966@builder.linuxtv.org>
-Subject: Build failed in Jenkins: xawtv4 #12
+        id S235511AbhHQBag (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 Aug 2021 21:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230304AbhHQBaf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 16 Aug 2021 21:30:35 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA49C061764;
+        Mon, 16 Aug 2021 18:30:03 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id f2so8516229ljn.1;
+        Mon, 16 Aug 2021 18:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bO5VmfaNpjVVREGufhEjpS0RVmiy0+tDrVzrBmR/Klk=;
+        b=DGL5unFzfWW6yGqVG2gtuY8Y7AYqNgW1kYmTAFI1UmotEReGMPQ7+/nurfdNtSw6kX
+         7t41EQ68yYpDkvs9bN8NZdDPqTqVXnPDOJyXnEBa7RaAsCXrib6QePdF4vbI2GIqUGJ/
+         MPRdlcA74ujsVmtLo3Swnwn/AAas5jW+pCF/Ln6WWt5EGHFoZNs+CovnkzUBoMWGJbOR
+         l3cHhI403t5GFk3fPzqdH+uHeSvXbH+QSIOscqju5HtKqtPZlgeiwTgbYFuVwhYOAlz0
+         uy0kJNeVrbzHlxDgJz3intJg8+X3fA1Hn7KHJHdpqaD4aGtti/w8DsC5NTsZ+HxU3PfJ
+         E64Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bO5VmfaNpjVVREGufhEjpS0RVmiy0+tDrVzrBmR/Klk=;
+        b=hZfvOIsgGrS9H6em1OWnLBGH/l4VYAjafHwT1tRLj6ZvLRqnB2tGIF2m2oyqZxQUsB
+         pG5b7lUbuRrRwQsMOk/EQzuWMQZCb3/U74SrOEDVmPyIrSOD4mXj5LNuB3+vJiTGMNJI
+         DQ5xPdbDHjUl4VHUZArdy0Xe5TZooq/1hPtRWXnfWcjapUtWc0/sgSYYXobv9HWUA3GU
+         0MAQTl0tEoJg5XUacOUQ5BWa0vj7jI54LYZqvx1KC4jE1OjdZhLUtHlS59g/USTuM++v
+         vW9xqEQc2Y9Tho8VXN4STlbE9/+iAarP55Um/OpJfhjpkqdOJueTBMyuPvVtSy6o694A
+         F5FQ==
+X-Gm-Message-State: AOAM532MHNzYZXluzHCdyWthUixU265yXTKOpV86E/QEVs2/dt4WXXD8
+        ii4Z1NAWK50xuxAbysUZMwo=
+X-Google-Smtp-Source: ABdhPJzfD+REHIwuiGYg1fuxQjjlpDVZHYlge+vtvAZqlGgG4tIZ0Of68hupSFQ0Tvw+LsNO5cfhqA==
+X-Received: by 2002:a05:651c:985:: with SMTP id b5mr890013ljq.78.1629163801449;
+        Mon, 16 Aug 2021 18:30:01 -0700 (PDT)
+Received: from localhost.localdomain (46-138-85-91.dynamic.spd-mgts.ru. [46.138.85.91])
+        by smtp.gmail.com with ESMTPSA id g30sm46607lfj.298.2021.08.16.18.30.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Aug 2021 18:30:01 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v8 00/34] NVIDIA Tegra power management patches for 5.16
+Date:   Tue, 17 Aug 2021 04:27:20 +0300
+Message-Id: <20210817012754.8710-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
-X-Jenkins-Job: xawtv4
-X-Jenkins-Result: FAILURE
-Auto-submitted: auto-generated
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-See <https://builder.linuxtv.org/job/xawtv4/12/display/redirect>
+This series adds runtime PM support to Tegra drivers and enables core
+voltage scaling for Tegra20/30 SoCs, resolving overheating troubles.
 
-Changes:
+All patches should go via Tegra tree because they are interdependent,
+please review and ack.
 
+If you haven't seen this series before, that's because I wanted to
+finalize the GENPD part at first and didn't bother you previously.
 
-------------------------------------------
-[...truncated 4.29 KB...]
-checking for alsa/asoundlib.h... yes
-checking linux/joystick.h usability... yes
-checking linux/joystick.h presence... yes
-checking for linux/joystick.h... yes
-checking dev/bktr/ioctl_bt848.h usability... no
-checking dev/bktr/ioctl_bt848.h presence... no
-checking for dev/bktr/ioctl_bt848.h... no
-checking dev/ic/bt8xx.h usability... no
-checking dev/ic/bt8xx.h presence... no
-checking for dev/ic/bt8xx.h... no
-checking linux/dvb/dmx.h usability... yes
-checking linux/dvb/dmx.h presence... yes
-checking for linux/dvb/dmx.h... yes
-checking for ftello... yes
-checking for fseeko... yes
-checking for getpt... yes
-checking for getnameinfo... yes
-checking for getopt_long... yes
-checking for strcasestr... yes
-checking for memmem... yes
-checking for dlopen... no
-checking for iconv_open... yes
-checking for dlopen in -ldl... yes
-checking for ELF... yes
-checking for pthread_create in -lpthread... yes
-checking for main in -lossaudio... no
-checking for initscr in -lncurses... yes
-checking for X... libraries , headers 
-checking for gethostbyname... yes
-checking for connect... yes
-checking for remove... yes
-checking for shmat... yes
-checking for IceConnectionNumber in -lICE... yes
-checking for Xft... yes
-checking for jpeg_start_compress in -ljpeg... yes
-checking for snd_seq_open in -lasound... yes
-checking for aRts... no
-checking for mad_decoder_init in -lmad... yes
-checking for mpeg2_init in -lmpeg2... yes
-checking for lirc_init in -llirc_client... yes
-checking for vbi_capture_fd in -lzvbi... yes
-checking for vbi_capture_proxy_new in -lzvbi... yes
-checking for vbi_capture_dvb_new2 in -lzvbi... yes
-*** aalib support disabled
-checking for dv_decoder_new in -ldv... yes
-Package glib was not found in the pkg-config search path.
-Perhaps you should add the directory containing `glib.pc'
-to the PKG_CONFIG_PATH environment variable
-No package 'glib' found
-checking for lqt_query_registry in -lquicktime... yes
-checking for DPMSQueryExtension in -lXdpms... no
-checking for DPMSQueryExtension in -lXext... yes
-checking for XineramaQueryExtension in -lXinerama... yes
-checking for XRenderQueryExtension in -lXrender... yes
-checking for XvQueryExtension in -lXv... yes
-checking for XmStringGenerate in -lXm... yes
-checking for glXChooseVisual in -lGL... yes
-checking for gtk+ 2.4... yes
-checking for X11 config directory... /etc/X11
-checking for X11 app-defaults directory... /etc/X11/app-defaults
-checking if mmx should be used... no
-configure: creating ./config.status
-config.status: creating Makefile
-config.status: WARNING:  'Makefile.in' seems to ignore the --datarootdir setting
-config.status: creating xawtv.spec
-config.status: creating config.h
-config.status: config.h is unchanged
+Changelog:
 
-compile time options summary
-============================
+v8: - Added new generic dev_pm_opp_sync() helper that syncs OPP state with
+      hardware. All drivers changed to use it. This replaces GENPD attach_dev
+      callback hacks that were used in v7.
 
-    aalib        : no
-    alsa         : yes
-    aRts         : no
-    dv           : yes
-    QuickTime    : yes
-    mad          : yes
-    mpeg2        : yes
-    X11R6        : yes
-    gtk+         : yes
-    OpenMotif    : yes
-    OpenGL       : yes
-    zvbi         : yes
-    DVB          : yes
+    - Added new patch patch "soc/tegra: regulators: Prepare for suspend"
+      that fixes dying Tegra20 SoC after enabling VENC power domain during
+      resume from suspend. It matches to what downstream kernel does on
+      suspend/resume.
 
-+ make
-  CC	  console/dump-mixers.o
-  CC	  console/record.o
-  CC	  console/showriff.o
-  CC	  console/showqt.o
-  CC	  console/streamer.o
-  CC	  common/sound.o
-  CC	  common/webcam.o
-  CC	  common/tuning.o
-  CC	  common/commands.o
-  CC	  common/devs.o
-  CC	  common/parseconfig.o
-  CC	  common/fifo.o
-console/showqt.c: In function ‘handle_classic_atom’:
-console/showqt.c:505:19: warning: ‘%d’ directive writing between 1 and 10 bytes into a region of size 7 [-Wformat-overflow=]
-  505 |      sprintf(si,"[%d] ",loop);
-      |                   ^~
-console/showqt.c:505:17: note: directive argument in the range [0, 2147483647]
-  505 |      sprintf(si,"[%d] ",loop);
-      |                 ^~~~~~~
-console/showqt.c:505:6: note: ‘sprintf’ output between 5 and 14 bytes into a destination of size 8
-  505 |      sprintf(si,"[%d] ",loop);
-      |      ^~~~~~~~~~~~~~~~~~~~~~~~
-console/showqt.c:510:19: warning: ‘%d’ directive writing between 1 and 10 bytes into a region of size 7 [-Wformat-overflow=]
-  510 |      sprintf(si,"[%d] ",loop);
-      |                   ^~
-console/showqt.c:510:17: note: directive argument in the range [1, 2147483647]
-  510 |      sprintf(si,"[%d] ",loop);
-      |                 ^~~~~~~
-console/showqt.c:510:6: note: ‘sprintf’ output between 5 and 14 bytes into a destination of size 8
-  510 |      sprintf(si,"[%d] ",loop);
-      |      ^~~~~~~~~~~~~~~~~~~~~~~~
-  CC	  common/capture.o
-  CC	  common/event.o
-  CC	  common/tv-config.o
-  CC	  common/dvb-tuning.o
-  CC	  structs/struct-dvb.o
-  CC	  structs/struct-dump.o
-  CC	  libng/grab-ng.o
-  CC	  libng/devices.o
-common/devs.c: In function ‘device_probe_video’:
-common/devs.c:127:15: warning: variable ‘add’ set but not used [-Wunused-but-set-variable]
-  127 |     int err,i,add=0;
-      |               ^~~
-common/devs.c: In function ‘device_probe_dvb’:
-common/devs.c:193:11: warning: variable ‘add’ set but not used [-Wunused-but-set-variable]
-  193 |     int i,add = 0;
-      |           ^~~
-  CC	  libng/writefile.o
-  CC	  libng/parse-mpeg.o
-  CC	  libng/parse-dvb.o
-common/commands.c: In function ‘keypad_handler’:
-common/commands.c:1184:18: warning: ‘%d’ directive writing between 1 and 10 bytes into a region of size 8 [-Wformat-overflow=]
- 1184 |      sprintf(ch,"%d",n);
-      |                  ^~
-common/commands.c:1184:17: note: directive argument in the range [1, 2147483647]
- 1184 |      sprintf(ch,"%d",n);
-      |                 ^~~~
-common/commands.c:1184:6: note: ‘sprintf’ output between 2 and 11 bytes into a destination of size 8
- 1184 |      sprintf(ch,"%d",n);
-      |      ^~~~~~~~~~~~~~~~~~
-  CC	  libng/color_common.o
-  CC	  libng/color_packed.o
-  CC	  libng/color_lut.o
-  CC	  libng/color_yuv2rgb.o
-  CC	  libng/convert.o
-libng/parse-dvb.c: In function ‘parse_nit_desc_2’:
-libng/parse-dvb.c:196:13: warning: variable ‘l’ set but not used [-Wunused-but-set-variable]
-  196 |     int i,t,l;
-      |             ^
-libng/parse-dvb.c: In function ‘parse_sdt_desc’:
-libng/parse-dvb.c:239:13: warning: variable ‘l’ set but not used [-Wunused-but-set-variable]
-  239 |     int i,t,l;
-      |             ^
-libng/parse-dvb.c: In function ‘mpeg_parse_psi_nit’:
-libng/parse-dvb.c:351:6: warning: the address of ‘network’ will always evaluate as ‘true’ [-Waddress]
-  351 |  if (network)
-      |      ^~~~~~~
-  CC	  libng/misc.o
-  CC	  console/webcam.o
-  CC	  console/ftp.o
-  CC	  console/scantv.o
-common/dvb-tuning.c: In function ‘fixup_numbers’:
-common/dvb-tuning.c:329:5: warning: enumeration value ‘FE_ATSC’ not handled in switch [-Wswitch]
-  329 |     switch (h->info.type) {
-      |     ^~~~~~
-common/dvb-tuning.c: In function ‘dump_fe_info’:
-common/dvb-tuning.c:365:5: warning: enumeration value ‘FE_ATSC’ not handled in switch [-Wswitch]
-  365 |     switch (h->info.type) {
-      |     ^~~~~~
-common/dvb-tuning.c: In function ‘dvb_frontend_tune’:
-common/dvb-tuning.c:433:5: warning: enumeration value ‘FE_ATSC’ not handled in switch [-Wswitch]
-  433 |     switch (h->info.type) {
-      |     ^~~~~~
-common/dvb-tuning.c: In function ‘parse_vdr_diseqc.constprop.isra’:
-common/dvb-tuning.c:1126:26: warning: ‘%d’ directive writing between 1 and 10 bytes into a region of size 9 [-Wformat-overflow=]
- 1126 |  sprintf(section,"diseqc-%d",i++);
-      |                          ^~
-common/dvb-tuning.c:1126:18: note: directive argument in the range [0, 2147483647]
- 1126 |  sprintf(section,"diseqc-%d",i++);
-      |                  ^~~~~~~~~~~
-common/dvb-tuning.c:1126:2: note: ‘sprintf’ output between 9 and 18 bytes into a destination of size 16
- 1126 |  sprintf(section,"diseqc-%d",i++);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  CC	  common/vbi-dvb.o
-  CC	  common/vbi-data.o
-  CC	  console/radio.o
-  CC	  console/v4l-info.o
-libng/grab-ng.c: In function ‘ng_filter_single’:
-libng/grab-ng.c:964:11: warning: variable ‘handle’ set but not used [-Wunused-but-set-variable]
-  964 |     void *handle;
-      |           ^~~~~~
-  CC	  structs/struct-v4l.o
-  CC	  structs/struct-v4l2.o
-  CC	  console/v4l-conf.o
-  LD	  console/dump-mixers
-In function ‘do_scan’,
-    inlined from ‘main’ at console/scantv.c:400:2:
-console/scantv.c:236:7: warning: ‘%s’ directive argument is null [-Wformat-overflow=]
-  236 |       sprintf(dummy,"unknown (%s)",fchannel);
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  LD	  console/record
-  LD	  console/showriff
-  LD	  console/showqt
-  LD	  console/v4l-info
-libng/parse-mpeg.c: In function ‘parse_pmt_desc’:
-libng/parse-mpeg.c:680:13: warning: variable ‘l’ set but not used [-Wunused-but-set-variable]
-  680 |     int i,t,l;
-      |             ^
-libng/parse-mpeg.c: In function ‘get_lang_tag’:
-libng/parse-mpeg.c:697:13: warning: variable ‘l’ set but not used [-Wunused-but-set-variable]
-  697 |     int i,t,l;
-      |             ^
-  AR	  libng/libng.a
-  LD	  console/radio
-ar: creating libng/libng.a
-  LD	  console/streamer
-/usr/bin/ld: common/commands.o:<https://builder.linuxtv.org/job/xawtv4/ws/common/commands.c>:52: multiple definition of `debug'; console/streamer.o:<https://builder.linuxtv.org/job/xawtv4/ws/console/streamer.c>:62: first defined here
-/usr/bin/ld: common/devs.o:<https://builder.linuxtv.org/job/xawtv4/ws/./libng/parse-mpeg.h>:17: multiple definition of `psi_service_type'; common/tuning.o:<https://builder.linuxtv.org/job/xawtv4/ws/./libng/parse-mpeg.h>:17: first defined here
-/usr/bin/ld: common/dvb-tuning.o:<https://builder.linuxtv.org/job/xawtv4/ws/./libng/parse-mpeg.h>:17: multiple definition of `psi_service_type'; common/tuning.o:<https://builder.linuxtv.org/job/xawtv4/ws/./libng/parse-mpeg.h>:17: first defined here
-/usr/bin/ld: libng/libng.a(parse-mpeg.o):<https://builder.linuxtv.org/job/xawtv4/ws/libng/parse-mpeg.h>:17: multiple definition of `psi_service_type'; common/tuning.o:<https://builder.linuxtv.org/job/xawtv4/ws/./libng/parse-mpeg.h>:17: first defined here
-/usr/bin/ld: libng/libng.a(parse-dvb.o):<https://builder.linuxtv.org/job/xawtv4/ws/libng/parse-mpeg.h>:17: multiple definition of `psi_service_type'; common/tuning.o:<https://builder.linuxtv.org/job/xawtv4/ws/./libng/parse-mpeg.h>:17: first defined here
-  LD	  console/webcam
-  LD	  console/v4l-conf
-/usr/bin/ld: common/dvb-tuning.o:<https://builder.linuxtv.org/job/xawtv4/ws/./libng/parse-mpeg.h>:17: multiple definition of `psi_service_type'; common/devs.o:<https://builder.linuxtv.org/job/xawtv4/ws/./libng/parse-mpeg.h>:17: first defined here
-/usr/bin/ld: libng/libng.a(parse-mpeg.o):<https://builder.linuxtv.org/job/xawtv4/ws/libng/parse-mpeg.h>:17: multiple definition of `psi_service_type'; common/devs.o:<https://builder.linuxtv.org/job/xawtv4/ws/./libng/parse-mpeg.h>:17: first defined here
-/usr/bin/ld: libng/libng.a(parse-dvb.o):<https://builder.linuxtv.org/job/xawtv4/ws/libng/parse-mpeg.h>:17: multiple definition of `psi_service_type'; common/devs.o:<https://builder.linuxtv.org/job/xawtv4/ws/./libng/parse-mpeg.h>:17: first defined here
-/usr/bin/ld: libng/libng.a(grab-ng.o): in function `ng_plugins':
-<https://builder.linuxtv.org/job/xawtv4/ws/libng/grab-ng.c>:1124: undefined reference to `dlopen'
-/usr/bin/ld: <https://builder.linuxtv.org/job/xawtv4/ws/libng/grab-ng.c>:1125: undefined reference to `dlerror'
-collect2: error: ld returned 1 exit status
-make: *** [mk/Compile.mk:75: console/streamer] Error 1
-make: *** Waiting for unfinished jobs....
-/usr/bin/ld: libng/libng.a(grab-ng.o): in function `ng_plugins':
-<https://builder.linuxtv.org/job/xawtv4/ws/libng/grab-ng.c>:1124: undefined reference to `dlopen'
-/usr/bin/ld: <https://builder.linuxtv.org/job/xawtv4/ws/libng/grab-ng.c>:1125: undefined reference to `dlerror'
-collect2: error: ld returned 1 exit status
-make: *** [mk/Compile.mk:74: console/webcam] Error 1
-In file included from common/vbi-data.c:17:
-common/vbi-sim.c: In function ‘ttx_sim’:
-common/vbi-sim.c:186:13: warning: variable ‘n’ set but not used [-Wunused-but-set-variable]
-  186 |   int i, j, n;
-      |             ^
-Build step 'Execute shell' marked build as failure
+    - After a second thought, I dropped patches which added RPM to memory
+      drivers since hardware is always-on and RPM not needed.
+
+    - Replaced the "dummy host1x driver" patch with new "Disable unused
+      host1x hardware" patch, since it's a cleaner solution.
+
+Dmitry Osipenko (34):
+  opp: Add dev_pm_opp_sync() helper
+  soc/tegra: pmc: Disable PMC state syncing
+  soc/tegra: Don't print error message when OPPs not available
+  soc/tegra: Add devm_tegra_core_dev_init_opp_table_simple()
+  soc/tegra: Use dev_pm_opp_sync()
+  dt-bindings: clock: tegra-car: Document new tegra-clocks sub-node
+  clk: tegra: Support runtime PM and power domain
+  dt-bindings: host1x: Document OPP and power domain properties
+  dt-bindings: host1x: Document Memory Client resets of Host1x, GR2D and
+    GR3D
+  gpu: host1x: Add host1x_channel_stop()
+  gpu: host1x: Add runtime PM and OPP support
+  drm/tegra: dc: Support OPP and SoC core voltage scaling
+  drm/tegra: hdmi: Add OPP support
+  drm/tegra: gr2d: Support power management
+  drm/tegra: gr3d: Support power management
+  drm/tegra: vic: Support system suspend
+  usb: chipidea: tegra: Add runtime PM and OPP support
+  bus: tegra-gmi: Add runtime PM and OPP support
+  pwm: tegra: Add runtime PM and OPP support
+  mmc: sdhci-tegra: Add runtime PM and OPP support
+  mtd: rawnand: tegra: Add runtime PM and OPP support
+  spi: tegra20-slink: Add OPP support
+  media: dt: bindings: tegra-vde: Convert to schema
+  media: dt: bindings: tegra-vde: Document OPP and power domain
+  media: staging: tegra-vde: Support generic power domain and OPP
+  soc/tegra: fuse: Add OPP support
+  soc/tegra: fuse: Reset hardware
+  soc/tegra: regulators: Prepare for suspend
+  soc/tegra: pmc: Enable core domain support for Tegra20 and Tegra30
+  ARM: tegra: Add OPP tables and power domains to Tegra20 device-trees
+  ARM: tegra: Add OPP tables and power domains to Tegra30 device-trees
+  ARM: tegra: Add Memory Client resets to Tegra20 GR2D, GR3D and Host1x
+  ARM: tegra: Add Memory Client resets to Tegra30 GR2D, GR3D and Host1x
+  ARM: tegra20/30: Disable unused host1x hardware
+
+ .../bindings/clock/nvidia,tegra20-car.yaml    |   51 +
+ .../display/tegra/nvidia,tegra20-host1x.txt   |   53 +
+ .../bindings/media/nvidia,tegra-vde.txt       |   64 -
+ .../bindings/media/nvidia,tegra-vde.yaml      |  119 ++
+ .../boot/dts/tegra20-acer-a500-picasso.dts    |    1 +
+ arch/arm/boot/dts/tegra20-colibri.dtsi        |    3 +-
+ arch/arm/boot/dts/tegra20-harmony.dts         |    3 +-
+ arch/arm/boot/dts/tegra20-paz00.dts           |    1 +
+ .../arm/boot/dts/tegra20-peripherals-opp.dtsi |  941 +++++++++++
+ arch/arm/boot/dts/tegra20-seaboard.dts        |    3 +-
+ arch/arm/boot/dts/tegra20-tamonten.dtsi       |    3 +-
+ arch/arm/boot/dts/tegra20-trimslice.dts       |    9 +
+ arch/arm/boot/dts/tegra20-ventana.dts         |    1 +
+ arch/arm/boot/dts/tegra20.dtsi                |  119 +-
+ .../tegra30-asus-nexus7-grouper-common.dtsi   |    1 +
+ arch/arm/boot/dts/tegra30-beaver.dts          |    1 +
+ arch/arm/boot/dts/tegra30-cardhu.dtsi         |    1 +
+ arch/arm/boot/dts/tegra30-colibri.dtsi        |   17 +-
+ arch/arm/boot/dts/tegra30-ouya.dts            |    1 +
+ .../arm/boot/dts/tegra30-peripherals-opp.dtsi | 1412 +++++++++++++++++
+ arch/arm/boot/dts/tegra30.dtsi                |  181 ++-
+ drivers/bus/tegra-gmi.c                       |   92 +-
+ drivers/clk/tegra/Makefile                    |    1 +
+ drivers/clk/tegra/clk-device.c                |  222 +++
+ drivers/clk/tegra/clk-pll.c                   |    2 +-
+ drivers/clk/tegra/clk-super.c                 |    2 +-
+ drivers/clk/tegra/clk-tegra20.c               |   39 +-
+ drivers/clk/tegra/clk-tegra30.c               |   70 +-
+ drivers/clk/tegra/clk.c                       |   64 +
+ drivers/clk/tegra/clk.h                       |    2 +
+ drivers/gpu/drm/tegra/dc.c                    |   74 +
+ drivers/gpu/drm/tegra/dc.h                    |    2 +
+ drivers/gpu/drm/tegra/gr2d.c                  |  154 +-
+ drivers/gpu/drm/tegra/gr3d.c                  |  393 ++++-
+ drivers/gpu/drm/tegra/hdmi.c                  |   15 +-
+ drivers/gpu/drm/tegra/vic.c                   |    4 +
+ drivers/gpu/host1x/channel.c                  |    8 +
+ drivers/gpu/host1x/debug.c                    |   15 +
+ drivers/gpu/host1x/dev.c                      |  157 +-
+ drivers/gpu/host1x/dev.h                      |    3 +-
+ drivers/gpu/host1x/hw/channel_hw.c            |   44 +-
+ drivers/gpu/host1x/intr.c                     |    3 -
+ drivers/gpu/host1x/syncpt.c                   |    5 +-
+ drivers/mmc/host/sdhci-tegra.c                |  146 +-
+ drivers/mtd/nand/raw/tegra_nand.c             |   62 +-
+ drivers/opp/core.c                            |   42 +-
+ drivers/pwm/pwm-tegra.c                       |  104 +-
+ drivers/soc/tegra/common.c                    |   34 +-
+ drivers/soc/tegra/fuse/fuse-tegra.c           |   36 +
+ drivers/soc/tegra/fuse/fuse.h                 |    1 +
+ drivers/soc/tegra/pmc.c                       |   17 +
+ drivers/soc/tegra/regulators-tegra20.c        |   99 ++
+ drivers/soc/tegra/regulators-tegra30.c        |  122 ++
+ drivers/spi/spi-tegra20-slink.c               |   15 +-
+ drivers/staging/media/tegra-vde/vde.c         |   65 +-
+ drivers/usb/chipidea/ci_hdrc_tegra.c          |   61 +-
+ include/linux/host1x.h                        |    1 +
+ include/linux/pm_opp.h                        |    6 +
+ include/soc/tegra/common.h                    |   13 +
+ 59 files changed, 4796 insertions(+), 384 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt
+ create mode 100644 Documentation/devicetree/bindings/media/nvidia,tegra-vde.yaml
+ create mode 100644 drivers/clk/tegra/clk-device.c
+
+-- 
+2.32.0
+
