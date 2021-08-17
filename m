@@ -6,35 +6,35 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2B2DC4338F
-	for <linux-media@archiver.kernel.org>; Tue, 17 Aug 2021 10:26:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10AC0C4338F
+	for <linux-media@archiver.kernel.org>; Tue, 17 Aug 2021 10:31:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BFEA060524
-	for <linux-media@archiver.kernel.org>; Tue, 17 Aug 2021 10:26:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E385260F35
+	for <linux-media@archiver.kernel.org>; Tue, 17 Aug 2021 10:31:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235203AbhHQK1J convert rfc822-to-8bit (ORCPT
+        id S236594AbhHQKcY convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Aug 2021 06:27:09 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:37430 "EHLO www.linuxtv.org"
+        Tue, 17 Aug 2021 06:32:24 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:38310 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234632AbhHQK1J (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Aug 2021 06:27:09 -0400
+        id S234093AbhHQKcY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 17 Aug 2021 06:32:24 -0400
 Received: from builder.linuxtv.org ([140.211.167.10])
         by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <jenkins@linuxtv.org>)
-        id 1mFwIl-002g3Z-4P; Tue, 17 Aug 2021 10:26:35 +0000
+        id 1mFwNp-002gPk-Mb; Tue, 17 Aug 2021 10:31:50 +0000
 Received: from [127.0.0.1] (helo=builder.linuxtv.org)
         by builder.linuxtv.org with esmtp (Exim 4.94.2)
         (envelope-from <jenkins@linuxtv.org>)
-        id 1mFwIk-001wMi-FB; Tue, 17 Aug 2021 10:26:33 +0000
-Date:   Tue, 17 Aug 2021 10:26:33 +0000 (UTC)
+        id 1mFwNo-001wzd-Vr; Tue, 17 Aug 2021 10:31:47 +0000
+Date:   Tue, 17 Aug 2021 10:31:47 +0000 (UTC)
 From:   Jenkins Builder Robot <jenkins@linuxtv.org>
 To:     mchehab@kernel.org, linux-media@vger.kernel.org
-Message-ID: <1000515396.13.1629195993388@builder.linuxtv.org>
-In-Reply-To: <1670214470.12.1629195922171@builder.linuxtv.org>
-References: <1670214470.12.1629195922171@builder.linuxtv.org>
-Subject: Build failed in Jenkins: xawtv4 #22
+Message-ID: <1375138458.14.1629196307904@builder.linuxtv.org>
+In-Reply-To: <1000515396.13.1629195993388@builder.linuxtv.org>
+References: <1000515396.13.1629195993388@builder.linuxtv.org>
+Subject: Build failed in Jenkins: xawtv4 #23
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
@@ -46,7 +46,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-See <https://builder.linuxtv.org/job/xawtv4/22/display/redirect?page=changes>
+See <https://builder.linuxtv.org/job/xawtv4/23/display/redirect?page=changes>
 
 Changes:
 
@@ -133,16 +133,16 @@ compile time options summary
 gcc -ldl -Wl,-E -o console/streamer console/streamer.o common/sound.o common/webcam.o common/tuning.o common/commands.o common/devs.o common/parseconfig.o common/fifo.o common/capture.o common/event.o common/tv-config.o common/dvb-tuning.o structs/struct-dvb.o structs/struct-dump.o libng/libng.a -lpthread -ljpeg -lm
 gcc -ldl -Wl,-E -o console/webcam console/webcam.o console/ftp.o common/parseconfig.o common/devs.o common/dvb-tuning.o structs/struct-dvb.o structs/struct-dump.o libng/libng.a -lpthread -ljpeg -lm
 gcc -ldl -Wl,-E -o console/scantv console/scantv.o common/vbi-dvb.o common/vbi-data.o common/sound.o common/webcam.o common/tuning.o common/commands.o common/devs.o common/parseconfig.o common/fifo.o common/capture.o common/event.o common/tv-config.o common/dvb-tuning.o structs/struct-dvb.o structs/struct-dump.o libng/libng.a -lpthread -lzvbi -lm -lpng -lz -ljpeg
-gcc -g -O2 -Wall -Wmissing-prototypes -Wstrict-prototypes -Wpointer-arith -Wno-pointer-sign -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/X11R6/include/X11/fonts -I/usr/include/lqt -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I. -I./vbistuff -I./x11 -I./jwz -I./common -I./console -I./x11 -I./structs -I./libng -ldl -Wl,-E -Llibng -DCONFIGFILE="/etc/X11/xawtvrc" -DLIBDIR="/usr/local/lib/xawtv4" -DDATADIR="/usr/local/share/xawtv" -DLOCALEDIR="/usr/local/share/locale" -DPACKAGE="xawtv" -DVERSION="4.0-pre" -fno-omit-frame-pointer -Wp,-MD,mk/console_ttv.tmp -c -o console/ttv.o console/ttv.c
-/usr/bin/ld: /usr/bin/ld: libng/libng.a(grab-ng.o): in function `ng_plugins':
-<https://builder.linuxtv.org/job/xawtv4/ws/libng/grab-ng.c>:1125: undefined reference to `dlopen'
-/usr/bin/ld: <https://builder.linuxtv.org/job/xawtv4/ws/libng/grab-ng.c>:1126: undefined reference to `dlerror'
-libng/libng.a(grab-ng.o): in function `ng_plugins':
+gcc -g -O2 -Wall -Wmissing-prototypes -Wstrict-prototypes -Wpointer-arith -Wno-pointer-sign -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/X11R6/include/X11/fonts -I/usr/include/lqt -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -ldl -Wl,-E -I. -I./vbistuff -I./x11 -I./jwz -I./common -I./console -I./x11 -I./structs -I./libng -Llibng -DCONFIGFILE="/etc/X11/xawtvrc" -DLIBDIR="/usr/local/lib/xawtv4" -DDATADIR="/usr/local/share/xawtv" -DLOCALEDIR="/usr/local/share/locale" -DPACKAGE="xawtv" -DVERSION="4.0-pre" -fno-omit-frame-pointer -Wp,-MD,mk/console_ttv.tmp -c -o console/ttv.o console/ttv.c
+/usr/bin/ld: libng/libng.a(grab-ng.o): in function `ng_plugins':
 <https://builder.linuxtv.org/job/xawtv4/ws/libng/grab-ng.c>:1125: undefined reference to `dlopen'
 /usr/bin/ld: <https://builder.linuxtv.org/job/xawtv4/ws/libng/grab-ng.c>:1126: undefined reference to `dlerror'
 collect2: error: ld returned 1 exit status
 make: *** [mk/Compile.mk:75: console/webcam] Error 1
 make: *** Waiting for unfinished jobs....
+/usr/bin/ld: libng/libng.a(grab-ng.o): in function `ng_plugins':
+<https://builder.linuxtv.org/job/xawtv4/ws/libng/grab-ng.c>:1125: undefined reference to `dlopen'
+/usr/bin/ld: <https://builder.linuxtv.org/job/xawtv4/ws/libng/grab-ng.c>:1126: undefined reference to `dlerror'
 collect2: error: ld returned 1 exit status
 make: *** [mk/Compile.mk:75: console/streamer] Error 1
 /usr/bin/ld: libng/libng.a(grab-ng.o): in function `ng_plugins':
