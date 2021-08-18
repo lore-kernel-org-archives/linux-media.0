@@ -7,57 +7,57 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC688C432BE
-	for <linux-media@archiver.kernel.org>; Wed, 18 Aug 2021 14:16:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96E01C4320E
+	for <linux-media@archiver.kernel.org>; Wed, 18 Aug 2021 14:16:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D3D2760EBD
-	for <linux-media@archiver.kernel.org>; Wed, 18 Aug 2021 14:16:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64D6F60EBD
+	for <linux-media@archiver.kernel.org>; Wed, 18 Aug 2021 14:16:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239494AbhHROQj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Aug 2021 10:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
+        id S239746AbhHROQk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Aug 2021 10:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239800AbhHROOg (ORCPT
+        with ESMTP id S239959AbhHROOt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Aug 2021 10:14:36 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B645C0611C6
-        for <linux-media@vger.kernel.org>; Wed, 18 Aug 2021 07:12:58 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id n12so1897158plf.4
-        for <linux-media@vger.kernel.org>; Wed, 18 Aug 2021 07:12:58 -0700 (PDT)
+        Wed, 18 Aug 2021 10:14:49 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAECC061151
+        for <linux-media@vger.kernel.org>; Wed, 18 Aug 2021 07:13:27 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id t1so2375668pgv.3
+        for <linux-media@vger.kernel.org>; Wed, 18 Aug 2021 07:13:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pathpartnertech.com; s=google;
         h=mime-version:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=vYeVmkRlQJdiZWrWZxyf4PyNxu87a0l/3abmvqWezow=;
-        b=jNnsDnT3KCn80HJVGC7PeWiYLC+T8h7VnPBOw0EErfAlYeZ86k9YURFbJEMF0Vaoy7
-         klDS3iFJZ8F9qXuzcsrpxHzMfT9GEjTb7YQGyFz5MmGpCQeaM7APSLK6tWurjG9iwIZd
-         JhLI/jah2ERgjezddFztfriOYDerFV0/jA0Jocmk5dBlmuoyhC7UfiO694MaMZZi7MG7
-         C2TCU4dIGZeS/e1OhnZpPXHcCkB7ZeyrAvtRCrYc6NpRTqUuupUlGtN8ZHlQD7iWSRLH
-         U0pVpDBLP8jmnIxHQNyI5oa29U0fIzrb15p7Mlzea/DCHTKtzrbW0pfIbA/2x17ckLRh
-         z7hQ==
+        bh=Jc0hnvG5husazj7ipIPTOEELB2619EDCrYNfEMW83oc=;
+        b=B4iYfE3H1+Im6tXGthfQIoKQA6XEg1LrWpDLrhwsRmFsNv1s4kNI0hU2gwDvx+UaJ7
+         e66TBa94uHLHoQoYTifx4bLKuq7PWbSMDhBO6FEtvo9EW+dDrgzRiqJeXoWeI+OXO5Pt
+         X6AzIMFOsgXhWqFf5WKNZUp4Un+DKgAv5vFLhquLsl9cvCkLMAbk7YjQl0f7ktSqxFEm
+         P+EsOeRmby0Q7KhjcaIfYrqa2Z0mBZWfOPfXiNOH4xFwYPbneEO2hp94H0NQuxQgkeZ/
+         neWsbGexljC2Zt06VTDgW4sqauDo65jHehXvc8J+zrdDUnabI5lVxDC3Oj2blgYO4rpo
+         OOog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=vYeVmkRlQJdiZWrWZxyf4PyNxu87a0l/3abmvqWezow=;
-        b=OLxIIJ5q9C3RTkOwMugoa3ykoLmrDfv5phoNazMMVUwDTWA000zb9NKFGg7z5S/7ic
-         u+iWyjH1Un658IiQqDLfJwSc9yUoXD94blgKKHIQj+PRvZxZpB+YJME/kpFqx1nB3Wti
-         Bj98tKvKfQuY1Df/BznbU2aDhF966/rUzNRNWkNMmeJPNaDmd79bTBvjVfb3Pg89lEGm
-         18bwl9ZDB6z/Mu0GkyZhmPzde9uEqBo6mCoQFecxHfdt0wpicR0X3D4iops6btHzjfb5
-         SqCJUBjp1K2BVKFgPCHy4rWZP5CfBWv2Ums/FRL0rB8Ir3ufuPpxHf2xXgC3EcBNMZwe
-         MwRg==
+        bh=Jc0hnvG5husazj7ipIPTOEELB2619EDCrYNfEMW83oc=;
+        b=jlXpc8zwcOkGShNYGI2A47ij4TvrQ8hpXWsI2OA/nQJXJN9omcxyFZa+DWqvwWCcd7
+         QItjsbdVmJ4dRod7NAvl+FURp5s/igvaL20zhRGc6PGu6+7mbkd05sgZH/bmtozBUuJb
+         0pfRq2TMzH7gsWEXsNY2/55FsGsmGs1rlPGdZRVZ31ir0+gXR+FrUF08mew2BcMbBeNV
+         UllND8yW1epekpR35DfIHmamu5PM89yBy1jSQw8kMU2px/VzDJ29I2xwDbXyxWJuQnxR
+         iOo1VNYOT7BCJEqhJysrd4953RNs1gwVoznxpKIkTUhcYi2Kv4Z0lFkJ9+s2KtXYvPB3
+         bzVg==
 MIME-Version: 1.0
-X-Gm-Message-State: AOAM532ieXQQ6VRgUxQrNa1TbRtI32K6gPO/oI3CaiivSs//klMjSjjF
-        gqQ4+ViQObMyDdumJOn3q4CprHrzoRi+nW1K4oz+2lw0jrhgV9SRgFToI9w1tHThVaKjelk0EIK
-        OL9EThJcKC8p7vM0M
-X-Google-Smtp-Source: ABdhPJz5JWPXOGZkvkB43Sy4cb3lH+qsHRMkZ9pZ38X9NzGGVjWHkiovW0y/BI/bAhyZvrcoizI9sg==
-X-Received: by 2002:a17:90a:d910:: with SMTP id c16mr9726089pjv.33.1629295977324;
-        Wed, 18 Aug 2021 07:12:57 -0700 (PDT)
+X-Gm-Message-State: AOAM530ptLbV02CrkQjBH97j0a6Hc1jG+T+6bs2eBQZ3pqLmLHNvT1BU
+        TtwTUSy3Pal47XvW/gsxRDN0Pn0pyYs5svJMasu6ZlVfRaIXuZlVVjDnEYfdFnTglooGRSGvnNw
+        kPRkuXqPaOlAutzHB
+X-Google-Smtp-Source: ABdhPJz6BogWYXnnlD3NJlGqngRVHCwWN5OJjFMGwmfb7XPFi1/AgKt5Lf0SIYF6KGa6Z3YaAy+VVQ==
+X-Received: by 2002:a63:215c:: with SMTP id s28mr9013616pgm.99.1629296007126;
+        Wed, 18 Aug 2021 07:13:27 -0700 (PDT)
 Received: from localhost.localdomain ([49.207.214.181])
-        by smtp.gmail.com with ESMTPSA id e8sm8084343pgg.31.2021.08.18.07.12.54
+        by smtp.gmail.com with ESMTPSA id e8sm8084343pgg.31.2021.08.18.07.13.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Aug 2021 07:12:56 -0700 (PDT)
+        Wed, 18 Aug 2021 07:13:26 -0700 (PDT)
 From:   sidraya.bj@pathpartnertech.com
 To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
@@ -65,9 +65,9 @@ Cc:     prashanth.ka@pathpartnertech.com, praneeth@ti.com,
         mchehab@kernel.org, linux-media@vger.kernel.org,
         praveen.ap@pathpartnertech.com,
         Sidraya <sidraya.bj@pathpartnertech.com>
-Subject: [PATCH 19/30] v4l:vxd-dec:vdecdd utility library
-Date:   Wed, 18 Aug 2021 19:40:26 +0530
-Message-Id: <20210818141037.19990-20-sidraya.bj@pathpartnertech.com>
+Subject: [PATCH 28/30] IMG DEC V4L2 Interface function implementations
+Date:   Wed, 18 Aug 2021 19:40:35 +0530
+Message-Id: <20210818141037.19990-29-sidraya.bj@pathpartnertech.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210818141037.19990-1-sidraya.bj@pathpartnertech.com>
 References: <20210818141037.19990-1-sidraya.bj@pathpartnertech.com>
@@ -78,1139 +78,2222 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Sidraya <sidraya.bj@pathpartnertech.com>
 
-This library handles picture buffer pixel format checking
-and layout conversion to suit HW requirements.
+Add Low-level VXD interface component and v4l2 wrapper Interface
+for VXD driver.
 
 Signed-off-by: Sunita Nadampalli <sunitan@ti.com>
-
 Signed-off-by: Sidraya <sidraya.bj@pathpartnertech.com>
 ---
- MAINTAINERS                                   |   3 +
- .../staging/media/vxd/decoder/vdecdd_utils.c  |  95 ++
- .../staging/media/vxd/decoder/vdecdd_utils.h  |  93 ++
- .../media/vxd/decoder/vdecdd_utils_buf.c      | 897 ++++++++++++++++++
- 4 files changed, 1088 insertions(+)
- create mode 100644 drivers/staging/media/vxd/decoder/vdecdd_utils.c
- create mode 100644 drivers/staging/media/vxd/decoder/vdecdd_utils.h
- create mode 100644 drivers/staging/media/vxd/decoder/vdecdd_utils_buf.c
+ MAINTAINERS                                  |    2 +
+ drivers/staging/media/vxd/common/vid_buf.h   |   42 +
+ drivers/staging/media/vxd/decoder/vxd_v4l2.c | 2129 ++++++++++++++++++
+ 3 files changed, 2173 insertions(+)
+ create mode 100644 drivers/staging/media/vxd/common/vid_buf.h
+ create mode 100644 drivers/staging/media/vxd/decoder/vxd_v4l2.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index bf47d48a1ec2..c7edc60f4d5b 100644
+index 0616ab620135..c7b4c860f8a7 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -19614,6 +19614,9 @@ F:	drivers/staging/media/vxd/decoder/translation_api.h
- F:	drivers/staging/media/vxd/decoder/vdec_defs.h
- F:	drivers/staging/media/vxd/decoder/vdec_mmu_wrapper.c
- F:	drivers/staging/media/vxd/decoder/vdec_mmu_wrapper.h
-+F:	drivers/staging/media/vxd/decoder/vdecdd_utils.c
-+F:	drivers/staging/media/vxd/decoder/vdecdd_utils.h
-+F:	drivers/staging/media/vxd/decoder/vdecdd_utils_buf.c
- F:	drivers/staging/media/vxd/decoder/vdecfw_share.h
- F:	drivers/staging/media/vxd/decoder/vdecfw_shared.h
- F:	drivers/staging/media/vxd/decoder/vxd_core.c
-diff --git a/drivers/staging/media/vxd/decoder/vdecdd_utils.c b/drivers/staging/media/vxd/decoder/vdecdd_utils.c
+@@ -19566,6 +19566,7 @@ F:	drivers/staging/media/vxd/common/rman_api.c
+ F:	drivers/staging/media/vxd/common/rman_api.h
+ F:	drivers/staging/media/vxd/common/talmmu_api.c
+ F:	drivers/staging/media/vxd/common/talmmu_api.h
++F:	drivers/staging/media/vxd/common/vid_buf.h
+ F:	drivers/staging/media/vxd/common/work_queue.c
+ F:	drivers/staging/media/vxd/common/work_queue.h
+ F:	drivers/staging/media/vxd/decoder/Kconfig
+@@ -19641,6 +19642,7 @@ F;	drivers/staging/media/vxd/decoder/vxd_props.h
+ F:	drivers/staging/media/vxd/decoder/vxd_pvdec.c
+ F:	drivers/staging/media/vxd/decoder/vxd_pvdec_priv.h
+ F:	drivers/staging/media/vxd/decoder/vxd_pvdec_regs.h
++F:	drivers/staging/media/vxd/decoder/vxd_v4l2.c
+ 
+ VIDEO I2C POLLING DRIVER
+ M:	Matt Ranostay <matt.ranostay@konsulko.com>
+diff --git a/drivers/staging/media/vxd/common/vid_buf.h b/drivers/staging/media/vxd/common/vid_buf.h
 new file mode 100644
-index 000000000000..7fd7a80d46ae
+index 000000000000..ac0e4f9b4894
 --- /dev/null
-+++ b/drivers/staging/media/vxd/decoder/vdecdd_utils.c
-@@ -0,0 +1,95 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * VXD Decoder device driver utility functions implementation
-+ *
-+ * Copyright (c) Imagination Technologies Ltd.
-+ * Copyright (c) 2021 Texas Instruments Incorporated - http://www.ti.com/
-+ *
-+ * Authors:
-+ *	Sunita Nadampalli <sunitan@ti.com>
-+ *
-+ * Re-written for upstream
-+ *	Sidraya Jayagond <sidraya.bj@pathpartnertech.com>
-+ *	Prashanth Kumar Amai <prashanth.ka@pathpartnertech.com>
-+ */
-+
-+#include <linux/dma-mapping.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-mem2mem.h>
-+
-+#include "bspp.h"
-+#include "vdecdd_utils.h"
-+
-+/*
-+ * @Function              VDECDDUTILS_FreeStrUnit
-+ */
-+int vdecddutils_free_strunit(struct vdecdd_str_unit *str_unit)
-+{
-+	struct bspp_bitstr_seg *bstr_seg;
-+
-+	/* Loop over bit stream segments */
-+	bstr_seg = (struct bspp_bitstr_seg *)lst_removehead(&str_unit->bstr_seg_list);
-+	while (bstr_seg) {
-+		/* Free segment. */
-+		kfree(bstr_seg);
-+
-+		/* Get next segment. */
-+		bstr_seg = (struct bspp_bitstr_seg *)lst_removehead(&str_unit->bstr_seg_list);
-+	}
-+
-+	/* Free the sequence header */
-+	if (str_unit->seq_hdr_info) {
-+		str_unit->seq_hdr_info->ref_count--;
-+		if (str_unit->seq_hdr_info->ref_count == 0) {
-+			kfree(str_unit->seq_hdr_info);
-+			str_unit->seq_hdr_info = NULL;
-+		}
-+	}
-+
-+	/* Free the picture header... */
-+	if (str_unit->pict_hdr_info) {
-+		kfree(str_unit->pict_hdr_info->pict_sgm_data.pic_data);
-+		str_unit->pict_hdr_info->pict_sgm_data.pic_data = NULL;
-+
-+		kfree(str_unit->pict_hdr_info);
-+		str_unit->pict_hdr_info = NULL;
-+	}
-+
-+	/* Free stream unit. */
-+	kfree(str_unit);
-+	str_unit = NULL;
-+
-+	/* Return success */
-+	return IMG_SUCCESS;
-+}
-+
-+/*
-+ * @Function: VDECDDUTILS_CreateStrUnit
-+ * @Description: this function allocate a structure for a complete data unit
-+ */
-+int vdecddutils_create_strunit(struct vdecdd_str_unit **str_unit_handle,
-+			       struct lst_t *bs_list)
-+{
-+	struct vdecdd_str_unit *str_unit;
-+	struct bspp_bitstr_seg *bstr_seg;
-+
-+	str_unit = kzalloc(sizeof(*str_unit), GFP_KERNEL);
-+	VDEC_ASSERT(str_unit);
-+	if (!str_unit)
-+		return IMG_ERROR_OUT_OF_MEMORY;
-+
-+	if (bs_list) {
-+		/* copy BS list to this list */
-+		lst_init(&str_unit->bstr_seg_list);
-+		for (bstr_seg = lst_first(bs_list); bstr_seg;
-+			bstr_seg = lst_first(bs_list)) {
-+			bstr_seg = lst_removehead(bs_list);
-+			lst_add(&str_unit->bstr_seg_list, bstr_seg);
-+		}
-+	}
-+
-+	*str_unit_handle = str_unit;
-+
-+	return IMG_SUCCESS;
-+}
-diff --git a/drivers/staging/media/vxd/decoder/vdecdd_utils.h b/drivers/staging/media/vxd/decoder/vdecdd_utils.h
-new file mode 100644
-index 000000000000..233b7c80fe10
---- /dev/null
-+++ b/drivers/staging/media/vxd/decoder/vdecdd_utils.h
-@@ -0,0 +1,93 @@
++++ b/drivers/staging/media/vxd/common/vid_buf.h
+@@ -0,0 +1,42 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * VXD Decoder device driver utility header
++ * Low-level VXD interface component
 + *
 + * Copyright (c) Imagination Technologies Ltd.
 + * Copyright (c) 2021 Texas Instruments Incorporated - http://www.ti.com/
 + *
 + * Authors:
-+ *	Sunita Nadampalli <sunitan@ti.com>
++ *	Angela Stegmaier <angelabaker@ti.com>
 + *
 + * Re-written for upstream
 + *	Sidraya Jayagond <sidraya.bj@pathpartnertech.com>
 + */
 +
-+#ifndef __VDECDD_UTILS_H__
-+#define __VDECDD_UTILS_H__
++#ifndef _VID_BUF_H
++#define _VID_BUF_H
 +
-+#include "img_errors.h"
-+#include "vdecdd_defs.h"
++/*
++ * struct vidio_ddbufinfo - contains information about virtual address
++ * @buf_size: the size of the buffer (in bytes).
++ * @cpu_virt: the cpu virtual address  (mapped into the local cpu mmu)
++ * @dev_virt: device virtual address (pages mapped into IMG H/W mmu)
++ * @hndl_memory: handle to device mmu mapping
++ * @buff_id: buffer id used in communication with interface
++ * @is_internal: true, if the buffer is allocated internally
++ * @ref_count: reference count (number of users)
++ * @kmstr_id: stream id
++ * @core_id: core id
++ */
++struct vidio_ddbufinfo {
++	unsigned int buf_size;
++	void *cpu_virt;
++	unsigned int dev_virt;
++	void *hndl_memory;
++	unsigned int buff_id;
++	unsigned int is_internal;
++	unsigned int ref_count;
++	unsigned int kmstr_id;
++	unsigned int core_id;
++};
 +
-+/* The picture buffer alignment (in bytes) for VXD. */
-+#define VDEC_VXD_PICTBUF_ALIGNMENT              (64)
-+/* The buffer alignment (in bytes) for VXD. */
-+#define VDEC_VXD_BUF_ALIGNMENT                  (4096)
-+/* The extended stride alignment for VXD.  */
-+#define VDEC_VXD_EXT_STRIDE_ALIGNMENT_DEFAULT   (64)
-+/* Macroblock dimension (width and height) in pixels. */
-+#define VDEC_MB_DIMENSION                       (16)
-+
-+static inline unsigned int vdec_size_min(unsigned int a, unsigned int b)
-+{
-+	return a <= b ? a : b;
-+}
-+
-+static inline unsigned char vdec_size_lt(struct vdec_pict_size sa, struct vdec_pict_size sb)
-+{
-+	return (sa.width < sb.width && sa.height <= sb.height) ||
-+	       (sa.width <= sb.width && sa.height < sb.height);
-+}
-+
-+static inline unsigned char vdec_size_ge(struct vdec_pict_size sa, struct vdec_pict_size sb)
-+{
-+	return sa.width >= sb.width && sa.height >= sb.height;
-+}
-+
-+static inline unsigned char vdec_size_ne(struct vdec_pict_size sa, struct vdec_pict_size sb)
-+{
-+	return sa.width != sb.width || sa.height != sb.height;
-+}
-+
-+static inline unsigned char vdec_size_nz(struct vdec_pict_size sa)
-+{
-+	return sa.width != 0 && sa.height != 0;
-+}
-+
-+int vdecddutils_free_strunit(struct vdecdd_str_unit *str_unit);
-+
-+int vdecddutils_create_strunit(struct vdecdd_str_unit **str_unit_handle,
-+			       struct lst_t *bs_list);
-+
-+int vdecddutils_ref_pict_get_maxnum(const struct vdec_str_configdata *str_cfg_data,
-+				    const struct vdec_comsequ_hdrinfo *comseq_hdr_info,
-+				    unsigned int *num_picts);
-+
-+int vdecddutils_get_minrequired_numpicts(const struct vdec_str_configdata *str_cfg_data,
-+					 const struct vdec_comsequ_hdrinfo *comseq_hdr_info,
-+					 const struct vdec_str_opconfig *op_cfg,
-+					 unsigned int *num_picts);
-+
-+int vdecddutils_pictbuf_getconfig(const struct vdec_str_configdata *str_cfg_data,
-+				  const struct vdec_pict_rend_config *pict_rend_cfg,
-+				  const struct vdec_str_opconfig *str_opcfg,
-+				  struct vdec_pict_bufconfig *pict_bufcfg);
-+
-+int vdecddutils_pictbuf_getinfo(const struct vdec_str_configdata *str_cfg_data,
-+				const struct vdec_pict_rend_config *pict_rend_cfg,
-+				const struct vdec_str_opconfig *str_opcfg,
-+				struct vdec_pict_rendinfo *pict_rend_info);
-+
-+int vdecddutils_convert_buffer_config(const struct vdec_str_configdata *str_cfg_data,
-+				      const struct vdec_pict_bufconfig *pict_bufcfg,
-+				      struct vdec_pict_rendinfo *pict_rend_info);
-+
-+int vdecddutils_get_display_region(const struct vdec_pict_size *coded_size,
-+				   const struct vdec_rect *orig_disp_region,
-+				   struct vdec_rect *disp_region);
-+
-+void vdecddutils_buf_vxd_adjust_size(unsigned int *buf_size);
-+
-+int vdecddutils_ref_pic_hevc_get_maxnum(const struct vdec_comsequ_hdrinfo *comseq_hdrinfo,
-+					unsigned int *max_ref_picnum);
-+
-+#endif
-diff --git a/drivers/staging/media/vxd/decoder/vdecdd_utils_buf.c b/drivers/staging/media/vxd/decoder/vdecdd_utils_buf.c
++#endif /* _VID_BUF_H */
+diff --git a/drivers/staging/media/vxd/decoder/vxd_v4l2.c b/drivers/staging/media/vxd/decoder/vxd_v4l2.c
 new file mode 100644
-index 000000000000..3a6ad609f981
+index 000000000000..292e2de0c5e0
 --- /dev/null
-+++ b/drivers/staging/media/vxd/decoder/vdecdd_utils_buf.c
-@@ -0,0 +1,897 @@
++++ b/drivers/staging/media/vxd/decoder/vxd_v4l2.c
+@@ -0,0 +1,2129 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * VXD Decoder device driver buffer utility functions implementation
++ * IMG DEC V4L2 Interface function implementations
 + *
 + * Copyright (c) Imagination Technologies Ltd.
 + * Copyright (c) 2021 Texas Instruments Incorporated - http://www.ti.com/
 + *
 + * Authors:
-+ *	Sunita Nadampalli <sunitan@ti.com>
++ *	Angela Stegmaier <angelabaker@ti.com>
 + *
-+ * Re-written for upstream
-+ *	Sidraya Jayagond <sidraya.bj@pathpartnertech.com>
++ * Re-written for upstreming
 + *	Prashanth Kumar Amai <prashanth.ka@pathpartnertech.com>
++ *	Sidraya Jayagond <sidraya.bj@pathpartnertech.com>
 + */
 +
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/module.h>
++#include <linux/of_address.h>
++#include <linux/of_device.h>
++#include <linux/of_irq.h>
++#include <linux/platform_device.h>
++#include <linux/pm.h>
++#include <linux/pm_runtime.h>
++#include <linux/videodev2.h>
++#include <linux/idr.h>
++#include <linux/slab.h>
++#include <linux/interrupt.h>
 +#include <linux/dma-mapping.h>
++#include <linux/spinlock.h>
++#include <linux/printk.h>
++#include <linux/mutex.h>
++
++#ifdef ERROR_RECOVERY_SIMULATION
++#include <linux/sysfs.h>
++#include <linux/kobject.h>
++#include <linux/types.h>
++#endif
++
++#include <media/v4l2-common.h>
 +#include <media/v4l2-ctrls.h>
 +#include <media/v4l2-device.h>
++#include <media/v4l2-event.h>
++#include <media/v4l2-ioctl.h>
 +#include <media/v4l2-mem2mem.h>
++#include <media/videobuf2-core.h>
++#include <media/videobuf2-dma-sg.h>
++#ifdef CAPTURE_CONTIG_ALLOC
++#include <media/videobuf2-dma-contig.h>
++#endif
 +
-+#include "img_profiles_levels.h"
-+#include "pixel_api.h"
-+#include "vdecdd_utils.h"
++#include "core.h"
++#include "h264fw_data.h"
++#include "hevcfw_data.h"
++#include "img_dec_common.h"
++#include "vxd_pvdec_priv.h"
++#include "vxd_dec.h"
++
++#define VXD_DEC_SPIN_LOCK_NAME  "vxd-dec"
++#define IMG_VXD_DEC_MODULE_NAME "vxd-dec"
++
++#ifdef ERROR_RECOVERY_SIMULATION
++/* This code should be execute only in debug flag */
++/*
++ * vxd decoder kernel object to create sysfs to debug error recovery and firmware
++ * watchdog timer. This kernel object will create a directory under /sys/kernel,
++ * containing two files fw_error_value and disable_fw_irq.
++ */
++struct kobject *vxd_dec_kobject;
++
++/* fw_error_value is the variable used to handle fw_error_attr */
++int fw_error_value = VDEC_ERROR_MAX;
++
++/* irq for the module, stored globally so can be accessed from sysfs */
++int g_module_irq;
 +
 +/*
-+ * Tests if chroma offset (immediately after size of luma) is exactly
-+ * aligned to buffer alignment constraint.
++ * fw_error_attr. Application can set the value of this attribute, based on the
++ * firmware error that needs to be reproduced.
 + */
-+static inline unsigned char is_packedbuf_chroma_aligned(unsigned int offset,
-+							unsigned int color_plane,
-+							unsigned int align)
-+{
-+	return(color_plane != VDEC_PLANE_VIDEO_Y ? TRUE :
-+	       (offset == ALIGN(offset, align) ? TRUE : FALSE));
-+}
++struct kobj_attribute fw_error_attr =
++	__ATTR(fw_error_value, 0660, vxd_sysfs_show, vxd_sysfs_store);
++
++/* disable_fw_irq_value is variable to handle disable_fw_irq_attr */
++int disable_fw_irq_value;
 +
 +/*
-+ * < h.264 MaxDpbMbs values per profile (see Table A-1 of Rec. ITU-T H.264
-+ * (03/2010)).
-+ *   NOTE: Level 1b will be treated as 1.1 in case of Baseline,
-+ * Constrained Baseline, Main, and Extended profiles as the value of the
-+ * constraint_set3_flag is not available in #VDEC_sComSequHdrInfo structure.
++ * disable_fw_irq_attr. Application can set the value of this attribute. 1 to
++ * disable irq. 0 to enable irq.
 + */
-+static unsigned int h264_max_dpb_mbs[H264_LEVEL_MAJOR_NUM][H264_LEVEL_MINOR_NUM] = {
-+	/* level: n/a     n/a     n/a     1.0b */
-+	{ 396,    396,    396,    396  },
-+	/* level: 1.0     1.1     1.2     1.3 */
-+	{ 396,    900,    2376,   2376 },
-+	/* level: 2.0     2.1     2.2     n/a */
-+	{ 2376,   4752,   8100,   8100 },
-+	/* level: 3.0     3.1     3.2     n/a */
-+	{ 8100,   18000,  20480,  20480},
-+	/* level: 4.0     4.1     4.2     n/a */
-+	{ 32768,  32768,  34816,  34816},
-+	/* level: 5.0     5.1     5.2     n/a */
-+	{ 110400, 184320, 184320, 184320}
++struct kobj_attribute disable_fw_irq_attr =
++	__ATTR(disable_fw_irq_value, 0660, vxd_sysfs_show, vxd_sysfs_store);
++
++/*
++ * Group attribute so that we can create and destroy all of them at once.
++ */
++struct attribute *attrs[] = {
++	&fw_error_attr.attr,
++	&disable_fw_irq_attr.attr,
++	NULL,         /* Terminate list of attributes with NULL */
 +};
 +
-+typedef int (*fn_ref_pic_get_max_num)(const struct vdec_comsequ_hdrinfo
-+	*comseq_hdrinfo, unsigned int *max_ref_pic_num);
++/*
++ * An unnamed attribute group will put all of the attributes directly in
++ * the kobject directory.  If we specify a name, a sub directory will be
++ * created for the attributes with the directory being the name of the
++ * attribute group
++ */
++struct attribute_group attr_group = {
++	.attrs = attrs,
++};
 +
-+void vdecddutils_buf_vxd_adjust_size(unsigned int *buf_size)
++#endif
++
++static struct heap_config vxd_dec_heap_configs[] = {
++	{
++		.type = MEM_HEAP_TYPE_UNIFIED,
++		.options.unified = {
++			.gfp_type = __GFP_DMA32 | __GFP_ZERO,
++		},
++		.to_dev_addr = NULL,
++	},
++};
++
++static struct vxd_dec_fmt vxd_dec_formats[] = {
++	{
++		.fourcc = V4L2_PIX_FMT_NV12,
++		.num_planes = 1,
++		.type = IMG_DEC_FMT_TYPE_CAPTURE,
++		.std = VDEC_STD_UNDEFINED,
++		.pixfmt = IMG_PIXFMT_420PL12YUV8,
++		.interleave = PIXEL_UV_ORDER,
++		.idc = PIXEL_FORMAT_420,
++		.size_num = 3,
++		.size_den = 2,
++		.bytes_pp = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_NV16,
++		.num_planes = 1,
++		.type = IMG_DEC_FMT_TYPE_CAPTURE,
++		.std = VDEC_STD_UNDEFINED,
++		.pixfmt = IMG_PIXFMT_422PL12YUV8,
++		.interleave = PIXEL_UV_ORDER,
++		.idc = PIXEL_FORMAT_422,
++		.size_num = 2,
++		.size_den = 1,
++		.bytes_pp = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_TI1210,
++		.num_planes = 1,
++		.type = IMG_DEC_FMT_TYPE_CAPTURE,
++		.std = VDEC_STD_UNDEFINED,
++		.pixfmt = IMG_PIXFMT_420PL12YUV10_MSB,
++		.interleave = PIXEL_UV_ORDER,
++		.idc = PIXEL_FORMAT_420,
++		.size_num = 3,
++		.size_den = 2,
++		.bytes_pp = 2,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_TI1610,
++		.num_planes = 1,
++		.type = IMG_DEC_FMT_TYPE_CAPTURE,
++		.std = VDEC_STD_UNDEFINED,
++		.pixfmt = IMG_PIXFMT_422PL12YUV10_MSB,
++		.interleave = PIXEL_UV_ORDER,
++		.idc = PIXEL_FORMAT_422,
++		.size_num = 2,
++		.size_den = 1,
++		.bytes_pp = 2,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_H264,
++		.num_planes = 1,
++		.type = IMG_DEC_FMT_TYPE_OUTPUT,
++		.std = VDEC_STD_H264,
++		.pixfmt = IMG_PIXFMT_UNDEFINED,
++		.interleave = PIXEL_INVALID_CI,
++		.idc = PIXEL_FORMAT_INVALID,
++		.size_num = 1,
++		.size_den = 1,
++		.bytes_pp = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_HEVC,
++		.num_planes = 1,
++		.type = IMG_DEC_FMT_TYPE_OUTPUT,
++		.std = VDEC_STD_HEVC,
++		.pixfmt = IMG_PIXFMT_UNDEFINED,
++		.interleave = PIXEL_INVALID_CI,
++		.idc = PIXEL_FORMAT_INVALID,
++		.size_num = 1,
++		.size_den = 1,
++		.bytes_pp = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_MJPEG,
++		.num_planes = 1,
++		.type = IMG_DEC_FMT_TYPE_OUTPUT,
++		.std = VDEC_STD_JPEG,
++		.pixfmt = IMG_PIXFMT_UNDEFINED,
++		.interleave = PIXEL_INVALID_CI,
++		.idc = PIXEL_FORMAT_INVALID,
++		.size_num = 1,
++		.size_den = 1,
++		.bytes_pp = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_YUV420M,
++		.num_planes = 3,
++		.type = IMG_DEC_FMT_TYPE_CAPTURE,
++		.std = VDEC_STD_UNDEFINED,
++		.pixfmt = 86031,
++		.interleave = PIXEL_UV_ORDER,
++		.idc = PIXEL_FORMAT_420,
++		.size_num = 2,
++		.size_den = 1,
++		.bytes_pp = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_YUV422M,
++		.num_planes = 3,
++		.type = IMG_DEC_FMT_TYPE_CAPTURE,
++		.std = VDEC_STD_UNDEFINED,
++		.pixfmt = 81935,
++		.interleave = PIXEL_UV_ORDER,
++		.idc = PIXEL_FORMAT_422,
++		.size_num = 3,
++		.size_den = 1,
++		.bytes_pp = 1,
++	},
++};
++
++#ifdef ERROR_RECOVERY_SIMULATION
++ssize_t vxd_sysfs_show(struct kobject *vxd_dec_kobject,
++		       struct kobj_attribute *attr, char *buf)
++
 +{
-+	/* Align the buffer size to VXD page size. */
-+	*buf_size = ALIGN(*buf_size, VDEC_VXD_BUF_ALIGNMENT);
++	int var = 0;
++
++	if (strcmp(attr->attr.name, "fw_error_value") == 0)
++		var = fw_error_value;
++
++	else
++		var = disable_fw_irq_value;
++
++	return sprintf(buf, "%d\n", var);
 +}
 +
-+static int vdecddutils_ref_pic_h264_get_maxnum
-+	(const struct vdec_comsequ_hdrinfo *comseq_hdrinfo,
-+	unsigned int *max_ref_pic_num)
++ssize_t vxd_sysfs_store(struct kobject *vxd_dec_kobject,
++			struct kobj_attribute *attr,
++			const char *buf, unsigned long count)
 +{
-+	unsigned int pic_width_mb;
-+	unsigned int pic_height_mb;
-+	unsigned int lvl_major = 0;
-+	unsigned int lvl_minor = 0;
++	int var = 0, rv = 0;
 +
-+	/* Pre-validate level. */
-+	if (comseq_hdrinfo->codec_level < H264_LEVEL_MIN ||
-+	    comseq_hdrinfo->codec_level > H264_LEVEL_MAX) {
-+		pr_warn("Wrong H264 level value: %u",
-+			comseq_hdrinfo->codec_level);
++	rv = sscanf(buf, "%du", &var);
++
++	if (strcmp(attr->attr.name, "fw_error_value") == 0) {
++		fw_error_value = var;
++	} else {
++		disable_fw_irq_value = var;
++		/*
++		 * if disable_fw_irq_value is not zero, disable the irq to reproduce
++		 * firmware non responsiveness in vxd_worker.
++		 */
++		if (disable_fw_irq_value != 0) {
++			/* just ignore the irq */
++			disable_irq(g_module_irq);
++		}
++	}
++	return sprintf((char *)buf, "%d\n", var);
++}
++#endif
++
++static struct vxd_dec_ctx *file2ctx(struct file *file)
++{
++	return container_of(file->private_data, struct vxd_dec_ctx, fh);
++}
++
++static irqreturn_t soft_thread_irq(int irq, void *dev_id)
++{
++	struct platform_device *pdev = (struct platform_device *)dev_id;
++
++	if (!pdev)
++		return IRQ_NONE;
++
++	return vxd_handle_thread_irq(&pdev->dev);
++}
++
++static irqreturn_t hard_isrcb(int irq, void *dev_id)
++{
++	struct platform_device *pdev = (struct platform_device *)dev_id;
++
++	if (!pdev)
++		return IRQ_NONE;
++
++	return vxd_handle_irq(&pdev->dev);
++}
++
++static struct vxd_buffer *find_buffer(unsigned int buf_map_id, struct list_head *head)
++{
++	struct list_head *list;
++	struct vxd_buffer *buf = NULL;
++
++	list_for_each(list, head) {
++		buf = list_entry(list, struct vxd_buffer, list);
++		if (buf->buf_map_id == buf_map_id)
++			break;
++		buf = NULL;
++	}
++	return buf;
++}
++
++static void return_worker(void *work)
++{
++	struct vxd_dec_ctx *ctx;
++	struct vxd_return *res;
++	struct device *dev;
++	struct timespec64 time;
++	int loop;
++
++	work = get_work_buff(work, TRUE);
++
++	res = container_of(work, struct vxd_return, work);
++	ctx = res->ctx;
++	dev = ctx->dev->dev;
++	switch (res->type) {
++	case VXD_CB_PICT_DECODED:
++		v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
++		ktime_get_real_ts64(&time);
++		for (loop = 0; loop < ARRAY_SIZE(ctx->dev->time_drv); loop++) {
++			if (ctx->dev->time_drv[loop].id == res->buf_map_id) {
++				ctx->dev->time_drv[loop].end_time =
++				timespec64_to_ns(&time);
++#ifdef DEBUG_DECODER_DRIVER
++				dev_info(dev, "picture buf decode time is %llu us for buf_map_id 0x%x\n",
++					 div_s64(ctx->dev->time_drv[loop].end_time -
++						 ctx->dev->time_drv[loop].start_time, 1000),
++					 res->buf_map_id);
++#endif
++				break;
++				}
++			}
++
++		if (loop == ARRAY_SIZE(ctx->dev->time_drv))
++			dev_err(dev, "picture buf decode for buf_map_id x%0x is not measured\n",
++				res->buf_map_id);
++		break;
++
++	default:
++		break;
++	}
++	kfree(res->work);
++	kfree(res);
++}
++
++static void vxd_error_recovery(struct vxd_dec_ctx *ctx)
++{
++	int ret = -1;
++
++	/*
++	 * In the previous frame decoding fatal error has been detected
++	 * so we need to reload the firmware to make it alive.
++	 */
++	pr_debug("Reloading the firmware because of previous error\n");
++	vxd_clean_fw_resources(ctx->dev);
++	ret = vxd_prepare_fw(ctx->dev);
++	if (ret)
++		pr_err("Reloading the firmware failed!!");
++}
++
++static struct vxd_dec_q_data *get_q_data(struct vxd_dec_ctx *ctx,
++					 enum v4l2_buf_type type)
++{
++	switch (type) {
++	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
++	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
++		return &ctx->q_data[Q_DATA_SRC];
++	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
++	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
++		return &ctx->q_data[Q_DATA_DST];
++	default:
++		return NULL;
++	}
++	return NULL;
++}
++
++static void vxd_return_resource(void *ctx_handle, enum vxd_cb_type type,
++				unsigned int buf_map_id)
++{
++	struct vxd_return *res;
++	struct vxd_buffer *buf = NULL;
++	struct vb2_v4l2_buffer *vb;
++	struct vxd_dec_ctx *ctx = (struct vxd_dec_ctx *)ctx_handle;
++	struct v4l2_event event = {};
++	struct device *dev = ctx->dev->dev;
++	int i;
++	struct vxd_dec_q_data *q_data;
++
++	if (ctx->aborting) {
++		v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
++		ctx->aborting = 0;
++		return;
 +	}
 +
-+	if (comseq_hdrinfo->max_reorder_picts) {
-+		*max_ref_pic_num = comseq_hdrinfo->max_reorder_picts;
-+	} else {
-+		/* Calculate level major and minor. */
-+		lvl_major = comseq_hdrinfo->codec_level / 10;
-+		lvl_minor = comseq_hdrinfo->codec_level % 10;
++	switch (type) {
++	case VXD_CB_STRUNIT_PROCESSED:
 +
-+		/* Calculate picture sizes in MBs. */
-+		pic_width_mb = (comseq_hdrinfo->max_frame_size.width +
-+			(VDEC_MB_DIMENSION - 1)) / VDEC_MB_DIMENSION;
-+		pic_height_mb = (comseq_hdrinfo->max_frame_size.height +
-+			(VDEC_MB_DIMENSION - 1)) / VDEC_MB_DIMENSION;
++		buf = find_buffer(buf_map_id, &ctx->out_buffers);
++		if (!buf) {
++			dev_err(dev, "Could not locate buf_map_id=0x%x in OUTPUT buffers list\n",
++				buf_map_id);
++			break;
++		}
++		buf->buffer.vb.field = V4L2_FIELD_NONE;
++		q_data = get_q_data(ctx, buf->buffer.vb.vb2_buf.vb2_queue->type);
++		if (!q_data)
++			return;
 +
-+		/* Validate lvl_minor */
-+		if (lvl_minor > 3) {
-+			pr_warn("Wrong H264 lvl_minor level value: %u, overriding with 3",
-+				lvl_minor);
-+			lvl_minor = 3;
++		for (i = 0; i < q_data->fmt->num_planes; i++)
++			vb2_set_plane_payload(&buf->buffer.vb.vb2_buf, i,
++					      ctx->pict_bufcfg.plane_size[i]);
++
++		v4l2_m2m_buf_done(&buf->buffer.vb, VB2_BUF_STATE_DONE);
++		break;
++	case VXD_CB_SPS_RELEASE:
++		break;
++	case VXD_CB_PPS_RELEASE:
++		break;
++	case VXD_CB_PICT_DECODED:
++		res = kzalloc(sizeof(*res), GFP_KERNEL);
++		if (!res)
++			return;
++		res->ctx = ctx;
++		res->type = type;
++		res->buf_map_id = buf_map_id;
++
++		init_work(&res->work, return_worker, HWA_DECODER);
++		if (!res->work)
++			return;
++
++		schedule_work(res->work);
++
++		break;
++	case VXD_CB_PICT_DISPLAY:
++		buf = find_buffer(buf_map_id, &ctx->cap_buffers);
++		if (!buf) {
++			dev_err(dev, "Could not locate buf_map_id=0x%x in CAPTURE buffers list\n",
++				buf_map_id);
++			break;
 +		}
-+		/* Validate lvl_major */
-+		if (lvl_major > 5) {
-+			pr_warn("Wrong H264 lvl_major level value: %u, overriding with 5",
-+				lvl_major);
-+			lvl_major = 5;
++		buf->reuse = FALSE;
++		buf->buffer.vb.field = V4L2_FIELD_NONE;
++		q_data = get_q_data(ctx, buf->buffer.vb.vb2_buf.vb2_queue->type);
++		if (!q_data)
++			return;
++
++		for (i = 0; i < q_data->fmt->num_planes; i++)
++			vb2_set_plane_payload(&buf->buffer.vb.vb2_buf, i,
++					      ctx->pict_bufcfg.plane_size[i]);
++
++		v4l2_m2m_buf_done(&buf->buffer.vb, VB2_BUF_STATE_DONE);
++		break;
++	case VXD_CB_PICT_RELEASE:
++		buf = find_buffer(buf_map_id, &ctx->reuse_queue);
++		if (buf) {
++			buf->reuse = TRUE;
++			list_move_tail(&buf->list, &ctx->cap_buffers);
++
++			v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, &buf->buffer.vb);
++			break;
 +		}
++		buf = find_buffer(buf_map_id, &ctx->cap_buffers);
++		if (!buf) {
++			dev_err(dev, "Could not locate buf_map_id=0x%x in CAPTURE buffers list\n",
++				buf_map_id);
++
++			break;
++		}
++		buf->reuse = TRUE;
++
++		break;
++	case VXD_CB_PICT_END:
++		break;
++	case VXD_CB_STR_END:
++		event.type = V4L2_EVENT_EOS;
++		v4l2_event_queue_fh(&ctx->fh, &event);
++		if (v4l2_m2m_num_dst_bufs_ready(ctx->fh.m2m_ctx) > 0) {
++			vb = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
++			vb->flags |= V4L2_BUF_FLAG_LAST;
++
++			q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
++			if (!q_data)
++				break;
++
++			for (i = 0; i < q_data->fmt->num_planes; i++)
++				vb2_set_plane_payload(&vb->vb2_buf, i, 0);
++
++			v4l2_m2m_buf_done(vb, VB2_BUF_STATE_DONE);
++		} else {
++			ctx->flag_last = TRUE;
++		}
++		break;
++	case VXD_CB_ERROR_FATAL:
++		/*
++		 * There has been FW error, so we need to reload the firmware.
++		 */
++		vxd_error_recovery(ctx);
 +
 +		/*
-+		 * Calculate the maximum number of reference pictures
-+		 * required based on level.
++		 * Just send zero size buffer to v4l2 application,
++		 * informing the error condition.
 +		 */
-+		*max_ref_pic_num = h264_max_dpb_mbs[lvl_major][lvl_minor] /
-+			(pic_width_mb * pic_height_mb);
-+		if (*max_ref_pic_num > 16)
-+			*max_ref_pic_num = 16;
-+	}
++		if (v4l2_m2m_num_dst_bufs_ready(ctx->fh.m2m_ctx) > 0) {
++			vb = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
 +
-+	/* Return success. */
-+	return IMG_SUCCESS;
++			q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
++			if (!q_data)
++				break;
++
++			for (i = 0; i < q_data->fmt->num_planes; i++)
++				vb2_set_plane_payload(&vb->vb2_buf, i, 0);
++
++			v4l2_m2m_buf_done(vb, VB2_BUF_STATE_DONE);
++		} else {
++			ctx->flag_last = TRUE;
++		}
++		break;
++	default:
++		break;
++	}
 +}
 +
-+#ifdef HAS_HEVC
-+/*
-+ * @Function              vdecddutils_ref_pic_hevc_get_maxnum
-+ */
-+int vdecddutils_ref_pic_hevc_get_maxnum(const struct vdec_comsequ_hdrinfo *comseq_hdrinfo,
-+					unsigned int *max_ref_picnum)
++static int vxd_dec_submit_opconfig(struct vxd_dec_ctx *ctx)
 +{
-+	static const unsigned int HEVC_LEVEL_IDC_MIN = 30;
-+	static const unsigned int HEVC_LEVEL_IDC_MAX = 186;
++	int ret = 0;
 +
-+	static const unsigned int
-+		max_luma_ps_list[HEVC_LEVEL_MAJOR_NUM][HEVC_LEVEL_MINOR_NUM] = {
-+		/* level: 1.0       1.1       1.2       */
-+		{ 36864,    0,        0,        },
-+		/* level: 2.0       2.1       2.2       */
-+		{ 122880,   245760,   0,        },
-+		/* level: 3.0       3.1       3.2       */
-+		{ 552960,   983040,   0,        },
-+		/* level: 4.0       4.1       4.2       */
-+		{ 2228224,  2228224,  0,        },
-+		/* level: 5.0       5.1       5.2       */
-+		{ 8912896,  8912896,  8912896,  },
-+		/* level: 6.0       6.1       6.2       */
-+		{ 35651584, 35651584, 35651584, }
-+	};
-+
-+	/* ITU-T H.265 04/2013 A.4.1 */
-+
-+	const unsigned int max_dpb_picbuf = 6;
-+
-+	/* this is rounded to whole Ctbs */
-+	unsigned int pic_size_in_samples_Y = comseq_hdrinfo->frame_size.height *
-+		comseq_hdrinfo->frame_size.width;
-+
-+	signed char level_maj, level_min;
-+	unsigned int max_luma_ps;
-+
-+	/* some error resilience */
-+	if (comseq_hdrinfo->codec_level > HEVC_LEVEL_IDC_MAX ||
-+	    comseq_hdrinfo->codec_level < HEVC_LEVEL_IDC_MIN) {
-+		pr_warn("HEVC Codec level out of range: %u, falling back to %u",
-+			comseq_hdrinfo->codec_level,
-+			comseq_hdrinfo->min_pict_buf_num);
-+
-+		*max_ref_picnum = comseq_hdrinfo->min_pict_buf_num;
-+		return IMG_SUCCESS;
-+	}
-+
-+	level_maj = comseq_hdrinfo->codec_level / 30;
-+	level_min = (comseq_hdrinfo->codec_level % 30) / 3;
-+
-+	if (level_maj > 0 && level_maj <= HEVC_LEVEL_MAJOR_NUM &&
-+	    level_min >= 0 && level_min < HEVC_LEVEL_MINOR_NUM) {
-+		max_luma_ps = max_luma_ps_list[level_maj - 1][level_min];
++	if (ctx->stream_created) {
++		ret = core_stream_set_output_config(ctx->res_str_id,
++						    &ctx->str_opcfg,
++						    &ctx->pict_bufcfg);
++		if (ret) {
++			dev_err(ctx->dev->dev, "core_stream_set_output_config failed\n");
++			ctx->opconfig_pending = TRUE;
++			return ret;
++		}
++		ctx->opconfig_pending = FALSE;
++		ctx->stream_configured = TRUE;
 +	} else {
-+		pr_err("%s: Invalid parameters\n", __func__);
-+		return IMG_ERROR_INVALID_PARAMETERS;
++		ctx->opconfig_pending = TRUE;
 +	}
-+
-+	if (max_luma_ps == 0) {
-+		pr_err("Wrong HEVC level value: %u.%u (general_level_idc: %u)",
-+		       level_maj, level_min, comseq_hdrinfo->codec_level);
-+
-+		return IMG_ERROR_VALUE_OUT_OF_RANGE;
-+	}
-+
-+	if (max_luma_ps < pic_size_in_samples_Y)
-+		pr_warn("HEVC PicSizeInSamplesY too large for level (%u > %u)",
-+			pic_size_in_samples_Y, max_luma_ps);
-+
-+	if (pic_size_in_samples_Y <= (max_luma_ps >> 2))
-+		*max_ref_picnum = vdec_size_min(4 * max_dpb_picbuf, 16);
-+	else if (pic_size_in_samples_Y <= (max_luma_ps >> 1))
-+		*max_ref_picnum = vdec_size_min(2 * max_dpb_picbuf, 16);
-+	else if (pic_size_in_samples_Y <= ((3 * max_luma_ps) >> 2))
-+		*max_ref_picnum = vdec_size_min((4 * max_dpb_picbuf) / 3, 16);
-+	else
-+		*max_ref_picnum = max_dpb_picbuf;
-+
-+	/* Return success. */
-+	return IMG_SUCCESS;
-+}
-+#endif
-+
-+#ifdef HAS_JPEG
-+static int vdecddutils_ref_pic_jpeg_get_maxnum(const struct vdec_comsequ_hdrinfo *comseq_hdrinfo,
-+					       unsigned int *max_ref_picnum)
-+{
-+	/* No reference frames for JPEG. */
-+	*max_ref_picnum = 0;
-+
-+	/* Return success. */
-+	return IMG_SUCCESS;
-+}
-+#endif
-+
-+/*
-+ * The array of pointers to functions calculating the maximum number
-+ * of reference pictures required for each supported video standard.
-+ * NOTE: The table is indexed by #VDEC_eVidStd enum values.
-+ */
-+static fn_ref_pic_get_max_num ref_pic_get_maxnum[VDEC_STD_MAX - 1] = {
-+	NULL,
-+	NULL,
-+	NULL,
-+	vdecddutils_ref_pic_h264_get_maxnum,
-+	NULL,
-+	NULL,
-+	NULL,
-+#ifdef HAS_JPEG
-+	vdecddutils_ref_pic_jpeg_get_maxnum,
-+#else
-+	NULL,
-+#endif
-+	NULL,
-+	NULL,
-+	NULL,
-+#ifdef HAS_HEVC
-+	vdecddutils_ref_pic_hevc_get_maxnum
-+#else
-+	NULL
-+#endif
-+};
-+
-+int
-+vdecddutils_ref_pict_get_maxnum(const struct vdec_str_configdata *str_cfg_data,
-+				const struct vdec_comsequ_hdrinfo *comseq_hdr_info,
-+				unsigned int *num_picts)
-+{
-+	int ret = IMG_SUCCESS;
-+
-+	/* Validate input params. */
-+	if (str_cfg_data->vid_std == VDEC_STD_UNDEFINED || str_cfg_data->vid_std >= VDEC_STD_MAX)
-+		return IMG_ERROR_VALUE_OUT_OF_RANGE;
-+
-+	/* Call the function related to the provided video standard. */
-+	ret = ref_pic_get_maxnum[str_cfg_data->vid_std - 1](comseq_hdr_info,
-+			num_picts);
-+	if (ret != IMG_SUCCESS)
-+		pr_warn("[USERSID=0x%08X] Failed to get number of reference pictures",
-+			str_cfg_data->user_str_id);
-+
-+	/*
-+	 * For non-conformant stream use the
-+	 * max(*pui32NumPicts,comseq_hdrinfo->ui32MinPicBufNum)
-+	 */
-+	if (*num_picts < comseq_hdr_info->min_pict_buf_num)
-+		*num_picts = comseq_hdr_info->min_pict_buf_num;
-+
-+	/*
-+	 * Increase for MVC: mvcScaleFactor = 2 (H.10.2) and additional pictures
-+	 * for a StoreInterViewOnlyRef case (C.4.5.2)
-+	 */
-+	if (comseq_hdr_info->num_views > 1) {
-+		*num_picts *= 2;
-+		*num_picts += comseq_hdr_info->num_views - 1;
-+	}
-+
 +	return ret;
 +}
 +
-+static void vdecddutils_update_rend_pictsize(struct vdec_pict_size pict_size,
-+					     struct vdec_pict_size *rend_pict_size)
++static int vxd_dec_queue_setup(struct vb2_queue *vq,
++			       unsigned int *nbuffers,
++			       unsigned int *nplanes,
++			       unsigned int sizes[],
++			       struct device *alloc_devs[])
 +{
-+	if (rend_pict_size->width == 0) {
-+		rend_pict_size->width = pict_size.width;
-+	} else {
-+		/* Take the smallest resolution supported by all the planes */
-+		rend_pict_size->width = (pict_size.width <
-+			rend_pict_size->width) ?
-+			pict_size.width :
-+			rend_pict_size->width;
++	struct vxd_dec_ctx *ctx = vb2_get_drv_priv(vq);
++	struct vxd_dec_q_data *q_data;
++	struct vxd_dec_q_data *src_q_data;
++	int i;
++	unsigned int hw_nbuffers = 0;
++
++	q_data = get_q_data(ctx, vq->type);
++	if (!q_data)
++		return -EINVAL;
++
++	if (*nplanes) {
++		/* This is being called from CREATEBUFS, perform validation */
++		if (*nplanes != q_data->fmt->num_planes)
++			return -EINVAL;
++
++		for (i = 0; i < *nplanes; i++) {
++			if (sizes[i] != q_data->size_image[i])
++				return -EINVAL;
++		}
++
++		return 0;
 +	}
-+	if (rend_pict_size->height == 0) {
-+		rend_pict_size->height = pict_size.height;
-+	} else {
-+		/* Take the smallest resolution supported by all the planes. */
-+		rend_pict_size->height = (pict_size.height <
-+			rend_pict_size->height) ?
-+			pict_size.height :
-+			rend_pict_size->height;
++
++	*nplanes = q_data->fmt->num_planes;
++
++	if (!V4L2_TYPE_IS_OUTPUT(vq->type)) {
++		src_q_data = &ctx->q_data[Q_DATA_SRC];
++		if (src_q_data)
++			hw_nbuffers = get_nbuffers(src_q_data->fmt->std,
++						   q_data->width,
++						   q_data->height,
++						   ctx->max_num_ref_frames);
 +	}
++
++	*nbuffers = max(*nbuffers, hw_nbuffers);
++
++	for (i = 0; i < *nplanes; i++)
++		sizes[i] = q_data->size_image[i];
++
++	return 0;
 +}
 +
-+int vdecddutils_convert_buffer_config(const struct vdec_str_configdata *str_cfg_data,
-+				      const struct vdec_pict_bufconfig *pict_bufcfg,
-+				      struct vdec_pict_rendinfo *pict_rend_info)
++static int vxd_dec_buf_prepare(struct vb2_buffer *vb)
 +{
-+	const struct pixel_pixinfo      *pix_info;
-+	struct  img_pixfmt_desc pixfmt;
-+	unsigned int i;
-+	unsigned int total_vert_samples = 0;
-+	unsigned int vert_samples[IMG_MAX_NUM_PLANES];
-+	unsigned int plane_size = 0;
-+	unsigned int plane_offset = 0;
-+	struct vdec_pict_size pict_size;
++	struct vxd_dec_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
++	struct device *dev = ctx->dev->dev;
++	struct vxd_dec_q_data *q_data;
++	void *sgt;
++#ifdef CAPTURE_CONTIG_ALLOC
++	struct page *new_page;
++#else
++	void *sgl;
++#endif
++	struct sg_table *sgt_new;
++	void *sgl_new;
++	int pages;
++	int nents = 0;
++	int size = 0;
++	int plane, num_planes, ret = 0;
++	struct vxd_buffer *buf =
++		container_of(vb, struct vxd_buffer, buffer.vb.vb2_buf);
 +
-+	/* Validate inputs. */
-+	VDEC_ASSERT(str_cfg_data);
-+	VDEC_ASSERT(pict_bufcfg);
-+	VDEC_ASSERT(pict_rend_info);
++	q_data = get_q_data(ctx, vb->vb2_queue->type);
++	if (!q_data)
++		return -EINVAL;
 +
-+	/* Reset picture buffer allocation data. */
-+	memset(pict_rend_info, 0x0, sizeof(*pict_rend_info));
++	num_planes = q_data->fmt->num_planes;
 +
-+	pr_debug("%s picture buffer pixel_fmt = %d\n", __func__, pict_bufcfg->pixel_fmt);
-+	/* Get pixel format info for regular pixel formats... */
-+	if (pict_bufcfg->pixel_fmt < IMG_PIXFMT_ARBPLANAR8) {
-+		pix_info = pixel_get_pixinfo(pict_bufcfg->pixel_fmt);
-+		pixel_yuv_get_desc((struct pixel_pixinfo *)pix_info, &pixfmt);
-+	} else {
-+		pixel_get_fmt_desc(pict_bufcfg->pixel_fmt, &pixfmt);
++	for (plane = 0; plane < num_planes; plane++) {
++		if (vb2_plane_size(vb, plane) < q_data->size_image[plane]) {
++			dev_err(dev, "data will not fit into plane (%lu < %lu)\n",
++				vb2_plane_size(vb, plane),
++				(long)q_data->size_image[plane]);
++			return -EINVAL;
++		}
 +	}
 +
-+	/*
-+	 * Construct the render region information from the picture
-+	 * buffer configuration.
-+	 */
-+	for (i = 0; i < IMG_MAX_NUM_PLANES; i++) {
-+		if (pixfmt.planes[i]) {
-+			unsigned int plane_align = VDEC_VXD_PICTBUF_ALIGNMENT;
++	if (buf->mapped)
++		return 0;
 +
-+			/*
-+			 * Determine the offset (in bytes) to this plane.
-+			 * This is zero for the first (luma) plane and at the
-+			 * end of the previous plane for all subsequent planes.
-+			 */
-+			plane_offset = plane_offset + plane_size;
++	buf->buf_info.cpu_linear_addr = vb2_plane_vaddr(vb, 0);
++	buf->buf_info.buf_size = vb2_plane_size(vb, 0);
++	buf->buf_info.fd = -1;
++	sgt = vb2_dma_sg_plane_desc(vb, 0);
++	if (!sgt) {
++		dev_err(dev, "Could not get sg_table from plane 0\n");
++		return -EINVAL;
++	}
 +
-+			/*
-+			 * Calculate the minimum number of vertical samples
-+			 * for this plane.
-+			 */
-+			vert_samples[i] =
-+				((pict_bufcfg->coded_height +
-+				pixfmt.v_denom - 1) / pixfmt.v_denom) *
-+				pixfmt.v_numer[i];
++	if (V4L2_TYPE_IS_OUTPUT(vb->type)) {
++		ret = core_stream_map_buf_sg(ctx->res_str_id,
++					     VDEC_BUFTYPE_BITSTREAM,
++					     &buf->buf_info, sgt,
++					     &buf->buf_map_id);
++		if (ret) {
++			dev_err(dev, "OUTPUT core_stream_map_buf_sg failed\n");
++			return ret;
++		}
 +
-+			/*
-+			 * Calculate the mimimum plane size from the stride and
-+			 * decode picture height. Packed buffers have the luma
-+			 * and chroma exactly adjacent and consequently the
-+			 * chroma plane offset is equal to this plane size.
-+			 */
-+			plane_size = pict_bufcfg->stride[i] * vert_samples[i];
-+			plane_size = ALIGN(plane_size, plane_align);
++		buf->bstr_info.buf_size = q_data->size_image[0];
++		buf->bstr_info.cpu_virt_addr = buf->buf_info.cpu_linear_addr;
++		buf->bstr_info.mem_attrib =
++			SYS_MEMATTRIB_UNCACHED | SYS_MEMATTRIB_WRITECOMBINE |
++			SYS_MEMATTRIB_INPUT | SYS_MEMATTRIB_CPU_WRITE;
++		buf->bstr_info.bufmap_id = buf->buf_map_id;
++		lst_init(&buf->seq_unit.bstr_seg_list);
++		lst_init(&buf->pic_unit.bstr_seg_list);
++		lst_init(&buf->end_unit.bstr_seg_list);
 +
-+			if (!pict_bufcfg->packed && pict_bufcfg->chroma_offset[i]) {
-+				unsigned int max_plane_size;
++		list_add_tail(&buf->list, &ctx->out_buffers);
++	} else {
++		/* Create a single sgt from the plane(s) */
++		sgt_new = kmalloc(sizeof(*sgt_new), GFP_KERNEL);
++		if (!sgt_new)
++			return -EINVAL;
 +
-+				max_plane_size =
-+					pict_bufcfg->chroma_offset[i] - plane_offset;
++		for (plane = 0; plane < num_planes; plane++) {
++			size += ALIGN(vb2_plane_size(vb, plane), PAGE_SIZE);
++			sgt = vb2_dma_sg_plane_desc(vb, plane);
++			if (!sgt) {
++				dev_err(dev, "Could not get sg_table from plane %d\n", plane);
++				kfree(sgt_new);
++				return -EINVAL;
++			}
++#ifdef CAPTURE_CONTIG_ALLOC
++			nents += 1;
++#else
++			nents += sg_nents(img_mmu_get_sgl(sgt));
++#endif
++		}
++		buf->buf_info.buf_size = size;
 +
-+				if (plane_size > max_plane_size) {
-+					pr_err("Chroma offset [%d bytes] is not large enough to fit minimum plane data [%d bytes] at offset [%d]",
-+					       pict_bufcfg->chroma_offset[i],
-+					       plane_size, plane_offset);
-+					return IMG_ERROR_INVALID_PARAMETERS;
-+				}
++		pages = (size + PAGE_SIZE - 1) / PAGE_SIZE;
++		ret = sg_alloc_table(sgt_new, nents, GFP_KERNEL);
++		if (ret) {
++			kfree(sgt_new);
++			return -EINVAL;
++		}
++		sgl_new = img_mmu_get_sgl(sgt_new);
 +
-+				plane_size = max_plane_size;
++		for (plane = 0; plane < num_planes; plane++) {
++			sgt = vb2_dma_sg_plane_desc(vb, plane);
++			if (!sgt) {
++				dev_err(dev, "Could not get sg_table from plane %d\n", plane);
++				sg_free_table(sgt_new);
++				kfree(sgt_new);
++				return -EINVAL;
++			}
++#ifdef CAPTURE_CONTIG_ALLOC
++			new_page = phys_to_page(vb2_dma_contig_plane_dma_addr(vb, plane));
++			sg_set_page(sgl_new, new_page, ALIGN(vb2_plane_size(vb, plane),
++							     PAGE_SIZE), 0);
++			sgl_new = sg_next(sgl_new);
++#else
++			sgl = img_mmu_get_sgl(sgt);
 +
-+				vert_samples[i] = plane_size /
-+					pict_bufcfg->stride[i];
++			while (sgl) {
++				sg_set_page(sgl_new, sg_page(sgl), img_mmu_get_sgl_length(sgl), 0);
++				sgl = sg_next(sgl);
++				sgl_new = sg_next(sgl_new);
++			}
++#endif
++		}
++
++		buf->buf_info.pictbuf_cfg = ctx->pict_bufcfg;
++		ret = core_stream_map_buf_sg(ctx->res_str_id,
++					     VDEC_BUFTYPE_PICTURE,
++					     &buf->buf_info, sgt_new,
++					     &buf->buf_map_id);
++		sg_free_table(sgt_new);
++		kfree(sgt_new);
++		if (ret) {
++			dev_err(dev, "CAPTURE core_stream_map_buf_sg failed\n");
++			return ret;
++		}
++		list_add_tail(&buf->list, &ctx->cap_buffers);
++	}
++	buf->mapped = TRUE;
++	buf->reuse = TRUE;
++
++	return 0;
++}
++
++static void vxd_dec_buf_queue(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct vxd_dec_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
++	struct vxd_buffer *buf =
++		container_of(vb, struct vxd_buffer, buffer.vb.vb2_buf);
++	struct vxd_dec_q_data *q_data;
++	int i;
++
++	if (V4L2_TYPE_IS_OUTPUT(vb->type)) {
++		v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, vbuf);
++	} else {
++		mutex_lock_nested(ctx->mutex, SUBCLASS_VXD_V4L2);
++		if (buf->reuse) {
++			mutex_unlock(ctx->mutex);
++			if (ctx->flag_last) {
++				q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
++				vbuf->flags |= V4L2_BUF_FLAG_LAST;
++
++				for (i = 0; i < q_data->fmt->num_planes; i++)
++					vb2_set_plane_payload(&vbuf->vb2_buf, i, 0);
++
++				v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_DONE);
 +			} else {
-+				if (pict_bufcfg->chroma_offset[i] && (plane_offset + plane_size) !=
-+				    pict_bufcfg->chroma_offset[i]) {
-+					pr_err("Chroma offset specified [%d bytes] should match that required for plane size calculated from stride and height [%d bytes]",
-+					       pict_bufcfg->chroma_offset[i],
-+					       plane_offset + plane_size);
-+					return IMG_ERROR_INVALID_PARAMETERS;
-+				}
++				v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, vbuf);
 +			}
-+
-+			pict_rend_info->plane_info[i].offset = plane_offset;
-+			pict_rend_info->plane_info[i].stride =
-+				pict_bufcfg->stride[i];
-+			pict_rend_info->plane_info[i].size = plane_size;
-+
-+#ifdef DEBUG_DECODER_DRIVER
-+			pr_info("VDECDDUTILS_ConvertBufferConfig() plane %d stride %u size %u offset %u",
-+				i, pict_rend_info->plane_info[i].stride,
-+				pict_rend_info->plane_info[i].size,
-+				pict_rend_info->plane_info[i].offset);
-+#endif
-+
-+			pict_rend_info->rendered_size +=
-+				pict_rend_info->plane_info[i].size;
-+
-+			total_vert_samples += vert_samples[i];
-+
-+			/* Calculate the render region maximum picture size. */
-+			pict_size.width = (pict_rend_info->plane_info[i].stride *
-+					   pixfmt.bop_denom) / pixfmt.bop_numer[i];
-+			pict_size.height = (vert_samples[i] * pixfmt.v_denom) / pixfmt.v_numer[i];
-+			vdecddutils_update_rend_pictsize(pict_size,
-+							 &pict_rend_info->rend_pict_size);
++		} else {
++			list_move_tail(&buf->list, &ctx->reuse_queue);
++			mutex_unlock(ctx->mutex);
 +		}
 +	}
-+#ifdef DEBUG_DECODER_DRIVER
-+	pr_info("VDECDDUTILS_ConvertBufferConfig() total required %u (inc. alignment for addressing/tiling) vs. buffer %u",
-+		pict_rend_info->rendered_size, pict_bufcfg->buf_size);
-+#endif
++}
 +
-+	/* Ensure that the buffer size is large enough to hold the data */
-+	if (pict_bufcfg->buf_size < pict_rend_info->rendered_size) {
-+		pr_err("Buffer size [%d bytes] should be at least as large as rendered data (inc. any enforced gap between planes) [%d bytes]",
-+		       pict_bufcfg->buf_size,
-+		       pict_rend_info->rendered_size);
-+		return IMG_ERROR_INVALID_PARAMETERS;
++static void vxd_dec_return_all_buffers(struct vxd_dec_ctx *ctx,
++				       struct vb2_queue *q,
++				       enum vb2_buffer_state state)
++{
++	struct vb2_v4l2_buffer *vb;
++	unsigned long flags;
++
++	for (;;) {
++		if (V4L2_TYPE_IS_OUTPUT(q->type))
++			vb = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
++		else
++			vb = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
++
++		if (!vb)
++			break;
++
++		spin_lock_irqsave(ctx->dev->lock, flags);
++		v4l2_m2m_buf_done(vb, state);
++		spin_unlock_irqrestore(ctx->dev->lock, (unsigned long)flags);
 +	}
-+
-+	/* Whole buffer should be marked as rendered region */
-+	pict_rend_info->rendered_size = pict_bufcfg->buf_size;
-+	/* Use the actual stride alignment */
-+	pict_rend_info->stride_alignment = pict_bufcfg->stride_alignment;
-+
-+	return IMG_SUCCESS;
 +}
 +
-+static unsigned char vdecddutils_is_secondary_op_required(const struct vdec_comsequ_hdrinfo
-+	*comseq_hdr_info,
-+	const struct vdec_str_opconfig
-+	*op_cfg)
++static int vxd_dec_start_streaming(struct vb2_queue *vq, unsigned int count)
 +{
-+	unsigned char result = TRUE;
++	int ret = 0;
++	struct vxd_dec_ctx *ctx = vb2_get_drv_priv(vq);
 +
-+	if (!op_cfg->force_oold &&
-+	    !comseq_hdr_info->post_processing &&
-+	    comseq_hdr_info->pixel_info.chroma_fmt_idc ==
-+	    op_cfg->pixel_info.chroma_fmt_idc &&
-+	    comseq_hdr_info->pixel_info.bitdepth_y ==
-+	    op_cfg->pixel_info.bitdepth_y &&
-+	    comseq_hdr_info->pixel_info.bitdepth_c ==
-+	    op_cfg->pixel_info.bitdepth_c)
-+		/*
-+		 * The secondary output is not required (if we have it we will
-+		 * not use it for transformation (e.g. scaling. rotating or
-+		 * up/down-sampling).
-+		 */
-+		result = FALSE;
-+
-+	return result;
-+}
-+
-+int vdecddutils_get_minrequired_numpicts(const struct vdec_str_configdata *str_cfg_data,
-+					 const struct vdec_comsequ_hdrinfo *comseq_hdr_info,
-+					 const struct vdec_str_opconfig *op_cfg,
-+					 unsigned int *num_picts)
-+{
-+	int ret;
-+	unsigned int max_held_picnum;
-+
-+	/* If any operation requiring internal buffers is to be applied... */
-+	if (vdecddutils_is_secondary_op_required(comseq_hdr_info, op_cfg)) {
-+		/*
-+		 * Reference picture buffers will be allocated internally,
-+		 * but there may be a number of picture buffers to which
-+		 * out-of-display-order pictures will be decoded. These
-+		 * buffers need to be allocated externally, so there's a
-+		 * need to calculate the number of out-of-(display)-order
-+		 * pictures required for the provided video standard.
-+		 */
-+		ret = vdecddutils_ref_pict_get_maxnum(str_cfg_data, comseq_hdr_info,
-+						      &max_held_picnum);
-+		if (ret != IMG_SUCCESS)
-+			return ret;
-+	} else {
-+		/*
-+		 * All the reference picture buffers have to be allocated
-+		 * externally, so there's a need to calculate the number of
-+		 * reference picture buffers required for the provided video
-+		 * standard.
-+		 */
-+		ret = vdecddutils_ref_pict_get_maxnum(str_cfg_data, comseq_hdr_info,
-+						      &max_held_picnum);
-+		if (ret != IMG_SUCCESS)
-+			return ret;
-+	}
-+
-+	/*
-+	 * Calculate the number of picture buffers required as the maximum
-+	 * number of picture buffers to be held onto by the driver plus the
-+	 * current picture buffer.
-+	 */
-+	*num_picts = max_held_picnum +
-+		(comseq_hdr_info->interlaced_frames ? 2 : 1);
-+
-+	return IMG_SUCCESS;
-+}
-+
-+static void vdecddutils_get_codedsize(const struct vdec_pict_rend_config *pict_rend_cfg,
-+				      struct vdec_pict_size *decoded_pict_size)
-+{
-+	decoded_pict_size->width = pict_rend_cfg->coded_pict_size.width;
-+	decoded_pict_size->height = pict_rend_cfg->coded_pict_size.height;
-+}
-+
-+static unsigned char vdecddutils_is_packed(const struct vdec_pict_rendinfo *pict_rend_info,
-+					   const struct vdec_pict_rend_config *pict_rend_cfg)
-+{
-+	unsigned char packed = TRUE;
-+	unsigned int pict_buf_align;
-+
-+	/* Validate inputs. */
-+	VDEC_ASSERT(pict_rend_info);
-+	VDEC_ASSERT(pict_rend_cfg);
-+
-+	pict_buf_align = VDEC_VXD_PICTBUF_ALIGNMENT;
-+
-+	if (pict_rend_info->plane_info[VDEC_PLANE_VIDEO_Y].size !=
-+		pict_rend_info->plane_info[VDEC_PLANE_VIDEO_UV].offset) {
-+		/* Planes that are not adjacent cannot be packed */
-+		packed = FALSE;
-+	} else if (!is_packedbuf_chroma_aligned(pict_rend_info->plane_info
-+				[VDEC_PLANE_VIDEO_UV].offset,
-+				VDEC_PLANE_VIDEO_Y,
-+				pict_buf_align)) {
-+		/* Chroma plane must be aligned for packed buffers. */
-+		VDEC_ASSERT(pict_rend_info->plane_info[VDEC_PLANE_VIDEO_Y].size ==
-+			pict_rend_info->plane_info[VDEC_PLANE_VIDEO_UV].offset);
-+		packed = FALSE;
-+	}
-+
-+	return packed;
-+}
-+
-+static int vdecddutils_get_stride
-+	(const struct vdec_str_configdata *str_cfg_data,
-+	const struct vdec_pict_rend_config *pict_rend_cfg,
-+	unsigned int vert_samples, unsigned int *h_stride,
-+	enum vdec_color_planes color_planes)
-+{
-+	unsigned int hw_h_stride = *h_stride;
-+
-+	/*
-+	 * If extended strides are to be used or indexed strides failed,
-+	 * make extended stride alignment.
-+	 */
-+	hw_h_stride = ALIGN(hw_h_stride,
-+			    pict_rend_cfg->stride_alignment > 0 ?
-+			    pict_rend_cfg->stride_alignment :
-+			    VDEC_VXD_EXT_STRIDE_ALIGNMENT_DEFAULT);
-+
-+	/* A zero-value indicates unsupported stride */
-+	if (hw_h_stride == 0)
-+		/* No valid stride found */
-+		return IMG_ERROR_NOT_SUPPORTED;
-+
-+	*h_stride = hw_h_stride;
-+
-+	return IMG_SUCCESS;
-+}
-+
-+static int vdecddutils_get_render_info(const struct vdec_str_configdata *str_cfg_data,
-+				       const struct vdec_pict_rend_config *pict_rend_cfg,
-+				       const struct pixel_pixinfo *pix_info,
-+				       struct vdec_pict_rendinfo *pict_rend_info)
-+{
-+	unsigned int i;
-+	struct img_pixfmt_desc pixfmt;
-+	struct vdec_pict_size coded_pict_size;
-+	unsigned char single_stride = FALSE;
-+	unsigned int vert_sample[IMG_MAX_NUM_PLANES] = {0};
-+	unsigned int total_vert_samples;
-+	unsigned int largest_stride;
-+	unsigned int result;
-+
-+	/* Reset the output structure. */
-+	memset(pict_rend_info, 0, sizeof(*pict_rend_info));
-+
-+	/* Ensure that the coded sizes are in whole macroblocks. */
-+	if ((pict_rend_cfg->coded_pict_size.width  &
-+		(VDEC_MB_DIMENSION - 1)) != 0 ||
-+		(pict_rend_cfg->coded_pict_size.height &
-+		(VDEC_MB_DIMENSION - 1)) != 0) {
-+		pr_err("Invalid render configuration coded picture size [%d x %d]. It should be a whole number of MBs in each dimension",
-+		       pict_rend_cfg->coded_pict_size.width,
-+		       pict_rend_cfg->coded_pict_size.height);
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+	}
-+
-+	/* Check if the stride alignment is multiple of default. */
-+	if ((pict_rend_cfg->stride_alignment &
-+		(VDEC_VXD_EXT_STRIDE_ALIGNMENT_DEFAULT - 1)) != 0) {
-+		pr_err("Invalid stride alignment %d used. It should be multiple of %d.",
-+		       pict_rend_cfg->stride_alignment,
-+		       VDEC_VXD_EXT_STRIDE_ALIGNMENT_DEFAULT);
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+	}
-+
-+	/* Get pixel format info for regular pixel formats... */
-+	if (pix_info->pixfmt < IMG_PIXFMT_ARBPLANAR8)
-+		pixel_yuv_get_desc((struct pixel_pixinfo *)pix_info, &pixfmt);
++	if (V4L2_TYPE_IS_OUTPUT(vq->type))
++		ctx->dst_streaming = TRUE;
 +	else
-+		pixel_get_fmt_desc(pix_info->pixfmt, &pixfmt);
++		ctx->src_streaming = TRUE;
 +
-+	/* Get the coded size for the appropriate orientation */
-+	vdecddutils_get_codedsize(pict_rend_cfg, &coded_pict_size);
-+
-+	/*
-+	 * Calculate the hardware (inc. constraints) strides and
-+	 * number of vertical samples for each plane.
-+	 */
-+	total_vert_samples = 0;
-+	largest_stride = 0;
-+	for (i = 0; i < IMG_MAX_NUM_PLANES; i++) {
-+		if (pixfmt.planes[i]) {
-+			unsigned int h_stride;
-+
-+			/* Horizontal stride must be for a multiple of BOPs. */
-+			h_stride = ((coded_pict_size.width +
-+				pixfmt.bop_denom - 1) /
-+				pixfmt.bop_denom) * pixfmt.bop_numer[i];
-+
-+			/*
-+			 * Vertical only has to satisfy whole pixel of
-+			 * samples.
-+			 */
-+			vert_sample[i] = ((coded_pict_size.height +
-+				pixfmt.v_denom - 1) /
-+				pixfmt.v_denom) * pixfmt.v_numer[i];
-+
-+			/*
-+			 * Obtain a horizontal stride supported by the hardware
-+			 * (inc. constraints).
-+			 */
-+			result = vdecddutils_get_stride(str_cfg_data, pict_rend_cfg, vert_sample[i],
-+							&h_stride, (enum vdec_color_planes)i);
-+			if (result != IMG_SUCCESS) {
-+				VDEC_ASSERT(0);
-+				pr_err("No valid VXD stride found for picture with decoded dimensions [%d x %d] and min stride [%d]",
-+				       coded_pict_size.width, coded_pict_size.height, h_stride);
-+				return result;
-+			}
-+
-+			pict_rend_info->plane_info[i].stride = h_stride;
-+			if (i == VDEC_PLANE_VIDEO_UV && (str_cfg_data->vid_std == VDEC_STD_H264 ||
-+							 str_cfg_data->vid_std == VDEC_STD_HEVC)) {
-+				struct pixel_pixinfo *info =
-+					pixel_get_pixinfo(pix_info->pixfmt);
-+				VDEC_ASSERT(PIXEL_FORMAT_INVALID !=
-+					info->chroma_fmt_idc);
-+			}
-+
-+			total_vert_samples += vert_sample[i];
-+			if (h_stride > largest_stride)
-+				largest_stride = h_stride;
++	if (ctx->dst_streaming && ctx->src_streaming && !ctx->core_streaming) {
++		if (!ctx->stream_configured) {
++			vxd_dec_return_all_buffers(ctx, vq, VB2_BUF_STATE_ERROR);
++			return -EINVAL;
 +		}
-+	}
-+	pict_rend_info->stride_alignment =
-+		pict_rend_cfg->stride_alignment > 0 ?
-+		pict_rend_cfg->stride_alignment :
-+		VDEC_VXD_EXT_STRIDE_ALIGNMENT_DEFAULT;
-+
-+	if (pict_rend_cfg->packed)
-+		single_stride = TRUE;
-+
-+#ifdef HAS_JPEG
-+	/* JPEG hardware uses a single (luma) stride for all planes. */
-+	if (str_cfg_data->vid_std == VDEC_STD_JPEG) {
-+		single_stride = true;
-+
-+		/* Luma should be largest for this to be used for all planes. */
-+		VDEC_ASSERT(largest_stride ==
-+			pict_rend_info->plane_info[VDEC_PLANE_VIDEO_Y].stride);
-+	}
-+#endif
-+
-+	/* Calculate plane sizes. */
-+	for (i = 0; i < IMG_MAX_NUM_PLANES; i++) {
-+		if (pixfmt.planes[i]) {
-+			struct vdec_pict_size pict_size;
-+			unsigned int vert_samples = vert_sample[i];
-+			unsigned int plane_align = VDEC_VXD_PICTBUF_ALIGNMENT;
-+
-+			if (single_stride)
-+				pict_rend_info->plane_info[i].stride =
-+					largest_stride;
-+
-+			pict_rend_info->plane_info[i].size =
-+				pict_rend_info->plane_info[i].stride *
-+				vert_samples;
-+			pict_rend_info->plane_info[i].size =
-+				ALIGN(pict_rend_info->plane_info[i].size, plane_align);
-+			/*
-+			 * Ensure that the total buffer rendered size is
-+			 * rounded-up to the picture buffer alignment so that
-+			 * this plane (within this single buffer) can be
-+			 * correctly addressed by the hardware at this byte
-+			 * offset.
-+			 */
-+			if (i == 1 && pict_rend_cfg->packed)
-+				/*
-+				 * Packed buffers must have chroma plane
-+				 * already aligned since this was factored
-+				 * into the stride/size calculation.
-+				 */
-+				VDEC_ASSERT(pict_rend_info->rendered_size ==
-+					    ALIGN(pict_rend_info->rendered_size, plane_align));
-+
-+			pict_rend_info->plane_info[i].offset = pict_rend_info->rendered_size;
-+
-+			/* Update the total buffer size (inc. this plane). */
-+			pict_rend_info->rendered_size +=
-+				pict_rend_info->plane_info[i].size;
-+
-+			/*
-+			 * Update the maximum render picture size supported
-+			 * by all planes of this buffer.
-+			 */
-+			pict_size.width = (pict_rend_info->plane_info[i].stride *
-+				pixfmt.bop_denom) / pixfmt.bop_numer[i];
-+
-+			pict_size.height = (vert_sample[i] * pixfmt.v_denom) / pixfmt.v_numer[i];
-+
-+			vdecddutils_update_rend_pictsize(pict_size,
-+							 &pict_rend_info->rend_pict_size);
-+
-+#ifdef DEBUG_DECODER_DRIVER
-+			pr_info("vdecddutils_GetRenderInfo() plane %d stride %u size %u offset %u",
-+				i, pict_rend_info->plane_info[i].stride,
-+				pict_rend_info->plane_info[i].size,
-+				pict_rend_info->plane_info[i].offset);
-+#endif
++		ctx->eos = FALSE;
++		ctx->stop_initiated = FALSE;
++		ctx->flag_last = FALSE;
++		ret = core_stream_play(ctx->res_str_id);
++		if (ret) {
++			vxd_dec_return_all_buffers(ctx, vq, VB2_BUF_STATE_ERROR);
++			return ret;
 +		}
++		ctx->core_streaming = TRUE;
 +	}
 +
-+#ifdef DEBUG_DECODER_DRIVER
-+	pr_info("vdecddutils_GetRenderInfo() total %u (inc. alignment for addressing/tiling)",
-+		pict_rend_info->rendered_size);
-+#endif
-+
-+	return IMG_SUCCESS;
++	return 0;
 +}
 +
-+int vdecddutils_pictbuf_getconfig(const struct vdec_str_configdata *str_cfg_data,
-+				  const struct vdec_pict_rend_config *pict_rend_cfg,
-+				  const struct vdec_str_opconfig *str_opcfg,
-+				  struct vdec_pict_bufconfig *pict_bufcfg)
++static void vxd_dec_stop_streaming(struct vb2_queue *vq)
 +{
-+	struct vdec_pict_rendinfo disp_pict_rendinfo;
-+	struct vdec_pict_size coded_pict_size;
-+	unsigned int ret, i;
-+	unsigned int size0, size1;
++	struct vxd_dec_ctx *ctx = vb2_get_drv_priv(vq);
++	struct list_head *list;
++	struct list_head *temp;
++	struct vxd_buffer *buf = NULL;
 +
-+	/* Validate inputs. */
-+	VDEC_ASSERT(str_cfg_data);
-+	VDEC_ASSERT(pict_rend_cfg);
-+	VDEC_ASSERT(str_opcfg);
-+	VDEC_ASSERT(pict_bufcfg);
++	if (V4L2_TYPE_IS_OUTPUT(vq->type))
++		ctx->dst_streaming = FALSE;
++	else
++		ctx->src_streaming = FALSE;
 +
-+	/* Clear the picture buffer config before populating */
-+	memset(pict_bufcfg, 0, sizeof(struct vdec_pict_bufconfig));
++	if (ctx->core_streaming) {
++		core_stream_stop(ctx->res_str_id);
++		ctx->core_streaming = FALSE;
 +
-+	/* Determine the rounded-up coded sizes (compatible with hardware) */
-+	ret = vdecddutils_get_render_info(str_cfg_data,
-+					  pict_rend_cfg,
-+					  &str_opcfg->pixel_info,
-+					  &disp_pict_rendinfo);
-+	if (ret != IMG_SUCCESS)
++		core_stream_flush(ctx->res_str_id, TRUE);
++	}
++
++	/* unmap all the output and capture plane buffers */
++	if (V4L2_TYPE_IS_OUTPUT(vq->type)) {
++		list_for_each(list, &ctx->out_buffers) {
++			buf = list_entry(list, struct vxd_buffer, list);
++			core_stream_unmap_buf_sg(buf->buf_map_id);
++			buf->mapped = FALSE;
++			__list_del_entry(&buf->list);
++		}
++	} else {
++		list_for_each_safe(list, temp, &ctx->reuse_queue) {
++			buf = list_entry(list, struct vxd_buffer, list);
++			list_move_tail(&buf->list, &ctx->cap_buffers);
++			v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, &buf->buffer.vb);
++		}
++
++		list_for_each(list, &ctx->cap_buffers) {
++			buf = list_entry(list, struct vxd_buffer, list);
++			core_stream_unmap_buf_sg(buf->buf_map_id);
++			buf->mapped = FALSE;
++			__list_del_entry(&buf->list);
++		}
++	}
++
++	vxd_dec_return_all_buffers(ctx, vq, VB2_BUF_STATE_ERROR);
++}
++
++static struct vb2_ops vxd_dec_video_ops = {
++	.queue_setup = vxd_dec_queue_setup,
++	.buf_prepare = vxd_dec_buf_prepare,
++	.buf_queue = vxd_dec_buf_queue,
++	.wait_prepare = vb2_ops_wait_prepare,
++	.wait_finish = vb2_ops_wait_finish,
++	.start_streaming = vxd_dec_start_streaming,
++	.stop_streaming = vxd_dec_stop_streaming,
++};
++
++static int queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
++{
++	struct vxd_dec_ctx *ctx = priv;
++	struct vxd_dev *vxd = ctx->dev;
++	int ret = 0;
++
++	/* src_vq */
++	memset(src_vq, 0, sizeof(*src_vq));
++	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
++	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
++	src_vq->drv_priv = ctx;
++	src_vq->buf_struct_size = sizeof(struct vxd_buffer);
++	src_vq->ops = &vxd_dec_video_ops;
++	src_vq->mem_ops = &vb2_dma_sg_memops;
++	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
++	src_vq->lock = vxd->mutex;
++	src_vq->dev = vxd->v4l2_dev.dev;
++	ret = vb2_queue_init(src_vq);
++	if (ret)
 +		return ret;
 +
-+	/* Get the coded size for the appropriate orientation */
-+	vdecddutils_get_codedsize(pict_rend_cfg, &coded_pict_size);
-+
-+	pict_bufcfg->coded_width = coded_pict_size.width;
-+	pict_bufcfg->coded_height = coded_pict_size.height;
-+
-+	/*
-+	 * Use the luma stride for all planes in buffer.
-+	 * Additional chroma stride may be needed for other pixel formats.
-+	 */
-+	for (i = 0; i < VDEC_PLANE_MAX; i++)
-+		pict_bufcfg->stride[i] = disp_pict_rendinfo.plane_info[i].stride;
-+
-+	/*
-+	 * Pixel information is taken from that
-+	 * specified for display.
-+	 */
-+	pict_bufcfg->pixel_fmt = str_opcfg->pixel_info.pixfmt;
-+	pr_debug("picture buffer pixel_fmt = %d\n", pict_bufcfg->pixel_fmt);
-+
-+	/* Tiling scheme is taken from render configuration */
-+	pict_bufcfg->byte_interleave = pict_rend_cfg->byte_interleave;
-+	pr_debug("picture buffer byte_interleave = %d\n", pict_bufcfg->byte_interleave);
-+	/* Stride alignment */
-+	pict_bufcfg->stride_alignment = pict_rend_cfg->stride_alignment > 0 ?
-+		pict_rend_cfg->stride_alignment : VDEC_VXD_EXT_STRIDE_ALIGNMENT_DEFAULT;
-+
-+	pr_debug("picture buffer stride_alignment = %d\n", pict_bufcfg->stride_alignment);
-+	/* Chroma offset taken as calculated for render configuration. */
-+	pict_bufcfg->chroma_offset[0] = disp_pict_rendinfo.plane_info[VDEC_PLANE_VIDEO_UV].offset;
-+	pict_bufcfg->chroma_offset[1] = disp_pict_rendinfo.plane_info[VDEC_PLANE_VIDEO_V].offset;
-+
-+	if (pict_rend_cfg->packed && str_opcfg->pixel_info.num_planes > 1) {
-+		pict_bufcfg->packed = vdecddutils_is_packed(&disp_pict_rendinfo, pict_rend_cfg);
-+		if (!pict_bufcfg->packed) {
-+			/* Report if unable to meet request to pack. */
-+			pr_err("Request for packed buffer could not be met");
-+			return IMG_ERROR_NOT_SUPPORTED;
-+		}
-+
-+		size0 = ALIGN(pict_bufcfg->chroma_offset[0], VDEC_VXD_PICTBUF_ALIGNMENT);
-+		size1 = ALIGN(pict_bufcfg->chroma_offset[1], VDEC_VXD_PICTBUF_ALIGNMENT);
-+
-+		if (pict_bufcfg->chroma_offset[0] != size0 ||
-+		    pict_bufcfg->chroma_offset[1] != size1)  {
-+			pr_err("Chroma plane could not be located on a %d byte boundary (investigate stride calculations)",
-+			       VDEC_VXD_PICTBUF_ALIGNMENT);
-+			return IMG_ERROR_NOT_SUPPORTED;
-+		}
-+	} else {
-+		pict_bufcfg->packed = FALSE;
-+	}
-+
-+	pict_bufcfg->buf_size = disp_pict_rendinfo.rendered_size;
-+
-+	/* Return success */
-+	return IMG_SUCCESS;
-+}
-+
-+int vdecddutils_get_display_region(const struct vdec_pict_size *coded_size,
-+				   const struct vdec_rect   *orig_disp_region,
-+				   struct vdec_rect *disp_region)
-+{
-+	int ret = IMG_SUCCESS;
-+
-+	/* Validate inputs. */
-+	VDEC_ASSERT(coded_size);
-+	VDEC_ASSERT(orig_disp_region);
-+	VDEC_ASSERT(disp_region);
-+	if (!coded_size || !orig_disp_region || !disp_region)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	/*
-+	 * In the simplest case the display region is the same as
-+	 * that defined in the bitstream.
-+	 */
-+	*disp_region = *orig_disp_region;
-+
-+	if (orig_disp_region->height == 0 || orig_disp_region->width == 0 ||
-+	    coded_size->height == 0 || coded_size->width == 0) {
-+		pr_err("Invalid params to calculate display region:");
-+		pr_err("Display Size: [%d,%d]", orig_disp_region->width, orig_disp_region->height);
-+		pr_err("Coded Size  : [%d,%d]", coded_size->width, coded_size->height);
-+		return IMG_ERROR_INVALID_PARAMETERS;
++	/* dst_vq */
++	memset(dst_vq, 0, sizeof(*dst_vq));
++	dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
++	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
++	dst_vq->drv_priv = ctx;
++	dst_vq->buf_struct_size = sizeof(struct vxd_buffer);
++	dst_vq->ops = &vxd_dec_video_ops;
++#ifdef CAPTURE_CONTIG_ALLOC
++	dst_vq->mem_ops = &vb2_dma_contig_memops;
++#else
++	dst_vq->mem_ops = &vb2_dma_sg_memops;
++#endif
++	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
++	dst_vq->lock = vxd->mutex;
++	dst_vq->dev = vxd->v4l2_dev.dev;
++	ret = vb2_queue_init(dst_vq);
++	if (ret) {
++		vb2_queue_release(src_vq);
++		return ret;
 +	}
 +
 +	return ret;
 +}
 +
-+int vdecddutils_pictbuf_getinfo(const struct vdec_str_configdata *str_cfg_data,
-+				const struct vdec_pict_rend_config *pict_rend_cfg,
-+				const struct vdec_str_opconfig *str_op_cfg,
-+				struct vdec_pict_rendinfo *pict_rend_info)
++static int vxd_dec_open(struct file *file)
 +{
-+	unsigned int ret;
++	struct vxd_dev *vxd = video_drvdata(file);
++	struct vxd_dec_ctx *ctx;
++	struct vxd_dec_q_data *s_q_data;
++	int i, ret = 0;
 +
-+	/* Validate inputs. */
-+	VDEC_ASSERT(str_cfg_data);
-+	VDEC_ASSERT(pict_rend_cfg);
-+	VDEC_ASSERT(str_op_cfg);
-+	VDEC_ASSERT(pict_rend_info);
++	dev_dbg(vxd->dev, "%s:%d vxd %p\n", __func__, __LINE__, vxd);
 +
-+	ret = vdecddutils_get_render_info(str_cfg_data, pict_rend_cfg,
-+					  &str_op_cfg->pixel_info,
-+					  pict_rend_info);
-+	VDEC_ASSERT(ret == IMG_SUCCESS);
-+	if (ret != IMG_SUCCESS)
++	if (vxd->no_fw) {
++		dev_err(vxd->dev, "Error!! fw binary is not present");
++		return -1;
++	}
++
++	mutex_lock_nested(vxd->mutex, SUBCLASS_BASE);
++
++	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
++	if (!ctx) {
++		mutex_unlock(vxd->mutex);
++		return -ENOMEM;
++	}
++	ctx->dev = vxd;
++
++	v4l2_fh_init(&ctx->fh, video_devdata(file));
++	file->private_data = &ctx->fh;
++
++	s_q_data = &ctx->q_data[Q_DATA_SRC];
++	s_q_data->fmt = &vxd_dec_formats[0];
++	s_q_data->width = 1920;
++	s_q_data->height = 1080;
++	for (i = 0; i < s_q_data->fmt->num_planes; i++) {
++		s_q_data->bytesperline[i] = s_q_data->width;
++		s_q_data->size_image[i] = s_q_data->bytesperline[i] * s_q_data->height;
++	}
++
++	ctx->q_data[Q_DATA_DST] = *s_q_data;
++
++	ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(vxd->m2m_dev, ctx, &queue_init);
++	if (IS_ERR_VALUE((unsigned long)ctx->fh.m2m_ctx)) {
++		ret = (long)(ctx->fh.m2m_ctx);
++		goto exit;
++	}
++
++	v4l2_fh_add(&ctx->fh);
++
++	ret = idr_alloc_cyclic(vxd->streams, &ctx->stream, VXD_MIN_STREAM_ID, VXD_MAX_STREAM_ID,
++			       GFP_KERNEL);
++	if (ret < VXD_MIN_STREAM_ID || ret > VXD_MAX_STREAM_ID) {
++		dev_err(vxd->dev, "%s: stream id creation failed!\n",
++			__func__);
++		ret = -EFAULT;
++		goto exit;
++	}
++
++	ctx->stream.id = ret;
++	ctx->stream.ctx = ctx;
++
++	ctx->stream_created = FALSE;
++	ctx->stream_configured = FALSE;
++	ctx->src_streaming = FALSE;
++	ctx->dst_streaming = FALSE;
++	ctx->core_streaming = FALSE;
++	ctx->eos = FALSE;
++	ctx->stop_initiated = FALSE;
++	ctx->flag_last = FALSE;
++
++	lst_init(&ctx->seg_list);
++	for (i = 0; i < MAX_SEGMENTS; i++)
++		lst_add(&ctx->seg_list, &ctx->bstr_segments[i]);
++
++	if (vxd_create_ctx(vxd, ctx))
++		goto out_idr_remove;
++
++	ctx->stream.mmu_ctx = ctx->mmu_ctx;
++	ctx->stream.ptd = ctx->ptd;
++
++	ctx->mutex = kzalloc(sizeof(*ctx->mutex), GFP_KERNEL);
++	if (!ctx->mutex) {
++		ret = -ENOMEM;
++		goto out_idr_remove;
++	}
++	mutex_init(ctx->mutex);
++
++	INIT_LIST_HEAD(&ctx->items_done);
++	INIT_LIST_HEAD(&ctx->reuse_queue);
++	INIT_LIST_HEAD(&ctx->return_queue);
++	INIT_LIST_HEAD(&ctx->out_buffers);
++	INIT_LIST_HEAD(&ctx->cap_buffers);
++
++	mutex_unlock(vxd->mutex);
++
++	return 0;
++
++out_idr_remove:
++	idr_remove(vxd->streams, ctx->stream.id);
++
++exit:
++	v4l2_fh_exit(&ctx->fh);
++	get_work_buff(ctx->work, TRUE);
++	kfree(ctx->work);
++	kfree(ctx);
++	mutex_unlock(vxd->mutex);
++	return ret;
++}
++
++static int vxd_dec_release(struct file *file)
++{
++	struct vxd_dev *vxd = video_drvdata(file);
++	struct vxd_dec_ctx *ctx = file2ctx(file);
++	struct bspp_ddbuf_array_info *fw_sequ = ctx->fw_sequ;
++	struct bspp_ddbuf_array_info *fw_pps = ctx->fw_pps;
++	int i, ret = 0;
++	struct vxd_dec_q_data *s_q_data;
++
++	s_q_data = &ctx->q_data[Q_DATA_SRC];
++
++	if (ctx->stream_created) {
++		bspp_stream_destroy(ctx->bspp_context);
++
++		for (i = 0; i < MAX_SEQUENCES; i++) {
++			core_stream_unmap_buf(fw_sequ[i].ddbuf_info.bufmap_id);
++			img_mem_free(ctx->mem_ctx, fw_sequ[i].ddbuf_info.buf_id);
++		}
++
++		if (s_q_data->fmt->std != VDEC_STD_JPEG) {
++			for (i = 0; i < MAX_PPSS; i++) {
++				core_stream_unmap_buf(fw_pps[i].ddbuf_info.bufmap_id);
++				img_mem_free(ctx->mem_ctx, fw_pps[i].ddbuf_info.buf_id);
++			}
++		}
++		core_stream_destroy(ctx->res_str_id);
++		ctx->stream_created = FALSE;
++	}
++
++	mutex_lock_nested(vxd->mutex, SUBCLASS_BASE);
++
++	vxd_destroy_ctx(vxd, ctx);
++
++	idr_remove(vxd->streams, ctx->stream.id);
++
++	v4l2_fh_del(&ctx->fh);
++
++	v4l2_fh_exit(&ctx->fh);
++
++	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
++
++	mutex_destroy(ctx->mutex);
++	kfree(ctx->mutex);
++	ctx->mutex = NULL;
++
++	get_work_buff(ctx->work, TRUE);
++	kfree(ctx->work);
++	kfree(ctx);
++
++	mutex_unlock(vxd->mutex);
++
++	return ret;
++}
++
++static int vxd_dec_querycap(struct file *file, void *priv, struct v4l2_capability *cap)
++{
++	strncpy(cap->driver, IMG_VXD_DEC_MODULE_NAME, sizeof(cap->driver) - 1);
++	strncpy(cap->card, IMG_VXD_DEC_MODULE_NAME, sizeof(cap->card) - 1);
++	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:%s", IMG_VXD_DEC_MODULE_NAME);
++	cap->device_caps = V4L2_CAP_VIDEO_M2M_MPLANE | V4L2_CAP_STREAMING;
++	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
++	return 0;
++}
++
++static int __enum_fmt(struct v4l2_fmtdesc *f, unsigned int type)
++{
++	int i, index;
++	struct vxd_dec_fmt *fmt = NULL;
++
++	index = 0;
++	for (i = 0; i < ARRAY_SIZE(vxd_dec_formats); ++i) {
++		if (vxd_dec_formats[i].type & type) {
++			if (index == f->index) {
++				fmt = &vxd_dec_formats[i];
++				break;
++			}
++			index++;
++		}
++	}
++
++	if (!fmt)
++		return -EINVAL;
++
++	f->pixelformat = fmt->fourcc;
++	return 0;
++}
++
++static int vxd_dec_enum_fmt(struct file *file, void *priv, struct v4l2_fmtdesc *f)
++{
++	if (V4L2_TYPE_IS_OUTPUT(f->type))
++		return __enum_fmt(f, IMG_DEC_FMT_TYPE_OUTPUT);
++
++	return __enum_fmt(f, IMG_DEC_FMT_TYPE_CAPTURE);
++}
++
++static struct vxd_dec_fmt *find_format(struct v4l2_format *f, unsigned int type)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(vxd_dec_formats); ++i) {
++		if (vxd_dec_formats[i].fourcc == f->fmt.pix_mp.pixelformat &&
++		    vxd_dec_formats[i].type == type)
++			return &vxd_dec_formats[i];
++	}
++	return NULL;
++}
++
++static unsigned int get_sizeimage(int w, int h, struct vxd_dec_fmt *fmt, int plane)
++{
++	switch (fmt->fourcc) {
++	case V4L2_PIX_FMT_YUV420M:
++		return ((plane == 0) ? (w * h) : (w * h / 2));
++	case V4L2_PIX_FMT_YUV422M:
++		return (w * h);
++	default:
++		return (w * h * fmt->size_num / fmt->size_den);
++	}
++
++	return 0;
++}
++
++static unsigned int get_stride(int w, struct vxd_dec_fmt *fmt)
++{
++	return (ALIGN(w, HW_ALIGN) * fmt->bytes_pp);
++}
++
++/*
++ * @ Function vxd_get_header_info
++ * Run bspp stream submit and preparse once before device_run
++ * To retrieve header information
++ */
++static int vxd_get_header_info(void *priv)
++{
++	struct vxd_dec_ctx *ctx = priv;
++	struct vxd_dev *vxd_dev = ctx->dev;
++	struct device *dev = vxd_dev->v4l2_dev.dev;
++	struct vb2_v4l2_buffer  *src_vb;
++	struct vxd_buffer *src_vxdb;
++	struct vxd_buffer *dst_vxdb;
++	struct bspp_preparsed_data *preparsed_data;
++	unsigned int data_size;
++	int ret;
++
++	/*
++	 * Checking for queued buffer.
++	 * If no next buffer present, do not get information from header.
++	 * Else, get header information and store for later use.
++	 */
++	src_vb =  v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
++	if (!src_vb) {
++		dev_warn(dev, "get_header_info Next src buffer is null\n");
++		return IMG_ERROR_INVALID_PARAMETERS;
++	}
++	mutex_lock_nested(ctx->mutex, SUBCLASS_VXD_V4L2);
++
++	src_vxdb = container_of(src_vb, struct vxd_buffer, buffer.vb);
++	/* Setting dst_vxdb to arbitrary value (using src_vb) for now */
++	dst_vxdb = container_of(src_vb, struct vxd_buffer, buffer.vb);
++
++	preparsed_data = &dst_vxdb->preparsed_data;
++
++	data_size = vb2_get_plane_payload(&src_vxdb->buffer.vb.vb2_buf, 0);
++
++	ret = bspp_stream_submit_buffer(ctx->bspp_context,
++					&src_vxdb->bstr_info,
++					src_vxdb->buf_map_id,
++					data_size, NULL,
++					VDEC_BSTRELEMENT_UNSPECIFIED);
++	if (ret) {
++		dev_err(dev, "get_header_info bspp_stream_submit_buffer failed %d\n", ret);
++		return ret;
++	}
++	mutex_unlock(ctx->mutex);
++
++	ret = bspp_stream_preparse_buffers(ctx->bspp_context, NULL, 0,
++					   &ctx->seg_list,
++					   preparsed_data, ctx->eos);
++	if (ret) {
++		dev_err(dev, "get_header_info bspp_stream_preparse_buffers failed %d\n", ret);
++		return ret;
++	}
++
++	if (preparsed_data->sequ_hdr_info.com_sequ_hdr_info.max_frame_size.height &&
++	    preparsed_data->sequ_hdr_info.com_sequ_hdr_info.max_ref_frame_num) {
++		ctx->height = preparsed_data->sequ_hdr_info.com_sequ_hdr_info.max_frame_size.height;
++		ctx->max_num_ref_frames =
++			preparsed_data->sequ_hdr_info.com_sequ_hdr_info.max_ref_frame_num;
++	} else {
++		dev_err(dev, "get_header_info preparsed data is null %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int vxd_dec_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
++{
++	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
++	struct vxd_dec_ctx *ctx = file2ctx(file);
++	struct vxd_dec_q_data *q_data;
++	struct vxd_dev *vxd_dev = ctx->dev;
++	unsigned int i = 0;
++	int ret = 0;
++
++	q_data = get_q_data(ctx, f->type);
++	if (!q_data)
++		return -EINVAL;
++
++	pix_mp->field = V4L2_FIELD_NONE;
++	pix_mp->pixelformat = q_data->fmt->fourcc;
++	pix_mp->num_planes = q_data->fmt->num_planes;
++
++	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
++		/* The buffer contains compressed image. */
++		pix_mp->width = ctx->width;
++		pix_mp->height = ctx->height;
++		pix_mp->plane_fmt[0].bytesperline = 0;
++		pix_mp->plane_fmt[0].sizeimage = q_data->size_image[0];
++	} else if (f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
++		/* The buffer contains decoded YUV image. */
++		pix_mp->width = ctx->width;
++		pix_mp->height = ctx->height;
++		for (i = 0; i < q_data->fmt->num_planes; i++) {
++			pix_mp->plane_fmt[i].bytesperline = get_stride(pix_mp->width, q_data->fmt);
++			pix_mp->plane_fmt[i].sizeimage = get_sizeimage
++							(pix_mp->plane_fmt[i].bytesperline,
++							 ctx->height, q_data->fmt, i);
++		}
++	} else {
++		dev_err(vxd_dev->v4l2_dev.dev, "Wrong V4L2_format type\n");
++		return -EINVAL;
++	}
++
++	return ret;
++}
++
++static int vxd_dec_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
++{
++	struct vxd_dec_ctx *ctx = file2ctx(file);
++	struct vxd_dev *vxd_dev = ctx->dev;
++	struct vxd_dec_fmt *fmt;
++	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
++	struct v4l2_plane_pix_format *plane_fmt = pix_mp->plane_fmt;
++	unsigned int i = 0;
++	int ret = 0;
++
++	if (V4L2_TYPE_IS_OUTPUT(f->type)) {
++		fmt = find_format(f, IMG_DEC_FMT_TYPE_OUTPUT);
++		if (!fmt) {
++			dev_err(vxd_dev->v4l2_dev.dev, "Unsupported format for source.\n");
++			return -EINVAL;
++		}
++		/*
++		 * Allocation for worst case input frame size:
++		 * I frame with full YUV size (YUV422)
++		 */
++		plane_fmt[0].sizeimage = ALIGN(pix_mp->width, HW_ALIGN) *
++			ALIGN(pix_mp->height, HW_ALIGN) * 2;
++	} else {
++		fmt = find_format(f, IMG_DEC_FMT_TYPE_CAPTURE);
++		if (!fmt) {
++			dev_err(vxd_dev->v4l2_dev.dev, "Unsupported format for dest.\n");
++			return -EINVAL;
++		}
++		for (i = 0; i < fmt->num_planes; i++) {
++			plane_fmt[i].bytesperline = get_stride(pix_mp->width, fmt);
++			plane_fmt[i].sizeimage = get_sizeimage(plane_fmt[i].bytesperline,
++							       pix_mp->height, fmt, i);
++		}
++		pix_mp->num_planes = fmt->num_planes;
++		pix_mp->flags = 0;
++	}
++
++	if (pix_mp->field == V4L2_FIELD_ANY)
++		pix_mp->field = V4L2_FIELD_NONE;
++
++	return ret;
++}
++
++static int vxd_dec_s_fmt(struct file *file, void *priv, struct v4l2_format *f)
++{
++	struct v4l2_pix_format_mplane *pix_mp;
++	struct vxd_dec_ctx *ctx = file2ctx(file);
++	struct vxd_dev *vxd_dev = ctx->dev;
++	struct device *dev = vxd_dev->v4l2_dev.dev;
++	struct vxd_dec_q_data *q_data;
++	struct vb2_queue *vq;
++	struct vdec_str_configdata strcfgdata;
++	int ret = 0;
++	unsigned char i = 0, j = 0;
++
++	pix_mp = &f->fmt.pix_mp;
++
++	if (!V4L2_TYPE_IS_OUTPUT(f->type)) {
++		int res = vxd_get_header_info(ctx);
++
++		if (res == 0)
++			pix_mp->height = ctx->height;
++	}
++
++	ret = vxd_dec_try_fmt(file, priv, f);
++	if (ret)
 +		return ret;
 +
-+	return IMG_SUCCESS;
++	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
++	if (!vq)
++		return -EINVAL;
++
++	if (vb2_is_busy(vq)) {
++		dev_err(dev, "Queue is busy\n");
++		return -EBUSY;
++	}
++
++	q_data = get_q_data(ctx, f->type);
++
++	if (!q_data)
++		return -EINVAL;
++
++	/*
++	 * saving the original dimensions to pass to gstreamer (to remove the green
++	 * padding on kmsink)
++	 */
++	ctx->width_orig = pix_mp->width;
++	ctx->height_orig = pix_mp->height;
++
++	ctx->width = pix_mp->width;
++	ctx->height = pix_mp->height;
++
++	q_data->width = pix_mp->width;
++	q_data->height = pix_mp->height;
++
++	if (V4L2_TYPE_IS_OUTPUT(f->type)) {
++		q_data->fmt = find_format(f, IMG_DEC_FMT_TYPE_OUTPUT);
++		q_data->size_image[0] = pix_mp->plane_fmt[0].sizeimage;
++
++		if (!ctx->stream_created) {
++			strcfgdata.vid_std = q_data->fmt->std;
++
++			if (strcfgdata.vid_std == VDEC_STD_UNDEFINED) {
++				dev_err(dev, "Invalid input format\n");
++				return -EINVAL;
++			}
++			strcfgdata.bstr_format = VDEC_BSTRFORMAT_ELEMENTARY;
++			strcfgdata.user_str_id = ctx->stream.id;
++			strcfgdata.update_yuv = FALSE;
++			strcfgdata.bandwidth_efficient = FALSE;
++			strcfgdata.disable_mvc = FALSE;
++			strcfgdata.full_scan = FALSE;
++			strcfgdata.immediate_decode = TRUE;
++			strcfgdata.intra_frame_closed_gop = TRUE;
++
++			ret = core_stream_create(ctx, &strcfgdata, &ctx->res_str_id);
++			if (ret) {
++				dev_err(dev, "Core stream create failed\n");
++				return -EINVAL;
++			}
++			ctx->stream_created = TRUE;
++			if (ctx->opconfig_pending) {
++				ret = vxd_dec_submit_opconfig(ctx);
++				if (ret) {
++					dev_err(dev, "Output config failed\n");
++					return -EINVAL;
++				}
++			}
++
++			vxd_dec_alloc_bspp_resource(ctx, strcfgdata.vid_std);
++			ret = bspp_stream_create(&strcfgdata,
++						 &ctx->bspp_context,
++						 ctx->fw_sequ,
++						 ctx->fw_pps);
++			if (ret) {
++				dev_err(dev, "BSPP stream create failed %d\n", ret);
++				return ret;
++			}
++		} else if (q_data->fmt !=
++			find_format(f, IMG_DEC_FMT_TYPE_OUTPUT)) {
++			dev_err(dev, "Input format already set\n");
++			return -EBUSY;
++		}
++	} else {
++		q_data->fmt = find_format(f, IMG_DEC_FMT_TYPE_CAPTURE);
++		for (i = 0; i < q_data->fmt->num_planes; i++) {
++			q_data->size_image[i] =
++				get_sizeimage(get_stride(pix_mp->width, q_data->fmt),
++					      ctx->height, q_data->fmt, i);
++		}
++
++		ctx->str_opcfg.pixel_info.pixfmt = q_data->fmt->pixfmt;
++		ctx->str_opcfg.pixel_info.chroma_interleave = q_data->fmt->interleave;
++		ctx->str_opcfg.pixel_info.chroma_fmt = TRUE;
++		ctx->str_opcfg.pixel_info.chroma_fmt_idc = q_data->fmt->idc;
++
++		if (q_data->fmt->pixfmt == IMG_PIXFMT_420PL12YUV10_MSB ||
++		    q_data->fmt->pixfmt == IMG_PIXFMT_422PL12YUV10_MSB) {
++			ctx->str_opcfg.pixel_info.mem_pkg = PIXEL_BIT10_MSB_MP;
++			ctx->str_opcfg.pixel_info.bitdepth_y = 10;
++			ctx->str_opcfg.pixel_info.bitdepth_c = 10;
++		} else {
++			ctx->str_opcfg.pixel_info.mem_pkg = PIXEL_BIT8_MP;
++			ctx->str_opcfg.pixel_info.bitdepth_y = 8;
++			ctx->str_opcfg.pixel_info.bitdepth_c = 8;
++		}
++
++		ctx->str_opcfg.force_oold = FALSE;
++
++		ctx->pict_bufcfg.coded_width = pix_mp->width;
++		ctx->pict_bufcfg.coded_height = pix_mp->height;
++		ctx->pict_bufcfg.pixel_fmt = q_data->fmt->pixfmt;
++		for (i = 0; i < pix_mp->num_planes; i++) {
++			q_data->bytesperline[i] = get_stride(q_data->width, q_data->fmt);
++			if (q_data->bytesperline[i] <
++				pix_mp->plane_fmt[0].bytesperline)
++				q_data->bytesperline[i] =
++					ALIGN(pix_mp->plane_fmt[0].bytesperline, HW_ALIGN);
++			pix_mp->plane_fmt[0].bytesperline =
++				q_data->bytesperline[i];
++			ctx->pict_bufcfg.stride[i] = q_data->bytesperline[i];
++		}
++		for (j = i; j < IMG_MAX_NUM_PLANES; j++) {
++			if ((i - 1) < 0)
++				i++;
++			ctx->pict_bufcfg.stride[j] =
++				q_data->bytesperline[i - 1];
++		}
++		ctx->pict_bufcfg.stride_alignment = HW_ALIGN;
++		ctx->pict_bufcfg.byte_interleave = FALSE;
++		for (i = 0; i < pix_mp->num_planes; i++) {
++			unsigned int plane_size =
++				get_sizeimage(ctx->pict_bufcfg.stride[i],
++					      ctx->pict_bufcfg.coded_height,
++					      q_data->fmt, i);
++			ctx->pict_bufcfg.buf_size += ALIGN(plane_size, PAGE_SIZE);
++			ctx->pict_bufcfg.plane_size[i] = plane_size;
++			pix_mp->plane_fmt[i].sizeimage = plane_size;
++		}
++		if (q_data->fmt->pixfmt == 86031 ||
++		    q_data->fmt->pixfmt == 81935) {
++			/* Handle the v4l2 multi-planar formats */
++			ctx->str_opcfg.pixel_info.num_planes = 3;
++			ctx->pict_bufcfg.packed = FALSE;
++			for (i = 0; i < pix_mp->num_planes; i++) {
++				ctx->pict_bufcfg.chroma_offset[i] =
++					ALIGN(pix_mp->plane_fmt[i].sizeimage, PAGE_SIZE);
++				ctx->pict_bufcfg.chroma_offset[i] +=
++					(i ? ctx->pict_bufcfg.chroma_offset[i - 1] : 0);
++			}
++		} else {
++			/* IMG Decoders support only multi-planar formats */
++			ctx->str_opcfg.pixel_info.num_planes = 2;
++			ctx->pict_bufcfg.packed = TRUE;
++			ctx->pict_bufcfg.chroma_offset[0] = 0;
++			ctx->pict_bufcfg.chroma_offset[1] = 0;
++		}
++
++		vxd_dec_submit_opconfig(ctx);
++	}
++
++	return ret;
 +}
++
++static int vxd_dec_subscribe_event(struct v4l2_fh *fh, const struct v4l2_event_subscription *sub)
++{
++	if (sub->type != V4L2_EVENT_EOS)
++		return -EINVAL;
++
++	v4l2_event_subscribe(fh, sub, 0, NULL);
++	return 0;
++}
++
++static int vxd_dec_try_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
++{
++	if (cmd->cmd != V4L2_DEC_CMD_STOP)
++		return -EINVAL;
++
++	return 0;
++}
++
++static int vxd_dec_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
++{
++	struct vxd_dec_ctx *ctx = file2ctx(file);
++
++	if (cmd->cmd != V4L2_DEC_CMD_STOP)
++		return -EINVAL;
++
++#ifdef DEBUG_DECODER_DRIVER
++	pr_info("%s CMD_STOP\n", __func__);
++#endif
++	/*
++	 * When stop command is received, notify device_run if it is
++	 * scheduled to run, or tell the decoder that eos has
++	 * happened.
++	 */
++	mutex_lock_nested(ctx->mutex, SUBCLASS_VXD_V4L2);
++	if (v4l2_m2m_num_src_bufs_ready(ctx->fh.m2m_ctx) > 0) {
++#ifdef DEBUG_DECODER_DRIVER
++		pr_info("V4L2 src bufs not empty, set a flag to notify device_run\n");
++#endif
++		ctx->stop_initiated = TRUE;
++		mutex_unlock(ctx->mutex);
++	} else {
++		if (ctx->num_decoding) {
++#ifdef DEBUG_DECODER_DRIVER
++			pr_info("buffers are still being decoded, so just set eos flag\n");
++#endif
++			ctx->eos = TRUE;
++			mutex_unlock(ctx->mutex);
++		} else {
++			mutex_unlock(ctx->mutex);
++#ifdef DEBUG_DECODER_DRIVER
++			pr_info("All buffers are decoded, so issue dummy stream end\n");
++#endif
++			vxd_return_resource((void *)ctx, VXD_CB_STR_END, 0);
++		}
++	}
++
++	return 0;
++}
++
++static int vxd_g_selection(struct file *file, void *fh, struct v4l2_selection *s)
++{
++	struct vxd_dec_ctx *ctx = file2ctx(file);
++	bool def_bounds = true;
++
++	if (s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE &&
++	    s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
++		return -EINVAL;
++
++	switch (s->target) {
++	case V4L2_SEL_TGT_COMPOSE_DEFAULT:
++	case V4L2_SEL_TGT_COMPOSE_BOUNDS:
++		if (s->type == V4L2_BUF_TYPE_VIDEO_OUTPUT)
++			return -EINVAL;
++		break;
++	case V4L2_SEL_TGT_CROP_BOUNDS:
++	case V4L2_SEL_TGT_CROP_DEFAULT:
++		if (s->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
++			return -EINVAL;
++		break;
++	case V4L2_SEL_TGT_COMPOSE:
++		if (s->type == V4L2_BUF_TYPE_VIDEO_OUTPUT)
++			return -EINVAL;
++		def_bounds = false;
++		break;
++	case V4L2_SEL_TGT_CROP:
++		if (s->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
++			return -EINVAL;
++		def_bounds = false;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	if (def_bounds) {
++		s->r.left = 0;
++		s->r.top = 0;
++		s->r.width = ctx->width_orig;
++		s->r.height = ctx->height_orig;
++	}
++
++	return 0;
++}
++
++static const struct v4l2_ioctl_ops vxd_dec_ioctl_ops = {
++	.vidioc_querycap = vxd_dec_querycap,
++
++	.vidioc_enum_fmt_vid_cap = vxd_dec_enum_fmt,
++	.vidioc_g_fmt_vid_cap_mplane = vxd_dec_g_fmt,
++	.vidioc_try_fmt_vid_cap_mplane = vxd_dec_try_fmt,
++	.vidioc_s_fmt_vid_cap_mplane = vxd_dec_s_fmt,
++
++	.vidioc_enum_fmt_vid_out = vxd_dec_enum_fmt,
++	.vidioc_g_fmt_vid_out_mplane = vxd_dec_g_fmt,
++	.vidioc_try_fmt_vid_out_mplane = vxd_dec_try_fmt,
++	.vidioc_s_fmt_vid_out_mplane = vxd_dec_s_fmt,
++
++	.vidioc_reqbufs = v4l2_m2m_ioctl_reqbufs,
++	.vidioc_querybuf = v4l2_m2m_ioctl_querybuf,
++	.vidioc_qbuf = v4l2_m2m_ioctl_qbuf,
++	.vidioc_dqbuf = v4l2_m2m_ioctl_dqbuf,
++	.vidioc_expbuf = v4l2_m2m_ioctl_expbuf,
++
++	.vidioc_streamon = v4l2_m2m_ioctl_streamon,
++	.vidioc_streamoff = v4l2_m2m_ioctl_streamoff,
++	.vidioc_log_status = v4l2_ctrl_log_status,
++	.vidioc_subscribe_event = vxd_dec_subscribe_event,
++	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
++	.vidioc_try_decoder_cmd = vxd_dec_try_cmd,
++	.vidioc_decoder_cmd = vxd_dec_cmd,
++
++	.vidioc_g_selection = vxd_g_selection,
++};
++
++static const struct v4l2_file_operations vxd_dec_fops = {
++	.owner = THIS_MODULE,
++	.open = vxd_dec_open,
++	.release = vxd_dec_release,
++	.poll = v4l2_m2m_fop_poll,
++	.unlocked_ioctl = video_ioctl2,
++	.mmap = v4l2_m2m_fop_mmap,
++};
++
++static struct video_device vxd_dec_videodev = {
++	.name = IMG_VXD_DEC_MODULE_NAME,
++	.fops = &vxd_dec_fops,
++	.ioctl_ops = &vxd_dec_ioctl_ops,
++	.minor = -1,
++	.release = video_device_release,
++	.vfl_dir = VFL_DIR_M2M,
++};
++
++static void device_run(void *priv)
++{
++	struct vxd_dec_ctx *ctx = priv;
++	struct vxd_dev *vxd_dev = ctx->dev;
++	struct device *dev = vxd_dev->v4l2_dev.dev;
++	struct vb2_v4l2_buffer  *src_vb;
++	struct vb2_v4l2_buffer  *dst_vb;
++	struct vxd_buffer *src_vxdb;
++	struct vxd_buffer *dst_vxdb;
++	struct bspp_bitstr_seg *item = NULL, *next = NULL;
++	struct bspp_preparsed_data *preparsed_data;
++	unsigned int data_size;
++	int ret;
++	struct timespec64 time;
++	static int cnt;
++	int i;
++
++	mutex_lock_nested(ctx->mutex, SUBCLASS_VXD_V4L2);
++	ctx->num_decoding++;
++
++	src_vb = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
++	if (!src_vb)
++		dev_err(dev, "Next src buffer is null\n");
++
++	dst_vb = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
++	if (!dst_vb)
++		dev_err(dev, "Next dst buffer is null\n");
++
++	src_vxdb = container_of(src_vb, struct vxd_buffer, buffer.vb);
++	dst_vxdb = container_of(dst_vb, struct vxd_buffer, buffer.vb);
++
++	preparsed_data = &dst_vxdb->preparsed_data;
++
++	data_size = vb2_get_plane_payload(&src_vxdb->buffer.vb.vb2_buf, 0);
++
++	ret = bspp_stream_submit_buffer(ctx->bspp_context,
++					&src_vxdb->bstr_info,
++					src_vxdb->buf_map_id,
++					data_size, NULL,
++					VDEC_BSTRELEMENT_UNSPECIFIED);
++	if (ret)
++		dev_err(dev, "bspp_stream_submit_buffer failed %d\n", ret);
++
++	if (ctx->stop_initiated &&
++	    (v4l2_m2m_num_src_bufs_ready(ctx->fh.m2m_ctx) == 0))
++		ctx->eos = TRUE;
++
++	mutex_unlock(ctx->mutex);
++
++	ret = bspp_stream_preparse_buffers(ctx->bspp_context, NULL, 0, &ctx->seg_list,
++					   preparsed_data, ctx->eos);
++	if (ret)
++		dev_err(dev, "bspp_stream_preparse_buffers failed %d\n", ret);
++
++	ktime_get_real_ts64(&time);
++	vxd_dev->time_drv[cnt].start_time = timespec64_to_ns(&time);
++	vxd_dev->time_drv[cnt].id = dst_vxdb->buf_map_id;
++	cnt++;
++
++	if (cnt >= ARRAY_SIZE(vxd_dev->time_drv))
++		cnt = 0;
++
++	core_stream_fill_pictbuf(dst_vxdb->buf_map_id);
++
++	if (preparsed_data->new_sequence) {
++		src_vxdb->seq_unit.str_unit_type =
++			VDECDD_STRUNIT_SEQUENCE_START;
++		src_vxdb->seq_unit.str_unit_handle = ctx;
++		src_vxdb->seq_unit.err_flags = 0;
++		src_vxdb->seq_unit.dd_data = NULL;
++		src_vxdb->seq_unit.seq_hdr_info =
++			&preparsed_data->sequ_hdr_info;
++		src_vxdb->seq_unit.seq_hdr_id = 0;
++		src_vxdb->seq_unit.closed_gop = TRUE;
++		src_vxdb->seq_unit.eop = FALSE;
++		src_vxdb->seq_unit.pict_hdr_info = NULL;
++		src_vxdb->seq_unit.dd_pict_data = NULL;
++		src_vxdb->seq_unit.last_pict_in_seq = FALSE;
++		src_vxdb->seq_unit.str_unit_tag = NULL;
++		src_vxdb->seq_unit.decode = FALSE;
++		src_vxdb->seq_unit.features = 0;
++		core_stream_submit_unit(ctx->res_str_id, &src_vxdb->seq_unit);
++	}
++
++	src_vxdb->pic_unit.str_unit_type = VDECDD_STRUNIT_PICTURE_START;
++	src_vxdb->pic_unit.str_unit_handle = ctx;
++	src_vxdb->pic_unit.err_flags = 0;
++	/* Move the processed segments to the submission buffer */
++	for (i = 0; i < BSPP_MAX_PICTURES_PER_BUFFER; i++) {
++		item = lst_first(&preparsed_data->picture_data.pre_pict_seg_list[i]);
++		while (item) {
++			next = lst_next(item);
++			lst_remove(&preparsed_data->picture_data.pre_pict_seg_list[i], item);
++			lst_add(&src_vxdb->pic_unit.bstr_seg_list, item);
++			item = next;
++		}
++		/* Move the processed segments to the submission buffer */
++		item = lst_first(&preparsed_data->picture_data.pict_seg_list[i]);
++		while (item) {
++			next = lst_next(item);
++			lst_remove(&preparsed_data->picture_data.pict_seg_list[i], item);
++			lst_add(&src_vxdb->pic_unit.bstr_seg_list, item);
++			item = next;
++		}
++	}
++
++	src_vxdb->pic_unit.dd_data = NULL;
++	src_vxdb->pic_unit.seq_hdr_info = NULL;
++	src_vxdb->pic_unit.seq_hdr_id = 0;
++	if (preparsed_data->new_sequence)
++		src_vxdb->pic_unit.closed_gop = TRUE;
++	else
++		src_vxdb->pic_unit.closed_gop = FALSE;
++	src_vxdb->pic_unit.eop = TRUE;
++	src_vxdb->pic_unit.eos = ctx->eos;
++	src_vxdb->pic_unit.pict_hdr_info =
++		&preparsed_data->picture_data.pict_hdr_info;
++	src_vxdb->pic_unit.dd_pict_data = NULL;
++	src_vxdb->pic_unit.last_pict_in_seq = FALSE;
++	src_vxdb->pic_unit.str_unit_tag = NULL;
++	src_vxdb->pic_unit.decode = FALSE;
++	src_vxdb->pic_unit.features = 0;
++	core_stream_submit_unit(ctx->res_str_id, &src_vxdb->pic_unit);
++
++	src_vxdb->end_unit.str_unit_type = VDECDD_STRUNIT_PICTURE_END;
++	src_vxdb->end_unit.str_unit_handle = ctx;
++	src_vxdb->end_unit.err_flags = 0;
++	src_vxdb->end_unit.dd_data = NULL;
++	src_vxdb->end_unit.seq_hdr_info = NULL;
++	src_vxdb->end_unit.seq_hdr_id = 0;
++	src_vxdb->end_unit.closed_gop = FALSE;
++	src_vxdb->end_unit.eop = FALSE;
++	src_vxdb->end_unit.eos = ctx->eos;
++	src_vxdb->end_unit.pict_hdr_info = NULL;
++	src_vxdb->end_unit.dd_pict_data = NULL;
++	src_vxdb->end_unit.last_pict_in_seq = FALSE;
++	src_vxdb->end_unit.str_unit_tag = NULL;
++	src_vxdb->end_unit.decode = FALSE;
++	src_vxdb->end_unit.features = 0;
++	core_stream_submit_unit(ctx->res_str_id, &src_vxdb->end_unit);
++}
++
++static int job_ready(void *priv)
++{
++	struct vxd_dec_ctx *ctx = priv;
++
++	if (v4l2_m2m_num_src_bufs_ready(ctx->fh.m2m_ctx) < 1 ||
++	    v4l2_m2m_num_dst_bufs_ready(ctx->fh.m2m_ctx) < 1 ||
++	    !ctx->core_streaming)
++		return 0;
++
++	return 1;
++}
++
++static void job_abort(void *priv)
++{
++	struct vxd_dec_ctx *ctx = priv;
++
++	/* Cancel the transaction at next callback */
++	ctx->aborting = 1;
++}
++
++static const struct v4l2_m2m_ops m2m_ops = {
++	.device_run = device_run,
++	.job_ready = job_ready,
++	.job_abort = job_abort,
++};
++
++static const struct of_device_id vxd_dec_of_match[] = {
++	{.compatible = "img,d5500-vxd"},
++	{ /* end */},
++};
++MODULE_DEVICE_TABLE(of, vxd_dec_of_match);
++
++static int vxd_dec_probe(struct platform_device *pdev)
++{
++	struct vxd_dev *vxd;
++	struct resource *res;
++	const struct of_device_id *of_dev_id;
++	int ret;
++	int module_irq;
++	struct video_device *vfd;
++
++	struct heap_config *heap_configs;
++	int num_heaps;
++	unsigned int i_heap_id;
++	/* Protect structure fields */
++	spinlock_t **lock;
++
++	of_dev_id = of_match_device(vxd_dec_of_match, &pdev->dev);
++	if (!of_dev_id) {
++		dev_err(&pdev->dev, "%s: Unable to match device\n", __func__);
++		return -ENODEV;
++	}
++
++	dma_set_mask(&pdev->dev, DMA_BIT_MASK(40));
++
++	vxd = devm_kzalloc(&pdev->dev, sizeof(*vxd), GFP_KERNEL);
++	if (!vxd)
++		return -ENOMEM;
++
++	vxd->dev = &pdev->dev;
++	vxd->plat_dev = pdev;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	vxd->reg_base = devm_ioremap_resource(&pdev->dev, res);
++	if (IS_ERR_VALUE((unsigned long)vxd->reg_base))
++		return (long)(vxd->reg_base);
++
++	module_irq = platform_get_irq(pdev, 0);
++	if (module_irq < 0)
++		return -ENXIO;
++	vxd->module_irq = module_irq;
++#ifdef ERROR_RECOVERY_SIMULATION
++	g_module_irq = module_irq;
++#endif
++
++	heap_configs = vxd_dec_heap_configs;
++	num_heaps = ARRAY_SIZE(vxd_dec_heap_configs);
++
++	vxd->mutex = kzalloc(sizeof(*vxd->mutex), GFP_KERNEL);
++	if (!vxd->mutex)
++		return -ENOMEM;
++
++	mutex_init(vxd->mutex);
++	platform_set_drvdata(pdev, vxd);
++
++	pm_runtime_enable(&pdev->dev);
++	ret = pm_runtime_get_sync(&pdev->dev);
++	if (ret < 0) {
++		dev_err(&pdev->dev, "%s: failed to enable clock, status = %d\n", __func__, ret);
++		goto exit;
++	}
++
++	/* Read HW properties */
++	ret = vxd_pvdec_get_props(vxd->dev, vxd->reg_base, &vxd->props);
++	if (ret) {
++		dev_err(&pdev->dev, "%s: failed to fetch core properties!\n", __func__);
++		ret = -ENXIO;
++		goto out_put_sync;
++	}
++	vxd->mmu_config_addr_width = VXD_EXTRN_ADDR_WIDTH(vxd->props);
++#ifdef DEBUG_DECODER_DRIVER
++	dev_info(&pdev->dev, "hw:%u.%u.%u, num_pix: %d, num_ent: %d, mmu: %d, MTX RAM: %d\n",
++		 VXD_MAJ_REV(vxd->props),
++		 VXD_MIN_REV(vxd->props),
++		 VXD_MAINT_REV(vxd->props),
++		 VXD_NUM_PIX_PIPES(vxd->props),
++		 VXD_NUM_ENT_PIPES(vxd->props),
++		 VXD_EXTRN_ADDR_WIDTH(vxd->props),
++		 vxd->props.mtx_ram_size);
++#endif
++
++	INIT_LIST_HEAD(&vxd->msgs);
++	INIT_LIST_HEAD(&vxd->pend);
++
++	/* initialize memory manager */
++	ret = img_mem_init(&pdev->dev);
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to initialize memory\n");
++		ret = -ENOMEM;
++		goto out_put_sync;
++	}
++	vxd->streams = kzalloc(sizeof(*vxd->streams), GFP_KERNEL);
++	if (!vxd->streams) {
++		ret = -ENOMEM;
++		goto out_init;
++	}
++
++	idr_init(vxd->streams);
++
++	ret = vxd_init(&pdev->dev, vxd, heap_configs, num_heaps);
++	if (ret) {
++		dev_err(&pdev->dev, "%s: main component initialisation failed!\n", __func__);
++		goto out_idr_init;
++	}
++
++	/* initialize core */
++	i_heap_id = vxd_g_internal_heap_id();
++	if (i_heap_id < 0) {
++		dev_err(&pdev->dev, "%s: Invalid internal heap id", __func__);
++		goto out_vxd_init;
++	}
++	ret = core_initialise(vxd, i_heap_id, vxd_return_resource);
++	if (ret) {
++		dev_err(&pdev->dev, "%s: core initialization failed!", __func__);
++		goto out_vxd_init;
++	}
++
++	vxd->fw_refcnt = 0;
++	vxd->hw_on = 0;
++
++#ifdef DEBUG_DECODER_DRIVER
++	vxd->hw_pm_delay = 10000;
++	vxd->hw_dwr_period = 10000;
++#else
++	vxd->hw_pm_delay = 1000;
++	vxd->hw_dwr_period = 1000;
++#endif
++	ret = vxd_prepare_fw(vxd);
++	if (ret) {
++		dev_err(&pdev->dev, "%s fw acquire failed!", __func__);
++		goto out_core_init;
++	}
++
++	if (vxd->no_fw) {
++		dev_err(&pdev->dev, "%s fw acquire failed!", __func__);
++		goto out_core_init;
++	}
++
++	 lock = (spinlock_t **)&vxd->lock;
++	*lock = kzalloc(sizeof(spinlock_t), GFP_KERNEL);
++
++	if (!(*lock)) {
++		pr_err("Memory allocation failed for spin-lock\n");
++		ret = ENOMEM;
++		goto out_core_init;
++	}
++	spin_lock_init(*lock);
++
++	ret = v4l2_device_register(&pdev->dev, &vxd->v4l2_dev);
++	if (ret)
++		goto out_clean_fw;
++
++#ifdef ERROR_RECOVERY_SIMULATION
++	/*
++	 * create a sysfs entry here, to debug firmware error recovery.
++	 */
++	vxd_dec_kobject = kobject_create_and_add("vxd_decoder", kernel_kobj);
++	if (!vxd_dec_kobject) {
++		dev_err(&pdev->dev, "Failed to create kernel object\n");
++		goto out_clean_fw;
++	}
++
++	ret = sysfs_create_group(vxd_dec_kobject, &attr_group);
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to create sysfs files\n");
++		kobject_put(vxd_dec_kobject);
++	}
++#endif
++
++	vfd = video_device_alloc();
++	if (!vfd) {
++		dev_err(&pdev->dev, "Failed to allocate video device\n");
++		ret = -ENOMEM;
++		goto out_v4l2_device;
++	}
++
++	vxd->vfd_dec = vfd;
++	*vfd = vxd_dec_videodev;
++	vfd->v4l2_dev = &vxd->v4l2_dev;
++	vfd->device_caps = V4L2_CAP_VIDEO_M2M_MPLANE | V4L2_CAP_STREAMING;
++	vfd->lock = vxd->mutex;
++
++	video_set_drvdata(vfd, vxd);
++
++	snprintf(vfd->name, sizeof(vfd->name), "%s", vxd_dec_videodev.name);
++	ret = devm_request_threaded_irq(&pdev->dev, module_irq, (irq_handler_t)hard_isrcb,
++					(irq_handler_t)soft_thread_irq, IRQF_SHARED,
++					IMG_VXD_DEC_MODULE_NAME, pdev);
++	if (ret) {
++		dev_err(&pdev->dev, "failed to request irq\n");
++		goto out_vid_dev;
++	}
++
++	vxd->m2m_dev = v4l2_m2m_init(&m2m_ops);
++	if (IS_ERR_VALUE((unsigned long)vxd->m2m_dev)) {
++		dev_err(&pdev->dev, "Failed to init mem2mem device\n");
++		ret = -EINVAL;
++		goto out_vid_dev;
++	}
++
++	ret = video_register_device(vfd, VFL_TYPE_VIDEO, 0);
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to register video device\n");
++		goto out_vid_reg;
++	}
++	v4l2_info(&vxd->v4l2_dev, "decoder registered as /dev/video%d\n", vfd->num);
++
++	return 0;
++
++out_vid_reg:
++	v4l2_m2m_release(vxd->m2m_dev);
++
++out_vid_dev:
++	video_device_release(vfd);
++
++out_v4l2_device:
++	v4l2_device_unregister(&vxd->v4l2_dev);
++
++out_clean_fw:
++	vxd_clean_fw_resources(vxd);
++
++out_core_init:
++	core_deinitialise();
++
++out_vxd_init:
++	vxd_deinit(vxd);
++
++out_idr_init:
++	idr_destroy(vxd->streams);
++	kfree(vxd->streams);
++
++out_init:
++	img_mem_exit();
++
++out_put_sync:
++	pm_runtime_put_sync(&pdev->dev);
++
++exit:
++	pm_runtime_disable(&pdev->dev);
++	mutex_destroy(vxd->mutex);
++	kfree(vxd->mutex);
++	vxd->mutex = NULL;
++
++	return ret;
++}
++
++static int vxd_dec_remove(struct platform_device *pdev)
++{
++	struct vxd_dev *vxd = platform_get_drvdata(pdev);
++
++	core_deinitialise();
++
++	vxd_clean_fw_resources(vxd);
++	vxd_deinit(vxd);
++	idr_destroy(vxd->streams);
++	kfree(vxd->streams);
++	get_delayed_work_buff(&vxd->dwork, TRUE);
++	kfree(&vxd->lock);
++	img_mem_exit();
++
++	pm_runtime_put_sync(&pdev->dev);
++	pm_runtime_disable(&pdev->dev);
++	kfree(vxd->dwork);
++	mutex_destroy(vxd->mutex);
++	kfree(vxd->mutex);
++	vxd->mutex = NULL;
++
++	video_unregister_device(vxd->vfd_dec);
++	v4l2_m2m_release(vxd->m2m_dev);
++	v4l2_device_unregister(&vxd->v4l2_dev);
++
++	return 0;
++}
++
++static int __maybe_unused vxd_dec_suspend(struct device *dev)
++{
++	int ret = 0;
++
++	ret = vxd_suspend_dev(dev);
++	if (ret)
++		dev_err(dev, "failed to suspend core hw!\n");
++
++	return ret;
++}
++
++static int __maybe_unused vxd_dec_resume(struct device *dev)
++{
++	int ret = 0;
++
++	ret = vxd_resume_dev(dev);
++	if (ret)
++		dev_err(dev, "failed to resume core hw!\n");
++
++	return ret;
++}
++
++static UNIVERSAL_DEV_PM_OPS(vxd_dec_pm_ops,
++	vxd_dec_suspend, vxd_dec_resume, NULL);
++
++static struct platform_driver vxd_dec_driver = {
++	.probe = vxd_dec_probe,
++	.remove = vxd_dec_remove,
++	.driver = {
++		.name = "img_dec",
++		.pm = &vxd_dec_pm_ops,
++		.of_match_table = vxd_dec_of_match,
++	},
++};
++module_platform_driver(vxd_dec_driver);
++
++MODULE_AUTHOR("Prashanth Kumar Amai <prashanth.ka@pathpartnertech.com> Sidraya Jayagond <sidraya.bj@pathpartnertech.com>");
++MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("IMG D5520 video decoder driver");
 -- 
 2.17.1
 
