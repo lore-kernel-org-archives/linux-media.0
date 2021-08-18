@@ -7,57 +7,57 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A007C432BE
-	for <linux-media@archiver.kernel.org>; Wed, 18 Aug 2021 14:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDEF7C4320A
+	for <linux-media@archiver.kernel.org>; Wed, 18 Aug 2021 14:14:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D00D610A7
-	for <linux-media@archiver.kernel.org>; Wed, 18 Aug 2021 14:13:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D4C1F610A3
+	for <linux-media@archiver.kernel.org>; Wed, 18 Aug 2021 14:14:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239193AbhHRONi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Aug 2021 10:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
+        id S239438AbhHROPO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Aug 2021 10:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239207AbhHRONH (ORCPT
+        with ESMTP id S239619AbhHROON (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Aug 2021 10:13:07 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA4AC0612E7
-        for <linux-media@vger.kernel.org>; Wed, 18 Aug 2021 07:12:32 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id t1so2372506pgv.3
-        for <linux-media@vger.kernel.org>; Wed, 18 Aug 2021 07:12:32 -0700 (PDT)
+        Wed, 18 Aug 2021 10:14:13 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A614C061224
+        for <linux-media@vger.kernel.org>; Wed, 18 Aug 2021 07:12:51 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id u13-20020a17090abb0db0290177e1d9b3f7so9010381pjr.1
+        for <linux-media@vger.kernel.org>; Wed, 18 Aug 2021 07:12:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pathpartnertech.com; s=google;
         h=mime-version:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=mmScyDNHuhPqInIkPDi1hrnGW/8MBui8p7fDqyfKaaY=;
-        b=AAhat11RtUjh2IsCIHcK4cJMJm9EkgRo4Yy4qwHn/aFpQICcCdCk/ZFt0zUCFv2Hml
-         A5NjAOABzqg57z7Fvm4y89RVtnfIk5Czbf1nCt8YFv9DBnVoH1K2Dzf84gf7LXq9NAVb
-         NIaCHciTl9rrDKP1bwvnFThSLSoSuZWbxZnjj1oIjV0VActLfkHX4m5w/9PM/1MfyPu4
-         OAoCCWa39z4O31+j3S/iFAlZom0RGoEbZ+huI+Xhf70i5YwwMo61qtTYFF8mTx1Zjeve
-         QaWjsxwvbhn+M4f67YPEvIPs0aCnL+0zu67qB1sOYpI/MwZyO0hXxBS3E5WYKjc4/wBp
-         6oWg==
+        bh=hciLVVz7oYmPEz+0OVi+40tuZkd3zXhAHIFMBcV5fuQ=;
+        b=CTgZvPMPrtzQSE3z+Tt/9htreF/68IeCOF2+whRVF6fO4LGY99ryZJadAfp2wMKbJ0
+         abccfykvqGzHuOmuXeMpqzxnnsG5OzRrKd+aV2NkGJz1KE+g/7bK9GA+Qo1npkCVn5e6
+         u19V4CrMy890EdRSRYqvPMpGy0Islw/sISe3z024rMftW93MmRO5Ngxbu58ouZCLkDQs
+         7eAuQIesoMRh441BqSpre4NuzY0fAeqUFMb0fvHm85iHMqHb+cOKL0AT4Jd9deSaDurs
+         De8EgHdUKDjdjMgRaQr+6hckwhME3U0BfVOYJeLRaM3IVt1d0CYhl4Y4SFHjg5LCIx2I
+         Kdaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=mmScyDNHuhPqInIkPDi1hrnGW/8MBui8p7fDqyfKaaY=;
-        b=sy23oddBBJWVPtnVTGGtHeUU6IE8l0olWa1788bJZLpNeOjkVRvI+lXqG/KHw9mmV/
-         s7mLcJSJiLNkPOLvaWNqDnxmeco702OFY4mTPQS/78CbShfaYC1YhOQHfM0MEfmhv8vr
-         R/1Pq443CWF0LZxyJnPfz132Bs5PNMBD6gK+x2uJDlZA2AzaTcB0vfs8P6mM5H1xKiGw
-         xFXHhUOhPG4wG/c1Hv6L5PNztMVC5g6yzLYwswRn0MZ+j4wL5/Tk0/2kgOq/YzziELhC
-         VsuWC+huPSWWVrLaIIOQb1GdlHz5CoK26sOjGTziDZuIz/rkyLcgmkQ1vJ98BBinFIul
-         duXw==
+        bh=hciLVVz7oYmPEz+0OVi+40tuZkd3zXhAHIFMBcV5fuQ=;
+        b=ZqlkVRmG3u9T9mX1tlxR0cyk5cy9GKAvbLI4UIyylSXQ6DqgLebKXoKyTkz8PWhpao
+         DACrNNvzAOp2zwizwy5pYAFDlVpbsMLkdwG3+JysJ2v9DavjQ6vqDJUhKKDEbDtjg/lZ
+         htwWtTZ+YRg4CF3ZiRZsXA7QrVMnexysaNS3Jn3UvjbtJQudY4c/tAT4+zjAoLqCMDr1
+         P9EAzudz7xdm/3KeAuq7NpSCbHRGQWfoxkLIMIfZhctJclXHz7hOxMdjtDKFvZCJxHJn
+         0sYl5Mvom+j4iga45APWYrdn3NRGBou5fjlqTX5fAHQoO/QndriBcbvDAtd+bVwDAkZ2
+         G4WA==
 MIME-Version: 1.0
-X-Gm-Message-State: AOAM532fXouy0NVrA7Ib6STwz/Sb0proHTPod5vEkGx3W254gHq86UJx
-        19z9VCntxgjfVS4cLfUxKTZIw5uILCnM3F999zWkUd2XPnZayt7GyLUOFWkgEUkRErhXeCkkHaj
-        IQsQXfH9t0C6CX6YU
-X-Google-Smtp-Source: ABdhPJyLBkj9FVxjq0VdTb3kf3e80XYzSmjEYlsQogtrjJnIWfnvzV3wvR0tVq1UEsWfV7DvTpCX3A==
-X-Received: by 2002:a62:8858:0:b029:2fb:6bb0:aba with SMTP id l85-20020a6288580000b02902fb6bb00abamr9665379pfd.32.1629295951880;
-        Wed, 18 Aug 2021 07:12:31 -0700 (PDT)
+X-Gm-Message-State: AOAM531Yyiioa5CqLA+d6QIi3sbI/en5U0/yxKy7ZnQi3lkTLMCKAxJH
+        7Su/GqPQPY1MUwmqVLJDpQi4UsPrE6MS1xbGHHr8NF3eFc2Y3JvAD6PtnNBIKzfwjBNyWKsd7wb
+        LEWnWJdrzqkmYk1oC
+X-Google-Smtp-Source: ABdhPJzIajwSqAJ/xLWgynJls+uwaNrEilp9qnynPFj+e/RNJO4L1NHC37WYsSlJAcaePOxqx7vDlQ==
+X-Received: by 2002:a17:903:2349:b0:12d:ada3:192e with SMTP id c9-20020a170903234900b0012dada3192emr7594388plh.3.1629295970735;
+        Wed, 18 Aug 2021 07:12:50 -0700 (PDT)
 Received: from localhost.localdomain ([49.207.214.181])
-        by smtp.gmail.com with ESMTPSA id e8sm8084343pgg.31.2021.08.18.07.12.29
+        by smtp.gmail.com with ESMTPSA id e8sm8084343pgg.31.2021.08.18.07.12.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Aug 2021 07:12:31 -0700 (PDT)
+        Wed, 18 Aug 2021 07:12:50 -0700 (PDT)
 From:   sidraya.bj@pathpartnertech.com
 To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
@@ -65,9 +65,9 @@ Cc:     prashanth.ka@pathpartnertech.com, praneeth@ti.com,
         mchehab@kernel.org, linux-media@vger.kernel.org,
         praveen.ap@pathpartnertech.com,
         Sidraya <sidraya.bj@pathpartnertech.com>
-Subject: [PATCH 12/30] v4l: vxd-dec: Add VDEC MMU wrapper
-Date:   Wed, 18 Aug 2021 19:40:19 +0530
-Message-Id: <20210818141037.19990-13-sidraya.bj@pathpartnertech.com>
+Subject: [PATCH 17/30] v4l: vxd-dec: This patch implements resource manage component
+Date:   Wed, 18 Aug 2021 19:40:24 +0530
+Message-Id: <20210818141037.19990-18-sidraya.bj@pathpartnertech.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210818141037.19990-1-sidraya.bj@pathpartnertech.com>
 References: <20210818141037.19990-1-sidraya.bj@pathpartnertech.com>
@@ -78,1047 +78,730 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Sidraya <sidraya.bj@pathpartnertech.com>
 
-It contains VDEC MMU APIs, used for buffer mapping, generating
-virtual addresses. It will use TALMMU APIs.
+This component is used to track decoder resources, and share them
+across other components.
 
-Signed-off-by: Lakshmi Sankar <lakshmisankar-t@ti.com>
+Signed-off-by: Sunita Nadampalli <sunitan@ti.com>
 Signed-off-by: Sidraya <sidraya.bj@pathpartnertech.com>
 ---
- MAINTAINERS                                   |   2 +
- .../media/vxd/decoder/vdec_mmu_wrapper.c      | 829 ++++++++++++++++++
- .../media/vxd/decoder/vdec_mmu_wrapper.h      | 174 ++++
- 3 files changed, 1005 insertions(+)
- create mode 100644 drivers/staging/media/vxd/decoder/vdec_mmu_wrapper.c
- create mode 100644 drivers/staging/media/vxd/decoder/vdec_mmu_wrapper.h
+ MAINTAINERS                                 |   2 +
+ drivers/staging/media/vxd/common/rman_api.c | 620 ++++++++++++++++++++
+ drivers/staging/media/vxd/common/rman_api.h |  66 +++
+ 3 files changed, 688 insertions(+)
+ create mode 100644 drivers/staging/media/vxd/common/rman_api.c
+ create mode 100644 drivers/staging/media/vxd/common/rman_api.h
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 2b0d0708d852..6c3f7a55ce9b 100644
+index f7e55791f355..d126162984c6 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -19565,6 +19565,8 @@ F:	drivers/staging/media/vxd/decoder/hw_control.h
- F:	drivers/staging/media/vxd/decoder/img_dec_common.h
- F:	drivers/staging/media/vxd/decoder/translation_api.c
- F:	drivers/staging/media/vxd/decoder/translation_api.h
-+F:	drivers/staging/media/vxd/decoder/vdec_mmu_wrapper.c
-+F:	drivers/staging/media/vxd/decoder/vdec_mmu_wrapper.h
- F:	drivers/staging/media/vxd/decoder/vxd_core.c
- F:	drivers/staging/media/vxd/decoder/vxd_dec.c
- F:	drivers/staging/media/vxd/decoder/vxd_dec.h
-diff --git a/drivers/staging/media/vxd/decoder/vdec_mmu_wrapper.c b/drivers/staging/media/vxd/decoder/vdec_mmu_wrapper.c
+@@ -19560,6 +19560,8 @@ F:	drivers/staging/media/vxd/common/pool_api.c
+ F:	drivers/staging/media/vxd/common/pool_api.h
+ F:	drivers/staging/media/vxd/common/ra.c
+ F:	drivers/staging/media/vxd/common/ra.h
++F:	drivers/staging/media/vxd/common/rman_api.c
++F:	drivers/staging/media/vxd/common/rman_api.h
+ F:	drivers/staging/media/vxd/common/talmmu_api.c
+ F:	drivers/staging/media/vxd/common/talmmu_api.h
+ F:	drivers/staging/media/vxd/common/work_queue.c
+diff --git a/drivers/staging/media/vxd/common/rman_api.c b/drivers/staging/media/vxd/common/rman_api.c
 new file mode 100644
-index 000000000000..384ce840b4dc
+index 000000000000..c595dccd5ed2
 --- /dev/null
-+++ b/drivers/staging/media/vxd/decoder/vdec_mmu_wrapper.c
-@@ -0,0 +1,829 @@
++++ b/drivers/staging/media/vxd/common/rman_api.c
+@@ -0,0 +1,620 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * VDEC MMU Functions
++ * This component is used to track decoder resources,
++ * and share them across other components.
 + *
 + * Copyright (c) Imagination Technologies Ltd.
 + * Copyright (c) 2021 Texas Instruments Incorporated - http://www.ti.com/
 + *
 + * Authors:
-+ *	Lakshmi Sankar <lakshmisankar-t@ti.com>
++ *	Amit Makani <amit.makani@ti.com>
 + *
-+ * Re-written for upstream
++ * Re-written for upstreamimg
 + *	Sidraya Jayagond <sidraya.bj@pathpartnertech.com>
 + */
-+
-+#include "img_dec_common.h"
-+#include "lst.h"
-+#include "talmmu_api.h"
-+#include "vdec_defs.h"
-+#include "vdec_mmu_wrapper.h"
-+#include "vxd_dec.h"
-+
-+#define GUARD_BAND  0x1000
-+
-+struct mmuheap {
-+	unsigned char *name;
-+	enum mmu_eheap_id heap_id;
-+	enum talmmu_heap_type heap_type;
-+	unsigned int start_offset;
-+	unsigned int size;
-+	unsigned char *mem_space;
-+	unsigned char use_guard_band;
-+	unsigned char image_buffers;
-+};
-+
-+static const struct mmuheap mmu_heaps[MMU_HEAP_MAX] = {
-+	{ "Image untiled", MMU_HEAP_IMAGE_BUFFERS_UNTILED,
-+	  TALMMU_HEAP_PERCONTEXT, PVDEC_HEAP_UNTILED_START,
-+	  PVDEC_HEAP_UNTILED_SIZE, "MEMBE", 1, 1 },
-+
-+	{ "Bitstream", MMU_HEAP_BITSTREAM_BUFFERS,
-+	  TALMMU_HEAP_PERCONTEXT, PVDEC_HEAP_BITSTREAM_START,
-+	  PVDEC_HEAP_BITSTREAM_SIZE, "MEMDMAC_02", 1, 0 },
-+
-+	{ "Stream", MMU_HEAP_STREAM_BUFFERS,
-+	  TALMMU_HEAP_PERCONTEXT, PVDEC_HEAP_STREAM_START,
-+	  PVDEC_HEAP_STREAM_SIZE, "MEM", 1, 0 },
-+};
-+
-+/*
-+ * @Heap ID
-+ * @Heap type
-+ * @Heap flags
-+ * @Memory space name
-+ * @Start address (virtual)
-+ * @Size of heap, in bytes
-+ */
-+static struct talmmu_heap_info heap_info = {
-+	MMU_HEAP_IMAGE_BUFFERS_UNTILED,
-+	TALMMU_HEAP_PERCONTEXT,
-+	TALMMU_HEAPFLAGS_NONE,
-+	"MEMBE",
-+	0,
-+	0,
-+};
-+
-+/*
-+ * This structure contains the device context.
-+ * @brief  VDECDD MMU Device Context
-+ * @devmem_template_hndl: Handle for MMU template.
-+ * @devmem_ctx_hndl: Handle for MMU context.
-+ * @str_list: List of streams.
-+ */
-+struct mmu_dev_context {
-+	void *devmem_template_hndl;
-+	void *devmem_ctx_hndl;
-+	struct lst_t str_list;
-+	unsigned int ctx_id;
-+	unsigned int next_ctx_id;
-+};
-+
-+/*
-+ * This structure contains the stream context.
-+ * @brief  VDECDD MMU Stream Context
-+ * @LST_LINK: List link (allows the structure to be part of a MeOS list).
-+ * @devmem_ctx_hndl: Handle for MMU context.
-+ * @dev_ctx: Pointer to device context.
-+ * @ctx_id: MMU context Id.
-+ * km_str_id: Stream ID used in communication with new KM interface
-+ */
-+struct mmu_str_context {
-+	void **link;
-+	void *devmem_ctx_hndl;
-+	struct mmu_dev_context *dev_ctx;
-+	unsigned int ctx_id;
-+	void *ptd_memspace_hndl;
-+	unsigned int int_reg_num;
-+	unsigned int km_str_id;
-+	struct vxd_dec_ctx *vxd_dec_context;
-+};
-+
-+static unsigned int set_attributes(enum sys_emem_attrib mem_attrib)
-+{
-+	unsigned int attrib = 0;
-+
-+	if (mem_attrib & SYS_MEMATTRIB_CACHED)
-+		attrib |= MEM_ATTR_CACHED;
-+
-+	if (mem_attrib & SYS_MEMATTRIB_UNCACHED)
-+		attrib |= MEM_ATTR_UNCACHED;
-+
-+	if (mem_attrib & SYS_MEMATTRIB_WRITECOMBINE)
-+		attrib |= MEM_ATTR_WRITECOMBINE;
-+
-+	if (mem_attrib & SYS_MEMATTRIB_SECURE)
-+		attrib |= MEM_ATTR_SECURE;
-+
-+	return attrib;
-+}
-+
-+/*
-+ * @Function	mmu_dev_mem_context_create
-+ */
-+static int mmu_devmem_context_create(struct mmu_dev_context *dev_ctx, void **mmu_ctx_hndl)
-+{
-+	int result;
-+	void *devmem_heap_hndl;
-+	union talmmu_heap_options heap_opt1;
-+	unsigned int i;
-+	unsigned char use_guardband;
-+	enum talmmu_heap_option_id heap_option_id;
-+
-+	dev_ctx->next_ctx_id++;
-+
-+	/* Create a context from the template */
-+	result = talmmu_devmem_ctx_create(dev_ctx->devmem_template_hndl, dev_ctx->next_ctx_id,
-+					  mmu_ctx_hndl);
-+	if (result != IMG_SUCCESS)
-+		return result;
-+
-+	/* Apply options to heaps. */
-+	heap_opt1.guardband_opt.guardband = GUARD_BAND;
-+
-+	for (i = 0; i < MMU_HEAP_MAX; i++) {
-+		result = talmmu_get_heap_handle(mmu_heaps[i].heap_id, *mmu_ctx_hndl,
-+						&devmem_heap_hndl);
-+		if (result != IMG_SUCCESS)
-+			return result;
-+
-+		use_guardband = mmu_heaps[i].use_guard_band;
-+		heap_option_id = TALMMU_HEAP_OPT_ADD_GUARD_BAND;
-+		if (use_guardband)
-+			talmmu_devmem_heap_options(devmem_heap_hndl, heap_option_id, heap_opt1);
-+	}
-+
-+	return IMG_SUCCESS;
-+}
-+
-+/*
-+ * @Function	mmu_device_create
-+ */
-+int mmu_device_create(enum mmu_etype mmu_type_arg,
-+		      unsigned int ptd_alignment,
-+		      void **mmudev_handle)
-+{
-+	int result = IMG_SUCCESS;
-+	enum talmmu_mmu_type talmmu_type =
-+		TALMMU_MMUTYPE_4K_PAGES_32BIT_ADDR;
-+	unsigned int i;
-+	struct mmu_dev_context *dev_ctx;
-+	struct talmmu_devmem_info dev_mem_info;
-+
-+	/* Set the TAL MMU type. */
-+	switch (mmu_type_arg) {
-+	case MMU_TYPE_32BIT:
-+		talmmu_type = TALMMU_MMUTYPE_4K_PAGES_32BIT_ADDR;
-+		break;
-+
-+	case MMU_TYPE_36BIT:
-+		talmmu_type = TALMMU_MMUTYPE_4K_PAGES_36BIT_ADDR;
-+		break;
-+
-+	case MMU_TYPE_40BIT:
-+		talmmu_type = TALMMU_MMUTYPE_4K_PAGES_40BIT_ADDR;
-+		break;
-+
-+	default:
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+	}
-+
-+	/* Allocate a device context structure */
-+	dev_ctx = kzalloc(sizeof(*dev_ctx), GFP_KERNEL);
-+	if (!dev_ctx)
-+		return IMG_ERROR_OUT_OF_MEMORY;
-+
-+	/* Initialise stream list. */
-+	lst_init(&dev_ctx->str_list);
-+
-+	/* Initialise TALMMU. */
-+	result = talmmu_init();
-+	if (result != IMG_SUCCESS)
-+		goto error_tal_init;
-+
-+	dev_mem_info.device_id = 0;
-+	dev_mem_info.mmu_type = talmmu_type;
-+	dev_mem_info.dev_flags = TALMMU_DEVFLAGS_NONE;
-+	dev_mem_info.pagedir_memspace_name = "MEM";
-+	dev_mem_info.pagetable_memspace_name = NULL;
-+	dev_mem_info.page_size = DEV_MMU_PAGE_SIZE;
-+	dev_mem_info.ptd_alignment = ptd_alignment;
-+
-+	result = talmmu_devmem_template_create(&dev_mem_info, &dev_ctx->devmem_template_hndl);
-+	if (result != IMG_SUCCESS)
-+		goto error_tal_template;
-+
-+	/* Add heaps to template */
-+	for (i = 0; i < MMU_HEAP_MAX; i++) {
-+		heap_info.heap_id = mmu_heaps[i].heap_id;
-+		heap_info.heap_type = mmu_heaps[i].heap_type;
-+		heap_info.memspace_name = mmu_heaps[i].name;
-+		heap_info.size = mmu_heaps[i].size;
-+		heap_info.basedev_virtaddr = mmu_heaps[i].start_offset;
-+
-+		result = talmmu_devmem_heap_add(dev_ctx->devmem_template_hndl, &heap_info);
-+		if (result != IMG_SUCCESS)
-+			goto error_tal_heap;
-+	}
-+
-+	/* Create the device context. */
-+	result = mmu_devmem_context_create(dev_ctx, &dev_ctx->devmem_ctx_hndl);
-+	if (result != IMG_SUCCESS)
-+		goto error_mmu_context;
-+
-+	dev_ctx->ctx_id = dev_ctx->next_ctx_id;
-+
-+	/* Return the device context. */
-+	*mmudev_handle = dev_ctx;
-+
-+	return IMG_SUCCESS;
-+
-+	/* Roll back in case of errors. */
-+error_mmu_context:
-+error_tal_heap:
-+	talmmu_devmem_template_destroy(dev_ctx->devmem_template_hndl);
-+error_tal_template:
-+	talmmu_deinit();
-+error_tal_init:
-+	kfree(dev_ctx);
-+	return result;
-+}
-+
-+/*
-+ * @Function	mmu_device_destroy
-+ */
-+int mmu_device_destroy(void *mmudev_handle)
-+{
-+	struct mmu_dev_context *dev_ctx = mmudev_handle;
-+	unsigned int result;
-+	struct mmu_str_context *str_ctx;
-+
-+	/* Validate inputs. */
-+	if (!mmudev_handle)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	/* Destroy all streams associated with the device. */
-+	str_ctx = lst_first(&dev_ctx->str_list);
-+	while (str_ctx) {
-+		result = mmu_stream_destroy(str_ctx);
-+		if (result != IMG_SUCCESS)
-+			return result;
-+		/* See if there are more streams. */
-+		str_ctx = lst_first(&dev_ctx->str_list);
-+	}
-+
-+	/* Destroy the device context */
-+	result = talmmu_devmem_ctx_destroy(dev_ctx->devmem_ctx_hndl);
-+	if (result != IMG_SUCCESS)
-+		return result;
-+
-+	/* Destroy the template. */
-+	result = talmmu_devmem_template_destroy(dev_ctx->devmem_template_hndl);
-+	if (result != IMG_SUCCESS)
-+		return result;
-+
-+	talmmu_deinit();
-+
-+	kfree(dev_ctx);
-+	return IMG_SUCCESS;
-+}
-+
-+/*
-+ * @Function	mmu_stream_create
-+ * @Description
-+ * This function is used to create and initialise the MMU stream context.
-+ * @Input	mmudev_handle : The MMU device handle.
-+ * @Input	km_str_id : Stream Id used in communication with KM driver.
-+ * @Output	mmu_str_hndl : A pointer used to return the MMU stream
-+ *		handle.
-+ * @Return	IMG_SUCCESS or an error code.
-+ */
-+int mmu_stream_create(void *mmudev_handle,
-+		      unsigned int km_str_id,
-+		      void *vxd_dec_ctx_arg,
-+		      void **mmu_str_hndl)
-+{
-+	struct mmu_dev_context *dev_ctx = mmudev_handle;
-+	struct mmu_str_context *str_ctx;
-+	int res;
-+
-+	/* Validate inputs. */
-+	if (!mmudev_handle)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	/* Allocate a stream context structure */
-+	str_ctx = kzalloc(sizeof(*str_ctx), GFP_KERNEL);
-+	if (!str_ctx)
-+		return IMG_ERROR_OUT_OF_MEMORY;
-+
-+	str_ctx->km_str_id = km_str_id;
-+	str_ctx->dev_ctx = dev_ctx;
-+	str_ctx->int_reg_num = 32;
-+	str_ctx->vxd_dec_context = (struct vxd_dec_ctx *)vxd_dec_ctx_arg;
-+
-+	/* Create a stream context. */
-+	res = mmu_devmem_context_create(dev_ctx, &str_ctx->devmem_ctx_hndl);
-+	if (res != IMG_SUCCESS) {
-+		kfree(str_ctx);
-+		return res;
-+	}
-+
-+	str_ctx->ctx_id = dev_ctx->next_ctx_id;
-+
-+	/* Add stream to list. */
-+	lst_add(&dev_ctx->str_list, str_ctx);
-+
-+	*mmu_str_hndl = str_ctx;
-+
-+	return IMG_SUCCESS;
-+}
-+
-+/*
-+ * @Function	mmu_stream_destroy
-+ * @Description
-+ * This function is used to create and initialise the MMU stream context.
-+ * NOTE: Destroy automatically frees and memory allocated using
-+ *	mmu_stream_malloc().
-+ * @Input	mmu_str_hndl : The MMU stream handle.
-+ * @Return	IMG_SUCCESS or an error code.
-+ */
-+int mmu_stream_destroy(void *mmu_str_hndl)
-+{
-+	struct mmu_str_context *str_ctx = mmu_str_hndl;
-+	int res;
-+
-+	/* Validate inputs. */
-+	if (!mmu_str_hndl)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	/* remove stream to list. */
-+	lst_remove(&str_ctx->dev_ctx->str_list, str_ctx);
-+
-+	/* Destroy the device context */
-+	res = talmmu_devmem_ctx_destroy(str_ctx->devmem_ctx_hndl);
-+	if (res != IMG_SUCCESS)
-+		return res;
-+
-+	kfree(str_ctx);
-+
-+	return IMG_SUCCESS;
-+}
-+
-+/*
-+ * @Function	mmu_malloc
-+ */
-+static int mmu_alloc(void *devmem_ctx_hndl,
-+		     struct vxd_dec_ctx *vxd_dec_ctx_arg,
-+		     enum mmu_eheap_id heap_id,
-+		     unsigned int mem_heap_id,
-+		     enum sys_emem_attrib mem_attrib,
-+		     unsigned int size,
-+		     unsigned int alignment,
-+		     struct vidio_ddbufinfo *ddbuf_info)
-+{
-+	int result;
-+	void *devmem_heap_hndl;
-+	struct vxd_free_data free_data;
-+	struct vxd_dec_ctx *ctx;
-+	struct vxd_dev *vxd;
-+	struct vxd_alloc_data alloc_data;
-+	unsigned int flags;
-+
-+	if (!devmem_ctx_hndl)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	/* Set buffer size. */
-+	ddbuf_info->buf_size = size;
-+
-+	/* Round size up to next multiple of physical pages */
-+	if ((size % HOST_MMU_PAGE_SIZE) != 0)
-+		size = ((size / HOST_MMU_PAGE_SIZE) + 1) * HOST_MMU_PAGE_SIZE;
-+
-+	/* Allocate memory */
-+	ctx = vxd_dec_ctx_arg;
-+	vxd = ctx->dev;
-+
-+	alloc_data.heap_id = mem_heap_id;
-+	alloc_data.size = ddbuf_info->buf_size;
-+
-+	alloc_data.attributes = set_attributes(mem_attrib);
-+
-+	result = img_mem_alloc(vxd->dev, ctx->mem_ctx, alloc_data.heap_id, alloc_data.size,
-+			       (enum mem_attr)alloc_data.attributes,
-+			       (int *)&ddbuf_info->buff_id);
-+	if (result != IMG_SUCCESS)
-+		goto error_alloc;
-+
-+	ddbuf_info->is_internal = 1;
-+
-+	if (mem_attrib & SYS_MEMATTRIB_SECURE) {
-+		ddbuf_info->cpu_virt = NULL;
-+	} else {
-+		/* Map the buffer to CPU */
-+		result = img_mem_map_km(ctx->mem_ctx, ddbuf_info->buff_id);
-+		if (result) {
-+			dev_err(vxd->dev, "%s: failed to map buf to cpu!(%d)\n", __func__, result);
-+			goto error_get_heap_handle;
-+		}
-+		ddbuf_info->cpu_virt = img_mem_get_kptr(ctx->mem_ctx, ddbuf_info->buff_id);
-+	}
-+
-+	/* Get heap handle */
-+	result = talmmu_get_heap_handle(heap_id, devmem_ctx_hndl, &devmem_heap_hndl);
-+	if (result != IMG_SUCCESS)
-+		goto error_get_heap_handle;
-+
-+	/* Allocate device "virtual" memory. */
-+	result = talmmu_devmem_addr_alloc(devmem_ctx_hndl, devmem_heap_hndl, size, alignment,
-+					  &ddbuf_info->hndl_memory);
-+	if (result != IMG_SUCCESS)
-+		goto error_mem_map_ext_mem;
-+
-+	/* Get the device virtual address. */
-+	result = talmmu_get_dev_virt_addr(ddbuf_info->hndl_memory, &ddbuf_info->dev_virt);
-+	if (result != IMG_SUCCESS)
-+		goto error_get_dev_virt_addr;
-+
-+	flags = VXD_MAP_FLAG_NONE;
-+
-+	if (mem_attrib & SYS_MEMATTRIB_CORE_READ_ONLY)
-+		flags |= VXD_MAP_FLAG_READ_ONLY;
-+
-+	if (mem_attrib & SYS_MEMATTRIB_CORE_WRITE_ONLY)
-+		flags |= VXD_MAP_FLAG_WRITE_ONLY;
-+
-+	result = vxd_map_buffer(vxd, ctx, ddbuf_info->kmstr_id, ddbuf_info->buff_id,
-+				ddbuf_info->dev_virt,
-+				flags);
-+
-+	if (result != IMG_SUCCESS)
-+		goto error_map_dev;
-+
-+	return IMG_SUCCESS;
-+
-+error_map_dev:
-+error_get_dev_virt_addr:
-+	talmmu_devmem_addr_free(ddbuf_info->hndl_memory);
-+	ddbuf_info->hndl_memory = NULL;
-+error_mem_map_ext_mem:
-+error_get_heap_handle:
-+	free_data.buf_id = ddbuf_info->buff_id;
-+	img_mem_free(ctx->mem_ctx, free_data.buf_id);
-+error_alloc:
-+	return result;
-+}
-+
-+/*
-+ * @Function	mmu_stream_malloc
-+ */
-+int mmu_stream_alloc(void *mmu_str_hndl,
-+		     enum mmu_eheap_id heap_id,
-+		     unsigned int mem_heap_id,
-+		     enum sys_emem_attrib mem_attrib,
-+		     unsigned int size,
-+		     unsigned int alignment,
-+		     struct vidio_ddbufinfo *ddbuf_info)
-+{
-+	struct mmu_str_context *str_ctx =
-+		(struct mmu_str_context *)mmu_str_hndl;
-+	int result;
-+
-+	/* Validate inputs. */
-+	if (!mmu_str_hndl)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	/* Check if device level heap. */
-+	switch (heap_id) {
-+	case MMU_HEAP_IMAGE_BUFFERS_UNTILED:
-+	case MMU_HEAP_BITSTREAM_BUFFERS:
-+	case MMU_HEAP_STREAM_BUFFERS:
-+		break;
-+
-+	default:
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+	}
-+
-+	ddbuf_info->kmstr_id = str_ctx->km_str_id;
-+
-+	/* Allocate device memory. */
-+	result = mmu_alloc(str_ctx->devmem_ctx_hndl, str_ctx->vxd_dec_context, heap_id, mem_heap_id,
-+			   mem_attrib, size, alignment, ddbuf_info);
-+	if (result != IMG_SUCCESS)
-+		return result;
-+
-+	return IMG_SUCCESS;
-+}
-+
-+/*
-+ * @Function	mmu_stream_map_ext_sg
-+ */
-+int mmu_stream_map_ext_sg(void *mmu_str_hndl,
-+			  enum mmu_eheap_id heap_id,
-+			  void *sgt,
-+			  unsigned int size,
-+			  unsigned int alignment,
-+			  enum sys_emem_attrib mem_attrib,
-+			  void *cpu_linear_addr,
-+			  struct vidio_ddbufinfo *ddbuf_info,
-+			  unsigned int *buff_id)
-+{
-+	struct mmu_str_context *str_ctx =
-+		(struct mmu_str_context *)mmu_str_hndl;
-+	int result;
-+	void *devmem_heap_hndl;
-+	unsigned int flags;
-+
-+	struct vxd_dec_ctx *ctx = str_ctx->vxd_dec_context;
-+	struct vxd_dev *vxd = ctx->dev;
-+
-+	/* Validate inputs. */
-+	if (!mmu_str_hndl)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	/* Check if device level heap. */
-+	switch (heap_id) {
-+	case MMU_HEAP_IMAGE_BUFFERS_UNTILED:
-+	case MMU_HEAP_BITSTREAM_BUFFERS:
-+	case MMU_HEAP_STREAM_BUFFERS:
-+		break;
-+
-+	default:
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+	}
-+
-+	if (!str_ctx->devmem_ctx_hndl)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	/* Set buffer size. */
-+	ddbuf_info->buf_size = size;
-+
-+	/* Round size up to next multiple of physical pages */
-+	if ((size % HOST_MMU_PAGE_SIZE) != 0)
-+		size = ((size / HOST_MMU_PAGE_SIZE) + 1) * HOST_MMU_PAGE_SIZE;
-+
-+	result = img_mem_import(vxd->dev, ctx->mem_ctx, ddbuf_info->buf_size,
-+				(enum mem_attr)set_attributes(mem_attrib),
-+				(int *)buff_id);
-+	if (result != IMG_SUCCESS)
-+		return result;
-+
-+	if (mem_attrib & SYS_MEMATTRIB_SECURE)
-+		ddbuf_info->cpu_virt = NULL;
-+
-+	ddbuf_info->buff_id = *buff_id;
-+	ddbuf_info->is_internal = 0;
-+
-+	ddbuf_info->kmstr_id = str_ctx->km_str_id;
-+
-+	/* Set buffer size. */
-+	ddbuf_info->buf_size = size;
-+
-+	/* Ensure the address of the buffer is at least page aligned. */
-+	ddbuf_info->cpu_virt = cpu_linear_addr;
-+
-+	/* Get heap handle */
-+	result = talmmu_get_heap_handle(heap_id, str_ctx->devmem_ctx_hndl, &devmem_heap_hndl);
-+	if (result != IMG_SUCCESS)
-+		return result;
-+
-+	/* Allocate device "virtual" memory. */
-+	result = talmmu_devmem_addr_alloc(str_ctx->devmem_ctx_hndl, devmem_heap_hndl, size,
-+					  alignment,
-+					  &ddbuf_info->hndl_memory);
-+	if (result != IMG_SUCCESS)
-+		return result;
-+
-+	/* Get the device virtual address. */
-+	result = talmmu_get_dev_virt_addr(ddbuf_info->hndl_memory, &ddbuf_info->dev_virt);
-+	if (result != IMG_SUCCESS)
-+		goto error_get_dev_virt_addr;
-+
-+	/* Map memory to the device */
-+	flags = VXD_MAP_FLAG_NONE;
-+
-+	if (mem_attrib & SYS_MEMATTRIB_CORE_READ_ONLY)
-+		flags |= VXD_MAP_FLAG_READ_ONLY;
-+
-+	if (mem_attrib & SYS_MEMATTRIB_CORE_WRITE_ONLY)
-+		flags |= VXD_MAP_FLAG_WRITE_ONLY;
-+
-+	result = vxd_map_buffer_sg(vxd, ctx, ddbuf_info->kmstr_id, ddbuf_info->buff_id, sgt,
-+				   ddbuf_info->dev_virt,
-+				   flags);
-+
-+	if (result != IMG_SUCCESS)
-+		goto error_map_dev;
-+
-+	return IMG_SUCCESS;
-+
-+error_map_dev:
-+error_get_dev_virt_addr:
-+	talmmu_devmem_addr_free(ddbuf_info->hndl_memory);
-+	ddbuf_info->hndl_memory = NULL;
-+	return result;
-+}
-+
-+/*
-+ * @Function	mmu_stream_map_ext
-+ */
-+int mmu_stream_map_ext(void *mmu_str_hndl,
-+		       enum mmu_eheap_id heap_id,
-+		       unsigned int buff_id,
-+		       unsigned int size,
-+		       unsigned int alignment,
-+		       enum sys_emem_attrib mem_attrib,
-+		       void *cpu_linear_addr,
-+		       struct vidio_ddbufinfo *ddbuf_info)
-+{
-+	struct mmu_str_context *str_ctx =
-+		(struct mmu_str_context *)mmu_str_hndl;
-+	int result;
-+	void *devmem_heap_hndl;
-+	struct vxd_dec_ctx *ctx;
-+	struct vxd_dev *vxd;
-+	unsigned int flags;
-+
-+	/* Validate inputs. */
-+	if (!mmu_str_hndl)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	/* Check if device level heap. */
-+	switch (heap_id) {
-+	case MMU_HEAP_IMAGE_BUFFERS_UNTILED:
-+	case MMU_HEAP_BITSTREAM_BUFFERS:
-+	case MMU_HEAP_STREAM_BUFFERS:
-+		break;
-+
-+	default:
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+	}
-+
-+	/* Round size up to next multiple of physical pages */
-+	if ((size % HOST_MMU_PAGE_SIZE) != 0)
-+		size = ((size / HOST_MMU_PAGE_SIZE) + 1) * HOST_MMU_PAGE_SIZE;
-+
-+	ddbuf_info->buff_id = buff_id;
-+	ddbuf_info->is_internal = 0;
-+
-+	ddbuf_info->kmstr_id = str_ctx->km_str_id;
-+
-+	/* Set buffer size. */
-+	ddbuf_info->buf_size = size;
-+
-+	/* Ensure the address of the buffer is at least page aligned. */
-+	ddbuf_info->cpu_virt = cpu_linear_addr;
-+
-+	/* Get heap handle */
-+	result = talmmu_get_heap_handle(heap_id, str_ctx->devmem_ctx_hndl, &devmem_heap_hndl);
-+	if (result != IMG_SUCCESS)
-+		return result;
-+
-+	/* Allocate device "virtual" memory. */
-+	result = talmmu_devmem_addr_alloc(str_ctx->devmem_ctx_hndl, devmem_heap_hndl, size,
-+					  alignment,
-+					  &ddbuf_info->hndl_memory);
-+	if (result != IMG_SUCCESS)
-+		return result;
-+
-+	/* Get the device virtual address. */
-+	result = talmmu_get_dev_virt_addr(ddbuf_info->hndl_memory, &ddbuf_info->dev_virt);
-+	if (result != IMG_SUCCESS)
-+		return result;
-+
-+	/*
-+	 * Map device memory (allocated from outside VDEC)
-+	 * into the stream PTD.
-+	 */
-+	ctx = str_ctx->vxd_dec_context;
-+	vxd = ctx->dev;
-+
-+	flags = VXD_MAP_FLAG_NONE;
-+
-+	if (mem_attrib & SYS_MEMATTRIB_CORE_READ_ONLY)
-+		flags |= VXD_MAP_FLAG_READ_ONLY;
-+
-+	if (mem_attrib & SYS_MEMATTRIB_CORE_WRITE_ONLY)
-+		flags |= VXD_MAP_FLAG_WRITE_ONLY;
-+
-+	result = vxd_map_buffer(vxd, ctx, ddbuf_info->kmstr_id, ddbuf_info->buff_id,
-+				ddbuf_info->dev_virt,
-+				flags);
-+	if (result != IMG_SUCCESS)
-+		return result;
-+
-+	return IMG_SUCCESS;
-+}
-+
-+/*
-+ * @Function	mmu_free_mem
-+ */
-+int mmu_free_mem(void *mmustr_hndl, struct vidio_ddbufinfo *ddbuf_info)
-+{
-+	int tmp_result;
-+	int result = IMG_SUCCESS;
-+	struct vxd_dec_ctx *ctx;
-+	struct vxd_dev *vxd;
-+
-+	struct mmu_str_context *str_ctx =
-+		(struct mmu_str_context *)mmustr_hndl;
-+
-+	/* Validate inputs. */
-+	if (!ddbuf_info)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	if (!str_ctx)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	/* Unmap the memory mapped to the device */
-+	ctx = str_ctx->vxd_dec_context;
-+	vxd = ctx->dev;
-+
-+	tmp_result = vxd_unmap_buffer(vxd, ctx, ddbuf_info->kmstr_id, ddbuf_info->buff_id);
-+	if (tmp_result != IMG_SUCCESS)
-+		result = tmp_result;
-+
-+	/*
-+	 * Unmapping the memory mapped to the device - done
-+	 * Free the memory.
-+	 */
-+	tmp_result = talmmu_devmem_addr_free(ddbuf_info->hndl_memory);
-+	if (tmp_result != IMG_SUCCESS)
-+		result = tmp_result;
-+
-+	if (ddbuf_info->is_internal) {
-+		struct vxd_free_data free_data = { ddbuf_info->buff_id };
-+
-+		img_mem_free(ctx->mem_ctx, free_data.buf_id);
-+	}
-+
-+	return result;
-+}
-+
-+/*
-+ * @Function	mmu_free_mem
-+ */
-+int mmu_free_mem_sg(void *mmustr_hndl, struct vidio_ddbufinfo *ddbuf_info)
-+{
-+	int tmp_result;
-+	int result = IMG_SUCCESS;
-+	struct vxd_dec_ctx *ctx;
-+	struct vxd_dev *vxd;
-+	struct vxd_free_data free_data;
-+
-+	struct mmu_str_context *str_ctx =
-+		(struct mmu_str_context *)mmustr_hndl;
-+
-+	/* Validate inputs. */
-+	if (!ddbuf_info)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	if (!str_ctx)
-+		return IMG_ERROR_INVALID_PARAMETERS;
-+
-+	free_data.buf_id = ddbuf_info->buff_id;
-+	/* Unmap the memory mapped to the device */
-+	ctx = str_ctx->vxd_dec_context;
-+	vxd = ctx->dev;
-+
-+	tmp_result = vxd_unmap_buffer(vxd, ctx, ddbuf_info->kmstr_id, ddbuf_info->buff_id);
-+	if (tmp_result != IMG_SUCCESS)
-+		result = tmp_result;
-+
-+	/*
-+	 * Unmapping the memory mapped to the device - done
-+	 * Free the memory.
-+	 */
-+	tmp_result = talmmu_devmem_addr_free(ddbuf_info->hndl_memory);
-+	if (tmp_result != IMG_SUCCESS)
-+		result = tmp_result;
-+
-+	/*
-+	 * for external mem manager buffers, just cleanup the idr list and
-+	 * buffer objects
-+	 */
-+	img_mem_free_bufid(ctx->mem_ctx, free_data.buf_id);
-+
-+	return result;
-+}
-+
-+/*
-+ * @Function                MMU_GetHeap
-+ */
-+int mmu_get_heap(unsigned int image_stride, enum mmu_eheap_id *heap_id)
-+{
-+	unsigned int i;
-+	unsigned char found = FALSE;
-+
-+	for (i = 0; i < MMU_HEAP_MAX; i++) {
-+		if (mmu_heaps[i].image_buffers) {
-+			*heap_id = mmu_heaps[i].heap_id;
-+			found = TRUE;
-+			break;
-+		}
-+	}
-+
-+	VDEC_ASSERT(found);
-+	if (!found)
-+		return IMG_ERROR_COULD_NOT_OBTAIN_RESOURCE;
-+
-+	return IMG_SUCCESS;
-+}
-diff --git a/drivers/staging/media/vxd/decoder/vdec_mmu_wrapper.h b/drivers/staging/media/vxd/decoder/vdec_mmu_wrapper.h
-new file mode 100644
-index 000000000000..50bed98240a6
---- /dev/null
-+++ b/drivers/staging/media/vxd/decoder/vdec_mmu_wrapper.h
-@@ -0,0 +1,174 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * VDEC MMU Functions
-+ *
-+ * Copyright (c) Imagination Technologies Ltd.
-+ * Copyright (c) 2021 Texas Instruments Incorporated - http://www.ti.com/
-+ *
-+ * Authors:
-+ *	Lakshmi Sankar <lakshmisankar-t@ti.com>
-+ *
-+ * Re-written for upstream
-+ *	Sidraya Jayagond <sidraya.bj@pathpartnertech.com>
-+ */
-+
++#include <linux/slab.h>
++#include <linux/printk.h>
++#include <linux/mutex.h>
++#include <linux/types.h>
 +#include <linux/dma-mapping.h>
 +#include <media/v4l2-ctrls.h>
 +#include <media/v4l2-device.h>
 +#include <media/v4l2-mem2mem.h>
 +
-+#include "img_errors.h"
-+#include "img_mem.h"
-+#include "lst.h"
-+#include "mmu_defs.h"
-+#include "vid_buf.h"
-+
-+#ifndef _VXD_MMU_H_
-+#define _VXD_MMU_H_
-+
-+/* Page size of the device MMU */
-+#define DEV_MMU_PAGE_SIZE (0x1000)
-+/* Page alignment of the device MMU */
-+#define DEV_MMU_PAGE_ALIGNMENT  (0x1000)
-+
-+#define HOST_MMU_PAGE_SIZE	PAGE_SIZE
++#include "dq.h"
++#include "idgen_api.h"
++#include "rman_api.h"
 +
 +/*
-+ * @Function	mmu_stream_get_ptd_handle
-+ * @Description
-+ * This function is used to obtain the stream PTD (Page Table Directory)handle
-+ * @Input	mmu_str_handle : MMU stream handle.
-+ * @Output	str_ptd : Pointer to stream PTD handle.
-+ * @Return	IMG_SUCCESS or an error code.
++ * The following macros are used to build/decompose the composite resource Id
++ * made up from the bucket index + 1 and the allocated resource Id.
 + */
-+int mmu_stream_get_ptd_handle(void *mmu_str_handle, void **str_ptd);
++#define RMAN_CRESID_BUCKET_INDEX_BITS	(8)
++#define RMAN_CRESID_RES_ID_BITS		(32 - RMAN_CRESID_BUCKET_INDEX_BITS)
++#define RMAN_CRESID_MAX_RES_ID		((1 << RMAN_CRESID_RES_ID_BITS) - 1)
++#define RMAN_CRESID_RES_ID_MASK		(RMAN_CRESID_MAX_RES_ID)
++#define RMAN_CRESID_BUCKET_SHIFT	(RMAN_CRESID_RES_ID_BITS)
++#define RMAN_CRESID_MAX_BUCKET_INDEX	\
++			((1 << RMAN_CRESID_BUCKET_INDEX_BITS) - 1)
++
++#define RMAN_MAX_ID		4096
++#define RMAN_ID_BLOCKSIZE	256
++
++/* global state variable */
++static unsigned char inited;
++static struct rman_bucket *bucket_array[RMAN_CRESID_MAX_BUCKET_INDEX] = {0};
++static struct rman_bucket *global_res_bucket;
++static struct rman_bucket *shared_res_bucket;
++static struct mutex *shared_res_mutex_handle;
++static struct mutex *global_mutex;
 +
 +/*
-+ * @Function	mmu_device_create
-+ * @Description
-+ * This function is used to create and initialise the MMU device context.
-+ * @Input	mmu_type : MMU type.
-+ * @Input	ptd_alignment : Alignment of Page Table directory.
-+ * @Output	mmudev_hndl : A pointer used to return the
-+ *		MMU device handle.
-+ * @Return	IMG_SUCCESS or an error code.
++ * This structure contains the bucket information.
 + */
-+int mmu_device_create(enum mmu_etype mmu_type,
-+		      unsigned int ptd_alignment,
-+		      void **mmudev_hndl);
++struct rman_bucket {
++	void		**link; /* to be part of single linked list */
++	struct dq_linkage_t	res_list;
++	unsigned int		bucket_idx;
++	void		*id_gen;
++	unsigned int	res_cnt;
++};
 +
 +/*
-+ * @Function	mmu_device_destroy
-+ * @Description
-+ * This function is used to create and initialise the MMU device context.
-+ * NOTE: Destroy device automatically destroys any streams and frees and
-+ * memory allocated using MMU_StreamMalloc().
-+ * @Input	mmudev_hndl : The MMU device handle.
-+ * @Return	IMG_SUCCESS or an error code.
++ * This structure contains the resource details for a resource registered with
++ * the resource manager.
 + */
-+int mmu_device_destroy(void *mmudev_hndl);
++struct rman_res {
++	struct dq_linkage_t	link; /* to be part of double linked list */
++	struct rman_bucket	*bucket;
++	unsigned int		type_id;
++	rman_fn_free		fn_free;
++	void			*param;
++	unsigned int		res_id;
++	struct mutex		*mutex_handle; /*resource mutex */
++	unsigned char		*res_name;
++	struct rman_res		*shared_res;
++	unsigned int		ref_cnt;
++};
 +
 +/*
-+ * @Function	mmu_stream_create
-+ * @Description
-+ * This function is used to create and initialise the MMU stream context.
-+ * @Input	mmudev_hndl : The MMU device handle.
-+ * @Input	km_str_id : Stream Id used in communication with KM driver.
-+ * @Output	mmustr_hndl : A pointer used to return the MMU stream handle.
-+ * @Return	IMG_SUCCESS or an error code.
++ * initialization
 + */
-+int mmu_stream_create(void *mmudev_hndl, unsigned int km_str_id, void *vxd_dec_ctx,
-+		      void **mmustr_hndl);
++int rman_initialise(void)
++{
++	unsigned int ret;
 +
-+/**
-+ * mmu_stream_destroy - This function is used to create and initialise the MMU stream context.
-+ * @mmustr_hndl : The MMU stream handle.
-+ * Return	IMG_SUCCESS or an error code.
++	if (!inited) {
++		shared_res_mutex_handle = kzalloc(sizeof(*shared_res_mutex_handle), GFP_KERNEL);
++		if (!shared_res_mutex_handle)
++			return IMG_ERROR_OUT_OF_MEMORY;
++
++		mutex_init(shared_res_mutex_handle);
++
++		/* Set initialised flag */
++		inited = TRUE;
++
++		/* Create the global resource bucket */
++		ret = rman_create_bucket((void **)&global_res_bucket);
++		IMG_DBG_ASSERT(ret == IMG_SUCCESS);
++		if (ret != IMG_SUCCESS)
++			return ret;
++
++		/* Create the shared resource bucket */
++		ret = rman_create_bucket((void **)&shared_res_bucket);
++		IMG_DBG_ASSERT(ret == IMG_SUCCESS);
++		if (ret != IMG_SUCCESS)
++			return ret;
++
++		global_mutex = kzalloc(sizeof(*global_mutex), GFP_KERNEL);
++		if (!global_mutex)
++			return IMG_ERROR_OUT_OF_MEMORY;
++
++		mutex_init(global_mutex);
++	}
++	return IMG_SUCCESS;
++}
++
++/*
++ * deinitialization
++ */
++void rman_deinitialise(void)
++{
++	unsigned int	i;
++
++	if (inited) {
++		/* Destroy the golbal resource bucket */
++		rman_destroy_bucket(global_res_bucket);
++
++		/* Destroy the shared resource bucket */
++		rman_destroy_bucket(shared_res_bucket);
++
++		/* Make sure we destroy the mutex after destroying the bucket */
++		mutex_destroy(global_mutex);
++		kfree(global_mutex);
++		global_mutex = NULL;
++
++		/* Destroy mutex */
++		mutex_destroy(shared_res_mutex_handle);
++		kfree(shared_res_mutex_handle);
++		shared_res_mutex_handle = NULL;
++
++		/* Check all buckets destroyed */
++		for (i = 0; i < RMAN_CRESID_MAX_BUCKET_INDEX; i++)
++			IMG_DBG_ASSERT(!bucket_array[i]);
++
++		/* Reset initialised flag */
++		inited = FALSE;
++	}
++}
++
++int rman_create_bucket(void **res_bucket_handle)
++{
++	struct rman_bucket	*bucket;
++	unsigned int			i;
++	int			ret;
++
++	IMG_DBG_ASSERT(inited);
++
++	/* Allocate a bucket structure */
++	bucket = kzalloc(sizeof(*bucket), GFP_KERNEL);
++	IMG_DBG_ASSERT(bucket);
++	if (!bucket)
++		return IMG_ERROR_OUT_OF_MEMORY;
++
++	/* Initialise the resource list */
++	dq_init(&bucket->res_list);
++
++	/* Then start allocating resource ids at the first */
++	ret = idgen_createcontext(RMAN_MAX_ID, RMAN_ID_BLOCKSIZE, FALSE,
++				  &bucket->id_gen);
++	if (ret != IMG_SUCCESS) {
++		kfree(bucket);
++		IMG_DBG_ASSERT("failed to create IDGEN context" == NULL);
++		return ret;
++	}
++
++	/* Locate free bucket index within the table */
++	mutex_lock_nested(shared_res_mutex_handle, SUBCLASS_RMAN);
++	for (i = 0; i < RMAN_CRESID_MAX_BUCKET_INDEX; i++) {
++		if (!bucket_array[i])
++			break;
++	}
++	if (i >= RMAN_CRESID_MAX_BUCKET_INDEX) {
++		mutex_unlock(shared_res_mutex_handle);
++		idgen_destroycontext(bucket->id_gen);
++		kfree(bucket);
++		IMG_DBG_ASSERT("No free buckets left" == NULL);
++		return IMG_ERROR_GENERIC_FAILURE;
++	}
++
++	/* Allocate bucket index */
++	bucket->bucket_idx = i;
++	bucket_array[i] = bucket;
++
++	mutex_unlock(shared_res_mutex_handle);
++
++	/* Return the bucket handle */
++	*res_bucket_handle = bucket;
++
++	return IMG_SUCCESS;
++}
++
++void rman_destroy_bucket(void *res_bucket_handle)
++{
++	struct rman_bucket *bucket = (struct rman_bucket *)res_bucket_handle;
++
++	IMG_DBG_ASSERT(inited);
++
++	IMG_DBG_ASSERT(bucket);
++	if (!bucket)
++		return;
++
++	IMG_DBG_ASSERT(bucket->bucket_idx < RMAN_CRESID_MAX_BUCKET_INDEX);
++	IMG_DBG_ASSERT(bucket_array[bucket->bucket_idx]);
++
++	/* Free all resources from the bucket */
++	rman_free_resources(res_bucket_handle, RMAN_TYPE_P1);
++	rman_free_resources(res_bucket_handle, RMAN_TYPE_P2);
++	rman_free_resources(res_bucket_handle, RMAN_TYPE_P3);
++	rman_free_resources(res_bucket_handle, RMAN_ALL_TYPES);
++
++	/* free sticky resources last: other resources are dependent on them */
++	rman_free_resources(res_bucket_handle, RMAN_STICKY);
++	/* Use proper locking around global buckets.  */
++	mutex_lock_nested(shared_res_mutex_handle, SUBCLASS_RMAN);
++
++	/* Free from array of bucket pointers */
++	bucket_array[bucket->bucket_idx] = NULL;
++
++	mutex_unlock(shared_res_mutex_handle);
++
++	/* Free the bucket itself */
++	idgen_destroycontext(bucket->id_gen);
++	kfree(bucket);
++}
++
++void *rman_get_global_bucket(void)
++{
++	IMG_DBG_ASSERT(inited);
++	IMG_DBG_ASSERT(global_res_bucket);
++
++	/* Return the handle of the global resource bucket */
++	return global_res_bucket;
++}
++
++int rman_register_resource(void *res_bucket_handle, unsigned int type_id,
++			   rman_fn_free fnfree, void *param,
++			   void **res_handle, unsigned int *res_id)
++{
++	struct rman_bucket *bucket = (struct rman_bucket *)res_bucket_handle;
++	struct rman_res		*res;
++	int			 ret;
++
++	IMG_DBG_ASSERT(inited);
++	IMG_DBG_ASSERT(type_id != RMAN_ALL_TYPES);
++
++	IMG_DBG_ASSERT(res_bucket_handle);
++	if (!res_bucket_handle)
++		return IMG_ERROR_GENERIC_FAILURE;
++
++	/* Allocate a resource structure */
++	res = kzalloc(sizeof(*res), GFP_KERNEL);
++	IMG_DBG_ASSERT(res);
++	if (!res)
++		return IMG_ERROR_OUT_OF_MEMORY;
++
++	/* Fill in the resource structure */
++	res->bucket	= bucket;
++	res->type_id	= type_id;
++	res->fn_free	= fnfree;
++	res->param	= param;
++
++	/* Allocate resource Id */
++	mutex_lock_nested(global_mutex, SUBCLASS_RMAN);
++	ret = idgen_allocid(bucket->id_gen, res, &res->res_id);
++	mutex_unlock(global_mutex);
++	if (ret != IMG_SUCCESS) {
++		IMG_DBG_ASSERT("failed to allocate RMAN id" == NULL);
++		return ret;
++	}
++	IMG_DBG_ASSERT(res->res_id <= RMAN_CRESID_MAX_RES_ID);
++
++	/* add this resource to the bucket */
++	mutex_lock_nested(shared_res_mutex_handle, SUBCLASS_RMAN);
++	dq_addtail(&bucket->res_list, res);
++
++	/* Update count of resources */
++	bucket->res_cnt++;
++	mutex_unlock(shared_res_mutex_handle);
++
++	/* If resource handle required */
++	if (res_handle)
++		*res_handle = res;
++
++	/* If resource id required */
++	if (res_id)
++		*res_id = rman_get_resource_id(res);
++
++	return IMG_SUCCESS;
++}
++
++unsigned int rman_get_resource_id(void *res_handle)
++{
++	struct rman_res *res = res_handle;
++	unsigned int		ext_res_id;
++
++	IMG_DBG_ASSERT(res_handle);
++	if (!res_handle)
++		return 0;
++
++	IMG_DBG_ASSERT(res->res_id <= RMAN_CRESID_MAX_RES_ID);
++	IMG_DBG_ASSERT(res->bucket->bucket_idx < RMAN_CRESID_MAX_BUCKET_INDEX);
++	if (res->bucket->bucket_idx >= RMAN_CRESID_MAX_BUCKET_INDEX)
++		return 0;
++
++	ext_res_id = (((res->bucket->bucket_idx + 1) <<
++			 RMAN_CRESID_BUCKET_SHIFT) | res->res_id);
++
++	return ext_res_id;
++}
++
++static void *rman_getresource_int(void *res_bucket_handle, unsigned int res_id,
++				  unsigned int type_id, void **res_handle)
++{
++	struct rman_bucket *bucket = (struct rman_bucket *)res_bucket_handle;
++	struct rman_res	*res;
++	int		ret;
++
++	IMG_DBG_ASSERT(res_id <= RMAN_CRESID_MAX_RES_ID);
++
++	/* Loop over the resources in this bucket till we find the required id */
++	mutex_lock_nested(global_mutex, SUBCLASS_RMAN);
++	ret = idgen_gethandle(bucket->id_gen, res_id, (void **)&res);
++	mutex_unlock(global_mutex);
++	if (ret != IMG_SUCCESS) {
++		IMG_DBG_ASSERT("failed to get RMAN resource" == NULL);
++		return NULL;
++	}
++
++	/* If the resource handle is required */
++	if (res_handle)
++		*res_handle = res; /* Return it */
++
++	/* If the resource was not found */
++	IMG_DBG_ASSERT(res);
++	IMG_DBG_ASSERT((void *)res != &bucket->res_list);
++	if (!res || ((void *)res == &bucket->res_list))
++		return NULL;
++
++	/* Cross check the type */
++	IMG_DBG_ASSERT(type_id == res->type_id);
++
++	/* Return the resource. */
++	return res->param;
++}
++
++int rman_get_resource(unsigned int res_id, unsigned int type_id, void **param,
++		      void **res_handle)
++{
++	unsigned int	bucket_idx = (res_id >> RMAN_CRESID_BUCKET_SHIFT) - 1;
++	unsigned int	int_res_id = (res_id & RMAN_CRESID_RES_ID_MASK);
++	void	*local_param;
++
++	IMG_DBG_ASSERT(bucket_idx < RMAN_CRESID_MAX_BUCKET_INDEX);
++	if (bucket_idx >= RMAN_CRESID_MAX_BUCKET_INDEX)
++		return IMG_ERROR_INVALID_ID; /* Happens when bucket_idx == 0 */
++
++	IMG_DBG_ASSERT(bucket_array[bucket_idx]);
++	if (!bucket_array[bucket_idx])
++		return IMG_ERROR_INVALID_ID;
++
++	local_param = rman_getresource_int(bucket_array[bucket_idx],
++					   int_res_id, type_id,
++					   res_handle);
++
++	/* If we didn't find the resource */
++	if (!local_param)
++		return IMG_ERROR_INVALID_ID;
++
++	/* Return the resource */
++	if (param)
++		*param = local_param;
++
++	return IMG_SUCCESS;
++}
++
++int rman_get_named_resource(unsigned char *res_name, rman_fn_alloc fn_alloc,
++			    void *alloc_info, void *res_bucket_handle,
++			    unsigned int type_id, rman_fn_free fn_free,
++			    void **param, void **res_handle, unsigned int *res_id)
++{
++	struct rman_bucket *bucket = res_bucket_handle;
++	struct rman_res	*res;
++	unsigned int		ret;
++	void	*local_param;
++	unsigned char	found = FALSE;
++
++	IMG_DBG_ASSERT(inited);
++
++	IMG_DBG_ASSERT(res_bucket_handle);
++	if (!res_bucket_handle)
++		return IMG_ERROR_GENERIC_FAILURE;
++
++	/* Lock the shared resources */
++	mutex_lock_nested(shared_res_mutex_handle, SUBCLASS_RMAN);
++	res = (struct rman_res *)dq_first(&bucket->res_list);
++	while (res && ((void *)res != &bucket->res_list)) {
++		/* If resource already in the shared list */
++		if (res->res_name && (strcmp(res_name,
++					     res->res_name) == 0)) {
++			IMG_DBG_ASSERT(res->fn_free == fn_free);
++			found = TRUE;
++			break;
++		}
++
++		/* Move to next resource */
++		res = (struct rman_res *)dq_next(res);
++	}
++	mutex_unlock(shared_res_mutex_handle);
++
++	/* If the named resource was not found */
++	if (!found) {
++		/* Allocate the resource */
++		ret = fn_alloc(alloc_info, &local_param);
++		IMG_DBG_ASSERT(ret == IMG_SUCCESS);
++		if (ret != IMG_SUCCESS)
++			return ret;
++
++		/* Register the named resource */
++		ret = rman_register_resource(res_bucket_handle, type_id,
++					     fn_free, local_param,
++					     (void **)&res, NULL);
++		IMG_DBG_ASSERT(ret == IMG_SUCCESS);
++		if (ret != IMG_SUCCESS)
++			return ret;
++
++		mutex_lock_nested(shared_res_mutex_handle, SUBCLASS_RMAN);
++		res->res_name = res_name;
++		mutex_unlock(shared_res_mutex_handle);
++	}
++
++	/* Return the pvParam value */
++	*param = res->param;
++
++	/* If resource handle required */
++	if (res_handle)
++		*res_handle = res;
++
++	/* If resource id required */
++	if (res_id)
++		*res_id = rman_get_resource_id(res);
++
++	/* Exit */
++	return IMG_SUCCESS;
++}
++
++static void rman_free_resource_int(struct rman_res *res)
++{
++	struct rman_bucket *bucket = res->bucket;
++
++	/* Remove the resource from the active list */
++	mutex_lock_nested(shared_res_mutex_handle, SUBCLASS_RMAN);
++
++	/* Remove from list */
++	dq_remove(res);
++
++	/* Update count of resources */
++	bucket->res_cnt--;
++
++	mutex_unlock(shared_res_mutex_handle);
++
++	/* If mutex associated with the resource */
++	if (res->mutex_handle) {
++		/* Destroy mutex */
++		mutex_destroy(res->mutex_handle);
++		kfree(res->mutex_handle);
++		res->mutex_handle = NULL;
++	}
++
++	/* If this resource is not already shared */
++	if (res->shared_res) {
++		/* Lock the shared resources */
++		mutex_lock_nested(shared_res_mutex_handle, SUBCLASS_RMAN);
++
++		/* Update the reference count */
++		IMG_DBG_ASSERT(res->shared_res->ref_cnt != 0);
++		res->shared_res->ref_cnt--;
++
++		/* If this is the last free for the shared resource */
++		if (res->shared_res->ref_cnt == 0)
++			/* Free the shared resource */
++			rman_free_resource_int(res->shared_res);
++
++		/* UnLock the shared resources */
++		mutex_unlock(shared_res_mutex_handle);
++	} else {
++		/* If there is a free callback function. */
++		if (res->fn_free)
++			/* Call resource free callback */
++			res->fn_free(res->param);
++	}
++
++	/* If the resource has a name then free it */
++	kfree(res->res_name);
++
++	/* Free the resource ID. */
++	mutex_lock_nested(global_mutex, SUBCLASS_RMAN);
++	idgen_freeid(bucket->id_gen, res->res_id);
++	mutex_unlock(global_mutex);
++
++	/* Free a resource structure */
++	kfree(res);
++}
++
++void rman_free_resource(void *res_handle)
++{
++	struct rman_res *res;
++
++	IMG_DBG_ASSERT(inited);
++
++	IMG_DBG_ASSERT(res_handle);
++	if (!res_handle)
++		return;
++
++	/* Get access to the resource structure */
++	res = (struct rman_res *)res_handle;
++
++	/* Free resource */
++	rman_free_resource_int(res);
++}
++
++void rman_lock_resource(void *res_handle)
++{
++	struct rman_res	*res;
++
++	IMG_DBG_ASSERT(inited);
++
++	IMG_DBG_ASSERT(res_handle);
++	if (!res_handle)
++		return;
++
++	/* Get access to the resource structure */
++	res = (struct rman_res *)res_handle;
++
++	/* If this is a shared resource */
++	if (res->shared_res)
++		/* We need to lock/unlock the underlying shared resource */
++		res = res->shared_res;
++
++	/* If no mutex associated with this resource */
++	if (!res->mutex_handle) {
++		/* Create one */
++
++		res->mutex_handle = kzalloc(sizeof(*res->mutex_handle), GFP_KERNEL);
++		if (!res->mutex_handle)
++			return;
++
++		mutex_init(res->mutex_handle);
++	}
++
++	/* lock it */
++	mutex_lock(res->mutex_handle);
++}
++
++void rman_unlock_resource(void *res_handle)
++{
++	struct rman_res *res;
++
++	IMG_DBG_ASSERT(inited);
++
++	IMG_DBG_ASSERT(res_handle);
++	if (!res_handle)
++		return;
++
++	/* Get access to the resource structure */
++	res = (struct rman_res *)res_handle;
++
++	/* If this is a shared resource */
++	if (res->shared_res)
++		/* We need to lock/unlock the underlying shared resource */
++		res = res->shared_res;
++
++	IMG_DBG_ASSERT(res->mutex_handle);
++
++	/* Unlock mutex */
++	mutex_unlock(res->mutex_handle);
++}
++
++void rman_free_resources(void *res_bucket_handle, unsigned int type_id)
++{
++	struct rman_bucket *bucket = (struct rman_bucket *)res_bucket_handle;
++	struct rman_res		*res;
++
++	IMG_DBG_ASSERT(inited);
++
++	IMG_DBG_ASSERT(res_bucket_handle);
++	if (!res_bucket_handle)
++		return;
++
++	/* Scan the active list looking for the resources to be freed */
++	mutex_lock_nested(shared_res_mutex_handle, SUBCLASS_RMAN);
++	res = (struct rman_res *)dq_first(&bucket->res_list);
++	while ((res) && ((void *)res != &bucket->res_list)) {
++		/* If this is resource is to be removed */
++		if ((type_id == RMAN_ALL_TYPES  &&
++		     res->type_id != RMAN_STICKY) ||
++		     res->type_id == type_id) {
++			/* Yes, remove it, Free current resource */
++			mutex_unlock(shared_res_mutex_handle);
++			rman_free_resource_int(res);
++			mutex_lock_nested(shared_res_mutex_handle, SUBCLASS_RMAN);
++
++			/* Restart from the beginning of the list */
++			res = (struct rman_res *)dq_first(&bucket->res_list);
++		} else {
++			/* Move to next resource */
++			res = (struct rman_res *)lst_next(res);
++		}
++	}
++	mutex_unlock(shared_res_mutex_handle);
++}
+diff --git a/drivers/staging/media/vxd/common/rman_api.h b/drivers/staging/media/vxd/common/rman_api.h
+new file mode 100644
+index 000000000000..baadc7f22eff
+--- /dev/null
++++ b/drivers/staging/media/vxd/common/rman_api.h
+@@ -0,0 +1,66 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * This component is used to track decoder resources,
++ * and share them across other components.
 + *
-+ * NOTE: Destroy automatically frees and memory allocated using
-+ *	mmu_stream_malloc().
++ * Copyright (c) Imagination Technologies Ltd.
++ * Copyright (c) 2021 Texas Instruments Incorporated - http://www.ti.com/
++ *
++ * Authors:
++ *	Amit Makani <amit.makani@ti.com>
++ *
++ * Re-written for upstreamimg
++ *	Sidraya Jayagond <sidraya.bj@pathpartnertech.com>
 + */
-+int mmu_stream_destroy(void *mmustr_hndl);
 +
-+/*
-+ * @Function	mmu_stream_alloc
-+ * @Description
-+ * This function is used to allocate stream memory.
-+ * @Input	mmustr_hndl : The MMU stream handle.
-+ * @Input	heap_id : The MMU heap Id.
-+ * @Input	mem_heap_id : Memory heap id
-+ * @Input	mem_attrib : Memory attributes
-+ * @Input	size : The size, in bytes, to be allocated.
-+ * @Input	alignment : The required byte alignment
-+ *		(1, 2, 4, 8, 16 etc).
-+ * @Output	ddbuf_info : A pointer to a #vidio_ddbufinfo structure
-+ *		used to return the buffer info.
-+ * @Return	IMG_SUCCESS or an error code.
-+ */
-+int  mmu_stream_alloc(void *mmustr_hndl,
-+		      enum mmu_eheap_id heap_id,
-+		      unsigned int mem_heap_id,
-+		      enum sys_emem_attrib mem_attrib,
-+		      unsigned int size,
-+		      unsigned int alignment,
-+		      struct vidio_ddbufinfo *ddbuf_info);
++#ifndef __RMAN_API_H__
++#define __RMAN_API_H__
 +
-+/*
-+ * @Function	mmu_stream_map_ext
-+ * @Description
-+ * This function is used to malloc device memory (virtual memory), but mapping
-+ * this to memory that has already been allocated (externally).
-+ * NOTE: Memory can be freed using MMU_Free().  However, this does not
-+ *	free the memory provided by the caller via pvCpuLinearAddr.
-+ * @Input	mmustr_hndl    : The MMU stream handle.
-+ * @Input	heap_id : The heap Id.
-+ * @Input	buff_id : The buffer Id.
-+ * @Input	size : The size, in bytes, to be allocated.
-+ * @Input	alignment : The required byte alignment (1, 2, 4, 8, 16 etc).
-+ * @Input	mem_attrib : Memory attributes
-+ * @Input	cpu_linear_addr : CPU linear address of the memory
-+ *		to be allocated for the device.
-+ * @Output	ddbuf_info : A pointer to a #vidio_ddbufinfo structure
-+ *		used to return the buffer info.
-+ * @Return	IMG_SUCCESS or an error code.
-+ */
-+int mmu_stream_map_ext(void *mmustr_hndl,
-+		       enum mmu_eheap_id heap_id,
-+		       unsigned int buff_id,
-+		       unsigned int size,
-+		       unsigned int alignment,
-+		       enum sys_emem_attrib mem_attrib,
-+		       void *cpu_linear_addr,
-+		       struct vidio_ddbufinfo *ddbuf_info);
++#include <linux/types.h>
 +
-+int mmu_stream_map_ext_sg(void *mmustr_hndl,
-+			  enum mmu_eheap_id heap_id,
-+			  void *sgt,
-+			  unsigned int size,
-+			  unsigned int alignment,
-+			  enum sys_emem_attrib mem_attrib,
-+			  void *cpu_linear_addr,
-+			  struct vidio_ddbufinfo *ddbuf_info,
-+			  unsigned int *buff_id);
++#include "img_errors.h"
++#include "lst.h"
 +
-+/*
-+ * @Function	mmu_free_mem
-+ * @Description
-+ * This function is used to free device memory.
-+ * @Input	ps_dd_buf_info : A pointer to a #vidio_ddbufinfo structure.
-+ * @Return	IMG_SUCCESS or an error code.
-+ */
-+int mmu_free_mem(void *mmustr_hndl, struct vidio_ddbufinfo *ddbuf_info);
++#define	RMAN_ALL_TYPES		(0xFFFFFFFF)
++#define	RMAN_TYPE_P1		(0xFFFFFFFE)
++#define	RMAN_TYPE_P2		(0xFFFFFFFE)
++#define	RMAN_TYPE_P3		(0xFFFFFFFE)
++#define RMAN_STICKY		(0xFFFFFFFD)
 +
-+/*
-+ * @Function	mmu_free_mem
-+ * @Description
-+ * This function is used to free device memory.
-+ * @Input	ps_dd_buf_info : A pointer to a #vidio_ddbufinfo structure.
-+ * @Return	IMG_SUCCESS or an error code.
-+ */
-+int mmu_free_mem_sg(void *mmustr_hndl, struct vidio_ddbufinfo *ddbuf_info);
++int rman_initialise(void);
 +
-+int mmu_get_heap(unsigned int image_stride, enum mmu_eheap_id *heap_id);
++void rman_deinitialise(void);
 +
-+#endif /* _VXD_MMU_H_ */
++int rman_create_bucket(void **res_handle);
++
++void rman_destroy_bucket(void *res_handle);
++
++void *rman_get_global_bucket(void);
++
++typedef void (*rman_fn_free) (void *param);
++
++int rman_register_resource(void *res_handle, unsigned int type_id, rman_fn_free fn_free,
++			   void *param, void **res_handle_ptr,
++			   unsigned int *res_id);
++
++typedef int (*rman_fn_alloc) (void *alloc_info, void **param);
++
++int rman_get_named_resource(unsigned char *res_name, rman_fn_alloc fn_alloc,
++			    void *alloc_info, void *res_bucket_handle,
++			    unsigned int type_id, rman_fn_free fn_free,
++			    void **param, void **res_handle, unsigned int *res_id);
++
++unsigned int rman_get_resource_id(void *res_handle);
++
++int rman_get_resource(unsigned int res_id, unsigned int type_id, void **param,
++		      void **res_handle);
++
++void rman_free_resource(void *res_handle);
++
++void rman_lock_resource(void *res_handle);
++
++void rman_unlock_resource(void *res_hanle);
++
++void rman_free_resources(void *res_bucket_handle, unsigned int type_id);
++
++#endif
 -- 
 2.17.1
 
