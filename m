@@ -7,57 +7,57 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E440BC4320A
-	for <linux-media@archiver.kernel.org>; Wed, 18 Aug 2021 14:15:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4174CC43214
+	for <linux-media@archiver.kernel.org>; Wed, 18 Aug 2021 14:15:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D3E34610C7
-	for <linux-media@archiver.kernel.org>; Wed, 18 Aug 2021 14:15:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A76060EBD
+	for <linux-media@archiver.kernel.org>; Wed, 18 Aug 2021 14:15:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239927AbhHROPu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Aug 2021 10:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
+        id S239770AbhHROP4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Aug 2021 10:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239947AbhHROOs (ORCPT
+        with ESMTP id S239974AbhHROOt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Aug 2021 10:14:48 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CFAC06114E
-        for <linux-media@vger.kernel.org>; Wed, 18 Aug 2021 07:13:24 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id mq3so2659190pjb.5
-        for <linux-media@vger.kernel.org>; Wed, 18 Aug 2021 07:13:24 -0700 (PDT)
+        Wed, 18 Aug 2021 10:14:49 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A68C061155
+        for <linux-media@vger.kernel.org>; Wed, 18 Aug 2021 07:13:30 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id s11so2373642pgr.11
+        for <linux-media@vger.kernel.org>; Wed, 18 Aug 2021 07:13:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pathpartnertech.com; s=google;
         h=mime-version:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=nKNE8ijfWlx9GrUceWKtzIYzjYKV/yPuSFqRxghOMMg=;
-        b=NEvL23y8xxuShE6xYlVqlSlYlNJkbLv4ksR82pPD/BFjcEOgr1KPG/pgd/sHDnWAyv
-         IAuAPk55Rz9W3uuq+slW6OuC3xb6wlasV69ZbQPXscISqwRiObAGL9yKTOWnVL6l0okV
-         0ty5PPJCo0kFkeQ0dr5Gr4G5qHaRgH5K38E07HN++4awJWDMVNceVn1I8alB/cnGpYyX
-         bKN1hr1tzatQu8zBoV1qATpGOEqP+XoO4m8YyfxPF7uNdiKv7gkegTjeRqEJXKoVitTV
-         LcONwyhI9t2r9R9Uw006GuZIhZHBK6mLdwD75ECF1tajWIZ6abzzBFsvKpO/wY8JRrRU
-         6FiA==
+        bh=OFpHweS/JQ3nqb6EquukVDDOgXnX34E/VyawLNfBUGQ=;
+        b=qIrjgaFUpOYCFS16Znu3m2ffDS9rT4371rnPKMR0z+4yAKGhi6HdGLD0+GQRFuBqBy
+         2+COOXDZSTvyO5BoWPqaW+Ozv4cwXwz/ZstzlsgSOn0KWTQVFQIlbFRvB7mkCeQqDQxO
+         F9uO5uqZ253MtIjYsl750rSDFVipfayu+8YzHxqjzJCopmrWGdtRk9vx6YM3lrqBgSFO
+         ISdI4RsrovhDOkVneIDiS11SOBWAilSPdUu2efruxi9kSYoVhpXd3t6TyeKorTlxpwy+
+         EfciVKQt53H6OIBk9Z18l3W1XWo/AZ6y1SU9iozJN0DTBzTFvYVXQi8pAcmyEz69SNi2
+         JRWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=nKNE8ijfWlx9GrUceWKtzIYzjYKV/yPuSFqRxghOMMg=;
-        b=h5ukxDL1jxP0QB4mTw13oq1OjDbCe28/Hjn6lNN7mciM7/VDUZVEq+li+P+FNkW44V
-         HNr1QSA5KZp2//WTMYrPfjUYwj5UXcBb/JWLwYVmE86Zm74ppq6E8koRG3hrehgjZSyL
-         uhklubxHXOYJsKFcpcUzfpP0OJRxNmsGQE9N/hALJR5Yewcv6uDqFiRjms7gU0H1QClc
-         1yh0tYTprkcpUGIwSudpsbVCfxb5dtDycGfdq1RioU2Qpe4z8Z402dVXO9KPoed9Igy2
-         koI8/LDbne8PzsE4qow6ONdcjKpXdB7XrFBOyu0tD5Nxn0PICm4KEty06HcckYIR0H2w
-         vAGg==
+        bh=OFpHweS/JQ3nqb6EquukVDDOgXnX34E/VyawLNfBUGQ=;
+        b=bNHoo4Qnur0kksa0IeU3YwBSqmEOcqJJl1OvYVFTOaljqhMlSidzI8U+3TB/aXfg4U
+         axK/lBkZrn8FE4D8NU48P7BxepScHzJ6u4Lf022sqNp65mmq4sMf1xuNbSF95vf5sBRJ
+         R7rF+iBySkyvosBz5LA1rXAYy6rLKg4ipNWnOZdZFiARRP8b+j3gzK53xpqGEOhCmV8J
+         kOOe7rFidqQDpl7Nlv3h4Q0qVDPi32usnHFawVzbhNEbRakG3tKh0QTv94Zw8oLp4KYL
+         w/yxUK/eOmsSRWN8yzW2O16NZXWFGQ+dk0SKnv9hF5f7iZDX11mbSruEkWFU+zO2EBXI
+         fHtg==
 MIME-Version: 1.0
-X-Gm-Message-State: AOAM532nCb5SjQghPLp1UdEzMXqxtPQ/jUw/ytHKFAlgjM/5Qu8zJTAK
-        CduOcVekTjCsU1nF8T5RlwLQ7mphhEpQV2WBgtR6Yjr+yCLHn5BsHhwmuY32vMKKNxgvD6xr0AO
-        uqmFutHmqEIvfS7mx
-X-Google-Smtp-Source: ABdhPJwE/dxPHNT6cwoDOXFR0Uxlw/pitQ720uZu9vDu5TLWOQ/TIH6eOlhLD6V6dh+JWfEL7pUgAQ==
-X-Received: by 2002:a17:90a:1b2a:: with SMTP id q39mr9369479pjq.219.1629296003962;
-        Wed, 18 Aug 2021 07:13:23 -0700 (PDT)
+X-Gm-Message-State: AOAM530zlbb0nkiBgX0g/U6ULBpQDN/miMmXh2yEGkQBmhAfBL0QXGm9
+        ot76CyqOOWtRuzunZapg0zVnuZLL5I7bCPeugQJ7dI5dmRC5OhAoT73Kw5vLl+CGzKISzF2HEEP
+        p436+/IckNUSj3UP6
+X-Google-Smtp-Source: ABdhPJzJFl0khqx5jqtp4TZDJFPqk5KxTnnqJXM3m1MLT0D7usuLVQ1pxYZhnGa0vAXluGhJBOCsow==
+X-Received: by 2002:a05:6a00:1583:b0:3e2:2ae3:2ba8 with SMTP id u3-20020a056a00158300b003e22ae32ba8mr9534018pfk.58.1629296010096;
+        Wed, 18 Aug 2021 07:13:30 -0700 (PDT)
 Received: from localhost.localdomain ([49.207.214.181])
-        by smtp.gmail.com with ESMTPSA id e8sm8084343pgg.31.2021.08.18.07.13.21
+        by smtp.gmail.com with ESMTPSA id e8sm8084343pgg.31.2021.08.18.07.13.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Aug 2021 07:13:23 -0700 (PDT)
+        Wed, 18 Aug 2021 07:13:29 -0700 (PDT)
 From:   sidraya.bj@pathpartnertech.com
 To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
@@ -65,9 +65,9 @@ Cc:     prashanth.ka@pathpartnertech.com, praneeth@ti.com,
         mchehab@kernel.org, linux-media@vger.kernel.org,
         praveen.ap@pathpartnertech.com,
         Sidraya <sidraya.bj@pathpartnertech.com>
-Subject: [PATCH 27/30] media: platform: vxd: Kconfig: Add Video decoder Kconfig and Makefile
-Date:   Wed, 18 Aug 2021 19:40:34 +0530
-Message-Id: <20210818141037.19990-28-sidraya.bj@pathpartnertech.com>
+Subject: [PATCH 29/30] arm64: dts: dra82: Add v4l2 vxd_dec device node
+Date:   Wed, 18 Aug 2021 19:40:36 +0530
+Message-Id: <20210818141037.19990-30-sidraya.bj@pathpartnertech.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210818141037.19990-1-sidraya.bj@pathpartnertech.com>
 References: <20210818141037.19990-1-sidraya.bj@pathpartnertech.com>
@@ -78,187 +78,34 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Sidraya <sidraya.bj@pathpartnertech.com>
 
-Add video decoder basic config to Kconfig and
-select the required V4l2 modules.
-Add video decoder Makefile.
+Enable v4l2 vxd_dec on dra82
 
 Signed-off-by: Angela Stegmaier <angelabaker@ti.com>
 Signed-off-by: Sidraya <sidraya.bj@pathpartnertech.com>
 ---
- MAINTAINERS                                |   2 +
- drivers/staging/media/vxd/decoder/Kconfig  |  13 +++
- drivers/staging/media/vxd/decoder/Makefile | 129 +++++++++++++++++++++
- 3 files changed, 144 insertions(+)
- create mode 100644 drivers/staging/media/vxd/decoder/Kconfig
- create mode 100644 drivers/staging/media/vxd/decoder/Makefile
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b5875f9015ba..0616ab620135 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19568,6 +19568,8 @@ F:	drivers/staging/media/vxd/common/talmmu_api.c
- F:	drivers/staging/media/vxd/common/talmmu_api.h
- F:	drivers/staging/media/vxd/common/work_queue.c
- F:	drivers/staging/media/vxd/common/work_queue.h
-+F:	drivers/staging/media/vxd/decoder/Kconfig
-+F:	drivers/staging/media/vxd/decoder/Makefile
- F:	drivers/staging/media/vxd/decoder/bspp.c
- F:	drivers/staging/media/vxd/decoder/bspp.h
- F:	drivers/staging/media/vxd/decoder/bspp_int.h
-diff --git a/drivers/staging/media/vxd/decoder/Kconfig b/drivers/staging/media/vxd/decoder/Kconfig
-new file mode 100644
-index 000000000000..5ee44cc07dd8
---- /dev/null
-+++ b/drivers/staging/media/vxd/decoder/Kconfig
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+index cf3482376c1e..a10eb7bcce74 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+@@ -1242,6 +1242,15 @@
+ 		power-domains = <&k3_pds 193 TI_SCI_PD_EXCLUSIVE>;
+ 	};
+ 
++	d5520: video-decoder@4300000 {
++	       /* IMG D5520 driver configuration */
++	       compatible = "img,d5500-vxd";
++	       reg = <0x00 0x04300000>,
++		     <0x00 0x100000>;
++	       power-domains = <&k3_pds 144 TI_SCI_PD_EXCLUSIVE>;
++	       interrupts = <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>;
++	};
 +
-+config VIDEO_IMG_VXD_DEC
-+	tristate "IMG VXD DEC (Video Decoder) driver"
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	select VIDEOBUF2_CORE
-+	select VIDEOBUF2_DMA_CONTIG
-+	select VIDEOBUF2_DMA_SG
-+	select V4L2_MEM2MEM_DEV
-+	help
-+	  This is an IMG VXD DEC V4L2 driver that adds support for the
-+	  Imagination D5520 (Video Decoder) hardware.
-+	  The module name when built is vxd-dec.
-diff --git a/drivers/staging/media/vxd/decoder/Makefile b/drivers/staging/media/vxd/decoder/Makefile
-new file mode 100644
-index 000000000000..80e46a7da1ab
---- /dev/null
-+++ b/drivers/staging/media/vxd/decoder/Makefile
-@@ -0,0 +1,129 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Optional Video feature configuration control
-+
-+# (1)
-+# This config allows enabling or disabling of HEVC/H265 video
-+# decoding functionality with IMG VXD Video decoder. If you
-+# do not want HEVC decode capability, select N.
-+# If unsure, select Y
-+HAS_HEVC ?=y
-+
-+# (2)
-+# This config enables error concealment with gray pattern.
-+# Disable if you do not want error concealment capability.
-+# If unsure, say Y
-+ERROR_CONCEALMENT ?=y
-+
-+# (3)
-+# This config, if enabled, configures H264 video decoder to
-+# output frames in the decode order with no buffering and
-+# picture reordering inside codec.
-+# If unsure, say N
-+REDUCED_DPB_NO_PIC_REORDERING ?=n
-+
-+# (4)
-+# This config, if enabled, enables all the debug traces in
-+# decoder driver. Enable it only for debug purpose
-+# Keep it always disabled for release codebase
-+DEBUG_DECODER_DRIVER ?=n
-+
-+# (5)
-+# This config allows enabling or disabling of MJPEG video
-+# decoding functionality with IMG VXD Video decoder. If you
-+# do not want MJPEG decode capability, select N.
-+# If unsure, select Y
-+HAS_JPEG ?=y
-+
-+# (6)
-+# This config allows simulation of Error recovery.
-+# This config is only for testing, never enable it for release build.
-+ERROR_RECOVERY_SIMULATION ?=n
-+
-+# (7)
-+# This config enables allocation of capture buffers from
-+# dma contiguous memory.
-+# If unsure, say Y
-+CAPTURE_CONTIG_ALLOC ?=y
-+
-+#VXD
-+vxd-dec-y += vxd_core.o
-+
-+#PVDEC
-+vxd-dec-y += vxd_pvdec.o
-+
-+#MEM_MGR
-+vxd-dec-y += ../common/img_mem_man.o ../common/img_mem_unified.o
-+vxd-dec-y += ../common/imgmmu.o
-+
-+#Utilities
-+vxd-dec-y += ../common/lst.o ../common/dq.o
-+vxd-dec-y += ../common/resource.o
-+vxd-dec-y += dec_resources.o
-+vxd-dec-y += ../common/rman_api.o
-+vxd-dec-y += pixel_api.o
-+vxd-dec-y += vdecdd_utils_buf.o
-+vxd-dec-y += vdecdd_utils.o
-+
-+#MMU
-+vxd-dec-y += ../common/talmmu_api.o
-+vxd-dec-y += ../common/pool.o
-+vxd-dec-y += ../common/hash.o
-+vxd-dec-y += ../common/ra.o
-+vxd-dec-y += ../common/addr_alloc.o
-+vxd-dec-y += ../common/work_queue.o
-+vxd-dec-y += vdec_mmu_wrapper.o
-+
-+#DECODER
-+vxd-dec-y += ../common/pool_api.o ../common/idgen_api.o
-+vxd-dec-y += hw_control.o
-+vxd-dec-y += vxd_int.o
-+vxd-dec-y += translation_api.o
-+vxd-dec-y += decoder.o
-+vxd-dec-y += core.o
-+
-+#BSPP
-+vxd-dec-y += swsr.o
-+vxd-dec-y += h264_secure_parser.o
-+vxd-dec-y += bspp.o
-+
-+#UM INTERFACE & SYSDEV
-+vxd-dec-y += vxd_dec.o
-+
-+vxd-dec-y += vxd_v4l2.o
-+
-+ifeq ($(DEBUG_DECODER_DRIVER), y)
-+ccflags-y   += -DDEBUG_DECODER_DRIVER
-+ccflags-y   += -DDEBUG
-+endif
-+
-+ifeq ($(HAS_HEVC),y)
-+ccflags-y   += -DHAS_HEVC
-+vxd-dec-y += hevc_secure_parser.o
-+endif
-+
-+ifeq ($(HAS_JPEG),y)
-+ccflags-y   += -DHAS_JPEG
-+vxd-dec-y += jpeg_secure_parser.o
-+endif
-+
-+
-+ifeq ($(ERROR_CONCEALMENT),y)
-+ccflags-y   += -DERROR_CONCEALMENT
-+endif
-+
-+ifeq ($(REDUCED_DPB_NO_PIC_REORDERING),y)
-+ccflags-y   += -DREDUCED_DPB_NO_PIC_REORDERING
-+endif
-+
-+ifeq ($(ERROR_RECOVERY_SIMULATION),y)
-+ccflags-y   += -DERROR_RECOVERY_SIMULATION
-+endif
-+
-+ifeq ($(CAPTURE_CONTIG_ALLOC),y)
-+ccflags-y += -DCAPTURE_CONTIG_ALLOC
-+endif
-+
-+obj-$(CONFIG_VIDEO_IMG_VXD_DEC) += vxd-dec.o
-+
-+ccflags-y += -I$(srctree)/drivers/staging/media/vxd/common
+ 	ufs_wrapper: ufs-wrapper@4e80000 {
+ 		compatible = "ti,j721e-ufs";
+ 		reg = <0x0 0x4e80000 0x0 0x100>;
 -- 
 2.17.1
 
