@@ -2,82 +2,111 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19405C4338F
-	for <linux-media@archiver.kernel.org>; Thu, 19 Aug 2021 17:55:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8833DC4338F
+	for <linux-media@archiver.kernel.org>; Thu, 19 Aug 2021 18:57:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E85026109F
-	for <linux-media@archiver.kernel.org>; Thu, 19 Aug 2021 17:55:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67B016109E
+	for <linux-media@archiver.kernel.org>; Thu, 19 Aug 2021 18:57:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbhHSRz4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Aug 2021 13:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S234161AbhHSS6W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Aug 2021 14:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233379AbhHSRzt (ORCPT
+        with ESMTP id S229907AbhHSS6V (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Aug 2021 13:55:49 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D833C061575;
-        Thu, 19 Aug 2021 10:55:13 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 27D711F43F4F
-Message-ID: <4b67e381c3c6819d5888f4ca713db5236b58d951.camel@collabora.com>
-Subject: Re: [PATCH] media: cedrus: Fix SUNXI tile size calculation
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 19 Aug 2021 13:54:59 -0400
-In-Reply-To: <3519986.qLKfoAsNv3@jernej-laptop>
-References: <20210819140009.158156-1-nicolas.dufresne@collabora.com>
-         <3519986.qLKfoAsNv3@jernej-laptop>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Thu, 19 Aug 2021 14:58:21 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BACC061756
+        for <linux-media@vger.kernel.org>; Thu, 19 Aug 2021 11:57:44 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 17so6755469pgp.4
+        for <linux-media@vger.kernel.org>; Thu, 19 Aug 2021 11:57:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+pL/e3dMN/Ws3i4JncdgQo+mYleTxWxH91pO0PWLJkc=;
+        b=W5Ybl1/Syk/AXW6g2eSCB3xLLB5MfQOvtY5dt5n25SxJq9p7g6q9ioGjh1zJ8VHWh0
+         5r+nCHLPRhJeckFUGrZj4SI6y3f9+5tK5VXaU9tfT/lflXTkOw9TRnpnahE5qfeRR6ZM
+         +Y68Eo8RGtIzf6V7J9T1ALTLH/GE59evROSUKEvKVacK4C7lWRhFwfSOohxH1AUWofAM
+         H2vkdSw5080uzdcyXx49mYJ73GOOSq1J6cJ1vos7+65b3jDKbuev7dIgip69Y7Pd9Lho
+         Ap+Ur0ZaDMpY2sVHyGvMcYWKfzVt7o3PIX1o+b1lP8COOVg+vxlw9BzsumLOwD6NhYxo
+         Ytog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+pL/e3dMN/Ws3i4JncdgQo+mYleTxWxH91pO0PWLJkc=;
+        b=r8D/kN5UIuGg5EuKgLrra55UzmCzqZ2mbjlpS+moFYh36pbUDei9YKNnfIUNNJKprJ
+         3q4UYAr++FhBj1oRUGoQFZ4AeUcdl0AFUcU7FI0wjPqHai8nu0GsF7bkMK7xQcEAOoWE
+         aeadUGKpxCcAXuz9qlI1gYVollTlEkqqWR7ZywPD9DRydCEt8Ih9j8tNDek0O3T4srxb
+         oN3m2WpqCPxQCYyAnO9KLbK1NXO1RU8T6UggRXRTLbjVI3UdDtjzQBKef8OLGRkX73qO
+         a9KskbNSIk2Zt0ZFQ7osgzjHZZ66+xkDIcsp89WWr7ngvvBMcNcM7VH3XURmPZ1I9xEj
+         RNLw==
+X-Gm-Message-State: AOAM5324ih/CD44ZG9x1brMRqN/seEc6WxyGUx5dVMY2Qmin+51hAaiP
+        27C2T7phFksaOS6hlUJTSEFLjMw60i1f+vYd13EZQg==
+X-Google-Smtp-Source: ABdhPJyK71zLy9qNMqrFxbyt2AhbN/GkKlbklmVO5emMKQo+9+ms7vAQuIxMRPlMupAVwRBILrt4KH3LQGBc+iW2gVI=
+X-Received: by 2002:a63:db4a:: with SMTP id x10mr1503255pgi.30.1629399464139;
+ Thu, 19 Aug 2021 11:57:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <m3tukc9tiw.fsf@t19.piap.pl>
+In-Reply-To: <m3tukc9tiw.fsf@t19.piap.pl>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Thu, 19 Aug 2021 11:57:32 -0700
+Message-ID: <CAJ+vNU1TbEPy8+9XpVwpHXzPDww31qcCyLvKvsxrcBJqu5L+tQ@mail.gmail.com>
+Subject: Re: [PATCH v2] TDA1997x: fix tda1997x_remove()
+To:     =?UTF-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le jeudi 19 août 2021 à 18:30 +0200, Jernej Škrabec a écrit :
-> Hi Nicolas!
-> 
-> Dne četrtek, 19. avgust 2021 ob 16:00:09 CEST je Nicolas Dufresne napisal(a):
-> > Tiled formats requires full rows being allocated (even for Chroma
-> > planes). When the number of Luma tiles is odd, we need to round up
-> > to twice the tile width in order to roundup the number of Chroma
-> > tiles.
-> > 
-> > This was notice with a crash running BA1_FT_C compliance test using
-> > sunxi tiles using GStreamer. Cedrus driver would allocate 9 rows for
-> > Luma, but only 4.5 rows for Chroma, causing userspace to crash.
-> > 
-> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> 
-> Fixes tag would be nice so it would be picked up for stable branches. 
-> Otherwise it looks good. It also aligns logic with libvdpau-sunxi.
+On Thu, Jul 29, 2021 at 11:59 PM Krzysztof Ha=C5=82asa <khalasa@piap.pl> wr=
+ote:
+>
+> TDA1997x driver tried to hold two values in a single variable:
+> device's "client data" pointer was first set to "sd" in
+> v4l2_i2c_subdev_init(), then it was overwritten explicitly
+> using dev_set_drvdata() with "state". This caused
+> tda1997x_remove() to fail badly.
+>
+> Signed-off-by: Krzysztof Ha=C5=82asa <khalasa@piap.pl>
+>
+> diff --git a/drivers/media/i2c/tda1997x.c b/drivers/media/i2c/tda1997x.c
+> index 17be95c0dcb3..fb37918b7fb5 100644
+> --- a/drivers/media/i2c/tda1997x.c
+> +++ b/drivers/media/i2c/tda1997x.c
+> @@ -2490,7 +2490,8 @@ static const struct media_entity_operations tda1997=
+x_media_ops =3D {
+>  static int tda1997x_pcm_startup(struct snd_pcm_substream *substream,
+>                                 struct snd_soc_dai *dai)
+>  {
+> -       struct tda1997x_state *state =3D snd_soc_dai_get_drvdata(dai);
+> +       struct v4l2_subdev *sd =3D snd_soc_dai_get_drvdata(dai);
+> +       struct tda1997x_state *state =3D to_state(sd);
+>         struct snd_soc_component *component =3D dai->component;
+>         struct snd_pcm_runtime *rtd =3D substream->runtime;
+>         int rate, err;
+> @@ -2799,7 +2800,6 @@ static int tda1997x_probe(struct i2c_client *client=
+,
+>                         dev_err(&client->dev, "register audio codec faile=
+d\n");
+>                         goto err_free_media;
+>                 }
+> -               dev_set_drvdata(&state->client->dev, state);
+>                 v4l_info(state->client, "registered audio codec\n");
+>         }
+>
+>
 
-Sure, I'd say can be merged adding (it was broken since when cedrus was added):
+Acked-By: Tim Harvey <tharvey@gateworks.com>
 
-Fixes: 50e761516f2b8 ("media: platform: Add Cedrus VPU decoder driver")
-
-> 
-> Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> 
-> Best regards,
-> Jernej
-> 
-> 
-
-
+Tim
