@@ -2,170 +2,208 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 684A7C4320A
-	for <linux-media@archiver.kernel.org>; Thu, 19 Aug 2021 14:10:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4CC2C4338F
+	for <linux-media@archiver.kernel.org>; Thu, 19 Aug 2021 14:15:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 511A96115A
-	for <linux-media@archiver.kernel.org>; Thu, 19 Aug 2021 14:10:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 904AC61155
+	for <linux-media@archiver.kernel.org>; Thu, 19 Aug 2021 14:15:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240461AbhHSOLP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Aug 2021 10:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240493AbhHSOLO (ORCPT
+        id S240406AbhHSOQV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Aug 2021 10:16:21 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:55634 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238495AbhHSOQU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Aug 2021 10:11:14 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645B6C061756
-        for <linux-media@vger.kernel.org>; Thu, 19 Aug 2021 07:10:38 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id dj8so9108836edb.2
-        for <linux-media@vger.kernel.org>; Thu, 19 Aug 2021 07:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rb9V42rg0n45GVH3GY2bVeX0F+8SMJocuuGI1FyjcmM=;
-        b=iJEPUU5oZEQ+HWwTgTCgLhFsbcZY/sN4h/IMNe1p8EeCOxcgf3JVciTGX87OqGRILz
-         Urxhw5a2EAGgRMcidl2dwJCCCNjUGG+3Aq90qboKf6+1WMDC1oxL1rZspWV1ngDaYwsV
-         SSO5y5R0ILHZz2TBbDnJjnbVGQnmK6+W9FW53lMoxbuOFnxeBiFz1jk3h8V4EIdyBR0y
-         N+u/wHUfjMg9Ibs9phlJMeMO9p/VILY8p8K6VKTmAN7+7nOwCJw4kPu2KNOjA4HOElnP
-         14V9a4ullK9qeLa87hC5WKNqfxQrOQAMCWlXZVYnTUrLieLB0auCQCaenqpPDW1tlikX
-         tE+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rb9V42rg0n45GVH3GY2bVeX0F+8SMJocuuGI1FyjcmM=;
-        b=NPYldlqig0j2Ssv1mW87GHfuIGxq0IfSeCjmDScvEl5hxndrMB8yPqbao68Tgp2Kd2
-         GJgGokYx4PT9/U9BlxyJNxkxEAb45vubrVmewPYqPOkrpLWCF6x58vfnMqh6rNgXULp2
-         /bYCbyvEvu27XdAUvwTOGrv5lRenmECrTUOlsJHxSkhAYpoOfqKISxqAEqFcJSlROcqj
-         yAaeL/afTCifQuKCCNhqdI9yNHm7qAhkkVHBSPIajbt1sNccLRJ+E93emzAxGThN5ulk
-         56Kkc88+hGmjcRx0NFujkkQvYrYerEteMXcXE0VHRiTE5MSkVoZkd2LZveeadqv3TX3N
-         x0cg==
-X-Gm-Message-State: AOAM533T9qjAkMtHq2S+gGjHXe9pCE3pb+uKIxxDIAZ629/3+805Xwoa
-        r0OTMAB7+DKuM9d71ZnsnVkAqL/ivOeZMFIlunmH2Q==
-X-Google-Smtp-Source: ABdhPJwsG2az69sF2C7NBuTLTqeCC9h1NnsP0/piYeVTCMnzsFbdwVTCtw/GXuxcx6yC4CKvqxzNAm07Sn6//4vK+aU=
-X-Received: by 2002:a05:6402:1514:: with SMTP id f20mr16652377edw.17.1629382236918;
- Thu, 19 Aug 2021 07:10:36 -0700 (PDT)
+        Thu, 19 Aug 2021 10:16:20 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 603DADD;
+        Thu, 19 Aug 2021 16:15:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1629382542;
+        bh=sUHl8zAiFe8M3a5eStkrgbR+jR8IjZemsHULapqp318=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JK+Vmv8E78K2sck2X1Q2eZaDWmRxvMKYUuFY8De0j3cMXuHix37xN5SMEq8JTskEl
+         eG8n9XQhMqgFN9x3y+Y8zcqP/zSrJr0kWS7JKtUs4TI0STimbcZozD4Rvok2uVym8G
+         XZ8kkUWLW6DEsrc1hw3M+sulyqqQOLJQBeYD3A5g=
+Date:   Thu, 19 Aug 2021 17:15:34 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] media: uvcvideo: Quirk for hardware with invalid sof
+Message-ID: <YR5nhmF3MXdjtCvs@pendragon.ideasonboard.com>
+References: <20210818203502.269889-1-ribalda@chromium.org>
+ <YR2INUYJSZCnBiC0@pendragon.ideasonboard.com>
+ <CANiDSCuP3OS7Z9UmHApPMmt0X3yrAoKVShEZgZ1oCvPgYshUSA@mail.gmail.com>
+ <YR4yRfEmMvsAXRfu@pendragon.ideasonboard.com>
+ <CANiDSCvStwDkkW7FLwTmogsH45292gugAvZfuoss3aJ9RzOAQw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210811025801.21597-1-yunfei.dong@mediatek.com>
- <CAAEAJfDWOzCJxZFNtxeT7Cvr2pWbYrfz-YnA81sVNs-rM=8n4Q@mail.gmail.com> <1b79a67b703d2c894bc4d9458c760e082fc42958.camel@mediatek.com>
-In-Reply-To: <1b79a67b703d2c894bc4d9458c760e082fc42958.camel@mediatek.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Thu, 19 Aug 2021 11:10:25 -0300
-Message-ID: <CAAEAJfCTrKj9AFExN-L-TKww4E=us1VVh8LHtZ8Q0j_eaCD4Eg@mail.gmail.com>
-Subject: Re: [PATCH v5, 00/15] Using component framework to support multi
- hardware decode
-To:     "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        George Sun <george.sun@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CANiDSCvStwDkkW7FLwTmogsH45292gugAvZfuoss3aJ9RzOAQw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 19 Aug 2021 at 04:13, yunfei.dong@mediatek.com
-<yunfei.dong@mediatek.com> wrote:
->
-> Hi Ezequiel,
->
-> Thanks for your suggestion.
->
-> On Wed, 2021-08-18 at 11:11 -0300, Ezequiel Garcia wrote:
-> > +danvet
-> >
-> > Hi,
-> >
-> > On Tue, 10 Aug 2021 at 23:58, Yunfei Dong <yunfei.dong@mediatek.com>
-> > wrote:
+Hi Ricardo,
+
+On Thu, Aug 19, 2021 at 01:31:32PM +0200, Ricardo Ribalda wrote:
+> On Thu, 19 Aug 2021 at 12:28, Laurent Pinchart wrote:
+> > On Thu, Aug 19, 2021 at 08:27:00AM +0200, Ricardo Ribalda wrote:
+> > > On Thu, 19 Aug 2021 at 00:22, Laurent Pinchart wrote:
+> > > > On Wed, Aug 18, 2021 at 10:35:02PM +0200, Ricardo Ribalda wrote:
+> > > > > The hardware timestamping code has the assumption than the device_sof
+> > > > > and the host_sof run at the same frequency (1 KHz).
+> > > > >
+> > > > > Unfortunately, this is not the case for all the hardware. Add a quirk to
+> > > > > support such hardware.
+> > > > >
+> > > > > Note on how to identify such hardware:
+> > > > > When running with "yavta -c /dev/videoX" Look for periodic jumps of the
+> > > > > fps. Eg:
+> > > > >
+> > > > > 30 (6) [-] none 30 614400 B 21.245557 21.395214 34.133 fps ts mono/SoE
+> > > > > 31 (7) [-] none 31 614400 B 21.275327 21.427246 33.591 fps ts mono/SoE
+> > > > > 32 (0) [-] none 32 614400 B 21.304739 21.459256 34.000 fps ts mono/SoE
+> > > > > 33 (1) [-] none 33 614400 B 21.334324 21.495274 33.801 fps ts mono/SoE
+> > > > > 34 (2) [-] none 34 614400 B 21.529237 21.527297 5.130 fps ts mono/SoE
+> > > > > 35 (3) [-] none 35 614400 B 21.649416 21.559306 8.321 fps ts mono/SoE
+> > > > > 36 (4) [-] none 36 614400 B 21.678789 21.595320 34.045 fps ts mono/SoE
+> > > > > ...
+> > > > > 99 (3) [-] none 99 614400 B 23.542226 23.696352 33.541 fps ts mono/SoE
+> > > > > 100 (4) [-] none 100 614400 B 23.571578 23.728404 34.069 fps ts mono/SoE
+> > > > > 101 (5) [-] none 101 614400 B 23.601425 23.760420 33.504 fps ts mono/SoE
+> > > > > 102 (6) [-] none 102 614400 B 23.798324 23.796428 5.079 fps ts mono/SoE
+> > > > > 103 (7) [-] none 103 614400 B 23.916271 23.828450 8.478 fps ts mono/SoE
+> > > > > 104 (0) [-] none 104 614400 B 23.945720 23.860479 33.957 fps ts mono/SoE
+> > > > >
+> > > > > They happen because the delta_sof calculated at
+> > > > > uvc_video_clock_host_sof(), wraps periodically, as both clocks drift.
+> > > >
+> > > > That looks plain wrong. First of all, the whole purpose of the SOF clock
+> > > > is to have a shared clock between the host and the device. It makes no
+> > > > sense for a device to have a free-running "SOF" clock. Given the log
+> > > > above, the issue occurs so quickly that it doesn't seem to be a mere
+> > > > drift of a free running clock. Could you investigate this more carefully
+> > > > ?
 > > >
-> > > This series adds support for multi hardware decode into mtk-vcodec,
-> > > by first
-> > > adding component framework to manage each hardware information:
-> > > interrupt,
-> > > clock, register bases and power. Secondly add core thread to deal
-> > > with core
-> > > hardware message, at the same time, add msg queue for different
-> > > hardware
-> > > share messages. Lastly, the architecture of different specs are not
-> > > the same,
-> > > using specs type to separate them.
+> > > In my test the dev_sof runs at 887.91Hz and the dev_sof at 1000.35Hz.
+> > > If I plot the difference of both clocks host_sof - (dev_sof % 2048), I
+> > > get this nice graph https://imgur.com/a/5fQnKa7
 > > >
+> > >
+> > > I agree that it makes not sense to have a free-running "SOF", but the
+> > > manufacturer thinks otherwise :)
 > >
-> > I don't think it's a good idea to introduce the component API in the
-> > media subsystem. It doesn't seem to be maintained, IRC there's not
-> > even
-> > a maintainer for it, and it has some issues that were never
-> > addressed.
-> >
-> > It would be really important to avoid it. Is it really needed in the
-> > first place?
-> >
-> > Thanks,
-> > Ezequiel
->
-> For there are many hardware need to use, mt8192 is three and mt8195 is
-> five. Maybe need more to be used in the feature.
->
-> Each hardware has independent clk/power/iommu port/irq.
-> Use component interface in prob to get each component's information.
-> Just enable the hardware when need to use it, very convenient and
-> simple.
->
-> I found that there are many modules use component to manage hardware
-> information, such as iommu and drm etc.
->
+> > In that case there's no common clock between the device and the host,
+> > which means that clock recovery is impossible. The whole timestamp
+> > computation should be bypassed, and the driver should use the system
+> > timestamp instead.
+> 
+> Or said differently. The clock recovery is susceptible to the jitter
+> in the frame acquisition.
+> 
+> If you have no jitter, the clock recovered will match the reality, and
+> if you have bad jitter, it will be as bad as system timestamp.
 
-Many drivers support multiple hardware variants, where each variant
-has a different number of clocks or interrupts, see for instance
-struct hantro_variant which allows to expose different codec cores,
-some having both decoder/encoder, and some having just a decoder.
+The whole point of the clock recovery code is to convert a precise
+timestamp, expressed using a device clock that the host has no access
+to, to a system clock. This can only be done if the relationship between
+the two clocks can be inferred, and the UVC specifies a mechanism to
+allow this by using a common clock, in the form of the SOF counter. If
+we don't have that, we're essentially screwed, and can't use the
+algorithm implemented in the driver at all. I'd much rather skip is
+completely in that case, instead of trying to hack the algorithm itself.
 
-The component API is mostly used by DRM to aggregate independent
-subdevices (called components) into an aggregated driver.
+On a side note, I think the whole clock recovery implementation should
+move from the uvcvideo driver to userspace, where we'll have the ability
+to perform floating point computation. The kernel implementation is
+crude, it should be replaced with a linear regression.
 
-For instance, a DRM driver needs to glue together the HDMI, MIPI,
-and plany controller, or any other hardware arrangement where
-devices can be described independently.
+> So this patch will still be better than nothing.
+> 
+> > I still find it hard to believe that a Logitech camera would get this
+> > wrong.
+> 
+> I guess I can send you a device, or give you access to mine remotely
+> if you do not believe me :)
+> 
+> > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > > > ---
+> > > > > v2: Fix typo in frequency
+> > > > >
+> > > > >  drivers/media/usb/uvc/uvc_driver.c |  9 +++++++++
+> > > > >  drivers/media/usb/uvc/uvc_video.c  | 11 +++++++++--
+> > > > >  drivers/media/usb/uvc/uvcvideo.h   |  2 ++
+> > > > >  3 files changed, 20 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> > > > > index 9a791d8ef200..d1e6cba10b15 100644
+> > > > > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > > > > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > > > > @@ -2771,6 +2771,15 @@ static const struct usb_device_id uvc_ids[] = {
+> > > > >         .bInterfaceSubClass   = 1,
+> > > > >         .bInterfaceProtocol   = 0,
+> > > > >         .driver_info          = UVC_INFO_QUIRK(UVC_QUIRK_RESTORE_CTRLS_ON_INIT) },
+> > > > > +     /* Logitech HD Pro Webcam C922 */
+> > > > > +     { .match_flags          = USB_DEVICE_ID_MATCH_DEVICE
+> > > > > +                             | USB_DEVICE_ID_MATCH_INT_INFO,
+> > > > > +       .idVendor             = 0x046d,
+> > > > > +       .idProduct            = 0x085c,
+> > > > > +       .bInterfaceClass      = USB_CLASS_VIDEO,
+> > > > > +       .bInterfaceSubClass   = 1,
+> > > > > +       .bInterfaceProtocol   = 0,
+> > > > > +       .driver_info          = UVC_INFO_QUIRK(UVC_QUIRK_INVALID_DEVICE_SOF) },
+> > > > >       /* Chicony CNF7129 (Asus EEE 100HE) */
+> > > > >       { .match_flags          = USB_DEVICE_ID_MATCH_DEVICE
+> > > > >                               | USB_DEVICE_ID_MATCH_INT_INFO,
+> > > > > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> > > > > index 6d0e474671a2..760ab015cf9c 100644
+> > > > > --- a/drivers/media/usb/uvc/uvc_video.c
+> > > > > +++ b/drivers/media/usb/uvc/uvc_video.c
+> > > > > @@ -518,13 +518,20 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
+> > > > >       /* To limit the amount of data, drop SCRs with an SOF identical to the
+> > > > >        * previous one.
+> > > > >        */
+> > > > > -     dev_sof = get_unaligned_le16(&data[header_size - 2]);
+> > > > > +     if (stream->dev->quirks & UVC_QUIRK_INVALID_DEVICE_SOF)
+> > > > > +             dev_sof = usb_get_current_frame_number(stream->dev->udev);
+> > > > > +     else
+> > > > > +             dev_sof = get_unaligned_le16(&data[header_size - 2]);
+> > > > > +
+> > > > >       if (dev_sof == stream->clock.last_sof)
+> > > > >               return;
+> > > > >
+> > > > >       stream->clock.last_sof = dev_sof;
+> > > > >
+> > > > > -     host_sof = usb_get_current_frame_number(stream->dev->udev);
+> > > > > +     if (stream->dev->quirks & UVC_QUIRK_INVALID_DEVICE_SOF)
+> > > > > +             host_sof = dev_sof;
+> > > > > +     else
+> > > > > +             host_sof = usb_get_current_frame_number(stream->dev->udev);
+> > > > >       time = uvc_video_get_time();
+> > > > >
+> > > > >       /* The UVC specification allows device implementations that can't obtain
+> > > > > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> > > > > index cce5e38133cd..89d909661915 100644
+> > > > > --- a/drivers/media/usb/uvc/uvcvideo.h
+> > > > > +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > > > > @@ -209,6 +209,8 @@
+> > > > >  #define UVC_QUIRK_RESTORE_CTRLS_ON_INIT      0x00000400
+> > > > >  #define UVC_QUIRK_FORCE_Y8           0x00000800
+> > > > >  #define UVC_QUIRK_FORCE_BPP          0x00001000
+> > > > > +#define UVC_QUIRK_INVALID_DEVICE_SOF 0x00002000
+> > > > > +
+> > > > >
+> > > > >  /* Format flags */
+> > > > >  #define UVC_FMT_FLAG_COMPRESSED              0x00000001
 
-The component API may look simple but has some issues, it's not easy
-to debug, and can cause troubles if not used as expected [1].
-It's worth making sure you actually need a framework
-to glue different devices together.
+-- 
+Regards,
 
-> Do you have any other suggestion for this architecture?
->
-
-Looking at the different patchsets that are posted, it's not clear
-to me what exactly are the different architectures that you intend
-to support, can you some documentation which clarifies that?
-
-Thanks,
-Ezequiel
-
-[1] https://patchwork.kernel.org/project/linux-rockchip/cover/20200120170602.3832-1-ezequiel@collabora.com/
+Laurent Pinchart
