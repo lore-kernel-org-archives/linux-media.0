@@ -4,69 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56D00C432BE
-	for <linux-media@archiver.kernel.org>; Thu, 19 Aug 2021 20:19:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 059D7C4320A
+	for <linux-media@archiver.kernel.org>; Thu, 19 Aug 2021 20:21:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36A1B610E6
-	for <linux-media@archiver.kernel.org>; Thu, 19 Aug 2021 20:19:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD6956108B
+	for <linux-media@archiver.kernel.org>; Thu, 19 Aug 2021 20:21:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235074AbhHSUUR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Aug 2021 16:20:17 -0400
-Received: from retiisi.eu ([95.216.213.190]:60174 "EHLO hillosipuli.retiisi.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231683AbhHSUUP (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Aug 2021 16:20:15 -0400
-Received: from lanttu.localdomain (unknown [192.168.2.193])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 3A684634C92;
-        Thu, 19 Aug 2021 23:19:37 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-acpi@vger.kernel.org, linux-media@vger.kernel.org
-Cc:     andriy.shevchenko@linux.intel.com, rafael@kernel.org
-Subject: [RFC 1/3] imx258: Defer probing on ident register read fail (on ACPI)
-Date:   Thu, 19 Aug 2021 23:19:34 +0300
-Message-Id: <20210819201936.7390-2-sakari.ailus@linux.intel.com>
+        id S234919AbhHSUWH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Aug 2021 16:22:07 -0400
+Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:36731 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233208AbhHSUWG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 19 Aug 2021 16:22:06 -0400
+Received: from pop-os.home ([90.126.253.178])
+        by mwinf5d33 with ME
+        id jYMT250033riaq203YMTFv; Thu, 19 Aug 2021 22:21:28 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 19 Aug 2021 22:21:28 +0200
+X-ME-IP: 90.126.253.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     minghsiu.tsai@mediatek.com, houlong.wei@mediatek.com,
+        andrew-ct.chen@mediatek.com, tiffany.lin@mediatek.com,
+        mchehab@kernel.org, matthias.bgg@gmail.com, hans.verkuil@cisco.com
+Cc:     linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] media: mtk-vpu: Fix a resource leak in the error handling path of 'mtk_vpu_probe()'
+Date:   Thu, 19 Aug 2021 22:21:25 +0200
+Message-Id: <3d4ba5d254044567653a006b18971658ec69560f.1629404378.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210819201936.7390-1-sakari.ailus@linux.intel.com>
-References: <20210819201936.7390-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Return -EPROBE_DEFER if probing the device fails because of the I²C
-transaction (-EIO only). This generally happens when the power on sequence
-of the device has not been fully performed yet due to later probing of
-other drivers.
+A successful 'clk_prepare()' call should be balanced by a corresponding
+'clk_unprepare()' call in the error handling path of the probe, as already
+done in the remove function.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Update the error handling path accordingly.
+
+Fixes: 3003a180ef6b ("[media] VPU: mediatek: support Mediatek VPU")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/media/i2c/imx258.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/media/platform/mtk-vpu/mtk_vpu.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index c249507aa2db..2751c12b6029 100644
---- a/drivers/media/i2c/imx258.c
-+++ b/drivers/media/i2c/imx258.c
-@@ -1109,6 +1109,14 @@ static int imx258_identify_module(struct imx258 *imx258)
+diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c b/drivers/media/platform/mtk-vpu/mtk_vpu.c
+index ec290dde59cf..7f1647da0ade 100644
+--- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
++++ b/drivers/media/platform/mtk-vpu/mtk_vpu.c
+@@ -848,7 +848,8 @@ static int mtk_vpu_probe(struct platform_device *pdev)
+ 	vpu->wdt.wq = create_singlethread_workqueue("vpu_wdt");
+ 	if (!vpu->wdt.wq) {
+ 		dev_err(dev, "initialize wdt workqueue failed\n");
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto clk_unprepare;
+ 	}
+ 	INIT_WORK(&vpu->wdt.ws, vpu_wdt_reset_func);
+ 	mutex_init(&vpu->vpu_mutex);
+@@ -942,6 +943,8 @@ static int mtk_vpu_probe(struct platform_device *pdev)
+ 	vpu_clock_disable(vpu);
+ workqueue_destroy:
+ 	destroy_workqueue(vpu->wdt.wq);
++clk_unprepare:
++	clk_unprepare(vpu->clk);
  
- 	ret = imx258_read_reg(imx258, IMX258_REG_CHIP_ID,
- 			      IMX258_REG_VALUE_16BIT, &val);
-+	if (ret == -EIO && is_acpi_device_node(dev_fwnode(&client->dev))) {
-+		/*
-+		 * If we get -EIO here and it's an ACPI device, there's a fair
-+		 * likelihood it's because the drivers required to power this
-+		 * device on have not probed yet. Thus return -EPROBE_DEFER.
-+		 */
-+		return -EPROBE_DEFER;
-+	}
- 	if (ret) {
- 		dev_err(&client->dev, "failed to read chip id %x\n",
- 			IMX258_CHIP_ID);
+ 	return ret;
+ }
 -- 
 2.30.2
 
