@@ -2,84 +2,84 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF17C4338F
-	for <linux-media@archiver.kernel.org>; Sun, 22 Aug 2021 00:04:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C635C4338F
+	for <linux-media@archiver.kernel.org>; Sun, 22 Aug 2021 04:03:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 55BE861284
-	for <linux-media@archiver.kernel.org>; Sun, 22 Aug 2021 00:04:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F0216127B
+	for <linux-media@archiver.kernel.org>; Sun, 22 Aug 2021 04:03:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbhHVAFd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 21 Aug 2021 20:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbhHVAFc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 21 Aug 2021 20:05:32 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AC9C061575;
-        Sat, 21 Aug 2021 17:04:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=2P4f8b9zjkblhd2q55UzBaaO80Xl5R5PMFyRxYqRT5M=; b=I4xMIObofvh8UYoC2Z0vfGwiWx
-        J23bM3jqzUCphMoxfsZWiLNVUO/Ij83w7otea8C1I7rNaIoKi8E+27vLdrFqa2c9s6Rv0+jJGO3/Z
-        JVGfzjUSBg+l9HKT6PchiefflCHBGKQS3Nl8bwt4KLzCTNNCmgcJR5HiSEoOcx24v8drz6ISxlXry
-        xcEzge5MzFsrzyj653lov+MSBSRTxL7KQxQTsRsW8Lpnyjo5u+bdm2m2J/IjYcE96XOqxzABxhmCc
-        jaOBIUclmlVnhQ2QxcHxNG1NCHpRDL7puxsR1BAkwWLUOIWhuGy0nNxjKitPQmMVkm2sBVTvAlcn3
-        sGJ5dvJQ==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mHayq-00DLQX-3E; Sun, 22 Aug 2021 00:04:52 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, Sean Young <sean@mess.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH] media: rc and cec: keep all menu entries together
-Date:   Sat, 21 Aug 2021 17:04:50 -0700
-Message-Id: <20210822000450.27329-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        id S229757AbhHVEEi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Aug 2021 00:04:38 -0400
+Received: from mx20.baidu.com ([111.202.115.85]:53890 "EHLO baidu.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229479AbhHVEEh (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Aug 2021 00:04:37 -0400
+Received: from BC-Mail-EX04.internal.baidu.com (unknown [172.31.51.44])
+        by Forcepoint Email with ESMTPS id D7FBBF0C0DAF11AF86C9;
+        Sun, 22 Aug 2021 12:03:54 +0800 (CST)
+Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
+ BC-Mail-EX04.internal.baidu.com (172.31.51.44) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2242.12; Sun, 22 Aug 2021 12:03:54 +0800
+Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.62.12) by
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Sun, 22 Aug 2021 12:03:54 +0800
+From:   Cai Huoqing <caihuoqing@baidu.com>
+To:     <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, Cai Huoqing <caihuoqing@baidu.com>
+Subject: [PATCH] media: b2c2: flexcop: Convert to SPDX identifier
+Date:   Sun, 22 Aug 2021 12:03:39 +0800
+Message-ID: <20210822040339.1837-1-caihuoqing@baidu.com>
+X-Mailer: git-send-email 2.32.0.windows.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.31.62.12]
+X-ClientProxiedBy: BC-Mail-Ex27.internal.baidu.com (172.31.51.21) To
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Keep all of the Remote Controller and CEC menu entries grouped
-together. This is most relevant to 'make xconfig', where the
-entries for "HDMI CEC RC integration" and "Enable CEC error injection
-support" are not displayed (presented) anywhere near the other
-Remote Controller support options.
-By grouping all of these menu entries inside a menu/endmenu block,
-they are forced to be kept together.
+use SPDX-License-Identifier instead of a verbose license text
 
-Fixes: 46d2a3b964dd ("media: place CEC menu before MEDIA_SUPPORT")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Sean Young <sean@mess.org>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: linux-media@vger.kernel.org
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
 ---
- drivers/media/Kconfig |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/common/b2c2/flexcop.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
---- linux-next-20210820.orig/drivers/media/Kconfig
-+++ linux-next-20210820/drivers/media/Kconfig
-@@ -6,8 +6,10 @@
- #
- # NOTE: CEC and Remote Controller support should not depend on MEDIA_SUPPORT
- #
-+menu "Remote Controller and CEC support"
- source "drivers/media/rc/Kconfig"
- source "drivers/media/cec/Kconfig"
-+endmenu
+diff --git a/drivers/media/common/b2c2/flexcop.c b/drivers/media/common/b2c2/flexcop.c
+index cbaa61f10d5f..2eaff1316952 100644
+--- a/drivers/media/common/b2c2/flexcop.c
++++ b/drivers/media/common/b2c2/flexcop.c
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Linux driver for digital TV devices equipped with B2C2 FlexcopII(b)/III
+  * flexcop.c - main module part
+@@ -15,16 +16,6 @@
+  *   Uwe Bugla, uwe.bugla at gmx.de (doing tests, restyling code, writing docu)
+  *   Niklas Peinecke, peinecke at gdv.uni-hannover.de (hardware pid/mac
+  *               filtering)
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public License
+- * as published by the Free Software Foundation; either version 2.1
+- * of the License, or (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+  */
  
- menuconfig MEDIA_SUPPORT
- 	tristate "Multimedia support"
+ #include "flexcop.h"
+-- 
+2.25.1
+
