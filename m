@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B354EC4320E
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54CC8C4338F
+	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E438613BD
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 42064613B1
+	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 10:00:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235992AbhHXKBX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Aug 2021 06:01:23 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:43050 "EHLO
+        id S235918AbhHXKBY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Aug 2021 06:01:24 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:43098 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235900AbhHXKBT (ORCPT
+        with ESMTP id S235947AbhHXKBU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Aug 2021 06:01:19 -0400
-X-UUID: 884c4857c37e4f31973d1d2839daf103-20210824
-X-UUID: 884c4857c37e4f31973d1d2839daf103-20210824
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        Tue, 24 Aug 2021 06:01:20 -0400
+X-UUID: 4b188475176c4b99ae26747846d05b4a-20210824
+X-UUID: 4b188475176c4b99ae26747846d05b4a-20210824
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1553220195; Tue, 24 Aug 2021 18:00:31 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 43432344; Tue, 24 Aug 2021 18:00:30 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Tue, 24 Aug 2021 18:00:29 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
@@ -54,10 +54,12 @@ CC:     Maoguang Meng <maoguang.meng@mediatek.com>,
         <sj.huang@mediatek.com>, <ben.lok@mediatek.com>,
         <randy.wu@mediatek.com>, <srv_heupstream@mediatek.com>,
         <hsinyi@google.com>
-Subject: [PATCH v7 0/5] media: mediatek: support mdp3 on mt8183 platform
-Date:   Tue, 24 Aug 2021 18:00:22 +0800
-Message-ID: <20210824100027.25989-1-moudy.ho@mediatek.com>
+Subject: [PATCH v7 3/5] dt-binding: mt8183: Add Mediatek MDP3 dt-bindings
+Date:   Tue, 24 Aug 2021 18:00:25 +0800
+Message-ID: <20210824100027.25989-4-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20210824100027.25989-1-moudy.ho@mediatek.com>
+References: <20210824100027.25989-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -65,140 +67,525 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Changes since v6:
-- Refactor GCE event to corresponding node.
-- Fix dt_binding_check fail.
-- Fix compilation errors.
+This patch adds DT binding document for Media Data Path 3 (MDP3)
+a unit in multimedia system used for scaling and color format convert.
 
-Changes since v5:
-- Rebase on v5.14-rc6.
-- Move MMSYS/Mutex settings to corresponding driver.
-- Revise the software license description and copyright.
-- Remove unnecessary enum. or definitions.
-- Optimize platform/chip definition conditions.
-- Use general printing functions instead of MDP3 private ones.
-- Fix compile warning.
-
-Changes since v4:
-- Rebase on v5.13-rc1.
-- Remove the CMDQ flush flow to match the CMDQ API change.
-- Integrate four of MDP's direct-link subcomponents into MDP controller node
-  from syscon node to avoid illegal clock usage.
-- Rewrite dt-binding in a JSON compatible subset of YAML
-- Fix a bit of macro argument precedence.
-
-Changes since v3:
-- Rebase on v5.9-rc1.
-- modify code for review comment from Rob Herring, cancel multiple nodes using
-  same register base situation.
-- control IOMMU port through pm runtime get/put to DMA components' device.
-- SCP(VPU) driver revision.
-- stop queuing jobs(remove flush_workqueue()) after mdp_m2m_release().
-- add computation of plane address with data_offset.
-- fix scale ratio check issue.
-- add default v4l2_format setting.
-
-Changes since v2:
-- modify code for review comment from Tomasz Figa & Alexandre Courbot
-- review comment from Rob Herring will offer code revision in v4, due to
-  it's related to device node modification, will need to modify code
-  architecture
-
-Changes since v1:
-- modify code for CMDQ v3 API support
-- EC ipi cmd migration
-- fix compliance test fail item (m2m cmd with -f) due to there is two problem in runing all format(-f) cmd:
-1. out of memory before test complete
-        Due to capture buffer mmap (refcount + 1) after reqbuf but seems
-        no corresponding munmap called before device close.
-        There are total 12XX items(formats) in format test and each format
-        alloc 8 capture/output buffers.
-2. unceasingly captureBufs() (randomly)
-        Seems the break statement didn't catch the count == 0 situation:
-        In v4l2-test-buffers.cpp, function: captureBufs()
-                        ...
-                        count--;
-                        if (!node->is_m2m && !count)
-                                break;
-        Log is as attachment
-
-I will paste the test result with problem part in another e-mail
-
-Hi,
-
-This is the first version of RFC patch for Media Data Path 3 (MDP3),
-MDP3 is used for scaling and color format conversion.
-support using GCE to write register in critical time limitation.
-support V4L2 m2m device control.
-
-Moudy Ho (5):
-  soc: mediatek: mutex: add support for MDP
-  soc: mediatek: mmsys: Add support for MDP
-  dt-binding: mt8183: Add Mediatek MDP3 dt-bindings
-  dts: arm64: mt8183: Add Mediatek MDP3 nodes
-  media: platform: mtk-mdp3: Add Mediatek MDP3 driver
-
- .../bindings/media/mediatek,mdp3-ccorr.yaml   |   57 +
- .../bindings/media/mediatek,mdp3-rdma.yaml    |  207 +++
- .../bindings/media/mediatek,mdp3-rsz.yaml     |   65 +
- .../bindings/media/mediatek,mdp3-wdma.yaml    |   71 +
- .../bindings/media/mediatek,mdp3-wrot.yaml    |   71 +
- arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  110 ++
- drivers/media/platform/Kconfig                |   19 +
- drivers/media/platform/Makefile               |    2 +
- drivers/media/platform/mtk-mdp3/Makefile      |    6 +
- .../media/platform/mtk-mdp3/mdp_reg_ccorr.h   |   19 +
- drivers/media/platform/mtk-mdp3/mdp_reg_isp.h |   27 +
- .../media/platform/mtk-mdp3/mdp_reg_rdma.h    |   65 +
- drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h |   39 +
- .../media/platform/mtk-mdp3/mdp_reg_wdma.h    |   47 +
- .../media/platform/mtk-mdp3/mdp_reg_wrot.h    |   55 +
- drivers/media/platform/mtk-mdp3/mtk-img-ipi.h |  280 ++++
- .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.c   |  507 +++++++
- .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.h   |   46 +
- .../media/platform/mtk-mdp3/mtk-mdp3-comp.c   | 1307 +++++++++++++++++
- .../media/platform/mtk-mdp3/mtk-mdp3-comp.h   |  147 ++
- .../media/platform/mtk-mdp3/mtk-mdp3-core.c   |  329 +++++
- .../media/platform/mtk-mdp3/mtk-mdp3-core.h   |   75 +
- .../media/platform/mtk-mdp3/mtk-mdp3-m2m.c    |  801 ++++++++++
- .../media/platform/mtk-mdp3/mtk-mdp3-m2m.h    |   41 +
- .../media/platform/mtk-mdp3/mtk-mdp3-regs.c   |  746 ++++++++++
- .../media/platform/mtk-mdp3/mtk-mdp3-regs.h   |  372 +++++
- .../media/platform/mtk-mdp3/mtk-mdp3-vpu.c    |  312 ++++
- .../media/platform/mtk-mdp3/mtk-mdp3-vpu.h    |   78 +
- drivers/soc/mediatek/mt8183-mmsys.h           |  235 +++
- drivers/soc/mediatek/mtk-mmsys.c              |  164 +++
- drivers/soc/mediatek/mtk-mmsys.h              |    9 +-
- drivers/soc/mediatek/mtk-mutex.c              |  106 +-
- include/linux/soc/mediatek/mtk-mmsys.h        |   81 +
- include/linux/soc/mediatek/mtk-mutex.h        |    8 +
- 34 files changed, 6495 insertions(+), 9 deletions(-)
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+---
+ .../bindings/media/mediatek,mdp3-ccorr.yaml   |  57 +++++
+ .../bindings/media/mediatek,mdp3-rdma.yaml    | 207 ++++++++++++++++++
+ .../bindings/media/mediatek,mdp3-rsz.yaml     |  65 ++++++
+ .../bindings/media/mediatek,mdp3-wdma.yaml    |  71 ++++++
+ .../bindings/media/mediatek,mdp3-wrot.yaml    |  71 ++++++
+ 5 files changed, 471 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-ccorr.yaml
  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-wdma.yaml
  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
- create mode 100644 drivers/media/platform/mtk-mdp3/Makefile
- create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_ccorr.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_isp.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_rdma.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_wdma.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_wrot.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-img-ipi.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-core.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.c
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.c
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.h
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.c
- create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.h
 
+diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-ccorr.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-ccorr.yaml
+new file mode 100644
+index 000000000000..59fd68b46022
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-ccorr.yaml
+@@ -0,0 +1,57 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/mediatek,mdp3-ccorr.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mediatek Media Data Path 3 CCORR Device Tree Bindings
++
++maintainers:
++  - Daoyuan Huang <daoyuan.huang@mediatek.com>
++  - Moudy Ho <moudy.ho@mediatek.com>
++
++description: |
++  One of Media Data Path 3 (MDP3) components used to do color correction with 3X3 matrix.
++
++properties:
++  compatible:
++    items:
++      - enum:
++        - mediatek,mt8183-mdp3-ccorr
++
++  mediatek,mdp3-id:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    maxItems: 1
++    description: |
++      HW index to distinguish same functionality modules.
++
++  reg:
++    description: |
++      Physical base address and length of the function block
++      register space, the number aligns with the component
++      and its own subcomponent.
++
++  mediatek,gce-client-reg:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: |
++      sub-system id corresponding to the global command engine (GCE)
++      register address.
++      $ref: /schemas/mailbox/mtk-gce.txt
++
++  clocks:
++    minItems: 1
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt8183-clk.h>
++    #include <dt-bindings/gce/mt8183-gce.h>
++
++    mdp3_ccorr: mdp3_ccorr@1401c000 {
++      compatible = "mediatek,mt8183-mdp3-ccorr";
++      mediatek,mdp3-id = <0>;
++      reg = <0x1401c000 0x1000>;
++      mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0xc000 0x1000>;
++      clocks = <&mmsys CLK_MM_MDP_CCORR>;
++    };
+diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
+new file mode 100644
+index 000000000000..b355d7fe791e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
+@@ -0,0 +1,207 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/mediatek,mdp3-rdma.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mediatek Media Data Path 3 Device Tree Bindings
++
++maintainers:
++  - Daoyuan Huang <daoyuan.huang@mediatek.com>
++  - Moudy Ho <moudy.ho@mediatek.com>
++
++description: |
++  One of Media Data Path 3 (MDP3) components used to do read DMA.
++  RDMA0 is also used to be a controller node containing MMSYS,
++  MUTEX, GCE and SCP settings.
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++        - enum:
++          # controller node
++          - mediatek,mt8183-mdp3
++        - enum:
++          - mediatek,mt8183-mdp3-rdma
++
++      - items:
++        - enum:
++          # read DMA
++          - mediatek,mt8183-mdp3-rdma
++
++  mediatek,scp:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    maxItems: 1
++    description: |
++      The node of system control processor (SCP), using
++      the remoteproc & rpmsg framework.
++      $ref: /schemas/remoteproc/mtk,scp.yaml
++
++  mediatek,mdp3-id:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    maxItems: 1
++    description: |
++      In MDP3, it can allocate multiple identical modules for
++      different data path selection or multi-pipeline execution.
++      This node is used to indicate the ID of each module.
++
++  mdp3-comps:
++    $ref: /schemas/types.yaml#/definitions/string-array
++    items:
++        - enum:
++          # MDP direct-link input path selection, create a
++          # component for path connectedness of HW pipe control
++          - mediatek,mt8183-mdp3-dl1
++        - enum:
++          - mediatek,mt8183-mdp3-dl2
++        - enum:
++          # MDP direct-link output path selection, create a
++          # component for path connectedness of HW pipe control
++          - mediatek,mt8183-mdp3-path1
++        - enum:
++          - mediatek,mt8183-mdp3-path2
++        - enum:
++          # Input DMA of ISP PASS2 (DIP) module for raw image input
++          - mediatek,mt8183-mdp3-imgi
++        - enum:
++          # Output DMA of ISP PASS2 (DIP) module for YUV image output
++          - mediatek,mt8183-mdp3-exto
++
++  mdp3-comp-ids:
++    maxItems: 1
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    description: |
++      Pipeline ID of MDP direct-link or DIP.
++
++  reg:
++    description: |
++      Physical base address and length of the function block
++      register space, the number aligns with the component
++      and its own subcomponent.
++
++  mediatek,gce-client-reg:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: |
++      sub-system id corresponding to the global command engine (GCE)
++      register address.
++      $ref: /schemas/mailbox/mtk-gce.txt
++
++  power-domains:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++    maxItems: 6
++
++  iommus:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: |
++      Should point to the respective IOMMU block with master
++      port as argument.
++      $ref: /schemas/iommu/mediatek,iommu.yaml
++
++  mediatek,mmsys:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    maxItems: 1
++    description: |
++      The node of mux(multiplexer) controller for HW connections.
++
++  mediatek,mm-mutex:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    maxItems: 1
++    description: |
++      The node of sof(start of frame) signal controller.
++
++  mediatek,mailbox-gce:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: |
++      The node of global command engine (GCE), used to read/write
++      registers with critical time limitation.
++      $ref: /schemas/mailbox/mtk-gce.txt
++
++  mboxes:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: |
++      $ref: /schemas/mailbox/mailbox.txt
++
++  gce-subsys:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: |
++      sub-system id corresponding to the global command engine (GCE)
++      register address.
++      $ref: /schemas/mailbox/mtk-gce.txt
++
++if:
++  properties:
++    compatible:
++      items:
++        - enum:
++          - mediatek,mt8183-mdp3
++        - enum:
++          - mediatek,mt8183-mdp3-rdma
++
++then:
++  required:
++    - mediatek,scp
++    - mediatek,mmsys
++    - mediatek,mm-mutex
++    - mediatek,mailbox-gce
++    - mboxes
++    - gce-subsys
++
++required:
++  - compatible
++  - mediatek,mdp3-id
++  - reg
++  - clocks
++  - mediatek,gce-client-reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt8183-clk.h>
++    #include <dt-bindings/gce/mt8183-gce.h>
++    #include <dt-bindings/power/mt8183-power.h>
++    #include <dt-bindings/memory/mt8183-larb-port.h>
++
++    mdp3_rdma0: mdp3_rdma0@14001000 {
++      compatible = "mediatek,mt8183-mdp3",
++                   "mediatek,mt8183-mdp3-rdma";
++      mediatek,scp = <&scp>;
++      mediatek,mdp3-id = <0>;
++      mdp3-comps = "mediatek,mt8183-mdp3-dl1", "mediatek,mt8183-mdp3-dl2",
++                   "mediatek,mt8183-mdp3-path1", "mediatek,mt8183-mdp3-path2",
++                   "mediatek,mt8183-mdp3-imgi", "mediatek,mt8183-mdp3-exto";
++      mdp3-comp-ids = <0 1 0 1 0 1>;
++      reg = <0x14001000 0x1000>,
++            <0x14000000 0x1000>,
++            <0x14005000 0x1000>,
++            <0x14006000 0x1000>,
++            <0x15020000 0x1000>;
++      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x1000 0x1000>,
++                                <&gce SUBSYS_1400XXXX 0 0x1000>,
++                                <&gce SUBSYS_1400XXXX 0x5000 0x1000>,
++                                <&gce SUBSYS_1400XXXX 0x6000 0x1000>,
++                                <&gce SUBSYS_1502XXXX 0 0x1000>;
++      power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++      clocks = <&mmsys CLK_MM_MDP_RDMA0>,
++               <&mmsys CLK_MM_MDP_RSZ1>,
++               <&mmsys CLK_MM_MDP_DL_TXCK>,
++               <&mmsys CLK_MM_MDP_DL_RX>,
++               <&mmsys CLK_MM_IPU_DL_TXCK>,
++               <&mmsys CLK_MM_IPU_DL_RX>;
++      iommus = <&iommu>;
++      mediatek,mmsys = <&mmsys>;
++      mediatek,mm-mutex = <&mutex>;
++      mediatek,mailbox-gce = <&gce>;
++      mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
++               <&gce 21 CMDQ_THR_PRIO_LOWEST 0>,
++               <&gce 22 CMDQ_THR_PRIO_LOWEST 0>,
++               <&gce 23 CMDQ_THR_PRIO_LOWEST 0>;
++      gce-subsys = <&gce 0x14000000 SUBSYS_1400XXXX>,
++                   <&gce 0x14010000 SUBSYS_1401XXXX>,
++                   <&gce 0x14020000 SUBSYS_1402XXXX>,
++                   <&gce 0x15020000 SUBSYS_1502XXXX>;
++    };
+\ No newline at end of file
+diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
+new file mode 100644
+index 000000000000..c55a52cd32b7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
+@@ -0,0 +1,65 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/mediatek,mdp3-rsz.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mediatek Media Data Path 3 Resizer Device Tree Bindings
++
++maintainers:
++  - Daoyuan Huang <daoyuan.huang@mediatek.com>
++  - Moudy Ho <moudy.ho@mediatek.com>
++
++description: |
++  One of Media Data Path 3 (MDP3) components used to do frame resizing.
++
++properties:
++  compatible:
++    items:
++      - enum:
++        - mediatek,mt8183-mdp3-rsz
++
++  mediatek,mdp3-id:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    maxItems: 1
++    description: |
++      HW index to distinguish same functionality modules.
++
++  reg:
++    description: |
++      Physical base address and length of the function block
++      register space, the number aligns with the component
++      and its own subcomponent.
++
++  mediatek,gce-client-reg:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: |
++      sub-system id corresponding to the global command engine (GCE)
++      register address.
++      $ref: /schemas/mailbox/mtk-gce.txt
++
++  clocks:
++    minItems: 1
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt8183-clk.h>
++    #include <dt-bindings/gce/mt8183-gce.h>
++
++    mdp3_rsz0: mdp3_rsz0@14003000 {
++      compatible = "mediatek,mt8183-mdp3-rsz";
++      mediatek,mdp3-id = <0>;
++      reg = <0x14003000 0x1000>;
++      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x3000 0x1000>;
++      clocks = <&mmsys CLK_MM_MDP_RSZ0>;
++    };
++
++    mdp3_rsz1: mdp3_rsz1@14004000 {
++      compatible = "mediatek,mt8183-mdp3-rsz";
++      mediatek,mdp3-id = <1>;
++      reg = <0x14004000 0x1000>;
++      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x4000 0x1000>;
++      clocks = <&mmsys CLK_MM_MDP_RSZ1>;
++    };
+diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-wdma.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-wdma.yaml
+new file mode 100644
+index 000000000000..93e6f331ada8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-wdma.yaml
+@@ -0,0 +1,71 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/mediatek,mdp3-wdma.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mediatek Media Data Path 3 Device Tree Bindings
++
++maintainers:
++  - Daoyuan Huang <daoyuan.huang@mediatek.com>
++  - Moudy Ho <moudy.ho@mediatek.com>
++
++description: |
++  One of Media Data Path 3 (MDP3) components used to write DMA.
++
++properties:
++  compatible:
++    items:
++      - enum:
++        - mediatek,mt8183-mdp3-wdma
++
++  mediatek,mdp3-id:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    maxItems: 1
++    description: |
++      HW index to distinguish same functionality modules.
++
++  reg:
++    description: |
++      Physical base address and length of the function block
++      register space, the number aligns with the component
++      and its own subcomponent.
++
++  mediatek,gce-client-reg:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: |
++      sub-system id corresponding to the global command engine (GCE)
++      register address.
++      $ref: /schemas/mailbox/mtk-gce.txt
++
++  power-domains:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++
++  iommus:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: |
++      Should point to the respective IOMMU block with master
++      port as argument.
++      $ref: /schemas/iommu/mediatek,iommu.yaml
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt8183-clk.h>
++    #include <dt-bindings/gce/mt8183-gce.h>
++    #include <dt-bindings/power/mt8183-power.h>
++    #include <dt-bindings/memory/mt8183-larb-port.h>
++
++    mdp3_wdma: mdp3_wdma@14006000 {
++      compatible = "mediatek,mt8183-mdp3-wdma";
++      mediatek,mdp3-id = <0>;
++      reg = <0x14006000 0x1000>;
++      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x6000 0x1000>;
++      power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++      clocks = <&mmsys CLK_MM_MDP_WDMA0>;
++      iommus = <&iommu>;
++    };
+diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
+new file mode 100644
+index 000000000000..2993da04c562
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
+@@ -0,0 +1,71 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/mediatek,mdp3-wrot.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mediatek Media Data Path 3 Device Tree Bindings
++
++maintainers:
++  - Daoyuan Huang <daoyuan.huang@mediatek.com>
++  - Moudy Ho <moudy.ho@mediatek.com>
++
++description: |
++  One of Media Data Path 3 (MDP3) components used to write DMA with frame rotation.
++
++properties:
++  compatible:
++    items:
++      - enum:
++        - mediatek,mt8183-mdp3-wrot
++
++  mediatek,mdp3-id:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    maxItems: 1
++    description: |
++      HW index to distinguish same functionality modules.
++
++  reg:
++    description: |
++      Physical base address and length of the function block
++      register space, the number aligns with the component
++      and its own subcomponent.
++
++  mediatek,gce-client-reg:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: |
++      sub-system id corresponding to the global command engine (GCE)
++      register address.
++      $ref: /schemas/mailbox/mtk-gce.txt
++
++  power-domains:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++
++  iommus:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: |
++      Should point to the respective IOMMU block with master
++      port as argument.
++      $ref: /schemas/iommu/mediatek,iommu.yaml
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt8183-clk.h>
++    #include <dt-bindings/gce/mt8183-gce.h>
++    #include <dt-bindings/power/mt8183-power.h>
++    #include <dt-bindings/memory/mt8183-larb-port.h>
++
++    mdp3_wrot0: mdp3_wrot0@14005000 {
++      compatible = "mediatek,mt8183-mdp3-wrot";
++      mediatek,mdp3-id = <0>;
++      reg = <0x14005000 0x1000>;
++      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x5000 0x1000>;
++      power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++      clocks = <&mmsys CLK_MM_MDP_WROT0>;
++      iommus = <&iommu>;
++    };
 -- 
 2.18.0
 
