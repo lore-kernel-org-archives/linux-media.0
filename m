@@ -2,150 +2,423 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE45CC4320A
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 17:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E3F7C4320A
+	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 18:03:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9793660F58
-	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 17:57:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6771610D0
+	for <linux-media@archiver.kernel.org>; Tue, 24 Aug 2021 18:03:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239594AbhHXR5z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Aug 2021 13:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239407AbhHXR5s (ORCPT
+        id S238585AbhHXSDs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Aug 2021 14:03:48 -0400
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:39529 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231863AbhHXSDm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Aug 2021 13:57:48 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D63C02B906
-        for <linux-media@vger.kernel.org>; Tue, 24 Aug 2021 10:32:31 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id a5so4045957qvq.0
-        for <linux-media@vger.kernel.org>; Tue, 24 Aug 2021 10:32:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=lwC1/qqMXCHkSEuX0aG71XmLnSxkAQ0/tMDOcg4Aies=;
-        b=KjMF1lA4YayhkMA/+onna2RUZsN7mjQYxMOcX2gD+57MQisyXwxt6Oi053+GIgqrkX
-         wkN4XahJSetG45Hq/xYogC9dQnfLRCPsyHSD6Q7tpElYbipZG4FkwyJuWVih3LEz06oM
-         +KHM4YBcae8DcATClLFJCnIgSzugnAHylazYJXvwdV+UitfGYHbYhLMgFpbtiVjDQ/hZ
-         6FpUoL9d2o+MQCSNfZoI0mMyluhTbm9YMZ+emKes/bQHe0tESliqVviSsh1yLLwb/OtF
-         O+Qael98lhH1hoeAIJlJwHnICFbEg0iI1liC8rgXZzX6OwslIY1ztRDfgZkeDvmxsRFp
-         KsEg==
+        Tue, 24 Aug 2021 14:03:42 -0400
+Received: by mail-ot1-f44.google.com with SMTP id m7-20020a9d4c87000000b0051875f56b95so48350698otf.6;
+        Tue, 24 Aug 2021 11:02:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=lwC1/qqMXCHkSEuX0aG71XmLnSxkAQ0/tMDOcg4Aies=;
-        b=l6F8GrR27Dr6vyPFsZNBhbbWyqFZaGoGCeFoROp4qelktPxVaR+hS/dcQFj9aWVtBt
-         pbNZ3q/2YOE1icGITMc364F5YmB+aRUo0H4xLhYq37zOQsMEJZejoq8z0ps/tP+RzxTq
-         TyBLfNU1JiHk6DcqafA2UnR5jOrT1rl9FP2iEFYK+09N92NOzuomMP0RHsdVeVg16M6x
-         YftVoyEuaHrTSuUFmQMDshnYcJQAa0u8fms1pImVHJSdNymTsRkbR9geLsij/jqkuB+Q
-         YR4KQNN7t/FO3PFFspJ4OEk4YdvQQyZoeGE/lIz0AnNXSlSEaD1qdwP1oUgdsorc6RXQ
-         sFtw==
-X-Gm-Message-State: AOAM532LczlGW+2k74KlRTyyfkegIz9OuOXRUpZiz0ZSAs8jfKV6kN71
-        oaVaN1vU5y2f+jDIp2sT/+pmXg==
-X-Google-Smtp-Source: ABdhPJwJ+2u+qDYC4MSLYpqJCPTaTMcY6ziqO6lM9p9+dgrNw/00zITDynb3bfoU+1EwIclnIvZtfQ==
-X-Received: by 2002:a05:6214:1787:: with SMTP id ct7mr40068660qvb.53.1629826350573;
-        Tue, 24 Aug 2021 10:32:30 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id m68sm9660473qkb.105.2021.08.24.10.32.29
+         :mime-version:content-disposition:in-reply-to;
+        bh=uNMRYMllxWL8XGJk3ETIsCnQBUzMHoUdrT2h5SkH/6Y=;
+        b=oZSww1SfBYuf9Gbq8uNnuKhNj5qhaHEQ5ihj4QA83GFSpuuntUm7k3AjSUZsOSnRsj
+         A3X8ZvduNYSdNIGgc1+hKdDdOkQ6gHR8lkuMg3K94ndin69YZefLoC7qFAD0T/TBIYhd
+         98bYv4B8VW6PKLKBA/yVMrofwDhDRIsM9tuQXQ2ZYkaVTfCOXE8GaVOUOzmRuHx7TJYG
+         3FIeltBc59yAsLXAfrspfip8/66ukUaZqFG6fBAdgJ+gnnBQzVdFyW48j8Zr3JLkLvFQ
+         fdhFBxrpSe5rgMQbtSeSp4TtjoEr0qiuZlkBi9JTLsMOTgd1sbDmGhS8iJnt/mMxcEL3
+         nhcA==
+X-Gm-Message-State: AOAM531XUeZ7GeGrXvv90LJkPEkHvWs8Ec3d0CeWHm5mQ1FimSN5XRlI
+        ZnR0Lva67j3HvUyUksKxGQ==
+X-Google-Smtp-Source: ABdhPJx7GMzxBvvweeX3MRXjWRK901bURfGJIMnVZwwutLazSpJSraaQ0ZU64MXeBUVS/xase701ng==
+X-Received: by 2002:aca:d06:: with SMTP id 6mr3707372oin.105.1629828176982;
+        Tue, 24 Aug 2021 11:02:56 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id t1sm4702931otp.9.2021.08.24.11.02.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Aug 2021 10:32:29 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1mIaHk-004XHB-QJ; Tue, 24 Aug 2021 14:32:28 -0300
-Date:   Tue, 24 Aug 2021 14:32:28 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Gal Pressman <galpress@amazon.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Doug Ledford <dledford@redhat.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Oded Gabbay <ogabbay@habana.ai>,
-        Tomer Tayar <ttayar@habana.ai>,
-        Yossi Leybovich <sleybo@amazon.com>,
-        Alexander Matushevsky <matua@amazon.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jianxin Xiong <jianxin.xiong@intel.com>
-Subject: Re: [RFC] Make use of non-dynamic dmabuf in RDMA
-Message-ID: <20210824173228.GE543798@ziepe.ca>
-References: <20210819230602.GU543798@ziepe.ca>
- <CAKMK7uGgQWcs4Va6TGN9akHSSkmTs1i0Kx+6WpeiXWhJKpasLA@mail.gmail.com>
- <20210820123316.GV543798@ziepe.ca>
- <0fc94ac0-2bb9-4835-62b8-ea14f85fe512@amazon.com>
- <20210820143248.GX543798@ziepe.ca>
- <da6364b7-9621-a384-23b0-9aa88ae232e5@amazon.com>
- <fa124990-ee0c-7401-019e-08109e338042@amd.com>
- <e2c47256-de89-7eaa-e5c2-5b96efcec834@amazon.com>
- <6b819064-feda-b70b-ea69-eb0a4fca6c0c@amd.com>
- <a9604a39-d08f-6263-4c5b-a2bc9a70583d@nvidia.com>
+        Tue, 24 Aug 2021 11:02:56 -0700 (PDT)
+Received: (nullmailer pid 725482 invoked by uid 1000);
+        Tue, 24 Aug 2021 18:02:54 -0000
+Date:   Tue, 24 Aug 2021 13:02:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Moudy Ho <moudy.ho@mediatek.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org, drinkcat@chromium.org, acourbot@chromium.org,
+        pihsun@chromium.org, menghui.lin@mediatek.com,
+        sj.huang@mediatek.com, ben.lok@mediatek.com, randy.wu@mediatek.com,
+        srv_heupstream@mediatek.com, hsinyi@google.com
+Subject: Re: [PATCH v7 3/5] dt-binding: mt8183: Add Mediatek MDP3 dt-bindings
+Message-ID: <YSU0TrfFCsaI1TqV@robh.at.kernel.org>
+References: <20210824100027.25989-1-moudy.ho@mediatek.com>
+ <20210824100027.25989-4-moudy.ho@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a9604a39-d08f-6263-4c5b-a2bc9a70583d@nvidia.com>
+In-Reply-To: <20210824100027.25989-4-moudy.ho@mediatek.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Aug 24, 2021 at 10:27:23AM -0700, John Hubbard wrote:
-> On 8/24/21 2:32 AM, Christian König wrote:
-> > Am 24.08.21 um 11:06 schrieb Gal Pressman:
-> > > On 23/08/2021 13:43, Christian König wrote:
-> > > > Am 21.08.21 um 11:16 schrieb Gal Pressman:
-> > > > > On 20/08/2021 17:32, Jason Gunthorpe wrote:
-> > > > > > On Fri, Aug 20, 2021 at 03:58:33PM +0300, Gal Pressman wrote:
-> ...
-> > > > > IIUC, we're talking about three different exporter "types":
-> > > > > - Dynamic with move_notify (requires ODP)
-> > > > > - Dynamic with revoke_notify
-> > > > > - Static
-> > > > > 
-> > > > > Which changes do we need to make the third one work?
-> > > > Basically none at all in the framework.
-> > > > 
-> > > > You just need to properly use the dma_buf_pin() function when you start using a
-> > > > buffer (e.g. before you create an attachment) and the dma_buf_unpin() function
-> > > > after you are done with the DMA-buf.
-> > > I replied to your previous mail, but I'll ask again.
-> > > Doesn't the pin operation migrate the memory to host memory?
-> > 
-> > Sorry missed your previous reply.
-> > 
-> > And yes at least for the amdgpu driver we migrate the memory to host
-> > memory as soon as it is pinned and I would expect that other GPU drivers
-> > do something similar.
+On Tue, Aug 24, 2021 at 06:00:25PM +0800, Moudy Ho wrote:
+> This patch adds DT binding document for Media Data Path 3 (MDP3)
+> a unit in multimedia system used for scaling and color format convert.
 > 
-> Well...for many topologies, migrating to host memory will result in a
-> dramatically slower p2p setup. For that reason, some GPU drivers may
-> want to allow pinning of video memory in some situations.
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> ---
+>  .../bindings/media/mediatek,mdp3-ccorr.yaml   |  57 +++++
+>  .../bindings/media/mediatek,mdp3-rdma.yaml    | 207 ++++++++++++++++++
+>  .../bindings/media/mediatek,mdp3-rsz.yaml     |  65 ++++++
+>  .../bindings/media/mediatek,mdp3-wdma.yaml    |  71 ++++++
+>  .../bindings/media/mediatek,mdp3-wrot.yaml    |  71 ++++++
+>  5 files changed, 471 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-ccorr.yaml
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-wdma.yaml
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
 > 
-> Ideally, you've got modern ODP devices and you don't even need to pin.
-> But if not, and you still hope to do high performance p2p between a GPU
-> and a non-ODP Infiniband device, then you would need to leave the pinned
-> memory in vidmem.
-> 
-> So I think we don't want to rule out that behavior, right? Or is the
-> thinking more like, "you're lucky that this old non-ODP setup works at
-> all, and we'll make it work by routing through host/cpu memory, but it
-> will be slow"?
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-ccorr.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-ccorr.yaml
+> new file mode 100644
+> index 000000000000..59fd68b46022
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-ccorr.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/mediatek,mdp3-ccorr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek Media Data Path 3 CCORR Device Tree Bindings
+> +
+> +maintainers:
+> +  - Daoyuan Huang <daoyuan.huang@mediatek.com>
+> +  - Moudy Ho <moudy.ho@mediatek.com>
+> +
+> +description: |
+> +  One of Media Data Path 3 (MDP3) components used to do color correction with 3X3 matrix.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +        - mediatek,mt8183-mdp3-ccorr
+> +
+> +  mediatek,mdp3-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +    description: |
+> +      HW index to distinguish same functionality modules.
 
-I think it depends on the user, if the user creates memory which is
-permanently located on the GPU then it should be pinnable in this way
-without force migration. But if the memory is inherently migratable
-then it just cannot be pinned in the GPU at all as we can't
-indefinately block migration from happening eg if the CPU touches it
-later or something.
+If we wanted h/w indexes in DT, we'd have a standard property. Why do 
+you need this?
 
-Jason
+> +
+> +  reg:
+> +    description: |
+> +      Physical base address and length of the function block
+> +      register space, the number aligns with the component
+> +      and its own subcomponent.
+
+Drop and add 'maxItems: 1'
+
+> +
+> +  mediatek,gce-client-reg:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: |
+> +      sub-system id corresponding to the global command engine (GCE)
+
+You mean 'phandle to GCE and sub-system id'?
+
+> +      register address.
+> +      $ref: /schemas/mailbox/mtk-gce.txt
+
+Kind of looks like jsonschema but in the description and to a .txt 
+file...
+
+> +
+> +  clocks:
+> +    minItems: 1
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt8183-clk.h>
+> +    #include <dt-bindings/gce/mt8183-gce.h>
+> +
+> +    mdp3_ccorr: mdp3_ccorr@1401c000 {
+> +      compatible = "mediatek,mt8183-mdp3-ccorr";
+> +      mediatek,mdp3-id = <0>;
+> +      reg = <0x1401c000 0x1000>;
+> +      mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0xc000 0x1000>;
+> +      clocks = <&mmsys CLK_MM_MDP_CCORR>;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
+> new file mode 100644
+> index 000000000000..b355d7fe791e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
+> @@ -0,0 +1,207 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/mediatek,mdp3-rdma.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek Media Data Path 3 Device Tree Bindings
+> +
+> +maintainers:
+> +  - Daoyuan Huang <daoyuan.huang@mediatek.com>
+> +  - Moudy Ho <moudy.ho@mediatek.com>
+> +
+> +description: |
+> +  One of Media Data Path 3 (MDP3) components used to do read DMA.
+> +  RDMA0 is also used to be a controller node containing MMSYS,
+> +  MUTEX, GCE and SCP settings.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +        - enum:
+
+Should be indented 2 more spaces. Install yamllint and check with 'make 
+dt_binding_check'.
+
+> +          # controller node
+> +          - mediatek,mt8183-mdp3
+
+And then 2 more here.
+
+> +        - enum:
+> +          - mediatek,mt8183-mdp3-rdma
+> +
+> +      - items:
+> +        - enum:
+> +          # read DMA
+> +          - mediatek,mt8183-mdp3-rdma
+> +
+> +  mediatek,scp:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    maxItems: 1
+> +    description: |
+> +      The node of system control processor (SCP), using
+> +      the remoteproc & rpmsg framework.
+> +      $ref: /schemas/remoteproc/mtk,scp.yaml
+> +
+> +  mediatek,mdp3-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +    description: |
+> +      In MDP3, it can allocate multiple identical modules for
+> +      different data path selection or multi-pipeline execution.
+> +      This node is used to indicate the ID of each module.
+> +
+> +  mdp3-comps:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    items:
+> +        - enum:
+
+And this is 2 too many spaces...
+
+> +          # MDP direct-link input path selection, create a
+> +          # component for path connectedness of HW pipe control
+> +          - mediatek,mt8183-mdp3-dl1
+> +        - enum:
+> +          - mediatek,mt8183-mdp3-dl2
+> +        - enum:
+> +          # MDP direct-link output path selection, create a
+> +          # component for path connectedness of HW pipe control
+> +          - mediatek,mt8183-mdp3-path1
+> +        - enum:
+> +          - mediatek,mt8183-mdp3-path2
+> +        - enum:
+> +          # Input DMA of ISP PASS2 (DIP) module for raw image input
+> +          - mediatek,mt8183-mdp3-imgi
+> +        - enum:
+> +          # Output DMA of ISP PASS2 (DIP) module for YUV image output
+> +          - mediatek,mt8183-mdp3-exto
+> +
+> +  mdp3-comp-ids:
+> +    maxItems: 1
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+
+If only a single item, then it's a 'uint32' not an array.
+
+> +    description: |
+> +      Pipeline ID of MDP direct-link or DIP.
+> +
+> +  reg:
+> +    description: |
+> +      Physical base address and length of the function block
+> +      register space, the number aligns with the component
+> +      and its own subcomponent.
+> +
+> +  mediatek,gce-client-reg:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: |
+> +      sub-system id corresponding to the global command engine (GCE)
+> +      register address.
+> +      $ref: /schemas/mailbox/mtk-gce.txt
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 6
+
+Need to define what they are.
+
+> +
+> +  iommus:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+
+iommus already has a type definition.
+
+> +    description: |
+> +      Should point to the respective IOMMU block with master
+> +      port as argument.
+> +      $ref: /schemas/iommu/mediatek,iommu.yaml
+
+No. Drop (the whole description because you don't need generic 
+descriptions for common properties).
+
+What's needed is how many entries (maxItems: 1).
+
+> +
+> +  mediatek,mmsys:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    maxItems: 1
+> +    description: |
+> +      The node of mux(multiplexer) controller for HW connections.
+> +
+> +  mediatek,mm-mutex:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    maxItems: 1
+> +    description: |
+> +      The node of sof(start of frame) signal controller.
+> +
+> +  mediatek,mailbox-gce:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: |
+> +      The node of global command engine (GCE), used to read/write
+> +      registers with critical time limitation.
+> +      $ref: /schemas/mailbox/mtk-gce.txt
+> +
+> +  mboxes:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: |
+> +      $ref: /schemas/mailbox/mailbox.txt
+> +
+> +  gce-subsys:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: |
+> +      sub-system id corresponding to the global command engine (GCE)
+> +      register address.
+> +      $ref: /schemas/mailbox/mtk-gce.txt
+> +
+> +if:
+> +  properties:
+> +    compatible:
+> +      items:
+> +        - enum:
+> +          - mediatek,mt8183-mdp3
+> +        - enum:
+> +          - mediatek,mt8183-mdp3-rdma
+
+Normally, you want to use 'contains' for if/then schemas:
+
+compatible:
+  contains:
+    const: mediatek,mt8183-mdp3
+
+> +
+> +then:
+> +  required:
+> +    - mediatek,scp
+> +    - mediatek,mmsys
+> +    - mediatek,mm-mutex
+> +    - mediatek,mailbox-gce
+> +    - mboxes
+> +    - gce-subsys
+> +
+> +required:
+> +  - compatible
+> +  - mediatek,mdp3-id
+> +  - reg
+> +  - clocks
+> +  - mediatek,gce-client-reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt8183-clk.h>
+> +    #include <dt-bindings/gce/mt8183-gce.h>
+> +    #include <dt-bindings/power/mt8183-power.h>
+> +    #include <dt-bindings/memory/mt8183-larb-port.h>
+> +
+> +    mdp3_rdma0: mdp3_rdma0@14001000 {
+> +      compatible = "mediatek,mt8183-mdp3",
+> +                   "mediatek,mt8183-mdp3-rdma";
+> +      mediatek,scp = <&scp>;
+> +      mediatek,mdp3-id = <0>;
+> +      mdp3-comps = "mediatek,mt8183-mdp3-dl1", "mediatek,mt8183-mdp3-dl2",
+> +                   "mediatek,mt8183-mdp3-path1", "mediatek,mt8183-mdp3-path2",
+> +                   "mediatek,mt8183-mdp3-imgi", "mediatek,mt8183-mdp3-exto";
+> +      mdp3-comp-ids = <0 1 0 1 0 1>;
+> +      reg = <0x14001000 0x1000>,
+> +            <0x14000000 0x1000>,
+> +            <0x14005000 0x1000>,
+> +            <0x14006000 0x1000>,
+> +            <0x15020000 0x1000>;
+> +      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x1000 0x1000>,
+> +                                <&gce SUBSYS_1400XXXX 0 0x1000>,
+> +                                <&gce SUBSYS_1400XXXX 0x5000 0x1000>,
+> +                                <&gce SUBSYS_1400XXXX 0x6000 0x1000>,
+> +                                <&gce SUBSYS_1502XXXX 0 0x1000>;
+> +      power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+> +      clocks = <&mmsys CLK_MM_MDP_RDMA0>,
+> +               <&mmsys CLK_MM_MDP_RSZ1>,
+> +               <&mmsys CLK_MM_MDP_DL_TXCK>,
+> +               <&mmsys CLK_MM_MDP_DL_RX>,
+> +               <&mmsys CLK_MM_IPU_DL_TXCK>,
+> +               <&mmsys CLK_MM_IPU_DL_RX>;
+> +      iommus = <&iommu>;
+> +      mediatek,mmsys = <&mmsys>;
+> +      mediatek,mm-mutex = <&mutex>;
+> +      mediatek,mailbox-gce = <&gce>;
+> +      mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
+> +               <&gce 21 CMDQ_THR_PRIO_LOWEST 0>,
+> +               <&gce 22 CMDQ_THR_PRIO_LOWEST 0>,
+> +               <&gce 23 CMDQ_THR_PRIO_LOWEST 0>;
+> +      gce-subsys = <&gce 0x14000000 SUBSYS_1400XXXX>,
+> +                   <&gce 0x14010000 SUBSYS_1401XXXX>,
+> +                   <&gce 0x14020000 SUBSYS_1402XXXX>,
+> +                   <&gce 0x15020000 SUBSYS_1502XXXX>;
+> +    };
+> \ No newline at end of file
+
+Fix this.
+
+Similar comments on the rest.
+
+Rob
