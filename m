@@ -2,193 +2,230 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 802C3C432BE
-	for <linux-media@archiver.kernel.org>; Mon, 30 Aug 2021 10:16:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 099CBC4320E
+	for <linux-media@archiver.kernel.org>; Mon, 30 Aug 2021 11:02:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66EB0610C7
-	for <linux-media@archiver.kernel.org>; Mon, 30 Aug 2021 10:16:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E3A7561107
+	for <linux-media@archiver.kernel.org>; Mon, 30 Aug 2021 11:02:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236335AbhH3KRc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Aug 2021 06:17:32 -0400
-Received: from mail-co1nam11on2040.outbound.protection.outlook.com ([40.107.220.40]:52193
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236330AbhH3KRb (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Aug 2021 06:17:31 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LSVgZnOJJKJieA8t/0+WdeU9Tajva23vKpIL4DXqV63+X/upZofkxE0UleT3jRlJwlf3LpxzUKOKQmzqF1I1TqaI4c7GqQL9WTTsvUyeSPQlC8UcXnTfsIFsljKDPTBlf85ywhODSBRMX74famMmh4+FXjeU5n2JevNKdAAciYx2MNUo1DuOTcVRdTDo7E1eIz9I7d0wMYhUSIyYeifru1h/v/AJDmVv90LYhr5kYwdkjsytG5qbALAiT7+tf1i0wG+6KOULNOXBM3aKdQrtBeXPYvFuG0byIEjN0ncYLkwGx80H+J2ypbE2TuqnVfOjN1t8wnPTQ0EL1NYS/u3Ydg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MMUAx9ccDV07lV7BtPeDauhTLcqik+389hsBbqeNKR8=;
- b=dZGIVhMqq+KAEuuH0lZsHIG808fSqH98HK4ubjOJ4Qrnb3KQVkB7mdS6ehoImYMPl6e9u/ohg+/mYPWjamy+Kc5pNte5R+aQLVbdCC7P0Vdk05DAJ9pZ/koGZxqTk/Jxy2LrjzTrdCc5B9ZtbU8/Lgfla9pXS2fienjLPmj0Dcix1Vg2vPVzKvaoKOZ0fd+oswpHEs8vrZTwLsiFxxG0gqoTMtys7sqCW62NFMt7o3nQTeTQjgpmdMhLbYjQ3G3KPQBEj9ahtAmXhfN8XDpy3QgrNe1yV2GFTIkpEVEgw4mAY/N7ydCrJw8M9OBrbnzB5mcC6v2fW9i1bb4ZM9wU5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MMUAx9ccDV07lV7BtPeDauhTLcqik+389hsBbqeNKR8=;
- b=B28muxSEla7cGXYnGTb8WODv+pU7OpYgj4d3xm9KtCkg+4abXi1oBQFwfQH8VsJQ2zpsBZQcrA0t5zJTZcmRKwjyXqvTd1w4/n3S7+ektFrqcWoN/beWYmNRhBajVka0FnzF+aPn5b+7KnNdFp1YWr53AH8a8tYFx1F7S3pVDWg=
-Authentication-Results: mediatek.com; dkim=none (message not signed)
- header.d=none;mediatek.com; dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB3775.namprd12.prod.outlook.com (2603:10b6:208:159::19)
- by MN2PR12MB4392.namprd12.prod.outlook.com (2603:10b6:208:264::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.24; Mon, 30 Aug
- 2021 10:16:35 +0000
-Received: from MN2PR12MB3775.namprd12.prod.outlook.com
- ([fe80::dce2:96e5:aba2:66fe]) by MN2PR12MB3775.namprd12.prod.outlook.com
- ([fe80::dce2:96e5:aba2:66fe%6]) with mapi id 15.20.4457.024; Mon, 30 Aug 2021
- 10:16:35 +0000
-Subject: Re: [PATCH] dma-buf: heaps: remove duplicated cache sync
-To:     guangming.cao@mediatek.com, Sumit Semwal <sumit.semwal@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:DMA-BUF HEAPS FRAMEWORK" <linux-media@vger.kernel.org>,
-        "open list:DMA-BUF HEAPS FRAMEWORK" <dri-devel@lists.freedesktop.org>,
-        "moderated list:DMA-BUF HEAPS FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Cc:     wsd_upstream@mediatek.com
-References: <20210830100139.15632-1-guangming.cao@mediatek.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Message-ID: <dd5ba603-8c9d-f6a0-cbcc-dfb353fb6701@amd.com>
-Date:   Mon, 30 Aug 2021 12:16:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-In-Reply-To: <20210830100139.15632-1-guangming.cao@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-ClientProxiedBy: AM0PR04CA0144.eurprd04.prod.outlook.com
- (2603:10a6:208:55::49) To MN2PR12MB3775.namprd12.prod.outlook.com
- (2603:10b6:208:159::19)
+        id S236408AbhH3LDI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Aug 2021 07:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236394AbhH3LDH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 30 Aug 2021 07:03:07 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C5EC06175F
+        for <linux-media@vger.kernel.org>; Mon, 30 Aug 2021 04:02:14 -0700 (PDT)
+Received: from deskari.lan (91-158-153-130.elisa-laajakaista.fi [91.158.153.130])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 84B328AD;
+        Mon, 30 Aug 2021 13:02:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1630321331;
+        bh=OkzH4CusK1IQ4GrZtmEiH3oJV7ezbnjSgjAf9XPreVk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Tcw+dyH/Gm0wWQ5Cq84CbjleB8zLvJeYcjaPyjJlP8nwbKnsrgbrkGdSXTHHcO5Sz
+         oz9eXWJikZr1zAZTwdQqfoXKvaJxjUbqKLaDbF951oIxIHCEnm+rh7UUEsHM/AFqtb
+         5DXNiXdA6+HkTNLcYFikvgJPcuvcryGcfrS/cE1g=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        niklas.soderlund+renesas@ragnatech.se
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>
+Subject: [PATCH v8 01/36] media: subdev: rename subdev-state alloc & free
+Date:   Mon, 30 Aug 2021 14:00:41 +0300
+Message-Id: <20210830110116.488338-2-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210830110116.488338-1-tomi.valkeinen@ideasonboard.com>
+References: <20210830110116.488338-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.178.21] (91.14.161.181) by AM0PR04CA0144.eurprd04.prod.outlook.com (2603:10a6:208:55::49) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.17 via Frontend Transport; Mon, 30 Aug 2021 10:16:33 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 14e4b5b5-f6df-4122-c2d3-08d96b9f3f42
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4392:
-X-Microsoft-Antispam-PRVS: <MN2PR12MB43927CE07B10C47AC8F2919383CB9@MN2PR12MB4392.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:655;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tfR00fALiHH9wxNxtB3LRLdO8q3k3F2VGP78g21te9IwYV0Zngxv8TanDOZxrAc+03MxahtFNjNYH7pYPjtsPRubvCqQut0ahnqWwwU0fObXdmv2imBPF62K2vL7hb90hXu+GOat0iI1nH+6z7X+1q8JjvjjMQTJO+FuVPdVszT3VEGt7BMOdX2A5JKf3eyyDJwEQKmIejlzz/qQsmJPtTwY8ibHKyTS7pChwi1TF7ipqb7FHe3mYICWT4/nZmhM6jcULxGG+MZRcdXmtk1NzCtoQvrsyMc9hlXnvWn1nBzwI98icL4c/bG6RqqTqWEB9nJ0VI8DERbp/WGplUXUw6Z2mIHcFjOconz8WMTLxuxNuviq+l93IpF881GKtc8/JfM1YwzF1orujrZtzWaVLZeiT7lDYXxgsaDMygrsrvQyCqcDJY4q5e/mCoH523uDY90h5mvT1UV+IYF/As3H7w1nMABg5r/5U/Qj9Y0ychqaAG1eNzcsUDKQL919BnijmHLfw0x4bpZmZ8U/Ri/4vgjRQFI4yLtkJ1emSWiifJiK7svCdIyizeBoxgtaLbn53DLLF6Fy9RE914m2umZToPPL1Gu7e2Pc+1ZPx39pF4QKMO55QUBVMbY/gkqnBHvBkVNeGyzDR+b7OU/tRPcRYNvt0BnsnGDYPk5Lvn3TuN3T7YIZjbxLGme17Xv0iIy07/IM8m4OqCdBooOjiHFF6v1eRLQrBLR3yd2HYt+30mHttf5Wz4lPN6Xzrp/dMT5Z
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3775.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(346002)(39860400002)(366004)(396003)(26005)(186003)(2906002)(956004)(83380400001)(38100700002)(31686004)(4326008)(31696002)(2616005)(66476007)(478600001)(6486002)(8676002)(110136005)(36756003)(16576012)(6666004)(66946007)(86362001)(66556008)(921005)(7416002)(316002)(8936002)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NDI3MUhZMW1URjVmN0hMeUdnVHpieGRWS1ZGcUp2dUMrSFBUODNsamdOMlB4?=
- =?utf-8?B?YkloemFXSWhMaHFFekZNS054RnJqTTlScXFRNGZpdEdQdWJSWk92SktWU3BL?=
- =?utf-8?B?ckNLRURvMWJraUQzdWowcTNKenZ2MVRaOVhBNDl5ZHJHRWREV3MxVzRENngx?=
- =?utf-8?B?cTgranBnNkFCWm53L1hQWjlpN3lza2t4M2xKREJHQUtZU0psVGJvaWVtVVcz?=
- =?utf-8?B?MFB2MXpod3dxVnF2VnZ6MnJ0WTFPZ2oydHU2bUNra0J3Q1poVGN2WlgxUjhB?=
- =?utf-8?B?Y05waVlpMmdtWjFieFNqN0RmNGE0bnRJQ2djRkE0cDVOWTJ6Skk0VXR5cXh1?=
- =?utf-8?B?YldxN05TenhpN01ob2FNWlhUbnpnaUM0L214MUlPY2JjSEtiaUxMWG1kK29v?=
- =?utf-8?B?ZkhUdFNTNUNQeUxCTUlQY1lQVmNuaDlMK2dHbVZZV2hibldCQ1dtNEdzaVht?=
- =?utf-8?B?OWhvMWZpRWEwcGRobXFxQWN0MGRueFl3UTd2QUJzallkTTVLSW1vc0R6UEVp?=
- =?utf-8?B?eExGMVZnM3dBSTJyMG1wYWZjZVBhU1ZVdlZYdy9VWDlvK3RmOW9KMEYwcVNi?=
- =?utf-8?B?OFREWXpiYVprRFFhK1hldmtiSkFOWDVqVlFlbVpiRDl5NHVvc0RhTlN5S3cv?=
- =?utf-8?B?c0ZUV1NOeFVlcEtlenlFeVdYUDQzVnBSV3hKRkswdXJWaFdvdVV4YTNaSTJN?=
- =?utf-8?B?K2UzR2M1K2ZsZDR4c2NaeW5wQlhzbFNoMGNwYms1UGczU2lWZmE3OE0vTzJM?=
- =?utf-8?B?S3pXdEFaUXNKenpQVW9jcEw2RmtheTNVM1RtWVltZ255ZE1TYk9sOExsWWVk?=
- =?utf-8?B?OWpYMURPb1lRMTIvaHBoTzI4dFhZc253S0F1aCtHSEsyWFZXUGQvZ05KVDZG?=
- =?utf-8?B?MEpCaXRIOHQ2SUN0WUIwWnlhMEMzNm9VL2tJY0NzenRTYzRmZHA4anVUN0wy?=
- =?utf-8?B?bFR1Tm5IZXVtbTVxZngzUFEwRTRNQWtvazFkN293NGp1eTBydXlMbDErbUU0?=
- =?utf-8?B?MkpDZDQ2Rjg1K2JEMVUvZHdpaCtBcTdVNFFONVk5M2ExTXJhZmN4OUpFY0Zl?=
- =?utf-8?B?c1ZpUjNqQVNQc3gzSDFoZy9Fczg2WW4wcXFOaHh6SDdrampGM2tTOTZxRHls?=
- =?utf-8?B?c21FeGdMS3ZmV1I3R09FdlV4TzFwbkhEWWRLRGdRM2QvTlJGSEsvQWwwYXJS?=
- =?utf-8?B?cGFrS0h4bUtGY29jY3ArL3o1a3pwZ0FyY29qSXNiRUVGRFlRV2VxK3kzeWdU?=
- =?utf-8?B?ekVlUzAvL0RVTjhnSjJ3K1JiejhXMFJNV2RPLytIc1kydVQ0NjF2OWdYaEpl?=
- =?utf-8?B?S2JIY3pUUlM1NkRpVHhKbE1NNXdZR1VxaXJBS0tDZEowNm1HR1lXZVJBNHlO?=
- =?utf-8?B?TGpBekNPQVh5TUZWQlBoNFR6NGMxSjBwVkZrUzFYV1BUVGQ3bHoxSGlZdytv?=
- =?utf-8?B?d2c0WG9mQ0VaSFN4dU9vMVk2SkgrV2pnQ2lMeUlpV2ljZWtZS2tIL2FLY0lh?=
- =?utf-8?B?aHFWN3lWUGI3NGlJVWhGQXdxNUMybE84bWxDTkI5MGFvc1hUNTYrRnVkalVa?=
- =?utf-8?B?dEkvOG1lSzVFTFlBRXgyK2l2b0xnSEIwYnNOOVlSZEJQQlhSeFk3bGZXZURT?=
- =?utf-8?B?THFPOWh1SXpjR3ZVcUlwNytlU0RBUThEUVRTZGJoMU9KLzR1dGs4clArVmpN?=
- =?utf-8?B?ZVo5SnVwdDRDY1VCYWxFSVNOKzRvNzg2andERUtidzNDL0wvMXFTQmMwK05y?=
- =?utf-8?Q?YKCQxxv6zcQ+cOGCuLBT1WV/KSJ8EpcGW7vGZVV?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14e4b5b5-f6df-4122-c2d3-08d96b9f3f42
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3775.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2021 10:16:35.8166
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EwLAbmhsQNiLtopzohB7x/Im8WXhUjC+sbGt0GIbp0jJ5EXLXtK0MdF+ZdgsbcST
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4392
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 30.08.21 um 12:01 schrieb guangming.cao@mediatek.com:
-> From: Guangming Cao <Guangming.Cao@mediatek.com>
->
-> Current flow, one dmabuf maybe call cache sync many times if
-> it has beed mapped more than one time.
+The recently added v4l2_subdev_alloc_state() and
+v4l2_subdev_free_state() were somewhat badly named. They allocate/free
+the state that can be used for a subdev, but they don't change the
+subdev itself in any way.
 
-Well I'm not an expert on DMA heaps, but this will most likely not work 
-correctly.
+In the future we want to have the subdev state available easily for all
+subdevs, and we want to store the state to subdev struct. Thus we will
+be needing a new function which allocates the state and stores it into
+the subdev struct.
 
-> Is there any case that attachments of one dmabuf will points to
-> different memory? If not, seems do sync only one time is more better.
+This patch renames v4l2_subdev_alloc/free_state functions to
+v4l2_alloc/free_subdev_state, so that we can later use
+v4l2_subdev_alloc/free_state for the versions which work on the subdev
+struct.
 
-I think that this can happen, yes.
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
+ drivers/media/platform/rcar-vin/rcar-v4l2.c |  4 ++--
+ drivers/media/platform/vsp1/vsp1_entity.c   |  4 ++--
+ drivers/media/v4l2-core/v4l2-subdev.c       | 12 ++++++------
+ drivers/staging/media/tegra-video/vi.c      |  4 ++--
+ include/media/v4l2-subdev.h                 | 10 +++++-----
+ 5 files changed, 17 insertions(+), 17 deletions(-)
 
-Christian.
-
-
->
-> Signed-off-by: Guangming Cao <Guangming.Cao@mediatek.com>
-> ---
->   drivers/dma-buf/heaps/system_heap.c | 14 ++++++++------
->   1 file changed, 8 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
-> index 23a7e74ef966..909ef652a8c8 100644
-> --- a/drivers/dma-buf/heaps/system_heap.c
-> +++ b/drivers/dma-buf/heaps/system_heap.c
-> @@ -162,9 +162,10 @@ static int system_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
->   		invalidate_kernel_vmap_range(buffer->vaddr, buffer->len);
->   
->   	list_for_each_entry(a, &buffer->attachments, list) {
-> -		if (!a->mapped)
-> -			continue;
-> -		dma_sync_sgtable_for_cpu(a->dev, a->table, direction);
-> +		if (a->mapped) {
-> +			dma_sync_sgtable_for_cpu(a->dev, a->table, direction);
-> +			break;
-> +		}
->   	}
->   	mutex_unlock(&buffer->lock);
->   
-> @@ -183,9 +184,10 @@ static int system_heap_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
->   		flush_kernel_vmap_range(buffer->vaddr, buffer->len);
->   
->   	list_for_each_entry(a, &buffer->attachments, list) {
-> -		if (!a->mapped)
-> -			continue;
-> -		dma_sync_sgtable_for_device(a->dev, a->table, direction);
-> +		if (!a->mapped) {
-> +			dma_sync_sgtable_for_device(a->dev, a->table, direction);
-> +			break;
-> +		}
->   	}
->   	mutex_unlock(&buffer->lock);
->   
+diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+index 0d141155f0e3..5f4fa8c48f68 100644
+--- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+@@ -252,7 +252,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+ 	u32 width, height;
+ 	int ret;
+ 
+-	sd_state = v4l2_subdev_alloc_state(sd);
++	sd_state = v4l2_alloc_subdev_state(sd);
+ 	if (IS_ERR(sd_state))
+ 		return PTR_ERR(sd_state);
+ 
+@@ -288,7 +288,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+ 
+ 	rvin_format_align(vin, pix);
+ done:
+-	v4l2_subdev_free_state(sd_state);
++	v4l2_free_subdev_state(sd_state);
+ 
+ 	return ret;
+ }
+diff --git a/drivers/media/platform/vsp1/vsp1_entity.c b/drivers/media/platform/vsp1/vsp1_entity.c
+index 823c15facd1b..e40bca254b8b 100644
+--- a/drivers/media/platform/vsp1/vsp1_entity.c
++++ b/drivers/media/platform/vsp1/vsp1_entity.c
+@@ -675,7 +675,7 @@ int vsp1_entity_init(struct vsp1_device *vsp1, struct vsp1_entity *entity,
+ 	 * Allocate the pad configuration to store formats and selection
+ 	 * rectangles.
+ 	 */
+-	entity->config = v4l2_subdev_alloc_state(&entity->subdev);
++	entity->config = v4l2_alloc_subdev_state(&entity->subdev);
+ 	if (IS_ERR(entity->config)) {
+ 		media_entity_cleanup(&entity->subdev.entity);
+ 		return PTR_ERR(entity->config);
+@@ -690,6 +690,6 @@ void vsp1_entity_destroy(struct vsp1_entity *entity)
+ 		entity->ops->destroy(entity);
+ 	if (entity->subdev.ctrl_handler)
+ 		v4l2_ctrl_handler_free(entity->subdev.ctrl_handler);
+-	v4l2_subdev_free_state(entity->config);
++	v4l2_free_subdev_state(entity->config);
+ 	media_entity_cleanup(&entity->subdev.entity);
+ }
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 5d27a27cc2f2..26a34a8e3d37 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -28,7 +28,7 @@ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
+ {
+ 	struct v4l2_subdev_state *state;
+ 
+-	state = v4l2_subdev_alloc_state(sd);
++	state = v4l2_alloc_subdev_state(sd);
+ 	if (IS_ERR(state))
+ 		return PTR_ERR(state);
+ 
+@@ -39,7 +39,7 @@ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
+ 
+ static void subdev_fh_free(struct v4l2_subdev_fh *fh)
+ {
+-	v4l2_subdev_free_state(fh->state);
++	v4l2_free_subdev_state(fh->state);
+ 	fh->state = NULL;
+ }
+ 
+@@ -870,7 +870,7 @@ int v4l2_subdev_link_validate(struct media_link *link)
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate);
+ 
+-struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd)
++struct v4l2_subdev_state *v4l2_alloc_subdev_state(struct v4l2_subdev *sd)
+ {
+ 	struct v4l2_subdev_state *state;
+ 	int ret;
+@@ -903,9 +903,9 @@ struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd)
+ 
+ 	return ERR_PTR(ret);
+ }
+-EXPORT_SYMBOL_GPL(v4l2_subdev_alloc_state);
++EXPORT_SYMBOL_GPL(v4l2_alloc_subdev_state);
+ 
+-void v4l2_subdev_free_state(struct v4l2_subdev_state *state)
++void v4l2_free_subdev_state(struct v4l2_subdev_state *state)
+ {
+ 	if (!state)
+ 		return;
+@@ -913,7 +913,7 @@ void v4l2_subdev_free_state(struct v4l2_subdev_state *state)
+ 	kvfree(state->pads);
+ 	kfree(state);
+ }
+-EXPORT_SYMBOL_GPL(v4l2_subdev_free_state);
++EXPORT_SYMBOL_GPL(v4l2_free_subdev_state);
+ 
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+ 
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index d321790b07d9..a94d19e2a67c 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -507,7 +507,7 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+ 	if (!subdev)
+ 		return -ENODEV;
+ 
+-	sd_state = v4l2_subdev_alloc_state(subdev);
++	sd_state = v4l2_alloc_subdev_state(subdev);
+ 	if (IS_ERR(sd_state))
+ 		return PTR_ERR(sd_state);
+ 	/*
+@@ -558,7 +558,7 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+ 	v4l2_fill_pix_format(pix, &fmt.format);
+ 	tegra_channel_fmt_align(chan, pix, fmtinfo->bpp);
+ 
+-	v4l2_subdev_free_state(sd_state);
++	v4l2_free_subdev_state(sd_state);
+ 
+ 	return 0;
+ }
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 95ec18c2f49c..8701d2e7d893 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -1135,20 +1135,20 @@ int v4l2_subdev_link_validate_default(struct v4l2_subdev *sd,
+ int v4l2_subdev_link_validate(struct media_link *link);
+ 
+ /**
+- * v4l2_subdev_alloc_state - allocate v4l2_subdev_state
++ * v4l2_alloc_subdev_state - allocate v4l2_subdev_state
+  *
+  * @sd: pointer to &struct v4l2_subdev for which the state is being allocated.
+  *
+- * Must call v4l2_subdev_free_state() when state is no longer needed.
++ * Must call v4l2_free_subdev_state() when state is no longer needed.
+  */
+-struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd);
++struct v4l2_subdev_state *v4l2_alloc_subdev_state(struct v4l2_subdev *sd);
+ 
+ /**
+- * v4l2_subdev_free_state - free a v4l2_subdev_state
++ * v4l2_free_subdev_state - free a v4l2_subdev_state
+  *
+  * @state: v4l2_subdev_state to be freed.
+  */
+-void v4l2_subdev_free_state(struct v4l2_subdev_state *state);
++void v4l2_free_subdev_state(struct v4l2_subdev_state *state);
+ 
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+ 
+-- 
+2.25.1
 
