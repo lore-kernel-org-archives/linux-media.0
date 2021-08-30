@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FC69C19F38
-	for <linux-media@archiver.kernel.org>; Mon, 30 Aug 2021 11:02:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17202C4320E
+	for <linux-media@archiver.kernel.org>; Mon, 30 Aug 2021 11:02:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 091EE61139
-	for <linux-media@archiver.kernel.org>; Mon, 30 Aug 2021 11:02:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 010DB61131
+	for <linux-media@archiver.kernel.org>; Mon, 30 Aug 2021 11:02:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236532AbhH3LDg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Aug 2021 07:03:36 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:43892 "EHLO
+        id S236384AbhH3LDe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Aug 2021 07:03:34 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:43936 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236493AbhH3LDa (ORCPT
+        with ESMTP id S236488AbhH3LD3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Aug 2021 07:03:30 -0400
+        Mon, 30 Aug 2021 07:03:29 -0400
 Received: from deskari.lan (91-158-153-130.elisa-laajakaista.fi [91.158.153.130])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 16BEE220E;
-        Mon, 30 Aug 2021 13:02:33 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 77389B7E;
+        Mon, 30 Aug 2021 13:02:30 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1630321353;
-        bh=3xTblfq00yXar8gawda0KjUrZ6yQgX3YMAn7J39H5rE=;
+        s=mail; t=1630321351;
+        bh=Q3RxadSLrXHtHkV0AyktOCF7iAfAYimZgccI7frbwRo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QoTzlQDsM8qCFpe+K8y3Me8p/+yLPJQ0YzHcjB9vEX1jY6+RaabB1VkVq2VACKifY
-         eKf8t+fdU4TjpSm77cikWS/LfknOvsrXOYv9Su7LHcaDVAOgXlCvhnupRd4NuqPBCi
-         2magLQ7eBIrOkcuu67Kcuu+sPEDLiI7/qXktP63Y=
+        b=aH+hh5lymuFlEsWlw7aNrznOsnS7SpXAOkh0TQjtKnMQknf3ZiqNEWAOuSTod36ds
+         zIXGhpfMjaLR7lxerQZY2TDS8dPHBxJOUAIHrEiQuDHYIkbojq8GQJf2eCYRngs5ba
+         ftS/1XOVq2nhgm+dU6xS9NUo6VJ7Yx404sKCgZ3E=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -40,46 +40,73 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>
-Subject: [PATCH v8 26/36] media: add V4L2_SUBDEV_FL_MULTIPLEXED
-Date:   Mon, 30 Aug 2021 14:01:06 +0300
-Message-Id: <20210830110116.488338-27-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v8 23/36] media: Add CSI-2 bus configuration to frame descriptors
+Date:   Mon, 30 Aug 2021 14:01:03 +0300
+Message-Id: <20210830110116.488338-24-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210830110116.488338-1-tomi.valkeinen@ideasonboard.com>
 References: <20210830110116.488338-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add subdev flag V4L2_SUBDEV_FL_MULTIPLEXED. It is used to indicate that
-the subdev supports the new API with multiplexed streams (routing,
-stream configs).
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-TODO: describe better what the flag does.
+Add CSI-2 bus specific configuration to the frame descriptors. This allows
+obtaining the virtual channel and data type information for each stream
+the transmitter is sending.
 
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- include/media/v4l2-subdev.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/media/v4l2-subdev.h | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 1c022d1a6896..356901d8a948 100644
+index 65471e579815..3071d202597d 100644
 --- a/include/media/v4l2-subdev.h
 +++ b/include/media/v4l2-subdev.h
-@@ -890,6 +890,12 @@ struct v4l2_subdev_internal_ops {
-  * should set this flag.
-  */
- #define V4L2_SUBDEV_FL_HAS_EVENTS		(1U << 3)
-+/*
-+ * Set this flag if this subdev supports multiplexed streams. This means
-+ * that the driver supports routing and handles the stream parameter in its
-+ * v4l2_subdev_pad_ops handlers.
+@@ -312,6 +312,17 @@ struct v4l2_subdev_audio_ops {
+ 	int (*s_stream)(struct v4l2_subdev *sd, int enable);
+ };
+ 
++/**
++ * struct v4l2_mbus_frame_desc_entry_csi2
++ *
++ * @vc: CSI-2 virtual channel
++ * @dt: CSI-2 data type ID
 + */
-+#define V4L2_SUBDEV_FL_MULTIPLEXED		(1U << 4)
++struct v4l2_mbus_frame_desc_entry_csi2 {
++	u8 vc;
++	u8 dt;
++};
++
+ /**
+  * enum v4l2_mbus_frame_desc_flags - media bus frame description flags
+  *
+@@ -335,11 +346,16 @@ enum v4l2_mbus_frame_desc_flags {
+  *		%FRAME_DESC_FL_BLOB is not set.
+  * @length:	number of octets per frame, valid if @flags
+  *		%V4L2_MBUS_FRAME_DESC_FL_LEN_MAX is set.
++ * @bus:	Bus-specific frame descriptor parameters
++ * @bus.csi2:	CSI-2-specific bus configuration
+  */
+ struct v4l2_mbus_frame_desc_entry {
+ 	enum v4l2_mbus_frame_desc_flags flags;
+ 	u32 pixelcode;
+ 	u32 length;
++	union {
++		struct v4l2_mbus_frame_desc_entry_csi2 csi2;
++	} bus;
+ };
  
- struct regulator_bulk_data;
- 
+ #define V4L2_FRAME_DESC_ENTRY_MAX	4
 -- 
 2.25.1
 
