@@ -2,33 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C9E0C432BE
-	for <linux-media@archiver.kernel.org>; Tue, 31 Aug 2021 09:49:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08063C4320A
+	for <linux-media@archiver.kernel.org>; Tue, 31 Aug 2021 09:49:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66CF760249
+	by mail.kernel.org (Postfix) with ESMTP id DE23A60249
 	for <linux-media@archiver.kernel.org>; Tue, 31 Aug 2021 09:49:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240661AbhHaJuO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Aug 2021 05:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S240677AbhHaJuP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Aug 2021 05:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240643AbhHaJuL (ORCPT
+        with ESMTP id S240630AbhHaJuL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 31 Aug 2021 05:50:11 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38195C06175F;
-        Tue, 31 Aug 2021 02:49:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31750C061575;
+        Tue, 31 Aug 2021 02:49:12 -0700 (PDT)
 Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:4cb:a870:2d6:5982:f5be:998c])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 65E701F42FCA;
-        Tue, 31 Aug 2021 10:49:11 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 268E21F42FC8;
+        Tue, 31 Aug 2021 10:49:09 +0100 (BST)
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, p.zabel@pengutronix.de,
         gregkh@linuxfoundation.org, mripard@kernel.org,
@@ -39,111 +38,37 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH 2/2] media: hevc: Embedded indexes in RPS
-Date:   Tue, 31 Aug 2021 11:49:00 +0200
-Message-Id: <20210831094900.203283-3-benjamin.gaignard@collabora.com>
+Subject: [PATCH 0/2] media: HEVC: RPS clean up
+Date:   Tue, 31 Aug 2021 11:48:58 +0200
+Message-Id: <20210831094900.203283-1-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210831094900.203283-1-benjamin.gaignard@collabora.com>
-References: <20210831094900.203283-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Reference Picture Set lists provide indexes of short and long term
-reference in DBP array.
-Fix Hantro to not do a look up in DBP entries.
-Make documentation more clear about it.
+This series aims to clean up Reference Picture Set usage and flags.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- .../media/v4l/ext-ctrls-codec.rst             |  6 ++---
- .../staging/media/hantro/hantro_g2_hevc_dec.c | 25 +++++--------------
- 2 files changed, 9 insertions(+), 22 deletions(-)
+Long term flag was named with RPS prefix while it is not used for RPS
+but for mark long term references in DBP. Remane it and remove the two
+other useless RPS flags.
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index eff33c511090..4e4892c37723 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -3352,15 +3352,15 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     * - __u8
-       - ``poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-       - PocStCurrBefore as described in section 8.3.2 "Decoding process for reference
--        picture set.
-+        picture set": provides the index of the short term before references in DPB array.
-     * - __u8
-       - ``poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-       - PocStCurrAfter as described in section 8.3.2 "Decoding process for reference
--        picture set.
-+        picture set": provides the index of the short term after references in DPB array.
-     * - __u8
-       - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-       - PocLtCurr as described in section 8.3.2 "Decoding process for reference
--        picture set.
-+        picture set": provides the index of the long term references in DPB array.
-     * - __u64
-       - ``flags``
-       - See :ref:`Decode Parameters Flags <hevc_decode_params_flags>`
-diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-index be46b3c28b17..76386e9eb8f4 100644
---- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-@@ -306,24 +306,11 @@ static void set_params(struct hantro_ctx *ctx)
- 	hantro_reg_write(vpu, &g2_apf_threshold, 8);
- }
- 
--static int find_ref_pic_index(const struct v4l2_hevc_dpb_entry *dpb, int pic_order_cnt)
--{
--	int i;
--
--	for (i = 0; i < V4L2_HEVC_DPB_ENTRIES_NUM_MAX; i++) {
--		if (dpb[i].pic_order_cnt[0] == pic_order_cnt)
--			return i;
--	}
--
--	return 0x0;
--}
--
- static void set_ref_pic_list(struct hantro_ctx *ctx)
- {
- 	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
- 	struct hantro_dev *vpu = ctx->dev;
- 	const struct v4l2_ctrl_hevc_decode_params *decode_params = ctrls->decode_params;
--	const struct v4l2_hevc_dpb_entry *dpb = decode_params->dpb;
- 	u32 list0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX] = {};
- 	u32 list1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX] = {};
- 	static const struct hantro_reg ref_pic_regs0[] = {
-@@ -367,11 +354,11 @@ static void set_ref_pic_list(struct hantro_ctx *ctx)
- 	/* List 0 contains: short term before, short term after and long term */
- 	j = 0;
- 	for (i = 0; i < decode_params->num_poc_st_curr_before && j < ARRAY_SIZE(list0); i++)
--		list0[j++] = find_ref_pic_index(dpb, decode_params->poc_st_curr_before[i]);
-+		list0[j++] = decode_params->poc_st_curr_before[i];
- 	for (i = 0; i < decode_params->num_poc_st_curr_after && j < ARRAY_SIZE(list0); i++)
--		list0[j++] = find_ref_pic_index(dpb, decode_params->poc_st_curr_after[i]);
-+		list0[j++] = decode_params->poc_st_curr_after[i];
- 	for (i = 0; i < decode_params->num_poc_lt_curr && j < ARRAY_SIZE(list0); i++)
--		list0[j++] = find_ref_pic_index(dpb, decode_params->poc_lt_curr[i]);
-+		list0[j++] = decode_params->poc_lt_curr[i];
- 
- 	/* Fill the list, copying over and over */
- 	i = 0;
-@@ -380,11 +367,11 @@ static void set_ref_pic_list(struct hantro_ctx *ctx)
- 
- 	j = 0;
- 	for (i = 0; i < decode_params->num_poc_st_curr_after && j < ARRAY_SIZE(list1); i++)
--		list1[j++] = find_ref_pic_index(dpb, decode_params->poc_st_curr_after[i]);
-+		list1[j++] = decode_params->poc_st_curr_after[i];
- 	for (i = 0; i < decode_params->num_poc_st_curr_before && j < ARRAY_SIZE(list1); i++)
--		list1[j++] = find_ref_pic_index(dpb, decode_params->poc_st_curr_before[i]);
-+		list1[j++] = decode_params->poc_st_curr_before[i];
- 	for (i = 0; i < decode_params->num_poc_lt_curr && j < ARRAY_SIZE(list1); i++)
--		list1[j++] = find_ref_pic_index(dpb, decode_params->poc_lt_curr[i]);
-+		list1[j++] = decode_params->poc_lt_curr[i];
- 
- 	i = 0;
- 	while (j < ARRAY_SIZE(list1))
+Clarify documentation about RPS lists content and make sure that Hantro
+driver use them correctly (i.e without look up in DBP).
+
+Benjamin
+
+Benjamin Gaignard (2):
+  media: hevc: Remove RPS named flags
+  media: hevc: Embedded indexes in RPS
+
+ .../media/v4l/ext-ctrls-codec.rst             | 12 ++++-----
+ .../staging/media/hantro/hantro_g2_hevc_dec.c | 27 +++++--------------
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  |  2 +-
+ include/media/hevc-ctrls.h                    |  4 +--
+ 4 files changed, 14 insertions(+), 31 deletions(-)
+
 -- 
 2.25.1
 
