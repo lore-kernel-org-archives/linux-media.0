@@ -2,29 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 602AEC43216
-	for <linux-media@archiver.kernel.org>; Tue, 31 Aug 2021 13:44:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F096C4320E
+	for <linux-media@archiver.kernel.org>; Tue, 31 Aug 2021 13:44:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 48FB360FED
-	for <linux-media@archiver.kernel.org>; Tue, 31 Aug 2021 13:44:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D4E661008
+	for <linux-media@archiver.kernel.org>; Tue, 31 Aug 2021 13:44:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239877AbhHaNpM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 Aug 2021 09:45:12 -0400
-Received: from comms.puri.sm ([159.203.221.185]:59080 "EHLO comms.puri.sm"
+        id S237059AbhHaNp0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 Aug 2021 09:45:26 -0400
+Received: from comms.puri.sm ([159.203.221.185]:59180 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239631AbhHaNpJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 Aug 2021 09:45:09 -0400
+        id S239631AbhHaNpU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 31 Aug 2021 09:45:20 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id BC001DFE60;
-        Tue, 31 Aug 2021 06:44:13 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id A2892DFE8B;
+        Tue, 31 Aug 2021 06:43:55 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 60XTzgj2cjcn; Tue, 31 Aug 2021 06:44:09 -0700 (PDT)
+        with ESMTP id wn-BFqgtG8Zf; Tue, 31 Aug 2021 06:43:54 -0700 (PDT)
 From:   Martin Kepplinger <martin.kepplinger@puri.sm>
 To:     martin.kepplinger@puri.sm
 Cc:     devicetree@vger.kernel.org, kernel@puri.sm,
@@ -34,35 +33,92 @@ Cc:     devicetree@vger.kernel.org, kernel@puri.sm,
         paul.kocialkowski@bootlin.com, pavel@ucw.cz,
         phone-devel@vger.kernel.org, robh@kernel.org, sakari.ailus@iki.fi,
         shawnx.tu@intel.com
-Subject: [PATCH v8 4/4] Documentation: i2c-cardlist: add the Hynix hi846 sensor
-Date:   Tue, 31 Aug 2021 15:43:44 +0200
-Message-Id: <20210831134344.1673318-5-martin.kepplinger@puri.sm>
-In-Reply-To: <20210831134344.1673318-1-martin.kepplinger@puri.sm>
-References: <20210831134344.1673318-1-martin.kepplinger@puri.sm>
+Subject: [PATCH v8 0/4] Add support for the Hynix Hi-846 camera
+Date:   Tue, 31 Aug 2021 15:43:40 +0200
+Message-Id: <20210831134344.1673318-1-martin.kepplinger@puri.sm>
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the SK Hynix Hi-846 8M Pixel CMOS image sensor to the i2c-cardlist.
+hi,
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
----
- Documentation/admin-guide/media/i2c-cardlist.rst | 1 +
- 1 file changed, 1 insertion(+)
+This series adds support for the SK Hynix Hi-846 CMOS images sensor.
+It includes the dt-bindings and the driver.
 
-diff --git a/Documentation/admin-guide/media/i2c-cardlist.rst b/Documentation/admin-guide/media/i2c-cardlist.rst
-index e60d459d18a9..185e07a3da43 100644
---- a/Documentation/admin-guide/media/i2c-cardlist.rst
-+++ b/Documentation/admin-guide/media/i2c-cardlist.rst
-@@ -60,6 +60,7 @@ Driver        Name
- ============  ==========================================================
- et8ek8        ET8EK8 camera sensor
- hi556         Hynix Hi-556 sensor
-+hi846         Hynix Hi-846 sensor
- imx214        Sony IMX214 sensor
- imx219        Sony IMX219 sensor
- imx258        Sony IMX258 sensor
+best wishes,
+
+                              martin
+
+revision history
+----------------
+v8: (thank you Laurent)
+* add fwnode properties support for orientation and rotation on the board
+* remove the arm64 defconfig addition patch. deal with that later.
+
+v7: (thank you Sakari)
+* move the check for supported nr_lanes for a mode to set_format()
+* change get_selection() according to the Sakaris' review
+* check for the mipi link frequencies from DT
+* check for the external clock rate and add assigned-clock-rates requirement
+* https://lore.kernel.org/linux-media/20210712084137.3779628-1-martin.kepplinger@puri.sm/
+
+v6:
+* better digital gain defaults
+* lane config fix found by smatch
+* fix regulator usage in power_on()
+* https://lore.kernel.org/linux-media/20210628101054.828579-1-martin.kepplinger@puri.sm/
+
+v5: (thank you Laurent and Rob)
+* minor dt-bindings fixes
+* driver: disable lens shading correcting (no seed values yet used from "otp" for that)
+* add reviewed-tags
+* https://lore.kernel.org/linux-media/20210611101404.2553818-1-martin.kepplinger@puri.sm/
+
+v4: (thank you Laurent, Sakari and Rob) many driver changes, see v3 review for
+details. they include:
+* add get_selection(), remove open() callback
+* use gpiod API
+* use regulator_bulk API
+* fix power supply timing sequence and bindings
+* https://lore.kernel.org/linux-media/20210607105213.1211722-1-martin.kepplinger@puri.sm/
+
+v3: (thank you, Laurent)
+* use do_div() for divisions
+* reset-gpios DT property name instead of rst-gpios
+* improve the dt-bindings
+* add the phone-devel list
+* https://lore.kernel.org/linux-media/20210531120737.168496-1-martin.kepplinger@puri.sm/
+
+v2:
+sent a bit early due to stupid mistakes
+* fix build issues
+* fix dtschema issues
+* add enable for arm64 defconfig
+* https://lore.kernel.org/linux-media/20210530212337.GA15366@duo.ucw.cz/T/#t
+
+v1:
+* https://lore.kernel.org/linux-media/20210527091221.3335998-1-martin.kepplinger@puri.sm/
+
+
+Martin Kepplinger (4):
+  dt-bindings: vendor-prefixes: Add SK Hynix Inc.
+  dt-bindings: media: document SK Hynix Hi-846 MIPI CSI-2 8M pixel
+    sensor
+  media: i2c: add driver for the SK Hynix Hi-846 8M pixel camera
+  Documentation: i2c-cardlist: add the Hynix hi846 sensor
+
+ .../admin-guide/media/i2c-cardlist.rst        |    1 +
+ .../bindings/media/i2c/hynix,hi846.yaml       |  120 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ MAINTAINERS                                   |    6 +
+ drivers/media/i2c/Kconfig                     |   13 +
+ drivers/media/i2c/Makefile                    |    1 +
+ drivers/media/i2c/hi846.c                     | 2190 +++++++++++++++++
+ 7 files changed, 2333 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+ create mode 100644 drivers/media/i2c/hi846.c
+
 -- 
 2.30.2
 
