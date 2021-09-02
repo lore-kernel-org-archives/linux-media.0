@@ -2,33 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89958C4320E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD96AC4320A
 	for <linux-media@archiver.kernel.org>; Thu,  2 Sep 2021 06:37:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 71CAB61059
+	by mail.kernel.org (Postfix) with ESMTP id C951460F21
 	for <linux-media@archiver.kernel.org>; Thu,  2 Sep 2021 06:37:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241783AbhIBGiN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S242115AbhIBGiN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 2 Sep 2021 02:38:13 -0400
-Received: from mx20.baidu.com ([111.202.115.85]:35676 "EHLO baidu.com"
+Received: from mx21.baidu.com ([220.181.3.85]:35996 "EHLO baidu.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233101AbhIBGiJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 2 Sep 2021 02:38:09 -0400
-Received: from BJHW-Mail-Ex05.internal.baidu.com (unknown [10.127.64.15])
-        by Forcepoint Email with ESMTPS id 78F6DC384F3776F3EF11;
-        Thu,  2 Sep 2021 14:37:09 +0800 (CST)
+        id S241743AbhIBGiM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 2 Sep 2021 02:38:12 -0400
+Received: from BJHW-Mail-Ex08.internal.baidu.com (unknown [10.127.64.18])
+        by Forcepoint Email with ESMTPS id 2702A7305C619AF5E1D2;
+        Thu,  2 Sep 2021 14:37:12 +0800 (CST)
 Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
- BJHW-Mail-Ex05.internal.baidu.com (10.127.64.15) with Microsoft SMTP Server
+ BJHW-Mail-Ex08.internal.baidu.com (10.127.64.18) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.14; Thu, 2 Sep 2021 14:37:09 +0800
+ 15.1.2308.14; Thu, 2 Sep 2021 14:37:12 +0800
 Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.63.8) by
  BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.14; Thu, 2 Sep 2021 14:37:08 +0800
+ 15.1.2308.14; Thu, 2 Sep 2021 14:37:11 +0800
 From:   Cai Huoqing <caihuoqing@baidu.com>
 To:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
         <patrice.chotard@foss.st.com>, <mchehab@kernel.org>,
@@ -40,45 +41,50 @@ CC:     <linux-kernel@vger.kernel.org>,
         <linux-media@vger.kernel.org>, <linux-pci@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         Cai Huoqing <caihuoqing@baidu.com>
-Subject: [PATCH v2 0/3] drivers: Add the helper function devm_platform_get_and_ioremap_resource_byname()
-Date:   Thu, 2 Sep 2021 14:36:59 +0800
-Message-ID: <20210902063702.32066-1-caihuoqing@baidu.com>
+Subject: [PATCH v2 3/3] PCI: mediatek-gen3: Make use of the helper function devm_platform_get_and_ioremap_resource_byname()
+Date:   Thu, 2 Sep 2021 14:37:02 +0800
+Message-ID: <20210902063702.32066-4-caihuoqing@baidu.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210902063702.32066-1-caihuoqing@baidu.com>
+References: <20210902063702.32066-1-caihuoqing@baidu.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [172.31.63.8]
 X-ClientProxiedBy: BC-Mail-Ex28.internal.baidu.com (172.31.51.22) To
  BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
-X-Baidu-BdMsfe-DateCheck: 1_BJHW-Mail-Ex05_2021-09-02 14:37:09:472
+X-Baidu-BdMsfe-DateCheck: 1_BJHW-Mail-Ex08_2021-09-02 14:37:12:149
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since provide the helper function devm_platform_ioremap_resource_byname()
-which is wrap platform_get_resource_byname() and devm_ioremap_resource().
-But sometimes, many drivers still need to use the resource variables obtained
-by platform_get_resource(). In these case, provide this helper function
-devm_platform_get_and_ioremap_resource_byname().
+Use the devm_platform_get_and_ioremap_resource_byname() helper
+instead of calling platform_get_resource_byname() and
+devm_ioremap_resource() separately.
 
-devm_platform_get_and_ioremap_resource_byname will be used:
- .../platform/sti/c8sectpfe/c8sectpfe-core.c   |  7 ++---
- drivers/pci/controller/pcie-mediatek-gen3.c   |  5 +---
+Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+---
+v1->v2: Use devm_platform_get_and_ioremap_resource_byname()
+	instead of devm_platform_ioremap_resource_byname().
 
+ drivers/pci/controller/pcie-mediatek-gen3.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Cai Huoqing (3):
-  driver core: platform: Add the helper function
-    devm_platform_get_and_ioremap_resource_byname()
-  media: sti/c8sectpfe: Make use of the helper function
-    devm_platform_get_and_ioremap_resource_byname()
-  PCI: mediatek-gen3: Make use of the helper function
-    devm_platform_get_and_ioremap_resource_byname()
-
- drivers/base/platform.c                       | 30 ++++++++++++++++---
- .../platform/sti/c8sectpfe/c8sectpfe-core.c   |  7 ++---
- drivers/pci/controller/pcie-mediatek-gen3.c   |  5 +---
- include/linux/platform_device.h               |  3 ++
- 4 files changed, 32 insertions(+), 13 deletions(-)
-
+diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
+index 17c59b0d6978..27009da62ec1 100644
+--- a/drivers/pci/controller/pcie-mediatek-gen3.c
++++ b/drivers/pci/controller/pcie-mediatek-gen3.c
+@@ -715,10 +715,7 @@ static int mtk_pcie_parse_port(struct mtk_pcie_port *port)
+ 	struct resource *regs;
+ 	int ret;
+ 
+-	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "pcie-mac");
+-	if (!regs)
+-		return -EINVAL;
+-	port->base = devm_ioremap_resource(dev, regs);
++	port->base = devm_platform_get_and_ioremap_resource_byname(pdev, "pcie-mac", &regs);
+ 	if (IS_ERR(port->base)) {
+ 		dev_err(dev, "failed to map register base\n");
+ 		return PTR_ERR(port->base);
 -- 
 2.25.1
 
