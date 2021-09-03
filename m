@@ -2,107 +2,112 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84370C433EF
-	for <linux-media@archiver.kernel.org>; Fri,  3 Sep 2021 19:16:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1278C433F5
+	for <linux-media@archiver.kernel.org>; Fri,  3 Sep 2021 19:16:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 691AC60462
-	for <linux-media@archiver.kernel.org>; Fri,  3 Sep 2021 19:16:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A7FE760232
+	for <linux-media@archiver.kernel.org>; Fri,  3 Sep 2021 19:16:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350663AbhICTRD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Sep 2021 15:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
+        id S1350640AbhICTRH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Sep 2021 15:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350618AbhICTQ4 (ORCPT
+        with ESMTP id S1350622AbhICTQ4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Fri, 3 Sep 2021 15:16:56 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04736C061764
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76952C0613C1
         for <linux-media@vger.kernel.org>; Fri,  3 Sep 2021 12:15:56 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 79-20020a1c0452000000b002e6cf79e572so230132wme.1
-        for <linux-media@vger.kernel.org>; Fri, 03 Sep 2021 12:15:55 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id k5-20020a05600c1c8500b002f76c42214bso215756wms.3
+        for <linux-media@vger.kernel.org>; Fri, 03 Sep 2021 12:15:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SCEKx7utYrwkWL98r7FBoPPDURIg0879OiU6M0zgQ8Y=;
-        b=VX11jB6gOfOzEMAWcceoSjCouFUaZpGXIPPupzOxCg7uZe9taoXFcI3QO2JUO4ZGci
-         M3ThXVVTxMH2xiX3TRkMjlJpz298UVrE4/U0G8/gxuVL3KaZ7P7s1T/805gcveQmSjOA
-         2dGBiymZFoCIap7OwP/Eyx5ZuEu+PsV1R2F6454Kf5ppfEvjtd1VeOTus/uHQNO/fLxy
-         DhmDvp8wH0pxv++Ib/Nf65U4hjhY4Akkk2LFRVanDuVQatkHuM0fuVId6ohWL5h9adUJ
-         Y/YGg9VgJMO4U2uUibUva6A20+W6cwnDix/3077970kAj1l+iJ2SEJsZUtRLuxM/mPn3
-         YkbQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ZX+m9eRP3G6qa3o26UuCwjfzdvb0rxacvbcUwg9LjVM=;
+        b=Ns2hVXrhoznNB3oQH1t3+j6ATt0VKG0o6PldIrMPznDbonpNc1JD3nxHMg2SOs8UB8
+         BEJjTrpy4wiOEyUr11OotV8A6rA4sifBneYuht28Gc5LpQI9C+bPdJBSE6ikH5bmDNGw
+         cqzxmpIGpbK7/VhLW70smCjFmbueWXY/fc7MfM+Yo1sG39GmR9+QMyasxlMaKklG5Fa9
+         YKT09M1sYE4rW2rJLeVh/AkKNItUQk636prFyQ7ozincLTr+iQbEo9cuWtfCqbFvC++B
+         trzuWRKuU4MdJ04uS0RxcaGjecHNZL6OGlx33M5+rYVeDG0ngluExiFl0ZClBTh/zNXG
+         0hMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SCEKx7utYrwkWL98r7FBoPPDURIg0879OiU6M0zgQ8Y=;
-        b=YpTBpuHcAx05m+DJFd8WNuscZyXqTJM4BUNbVD7qrnHC+44NtYd17snebACSHFOLba
-         XErHd0ha3jGfR8WBTcNgZrFdsXS/rqJRUEuX3iM22kLHwYtqHrTQ8D9JXQx/GqsIa1VW
-         FzDuh3Wsc6989thmn5fNVPmCyENXr326PuCbXYf8m6lVKfvvWOUq2+a2eWrpPCLMOsM4
-         N62Xfc+YJ/ZU1nSGsboVgbaG3xJ7ExCuVAiIYnY+TS2PtnkRkR1DQMWjzzVrP3G4vde6
-         29jh9hLAHvlyYZ6pwEeM1+I7HM04ZabDpMtJKbnW2sEXu1vNYhQjUX+oIAj6GNUQQ586
-         NI2Q==
-X-Gm-Message-State: AOAM530OrROcf5cUa/pcpLXv01q0Mz6dbAsmP/XtvRD1afMW62fhra/o
-        MT2weDJJ3EBLsAZhVeGvulUJ27Xl0eTuVjezaFw=
-X-Google-Smtp-Source: ABdhPJztyWjMkam7gbJm517Pa8QO9y5uIwtoPSks8MeGt/ZyN11hmZZ5n1fS8fPujss4uzjqYDqYUA==
-X-Received: by 2002:a05:600c:2e4a:: with SMTP id q10mr224171wmf.189.1630696553935;
-        Fri, 03 Sep 2021 12:15:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ZX+m9eRP3G6qa3o26UuCwjfzdvb0rxacvbcUwg9LjVM=;
+        b=lJQt4/y6+PCeSVt+pcpO+wX2x/S4wy/SOYaYJHInUKtikbue2m1CLZpbVc5UuZKUE9
+         5GhmVm7SqY6Sr+Mwu7F5S2QknEl2Qy9fs6eaLB/JRd5JNCqXIM8tWvHtC0H9EP4cVaVT
+         RfQy8F9EUSxhiz3vjp+YqEg54W7osWxnNBOw5NQ/1962EdvvrXz5mdpVLYH83Y68Bwpy
+         9Co14R2mswfdZJJkfB/1beCaSJIdW6zhVFRz/y7ua7OLrE/OnIGLCxXTqQo1hYaYiIOA
+         7YaXv6YpPQw0OOcirOwswhBMOZL5PwN4dMVWKuEk/KWeDniPQjYzeThNzfPyE4S5PaJC
+         g/Zw==
+X-Gm-Message-State: AOAM53184Y7dFdH3ozzNeS0aIsuNH4oiMzhug0TP0eEDNQwr3KMgfQPz
+        S5cABEyxIwQvqz3777ei6Qbqmg==
+X-Google-Smtp-Source: ABdhPJxE0dUX5u4RNf/Wx18X+2EXKv90xIdKm7MsrBaO5GUKwN6yqejEQKaf0pkgyJ7eVksRjDUa2Q==
+X-Received: by 2002:a05:600c:acd:: with SMTP id c13mr327456wmr.28.1630696555125;
+        Fri, 03 Sep 2021 12:15:55 -0700 (PDT)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id a133sm253397wme.5.2021.09.03.12.15.53
+        by smtp.googlemail.com with ESMTPSA id a133sm253397wme.5.2021.09.03.12.15.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Sep 2021 12:15:53 -0700 (PDT)
+        Fri, 03 Sep 2021 12:15:54 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     gregkh@linuxfoundation.org, mchehab@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev, mjpeg-users@lists.sourceforge.net,
         Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH 0/8] staging: media: zoran: fusion in one module
-Date:   Fri,  3 Sep 2021 19:15:32 +0000
-Message-Id: <20210903191540.3052775-1-clabbe@baylibre.com>
+Subject: [PATCH 2/8] staging: media: zoran: use module_pci_driver
+Date:   Fri,  3 Sep 2021 19:15:34 +0000
+Message-Id: <20210903191540.3052775-3-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210903191540.3052775-1-clabbe@baylibre.com>
+References: <20210903191540.3052775-1-clabbe@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello
+Simplify code by using module_pci_driver()
 
-The main change of this serie is to fusion all zoran related modules in
-one.
-This fixes the load order problem when everything is built-in.
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ drivers/staging/media/zoran/zoran_card.c | 21 +--------------------
+ 1 file changed, 1 insertion(+), 20 deletions(-)
 
-Regards
-
-Corentin Labbe (8):
-  staging: media: zoran: move module parameter checks to zoran_probe
-  staging: media: zoran: use module_pci_driver
-  staging: media: zoran: rename debug module parameter
-  staging: media: zoran: add debugfs
-  staging: media: zoran: videocode: remove procfs
-  staging: media: zoran: fusion all modules
-  staging: media: zoran: remove vidmem
-  staging: media: zoran: move videodev alloc
-
- drivers/staging/media/zoran/Kconfig        |  24 +-
- drivers/staging/media/zoran/Makefile       |   8 +-
- drivers/staging/media/zoran/videocodec.c   |  60 +----
- drivers/staging/media/zoran/videocodec.h   |   5 +
- drivers/staging/media/zoran/zoran.h        |   7 +-
- drivers/staging/media/zoran/zoran_card.c   | 259 +++++++++++++--------
- drivers/staging/media/zoran/zoran_driver.c |   5 +-
- drivers/staging/media/zoran/zr36016.c      |  23 +-
- drivers/staging/media/zoran/zr36016.h      |   2 +
- drivers/staging/media/zoran/zr36050.c      |  20 +-
- drivers/staging/media/zoran/zr36050.h      |   2 +
- drivers/staging/media/zoran/zr36060.c      |  20 +-
- drivers/staging/media/zoran/zr36060.h      |   2 +
- 13 files changed, 229 insertions(+), 208 deletions(-)
-
+diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
+index 3bc0e64f1007..f1465fbf98af 100644
+--- a/drivers/staging/media/zoran/zoran_card.c
++++ b/drivers/staging/media/zoran/zoran_card.c
+@@ -1314,23 +1314,4 @@ static struct pci_driver zoran_driver = {
+ 	.remove = zoran_remove,
+ };
+ 
+-static int __init zoran_init(void)
+-{
+-	int res;
+-
+-	res = pci_register_driver(&zoran_driver);
+-	if (res) {
+-		pr_err("Unable to register ZR36057 driver\n");
+-		return res;
+-	}
+-
+-	return 0;
+-}
+-
+-static void __exit zoran_exit(void)
+-{
+-	pci_unregister_driver(&zoran_driver);
+-}
+-
+-module_init(zoran_init);
+-module_exit(zoran_exit);
++module_pci_driver(zoran_driver);
 -- 
 2.32.0
 
