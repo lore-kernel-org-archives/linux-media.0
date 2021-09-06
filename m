@@ -2,151 +2,135 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BB0CC43217
-	for <linux-media@archiver.kernel.org>; Mon,  6 Sep 2021 15:31:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29E8CC433EF
+	for <linux-media@archiver.kernel.org>; Mon,  6 Sep 2021 18:18:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C9D961078
-	for <linux-media@archiver.kernel.org>; Mon,  6 Sep 2021 15:31:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E5096101C
+	for <linux-media@archiver.kernel.org>; Mon,  6 Sep 2021 18:18:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241953AbhIFPc1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Sep 2021 11:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbhIFPc0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Sep 2021 11:32:26 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54421C06175F
-        for <linux-media@vger.kernel.org>; Mon,  6 Sep 2021 08:31:21 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id k5-20020a05600c1c8500b002f76c42214bso5277037wms.3
-        for <linux-media@vger.kernel.org>; Mon, 06 Sep 2021 08:31:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PQ0Sz3nSdC4M1Li6PaTkmdjXBaQB3/I9C/9VyXKR078=;
-        b=UXRljDfh9pslkpfpiZW87xjIeGBWGwIaAMRlhWJCKG7426frC0Kf3IPd4Y1I1la0VX
-         yR+sttTvRZyIIqXtqEvMNgsD46eYnTi/cTMP9nhkOXv4qZJ2YwpO6rzL+Ad9sxuj2FUM
-         6W6/m+rhws4O7vtCY4Xiva5VZ95hBKwVmVRc5gCM+RrOnt67C1wg/drGrneMfWvU+jG5
-         l7O1qd0bsLRgpjxFf8Bd6t5jthk5fKIaMSBNPrDlWhhP0XLPqT4MFYj+oA0vYzozk3X2
-         bZpg5O3sTif4O/ZWaOrDw3jH9S/DBp5s9fEn++665aVy0K0x/CMSqlpEfnUx6laQG736
-         0S6w==
+        id S244148AbhIFSTd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Sep 2021 14:19:33 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:44764 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238942AbhIFSTd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Sep 2021 14:19:33 -0400
+Received: by mail-io1-f69.google.com with SMTP id d15-20020a0566022befb02905b2e9040807so5474261ioy.11
+        for <linux-media@vger.kernel.org>; Mon, 06 Sep 2021 11:18:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=PQ0Sz3nSdC4M1Li6PaTkmdjXBaQB3/I9C/9VyXKR078=;
-        b=Ozejr0eKlu8asnoRV/85JmetncQdgBODuwNPBMZTeFK6vwa+fTASUHIo0bVIEMgy0Q
-         AWyozq7rtqiuxKe2rnHEOCVghcJzE4/UJV2REi0Y6KmEDg/3ZsjMzWQ9fxM1M+W2qZdv
-         MSVUCH7vU5jX5cQ/WNT9+I7E0LYe/C4UWBHsu7d6sZh+OLR2uzNvelnbwzN9C0iwr2mH
-         aaK4YW5K2iWEnM5IkUIDGLrZvKokqxPqqJaksqLKG07j5JaQC4V5M+5Reot508PfwPTL
-         NuL5iqrTFX/x7tayiJ9k6U9QRBP9K9Uikq8X54Mk/E0U+5EOK67QWnUP2qRbxM7aq1Pl
-         LLLQ==
-X-Gm-Message-State: AOAM5301ImtV7AEreSnZn78znxx4V1alqtPsBrc8hVJHGm1mbrId7bnZ
-        ntyFDCjCa5rZX7xix0OMYw3bHQ==
-X-Google-Smtp-Source: ABdhPJw1GKspi6vCehDcEOXPQ+NCWmQvHbO1FyzGfSYpe1CVz0Iflaaie8Hoz/ZDPTqau9R2oirf6Q==
-X-Received: by 2002:a1c:1f49:: with SMTP id f70mr12167723wmf.13.1630942279756;
-        Mon, 06 Sep 2021 08:31:19 -0700 (PDT)
-Received: from [192.168.86.34] (cpc86377-aztw32-2-0-cust226.18-1.cable.virginm.net. [92.233.226.227])
-        by smtp.googlemail.com with ESMTPSA id f20sm7471638wmb.32.2021.09.06.08.31.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Sep 2021 08:31:19 -0700 (PDT)
-Subject: Re: [PATCH] dt-bindings: Use 'enum' instead of 'oneOf' plus 'const'
- entries
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     alsa-devel@alsa-project.org, Vignesh R <vigneshr@ti.com>,
-        linux-pci@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-phy@lists.infradead.org, Lee Jones <lee.jones@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        linux-media@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-References: <20210824202014.978922-1-robh@kernel.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <b2e70818-521d-eff8-d7d5-be5a8d95df19@linaro.org>
-Date:   Mon, 6 Sep 2021 16:31:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=CbFOppKerIOMfz01zxChfgriamnUUxzr6i/aOdK7d80=;
+        b=WV0dJlrjZWutp1tZKN44fCQmYYm4norQxxLq7mQQ5e9VMMx5onq+3+oWqxRkuGeUvp
+         lAMAodGD24zfRZGBkMxSHP5caTGlcYYccQvB/c+MhnyfPxqOWRiJ9sDmafiUsHargbvG
+         BsRlqiWos6mHAHsXXYXLEvrOA5OT/KO1NF4NPTdf251f+3ArbSbjRn4PxPPGbKsbjt8O
+         Po+pMS4iPVGfCHgjT6nwCVfZiZ8DgdYyxNb1sCQxxmWmz/w9G3UopKK/uwkdtcUSoEKc
+         LcSn3FlQXT/v8T60ejtK7H3rLHo901iHyD49rnKuvKwVca+VrOQlkkusajk0/FYIVS61
+         4Zow==
+X-Gm-Message-State: AOAM531bK128SkPU2QvvpJ8AXQupBIJ/LJp0L5JH8Dx1HS6/dohAwGvA
+        LqSWnpdrz5oqiXpQFsyvEUJcrO+J8FkeJb1OsWU6P/+z9PP/
+X-Google-Smtp-Source: ABdhPJxBSOgQ9J+AR77+E5wk9XSzpkz+H8+KapnGDp4NJXf3Ud2RlQENfAytlX7iGjmu8NF37fI/oATHPxlbMyp7kcRLo/6TOHNN
 MIME-Version: 1.0
-In-Reply-To: <20210824202014.978922-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a6b:296:: with SMTP id 144mr10583774ioc.114.1630952307961;
+ Mon, 06 Sep 2021 11:18:27 -0700 (PDT)
+Date:   Mon, 06 Sep 2021 11:18:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f6349105cb57accd@google.com>
+Subject: [syzbot] WARNING in pvr2_send_request_ex/usb_submit_urb
+From:   syzbot <syzbot+20fef510634faf733060@syzkaller.appspotmail.com>
+To:     isely@pobox.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    1b4f3dfb4792 Merge tag 'usb-serial-5.15-rc1' of https://gi..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=160b7ecd300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=63ae519fb23783f7
+dashboard link: https://syzkaller.appspot.com/bug?extid=20fef510634faf733060
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1308a286300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1654f791300000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+20fef510634faf733060@syzkaller.appspotmail.com
+
+pvrusb2: Invalid read control endpoint
+------------[ cut here ]------------
+URB 00000000b3505d0d submitted while active
+WARNING: CPU: 0 PID: 2391 at drivers/usb/core/urb.c:378 usb_submit_urb+0x14e2/0x18a0 drivers/usb/core/urb.c:378
+Modules linked in:
+CPU: 0 PID: 2391 Comm: pvrusb2-context Not tainted 5.14.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:usb_submit_urb+0x14e2/0x18a0 drivers/usb/core/urb.c:378
+Code: 89 de e8 31 c0 ab fd 84 db 0f 85 a9 f3 ff ff e8 f4 b8 ab fd 4c 89 fe 48 c7 c7 20 26 84 86 c6 05 d8 3c ef 04 01 e8 11 8c 00 02 <0f> 0b e9 87 f3 ff ff 41 be ed ff ff ff e9 7c f3 ff ff e8 c7 b8 ab
+RSP: 0018:ffffc90006996f78 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88810fc89b40 RSI: ffffffff812aca53 RDI: fffff52000d32de1
+RBP: 00000000c0008200 R08: 0000000000000001 R09: 0000000000000000
+R10: ffffffff814c6d1b R11: 0000000000000000 R12: ffff888119e0a000
+R13: 0000000000000005 R14: 00000000fffffff0 R15: ffff888110825600
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055e769882928 CR3: 0000000100fbe000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ pvr2_send_request_ex+0x7c2/0x20e0 drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3667
+ pvr2_send_request+0x35/0x40 drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3810
+ pvr2_i2c_read drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c:130 [inline]
+ pvr2_i2c_basic_op+0x4af/0x900 drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c:172
+ pvr2_i2c_xfer+0x375/0xb90 drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c:445
+ __i2c_transfer+0x52b/0x16e0 drivers/i2c/i2c-core-base.c:2207
+ i2c_smbus_xfer_emulated+0x1b5/0xfe0 drivers/i2c/i2c-core-smbus.c:468
+ __i2c_smbus_xfer drivers/i2c/i2c-core-smbus.c:606 [inline]
+ __i2c_smbus_xfer+0x4b9/0xfb0 drivers/i2c/i2c-core-smbus.c:552
+ i2c_smbus_xfer drivers/i2c/i2c-core-smbus.c:544 [inline]
+ i2c_smbus_xfer+0x100/0x380 drivers/i2c/i2c-core-smbus.c:534
+ i2c_smbus_read_byte_data+0x107/0x1b0 drivers/i2c/i2c-core-smbus.c:141
+ saa711x_detect_chip drivers/media/i2c/saa7115.c:1718 [inline]
+ saa711x_probe+0x1e8/0x940 drivers/media/i2c/saa7115.c:1824
+ i2c_device_probe+0xacc/0xc90 drivers/i2c/i2c-core-base.c:572
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:751
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:781
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:898
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:969
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xc35/0x21b0 drivers/base/core.c:3353
+ i2c_new_client_device+0x613/0xaf0 drivers/i2c/i2c-core-base.c:1062
+ v4l2_i2c_new_subdev_board+0xaf/0x2c0 drivers/media/v4l2-core/v4l2-i2c.c:80
+ v4l2_i2c_new_subdev+0x102/0x170 drivers/media/v4l2-core/v4l2-i2c.c:135
+ pvr2_hdw_load_subdev drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2022 [inline]
+ pvr2_hdw_load_modules drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2074 [inline]
+ pvr2_hdw_setup_low drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2155 [inline]
+ pvr2_hdw_setup drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2261 [inline]
+ pvr2_hdw_initialize+0xc97/0x37d0 drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2338
+ pvr2_context_check drivers/media/usb/pvrusb2/pvrusb2-context.c:109 [inline]
+ pvr2_context_thread_func+0x250/0x850 drivers/media/usb/pvrusb2/pvrusb2-context.c:158
+ kthread+0x3c2/0x4a0 kernel/kthread.c:319
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
 
 
-On 24/08/2021 21:20, Rob Herring wrote:
-> 'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
-> is more concise and yields better error messages.
-> 
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Vignesh R <vigneshr@ti.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->   .../bindings/display/msm/dsi-phy-10nm.yaml           |  6 +++---
->   .../bindings/display/msm/dsi-phy-14nm.yaml           |  6 +++---
->   .../bindings/display/msm/dsi-phy-28nm.yaml           |  8 ++++----
->   .../bindings/dma/allwinner,sun6i-a31-dma.yaml        | 12 ++++++------
->   .../devicetree/bindings/firmware/arm,scpi.yaml       |  6 +++---
->   .../devicetree/bindings/i2c/ti,omap4-i2c.yaml        | 10 +++++-----
->   .../interrupt-controller/loongson,liointc.yaml       |  8 ++++----
->   .../devicetree/bindings/media/i2c/mipi-ccs.yaml      |  8 ++++----
->   .../devicetree/bindings/mfd/ti,lp87565-q1.yaml       |  6 +++---
->   .../devicetree/bindings/net/realtek-bluetooth.yaml   |  8 ++++----
->   .../bindings/net/ti,k3-am654-cpsw-nuss.yaml          |  8 ++++----
->   .../devicetree/bindings/net/ti,k3-am654-cpts.yaml    |  6 +++---
->   Documentation/devicetree/bindings/pci/loongson.yaml  |  8 ++++----
->   .../devicetree/bindings/phy/intel,lgm-emmc-phy.yaml  |  6 +++---
->   .../devicetree/bindings/serial/8250_omap.yaml        |  9 +++++----
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
->   .../devicetree/bindings/sound/qcom,sm8250.yaml       |  6 +++---
-
-for sm8250 sound card,
-
-Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-
->   .../devicetree/bindings/sound/tlv320adcx140.yaml     |  8 ++++----
->   .../devicetree/bindings/spi/realtek,rtl-spi.yaml     | 12 ++++++------
->   .../devicetree/bindings/timer/arm,sp804.yaml         |  6 +++---
->   19 files changed, 74 insertions(+), 73 deletions(-)
-> 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
