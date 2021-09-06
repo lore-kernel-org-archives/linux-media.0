@@ -2,76 +2,144 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EF27C433FE
-	for <linux-media@archiver.kernel.org>; Mon,  6 Sep 2021 07:56:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A463C433FE
+	for <linux-media@archiver.kernel.org>; Mon,  6 Sep 2021 08:05:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E8DB60184
-	for <linux-media@archiver.kernel.org>; Mon,  6 Sep 2021 07:56:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4ECF360F92
+	for <linux-media@archiver.kernel.org>; Mon,  6 Sep 2021 08:05:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240361AbhIFH5N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Sep 2021 03:57:13 -0400
-Received: from mga03.intel.com ([134.134.136.65]:38491 "EHLO mga03.intel.com"
+        id S240578AbhIFIGH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Sep 2021 04:06:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43926 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230466AbhIFH5M (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 6 Sep 2021 03:57:12 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10098"; a="219968292"
-X-IronPort-AV: E=Sophos;i="5.85,271,1624345200"; 
-   d="scan'208";a="219968292"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2021 00:56:07 -0700
-X-IronPort-AV: E=Sophos;i="5.85,271,1624345200"; 
-   d="scan'208";a="448515225"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2021 00:56:05 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 6DD73204C6;
-        Mon,  6 Sep 2021 10:56:03 +0300 (EEST)
-Date:   Mon, 6 Sep 2021 10:56:03 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: i2c: ths8200 needs V4L2_ASYNC
-Message-ID: <20210906075603.GD3@paasikivi.fi.intel.com>
-References: <20210904232808.25638-1-rdunlap@infradead.org>
+        id S240504AbhIFIEX (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 6 Sep 2021 04:04:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8493A60F43;
+        Mon,  6 Sep 2021 08:03:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630915396;
+        bh=wvOQMqx+ttkvKL5vTgiWBch+7sKvXQrHilV+EnzpqDY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qJelRv7D2U3fMcsBsFcgqqREJc978ZMcQmtjZz3YTAXAI0mwLSSN8+C5ZftlBJvUh
+         pl6AreYgAthuXlPl4mq4oN88NXnDI8HGvTcWlrXIlVnS7eNFqkeXHOu/tKjt5EtENE
+         WXWjkCqT76vEyLVp/ZL6KttsiBTpv5gigeOMd7dOPICYY93gQWfsjq9eSgavw0EpgM
+         QWpO9Ah8eaAxkllHHuCGIgIqnO6p9xrDpNFmmxZflqSmHgjd59oLf8SJiyqRmdeqSr
+         9Gu5cmSed6Tcp6en0IhiRPOwSeUp3Y6nXvPzK5R5GaGOibpDTJpGSZdyacdq834n74
+         oqKBZHCk/QijA==
+Date:   Mon, 6 Sep 2021 10:03:10 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     <Eugen.Hristev@microchip.com>
+Cc:     <Jonathan.Cameron@Huawei.com>, <linuxarm@huawei.com>,
+        <mauro.chehab@huawei.com>, <alexandre.belloni@bootlin.com>,
+        <Ludovic.Desroches@microchip.com>, <mchehab@kernel.org>,
+        <Nicolas.Ferre@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <Claudiu.Beznea@microchip.com>
+Subject: Re: [PATCH 08/25] media: atmel: properly get pm_runtime
+Message-ID: <20210906100310.4891fa2c@coco.lan>
+In-Reply-To: <e25d024e-4fa6-dd67-b97a-1d2640f2b560@microchip.com>
+References: <cover.1620207353.git.mchehab+huawei@kernel.org>
+        <975645970144b6c8401ab9bd1243619978a868a9.1620207353.git.mchehab+huawei@kernel.org>
+        <20210505130835.000006b7@Huawei.com>
+        <cd524923-93f0-e15c-816f-595a80184206@microchip.com>
+        <20210610113827.57db9e77@coco.lan>
+        <e25d024e-4fa6-dd67-b97a-1d2640f2b560@microchip.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210904232808.25638-1-rdunlap@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Sep 04, 2021 at 04:28:08PM -0700, Randy Dunlap wrote:
-> Fix the build errors reported by the kernel test robot by
-> selecting V4L2_ASYNC:
-> 
-> mips-linux-ld: drivers/media/i2c/ths8200.o: in function `ths8200_remove':
-> ths8200.c:(.text+0x1ec): undefined reference to `v4l2_async_unregister_subdev'
-> mips-linux-ld: drivers/media/i2c/ths8200.o: in function `ths8200_probe':
-> ths8200.c:(.text+0x404): undefined reference to `v4l2_async_register_subdev'
-> 
-> Fixes: ed29f89497006 ("media: i2c: ths8200: support asynchronous probing")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-> Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: Ezequiel Garcia <ezequiel@collabora.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: linux-media@vger.kernel.org
+Hi Eugen,
 
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Em Thu, 10 Jun 2021 12:00:42 +0000
+<Eugen.Hristev@microchip.com> escreveu:
 
--- 
-Sakari Ailus
+> On 6/10/21 12:38 PM, Mauro Carvalho Chehab wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > Em Thu, 10 Jun 2021 09:04:07 +0000
+> > <Eugen.Hristev@microchip.com> escreveu:
+> >   
+> >>>> diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+> >>>> index fe3ec8d0eaee..ce8e1351fa53 100644
+> >>>> --- a/drivers/media/platform/atmel/atmel-isc-base.c
+> >>>> +++ b/drivers/media/platform/atmel/atmel-isc-base.c
+> >>>> @@ -294,9 +294,13 @@ static int isc_wait_clk_stable(struct clk_hw *hw)
+> >>>>    static int isc_clk_prepare(struct clk_hw *hw)
+> >>>>    {
+> >>>>         struct isc_clk *isc_clk = to_isc_clk(hw);
+> >>>> +     int ret;
+> >>>>
+> >>>> -     if (isc_clk->id == ISC_ISPCK)
+> >>>> -             pm_runtime_get_sync(isc_clk->dev);
+> >>>> +     if (isc_clk->id == ISC_ISPCK) {
+> >>>> +             ret = pm_runtime_resume_and_get(isc_clk->dev);
+> >>>> +             if (ret < 0)
+> >>>> +                     return ret;
+> >>>> +     }  
+> >>
+> >> Hi Mauro,
+> >>
+> >> With this patch, the ISC is broken on latest media tree. It looks like
+> >> pm_runtime_resume_and_get for the ISC_ISPCK clock returns -ENOACCESS and
+> >> thus, the probe of the driver fails:
+> >>
+> >> atmel-sama5d2-isc f0008000.isc: failed to enable ispck: -13
+> >> atmel-sama5d2-isc: probe of f0008000.isc failed with error -13
+
+What's the current status of this issue? 
+
+If the bug still happens, we need a fix for it.
+
+We might revert this patch, but this would just be masking some other
+hidden bug.
+
+Regards,
+Mauro
+
+
+
+> >>
+> >>
+> >> Could you point out how I could fix this ? Maybe the isc_clk->dev is not
+> >> properly handled/initialized in some other part of the code ?  
+> > 
+> > Looking at RPM implementation:
+> > 
+> >          static int rpm_resume(struct device *dev, int rpmflags)
+> >          {
+> > ...
+> >          if (dev->power.runtime_error)
+> >                  retval = -EINVAL;
+> >          else if (dev->power.disable_depth == 1 && dev->power.is_suspended
+> >              && dev->power.runtime_status == RPM_ACTIVE)
+> >                  retval = 1;
+> >          else if (dev->power.disable_depth > 0)
+> >                  retval = -EACCES;
+> > ...
+> > 
+> > It sounds that RPM is disabled for this clock. Did you call
+> > pm_runtime_enable() before calling isc_clk_prepare()?
+> > 
+> > Thanks,
+> > Mauro
+> >   
+> 
+> I tried to call pm_runtime_enable for the clk at clk_init time, but 
+> doing that makes the runtime for the ISC fail like this:
+> 
+> atmel-sama5d2-isc f0008000.isc: Unbalanced pm_runtime_enable!
+
+
+
+Thanks,
+Mauro
