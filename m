@@ -2,86 +2,89 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03408C433EF
-	for <linux-media@archiver.kernel.org>; Wed,  8 Sep 2021 10:58:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A3DAC433EF
+	for <linux-media@archiver.kernel.org>; Wed,  8 Sep 2021 11:02:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DBC3A61026
-	for <linux-media@archiver.kernel.org>; Wed,  8 Sep 2021 10:58:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B04E61026
+	for <linux-media@archiver.kernel.org>; Wed,  8 Sep 2021 11:02:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351443AbhIHK7T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Sep 2021 06:59:19 -0400
-Received: from mx20.baidu.com ([111.202.115.85]:41852 "EHLO baidu.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1351535AbhIHK7R (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 8 Sep 2021 06:59:17 -0400
-Received: from Bc-Mail-Ex13.internal.baidu.com (unknown [172.31.51.53])
-        by Forcepoint Email with ESMTPS id A145D64496600D136CD7;
-        Wed,  8 Sep 2021 18:58:08 +0800 (CST)
-Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
- Bc-Mail-Ex13.internal.baidu.com (172.31.51.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2242.12; Wed, 8 Sep 2021 18:58:08 +0800
-Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.63.8) by
- BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.14; Wed, 8 Sep 2021 18:58:07 +0800
-From:   Cai Huoqing <caihuoqing@baidu.com>
-To:     <caihuoqing@baidu.com>
-CC:     Ezequiel Garcia <ezequiel@collabora.com>,
+        id S1349071AbhIHLED (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Sep 2021 07:04:03 -0400
+Received: from vps.xff.cz ([195.181.215.36]:38364 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232630AbhIHLEB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 8 Sep 2021 07:04:01 -0400
+X-Greylist: delayed 394 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Sep 2021 07:04:01 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1631098575; bh=YY2yCPD5vLXF6o1p4UODyyT1QmHGm6Y/SxZTq/D9uMg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mYaLZngkt2nB4yE41SBYtnk11sdtwCw7txgKGBz2Q/2CJ0HBC+vnJHdMdqkqjJQiM
+         gQYiAehdspatbT9xsNwpwxOThXCXQztBA4qx3XaJn7L5n3/C/tXVPC5dbwh2QY+ulA
+         kJa/bp4QvEvzzF8d4CSUdarF7Ni73Q03Xmt7Iyio=
+From:   Ondrej Jirman <megous@megous.com>
+To:     Yong Deng <yong.deng@magewell.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-media@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] staging: media: rkvdec: Make use of the helper function devm_platform_ioremap_resource()
-Date:   Wed, 8 Sep 2021 18:57:59 +0800
-Message-ID: <20210908105801.2086-1-caihuoqing@baidu.com>
-X-Mailer: git-send-email 2.17.1
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-media@vger.kernel.org (open list:CSI DRIVERS FOR ALLWINNER V3s),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Allwinner
+        sunXi SoC support),
+        linux-sunxi@lists.linux.dev (open list:ARM/Allwinner sunXi SoC support),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     Ondrej Jirman <megous@megous.com>
+Subject: [PATCH] media: sun6i-csi: Allow the video device to be open multiple times
+Date:   Wed,  8 Sep 2021 12:56:09 +0200
+Message-Id: <20210908105609.1823449-1-megous@megous.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.31.63.8]
-X-ClientProxiedBy: BJHW-Mail-Ex15.internal.baidu.com (10.127.64.38) To
- BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the devm_platform_ioremap_resource() helper instead of
-calling platform_get_resource() and devm_ioremap_resource()
-separately
+Previously it was possible, but a recent fix for uninitialized
+`ret` variable broke this behavior.
 
-Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+v4l2_fh_is_singular_file() check is there just to determine
+whether the power needs to be enabled, and it's not a failure
+if it returns false.
+
+Fixes: ba9139116bc0538 ("media: sun6i-csi: add a missing return code")
+Signed-off-by: Ondrej Jirman <megous@megous.com>
 ---
- drivers/staging/media/rkvdec/rkvdec.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index 7131156c1f2c..bf00fe6534a3 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -967,7 +967,6 @@ static const char * const rkvdec_clk_names[] = {
- static int rkvdec_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
+index 0129dee798b4..da1f8b2852b7 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
+@@ -510,7 +510,7 @@ static const struct v4l2_ioctl_ops sun6i_video_ioctl_ops = {
+ static int sun6i_video_open(struct file *file)
  {
- 	struct rkvdec_dev *rkvdec;
--	struct resource *res;
- 	unsigned int i;
- 	int ret, irq;
+ 	struct sun6i_video *video = video_drvdata(file);
+-	int ret;
++	int ret = 0;
  
-@@ -999,8 +998,7 @@ static int rkvdec_probe(struct platform_device *pdev)
- 	 */
- 	clk_set_rate(rkvdec->clocks[0].clk, 500 * 1000 * 1000);
+ 	if (mutex_lock_interruptible(&video->lock))
+ 		return -ERESTARTSYS;
+@@ -524,10 +524,8 @@ static int sun6i_video_open(struct file *file)
+ 		goto fh_release;
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	rkvdec->regs = devm_ioremap_resource(&pdev->dev, res);
-+	rkvdec->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(rkvdec->regs))
- 		return PTR_ERR(rkvdec->regs);
+ 	/* check if already powered */
+-	if (!v4l2_fh_is_singular_file(file)) {
+-		ret = -EBUSY;
++	if (!v4l2_fh_is_singular_file(file))
+ 		goto unlock;
+-	}
  
+ 	ret = sun6i_csi_set_power(video->csi, true);
+ 	if (ret < 0)
 -- 
-2.25.1
+2.33.0
 
