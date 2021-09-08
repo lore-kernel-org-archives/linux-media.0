@@ -2,126 +2,93 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23F22C433EF
-	for <linux-media@archiver.kernel.org>; Wed,  8 Sep 2021 12:07:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28CD6C433F5
+	for <linux-media@archiver.kernel.org>; Wed,  8 Sep 2021 13:03:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F3A8F60F0F
-	for <linux-media@archiver.kernel.org>; Wed,  8 Sep 2021 12:07:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A5CC6115C
+	for <linux-media@archiver.kernel.org>; Wed,  8 Sep 2021 13:03:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349065AbhIHMIr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Sep 2021 08:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
+        id S230109AbhIHNE3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Sep 2021 09:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234758AbhIHMIr (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Sep 2021 08:08:47 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A92C061575
-        for <linux-media@vger.kernel.org>; Wed,  8 Sep 2021 05:07:39 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id m9so2961927wrb.1
-        for <linux-media@vger.kernel.org>; Wed, 08 Sep 2021 05:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xKkXisCl2vIi7OCx8uRGfHdsX0k2dDIgnIlUiuL+Z/Y=;
-        b=JnOw9NpBCJWVZZ7iNJI979Pib4l2Z6LsNopyLTg13EkvXDZAZIYHBf6alkeJ3CcUUo
-         E2j1KcTKOXOZfAKgihAk+9zTUEEFYiE1rAobG1mL5rZeSpc8UrXH+ZTovHtTnf6WxHoj
-         tuA5dqHmYrEDw1X0kDL0RrmzYSVcHj/vGDLXjsGDcYh34STSoxnW7tTtgcGLxqErs/OI
-         vdXTqAk37kFohJoydya+FyqMLoaOnFaD9MXkycdCoFembCzxhKJLKKeFnAeVyQkX331w
-         pl4cI6FX0etmJvwWgGeyN4wtfsIXtT9evwlq0AOj5gN34Qcuq2UXdEKacySWTvhaLIH4
-         O04w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=xKkXisCl2vIi7OCx8uRGfHdsX0k2dDIgnIlUiuL+Z/Y=;
-        b=BNBbQEoCsVDzyAtzV86T3g7HmHPguaczvuEiFREbSrOXBohrtqGyRWeIUWjm45jImq
-         wae1caOETC7AM+OcSVsdRf5JCzKKehv9WzyCIA+lLYnkiqUeoeAeWNMYTWLTFjux4oy5
-         RFn8AF95sfY2wTZXCDPTCTlt75gpfgZVHtY3RLlkQNsb9a0om67udZvdA0T9Ks7bSA1a
-         prXqix/mpGctDqnvJaLYU4CFPxkJqYCSLNAnrwCXR80XYb+G6NHdH1o0E1lu9c0/GlxN
-         anWCi6a9mnMiIA9rSIEBlAiQC01+tgpVhF+h0sv+rvNNnEAckYQpFWbBgY7j0DjSJXhf
-         IhOg==
-X-Gm-Message-State: AOAM532w0XCFQl2gsf01jjktHwRKFEVePTlaGQQjrR0iLIsv3heUAE/P
-        BfSXBg+49/udzbl/nZ58rtaWgA==
-X-Google-Smtp-Source: ABdhPJwSSpAail5nl9T9TWoMaDxdil36KbTbvhFE3B+c19tOhhcm0J3vdXa3Hm58ilTQjL+kaX6kYw==
-X-Received: by 2002:adf:c44b:: with SMTP id a11mr3748453wrg.416.1631102857845;
-        Wed, 08 Sep 2021 05:07:37 -0700 (PDT)
-Received: from ?IPv6:2001:861:44c0:66c0:19d:2e13:ec0a:9d59? ([2001:861:44c0:66c0:19d:2e13:ec0a:9d59])
-        by smtp.gmail.com with ESMTPSA id l15sm1739951wms.38.2021.09.08.05.07.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Sep 2021 05:07:37 -0700 (PDT)
-Subject: Re: [PATCH] staging: media: meson: vdec: Make use of the helper
- function devm_platform_ioremap_resource_byname()
-To:     Cai Huoqing <caihuoqing@baidu.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20210908105730.1882-1-caihuoqing@baidu.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <4cd6453f-8b0e-a438-0e97-53e3962d652b@baylibre.com>
-Date:   Wed, 8 Sep 2021 14:07:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        with ESMTP id S236221AbhIHNE0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Sep 2021 09:04:26 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55128C06175F
+        for <linux-media@vger.kernel.org>; Wed,  8 Sep 2021 06:03:18 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1mNxES-0004mH-L8; Wed, 08 Sep 2021 15:03:16 +0200
+Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1mNxER-0004S8-Lo; Wed, 08 Sep 2021 15:03:15 +0200
+Received: from mtr by dude03.red.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1mNxER-00DpG2-Kx; Wed, 08 Sep 2021 15:03:15 +0200
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     linux-media@vger.kernel.org, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl
+Cc:     kernel@pengutronix.de, m.tretter@pengutronix.de
+Subject: [PATCH 1/6] media: allegro: ignore interrupt if mailbox is not initialized
+Date:   Wed,  8 Sep 2021 15:03:10 +0200
+Message-Id: <20210908130315.3295253-2-m.tretter@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210908130315.3295253-1-m.tretter@pengutronix.de>
+References: <20210908130315.3295253-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20210908105730.1882-1-caihuoqing@baidu.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 08/09/2021 12:57, Cai Huoqing wrote:
-> Use the devm_platform_ioremap_resource_byname() helper instead of
-> calling platform_get_resource_byname() and devm_ioremap_resource()
-> separately
-> 
-> Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
-> ---
->  drivers/staging/media/meson/vdec/vdec.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/staging/media/meson/vdec/vdec.c b/drivers/staging/media/meson/vdec/vdec.c
-> index e51d69c4729d..8549d95be0f2 100644
-> --- a/drivers/staging/media/meson/vdec/vdec.c
-> +++ b/drivers/staging/media/meson/vdec/vdec.c
-> @@ -994,7 +994,6 @@ static int vdec_probe(struct platform_device *pdev)
->  	struct device *dev = &pdev->dev;
->  	struct video_device *vdev;
->  	struct amvdec_core *core;
-> -	struct resource *r;
->  	const struct of_device_id *of_id;
->  	int irq;
->  	int ret;
-> @@ -1006,13 +1005,11 @@ static int vdec_probe(struct platform_device *pdev)
->  	core->dev = dev;
->  	platform_set_drvdata(pdev, core);
->  
-> -	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dos");
-> -	core->dos_base = devm_ioremap_resource(dev, r);
-> +	core->dos_base = devm_platform_ioremap_resource_byname(pdev, "dos");
->  	if (IS_ERR(core->dos_base))
->  		return PTR_ERR(core->dos_base);
->  
-> -	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, "esparser");
-> -	core->esparser_base = devm_ioremap_resource(dev, r);
-> +	core->esparser_base = devm_platform_ioremap_resource_byname(pdev, "esparser");
->  	if (IS_ERR(core->esparser_base))
->  		return PTR_ERR(core->esparser_base);
->  
-> 
+The mailbox is initialized after the interrupt handler is installed. As
+the firmware is loaded and started even later, it should not happen that
+the interrupt occurs without the mailbox being initialized.
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+As the Linux Driver Verification project (linuxtesting.org) keeps
+reporting this as an error, add a check to ignore interrupts before the
+mailbox is initialized to fix this potential null pointer dereference.
+
+Reported-by: Yuri Savinykh <s02190703@gse.cs.msu.ru>
+Reported-by: Nadezda Lutovinova <lutovinova@ispras.ru>
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+---
+ drivers/media/platform/allegro-dvt/allegro-core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/allegro-core.c
+index 887b492e4ad1..14a119b43bca 100644
+--- a/drivers/media/platform/allegro-dvt/allegro-core.c
++++ b/drivers/media/platform/allegro-dvt/allegro-core.c
+@@ -2185,6 +2185,15 @@ static irqreturn_t allegro_irq_thread(int irq, void *data)
+ {
+ 	struct allegro_dev *dev = data;
+ 
++	/*
++	 * The firmware is initialized after the mailbox is setup. We further
++	 * check the AL5_ITC_CPU_IRQ_STA register, if the firmware actually
++	 * triggered the interrupt. Although this should not happen, make sure
++	 * that we ignore interrupts, if the mailbox is not initialized.
++	 */
++	if (!dev->mbox_status)
++		return IRQ_NONE;
++
+ 	allegro_mbox_notify(dev->mbox_status);
+ 
+ 	return IRQ_HANDLED;
+-- 
+2.30.2
+
