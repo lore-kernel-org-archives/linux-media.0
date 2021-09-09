@@ -5,42 +5,43 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0DDAC433EF
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:11:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FDDAC433F5
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:12:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 879FD61132
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:11:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16F5661132
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:12:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242269AbhIIMMn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:12:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48310 "EHLO mail.kernel.org"
+        id S244419AbhIIMN3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:13:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52004 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345252AbhIIMHF (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:07:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C47D261994;
-        Thu,  9 Sep 2021 11:47:36 +0000 (UTC)
+        id S245706AbhIIML0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:11:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3124161A0C;
+        Thu,  9 Sep 2021 11:48:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188057;
-        bh=vJf/hOLRbSjBB5md0JjqiGgNpfTuhUqJ4jPhXj65f/0=;
+        s=k20201202; t=1631188116;
+        bh=YC8/XbiDbaj/RxCg++JrowC1boSNXqHMcH+BfvlVeiw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sj5CLv192c2vSJG3G2pk5+OG2KMjpZvWbpo1S7P+T7w3J+Hyrk6ykuJfuZYRtKPBm
-         1SZXsF3T8EofG7RCGGxLE66VP7Brv/uJO5z+rPc7AWMS0AQdZP8pN5B+UuzaL+xPiq
-         ydX+mWxQjdlh6I7O6J+uSFmja8sV9MSdVhqh5iQbUhFx4cb3yj+ly52spewCrg4bMj
-         LndA8TfL5hC/rB4FUGhkBAD/iyuQtQh4ucEBvYJlRGJU0OpqAYZp0xos8IbdA2JaZZ
-         d5HKkEpDdw9NOL0pqZcapYlm41HnER5ddT5r/YvTV71aPkP8zmCu9p8FWeDRDrFndb
-         YrJcb7QcxzBUw==
+        b=GMGXhkYowsRi3jHLP1G+SkpAWVy8qJR3yD4iCSu0ye6rvQqZaL2fVMCE4Tz2R+J0U
+         aQaVByQO5yn2dSZ+1hq3ixLq4pRPoL68OsVGbDlJD1dyt4RqmdHMj8k134evNrZSos
+         OMs0Jh4t7Ca8n/HHI3Y8qpadlaz8qNew+KoTHOToWD7Ylswg1A3i4cQWN+GHIAe3/E
+         6XP9803Im5A76FZ1OxWMth5afNMOh5jrSWpbW575eeQ56wh0rHtazXP5dwx6olKFqW
+         8L7yIOgMLbk96Ir82IUoNTbQiVlFF9tF4/rGNhRMLAn4XhcZIqCgvy1bpyCSWKeWXt
+         9+NhHlWImIykA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yang Yingliang <yangyingliang@huawei.com>,
-        Hulk Robot <hulkci@huawei.com>,
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.13 048/219] media: atomisp: pci: fix error return code in atomisp_pci_probe()
-Date:   Thu,  9 Sep 2021 07:43:44 -0400
-Message-Id: <20210909114635.143983-48-sashal@kernel.org>
+        linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.13 093/219] media: imx: imx7-media-csi: Fix buffer return upon stream start failure
+Date:   Thu,  9 Sep 2021 07:44:29 -0400
+Message-Id: <20210909114635.143983-93-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
 References: <20210909114635.143983-1-sashal@kernel.org>
@@ -52,36 +53,82 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-[ Upstream commit d14e272958bdfdc40dcafb827d24ba6fdafa9d52 ]
+[ Upstream commit 0ada1697ed4256b38225319c9896661142a3572d ]
 
-If init_atomisp_wdts() fails, atomisp_pci_probe() need return
-error code.
+When the stream fails to start, the first two buffers in the queue have
+been moved to the active_vb2_buf array and are returned to vb2 by
+imx7_csi_dma_unsetup_vb2_buf(). The function is called with the buffer
+state set to VB2_BUF_STATE_ERROR unconditionally, which is correct when
+stopping the stream, but not when the start operation fails. In that
+case, the state should be set to VB2_BUF_STATE_QUEUED. Fix it.
 
-Link: https://lore.kernel.org/linux-media/20210617072329.1233662-1-yangyingliang@huawei.com
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Tested-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_v4l2.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/staging/media/imx/imx7-media-csi.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index 02f774ed80c8..fa1bd99cd6f1 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -1763,7 +1763,8 @@ static int atomisp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
- 	if (err < 0)
- 		goto register_entities_fail;
- 	/* init atomisp wdts */
--	if (init_atomisp_wdts(isp) != 0)
-+	err = init_atomisp_wdts(isp);
-+	if (err != 0)
- 		goto wdt_work_queue_fail;
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index f85a2f5f1413..ad1bca3fe047 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -361,6 +361,7 @@ static void imx7_csi_dma_unsetup_vb2_buf(struct imx7_csi *csi,
  
- 	/* save the iunit context only once after all the values are init'ed. */
+ 			vb->timestamp = ktime_get_ns();
+ 			vb2_buffer_done(vb, return_status);
++			csi->active_vb2_buf[i] = NULL;
+ 		}
+ 	}
+ }
+@@ -386,9 +387,10 @@ static int imx7_csi_dma_setup(struct imx7_csi *csi)
+ 	return 0;
+ }
+ 
+-static void imx7_csi_dma_cleanup(struct imx7_csi *csi)
++static void imx7_csi_dma_cleanup(struct imx7_csi *csi,
++				 enum vb2_buffer_state return_status)
+ {
+-	imx7_csi_dma_unsetup_vb2_buf(csi, VB2_BUF_STATE_ERROR);
++	imx7_csi_dma_unsetup_vb2_buf(csi, return_status);
+ 	imx_media_free_dma_buf(csi->dev, &csi->underrun_buf);
+ }
+ 
+@@ -537,9 +539,10 @@ static int imx7_csi_init(struct imx7_csi *csi)
+ 	return 0;
+ }
+ 
+-static void imx7_csi_deinit(struct imx7_csi *csi)
++static void imx7_csi_deinit(struct imx7_csi *csi,
++			    enum vb2_buffer_state return_status)
+ {
+-	imx7_csi_dma_cleanup(csi);
++	imx7_csi_dma_cleanup(csi, return_status);
+ 	imx7_csi_init_default(csi);
+ 	imx7_csi_dmareq_rff_disable(csi);
+ 	clk_disable_unprepare(csi->mclk);
+@@ -702,7 +705,7 @@ static int imx7_csi_s_stream(struct v4l2_subdev *sd, int enable)
+ 
+ 		ret = v4l2_subdev_call(csi->src_sd, video, s_stream, 1);
+ 		if (ret < 0) {
+-			imx7_csi_deinit(csi);
++			imx7_csi_deinit(csi, VB2_BUF_STATE_QUEUED);
+ 			goto out_unlock;
+ 		}
+ 
+@@ -712,7 +715,7 @@ static int imx7_csi_s_stream(struct v4l2_subdev *sd, int enable)
+ 
+ 		v4l2_subdev_call(csi->src_sd, video, s_stream, 0);
+ 
+-		imx7_csi_deinit(csi);
++		imx7_csi_deinit(csi, VB2_BUF_STATE_ERROR);
+ 	}
+ 
+ 	csi->is_streaming = !!enable;
 -- 
 2.30.2
 
