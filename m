@@ -4,44 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AE48C433EF
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5196DC433EF
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F4F460ED8
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D79F604E9
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354035AbhIIMva (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:51:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56650 "EHLO mail.kernel.org"
+        id S1354653AbhIIMve (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:51:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57496 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347679AbhIIMlS (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:41:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D52756103D;
-        Thu,  9 Sep 2021 11:55:10 +0000 (UTC)
+        id S1355436AbhIIMpo (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:45:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D6782613B5;
+        Thu,  9 Sep 2021 11:56:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188511;
-        bh=gB9z9wL68N4zA6j+tsmo/QkfIMZQNo6VHD+mttTBms0=;
+        s=k20201202; t=1631188570;
+        bh=jNfagrwBB6tBxwk5PwVadgQlBB9yK8VvqcvtDl0vPX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NensyPIafXteNXueRBM+VClI41yH2+GUfgIny9Ak/qMTQYi75B7eelyZ7c6ZZJfwY
-         mQoBgtP7RpluGtKgDyNDOc5JIhFZ9wttYF6ABRGVIzeNG+RldzKoOvOZXfYYyvFl1u
-         CnNnvEsvacul6iKcjgqpuvkNvfS6ceywA3hbuPvmysdE7UlA9+rVNhxV5QDZs/fP9D
-         LLXwapiPYLyT7IBu5dUUeT60+hx2gIvpZKOyM1qnveF+SwfW8b7SdESkOecDqzc8Py
-         +D7AVxmw29rAaKVglmNsRf14K4d1Dzc5UpnU6KbcPrCgH+UeQkv1yMmE1E6f5hATK+
-         /mYa0PClEt/Ww==
+        b=g2KYWx4nG4nZ9RQgbwvSiacPn6yS4el9tTkZGqdA0+OtShxCtUq8CrTpjuae1rojK
+         PRUpWSCvuiSsYQErKy7twaSAsTH+lklGgsgcZ+nnJTsO8f+OUiH/JJ4gA7HkkLu/N4
+         cr5wITLzpRwiB2hyq+bKD+VZxE4repHxL+KpsSojmnvMqaxremxxKd5fPm8kwxaZYv
+         cyCCq6vPzesFRWANPnyv4EmM5g8k4wbG0bUC2FI+PYo7c+GmCvUIlqjRvDNuUid3uR
+         R8cHoOn2ss68jrmEhBxFAF/QfK5TObRGUefSqSqJKvo9YMegbmxZiGSKRDKcLLziru
+         thbU3NpXogsiQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Umang Jain <umang.jain@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 003/109] media: dib8000: rewrite the init prbs logic
-Date:   Thu,  9 Sep 2021 07:53:20 -0400
-Message-Id: <20210909115507.147917-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 050/109] media: imx258: Limit the max analogue gain to 480
+Date:   Thu,  9 Sep 2021 07:54:07 -0400
+Message-Id: <20210909115507.147917-50-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115507.147917-1-sashal@kernel.org>
 References: <20210909115507.147917-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -49,137 +54,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Umang Jain <umang.jain@ideasonboard.com>
 
-[ Upstream commit 8db11aebdb8f93f46a8513c22c9bd52fa23263aa ]
+[ Upstream commit f809665ee75fff3f4ea8907f406a66d380aeb184 ]
 
-The logic at dib8000_get_init_prbs() has a few issues:
+The range for analog gain mentioned in the datasheet is [0, 480].
+The real gain formula mentioned in the datasheet is:
 
-1. the tables used there has an extra unused value at the beginning;
-2. the dprintk() message doesn't write the right value when
-   transmission mode is not 8K;
-3. the array overflow validation is done by the callers.
+	Gain = 512 / (512 – X)
 
-Rewrite the code to fix such issues.
+Hence, values larger than 511 clearly makes no sense. The gain
+register field is also documented to be of 9-bits in the datasheet.
 
-This should also shut up those smatch warnings:
+Certainly, it is enough to infer that, the kernel driver currently
+advertises an arbitrary analog gain max. Fix it by rectifying the
+value as per the data sheet i.e. 480.
 
-	drivers/media/dvb-frontends/dib8000.c:2125 dib8000_get_init_prbs() error: buffer overflow 'lut_prbs_8k' 14 <= 14
-	drivers/media/dvb-frontends/dib8000.c:2129 dib8000_get_init_prbs() error: buffer overflow 'lut_prbs_2k' 14 <= 14
-	drivers/media/dvb-frontends/dib8000.c:2131 dib8000_get_init_prbs() error: buffer overflow 'lut_prbs_4k' 14 <= 14
-	drivers/media/dvb-frontends/dib8000.c:2134 dib8000_get_init_prbs() error: buffer overflow 'lut_prbs_8k' 14 <= 14
-
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/dib8000.c | 58 +++++++++++++++++++--------
- 1 file changed, 41 insertions(+), 17 deletions(-)
+ drivers/media/i2c/imx258.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-frontends/dib8000.c b/drivers/media/dvb-frontends/dib8000.c
-index 082796534b0a..bb02354a48b8 100644
---- a/drivers/media/dvb-frontends/dib8000.c
-+++ b/drivers/media/dvb-frontends/dib8000.c
-@@ -2107,32 +2107,55 @@ static void dib8000_load_ana_fe_coefs(struct dib8000_state *state, const s16 *an
- 			dib8000_write_word(state, 117 + mode, ana_fe[mode]);
- }
+diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+index 5f5e50c01b12..ffaa4a91e571 100644
+--- a/drivers/media/i2c/imx258.c
++++ b/drivers/media/i2c/imx258.c
+@@ -46,7 +46,7 @@
+ /* Analog gain control */
+ #define IMX258_REG_ANALOG_GAIN		0x0204
+ #define IMX258_ANA_GAIN_MIN		0
+-#define IMX258_ANA_GAIN_MAX		0x1fff
++#define IMX258_ANA_GAIN_MAX		480
+ #define IMX258_ANA_GAIN_STEP		1
+ #define IMX258_ANA_GAIN_DEFAULT		0x0
  
--static const u16 lut_prbs_2k[14] = {
--	0, 0x423, 0x009, 0x5C7, 0x7A6, 0x3D8, 0x527, 0x7FF, 0x79B, 0x3D6, 0x3A2, 0x53B, 0x2F4, 0x213
-+static const u16 lut_prbs_2k[13] = {
-+	0x423, 0x009, 0x5C7,
-+	0x7A6, 0x3D8, 0x527,
-+	0x7FF, 0x79B, 0x3D6,
-+	0x3A2, 0x53B, 0x2F4,
-+	0x213
- };
--static const u16 lut_prbs_4k[14] = {
--	0, 0x208, 0x0C3, 0x7B9, 0x423, 0x5C7, 0x3D8, 0x7FF, 0x3D6, 0x53B, 0x213, 0x029, 0x0D0, 0x48E
-+
-+static const u16 lut_prbs_4k[13] = {
-+	0x208, 0x0C3, 0x7B9,
-+	0x423, 0x5C7, 0x3D8,
-+	0x7FF, 0x3D6, 0x53B,
-+	0x213, 0x029, 0x0D0,
-+	0x48E
- };
--static const u16 lut_prbs_8k[14] = {
--	0, 0x740, 0x069, 0x7DD, 0x208, 0x7B9, 0x5C7, 0x7FF, 0x53B, 0x029, 0x48E, 0x4C4, 0x367, 0x684
-+
-+static const u16 lut_prbs_8k[13] = {
-+	0x740, 0x069, 0x7DD,
-+	0x208, 0x7B9, 0x5C7,
-+	0x7FF, 0x53B, 0x029,
-+	0x48E, 0x4C4, 0x367,
-+	0x684
- };
- 
- static u16 dib8000_get_init_prbs(struct dib8000_state *state, u16 subchannel)
- {
- 	int sub_channel_prbs_group = 0;
-+	int prbs_group;
- 
--	sub_channel_prbs_group = (subchannel / 3) + 1;
--	dprintk("sub_channel_prbs_group = %d , subchannel =%d prbs = 0x%04x\n", sub_channel_prbs_group, subchannel, lut_prbs_8k[sub_channel_prbs_group]);
-+	sub_channel_prbs_group = subchannel / 3;
-+	if (sub_channel_prbs_group >= ARRAY_SIZE(lut_prbs_2k))
-+		return 0;
- 
- 	switch (state->fe[0]->dtv_property_cache.transmission_mode) {
- 	case TRANSMISSION_MODE_2K:
--			return lut_prbs_2k[sub_channel_prbs_group];
-+		prbs_group = lut_prbs_2k[sub_channel_prbs_group];
-+		break;
- 	case TRANSMISSION_MODE_4K:
--			return lut_prbs_4k[sub_channel_prbs_group];
-+		prbs_group =  lut_prbs_4k[sub_channel_prbs_group];
-+		break;
- 	default:
- 	case TRANSMISSION_MODE_8K:
--			return lut_prbs_8k[sub_channel_prbs_group];
-+		prbs_group = lut_prbs_8k[sub_channel_prbs_group];
- 	}
-+
-+	dprintk("sub_channel_prbs_group = %d , subchannel =%d prbs = 0x%04x\n",
-+		sub_channel_prbs_group, subchannel, prbs_group);
-+
-+	return prbs_group;
- }
- 
- static void dib8000_set_13seg_channel(struct dib8000_state *state)
-@@ -2409,10 +2432,8 @@ static void dib8000_set_isdbt_common_channel(struct dib8000_state *state, u8 seq
- 	/* TSB or ISDBT ? apply it now */
- 	if (c->isdbt_sb_mode) {
- 		dib8000_set_sb_channel(state);
--		if (c->isdbt_sb_subchannel < 14)
--			init_prbs = dib8000_get_init_prbs(state, c->isdbt_sb_subchannel);
--		else
--			init_prbs = 0;
-+		init_prbs = dib8000_get_init_prbs(state,
-+						  c->isdbt_sb_subchannel);
- 	} else {
- 		dib8000_set_13seg_channel(state);
- 		init_prbs = 0xfff;
-@@ -3004,6 +3025,7 @@ static int dib8000_tune(struct dvb_frontend *fe)
- 
- 	unsigned long *timeout = &state->timeout;
- 	unsigned long now = jiffies;
-+	u16 init_prbs;
- #ifdef DIB8000_AGC_FREEZE
- 	u16 agc1, agc2;
- #endif
-@@ -3302,8 +3324,10 @@ static int dib8000_tune(struct dvb_frontend *fe)
- 		break;
- 
- 	case CT_DEMOD_STEP_11:  /* 41 : init prbs autosearch */
--		if (state->subchannel <= 41) {
--			dib8000_set_subchannel_prbs(state, dib8000_get_init_prbs(state, state->subchannel));
-+		init_prbs = dib8000_get_init_prbs(state, state->subchannel);
-+
-+		if (init_prbs) {
-+			dib8000_set_subchannel_prbs(state, init_prbs);
- 			*tune_state = CT_DEMOD_STEP_9;
- 		} else {
- 			*tune_state = CT_DEMOD_STOP;
 -- 
 2.30.2
 
