@@ -4,40 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EF4EC433F5
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:27:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6028C433F5
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:34:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 56A1F610FF
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:27:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA747610FF
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:34:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353454AbhIIM2u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:28:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34534 "EHLO mail.kernel.org"
+        id S1345646AbhIIMeH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:34:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33294 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346703AbhIIMYO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:24:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9709561AE0;
-        Thu,  9 Sep 2021 11:51:23 +0000 (UTC)
+        id S1353503AbhIIM1N (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:27:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2F49661B3B;
+        Thu,  9 Sep 2021 11:52:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188284;
-        bh=gB9z9wL68N4zA6j+tsmo/QkfIMZQNo6VHD+mttTBms0=;
+        s=k20201202; t=1631188322;
+        bh=cuOdGNw7f1QnFZNVV4eoDeQrIqRmu4KsyB2G/6dTrig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YE0xMIuM6UBdv36KXQilt0NxkcL/hmfFdxwfuPCAE5KapoO/EZygFnstMvMky0Ys1
-         2MbLHJwiea2Toa3qCwyEQGzgKOJR2GZYuBy36h1JNUQHDF2zzsCyMK5oddJn9FMkZa
-         0m1FOFtutk0yQ/tIPcnpy5n38Rj9cqmmamRfxNPZnCEYzaF8NHquAjC6FfRnkyPsvI
-         UEw4T3+kyd5c+6um/8SXMo/LnNpVUn43RjpZtxPZ1nO3h3TUNgBi49ZP3iGsyuMHzO
-         XNAEcM/Shmn4M6XLY9U7oWa9IyLDKeD6CKJYAv86KzYu8KNOMfOBMaoNGAyGV0tspk
-         G8sdfNK3SPLJw==
+        b=qQzIMEwYWgZ/Ov4w0eRSeSNSf3Pz9def3FKb05PPXNoon/zKBQ/K0q9oFdcPYzj9x
+         FdHRAYYSDDp+SgXnXXdEdqhHLhjG0NtsX8Vpqe2JHytbf0zZwB0a7zxp+CC075U6H/
+         hV0O9b1gapcqRkExMcvhumQcq8QqPcLJ3bPDlQ5p4lXE27Gf4HCs+6r2tdUQ4H+P9h
+         GF8gXdTb8XkH+U6dLFMpu3aeXcoWxf4Yk5/V0GL2/sAMHM8ZNZgFDFlxEXpHoymS/Q
+         w0RW6fT4mi2rJLAJ1ZC8BbEkOwXlCELa7iZ+w/4DmtwJuzbMZPt4tp3kEXJ1h7HCM1
+         lCyfkvvqsYreA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 004/176] media: dib8000: rewrite the init prbs logic
-Date:   Thu,  9 Sep 2021 07:48:26 -0400
-Message-Id: <20210909115118.146181-4-sashal@kernel.org>
+Cc:     Evgeny Novikov <novikov@ispras.ru>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.10 034/176] media: platform: stm32: unprepare clocks at handling errors in probe
+Date:   Thu,  9 Sep 2021 07:48:56 -0400
+Message-Id: <20210909115118.146181-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115118.146181-1-sashal@kernel.org>
 References: <20210909115118.146181-1-sashal@kernel.org>
@@ -49,137 +53,80 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Evgeny Novikov <novikov@ispras.ru>
 
-[ Upstream commit 8db11aebdb8f93f46a8513c22c9bd52fa23263aa ]
+[ Upstream commit 055d2db28ec2fa3ab5c527c5604f1b32b89fa13a ]
 
-The logic at dib8000_get_init_prbs() has a few issues:
+stm32_cec_probe() did not unprepare clocks on error handling paths. The
+patch fixes that.
 
-1. the tables used there has an extra unused value at the beginning;
-2. the dprintk() message doesn't write the right value when
-   transmission mode is not 8K;
-3. the array overflow validation is done by the callers.
+Found by Linux Driver Verification project (linuxtesting.org).
 
-Rewrite the code to fix such issues.
-
-This should also shut up those smatch warnings:
-
-	drivers/media/dvb-frontends/dib8000.c:2125 dib8000_get_init_prbs() error: buffer overflow 'lut_prbs_8k' 14 <= 14
-	drivers/media/dvb-frontends/dib8000.c:2129 dib8000_get_init_prbs() error: buffer overflow 'lut_prbs_2k' 14 <= 14
-	drivers/media/dvb-frontends/dib8000.c:2131 dib8000_get_init_prbs() error: buffer overflow 'lut_prbs_4k' 14 <= 14
-	drivers/media/dvb-frontends/dib8000.c:2134 dib8000_get_init_prbs() error: buffer overflow 'lut_prbs_8k' 14 <= 14
-
+Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/dib8000.c | 58 +++++++++++++++++++--------
- 1 file changed, 41 insertions(+), 17 deletions(-)
+ drivers/media/cec/platform/stm32/stm32-cec.c | 26 ++++++++++++++------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/dib8000.c b/drivers/media/dvb-frontends/dib8000.c
-index 082796534b0a..bb02354a48b8 100644
---- a/drivers/media/dvb-frontends/dib8000.c
-+++ b/drivers/media/dvb-frontends/dib8000.c
-@@ -2107,32 +2107,55 @@ static void dib8000_load_ana_fe_coefs(struct dib8000_state *state, const s16 *an
- 			dib8000_write_word(state, 117 + mode, ana_fe[mode]);
- }
+diff --git a/drivers/media/cec/platform/stm32/stm32-cec.c b/drivers/media/cec/platform/stm32/stm32-cec.c
+index ea4b1ebfca99..0ffd89712536 100644
+--- a/drivers/media/cec/platform/stm32/stm32-cec.c
++++ b/drivers/media/cec/platform/stm32/stm32-cec.c
+@@ -305,14 +305,16 @@ static int stm32_cec_probe(struct platform_device *pdev)
  
--static const u16 lut_prbs_2k[14] = {
--	0, 0x423, 0x009, 0x5C7, 0x7A6, 0x3D8, 0x527, 0x7FF, 0x79B, 0x3D6, 0x3A2, 0x53B, 0x2F4, 0x213
-+static const u16 lut_prbs_2k[13] = {
-+	0x423, 0x009, 0x5C7,
-+	0x7A6, 0x3D8, 0x527,
-+	0x7FF, 0x79B, 0x3D6,
-+	0x3A2, 0x53B, 0x2F4,
-+	0x213
- };
--static const u16 lut_prbs_4k[14] = {
--	0, 0x208, 0x0C3, 0x7B9, 0x423, 0x5C7, 0x3D8, 0x7FF, 0x3D6, 0x53B, 0x213, 0x029, 0x0D0, 0x48E
-+
-+static const u16 lut_prbs_4k[13] = {
-+	0x208, 0x0C3, 0x7B9,
-+	0x423, 0x5C7, 0x3D8,
-+	0x7FF, 0x3D6, 0x53B,
-+	0x213, 0x029, 0x0D0,
-+	0x48E
- };
--static const u16 lut_prbs_8k[14] = {
--	0, 0x740, 0x069, 0x7DD, 0x208, 0x7B9, 0x5C7, 0x7FF, 0x53B, 0x029, 0x48E, 0x4C4, 0x367, 0x684
-+
-+static const u16 lut_prbs_8k[13] = {
-+	0x740, 0x069, 0x7DD,
-+	0x208, 0x7B9, 0x5C7,
-+	0x7FF, 0x53B, 0x029,
-+	0x48E, 0x4C4, 0x367,
-+	0x684
- };
+ 	cec->clk_hdmi_cec = devm_clk_get(&pdev->dev, "hdmi-cec");
+ 	if (IS_ERR(cec->clk_hdmi_cec) &&
+-	    PTR_ERR(cec->clk_hdmi_cec) == -EPROBE_DEFER)
+-		return -EPROBE_DEFER;
++	    PTR_ERR(cec->clk_hdmi_cec) == -EPROBE_DEFER) {
++		ret = -EPROBE_DEFER;
++		goto err_unprepare_cec_clk;
++	}
  
- static u16 dib8000_get_init_prbs(struct dib8000_state *state, u16 subchannel)
- {
- 	int sub_channel_prbs_group = 0;
-+	int prbs_group;
- 
--	sub_channel_prbs_group = (subchannel / 3) + 1;
--	dprintk("sub_channel_prbs_group = %d , subchannel =%d prbs = 0x%04x\n", sub_channel_prbs_group, subchannel, lut_prbs_8k[sub_channel_prbs_group]);
-+	sub_channel_prbs_group = subchannel / 3;
-+	if (sub_channel_prbs_group >= ARRAY_SIZE(lut_prbs_2k))
-+		return 0;
- 
- 	switch (state->fe[0]->dtv_property_cache.transmission_mode) {
- 	case TRANSMISSION_MODE_2K:
--			return lut_prbs_2k[sub_channel_prbs_group];
-+		prbs_group = lut_prbs_2k[sub_channel_prbs_group];
-+		break;
- 	case TRANSMISSION_MODE_4K:
--			return lut_prbs_4k[sub_channel_prbs_group];
-+		prbs_group =  lut_prbs_4k[sub_channel_prbs_group];
-+		break;
- 	default:
- 	case TRANSMISSION_MODE_8K:
--			return lut_prbs_8k[sub_channel_prbs_group];
-+		prbs_group = lut_prbs_8k[sub_channel_prbs_group];
+ 	if (!IS_ERR(cec->clk_hdmi_cec)) {
+ 		ret = clk_prepare(cec->clk_hdmi_cec);
+ 		if (ret) {
+ 			dev_err(&pdev->dev, "Can't prepare hdmi-cec clock\n");
+-			return ret;
++			goto err_unprepare_cec_clk;
+ 		}
  	}
+ 
+@@ -324,19 +326,27 @@ static int stm32_cec_probe(struct platform_device *pdev)
+ 			CEC_NAME, caps,	CEC_MAX_LOG_ADDRS);
+ 	ret = PTR_ERR_OR_ZERO(cec->adap);
+ 	if (ret)
+-		return ret;
++		goto err_unprepare_hdmi_cec_clk;
+ 
+ 	ret = cec_register_adapter(cec->adap, &pdev->dev);
+-	if (ret) {
+-		cec_delete_adapter(cec->adap);
+-		return ret;
+-	}
++	if (ret)
++		goto err_delete_adapter;
+ 
+ 	cec_hw_init(cec);
+ 
+ 	platform_set_drvdata(pdev, cec);
+ 
+ 	return 0;
 +
-+	dprintk("sub_channel_prbs_group = %d , subchannel =%d prbs = 0x%04x\n",
-+		sub_channel_prbs_group, subchannel, prbs_group);
++err_delete_adapter:
++	cec_delete_adapter(cec->adap);
 +
-+	return prbs_group;
++err_unprepare_hdmi_cec_clk:
++	clk_unprepare(cec->clk_hdmi_cec);
++
++err_unprepare_cec_clk:
++	clk_unprepare(cec->clk_cec);
++	return ret;
  }
  
- static void dib8000_set_13seg_channel(struct dib8000_state *state)
-@@ -2409,10 +2432,8 @@ static void dib8000_set_isdbt_common_channel(struct dib8000_state *state, u8 seq
- 	/* TSB or ISDBT ? apply it now */
- 	if (c->isdbt_sb_mode) {
- 		dib8000_set_sb_channel(state);
--		if (c->isdbt_sb_subchannel < 14)
--			init_prbs = dib8000_get_init_prbs(state, c->isdbt_sb_subchannel);
--		else
--			init_prbs = 0;
-+		init_prbs = dib8000_get_init_prbs(state,
-+						  c->isdbt_sb_subchannel);
- 	} else {
- 		dib8000_set_13seg_channel(state);
- 		init_prbs = 0xfff;
-@@ -3004,6 +3025,7 @@ static int dib8000_tune(struct dvb_frontend *fe)
- 
- 	unsigned long *timeout = &state->timeout;
- 	unsigned long now = jiffies;
-+	u16 init_prbs;
- #ifdef DIB8000_AGC_FREEZE
- 	u16 agc1, agc2;
- #endif
-@@ -3302,8 +3324,10 @@ static int dib8000_tune(struct dvb_frontend *fe)
- 		break;
- 
- 	case CT_DEMOD_STEP_11:  /* 41 : init prbs autosearch */
--		if (state->subchannel <= 41) {
--			dib8000_set_subchannel_prbs(state, dib8000_get_init_prbs(state, state->subchannel));
-+		init_prbs = dib8000_get_init_prbs(state, state->subchannel);
-+
-+		if (init_prbs) {
-+			dib8000_set_subchannel_prbs(state, init_prbs);
- 			*tune_state = CT_DEMOD_STEP_9;
- 		} else {
- 			*tune_state = CT_DEMOD_STOP;
+ static int stm32_cec_remove(struct platform_device *pdev)
 -- 
 2.30.2
 
