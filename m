@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA002C4332F
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 953FBC433FE
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A43B960ED8
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7894460ED8
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350216AbhIIMvq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:51:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40848 "EHLO mail.kernel.org"
+        id S1354809AbhIIMvp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:51:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60532 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353691AbhIIMrF (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:47:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AD33563217;
-        Thu,  9 Sep 2021 11:56:13 +0000 (UTC)
+        id S1353610AbhIIMrE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:47:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4417C61C13;
+        Thu,  9 Sep 2021 11:56:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188574;
-        bh=zSV7DOOWFw3nSUmyFh+zYk2R/S1ll/DHgGt+nt/QXng=;
+        s=k20201202; t=1631188572;
+        bh=6J6zPQmnNKWm5XTWmA6GFpBNcnAP7lr0aUlalCAMhh4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W+mUvfoGqshRSZVZ37KPwz4xf2+3KecnPNwhHQnquMwdT2x/DNIPTYR7vMyOWhpLO
-         Ni33msmQuQadiptEZC8FTIDozTKd2qb2MoEALP0rQpW5ZrYaVgS4RDiyD79JIoyLV8
-         g/y08ubyxtsMPpBk/oI0wbK0A5G7Is4jrRNhaIJ4Xpm14YDqwJHc84rVYRajcNqz/u
-         d6OgDUJTInOmdwUoxCXUUMZ1PXt9XwinuqaR8rDygyKqWnPG7PQhtMRBtLRdrmE59w
-         1lNk2O0WyoshQ+Ci5afVyZO+41kVpxSLp6RPX5F/v0Xmu7O03ss0D+izzx/IrMLnPn
-         rHdmtQa5xuY0Q==
+        b=QOrTuGPLzlnTWc9MoHsokJCQgJbFd35sqhIo/YA24k0DYbuqOGH8F4kjPcPGU9knW
+         8FFM1YaHw+5FYSWYyk106PSbJdhJWUmpgEpq5Ih93BTIoDwV9VKJ9LnuUxrb8fzXHX
+         dohnls8JFTGrbZqiijPS2pWNNoDd6P2zTcI0Rr4NXUyKuEzHz3N4WEZ4DTEivywOlW
+         SEnS7lY/duAznqr0wNoOI9GfyUeaGULC0IGIR/zhJFL+NwkbeAposOcRO6npSRy132
+         dbeNcdEL8Cd5R/Yuu7Rz4ADMyQ8InbnBeC6SJlt1/F8GJf8zVjCfG3ovtoAr7e1DDE
+         4mI3M2lndepGQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 053/109] media: tegra-cec: Handle errors of clk_prepare_enable()
-Date:   Thu,  9 Sep 2021 07:54:10 -0400
-Message-Id: <20210909115507.147917-53-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 051/109] media: v4l2-dv-timings.c: fix wrong condition in two for-loops
+Date:   Thu,  9 Sep 2021 07:54:08 -0400
+Message-Id: <20210909115507.147917-51-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115507.147917-1-sashal@kernel.org>
 References: <20210909115507.147917-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -52,50 +52,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 38367073c796a37a61549b1f66a71b3adb03802d ]
+[ Upstream commit 4108b3e6db31acc4c68133290bbcc87d4db905c9 ]
 
-tegra_cec_probe() and tegra_cec_resume() ignored possible errors of
-clk_prepare_enable(). The patch fixes this.
+These for-loops should test against v4l2_dv_timings_presets[i].bt.width,
+not if i < v4l2_dv_timings_presets[i].bt.width. Luckily nothing ever broke,
+since the smallest width is still a lot higher than the total number of
+presets, but it is wrong.
 
-Found by Linux Driver Verification project (linuxtesting.org).
+The last item in the presets array is all 0, so the for-loop must stop
+when it reaches that sentinel.
 
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: Krzysztof Hałasa <khalasa@piap.pl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/tegra-cec/tegra_cec.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/media/v4l2-core/v4l2-dv-timings.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/tegra-cec/tegra_cec.c b/drivers/media/platform/tegra-cec/tegra_cec.c
-index a632602131f2..efb80a78d2fa 100644
---- a/drivers/media/platform/tegra-cec/tegra_cec.c
-+++ b/drivers/media/platform/tegra-cec/tegra_cec.c
-@@ -366,7 +366,11 @@ static int tegra_cec_probe(struct platform_device *pdev)
- 		return -ENOENT;
- 	}
+diff --git a/drivers/media/v4l2-core/v4l2-dv-timings.c b/drivers/media/v4l2-core/v4l2-dv-timings.c
+index 4f23e939ead0..60454e1b727e 100644
+--- a/drivers/media/v4l2-core/v4l2-dv-timings.c
++++ b/drivers/media/v4l2-core/v4l2-dv-timings.c
+@@ -196,7 +196,7 @@ bool v4l2_find_dv_timings_cap(struct v4l2_dv_timings *t,
+ 	if (!v4l2_valid_dv_timings(t, cap, fnc, fnc_handle))
+ 		return false;
  
--	clk_prepare_enable(cec->clk);
-+	ret = clk_prepare_enable(cec->clk);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Unable to prepare clock for CEC\n");
-+		return ret;
-+	}
+-	for (i = 0; i < v4l2_dv_timings_presets[i].bt.width; i++) {
++	for (i = 0; v4l2_dv_timings_presets[i].bt.width; i++) {
+ 		if (v4l2_valid_dv_timings(v4l2_dv_timings_presets + i, cap,
+ 					  fnc, fnc_handle) &&
+ 		    v4l2_match_dv_timings(t, v4l2_dv_timings_presets + i,
+@@ -218,7 +218,7 @@ bool v4l2_find_dv_timings_cea861_vic(struct v4l2_dv_timings *t, u8 vic)
+ {
+ 	unsigned int i;
  
- 	/* set context info. */
- 	cec->dev = &pdev->dev;
-@@ -446,9 +450,7 @@ static int tegra_cec_resume(struct platform_device *pdev)
- 
- 	dev_notice(&pdev->dev, "Resuming\n");
- 
--	clk_prepare_enable(cec->clk);
--
--	return 0;
-+	return clk_prepare_enable(cec->clk);
- }
- #endif
+-	for (i = 0; i < v4l2_dv_timings_presets[i].bt.width; i++) {
++	for (i = 0; v4l2_dv_timings_presets[i].bt.width; i++) {
+ 		const struct v4l2_bt_timings *bt =
+ 			&v4l2_dv_timings_presets[i].bt;
  
 -- 
 2.30.2
