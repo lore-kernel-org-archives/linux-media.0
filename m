@@ -7,41 +7,40 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6028C433F5
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:34:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09479C43217
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:34:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA747610FF
+	by mail.kernel.org (Postfix) with ESMTP id F2F346121F
 	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:34:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345646AbhIIMeH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:34:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33294 "EHLO mail.kernel.org"
+        id S1353101AbhIIMeZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:34:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33430 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353503AbhIIM1N (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:27:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2F49661B3B;
-        Thu,  9 Sep 2021 11:52:01 +0000 (UTC)
+        id S1353994AbhIIM1Q (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:27:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D6A8161B28;
+        Thu,  9 Sep 2021 11:52:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188322;
-        bh=cuOdGNw7f1QnFZNVV4eoDeQrIqRmu4KsyB2G/6dTrig=;
+        s=k20201202; t=1631188324;
+        bh=vJf/hOLRbSjBB5md0JjqiGgNpfTuhUqJ4jPhXj65f/0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qQzIMEwYWgZ/Ov4w0eRSeSNSf3Pz9def3FKb05PPXNoon/zKBQ/K0q9oFdcPYzj9x
-         FdHRAYYSDDp+SgXnXXdEdqhHLhjG0NtsX8Vpqe2JHytbf0zZwB0a7zxp+CC075U6H/
-         hV0O9b1gapcqRkExMcvhumQcq8QqPcLJ3bPDlQ5p4lXE27Gf4HCs+6r2tdUQ4H+P9h
-         GF8gXdTb8XkH+U6dLFMpu3aeXcoWxf4Yk5/V0GL2/sAMHM8ZNZgFDFlxEXpHoymS/Q
-         w0RW6fT4mi2rJLAJ1ZC8BbEkOwXlCELa7iZ+w/4DmtwJuzbMZPt4tp3kEXJ1h7HCM1
-         lCyfkvvqsYreA==
+        b=gjDwOQol4jsJrYqQDjQAoGY0ThdvtXv79CfxUNIpTZI9GFcB01sIH5df7iUGhHSPM
+         PRVuv3UeLIKzowIH0h1kb1qf7agVE812sP/59g/WTl7tDv69zAk6iqCF5JaHTF8wN5
+         bbblfM2R5AUcEDMBi4oX7THho1LrCsem4I2LYh4iHTxttGmAs3CaFvo3F1WbiVw7kp
+         jj4sLTtQTyLwWmpd3kgXvT1NS8n8kAma/YT0VgTtzfuGBj/aBVs2AZEpMvc2jomi4x
+         BLcuUFVXKknrSQrTXLaSekf3h78Aa6RvijabuEL1uihfHMS6EN9mmVFH7zLUPdOwX8
+         HsITrDeQnGoMQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        Hulk Robot <hulkci@huawei.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 034/176] media: platform: stm32: unprepare clocks at handling errors in probe
-Date:   Thu,  9 Sep 2021 07:48:56 -0400
-Message-Id: <20210909115118.146181-34-sashal@kernel.org>
+        linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.10 036/176] media: atomisp: pci: fix error return code in atomisp_pci_probe()
+Date:   Thu,  9 Sep 2021 07:48:58 -0400
+Message-Id: <20210909115118.146181-36-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115118.146181-1-sashal@kernel.org>
 References: <20210909115118.146181-1-sashal@kernel.org>
@@ -53,80 +52,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 055d2db28ec2fa3ab5c527c5604f1b32b89fa13a ]
+[ Upstream commit d14e272958bdfdc40dcafb827d24ba6fdafa9d52 ]
 
-stm32_cec_probe() did not unprepare clocks on error handling paths. The
-patch fixes that.
+If init_atomisp_wdts() fails, atomisp_pci_probe() need return
+error code.
 
-Found by Linux Driver Verification project (linuxtesting.org).
-
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Link: https://lore.kernel.org/linux-media/20210617072329.1233662-1-yangyingliang@huawei.com
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/cec/platform/stm32/stm32-cec.c | 26 ++++++++++++++------
- 1 file changed, 18 insertions(+), 8 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_v4l2.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/cec/platform/stm32/stm32-cec.c b/drivers/media/cec/platform/stm32/stm32-cec.c
-index ea4b1ebfca99..0ffd89712536 100644
---- a/drivers/media/cec/platform/stm32/stm32-cec.c
-+++ b/drivers/media/cec/platform/stm32/stm32-cec.c
-@@ -305,14 +305,16 @@ static int stm32_cec_probe(struct platform_device *pdev)
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+index 02f774ed80c8..fa1bd99cd6f1 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+@@ -1763,7 +1763,8 @@ static int atomisp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
+ 	if (err < 0)
+ 		goto register_entities_fail;
+ 	/* init atomisp wdts */
+-	if (init_atomisp_wdts(isp) != 0)
++	err = init_atomisp_wdts(isp);
++	if (err != 0)
+ 		goto wdt_work_queue_fail;
  
- 	cec->clk_hdmi_cec = devm_clk_get(&pdev->dev, "hdmi-cec");
- 	if (IS_ERR(cec->clk_hdmi_cec) &&
--	    PTR_ERR(cec->clk_hdmi_cec) == -EPROBE_DEFER)
--		return -EPROBE_DEFER;
-+	    PTR_ERR(cec->clk_hdmi_cec) == -EPROBE_DEFER) {
-+		ret = -EPROBE_DEFER;
-+		goto err_unprepare_cec_clk;
-+	}
- 
- 	if (!IS_ERR(cec->clk_hdmi_cec)) {
- 		ret = clk_prepare(cec->clk_hdmi_cec);
- 		if (ret) {
- 			dev_err(&pdev->dev, "Can't prepare hdmi-cec clock\n");
--			return ret;
-+			goto err_unprepare_cec_clk;
- 		}
- 	}
- 
-@@ -324,19 +326,27 @@ static int stm32_cec_probe(struct platform_device *pdev)
- 			CEC_NAME, caps,	CEC_MAX_LOG_ADDRS);
- 	ret = PTR_ERR_OR_ZERO(cec->adap);
- 	if (ret)
--		return ret;
-+		goto err_unprepare_hdmi_cec_clk;
- 
- 	ret = cec_register_adapter(cec->adap, &pdev->dev);
--	if (ret) {
--		cec_delete_adapter(cec->adap);
--		return ret;
--	}
-+	if (ret)
-+		goto err_delete_adapter;
- 
- 	cec_hw_init(cec);
- 
- 	platform_set_drvdata(pdev, cec);
- 
- 	return 0;
-+
-+err_delete_adapter:
-+	cec_delete_adapter(cec->adap);
-+
-+err_unprepare_hdmi_cec_clk:
-+	clk_unprepare(cec->clk_hdmi_cec);
-+
-+err_unprepare_cec_clk:
-+	clk_unprepare(cec->clk_cec);
-+	return ret;
- }
- 
- static int stm32_cec_remove(struct platform_device *pdev)
+ 	/* save the iunit context only once after all the values are init'ed. */
 -- 
 2.30.2
 
