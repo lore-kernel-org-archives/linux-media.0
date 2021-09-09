@@ -7,46 +7,45 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5196DC433EF
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AEF2C433FE
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D79F604E9
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E88C611AF
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354653AbhIIMve (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:51:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57496 "EHLO mail.kernel.org"
+        id S1344016AbhIIMvg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:51:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57490 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355436AbhIIMpo (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1355438AbhIIMpo (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 9 Sep 2021 08:45:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D6782613B5;
-        Thu,  9 Sep 2021 11:56:09 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 76E9C63213;
+        Thu,  9 Sep 2021 11:56:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188570;
-        bh=jNfagrwBB6tBxwk5PwVadgQlBB9yK8VvqcvtDl0vPX8=;
+        s=k20201202; t=1631188569;
+        bh=uAbR59EJyY356MSmfgpeGTVaI69N2/xc0UlG7WwyYPs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g2KYWx4nG4nZ9RQgbwvSiacPn6yS4el9tTkZGqdA0+OtShxCtUq8CrTpjuae1rojK
-         PRUpWSCvuiSsYQErKy7twaSAsTH+lklGgsgcZ+nnJTsO8f+OUiH/JJ4gA7HkkLu/N4
-         cr5wITLzpRwiB2hyq+bKD+VZxE4repHxL+KpsSojmnvMqaxremxxKd5fPm8kwxaZYv
-         cyCCq6vPzesFRWANPnyv4EmM5g8k4wbG0bUC2FI+PYo7c+GmCvUIlqjRvDNuUid3uR
-         R8cHoOn2ss68jrmEhBxFAF/QfK5TObRGUefSqSqJKvo9YMegbmxZiGSKRDKcLLziru
-         thbU3NpXogsiQ==
+        b=S/jl/xUa5KVCnjfHguDItj0P10B2ubFX8zUf7gJOIUjyEEKNyQ0fapi3TqeFsYwEt
+         8oNe35H9Uo/oHggincw4kQxlrGbCPyBtILlXDntc9OrqkgaONyP8buUTQWQ10DZpd8
+         mBxfXwQpy+vE5ENCfUFkHg6j47hoq6ct2TpD8HM1QkdXGB84ZKySAoQy3sV8micZX5
+         OskpJXGdRwR5glPqFwQPkEER+P51mZ4KnSl8E8wxVs8GXH4g+1POnll7h1VbSoVtzd
+         LuFCMraUHDMtUe5iT2r5DbQl2IPW8ZnA4AoXYKNkLkY9ir07RgRhAZFdRFe7hWQI1N
+         2GRSBseRd31cg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Umang Jain <umang.jain@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Umang Jain <umang.jain@ideasonboard.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 050/109] media: imx258: Limit the max analogue gain to 480
-Date:   Thu,  9 Sep 2021 07:54:07 -0400
-Message-Id: <20210909115507.147917-50-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 049/109] media: imx258: Rectify mismatch of VTS value
+Date:   Thu,  9 Sep 2021 07:54:06 -0400
+Message-Id: <20210909115507.147917-49-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115507.147917-1-sashal@kernel.org>
 References: <20210909115507.147917-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -54,25 +53,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Umang Jain <umang.jain@ideasonboard.com>
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-[ Upstream commit f809665ee75fff3f4ea8907f406a66d380aeb184 ]
+[ Upstream commit 51f93add3669f1b1f540de1cf397815afbd4c756 ]
 
-The range for analog gain mentioned in the datasheet is [0, 480].
-The real gain formula mentioned in the datasheet is:
+The frame_length_lines (0x0340) registers are hard-coded as follows:
 
-	Gain = 512 / (512 – X)
+- 4208x3118
+  frame_length_lines = 0x0c50
 
-Hence, values larger than 511 clearly makes no sense. The gain
-register field is also documented to be of 9-bits in the datasheet.
+- 2104x1560
+  frame_length_lines = 0x0638
 
-Certainly, it is enough to infer that, the kernel driver currently
-advertises an arbitrary analog gain max. Fix it by rectifying the
-value as per the data sheet i.e. 480.
+- 1048x780
+  frame_length_lines = 0x034c
 
+The driver exposes the V4L2_CID_VBLANK control in read-only mode and
+sets its value to vts_def - height, where vts_def is a mode-dependent
+value coming from the supported_modes array. It is set using one of
+the following macros defined in the driver:
+
+  #define IMX258_VTS_30FPS                0x0c98
+  #define IMX258_VTS_30FPS_2K             0x0638
+  #define IMX258_VTS_30FPS_VGA            0x034c
+
+There's a clear mismatch in the value for the full resolution mode i.e.
+IMX258_VTS_30FPS. Fix it by rectifying the macro with the value set for
+the frame_length_lines register as stated above.
+
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
@@ -81,18 +92,18 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index 5f5e50c01b12..ffaa4a91e571 100644
+index f86ae18bc104..5f5e50c01b12 100644
 --- a/drivers/media/i2c/imx258.c
 +++ b/drivers/media/i2c/imx258.c
-@@ -46,7 +46,7 @@
- /* Analog gain control */
- #define IMX258_REG_ANALOG_GAIN		0x0204
- #define IMX258_ANA_GAIN_MIN		0
--#define IMX258_ANA_GAIN_MAX		0x1fff
-+#define IMX258_ANA_GAIN_MAX		480
- #define IMX258_ANA_GAIN_STEP		1
- #define IMX258_ANA_GAIN_DEFAULT		0x0
+@@ -22,7 +22,7 @@
+ #define IMX258_CHIP_ID			0x0258
  
+ /* V_TIMING internal */
+-#define IMX258_VTS_30FPS		0x0c98
++#define IMX258_VTS_30FPS		0x0c50
+ #define IMX258_VTS_30FPS_2K		0x0638
+ #define IMX258_VTS_30FPS_VGA		0x034c
+ #define IMX258_VTS_MAX			0xffff
 -- 
 2.30.2
 
