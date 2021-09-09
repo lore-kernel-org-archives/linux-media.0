@@ -4,47 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D260EC433EF
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EF4EC433F5
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:27:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE9DB60FE3
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:12:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 56A1F610FF
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:27:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346451AbhIIMOA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:14:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52264 "EHLO mail.kernel.org"
+        id S1353454AbhIIM2u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:28:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34534 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347752AbhIIMLn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:11:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E245461A3B;
-        Thu,  9 Sep 2021 11:48:37 +0000 (UTC)
+        id S1346703AbhIIMYO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:24:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9709561AE0;
+        Thu,  9 Sep 2021 11:51:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188118;
-        bh=ypLNbZP+3MIQilLWdbUAO0ufso0QTmsjFav+lwhfidk=;
+        s=k20201202; t=1631188284;
+        bh=gB9z9wL68N4zA6j+tsmo/QkfIMZQNo6VHD+mttTBms0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wnx4RzNYyHqsxZqFMoSvRZKmVAncRreattuqDOUw7iLqUIwIgA9T+7Yrcb7bg4qlc
-         d1ZFyuic0pBZibb0NwV81Jou6SYgwMHup1hi4xCtnv/1Yhy+Gz6emdmFIFgRnHPvbs
-         3moODr6EIng/IJir1TMeYljsJo+6rk71EZDkrryz3WffQJxoIBn/tp3iTIicP4Gc5O
-         h5la0qNocuuLBAMfXwWS2dtFfMxJUfFuMZj1U5+htt4cp67o+FaKwYlfJg1FJxxTGQ
-         urf7L9PGdhp9H090XmhgWgMQ8yC5woexAM95u00t+AeCD17fNfPry1bN2ZS4V0rNCP
-         L2oMVQpM1cgIQ==
+        b=YE0xMIuM6UBdv36KXQilt0NxkcL/hmfFdxwfuPCAE5KapoO/EZygFnstMvMky0Ys1
+         2MbLHJwiea2Toa3qCwyEQGzgKOJR2GZYuBy36h1JNUQHDF2zzsCyMK5oddJn9FMkZa
+         0m1FOFtutk0yQ/tIPcnpy5n38Rj9cqmmamRfxNPZnCEYzaF8NHquAjC6FfRnkyPsvI
+         UEw4T3+kyd5c+6um/8SXMo/LnNpVUn43RjpZtxPZ1nO3h3TUNgBi49ZP3iGsyuMHzO
+         XNAEcM/Shmn4M6XLY9U7oWa9IyLDKeD6CKJYAv86KzYu8KNOMfOBMaoNGAyGV0tspk
+         G8sdfNK3SPLJw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 095/219] media: TDA1997x: fix tda1997x_query_dv_timings() return value
-Date:   Thu,  9 Sep 2021 07:44:31 -0400
-Message-Id: <20210909114635.143983-95-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 004/176] media: dib8000: rewrite the init prbs logic
+Date:   Thu,  9 Sep 2021 07:48:26 -0400
+Message-Id: <20210909115118.146181-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
-References: <20210909114635.143983-1-sashal@kernel.org>
+In-Reply-To: <20210909115118.146181-1-sashal@kernel.org>
+References: <20210909115118.146181-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -52,42 +49,137 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Krzysztof Hałasa <khalasa@piap.pl>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 7dee1030871a48d4f3c5a74227a4b4188463479a ]
+[ Upstream commit 8db11aebdb8f93f46a8513c22c9bd52fa23263aa ]
 
-Correctly propagate the tda1997x_detect_std error value.
+The logic at dib8000_get_init_prbs() has a few issues:
 
-Signed-off-by: Krzysztof Hałasa <khalasa@piap.pl>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+1. the tables used there has an extra unused value at the beginning;
+2. the dprintk() message doesn't write the right value when
+   transmission mode is not 8K;
+3. the array overflow validation is done by the callers.
+
+Rewrite the code to fix such issues.
+
+This should also shut up those smatch warnings:
+
+	drivers/media/dvb-frontends/dib8000.c:2125 dib8000_get_init_prbs() error: buffer overflow 'lut_prbs_8k' 14 <= 14
+	drivers/media/dvb-frontends/dib8000.c:2129 dib8000_get_init_prbs() error: buffer overflow 'lut_prbs_2k' 14 <= 14
+	drivers/media/dvb-frontends/dib8000.c:2131 dib8000_get_init_prbs() error: buffer overflow 'lut_prbs_4k' 14 <= 14
+	drivers/media/dvb-frontends/dib8000.c:2134 dib8000_get_init_prbs() error: buffer overflow 'lut_prbs_8k' 14 <= 14
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/tda1997x.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/dvb-frontends/dib8000.c | 58 +++++++++++++++++++--------
+ 1 file changed, 41 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/media/i2c/tda1997x.c b/drivers/media/i2c/tda1997x.c
-index 89bb7e6dc7a4..258b51d8bcbc 100644
---- a/drivers/media/i2c/tda1997x.c
-+++ b/drivers/media/i2c/tda1997x.c
-@@ -1695,14 +1695,15 @@ static int tda1997x_query_dv_timings(struct v4l2_subdev *sd,
- 				     struct v4l2_dv_timings *timings)
- {
- 	struct tda1997x_state *state = to_state(sd);
-+	int ret;
- 
- 	v4l_dbg(1, debug, state->client, "%s\n", __func__);
- 	memset(timings, 0, sizeof(struct v4l2_dv_timings));
- 	mutex_lock(&state->lock);
--	tda1997x_detect_std(state, timings);
-+	ret = tda1997x_detect_std(state, timings);
- 	mutex_unlock(&state->lock);
- 
--	return 0;
-+	return ret;
+diff --git a/drivers/media/dvb-frontends/dib8000.c b/drivers/media/dvb-frontends/dib8000.c
+index 082796534b0a..bb02354a48b8 100644
+--- a/drivers/media/dvb-frontends/dib8000.c
++++ b/drivers/media/dvb-frontends/dib8000.c
+@@ -2107,32 +2107,55 @@ static void dib8000_load_ana_fe_coefs(struct dib8000_state *state, const s16 *an
+ 			dib8000_write_word(state, 117 + mode, ana_fe[mode]);
  }
  
- static const struct v4l2_subdev_video_ops tda1997x_video_ops = {
+-static const u16 lut_prbs_2k[14] = {
+-	0, 0x423, 0x009, 0x5C7, 0x7A6, 0x3D8, 0x527, 0x7FF, 0x79B, 0x3D6, 0x3A2, 0x53B, 0x2F4, 0x213
++static const u16 lut_prbs_2k[13] = {
++	0x423, 0x009, 0x5C7,
++	0x7A6, 0x3D8, 0x527,
++	0x7FF, 0x79B, 0x3D6,
++	0x3A2, 0x53B, 0x2F4,
++	0x213
+ };
+-static const u16 lut_prbs_4k[14] = {
+-	0, 0x208, 0x0C3, 0x7B9, 0x423, 0x5C7, 0x3D8, 0x7FF, 0x3D6, 0x53B, 0x213, 0x029, 0x0D0, 0x48E
++
++static const u16 lut_prbs_4k[13] = {
++	0x208, 0x0C3, 0x7B9,
++	0x423, 0x5C7, 0x3D8,
++	0x7FF, 0x3D6, 0x53B,
++	0x213, 0x029, 0x0D0,
++	0x48E
+ };
+-static const u16 lut_prbs_8k[14] = {
+-	0, 0x740, 0x069, 0x7DD, 0x208, 0x7B9, 0x5C7, 0x7FF, 0x53B, 0x029, 0x48E, 0x4C4, 0x367, 0x684
++
++static const u16 lut_prbs_8k[13] = {
++	0x740, 0x069, 0x7DD,
++	0x208, 0x7B9, 0x5C7,
++	0x7FF, 0x53B, 0x029,
++	0x48E, 0x4C4, 0x367,
++	0x684
+ };
+ 
+ static u16 dib8000_get_init_prbs(struct dib8000_state *state, u16 subchannel)
+ {
+ 	int sub_channel_prbs_group = 0;
++	int prbs_group;
+ 
+-	sub_channel_prbs_group = (subchannel / 3) + 1;
+-	dprintk("sub_channel_prbs_group = %d , subchannel =%d prbs = 0x%04x\n", sub_channel_prbs_group, subchannel, lut_prbs_8k[sub_channel_prbs_group]);
++	sub_channel_prbs_group = subchannel / 3;
++	if (sub_channel_prbs_group >= ARRAY_SIZE(lut_prbs_2k))
++		return 0;
+ 
+ 	switch (state->fe[0]->dtv_property_cache.transmission_mode) {
+ 	case TRANSMISSION_MODE_2K:
+-			return lut_prbs_2k[sub_channel_prbs_group];
++		prbs_group = lut_prbs_2k[sub_channel_prbs_group];
++		break;
+ 	case TRANSMISSION_MODE_4K:
+-			return lut_prbs_4k[sub_channel_prbs_group];
++		prbs_group =  lut_prbs_4k[sub_channel_prbs_group];
++		break;
+ 	default:
+ 	case TRANSMISSION_MODE_8K:
+-			return lut_prbs_8k[sub_channel_prbs_group];
++		prbs_group = lut_prbs_8k[sub_channel_prbs_group];
+ 	}
++
++	dprintk("sub_channel_prbs_group = %d , subchannel =%d prbs = 0x%04x\n",
++		sub_channel_prbs_group, subchannel, prbs_group);
++
++	return prbs_group;
+ }
+ 
+ static void dib8000_set_13seg_channel(struct dib8000_state *state)
+@@ -2409,10 +2432,8 @@ static void dib8000_set_isdbt_common_channel(struct dib8000_state *state, u8 seq
+ 	/* TSB or ISDBT ? apply it now */
+ 	if (c->isdbt_sb_mode) {
+ 		dib8000_set_sb_channel(state);
+-		if (c->isdbt_sb_subchannel < 14)
+-			init_prbs = dib8000_get_init_prbs(state, c->isdbt_sb_subchannel);
+-		else
+-			init_prbs = 0;
++		init_prbs = dib8000_get_init_prbs(state,
++						  c->isdbt_sb_subchannel);
+ 	} else {
+ 		dib8000_set_13seg_channel(state);
+ 		init_prbs = 0xfff;
+@@ -3004,6 +3025,7 @@ static int dib8000_tune(struct dvb_frontend *fe)
+ 
+ 	unsigned long *timeout = &state->timeout;
+ 	unsigned long now = jiffies;
++	u16 init_prbs;
+ #ifdef DIB8000_AGC_FREEZE
+ 	u16 agc1, agc2;
+ #endif
+@@ -3302,8 +3324,10 @@ static int dib8000_tune(struct dvb_frontend *fe)
+ 		break;
+ 
+ 	case CT_DEMOD_STEP_11:  /* 41 : init prbs autosearch */
+-		if (state->subchannel <= 41) {
+-			dib8000_set_subchannel_prbs(state, dib8000_get_init_prbs(state, state->subchannel));
++		init_prbs = dib8000_get_init_prbs(state, state->subchannel);
++
++		if (init_prbs) {
++			dib8000_set_subchannel_prbs(state, init_prbs);
+ 			*tune_state = CT_DEMOD_STEP_9;
+ 		} else {
+ 			*tune_state = CT_DEMOD_STOP;
 -- 
 2.30.2
 
