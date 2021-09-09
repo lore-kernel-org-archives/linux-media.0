@@ -2,165 +2,137 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFE5CC433EF
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 02:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6915C433F5
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 02:37:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9DD4B60FE3
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 02:20:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6A396113A
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 02:37:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348431AbhIICVf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Sep 2021 22:21:35 -0400
-Received: from mga03.intel.com ([134.134.136.65]:39019 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242062AbhIICVe (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 8 Sep 2021 22:21:34 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10101"; a="220704800"
-X-IronPort-AV: E=Sophos;i="5.85,279,1624345200"; 
-   d="scan'208";a="220704800"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2021 19:20:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,279,1624345200"; 
-   d="scan'208";a="548248414"
-Received: from ipu5-build.bj.intel.com (HELO [10.238.232.202]) ([10.238.232.202])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Sep 2021 19:20:21 -0700
-Subject: Re: [RFC PATCH] media: staging: ipu3-imgu: add the AWB memory layout
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        bingbu.cao@intel.com, Tian Shu Qiu <tian.shu.qiu@intel.com>,
-        sakari.ailus@linux.intel.com
-Cc:     linux-media@vger.kernel.org,
-        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
-        Tomasz Figa <tfiga@google.com>
-References: <20210831185140.77400-1-jeanmichel.hautbois@ideasonboard.com>
- <YS6gR2YSWPSftCO0@pendragon.ideasonboard.com>
- <YThxnoukNwJjSUOr@pendragon.ideasonboard.com>
-From:   Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <bf225374-13bf-e531-f794-d0a22a382cfa@linux.intel.com>
-Date:   Thu, 9 Sep 2021 10:19:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S236257AbhIICiy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Sep 2021 22:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232144AbhIICiy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Sep 2021 22:38:54 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9EFC061575
+        for <linux-media@vger.kernel.org>; Wed,  8 Sep 2021 19:37:45 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id e16so453992pfc.6
+        for <linux-media@vger.kernel.org>; Wed, 08 Sep 2021 19:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K5YCXnOiX361RXst/Dj0kh5mfTvHw/XbbmDLBua51kU=;
+        b=JMMW46p0Yi2eqXRdlDn8FwI1MOm7uFUW6DSImYerI9dX1tYK2SO0GcNmaRQ/JHcFkM
+         b4Y7d154QEgiSHzOAM7rZY2wU3AuhjqyMlwtAr/NZ8EY+dZTJjS0Wl5xZ6wwsLcYU6fL
+         mOUWek4y0GmDzIoZQ1BkQZ6z+u8oVXLtki2zeYR+9MuN18RVqJV8svPagaL+AYahrAUL
+         ebhFkHhRLKdSRvCU62zBFnd+gb/kDCrRgq4z04bZ4hIytA1HWjeomOnJoa02m1B7s3US
+         D3pZB6XlvYPl1qdxlc+Tey4M1odRhMUJPct1zF42zOVcmGmnIOs+ESgnST2WcB0Cuewq
+         GLZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K5YCXnOiX361RXst/Dj0kh5mfTvHw/XbbmDLBua51kU=;
+        b=giG8Y4/JU4Jm++BV/9MbySIR6YUtNeC0ChnW4lFqZgvt/K5VR1p5OSxcG76LWQWNf1
+         oP6nuiuNeyeZCeM1HV45z3OJxQNVGdJoYRJcCU5WgE3lT9JHw4OmXRrP0FDq9W/M+AJv
+         SHd/FpHhoropa8UTg2ijX12nQuVPuL5VMPy1HsYtLsdYlBcfixoYDIamSy/wZbeu+/Yg
+         M013HsJHcFkXHsqp2krzEtRypY0Gq8vXNrRb1J88Wr4PeGBf4KpIJEcaHXrwaGron7iw
+         lbFjD6A6L8GWeV7PEnZ67hzi7f97QKza1zRI/MXUnHjUVeIdMpUPKiyioEjQj6m08P/t
+         aSag==
+X-Gm-Message-State: AOAM532kgK54n+w9wKw+gqlicd4g3y28KubWrkLuYWW6hvbBKkPGQyBh
+        0mXmCN1GEWxU7i7zu2AfXaloHA==
+X-Google-Smtp-Source: ABdhPJx67ZfUJQOS7EFxj4RJBf9z5uJTsHC3qufEA08FU6XaEQgSBIopVskMt5axXYtC+B/dT4IGZQ==
+X-Received: by 2002:a63:77cc:: with SMTP id s195mr528941pgc.147.1631155065095;
+        Wed, 08 Sep 2021 19:37:45 -0700 (PDT)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id n1sm206832pfv.209.2021.09.08.19.37.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Sep 2021 19:37:44 -0700 (PDT)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        =?UTF-8?q?=C3=98rjan=20Eide?= <orjan.eide@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Simon Ser <contact@emersion.fr>,
+        James Jones <jajones@nvidia.com>, Leo Yan <leo.yan@linaro.org>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH] dma-buf: system_heap: Avoid warning on mid-order allocations
+Date:   Thu,  9 Sep 2021 02:37:41 +0000
+Message-Id: <20210909023741.2592429-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <YThxnoukNwJjSUOr@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Jean-Michel,
+When trying to do mid-order allocations, set __GFP_NOWARN to
+avoid warning messages if the allocation fails, as we will
+still fall back to single page allocatitions in that case.
+This is the similar to what we already do for large order
+allocations.
 
-Thanks for your patch.
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Christian Koenig <christian.koenig@amd.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Liam Mark <lmark@codeaurora.org>
+Cc: Chris Goldsworthy <cgoldswo@codeaurora.org>
+Cc: Laura Abbott <labbott@kernel.org>
+Cc: Brian Starkey <Brian.Starkey@arm.com>
+Cc: Hridya Valsaraju <hridya@google.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Sandeep Patil <sspatil@google.com>
+Cc: Daniel Mentz <danielmentz@google.com>
+Cc: Ørjan Eide <orjan.eide@arm.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Simon Ser <contact@emersion.fr>
+Cc: James Jones <jajones@nvidia.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+---
+ drivers/dma-buf/heaps/system_heap.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-On 9/8/21 4:17 PM, Laurent Pinchart wrote:
-> Hello,
-> 
-> (CC'ing Tomasz)
-> 
-> Gentle ping.
-> 
-> On Wed, Sep 01, 2021 at 12:34:00AM +0300, Laurent Pinchart wrote:
->> On Tue, Aug 31, 2021 at 08:51:40PM +0200, Jean-Michel Hautbois wrote:
->>> While parsing the RAW AWB metadata, the AWB layout was missing to fully
->>> understand which byte corresponds to which feature. Make the field names
->>> and usage explicit, as it is used by the userspace applications.
->>>
->>> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
->>> ---
->>> This structure layout is defined in CrOs:
->>> https://chromium.googlesource.com/chromiumos/platform/arc-camera/+/refs/heads/master/hal/intel/include/ia_imaging/awb_public.h
->>>
->>> There are a few things not really understood right now:
->>> - Is sat_ratio a full scale ratio (I can't get more than some values out
->>>   of it, is it a ratio of 25%, 50%, 75%, 100% ?)
->>> - What are the real minimum and maximum values for the grid size ? From
->>>   CrOs it appears to be [16, 80] for width and [16, 60] for height while
->>>   in this file it seems to be [16, 160] for width and not really defined
->>>   for height AFAICT ?
->>> - Same for the block_width_log2 and block_height_log2 which are [3, 7]
->>>   in this file and [3, 6] in the awb_public.h header ?
->>>
->>>  .../media/ipu3/include/uapi/intel-ipu3.h      | 38 ++++++++++++++-----
->>>  1 file changed, 29 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/drivers/staging/media/ipu3/include/uapi/intel-ipu3.h b/drivers/staging/media/ipu3/include/uapi/intel-ipu3.h
->>> index fa3d6ee5adf2..83191aff2ddd 100644
->>> --- a/drivers/staging/media/ipu3/include/uapi/intel-ipu3.h
->>> +++ b/drivers/staging/media/ipu3/include/uapi/intel-ipu3.h
->>> @@ -61,20 +61,40 @@ struct ipu3_uapi_grid_config {
->>>  	__u16 y_end;
->>>  } __packed;
->>>  
->>> +/**
->>> + * struct ipu3_uapi_awb_raw_buffer - Memory layout for each cell in AWB
->>> + *
->>> + * @Gr_avg:	Green average for red lines in the cell.
->>> + * @R_avg:	Red average in the cell.
->>> + * @B_avg:	Blue average in the cell.
->>> + * @Gb_avg:	Green average for blue lines in the cell.
->>> + * @sat_ratio:  Saturation ratio in the cell.
->>> + * @padding0:   Unused byte for padding.
->>> + * @padding1:   Unused byte for padding.
->>> + * @padding2:   Unused byte for padding.
->>> + */
->>> +struct ipu3_uapi_awb_raw_buffer {
->>> +    unsigned char Gr_avg;
->>> +    unsigned char R_avg;
->>> +    unsigned char B_avg;
->>> +    unsigned char Gb_avg;
->>> +    unsigned char sat_ratio;
->>> +    unsigned char padding0;
->>> +    unsigned char padding1;
->>> +    unsigned char padding2;
-
-It is fine for me to define and exposure the awb memory layout in uAPI.
-
-nit: use __u8 here?
-
->>> +} __packed;
->>> +
->>>  /*
->>>   * The grid based data is divided into "slices" called set, each slice of setX
->>>   * refers to ipu3_uapi_grid_config width * height_per_slice.
->>>   */
->>>  #define IPU3_UAPI_AWB_MAX_SETS				60
->>> -/* Based on grid size 80 * 60 and cell size 16 x 16 */
->>> -#define IPU3_UAPI_AWB_SET_SIZE				1280
->>> -#define IPU3_UAPI_AWB_MD_ITEM_SIZE			8
->>> -#define IPU3_UAPI_AWB_SPARE_FOR_BUBBLES \
->>> -	(IPU3_UAPI_MAX_BUBBLE_SIZE * IPU3_UAPI_MAX_STRIPES * \
->>> -	 IPU3_UAPI_AWB_MD_ITEM_SIZE)
->>> +#define AWB_PUBLIC_NUM_OF_ITEMS_IN_SET			160
->>> +/* Based on max grid height + Spare for bubbles */
->>> +#define AWB_PUBLIC_NUM_OF_SETS_IN_BUFFER IPU3_UAPI_AWB_MAX_SETS + \
->>> +	(IPU3_UAPI_MAX_BUBBLE_SIZE * IPU3_UAPI_MAX_STRIPES)
->>>  #define IPU3_UAPI_AWB_MAX_BUFFER_SIZE \
->>> -	(IPU3_UAPI_AWB_MAX_SETS * \
->>> -	 (IPU3_UAPI_AWB_SET_SIZE + IPU3_UAPI_AWB_SPARE_FOR_BUBBLES))
->>> +        AWB_PUBLIC_NUM_OF_SETS_IN_BUFFER * AWB_PUBLIC_NUM_OF_ITEMS_IN_SET
-
-It's better to update the name of 'IPU3_UAPI_AWB_MAX_BUFFER_SIZE' to align current
-definition.
-
->>>  
->>>  /**
->>>   * struct ipu3_uapi_awb_raw_buffer - AWB raw buffer
->>> @@ -83,7 +103,7 @@ struct ipu3_uapi_grid_config {
->>>   *		the average values for each color channel.
->>>   */
->>>  struct ipu3_uapi_awb_raw_buffer {
->>> -	__u8 meta_data[IPU3_UAPI_AWB_MAX_BUFFER_SIZE]
->>> +	struct ipu3_uapi_awb_raw_buffer meta_data[IPU3_UAPI_AWB_MAX_BUFFER_SIZE]
->>>  		__attribute__((aligned(32)));
->>>  } __packed;
->>>  
-> 
-
+diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
+index 23a7e74ef966..f57a39ddd063 100644
+--- a/drivers/dma-buf/heaps/system_heap.c
++++ b/drivers/dma-buf/heaps/system_heap.c
+@@ -40,11 +40,12 @@ struct dma_heap_attachment {
+ 	bool mapped;
+ };
+ 
++#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP)
++#define MID_ORDER_GFP (LOW_ORDER_GFP | __GFP_NOWARN)
+ #define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
+ 				| __GFP_NORETRY) & ~__GFP_RECLAIM) \
+ 				| __GFP_COMP)
+-#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP)
+-static gfp_t order_flags[] = {HIGH_ORDER_GFP, LOW_ORDER_GFP, LOW_ORDER_GFP};
++static gfp_t order_flags[] = {HIGH_ORDER_GFP, MID_ORDER_GFP, LOW_ORDER_GFP};
+ /*
+  * The selection of the orders used for allocation (1MB, 64K, 4K) is designed
+  * to match with the sizes often found in IOMMUs. Using order 4 pages instead
 -- 
-Best regards,
-Bingbu Cao
+2.25.1
+
