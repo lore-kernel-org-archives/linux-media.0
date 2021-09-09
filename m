@@ -7,40 +7,42 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09479C43217
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:34:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1BF4C433FE
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:34:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2F346121F
+	by mail.kernel.org (Postfix) with ESMTP id C826A6115B
 	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:34:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353101AbhIIMeZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:34:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33430 "EHLO mail.kernel.org"
+        id S243700AbhIIMeF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:34:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33216 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353994AbhIIM1Q (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:27:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D6A8161B28;
-        Thu,  9 Sep 2021 11:52:03 +0000 (UTC)
+        id S1350570AbhIIM1N (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:27:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 956F46127A;
+        Thu,  9 Sep 2021 11:51:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188324;
-        bh=vJf/hOLRbSjBB5md0JjqiGgNpfTuhUqJ4jPhXj65f/0=;
+        s=k20201202; t=1631188320;
+        bh=L0rHw5ZGotj/gnqKYNSK1Xc/T0+CJetbfYu7bTcQweI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gjDwOQol4jsJrYqQDjQAoGY0ThdvtXv79CfxUNIpTZI9GFcB01sIH5df7iUGhHSPM
-         PRVuv3UeLIKzowIH0h1kb1qf7agVE812sP/59g/WTl7tDv69zAk6iqCF5JaHTF8wN5
-         bbblfM2R5AUcEDMBi4oX7THho1LrCsem4I2LYh4iHTxttGmAs3CaFvo3F1WbiVw7kp
-         jj4sLTtQTyLwWmpd3kgXvT1NS8n8kAma/YT0VgTtzfuGBj/aBVs2AZEpMvc2jomi4x
-         BLcuUFVXKknrSQrTXLaSekf3h78Aa6RvijabuEL1uihfHMS6EN9mmVFH7zLUPdOwX8
-         HsITrDeQnGoMQ==
+        b=Epi7VoHbO7ebOaOS7MhjvyRu8s+Y1N/6BNhjV0qcK+YJKnnU/3Wq8SFTYc7uRYI3M
+         vobNaYLCpXawb0S1wtHjXPREm+A18eKqV01fW55V6pkmBRzJ40R6UAZ6dHcvYMsZQf
+         Qp8mPhzs36n+ZwwoEbttiZPGOlksN9R2kg0ebPxIRlXglKJ2vQWKGcKJwKO5avM7O9
+         PHQP+E4mqIbzgMOaEnLEFXLj1YHjPvrwp580Fd0p8lEhMuW0jx7taGwBu4/fHLbYzW
+         S6ZkcuWYpMdRuLWSqenz4fxrXkNouMqTvEuI4DxAhEfSONd6cM1fSs2AbH+uyaB4pW
+         cCf5+mz87a0Zg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yang Yingliang <yangyingliang@huawei.com>,
-        Hulk Robot <hulkci@huawei.com>,
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Alex Bee <knaerzche@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 036/176] media: atomisp: pci: fix error return code in atomisp_pci_probe()
-Date:   Thu,  9 Sep 2021 07:48:58 -0400
-Message-Id: <20210909115118.146181-36-sashal@kernel.org>
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.10 033/176] media: hantro: vp8: Move noisy WARN_ON to vpu_debug
+Date:   Thu,  9 Sep 2021 07:48:55 -0400
+Message-Id: <20210909115118.146181-33-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115118.146181-1-sashal@kernel.org>
 References: <20210909115118.146181-1-sashal@kernel.org>
@@ -52,36 +54,98 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Ezequiel Garcia <ezequiel@collabora.com>
 
-[ Upstream commit d14e272958bdfdc40dcafb827d24ba6fdafa9d52 ]
+[ Upstream commit 6ad61a7847da09b6261824accb539d05bcdfef65 ]
 
-If init_atomisp_wdts() fails, atomisp_pci_probe() need return
-error code.
+When the VP8 decoders can't find a reference frame,
+the driver falls back to the current output frame.
 
-Link: https://lore.kernel.org/linux-media/20210617072329.1233662-1-yangyingliang@huawei.com
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+This will probably produce some undesirable results,
+leading to frame corruption, but shouldn't cause
+noisy warnings.
+
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Tested-by: Alex Bee <knaerzche@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_v4l2.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/staging/media/hantro/hantro_g1_vp8_dec.c    | 13 ++++++++++---
+ .../staging/media/hantro/rk3399_vpu_hw_vp8_dec.c    | 13 ++++++++++---
+ 2 files changed, 20 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index 02f774ed80c8..fa1bd99cd6f1 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -1763,7 +1763,8 @@ static int atomisp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
- 	if (err < 0)
- 		goto register_entities_fail;
- 	/* init atomisp wdts */
--	if (init_atomisp_wdts(isp) != 0)
-+	err = init_atomisp_wdts(isp);
-+	if (err != 0)
- 		goto wdt_work_queue_fail;
+diff --git a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
+index a5cdf150cd16..d30bdc678cc2 100644
+--- a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
++++ b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
+@@ -377,12 +377,17 @@ static void cfg_ref(struct hantro_ctx *ctx,
+ 	vb2_dst = hantro_get_dst_buf(ctx);
  
- 	/* save the iunit context only once after all the values are init'ed. */
+ 	ref = hantro_get_ref(ctx, hdr->last_frame_ts);
+-	if (!ref)
++	if (!ref) {
++		vpu_debug(0, "failed to find last frame ts=%llu\n",
++			  hdr->last_frame_ts);
+ 		ref = vb2_dma_contig_plane_dma_addr(&vb2_dst->vb2_buf, 0);
++	}
+ 	vdpu_write_relaxed(vpu, ref, G1_REG_ADDR_REF(0));
+ 
+ 	ref = hantro_get_ref(ctx, hdr->golden_frame_ts);
+-	WARN_ON(!ref && hdr->golden_frame_ts);
++	if (!ref && hdr->golden_frame_ts)
++		vpu_debug(0, "failed to find golden frame ts=%llu\n",
++			  hdr->golden_frame_ts);
+ 	if (!ref)
+ 		ref = vb2_dma_contig_plane_dma_addr(&vb2_dst->vb2_buf, 0);
+ 	if (hdr->flags & V4L2_VP8_FRAME_HEADER_FLAG_SIGN_BIAS_GOLDEN)
+@@ -390,7 +395,9 @@ static void cfg_ref(struct hantro_ctx *ctx,
+ 	vdpu_write_relaxed(vpu, ref, G1_REG_ADDR_REF(4));
+ 
+ 	ref = hantro_get_ref(ctx, hdr->alt_frame_ts);
+-	WARN_ON(!ref && hdr->alt_frame_ts);
++	if (!ref && hdr->alt_frame_ts)
++		vpu_debug(0, "failed to find alt frame ts=%llu\n",
++			  hdr->alt_frame_ts);
+ 	if (!ref)
+ 		ref = vb2_dma_contig_plane_dma_addr(&vb2_dst->vb2_buf, 0);
+ 	if (hdr->flags & V4L2_VP8_FRAME_HEADER_FLAG_SIGN_BIAS_ALT)
+diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c b/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
+index a4a792f00b11..5b8c8fc49cce 100644
+--- a/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
++++ b/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
+@@ -454,12 +454,17 @@ static void cfg_ref(struct hantro_ctx *ctx,
+ 	vb2_dst = hantro_get_dst_buf(ctx);
+ 
+ 	ref = hantro_get_ref(ctx, hdr->last_frame_ts);
+-	if (!ref)
++	if (!ref) {
++		vpu_debug(0, "failed to find last frame ts=%llu\n",
++			  hdr->last_frame_ts);
+ 		ref = vb2_dma_contig_plane_dma_addr(&vb2_dst->vb2_buf, 0);
++	}
+ 	vdpu_write_relaxed(vpu, ref, VDPU_REG_VP8_ADDR_REF0);
+ 
+ 	ref = hantro_get_ref(ctx, hdr->golden_frame_ts);
+-	WARN_ON(!ref && hdr->golden_frame_ts);
++	if (!ref && hdr->golden_frame_ts)
++		vpu_debug(0, "failed to find golden frame ts=%llu\n",
++			  hdr->golden_frame_ts);
+ 	if (!ref)
+ 		ref = vb2_dma_contig_plane_dma_addr(&vb2_dst->vb2_buf, 0);
+ 	if (hdr->flags & V4L2_VP8_FRAME_HEADER_FLAG_SIGN_BIAS_GOLDEN)
+@@ -467,7 +472,9 @@ static void cfg_ref(struct hantro_ctx *ctx,
+ 	vdpu_write_relaxed(vpu, ref, VDPU_REG_VP8_ADDR_REF2_5(2));
+ 
+ 	ref = hantro_get_ref(ctx, hdr->alt_frame_ts);
+-	WARN_ON(!ref && hdr->alt_frame_ts);
++	if (!ref && hdr->alt_frame_ts)
++		vpu_debug(0, "failed to find alt frame ts=%llu\n",
++			  hdr->alt_frame_ts);
+ 	if (!ref)
+ 		ref = vb2_dma_contig_plane_dma_addr(&vb2_dst->vb2_buf, 0);
+ 	if (hdr->flags & V4L2_VP8_FRAME_HEADER_FLAG_SIGN_BIAS_ALT)
 -- 
 2.30.2
 
