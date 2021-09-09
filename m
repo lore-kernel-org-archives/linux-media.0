@@ -5,46 +5,47 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9A6FC433F5
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:12:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7390EC433EF
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:12:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD70D610E9
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:12:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D14E6113E
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:12:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347384AbhIIMNk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:13:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52182 "EHLO mail.kernel.org"
+        id S245663AbhIIMNs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:13:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51718 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244764AbhIIMLj (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:11:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AE6AD61A0D;
-        Thu,  9 Sep 2021 11:48:36 +0000 (UTC)
+        id S1346005AbhIIMLO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:11:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 689E66121D;
+        Thu,  9 Sep 2021 11:48:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188117;
-        bh=kqaF2kdpyKuBuKaT20mI9yFo8DzOL4OTh5ZkI/2DHyc=;
+        s=k20201202; t=1631188113;
+        bh=oraHnGZFm1q6kF2RehNTcm+Sqn9GnMrRvzl+imUiu7Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cpm+9EpNU1sRQ/zdyWT0c2b4EMewK7dtaHantZBn5knRqIsehxnk1R+LkdOkBdZS4
-         39ioVKGvmQ4rWs6ZdcGT/toz7+f2LShY1U3R8LlJ+MlCagOIt/Om8PbHtrb7QkaPR3
-         1wKdQSnNQByJapiWmrbGcAQ7FYJHQYaD1xsjrVEeKNoqPGdTFUW8BI8imouMOOQV9G
-         sYNiZ75fk6GPjyBx3LywXWJ/Xa2quVY+vg7iKI4bthGQREsk6smHgwLPAoS/6Y4kpg
-         h0tkRFRu+saK0ca1Ay3YwPhCQ+Q6uAyDMqJc/GXJqk1b1OoZTCUoeHToK0DEt0o29R
-         2gbhJTKFqvuaw==
+        b=DoQD5+C7nPx6YVb1w3TWtt3r2qmeVQsH0ZwhyX56nfs9YeWZ75zDrlBIcjJfD2KiI
+         EKggo/vSkYn+j/tFqjdPG4crLuqY3OZBSTqXxNp1Wh+t3sQwrSnXU/WpgpYDP8AVSV
+         w8MPz0FWrCxY+iksy9dWKqXzrcsRZ2f0DwkuH9by9v3NZ7V2St1kGgfgULzyW7x7AO
+         sYBP5NtS3UxPOyJ3gexhCE+m8ueW+W9ZE6I5fAjOe3NI3/EIKslgRf2wb/AFGinVmg
+         LW02574VT0sqyDUKYLc1r8BdC1a4xp/KEOP3EDSJWWdAOUpoUK0M0h+tz4OB5qfQZz
+         g9+wuCKi7WtjQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Umang Jain <umang.jain@ideasonboard.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 094/219] media: v4l2-dv-timings.c: fix wrong condition in two for-loops
-Date:   Thu,  9 Sep 2021 07:44:30 -0400
-Message-Id: <20210909114635.143983-94-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 091/219] media: imx258: Rectify mismatch of VTS value
+Date:   Thu,  9 Sep 2021 07:44:27 -0400
+Message-Id: <20210909114635.143983-91-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
 References: <20210909114635.143983-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -52,48 +53,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-[ Upstream commit 4108b3e6db31acc4c68133290bbcc87d4db905c9 ]
+[ Upstream commit 51f93add3669f1b1f540de1cf397815afbd4c756 ]
 
-These for-loops should test against v4l2_dv_timings_presets[i].bt.width,
-not if i < v4l2_dv_timings_presets[i].bt.width. Luckily nothing ever broke,
-since the smallest width is still a lot higher than the total number of
-presets, but it is wrong.
+The frame_length_lines (0x0340) registers are hard-coded as follows:
 
-The last item in the presets array is all 0, so the for-loop must stop
-when it reaches that sentinel.
+- 4208x3118
+  frame_length_lines = 0x0c50
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reported-by: Krzysztof Hałasa <khalasa@piap.pl>
+- 2104x1560
+  frame_length_lines = 0x0638
+
+- 1048x780
+  frame_length_lines = 0x034c
+
+The driver exposes the V4L2_CID_VBLANK control in read-only mode and
+sets its value to vts_def - height, where vts_def is a mode-dependent
+value coming from the supported_modes array. It is set using one of
+the following macros defined in the driver:
+
+  #define IMX258_VTS_30FPS                0x0c98
+  #define IMX258_VTS_30FPS_2K             0x0638
+  #define IMX258_VTS_30FPS_VGA            0x034c
+
+There's a clear mismatch in the value for the full resolution mode i.e.
+IMX258_VTS_30FPS. Fix it by rectifying the macro with the value set for
+the frame_length_lines register as stated above.
+
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-dv-timings.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/imx258.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-dv-timings.c b/drivers/media/v4l2-core/v4l2-dv-timings.c
-index 230d65a64217..af48705c704f 100644
---- a/drivers/media/v4l2-core/v4l2-dv-timings.c
-+++ b/drivers/media/v4l2-core/v4l2-dv-timings.c
-@@ -196,7 +196,7 @@ bool v4l2_find_dv_timings_cap(struct v4l2_dv_timings *t,
- 	if (!v4l2_valid_dv_timings(t, cap, fnc, fnc_handle))
- 		return false;
+diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+index a017ec4e0f50..b3fa28d05fa6 100644
+--- a/drivers/media/i2c/imx258.c
++++ b/drivers/media/i2c/imx258.c
+@@ -23,7 +23,7 @@
+ #define IMX258_CHIP_ID			0x0258
  
--	for (i = 0; i < v4l2_dv_timings_presets[i].bt.width; i++) {
-+	for (i = 0; v4l2_dv_timings_presets[i].bt.width; i++) {
- 		if (v4l2_valid_dv_timings(v4l2_dv_timings_presets + i, cap,
- 					  fnc, fnc_handle) &&
- 		    v4l2_match_dv_timings(t, v4l2_dv_timings_presets + i,
-@@ -218,7 +218,7 @@ bool v4l2_find_dv_timings_cea861_vic(struct v4l2_dv_timings *t, u8 vic)
- {
- 	unsigned int i;
- 
--	for (i = 0; i < v4l2_dv_timings_presets[i].bt.width; i++) {
-+	for (i = 0; v4l2_dv_timings_presets[i].bt.width; i++) {
- 		const struct v4l2_bt_timings *bt =
- 			&v4l2_dv_timings_presets[i].bt;
- 
+ /* V_TIMING internal */
+-#define IMX258_VTS_30FPS		0x0c98
++#define IMX258_VTS_30FPS		0x0c50
+ #define IMX258_VTS_30FPS_2K		0x0638
+ #define IMX258_VTS_30FPS_VGA		0x034c
+ #define IMX258_VTS_MAX			0xffff
 -- 
 2.30.2
 
