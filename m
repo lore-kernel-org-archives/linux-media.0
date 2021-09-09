@@ -5,43 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CBFFC4332F
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:12:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D260EC433EF
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:12:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D93A60FE3
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:12:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE9DB60FE3
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:12:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350567AbhIIMN4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:13:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48408 "EHLO mail.kernel.org"
+        id S1346451AbhIIMOA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:14:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52264 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345993AbhIIMLO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:11:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C475761A07;
-        Thu,  9 Sep 2021 11:48:33 +0000 (UTC)
+        id S1347752AbhIIMLn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:11:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E245461A3B;
+        Thu,  9 Sep 2021 11:48:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188114;
-        bh=DLsL0fEIJu4CmK1/of73Xd2UD5LwRFimUx9537icPPA=;
+        s=k20201202; t=1631188118;
+        bh=ypLNbZP+3MIQilLWdbUAO0ufso0QTmsjFav+lwhfidk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BzA5/YSzfy4aWbPaUCqljY0DsgILIa78u7HwZJIc6N4QE8Y3qBQWOebbOOyVmKD2T
-         0IAbx1Z8BXtV0XS5IZIeC30WXM5l6rOYfI/0Lq1ZiFYCn/yJfV02CUYk874nA6QIAX
-         fRLLjHlIAbWpXGbQJb8eLScDODlNMKOVQKiEjyPpWbxzDqGNaMlwMJQIdtcbLdVQDC
-         5JXXJYZZw1eh1BVNAgGQAFYJpGhI0f1Ijqr6eVXVpD1It7BQBEcOJDdwVomgNKwMU/
-         ROCWuLvUm4G+zV07D9u55fnNv7HDXCqzxZW5RMHZNoCNJpnQ35ttQ8a7zWa0SgZN47
-         YwdAH1gfyfyLA==
+        b=Wnx4RzNYyHqsxZqFMoSvRZKmVAncRreattuqDOUw7iLqUIwIgA9T+7Yrcb7bg4qlc
+         d1ZFyuic0pBZibb0NwV81Jou6SYgwMHup1hi4xCtnv/1Yhy+Gz6emdmFIFgRnHPvbs
+         3moODr6EIng/IJir1TMeYljsJo+6rk71EZDkrryz3WffQJxoIBn/tp3iTIicP4Gc5O
+         h5la0qNocuuLBAMfXwWS2dtFfMxJUfFuMZj1U5+htt4cp67o+FaKwYlfJg1FJxxTGQ
+         urf7L9PGdhp9H090XmhgWgMQ8yC5woexAM95u00t+AeCD17fNfPry1bN2ZS4V0rNCP
+         L2oMVQpM1cgIQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Umang Jain <umang.jain@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 092/219] media: imx258: Limit the max analogue gain to 480
-Date:   Thu,  9 Sep 2021 07:44:28 -0400
-Message-Id: <20210909114635.143983-92-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 095/219] media: TDA1997x: fix tda1997x_query_dv_timings() return value
+Date:   Thu,  9 Sep 2021 07:44:31 -0400
+Message-Id: <20210909114635.143983-95-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
 References: <20210909114635.143983-1-sashal@kernel.org>
@@ -54,45 +52,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Umang Jain <umang.jain@ideasonboard.com>
+From: Krzysztof Hałasa <khalasa@piap.pl>
 
-[ Upstream commit f809665ee75fff3f4ea8907f406a66d380aeb184 ]
+[ Upstream commit 7dee1030871a48d4f3c5a74227a4b4188463479a ]
 
-The range for analog gain mentioned in the datasheet is [0, 480].
-The real gain formula mentioned in the datasheet is:
+Correctly propagate the tda1997x_detect_std error value.
 
-	Gain = 512 / (512 – X)
-
-Hence, values larger than 511 clearly makes no sense. The gain
-register field is also documented to be of 9-bits in the datasheet.
-
-Certainly, it is enough to infer that, the kernel driver currently
-advertises an arbitrary analog gain max. Fix it by rectifying the
-value as per the data sheet i.e. 480.
-
-Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Krzysztof Hałasa <khalasa@piap.pl>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/imx258.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/tda1997x.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index b3fa28d05fa6..cdeaaec31879 100644
---- a/drivers/media/i2c/imx258.c
-+++ b/drivers/media/i2c/imx258.c
-@@ -47,7 +47,7 @@
- /* Analog gain control */
- #define IMX258_REG_ANALOG_GAIN		0x0204
- #define IMX258_ANA_GAIN_MIN		0
--#define IMX258_ANA_GAIN_MAX		0x1fff
-+#define IMX258_ANA_GAIN_MAX		480
- #define IMX258_ANA_GAIN_STEP		1
- #define IMX258_ANA_GAIN_DEFAULT		0x0
+diff --git a/drivers/media/i2c/tda1997x.c b/drivers/media/i2c/tda1997x.c
+index 89bb7e6dc7a4..258b51d8bcbc 100644
+--- a/drivers/media/i2c/tda1997x.c
++++ b/drivers/media/i2c/tda1997x.c
+@@ -1695,14 +1695,15 @@ static int tda1997x_query_dv_timings(struct v4l2_subdev *sd,
+ 				     struct v4l2_dv_timings *timings)
+ {
+ 	struct tda1997x_state *state = to_state(sd);
++	int ret;
  
+ 	v4l_dbg(1, debug, state->client, "%s\n", __func__);
+ 	memset(timings, 0, sizeof(struct v4l2_dv_timings));
+ 	mutex_lock(&state->lock);
+-	tda1997x_detect_std(state, timings);
++	ret = tda1997x_detect_std(state, timings);
+ 	mutex_unlock(&state->lock);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static const struct v4l2_subdev_video_ops tda1997x_video_ops = {
 -- 
 2.30.2
 
