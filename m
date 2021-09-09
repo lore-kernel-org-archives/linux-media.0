@@ -7,42 +7,44 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE22BC433F5
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 13:11:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31B52C433F5
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 13:39:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9DFC611AF
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 13:11:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17BA4611C9
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 13:39:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357129AbhIINMC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 09:12:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42430 "EHLO mail.kernel.org"
+        id S1347693AbhIINlF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 09:41:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58636 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1357661AbhIINDP (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Sep 2021 09:03:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3A2E863290;
-        Thu,  9 Sep 2021 11:59:40 +0000 (UTC)
+        id S1356619AbhIIMzd (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:55:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F2AD063253;
+        Thu,  9 Sep 2021 11:58:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188781;
-        bh=bE1/ceCmSk5TxgkKSMKH0vSutzfDglqzezrJJU+M4jA=;
+        s=k20201202; t=1631188692;
+        bh=sQw9MZjQniyUBF22K2BBv1mR9r1y/Ody4+hAHNxdgZQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cLBbt24tehudwv2g3cNHAjIJQJKPPbUME4tMSpRcnRv5FqsL3OGY0HszqnXobXZ+u
-         ir3hsbYy2P6O+D+XSQuiV8XEmjHiO2k95LPNOus40LGr+vQKHspG6gOUfhcRv3pkx8
-         dE3SF/jJ23zh99kVfnxfae1EbIi0z0aCSdQW4+NQ6QMb0JE16ephjGY32ls0XkIgFN
-         NNVFvMnbtO3F05PYlno5UB0VR483xhPkxonIWcB4Q7f8OwfTLxPSeeYSYk18eDNwqC
-         lKmGmVKxRhKn+eL4qCHMCeoeHAQ2YRJqFV9TvaJzIWlpDMCouEz4eH06bd1zHiPrV3
-         zR2MKpCp/gDcg==
+        b=CG8DdKq+UfH7tLdkBQWfdypmG/4fdAaZT4Qve7xQ1bdyR2sVBoqH+O05rNl/e3Zsv
+         d3XdWVoSqCfj7LUoLO8Vt9MrnmaGqKzDJMgXdq1NKJWAU4zJjhUIybs0agrrALCJc0
+         zr1Ka0QrmaonItyYqrj2Wj0KWH/oxoHckTfAx2UGOpLbcBKm2OxJaD1tOFH7dsGSwP
+         3W8lmEKwVhss3mihy01gZWhA57QotfkbXfzzSYhYdtbV1MgF8GIDYu/uSj7MYw9WW5
+         TUx1lLMOrxwTvopYjRT9j9g5zLZm+45xbDXW7U5kX8i63NF/5gwkZZsNYuWfAlBwCu
+         QjDhBR/0hDO6A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+Cc:     Umang Jain <umang.jain@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 32/59] media: v4l2-dv-timings.c: fix wrong condition in two for-loops
-Date:   Thu,  9 Sep 2021 07:58:33 -0400
-Message-Id: <20210909115900.149795-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 37/74] media: imx258: Limit the max analogue gain to 480
+Date:   Thu,  9 Sep 2021 07:56:49 -0400
+Message-Id: <20210909115726.149004-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909115900.149795-1-sashal@kernel.org>
-References: <20210909115900.149795-1-sashal@kernel.org>
+In-Reply-To: <20210909115726.149004-1-sashal@kernel.org>
+References: <20210909115726.149004-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -52,47 +54,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Umang Jain <umang.jain@ideasonboard.com>
 
-[ Upstream commit 4108b3e6db31acc4c68133290bbcc87d4db905c9 ]
+[ Upstream commit f809665ee75fff3f4ea8907f406a66d380aeb184 ]
 
-These for-loops should test against v4l2_dv_timings_presets[i].bt.width,
-not if i < v4l2_dv_timings_presets[i].bt.width. Luckily nothing ever broke,
-since the smallest width is still a lot higher than the total number of
-presets, but it is wrong.
+The range for analog gain mentioned in the datasheet is [0, 480].
+The real gain formula mentioned in the datasheet is:
 
-The last item in the presets array is all 0, so the for-loop must stop
-when it reaches that sentinel.
+	Gain = 512 / (512 – X)
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reported-by: Krzysztof Hałasa <khalasa@piap.pl>
+Hence, values larger than 511 clearly makes no sense. The gain
+register field is also documented to be of 9-bits in the datasheet.
+
+Certainly, it is enough to infer that, the kernel driver currently
+advertises an arbitrary analog gain max. Fix it by rectifying the
+value as per the data sheet i.e. 480.
+
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-dv-timings.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/imx258.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-dv-timings.c b/drivers/media/v4l2-core/v4l2-dv-timings.c
-index 5c8c49d240d1..bed6b7db43f5 100644
---- a/drivers/media/v4l2-core/v4l2-dv-timings.c
-+++ b/drivers/media/v4l2-core/v4l2-dv-timings.c
-@@ -207,7 +207,7 @@ bool v4l2_find_dv_timings_cap(struct v4l2_dv_timings *t,
- 	if (!v4l2_valid_dv_timings(t, cap, fnc, fnc_handle))
- 		return false;
- 
--	for (i = 0; i < v4l2_dv_timings_presets[i].bt.width; i++) {
-+	for (i = 0; v4l2_dv_timings_presets[i].bt.width; i++) {
- 		if (v4l2_valid_dv_timings(v4l2_dv_timings_presets + i, cap,
- 					  fnc, fnc_handle) &&
- 		    v4l2_match_dv_timings(t, v4l2_dv_timings_presets + i,
-@@ -229,7 +229,7 @@ bool v4l2_find_dv_timings_cea861_vic(struct v4l2_dv_timings *t, u8 vic)
- {
- 	unsigned int i;
- 
--	for (i = 0; i < v4l2_dv_timings_presets[i].bt.width; i++) {
-+	for (i = 0; v4l2_dv_timings_presets[i].bt.width; i++) {
- 		const struct v4l2_bt_timings *bt =
- 			&v4l2_dv_timings_presets[i].bt;
+diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+index 68ce63333744..85395813c0f2 100644
+--- a/drivers/media/i2c/imx258.c
++++ b/drivers/media/i2c/imx258.c
+@@ -46,7 +46,7 @@
+ /* Analog gain control */
+ #define IMX258_REG_ANALOG_GAIN		0x0204
+ #define IMX258_ANA_GAIN_MIN		0
+-#define IMX258_ANA_GAIN_MAX		0x1fff
++#define IMX258_ANA_GAIN_MAX		480
+ #define IMX258_ANA_GAIN_STEP		1
+ #define IMX258_ANA_GAIN_DEFAULT		0x0
  
 -- 
 2.30.2
