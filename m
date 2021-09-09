@@ -5,46 +5,46 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D327FC433FE
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 11:50:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72101C43219
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 11:50:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BCDB261AE4
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 11:50:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A31A61AA3
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 11:50:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241764AbhIILvO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 07:51:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54744 "EHLO mail.kernel.org"
+        id S241884AbhIILvQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 07:51:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54742 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242198AbhIILse (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S242216AbhIILse (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 9 Sep 2021 07:48:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 86B7D611C7;
-        Thu,  9 Sep 2021 11:43:27 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C73661263;
+        Thu,  9 Sep 2021 11:43:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631187808;
-        bh=Mgk6zcJV3cp/1FnKDc4HTUGsqHEyT0cD/bodCBNyz7k=;
+        s=k20201202; t=1631187807;
+        bh=Wz14k6GnJ86+Q3oVwhuo0nWxt6u7fgky9qP3EUu+1yo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iG6rARMSQtBOWvymGnKcrEgjGkDxxLtw2IWBxaKqjTRjypaBCzaUYNkRtdvFssm5t
-         ZJ6H9WMzy9QrZP6Ao0AOceb4v5OTMl0fyaFVCBjnrZ8VjyqwNC/ipWZmFBb0jm4VFs
-         hm3oUdkWF8vfl1QzPsvCPwyU5EblzfQTr761iF5Qyh5Z7OnWjhjcEbsd/hzlt3ZW57
-         gk7wlv5xP3+pSJfYIpfvo2yoZ0mbyM/0nlZhO59YHkAKhGTljNkUB+aF2zT+qnbkBw
-         Gl/ALdcTRmS5vJxQJoQcODsL60tE7QdEVmCYbVODqvoovZQkwT3oJwhaUItdm5Lqfh
-         FARjaSvSYL0mg==
+        b=nJdAdlNTrhzhHLef6Yj/EhU5XVJpeBJls++zMRuhCPoZ0SeqUwceDSEggR/u+hbDm
+         VBbV4zuXNX5V+7cAR1GK/cchDGGgbuuprVp/ZajTaLmA9xiCEQaD2QUgCejaLH+ru2
+         aftNA9ROPxoTzK/WFXISp/47gvIdNsBKauqRuQqouRTvKQXgXxcJfeiNT7aUNYLpMP
+         i/U5D6lS7JHusJDDtGBkhyPXk4JAOQhfX2XOn9w8q0y/NUf0/+lnNZ0X1CrkUCDEWa
+         fgQ4x92+knUD2cObIm5HWFB8d4vvdZdbOLHeK6lQmOhMx63BQZhHlHn13fd4zwsjXW
+         MUj2Rgoj6ksbw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
+Cc:     =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-tegra@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 110/252] media: tegra-cec: Handle errors of clk_prepare_enable()
-Date:   Thu,  9 Sep 2021 07:38:44 -0400
-Message-Id: <20210909114106.141462-110-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 109/252] media: TDA1997x: fix tda1997x_query_dv_timings() return value
+Date:   Thu,  9 Sep 2021 07:38:43 -0400
+Message-Id: <20210909114106.141462-109-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
 References: <20210909114106.141462-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -52,51 +52,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+From: Krzysztof Hałasa <khalasa@piap.pl>
 
-[ Upstream commit 38367073c796a37a61549b1f66a71b3adb03802d ]
+[ Upstream commit 7dee1030871a48d4f3c5a74227a4b4188463479a ]
 
-tegra_cec_probe() and tegra_cec_resume() ignored possible errors of
-clk_prepare_enable(). The patch fixes this.
+Correctly propagate the tda1997x_detect_std error value.
 
-Found by Linux Driver Verification project (linuxtesting.org).
-
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Signed-off-by: Krzysztof Hałasa <khalasa@piap.pl>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/cec/platform/tegra/tegra_cec.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/media/i2c/tda1997x.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/cec/platform/tegra/tegra_cec.c b/drivers/media/cec/platform/tegra/tegra_cec.c
-index 1ac0c70a5981..5e907395ca2e 100644
---- a/drivers/media/cec/platform/tegra/tegra_cec.c
-+++ b/drivers/media/cec/platform/tegra/tegra_cec.c
-@@ -366,7 +366,11 @@ static int tegra_cec_probe(struct platform_device *pdev)
- 		return -ENOENT;
- 	}
+diff --git a/drivers/media/i2c/tda1997x.c b/drivers/media/i2c/tda1997x.c
+index 91e6db847bb5..891f81f0c18b 100644
+--- a/drivers/media/i2c/tda1997x.c
++++ b/drivers/media/i2c/tda1997x.c
+@@ -1695,14 +1695,15 @@ static int tda1997x_query_dv_timings(struct v4l2_subdev *sd,
+ 				     struct v4l2_dv_timings *timings)
+ {
+ 	struct tda1997x_state *state = to_state(sd);
++	int ret;
  
--	clk_prepare_enable(cec->clk);
-+	ret = clk_prepare_enable(cec->clk);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Unable to prepare clock for CEC\n");
-+		return ret;
-+	}
+ 	v4l_dbg(1, debug, state->client, "%s\n", __func__);
+ 	memset(timings, 0, sizeof(struct v4l2_dv_timings));
+ 	mutex_lock(&state->lock);
+-	tda1997x_detect_std(state, timings);
++	ret = tda1997x_detect_std(state, timings);
+ 	mutex_unlock(&state->lock);
  
- 	/* set context info. */
- 	cec->dev = &pdev->dev;
-@@ -446,9 +450,7 @@ static int tegra_cec_resume(struct platform_device *pdev)
- 
- 	dev_notice(&pdev->dev, "Resuming\n");
- 
--	clk_prepare_enable(cec->clk);
--
 -	return 0;
-+	return clk_prepare_enable(cec->clk);
++	return ret;
  }
- #endif
  
+ static const struct v4l2_subdev_video_ops tda1997x_video_ops = {
 -- 
 2.30.2
 
