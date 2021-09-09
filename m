@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEE8AC433F5
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:06:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E18CDC433EF
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:09:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE10D60FE3
-	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:06:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADFA060FE3
+	for <linux-media@archiver.kernel.org>; Thu,  9 Sep 2021 12:09:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242394AbhIIMIC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:08:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40914 "EHLO mail.kernel.org"
+        id S239082AbhIIMJM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:09:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48186 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346080AbhIIMDG (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:03:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A00C260041;
-        Thu,  9 Sep 2021 11:46:48 +0000 (UTC)
+        id S241105AbhIIMHE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:07:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BF93619A6;
+        Thu,  9 Sep 2021 11:47:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188009;
-        bh=QPnP8Y83eXrqB45XfSTnst6zMUhMxU7dGsBKRkwtUKA=;
+        s=k20201202; t=1631188056;
+        bh=r/XfC9YknuEJTwDT2ObfBukG4ljdVEksqJ+CNLioO00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sCFkZrPLjJvJYvwiJbbr9P80KfhB0yEgBVgzO39wBKRnVc/dP5OX2n7pmtCT2L/FV
-         iXn3LxOYuQgCYh6rOcCjgXW5/K7T3VzpLUkFaXAIonauFTjMXufWiaZRYEyynoV4Zz
-         m1/3rDebbXVy4fmGwlFJVM36aL2rfs8e8PVhmsD5bFLjKwd16+Jsp99/6+Vivpx05a
-         cyfHEJNAWL+d+MC+VYFHWZBx59HflEMIAA7amuZgv6PUF3Jp3V6nHofYbpEfWWf4O9
-         MQ/k81B1it6LSnvQc105bShhwKbSMI6ReRlVvE9koCWaxPaslSHKLNP7EOSVotAqZc
-         9p3wjTmsJ0xJQ==
+        b=pi1bFiis1JVsGLgsijPsci6x0Ah63uBffdYjnjEOKO7YRxVMKdcwbYMrqYkgiZrAO
+         0oJpvU9c2zZoidK4CzQYerAwcREYIchjYBs1R6rT1/9zhjgZLpuqe5mWMBIG4jSzMg
+         efWfr7T5ls6t5KK82vPUfwZ9N8WNRbIY3RrHSxQeNDHyjS5OBL83deemGv9eeo0DZI
+         +RBo9GIqhVV1jOWmE2c+dft797kxBE5nVoihyH8PPsoGjbODrzlaL62IOAwznEfENJ
+         21Y7UKJI8jodKXN7i40UMRaEGNuo/sI/FX9FlW5ohTPQHO47JMTuUvZ2sDgidMa8x7
+         ah0G4t2qCUnLA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 010/219] media: ti-vpe: cal: fix queuing of the initial buffer
-Date:   Thu,  9 Sep 2021 07:43:06 -0400
-Message-Id: <20210909114635.143983-10-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.13 047/219] media: atomisp: Fix runtime PM imbalance in atomisp_pci_probe
+Date:   Thu,  9 Sep 2021 07:43:43 -0400
+Message-Id: <20210909114635.143983-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
 References: <20210909114635.143983-1-sashal@kernel.org>
@@ -52,40 +52,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit 892c37f8a3d673b945e951a8754695c119a2b1b0 ]
+[ Upstream commit 672fe1cf145ab9978c62eb827d6a16aa6b63994b ]
 
-When starting streaming the driver currently programs the buffer
-address to the CAL base-address register and assigns the buffer pointer
-to ctx->dma.pending. This is not correct, as the buffer is not
-"pending", but active, and causes the first buffer to be needlessly
-written twice.
+When hmm_pool_register() fails, a pairing PM usage counter
+increment is needed to keep the counter balanced. It's the
+same for the following error paths.
 
-Fix this by assigning the buffer pointer to ctx->dma.active.
-
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Link: https://lore.kernel.org/linux-media/20210408081850.24278-1-dinghao.liu@zju.edu.cn
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/ti-vpe/cal-video.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/atomisp/pci/atomisp_v4l2.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
-index 7b7436a355ee..b9405f70af9f 100644
---- a/drivers/media/platform/ti-vpe/cal-video.c
-+++ b/drivers/media/platform/ti-vpe/cal-video.c
-@@ -694,7 +694,7 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
- 
- 	spin_lock_irq(&ctx->dma.lock);
- 	buf = list_first_entry(&ctx->dma.queue, struct cal_buffer, list);
--	ctx->dma.pending = buf;
-+	ctx->dma.active = buf;
- 	list_del(&buf->list);
- 	spin_unlock_irq(&ctx->dma.lock);
- 
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+index 0295e2e32d79..02f774ed80c8 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+@@ -1815,6 +1815,7 @@ static int atomisp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
+ 	hmm_cleanup();
+ 	hmm_pool_unregister(HMM_POOL_TYPE_RESERVED);
+ hmm_pool_fail:
++	pm_runtime_get_noresume(&pdev->dev);
+ 	destroy_workqueue(isp->wdt_work_queue);
+ wdt_work_queue_fail:
+ 	atomisp_acc_cleanup(isp);
 -- 
 2.30.2
 
