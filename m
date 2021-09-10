@@ -2,85 +2,100 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FA29C433FE
-	for <linux-media@archiver.kernel.org>; Fri, 10 Sep 2021 18:44:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AE3CC433EF
+	for <linux-media@archiver.kernel.org>; Fri, 10 Sep 2021 22:37:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 678A261209
-	for <linux-media@archiver.kernel.org>; Fri, 10 Sep 2021 18:44:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1EC16120D
+	for <linux-media@archiver.kernel.org>; Fri, 10 Sep 2021 22:37:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbhIJSqH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Sep 2021 14:46:07 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:59609 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233117AbhIJSn6 (ORCPT
+        id S232013AbhIJWiP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Sep 2021 18:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231376AbhIJWiP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Sep 2021 14:43:58 -0400
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 30EC7240005;
-        Fri, 10 Sep 2021 18:42:44 +0000 (UTC)
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 19/22] soc: sunxi: mbus: Add A31 ISP compatibles to the list
-Date:   Fri, 10 Sep 2021 20:41:44 +0200
-Message-Id: <20210910184147.336618-20-paul.kocialkowski@bootlin.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210910184147.336618-1-paul.kocialkowski@bootlin.com>
-References: <20210910184147.336618-1-paul.kocialkowski@bootlin.com>
+        Fri, 10 Sep 2021 18:38:15 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61545C061756
+        for <linux-media@vger.kernel.org>; Fri, 10 Sep 2021 15:37:03 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id b10so4266868ioq.9
+        for <linux-media@vger.kernel.org>; Fri, 10 Sep 2021 15:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IFaDdxqmF/T13hXPY+icTVWA4xnaWqbUGckikX+9UCU=;
+        b=KApiJDO81GVjSe/Z5tZbiWT7xBq6x+evwNXRfNs5RxZEPC2ify4IT0CqzG77T4ST0Q
+         X6scXMZl6SsRESo/jZKRhAjsAtrYu3UdNdWj6DxiySx8DrSs2E+wmVvV0gMTCVP4gbDd
+         AQGB/Mp3fziOhTu8BRTusYT07k4kOvvMt0+JY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IFaDdxqmF/T13hXPY+icTVWA4xnaWqbUGckikX+9UCU=;
+        b=zjndaeQcWQvi/dInlxg6MTONdzbYI8W+DptMiiNL2Z3nGI4w6ukDBMv8c+Wz9c6LcV
+         pgQ2eSwVHF1/5k0VzoMknhLAlMS1YgUNtoo+dy1QH4P9fWU3LEhrUaRwapbwQduySuSB
+         W4Vv43EoFN52vmcFMmNiCVvOy+8du3ER/Wz5Z+XrwOfnaBMNFantCrK/w6iSXiiNDaYT
+         smq5EC3EVWZfp9XH9f+Kd582eJuvy73RYYRvkMzNiEg+QGgt59muwMrO3U91bVa4XvFG
+         0bnYEVAk3qkReyoi3mVSAfKmTHrtrJkIaNv0oEwxCjaDDSGGsjL407EnKyU1f1awJT3F
+         mDvg==
+X-Gm-Message-State: AOAM533QnaX3iyfKk739/+v4l/U7ZivDW+kTlg6OQqKFiEhKDTTG7cMZ
+        jS49C13ItVF1a4xM0zOBy4vV/g==
+X-Google-Smtp-Source: ABdhPJyo1Zzq8WZa3h6TAc80j+2p7KisrmCeonOgHtXV/Hhm9GdGRLW7KTmjd6/XBPFJGcOPMU6sWg==
+X-Received: by 2002:a05:6638:d1:: with SMTP id w17mr46388jao.33.1631313422678;
+        Fri, 10 Sep 2021 15:37:02 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id c23sm21623ioi.31.2021.09.10.15.37.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Sep 2021 15:37:02 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        gregkh@linuxfoundation.org, paskripkin@gmail.com
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] media: atomisp: fix control reaches end of non-void function error
+Date:   Fri, 10 Sep 2021 16:37:00 -0600
+Message-Id: <20210910223700.32494-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The A31 ISP sits on the mbus and requires the usual bus address
-adaptation. Add its compatibles to the list.
+Fix the following build error with -Werror=return-type enabled. Fix
+input_system_configure_channel_sensor() to return status when control
+reaches the end.
 
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.o
+drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c: In function ‘input_system_configure_channel_sensor’:
+drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c:1649:1: error: control reaches end of non-void function [-Werror=return-type]
+ 1649 | }
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- drivers/soc/sunxi/sunxi_mbus.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../media/atomisp/pci/hive_isp_css_common/host/input_system.c    | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/soc/sunxi/sunxi_mbus.c b/drivers/soc/sunxi/sunxi_mbus.c
-index d90e4a264b6f..7f0079ea30b1 100644
---- a/drivers/soc/sunxi/sunxi_mbus.c
-+++ b/drivers/soc/sunxi/sunxi_mbus.c
-@@ -37,6 +37,7 @@ static const char * const sunxi_mbus_devices[] = {
- 	"allwinner,sun5i-a13-video-engine",
- 	"allwinner,sun6i-a31-csi",
- 	"allwinner,sun6i-a31-display-backend",
-+	"allwinner,sun6i-a31-isp",
- 	"allwinner,sun7i-a20-csi0",
- 	"allwinner,sun7i-a20-display-backend",
- 	"allwinner,sun7i-a20-display-frontend",
-@@ -50,6 +51,7 @@ static const char * const sunxi_mbus_devices[] = {
- 	"allwinner,sun8i-h3-csi",
- 	"allwinner,sun8i-h3-video-engine",
- 	"allwinner,sun8i-v3s-csi",
-+	"allwinner,sun8i-v3s-isp",
- 	"allwinner,sun9i-a80-display-backend",
- 	"allwinner,sun50i-a64-csi",
- 	"allwinner,sun50i-a64-video-engine",
+diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
+index 8e085dda0c18..5d088d6fb01f 100644
+--- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
++++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c
+@@ -1646,6 +1646,7 @@ static input_system_err_t input_system_configure_channel_sensor(
+ 	default:
+ 		return INPUT_SYSTEM_ERR_PARAMETER_NOT_SUPPORTED;
+ 	}
++	return status;
+ }
+ 
+ // Test flags and set structure.
 -- 
-2.32.0
+2.30.2
 
