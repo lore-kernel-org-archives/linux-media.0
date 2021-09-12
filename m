@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39250C4332F
-	for <linux-media@archiver.kernel.org>; Sun, 12 Sep 2021 20:13:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 831D6C433FE
+	for <linux-media@archiver.kernel.org>; Sun, 12 Sep 2021 20:13:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1EEA261050
-	for <linux-media@archiver.kernel.org>; Sun, 12 Sep 2021 20:13:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 70904610A3
+	for <linux-media@archiver.kernel.org>; Sun, 12 Sep 2021 20:13:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236472AbhILUOM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 12 Sep 2021 16:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
+        id S236423AbhILULG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 12 Sep 2021 16:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237033AbhILUM0 (ORCPT
+        with ESMTP id S236289AbhILULA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 12 Sep 2021 16:12:26 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D45C061768;
-        Sun, 12 Sep 2021 13:10:43 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id u15so5265442wru.6;
-        Sun, 12 Sep 2021 13:10:43 -0700 (PDT)
+        Sun, 12 Sep 2021 16:11:00 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D516C061574;
+        Sun, 12 Sep 2021 13:09:44 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id g128so690641wma.5;
+        Sun, 12 Sep 2021 13:09:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=H6ifLJNQpWHL/aW6APbCXiXF4Xey3uNJjXkEDYLDpf0=;
-        b=ZfKwSrRJYOUFhAoytmkutWh0G4OM3EDXtdlI9nE+QFtPei+2E4JdDl9Wka9E5pH3YS
-         04uPK1Tw8S/mpSJek9+01/hZUOudukqiP1FHYcqijmNUw3d/ou4/LVcqog6TND7k1ctk
-         nhrCXGQ6H7XuuSz39ea5BGGnr4/poWAHAjMjQDsmYxL4FiyE8A3sMYfTHP3veVbXO+uo
-         d9x7efPI4RBayLlBeljU0f1eSkDX3OfNSksY6kDtJWGRBn8yGTD1egqNKbd5IoFywF9B
-         P5raiK7sTUwh7OkLsuO0sINvzimEE1qvWRuqPCO+jbWgCSh5d3Bgwic9fGMsNaWhx7YO
-         E6qg==
+        bh=azJO16PBS0aaEX5vOfJpmf9jn1x1mJqiJpQpMZ0azY4=;
+        b=dgfruC3Cp7h5J9EBqCGafMKFXt20sGTs0YsYPkR7d1TWRr8oLswsvyCKcBSxy4nulu
+         0ZbxVa4QFZQfmClH9qJ+sj0/aqr1Oj4x/2i4oRtkgdsKe6uRyet4NtuDNfxNskm/LaL3
+         8G3liXSQkeLLElx3zNZ5Jg4yey7pZ9YhZxU9IXTtiBUnML34vHWNB7u27oXvTml/Yx+T
+         nKYVv/4i3YYIKnpQV2d8M+QJSBaCu5P1QMYCVCbFOiXdv/zaOWdhIPOBsiZBvSYznQTm
+         1cx/B8qabHGSZgtGF8U4kZD8Mq0cMv4HZzfWjRheyzvnTcjs6shxv/6yp7El7CNX7MWp
+         awFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=H6ifLJNQpWHL/aW6APbCXiXF4Xey3uNJjXkEDYLDpf0=;
-        b=opNkQv4GL2p4rKmnVZxndhirt5HO86rNkyFFU8EoP0AbTk0l5F01AMpzQngTp/zXVw
-         qWjHfbroQ1EHk9Vfj7XZq/MCERRnfzlYum5hMlKL4cRfOKW89tjshOAhB+ZGxCDr5h2H
-         avyWy5S7CaattDMPBopUrs1fHwEp3FQPvF9Jgk+aPCsFaglcDrpcMs8vXGO0sQGeuSDS
-         H7aDnvCzUPAHR4fv0cCNQrmJesfGH5Mmy2TXCQPGUBhqhUc+T9Hlzzr01wq/+hPxr3/Z
-         MToAeVIp1W3RgDx97Ausl6cuSAYjQrQYb9r918sXzAbTBgX5/CwXmIt2O9GXduyPun0q
-         EY1A==
-X-Gm-Message-State: AOAM532qQHFfYQdST0F/ztPoBYgyqGuNYTbJTUnfTjT2ZkXJMFcbRlcm
-        b1ucJmsMnn51PD0uE9RtUaY=
-X-Google-Smtp-Source: ABdhPJy5R0R2cYZ9ytbAqF/pKeienf/EwQwWGSDMVrYLML+XPPmZs/giSU/21wa5JsLrvKFXP2DpUQ==
-X-Received: by 2002:adf:8170:: with SMTP id 103mr9108790wrm.167.1631477442191;
-        Sun, 12 Sep 2021 13:10:42 -0700 (PDT)
+        bh=azJO16PBS0aaEX5vOfJpmf9jn1x1mJqiJpQpMZ0azY4=;
+        b=buvAiB0gbKTO8OwAMeloqoen7VqAdHe4eXf0XxMVRmbEKbkbFFWr1DkKMkWYllmN5l
+         pFfPsQoAdNimmhPFXG9lIKhl4GbrmKreWNl4gS8gGzX5yoLZ6ph5msy08cjdz0IGeVFr
+         MurPEFKbNEhThfoPPcgJf5eNrd/Cx4hcctoyhZco2uLOJJYKnrVUmVdePDJF1S/Evoj2
+         hHH2D5Rt9okPDCKNmBgbeGPF/cSP4tmr8pVkdizBF/XrYCy57mNJYuXsuD0redRN9dAc
+         KZfu1o7JFh0sGc7UU8zfgOEWm7Y6ki/q118+jgYpop4mxu+JrZqyYoRFfhssx03JgK6a
+         4BsA==
+X-Gm-Message-State: AOAM532QbIPeEZR8wWk3wrJBC3r6qdjd9+5NaBgssPe3s2BtslvIFVMp
+        oMFWAkPtlFyjctmsfYkGUn4=
+X-Google-Smtp-Source: ABdhPJwmxULcCBMXR6BD0JLAazGByGQYAT6BgoTu1ONDbXSqkFAZZJt5z69GiuVGoP2Im9fwPD+HbA==
+X-Received: by 2002:a7b:c3cc:: with SMTP id t12mr7819882wmj.68.1631477382665;
+        Sun, 12 Sep 2021 13:09:42 -0700 (PDT)
 Received: from localhost.localdomain (46-138-83-36.dynamic.spd-mgts.ru. [46.138.83.36])
-        by smtp.gmail.com with ESMTPSA id v10sm5463476wrg.15.2021.09.12.13.10.39
+        by smtp.gmail.com with ESMTPSA id v10sm5463476wrg.15.2021.09.12.13.09.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Sep 2021 13:10:41 -0700 (PDT)
+        Sun, 12 Sep 2021 13:09:42 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -85,9 +85,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v11 28/34] soc/tegra: pmc: Change name of core power domain
-Date:   Sun, 12 Sep 2021 23:08:26 +0300
-Message-Id: <20210912200832.12312-29-digetx@gmail.com>
+Subject: [PATCH v11 04/34] soc/tegra: Don't print error message when OPPs not available
+Date:   Sun, 12 Sep 2021 23:08:02 +0300
+Message-Id: <20210912200832.12312-5-digetx@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210912200832.12312-1-digetx@gmail.com>
 References: <20210912200832.12312-1-digetx@gmail.com>
@@ -97,27 +97,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-CORE power domain uses name of device-tree node, which is inconsistent with
-the names of PMC domains. Set the name to "core" to make it consistent.
+Previously we assumed that devm_tegra_core_dev_init_opp_table() will
+be used only by drivers that will always have device with OPP table,
+but this is not true anymore. For example now Tegra30 will have OPP table
+for PWM, but Tegra20 not and both use the same driver. Hence let's not
+print the error message about missing OPP table in the common helper,
+we can print it elsewhere.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/soc/tegra/pmc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/soc/tegra/common.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-index fb8faf7b226a..5e1fc873bf8f 100644
---- a/drivers/soc/tegra/pmc.c
-+++ b/drivers/soc/tegra/pmc.c
-@@ -1353,7 +1353,7 @@ static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
- 	if (!genpd)
- 		return -ENOMEM;
+diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
+index cd33e99249c3..a42d4f98c078 100644
+--- a/drivers/soc/tegra/common.c
++++ b/drivers/soc/tegra/common.c
+@@ -111,9 +111,7 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+ 	 */
+ 	err = devm_pm_opp_of_add_table(dev);
+ 	if (err) {
+-		if (err == -ENODEV)
+-			dev_err_once(dev, "OPP table not found, please update device-tree\n");
+-		else
++		if (err != -ENODEV)
+ 			dev_err(dev, "failed to add OPP table: %d\n", err);
  
--	genpd->name = np->name;
-+	genpd->name = "core";
- 	genpd->set_performance_state = tegra_pmc_core_pd_set_performance_state;
- 	genpd->opp_to_performance_state = tegra_pmc_core_pd_opp_to_performance_state;
- 
+ 		return err;
 -- 
 2.32.0
 
