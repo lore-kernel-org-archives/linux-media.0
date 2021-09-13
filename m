@@ -2,145 +2,557 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48F32C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 09:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35996C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 09:35:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 32CDC60FBF
-	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 09:13:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFABE60D42
+	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 09:35:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238780AbhIMJOs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Sep 2021 05:14:48 -0400
-Received: from mail-eopbgr140043.outbound.protection.outlook.com ([40.107.14.43]:39618
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238506AbhIMJOn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Sep 2021 05:14:43 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=edghxFXvpdqRydWFckZ+WwwAcaRdltEGsINeCP5wc8fGEntSDvEgDT3Vb+jvplbasjHWs68+4k3UaBCVej6EhsO55+621RSA343OXfO+No/DcmdDxySsSyxc857TNlAhkb53V0y5cCwhAAPfzj5et6t0olINtQUsU+sqosiUhnlcBOaKsVeEzPj22Ix1nm4KzufNgSW0ZcdlT/aDseIbX8cBpxwo34FHqTIc+K5qxvs/Wp7IYWrUPBQHsb5oiei0srizUk1fMurpH947IObnrwvKlieEQYhD5Gbm/CphQRwGbRyBCr0psjxrLCYVzFFPQF17iZB51JnZDmAdzEQWNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=CphCoXulIFGtU2AEB4KsSkyW/W7RFji+tc3255MclSo=;
- b=NYFT0VSzhnYEumwkq5WzlnQmNBTKix8gD8sF5Y7YBS+0lGqojNSRAuc4wqur6VdzAqSbDZHxqKtGhAsA1BD+sW13p4WdeK58RbKMjai9y0KHelrzwZL0r/LgTzfZ7xLM9e2WyP6IuUtz9svABvBG4pnuewYxNMMqKJVzwt7UiHwJxnBeUobc1Km1pU1S/8KY/76eNuLVWQHj4bqIupF4jClUE0WWGIduyyL01DmtNkG+nAJ0omXIQlJVYSf1UV8GMmEsIm1H9VvWUVZEdKf5FRL2wVZLoMDeSBu50wvj6xdGgu367L8gBdBWJZq0iaGhHfhNZsdxZTxWoVowXQeC5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CphCoXulIFGtU2AEB4KsSkyW/W7RFji+tc3255MclSo=;
- b=Mf22aMUInhYkbXDsXdrqYm9+Vd0x4eTXB7TY1LbsrKngD0qup/mw9SMB57aQWFm/SBXFxn4Ch5v+MUyeqRg5D7yPG5uEtHRi7wcdFrqEptwPv/FFW/WV6j1CeO1Zm2HmPIJ6UCm4fNu04v+KOv6mrcnO9h635IwZO31td5Pfpqg=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by AM6PR0402MB3925.eurprd04.prod.outlook.com (2603:10a6:209:1c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.17; Mon, 13 Sep
- 2021 09:12:34 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::998c:7f25:6d75:d5f4]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::998c:7f25:6d75:d5f4%7]) with mapi id 15.20.4500.018; Mon, 13 Sep 2021
- 09:12:34 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, shawnguo@kernel.org, robh+dt@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, aisheng.dong@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v9 12/13] firmware: imx: scu-pd: imx8q: add vpu mu resources
-Date:   Mon, 13 Sep 2021 17:11:14 +0800
-Message-Id: <2eb67c17f126f196be5cebc81a9a9dd64c76cf03.1631521295.git.ming.qian@nxp.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1631521295.git.ming.qian@nxp.com>
-References: <cover.1631521295.git.ming.qian@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0101.apcprd01.prod.exchangelabs.com
- (2603:1096:3:15::27) To AM6PR04MB6341.eurprd04.prod.outlook.com
- (2603:10a6:20b:d8::14)
+        id S238653AbhIMJgs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Sep 2021 05:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238367AbhIMJgr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 13 Sep 2021 05:36:47 -0400
+Received: from lb1-smtp-cloud7.xs4all.net (lb1-smtp-cloud7.xs4all.net [IPv6:2001:888:0:108::1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6E4C061574;
+        Mon, 13 Sep 2021 02:35:31 -0700 (PDT)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id PiN3mXbAupQdWPiN4m2GyV; Mon, 13 Sep 2021 11:35:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1631525729; bh=iS44fWegCcqajhniRMZOhI2rCLhnlrrJLZg1C5vJ31A=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=BPvTqlWh1SD+P6Lf7Jqxwv2/exK0AUvq8pWajoly+l4dj81Xo582ik0/DPTcxv/le
+         8wjyV7BcwRVaKsY+GGt/GEZzTFrK2SvgR3JfLSG/lWvfoh6wuH55mRn/PRR6PFnsqw
+         9KTbwgJ260IeyRbhtWeAZt83Ib3paUdTREf2EYkA6EL8sHBzNnVYzLVsrDRX3bxwce
+         QTGAVwVjfvRDyThhxtr7stOhHWjvQNqiKiVdEzxdgubfSlafj0NTpA7alX24Gd9KTi
+         jhL4PmQcnRjGcyoEowuYOHW0VjreQCEQztjucAu0riWJ1o83vqXKu27y1y8erkfIgw
+         a7xpAgwEnKwgA==
+Subject: Re: [PATCH v6] media: em28xx: Fix race condition between open and
+ init function
+To:     Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
+        mchehab@kernel.org, skhan@linuxfoundation.org, hdanton@sina.com
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        syzbot+b2391895514ed9ef4a8e@syzkaller.appspotmail.com
+References: <20210614195230.28691-1-igormtorrente@gmail.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <0763c5bc-b7f7-b0da-e48c-d61c61fc5499@xs4all.nl>
+Date:   Mon, 13 Sep 2021 11:35:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from lsv11149.swis.cn-sha01.nxp.com (119.31.174.70) by SG2PR01CA0101.apcprd01.prod.exchangelabs.com (2603:1096:3:15::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.16 via Frontend Transport; Mon, 13 Sep 2021 09:12:30 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6e508c80-c8af-4a1a-097d-08d976969f3b
-X-MS-TrafficTypeDiagnostic: AM6PR0402MB3925:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM6PR0402MB39255D5FE43C0EFDC122D7F5E7D99@AM6PR0402MB3925.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1201;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kfKyfB+FzswWml0Pze1OQPkn9uJVe8GRQK1E/APiWGd1b+GkeLwOV+c8O3JjIw78dh6MQuf3lxGZ7gHgZy9VKOoJji8GLW73JghmFyETCM0drjC2G6cpJHFxoH/3kcW7t3HgaGacfZIU2C5/OkC7uBgStUfZ8cGmFgcd6u3n8ppocXdZT2lhhLCABoOnP0Z3liroIfWaVJUpRT1VKbwWf7U0zsI22/maYRXYhakJggKpYBeqbrMmNf0xiMYzP/JwnNdxQG8A/qX9+vWsb7HvV8nosDRLUuOtB5p08DIvn5sDRbelxMYSZTKMj4tNSPobig/cIQqNsp0/Fw51OT08v+dOzgc6fbew4+wjzsY+rQFDyQPjjEtuSGsZT0i94/ieJH7+T5zVeWNuHdbdbysMVXDvqTwOao9rbuU8Ipu135i6O6qwoZ5WHwtX9ZHkYyrLHnz5qX6BxEzAiEFq8CCkk2gxAtQhGzmq0GaCVYxi8vbuk0RCaaMUpylcciiLP9m1N4og4sGYXRtd+0Vw3B4Avmn9UI1UOFoJhhdkSpk1TiJ4b4VbAce3iFyJOtXSWQ1pR5tq21cpm20tLni3mufd3nPNAaw3+4BXlq7+r/nIcmxjGVvKlG1aOgja3hzzpHRIcfxfP88n9//Q4herrBBJa1Z4GIO6z2BnVjvjkfdFpenmWKTZSIJXJBdFT40FURoQfzrGFWkqW0kbslGqNeLm9BBqPIFXKzQfJGf6lHLngSg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(136003)(366004)(396003)(376002)(346002)(7416002)(4744005)(66946007)(66476007)(38350700002)(38100700002)(26005)(8676002)(6486002)(52116002)(7696005)(5660300002)(8936002)(186003)(66556008)(478600001)(956004)(6666004)(316002)(2616005)(36756003)(44832011)(4326008)(2906002)(86362001)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d4gTcWjrSHRKTyf7UoN8hZHRKsIVCoeJ6r9VQZZpbK4c0O4ylwLvQnQW125z?=
- =?us-ascii?Q?8QfjjtGQUlFWHJIRMh7SLrwnWM+tTLUOjkvV/Ogy77EBcr5syznnC9sNsECW?=
- =?us-ascii?Q?e48R/pltYMHYEOQ4Wv6bXzbdyS9uUm14ifd8zBtzWDVmTc4PeAfawRuBAls+?=
- =?us-ascii?Q?/027o3bNBF6kmw+BHODRlssssS7vCNaIb9wpjlsm8JGK8KhIEw9tqmY/Hc5F?=
- =?us-ascii?Q?y3InwaOA3y3KU9o9lIM1GGw0waj2tS8Wy1OmTYHCTT7LI33uEwPlBBOW8RSc?=
- =?us-ascii?Q?hh+syF0n31cJxZmV22iLrCQ1AlOXjVDjKFMuRf+gSccZBnD4afjqkFq5yuET?=
- =?us-ascii?Q?7OPsLDbv09ffoJTcL6oS5Ka7BDqNkQdRmrQIjaeX/9eUDmqE3nQObtfKOm8J?=
- =?us-ascii?Q?tM3n0JVGqDJXBuIB4AJhBDJtDY38/isJ+Ki97j5jwuUoaESvVPMDZNTeBOpi?=
- =?us-ascii?Q?PC1KWUCmNS+posv32EVhTtf4RDqzHbzcco3nL+WhgcSqPmuQZ+kxT5zbLXT2?=
- =?us-ascii?Q?aMbtCnmSR3oh7PXnh95q4jGjqTRdUPq+9L2bzN7MOr22jGY0QBXk261d3X7D?=
- =?us-ascii?Q?E12ALKIQRDE9BrrOef+5Y/84Na0G5EUSi3QA0YYKNzHX6reqREXtXKRI79HI?=
- =?us-ascii?Q?70mm860PHvN0wItoW1syD1z6x+OJDrvwgAa3kj2EUkh1XxqyniNEyUya3F1N?=
- =?us-ascii?Q?U88UggRTZO6371ytBYso4CcHKvWTHEo5/2BSh1QBPXTv0ZcO4QXUojG9Cter?=
- =?us-ascii?Q?la2W0qrJdoBwuBIE9N4RqhN1gxUASz0fS8CzHcVpA+x837JnE/o1WhFjRLg0?=
- =?us-ascii?Q?7OKFhjxh3h+2/x9yPjadS+QLhfZIftAUCqGejCZeJpHYOYS9qKG7QUsgpBC8?=
- =?us-ascii?Q?v2C1RacmuqZRsF/0OtjQYBorTXZ6NWav3sBgfIGOmYXFj87iMSkTmOR9RsKg?=
- =?us-ascii?Q?1+OvGZhcQbizNnfKJ+/jAAvrxfKLFsCViBVrme0951ls0KQ7H5tUVvolJO2m?=
- =?us-ascii?Q?swZiK6+4YKQbgXDqYILHUGG5DCE3Is1Po+GNsf7PVgqFlJzHaERTsPdlhI0O?=
- =?us-ascii?Q?MwfsXYmW4n0LAZD5Qo4IU9VNuO4XKE5ifaAJfeeT2obBLEtIbH/xkQdemAG0?=
- =?us-ascii?Q?2EuCnqhiXON0XttyeE3BI9yeZJN7stx7d3hEJje1l6n5eJwmSs6DJO7DyKU8?=
- =?us-ascii?Q?iHA8h9+jCfqpeM4O9jf/1BPkkUXYs+pVArxYzyjZMrmzl2UNNyi/tbyt6UcN?=
- =?us-ascii?Q?iq5kp1ZkLSBvMBuOYeq+9AD/UwdQeNBAa8dXok4y9vEP9TYA3WdW9oe8pHaF?=
- =?us-ascii?Q?QisSmyyegVbT+8U2zQh35ARe?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e508c80-c8af-4a1a-097d-08d976969f3b
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2021 09:12:34.2192
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UIolKAmCVSkn6jss0hpry/ia7NSVImlFkvAUIXi/Ssv7R74kcqwSbNeTCgHzhBpvcZslXkky6Uqd10xAuWf3Ag==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3925
+In-Reply-To: <20210614195230.28691-1-igormtorrente@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfBfETrkQKgpiubodEMFFgi6eddGxPXJVXoMubrNGXFJk0T9dXrcAsTAksCaC3c9m4dNtAoEa/7wxUNdV8y7Oruuy2O741r2jkfkSWbtUWiQ8/AsD2UI7
+ d/rFc9jyzp7mV6LWIWqxAIDv19zfJTvbiTrlVP27+izBZanEPMVeozxPhbZwClEYmxf5WmIBFj13kUXv9w1kqXxrh95x1We3lPnQp2SbHBRq2jT0XBwliMVO
+ jQ4Neqj9VuF+ghNiNZEV/3yLWW0/EbuqtxbkMzdmQPRUeBA98iJptFfS/4PvOhHmEgYVl2yD2U4+2wjsjbsQS+pIwUuw9NnCifLKv5GQCzvsCchNHdu0q2KJ
+ RlqIHR10NQuAfBT33K1yy3EKL0sAniOOMV6NAERgAQ2d2E+QR8vu8CEqO7izYZuSXlKnyCGMKyknOr+VXykESWLbIoKrkDQiyn6bWm5atIJ2XwTM0ueR3LCE
+ VAN0HqEU4HoPg5E+RYucI36Vajs72hCE5fcK/4hnTfG/9i123vxNB1uzdC6qlrgGUnrmrdwRJKnTNRiW0Ka+KF3fJPfvR5WBiaLiwg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-the vpu core depends on the mu resources.
-if they're missed, the vpu can't work.
+On 14/06/2021 21:52, Igor Matheus Andrade Torrente wrote:
+> Fixes a race condition - for lack of a more precise term - between
+> em28xx_v4l2_open and em28xx_v4l2_init, by managing the em28xx_v4l2
+> and v4l2_dev life-time with the v4l2_dev->release() callback.
+> 
+> The race happens when a thread[1] - containing the em28xx_v4l2_init()
+> code - calls the v4l2_mc_create_media_graph(), and it return a error,
+> if a thread[2] - running v4l2_open() - pass the verification point
+> and reaches the em28xx_v4l2_open() before the thread[1] finishes
+> the deregistration of v4l2 subsystem, the thread[1] will free all
+> resources before the em28xx_v4l2_open() can process their things,
+> because the em28xx_v4l2_init() has the dev->lock. And all this lead
+> the thread[2] to cause a user-after-free.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-and-tested-by: syzbot+b2391895514ed9ef4a8e@syzkaller.appspotmail.com
+> Signed-off-by: Igor Matheus Andrade Torrente <igormtorrente@gmail.com>
+> ---
+> 
+> V2: Add v4l2_i2c_new_subdev null check
+>     Deal with v4l2 subdevs dependencies
+> 
+> V3: Fix link error when compiled as a module
+> 
+> V4: Remove duplicated v4l2_device_disconnect
+>     in the em28xx_v4l2_fini
+> 
+> V5: Move all the v4l2 resources management
+>     to the v4l2_dev->release() callback.
+> 
+> V6: Address some Hans comments regarding
+>     video_unregister_device and struct v4l2_device
+>     inside the struct v4l2_device.
+> 
+>     I'm sending this v6 that way but I'm totally open
+>     to the Hilt approach, if it is a more desirable
+>     way to fix this issue.
+> ---
+>  drivers/media/usb/em28xx/em28xx-cards.c |   3 +-
+>  drivers/media/usb/em28xx/em28xx-video.c | 232 +++++++++++++++---------
+>  drivers/media/usb/em28xx/em28xx.h       |   1 -
+>  3 files changed, 151 insertions(+), 85 deletions(-)
+> 
+> diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
+> index ba9292e2a587..6e67cf0a1e04 100644
+> --- a/drivers/media/usb/em28xx/em28xx-cards.c
+> +++ b/drivers/media/usb/em28xx/em28xx-cards.c
+> @@ -4120,7 +4120,6 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
+>  	struct em28xx *dev;
+>  
+>  	dev = usb_get_intfdata(intf);
+> -	usb_set_intfdata(intf, NULL);
+>  
+>  	if (!dev)
+>  		return;
+> @@ -4148,6 +4147,8 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
+>  		dev->dev_next = NULL;
+>  	}
+>  	kref_put(&dev->ref, em28xx_free_device);
+> +
+> +	usb_set_intfdata(intf, NULL);
+>  }
+>  
+>  static int em28xx_usb_suspend(struct usb_interface *intf,
+> diff --git a/drivers/media/usb/em28xx/em28xx-video.c b/drivers/media/usb/em28xx/em28xx-video.c
+> index 6b84c3413e83..abf9b325eae4 100644
+> --- a/drivers/media/usb/em28xx/em28xx-video.c
+> +++ b/drivers/media/usb/em28xx/em28xx-video.c
+> @@ -1897,7 +1897,7 @@ static int vidioc_g_chip_info(struct file *file, void *priv,
+>  		strscpy(chip->name, "ac97", sizeof(chip->name));
+>  	else
+>  		strscpy(chip->name,
+> -			dev->v4l2->v4l2_dev.name, sizeof(chip->name));
+> +			dev->v4l2->v4l2_dev->name, sizeof(chip->name));
+>  	return 0;
+>  }
+>  
+> @@ -2113,21 +2113,6 @@ static int radio_s_tuner(struct file *file, void *priv,
+>  	return 0;
+>  }
+>  
+> -/*
+> - * em28xx_free_v4l2() - Free struct em28xx_v4l2
+> - *
+> - * @ref: struct kref for struct em28xx_v4l2
+> - *
+> - * Called when all users of struct em28xx_v4l2 are gone
+> - */
+> -static void em28xx_free_v4l2(struct kref *ref)
+> -{
+> -	struct em28xx_v4l2 *v4l2 = container_of(ref, struct em28xx_v4l2, ref);
+> -
+> -	v4l2->dev->v4l2 = NULL;
+> -	kfree(v4l2);
+> -}
+> -
+>  /*
+>   * em28xx_v4l2_open()
+>   * inits the device and starts isoc transfer
+> @@ -2153,12 +2138,21 @@ static int em28xx_v4l2_open(struct file *filp)
+>  		return -EINVAL;
+>  	}
+>  
+> +	/* To prevent the case when the v4l2_device_put() has already being called,
+> +	 * the ref is now 0, we call a v4l2_device_get, and end up accessing freed
+> +	 * resources. Or straigth accessing a freed v4l2.
+> +	 */
+> +	if (!v4l2 || !kref_get_unless_zero(&v4l2->v4l2_dev.ref))
+> +		return -ENODEV;
+> +
 
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
-Signed-off-by: Shijie Qin <shijie.qin@nxp.com>
-Signed-off-by: Zhou Peng <eagle.zhou@nxp.com>
----
- drivers/firmware/imx/scu-pd.c | 4 ++++
- 1 file changed, 4 insertions(+)
+This should not be needed: once the video devices are unregistered, it is no longer
+possible to open the video device. So this can't happen.
 
-diff --git a/drivers/firmware/imx/scu-pd.c b/drivers/firmware/imx/scu-pd.c
-index ff6569c4a53b..af3d057e6421 100644
---- a/drivers/firmware/imx/scu-pd.c
-+++ b/drivers/firmware/imx/scu-pd.c
-@@ -155,6 +155,10 @@ static const struct imx_sc_pd_range imx8qxp_scu_pd_ranges[] = {
- 	{ "vpu-pid", IMX_SC_R_VPU_PID0, 8, true, 0 },
- 	{ "vpu-dec0", IMX_SC_R_VPU_DEC_0, 1, false, 0 },
- 	{ "vpu-enc0", IMX_SC_R_VPU_ENC_0, 1, false, 0 },
-+	{ "vpu-enc1", IMX_SC_R_VPU_ENC_1, 1, false, 0 },
-+	{ "vpu-mu0", IMX_SC_R_VPU_MU_0, 1, false, 0 },
-+	{ "vpu-mu1", IMX_SC_R_VPU_MU_1, 1, false, 0 },
-+	{ "vpu-mu2", IMX_SC_R_VPU_MU_2, 1, false, 0 },
- 
- 	/* GPU SS */
- 	{ "gpu0-pid", IMX_SC_R_GPU_0_PID0, 4, true, 0 },
--- 
-2.32.0
+>  	em28xx_videodbg("open dev=%s type=%s users=%d\n",
+>  			video_device_node_name(vdev), v4l2_type_names[fh_type],
+>  			v4l2->users);
+>  
+> -	if (mutex_lock_interruptible(&dev->lock))
+> +	if (mutex_lock_interruptible(&dev->lock)) {
+> +		v4l2_device_put(&v4l2->v4l2_dev);
 
+So this is also not needed...
+
+>  		return -ERESTARTSYS;
+> +	}
+>  
+>  	ret = v4l2_fh_open(filp);
+>  	if (ret) {
+> @@ -2166,6 +2160,7 @@ static int em28xx_v4l2_open(struct file *filp)
+>  			"%s: v4l2_fh_open() returned error %d\n",
+>  		       __func__, ret);
+>  		mutex_unlock(&dev->lock);
+> +		v4l2_device_put(&v4l2->v4l2_dev);
+
+...and neither is this.
+
+>  		return ret;
+>  	}
+>  
+> @@ -2187,8 +2182,6 @@ static int em28xx_v4l2_open(struct file *filp)
+>  		v4l2_device_call_all(&v4l2->v4l2_dev, 0, tuner, s_radio);
+>  	}
+>  
+> -	kref_get(&dev->ref);
+> -	kref_get(&v4l2->ref);
+>  	v4l2->users++;
+>  
+>  	mutex_unlock(&dev->lock);
+> @@ -2222,36 +2215,30 @@ static int em28xx_v4l2_fini(struct em28xx *dev)
+>  
+>  	mutex_lock(&dev->lock);
+>  
+> -	v4l2_device_disconnect(&v4l2->v4l2_dev);
+> -
+>  	em28xx_uninit_usb_xfer(dev, EM28XX_ANALOG_MODE);
+>  
+> -	em28xx_v4l2_media_release(dev);
+> -
+>  	if (video_is_registered(&v4l2->radio_dev)) {
+> -		dev_info(&dev->intf->dev, "V4L2 device %s deregistered\n",
+> +		dev_info(&dev->intf->dev,
+> +			 "V4L2 device %s deregistered\n",
+>  			 video_device_node_name(&v4l2->radio_dev));
+> -		video_unregister_device(&v4l2->radio_dev);
+> +		vb2_video_unregister_device(&v4l2->radio_dev);
+>  	}
+>  	if (video_is_registered(&v4l2->vbi_dev)) {
+> -		dev_info(&dev->intf->dev, "V4L2 device %s deregistered\n",
+> +		dev_info(&dev->intf->dev,
+> +			 "V4L2 device %s deregistered\n",
+>  			 video_device_node_name(&v4l2->vbi_dev));
+> -		video_unregister_device(&v4l2->vbi_dev);
+> +		vb2_video_unregister_device(&v4l2->vbi_dev);
+>  	}
+>  	if (video_is_registered(&v4l2->vdev)) {
+> -		dev_info(&dev->intf->dev, "V4L2 device %s deregistered\n",
+> +		dev_info(&dev->intf->dev,
+> +			 "V4L2 device %s deregistered\n",
+>  			 video_device_node_name(&v4l2->vdev));
+> -		video_unregister_device(&v4l2->vdev);
+> +		vb2_video_unregister_device(&v4l2->vdev);
+>  	}
+>  
+> -	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
+> -	v4l2_device_unregister(&v4l2->v4l2_dev);
+> -
+> -	kref_put(&v4l2->ref, em28xx_free_v4l2);
+> -
+>  	mutex_unlock(&dev->lock);
+>  
+> -	kref_put(&dev->ref, em28xx_free_device);
+> +	v4l2_device_put(&v4l2->v4l2_dev);
+>  
+>  	return 0;
+>  }
+> @@ -2323,9 +2310,8 @@ static int em28xx_v4l2_close(struct file *filp)
+>  
+>  exit:
+>  	v4l2->users--;
+> -	kref_put(&v4l2->ref, em28xx_free_v4l2);
+>  	mutex_unlock(&dev->lock);
+> -	kref_put(&dev->ref, em28xx_free_device);
+> +	v4l2_device_put(&v4l2->v4l2_dev);
+
+...and neither is this v4l2_device_put.
+
+>  
+>  	return 0;
+>  }
+> @@ -2517,6 +2503,28 @@ static void em28xx_tuner_setup(struct em28xx *dev, unsigned short tuner_addr)
+>  	v4l2_device_call_all(v4l2_dev, 0, tuner, s_frequency, &f);
+>  }
+>  
+> +static void em28xx_v4l2_dev_unregister(struct em28xx *dev)
+> +{
+> +	struct em28xx_v4l2 *v4l2 = dev->v4l2;
+> +
+> +	v4l2_device_unregister(&v4l2->v4l2_dev);
+> +	em28xx_v4l2_media_release(dev);
+> +	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
+> +}
+> +
+> +static void em28xx_v4l2_dev_release(struct v4l2_device *v4l2_dev)
+> +{
+> +	struct em28xx *dev = v4l2_dev->dev->driver_data;
+> +
+> +	mutex_lock(&dev->lock);
+> +	em28xx_v4l2_dev_unregister(dev);
+> +	kfree(dev->v4l2);
+> +	dev->v4l2 = NULL;
+> +	mutex_unlock(&dev->lock);
+> +
+> +	kref_put(&dev->ref, em28xx_free_device);
+> +}
+> +
+>  static int em28xx_v4l2_init(struct em28xx *dev)
+>  {
+>  	u8 val;
+> @@ -2524,6 +2532,7 @@ static int em28xx_v4l2_init(struct em28xx *dev)
+>  	unsigned int maxw;
+>  	struct v4l2_ctrl_handler *hdl;
+>  	struct em28xx_v4l2 *v4l2;
+> +	struct v4l2_subdev *sd;
+>  
+>  	if (dev->is_audio_only) {
+>  		/* Shouldn't initialize IR for this interface */
+> @@ -2541,12 +2550,13 @@ static int em28xx_v4l2_init(struct em28xx *dev)
+>  
+>  	v4l2 = kzalloc(sizeof(*v4l2), GFP_KERNEL);
+>  	if (!v4l2) {
+> -		mutex_unlock(&dev->lock);
+> -		return -ENOMEM;
+> +		ret = -ENOMEM;
+> +		goto err;
+>  	}
+> -	kref_init(&v4l2->ref);
+> +
+>  	v4l2->dev = dev;
+>  	dev->v4l2 = v4l2;
+> +	v4l2->v4l2_dev.release = em28xx_v4l2_dev_release;
+>  
+>  #ifdef CONFIG_MEDIA_CONTROLLER
+>  	v4l2->v4l2_dev.mdev = dev->media_dev;
+> @@ -2555,7 +2565,7 @@ static int em28xx_v4l2_init(struct em28xx *dev)
+>  	if (ret < 0) {
+>  		dev_err(&dev->intf->dev,
+>  			"Call to v4l2_device_register() failed!\n");
+> -		goto err;
+> +		goto free_v4l2;
+>  	}
+>  
+>  	hdl = &v4l2->ctrl_handler;
+> @@ -2574,25 +2584,53 @@ static int em28xx_v4l2_init(struct em28xx *dev)
+>  
+>  	/* request some modules */
+>  
+> -	if (dev->has_msp34xx)
+> -		v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> -				    &dev->i2c_adap[dev->def_i2c_bus],
+> -				    "msp3400", 0, msp3400_addrs);
+> +	if (dev->has_msp34xx) {
+> +		sd = v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> +					 &dev->i2c_adap[dev->def_i2c_bus],
+> +					 "msp3400", 0, msp3400_addrs);
+> +		if (!sd) {
+> +			dev_err(&dev->intf->dev,
+> +				"Error while registering 'msp34xx' v4l2 subdevice!\n");
+> +			ret = -EINVAL;
+> +			goto unregister_dev;
+> +		}
+> +	}
+>  
+> -	if (dev->board.decoder == EM28XX_SAA711X)
+> -		v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> -				    &dev->i2c_adap[dev->def_i2c_bus],
+> -				    "saa7115_auto", 0, saa711x_addrs);
+> +	if (dev->board.decoder == EM28XX_SAA711X) {
+> +		sd = v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> +					 &dev->i2c_adap[dev->def_i2c_bus],
+> +					 "saa7115_auto", 0, saa711x_addrs);
+> +		if (!sd) {
+> +			dev_err(&dev->intf->dev,
+> +				"Error while registering 'EM28XX_SAA711X' v4l2 subdevice!\n");
+> +			ret = -EINVAL;
+> +			goto unregister_dev;
+> +		}
+> +	}
+>  
+> -	if (dev->board.decoder == EM28XX_TVP5150)
+> -		v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> -				    &dev->i2c_adap[dev->def_i2c_bus],
+> -				    "tvp5150", 0, tvp5150_addrs);
+> +	if (dev->board.decoder == EM28XX_TVP5150) {
+> +		sd = v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> +					 &dev->i2c_adap[dev->def_i2c_bus],
+> +					 "tvp5150", 0, tvp5150_addrs);
+> +		if (!sd) {
+> +			dev_err(&dev->intf->dev,
+> +				"Error while registering 'EM28XX_TVP5150' v4l2 subdevice!\n");
+> +			ret = -EINVAL;
+> +			goto unregister_dev;
+> +		}
+> +	}
+>  
+> -	if (dev->board.adecoder == EM28XX_TVAUDIO)
+> -		v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> -				    &dev->i2c_adap[dev->def_i2c_bus],
+> -				    "tvaudio", dev->board.tvaudio_addr, NULL);
+> +	if (dev->board.adecoder == EM28XX_TVAUDIO) {
+> +		sd = v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> +					 &dev->i2c_adap[dev->def_i2c_bus],
+> +					 "tvaudio", dev->board.tvaudio_addr, NULL);
+> +		if (!sd) {
+> +			dev_err(&dev->intf->dev,
+> +				"Error while registering 'EM28XX_TVAUDIO' v4l2 subdevice!\n");
+> +			ret = -EINVAL;
+> +			goto unregister_dev;
+> +		}
+> +	}
+>  
+>  	/* Initialize tuner and camera */
+>  
+> @@ -2600,33 +2638,63 @@ static int em28xx_v4l2_init(struct em28xx *dev)
+>  		unsigned short tuner_addr = dev->board.tuner_addr;
+>  		int has_demod = (dev->board.tda9887_conf & TDA9887_PRESENT);
+>  
+> -		if (dev->board.radio.type)
+> -			v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> -					    &dev->i2c_adap[dev->def_i2c_bus],
+> -					    "tuner", dev->board.radio_addr,
+> -					    NULL);
+> -
+> -		if (has_demod)
+> -			v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> -					    &dev->i2c_adap[dev->def_i2c_bus],
+> -					    "tuner", 0,
+> -					    v4l2_i2c_tuner_addrs(ADDRS_DEMOD));
+> +		if (dev->board.radio.type) {
+> +			sd = v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> +						 &dev->i2c_adap[dev->def_i2c_bus],
+> +						 "tuner", dev->board.radio_addr,
+> +						 NULL);
+> +			if (!sd) {
+> +				dev_err(&dev->intf->dev,
+> +					"Error while registering '%s' v4l2 subdevice!\n",
+> +					 dev->board.name);
+> +				ret = -EINVAL;
+> +				goto unregister_dev;
+> +			}
+> +		}
+> +
+> +		if (has_demod) {
+> +			sd = v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> +						 &dev->i2c_adap[dev->def_i2c_bus],
+> +						 "tuner", 0,
+> +						 v4l2_i2c_tuner_addrs(ADDRS_DEMOD));
+> +			if (!sd) {
+> +				dev_err(&dev->intf->dev,
+> +					"Error while registering '%s' v4l2 subdevice!\n",
+> +					 dev->i2c_adap[dev->def_i2c_bus].name);
+> +				ret = -EINVAL;
+> +				goto unregister_dev;
+> +			}
+> +		}
+> +
+>  		if (tuner_addr == 0) {
+>  			enum v4l2_i2c_tuner_type type =
+>  				has_demod ? ADDRS_TV_WITH_DEMOD : ADDRS_TV;
+> -			struct v4l2_subdev *sd;
+>  
+>  			sd = v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+>  						 &dev->i2c_adap[dev->def_i2c_bus],
+>  						 "tuner", 0,
+>  						 v4l2_i2c_tuner_addrs(type));
+> -
+> -			if (sd)
+> +			if (sd) {
+>  				tuner_addr = v4l2_i2c_subdev_addr(sd);
+> +			} else {
+> +				dev_err(&dev->intf->dev,
+> +					"Error while registering '%s' v4l2 subdevice!\n",
+> +					 dev->i2c_adap[dev->def_i2c_bus].name);
+> +				ret = -EINVAL;
+> +				goto unregister_dev;
+> +			}
+> +
+>  		} else {
+> -			v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> -					    &dev->i2c_adap[dev->def_i2c_bus],
+> -					    "tuner", tuner_addr, NULL);
+> +			sd = v4l2_i2c_new_subdev(&v4l2->v4l2_dev,
+> +						 &dev->i2c_adap[dev->def_i2c_bus],
+> +						 "tuner", tuner_addr, NULL);
+> +			if (!sd) {
+> +				dev_err(&dev->intf->dev,
+> +					"Error while registering '%s' v4l2 subdevice!\n",
+> +					 dev->i2c_adap[dev->def_i2c_bus].name);
+> +				ret = -EINVAL;
+> +				goto unregister_dev;
+> +			}
+>  		}
+>  
+>  		em28xx_tuner_setup(dev, tuner_addr);
+> @@ -2755,7 +2823,6 @@ static int em28xx_v4l2_init(struct em28xx *dev)
+>  	if (ret)
+>  		goto unregister_dev;
+>  
+> -	/* allocate and fill video video_device struct */
+>  	em28xx_vdev_init(dev, &v4l2->vdev, &em28xx_video_template, "video");
+>  	mutex_init(&v4l2->vb_queue_lock);
+>  	mutex_init(&v4l2->vb_vbi_queue_lock);
+> @@ -2768,7 +2835,6 @@ static int em28xx_v4l2_init(struct em28xx *dev)
+>  	if (dev->tuner_type != TUNER_ABSENT)
+>  		v4l2->vdev.device_caps |= V4L2_CAP_TUNER;
+>  
+> -
+>  	/* disable inapplicable ioctls */
+>  	if (dev->is_webcam) {
+>  		v4l2_disable_ioctl(&v4l2->vdev, VIDIOC_QUERYSTD);
+> @@ -2889,26 +2955,26 @@ static int em28xx_v4l2_init(struct em28xx *dev)
+>  		dev_info(&dev->intf->dev,
+>  			 "V4L2 device %s deregistered\n",
+>  			 video_device_node_name(&v4l2->radio_dev));
+> -		video_unregister_device(&v4l2->radio_dev);
+> +		vb2_video_unregister_device(&v4l2->radio_dev);
+>  	}
+>  	if (video_is_registered(&v4l2->vbi_dev)) {
+>  		dev_info(&dev->intf->dev,
+>  			 "V4L2 device %s deregistered\n",
+>  			 video_device_node_name(&v4l2->vbi_dev));
+> -		video_unregister_device(&v4l2->vbi_dev);
+> +		vb2_video_unregister_device(&v4l2->vbi_dev);
+>  	}
+>  	if (video_is_registered(&v4l2->vdev)) {
+>  		dev_info(&dev->intf->dev,
+>  			 "V4L2 device %s deregistered\n",
+>  			 video_device_node_name(&v4l2->vdev));
+> -		video_unregister_device(&v4l2->vdev);
+> +		vb2_video_unregister_device(&v4l2->vdev);
+>  	}
+>  
+> -	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
+> -	v4l2_device_unregister(&v4l2->v4l2_dev);
+> -err:
+> +	em28xx_v4l2_dev_unregister(dev);
+> +free_v4l2:
+> +	kfree(v4l2);
+>  	dev->v4l2 = NULL;
+> -	kref_put(&v4l2->ref, em28xx_free_v4l2);
+> +err:
+>  	mutex_unlock(&dev->lock);
+>  	return ret;
+>  }
+> diff --git a/drivers/media/usb/em28xx/em28xx.h b/drivers/media/usb/em28xx/em28xx.h
+> index ab167cd1f400..666b7eff55f4 100644
+> --- a/drivers/media/usb/em28xx/em28xx.h
+> +++ b/drivers/media/usb/em28xx/em28xx.h
+> @@ -549,7 +549,6 @@ struct em28xx_eeprom {
+>  #define EM28XX_RESOURCE_VBI   0x02
+>  
+>  struct em28xx_v4l2 {
+> -	struct kref ref;
+>  	struct em28xx *dev;
+>  
+>  	struct v4l2_device v4l2_dev;
+> 
+
+With the suggested changes it should be ready (pending testing on my side).
+
+Regards,
+
+	Hans
