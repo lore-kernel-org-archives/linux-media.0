@@ -2,300 +2,107 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B462C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 13:41:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DB83C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 15:26:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4391C613E6
-	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 13:41:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1E3761056
+	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 15:26:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243368AbhIMNmP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Sep 2021 09:42:15 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:33367 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243114AbhIMNjO (ORCPT
+        id S233779AbhIMP1y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Sep 2021 11:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229685AbhIMP1o (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Sep 2021 09:39:14 -0400
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id E0C1E60007;
-        Mon, 13 Sep 2021 13:37:54 +0000 (UTC)
-Date:   Mon, 13 Sep 2021 15:38:41 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>
-Subject: Re: [PATCH v8 03/36] media: subdev: add 'which' to subdev state
-Message-ID: <20210913133841.nck65h2ft4hfnbg5@uno.localdomain>
-References: <20210830110116.488338-1-tomi.valkeinen@ideasonboard.com>
- <20210830110116.488338-4-tomi.valkeinen@ideasonboard.com>
- <20210913114154.ovffxjoghgdud4js@uno.localdomain>
- <0733ae28-bcd9-6dc8-fb6a-0fa43beb1191@ideasonboard.com>
+        Mon, 13 Sep 2021 11:27:44 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D22C0FA0B3
+        for <linux-media@vger.kernel.org>; Mon, 13 Sep 2021 07:24:53 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id m11so12299167ioo.6
+        for <linux-media@vger.kernel.org>; Mon, 13 Sep 2021 07:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=y4Lq9CmvVcXXhPkYqU8poyyam6g50FxqVLy0oSkOGwo=;
+        b=cr3Szu2PZkLNoOgq0/pNUQ7Fj5694Bo2qV8vrVedRjJCfzgGVXOzeEYVheg4ZPxGEv
+         3aCVgAf9I5Kz+XUoyOocmaSYPYPnbuPvwm8fGpvMCuWC0o+1E+mXMACJtVgk0uIJUU9h
+         t/yXY9ZSwWjKUjFKgM4E6NRaTZTBoBrpKixGs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=y4Lq9CmvVcXXhPkYqU8poyyam6g50FxqVLy0oSkOGwo=;
+        b=tTBH+VoXAdiLteaoImIna1O8FNYt0a/ubBbolKTtNXt3QS6Kh1qQS0N/haYjzgyxR5
+         6qjKKtiYIBhf0iy5Vu5OlPG92USM+No2MVeA1+dNyax3MqcuvhcXMJXKk/WO/T0HEMeK
+         wVqhoTE1nWSw8AJrMf8B2Mcsbmar+ptdIRrZyggW95ZvT1/fFmsWbjdVPobmIH1Gxa9p
+         ZymNjmOq+s7s+E9ZhfRe9cuGGeVVUXWgM7lxVMjOdQiJB4zAZJ0Qm+kmia5caMBDRXBM
+         hqSb5d7cAiurDi74MTrbQA1EOSuhZCYqDD8Z9ln7s7TU8X8hhtGYrhxxkRxtiDwnrM9D
+         NlZw==
+X-Gm-Message-State: AOAM5305hfaefb6L6ffV5J3Xx/q5jg8DQ/UOh9bS6qARlbKSKjoU/tA4
+        r6Uonusw2GOqPod0Ic74Mw82ZQ==
+X-Google-Smtp-Source: ABdhPJx/eqqIB4vBAz8lHgsBf/5IFCa6nkTSnkdfc1eI2EY+xn1/EEl30qUR5S0dnd5MPZmncifOqg==
+X-Received: by 2002:a05:6638:1301:: with SMTP id r1mr10200622jad.32.1631543093348;
+        Mon, 13 Sep 2021 07:24:53 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id w3sm4899283ilc.23.2021.09.13.07.24.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Sep 2021 07:24:52 -0700 (PDT)
+Subject: Re: [PATCH] media: atomisp: fix control reaches end of non-void
+ function error
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        gregkh@linuxfoundation.org, paskripkin@gmail.com,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210910223700.32494-1-skhan@linuxfoundation.org>
+ <20210913084102.GF7203@kadam>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <7f1c09f9-49e1-718b-329c-aae9d2f69266@linuxfoundation.org>
+Date:   Mon, 13 Sep 2021 08:24:51 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0733ae28-bcd9-6dc8-fb6a-0fa43beb1191@ideasonboard.com>
+In-Reply-To: <20210913084102.GF7203@kadam>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tomi,
+On 9/13/21 2:41 AM, Dan Carpenter wrote:
+> On Fri, Sep 10, 2021 at 04:37:00PM -0600, Shuah Khan wrote:
+>> Fix the following build error with -Werror=return-type enabled. Fix
+>> input_system_configure_channel_sensor() to return status when control
+>> reaches the end.
+>>
+>> drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.o
+>> drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c: In function ‘input_system_configure_channel_sensor’:
+>> drivers/staging/media/atomisp/pci/hive_isp_css_common/host/input_system.c:1649:1: error: control reaches end of non-void function [-Werror=return-type]
+>>   1649 | }
+>>
+>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> 
+> Hi Shuah,
+> 
+> You're the third person to send this patch recently but it was fixed on
+> Aug 2 in staging-next in commit 05344a1d2ea7 ("media: atomisp: restore
+> missing 'return' statement").  What tree are you working against?  It
+> seems like it needs to be backported somewhere.
+> 
 
-On Mon, Sep 13, 2021 at 03:17:01PM +0300, Tomi Valkeinen wrote:
-> On 13/09/2021 14:41, Jacopo Mondi wrote:
-> > Hi Tomi,
-> >
-> > On Mon, Aug 30, 2021 at 02:00:43PM +0300, Tomi Valkeinen wrote:
-> > > The subdev state is passed to functions in the media drivers, and
-> > > usually either V4L2_SUBDEV_FORMAT_ACTIVE or V4L2_SUBDEV_FORMAT_TRY is
-> > > also given to the function in one way or another.
-> > >
-> > > One op where this is not the case is v4l2_subdev_pad_ops.init_cfg. One
-> > > could argue that the initialization of the state should be the same for
-> > > both ACTIVE and TRY cases, but unfortunately that is not the case:
-> > >
-> > > - Some drivers do also other things than just touch the state when
-> > > dealing with ACTIVE, e.g. if there is extra state outside the standard
-> > > subdev state.
-> > > - Some drivers might need to create, say, struct v4l2_subdev_format
-> > > which has 'which' field, and that needs to be filled with either ACTIVE
-> > > or TRY.
-> > >
-> > > Currently init_cfg is only called for TRY case from the v4l2 framework,
-> > > passing the TRY state. Some drivers call their own init_cfg, passing
-> > > NULL as the state, which is used to indicate ACTIVE case.
-> > >
-> > > In the future we want to pass subdev's active state from the v4l2
-> > > framework side, so we need a solution to this.
-> > >
-> > > We could change the init_cfg() to include the TRY/ACTIVE value, which
-> > > would require changing more or less all the drivers. Instead, I have
-> > > added 'which' field to the subdev state itself, filled at state
-> > > allocation time, which only requires changes to the drivers that
-> > > allocate a state themselves.
-> > >
-> > > Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> > > ---
-> > >   drivers/media/platform/rcar-vin/rcar-v4l2.c |  2 +-
-> > >   drivers/media/platform/vsp1/vsp1_entity.c   |  2 +-
-> > >   drivers/media/v4l2-core/v4l2-subdev.c       | 10 +++++++---
-> > >   drivers/staging/media/tegra-video/vi.c      |  2 +-
-> > >   include/media/v4l2-subdev.h                 |  7 ++++++-
-> > >   5 files changed, 16 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-> > > index 5f4fa8c48f68..1de30d5b437f 100644
-> > > --- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
-> > > +++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-> > > @@ -252,7 +252,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
-> > >   	u32 width, height;
-> > >   	int ret;
-> > >
-> > > -	sd_state = v4l2_alloc_subdev_state(sd);
-> > > +	sd_state = v4l2_alloc_subdev_state(sd, V4L2_SUBDEV_FORMAT_ACTIVE);
-> >
-> > Shouldn't the 'which' parameters be used to decide if either ACTIVE or
-> > TRY have to be used ? this function is also used to set TRY formats,
-> > in example...
-> >
-> > Oh, maybe I got how it works, the state's which is not
-> > relevant but the v4l2_subdev_format's which is, as it will be used in
-> > the next patch to decide if the subdev's state of the file-handle's
-> > state should be passed to the ioctl.
->
-> Yes. It's messy, but it's how it worked before also.
->
-> The drivers can't really allocate TRY state as it must come from the core,
-> based on the filehandle. Now as I say that, makes me wonder why even expose
-> the option to drivers. Maybe v4l2_alloc_subdev_state() should take just the
-> sd parameter, and always allocate ACTIVE state, and the v4l2 core can use
-> another way to create the TRY state.
->
+I am working on Linux 5.15 - should have checked staging next though before
+sending the patch :)
 
-init_cfg() as well as other operations used to received an
-array of per fh's pad_configs, and the sd pointer itself. The fh's pad
-configs were allocated by the core, as well as the core now allocates
-the per-fh's state.
+thanks,
+-- Shuah
 
-Before the introduction of 'state', if the 'which' flags was set to
-TRY then information were stored/retrieved/initialized in the per-fh
-pad_config, otherwise the active configuration (usually stored in the
-driver main structure) was used.
-
-So we had a clear separation of per-fh information and the active
-state. The core didn't care afaict, and passed in both, then driver had
-to deal with them doing the right thing by inspecting the 'which' flag.
-
-The typical pattern was:
-
-        static int subdev_ops(sd, pad_cfg, which)
-        {
-                if (which == TRY)
-                        /* Operate on config stored in pad_cfg */
-
-                else
-                        /*
-                         * Operate on config stored in subdev (and
-                         * applied to HW)
-                         */
-        }
-
-Or am I overlooking some cases or do you agree with my understanding
-so far ?
-
-Now we have a 'state' that holds the array of pad_configs and along
-the continuation of the series will end up holding per-pad
-configurations.
-
-We now also have one 'state' per file-handle, and one
-per-subdev. As I see this, it would be natual for drivers to receive
-one state without knowing where it comes from. In the next patch you
-instrument the core to do exactly this: inspect the which flag and
-pass in the 'right' state. Ofc drivers need to have access to 'which'
-to know if they have to apply settings to the HW or not.
-
-Looking ahead in your series I see these structures:
-
-        struct v4l2_subdev_pad_config {
-                struct v4l2_mbus_framefmt try_fmt;
-                struct v4l2_rect try_crop;
-                struct v4l2_rect try_compose;
-        };
-
-        struct v4l2_subdev_stream_config {
-                u32 pad;
-                u32 stream;
-
-                struct v4l2_mbus_framefmt fmt;
-                struct v4l2_rect crop;
-                struct v4l2_rect compose;
-        };
-
-        struct v4l2_subdev_stream_configs {
-                u32 num_configs;
-                struct v4l2_subdev_stream_config *configs;
-        };
-
-All of them part of state:
-
-struct v4l2_subdev_state {
-	struct mutex lock;
-	u32 which;
-	struct v4l2_subdev_pad_config *pads;
-	struct v4l2_subdev_krouting routing;
-	struct v4l2_subdev_stream_configs stream_configs;
-};
-
-So 'state' will hold 'TRY' information (only used for 'state'
-instances allocated in the fh) and 'ACTIVE' ones (used for states
-allocated in the sd).
-
-Looking at 'v4l2_subdev_pad_config' and 'v4l2_subdev_stream_config' they
-seem to describe more or less the same things: fmt, crop and compose
-(per pad-stream in case of stream_config). I wonder if those shouldn't
-be unified so that:
-
-1) Drivers receive one state: the core passes in the 'correct' one
-(per-fh or per-sd) as you do in next patch
-2) The 'which' information is not stored in the state but it's only
-'contextual' (as in a parameter to the subdev operation) so that
-drivers inspect it to know if they have to apply settings to hw or not
-3) v4l2_subdev_pad_config can be re-used and expanded, to maintain per-pad
-configurations regardless if they're ACTIVE or TRY, as this only depends
-on where the state is stored.
-
-As I immagine it a subdev pad operation could look like:
-
-        static int subdev_op(sd, pad, state, which, ...)
-        {
-                /* Doesn't matter if state is per-fh or the sd one. */
-                state->pads[pad].fmt = ....;
-
-                if (which == TRY)
-                        return;
-
-                /* Apply to the HW. */
-        }
-
-Does it make any sense to you ? I might have missed some reason why
-this is not possible.
-
-> > >   	if (IS_ERR(sd_state))
-> > >   		return PTR_ERR(sd_state);
-> > >
-> > > diff --git a/drivers/media/platform/vsp1/vsp1_entity.c b/drivers/media/platform/vsp1/vsp1_entity.c
-> > > index e40bca254b8b..63ea5e472c33 100644
-> > > --- a/drivers/media/platform/vsp1/vsp1_entity.c
-> > > +++ b/drivers/media/platform/vsp1/vsp1_entity.c
-> > > @@ -675,7 +675,7 @@ int vsp1_entity_init(struct vsp1_device *vsp1, struct vsp1_entity *entity,
-> > >   	 * Allocate the pad configuration to store formats and selection
-> > >   	 * rectangles.
-> > >   	 */
-> > > -	entity->config = v4l2_alloc_subdev_state(&entity->subdev);
-> > > +	entity->config = v4l2_alloc_subdev_state(&entity->subdev, V4L2_SUBDEV_FORMAT_ACTIVE);
-> > >   	if (IS_ERR(entity->config)) {
-> > >   		media_entity_cleanup(&entity->subdev.entity);
-> > >   		return PTR_ERR(entity->config);
-> > > diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-> > > index e1a794f69815..04ad319fb150 100644
-> > > --- a/drivers/media/v4l2-core/v4l2-subdev.c
-> > > +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-> > > @@ -28,7 +28,7 @@ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
-> > >   {
-> > >   	struct v4l2_subdev_state *state;
-> > >
-> > > -	state = v4l2_alloc_subdev_state(sd);
-> > > +	state = v4l2_alloc_subdev_state(sd, V4L2_SUBDEV_FORMAT_TRY);
-> >
-> > At the same time I'm not sure I get the purpose of this. Don't
-> > init_cfg() callback implementations deal with try formats themeselves
-> > ? I mean, it's not a fixed rule, they can as well initialize their
-> > default 'active' formats, but what matters is that they initialize
-> > their per-fh try states ?
->
-> That is what they do currently. init_cfg() only deals with TRY state, as
-> that's the only "state" (i.e. pad_config) there used to be from v4l2 core's
-> perspective.
->
-> > Shouldn't init_cfg receive the fh's state so that it can initialize
-> > it, and just in case they need to, access their subdev's state and
-> > initialize them ? I'm missing what the purpose of the flag is tbh.
->
-> Now we have (a possibility to have) state for both TRY and ACTIVE on the
-> v4l2 core side. The active state has to be initialized also, and a logical
-> way to do that is to use the init_cfg().
-
-The 'ACTIVE' state is stored in the subdev, to which init_cfg() has
-access, and it receives the 'TRY' state as a parameter.
-
-It is possible to access both states and initialize them properly if
-I'm not mistaken.
-
->
-> So now, for drivers that support the new active state, init_cfg() can get
-> either TRY or ACTIVE state. And if you want to call, say, the driver's
-> set_routing() to setup the routing in the state, you have to set the 'which'
-> in the routing struct to a value. So somehow init_cfg needs to know if it's
-> initializing an ACTIVE or TRY state.
-
-I'm not sure I got this part. set_routing() as other ops will receive
-a state and 'which'. If my proposal above makes sensem where the state
-comes from (aka it's TRY or ACTIVE) it's not relevant for the driver.
-
-Ofc init_cfg() should have initialized both states opportunely, but
-that's the case today as well.
-
-Thanks
-  j
-
->
->  Tomi
