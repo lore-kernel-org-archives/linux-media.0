@@ -8,64 +8,64 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 189A4C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 13:30:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FC8CC433EF
+	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 13:30:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0433561502
-	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 13:30:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C6BD61359
+	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 13:30:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241092AbhIMNbg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Sep 2021 09:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58272 "EHLO
+        id S238400AbhIMNbl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Sep 2021 09:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240043AbhIMNTx (ORCPT
+        with ESMTP id S240003AbhIMNTx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 13 Sep 2021 09:19:53 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709ACC061786
-        for <linux-media@vger.kernel.org>; Mon, 13 Sep 2021 06:17:33 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id x6so14629206wrv.13
-        for <linux-media@vger.kernel.org>; Mon, 13 Sep 2021 06:17:33 -0700 (PDT)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A92C0613E6
+        for <linux-media@vger.kernel.org>; Mon, 13 Sep 2021 06:17:25 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id d6so14631726wrc.11
+        for <linux-media@vger.kernel.org>; Mon, 13 Sep 2021 06:17:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sKcmOjs+nnoTfTMzj1B5wwjzz9EHhzICWjOSUDa4Z8U=;
-        b=nBPqCuTA/TC2qVnaVxCbTiYSf/S2Zb+rPI3NMesDDCkuCLK6GhnykrXk2iMYKdSdT1
-         jvPsOLCrv2QnGCs4MxccvHdcgMir8VwtF8aB35eDL1jKIc2IhHVRj6bnTtWyN7WQV28X
-         EXCaP1pbmof5OEUYC6IXxSI5P9/RjqqhzG0gvV09dp/aonbhLWGKRjt40FZ10nAA9aN0
-         xEOyQS0g4JwN98ffF/JVBgZs6jXfF0J4uPfsjmHBggroCU5cHYtt1pPnadRl4cMs+W04
-         Hg9Pfu7wtmSxrbMAlBBbwP74P3dl+SpST7alSOENKz66OCpJJQA8a5J5aELwnIkgm1h0
-         vqUA==
+        bh=E+vlHAHze2GbFEMjJ18FaF4XzFbDHKUq0E4VCOiUNuo=;
+        b=cIaoNW7Pu71uAxZQrsu/xnmOwW4Bc5B869gtUROGkegEYgkxFg9VkD02qtnGbmKz0l
+         r7HD1XwBYzQRvbt9qjF9ccsBOGjHtODOy1AGr44+JhyEb4vjHPFdomDedOEniYh8bB6V
+         MdVentOMB0CkWNarQsEwl5Ru0CWRr4J+NntBzk7mFYxorok6dnYsv76Wg769nN/H20K/
+         zStSwZi9jLzed5G+TRqiV2gHKeqm+0K5eGXNCgISkxmzGkQ4kdBAP6xnUdFrxpYAFHPh
+         hGGEAXtwTeUE3L50+GZR/39vCe/CboqjmHuMMYpcZflJl0+JS7herysbSicpKlD1gBg0
+         NloQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sKcmOjs+nnoTfTMzj1B5wwjzz9EHhzICWjOSUDa4Z8U=;
-        b=LB3WuMGECYFEAGmT2wZa+vFJ9+aPEoBtJHTKte/VuR7WK80LcU7hv6tTOws40sg+XE
-         8KoR2F3iU5pEKmlPaemwrlsgZ+YPj12GFIqoMSYWRlAgj4XJ0e3aTHqh07J6UmiZiuDk
-         ponYJ6VWuI6QOrzc4bJpSU4TO1SqbCcA0gErHl2eSrQ4Ge7rKiQ1wQdSOUGxjzSDL+ys
-         1wLIpME3Lw6///QVOuzhEts+qFHtyUlAsUD8IDNJ2a/S0G5VzDNNLOD99WqSawwVfNGG
-         s5P09bkqr/5uMpLaERkwato+AeLNsGm/sobdkd8WZBUh9JJp5SUH3PBCi7WtwZLpmNoZ
-         XO5Q==
-X-Gm-Message-State: AOAM533wdssup1d7XvIfHzFTZKQbxKm78lRf9wKu9Us24iDRLUH1GQkf
-        km8WA+WiipUbVYafOYBaRRQ=
-X-Google-Smtp-Source: ABdhPJxsd5NTCKCjaeMUfEJLxSPuesNlwu+JoEsLMfvIj+y4YAP3U29/E88Z+2CBo6RfJbhW863CUw==
-X-Received: by 2002:adf:ce89:: with SMTP id r9mr9242218wrn.238.1631539052126;
-        Mon, 13 Sep 2021 06:17:32 -0700 (PDT)
+        bh=E+vlHAHze2GbFEMjJ18FaF4XzFbDHKUq0E4VCOiUNuo=;
+        b=m6UohxA7RpMma8ebA0HsA9DvEVbVY/MQXSP6cH4hgfJapYvlf3YRvc7K/wJvZWLcWE
+         PLom4qjVlEDN1fzV8/Cj1PEQtbVvpSiVeSjJjCA0G67wd59nKjZvqAagQu+XwWNZscd2
+         hrETDoIEcs7NMaqNWXq+YEr2rJWoD/ZKOgzFjMYFhXGM+q0km2Zyv7iOIcglsEOv2Rva
+         a0837abdfWAi41/8TQNRO4oj2Vs4QPwkKJ3luvj1Yqtr7i7iB0ZQoUa8t5JVufY3DOpO
+         RQqf857ykpHFWSXDi8VhY+pvejPYw6kLZWdcL7PSxAW8WkbftBgYu6ONYEVJmO61d7cY
+         ecwg==
+X-Gm-Message-State: AOAM533QwJSUKz9N/KDNF5Qk6fm3UV9+OnDUAe5wgtARGBIURHx7tgvz
+        aH84uQSGSsxXTvfbR+34zme0OAwF/l4MNzDj
+X-Google-Smtp-Source: ABdhPJxLsXI8wPKkwytM0i7YOK1uTgTTkrkYfOP7JpKZmiofMgoeOrjtHMbPc5TauiHJ7pU4s2Wl/A==
+X-Received: by 2002:a5d:4a4e:: with SMTP id v14mr12452364wrs.271.1631539044369;
+        Mon, 13 Sep 2021 06:17:24 -0700 (PDT)
 Received: from abel.fritz.box (p5b0ea1b5.dip0.t-ipconnect.de. [91.14.161.181])
-        by smtp.gmail.com with ESMTPSA id h18sm7602834wrb.33.2021.09.13.06.17.30
+        by smtp.gmail.com with ESMTPSA id h18sm7602834wrb.33.2021.09.13.06.17.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Sep 2021 06:17:31 -0700 (PDT)
+        Mon, 13 Sep 2021 06:17:24 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org
 Cc:     daniel@ffwll.ch, intel-gfx@lists.freedesktop.org
-Subject: [PATCH 15/26] drm/i915: use the new iterator in i915_request_await_object
-Date:   Mon, 13 Sep 2021 15:16:56 +0200
-Message-Id: <20210913131707.45639-16-christian.koenig@amd.com>
+Subject: [PATCH 09/26] drm/amdgpu: use new iterator in amdgpu_ttm_bo_eviction_valuable
+Date:   Mon, 13 Sep 2021 15:16:50 +0200
+Message-Id: <20210913131707.45639-10-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210913131707.45639-1-christian.koenig@amd.com>
 References: <20210913131707.45639-1-christian.koenig@amd.com>
@@ -80,59 +80,43 @@ Simplifying the code a bit.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/gpu/drm/i915/i915_request.c | 36 ++++++-----------------------
- 1 file changed, 7 insertions(+), 29 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
-index 37aef1308573..b81045ceb619 100644
---- a/drivers/gpu/drm/i915/i915_request.c
-+++ b/drivers/gpu/drm/i915/i915_request.c
-@@ -1583,38 +1583,16 @@ i915_request_await_object(struct i915_request *to,
- 			  struct drm_i915_gem_object *obj,
- 			  bool write)
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+index 489e22190e29..0a927006ba9c 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+@@ -1332,10 +1332,9 @@ static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+ 					    const struct ttm_place *place)
  {
--	struct dma_fence *excl;
-+	struct dma_resv_cursor cursor;
-+	struct dma_fence *fence;
- 	int ret = 0;
+ 	unsigned long num_pages = bo->resource->num_pages;
++	struct dma_resv_cursor resv_cursor;
+ 	struct amdgpu_res_cursor cursor;
+-	struct dma_resv_list *flist;
+ 	struct dma_fence *f;
+-	int i;
  
--	if (write) {
--		struct dma_fence **shared;
--		unsigned int count, i;
--
--		ret = dma_resv_get_fences(obj->base.resv, &excl, &count,
--					  &shared);
--		if (ret)
--			return ret;
--
--		for (i = 0; i < count; i++) {
--			ret = i915_request_await_dma_fence(to, shared[i]);
--			if (ret)
--				break;
--
--			dma_fence_put(shared[i]);
-+	dma_resv_for_each_fence_unlocked(obj->base.resv, &cursor, write, fence) {
-+		ret = i915_request_await_dma_fence(to, fence);
-+		if (ret) {
-+			dma_fence_put(fence);
-+			break;
- 		}
--
--		for (; i < count; i++)
--			dma_fence_put(shared[i]);
--		kfree(shared);
--	} else {
--		excl = dma_resv_get_excl_unlocked(obj->base.resv);
--	}
--
--	if (excl) {
--		if (ret == 0)
--			ret = i915_request_await_dma_fence(to, excl);
--
--		dma_fence_put(excl);
+ 	/* Swapout? */
+ 	if (bo->resource->mem_type == TTM_PL_SYSTEM)
+@@ -1349,14 +1348,9 @@ static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+ 	 * If true, then return false as any KFD process needs all its BOs to
+ 	 * be resident to run successfully
+ 	 */
+-	flist = dma_resv_shared_list(bo->base.resv);
+-	if (flist) {
+-		for (i = 0; i < flist->shared_count; ++i) {
+-			f = rcu_dereference_protected(flist->shared[i],
+-				dma_resv_held(bo->base.resv));
+-			if (amdkfd_fence_check_mm(f, current->mm))
+-				return false;
+-		}
++	dma_resv_for_each_fence(bo->base.resv, &resv_cursor, true, f) {
++		if (amdkfd_fence_check_mm(f, current->mm))
++			return false;
  	}
  
- 	return ret;
+ 	switch (bo->resource->mem_type) {
 -- 
 2.25.1
 
