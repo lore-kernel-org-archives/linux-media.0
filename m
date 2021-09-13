@@ -2,122 +2,231 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEFDEC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 12:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E56AAC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 13:19:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF90860F8F
-	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 12:53:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D203A61222
+	for <linux-media@archiver.kernel.org>; Mon, 13 Sep 2021 13:19:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235988AbhIMMyl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Sep 2021 08:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        id S239505AbhIMNUU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Sep 2021 09:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235037AbhIMMyl (ORCPT
+        with ESMTP id S239126AbhIMNTs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Sep 2021 08:54:41 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9F1C061574
-        for <linux-media@vger.kernel.org>; Mon, 13 Sep 2021 05:53:25 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id i7so4720342lfr.13
-        for <linux-media@vger.kernel.org>; Mon, 13 Sep 2021 05:53:25 -0700 (PDT)
+        Mon, 13 Sep 2021 09:19:48 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A07C0613E1
+        for <linux-media@vger.kernel.org>; Mon, 13 Sep 2021 06:17:20 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id i23so14674881wrb.2
+        for <linux-media@vger.kernel.org>; Mon, 13 Sep 2021 06:17:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BD+DPDh/6joAqVggU6X1vywkJMOanIEvYQGdDSh+asE=;
-        b=dyxkR0LekFs/9eazkETn4gqIFMQqr/s5JJg51m6HYSjiS/2HuiRRruyNcFgeP+ZsQI
-         VAo4LA0JB3vkmjHcZ+C9a8XTy2K5zexlEhzJBQgyCUpmRDylznhPERO81kUHY7NWvAfX
-         IihCNx44RBHUbp9bVhKmgcCfZ94uJkss9wo4PYyUWuAT1/C0Npkz/eY7+cC/cqYMxtZ3
-         oRmHdjnXyXJlH/MbdNYcK7MsIURhIUV+azr0+iOv+bJPjLsvxqVGwGPUaZgMypS8Ax70
-         Lizy1sXJUewTKwcXscQbP+V+Ac5jYprSXHEpU5Q5hiRAAlMZXITjHyGlMoKESHMtLLkx
-         9xbQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ivU+OEHPZyTPE7GE4j0vohkEJckChOzR5FJoAf7dYnA=;
+        b=J5pWzbtViRHhiLdvzRYSg/iy139gaerhwykupE9HkjblLjIXkXaLdMChYI/0qOX/OC
+         rAx1Jka/f6UL9UwrbXw1pPP+HCmRzXo/rB1DMIRA8Ag5wWDk2SiFVEpz7hXs3IW2LMuy
+         ULz8g75lc5aXJ/90nzVNIq7FemVAhsEC4kcMPT1RrIXbsr8/eYEPC1S++lU4jV6ZmWxj
+         XbDwi2cCC8ZSDuXqmorI79dAkXuSfvRsWwBVLc6R+mbjyCf4wtUuhWTtaNcJM8s6QR0J
+         rKoFCxi/wcmA1OTk4iNXi4Tkv2HdggHnBGM88llUxz72uxDMM8k2uCcqocXKkzZtsfbq
+         JCxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BD+DPDh/6joAqVggU6X1vywkJMOanIEvYQGdDSh+asE=;
-        b=PpkjjBqnXhBcJ0kc5Xt1zAP/x5254pBJStqQFZZd0BD996cnDlpr3rIIy+7p1mdqhm
-         384XFkpCSfWVnnr1PEXpAjDhtOdXVQl/P2HFCjBPagumtDPx53aqHxtxLqlDTZKAjQLD
-         JDWZhuGXaEt6z22ZSHoltYPYWyCON7vo/hvTOD6yJFiPpgXrr7nJrGGZjg6jMUL/AtB3
-         QSHokIpCBZNcN0Bl7+LuOX3xwgrnVXEFOdVlq9Oq4GaFWOBQZA1bgihigWLjrQ4LNXLa
-         j1UlSQpBTDOo5PZKduq7MRRM/ddh5us8I+lLoncQh+46gYbyq9/mYMEOEu68jultRFrl
-         XyYw==
-X-Gm-Message-State: AOAM532fvsnRQI0uvm9ke6vB8BsfsuhgnVgWpA3JIDGMONhenmZ30nsD
-        inwwywwAJPWlSp7+sAUZvf6u9GICnnzFmAhQF1c=
-X-Google-Smtp-Source: ABdhPJxuu8CkCYVZZ0EASUKcT8jWLtegHIubSOi8hOuLUm7Wnv7q1XpE+lD0eLprrYrA+HvS+MMLXjQg6BRRuW8qf9s=
-X-Received: by 2002:a19:f701:: with SMTP id z1mr8653150lfe.457.1631537603568;
- Mon, 13 Sep 2021 05:53:23 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ivU+OEHPZyTPE7GE4j0vohkEJckChOzR5FJoAf7dYnA=;
+        b=vFTq+a8NfRzWsUqwLB09DnM/n+l0BlL2mY/Y/EXGgDMEjx9eCoi4HwMZET0SDOptNK
+         NNI9Wlp/erJXVJ4IWCHxrAxnR21Un9ZuEfeqOYyxzEk+D//V1rwFhSjYkH4PxoPNlsW+
+         K/koxIFwpNYovtds2Q7S50nNjoxyrxiD3VBpAv+31fExRfUvAKKvHzAyvvK8gIA17pEt
+         Wv4hrtKU7Wk1Bh1RJTJsGacUEKnPxQNu11u6ds7m8v9ur2zzB316b82x4hIG/pn1Xzl4
+         Gcl+KVfHX1cS0CUUgJjv7B1MSaSEBUAsvHbAo7Dn5aOp28OKn8Uf9bLgT/0k+622HFrH
+         SlzQ==
+X-Gm-Message-State: AOAM532IL3DTOgz5K2Y7ffhHldzb28WcwFKw21DoC0ZcNvajBulzQ3Kh
+        ASCgY+6EIsQVUhwx14/FNag=
+X-Google-Smtp-Source: ABdhPJy7uSu97RQXEG8GegudJHIf1HA6JvebsnWu5zCM57mF6N/7kCZqy7tbuUGVW9dQkNEF8c/BNw==
+X-Received: by 2002:adf:9e0b:: with SMTP id u11mr12588355wre.85.1631539038697;
+        Mon, 13 Sep 2021 06:17:18 -0700 (PDT)
+Received: from abel.fritz.box (p5b0ea1b5.dip0.t-ipconnect.de. [91.14.161.181])
+        by smtp.gmail.com with ESMTPSA id h18sm7602834wrb.33.2021.09.13.06.17.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Sep 2021 06:17:16 -0700 (PDT)
+From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
+        <ckoenig.leichtzumerken@gmail.com>
+X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+To:     linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org
+Cc:     daniel@ffwll.ch, intel-gfx@lists.freedesktop.org
+Subject: [PATCH 04/26] dma-buf: use new iterator in dma_resv_get_fences v2
+Date:   Mon, 13 Sep 2021 15:16:45 +0200
+Message-Id: <20210913131707.45639-5-christian.koenig@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210913131707.45639-1-christian.koenig@amd.com>
+References: <20210913131707.45639-1-christian.koenig@amd.com>
 MIME-Version: 1.0
-References: <20210827130150.909695-1-festevam@gmail.com> <20210913085942.zmhv5pmo5nzqunuj@uno.localdomain>
-In-Reply-To: <20210913085942.zmhv5pmo5nzqunuj@uno.localdomain>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 13 Sep 2021 09:53:12 -0300
-Message-ID: <CAOMZO5B-BRfuPoGFyYQk4HdwaX45zxL9=gKTXKDHSxNwBDO-2g@mail.gmail.com>
-Subject: Re: [RFC 1/3] media: tw9910: Allow to probe from device tree
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media <linux-media@vger.kernel.org>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Rui Miguel Silva <rui.silva@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+This makes the function much simpler since the complex
+retry logic is now handled elsewhere.
 
-On Mon, Sep 13, 2021 at 5:58 AM Jacopo Mondi <jacopo@jmondi.org> wrote:
+v2: use sizeof(void*) instead
 
-> There's an
->
->         tw9910_s_power(&priv->subdev, 0);
->
-> at the end of the video_probe() function.
->
-> The driver handles power management with the legacy s_power() call
-> chain, and the receiver driver needs to v4l2_pipeline_pm_get() which
-> the imx driver does when the capture node is open.
->
-> Just an hint, you might have noticed already
+Signed-off-by: Christian König <christian.koenig@amd.com>
+---
+ drivers/dma-buf/dma-resv.c | 110 +++++++++++++------------------------
+ 1 file changed, 37 insertions(+), 73 deletions(-)
 
-Thanks for your comments and review. Yes, I have fixed the I2C errors.
+diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
+index 9a9c0bba772b..0a0e3ee62648 100644
+--- a/drivers/dma-buf/dma-resv.c
++++ b/drivers/dma-buf/dma-resv.c
+@@ -493,99 +493,63 @@ EXPORT_SYMBOL(dma_resv_copy_fences);
+  * dma_resv_get_fences - Get an object's shared and exclusive
+  * fences without update side lock held
+  * @obj: the reservation object
+- * @pfence_excl: the returned exclusive fence (or NULL)
+- * @pshared_count: the number of shared fences returned
+- * @pshared: the array of shared fence ptrs returned (array is krealloc'd to
++ * @fence_excl: the returned exclusive fence (or NULL)
++ * @shared_count: the number of shared fences returned
++ * @shared: the array of shared fence ptrs returned (array is krealloc'd to
+  * the required size, and must be freed by caller)
+  *
+  * Retrieve all fences from the reservation object. If the pointer for the
+  * exclusive fence is not specified the fence is put into the array of the
+  * shared fences as well. Returns either zero or -ENOMEM.
+  */
+-int dma_resv_get_fences(struct dma_resv *obj, struct dma_fence **pfence_excl,
+-			unsigned int *pshared_count,
+-			struct dma_fence ***pshared)
++int dma_resv_get_fences(struct dma_resv *obj, struct dma_fence **fence_excl,
++			unsigned int *shared_count, struct dma_fence ***shared)
+ {
+-	struct dma_fence **shared = NULL;
+-	struct dma_fence *fence_excl;
+-	unsigned int shared_count;
+-	int ret = 1;
+-
+-	do {
+-		struct dma_resv_list *fobj;
+-		unsigned int i, seq;
+-		size_t sz = 0;
+-
+-		shared_count = i = 0;
+-
+-		rcu_read_lock();
+-		seq = read_seqcount_begin(&obj->seq);
+-
+-		fence_excl = dma_resv_excl_fence(obj);
+-		if (fence_excl && !dma_fence_get_rcu(fence_excl))
+-			goto unlock;
++	struct dma_resv_cursor cursor;
++	struct dma_fence *fence;
+ 
+-		fobj = dma_resv_shared_list(obj);
+-		if (fobj)
+-			sz += sizeof(*shared) * fobj->shared_max;
++	*shared_count = 0;
++	*shared = NULL;
+ 
+-		if (!pfence_excl && fence_excl)
+-			sz += sizeof(*shared);
++	if (fence_excl)
++		*fence_excl = NULL;
+ 
+-		if (sz) {
+-			struct dma_fence **nshared;
++	rcu_read_lock();
++	dma_resv_for_each_fence_unlocked(obj, &cursor, true, fence) {
+ 
+-			nshared = krealloc(shared, sz,
+-					   GFP_NOWAIT | __GFP_NOWARN);
+-			if (!nshared) {
+-				rcu_read_unlock();
++		if (cursor.is_first) {
++			unsigned int count;
+ 
+-				dma_fence_put(fence_excl);
+-				fence_excl = NULL;
++			while (*shared_count)
++				dma_fence_put((*shared)[--(*shared_count)]);
+ 
+-				nshared = krealloc(shared, sz, GFP_KERNEL);
+-				if (nshared) {
+-					shared = nshared;
+-					continue;
+-				}
++			if (fence_excl)
++				dma_fence_put(*fence_excl);
+ 
+-				ret = -ENOMEM;
+-				break;
+-			}
+-			shared = nshared;
+-			shared_count = fobj ? fobj->shared_count : 0;
+-			for (i = 0; i < shared_count; ++i) {
+-				shared[i] = rcu_dereference(fobj->shared[i]);
+-				if (!dma_fence_get_rcu(shared[i]))
+-					break;
+-			}
+-		}
++			count = cursor.fences ? cursor.fences->shared_count : 0;
++			count += fence_excl ? 0 : 1;
++			rcu_read_unlock();
+ 
+-		if (i != shared_count || read_seqcount_retry(&obj->seq, seq)) {
+-			while (i--)
+-				dma_fence_put(shared[i]);
+-			dma_fence_put(fence_excl);
+-			goto unlock;
++			/* Eventually re-allocate the array */
++			*shared = krealloc_array(*shared, count,
++						 sizeof(void*),
++						 GFP_KERNEL);
++			if (count && !*shared)
++				return -ENOMEM;
++			rcu_read_lock();
+ 		}
+ 
+-		ret = 0;
+-unlock:
+-		rcu_read_unlock();
+-	} while (ret);
+-
+-	if (pfence_excl)
+-		*pfence_excl = fence_excl;
+-	else if (fence_excl)
+-		shared[shared_count++] = fence_excl;
++		if (cursor.is_exclusive && fence_excl)
++			*fence_excl = fence;
++		else
++			(*shared)[(*shared_count)++] = fence;
+ 
+-	if (!shared_count) {
+-		kfree(shared);
+-		shared = NULL;
++		/* Don't drop the reference */
++		fence = NULL;
+ 	}
++	rcu_read_unlock();
+ 
+-	*pshared_count = shared_count;
+-	*pshared = shared;
+-	return ret;
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(dma_resv_get_fences);
+ 
+-- 
+2.25.1
 
-I plan to re-submit the entire series after I get the TW9990 to work
-on my imx6sx-based board.
-
-The capture driver is drivers/staging/media/imx/imx7-media-csi.c.
-
-Currently, I am not able to get the stream to start.
-
-This is the configuration I am using:
-
-media-ctl -l "'tw9910 2-0044':0 -> 'csi':0[1]"
-media-ctl -l "'csi':1 -> 'csi capture':0[1]"
-media-ctl -v -V "'tw9910 2-0044':0 [fmt:UYVY8_2X8/720x480 field:any]"
-Opening media device /dev/media0
-Enumerating entities
-Found 3 entities
-Enumerating pads and links
-Setting up format UYVY8_2X8 720x480 on pad tw9910 2-0044/0
-Format set: UYVY8_2X8 720x480
-Setting up format UYVY8_2X8 720x480 on pad csi/0
-Format set: UYVY8_2X8 720x480
-
-Then I launch the capture stream command:
-
-v4l2-ctl --stream-mmap -d /dev/video1
-
-but nothing happens here, no >>>>> frame indication progress is shown.
-
-If I hit CTRL + C then I get:
-[  715.467623] csi: wait last EOF timeout
-
-Any suggestions?
-
-Thanks
