@@ -7,44 +7,45 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1B11C433FE
-	for <linux-media@archiver.kernel.org>; Tue, 14 Sep 2021 12:18:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7352C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 14 Sep 2021 12:18:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB3F361166
-	for <linux-media@archiver.kernel.org>; Tue, 14 Sep 2021 12:18:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D7D161166
+	for <linux-media@archiver.kernel.org>; Tue, 14 Sep 2021 12:18:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232905AbhINMUE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Sep 2021 08:20:04 -0400
-Received: from omta002.cacentral1.a.cloudfilter.net ([3.97.99.33]:37605 "EHLO
-        omta002.cacentral1.a.cloudfilter.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232884AbhINMUB (ORCPT
+        id S232884AbhINMUF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Sep 2021 08:20:05 -0400
+Received: from omta001.cacentral1.a.cloudfilter.net ([3.97.99.32]:57301 "EHLO
+        omta001.cacentral1.a.cloudfilter.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232883AbhINMUB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 14 Sep 2021 08:20:01 -0400
+X-Greylist: delayed 430 seconds by postgrey-1.27 at vger.kernel.org; Tue, 14 Sep 2021 08:19:58 EDT
 Received: from shw-obgw-4003a.ext.cloudfilter.net ([10.228.9.183])
         by cmsmtp with ESMTP
-        id Q4EUm0M5Rps7PQ7HkmGPV8; Tue, 14 Sep 2021 12:11:36 +0000
+        id PqoemL4ueczbLQ7Hkmm237; Tue, 14 Sep 2021 12:11:36 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
-        t=1631621496; bh=SctABPA34YBxBrr/4QVTApaycLX0mMdsaOxib+u1UxY=;
+        t=1631621496; bh=WE7WlClLMnckclIOD2RLuKF2mC/Xymy49zqFOatsrQ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=VL8+7j9GWRvaaH4SEmHhqEJAtyhd1qfUFr+Ed95NUVbCDFNFzmWTVpENsobxstgET
-         hurhrHJ7Z6oq8V+QLae5vNEEHlkiXY3ZAq/Fvs3/o4s6Vbvh2oVszyZaKt1eTfZ+zB
-         gAf1c+saxT4w5pgwhbzGuem/wE+i+Se25rzxlo8lyAi1XN4Boo10Sbollmm6Gn+rTC
-         Z3a8jYqO4UD5GXyi3Z+YV9ISGZJtLTPhgFntoeTQXg/Z6WD8oc/T4emvObMayAm1El
-         CVXDHIBd1HWGzQf6CobuWHIluIkDjzH3+grOqy8SXiwDvYfQgssHEvM6nNsObFFjvF
-         UtLKuEZAIiEOg==
+        b=I4+ksfllfJHczDLQpFMO2dChmI7KjdihUMLBEhATsr3jxhG4zo+elfh67hzA1s6b4
+         ej6ycHvCW7tEGOZ386V2qf0P1/om2P0m3y6dsa1oX8iSnpvpgGZj1l4iZzVgedjcJr
+         qTNmVy5ilkPUUbv0LHUrjJRgrcrhaM2LMYa69th0kQcrBqmHO7C5NLwarXwgip+Fca
+         W4F6QRsFySQ4amJM3qqijLwpFXE1D3Ise3rlKn61rRSPBpCCvaWhK3+US/G7U0FCqg
+         zRXmwNBJnB8omfcQFyFRhnwEqvNi8L5GaeLv1KKt3X+evN7lmc06+7QF3O0h7x+tYU
+         jftPrD2yFkiuA==
 Received: from shaw.ca ([70.71.78.228])
         by cmsmtp with ESMTPA
-        id Q7Hdmcu7dcHSBQ7Hkmpv1P; Tue, 14 Sep 2021 12:11:36 +0000
+        id Q7Hdmcu7dcHSBQ7Hjmpv1B; Tue, 14 Sep 2021 12:11:36 +0000
 Authentication-Results: ; auth=pass (LOGIN) smtp.auth=joevt@shaw.ca
 X-Authority-Analysis: v=2.4 cv=I4EG+Psg c=1 sm=1 tr=0 ts=61409178
  a=qDatE6m/3wxSEG8Wq7h0zQ==:117 a=qDatE6m/3wxSEG8Wq7h0zQ==:17 a=_Dj-zB-qAAAA:8
- a=77ANNSRXFWH3LhZW9EwA:9 a=c-cOe7UV8MviEfHuAVEQ:22
+ a=CaOe0OiltPeIXg3nyRAA:9 a=c-cOe7UV8MviEfHuAVEQ:22
 From:   joevt <joevt@shaw.ca>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     linux-media@vger.kernel.org
-Subject: [PATCH 10/11] edid-decode: add warnings to VESA VSDB
-Date:   Tue, 14 Sep 2021 05:11:28 -0700
-Message-Id: <20210914121129.51451-11-joevt@shaw.ca>
+Subject: [PATCH 08/11] edid-decode: output full frequencies for 4:2:0
+Date:   Tue, 14 Sep 2021 05:11:26 -0700
+Message-Id: <20210914121129.51451-9-joevt@shaw.ca>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20210914121129.51451-1-joevt@shaw.ca>
 References: <20210914121129.51451-1-joevt@shaw.ca>
@@ -56,64 +57,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add warnings for VESA vendor specific datablock (bits that should be zero and reserved values).
+Don't half hfreq for 4:2:0 timings - the character clock is halved, but the number of characters per line is also halved (two luminance values per character for 4:2:0), so there's no change in hfreq.
+Don't half pixel clock because it looks weird. Character clock is halved but the number of pixels remains the same (two luminance values per character for 4:2:0).
+Continue to use the half hfreq and half pixel clock for the ranges calculations because some non-HDMI 2.0 displays have max pixel clock halved when they have 4:2:0 modes and because other reasons that lead to adding this code in the first place?
 
 Signed-off-by: Joe van Tunen <joevt@shaw.ca>
 ---
- parse-displayid-block.cpp | 33 ++++++++++++++++++++++++---------
- 1 file changed, 24 insertions(+), 9 deletions(-)
+ edid-decode.cpp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/parse-displayid-block.cpp b/parse-displayid-block.cpp
-index 8f4e366..5c81294 100644
---- a/parse-displayid-block.cpp
-+++ b/parse-displayid-block.cpp
-@@ -1461,22 +1461,37 @@ void edid_state::parse_displayid_vesa(const unsigned char *x)
- 	unsigned len = x[2];
- 	x += 6;
- 	printf("    Data Structure Type: ");
--	switch (x[0] & 0x07) {
--	case 0x00: printf("eDP\n"); break;
--	case 0x01: printf("DP\n"); break;
--	default: printf("Reserved\n"); break;
-+	switch (x[0] & 7) {
-+	case 0: printf("eDP\n"); break;
-+	case 1: printf("DP\n"); break;
-+	default: printf("Reserved (%d)\n", x[0] & 7); break;
- 	}
-+
-+	if ((x[0] >> 3) & 15)
-+		warn("Reserved bits 6:3 (%d) are not 0.\n", (x[0] >> 3) & 15);
-+
- 	printf("    Default Colorspace and EOTF Handling: %s\n",
- 	       (x[0] & 0x80) ? "Native as specified in the Display Parameters DB" : "sRGB");
-+
- 	printf("    Number of Pixels in Hor Pix Cnt Overlapping an Adjacent Panel: %u\n",
- 	       x[1] & 0xf);
-+	if ((x[1] & 0xf) > 8)
-+		warn("Number of Pixels in Hor Pix Cnt Overlapping an Adjacent Panel exceeds 8.\n");
-+
-+	if ((x[1] >> 4) & 1)
-+		warn("Reserved bit 4 is not 0.\n");
-+
- 	printf("    Multi-SST Operation: ");
--	switch ((x[1] >> 5) & 0x03) {
--	case 0x00: printf("Not Supported\n"); break;
--	case 0x01: printf("Two Streams (number of links shall be 2 or 4)\n"); break;
--	case 0x02: printf("Four Streams (number of links shall be 4)\n"); break;
--	case 0x03: printf("Reserved\n"); break;
-+	switch ((x[1] >> 5) & 3) {
-+	case 0: printf("Not Supported\n"); break;
-+	case 1: printf("Two Streams (number of links shall be 2 or 4)\n"); break;
-+	case 2: printf("Four Streams (number of links shall be 4)\n"); break;
-+	case 3: printf("Reserved\n"); warn("Invalid option for Multi-SST Operation.\n"); break;
- 	}
-+
-+	if ((x[1] >> 7) & 1)
-+		warn("Reserved bit 7 is not 0.\n");
-+
- 	if (len >= 7) {
- 		double bpp = (x[2] & 0x3f) + (x[3] & 0x0f) / 16.0;
- 		printf("    Pass through timing's target DSC bits per pixel: %.4f\n", bpp);
+diff --git a/edid-decode.cpp b/edid-decode.cpp
+index 6aa93fb..0c83e0e 100644
+--- a/edid-decode.cpp
++++ b/edid-decode.cpp
+@@ -513,6 +513,7 @@ bool edid_state::print_timings(const char *prefix, const struct timings *t,
+ 	if (t->interlaced)
+ 		vact /= 2;
+ 
++	double out_hor_freq_khz = hor_freq_khz;
+ 	if (t->ycbcr420)
+ 		hor_freq_khz /= 2;
+ 
+@@ -558,6 +559,7 @@ bool edid_state::print_timings(const char *prefix, const struct timings *t,
+ 		dtd_max_vsize_mm = t->vsize_mm;
+ 	if (!s.empty())
+ 		s = " (" + s + ")";
++	unsigned out_pixclk_khz = t->pixclk_khz;
+ 	unsigned pixclk_khz = t->pixclk_khz / (t->ycbcr420 ? 2 : 1);
+ 
+ 	char buf[10];
+@@ -568,8 +570,8 @@ bool edid_state::print_timings(const char *prefix, const struct timings *t,
+ 	       t->hact, buf,
+ 	       refresh,
+ 	       t->hratio, t->vratio,
+-	       hor_freq_khz,
+-	       pixclk_khz / 1000.0,
++	       out_hor_freq_khz,
++	       out_pixclk_khz / 1000.0,
+ 	       s.c_str());
+ 
+ 	unsigned len = strlen(prefix) + 2;
 -- 
 2.24.3 (Apple Git-128)
 
