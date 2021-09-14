@@ -7,65 +7,82 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 166B2C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76A64C433EF
 	for <linux-media@archiver.kernel.org>; Tue, 14 Sep 2021 15:18:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F35766115C
-	for <linux-media@archiver.kernel.org>; Tue, 14 Sep 2021 15:18:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6486E61151
+	for <linux-media@archiver.kernel.org>; Tue, 14 Sep 2021 15:18:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234793AbhINPTc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S234803AbhINPTc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 14 Sep 2021 11:19:32 -0400
-Received: from gofer.mess.org ([88.97.38.141]:35469 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234879AbhINPT2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Sep 2021 11:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234350AbhINPTb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 14 Sep 2021 11:19:31 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6809FC061768
+        for <linux-media@vger.kernel.org>; Tue, 14 Sep 2021 08:18:12 -0700 (PDT)
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 460B8C6398; Tue, 14 Sep 2021 16:18:09 +0100 (BST)
+        id 7A9BBC64DB; Tue, 14 Sep 2021 16:18:09 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1631632689; bh=qeS/5imX9GLmIFY4E6hwoHSSrOLKVUvULn/KMQN2Ozc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lLw/CbK3FIjjpwYsHvj/nTa8oprwHd/CwV4VN5BC66grJeL3LwwIaxztH5e92UA1r
-         0oOG6L/z25YALUHbCt8+qj8uvgShy3QRiqlXRZgw+nturEQFDZouaOxFYPX2eD7BoL
-         jTPSD/y2RVZVI7k1CHPBmSzw+0DsveHJl0lT7akflobBXASog08xvx0046x6OH2gkt
-         BPVWQzuHlOP/wmXLLZOWOpTbH6D+rBaGLxzQkZUKG4f7cMZlTgcTzjt6LSnzoNIyb6
-         VVUFbwbdBKYtgn7il2y8tZcapIVwMDOWDCUyRkfQ9fZB8wlBUdhC9Lg3lWV7BWXdeX
-         QPOD9A7C0VUXQ==
+        t=1631632689; bh=X5FVP3NY/rkYiydH64k/xGz1BQQi5i1hZr4CRXtGGRE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ax9Jr0jNhYiI91jz98p9hVBchlDmQnzMXKv56tBwfekLU8DW13elwzaBOSR++m1be
+         dXsqYzuUwq8MpKzDz2OYdwYR1FibwEPUssYJ/tdwH5htgoy9qFFot5gzpdfK6mbO44
+         hNyZfdKsT0arC4EuPJkGIwMD1hg871zrJCH7XLqNzwKp49dR3cxl8FkGPJK5wYzhzL
+         hga1yZJR4Xjk61uUSsSH/z/oYkyUlwiVNYpNqdyR4lbWvxCzI9mTAXk/fM2DkS/IEZ
+         VeJZXkvwc66+BnczlQNZ1CL5JlmIRHKuU3WuOI71wMwFbygTO8p1OV9xEbXZCBdgm4
+         tXhK9qv6uG4aQ==
 From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org
 Cc:     Georgi Bakalski <georgi.bakalski@gmail.com>
-Subject: [PATCH 1/4] media: ir_toy: print firmwware version in correct format
-Date:   Tue, 14 Sep 2021 16:18:06 +0100
-Message-Id: <22eeae667aac9d5eaaae2f21904f238ebef0c05b.1631632442.git.sean@mess.org>
+Subject: [PATCH 3/4] media: ir_toy: do not resubmit broken urb
+Date:   Tue, 14 Sep 2021 16:18:08 +0100
+Message-Id: <c6db1a8122d0c8383b0b16c49057d78720675013.1631632442.git.sean@mess.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <22eeae667aac9d5eaaae2f21904f238ebef0c05b.1631632442.git.sean@mess.org>
+References: <22eeae667aac9d5eaaae2f21904f238ebef0c05b.1631632442.git.sean@mess.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A value of 25 means firmware version 2.5.
+This causes the same urb to resubmitted continuously, hogging up a cpu.
 
 Signed-off-by: Sean Young <sean@mess.org>
 ---
- drivers/media/rc/ir_toy.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/rc/ir_toy.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/rc/ir_toy.c b/drivers/media/rc/ir_toy.c
-index b0dc19d36ac9..45d39b6e49c0 100644
+index 2b7c8bba4d6a..d2d9346eb8f5 100644
 --- a/drivers/media/rc/ir_toy.c
 +++ b/drivers/media/rc/ir_toy.c
-@@ -440,8 +440,9 @@ static int irtoy_probe(struct usb_interface *intf,
- 	if (err)
- 		goto free_rcdev;
+@@ -213,10 +213,20 @@ static void irtoy_in_callback(struct urb *urb)
+ 	struct irtoy *irtoy = urb->context;
+ 	int ret;
  
--	dev_info(irtoy->dev, "version: hardware %u, firmware %u, protocol %u",
--		 irtoy->hw_version, irtoy->sw_version, irtoy->proto_version);
-+	dev_info(irtoy->dev, "version: hardware %u, firmware %u.%u, protocol %u",
-+		 irtoy->hw_version, irtoy->sw_version / 10,
-+		 irtoy->sw_version % 10, irtoy->proto_version);
+-	if (urb->status == 0)
++	switch (urb->status) {
++	case 0:
+ 		irtoy_response(irtoy, urb->actual_length);
+-	else
++		break;
++	case -ECONNRESET:
++	case -ENOENT:
++	case -ESHUTDOWN:
++	case -EPROTO:
++	case -EPIPE:
++		usb_unlink_urb(urb);
++		return;
++	default:
+ 		dev_dbg(irtoy->dev, "in urb status: %d\n", urb->status);
++	}
  
- 	if (irtoy->sw_version < MIN_FW_VERSION) {
- 		dev_err(irtoy->dev, "need firmware V%02u or higher",
+ 	ret = usb_submit_urb(urb, GFP_ATOMIC);
+ 	if (ret && ret != -ENODEV)
 -- 
 2.31.1
 
