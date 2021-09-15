@@ -2,172 +2,93 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95E86C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 15 Sep 2021 11:19:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAE83C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 15 Sep 2021 11:56:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E12E6127C
-	for <linux-media@archiver.kernel.org>; Wed, 15 Sep 2021 11:19:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9183261283
+	for <linux-media@archiver.kernel.org>; Wed, 15 Sep 2021 11:56:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237451AbhIOLVO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Sep 2021 07:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232699AbhIOLVN (ORCPT
+        id S232906AbhIOL5V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Sep 2021 07:57:21 -0400
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:57538
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232824AbhIOL5U (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Sep 2021 07:21:13 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CBAC061574
-        for <linux-media@vger.kernel.org>; Wed, 15 Sep 2021 04:19:54 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id q11so3272205wrr.9
-        for <linux-media@vger.kernel.org>; Wed, 15 Sep 2021 04:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=93lsXU/Z3uxd8n34/9P2RUUBOmtBhYmL6uqJmdWmF/o=;
-        b=FQNYqWS4ukF31jcFARjgKDPNO9U9aouBEuBONB/qI4hHlUp1KzR9maed8WVf3OWJO8
-         85TLH+YTmkH3tw0CfVzOXwI+iOtJF4kOffF0dTr1s/Pjd2670p2Qf4LuQFyIqp8JXQFi
-         XWkenTcCx01zB81GfqOYW4UP/io6X8tVe9sT0ndKSlPfX4HE/EP1HzYCGTYLITN/H6Dc
-         3jxKXiSzQt+ZEIcz7DzBtRD4eNIU501L864O2eOyBIyFgvTf7mKxgiAtev3bjuTcF/nW
-         kVbw7aRw3wSsT7OzhJhjOZNXXZSmicoz4m/9xxj3L8xv/Mjc5bmoWY876ggpDz0AOyS6
-         utbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=93lsXU/Z3uxd8n34/9P2RUUBOmtBhYmL6uqJmdWmF/o=;
-        b=jzhlkgsN6xp2iyQ4Q7B6C684/8QmAt0u78dsTKYMhHOUGb2BrjY/MD2vs3msokMT92
-         rzmB7R+gT+RtGLu8QH4TjTkMujdhsNenaoTKmjebhIRjXtcslhMAQxGgDxRL7+mvm3QT
-         7FTrNohpCOPqDOuDAJRLVKF+ub74vRGjVK0Rtac/qXXdjsSN2cFoXu97/Stglyg7J21e
-         UKazGePzxDAdpLUQkqQMLE7bdFCe4/Hktdx45Mb+dh/wrs8JXFOyvtl0EbfhmjW539fx
-         6HWMG0nstLfUgHRkYVzJJ4KARd2rRr3F/c317zhft4t/8QRvabaTa86eIR0uZB7XtD2q
-         IGAQ==
-X-Gm-Message-State: AOAM531MlvFUYeaU6Fa4L1B6fObmtD7tIEa3ZP9tgXdOLNUc39aPoSTt
-        3XyK9BYWUpFs6jIftuA1zgg=
-X-Google-Smtp-Source: ABdhPJzo7z9Zb7dkNgAWCsWWmzcOTtaDbeuyUXJErhg6OxOAjyeFUh0u1y5yexp4OvMxrUy1oSqjJQ==
-X-Received: by 2002:a5d:43d2:: with SMTP id v18mr4451441wrr.98.1631704793321;
-        Wed, 15 Sep 2021 04:19:53 -0700 (PDT)
-Received: from ?IPv6:2a02:908:1252:fb60:d03d:8939:3840:1f95? ([2a02:908:1252:fb60:d03d:8939:3840:1f95])
-        by smtp.gmail.com with ESMTPSA id l1sm3450397wmq.8.2021.09.15.04.19.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Sep 2021 04:19:52 -0700 (PDT)
-Subject: Re: [Intel-gfx] [PATCH 18/26] drm/i915: use new iterator in
- i915_gem_object_last_write_engine
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        Wed, 15 Sep 2021 07:57:20 -0400
+Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id B922B3F0FD;
+        Wed, 15 Sep 2021 11:56:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1631706960;
+        bh=T3Sy3dbkoW1c6lX4amXfpg9ipcXLCPsjdqsntxzJicU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=fHLld2aUFMEMnKu7+I0xQkjb6+KKpW7tF7cDixgJujhwrUFIh1Ll46N2E9x2PztK0
+         6DOxRgrLeAsK8qTCygcnwz2ZXP52iAozDHt7ogfD77PM1Zyx0WI//txdzV0f2j2EhF
+         DasdZ99KP+Le5dBZYS1Ox/iGuFwsV+1xbTIEf7JDl2X4KqO+2lpSjQSFwsSPOEx7fw
+         lmkJnjZSYH8z3CJbKAOoMjo4TTB63PRRmdOxXcxK0udEolZcyMEayfhv2uNzF41eQo
+         dHj05BK0GG6Yw8kE7KPDr+FD8btMf3hzvpPeP+iirh3GL2QQ4ELvIxonOEdVqgqnpz
+         3Ca+BNF93sj7w==
+From:   Colin King <colin.king@canonical.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
-Cc:     daniel@ffwll.ch, intel-gfx@lists.freedesktop.org
-References: <20210913131707.45639-1-christian.koenig@amd.com>
- <20210913131707.45639-19-christian.koenig@amd.com>
- <46a40614-b448-7f2d-7b6b-0705c4277e2b@linux.intel.com>
- <6c0217a7-6ac8-0c12-4087-ee55f456f99c@gmail.com>
- <f9b65430-de19-7c3b-c77f-5a88114037c5@linux.intel.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-Message-ID: <be670538-cba3-1362-c79d-910a0bb54b3d@gmail.com>
-Date:   Wed, 15 Sep 2021 13:19:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: mb86a20s: make arrays static const
+Date:   Wed, 15 Sep 2021 12:56:00 +0100
+Message-Id: <20210915115600.14553-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <f9b65430-de19-7c3b-c77f-5a88114037c5@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 14.09.21 um 14:47 schrieb Tvrtko Ursulin:
->
-> On 14/09/2021 13:32, Christian König wrote:
->> Am 14.09.21 um 14:27 schrieb Tvrtko Ursulin:
->>>
->>> On 13/09/2021 14:16, Christian König wrote:
->>>> This is maybe even a fix since the RCU usage here looks incorrect.
->>>
->>> What you think is incorrect? Pointless extra rcu locking?
->>
->> Yeah, exactly that. I also wondered for a second if rcu_read_lock() 
->> can nest or not. But obviously it either works or lockdep hasn't 
->> complained yet.
->>
->> But I've made a mistake here and at a couple of other places to 
->> remove to many rcu_read_lock() calls. Thanks for pointing that out, 
->> going to fix it as well.
->
-> Ack.
->
->>> Also, FWIW, I submitted a patch to remove this function altogether 
->>> since its IMO pretty useless, just failed in getting anyone to ack 
->>> it so far.
->>
->> I was on the edge of suggesting that as well since it's only debugfs 
->> usage looked quite pointless to me.
->>
->> Feel free to CC me on the patch and you can have my acked-by.
->
-> Patch is here 
-> https://patchwork.freedesktop.org/patch/451864/?series=94202&rev=1, 
-> thanks!
+From: Colin Ian King <colin.king@canonical.com>
 
-Feel free to add an Acked-by: Christian König <christian.koenig@amd.com> 
-to that one.
+Don't populate the read-only arrays on the stack but instead them
+static const. Also makes the object code smaller by 154 bytes:
 
-Regards,
-Christian.
+Before:
+   text	   data	    bss	    dec	    hex	filename
+  42949	  22424	      0	  65373	   ff5d	media/dvb-frontends/mb86a20s.o
 
->
-> Regards,
->
-> Tvrtko
->
->> Thanks,
->> Christian.
->>
->>>
->>> Regards,
->>>
->>> Tvrtko
->>>
->>>> Signed-off-by: Christian König <christian.koenig@amd.com>
->>>> ---
->>>>   drivers/gpu/drm/i915/gem/i915_gem_object.h | 15 +++++++--------
->>>>   1 file changed, 7 insertions(+), 8 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object.h 
->>>> b/drivers/gpu/drm/i915/gem/i915_gem_object.h
->>>> index e9eecebf5c9d..3343922af4d6 100644
->>>> --- a/drivers/gpu/drm/i915/gem/i915_gem_object.h
->>>> +++ b/drivers/gpu/drm/i915/gem/i915_gem_object.h
->>>> @@ -500,16 +500,15 @@ static inline struct intel_engine_cs *
->>>>   i915_gem_object_last_write_engine(struct drm_i915_gem_object *obj)
->>>>   {
->>>>       struct intel_engine_cs *engine = NULL;
->>>> +    struct dma_resv_cursor cursor;
->>>>       struct dma_fence *fence;
->>>>   -    rcu_read_lock();
->>>> -    fence = dma_resv_get_excl_unlocked(obj->base.resv);
->>>> -    rcu_read_unlock();
->>>> -
->>>> -    if (fence && dma_fence_is_i915(fence) && 
->>>> !dma_fence_is_signaled(fence))
->>>> -        engine = to_request(fence)->engine;
->>>> -    dma_fence_put(fence);
->>>> -
->>>> +    dma_resv_for_each_fence_unlocked(obj->base.resv, &cursor, false,
->>>> +                     fence) {
->>>> +        if (fence && dma_fence_is_i915(fence) &&
->>>> +            !dma_fence_is_signaled(fence))
->>>> +            engine = to_request(fence)->engine;
->>>> +    }
->>>>       return engine;
->>>>   }
->>>>
->>
+After:
+   text	   data	    bss	    dec	    hex	filename
+  42731	  22488	      0	  65219	   fec3	media/dvb-frontends/mb86a20s.o
+
+(gcc version 11.2.0)
+
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/media/dvb-frontends/mb86a20s.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/dvb-frontends/mb86a20s.c b/drivers/media/dvb-frontends/mb86a20s.c
+index a7faf0cf8788..b74b9afed9a2 100644
+--- a/drivers/media/dvb-frontends/mb86a20s.c
++++ b/drivers/media/dvb-frontends/mb86a20s.c
+@@ -444,11 +444,11 @@ static int mb86a20s_get_interleaving(struct mb86a20s_state *state,
+ 				     unsigned layer)
+ {
+ 	int rc;
+-	int interleaving[] = {
++	static const int interleaving[] = {
+ 		0, 1, 2, 4, 8
+ 	};
+ 
+-	static unsigned char reg[] = {
++	static const unsigned char reg[] = {
+ 		[0] = 0x88,	/* Layer A */
+ 		[1] = 0x8c,	/* Layer B */
+ 		[2] = 0x90,	/* Layer C */
+-- 
+2.32.0
 
