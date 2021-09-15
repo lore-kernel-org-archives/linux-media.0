@@ -8,44 +8,44 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC1D3C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 15 Sep 2021 12:03:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D69E5C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 15 Sep 2021 12:03:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D41EF61247
-	for <linux-media@archiver.kernel.org>; Wed, 15 Sep 2021 12:03:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF96E61247
+	for <linux-media@archiver.kernel.org>; Wed, 15 Sep 2021 12:03:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237805AbhIOMEj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Sep 2021 08:04:39 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:55208 "EHLO
+        id S237737AbhIOMEq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Sep 2021 08:04:46 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:55216 "EHLO
         fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237741AbhIOMEe (ORCPT
+        with ESMTP id S237735AbhIOMEh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Sep 2021 08:04:34 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 18FC36p1085464;
-        Wed, 15 Sep 2021 07:03:06 -0500
+        Wed, 15 Sep 2021 08:04:37 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 18FC3Eh4085502;
+        Wed, 15 Sep 2021 07:03:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1631707386;
-        bh=1EbfquFBKlFE7F+bpSOI+/LXMEkFHo8R0YoztebJ0/Q=;
+        s=ti-com-17Q1; t=1631707394;
+        bh=qGqqKeOzBHe5XEzH1nw3griRZuYm6K1QDfOlq3ycjxA=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=TAgSH8GD9LQDejUi3BP3R7/fPQc8anW1UMdZSt6Lts034I//C38B84GMcsxEYEyUM
-         FdEWL31uVkQP+OqK5MYwYcGt8Bphhdgm6nx4zi8SCJMaPUInF135g6OxAGq1Vibil0
-         HcjFsxPcy1LpNgAiqWDC9Z98vGBmnI94rrpkEUIo=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 18FC36Br121053
+        b=AGoAeWRqjm0EVDMFUedVtFm+ugWyUgYbgo8+l4ADnhPB1i9E8HPw0Mjr3at/rmvaq
+         3fUhXF04iY6vs4eYRe8JCNW0L2Wo/diaBHkd5uuFuLVomlF7UXwvgti0n+rkmQEscm
+         kFNS5iLFmt7FYA2ilryxotAW21ShUNqJ2RQCRbdk=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 18FC3E3v100222
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 15 Sep 2021 07:03:06 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 15 Sep 2021 07:03:14 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 15
- Sep 2021 07:03:06 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ Sep 2021 07:03:14 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 15 Sep 2021 07:03:06 -0500
+ Frontend Transport; Wed, 15 Sep 2021 07:03:14 -0500
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 18FC2fD6019246;
-        Wed, 15 Sep 2021 07:03:02 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 18FC2fD8019246;
+        Wed, 15 Sep 2021 07:03:10 -0500
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 CC:     Pratyush Yadav <p.yadav@ti.com>,
@@ -61,9 +61,9 @@ CC:     Pratyush Yadav <p.yadav@ti.com>,
         <niklas.soderlund+renesas@ragnatech.se>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-media@vger.kernel.org>
-Subject: [PATCH v4 05/11] media: cadence: csi2rx: Fix stream data configuration
-Date:   Wed, 15 Sep 2021 17:32:34 +0530
-Message-ID: <20210915120240.21572-6-p.yadav@ti.com>
+Subject: [PATCH v4 07/11] media: Re-structure TI platform drivers
+Date:   Wed, 15 Sep 2021 17:32:36 +0530
+Message-ID: <20210915120240.21572-8-p.yadav@ti.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210915120240.21572-1-p.yadav@ti.com>
 References: <20210915120240.21572-1-p.yadav@ti.com>
@@ -75,51 +75,189 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Firstly, there is no VC_EN bit present in the STREAM_DATA_CFG register.
-Bit 31 is part of the VL_SELECT field. Remove it completely.
+The ti-vpe/ sub-directory does not only contain the VPE-specific things.
+It also contains the CAL driver, which is a completely different
+subsystem. This is also not a good place to add new drivers for other TI
+platforms since they will all get mixed up.
 
-Secondly, it makes little sense to enable ith virtual channel for ith
-stream. Sure, there might be a use-case that demands it. But there might
-also be a use case that demands all streams to use the 0th virtual
-channel. Prefer this case over the former because it is less arbitrary
-and also makes it very clear what the limitations of the current driver
-is instead of giving a false impression that multiple virtual channels
-are supported.
+Separate the VPE and CAL parts into different sub-directories and rename
+the ti-vpe/ sub-directory to ti/. This is now the place where new TI
+platform drivers can be added.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+
 ---
+Compile tested only. There should be no functional change.
 
-(no changes since v1)
+(no changes since v3)
 
- drivers/media/platform/cadence/cdns-csi2rx.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Changes in v3:
+- Add Tomi's R-by.
 
-diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index 3730e8beee48..edd56c5f2e89 100644
---- a/drivers/media/platform/cadence/cdns-csi2rx.c
-+++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -48,7 +48,6 @@
- #define CSI2RX_STREAM_STATUS_RDY			BIT(31)
+Changes in v2:
+- New in v2.
+
+ MAINTAINERS                                              | 3 ++-
+ drivers/media/platform/Makefile                          | 2 +-
+ drivers/media/platform/ti/Makefile                       | 3 +++
+ drivers/media/platform/ti/cal/Makefile                   | 3 +++
+ drivers/media/platform/{ti-vpe => ti/cal}/cal-camerarx.c | 0
+ drivers/media/platform/{ti-vpe => ti/cal}/cal-video.c    | 0
+ drivers/media/platform/{ti-vpe => ti/cal}/cal.c          | 0
+ drivers/media/platform/{ti-vpe => ti/cal}/cal.h          | 0
+ drivers/media/platform/{ti-vpe => ti/cal}/cal_regs.h     | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/Makefile       | 4 ----
+ drivers/media/platform/{ti-vpe => ti/vpe}/csc.c          | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/csc.h          | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/sc.c           | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/sc.h           | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/sc_coeff.h     | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.c        | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.h        | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpdma_priv.h   | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpe.c          | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpe_regs.h     | 0
+ 20 files changed, 9 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/media/platform/ti/Makefile
+ create mode 100644 drivers/media/platform/ti/cal/Makefile
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal-camerarx.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal-video.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal_regs.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/Makefile (78%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/csc.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/csc.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/sc.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/sc.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/sc_coeff.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma_priv.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpe.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpe_regs.h (100%)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cad1289793db..62bc4a949ae1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18829,7 +18829,8 @@ W:	http://linuxtv.org/
+ Q:	http://patchwork.linuxtv.org/project/linux-media/list/
+ F:	Documentation/devicetree/bindings/media/ti,cal.yaml
+ F:	Documentation/devicetree/bindings/media/ti,vpe.yaml
+-F:	drivers/media/platform/ti-vpe/
++F:	drivers/media/platform/ti/cal/
++F:	drivers/media/platform/ti/vpe/
  
- #define CSI2RX_STREAM_DATA_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x008)
--#define CSI2RX_STREAM_DATA_CFG_EN_VC_SELECT		BIT(31)
- #define CSI2RX_STREAM_DATA_CFG_VC_SELECT(n)		BIT((n) + 16)
+ TI WILINK WIRELESS DRIVERS
+ L:	linux-wireless@vger.kernel.org
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 73ce083c2fc6..26d15b377a79 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -15,7 +15,7 @@ obj-$(CONFIG_VIDEO_PXA27x)	+= pxa_camera.o
  
- #define CSI2RX_STREAM_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x00c)
-@@ -286,8 +285,11 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
- 		writel(CSI2RX_STREAM_CFG_FIFO_MODE_LARGE_BUF,
- 		       csi2rx->base + CSI2RX_STREAM_CFG_REG(i));
+ obj-$(CONFIG_VIDEO_VIU) += fsl-viu.o
  
--		writel(CSI2RX_STREAM_DATA_CFG_EN_VC_SELECT |
--		       CSI2RX_STREAM_DATA_CFG_VC_SELECT(i),
-+		/*
-+		 * Enable one virtual channel. When multiple virtual channels
-+		 * are supported this will have to be changed.
-+		 */
-+		writel(CSI2RX_STREAM_DATA_CFG_VC_SELECT(0),
- 		       csi2rx->base + CSI2RX_STREAM_DATA_CFG_REG(i));
+-obj-y	+= ti-vpe/
++obj-y	+= ti/
  
- 		writel(CSI2RX_STREAM_CTRL_START,
+ obj-$(CONFIG_VIDEO_MX2_EMMAPRP)		+= mx2_emmaprp.o
+ obj-$(CONFIG_VIDEO_CODA)		+= coda/
+diff --git a/drivers/media/platform/ti/Makefile b/drivers/media/platform/ti/Makefile
+new file mode 100644
+index 000000000000..bbc737ccbbea
+--- /dev/null
++++ b/drivers/media/platform/ti/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++obj-y += cal/
++obj-y += vpe/
+diff --git a/drivers/media/platform/ti/cal/Makefile b/drivers/media/platform/ti/cal/Makefile
+new file mode 100644
+index 000000000000..45ac35585f0b
+--- /dev/null
++++ b/drivers/media/platform/ti/cal/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_VIDEO_TI_CAL) += ti-cal.o
++ti-cal-y := cal.o cal-camerarx.o cal-video.o
+diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti/cal/cal-camerarx.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/cal-camerarx.c
+rename to drivers/media/platform/ti/cal/cal-camerarx.c
+diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti/cal/cal-video.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/cal-video.c
+rename to drivers/media/platform/ti/cal/cal-video.c
+diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti/cal/cal.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/cal.c
+rename to drivers/media/platform/ti/cal/cal.c
+diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti/cal/cal.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/cal.h
+rename to drivers/media/platform/ti/cal/cal.h
+diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti/cal/cal_regs.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/cal_regs.h
+rename to drivers/media/platform/ti/cal/cal_regs.h
+diff --git a/drivers/media/platform/ti-vpe/Makefile b/drivers/media/platform/ti/vpe/Makefile
+similarity index 78%
+rename from drivers/media/platform/ti-vpe/Makefile
+rename to drivers/media/platform/ti/vpe/Makefile
+index ad624056e039..3fadfe084f87 100644
+--- a/drivers/media/platform/ti-vpe/Makefile
++++ b/drivers/media/platform/ti/vpe/Makefile
+@@ -10,7 +10,3 @@ ti-sc-y := sc.o
+ ti-csc-y := csc.o
+ 
+ ccflags-$(CONFIG_VIDEO_TI_VPE_DEBUG) += -DDEBUG
+-
+-obj-$(CONFIG_VIDEO_TI_CAL) += ti-cal.o
+-
+-ti-cal-y := cal.o cal-camerarx.o cal-video.o
+diff --git a/drivers/media/platform/ti-vpe/csc.c b/drivers/media/platform/ti/vpe/csc.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/csc.c
+rename to drivers/media/platform/ti/vpe/csc.c
+diff --git a/drivers/media/platform/ti-vpe/csc.h b/drivers/media/platform/ti/vpe/csc.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/csc.h
+rename to drivers/media/platform/ti/vpe/csc.h
+diff --git a/drivers/media/platform/ti-vpe/sc.c b/drivers/media/platform/ti/vpe/sc.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/sc.c
+rename to drivers/media/platform/ti/vpe/sc.c
+diff --git a/drivers/media/platform/ti-vpe/sc.h b/drivers/media/platform/ti/vpe/sc.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/sc.h
+rename to drivers/media/platform/ti/vpe/sc.h
+diff --git a/drivers/media/platform/ti-vpe/sc_coeff.h b/drivers/media/platform/ti/vpe/sc_coeff.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/sc_coeff.h
+rename to drivers/media/platform/ti/vpe/sc_coeff.h
+diff --git a/drivers/media/platform/ti-vpe/vpdma.c b/drivers/media/platform/ti/vpe/vpdma.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpdma.c
+rename to drivers/media/platform/ti/vpe/vpdma.c
+diff --git a/drivers/media/platform/ti-vpe/vpdma.h b/drivers/media/platform/ti/vpe/vpdma.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpdma.h
+rename to drivers/media/platform/ti/vpe/vpdma.h
+diff --git a/drivers/media/platform/ti-vpe/vpdma_priv.h b/drivers/media/platform/ti/vpe/vpdma_priv.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpdma_priv.h
+rename to drivers/media/platform/ti/vpe/vpdma_priv.h
+diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti/vpe/vpe.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpe.c
+rename to drivers/media/platform/ti/vpe/vpe.c
+diff --git a/drivers/media/platform/ti-vpe/vpe_regs.h b/drivers/media/platform/ti/vpe/vpe_regs.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpe_regs.h
+rename to drivers/media/platform/ti/vpe/vpe_regs.h
 -- 
 2.33.0
 
