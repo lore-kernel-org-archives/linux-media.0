@@ -2,141 +2,172 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56A4DC43219
-	for <linux-media@archiver.kernel.org>; Wed, 15 Sep 2021 01:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D87B4C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 15 Sep 2021 03:44:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 37C4461211
-	for <linux-media@archiver.kernel.org>; Wed, 15 Sep 2021 01:50:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE3B56108F
+	for <linux-media@archiver.kernel.org>; Wed, 15 Sep 2021 03:44:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233988AbhIOBwA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Sep 2021 21:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
+        id S236078AbhIODpx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Sep 2021 23:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbhIOBwA (ORCPT
+        with ESMTP id S234150AbhIODpt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Sep 2021 21:52:00 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9B0C061574
-        for <linux-media@vger.kernel.org>; Tue, 14 Sep 2021 18:50:41 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id l7-20020a1c2507000000b002e6be5d86b3so854364wml.3
-        for <linux-media@vger.kernel.org>; Tue, 14 Sep 2021 18:50:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zM8FsXiM9O4eBZdkXaqFVNn1tTornIe046XH9M/vUAo=;
-        b=ITTklQFgG3s6JDx1la106SAbbJymHKIxsXGMVxvhhjWdDYHTqhnC+9/zigBbwHNwsC
-         j7ksWU2Ygjjtcgu2SZokKjzBzjIXIuXUyZ5cul0byJs4VQ5JO/6x524dmwzYshLXeMq1
-         1eYOL1kL9NJTUyoZuTKkj2vP60nk1WotYueH8uCxMtc42YNRf9c75QoVl3Z4NjKasqcQ
-         AkLlpjRi6E4kXsIl8alY0Dx3Lc8S9hsBIAP/RYeoY+QxktgieHW0ulgpj5jDDqG9nura
-         xr0QPnaeJH58Q0hRzvL0bZeRxZr4YFFeZMXCHwZ3bwYwWzTDCXw3vuLtJFx7xLD+PRkB
-         0m9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zM8FsXiM9O4eBZdkXaqFVNn1tTornIe046XH9M/vUAo=;
-        b=el6rnwE74BCbILUBVqFxl+vE2icVrSoogYZcyuKVtQPiPG00c2Od8vifd1klA5XP1s
-         vU72djQidd0ZrvjLxJLlSIONCQwevvffe/YGAgoCzG99sErEG5M7ErMuk+F7sEpAKbji
-         f3ytwjF3SPc30CCpD7KRF/OXRuJj2A0xSdZ/otAehjiPNldaSxnRg60IU9xq3CXx+5Rg
-         HB2qf85nbZjYYWCxcHdTq2mFkMp4VossowYiPeYZMsEsCRS1sWp8Fuvm6bsT27Ir2ioK
-         oNEoCPe8tnm3Y4ty2S+5Mu7rQltoH0OcL9x0PDUT63BjDeOhfIFVwi8AviVbnkbwFVuG
-         Go7g==
-X-Gm-Message-State: AOAM531s2rBk5flSfR0VtGp9qxhE/Q9xH6HbnnAlb80j5gfpffmWHVtX
-        7rqbrdXoB1hxuLH3HVAqIvHYcw==
-X-Google-Smtp-Source: ABdhPJwbRo5NrwKJhg2n6ORF2bczxZ4tl+VhEo+No1jKxRFo79yONd7Liw3MJQ42pjX/XDzUkco6OQ==
-X-Received: by 2002:a7b:c30b:: with SMTP id k11mr1747912wmj.49.1631670640385;
-        Tue, 14 Sep 2021 18:50:40 -0700 (PDT)
-Received: from bismarck.berto.se (p54ac5892.dip0.t-ipconnect.de. [84.172.88.146])
-        by smtp.googlemail.com with ESMTPSA id k17sm3486863wmj.0.2021.09.14.18.50.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Sep 2021 18:50:40 -0700 (PDT)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v2 2/2] media: rcar-csi2: Serialize access to set_fmt and get_fmt
-Date:   Wed, 15 Sep 2021 03:50:13 +0200
-Message-Id: <20210915015013.3169934-3-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210915015013.3169934-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20210915015013.3169934-1-niklas.soderlund+renesas@ragnatech.se>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Tue, 14 Sep 2021 23:45:49 -0400
+Received: from lb2-smtp-cloud7.xs4all.net (lb2-smtp-cloud7.xs4all.net [IPv6:2001:888:0:108::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D73AC061574
+        for <linux-media@vger.kernel.org>; Tue, 14 Sep 2021 20:44:31 -0700 (PDT)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id QLqQmofprpQdWQLqWm9uty; Wed, 15 Sep 2021 05:44:28 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1631677468; bh=1XgCo9Q1mrf8XHGF86gWmPdIn0z5LkMwIs4EWsab9Ic=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=rRAmTg0TOs/TGC5b4hYl30cmmRpsOXSI2iRV82DWweP9L/aRtHQZDaOOOeIGIqIW8
+         rBz8aNH0HVLZ7VLYlWKgu5i/1CwVwEw98ul+DF/D7OAaWavqU7DqjKsWAwsbuWl9qq
+         SaCWZJ9XtVwcZtvMI0/NXvAFojc2+bi73DojAxQKqEKanVJBoDoVQMabeR2NOam1Gv
+         ShHiiCROJ7G08Suh0nYXjDb7Zh7FZtlad6SBQfWqAcKuOC5oOuq+Bndw03q7zBSxkU
+         GtvN8UM4HgYEFh9pbA+NysO3alyXqU+If//dHFNNM8i2a4UT4xDt3PJY97TUgCOsxB
+         SA/5dmu3j5v2Q==
+Message-ID: <c4390beffc53fbe727027f21e03888b9@smtp-cloud7.xs4all.net>
+Date:   Wed, 15 Sep 2021 05:44:22 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4xfNoxPfmBgfCgDanqqR5lYIVMDAT5t0Y7yANC5f/DxHyv1uhq5FXMo1kGXKGFvdbXL+I6losaX2V01Gm++12hNZ0d63/sNMZ8iC/vTMva/yBRCq8rrCRI
+ /O0GSHtgGczE3bEfVQqo8FG2xyALl44r7NIzFLHnXYf9LfWzg3DRYkFBiEYI+H2EeUoUmbwj3xBY9cFXErN594C77hIFjw+/XSi1YmBcYRE6TOMvw8LU4Zc+
+ XjQozQeoNnbU2X78cZcdxg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The access to the internal storage of the format rcar_csi2.mf should be
-serialized, extend the exciting lock mutex to also cover this.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-While at it document the mutex.
+Results of the daily build of media_tree:
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
----
- drivers/media/platform/rcar-vin/rcar-csi2.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+date:			Wed Sep 15 05:00:11 CEST 2021
+media-tree git hash:	9c3a0f285248899dfa81585bc5d5bc9ebdb8fead
+media_build git hash:	7253675c65ed84dc294ef25e2af873e8092be48b
+v4l-utils git hash:	05a468e033af0e4c775aaa10fe4d02c45de698ae
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 10.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.3-349-gb21d5e09
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-7593-g7f4b93661
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 8f230e7be768cbdfab869697ba0a2c622a4a0cae
+host hardware:		x86_64
+host os:		5.13.11-marune
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index a02573dbd5da4f62..2fdfdc38de424c72 100644
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -370,9 +370,8 @@ struct rcar_csi2 {
- 	struct v4l2_subdev *remote;
- 	unsigned int remote_pad;
- 
-+	struct mutex lock; /* Protects mf and stream_count. */
- 	struct v4l2_mbus_framefmt mf;
--
--	struct mutex lock;
- 	int stream_count;
- 
- 	unsigned short lanes;
-@@ -725,6 +724,8 @@ static int rcsi2_set_pad_format(struct v4l2_subdev *sd,
- 	struct rcar_csi2 *priv = sd_to_csi2(sd);
- 	struct v4l2_mbus_framefmt *framefmt;
- 
-+	mutex_lock(&priv->lock);
-+
- 	if (!rcsi2_code_to_fmt(format->format.code))
- 		format->format.code = rcar_csi2_formats[0].code;
- 
-@@ -735,6 +736,8 @@ static int rcsi2_set_pad_format(struct v4l2_subdev *sd,
- 		*framefmt = format->format;
- 	}
- 
-+	mutex_unlock(&priv->lock);
-+
- 	return 0;
- }
- 
-@@ -744,11 +747,15 @@ static int rcsi2_get_pad_format(struct v4l2_subdev *sd,
- {
- 	struct rcar_csi2 *priv = sd_to_csi2(sd);
- 
-+	mutex_lock(&priv->lock);
-+
- 	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
- 		format->format = priv->mf;
- 	else
- 		format->format = *v4l2_subdev_get_try_format(sd, sd_state, 0);
- 
-+	mutex_unlock(&priv->lock);
-+
- 	return 0;
- }
- 
--- 
-2.33.0
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-mips: OK
+linux-git-arm-pxa: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-4.4.283-i686: OK
+linux-4.4.283-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.246-i686: OK
+linux-4.9.246-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.246-i686: OK
+linux-4.14.246-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.206-i686: OK
+linux-4.19.206-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.144-i686: OK
+linux-5.4.144-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.18-i686: OK
+linux-5.8.18-x86_64: OK
+linux-5.9.16-i686: OK
+linux-5.9.16-x86_64: OK
+linux-5.10.62-i686: OK
+linux-5.10.62-x86_64: OK
+linux-5.11.22-i686: OK
+linux-5.11.22-x86_64: OK
+linux-5.12.19-i686: OK
+linux-5.12.19-x86_64: OK
+linux-5.13.14-i686: OK
+linux-5.13.14-x86_64: OK
+linux-5.14.1-i686: OK
+linux-5.14.1-x86_64: OK
+linux-5.15-rc1-i686: ERRORS
+linux-5.15-rc1-x86_64: ERRORS
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 2
+virtme-32: OK: Final Summary: 3100, Succeeded: 3100, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: WARNINGS
 
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Wednesday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Wednesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
