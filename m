@@ -2,92 +2,87 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C4ADC433F5
-	for <linux-media@archiver.kernel.org>; Thu, 16 Sep 2021 02:06:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0592FC433F5
+	for <linux-media@archiver.kernel.org>; Thu, 16 Sep 2021 02:15:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E02461185
-	for <linux-media@archiver.kernel.org>; Thu, 16 Sep 2021 02:06:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBCBD61185
+	for <linux-media@archiver.kernel.org>; Thu, 16 Sep 2021 02:15:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbhIPCHv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Sep 2021 22:07:51 -0400
-Received: from mx24.baidu.com ([111.206.215.185]:49932 "EHLO baidu.com"
+        id S233717AbhIPCRB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Sep 2021 22:17:01 -0400
+Received: from mx22.baidu.com ([220.181.50.185]:59730 "EHLO baidu.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233809AbhIPCHu (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Sep 2021 22:07:50 -0400
-X-Greylist: delayed 368 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Sep 2021 22:07:50 EDT
-Received: from Bc-Mail-Ex13.internal.baidu.com (unknown [172.31.51.53])
-        by Forcepoint Email with ESMTPS id 2B74F308AEF8BAE180B3;
-        Thu, 16 Sep 2021 10:06:29 +0800 (CST)
-Received: from BJHW-MAIL-EX28.internal.baidu.com (10.127.64.43) by
- Bc-Mail-Ex13.internal.baidu.com (172.31.51.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2242.12; Thu, 16 Sep 2021 10:06:28 +0800
+        id S231674AbhIPCRA (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 15 Sep 2021 22:17:00 -0400
+Received: from BJHW-Mail-Ex06.internal.baidu.com (unknown [10.127.64.16])
+        by Forcepoint Email with ESMTPS id A4DCE88C43637F91B40D;
+        Thu, 16 Sep 2021 10:00:16 +0800 (CST)
 Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
- BJHW-MAIL-EX28.internal.baidu.com (10.127.64.43) with Microsoft SMTP Server
+ BJHW-Mail-Ex06.internal.baidu.com (10.127.64.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.14; Thu, 16 Sep 2021 10:06:28 +0800
-Received: from BJHW-MAIL-EX27.internal.baidu.com ([169.254.58.247]) by
- BJHW-MAIL-EX27.internal.baidu.com ([169.254.58.247]) with mapi id
- 15.01.2308.014; Thu, 16 Sep 2021 10:06:28 +0800
-From:   "Cai,Huoqing" <caihuoqing@baidu.com>
-To:     Sean Young <sean@mess.org>
+ 15.1.2308.14; Thu, 16 Sep 2021 10:00:16 +0800
+Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.63.8) by
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Thu, 16 Sep 2021 10:00:16 +0800
+From:   Cai Huoqing <caihuoqing@baidu.com>
+To:     <caihuoqing@baidu.com>
 CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] media: b2c2: flexcop: Convert to SPDX identifier
-Thread-Topic: [PATCH v2] media: b2c2: flexcop: Convert to SPDX identifier
-Thread-Index: AQHXqp6YKLlLTRa+3UOAGkVQbN03Vaul6XWg
-Date:   Thu, 16 Sep 2021 02:06:28 +0000
-Message-ID: <de095ae62b4a4e3196ccd96857049870@baidu.com>
-References: <20210916020006.8497-1-caihuoqing@baidu.com>
-In-Reply-To: <20210916020006.8497-1-caihuoqing@baidu.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.12.45.132]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] media: b2c2: flexcop: Convert to SPDX identifier
+Date:   Thu, 16 Sep 2021 10:00:05 +0800
+Message-ID: <20210916020006.8497-1-caihuoqing@baidu.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [172.31.63.8]
+X-ClientProxiedBy: BJHW-Mail-Ex11.internal.baidu.com (10.127.64.34) To
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
+X-Baidu-BdMsfe-DateCheck: 1_BJHW-Mail-Ex06_2021-09-16 10:00:16:668
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SGVsbG8sDQorQ2MgU2VhbiBZb3VuZyA8c2VhbkBtZXNzLm9yZz4NCg0KPiAtLS0tLU9yaWdpbmFs
-IE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBDYWksSHVvcWluZyA8Y2FpaHVvcWluZ0BiYWlkdS5jb20+
-DQo+IFNlbnQ6IDIwMjHE6jnUwjE2yNUgMTA6MDANCj4gVG86IENhaSxIdW9xaW5nDQo+IENjOiBN
-YXVybyBDYXJ2YWxobyBDaGVoYWI7IGxpbnV4LW1lZGlhQHZnZXIua2VybmVsLm9yZzsgbGludXgt
-DQo+IGtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogW1BBVENIIHYyXSBtZWRpYTog
-YjJjMjogZmxleGNvcDogQ29udmVydCB0byBTUERYIGlkZW50aWZpZXINCj4gDQo+IHVzZSBTUERY
-LUxpY2Vuc2UtSWRlbnRpZmllciBpbnN0ZWFkIG9mIGEgdmVyYm9zZSBsaWNlbnNlIHRleHQNCj4g
-DQo+IFNpZ25lZC1vZmYtYnk6IENhaSBIdW9xaW5nIDxjYWlodW9xaW5nQGJhaWR1LmNvbT4NCj4g
-LS0tDQo+IHYxLT52MjogQ2hhbmdlIGxpY2Vuc2UgZnJvbSBHUEwtMi4wKyB0byBMR1BMLTIuMS1v
-ci1sYXRlcg0KPiANCj4gIGRyaXZlcnMvbWVkaWEvY29tbW9uL2IyYzIvZmxleGNvcC5jIHwgMTEg
-Ky0tLS0tLS0tLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMTAgZGVsZXRp
-b25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9tZWRpYS9jb21tb24vYjJjMi9mbGV4
-Y29wLmMNCj4gYi9kcml2ZXJzL21lZGlhL2NvbW1vbi9iMmMyL2ZsZXhjb3AuYw0KPiBpbmRleCBj
-YmFhNjFmMTBkNWYuLjJlYWZmMTMxNjk1MiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9tZWRpYS9j
-b21tb24vYjJjMi9mbGV4Y29wLmMNCj4gKysrIGIvZHJpdmVycy9tZWRpYS9jb21tb24vYjJjMi9m
-bGV4Y29wLmMNCj4gQEAgLTEsMyArMSw0IEBADQo+ICsvLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmll
-cjogTEdQTC0yLjEtb3ItbGF0ZXINCj4gIC8qDQo+ICAgKiBMaW51eCBkcml2ZXIgZm9yIGRpZ2l0
-YWwgVFYgZGV2aWNlcyBlcXVpcHBlZCB3aXRoIEIyQzIgRmxleGNvcElJKGIpL0lJSQ0KPiAgICog
-ZmxleGNvcC5jIC0gbWFpbiBtb2R1bGUgcGFydA0KPiBAQCAtMTUsMTYgKzE2LDYgQEANCj4gICAq
-ICAgVXdlIEJ1Z2xhLCB1d2UuYnVnbGEgYXQgZ214LmRlIChkb2luZyB0ZXN0cywgcmVzdHlsaW5n
-IGNvZGUsIHdyaXRpbmcgZG9jdSkNCj4gICAqICAgTmlrbGFzIFBlaW5lY2tlLCBwZWluZWNrZSBh
-dCBnZHYudW5pLWhhbm5vdmVyLmRlIChoYXJkd2FyZSBwaWQvbWFjDQo+ICAgKiAgICAgICAgICAg
-ICAgIGZpbHRlcmluZykNCj4gLSAqDQo+IC0gKiBUaGlzIHByb2dyYW0gaXMgZnJlZSBzb2Z0d2Fy
-ZTsgeW91IGNhbiByZWRpc3RyaWJ1dGUgaXQgYW5kL29yDQo+IC0gKiBtb2RpZnkgaXQgdW5kZXIg
-dGhlIHRlcm1zIG9mIHRoZSBHTlUgTGVzc2VyIEdlbmVyYWwgUHVibGljIExpY2Vuc2UNCj4gLSAq
-IGFzIHB1Ymxpc2hlZCBieSB0aGUgRnJlZSBTb2Z0d2FyZSBGb3VuZGF0aW9uOyBlaXRoZXIgdmVy
-c2lvbiAyLjENCj4gLSAqIG9mIHRoZSBMaWNlbnNlLCBvciAoYXQgeW91ciBvcHRpb24pIGFueSBs
-YXRlciB2ZXJzaW9uLg0KPiAtICoNCj4gLSAqIFRoaXMgcHJvZ3JhbSBpcyBkaXN0cmlidXRlZCBp
-biB0aGUgaG9wZSB0aGF0IGl0IHdpbGwgYmUgdXNlZnVsLA0KPiAtICogYnV0IFdJVEhPVVQgQU5Z
-IFdBUlJBTlRZOyB3aXRob3V0IGV2ZW4gdGhlIGltcGxpZWQgd2FycmFudHkgb2YNCj4gLSAqIE1F
-UkNIQU5UQUJJTElUWSBvciBGSVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRS4gIFNlZSB0
-aGUNCj4gLSAqIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlIGZvciBtb3JlIGRldGFpbHMuDQo+
-ICAgKi8NCj4gDQo+ICAjaW5jbHVkZSAiZmxleGNvcC5oIg0KPiAtLQ0KPiAyLjI1LjENCg0K
+use SPDX-License-Identifier instead of a verbose license text
+
+Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+---
+v1->v2: Change license from GPL-2.0+ to LGPL-2.1-or-later
+
+ drivers/media/common/b2c2/flexcop.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/drivers/media/common/b2c2/flexcop.c b/drivers/media/common/b2c2/flexcop.c
+index cbaa61f10d5f..2eaff1316952 100644
+--- a/drivers/media/common/b2c2/flexcop.c
++++ b/drivers/media/common/b2c2/flexcop.c
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: LGPL-2.1-or-later
+ /*
+  * Linux driver for digital TV devices equipped with B2C2 FlexcopII(b)/III
+  * flexcop.c - main module part
+@@ -15,16 +16,6 @@
+  *   Uwe Bugla, uwe.bugla at gmx.de (doing tests, restyling code, writing docu)
+  *   Niklas Peinecke, peinecke at gdv.uni-hannover.de (hardware pid/mac
+  *               filtering)
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public License
+- * as published by the Free Software Foundation; either version 2.1
+- * of the License, or (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+  */
+ 
+ #include "flexcop.h"
+-- 
+2.25.1
+
