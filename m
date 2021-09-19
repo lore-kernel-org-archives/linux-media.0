@@ -2,105 +2,150 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91488C433EF
-	for <linux-media@archiver.kernel.org>; Sun, 19 Sep 2021 08:27:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7A53C433EF
+	for <linux-media@archiver.kernel.org>; Sun, 19 Sep 2021 18:45:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74DBC61205
-	for <linux-media@archiver.kernel.org>; Sun, 19 Sep 2021 08:27:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9564610A3
+	for <linux-media@archiver.kernel.org>; Sun, 19 Sep 2021 18:45:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbhISI27 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 19 Sep 2021 04:28:59 -0400
-Received: from mout.gmx.net ([212.227.15.15]:36979 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229576AbhISI26 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 19 Sep 2021 04:28:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1632040038;
-        bh=bhpnsaGrv1Np5DCcjaML4H7Oxy9P1u6fnD5PIt2nVJE=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=BJoNlmIpWvL93Ez43cKMHRjF33O5J5CmJnSxXc3wRAb6X+RvTeDzKSXDpRDfmubDb
-         rvgwifMccIi4fCRuhbs5njatCvfgrKOLEyFt0L/t+CK+oVYjpRga2hrn5D3XKm2j9i
-         fEecdnN2+Vo6NmoMPr2z5xAk64umomxs8dvIL8mE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from titan ([79.150.72.99]) by mail.gmx.net (mrgmx005
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MJE2D-1mC8pq469b-00KeCc; Sun, 19
- Sep 2021 10:27:18 +0200
-Date:   Sun, 19 Sep 2021 10:27:05 +0200
-From:   Len Baker <len.baker@gmx.com>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     Kees Cook <keescook@chromium.org>, Len Baker <len.baker@gmx.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH] net: mana: Prefer struct_size over open coded arithmetic
-Message-ID: <20210918171519.GA2141@titan>
-References: <20210911102818.3804-1-len.baker@gmx.com>
- <20210918132010.GA15999@titan>
- <BYAPR21MB1270797B518555DF5DC87871BFDE9@BYAPR21MB1270.namprd21.prod.outlook.com>
+        id S230453AbhISSrM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 19 Sep 2021 14:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229517AbhISSrL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sun, 19 Sep 2021 14:47:11 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12965C061574
+        for <linux-media@vger.kernel.org>; Sun, 19 Sep 2021 11:45:46 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id x6so24620423wrv.13
+        for <linux-media@vger.kernel.org>; Sun, 19 Sep 2021 11:45:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=drpg7YBGnaAbRmge+cSF4APeRN+YB14Bio0RJmTeKiE=;
+        b=e9yPuOmNpAtBJM74zJ3YRSCpfRfzCiUoc/zMId+AK7rR/dkQiQyS5W4ZTiXNA7wqhv
+         xUQBrLgsPG+kWO7aCZ9R0VoxXB2hZOPKO507z35Tf/T8l3P11BgXwWwXOkwlLktsUw7s
+         wkFjinQ+fVbd7Wtn0OAKWNxX0kux1YlMX2y0xB0Umgb54tUyGG4gQ+7vyjA64zmSq8WG
+         XulG0ItL65f3FZk/NWFBzz4/nvzKBwRyHH0JZVEy3ylVdAFYswBZaWtcDzs0TWqg4Ta9
+         V6y59R8qQrKfpUmTL3+Lhc72SAorTMWxVKfEhos0bKnbO9EwYcV+JNPnuUF6McJhio0u
+         L5DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=drpg7YBGnaAbRmge+cSF4APeRN+YB14Bio0RJmTeKiE=;
+        b=FsOwJmfblukm45VuST8Z2XE9ustzV4sPA9fWmUGZDcyAV2imVWhazuhnCkiMQQyBDJ
+         b/mzndY2Uiit5ZENB5Ap5HqFDPOwye1bvMqPWEpWDDiusxs+BMXZSX1jhhQL2lH3gZ16
+         rpYw7RNVC/dkI5TlV/YEQK3X2UbkzR/R/71TOTRLwBJSylqEsFPnB6MkwoDExiyNquh/
+         Utb0dQpCHzMUURHqcSorlaB6y7aObLUSESXflsLbG2AQ3PCrVik0sv5cgWANmm5aYwPF
+         O5dhZjYJ+nEv/sALvfsmscNroczBa870smyKWZtdohMHsv0RoPCUbVzQi/jPvccHSGg5
+         RTIg==
+X-Gm-Message-State: AOAM5300EhOd2zjILIf1849m7ozJdksqDg+GqVc6vVJpXJ9IhzcEB4/u
+        FD8lGqy7sooAm+3OTUNked0=
+X-Google-Smtp-Source: ABdhPJz3J51kUFsnP8NZfoISrBZzFItEHv99BVdITaYtwfEFcRPm4ztgOjzExMcF1EQwKlFT3pINuw==
+X-Received: by 2002:adf:b781:: with SMTP id s1mr23863177wre.319.1632077144509;
+        Sun, 19 Sep 2021 11:45:44 -0700 (PDT)
+Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
+        by smtp.gmail.com with ESMTPSA id m1sm12492048wmq.10.2021.09.19.11.45.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Sep 2021 11:45:43 -0700 (PDT)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+Date:   Sun, 19 Sep 2021 20:45:42 +0200
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Luo Likang <luolikang@nsfocus.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux1394-devel@lists.sourceforge.net,
+        Yang Yanchao <yangyanchao6@huawei.com>,
+        Security Officers <security@kernel.org>
+Subject: Re: [PATCH v2 RESEND] media: firewire: firedtv-avc: fix a buffer
+ overflow in avc_ca_pmt()
+Message-ID: <YUeFVpGsWFpSPUsM@eldamar.lan>
+References: <YRoNTX3Krtw9NdkI@eldamar.lan>
+ <20210816072721.GA10534@kili>
+ <20210901104026.GB2129@kadam>
+ <YT39LBTgGL/b/V5N@eldamar.lan>
+ <CAHk-=wjOW3Fx8td1Snezd1_9sf8q7KuQx8TyQNR0ypS2rVBHtg@mail.gmail.com>
+ <20210913152302.76d57784@coco.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1270797B518555DF5DC87871BFDE9@BYAPR21MB1270.namprd21.prod.outlook.com>
-X-Provags-ID: V03:K1:0Usx9DIb/dE6r4AgA5bj+2H9ipZynWUT6G16cuQBnHsNr+kBZoR
- +l/jfqBdlR3QmD0jTX6WNa8vHjJkdzf2bXDDPykHodB/1mrO1nUJ6AZLVl0NgXVz0gtGISk
- jJ+kwAH1QYzowbUo0nJ0gygeIJkKK7eUPjsvlQ4Z6FH7rISeES9ue7+jK9zDavetLczc1FT
- V4vqf4e+YebRTYGD58maw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/o2y+7uZsWk=:i/6c2zo8lB/CxbdCkH5RA9
- NQsyuIZxvE/yGV1swzX6YJsbVmi+DPQweOyxQkuR1oSGzmYtrIM0jVspuno6MXmIsiFDve7fE
- jhJswVHO2qnR8+5ytzSIcdVPc11h5iw+p9oTg0GGqK22cWPc5qfTAsisPXetdfHkaDsSDJGMT
- dkZFNw8yCxreLE/4T2L7EXINbcCmYrXyo9cyHOJGTxbUQwctT3g9pNJByOf0K7k+N4Jfa7R4U
- TnNuSSIjhY3M5y2Cd+pE7akPSo7u9oRNEiwbRZg3kS59GaZVQCCzcw9A0w0sQjg7hJT7F6DrN
- 7WHFJGGSXTDhnqkpwLLfzg4bdehL2r4rUN61xmnifuq0GzdLqiV/mTucoaUFXpvaXkarM1kvH
- PXTbFhzsVK8YO4Nbx3TcifN1Wv/f95j6Fcc1V9iNMQbGxZZ/Kmr+VcacyTJ6uK///k6PJSa5r
- 6udijW033Ntc9RjBOgJwQzMXndp9FtYrRx6ID5KSzLbon3K5l64RUK9ZuTwPAtr3eJmpghSiw
- bdO3YIiFNqklJoSwf6HuLPY67gYQJYfdnQtoVAoy79mwhPLyBtbXoNic/ICj8tv0wxjORRpHV
- k2L3c12zEhQYo3T2j+TtyGGzyHw0gKk1GO0txkS01nyrmUH9liqqhplSN2dBTul+280nwyrDd
- CnjCE/iaRtKodvNswDp+Cm59tyGYQ1YUraeAgBi64giLKIngZLxrxqDJeFtB10TfmWJh5vTvj
- Z+jkPJUkx6RQwM5ABGSzoJXH+VCrxpvaYx+1ukhe6a1ocjZVZ64oNGmiwVT50G/N62uQqrILN
- 0gQ8IjrDzkkhcSlQTtA13Ot28Ij6ptU5ID0TA3eg336hQFoevTbQF+IM2s/8Tz6hs9i6ByOuK
- lQg67WHcWTycJ1PBTfDkwJis4osh8bkRAIuSekP9DyFa0JgLxSFiMwYw71x+hWnUOVKL54uqd
- jnF8z5Yfp13dnERAiUKiIyuR7eJ58hGCvtF0M61E4BpYh9kSyD6W7XfAVl0WmcKfYTWwtLVQ7
- mVXi3v8OUtczsCkLCmE8HjGwVuuaepVm9KCYYde0i8EFhFsMkkjFIfXvDDA2g5KWYtvE69SgA
- lReoUDAC/jsw2M=
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210913152302.76d57784@coco.lan>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dexuan,
+Hi Dan,
 
-On Sat, Sep 18, 2021 at 05:06:16PM +0000, Dexuan Cui wrote:
-> > From: Len Baker <len.baker@gmx.com>
-> > Sent: Saturday, September 18, 2021 6:20 AM
-> >  ...
-> > I have received a email from the linux-media subsystem telling that th=
-is
-> > patch is not applicable. The email is the following:
-> >
-> > Regards,
-> > Len
->
-> The patch is already in the net-next tree:
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/comm=
-it/?id=3Df11ee2ad25b22c2ee587045dd6999434375532f7
+On Mon, Sep 13, 2021 at 03:23:02PM +0200, Mauro Carvalho Chehab wrote:
+> Em Sun, 12 Sep 2021 11:26:10 -0700
+> Linus Torvalds <torvalds@linuxfoundation.org> escreveu:
+> 
+> > On Sun, Sep 12, 2021 at 6:14 AM Salvatore Bonaccorso <carnil@debian.org> wrote:
+> > >
+> > > On Wed, Sep 01, 2021 at 01:40:26PM +0300, Dan Carpenter wrote:  
+> > > > On Mon, Aug 16, 2021 at 10:27:22AM +0300, Dan Carpenter wrote:  
+> > > > > The bounds checking in avc_ca_pmt() is not strict enough.  It should
+> > > > > be checking "read_pos + 4" because it's reading 5 bytes.  If the
+> > > > > "es_info_length" is non-zero then it reads a 6th byte so there needs to
+> > > > > be an additional check for that.
+> > > > >
+> > > > > I also added checks for the "write_pos".  I don't think these are
+> > > > > required because "read_pos" and "write_pos" are tied together so
+> > > > > checking one ought to be enough.  
+> > 
+> > They may be in sync at a fixed offset, but the buffer length of the
+> > read ("int length") is not in sync with the buffer length for the
+> > write ("sizeof(c->operand)").
+> > 
+> > So I do think the write pos limit checking is actually necessary and needed.
+> > 
+> > > > > RESEND: this patch got lost somehow.  
+> > > >
+> > > > What the heck?  Someone on patchwork just marked this patch as obsolete
+> > > > again!!!  
+> > 
+> > Can we please make sure patchwork has some logging so that that kind
+> > of thing shows _who_ did this?
+> 
+> I've been wanting a feature like that on patchwork for years. Basically,
+> when there's more then a single person capable of accessing a patchwork
+> instance, there's no way to log who changed the status, nor to control who
+> can delegate a patch to someone else or not.
+> 
+> At least for me, touching patchwork is very hard, as the the entire login
+> logic, as well as the database model itself, is abstracted by Django. So,
+> I can't simply change a SQL insert clause there to add something else to
+> their logs nor to change the sent email that it is pushed when a patch
+> status changed.
+> 
+> I ended adding an internal log to indicate when I do some changes on my
+> patchwork instance via script a couple of years ago.
+> 
+> > > Someone knows what is going on here, i.e. what is the problem?  
+> > 
+> > Dan, can you just send that fix to me directly, with the fixed commit
+> > message (see above), and we can close this.
+> 
+> Feel free to add my:
+> 
+> 	Acked-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Thanks for the info.
+I'm sorry for prodding again, I guess I'm becoming a bit annoying :-/
+
+Dan, could you sent the patch with the above to Linus directly so it
+can show up in at least 5.15-rc3? I guess it's now to late for
+5.15-rc2.
 
 Regards,
-Len
+Salvatore
