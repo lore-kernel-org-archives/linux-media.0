@@ -2,215 +2,127 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D72ACC433F5
-	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 10:12:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0878CC433FE
+	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 10:21:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5E6C60F11
-	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 10:12:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DF70460E94
+	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 10:21:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234757AbhIVKOO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Sep 2021 06:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234782AbhIVKNl (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Sep 2021 06:13:41 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D72C061764;
-        Wed, 22 Sep 2021 03:12:07 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id 3696C1F437F7
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev
-Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Fabio Estevam <festevam@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, kernel@collabora.com
-Subject: [PATCH v5 08/10] media: hantro: Prepare for other G2 codecs
-Date:   Wed, 22 Sep 2021 12:11:44 +0200
-Message-Id: <20210922101146.13762-9-andrzej.p@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210922101146.13762-1-andrzej.p@collabora.com>
-References: <20210922101146.13762-1-andrzej.p@collabora.com>
+        id S234760AbhIVKXI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Sep 2021 06:23:08 -0400
+Received: from mga17.intel.com ([192.55.52.151]:25046 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234531AbhIVKXG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 22 Sep 2021 06:23:06 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10114"; a="203718043"
+X-IronPort-AV: E=Sophos;i="5.85,313,1624345200"; 
+   d="scan'208";a="203718043"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2021 03:21:35 -0700
+X-IronPort-AV: E=Sophos;i="5.85,313,1624345200"; 
+   d="scan'208";a="512927375"
+Received: from bbrowne-mobl.ger.corp.intel.com (HELO [10.213.200.151]) ([10.213.200.151])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2021 03:21:33 -0700
+Subject: Re: [PATCH 13/26] drm/i915: use the new iterator in
+ i915_gem_busy_ioctl
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org
+Cc:     daniel@ffwll.ch
+References: <20210922091044.2612-1-christian.koenig@amd.com>
+ <20210922091044.2612-14-christian.koenig@amd.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+Message-ID: <6b22cb75-6c41-db55-83f2-3eae87b585aa@linux.intel.com>
+Date:   Wed, 22 Sep 2021 11:21:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20210922091044.2612-14-christian.koenig@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-VeriSilicon Hantro G2 core supports other codecs besides hevc.
-Factor out some common code in preparation for vp9 support.
 
-Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
----
- drivers/staging/media/hantro/Makefile         |  1 +
- drivers/staging/media/hantro/hantro.h         |  7 +++++
- drivers/staging/media/hantro/hantro_g2.c      | 27 ++++++++++++++++
- .../staging/media/hantro/hantro_g2_hevc_dec.c | 31 -------------------
- drivers/staging/media/hantro/hantro_g2_regs.h |  7 +++++
- drivers/staging/media/hantro/hantro_hw.h      |  2 ++
- 6 files changed, 44 insertions(+), 31 deletions(-)
- create mode 100644 drivers/staging/media/hantro/hantro_g2.c
+On 22/09/2021 10:10, Christian König wrote:
+> This makes the function much simpler since the complex
+> retry logic is now handled else where.
+> 
+> Signed-off-by: Christian König <christian.koenig@amd.com>
+> ---
+>   drivers/gpu/drm/i915/gem/i915_gem_busy.c | 35 ++++++++++--------------
+>   1 file changed, 14 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_busy.c b/drivers/gpu/drm/i915/gem/i915_gem_busy.c
+> index 6234e17259c1..313afb4a11c7 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_busy.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_busy.c
+> @@ -82,8 +82,8 @@ i915_gem_busy_ioctl(struct drm_device *dev, void *data,
+>   {
+>   	struct drm_i915_gem_busy *args = data;
+>   	struct drm_i915_gem_object *obj;
+> -	struct dma_resv_list *list;
+> -	unsigned int seq;
+> +	struct dma_resv_iter cursor;
+> +	struct dma_fence *fence;
+>   	int err;
+>   
+>   	err = -ENOENT;
+> @@ -109,27 +109,20 @@ i915_gem_busy_ioctl(struct drm_device *dev, void *data,
+>   	 * to report the overall busyness. This is what the wait-ioctl does.
+>   	 *
+>   	 */
+> -retry:
+> -	seq = raw_read_seqcount(&obj->base.resv->seq);
+> -
+> -	/* Translate the exclusive fence to the READ *and* WRITE engine */
+> -	args->busy = busy_check_writer(dma_resv_excl_fence(obj->base.resv));
+> -
+> -	/* Translate shared fences to READ set of engines */
+> -	list = dma_resv_shared_list(obj->base.resv);
+> -	if (list) {
+> -		unsigned int shared_count = list->shared_count, i;
+> -
+> -		for (i = 0; i < shared_count; ++i) {
+> -			struct dma_fence *fence =
+> -				rcu_dereference(list->shared[i]);
+> -
+> +	args->busy = false;
 
-diff --git a/drivers/staging/media/hantro/Makefile b/drivers/staging/media/hantro/Makefile
-index 90036831fec4..fe6d84871d07 100644
---- a/drivers/staging/media/hantro/Makefile
-+++ b/drivers/staging/media/hantro/Makefile
-@@ -12,6 +12,7 @@ hantro-vpu-y += \
- 		hantro_g1_mpeg2_dec.o \
- 		hantro_g2_hevc_dec.o \
- 		hantro_g1_vp8_dec.o \
-+		hantro_g2.o \
- 		rockchip_vpu2_hw_jpeg_enc.o \
- 		rockchip_vpu2_hw_h264_dec.o \
- 		rockchip_vpu2_hw_mpeg2_dec.o \
-diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-index dd5e56765d4e..d91eb2b1c509 100644
---- a/drivers/staging/media/hantro/hantro.h
-+++ b/drivers/staging/media/hantro/hantro.h
-@@ -369,6 +369,13 @@ static inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
- 	writel(val, vpu->dec_base + reg);
- }
- 
-+static inline void hantro_write_addr(struct hantro_dev *vpu,
-+				     unsigned long offset,
-+				     dma_addr_t addr)
-+{
-+	vdpu_write(vpu, addr & 0xffffffff, offset);
-+}
-+
- static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
- {
- 	u32 val = readl(vpu->dec_base + reg);
-diff --git a/drivers/staging/media/hantro/hantro_g2.c b/drivers/staging/media/hantro/hantro_g2.c
-new file mode 100644
-index 000000000000..5f7bb27913de
---- /dev/null
-+++ b/drivers/staging/media/hantro/hantro_g2.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Hantro VPU codec driver
-+ *
-+ * Copyright (C) 2021 Collabora Ltd, Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-+ */
-+
-+#include "hantro_hw.h"
-+#include "hantro_g2_regs.h"
-+
-+void hantro_g2_check_idle(struct hantro_dev *vpu)
-+{
-+	int i;
-+
-+	for (i = 0; i < 3; i++) {
-+		u32 status;
-+
-+		/* Make sure the VPU is idle */
-+		status = vdpu_read(vpu, G2_REG_INTERRUPT);
-+		if (status & G2_REG_INTERRUPT_DEC_E) {
-+			dev_warn(vpu->dev, "device still running, aborting");
-+			status |= G2_REG_INTERRUPT_DEC_ABORT_E | G2_REG_INTERRUPT_DEC_IRQ_DIS;
-+			vdpu_write(vpu, status, G2_REG_INTERRUPT);
-+		}
-+	}
-+}
-+
-diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-index 340efb57fd18..226cecda9495 100644
---- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-@@ -8,20 +8,6 @@
- #include "hantro_hw.h"
- #include "hantro_g2_regs.h"
- 
--#define HEVC_DEC_MODE	0xC
--
--#define BUS_WIDTH_32		0
--#define BUS_WIDTH_64		1
--#define BUS_WIDTH_128		2
--#define BUS_WIDTH_256		3
--
--static inline void hantro_write_addr(struct hantro_dev *vpu,
--				     unsigned long offset,
--				     dma_addr_t addr)
--{
--	vdpu_write(vpu, addr & 0xffffffff, offset);
--}
--
- static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
-@@ -516,23 +502,6 @@ static void set_buffers(struct hantro_ctx *ctx)
- 	hantro_write_addr(vpu, G2_TILE_BSD, ctx->hevc_dec.tile_bsd.dma);
- }
- 
--static void hantro_g2_check_idle(struct hantro_dev *vpu)
--{
--	int i;
--
--	for (i = 0; i < 3; i++) {
--		u32 status;
--
--		/* Make sure the VPU is idle */
--		status = vdpu_read(vpu, G2_REG_INTERRUPT);
--		if (status & G2_REG_INTERRUPT_DEC_E) {
--			dev_warn(vpu->dev, "device still running, aborting");
--			status |= G2_REG_INTERRUPT_DEC_ABORT_E | G2_REG_INTERRUPT_DEC_IRQ_DIS;
--			vdpu_write(vpu, status, G2_REG_INTERRUPT);
--		}
--	}
--}
--
- int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
-diff --git a/drivers/staging/media/hantro/hantro_g2_regs.h b/drivers/staging/media/hantro/hantro_g2_regs.h
-index bb22fa921914..0ac0ba375e80 100644
---- a/drivers/staging/media/hantro/hantro_g2_regs.h
-+++ b/drivers/staging/media/hantro/hantro_g2_regs.h
-@@ -27,6 +27,13 @@
- #define G2_REG_INTERRUPT_DEC_IRQ_DIS	BIT(4)
- #define G2_REG_INTERRUPT_DEC_E		BIT(0)
- 
-+#define HEVC_DEC_MODE			0xc
-+
-+#define BUS_WIDTH_32			0
-+#define BUS_WIDTH_64			1
-+#define BUS_WIDTH_128			2
-+#define BUS_WIDTH_256			3
-+
- #define g2_strm_swap		G2_DEC_REG(2, 28, 0xf)
- #define g2_dirmv_swap		G2_DEC_REG(2, 20, 0xf)
- 
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 4323e63dfbfc..42b3f3961f75 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -308,4 +308,6 @@ void hantro_vp8_dec_exit(struct hantro_ctx *ctx);
- void hantro_vp8_prob_update(struct hantro_ctx *ctx,
- 			    const struct v4l2_ctrl_vp8_frame *hdr);
- 
-+void hantro_g2_check_idle(struct hantro_dev *vpu);
-+
- #endif /* HANTRO_HW_H_ */
--- 
-2.17.1
+You can drop this line, especially since it is not a boolean. With that:
 
+Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+
+Regards,
+
+Tvrtko
+
+> +	dma_resv_iter_begin(&cursor, obj->base.resv, true);
+> +	dma_resv_for_each_fence_unlocked(&cursor, fence) {
+> +		if (dma_resv_iter_is_restarted(&cursor))
+> +			args->busy = 0;
+> +
+> +		if (dma_resv_iter_is_exclusive(&cursor))
+> +			/* Translate the exclusive fence to the READ *and* WRITE engine */
+> +			args->busy |= busy_check_writer(fence);
+> +		else
+> +			/* Translate shared fences to READ set of engines */
+>   			args->busy |= busy_check_reader(fence);
+> -		}
+>   	}
+> -
+> -	if (args->busy && read_seqcount_retry(&obj->base.resv->seq, seq))
+> -		goto retry;
+> +	dma_resv_iter_end(&cursor);
+>   
+>   	err = 0;
+>   out:
+> 
