@@ -8,64 +8,64 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA773C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 09:11:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D7D9C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 09:11:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BD1006135F
-	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 09:11:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4978D6120F
+	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 09:11:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbhIVJMu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Sep 2021 05:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
+        id S234285AbhIVJM5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Sep 2021 05:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234288AbhIVJMa (ORCPT
+        with ESMTP id S234312AbhIVJMh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Sep 2021 05:12:30 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778DAC061574
-        for <linux-media@vger.kernel.org>; Wed, 22 Sep 2021 02:11:00 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id d21so4550290wra.12
-        for <linux-media@vger.kernel.org>; Wed, 22 Sep 2021 02:11:00 -0700 (PDT)
+        Wed, 22 Sep 2021 05:12:37 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB61FC061756
+        for <linux-media@vger.kernel.org>; Wed, 22 Sep 2021 02:11:07 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id w17so4591663wrv.10
+        for <linux-media@vger.kernel.org>; Wed, 22 Sep 2021 02:11:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=d730QTcA12WB0FxkhM0n+vEOwpHIgTa3YH56dqVvnac=;
-        b=j90J/7JUL45MnI4Ak6Zob/9DvPF7tRT9c0kTqlvHmtQqcmG72bRfc7vEybu+f/lGlN
-         XGz+AvKTZ9qloKeXOmGC9fPo5NQeTQAayLBopocjrNOrASSjtylOpH8pQNA+khn5wBfn
-         DMN2CafDZ4aQl7yb3qHndbvsIk4CKhr/BPf6mdv+m9CAt5nu7SGMmXaqgTHgU1YE4ksb
-         dEOYuFLGk/DJ/ZVdrGH5Du7o5bqY7C+Btl/Wfdov3f/1PpNTEGcbsPYysxuXYc+AOwNm
-         gZEVj5EKY/0YRhx6o2WO0fYn5cDtf261049prYNT9Tddqh+svLWG/mDmm96Klbg6eBny
-         UFmQ==
+        bh=by8trJVpX1Yx/8GVC1WzD9CSlRZcllVkqP6ongV+oMI=;
+        b=Ua1WTdcULCVJgyuOvvfgOq9UKM6ZT/ugK3x8DSROR31LC/bzEtDJKSpn9wN+Oa1+iC
+         5QQiBwuz2KUY0d4ev3JsfeSNM9p7o2mUpGKHfUXnubRAOf1d97WBSmyQkFkucFHCYwCS
+         qG1S66N9Ff1/DGJOyZP1Vd33RRL34FRqP7sdtUS6vlPQEWZUmxbgLCJnbN3xw4IU51Pe
+         vqbTj1L/FTQzRntNRxky4xEJV5yc1f1JIWY65V80gtwkTGEPvYfpucuMS6pL+ukOvJ6L
+         Q6PKskYsBoW5erXrsxIabA05RlKIGxaQpDlols8wd3FcOXLTsBTepAoYwCckAWKnDccm
+         lsHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=d730QTcA12WB0FxkhM0n+vEOwpHIgTa3YH56dqVvnac=;
-        b=8AIdRYaQwoaV4AS0B6hPsR0g8EzFZjW2en19AVu7ugZJnT96v6l5oS2gQ4s3KoTISD
-         znG5azlFoOKYrU1u6JJ9s5MpUGFM+rxLBH9S8Zz7t7NPkdDGPCwFBqU0Ux4gMGuddJa4
-         W2z8nNT54CfN2a3I2p6PrTl/aNczxFmz1+NJy3fH12WZPKYQzh+2Butva1ojKuJEZLaU
-         A+s+FihYay9Nm0I6PCgdnUh0coNxyWrmvh3buG8INoralsJmbo01vN1qqXb+SebY5GhF
-         DbZe08yhlB5HUk5r6g8qDTHliDCXpsb4qIrGGW0F9i4t8v4CfBu+Wqq4vgJFZ9pdActa
-         Xq8Q==
-X-Gm-Message-State: AOAM530OVVoPvqgKGwvSnESK1ShFpNxhZqEL1KbxO4t63FByAkTqxbjZ
-        fEXzHRoeH1BNcL//39taMVo=
-X-Google-Smtp-Source: ABdhPJwaobByNyerA5LioHPKRWh238hsBS9x3PdyiMb0uZTKHX40+PdO2QBIO1h46X7VKKESUTYfQQ==
-X-Received: by 2002:a05:6000:156e:: with SMTP id 14mr29312311wrz.393.1632301859163;
-        Wed, 22 Sep 2021 02:10:59 -0700 (PDT)
+        bh=by8trJVpX1Yx/8GVC1WzD9CSlRZcllVkqP6ongV+oMI=;
+        b=d3GURGi01MfM8iEc1v56gOUm348Uq4viL6xSSAD0h6teLmaJpuFT72QwyGsp3d0lhD
+         2KOhlqXlDd4zXX2axDJ5mglbIagD9nr4xNPk2PJh9/RSJbop/zHsQZtzeYRuD9N8eoHf
+         cxeCKNs3ZmKFEBRDjDzq23/pMq98w6o7qT2gD91O2pDMte4Iczl9LSRLpAc4v7tvYtTn
+         X9E8ZcZfkd6ETlbV+Uwafpn3/XHMLSmRWUVgB2DST4v8oQi6X4eSoAJPrCuIFm2V5pxj
+         oTYZks7SQoxSNbDphLSUUvJkXeSQTmIMy+xkJkdZ8XN7+yjKzKyxfzABfnnjZI7SLulJ
+         vi9A==
+X-Gm-Message-State: AOAM53114Jenl+ActdNjVcyywWw5QhqOIa7PZTD/69a5+NLyV8Qe1AnO
+        8k6SUqdOdBApxugZxR1bFF4=
+X-Google-Smtp-Source: ABdhPJwEnHZflQbZNIvlY5UfSsq0l60zNStoX16GjYgyxjqV6JFzPSHp+xvb2qeAILGpSnOZhNb/rA==
+X-Received: by 2002:adf:f183:: with SMTP id h3mr39765708wro.32.1632301866385;
+        Wed, 22 Sep 2021 02:11:06 -0700 (PDT)
 Received: from abel.fritz.box (p5b0ea1b5.dip0.t-ipconnect.de. [91.14.161.181])
-        by smtp.gmail.com with ESMTPSA id r25sm1535515wra.76.2021.09.22.02.10.58
+        by smtp.gmail.com with ESMTPSA id r25sm1535515wra.76.2021.09.22.02.11.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Sep 2021 02:10:58 -0700 (PDT)
+        Wed, 22 Sep 2021 02:11:06 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org
 Cc:     daniel@ffwll.ch, tvrtko.ursulin@linux.intel.com
-Subject: [PATCH 12/26] drm/scheduler: use new iterator in drm_sched_job_add_implicit_dependencies v2
-Date:   Wed, 22 Sep 2021 11:10:30 +0200
-Message-Id: <20210922091044.2612-13-christian.koenig@amd.com>
+Subject: [PATCH 20/26] drm: use new iterator in drm_gem_fence_array_add_implicit v3
+Date:   Wed, 22 Sep 2021 11:10:38 +0200
+Message-Id: <20210922091044.2612-21-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210922091044.2612-1-christian.koenig@amd.com>
 References: <20210922091044.2612-1-christian.koenig@amd.com>
@@ -78,55 +78,55 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Simplifying the code a bit.
 
-v2: use dma_resv_for_each_fence
+v2: add missing rcu_read_lock()/unlock()
+v3: switch to locked version
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 ---
- drivers/gpu/drm/scheduler/sched_main.c | 26 ++++++--------------------
- 1 file changed, 6 insertions(+), 20 deletions(-)
+ drivers/gpu/drm/drm_gem.c | 26 +++++---------------------
+ 1 file changed, 5 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-index 042c16b5d54a..5bc5f775abe1 100644
---- a/drivers/gpu/drm/scheduler/sched_main.c
-+++ b/drivers/gpu/drm/scheduler/sched_main.c
-@@ -699,30 +699,16 @@ int drm_sched_job_add_implicit_dependencies(struct drm_sched_job *job,
- 					    struct drm_gem_object *obj,
- 					    bool write)
+diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+index 09c820045859..4dcdec6487bb 100644
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -1340,31 +1340,15 @@ int drm_gem_fence_array_add_implicit(struct xarray *fence_array,
+ 				     struct drm_gem_object *obj,
+ 				     bool write)
  {
-+	struct dma_resv_iter cursor;
-+	struct dma_fence *fence;
- 	int ret;
+-	int ret;
 -	struct dma_fence **fences;
 -	unsigned int i, fence_count;
 -
 -	if (!write) {
--		struct dma_fence *fence = dma_resv_get_excl_unlocked(obj->resv);
+-		struct dma_fence *fence =
+-			dma_resv_get_excl_unlocked(obj->resv);
 -
--		return drm_sched_job_add_dependency(job, fence);
+-		return drm_gem_fence_array_add(fence_array, fence);
 -	}
--
--	ret = dma_resv_get_fences(obj->resv, NULL, &fence_count, &fences);
++	struct dma_resv_iter cursor;
++	struct dma_fence *fence;
++	int ret = 0;
+ 
+-	ret = dma_resv_get_fences(obj->resv, NULL,
+-						&fence_count, &fences);
 -	if (ret || !fence_count)
 -		return ret;
- 
+-
 -	for (i = 0; i < fence_count; i++) {
--		ret = drm_sched_job_add_dependency(job, fences[i]);
+-		ret = drm_gem_fence_array_add(fence_array, fences[i]);
 +	dma_resv_for_each_fence(&cursor, obj->resv, write, fence) {
-+		ret = drm_sched_job_add_dependency(job, fence);
++		ret = drm_gem_fence_array_add(fence_array, fence);
  		if (ret)
--			break;
-+			return ret;
+ 			break;
  	}
 -
 -	for (; i < fence_count; i++)
 -		dma_fence_put(fences[i]);
 -	kfree(fences);
--	return ret;
-+	return 0;
+ 	return ret;
  }
- EXPORT_SYMBOL(drm_sched_job_add_implicit_dependencies);
- 
+ EXPORT_SYMBOL(drm_gem_fence_array_add_implicit);
 -- 
 2.25.1
 
