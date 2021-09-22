@@ -2,124 +2,99 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95027C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 09:11:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C96BC433F5
+	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 10:12:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8030860F23
-	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 09:11:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1573161178
+	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 10:12:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234346AbhIVJNS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Sep 2021 05:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
+        id S234717AbhIVKN3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Sep 2021 06:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234268AbhIVJMn (ORCPT
+        with ESMTP id S234709AbhIVKN2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Sep 2021 05:12:43 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61999C061574
-        for <linux-media@vger.kernel.org>; Wed, 22 Sep 2021 02:11:13 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id u15so4676502wru.6
-        for <linux-media@vger.kernel.org>; Wed, 22 Sep 2021 02:11:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yn0dGzK8VwWATbg/MRLaeJ+EViGvUvAidNc2i9iKcqg=;
-        b=bAI4QNHT6vZca+VmFCOr8IcuGXzG39ykF9NW3OCQnREbvSP4HdtVYbDCDCvnpb0uwp
-         kiQDOiUHYuerHcdO0clz0n8em/ntx/m9ZEoC+SPuawsAbuNU+G8VjJkshFDctQafV8b7
-         kWI+27wdOqFJW/b3CKnzoMtaCfk+MJOsq9QIfLaZ3phScwnLtxV3TX0aGtVcqoGCY1Ro
-         yz0ThFDp5Cfc2O28+YF/58t8Licv5AKPUWZMGap6ksAZS+Xns9oL/4DoFbvpqTKGygEo
-         KoyYl25NDtQWDpwd2GG+gXQh5hE56wBf5l6O3dtZ2AMl3LiFdWRlr+mQX+cUVIzDz87Y
-         tMqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yn0dGzK8VwWATbg/MRLaeJ+EViGvUvAidNc2i9iKcqg=;
-        b=IpVI4/jNCvrC4cnv6tQ2rAChAR/X0q5UpXLLl6oCRORSNrMZBR9XEv0NB9LZmQvdf8
-         azMxE0QhF6Y+Mfuc6RvHJC0gH/ftC+QyUF6IqUfGVi1ZMkmeBSJX4H3HbvjMf/kuqsaD
-         BuuGAbrjgkmnxZD3RPZgDLuyS2aK5gosNdc/wK6vdw4+YriewlWVtKL8oQXHK2OGIXqx
-         fgaMOlmUMjetjU+xLChSl39rPsjrUb1G3WR7oJZlHSmc94hCMPBoFKD7EOHX3EWcPuPW
-         jpbdRHQ3jJs9wXQyAVReDxisPpESYTgVRcFSyWL49Qnqt/pr9s7Dl3fTBcOCsEAiAk+a
-         Ti1A==
-X-Gm-Message-State: AOAM5311HAFHcGTK7XqAopPIL3YRfaFvpf31t9agq8Z2H5vWHS4pufs8
-        yQx6ILz51QpFqEr8MNXlHTU=
-X-Google-Smtp-Source: ABdhPJx1e4IYSS2hUCc44tdiMviIyop+wkXx3UxTQUXZN8BLtELRRtnSwV5mF7dKgP+yM4dDjp6h0Q==
-X-Received: by 2002:adf:f1c4:: with SMTP id z4mr40573442wro.418.1632301871941;
-        Wed, 22 Sep 2021 02:11:11 -0700 (PDT)
-Received: from abel.fritz.box (p5b0ea1b5.dip0.t-ipconnect.de. [91.14.161.181])
-        by smtp.gmail.com with ESMTPSA id r25sm1535515wra.76.2021.09.22.02.11.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Sep 2021 02:11:11 -0700 (PDT)
-From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
-        <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To:     linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Cc:     daniel@ffwll.ch, tvrtko.ursulin@linux.intel.com
-Subject: [PATCH 26/26] dma-buf: nuke dma_resv_get_excl_unlocked
-Date:   Wed, 22 Sep 2021 11:10:44 +0200
-Message-Id: <20210922091044.2612-27-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210922091044.2612-1-christian.koenig@amd.com>
-References: <20210922091044.2612-1-christian.koenig@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Wed, 22 Sep 2021 06:13:28 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA82C061756;
+        Wed, 22 Sep 2021 03:11:58 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id BA9231F437DF
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev
+Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Fabio Estevam <festevam@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, kernel@collabora.com,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v5 01/10] hantro: postproc: Fix motion vector space size
+Date:   Wed, 22 Sep 2021 12:11:37 +0200
+Message-Id: <20210922101146.13762-2-andrzej.p@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210922101146.13762-1-andrzej.p@collabora.com>
+References: <20210922101146.13762-1-andrzej.p@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Heureka, that's finally not used any more.
+From: Ezequiel Garcia <ezequiel@collabora.com>
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
+When the post-processor hardware block is enabled, the driver
+allocates an internal queue of buffers for the decoder enginer,
+and uses the vb2 queue for the post-processor engine.
+
+For instance, on a G1 core, the decoder engine produces NV12 buffers
+and the post-processor engine can produce YUY2 buffers. The decoder
+engine expects motion vectors to be appended to the NV12 buffers,
+but this is only required for CODECs that need motion vectors,
+such as H.264.
+
+Fix the post-processor logic accordingly.
+
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 ---
- include/linux/dma-resv.h | 26 --------------------------
- 1 file changed, 26 deletions(-)
+ drivers/staging/media/hantro/hantro_postproc.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/dma-resv.h b/include/linux/dma-resv.h
-index 72e7ebaa675f..42ea6f667120 100644
---- a/include/linux/dma-resv.h
-+++ b/include/linux/dma-resv.h
-@@ -436,32 +436,6 @@ dma_resv_excl_fence(struct dma_resv *obj)
- 	return rcu_dereference_check(obj->fence_excl, dma_resv_held(obj));
- }
+diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
+index ed8916c950a4..07842152003f 100644
+--- a/drivers/staging/media/hantro/hantro_postproc.c
++++ b/drivers/staging/media/hantro/hantro_postproc.c
+@@ -132,9 +132,10 @@ int hantro_postproc_alloc(struct hantro_ctx *ctx)
+ 	unsigned int num_buffers = cap_queue->num_buffers;
+ 	unsigned int i, buf_size;
  
--/**
-- * dma_resv_get_excl_unlocked - get the reservation object's
-- * exclusive fence, without lock held.
-- * @obj: the reservation object
-- *
-- * If there is an exclusive fence, this atomically increments it's
-- * reference count and returns it.
-- *
-- * RETURNS
-- * The exclusive fence or NULL if none
-- */
--static inline struct dma_fence *
--dma_resv_get_excl_unlocked(struct dma_resv *obj)
--{
--	struct dma_fence *fence;
--
--	if (!rcu_access_pointer(obj->fence_excl))
--		return NULL;
--
--	rcu_read_lock();
--	fence = dma_fence_get_rcu_safe(&obj->fence_excl);
--	rcu_read_unlock();
--
--	return fence;
--}
--
- /**
-  * dma_resv_shared_list - get the reservation object's shared fence list
-  * @obj: the reservation object
+-	buf_size = ctx->dst_fmt.plane_fmt[0].sizeimage +
+-		   hantro_h264_mv_size(ctx->dst_fmt.width,
+-				       ctx->dst_fmt.height);
++	buf_size = ctx->dst_fmt.plane_fmt[0].sizeimage;
++	if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_H264_SLICE)
++		buf_size += hantro_h264_mv_size(ctx->dst_fmt.width,
++						ctx->dst_fmt.height);
+ 
+ 	for (i = 0; i < num_buffers; ++i) {
+ 		struct hantro_aux_buf *priv = &ctx->postproc.dec_q[i];
 -- 
-2.25.1
+2.17.1
 
