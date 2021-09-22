@@ -2,142 +2,94 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCC74C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 15:09:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF2E1C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 22:47:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A1D3160EDF
-	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 15:09:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9682E61131
+	for <linux-media@archiver.kernel.org>; Wed, 22 Sep 2021 22:47:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236363AbhIVPK6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Sep 2021 11:10:58 -0400
-Received: from mga02.intel.com ([134.134.136.20]:7977 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232274AbhIVPK6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Sep 2021 11:10:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10115"; a="210852638"
-X-IronPort-AV: E=Sophos;i="5.85,314,1624345200"; 
-   d="scan'208";a="210852638"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2021 08:09:26 -0700
-X-IronPort-AV: E=Sophos;i="5.85,314,1624345200"; 
-   d="scan'208";a="704054443"
-Received: from bbrowne-mobl.ger.corp.intel.com (HELO [10.213.200.151]) ([10.213.200.151])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2021 08:09:23 -0700
-Subject: Re: [PATCH 01/26] dma-buf: add dma_resv_for_each_fence_unlocked v4
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Cc:     daniel@ffwll.ch
-References: <20210922091044.2612-1-christian.koenig@amd.com>
- <20210922091044.2612-2-christian.koenig@amd.com>
- <093432d2-de8e-9684-03aa-7cb4842ea755@linux.intel.com>
- <347e66cf-fd85-da15-6a00-cecab25c2d49@gmail.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-Message-ID: <3ea25ac4-19f9-530e-8961-cb5b1822a11b@linux.intel.com>
-Date:   Wed, 22 Sep 2021 16:09:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S238330AbhIVWtO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Sep 2021 18:49:14 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:60108 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229506AbhIVWtN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 22 Sep 2021 18:49:13 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 85775E52;
+        Thu, 23 Sep 2021 00:47:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1632350861;
+        bh=/JIfGkpHJEOWf70+fx28BF1bpVMNHC1Qx+yk5ONMQZY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FoC+oxH6+XHWFhejlBZDMmfCUhMwh6uHdZ5u0HN4duv3Xd7LY4u7hGMjgn3SHuyCT
+         jmGKay7MRcR1GDPc9FdVlryW3o9sS14wh0mFyHdfmxEOS6Xig4dpqXNyDEyU0yNTF6
+         Rgaf1J3LhEuoe3NIKGyoOnkJBrY/q/k0co4cNWC8=
+Date:   Thu, 23 Sep 2021 01:47:40 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Cai Huoqing <caihuoqing@baidu.com>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: vsp1: Make use of the helper function
+ devm_platform_ioremap_resource()
+Message-ID: <YUuyjEibbug/Taal@pendragon.ideasonboard.com>
+References: <20210901055709.8079-1-caihuoqing@baidu.com>
 MIME-Version: 1.0
-In-Reply-To: <347e66cf-fd85-da15-6a00-cecab25c2d49@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210901055709.8079-1-caihuoqing@baidu.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Cai,
 
-On 22/09/2021 15:50, Christian König wrote:
-> Am 22.09.21 um 16:36 schrieb Tvrtko Ursulin:
->>> +
->>> +/**
->>> + * dma_resv_iter_first_unlocked - first fence in an unlocked 
->>> dma_resv obj.
->>> + * @cursor: the cursor with the current position
->>> + *
->>> + * Returns the first fence from an unlocked dma_resv obj.
->>> + */
->>> +struct dma_fence *dma_resv_iter_first_unlocked(struct dma_resv_iter 
->>> *cursor)
->>> +{
->>> +    rcu_read_lock();
->>> +    do {
->>> +        dma_resv_iter_restart_unlocked(cursor);
->>> +        dma_resv_iter_walk_unlocked(cursor);
->>> +    } while (read_seqcount_retry(&cursor->obj->seq, cursor->seq));
->>> +    rcu_read_unlock();
->>> +
->>> +    return cursor->fence;
->>> +}
->>> +EXPORT_SYMBOL(dma_resv_iter_first_unlocked);
->>
->> Why is this one split from dma_resv_iter_begin and even exported?
+Thank you for the patch.
+
+On Wed, Sep 01, 2021 at 01:57:08PM +0800, Cai Huoqing wrote:
+> Use the devm_platform_ioremap_resource() helper instead of
+> calling platform_get_resource() and devm_ioremap_resource()
+> separately
 > 
-> I've split it to be able to use dma_resv_iter_begin in both the unlocked 
-> and locked iterator.
+> Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
 
-Ok.
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
+> ---
+>  drivers/media/platform/vsp1/vsp1_drv.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
->> I couldn't find any users in the series.
-> 
-> This is used in the dma_resv_for_each_fence_unlocked() macro to return 
-> the first fence.
+> diff --git a/drivers/media/platform/vsp1/vsp1_drv.c b/drivers/media/platform/vsp1/vsp1_drv.c
+> index de442d6c9926..8acd6d45d8d0 100644
+> --- a/drivers/media/platform/vsp1/vsp1_drv.c
+> +++ b/drivers/media/platform/vsp1/vsp1_drv.c
+> @@ -785,7 +785,6 @@ static int vsp1_probe(struct platform_device *pdev)
+>  	struct vsp1_device *vsp1;
+>  	struct device_node *fcp_node;
+>  	struct resource *irq;
+> -	struct resource *io;
+>  	unsigned int i;
+>  	int ret;
+>  
+> @@ -800,8 +799,7 @@ static int vsp1_probe(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, vsp1);
+>  
+>  	/* I/O and IRQ resources (clock managed by the clock PM domain). */
+> -	io = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	vsp1->mmio = devm_ioremap_resource(&pdev->dev, io);
+> +	vsp1->mmio = devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(vsp1->mmio))
+>  		return PTR_ERR(vsp1->mmio);
+>  
 
-Doh!
-
->>> +
->>> +/**
->>> + * dma_resv_iter_next_unlocked - next fence in an unlocked dma_resv 
->>> obj.
->>> + * @cursor: the cursor with the current position
->>> + *
->>> + * Returns the next fence from an unlocked dma_resv obj.
->>> + */
->>> +struct dma_fence *dma_resv_iter_next_unlocked(struct dma_resv_iter 
->>> *cursor)
->>> +{
->>> +    bool restart;
->>> +
->>> +    rcu_read_lock();
->>> +    cursor->is_restarted = false;
->>> +    restart = read_seqcount_retry(&cursor->obj->seq, cursor->seq);
->>> +    do {
->>> +        if (restart)
->>> +            dma_resv_iter_restart_unlocked(cursor);
->>> +        dma_resv_iter_walk_unlocked(cursor);
->>> +        restart = true;
->>> +    } while (read_seqcount_retry(&cursor->obj->seq, cursor->seq));
->>> +    rcu_read_unlock();
->>> +
->>> +    return cursor->fence;
->>> +}
->>> +EXPORT_SYMBOL(dma_resv_iter_next_unlocked);
->>
->> Couldn't dma_resv_iter_first_unlocked and dma_resv_iter_next_unlocked 
->> share the same implementation? Especially if you are able to replace 
->> cursor->is_restarted with cursor->index == -1.
-> 
-> That's what I had initially, but Daniel disliked it for some reason. You 
-> then need a centralized walk function instead of first/next.
-
-I had some ideas to only consolidate "first" and "next" helpers but never mind, yours is fine as well.
-
+-- 
 Regards,
 
-Tvrtko
-
-> 
-> Thanks,
-> Christian.
-> 
->> Regards,
->>
->> Tvrtko
-> 
+Laurent Pinchart
