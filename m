@@ -2,106 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 232B3C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 24 Sep 2021 21:45:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77FBDC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 24 Sep 2021 23:31:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0AE2C611C8
-	for <linux-media@archiver.kernel.org>; Fri, 24 Sep 2021 21:45:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D3F360F9C
+	for <linux-media@archiver.kernel.org>; Fri, 24 Sep 2021 23:31:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348613AbhIXVrK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 Sep 2021 17:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348652AbhIXVqx (ORCPT
+        id S1344487AbhIXXd1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Sep 2021 19:33:27 -0400
+Received: from omta002.cacentral1.a.cloudfilter.net ([3.97.99.33]:32974 "EHLO
+        omta002.cacentral1.a.cloudfilter.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232572AbhIXXd0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 Sep 2021 17:46:53 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C8CC0613E4;
-        Fri, 24 Sep 2021 14:45:15 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id k23-20020a17090a591700b001976d2db364so8551063pji.2;
-        Fri, 24 Sep 2021 14:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=epToM7rTUgDt/oPY5JZMe7Kk98e+irfzzBER4/Xpfp4=;
-        b=dNDP3CaQeEGsblNafyCxRaIg4lRVSpTrYzue0XIllqggvAnzdlv559QOJO0lvLTtFp
-         DDMLhIPUU+JyOBYfjDhzcOEAi38XzXa7FWe7mkiYNoViB2zs40m1giQvfXWWFjAoAVHi
-         ERMQA2ZvtsrqhBZRtebFeWZy5ogX+xaKQB9voyxze9P61RIx9oQ6PTd4r2Jjn3c6qKrz
-         rYkqQGApSjwgV3HZREPXzkHvdP2FQxVzLZUiB7WBL29M/C8z0/wc2WpRdTMBCwSyH80a
-         NLEYpw/qy+Vvng2IBNzVH/hSn8/SXkNBoN/SIucAs2D9DOqrpa5f1RT6jDxrcSPX63zS
-         ZXEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=epToM7rTUgDt/oPY5JZMe7Kk98e+irfzzBER4/Xpfp4=;
-        b=BLrTHH0rfPrciJm4TMqqlEmcor9fbKdXGcZKXLJ3T0oS+85rqjYZoTiFX9SMaBlCPu
-         xv8AF1FRn/wXorZDsf0WwEgX+xdaKKphwVRfdfn7Un+3kDOF4JrlaNBYtftF907zMDcR
-         2uBXgzP5BX8+s6H8rJj0zN5+gyLa8V/woeYnXMnb0OpEbv/CU4GuHVKmsI0WC4YP1e9d
-         THGtpUVLqQxXRfgNvcalk4wABG+ImtwCD96tApPIu/8c3YbafmKNLVW0vJ10hVZciqy0
-         urV1eLGI1//pHFGAl81xE7yw9jAQEfv4hdI+BZZ4xNWiJ00IwdkFrnuLdfrmwMj8WvJC
-         qO4A==
-X-Gm-Message-State: AOAM530G/H4epDbac6Xvgxv10Rh70UoOmiQm+Lh1ijGHyrIFY9KSVcwH
-        wy0jYuQI2VykuPkSRLASX8aKABm9ofm+zw==
-X-Google-Smtp-Source: ABdhPJxMxy7rARwSn89e5tP/HM6c8wUUMpshXQGMXqQ/qMpXAyOnYrBp6Qn+w4L9nJqji48KkTj6uQ==
-X-Received: by 2002:a17:902:aa02:b0:13a:6c8f:407f with SMTP id be2-20020a170902aa0200b0013a6c8f407fmr11130485plb.59.1632519914540;
-        Fri, 24 Sep 2021 14:45:14 -0700 (PDT)
-Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id n66sm9842029pfn.142.2021.09.24.14.45.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 24 Sep 2021 14:45:14 -0700 (PDT)
-From:   Justin Chen <justinpopo6@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        Justin Chen <justinpopo6@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Doug Berger <opendmb@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list),
-        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
-        dri-devel@lists.freedesktop.org (open list:DMA BUFFER SHARING FRAMEWORK),
-        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
-        FRAMEWORK)
-Subject: [PATCH net-next 4/5] net: phy: mdio-bcm-unimac: Add asp v2.0 support
-Date:   Fri, 24 Sep 2021 14:44:50 -0700
-Message-Id: <1632519891-26510-5-git-send-email-justinpopo6@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1632519891-26510-1-git-send-email-justinpopo6@gmail.com>
-References: <1632519891-26510-1-git-send-email-justinpopo6@gmail.com>
+        Fri, 24 Sep 2021 19:33:26 -0400
+Received: from shw-obgw-4001a.ext.cloudfilter.net ([10.228.9.142])
+        by cmsmtp with ESMTP
+        id ToOTmFeAMps7PTufXmwEGd; Fri, 24 Sep 2021 23:31:51 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
+        t=1632526311; bh=pj+RHrhICqKJoRuBhb7ZmfdXw8gdksDk1APSkKlQohg=;
+        h=From:To:Cc:Subject:Date;
+        b=C4DiPqZKJzk0aoU7AluYZFKu91HjxkMhIV3bT+PQLsqR1IszAFsAa7qU5DRYOnxBq
+         0ksS7q0Gx+V8AIOlg0CRVBIUy28z3ozFze4HVfgozTS19v2pGUNLnnDcxm0UY1vaGd
+         DZYtpqmhFb1OU72G2aoH5aIqGOrQ2qQlJWemSQUPqChbQQa2AMVdXB8byM7DDQxKn/
+         W2exi1qcZsrdWy0beLToITTWzJV/qYR/RP2h76oHjBmWkS2JT9vxIKs+WLcoxx6k6J
+         JNSCUD16CufGNPY9jdR2l5lFrpZNqizzjCC3WYKm75KfeYMGVDeJV8G4Bh9QToBBIb
+         dAcBV1DJre4Fw==
+Received: from shaw.ca ([70.71.78.228])
+        by cmsmtp with ESMTPA
+        id TufVmyJPGU9pxTufXmYw6Y; Fri, 24 Sep 2021 23:31:51 +0000
+Authentication-Results: ; auth=pass (LOGIN) smtp.auth=joevt@shaw.ca
+X-Authority-Analysis: v=2.4 cv=Bbi7bph2 c=1 sm=1 tr=0 ts=614e5fe7
+ a=qDatE6m/3wxSEG8Wq7h0zQ==:117 a=qDatE6m/3wxSEG8Wq7h0zQ==:17
+ a=GthV8c92ZZJlE00sHJIA:9
+From:   joevt <joevt@shaw.ca>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-media@vger.kernel.org
+Subject: [PATCH 00/28] bug fixes, additions, changes
+Date:   Fri, 24 Sep 2021 16:31:21 -0700
+Message-Id: <20210924233149.10028-1-joevt@shaw.ca>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfAyM3s+ovMFQRQpc/cLhegYJhJaS7WXisWfQB1L3na/VZqh5EoI3HBtsqVMzHCYzMFRON95FUwMrkdgVW3Vq/ONyfWd2GbM6jr5TJ5VhrzUDBqG8AgqM
+ GVlpXJSm0SYMViWdafa9HqCOfvG2u3cRMmkkGYoJB59OsOMyIiqX1/IfrYbb/jeDadhRS+APoaq4qbHszrxY65WsrriYj4bdQ58=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Signed-off-by: Justin Chen <justinpopo6@gmail.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/net/mdio/mdio-bcm-unimac.c | 1 +
- 1 file changed, 1 insertion(+)
+- Patch 02/28 replaces my previous patch 05/11.
+It adds a new warning message.
 
-diff --git a/drivers/net/mdio/mdio-bcm-unimac.c b/drivers/net/mdio/mdio-bcm-unimac.c
-index bfc9be2..14202a1 100644
---- a/drivers/net/mdio/mdio-bcm-unimac.c
-+++ b/drivers/net/mdio/mdio-bcm-unimac.c
-@@ -334,6 +334,7 @@ static SIMPLE_DEV_PM_OPS(unimac_mdio_pm_ops,
- 			 unimac_mdio_suspend, unimac_mdio_resume);
- 
- static const struct of_device_id unimac_mdio_ids[] = {
-+	{ .compatible = "brcm,asp-v2.0-mdio", },
- 	{ .compatible = "brcm,genet-mdio-v5", },
- 	{ .compatible = "brcm,genet-mdio-v4", },
- 	{ .compatible = "brcm,genet-mdio-v3", },
+- The problem with my previous patch 07/11 is addressed in patch 01/28 and 04/28 (and maybe elsewhere).
+
+- Patches 06/28 to 26/28 replace my previous patch 11/11 (broken down into smaller steps this time).
+They contain some corrections.
+
+- Includes some other changes.
+
+
+joevt (28):
+  edid-decode: remove unnecessary length check
+  edid-decode: fix standard timing vertical pixels
+  edid-decode: exclude oui from _block functions
+  edid-decode: check cta_hdr10plus length
+  edid-decode: Capitalize fail sentence
+  edid-decode: Replace return with break in switch
+  edid-decode: extended tag length check
+  edid-decode: Output block type before fail
+  edid-decode: update Microsoft expected length
+  edid-decode: Capitalize fail sentence
+  edid-decode: make all OUI handlers the same
+  edid-decode: move OUI parsing to separate function
+  edid-decode: move unknown block warning
+  edid-decode: remove cta_ext_block
+  edid-decode: change unknown CTA block names
+  edid-decode: move audio fail/warn messages
+  edid-decode: replace first_block with block_number
+  edid-decode: move parse_displayid_block inner loop
+  edid-decode: remove offset from displayid_block
+  edid-decode: displayid_block len fixes
+  edid-decode: ignore DisplayID version for OUI check.
+  edid-decode: DisplayID non-0 filler fixes
+  edid-decode: DisplayID length checks
+  edid-decode: make OUI enum
+  edid-decode: more OUI changes
+  edid-decode: remove extra vendor field
+  edid-decode: re-add one EDID
+  edid-decode: add interesting EDID
+
+ data/apple-imac-retina-4k-21.5-inch-late-2015 | Bin 0 -> 256 bytes
+ data/vizio-m60c3-hdmi-onkyo-txnr555           | Bin 0 -> 256 bytes
+ edid-decode.cpp                               | 106 +++-
+ edid-decode.h                                 |  32 +-
+ oui.h                                         |  20 +
+ parse-base-block.cpp                          |   5 +-
+ parse-cta-block.cpp                           | 482 +++++++----------
+ parse-displayid-block.cpp                     | 498 +++++++++---------
+ 8 files changed, 553 insertions(+), 590 deletions(-)
+ create mode 100644 data/apple-imac-retina-4k-21.5-inch-late-2015
+ create mode 100644 oui.h
+
 -- 
-2.7.4
+2.24.3 (Apple Git-128)
 
