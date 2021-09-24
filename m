@@ -2,221 +2,228 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DA49C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 24 Sep 2021 16:23:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 991B7C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 24 Sep 2021 20:54:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 04D8B610FD
-	for <linux-media@archiver.kernel.org>; Fri, 24 Sep 2021 16:23:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73201611C8
+	for <linux-media@archiver.kernel.org>; Fri, 24 Sep 2021 20:54:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245622AbhIXQZI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 Sep 2021 12:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
+        id S1346164AbhIXUzf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Sep 2021 16:55:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbhIXQZF (ORCPT
+        with ESMTP id S1345966AbhIXUze (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 Sep 2021 12:25:05 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066ADC061571
-        for <linux-media@vger.kernel.org>; Fri, 24 Sep 2021 09:23:32 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id f130so28603099qke.6
-        for <linux-media@vger.kernel.org>; Fri, 24 Sep 2021 09:23:31 -0700 (PDT)
+        Fri, 24 Sep 2021 16:55:34 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2B1C061571;
+        Fri, 24 Sep 2021 13:54:00 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id w29so30989152wra.8;
+        Fri, 24 Sep 2021 13:54:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8RykFUS+zIQyPPrYlPKKvEG+geEoI9vSseHxlpcXrKQ=;
-        b=h989I/HASgZ7AIF7P/YOMqX4kXGgqJNzuOzQ0waHkcENUVdEHqlLKXODhzloVPZyi9
-         4yi/EHzKbdhBlwbwiQMwvvfG/crbxB9VqCyfzmdA6LCF/qtofzrlvsiFneZTNytlGw64
-         28AXtt3FZGWF9nkU8gCoDB1+iSRlNh/u7sjLteAlpCYVw7YNrFv8DCW51PeI4HhbLxUy
-         eazO1xqYZWg8/7Ya6YO3jiEpycDfVY/jd9VD+cvtqoPPqY7GsAA/+TCPmhc2CzQsdaPm
-         7Yz/lOrDVk1yqzdfNfqK74DbsztAbMasJW4726PtaVVC2Yay7X2CIS22QXGHfxCRcE0U
-         AjYg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=uBK3kIF03EoojuPkVPYFnbtHDg911meAFaC4x+8vLoU=;
+        b=eG+xwf1r45RolAI7X1FYzC+K9OkqVYQHyQYpfYYqqJueIM/GtMuLrUnWkiF//ZdsP0
+         euDauiBLOpRw5ASNk3lX3V2Ewt6WiMsD5BCGoX9Cv0kVdcaStIi6w2J8qEEYY7XlxaGu
+         iY9hum/H4z/IGDdTGWKmaBoDsLVO2JCNvKmS+BKU8vhAA8waUWIazRKkvKIZ01g3G6l2
+         UBiEo5e8neza03fvcDDIx8DQ803a2gqDQkcfr7+0vXpRkYGfO8w08F5kLw5ag4ESY5gV
+         bTdHYZcbly+SdzJ4l8ejQWiAavKeo/i2mp5POgjmU4GHipFocMJY4JqltmcvniaL6Yyr
+         8OfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8RykFUS+zIQyPPrYlPKKvEG+geEoI9vSseHxlpcXrKQ=;
-        b=uNiLw+Tt/gSFtqP3Pk4hXXEXfKmYXT26KwOwbUusY//h9xS6knbY7uPa2gbmAgL+n1
-         HamCHln4/DmfDW7Xs1lrmNdtGS0dtj+/lNOZHP7k4LUk3q7gebps/9OEGqb6P7wD26Ov
-         68Za382QVQKfUAcLEWOZfZlNAUIe5KDFZTeCEQvSbnis/CgvnPXVvQ4Zmv/YnDxSyhn1
-         APl71hbfbQxJsZNjoXq8BOjd8XGbbsQv/y1Al6466V2N4AnFX3GkgtGsG2NOocQecSnp
-         fZEcUr02o8KD6MG9PYdO9deIH33hLQ9bjeFztQt1VYN8RGf6bg6KJjDT+u0Fh6uMIwWt
-         /Mrg==
-X-Gm-Message-State: AOAM531sAxokq6drdKp1vLIycHhZQiKu5i9SZvddspoTHdOkut2C4LwI
-        QN7NopG09OGY1SeMpfkIzU6sLVUe6JItN1Mg
-X-Google-Smtp-Source: ABdhPJw1kkgVb6LnRxSEtDqPeAhQjar+Ov9byHFml/Xm3S236dE4glk6vx5O+A7pJWzwQivL/2QSSw==
-X-Received: by 2002:ae9:eb84:: with SMTP id b126mr11137072qkg.67.1632500611095;
-        Fri, 24 Sep 2021 09:23:31 -0700 (PDT)
-Received: from fedora ([196.32.91.248])
-        by smtp.gmail.com with ESMTPSA id g13sm615144qkk.22.2021.09.24.09.23.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Sep 2021 09:23:29 -0700 (PDT)
-Date:   Fri, 24 Sep 2021 13:23:23 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, kernel@collabora.com,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>
-Subject: Re: [PATCH v5 05/10] media: uapi: Add VP9 stateless decoder controls
-Message-ID: <YU37e90gldL7zHke@fedora>
-References: <20210922101146.13762-1-andrzej.p@collabora.com>
- <20210922101146.13762-6-andrzej.p@collabora.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=uBK3kIF03EoojuPkVPYFnbtHDg911meAFaC4x+8vLoU=;
+        b=1g0jIIUU//JnPNG0XaTPQSkGCX6tQ4bSL0qwLTZ7cpxDtooL3xgdY5ofDTng3sm74O
+         nTheESNohQdlz7BwZcjxncozuw0RWoP0Bm7iHXhwehGig1+o3SQO6Rtep4yF4gzXvqvJ
+         24SLXKYjd75vufb0KwLOFbYcTHbUD+6UTaY8Tdp9QxAyZD3bK/E/DNZKJreXUWFnEufC
+         OgQLzzqlMpPOZm9AN/8p8QLDgzi6ndj7HFK/PkjbaeUqx20GRrhj0tG3Hxx0BLJQW4ch
+         paZ5n53effxp9SiWTxwa99aBtTWmuYcC+KsQNMYliiV0uHcoTKLlA38afQoksHs5kwlD
+         ueYg==
+X-Gm-Message-State: AOAM533+XXbxCPdkVHvFbC21XnQFa6THBRUBoFo4PVpRcAHyoW56BBF1
+        F84INysYyg7elZbAOwKF+bFawjcJaOYmngCFfIU=
+X-Google-Smtp-Source: ABdhPJyI8zaM6SVV9fKH0gNRI3MH/q09miYXikX9BmaxTIVHKik9puC7KXd2F8UYrIhi7QrD7wnVKE8z9RBeIw3dr2M=
+X-Received: by 2002:a1c:ac03:: with SMTP id v3mr4149363wme.127.1632516839424;
+ Fri, 24 Sep 2021 13:53:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210922101146.13762-6-andrzej.p@collabora.com>
+References: <20210924071759.22659-1-christian.koenig@amd.com>
+In-Reply-To: <20210924071759.22659-1-christian.koenig@amd.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Fri, 24 Sep 2021 13:58:31 -0700
+Message-ID: <CAF6AEGtD5Xb=4LYK3Nxd+ucMDkABdLFvW6rUqqP8q2-iVedqew@mail.gmail.com>
+Subject: Re: [PATCH 1/4] dma-buf: add dma_fence_describe and dma_resv_describe
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        The etnaviv authors <etnaviv@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Sean Paul <sean@poorly.run>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Andrzej, 
+On Fri, Sep 24, 2021 at 12:18 AM Christian K=C3=B6nig
+<ckoenig.leichtzumerken@gmail.com> wrote:
+>
+> Add functions to dump dma_fence and dma_resv objects into a seq_file and
+> use them for printing the debugfs informations.
+>
+> Signed-off-by: Christian K=C3=B6nig <christian.koenig@amd.com>
 
-On Wed, Sep 22, 2021 at 12:11:41PM +0200, Andrzej Pietrasiewicz wrote:
-> Add the VP9 stateless decoder controls plus the documentation that goes
-> with it.
-> 
-> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-> Co-developed-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
-> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-> Co-developed-by: Daniel Almeida <daniel.almeida@collabora.com>
-> Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
+for the series,
+
+Reviewed-by: Rob Clark <robdclark@gmail.com>
+
 > ---
-[snip]
-> +
-> +#define V4L2_VP9_FRAME_FLAG_KEY_FRAME			0x001
-> +#define V4L2_VP9_FRAME_FLAG_SHOW_FRAME			0x002
-> +#define V4L2_VP9_FRAME_FLAG_ERROR_RESILIENT		0x004
-> +#define V4L2_VP9_FRAME_FLAG_INTRA_ONLY			0x008
-> +#define V4L2_VP9_FRAME_FLAG_ALLOW_HIGH_PREC_MV		0x010
-> +#define V4L2_VP9_FRAME_FLAG_REFRESH_FRAME_CTX		0x020
-> +#define V4L2_VP9_FRAME_FLAG_PARALLEL_DEC_MODE		0x040
-> +#define V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING		0x080
-> +#define V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING		0x100
-> +#define V4L2_VP9_FRAME_FLAG_COLOR_RANGE_FULL_SWING	0x200
-> +
-> +#define V4L2_VP9_SIGN_BIAS_LAST				0x1
-> +#define V4L2_VP9_SIGN_BIAS_GOLDEN			0x2
-> +#define V4L2_VP9_SIGN_BIAS_ALT				0x4
-> +
-> +#define V4L2_VP9_RESET_FRAME_CTX_NONE			0
-> +#define V4L2_VP9_RESET_FRAME_CTX_SPEC			1
-> +#define V4L2_VP9_RESET_FRAME_CTX_ALL			2
-> +
-> +#define V4L2_VP9_INTERP_FILTER_EIGHTTAP			0
-> +#define V4L2_VP9_INTERP_FILTER_EIGHTTAP_SMOOTH		1
-> +#define V4L2_VP9_INTERP_FILTER_EIGHTTAP_SHARP		2
-> +#define V4L2_VP9_INTERP_FILTER_BILINEAR			3
-> +#define V4L2_VP9_INTERP_FILTER_SWITCHABLE		4
-> +
-> +#define V4L2_VP9_REFERENCE_MODE_SINGLE_REFERENCE	0
-> +#define V4L2_VP9_REFERENCE_MODE_COMPOUND_REFERENCE	1
-> +#define V4L2_VP9_REFERENCE_MODE_SELECT			2
-> +
-> +#define V4L2_VP9_PROFILE_MAX				3
-> +
-> +#define V4L2_CID_STATELESS_VP9_FRAME	(V4L2_CID_CODEC_STATELESS_BASE + 300)
+>  drivers/dma-buf/dma-buf.c   | 11 +----------
+>  drivers/dma-buf/dma-fence.c | 16 ++++++++++++++++
+>  drivers/dma-buf/dma-resv.c  | 23 +++++++++++++++++++++++
+>  include/linux/dma-fence.h   |  1 +
+>  include/linux/dma-resv.h    |  1 +
+>  5 files changed, 42 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index d35c71743ccb..4975c9289b02 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -1368,8 +1368,6 @@ static int dma_buf_debug_show(struct seq_file *s, v=
+oid *unused)
+>  {
+>         struct dma_buf *buf_obj;
+>         struct dma_buf_attachment *attach_obj;
+> -       struct dma_resv_iter cursor;
+> -       struct dma_fence *fence;
+>         int count =3D 0, attach_count;
+>         size_t size =3D 0;
+>         int ret;
+> @@ -1397,14 +1395,7 @@ static int dma_buf_debug_show(struct seq_file *s, =
+void *unused)
+>                                 file_inode(buf_obj->file)->i_ino,
+>                                 buf_obj->name ?: "");
+>
+> -               dma_resv_for_each_fence(&cursor, buf_obj->resv, true, fen=
+ce) {
+> -                       seq_printf(s, "\t%s fence: %s %s %ssignalled\n",
+> -                                  dma_resv_iter_is_exclusive(&cursor) ?
+> -                                       "Exclusive" : "Shared",
+> -                                  fence->ops->get_driver_name(fence),
+> -                                  fence->ops->get_timeline_name(fence),
+> -                                  dma_fence_is_signaled(fence) ? "" : "u=
+n");
+> -               }
+> +               dma_resv_describe(buf_obj->resv, s);
+>
+>                 seq_puts(s, "\tAttached Devices:\n");
+>                 attach_count =3D 0;
+> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+> index 1e82ecd443fa..5175adf58644 100644
+> --- a/drivers/dma-buf/dma-fence.c
+> +++ b/drivers/dma-buf/dma-fence.c
+> @@ -907,6 +907,22 @@ dma_fence_wait_any_timeout(struct dma_fence **fences=
+, uint32_t count,
+>  }
+>  EXPORT_SYMBOL(dma_fence_wait_any_timeout);
+>
 > +/**
-> + * struct v4l2_ctrl_vp9_frame - VP9 frame decoding control
+> + * dma_fence_describe - Dump fence describtion into seq_file
+> + * @fence: the 6fence to describe
+> + * @seq: the seq_file to put the textual description into
 > + *
-> + * @lf: loop filter parameters. See &v4l2_vp9_loop_filter for more details
-
-Seems these documentation is missing an ending period for many fields.
-
-> + * @quant: quantization parameters. See &v4l2_vp9_quantization for more details
-> + * @seg: segmentation parameters. See &v4l2_vp9_segmentation for more details
-> + * @flags: combination of V4L2_VP9_FRAME_FLAG_* flags
-> + * @compressed_header_size: compressed header size in bytes
-> + * @uncompressed_header_size: uncompressed header size in bytes
-> + * @frame_width_minus_1: add 1 to it and you'll get the frame width expressed in pixels
-> + * @frame_height_minus_1: add 1 to it and you'll get the frame height expressed in pixels
-> + * @render_width_minus_1: add 1 to it and you'll get the expected render width expressed in
-> + *	pixels. This is not used during the decoding process but might be used by HW scalers
-> + *	to prepare a frame that's ready for scanout
-> + * @render_height_minus_1: add 1 to it and you'll get the expected render height expressed in
-> + *	pixels. This is not used during the decoding process but might be used by HW scalers
-> + *	to prepare a frame that's ready for scanout
-> + * @last_frame_ts: "last" reference buffer timestamp.
-> + * The timestamp refers to the timestamp field in struct v4l2_buffer.
-> + * Use v4l2_timeval_to_ns() to convert the struct timeval to a __u64.
-> + * @golden_frame_ts: "golden" reference buffer timestamp.
-> + * The timestamp refers to the timestamp field in struct v4l2_buffer.
-> + * Use v4l2_timeval_to_ns() to convert the struct timeval to a __u64.
-> + * @alt_frame_ts: "alt" reference buffer timestamp.
-> + * The timestamp refers to the timestamp field in struct v4l2_buffer.
-> + * Use v4l2_timeval_to_ns() to convert the struct timeval to a __u64.
-> + * @ref_frame_sign_bias: a bitfield specifying whether the sign bias is set for a given
-> + *	reference frame. Either of V4L2_VP9_SIGN_BIAS_*.
-> + * @reset_frame_context: specifies whether the frame context should be reset to default values.
-> + *	Either of V4L2_VP9_RESET_FRAME_CTX_*.
-> + * @frame_context_idx: frame context that should be used/updated
-> + * @profile: VP9 profile. Can be 0, 1, 2 or 3
-> + * @bit_depth: bits per components. Can be 8, 10 or 12. Note that not all profiles support
-> + *	10 and/or 12 bits depths
-> + * @interpolation_filter: specifies the filter selection used for performing inter prediction.
-> + *	Either of V4L2_VP9_INTERP_FILTER_*
-> + * @tile_cols_log2: specifies the base 2 logarithm of the width of each tile (where the width
-> + *	is measured in units of 8x8 blocks). Shall be less than or equal to 6
-> + * @tile_rows_log2: specifies the base 2 logarithm of the height of each tile (where the height
-> + *	is measured in units of 8x8 blocks)
-> + * @reference_mode: specifies the type of inter prediction to be used. See
-
-See what? :-)
-
-> + *	Either of V4L2_VP9_REFERENCE_MODE_*
-
-Other controls use V4L2_VP9_REFERENCE_MODE_{}, {} instead of *.
-The same applies to all the documentation.
-
-> + * @reserved: padding field. Should be zeroed by applications.
+> + * Dump a textual description of the fence and it's state into the seq_f=
+ile.
 > + */
-> +struct v4l2_ctrl_vp9_frame {
-> +	struct v4l2_vp9_loop_filter lf;
-> +	struct v4l2_vp9_quantization quant;
-> +	struct v4l2_vp9_segmentation seg;
-> +	__u32 flags;
-> +	__u16 compressed_header_size;
-> +	__u16 uncompressed_header_size;
-> +	__u16 frame_width_minus_1;
-> +	__u16 frame_height_minus_1;
-> +	__u16 render_width_minus_1;
-> +	__u16 render_height_minus_1;
-> +	__u64 last_frame_ts;
-> +	__u64 golden_frame_ts;
-> +	__u64 alt_frame_ts;
-> +	__u8 ref_frame_sign_bias;
-> +	__u8 reset_frame_context;
-> +	__u8 frame_context_idx;
-> +	__u8 profile;
-> +	__u8 bit_depth;
-> +	__u8 interpolation_filter;
-> +	__u8 tile_cols_log2;
-> +	__u8 tile_rows_log2;
-> +	__u8 reference_mode;
-> +	__u8 reserved[7];
-> +};
+> +void dma_fence_describe(struct dma_fence *fence, struct seq_file *seq)
+> +{
+> +       seq_printf(seq, "%s %s seq %llu %ssignalled\n",
+> +                  fence->ops->get_driver_name(fence),
+> +                  fence->ops->get_timeline_name(fence), fence->seqno,
+> +                  dma_fence_is_signaled(fence) ? "" : "un");
+> +}
+> +EXPORT_SYMBOL(dma_fence_describe);
 > +
-
-Also, have you checked html and pdf docs and make sure
-it looks as you expect?
-
-Thanks,
-Ezequiel
+>  /**
+>   * dma_fence_init - Initialize a custom fence.
+>   * @fence: the fence to initialize
+> diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
+> index 266ec9e3caef..6bb25d53e702 100644
+> --- a/drivers/dma-buf/dma-resv.c
+> +++ b/drivers/dma-buf/dma-resv.c
+> @@ -38,6 +38,7 @@
+>  #include <linux/mm.h>
+>  #include <linux/sched/mm.h>
+>  #include <linux/mmu_notifier.h>
+> +#include <linux/seq_file.h>
+>
+>  /**
+>   * DOC: Reservation Object Overview
+> @@ -654,6 +655,28 @@ bool dma_resv_test_signaled(struct dma_resv *obj, bo=
+ol test_all)
+>  }
+>  EXPORT_SYMBOL_GPL(dma_resv_test_signaled);
+>
+> +/**
+> + * dma_resv_describe - Dump description of the resv object into seq_file
+> + * @obj: the reservation object
+> + * @seq: the seq_file to dump the description into
+> + *
+> + * Dump a textual description of the fences inside an dma_resv object in=
+to the
+> + * seq_file.
+> + */
+> +void dma_resv_describe(struct dma_resv *obj, struct seq_file *seq)
+> +{
+> +       struct dma_resv_iter cursor;
+> +       struct dma_fence *fence;
+> +
+> +       dma_resv_for_each_fence(&cursor, obj, true, fence) {
+> +               seq_printf(seq, "\t%s fence:",
+> +                          dma_resv_iter_is_exclusive(&cursor) ?
+> +                               "Exclusive" : "Shared");
+> +               dma_fence_describe(fence, seq);
+> +       }
+> +}
+> +EXPORT_SYMBOL_GPL(dma_resv_describe);
+> +
+>  #if IS_ENABLED(CONFIG_LOCKDEP)
+>  static int __init dma_resv_lockdep(void)
+>  {
+> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+> index a706b7bf51d7..1ea691753bd3 100644
+> --- a/include/linux/dma-fence.h
+> +++ b/include/linux/dma-fence.h
+> @@ -264,6 +264,7 @@ void dma_fence_init(struct dma_fence *fence, const st=
+ruct dma_fence_ops *ops,
+>
+>  void dma_fence_release(struct kref *kref);
+>  void dma_fence_free(struct dma_fence *fence);
+> +void dma_fence_describe(struct dma_fence *fence, struct seq_file *seq);
+>
+>  /**
+>   * dma_fence_put - decreases refcount of the fence
+> diff --git a/include/linux/dma-resv.h b/include/linux/dma-resv.h
+> index d4b4cd43f0f1..49c0152073fd 100644
+> --- a/include/linux/dma-resv.h
+> +++ b/include/linux/dma-resv.h
+> @@ -486,5 +486,6 @@ int dma_resv_copy_fences(struct dma_resv *dst, struct=
+ dma_resv *src);
+>  long dma_resv_wait_timeout(struct dma_resv *obj, bool wait_all, bool int=
+r,
+>                            unsigned long timeout);
+>  bool dma_resv_test_signaled(struct dma_resv *obj, bool test_all);
+> +void dma_resv_describe(struct dma_resv *obj, struct seq_file *seq);
+>
+>  #endif /* _LINUX_RESERVATION_H */
+> --
+> 2.25.1
+>
