@@ -2,149 +2,136 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DCDCC433F5
-	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 08:33:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2383C43217
+	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 08:33:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 796A460F11
-	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 08:33:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9AA7860EE0
+	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 08:33:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbhIZIfU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Sep 2021 04:35:20 -0400
-Received: from omta001.cacentral1.a.cloudfilter.net ([3.97.99.32]:37615 "EHLO
+        id S229918AbhIZIfV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Sep 2021 04:35:21 -0400
+Received: from omta001.cacentral1.a.cloudfilter.net ([3.97.99.32]:51462 "EHLO
         omta001.cacentral1.a.cloudfilter.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229792AbhIZIfQ (ORCPT
+        by vger.kernel.org with ESMTP id S229876AbhIZIfU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Sep 2021 04:35:16 -0400
+        Sun, 26 Sep 2021 04:35:20 -0400
 Received: from shw-obgw-4004a.ext.cloudfilter.net ([10.228.9.227])
         by cmsmtp with ESMTP
-        id UHFtmfkKBczbLUPbQmV5UQ; Sun, 26 Sep 2021 08:33:40 +0000
+        id U8Srmf7ImczbLUPbRmV5UV; Sun, 26 Sep 2021 08:33:41 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
-        t=1632645220; bh=cPwxdcMYDI5ANmgFFYWlf5yKBD/eeVh9Lbci7WuurOg=;
+        t=1632645221; bh=X+ZNxfdytYuQ+kOgdpzqONaAfXCrd1KgFpphs3NQJP8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=J2mx2PXEGQmSanW68D8SRgiWMAXnUT95mwcbDIJK4zE35B8bgyayPK2lDABCaCCWD
-         1QRhyl3Lm1x8V+VRsOrxLKSZvOUgMBDhARXYY5ot0FXlBZ3HQW2haqRCByKLgtBOUi
-         22NvvfWxkdE8EvH+iPawJSc0dSnxKngOyn1uRKDm4UnDgia0yWtSBJUUDuuICL+KQi
-         8g4KKGZkAy7uDlcwuWlc7q/ZOnQsgXzOsVnzDEySoW9HIIVl/W7j5fssRYF8VZlz3D
-         JAaRoOev5mTc7yNUm+yqnsWKhL5Hu22aq31ht8BwS3I62hv4wWWgxALvO1OskAi+3T
-         TR2/+lB8suL8g==
+        b=FjrtBDog0QxVw0H+JmcZo1mYK7LE78wxT2Bw1A27Psa0U+orkMR5IzHKXHsGKVyX5
+         LjBrnASbvEhkJXShroabKmMz4IuUHXy0wrW7yuoavV8LwUuIbpvxbsIv28KHz4UARQ
+         +JMKads/BSaEK5y6Qu3bAjbS1LcgNEHKAmLHkEL1W3YHBw/X4z5WUo9qNURdX/Xnh6
+         tdPQwaqvWnNcj1wsNc7/y44X2IfQnqhVu/Y0Lnn9FCbcfA2pI9nTBO8FtAsQhpA1xu
+         1kSbfPLQBxlydu5SZu3K4MZGZOa8LKOzH9tyJjKtPsVv4VGXz6KickIz/hL6I5AZwL
+         2FTHP63KnmQow==
 Received: from shaw.ca ([70.71.78.228])
         by cmsmtp with ESMTPA
-        id UPbGmpVUmdCHGUPbPm6iFE; Sun, 26 Sep 2021 08:33:40 +0000
+        id UPbGmpVUmdCHGUPbQm6iFL; Sun, 26 Sep 2021 08:33:41 +0000
 Authentication-Results: ; auth=pass (LOGIN) smtp.auth=joevt@shaw.ca
-X-Authority-Analysis: v=2.4 cv=SdyUytdu c=1 sm=1 tr=0 ts=61503064
+X-Authority-Analysis: v=2.4 cv=SdyUytdu c=1 sm=1 tr=0 ts=61503065
  a=qDatE6m/3wxSEG8Wq7h0zQ==:117 a=qDatE6m/3wxSEG8Wq7h0zQ==:17 a=_Dj-zB-qAAAA:8
- a=E4F5njE0240e4IrhLHkA:9 a=c-cOe7UV8MviEfHuAVEQ:22
+ a=Kq4NL1YokvzOOEXvYrsA:9 a=c-cOe7UV8MviEfHuAVEQ:22
 From:   joevt <joevt@shaw.ca>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     linux-media@vger.kernel.org
-Subject: [PATCH v2 15/29] edid-decode: change unknown CTA block names
-Date:   Sun, 26 Sep 2021 01:33:16 -0700
-Message-Id: <20210926083330.5206-16-joevt@shaw.ca>
+Subject: [PATCH v2 17/29] edid-decode: replace first_block with block_number
+Date:   Sun, 26 Sep 2021 01:33:18 -0700
+Message-Id: <20210926083330.5206-18-joevt@shaw.ca>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20210926083330.5206-1-joevt@shaw.ca>
 References: <20210926083330.5206-1-joevt@shaw.ca>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfIKedk/vO9v2MlsS9rBm6JDEQFBBPVGfN3SYJRLjTpZqjbx2srqQbtioKjSnrTi470QZWnyj4qmDQlCYgWoiOz++yWJeTPfQGgsGeEtg+SrHcAdgzCYM
- ZedvgP+Ej+88skuRaDX4/ccZmJL53ZH07G7oasjbIts5Hp7W6sg8PUrJ8MHX5spbRwTzG2RH4LYs5PRGANHHFjufJ1jG+bMLC6U=
+X-CMAE-Envelope: MS4xfGWXBY4HvalrRx/3DaJvAGBBeTSVFDda6tc4rcB80y3y6T1C4yyoE9uROdofOyHrUP1OnGZqSYavEPTHEUUqpyL7Qw59Q+VBuzgMostAsbRCXk651a4b
+ b6dBlsTsmtihdblvjJ+XMS5hLiayLoTIJE0HmaqWTbldUVK+KARyuPRZxqOsSe55AzSKJ4OaymBISk/QCClR46HlIYSBiSzjGZw=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make consistent the Unknown CTA-861 Data Block names and warnings.
+track progress instead of milestones.
 
-- Add " Data Block" suffix for normal tags (like unknown extended tags and known normal tags have).
-- Put tag in parenthesis (like unknown extended tags).
-- Output colon after unknown block name (like known tags).
-- Make warning same as block name (so the block mentioned in the warning section can be found more easily in the edid output).
-
-1) Unknown normal tags:
-Before:
-- name: "Unknown CTA-861 tag 0x$$"
-- warning: "Unknown CTA-861 Data Block #."
-After:
-"Unknown CTA-861 Data Block (tag 0x$$):" (with period instead of colon for warning)
-
-2) Unknown extended tags:
-Before:
-- name: "Unknown CTA-861 @Data Block (extended tag 0x$$)" (@ = "", "Video-Related ", "Audio-Related ", "HDMI-Related ")
-- warning: "Unknown Extended CTA-861 Data Block 0x$$."
-After:
-- "Unknown CTA-861 @Data Block (extended tag 0x$$):" (with period instead of colon for warning)
-
-We still have the following from a previous commit:
-3) Truncated extended tag (when length is not enough to get the extended tag):
-Before:
-name: "Unknown CTA-861 Data Block (extended tag truncated):"
-failure: "Extended tag cannot have zero length."
-
-Since the name is different than the failure message, we should set data_block so both are output to the failure section:
-After:
-failure: "Unknown CTA-861 Data Block (extended tag truncated): Extended tag cannot have zero length."
+With a flag like first_block, you can only know if you're at the first block or not.
+But with a progressing value like block_number, you can know when you're at the first block or second block etc. and you can know how many blocks have been done.
+We'll also replace last_block_was_hdmi_vsdb in a later commit.
+Both of these changes will cleanup the hdmi block.
 
 Signed-off-by: Joe van Tunen <joevt@shaw.ca>
 ---
- parse-cta-block.cpp | 33 ++++++++++++---------------------
- 1 file changed, 12 insertions(+), 21 deletions(-)
+ edid-decode.h       |  5 +++--
+ parse-cta-block.cpp | 10 +++++-----
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
+diff --git a/edid-decode.h b/edid-decode.h
+index ccf8558..dbc00c2 100644
+--- a/edid-decode.h
++++ b/edid-decode.h
+@@ -154,7 +154,8 @@ struct edid_state {
+ 		cta.has_vic_1 = cta.first_svd_might_be_preferred = cta.has_sldb =
+ 			cta.has_hdmi = cta.has_vcdb = cta.has_vfpdb = false;
+ 		cta.last_block_was_hdmi_vsdb = cta.have_hf_vsdb = cta.have_hf_scdb = false;
+-		cta.first_block = cta.first_svd = true;
++		cta.block_number = 0;
++		cta.first_svd = true;
+ 		cta.supported_hdmi_vic_codes = cta.supported_hdmi_vic_vsb_codes = 0;
+ 		memset(cta.vics, 0, sizeof(cta.vics));
+ 		memset(cta.preparsed_has_vic, 0, sizeof(cta.preparsed_has_vic));
+@@ -259,7 +260,7 @@ struct edid_state {
+ 		unsigned short preparsed_phys_addr;
+ 		bool last_block_was_hdmi_vsdb;
+ 		bool have_hf_vsdb, have_hf_scdb;
+-		bool first_block;
++		unsigned block_number;
+ 		bool first_svd;
+ 		unsigned supported_hdmi_vic_codes;
+ 		unsigned supported_hdmi_vic_vsb_codes;
 diff --git a/parse-cta-block.cpp b/parse-cta-block.cpp
-index 79354c5..16c7bee 100644
+index 607e42b..13b3b73 100644
 --- a/parse-cta-block.cpp
 +++ b/parse-cta-block.cpp
-@@ -2057,7 +2057,7 @@ void edid_state::cta_block(const unsigned char *x, bool duplicate)
- 	case 0x04: data_block = "Speaker Allocation Data Block"; audio_block = true; break;
- 	case 0x05: data_block = "VESA Display Transfer Characteristics Data Block"; break;
- 
--	case 0x07: data_block.clear(); break;
-+	case 0x07: data_block = "Unknown CTA-861 Data Block (extended tag truncated)"; break;
- 
- 	case 0x700: data_block = "Video Capability Data Block"; break;
- 	case 0x701: data_block.clear(); break;
-@@ -2088,22 +2088,16 @@ void edid_state::cta_block(const unsigned char *x, bool duplicate)
- 
- 	default:
- 		data_block.clear();
--		if (tag < 0x700) {
--			printf("  Unknown CTA-861 tag 0x%02x\n", tag);
--			warn("Unknown CTA-861 Data Block %u.\n", tag);
--		}
--		else {
--			if (tag < 0x70d)
--				printf("  Unknown CTA-861 Video-Related");
--			else if (tag < 0x720)
--				printf("  Unknown CTA-861 Audio-Related");
--			else if (tag >= 0x778 && tag <= 0x77f)
--				printf("  Unknown CTA-861 HDMI-Related");
--			else
--				printf("  Unknown CTA-861");
--			printf(" Data Block (extended tag 0x%02x)\n", tag & 0xff);
--			warn("Unknown Extended CTA-861 Data Block 0x%02x.\n", tag & 0xff);
--		}
-+		std::string unknown_name;
-+		     if (tag < 0x700) unknown_name = "Unknown CTA-861 Data Block";
-+		else if (tag < 0x70d) unknown_name = "Unknown CTA-861 Video-Related Data Block";
-+		else if (tag < 0x720) unknown_name = "Unknown CTA-861 Audio-Related Data Block";
-+		else if (tag < 0x778) unknown_name = "Unknown CTA-861 Data Block";
-+		else if (tag < 0x780) unknown_name = "Unknown CTA-861 HDMI-Related Data Block";
-+		else                  unknown_name = "Unknown CTA-861 Data Block";
-+		unknown_name += std::string(" (") + (extended ? "extended " : "") + "tag " + utohex(tag & 0xff) + ")";
-+		printf("  %s:\n", unknown_name.c_str());
-+		warn("%s.\n", unknown_name.c_str());
+@@ -2131,7 +2131,7 @@ void edid_state::cta_block(const unsigned char *x, bool duplicate)
+ 		if (oui == 0x000c03) {
+ 			cta_hdmi_block(x, length);
+ 			cta.last_block_was_hdmi_vsdb = 1;
+-			cta.first_block = 0;
++			cta.block_number++;
+ 			// The HDMI OUI is present, so this EDID represents an HDMI
+ 			// interface. And HDMI interfaces must use EDID version 1.3
+ 			// according to the HDMI Specification, so check for this.
+@@ -2194,7 +2194,7 @@ void edid_state::cta_block(const unsigned char *x, bool duplicate)
+ 	case 0x778:
+ 		cta_hf_eeodb(x, length);
+ 		// This must be the first CTA-861 block
+-		if (!cta.first_block)
++		if (cta.block_number > 0)
+ 			fail("Block starts at a wrong offset.\n");
+ 		break;
+ 	case 0x779:
+@@ -2216,7 +2216,7 @@ void edid_state::cta_block(const unsigned char *x, bool duplicate)
+ 		hex_block("    ", x, length);
  	}
  
- 	if (data_block.length())
-@@ -2168,10 +2162,7 @@ void edid_state::cta_block(const unsigned char *x, bool duplicate)
- 		break;
- 	case 0x04: cta_sadb(x, length); break;
- 	case 0x05: cta_vesa_dtcdb(x, length); break;
--	case 0x07:
--		printf("  Unknown CTA-861 Data Block (extended tag truncated):\n");
--		fail("Extended tag cannot have zero length.\n");
--		break;
-+	case 0x07: fail("Extended tag cannot have zero length.\n"); break;
- 	case 0x700: cta_vcdb(x, length); break;
- 	case 0x701:
- 		data_block_o("Vendor-Specific Video Data Block");
+-	cta.first_block = 0;
++	cta.block_number++;
+ 	cta.last_block_was_hdmi_vsdb = 0;
+ }
+ 
+@@ -2333,11 +2333,11 @@ void edid_state::parse_cta_block(const unsigned char *x)
+ //				msg(!cta.has_hdmi, "If YCbCr support is indicated, then both 4:2:2 and 4:4:4 %s be supported.\n",
+ //				    cta.has_hdmi ? "shall" : "should");
+ 			printf("  Native detailed modes: %u\n", x[3] & 0x0f);
+-			if (cta.first_block)
++			if (cta.block_number == 0)
+ 				cta.byte3 = x[3];
+ 			else if (x[3] != cta.byte3)
+ 				fail("Byte 3 must be the same for all CTA-861 Extension Blocks.\n");
+-			if (cta.first_block) {
++			if (cta.block_number == 0) {
+ 				unsigned native_dtds = x[3] & 0x0f;
+ 
+ 				cta.native_timings.clear();
 -- 
 2.24.3 (Apple Git-128)
 
