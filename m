@@ -2,181 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06051C433EF
-	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 08:33:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46179C433F5
+	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 08:33:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E007E60EE0
-	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 08:33:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2AC4260EE0
+	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 08:33:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbhIZIfL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Sep 2021 04:35:11 -0400
-Received: from omta001.cacentral1.a.cloudfilter.net ([3.97.99.32]:51462 "EHLO
+        id S229797AbhIZIfN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Sep 2021 04:35:13 -0400
+Received: from omta001.cacentral1.a.cloudfilter.net ([3.97.99.32]:43776 "EHLO
         omta001.cacentral1.a.cloudfilter.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229730AbhIZIfL (ORCPT
+        by vger.kernel.org with ESMTP id S229730AbhIZIfM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Sep 2021 04:35:11 -0400
+        Sun, 26 Sep 2021 04:35:12 -0400
 Received: from shw-obgw-4004a.ext.cloudfilter.net ([10.228.9.227])
         by cmsmtp with ESMTP
-        id U6mYmf0pJczbLUPbLmV5U9; Sun, 26 Sep 2021 08:33:35 +0000
+        id U9QQmfBXuczbLUPbMmV5UD; Sun, 26 Sep 2021 08:33:36 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=shaw.ca; s=s20180605;
-        t=1632645215; bh=wdkOL7mRmZXM5cZIdE/n+C/nxawk/Weu4v15MsU89H8=;
+        t=1632645216; bh=cxyaxxnK8vlZziWlgCEUEHzp47YRM7TOJ7SNy1QIctw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=lzubybFAZopCF2UmbAvOxroPaLDlqbB5YRhcyEUg4LWErzDrlInwxjAp02OZ7EE0V
-         oStq0XCfET/EbpRBVNmFp2SOcVjcEsT0SUbqa2nb2cKlmADIHQVWriJrpvbVCK+TvN
-         otxdzbna1wH99lfPeeBeylvcr53dpkx9dbA9/XIijNEnrdfPLCJ7OkkKbWteoSHXrq
-         xJYe43EeRMEFab9CPOaD8TRt50EP/KHdxLGMlJ35/APrmbGid/ItA2vz4m9AfKGG08
-         2sDptn7H01CMl+6rQedRPUs5WzYI9FglmpT3yVz9VVcbaUx8Q0z03y/0Ng3KJhlsdH
-         BXwa9GKJeOeWg==
+        b=oaI9mupkyohfKjO5V14gXwiRZd8BJ9Va58lKLsyufFxCVRXTzrwE0FE7FyimEAJEc
+         Cg5Tmx7eTjzVHaztsGJUt1JkWBcX4ZqtHZzQnjAg34GrcH8WVgZ936nP7VtQQID8t5
+         W+ycPPac5D4PSP9P9vpg7mosZPqxh12MSlbCudcj9kp4zN6h3CofCMVSVMbMd0OS9H
+         jr7ZkmghAoazdrYBC+vobuaQq5fOBPhqbY9AgieM4vpd+I8SPAwYVNR05ePN1YkYx5
+         4P9PFZ3k2+3fnRIQHRNd0aboR4aWHgiKZnNx4kZKosq8ujLFjbLYPNbskwbC0TBtwy
+         JSBneuj9EBXnw==
 Received: from shaw.ca ([70.71.78.228])
         by cmsmtp with ESMTPA
-        id UPbGmpVUmdCHGUPbKm6iEV; Sun, 26 Sep 2021 08:33:35 +0000
+        id UPbGmpVUmdCHGUPbLm6iEd; Sun, 26 Sep 2021 08:33:36 +0000
 Authentication-Results: ; auth=pass (LOGIN) smtp.auth=joevt@shaw.ca
-X-Authority-Analysis: v=2.4 cv=SdyUytdu c=1 sm=1 tr=0 ts=6150305f
+X-Authority-Analysis: v=2.4 cv=SdyUytdu c=1 sm=1 tr=0 ts=61503060
  a=qDatE6m/3wxSEG8Wq7h0zQ==:117 a=qDatE6m/3wxSEG8Wq7h0zQ==:17 a=_Dj-zB-qAAAA:8
- a=HJMu6jesDG4n_MRZF-gA:9 a=c-cOe7UV8MviEfHuAVEQ:22
+ a=LIcKB4O_YFRxREVKF7IA:9 a=+jEqtf1s3R9VXZ0wqowq2kgwd+I=:19
+ a=c-cOe7UV8MviEfHuAVEQ:22
 From:   joevt <joevt@shaw.ca>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     linux-media@vger.kernel.org
-Subject: [PATCH v2 06/29] edid-decode: Replace return with break in switch
-Date:   Sun, 26 Sep 2021 01:33:07 -0700
-Message-Id: <20210926083330.5206-7-joevt@shaw.ca>
+Subject: [PATCH v2 08/29] edid-decode: Output block type before fail
+Date:   Sun, 26 Sep 2021 01:33:09 -0700
+Message-Id: <20210926083330.5206-9-joevt@shaw.ca>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20210926083330.5206-1-joevt@shaw.ca>
 References: <20210926083330.5206-1-joevt@shaw.ca>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfDj+u4Nplv7rCIWEO8fSNAHUhse0sWW7L1c1b8VNooIKeApJNtz20q+KTHy7q10ZDWcMiJYKfkluw5pMjlJExmDuMnYicmLNwN7xT8LD0RY0Xj8Z2wON
- YN79n8UCzbIhb7GAfJAFiJelA+UWiwzaIqjl5ZCVFU4i2sYXYcT4DQdZCvBm+aSzhNpp+y160Rofk6osHkIdtmcWFmcdwiY12l0=
+X-CMAE-Envelope: MS4xfIOATl9zMXl0FJ50DkXDFGJYe7nugBSE5oX2wPChKlD0XksBv6c6X8Dw95FVxT9xU4jbesc1vc5RNEDuv+Hv4/NJmVdA93rWd8EAmPk4z2polZ0YP+US
+ 20jKE1jZ8LsR11RqNCnnn8k6EvElvpCut1mM8knYpdC3aR/sAfln0T6pOkOCSDAI1fvNs2j5MWXQ0FAkiHhVZ+iZG1cJoYN53i0=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use break to leave a switch instead of return.
-Move code that was after switch to default statement in switch.
-This way, we can move switch or have other code after switch.
+For extended tags, block type should be output before fail messages (duplicate failure, or missing audio failure).
+For normal tags 0x04 and 0x05, fail message should appear after block type instead of block data to be consistent (and also to indicate that the failure is because of the block type and not the contents of the block).
 
 Signed-off-by: Joe van Tunen <joevt@shaw.ca>
 ---
- parse-cta-block.cpp | 51 +++++++++++++++++++++++----------------------
- 1 file changed, 26 insertions(+), 25 deletions(-)
+ parse-cta-block.cpp | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/parse-cta-block.cpp b/parse-cta-block.cpp
-index 042b933..bba3af2 100644
+index f1ad041..fb2e9ea 100644
 --- a/parse-cta-block.cpp
 +++ b/parse-cta-block.cpp
-@@ -2101,12 +2101,12 @@ void edid_state::cta_ext_block(const unsigned char *x, unsigned length,
- 		printf("  %s:\n", data_block.c_str());
- 
- 	switch (x[0]) {
--	case 0x00: cta_vcdb(x + 1, length); return;
-+	case 0x00: cta_vcdb(x + 1, length); break;
- 	case 0x01:
- 		if (length < 3) {
- 			data_block = std::string("Vendor-Specific Video Data Block");
- 			fail("Invalid length %u < 3.\n", length);
--			return;
-+			break;
- 		}
- 		oui = (x[3] << 16) + (x[2] << 8) + x[1];
- 		name = oui_name(oui);
-@@ -2122,7 +2122,7 @@ void edid_state::cta_ext_block(const unsigned char *x, unsigned length,
- 			data_block.clear();
- 			warn("Unknown Extended Vendor-Specific Video Data Block, OUI %s.\n",
- 			     ouitohex(oui).c_str());
--			return;
-+			break;
- 		}
- 		data_block = std::string("Vendor-Specific Video Data Block (") + name + ")";
- 		if (reverse)
-@@ -2134,19 +2134,19 @@ void edid_state::cta_ext_block(const unsigned char *x, unsigned length,
- 			cta_dolby_video(x + 4, length - 3);
- 		else
- 			hex_block("    ", x + 4, length - 3);
--		return;
--	case 0x02: cta_vesa_vdddb(x + 1, length); return;
--	case 0x05: cta_colorimetry_block(x + 1, length); return;
--	case 0x06: cta_hdr_static_metadata_block(x + 1, length); return;
--	case 0x07: cta_hdr_dyn_metadata_block(x + 1, length); return;
--	case 0x0d: cta_vfpdb(x + 1, length); return;
--	case 0x0e: cta_svd(x + 1, length, true); return;
--	case 0x0f: cta_y420cmdb(x + 1, length); return;
-+		break;
-+	case 0x02: cta_vesa_vdddb(x + 1, length); break;
-+	case 0x05: cta_colorimetry_block(x + 1, length); break;
-+	case 0x06: cta_hdr_static_metadata_block(x + 1, length); break;
-+	case 0x07: cta_hdr_dyn_metadata_block(x + 1, length); break;
-+	case 0x0d: cta_vfpdb(x + 1, length); break;
-+	case 0x0e: cta_svd(x + 1, length, true); break;
-+	case 0x0f: cta_y420cmdb(x + 1, length); break;
- 	case 0x11:
- 		if (length < 3) {
- 			data_block = std::string("Vendor-Specific Audio Data Block");
- 			fail("Invalid length %u < 3.\n", length);
--			return;
-+			break;
- 		}
- 		oui = (x[3] << 16) + (x[2] << 8) + x[1];
- 		name = oui_name(oui);
-@@ -2162,7 +2162,7 @@ void edid_state::cta_ext_block(const unsigned char *x, unsigned length,
- 			data_block.clear();
- 			warn("Unknown Extended Vendor-Specific Audio Data Block, OUI %s.\n",
- 			     ouitohex(oui).c_str());
--			return;
-+			break;
- 		}
- 		data_block = std::string("Vendor-Specific Audio Data Block (") + name + ")";
- 		if (reverse)
-@@ -2172,20 +2172,20 @@ void edid_state::cta_ext_block(const unsigned char *x, unsigned length,
- 			cta_dolby_audio(x + 4, length - 3);
- 		else
- 			hex_block("    ", x + 4, length - 3);
--		return;
--	case 0x12: cta_hdmi_audio_block(x + 1, length); return;
--	case 0x13: cta_rcdb(x + 1, length); return;
--	case 0x14: cta_sldb(x + 1, length); return;
--	case 0x20: cta_ifdb(x + 1, length); return;
--	case 0x34: cta_displayid_type_7(x + 1, length); return;
--	case 0x35: cta_displayid_type_8(x + 1, length); return;
--	case 0x42: cta_displayid_type_10(x + 1, length); return;
-+		break;
-+	case 0x12: cta_hdmi_audio_block(x + 1, length); break;
-+	case 0x13: cta_rcdb(x + 1, length); break;
-+	case 0x14: cta_sldb(x + 1, length); break;
-+	case 0x20: cta_ifdb(x + 1, length); break;
-+	case 0x34: cta_displayid_type_7(x + 1, length); break;
-+	case 0x35: cta_displayid_type_8(x + 1, length); break;
-+	case 0x42: cta_displayid_type_10(x + 1, length); break;
- 	case 0x78:
- 		cta_hf_eeodb(x + 1, length);
- 		// This must be the first CTA-861 block
- 		if (!cta.first_block)
- 			fail("Block starts at a wrong offset.\n");
--		return;
-+		break;
- 	case 0x79:
- 		if (!cta.last_block_was_hdmi_vsdb)
- 			fail("HDMI Forum SCDB did not immediately follow the HDMI VSDB.\n");
-@@ -2194,16 +2194,17 @@ void edid_state::cta_ext_block(const unsigned char *x, unsigned length,
- 		if (length < 2) {
- 			data_block = std::string("HDMI Forum SCDB");
- 			fail("Invalid length %u < 2.\n", length);
--			return;
-+			break;
- 		}
- 		if (x[1] || x[2])
- 			printf("  Non-zero SCDB reserved fields!\n");
- 		cta_hf_scdb(x + 3, length - 2);
- 		cta.have_hf_scdb = 1;
--		return;
-+		break;
-+	default:
-+		hex_block("    ", x + 1, length);
+@@ -2078,6 +2078,9 @@ void edid_state::cta_ext_block(unsigned tag, const unsigned char *x, unsigned le
+ 		return;
  	}
  
--	hex_block("    ", x + 1, length);
- }
++	if (data_block.length())
++		printf("  %s:\n", data_block.c_str());
++
+ 	switch (tag) {
+ 	case 0x700:
+ 	case 0x702:
+@@ -2097,9 +2100,6 @@ void edid_state::cta_ext_block(unsigned tag, const unsigned char *x, unsigned le
+ 	if (audio_block && !(cta.byte3 & 0x40))
+ 		fail("Audio information is present, but bit 6 of Byte 3 of the CTA-861 Extension header indicates no Basic Audio support.\n");
  
- void edid_state::cta_block(const unsigned char *x, bool duplicate)
+-	if (data_block.length())
+-		printf("  %s:\n", data_block.c_str());
+-
+ 	switch (tag) {
+ 	case 0x700: cta_vcdb(x, length); break;
+ 	case 0x701:
+@@ -2294,17 +2294,17 @@ void edid_state::cta_block(const unsigned char *x, bool duplicate)
+ 	case 0x04:
+ 		data_block = "Speaker Allocation Data Block";
+ 		printf("  %s:\n", data_block.c_str());
+-		cta_sadb(x, length);
+-		audio_block = true;
+ 		if (duplicate)
+ 			fail("Only one instance of this Data Block is allowed.\n");
++		cta_sadb(x, length);
++		audio_block = true;
+ 		break;
+ 	case 0x05:
+ 		data_block = "VESA Display Transfer Characteristics Data Block";
+ 		printf("  %s:\n", data_block.c_str());
+-		cta_vesa_dtcdb(x, length);
+ 		if (duplicate)
+ 			fail("Only one instance of this Data Block is allowed.\n");
++		cta_vesa_dtcdb(x, length);
+ 		break;
+ 	case 0x07:
+ 		data_block = "Unknown CTA-861 Data Block (extended tag truncated)";
 -- 
 2.24.3 (Apple Git-128)
 
