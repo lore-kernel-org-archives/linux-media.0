@@ -2,100 +2,112 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B083FC433FE
-	for <linux-media@archiver.kernel.org>; Sat, 25 Sep 2021 22:16:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBAAAC4332F
+	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 02:22:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 950EB61051
-	for <linux-media@archiver.kernel.org>; Sat, 25 Sep 2021 22:16:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6131610C9
+	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 02:22:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbhIYWSP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 25 Sep 2021 18:18:15 -0400
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:33500 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbhIYWSL (ORCPT
+        id S230307AbhIZCYO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 25 Sep 2021 22:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230205AbhIZCYO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 25 Sep 2021 18:18:11 -0400
-Received: by mail-ot1-f51.google.com with SMTP id s36-20020a05683043a400b0054d4c88353dso7640244otv.0;
-        Sat, 25 Sep 2021 15:16:35 -0700 (PDT)
+        Sat, 25 Sep 2021 22:24:14 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9659C061570;
+        Sat, 25 Sep 2021 19:22:38 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id s36-20020a05683043a400b0054d4c88353dso8130980otv.0;
+        Sat, 25 Sep 2021 19:22:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nj+G8GkuNT5hGMd8K9aymkYSN+enFAuUPMyNPjlyK48=;
+        b=kTBdGOpfjzQt9bXyFWTkT1NODUtydsYiq+h61BC9MuikRdLIS4XcSDV7ZbMBUgzHtq
+         lllJgpPKmNayz5W6Aq2DyT2DgjhYRmtm1EuxRaZw0II1F5kYzRRXDSXMQXLBp3IQsXP/
+         t5htX+l4Jg2pZbE3hZqRvnvE8FA1qmaeb0OqBV5Xl5czV4d0m2R9n8MIGkU/XR4yQezG
+         iORd6PglvfhONgXzXHZ7omviB4JBlhVOA3Dq4dmkiXgAYNgibMLPQpNYJ3spJYxoRg81
+         n5qC3xjBSpn80pIVwudqiuABtg8o4Gq9CYKNEqcqsEi4mM1Mjv/+arObdvlZOnSPDUyv
+         01Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=FpW3DBFCE8qk3/WrOETm+elC+ikU+jNmzXfQ4H1gg0E=;
-        b=KqhKeEHoT4kQfPilmY5UdZeU/J1UQPHt6hTHsZtRycm6nmzs1hNLk6DhXvacLcODPD
-         JWgdc12CPxQX4Bjehcxw4vFY9adk34g77vI1omRopMdPN3uRzrYOhxX1UptjP8mGXhzt
-         mfz/OXFr7gW8QWjAY85yQPvO2oJXbeiJUWC0VCAeZwvigKcmAytyvFff3z5ysuhhoKhi
-         l6MSv90PvNUqvtF7IdvPm8Y5701q/flwvrU69qeHdjH39MaEwKKKRyDeDtiTwm8MJlep
-         E9iF45pkgTYFkA79b61UfYu+Nmv8Vd4uKuRaEr9DN3w8JeIP4QqJchscIE1uOsLhiVxA
-         OpVQ==
-X-Gm-Message-State: AOAM531hGdLYjIu0ZNfYfXl3Te8iAEvDjDFxhmNkyA5P4TVcHAZAY2+z
-        S4FoG80HNosc1WyKPgowqw==
-X-Google-Smtp-Source: ABdhPJxDZmLtb6AEW6lYozXpuwFp7CVefOJn9HXZ8cCR5cQl8/2w5SChodyo8ByACA4nNEmpUmtxrw==
-X-Received: by 2002:a9d:6c52:: with SMTP id g18mr10068166otq.75.1632608195370;
-        Sat, 25 Sep 2021 15:16:35 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 10sm587122oti.79.2021.09.25.15.16.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Sep 2021 15:16:34 -0700 (PDT)
-Received: (nullmailer pid 3839366 invoked by uid 1000);
-        Sat, 25 Sep 2021 22:16:30 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Justin Chen <justinpopo6@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, Jakub Kicinski <kuba@kernel.org>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nj+G8GkuNT5hGMd8K9aymkYSN+enFAuUPMyNPjlyK48=;
+        b=70fVNhHhmS0r+9r6S0DjFF/W4jpWjFRZkfKHvA27BVOsswEkbDmgzttwvRhiB40fFF
+         dhLFsDr5EVmoyxTZm77e2MKb/3S/IvFwPFFrevhDkUZhJZ31QH7+O0JIfYuz/kQRFLgf
+         igM5KDNhwgS9JnomHSyWqTp6LjSyoFbzYkvPMFzYPr9MO9HXDwXxRtU/Z8RtAoz9q4cs
+         ZXcKZQI4pbH8CpG5uj0ngvqSW3gMsBxfVQYtLAqEuWuqnBo1u+hqpIE/uzv907Z/oSfy
+         hVSqyid5YiNPhj5Tl22IU2OPvnXT7DPiF2UReC92FvynnJccFVWo9TAShfJ0E4NXkaSz
+         SZwg==
+X-Gm-Message-State: AOAM532wsOMejAO00T3OUBAkddjDflHfP13A30dPG2gsw/6L4kQu56n0
+        vNrrtDVEetY6Hf+OYXiJlDxtgOa8OIg=
+X-Google-Smtp-Source: ABdhPJzcgkOiRZFHSghvqK//AMjMoDWJYEqNMKVMMnLqpdVnNwS/QUI+IP7Uh29kWFPfCn1sLajIcQ==
+X-Received: by 2002:a9d:7d0d:: with SMTP id v13mr12022342otn.289.1632622956517;
+        Sat, 25 Sep 2021 19:22:36 -0700 (PDT)
+Received: from ?IPV6:2600:1700:dfe0:49f0:a90f:da5:ff6e:aa3e? ([2600:1700:dfe0:49f0:a90f:da5:ff6e:aa3e])
+        by smtp.gmail.com with ESMTPSA id u15sm3475737oon.35.2021.09.25.19.22.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Sep 2021 19:22:36 -0700 (PDT)
+Message-ID: <2cb4144b-7250-1e6d-88d1-cc4efa3f59dd@gmail.com>
+Date:   Sat, 25 Sep 2021 19:22:33 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: [PATCH net-next 0/5] brcm ASP 2.0 Ethernet controller
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>, Justin Chen <justinpopo6@gmail.com>
+Cc:     netdev@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
         Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-media@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
-        devicetree@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Arnd Bergmann <arnd@arndb.de>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Doug Berger <opendmb@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Michael Chan <michael.chan@broadcom.com>,
-        Russell King <linux@armlinux.org.uk>
-In-Reply-To: <1632519891-26510-3-git-send-email-justinpopo6@gmail.com>
-References: <1632519891-26510-1-git-send-email-justinpopo6@gmail.com> <1632519891-26510-3-git-send-email-justinpopo6@gmail.com>
-Subject: Re: [PATCH net-next 2/5] dt-bindings: net: brcm,unimac-mdio: Add asp-v2.0
-Date:   Sat, 25 Sep 2021 17:16:30 -0500
-Message-Id: <1632608190.786543.3839365.nullmailer@robh.at.kernel.org>
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <dri-devel@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+References: <1632519891-26510-1-git-send-email-justinpopo6@gmail.com>
+ <YU8xX0fUWAoEnmRR@lunn.ch>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <YU8xX0fUWAoEnmRR@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, 24 Sep 2021 14:44:48 -0700, Justin Chen wrote:
-> The ASP 2.0 Ethernet controller uses a brcm unimac.
+Hi Andrew,
+
+On 9/25/2021 7:25 AM, Andrew Lunn wrote:
+> On Fri, Sep 24, 2021 at 02:44:46PM -0700, Justin Chen wrote:
+>> This patch set adds support for Broadcom's ASP 2.0 Ethernet controller.
 > 
-> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml | 1 +
->  1 file changed, 1 insertion(+)
 > 
+> Hi Justin
+> 
+> Does the hardware support L2 switching between the two ports? I'm just
+> wondering if later this is going to be modified into a switchdev
+> driver?
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
-
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
-
-Full log is available here: https://patchwork.ozlabs.org/patch/1532529
-
-
-mdio@e14: #address-cells:0:0: 1 was expected
-	arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dt.yaml
-	arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b.dt.yaml
-	arch/arm/boot/dts/bcm2711-rpi-400.dt.yaml
-	arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml
-
-mdio@e14: #size-cells:0:0: 0 was expected
-	arch/arm64/boot/dts/broadcom/bcm2711-rpi-400.dt.yaml
-	arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b.dt.yaml
-	arch/arm/boot/dts/bcm2711-rpi-400.dt.yaml
-	arch/arm/boot/dts/bcm2711-rpi-4-b.dt.yaml
-
+It does not, these are just a bunch of Ethernet ports sharing a few 
+resources (clocks, network filters etc.).
+-- 
+Florian
