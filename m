@@ -2,116 +2,243 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 598AFC433FE
-	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 20:51:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16AFEC433F5
+	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 23:06:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3BDDB6044F
-	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 20:51:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DEF7860F9E
+	for <linux-media@archiver.kernel.org>; Sun, 26 Sep 2021 23:06:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbhIZUxK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Sep 2021 16:53:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57618 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230112AbhIZUxH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Sep 2021 16:53:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 375616103B;
-        Sun, 26 Sep 2021 20:51:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632689491;
-        bh=QIH0+cev8bo8hbGLg+SlpuLNpPmJX3/IrRwxc7ssKZk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TaQzjNHbVIQTyk0Qhayu5RyLDtHno1Vu0yybIvfo0SuuN1aSw4AqcbIsMtWrZYqTJ
-         p5y9uawxECcvEvvRNJKzX91q/JibCHdbWxEcztuaj6Ki4nyj27XVJEfhYcKg3ryvvg
-         Zg4EAqkwhvmcN8COHj4/7TPAtNKaJ6kPxRz7Jln2Nh9Vvn0iQ01s6CtOWLBpmpzZTf
-         S07QtVxhRfppGvSb5vAN8J4sg/Qj3usGxraYmIiRilRkQf6yXrxU8JIPiQpWUUeJc3
-         NS9NE6VyvT5ER5bs4oG/3DalVwAkbe1deW8A6ypDvSh0SP++iaDnDLGgfNIRgMCLkT
-         x9Odb00f6wM1Q==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mUb7R-001Yb6-8T; Sun, 26 Sep 2021 22:51:29 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        id S232037AbhIZXIZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 Sep 2021 19:08:25 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:39414 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231979AbhIZXIZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sun, 26 Sep 2021 19:08:25 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A66C649A;
+        Mon, 27 Sep 2021 01:06:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1632697607;
+        bh=CDC8EqQ5zCYrbhsqQf4E2vnR5hsrL3nFRbBhjfXLwXE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WctOx4c5p1vWHxDV1rAVd6MdchEF8Hn4jAzr+rKtssL/IgidPN0CSt1Zhpt94L7QG
+         2DNGNaHmeSecFbBkvLed7q7Z4wrYpKrVCbOlk+JYSTHDP+6TD/8IqHh59MIt5exTXw
+         R4FeksP9SDwn739+2vsKCMR2tUFlxk/weLlWJ+0M=
+Date:   Mon, 27 Sep 2021 02:06:41 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Kuron <michael.kuron@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        pb@linuxtv.org
-Subject: [PATCH 2/3] media: dib0700: cleanup start/stop streaming logic
-Date:   Sun, 26 Sep 2021 22:51:27 +0200
-Message-Id: <065a6fff925a42153671fa5202c81882ca12c59c.1632689033.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1632689033.git.mchehab+huawei@kernel.org>
-References: <cover.1632689033.git.mchehab+huawei@kernel.org>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>
+Subject: Re: [PATCH v8 01/36] media: subdev: rename subdev-state alloc & free
+Message-ID: <YVD9AQp1Y+CCEThn@pendragon.ideasonboard.com>
+References: <20210830110116.488338-1-tomi.valkeinen@ideasonboard.com>
+ <20210830110116.488338-2-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210830110116.488338-2-tomi.valkeinen@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Having two different pathes to start/stop streaming, depending
-weather the USB endpoints are 0x82/0x83 or not makes it more
-prune to errors.
+Hi Tomi,
 
-Unify the logic.
+Thank you for the patch.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/usb/dvb-usb/dib0700_core.c | 26 +++++++++++++-----------
- 1 file changed, 14 insertions(+), 12 deletions(-)
+On Mon, Aug 30, 2021 at 02:00:41PM +0300, Tomi Valkeinen wrote:
+> The recently added v4l2_subdev_alloc_state() and
+> v4l2_subdev_free_state() were somewhat badly named. They allocate/free
+> the state that can be used for a subdev, but they don't change the
+> subdev itself in any way.
+> 
+> In the future we want to have the subdev state available easily for all
+> subdevs, and we want to store the state to subdev struct. Thus we will
+> be needing a new function which allocates the state and stores it into
+> the subdev struct.
+> 
+> This patch renames v4l2_subdev_alloc/free_state functions to
+> v4l2_alloc/free_subdev_state, so that we can later use
+> v4l2_subdev_alloc/free_state for the versions which work on the subdev
+> struct.
 
-diff --git a/drivers/media/usb/dvb-usb/dib0700_core.c b/drivers/media/usb/dvb-usb/dib0700_core.c
-index 7ea8f68b0f45..d7c5836b9271 100644
---- a/drivers/media/usb/dvb-usb/dib0700_core.c
-+++ b/drivers/media/usb/dvb-usb/dib0700_core.c
-@@ -583,7 +583,7 @@ int dib0700_download_firmware(struct usb_device *udev, const struct firmware *fw
- int dib0700_streaming_ctrl(struct dvb_usb_adapter *adap, int onoff)
- {
- 	struct dib0700_state *st = adap->dev->priv;
--	int ret;
-+	int ret, adapt_nr;
- 
- 	if ((onoff != 0) && (st->fw_version >= 0x10201)) {
- 		/* for firmware later than 1.20.1,
-@@ -610,24 +610,26 @@ int dib0700_streaming_ctrl(struct dvb_usb_adapter *adap, int onoff)
- 
- 	st->buf[3] = 0x00;
- 
--	deb_info("modifying (%d) streaming state for %d\n", onoff, adap->id);
--
- 	st->channel_state &= ~0x3;
-+
- 	if ((adap->fe_adap[0].stream.props.endpoint != 2)
--			&& (adap->fe_adap[0].stream.props.endpoint != 3)) {
--		deb_info("the endpoint number (%i) is not correct, use the adapter id instead", adap->fe_adap[0].stream.props.endpoint);
--		if (onoff)
--			st->channel_state |=	1 << (adap->id);
-+	    && (adap->fe_adap[0].stream.props.endpoint != 3)) {
-+		deb_info("the endpoint number (%i) is not correct, use the adapter id instead\n",
-+			 adap->fe_adap[0].stream.props.endpoint);
-+		adapt_nr = adap->id;
- 	} else {
--		if (onoff)
--			st->channel_state |=	1 << (adap->fe_adap[0].stream.props.endpoint-2);
--		else
--			st->channel_state |=	1 << (3-adap->fe_adap[0].stream.props.endpoint);
-+		adapt_nr = adap->fe_adap[0].stream.props.endpoint - 2;
- 	}
- 
-+	if (onoff)
-+		st->channel_state |= 1 << adapt_nr;
-+	else
-+		st->channel_state |= 1 << (1 - adapt_nr);
-+
- 	st->buf[2] |= st->channel_state;
- 
--	deb_info("data for streaming: %x %x\n", st->buf[1], st->buf[2]);
-+	deb_info("adapter %d, streaming %s: %*ph\n",
-+		adapt_nr, onoff ? "ON" : "OFF", 3, st->buf);
- 
- 	ret = dib0700_ctrl_wr(adap->dev, st->buf, 4);
- 	mutex_unlock(&adap->dev->usb_mutex);
+With have video_device_alloc() and media_request_alloc(), should we use
+v4l2_subdev_state_alloc() and v4l2_subdev_state_free() to be consistent
+?
+
+With or without this (but preferably with ;-)),
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+Note that regardless of the name, if we have both
+v4l2_subdev_alloc_state() (to allocate the state and store it in the
+subdev structure) and v4l2_subdev_alloc_state() (to allocate the state),
+it could be confusing for driver authors. Let's discuss this further in
+the patch series when the problem arises (if it does).
+
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+>  drivers/media/platform/rcar-vin/rcar-v4l2.c |  4 ++--
+>  drivers/media/platform/vsp1/vsp1_entity.c   |  4 ++--
+>  drivers/media/v4l2-core/v4l2-subdev.c       | 12 ++++++------
+>  drivers/staging/media/tegra-video/vi.c      |  4 ++--
+>  include/media/v4l2-subdev.h                 | 10 +++++-----
+>  5 files changed, 17 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+> index 0d141155f0e3..5f4fa8c48f68 100644
+> --- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
+> +++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+> @@ -252,7 +252,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+>  	u32 width, height;
+>  	int ret;
+>  
+> -	sd_state = v4l2_subdev_alloc_state(sd);
+> +	sd_state = v4l2_alloc_subdev_state(sd);
+>  	if (IS_ERR(sd_state))
+>  		return PTR_ERR(sd_state);
+>  
+> @@ -288,7 +288,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+>  
+>  	rvin_format_align(vin, pix);
+>  done:
+> -	v4l2_subdev_free_state(sd_state);
+> +	v4l2_free_subdev_state(sd_state);
+>  
+>  	return ret;
+>  }
+> diff --git a/drivers/media/platform/vsp1/vsp1_entity.c b/drivers/media/platform/vsp1/vsp1_entity.c
+> index 823c15facd1b..e40bca254b8b 100644
+> --- a/drivers/media/platform/vsp1/vsp1_entity.c
+> +++ b/drivers/media/platform/vsp1/vsp1_entity.c
+> @@ -675,7 +675,7 @@ int vsp1_entity_init(struct vsp1_device *vsp1, struct vsp1_entity *entity,
+>  	 * Allocate the pad configuration to store formats and selection
+>  	 * rectangles.
+>  	 */
+> -	entity->config = v4l2_subdev_alloc_state(&entity->subdev);
+> +	entity->config = v4l2_alloc_subdev_state(&entity->subdev);
+>  	if (IS_ERR(entity->config)) {
+>  		media_entity_cleanup(&entity->subdev.entity);
+>  		return PTR_ERR(entity->config);
+> @@ -690,6 +690,6 @@ void vsp1_entity_destroy(struct vsp1_entity *entity)
+>  		entity->ops->destroy(entity);
+>  	if (entity->subdev.ctrl_handler)
+>  		v4l2_ctrl_handler_free(entity->subdev.ctrl_handler);
+> -	v4l2_subdev_free_state(entity->config);
+> +	v4l2_free_subdev_state(entity->config);
+>  	media_entity_cleanup(&entity->subdev.entity);
+>  }
+> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> index 5d27a27cc2f2..26a34a8e3d37 100644
+> --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> @@ -28,7 +28,7 @@ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
+>  {
+>  	struct v4l2_subdev_state *state;
+>  
+> -	state = v4l2_subdev_alloc_state(sd);
+> +	state = v4l2_alloc_subdev_state(sd);
+>  	if (IS_ERR(state))
+>  		return PTR_ERR(state);
+>  
+> @@ -39,7 +39,7 @@ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
+>  
+>  static void subdev_fh_free(struct v4l2_subdev_fh *fh)
+>  {
+> -	v4l2_subdev_free_state(fh->state);
+> +	v4l2_free_subdev_state(fh->state);
+>  	fh->state = NULL;
+>  }
+>  
+> @@ -870,7 +870,7 @@ int v4l2_subdev_link_validate(struct media_link *link)
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate);
+>  
+> -struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd)
+> +struct v4l2_subdev_state *v4l2_alloc_subdev_state(struct v4l2_subdev *sd)
+>  {
+>  	struct v4l2_subdev_state *state;
+>  	int ret;
+> @@ -903,9 +903,9 @@ struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd)
+>  
+>  	return ERR_PTR(ret);
+>  }
+> -EXPORT_SYMBOL_GPL(v4l2_subdev_alloc_state);
+> +EXPORT_SYMBOL_GPL(v4l2_alloc_subdev_state);
+>  
+> -void v4l2_subdev_free_state(struct v4l2_subdev_state *state)
+> +void v4l2_free_subdev_state(struct v4l2_subdev_state *state)
+>  {
+>  	if (!state)
+>  		return;
+> @@ -913,7 +913,7 @@ void v4l2_subdev_free_state(struct v4l2_subdev_state *state)
+>  	kvfree(state->pads);
+>  	kfree(state);
+>  }
+> -EXPORT_SYMBOL_GPL(v4l2_subdev_free_state);
+> +EXPORT_SYMBOL_GPL(v4l2_free_subdev_state);
+>  
+>  #endif /* CONFIG_MEDIA_CONTROLLER */
+>  
+> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+> index d321790b07d9..a94d19e2a67c 100644
+> --- a/drivers/staging/media/tegra-video/vi.c
+> +++ b/drivers/staging/media/tegra-video/vi.c
+> @@ -507,7 +507,7 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+>  	if (!subdev)
+>  		return -ENODEV;
+>  
+> -	sd_state = v4l2_subdev_alloc_state(subdev);
+> +	sd_state = v4l2_alloc_subdev_state(subdev);
+>  	if (IS_ERR(sd_state))
+>  		return PTR_ERR(sd_state);
+>  	/*
+> @@ -558,7 +558,7 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+>  	v4l2_fill_pix_format(pix, &fmt.format);
+>  	tegra_channel_fmt_align(chan, pix, fmtinfo->bpp);
+>  
+> -	v4l2_subdev_free_state(sd_state);
+> +	v4l2_free_subdev_state(sd_state);
+>  
+>  	return 0;
+>  }
+> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> index 95ec18c2f49c..8701d2e7d893 100644
+> --- a/include/media/v4l2-subdev.h
+> +++ b/include/media/v4l2-subdev.h
+> @@ -1135,20 +1135,20 @@ int v4l2_subdev_link_validate_default(struct v4l2_subdev *sd,
+>  int v4l2_subdev_link_validate(struct media_link *link);
+>  
+>  /**
+> - * v4l2_subdev_alloc_state - allocate v4l2_subdev_state
+> + * v4l2_alloc_subdev_state - allocate v4l2_subdev_state
+>   *
+>   * @sd: pointer to &struct v4l2_subdev for which the state is being allocated.
+>   *
+> - * Must call v4l2_subdev_free_state() when state is no longer needed.
+> + * Must call v4l2_free_subdev_state() when state is no longer needed.
+>   */
+> -struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd);
+> +struct v4l2_subdev_state *v4l2_alloc_subdev_state(struct v4l2_subdev *sd);
+>  
+>  /**
+> - * v4l2_subdev_free_state - free a v4l2_subdev_state
+> + * v4l2_free_subdev_state - free a v4l2_subdev_state
+>   *
+>   * @state: v4l2_subdev_state to be freed.
+>   */
+> -void v4l2_subdev_free_state(struct v4l2_subdev_state *state);
+> +void v4l2_free_subdev_state(struct v4l2_subdev_state *state);
+>  
+>  #endif /* CONFIG_MEDIA_CONTROLLER */
+>  
+
 -- 
-2.31.1
+Regards,
 
+Laurent Pinchart
