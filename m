@@ -2,35 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61A4CC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 27 Sep 2021 01:45:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C6A7C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 27 Sep 2021 06:38:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39F2B6113D
-	for <linux-media@archiver.kernel.org>; Mon, 27 Sep 2021 01:45:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31D486113D
+	for <linux-media@archiver.kernel.org>; Mon, 27 Sep 2021 06:38:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbhI0BrL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 Sep 2021 21:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbhI0BrI (ORCPT
+        id S232995AbhI0GkC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Sep 2021 02:40:02 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:55372 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232955AbhI0GkC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 Sep 2021 21:47:08 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6018C061570
-        for <linux-media@vger.kernel.org>; Sun, 26 Sep 2021 18:45:30 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 14F9649A;
-        Mon, 27 Sep 2021 03:45:29 +0200 (CEST)
+        Mon, 27 Sep 2021 02:40:02 -0400
+Received: from [192.168.1.111] (91-158-153-130.elisa-laajakaista.fi [91.158.153.130])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2D73449A;
+        Mon, 27 Sep 2021 08:38:23 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1632707129;
-        bh=mhdLDSXJ+vY7VuZ+AX7OqP0Qubwrsg5u/S47g4lvi8U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jQrqOdUCYnidVsMilj1Fd1g1XdqG1YBh7mq1V6dux6ZYj0lsnPv3nyM8LplFuQthA
-         BFaYAgb0HXqUPxMV3U90cWrA8Ftgogn+vz/G9hpxcXMy+E1cvinE6CO/Fl5LSpv/JK
-         Ir/UPbKEcjso50xB4U5XdZeWILM8aNmHQjuRHTlE=
-Date:   Mon, 27 Sep 2021 04:45:23 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+        s=mail; t=1632724703;
+        bh=10WSEdvbhCA4+pmpkl/PV22zJhBbAM+kHa/4MaQ3bcw=;
+        h=To:Cc:References:From:Subject:Date:In-Reply-To:From;
+        b=DpPnaJanDJyC6pSbh0hCa4lEMpg2WLBlkJA4Dztk0ySVtL/3AlpJ0ZHslKLZXZvPI
+         3Ct4VHH2aMdLotzXYcAIsHeqlXAMkIQ5POwN+Mh4I0QkWp0+ZDvbwvsK+vIe/ctoOG
+         hm0eVTJ4Vf2lMyBLo7RUwqVjWM40RKEqctEFcqSE=
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
         niklas.soderlund+renesas@ragnatech.se,
@@ -38,108 +33,80 @@ Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Pratyush Yadav <p.yadav@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>
-Subject: Re: [PATCH v8 06/36] media: subdev: Add
- v4l2_subdev_validate(_and_lock)_state()
-Message-ID: <YVEiM5MHXvWK9dr/@pendragon.ideasonboard.com>
 References: <20210830110116.488338-1-tomi.valkeinen@ideasonboard.com>
- <20210830110116.488338-7-tomi.valkeinen@ideasonboard.com>
+ <20210830110116.488338-2-tomi.valkeinen@ideasonboard.com>
+ <YVD9AQp1Y+CCEThn@pendragon.ideasonboard.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH v8 01/36] media: subdev: rename subdev-state alloc & free
+Message-ID: <8c8f2609-4fe1-02c9-2c49-34f0902f41e1@ideasonboard.com>
+Date:   Mon, 27 Sep 2021 09:38:19 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210830110116.488338-7-tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <YVD9AQp1Y+CCEThn@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tomi,
-
-Thank you for the patch.
-
-On Mon, Aug 30, 2021 at 02:00:46PM +0300, Tomi Valkeinen wrote:
-> All suitable subdev ops are now passed either the TRY or the ACTIVE
-> state by the v4l2 core. However, other subdrivers can still call the ops
-> passing NULL as the state, implying the active case.
+On 27/09/2021 02:06, Laurent Pinchart wrote:
+> Hi Tomi,
 > 
-> Thus all subdev drivers supporting active state need to handle the NULL
-> state case.
-
-Do they ? Can't we mandate that the callers pass the correct state ? Do
-you think that would make the transition too difficult ?
-
-The way I understand the issue, this would only be needed to facilitate
-the transition. Is there a reason why the drivers you've ported (CAL &
-co.) use v4l2_subdev_validate_and_lock_state() after completing the
-transition, or is the correct state always passed by the caller ?
-
-> Additionally, the subdev drivers usually need to lock the
-> state.
+> Thank you for the patch.
 > 
-> Add two helper functions to easen the transition to centrally managed
-> ACTIVE state. v4l2_subdev_validate_state() ensures that the state is not
-> NULL, and v4l2_subdev_validate_and_lock_state() does the same and
-> additionally locks the state.
+> On Mon, Aug 30, 2021 at 02:00:41PM +0300, Tomi Valkeinen wrote:
+>> The recently added v4l2_subdev_alloc_state() and
+>> v4l2_subdev_free_state() were somewhat badly named. They allocate/free
+>> the state that can be used for a subdev, but they don't change the
+>> subdev itself in any way.
+>>
+>> In the future we want to have the subdev state available easily for all
+>> subdevs, and we want to store the state to subdev struct. Thus we will
+>> be needing a new function which allocates the state and stores it into
+>> the subdev struct.
+>>
+>> This patch renames v4l2_subdev_alloc/free_state functions to
+>> v4l2_alloc/free_subdev_state, so that we can later use
+>> v4l2_subdev_alloc/free_state for the versions which work on the subdev
+>> struct.
 > 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> ---
->  include/media/v4l2-subdev.h | 41 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
+> With have video_device_alloc() and media_request_alloc(), should we use
+> v4l2_subdev_state_alloc() and v4l2_subdev_state_free() to be consistent
+> ?
 > 
-> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-> index 52a725281b23..2290b5025fc0 100644
-> --- a/include/media/v4l2-subdev.h
-> +++ b/include/media/v4l2-subdev.h
-> @@ -1307,4 +1307,45 @@ void v4l2_subdev_lock_state(struct v4l2_subdev_state *state);
->   */
->  void v4l2_subdev_unlock_state(struct v4l2_subdev_state *state);
->  
-> +/**
-> + * v4l2_subdev_validate_state() - Gets the TRY or ACTIVE subdev state
-> + * @sd: subdevice
-> + * @state: subdevice state as passed to the subdev op
-> + *
-> + * Subdev ops used to be sometimes called with NULL as the state for ACTIVE
-> + * case. Even if the v4l2 core now passes proper state for both TRY and
-> + * ACTIVE cases, a subdev driver may call an op in another subdev driver,
-> + * passing NULL.
-> + *
-> + * This function can be used as a helper to get the state also for the ACTIVE
-> + * case. The subdev driver that supports ACTIVE state can use this function
-> + * as the first thing in its ops, ensuring that the state variable contains
-> + * either the TRY or ACTIVE state.
-> + */
-> +static inline struct v4l2_subdev_state *
-> +v4l2_subdev_validate_state(struct v4l2_subdev *sd,
-> +			   struct v4l2_subdev_state *state)
-> +{
-> +	return state ? state : sd->state;
-> +}
+> With or without this (but preferably with ;-)),
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> Note that regardless of the name, if we have both
+> v4l2_subdev_alloc_state() (to allocate the state and store it in the
+> subdev structure) and v4l2_subdev_alloc_state() (to allocate the state),
+> it could be confusing for driver authors. Let's discuss this further in
+> the patch series when the problem arises (if it does).
 
-This doesn't seem to be used by the drivers you've ported, or by the
-R-Car and GMSL patches from Jacopo. Do we need this function ?
+It is confusing. I guess to prove the point you used 
+"v4l2_subdev_alloc_state" twice above ;).
 
-> +
-> +/**
-> + * v4l2_subdev_validate_and_lock_state() - Gets locked TRY or ACTIVE subdev state
-> + * @sd: subdevice
-> + * @state: subdevice state as passed to the subdev op
-> + *
-> + * This is a helper function which does the same as v4l2_subdev_validate_state
-> + * () except that it also locks the state.
-> + */
-> +static inline struct v4l2_subdev_state *
-> +v4l2_subdev_validate_and_lock_state(struct v4l2_subdev *sd,
-> +				    struct v4l2_subdev_state *state)
-> +{
-> +	state = state ? state : sd->state;
-> +
-> +	v4l2_subdev_lock_state(state);
-> +
-> +	return state;
-> +}
-> +
->  #endif
+To me, the change you propose makes it more confusing than my version, 
+but I think that's up to the reader.
 
--- 
-Regards,
+My thinking was that v4l2_subdev_xyz function does something to the 
+subdev, thus v4l2_alloc_subdev_state does something that won't affect 
+the subdev. With v4l2_subdev_alloc_state() and v4l2_subdev_state_alloc() 
+that logic doesn't hold.
 
-Laurent Pinchart
+Perhaps we should just use something totally else for the version that 
+allocates and stores the state? v4l2_subdev_setup_state or something in 
+that direction? Or v4l2_subdev_setup, i.e. don't even refer to "state".
+
+You propose "v4l2_subdev_init_done" in a later reply, so I think however 
+we restructure (or don't) the subdev init, we should rename 
+v4l2_subdev_alloc_state to something else.
+
+We can discuss that rename in the other thread. As to your proposal for 
+this patch, I agree with it presuming we also rename 
+v4l2_subdev_alloc_state.
+
+  Tomi
