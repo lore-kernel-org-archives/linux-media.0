@@ -2,129 +2,302 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDB9EC433F5
-	for <linux-media@archiver.kernel.org>; Mon, 27 Sep 2021 12:20:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B20F0C433FE
+	for <linux-media@archiver.kernel.org>; Mon, 27 Sep 2021 05:25:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B23FE61058
-	for <linux-media@archiver.kernel.org>; Mon, 27 Sep 2021 12:20:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B8046115B
+	for <linux-media@archiver.kernel.org>; Mon, 27 Sep 2021 05:25:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234265AbhI0MWG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Sep 2021 08:22:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45018 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234073AbhI0MWF (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Sep 2021 08:22:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 719DE61074;
-        Mon, 27 Sep 2021 12:20:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632745228;
-        bh=jhCTgeMjDAgbXS4PhsYSF1UKTXtXCFTpi/I5crQIPYQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Kvk395jTUE93EswOaTpjw8khOLF9oZ4j5V5Hg11Q0KLOkDZZ3Bb0OTDWfO99SXd2C
-         vAPojKCdaumtc3MwO0et5/x8HwLFuGVwR3BSNeknv7nw7NPaeI556r1ShAcZ6+ZZrS
-         ZV3tlSOpK3xNAKsrMTFTJIYvictjp3ZDY65+Kl0yiENDOxYUoU2t2iWAaxeKql3pI4
-         vihCyWv+nEyBcIagH/lvuXJl4SNiuu/yh3rjM9ZxomVj+Modduj3gCtR+kiYmgi0mG
-         lDASZGYXmtwu2t6EJpmXrvPncsrjWhaFtKRJj/qdGpsYViBQ+sPNTKZnHDGHcHtATk
-         KXo151FMbP4Ag==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Olivier Lorin <o.lorin@laposte.net>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] media: gspca/gl860-mi1320: avoid -Wstring-concatenation warning
-Date:   Mon, 27 Sep 2021 14:20:18 +0200
-Message-Id: <20210927122024.941874-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        id S232926AbhI0F0i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Sep 2021 01:26:38 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:42903 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232594AbhI0F0h (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 27 Sep 2021 01:26:37 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1632720300; h=Message-ID: References: In-Reply-To: Subject:
+ To: From: Date: Content-Transfer-Encoding: Content-Type: MIME-Version:
+ Sender; bh=tdIC6J5oq2rz3aeFEM/CkAoed670O42766gLqKYdVTs=; b=ZfEkYbRZyzx6K3TsD6P56e9kOezR9w/iGhMXXbeMbjMqpyrDF1DL7UdxKjOJzLPAkoh1T5of
+ wOnhVm4hslRHeqNdtBcCEKbl8P4vmFMOzXBWygfdTJ9Db4RTPNwRpdNpAWWNlcS+Mc+J8C57
+ JEyYHFerDdHnm6bYhDU/AUQ/Ty4=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 615155ab47d64efb6d983603 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 27 Sep 2021 05:24:59
+ GMT
+Sender: mansur=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 3DD3DC4360D; Mon, 27 Sep 2021 05:24:59 +0000 (UTC)
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: mansur)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 15DB2C4338F;
+        Mon, 27 Sep 2021 05:24:58 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 27 Sep 2021 10:54:57 +0530
+From:   mansur@codeaurora.org
+To:     undisclosed-recipients:;
+Subject: Re: [V3] venus: vdec: decoded picture buffer handling during reconfig
+ sequence
+In-Reply-To: <78dec463-5e75-18d7-b74e-154f00b8a7b2@linaro.org>
+References: <20210825110841.12815-1-mansur@codeaurora.org>
+ <78dec463-5e75-18d7-b74e-154f00b8a7b2@linaro.org>
+Message-ID: <9f09bc40e52021f89b29cfaef8e314d8@codeaurora.org>
+X-Sender: mansur@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
-
-Newer clang versions are suspicious of definitions that mix concatenated
-strings with comma-separated arrays of strings, this has found real bugs
-elsewhere, but this seems to be a false positive:
-
-drivers/media/usb/gspca/gl860/gl860-mi1320.c:62:37: error: suspicious concatenation of string literals in an array initialization; did you mean to separate the elements with a comma? [-Werror,-Wstring-concatenation]
-        "\xd3\x02\xd4\x28\xd5\x01\xd0\x02" "\xd1\x18\xd2\xc1"
-                                           ^
-                                          ,
-drivers/media/usb/gspca/gl860/gl860-mi1320.c:62:2: note: place parentheses around the string literal to silence warning
-        "\xd3\x02\xd4\x28\xd5\x01\xd0\x02" "\xd1\x18\xd2\xc1"
-
-Use the extra parentheses as suggested in the warning message.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/media/usb/gspca/gl860/gl860-mi1320.c | 24 ++++++++++----------
- 1 file changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/media/usb/gspca/gl860/gl860-mi1320.c b/drivers/media/usb/gspca/gl860/gl860-mi1320.c
-index 0749fe13160f..1253eb145c99 100644
---- a/drivers/media/usb/gspca/gl860/gl860-mi1320.c
-+++ b/drivers/media/usb/gspca/gl860/gl860-mi1320.c
-@@ -49,44 +49,44 @@ static struct validx tbl_post_unset_alt[] = {
- 	{0x0061, 0x0000}, {0x0068, 0x000d},
- };
- 
--static u8 *tbl_1280[] = {
-+static u8 *tbl_1280[] = {(
- 	"\x0d\x80\xf1\x08\x03\x04\xf1\x00" "\x04\x05\xf1\x02\x05\x00\xf1\xf1"
- 	"\x06\x00\xf1\x0d\x20\x01\xf1\x00" "\x21\x84\xf1\x00\x0d\x00\xf1\x08"
- 	"\xf0\x00\xf1\x01\x34\x00\xf1\x00" "\x9b\x43\xf1\x00\xa6\x05\xf1\x00"
- 	"\xa9\x04\xf1\x00\xa1\x05\xf1\x00" "\xa4\x04\xf1\x00\xae\x0a\xf1\x08"
--	,
-+	), (
- 	"\xf0\x00\xf1\x02\x3a\x05\xf1\xf1" "\x3c\x05\xf1\xf1\x59\x01\xf1\x47"
- 	"\x5a\x01\xf1\x88\x5c\x0a\xf1\x06" "\x5d\x0e\xf1\x0a\x64\x5e\xf1\x1c"
- 	"\xd2\x00\xf1\xcf\xcb\x00\xf1\x01"
--	,
-+	), (
- 	"\xd3\x02\xd4\x28\xd5\x01\xd0\x02" "\xd1\x18\xd2\xc1"
--};
-+)};
- 
--static u8 *tbl_800[] = {
-+static u8 *tbl_800[] = { (
- 	"\x0d\x80\xf1\x08\x03\x03\xf1\xc0" "\x04\x05\xf1\x02\x05\x00\xf1\xf1"
- 	"\x06\x00\xf1\x0d\x20\x01\xf1\x00" "\x21\x84\xf1\x00\x0d\x00\xf1\x08"
- 	"\xf0\x00\xf1\x01\x34\x00\xf1\x00" "\x9b\x43\xf1\x00\xa6\x05\xf1\x00"
- 	"\xa9\x03\xf1\xc0\xa1\x03\xf1\x20" "\xa4\x02\xf1\x5a\xae\x0a\xf1\x08"
--	,
-+	), (
- 	"\xf0\x00\xf1\x02\x3a\x05\xf1\xf1" "\x3c\x05\xf1\xf1\x59\x01\xf1\x47"
- 	"\x5a\x01\xf1\x88\x5c\x0a\xf1\x06" "\x5d\x0e\xf1\x0a\x64\x5e\xf1\x1c"
- 	"\xd2\x00\xf1\xcf\xcb\x00\xf1\x01"
--	,
-+	), (
- 	"\xd3\x02\xd4\x18\xd5\x21\xd0\x02" "\xd1\x10\xd2\x59"
--};
-+)};
- 
--static u8 *tbl_640[] = {
-+static u8 *tbl_640[] = {(
- 	"\x0d\x80\xf1\x08\x03\x04\xf1\x04" "\x04\x05\xf1\x02\x07\x01\xf1\x7c"
- 	"\x08\x00\xf1\x0e\x21\x80\xf1\x00" "\x0d\x00\xf1\x08\xf0\x00\xf1\x01"
- 	"\x34\x10\xf1\x10\x3a\x43\xf1\x00" "\xa6\x05\xf1\x02\xa9\x04\xf1\x04"
- 	"\xa7\x02\xf1\x81\xaa\x01\xf1\xe2" "\xae\x0c\xf1\x09"
--	,
-+	), (
- 	"\xf0\x00\xf1\x02\x39\x03\xf1\xfc" "\x3b\x04\xf1\x04\x57\x01\xf1\xb6"
- 	"\x58\x02\xf1\x0d\x5c\x1f\xf1\x19" "\x5d\x24\xf1\x1e\x64\x5e\xf1\x1c"
- 	"\xd2\x00\xf1\x00\xcb\x00\xf1\x01"
--	,
-+	), (
- 	"\xd3\x02\xd4\x10\xd5\x81\xd0\x02" "\xd1\x08\xd2\xe1"
--};
-+)};
- 
- static s32 tbl_sat[] = {0x25, 0x1d, 0x15, 0x0d, 0x05, 0x4d, 0x55, 0x5d, 0x2d};
- static s32 tbl_bright[] = {0, 8, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70};
--- 
-2.29.2
-
+> On 2021-09-21 19:17, Stanimir Varbanov wrote:
+>> Hi Mansur,
+>> 
+>> On 8/25/21 2:08 PM, Mansur Alisha Shaik wrote:
+>>> In existing implementation, driver is freeing and un-mapping all the
+>>> decoded picture buffers(DPB) as part of dynamic resolution 
+>>> change(DRC)
+>>> handling. As a result, when firmware try to access the DPB buffer, 
+>>> from
+>>> previous sequence, SMMU context fault is seen due to the buffer being
+>>> already unmapped.
+>>> 
+>>> With this change, driver defines ownership of each DPB buffer. If a 
+>>> buffer
+>>> is owned by firmware, driver would skip from un-mapping the same.
+>>> 
+>>> Signed-off-by: Mansur Alisha Shaik <mansur@codeaurora.org>
+>>> 
+>>> Changes in V3:
+>>> - Migrated id allocation using kernel API ida_alloc_min()
+>>> 
+>>> ---
+>>>  drivers/media/platform/qcom/venus/helpers.c | 50 
+>>> ++++++++++++++++++++-
+>>>  drivers/media/platform/qcom/venus/helpers.h |  2 +
+>>>  drivers/media/platform/qcom/venus/vdec.c    |  7 ++-
+>>>  3 files changed, 57 insertions(+), 2 deletions(-)
+>>> 
+>>> diff --git a/drivers/media/platform/qcom/venus/helpers.c 
+>>> b/drivers/media/platform/qcom/venus/helpers.c
+>>> index 8012f5c7bf34..f36361d346b2 100644
+>>> --- a/drivers/media/platform/qcom/venus/helpers.c
+>>> +++ b/drivers/media/platform/qcom/venus/helpers.c
+>>> @@ -3,6 +3,7 @@
+>>>   * Copyright (c) 2012-2016, The Linux Foundation. All rights 
+>>> reserved.
+>>>   * Copyright (C) 2017 Linaro Ltd.
+>>>   */
+>>> +#include <linux/idr.h>
+>>>  #include <linux/list.h>
+>>>  #include <linux/mutex.h>
+>>>  #include <linux/slab.h>
+>>> @@ -21,6 +22,13 @@
+>>>  #define NUM_MBS_720P	(((1280 + 15) >> 4) * ((720 + 15) >> 4))
+>>>  #define NUM_MBS_4K	(((4096 + 15) >> 4) * ((2304 + 15) >> 4))
+>>> 
+>>> +static DEFINE_IDA(dpb_out_tag_ida);
+>> 
+>> No global static variables please. Make it part of venus_inst 
+>> structure.
+> 	As per my understanding it is not just static global variable.
+> 	We are defining the ida structure and assign to name when pass as 
+> param as follows
+> 	struct ida {
+> 	struct idr		idr;
+> 	struct ida_bitmap	*free_bitmap;
+> 	};
+> 	#define IDA_INIT(name)		{ .idr = IDR_INIT((name).idr), .free_bitmap = 
+> NULL, }
+> 	#define DEFINE_IDA(name)	struct ida name = IDA_INIT(name)
+> 
+> 	Any ida related API's expect pointer to this structure.
+> 	If we move the variable then it might be bit difficult use ida_xxx() 
+> API'same
+>>> +
+>>> +enum dpb_buf_owner {
+>>> +	DRIVER,
+>>> +	FIRMWARE,
+>>> +};
+>>> +
+>>>  struct intbuf {
+>>>  	struct list_head list;
+>>>  	u32 type;
+>>> @@ -28,6 +36,8 @@ struct intbuf {
+>>>  	void *va;
+>>>  	dma_addr_t da;
+>>>  	unsigned long attrs;
+>>> +	enum dpb_buf_owner owned_by;
+>>> +	u32 dpb_out_tag;
+>>>  };
+>>> 
+>>>  bool venus_helper_check_codec(struct venus_inst *inst, u32 
+>>> v4l2_pixfmt)
+>>> @@ -95,9 +105,16 @@ int venus_helper_queue_dpb_bufs(struct venus_inst 
+>>> *inst)
+>>>  		fdata.device_addr = buf->da;
+>>>  		fdata.buffer_type = buf->type;
+>>> 
+>>> +		if (buf->owned_by == FIRMWARE)
+>>> +			continue;
+>>> +
+>>> +		fdata.clnt_data = buf->dpb_out_tag;
+>>> +
+>>>  		ret = hfi_session_process_buf(inst, &fdata);
+>>>  		if (ret)
+>>>  			goto fail;
+>>> +
+>>> +		buf->owned_by = FIRMWARE;
+>>>  	}
+>>> 
+>>>  fail:
+>>> @@ -110,13 +127,19 @@ int venus_helper_free_dpb_bufs(struct 
+>>> venus_inst *inst)
+>>>  	struct intbuf *buf, *n;
+>>> 
+>>>  	list_for_each_entry_safe(buf, n, &inst->dpbbufs, list) {
+>>> +		if (buf->owned_by == FIRMWARE)
+>>> +			continue;
+>>> +
+>>> +		ida_free(&dpb_out_tag_ida, buf->dpb_out_tag);
+>>> +
+>>>  		list_del_init(&buf->list);
+>>>  		dma_free_attrs(inst->core->dev, buf->size, buf->va, buf->da,
+>>>  			       buf->attrs);
+>>>  		kfree(buf);
+>>>  	}
+>>> 
+>>> -	INIT_LIST_HEAD(&inst->dpbbufs);
+>>> +	if (list_empty(&inst->dpbbufs))
+>>> +		INIT_LIST_HEAD(&inst->dpbbufs);
+>>> 
+>>>  	return 0;
+>>>  }
+>>> @@ -134,6 +157,7 @@ int venus_helper_alloc_dpb_bufs(struct venus_inst 
+>>> *inst)
+>>>  	unsigned int i;
+>>>  	u32 count;
+>>>  	int ret;
+>>> +	int id;
+>>> 
+>>>  	/* no need to allocate dpb buffers */
+>>>  	if (!inst->dpb_fmt)
+>>> @@ -171,6 +195,15 @@ int venus_helper_alloc_dpb_bufs(struct 
+>>> venus_inst *inst)
+>>>  			ret = -ENOMEM;
+>>>  			goto fail;
+>>>  		}
+>>> +		buf->owned_by = DRIVER;
+>>> +
+>>> +		id = ida_alloc_min(&dpb_out_tag_ida, VB2_MAX_FRAME, GFP_KERNEL);
+>>> +		if (id < 0) {
+>>> +			ret = id;
+>>> +			goto fail;
+>>> +		}
+>>> +
+>>> +		buf->dpb_out_tag = id;
+>>> 
+>>>  		list_add_tail(&buf->list, &inst->dpbbufs);
+>>>  	}
+>>> @@ -1365,6 +1398,21 @@ venus_helper_find_buf(struct venus_inst *inst, 
+>>> unsigned int type, u32 idx)
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(venus_helper_find_buf);
+>>> 
+>>> +void venus_helper_find_dpb_buf(struct venus_inst *inst, struct 
+>>> vb2_v4l2_buffer *vbuf,
+>>> +			       unsigned int type, unsigned int buf_type, u32 tag)
+>> 
+>> If this helper will return void then it should be renamed to something
+>> like venus_helper_dpb_buf_change_owner().
+>  Ok.
+>>> +{
+>>> +	struct intbuf *dpb_buf;
+>>> +
+>>> +	if (type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE &&
+>>> +	    buf_type == HFI_BUFFER_OUTPUT)
+>>> +		list_for_each_entry(dpb_buf, &inst->dpbbufs, list)
+>>> +			if (dpb_buf->dpb_out_tag == tag) {
+>>> +				dpb_buf->owned_by = DRIVER;
+>>> +				break;
+>>> +			}
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(venus_helper_find_dpb_buf);
+>>> +
+>>>  int venus_helper_vb2_buf_init(struct vb2_buffer *vb)
+>>>  {
+>>>  	struct venus_inst *inst = vb2_get_drv_priv(vb->vb2_queue);
+>>> diff --git a/drivers/media/platform/qcom/venus/helpers.h 
+>>> b/drivers/media/platform/qcom/venus/helpers.h
+>>> index e6269b4be3af..17c5aadaec82 100644
+>>> --- a/drivers/media/platform/qcom/venus/helpers.h
+>>> +++ b/drivers/media/platform/qcom/venus/helpers.h
+>>> @@ -14,6 +14,8 @@ struct venus_core;
+>>>  bool venus_helper_check_codec(struct venus_inst *inst, u32 
+>>> v4l2_pixfmt);
+>>>  struct vb2_v4l2_buffer *venus_helper_find_buf(struct venus_inst 
+>>> *inst,
+>>>  					      unsigned int type, u32 idx);
+>>> +void venus_helper_find_dpb_buf(struct venus_inst *inst, struct 
+>>> vb2_v4l2_buffer *vbuf,
+>>> +			       unsigned int type, unsigned int buf_type, u32 idx);
+>>>  void venus_helper_buffers_done(struct venus_inst *inst, unsigned int 
+>>> type,
+>>>  			       enum vb2_buffer_state state);
+>>>  int venus_helper_vb2_buf_init(struct vb2_buffer *vb);
+>>> diff --git a/drivers/media/platform/qcom/venus/vdec.c 
+>>> b/drivers/media/platform/qcom/venus/vdec.c
+>>> index 198e47eb63f4..cafdc3d8e473 100644
+>>> --- a/drivers/media/platform/qcom/venus/vdec.c
+>>> +++ b/drivers/media/platform/qcom/venus/vdec.c
+>>> @@ -1297,6 +1297,7 @@ static void vdec_buf_done(struct venus_inst 
+>>> *inst, unsigned int buf_type,
+>>>  	struct vb2_v4l2_buffer *vbuf;
+>>>  	struct vb2_buffer *vb;
+>>>  	unsigned int type;
+>>> +	struct intbuf *dpb_buf;
+>>> 
+>>>  	vdec_pm_touch(inst);
+>>> 
+>>> @@ -1306,8 +1307,10 @@ static void vdec_buf_done(struct venus_inst 
+>>> *inst, unsigned int buf_type,
+>>>  		type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+>>> 
+>>>  	vbuf = venus_helper_find_buf(inst, type, tag);
+>>> -	if (!vbuf)
+>>> +	if (!vbuf) {
+>>> +		venus_helper_find_dpb_buf(inst, vbuf, type, buf_type, tag);
+>>>  		return;
+>>> +	}
+>>> 
+>>>  	vbuf->flags = flags;
+>>>  	vbuf->field = V4L2_FIELD_NONE;
+>>> @@ -1622,6 +1625,8 @@ static int vdec_close(struct file *file)
+>>> 
+>>>  	vdec_pm_get(inst);
+>>> 
+>>> +	venus_helper_free_dpb_bufs(inst);
+>>> +	INIT_LIST_HEAD(&inst->dpbbufs);
+>> 
+>> This belongs to venus_helper_free_dpb_bufs not here.
+>  Ok, I will remove it from here, since in free_dpb() api 
+> INIT_LIST_HEAD() when list is free.
+>>>  	v4l2_m2m_ctx_release(inst->m2m_ctx);
+>>>  	v4l2_m2m_release(inst->m2m_dev);
+>>>  	vdec_ctrl_deinit(inst);
+>>> 
+>> 
+>> --
+>> regards,
+>> Stan
+> 
+> --
+> Thanks,
+> Mansur
