@@ -2,111 +2,156 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C6A7C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 27 Sep 2021 06:38:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2967CC4332F
+	for <linux-media@archiver.kernel.org>; Mon, 27 Sep 2021 07:01:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 31D486113D
-	for <linux-media@archiver.kernel.org>; Mon, 27 Sep 2021 06:38:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1454E61041
+	for <linux-media@archiver.kernel.org>; Mon, 27 Sep 2021 07:01:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbhI0GkC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Sep 2021 02:40:02 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:55372 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232955AbhI0GkC (ORCPT
+        id S233171AbhI0HDA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Sep 2021 03:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233118AbhI0HC7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Sep 2021 02:40:02 -0400
-Received: from [192.168.1.111] (91-158-153-130.elisa-laajakaista.fi [91.158.153.130])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2D73449A;
-        Mon, 27 Sep 2021 08:38:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1632724703;
-        bh=10WSEdvbhCA4+pmpkl/PV22zJhBbAM+kHa/4MaQ3bcw=;
-        h=To:Cc:References:From:Subject:Date:In-Reply-To:From;
-        b=DpPnaJanDJyC6pSbh0hCa4lEMpg2WLBlkJA4Dztk0ySVtL/3AlpJ0ZHslKLZXZvPI
-         3Ct4VHH2aMdLotzXYcAIsHeqlXAMkIQ5POwN+Mh4I0QkWp0+ZDvbwvsK+vIe/ctoOG
-         hm0eVTJ4Vf2lMyBLo7RUwqVjWM40RKEqctEFcqSE=
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>
-References: <20210830110116.488338-1-tomi.valkeinen@ideasonboard.com>
- <20210830110116.488338-2-tomi.valkeinen@ideasonboard.com>
- <YVD9AQp1Y+CCEThn@pendragon.ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH v8 01/36] media: subdev: rename subdev-state alloc & free
-Message-ID: <8c8f2609-4fe1-02c9-2c49-34f0902f41e1@ideasonboard.com>
-Date:   Mon, 27 Sep 2021 09:38:19 +0300
+        Mon, 27 Sep 2021 03:02:59 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42930C061570;
+        Mon, 27 Sep 2021 00:01:22 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id w29so49208804wra.8;
+        Mon, 27 Sep 2021 00:01:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=zQB26B5eWUnzl+964mpUpFb8aQd6/nGrTcRgYihaeWc=;
+        b=hhkZKKfmY6xHACewDTWjOFBz4xjAdw6xepF6ktK90NO/v63YVfo3bclcJjktmyxKd9
+         Z/c4igoFBRypdKeRup7kuFoUmC/X1Ve6oHCvfGuhIPEsLfcEPQw33+GPKhEzsaTZc8AB
+         FRO4bjD10C8Oh8tk8cVFMIHRCrcV/nFhAVuQJwEXZYxXtzHVZWPwpH6WwM4X58xMxD3G
+         ANTPz2NS8tzJLST011L1Ub4nsekD7rgLMNy021dE0rsoWx/yWUahwOlLMkjDzbTjLZyQ
+         gg06B5E6Oq2eJ6mqcnpBhkZzaI05ZMPzkrFUOtTv6WPupPyIVVbHmiOWBJUuvTNXTRaP
+         2vyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=zQB26B5eWUnzl+964mpUpFb8aQd6/nGrTcRgYihaeWc=;
+        b=BHcBFSOnm1teo2ab0AwsFsuP9h8WAYzld9HQdPkd9HZl5eVCMi7wUKQdS5AECoGV/l
+         qgQDqS36mKAZZc1CeildQiTmiett/AJ928ASqmNk6O2sFKwKlBoJ+qh4jXJcDhuqvwlg
+         ihQ5YrAv7QZLsNV0ook7wU/b9FROHbHKeFOHZKsxAUlWiag0/6akzRJVkgGg8w5SVn1M
+         CCwH1XjaQtDVCejrIKQm8TGr1V+cQNvaKkUZWBEjVH7uraCLdwIR8jUCUlaJLlaD7h6X
+         BZeqRfcrJifDTu9FXoV/fftDbXNx/c7oEkTHjB9VpzrjKr1qVuG0qG9x54M2d1y8Yzlo
+         lwvA==
+X-Gm-Message-State: AOAM532ndhmCHlU7dg5HXrgtDuWkJ/S35KnWmTxPtsPVdjNqKN8wU8ab
+        B0vOF5ESy0A9ERkM3LhARdY=
+X-Google-Smtp-Source: ABdhPJyKxcFSxLyjYTbrEPilQCvwXzB/i+kykltwhE6uBKLPaKa7c1AQMv9DtFoICMHeA7Ce1DlXbg==
+X-Received: by 2002:a5d:6a08:: with SMTP id m8mr25303052wru.336.1632726080941;
+        Mon, 27 Sep 2021 00:01:20 -0700 (PDT)
+Received: from [192.168.178.21] (p5b0ea1b5.dip0.t-ipconnect.de. [91.14.161.181])
+        by smtp.gmail.com with ESMTPSA id w21sm2167288wmk.15.2021.09.27.00.01.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Sep 2021 00:01:20 -0700 (PDT)
+Subject: Re: [PATCH 2/4] drm/msm: allow compile_test on !ARM
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+To:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, etnaviv@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org
+Cc:     l.stach@pengutronix.de, christian.gmeiner@gmail.com,
+        linux+etnaviv@armlinux.org.uk, robdclark@gmail.com, sean@poorly.run
+References: <20210924071759.22659-1-christian.koenig@amd.com>
+ <20210924071759.22659-2-christian.koenig@amd.com>
+Message-ID: <dbf6b324-511e-45d4-3316-f41f076c4f82@gmail.com>
+Date:   Mon, 27 Sep 2021 09:01:18 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <YVD9AQp1Y+CCEThn@pendragon.ideasonboard.com>
+In-Reply-To: <20210924071759.22659-2-christian.koenig@amd.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 27/09/2021 02:06, Laurent Pinchart wrote:
-> Hi Tomi,
-> 
-> Thank you for the patch.
-> 
-> On Mon, Aug 30, 2021 at 02:00:41PM +0300, Tomi Valkeinen wrote:
->> The recently added v4l2_subdev_alloc_state() and
->> v4l2_subdev_free_state() were somewhat badly named. They allocate/free
->> the state that can be used for a subdev, but they don't change the
->> subdev itself in any way.
->>
->> In the future we want to have the subdev state available easily for all
->> subdevs, and we want to store the state to subdev struct. Thus we will
->> be needing a new function which allocates the state and stores it into
->> the subdev struct.
->>
->> This patch renames v4l2_subdev_alloc/free_state functions to
->> v4l2_alloc/free_subdev_state, so that we can later use
->> v4l2_subdev_alloc/free_state for the versions which work on the subdev
->> struct.
-> 
-> With have video_device_alloc() and media_request_alloc(), should we use
-> v4l2_subdev_state_alloc() and v4l2_subdev_state_free() to be consistent
-> ?
-> 
-> With or without this (but preferably with ;-)),
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> Note that regardless of the name, if we have both
-> v4l2_subdev_alloc_state() (to allocate the state and store it in the
-> subdev structure) and v4l2_subdev_alloc_state() (to allocate the state),
-> it could be confusing for driver authors. Let's discuss this further in
-> the patch series when the problem arises (if it does).
+As long as nobody objects I'm going to push this one here to 
+drm-misc-next with Rob's rb.
 
-It is confusing. I guess to prove the point you used 
-"v4l2_subdev_alloc_state" twice above ;).
+The other patches still need a bit more work, but being able to at least 
+compile test MSM on x86 is really helpful.
 
-To me, the change you propose makes it more confusing than my version, 
-but I think that's up to the reader.
+Christian.
 
-My thinking was that v4l2_subdev_xyz function does something to the 
-subdev, thus v4l2_alloc_subdev_state does something that won't affect 
-the subdev. With v4l2_subdev_alloc_state() and v4l2_subdev_state_alloc() 
-that logic doesn't hold.
+Am 24.09.21 um 09:17 schrieb Christian König:
+> MSM is one of the few drivers which won't even compile
+> test on !ARM platforms.
+>
+> Looking into this a bit more it turned out that there is
+> actually not that much missing to at least let the driver
+> compile on x86 as well.
+>
+> So this patch replaces the use of phys_to_page() with the
+> open coded version and provides a dummy for of_drm_find_bridge().
+>
+> Signed-off-by: Christian König <christian.koenig@amd.com>
+> ---
+>   drivers/gpu/drm/msm/Kconfig   |  4 ++--
+>   drivers/gpu/drm/msm/msm_gem.c |  2 +-
+>   include/drm/drm_bridge.h      | 10 +++++++++-
+>   3 files changed, 12 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
+> index e9c6af78b1d7..5879f67bc88c 100644
+> --- a/drivers/gpu/drm/msm/Kconfig
+> +++ b/drivers/gpu/drm/msm/Kconfig
+> @@ -3,9 +3,9 @@
+>   config DRM_MSM
+>   	tristate "MSM DRM"
+>   	depends on DRM
+> -	depends on ARCH_QCOM || SOC_IMX5 || (ARM && COMPILE_TEST)
+> +	depends on ARCH_QCOM || SOC_IMX5 || COMPILE_TEST
+>   	depends on IOMMU_SUPPORT
+> -	depends on OF && COMMON_CLK
+> +	depends on (OF && COMMON_CLK) || COMPILE_TEST
+>   	depends on QCOM_OCMEM || QCOM_OCMEM=n
+>   	depends on QCOM_LLCC || QCOM_LLCC=n
+>   	depends on QCOM_COMMAND_DB || QCOM_COMMAND_DB=n
+> diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
+> index 14907622769f..5bd511f07c07 100644
+> --- a/drivers/gpu/drm/msm/msm_gem.c
+> +++ b/drivers/gpu/drm/msm/msm_gem.c
+> @@ -85,7 +85,7 @@ static struct page **get_pages_vram(struct drm_gem_object *obj, int npages)
+>   
+>   	paddr = physaddr(obj);
+>   	for (i = 0; i < npages; i++) {
+> -		p[i] = phys_to_page(paddr);
+> +		p[i] = pfn_to_page(__phys_to_pfn(paddr));
+>   		paddr += PAGE_SIZE;
+>   	}
+>   
+> diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
+> index 9cdbd209388e..a445298e1c25 100644
+> --- a/include/drm/drm_bridge.h
+> +++ b/include/drm/drm_bridge.h
+> @@ -790,11 +790,19 @@ drm_priv_to_bridge(struct drm_private_obj *priv)
+>   
+>   void drm_bridge_add(struct drm_bridge *bridge);
+>   void drm_bridge_remove(struct drm_bridge *bridge);
+> -struct drm_bridge *of_drm_find_bridge(struct device_node *np);
+>   int drm_bridge_attach(struct drm_encoder *encoder, struct drm_bridge *bridge,
+>   		      struct drm_bridge *previous,
+>   		      enum drm_bridge_attach_flags flags);
+>   
+> +#ifdef CONFIG_OF
+> +struct drm_bridge *of_drm_find_bridge(struct device_node *np);
+> +#else
+> +static inline struct drm_bridge *of_drm_find_bridge(struct device_node *np)
+> +{
+> +	return NULL;
+> +}
+> +#endif
+> +
+>   /**
+>    * drm_bridge_get_next_bridge() - Get the next bridge in the chain
+>    * @bridge: bridge object
 
-Perhaps we should just use something totally else for the version that 
-allocates and stores the state? v4l2_subdev_setup_state or something in 
-that direction? Or v4l2_subdev_setup, i.e. don't even refer to "state".
-
-You propose "v4l2_subdev_init_done" in a later reply, so I think however 
-we restructure (or don't) the subdev init, we should rename 
-v4l2_subdev_alloc_state to something else.
-
-We can discuss that rename in the other thread. As to your proposal for 
-this patch, I agree with it presuming we also rename 
-v4l2_subdev_alloc_state.
-
-  Tomi
