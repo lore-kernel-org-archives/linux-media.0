@@ -2,103 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A434EC433EF
-	for <linux-media@archiver.kernel.org>; Tue, 28 Sep 2021 19:05:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAAFAC433F5
+	for <linux-media@archiver.kernel.org>; Tue, 28 Sep 2021 19:13:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CA026128E
-	for <linux-media@archiver.kernel.org>; Tue, 28 Sep 2021 19:05:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B207161131
+	for <linux-media@archiver.kernel.org>; Tue, 28 Sep 2021 19:13:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242169AbhI1THS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Sep 2021 15:07:18 -0400
-Received: from thorn.bewilderbeest.net ([71.19.156.171]:51219 "EHLO
-        thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbhI1THS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Sep 2021 15:07:18 -0400
-X-Greylist: delayed 491 seconds by postgrey-1.27 at vger.kernel.org; Tue, 28 Sep 2021 15:07:18 EDT
-Received: from hatter.bewilderbeest.net (71-212-29-146.tukw.qwest.net [71.212.29.146])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 8CF6F293;
-        Tue, 28 Sep 2021 11:57:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1632855446;
-        bh=IFT3ZrpRZd+Ibr02i8FrlOCSYn/cxKG+rD5MpR8Vock=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DWL+C+dHOgnPcq0cZchQ12PhW3t9SddpmR2MCjXQLHiGjRkmHFwkj9b5Fxcx308dN
-         WkzsqUDmdqAMqFjnryQZ3xWDMM603fAOMHZzB8wQL+2+A5H0NRuApMACU2H3jptchH
-         j/SDraM5EGdylpEkqfLBwv2INKURWptZ+I6RjTao=
-Date:   Tue, 28 Sep 2021 11:57:03 -0700
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Joel Stanley <joel@jms.id.au>, Eddie James <eajames@linux.ibm.com>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH v3] media: aspeed-video: ignore interrupts that aren't
- enabled
-Message-ID: <YVNlfwLUDNxtp0fs@hatter.bewilderbeest.net>
-References: <20210617220229.7352-1-zev@bewilderbeest.net>
- <46edf81d60a38747f7d2511f840253a1c6867652.camel@linux.ibm.com>
- <HK0PR06MB338081E134AA6F43ECBCBA4DF2D29@HK0PR06MB3380.apcprd06.prod.outlook.com>
- <CACPK8XfE6zB9BWYq7e8WbXkPFp2Cicwv2x2dc8h6jNaR2qZV0g@mail.gmail.com>
+        id S242383AbhI1TOx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Sep 2021 15:14:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38916 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229678AbhI1TOw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 28 Sep 2021 15:14:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2203D6135D;
+        Tue, 28 Sep 2021 19:13:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632856393;
+        bh=7B069zu3fIEzc7J70Px6o5DhIK24ITV1Z/pXFm5SPE0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=l6f3rhKcvzS0cbgcm8Mrrz4ooPJZlG/4m1v9BWnHnLbjLhFxTHio3iJqUb30rWppT
+         bkrU3N/7CrsynPS44VKf0F2VQiuAKkNUFlNPTayOIUECmpi5i8qpKmMSC/lBmgtS7j
+         X4kQkoxKPRo4YEiG5j2cprdm3SqnXAJO0aQYTGHuo1F1PYDZMuTo0r+HG+4p53LGkx
+         6g2hElAnx6lHAbgmMZ4OmahFoV7S1PCe5RpOroGQpbz3A8K5WRGTW29H9j5IXkbBGD
+         3mQlgTa3+GnIvq5ZXBvfbIyXjy3El0UVXSA16dxV71BieYlJXPFw3G4y+ns8x5uyUQ
+         yBbjLwWqCZu2w==
+Received: by mail-yb1-f177.google.com with SMTP id b82so10852ybg.1;
+        Tue, 28 Sep 2021 12:13:13 -0700 (PDT)
+X-Gm-Message-State: AOAM533yGAKgXXVhFyLR4KCWpEiXc68xctSPw1mwofXvq2AJCebThXU+
+        eucum2gS5POVXfUbELpSsADXhFQW6GVUdPulV9w=
+X-Google-Smtp-Source: ABdhPJzG+BFlkram6wvHYJeDdwoU4EG8PEfLiuo+UnYK/GvSnKWgTPJ0sB5vh6yCxEX5jumwKy2fpW82HRuvpNo3wUE=
+X-Received: by 2002:a25:3614:: with SMTP id d20mr8888513yba.537.1632856392408;
+ Tue, 28 Sep 2021 12:13:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CACPK8XfE6zB9BWYq7e8WbXkPFp2Cicwv2x2dc8h6jNaR2qZV0g@mail.gmail.com>
+References: <20210912165309.98695-1-ogabbay@kernel.org> <20210912165309.98695-2-ogabbay@kernel.org>
+ <20210928171329.GF3544071@ziepe.ca>
+In-Reply-To: <20210928171329.GF3544071@ziepe.ca>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Tue, 28 Sep 2021 22:12:45 +0300
+X-Gmail-Original-Message-ID: <CAFCwf11_2TTVnqr8HqrsCW6cxUHu9txKuX-3U6mgMVPq8WqKdg@mail.gmail.com>
+Message-ID: <CAFCwf11_2TTVnqr8HqrsCW6cxUHu9txKuX-3U6mgMVPq8WqKdg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] habanalabs: define uAPI to export FD for DMA-BUF
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Gal Pressman <galpress@amazon.com>,
+        Yossi Leybovich <sleybo@amazon.com>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Doug Ledford <dledford@redhat.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Sep 06, 2021 at 04:47:14AM PDT, Joel Stanley wrote:
->Hi Mauro,
+On Tue, Sep 28, 2021 at 8:13 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
 >
->On Mon, 6 Sept 2021 at 10:10, Ryan Chen <ryan_chen@aspeedtech.com> wrote:
->> > Subject: Re: [PATCH v3] media: aspeed-video: ignore interrupts that aren't
->> > enabled
->> >
->> > On Thu, 2021-06-17 at 17:02 -0500, Zev Weiss wrote:
->> > > As partially addressed in commit 65d270acb2d6 ("media: aspeed: clear
->> > > garbage interrupts"), the ASpeed video engine sometimes asserts
->> > > interrupts that the driver hasn't enabled.  In addition to the
->> > > CAPTURE_COMPLETE and FRAME_COMPLETE interrupts dealt with in that
->> > > patch, COMP_READY has also been observed.  Instead of playing
->> > > whack-a-mole with each one individually, we can instead just blanket
->> > > ignore everything we haven't explicitly enabled.
->> >
->> > Suspect this will fix an intermittent problem on AST2500 with screensaver.
->> > Change looks good, thanks!
->> >
->> > Reviewed-by: Eddie James <eajames@linux.ibm.com>
->> >
->> Reviewed-by: Ryan Chen <ryan_chen@aspeedtech.com>
->> > >
->> > > Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> On Sun, Sep 12, 2021 at 07:53:08PM +0300, Oded Gabbay wrote:
+> >       /* HL_MEM_OP_* */
+> >       __u32 op;
+> > -     /* HL_MEM_* flags */
+> > +     /* HL_MEM_* flags.
+> > +      * For the HL_MEM_OP_EXPORT_DMABUF_FD opcode, this field holds the
+> > +      * DMA-BUF file/FD flags.
+> > +      */
+> >       __u32 flags;
+> >       /* Context ID - Currently not in use */
+> >       __u32 ctx_id;
+> > @@ -1072,6 +1091,13 @@ struct hl_mem_out {
+> >
+> >                       __u32 pad;
+> >               };
+> > +
+> > +             /* Returned in HL_MEM_OP_EXPORT_DMABUF_FD. Represents the
+> > +              * DMA-BUF object that was created to describe a memory
+> > +              * allocation on the device's memory space. The FD should be
+> > +              * passed to the importer driver
+> > +              */
+> > +             __u64 fd;
 >
->I notice this wasn't merged in the pull request you sent for v5.15.
->Would you be able to ensure it makes it in the next pull request you
->send?
->
->It can have some fixes tags too:
->
->Fixes: 65d270acb2d6 ("media: aspeed: clear garbage interrupts")
->Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
->Acked-by: Joel Stanley <joel@jms.id.au>
->
->Cheers,
->
->Joel
->
+> fd's should be a s32 type in a fixed width uapi.
+Yep, will correct this.
 
-Also not in the recent merge of the media/v5.15-2 tag it looks like -- ping?
-
+>
+> I usually expect to see the uapi changes inside the commit that
+> consumes them, splitting the patch like this seems strange but
+> harmless.
+I'll remember that when I send the RDMA patches down the road :)
 
 Thanks,
-Zev
-
+Oded
+>
+> Jason
