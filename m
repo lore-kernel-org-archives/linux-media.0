@@ -2,95 +2,151 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B625DC4332F
-	for <linux-media@archiver.kernel.org>; Tue, 28 Sep 2021 07:09:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0DD8C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 28 Sep 2021 07:53:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A310B611C0
-	for <linux-media@archiver.kernel.org>; Tue, 28 Sep 2021 07:09:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8153F611CC
+	for <linux-media@archiver.kernel.org>; Tue, 28 Sep 2021 07:53:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239188AbhI1HKn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Sep 2021 03:10:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44422 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239068AbhI1HKk (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Sep 2021 03:10:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D26DF6127C;
-        Tue, 28 Sep 2021 07:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632812941;
-        bh=UL3HabPZo5poDvomfSgnMsUOXswOov4XaFV+Mhe/hPM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=peKRlRdshfCDM0WKkr1XAFZ5JA0DCpMVcB0qXm9NxkojuV08GN8y4VUWHQuL7c9ZY
-         6sWn8yb6HkL33eo7lHoIpmV+16YmcV5URUsbb5ROqMLP/B2oYGO9uzYlQKzwmYIte9
-         JjCrZb+8LY02VUAqdkytXO6BXCrNT6hTbVe6tjxqsCJOIcI5lKKEAFEQw+MtMj1kd9
-         7TD06BzKQnK5KlREkvXV6RcZ4dYFoBhJ+Sg8NqJMxbI95VJng6XTqHy4AQImO9S4Kf
-         gEL4X76N6d2P14bUwruG/Y5pIfa3QIReUn3JXZEw80+7KD8/DNNMDPScLhF7pMaSHH
-         +Epm+raz+IWiQ==
-Received: by mail-wm1-f52.google.com with SMTP id 136-20020a1c048e000000b0030d05169e9bso1249623wme.4;
-        Tue, 28 Sep 2021 00:09:01 -0700 (PDT)
-X-Gm-Message-State: AOAM532eFBrVLN0yyjVeef3QUJ7y/HUlJr6qjLOy5iZfdwwYYBbQwv6z
-        kmM47WsEAOJ+SNiheGd/9UfQm5XreTmeoj6zLKY=
-X-Google-Smtp-Source: ABdhPJy7UdwG5CMt3vBprQtkQXDtnziSdWAdhBrxF2DYHzwuiJfWIuOu4DEBfNVS3j3HCobxe7h4te4Xc8Y+nnvjU1E=
-X-Received: by 2002:a1c:7413:: with SMTP id p19mr3161995wmc.98.1632812940328;
- Tue, 28 Sep 2021 00:09:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210927152412.2900928-1-arnd@kernel.org> <87k0j1qj0i.fsf@codeaurora.org>
-In-Reply-To: <87k0j1qj0i.fsf@codeaurora.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 28 Sep 2021 09:08:44 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2FiMLZK7W9L9XD5h=3yS8QJ6iMr0pXHtCNrpctZG4FhQ@mail.gmail.com>
-Message-ID: <CAK8P3a2FiMLZK7W9L9XD5h=3yS8QJ6iMr0pXHtCNrpctZG4FhQ@mail.gmail.com>
-Subject: Re: [PATCH] [RFC] qcom_scm: hide Kconfig symbol
-To:     Kalle Valo <kvalo@codeaurora.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        id S239447AbhI1Hym (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Sep 2021 03:54:42 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:32898 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239287AbhI1Hym (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 28 Sep 2021 03:54:42 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D91153F1;
+        Tue, 28 Sep 2021 09:53:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1632815582;
+        bh=flHZNFpHfN+2jpIPfCCVbmKLFdZra/8AXhgQN9TUzBQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kXjp3w5FSVkBf6L3c6LNqyXnew1QO84pSZLDh8Hu35B+WdVVYM9fkk2CdEoJvzaB+
+         6Jy7ZIMRUrx2yj4Xj6AmD5EzZARb0SMSG/JdOIZj7oavf4shuD2I0phmeZzLxzjAsl
+         JIY7KyBWeeFqi1UI3i66xv2O+VD0SEllvnR2EUj4=
+Date:   Tue, 28 Sep 2021 10:52:53 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alex Elder <elder@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, ath10k@lists.infradead.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>
+Subject: Re: [PATCH v8 06/36] media: subdev: Add
+ v4l2_subdev_validate(_and_lock)_state()
+Message-ID: <YVLJ1cWBhK8CRJoB@pendragon.ideasonboard.com>
+References: <20210830110116.488338-1-tomi.valkeinen@ideasonboard.com>
+ <20210830110116.488338-7-tomi.valkeinen@ideasonboard.com>
+ <YVEiM5MHXvWK9dr/@pendragon.ideasonboard.com>
+ <fdb7faf3-337c-28aa-081d-75d317c418d5@ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <fdb7faf3-337c-28aa-081d-75d317c418d5@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 9:05 AM Kalle Valo <kvalo@codeaurora.org> wrote:
-> Arnd Bergmann <arnd@kernel.org> writes:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> I assume I can continue to build test ATH10K_SNOC with x86 as before?
-> That's important for me. If yes, then:
->
-> Acked-by: Kalle Valo <kvalo@codeaurora.org>
->
-> --
-> https://patchwork.kernel.org/project/linux-wireless/list/
->
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Hi Tomi,
 
-Yes, the difference is that this will then also build the qcom_scm module, but
-that should not cause any problems after the other changes in this patch.
+On Tue, Sep 28, 2021 at 08:02:18AM +0300, Tomi Valkeinen wrote:
+> On 27/09/2021 04:45, Laurent Pinchart wrote:
+> > On Mon, Aug 30, 2021 at 02:00:46PM +0300, Tomi Valkeinen wrote:
+> >> All suitable subdev ops are now passed either the TRY or the ACTIVE
+> >> state by the v4l2 core. However, other subdrivers can still call the ops
+> >> passing NULL as the state, implying the active case.
+> >>
+> >> Thus all subdev drivers supporting active state need to handle the NULL
+> >> state case.
+> > 
+> > Do they ? Can't we mandate that the callers pass the correct state ? Do
+> > you think that would make the transition too difficult ?
+> 
+> That would limit the use of the new drivers. E.g. the sensor driver I'm 
+> using works fine with CAL & co. without handling the NULL, but then the 
+> sensor driver couldn't be used with "old" drivers.
 
-      Arnd
+I'm tempted to say that would be a good thing as it would accelerate the
+transition :-)
+
+> > The way I understand the issue, this would only be needed to facilitate
+> > the transition. Is there a reason why the drivers you've ported (CAL &
+> > co.) use v4l2_subdev_validate_and_lock_state() after completing the
+> > transition, or is the correct state always passed by the caller ?
+> 
+> The drivers I'm using only call non-state-aware ops in the other 
+> subdevs, so they should work fine without validate.
+> 
+> I think it's safer to just use the validate versions for now. They're 
+> trivial to convert to non-validate versions later.
+> 
+> We could just do the validate implicitly while locking the state, but it 
+> would make the code a bit odd:
+> 
+> state = v4l2_subdev_lock_state(state);
+> 
+> After the transition we want to do just:
+> 
+> v4l2_subdev_lock_state(state);
+> 
+> Or we could do v4l2_subdev_lock_state() with a macro, which changes the 
+> state variable, but... I think I'd rather have it clear and obvious with 
+> v4l2_subdev_validate_and_lock_state().
+> 
+> >> Additionally, the subdev drivers usually need to lock the
+> >> state.
+> >>
+> >> Add two helper functions to easen the transition to centrally managed
+> >> ACTIVE state. v4l2_subdev_validate_state() ensures that the state is not
+> >> NULL, and v4l2_subdev_validate_and_lock_state() does the same and
+> >> additionally locks the state.
+> >>
+> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> >> ---
+> >>   include/media/v4l2-subdev.h | 41 +++++++++++++++++++++++++++++++++++++
+> >>   1 file changed, 41 insertions(+)
+> >>
+> >> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> >> index 52a725281b23..2290b5025fc0 100644
+> >> --- a/include/media/v4l2-subdev.h
+> >> +++ b/include/media/v4l2-subdev.h
+> >> @@ -1307,4 +1307,45 @@ void v4l2_subdev_lock_state(struct v4l2_subdev_state *state);
+> >>    */
+> >>   void v4l2_subdev_unlock_state(struct v4l2_subdev_state *state);
+> >>   
+> >> +/**
+> >> + * v4l2_subdev_validate_state() - Gets the TRY or ACTIVE subdev state
+> >> + * @sd: subdevice
+> >> + * @state: subdevice state as passed to the subdev op
+> >> + *
+> >> + * Subdev ops used to be sometimes called with NULL as the state for ACTIVE
+> >> + * case. Even if the v4l2 core now passes proper state for both TRY and
+> >> + * ACTIVE cases, a subdev driver may call an op in another subdev driver,
+> >> + * passing NULL.
+> >> + *
+> >> + * This function can be used as a helper to get the state also for the ACTIVE
+> >> + * case. The subdev driver that supports ACTIVE state can use this function
+> >> + * as the first thing in its ops, ensuring that the state variable contains
+> >> + * either the TRY or ACTIVE state.
+> >> + */
+> >> +static inline struct v4l2_subdev_state *
+> >> +v4l2_subdev_validate_state(struct v4l2_subdev *sd,
+> >> +			   struct v4l2_subdev_state *state)
+> >> +{
+> >> +	return state ? state : sd->state;
+> >> +}
+> > 
+> > This doesn't seem to be used by the drivers you've ported, or by the
+> > R-Car and GMSL patches from Jacopo. Do we need this function ?
+> 
+> Probably not. If you need to validate, you most likely will lock the 
+> state right afterwards, so v4l2_subdev_validate_and_lock_state should be 
+> enough.
+
+-- 
+Regards,
+
+Laurent Pinchart
