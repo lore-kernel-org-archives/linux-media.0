@@ -2,426 +2,448 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F07CC433EF
-	for <linux-media@archiver.kernel.org>; Tue, 28 Sep 2021 17:36:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44FE1C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 28 Sep 2021 18:59:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E91756128B
-	for <linux-media@archiver.kernel.org>; Tue, 28 Sep 2021 17:36:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E44E61246
+	for <linux-media@archiver.kernel.org>; Tue, 28 Sep 2021 18:59:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242200AbhI1RiE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Sep 2021 13:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
+        id S242252AbhI1TA7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Sep 2021 15:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242163AbhI1RiD (ORCPT
+        with ESMTP id S242196AbhI1TA6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 Sep 2021 13:38:03 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33321C061746
-        for <linux-media@vger.kernel.org>; Tue, 28 Sep 2021 10:36:24 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id f15so7759864qtv.9
-        for <linux-media@vger.kernel.org>; Tue, 28 Sep 2021 10:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2j0hSIPEbEVg08O91IQHe4e/t66ZjkFeXF4uWgBdazo=;
-        b=ax7LPES/qoKnFOEWKvaH8l1/x+ycloiA/hqHbPeL5rP8Z1vn907OmU4BErMfCuVCQc
-         uykk/OGXe7PV+xjzDRfkypKmDznCXQsvvz3zqFUmlkelU8ZkngLjEO/wINJszUCiO6fM
-         rkC4xrj8aKDffdSBLCe6RujXg1aOQUTzSlUr/UMvo61pUtTO+oYCwyOV634CFGZsY3yi
-         IiQEQ7G33mCNMT2e5fuJtLPw8Dvjst412sYB6xqWHjwxFiWGrGwoYAs9wm8hFbqIOcUm
-         D0BS8zqjwkZUWjefjReFzvuS5I14QPxK6cI/EN+UNxqhUhnycRjJZujgSzt7Xzy0jauC
-         VN/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2j0hSIPEbEVg08O91IQHe4e/t66ZjkFeXF4uWgBdazo=;
-        b=Q6YTsRkr3ymNvge4ZiwnhRWbiNWu4mdE5gf8UZk4DKcAhsQeARZ9x0gi45MkGZs2Nc
-         eRJPWYBHUKbnlky35qSUfK9iX8D9gsdhuY5j6GH96JjM9tctLY5JwYKq1gHmQA5kOuYG
-         4O7OlkCABlOJmJWv2vjbrc0uCxpFXODqdxdbcK0RAhrNvQ2CE1pRLn2VT3ZPdYCIok4C
-         ZHmf7Pbyahrx28XTcnXIHZkpF8rvRjNDhbeXE8Og5hVJ+tKLUvA304qCM24ruGH3EHQr
-         PKBuTv6EKVRaJLLFWKEjmucG5N8Mjmvj/mvOsvzHsVD9fqy8NphXq/rc77ZI/hOnzCUJ
-         0CQg==
-X-Gm-Message-State: AOAM530Jo6FHEItpBsxbd8ooZkRWWmrDEvJfROaoGjK8XbhuAh6UiVQ2
-        y8zZq8zF7nVcoelsG74nqHBa0g==
-X-Google-Smtp-Source: ABdhPJyCMnEBQPKgYsxOkhRLCW8qILx1aEYS07Bsz6/uRtyaQBO+Rln0oQrRf1mMYyjQAzRzdprBSg==
-X-Received: by 2002:ac8:4819:: with SMTP id g25mr6958932qtq.364.1632850583261;
-        Tue, 28 Sep 2021 10:36:23 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id h4sm2175787qtb.67.2021.09.28.10.36.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Sep 2021 10:36:22 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1mVH1h-007EMG-K7; Tue, 28 Sep 2021 14:36:21 -0300
-Date:   Tue, 28 Sep 2021 14:36:21 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        christian.koenig@amd.com, daniel.vetter@ffwll.ch,
-        galpress@amazon.com, sleybo@amazon.com,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, dledford@redhat.com,
-        airlied@gmail.com, alexander.deucher@amd.com, leonro@nvidia.com,
-        hch@lst.de, amd-gfx@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, Tomer Tayar <ttayar@habana.ai>
-Subject: Re: [PATCH v6 2/2] habanalabs: add support for dma-buf exporter
-Message-ID: <20210928173621.GG3544071@ziepe.ca>
-References: <20210912165309.98695-1-ogabbay@kernel.org>
- <20210912165309.98695-3-ogabbay@kernel.org>
+        Tue, 28 Sep 2021 15:00:58 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D43C06161C;
+        Tue, 28 Sep 2021 11:59:18 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 58B7E1F43BE3
+Message-ID: <eeca2c7a694cbed0d7598177ebdd3bb4bf341622.camel@collabora.com>
+Subject: Re: [PATCH v6 09/10] media: hantro: Support VP9 on the G2 core
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, kernel@collabora.com,
+        bob.beckett@collabora.com
+Date:   Tue, 28 Sep 2021 14:59:05 -0400
+In-Reply-To: <YVNJGaLmZkJVuXbe@fedora>
+References: <20210927151958.24426-1-andrzej.p@collabora.com>
+         <20210927151958.24426-10-andrzej.p@collabora.com>
+         <e298b3b1204f56dd91cc5b8493810e16267bbb91.camel@collabora.com>
+         <532bfb30-c464-137e-1635-b6a868d5d7e6@collabora.com>
+         <YVNJGaLmZkJVuXbe@fedora>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210912165309.98695-3-ogabbay@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Sep 12, 2021 at 07:53:09PM +0300, Oded Gabbay wrote:
-> From: Tomer Tayar <ttayar@habana.ai>
+Le mardi 28 septembre 2021 à 13:55 -0300, Ezequiel Garcia a écrit :
+> On Tue, Sep 28, 2021 at 05:39:02PM +0200, Andrzej Pietrasiewicz wrote:
+> > Hi Nicolas,
+> > 
+> > W dniu 27.09.2021 o 21:17, Nicolas Dufresne pisze:
+> > > Le lundi 27 septembre 2021 à 17:19 +0200, Andrzej Pietrasiewicz a écrit :
+> > > > VeriSilicon Hantro G2 core supports VP9 codec.
+> > > > 
+> > > > Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+> > > > Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> > > > ---
+> > > >   drivers/staging/media/hantro/Kconfig          |   1 +
+> > > >   drivers/staging/media/hantro/Makefile         |   6 +-
+> > > >   drivers/staging/media/hantro/hantro.h         |  26 +
+> > > >   drivers/staging/media/hantro/hantro_drv.c     |  18 +-
+> > > >   drivers/staging/media/hantro/hantro_g2_regs.h |  97 ++
+> > > >   .../staging/media/hantro/hantro_g2_vp9_dec.c  | 978 ++++++++++++++++++
+> > > >   drivers/staging/media/hantro/hantro_hw.h      |  67 ++
+> > > >   drivers/staging/media/hantro/hantro_v4l2.c    |   6 +
+> > > >   drivers/staging/media/hantro/hantro_vp9.c     | 240 +++++
+> > > >   drivers/staging/media/hantro/hantro_vp9.h     | 103 ++
+> > > >   drivers/staging/media/hantro/imx8m_vpu_hw.c   |  22 +-
+> > > >   11 files changed, 1560 insertions(+), 4 deletions(-)
+> > > >   create mode 100644 drivers/staging/media/hantro/hantro_g2_vp9_dec.c
+> > > >   create mode 100644 drivers/staging/media/hantro/hantro_vp9.c
+> > > >   create mode 100644 drivers/staging/media/hantro/hantro_vp9.h
+> > > > 
+> > > > diff --git a/drivers/staging/media/hantro/Kconfig b/drivers/staging/media/hantro/Kconfig
+> > > > index 20b1f6d7b69c..00a57d88c92e 100644
+> > > > --- a/drivers/staging/media/hantro/Kconfig
+> > > > +++ b/drivers/staging/media/hantro/Kconfig
+> > > > @@ -9,6 +9,7 @@ config VIDEO_HANTRO
+> > > >   	select VIDEOBUF2_VMALLOC
+> > > >   	select V4L2_MEM2MEM_DEV
+> > > >   	select V4L2_H264
+> > > > +	select V4L2_VP9
+> > > >   	help
+> > > >   	  Support for the Hantro IP based Video Processing Units present on
+> > > >   	  Rockchip and NXP i.MX8M SoCs, which accelerate video and image
+> > > > diff --git a/drivers/staging/media/hantro/Makefile b/drivers/staging/media/hantro/Makefile
+> > > > index fe6d84871d07..28af0a1ee4bf 100644
+> > > > --- a/drivers/staging/media/hantro/Makefile
+> > > > +++ b/drivers/staging/media/hantro/Makefile
+> > > > @@ -10,9 +10,10 @@ hantro-vpu-y += \
+> > > >   		hantro_g1.o \
+> > > >   		hantro_g1_h264_dec.o \
+> > > >   		hantro_g1_mpeg2_dec.o \
+> > > > -		hantro_g2_hevc_dec.o \
+> > > >   		hantro_g1_vp8_dec.o \
+> > > >   		hantro_g2.o \
+> > > > +		hantro_g2_hevc_dec.o \
+> > > > +		hantro_g2_vp9_dec.o \
+> > > >   		rockchip_vpu2_hw_jpeg_enc.o \
+> > > >   		rockchip_vpu2_hw_h264_dec.o \
+> > > >   		rockchip_vpu2_hw_mpeg2_dec.o \
+> > > > @@ -21,7 +22,8 @@ hantro-vpu-y += \
+> > > >   		hantro_h264.o \
+> > > >   		hantro_hevc.o \
+> > > >   		hantro_mpeg2.o \
+> > > > -		hantro_vp8.o
+> > > > +		hantro_vp8.o \
+> > > > +		hantro_vp9.o
+> > > >   hantro-vpu-$(CONFIG_VIDEO_HANTRO_IMX8M) += \
+> > > >   		imx8m_vpu_hw.o
+> > > > diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
+> > > > index d91eb2b1c509..1e8c1a6e3eb0 100644
+> > > > --- a/drivers/staging/media/hantro/hantro.h
+> > > > +++ b/drivers/staging/media/hantro/hantro.h
+> > > > @@ -36,6 +36,7 @@ struct hantro_postproc_ops;
+> > > >   #define HANTRO_VP8_DECODER	BIT(17)
+> > > >   #define HANTRO_H264_DECODER	BIT(18)
+> > > >   #define HANTRO_HEVC_DECODER	BIT(19)
+> > > > +#define HANTRO_VP9_DECODER	BIT(20)
+> > > >   #define HANTRO_DECODERS		0xffff0000
+> > > >   /**
+> > > > @@ -110,6 +111,7 @@ enum hantro_codec_mode {
+> > > >   	HANTRO_MODE_MPEG2_DEC,
+> > > >   	HANTRO_MODE_VP8_DEC,
+> > > >   	HANTRO_MODE_HEVC_DEC,
+> > > > +	HANTRO_MODE_VP9_DEC,
+> > > >   };
+> > > >   /*
+> > > > @@ -223,6 +225,7 @@ struct hantro_dev {
+> > > >    * @mpeg2_dec:		MPEG-2-decoding context.
+> > > >    * @vp8_dec:		VP8-decoding context.
+> > > >    * @hevc_dec:		HEVC-decoding context.
+> > > > + * @vp9_dec:		VP9-decoding context.
+> > > >    */
+> > > >   struct hantro_ctx {
+> > > >   	struct hantro_dev *dev;
+> > > > @@ -250,6 +253,7 @@ struct hantro_ctx {
+> > > >   		struct hantro_mpeg2_dec_hw_ctx mpeg2_dec;
+> > > >   		struct hantro_vp8_dec_hw_ctx vp8_dec;
+> > > >   		struct hantro_hevc_dec_hw_ctx hevc_dec;
+> > > > +		struct hantro_vp9_dec_hw_ctx vp9_dec;
+> > > >   	};
+> > > >   };
+> > > > @@ -299,6 +303,22 @@ struct hantro_postproc_regs {
+> > > >   	struct hantro_reg display_width;
+> > > >   };
+> > > > +struct hantro_vp9_decoded_buffer_info {
+> > > > +	/* Info needed when the decoded frame serves as a reference frame. */
+> > > > +	unsigned short width;
+> > > > +	unsigned short height;
+> > > > +	u32 bit_depth : 4;
+> > > > +};
+> > > > +
+> > > > +struct hantro_decoded_buffer {
+> > > > +	/* Must be the first field in this struct. */
+> > > > +	struct v4l2_m2m_buffer base;
+> > > > +
+> > > > +	union {
+> > > > +		struct hantro_vp9_decoded_buffer_info vp9;
+> > > > +	};
+> > > > +};
+> > > > +
+> > > >   /* Logging helpers */
+> > > >   /**
+> > > > @@ -436,6 +456,12 @@ hantro_get_dec_buf_addr(struct hantro_ctx *ctx, struct vb2_buffer *vb)
+> > > >   	return vb2_dma_contig_plane_dma_addr(vb, 0);
+> > > >   }
+> > > > +static inline struct hantro_decoded_buffer *
+> > > > +vb2_to_hantro_decoded_buf(struct vb2_buffer *buf)
+> > > > +{
+> > > > +	return container_of(buf, struct hantro_decoded_buffer, base.vb.vb2_buf);
+> > > > +}
+> > > > +
+> > > >   void hantro_postproc_disable(struct hantro_ctx *ctx);
+> > > >   void hantro_postproc_enable(struct hantro_ctx *ctx);
+> > > >   void hantro_postproc_free(struct hantro_ctx *ctx);
+> > > > diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+> > > > index 8a2edd67f2c6..800c8879aee0 100644
+> > > > --- a/drivers/staging/media/hantro/hantro_drv.c
+> > > > +++ b/drivers/staging/media/hantro/hantro_drv.c
+> > > > @@ -232,7 +232,7 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
+> > > >   	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
+> > > >   	dst_vq->drv_priv = ctx;
+> > > >   	dst_vq->ops = &hantro_queue_ops;
+> > > > -	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
+> > > > +	dst_vq->buf_struct_size = sizeof(struct hantro_decoded_buffer);
+> > > >   	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+> > > >   	dst_vq->lock = &ctx->dev->vpu_mutex;
+> > > >   	dst_vq->dev = ctx->dev->v4l2_dev.dev;
+> > > > @@ -266,6 +266,12 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+> > > >   		if (sps->flags & V4L2_HEVC_SPS_FLAG_SCALING_LIST_ENABLED)
+> > > >   			/* No scaling support */
+> > > >   			return -EINVAL;
+> > > > +	} else if (ctrl->id == V4L2_CID_STATELESS_VP9_FRAME) {
+> > > > +		const struct v4l2_ctrl_vp9_frame *dec_params = ctrl->p_new.p_vp9_frame;
+> > > > +
+> > > > +		/* We only support profile 0 */
+> > > > +		if (dec_params->profile != 0)
+> > > > +			return -EINVAL;
+> > > >   	}
+> > > >   	return 0;
+> > > >   }
+> > > > @@ -459,6 +465,16 @@ static const struct hantro_ctrl controls[] = {
+> > > >   			.step = 1,
+> > > >   			.ops = &hantro_hevc_ctrl_ops,
+> > > >   		},
+> > > > +	}, {
+> > > > +		.codec = HANTRO_VP9_DECODER,
+> > > > +		.cfg = {
+> > > > +			.id = V4L2_CID_STATELESS_VP9_FRAME,
+> > > > +		},
+> > > > +	}, {
+> > > > +		.codec = HANTRO_VP9_DECODER,
+> > > > +		.cfg = {
+> > > > +			.id = V4L2_CID_STATELESS_VP9_COMPRESSED_HDR,
+> > > > +		},
+> > > >   	},
+> > > >   };
+> > > > diff --git a/drivers/staging/media/hantro/hantro_g2_regs.h b/drivers/staging/media/hantro/hantro_g2_regs.h
+> > > > index 0ac0ba375e80..21ca21648614 100644
+> > > > --- a/drivers/staging/media/hantro/hantro_g2_regs.h
+> > > > +++ b/drivers/staging/media/hantro/hantro_g2_regs.h
+> > > > @@ -28,6 +28,7 @@
+> > > >   #define G2_REG_INTERRUPT_DEC_E		BIT(0)
+> > > >   #define HEVC_DEC_MODE			0xc
+> > > > +#define VP9_DEC_MODE			0xd
+> > > >   #define BUS_WIDTH_32			0
+> > > >   #define BUS_WIDTH_64			1
+> > > > @@ -49,6 +50,7 @@
+> > > >   #define g2_pic_height_in_cbs	G2_DEC_REG(4, 6,  0x1fff)
+> > > >   #define g2_num_ref_frames	G2_DEC_REG(4, 0,  0x1f)
+> > > > +#define g2_start_bit		G2_DEC_REG(5, 25, 0x7f)
+> > > >   #define g2_scaling_list_e	G2_DEC_REG(5, 24, 0x1)
+> > > >   #define g2_cb_qp_offset		G2_DEC_REG(5, 19, 0x1f)
+> > > >   #define g2_cr_qp_offset		G2_DEC_REG(5, 14, 0x1f)
+> > > > @@ -84,6 +86,7 @@
+> > > >   #define g2_bit_depth_y_minus8	G2_DEC_REG(8, 6,  0x3)
+> > > >   #define g2_bit_depth_c_minus8	G2_DEC_REG(8, 4,  0x3)
+> > > >   #define g2_output_8_bits	G2_DEC_REG(8, 3,  0x1)
+> > > > +#define g2_output_format	G2_DEC_REG(8, 0,  0x7)
+> > > >   #define g2_refidx1_active	G2_DEC_REG(9, 19, 0x1f)
+> > > >   #define g2_refidx0_active	G2_DEC_REG(9, 14, 0x1f)
+> > > > @@ -96,6 +99,14 @@
+> > > >   #define g2_tile_e		G2_DEC_REG(10, 1,  0x1)
+> > > >   #define g2_entropy_sync_e	G2_DEC_REG(10, 0,  0x1)
+> > > > +#define vp9_transform_mode	G2_DEC_REG(11, 27, 0x7)
+> > > > +#define vp9_filt_sharpness	G2_DEC_REG(11, 21, 0x7)
+> > > > +#define vp9_mcomp_filt_type	G2_DEC_REG(11,  8, 0x7)
+> > > > +#define vp9_high_prec_mv_e	G2_DEC_REG(11,  7, 0x1)
+> > > > +#define vp9_comp_pred_mode	G2_DEC_REG(11,  4, 0x3)
+> > > > +#define vp9_gref_sign_bias	G2_DEC_REG(11,  2, 0x1)
+> > > > +#define vp9_aref_sign_bias	G2_DEC_REG(11,  0, 0x1)
+> > > > +
+> > > >   #define g2_refer_lterm_e	G2_DEC_REG(12, 16, 0xffff)
+> > > >   #define g2_min_cb_size		G2_DEC_REG(12, 13, 0x7)
+> > > >   #define g2_max_cb_size		G2_DEC_REG(12, 10, 0x7)
+> > > > @@ -154,6 +165,50 @@
+> > > >   #define g2_partial_ctb_y	G2_DEC_REG(20, 30, 0x1)
+> > > >   #define g2_pic_width_4x4	G2_DEC_REG(20, 16, 0xfff)
+> > > >   #define g2_pic_height_4x4	G2_DEC_REG(20, 0,  0xfff)
+> > > > +
+> > > > +#define vp9_qp_delta_y_dc	G2_DEC_REG(13, 23, 0x3f)
+> > > > +#define vp9_qp_delta_ch_dc	G2_DEC_REG(13, 17, 0x3f)
+> > > > +#define vp9_qp_delta_ch_ac	G2_DEC_REG(13, 11, 0x3f)
+> > > > +#define vp9_last_sign_bias	G2_DEC_REG(13, 10, 0x1)
+> > > > +#define vp9_lossless_e		G2_DEC_REG(13,  9, 0x1)
+> > > > +#define vp9_comp_pred_var_ref1	G2_DEC_REG(13,  7, 0x3)
+> > > > +#define vp9_comp_pred_var_ref0	G2_DEC_REG(13,  5, 0x3)
+> > > > +#define vp9_comp_pred_fixed_ref	G2_DEC_REG(13,  3, 0x3)
+> > > > +#define vp9_segment_temp_upd_e	G2_DEC_REG(13,  2, 0x1)
+> > > > +#define vp9_segment_upd_e	G2_DEC_REG(13,  1, 0x1)
+> > > > +#define vp9_segment_e		G2_DEC_REG(13,  0, 0x1)
+> > > > +
+> > > > +#define vp9_filt_level		G2_DEC_REG(14, 18, 0x3f)
+> > > > +#define vp9_refpic_seg0		G2_DEC_REG(14, 15, 0x7)
+> > > > +#define vp9_skip_seg0		G2_DEC_REG(14, 14, 0x1)
+> > > > +#define vp9_filt_level_seg0	G2_DEC_REG(14,  8, 0x3f)
+> > > > +#define vp9_quant_seg0		G2_DEC_REG(14,  0, 0xff)
+> > > > +
+> > > > +#define vp9_refpic_seg1		G2_DEC_REG(15, 15, 0x7)
+> > > > +#define vp9_skip_seg1		G2_DEC_REG(15, 14, 0x1)
+> > > > +#define vp9_filt_level_seg1	G2_DEC_REG(15,  8, 0x3f)
+> > > > +#define vp9_quant_seg1		G2_DEC_REG(15,  0, 0xff)
+> > > > +
+> > > > +#define vp9_refpic_seg2		G2_DEC_REG(16, 15, 0x7)
+> > > > +#define vp9_skip_seg2		G2_DEC_REG(16, 14, 0x1)
+> > > > +#define vp9_filt_level_seg2	G2_DEC_REG(16,  8, 0x3f)
+> > > > +#define vp9_quant_seg2		G2_DEC_REG(16,  0, 0xff)
+> > > > +
+> > > > +#define vp9_refpic_seg3		G2_DEC_REG(17, 15, 0x7)
+> > > > +#define vp9_skip_seg3		G2_DEC_REG(17, 14, 0x1)
+> > > > +#define vp9_filt_level_seg3	G2_DEC_REG(17,  8, 0x3f)
+> > > > +#define vp9_quant_seg3		G2_DEC_REG(17,  0, 0xff)
+> > > > +
+> > > > +#define vp9_refpic_seg4		G2_DEC_REG(18, 15, 0x7)
+> > > > +#define vp9_skip_seg4		G2_DEC_REG(18, 14, 0x1)
+> > > > +#define vp9_filt_level_seg4	G2_DEC_REG(18,  8, 0x3f)
+> > > > +#define vp9_quant_seg4		G2_DEC_REG(18,  0, 0xff)
+> > > > +
+> > > > +#define vp9_refpic_seg5		G2_DEC_REG(19, 15, 0x7)
+> > > > +#define vp9_skip_seg5		G2_DEC_REG(19, 14, 0x1)
+> > > > +#define vp9_filt_level_seg5	G2_DEC_REG(19,  8, 0x3f)
+> > > > +#define vp9_quant_seg5		G2_DEC_REG(19,  0, 0xff)
+> > > > +
+> > > >   #define hevc_cur_poc_00		G2_DEC_REG(46, 24, 0xff)
+> > > >   #define hevc_cur_poc_01		G2_DEC_REG(46, 16, 0xff)
+> > > >   #define hevc_cur_poc_02		G2_DEC_REG(46, 8,  0xff)
+> > > > @@ -174,6 +229,44 @@
+> > > >   #define hevc_cur_poc_14		G2_DEC_REG(49, 8,  0xff)
+> > > >   #define hevc_cur_poc_15		G2_DEC_REG(49, 0,  0xff)
+> > > > +#define vp9_refpic_seg6		G2_DEC_REG(31, 15, 0x7)
+> > > > +#define vp9_skip_seg6		G2_DEC_REG(31, 14, 0x1)
+> > > > +#define vp9_filt_level_seg6	G2_DEC_REG(31,  8, 0x3f)
+> > > > +#define vp9_quant_seg6		G2_DEC_REG(31,  0, 0xff)
+> > > > +
+> > > > +#define vp9_refpic_seg7		G2_DEC_REG(32, 15, 0x7)
+> > > > +#define vp9_skip_seg7		G2_DEC_REG(32, 14, 0x1)
+> > > > +#define vp9_filt_level_seg7	G2_DEC_REG(32,  8, 0x3f)
+> > > > +#define vp9_quant_seg7		G2_DEC_REG(32,  0, 0xff)
+> > > > +
+> > > > +#define vp9_lref_width		G2_DEC_REG(33, 16, 0xffff)
+> > > > +#define vp9_lref_height		G2_DEC_REG(33,  0, 0xffff)
+> > > > +
+> > > > +#define vp9_gref_width		G2_DEC_REG(34, 16, 0xffff)
+> > > > +#define vp9_gref_height		G2_DEC_REG(34,  0, 0xffff)
+> > > > +
+> > > > +#define vp9_aref_width		G2_DEC_REG(35, 16, 0xffff)
+> > > > +#define vp9_aref_height		G2_DEC_REG(35,  0, 0xffff)
+> > > > +
+> > > > +#define vp9_lref_hor_scale	G2_DEC_REG(36, 16, 0xffff)
+> > > > +#define vp9_lref_ver_scale	G2_DEC_REG(36,  0, 0xffff)
+> > > > +
+> > > > +#define vp9_gref_hor_scale	G2_DEC_REG(37, 16, 0xffff)
+> > > > +#define vp9_gref_ver_scale	G2_DEC_REG(37,  0, 0xffff)
+> > > > +
+> > > > +#define vp9_aref_hor_scale	G2_DEC_REG(38, 16, 0xffff)
+> > > > +#define vp9_aref_ver_scale	G2_DEC_REG(38,  0, 0xffff)
+> > > > +
+> > > > +#define vp9_filt_ref_adj_0	G2_DEC_REG(46, 24, 0x7f)
+> > > > +#define vp9_filt_ref_adj_1	G2_DEC_REG(46, 16, 0x7f)
+> > > > +#define vp9_filt_ref_adj_2	G2_DEC_REG(46,  8, 0x7f)
+> > > > +#define vp9_filt_ref_adj_3	G2_DEC_REG(46,  0, 0x7f)
+> > > > +
+> > > > +#define vp9_filt_mb_adj_0	G2_DEC_REG(47, 24, 0x7f)
+> > > > +#define vp9_filt_mb_adj_1	G2_DEC_REG(47, 16, 0x7f)
+> > > > +#define vp9_filt_mb_adj_2	G2_DEC_REG(47,  8, 0x7f)
+> > > > +#define vp9_filt_mb_adj_3	G2_DEC_REG(47,  0, 0x7f)
+> > > > +
+> > > >   #define g2_apf_threshold	G2_DEC_REG(55, 0, 0xffff)
+> > > >   #define g2_clk_gate_e		G2_DEC_REG(58, 16, 0x1)
+> > > > @@ -186,6 +279,8 @@
+> > > >   #define G2_ADDR_DST		(G2_SWREG(65))
+> > > >   #define G2_REG_ADDR_REF(i)	(G2_SWREG(67)  + ((i) * 0x8))
+> > > > +#define VP9_ADDR_SEGMENT_WRITE	(G2_SWREG(79))
+> > > > +#define VP9_ADDR_SEGMENT_READ	(G2_SWREG(81))
+> > > >   #define G2_ADDR_DST_CHR		(G2_SWREG(99))
+> > > >   #define G2_REG_CHR_REF(i)	(G2_SWREG(101) + ((i) * 0x8))
+> > > >   #define G2_ADDR_DST_MV		(G2_SWREG(133))
+> > > > @@ -193,6 +288,8 @@
+> > > >   #define G2_ADDR_TILE_SIZE	(G2_SWREG(167))
+> > > 
+> > > I think this name can be improved. We don't say "G2 address tile size", but "G2
+> > > tile size address". Also, there is multiple tile sizes, so I'd prefer if we say
+> > > "G2 tile sizes address". May I suggest this naming then ?
+> > > 
+> > >    #define G2_TILE_SIZES_ADDR_LSB ...
+> > > 
+> > > As a reference, VSI names this sw_tile_base_lsb . That denotes that the name
+> > > also fails to capture that this is only the lower 32bit of the tile_sizes
+> > > address and that if someone have a G2 core on a larger amount of RAM it will
+> > > need to figure where is the second half (spoiler, it looks like it's
+> > > G1_SWREG(166) ). Anyway, that's why I'm proposing dropping LSB in there. Not
+> > > sure between LSB_ADDR or ADDR_LSB.
+> > 
+> > The LSB/MSB point is indeed valid. I think I will change hantro_write_addr() to
+> > something on the lines of:
+> > 
+> > static inline void hantro_write_addr(struct hantro_dev *vpu,
+> > 				     unsigned long offset,
+> > 				     dma_addr_t addr)
+> > {
+> > 	vdpu_write(vpu, addr & 0xffffffff, offset);
+> > #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+> > 	vdpu_write(vpu, (addr >> 32) & 0xffffffff, offset + 4);
+> > #endif
+> > }
+> > 
+> > Then the #defines will not need the _LSB/_MSB suffixes at all
+> > (and will remain as they are) and the modified function will
+> > still do the right thing.
+> > 
 > 
-> Implement the calls to the dma-buf kernel api to create a dma-buf
-> object backed by FD.
+> I'd rather not go in this direction. First of all, ifdefs are something
+> to avoid, and only use if really needed. I know there are other drivers
+> doing this, but that doesn't mean it's nice.
 > 
-> We block the option to mmap the DMA-BUF object because we don't support
-> DIRECT_IO and implicit P2P. 
+> And then I'm not sure if this is even correct. The MSB bits are needed
+> if the device is sitting on a bus that can do 64-bits DMA.
+> That _may_ be something you can figure out per architecture,
+> but doesn't have to be like that.
+> 
+> For instance, the Hantro device could be sitting on PCI (Adding
+> Robert in Cc who can comment on this).
+> 
+> For now, I don't think we care given we are setting
+> the DMA mask to 32-bits (see hantro_probe). So we won't get
+> 64-bit addresses. I'd really like to see 64-bit support
+> via the LSB/MSB registers, but I think it's not something
+> we should cover on this VP9 patchset.
 
-This statement doesn't make sense, you can mmap your dmabuf if you
-like. All dmabuf mmaps are supposed to set the special bit/etc to
-exclude them from get_user_pages() anyhow - and since this is BAR
-memory not struct page memory this driver would be doing it anyhow.
+Perhaps you wanted to suggest to just clear the MSB to 0 for now ? Or perhaps
+you forgot to make a suggestion and have something else in mind ?
 
-> We check the p2p distance using pci_p2pdma_distance_many() and refusing
-> to map dmabuf in case the distance doesn't allow p2p.
+The register names are written as foot guns, they don't match either HW designer
+doc, or vendor code, and they are missing previous information, like being an
+address, or having a companion MSB addr. We don't have to fix everything, but I
+think when we notice such thing, it should at least go into TODOs of the
+respective staging driver if not already there.
 
-Does this actually allow the p2p transfer for your intended use cases?
+> 
+> One more thing: is it correct to assume that the MSB register
+> is always right after the LSB register? Is that the case
+> for all buffers and Hantro-like variants?
 
-> diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-> index 33986933aa9e..8cf5437c0390 100644
-> +++ b/drivers/misc/habanalabs/common/memory.c
-> @@ -1,7 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  
->  /*
-> - * Copyright 2016-2019 HabanaLabs, Ltd.
-> + * Copyright 2016-2021 HabanaLabs, Ltd.
->   * All Rights Reserved.
->   */
->  
-> @@ -11,11 +11,13 @@
->  
->  #include <linux/uaccess.h>
->  #include <linux/slab.h>
-> +#include <linux/pci-p2pdma.h>
->  
->  #define HL_MMU_DEBUG	0
->  
->  /* use small pages for supporting non-pow2 (32M/40M/48M) DRAM phys page sizes */
-> -#define DRAM_POOL_PAGE_SIZE SZ_8M
-> +#define DRAM_POOL_PAGE_SIZE		SZ_8M
-> +
+Well, no, since it's always before (e.g. REG 166 is  sw_tile_base_msb and REG
+167 is sw_tile_base_lsb). I didn't comment as this was commented as "something
+on the lines of:" and I'm pretty sure Andrzej Pietrasiewicz  would have noticed.
+Though, from the best of my reading of the ref code and register map document I
+have, it's consistent for all addresses.
 
-??
+> 
+> Thanks,
+> Ezequiel
 
->  /*
->   * The va ranges in context object contain a list with the available chunks of
-> @@ -347,6 +349,13 @@ static int free_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args)
->  			return -EINVAL;
->  		}
->  
-> +		if (phys_pg_pack->exporting_cnt) {
-> +			dev_err(hdev->dev,
-> +				"handle %u is exported, cannot free\n",	handle);
-> +			spin_unlock(&vm->idr_lock);
 
-Don't write to the kernel log from user space triggered actions
-
-> +static int alloc_sgt_from_device_pages(struct hl_device *hdev,
-> +					struct sg_table **sgt, u64 *pages,
-> +					u64 npages, u64 page_size,
-> +					struct device *dev,
-> +					enum dma_data_direction dir)
-
-Why doesn't this return a sg_table * and an ERR_PTR?
-
-> +{
-> +	u64 chunk_size, bar_address, dma_max_seg_size;
-> +	struct asic_fixed_properties *prop;
-> +	int rc, i, j, nents, cur_page;
-> +	struct scatterlist *sg;
-> +
-> +	prop = &hdev->asic_prop;
-> +
-> +	dma_max_seg_size = dma_get_max_seg_size(dev);
-
-> +
-> +	/* We would like to align the max segment size to PAGE_SIZE, so the
-> +	 * SGL will contain aligned addresses that can be easily mapped to
-> +	 * an MMU
-> +	 */
-> +	dma_max_seg_size = ALIGN_DOWN(dma_max_seg_size, PAGE_SIZE);
-> +	if (dma_max_seg_size < PAGE_SIZE) {
-> +		dev_err_ratelimited(hdev->dev,
-> +				"dma_max_seg_size %llu can't be smaller than PAGE_SIZE\n",
-> +				dma_max_seg_size);
-> +		return -EINVAL;
-> +	}
-> +
-> +	*sgt = kzalloc(sizeof(**sgt), GFP_KERNEL);
-> +	if (!*sgt)
-> +		return -ENOMEM;
-> +
-> +	/* If the size of each page is larger than the dma max segment size,
-> +	 * then we can't combine pages and the number of entries in the SGL
-> +	 * will just be the
-> +	 * <number of pages> * <chunks of max segment size in each page>
-> +	 */
-> +	if (page_size > dma_max_seg_size)
-> +		nents = npages * DIV_ROUND_UP_ULL(page_size, dma_max_seg_size);
-> +	else
-> +		/* Get number of non-contiguous chunks */
-> +		for (i = 1, nents = 1, chunk_size = page_size ; i < npages ; i++) {
-> +			if (pages[i - 1] + page_size != pages[i] ||
-> +					chunk_size + page_size > dma_max_seg_size) {
-> +				nents++;
-> +				chunk_size = page_size;
-> +				continue;
-> +			}
-> +
-> +			chunk_size += page_size;
-> +		}
-> +
-> +	rc = sg_alloc_table(*sgt, nents, GFP_KERNEL | __GFP_ZERO);
-> +	if (rc)
-> +		goto error_free;
-> +
-> +	/* Because we are not going to include a CPU list we want to have some
-> +	 * chance that other users will detect this by setting the orig_nents
-> +	 * to 0 and using only nents (length of DMA list) when going over the
-> +	 * sgl
-> +	 */
-> +	(*sgt)->orig_nents = 0;
-
-Maybe do this at the end so you'd have to undo it on the error path?
-
-> +	cur_page = 0;
-> +
-> +	if (page_size > dma_max_seg_size) {
-> +		u64 size_left, cur_device_address = 0;
-> +
-> +		size_left = page_size;
-> +
-> +		/* Need to split each page into the number of chunks of
-> +		 * dma_max_seg_size
-> +		 */
-> +		for_each_sgtable_dma_sg((*sgt), sg, i) {
-> +			if (size_left == page_size)
-> +				cur_device_address =
-> +					pages[cur_page] - prop->dram_base_address;
-> +			else
-> +				cur_device_address += dma_max_seg_size;
-> +
-> +			chunk_size = min(size_left, dma_max_seg_size);
-> +
-> +			bar_address = hdev->dram_pci_bar_start + cur_device_address;
-> +
-> +			rc = set_dma_sg(sg, bar_address, chunk_size, dev, dir);
-> +			if (rc)
-> +				goto error_unmap;
-> +
-> +			if (size_left > dma_max_seg_size) {
-> +				size_left -= dma_max_seg_size;
-> +			} else {
-> +				cur_page++;
-> +				size_left = page_size;
-> +			}
-> +		}
-> +	} else {
-> +		/* Merge pages and put them into the scatterlist */
-> +		for_each_sgtable_dma_sg((*sgt), sg, i) {
-> +			chunk_size = page_size;
-> +			for (j = cur_page + 1 ; j < npages ; j++) {
-> +				if (pages[j - 1] + page_size != pages[j] ||
-> +						chunk_size + page_size > dma_max_seg_size)
-> +					break;
-> +
-> +				chunk_size += page_size;
-> +			}
-> +
-> +			bar_address = hdev->dram_pci_bar_start +
-> +					(pages[cur_page] - prop->dram_base_address);
-> +
-> +			rc = set_dma_sg(sg, bar_address, chunk_size, dev, dir);
-> +			if (rc)
-> +				goto error_unmap;
-> +
-> +			cur_page = j;
-> +		}
-> +	}
-
-We have this sg_append stuff now that is intended to help building
-these things. It can only build CPU page lists, not these DMA lists,
-but I do wonder if open coding in drivers is slipping back a
-bit. Especially since AMD seems to be doing something different.
-
-Could the DMABUF layer gain some helpers styled after the sg_append to
-simplify building these things? and convert the AMD driver of course.
-
-> +static int hl_dmabuf_attach(struct dma_buf *dmabuf,
-> +				struct dma_buf_attachment *attachment)
-> +{
-> +	struct hl_dmabuf_wrapper *hl_dmabuf;
-> +	struct hl_device *hdev;
-> +	int rc;
-> +
-> +	hl_dmabuf = dmabuf->priv;
-> +	hdev = hl_dmabuf->ctx->hdev;
-> +
-> +	rc = pci_p2pdma_distance_many(hdev->pdev, &attachment->dev, 1, true);
-> +
-> +	if (rc < 0)
-> +		attachment->peer2peer = false;
-
-Extra blank line
-
-> +
-> +	return 0;
-> +}
-> +
-> +static struct sg_table *hl_map_dmabuf(struct dma_buf_attachment *attachment,
-> +					enum dma_data_direction dir)
-> +{
-> +	struct dma_buf *dma_buf = attachment->dmabuf;
-> +	struct hl_vm_phys_pg_pack *phys_pg_pack;
-> +	struct hl_dmabuf_wrapper *hl_dmabuf;
-> +	struct hl_device *hdev;
-> +	struct sg_table *sgt;
-> +	int rc;
-> +
-> +	hl_dmabuf = dma_buf->priv;
-> +	hdev = hl_dmabuf->ctx->hdev;
-> +	phys_pg_pack = hl_dmabuf->phys_pg_pack;
-> +
-> +	if (!attachment->peer2peer) {
-> +		dev_err(hdev->dev,
-> +			"Failed to map dmabuf because p2p is disabled\n");
-> +		return ERR_PTR(-EPERM);
-
-User triggered printable again?
-
-> +static void hl_unmap_dmabuf(struct dma_buf_attachment *attachment,
-> +				  struct sg_table *sgt,
-> +				  enum dma_data_direction dir)
-> +{
-> +	struct scatterlist *sg;
-> +	int i;
-> +
-> +	for_each_sgtable_dma_sg(sgt, sg, i)
-> +		dma_unmap_resource(attachment->dev, sg_dma_address(sg),
-> +					sg_dma_len(sg), dir,
-> +					DMA_ATTR_SKIP_CPU_SYNC);
-
-Why can we skip the CPU_SYNC? Seems like a comment is needed
-
-Something has to do a CPU_SYNC before recylcing this memory for
-another purpose, where is it?
-
-> +static void hl_release_dmabuf(struct dma_buf *dmabuf)
-> +{
-> +	struct hl_dmabuf_wrapper *hl_dmabuf = dmabuf->priv;
-
-Maybe hl_dmabuf_wrapper should be hl_dmabuf_priv
-
-> + * export_dmabuf_from_addr() - export a dma-buf object for the given memory
-> + *                             address and size.
-> + * @ctx: pointer to the context structure.
-> + * @device_addr:  device memory physical address.
-> + * @size: size of device memory.
-> + * @flags: DMA-BUF file/FD flags.
-> + * @dmabuf_fd: pointer to result FD that represents the dma-buf object.
-> + *
-> + * Create and export a dma-buf object for an existing memory allocation inside
-> + * the device memory, and return a FD which is associated with the dma-buf
-> + * object.
-> + *
-> + * Return: 0 on success, non-zero for failure.
-> + */
-> +static int export_dmabuf_from_addr(struct hl_ctx *ctx, u64 device_addr,
-> +					u64 size, int flags, int *dmabuf_fd)
-> +{
-> +	struct hl_dmabuf_wrapper *hl_dmabuf;
-> +	struct hl_device *hdev = ctx->hdev;
-> +	struct asic_fixed_properties *prop;
-> +	u64 bar_address;
-> +	int rc;
-> +
-> +	prop = &hdev->asic_prop;
-> +
-> +	if (!IS_ALIGNED(device_addr, PAGE_SIZE)) {
-> +		dev_err_ratelimited(hdev->dev,
-> +			"address of exported device memory should be aligned to 0x%lx, address 0x%llx\n",
-> +			PAGE_SIZE, device_addr);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (size < PAGE_SIZE) {
-> +		dev_err_ratelimited(hdev->dev,
-> +			"size %llu of exported device memory should be equal to or greater than %lu\n",
-> +			size, PAGE_SIZE);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (device_addr < prop->dram_user_base_address ||
-> +				device_addr + size > prop->dram_end_address ||
-> +				device_addr + size < device_addr) {
-> +		dev_err_ratelimited(hdev->dev,
-> +			"DRAM memory range is outside of DRAM boundaries, address 0x%llx, size 0x%llx\n",
-> +			device_addr, size);
-> +		return -EINVAL;
-> +	}
-> +
-> +	bar_address = hdev->dram_pci_bar_start +
-> +			(device_addr - prop->dram_base_address);
-> +
-> +	if (bar_address + size >
-> +			hdev->dram_pci_bar_start + prop->dram_pci_bar_size ||
-> +			bar_address + size < bar_address) {
-> +		dev_err_ratelimited(hdev->dev,
-> +			"DRAM memory range is outside of PCI BAR boundaries, address 0x%llx, size 0x%llx\n",
-> +			device_addr, size);
-> +		return -EINVAL;
-> +	}
-
-More prints from userspace
-
-> +static int export_dmabuf_from_handle(struct hl_ctx *ctx, u64 handle, int flags,
-> +					int *dmabuf_fd)
-> +{
-> +	struct hl_vm_phys_pg_pack *phys_pg_pack;
-> +	struct hl_dmabuf_wrapper *hl_dmabuf;
-> +	struct hl_device *hdev = ctx->hdev;
-> +	struct asic_fixed_properties *prop;
-> +	struct hl_vm *vm = &hdev->vm;
-> +	u64 bar_address;
-> +	u32 idr_handle;
-> +	int rc, i;
-> +
-> +	prop = &hdev->asic_prop;
-> +
-> +	idr_handle = lower_32_bits(handle);
-
-Why silent truncation? Shouldn't setting the upper 32 bits be an
-error?
-
-> +	case HL_MEM_OP_EXPORT_DMABUF_FD:
-> +		rc = export_dmabuf_from_addr(ctx,
-> +				args->in.export_dmabuf_fd.handle,
-> +				args->in.export_dmabuf_fd.mem_size,
-> +				args->in.flags,
-> +				&dmabuf_fd);
-> +		memset(args, 0, sizeof(*args));
-> +		args->out.fd = dmabuf_fd;
-
-Would expect the installed fd to be the positive return, not a pointer
-
-Jason
