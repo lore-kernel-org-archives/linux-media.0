@@ -2,22 +2,22 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5B23C43217
-	for <linux-media@archiver.kernel.org>; Wed, 29 Sep 2021 16:06:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6935CC433EF
+	for <linux-media@archiver.kernel.org>; Wed, 29 Sep 2021 16:06:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CB6BF617E2
-	for <linux-media@archiver.kernel.org>; Wed, 29 Sep 2021 16:06:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 563DC615E6
+	for <linux-media@archiver.kernel.org>; Wed, 29 Sep 2021 16:06:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345949AbhI2QIA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 Sep 2021 12:08:00 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51366 "EHLO
+        id S1346013AbhI2QIE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 Sep 2021 12:08:04 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:51482 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346138AbhI2QGb (ORCPT
+        with ESMTP id S1344649AbhI2QGh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 29 Sep 2021 12:06:31 -0400
+        Wed, 29 Sep 2021 12:06:37 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: andrzej.p)
-        with ESMTPSA id 7FEBC1F44672
+        with ESMTPSA id E3D841F44691
 From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
@@ -37,11 +37,10 @@ Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, kernel@collabora.com,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v7 03/11] hantro: Simplify postprocessor
-Date:   Wed, 29 Sep 2021 18:04:31 +0200
-Message-Id: <20210929160439.6601-4-andrzej.p@collabora.com>
+        Shawn Guo <shawnguo@kernel.org>, kernel@collabora.com
+Subject: [PATCH v7 09/11] media: hantro: Prepare for other G2 codecs
+Date:   Wed, 29 Sep 2021 18:04:37 +0200
+Message-Id: <20210929160439.6601-10-andrzej.p@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210929160439.6601-1-andrzej.p@collabora.com>
 References: <20210929160439.6601-1-andrzej.p@collabora.com>
@@ -49,99 +48,179 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ezequiel Garcia <ezequiel@collabora.com>
+VeriSilicon Hantro G2 core supports other codecs besides hevc.
+Factor out some common code in preparation for vp9 support.
 
-Add a 'postprocessed' boolean property to struct hantro_fmt
-to signal that a format is produced by the post-processor.
-This will allow to introduce the G2 post-processor in a simple way.
-
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/staging/media/hantro/hantro.h          | 2 ++
- drivers/staging/media/hantro/hantro_postproc.c | 8 +-------
- drivers/staging/media/hantro/imx8m_vpu_hw.c    | 1 +
- drivers/staging/media/hantro/rockchip_vpu_hw.c | 1 +
- drivers/staging/media/hantro/sama5d4_vdec_hw.c | 1 +
- 5 files changed, 6 insertions(+), 7 deletions(-)
+ drivers/staging/media/hantro/Makefile         |  1 +
+ drivers/staging/media/hantro/hantro.h         |  7 +++++
+ drivers/staging/media/hantro/hantro_drv.c     |  5 +++
+ drivers/staging/media/hantro/hantro_g2.c      | 27 ++++++++++++++++
+ .../staging/media/hantro/hantro_g2_hevc_dec.c | 31 -------------------
+ drivers/staging/media/hantro/hantro_g2_regs.h |  7 +++++
+ drivers/staging/media/hantro/hantro_hw.h      |  2 ++
+ 7 files changed, 49 insertions(+), 31 deletions(-)
+ create mode 100644 drivers/staging/media/hantro/hantro_g2.c
 
+diff --git a/drivers/staging/media/hantro/Makefile b/drivers/staging/media/hantro/Makefile
+index 90036831fec4..fe6d84871d07 100644
+--- a/drivers/staging/media/hantro/Makefile
++++ b/drivers/staging/media/hantro/Makefile
+@@ -12,6 +12,7 @@ hantro-vpu-y += \
+ 		hantro_g1_mpeg2_dec.o \
+ 		hantro_g2_hevc_dec.o \
+ 		hantro_g1_vp8_dec.o \
++		hantro_g2.o \
+ 		rockchip_vpu2_hw_jpeg_enc.o \
+ 		rockchip_vpu2_hw_h264_dec.o \
+ 		rockchip_vpu2_hw_mpeg2_dec.o \
 diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-index c2e01959dc00..dd5e56765d4e 100644
+index dd5e56765d4e..d91eb2b1c509 100644
 --- a/drivers/staging/media/hantro/hantro.h
 +++ b/drivers/staging/media/hantro/hantro.h
-@@ -263,6 +263,7 @@ struct hantro_ctx {
-  * @max_depth:	Maximum depth, for bitstream formats
-  * @enc_fmt:	Format identifier for encoder registers.
-  * @frmsize:	Supported range of frame sizes (only for bitstream formats).
-+ * @postprocessed: Indicates if this format needs the post-processor.
-  */
- struct hantro_fmt {
- 	char *name;
-@@ -272,6 +273,7 @@ struct hantro_fmt {
- 	int max_depth;
- 	enum hantro_enc_fmt enc_fmt;
- 	struct v4l2_frmsize_stepwise frmsize;
-+	bool postprocessed;
- };
- 
- struct hantro_reg {
-diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
-index 882fb8bc5ddd..4549aec08feb 100644
---- a/drivers/staging/media/hantro/hantro_postproc.c
-+++ b/drivers/staging/media/hantro/hantro_postproc.c
-@@ -53,15 +53,9 @@ const struct hantro_postproc_regs hantro_g1_postproc_regs = {
- bool hantro_needs_postproc(const struct hantro_ctx *ctx,
- 			   const struct hantro_fmt *fmt)
- {
--	struct hantro_dev *vpu = ctx->dev;
--
- 	if (ctx->is_encoder)
- 		return false;
--
--	if (!vpu->variant->postproc_fmts)
--		return false;
--
--	return fmt->fourcc != V4L2_PIX_FMT_NV12;
-+	return fmt->postprocessed;
+@@ -369,6 +369,13 @@ static inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+ 	writel(val, vpu->dec_base + reg);
  }
  
- static void hantro_postproc_g1_enable(struct hantro_ctx *ctx)
-diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-index 22fa7d2f3b64..02e61438220a 100644
---- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
-+++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-@@ -82,6 +82,7 @@ static const struct hantro_fmt imx8m_vpu_postproc_fmts[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_YUYV,
- 		.codec_mode = HANTRO_MODE_NONE,
-+		.postprocessed = true,
- 	},
- };
++static inline void hantro_write_addr(struct hantro_dev *vpu,
++				     unsigned long offset,
++				     dma_addr_t addr)
++{
++	vdpu_write(vpu, addr & 0xffffffff, offset);
++}
++
+ static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
+ {
+ 	u32 val = readl(vpu->dec_base + reg);
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index 8a2edd67f2c6..e8eee117d97f 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -905,6 +905,11 @@ static int hantro_probe(struct platform_device *pdev)
+ 	vpu->enc_base = vpu->reg_bases[0] + vpu->variant->enc_offset;
+ 	vpu->dec_base = vpu->reg_bases[0] + vpu->variant->dec_offset;
  
-diff --git a/drivers/staging/media/hantro/rockchip_vpu_hw.c b/drivers/staging/media/hantro/rockchip_vpu_hw.c
-index 6c1ad5534ce5..f372f767d4ff 100644
---- a/drivers/staging/media/hantro/rockchip_vpu_hw.c
-+++ b/drivers/staging/media/hantro/rockchip_vpu_hw.c
-@@ -62,6 +62,7 @@ static const struct hantro_fmt rockchip_vpu1_postproc_fmts[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_YUYV,
- 		.codec_mode = HANTRO_MODE_NONE,
-+		.postprocessed = true,
- 	},
- };
++	/**
++	 * TODO: Eventually allow taking advantage of full 64-bit address space.
++	 * Until then we assume the MSB portion of buffers' base addresses is
++	 * always 0 due to this masking operation.
++	 */
+ 	ret = dma_set_coherent_mask(vpu->dev, DMA_BIT_MASK(32));
+ 	if (ret) {
+ 		dev_err(vpu->dev, "Could not set DMA coherent mask.\n");
+diff --git a/drivers/staging/media/hantro/hantro_g2.c b/drivers/staging/media/hantro/hantro_g2.c
+new file mode 100644
+index 000000000000..5f7bb27913de
+--- /dev/null
++++ b/drivers/staging/media/hantro/hantro_g2.c
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Hantro VPU codec driver
++ *
++ * Copyright (C) 2021 Collabora Ltd, Andrzej Pietrasiewicz <andrzej.p@collabora.com>
++ */
++
++#include "hantro_hw.h"
++#include "hantro_g2_regs.h"
++
++void hantro_g2_check_idle(struct hantro_dev *vpu)
++{
++	int i;
++
++	for (i = 0; i < 3; i++) {
++		u32 status;
++
++		/* Make sure the VPU is idle */
++		status = vdpu_read(vpu, G2_REG_INTERRUPT);
++		if (status & G2_REG_INTERRUPT_DEC_E) {
++			dev_warn(vpu->dev, "device still running, aborting");
++			status |= G2_REG_INTERRUPT_DEC_ABORT_E | G2_REG_INTERRUPT_DEC_IRQ_DIS;
++			vdpu_write(vpu, status, G2_REG_INTERRUPT);
++		}
++	}
++}
++
+diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+index 97da719a9844..2797825cef47 100644
+--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
++++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+@@ -8,20 +8,6 @@
+ #include "hantro_hw.h"
+ #include "hantro_g2_regs.h"
  
-diff --git a/drivers/staging/media/hantro/sama5d4_vdec_hw.c b/drivers/staging/media/hantro/sama5d4_vdec_hw.c
-index f3fecc7248c4..b2fc1c5613e1 100644
---- a/drivers/staging/media/hantro/sama5d4_vdec_hw.c
-+++ b/drivers/staging/media/hantro/sama5d4_vdec_hw.c
-@@ -15,6 +15,7 @@ static const struct hantro_fmt sama5d4_vdec_postproc_fmts[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_YUYV,
- 		.codec_mode = HANTRO_MODE_NONE,
-+		.postprocessed = true,
- 	},
- };
+-#define HEVC_DEC_MODE	0xC
+-
+-#define BUS_WIDTH_32		0
+-#define BUS_WIDTH_64		1
+-#define BUS_WIDTH_128		2
+-#define BUS_WIDTH_256		3
+-
+-static inline void hantro_write_addr(struct hantro_dev *vpu,
+-				     unsigned long offset,
+-				     dma_addr_t addr)
+-{
+-	vdpu_write(vpu, addr & 0xffffffff, offset);
+-}
+-
+ static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
+ {
+ 	struct hantro_dev *vpu = ctx->dev;
+@@ -516,23 +502,6 @@ static void set_buffers(struct hantro_ctx *ctx)
+ 	hantro_write_addr(vpu, G2_TILE_BSD_ADDR, ctx->hevc_dec.tile_bsd.dma);
+ }
  
+-static void hantro_g2_check_idle(struct hantro_dev *vpu)
+-{
+-	int i;
+-
+-	for (i = 0; i < 3; i++) {
+-		u32 status;
+-
+-		/* Make sure the VPU is idle */
+-		status = vdpu_read(vpu, G2_REG_INTERRUPT);
+-		if (status & G2_REG_INTERRUPT_DEC_E) {
+-			dev_warn(vpu->dev, "device still running, aborting");
+-			status |= G2_REG_INTERRUPT_DEC_ABORT_E | G2_REG_INTERRUPT_DEC_IRQ_DIS;
+-			vdpu_write(vpu, status, G2_REG_INTERRUPT);
+-		}
+-	}
+-}
+-
+ int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx)
+ {
+ 	struct hantro_dev *vpu = ctx->dev;
+diff --git a/drivers/staging/media/hantro/hantro_g2_regs.h b/drivers/staging/media/hantro/hantro_g2_regs.h
+index 24b18f839ff8..136ba6d98a1f 100644
+--- a/drivers/staging/media/hantro/hantro_g2_regs.h
++++ b/drivers/staging/media/hantro/hantro_g2_regs.h
+@@ -27,6 +27,13 @@
+ #define G2_REG_INTERRUPT_DEC_IRQ_DIS	BIT(4)
+ #define G2_REG_INTERRUPT_DEC_E		BIT(0)
+ 
++#define HEVC_DEC_MODE			0xc
++
++#define BUS_WIDTH_32			0
++#define BUS_WIDTH_64			1
++#define BUS_WIDTH_128			2
++#define BUS_WIDTH_256			3
++
+ #define g2_strm_swap		G2_DEC_REG(2, 28, 0xf)
+ #define g2_dirmv_swap		G2_DEC_REG(2, 20, 0xf)
+ 
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 4323e63dfbfc..42b3f3961f75 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -308,4 +308,6 @@ void hantro_vp8_dec_exit(struct hantro_ctx *ctx);
+ void hantro_vp8_prob_update(struct hantro_ctx *ctx,
+ 			    const struct v4l2_ctrl_vp8_frame *hdr);
+ 
++void hantro_g2_check_idle(struct hantro_dev *vpu);
++
+ #endif /* HANTRO_HW_H_ */
 -- 
 2.17.1
 
