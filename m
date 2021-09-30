@@ -2,139 +2,237 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A38BDC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 30 Sep 2021 07:23:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47EE0C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 30 Sep 2021 09:13:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 78CF761439
-	for <linux-media@archiver.kernel.org>; Thu, 30 Sep 2021 07:23:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2C982619E3
+	for <linux-media@archiver.kernel.org>; Thu, 30 Sep 2021 09:13:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348700AbhI3HZF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 Sep 2021 03:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
+        id S1349278AbhI3JOs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 Sep 2021 05:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348699AbhI3HZE (ORCPT
+        with ESMTP id S235794AbhI3JOr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 Sep 2021 03:25:04 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1F2C06161C;
-        Thu, 30 Sep 2021 00:23:22 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so6169354otb.1;
-        Thu, 30 Sep 2021 00:23:22 -0700 (PDT)
+        Thu, 30 Sep 2021 05:14:47 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D0FC06176A
+        for <linux-media@vger.kernel.org>; Thu, 30 Sep 2021 02:13:05 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id s24so4057430wmh.4
+        for <linux-media@vger.kernel.org>; Thu, 30 Sep 2021 02:13:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1I1nXLI6APgtAXVlnSH2tDSE1F+gk/nTZkMd/P13QnM=;
-        b=AM00vJx8YutY2y03FGwOzMB4F65tCdTPaWerM11qRrgq55yZhS8ZGBFp0tpAVyO6Wb
-         gUwNrDppdPLFqCHICaRzrcwXawyxIM1xDLWZTR4XVuNzTgSUC02vUfp8LzCl7S/VOFS7
-         ixqY5BL4KNH9gHHnwpnTTstkk7zIt/1fY/vKdXaW07IkHOvo7iskocXGhAcSWZcDHc+9
-         pq6xubaraFJR+yZ6ZDBB2CK7GaOL0fjp52QcsGtdnG5Cq/zzyxIo/UL05C6//UP+ZNtI
-         mnGXbC+CLflXmPAY7glOl3xYRbPBxliG0LxRCw2ZtDSsfhE3jDSaWvqfAHkic75hGp5c
-         eCZA==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=elEeaMy1+9KonQWqwwLNAlzYtOXt+PkIIF5xVf4W7iU=;
+        b=RpyQc43teUEBvT9JUv6TY3eG4vK6FM3J7wuhrlTcN1QmT/aghUj5qJw2VxHXWUpxUq
+         5wn/RraApaXmMbXeJs2W2H9heKSDMU7LZzEFnGHTgUN4vfbVY2zJ5esTgCApFAozZS8n
+         qJwesz68hZ/+B0MKBuxlZmVAy7SjJpAnamEKg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1I1nXLI6APgtAXVlnSH2tDSE1F+gk/nTZkMd/P13QnM=;
-        b=GZI7ZG7aS88+dP9KYjFMRQGWc3PodWtXgFFF+EjRFe27iUwpyPtEHrjbeL4mVRnOZD
-         E8jPU6q1KJZX8K2XWYbuT0UsEKOHMk6ONlC9hTYdSh9F/zYPYhEDNat0q1sfg0pn6DhY
-         3Gim5HFzKIQ1/E/nkyJYeIYOA2KNwqO7VgDyBWlMYtjvzD+cVllqv2Cj/zsRR5jIycrH
-         HpbOSVXT2yGWJYiY2nLTt6eVvba62s7Zg4ZiZcEUiZ2MrRXqCa8FS5ZF9Kd99vLENd3f
-         SItE65hgwwuG+GuLZO9PttxZh+fGhi2KbzJI0YAIAjyrTF/uBibVMlC57e3iM/NolT5H
-         g2qA==
-X-Gm-Message-State: AOAM532RJEs7SnEIxk82ZY86sEjNJMw0tohUC24Sa7EeCuhF3lw2Cgnm
-        RdHAtG8v4JePgFe9Yb1f1jP3gion0EgTq/9qX1o=
-X-Google-Smtp-Source: ABdhPJzkx0SiPJkTwjnw/szFDmj1KPx6Cg36LPLPfN3a1aV1RvHl2MDEPnGNEoGlyj86D+iBI4eONraBUbwXekv8q/s=
-X-Received: by 2002:a05:6830:1089:: with SMTP id y9mr3930400oto.335.1632986602241;
- Thu, 30 Sep 2021 00:23:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210930062014.38200-1-mie@igel.co.jp> <20210930062014.38200-2-mie@igel.co.jp>
- <CAD=hENdzYGNp14fm9y9+A71D2BJSjV5GewHMkSJKUzNOs0hqWg@mail.gmail.com> <CANXvt5pcHbRVa9=Uqi-MN6RY1g6OY1MDecyhdedqL8Xmv0y6QQ@mail.gmail.com>
-In-Reply-To: <CANXvt5pcHbRVa9=Uqi-MN6RY1g6OY1MDecyhdedqL8Xmv0y6QQ@mail.gmail.com>
-From:   Zhu Yanjun <zyjzyj2000@gmail.com>
-Date:   Thu, 30 Sep 2021 15:23:10 +0800
-Message-ID: <CAD=hENcANb07bZiAuDYmozsWmZ4uA23Rqca=400+v23QQua_bg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/1] Providers/rxe: Add dma-buf support
-To:     Shunsuke Mie <mie@igel.co.jp>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=elEeaMy1+9KonQWqwwLNAlzYtOXt+PkIIF5xVf4W7iU=;
+        b=l2hCSJKV8qOT1KdmOX0xT9P63HW1nmx0HvngIbVksyIMsmwfodtOGfK6QhrKC6hwOK
+         a2aVs1iET2UiUqQEh5Bhd/t41YfZQ9a27KRaA/YscjkKxuRZkIhs/pUmsKSoq+sdauVt
+         g7tAFTNikjTTt0OoY2JF+r/NobKr8oufb72dlC7MMhw6B9ANho50YGPbTA8XwR0z++l5
+         fjORqVm59gzBcw9WPCKuxuht+gdx3rt4SpD0mrd2bk0Gd+GkzQOCtWWzi9mQJOOu9og/
+         2q+sUam0VX1z1WgTVEs8zIk292k6GZwouVv/ITxFkHWoCkB5Z/aBIE+EBZIgZGdO7p/v
+         qjuw==
+X-Gm-Message-State: AOAM533TXOTjjIktELfVU38EJb+2CkAqRUmCWs5vMA6Ck6S9WwkYvudb
+        jkTV/3f7u0pQqqYEMNO/t5mUweE6KWiMGw==
+X-Google-Smtp-Source: ABdhPJyjl3VeEvqgrpXI1HnSJv/tX2ccaXjRCxWiO5hP7LA/fyTgLST6AdkigSP21R27lbj4q5oOGg==
+X-Received: by 2002:a1c:a94a:: with SMTP id s71mr14468560wme.32.1632993183602;
+        Thu, 30 Sep 2021 02:13:03 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id r27sm2358165wrr.70.2021.09.30.02.13.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Sep 2021 02:13:03 -0700 (PDT)
+Date:   Thu, 30 Sep 2021 11:13:01 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dave Airlie <airlied@gmail.com>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Gal Pressman <galpress@amazon.com>,
+        Yossi Leybovich <sleybo@amazon.com>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
         Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jianxin Xiong <jianxin.xiong@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Sean Hefty <sean.hefty@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        RDMA mailing list <linux-rdma@vger.kernel.org>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>,
-        Tomohito Esaki <etom@igel.co.jp>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Alex Deucher <alexander.deucher@amd.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Subject: Re: [PATCH v6 0/2] Add p2p via dmabuf to habanalabs
+Message-ID: <YVV/nc4iQlQMtkS8@phenom.ffwll.local>
+Mail-Followup-To: Oded Gabbay <ogabbay@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Dave Airlie <airlied@gmail.com>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Gal Pressman <galpress@amazon.com>,
+        Yossi Leybovich <sleybo@amazon.com>,
+        Maling list - DRI developers <dri-devel@lists.freedesktop.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Doug Ledford <dledford@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Leon Romanovsky <leonro@nvidia.com>, Christoph Hellwig <hch@lst.de>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" <linaro-mm-sig@lists.linaro.org>
+References: <20210912165309.98695-1-ogabbay@kernel.org>
+ <YUCvNzpyC091KeaJ@phenom.ffwll.local>
+ <20210914161218.GF3544071@ziepe.ca>
+ <CAFCwf13322953Txr3Afa_MomuD148vnfpEog0xzW7FPWH9=6fg@mail.gmail.com>
+ <YUM5JoMMK7gceuKZ@phenom.ffwll.local>
+ <20210916131014.GK3544071@ziepe.ca>
+ <YUSKSHBC9uI49wZZ@phenom.ffwll.local>
+ <CAFCwf12o-+wtbk8J8k8hP4_k0a8Lco4m9f4s1vBobkQwNtn39w@mail.gmail.com>
+ <CAFCwf11UFVh-88Z=d=EH07_nx=3tf9kQkHhJ4pF6hfgO=80u0g@mail.gmail.com>
+ <CAFCwf121CuNOesSRECUY9y7KWSGOZ2dHPCVvBqu8C4PCYj5PTw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFCwf121CuNOesSRECUY9y7KWSGOZ2dHPCVvBqu8C4PCYj5PTw@mail.gmail.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 2:58 PM Shunsuke Mie <mie@igel.co.jp> wrote:
->
-> 2021=E5=B9=B49=E6=9C=8830=E6=97=A5(=E6=9C=A8) 15:37 Zhu Yanjun <zyjzyj200=
-0@gmail.com>:
+On Tue, Sep 28, 2021 at 10:04:29AM +0300, Oded Gabbay wrote:
+> On Thu, Sep 23, 2021 at 12:22 PM Oded Gabbay <ogabbay@kernel.org> wrote:
 > >
-> > On Thu, Sep 30, 2021 at 2:20 PM Shunsuke Mie <mie@igel.co.jp> wrote:
+> > On Sat, Sep 18, 2021 at 11:38 AM Oded Gabbay <ogabbay@kernel.org> wrote:
 > > >
-> > > Implement a new provider method for dma-buf base memory registration.
+> > > On Fri, Sep 17, 2021 at 3:30 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > > >
+> > > > On Thu, Sep 16, 2021 at 10:10:14AM -0300, Jason Gunthorpe wrote:
+> > > > > On Thu, Sep 16, 2021 at 02:31:34PM +0200, Daniel Vetter wrote:
+> > > > > > On Wed, Sep 15, 2021 at 10:45:36AM +0300, Oded Gabbay wrote:
+> > > > > > > On Tue, Sep 14, 2021 at 7:12 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> > > > > > > >
+> > > > > > > > On Tue, Sep 14, 2021 at 04:18:31PM +0200, Daniel Vetter wrote:
+> > > > > > > > > On Sun, Sep 12, 2021 at 07:53:07PM +0300, Oded Gabbay wrote:
+> > > > > > > > > > Hi,
+> > > > > > > > > > Re-sending this patch-set following the release of our user-space TPC
+> > > > > > > > > > compiler and runtime library.
+> > > > > > > > > >
+> > > > > > > > > > I would appreciate a review on this.
+> > > > > > > > >
+> > > > > > > > > I think the big open we have is the entire revoke discussions. Having the
+> > > > > > > > > option to let dma-buf hang around which map to random local memory ranges,
+> > > > > > > > > without clear ownership link and a way to kill it sounds bad to me.
+> > > > > > > > >
+> > > > > > > > > I think there's a few options:
+> > > > > > > > > - We require revoke support. But I've heard rdma really doesn't like that,
+> > > > > > > > >   I guess because taking out an MR while holding the dma_resv_lock would
+> > > > > > > > >   be an inversion, so can't be done. Jason, can you recap what exactly the
+> > > > > > > > >   hold-up was again that makes this a no-go?
+> > > > > > > >
+> > > > > > > > RDMA HW can't do revoke.
+> > > > > >
+> > > > > > Like why? I'm assuming when the final open handle or whatever for that MR
+> > > > > > is closed, you do clean up everything? Or does that MR still stick around
+> > > > > > forever too?
+> > > > >
+> > > > > It is a combination of uAPI and HW specification.
+> > > > >
+> > > > > revoke here means you take a MR object and tell it to stop doing DMA
+> > > > > without causing the MR object to be destructed.
+> > > > >
+> > > > > All the drivers can of course destruct the MR, but doing such a
+> > > > > destruction without explicit synchronization with user space opens
+> > > > > things up to a serious use-after potential that could be a security
+> > > > > issue.
+> > > > >
+> > > > > When the open handle closes the userspace is synchronized with the
+> > > > > kernel and we can destruct the HW objects safely.
+> > > > >
+> > > > > So, the special HW feature required is 'stop doing DMA but keep the
+> > > > > object in an error state' which isn't really implemented, and doesn't
+> > > > > extend very well to other object types beyond simple MRs.
+> > > >
+> > > > Yeah revoke without destroying the MR doesn't work, and it sounds like
+> > > > revoke by destroying the MR just moves the can of worms around to another
+> > > > place.
+> > > >
+> > > > > > 1. User A opens gaudi device, sets up dma-buf export
+> > > > > >
+> > > > > > 2. User A registers that with RDMA, or anything else that doesn't support
+> > > > > > revoke.
+> > > > > >
+> > > > > > 3. User A closes gaudi device
+> > > > > >
+> > > > > > 4. User B opens gaudi device, assumes that it has full control over the
+> > > > > > device and uploads some secrets, which happen to end up in the dma-buf
+> > > > > > region user A set up
+> > > > >
+> > > > > I would expect this is blocked so long as the DMABUF exists - eg the
+> > > > > DMABUF will hold a fget on the FD of #1 until the DMABUF is closed, so
+> > > > > that #3 can't actually happen.
+> > > > >
+> > > > > > It's not mlocked memory, it's mlocked memory and I can exfiltrate
+> > > > > > it.
+> > > > >
+> > > > > That's just bug, don't make buggy drivers :)
+> > > >
+> > > > Well yeah, but given that habanalabs hand rolled this I can't just check
+> > > > for the usual things we have to enforce this in drm. And generally you can
+> > > > just open chardevs arbitrarily, and multiple users fighting over each
+> > > > another. The troubles only start when you have private state or memory
+> > > > allocations of some kind attached to the struct file (instead of the
+> > > > underlying device), or something else that requires device exclusivity.
+> > > > There's no standard way to do that.
+> > > >
+> > > > Plus in many cases you really want revoke on top (can't get that here
+> > > > unfortunately it seems), and the attempts to get towards a generic
+> > > > revoke() just never went anywhere. So again it's all hand-rolled
+> > > > per-subsystem. *insert lament about us not having done this through a
+> > > > proper subsystem*
+> > > >
+> > > > Anyway it sounds like the code takes care of that.
+> > > > -Daniel
 > > >
-> > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > > ---
-> > >  providers/rxe/rxe.c | 21 +++++++++++++++++++++
-> > >  1 file changed, 21 insertions(+)
+> > > Daniel, Jason,
+> > > Thanks for reviewing this code.
 > > >
-> > > diff --git a/providers/rxe/rxe.c b/providers/rxe/rxe.c
-> > > index 3c3ea8bb..84e00e60 100644
-> > > --- a/providers/rxe/rxe.c
-> > > +++ b/providers/rxe/rxe.c
-> > > @@ -239,6 +239,26 @@ static struct ibv_mr *rxe_reg_mr(struct ibv_pd *=
-pd, void *addr, size_t length,
-> > >         return &vmr->ibv_mr;
-> > >  }
+> > > Can I get an R-B / A-B from you for this patch-set ?
 > > >
-> > > +static struct ibv_mr *rxe_reg_dmabuf_mr(struct ibv_pd *pd, uint64_t =
-offset,
-> > > +                                       size_t length, uint64_t iova,=
- int fd,
-> > > +                                       int access)
-> > > +{
-> > > +       struct verbs_mr *vmr;
-> > > +       int ret;
-> > > +
-> > > +       vmr =3D malloc(sizeof(*vmr));
-> > > +       if (!vmr)
-> > > +               return NULL;
-> > > +
+> > > Thanks,
+> > > Oded
 > >
-> > Do we need to set vmr to zero like the following?
+> > A kind reminder.
 > >
-> > memset(vmr, 0, sizeof(*vmr));
-> >
-> > Zhu Yanjun
-> Thank you for your quick response.
->
-> I think it is better to clear the vmr. Actually the mlx5 driver allocates
-> the vmr using calloc().
->
-> In addition, rxe_reg_mr() (not rxe_reg_dmabuf_mr()) is used the malloc
-> and not clear the vmr. I think It has to be fixed too. Should I make
-> another patch to fix this problem?
+> > Thanks,
+> > Oded
+> 
+> Hi,
+> I know last week was LPC and maybe this got lost in the inbox, so I'm
+> sending it again to make sure you got my request for R-B / A-B.
 
-Yes. Please.
+I was waiting for some clarity from the maintainers summit, but that's
+still about as unclear as it gets. Either way technically it sounds ok,
+but I'm a bit burried so didn't look at the code.
 
-Zhu Yanjun
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
->
-> Thanks a lot.
-> Shunsuke
->
-> ~
+But looking beyond the strict lens of dma-buf I'm still impressed by the
+mess this created, to get to the same endpoint of "we open our stack" in
+the same time it takes others to sort this out. I'm still looking for some
+kind of plan to fix this.
+
+Also you probably want to get Dave to ack this too, I pinged him on irc
+last week about this after maintainer summit.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
