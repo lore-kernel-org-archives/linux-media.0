@@ -2,51 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBB17C433EF
-	for <linux-media@archiver.kernel.org>; Fri,  1 Oct 2021 11:25:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03125C433FE
+	for <linux-media@archiver.kernel.org>; Fri,  1 Oct 2021 11:25:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D88F261A8C
+	by mail.kernel.org (Postfix) with ESMTP id E3EFC6103C
 	for <linux-media@archiver.kernel.org>; Fri,  1 Oct 2021 11:25:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353888AbhJAL13 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 1 Oct 2021 07:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        id S1353883AbhJAL12 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 1 Oct 2021 07:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353852AbhJAL1O (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Oct 2021 07:27:14 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F00C06177D
+        with ESMTP id S1353832AbhJAL1N (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Oct 2021 07:27:13 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F84C06177F
         for <linux-media@vger.kernel.org>; Fri,  1 Oct 2021 04:25:29 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id d207-20020a1c1dd8000000b00307e2d1ec1aso6498057wmd.5
+Received: by mail-wr1-x436.google.com with SMTP id d6so14881594wrc.11
         for <linux-media@vger.kernel.org>; Fri, 01 Oct 2021 04:25:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VNaI9C5/qcGt+6XKfL8dD53jkaX+jHT8gS0DI0vOhMk=;
-        b=fZ3cK5y8CtUA2QTCkJD4v42HS0fhzRpRuUiw0yPW50W42q6IZ558y2xg/OaJfu8Sz1
-         5YXvROMkosDpzW4GE+Vrv6Sx7gb5Wr+0lpi005IfCHj0DRAJKyM6uB78ueSFgDJURdBb
-         seSsEUjULHw4S+mQC66XvlKURIisXxBQQ6Gig=
+        bh=tmEJ9vFpZDT8h8HObohmRstQUsecSrrPbxIcYXjIt14=;
+        b=mlg6xJ+z/3D7g/FEIfOjSYDGmoYGEGbs98RXwl4s5paFKGPmigUvG/2nYEGgD9thTj
+         I2tDZ1k2GTp9CLR1RqsUqrxzo/cqp8PeYQpAffEBC3gRdS6Lczgb4epuL/xwZ074SiEN
+         OT3eTRdSrHMpGtSvUhsgQtm8TJwCPtipKqBgc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VNaI9C5/qcGt+6XKfL8dD53jkaX+jHT8gS0DI0vOhMk=;
-        b=xKRQPpOiy5G4PGcMnNArAqghdjM4a9LuQXM4HEwPawyRfwti3Ip+DIaKhZtWF9e8Fy
-         gSbg/CHvHVtYx3dyuLrvyZTBjoe3W2TEBYjJ6sem31WhJr77VNlepJDRKuBRNOIf7yoD
-         f1z4C912ABXrxuPBeMwwsxHZaQ8ZFqPwK2oFxR+5hcahP4HX4MEWWuzBxYqmL4MpAjop
-         nwLXs4T9dXnM2cq+oMxccvZxovV3Svkwn619xWzD1tveIMdWI8Tm6wIGXMdYFCDn9Scy
-         o0/kMJjcgLdUTMTtGAHlSDWRv5Rzq9gMA9IYPn80h6tybwBH81tCgoxn7cLD4slL8ph7
-         A3Gg==
-X-Gm-Message-State: AOAM533Vf8nQGqoNZqfAmHWCLfNfpUtuLcgw9OzSULzkBBVFdz+omlUH
-        wDlMkVoSsk55ExX0byz37xLWTw==
-X-Google-Smtp-Source: ABdhPJx3k528VbAOecSOVvxuMk/z+vJiK8J9dkH8vF3yiWTPPLsn7nH6xcSNRl6G3gBbbFP9HpKdZw==
-X-Received: by 2002:a05:600c:4ed3:: with SMTP id g19mr3815631wmq.195.1633087528626;
-        Fri, 01 Oct 2021 04:25:28 -0700 (PDT)
+        bh=tmEJ9vFpZDT8h8HObohmRstQUsecSrrPbxIcYXjIt14=;
+        b=oeOMxyzLcS+mkUGL3/hI3mTTdvkR5u36cHwDEPt+t3vRrl73zz1PsdgpBiYgcBs0fo
+         0JgBV4yyzthYasE7a8X/A6gavbXc26GOXNZP+B6Xh0ZK8e+9fLpDHbozZdvLuPpA9TmD
+         mrEJ6jH3L0jVl1BN2IHo6Kl8TVsyotgtWmkAKSTedVsPkLAW1542Nou0yb96h1Lequry
+         N38B2sTTZxg02JcrWCrCYzGHyjjVnyjhSxDMzx8nGzLMhGbDK5W8A0HFyrgsx9k2A/Qd
+         YqBZhCTxHTpyeb/l0BSkNqNGFdMsP4DxogAz7kLlHDVHPkkgmr2BpP5ksN00VP8jC/ce
+         EBSA==
+X-Gm-Message-State: AOAM532IIwTWrqtobgZFi1cVXlttmyJn6f0oepcOwEnFfC2Pln4xucHe
+        BpaQi9dt7TpXrow11TIDP24wSQ==
+X-Google-Smtp-Source: ABdhPJyVdC2NJRWi5/UJGa4RdI2Y7in5qLDFCkrNEpR3UXiq/NHEZJoZrxDysLDhtEHVdn019GeKAA==
+X-Received: by 2002:a5d:6b03:: with SMTP id v3mr11779105wrw.226.1633087527757;
+        Fri, 01 Oct 2021 04:25:27 -0700 (PDT)
 Received: from beni.c.googlers.com.com (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
-        by smtp.gmail.com with ESMTPSA id x17sm5530958wrc.51.2021.10.01.04.25.28
+        by smtp.gmail.com with ESMTPSA id x17sm5530958wrc.51.2021.10.01.04.25.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Oct 2021 04:25:28 -0700 (PDT)
+        Fri, 01 Oct 2021 04:25:27 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Yong Zhi <yong.zhi@intel.com>,
@@ -55,9 +55,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v3 8/8] media: ov5670: Add implementation for events
-Date:   Fri,  1 Oct 2021 11:25:22 +0000
-Message-Id: <20211001112522.2839602-9-ribalda@chromium.org>
+Subject: [PATCH v3 6/8] media: dw9714: Add implementation for events
+Date:   Fri,  1 Oct 2021 11:25:20 +0000
+Message-Id: <20211001112522.2839602-7-ribalda@chromium.org>
 X-Mailer: git-send-email 2.33.0.800.g4c38ced690-goog
 In-Reply-To: <20211001112522.2839602-1-ribalda@chromium.org>
 References: <20211001112522.2839602-1-ribalda@chromium.org>
@@ -75,52 +75,48 @@ test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: FAIL
 
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/i2c/ov5670.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/media/i2c/dw9714.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
-index 49189926afd67..251f459ab484a 100644
---- a/drivers/media/i2c/ov5670.c
-+++ b/drivers/media/i2c/ov5670.c
+diff --git a/drivers/media/i2c/dw9714.c b/drivers/media/i2c/dw9714.c
+index c8b4292512dca..3863dfeb82934 100644
+--- a/drivers/media/i2c/dw9714.c
++++ b/drivers/media/i2c/dw9714.c
 @@ -7,6 +7,7 @@
  #include <linux/pm_runtime.h>
  #include <media/v4l2-ctrls.h>
  #include <media/v4l2-device.h>
 +#include <media/v4l2-event.h>
- #include <media/v4l2-fwnode.h>
  
- #define OV5670_REG_CHIP_ID		0x300a
-@@ -2420,6 +2421,12 @@ static int ov5670_identify_module(struct ov5670 *ov5670)
- 	return 0;
- }
+ #define DW9714_NAME		"dw9714"
+ #define DW9714_MAX_FOCUS_POS	1023
+@@ -100,7 +101,15 @@ static const struct v4l2_subdev_internal_ops dw9714_int_ops = {
+ 	.close = dw9714_close,
+ };
  
-+static const struct v4l2_subdev_core_ops ov5670_core_ops = {
+-static const struct v4l2_subdev_ops dw9714_ops = { };
++static const struct v4l2_subdev_core_ops dw9714_core_ops = {
 +	.log_status = v4l2_ctrl_subdev_log_status,
 +	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
 +	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
 +};
 +
- static const struct v4l2_subdev_video_ops ov5670_video_ops = {
- 	.s_stream = ov5670_set_stream,
- };
-@@ -2436,6 +2443,7 @@ static const struct v4l2_subdev_sensor_ops ov5670_sensor_ops = {
- };
++static const struct v4l2_subdev_ops dw9714_ops = {
++	.core = &dw9714_core_ops,
++};
  
- static const struct v4l2_subdev_ops ov5670_subdev_ops = {
-+	.core = &ov5670_core_ops,
- 	.video = &ov5670_video_ops,
- 	.pad = &ov5670_pad_ops,
- 	.sensor = &ov5670_sensor_ops,
-@@ -2489,7 +2497,8 @@ static int ov5670_probe(struct i2c_client *client)
- 	}
+ static void dw9714_subdev_cleanup(struct dw9714_device *dw9714_dev)
+ {
+@@ -137,7 +146,8 @@ static int dw9714_probe(struct i2c_client *client)
+ 		return -ENOMEM;
  
- 	ov5670->sd.internal_ops = &ov5670_internal_ops;
--	ov5670->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	ov5670->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-+			    V4L2_SUBDEV_FL_HAS_EVENTS;
- 	ov5670->sd.entity.ops = &ov5670_subdev_entity_ops;
- 	ov5670->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+ 	v4l2_i2c_subdev_init(&dw9714_dev->sd, client, &dw9714_ops);
+-	dw9714_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
++	dw9714_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
++				V4L2_SUBDEV_FL_HAS_EVENTS;
+ 	dw9714_dev->sd.internal_ops = &dw9714_int_ops;
  
+ 	rval = dw9714_init_controls(dw9714_dev);
 -- 
 2.33.0.800.g4c38ced690-goog
 
