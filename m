@@ -2,78 +2,286 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2D68C433F5
-	for <linux-media@archiver.kernel.org>; Mon,  4 Oct 2021 12:19:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10320C433F5
+	for <linux-media@archiver.kernel.org>; Mon,  4 Oct 2021 13:23:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA9A46136F
-	for <linux-media@archiver.kernel.org>; Mon,  4 Oct 2021 12:19:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED83760F9C
+	for <linux-media@archiver.kernel.org>; Mon,  4 Oct 2021 13:23:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233228AbhJDMVM convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Oct 2021 08:21:12 -0400
-Received: from ni.piap.pl ([195.187.100.5]:51922 "EHLO ni.piap.pl"
+        id S236909AbhJDNZJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Oct 2021 09:25:09 -0400
+Received: from mga14.intel.com ([192.55.52.115]:41430 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233194AbhJDMVL (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 4 Oct 2021 08:21:11 -0400
-From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: v5.15-rcX regression: video devices on i.MX6 are not created
-Date:   Mon, 04 Oct 2021 14:19:17 +0200
-Message-ID: <m3lf39nfsq.fsf@t19.piap.pl>
+        id S235847AbhJDNWA (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 4 Oct 2021 09:22:00 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10126"; a="225736075"
+X-IronPort-AV: E=Sophos;i="5.85,345,1624345200"; 
+   d="scan'208";a="225736075"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2021 06:11:49 -0700
+X-IronPort-AV: E=Sophos;i="5.85,345,1624345200"; 
+   d="scan'208";a="482979941"
+Received: from shearne-mobl.ger.corp.intel.com (HELO [10.213.208.122]) ([10.213.208.122])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2021 06:11:45 -0700
+Subject: Re: [PATCH 03/28] dma-buf: add dma_resv selftest
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org
+Cc:     daniel@ffwll.ch
+References: <20211001100610.2899-1-christian.koenig@amd.com>
+ <20211001100610.2899-4-christian.koenig@amd.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+Message-ID: <3922f4b4-5b77-ab9d-a398-be4c20e88f1c@linux.intel.com>
+Date:   Mon, 4 Oct 2021 14:11:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20211001100610.2899-4-christian.koenig@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Saravana et al.,
 
-FYI the patch: 6b2117ad65f1bca9ece6d4b1ee784b42701a2d86
+On 01/10/2021 11:05, Christian König wrote:
+> Just exercising a very minor subset of the functionality, but already
+> proven useful.
+> 
+> Signed-off-by: Christian König <christian.koenig@amd.com>
+> ---
+>   drivers/dma-buf/Makefile      |   3 +-
+>   drivers/dma-buf/selftests.h   |   1 +
+>   drivers/dma-buf/st-dma-resv.c | 164 ++++++++++++++++++++++++++++++++++
+>   3 files changed, 167 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/dma-buf/st-dma-resv.c
+> 
+> diff --git a/drivers/dma-buf/Makefile b/drivers/dma-buf/Makefile
+> index 1ef021273a06..511805dbeb75 100644
+> --- a/drivers/dma-buf/Makefile
+> +++ b/drivers/dma-buf/Makefile
+> @@ -11,6 +11,7 @@ obj-$(CONFIG_DMABUF_SYSFS_STATS) += dma-buf-sysfs-stats.o
+>   dmabuf_selftests-y := \
+>   	selftest.o \
+>   	st-dma-fence.o \
+> -	st-dma-fence-chain.o
+> +	st-dma-fence-chain.o \
+> +	st-dma-resv.o
+>   
+>   obj-$(CONFIG_DMABUF_SELFTESTS)	+= dmabuf_selftests.o
+> diff --git a/drivers/dma-buf/selftests.h b/drivers/dma-buf/selftests.h
+> index bc8cea67bf1e..97d73aaa31da 100644
+> --- a/drivers/dma-buf/selftests.h
+> +++ b/drivers/dma-buf/selftests.h
+> @@ -12,3 +12,4 @@
+>   selftest(sanitycheck, __sanitycheck__) /* keep first (igt selfcheck) */
+>   selftest(dma_fence, dma_fence)
+>   selftest(dma_fence_chain, dma_fence_chain)
+> +selftest(dma_resv, dma_resv)
+> diff --git a/drivers/dma-buf/st-dma-resv.c b/drivers/dma-buf/st-dma-resv.c
+> new file mode 100644
+> index 000000000000..ea44769d058d
+> --- /dev/null
+> +++ b/drivers/dma-buf/st-dma-resv.c
+> @@ -0,0 +1,164 @@
+> +/* SPDX-License-Identifier: MIT */
+> +
+> +/*
+> +* Copyright © 2019 Intel Corporation
+> +*/
 
-of: property: fw_devlink: Add support for "resets" and "pwms"
+May want to update the year.
 
-Allows better tracking of dependencies between devices.
+> +
+> +//#include <linux/delay.h>
+> +//#include <linux/dma-fence.h>
+> +//#include <linux/kernel.h>
+> +//#include <linux/kthread.h>
+> +//#include <linux/sched/signal.h>
 
- drivers/of/property.c | 4 ++++
+And remove these?
 
-breaks v4l2 video devices on an i.MX6 CPU. The /dev/video* nodes are not
-created, and the drivers (async subdevicess) are "waiting":
+> +
+> +#include <linux/slab.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/dma-resv.h>
+> +
+> +#include "selftest.h"
+> +
+> +static struct spinlock fence_lock;
+> +
+> +static const char *fence_name(struct dma_fence *f)
+> +{
+> +	return "selftest";
+> +}
+> +
+> +static const struct dma_fence_ops fence_ops = {
+> +	.get_driver_name = fence_name,
+> +	.get_timeline_name = fence_name,
+> +};
+> +
+> +static struct dma_fence *alloc_fence(void)
+> +{
+> +	struct dma_fence *f;
+> +
+> +	f = kmalloc(sizeof(*f), GFP_KERNEL);
+> +	if (!f)
+> +		return NULL;
+> +
+> +	dma_fence_init(f, &fence_ops, &fence_lock, 0, 0);
+> +	return f;
+> +}
+> +
+> +static int sanitycheck(void *arg)
+> +{
+> +	struct dma_fence *f;
+> +
+> +	f = alloc_fence();
+> +	if (!f)
+> +		return -ENOMEM;
+> +
+> +	dma_fence_signal(f);
+> +	dma_fence_put(f);
+> +	return 0;
+> +}
+> +
+> +static int test_excl_signaling(void *arg)
+> +{
+> +	struct dma_resv resv;
+> +	struct dma_fence *f;
+> +	int err = -EINVAL;
+> +
+> +	f = alloc_fence();
+> +	if (!f)
+> +		return -ENOMEM;
+> +
+> +	dma_resv_init(&resv);
+> +	dma_resv_add_excl_fence(&resv, f);
+> +	if (dma_resv_test_signaled(&resv, false)) {
+> +		pr_err("Resv unexpectedly signaled\n");
+> +		goto err_free;
+> +	}
+> +	dma_fence_signal(f);
+> +	if (!dma_resv_test_signaled(&resv, false)) {
+> +		pr_err("Resv not reporting signaled\n");
+> +		goto err_free;
+> +	}
+> +	err = 0;
+> +err_free:
+> +	dma_resv_fini(&resv);
+> +	dma_fence_put(f);
+> +	return err;
+> +}
+> +
+> +static int test_shared_signaling(void *arg)
+> +{
+> +	struct dma_resv resv;
+> +	struct dma_fence *f;
+> +	int err;
+> +
+> +	f = alloc_fence();
+> +	if (!f)
+> +		return -ENOMEM;
+> +
+> +	dma_resv_init(&resv);
+> +	err = dma_resv_reserve_shared(&resv, 1);
+> +	if (err) {
+> +		pr_err("Resv shared slot allocation failed\n");
+> +		goto err_free;
+> +	}
+> +
+> +	err = -EINVAL;
+> +	dma_resv_add_shared_fence(&resv, f);
+> +	if (dma_resv_test_signaled(&resv, true)) {
+> +		pr_err("Resv unexpectedly signaled\n");
+> +		goto err_free;
+> +	}
+> +	dma_fence_signal(f);
+> +	if (!dma_resv_test_signaled(&resv, true)) {
+> +		pr_err("Resv not reporting signaled\n");
+> +		goto err_free;
+> +	}
+> +	err = 0;
+> +err_free:
+> +	dma_resv_fini(&resv);
+> +	dma_fence_put(f);
+> +	return err;
+> +}
 
-# cat /sys/kernel/debug/v4l2-async/pending_async_subdevices
+Task for a rainy day - consolidate the above two into parameter driven 
+dma_resv setup (more fences, mixed signaling status, mixed exclusive and 
+shared, different signaling mode) and common verification stages.
 
-imx-media:
- [fwnode] dev=nil, node=/soc/ipu@2400000/port@0
- [fwnode] dev=nil, node=/soc/ipu@2400000/port@1
- [fwnode] dev=nil, node=/soc/ipu@2800000/port@0
- [fwnode] dev=nil, node=/soc/ipu@2800000/port@1
-imx6-mipi-csi2:
- [fwnode] dev=0-0036, node=/soc/bus@2100000/i2c@21a0000/camera@36
-ipu2_csi1_mux:
-ipu1_csi0_mux:
- [fwnode] dev=21dc000.mipi, node=/soc/bus@2100000/mipi@21dc000
+> +
+> +static int test_excl_for_each(void *arg)
+> +{
+> +	struct dma_resv_iter cursor;
+> +	struct dma_fence *f, *fence;
+> +	struct dma_resv resv;
+> +	int err;
+> +
+> +	f = alloc_fence();
+> +	if (!f)
+> +		return -ENOMEM;
+> +
+> +	dma_resv_init(&resv);
+> +	dma_resv_add_excl_fence(&resv, f);
+> +
+> +	err = -EINVAL;
+> +	dma_resv_for_each_fence(&cursor, &resv, false, fence) {
 
-Reverting the patch (or commenting the "resets" out) fixes the problem:
+What about the dma_resv_assert_held(cursor->obj) assert? I must be 
+missing something..
 
-# cat /sys/kernel/debug/v4l2-async/pending_async_subdevices
-ipu2_csi1:
-ipu2_csi0:
-ipu1_csi1:
-ipu1_csi0:
-imx-media:
-imx6-mipi-csi2:
-ipu2_csi1_mux:
-ipu1_csi0_mux:
+> +		if (f != fence) {
+> +			pr_err("Unexpected fence\n");
 
+Best set err to something, unit tests should be super robust, like if 
+unexpected fence follows the expected one.
 
-What now?
---
-Krzysztof "Chris" Hałasa
+> +			goto err_free;
+> +		}
+> +		err = 0;
+> +	}
+> +	if (err) {
+> +		pr_err("No fence found\n");
+> +		goto err_free;
+> +	}
+> +	dma_fence_signal(f);
+> +	err = 0;
 
-Sieć Badawcza Łukasiewicz
-Przemysłowy Instytut Automatyki i Pomiarów PIAP
-Al. Jerozolimskie 202, 02-486 Warszawa
+Looks like err is already zero here, courtesy of the above "if (err) goto".
+
+> +err_free:
+> +	dma_resv_fini(&resv);
+> +	dma_fence_put(f);
+> +	return err;
+> +}
+
+Similar coverage extensions on a rainy day for this one - I mean testing 
+more than just a single excl fence.
+
+> +
+> +int dma_resv(void)
+> +{
+> +	static const struct subtest tests[] = {
+> +		SUBTEST(sanitycheck),
+> +		SUBTEST(test_excl_signaling),
+> +		SUBTEST(test_shared_signaling),
+> +		SUBTEST(test_excl_for_each),
+> +	};
+> +
+> +	spin_lock_init(&fence_lock);
+> +	return subtests(tests, NULL);
+> +}
+> 
+
+You acknowledge in the commit message coverage is poor but I have no 
+complaints since it is better than nothing. Just a question on that 
+assert and maybe some tidies.
+
+Regards,
+
+Tvrtko
