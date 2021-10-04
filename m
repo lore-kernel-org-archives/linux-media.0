@@ -2,101 +2,138 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8684DC433F5
-	for <linux-media@archiver.kernel.org>; Mon,  4 Oct 2021 05:15:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D0B7C433F5
+	for <linux-media@archiver.kernel.org>; Mon,  4 Oct 2021 07:37:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 645EA611C1
-	for <linux-media@archiver.kernel.org>; Mon,  4 Oct 2021 05:15:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB631611CB
+	for <linux-media@archiver.kernel.org>; Mon,  4 Oct 2021 07:37:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbhJDFRd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Oct 2021 01:17:33 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:56750 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232388AbhJDFRc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Oct 2021 01:17:32 -0400
-Received: from [192.168.1.111] (91-158-153-130.elisa-laajakaista.fi [91.158.153.130])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BEC5F71;
-        Mon,  4 Oct 2021 07:15:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1633324542;
-        bh=BK5rBDH3E2Yd5Lbph77TErxo1oe5VyF/tKEoB+WnIwc=;
-        h=To:Cc:References:From:Subject:Date:In-Reply-To:From;
-        b=uQZcxuvePQZRi4UkBI1lGODXSdA0AKfzWZu4/jKFIUXok3rZ3PGX2mmuOvB+EEWbA
-         W02z9+DjQTQOEU2pFOUBbaq+e74KxXNDLW4jllD2Hl4kcegTe+BLtDZGVOCVq3Gfw0
-         6GuVh1mGVToh8V+pi4GnbHQJfuXI0n0EoESvRkd0=
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        niklas.soderlund+renesas@ragnatech.se
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Michal Simek <michal.simek@xilinx.com>
-References: <20210830110116.488338-1-tomi.valkeinen@ideasonboard.com>
- <20210830110116.488338-29-tomi.valkeinen@ideasonboard.com>
- <c79b503e-cb83-61cb-f1d0-982e49a6f0cc@collabora.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH v8 28/36] media: subdev: Add [GS]_ROUTING subdev ioctls
- and operations
-Message-ID: <30a468fe-e813-2b30-49e8-86192379c238@ideasonboard.com>
-Date:   Mon, 4 Oct 2021 08:15:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S230178AbhJDHjg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Oct 2021 03:39:36 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:14993 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230099AbhJDHjf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Oct 2021 03:39:35 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1633333067; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=qkd4MVWGUsJu+oxqYRU+yhpR+llgKwiBa2xcweEug+I=;
+ b=SDN6ShlhApJbrvm5DMMjEwVSIV3hU9HxaASnjB5rvRljVlKTTAuLxy3Y2BeoGcBDyGYflK27
+ +aLOx8kzsNavah6QJX3YLCbmrAsRDr5sM5o9pWh/+po5zCd8iIalQNIGnc5b8/RYLlydvePZ
+ YXioR44tHYD1fwscHjYhms10FU4=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI3ZjU0NiIsICJsaW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 615aaf34a3e8d3c640281636 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 04 Oct 2021 07:37:24
+ GMT
+Sender: dikshita=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id EB1E5C43460; Mon,  4 Oct 2021 07:37:23 +0000 (UTC)
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: dikshita)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 503E8C4338F;
+        Mon,  4 Oct 2021 07:37:22 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <c79b503e-cb83-61cb-f1d0-982e49a6f0cc@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 04 Oct 2021 13:07:22 +0530
+From:   dikshita@codeaurora.org
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, vgarodia@codeaurora.org
+Subject: Re: [PATCH v4 6/7] media: venus: helpers: update NUM_MBS macro
+ calculation
+In-Reply-To: <283e23db-5383-57d7-48ca-0efa03420335@linaro.org>
+References: <1628588875-23790-1-git-send-email-dikshita@codeaurora.org>
+ <1628588875-23790-7-git-send-email-dikshita@codeaurora.org>
+ <283e23db-5383-57d7-48ca-0efa03420335@linaro.org>
+Message-ID: <5acab57bd6c1088dd1beff1df0ba71d1@codeaurora.org>
+X-Sender: dikshita@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Hi Stan,
 
-On 03/10/2021 22:52, Dafna Hirschfeld wrote:
-
->> +/**
->> + * struct v4l2_subdev_route - A route inside a subdev
->> + *
->> + * @sink_pad: the sink pad index
->> + * @sink_stream: the sink stream identifier
->> + * @source_pad: the source pad index
->> + * @source_stream: the source stream identifier
->> + * @flags: route flags V4L2_SUBDEV_ROUTE_FL_*
->> + * @reserved: drivers and applications must zero this array
->> + */
->> +struct v4l2_subdev_route {
->> +    __u32 sink_pad;
->> +    __u32 sink_stream;
->> +    __u32 source_pad;
->> +    __u32 source_stream;
->> +    __u32 flags;
->> +    __u32 reserved[5];
->> +};
+On 2021-10-02 03:01, Stanimir Varbanov wrote:
+> Hi,
+> 
+> On 8/10/21 12:47 PM, Dikshita Agarwal wrote:
+>> Consider alignment while calculating NUM_MBS.
+>> 
+>> Co-developed-by: Mansur Alisha Shaik <mansur@codeaurora.org>
+>> Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
+>> ---
+>>  drivers/media/platform/qcom/venus/helpers.c | 13 +++++++------
+>>  1 file changed, 7 insertions(+), 6 deletions(-)
+>> 
+>> diff --git a/drivers/media/platform/qcom/venus/helpers.c 
+>> b/drivers/media/platform/qcom/venus/helpers.c
+>> index 60a2775..2db33ba 100644
+>> --- a/drivers/media/platform/qcom/venus/helpers.c
+>> +++ b/drivers/media/platform/qcom/venus/helpers.c
+>> @@ -18,8 +18,8 @@
+>>  #include "hfi_platform.h"
+>>  #include "hfi_parser.h"
+>> 
+>> -#define NUM_MBS_720P	(((1280 + 15) >> 4) * ((720 + 15) >> 4))
+>> -#define NUM_MBS_4K	(((4096 + 15) >> 4) * ((2304 + 15) >> 4))
+>> +#define NUM_MBS_720P	(((ALIGN(1280, 16)) >> 4) * ((ALIGN(736, 16)) >> 
+>> 4))
+>> +#define NUM_MBS_4K	(((ALIGN(4096, 16)) >> 4) * ((ALIGN(2304, 16)) >> 
+>> 4))
+>> 
+>>  struct intbuf {
+>>  	struct list_head list;
+>> @@ -1098,16 +1098,17 @@ static u32 venus_helper_get_work_mode(struct 
+>> venus_inst *inst)
+>>  	u32 num_mbs;
+>> 
+>>  	mode = VIDC_WORK_MODE_2;
 >> +
+>>  	if (inst->session_type == VIDC_SESSION_TYPE_DEC) {
+>> -		num_mbs = (ALIGN(inst->height, 16) * ALIGN(inst->width, 16)) / 256;
+>> +		num_mbs = ((ALIGN(inst->height, 16))/16 * (ALIGN(inst->width, 
+>> 16)))/16;
 > 
-> I don't understand that struct, what is the meaning of the two 
-> sink_stream, source_stream fields?
-> What is the relation between sink_pad and source_pad? A 'route' between 
-> two pads means that 'streams' can flow through them?
+> Could you help me understand what is the difference between both
+> calculations? IMO this patch should only change NUM_MBS_720P and
+> NUM_MBS_4K macros.
 > 
-> If I have for example:
+We are updating the calculation here to match with the calculation used 
+in Macro.
+AFAIK, we were seeing a size mismatch for a resolution with the old 
+calculation.
+
+>>  		if (inst->hfi_codec == HFI_VIDEO_CODEC_MPEG2 ||
+>> -		    inst->pic_struct != HFI_INTERLACE_FRAME_PROGRESSIVE ||
+>> -		    num_mbs <= NUM_MBS_720P)
+>> +			inst->pic_struct != HFI_INTERLACE_FRAME_PROGRESSIVE ||
+>> +			num_mbs <= NUM_MBS_720P)
 > 
-> sink_pad = sink_stream = 0
-> source_pad = source_stream = 1
+> This change just makes indentation wrong and also it is not related to
+> the patch subject.
+I think it can be dropped.
 > 
-> what does that mean?
-
-It means that a stream with stream ID 0 that comes to the subdev's sink 
-pad 0 will be routed to the subdev's source pad 1 with stream ID 1.
-
-So the sink_pad and source_pad tell via which pads the streams flows.
-
-Stream IDs are numbers used to uniquely identify the stream for the 
-specific pad. In other words, for the subdev's pad 0, each stream ID 
-must be unique. That pad 0 is linked (media link) to another subdev's 
-pad, and on that pad there must be streams with the matching IDs.
-
-  Tomi
+>>  			mode = VIDC_WORK_MODE_1;
+>>  	} else {
+>>  		num_mbs = (ALIGN(inst->out_height, 16) * ALIGN(inst->out_width, 
+>> 16)) / 256;
+>>  		if (inst->hfi_codec == HFI_VIDEO_CODEC_VP8 &&
+>> -		    num_mbs <= NUM_MBS_4K)
+>> +			num_mbs <= NUM_MBS_4K)
+> 
+> ditto
+Same here.
+> 
+>>  			mode = VIDC_WORK_MODE_1;
+>>  	}
+>> 
+>> 
