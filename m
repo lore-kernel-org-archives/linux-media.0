@@ -2,172 +2,223 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FDC9C433EF
-	for <linux-media@archiver.kernel.org>; Tue,  5 Oct 2021 08:11:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 907AAC433EF
+	for <linux-media@archiver.kernel.org>; Tue,  5 Oct 2021 08:16:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF82461131
-	for <linux-media@archiver.kernel.org>; Tue,  5 Oct 2021 08:11:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 762906138F
+	for <linux-media@archiver.kernel.org>; Tue,  5 Oct 2021 08:16:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233372AbhJEINW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Oct 2021 04:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233320AbhJEINA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Oct 2021 04:13:00 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E8CC061745
-        for <linux-media@vger.kernel.org>; Tue,  5 Oct 2021 01:11:09 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id z20so23700993edc.13
-        for <linux-media@vger.kernel.org>; Tue, 05 Oct 2021 01:11:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5aa4vZiuIFSCPHF4dxekm5eLMC5HcT+Pb9Hlo0UAubI=;
-        b=JYzfxac7W+813vz3g6oISyCSz1sLUD4TZXUQfbe+Ap5PzbUCz8pDjLyYvazAS9erlY
-         z3K037RE8QB+HZ06Sx1KP5VYA3uMLdY0lVEwCZ6ldhl56L4hZ83AuoJe1MF/JL6P0fWD
-         Z0jgWVbjUB/K9WrR7rDiJ7+W+p12mI6/Z4WfeQLMeQUw7JoaR1C5WmOitJJLH39zviF4
-         rb6k5R+5hRqp7cDpsRqIgyRwmb1eSxOjrD1F2ofrkbv4IPj9lI90PPbTORFgOzRvZNeG
-         ADejhdeUFvn6QQWdkOy52Yva9v9+FJgvUiXUmHRD9UCKGxJTlL2ClW4TWOar75Mia6Jj
-         XHWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5aa4vZiuIFSCPHF4dxekm5eLMC5HcT+Pb9Hlo0UAubI=;
-        b=gPrvU4E7ymlkqXMq6/olhyHlOao46U/wexwIduAsIlBpiD9+PamTH79blUusyEkFHq
-         hLEgFHtRgGj6g8XjW+hf0Z8b57ocVCzY3Jwz4epadGe7PBDMvz5CTIlyuOmxh66++flM
-         JTNE8X+ILCsBkeByFHCGjsWJZFjx0dZvlsT18WM0USsstbabVvO5QzBw5ypZqbpPclqv
-         wZs+DziMoDxGyCcfXKpRyU7y8Pm0qpoHpes/PYxvImXgZbM63ouH5IfrfIz9ehC51/cO
-         e7PZrZRlkkSh4xOanY/KQBGHb9qscJrWov7iXuuC832ISvjlG0DvQ4jjDCWNsTjHObKv
-         0ZWQ==
-X-Gm-Message-State: AOAM532G3HRgbjISAQxLK9jGj+CIxEb6s6LAPkYdF+mvu8HiMdb+gvE5
-        mp0GVvP3fgVGs8NXD4VU+d3q8sa1LVdt1A==
-X-Google-Smtp-Source: ABdhPJyNuhS5/OGQl3GyNzyK2Qf/kZaKWCLVmzcZORm7DqQ8n6orub/P2fkp4YteNMOvh/Ssi7bouQ==
-X-Received: by 2002:a17:906:aed1:: with SMTP id me17mr23060476ejb.474.1633421466458;
-        Tue, 05 Oct 2021 01:11:06 -0700 (PDT)
-Received: from localhost.localdomain ([84.238.208.199])
-        by smtp.gmail.com with ESMTPSA id f1sm3096258edz.47.2021.10.05.01.11.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Oct 2021 01:11:06 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org,
-        Dikshita Agarwal <dikshita@codeaurora.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v5 1/7] venus: firmware: enable no tz fw loading for sc7280
-Date:   Tue,  5 Oct 2021 11:10:42 +0300
-Message-Id: <20211005081048.3095252-2-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211005081048.3095252-1-stanimir.varbanov@linaro.org>
-References: <20211005081048.3095252-1-stanimir.varbanov@linaro.org>
-MIME-Version: 1.0
+        id S232985AbhJEISH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Oct 2021 04:18:07 -0400
+Received: from mail-dm3nam07on2062.outbound.protection.outlook.com ([40.107.95.62]:34216
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232929AbhJEISF (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 5 Oct 2021 04:18:05 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c/uvPlQUywEUVjTtuGeBvCb74/5u8LU7j5R3NoHdqWlbRkJJ+B9nQv7h3gy2aQJOpAmT0ULpAFim+ra7WSh/OW+enmJ+ZX8esShVoShQg+cQIEJpL8dxWXKNaDaPDGzY4tQulVCSRd4hvoMcbmnhMn3gnxnSmRfQz75yl8zDTlxlIdugTo2PY92WDuSCV+NEr3AZk/UAafiCWCPoe/n/Cz0bvuhNtuEVnTFtCtA78wIm5+DEAFmzYc7wtQ6zgS/GKYVNETXZPtPzPEJN15W6sX+MVP/bHexTW1s/lhrRp5j50b/NSiPfJrleUufJ1rRxgCm+a0dQlsWHbGvoeKF5KA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M+bFFU3GtDMEbKY8X8UNu8Fg+BfmjBVGO09QNkacM0o=;
+ b=ajpTVH2wxDDcx0DCbPkLf2l0WgCChTo8qszTkNqnJ83IirunaNygKmqzstJbCAgmHxBIUwK2hmcRy5mkJRJN5HDtNtykWQbk5AXbXGnJ4nrgTDCG7qVIo4ulSznozKGpaJpmgjc9FCN0HgIaL3iuOtM9oZSLTpoKZPy22NCaBksa4TMQd6HuHXqYqnRnhoTeexm8Gxf1l324D2MLHE+8oy0Mf4WYsdlYmC8cqGQFmzFORS4yQFXOc3Y+NOHI8mgqO4s8+60VEm7G9tiNgDFlA56lbSIekkziP/3yFwdIsMGQ2eugvX7yme6QRIyGjBid4Wm1v0shr7iF0vkGuWjPKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M+bFFU3GtDMEbKY8X8UNu8Fg+BfmjBVGO09QNkacM0o=;
+ b=wlSxxjMGhmPWlcNwIVpmOqM6Fq34XhSZNFEKvpyhuXWEunM9PWnSX0SKfrZ0BTYgN3xyV5kLu2zdwSEVRNznijBPVejPS0Zk81NMqJT1TVw2VemdJu7sC1vhD2n8Xfvjz2gTX8THHB2s0o43aQfWg+8SSk3Q74lTs96WTeCpyA8=
+Authentication-Results: ffwll.ch; dkim=none (message not signed)
+ header.d=none;ffwll.ch; dmarc=none action=none header.from=amd.com;
+Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
+ (2603:10b6:301:5a::14) by MWHPR1201MB0111.namprd12.prod.outlook.com
+ (2603:10b6:301:55::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.19; Tue, 5 Oct
+ 2021 08:16:11 +0000
+Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
+ ([fe80::55c7:6fc9:b2b1:1e6a]) by MWHPR1201MB0192.namprd12.prod.outlook.com
+ ([fe80::55c7:6fc9:b2b1:1e6a%10]) with mapi id 15.20.4566.022; Tue, 5 Oct 2021
+ 08:16:11 +0000
+Subject: Re: [PATCH 09/28] dma-buf: use the new iterator in dma_resv_poll
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org
+Cc:     daniel@ffwll.ch
+References: <20211001100610.2899-1-christian.koenig@amd.com>
+ <20211001100610.2899-10-christian.koenig@amd.com>
+ <ef650439-a418-979b-56fb-4cf10f91747e@linux.intel.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Message-ID: <e43bc3f9-60be-0f7f-b1a7-3cd2fe1a6289@amd.com>
+Date:   Tue, 5 Oct 2021 10:16:00 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+In-Reply-To: <ef650439-a418-979b-56fb-4cf10f91747e@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-ClientProxiedBy: AM0PR05CA0081.eurprd05.prod.outlook.com
+ (2603:10a6:208:136::21) To MWHPR1201MB0192.namprd12.prod.outlook.com
+ (2603:10b6:301:5a::14)
+MIME-Version: 1.0
+Received: from [172.31.55.180] (165.204.72.6) by AM0PR05CA0081.eurprd05.prod.outlook.com (2603:10a6:208:136::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.14 via Frontend Transport; Tue, 5 Oct 2021 08:16:08 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 13e73777-6a31-4317-6a76-08d987d863c4
+X-MS-TrafficTypeDiagnostic: MWHPR1201MB0111:
+X-Microsoft-Antispam-PRVS: <MWHPR1201MB01114E95B2899FB36ADAB0F883AF9@MWHPR1201MB0111.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: M8A5+o8o/fKxRMaMSn+nQ1xwVMSXXsZV0MUhDJY9tA3SoenQ4ls//HYaoJXbOvYvNbY9L+Hz3i+I0lXuxRz1Y2bFXnvO37rbHMUU8O6ZyR8Qy1N66ybbuYHNkx638KmKp9uICI7p2o9PeDXJXNlYaC54SGONEFV8bK3RKoORLCdBgLQEZWVerZh05Ah150YJWqUy7AWqAU1MGlvd4TN19NqX2J2bEixIwAhfBes7MA9zCaC5ypmJmKA3KKOIa2/dWGwrRP9tjK6Z/lDzuG2WGoqJYhy5kDt95w2vKlz+O+FvZIFt5tujzWJxQRo0yQVv0qu6KdbSEVpn7zq3dPClYBAbGG1Ls7OpKnEi4cZ8R2BWxc8eYyR2MEOWAh31qcqkGK+PNGAlH9Sm83ifd3pnFggFuYmuHBQsD3QKWrtAvqN0HK/TgMon/2dGW+X3bkkAdQOFEznQh13KlO5YPVoWKttQj/pKCdEFEH3krAm4aS89GUxfoZa0tAKDR5/FsIUADZE1GPM0a4eJ9SbmWfIb2qeWPK4YUEBVL1tSXqnqVQkowbPney4b/kwVbUzKHN5L021o/8JowCkK8glkdt3R6zrDA0DlYoTnmBAtr6utco4NEj8Iibru7Y4vqXoXUAY8US0XISQWpc+7rg42fM6aMGiaI0FDyp0AMVlR5SUonWkmNfGl6xf3CwfUEZQRmxXFYhWgye4pQvzc0vX/kgkxPt5zTKwit3ZpbA/d5XSHLiY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1201MB0192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(5660300002)(6666004)(86362001)(31686004)(956004)(508600001)(36756003)(66556008)(316002)(38100700002)(8676002)(66946007)(66476007)(8936002)(26005)(83380400001)(53546011)(66574015)(6486002)(186003)(16576012)(2906002)(2616005)(4326008)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SmJBaDBHdU44VHNWdDZOMjJGUFBKbTZqdGRTVEZuMXJUWmdkS25LakVBRkJS?=
+ =?utf-8?B?RWg0UUgvRFU1LzdjUXB1Y3c5eVBsSlE1YWxqblZCT3V3dmJQclZkelJ3U0Q0?=
+ =?utf-8?B?UmJRRmVMYks5aUNKQU5PNlArakgwKy9SQTdIK1ZLYkNFekwwWmEyVjNScjly?=
+ =?utf-8?B?d1pJUFNVNFZjTEh4MmpaRjU2R29RN1lnZzhQcTFnbXovOTlLdm11RGNGckVI?=
+ =?utf-8?B?U2ppdmxHZHRwMXpPem4yZEVPSEJQbXF4NkxCc0RvQklzdmhBRDFPQkg5ZlVy?=
+ =?utf-8?B?elducGdBR1FtSmFIaG12Zzh4c2p0MmI3U2ZMeWpDb2JkZlJrOGJBRDNlOCtq?=
+ =?utf-8?B?TGdkQmFkeklyR3FzQmlpYTFLQ3pOUnd1ZStCeWNOWEFySlNOQlRFQXRRTzY4?=
+ =?utf-8?B?MVNySy9YanRpRHBUa3dVNFQ2Sk9nd0lzQlRoUllYSTFmeGJreXJGNGk1SDlC?=
+ =?utf-8?B?YUVERkszSFBmWHU5Rm5uRW1NV3VaRVlsSW0wd016TElPM3dQTjlub2RkaXlM?=
+ =?utf-8?B?VVRBVWFFdWRuaEFhbGJieWllUWtwSmd3TnRjNkMyd0hGVnBUMmRITUczeTVH?=
+ =?utf-8?B?UWU5U2FqRTRHa1k4eTBCOEoxVFl4ZTNOY212dDBQTzBwcExLdTBsaHcvaHJX?=
+ =?utf-8?B?bWhjRnVzdk1RdDFJWkQ4U1A2U01vNDFIQjEvSWRkVDJsc1U5UEpFaFZCUFYy?=
+ =?utf-8?B?eHNNYlB2cVYwandVM3ZpYzU4b28zdGQvN2RTRVJFU1cwMVpoMElrTitjNENE?=
+ =?utf-8?B?b042NTQ2UWtKNXBxZVlkcHhXU2FBandnQTlXZ2NJWjllbFR5TFVwOHpZQ3lv?=
+ =?utf-8?B?STl2R0tESVAyZzBjTnNzd0pXcVpFWlJYRmdvY3hRVy9ySVBVMUhka1VEY3FQ?=
+ =?utf-8?B?YmU3ZFVsMzJtMzRFZEpyVnVBSXM4cGVsMFl5ODFCR1o0QklaeEtIdnJITjM0?=
+ =?utf-8?B?NUJ6WjF3QnMwRU1GT1poRGsxS3FETkpBUDJwMURtRXpzelZhbEY5MnR4UjhN?=
+ =?utf-8?B?d2FhYkh6dU1jVEVGSFk5ZmhpVTh2UlhjUnY0K0M2RVVtc0ZEZVBtbWZKb0h1?=
+ =?utf-8?B?VjFCalNDeDN2YUtLWWZvRGp0YkgvTXhLT01SdytlSGJTOVo2U0lHS2VwSTFx?=
+ =?utf-8?B?ZERsRGNrbmUzU214WFBCWlZxZ05GY2JRNmZOdk1zWlQ3NmRqVC9CWEtEUVg0?=
+ =?utf-8?B?b0lWampXME5kb0QyVzJzdmJnMUVOdGJkeFA4eExCak5HN3B0eUVOZU1VcGE2?=
+ =?utf-8?B?M09DTGkvby9SdUV6eXJhMVhlV1VXUGlBdmhZWDNkSm5RY1p0ZjdhdzUxdzdz?=
+ =?utf-8?B?ejR5UkdoK2R5N1ltczRLOVhaT1NEL2RaZ3R3MFlTMFBmaExSOW13RGZCZlhH?=
+ =?utf-8?B?VjVpTFBtc1NSbitCdmp6M29mSmZ5aUw5Mkc5Nk50ajEvb0JiQzR0RVdxWDlV?=
+ =?utf-8?B?TlpwVWRBcll6eEtXVU9yMWp1OTQ2b3lrNk9HKy9tNTVVOEZIM0d1T3d4M2xl?=
+ =?utf-8?B?TGV2bElnbjVUdWtjL2VXWU5yenBramRUaXlsMi9mSTRpTzFaa3hPVVZuT3d1?=
+ =?utf-8?B?WmZwSHdtRCtFY0EzT1UyV3JZVDlSeDdrc3ZhVnhiSHBEem05a1QrcmRVZURz?=
+ =?utf-8?B?TDZLZkdud0pKY1NGdDIzWkNjcFdaZzJPUEU2QTdmbGpYY0JsRkJKVGw2NTVK?=
+ =?utf-8?B?c2p3QTlMUjVGL3k2ZC83Z3FFVTJQeU1ETm5XZHg5UExnQjRsTndlZVpvQ2M3?=
+ =?utf-8?Q?5/5IMgbsZBfh9h2R06tc569x3UvKntfiHteAPLv?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13e73777-6a31-4317-6a76-08d987d863c4
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1201MB0192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2021 08:16:11.1905
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: r5J4H+op5BTApAn/9aQ/jya5bD2+pPo2x2snz5w6NbCngizFTT5TkHKWLLPuwDnX
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0111
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dikshita Agarwal <dikshita@codeaurora.org>
+Am 05.10.21 um 09:44 schrieb Tvrtko Ursulin:
+>
+> On 01/10/2021 11:05, Christian König wrote:
+>> Simplify the code a bit.
+>>
+>> Signed-off-by: Christian König <christian.koenig@amd.com>
+>> ---
+>>   drivers/dma-buf/dma-buf.c | 36 ++++++------------------------------
+>>   1 file changed, 6 insertions(+), 30 deletions(-)
+>>
+>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+>> index 8242b5d9baeb..beb504a92d60 100644
+>> --- a/drivers/dma-buf/dma-buf.c
+>> +++ b/drivers/dma-buf/dma-buf.c
+>> @@ -209,19 +209,14 @@ static void dma_buf_poll_cb(struct dma_fence 
+>> *fence, struct dma_fence_cb *cb)
+>>       dma_fence_put(fence);
+>>   }
+>>   -static bool dma_buf_poll_shared(struct dma_resv *resv,
+>> +static bool dma_buf_poll_add_cb(struct dma_resv *resv, bool write,
+>>                   struct dma_buf_poll_cb_t *dcb)
+>>   {
+>> -    struct dma_resv_list *fobj = dma_resv_shared_list(resv);
+>> +    struct dma_resv_iter cursor;
+>>       struct dma_fence *fence;
+>> -    int i, r;
+>> -
+>> -    if (!fobj)
+>> -        return false;
+>> +    int r;
+>>   -    for (i = 0; i < fobj->shared_count; ++i) {
+>> -        fence = rcu_dereference_protected(fobj->shared[i],
+>> -                          dma_resv_held(resv));
+>> +    dma_resv_for_each_fence(&cursor, resv, write, fence) {
+>>           dma_fence_get(fence);
+>>           r = dma_fence_add_callback(fence, &dcb->cb, dma_buf_poll_cb);
+>>           if (!r)
+>
+> It is unchanged with this patch, but are the semantics supposed to be 
+> like this? Signal poll event if _any_ of the shared fences has been 
+> signaled?
 
-Enable no tz FW loading and add routine to reset XTSS.
+That had Daniel and me confused for a moment as well.
 
-Signed-off-by: Dikshita Agarwal <dikshita@codeaurora.org>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
----
- drivers/media/platform/qcom/venus/firmware.c  | 42 ++++++++++++++-----
- .../media/platform/qcom/venus/hfi_venus_io.h  |  2 +
- 2 files changed, 33 insertions(+), 11 deletions(-)
+We don't signal the poll when any of the shared fences has signaled, but 
+rather install a callback on the first not-signaled fence.
 
-diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
-index 227bd3b3f84c..14b6f1d05991 100644
---- a/drivers/media/platform/qcom/venus/firmware.c
-+++ b/drivers/media/platform/qcom/venus/firmware.c
-@@ -27,7 +27,12 @@
- static void venus_reset_cpu(struct venus_core *core)
- {
- 	u32 fw_size = core->fw.mapped_mem_size;
--	void __iomem *wrapper_base = core->wrapper_base;
-+	void __iomem *wrapper_base;
-+
-+	if (IS_V6(core))
-+		wrapper_base = core->wrapper_tz_base;
-+	else
-+		wrapper_base = core->wrapper_base;
- 
- 	writel(0, wrapper_base + WRAPPER_FW_START_ADDR);
- 	writel(fw_size, wrapper_base + WRAPPER_FW_END_ADDR);
-@@ -35,11 +40,17 @@ static void venus_reset_cpu(struct venus_core *core)
- 	writel(fw_size, wrapper_base + WRAPPER_CPA_END_ADDR);
- 	writel(fw_size, wrapper_base + WRAPPER_NONPIX_START_ADDR);
- 	writel(fw_size, wrapper_base + WRAPPER_NONPIX_END_ADDR);
--	writel(0x0, wrapper_base + WRAPPER_CPU_CGC_DIS);
--	writel(0x0, wrapper_base + WRAPPER_CPU_CLOCK_CONFIG);
- 
--	/* Bring ARM9 out of reset */
--	writel(0, wrapper_base + WRAPPER_A9SS_SW_RESET);
-+	if (IS_V6(core)) {
-+		/* Bring XTSS out of reset */
-+		writel(0, wrapper_base + WRAPPER_TZ_XTSS_SW_RESET);
-+	} else {
-+		writel(0x0, wrapper_base + WRAPPER_CPU_CGC_DIS);
-+		writel(0x0, wrapper_base + WRAPPER_CPU_CLOCK_CONFIG);
-+
-+		/* Bring ARM9 out of reset */
-+		writel(0, wrapper_base + WRAPPER_A9SS_SW_RESET);
-+	}
- }
- 
- int venus_set_hw_state(struct venus_core *core, bool resume)
-@@ -56,7 +67,9 @@ int venus_set_hw_state(struct venus_core *core, bool resume)
- 	if (resume) {
- 		venus_reset_cpu(core);
- 	} else {
--		if (!IS_V6(core))
-+		if (IS_V6(core))
-+			writel(1, core->wrapper_tz_base + WRAPPER_TZ_XTSS_SW_RESET);
-+		else
- 			writel(1, core->wrapper_base + WRAPPER_A9SS_SW_RESET);
- 	}
- 
-@@ -162,12 +175,19 @@ static int venus_shutdown_no_tz(struct venus_core *core)
- 	u32 reg;
- 	struct device *dev = core->fw.dev;
- 	void __iomem *wrapper_base = core->wrapper_base;
-+	void __iomem *wrapper_tz_base = core->wrapper_tz_base;
- 
--	/* Assert the reset to ARM9 */
--	reg = readl_relaxed(wrapper_base + WRAPPER_A9SS_SW_RESET);
--	reg |= WRAPPER_A9SS_SW_RESET_BIT;
--	writel_relaxed(reg, wrapper_base + WRAPPER_A9SS_SW_RESET);
--
-+	if (IS_V6(core)) {
-+		/* Assert the reset to XTSS */
-+		reg = readl_relaxed(wrapper_tz_base + WRAPPER_TZ_XTSS_SW_RESET);
-+		reg |= WRAPPER_XTSS_SW_RESET_BIT;
-+		writel_relaxed(reg, wrapper_tz_base + WRAPPER_TZ_XTSS_SW_RESET);
-+	} else {
-+		/* Assert the reset to ARM9 */
-+		reg = readl_relaxed(wrapper_base + WRAPPER_A9SS_SW_RESET);
-+		reg |= WRAPPER_A9SS_SW_RESET_BIT;
-+		writel_relaxed(reg, wrapper_base + WRAPPER_A9SS_SW_RESET);
-+	}
- 	/* Make sure reset is asserted before the mapping is removed */
- 	mb();
- 
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus_io.h b/drivers/media/platform/qcom/venus/hfi_venus_io.h
-index 300c6e47e72f..9735a246ce36 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus_io.h
-+++ b/drivers/media/platform/qcom/venus/hfi_venus_io.h
-@@ -149,6 +149,8 @@
- /* Wrapper TZ 6xx */
- #define WRAPPER_TZ_BASE_V6			0x000c0000
- #define WRAPPER_TZ_CPU_STATUS_V6		0x10
-+#define WRAPPER_TZ_XTSS_SW_RESET		0x1000
-+#define WRAPPER_XTSS_SW_RESET_BIT		BIT(0)
- 
- /* Venus AON */
- #define AON_BASE_V6				0x000e0000
--- 
-2.25.1
+This callback then issues a re-test of the poll and only if we can't 
+find any more fence the poll is considered signaled (at least that's the 
+idea, the coding could as well be broken).
+
+Christian.
+
+>
+> Regards,
+>
+> Tvrtko
+>
+>> @@ -232,24 +227,6 @@ static bool dma_buf_poll_shared(struct dma_resv 
+>> *resv,
+>>       return false;
+>>   }
+>>   -static bool dma_buf_poll_excl(struct dma_resv *resv,
+>> -                  struct dma_buf_poll_cb_t *dcb)
+>> -{
+>> -    struct dma_fence *fence = dma_resv_excl_fence(resv);
+>> -    int r;
+>> -
+>> -    if (!fence)
+>> -        return false;
+>> -
+>> -    dma_fence_get(fence);
+>> -    r = dma_fence_add_callback(fence, &dcb->cb, dma_buf_poll_cb);
+>> -    if (!r)
+>> -        return true;
+>> -    dma_fence_put(fence);
+>> -
+>> -    return false;
+>> -}
+>> -
+>>   static __poll_t dma_buf_poll(struct file *file, poll_table *poll)
+>>   {
+>>       struct dma_buf *dmabuf;
+>> @@ -282,8 +259,7 @@ static __poll_t dma_buf_poll(struct file *file, 
+>> poll_table *poll)
+>>           spin_unlock_irq(&dmabuf->poll.lock);
+>>             if (events & EPOLLOUT) {
+>> -            if (!dma_buf_poll_shared(resv, dcb) &&
+>> -                !dma_buf_poll_excl(resv, dcb))
+>> +            if (!dma_buf_poll_add_cb(resv, true, dcb))
+>>                   /* No callback queued, wake up any other waiters */
+>>                   dma_buf_poll_cb(NULL, &dcb->cb);
+>>               else
+>> @@ -303,7 +279,7 @@ static __poll_t dma_buf_poll(struct file *file, 
+>> poll_table *poll)
+>>           spin_unlock_irq(&dmabuf->poll.lock);
+>>             if (events & EPOLLIN) {
+>> -            if (!dma_buf_poll_excl(resv, dcb))
+>> +            if (!dma_buf_poll_add_cb(resv, false, dcb))
+>>                   /* No callback queued, wake up any other waiters */
+>>                   dma_buf_poll_cb(NULL, &dcb->cb);
+>>               else
+>>
 
