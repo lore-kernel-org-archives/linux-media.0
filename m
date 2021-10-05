@@ -2,163 +2,220 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DBB7C433EF
-	for <linux-media@archiver.kernel.org>; Tue,  5 Oct 2021 08:41:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDE85C433EF
+	for <linux-media@archiver.kernel.org>; Tue,  5 Oct 2021 08:58:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7337061130
-	for <linux-media@archiver.kernel.org>; Tue,  5 Oct 2021 08:41:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A25F16137C
+	for <linux-media@archiver.kernel.org>; Tue,  5 Oct 2021 08:58:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbhJEInd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Oct 2021 04:43:33 -0400
-Received: from mga05.intel.com ([192.55.52.43]:5950 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230526AbhJEInc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 5 Oct 2021 04:43:32 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10127"; a="311897480"
-X-IronPort-AV: E=Sophos;i="5.85,348,1624345200"; 
-   d="scan'208";a="311897480"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2021 01:41:41 -0700
-X-IronPort-AV: E=Sophos;i="5.85,348,1624345200"; 
-   d="scan'208";a="487942524"
-Received: from tbarret1-mobl.ger.corp.intel.com (HELO [10.213.238.194]) ([10.213.238.194])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2021 01:41:39 -0700
-Subject: Re: [PATCH 09/28] dma-buf: use the new iterator in dma_resv_poll
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Cc:     daniel@ffwll.ch
-References: <20211001100610.2899-1-christian.koenig@amd.com>
- <20211001100610.2899-10-christian.koenig@amd.com>
- <ef650439-a418-979b-56fb-4cf10f91747e@linux.intel.com>
- <e43bc3f9-60be-0f7f-b1a7-3cd2fe1a6289@amd.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-Message-ID: <afa865d8-9d95-1540-016a-f94d80f12950@linux.intel.com>
-Date:   Tue, 5 Oct 2021 09:41:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S232920AbhJEJAH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Oct 2021 05:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232658AbhJEJAH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Oct 2021 05:00:07 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001CDC061745
+        for <linux-media@vger.kernel.org>; Tue,  5 Oct 2021 01:58:16 -0700 (PDT)
+Received: from deskari.lan (91-158-153-130.elisa-laajakaista.fi [91.158.153.130])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A8026A2A;
+        Tue,  5 Oct 2021 10:58:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1633424295;
+        bh=6hP/WudbRezNIhC/nrgVElzZEbEKDYv2wzChI+gcUhc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZGB1Cr5fbAWQrL35h9YkoNETqSVIg/tdCvZT4Tr80SVX7lQYHFbQGrQfQ44GAZ+hg
+         ZYovjAp69znAJ5GqMfwMxjZvFIdp6sZr6EpxH/3hEVyHbUwpHbziAKzcrtERDkaBbf
+         xDlsfyqt9q1KaeQOjUX0fWBmMgMhn0siBFgzPcyc=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        niklas.soderlund+renesas@ragnatech.se
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Pratyush Yadav <p.yadav@ti.com>
+Subject: [PATCH v9 01/36] media: subdev: rename subdev-state alloc & free
+Date:   Tue,  5 Oct 2021 11:57:15 +0300
+Message-Id: <20211005085750.138151-2-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211005085750.138151-1-tomi.valkeinen@ideasonboard.com>
+References: <20211005085750.138151-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-In-Reply-To: <e43bc3f9-60be-0f7f-b1a7-3cd2fe1a6289@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+v4l2_subdev_alloc_state() and v4l2_subdev_free_state() are not supposed
+to be used by the drivers. However, we do have a few drivers that use
+those at the moment, so we need to expose these functions for the time
+being.
 
-On 05/10/2021 09:16, Christian König wrote:
-> Am 05.10.21 um 09:44 schrieb Tvrtko Ursulin:
->>
->> On 01/10/2021 11:05, Christian König wrote:
->>> Simplify the code a bit.
->>>
->>> Signed-off-by: Christian König <christian.koenig@amd.com>
->>> ---
->>>   drivers/dma-buf/dma-buf.c | 36 ++++++------------------------------
->>>   1 file changed, 6 insertions(+), 30 deletions(-)
->>>
->>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
->>> index 8242b5d9baeb..beb504a92d60 100644
->>> --- a/drivers/dma-buf/dma-buf.c
->>> +++ b/drivers/dma-buf/dma-buf.c
->>> @@ -209,19 +209,14 @@ static void dma_buf_poll_cb(struct dma_fence 
->>> *fence, struct dma_fence_cb *cb)
->>>       dma_fence_put(fence);
->>>   }
->>>   -static bool dma_buf_poll_shared(struct dma_resv *resv,
->>> +static bool dma_buf_poll_add_cb(struct dma_resv *resv, bool write,
->>>                   struct dma_buf_poll_cb_t *dcb)
->>>   {
->>> -    struct dma_resv_list *fobj = dma_resv_shared_list(resv);
->>> +    struct dma_resv_iter cursor;
->>>       struct dma_fence *fence;
->>> -    int i, r;
->>> -
->>> -    if (!fobj)
->>> -        return false;
->>> +    int r;
->>>   -    for (i = 0; i < fobj->shared_count; ++i) {
->>> -        fence = rcu_dereference_protected(fobj->shared[i],
->>> -                          dma_resv_held(resv));
->>> +    dma_resv_for_each_fence(&cursor, resv, write, fence) {
->>>           dma_fence_get(fence);
->>>           r = dma_fence_add_callback(fence, &dcb->cb, dma_buf_poll_cb);
->>>           if (!r)
->>
->> It is unchanged with this patch, but are the semantics supposed to be 
->> like this? Signal poll event if _any_ of the shared fences has been 
->> signaled?
-> 
-> That had Daniel and me confused for a moment as well.
-> 
-> We don't signal the poll when any of the shared fences has signaled, but 
-> rather install a callback on the first not-signaled fence.
-> 
-> This callback then issues a re-test of the poll and only if we can't 
-> find any more fence the poll is considered signaled (at least that's the 
-> idea, the coding could as well be broken).
+Prefix the functions with __ to mark the functions as internal.
 
-You are right, one too many boolean inversions for me not to get confused.
+At the same time, rename them to v4l2_subdev_state_alloc and
+v4l2_subdev_state_free to match the style used for other functions like
+video_device_alloc() and media_request_alloc().
 
-Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/platform/rcar-vin/rcar-v4l2.c |  4 ++--
+ drivers/media/platform/vsp1/vsp1_entity.c   |  4 ++--
+ drivers/media/v4l2-core/v4l2-subdev.c       | 12 ++++++------
+ drivers/staging/media/tegra-video/vi.c      |  4 ++--
+ include/media/v4l2-subdev.h                 | 10 +++++-----
+ 5 files changed, 17 insertions(+), 17 deletions(-)
 
-Regards,
+diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+index 0d141155f0e3..ba1d16ab1651 100644
+--- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+@@ -252,7 +252,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+ 	u32 width, height;
+ 	int ret;
+ 
+-	sd_state = v4l2_subdev_alloc_state(sd);
++	sd_state = __v4l2_subdev_state_alloc(sd);
+ 	if (IS_ERR(sd_state))
+ 		return PTR_ERR(sd_state);
+ 
+@@ -288,7 +288,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+ 
+ 	rvin_format_align(vin, pix);
+ done:
+-	v4l2_subdev_free_state(sd_state);
++	__v4l2_subdev_state_free(sd_state);
+ 
+ 	return ret;
+ }
+diff --git a/drivers/media/platform/vsp1/vsp1_entity.c b/drivers/media/platform/vsp1/vsp1_entity.c
+index 823c15facd1b..869cadc1468d 100644
+--- a/drivers/media/platform/vsp1/vsp1_entity.c
++++ b/drivers/media/platform/vsp1/vsp1_entity.c
+@@ -675,7 +675,7 @@ int vsp1_entity_init(struct vsp1_device *vsp1, struct vsp1_entity *entity,
+ 	 * Allocate the pad configuration to store formats and selection
+ 	 * rectangles.
+ 	 */
+-	entity->config = v4l2_subdev_alloc_state(&entity->subdev);
++	entity->config = __v4l2_subdev_state_alloc(&entity->subdev);
+ 	if (IS_ERR(entity->config)) {
+ 		media_entity_cleanup(&entity->subdev.entity);
+ 		return PTR_ERR(entity->config);
+@@ -690,6 +690,6 @@ void vsp1_entity_destroy(struct vsp1_entity *entity)
+ 		entity->ops->destroy(entity);
+ 	if (entity->subdev.ctrl_handler)
+ 		v4l2_ctrl_handler_free(entity->subdev.ctrl_handler);
+-	v4l2_subdev_free_state(entity->config);
++	__v4l2_subdev_state_free(entity->config);
+ 	media_entity_cleanup(&entity->subdev.entity);
+ }
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 5d27a27cc2f2..fe49c86a9b02 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -28,7 +28,7 @@ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
+ {
+ 	struct v4l2_subdev_state *state;
+ 
+-	state = v4l2_subdev_alloc_state(sd);
++	state = __v4l2_subdev_state_alloc(sd);
+ 	if (IS_ERR(state))
+ 		return PTR_ERR(state);
+ 
+@@ -39,7 +39,7 @@ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
+ 
+ static void subdev_fh_free(struct v4l2_subdev_fh *fh)
+ {
+-	v4l2_subdev_free_state(fh->state);
++	__v4l2_subdev_state_free(fh->state);
+ 	fh->state = NULL;
+ }
+ 
+@@ -870,7 +870,7 @@ int v4l2_subdev_link_validate(struct media_link *link)
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate);
+ 
+-struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd)
++struct v4l2_subdev_state *__v4l2_subdev_state_alloc(struct v4l2_subdev *sd)
+ {
+ 	struct v4l2_subdev_state *state;
+ 	int ret;
+@@ -903,9 +903,9 @@ struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd)
+ 
+ 	return ERR_PTR(ret);
+ }
+-EXPORT_SYMBOL_GPL(v4l2_subdev_alloc_state);
++EXPORT_SYMBOL_GPL(__v4l2_subdev_state_alloc);
+ 
+-void v4l2_subdev_free_state(struct v4l2_subdev_state *state)
++void __v4l2_subdev_state_free(struct v4l2_subdev_state *state)
+ {
+ 	if (!state)
+ 		return;
+@@ -913,7 +913,7 @@ void v4l2_subdev_free_state(struct v4l2_subdev_state *state)
+ 	kvfree(state->pads);
+ 	kfree(state);
+ }
+-EXPORT_SYMBOL_GPL(v4l2_subdev_free_state);
++EXPORT_SYMBOL_GPL(__v4l2_subdev_state_free);
+ 
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+ 
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index d321790b07d9..66b9ce160472 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -507,7 +507,7 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+ 	if (!subdev)
+ 		return -ENODEV;
+ 
+-	sd_state = v4l2_subdev_alloc_state(subdev);
++	sd_state = __v4l2_subdev_state_alloc(subdev);
+ 	if (IS_ERR(sd_state))
+ 		return PTR_ERR(sd_state);
+ 	/*
+@@ -558,7 +558,7 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+ 	v4l2_fill_pix_format(pix, &fmt.format);
+ 	tegra_channel_fmt_align(chan, pix, fmtinfo->bpp);
+ 
+-	v4l2_subdev_free_state(sd_state);
++	__v4l2_subdev_state_free(sd_state);
+ 
+ 	return 0;
+ }
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 95ec18c2f49c..e52bf508c75b 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -1135,20 +1135,20 @@ int v4l2_subdev_link_validate_default(struct v4l2_subdev *sd,
+ int v4l2_subdev_link_validate(struct media_link *link);
+ 
+ /**
+- * v4l2_subdev_alloc_state - allocate v4l2_subdev_state
++ * __v4l2_subdev_state_alloc - allocate v4l2_subdev_state
+  *
+  * @sd: pointer to &struct v4l2_subdev for which the state is being allocated.
+  *
+- * Must call v4l2_subdev_free_state() when state is no longer needed.
++ * Must call __v4l2_subdev_state_free() when state is no longer needed.
+  */
+-struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd);
++struct v4l2_subdev_state *__v4l2_subdev_state_alloc(struct v4l2_subdev *sd);
+ 
+ /**
+- * v4l2_subdev_free_state - free a v4l2_subdev_state
++ * __v4l2_subdev_state_free - free a v4l2_subdev_state
+  *
+  * @state: v4l2_subdev_state to be freed.
+  */
+-void v4l2_subdev_free_state(struct v4l2_subdev_state *state);
++void __v4l2_subdev_state_free(struct v4l2_subdev_state *state);
+ 
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+ 
+-- 
+2.25.1
 
-Tvrtko
-
-> 
-> Christian.
-> 
->>
->> Regards,
->>
->> Tvrtko
->>
->>> @@ -232,24 +227,6 @@ static bool dma_buf_poll_shared(struct dma_resv 
->>> *resv,
->>>       return false;
->>>   }
->>>   -static bool dma_buf_poll_excl(struct dma_resv *resv,
->>> -                  struct dma_buf_poll_cb_t *dcb)
->>> -{
->>> -    struct dma_fence *fence = dma_resv_excl_fence(resv);
->>> -    int r;
->>> -
->>> -    if (!fence)
->>> -        return false;
->>> -
->>> -    dma_fence_get(fence);
->>> -    r = dma_fence_add_callback(fence, &dcb->cb, dma_buf_poll_cb);
->>> -    if (!r)
->>> -        return true;
->>> -    dma_fence_put(fence);
->>> -
->>> -    return false;
->>> -}
->>> -
->>>   static __poll_t dma_buf_poll(struct file *file, poll_table *poll)
->>>   {
->>>       struct dma_buf *dmabuf;
->>> @@ -282,8 +259,7 @@ static __poll_t dma_buf_poll(struct file *file, 
->>> poll_table *poll)
->>>           spin_unlock_irq(&dmabuf->poll.lock);
->>>             if (events & EPOLLOUT) {
->>> -            if (!dma_buf_poll_shared(resv, dcb) &&
->>> -                !dma_buf_poll_excl(resv, dcb))
->>> +            if (!dma_buf_poll_add_cb(resv, true, dcb))
->>>                   /* No callback queued, wake up any other waiters */
->>>                   dma_buf_poll_cb(NULL, &dcb->cb);
->>>               else
->>> @@ -303,7 +279,7 @@ static __poll_t dma_buf_poll(struct file *file, 
->>> poll_table *poll)
->>>           spin_unlock_irq(&dmabuf->poll.lock);
->>>             if (events & EPOLLIN) {
->>> -            if (!dma_buf_poll_excl(resv, dcb))
->>> +            if (!dma_buf_poll_add_cb(resv, false, dcb))
->>>                   /* No callback queued, wake up any other waiters */
->>>                   dma_buf_poll_cb(NULL, &dcb->cb);
->>>               else
->>>
-> 
