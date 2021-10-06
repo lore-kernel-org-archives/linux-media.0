@@ -2,117 +2,96 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF35BC433F5
-	for <linux-media@archiver.kernel.org>; Wed,  6 Oct 2021 22:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B82EC433FE
+	for <linux-media@archiver.kernel.org>; Wed,  6 Oct 2021 22:38:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C141E61163
-	for <linux-media@archiver.kernel.org>; Wed,  6 Oct 2021 22:28:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F15360232
+	for <linux-media@archiver.kernel.org>; Wed,  6 Oct 2021 22:38:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233813AbhJFW36 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Oct 2021 18:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbhJFW35 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Oct 2021 18:29:57 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314B6C061746
-        for <linux-media@vger.kernel.org>; Wed,  6 Oct 2021 15:28:05 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id y17so4387081ilb.9
-        for <linux-media@vger.kernel.org>; Wed, 06 Oct 2021 15:28:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VI72+rQQH950OkSQA66NIQXwWicvtVqAwf2xJMPB6lM=;
-        b=fxHYOaNVrsUChcGOTJdXMhCykDCTOyS1Aq6lNkx/fLSTsg29afZshjsuobE/hRb1me
-         aOfGx4wiRWv/YGtwGYvorqk9t4vLAu9oNu5Zd6R2V+JkKsPAN/3etLL/wayLjrLo70Hk
-         vM8A1NyzRE3JtFvJe4HMsaN7cZGdtYRONB/mk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VI72+rQQH950OkSQA66NIQXwWicvtVqAwf2xJMPB6lM=;
-        b=kD+ntAzLRmUEYWOy4Ign7JXA3gGBwpgcAHyJYWzqyL4GQfHRCYbeXWYD9FQHjy7tmo
-         z20k/FkeQhh8pr+49hoFu2zP5VyfvL1ZM2lqCLooJXMSt3iUMHLWAGquwq8JyLHEkk2h
-         XUhaSo7GFiqRkbwo8ejthR6oAN/OSlCuxenZiTu54F79ofsDw/b79apv660WxcfbKdqy
-         D1ekKQ5GGAJsUGub4khAqAYN9fNaL+leB55GqucET2gLexDYWXJxCclCBysmOrG0GlBp
-         WtfZYYx688Ws5vqJtuays93H36a7JaBXkTQ5O+0EQ+FdrzbyzP1CBL9V0wjHIJCia19i
-         JBzA==
-X-Gm-Message-State: AOAM532V/gXQgtHAoXlSEg18xUcfL5YfmexIl9M4wKDoVlgt3h9MOFxm
-        jrUmw64n1PPY08jakWkeZFnUYyiBlIkzFw==
-X-Google-Smtp-Source: ABdhPJzwtSoIC6+sn5axPTXwATv+vv9v+H3glHQ/7qU6cGeONMV2kBqcWh7AAJejL6mDdwYmGnglZQ==
-X-Received: by 2002:a05:6e02:20ee:: with SMTP id q14mr513083ilv.176.1633559284397;
-        Wed, 06 Oct 2021 15:28:04 -0700 (PDT)
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com. [209.85.166.42])
-        by smtp.gmail.com with ESMTPSA id o7sm943581ilm.4.2021.10.06.15.28.03
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Oct 2021 15:28:04 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id h189so1711509iof.1
-        for <linux-media@vger.kernel.org>; Wed, 06 Oct 2021 15:28:03 -0700 (PDT)
-X-Received: by 2002:a5e:d618:: with SMTP id w24mr685194iom.178.1633559283343;
- Wed, 06 Oct 2021 15:28:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211001112522.2839602-1-ribalda@chromium.org>
- <20211001112522.2839602-2-ribalda@chromium.org> <YV4blXBkmYhCXxKG@paasikivi.fi.intel.com>
-In-Reply-To: <YV4blXBkmYhCXxKG@paasikivi.fi.intel.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 7 Oct 2021 00:27:52 +0200
-X-Gmail-Original-Message-ID: <CANiDSCtHKOAmC3=vmyz0Ky2ZJ5Xg4rfwoetSc+=XXt2msE2KPg@mail.gmail.com>
-Message-ID: <CANiDSCtHKOAmC3=vmyz0Ky2ZJ5Xg4rfwoetSc+=XXt2msE2KPg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/8] media: ipu3-cio2 Check num_planes and sizes in queue_setup
+        id S239847AbhJFWkL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Oct 2021 18:40:11 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:48012 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239912AbhJFWj4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Oct 2021 18:39:56 -0400
+X-Greylist: delayed 5755 seconds by postgrey-1.27 at vger.kernel.org; Wed, 06 Oct 2021 18:39:54 EDT
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 196L1xSo095749;
+        Wed, 6 Oct 2021 16:01:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1633554119;
+        bh=5GQkMzCzRXHqDDBT/bRBMLgEAfL2pt0t8U1wYbm8oDE=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=NET/pdSy1xXpoizghZ6rEKPBbwja1s7RS1GQQNJNAnaFv66wnOrt9noLRvfUo17Rq
+         MIEMlNTSmEDuaPxkyq7Osj2nBdxBtqLmi1seiHsPZlVxgpGl+6zaYYSlqjBfWDEDdV
+         3igehkjpy0JiqQu3NEmamFdGeDMtEdtKDKvDjFW0=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 196L1xdG044307
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 6 Oct 2021 16:01:59 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
+ Oct 2021 16:01:59 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 6 Oct 2021 16:01:59 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 196L1wxu070269;
+        Wed, 6 Oct 2021 16:01:58 -0500
+Date:   Thu, 7 Oct 2021 02:31:57 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Yong Zhi <yong.zhi@intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Nikhil Devshatwar <nikhil.nd@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>
+Subject: Re: [PATCH v4 02/11] media: cadence: csi2rx: Add external DPHY
+ support
+Message-ID: <20211006210155.ukfmh24kdipqprcn@ti.com>
+References: <20210915120240.21572-1-p.yadav@ti.com>
+ <20210915120240.21572-3-p.yadav@ti.com>
+ <YV4EuD2KSIXIYzY4@paasikivi.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YV4EuD2KSIXIYzY4@paasikivi.fi.intel.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari
+On 06/10/21 11:19PM, Sakari Ailus wrote:
+> Hi Pratyush,
+> 
+> On Wed, Sep 15, 2021 at 05:32:31PM +0530, Pratyush Yadav wrote:
+> > +	ret = phy_pm_runtime_get_sync(csi2rx->dphy);
+> 
+> Note that this will return 1 if the device was already resumed. That is not
+> an error.
 
-Thanks for your review :)
+Thanks. Will fix.
 
-On Wed, 6 Oct 2021 at 23:56, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
->
-> Hi Ricardo,
->
-> On Fri, Oct 01, 2021 at 11:25:15AM +0000, Ricardo Ribalda wrote:
-> > If num_planes is different than zero num_planes and sizes must be
-> > checked to support the format.
-> >
-> > Fix the following v4l2-compliance error:
-> >
-> > Buffer ioctls (Input 0):
-> >     fail: v4l2-test-buffers.cpp(717): q.create_bufs(node, 1, &fmt) != EINVAL
-> >   test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: FAIL
-> >
-> > Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
->
-> I attempted to apply the set to my tree but it doesn't seem to.
->
-> Do you happen to have extra patches in your tree?
-
-
-I think that I was on top of Linus.
-I just rebased it on top of yours and resend it as v4
-
-Thanks!
-
-
->
-> I just pushed mine to the master branch here:
->
->         https://git.linuxtv.org/sailus/media_tree.git/
->
-> --
+> 
+> > +	if (ret == -ENOTSUPP)
+> > +		got_pm = false;
+> > +	else if (ret)
+> > +		return ret;
+> 
+> -- 
 > Sakari Ailus
 
-
-
---
-Ricardo Ribalda
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
