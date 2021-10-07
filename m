@@ -2,169 +2,87 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D676C4332F
-	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 15:44:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2191C433F5
+	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 15:54:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 55E6261245
-	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 15:44:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CAE3C61139
+	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 15:54:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242419AbhJGPqE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Oct 2021 11:46:04 -0400
-Received: from mga02.intel.com ([134.134.136.20]:27707 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233463AbhJGPqC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 7 Oct 2021 11:46:02 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="213423794"
-X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="scan'208";a="213423794"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 08:44:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="scan'208";a="657430584"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 07 Oct 2021 08:44:03 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 486BC299; Thu,  7 Oct 2021 18:44:10 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        id S242043AbhJGP4h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Oct 2021 11:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232589AbhJGP4h (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Oct 2021 11:56:37 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733AFC061570;
+        Thu,  7 Oct 2021 08:54:43 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id w11so3636339ilv.6;
+        Thu, 07 Oct 2021 08:54:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gEeeOHW2XScEPt9l9T7cyjA12nlEqvYFpEPTjeOlhtk=;
+        b=GozB4eJgGzxuSljp5CgF97+YvAQZiobXsfKatDDQ3SRdjV2w8zl+tdKbRMUkZ11WcY
+         BmsMIF92hW1T1Jdh5lxRyNQ66QsBegrZZ+oA2TEwHuVAddzl1effAhfw7pZD6aiBsE7x
+         +vZf8T3375mHEuNkUinYCN5zcXtkNNTr81FAmSWvrZ0eGcy7NuSWVsgZVXjoOM6/OHMo
+         ZkHWT4MKtp4InKxaDfwpGg8drLeh4nWQ05eDCw/Xb3d33+ARxwS4ZjH9btiE6vbM1u4R
+         KIFemT4+ChWkJl+rH2yst3brWqM8DyXlwFZhQBiXMaSZnRU7AAACPOd02GJNDpnuaEUC
+         8w+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gEeeOHW2XScEPt9l9T7cyjA12nlEqvYFpEPTjeOlhtk=;
+        b=6Wg4W+kldb2yjvWcKvV5yX/J9ooxvqQxb+UKCd+xy8oQMOqK+R6PczdYou+BF3YNuB
+         7r9hV3MxycFYBL2xHQ/tz2cbRZdjBrokvAIm7TuXD3H71Rppid/asIFdGAjCRVyRA4KR
+         Iu8lItPY5qMJ/rZcf8EP2r+4YMZEKFnijVi0wdz6Hh9q9M+C3Fe1NLf3iHC5jaJomwCa
+         sHdGBQB3dRgE23JTe6Kh0EsdTHNZRku6+SMZOcQKIxE6Vz6kKOrxeaSlSNBVVqoh/Vks
+         d/vTB9zukai8LQtdwZKy+sWL4mAVcxg3vGDFiaDxt7biIzrG5K4oGvdnjSkNWCf56FGX
+         t9ig==
+X-Gm-Message-State: AOAM532kFbUOrwApz91X8kgXmvwBIxZFaiUxzuM9Zgcv9LjJz/W1/hrm
+        qLceJCC68qf9eXs9fmRJCFEWJfTnHP0mTdUkOJg=
+X-Google-Smtp-Source: ABdhPJzmi9FW2Opfs1nIzYmaM2A75n805ZIic6DitSDDSrvjWB4ocsStnK68m9Da+iZyOmOC4GLILSc2WVwn06BgL78=
+X-Received: by 2002:a05:6e02:1d86:: with SMTP id h6mr3917519ila.5.1633622082893;
+ Thu, 07 Oct 2021 08:54:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211007154407.29746-1-andriy.shevchenko@linux.intel.com> <20211007154407.29746-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20211007154407.29746-3-andriy.shevchenko@linux.intel.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 7 Oct 2021 17:54:32 +0200
+Message-ID: <CANiq72=pCQgwHe5u2nS_RkGBnRLdcw2v=vk-8eNDeAP9ygO0SQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/7] kernel.h: Split out container_of() and
+ typeof_member() macros
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-media@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        jic23@kernel.org, linux@rasmusvillemoes.dk,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: [PATCH v4 2/7] kernel.h: Split out container_of() and typeof_member() macros
-Date:   Thu,  7 Oct 2021 18:44:02 +0300
-Message-Id: <20211007154407.29746-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211007154407.29746-1-andriy.shevchenko@linux.intel.com>
-References: <20211007154407.29746-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-kernel.h is being used as a dump for all kinds of stuff for a long time.
-Here is the attempt cleaning it up by splitting out container_of() and
-typeof_member() macros.
+On Thu, Oct 7, 2021 at 5:44 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> +#define typeof_member(T, m)    typeof(((T*)0)->m)
 
-For time being include new header back to kernel.h to avoid twisted
-indirected includes for existing users.
+Is the patch missing the removal from the other place?
 
-Note, there are _a lot_ of headers and modules that include kernel.h solely
-for one of these macros and this allows to unburden compiler for the twisted
-inclusion paths and to make new code cleaner in the future.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/linux/container_of.h | 37 ++++++++++++++++++++++++++++++++++++
- include/linux/kernel.h       | 31 +-----------------------------
- 2 files changed, 38 insertions(+), 30 deletions(-)
- create mode 100644 include/linux/container_of.h
-
-diff --git a/include/linux/container_of.h b/include/linux/container_of.h
-new file mode 100644
-index 000000000000..f6ee1be0e784
---- /dev/null
-+++ b/include/linux/container_of.h
-@@ -0,0 +1,37 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_CONTAINER_OF_H
-+#define _LINUX_CONTAINER_OF_H
-+
-+#define typeof_member(T, m)	typeof(((T*)0)->m)
-+
-+/**
-+ * container_of - cast a member of a structure out to the containing structure
-+ * @ptr:	the pointer to the member.
-+ * @type:	the type of the container struct this is embedded in.
-+ * @member:	the name of the member within the struct.
-+ *
-+ */
-+#define container_of(ptr, type, member) ({				\
-+	void *__mptr = (void *)(ptr);					\
-+	BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&	\
-+			 !__same_type(*(ptr), void),			\
-+			 "pointer type mismatch in container_of()");	\
-+	((type *)(__mptr - offsetof(type, member))); })
-+
-+/**
-+ * container_of_safe - cast a member of a structure out to the containing structure
-+ * @ptr:	the pointer to the member.
-+ * @type:	the type of the container struct this is embedded in.
-+ * @member:	the name of the member within the struct.
-+ *
-+ * If IS_ERR_OR_NULL(ptr), ptr is returned unchanged.
-+ */
-+#define container_of_safe(ptr, type, member) ({				\
-+	void *__mptr = (void *)(ptr);					\
-+	BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&	\
-+			 !__same_type(*(ptr), void),			\
-+			 "pointer type mismatch in container_of()");	\
-+	IS_ERR_OR_NULL(__mptr) ? ERR_CAST(__mptr) :			\
-+		((type *)(__mptr - offsetof(type, member))); })
-+
-+#endif	/* _LINUX_CONTAINER_OF_H */
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index d416fe3165cb..ad9fdcce9dcf 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -9,6 +9,7 @@
- #include <linux/stddef.h>
- #include <linux/types.h>
- #include <linux/compiler.h>
-+#include <linux/container_of.h>
- #include <linux/bitops.h>
- #include <linux/kstrtox.h>
- #include <linux/log2.h>
-@@ -482,36 +483,6 @@ static inline void ftrace_dump(enum ftrace_dump_mode oops_dump_mode) { }
- #define __CONCAT(a, b) a ## b
- #define CONCATENATE(a, b) __CONCAT(a, b)
- 
--/**
-- * container_of - cast a member of a structure out to the containing structure
-- * @ptr:	the pointer to the member.
-- * @type:	the type of the container struct this is embedded in.
-- * @member:	the name of the member within the struct.
-- *
-- */
--#define container_of(ptr, type, member) ({				\
--	void *__mptr = (void *)(ptr);					\
--	BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&	\
--			 !__same_type(*(ptr), void),			\
--			 "pointer type mismatch in container_of()");	\
--	((type *)(__mptr - offsetof(type, member))); })
--
--/**
-- * container_of_safe - cast a member of a structure out to the containing structure
-- * @ptr:	the pointer to the member.
-- * @type:	the type of the container struct this is embedded in.
-- * @member:	the name of the member within the struct.
-- *
-- * If IS_ERR_OR_NULL(ptr), ptr is returned unchanged.
-- */
--#define container_of_safe(ptr, type, member) ({				\
--	void *__mptr = (void *)(ptr);					\
--	BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&	\
--			 !__same_type(*(ptr), void),			\
--			 "pointer type mismatch in container_of()");	\
--	IS_ERR_OR_NULL(__mptr) ? ERR_CAST(__mptr) :			\
--		((type *)(__mptr - offsetof(type, member))); })
--
- /* Rebuild everything on CONFIG_FTRACE_MCOUNT_RECORD */
- #ifdef CONFIG_FTRACE_MCOUNT_RECORD
- # define REBUILD_DUE_TO_FTRACE_MCOUNT_RECORD
--- 
-2.33.0
-
+Cheers,
+Miguel
