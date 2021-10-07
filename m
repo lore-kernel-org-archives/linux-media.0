@@ -2,80 +2,163 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF61DC433EF
-	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 10:56:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AE7EC433F5
+	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 11:22:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BAEB9610C7
-	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 10:56:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F154B60F9C
+	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 11:22:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbhJGK6R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Oct 2021 06:58:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44304 "EHLO mail.kernel.org"
+        id S240778AbhJGLXy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Oct 2021 07:23:54 -0400
+Received: from phobos.denx.de ([85.214.62.61]:52668 "EHLO phobos.denx.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230319AbhJGK6O (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 7 Oct 2021 06:58:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9DAE66125F;
-        Thu,  7 Oct 2021 10:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633604180;
-        bh=ThIL5wTqkNiACMqeeSl39LO0ke5MAX68IFzHv68/mWI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YT2alqyBuji3GiowZLfZazBMG94K/C66fT1m30UGQAAj5PU+N440j1v/iR9khsZju
-         5kViA2pY8LK6nXYdHpH46ejmMmzXbkLR5hYwao699vyKZ9ZAVV1Dr4tNjiFkn14n6F
-         a6RPw/nc0+PvQtSGCg9rQGTg6uO6WZ0/sL2XKS6jCrDo1Dg71yjiCZgf0w15UMHENl
-         xpWPlL5i2LpzXvyp5ZGOIG3W0aqahYSm6XdRg3VxVMIke7KgSdVnEaYC7kYptdjcR5
-         Xpqkn2akCzaUcoN5I+WZ7BqwixRJc4b7CxKnnIkE/KiL0n7u/CEDyP7PumLO3KyK1X
-         YlE7a6r6zfzxA==
-Received: by mail-yb1-f169.google.com with SMTP id r1so12396908ybo.10;
-        Thu, 07 Oct 2021 03:56:20 -0700 (PDT)
-X-Gm-Message-State: AOAM531S9+vYu9fUE4anF+90Q/M3V5Ga2u/R3WLpisGD18mqiKewY1qS
-        leOu+w0nk1yrXXCBa9H86vcIsPg0O7cf2ocIvCA=
-X-Google-Smtp-Source: ABdhPJzwxU3qp/2r+9YudGCUJue9BH8SS1W+JH6xZ5rfm/idWD4VsigFIU10SCXzX+AOt3Hbjgk+16k+dUIMb6/O+CE=
-X-Received: by 2002:a25:9007:: with SMTP id s7mr3881247ybl.142.1633604179700;
- Thu, 07 Oct 2021 03:56:19 -0700 (PDT)
+        id S240743AbhJGLXy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 7 Oct 2021 07:23:54 -0400
+Received: from localhost.localdomain (unknown [IPv6:2804:14c:485:504a:4341:77b:7540:97e3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: festevam@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 9F9808187B;
+        Thu,  7 Oct 2021 13:21:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1633605719;
+        bh=9iKogHFsUZz5G4280ZfBZm6PImKPAmju6DXyAyPSeUw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mu9ATSazFFJVFERYgR7km0laqmOQZ07gynLRNEj/zuBfoLRdQeNhgqYQk1Rcu9EDO
+         P5ZIKv2T+9hTRHwcuo6Xlzw/fItsOfbTLlzL7mk7R1BptcqeFweqDzOgN2WZsZ4iiY
+         MnZBQ8F8q2ayaWI5yrg2LJZWN95KZ1wlEkoYTDGwBE5Lp2JYGf9TobfWxwAxj9dty8
+         4EhcOZAgwXmz8iOp05UbKXwC/XCWVdBFOtHK2sxDH75zH/tzYugM8A/VjA+c6jT1wq
+         UytKe5Asr/j43oZ9PcnLv8+Ncw2LFEXPVc7nVRpJMxRetUF9dv8t320o5UeDMD6MlQ
+         DFe1UTQfAzDQw==
+From:   Fabio Estevam <festevam@denx.de>
+To:     p.zabel@pengutronix.de
+Cc:     hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH] media: imx-pxp: Add rotation support
+Date:   Thu,  7 Oct 2021 08:21:47 -0300
+Message-Id: <20211007112147.2037585-1-festevam@denx.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211003090756.117809-1-ogabbay@kernel.org>
-In-Reply-To: <20211003090756.117809-1-ogabbay@kernel.org>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Thu, 7 Oct 2021 13:55:52 +0300
-X-Gmail-Original-Message-ID: <CAFCwf13nkoyk9QmtsyAno6QZCgmh1EdhN=diKvUpKxwTXYQMvw@mail.gmail.com>
-Message-ID: <CAFCwf13nkoyk9QmtsyAno6QZCgmh1EdhN=diKvUpKxwTXYQMvw@mail.gmail.com>
-Subject: Re: [PATCH v7 0/2] Add p2p via dmabuf to habanalabs
-To:     "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Dave Airlie <airlied@gmail.com>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Gal Pressman <galpress@amazon.com>,
-        Yossi Leybovich <sleybo@amazon.com>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Doug Ledford <dledford@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Oct 3, 2021 at 12:08 PM Oded Gabbay <ogabbay@kernel.org> wrote:
->
-> Hi,
-> I'm sending v7 after the latest review from Jason.
-> All the changes are detailed in the commit messages.
->
-> Dave, I'll appreciate if you can also a-b this patchset.
->
-> Thanks,
-> Oded
+From: Fabio Estevam <festevam@gmail.com>
 
-Hi,
-I would like to send a pull request with these patches next week, so
-if you have any more comments, please let me know.
-Oded
+PXP allows clockwise rotation in 0°, 90°, 180° and 270° degrees.
+
+Add support for it.
+
+Tested on a imx6ull-evk.
+
+For example, to rotate 90° the following Gstreamer pipeline can
+be used:
+
+gst-launch-1.0 videotestsrc ! video/x-raw,width=640,height=480 ! \
+v4l2convert extra-controls=cid,rotate=90  ! \
+video/x-raw,width=120,height=160 ! fbdevsink
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ drivers/media/platform/imx-pxp.c | 38 ++++++++++++++++++++++++++++++--
+ 1 file changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/imx-pxp.c b/drivers/media/platform/imx-pxp.c
+index 723b096fedd1..2789c0b2d926 100644
+--- a/drivers/media/platform/imx-pxp.c
++++ b/drivers/media/platform/imx-pxp.c
+@@ -168,6 +168,13 @@ enum {
+ 	V4L2_M2M_DST = 1,
+ };
+ 
++enum pxp_rotation_modes {
++	PXP_ROTATE_0,
++	PXP_ROTATE_90,
++	PXP_ROTATE_180,
++	PXP_ROTATE_270,
++};
++
+ static struct pxp_fmt *find_format(struct v4l2_format *f)
+ {
+ 	struct pxp_fmt *fmt;
+@@ -211,6 +218,7 @@ struct pxp_ctx {
+ 	/* Processing mode */
+ 	int			mode;
+ 	u8			alpha_component;
++	u8			rotation;
+ 
+ 	enum v4l2_colorspace	colorspace;
+ 	enum v4l2_xfer_func	xfer_func;
+@@ -767,9 +775,10 @@ static int pxp_start(struct pxp_ctx *ctx, struct vb2_v4l2_buffer *in_vb,
+ 		 V4L2_BUF_FLAG_BFRAME |
+ 		 V4L2_BUF_FLAG_TSTAMP_SRC_MASK);
+ 
+-	/* Rotation disabled, 8x8 block size */
++	/* 8x8 block size */
+ 	ctrl = BF_PXP_CTRL_VFLIP0(!!(ctx->mode & MEM2MEM_VFLIP)) |
+-	       BF_PXP_CTRL_HFLIP0(!!(ctx->mode & MEM2MEM_HFLIP));
++	       BF_PXP_CTRL_HFLIP0(!!(ctx->mode & MEM2MEM_HFLIP)) |
++	       BF_PXP_CTRL_ROTATE0(ctx->rotation);
+ 	/* Always write alpha value as V4L2_CID_ALPHA_COMPONENT */
+ 	out_ctrl = BF_PXP_OUT_CTRL_ALPHA(ctx->alpha_component) |
+ 		   BF_PXP_OUT_CTRL_ALPHA_OUTPUT(1) |
+@@ -787,6 +796,10 @@ static int pxp_start(struct pxp_ctx *ctx, struct vb2_v4l2_buffer *in_vb,
+ 	}
+ 
+ 	out_pitch = BF_PXP_OUT_PITCH_PITCH(dst_stride);
++
++	if (ctx->rotation == PXP_ROTATE_90 || ctx->rotation == PXP_ROTATE_270)
++		swap(dst_width, dst_height);
++
+ 	out_lrc = BF_PXP_OUT_LRC_X(dst_width - 1) |
+ 		  BF_PXP_OUT_LRC_Y(dst_height - 1);
+ 	/* PS covers whole output */
+@@ -1297,6 +1310,22 @@ static int pxp_s_fmt_vid_out(struct file *file, void *priv,
+ 	return 0;
+ }
+ 
++static u8 pxp_degrees_to_rot_mode(u32 degrees)
++{
++	switch (degrees) {
++	case 0:
++		return PXP_ROTATE_0;
++	case 90:
++		return PXP_ROTATE_90;
++	case 180:
++		return PXP_ROTATE_180;
++	case 270:
++		return PXP_ROTATE_270;
++	default:
++		return 0;
++	}
++}
++
+ static int pxp_s_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct pxp_ctx *ctx =
+@@ -1317,6 +1346,10 @@ static int pxp_s_ctrl(struct v4l2_ctrl *ctrl)
+ 			ctx->mode &= ~MEM2MEM_VFLIP;
+ 		break;
+ 
++	case V4L2_CID_ROTATE:
++		ctx->rotation = pxp_degrees_to_rot_mode(ctrl->val);
++		break;
++
+ 	case V4L2_CID_ALPHA_COMPONENT:
+ 		ctx->alpha_component = ctrl->val;
+ 		break;
+@@ -1524,6 +1557,7 @@ static int pxp_open(struct file *file)
+ 	v4l2_ctrl_handler_init(hdl, 4);
+ 	v4l2_ctrl_new_std(hdl, &pxp_ctrl_ops, V4L2_CID_HFLIP, 0, 1, 1, 0);
+ 	v4l2_ctrl_new_std(hdl, &pxp_ctrl_ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
++	v4l2_ctrl_new_std(hdl, &pxp_ctrl_ops, V4L2_CID_ROTATE, 0, 270, 90, 0);
+ 	v4l2_ctrl_new_std(hdl, &pxp_ctrl_ops, V4L2_CID_ALPHA_COMPONENT,
+ 			  0, 255, 1, 255);
+ 	if (hdl->error) {
+-- 
+2.25.1
+
