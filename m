@@ -2,47 +2,40 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 660F2C433F5
-	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 09:21:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A184C433F5
+	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 09:51:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 485BC611C3
-	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 09:21:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 42AC561042
+	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 09:51:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240546AbhJGJXN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Oct 2021 05:23:13 -0400
-Received: from mga11.intel.com ([192.55.52.93]:29344 "EHLO mga11.intel.com"
+        id S240650AbhJGJx3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Oct 2021 05:53:29 -0400
+Received: from mga06.intel.com ([134.134.136.31]:46353 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240304AbhJGJXJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 7 Oct 2021 05:23:09 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10129"; a="223604774"
+        id S232662AbhJGJx2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 7 Oct 2021 05:53:28 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10129"; a="287094687"
 X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
-   d="scan'208";a="223604774"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 02:21:11 -0700
+   d="scan'208";a="287094687"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 02:51:34 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
-   d="scan'208";a="439457666"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 02:21:02 -0700
-Received: from andy by smile with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mYPaE-009TlL-CK;
-        Thu, 07 Oct 2021 12:20:58 +0300
-Date:   Thu, 7 Oct 2021 12:20:58 +0300
+   d="scan'208";a="568576676"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 07 Oct 2021 02:51:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1E24C3A3; Thu,  7 Oct 2021 12:51:36 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Waiman Long <longman@redhat.com>,
@@ -50,55 +43,50 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Thomas Graf <tgraf@suug.ch>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v1 3/3] kernel.h: Split out container_of() and
- typeof_memeber() macros
-Message-ID: <YV67+vrn3MxpXABy@smile.fi.intel.com>
-References: <20210713084541.7958-1-andriy.shevchenko@linux.intel.com>
- <20210713084541.7958-3-andriy.shevchenko@linux.intel.com>
- <YO1s+rHEqC9RjMva@kroah.com>
- <YO12ARa3i1TprGnJ@smile.fi.intel.com>
- <YO13lSUdPfNGOnC3@kroah.com>
- <CANiq72=vs8-88h3Z+BON=qA4CZQ1pS1nggnCFHDEHYyG+Y+3JQ@mail.gmail.com>
+        Thomas Graf <tgraf@suug.ch>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v2 3/4] lib/rhashtable: Replace kernel.h with the necessary inclusions
+Date:   Thu,  7 Oct 2021 12:51:28 +0300
+Message-Id: <20211007095129.22037-4-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211007095129.22037-1-andriy.shevchenko@linux.intel.com>
+References: <20211007095129.22037-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANiq72=vs8-88h3Z+BON=qA4CZQ1pS1nggnCFHDEHYyG+Y+3JQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jul 13, 2021 at 08:39:22PM +0200, Miguel Ojeda wrote:
-> On Tue, Jul 13, 2021 at 1:23 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > Life is messy and can not easily be partitioned into tiny pieces.  That
-> > way usually ends up being even messier in the end...
-> 
-> I agree measurements would be ideal.
-> 
-> Having said that, even if it makes no performance difference, I think
-> it is reasonable to split things (within reason) and makes a bunch of
-> other things easier, plus sometimes one can enforce particular
-> conventions in the separate header (like I did when introducing
-> `compiler_attributes.h`).
+When kernel.h is used in the headers it adds a lot into dependency hell,
+especially when there are circular dependencies are involved.
 
-It does almost 2% (steady) speedup. I will send a v2 with methodology
-and numbers of testing.
+Replace kernel.h inclusion with the list of what is really being used.
 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ lib/rhashtable.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/lib/rhashtable.c b/lib/rhashtable.c
+index a422c7dd9126..01502cf77564 100644
+--- a/lib/rhashtable.c
++++ b/lib/rhashtable.c
+@@ -12,9 +12,13 @@
+  */
+ 
+ #include <linux/atomic.h>
++#include <linux/bit_spinlock.h>
+ #include <linux/container_of.h>
+-#include <linux/kernel.h>
++#include <linux/err.h>
++#include <linux/export.h>
+ #include <linux/init.h>
++#include <linux/jhash.h>
++#include <linux/lockdep.h>
+ #include <linux/log2.h>
+ #include <linux/sched.h>
+ #include <linux/rculist.h>
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.33.0
 
