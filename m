@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC6D8C4332F
-	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 15:44:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0F7BC433F5
+	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 15:44:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D0ED261360
-	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 15:44:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A906661245
+	for <linux-media@archiver.kernel.org>; Thu,  7 Oct 2021 15:44:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242411AbhJGPqD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Oct 2021 11:46:03 -0400
+        id S242442AbhJGPqF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Oct 2021 11:46:05 -0400
 Received: from mga02.intel.com ([134.134.136.20]:27707 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242391AbhJGPqC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 7 Oct 2021 11:46:02 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="213423790"
+        id S242421AbhJGPqE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 7 Oct 2021 11:46:04 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="213423814"
 X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="scan'208";a="213423790"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 08:44:08 -0700
+   d="scan'208";a="213423814"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 08:44:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="scan'208";a="657430583"
+   d="scan'208";a="478610545"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 07 Oct 2021 08:44:03 -0700
+  by orsmga007.jf.intel.com with ESMTP; 07 Oct 2021 08:44:04 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 3E392291; Thu,  7 Oct 2021 18:44:10 +0300 (EEST)
+        id 5D01F3DB; Thu,  7 Oct 2021 18:44:10 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -43,9 +43,9 @@ Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
         jic23@kernel.org, linux@rasmusvillemoes.dk,
         Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: [PATCH v4 1/7] kernel.h: Drop unneeded <linux/kernel.h> inclusion from other headers
-Date:   Thu,  7 Oct 2021 18:44:01 +0300
-Message-Id: <20211007154407.29746-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v4 4/7] list.h: Replace kernel.h with the necessary inclusions
+Date:   Thu,  7 Oct 2021 18:44:04 +0300
+Message-Id: <20211007154407.29746-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211007154407.29746-1-andriy.shevchenko@linux.intel.com>
 References: <20211007154407.29746-1-andriy.shevchenko@linux.intel.com>
@@ -55,39 +55,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is no evidence we need kernel.h inclusion in certain headers.
-Drop unneeded <linux/kernel.h> inclusion from other headers.
+When kernel.h is used in the headers it adds a lot into dependency hell,
+especially when there are circular dependencies are involved.
+
+Replace kernel.h inclusion with the list of what is really being used.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- include/linux/rwsem.h    | 1 -
- include/linux/spinlock.h | 1 -
- 2 files changed, 2 deletions(-)
+ include/linux/list.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/rwsem.h b/include/linux/rwsem.h
-index 352c6127cb90..f9348769e558 100644
---- a/include/linux/rwsem.h
-+++ b/include/linux/rwsem.h
-@@ -11,7 +11,6 @@
- #include <linux/linkage.h>
+diff --git a/include/linux/list.h b/include/linux/list.h
+index f2af4b4aa4e9..5dc679b373da 100644
+--- a/include/linux/list.h
++++ b/include/linux/list.h
+@@ -2,11 +2,13 @@
+ #ifndef _LINUX_LIST_H
+ #define _LINUX_LIST_H
  
++#include <linux/container_of.h>
++#include <linux/const.h>
  #include <linux/types.h>
+ #include <linux/stddef.h>
+ #include <linux/poison.h>
+-#include <linux/const.h>
 -#include <linux/kernel.h>
- #include <linux/list.h>
- #include <linux/spinlock.h>
- #include <linux/atomic.h>
-diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
-index 76a855b3ecde..c04e99edfe92 100644
---- a/include/linux/spinlock.h
-+++ b/include/linux/spinlock.h
-@@ -57,7 +57,6 @@
- #include <linux/compiler.h>
- #include <linux/irqflags.h>
- #include <linux/thread_info.h>
--#include <linux/kernel.h>
- #include <linux/stringify.h>
- #include <linux/bottom_half.h>
- #include <linux/lockdep.h>
++
++#include <asm/barrier.h>
+ 
+ /*
+  * Circular doubly linked list implementation.
 -- 
 2.33.0
 
