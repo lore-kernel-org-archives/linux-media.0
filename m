@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9909C433EF
-	for <linux-media@archiver.kernel.org>; Sat,  9 Oct 2021 10:53:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B298CC433F5
+	for <linux-media@archiver.kernel.org>; Sat,  9 Oct 2021 10:53:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B27CC60F6D
-	for <linux-media@archiver.kernel.org>; Sat,  9 Oct 2021 10:53:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D9A760F6C
+	for <linux-media@archiver.kernel.org>; Sat,  9 Oct 2021 10:53:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244754AbhJIKy6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 9 Oct 2021 06:54:58 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:13885 "EHLO
+        id S244770AbhJIKzA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 9 Oct 2021 06:55:00 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:13886 "EHLO
         szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244680AbhJIKyx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Oct 2021 06:54:53 -0400
-Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HRMGc629Nz900W;
-        Sat,  9 Oct 2021 18:48:08 +0800 (CST)
+        with ESMTP id S244697AbhJIKyy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Oct 2021 06:54:54 -0400
+Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HRMGd2rMXz900t;
+        Sat,  9 Oct 2021 18:48:09 +0800 (CST)
 Received: from SZX1000464847.huawei.com (10.21.59.169) by
  dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.8; Sat, 9 Oct 2021 18:52:55 +0800
+ 15.1.2308.8; Sat, 9 Oct 2021 18:52:56 +0800
 From:   Dongdong Liu <liudongdong3@huawei.com>
 To:     <helgaas@kernel.org>, <hch@infradead.org>, <kw@linux.com>,
         <logang@deltatee.com>, <leon@kernel.org>,
         <linux-pci@vger.kernel.org>, <rajur@chelsio.com>,
         <hverkuil-cisco@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: [PATCH V10 5/8] PCI/IOV: Add 10-Bit Tag sysfs files for VF devices
-Date:   Sat, 9 Oct 2021 18:49:35 +0800
-Message-ID: <20211009104938.48225-6-liudongdong3@huawei.com>
+Subject: [PATCH V10 8/8] PCI/IOV: Enable 10-Bit Tag support for PCIe VF devices
+Date:   Sat, 9 Oct 2021 18:49:38 +0800
+Message-ID: <20211009104938.48225-9-liudongdong3@huawei.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20211009104938.48225-1-liudongdong3@huawei.com>
 References: <20211009104938.48225-1-liudongdong3@huawei.com>
@@ -44,168 +44,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-PCIe spec 5.0 r1.0 section 2.2.6.2 says:
-
-  If an Endpoint supports sending Requests to other Endpoints (as
-  opposed to host memory), the Endpoint must not send 10-Bit Tag
-  Requests to another given Endpoint unless an implementation-specific
-  mechanism determines that the Endpoint supports 10-Bit Tag Completer
-  capability.
-
-Add sriov_vf_10bit_tag file to query the status of VF 10-Bit Tag
-Requester Enable.
-
-Add a sriov_vf_10bit_tag_ctl sysfs file, write 0 to disable the VF
-10-Bit Tag Requester. The typical use case is for p2pdma when the peer
-device does not support 10-Bit Tag Completer. Write 1 to enable 10-Bit
-Tag Requester when RC supports 10-Bit Tag Completer capability. The
-typical use case is for host memory targeted by DMA Requests.
+Enable 10-Bit Tag Requester for the VF devices below the
+Root Port that support 10-Bit Tag Completer.
 
 Signed-off-by: Dongdong Liu <liudongdong3@huawei.com>
 ---
- Documentation/ABI/testing/sysfs-bus-pci | 23 +++++++++++
- drivers/pci/iov.c                       | 55 +++++++++++++++++++++++++
- 2 files changed, 78 insertions(+)
+ drivers/pci/iov.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-pci b/Documentation/ABI/testing/sysfs-bus-pci
-index 0c26346d1069..28b1f71df620 100644
---- a/Documentation/ABI/testing/sysfs-bus-pci
-+++ b/Documentation/ABI/testing/sysfs-bus-pci
-@@ -440,3 +440,26 @@ Description:
- 		10-Bit Tag Completer. Write 1 to enable 10-Bit Tag Requester
- 		when RC supports 10-Bit Tag Completer capability. The typical
- 		use case is for host memory targeted by DMA Requests.
-+
-+What:		/sys/bus/pci/devices/.../sriov_vf_10bit_tag
-+Date:		September 2021
-+Contact:	Dongdong Liu <liudongdong3@huawei.com>
-+Description:
-+		This file is associated with a SR-IOV physical function (PF).
-+		It is visible when the device supports VF 10-Bit Tag Requester.
-+		It contains the status of VF 10-Bit Tag Requester Enable.
-+		The file is read-only.
-+
-+What:		/sys/bus/pci/devices/.../sriov_vf_10bit_tag_ctl
-+Date:		September 2021
-+Contact:	Dongdong Liu <liudongdong3@huawei.com>
-+Description:
-+		This file is associated with a SR-IOV virtual function (VF).
-+		It is visible when the device supports VF 10-Bit Tag
-+		Requester. The file is only writeable when the VF driver
-+		does not bind to a device. Write 0 to any VF's file disables
-+		10-Bit Tag Requester for all VFs. The typical use case is for
-+		p2pdma when the peer device does not support 10-Bit Tag
-+		Completer. Write 1 to enable 10-Bit Tag Requester for all VFs
-+		when RC supports 10-Bit Tag Completer capability. The typical
-+		use case is for host memory targeted by DMA Requests.
 diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-index dafdc652fcd0..527ef0b745c7 100644
+index bd600c15258f..760ee8b939cd 100644
 --- a/drivers/pci/iov.c
 +++ b/drivers/pci/iov.c
-@@ -220,10 +220,43 @@ static ssize_t sriov_vf_msix_count_store(struct device *dev,
- static DEVICE_ATTR_WO(sriov_vf_msix_count);
- #endif
+@@ -692,6 +692,15 @@ static int sriov_enable(struct pci_dev *dev, int nr_virtfn)
  
-+static ssize_t sriov_vf_10bit_tag_ctl_store(struct device *dev,
-+					    struct device_attribute *attr,
-+					    const char *buf, size_t count)
-+{
-+	struct pci_dev *vf_dev = to_pci_dev(dev);
-+	struct pci_dev *pdev = pci_physfn(vf_dev);
-+	bool enable;
+ 	pci_iov_set_numvfs(dev, nr_virtfn);
+ 	iov->ctrl |= PCI_SRIOV_CTRL_VFE | PCI_SRIOV_CTRL_MSE;
 +
-+	if (!capable(CAP_SYS_ADMIN))
-+		return -EPERM;
++	if ((pcie_tag_config == PCIE_TAG_DEFAULT) &&
++	    (iov->cap & PCI_SRIOV_CAP_VF_10BIT_TAG_REQ) &&
++	    pcie_rp_10bit_tag_cmp_supported(dev))
++		iov->ctrl |= PCI_SRIOV_CTRL_VF_10BIT_TAG_REQ_EN;
 +
-+	if (kstrtobool(buf, &enable) < 0)
-+		return -EINVAL;
++	if (pcie_tag_config == PCIE_TAG_PEER2PEER)
++		iov->ctrl &= ~PCI_SRIOV_CTRL_VF_10BIT_TAG_REQ_EN;
 +
-+	if (vf_dev->driver)
-+		return -EBUSY;
-+
-+	if (!pcie_rp_10bit_tag_cmp_supported(pdev))
-+		return -EPERM;
-+
-+	if (enable)
-+		pdev->sriov->ctrl |= PCI_SRIOV_CTRL_VF_10BIT_TAG_REQ_EN;
-+	else
-+		pdev->sriov->ctrl &= ~PCI_SRIOV_CTRL_VF_10BIT_TAG_REQ_EN;
-+
-+	pci_write_config_word(pdev, pdev->sriov->pos + PCI_SRIOV_CTRL,
-+				      pdev->sriov->ctrl);
-+
-+	return count;
-+}
-+static DEVICE_ATTR_WO(sriov_vf_10bit_tag_ctl);
-+
- static struct attribute *sriov_vf_dev_attrs[] = {
- #ifdef CONFIG_PCI_MSI
- 	&dev_attr_sriov_vf_msix_count.attr,
- #endif
-+	&dev_attr_sriov_vf_10bit_tag_ctl.attr,
- 	NULL,
- };
+ 	pci_cfg_access_lock(dev);
+ 	pci_write_config_word(dev, iov->pos + PCI_SRIOV_CTRL, iov->ctrl);
+ 	msleep(100);
+@@ -708,6 +717,7 @@ static int sriov_enable(struct pci_dev *dev, int nr_virtfn)
  
-@@ -236,6 +269,11 @@ static umode_t sriov_vf_attrs_are_visible(struct kobject *kobj,
- 	if (!pdev->is_virtfn)
- 		return 0;
+ err_pcibios:
+ 	iov->ctrl &= ~(PCI_SRIOV_CTRL_VFE | PCI_SRIOV_CTRL_MSE);
++	iov->ctrl &= ~PCI_SRIOV_CTRL_VF_10BIT_TAG_REQ_EN;
+ 	pci_cfg_access_lock(dev);
+ 	pci_write_config_word(dev, iov->pos + PCI_SRIOV_CTRL, iov->ctrl);
+ 	ssleep(1);
+@@ -740,6 +750,7 @@ static void sriov_disable(struct pci_dev *dev)
  
-+	pdev = pci_physfn(pdev);
-+	if ((a == &dev_attr_sriov_vf_10bit_tag_ctl.attr) &&
-+	     !(pdev->sriov->cap & PCI_SRIOV_CAP_VF_10BIT_TAG_REQ))
-+		return 0;
-+
- 	return a->mode;
- }
- 
-@@ -487,12 +525,23 @@ static ssize_t sriov_drivers_autoprobe_store(struct device *dev,
- 	return count;
- }
- 
-+static ssize_t sriov_vf_10bit_tag_show(struct device *dev,
-+				       struct device_attribute *attr,
-+				       char *buf)
-+{
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+
-+	return sysfs_emit(buf, "%u\n",
-+		!!(pdev->sriov->ctrl & PCI_SRIOV_CTRL_VF_10BIT_TAG_REQ_EN));
-+}
-+
- static DEVICE_ATTR_RO(sriov_totalvfs);
- static DEVICE_ATTR_RW(sriov_numvfs);
- static DEVICE_ATTR_RO(sriov_offset);
- static DEVICE_ATTR_RO(sriov_stride);
- static DEVICE_ATTR_RO(sriov_vf_device);
- static DEVICE_ATTR_RW(sriov_drivers_autoprobe);
-+static DEVICE_ATTR_RO(sriov_vf_10bit_tag);
- 
- static struct attribute *sriov_pf_dev_attrs[] = {
- 	&dev_attr_sriov_totalvfs.attr,
-@@ -501,6 +550,7 @@ static struct attribute *sriov_pf_dev_attrs[] = {
- 	&dev_attr_sriov_stride.attr,
- 	&dev_attr_sriov_vf_device.attr,
- 	&dev_attr_sriov_drivers_autoprobe.attr,
-+	&dev_attr_sriov_vf_10bit_tag.attr,
- #ifdef CONFIG_PCI_MSI
- 	&dev_attr_sriov_vf_total_msix.attr,
- #endif
-@@ -511,10 +561,15 @@ static umode_t sriov_pf_attrs_are_visible(struct kobject *kobj,
- 					  struct attribute *a, int n)
- {
- 	struct device *dev = kobj_to_dev(kobj);
-+	struct pci_dev *pdev = to_pci_dev(dev);
- 
- 	if (!dev_is_pf(dev))
- 		return 0;
- 
-+	if ((a == &dev_attr_sriov_vf_10bit_tag.attr) &&
-+	     !(pdev->sriov->cap & PCI_SRIOV_CAP_VF_10BIT_TAG_REQ))
-+		return 0;
-+
- 	return a->mode;
- }
- 
+ 	sriov_del_vfs(dev);
+ 	iov->ctrl &= ~(PCI_SRIOV_CTRL_VFE | PCI_SRIOV_CTRL_MSE);
++	iov->ctrl &= ~PCI_SRIOV_CTRL_VF_10BIT_TAG_REQ_EN;
+ 	pci_cfg_access_lock(dev);
+ 	pci_write_config_word(dev, iov->pos + PCI_SRIOV_CTRL, iov->ctrl);
+ 	ssleep(1);
 -- 
 2.22.0
 
