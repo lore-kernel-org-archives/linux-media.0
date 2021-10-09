@@ -2,259 +2,205 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DC59C4332F
-	for <linux-media@archiver.kernel.org>; Sat,  9 Oct 2021 10:53:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C653FC433EF
+	for <linux-media@archiver.kernel.org>; Sat,  9 Oct 2021 11:14:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7AA5B60F6B
-	for <linux-media@archiver.kernel.org>; Sat,  9 Oct 2021 10:53:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB8CF60F6B
+	for <linux-media@archiver.kernel.org>; Sat,  9 Oct 2021 11:14:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244780AbhJIKzC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 9 Oct 2021 06:55:02 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:28906 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244688AbhJIKyy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Oct 2021 06:54:54 -0400
-Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HRMH312WKzbn0t;
-        Sat,  9 Oct 2021 18:48:31 +0800 (CST)
-Received: from SZX1000464847.huawei.com (10.21.59.169) by
- dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.8; Sat, 9 Oct 2021 18:52:55 +0800
-From:   Dongdong Liu <liudongdong3@huawei.com>
-To:     <helgaas@kernel.org>, <hch@infradead.org>, <kw@linux.com>,
-        <logang@deltatee.com>, <leon@kernel.org>,
-        <linux-pci@vger.kernel.org>, <rajur@chelsio.com>,
-        <hverkuil-cisco@xs4all.nl>
-CC:     <linux-media@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: [PATCH V10 7/8] PCI: Enable 10-Bit Tag support for PCIe Endpoint device
-Date:   Sat, 9 Oct 2021 18:49:37 +0800
-Message-ID: <20211009104938.48225-8-liudongdong3@huawei.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20211009104938.48225-1-liudongdong3@huawei.com>
-References: <20211009104938.48225-1-liudongdong3@huawei.com>
+        id S235737AbhJILQk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 9 Oct 2021 07:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233160AbhJILQi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Oct 2021 07:16:38 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4999CC061570
+        for <linux-media@vger.kernel.org>; Sat,  9 Oct 2021 04:14:42 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id m21so5701878pgu.13
+        for <linux-media@vger.kernel.org>; Sat, 09 Oct 2021 04:14:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=3P5BasEA1a1sjx45YX6htf0plCj0PERI910vkXF4DVE=;
+        b=bDqvOEnRAJWWP0DV4MiHK4KAfMm0ukjBFFC3G2nARFgdDpHeRHQ9bbiHbzSeHzxuu+
+         38Iq6y2QPAjCRInAQonSW3R+442lPeWwycAIYWwlwPu1vBnw8ZTUg/jHRUr39bdCV+Vf
+         o4Aq2kfo40UEW7kEYDzU1dh/jY5SQvVarISDuwAZg9YqypkqvDTNKMNTxq7OfHunZoxL
+         B/YHfLtkHHfRdY9Tfh3db5d/ebsj+a/3qyGrBHeQ3H9IJu7pbwqa5iSRyOSh8DYuh5+j
+         acUwNXz7Qn9qYXAU+HvYuqRug4porTobeCztDkJhqMkwr+Z+qZZuy1geNoFa2j9nRSQe
+         kmCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3P5BasEA1a1sjx45YX6htf0plCj0PERI910vkXF4DVE=;
+        b=sd2Io4oe2TaBloZFu3cFsrWCwB9HatW2fHZ4fQJsw5XUVMB960Ic1gxmoJbUvkpto7
+         KSiFv1fa8YpAFUChh0mS7fz8gnkl3BNJkDatum+mZ4036f3p/i4uwxD3W4fXP83zJKcM
+         ++4TW4LaNXg/fGEltGPgtO6lmxI4phPbJzPcsCn8RB1Bp1C8jJoyXGcucN8Cy2ADIgYY
+         ks0wiUPLE5+BKnj9L1qvBbgLKpYXg7syn87n5vTTA2I+enz3w40fk70tIwYI5DNJ/eAu
+         bFSRY+P3tPV82mypx6wD1/KNFi9OVO9iFmfO+kbiPihRKQWNfkvQlDFIb1rgk+Gr35QB
+         ayEA==
+X-Gm-Message-State: AOAM53099rEbh1cwqwZzTqQdOQwWZuopKb/xpppvBB1aMl3YSQB4mLqh
+        dXD1orAQ+vJf4RvT56cEpxPl4xMRVX1YnudNMGQ=
+X-Google-Smtp-Source: ABdhPJxTlKxyWMVrd+y97Ce3if13cXwXLBa3ZA9olREzNcKqvciZewvrA1azSaREFsla79oAZhTQxA5twlWqrum30MI=
+X-Received: by 2002:a63:6e4a:: with SMTP id j71mr1704827pgc.447.1633778081695;
+ Sat, 09 Oct 2021 04:14:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.21.59.169]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggeme758-chm.china.huawei.com (10.3.19.104)
-X-CFilter-Loop: Reflected
+References: <20210608152451.14730-1-euphoriccatface@gmail.com>
+ <20210608152451.14730-3-euphoriccatface@gmail.com> <20210805145504.GC3@valkosipuli.retiisi.eu>
+ <4f18b09b-993b-6fc7-6ee2-59e2b738d21f@xs4all.nl> <YT8iaJ6NLwg8129+@valkosipuli.retiisi.eu>
+In-Reply-To: <YT8iaJ6NLwg8129+@valkosipuli.retiisi.eu>
+From:   Seongyong Park <euphoriccatface@gmail.com>
+Date:   Sat, 9 Oct 2021 20:14:07 +0900
+Message-ID: <CAJp=mWQ6d_tzfu29hyVFcR4EeUbdhURthbEyMpbPjc7NnRzV9g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] media: video-i2c: append register data on
+ MLX90640's frame
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-media <linux-media@vger.kernel.org>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-10-Bit Tag capability, introduced in PCIe-4.0 increases the total Tag
-field size from 8 bits to 10 bits.
+Thank you to everyone who gave some feedback.
+I finally have found the time to get back to this. Sorry for the delay.
 
-PCIe spec 5.0 r1.0 section 2.2.6.2 "Considerations for Implementing
-10-Bit Tag Capabilities" Implementation Note:
+I tried gathering what I'd need to do if I wanted to add the suggested
+new pixel format.
+Since I'm learning a ton with this project on my own, I'd like some
+help to figure things out.
+Much appreciated if someone could confirm whether this looks right:
 
-  For platforms where the RC supports 10-Bit Tag Completer capability,
-  it is highly recommended for platform firmware or operating software
-  that configures PCIe hierarchies to Set the 10-Bit Tag Requester Enable
-  bit automatically in Endpoints with 10-Bit Tag Requester capability.
-  This enables the important class of 10-Bit Tag capable adapters that
-  send Memory Read Requests only to host memory.
+1. Modify any part in video-i2c that assume capability / stream
+parameter / buffer type of *VIDEO_CAPTURE only
+For example, the following part of `video_i2c_g_parm()`
+```
+if (parm->type !=3D V4L2_BUF_TYPE_VIDEO_CAPTURE)
+    return -EINVAL;
+```
 
-It's safe to enable 10-bit tags for all devices below a Root Port that
-supports them. Switches that lack 10-Bit Tag Completer capability are
-still able to forward NPRs and Completions carrying 10-Bit Tags correctly,
-since the two new Tag bits are in TLP Header bits that were formerly
-Reserved.
+2. Make it possible for the videobuf2 queue to be configured for
+BUF_TYPE_VIDEO_CAPTURE_MPLANE as well
+Since the `vb2_queue_init()` is currently called inside
+`video_i2c_probe()`, I assume the setup and initialization will have
+to be moved to another place. Maybe into `start_streaming()`.
 
-PCIe spec 5.0 r1.0 section 2.2.6.2 says:
+3. Add an entry to `videodev2.h`
+I assume so because, with quick grep-ing, I couldn't find any pixel
+format definitions under `drivers/media` but one
+(drivers/media/usb/msi2500)
+The entry would be named like V4L2_PIX_FMT_MLX9064X (MLX90641 seems to
+have similar format)
 
-  If an Endpoint supports sending Requests to other Endpoints (as opposed
-  to host memory), the Endpoint must not send 10-Bit Tag Requests to
-  another given Endpoint unless an implementation-specific mechanism
-  determines that the Endpoint supports 10-Bit Tag Completer capability.
+4. Add a flag in `video_i2c_data` for the multiplane output, and add
+appropriate code to fill in the second plane
 
-It is not safe for P2P traffic if an Endpoint send 10-Bit Tag Requesters
-to another Endpoint that does not support 10-Bit Tag Completer capability,
-so we provide sysfs file to disable 10-Bit Tag Requester. Unbind the
-device driver, set the sysfs file and then rebind the driver.
+...and then the rest will be adjusting the code, like getting the size
+of data correct and so on.
 
-Add a kernel parameter pcie_tag_peer2peer that disables 10-Bit Tag
-Requester for all PCIe devices. This configuration allows peer-to-peer
-DMA between any pair of devices, possibly at the cost of reduced
-performance.
+Thanks in advance.
+Seongyong Park
 
-Signed-off-by: Dongdong Liu <liudongdong3@huawei.com>
----
- .../admin-guide/kernel-parameters.txt         |  5 ++
- drivers/pci/iov.c                             |  3 ++
- drivers/pci/pci-sysfs.c                       |  3 ++
- drivers/pci/pci.c                             |  4 ++
- drivers/pci/pci.h                             |  7 +++
- drivers/pci/probe.c                           | 46 ++++++++++++++++++-
- 6 files changed, 67 insertions(+), 1 deletion(-)
+2021=EB=85=84 9=EC=9B=94 13=EC=9D=BC (=EC=9B=94) =EC=98=A4=ED=9B=84 7:05, S=
+akari Ailus <sakari.ailus@iki.fi>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 91ba391f9b32..54fddae7b2d9 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3979,6 +3979,11 @@
- 				any pair of devices, possibly at the cost of
- 				reduced performance.  This also guarantees
- 				that hot-added devices will work.
-+		pcie_tag_peer2peer	Disable 10-Bit Tag Requester for all
-+				PCIe devices. This configuration allows
-+				peer-to-peer DMA between any pair of devices,
-+				possibly at the cost of reduced performance.
-+
- 		cbiosize=nn[KMG]	The fixed amount of bus space which is
- 				reserved for the CardBus bridge's IO window.
- 				The default value is 256 bytes.
-diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-index 527ef0b745c7..bd600c15258f 100644
---- a/drivers/pci/iov.c
-+++ b/drivers/pci/iov.c
-@@ -237,6 +237,9 @@ static ssize_t sriov_vf_10bit_tag_ctl_store(struct device *dev,
- 	if (vf_dev->driver)
- 		return -EBUSY;
- 
-+	if (pcie_tag_config == PCIE_TAG_PEER2PEER)
-+		return -EPERM;
-+
- 	if (!pcie_rp_10bit_tag_cmp_supported(pdev))
- 		return -EPERM;
- 
-diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-index f571e4a0eb4c..17aef11454d3 100644
---- a/drivers/pci/pci-sysfs.c
-+++ b/drivers/pci/pci-sysfs.c
-@@ -322,6 +322,9 @@ static ssize_t pci_10bit_tag_store(struct device *dev,
- 	if (pdev->driver)
- 		return -EBUSY;
- 
-+	if (pcie_tag_config == PCIE_TAG_PEER2PEER)
-+		return -EPERM;
-+
- 	if (!pcie_rp_10bit_tag_cmp_supported(pdev))
- 		return -EPERM;
- 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 64138a83b0f7..46faf2e8c8ab 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -118,6 +118,8 @@ enum pcie_bus_config_types pcie_bus_config = PCIE_BUS_PEER2PEER;
- enum pcie_bus_config_types pcie_bus_config = PCIE_BUS_DEFAULT;
- #endif
- 
-+enum pcie_tag_config_types pcie_tag_config = PCIE_TAG_DEFAULT;
-+
- /*
-  * The default CLS is used if arch didn't set CLS explicitly and not
-  * all pci devices agree on the same value.  Arch can override either
-@@ -6795,6 +6797,8 @@ static int __init pci_setup(char *str)
- 				pci_add_flags(PCI_SCAN_ALL_PCIE_DEVS);
- 			} else if (!strncmp(str, "disable_acs_redir=", 18)) {
- 				disable_acs_redir_param = str + 18;
-+			} else if (!strncmp(str, "pcie_tag_peer2peer", 18)) {
-+				pcie_tag_config = PCIE_TAG_PEER2PEER;
- 			} else {
- 				pr_err("PCI: Unknown option `%s'\n", str);
- 			}
-diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-index f719a41dfc7f..7846aa7b85dc 100644
---- a/drivers/pci/pci.h
-+++ b/drivers/pci/pci.h
-@@ -59,6 +59,13 @@ struct pci_cap_saved_state *pci_find_saved_cap(struct pci_dev *dev, char cap);
- struct pci_cap_saved_state *pci_find_saved_ext_cap(struct pci_dev *dev,
- 						   u16 cap);
- 
-+enum pcie_tag_config_types {
-+	PCIE_TAG_DEFAULT,   /* Enable 10-Bit Tag Requester for devices below
-+			       Root Port that support 10-Bit Tag Completer. */
-+	PCIE_TAG_PEER2PEER  /* Disable 10-Bit Tag Requester for all devices. */
-+};
-+extern enum pcie_tag_config_types pcie_tag_config;
-+
- #define PCI_PM_D2_DELAY         200	/* usec; see PCIe r4.0, sec 5.9.1 */
- #define PCI_PM_D3HOT_WAIT       10	/* msec */
- #define PCI_PM_D3COLD_WAIT      100	/* msec */
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 705dd4e85df5..ab18fac5d54d 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -2056,10 +2056,30 @@ bool pcie_rp_10bit_tag_cmp_supported(struct pci_dev *dev)
- 	return true;
- }
- 
-+static void pci_configure_10bit_tags(struct pci_dev *dev)
-+{
-+	/*
-+	 * PCIe 5.0 section 9.3.5.10 10-Bit Tag Requester Enable in Device
-+	 * Control 2 Register is RsvdP for VF.
-+	 */
-+	if (dev->is_virtfn)
-+		return;
-+
-+	if (!pcie_rp_10bit_tag_cmp_supported(dev))
-+		return;
-+
-+	if (pci_pcie_type(dev) != PCI_EXP_TYPE_ENDPOINT)
-+		return;
-+
-+	pci_dbg(dev, "enabling 10-Bit Tag Requester\n");
-+	pcie_capability_set_word(dev, PCI_EXP_DEVCTL2,
-+				PCI_EXP_DEVCTL2_10BIT_TAG_REQ_EN);
-+}
-+
- int pci_configure_extended_tags(struct pci_dev *dev, void *ign)
- {
- 	struct pci_host_bridge *host;
--	u16 ctl;
-+	u16 ctl, ctl2;
- 	int ret;
- 
- 	if (!pci_is_pcie(dev))
-@@ -2072,6 +2092,10 @@ int pci_configure_extended_tags(struct pci_dev *dev, void *ign)
- 	if (ret)
- 		return 0;
- 
-+	ret = pcie_capability_read_word(dev, PCI_EXP_DEVCTL2, &ctl2);
-+	if (ret)
-+		return 0;
-+
- 	host = pci_find_host_bridge(dev->bus);
- 	if (!host)
- 		return 0;
-@@ -2086,6 +2110,12 @@ int pci_configure_extended_tags(struct pci_dev *dev, void *ign)
- 			pcie_capability_clear_word(dev, PCI_EXP_DEVCTL,
- 						   PCI_EXP_DEVCTL_EXT_TAG);
- 		}
-+
-+		if (ctl2 & PCI_EXP_DEVCTL2_10BIT_TAG_REQ_EN) {
-+			pci_info(dev, "disabling 10-Bit Tags\n");
-+			pcie_capability_clear_word(dev, PCI_EXP_DEVCTL2,
-+					PCI_EXP_DEVCTL2_10BIT_TAG_REQ_EN);
-+		}
- 		return 0;
- 	}
- 
-@@ -2094,6 +2124,20 @@ int pci_configure_extended_tags(struct pci_dev *dev, void *ign)
- 		pcie_capability_set_word(dev, PCI_EXP_DEVCTL,
- 					 PCI_EXP_DEVCTL_EXT_TAG);
- 	}
-+
-+	if ((pcie_tag_config == PCIE_TAG_PEER2PEER) &&
-+	    (ctl2 & PCI_EXP_DEVCTL2_10BIT_TAG_REQ_EN)) {
-+		pci_info(dev, "disabling 10-Bit Tags\n");
-+		pcie_capability_clear_word(dev, PCI_EXP_DEVCTL2,
-+					PCI_EXP_DEVCTL2_10BIT_TAG_REQ_EN);
-+		return 0;
-+	}
-+
-+	if (pcie_tag_config != PCIE_TAG_DEFAULT)
-+		return 0;
-+
-+	pci_configure_10bit_tags(dev);
-+
- 	return 0;
- }
- 
--- 
-2.22.0
-
+>
+> Hi Hans, Seongyong,
+>
+> On Mon, Sep 13, 2021 at 10:57:04AM +0200, Hans Verkuil wrote:
+> > On 05/08/2021 16:55, Sakari Ailus wrote:
+> > > Hi Seongyong,
+> > >
+> > > On Wed, Jun 09, 2021 at 12:24:51AM +0900, Seongyong Park wrote:
+> > >> On MLX90640, Each measurement step updates half of the pixels in the=
+ frame
+> > >> (every other pixel in default "chess mode", and every other row
+> > >> in "interleave mode"), while additional coefficient data (25th & 26t=
+h row)
+> > >> updates every step. The compensational coefficient data only corresp=
+onds
+> > >> with the pixels updated in the same step.
+> > >>
+> > >> Only way to know which "subpage" was updated on the last step is to =
+read
+> > >> "status register" on address 0x8000. Without this data,
+> > >> compensation calculation may be able to detect which sets of pixels =
+have
+> > >> been updated, but it will have to make assumptions when frame skip h=
+appens,
+> > >> and there is no way to do it correctly when the host simply cannot
+> > >> keep up with refresh rate.
+> > >>
+> > >> Signed-off-by: Seongyong Park <euphoriccatface@gmail.com>
+> > >> ---
+> > >>  drivers/media/i2c/video-i2c.c | 13 +++++++++----
+> > >>  1 file changed, 9 insertions(+), 4 deletions(-)
+> > >>
+> > >> diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video=
+-i2c.c
+> > >> index 64ba96329..2b50a76f3 100644
+> > >> --- a/drivers/media/i2c/video-i2c.c
+> > >> +++ b/drivers/media/i2c/video-i2c.c
+> > >> @@ -74,7 +74,8 @@ static const struct v4l2_fmtdesc mlx90640_format =
+=3D {
+> > >>
+> > >>  static const struct v4l2_frmsize_discrete mlx90640_size =3D {
+> > >>    .width =3D 32,
+> > >> -  .height =3D 26, /* 24 lines of pixel data + 2 lines of processing=
+ data */
+> > >> +  .height =3D 27,
+> > >> +  /* 24 lines of pixel data + 2 lines of processing data + 1 line o=
+f registers */
+> > >
+> > > This device should actually use a multi-plane format as the data isn'=
+t
+> > > Y16_BE as the driver declares. That said, the format would be device
+> > > specific and using one would require specific support from applicatio=
+ns.
+> > >
+> > > I might just declare it produces fewer lines while an application tha=
+t
+> > > knows the device could access the extra data close to the end of the
+> > > buffer.
+> > >
+> > > An alternative would be to use that multi-plane format and keep drive=
+r
+> > > support for the plain Y16_BE as well. But I think this would be a bit
+> > > heavy-weight solution.
+> > >
+> > > I wonder what Hans thinks.
+> >
+> > I think it is a bit overkill as well.
+> >
+> > Wouldn't it be better to just add a new pixel format for this device, a=
+nd
+> > document it properly? I would keep the existing Y16_BE as it was to avo=
+id
+> > breaking userspace (since adding the extra line breaks the ABI IMHO), a=
+nd
+> > add a new format that properly documents how to parse the contents of t=
+he
+> > buffer, which includes the last line with the status register.
+> >
+> > Sorry for the late reply, it looks like an attempt was made to CC me, b=
+ut
+> > the email address was wrong, so I never received it. I only noticed thi=
+s
+> > when I started to review this patch.
+>
+> Yeah, my mistake. I thought I had an alias for you but apparently not. I =
+do
+> now.
+>
+> I think that'd be fine, albeit equally heavy-weight. But also correct.
+> Documenting what's there is also important.
+>
+> --
+> Regards,
+>
+> Sakari Ailus
