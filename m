@@ -2,110 +2,111 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E9B1C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 11 Oct 2021 10:42:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F7D2C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 11 Oct 2021 11:01:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2925360241
-	for <linux-media@archiver.kernel.org>; Mon, 11 Oct 2021 10:42:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C0E560E9C
+	for <linux-media@archiver.kernel.org>; Mon, 11 Oct 2021 11:01:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235963AbhJKKoO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Oct 2021 06:44:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39016 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235925AbhJKKoK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Oct 2021 06:44:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ED12A60187;
-        Mon, 11 Oct 2021 10:42:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633948930;
-        bh=cjx+5rsYe8UvNF1b9zMrsBf02i/1bJyf0x9UEIvBXgU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gWQav5hpST88/wYDpkh53hX1b4+V0AC77g6mqN4yfcQ9TTH+8ZwTBgH5rzi/pnN3x
-         wSYLuiKJfUdEboJUvENckKIQM0lLvsR9oNoRIjX9KPi+P/tSPMy1tCzXrLXXSOobVJ
-         QbwXpBFpzucrT72JyhRUaL3GoZYGD3ke87TB4QHVFBVMetChnkPndzy63f0UiUpbYQ
-         pb8FgD97npdel3t9qA1/z4wSDmjH/CiwHXNFp6n4f2hkBuuKg/8/lgzzHQL0nUfp35
-         PawwqUfJMsLYAecPFvBAEHYTS0R4zGvDbeLlrkntEtIUBD92XuMX8qiHgR2z9WR1wh
-         irg2MXFeVLmGw==
-Date:   Mon, 11 Oct 2021 11:42:05 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH 05/12] regulator: Introduce tps68470-regulator driver
-Message-ID: <YWQU/SYTT5Vk24XH@sirena.org.uk>
-References: <20211008162121.6628-1-hdegoede@redhat.com>
- <20211008162121.6628-6-hdegoede@redhat.com>
+        id S236059AbhJKLDJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Oct 2021 07:03:09 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:25119 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235971AbhJKLDI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 11 Oct 2021 07:03:08 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4HSbQq5nBPz1DHYp;
+        Mon, 11 Oct 2021 18:59:31 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Mon, 11 Oct 2021 19:01:06 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Mon, 11 Oct
+ 2021 19:01:05 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH] media: lm3560: prevent memory leak of v4l2_ctrl_handler
+Date:   Mon, 11 Oct 2021 19:39:15 +0800
+Message-ID: <20211011113915.2646960-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CXmdVO9SzkamGhvy"
-Content-Disposition: inline
-In-Reply-To: <20211008162121.6628-6-hdegoede@redhat.com>
-X-Cookie: Your ignorance cramps my conversation.
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+If lm3560_subdev_init() or lm3560_init_device() failed, lm3560_probe() will
+directly return without free v4l2_ctrl_handler, which results memory leak:
 
---CXmdVO9SzkamGhvy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+unreferenced object 0xffff8881ea566e00 (size 256):
+  comm "xrun", pid 396, jiffies 4294949372 (age 80.376s)
+  hex dump (first 32 bytes):
+    d8 82 81 4d 81 88 ff ff 00 4c 56 ea 81 88 ff ff  ...M.....LV.....
+    10 6e 56 ea 81 88 ff ff 10 6e 56 ea 81 88 ff ff  .nV......nV.....
+  backtrace:
+    [<0000000055d4bb48>] __kmalloc_node+0x198/0x330
+    [<00000000e3b57405>] kvmalloc_node+0x65/0x130
+    [<0000000061e6063e>] v4l2_ctrl_new+0x820/0x1d40 [videodev]
+    [<00000000d7174c1b>] v4l2_ctrl_new_std+0x1d5/0x2b0 [videodev]
+    [<00000000cefb1a26>] lm3560_subdev_init+0x374/0x5e0 [lm3560]
+    [<00000000cda4c495>] lm3560_probe+0x1c2/0x61a [lm3560]
+    [<00000000d9502788>] i2c_device_probe+0xa07/0xbb0
+    [<00000000a5e908d0>] really_probe+0x285/0xc30
+    [<000000002fee9400>] __driver_probe_device+0x35f/0x4f0
+    [<0000000025fd5e96>] driver_probe_device+0x4f/0x140
+    [<00000000d37732ef>] __device_attach_driver+0x24c/0x330
+    [<000000001e0f0dfd>] bus_for_each_drv+0x15d/0x1e0
+    [<00000000c6c72d57>] __device_attach+0x267/0x410
+    [<000000005f7e4b8c>] bus_probe_device+0x1ec/0x2a0
+    [<000000001c3d09f6>] device_add+0xc1c/0x1d50
+    [<00000000cddb870a>] i2c_new_client_device+0x614/0xb00
 
-On Fri, Oct 08, 2021 at 06:21:14PM +0200, Hans de Goede wrote:
+Fixes: 7f6b11a18c30 ("[media] media: i2c: add driver for dual LED Flash, lm3560")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ drivers/media/i2c/lm3560.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-> +++ b/drivers/regulator/tps68470-regulator.c
-> @@ -0,0 +1,194 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Regulator driver for TPS68470 PMIC
-> + *
+diff --git a/drivers/media/i2c/lm3560.c b/drivers/media/i2c/lm3560.c
+index 9e34ccce4fc3..8d2e224c725b 100644
+--- a/drivers/media/i2c/lm3560.c
++++ b/drivers/media/i2c/lm3560.c
+@@ -432,15 +432,22 @@ static int lm3560_probe(struct i2c_client *client,
+ 
+ 	rval = lm3560_subdev_init(flash, LM3560_LED1, "lm3560-led1");
+ 	if (rval < 0)
+-		return rval;
++		goto free_led0;
+ 
+ 	rval = lm3560_init_device(flash);
+ 	if (rval < 0)
+-		return rval;
++		goto free_led1;
+ 
+ 	i2c_set_clientdata(client, flash);
+ 
+ 	return 0;
++
++free_led1:
++	v4l2_ctrl_handler_free(&flash->ctrls_led[LM3560_LED1]);
++free_led0:
++	v4l2_ctrl_handler_free(&flash->ctrls_led[LM3560_LED0]);
++
++	return rval;
+ }
+ 
+ static int lm3560_remove(struct i2c_client *client)
+-- 
+2.25.1
 
-Please make the entire comment a C++ one so things look more
-intentional.
-
-> +
-> +/*
-> + * The ACPI tps68470 probe-ordering depends on the clk/gpio/regulator drivers
-> + * being registered before the MFD cells are created (the MFD driver calls
-> + * acpi_dev_clear_dependencies() after the cell creation).
-> + * subsys_initcall() ensures this when the drivers are builtin.
-> + */
-> +static int __init tps68470_regulator_init(void)
-> +{
-> +	return platform_driver_register(&tps68470_regulator_driver);
-> +}
-> +subsys_initcall(tps68470_regulator_init);
-
-If this is actually required then the driver is broken for modular use
-which frankly is just generally broken.  I don't understand why this
-driver would require this when other drivers don't, or what the actual
-requirement is here - what does the call do and why is the ordering
-important?
-
---CXmdVO9SzkamGhvy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFkFPwACgkQJNaLcl1U
-h9DYAQf/ZlwsujMRBtUtj8bnTodoar5ljYIwvbbIIPON2PaSlXELcV/AX9h7me8A
-R3OBXlixWnyr94CUY3iH/jQFJKqMuIreX0T9TCwjfMgHltPFQUiTbyPA+HhsTYAn
-dyxV8AF3WBEJVmrRJ3nhSkM8UFz5we/AqLeSwbhhW6Z/J/Cy/n1bhSyEJVomkT1j
-cw7+RmGlwHCvVHM0qmZs0h59wL1fQhGL5BH0IgjEDFokKBEfg+zPJTeRYtf4FU0n
-7RjHcJF067H+I4hOCikqmtG+FzdT+wewYIWNwFkOmkvVYLEHqg/uV/8q0oLVzxxi
-QI2Rqn2VTDC8k/pQZA+vsyF5fNNgmA==
-=5gYB
------END PGP SIGNATURE-----
-
---CXmdVO9SzkamGhvy--
