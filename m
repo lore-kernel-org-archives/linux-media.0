@@ -2,224 +2,97 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98B68C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 11 Oct 2021 12:36:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32C7AC4321E
+	for <linux-media@archiver.kernel.org>; Mon, 11 Oct 2021 13:28:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CD3260F3A
-	for <linux-media@archiver.kernel.org>; Mon, 11 Oct 2021 12:36:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EF9560F38
+	for <linux-media@archiver.kernel.org>; Mon, 11 Oct 2021 13:28:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236617AbhJKMiU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Oct 2021 08:38:20 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:48088 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234738AbhJKMiT (ORCPT
+        id S236922AbhJKNaP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Oct 2021 09:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236919AbhJKNaO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Oct 2021 08:38:19 -0400
-Received: from [IPv6:2a02:810a:880:f54:b116:1535:401e:a6ca] (unknown [IPv6:2a02:810a:880:f54:b116:1535:401e:a6ca])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D42FE1F42D3F;
-        Mon, 11 Oct 2021 13:36:16 +0100 (BST)
-Subject: Re: [PATCH v8 04/12] iommu/mediatek: Add device_link between the
- consumer and the larb devices
-To:     Yong Wu <yong.wu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        David Airlie <airlied@linux.ie>,
+        Mon, 11 Oct 2021 09:30:14 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A6DC06161C
+        for <linux-media@vger.kernel.org>; Mon, 11 Oct 2021 06:28:14 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mZvLZ-0006fo-Rl; Mon, 11 Oct 2021 15:28:05 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mZvLW-0003ns-BL; Mon, 11 Oct 2021 15:28:02 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mZvLW-0000Su-AS; Mon, 11 Oct 2021 15:28:02 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Evan Green <evgreen@chromium.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Will Deacon <will.deacon@arm.com>,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
-        Matthias Kaehlcke <mka@chromium.org>, anan.sun@mediatek.com,
-        yi.kuo@mediatek.com, acourbot@chromium.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Eizan Miyamoto <eizan@chromium.org>,
-        anthony.huang@mediatek.com,
-        Frank Wunderlich <frank-w@public-files.de>
-References: <20210929013719.25120-1-yong.wu@mediatek.com>
- <20210929013719.25120-5-yong.wu@mediatek.com>
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Message-ID: <e00b92db-0562-27ca-2f96-1f03ff824988@collabora.com>
-Date:   Mon, 11 Oct 2021 14:36:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        kernel@pengutronix.de, linux-media@vger.kernel.org
+Subject: [PATCH 06/13] media: cxd2880: Eliminate dead code
+Date:   Mon, 11 Oct 2021 15:27:47 +0200
+Message-Id: <20211011132754.2479853-7-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
+References: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20210929013719.25120-5-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+X-Patch-Hashes: v=1; h=sha256; i=i/V0IwiXrJHb2puTsy4r3UAQrVBpJK4uRHfeGK5dIi4=; m=6Brp6ipiIrN4N0gba2jlJ7ZY/JS2k/XshUNdN7/roa8=; p=8ZiFid/gojahfXRtSIUMwOZadkeWb7YdowfHaijfOII=; g=d6494736086a7092e3c965bf6057c1246baeecdc
+X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFkO3AACgkQwfwUeK3K7An0qwgAj8V mDxoME459ANjclTFtNbTpA1pzAKyZwdClCAQ9VnZIJIZhfNdG81qCXcPjvYi4zdwJeEHFUwBONzPT PrvEmxFgDrETZHjQbuEHlAjQI7Eqw7VrPeD5Lu+geB4XEdUC/kMatvjqMme7wAX5hkoKxmKMzWk12 MeqPBzXo73w6z/eug2ODOdUypkdm2MLZSRl9NrqVR46wXOi0MWMG44YbfeJBwrWYe8bykfqnFGEOC WWgyK97pP7n/mnemkzTkJ3JZDLmajZjMs5PO+VVH5HG35Wr8lc0PATn8OOZm8haAkZC1otmbYUV0m L2zPwQ1EFUnRMZ8Xo+yMyHEsUxXa4nw==
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+An spi remove callback is never called with an spi_device pointer that
+is NULL. Also it is only called for devices that probed successfully. As
+cxd2880_spi_probe() always sets driver data, spi_get_drvdata() cannot be
+NULL.
 
+Also the return value of spi remove callbacks is ignored anyway and not
+freeing resources in .remove() is a bad idea.
 
-On 29.09.21 03:37, Yong Wu wrote:
-> MediaTek IOMMU-SMI diagram is like below. all the consumer connect with
-> smi-larb, then connect with smi-common.
-> 
->          M4U
->           |
->      smi-common
->           |
->    -------------
->    |         |    ...
->    |         |
-> larb1     larb2
->    |         |
-> vdec       venc
-> 
-> When the consumer works, it should enable the smi-larb's power which
-> also need enable the smi-common's power firstly.
-> 
-> Thus, First of all, use the device link connect the consumer and the
-> smi-larbs. then add device link between the smi-larb and smi-common.
-> 
-> This patch adds device_link between the consumer and the larbs.
-> 
-> When device_link_add, I add the flag DL_FLAG_STATELESS to avoid calling
-> pm_runtime_xx to keep the original status of clocks. It can avoid two
-> issues:
-> 1) Display HW show fastlogo abnormally reported in [1]. At the beggining,
-> all the clocks are enabled before entering kernel, but the clocks for
-> display HW(always in larb0) will be gated after clk_enable and clk_disable
-> called from device_link_add(->pm_runtime_resume) and rpm_idle. The clock
-> operation happened before display driver probe. At that time, the display
-> HW will be abnormal.
-> 
-> 2) A deadlock issue reported in [2]. Use DL_FLAG_STATELESS to skip
-> pm_runtime_xx to avoid the deadlock.
-> 
-> Corresponding, DL_FLAG_AUTOREMOVE_CONSUMER can't be added, then
-> device_link_removed should be added explicitly.
-> 
-> [1] https://lore.kernel.org/linux-mediatek/1564213888.22908.4.camel@mhfsdcap03/
-> [2] https://lore.kernel.org/patchwork/patch/1086569/
-> 
-> Suggested-by: Tomasz Figa <tfiga@chromium.org>
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> Tested-by: Frank Wunderlich <frank-w@public-files.de> # BPI-R2/MT7623
-> ---
->   drivers/iommu/mtk_iommu.c    | 22 ++++++++++++++++++++++
->   drivers/iommu/mtk_iommu_v1.c | 20 +++++++++++++++++++-
->   2 files changed, 41 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index d5848f78a677..a2fa55899434 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -560,22 +560,44 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
->   {
->   	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
->   	struct mtk_iommu_data *data;
-> +	struct device_link *link;
-> +	struct device *larbdev;
-> +	unsigned int larbid;
->   
->   	if (!fwspec || fwspec->ops != &mtk_iommu_ops)
->   		return ERR_PTR(-ENODEV); /* Not a iommu client device */
->   
->   	data = dev_iommu_priv_get(dev);
->   
-> +	/*
-> +	 * Link the consumer device with the smi-larb device(supplier)
-> +	 * The device in each a larb is a independent HW. thus only link
-> +	 * one larb here.
-> +	 */
-> +	larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/media/spi/cxd2880-spi.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-so larbid is always the same for all the ids of a device? If so
-maybe it worth testing it and return error if this is not the case.
+diff --git a/drivers/media/spi/cxd2880-spi.c b/drivers/media/spi/cxd2880-spi.c
+index b91a1e845b97..67cacf29a61e 100644
+--- a/drivers/media/spi/cxd2880-spi.c
++++ b/drivers/media/spi/cxd2880-spi.c
+@@ -628,19 +628,8 @@ cxd2880_spi_probe(struct spi_device *spi)
+ static int
+ cxd2880_spi_remove(struct spi_device *spi)
+ {
+-	struct cxd2880_dvb_spi *dvb_spi;
++	struct cxd2880_dvb_spi *dvb_spi = spi_get_drvdata(spi);
+ 
+-	if (!spi) {
+-		pr_err("invalid arg\n");
+-		return -EINVAL;
+-	}
+-
+-	dvb_spi = spi_get_drvdata(spi);
+-
+-	if (!dvb_spi) {
+-		pr_err("failed\n");
+-		return -EINVAL;
+-	}
+ 	dvb_spi->demux.dmx.remove_frontend(&dvb_spi->demux.dmx,
+ 					   &dvb_spi->dmx_fe);
+ 	dvb_dmxdev_release(&dvb_spi->dmxdev);
+-- 
+2.30.2
 
-Thanks,
-Dafna
-
-> +	larbdev = data->larb_imu[larbid].dev;
-> +	link = device_link_add(dev, larbdev,
-> +			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
-> +	if (!link)
-> +		dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
->   	return &data->iommu;
->   }
->   
->   static void mtk_iommu_release_device(struct device *dev)
->   {
->   	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
-> +	struct mtk_iommu_data *data;
-> +	struct device *larbdev;
-> +	unsigned int larbid;
->   
->   	if (!fwspec || fwspec->ops != &mtk_iommu_ops)
->   		return;
->   
-> +	data = dev_iommu_priv_get(dev);
-> +	larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
-> +	larbdev = data->larb_imu[larbid].dev;
-> +	device_link_remove(dev, larbdev);
-> +
->   	iommu_fwspec_free(dev);
->   }
->   
-> diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
-> index 4d7809432239..e6f13459470e 100644
-> --- a/drivers/iommu/mtk_iommu_v1.c
-> +++ b/drivers/iommu/mtk_iommu_v1.c
-> @@ -423,7 +423,9 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
->   	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
->   	struct of_phandle_args iommu_spec;
->   	struct mtk_iommu_data *data;
-> -	int err, idx = 0;
-> +	int err, idx = 0, larbid;
-> +	struct device_link *link;
-> +	struct device *larbdev;
->   
->   	/*
->   	 * In the deferred case, free the existed fwspec.
-> @@ -453,6 +455,14 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
->   
->   	data = dev_iommu_priv_get(dev);
->   
-> +	/* Link the consumer device with the smi-larb device(supplier) */
-> +	larbid = mt2701_m4u_to_larb(fwspec->ids[0]);
-> +	larbdev = data->larb_imu[larbid].dev;
-> +	link = device_link_add(dev, larbdev,
-> +			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
-> +	if (!link)
-> +		dev_err(dev, "Unable to link %s\n", dev_name(larbdev));
-> +
->   	return &data->iommu;
->   }
->   
-> @@ -473,10 +483,18 @@ static void mtk_iommu_probe_finalize(struct device *dev)
->   static void mtk_iommu_release_device(struct device *dev)
->   {
->   	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
-> +	struct mtk_iommu_data *data;
-> +	struct device *larbdev;
-> +	unsigned int larbid;
->   
->   	if (!fwspec || fwspec->ops != &mtk_iommu_ops)
->   		return;
->   
-> +	data = dev_iommu_priv_get(dev);
-> +	larbid = mt2701_m4u_to_larb(fwspec->ids[0]);
-> +	larbdev = data->larb_imu[larbid].dev;
-> +	device_link_remove(dev, larbdev);
-> +
->   	iommu_fwspec_free(dev);
->   }
->   
-> 
