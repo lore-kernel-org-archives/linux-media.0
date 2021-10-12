@@ -2,110 +2,69 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61200C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 08:23:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C381C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 08:30:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 436A6608FE
-	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 08:23:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DE9060EE5
+	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 08:30:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234812AbhJLIZQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Oct 2021 04:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234501AbhJLIZP (ORCPT
+        id S234937AbhJLIco (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Oct 2021 04:32:44 -0400
+Received: from service.sunplusit.com ([211.20.105.19]:45471 "EHLO
+        itmg.sunplusit.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234829AbhJLIcn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Oct 2021 04:25:15 -0400
-Received: from lb1-smtp-cloud7.xs4all.net (lb1-smtp-cloud7.xs4all.net [IPv6:2001:888:0:108::1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75A2C061570;
-        Tue, 12 Oct 2021 01:23:13 -0700 (PDT)
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id aD40m6YsKk3b0aD44mPZdY; Tue, 12 Oct 2021 10:23:12 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1634026992; bh=IcmG4hlwkywRE0PK6X1+E437tEYrBkwUPVeE4O1mHiY=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=RCnAujWlRxHBoL1QdKw48WfQpGdxT6iixcng9vb0Xc1Z1wUrLPFQ1mVx9C7flL3a8
-         Y7TZllynMNSC9Mvw0HgVf/SUIz2OQieIJ3LmTTLAIHzreKT+aJe968qIOqekjDSLqd
-         p9i641lKestJ0hR6dFGgkny/B9rrd6TlRmlj/V+bh441ZYM2AifkLjgnKlxru5Xp7n
-         /3JW8PNUlReSH2oWq7bz36bnVcUEY1x0WSsIInhHqAMC7b14d4KNqF4oNSKmBqnrqv
-         RvySXj/7O8zdxhcTdmAmo/h9+OdU08NA9H3PnCCK7TlqYTXqa3sNxE2kH8x/rQt1Dy
-         zg/yZtjKhOSzw==
-Subject: Re: [PATCH] media: Kconfig: Make DVB_CORE=m possible when
- MEDIA_SUPPORT=y
-To:     Lecopzer Chen <lecopzer.chen@mediatek.com>, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, yj.chiang@mediatek.com
-References: <20211005105110.14082-1-lecopzer.chen@mediatek.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <5086eb11-621f-29ed-e2dd-2a262857b78c@xs4all.nl>
-Date:   Tue, 12 Oct 2021 10:23:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Tue, 12 Oct 2021 04:32:43 -0400
+X-MailGates: (compute_score:DELIVER,40,3)(audit_rules:UAAAAAAAAAALBAo1Kx
+        ZNRjcjSVkUPl0SPEsQbXwDXHsXAARpAg9DCFwjDWNUbCY3eyQfAGhiTCkdNS0ZRjcyVwB4AV
+        NBKBxWAUsLYB1/VnhpWRJcejlYew==)
+X-MGADT: QAAAAAAAAAALHwo1KxZNRjcjSVkUPl0SPEsQbXwDXHsXAARpAg9DCFwjDWMwbxUWXQ0/I
+        EhUWkFUFScXA29zAEpxERsLaVsX
+Received: from 172.30.8.112
+        by itmg2.sunplusit.com.tw with MailGates ESMTP Server V5.0(28610:0:AUTH_RELAY)
+        (envelope-from <hn.chen@sunplusit.com>); Tue, 12 Oct 2021 15:59:58 +0800 (CST)
+In-Reply-To: <20210915200525.448941-1-ribalda@chromium.org>
+References: <20210915200525.448941-1-ribalda@chromium.org>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20211005105110.14082-1-lecopzer.chen@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfE/P2szUh3UowWLMZqnKxz/PUYZfRHCTaA2A7qVF8Y5nVArKLxkVRNI9niMZUYQjgR2wrx96rDLeiC+F1OrKBhpbh1S2YxkJeEWDEpZR/K9rqsFcGD7i
- xnG4TRY9gW44QLWvk/71efYDqvDpEjIl4g7Eh3/CP6vx+0laTcwJuy/RSIWNHGFHlat5UM+o3zDLPB0Hf7WhgZScMBHlfoWd/9Y6oqNL8PazR/lVE/8bx2YW
- v+GY5T/P0FE7ht0fhuUHSdaccWVgBnRrBHYmqSSFF/DmiyhStMWU1dE0AhU8ZAAgeG8IPwqCmO0+Wp8PniuZrdDVC62qD/iNAnSBXvBRbXAOQ01BXNgL85C7
- 63DCnrFp
+Subject: Re: [PATCH 0/3] uvcvideo: Fix hw timestamp in Sunplus modules
+X-KeepSent: 2CD4BF44:6BBDEBB3-4825876C:002AB862;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3 September 15, 2011
+Message-ID: <OF2CD4BF44.6BBDEBB3-ON4825876C.002AB862-4825876C.002BF1E7@sunplusit.com>
+From:   hn.chen@sunplusit.com
+Date:   Tue, 12 Oct 2021 15:59:59 +0800
+X-MIMETrack: Serialize by Router on itmail06/SunplusIT(Release 8.5.3FP3|November 15, 2012) at
+ 10/12/2021 03:59:59 PM,
+        Serialize complete at 10/12/2021 03:59:59 PM
+Content-Type: text/plain; charset="Big5"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 05/10/2021 12:51, Lecopzer Chen wrote:
-> A case that we need VIDEO_DEV=y but DVB_CORE=m, and this doesn't
-> work since DVB_CORE is default MEDIA_DIGITAL_TV_SUPPORT and then
-> follows MEDIA_SUPPORT.
-> 
-> Change to tristate to make DVB_CORE=m possible when MEDIA_SUPPORT=y
-> 
-> Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
-> ---
->  drivers/media/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-> index b07812657cee..c3baf92b4d02 100644
-> --- a/drivers/media/Kconfig
-> +++ b/drivers/media/Kconfig
-> @@ -88,7 +88,7 @@ config MEDIA_ANALOG_TV_SUPPORT
->  		will disable support for them.
->  
->  config MEDIA_DIGITAL_TV_SUPPORT
-> -	bool
-> +	tristate
->  	prompt "Digital TV" if MEDIA_SUPPORT_FILTER
->  	default y if !MEDIA_SUPPORT_FILTER
->  	help
-> 
-
-I don't think this is the right approach.
-
-I think the following patch would fix the issue, and it is also in line
-with what config VIDEO_DEV does.
-
-What do you think, Mauro?
-
-Regards,
-
-	Hans
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
-diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
-index c3baf92b4d02..46f7b1f75630 100644
---- a/drivers/media/Kconfig
-+++ b/drivers/media/Kconfig
-@@ -179,8 +179,7 @@ config MEDIA_CONTROLLER
- #
-
- config DVB_CORE
--	tristate
--	depends on MEDIA_DIGITAL_TV_SUPPORT
-+	tristate "DVB core"
- 	depends on (I2C || I2C=n)
- 	default MEDIA_DIGITAL_TV_SUPPORT
- 	select CRC32
+VGVzdGVkLWJ5OiBobi5jaGVuIDxobi5jaGVuQHN1bnBsdXNpdC5jb20+DQpUaGlzIHBhdGNoZWQg
+ZHJ2aWVyIGNhbiBmaW5kIHRoZSBTUElUJ3MgZGV2aWNlIHRvIHNldCB0aGUgcXVpcmsgdmFsdWUg
+YW5kIA0KdGltZXN0YW1wcyBsb29rIG9rLg0KVGhlIHBsYXRmb3JtIEkgdXNlZCBpcyBhIHg2NCBw
+YyBydW5uaW5nIENocm9taXVtIE9TIHdpdGgga2VybmVsIDQuMTQuDQoNCm5vdGU6IEJhY2twb3J0
+ZWQgdG8gNC4xNCBmb3Igb3VyIHRlc3QgZHVlIHRvIHBsYXRmb3JtIHJlcXVpcmVtZW50cy4NCg0K
+DQoNCg0KDQoNCkZyb206ICAgUmljYXJkbyBSaWJhbGRhIDxyaWJhbGRhQGNocm9taXVtLm9yZz4N
+ClRvOiAgICAgTGF1cmVudCBQaW5jaGFydCA8bGF1cmVudC5waW5jaGFydEBpZGVhc29uYm9hcmQu
+Y29tPiwgTWF1cm8gDQpDYXJ2YWxobyBDaGVoYWIgPG1jaGVoYWJAa2VybmVsLm9yZz4sIGxpbnV4
+LW1lZGlhQHZnZXIua2VybmVsLm9yZywgDQpsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnLCBo
+bi5jaGVuQHN1bnBsdXNpdC5jb20sIA0KQ2M6ICAgICBSaWNhcmRvIFJpYmFsZGEgPHJpYmFsZGFA
+Y2hyb21pdW0ub3JnPg0KRGF0ZTogICAyMDIxLzA5LzE2IKRXpMggMDQ6MzcNClN1YmplY3Q6ICAg
+ICAgICBbUEFUQ0ggMC8zXSB1dmN2aWRlbzogRml4IGh3IHRpbWVzdGFtcCBpbiBTdW5wbHVzIG1v
+ZHVsZXMNCg0KDQoNCkFkZCBhIHF1aXJrIHRvIGZpeCB0aGUgaGFyZHdhcmUgdGltZXN0YW1waW5n
+IGluIFN1bnBsdXMgY2FtZXJhIG1vZHVsZXMuDQoNClJpY2FyZG8gUmliYWxkYSAoMyk6DQogIG1l
+ZGlhOiB1dmM6IEV4dGVuZCBkb2N1bWVudGF0aW9uIG9mIHV2Y192aWRlb19jbG9ja19kZWNvZGUo
+KQ0KICBtZWRpYTogdXZjOiBBbGxvdyBxdWlya2luZyBieSBlbnRpdHkgZ3VpZA0KICBtZWRpYTog
+dXZjOiBDcmVhdGUgVVZDX1FVSVJLX0lHTk9SRV9FTVBUWV9UUyBxdWlyaw0KDQogZHJpdmVycy9t
+ZWRpYS91c2IvdXZjL3V2Y19kcml2ZXIuYyB8IDM2ICsrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKw0KIGRyaXZlcnMvbWVkaWEvdXNiL3V2Yy91dmNfdmlkZW8uYyAgfCAxMSArKysrKysrKysN
+CiBkcml2ZXJzL21lZGlhL3VzYi91dmMvdXZjdmlkZW8uaCAgIHwgIDEgKw0KIDMgZmlsZXMgY2hh
+bmdlZCwgNDggaW5zZXJ0aW9ucygrKQ0KDQotLSANCjIuMzMuMC4zMDkuZzMwNTJiODk0MzgtZ29v
+Zw0KDQoNCg0K
