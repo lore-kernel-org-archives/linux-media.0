@@ -2,69 +2,128 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C381C433F5
-	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 08:30:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 093B9C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 08:39:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0DE9060EE5
-	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 08:30:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C98CC604D2
+	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 08:39:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234937AbhJLIco (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Oct 2021 04:32:44 -0400
-Received: from service.sunplusit.com ([211.20.105.19]:45471 "EHLO
-        itmg.sunplusit.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234829AbhJLIcn (ORCPT
+        id S235028AbhJLIl0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Oct 2021 04:41:26 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42782 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234870AbhJLIlZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Oct 2021 04:32:43 -0400
-X-MailGates: (compute_score:DELIVER,40,3)(audit_rules:UAAAAAAAAAALBAo1Kx
-        ZNRjcjSVkUPl0SPEsQbXwDXHsXAARpAg9DCFwjDWNUbCY3eyQfAGhiTCkdNS0ZRjcyVwB4AV
-        NBKBxWAUsLYB1/VnhpWRJcejlYew==)
-X-MGADT: QAAAAAAAAAALHwo1KxZNRjcjSVkUPl0SPEsQbXwDXHsXAARpAg9DCFwjDWMwbxUWXQ0/I
-        EhUWkFUFScXA29zAEpxERsLaVsX
-Received: from 172.30.8.112
-        by itmg2.sunplusit.com.tw with MailGates ESMTP Server V5.0(28610:0:AUTH_RELAY)
-        (envelope-from <hn.chen@sunplusit.com>); Tue, 12 Oct 2021 15:59:58 +0800 (CST)
-In-Reply-To: <20210915200525.448941-1-ribalda@chromium.org>
-References: <20210915200525.448941-1-ribalda@chromium.org>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
+        Tue, 12 Oct 2021 04:41:25 -0400
+X-UUID: 4cf412d9876e48d4b14de15c2228a019-20211012
+X-UUID: 4cf412d9876e48d4b14de15c2228a019-20211012
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <guangming.cao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1964211283; Tue, 12 Oct 2021 16:39:21 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 12 Oct 2021 16:39:20 +0800
+Received: from mszswglt01.gcn.mediatek.inc (10.16.20.20) by
+ mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Tue, 12 Oct 2021 16:39:20 +0800
+From:   <guangming.cao@mediatek.com>
+To:     <christian.koenig@amd.com>
+CC:     <dri-devel@lists.freedesktop.org>, <guangming.cao@mediatek.com>,
+        <linaro-mm-sig@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <rdunlap@infradead.org>, <sumit.semwal@linaro.org>,
+        <wsd_upstream@mediatek.com>,
+        Guangming Cao <Guangming.Cao@mediatek.com>
+Subject: Re: [PATCH v2] dma-buf: remove restriction of IOCTL:DMA_BUF_SET_NAME
+Date:   Tue, 12 Oct 2021 16:41:09 +0800
+Message-ID: <20211012084109.176542-1-guangming.cao@mediatek.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <eba79a76-413b-570c-aec0-899a5f918d38@amd.com>
+References: <eba79a76-413b-570c-aec0-899a5f918d38@amd.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH 0/3] uvcvideo: Fix hw timestamp in Sunplus modules
-X-KeepSent: 2CD4BF44:6BBDEBB3-4825876C:002AB862;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3 September 15, 2011
-Message-ID: <OF2CD4BF44.6BBDEBB3-ON4825876C.002AB862-4825876C.002BF1E7@sunplusit.com>
-From:   hn.chen@sunplusit.com
-Date:   Tue, 12 Oct 2021 15:59:59 +0800
-X-MIMETrack: Serialize by Router on itmail06/SunplusIT(Release 8.5.3FP3|November 15, 2012) at
- 10/12/2021 03:59:59 PM,
-        Serialize complete at 10/12/2021 03:59:59 PM
-Content-Type: text/plain; charset="Big5"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-VGVzdGVkLWJ5OiBobi5jaGVuIDxobi5jaGVuQHN1bnBsdXNpdC5jb20+DQpUaGlzIHBhdGNoZWQg
-ZHJ2aWVyIGNhbiBmaW5kIHRoZSBTUElUJ3MgZGV2aWNlIHRvIHNldCB0aGUgcXVpcmsgdmFsdWUg
-YW5kIA0KdGltZXN0YW1wcyBsb29rIG9rLg0KVGhlIHBsYXRmb3JtIEkgdXNlZCBpcyBhIHg2NCBw
-YyBydW5uaW5nIENocm9taXVtIE9TIHdpdGgga2VybmVsIDQuMTQuDQoNCm5vdGU6IEJhY2twb3J0
-ZWQgdG8gNC4xNCBmb3Igb3VyIHRlc3QgZHVlIHRvIHBsYXRmb3JtIHJlcXVpcmVtZW50cy4NCg0K
-DQoNCg0KDQoNCkZyb206ICAgUmljYXJkbyBSaWJhbGRhIDxyaWJhbGRhQGNocm9taXVtLm9yZz4N
-ClRvOiAgICAgTGF1cmVudCBQaW5jaGFydCA8bGF1cmVudC5waW5jaGFydEBpZGVhc29uYm9hcmQu
-Y29tPiwgTWF1cm8gDQpDYXJ2YWxobyBDaGVoYWIgPG1jaGVoYWJAa2VybmVsLm9yZz4sIGxpbnV4
-LW1lZGlhQHZnZXIua2VybmVsLm9yZywgDQpsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnLCBo
-bi5jaGVuQHN1bnBsdXNpdC5jb20sIA0KQ2M6ICAgICBSaWNhcmRvIFJpYmFsZGEgPHJpYmFsZGFA
-Y2hyb21pdW0ub3JnPg0KRGF0ZTogICAyMDIxLzA5LzE2IKRXpMggMDQ6MzcNClN1YmplY3Q6ICAg
-ICAgICBbUEFUQ0ggMC8zXSB1dmN2aWRlbzogRml4IGh3IHRpbWVzdGFtcCBpbiBTdW5wbHVzIG1v
-ZHVsZXMNCg0KDQoNCkFkZCBhIHF1aXJrIHRvIGZpeCB0aGUgaGFyZHdhcmUgdGltZXN0YW1waW5n
-IGluIFN1bnBsdXMgY2FtZXJhIG1vZHVsZXMuDQoNClJpY2FyZG8gUmliYWxkYSAoMyk6DQogIG1l
-ZGlhOiB1dmM6IEV4dGVuZCBkb2N1bWVudGF0aW9uIG9mIHV2Y192aWRlb19jbG9ja19kZWNvZGUo
-KQ0KICBtZWRpYTogdXZjOiBBbGxvdyBxdWlya2luZyBieSBlbnRpdHkgZ3VpZA0KICBtZWRpYTog
-dXZjOiBDcmVhdGUgVVZDX1FVSVJLX0lHTk9SRV9FTVBUWV9UUyBxdWlyaw0KDQogZHJpdmVycy9t
-ZWRpYS91c2IvdXZjL3V2Y19kcml2ZXIuYyB8IDM2ICsrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKw0KIGRyaXZlcnMvbWVkaWEvdXNiL3V2Yy91dmNfdmlkZW8uYyAgfCAxMSArKysrKysrKysN
-CiBkcml2ZXJzL21lZGlhL3VzYi91dmMvdXZjdmlkZW8uaCAgIHwgIDEgKw0KIDMgZmlsZXMgY2hh
-bmdlZCwgNDggaW5zZXJ0aW9ucygrKQ0KDQotLSANCjIuMzMuMC4zMDkuZzMwNTJiODk0MzgtZ29v
-Zw0KDQoNCg0K
+From: Guangming Cao <Guangming.Cao@mediatek.com>
+
+> Am 09.10.21 um 07:55 schrieb guangming.cao@mediatek.com:
+> From: Guangming Cao <Guangming.Cao@mediatek.com>
+> >
+> > If dma-buf don't want userspace users to touch the dmabuf buffer,
+> > it seems we should add this restriction into dma_buf_ops.mmap,
+> > not in this IOCTL:DMA_BUF_SET_NAME.
+> >
+> > With this restriction, we can only know the kernel users of the dmabuf
+> > by attachments.
+> > However, for many userspace users, such as userpsace users of dma_heap,
+> > they also need to mark the usage of dma-buf, and they don't care about
+> > who attached to this dmabuf, and seems it's no meaning to be waiting for
+> > IOCTL:DMA_BUF_SET_NAME rather than mmap.
+> 
+> Sounds valid to me, but I have no idea why this restriction was added in 
+> the first place.
+> 
+> Can you double check the git history and maybe identify when that was 
+> added? Mentioning this change in the commit message then might make 
+> things a bit easier to understand.
+> 
+> Thanks,
+> Christian.
+It was add in this patch: https://patchwork.freedesktop.org/patch/310349/.
+However, there is no illustration about it.
+I guess it wants users to set_name when no attachments on the dmabuf,
+for case with attachments, we can find owner by device in attachments.
+But just I said in commit message, this is might not a good idea.
+
+Do you have any idea?
+> 
+> >
+> > Signed-off-by: Guangming Cao <Guangming.Cao@mediatek.com>
+> > ---
+> >   drivers/dma-buf/dma-buf.c | 14 ++------------
+> >   1 file changed, 2 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> > index 511fe0d217a0..db2f4efdec32 100644
+> > --- a/drivers/dma-buf/dma-buf.c
+> > +++ b/drivers/dma-buf/dma-buf.c
+> > @@ -325,10 +325,8 @@ static __poll_t dma_buf_poll(struct file *file, poll_table *poll)
+> >   
+> >   /**
+> >    * dma_buf_set_name - Set a name to a specific dma_buf to track the usage.
+> > - * The name of the dma-buf buffer can only be set when the dma-buf is not
+> > - * attached to any devices. It could theoritically support changing the
+> > - * name of the dma-buf if the same piece of memory is used for multiple
+> > - * purpose between different devices.
+> > + * It could theoretically support changing the name of the dma-buf if the same
+> > + * piece of memory is used for multiple purpose between different devices.
+> >    *
+> >    * @dmabuf: [in]     dmabuf buffer that will be renamed.
+> >    * @buf:    [in]     A piece of userspace memory that contains the name of
+> > @@ -346,19 +344,11 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
+> >   	if (IS_ERR(name))
+> >   		return PTR_ERR(name);
+> >   
+> > -	dma_resv_lock(dmabuf->resv, NULL);
+> > -	if (!list_empty(&dmabuf->attachments)) {
+> > -		ret = -EBUSY;
+> > -		kfree(name);
+> > -		goto out_unlock;
+> > -	}
+> >   	spin_lock(&dmabuf->name_lock);
+> >   	kfree(dmabuf->name);
+> >   	dmabuf->name = name;
+> >   	spin_unlock(&dmabuf->name_lock);
+> >   
+> > -out_unlock:
+> > -	dma_resv_unlock(dmabuf->resv);
+> >   	return ret;
+> >   }
+> >   
