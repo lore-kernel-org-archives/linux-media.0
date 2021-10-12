@@ -2,37 +2,37 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 002EBC433EF
-	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 14:16:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EE6DC433EF
+	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 14:32:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D0A576109E
-	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 14:16:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E82B6103D
+	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 14:32:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237240AbhJLOS2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Oct 2021 10:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
+        id S235309AbhJLOeU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Oct 2021 10:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237015AbhJLOS1 (ORCPT
+        with ESMTP id S237252AbhJLOeR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Oct 2021 10:18:27 -0400
+        Tue, 12 Oct 2021 10:34:17 -0400
 Received: from lb2-smtp-cloud8.xs4all.net (lb2-smtp-cloud8.xs4all.net [IPv6:2001:888:0:108::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65906C06161C
-        for <linux-media@vger.kernel.org>; Tue, 12 Oct 2021 07:16:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5524DC06174E
+        for <linux-media@vger.kernel.org>; Tue, 12 Oct 2021 07:32:15 -0700 (PDT)
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id aIZomsOPZx7rIaIZrmMJHw; Tue, 12 Oct 2021 16:16:23 +0200
+        id aIp8msThAx7rIaIpBmMLye; Tue, 12 Oct 2021 16:32:13 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1634048183; bh=rE26Onarf9mv0iwfowGou4R3SK1b8CimeNtaCDYdS2k=;
+        t=1634049133; bh=g9XrZmnh3UMjJvBHCpehZSHtTZAD1I3BElsxJwgBDU4=;
         h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
          Subject;
-        b=qL8BhOoVHUs4+xfbDZCN1Lc9uXBA8yW5rxbQPfZ6D3J54KWc/9TBbDy6nPQTQPrTh
-         iJmhWP52L5Lyur5Jhoq3LOcMAl2+K4W9Li8rKr3A8bmvWm99Uz3kG65bb012nW2h3d
-         lXOWDV/5EadM9vdXDpPBh+JxHa0hpcwDqUXKqKYB3Xx+5fnuzUXaHLPe4hQFgaKUDO
-         Ob/Fiu6bXWhkW3xll8A/tB44xxdqihPYTmrCXmnbnp0KrbKfqzM4NjyVo/sjx0ugQd
-         v2Od4V2+1xDoTD8gPEvw33yNEyyix8IYezk7vCac6Rnbn9rKd8K2gsMTlwdF0KDJrU
-         6kLXdlyMVIM2Q==
-Subject: Re: [PATCH v9 05/36] media: subdev: Add
- v4l2_subdev_validate_and_lock_state()
+        b=EvNVa7DvnLTku3E32R9NqVfvSWIwA0b1qEndaZW6mlyIBF7B2rxbx5j1y2wBmXZV+
+         kTKE8t7KVWNZ1MKDYiaNRiBSRWcQCpoc9yhfOKtr9C3cMcbLt9sv+IebVWDmbCZc1T
+         00O+F8jwyMVKW+FD6vwJiClAUQOwH997JNWTiVe0t1CGFQHH58iwUKkpXouKfOHvaU
+         2rrbBDzPR/3gk2Y5Dg49EZXGdMpkHfrAieW3T3ztPWV9ZyEjjzz89LdHf0zFCQiWbg
+         vBYceH4n000mV8cQNuBDMOLHzG/uoQWooxdHxeDa/wVRybEigMx0SFlKpVwwJb2OhU
+         G66SuRAC8nNDA==
+Subject: Re: [PATCH v9 02/36] media: subdev: add active state to struct
+ v4l2_subdev
 To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -41,98 +41,168 @@ To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Pratyush Yadav <p.yadav@ti.com>
 References: <20211005085750.138151-1-tomi.valkeinen@ideasonboard.com>
- <20211005085750.138151-6-tomi.valkeinen@ideasonboard.com>
+ <20211005085750.138151-3-tomi.valkeinen@ideasonboard.com>
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <c09d0bef-ad85-64aa-2165-beee40097e51@xs4all.nl>
-Date:   Tue, 12 Oct 2021 16:16:19 +0200
+Message-ID: <710f80a6-81a4-3c98-70d5-364e015d8bfd@xs4all.nl>
+Date:   Tue, 12 Oct 2021 16:32:10 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20211005085750.138151-6-tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20211005085750.138151-3-tomi.valkeinen@ideasonboard.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfMccAPxoo/cJ2XlHVICNbZb8sFgZmzxsTzhhBugul95SQKaL5OrvZJktr6YICEilvId1qiFpcb6iNO6R7sSj+bvPyvWtkSHSy1nr7aYer3GAxyk7zMBD
- pbBmmrW+ijvaUkGF/sJQgUP8OSh1PzShye/miyATLhVzGY36lwTbpfFbrJYTUpEd+fU8NGDKq2EreGb/QNVCvbcfccoE/js//sHwfWybtsCGuWhVPHHvanB5
- PkuK2frLgcd+3A5nxbKvv+G+B4esBlolMiz3eD/LWb++nVY9BtFO1Yhe2kEhX0abHqD8AouQNWruO+dd5buQaqy2+khfKPyqeQ/DFoxxpjyrR7n0ei8ZYF0P
- xR6tgHAe2iWIovZnRQvMRUDIvGHURRgpPuWWgWWlejcn4SPMyn9XC2vmsj/8yytX7nJy+3ZwQFW2p6PcaJ2ukYEJylgQy+HaoFxNV1eRRoVF8RBywlyJRGZJ
- 5HQSHP09vgnWQku7j+1KIPAinMCEWzNMqcxz6g==
+X-CMAE-Envelope: MS4xfOrRIVBBWX4yJc94+fMD2ea3BlpXPs+etg85PmWnodJHohPiQ7hxb2TCfizk2zZ0OHkWubFouhfF8cwF1I+Eb5djvhM32+EDXtaawPYlvxE4zH7C5S3N
+ LjyPEpPD8mOD9WXRtpUwbybbOvnC3qzTtOgu1OFsoqv7+O5P5ThhD+COXzSexf3TSjP+q09MfLE7Egfz+VROXFlA8YN1DKpC3+ZhuVfkcrw0dai3m5AZ7o90
+ tu0CBkWfNSsxlgLPgr0pHRWPEp4z6WZU6cbzYATHUW1KRZohwJiBqddlB7S4pTiQYw1raJK4qqyAh1UTXDCUT+cv3Z+1pIoskczoCC1stk5xQ7ixp9UV46fU
+ r7xpyKiEtAT7vV9jwc3AxVTpd29mC+I3XFJ97pVynuzd6i4Sr2dp98MLHRkTe3Q79caOeLBcOgeKZDPZzA84BKDigPklu6gF21ozXLLtN/12wg77yruoqV6N
+ 6pb2y4Lx7r5m/r/e8RaSgj67tN+RXWA3MeXfDQ==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 On 05/10/2021 10:57, Tomi Valkeinen wrote:
-> All suitable subdev ops are now passed either the TRY or the ACTIVE
-> state by the v4l2 core. However, other subdev drivers can still call the
-> ops passing NULL as the state, implying the active case.
+> Add a new 'state' field to struct v4l2_subdev to which we can store the
+> active state of a subdev. This will place the subdev configuration into
+> a known place, allowing us to use the state directly from the v4l2
+> framework, thus simplifying the drivers.
 > 
-> For all current upstream drivers this doesn't matter, as they do not
-> expect to get a valid state for ACTIVE case. But future drivers which
-> support multiplexed streaming and routing will depend on getting a state
-> for both active and try cases.
-> 
-> For new drivers we can mandate that the pipelines where the drivers are
-> used need to pass the state properly, or preferably, not call such
-> subdev ops at all.
-> 
-> However, if an existing subdev driver is changed to support multiplexed
-> streams, the driver has to consider cases where its ops will be called
-> with NULL state. The problem can easily be solved by using the
-> v4l2_subdev_validate_and_lock_state() helper, introduced here.
+> Also add functions v4l2_subdev_init_finalize() and
+> v4l2_subdev_cleanup(), which will allocate and free the active state.
+> The functions are named in a generic way so that they can be also used
+> for other subdev initialization work.
 > 
 > Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 > ---
->  include/media/v4l2-subdev.h | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
+>  drivers/media/v4l2-core/v4l2-subdev.c | 21 +++++++++++
+>  include/media/v4l2-subdev.h           | 51 +++++++++++++++++++++++++++
+>  2 files changed, 72 insertions(+)
 > 
+> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> index fe49c86a9b02..bcaf66a1e3d9 100644
+> --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> @@ -943,3 +943,24 @@ void v4l2_subdev_notify_event(struct v4l2_subdev *sd,
+>  	v4l2_subdev_notify(sd, V4L2_DEVICE_NOTIFY_EVENT, (void *)ev);
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_subdev_notify_event);
+> +
+> +int v4l2_subdev_init_finalize(struct v4l2_subdev *sd)
+> +{
+> +	struct v4l2_subdev_state *state;
+> +
+> +	state = __v4l2_subdev_state_alloc(sd);
+> +	if (IS_ERR(state))
+> +		return PTR_ERR(state);
+> +
+> +	sd->state = state;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(v4l2_subdev_init_finalize);
+> +
+> +void v4l2_subdev_cleanup(struct v4l2_subdev *sd)
+> +{
+> +	__v4l2_subdev_state_free(sd->state);
+> +	sd->state = NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(v4l2_subdev_cleanup);
 > diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-> index a6e8f531a396..b75eeaee492b 100644
+> index e52bf508c75b..3aaa7146e5ff 100644
 > --- a/include/media/v4l2-subdev.h
 > +++ b/include/media/v4l2-subdev.h
-> @@ -1313,4 +1313,37 @@ void v4l2_subdev_lock_state(struct v4l2_subdev_state *state);
->   */
->  void v4l2_subdev_unlock_state(struct v4l2_subdev_state *state);
->  
-> +/**
-> + * v4l2_subdev_validate_and_lock_state() - Gets locked TRY or ACTIVE subdev
+> @@ -898,6 +898,8 @@ struct v4l2_subdev_platform_data {
+>   * @subdev_notifier: A sub-device notifier implicitly registered for the sub-
+>   *		     device using v4l2_async_register_subdev_sensor().
+>   * @pdata: common part of subdevice platform data
+> + * @state: active state for the subdev (NULL for subdevs tracking the state
+> + *	   internally)
+>   *
+>   * Each instance of a subdev driver should create this struct, either
+>   * stand-alone or embedded in a larger struct.
+> @@ -929,6 +931,19 @@ struct v4l2_subdev {
+>  	struct v4l2_async_notifier *notifier;
+>  	struct v4l2_async_notifier *subdev_notifier;
+>  	struct v4l2_subdev_platform_data *pdata;
+> +
+> +	/*
+> +	 * The fields below are private, and should only be accessed via
+> +	 * appropriate functions.
+> +	 */
+> +
+> +	/*
+> +	 * TODO: state should most likely be changed from a pointer to an
+> +	 * embedded field. For the time being it's kept as a pointer to more
+> +	 * easily catch uses of state in the cases where the driver doesn't
+> +	 * support it.
+> +	 */
+> +	struct v4l2_subdev_state *state;
 
-I think this name is confusing since it isn't validating anything.
+Hmm:
 
-I'd call it v4l2_subdev_lock_and_return_state().
+struct v4l2_subdev_state {
+        struct v4l2_subdev_pad_config *pads;
+};
+
+and:
+
+struct v4l2_subdev_pad_config {
+        struct v4l2_mbus_framefmt try_fmt;
+        struct v4l2_rect try_crop;
+        struct v4l2_rect try_compose;
+};
+
+So why is this the active state if struct v4l2_subdev_pad_config has try_* fields?
+
+At the very least it should be mentioned somewhere in the code (and probably commit
+log as well) that the try_ prefix is historical, or will be removed later, or something
+like that.
 
 Regards,
 
 	Hans
 
-> + *					   state
-> + * @sd: subdevice
-> + * @state: subdevice state as passed to the subdev op
+>  };
+>  
+>  
+> @@ -1217,4 +1232,40 @@ extern const struct v4l2_subdev_ops v4l2_subdev_call_wrappers;
+>  void v4l2_subdev_notify_event(struct v4l2_subdev *sd,
+>  			      const struct v4l2_event *ev);
+>  
+> +/**
+> + * v4l2_subdev_init_finalize() - Finalize the initialization of the subdevice
+> + * @sd: The subdev
 > + *
-> + * Due to legacy reasons, when subdev drivers call ops in other subdevs they use
-> + * NULL as the state parameter, as subdevs always used to have their active
-> + * state stored privately.
+> + * This finalizes the initialization of the subdev, including allocation of
+> + * the active state for the subdev.
 > + *
-> + * However, newer state-aware subdev drivers, which store their active state in
-> + * a common place, subdev->state, expect to always get a proper state as a
-> + * parameter.
+> + * This must be called by the subdev drivers that use the centralized active
+> + * state, after the subdev struct has been initialized and
+> + * media_entity_pads_init() has been called.
 > + *
-> + * These state-aware drivers can use v4l2_subdev_validate_and_lock_state()
-> + * instead of v4l2_subdev_lock_state(). v4l2_subdev_validate_and_lock_state()
-> + * solves the issue by using subdev->state in case the passed state is
-> + * NULL.
+> + * Must call v4l2_subdev_cleanup() when the subdev is being removed.
+> + */
+> +int v4l2_subdev_init_finalize(struct v4l2_subdev *sd);
+> +
+> +/**
+> + * v4l2_subdev_cleanup() - Release the resources needed by the subdevice
+> + * @sd: The subdevice
 > + *
-> + * This is a temporary helper function, and should be removed when we can ensure
-> + * that all drivers pass proper state when calling other subdevs.
+> + * This will release the resources allocated in v4l2_subdev_init_finalize.
+> + */
+> +void v4l2_subdev_cleanup(struct v4l2_subdev *sd);
+> +
+> +/**
+> + * v4l2_subdev_get_active_state() - Return the active subdev state for subdevice
+> + * @sd: The subdevice
+> + *
+> + * Return the active state for the subdevice, or NULL if the subdev does not
+> + * support active state.
 > + */
 > +static inline struct v4l2_subdev_state *
-> +v4l2_subdev_validate_and_lock_state(struct v4l2_subdev *sd,
-> +				    struct v4l2_subdev_state *state)
+> +v4l2_subdev_get_active_state(struct v4l2_subdev *sd)
 > +{
-> +	state = state ? state : sd->state;
-> +
-> +	v4l2_subdev_lock_state(state);
-> +
-> +	return state;
+> +	return sd->state;
 > +}
 > +
 >  #endif
