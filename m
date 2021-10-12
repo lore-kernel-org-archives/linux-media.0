@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED848C433FE
-	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 08:41:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5B7EC4321E
+	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 08:41:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C799661078
-	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 08:41:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0393610E5
+	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 08:41:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235175AbhJLInz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Oct 2021 04:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S235189AbhJLIn4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Oct 2021 04:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234998AbhJLInz (ORCPT
+        with ESMTP id S235009AbhJLInz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 12 Oct 2021 04:43:55 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A58C061749
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D52FC061745
         for <linux-media@vger.kernel.org>; Tue, 12 Oct 2021 01:41:53 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1maDM7-0006go-RI; Tue, 12 Oct 2021 10:41:51 +0200
+        id 1maDM7-0006gm-RK; Tue, 12 Oct 2021 10:41:51 +0200
 Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1maDM7-0004OJ-0C; Tue, 12 Oct 2021 10:41:51 +0200
+        id 1maDM6-0004OG-VS; Tue, 12 Oct 2021 10:41:50 +0200
 Received: from mtr by dude03.red.stw.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1maDM6-003ASq-VN; Tue, 12 Oct 2021 10:41:50 +0200
+        id 1maDM6-003ASl-S1; Tue, 12 Oct 2021 10:41:50 +0200
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Marek Vasut <marex@denx.de>
@@ -38,12 +38,10 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         p.zabel@pengutronix.de, kernel@pengutronix.de,
         Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH v5 2/3] media: dt-bindings: Add Intersil ISL79987 DT bindings
-Date:   Tue, 12 Oct 2021 10:41:49 +0200
-Message-Id: <20211012084150.755160-3-m.tretter@pengutronix.de>
+Subject: [PATCH v5 0/3] media: i2c: isl7998x: Add driver for Intersil ISL7998x
+Date:   Tue, 12 Oct 2021 10:41:47 +0200
+Message-Id: <20211012084150.755160-1-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211012084150.755160-1-m.tretter@pengutronix.de>
-References: <20211012084150.755160-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -54,149 +52,66 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+This is v5 of the series to for adding the isl7998x driver [0]
 
-Add bindings for the Intersil ISL79987 analog to MIPI CSI-2 decoder.
+The isl7998x is an analog video to MIPI CSI-2 or BT.656 converter. The dt
+binding describes only the isl79987 chip, which supports MIPI CSI-2. The
+driver could be extended to handle isl79988 (for BT.656), too, but this isn't
+implemented.
 
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: devicetree@vger.kernel.org
-To: linux-media@vger.kernel.org
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
+In v5, I fixed the pre_streamon subdev call from imx6-mipi-csi2 to ensure
+backward compatibility with subdev drivers that do not implement pre_streamon
+as suggested by Philipp Zabel.
+
+Michael
+
+[0] https://lore.kernel.org/linux-media/20190520201812.7937-1-marex@denx.de/
+
 Changelog:
 
-v5: none
+v5:
 
-v4: none
+- ignore -ENOIOCTLCMD of pre_streamon for backwards compatibility
+
+v4:
+
+- add patch for imx6-mipi-csi2 to request LP-11 mode
+- update isl7998x driver with review feedback on v3
 
 v3:
 
 - rename pd-gpios property to powerdown-gpios
-- reference graph.yaml for ports/port properties
+- reference graph.yaml for port/ports property
 - remove reference to video-interfaces.txt
-- remove unnecessary description of ports property
 
 v2:
 
-- convert binding to yaml
-- change description to match only isl79987
-- replace num-inputs property with multiple ports
+- convert dt binding to yaml
+- change binding to ISL79987 only
+- general driver cleanup
+- convert driver to pm_runtime
+- use ports in device tree for specifying inputs
 - add reset gpio
----
- .../bindings/media/i2c/isil,isl79987.yaml     | 100 ++++++++++++++++++
- 1 file changed, 100 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/isil,isl79987.yaml
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/isil,isl79987.yaml b/Documentation/devicetree/bindings/media/i2c/isil,isl79987.yaml
-new file mode 100644
-index 000000000000..aee4a5966df3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/isil,isl79987.yaml
-@@ -0,0 +1,100 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/isil,isl79987.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Intersil ISL79987 Analog to MIPI CSI-2 decoder
-+
-+maintainers:
-+  - Michael Tretter <m.tretter@pengutronix.de>
-+  - Marek Vasut <marex@denx.de>
-+
-+description:
-+  The Intersil ISL79987 is an analog to MIPI CSI-2 decoder which is capable of
-+  receiving up to four analog stream and multiplexing them into up to four MIPI
-+  CSI-2 virtual channels, using one MIPI clock lane and 1/2 data lanes.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - isil,isl79987
-+
-+  reg:
-+    maxItems: 1
-+
-+  reset-gpios:
-+    maxItems: 1
-+    description:
-+      A GPIO spec for the RSTB pin (active high)
-+
-+  powerdown-gpios:
-+    maxItems: 1
-+    description:
-+      A GPIO spec for the Power Down pin (active high)
-+
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description: Output port
-+
-+    patternProperties:
-+      "^port@[1-4]$":
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description: Input ports
-+
-+    required:
-+      - port@0
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - ports
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      isl7998x_mipi@44 {
-+        compatible = "isil,isl79987";
-+        reg = <0x44>;
-+        powerdown-gpios = <&gpio3 27 GPIO_ACTIVE_HIGH>;
-+        reset-gpios = <&gpio3 28 GPIO_ACTIVE_HIGH>;
-+
-+        ports {
-+          #address-cells = <1>;
-+          #size-cells = <0>;
-+
-+          port@0 {
-+            reg = <0>;
-+            isl79987_out: endpoint {
-+              remote-endpoint = <&mipi_csi2_in>;
-+              clock-lanes = <0>;
-+              data-lanes = <1 2>;
-+            };
-+          };
-+
-+          port@1 {
-+            reg = <1>;
-+            endpoint {
-+              remote-endpoint = <&camera_0>;
-+            };
-+          };
-+
-+          port@2 {
-+            reg = <2>;
-+            endpoint {
-+              remote-endpoint = <&camera_1>;
-+            };
-+          };
-+        };
-+      };
-+    };
+
+Marek Vasut (2):
+  media: dt-bindings: Add Intersil ISL79987 DT bindings
+  media: i2c: isl7998x: Add driver for Intersil ISL7998x
+
+Michael Tretter (1):
+  media: imx6-mipi-csi2: use pre_streamon callback to set sensor into
+    LP11
+
+ .../bindings/media/i2c/isil,isl79987.yaml     |  100 ++
+ MAINTAINERS                                   |    8 +
+ drivers/media/i2c/Kconfig                     |    9 +
+ drivers/media/i2c/Makefile                    |    1 +
+ drivers/media/i2c/isl7998x.c                  | 1416 +++++++++++++++++
+ drivers/staging/media/imx/imx6-mipi-csi2.c    |    9 +-
+ 6 files changed, 1542 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/isil,isl79987.yaml
+ create mode 100644 drivers/media/i2c/isl7998x.c
+
 -- 
 2.30.2
 
