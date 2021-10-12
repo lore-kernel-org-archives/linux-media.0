@@ -2,84 +2,66 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B19F6C433FE
-	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 12:15:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86EDFC433FE
+	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 12:22:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 972A661076
-	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 12:15:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67100610D1
+	for <linux-media@archiver.kernel.org>; Tue, 12 Oct 2021 12:22:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236336AbhJLMRO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Oct 2021 08:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
+        id S236388AbhJLMYk convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Oct 2021 08:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236196AbhJLMRN (ORCPT
+        with ESMTP id S236312AbhJLMYj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Oct 2021 08:17:13 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF24C061570;
-        Tue, 12 Oct 2021 05:15:12 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5C099E7;
-        Tue, 12 Oct 2021 14:15:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1634040909;
-        bh=CCt/RZJZYJQHKeq2CmDncjLPs5cyvDBLmABtgkNI134=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=TnPXteAtjSIshmqQL0gGqQvIq9jbrizAyqrG/h7iQTdB2Xo+Dqe1y2RgLuc5AN+5u
-         VBozScnDuTRBTPpIXSrZvD9SJHrBS1ezVZV5ygP5ovTqC6c8jBXt1AUnRXq6VXzYW3
-         7cerD3d37zIl7PxNhdgmOy89jSfurCabN0mskxq8=
-Content-Type: text/plain; charset="utf-8"
+        Tue, 12 Oct 2021 08:24:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83467C06161C
+        for <linux-media@vger.kernel.org>; Tue, 12 Oct 2021 05:22:37 -0700 (PDT)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1maGnj-0000yy-Rk; Tue, 12 Oct 2021 14:22:35 +0200
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1maGnj-0006rS-Ag; Tue, 12 Oct 2021 14:22:35 +0200
+Message-ID: <c27b83000485f8bce6f3d2a3e43c7cb558c4d84a.camel@pengutronix.de>
+Subject: Re: [PATCH v5 1/3] media: imx6-mipi-csi2: use pre_streamon callback
+ to set sensor into LP11
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Michael Tretter <m.tretter@pengutronix.de>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Marek Vasut <marex@denx.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        kernel@pengutronix.de
+Date:   Tue, 12 Oct 2021 14:22:35 +0200
+In-Reply-To: <20211012084150.755160-2-m.tretter@pengutronix.de>
+References: <20211012084150.755160-1-m.tretter@pengutronix.de>
+         <20211012084150.755160-2-m.tretter@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211012082150.GA31086@kili>
-References: <20211012082150.GA31086@kili>
-Subject: Re: [PATCH] media: atomisp: fix uninitialized bug in gmin_get_pmic_id_and_addr()
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Aniket Bhattacharyea <aniketmail669@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        kernel-janitors@vger.kernel.org
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Date:   Tue, 12 Oct 2021 13:15:07 +0100
-Message-ID: <163404090731.2943484.13435330592523167555@Monstersaurus>
-User-Agent: alot/0.9.1
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Quoting Dan Carpenter (2021-10-12 09:21:50)
-> The "power" pointer is not initialized on the else path and that would
-> lead to an Oops.
->=20
+On Tue, 2021-10-12 at 10:41 +0200, Michael Tretter wrote:
+> Step 5 expects that the sensor is in LP11 mode. Use the new
+> pre_streamon callback to signal the sensor that it should switch into
+> LP11.
+> 
+> Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 
-Yes, that looks like a good catch.
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-
-> Fixes: c30f4cb2d4c7 ("media: atomisp: Refactor PMIC detection to a separa=
-te function")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
->  drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/=
-drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-> index d8c9e31314b2..62dc06e22476 100644
-> --- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-> +++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-> @@ -481,7 +481,7 @@ static int atomisp_get_acpi_power(struct device *dev)
-> =20
->  static u8 gmin_get_pmic_id_and_addr(struct device *dev)
->  {
-> -       struct i2c_client *power;
-> +       struct i2c_client *power =3D NULL;
->         static u8 pmic_i2c_addr;
-> =20
->         if (pmic_id)
-> --=20
-> 2.20.1
->
+regards
+Philipp
