@@ -2,63 +2,63 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 442CBC433F5
-	for <linux-media@archiver.kernel.org>; Wed, 13 Oct 2021 18:58:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05699C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 13 Oct 2021 18:58:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2B3AD610E8
-	for <linux-media@archiver.kernel.org>; Wed, 13 Oct 2021 18:58:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0DF0610F9
+	for <linux-media@archiver.kernel.org>; Wed, 13 Oct 2021 18:58:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238964AbhJMTAb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Oct 2021 15:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
+        id S238897AbhJMTAw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Oct 2021 15:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238874AbhJMTA1 (ORCPT
+        with ESMTP id S238904AbhJMTA3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Oct 2021 15:00:27 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5EDC061749
-        for <linux-media@vger.kernel.org>; Wed, 13 Oct 2021 11:58:23 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id g25so11636956wrb.2
-        for <linux-media@vger.kernel.org>; Wed, 13 Oct 2021 11:58:23 -0700 (PDT)
+        Wed, 13 Oct 2021 15:00:29 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE59C06174E
+        for <linux-media@vger.kernel.org>; Wed, 13 Oct 2021 11:58:25 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id k7so11467780wrd.13
+        for <linux-media@vger.kernel.org>; Wed, 13 Oct 2021 11:58:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3LHPDY3kMpnJAm0T8AaCeTyE7uf/LEhpftdR1uzKAKo=;
-        b=HZr6vn6r95DGJh75IxvsNPy20JYk18tx0+R2HbzZTxZWxtuvkWgmEdQxbicqIAteHT
-         YSy1owofRejoV7zFOPr0E6vU8BE0l0j61q6gCVCHVXSgyzwk6/gct7xr9K/Cmm9C1lUM
-         91az4pu5wzKnYvyFmbzkemjCABbcdSyiRp+UF3CZvvVDWWyuDgq6b0RCfXQJsO/AIDZP
-         eQj3OeH+f6gfNWoc1qD/tdazwDK/bZHvnviAqZf27J4WCYIeXS5Gn6EKkl9jcVo7tvJk
-         TQJyU8nIE4GKoQxTOn4nuWq3P52h89sLq0tgCatqPuCOHXiBg8C3dupTmpIyLLZB6DJM
-         7t6w==
+        bh=1pX+dk6S2Emip4/Nqct0yrRJCmYFD6furMGbyUcjpgc=;
+        b=DA976g7/t/FGIK9BnAw3PJeMOr49NCZphgKnIJN+7Zbrv+2hzUmipTqnbJySonFi6X
+         O0+iuAiK4K8S+JOJF93g216nCbxxW4lpPRNbfE6R4x+DmNrweAG1JD0i3XECMVLDgQsV
+         30abQnqDP2BLMsglFLRsU38lLS9y1sOu1sKnhD530/pTiUl08OC8zpOVUIwW6oTsWDKJ
+         RqsYeZ3tIQy0PTwOCozcEO2rmSfVTbg8/FBtJHO0IvNcnCJqoRT9VpYwzpXOYRPqcVfe
+         Bq7X5Qonol3FbPE/F9XwPWfIMY83Jn9CpMSlAfNrbo62Sfo0jTrk4ed5dU0T2wiGYcPU
+         D7tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3LHPDY3kMpnJAm0T8AaCeTyE7uf/LEhpftdR1uzKAKo=;
-        b=lf1NBiGwb5QqDYqTQfbW7vftSeHS0jEJ3SWsYA4U4b6c9MloIzoWdDXvfVVbVf6TUb
-         7kgwSBLreL+g7FHR9LzsQu6ChLebiRW/O0uljUWOIwMZcQujWOJnuysp0fyP9GFbM7x+
-         MThLHE3a7WNczlPVMD4Z19dC+cmidIFzBcThC3EvGJ3qknH56uvWH7POuVpJ9mEx8//p
-         cioR9Dm0SriEi2UtJgM0t7xMFVdu4ttWoGtyc+MoMOCOCNanUVCW01djtkMdyKVTVZXP
-         YrlyLmrPi+5F7K6RK8/RaTMqs3+9NG1zT2Z6Vw2KiRV0SnRVWTJas0q0ag2qa/iW01tY
-         gosw==
-X-Gm-Message-State: AOAM533hZnZ9IE1dLGZ61hlHq4J8xiGfEOFPx9T3bWDxhcX7/CGJNgFj
-        69SHLuNt/Ps6d8EFErIvE82bzA==
-X-Google-Smtp-Source: ABdhPJzvdZhsGfY6dZ6ucVvnv9IBWKAI3FFz6SFEXeKM7wFbmlQt8vov1bzfTxacvUBPQUi+OO87VA==
-X-Received: by 2002:adf:f902:: with SMTP id b2mr1011711wrr.265.1634151502535;
-        Wed, 13 Oct 2021 11:58:22 -0700 (PDT)
+        bh=1pX+dk6S2Emip4/Nqct0yrRJCmYFD6furMGbyUcjpgc=;
+        b=IhykllCUir+/mkyXUT+joYSn0vg3rHiPmIHdgyW67bKHOedalk73lEsSf/q/Ebo/yR
+         8iRXPVQ7m6n+Gf6kyaJFQnqL26LwQp1U2elAMpJ6sBX2EhSYMGiwod7RM5Loxkj9rz0Y
+         FeuntlaZtIHbeADWKxikN0dYCIJH+qnxwVyO9REWIjUJVYji9dPDAUp9zoCSEoZQWOao
+         /seXWXdpTdsqt0YupgJxkwDU7wvUyjmh4hZXl3+awezM89oAC0YJssjrJbhb41uFiFqD
+         mfaw6G44mrZ9pkC5ci7pEr0NAZyT1Z1tbFh3QVm6N7w4p4IDmBmhBV1m5v0E2XFwfFIP
+         hHyg==
+X-Gm-Message-State: AOAM531qKEmy9f0sqzc9dYFkY4QQm8er4G/BZqSiUYzgpEcpBWynVbrq
+        5qI8YqIwfXXf9Fr8gyU1zY8pvA==
+X-Google-Smtp-Source: ABdhPJzTLS+In7OLgKpaJ0PsmFa9QHJG7F0VtX1X537GrRAr6D8fhAYJAtOnQu+iky8AFPxa2X3+RQ==
+X-Received: by 2002:adf:a48c:: with SMTP id g12mr995452wrb.341.1634151503877;
+        Wed, 13 Oct 2021 11:58:23 -0700 (PDT)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id e8sm573059wrg.48.2021.10.13.11.58.22
+        by smtp.googlemail.com with ESMTPSA id e8sm573059wrg.48.2021.10.13.11.58.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Oct 2021 11:58:22 -0700 (PDT)
+        Wed, 13 Oct 2021 11:58:23 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl, gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev, mjpeg-users@lists.sourceforge.net,
         Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v2 07/10] staging: media: zoran: remove vidmem
-Date:   Wed, 13 Oct 2021 18:58:09 +0000
-Message-Id: <20211013185812.590931-8-clabbe@baylibre.com>
+Subject: [PATCH v2 09/10] staging: media: zoran: move config select on primary kconfig
+Date:   Wed, 13 Oct 2021 18:58:11 +0000
+Message-Id: <20211013185812.590931-10-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211013185812.590931-1-clabbe@baylibre.com>
 References: <20211013185812.590931-1-clabbe@baylibre.com>
@@ -68,47 +68,93 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The vidmem parameter is no longer necessary since we removed framebuffer
-support.
+Since all kconfigs for card selection are bool, this causes all selected modules
+to be always built-in.
+Prevent this by moving selects to the main tristate kconfig.
+
+By doing this, remove also all "if MEDIA_SUBDRV_AUTOSELECT" which are
+wrong, since zoran always need them to work.
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/staging/media/zoran/zoran_card.c | 15 ---------------
- 1 file changed, 15 deletions(-)
+ drivers/staging/media/zoran/Kconfig | 23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
-index a0739d3462bb..a079fb6e27a3 100644
---- a/drivers/staging/media/zoran/zoran_card.c
-+++ b/drivers/staging/media/zoran/zoran_card.c
-@@ -39,17 +39,6 @@ static int card[BUZ_MAX] = { [0 ... (BUZ_MAX - 1)] = -1 };
- module_param_array(card, int, NULL, 0444);
- MODULE_PARM_DESC(card, "Card type");
+diff --git a/drivers/staging/media/zoran/Kconfig b/drivers/staging/media/zoran/Kconfig
+index b5a3fc6e98f6..0a9c1ab19016 100644
+--- a/drivers/staging/media/zoran/Kconfig
++++ b/drivers/staging/media/zoran/Kconfig
+@@ -3,6 +3,16 @@ config VIDEO_ZORAN
+ 	depends on PCI && I2C_ALGOBIT && VIDEO_V4L2
+ 	depends on !ALPHA
+ 	select VIDEOBUF2_DMA_CONTIG
++	select VIDEO_ADV7170 if VIDEO_ZORAN_LML33R10
++	select VIDEO_ADV7175 if VIDEO_ZORAN_DC10 || VIDEO_ZORAN_DC30
++	select VIDEO_BT819 if VIDEO_ZORAN_LML33
++	select VIDEO_BT856 if VIDEO_ZORAN_LML33 || VIDEO_ZORAN_AVS6EYES
++	select VIDEO_BT866 if VIDEO_ZORAN_AVS6EYES
++	select VIDEO_KS0127 if VIDEO_ZORAN_AVS6EYES
++	select VIDEO_SAA711X if VIDEO_ZORAN_BUZ || VIDEO_ZORAN_LML33R10
++	select VIDEO_SAA7110 if VIDEO_ZORAN_DC10
++	select VIDEO_SAA7185 if VIDEO_ZORAN_BUZ
++	select VIDEO_VPX3220 if VIDEO_ZORAN_DC30
+ 	help
+ 	  Say Y for support for MJPEG capture cards based on the Zoran
+ 	  36057/36067 PCI controller chipset. This includes the Iomega
+@@ -16,8 +26,6 @@ config VIDEO_ZORAN
+ config VIDEO_ZORAN_DC30
+ 	bool "Pinnacle/Miro DC30(+) support"
+ 	depends on VIDEO_ZORAN
+-	select VIDEO_ADV7175 if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_VPX3220 if MEDIA_SUBDRV_AUTOSELECT
+ 	help
+ 	  Support for the Pinnacle/Miro DC30(+) MJPEG capture/playback
+ 	  card. This also supports really old DC10 cards based on the
+@@ -34,16 +42,12 @@ config VIDEO_ZORAN_ZR36060
+ config VIDEO_ZORAN_BUZ
+ 	bool "Iomega Buz support"
+ 	depends on VIDEO_ZORAN_ZR36060
+-	select VIDEO_SAA711X if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_SAA7185 if MEDIA_SUBDRV_AUTOSELECT
+ 	help
+ 	  Support for the Iomega Buz MJPEG capture/playback card.
  
--/*
-- * The video mem address of the video card. The driver has a little database
-- * for some videocards to determine it from there. If your video card is not
-- * in there you have either to give it to the driver as a parameter or set
-- * in a VIDIOCSFBUF ioctl
-- */
--
--static unsigned long vidmem;	/* default = 0 - Video memory base address */
--module_param_hw(vidmem, ulong, iomem, 0444);
--MODULE_PARM_DESC(vidmem, "Default video memory base address");
--
- /* Default input and video norm at startup of the driver. */
+ config VIDEO_ZORAN_DC10
+ 	bool "Pinnacle/Miro DC10(+) support"
+ 	depends on VIDEO_ZORAN_ZR36060
+-	select VIDEO_SAA7110 if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_ADV7175 if MEDIA_SUBDRV_AUTOSELECT
+ 	help
+ 	  Support for the Pinnacle/Miro DC10(+) MJPEG capture/playback
+ 	  card.
+@@ -51,8 +55,6 @@ config VIDEO_ZORAN_DC10
+ config VIDEO_ZORAN_LML33
+ 	bool "Linux Media Labs LML33 support"
+ 	depends on VIDEO_ZORAN_ZR36060
+-	select VIDEO_BT819 if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_BT856 if MEDIA_SUBDRV_AUTOSELECT
+ 	help
+ 	  Support for the Linux Media Labs LML33 MJPEG capture/playback
+ 	  card.
+@@ -60,8 +62,6 @@ config VIDEO_ZORAN_LML33
+ config VIDEO_ZORAN_LML33R10
+ 	bool "Linux Media Labs LML33R10 support"
+ 	depends on VIDEO_ZORAN_ZR36060
+-	select VIDEO_SAA711X if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_ADV7170 if MEDIA_SUBDRV_AUTOSELECT
+ 	help
+ 	  support for the Linux Media Labs LML33R10 MJPEG capture/playback
+ 	  card.
+@@ -69,9 +69,6 @@ config VIDEO_ZORAN_LML33R10
+ config VIDEO_ZORAN_AVS6EYES
+ 	bool "AverMedia 6 Eyes support"
+ 	depends on VIDEO_ZORAN_ZR36060
+-	select VIDEO_BT856 if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_BT866 if MEDIA_SUBDRV_AUTOSELECT
+-	select VIDEO_KS0127 if MEDIA_SUBDRV_AUTOSELECT
+ 	help
+ 	  Support for the AverMedia 6 Eyes video surveillance card.
  
- static unsigned int default_input;	/* default 0 = Composite, 1 = S-Video */
-@@ -1163,10 +1152,6 @@ static int zoran_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		jpg_bufsize = 8192;
- 	if (jpg_bufsize > (512 * 1024))
- 		jpg_bufsize = 512 * 1024;
--	/* Use parameter for vidmem or try to find a video card */
--	if (vidmem)
--		pci_info(pdev, "%s: Using supplied video memory base address @ 0x%lx\n",
--			 ZORAN_NAME, vidmem);
- 
- 	/* some mainboards might not do PCI-PCI data transfer well */
- 	if (pci_pci_problems & (PCIPCI_FAIL | PCIAGP_FAIL | PCIPCI_ALIMAGIK))
 -- 
 2.32.0
 
