@@ -2,191 +2,436 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ED37C433F5
-	for <linux-media@archiver.kernel.org>; Sat, 16 Oct 2021 10:18:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8093FC433F5
+	for <linux-media@archiver.kernel.org>; Sat, 16 Oct 2021 14:19:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E39560FDA
-	for <linux-media@archiver.kernel.org>; Sat, 16 Oct 2021 10:18:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5DA64611C3
+	for <linux-media@archiver.kernel.org>; Sat, 16 Oct 2021 14:19:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244099AbhJPKUe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 16 Oct 2021 06:20:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48569 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244092AbhJPKUa (ORCPT
+        id S235901AbhJPOVQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 16 Oct 2021 10:21:16 -0400
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:37492 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244348AbhJPOVM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 16 Oct 2021 06:20:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634379502;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lRKifhuZPEWMV9NZ2wr+qPq6taJBi8mO/4F/nJu9ENk=;
-        b=Kkh/ARh4ZzzY0jfO/HfqlKEgh64pzOBYEwTQodBwTBrukREV9FZ1r51i+1OHjUtJzVEjHv
-        eY7vdtDG00BmvAFqkyjZDzU88lcJavL0VRLpkTp7ZAaQFxt8KXa0zTS1TR+va8qPZ7G1tp
-        NEEnvxWH3DONV69cC8mszAwxsX0fgd4=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-408-801wRpdaNLWwrlSuGlJeTA-1; Sat, 16 Oct 2021 06:18:20 -0400
-X-MC-Unique: 801wRpdaNLWwrlSuGlJeTA-1
-Received: by mail-ed1-f70.google.com with SMTP id cy14-20020a0564021c8e00b003db8c9a6e30so10359407edb.1
-        for <linux-media@vger.kernel.org>; Sat, 16 Oct 2021 03:18:20 -0700 (PDT)
+        Sat, 16 Oct 2021 10:21:12 -0400
+Received: by mail-oi1-f175.google.com with SMTP id o83so17525332oif.4;
+        Sat, 16 Oct 2021 07:19:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lRKifhuZPEWMV9NZ2wr+qPq6taJBi8mO/4F/nJu9ENk=;
-        b=ynl/JT6JoKyH6ORBcMRjloccPLjGIN1+1a2yZzz4+qD9Ys6d1hKxr7O+AKZTabs1CP
-         UUx9KG91y/yJtsBWtQxtVceVPlVKSy171Qh8ZtPQsuW981L+XOpokufD9zkfFEuz8C2F
-         i6cPcEPxICKd+KgtutI9YvWruwFoFlO7zSrqmXa0WA4uk4ZuWHQKjDz07LROZcDOfjBq
-         +Rqum9vt9AZyjMc98dT0iT7NE1D2OMoNUJIBeYLIiJ3JWaJzX3d9epESi4J1hGpZIKHh
-         me/BTBjhYio8tZMziWIkDaAxfrHgeLVygInnuufMFCzzhZzN83KjfmX5Pv472UI8pAKY
-         RZZg==
-X-Gm-Message-State: AOAM530VKc/xJwW/8cTmTPXXiR31u9zuUNKoHxY7Uwb5P4sSiT75ybpH
-        Fg3vifNuI6kzrM/FrQ/29e6BAfbl53+boCimdor/Oda8UTQUIIVc9IqLBXEVhd+HNrTvCfKR07I
-        3/DHBkphgY2LeSP38wDOJzfU=
-X-Received: by 2002:a05:6402:1c85:: with SMTP id cy5mr26031885edb.281.1634379499474;
-        Sat, 16 Oct 2021 03:18:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwuJiWcON3M4nXKn747LTbTpMeMQmvBtJaORLUCaPCevFz0HcJ8P2t0t0MZp62LMyoxb4bUTQ==
-X-Received: by 2002:a05:6402:1c85:: with SMTP id cy5mr26031859edb.281.1634379499200;
-        Sat, 16 Oct 2021 03:18:19 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id m18sm3371750ejn.62.2021.10.16.03.18.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Oct 2021 03:18:18 -0700 (PDT)
-Subject: Re: [PATCH 05/12] regulator: Introduce tps68470-regulator driver
-To:     Mark Brown <broonie@kernel.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Daniel Scally <djrscally@gmail.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aOytoN8C+U3Rn90b6LRYZACEMLn+/RQ2njWL4ku1AlA=;
+        b=4JfezNqalfqkCWJzPkN1jYu37+V6CCCoNrmC3rFH+O95/2dXpNkE1nHsfmKV1rzBnm
+         dNxBcfIwrDrLv2vCV9bn0SbMMnow2kPReYKCfg9dV/bzja/3MbeJBQtnPfWAkHNnEu13
+         Ke0BgjH5Gdeddz/JQGCXLtgb1vFR4p8HpM2u+RUQcghLUAbwluOAT4/AbHJCwu3nfCM/
+         6oDIWY1tzxv957yQfPlP55RFAaL7zWPdiqYNGJ1338LyQrmOYHSbh7bMHgsGYmgnoXlk
+         6kwf43AvSU5jCoSdBMIngPx9dbasyMpj7weQeDHi78QPCJVPDTf2eJ5T9i9pg9LAYfkz
+         lxUA==
+X-Gm-Message-State: AOAM533ii0UaRF5j++Fe0QzTBFB5fkras5QJH2R6TGfT5C+CdFKACBPK
+        aM/hMjoBWx+X51ltQDYnLQ==
+X-Google-Smtp-Source: ABdhPJwH6z7wFjfPNxSwD8xSpolT6ZSFgxQdba+N0JtbkHE6D3GikZ06PyB//4Q7ixNJhIi/SWdbHA==
+X-Received: by 2002:a05:6808:301e:: with SMTP id ay30mr177018oib.75.1634393940896;
+        Sat, 16 Oct 2021 07:19:00 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 65sm1874803otd.81.2021.10.16.07.18.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Oct 2021 07:19:00 -0700 (PDT)
+Received: (nullmailer pid 3872759 invoked by uid 1000);
+        Sat, 16 Oct 2021 14:18:58 -0000
+Date:   Sat, 16 Oct 2021 09:18:58 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Moudy Ho <moudy.ho@mediatek.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <YWQU/SYTT5Vk24XH@sirena.org.uk>
- <f6f2d7e8-fdb8-ed64-0cdd-65aded9fc42c@redhat.com>
- <YWmwZJvDYjPWJdb4@sirena.org.uk>
- <d0d1dc05-4cc6-2f47-88a9-700cfc356d86@redhat.com>
- <YWnPaI/ZECdfYre9@sirena.org.uk>
- <843f939a-7e43-bc12-e9fc-582e01129b63@redhat.com>
- <YWnZIZTPiuAIazV+@sirena.org.uk>
- <c595b143-d7ed-e76b-7734-e03d14e0f76e@redhat.com>
- <YWndpGgBtLEAEaNj@sirena.org.uk>
- <1805d16e-87ab-c291-6a73-adabf41344ca@redhat.com>
- <YWoAtCdikYfMpUnD@sirena.org.uk>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <26a1b636-1b82-2ca6-4f78-b1d22fa556d6@redhat.com>
-Date:   Sat, 16 Oct 2021 12:18:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org, drinkcat@chromium.org, acourbot@chromium.org,
+        pihsun@chromium.org, menghui.lin@mediatek.com,
+        sj.huang@mediatek.com, allen-kh.cheng@mediatek.com,
+        randy.wu@mediatek.com, srv_heupstream@mediatek.com,
+        hsinyi@google.com
+Subject: Re: [PATCH v8 5/7] dt-binding: mt8183: add Mediatek MDP3 dt-bindings
+Message-ID: <YWrfUo73+UegMKYP@robh.at.kernel.org>
+References: <20211015123832.17914-1-moudy.ho@mediatek.com>
+ <20211015123832.17914-6-moudy.ho@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <YWoAtCdikYfMpUnD@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211015123832.17914-6-moudy.ho@mediatek.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mark,
-
-On 10/16/21 12:29 AM, Mark Brown wrote:
-> On Fri, Oct 15, 2021 at 10:14:30PM +0200, Hans de Goede wrote:
->> On 10/15/21 9:59 PM, Mark Brown wrote:
-
-<snip>
-
->> During that discussion you said that instead we should sinmply
->> directly pass the regulator_init_data, rather then first
->> encoding this in device-properties in a swnode and then
->> decoding those again in the regulator core.
+On Fri, Oct 15, 2021 at 08:38:30PM +0800, Moudy Ho wrote:
+> This patch adds DT binding document for Media Data Path 3 (MDP3)
+> a unit in multimedia system used for scaling and color format convert.
 > 
->> And passing the regulator_init_data is exactly what we are doing
->> now; and now again this is not what we should be doing ?
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> ---
+>  .../bindings/arm/mediatek/mediatek,ccorr.yaml |  59 +++++
+>  .../bindings/arm/mediatek/mediatek,rdma.yaml  | 211 ++++++++++++++++++
+>  .../bindings/arm/mediatek/mediatek,wdma.yaml  |  70 ++++++
+
+These belong in a functional directory, not 'arm'.
+
+>  .../bindings/media/mediatek,mdp3-rsz.yaml     |  68 ++++++
+>  .../bindings/media/mediatek,mdp3-wrot.yaml    |  70 ++++++
+>  5 files changed, 478 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,ccorr.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,rdma.yaml
+>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,wdma.yaml
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
 > 
-> No, it is not what the driver doing now.  The driver will *optionally*
-> check for platform data, but if none is provided or if it doesn't
-> configure some of the regulators then the driver will provide some hard
-> coded regulator_init_data as a default.  These might be OK on the system
-> you're looking at but will also be used on any other system that happens
-> to instantiate the driver without platform data where there's no
-> guarantee that the information provided will be safe.  These defaults
-> that are being provided may use the same structure that gets used for
-> platform data but they aren't really platform data.
-> 
-> Yes, someone could use this on a system that does things in the standard
-> fashion where the platform data is getting passed in but if it's ever
-> run on any other system then it's going to assume this default platform
-> data with these constraints that have been embedded directly into the
-> driver without anything to ensure that they make sense on that system.
-> 
-> Indeed, now I go back and dig out the rest of the series it seems that
-> there's some drivers/platforms/x86 code added later which does in fact
-> do the right thing for some but not all of the regulators, it supplies
-> some platform data which overrides some but not all of this default
-> regulator_init_data using platform_data having identified the system
-> using DMI information (with configurations quite different to and much
-> more restricted than the defaults provided, exactly why defaults are an
-> issue).  I'm now even more confused about what the information that's
-> there is doing in the driver.  Either it's all unneeded even for your
-> system and should just be deleted, or if any of it is needed then it
-> should be moved to being initialised in the same place everything else
-> is so that it's only used on your system and not on any other system
-> that happens to end up running the driver.
-> 
-> In any case given that your platform does actually have code for
-> identifying it and supplying appropriate platform data the driver itself
-> can be fixed by just deleting the else case of
-> 
-> 	if (pdata && pdata->reg_init_data[i])
-> 		config.init_data = pdata->reg_init_data[i];
-> 	else
-> 		config.init_data = &tps68470_init[i];
-> 
-> and the data structure/macro it uses.  If no configuration is provided
-> by the platform then none should be provided to the core, this in turn
-> means that the regulator framework won't reconfigure the hardware if it
-> doesn't know it's safe to do so.
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,ccorr.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,ccorr.yaml
+> new file mode 100644
+> index 000000000000..40ea7955efc6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,ccorr.yaml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,ccorr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek color correction
+> +
+> +maintainers:
+> +  - Matthias Brugger <matthias.bgg@gmail.com>
+> +
+> +description: |
+> +  Mediatek color correction with 3X3 matrix.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +        - mediatek,mt8183-mdp3-ccorr
+> +
+> +  mediatek,mdp3-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
 
-Ah, ok. The default regulator_init_data in the tps68470_init[]
-array was already there in the out of tree version of this driver
-Daniel and I started with:
+maxItems is for an array, but you said this is a uint32.
 
-https://github.com/intel/linux-intel-lts/blob/4.14/base/drivers/regulator/tps68470-regulator.c
+> +    description: |
+> +      There may be multiple blocks with the same function but
+> +      different addresses in MDP3.
+> +      In order to distinguish the connection with other blocks,
+> +      a unique ID is needed to dynamically use one or more identical
+> +      blocks to implement multiple pipelines.
 
-Now that you have pointed this out I would be more then happy to
-delete it and I agree that providing this bogus data is not a
-good idea.
+They aren't identical if you need to distinguish them. We should 
+describe the difference rather than make up device indices. Why is this 
+needed?
 
-<snip>
+For connections between components, use the graph binding.
 
-> The important thing is to get rid of the hard coded defaults for the
-> regulator_init_data in the driver itself, if there is regulator_init_data
-> in the driver itself then it should be guarded with a DMI or similar
-> quirk.  Like I say above I think now I've gone back and dug through the
-> rest of the series once the default init_data is gone it's probably OK.
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  mediatek,gce-client-reg:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: |
+> +      The register of client driver can be configured by gce with 4 arguments
+> +      defined in this property, such as phandle of gce, subsys id,
+> +      register offset and size.
+> +      Each GCE subsys id is mapping to a client defined in the header
+> +      include/dt-bindings/gce/<chip>-gce.h.
+> +
+> +  clocks:
+> +    minItems: 1
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt8183-clk.h>
+> +    #include <dt-bindings/gce/mt8183-gce.h>
+> +
+> +    mdp3_ccorr: mdp3_ccorr@1401c000 {
+> +      compatible = "mediatek,mt8183-mdp3-ccorr";
+> +      mediatek,mdp3-id = <0>;
+> +      reg = <0x1401c000 0x1000>;
+> +      mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0xc000 0x1000>;
+> +      clocks = <&mmsys CLK_MM_MDP_CCORR>;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,rdma.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,rdma.yaml
+> new file mode 100644
+> index 000000000000..ad0e56923494
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,rdma.yaml
+> @@ -0,0 +1,211 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,rdma.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek Read Direct Memory Access
+> +
+> +maintainers:
+> +  - Matthias Brugger <matthias.bgg@gmail.com>
+> +
+> +description: |
+> +  Mediatek Read Direct Memory Access(RDMA) component used to do read DMA.
+> +  It contains one line buffer to store the sufficient pixel data, and
+> +  must be siblings to the central MMSYS_CONFIG node.
+> +  For a description of the MMSYS_CONFIG binding, see
+> +  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> +  for details.
+> +  The 1st RDMA is also used to be a controller node in Media Data Path 3(MDP3)
+> +  that containing MMSYS, MUTEX, GCE and SCP settings.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: mediatek,mt8183-mdp3
 
-Ok, for the next version of this patch-set I will:
+This looks less specific than this:
 
-1. Remove the default init_data
-2. Change the toplevel comment to be all C++ style matching the SPDX line
-3. Add a || COMPILE_TEST to the Kconfig so that this can be compile-tested
-   without selecting the INTEL_SKL_INT3472 option
+> +          - const: mediatek,mt8183-mdp3-rdma
 
-Thank you for taking the time to dive a bit deeper into the patch-set
-and make it clear that your objection is the presence of the default
-regulator_init_data; and sorry for loosing my cool a bit in my previous
-email.
+Which is the wrong order. But why the 2 values to begin with?
 
-Regards,
+> +      - items:
+> +          - const: mediatek,mt8183-mdp3-rdma
+> +
+> +  mediatek,scp:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    maxItems: 1
+> +    description: |
+> +      The node of system control processor (SCP), using
+> +      the remoteproc & rpmsg framework.
+> +      $ref: /schemas/remoteproc/mtk,scp.yaml
+> +
+> +  mediatek,mdp3-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +    description: |
+> +      There may be multiple blocks with the same function but
+> +      different addresses in MDP3.
+> +      In order to distinguish the connection with other blocks,
+> +      a unique ID is needed to dynamically use one or more identical
+> +      blocks to implement multiple pipelines.
+> +
+> +  mdp3-comps:
 
-Hans
+vendor prefix needed.
+
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    items:
+> +      - enum:
+> +          # MDP direct-link input path selection, create a
+> +          # component for path connectedness of HW pipe control
+> +          - mediatek,mt8183-mdp3-dl1
+> +      - enum:
+> +          - mediatek,mt8183-mdp3-dl2
+> +      - enum:
+> +          # MDP direct-link output path selection, create a
+> +          # component for path connectedness of HW pipe control
+> +          - mediatek,mt8183-mdp3-path1
+> +      - enum:
+> +          - mediatek,mt8183-mdp3-path2
+> +      - enum:
+> +          # Input DMA of ISP PASS2 (DIP) module for raw image input
+> +          - mediatek,mt8183-mdp3-imgi
+> +      - enum:
+> +          # Output DMA of ISP PASS2 (DIP) module for YUV image output
+> +          - mediatek,mt8183-mdp3-exto
+> +    description: |
+> +      MTK sub-system of direct-link or DIP
+> +
+> +  mdp3-comp-ids:
+> +    maxItems: 1
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+
+An array of only 1 item is a 'uint32'
+
+> +    description: |
+> +      Pipeline ID of MDP sub-system.
+
+Needs a better description and possibly constraints. Any value 0-2^32 is 
+valid?
+
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 5
+> +    description: |
+> +      1st: basic HW address
+> +      2nd: mediatek,mt8183-mdp-dl1, mediatek,mt8183-mdp-dl2
+> +      3rd: mediatek,mt8183-mdp-path1
+> +      4th: mediatek,mt8183-mdp-path2
+> +      5th: mediatek,mt8183-mdp3-imgi, mediatek,mt8183-mdp3-exto
+
+This is better expressed as:
+
+items:
+  - description: ...
+  - description: ...
+  - description: ...
+  - description: ...
+  - description: ...
+
+> +
+> +  mediatek,gce-client-reg:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: |
+> +      The register of client driver can be configured by gce with 4 arguments
+
+So 'maxItems: 4'?
+
+> +      defined in this property, such as phandle of gce, subsys id,
+> +      register offset and size.
+> +      Each GCE subsys id is mapping to a client defined in the header
+> +      include/dt-bindings/gce/<chip>-gce.h.
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 6
+> +    description: |
+> +      1st: RDMA0 clock
+> +      2nd: RSZ1 clock
+> +      3rd: direck-link TX clock in MDP side
+> +      4th: direck-link RX clock in MDP side
+> +      5th: direck-link TX clock in ISP side
+> +      6th: direck-link RX clock in ISP side
+
+Again, use 'items'.
+
+> +
+> +  iommus:
+> +    maxItems: 1
+> +
+> +  mediatek,mmsys:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    maxItems: 1
+
+Not an array.
+
+> +    description: |
+
+Don't need '|' when there is no formatting to maintain.
+
+> +      The node of mux(multiplexer) controller for HW connections.
+> +
+> +  mediatek,mm-mutex:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    maxItems: 1
+> +    description: |
+> +      The node of sof(start of frame) signal controller.
+> +
+> +  mediatek,mailbox-gce:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: |
+> +      The node of global command engine (GCE), used to read/write
+> +      registers with critical time limitation.
+> +
+> +  mboxes:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+
+Already has a type. This is where you need to define how many and what 
+each one is if more than 1.
+
+> +
+> +  gce-subsys:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description: |
+> +      sub-system id corresponding to the global command engine (GCE)
+> +      register address.
+> +
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: mediatek,mt8183-mdp3
+> +
+> +then:
+> +  required:
+> +    - mediatek,scp
+> +    - mediatek,mmsys
+> +    - mediatek,mm-mutex
+> +    - mediatek,mailbox-gce
+> +    - mboxes
+> +    - gce-subsys
+> +
+> +required:
+> +  - compatible
+> +  - mediatek,mdp3-id
+> +  - reg
+> +  - clocks
+> +  - mediatek,gce-client-reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt8183-clk.h>
+> +    #include <dt-bindings/gce/mt8183-gce.h>
+> +    #include <dt-bindings/power/mt8183-power.h>
+> +    #include <dt-bindings/memory/mt8183-larb-port.h>
+> +
+> +    mdp3_rdma0: mdp3_rdma0@14001000 {
+> +      compatible = "mediatek,mt8183-mdp3",
+> +                   "mediatek,mt8183-mdp3-rdma";
+> +      mediatek,scp = <&scp>;
+> +      mediatek,mdp3-id = <0>;
+> +      mdp3-comps = "mediatek,mt8183-mdp3-dl1", "mediatek,mt8183-mdp3-dl2",
+> +                   "mediatek,mt8183-mdp3-path1", "mediatek,mt8183-mdp3-path2",
+> +                   "mediatek,mt8183-mdp3-imgi", "mediatek,mt8183-mdp3-exto";
+> +      mdp3-comp-ids = <0 1 0 1 0 1>;
+> +      reg = <0x14001000 0x1000>,
+> +            <0x14000000 0x1000>,
+> +            <0x14005000 0x1000>,
+> +            <0x14006000 0x1000>,
+> +            <0x15020000 0x1000>;
+> +      mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x1000 0x1000>,
+> +                                <&gce SUBSYS_1400XXXX 0 0x1000>,
+> +                                <&gce SUBSYS_1400XXXX 0x5000 0x1000>,
+> +                                <&gce SUBSYS_1400XXXX 0x6000 0x1000>,
+> +                                <&gce SUBSYS_1502XXXX 0 0x1000>;
+> +      power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+> +      clocks = <&mmsys CLK_MM_MDP_RDMA0>,
+> +               <&mmsys CLK_MM_MDP_RSZ1>,
+> +               <&mmsys CLK_MM_MDP_DL_TXCK>,
+> +               <&mmsys CLK_MM_MDP_DL_RX>,
+> +               <&mmsys CLK_MM_IPU_DL_TXCK>,
+> +               <&mmsys CLK_MM_IPU_DL_RX>;
+> +      iommus = <&iommu>;
+> +      mediatek,mmsys = <&mmsys>;
+> +      mediatek,mm-mutex = <&mutex>;
+> +      mediatek,mailbox-gce = <&gce>;
+> +      mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
+> +               <&gce 21 CMDQ_THR_PRIO_LOWEST 0>,
+> +               <&gce 22 CMDQ_THR_PRIO_LOWEST 0>,
+> +               <&gce 23 CMDQ_THR_PRIO_LOWEST 0>;
+> +      gce-subsys = <&gce 0x14000000 SUBSYS_1400XXXX>,
+> +                   <&gce 0x14010000 SUBSYS_1401XXXX>,
+> +                   <&gce 0x14020000 SUBSYS_1402XXXX>,
+> +                   <&gce 0x15020000 SUBSYS_1502XXXX>;
+> +    };
+> \ No newline at end of file
+
+Fix this.
+
+Similar comments on the rest...
+
+Rob
 
