@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7A0EC433FE
-	for <linux-media@archiver.kernel.org>; Sun, 17 Oct 2021 11:07:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6328C433FE
+	for <linux-media@archiver.kernel.org>; Sun, 17 Oct 2021 11:08:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E41961245
-	for <linux-media@archiver.kernel.org>; Sun, 17 Oct 2021 11:07:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9B1E560FDC
+	for <linux-media@archiver.kernel.org>; Sun, 17 Oct 2021 11:08:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245393AbhJQLKG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 17 Oct 2021 07:10:06 -0400
-Received: from comms.puri.sm ([159.203.221.185]:52880 "EHLO comms.puri.sm"
+        id S245403AbhJQLKf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 17 Oct 2021 07:10:35 -0400
+Received: from comms.puri.sm ([159.203.221.185]:53370 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235960AbhJQLKF (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 17 Oct 2021 07:10:05 -0400
+        id S235960AbhJQLKe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 17 Oct 2021 07:10:34 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id AEB44DFA1F;
-        Sun, 17 Oct 2021 04:07:25 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id 42A4EDFA1F;
+        Sun, 17 Oct 2021 04:08:25 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BdkqQhRX4NpW; Sun, 17 Oct 2021 04:07:24 -0700 (PDT)
-Date:   Sun, 17 Oct 2021 13:07:13 +0200
+        with ESMTP id hPFtdl-ST-Td; Sun, 17 Oct 2021 04:08:24 -0700 (PDT)
+Date:   Sun, 17 Oct 2021 13:08:17 +0200
 From:   Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+To:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Shawn Guo <shawnguo@kernel.org>,
@@ -34,175 +34,165 @@ Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         kernel@puri.sm, phone-devel@vger.kernel.org
-Subject: Re: [PATCH] media: imx: Round line size to 4 bytes
-Message-ID: <20211017130713.4668c616.dorota.czaplejewicz@puri.sm>
-In-Reply-To: <1d8878e86b862ae8d551b6796e86c4fb1eb5d671.camel@pengutronix.de>
-References: <20211006110207.256325-1-dorota.czaplejewicz@puri.sm>
-        <7d61fdbd161fce40874766bde5f95c3b73f1a96d.camel@pengutronix.de>
-        <20211013112636.6963344d.dorota.czaplejewicz@puri.sm>
-        <1d8878e86b862ae8d551b6796e86c4fb1eb5d671.camel@pengutronix.de>
+Subject: [PATCHv2 2/4] media: imx: Store the type of hardware implementation
+Message-ID: <20211017102904.756408-2-dorota.czaplejewicz@puri.sm>
+In-Reply-To: <20211017102904.756408-1-dorota.czaplejewicz@puri.sm>
+References: <20211017102904.756408-1-dorota.czaplejewicz@puri.sm>
 Organization: Purism
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3Pfy1EoRadhkVVrPdaPSq/H";
+Content-Type: multipart/signed; boundary="Sig_/=3CTC_Z4HKntYsD0qSXe6Gp";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
---Sig_/3Pfy1EoRadhkVVrPdaPSq/H
+--Sig_/=3CTC_Z4HKntYsD0qSXe6Gp
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hello,
+The driver covers i.MX5/6, as well as i.MX7/8 hardware.
+Those implementations differ, e.g. in the sizes of buffers they accept.
 
-On Thu, 14 Oct 2021 13:26:26 +0200
-Philipp Zabel <p.zabel@pengutronix.de> wrote:
+Some functionality should be abstracted, and storing type achieves that.
 
-> Hi Dorota,
->=20
-> On Wed, 2021-10-13 at 11:26 +0200, Dorota Czaplejewicz wrote:
-> > On Fri, 08 Oct 2021 14:19:41 +0200 Philipp Zabel <p.zabel@pengutronix.d=
-e> wrote: =20
-> [...]
-> > > I wonder: if you use 4-byte aligned width and odd height, does the CSI
-> > > write over the end of the buffer? =20
-> >=20
-> > I tested this case, and found a glitch which suggests the last 4 bytes =
-are ignored:
-> >=20
-> > https://source.puri.sm/Librem5/linux-next/uploads/cfb59e3832431aaa3a695=
-49455502568/image.png =20
->=20
-> Thank you for testing, so it appears that at least without FBUF_STRIDE
-> the only requirement is that the whole image size must be a multiple of
-> 8 bytes.
->=20
-> > That would be taken care of rounding up towards a number decided at run=
-time, like:
-> >=20
-> > divisor =3D 8 >> (mbus->height % 2); =20
->=20
-> Which would then cause the CSI to write past the end of the buffer?
->=20
-I'm not sure if you point out the mistake here (should be "4 <<"), or the f=
-act that rounding is happening. If it's the latter, then it's of no concern=
-: the values derived here are used to calculate buffer size.
+Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+---
+ drivers/staging/media/imx/imx-ic-prpencvf.c   | 3 ++-
+ drivers/staging/media/imx/imx-media-capture.c | 5 ++++-
+ drivers/staging/media/imx/imx-media-csi.c     | 3 ++-
+ drivers/staging/media/imx/imx-media.h         | 8 +++++++-
+ drivers/staging/media/imx/imx7-media-csi.c    | 3 ++-
+ 5 files changed, 17 insertions(+), 5 deletions(-)
 
-I'm submitting a new series where this is fixed.
-
-> I'd rather make sure that either the number of lines is even or the
-> width is a multiple of 8 bytes.
->=20
-> > > > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> > > > ---
-> > > >=20
-> > > > Hello,
-> > > >=20
-> > > > my previous patch identified something that was not a problem,
-> > > > so I'm sending a different one.
-> > > >=20
-> > > > This has been tested on the Librem 5.
-> > > >=20
-> > > > Cheers,
-> > > > Dorota
-> > > >=20
-> > > >  drivers/staging/media/imx/imx-media-utils.c | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > >=20
-> > > > diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/=
-staging/media/imx/imx-media-utils.c
-> > > > index 5128915a5d6f..a303003929e3 100644
-> > > > --- a/drivers/staging/media/imx/imx-media-utils.c
-> > > > +++ b/drivers/staging/media/imx/imx-media-utils.c
-> > > > @@ -545,13 +545,13 @@ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2=
-_pix_format *pix,
-> > > >  	}
-> > > > =20
-> > > >  	/* Round up width for minimum burst size */
-> > > > -	width =3D round_up(mbus->width, 8);
-> > > > +	width =3D round_up(mbus->width, 4);
-> > > > =20
-> > > >  	/* Round up stride for IDMAC line start address alignment */
-> > > >  	if (cc->planar)
-> > > >  		stride =3D round_up(width, 16);
-> > > >  	else
-> > > > -		stride =3D round_up((width * cc->bpp) >> 3, 8);
-> > > > +		stride =3D round_up((width * cc->bpp) >> 3, 4);   =20
-> > >=20
-> > > Second, even if this works fine on the i.MX7/8M CSI, the alignment is
-> > > still required for the i.MX5/6 IPU, for which this code and the comme=
-nts
-> > > were written. So we need a way to differentiate the two cases here.
-> > >=20
-> > > regards
-> > > Philipp =20
-> >=20
-> > How best to go about this? I can see in the file imx-media-capture.c
-> > that there the video device lives in struct capture_priv.vdev.vfd.
-> > Would that be the right place to query about the underlying hardware?
-> >=20
-> > Then the following functions would gain a new "small_divisor" parameter:
-> > - imx_media_mbus_fmt_to_pix_fmt (a GPL symbol)
-> > - imx_media_mbus_fmt_to_ipu_image (a GPL symbol)
-> > - __capture_try_fmt =20
->=20
-> That sounds like it would work around the current code when it (at least
-> part of imx_media_mbus_fmt_to_pix_fmt()) should be split between i.MX5/6
-> and i.MX7/8 implementations. For example rounding up the stride is not
-> useful on i.MX7/8, it just doesn't currently hurt because imx7-media-csi=
+diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/=
+media/imx/imx-ic-prpencvf.c
+index d990553de87b..e06f5fbe5174 100644
+--- a/drivers/staging/media/imx/imx-ic-prpencvf.c
++++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
+@@ -1265,7 +1265,8 @@ static int prp_registered(struct v4l2_subdev *sd)
 =20
-> is not using bytesperline to set up FBUF_STRIDE. And certainly the
-> comments don't apply.
->=20
-> imx_media_mbus_fmt_to_ipu_image() is unused and should probably be
-> dropped, same as imx_media_ipu_image_to_mbus_fmt().
+ 	priv->vdev =3D imx_media_capture_device_init(ic_priv->ipu_dev,
+ 						   &ic_priv->sd,
+-						   PRPENCVF_SRC_PAD, true);
++						   PRPENCVF_SRC_PAD, true,
++						   DEVICE_TYPE_IMX56);
+ 	if (IS_ERR(priv->vdev))
+ 		return PTR_ERR(priv->vdev);
+=20
+diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/stagin=
+g/media/imx/imx-media-capture.c
+index 93ba09236010..fdf0f3a8f253 100644
+--- a/drivers/staging/media/imx/imx-media-capture.c
++++ b/drivers/staging/media/imx/imx-media-capture.c
+@@ -34,6 +34,7 @@ struct capture_priv {
+=20
+ 	struct imx_media_video_dev vdev;	/* Video device */
+ 	struct media_pad vdev_pad;		/* Video device pad */
++	enum imx_device_type type;		/* Type of hardware implementation */
+=20
+ 	struct v4l2_subdev *src_sd;		/* Source subdev */
+ 	int src_sd_pad;				/* Source subdev pad */
+@@ -957,7 +958,8 @@ EXPORT_SYMBOL_GPL(imx_media_capture_device_unregister);
+=20
+ struct imx_media_video_dev *
+ imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_=
+sd,
+-			      int pad, bool legacy_api)
++			      int pad, bool legacy_api,
++			      enum imx_device_type type)
+ {
+ 	struct capture_priv *priv;
+ 	struct video_device *vfd;
+@@ -972,6 +974,7 @@ imx_media_capture_device_init(struct device *dev, struc=
+t v4l2_subdev *src_sd,
+ 	priv->src_sd_pad =3D pad;
+ 	priv->dev =3D dev;
+ 	priv->legacy_api =3D legacy_api;
++	priv->type =3D type;
+=20
+ 	mutex_init(&priv->mutex);
+ 	INIT_LIST_HEAD(&priv->ready_q);
+diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/me=
+dia/imx/imx-media-csi.c
+index 6a94fff49bf6..b6758c3787c7 100644
+--- a/drivers/staging/media/imx/imx-media-csi.c
++++ b/drivers/staging/media/imx/imx-media-csi.c
+@@ -1794,7 +1794,8 @@ static int csi_registered(struct v4l2_subdev *sd)
+ 	}
+=20
+ 	priv->vdev =3D imx_media_capture_device_init(priv->sd.dev, &priv->sd,
+-						   CSI_SRC_PAD_IDMAC, true);
++						   CSI_SRC_PAD_IDMAC, true,
++						   DEVICE_TYPE_IMX56);
+ 	if (IS_ERR(priv->vdev)) {
+ 		ret =3D PTR_ERR(priv->vdev);
+ 		goto free_fim;
+diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/=
+imx/imx-media.h
+index d2a150aac6cd..2bacfb96da85 100644
+--- a/drivers/staging/media/imx/imx-media.h
++++ b/drivers/staging/media/imx/imx-media.h
+@@ -96,6 +96,11 @@ enum imx_pixfmt_sel {
+ 	PIXFMT_SEL_ANY =3D PIXFMT_SEL_YUV | PIXFMT_SEL_RGB | PIXFMT_SEL_BAYER,
+ };
+=20
++enum imx_device_type {
++	DEVICE_TYPE_IMX56,
++	DEVICE_TYPE_IMX78,
++};
++
+ struct imx_media_buffer {
+ 	struct vb2_v4l2_buffer vbuf; /* v4l buffer must be first */
+ 	struct list_head  list;
+@@ -282,7 +287,8 @@ int imx_media_ic_unregister(struct v4l2_subdev *sd);
+ /* imx-media-capture.c */
+ struct imx_media_video_dev *
+ imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_=
+sd,
+-			      int pad, bool legacy_api);
++			      int pad, bool legacy_api,
++			      enum imx_device_type type);
+ void imx_media_capture_device_remove(struct imx_media_video_dev *vdev);
+ int imx_media_capture_device_register(struct imx_media_video_dev *vdev,
+ 				      u32 link_flags);
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/m=
+edia/imx/imx7-media-csi.c
+index d7dc0d8edf50..1a11f07620e9 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -1012,7 +1012,8 @@ static int imx7_csi_registered(struct v4l2_subdev *sd)
+ 	}
+=20
+ 	csi->vdev =3D imx_media_capture_device_init(csi->sd.dev, &csi->sd,
+-						  IMX7_CSI_PAD_SRC, false);
++						  IMX7_CSI_PAD_SRC, false,
++						  DEVICE_TYPE_IMX78);
+ 	if (IS_ERR(csi->vdev))
+ 		return PTR_ERR(csi->vdev);
+=20
+--=20
+2.31.1
 
-Done in next series.
->=20
-> > Those would have to extract the device type from struct capture_priv:
-> > - __capture_legacy_try_fmt
-> > - capture_try_fmt_vid_cap
-> > - capture_s_fmt_vid_cap
-> > - capture_init_format =20
->=20
-> Maybe imx_media_mbus_fmt_to_pix_fmt should be moved into imx-media-
-> capture.c be passed struct capture_priv to avoid duplicating the device
-> type check?
->=20
-I opted not to, in favor of passing the actual device type. It comes out to=
- the same thing, except a simple value is passed around instead of a device.
 
-> imx_media_capture_device_init() could gain a new parameter (or maybe
-> replace legacy_api) to set the device type.
-
-Thanks, this is what I was missing.
-
-Regards,
-Dorota
->=20
-> regards
-> Philipp
-
-
---Sig_/3Pfy1EoRadhkVVrPdaPSq/H
+--Sig_/=3CTC_Z4HKntYsD0qSXe6Gp
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmFsA+EACgkQADBpX4S8
-ZncnvQ/+NEAYfdFoRmGgvfSL+jRzj/+XIvhViKP2W+CzU2lE4Y+YdG/4DQsAq4hv
-K34krzBX8ZG8wdxP4kTCKRmqZfQ47sRDW594mpvcTG4fsovyLlhr8TnMW69AMzXB
-nvaM5DSZhpz6msI9paaROyX6IXK7LRfehDlOLyCZO/U3u1Z3ujvKXyw45waM1LN/
-6hCBqflMO+pGV4XhVHlRc+1DlXn5o2/7XTVvT2qtVCkiyBFy24WaDYjtCjCtI6o1
-rIOGxdl5X6GiYL1Z5+Or3QOIQQxtbTaUhLxAzXyX5r/gb08BZQmJLJJHIEUSJfMf
-tr5m6eiCZhQxqfG9IagFM6c43kv4cVuf8tf7UrEu3wrFAziaJKfNvfWSOE6NbrLv
-JrP5XVNAigQNXss8NmQzyxSeHIJWH33+6oODC1SZ2q+8I1PrH6CvK+eFZQ1KAwUI
-OLp+SCd7BeXrG2s1gqTmTFP8t7rgWZ0eZc86h3nt2mCdsIGFQdB3ZF0X7Y4AQM+N
-nbcG1SyBAEX0Hdqm+2W5OnUjchi/5QZ6KyScPDO6ABolUd0kDzC8Cd3m4MOoqtXf
-moat42ZqQBvtmPmaxeuxJeVjpoOnp5z9/wihbtAqMVC0du/wbb61zQaB2iP5reVL
-VAOgMIzp141f8DPRf2954PcecPzjq+E5qZsFkUNafzk00f6BkG4=
-=pJAi
+iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmFsBCEACgkQADBpX4S8
+ZncEeBAAni2sIsO33V6GZobm5hF3BfdGzBir1VAaKx63rBHNpBUY+XF/4mIObEBY
+9AOaCiBrhseXRfgymsMs09VsMKoZLp1NvfV1PfefsUCu6AVB9mhcqlJF56p4cXrt
+gAj9bH/+pfvAFU67bxfCDzLUCJQIBgVGaVOQilpmH87I8tAohfBCOdtZkFnWIrtd
+BZfz7nYAh/QuCmwNAZC7+mX8YIPVA7+JyVRnDgKLni9Dm9yyFtyNdjZz+BBrHLU3
+q33jBdxGBCrzoN8uV3PQQfs3cBXFDeoA5kz/UbQznJYHAJeOr1dNmlchK6B2ZzzK
+9wulQ/6bOpA14HHbIfyIFJYhfy5NWSbGvU74QcKxQLI9HJPp3hTwYcRQR8SgNiZk
+phbIJBvXDPwI9M5R6O2XbA4m4hGgU41paUAqZiM5zV8fsK0f4S/uPnx6nZrEaNkY
+RfUaCIYpOFt0eQInLigarUDEPm+K8t7O+afd8IcotnmxsVGApvfP5OooRkS12SOS
+NqtRlSs3MwwhfcnRlmuw/T/YpxuiIUwQPidE4kEg0zqGw0Y0VVEwWasvbRdTYpnP
+MpZeY6g9BTj+7xT+s6s4QR6qXGV0DrTN09EoEWVWpYiNaO/iIq3Sj81Mm+Gp77pV
+ntrjB3rLHWFcI086+01oYwn7UmkPMUPH29haVJ8s6MOxtS2CxY8=
+=+cL7
 -----END PGP SIGNATURE-----
 
---Sig_/3Pfy1EoRadhkVVrPdaPSq/H--
+--Sig_/=3CTC_Z4HKntYsD0qSXe6Gp--
