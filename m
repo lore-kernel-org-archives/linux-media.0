@@ -2,25 +2,25 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1096EC433F5
-	for <linux-media@archiver.kernel.org>; Sun, 17 Oct 2021 11:08:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DD3BC433FE
+	for <linux-media@archiver.kernel.org>; Sun, 17 Oct 2021 11:09:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E6B8461244
-	for <linux-media@archiver.kernel.org>; Sun, 17 Oct 2021 11:08:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3311261245
+	for <linux-media@archiver.kernel.org>; Sun, 17 Oct 2021 11:09:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245428AbhJQLKu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 17 Oct 2021 07:10:50 -0400
-Received: from comms.puri.sm ([159.203.221.185]:53474 "EHLO comms.puri.sm"
+        id S245425AbhJQLLY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 17 Oct 2021 07:11:24 -0400
+Received: from comms.puri.sm ([159.203.221.185]:54070 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245421AbhJQLKt (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 17 Oct 2021 07:10:49 -0400
+        id S229804AbhJQLLX (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 17 Oct 2021 07:11:23 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 19645DFA69;
-        Sun, 17 Oct 2021 04:08:10 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id 88E56DFAAA;
+        Sun, 17 Oct 2021 04:08:44 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xdWr8zFnNGxh; Sun, 17 Oct 2021 04:08:09 -0700 (PDT)
-Date:   Sun, 17 Oct 2021 13:08:02 +0200
+        with ESMTP id d2kKGqEIxJ38; Sun, 17 Oct 2021 04:08:43 -0700 (PDT)
+Date:   Sun, 17 Oct 2021 13:08:37 +0200
 From:   Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
 To:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -34,143 +34,153 @@ To:     Steve Longerbeam <slongerbeam@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         kernel@puri.sm, phone-devel@vger.kernel.org
-Subject: [PATCHv2 1/4] media: imx: Remove unused functions
-Message-ID: <20211017102904.756408-1-dorota.czaplejewicz@puri.sm>
+Subject: [PATCHv2 4/4] media: imx: Use dedicated format handler for i.MX7/8
+Message-ID: <20211017102904.756408-4-dorota.czaplejewicz@puri.sm>
+In-Reply-To: <20211017102904.756408-1-dorota.czaplejewicz@puri.sm>
+References: <20211017102904.756408-1-dorota.czaplejewicz@puri.sm>
 Organization: Purism
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IeWBxaTwi59gY3NqHrUWmfD";
+Content-Type: multipart/signed; boundary="Sig_/UChzlzgPs98xJxK1DilnSN2";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
---Sig_/IeWBxaTwi59gY3NqHrUWmfD
+--Sig_/UChzlzgPs98xJxK1DilnSN2
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Neither imx_media_mbus_fmt_to_ipu_image nor imx_media_ipu_image_to_mbus_fmt
-were used anywhere.
+This splits out a format handler which takes into account
+the capabilities of the i.MX7/8 video device,
+as opposed to the default handler compatible with both i.MX5/6 and i.MX7/8.
 
 Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
 ---
-Hello,
-
-This patch series attempts to separate image format handling between device=
-s in the i.MX5/6 and i.MX7/8 families.
-
-The first patch in the series implements the suggestion I received from Phi=
-lipp Zabel as feedback to the previous series.
-
-The last 3 could in principle be submitted as a single patch, but I opted f=
-or minimal changes, for reviewing clarity.
-
-The last patch is the core of the change, where i.MX5/6 uses the old code p=
-ath, and i.MX7/8 uses a slightly redacted copy of it. I have fairly limited=
- experience with the parameters that go into determining the format, so I o=
-pted only to adjust the part I have tested: the rounding.
-
-Regards,
-Dorota
-
- drivers/staging/media/imx/imx-media-utils.c | 42 ---------------------
- drivers/staging/media/imx/imx-media.h       |  4 --
- 2 files changed, 46 deletions(-)
+ drivers/staging/media/imx/imx-media-utils.c | 78 +++++++++++++++++++--
+ 1 file changed, 74 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/=
 media/imx/imx-media-utils.c
-index 5128915a5d6f..afa96e05ea7f 100644
+index e124dd722107..938db2e2ddb1 100644
 --- a/drivers/staging/media/imx/imx-media-utils.c
 +++ b/drivers/staging/media/imx/imx-media-utils.c
-@@ -569,48 +569,6 @@ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_form=
-at *pix,
+@@ -516,10 +516,9 @@ void imx_media_try_colorimetry(struct v4l2_mbus_framef=
+mt *tryfmt,
  }
+ EXPORT_SYMBOL_GPL(imx_media_try_colorimetry);
+=20
+-int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
+-				  const struct v4l2_mbus_framefmt *mbus,
+-				  const struct imx_media_pixfmt *cc,
+-				  enum imx_device_type type)
++static int imx56_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
++					   const struct v4l2_mbus_framefmt *mbus,
++					   const struct imx_media_pixfmt *cc)
+ {
+ 	u32 width;
+ 	u32 stride;
+@@ -568,6 +567,77 @@ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_form=
+at *pix,
+=20
+ 	return 0;
+ }
++
++static int imx78_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
++					   const struct v4l2_mbus_framefmt *mbus,
++					   const struct imx_media_pixfmt *cc)
++{
++	u32 width;
++	u32 stride;
++	u8 divisor;
++
++	if (!cc) {
++		cc =3D imx_media_find_ipu_format(mbus->code,
++					       PIXFMT_SEL_YUV_RGB);
++		if (!cc)
++			cc =3D imx_media_find_mbus_format(mbus->code,
++							PIXFMT_SEL_ANY);
++		if (!cc)
++			return -EINVAL;
++	}
++
++	/*
++	 * TODO: the IPU currently does not support the AYUV32 format,
++	 * so until it does convert to a supported YUV format.
++	 */
++	if (cc->ipufmt && cc->cs =3D=3D IPUV3_COLORSPACE_YUV) {
++		u32 code;
++
++		imx_media_enum_mbus_formats(&code, 0, PIXFMT_SEL_YUV);
++		cc =3D imx_media_find_mbus_format(code, PIXFMT_SEL_YUV);
++	}
++
++	/*
++	 * The hardware can handle line lengths divisible by 4 bytes,
++	 * as long as the number of lines is even.
++	 * Otherwise, use the value of 8 bytes recommended in the datasheet.
++	 */
++	divisor =3D 4 << (mbus->height % 2);
++
++	width =3D round_up(mbus->width, divisor);
++
++	if (cc->planar)
++		stride =3D round_up(width, 16);
++	else
++		stride =3D round_up((width * cc->bpp) >> 3, divisor);
++
++	pix->width =3D width;
++	pix->height =3D mbus->height;
++	pix->pixelformat =3D cc->fourcc;
++	pix->colorspace =3D mbus->colorspace;
++	pix->xfer_func =3D mbus->xfer_func;
++	pix->ycbcr_enc =3D mbus->ycbcr_enc;
++	pix->quantization =3D mbus->quantization;
++	pix->field =3D mbus->field;
++	pix->bytesperline =3D stride;
++	pix->sizeimage =3D cc->planar ? ((stride * pix->height * cc->bpp) >> 3) :
++			 stride * pix->height;
++
++	return 0;
++}
++
++int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
++				  const struct v4l2_mbus_framefmt *mbus,
++				  const struct imx_media_pixfmt *cc,
++				  enum imx_device_type type) {
++	switch (type) {
++	case DEVICE_TYPE_IMX56:
++		return imx56_media_mbus_fmt_to_pix_fmt(pix, mbus, cc);
++	case DEVICE_TYPE_IMX78:
++		return imx78_media_mbus_fmt_to_pix_fmt(pix, mbus, cc);
++	}
++	return -EINVAL;
++}
  EXPORT_SYMBOL_GPL(imx_media_mbus_fmt_to_pix_fmt);
 =20
--int imx_media_mbus_fmt_to_ipu_image(struct ipu_image *image,
--				    const struct v4l2_mbus_framefmt *mbus)
--{
--	int ret;
--
--	memset(image, 0, sizeof(*image));
--
--	ret =3D imx_media_mbus_fmt_to_pix_fmt(&image->pix, mbus, NULL);
--	if (ret)
--		return ret;
--
--	image->rect.width =3D mbus->width;
--	image->rect.height =3D mbus->height;
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(imx_media_mbus_fmt_to_ipu_image);
--
--int imx_media_ipu_image_to_mbus_fmt(struct v4l2_mbus_framefmt *mbus,
--				    const struct ipu_image *image)
--{
--	const struct imx_media_pixfmt *fmt;
--
--	fmt =3D imx_media_find_pixel_format(image->pix.pixelformat,
--					  PIXFMT_SEL_ANY);
--	if (!fmt || !fmt->codes || !fmt->codes[0])
--		return -EINVAL;
--
--	memset(mbus, 0, sizeof(*mbus));
--	mbus->width =3D image->pix.width;
--	mbus->height =3D image->pix.height;
--	mbus->code =3D fmt->codes[0];
--	mbus->field =3D image->pix.field;
--	mbus->colorspace =3D image->pix.colorspace;
--	mbus->xfer_func =3D image->pix.xfer_func;
--	mbus->ycbcr_enc =3D image->pix.ycbcr_enc;
--	mbus->quantization =3D image->pix.quantization;
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(imx_media_ipu_image_to_mbus_fmt);
--
  void imx_media_free_dma_buf(struct device *dev,
- 			    struct imx_media_dma_buf *buf)
- {
-diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/=
-imx/imx-media.h
-index 492d9a64e704..d2a150aac6cd 100644
---- a/drivers/staging/media/imx/imx-media.h
-+++ b/drivers/staging/media/imx/imx-media.h
-@@ -199,10 +199,6 @@ void imx_media_try_colorimetry(struct v4l2_mbus_framef=
-mt *tryfmt,
- int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
- 				  const struct v4l2_mbus_framefmt *mbus,
- 				  const struct imx_media_pixfmt *cc);
--int imx_media_mbus_fmt_to_ipu_image(struct ipu_image *image,
--				    const struct v4l2_mbus_framefmt *mbus);
--int imx_media_ipu_image_to_mbus_fmt(struct v4l2_mbus_framefmt *mbus,
--				    const struct ipu_image *image);
- void imx_media_grp_id_to_sd_name(char *sd_name, int sz,
- 				 u32 grp_id, int ipu_id);
- struct v4l2_subdev *
 --=20
 2.31.1
 
 
---Sig_/IeWBxaTwi59gY3NqHrUWmfD
+--Sig_/UChzlzgPs98xJxK1DilnSN2
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmFsBBIACgkQADBpX4S8
-ZncOpBAAilkWS7552zCmzw6XFP9OCOcjyAcmet2jOnvtWLRzGtLLZJb1RlsfqIXI
-Cmty13PyOnHF6Y+pfs8gyB7LtIuICgDkJYDqOGF78eSmLu+0icX9zzEOGef9+ynN
-UmysNRJ/Z10KQbg/hf11oVPREV8n5x6/jXEFVF1KAEnr/hASb/ox6OTw6zEpKCE+
-jZVpg+YhX//EwNayLEl3R9FGvyVuwarGu0H3Trqb+EktzMVZM9X849snMcZXuabY
-oh6Yo8u605H/Zj9E15rqT6U7Rdifn+qoR89Gt0/LBGhxOXEadGXQkNrHawbNpwGU
-oUtnGYHYMCPHLOQ3Z3TFxjs0ldlmXtKQ0zCENfQG97p026J9AIwkw84iBXafi3Xr
-pfrHdpl59mX6yWZ7R0psgC+mi66FgSbktbunVj1xCro1uV1Df8Ccv05usSMKKtoK
-Quq10hwGBvVq+lCrgHk8+yFA4h9rPDemearxqR8VneehBQna5tEzmI7r7dpFc51G
-zHFrg483eObfMjcxZGROxvop9QjH22QC45aQ6vNGaZ1Jki+dYxiiWKJk+IcEvSCj
-CmWZgcYWfSdchZVCzJSw1APUq/Wr0kRwR5DsZOJI88XNvJbFuPlpKtO7kEcFoRtz
-q7f4qFGX6BQEto58WiiZloGzlBJDcQgA12wZvNfA9rF83hD0160=
-=Q4YH
+iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmFsBDUACgkQADBpX4S8
+Znd5lw/+IqabIiFF8Lz73MM9TgWmsrSufcFzhPHP1cFb/+I6o1hqNbn6XdPKexKR
+I0vGqlHHNV2eFOksDZThEHlKZihp8ZS3PEt+WISJGVjY636uKgQkZ/DYZT5AjV+P
+Cdf6mh4x1+Ma/QV1gtyQbAL/eLekP4LChUEq6vL3kRG1ZCRGpEWjyVf/qeKYWq45
+si/324AOrvMm8/2bLjiY/SSsB0CIDAr6SwMSP2a6/kuNWbeOE1iCtlFRHsXPqZIH
+rPxM8m3yVOjwQaakw1pt5VSNLdpmaXHPLzgEb+N6UAceFWogHgVihTA6ZmvLAo5s
+VmwiySl3OPZAY4YFtQtys6vstQXsiWOiDoDkevCF4dM13qCAUjqsvHfk0uyQ35L7
+bBF+q1I8FXzAxvwGiCixQeYwhGK6BGe9fjStd9G/GP/M4jHxMZ0rofIOIIVPqQGF
+CqQBNksvX9E2TwHcnIkWWP22PdnJImz77Scb2pH+uzgiydtJLrNWkrR8dKLFdJnB
+d39bvbxtab7QutBm4SsEvwweR+OnFwmmjcR3E34gnK9YrlaaDXY8EFD5sWkt5o4L
+Wu3xTs5J6a0jdg3YBBk1QoPhXNf/pFW29kXYhHvqjiOj8/kOnuiaheO9//twM3FR
+SNzUZ5Xk1/ut9E5zndrNyOTlCI/Y6Vks7uD6OzMlgstAqDBH64Q=
+=dYEO
 -----END PGP SIGNATURE-----
 
---Sig_/IeWBxaTwi59gY3NqHrUWmfD--
+--Sig_/UChzlzgPs98xJxK1DilnSN2--
