@@ -2,130 +2,84 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF6F5C4332F
-	for <linux-media@archiver.kernel.org>; Mon, 18 Oct 2021 15:17:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3649DC433FE
+	for <linux-media@archiver.kernel.org>; Mon, 18 Oct 2021 16:47:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CDBF9610A5
-	for <linux-media@archiver.kernel.org>; Mon, 18 Oct 2021 15:17:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 198F960E9C
+	for <linux-media@archiver.kernel.org>; Mon, 18 Oct 2021 16:47:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbhJRPUD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 18 Oct 2021 11:20:03 -0400
-Received: from mga12.intel.com ([192.55.52.136]:57505 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232846AbhJRPT7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 18 Oct 2021 11:19:59 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10141"; a="208372722"
-X-IronPort-AV: E=Sophos;i="5.85,382,1624345200"; 
-   d="scan'208";a="208372722"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 08:15:01 -0700
-X-IronPort-AV: E=Sophos;i="5.85,382,1624345200"; 
-   d="scan'208";a="462358708"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2021 08:14:58 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id A117820769;
-        Mon, 18 Oct 2021 15:17:33 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1mcRa5-0001fb-LB; Mon, 18 Oct 2021 15:17:29 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajmohan.mani@intel.com, Tomasz Figa <tfiga@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Hyungwoo Yang <hyungwoo.yang@intel.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH 4/6] ACPI: Add a convenience function to tell a device is in D0 state
-Date:   Mon, 18 Oct 2021 15:17:27 +0300
-Message-Id: <20211018121729.6357-5-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211018121729.6357-1-sakari.ailus@linux.intel.com>
-References: <20211018121729.6357-1-sakari.ailus@linux.intel.com>
+        id S232814AbhJRQtQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 18 Oct 2021 12:49:16 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.20]:24225 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231495AbhJRQtP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 18 Oct 2021 12:49:15 -0400
+X-Greylist: delayed 360 seconds by postgrey-1.27 at vger.kernel.org; Mon, 18 Oct 2021 12:49:15 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1634575260;
+    s=strato-dkim-0002; d=schepmann.de;
+    h=Date:Message-ID:Subject:From:To:Cc:Date:From:Subject:Sender;
+    bh=Ca+wlYYDwWB93mJKJ9iwSBTZSyclk/0S5VU8WCLiwSg=;
+    b=R8RGu3F8+bgo7y+Hr0LfURNe1WqJRTaBiL0m7/G/wvcCTAn0cK0xi1a1VjdPTHc7a/
+    RSlxSAfhSBVAvOp/sXzkCTwM3GTlBzQI75aqgb+CDBxQjxxayE5iWtgtU6clJFH9wUN1
+    gjGK1EW6AyImV+Sb49KCL0UGv9Na3Lv/wsU0w3TmyPwL8ej8gfOO2zgbbyeITLngvTLD
+    mYmU2UpmtbejtI1U6C4z9FS7s1ZOI1Pofc7RMMVRWnMozVzmrF1RShiq88m+9FRjOaAb
+    TAvbTNo8JtguZccRnzxLYVsndIuwo45rqUyKrHOHSnoL77rAFidJmF7wKJSXkFp6mtUt
+    ZHAA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":KmkIfFiIaPwJgcTzoxCAM9+H+dvshPpqKzm/2++gu8KR07e+sHGTMcXmfB3arwy25rYldR/JeJYsezvQQQD6PwxUhbPEOqetRjOo+w=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPv6:2003:f6:3f3e:4d00:3630:82b6:9c64:ec6c]
+    by smtp.strato.de (RZmta 47.33.8 AUTH)
+    with ESMTPSA id t00f79x9IGf0o04
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate)
+    for <linux-media@vger.kernel.org>;
+    Mon, 18 Oct 2021 18:41:00 +0200 (CEST)
+To:     linux-media@vger.kernel.org
+From:   Felix Schepmann <felix@schepmann.de>
+Subject: camera not supported in your device-list does not work
+Message-ID: <3158098a-c508-a8e0-dfba-d30b59c26d34@schepmann.de>
+Date:   Mon, 18 Oct 2021 18:41:00 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a convenience function to tell whether a device is in D0 state,
-primarily for use in drivers' probe or remove functions on busses where
-the custom is to power on the device for the duration of both.
+Hello,
 
-Returns false on non-ACPI systems.
+i am using a webcam with the following dmesg-output when inserting, 
+which is not showing any video signal:
 
-Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
----
- drivers/acpi/device_pm.c | 26 ++++++++++++++++++++++++++
- include/linux/acpi.h     |  5 +++++
- 2 files changed, 31 insertions(+)
+[  405.386690] usb 3-1.2: USB disconnect, device number 4
+[  411.018485] usb 3-1.1: USB disconnect, device number 3
+[  414.105490] usb 3-1.1: new high-speed USB device number 7 using xhci_hcd
+[  414.285316] usb 3-1.1: New USB device found, idVendor=0c45, 
+idProduct=6366, bcdDevice= 1.00
+[  414.285331] usb 3-1.1: New USB device strings: Mfr=2, Product=1, 
+SerialNumber=3
+[  414.285338] usb 3-1.1: Product: USB 2.0 Camera
+[  414.285343] usb 3-1.1: Manufacturer: Sonix Technology Co., Ltd.
+[  414.285348] usb 3-1.1: SerialNumber: SN0001
+[  414.288227] uvcvideo: Found UVC 1.00 device USB 2.0 Camera (0c45:6366)
+[  414.315921] input: USB 2.0 Camera: USB Camera as 
+/devices/pci0000:00/0000:00:1c.4/0000:03:00.0/0000:04:02.0/0000:39:00.0/usb3/3-1/3-1.1/3-1.1:1.0/input/input52
+[  414.365853] usb 3-1.1: 3:1: cannot get freq at ep 0x84
+[  414.721869] usb 3-1.1: 3:1: cannot get freq at ep 0x84
+[  414.791189] usb 3-1.1: 3:1: cannot get freq at ep 0x84
 
-diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
-index 0028b6b51c877..19b33c028f356 100644
---- a/drivers/acpi/device_pm.c
-+++ b/drivers/acpi/device_pm.c
-@@ -1400,4 +1400,30 @@ bool acpi_storage_d3(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(acpi_storage_d3);
- 
-+/**
-+ * acpi_dev_state_d0 - Tell if the device is in D0 power state
-+ * @dev: Physical device the ACPI power state of which to check
-+ *
-+ * On a system without ACPI, return true. On a system with ACPI, return true if
-+ * the current ACPI power state of the device is D0, or false otherwise.
-+ *
-+ * Note that the power state of a device is not well-defined after it has been
-+ * passed to acpi_device_set_power() and before that function returns, so it is
-+ * not valid to ask for the ACPI power state of the device in that time frame.
-+ *
-+ * This function is intended to be used in a driver's probe or remove
-+ * function. See Documentation/firmware-guide/acpi/low-power-probe.rst for
-+ * more information.
-+ */
-+bool acpi_dev_state_d0(struct device *dev)
-+{
-+	struct acpi_device *adev = ACPI_COMPANION(dev);
-+
-+	if (!adev)
-+		return true;
-+
-+	return adev->power.state == ACPI_STATE_D0;
-+}
-+EXPORT_SYMBOL_GPL(acpi_dev_state_d0);
-+
- #endif /* CONFIG_PM */
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index 375715b0535fb..143ce7e0bee13 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -1014,6 +1014,7 @@ int acpi_subsys_runtime_suspend(struct device *dev);
- int acpi_subsys_runtime_resume(struct device *dev);
- int acpi_dev_pm_attach(struct device *dev, bool power_on);
- bool acpi_storage_d3(struct device *dev);
-+bool acpi_dev_state_d0(struct device *dev);
- #else
- static inline int acpi_subsys_runtime_suspend(struct device *dev) { return 0; }
- static inline int acpi_subsys_runtime_resume(struct device *dev) { return 0; }
-@@ -1025,6 +1026,10 @@ static inline bool acpi_storage_d3(struct device *dev)
- {
- 	return false;
- }
-+static inline bool acpi_dev_state_d0(struct device *dev)
-+{
-+	return true;
-+}
- #endif
- 
- #if defined(CONFIG_ACPI) && defined(CONFIG_PM_SLEEP)
--- 
-2.30.2
+Maybe you could tell me what else of information I should show you?
+
+When I connect to this cam from e.g. firefox it's activity light turns 
+on, but no video-stream ist shown in my Web-conferencing screen.
+
+regards, Felix
+
+
 
