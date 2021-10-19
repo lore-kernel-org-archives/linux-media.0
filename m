@@ -2,274 +2,177 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 978A4C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 19 Oct 2021 15:40:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDD95C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 19 Oct 2021 15:52:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6728460FDA
-	for <linux-media@archiver.kernel.org>; Tue, 19 Oct 2021 15:40:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1A546112D
+	for <linux-media@archiver.kernel.org>; Tue, 19 Oct 2021 15:52:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbhJSPmV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Oct 2021 11:42:21 -0400
-Received: from mga12.intel.com ([192.55.52.136]:36667 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229774AbhJSPmU (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Oct 2021 11:42:20 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10142"; a="208651561"
-X-IronPort-AV: E=Sophos;i="5.87,164,1631602800"; 
-   d="scan'208";a="208651561"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2021 08:30:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,164,1631602800"; 
-   d="scan'208";a="444539236"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga003.jf.intel.com with ESMTP; 19 Oct 2021 08:30:04 -0700
-Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Tue, 19 Oct 2021 08:30:03 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12 via Frontend Transport; Tue, 19 Oct 2021 08:30:03 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.177)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.12; Tue, 19 Oct 2021 08:30:02 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UYHcFAxBS2JNxZDjWfSDo5ZF4Yu/Qzwxm+h7PgDezLsmKdQqrUCQKWEBZXcs4ytjdgynlxLjmfIWBRYOHfxkh14kOSWF/rs+rYbeUD/+zy5VCIO5ZJDj8UhWkZKN4KgOkrZn3cbD+JnpVGg2lDFmVZDi0LrC74MzN+liLWsvaf4NbDA8jv66XE/KK9NCS6+EDQY7UO0hMIKLmyQEOPOBPt1rsySI9pZLhkrPI12LVRp5B6yD/qjpZ1fEqU2oFtfDLkLX7UEPyUe8x3mUcHLfu3BS3jWg+ILLZCa1MWNXmO8tS9zuiZrupOA+/WPOTraxq2JCysFHWyjwLXhX6lqcGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xK2Db0yUuKbwtBk1JCTNjFqETN14ToofIAjQWoaQx08=;
- b=B0Hv+iU9I+6KWk7NcCoeR7CLj45LAzN6gWn+GjWjbIrdlqZcPz2mflTJ4Hz6ibDvetQvQK4uWn4Y0mDl40P42zb9rDPKTWcRgB6RMSMpkOl+F82OqLvFytBlfjxeoWjGZn+49SHQrerTe14G9o5p28eJr6VvbAiH63gF7kD7b0EjSDuyXjq8NuRCF4puJWuF6S+iIJbJF+xTYuxXENJ+KpzfvtT/K8KwXp1W22dqeebyJz0MtBVynTbddV3XzoKiT2eDwfOFQM49H90tH00XFXumhtc+ig/DC5W+Lt4j9VQvJ+7iOVdTReSPtS0idhyqsuTVNRI9/nmkj+IfaqbFtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xK2Db0yUuKbwtBk1JCTNjFqETN14ToofIAjQWoaQx08=;
- b=uajVF8IdsY9GXS2HgVArwFkEVhFnfSelR+SneHIiX8BbUepNIbC2sWyyLX4BthPjpqy6g15kWPfEZzxYapi4VrDUy7IXa08SKChYGLg8pyTQLVFMJ4gwqhqtaiGEn3jn+yqw8KjeEdn8J0ZZbRBOAqLLcsnkbAszBTZ9IDkjen8=
-Received: from DM8PR11MB5653.namprd11.prod.outlook.com (2603:10b6:8:25::8) by
- DM8PR11MB5607.namprd11.prod.outlook.com (2603:10b6:8:28::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4628.15; Tue, 19 Oct 2021 15:30:01 +0000
-Received: from DM8PR11MB5653.namprd11.prod.outlook.com
- ([fe80::f40d:164c:f22:5ad6]) by DM8PR11MB5653.namprd11.prod.outlook.com
- ([fe80::f40d:164c:f22:5ad6%9]) with mapi id 15.20.4628.015; Tue, 19 Oct 2021
- 15:30:01 +0000
-From:   "Cao, Bingbu" <bingbu.cao@intel.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "tfiga@chromium.org" <tfiga@chromium.org>,
-        "kieran.bingham@ideasonboard.com" <kieran.bingham@ideasonboard.com>,
-        "bingbu.cao@linux.intel.com" <bingbu.cao@linux.intel.com>
-Subject: RE: [PATCH v3] media: imx258: add vblank control to support more
- frame rate range
-Thread-Topic: [PATCH v3] media: imx258: add vblank control to support more
- frame rate range
-Thread-Index: AQHXw9CEorwlFxevV0mGeohgDRS1A6vaSIcAgAAp8eA=
-Date:   Tue, 19 Oct 2021 15:30:01 +0000
-Message-ID: <DM8PR11MB56532CA3BC7F2FDCD78C4E7E99BD9@DM8PR11MB5653.namprd11.prod.outlook.com>
-References: <1634527576-2928-1-git-send-email-bingbu.cao@intel.com>
- <YW6/ZGI5/j4UDaBQ@paasikivi.fi.intel.com>
-In-Reply-To: <YW6/ZGI5/j4UDaBQ@paasikivi.fi.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-authentication-results: linux.intel.com; dkim=none (message not signed)
- header.d=none;linux.intel.com; dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9fb20d93-f346-48ca-5850-08d99315511d
-x-ms-traffictypediagnostic: DM8PR11MB5607:
-x-microsoft-antispam-prvs: <DM8PR11MB56076D19FC74D4A50B79D1C399BD9@DM8PR11MB5607.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Zhop93Rt7OfygVLGAhYnXQwF3LGXo8KHylgI7vaGWO5bBbkfhiClcszQCueEArKxjREdZa0G0T/seLJRszOP7qh9j26UHRq7lupMrnlF021BhWlTdhZbNlm5V9znf1Lbu4sCrQOlshpDS5l8kRE/lJYsYt81gcUTltEm85JdJ+aywj7yxBSHQjod9yEnHKB6ecWozaZFowxdl7p+MaT/dx55OxVelYXR394l0WBfRsiWDoTSSp+NzvOeUiPCi7EhvFJy4UPFLIArDRpkibqmHye5SjznGVgN43QE2R9h65e1NhmxSOdHQ6dPVZBfJB9gU/v5JhXhX9zigaRprBzIzO25a2vBbI5I0ytFDGogdrqTtBLqnfqAzxMJ71omyJtK7ihRvc7OF1JA2b2w1xXzwB5O8hnp0zFsMhrykhP9R7KUh+bFk952O9M3EF8/std7pq+wGFmHlmZbdAh56gYzOQKTdwhwGxO8gln9QWRJgx+kgM00IL3+7sN2luRW++HZJLP4J+kH276EduFL9yaTa2w78Ib6yAgKpvaFpCyRN7SnZ3GNTTKI5bP61iQeC+FW3M3SGBgQmVQ/YU96NwgM6NkkRExNhqIzzUg2IyaCh2d0O1YyVzJsJ59YuVGfwWFVEfnx5ht7EyFu7ZDSv+REbF7u35mLr/vtyQA33ozUCX4+V9ER1kGBjxT9pu3FSg4pLfIySh501g03xoKucj3qvQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5653.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(186003)(8676002)(8936002)(4326008)(26005)(53546011)(6506007)(76116006)(64756008)(66946007)(5660300002)(66556008)(66446008)(66476007)(508600001)(316002)(2906002)(7696005)(54906003)(9686003)(55016002)(6916009)(52536014)(122000001)(38100700002)(83380400001)(86362001)(33656002)(71200400001)(82960400001)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?T9ytIKhlVOTdZA5QHPqwGlMgdnVz35M+HqJoceBzEMMzEDoK/hhFPDlFXYWj?=
- =?us-ascii?Q?uUGQvtbs7c4RB3G2IbmOM2S+qagUwwGNRFQ+86LmJ7nl5mABVr72xY1rtN3n?=
- =?us-ascii?Q?esL/YIkbWTketukR/lVZf8Zl1KHIY/kxytAPfC/xk8by4Sq0/vF1Rtw8NQXk?=
- =?us-ascii?Q?g90/5NNWjokdJuf2pdVlinMliUUFVFl0tKNiyBmno8b9D+iJygedi+bP5uGp?=
- =?us-ascii?Q?f5B+8dXBEXTWpzfyJYf4l28FUkSsFBE6zc569qb2y0Y+bqOjndELHYC0hwuj?=
- =?us-ascii?Q?Vf2Dt9gKCU561pNekPawLwhbi4GTzQvpOyBF2huVpfwGuIYqDEN38KE2Ly4+?=
- =?us-ascii?Q?w9fBmOLBAcPpxtAqZKcCeFmwcqGAZfXlk6O3WOJicWUuGkJ7C00QgKwqpq4F?=
- =?us-ascii?Q?pbWkrp97jhfS8axMuAaIUrFUQHUqfp1D35bFU9dtNuavxIqo4RAFm6XhWAFg?=
- =?us-ascii?Q?hM6XaUYQmNtWY70OkvssqV18vFGnqTJnmV1mkCUzKD+CDiNjPr4nGJDyNuSV?=
- =?us-ascii?Q?wwqaTn1CAJPdeSY8ZE2cCyDvqNAdWPvmB7/UHxxAvk7tDVdXlAxGnKEfNC+T?=
- =?us-ascii?Q?7gzYy6SdGzTkoXC0o62gjyszKf2/J4OdQbuZKEHJXJoDZGPvhjs6Er71OdEH?=
- =?us-ascii?Q?1CihQDkgVR/0rd9OudBpKUo0z8sWF1Tr6/aGtN6rlAjT5ULLjgD5NX5Z4hoQ?=
- =?us-ascii?Q?k/EfEn+TLHhAFSVCe+GxPe0CLuQ3R67CbxkAdkfOdl1zFonSn1pg5yuY8EO8?=
- =?us-ascii?Q?a3NewIcs5anRfyRrgzH5wibyaQBEJuJJfZgVNZ3yVCq2EmsBoSR/egEBgUW4?=
- =?us-ascii?Q?kPrVUIghHB8jAzrOKS63HUD1gbOsFvpjJpi7ZTxn14/iDHk/RBpNYZSQQuM2?=
- =?us-ascii?Q?mBgCQ/kY6fmU/6Grv3YY2BWME/R2VoCmtRWFMD8ZOOMzWlMyvQn645BoQ638?=
- =?us-ascii?Q?ya/ryxjvJ1PgyG1+9If4lsDtrgEtNjsKQ4N9LAA9byMrBVmUCDH1bN1VDVpc?=
- =?us-ascii?Q?XtpD8hxtu9zmMRNbzDe8Gj4bka5HaZaa/3KxMr9MXesA84+1wjf9K0B0IrId?=
- =?us-ascii?Q?IjTHtw4hRnNa/Ysqq1M+8WPLlJ2JrsFXhLcpdgp7HLEFvofqc8bD/rcNO0d/?=
- =?us-ascii?Q?7aQslupAT18FKGkjKykv+4XX4iDPWqzt5FRTG0OnbjNnx4N4F6vy/MfDRN+4?=
- =?us-ascii?Q?DKrj9koRoeGJf/5HLzoT75krjmiO7+/1V7zpiiXX3JZtgspu97dRqLlKd2oy?=
- =?us-ascii?Q?tqmALJGUPDMKzmXjOrKZyCvkSMN54fgyEMDiXxKj/tZqNPWGda3E4lsqQ9Sg?=
- =?us-ascii?Q?/YcR6uFA37lwwnEQH3lFcGM8lc5hQOtGc8I9AOIdiDA7GFL9YBl2KvqyrOPZ?=
- =?us-ascii?Q?LPx00OguULpCFsRutDM08/CxBV0PalnemQdoUzFe/U7bJ+4KsMsVK4rUxogf?=
- =?us-ascii?Q?frscVTy9rSy8+rj8jUpA5UXNlIOxnTOooSC25o8u6vFrZn634C4GovVvSn5w?=
- =?us-ascii?Q?82+zME1reWOkRN+AhStoH6yqRQPXXPZQwvLKEf03LK5mjhokhQeYjPJ1hpYt?=
- =?us-ascii?Q?cxZLOcCnuH5mlk3HPz2E9Q1JIcm0Ng4Vi5FOMDQtRIzfOw9xYan+WzeOgzGh?=
- =?us-ascii?Q?N99VGX6TICCDWSl0FsVjZOg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S233067AbhJSPyn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Oct 2021 11:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234504AbhJSPyJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 19 Oct 2021 11:54:09 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FD4C061777
+        for <linux-media@vger.kernel.org>; Tue, 19 Oct 2021 08:51:41 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id g39so8454596wmp.3
+        for <linux-media@vger.kernel.org>; Tue, 19 Oct 2021 08:51:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=6ZFaxOZuF+IhLUiqvXFEEaubfNfset/rnTpcy2dgnJg=;
+        b=UKPHdrSwzYVYfSOaQNp28TlNw8ngnMfJFfd+bxj8K6Yk60xlDM3U3CMVv7havbe6d5
+         mlhmi+ZablsSB8GX3O3JLakmBpT4p/UFv6EBMQiUNmbHp8w86++d1P1D9eE34J3Xn/UN
+         QrvCaOe6Ebj8ZPQYzkFrNuKm3+BHxHE851Thul43ZfsCvMn6vJLjX/1jgzAIhCGEsN9e
+         oA6TExBNqjmvTTgQ2W+mkivR9ovsuQ+VhByjzxqAuRfHXRfx5Ud+CtKkUj+9Ug0bjCHI
+         VE4zU2MMS/hPW/IwgxZGY94R9f58Jq8wLe5F7m7aFOEQMkeVwKU2si3Tqe+jcKFK6Bdb
+         WfLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=6ZFaxOZuF+IhLUiqvXFEEaubfNfset/rnTpcy2dgnJg=;
+        b=Jb86Ax26a/5g6dJc2p8lF6qtlklN+NfwSkhBz4wEtqQAMXS3/qcTSMmAZI5NSFblo9
+         i9TQhzk4RByQIWB5IbeIH2oEyIeMtUeYjRbRvJUwN6S0Z/PPggM0A9f4VNOgbDAIqK4z
+         S8GsyO9ojUqBZGLphq03MmqhVUGMBrc/epGYUGkOPCKfl1y+pml1D6tEjOh26RM8x3E7
+         30ja2299PBo9LLF6iW0Lwl0Boft/9/xyMhXounV5q34GMEXwdg1Zqllb2pl46pvhZglD
+         npHj52tmPtl1EAa+8NeVAS10yBH1vo2qyKuFqsv24HGR7+wFu2MFdNgcRztdBN9cXHBU
+         DRNw==
+X-Gm-Message-State: AOAM530UV1EgL+AeSME0+/mLJqhUS7/gUCiFNFx/INwZw3NSVsIaHXmg
+        vgsNpiVSl+yU/Gprii20uhc=
+X-Google-Smtp-Source: ABdhPJz4XNeACAlrFxmsoMuUEFHsdoY3ZgMk/DqPLSEBGgjXzSylOvjXgNMCJTEtcGYcpIsBs1s+Tw==
+X-Received: by 2002:a7b:c114:: with SMTP id w20mr6922264wmi.143.1634658700577;
+        Tue, 19 Oct 2021 08:51:40 -0700 (PDT)
+Received: from ?IPv6:2a02:908:1252:fb60:4fc4:fae2:bc41:a808? ([2a02:908:1252:fb60:4fc4:fae2:bc41:a808])
+        by smtp.gmail.com with ESMTPSA id 133sm2560203wmb.24.2021.10.19.08.51.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Oct 2021 08:51:40 -0700 (PDT)
+Subject: Re: [PATCH 24/28] drm: use new iterator in
+ drm_gem_plane_helper_prepare_fb v2
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        tvrtko.ursulin@linux.intel.com
+References: <20211005113742.1101-1-christian.koenig@amd.com>
+ <20211005113742.1101-25-christian.koenig@amd.com>
+ <YWbr0/ey1rCbb0Yi@phenom.ffwll.local>
+ <405b9df8-58fd-b8f2-cec2-acde69aa5633@gmail.com>
+ <YW7WmU/GLzgJbDQc@phenom.ffwll.local>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+Message-ID: <35416546-b60b-d5cf-7fe9-abaa0dde63e2@gmail.com>
+Date:   Tue, 19 Oct 2021 17:51:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5653.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9fb20d93-f346-48ca-5850-08d99315511d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Oct 2021 15:30:01.3363
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SGnniNadz4YcvYIZf6knYe1vOoNbCmUNWA5f0t+3Cj1JD0pewFNr7tsE+3Pi6FJIV2mc973xaHS8WPuJIeb9jQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5607
-X-OriginatorOrg: intel.com
+In-Reply-To: <YW7WmU/GLzgJbDQc@phenom.ffwll.local>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Sakari,=20
+Am 19.10.21 um 16:30 schrieb Daniel Vetter:
+> On Tue, Oct 19, 2021 at 03:02:26PM +0200, Christian König wrote:
+>> Am 13.10.21 um 16:23 schrieb Daniel Vetter:
+>>> On Tue, Oct 05, 2021 at 01:37:38PM +0200, Christian König wrote:
+>>>> Makes the handling a bit more complex, but avoids the use of
+>>>> dma_resv_get_excl_unlocked().
+>>>>
+>>>> v2: improve coding and documentation
+>>>>
+>>>> Signed-off-by: Christian König <christian.koenig@amd.com>
+>>>> ---
+>>>>    drivers/gpu/drm/drm_gem_atomic_helper.c | 13 +++++++++++--
+>>>>    1 file changed, 11 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/drm_gem_atomic_helper.c b/drivers/gpu/drm/drm_gem_atomic_helper.c
+>>>> index e570398abd78..8534f78d4d6d 100644
+>>>> --- a/drivers/gpu/drm/drm_gem_atomic_helper.c
+>>>> +++ b/drivers/gpu/drm/drm_gem_atomic_helper.c
+>>>> @@ -143,6 +143,7 @@
+>>>>     */
+>>>>    int drm_gem_plane_helper_prepare_fb(struct drm_plane *plane, struct drm_plane_state *state)
+>>>>    {
+>>>> +	struct dma_resv_iter cursor;
+>>>>    	struct drm_gem_object *obj;
+>>>>    	struct dma_fence *fence;
+>>>> @@ -150,9 +151,17 @@ int drm_gem_plane_helper_prepare_fb(struct drm_plane *plane, struct drm_plane_st
+>>>>    		return 0;
+>>>>    	obj = drm_gem_fb_get_obj(state->fb, 0);
+>>>> -	fence = dma_resv_get_excl_unlocked(obj->resv);
+>>>> -	drm_atomic_set_fence_for_plane(state, fence);
+>>>> +	dma_resv_iter_begin(&cursor, obj->resv, false);
+>>>> +	dma_resv_for_each_fence_unlocked(&cursor, fence) {
+>>>> +		/* TODO: We only use the first write fence here and need to fix
+>>>> +		 * the drm_atomic_set_fence_for_plane() API to accept more than
+>>>> +		 * one. */
+>>> I'm confused, right now there is only one write fence. So no need to
+>>> iterate, and also no need to add a TODO. If/when we add more write fences
+>>> then I think this needs to be revisited, and ofc then we do need to update
+>>> the set_fence helpers to carry an entire array of fences.
+>> Well could be that I misunderstood you, but in your last explanation it
+>> sounded like the drm_atomic_set_fence_for_plane() function needs fixing
+>> anyway because a plane could have multiple BOs.
+>>
+>> So in my understanding what we need is a
+>> drm_atomic_add_dependency_for_plane() function which records that a certain
+>> fence needs to be signaled before a flip.
+> Yeah that's another issue, but in practice there's no libva which decodes
+> into planar yuv with different fences between the planes. So not a bug in
+> practice.
+>
+> But this is entirely orthogonal to you picking up the wrong fence here if
+> there's not exclusive fence set:
+>
+> - old code: Either pick the exclusive fence, or not fence if the exclusive
+>    one is not set.
+>
+> - new code: Pick the exclusive fence or the first shared fence
 
-________________________
-BRs, =20
-Bingbu Cao=20
+Hui what?
 
-> -----Original Message-----
-> From: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Sent: Tuesday, October 19, 2021 8:52 PM
-> To: Cao, Bingbu <bingbu.cao@intel.com>
-> Cc: linux-media@vger.kernel.org; tfiga@chromium.org;
-> kieran.bingham@ideasonboard.com; bingbu.cao@linux.intel.com
-> Subject: Re: [PATCH v3] media: imx258: add vblank control to support more
-> frame rate range
->=20
-> Hi Bingbu,
->=20
-> On Mon, Oct 18, 2021 at 11:26:16AM +0800, Bingbu Cao wrote:
-> > Current imx258 driver enable the automatic frame length tracking
-> > control by default and did not support VBLANK change, it's always
-> working at 30fps.
-> > However, in reality we need a wider frame rate range from 15 to 30.
-> > This patch disable the automatic frame length tracking control and
-> > enable the v4l2 VBLANK control to allow user changing frame rate per
-> requirement.
-> >
-> > Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-> > ---
-> >  drivers/media/i2c/imx258.c | 23 +++++++++++++++++------
-> >  1 file changed, 17 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-> > index 81cdf37216ca..2c787af7074d 100644
-> > --- a/drivers/media/i2c/imx258.c
-> > +++ b/drivers/media/i2c/imx258.c
-> > @@ -29,6 +29,7 @@
-> >  #define IMX258_VTS_MAX			0xffff
-> >
-> >  /*Frame Length Line*/
-> > +#define IMX258_REG_FLL			0x0340
-> >  #define IMX258_FLL_MIN			0x08a6
-> >  #define IMX258_FLL_MAX			0xffff
-> >  #define IMX258_FLL_STEP			1
-> > @@ -241,7 +242,7 @@ static const struct imx258_reg mode_4208x3118_regs[=
-]
-> =3D {
-> >  	{ 0x034D, 0x70 },
-> >  	{ 0x034E, 0x0C },
-> >  	{ 0x034F, 0x30 },
-> > -	{ 0x0350, 0x01 },
-> > +	{ 0x0350, 0x00 }, /* no frame length automatic tracking control */
-> >  	{ 0x0202, 0x0C },
-> >  	{ 0x0203, 0x46 },
-> >  	{ 0x0204, 0x00 },
-> > @@ -360,7 +361,7 @@ static const struct imx258_reg mode_2104_1560_regs[=
-]
-> =3D {
-> >  	{ 0x034D, 0x38 },
-> >  	{ 0x034E, 0x06 },
-> >  	{ 0x034F, 0x18 },
-> > -	{ 0x0350, 0x01 },
-> > +	{ 0x0350, 0x00 }, /* no frame length automatic tracking control */
-> >  	{ 0x0202, 0x06 },
-> >  	{ 0x0203, 0x2E },
-> >  	{ 0x0204, 0x00 },
-> > @@ -479,7 +480,7 @@ static const struct imx258_reg mode_1048_780_regs[]
-> =3D {
-> >  	{ 0x034D, 0x18 },
-> >  	{ 0x034E, 0x03 },
-> >  	{ 0x034F, 0x0C },
-> > -	{ 0x0350, 0x01 },
-> > +	{ 0x0350, 0x00 }, /* no frame length automatic tracking control */
->=20
-> Why is automatic frame length control disabled?
+We use "dma_resv_iter_begin(&cursor, obj->resv, *false*);" here which 
+means that only the exclusive fence is returned and no shared fences 
+whatsoever.
 
-My understanding:
-If automatic frame length control enabled, the frame length is changed
-automatically when COARSE_INTEGRATE_TIME + 10 > FRAME_LENGTH_LINES, it
-may not meet the requirement - less integrate time with more frame length.
-we need control the vertical blank to do that.
+My next step is to replace the boolean with a bunch of use case 
+describing enums. I hope that will make it much clearer what's going on 
+here.
+
+Christian.
+
+> New behaviour is busted, because scanning out and reading from a buffer at
+> the same time (for the next frame, e.g. to copy over damaged areas or some
+> other tricks) is very much a supported thing. Atomic _only_ wants to look
+> at the exclusive fence slot, which mean "there is an implicitly synced
+> write to this buffers". Implicitly synced reads _must_ be ignored.
 
 
->=20
-> >  	{ 0x0202, 0x03 },
-> >  	{ 0x0203, 0x42 },
-> >  	{ 0x0204, 0x00 },
-> > @@ -753,8 +754,17 @@ static int imx258_set_ctrl(struct v4l2_ctrl *ctrl)
-> >  	struct imx258 *imx258 =3D
-> >  		container_of(ctrl->handler, struct imx258, ctrl_handler);
-> >  	struct i2c_client *client =3D v4l2_get_subdevdata(&imx258->sd);
-> > +	s64 max;
-> >  	int ret =3D 0;
-> >
-> > +	if (ctrl->id =3D=3D V4L2_CID_VBLANK) {
-> > +		/* Update max exposure to meet expected vblanking */
-> > +		max =3D imx258->cur_mode->height + ctrl->val - 10;
-> > +		__v4l2_ctrl_modify_range(imx258->exposure,
-> > +					 imx258->exposure->minimum,
-> > +					 max, imx258->exposure->step, max);
-> > +	}
-> > +
-> >  	/*
-> >  	 * Applying V4L2 control value only happens
-> >  	 * when power is up for streaming
-> > @@ -773,6 +783,10 @@ static int imx258_set_ctrl(struct v4l2_ctrl *ctrl)
-> >  				IMX258_REG_VALUE_16BIT,
-> >  				ctrl->val);
-> >  		break;
-> > +	case V4L2_CID_VBLANK:
-> > +		ret =3D imx258_write_reg(imx258, IMX258_REG_FLL, 2,
-> > +				       imx258->cur_mode->height + ctrl->val);
-> > +		break;
-> >  	case V4L2_CID_DIGITAL_GAIN:
-> >  		ret =3D imx258_update_digital_gain(imx258,
-> IMX258_REG_VALUE_16BIT,
-> >  				ctrl->val);
-> > @@ -1189,9 +1203,6 @@ static int imx258_init_controls(struct imx258
-> *imx258)
-> >  				IMX258_VTS_MAX - imx258->cur_mode->height, 1,
-> >  				vblank_def);
-> >
-> > -	if (imx258->vblank)
-> > -		imx258->vblank->flags |=3D V4L2_CTRL_FLAG_READ_ONLY;
-> > -
-> >  	imx258->hblank =3D v4l2_ctrl_new_std(
-> >  				ctrl_hdlr, &imx258_ctrl_ops, V4L2_CID_HBLANK,
-> >  				IMX258_PPL_DEFAULT - imx258->cur_mode->width,
->=20
-> --
-> Kind regards,
->=20
-> Sakari Ailus
+>
+> Now amdgpu doesn't have this distinction in its uapi, but many drivers do.
+> -Daniel
+>
+>> Support for more than one write fence then comes totally naturally.
+>>
+>> Christian.
+>>
+>>> -Daniel
+>>>
+>>>> +		dma_fence_get(fence);
+>>>> +		break;
+>>>> +	}
+>>>> +	dma_resv_iter_end(&cursor);
+>>>> +	drm_atomic_set_fence_for_plane(state, fence);
+>>>>    	return 0;
+>>>>    }
+>>>>    EXPORT_SYMBOL_GPL(drm_gem_plane_helper_prepare_fb);
+>>>> -- 
+>>>> 2.25.1
+>>>>
+
