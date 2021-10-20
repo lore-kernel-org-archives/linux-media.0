@@ -2,48 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94D9FC433F5
-	for <linux-media@archiver.kernel.org>; Wed, 20 Oct 2021 06:48:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9D3CC433F5
+	for <linux-media@archiver.kernel.org>; Wed, 20 Oct 2021 06:50:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 68921610E6
-	for <linux-media@archiver.kernel.org>; Wed, 20 Oct 2021 06:48:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8FD3E610EA
+	for <linux-media@archiver.kernel.org>; Wed, 20 Oct 2021 06:50:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbhJTGu5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Oct 2021 02:50:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59182 "EHLO mail.kernel.org"
+        id S229817AbhJTGwg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Oct 2021 02:52:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59834 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229591AbhJTGu5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Oct 2021 02:50:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A6B38610CB;
-        Wed, 20 Oct 2021 06:48:39 +0000 (UTC)
+        id S229591AbhJTGwf (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 20 Oct 2021 02:52:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 47E5361074;
+        Wed, 20 Oct 2021 06:50:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634712523;
-        bh=MNfb1++EYpc9JxhagAgZLPvO4LJwE7gvMKEM/LbN6i8=;
+        s=k20201202; t=1634712621;
+        bh=PURJ57CDCK1CRMg4ZPPC0Zof7vbwM57cPumF7fbuLJI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u9MygGq8/TTQ25w1YPANrQUCmrRNQPVHQg08ROhbft6I7cd09LGuGuUN98+XgSbKb
-         d39fbfycs9YExiWCN8xM36SsKNUnooDMyWASm/LDXcuBVan2sJscq7bIsDtLA7IZi6
-         DgRpJzAhq7bokFh/ZcgXXwuodBZewVva2VZgCEXmEl/8ZAW0ocmhHcEbf9ubbbZXjl
-         5w3u3xWZ8gw4x+9axAoO4/fOp5SFOX/VZGVXuGt3llQZgaXXLzv9JeCNIVLmhUVcNT
-         t0IaQpOs+mV2sVqVeRaxo7GlQOmaO7G83cdd04v0JP1gp3HgI6ytQ2JiteEJXhMmWI
-         byVHMk1rJlw3Q==
-Date:   Wed, 20 Oct 2021 07:48:36 +0100
+        b=OuVNV+doiltxzOI0vzzO8N6FQkXjkSceYpUTO7khRcAoIZArPDbOgjk1B2/rkogrb
+         5b2VDMahz1vFawbpLSCTRd2p85ljk35uaTE1nNkDHK6sHEn4/gmuJ+bQUzR4fZfE3b
+         +H29T1khuTJAuz40cIpzEM9zD80kZM/aoQUb0o8AYidFlRELcKA9yklToJOloggdPR
+         V7IVUaqBR4SBOdys4AvRBqzftmLRr90AHIZJ3uL4NNcmRkXeURqXjKwT1S7EuNsQ0S
+         1lgJ2pPc7OZMkIaZrBasATzOlBmTO4ae4ycC5HNPrvKigSYwoWobvNAtFvJo3nky0D
+         P7ZCVBjCEh2bQ==
+Date:   Wed, 20 Oct 2021 07:50:15 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Tsuchiya Yuto <kitakar@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Tsuchiya Yuto <kitakar@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Patrik Gfeller <patrik.gfeller@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kaixu Xia <kaixuxia@tencent.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [BUG 0/5] bug reports for atomisp to make it work
-Message-ID: <20211020074836.42476792@sal.lan>
-In-Reply-To: <20211017162337.44860-1-kitakar@gmail.com>
-References: <20211017162337.44860-1-kitakar@gmail.com>
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Alan <alan@linux.intel.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 00/17] various fixes for atomisp to make it work
+Message-ID: <20211020075015.316d827c@sal.lan>
+In-Reply-To: <CAHp75VcDZQ1M2iNKewxqcG3C+bzSEGV05dTmYp3xXhnhNGdviw@mail.gmail.com>
+References: <20211017161958.44351-1-kitakar@gmail.com>
+        <CAHp75VcDZQ1M2iNKewxqcG3C+bzSEGV05dTmYp3xXhnhNGdviw@mail.gmail.com>
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -52,23 +55,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Mon, 18 Oct 2021 01:23:31 +0900
-Tsuchiya Yuto <kitakar@gmail.com> escreveu:
+Em Mon, 18 Oct 2021 10:56:40 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> escreveu:
 
-> Hi all,
+> On Mon, Oct 18, 2021 at 6:45 AM Tsuchiya Yuto <kitakar@gmail.com> wrote:
+> >
+> > Hi all,
+> >
+> > This patch series contains fixes for atomisp to work (again). Tested on
+> > Microsoft Surface 3 (Windows) and Xiaomi Mi Pad 2 (Android model) with
+> > v5.15-rc5. Both are Cherry Trail (ISP2401) devices.
+> >
+> > I'm still not used to Linux patch sending flow. Sorry in advance
+> > if there is some weirdness :-) but I did my best.  
 > 
-> These mails contain RFC patches, which are almost bug report and some
-> are just bug report, for atomisp to work (again). Tested on Microsoft
-> Surface 3 (Windows) and Xiaomi Mi Pad 2 (Android model) with v5.15-rc5.
-> Both are Cherry Trail (ISP2401) devices.
+> I agree with Hans, you did an excellent job!
+> I will try to find time to look into this. In any case it seems to me
+> that this is a material more likely for v5.17-rc1, rather than v5.16.
 
-Before start looking at the patches, let me check if I got it right:
-
-Should this series be applied after the series you sent earlier[1]?
-
-[1] The series which starts with this one:
-	 [PATCH 00/17] various fixes for atomisp to make it work
-
+Yeah, it sounds to late to apply it for 5.16.
 
 Regards,
 Mauro
