@@ -2,153 +2,174 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC437C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 20 Oct 2021 17:57:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D97FAC433F5
+	for <linux-media@archiver.kernel.org>; Wed, 20 Oct 2021 18:43:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D9AE6135F
-	for <linux-media@archiver.kernel.org>; Wed, 20 Oct 2021 17:57:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C00A2610D0
+	for <linux-media@archiver.kernel.org>; Wed, 20 Oct 2021 18:43:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbhJTR7i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Oct 2021 13:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbhJTR7h (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Oct 2021 13:59:37 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F77C06161C
-        for <linux-media@vger.kernel.org>; Wed, 20 Oct 2021 10:57:22 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id o24-20020a05600c511800b0030d9da600aeso11809896wms.4
-        for <linux-media@vger.kernel.org>; Wed, 20 Oct 2021 10:57:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:references:from:organization:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=eUXnYsZJvnOAF9kzZYgcYvLxfHgvnwyAqbl51jXHyOk=;
-        b=5SRvDSnW9NALjwV2LaLE+zMHcgRRVEur9K+oWOkjkMa/ekGvFZUUWHhW9wUXIuQQFC
-         /a8o1NfWJf7n8u1WCsgJ6DZ9GzXI/vxRCErkva+u6IIt3Ftot2dLC5WyXE/qEkDejh1O
-         kVqvbLZLsY4DiTy7nVUI0vKMtRJFIRvZDD1t4btCIGXSU0hbMQMrdw0UCQ2wHqq9fBJR
-         XWDbyugS/eLkDqzecFcAtr+OSwjbVGG85VaokC0qIQ/n+uJRoJUbG37x3AckVjjiRCnA
-         lG8sEAiA+g4Ih121u9/zb9evJ+eGwkaeaJ5PL8bBFb99jNQJs00eYaRrjJiruivZ0pZW
-         5+mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=eUXnYsZJvnOAF9kzZYgcYvLxfHgvnwyAqbl51jXHyOk=;
-        b=ojdimr6pnU+JsF0ZlhXblxPM8Ua9hCbFuAut0apo+B3d1UMmYmVw6BqIocA1pJa02h
-         n9o90Clj+9N5UD837VvJn2DFlAoab53ZN4aziZNZBlBi2HEi+HeOvYQQtE/rbVxGGViq
-         tdYAI0kgU1Fvhrhn+p9qsJsXoHXc3+7Boek9XNDpOW1xRMQ6OQUl1YwAI9HK4aW3lHrk
-         u6ci47ZOuYdImmxIJgUkph1emNPr6Uhpaz7gcoQBURBf3wej72uP8bheP05+3C3lOJ/K
-         DHG3YvFSgF7IGYVa6rywP5JLSXrtQv/cuKNDmYpiP801ox8PSciWqIhIva3LPDMJrt5p
-         JIlA==
-X-Gm-Message-State: AOAM5326TJ3Frznto+FMGb8Ch3usYAkcC76O+aWt6Y+nwoIw3C/0O6Ac
-        DunY19zkDwngFY+c7EXb4T/IaQ==
-X-Google-Smtp-Source: ABdhPJw5z4pbgVNM5h6MqZvS0r0oCzcOE1i7EGAQsH0+8u7iGi3dGj0Z2eWsGRLSNwQEx+5xxoBcfQ==
-X-Received: by 2002:a05:600c:892:: with SMTP id l18mr784909wmp.89.1634752641318;
-        Wed, 20 Oct 2021 10:57:21 -0700 (PDT)
-Received: from ?IPv6:2001:861:44c0:66c0:d31f:1512:8915:e439? ([2001:861:44c0:66c0:d31f:1512:8915:e439])
-        by smtp.gmail.com with ESMTPSA id s186sm3164965wme.14.2021.10.20.10.57.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Oct 2021 10:57:20 -0700 (PDT)
-Subject: Re: [PATCH] MAINTAINERS: Update email of Andrzej Hajda
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211018211353.586986-1-andrzej.hajda@intel.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <1425b43a-e5ce-b70e-3c9d-a8735860baa5@baylibre.com>
-Date:   Wed, 20 Oct 2021 19:57:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S231278AbhJTSqD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Oct 2021 14:46:03 -0400
+Received: from meesny.iki.fi ([195.140.195.201]:36916 "EHLO meesny.iki.fi"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230076AbhJTSqD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 20 Oct 2021 14:46:03 -0400
+Received: from hillosipuli.retiisi.eu (dkvn5pty0gzs3nltj987t-3.rev.dnainternet.fi [IPv6:2001:14ba:4457:9640:1e2d:1f75:a607:ef37])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 69C4A200A4;
+        Wed, 20 Oct 2021 21:43:46 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1634755426;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RoYvvqZQkhJSELmgjkpysEUTTnb/9wmmXf4FzNHpdn4=;
+        b=SYlYaDz8mPMtSzfo7f+2jzLc7AjFYqb7YHgf8eB9lpAa1cNOz5/V6kK6wZFif4yT2B2M/8
+        b36oIylv6ajzENnwxh9JbZ+OEk76HRB1AQFs6PlwVAoIPWV6RlRnSfKxae0hqChzAi4uuV
+        7WJRe8WXOuJ6xrlUw3NFKj86hPI3ULo=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 3C6BA634C90;
+        Wed, 20 Oct 2021 21:43:44 +0300 (EEST)
+Date:   Wed, 20 Oct 2021 21:43:43 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Matteo Lisi <matteo.lisi@engicam.com>
+Subject: Re: [PATCH v5] Driver for ON Semi AR0521 camera sensor
+Message-ID: <YXBjX2vUwrKVOd78@valkosipuli.retiisi.eu>
+References: <m3fstfoexa.fsf@t19.piap.pl>
+ <20211009102446.jrvrdr7whtd2rv4z@uno.localdomain>
+ <m3mtnflpna.fsf@t19.piap.pl>
+ <20211011143420.vm6ncl5gdv44nsn3@uno.localdomain>
+ <m3a6jel9ce.fsf@t19.piap.pl>
+ <YWXwSAm3OO/WTkOL@valkosipuli.retiisi.eu>
+ <m335p5lc04.fsf@t19.piap.pl>
 MIME-Version: 1.0
-In-Reply-To: <20211018211353.586986-1-andrzej.hajda@intel.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <m335p5lc04.fsf@t19.piap.pl>
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1634755426; a=rsa-sha256; cv=none;
+        b=YVth3SL3n/8q/Y+6g18UnZ4TugSE/pDLHS49PElAlo8/NTiBl/xtwBer8I1rdSMz/L3N6Z
+        zXlrtmEnSM4NQLz2+2meyFb8Dxgcr+c266sAVKD37H4+FbdEIgUVwp9eLfGR/GiDb+VtwF
+        ColZdm/Zh3EeiEusBYosu2pR8ltSo2I=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1634755426;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RoYvvqZQkhJSELmgjkpysEUTTnb/9wmmXf4FzNHpdn4=;
+        b=w854VqFbZ0kTtLlb7l0UwUSVmDHmOQCY4Si79n2t+9kZx2Kj1Y8BxxwcWeQ7eKSimg7iZK
+        t3usWgnh/Ii+OhqqG3E+JAOJ1dxtxFJKh53yjHbVE/oFSP68GxjONoqqqKqQ1LtW5ccrh/
+        WdGJx1vUjsTs6N8+lZhxtag6PPPn/Cs=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 18/10/2021 23:13, Andrzej Hajda wrote:
-> Beside updating email, the patch updates maintainers
-> of Samsung drivers.
-> 
-> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> ---
->  .mailmap    |  1 +
->  MAINTAINERS | 13 ++++++++-----
->  2 files changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/.mailmap b/.mailmap
-> index 4f6e37da60589..4283a86f70d26 100644
-> --- a/.mailmap
-> +++ b/.mailmap
-> @@ -40,6 +40,7 @@ Andrew Vasquez <andrew.vasquez@qlogic.com>
->  Andrey Konovalov <andreyknvl@gmail.com> <andreyknvl@google.com>
->  Andrey Ryabinin <ryabinin.a.a@gmail.com> <a.ryabinin@samsung.com>
->  Andrey Ryabinin <ryabinin.a.a@gmail.com> <aryabinin@virtuozzo.com>
-> +Andrzej Hajda <andrzej.hajda@intel.com> <a.hajda@samsung.com>
->  Andy Adamson <andros@citi.umich.edu>
->  Antoine Tenart <atenart@kernel.org> <antoine.tenart@bootlin.com>
->  Antoine Tenart <atenart@kernel.org> <antoine.tenart@free-electrons.com>
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 54cd05d3aab65..e3fadb4ebced3 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2546,7 +2546,7 @@ N:	s3c64xx
->  N:	s5pv210
->  
->  ARM/SAMSUNG S5P SERIES 2D GRAPHICS ACCELERATION (G2D) SUPPORT
-> -M:	Andrzej Hajda <a.hajda@samsung.com>
-> +M:	Łukasz Stelmach <l.stelmach@samsung.com>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  L:	linux-media@vger.kernel.org
->  S:	Maintained
-> @@ -2570,7 +2570,8 @@ S:	Maintained
->  F:	drivers/media/platform/s5p-jpeg/
->  
->  ARM/SAMSUNG S5P SERIES Multi Format Codec (MFC) SUPPORT
-> -M:	Andrzej Hajda <a.hajda@samsung.com>
-> +M:	Marek Szyprowski <m.szyprowski@samsung.com>
-> +M:	Andrzej Hajda <andrzej.hajda@intel.com>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  L:	linux-media@vger.kernel.org
->  S:	Maintained
-> @@ -6254,7 +6255,7 @@ F:	Documentation/devicetree/bindings/display/atmel/
->  F:	drivers/gpu/drm/atmel-hlcdc/
->  
->  DRM DRIVERS FOR BRIDGE CHIPS
-> -M:	Andrzej Hajda <a.hajda@samsung.com>
-> +M:	Andrzej Hajda <andrzej.hajda@intel.com>
->  M:	Neil Armstrong <narmstrong@baylibre.com>
->  M:	Robert Foss <robert.foss@linaro.org>
->  R:	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-> @@ -16748,13 +16749,15 @@ F:	Documentation/devicetree/bindings/net/nfc/samsung,s3fwrn5.yaml
->  F:	drivers/nfc/s3fwrn5
+Hi Krzysztof,
 
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-
->  
->  SAMSUNG S5C73M3 CAMERA DRIVER
-> -M:	Andrzej Hajda <a.hajda@samsung.com>
-> +M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
-> +M:	Andrzej Hajda <andrzej.hajda@intel.com>
->  L:	linux-media@vger.kernel.org
->  S:	Supported
->  F:	drivers/media/i2c/s5c73m3/*
->  
->  SAMSUNG S5K5BAF CAMERA DRIVER
-> -M:	Andrzej Hajda <a.hajda@samsung.com>
-> +M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
-> +M:	Andrzej Hajda <andrzej.hajda@intel.com>
->  L:	linux-media@vger.kernel.org
->  S:	Supported
->  F:	drivers/media/i2c/s5k5baf.c
+On Wed, Oct 13, 2021 at 07:39:07AM +0200, Krzysztof Hałasa wrote:
+> Hi Sakari,
 > 
+> > 	https://hverkuil.home.xs4all.nl/spec/driver-api/camera-sensor.html
+> 
+> Ok:
+> "8.2.2. Devicetree
+> 
+> The currently preferred way to achieve this is using assigned-clocks,
+> assigned-clock-parents and assigned-clock-rates properties. See
+> Documentation/devicetree/bindings/clock/clock-bindings.txt for more
+> information. The driver then gets the frequency using clk_get_rate()."
+> 
+> Let's see:
+> Documentation/devicetree/bindings/clock/clock-bindings.txt:
+> 
+> "==Assigned clock parents and rates==
+> 
+> Some platforms may require initial configuration of default parent clocks
+> and clock frequencies. Such a configuration can be specified in a device tree
+> node through assigned-clocks, assigned-clock-parents and assigned-clock-rates
+> properties. The assigned-clock-parents property should contain a list of parent
+> clocks in the form of a phandle and clock specifier pair and the
+> assigned-clock-rates property should contain a list of frequencies in Hz. Both
+> these properties should correspond to the clocks listed in the assigned-clocks
+> property."
+> 
+> So I'm after "assigned-clock-rates", right?
+> 
+> "Configuring a clock's parent and rate through the device node that consumes
+> the clock can be done only for clocks that have a single user. Specifying
+> conflicting parent or rate configuration in multiple consumer nodes for
+> a shared clock is forbidden."
+> 
+> This sounds a bit problematic, the clock I use is at least potentially
+> shared by multiple parts of the system, depending on current (run time)
+> configuration. I am/was getting different frequencies depending of the
+> particular system (all based on the same i.MX6* SoC, but with different
+> peripherals used/enabled). I think it's quite a common situation.
 
+This was discussed some time ago before I wrote the documentation. The
+conclusion back then was that it's just fine, and such cases would need to
+be addressed when they turn up. We haven't had any yet as far as I know.
+
+> 
+> > Generally camera sensor drivers that set the clock in drivers themselves
+> > are (very) old.
+> 
+> Let's have a look... ov9282 is (one of) the newest drivers. It does:
+> #define OV9282_INCLK_RATE    24000000
+> 
+>         /* Get sensor input clock */
+>         ov9282->inclk = devm_clk_get(ov9282->dev, NULL);
+>         if (IS_ERR(ov9282->inclk)) {
+>                 dev_err(ov9282->dev, "could not get inclk");
+>                 return PTR_ERR(ov9282->inclk);
+>         }
+> 
+>         rate = clk_get_rate(ov9282->inclk);
+>         if (rate != OV9282_INCLK_RATE) {
+>                 dev_err(ov9282->dev, "inclk frequency mismatch");
+>                 return -EINVAL;
+>         }
+> 
+> $ git grep -l ov9282
+> Documentation/devicetree/bindings/media/i2c/ovti,ov9282.yaml
+> MAINTAINERS
+> drivers/media/i2c/Kconfig
+> drivers/media/i2c/Makefile
+> drivers/media/i2c/ov9282.c
+> 
+>   clocks:
+>     description: Clock frequency from 6 to 27MHz
+> 
+> No in-tree DTS exists, but the single frequency (both in the driver -
+> this one can be fixed - and in the DTS) is rather limiting. Maybe
+> another:
+> 
+> imx412, imx335, imx334, imx258 - same here.
+> imx208 is ACPI-based.
+> 
+> Which driver should I consult?
+
+The drivers you're looking at are based on register lists so they usually
+support just a single frequency. The sensors are not limited to this
+frequency however, which is why you see the frequency in DT bindings, too.
+
+-- 
+Regards,
+
+Sakari Ailus
