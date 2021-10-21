@@ -2,720 +2,267 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA773C4167B
-	for <linux-media@archiver.kernel.org>; Wed, 20 Oct 2021 20:09:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A80A7C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 21 Oct 2021 03:10:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9CCCF61374
-	for <linux-media@archiver.kernel.org>; Wed, 20 Oct 2021 20:09:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86FDF61090
+	for <linux-media@archiver.kernel.org>; Thu, 21 Oct 2021 03:10:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbhJTUL6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Oct 2021 16:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbhJTUL5 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Oct 2021 16:11:57 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33BBC06161C
-        for <linux-media@vger.kernel.org>; Wed, 20 Oct 2021 13:09:42 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id u18so680011wrg.5
-        for <linux-media@vger.kernel.org>; Wed, 20 Oct 2021 13:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rD4qs13PLD1/MuLVPUztLZF9RWKiIvCOaTR/gWIBp6w=;
-        b=pGiZogZPRT0bCxUtWOptgVGHeiEywgrF4fUo5gzr3qz5VHKhlPYa/IruiPWNpz2J3y
-         AWP008EZJ+6bMbNRmwuYBotDMlBBYdju1tMLb0UxnKuW6ikZloKawIoT2jEz26QgoS+o
-         3tjD8TQOJR23yv8Jk3Cw6B8qJfPgpAKtcF/84+FFtXYI4IHQ1i6EbU42USCOzbT02dIt
-         /TfiuIDRWNdaBKvKforr3oYkOxKB7nHuEmNcf/14YmgY5uJOCcn8DPUHIIlfpFGfqEY/
-         CeVoFV+JdMZs6sfwHXKSDQNrhCYmVgEXKEeMlgLvH6brZcSBi+F6MgcWXH8Gut7sHGMg
-         SNOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rD4qs13PLD1/MuLVPUztLZF9RWKiIvCOaTR/gWIBp6w=;
-        b=qqZWgZiCYDMwgzwUqIcBp/tSRQxJz8b1oqYHbEDB5582E3Xw/qL15bfIV8ZBToMfyD
-         LQoAhBgsMXqC0P1V/RQ9CXkGigFFbLgbjf3KxX00Gm1g+dPImk8jSuocH2cGDIdK3kBn
-         +FhnhM1QaoKH+4l8cTKabQ20kh3khn/gu2KzxAhtb8uqzbLsQ/vtWVs9n4BEo9KUKEZy
-         Qct0aVJQZqttguzgnSYsTW7FSxj4pnJF1bxUvasLelx8UBg0zphjL9rdcykmINe13/h1
-         RYOZ1yffnDVSRtM3y5Di3YAXaZr6fiIba+HAXkm2c/3aqM6D3msFLzzu40Ixd+MNqVft
-         /vXA==
-X-Gm-Message-State: AOAM532Kp2iddDfqWZgmrTU9FkwlvrljmvTkJf8TdPkayE4nca3KSsnq
-        oulNEjndV8j8MK+C+CF2eQI2eA==
-X-Google-Smtp-Source: ABdhPJwfUIO8M2RNhswFuhEwk91SXV6LKsz9dGaRlEVZPDe/y1FkKGP/yfiLPWhu4q7XPjE5iatToA==
-X-Received: by 2002:a05:6000:1681:: with SMTP id y1mr1705928wrd.340.1634760581243;
-        Wed, 20 Oct 2021 13:09:41 -0700 (PDT)
-Received: from bismarck.berto.se (p54ac5892.dip0.t-ipconnect.de. [84.172.88.146])
-        by smtp.googlemail.com with ESMTPSA id x7sm2849904wrq.69.2021.10.20.13.09.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Oct 2021 13:09:40 -0700 (PDT)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        linux-media@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH 3/3] media: rcar-{csi2,vin}: Move to full Virtual Channel routing per CSI-2 IP
-Date:   Wed, 20 Oct 2021 22:02:25 +0200
-Message-Id: <20211020200225.1956048-4-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211020200225.1956048-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20211020200225.1956048-1-niklas.soderlund+renesas@ragnatech.se>
+        id S230385AbhJUDMw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Oct 2021 23:12:52 -0400
+Received: from mail-eopbgr30040.outbound.protection.outlook.com ([40.107.3.40]:40078
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230389AbhJUDMs (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 20 Oct 2021 23:12:48 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WzdX5hvbbUzDdDSFhqO9lj88d61TUX6VVEF7j/jHMvhqfDWsuRdHXnzl9FPbFXtpwp0BSP0fKQCxbQfVUujd7zBrERujfpcNrnj+V3ErEtVKU+OzCvILvtKiNh7dUwJaZaF2sJvPkdqhMHcU0p3gaWAcApFGDHzcHR2H8B6X/i6Nwlx4/O91O4D1js4rp4mF5Q+zw9ZmGO/EAuOx+qaQJyuFGvPU9gdxW8fCZbXEOwTDWiXhNYo8Di9X2LrJ/MXGmkcDFDUTP0x6j1KgP+Yq7K85B56geTRk7SJwhJY/c9R30fnUr/BWn83m5ZGs0blXzZ4JZB2yob4viNbW4GNQrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Av1cV4MemIwxnoKWCqgpL2Jdcal5nn/OgNU8EFoR0HQ=;
+ b=nJc+yqcWJlETbrKMsKGQ+AA36B79XVfYapCOwwl9oHrdwryEg2Grrt6HY5Kb7DRv9s2kYvYZHc9SzPBi0kw2tW7z8rTIhRMKqcuji+g+iTf6OHlPFQRxwoFvJXfmigZGwG1nT07Vf4EQg2sta3sBLC7kW2GjUKIXsa4fHQQ2gMICC/roupGYTIXSldM4h69xyOvClD8rRy0u11uIJ5sAU5qfaN8e8OHD71e1zAvB8DPK/6Vy/JWc5x8XBeAn+rmca/WrNXMeGyDZdAqokyNlHxT1Ply/1LXxCdgyyTbZVvgk/ZB+ualhsSX040ubmtGpI4Dm9qo8X7OBCAyUNB7LPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Av1cV4MemIwxnoKWCqgpL2Jdcal5nn/OgNU8EFoR0HQ=;
+ b=ZzIESHr2dfOvLDbE/nQKXVzW8Crtpgj3F1LhAx+2guPhCNQ4eOQKKvtCTczZA5BK19SdpkiXNXjR9b1NdZt4kMdHtEDIJ5Ptdt5yReJKq6cHxcnlUYew0B05aeepPH07zU0KL4hLKL0vanWZDCEvCTpm9BoqaA2gVOYziom4Rus=
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by AM6PR04MB5224.eurprd04.prod.outlook.com (2603:10a6:20b:f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.17; Thu, 21 Oct
+ 2021 03:10:30 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::fc3a:8aea:2c92:3886]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::fc3a:8aea:2c92:3886%5]) with mapi id 15.20.4608.018; Thu, 21 Oct 2021
+ 03:10:30 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
+        Aisheng Dong <aisheng.dong@nxp.com>
+Subject: RE: [EXT] Re: [PATCH v11 11/13] ARM64: dts: freescale: imx8q: add imx
+ vpu codec entries
+Thread-Topic: [EXT] Re: [PATCH v11 11/13] ARM64: dts: freescale: imx8q: add
+ imx vpu codec entries
+Thread-Index: AQHXwZehsLN6epfSX0WWCbOHyHdFZavb7q4AgADdkuA=
+Date:   Thu, 21 Oct 2021 03:10:29 +0000
+Message-ID: <AM6PR04MB634122C54C46D3D166A217DEE7BF9@AM6PR04MB6341.eurprd04.prod.outlook.com>
+References: <cover.1634282966.git.ming.qian@nxp.com>
+         <82e0572a0a3f3dc9e859ebd9bcd2cf6505481726.1634282966.git.ming.qian@nxp.com>
+ <8dca7c932d82815ef6d67181193a030ccb609c5b.camel@toradex.com>
+In-Reply-To: <8dca7c932d82815ef6d67181193a030ccb609c5b.camel@toradex.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: toradex.com; dkim=none (message not signed)
+ header.d=none;toradex.com; dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 992e115e-dd29-473f-8aa8-08d99440569b
+x-ms-traffictypediagnostic: AM6PR04MB5224:
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM6PR04MB5224A0F4402DAD828D8194C1E7BF9@AM6PR04MB5224.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3173;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3/U5KvR46aaoi/WJrK2HAim3BqadCroqvRrAWcKSSCptWJzKgw1/ESEcn5Ha4Gg6vQ5PqDoftCMzVeRhTq3Xs4sqVft2VIHAm1t9KTxQBFiqQIeaGSs6fCAIe+UsCWC6o6ixWvgXlUU+rn8SrLPnsRiaiveozMrwMmYW60VaFFFwFlP4Q2CvDHfNqjzmxpTGs2roHDWt9qKJJVnBpJedtDSFncylEv5SDi5FT7hFaYE0ogxTz7XHbMLaBJYRi0rbSia67ajb6YzgQ8g1t7gxyc9vyh7OHft0h0d/r+q3raaK6HLCz8kee9rcmqv1POyZlxGAVmP7nVzod3zuGqEqeoyK6jVKvupkxHUPx0gzFO9k046mOsU18aZesNnAZMydFMaUp3/MRVjxchdg5kutrhMpsHoFGyIBv5JDEzr1F1T/9uTvKQNiGto74m6XGIeEs3ZTOnCj1Uche130QRl+4m+J3uJE6MLAP5wYnacU8or+OtH8qEUDgHPy/x+eOCTRm5Xqngq9Muod6bho0cxoXosM64l6OUNUM83oE8Ip93YqcBbj8M2AVBshTttV+9z3tOYYkdIn6p9u57623bUwMOQoa4Ux5VRQePNiERexu2atqQDCMBKcnBIBlbIDr8unc6N33AffbjvAD6kBnK98L6L8p4yh1y2/ciDirfBKm9utu/4Ztip6cXKdAuENjvGSu+5DW1PCAXljolikeGzDQJO9djACzdUiMltHy7oVlh5uEryzXCG9SlX07prBMf+KL3Kj4N+zkeHgi6TTY+qJOcD8qISRmT9GlJa2qVNYlJ0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(66476007)(7696005)(66556008)(64756008)(5660300002)(4001150100001)(66446008)(2906002)(76116006)(71200400001)(54906003)(4326008)(53546011)(7416002)(83380400001)(44832011)(9686003)(55016002)(38100700002)(110136005)(8936002)(52536014)(122000001)(6506007)(316002)(66946007)(86362001)(508600001)(26005)(38070700005)(186003)(33656002)(32563001)(414714003)(473944003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ekZvSjFDeUZzRXhaTDJoTUpoc1pMcEl2aytQTHNEcGJjSnFuSzJDMEZma1RU?=
+ =?utf-8?B?ZXcvMEtrVU14cjNaRmx1OWVjSUJvTENjQ2VXaG5PZ3BHMXArQVdEK3I5S0pO?=
+ =?utf-8?B?ZXlBRTNZQjFaUHJSelZpaTlTekFRMFRGbkEwVWsrMGFTUWpYMTZmRnFtNUZq?=
+ =?utf-8?B?c0tjdHBmaS9zTlNxSHdqZEd0Rk00Nm44UTZ2VW1vNEgySW5ZTU1BbVV4bGVG?=
+ =?utf-8?B?SHFESFQ5UzRnelB6YlBXbTRDZUh6Tk5mVGtIdHBTNXpGTy9CMVNtSzNXcXNz?=
+ =?utf-8?B?UVNnQWR0K0NuS0hhaWsyMkFUOFErbHF3OEgwYjFsRE9zdXh6VU94Szc3QXMr?=
+ =?utf-8?B?WWN6Skc2cmUzY3ZxanhXY05OaWVPd1BaSFN0TzZvaWZaa2wzMXRobjU5N2VR?=
+ =?utf-8?B?UFEvcWlsUXg4OEQzT3h3MCtpSU0vczhrZGlGa0FrekdBSm4vWkdNQ2FqWmM1?=
+ =?utf-8?B?eGwrc3NEOU05SEo5YzViWmpJSWdDUmVHU0dKVHRWTURxV3pZdG9BZTZUVUZh?=
+ =?utf-8?B?aDMyZGpRS0crWUJ3bTRKeXZhNEhha0l4c21RSms3S2w4SnZDN29tdHdEd3l6?=
+ =?utf-8?B?VVRINFoxa0tPQ0t3Y2V6YzZOeU1RWkE0WVRWZFlmMEx4TFVaS0RNcU40Q0Nn?=
+ =?utf-8?B?THJ6RVZaQXExR21rL2N4eGdTK0Nyc3pUTjRYS21BSnZUdEZzY3BNUzg5R2tm?=
+ =?utf-8?B?YjdNVU84ZWlNQ0dqc3p0RXYwZCs0ZEgrUU1tU3NxQUlSeDhVWjc2VlhlMVN0?=
+ =?utf-8?B?N3ZWbVRoOFNpd0liZUdqZmQxd0MvRnlFcTdIdEJ5VFBNS2Zwa1lCSGF5WDVJ?=
+ =?utf-8?B?U0Z3OFF4blppSU42QVRhcHptSlJpZmFPT1FGTlpEZ2orR1hadHBoa1l0UUNw?=
+ =?utf-8?B?ZzJQZVJodTVzZkFvdVdtNTRodDIzWDlWc1o2UENBR1EwWGlhcjdFMk90bnho?=
+ =?utf-8?B?ekZQYUg5UVZoQkZVSkFmQWhhOFFZY1JjU3NnVUV3L2h2dGZTVFlkWm5kZnh2?=
+ =?utf-8?B?V01WdzFBWWZ0RFVLVXcwZGdSY09PbU9FaHN6VEpYNld3Vm9lVXBRcmFHUTBT?=
+ =?utf-8?B?Q2JORFNVdEkyR3pWOWNjRlNpaU4vMGtaQlRBL3IxY01hU2lYblhZNi81OElW?=
+ =?utf-8?B?eXl0YnpMaHlhU081bHA2RXpROEpTNC93Wm1DVXZoRGF4MUJHQmdEdWNDNHJl?=
+ =?utf-8?B?eFJmL0NMalFxNFNBN3JiQ0VBZko4ZHUrVHRTT0l1NG9hVGFPekZYNkpMOHAx?=
+ =?utf-8?B?ZlV4bmY3UjliaGM4Q1N3dXN3WE5WQUJ6R25uY0FNZVRoWisxKyt3K213SzFz?=
+ =?utf-8?B?RmsvWndGdlo2ZjU5VTZmTllRdG84cmx5QXhQSXNHTy9hQVBkQWZySXQ0TU8y?=
+ =?utf-8?B?Wnc4RW5IY0s3N3FnNTNPb1lEdFhVaVRkSTFIQnV2QkZGMllGQUdiU1oxbFk3?=
+ =?utf-8?B?S3ZaejgwYjNEZm0rMWtiTFZsNGYwR1piOWNLQ091cmZIK1Vpc21RSS85MjJl?=
+ =?utf-8?B?MG1ONVdHQzh0b2FMUnloUkk0amsvZmVnd3lKcHloUjZSUDJ0VUhZMTZJeXVo?=
+ =?utf-8?B?d1BwVGEvUUN6WEZlRmhjUXNYS1Q1ZVJ1LzA5dkxuT2s4dzJDWnJ2dElPWFIx?=
+ =?utf-8?B?V2RCUVIzZzNPLytUQ1BaU2sxSlM1bzBqT0Y1VC9SYTdYZ1NPTzVtYjEzRGxC?=
+ =?utf-8?B?T0h4bWRnVlJKemRGOEY3cC9NdmdGOGZIQWRtUDREUG5DbGo3c3dlMXh4MHVF?=
+ =?utf-8?Q?rJDEB48wG/Bg/G6pLU=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 992e115e-dd29-473f-8aa8-08d99440569b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Oct 2021 03:10:29.9828
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dsYtRYxDghizqrgBNfGznOOP84gVgMvWC9ZkML73Jbp3pNRv69OZ6G/zgDVQYtLRkRoSiq1mZjndpjqGCVUncA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5224
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When Gen3 support was first added to this R-Car VIN and CSI-2 driver the
-routing was centred around the CHSEL register which multiplex the
-different parallel buses that sits between the CSI-2 receivers source
-side and the VIN dma engines. This was a bad design as the multiplexing
-do allow for only a few combinations and do not play nice with many
-video streams in the system.
-
-For example it's only possible for CSI-2 Virtual Channels 0 and 1 of any
-given CSI-2 receiver to be used together with the scaler.
-
-Later datasheets have expanded the documentation and it is now possible
-to improve on this design by allowing any Virtual Channel to be routed
-to any R-Car VIN instance, provided that there exists a parallel bus
-between them. This increases the flexibility as all Virtual Channels can
-now be used together with the scaler for example.
-
-The redesign is not however perfect. While the new design allows for
-many more routes, two constrains limit a small portion of routes that
-was possible in the old design but are no more.
-
-- It is no longer possible to route the same CSI-2 and VC to more then
-  one VIN at a time. This was theoretically possible before if the
-  specific SoC allowed for the same CSI-2 and VC to be routed to two
-  different VIN capture groups.
-
-- It is no longer possible to simultaneously mix links from two CSI-2 IP
-  blocks to the same VIN capture group.
-
-  For example if VIN2 is capturing from CSI40 then VIN{0,1,3} must also
-  capture from CSI40. While VIN{4,5,6,7} is still free to capture from
-  any other CSI-2 IP in the system. Once all VIN{0,1,2,3} links to CSI40
-  are disabled that VIN capture group is free again to capture from any
-  other CSI-2 IP it is connected to.
-
-At the core of the redesign is greater cooperator of the R-Car VIN and
-CSI-2 drivers in configuring the routing. The VIN driver is after this
-change only responsible to configure the full VIN capture groups
-parallel buses to be to a particular CSI-2 IP. While the configuration
-of which CSI-2 Virtual Channel is outputted on which of the R-Car CSI-2
-IP output ports is handled by the CSI-2 driver.
-
-Before this change the CSI-2 Virtual Channel to output port was static
-in the CSI-2 driver and the different links only manipulated the VIN
-capture groups CHSEL register. With this change both the CHSEl register
-and the CSI-2 routing VCDT registers are modified for greater
-flexibility.
-
-This change touches both the R-Car VIN and R-Car CSI-2 drivers in the
-same commit as both drivers cooperate closely and one change without the
-other would more or less break video capture.
-
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- drivers/media/platform/rcar-vin/rcar-core.c | 318 +++++---------------
- drivers/media/platform/rcar-vin/rcar-csi2.c |  58 +++-
- drivers/media/platform/rcar-vin/rcar-dma.c  |   2 +-
- drivers/media/platform/rcar-vin/rcar-vin.h  |  18 +-
- 4 files changed, 136 insertions(+), 260 deletions(-)
-
-diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
-index 65ab66a072e9d635..6b05ad10e8aa66f9 100644
---- a/drivers/media/platform/rcar-vin/rcar-core.c
-+++ b/drivers/media/platform/rcar-vin/rcar-core.c
-@@ -745,27 +745,6 @@ static int rvin_parallel_init(struct rvin_dev *vin)
-  * CSI-2
-  */
- 
--static unsigned int rvin_csi2_get_mask(struct rvin_dev *vin,
--				       enum rvin_csi_id csi_id,
--				       unsigned char channel)
--{
--	const struct rvin_group_route *route;
--	unsigned int mask = 0;
--
--	for (route = vin->info->routes; route->mask; route++) {
--		if (route->vin == vin->id &&
--		    route->csi == csi_id &&
--		    route->channel == channel) {
--			vin_dbg(vin,
--				"Adding route: vin: %d csi: %d channel: %d\n",
--				route->vin, route->csi, route->channel);
--			mask |= route->mask;
--		}
--	}
--
--	return mask;
--}
--
- /*
-  * Link setup for the links between a VIN and a CSI-2 receiver is a bit
-  * complex. The reason for this is that the register controlling routing
-@@ -852,9 +831,9 @@ static int rvin_csi2_link_notify(struct media_link *link, u32 flags,
- 			link->source->entity->name);
- 		ret = -ENODEV;
- 	} else {
--		unsigned int master_id, channel, mask_new;
--		unsigned int mask = ~0;
--		struct media_pad *csi_pad;
-+		const struct rvin_group_route *route;
-+		unsigned int chsel = -1;
-+		unsigned int master_id;
- 
- 		master_id = rvin_group_id_to_master(vin->id);
- 
-@@ -863,8 +842,10 @@ static int rvin_csi2_link_notify(struct media_link *link, u32 flags,
- 			goto out;
- 		}
- 
--		/* Build a mask for already enabled links. */
-+		/* Make sure group is connected to same CSI-2 */
- 		for (i = master_id; i < master_id + 4; i++) {
-+			struct media_pad *csi_pad;
-+
- 			if (!group->vin[i])
- 				continue;
- 
-@@ -874,26 +855,24 @@ static int rvin_csi2_link_notify(struct media_link *link, u32 flags,
- 			if (!csi_pad)
- 				continue;
- 
--			csi_id = rvin_group_entity_to_remote_id(group,
--								csi_pad->entity);
--			channel = rvin_group_csi_pad_to_channel(csi_pad->index);
--
--			mask &= rvin_csi2_get_mask(group->vin[i], csi_id, channel);
-+			if (csi_pad->entity != link->source->entity) {
-+				vin_dbg(vin, "Already attached to %s\n",
-+					csi_pad->entity->name);
-+				ret = -EBUSY;
-+				goto out;
-+			}
- 		}
- 
--		channel = rvin_group_csi_pad_to_channel(link->source->index);
--		mask_new = mask & rvin_csi2_get_mask(vin, csi_id, channel);
--		vin_dbg(vin, "Try link change mask: 0x%x new: 0x%x\n", mask,
--			mask_new);
--
--		if (!mask_new) {
--			ret = -EMLINK;
--			goto out;
-+		for (route = vin->info->routes; route->chsel; route++) {
-+			if (route->master == master_id && route->csi == csi_id) {
-+				chsel = route->chsel;
-+				break;
-+			}
- 		}
- 
--		/* New valid CHSEL found, set the new value. */
--		ret = rvin_set_channel_routing(group->vin[master_id],
--					       __ffs(mask_new));
-+		BUG_ON(chsel < 0);
-+
-+		ret = rvin_set_channel_routing(group->vin[master_id], chsel);
- 		if (ret)
- 			goto out;
- 
-@@ -909,46 +888,59 @@ static const struct media_device_ops rvin_csi2_media_ops = {
- 	.link_notify = rvin_csi2_link_notify,
- };
- 
--static int rvin_csi2_add_route(struct rvin_group *group,
--			       const struct rvin_group_route *route)
-+static int rvin_csi2_add_routes(struct rvin_group *group, unsigned int id,
-+				const struct rvin_group_route *route)
- 
- {
- 	struct media_entity *source = &group->remotes[route->csi].subdev->entity;
--	unsigned int source_idx = rvin_group_csi_channel_to_pad(route->channel);
--	struct media_entity *sink = &group->vin[route->vin]->vdev.entity;
--	struct media_pad *source_pad = &source->pads[source_idx];
-+	struct media_entity *sink = &group->vin[id]->vdev.entity;
- 	struct media_pad *sink_pad = &sink->pads[0];
-+	unsigned int channel;
-+	int ret;
- 
--	if (media_entity_find_link(source_pad, sink_pad))
--		return 0;
-+	for (channel = 0; channel < 4; channel++) {
-+		unsigned int source_idx = rvin_group_csi_channel_to_pad(channel);
-+		struct media_pad *source_pad = &source->pads[source_idx];
- 
--	return media_create_pad_link(source, source_idx, sink, 0, 0);
-+		if (media_entity_find_link(source_pad, sink_pad))
-+			continue;
-+
-+		ret = media_create_pad_link(source, source_idx, sink, 0, 0);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
- }
- 
- static int rvin_csi2_setup_links(struct rvin_dev *vin)
- {
- 	const struct rvin_group_route *route;
-+	unsigned int id;
- 	int ret = -EINVAL;
- 
- 	/* Create all media device links between VINs and CSI-2's. */
- 	mutex_lock(&vin->group->lock);
--	for (route = vin->info->routes; route->mask; route++) {
--		/* Check that VIN is part of the group. */
--		if (!vin->group->vin[route->vin])
--			continue;
--
-+	for (route = vin->info->routes; route->chsel; route++) {
- 		/* Check that VIN' master is part of the group. */
--		if (!vin->group->vin[rvin_group_id_to_master(route->vin)])
-+		if (!vin->group->vin[route->master])
- 			continue;
- 
- 		/* Check that CSI-2 is part of the group. */
- 		if (!vin->group->remotes[route->csi].subdev)
- 			continue;
- 
--		ret = rvin_csi2_add_route(vin->group, route);
--		if (ret)
--			break;
-+		for (id = route->master; id < route->master + 4; id++) {
-+			/* Check that VIN is part of the group. */
-+			if (!vin->group->vin[id])
-+				continue;
-+
-+			ret = rvin_csi2_add_routes(vin->group, id, route);
-+			if (ret)
-+				goto out;
-+		}
- 	}
-+out:
- 	mutex_unlock(&vin->group->lock);
- 
- 	return ret;
-@@ -1158,30 +1150,9 @@ static const struct rvin_info rcar_info_gen2 = {
- };
- 
- static const struct rvin_group_route rcar_info_r8a774e1_routes[] = {
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 0, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 0, .mask = BIT(1) | BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 0, .mask = BIT(2) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 1, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 1, .mask = BIT(1) | BIT(3) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 1, .mask = BIT(2) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 1, .mask = BIT(4) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 2, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 2, .mask = BIT(1) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 2, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 2, .vin = 2, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 2, .vin = 2, .mask = BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 3, .mask = BIT(0) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 3, .mask = BIT(1) | BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 3, .vin = 3, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 3, .vin = 3, .mask = BIT(4) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 4, .mask = BIT(1) | BIT(4) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 5, .mask = BIT(0) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 5, .mask = BIT(4) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 6, .mask = BIT(0) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 6, .mask = BIT(2) },
--	{ .csi = RVIN_CSI20, .channel = 2, .vin = 6, .mask = BIT(4) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 7, .mask = BIT(1) | BIT(2) },
--	{ .csi = RVIN_CSI20, .channel = 3, .vin = 7, .mask = BIT(4) },
-+	{ .master = 0, .csi = RVIN_CSI20, .chsel = 0x04 },
-+	{ .master = 0, .csi = RVIN_CSI40, .chsel = 0x03 },
-+	{ .master = 4, .csi = RVIN_CSI20, .chsel = 0x04 },
- 	{ /* Sentinel */ }
- };
- 
-@@ -1194,38 +1165,10 @@ static const struct rvin_info rcar_info_r8a774e1 = {
- };
- 
- static const struct rvin_group_route rcar_info_r8a7795_routes[] = {
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 0, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 0, .mask = BIT(1) | BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 0, .mask = BIT(2) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 1, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 1, .mask = BIT(1) | BIT(3) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 1, .mask = BIT(2) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 1, .mask = BIT(4) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 2, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 2, .mask = BIT(1) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 2, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 2, .vin = 2, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 2, .vin = 2, .mask = BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 3, .mask = BIT(0) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 3, .mask = BIT(1) | BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 3, .vin = 3, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 3, .vin = 3, .mask = BIT(4) },
--	{ .csi = RVIN_CSI41, .channel = 0, .vin = 4, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 4, .mask = BIT(1) | BIT(4) },
--	{ .csi = RVIN_CSI41, .channel = 1, .vin = 4, .mask = BIT(2) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 5, .mask = BIT(0) },
--	{ .csi = RVIN_CSI41, .channel = 1, .vin = 5, .mask = BIT(1) | BIT(3) },
--	{ .csi = RVIN_CSI41, .channel = 0, .vin = 5, .mask = BIT(2) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 5, .mask = BIT(4) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 6, .mask = BIT(0) },
--	{ .csi = RVIN_CSI41, .channel = 0, .vin = 6, .mask = BIT(1) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 6, .mask = BIT(2) },
--	{ .csi = RVIN_CSI41, .channel = 2, .vin = 6, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 2, .vin = 6, .mask = BIT(4) },
--	{ .csi = RVIN_CSI41, .channel = 1, .vin = 7, .mask = BIT(0) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 7, .mask = BIT(1) | BIT(2) },
--	{ .csi = RVIN_CSI41, .channel = 3, .vin = 7, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 3, .vin = 7, .mask = BIT(4) },
-+	{ .master = 0, .csi = RVIN_CSI20, .chsel = 0x04 },
-+	{ .master = 0, .csi = RVIN_CSI40, .chsel = 0x03 },
-+	{ .master = 4, .csi = RVIN_CSI20, .chsel = 0x04 },
-+	{ .master = 4, .csi = RVIN_CSI41, .chsel = 0x03 },
- 	{ /* Sentinel */ }
- };
- 
-@@ -1239,48 +1182,12 @@ static const struct rvin_info rcar_info_r8a7795 = {
- };
- 
- static const struct rvin_group_route rcar_info_r8a7795es1_routes[] = {
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 0, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 0, .mask = BIT(1) | BIT(4) },
--	{ .csi = RVIN_CSI21, .channel = 0, .vin = 0, .mask = BIT(2) | BIT(5) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 1, .mask = BIT(0) },
--	{ .csi = RVIN_CSI21, .channel = 0, .vin = 1, .mask = BIT(1) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 1, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 1, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 1, .mask = BIT(4) },
--	{ .csi = RVIN_CSI21, .channel = 1, .vin = 1, .mask = BIT(5) },
--	{ .csi = RVIN_CSI21, .channel = 0, .vin = 2, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 2, .mask = BIT(1) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 2, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 2, .vin = 2, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 2, .vin = 2, .mask = BIT(4) },
--	{ .csi = RVIN_CSI21, .channel = 2, .vin = 2, .mask = BIT(5) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 3, .mask = BIT(0) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 3, .mask = BIT(1) },
--	{ .csi = RVIN_CSI21, .channel = 1, .vin = 3, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 3, .vin = 3, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 3, .vin = 3, .mask = BIT(4) },
--	{ .csi = RVIN_CSI21, .channel = 3, .vin = 3, .mask = BIT(5) },
--	{ .csi = RVIN_CSI41, .channel = 0, .vin = 4, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 4, .mask = BIT(1) | BIT(4) },
--	{ .csi = RVIN_CSI21, .channel = 0, .vin = 4, .mask = BIT(2) | BIT(5) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 5, .mask = BIT(0) },
--	{ .csi = RVIN_CSI21, .channel = 0, .vin = 5, .mask = BIT(1) },
--	{ .csi = RVIN_CSI41, .channel = 0, .vin = 5, .mask = BIT(2) },
--	{ .csi = RVIN_CSI41, .channel = 1, .vin = 5, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 5, .mask = BIT(4) },
--	{ .csi = RVIN_CSI21, .channel = 1, .vin = 5, .mask = BIT(5) },
--	{ .csi = RVIN_CSI21, .channel = 0, .vin = 6, .mask = BIT(0) },
--	{ .csi = RVIN_CSI41, .channel = 0, .vin = 6, .mask = BIT(1) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 6, .mask = BIT(2) },
--	{ .csi = RVIN_CSI41, .channel = 2, .vin = 6, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 2, .vin = 6, .mask = BIT(4) },
--	{ .csi = RVIN_CSI21, .channel = 2, .vin = 6, .mask = BIT(5) },
--	{ .csi = RVIN_CSI41, .channel = 1, .vin = 7, .mask = BIT(0) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 7, .mask = BIT(1) },
--	{ .csi = RVIN_CSI21, .channel = 1, .vin = 7, .mask = BIT(2) },
--	{ .csi = RVIN_CSI41, .channel = 3, .vin = 7, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 3, .vin = 7, .mask = BIT(4) },
--	{ .csi = RVIN_CSI21, .channel = 3, .vin = 7, .mask = BIT(5) },
-+	{ .master = 0, .csi = RVIN_CSI20, .chsel = 0x04 },
-+	{ .master = 0, .csi = RVIN_CSI20, .chsel = 0x05 },
-+	{ .master = 0, .csi = RVIN_CSI40, .chsel = 0x03 },
-+	{ .master = 4, .csi = RVIN_CSI20, .chsel = 0x04 },
-+	{ .master = 4, .csi = RVIN_CSI20, .chsel = 0x05 },
-+	{ .master = 4, .csi = RVIN_CSI40, .chsel = 0x03 },
- 	{ /* Sentinel */ }
- };
- 
-@@ -1293,34 +1200,10 @@ static const struct rvin_info rcar_info_r8a7795es1 = {
- };
- 
- static const struct rvin_group_route rcar_info_r8a7796_routes[] = {
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 0, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 0, .mask = BIT(1) | BIT(4) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 1, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 1, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 1, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 1, .mask = BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 2, .mask = BIT(1) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 2, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 2, .vin = 2, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 2, .vin = 2, .mask = BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 3, .mask = BIT(0) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 3, .mask = BIT(1) },
--	{ .csi = RVIN_CSI40, .channel = 3, .vin = 3, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 3, .vin = 3, .mask = BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 4, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 4, .mask = BIT(1) | BIT(4) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 5, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 5, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 5, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 5, .mask = BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 6, .mask = BIT(1) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 6, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 2, .vin = 6, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 2, .vin = 6, .mask = BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 7, .mask = BIT(0) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 7, .mask = BIT(1) },
--	{ .csi = RVIN_CSI40, .channel = 3, .vin = 7, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 3, .vin = 7, .mask = BIT(4) },
-+	{ .master = 0, .csi = RVIN_CSI20, .chsel = 0x04 },
-+	{ .master = 0, .csi = RVIN_CSI40, .chsel = 0x03 },
-+	{ .master = 4, .csi = RVIN_CSI20, .chsel = 0x04 },
-+	{ .master = 4, .csi = RVIN_CSI40, .chsel = 0x03 },
- 	{ /* Sentinel */ }
- };
- 
-@@ -1334,38 +1217,10 @@ static const struct rvin_info rcar_info_r8a7796 = {
- };
- 
- static const struct rvin_group_route rcar_info_r8a77965_routes[] = {
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 0, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 0, .mask = BIT(1) | BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 0, .mask = BIT(2) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 1, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 1, .mask = BIT(1) | BIT(3) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 1, .mask = BIT(2) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 1, .mask = BIT(4) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 2, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 2, .mask = BIT(1) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 2, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 2, .vin = 2, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 2, .vin = 2, .mask = BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 3, .mask = BIT(0) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 3, .mask = BIT(1) | BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 3, .vin = 3, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 3, .vin = 3, .mask = BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 4, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 4, .mask = BIT(1) | BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 4, .mask = BIT(2) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 5, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 5, .mask = BIT(1) | BIT(3) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 5, .mask = BIT(2) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 5, .mask = BIT(4) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 6, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 6, .mask = BIT(1) },
--	{ .csi = RVIN_CSI20, .channel = 0, .vin = 6, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 2, .vin = 6, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 2, .vin = 6, .mask = BIT(4) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 7, .mask = BIT(0) },
--	{ .csi = RVIN_CSI20, .channel = 1, .vin = 7, .mask = BIT(1) | BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 3, .vin = 7, .mask = BIT(3) },
--	{ .csi = RVIN_CSI20, .channel = 3, .vin = 7, .mask = BIT(4) },
-+	{ .master = 0, .csi = RVIN_CSI20, .chsel = 0x04 },
-+	{ .master = 0, .csi = RVIN_CSI40, .chsel = 0x03 },
-+	{ .master = 4, .csi = RVIN_CSI20, .chsel = 0x04 },
-+	{ .master = 4, .csi = RVIN_CSI40, .chsel = 0x03 },
- 	{ /* Sentinel */ }
- };
- 
-@@ -1379,13 +1234,7 @@ static const struct rvin_info rcar_info_r8a77965 = {
- };
- 
- static const struct rvin_group_route rcar_info_r8a77970_routes[] = {
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 0, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 1, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 1, .mask = BIT(3) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 2, .mask = BIT(1) },
--	{ .csi = RVIN_CSI40, .channel = 2, .vin = 2, .mask = BIT(3) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 3, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 3, .vin = 3, .mask = BIT(3) },
-+	{ .master = 0, .csi = RVIN_CSI40, .chsel = 0x03 },
- 	{ /* Sentinel */ }
- };
- 
-@@ -1398,22 +1247,8 @@ static const struct rvin_info rcar_info_r8a77970 = {
- };
- 
- static const struct rvin_group_route rcar_info_r8a77980_routes[] = {
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 0, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 0, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 1, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 1, .mask = BIT(1) | BIT(3) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 2, .mask = BIT(1) },
--	{ .csi = RVIN_CSI40, .channel = 2, .vin = 2, .mask = BIT(3) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 3, .mask = BIT(0) },
--	{ .csi = RVIN_CSI40, .channel = 3, .vin = 3, .mask = BIT(3) },
--	{ .csi = RVIN_CSI41, .channel = 0, .vin = 4, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI41, .channel = 1, .vin = 4, .mask = BIT(2) },
--	{ .csi = RVIN_CSI41, .channel = 0, .vin = 5, .mask = BIT(2) },
--	{ .csi = RVIN_CSI41, .channel = 1, .vin = 5, .mask = BIT(1) | BIT(3) },
--	{ .csi = RVIN_CSI41, .channel = 0, .vin = 6, .mask = BIT(1) },
--	{ .csi = RVIN_CSI41, .channel = 2, .vin = 6, .mask = BIT(3) },
--	{ .csi = RVIN_CSI41, .channel = 1, .vin = 7, .mask = BIT(0) },
--	{ .csi = RVIN_CSI41, .channel = 3, .vin = 7, .mask = BIT(3) },
-+	{ .master = 0, .csi = RVIN_CSI40, .chsel = 0x03 },
-+	{ .master = 4, .csi = RVIN_CSI41, .chsel = 0x03 },
- 	{ /* Sentinel */ }
- };
- 
-@@ -1427,10 +1262,7 @@ static const struct rvin_info rcar_info_r8a77980 = {
- };
- 
- static const struct rvin_group_route rcar_info_r8a77990_routes[] = {
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 4, .mask = BIT(0) | BIT(3) },
--	{ .csi = RVIN_CSI40, .channel = 0, .vin = 5, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 4, .mask = BIT(2) },
--	{ .csi = RVIN_CSI40, .channel = 1, .vin = 5, .mask = BIT(1) | BIT(3) },
-+	{ .master = 0, .csi = RVIN_CSI40, .chsel = 0x03 },
- 	{ /* Sentinel */ }
- };
- 
-diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index 11848d0c4a55cb4c..b8c56d248454efbf 100644
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -468,6 +468,8 @@ struct rcar_csi2 {
- 	struct v4l2_subdev *remote;
- 	unsigned int remote_pad;
- 
-+	int channel_vc[4];
-+
- 	struct mutex lock; /* Protects mf and stream_count. */
- 	struct v4l2_mbus_framefmt mf;
- 	int stream_count;
-@@ -664,8 +666,11 @@ static int rcsi2_start_receiver(struct rcar_csi2 *priv)
- 	for (i = 0; i < priv->info->num_channels; i++) {
- 		u32 vcdt_part;
- 
--		vcdt_part = VCDT_SEL_VC(i) | VCDT_VCDTN_EN | VCDT_SEL_DTN_ON |
--			VCDT_SEL_DT(format->datatype);
-+		if (priv->channel_vc[i] < 0)
-+			continue;
-+
-+		vcdt_part = VCDT_SEL_VC(priv->channel_vc[i]) | VCDT_VCDTN_EN |
-+			VCDT_SEL_DTN_ON | VCDT_SEL_DT(format->datatype);
- 
- 		/* Store in correct reg and offset. */
- 		if (i < 2)
-@@ -1240,7 +1245,53 @@ static int rcsi2_init_phtw_v3u(struct rcar_csi2 *priv,
-  * Platform Device Driver.
-  */
- 
-+static int rcsi2_link_setup(struct media_entity *entity,
-+			    const struct media_pad *local,
-+			    const struct media_pad *remote, u32 flags)
-+{
-+	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(entity);
-+	struct rcar_csi2 *priv = sd_to_csi2(sd);
-+	struct video_device *vdev;
-+	int channel, vc;
-+	u32 id;
-+
-+	if (!is_media_entity_v4l2_video_device(remote->entity)) {
-+		dev_err(priv->dev, "Remote is not a video device\n");
-+		return -EINVAL;
-+	}
-+
-+	vdev = media_entity_to_video_device(remote->entity);
-+
-+	if (of_property_read_u32(vdev->dev_parent->of_node, "renesas,id", &id)) {
-+		dev_err(priv->dev, "No renesas,id, can't configure routing\n");
-+		return -EINVAL;
-+	}
-+
-+	channel = id % 4;
-+
-+	if (flags & MEDIA_LNK_FL_ENABLED) {
-+		if (media_entity_remote_pad(local)) {
-+			dev_dbg(priv->dev,
-+				"Each VC can only be routed to one output channel\n");
-+			return -EINVAL;
-+		}
-+
-+		vc = local->index - 1;
-+
-+		dev_dbg(priv->dev, "Route VC%d to VIN%u on output channel %d\n",
-+			vc, id, channel);
-+	} else {
-+		vc = -1;
-+	}
-+
-+	priv->channel_vc[channel] = vc;
-+
-+	return 0;
-+}
-+
-+
- static const struct media_entity_operations rcar_csi2_entity_ops = {
-+	.link_setup = rcsi2_link_setup,
- 	.link_validate = v4l2_subdev_link_validate,
- };
- 
-@@ -1459,6 +1510,9 @@ static int rcsi2_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto error_async;
- 
-+	for (i = 0; i < ARRAY_SIZE(priv->channel_vc); i++)
-+		priv->channel_vc[i] = -1;
-+
- 	pm_runtime_enable(&pdev->dev);
- 
- 	ret = v4l2_async_register_subdev(&priv->subdev);
-diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
-index 25ead9333d0046e7..b72ae27a407dc96c 100644
---- a/drivers/media/platform/rcar-vin/rcar-dma.c
-+++ b/drivers/media/platform/rcar-vin/rcar-dma.c
-@@ -1490,7 +1490,7 @@ int rvin_set_channel_routing(struct rvin_dev *vin, u8 chsel)
- 	 * register. IFMD_DES1 controls data expansion mode for CSI20/21,
- 	 * IFMD_DES0 controls data expansion mode for CSI40/41.
- 	 */
--	for (route = vin->info->routes; route->mask; route++) {
-+	for (route = vin->info->routes; route->chsel; route++) {
- 		if (route->csi == RVIN_CSI20 || route->csi == RVIN_CSI21)
- 			ifmd |= VNCSI_IFMD_DES1;
- 		else
-diff --git a/drivers/media/platform/rcar-vin/rcar-vin.h b/drivers/media/platform/rcar-vin/rcar-vin.h
-index 6c06320174a2ed96..ddc1830be9a5d6c3 100644
---- a/drivers/media/platform/rcar-vin/rcar-vin.h
-+++ b/drivers/media/platform/rcar-vin/rcar-vin.h
-@@ -128,11 +128,9 @@ struct rvin_parallel_entity {
-  * struct rvin_group_route - describes a route from a channel of a
-  *	CSI-2 receiver to a VIN
-  *
-+ * @master:	VIN group master ID.
-  * @csi:	CSI-2 receiver ID.
-- * @channel:	Output channel of the CSI-2 receiver.
-- * @vin:	VIN ID.
-- * @mask:	Bitmask of the different CHSEL register values that
-- *		allow for a route from @csi + @chan to @vin.
-+ * @chsel:	CHSEL register values that connects VIN group to CSI-2.
-  *
-  * .. note::
-  *	Each R-Car CSI-2 receiver has four output channels facing the VIN
-@@ -140,19 +138,11 @@ struct rvin_parallel_entity {
-  *	There is no correlation between channel number and CSI-2 VC. It's
-  *	up to the CSI-2 receiver driver to configure which VC is output
-  *	on which channel, the VIN devices only care about output channels.
-- *
-- *	There are in some cases multiple CHSEL register settings which would
-- *	allow for the same route from @csi + @channel to @vin. For example
-- *	on R-Car H3 both the CHSEL values 0 and 3 allow for a route from
-- *	CSI40/VC0 to VIN0. All possible CHSEL values for a route need to be
-- *	recorded as a bitmask in @mask, in this example bit 0 and 3 should
-- *	be set.
-  */
- struct rvin_group_route {
-+	unsigned int master;
- 	enum rvin_csi_id csi;
--	unsigned int channel;
--	unsigned int vin;
--	unsigned int mask;
-+	unsigned int chsel;
- };
- 
- /**
--- 
-2.33.1
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBNYXJjZWwgWmlzd2lsZXIgW21h
+aWx0bzptYXJjZWwuemlzd2lsZXJAdG9yYWRleC5jb21dDQo+IFNlbnQ6IFdlZG5lc2RheSwgT2N0
+b2JlciAyMCwgMjAyMSA5OjQ3IFBNDQo+IFRvOiBzLmhhdWVyQHBlbmd1dHJvbml4LmRlOyBtY2hl
+aGFiQGtlcm5lbC5vcmc7IE1pbmcgUWlhbg0KPiA8bWluZy5xaWFuQG54cC5jb20+OyBzaGF3bmd1
+b0BrZXJuZWwub3JnOyByb2JoK2R0QGtlcm5lbC5vcmcNCj4gQ2M6IGxpbnV4LW1lZGlhQHZnZXIu
+a2VybmVsLm9yZzsga2VybmVsQHBlbmd1dHJvbml4LmRlOyBkbC1saW51eC1pbXgNCj4gPGxpbnV4
+LWlteEBueHAuY29tPjsgZmVzdGV2YW1AZ21haWwuY29tOyBkZXZpY2V0cmVlQHZnZXIua2VybmVs
+Lm9yZzsNCj4gbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbGludXgtYXJtLWtlcm5lbEBs
+aXN0cy5pbmZyYWRlYWQub3JnOw0KPiBodmVya3VpbC1jaXNjb0B4czRhbGwubmw7IEFpc2hlbmcg
+RG9uZyA8YWlzaGVuZy5kb25nQG54cC5jb20+DQo+IFN1YmplY3Q6IFtFWFRdIFJlOiBbUEFUQ0gg
+djExIDExLzEzXSBBUk02NDogZHRzOiBmcmVlc2NhbGU6IGlteDhxOiBhZGQgaW14DQo+IHZwdSBj
+b2RlYyBlbnRyaWVzDQo+IA0KPiBDYXV0aW9uOiBFWFQgRW1haWwNCj4gDQo+IE9uIEZyaSwgMjAy
+MS0xMC0xNSBhdCAxNjoyMiArMDgwMCwgTWluZyBRaWFuIHdyb3RlOg0KPiA+IEFkZCB0aGUgVmlk
+ZW8gUHJvY2Vzc2luZyBVbml0IG5vZGUgZm9yIElNWDhRIFNvQy4NCj4gDQo+IEFyZW4ndCB0aG9z
+ZSB1c3VhbGx5IGNhbGxlZCB0aGUgaS5NWCA4WCByYXRoZXIgdGhhbiA4UT8NCj4gDQoNCkhpIE1h
+cmNlbCwNCg0KICAgIEdlbmVyYWxseSwgaS5NWCA4WCBtZWFucyBpLk1YIDhRWFAsIGFuZCBpLk1Y
+IDhRIGluY2x1ZGVzIGkuTVggOFFYUCBhbmQgaS5NWCA4UU0uDQpUaGUgOHF4cCBhbmQgOHFtIHVz
+ZSB0aGUgc2FtZSB2cHUsICB0aGlzIGRyaXZlciBzdXBwb3J0IGJvdGggOHF4cCBhbmQgOHFtLg0K
+U28gd2UnZCBsaWtlIHRvIGNhbGwgaXQgaS5NWCA4UQ0KDQo+ID4gU2lnbmVkLW9mZi1ieTogTWlu
+ZyBRaWFuIDxtaW5nLnFpYW5AbnhwLmNvbT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBTaGlqaWUgUWlu
+IDxzaGlqaWUucWluQG54cC5jb20+DQo+ID4gU2lnbmVkLW9mZi1ieTogWmhvdSBQZW5nIDxlYWds
+ZS56aG91QG54cC5jb20+DQo+ID4gLS0tDQo+ID4gIC4uLi9hcm02NC9ib290L2R0cy9mcmVlc2Nh
+bGUvaW14OC1zcy12cHUuZHRzaSB8IDcyDQo+ID4gKysrKysrKysrKysrKysrKysrKyAgYXJjaC9h
+cm02NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OHF4cC1tZWsuZHRzDQo+IHwgMTcgKysrKysNCj4g
+PiAgYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OHF4cC5kdHNpICAgIHwgMjQgKysr
+KysrKw0KPiA+ICAzIGZpbGVzIGNoYW5nZWQsIDExMyBpbnNlcnRpb25zKCspDQo+ID4gIGNyZWF0
+ZSBtb2RlIDEwMDY0NCBhcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4LXNzLXZwdS5k
+dHNpDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUv
+aW14OC1zcy12cHUuZHRzaQ0KPiA+IGIvYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUvaW14
+OC1zcy12cHUuZHRzaQ0KPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAw
+MDAwMDAwLi5mMmRkZTZkMTRjYTMNCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvYXJjaC9h
+cm02NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OC1zcy12cHUuZHRzaQ0KPiA+IEBAIC0wLDAgKzEs
+NzIgQEANCj4gPiArLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjArDQo+ID4gKy8q
+DQo+ID4gKyAqIENvcHlyaWdodCAyMDIxIE5YUA0KPiA+ICsgKiAgICAgRG9uZyBBaXNoZW5nIDxh
+aXNoZW5nLmRvbmdAbnhwLmNvbT4NCj4gPiArICovDQo+ID4gKw0KPiA+ICt2cHU6IHZwdUAyYzAw
+MDAwMCB7DQo+ID4gKyAgICAgICAjYWRkcmVzcy1jZWxscyA9IDwxPjsNCj4gPiArICAgICAgICNz
+aXplLWNlbGxzID0gPDE+Ow0KPiA+ICsgICAgICAgcmFuZ2VzID0gPDB4MmMwMDAwMDAgMHgwIDB4
+MmMwMDAwMDAgMHgyMDAwMDAwPjsNCj4gPiArICAgICAgIHJlZyA9IDwwIDB4MmMwMDAwMDAgMCAw
+eDEwMDAwMDA+Ow0KPiA+ICsgICAgICAgcG93ZXItZG9tYWlucyA9IDwmcGQgSU1YX1NDX1JfVlBV
+PjsNCj4gPiArICAgICAgIHN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+ID4gKw0KPiA+ICsgICAgICAg
+bXVfbTA6IG1haWxib3hAMmQwMDAwMDAgew0KPiA+ICsgICAgICAgICAgICAgICBjb21wYXRpYmxl
+ID0gImZzbCxpbXg2c3gtbXUiOw0KPiA+ICsgICAgICAgICAgICAgICByZWcgPSA8MHgyZDAwMDAw
+MCAweDIwMDAwPjsNCj4gPiArICAgICAgICAgICAgICAgaW50ZXJydXB0cyA9IDxHSUNfU1BJIDQ2
+OSBJUlFfVFlQRV9MRVZFTF9ISUdIPjsNCj4gPiArICAgICAgICAgICAgICAgI21ib3gtY2VsbHMg
+PSA8Mj47DQo+ID4gKyAgICAgICAgICAgICAgIHBvd2VyLWRvbWFpbnMgPSA8JnBkIElNWF9TQ19S
+X1ZQVV9NVV8wPjsNCj4gPiArICAgICAgICAgICAgICAgc3RhdHVzID0gIm9rYXkiOw0KPiA+ICsg
+ICAgICAgfTsNCj4gPiArDQo+ID4gKyAgICAgICBtdTFfbTA6IG1haWxib3hAMmQwMjAwMDAgew0K
+PiA+ICsgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gImZzbCxpbXg2c3gtbXUiOw0KPiA+ICsg
+ICAgICAgICAgICAgICByZWcgPSA8MHgyZDAyMDAwMCAweDIwMDAwPjsNCj4gPiArICAgICAgICAg
+ICAgICAgaW50ZXJydXB0cyA9IDxHSUNfU1BJIDQ3MCBJUlFfVFlQRV9MRVZFTF9ISUdIPjsNCj4g
+PiArICAgICAgICAgICAgICAgI21ib3gtY2VsbHMgPSA8Mj47DQo+ID4gKyAgICAgICAgICAgICAg
+IHBvd2VyLWRvbWFpbnMgPSA8JnBkIElNWF9TQ19SX1ZQVV9NVV8xPjsNCj4gPiArICAgICAgICAg
+ICAgICAgc3RhdHVzID0gIm9rYXkiOw0KPiA+ICsgICAgICAgfTsNCj4gPiArDQo+ID4gKyAgICAg
+ICBtdTJfbTA6IG1haWxib3hAMmQwNDAwMDAgew0KPiA+ICsgICAgICAgICAgICAgICBjb21wYXRp
+YmxlID0gImZzbCxpbXg2c3gtbXUiOw0KPiA+ICsgICAgICAgICAgICAgICByZWcgPSA8MHgyZDA0
+MDAwMCAweDIwMDAwPjsNCj4gPiArICAgICAgICAgICAgICAgaW50ZXJydXB0cyA9IDxHSUNfU1BJ
+IDQ3NCBJUlFfVFlQRV9MRVZFTF9ISUdIPjsNCj4gPiArICAgICAgICAgICAgICAgI21ib3gtY2Vs
+bHMgPSA8Mj47DQo+ID4gKyAgICAgICAgICAgICAgIHBvd2VyLWRvbWFpbnMgPSA8JnBkIElNWF9T
+Q19SX1ZQVV9NVV8yPjsNCj4gPiArICAgICAgICAgICAgICAgc3RhdHVzID0gImRpc2FibGVkIjsN
+Cj4gPiArICAgICAgIH07DQo+ID4gKw0KPiA+ICsgICAgICAgdnB1X2NvcmUwOiB2cHVfY29yZUAy
+ZDA4MDAwMCB7DQo+ID4gKyAgICAgICAgICAgICAgIHJlZyA9IDwweDJkMDgwMDAwIDB4MTAwMDA+
+Ow0KPiA+ICsgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gIm54cCxpbXg4cS12cHUtZGVjb2Rl
+ciI7DQo+ID4gKyAgICAgICAgICAgICAgIHBvd2VyLWRvbWFpbnMgPSA8JnBkIElNWF9TQ19SX1ZQ
+VV9ERUNfMD47DQo+ID4gKyAgICAgICAgICAgICAgIG1ib3gtbmFtZXMgPSAidHgwIiwgInR4MSIs
+ICJyeCI7DQo+ID4gKyAgICAgICAgICAgICAgIG1ib3hlcyA9IDwmbXVfbTAgMCAwPiwNCj4gPiAr
+ICAgICAgICAgICAgICAgICAgICAgICA8Jm11X20wIDAgMT4sDQo+ID4gKyAgICAgICAgICAgICAg
+ICAgICAgICAgPCZtdV9tMCAxIDA+Ow0KPiA+ICsgICAgICAgICAgICAgICBzdGF0dXMgPSAiZGlz
+YWJsZWQiOw0KPiA+ICsgICAgICAgfTsNCj4gPiArICAgICAgIHZwdV9jb3JlMTogdnB1X2NvcmVA
+MmQwOTAwMDAgew0KPiA+ICsgICAgICAgICAgICAgICByZWcgPSA8MHgyZDA5MDAwMCAweDEwMDAw
+PjsNCj4gPiArICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJueHAsaW14OHEtdnB1LWVuY29k
+ZXIiOw0KPiA+ICsgICAgICAgICAgICAgICBwb3dlci1kb21haW5zID0gPCZwZCBJTVhfU0NfUl9W
+UFVfRU5DXzA+Ow0KPiA+ICsgICAgICAgICAgICAgICBtYm94LW5hbWVzID0gInR4MCIsICJ0eDEi
+LCAicngiOw0KPiA+ICsgICAgICAgICAgICAgICBtYm94ZXMgPSA8Jm11MV9tMCAwIDA+LA0KPiA+
+ICsgICAgICAgICAgICAgICAgICAgICAgIDwmbXUxX20wIDAgMT4sDQo+ID4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgPCZtdTFfbTAgMSAwPjsNCj4gPiArICAgICAgICAgICAgICAgc3RhdHVzID0g
+ImRpc2FibGVkIjsNCj4gPiArICAgICAgIH07DQo+ID4gKyAgICAgICB2cHVfY29yZTI6IHZwdV9j
+b3JlQDJkMGEwMDAwIHsNCj4gPiArICAgICAgICAgICAgICAgcmVnID0gPDB4MmQwYTAwMDAgMHgx
+MDAwMD47DQo+ID4gKyAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAibnhwLGlteDhxLXZwdS1l
+bmNvZGVyIjsNCj4gPiArICAgICAgICAgICAgICAgcG93ZXItZG9tYWlucyA9IDwmcGQgSU1YX1ND
+X1JfVlBVX0VOQ18xPjsNCj4gPiArICAgICAgICAgICAgICAgbWJveC1uYW1lcyA9ICJ0eDAiLCAi
+dHgxIiwgInJ4IjsNCj4gPiArICAgICAgICAgICAgICAgbWJveGVzID0gPCZtdTJfbTAgMCAwPiwN
+Cj4gPiArICAgICAgICAgICAgICAgICAgICAgICA8Jm11Ml9tMCAwIDE+LA0KPiA+ICsgICAgICAg
+ICAgICAgICAgICAgICAgIDwmbXUyX20wIDEgMD47DQo+ID4gKyAgICAgICAgICAgICAgIHN0YXR1
+cyA9ICJkaXNhYmxlZCI7DQo+ID4gKyAgICAgICB9Ow0KPiA+ICt9Ow0KPiA+IGRpZmYgLS1naXQg
+YS9hcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4cXhwLW1lay5kdHMNCj4gPiBiL2Fy
+Y2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL2lteDhxeHAtbWVrLmR0cw0KPiA+IGluZGV4IDg2
+MzIzMmE0NzAwNC4uMDU0OTViNjBiZWI4IDEwMDY0NA0KPiA+IC0tLSBhL2FyY2gvYXJtNjQvYm9v
+dC9kdHMvZnJlZXNjYWxlL2lteDhxeHAtbWVrLmR0cw0KPiA+ICsrKyBiL2FyY2gvYXJtNjQvYm9v
+dC9kdHMvZnJlZXNjYWxlL2lteDhxeHAtbWVrLmR0cw0KPiA+IEBAIC0xOTYsNiArMTk2LDIzIEBA
+ICZ1c2RoYzIgew0KPiA+ICAgICAgICAgc3RhdHVzID0gIm9rYXkiOw0KPiA+ICB9Ow0KPiA+DQo+
+ID4gKyZ2cHUgew0KPiA+ICsgICAgICAgY29tcGF0aWJsZSA9ICJueHAsaW14OHF4cC12cHUiOw0K
+PiA+ICsgICAgICAgc3RhdHVzID0gIm9rYXkiOw0KPiA+ICt9Ow0KPiA+ICsNCj4gPiArJnZwdV9j
+b3JlMCB7DQo+ID4gKyAgICAgICByZWcgPSA8MHgyZDA0MDAwMCAweDEwMDAwPjsNCj4gPiArICAg
+ICAgIG1lbW9yeS1yZWdpb24gPSA8JmRlY29kZXJfYm9vdD4sIDwmZGVjb2Rlcl9ycGM+Ow0KPiA+
+ICsgICAgICAgc3RhdHVzID0gIm9rYXkiOw0KPiA+ICt9Ow0KPiA+ICsNCj4gPiArJnZwdV9jb3Jl
+MSB7DQo+ID4gKyAgICAgICByZWcgPSA8MHgyZDA1MDAwMCAweDEwMDAwPjsNCj4gPiArICAgICAg
+IG1lbW9yeS1yZWdpb24gPSA8JmVuY29kZXJfYm9vdD4sIDwmZW5jb2Rlcl9ycGM+Ow0KPiA+ICsg
+ICAgICAgc3RhdHVzID0gIm9rYXkiOw0KPiA+ICt9Ow0KPiA+ICsNCj4gPiAgJmlvbXV4YyB7DQo+
+ID4gICAgICAgICBwaW5jdHJsX2ZlYzE6IGZlYzFncnAgew0KPiA+ICAgICAgICAgICAgICAgICBm
+c2wscGlucyA9IDwNCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2Nh
+bGUvaW14OHF4cC5kdHNpDQo+ID4gYi9hcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4
+cXhwLmR0c2kNCj4gPiBpbmRleCA2MTc2MThlZGY3N2UuLjZiNmQzYzcxNjMyYiAxMDA2NDQNCj4g
+PiAtLS0gYS9hcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4cXhwLmR0c2kNCj4gPiAr
+KysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4cXhwLmR0c2kNCj4gPiBAQCAt
+NDYsNiArNDYsOSBAQCBhbGlhc2VzIHsNCj4gPiAgICAgICAgICAgICAgICAgc2VyaWFsMSA9ICZs
+cHVhcnQxOw0KPiA+ICAgICAgICAgICAgICAgICBzZXJpYWwyID0gJmxwdWFydDI7DQo+ID4gICAg
+ICAgICAgICAgICAgIHNlcmlhbDMgPSAmbHB1YXJ0MzsNCj4gPiArICAgICAgICAgICAgICAgdnB1
+X2NvcmUwID0gJnZwdV9jb3JlMDsNCj4gPiArICAgICAgICAgICAgICAgdnB1X2NvcmUxID0gJnZw
+dV9jb3JlMTsNCj4gPiArICAgICAgICAgICAgICAgdnB1X2NvcmUyID0gJnZwdV9jb3JlMjsNCj4g
+PiAgICAgICAgIH07DQo+ID4NCj4gPiAgICAgICAgIGNwdXMgew0KPiA+IEBAIC0xMzQsMTAgKzEz
+NywzMCBAQCByZXNlcnZlZC1tZW1vcnkgew0KPiA+ICAgICAgICAgICAgICAgICAjc2l6ZS1jZWxs
+cyA9IDwyPjsNCj4gPiAgICAgICAgICAgICAgICAgcmFuZ2VzOw0KPiA+DQo+ID4gKyAgICAgICAg
+ICAgICAgIGRlY29kZXJfYm9vdDogZGVjb2Rlci1ib290QDg0MDAwMDAwIHsNCj4gPiArICAgICAg
+ICAgICAgICAgICAgICAgICByZWcgPSA8MCAweDg0MDAwMDAwIDAgMHgyMDAwMDAwPjsNCj4gPiAr
+ICAgICAgICAgICAgICAgICAgICAgICBuby1tYXA7DQo+ID4gKyAgICAgICAgICAgICAgIH07DQo+
+ID4gKw0KPiA+ICsgICAgICAgICAgICAgICBlbmNvZGVyX2Jvb3Q6IGVuY29kZXItYm9vdEA4NjAw
+MDAwMCB7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgcmVnID0gPDAgMHg4NjAwMDAwMCAw
+IDB4MjAwMDAwPjsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICBuby1tYXA7DQo+ID4gKyAg
+ICAgICAgICAgICAgIH07DQo+ID4gKw0KPiA+ICsgICAgICAgICAgICAgICBkZWNvZGVyX3JwYzog
+ZGVjb2Rlci1ycGNAMHg5MjAwMDAwMCB7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgcmVn
+ID0gPDAgMHg5MjAwMDAwMCAwIDB4MTAwMDAwPjsNCj4gPiArICAgICAgICAgICAgICAgICAgICAg
+ICBuby1tYXA7DQo+ID4gKyAgICAgICAgICAgICAgIH07DQo+ID4gKw0KPiA+ICAgICAgICAgICAg
+ICAgICBkc3BfcmVzZXJ2ZWQ6IGRzcEA5MjQwMDAwMCB7DQo+ID4gICAgICAgICAgICAgICAgICAg
+ICAgICAgcmVnID0gPDAgMHg5MjQwMDAwMCAwIDB4MjAwMDAwMD47DQo+ID4gICAgICAgICAgICAg
+ICAgICAgICAgICAgbm8tbWFwOw0KPiA+ICAgICAgICAgICAgICAgICB9Ow0KPiA+ICsNCj4gPiAr
+ICAgICAgICAgICAgICAgZW5jb2Rlcl9ycGM6IGVuY29kZXItcnBjQDB4OTQ0MDAwMDAgew0KPiA+
+ICsgICAgICAgICAgICAgICAgICAgICAgIHJlZyA9IDwwIDB4OTQ0MDAwMDAgMCAweDcwMDAwMD47
+DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgbm8tbWFwOw0KPiA+ICsgICAgICAgICAgICAg
+ICB9Ow0KPiA+ICAgICAgICAgfTsNCj4gPg0KPiA+ICAgICAgICAgcG11IHsNCj4gPiBAQCAtMjU5
+LDYgKzI4Miw3IEBAIG1hcDAgew0KPiA+DQo+ID4gICAgICAgICAvKiBzb3J0ZWQgaW4gcmVnaXN0
+ZXIgYWRkcmVzcyAqLw0KPiA+ICAgICAgICAgI2luY2x1ZGUgImlteDgtc3MtaW1nLmR0c2kiDQo+
+ID4gKyAgICAgICAjaW5jbHVkZSAiaW14OC1zcy12cHUuZHRzaSINCj4gPiAgICAgICAgICNpbmNs
+dWRlICJpbXg4LXNzLWFkbWEuZHRzaSINCj4gPiAgICAgICAgICNpbmNsdWRlICJpbXg4LXNzLWNv
+bm4uZHRzaSINCj4gPiAgICAgICAgICNpbmNsdWRlICJpbXg4LXNzLWRkci5kdHNpIg0K
