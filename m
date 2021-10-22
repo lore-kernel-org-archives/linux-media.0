@@ -2,74 +2,213 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DED3C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 22 Oct 2021 06:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F540C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 22 Oct 2021 06:56:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1633360F50
-	for <linux-media@archiver.kernel.org>; Fri, 22 Oct 2021 06:42:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 33EC561037
+	for <linux-media@archiver.kernel.org>; Fri, 22 Oct 2021 06:56:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbhJVGof (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Oct 2021 02:44:35 -0400
-Received: from ni.piap.pl ([195.187.100.5]:59198 "EHLO ni.piap.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230295AbhJVGof (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Oct 2021 02:44:35 -0400
-Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-        by ni.piap.pl (Postfix) with ESMTPSA id 066B9C4919A6;
-        Fri, 22 Oct 2021 08:42:16 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 066B9C4919A6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
-        t=1634884937; bh=UcfEjk8DBNDpRG6uthQ/iHYz4huVJ4WRfk9x2Wd4HPk=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=FWyTCVFdx0rGJ0MatR2ACAZ308n1P9w+EEdOnsl4V2BriH6i8GWA1g59XP27A8OsL
-         8XE7zY9iBWyoRTFmdmCiKZ3Jko403K7lPb7FWBYc2SAOlGVuIX0TeZzhP+HHra0huY
-         bWOJ1HVd+Hi4wYUlqfd+aPuS7986zg4olkcqB2Zw=
-From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Matteo Lisi <matteo.lisi@engicam.com>
-Subject: Re: [PATCH v5] Driver for ON Semi AR0521 camera sensor
-References: <m3fstfoexa.fsf@t19.piap.pl>
-        <20211009102446.jrvrdr7whtd2rv4z@uno.localdomain>
-        <m3mtnflpna.fsf@t19.piap.pl>
-        <20211011143420.vm6ncl5gdv44nsn3@uno.localdomain>
-        <m3a6jel9ce.fsf@t19.piap.pl> <YWXwSAm3OO/WTkOL@valkosipuli.retiisi.eu>
-        <m335p5lc04.fsf@t19.piap.pl> <YXBjX2vUwrKVOd78@valkosipuli.retiisi.eu>
-Sender: khalasa@piap.pl
-Date:   Fri, 22 Oct 2021 08:42:16 +0200
-In-Reply-To: <YXBjX2vUwrKVOd78@valkosipuli.retiisi.eu> (Sakari Ailus's message
-        of "Wed, 20 Oct 2021 21:43:43 +0300")
-Message-ID: <m3bl3hd0hj.fsf@t19.piap.pl>
+        id S232338AbhJVG6Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Oct 2021 02:58:24 -0400
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:30588 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232377AbhJVG6P (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 22 Oct 2021 02:58:15 -0400
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 19M6XFVn087034;
+        Fri, 22 Oct 2021 14:33:15 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 22 Oct
+ 2021 14:55:22 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 2/7] media: aspeed: use v4l2_info/v4l2_warn/v4l2_dbg for log
+Date:   Fri, 22 Oct 2021 14:55:34 +0800
+Message-ID: <20211022065539.12392-3-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211022065539.12392-1-jammy_huang@aspeedtech.com>
+References: <20211022065539.12392-1-jammy_huang@aspeedtech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-KLMS-Rule-ID: 3
-X-KLMS-Message-Action: skipped
-X-KLMS-AntiSpam-Status: not scanned, whitelist
-X-KLMS-AntiPhishing: not scanned, whitelist
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, whitelist
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 19M6XFVn087034
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
+The debug log level, 0~3, is controlled by module_param, debug.
+The higher the value, the more the information.
+  0: off
+  1: info
+  2: debug
+  3: register operations
 
-> The drivers you're looking at are based on register lists so they usually
-> support just a single frequency. The sensors are not limited to this
-> frequency however, which is why you see the frequency in DT bindings, too.
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+---
+ drivers/media/platform/aspeed-video.c | 40 +++++++++++++++------------
+ 1 file changed, 23 insertions(+), 17 deletions(-)
 
-Does that mean that drivers supporting a frequency range (rather than a
-single frequency) don't need the range (nor single frequency) in DT?
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index 6259cf17a7cc..789adc86d1af 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -30,6 +30,7 @@
+ #include <media/v4l2-event.h>
+ #include <media/v4l2-ioctl.h>
+ #include <media/videobuf2-dma-contig.h>
++#include <linux/videodev2.h>
+ 
+ #define DEVICE_NAME			"aspeed-video"
+ 
+@@ -390,6 +391,8 @@ static const struct v4l2_dv_timings_cap aspeed_video_timings_cap = {
+ 	},
+ };
+ 
++static unsigned int debug;
++
+ static void aspeed_video_init_jpeg_table(u32 *table, bool yuv420)
+ {
+ 	int i;
+@@ -437,23 +440,23 @@ static void aspeed_video_update(struct aspeed_video *video, u32 reg, u32 clear,
+ 	t &= ~clear;
+ 	t |= bits;
+ 	writel(t, video->base + reg);
+-	dev_dbg(video->dev, "update %03x[%08x -> %08x]\n", reg, before,
+-		readl(video->base + reg));
++	v4l2_dbg(3, debug, &video->v4l2_dev, "update %03x[%08x -> %08x]\n",
++		 reg, before, readl(video->base + reg));
+ }
+ 
+ static u32 aspeed_video_read(struct aspeed_video *video, u32 reg)
+ {
+ 	u32 t = readl(video->base + reg);
+ 
+-	dev_dbg(video->dev, "read %03x[%08x]\n", reg, t);
++	v4l2_dbg(3, debug, &video->v4l2_dev, "read %03x[%08x]\n", reg, t);
+ 	return t;
+ }
+ 
+ static void aspeed_video_write(struct aspeed_video *video, u32 reg, u32 val)
+ {
+ 	writel(val, video->base + reg);
+-	dev_dbg(video->dev, "write %03x[%08x]\n", reg,
+-		readl(video->base + reg));
++	v4l2_dbg(3, debug, &video->v4l2_dev, "write %03x[%08x]\n", reg,
++		 readl(video->base + reg));
+ }
+ 
+ static void update_perf(struct aspeed_video_perf *p)
+@@ -474,13 +477,13 @@ static int aspeed_video_start_frame(struct aspeed_video *video)
+ 	u32 seq_ctrl = aspeed_video_read(video, VE_SEQ_CTRL);
+ 
+ 	if (video->v4l2_input_status) {
+-		dev_dbg(video->dev, "No signal; don't start frame\n");
++		v4l2_warn(&video->v4l2_dev, "No signal; don't start frame\n");
+ 		return 0;
+ 	}
+ 
+ 	if (!(seq_ctrl & VE_SEQ_CTRL_COMP_BUSY) ||
+ 	    !(seq_ctrl & VE_SEQ_CTRL_CAP_BUSY)) {
+-		dev_dbg(video->dev, "Engine busy; don't start frame\n");
++		v4l2_warn(&video->v4l2_dev, "Engine busy; don't start frame\n");
+ 		return -EBUSY;
+ 	}
+ 
+@@ -489,7 +492,7 @@ static int aspeed_video_start_frame(struct aspeed_video *video)
+ 				       struct aspeed_video_buffer, link);
+ 	if (!buf) {
+ 		spin_unlock_irqrestore(&video->lock, flags);
+-		dev_dbg(video->dev, "No buffers; don't start frame\n");
++		v4l2_warn(&video->v4l2_dev, "No buffers; don't start frame\n");
+ 		return -EPROTO;
+ 	}
+ 
+@@ -565,7 +568,7 @@ static void aspeed_video_bufs_done(struct aspeed_video *video,
+ 
+ static void aspeed_video_irq_res_change(struct aspeed_video *video, ulong delay)
+ {
+-	dev_dbg(video->dev, "Resolution changed; resetting\n");
++	v4l2_dbg(1, debug, &video->v4l2_dev, "Resolution changed; resetting\n");
+ 
+ 	set_bit(VIDEO_RES_CHANGE, &video->flags);
+ 	clear_bit(VIDEO_FRAME_INPRG, &video->flags);
+@@ -766,8 +769,8 @@ static void aspeed_video_calc_compressed_size(struct aspeed_video *video,
+ 	aspeed_video_write(video, VE_STREAM_BUF_SIZE,
+ 			   compression_buffer_size_reg);
+ 
+-	dev_dbg(video->dev, "Max compressed size: %x\n",
+-		video->max_compressed_size);
++	v4l2_dbg(1, debug, &video->v4l2_dev, "Max compressed size: %#x\n",
++		 video->max_compressed_size);
+ }
+ 
+ #define res_check(v) test_and_clear_bit(VIDEO_MODE_DETECT_DONE, &(v)->flags)
+@@ -804,7 +807,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+ 						      res_check(video),
+ 						      MODE_DETECT_TIMEOUT);
+ 		if (!rc) {
+-			dev_dbg(video->dev, "Timed out; first mode detect\n");
++			v4l2_warn(&video->v4l2_dev, "Timed out; first mode detect\n");
+ 			clear_bit(VIDEO_RES_DETECT, &video->flags);
+ 			return;
+ 		}
+@@ -822,7 +825,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+ 						      MODE_DETECT_TIMEOUT);
+ 		clear_bit(VIDEO_RES_DETECT, &video->flags);
+ 		if (!rc) {
+-			dev_dbg(video->dev, "Timed out; second mode detect\n");
++			v4l2_warn(&video->v4l2_dev, "Timed out; second mode detect\n");
+ 			return;
+ 		}
+ 
+@@ -856,7 +859,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+ 	} while (invalid_resolution && (tries++ < INVALID_RESOLUTION_RETRIES));
+ 
+ 	if (invalid_resolution) {
+-		dev_dbg(video->dev, "Invalid resolution detected\n");
++		v4l2_warn(&video->v4l2_dev, "Invalid resolution detected\n");
+ 		return;
+ 	}
+ 
+@@ -873,8 +876,8 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+ 	aspeed_video_update(video, VE_SEQ_CTRL, 0,
+ 			    VE_SEQ_CTRL_AUTO_COMP | VE_SEQ_CTRL_EN_WATCHDOG);
+ 
+-	dev_dbg(video->dev, "Got resolution: %dx%d\n", det->width,
+-		det->height);
++	v4l2_dbg(1, debug, &video->v4l2_dev, "Got resolution: %dx%d\n",
++		 det->width, det->height);
+ }
+ 
+ static void aspeed_video_set_resolution(struct aspeed_video *video)
+@@ -1501,7 +1504,7 @@ static void aspeed_video_stop_streaming(struct vb2_queue *q)
+ 				!test_bit(VIDEO_FRAME_INPRG, &video->flags),
+ 				STOP_TIMEOUT);
+ 	if (!rc) {
+-		dev_dbg(video->dev, "Timed out when stopping streaming\n");
++		v4l2_warn(&video->v4l2_dev, "Timed out when stopping streaming\n");
+ 
+ 		/*
+ 		 * Need to force stop any DMA and try and get HW into a good
+@@ -1856,6 +1859,9 @@ static struct platform_driver aspeed_video_driver = {
+ 
+ module_platform_driver(aspeed_video_driver);
+ 
++module_param(debug, int, 0644);
++MODULE_PARM_DESC(debug, "Debug level (0=off,1=info,2=debug,3=reg ops)");
++
+ MODULE_DESCRIPTION("ASPEED Video Engine Driver");
+ MODULE_AUTHOR("Eddie James");
+ MODULE_LICENSE("GPL v2");
+-- 
+2.25.1
 
-While it's true that the AR0521 driver can (and has to) work with
-different frequencies (on different systems), I think I can specify
-a single frequency per system. But - should I really do that?
---=20
-Krzysztof "Chris" Ha=C5=82asa
-
-Sie=C4=87 Badawcza =C5=81ukasiewicz
-Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
-Al. Jerozolimskie 202, 02-486 Warszawa
