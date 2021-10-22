@@ -2,126 +2,92 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E2EFC433F5
-	for <linux-media@archiver.kernel.org>; Fri, 22 Oct 2021 15:04:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4D3DC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 22 Oct 2021 15:24:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7FB6761205
-	for <linux-media@archiver.kernel.org>; Fri, 22 Oct 2021 15:04:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B82906112D
+	for <linux-media@archiver.kernel.org>; Fri, 22 Oct 2021 15:24:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbhJVPGp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Oct 2021 11:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S233437AbhJVP0z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Oct 2021 11:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233069AbhJVPGi (ORCPT
+        with ESMTP id S233358AbhJVP0w (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Oct 2021 11:06:38 -0400
+        Fri, 22 Oct 2021 11:26:52 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B83C061764;
-        Fri, 22 Oct 2021 08:04:20 -0700 (PDT)
-Received: from guri.fritz.box (unknown [IPv6:2a02:810a:880:f54:50fa:5c7d:20f4:e8d3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 117821F4163C;
-        Fri, 22 Oct 2021 16:04:19 +0100 (BST)
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        kernel@collabora.com, acourbot@chromium.org,
-        andrew-ct.chen@mediatek.com, courbot@chromium.org,
-        dafna3@gmail.com, eizan@chromium.org, houlong.wei@mediatek.com,
-        hsinyi@chromium.org, hverkuil@xs4all.nl, irui.wang@mediatek.com,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        maoguang.meng@mediatek.com, matthias.bgg@gmail.com,
-        mchehab@kernel.org, minghsiu.tsai@mediatek.com, tfiga@chromium.org,
-        tiffany.lin@mediatek.com
-Subject: [PATCH 2/3] media: mtk-vcodec: enc: use "stream_started" flag for "stop/start_streaming"
-Date:   Fri, 22 Oct 2021 17:04:09 +0200
-Message-Id: <20211022150410.29335-3-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211022150410.29335-1-dafna.hirschfeld@collabora.com>
-References: <20211022150410.29335-1-dafna.hirschfeld@collabora.com>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0667DC061767;
+        Fri, 22 Oct 2021 08:24:35 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 1D4241F44B70
+Subject: Re: [PATCH v2 3/4] media: platform: mtk-mdp3: Set
+ dma_set_mask_and_coherent
+To:     "roy-cw.yeh" <roy-cw.yeh@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Fabien Parent <fparent@baylibre.com>,
+        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        Moudy Ho <moudy.ho@mediatek.com>,
+        "river . cheng" <river.cheng@mediatek.com>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20211022092827.24631-1-roy-cw.yeh@mediatek.com>
+ <20211022092827.24631-4-roy-cw.yeh@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <448b3d2f-54a0-f021-dc2a-ea29dc56c146@collabora.com>
+Date:   Fri, 22 Oct 2021 17:24:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20211022092827.24631-4-roy-cw.yeh@mediatek.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently the mtk-vcodec encoder init the hardware
-upon "start_streaming" cb when both queues are streaming and turns off
-the hardware upon "stop_streaming" when both queues stop
-streaming. This is wrong since the same queue might be started and
-then stopped causing the driver to turn off the hardware without
-turning it on. This cause for example unbalanced
-calls to pm_runtime_*
+Il 22/10/21 11:28, roy-cw.yeh ha scritto:
+> From: "Roy-CW.Yeh" <roy-cw.yeh@mediatek.com>
+> 
+> Use the dma_set_mask_and_coherent helper to set mdp
+> DMA bit mask to support 34bits iova space(16GB) that
+> the mt8195 iommu HW supports.
+> 
+> The whole iova range separates to 0~4G/4G~8G/8G~12G/12G~16G.
+> Regarding which iova range mdp actually locates,
+> it depends on the dma-ranges property of mdp dtsi node.
+> 
+> Signed-off-by: Roy-CW.Yeh <roy-cw.yeh@mediatek.com>
 
-Fixes: 4e855a6efa547 ("[media] vcodec: mediatek: Add Mediatek V4L2 Video Encoder Driver")
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
----
- drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h | 4 ++++
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c | 8 ++++++++
- 2 files changed, 12 insertions(+)
+Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index 9d36e3d27369..84c5289f872b 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -259,6 +259,9 @@ struct vdec_pic_info {
-  * @decoded_frame_cnt: number of decoded frames
-  * @lock: protect variables accessed by V4L2 threads and worker thread such as
-  *	  mtk_video_dec_buf.
-+ * @stream_started: this flag is turned on when both queues (cap and out) starts streaming
-+ *	  and it is turned off once both queues stop streaming. It is used for a correct
-+ *	  setup and set-down of the hardware when starting and stopping streaming.
-  */
- struct mtk_vcodec_ctx {
- 	enum mtk_instance_type type;
-@@ -301,6 +304,7 @@ struct mtk_vcodec_ctx {
- 
- 	int decoded_frame_cnt;
- 	struct mutex lock;
-+	bool stream_started;
- 
- };
- 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-index 87a5114bf680..fb3cf804c96a 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-@@ -890,6 +890,9 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 		goto err_start_stream;
- 	}
- 
-+	if (ctx->stream_started)
-+		return 0;
-+
- 	/* Do the initialization when both start_streaming have been called */
- 	if (V4L2_TYPE_IS_OUTPUT(q->type)) {
- 		if (!vb2_start_streaming_called(&ctx->m2m_ctx->cap_q_ctx.q))
-@@ -928,6 +931,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
- 		ctx->state = MTK_STATE_HEADER;
- 	}
- 
-+	ctx->stream_started = true;
- 	return 0;
- 
- err_set_param:
-@@ -1002,6 +1006,9 @@ static void vb2ops_venc_stop_streaming(struct vb2_queue *q)
- 		}
- 	}
- 
-+	if (!ctx->stream_started)
-+		return;
-+
- 	if ((q->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE &&
- 	     vb2_is_streaming(&ctx->m2m_ctx->out_q_ctx.q)) ||
- 	    (q->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE &&
-@@ -1023,6 +1030,7 @@ static void vb2ops_venc_stop_streaming(struct vb2_queue *q)
- 		mtk_v4l2_err("pm_runtime_put fail %d", ret);
- 
- 	ctx->state = MTK_STATE_FREE;
-+	ctx->stream_started = false;
- }
- 
- static int vb2ops_venc_buf_out_validate(struct vb2_buffer *vb)
--- 
-2.17.1
+> ---
+>   drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c
+> index 12b029d145d6..51f7ef2b31ce 100644
+> --- a/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c
+> +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c
+> @@ -1141,6 +1141,9 @@ static int mdp_probe(struct platform_device *pdev)
+>   	mdp->pdev = pdev;
+>   	mdp->mdp_data = of_device_get_match_data(&pdev->dev);
+>   
+> +	if (of_get_property(pdev->dev.of_node, "dma-ranges", NULL))
+> +		dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(34));
+> +
+>   	ret = of_property_read_u32(dev->of_node, "mediatek,mdp3-id", &id);
+>   	if (ret) {
+>   		dev_err(dev, "Failed to get mdp-id\n");
+> 
+
 
