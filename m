@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25282C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55287C433EF
 	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:17:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0DB5160EBD
+	by mail.kernel.org (Postfix) with ESMTP id 4120760EBD
 	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:17:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbhJYMT4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Oct 2021 08:19:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56316 "EHLO mail.kernel.org"
+        id S233233AbhJYMT5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Oct 2021 08:19:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56320 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233066AbhJYMTn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S233070AbhJYMTn (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 25 Oct 2021 08:19:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CC02A61027;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E477B6108C;
         Mon, 25 Oct 2021 12:17:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635164239;
-        bh=YFwLRyGwAZtnL++iA+D5m4TYup42zCL/qnKUOAkiau0=;
+        s=k20201202; t=1635164240;
+        bh=yeLLjKIkG2yxf3NFQJnoNHi8BdfnAnLKwOhTGVC/QpU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tcAem/Oa4ouXbgBwyvGsBAbDs3XORSwVwDp0O8C6aTMznlsQ1v+foKJw/G2kZhKx3
-         FT8hIhkgnWxgufgCUYXNdUQk598fw9axFjVbAbXjlR9lgeQPRdHt5LlvRrN4xjwG/s
-         MBH2IxZtoM5CjIXsRhaA3OQbanNwgjGgTCfGj04yBeeoAq5l7NlvzUxkEbi4zxXdbB
-         iUHB8Np6mH+yEnNU7R3u5/bcAkCiJW/hIPuQkOMnODnjFWY/+sog0Lmb4NqdBI4lLQ
-         gXQfObHDDwx+wLwuqRJdkA+8N97b+7S8cjIVR21SwdksArZmu40r7r7hX40UKmHlf+
-         2FnNUZDwkff9w==
+        b=OwycEgIdGDVbktrnIz1VAXAi6iTQ0cmJb+s2STktxHn0zF3pZdhvVoKgIN8sYr/br
+         +wWM2YuO/NnYh2v6154oqUMq4ZsKN5JhL1NBjLwLd+RivwFOyPDbT1dhUJa7031GLs
+         bRuYvaYY6VdTRsyCbNFe3QRRKMtEywITulQBnp+HsWgHKy74bPTH8Kd59R+6Ps1Ep6
+         AcrKYQsuE9kACLLsxBmpyiuDp6nAoXtP+P9p16Low9QywVjtB+QOZDJUIFKflC0LDD
+         bzTHPLcQt4PCCN9ZVUWXumKam3qh2aUSKWJjOFZzqGn62I2PYRxU4nSP/YtNVkKEl+
+         B961yX0lgIMfg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1meyuU-0001mF-Eu; Mon, 25 Oct 2021 14:17:02 +0200
+        id 1meyuV-0001mZ-0b; Mon, 25 Oct 2021 14:17:03 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -37,9 +37,9 @@ Cc:     Mike Isely <isely@pobox.com>,
         linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
         stable@vger.kernel.org
-Subject: [PATCH 1/8] media: mceusb: fix control-message timeouts
-Date:   Mon, 25 Oct 2021 14:16:34 +0200
-Message-Id: <20211025121641.6759-2-johan@kernel.org>
+Subject: [PATCH 8/8] media: stk1160: fix control-message timeouts
+Date:   Mon, 25 Oct 2021 14:16:41 +0200
+Message-Id: <20211025121641.6759-9-johan@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211025121641.6759-1-johan@kernel.org>
 References: <20211025121641.6759-1-johan@kernel.org>
@@ -52,50 +52,35 @@ X-Mailing-List: linux-media@vger.kernel.org
 USB control-message timeouts are specified in milliseconds and should
 specifically not vary with CONFIG_HZ.
 
-Fixes: 66e89522aff7 ("V4L/DVB: IR: add mceusb IR receiver driver")
-Cc: stable@vger.kernel.org      # 2.6.36
+Fixes: 9cb2173e6ea8 ("[media] media: Add stk1160 new driver (easycap replacement)")
+Cc: stable@vger.kernel.org      # 3.7
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/media/rc/mceusb.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/usb/stk1160/stk1160-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
-index e03dd1f0144f..7a8a889d54a2 100644
---- a/drivers/media/rc/mceusb.c
-+++ b/drivers/media/rc/mceusb.c
-@@ -1429,7 +1429,7 @@ static void mceusb_gen1_init(struct mceusb_dev *ir)
- 	 */
- 	ret = usb_control_msg(ir->usbdev, usb_rcvctrlpipe(ir->usbdev, 0),
- 			      USB_REQ_SET_ADDRESS, USB_TYPE_VENDOR, 0, 0,
--			      data, USB_CTRL_MSG_SZ, HZ * 3);
-+			      data, USB_CTRL_MSG_SZ, 3000);
- 	dev_dbg(dev, "set address - ret = %d", ret);
- 	dev_dbg(dev, "set address - data[0] = %d, data[1] = %d",
- 						data[0], data[1]);
-@@ -1437,20 +1437,20 @@ static void mceusb_gen1_init(struct mceusb_dev *ir)
- 	/* set feature: bit rate 38400 bps */
- 	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
- 			      USB_REQ_SET_FEATURE, USB_TYPE_VENDOR,
--			      0xc04e, 0x0000, NULL, 0, HZ * 3);
-+			      0xc04e, 0x0000, NULL, 0, 3000);
+diff --git a/drivers/media/usb/stk1160/stk1160-core.c b/drivers/media/usb/stk1160/stk1160-core.c
+index b4f8bc5db138..4e1698f78818 100644
+--- a/drivers/media/usb/stk1160/stk1160-core.c
++++ b/drivers/media/usb/stk1160/stk1160-core.c
+@@ -65,7 +65,7 @@ int stk1160_read_reg(struct stk1160 *dev, u16 reg, u8 *value)
+ 		return -ENOMEM;
+ 	ret = usb_control_msg(dev->udev, pipe, 0x00,
+ 			USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+-			0x00, reg, buf, sizeof(u8), HZ);
++			0x00, reg, buf, sizeof(u8), 1000);
+ 	if (ret < 0) {
+ 		stk1160_err("read failed on reg 0x%x (%d)\n",
+ 			reg, ret);
+@@ -85,7 +85,7 @@ int stk1160_write_reg(struct stk1160 *dev, u16 reg, u16 value)
  
- 	dev_dbg(dev, "set feature - ret = %d", ret);
- 
- 	/* bRequest 4: set char length to 8 bits */
- 	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
- 			      4, USB_TYPE_VENDOR,
--			      0x0808, 0x0000, NULL, 0, HZ * 3);
-+			      0x0808, 0x0000, NULL, 0, 3000);
- 	dev_dbg(dev, "set char length - retB = %d", ret);
- 
- 	/* bRequest 2: set handshaking to use DTR/DSR */
- 	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
- 			      2, USB_TYPE_VENDOR,
--			      0x0000, 0x0100, NULL, 0, HZ * 3);
-+			      0x0000, 0x0100, NULL, 0, 3000);
- 	dev_dbg(dev, "set handshake  - retC = %d", ret);
- 
- 	/* device resume */
+ 	ret =  usb_control_msg(dev->udev, pipe, 0x01,
+ 			USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+-			value, reg, NULL, 0, HZ);
++			value, reg, NULL, 0, 1000);
+ 	if (ret < 0) {
+ 		stk1160_err("write failed on reg 0x%x (%d)\n",
+ 			reg, ret);
 -- 
 2.32.0
 
