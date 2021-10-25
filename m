@@ -2,64 +2,65 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F38EDC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 16:01:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24C6DC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 16:15:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDFF460EB1
-	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 16:01:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 122FF60EBD
+	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 16:15:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233844AbhJYQEQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Oct 2021 12:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
+        id S233917AbhJYQRw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Oct 2021 12:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbhJYQEP (ORCPT
+        with ESMTP id S230177AbhJYQRv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Oct 2021 12:04:15 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FE2C061745
-        for <linux-media@vger.kernel.org>; Mon, 25 Oct 2021 09:01:53 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id d10so9643315wrb.1
-        for <linux-media@vger.kernel.org>; Mon, 25 Oct 2021 09:01:53 -0700 (PDT)
+        Mon, 25 Oct 2021 12:17:51 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4411BC061745
+        for <linux-media@vger.kernel.org>; Mon, 25 Oct 2021 09:15:29 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id y78so5957484wmc.0
+        for <linux-media@vger.kernel.org>; Mon, 25 Oct 2021 09:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zMkg/0xA2M5G/rhCUOwOXIDgsrNS6y7y/a+diRyWYzc=;
-        b=x6efCHXNxaYrirQVpspZroKoKRD7/1SgHGFiUxfs4LIlHXrgby1/xhprQ9XHEfRHiO
-         KgIje9no8GY375bClUsmuMiAqJHd1zqphUCi9ZcLISCqrgsWVNP4DYdb9qptXCqJpLfu
-         xdCl4qAbJDSZVP+dYrxcAESmtkX1tSCtWP6nGmyxCZntSCgUBDsqXvAuTTUJ2+cg2f4g
-         tYStffmQyW/K1uH/ftQtJv9zoDHPyNr5Rz6hIuMVOlWsKUdOSfHmTz1yGRgPDDDpkYHf
-         rNvT14S1GkDZ1UKW3qww3WE6NIstZTmuwqU13idA4sJmAOgyy0UJA0U6Z1eMH3Ea4/6U
-         9MLQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=YfXAT9J3zg9nM6acPCxL/mbo5sK8qaM6YnGKL8Z4sis=;
+        b=AWg0kI+n5Qz+KOgHdnePtR9QI0EJQNR9ymM4xxpxLH32V+OqnFfNhVebESKNeZkMYs
+         VrnzWaL64M8zVq/kSYn8yHy2AwighyaraIEd8JQBeNurOQNyYhqRFkHyMKvBxqMv4mpU
+         lVxc4EX6HDNyx+c4oEEimSV3HwbcpYI6kvDtbEtXCetVw6+NqzwbQ2R2185qp9zXOYNW
+         3QI6OAMh38Gcp+rF3uk7rxT+qB7dpAGPz2VOYDKx6V+XMgUIjcSXe+IXLfgchGLx9GFP
+         G3N/U4ls6loXtPdrcRLgJRwc/PHT68HUxy18wgfOwYTC0reFgzj3edLLMFxAyrLCW7iS
+         tz5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=zMkg/0xA2M5G/rhCUOwOXIDgsrNS6y7y/a+diRyWYzc=;
-        b=3FawRvh4jGfo2KwMRibzbMc8kOi1l4TmXazky6t+kolRIj214U5L6ZhVhmh76EARXO
-         R5aKwgcAdmq+edEnQqgLX6VJUTfRFzaWLkbtQlViZ5huAYPPXKQUhzRzk+tbENGVP2ab
-         RX2WwKh7oByg6siPNtZrHqETvkbVG19CIUXL4H+cOjeTgm9dyj8RWFp9Sgi1dpq96S9S
-         EructF2We7HXqjxWd9dfH3TccRkeXeo5sDpv1DhesE9/wikyX00m41uSKRZvOeREXCmQ
-         uZRgFc17SjewKUiWeWqFLGnabevTg20LFamkLeSgt8en2C1zB8SnJ1GgTuoyWaG5rKhh
-         jU5Q==
-X-Gm-Message-State: AOAM533QoRDHLolHzfqfOY3LJzcA45B5PLX/OA2jpkBOxVm+2eksdDb6
-        8DchipRgN0PGKtLntz2XCY0PQQ==
-X-Google-Smtp-Source: ABdhPJzhIfub+4l1wiD7yr36/+orUeB6LL3rR5ftkCBdo6TCfFkDiInNpCKTsodqMrJ3eu2Sixr3Sg==
-X-Received: by 2002:a05:6000:1241:: with SMTP id j1mr24785718wrx.419.1635177711769;
-        Mon, 25 Oct 2021 09:01:51 -0700 (PDT)
+        bh=YfXAT9J3zg9nM6acPCxL/mbo5sK8qaM6YnGKL8Z4sis=;
+        b=TdiBTtpLebiyNa/+s8TALIKEHUIFPDQNgUxI2phrDTg2BRbVslglQjvztVUaAKIHYF
+         f5a4+suekq204XP149C6HhJVvgEo4F1iISBYANBymKPkMi26Fr+q0t84V6Af/LOp6dUn
+         zOlHAEhy0tpotgJA50HVHUbd9TWPVqFSC4edUic/Kg5gk3MuLWPSK8+vsRGjlrXUYsZ4
+         X94ikCbmQXk7LNNCRmpHMtZnwxygMZB0+y04S2DQdGMLwPu5bgWG8EIPNjatROgxYe21
+         Ea5IRuG5YXVfkLpO6qTFsJN/BDn5beG94SwkiFr3DngWl+dqTjJGZAtPnMmjGDUHrljd
+         KBjw==
+X-Gm-Message-State: AOAM533Qfhdd0O3cWcETtzFS4Kk5V+BwLKUotND0yNBMpXrUFr6gSLkB
+        B7v38rMvLcI1A2JlqXKwiAbYuA==
+X-Google-Smtp-Source: ABdhPJzlJEUM4JECSJtllaaEViuXR3XCiEmdLs27IiVm2DR7HM3U0zuqDIaPaAvBcGPKwoplfCwp8g==
+X-Received: by 2002:a7b:c5d9:: with SMTP id n25mr10315342wmk.139.1635178527938;
+        Mon, 25 Oct 2021 09:15:27 -0700 (PDT)
 Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id r11sm2165904wrx.79.2021.10.25.09.01.50
+        by smtp.gmail.com with ESMTPSA id k6sm17037479wri.83.2021.10.25.09.15.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Oct 2021 09:01:51 -0700 (PDT)
-Message-ID: <00b817a4-f1ac-6a94-5f1e-836d8d313406@linaro.org>
-Date:   Mon, 25 Oct 2021 17:03:52 +0100
+        Mon, 25 Oct 2021 09:15:26 -0700 (PDT)
+Message-ID: <9ea50569-1d4d-5413-5c77-241f2a589f09@linaro.org>
+Date:   Mon, 25 Oct 2021 17:17:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.1
 Subject: Re: [PATCH] media: venus: Synchronize probe() between venus_core and
  enc/dec
 Content-Language: en-US
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     Tadeusz Struk <tadeusz.struk@linaro.org>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Andy Gross <agross@kernel.org>
@@ -73,43 +74,17 @@ Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
 References: <20211025144345.267107-1-tadeusz.struk@linaro.org>
  <72f8dd7a-66c7-fb50-db23-f98ba753af1d@nexus-software.ie>
  <bba3acc1-cfa1-0c53-75de-f4ffa0a2bc9e@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <bba3acc1-cfa1-0c53-75de-f4ffa0a2bc9e@linaro.org>
+ <00b817a4-f1ac-6a94-5f1e-836d8d313406@linaro.org>
+In-Reply-To: <00b817a4-f1ac-6a94-5f1e-836d8d313406@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 25/10/2021 16:30, Tadeusz Struk wrote:
-> No, we want a hard stop here. At this point the venus_core probe()
-> has finished and it failed. Returning -EPROBE_DEFER here will just
-> cause it to loop infinitely.
+On 25/10/2021 17:03, Bryan O'Donoghue wrote:
+> child devices drivers/usb/dwc3/dwc3-qcom.c
 
-I don't think there's any guarantee at all, that core probe() has 
-completed at that point.
+doh - learn to type
 
-of_platform_populate() doesn't guarantee ordering of the probe() 
-completing before or after the probe() of the platform drivers that are 
-associated with the devices in of_platform_populate().
-
-When you think it about it can't do that and you wouldn't want it to do 
-that since a device might have a legitimate reason to EPROBE_DEFER
-
-As an example core could call of_platform_populate() and then as a 
-ridiculous example go to sleep for five seconds - in which case it is 
-perfectly possible the encoder and decoder probe() functions will bug 
-out illegitimately waiting because of core->state != CORE_INIT
-
-This is a problem we have and still haven't solved in 
-drivers/usb/dwc3/dwc3-qcom.c::probe() and child devices 
-drivers/usb/dwc3/dwc3-qcom.c
-
-Here:
-https://patches.linaro.org/cover/470387/
-
-There's no serialisation guarantee between parent and child on 
-of_platform_populate() - at least none I'm aware of.
-
----
-bod
+*child devices drivers/usb/dwc3/core.c
