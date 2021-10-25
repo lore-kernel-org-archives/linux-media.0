@@ -2,103 +2,126 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A08D1C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:17:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8E37C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:45:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8495F60ED4
-	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:17:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB87860F02
+	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:45:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbhJYMTp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Oct 2021 08:19:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56208 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232455AbhJYMTm (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 25 Oct 2021 08:19:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B5C0460555;
-        Mon, 25 Oct 2021 12:17:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635164239;
-        bh=UB12+Dycc6GEIdWE3BW/yQ4o2454bP5RnbmKCx2jaAY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o14BBX8D0y4R5IVly34dWIXF7bWeZrdPavDEd/uGhfq/F4QY7aDHf6G4VTgud4/al
-         wE1uOU4B+V5/pdT69qEWbwXQnlhBt4yKO4DI7HZkWLx01Iu3NSMO7hHptq9ol58YkO
-         A9fiByuivwuIZyATw3Fev5vl85uaK6BIVcl4tf17iyam4RV5W1nA+jWIkfR9JwqRAq
-         ml8Ohnm3NCEtKrv360kHOKsJLgNB0SUh/1WvTpuHOWuhO/IqAXcKsE6AusRpqFIajx
-         vUjjd8n4rmVVk3kBxZYzzka6z6hktGZhb47rrZSjH2Ikpjhj2qVDdUFM4vAfWwMEZJ
-         h39WoUhIuqLNQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1meyuU-0001mS-R8; Mon, 25 Oct 2021 14:17:02 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Mike Isely <isely@pobox.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        stable@vger.kernel.org
-Subject: [PATCH 6/8] media: pvrusb2: fix control-message timeouts
-Date:   Mon, 25 Oct 2021 14:16:39 +0200
-Message-Id: <20211025121641.6759-7-johan@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211025121641.6759-1-johan@kernel.org>
-References: <20211025121641.6759-1-johan@kernel.org>
+        id S233306AbhJYMrc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Oct 2021 08:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233254AbhJYMra (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 25 Oct 2021 08:47:30 -0400
+Received: from lb2-smtp-cloud7.xs4all.net (lb2-smtp-cloud7.xs4all.net [IPv6:2001:888:0:108::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9D7C061745;
+        Mon, 25 Oct 2021 05:45:07 -0700 (PDT)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id ezLamN9JyUo2HezLbmIfLC; Mon, 25 Oct 2021 14:45:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1635165903; bh=MIrPmlZMXbntaIfNzNiL+53Ms2d0qAt5qT61zPsRcbQ=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=m+LHcJME2HJ9EGk9IY8grmg1yD4Ju2weXMHpTdctYcDZ1f3MIo8GHOYiT9xJuM20z
+         PGrgbqcIvJ1DmiN8w5eNx+gMw91DBp6MV6Ucjx+sAxdP/bKcAoRWHLoSAHeMvXCu92
+         cTVk4gumwFPGp+LzJxVZqPz++WMsNK2xRhnCfOl1NLlihSCI55nj0UZPPA4XqGEdZV
+         BMOQnyUq1DhLZMCvK3hdB2D+/ioyZ05F58mjr+4WM2IkMMsUSSPUqMtu12vArOiIwl
+         2AFCXK/tkY7TiKyJYEjZesB+hH0drxjYZc3RPxUTdT1tq9UBkS7IgRSARxNBhOhi1+
+         bMqRvvK/XbmsA==
+Subject: Re: [PATCH v2 00/10] staging: media: zoran: fusion in one module
+To:     Corentin Labbe <clabbe@baylibre.com>, mchehab@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mjpeg-users@lists.sourceforge.net
+References: <20211013185812.590931-1-clabbe@baylibre.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <da925d73-fdf0-3962-3841-a1dd53b5c5dd@xs4all.nl>
+Date:   Mon, 25 Oct 2021 14:45:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211013185812.590931-1-clabbe@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfG4yLNWqnYNBP9/1n40nSetLdb+rU3jaz1ZDe2tK5Z8747Kg5+iSFSKeNp69iojMjYf8Q/XAlZFW9QUFkOnWaqd2etvO+PbYJnYieGVwd8wTN8u2qkYx
+ mE7RyI7qYfdNTklpdzSqQu8kVhzm9pouB45Zri1vUBhJHecpHSxod+pWetwy/s8ZuFk73+mIGFNNs8aX+Eb+0Qirm5iRU9oZsmjFzCoyLr+3qn9W95FEvtSr
+ pMPKYMFwnJj0Blv2b+B/xZ50TH1ePxcwO2yY39MAjBK/xNC33xO2P0JJEHc5PwMGCNjzWI5kbwvZFL5QkrTJEzodM5Ihi1hpSTairWzdb0VDLxo2e72IXCr8
+ 33mE1IkGRoqlTjgeBbF/k6thPWfylWpHm+Pzhomptk0dbV/zSkVPue7AKq5wLzlzk1zwyW0HMQP8FfKV1WboMs4UJjYWKte/TcDXUH8ck1FO55j21dOZYCOx
+ wRrmcoxHlCgNsJyVrltcdi+Hdq35o9Ud8N6IjdvzC5Hw7beS97rfl24OqXw=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-USB control-message timeouts are specified in milliseconds and should
-specifically not vary with CONFIG_HZ.
+Hi Corentin,
 
-Fixes: d855497edbfb ("V4L/DVB (4228a): pvrusb2 to kernel 2.6.18")
-Cc: stable@vger.kernel.org      # 2.6.18
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On 13/10/2021 20:58, Corentin Labbe wrote:
+> Hello
+> 
+> The main change of this serie is to fusion all zoran related modules in
+> one.
+> This fixes the load order problem when everything is built-in.
+> 
+> Regards
+> 
+> Changes since v1:
+> - add missing debugfs cleaning
+> - clean some remaining module_get/put functions which made impossible to
+>   remove the zoran module
+> - added the two latest patchs
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-index d38dee1792e4..3915d551d59e 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -1467,7 +1467,7 @@ static int pvr2_upload_firmware1(struct pvr2_hdw *hdw)
- 	for (address = 0; address < fwsize; address += 0x800) {
- 		memcpy(fw_ptr, fw_entry->data + address, 0x800);
- 		ret += usb_control_msg(hdw->usb_dev, pipe, 0xa0, 0x40, address,
--				       0, fw_ptr, 0x800, HZ);
-+				       0, fw_ptr, 0x800, 1000);
- 	}
- 
- 	trace_firmware("Upload done, releasing device's CPU");
-@@ -1605,7 +1605,7 @@ int pvr2_upload_firmware2(struct pvr2_hdw *hdw)
- 			((u32 *)fw_ptr)[icnt] = swab32(((u32 *)fw_ptr)[icnt]);
- 
- 		ret |= usb_bulk_msg(hdw->usb_dev, pipe, fw_ptr,bcnt,
--				    &actual_length, HZ);
-+				    &actual_length, 1000);
- 		ret |= (actual_length != bcnt);
- 		if (ret) break;
- 		fw_done += bcnt;
-@@ -3438,7 +3438,7 @@ void pvr2_hdw_cpufw_set_enabled(struct pvr2_hdw *hdw,
- 						      0xa0,0xc0,
- 						      address,0,
- 						      hdw->fw_buffer+address,
--						      0x800,HZ);
-+						      0x800,1000);
- 				if (ret < 0) break;
- 			}
- 
-@@ -3977,7 +3977,7 @@ void pvr2_hdw_cpureset_assert(struct pvr2_hdw *hdw,int val)
- 	/* Write the CPUCS register on the 8051.  The lsb of the register
- 	   is the reset bit; a 1 asserts reset while a 0 clears it. */
- 	pipe = usb_sndctrlpipe(hdw->usb_dev, 0);
--	ret = usb_control_msg(hdw->usb_dev,pipe,0xa0,0x40,0xe600,0,da,1,HZ);
-+	ret = usb_control_msg(hdw->usb_dev,pipe,0xa0,0x40,0xe600,0,da,1,1000);
- 	if (ret < 0) {
- 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
- 			   "cpureset_assert(%d) error=%d",val,ret);
--- 
-2.32.0
+Something weird is wrong with this series. I have a DC30, but loading this with:
+
+modprobe zr36067 card=3
+
+results in this error message in the kernel log:
+
+[   58.645557] zr36067: module is from the staging directory, the quality is unknown, you have been warned.
+[   58.646658] zr36067 0000:03:00.0: Zoran MJPEG board driver version 0.10.1
+[   58.646793] zr36067 0000:03:00.0: Zoran ZR36057 (rev 1), irq: 18, memory: 0xf4000000
+[   58.648821] zr36067 0000:03:00.0: Initializing i2c bus...
+[   58.662420] vpx3220 22-0047: vpx3216b found @ 0x8e (DC30[0])
+[   58.737445] zr36067 0000:03:00.0: Fail to get encoder
+
+This works before, so why this is now failing is not clear to me.
+
+It does work with 'card=0', but I really have a DC30.
+
+If I test with 'card=0' then the rmmod issue is now solved.
+
+Regards,
+
+	Hans
+
+> 
+> Corentin Labbe (10):
+>   staging: media: zoran: move module parameter checks to zoran_probe
+>   staging: media: zoran: use module_pci_driver
+>   staging: media: zoran: rename debug module parameter
+>   staging: media: zoran: add debugfs
+>   staging: media: zoran: videocode: remove procfs
+>   staging: media: zoran: fusion all modules
+>   staging: media: zoran: remove vidmem
+>   staging: media: zoran: move videodev alloc
+>   staging: media: zoran: move config select on primary kconfig
+>   staging: media: zoran: introduce zoran_i2c_init
+> 
+>  drivers/staging/media/zoran/Kconfig        |  46 +--
+>  drivers/staging/media/zoran/Makefile       |   8 +-
+>  drivers/staging/media/zoran/videocodec.c   |  68 +----
+>  drivers/staging/media/zoran/videocodec.h   |   6 +-
+>  drivers/staging/media/zoran/zoran.h        |   6 +-
+>  drivers/staging/media/zoran/zoran_card.c   | 328 ++++++++++++++-------
+>  drivers/staging/media/zoran/zoran_driver.c |   5 +-
+>  drivers/staging/media/zoran/zr36016.c      |  24 +-
+>  drivers/staging/media/zoran/zr36016.h      |   2 +
+>  drivers/staging/media/zoran/zr36050.c      |  21 +-
+>  drivers/staging/media/zoran/zr36050.h      |   2 +
+>  drivers/staging/media/zoran/zr36060.c      |  21 +-
+>  drivers/staging/media/zoran/zr36060.h      |   2 +
+>  13 files changed, 291 insertions(+), 248 deletions(-)
+> 
 
