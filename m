@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A4D1C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:17:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FA3DC433FE
+	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:17:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F321A60C49
-	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:17:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48A6A60ED4
+	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:17:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233182AbhJYMTy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Oct 2021 08:19:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56314 "EHLO mail.kernel.org"
+        id S233203AbhJYMTz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Oct 2021 08:19:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56318 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233062AbhJYMTn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S233067AbhJYMTn (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 25 Oct 2021 08:19:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D04906105A;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CF6ED60FDA;
         Mon, 25 Oct 2021 12:17:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1635164239;
-        bh=bHMyDNovNe9zehRCGFFe8UpbUFbhhC6sMj7mtZpO1qM=;
+        bh=+dTGrFrFfzFxC5RMHG3/2ZpQrfugi52+1DYDtAvVEeo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BmikNBtqhvCcR27Eb+ZkZ44xZ80+i+VWyTFaoTWyGxoEie0daNYfX+kfriVCzXgYx
-         Cdq46dBQ31u1kdWPpNJPvgF1w8xDq1M+5rT7XcIzIOj7FEBf0qzDJ+kjdd9clPS10e
-         epLD6Eb97oyy9WEj1c/jjYLIgfmHJUBheItJsjk6+FOU7TFNT3tDACXDJ7L2zHr4h5
-         +lyT7fA07dWTU9bPFLTx0e4lh67R2oklqd61TinbwQEjnHpP2p2JyDF/5VqrwCvZV/
-         A1xuqx0ukvV2VXGUwTSocPKavCTJ/o4wnjDH8VGp+zHFsCN0ug7ofvU3M8KPfI8HCx
-         0PaBkTR25Gv+A==
+        b=RIfsKSQLQP1dZ05cQkfZHeg0nxS58Qvb+URxY1sdA8VTasXl/Kes8SE4YcpwaYlRS
+         XZYoOyBJPAaRkwfrlLDBiPp6YR4j/b6KE8+9pv/zWEyjDWgaEv1wNpwjl3OToNIlNP
+         TUy3xx8l2dlm7+8MvSFwY3FxxAb+tbMQS7uoUAuPWnAovk2zO9qPKBkY4GgnhDfUta
+         9Wk3ZH3cKWkdl0mmujwSnxlOrgBCUlUijTVY84suinTpz1lgztRdfgR/oRKAdMb0U7
+         KA9YlLxLQ1drTinqh2Hf7ZjUmjoJwf+5YtiRAD2JOnmcaHSfTN1BhzyEJ7ZJ8Bx+Wr
+         OBeeREaxi8O5A==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1meyuU-0001mM-MP; Mon, 25 Oct 2021 14:17:02 +0200
+        id 1meyuU-0001mW-Ty; Mon, 25 Oct 2021 14:17:02 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -37,9 +37,9 @@ Cc:     Mike Isely <isely@pobox.com>,
         linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
         stable@vger.kernel.org
-Subject: [PATCH 4/8] media: cpia2: fix control-message timeouts
-Date:   Mon, 25 Oct 2021 14:16:37 +0200
-Message-Id: <20211025121641.6759-5-johan@kernel.org>
+Subject: [PATCH 7/8] media: s2255: fix control-message timeouts
+Date:   Mon, 25 Oct 2021 14:16:40 +0200
+Message-Id: <20211025121641.6759-8-johan@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211025121641.6759-1-johan@kernel.org>
 References: <20211025121641.6759-1-johan@kernel.org>
@@ -52,35 +52,38 @@ X-Mailing-List: linux-media@vger.kernel.org
 USB control-message timeouts are specified in milliseconds and should
 specifically not vary with CONFIG_HZ.
 
-Fixes: ab33d5071de7 ("V4L/DVB (3376): Add cpia2 camera support")
-Cc: stable@vger.kernel.org      # 2.6.17
+Use the common control-message timeout define for the five-second
+timeouts.
+
+Fixes: 38f993ad8b1f ("V4L/DVB (8125): This driver adds support for the Sensoray 2255 devices.")
+Cc: stable@vger.kernel.org      # 2.6.27
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/media/usb/cpia2/cpia2_usb.c | 4 ++--
+ drivers/media/usb/s2255/s2255drv.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/cpia2/cpia2_usb.c b/drivers/media/usb/cpia2/cpia2_usb.c
-index 76aac06f9fb8..cba03b286473 100644
---- a/drivers/media/usb/cpia2/cpia2_usb.c
-+++ b/drivers/media/usb/cpia2/cpia2_usb.c
-@@ -550,7 +550,7 @@ static int write_packet(struct usb_device *udev,
- 			       0,	/* index */
- 			       buf,	/* buffer */
- 			       size,
--			       HZ);
-+			       1000);
+diff --git a/drivers/media/usb/s2255/s2255drv.c b/drivers/media/usb/s2255/s2255drv.c
+index 3b0e4ed75d99..acf18e2251a5 100644
+--- a/drivers/media/usb/s2255/s2255drv.c
++++ b/drivers/media/usb/s2255/s2255drv.c
+@@ -1882,7 +1882,7 @@ static long s2255_vendor_req(struct s2255_dev *dev, unsigned char Request,
+ 				    USB_TYPE_VENDOR | USB_RECIP_DEVICE |
+ 				    USB_DIR_IN,
+ 				    Value, Index, buf,
+-				    TransferBufferLength, HZ * 5);
++				    TransferBufferLength, USB_CTRL_SET_TIMEOUT);
  
+ 		if (r >= 0)
+ 			memcpy(TransferBuffer, buf, TransferBufferLength);
+@@ -1891,7 +1891,7 @@ static long s2255_vendor_req(struct s2255_dev *dev, unsigned char Request,
+ 		r = usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0),
+ 				    Request, USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+ 				    Value, Index, buf,
+-				    TransferBufferLength, HZ * 5);
++				    TransferBufferLength, USB_CTRL_SET_TIMEOUT);
+ 	}
  	kfree(buf);
- 	return ret;
-@@ -582,7 +582,7 @@ static int read_packet(struct usb_device *udev,
- 			       0,	/* index */
- 			       buf,	/* buffer */
- 			       size,
--			       HZ);
-+			       1000);
- 
- 	if (ret >= 0)
- 		memcpy(registers, buf, size);
+ 	return r;
 -- 
 2.32.0
 
