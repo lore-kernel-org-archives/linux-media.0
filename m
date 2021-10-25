@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FA3DC433FE
-	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:17:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25282C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:17:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 48A6A60ED4
-	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:17:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DB5160EBD
+	for <linux-media@archiver.kernel.org>; Mon, 25 Oct 2021 12:17:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233203AbhJYMTz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 25 Oct 2021 08:19:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56318 "EHLO mail.kernel.org"
+        id S233222AbhJYMT4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 25 Oct 2021 08:19:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56316 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233067AbhJYMTn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S233066AbhJYMTn (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 25 Oct 2021 08:19:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CF6ED60FDA;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CC02A61027;
         Mon, 25 Oct 2021 12:17:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1635164239;
-        bh=+dTGrFrFfzFxC5RMHG3/2ZpQrfugi52+1DYDtAvVEeo=;
+        bh=YFwLRyGwAZtnL++iA+D5m4TYup42zCL/qnKUOAkiau0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RIfsKSQLQP1dZ05cQkfZHeg0nxS58Qvb+URxY1sdA8VTasXl/Kes8SE4YcpwaYlRS
-         XZYoOyBJPAaRkwfrlLDBiPp6YR4j/b6KE8+9pv/zWEyjDWgaEv1wNpwjl3OToNIlNP
-         TUy3xx8l2dlm7+8MvSFwY3FxxAb+tbMQS7uoUAuPWnAovk2zO9qPKBkY4GgnhDfUta
-         9Wk3ZH3cKWkdl0mmujwSnxlOrgBCUlUijTVY84suinTpz1lgztRdfgR/oRKAdMb0U7
-         KA9YlLxLQ1drTinqh2Hf7ZjUmjoJwf+5YtiRAD2JOnmcaHSfTN1BhzyEJ7ZJ8Bx+Wr
-         OBeeREaxi8O5A==
+        b=tcAem/Oa4ouXbgBwyvGsBAbDs3XORSwVwDp0O8C6aTMznlsQ1v+foKJw/G2kZhKx3
+         FT8hIhkgnWxgufgCUYXNdUQk598fw9axFjVbAbXjlR9lgeQPRdHt5LlvRrN4xjwG/s
+         MBH2IxZtoM5CjIXsRhaA3OQbanNwgjGgTCfGj04yBeeoAq5l7NlvzUxkEbi4zxXdbB
+         iUHB8Np6mH+yEnNU7R3u5/bcAkCiJW/hIPuQkOMnODnjFWY/+sog0Lmb4NqdBI4lLQ
+         gXQfObHDDwx+wLwuqRJdkA+8N97b+7S8cjIVR21SwdksArZmu40r7r7hX40UKmHlf+
+         2FnNUZDwkff9w==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1meyuU-0001mW-Ty; Mon, 25 Oct 2021 14:17:02 +0200
+        id 1meyuU-0001mF-Eu; Mon, 25 Oct 2021 14:17:02 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -37,9 +37,9 @@ Cc:     Mike Isely <isely@pobox.com>,
         linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
         stable@vger.kernel.org
-Subject: [PATCH 7/8] media: s2255: fix control-message timeouts
-Date:   Mon, 25 Oct 2021 14:16:40 +0200
-Message-Id: <20211025121641.6759-8-johan@kernel.org>
+Subject: [PATCH 1/8] media: mceusb: fix control-message timeouts
+Date:   Mon, 25 Oct 2021 14:16:34 +0200
+Message-Id: <20211025121641.6759-2-johan@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211025121641.6759-1-johan@kernel.org>
 References: <20211025121641.6759-1-johan@kernel.org>
@@ -52,38 +52,50 @@ X-Mailing-List: linux-media@vger.kernel.org
 USB control-message timeouts are specified in milliseconds and should
 specifically not vary with CONFIG_HZ.
 
-Use the common control-message timeout define for the five-second
-timeouts.
-
-Fixes: 38f993ad8b1f ("V4L/DVB (8125): This driver adds support for the Sensoray 2255 devices.")
-Cc: stable@vger.kernel.org      # 2.6.27
+Fixes: 66e89522aff7 ("V4L/DVB: IR: add mceusb IR receiver driver")
+Cc: stable@vger.kernel.org      # 2.6.36
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/media/usb/s2255/s2255drv.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/rc/mceusb.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/usb/s2255/s2255drv.c b/drivers/media/usb/s2255/s2255drv.c
-index 3b0e4ed75d99..acf18e2251a5 100644
---- a/drivers/media/usb/s2255/s2255drv.c
-+++ b/drivers/media/usb/s2255/s2255drv.c
-@@ -1882,7 +1882,7 @@ static long s2255_vendor_req(struct s2255_dev *dev, unsigned char Request,
- 				    USB_TYPE_VENDOR | USB_RECIP_DEVICE |
- 				    USB_DIR_IN,
- 				    Value, Index, buf,
--				    TransferBufferLength, HZ * 5);
-+				    TransferBufferLength, USB_CTRL_SET_TIMEOUT);
+diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
+index e03dd1f0144f..7a8a889d54a2 100644
+--- a/drivers/media/rc/mceusb.c
++++ b/drivers/media/rc/mceusb.c
+@@ -1429,7 +1429,7 @@ static void mceusb_gen1_init(struct mceusb_dev *ir)
+ 	 */
+ 	ret = usb_control_msg(ir->usbdev, usb_rcvctrlpipe(ir->usbdev, 0),
+ 			      USB_REQ_SET_ADDRESS, USB_TYPE_VENDOR, 0, 0,
+-			      data, USB_CTRL_MSG_SZ, HZ * 3);
++			      data, USB_CTRL_MSG_SZ, 3000);
+ 	dev_dbg(dev, "set address - ret = %d", ret);
+ 	dev_dbg(dev, "set address - data[0] = %d, data[1] = %d",
+ 						data[0], data[1]);
+@@ -1437,20 +1437,20 @@ static void mceusb_gen1_init(struct mceusb_dev *ir)
+ 	/* set feature: bit rate 38400 bps */
+ 	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
+ 			      USB_REQ_SET_FEATURE, USB_TYPE_VENDOR,
+-			      0xc04e, 0x0000, NULL, 0, HZ * 3);
++			      0xc04e, 0x0000, NULL, 0, 3000);
  
- 		if (r >= 0)
- 			memcpy(TransferBuffer, buf, TransferBufferLength);
-@@ -1891,7 +1891,7 @@ static long s2255_vendor_req(struct s2255_dev *dev, unsigned char Request,
- 		r = usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0),
- 				    Request, USB_TYPE_VENDOR | USB_RECIP_DEVICE,
- 				    Value, Index, buf,
--				    TransferBufferLength, HZ * 5);
-+				    TransferBufferLength, USB_CTRL_SET_TIMEOUT);
- 	}
- 	kfree(buf);
- 	return r;
+ 	dev_dbg(dev, "set feature - ret = %d", ret);
+ 
+ 	/* bRequest 4: set char length to 8 bits */
+ 	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
+ 			      4, USB_TYPE_VENDOR,
+-			      0x0808, 0x0000, NULL, 0, HZ * 3);
++			      0x0808, 0x0000, NULL, 0, 3000);
+ 	dev_dbg(dev, "set char length - retB = %d", ret);
+ 
+ 	/* bRequest 2: set handshaking to use DTR/DSR */
+ 	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
+ 			      2, USB_TYPE_VENDOR,
+-			      0x0000, 0x0100, NULL, 0, HZ * 3);
++			      0x0000, 0x0100, NULL, 0, 3000);
+ 	dev_dbg(dev, "set handshake  - retC = %d", ret);
+ 
+ 	/* device resume */
 -- 
 2.32.0
 
