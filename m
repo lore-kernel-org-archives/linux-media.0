@@ -2,91 +2,94 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D61AC433F5
-	for <linux-media@archiver.kernel.org>; Tue, 26 Oct 2021 11:05:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7C49C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 26 Oct 2021 11:15:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 473E760F90
-	for <linux-media@archiver.kernel.org>; Tue, 26 Oct 2021 11:05:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C83360F9B
+	for <linux-media@archiver.kernel.org>; Tue, 26 Oct 2021 11:15:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235399AbhJZLIQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Oct 2021 07:08:16 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:26122 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235369AbhJZLIP (ORCPT
+        id S235381AbhJZLSJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Oct 2021 07:18:09 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:45352 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230308AbhJZLSI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Oct 2021 07:08:15 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Hdppz16rbz1DHfs;
-        Tue, 26 Oct 2021 19:03:55 +0800 (CST)
-Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Tue, 26 Oct 2021 19:05:49 +0800
-Received: from huawei.com (10.175.104.82) by kwepemm600001.china.huawei.com
- (7.193.23.3) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Tue, 26 Oct
- 2021 19:05:48 +0800
-From:   Wang Hai <wanghai38@huawei.com>
-To:     <crope@iki.fi>, <mchehab@kernel.org>, <hans.verkuil@cisco.com>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] msi001: fix possible null-ptr-deref in msi001_probe()
-Date:   Tue, 26 Oct 2021 19:23:48 +0800
-Message-ID: <20211026112348.2878040-1-wanghai38@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 26 Oct 2021 07:18:08 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 196243F0;
+        Tue, 26 Oct 2021 13:15:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1635246943;
+        bh=WxA0PSLaqHfqEyChJwTJYKvReBL3f+/2oUC5lcN5GHE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ucXfWtQUi5q+VLNAVYwATavzowlEIhtqsygINS7W+DRWUsI8RE+sb1aFgq93u2VPB
+         K73haXlDyxHFXzDYcf17TUahjEZJIeQHvIDlEkKudUF2cnNgqRlPOdRyw/QbhtybJ7
+         zcEFCevaqgsHsVyJhEZLuT/qO8QCC5/LeGb6ZADk=
+Date:   Tue, 26 Oct 2021 14:15:20 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] media: uvcvideo: fix division by zero at stream start
+Message-ID: <YXfjSJ+fm+LV/m+M@pendragon.ideasonboard.com>
+References: <20211026095511.26673-1-johan@kernel.org>
+ <163524570516.1184428.14632987312253060787@Monstersaurus>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600001.china.huawei.com (7.193.23.3)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <163524570516.1184428.14632987312253060787@Monstersaurus>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-I got a null-ptr-deref report:
+On Tue, Oct 26, 2021 at 11:55:05AM +0100, Kieran Bingham wrote:
+> Quoting Johan Hovold (2021-10-26 10:55:11)
+> > Add the missing bulk-endpoint max-packet sanity check to probe() to
+> > avoid division by zero in uvc_alloc_urb_buffers() in case a malicious
+> > device has broken descriptors (or when doing descriptor fuzz testing).
+> > 
+> > Note that USB core will reject URBs submitted for endpoints with zero
+> > wMaxPacketSize but that drivers doing packet-size calculations still
+> > need to handle this (cf. commit 2548288b4fb0 ("USB: Fix: Don't skip
+> > endpoint descriptors with maxpacket=0")).
+> > 
+> > Fixes: c0efd232929c ("V4L/DVB (8145a): USB Video Class driver")
+> > Cc: stable@vger.kernel.org      # 2.6.26
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > ---
+> >  drivers/media/usb/uvc/uvc_video.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> > index e16464606b14..85ac5c1081b6 100644
+> > --- a/drivers/media/usb/uvc/uvc_video.c
+> > +++ b/drivers/media/usb/uvc/uvc_video.c
+> > @@ -1958,6 +1958,10 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
+> >                 if (ep == NULL)
+> >                         return -EIO;
+> >  
+> > +               /* Reject broken descriptors. */
+> > +               if (usb_endpoint_maxp(&ep->desc) == 0)
+> > +                       return -EIO;
+> 
+> Is there any value in identifying this with a specific return code like
+> -ENODATA?
 
-BUG: kernel NULL pointer dereference, address: 0000000000000060
-...
-RIP: 0010:v4l2_ctrl_auto_cluster+0x57/0x270
-...
-Call Trace:
- msi001_probe+0x13b/0x24b [msi001]
- spi_probe+0xeb/0x130
-...
- do_syscall_64+0x35/0xb0
+Going one step further, wouldn't it be better to fail probe() for those
+devices ?
 
-In msi001_probe(), if the creation of control for bandwidth_auto
-fails, there will be a null-ptr-deref issue when it is used in
-v4l2_ctrl_auto_cluster().
+> But either way, this seems sane.
+> 
+> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> 
+> > +
+> >                 ret = uvc_init_video_bulk(stream, ep, gfp_flags);
+> >         }
+> >  
 
-Check dev->hdl.error before v4l2_ctrl_auto_cluster() to fix this bug.
-
-Fixes: 93203dd6c7c4 ("[media] msi001: Mirics MSi001 silicon tuner driver")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
----
- drivers/media/tuners/msi001.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/media/tuners/msi001.c b/drivers/media/tuners/msi001.c
-index 78e6fd600d8e..44247049a319 100644
---- a/drivers/media/tuners/msi001.c
-+++ b/drivers/media/tuners/msi001.c
-@@ -442,6 +442,13 @@ static int msi001_probe(struct spi_device *spi)
- 			V4L2_CID_RF_TUNER_BANDWIDTH_AUTO, 0, 1, 1, 1);
- 	dev->bandwidth = v4l2_ctrl_new_std(&dev->hdl, &msi001_ctrl_ops,
- 			V4L2_CID_RF_TUNER_BANDWIDTH, 200000, 8000000, 1, 200000);
-+	if (dev->hdl.error) {
-+		ret = dev->hdl.error;
-+		dev_err(&spi->dev, "Could not initialize controls\n");
-+		/* control init failed, free handler */
-+		goto err_ctrl_handler_free;
-+	}
-+
- 	v4l2_ctrl_auto_cluster(2, &dev->bandwidth_auto, 0, false);
- 	dev->lna_gain = v4l2_ctrl_new_std(&dev->hdl, &msi001_ctrl_ops,
- 			V4L2_CID_RF_TUNER_LNA_GAIN, 0, 1, 1, 1);
 -- 
-2.25.1
+Regards,
 
+Laurent Pinchart
