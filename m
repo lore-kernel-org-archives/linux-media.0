@@ -2,133 +2,133 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ABE4C433EF
-	for <linux-media@archiver.kernel.org>; Thu, 28 Oct 2021 10:19:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E7B0C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 28 Oct 2021 10:58:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 14D1E60232
-	for <linux-media@archiver.kernel.org>; Thu, 28 Oct 2021 10:19:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9899610FC
+	for <linux-media@archiver.kernel.org>; Thu, 28 Oct 2021 10:58:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbhJ1KWM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Oct 2021 06:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbhJ1KVj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Oct 2021 06:21:39 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE97C06122F;
-        Thu, 28 Oct 2021 03:19:10 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E2C44513;
-        Thu, 28 Oct 2021 12:19:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1635416349;
-        bh=oOq47DPR69CtLzsVp9nbXbnczCvNlhKJKGbpErTlxSc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CVLeC+uwzI+ox21NVWaEO+ot+0OmT7G9LKlvtI6/EynNB99+b/Pub65og9gCkOBww
-         uh1eZeRdt2JwPmgLK7RP0rMTkJh/0DorvbdqBskJYgGS7jU07z4OifxD8duLAwn31S
-         OuvUOQMfaDEFU2+fVMpnvdYSaM1X68GfBIazDcVM=
-Date:   Thu, 28 Oct 2021 13:18:44 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        sakari.ailus@linux.intel.com, niklas.soderlund@ragnatech.se,
-        kieran.bingham@ideasonboard.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2 06/13] media: subdev: Add for_each_active_route() macro
-Message-ID: <YXp5BKABg0lb7EZk@pendragon.ideasonboard.com>
-References: <20211017182449.64192-1-jacopo+renesas@jmondi.org>
- <20211017182449.64192-7-jacopo+renesas@jmondi.org>
- <8c16cd01-48c6-ecc8-4437-e597559f492f@ideasonboard.com>
- <20211028090331.sccuthk5h3tw22f3@uno.localdomain>
- <b029f3ad-1790-d316-dfb0-0e64e161fc2c@ideasonboard.com>
+        id S230119AbhJ1LAf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Oct 2021 07:00:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49220 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230049AbhJ1LAe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 28 Oct 2021 07:00:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 71D5D610F8;
+        Thu, 28 Oct 2021 10:58:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635418687;
+        bh=Gkr2M7tmNtttpnmRIuF7dQ106RqzchtOjG7lRkrUzbw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sh7DFrbTAMUW7cRKsSXrUpXu05gMw4SzitY5VmvMI67cJemTsugL2zzQullaVuih/
+         aHcXeI4Sq2M0qhye/vXevYvIekb07XcyNT9xMgQc72Jf4rkCyO3pNR2kCLaktFqyQi
+         z9cyNkhoaQ/yaF3jFaQMDctOk8b1/g04ZPEePKiR2sgNV3T/mz9jjFPBKgH/MjCw4B
+         bYf5HuuOdRiZtq7LnRzSWr7Ja0YCQ/GMkkTVV7SBqS3P9pNDLS9eWhHCTpHxIElbGw
+         Ksam/z0SoiMf0Wnd56CX7Lad9jeq2iW9aM6KKtWmA94EBOi1hyho88Gnzw7KQdWvIu
+         wqDpOt+OTdabQ==
+Date:   Thu, 28 Oct 2021 11:58:02 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Tsuchiya Yuto <kitakar@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Nable <nable.maininbox@googlemail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        "andrey.i.trufanov" <andrey.i.trufanov@gmail.com>,
+        Patrik Gfeller <patrik.gfeller@gmail.com>
+Subject: Re: [PATCH 00/17] various fixes for atomisp to make it work
+Message-ID: <20211028115802.49258990@sal.lan>
+In-Reply-To: <00dd9a0286e194696f6cc083a98de47d709b1d9e.camel@gmail.com>
+References: <20211017161958.44351-1-kitakar@gmail.com>
+        <00dd9a0286e194696f6cc083a98de47d709b1d9e.camel@gmail.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b029f3ad-1790-d316-dfb0-0e64e161fc2c@ideasonboard.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Oct 28, 2021 at 01:17:10PM +0300, Tomi Valkeinen wrote:
-> On 28/10/2021 12:03, Jacopo Mondi wrote:
-> > On Thu, Oct 28, 2021 at 11:32:12AM +0300, Tomi Valkeinen wrote:
-> >> On 17/10/2021 21:24, Jacopo Mondi wrote:
-> >>> Add a for_each_active_route() macro to replace the repeated pattern
-> >>> of iterating on the active routes of a routing table.
-> >>>
-> >>> Replace the existing occurrences of such pattern in the codebase.
-> >>>
-> >>> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> >>> ---
-> >>>    drivers/media/i2c/ds90ub913.c             |  8 ++------
-> >>>    drivers/media/i2c/ds90ub953.c             |  7 ++-----
-> >>>    drivers/media/i2c/ds90ub960.c             |  8 ++------
-> >>>    drivers/media/i2c/max9286.c               | 10 ++--------
-> >>>    drivers/media/platform/ti-vpe/cal-video.c |  9 ++-------
-> >>>    drivers/media/v4l2-core/v4l2-subdev.c     | 18 ++++++++++++++++++
-> >>>    include/media/v4l2-subdev.h               | 11 +++++++++++
-> >>>    7 files changed, 39 insertions(+), 32 deletions(-)
-> >>>
-> >>
-> >> ...
-> >>
-> >>> +struct v4l2_subdev_route *next_active_route(const struct v4l2_subdev_krouting *routing,
-> >>> +					    struct v4l2_subdev_route *route)
-> >>> +{
-> >>> +	if (route)
-> >>> +		++route;
-> >>> +	else
-> >>> +		route = &routing->routes[0];
-> >>> +
-> >>> +	for (; route < routing->routes + routing->num_routes; ++route) {
-> >>> +		if (!(route->flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
-> >>> +			continue;
-> >>> +
-> >>> +		return route;
-> >>> +	}
-> >>> +
-> >>> +	return NULL;
-> >>> +}
-> >>
-> >> Also, this must be exported. I'll add that. And probably better to have a
+Em Thu, 28 Oct 2021 13:32:29 +0900
+Tsuchiya Yuto <kitakar@gmail.com> escreveu:
+
+> <Fixed Cc list>
+> 
+> On Mon, 2021-10-18 at 01:19 +0900, Tsuchiya Yuto wrote:
+> > [...]
+> >   ## taking a picture with atomisp
 > > 
-> > Does it ? I would rather have it in the header, as this is only
-> > meant to be called by the for_each_active_route() macro, and not by
-> > other users. However it seemed to be rather long to be defined as a
-> > static inline function in the header, so I opted to move it to the c
-> > file.
+> > Note that to try to take a picture, please also apply at least the
+> > this RFC patch ("[BUG][RFC] media: atomisp: pci: assume run_mode is
+> > PREVIEW") I'll send as almost a BUG report later.
+> > 
+> > You need to use firmware version irci_stable_candrpv_0415_20150521_0458,
+> > which is available from the intel-aero [1]  
 > 
-> Yes, static inline is an option. The function is a bit long-ish, though, 
-> as you mention.
+> Just in case, the hash (as well as version) of firmware which I
+> downloaded from intel-aero and I use to capture is the following:
 > 
-> > To be honest, it's not clear to me what happens if a module calls the
-> > for_each_active_route() macro that calls this non-exported function,
-> > so you're probably correct.
+>         $ sha256sum /lib/firmware/shisp_2401a0_v21.bin
+>         e89359f4e4934c410c83d525e283f34c5fcce9cb5caa75ad8a32d66d3842d95c  /lib/firmware/shisp_2401a0_v21.bin
 > 
-> The module cannot be loaded if it refers to a non-exported symbol.
+>         $ strings /lib/firmware/shisp_2401a0_v21.bin | grep 2015
+>         irci_stable_candrpv_0415_20150521_0458
 > 
-> > However exporting the symbol makes it available globally, but I guess
+> Regards,
+> Tsuchiya Yuto
 > 
-> Yes, thus the prefix is a good thing =).
-> 
-> > that's not a big deal if it's clearly documented that drivers shall
-> > not call this directly (or maybe we want it to be available globally,
-> > why not...)
-> 
-> I'll see how long helper functions similar macros have as inline in 
-> other parts of the kernel. Maybe static inline is fine.
-> 
-> But if not, we'll just need to document the helper function. I don't see 
-> why we should say it shouldn't be called directly, though. But if that 
-> is the case, we can prefix it with __.
+> > The atomisp (ipu2), like the ipu3, needs userspace support. The libcamera
+> > has now decent ipu3 support but does not have atomisp support yet.
+> > 
+> > I found some userspace tools for atomisp that run on Linux:
+> > 
+> >   - capturev4l2 from intel-aero/sample-apps
+> >     (https://github.com/intel-aero/sample-apps/tree/master/capturev4l2)
+> >   - hd-camera from intel-aero/sample-apps
+> >     (https://github.com/intel-aero/sample-apps/tree/master/hd-camera)
+> >   - intel/nvt
+> >     (https://github.com/intel/nvt)
+> > 
+> > It looks like the nvt is the most feature-rich, like exposure and white
+> > balance. Note that current upstreamed atomisp dropped 32-bit support.
+> > So, you need to build it with `-m64` (change it in Makefile). Here is
+> > the example of usage I use on mipad2:
+> > 
+> >         $ ./v4l2n -o testimage_@.raw \
+> >                 --device /dev/video2 \
+> >                 --input 0 \
+> >                 --exposure=30000,30000,30000,30000 \
+> >                 --parm type=1,capturemode=CI_MODE_PREVIEW \
+> >                 --fmt type=1,width=1920,height=1080,pixelformat=NV12 \
+> >                 --reqbufs count=2,memory=USERPTR \
+> >                 --parameters=wb_config.r=32768,wb_config.gr=21043,wb_config.gb=21043,wb_config.b=30863 \
+> >                 --capture=2 \
+> > 
+> >         ./raw2pnm -x1920 -y1080 -fNV12 testimage_001.raw testimage_001.pnm
+> >         feh *.pnm # open the converted image
+> >         rm testimage*
 
-The __ prefix is exactly what I was going to propose.
+Great! that worked for me too on Asus T101HA (CHT). I had to tweak the
+resolution, as ov2680 sensor has a max of 1616x1216 30fps. I had
+to use a number smaller than that, though (1600x1200).
 
--- 
-Regards,
+I guess the next step is to make a generic app to also work on it. 
 
-Laurent Pinchart
+> > 
+> > Note that I see the following warn/err after capture:
+> > 
+> >         kern  :warn  : [72660.793335] atomisp-isp2 0000:00:03.0: stop stream timeout.
+> >         kern  :err   : [72660.973629] atomisp-isp2 0000:00:03.0: atomisp_reset
+> > 
+> > but I see the same message on the Android kernel, too. So, I think this
+> > is not a real issue (I hope).
+
+Same here.
+
+> > 
+> > [1] https://github.com/intel-aero/meta-intel-aero-base/tree/master/recipes-kernel/linux/linux-yocto
+> >     filename shisp_2401a0_v21.bin  
+> 
+> 
