@@ -2,93 +2,76 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00BD6C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 29 Oct 2021 11:50:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 878ECC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 29 Oct 2021 11:54:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC46361167
-	for <linux-media@archiver.kernel.org>; Fri, 29 Oct 2021 11:50:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E3536023F
+	for <linux-media@archiver.kernel.org>; Fri, 29 Oct 2021 11:54:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbhJ2LxJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Oct 2021 07:53:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54744 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229692AbhJ2LxI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Oct 2021 07:53:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A75FD60FC4;
-        Fri, 29 Oct 2021 11:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635508240;
-        bh=H3P4wOd7EOrUAcxLCwk43Gf0aEDnKez0F55HW897lXI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Wxd9pUS0IQviAEdGYwyc9aW4xkHe56mVs0em7PiqDs3RxGxD4CqbLVEVi7j4rEiEW
-         mM0EgEVsiMzBlN2fIBBh3E9vQe8tdZlV4uBeH/MbKu4HtebZEWhdVdi9W3w3BOypG9
-         EJsBCUz/WoZ/HZbnmEkQ0T6As3VOdugCGX1l9iO+XdpTRd0sanagS2l+L4Shrt3MK4
-         Vwg64TV+zD8knPA6TiKAP27RtzRWDeh9x1V66weQUK9BU98BthkgphJJ4ppDvVGR62
-         TYdEahIota5RijYQj10H8M0wjfWBHSs3eGBsFQTtX6qix/me9KU5RZoSA4qdhbaZSv
-         dP9qFlw8k5NrQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: stm32-dma2d: fix Kconfig dependencies
-Date:   Fri, 29 Oct 2021 13:50:22 +0200
-Message-Id: <20211029115036.1365378-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        id S231504AbhJ2L4q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Oct 2021 07:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231464AbhJ2L4q (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 29 Oct 2021 07:56:46 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C345BC061714;
+        Fri, 29 Oct 2021 04:54:17 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 1493DC638B; Fri, 29 Oct 2021 12:54:13 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1635508453; bh=1ibxwqgBZhCbkK4nb0aNYAFKQRFLUuXXiDUrBdxYH+s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n9s6MW2Kc68g44HK8GwSp2AYpSNTNWxYIksaYr9fiqOOSv3DFrcBMwLEi77QBNchy
+         HA2ZtAIjt+hw8Vg9rAGowMOrbTKQZf6r02m7Ow/Xpl/z2W6VFMgmDzK7cqqRo8dmBl
+         EsgthhJ/+fGXuxpJdESnaz2T+rNZ8zuvtsdMuVfjSNo4cocQXT80abn6Nc3Sbm5c83
+         wrzn6iCVBY0JukBkFH8v66awRXqcFBgMhukmqTpUv0XRNiocLUUN9Qxbw9PCMbFuNO
+         orIcmolElUKprCSP5xWlejyXS93XmuIbBh3tbNXY5SVG6vShvAQgQE3W2oafxVkOUf
+         0s3voRAdpvocg==
+Date:   Fri, 29 Oct 2021 12:54:12 +0100
+From:   Sean Young <sean@mess.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>, lkp@intel.com,
+        mchehab@kernel.org, thierry.reding@gmail.com, lee.jones@linaro.org,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v4] media: rc: pwm-ir-tx: Switch to atomic PWM API
+Message-ID: <20211029115412.GA32383@gofer.mess.org>
+References: <YXlxhpZWf2mxJaMi@fedora>
+ <20211028064513.guziv6uaivzlk6ki@pengutronix.de>
+ <20211028091442.GA16514@gofer.mess.org>
+ <20211028111535.x7xgz7domx2lpyfh@pengutronix.de>
+ <20211028122610.GA18767@gofer.mess.org>
+ <20211028180516.t2tpfbzztm7s6cqm@pengutronix.de>
+ <20211029071608.GA28997@gofer.mess.org>
+ <20211029110602.uugnbm5vtfpghiwh@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211029110602.uugnbm5vtfpghiwh@pengutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Oct 29, 2021 at 01:06:02PM +0200, Uwe Kleine-König wrote:
+> On Fri, Oct 29, 2021 at 08:16:08AM +0100, Sean Young wrote:
+> > This means with your changes, if the carrier and duty cycle are both set
+> > for each transmission, then we're doing more work. If only the carrier
+> > is set for each transmission, then there is no net gain/loss (I think),
+> > but the code size has increased.
+> 
+> OK, then I discard my patch.
+> 
+> While reading that I wondered if it makes sense to have a callback that
+> sets both carrier and duty cycle and then remove the other two.
 
-The new DMA2D accidentally allowed compile-testing configurations
-that clearly cannot link:
+There are separate lirc ioctls to set carrier and duty cycle, that's why
+there are separate callbacks.
 
-ld.lld: error: undefined symbol: v4l_vb2q_enable_media_source
->>> referenced by videobuf2-core.c
->>>               media/common/videobuf2/videobuf2-core.o:(vb2_core_streamon) in archive drivers/built-in.a
 
-ld.lld: error: undefined symbol: v4l2_device_register
->>> referenced by dma2d.c
->>>               media/platform/stm32/dma2d/dma2d.o:(dma2d_probe) in archive drivers/built-in.a
-
-ld.lld: error: undefined symbol: video_device_alloc
->>> referenced by dma2d.c
->>>               media/platform/stm32/dma2d/dma2d.o:(dma2d_probe) in archive drivers/built-in.a
-
-ld.lld: error: undefined symbol: v4l2_m2m_init
->>> referenced by dma2d.c
->>>               media/platform/stm32/dma2d/dma2d.o:(dma2d_probe) in archive drivers/built-in.a
-
-Tighten the dependencies to only allow test builds when VIDEO_V4L2
-is available, but keep it possible for non-stm32 targets.
-
-Fixes: bdbbd511ef0c ("media: stm32-dma2d: STM32 DMA2D driver")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/media/platform/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 68f16aef8754..9fbdba0fd1e7 100644
---- a/drivers/media/platform/Kconfig
-+++ b/drivers/media/platform/Kconfig
-@@ -494,7 +494,8 @@ endif # VIDEO_STI_DELTA
- 
- config VIDEO_STM32_DMA2D
- 	tristate "STM32 Chrom-Art Accelerator (DMA2D)"
--	depends on (VIDEO_DEV && VIDEO_V4L2 && ARCH_STM32) || COMPILE_TEST
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_STM32 || COMPILE_TEST
- 	select VIDEOBUF2_DMA_CONTIG
- 	select V4L2_MEM2MEM_DEV
- 	help
--- 
-2.29.2
-
+Sean
