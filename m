@@ -2,176 +2,219 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02881C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 29 Oct 2021 11:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F3BAC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 29 Oct 2021 11:35:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC21261165
-	for <linux-media@archiver.kernel.org>; Fri, 29 Oct 2021 11:12:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48E6961177
+	for <linux-media@archiver.kernel.org>; Fri, 29 Oct 2021 11:35:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbhJ2LPZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Oct 2021 07:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
+        id S231946AbhJ2LiP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Oct 2021 07:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbhJ2LPY (ORCPT
+        with ESMTP id S231807AbhJ2LiP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Oct 2021 07:15:24 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15F6C061570
-        for <linux-media@vger.kernel.org>; Fri, 29 Oct 2021 04:12:55 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mgPoa-0002o5-O7; Fri, 29 Oct 2021 13:12:52 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mgPoZ-0005Qv-GR; Fri, 29 Oct 2021 13:12:51 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mgPoZ-0002Ve-FG; Fri, 29 Oct 2021 13:12:51 +0200
-Date:   Fri, 29 Oct 2021 13:12:32 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     =?utf-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>
-Cc:     sean@mess.org, mchehab@kernel.org, thierry.reding@gmail.com,
-        lee.jones@linaro.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH] media: ir-rx51: Switch to atomic PWM API
-Message-ID: <20211029111232.soknq7mu3r65laar@pengutronix.de>
-References: <YXqv339PJTHcGxJg@fedora>
+        Fri, 29 Oct 2021 07:38:15 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CC9C061570;
+        Fri, 29 Oct 2021 04:35:46 -0700 (PDT)
+Received: from [IPv6:2a02:810a:880:f54:6141:93b5:19a6:af87] (unknown [IPv6:2a02:810a:880:f54:6141:93b5:19a6:af87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 137BD1F45952;
+        Fri, 29 Oct 2021 12:35:42 +0100 (BST)
+Subject: Re: [PATCH v8, 03/17] media: mtk-vcodec: Refactor vcodec pm interface
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+References: <20211029035527.454-1-yunfei.dong@mediatek.com>
+ <20211029035527.454-4-yunfei.dong@mediatek.com>
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Message-ID: <2a25abdc-691b-9409-15ed-980af460c6c6@collabora.com>
+Date:   Fri, 29 Oct 2021 13:35:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hinosvmzhgot2cey"
-Content-Disposition: inline
-In-Reply-To: <YXqv339PJTHcGxJg@fedora>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+In-Reply-To: <20211029035527.454-4-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
---hinosvmzhgot2cey
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello Ma=EDra,
+On 29.10.21 05:55, Yunfei Dong wrote:
+> Using the needed param for pm init/release function and remove unused
+> param mtkdev in 'struct mtk_vcodec_pm'.
+> 
+> Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+> Reviewed-By: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 
-On Thu, Oct 28, 2021 at 11:12:47AM -0300, Ma=EDra Canal wrote:
-> Remove legacy PWM interface (pwm_config, pwm_enable, pwm_disable) and
-> replace it for the atomic PWM API.
->=20
-> Signed-off-by: Ma=EDra Canal <maira.canal@usp.br>
+Hi,
+I already commented on v7 that since the pm implementation for dec and enc is identical,
+you should better do the same refactor to enc and dec or better remove the code duplication.
+
+Thanks,
+Dafna
+
 > ---
->  drivers/media/rc/ir-rx51.c | 27 +++++++++++++--------------
->  1 file changed, 13 insertions(+), 14 deletions(-)
->=20
-> diff --git a/drivers/media/rc/ir-rx51.c b/drivers/media/rc/ir-rx51.c
-> index a0d9c02a7588..7a643a94e181 100644
-> --- a/drivers/media/rc/ir-rx51.c
-> +++ b/drivers/media/rc/ir-rx51.c
-> @@ -19,6 +19,7 @@
->  struct ir_rx51 {
->  	struct rc_dev *rcdev;
->  	struct pwm_device *pwm;
-> +	struct pwm_state *state;
->  	struct hrtimer timer;
->  	struct device	     *dev;
->  	wait_queue_head_t     wqueue;
-> @@ -32,22 +33,22 @@ struct ir_rx51 {
-> =20
->  static inline void ir_rx51_on(struct ir_rx51 *ir_rx51)
->  {
-> -	pwm_enable(ir_rx51->pwm);
-> +	ir_rx51->state->enabled =3D true;
-> +	pwm_apply_state(ir_rx51->pwm, ir_rx51->state);
->  }
-> =20
->  static inline void ir_rx51_off(struct ir_rx51 *ir_rx51)
->  {
-> -	pwm_disable(ir_rx51->pwm);
-> +	ir_rx51->state->enabled =3D false;
-> +	pwm_apply_state(ir_rx51->pwm, ir_rx51->state);
->  }
-> =20
->  static int init_timing_params(struct ir_rx51 *ir_rx51)
->  {
-> -	struct pwm_device *pwm =3D ir_rx51->pwm;
-> -	int duty, period =3D DIV_ROUND_CLOSEST(NSEC_PER_SEC, ir_rx51->freq);
-> +	struct pwm_state *state =3D ir_rx51->state;
-> =20
-> -	duty =3D DIV_ROUND_CLOSEST(ir_rx51->duty_cycle * period, 100);
-> -
-> -	pwm_config(pwm, duty, period);
-> +	state->period =3D DIV_ROUND_CLOSEST(NSEC_PER_SEC, ir_rx51->freq);
-> +	pwm_set_relative_duty_cycle(state, ir_rx51->duty_cycle, 100);
-> =20
->  	return 0;
->  }
-> @@ -154,6 +155,8 @@ static int ir_rx51_open(struct rc_dev *dev)
->  		return res;
->  	}
-> =20
-> +	pwm_init_state(ir_rx51->pwm, ir_rx51->state);
-> +
-
-Doing this here introduces a change in behaviour. Better do this after
-pwm_get().
-
->  	return 0;
->  }
-> =20
-> @@ -232,13 +235,9 @@ static int ir_rx51_probe(struct platform_device *dev)
->  	struct rc_dev *rcdev;
-> =20
->  	pwm =3D pwm_get(&dev->dev, NULL);
-> -	if (IS_ERR(pwm)) {
-> -		int err =3D PTR_ERR(pwm);
-> -
-> -		if (err !=3D -EPROBE_DEFER)
-> -			dev_err(&dev->dev, "pwm_get failed: %d\n", err);
-> -		return err;
-> -	}
-> +	if (IS_ERR(pwm))
-> +		return dev_err_probe(&dev->dev, PTR_ERR(pwm), "pwm_get failed: %ld\n",
-> +				PTR_ERR(pwm));
-> =20
->  	/* Use default, in case userspace does not set the carrier */
->  	ir_rx51.freq =3D DIV_ROUND_CLOSEST_ULL(pwm_get_period(pwm), NSEC_PER_SE=
-C);
-
-Conceptually this last hunk belongs in a separate patch. And you don't
-need to repeat PTR_ERR(pwm), as dev_err_probe already emits this
-information. So
-
-	return dev_err_probe(&dev->dev, PTR_ERR(pwm), "pwm_get failed\n");
-
-should be fine.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---hinosvmzhgot2cey
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmF71xgACgkQwfwUeK3K
-7An77gf9EJHqGJxmsw7fxJwBRnMdlUaRbvbjtsNEPYIZTUVQS9hdoywed1U0To+P
-Kx55vOKpVEMJQH1dhxEv8KzXtr8iAxIp1c0z93F0KuEeaOYMJvM/OEw1yz8ucg4l
-HWYF6ZO/szCGDVp4ML/UG1djUAfqptEupN1Mdm7xxH6Boo8a6WiWu2alMxkJd8eB
-tch8shtihSlX4ve6qKwghOKmyJ1ZfYrW4RPff2Tvv8Pw2aBQIUuh1vJER/k/mJQE
-0tbBGkVvFZpr8GipH89tAazx0vpqCdhywUch4CzIGpnQ48GOK7JgAsu446I5oj4Q
-FEST/sIcvHW1/VEyFQeUXM9bt94Rlw==
-=IcFh
------END PGP SIGNATURE-----
-
---hinosvmzhgot2cey--
+>   .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |  6 ++---
+>   .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   | 22 ++++++++-----------
+>   .../platform/mtk-vcodec/mtk_vcodec_dec_pm.h   |  5 +++--
+>   .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  1 -
+>   .../platform/mtk-vcodec/mtk_vcodec_enc_pm.c   |  1 -
+>   5 files changed, 15 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> index 055d50e52720..3ac4c3935e4e 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> @@ -249,7 +249,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+>   	if (IS_ERR(dev->fw_handler))
+>   		return PTR_ERR(dev->fw_handler);
+>   
+> -	ret = mtk_vcodec_init_dec_pm(dev);
+> +	ret = mtk_vcodec_init_dec_pm(dev->plat_dev, &dev->pm);
+>   	if (ret < 0) {
+>   		dev_err(&pdev->dev, "Failed to get mt vcodec clock source");
+>   		goto err_dec_pm;
+> @@ -378,7 +378,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+>   err_dec_alloc:
+>   	v4l2_device_unregister(&dev->v4l2_dev);
+>   err_res:
+> -	mtk_vcodec_release_dec_pm(dev);
+> +	mtk_vcodec_release_dec_pm(&dev->pm);
+>   err_dec_pm:
+>   	mtk_vcodec_fw_release(dev->fw_handler);
+>   	return ret;
+> @@ -418,7 +418,7 @@ static int mtk_vcodec_dec_remove(struct platform_device *pdev)
+>   		video_unregister_device(dev->vfd_dec);
+>   
+>   	v4l2_device_unregister(&dev->v4l2_dev);
+> -	mtk_vcodec_release_dec_pm(dev);
+> +	mtk_vcodec_release_dec_pm(&dev->pm);
+>   	mtk_vcodec_fw_release(dev->fw_handler);
+>   	return 0;
+>   }
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+> index 6038db96f71c..20bd157a855c 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+> @@ -13,18 +13,15 @@
+>   #include "mtk_vcodec_dec_pm.h"
+>   #include "mtk_vcodec_util.h"
+>   
+> -int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
+> +int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
+> +	struct mtk_vcodec_pm *pm)
+>   {
+>   	struct device_node *node;
+> -	struct platform_device *pdev;
+> -	struct mtk_vcodec_pm *pm;
+> +	struct platform_device *larb_pdev;
+>   	struct mtk_vcodec_clk *dec_clk;
+>   	struct mtk_vcodec_clk_info *clk_info;
+>   	int i = 0, ret = 0;
+>   
+> -	pdev = mtkdev->plat_dev;
+> -	pm = &mtkdev->pm;
+> -	pm->mtkdev = mtkdev;
+>   	dec_clk = &pm->vdec_clk;
+>   	node = of_parse_phandle(pdev->dev.of_node, "mediatek,larb", 0);
+>   	if (!node) {
+> @@ -32,13 +29,12 @@ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
+>   		return -1;
+>   	}
+>   
+> -	pdev = of_find_device_by_node(node);
+> +	larb_pdev = of_find_device_by_node(node);
+>   	of_node_put(node);
+> -	if (WARN_ON(!pdev)) {
+> +	if (WARN_ON(!larb_pdev)) {
+>   		return -1;
+>   	}
+> -	pm->larbvdec = &pdev->dev;
+> -	pdev = mtkdev->plat_dev;
+> +	pm->larbvdec = &larb_pdev->dev;
+>   	pm->dev = &pdev->dev;
+>   
+>   	dec_clk->clk_num =
+> @@ -82,10 +78,10 @@ int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *mtkdev)
+>   	return ret;
+>   }
+>   
+> -void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev)
+> +void mtk_vcodec_release_dec_pm(struct mtk_vcodec_pm *pm)
+>   {
+> -	pm_runtime_disable(dev->pm.dev);
+> -	put_device(dev->pm.larbvdec);
+> +	pm_runtime_disable(pm->dev);
+> +	put_device(pm->larbvdec);
+>   }
+>   
+>   int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+> index 280aeaefdb65..a3df6aef6cb9 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+> @@ -9,8 +9,9 @@
+>   
+>   #include "mtk_vcodec_drv.h"
+>   
+> -int mtk_vcodec_init_dec_pm(struct mtk_vcodec_dev *dev);
+> -void mtk_vcodec_release_dec_pm(struct mtk_vcodec_dev *dev);
+> +int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
+> +	struct mtk_vcodec_pm *pm);
+> +void mtk_vcodec_release_dec_pm(struct mtk_vcodec_pm *pm);
+>   
+>   int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm);
+>   void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm);
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> index 1d2370608d0d..0fa9d85114b9 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> @@ -195,7 +195,6 @@ struct mtk_vcodec_pm {
+>   	struct mtk_vcodec_clk	venc_clk;
+>   	struct device	*larbvenc;
+>   	struct device	*dev;
+> -	struct mtk_vcodec_dev	*mtkdev;
+>   };
+>   
+>   /**
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
+> index 1b2e4930ed27..0c8c8f86788c 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
+> @@ -26,7 +26,6 @@ int mtk_vcodec_init_enc_pm(struct mtk_vcodec_dev *mtkdev)
+>   	pdev = mtkdev->plat_dev;
+>   	pm = &mtkdev->pm;
+>   	memset(pm, 0, sizeof(struct mtk_vcodec_pm));
+> -	pm->mtkdev = mtkdev;
+>   	pm->dev = &pdev->dev;
+>   	dev = &pdev->dev;
+>   	enc_clk = &pm->venc_clk;
+> 
