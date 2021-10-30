@@ -2,87 +2,300 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08614C433FE
-	for <linux-media@archiver.kernel.org>; Sat, 30 Oct 2021 11:21:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFB61C433FE
+	for <linux-media@archiver.kernel.org>; Sat, 30 Oct 2021 13:57:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D8F1660FC0
-	for <linux-media@archiver.kernel.org>; Sat, 30 Oct 2021 11:21:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC1CB60F55
+	for <linux-media@archiver.kernel.org>; Sat, 30 Oct 2021 13:57:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231875AbhJ3LXd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 Oct 2021 07:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbhJ3LXc (ORCPT
+        id S231731AbhJ3OAC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 Oct 2021 10:00:02 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:30885 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230125AbhJ3OAB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 30 Oct 2021 07:23:32 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F52AC061764
-        for <linux-media@vger.kernel.org>; Sat, 30 Oct 2021 04:21:02 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id l13so13402108ilh.3
-        for <linux-media@vger.kernel.org>; Sat, 30 Oct 2021 04:21:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=fzrPWdrYK+uGIZVarnBib+gCZxAPn922Wg+8PFfxUYY=;
-        b=hV54KDjgIxufXu2nlKaNsKyOfyFdkMFTxuESLgZDLcZGzORWjUCZGPmiV36nrZifXu
-         now2fZpFn3iBm2cOniogtpXbg8JKzpgy0sNyFGPQ6DWOfcXOq/DrhNyEai+pq7ci6Q5O
-         En4ot6pZd2hSDgERZPTSsFvefeTdLrWRSecqHS4P18dD7AI+1Axvh0gFvmxuLs1V8O2q
-         fXkXKIEVepkOWH3Tc97RBf2XeS2FGpWv8TmNjD4h8+4OjVAhgLfnSZL5LuJMCf0Hs7dW
-         PdpQGH6h462Xl37NZbF/3BtDMB8v1Qu3SVVdLF7ZunpEVPK/buy3zAJZNkrFx/EX51hx
-         9MdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=fzrPWdrYK+uGIZVarnBib+gCZxAPn922Wg+8PFfxUYY=;
-        b=VlZQB/Hr5+0Oi/SEnrsCuMDuuT1B6Do+yjyVQPR3MBSddNNvZSrlTrFdkedJo4hTsV
-         s6OuEKZxeUOD5zWCdYnDiAoCpEiZue+uSNubpy7zJIis9wlvGgGnADGOyTJJhS/1cKrV
-         B2c3Cbl5U+by+Q/9asfxEevDeVZdynCmmnwfXJST6EPHY7bV5PpNBdt7eyClIl65UJPW
-         pRQGIRBrsbS5kfzVeccE0h0iwMr2jCOQpL87DPONei4ts7rwqsA9d4j+3WM0lk0oTB5+
-         x44ZeGLBHMhXWIu/t+eW1GYq451qMjF2/LLMFVfnylBpY8v9h9MqJXVsJFFdxS9c88+7
-         9RCA==
-X-Gm-Message-State: AOAM532H4wve381HZtgVBAwZw2TdeWisG18HXzg5tUyBmPXExL/Iu0kC
-        Ct+u2WKpQWb+bJ7X8xRpGQjsEkFZs07ofGLGTm9QKQ==
-X-Google-Smtp-Source: ABdhPJw/kzqj41zeqc4IU3MmFJ/HjzaIYIBb1AsGPPQtCFEpf+XRw7egBEmj0MwxE2dp/sHgp6UXzfxES4guaa1wvQw=
-X-Received: by 2002:a05:6e02:2187:: with SMTP id j7mr6049830ila.323.1635592861248;
- Sat, 30 Oct 2021 04:21:01 -0700 (PDT)
+        Sat, 30 Oct 2021 10:00:01 -0400
+Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HhLMx50CJzbnB3;
+        Sat, 30 Oct 2021 21:52:45 +0800 (CST)
+Received: from SZX1000464847.huawei.com (10.21.59.169) by
+ dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.15; Sat, 30 Oct 2021 21:57:26 +0800
+From:   Dongdong Liu <liudongdong3@huawei.com>
+To:     <helgaas@kernel.org>, <hch@infradead.org>, <kw@linux.com>,
+        <logang@deltatee.com>, <leon@kernel.org>,
+        <linux-pci@vger.kernel.org>, <rajur@chelsio.com>,
+        <hverkuil-cisco@xs4all.nl>
+CC:     <linux-media@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: [PATCH V11 4/8] PCI/sysfs: Add a tags sysfs file for PCIe Endpoint devices
+Date:   Sat, 30 Oct 2021 21:53:44 +0800
+Message-ID: <20211030135348.61364-5-liudongdong3@huawei.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20211030135348.61364-1-liudongdong3@huawei.com>
+References: <20211030135348.61364-1-liudongdong3@huawei.com>
 MIME-Version: 1.0
-References: <YXqv339PJTHcGxJg@fedora> <20211029111232.soknq7mu3r65laar@pengutronix.de>
-In-Reply-To: <20211029111232.soknq7mu3r65laar@pengutronix.de>
-From:   =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
-Date:   Sat, 30 Oct 2021 08:20:50 -0300
-Message-ID: <CAH7FV3md_SBTHu9sTp-hLtLd0ERBdXx8HzM=W9hF79X5V=twQA@mail.gmail.com>
-Subject: Re: [PATCH] media: ir-rx51: Switch to atomic PWM API
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Sean Young <sean@mess.org>, mchehab@kernel.org,
-        thierry.reding@gmail.com, Lee Jones <lee.jones@linaro.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.21.59.169]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggeme758-chm.china.huawei.com (10.3.19.104)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Uwe,
+PCIe spec 5.0 r1.0 section 2.2.6.2 says:
 
-> Doing this here introduces a change in behaviour. Better do this after
-> pwm_get().
+  If an Endpoint supports sending Requests to other Endpoints (as
+  opposed to host memory), the Endpoint must not send 10-Bit Tag
+  Requests to another given Endpoint unless an implementation-specific
+  mechanism determines that the Endpoint supports 10-Bit Tag Completer
+  capability.
 
-I didn't really get this feedback. Isn't pwm_init_state after pwm_get?
-Or should it be before the error treatment of pwm_get?
+Add a tags sysfs file, write 0 to disable 10-Bit Tag Requester
+when the driver does not bind the device. The typical use case is for
+p2pdma when the peer device does not support 10-Bit Tag Completer.
+Write 10 to enable 10-Bit Tag Requester when RC supports 10-Bit Tag
+Completer capability. The typical use case is for host memory targeted
+by DMA Requests. The tags file content indicate current status of Tags
+Enable.
 
-> Conceptually this last hunk belongs in a separate patch. And you don't
-> need to repeat PTR_ERR(pwm), as dev_err_probe already emits this
-> information. So
->
->         return dev_err_probe(&dev->dev, PTR_ERR(pwm), "pwm_get failed\n")=
-;
->
-> should be fine.
+PCIe r5.0, sec 2.2.6.2 says:
 
-Thank you for the suggestion! I will fix it on v2.
+  Receivers/Completers must handle 8-bit Tag values correctly regardless
+  of the setting of their Extended Tag Field Enable bit (see Section
+  7.5.3.4).
 
-Ma=C3=ADra
+Add this comment in pci_configure_extended_tags(). As all PCIe completers
+are required to support 8-bit tags, so we do not use tags sysfs file
+to manage 8-bit tags.
+
+Signed-off-by: Dongdong Liu <liudongdong3@huawei.com>
+---
+ Documentation/ABI/testing/sysfs-bus-pci | 24 ++++++-
+ drivers/pci/pci-sysfs.c                 | 88 +++++++++++++++++++++++++
+ drivers/pci/pci.h                       |  2 +
+ drivers/pci/probe.c                     | 20 ++++++
+ 4 files changed, 133 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-bus-pci b/Documentation/ABI/testing/sysfs-bus-pci
+index d4ae03296861..c16bb31486d2 100644
+--- a/Documentation/ABI/testing/sysfs-bus-pci
++++ b/Documentation/ABI/testing/sysfs-bus-pci
+@@ -156,7 +156,7 @@ Description:
+ 		binary file containing the Vital Product Data for the
+ 		device.  It should follow the VPD format defined in
+ 		PCI Specification 2.1 or 2.2, but users should consider
+-		that some devices may have incorrectly formatted data.  
++		that some devices may have incorrectly formatted data.
+ 		If the underlying VPD has a writable section then the
+ 		corresponding section of this file will be writable.
+ 
+@@ -424,3 +424,25 @@ Description:
+ 
+ 		The file is writable if the PF is bound to a driver that
+ 		implements ->sriov_set_msix_vec_count().
++
++What:		/sys/bus/pci/devices/.../tags
++Date:		September 2021
++Contact:	Dongdong Liu <liudongdong3@huawei.com>
++Description:
++		The file will be visible when the device supports 10-Bit Tag
++		Requester. The file is readable, the value indicate current
++		status of Tags Enable(5-Bit, 8-Bit, 10-Bit).
++
++		The file is also writable, The values accepted are:
++		* > 0 - this number will be reported as tags bit to be
++			enabled. current only 10 is accepted
++		* < 0 - not valid
++		* = 0 - disable 10-Bit Tag, use Extended Tags(8-Bit or 5-Bit)
++
++		write 0 to disable 10-Bit Tag Requester when the driver does
++		not bind the device. The typical use case is for p2pdma when
++		the peer device does not support 10-Bit Tag Completer.
++
++		Write 10 to enable 10-Bit Tag Requester when RC supports 10-Bit
++		Tag Completer capability. The typical use case is for host
++		memory targeted by DMA Requests.
+diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+index 7fb5cd17cc98..04fd9a8b9d4e 100644
+--- a/drivers/pci/pci-sysfs.c
++++ b/drivers/pci/pci-sysfs.c
+@@ -306,6 +306,65 @@ static ssize_t enable_show(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RW(enable);
+ 
++static ssize_t tags_store(struct device *dev,
++			  struct device_attribute *attr,
++			  const char *buf, size_t count)
++{
++	struct pci_dev *pdev = to_pci_dev(dev);
++	unsigned long val;
++
++	if (!capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	if (kstrtoul(buf, 0, &val) < 0)
++		return -EINVAL;
++
++	/* 10 - enable 10-Bit Tag, 0 - disable 10-Bit Tag */
++	if (val != 10 && val != 0)
++		return -EINVAL;
++
++	if (pdev->driver)
++		return -EBUSY;
++
++	if (!pcie_rp_10bit_tag_cmp_supported(pdev))
++		return -EPERM;
++
++	if (val == 10)
++		pcie_capability_set_word(pdev, PCI_EXP_DEVCTL2,
++					 PCI_EXP_DEVCTL2_10BIT_TAG_REQ_EN);
++	else
++		pcie_capability_clear_word(pdev, PCI_EXP_DEVCTL2,
++					   PCI_EXP_DEVCTL2_10BIT_TAG_REQ_EN);
++
++	return count;
++}
++
++static ssize_t tags_show(struct device *dev,
++			 struct device_attribute *attr,
++			 char *buf)
++{
++	struct pci_dev *pdev = to_pci_dev(dev);
++	u16 ctl;
++	int ret;
++
++	ret = pcie_capability_read_word(pdev, PCI_EXP_DEVCTL2, &ctl);
++	if (ret)
++		return -EINVAL;
++
++	if (ctl & PCI_EXP_DEVCTL2_10BIT_TAG_REQ_EN)
++		return sysfs_emit(buf, "%s\n", "10-Bit");
++
++	ret = pcie_capability_read_word(pdev, PCI_EXP_DEVCTL, &ctl);
++	if (ret)
++		return -EINVAL;
++
++	if (ctl & PCI_EXP_DEVCTL_EXT_TAG)
++		return sysfs_emit(buf, "%s\n", "8-Bit");
++
++	return sysfs_emit(buf, "%s\n", "5-Bit");
++}
++static DEVICE_ATTR_RW(tags);
++
+ #ifdef CONFIG_NUMA
+ static ssize_t numa_node_store(struct device *dev,
+ 			       struct device_attribute *attr, const char *buf,
+@@ -635,6 +694,11 @@ static struct attribute *pcie_dev_attrs[] = {
+ 	NULL,
+ };
+ 
++static struct attribute *pcie_dev_tags_attrs[] = {
++	&dev_attr_tags.attr,
++	NULL,
++};
++
+ static struct attribute *pcibus_attrs[] = {
+ 	&dev_attr_bus_rescan.attr,
+ 	&dev_attr_cpuaffinity.attr,
+@@ -1482,6 +1546,24 @@ static umode_t pcie_dev_attrs_are_visible(struct kobject *kobj,
+ 	return 0;
+ }
+ 
++static umode_t pcie_dev_tags_attrs_is_visible(struct kobject *kobj,
++					      struct attribute *a, int n)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct pci_dev *pdev = to_pci_dev(dev);
++
++	if (pdev->is_virtfn)
++		return 0;
++
++	if (pci_pcie_type(pdev) != PCI_EXP_TYPE_ENDPOINT)
++		return 0;
++
++	if (!(pdev->devcap2 & PCI_EXP_DEVCAP2_10BIT_TAG_REQ))
++		return 0;
++
++	return a->mode;
++}
++
+ static const struct attribute_group pci_dev_group = {
+ 	.attrs = pci_dev_attrs,
+ };
+@@ -1522,6 +1604,11 @@ static const struct attribute_group pcie_dev_attr_group = {
+ 	.is_visible = pcie_dev_attrs_are_visible,
+ };
+ 
++static const struct attribute_group pcie_dev_tags_attr_group = {
++	.attrs = pcie_dev_tags_attrs,
++	.is_visible = pcie_dev_tags_attrs_is_visible,
++};
++
+ static const struct attribute_group *pci_dev_attr_groups[] = {
+ 	&pci_dev_attr_group,
+ 	&pci_dev_hp_attr_group,
+@@ -1531,6 +1618,7 @@ static const struct attribute_group *pci_dev_attr_groups[] = {
+ #endif
+ 	&pci_bridge_attr_group,
+ 	&pcie_dev_attr_group,
++	&pcie_dev_tags_attr_group,
+ #ifdef CONFIG_PCIEAER
+ 	&aer_stats_attr_group,
+ #endif
+diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+index 1cce56c2aea0..f719a41dfc7f 100644
+--- a/drivers/pci/pci.h
++++ b/drivers/pci/pci.h
+@@ -264,6 +264,8 @@ struct device *pci_get_host_bridge_device(struct pci_dev *dev);
+ void pci_put_host_bridge_device(struct device *dev);
+ 
+ int pci_configure_extended_tags(struct pci_dev *dev, void *ign);
++bool pcie_rp_10bit_tag_cmp_supported(struct pci_dev *dev);
++
+ bool pci_bus_read_dev_vendor_id(struct pci_bus *bus, int devfn, u32 *pl,
+ 				int crs_timeout);
+ bool pci_bus_generic_read_dev_vendor_id(struct pci_bus *bus, int devfn, u32 *pl,
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 7259ad774ac8..8f5372c7c737 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -2042,6 +2042,20 @@ static void pci_configure_mps(struct pci_dev *dev)
+ 		 p_mps, mps, mpss);
+ }
+ 
++bool pcie_rp_10bit_tag_cmp_supported(struct pci_dev *dev)
++{
++	struct pci_dev *root;
++
++	root = pcie_find_root_port(dev);
++	if (!root)
++		return false;
++
++	if (!(root->devcap2 & PCI_EXP_DEVCAP2_10BIT_TAG_COMP))
++		return false;
++
++	return true;
++}
++
+ int pci_configure_extended_tags(struct pci_dev *dev, void *ign)
+ {
+ 	struct pci_host_bridge *host;
+@@ -2075,6 +2089,12 @@ int pci_configure_extended_tags(struct pci_dev *dev, void *ign)
+ 		return 0;
+ 	}
+ 
++	/*
++	 * PCIe r5.0, sec 2.2.6.2 says "Receivers/Completers must handle 8-bit
++	 * Tag values correctly regardless of the setting of their Extended Tag
++	 * Field Enable bit (see Section 7.5.3.4)", so it is safe to enable
++	 * Extented Tags.
++	 */
+ 	if (!(ctl & PCI_EXP_DEVCTL_EXT_TAG)) {
+ 		pci_info(dev, "enabling Extended Tags\n");
+ 		pcie_capability_set_word(dev, PCI_EXP_DEVCTL,
+-- 
+2.22.0
+
