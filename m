@@ -2,58 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5345AC43219
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31319C433EF
 	for <linux-media@archiver.kernel.org>; Sun, 31 Oct 2021 11:25:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4956B610A8
+	by mail.kernel.org (Postfix) with ESMTP id 10D5261051
 	for <linux-media@archiver.kernel.org>; Sun, 31 Oct 2021 11:25:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbhJaL1j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 31 Oct 2021 07:27:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47128 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230209AbhJaL1i (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S231145AbhJaL1i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sun, 31 Oct 2021 07:27:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C39660F56;
+Received: from mail.kernel.org ([198.145.29.99]:47130 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229697AbhJaL1i (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 31 Oct 2021 07:27:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4D18F60F58;
         Sun, 31 Oct 2021 11:25:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1635679506;
-        bh=5AQ4SFcPBrRu8r+f85REA1Qo7urIQufQynh/2GrVMLY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PminbNS/sScjp2Kr2IYaraoupgvxMecnhIyPC/YsRKar60GF/V2Hk+6IdS+hUFe4b
-         ChDB+8uaoUzNsZfFKTpnzVjYR9hGs/G2ogqgC1tqN2tmhM5mVXJ1gT1qDstjA0JngV
-         J9ykKaJCD/rhP965hzy1ES1o1UacHIoXlOOJCFHqBwdKyGkwhfDNfZhMJ9kHgb50os
-         vdUlA7+7ldGvO9HPfoHLuAKxi9BxsOjoGXFxua9O92FJ041QCLKdzWzXdfRlChZ/2k
-         Ww6EeP/ZNeAtv6Q/+Pr1sYPmGWzBPimR/3ERl1+2z7hylb4jT7GEyYrabpGkZW/kZl
-         3AmcZ3SHo50Hg==
+        bh=/ba630/yMxIG0G/HrfuOl0TTd12zVAhW+3p5jt4O1qg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oc2RO08dPHGJIm4glq6KAAnyX1wJ3BcD1+WsaqgNw7C5s7sWu6Qf4EUW2Vm6UsAsn
+         QV2meBXVjguJoYt5SVMRQ1eoRT2pyC31iglV8D5F6Pkqg4/36ERdF7S/B6vdd8BsTg
+         1gO8Nn8NZsVCHFf6ZF/ii+64U7GyKjRUqsCbIMP/6erYsHzEfiSTT8CUDZcCekLiA3
+         /wDiP/+hf7Vq0OygRfpYk7Tke8GXHhvWOo7z4OkDjWm0D20Myxqsi3+Zns0U8bg9ST
+         P1bOAn/Ircmq2S55sgWZNYpKDJfq45eyq/V/O7qUc8oRtZ3c5nY9z7fiplI4UsLq3v
+         TKJh1orqxpkrw==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mh8xT-003wZP-Em; Sun, 31 Oct 2021 11:25:03 +0000
+        id 1mh8xT-003wZJ-Cp; Sun, 31 Oct 2021 11:25:03 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alex Dewar <alex.dewar90@gmail.com>,
-        Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ingo Molnar <mingo@kernel.org>,
         Kaixu Xia <kaixuxia@tencent.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Tsuchiya Yuto <kitakar@gmail.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH 3/3] media: atomisp: comment-out JPEG format
-Date:   Sun, 31 Oct 2021 11:25:02 +0000
-Message-Id: <b561275a4b10949ac06ff834e27243ec6ad6d546.1635679495.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 1/3] media: atomisp: don't print errors for ignored MBUS formats
+Date:   Sun, 31 Oct 2021 11:25:00 +0000
+Message-Id: <dc24ab2a6c9bb0831e1bb732d3377529fb0ead87.1635679495.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <dc24ab2a6c9bb0831e1bb732d3377529fb0ead87.1635679495.git.mchehab+huawei@kernel.org>
-References: <dc24ab2a6c9bb0831e1bb732d3377529fb0ead87.1635679495.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -62,67 +55,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is already disabled on some parts of the code, and trying
-to use it with current firmware causes an error:
+The bayer formats aren't currently available for userspace
+to select: those are marked as IA_CSS_FRAME_FORMAT_RAW and
+trying to get them result on binary firmware load errors:
 
-[   53.799946] atomisp-isp2 0000:00:03.0: can't create streams
-[   53.799962] atomisp-isp2 0000:00:03.0: __get_frame_info 1600x900 (padded to 0) returned -22
+	[74625.258097] atomisp-isp2 0000:00:03.0: Using binary isp_preview_var_isp2 (id 22), type 0, mode 1, continuous true
+	[74625.258146] atomisp-isp2 0000:00:03.0: Seeking for binary failed at:
+	[74625.258161] CPU: 3 PID: 2792 Comm: v4l2grab Tainted: G         C        5.15.0-rc4+ #77
+	[74625.258190] Hardware name: ASUSTeK COMPUTER INC. T101HA/T101HA, BIOS T101HA.306 04/23/2019
+	[74625.258208] Call Trace:
+	[74625.258231]  dump_stack_lvl+0x46/0x5a
+	[74625.258272]  ia_css_binary_find+0xa7d/0xcf0 [atomisp]
+	[74625.258570]  load_preview_binaries+0x323/0x3c0 [atomisp]
+	...
+	[74625.265892] atomisp-isp2 0000:00:03.0: can't create streams
+	[74625.265937] atomisp-isp2 0000:00:03.0: __get_frame_info 1604x1200 (padded to 0) returned -22
+	[74625.265962] atomisp-isp2 0000:00:03.0: Can't set format on ISP. Error -22
 
-So, completely disable reporting it.
+As those formats are ignored by purpose, it doesn't make any sense
+to print a message like:
+
+	atomisp_enum_fmt_cap(): format for code 3007 not found.
+
+for those.
+
+Yet, some day it would be interesting to also report the bayer
+formats, letting userspace to decode them on a different way.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_cmd.c   | 2 ++
- drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 7 +++----
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-index ff8640314f65..feb75491a273 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-@@ -1980,9 +1980,11 @@ v4l2_fmt_to_sh_fmt(u32 fmt)
- 		return IA_CSS_FRAME_FORMAT_RGBA888;
- 	case V4L2_PIX_FMT_RGB565:
- 		return IA_CSS_FRAME_FORMAT_RGB565;
-+#if 0
- 	case V4L2_PIX_FMT_JPEG:
- 	case V4L2_PIX_FMT_CUSTOM_M10MO_RAW:
- 		return IA_CSS_FRAME_FORMAT_BINARY_8;
-+#endif
- 	case V4L2_PIX_FMT_SBGGR16:
- 	case V4L2_PIX_FMT_SBGGR10:
- 	case V4L2_PIX_FMT_SGBRG10:
 diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index d92d41dd0ade..936516daec7d 100644
+index f082d7a67875..8f0a9a69f075 100644
 --- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
 +++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -492,23 +492,22 @@ const struct atomisp_format_bridge atomisp_output_fmts[] = {
- 		.mbus_code = MEDIA_BUS_FMT_BGR565_2X8_LE,
- 		.sh_fmt = IA_CSS_FRAME_FORMAT_RGB565,
- 		.description = "16 RGB 5-6-5"
-+#if 0
- 	}, {
- 		.pixelformat = V4L2_PIX_FMT_JPEG,
- 		.depth = 8,
- 		.mbus_code = MEDIA_BUS_FMT_JPEG_1X8,
- 		.sh_fmt = IA_CSS_FRAME_FORMAT_BINARY_8,
- 		.description = "JPEG"
--	},
--#if 0
--	{
-+	}, {
- 		/* This is a custom format being used by M10MO to send the RAW data */
- 		.pixelformat = V4L2_PIX_FMT_CUSTOM_M10MO_RAW,
- 		.depth = 8,
- 		.mbus_code = V4L2_MBUS_FMT_CUSTOM_M10MO_RAW,
- 		.sh_fmt = IA_CSS_FRAME_FORMAT_BINARY_8,
- 		.description = "Custom RAW for M10MO"
--	},
- #endif
-+	},
- };
+@@ -829,8 +829,6 @@ static int atomisp_enum_fmt_cap(struct file *file, void *fh,
+ 		f->pixelformat = format->pixelformat;
+ 		return 0;
+ 	}
+-	dev_err(isp->dev, "%s(): format for code %x not found.\n",
+-		__func__, code.code);
  
- const struct atomisp_format_bridge *
+ 	return -EINVAL;
+ }
 -- 
 2.31.1
 
