@@ -2,98 +2,101 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 417F0C4332F
-	for <linux-media@archiver.kernel.org>; Sun, 31 Oct 2021 11:25:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D4F3C433F5
+	for <linux-media@archiver.kernel.org>; Sun, 31 Oct 2021 13:04:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 24716610A8
-	for <linux-media@archiver.kernel.org>; Sun, 31 Oct 2021 11:25:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82E9960FC2
+	for <linux-media@archiver.kernel.org>; Sun, 31 Oct 2021 13:04:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbhJaL1j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 31 Oct 2021 07:27:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47148 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230388AbhJaL1i (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 31 Oct 2021 07:27:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 721AC60F9E;
-        Sun, 31 Oct 2021 11:25:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635679506;
-        bh=yWrx6iv06r2GqFH4VQZjTHiT5ccrn4b5I9ePck+bYns=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rIT/1xHUV33yKbZdHVRcC5DI/obAHQdv3K3Ns3AQ38ka19ofrevwnDmgctC7QDeVU
-         I0ZyynsCtqjYN+KLD/qtSxNF7VZJftjp9UDyjJBc/4E+Gzeoav5vOkNVbMRtfLd45q
-         hOLQDCI8YFsoHidyyevq/dHJwWqIAOhMd9+KqqCfL6NEveD+ncIHIy9X+fXZuwV9bR
-         o+me66FB6xiF2z5AYNvLNv/Q93Dha57DBFvB7E3uvKplKTOT5nBnTbzd9rLbOPE0zF
-         w1oxZBzTvbXCTvjRPfl5SCJVeAqr4WDe6+PPWkzIcnSxvsK4zeQ4wHL1Ax+4jyLZly
-         uq+phd7/vGaGg==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mh8xT-003wZM-EC; Sun, 31 Oct 2021 11:25:03 +0000
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        id S229974AbhJaNGu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 31 Oct 2021 09:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229662AbhJaNGt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sun, 31 Oct 2021 09:06:49 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCDEC061570;
+        Sun, 31 Oct 2021 06:04:17 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id k24so5565496ljg.3;
+        Sun, 31 Oct 2021 06:04:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EMe2Z2587AVutQZvLwNBuhISbQ8pHURWp8p6vvRjrlc=;
+        b=a2iKCDA/nqe1HltLr9hVTTfl2+nGyDu2Z3sl5WvHKWffYUTP1PzdUqf468l1TtR5bK
+         KmOlJqV58zjINjRK+rB6IcQNIZR/GvPvBHBAxGJat4OVhs4SjudzbaHCVdf8yvrfeTKh
+         dn9SKK/iqD0p9ax7zF/mmifUJJ3Oq8mJw8pLMt00GX0O+idlBo+dcyUEFhac7YAUZlB5
+         vwQJhhZ77ixkgVrjKdlZryIabUtNaUjBfFcjb7+wgDy0beWPQSUzm+TkF2VWj42jgqSr
+         hR1Qic+nb+yJNXQKOW2qo8b0pttbT1IEJCGSNWaC/wimitqp0hmK6oE9fMoVJLbmNO/t
+         0SvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EMe2Z2587AVutQZvLwNBuhISbQ8pHURWp8p6vvRjrlc=;
+        b=RRNbYLjjX3Nqxh4RpqAfdfNSEwYrd8DjUcs7hHJqwDvc0SWU749CZnl3TUKmypK3O2
+         Y8a1m5D15z6c0J35HkhqVgN569LSQNI66F+nDQWDmn0tx4oPXyWNQU2aoPK9OvPXIYTx
+         geac94HnFL2W/HR3ZV7ylQRlLQtan7fP5LGTz5ptWKbtM11NusCRuDV1NcDMWFwNrZho
+         E3ItK/mQ5XaMUQtogJ/7ynuwkAVfa+3K9cbvQ4GY12X5XWJMsF/wBIUZt52wDKYdpJlD
+         NjcXIXsOxBcUYbR6wnAn0h+upUPsB5XwNFaylMpzepz9DXNHeANVEv4pnR7bNr9r2ICZ
+         5XNw==
+X-Gm-Message-State: AOAM5319r7eCjSGda/IYVDRleJnyXXBoOs2oH1DqOo5YkxB5EF5SZSiW
+        dce1sHuD5FHGGUI4G46GHLlJ9yfubILJonByxvk=
+X-Google-Smtp-Source: ABdhPJwu7xlJgXcDLfBtqzUnE3+rerLqH1wzhSdAeqWlQfbNF5Kythz68RK7/JMcva/SffISoH67p1nJGkwCfHQG3eY=
+X-Received: by 2002:a2e:81c8:: with SMTP id s8mr18128016ljg.407.1635685455484;
+ Sun, 31 Oct 2021 06:04:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <dc24ab2a6c9bb0831e1bb732d3377529fb0ead87.1635679495.git.mchehab+huawei@kernel.org>
+ <b561275a4b10949ac06ff834e27243ec6ad6d546.1635679495.git.mchehab+huawei@kernel.org>
+In-Reply-To: <b561275a4b10949ac06ff834e27243ec6ad6d546.1635679495.git.mchehab+huawei@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 31 Oct 2021 15:03:39 +0200
+Message-ID: <CAHp75VcaWqeY2=13WE+ObQzjA1q83QPU4NGJnPR0H12m68uzVQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] media: atomisp: comment-out JPEG format
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linuxarm <linuxarm@huawei.com>, mauro.chehab@huawei.com,
+        Alex Dewar <alex.dewar90@gmail.com>,
+        Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Ingo Molnar <mingo@kernel.org>,
         Kaixu Xia <kaixuxia@tencent.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Tsuchiya Yuto <kitakar@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
         linux-staging@lists.linux.dev
-Subject: [PATCH 2/3] media: atomisp: report the visible resolution
-Date:   Sun, 31 Oct 2021 11:25:01 +0000
-Message-Id: <3a7f0de1edeca8d3e4d91f25f42339580d34a6e0.1635679495.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <dc24ab2a6c9bb0831e1bb732d3377529fb0ead87.1635679495.git.mchehab+huawei@kernel.org>
-References: <dc24ab2a6c9bb0831e1bb732d3377529fb0ead87.1635679495.git.mchehab+huawei@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The atomisp sensors and logic adds an extra pad lines/columns,
-called "dvs envelope". It also uses an extra 12 lines/columns
-at the sensor for BYT.
+On Sun, Oct 31, 2021 at 1:30 PM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> This is already disabled on some parts of the code, and trying
+> to use it with current firmware causes an error:
+>
+> [   53.799946] atomisp-isp2 0000:00:03.0: can't create streams
+> [   53.799962] atomisp-isp2 0000:00:03.0: __get_frame_info 1600x900 (padded to 0) returned -22
+>
+> So, completely disable reporting it.
 
-As those are not visible to userspace, the V4L2 API should
-decrement such values when reporting the current resolution.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Can't we simply remove all these pieces altogether?
+The rationale:
+ - code is still kept in the index of the Git
+ - avoid robots and humans of sending patches against dead code
+ - leaving dead code (even in staging) is not what we want in the long term
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index 8f0a9a69f075..d92d41dd0ade 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -876,6 +876,20 @@ static int atomisp_g_fmt_cap(struct file *file, void *fh,
- 		v4l2_fill_pix_format(&f->fmt.pix, &fmt.format);
- 
- 		f->fmt.pix.pixelformat = fmtdesc.pixelformat;
-+
-+		/*
-+		 * HACK: The atomisp does something different here, as it
-+		 * seems to set the sensor to a slightly higher resolution than
-+		 * the visible ones. That seems to be needed by atomisp's ISP
-+		 * in order to properly handle the frames. So, s_fmt adds 16
-+		 * extra columns/lines. See atomisp_subdev_set_selection().
-+		 *
-+		 * Yet, the V4L2 userspace API doesn't expect those, so it
-+		 * needs to be decremented when reporting the visible
-+		 * resolution to userspace.
-+		 */
-+		f->fmt.pix.width -= pad_w;
-+		f->fmt.pix.height -= pad_h;
- 	}
- 
- 	depth = atomisp_get_pixel_depth(f->fmt.pix.pixelformat);
 -- 
-2.31.1
-
+With Best Regards,
+Andy Shevchenko
