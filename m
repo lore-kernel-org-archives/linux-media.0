@@ -2,91 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 133F2C433F5
-	for <linux-media@archiver.kernel.org>; Mon,  1 Nov 2021 12:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C35B0C433F5
+	for <linux-media@archiver.kernel.org>; Mon,  1 Nov 2021 13:30:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E8621610CB
-	for <linux-media@archiver.kernel.org>; Mon,  1 Nov 2021 12:31:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9740561058
+	for <linux-media@archiver.kernel.org>; Mon,  1 Nov 2021 13:30:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbhKAMeK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Nov 2021 08:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
+        id S231808AbhKANcq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Nov 2021 09:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbhKAMeJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Nov 2021 08:34:09 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A432C061714;
-        Mon,  1 Nov 2021 05:31:36 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id f4so5582226edx.12;
-        Mon, 01 Nov 2021 05:31:36 -0700 (PDT)
+        with ESMTP id S230417AbhKANcq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Nov 2021 09:32:46 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FD4C061714
+        for <linux-media@vger.kernel.org>; Mon,  1 Nov 2021 06:30:12 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id u21so36336943lff.8
+        for <linux-media@vger.kernel.org>; Mon, 01 Nov 2021 06:30:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qto1d5JIXD/QqDsIJGSoCTbsHoPtJJlBHj7tkgHwuus=;
-        b=Aj4dfOmh19Kyot7MDw1kYbovj7X49JqrptseqihRmAwB2uv1pvqGNWJD6dJqdzj9Zg
-         XAB3Jl2+/zvaQJphV1fHQfa3+vckdXdys5zxFm7NZ9ETe6xb3TixfFlhMLxalgf2qXXh
-         pDgNrt3C6ybGrQrZgsf38swcqaMnW4vW91fvxjLuMG8DzgIrhxh5z1pvPQxREa1nPii5
-         6kxT7nihcfjb4cQR/CoMUKkGUjZVpMA3eGCP6O86Pdrcr4fk6/RoXIQPtYoFiumVDIZ+
-         EAl6w2PuHYifrIjnSr0A9oxboA0wiq+BZhxIwkEMT6M3tTACJaCZJoPNVotRBKSA0z6t
-         9WKA==
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=CyUOu1mxVjBL3zzC4Bo6zlVEE7judTp5CT7Y7DHgDi8=;
+        b=4NpGg6GGOenWuXdG7RXg0TgnVcqszAIsBPxLO1dW5RTRhKUWksUT6a3lj7AlPK9yfF
+         ztd+EG2dPHkJ4r7PieWgy7cQjSZVhFH5iwSq2b3swmhXBMm6jx8SKvH9kBgfUrwrpuiq
+         ojJ/uSAFN8D67S8mD/Fz/Q6k/W621FAJMNEYp/ZoP+WMB08rlsQJvWHq1B8+UYogHUxV
+         kEj1F4hd24Auk42/nuFULuHn0gLYoye4Mg6rdBJUBcV/71GN4VnethwKiOPW8rmeGVwQ
+         DLFmxUPyjNgUCyU6bWTLbUs6AvHnz7W918CzKVPPb5Wop1HG0jcZwYAyhRP5aSbTFkSt
+         xHfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qto1d5JIXD/QqDsIJGSoCTbsHoPtJJlBHj7tkgHwuus=;
-        b=WGW/ATM0/o1n2ckgoKMxP/deJ6dZ/OPyIBDoleRFXhJoWk2sCEW0NSs2fKphTiFdzQ
-         KBVPTU+yVVnPfZAGK9K2vyXqb32vlS0jbIYSmHWExN1T7hV1YFhvmDkgAcS1yjWx1oVq
-         y72drj36NRJX5TBsGoIBTDLaGJNedAPUMZGw2xYw076Q6Yzt5CMDlHBogkjYsNFQsSwW
-         LfVRj+EsU8RX6C5GwCpoETxKvs7Okxqe69lMblecxPmJ/Vb4RUYJ6xaC3GHzCwB7RAWm
-         N4DNV8u2L85MCW2IlxJg5RuXh608/AGyIs+oZdYdKbO+Jg8Ukwl8Qut08C3Hup5HXV6/
-         hQ3w==
-X-Gm-Message-State: AOAM5306N5lHHaG126dy/4zOXaQzHyVvA/aS1jZa3xSA0WqGN+mJaYoS
-        9MJD2XfoyWBtz2TrR624evlRK/1mSgRKQ3IGzgM=
-X-Google-Smtp-Source: ABdhPJzOd0419V+6gM1oTF3TtGEEChdGS0y+0AmBCD8PFYmtCJhYguMrXOTCReJarv64RxztdyX0ScIyn90QiWhT6ng=
-X-Received: by 2002:a05:6402:b0f:: with SMTP id bm15mr26844026edb.302.1635769894774;
- Mon, 01 Nov 2021 05:31:34 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=CyUOu1mxVjBL3zzC4Bo6zlVEE7judTp5CT7Y7DHgDi8=;
+        b=rs59JH4FOGtEwNYBa2mXzMDX8iuRNdZMdcMTzyj9AWuqzSrgxmVrJHXOgBzh1BVtf8
+         L4D9YF4sTphaoOUY8Ax/fEe86Xyp7nnZoKrvm3sLPEv7bBboGAgnPv4Nn+cp4sen3rCS
+         OTBpcS2r9rBrfnY44W47wtvYXFOR1x3JNYNt754+f+glhH6VYhCB3XMQCdpjnuliM5tw
+         HQ5uNiwB3KzZYn/DfVJRtUFIi0MQcVgM2JnxWwKjvHKI4Hk3L5xua/yWamY2M0lyeHIX
+         80b0fkVMHE87HeIZbXsH/nAtdhcKii07pj4ZWfNQ0a9IrRCvmTkGztix6zFVjeJYFkZT
+         JJwA==
+X-Gm-Message-State: AOAM532FhOaaEE2lB/okvfFwxpGFWB1hT1fChQglEm/yKgBIYLiyDpcK
+        1WBJDyJXu4sggeEnISeVNgqWZg==
+X-Google-Smtp-Source: ABdhPJxtFDQURpm5Q+f9ATJuYH04J6QS8afL0jcy0I2OGJC70kwzYd4ka698SWzw3SPYARzHOCXEpg==
+X-Received: by 2002:a05:6512:32a3:: with SMTP id q3mr11750341lfe.434.1635773410905;
+        Mon, 01 Nov 2021 06:30:10 -0700 (PDT)
+Received: from localhost (h-46-59-88-219.A463.priv.bahnhof.se. [46.59.88.219])
+        by smtp.gmail.com with ESMTPSA id m3sm541322lfr.7.2021.11.01.06.30.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Nov 2021 06:30:10 -0700 (PDT)
+Date:   Mon, 1 Nov 2021 14:30:09 +0100
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [PATCH 1/1] max96712: Select VIDEO_V4L2
+Message-ID: <YX/r4QwpG2vQ28Km@oden.dyn.berto.se>
+References: <20211101132502.700505-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-References: <CAD-N9QXsUcczurqq9LdaVjXFZMBSbStynwFJyu0UayDazGe=nw@mail.gmail.com>
- <55f04cb1-18ac-085b-3d35-7a01716fbcbe@gmail.com> <CAD-N9QVN7cepUpRu3d-xtr1L3DG90-nLS4gmkjerDZO21F_ejQ@mail.gmail.com>
- <f622f569-25d5-f38e-e9fb-7f07e12c4b7e@gmail.com> <CAD-N9QWeGOZdnuRuHVVNzZHWeP3eSHg=tsm+Qn3tqGqACSNbhg@mail.gmail.com>
- <ffbaeb72-0f76-fb1e-dde5-6e6bdcce1301@gmail.com> <CAD-N9QWQkivwR0mWwiaW_pLE6J_b03x4dP8RyxbmuKYRkcRhoQ@mail.gmail.com>
- <28a3777a-7941-6ffc-07e5-38456372cfb3@gmail.com> <CAD-N9QUcoKnEWw98XnBJZkas3AkwPonNG0K-PMROOwn8kReT5g@mail.gmail.com>
- <613828ef-085c-acbb-f54e-7819dc22c769@gmail.com>
-In-Reply-To: <613828ef-085c-acbb-f54e-7819dc22c769@gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Mon, 1 Nov 2021 20:31:08 +0800
-Message-ID: <CAD-N9QXHGRZugX9wMygZV=FzKgrKt1ZgDSbh+h9CbWBy5DUWJg@mail.gmail.com>
-Subject: Re: Need help in debugging "memory leak in em28xx_init_dev"
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211101132502.700505-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Nov 1, 2021 at 8:26 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
->
-> On 11/1/21 15:23, Dongliang Mu wrote:
-> > drop? I do see some patches from local syzkaller will attach this tag
-> > to assign credits to syzkaller/syzbot.
-> >
-> > I think this form is good. Thus I copy this tag from them.
-> >
->
-> Sorry for not being clear :(
->
-> I mean, I can't send my "Reviewed-by" tag to the patch. Missed that
-> "R-b" can be also decoded as Reported-by
+Hi Sakari,
 
-OK. It's fine. Just want to make sure we don't introduce any new
-issues in the patch.
+Thanks for your patch.
 
->
->
-> With regards,
-> Pavel Skripkin
+On 2021-11-01 15:25:02 +0200, Sakari Ailus wrote:
+> Select VIDEO_V4L2 for the driver actually depends on it, failing to
+> compile otherwise.
+> 
+> Fixes: 51758f8b32134bacbf30bd217f7c2074e9b4b51e ("media: staging: max96712: Add basic support for MAX96712 GMSL2 deserializer")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
+> ---
+>  drivers/staging/media/max96712/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/staging/media/max96712/Kconfig b/drivers/staging/media/max96712/Kconfig
+> index 258d47644cbd..492a7ff70dd8 100644
+> --- a/drivers/staging/media/max96712/Kconfig
+> +++ b/drivers/staging/media/max96712/Kconfig
+> @@ -6,6 +6,7 @@ config VIDEO_MAX96712
+>  	select V4L2_FWNODE
+>  	select VIDEO_V4L2_SUBDEV_API
+>  	select MEDIA_CONTROLLER
+> +	select VIDEO_V4L2
+>  	help
+>  	  This driver supports the Maxim MAX96712 Quad GMSL2 Deserializer.
+>  
+> -- 
+> 2.30.2
+> 
+
+-- 
+Regards,
+Niklas Söderlund
