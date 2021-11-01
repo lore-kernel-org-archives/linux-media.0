@@ -2,118 +2,125 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCA62C433EF
-	for <linux-media@archiver.kernel.org>; Mon,  1 Nov 2021 19:18:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D45CAC433F5
+	for <linux-media@archiver.kernel.org>; Mon,  1 Nov 2021 19:28:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A07506112F
-	for <linux-media@archiver.kernel.org>; Mon,  1 Nov 2021 19:18:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B91CB60F46
+	for <linux-media@archiver.kernel.org>; Mon,  1 Nov 2021 19:28:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbhKATU6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Nov 2021 15:20:58 -0400
-Received: from mga06.intel.com ([134.134.136.31]:27443 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230084AbhKATU5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 1 Nov 2021 15:20:57 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10155"; a="291936635"
-X-IronPort-AV: E=Sophos;i="5.87,200,1631602800"; 
-   d="scan'208";a="291936635"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2021 12:18:22 -0700
-X-IronPort-AV: E=Sophos;i="5.87,200,1631602800"; 
-   d="scan'208";a="449069418"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2021 12:18:21 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mhcom-002n1z-Gq;
-        Mon, 01 Nov 2021 21:18:04 +0200
-Date:   Mon, 1 Nov 2021 21:18:04 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        libcamera-devel@lists.libcamera.org
-Subject: Re: Fwd: Surface Go VCM type (was: Need to pass
- acpi_enforce_resources=lax on the Surface Go (version1))
-Message-ID: <YYA9bJ/DZp0+K0MB@smile.fi.intel.com>
-References: <e2312277-f967-7d3f-5ce9-fbb197d35fd6@gmail.com>
- <3b61bb2d-1136-cf35-ba7a-724da9642855@gmail.com>
- <418dc16a-2a03-7604-a8e2-31c5ddfcf436@redhat.com>
+        id S232605AbhKATbQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Nov 2021 15:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232549AbhKATbP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Nov 2021 15:31:15 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C01C061714;
+        Mon,  1 Nov 2021 12:28:41 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id f3so30148050lfu.12;
+        Mon, 01 Nov 2021 12:28:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oUizDfgwFNYdL5n8t93Z0CbMWx8hyiTVK1QWUlqRL/Q=;
+        b=qEH27vzYm2AHnn13IP3Acl+1k1FWd9og+36OEIHAjo56EAjTLsxZCzmKFXgN5OiAa2
+         YuX133+pK9Mv1ns/UlG4c3B7NTZygGaUtRdql/VDVdteJpxHfN5YiBnQNNiwZVges9bd
+         hjk3tzfVS7VE82RrIcilaXM2do42n8Dz5WwsR6CUa/tm1wxVCZaLyyscDsf7q7gYn3Kn
+         slUHUH0SLxTkE4c39BHF4w5ifXcikuXG0tn3evuL/Da4YLJHUXn00uh/0aHl1Z8cqxgs
+         ZXQnWA/jcrzxsLdesDXLf0N6wGGu2Vi93TrAjs+Sm5o20JgrSDSMKhs8bL9xZouBzERX
+         Ti8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oUizDfgwFNYdL5n8t93Z0CbMWx8hyiTVK1QWUlqRL/Q=;
+        b=1aOQziBn0YrBz6PbY5Oht1ZJwavaEOBBb8iijO0vLlot8E/iMkerdExm7RxyPK145p
+         O5Q/hS9cKt02sRFzrarCWkeiExI0a6XvI4dITFGhIptf8UmUriL51tEAn6fkW0W1moG7
+         nqStTusWSFoI56jazGGUVopDb5EKnUCGl3QmHFEzSkr3K15I43xvK847cooc709dB9o0
+         34WNiW8DfB+44bUIZpKZqvL5AjLfZ0w5Y3O7nrcAHpF3tlSafLFBbXwZ1cd266Zt9tVS
+         FZbsWGSlyxoj1v/rGrF3l7ryZ697tMqwFbLo3a5kUxsxfpZpB2gzFzjJNSswPvRN5Bj5
+         2MJQ==
+X-Gm-Message-State: AOAM533RkIOUz/Ww8z8cJ/0YfjhhvG+XLtnVqb7DbJnSFcMr/yNJA0WC
+        1LtjhxABqoPLZ1H2ETaUTbw=
+X-Google-Smtp-Source: ABdhPJx4PduTsZO++oiInqWsTNhdAevMfOOiT7uK/gx2Q0I8LxiEf88BoZeKfktj3dRaXwDnpM1/8Q==
+X-Received: by 2002:ac2:5d2d:: with SMTP id i13mr29160344lfb.175.1635794919383;
+        Mon, 01 Nov 2021 12:28:39 -0700 (PDT)
+Received: from [192.168.1.11] ([94.103.235.8])
+        by smtp.gmail.com with ESMTPSA id w24sm1486579lfu.24.2021.11.01.12.28.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Nov 2021 12:28:38 -0700 (PDT)
+Message-ID: <76e1264b-87d3-c7cb-c9d5-bcf461fbb2bf@gmail.com>
+Date:   Mon, 1 Nov 2021 22:28:37 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <418dc16a-2a03-7604-a8e2-31c5ddfcf436@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] media: em28xx: fix memory leak in em28xx_init_dev
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        syzbot <syzkaller@googlegroups.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211101095539.423246-1-mudongliangabcd@gmail.com>
+ <20211101183249.GA28019@kili>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20211101183249.GA28019@kili>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Nov 01, 2021 at 05:02:58PM +0100, Hans de Goede wrote:
-> On 10/29/21 13:50, Daniel Scally wrote:
-
-...
-
-> > To throw a spanner in the works though; I noticed this delightful _CRS
-> > for the OV9734 sensor of a  Surface Laptop 1 earlier:
-> > 
-> > Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-> > {
-> >     Name (SBUF, ResourceTemplate ()
-> >     {
-> >         I2cSerialBusV2 (0x0036, ControllerInitiated, 0x00061A80,
-> >             AddressingMode7Bit, "\\_SB.PCI0.I2C2",
-> >             0x00, ResourceConsumer, , Exclusive,
-> >             )
-> >         I2cSerialBusV2 (0x0050, ControllerInitiated, 0x00061A80,
-> >             AddressingMode7Bit, "\\_SB.PCI0.I2C2",
-> >             0x00, ResourceConsumer, , Exclusive,
-> >             )
-> >         I2cSerialBusV2 (0x0051, ControllerInitiated, 0x00061A80,
-> >             AddressingMode7Bit, "\\_SB.PCI0.I2C2",
-> >             0x00, ResourceConsumer, , Exclusive,
-> >             )
-> >         I2cSerialBusV2 (0x0052, ControllerInitiated, 0x00061A80,
-> >             AddressingMode7Bit, "\\_SB.PCI0.I2C2",
-> >             0x00, ResourceConsumer, , Exclusive,
-> >             )
-> >         I2cSerialBusV2 (0x0053, ControllerInitiated, 0x00061A80,
-> >             AddressingMode7Bit, "\\_SB.PCI0.I2C2",
-> >             0x00, ResourceConsumer, , Exclusive,
-> >             )
-> >     })
-> >     Return (SBUF) /* \_SB_.PCI0.I2C2.CAMF._CRS.SBUF */
-> > }
+On 11/1/21 21:32, Dan Carpenter wrote:
+> On Mon, Nov 01, 2021 at 05:55:39PM +0800, Dongliang Mu wrote:
+>> In the em28xx_init_rev, if em28xx_audio_setup fails, this function fails
+>> to deallocate the media_dev allocated in the em28xx_media_device_init.
+>> 
+>> Fix this by adding em28xx_unregister_media_device to free media_dev.
+>> 
+>> BTW, this patch is tested in my local syzkaller instance, and it can
+>> prevent the memory leak from occurring again.
+>> 
+>> CC: Pavel Skripkin <paskripkin@gmail.com>
+>> Fixes: 37ecc7b1278f ("[media] em28xx: add media controller support")
+>> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+>> Reported-by: syzbot <syzkaller@googlegroups.com>
 > 
-> Hmm, we do have i2c_acpi_client_count(adev), so it is easy to use
-> that and just always use the last resource for the VCM. But that assumes
-> that is what is going on here and I have no idea.
-
-You probably composed this message before reading my reply(ies).
-
-...
-
-> Change the first parameter of i2c_acpi_new_device() from
-> a struct device * to a struct acpi_device *.
+> Is this really a syzbot warning?  If so it should be in the format:
 > 
-> This is necessary because in some cases we may only have access
-> to the fwnode / acpi_device and not to the matching physical-node
-> struct device *.
+> Reported-by: syzbot+4c4ffd1e1094dae61035@syzkaller.appspotmail.com
+> 
+> Syzbot is different from syzkaller.  Syzkaller is the fuzzer and syzbot
+> is the program which reports syzkaller bugs.
+> 
 
-Can we rather create an fwnode based API and then
+Bug report is from his local instance. He just wants to give credit to 
+syzbot for finding it
 
-static inline
-struct i2c_client *i2c_acpi_new_device(struct device *dev, int index,
-				       struct i2c_board_info *info)
-	return i2c_acpi_new_device_by_fwnode(dev_fwnode(), index, info);
-}
+>> ---
+>>  drivers/media/usb/em28xx/em28xx-cards.c | 19 +++++++++++++------
+>>  1 file changed, 13 insertions(+), 6 deletions(-)
+>> 
+>> diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
+>> index c1e0dccb7408..fca68939ca50 100644
+>> --- a/drivers/media/usb/em28xx/em28xx-cards.c
+>> +++ b/drivers/media/usb/em28xx/em28xx-cards.c
+>> @@ -3625,8 +3625,10 @@ static int em28xx_init_dev(struct em28xx *dev, struct usb_device *udev,
+>>  
+> 
+> There is no check to see if the em28xx_media_device_init() fails.  I
 
-?
+I guess, it should work, since there a lot of checks to see if this 
+pointer is valid, i.e driver can work even without this pointer, AFAIK
 
--- 
-With Best Regards,
-Andy Shevchenko
+> don't love that we call unregister() to undo the init() but it seems
+> like it should work...
+
+Same here, but it is out of scope of this patch :)
 
 
+
+With regards,
+Pavel Skripkin
