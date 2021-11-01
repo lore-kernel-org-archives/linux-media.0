@@ -2,106 +2,100 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBE3FC433F5
-	for <linux-media@archiver.kernel.org>; Mon,  1 Nov 2021 15:02:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28D18C433EF
+	for <linux-media@archiver.kernel.org>; Mon,  1 Nov 2021 15:05:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D33F0610F7
-	for <linux-media@archiver.kernel.org>; Mon,  1 Nov 2021 15:02:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 112E26113D
+	for <linux-media@archiver.kernel.org>; Mon,  1 Nov 2021 15:05:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbhKAPEr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Nov 2021 11:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
+        id S232450AbhKAPIX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Nov 2021 11:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbhKAPEq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Nov 2021 11:04:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F40C061714
-        for <linux-media@vger.kernel.org>; Mon,  1 Nov 2021 08:02:13 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mhYp8-0005oy-TM; Mon, 01 Nov 2021 16:02:10 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mhYp7-0006P0-VO; Mon, 01 Nov 2021 16:02:09 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mhYp7-0001RP-UO; Mon, 01 Nov 2021 16:02:09 +0100
-Date:   Mon, 1 Nov 2021 16:02:09 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Antti Palosaari <crope@iki.fi>,
+        with ESMTP id S231304AbhKAPIW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Nov 2021 11:08:22 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD83C061714;
+        Mon,  1 Nov 2021 08:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=KEjSiPeQus1e5C5m4glvQm9hY/OA1aKif95A7YiVQtI=; b=2LGb6RpYGmcP87QrowtsGlb1CG
+        MlNNkNVp7zrosbZMXSGbqsff+zVFddtxYJ0AwM45FBd0nEfPgeMcoZerqRhfkQKcsmvSqBtVRXYTI
+        9F4kFpo3TJ1bR9YTKfIQ89iDY7ZYn9EX+qCOq8wvNergjFgNicLNKOIRjnxS3M1RU/uMtMIM5G3yi
+        wvbeBtSXV214nJSnbJ9eHPHivKJDfjo7kipr+RUoApfqqu5X9Ng5AmLIhYmKYuABk3KeXQAlIYccf
+        dufg8fg4bQWGA5deqm/TxMoiq49lywFjfdzog9V3YHefDkCBn0RHPFbCtYOi2/lAlx0VTEM3u4rPX
+        473BS/HQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mhYse-00GdmR-PV; Mon, 01 Nov 2021 15:05:48 +0000
+Subject: Re: Need help in debugging "memory leak in em28xx_init_dev"
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        kernel@pengutronix.de, linux-media@vger.kernel.org
-Subject: Re: [PATCH] [media] tua9001: Improve messages in .remove's error path
-Message-ID: <20211101150209.an56wy32ttjzoquj@pengutronix.de>
-References: <20211026194010.109029-1-u.kleine-koenig@pengutronix.de>
- <163577655353.275423.6737046445297486684@Monstersaurus>
+        linux-media@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <CAD-N9QXsUcczurqq9LdaVjXFZMBSbStynwFJyu0UayDazGe=nw@mail.gmail.com>
+ <55f04cb1-18ac-085b-3d35-7a01716fbcbe@gmail.com>
+ <CAD-N9QVN7cepUpRu3d-xtr1L3DG90-nLS4gmkjerDZO21F_ejQ@mail.gmail.com>
+ <f622f569-25d5-f38e-e9fb-7f07e12c4b7e@gmail.com>
+ <CAD-N9QWeGOZdnuRuHVVNzZHWeP3eSHg=tsm+Qn3tqGqACSNbhg@mail.gmail.com>
+ <ffbaeb72-0f76-fb1e-dde5-6e6bdcce1301@gmail.com>
+ <CAD-N9QWQkivwR0mWwiaW_pLE6J_b03x4dP8RyxbmuKYRkcRhoQ@mail.gmail.com>
+ <20211101143004.GD2914@kadam>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <c0e25c48-84cc-6ad1-8312-1957f459148d@infradead.org>
+Date:   Mon, 1 Nov 2021 08:05:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g2oryxtnumy4by3n"
-Content-Disposition: inline
-In-Reply-To: <163577655353.275423.6737046445297486684@Monstersaurus>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+In-Reply-To: <20211101143004.GD2914@kadam>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On 11/1/21 7:30 AM, Dan Carpenter wrote:
+> On Mon, Nov 01, 2021 at 05:58:56PM +0800, Dongliang Mu wrote:
+>> On Mon, Nov 1, 2021 at 5:43 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+>>>
+>>> On 11/1/21 12:41, Dongliang Mu wrote:
+>>>>> Hi, Dongliang,
+>>>>>
+>>>>> Did patch attached to my previous email pass syzbot's reproducer test?
+>>>>> Unfortunately, I am not able to test rn :(
+>>>>
+>>>> Yes, it works. The memory leak does not occur anymore.
+>>>>
+>>>> But I am crafting another patch based on yours as there is a small
+>>>> issue in the retval and I would like to make the error handling code
+>>>> uniform.
+>>>>
+>>>
+>>> Cool! Thank you for confirmation.
+>>
+>> Hi Pavel,
+>>
+>> Thanks for your advice. I have sent the patch and you are on the CC
+>> list. Can you please take a look at and review my patch?
+>>
+> 
+> What's the Message-ID of your patch so I can b4 it.
 
---g2oryxtnumy4by3n
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+<20211101095539.423246-1-mudongliangabcd@gmail.com>
 
-On Mon, Nov 01, 2021 at 02:22:33PM +0000, Kieran Bingham wrote:
-> Quoting Uwe Kleine-K=F6nig (2021-10-26 20:40:10)
-> > If disabling the hardware fails the driver propagates the error code to
-> > the i2c core. However this only results in a generic error message; the
-> > device still disappears.
-> >=20
-> > So instead emit a message that better describes the actual problem than
-> > the i2c core's "remove failed (ESOMETHING), will be ignored" and return
-> > 0 to suppress the generic message.
->=20
-> You almost caught me out. I was going to say, this changes the
-> behaviour of the return code. But It's intentional ;-)
->=20
-> It's still a bit concerning, /not/ returning an error on an error - but
-> as it's not going to prevent removal, and it won't add further (helpful)
-> diagnosticts), maybe it makes sense.
->=20
-> My only concern would be if it might be better to keep the return code,
-> so that the core frameworks know about the issue at least.
+> This whole thread has no patches.  I don't know why I'm CC'd when the
+> only part I'm interested in is not included...  :/  Hashtag Grumble.
+> 
+> regards,
+> dan carpenter
+> 
 
-The long term goal is to make the remove callback return void. For that
-change I want all implementations to remove 0 to make the change easy to
-review.
 
-Best regards and thanks for your thoughts,
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---g2oryxtnumy4by3n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGAAW4ACgkQwfwUeK3K
-7AlYLwf9Ffg7FrOZ3gmptZQ0YTT9xKILULGVPeGfqhMXLnbN6pRRFXQJfhHbPJK0
-O9USznxJX7E6CNKrXx2ukYWqsyBvA9JLf1tKct3tDBWBNXt3vzU4mm8Rv4a7RVU1
-zPiSVfCv+SH5lwP8tDm+lVPeUaeLh3U4+zrKe8u0gQdNA6CCBGv4Bk1Hs5dYf29+
-WpiQqe70sUt1p95SBYKCkHWbD86yHPUOsilZlm7EVBl3Eb/+OvhhtkmWHha0/wTF
-YE3eJWGdJpOdY6XEMchiM2la+C1mtUR7l5jWi65Rk/8+LJKT3X/IfxYL+sRWkUyQ
-oaTTR/ZFscarBQH9Gycn5rtMW+O2RA==
-=vctD
------END PGP SIGNATURE-----
-
---g2oryxtnumy4by3n--
+-- 
+~Randy
