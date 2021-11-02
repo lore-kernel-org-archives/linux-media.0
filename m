@@ -2,148 +2,198 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A9E2C433FE
-	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 12:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA19DC433F5
+	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 13:03:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E5384610A3
-	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 12:24:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A320B6108F
+	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 13:03:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbhKBM1V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Nov 2021 08:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbhKBM1S (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Nov 2021 08:27:18 -0400
-Received: from lb1-smtp-cloud8.xs4all.net (lb1-smtp-cloud8.xs4all.net [IPv6:2001:888:0:108::1b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5AAC061203
-        for <linux-media@vger.kernel.org>; Tue,  2 Nov 2021 05:24:36 -0700 (PDT)
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id hsq3mJkibDjkdhsqAmFmMn; Tue, 02 Nov 2021 13:24:34 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1635855874; bh=DKnOkKUvXN2DW3tECb6QqzCKT7eEe7vz5w7sehhAAwQ=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=uC2yvenygs0+aStMUaSa1D2FmGLzlmbKFayI/uE9gKxCgPZCni1QbuOltWMTD+KGh
-         pmTfsQp8Ae3ApD6KIXEyz6ashGWFjlsSqpTeKWmg3JF3aN7UbKkmRL2J6IlyhzW+TI
-         H3Y4l7sfB97KcdXndCMf5Sa4PdMy5mkOXjFGmXBVmoLA97KicHEciZlejKhIH3MPDi
-         rxwEfgN1LR413vcOAzScG/XSrWSoFu84PMFT3/4YlOJIOa5g8yFH1tHk5844WLAbGi
-         1mIHGkLlmCC220mIs9pz2DTI01Z5lCA2CCANTlrdqERTjJWTPwyk2AOzk90BbKDSAm
-         ZKwxcEEX4/i0g==
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 2/2] cec-ioc-receive.rst: clarify sequence and status fields
-Date:   Tue,  2 Nov 2021 13:24:27 +0100
-Message-Id: <20211102122427.544085-2-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211102122427.544085-1-hverkuil-cisco@xs4all.nl>
-References: <20211102122427.544085-1-hverkuil-cisco@xs4all.nl>
+        id S230504AbhKBNGL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Nov 2021 09:06:11 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:14701 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229924AbhKBNGL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Nov 2021 09:06:11 -0400
+Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Hk95L58zBzZcVs;
+        Tue,  2 Nov 2021 21:01:26 +0800 (CST)
+Received: from [10.67.103.235] (10.67.103.235) by
+ dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.15; Tue, 2 Nov 2021 21:03:30 +0800
+Subject: Re: [PATCH V11 4/8] PCI/sysfs: Add a tags sysfs file for PCIe
+ Endpoint devices
+To:     Bjorn Helgaas <helgaas@kernel.org>
+References: <20211101205442.GA546492@bhelgaas>
+CC:     <hch@infradead.org>, <kw@linux.com>, <logang@deltatee.com>,
+        <leon@kernel.org>, <linux-pci@vger.kernel.org>,
+        <rajur@chelsio.com>, <hverkuil-cisco@xs4all.nl>,
+        <linux-media@vger.kernel.org>, <netdev@vger.kernel.org>
+From:   Dongdong Liu <liudongdong3@huawei.com>
+Message-ID: <40e675a1-6931-8daa-d98d-7b9c64785012@huawei.com>
+Date:   Tue, 2 Nov 2021 21:03:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfOYCBZHaH4E4XcLMv6DiZ1sNEcIFoI+sia2XHbnxZXYMuv6PCACWO3yh3o5clAOrSrez3M8RW9H7lBvQ+GraxuIDHh/fDcT2M0vmBpRyD5lLlMPMJuHg
- hXXhaZTB+vbHzoyb1fF559D5dEPaSSNWSR+Dts2r6HPOtwSU4Z2yM0JXeKh/xPNQ7Z/uok2H0HkV/uPGbGfEmu/VIBJuMsVcAKceDWZpXxS4/vv1O6mzW4WH
- Y0F8cg2TVs/2pkze4d9O37jCTBedYO+KBj/GsjU2KCgIUcKW6PIxhOLq69924AJ9S/iae7xSmP26J7zuPkuUbg==
+In-Reply-To: <20211101205442.GA546492@bhelgaas>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.235]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggeme758-chm.china.huawei.com (10.3.19.104)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Improve the documentation for CEC_RECEIVE/TRANSMIT w.r.t. the
-sequence and tx/rx_status fields.
+Hi Bjorn
 
-Also remove a duplicate tx_status description.
+Many thanks for you review.
+On 2021/11/2 4:54, Bjorn Helgaas wrote:
+> On Sat, Oct 30, 2021 at 09:53:44PM +0800, Dongdong Liu wrote:
+>> PCIe spec 5.0 r1.0 section 2.2.6.2 says:
+>>
+>>   If an Endpoint supports sending Requests to other Endpoints (as
+>>   opposed to host memory), the Endpoint must not send 10-Bit Tag
+>>   Requests to another given Endpoint unless an implementation-specific
+>>   mechanism determines that the Endpoint supports 10-Bit Tag Completer
+>>   capability.
+>>
+>> Add a tags sysfs file, write 0 to disable 10-Bit Tag Requester
+>> when the driver does not bind the device. The typical use case is for
+>> p2pdma when the peer device does not support 10-Bit Tag Completer.
+>> Write 10 to enable 10-Bit Tag Requester when RC supports 10-Bit Tag
+>> Completer capability. The typical use case is for host memory targeted
+>> by DMA Requests. The tags file content indicate current status of Tags
+>> Enable.
+>>
+>> PCIe r5.0, sec 2.2.6.2 says:
+>>
+>>   Receivers/Completers must handle 8-bit Tag values correctly regardless
+>>   of the setting of their Extended Tag Field Enable bit (see Section
+>>   7.5.3.4).
+>>
+>> Add this comment in pci_configure_extended_tags(). As all PCIe completers
+>> are required to support 8-bit tags, so we do not use tags sysfs file
+>> to manage 8-bit tags.
+>
+>> +What:		/sys/bus/pci/devices/.../tags
+>> +Date:		September 2021
+>> +Contact:	Dongdong Liu <liudongdong3@huawei.com>
+>> +Description:
+>> +		The file will be visible when the device supports 10-Bit Tag
+>> +		Requester. The file is readable, the value indicate current
+>> +		status of Tags Enable(5-Bit, 8-Bit, 10-Bit).
+>> +
+>> +		The file is also writable, The values accepted are:
+>> +		* > 0 - this number will be reported as tags bit to be
+>> +			enabled. current only 10 is accepted
+>> +		* < 0 - not valid
+>> +		* = 0 - disable 10-Bit Tag, use Extended Tags(8-Bit or 5-Bit)
+>> +
+>> +		write 0 to disable 10-Bit Tag Requester when the driver does
+>> +		not bind the device. The typical use case is for p2pdma when
+>> +		the peer device does not support 10-Bit Tag Completer.
+>> +
+>> +		Write 10 to enable 10-Bit Tag Requester when RC supports 10-Bit
+>> +		Tag Completer capability. The typical use case is for host
+>> +		memory targeted by DMA Requests.
+>
+> 1) I think I would rename this from "tags" to "tag_bits".  A file
+>    named "tags" that contains 8 suggests that we can use 8 tags, but
+>    in fact, we can use 256 tags.
+Looks good, Will do.
+>
+> 2) This controls tag size the requester will use.  The current knobs
+>    in the hardware allow 5, 8, or 10 bits.
+>
+>    "0" to disable 10-bit tags without specifying whether we should use
+>    5- or 8-bit tags doesn't seem right.  All completers are *supposed*
+>    to support 8-bit, but we've tripped over a few that don't.
+>
+>    I don't think we currently have a run-time (or even a boot-time)
+>    way to disable 8-bit tags; all we have is the quirk_no_ext_tags()
+>    quirk.  But if we ever wanted to *add* that, maybe we would want:
+>
+>       5 - use 5-bit tags
+>       8 - use 8-bit tags
+>      10 - use 10-bit tags
+will do.
+>    Maybe we just say "0" is invalid, since there's no obvious way to
+>    map this?
+OK, will do.
+>
+>> +static ssize_t tags_show(struct device *dev,
+>> +			 struct device_attribute *attr,
+>> +			 char *buf)
+>> +{
+>> + ...
+>
+>> +	if (ctl & PCI_EXP_DEVCTL2_10BIT_TAG_REQ_EN)
+>> +		return sysfs_emit(buf, "%s\n", "10-Bit");
+>> +
+>> +	ret = pcie_capability_read_word(pdev, PCI_EXP_DEVCTL, &ctl);
+>> +	if (ret)
+>> +		return -EINVAL;
+>> +
+>> +	if (ctl & PCI_EXP_DEVCTL_EXT_TAG)
+>> +		return sysfs_emit(buf, "%s\n", "8-Bit");
+>> +
+>> +	return sysfs_emit(buf, "%s\n", "5-Bit");
+>
+> Since I prefer the "tag_bits" name, my preference would be bare
+> numbers here: "10", "8", "5".
+Will do.
+>
+> Both comments apply to the sriov files, too.
+Will do.
+>
+>> +static umode_t pcie_dev_tags_attrs_is_visible(struct kobject *kobj,
+>> +					      struct attribute *a, int n)
+>> +{
+>> +	struct device *dev = kobj_to_dev(kobj);
+>> +	struct pci_dev *pdev = to_pci_dev(dev);
+>> +
+>> +	if (pdev->is_virtfn)
+>> +		return 0;
+>> +
+>> +	if (pci_pcie_type(pdev) != PCI_EXP_TYPE_ENDPOINT)
+>> +		return 0;
+>> +
+>> +	if (!(pdev->devcap2 & PCI_EXP_DEVCAP2_10BIT_TAG_REQ))
+>> +		return 0;
+>
+> Makes sense for now that the file is only visible if a requester
+> supports 10-bit tags.  If we ever wanted to extend this to control 5-
+> vs 8-bit tags, we could make it visible in more cases then.
+Will do.
+>
+>> +
+>> +	return a->mode;
+>> +}
+>
+>> @@ -2075,6 +2089,12 @@ int pci_configure_extended_tags(struct pci_dev *dev, void *ign)
+>>  		return 0;
+>>  	}
+>>
+>> +	/*
+>> +	 * PCIe r5.0, sec 2.2.6.2 says "Receivers/Completers must handle 8-bit
+>> +	 * Tag values correctly regardless of the setting of their Extended Tag
+>> +	 * Field Enable bit (see Section 7.5.3.4)", so it is safe to enable
+>> +	 * Extented Tags.
+>
+> s/Extented/Extended/
+Will fix.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- .../media/cec/cec-ioc-receive.rst             | 49 ++++++++++---------
- 1 file changed, 26 insertions(+), 23 deletions(-)
-
-diff --git a/Documentation/userspace-api/media/cec/cec-ioc-receive.rst b/Documentation/userspace-api/media/cec/cec-ioc-receive.rst
-index bd7f7e7235cb..364938ad34df 100644
---- a/Documentation/userspace-api/media/cec/cec-ioc-receive.rst
-+++ b/Documentation/userspace-api/media/cec/cec-ioc-receive.rst
-@@ -48,9 +48,12 @@ it will return -1 and set errno to the ``ETIMEDOUT`` error code.
- A received message can be:
- 
- 1. a message received from another CEC device (the ``sequence`` field will
--   be 0).
--2. the result of an earlier non-blocking transmit (the ``sequence`` field will
--   be non-zero).
-+   be 0, ``tx_status`` will be 0 and ``rx_status`` will be non-zero).
-+2. the transmit result of an earlier non-blocking transmit (the ``sequence``
-+   field will be non-zero, ``tx_status`` will be non-zero and ``rx_status``
-+   will be 0).
-+3. the reply to an earlier non-blocking transmit (the ``sequence`` field will
-+   be non-zero, ``tx_status`` will be 0 and ``rx_status`` will be non-zero).
- 
- To send a CEC message the application has to fill in the struct
- :c:type:`cec_msg` and pass it to :ref:`ioctl CEC_TRANSMIT <CEC_TRANSMIT>`.
-@@ -64,12 +67,11 @@ idea to fully fill up the transmit queue.
- 
- If the file descriptor is in non-blocking mode then the transmit will
- return 0 and the result of the transmit will be available via
--:ref:`ioctl CEC_RECEIVE <CEC_RECEIVE>` once the transmit has finished
--(including waiting for a reply, if requested).
--
--The ``sequence`` field is filled in for every transmit and this can be
--checked against the received messages to find the corresponding transmit
--result.
-+:ref:`ioctl CEC_RECEIVE <CEC_RECEIVE>` once the transmit has finished.
-+If a non-blocking transmit also specified waiting for a reply, then
-+the reply will arrive in a later message. The ``sequence`` field can
-+be used to associate both transmit results and replies with the original
-+transmit.
- 
- Normally calling :ref:`ioctl CEC_TRANSMIT <CEC_TRANSMIT>` when the physical
- address is invalid (due to e.g. a disconnect) will return ``ENONET``.
-@@ -123,17 +125,16 @@ View On' messages from initiator 0xf ('Unregistered') to destination 0 ('TV').
-       - ``sequence``
-       - A non-zero sequence number is automatically assigned by the CEC framework
- 	for all transmitted messages. It is used by the CEC framework when it queues
--	the transmit result (when transmit was called in non-blocking mode). This
--	allows the application to associate the received message with the original
--	transmit.
-+	the transmit result for a non-blocking transmit. This allows the application
-+	to associate the received message with the original transmit.
-+
-+	In addition, if a non-blocking transmit will wait for a reply (ii.e. ``timeout``
-+	was not 0), then the ``sequence`` field of the reply will be set to the sequence
-+	value of the original transmit. This allows the application to associate the
-+	received message with the original transmit.
-     * - __u32
-       - ``flags``
-       - Flags. See :ref:`cec-msg-flags` for a list of available flags.
--    * - __u8
--      - ``tx_status``
--      - The status bits of the transmitted message. See
--	:ref:`cec-tx-status` for the possible status values. It is 0 if
--	this message was received, not transmitted.
-     * - __u8
-       - ``msg[16]``
-       - The message payload. For :ref:`ioctl CEC_TRANSMIT <CEC_TRANSMIT>` this is filled in by the
-@@ -162,15 +163,17 @@ View On' messages from initiator 0xf ('Unregistered') to destination 0 ('TV').
-     * - __u8
-       - ``rx_status``
-       - The status bits of the received message. See
--	:ref:`cec-rx-status` for the possible status values. It is 0 if
--	this message was transmitted, not received, unless this is the
--	reply to a transmitted message. In that case both ``rx_status``
--	and ``tx_status`` are set.
-+	:ref:`cec-rx-status` for the possible status values.
-     * - __u8
-       - ``tx_status``
-       - The status bits of the transmitted message. See
--	:ref:`cec-tx-status` for the possible status values. It is 0 if
--	this message was received, not transmitted.
-+	:ref:`cec-tx-status` for the possible status values.
-+	When calling :ref:`ioctl CEC_TRANSMIT <CEC_TRANSMIT>` in non-blocking mode,
-+	this field will be 0 if the transmit started, or non-0 if the transmit
-+	result is known immediately. The latter would be the case when attempting
-+	to transmit a Poll message to yourself. That results in a
-+	:ref:`CEC_TX_STATUS_NACK <CEC-TX-STATUS-NACK>` without ever actually
-+	transmitting the Poll message.
-     * - __u8
-       - ``tx_arb_lost_cnt``
-       - A counter of the number of transmit attempts that resulted in the
--- 
-2.33.0
-
+Thanks,
+Dongdong
+>
+>> +	 */
+>>  	if (!(ctl & PCI_EXP_DEVCTL_EXT_TAG)) {
+>>  		pci_info(dev, "enabling Extended Tags\n");
+>>  		pcie_capability_set_word(dev, PCI_EXP_DEVCTL,
+>> --
+>> 2.22.0
+>>
+> .
+>
