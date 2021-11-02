@@ -2,107 +2,120 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0543C433EF
-	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 15:40:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDDA1C43219
+	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 15:53:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9D9660F70
-	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 15:40:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC01A60F70
+	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 15:53:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbhKBPnd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Nov 2021 11:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S234652AbhKBPzz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Nov 2021 11:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232003AbhKBPnc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Nov 2021 11:43:32 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B592C061714;
-        Tue,  2 Nov 2021 08:40:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=r/i/KXCV63u35JO0/BNDE+hkZKtvbs8LAbgs3kVqOMg=; b=htJyD8AjqXx0jnW0nNAoUoopTQ
-        B2tGGLL0UrZ0KgBmpxZjieLJYWFk35jfBa3x27voK5KDqwbLXeHZdGr/9yakBcKp+jvufuPuDczFN
-        og+FOm4vDUX9FndFDpRdsPoVZx+0tTWI7C2eHL0E8LBbZOcIuJApHgFGjNKVke4gOUFCDcGpvhho/
-        E4WHbiCvB9F/msQt3Gqc8Sxq0NTpS1gcFr9tvoMzz8tMhoxLqdtmzT3d3zqJbHM1paPnch4YvKVFV
-        5KnTwpveXCZcdklcalO+A/mLlhAx4GuxNZT8uvE75onsvmQCATKOvnlrXW2IrqU+Vfg6aTgtfRXc5
-        M38TTf+A==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mhvuD-002AQy-6a; Tue, 02 Nov 2021 15:40:57 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        linux-media@vger.kernel.org, Dillon Min <dillon.minfei@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH -next] media: stm32-dma2d: fix Kconfig dependencies grouping
-Date:   Tue,  2 Nov 2021 08:40:56 -0700
-Message-Id: <20211102154056.1282-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S234642AbhKBPzy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Nov 2021 11:55:54 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531FDC061714;
+        Tue,  2 Nov 2021 08:53:19 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id g14so15346532edz.2;
+        Tue, 02 Nov 2021 08:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Uh3V+KhWN7/HDkvhbVf6laOL4Ct4HKkj535+ZUd6sTc=;
+        b=mljJuPk2s95J1Zu/X2yPZDdeX9Tf7AHTEqZnBDycdLY58ImXaeR/qCwS/yHo/ygp0E
+         RJym9wVijZxG5saxzNG0JyJ8gLTZ+dTaAz7P00YLje3/Bs/H1KQprhFV6hGbWx7oL2dF
+         BAD/6VP1Gvg2rZNZqWifEKMjNYV5/GmhwwUK8pKpMX/8GSMjhTIqexDbTk4ZsSxk7SCN
+         XyTXy4gm/8KLLwipx5eOiFBhN1eDI5/KyGFLQAOHh5abx1wrsRuuh3qxqR0eldbXT9Gk
+         L2oTZNC4gw/F+adHjZPGZqN1TgQTWAbRqOebK++aRc9XMQUAztT3+iPOC+qz641ayfM4
+         rOWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Uh3V+KhWN7/HDkvhbVf6laOL4Ct4HKkj535+ZUd6sTc=;
+        b=OK2eOGhS17AWr5hEBZTm8mBJzKAhkYqhc7c3F/6z6caO6Ymo9TqVBp1UShfRZfKEJj
+         qYJG5yCG2eIjKVjp8Day9sU7mZg90VYwXmVhlXO2OqNX1WTPwJB3/EWMbYzSppb8+bwV
+         dSIPvXOpr94pTRDqxZ921YyAGytEs6xXFcblVWZzh9Ho4vrnOrcky7007+Uo5VFrZEUC
+         BXD5t5J9GqJ67BfMxpHyyvM7EAYgEF+3f/lVjyiTBnsXGHHfkVtttUamQzeDMohDWXs8
+         JK5tu1EAe7ZmQkMjg87hLkHm/mmGEpnjVmyBvvEvtvDtbxvK2yrW+bZqk77tZVDLtn6v
+         cmOA==
+X-Gm-Message-State: AOAM531NZZzvNOsKl0AADAEmRjmODye7JpOYi4kBTNSAUFYCsE3Ub2iH
+        Ftlpc0Ns2SesAPN6zmf5bTkNYVXDiLUtYlfEIMc=
+X-Google-Smtp-Source: ABdhPJyTjVXWUex3kx74jUkyZZy1Lgyk60TiagscYsQU7F+1Bp3htGq7r9PeARDpBYraFJPo86RpwCEz5AO3nHAjN0c=
+X-Received: by 2002:a17:906:9f21:: with SMTP id fy33mr46127665ejc.567.1635868395452;
+ Tue, 02 Nov 2021 08:53:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211102094907.31271-1-hdegoede@redhat.com> <20211102094907.31271-11-hdegoede@redhat.com>
+ <CAHp75Vd-xY43H8jPOUqJp55Rq3Wuhsdzctfhqq300S0vAKTzpw@mail.gmail.com> <1f4377bb-2902-05e9-95c7-ad924477b543@redhat.com>
+In-Reply-To: <1f4377bb-2902-05e9-95c7-ad924477b543@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 2 Nov 2021 17:52:26 +0200
+Message-ID: <CAHp75VfJZYiVvE0uQ6ahOJo9wxh0EwjgkeN81vas89pNMDv3GQ@mail.gmail.com>
+Subject: Re: [PATCH v5 10/11] platform/x86: int3472: Pass tps68470_regulator_platform_data
+ to the tps68470-regulator MFD-cell
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On x86_64, when
-CONFIG_COMPILE_TEST=y
-CONFIG_VIDEO_DEV=m
-CONFIG_VIDEO_V4L2=m
-CONFIG_VIDEO_STM32_DMA2D=y
+On Tue, Nov 2, 2021 at 4:59 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 11/2/21 15:34, Andy Shevchenko wrote:
+> > On Tue, Nov 2, 2021 at 11:50 AM Hans de Goede <hdegoede@redhat.com> wrote:
 
-there are many build errors (this is only a sampling of them):
+...
 
-ld: drivers/media/common/videobuf2/videobuf2-core.o: in function `vb2_core_streamon':
-videobuf2-core.c:(.text+0x1f4e): undefined reference to `v4l_vb2q_enable_media_source'
-ld: drivers/media/platform/stm32/dma2d/dma2d.o: in function `dma2d_remove':
-dma2d.c:(.text+0x4d9): undefined reference to `v4l2_m2m_release'
-ld: dma2d.c:(.text+0x4e5): undefined reference to `video_unregister_device'
-ld: dma2d.c:(.text+0x4ed): undefined reference to `v4l2_device_unregister'
-ld: drivers/media/platform/stm32/dma2d/dma2d.o: in function `device_run':
-dma2d.c:(.text+0x588): undefined reference to `v4l2_m2m_next_buf'
-ld: dma2d.c:(.text+0x59b): undefined reference to `v4l2_m2m_next_buf'
-ld: dma2d.c:(.text+0x61f): undefined reference to `v4l2_m2m_buf_copy_metadata'
-ld: drivers/media/platform/stm32/dma2d/dma2d.o: in function `vidioc_g_fmt':
-dma2d.c:(.text+0x71c): undefined reference to `v4l2_m2m_get_vq'
-ld: drivers/media/platform/stm32/dma2d/dma2d.o: in function `dma2d_release':
-dma2d.c:(.text+0x850): undefined reference to `video_devdata'
-ld: dma2d.c:(.text+0x87b): undefined reference to `v4l2_m2m_ctx_release'
-ld: dma2d.c:(.text+0x88f): undefined reference to `v4l2_ctrl_handler_free'
-ld: dma2d.c:(.text+0x897): undefined reference to `v4l2_fh_del'
-ld: dma2d.c:(.text+0x89f): undefined reference to `v4l2_fh_exit'
-ld: drivers/media/platform/stm32/dma2d/dma2d.o: in function `dma2d_buf_queue':
-dma2d.c:(.text+0x8db): undefined reference to `v4l2_m2m_buf_queue'
-ld: drivers/media/platform/stm32/dma2d/dma2d.o: in function `dma2d_stop_streaming':
-dma2d.c:(.text+0x922): undefined reference to `v4l2_m2m_buf_remove'
-ld: dma2d.c:(.text+0x956): undefined reference to `v4l2_m2m_buf_remove'
-ld: drivers/media/platform/stm32/dma2d/dma2d.o: in function `dma2d_open':
-dma2d.c:(.text+0x996): undefined reference to `video_devdata'
+> >> +               board_data = int3472_tps68470_get_board_data(dev_name(&client->dev));
+> >> +               if (!board_data) {
+> >> +                       dev_err(&client->dev, "No board-data found for this laptop/tablet model\n");
+> >> +                       return -ENODEV;
+> >
+> > It's fine to use dev_err_probe() for known error codes.
+> >
+> >> +               }
+> >
+> > ...
+> >
+> >> +               cells[1].platform_data = (void *)board_data->tps68470_regulator_pdata;
+> >
+> > Do we need casting?
+>
+> Yes, the cast casts away a "const", the const is correct
+> since the data only ever gets read by the regulator driver,
+> but platform_data pointers are normally not const, so it
+> is either the cast, or loose the const on the definition
+> of the struct to which board_data->tps68470_regulator_pdata
+> points...
+>
+> So not good choice here really, only chosing between bad
+> options and I picked the lets do the cast "least worse"
+> option (at least to me). I'm open to changing this.
 
-Regrouping the depend items limits the STM32_DMA2D symbol to =m,
-so that the build errors are eliminated.
+Hmm... Okay, I was under the impression that MFD is using const for
+that field...
 
-Fixes: bdbbd511ef0c ("media: stm32-dma2d: STM32 DMA2D driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Hugues Fruchet <hugues.fruchet@foss.st.com>
-Cc: linux-media@vger.kernel.org
-Cc: Dillon Min <dillon.minfei@gmail.com>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/platform/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- linux-next-20211102.orig/drivers/media/platform/Kconfig
-+++ linux-next-20211102/drivers/media/platform/Kconfig
-@@ -494,7 +494,7 @@ endif # VIDEO_STI_DELTA
- 
- config VIDEO_STM32_DMA2D
- 	tristate "STM32 Chrom-Art Accelerator (DMA2D)"
--	depends on (VIDEO_DEV && VIDEO_V4L2 && ARCH_STM32) || COMPILE_TEST
-+	depends on (VIDEO_DEV && VIDEO_V4L2) && (ARCH_STM32 || COMPILE_TEST)
- 	select VIDEOBUF2_DMA_CONTIG
- 	select V4L2_MEM2MEM_DEV
- 	help
+-- 
+With Best Regards,
+Andy Shevchenko
