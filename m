@@ -2,119 +2,99 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6098C43219
-	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 14:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15F84C433EF
+	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 14:45:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD92161076
-	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 14:38:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E798160E73
+	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 14:45:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbhKBOkn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Nov 2021 10:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S231340AbhKBOrf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Nov 2021 10:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbhKBOkl (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Nov 2021 10:40:41 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BB3C061714;
-        Tue,  2 Nov 2021 07:38:06 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id g10so76466997edj.1;
-        Tue, 02 Nov 2021 07:38:06 -0700 (PDT)
+        with ESMTP id S230326AbhKBOre (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Nov 2021 10:47:34 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD02C061714;
+        Tue,  2 Nov 2021 07:44:59 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id w1so23002741edd.10;
+        Tue, 02 Nov 2021 07:44:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0I7ubj1Ldo3Nk5KDl6c4JTG3GlivIn7ejVsprdJKiXY=;
-        b=JlJTn17qKYIhLmMbFUjqYTIi9H4FR8PTJE4FBsZLnl//slB0e20M00TFsPqunDzHxF
-         PbVznl4+bNrhhrtQwo3TbA+AFWCj8dxNsVeARjRpvwrlPO/qNVg9XntE2Tu72oEVqqlA
-         sI8ekdXZEX/jKSwoYaUCE52G+M8UskIwpShUEhDHge3BU1vfPfmEbTteuy2S9VGbAcz8
-         wNpgwpdWvlRmGYogKzxaHPHsNJsB0OKzJoCOClqei2uOF26HK0U4vETsulOx8uc+tbHn
-         /qgXz45mYp7zYmffuPj5cj5poU8tkZIB8CYsEsClP67R0h32k7QURMbdUHQ+C9YWiutM
-         pjbg==
+        bh=IGpA0l/guxcjGElfIHSIdtmCKC4GUcHmk6UoLJ28NjY=;
+        b=PY3YWvGI8aGwzSGlAZFZinGNujL/HX9RWkWzatjVR7IklhoSKkgOJc4hDR8WpPXwza
+         QNgjpRP2CQDZg/0/lm1e1np6HonfdL7sbczLeKIGX5sdR17yRwH9wH7xUTHx0gK2CD1i
+         WlEaJIXrsWZFDfK3r/dgEU58AB0pa5E7r1qwu86hkWC0Yq/+f6s/Ccm4jiFIVdJGFFuB
+         lIrxX5mi/tcDOykdQictIFk9nK6IUNrSnDUUxcujwHvWBKC5fQvxrK/69JH5Jo26c8An
+         f8fJbmGzIvWe9cH5gMOoq0W73qGoyWI4UFeUSfQDUA25RQ52AG28Wvr+TZrcdWMjj51R
+         YZ+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0I7ubj1Ldo3Nk5KDl6c4JTG3GlivIn7ejVsprdJKiXY=;
-        b=g6FUfqFS/A5kily7HeyTA/8QhqwxASxlWI8r1/3Q4f+LPOOXzif7wFVEeuJWKEroKC
-         wVFnByCBSOwaud1+c9eSTEUBMbTZbHWz7SiT1sAGZtwe5OVzgycic9ONfG10l/rCxbLc
-         uTyhTJpD+pd7j2ttBl3mOLU4Ba/gcjlTiDZbkKIaNO0/DoSIqUGxuUhYdmF4S7NS/LUW
-         6Z300phn0vr+ypmG+boon0noPJglX1Vq/JGKOPh5p3bwYdgeHJ2CwlnuZEQCixs7BgIo
-         ymb+qiegzLDmVEMMyiMiYWxzE6a3pGnLuH0P7QaMdvNlYkpiMiUDGqpVuWbRQJbHIt95
-         F35Q==
-X-Gm-Message-State: AOAM532QFuaQ3pXTtFQGdb0pxVzZOHFi6fwh/iMu+CLgvmbjnds+5R+0
-        vDEzto0HFY2Da/Vg6M5ObNs58O1ov3pKdrLKJwI=
-X-Google-Smtp-Source: ABdhPJz78G9S+IwBiHwzwtrFf9Ws1srJp3v1MBNrdOcNp2jvAQsLpSlPPk6MqY0r4sswsy4EnwvJEpp19zeqpea2M7Q=
-X-Received: by 2002:a17:906:6a0a:: with SMTP id qw10mr18550055ejc.141.1635863882143;
- Tue, 02 Nov 2021 07:38:02 -0700 (PDT)
+        bh=IGpA0l/guxcjGElfIHSIdtmCKC4GUcHmk6UoLJ28NjY=;
+        b=lvwqZL6yGKHDd1mWk3RNmaKQbJF8X629QAnj1IqVYQDO+pZuwq/2ATotGfJaOCVgtd
+         bep/eRXvejLiDU1xc/lIZ1Zvf7dJF2vWccMRTnRy1Egl49KmmU/dui6BRrufHT69t1T7
+         X4E/gJ1RWVcxMZ4Bs1LOfX2vfMQRz68/QVt3PncjQLcnaVQovg6MaPfvZ+aRsXy75VkF
+         cAAwiI62HoEJRSXgxCr/nSlB8DlN/mYpNvZeK/XcdoIlr13LnwJTAbObl3jAyIoFbVgY
+         FFyHSG++663xBetw7F7RWujIsm1pfMjWb0eRssVUhFBl+4SId0rhML9YSl+Pz135SGNs
+         QKlQ==
+X-Gm-Message-State: AOAM5330QxIKpxtne/wfdLLrYAJHExrO5EzMQUdhjX7r6qPtE8Yw40BR
+        i2fEHbHETyfnAkWwp21jo0iNVLtAFAfzSLg4SvY=
+X-Google-Smtp-Source: ABdhPJy/tB8lxZRFDOwRPpbKQu8fZ4y+m8XO40U23cDbGR4mnXDC7HAMwVCourQlr3P5r279E3+PkjTqokWYSyDwFC0=
+X-Received: by 2002:a05:6402:1801:: with SMTP id g1mr24872630edy.107.1635864298428;
+ Tue, 02 Nov 2021 07:44:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211102094907.31271-1-hdegoede@redhat.com>
-In-Reply-To: <20211102094907.31271-1-hdegoede@redhat.com>
+References: <20211017162337.44860-1-kitakar@gmail.com> <20211017162337.44860-4-kitakar@gmail.com>
+ <20211102130245.GE2794@kadam>
+In-Reply-To: <20211102130245.GE2794@kadam>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 2 Nov 2021 16:37:13 +0200
-Message-ID: <CAHp75VfHo1XRo8SPy2PtW8JyJ4K6AtZhwGotuCu3Fw5-FFpK0g@mail.gmail.com>
-Subject: Re: [PATCH v5 00/11] Add support for X86/ACPI camera sensor/PMIC
- setup with clk and regulator platform data
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+Date:   Tue, 2 Nov 2021 16:44:09 +0200
+Message-ID: <CAHp75VeThcCywYZsrUNYSA3Yc3MjJwfiCBCGep1DpWFFUg71cw@mail.gmail.com>
+Subject: Re: [BUG/RFC PATCH 3/5] [BUG][RFC] media: atomisp: pci: add NULL
+ check for asd obtained from atomisp_video_pipe
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Tsuchiya Yuto <kitakar@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Patrik Gfeller <patrik.gfeller@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Kaixu Xia <kaixuxia@tencent.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Yang Li <abaci-bugfix@linux.alibaba.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Alex Dewar <alex.dewar90@gmail.com>,
+        Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Alan <alan@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
+        linux-staging@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Nov 2, 2021 at 11:49 AM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Here is v5 of my patch-set adding support for camera sensor connected to a
-> TPS68470 PMIC on x86/ACPI devices.
+On Tue, Nov 2, 2021 at 3:10 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> On Mon, Oct 18, 2021 at 01:23:34AM +0900, Tsuchiya Yuto wrote:
 
-No showstoppers observed, FWIW,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > +     if(!pipe->asd) {
+>
+> Run your patches through scripts/checkpatch.pl.
 
-> I'm quite happy with how this works now, so from my pov this is the final
-> version of the device-instantiation deferral code / approach.
->
-> ###
->
-> The clk and regulator frameworks expect clk/regulator consumer-devices
-> to have info about the consumed clks/regulators described in the device's
-> fw_node, but on ACPI this info is missing.
->
-> This series worksaround this by providing platform_data with the info to
-> the TPS68470 clk/regulator MFD cells.
->
-> Patches 1 - 2 deal with a probe-ordering problem this introduces,
-> since the lookups are only registered when the provider-driver binds,
-> trying to get these clks/regulators before then results in a -ENOENT
-> error for clks and a dummy regulator for regulators. See the patches
-> for more details.
->
-> Patch 3 adds a header file which adds tps68470_clk_platform_data and
-> tps68470_regulator_platform_data structs. The futher patches depend on
-> this new header file.
->
-> Patch 4 + 5 add the TPS68470 clk and regulator drivers
->
-> Patches 6 - 11 Modify the INT3472 driver which instantiates the MFD cells to
-> provide the necessary platform-data.
+While it's good advice, we are dealing with quite a bad code under
+staging, so the requirements may be relaxed.
 
+> > +             dev_err(pipe->isp->dev, "%s(): asd is NULL, device is %s\n",
+> > +                     __func__, pipe->vdev.name);
+> > +             return;
+> > +     }
 
 -- 
 With Best Regards,
