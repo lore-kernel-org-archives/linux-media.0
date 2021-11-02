@@ -2,125 +2,137 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C428C4332F
-	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 14:35:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25D75C433FE
+	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 14:36:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 11613610FD
-	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 14:35:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A9FD6109D
+	for <linux-media@archiver.kernel.org>; Tue,  2 Nov 2021 14:36:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbhKBOh5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Nov 2021 10:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbhKBOhz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Nov 2021 10:37:55 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83560C0613F5;
-        Tue,  2 Nov 2021 07:35:20 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id w15so76792713edc.9;
-        Tue, 02 Nov 2021 07:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=65sYvvqiPacKnyXGm00uOfZmsdN1H152QZb/K+6oTrA=;
-        b=JxLBTKIVNZHK0eYuQS+2xQbio8EFWVSsF86el4ZeRBHIxp4C+xMek7kd13w+RHprtp
-         BUr6gFI4Vd7RVLKLTkAdpctZSALuqID7yhubn31jBEo/wGXnTxwHFvGgb5i4tXyM44Ee
-         eMuMErWiXd+lLV4bh96VAYwFml+Qjt1p1vDuv5nvc4C96SKi161F3rM8FIZVUGE//s0i
-         BLwF+OO8ZOIzlyS7sPYrylrrQKNDcbv8boMgC6JrTdWxM8/0I6RP3FvRt/eSc2c6djHg
-         ZW1mqeU1TH+QAxauUw/3Jv37PxViBGQ8hzcIpuWT7DOpoVx8iwLliYA8im2G00scJf3i
-         dBKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=65sYvvqiPacKnyXGm00uOfZmsdN1H152QZb/K+6oTrA=;
-        b=w9WksMXQ69VBCIl/ePBEdHusuh0tpUoLSsMRPQVUZgzkThSOtvCIhdilpIPQKg+YZs
-         GuWeFZF3F012u0eAwer5ydliXuZ7UoRjQ5J3KCencmJvnk5zQ/3Vr0fRN2YxoFulg/WL
-         /MBFwkBWmjwy3OO/kGI2EqDDba3rUTHCjnZDxFwPb6etYilFOme0FFLquBch3DDjDUBS
-         YtYhkdJ2a3R0zppzu28NVAQz0sje5sjpW1/upl+lJqw9sTFk1D+SOB33A2RXBikoHyC3
-         C/roUKgdFEdvBpy2aE2N5QNUhmxDPPWCtMglaasXzTFF5RABOXq3Bwo5ieC85PvPPhQP
-         SHvg==
-X-Gm-Message-State: AOAM530mHExfyJrE6KZuf6NPWOGOTK7Jt7jPq+IWUR3Bh4xFal/6ceEo
-        nzunRVd6gIfc88uzY9DrzndOu6onUaLF4Gu3Kgk=
-X-Google-Smtp-Source: ABdhPJxbNeuBL+SSNH+3/S3iAwFmMxZhFeZFkV/g7SdZI4XCi+BAFf24eDiSTLXHPzQiLIjNziN/KABxFr0PzlrMtTE=
-X-Received: by 2002:a05:6402:207c:: with SMTP id bd28mr41368359edb.240.1635863711126;
- Tue, 02 Nov 2021 07:35:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211102094907.31271-1-hdegoede@redhat.com> <20211102094907.31271-11-hdegoede@redhat.com>
-In-Reply-To: <20211102094907.31271-11-hdegoede@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 2 Nov 2021 16:34:21 +0200
-Message-ID: <CAHp75Vd-xY43H8jPOUqJp55Rq3Wuhsdzctfhqq300S0vAKTzpw@mail.gmail.com>
-Subject: Re: [PATCH v5 10/11] platform/x86: int3472: Pass tps68470_regulator_platform_data
- to the tps68470-regulator MFD-cell
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        id S230336AbhKBOj3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Nov 2021 10:39:29 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:53977 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229530AbhKBOj2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Nov 2021 10:39:28 -0400
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 206041C000A;
+        Tue,  2 Nov 2021 14:36:48 +0000 (UTC)
+Date:   Tue, 2 Nov 2021 15:37:40 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        sakari.ailus@linux.intel.com, niklas.soderlund@ragnatech.se,
+        kieran.bingham@ideasonboard.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2 06/13] media: subdev: Add for_each_active_route() macro
+Message-ID: <20211102143740.bu5kfmcyj5opkuxg@uno.localdomain>
+References: <20211017182449.64192-1-jacopo+renesas@jmondi.org>
+ <20211017182449.64192-7-jacopo+renesas@jmondi.org>
+ <8c16cd01-48c6-ecc8-4437-e597559f492f@ideasonboard.com>
+ <20211028090331.sccuthk5h3tw22f3@uno.localdomain>
+ <b029f3ad-1790-d316-dfb0-0e64e161fc2c@ideasonboard.com>
+ <YXp5BKABg0lb7EZk@pendragon.ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YXp5BKABg0lb7EZk@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Nov 2, 2021 at 11:50 AM Hans de Goede <hdegoede@redhat.com> wrote:
+Hello,
+
+On Thu, Oct 28, 2021 at 01:18:44PM +0300, Laurent Pinchart wrote:
+> On Thu, Oct 28, 2021 at 01:17:10PM +0300, Tomi Valkeinen wrote:
+> > On 28/10/2021 12:03, Jacopo Mondi wrote:
+> > > On Thu, Oct 28, 2021 at 11:32:12AM +0300, Tomi Valkeinen wrote:
+> > >> On 17/10/2021 21:24, Jacopo Mondi wrote:
+> > >>> Add a for_each_active_route() macro to replace the repeated pattern
+> > >>> of iterating on the active routes of a routing table.
+> > >>>
+> > >>> Replace the existing occurrences of such pattern in the codebase.
+> > >>>
+> > >>> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> > >>> ---
+> > >>>    drivers/media/i2c/ds90ub913.c             |  8 ++------
+> > >>>    drivers/media/i2c/ds90ub953.c             |  7 ++-----
+> > >>>    drivers/media/i2c/ds90ub960.c             |  8 ++------
+> > >>>    drivers/media/i2c/max9286.c               | 10 ++--------
+> > >>>    drivers/media/platform/ti-vpe/cal-video.c |  9 ++-------
+> > >>>    drivers/media/v4l2-core/v4l2-subdev.c     | 18 ++++++++++++++++++
+> > >>>    include/media/v4l2-subdev.h               | 11 +++++++++++
+> > >>>    7 files changed, 39 insertions(+), 32 deletions(-)
+> > >>>
+> > >>
+> > >> ...
+> > >>
+> > >>> +struct v4l2_subdev_route *next_active_route(const struct v4l2_subdev_krouting *routing,
+> > >>> +					    struct v4l2_subdev_route *route)
+> > >>> +{
+> > >>> +	if (route)
+> > >>> +		++route;
+> > >>> +	else
+> > >>> +		route = &routing->routes[0];
+> > >>> +
+> > >>> +	for (; route < routing->routes + routing->num_routes; ++route) {
+> > >>> +		if (!(route->flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
+> > >>> +			continue;
+> > >>> +
+> > >>> +		return route;
+> > >>> +	}
+> > >>> +
+> > >>> +	return NULL;
+> > >>> +}
+> > >>
+> > >> Also, this must be exported. I'll add that. And probably better to have a
+> > >
+> > > Does it ? I would rather have it in the header, as this is only
+> > > meant to be called by the for_each_active_route() macro, and not by
+> > > other users. However it seemed to be rather long to be defined as a
+> > > static inline function in the header, so I opted to move it to the c
+> > > file.
+> >
+> > Yes, static inline is an option. The function is a bit long-ish, though,
+> > as you mention.
+> >
+> > > To be honest, it's not clear to me what happens if a module calls the
+> > > for_each_active_route() macro that calls this non-exported function,
+> > > so you're probably correct.
+> >
+> > The module cannot be loaded if it refers to a non-exported symbol.
+> >
+
+Yeah, dumb me, the macro will just expand and the symbol won't be
+available.
+
+> > > However exporting the symbol makes it available globally, but I guess
+> >
+> > Yes, thus the prefix is a good thing =).
+> >
+> > > that's not a big deal if it's clearly documented that drivers shall
+> > > not call this directly (or maybe we want it to be available globally,
+> > > why not...)
+> >
+> > I'll see how long helper functions similar macros have as inline in
+> > other parts of the kernel. Maybe static inline is fine.
+> >
+> > But if not, we'll just need to document the helper function. I don't see
+> > why we should say it shouldn't be called directly, though. But if that
+> > is the case, we can prefix it with __.
 >
-> Pass tps68470_regulator_platform_data to the tps68470-regulator
-> MFD-cell, specifying the voltages of the various regulators and
-> tying the regulators to the sensor supplies so that sensors which use
-> the TPS68470 can find their regulators.
+> The __ prefix is exactly what I was going to propose.
 >
-> Since the voltages and supply connections are board-specific, this
-> introduces a DMI matches int3472_tps68470_board_data struct which
-> contains the necessary per-board info.
+
+Ack to the __ prefix and export the symbol from the .c file if it's
+deemed too long to live in the header!
+
+Thanks
+   j
+
+> --
+> Regards,
 >
-> This per-board info also includes GPIO lookup information for the
-> sensor IO lines which may be connected to the tps68470 GPIOs.
-
-...
-
-> +               board_data = int3472_tps68470_get_board_data(dev_name(&client->dev));
-> +               if (!board_data) {
-> +                       dev_err(&client->dev, "No board-data found for this laptop/tablet model\n");
-> +                       return -ENODEV;
-
-It's fine to use dev_err_probe() for known error codes.
-
-> +               }
-
-...
-
-> +               cells[1].platform_data = (void *)board_data->tps68470_regulator_pdata;
-
-Do we need casting?
-
-...
-
-> +#include <linux/dmi.h>
-> +#include <linux/gpio/machine.h>
-> +#include <linux/platform_data/tps68470.h>
-> +#include <linux/regulator/machine.h>
-
-string.h  for strcmp() ?
-kernel.h for ARRAY_SIZE() ?
-
--- 
-With Best Regards,
-Andy Shevchenko
+> Laurent Pinchart
