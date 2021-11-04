@@ -2,101 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2E8AC433F5
-	for <linux-media@archiver.kernel.org>; Thu,  4 Nov 2021 12:06:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38FB7C433EF
+	for <linux-media@archiver.kernel.org>; Thu,  4 Nov 2021 12:06:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D7646109F
-	for <linux-media@archiver.kernel.org>; Thu,  4 Nov 2021 12:06:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 21EB361073
+	for <linux-media@archiver.kernel.org>; Thu,  4 Nov 2021 12:06:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbhKDMIo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Nov 2021 08:08:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37176 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231340AbhKDMIj (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Nov 2021 08:08:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B371861246;
-        Thu,  4 Nov 2021 12:06:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636027560;
-        bh=2T0ZwNsJcy30Fl7Ibrebx0nzNGLAhY58MGxL/A03P6c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N3yNWtDZFdq0nWqZA6s/lgz4Rw4jC6r1hRfe1qcRFKFqgaz+FehNRNvfxrMmB3rQx
-         KJWNtLLO03ojZk5XJBjBAxIcGruw9OUL31oAWpLxukRsYJx/Fa7xyLiPB1yYcfjM+f
-         ibBSIWd/r8mAXExyni7mSmmQiehHCdN6x5bOWH6QAAgnRPAkdtVVexLbfz+Ll/WecJ
-         g/wteL9UyYBE6MXBfqLkxjk9FWDNZjfiJyN1QyvQQuFZTMv0zDlti8NJdhRABGJPpo
-         UWk5IouZFr9oRuLl2JsLHIf9R8Y0sxMIZvFjzZwzeo95IpBZ/1nhD09uPpyNpZ9GZi
-         oUgEFC9hUpvzQ==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mibVG-005nHh-5q; Thu, 04 Nov 2021 12:05:58 +0000
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alex Dewar <alex.dewar90@gmail.com>,
-        Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        id S231643AbhKDMJY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Nov 2021 08:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231626AbhKDMJN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Nov 2021 08:09:13 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EC7C06120D
+        for <linux-media@vger.kernel.org>; Thu,  4 Nov 2021 05:06:35 -0700 (PDT)
+Received: from [192.168.1.111] (91-158-153-130.elisa-laajakaista.fi [91.158.153.130])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 473B8D8B;
+        Thu,  4 Nov 2021 13:06:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1636027593;
+        bh=btuS+2dQolQjMmzNCi3BS3UDKB2HvM3ZQFDGoNSJeGI=;
+        h=To:Cc:References:From:Subject:Date:In-Reply-To:From;
+        b=pVHMbVS2ORkUeB7a/idynQRXwlgK1PKCGGgEnovmdMi6Z49r3rM13zuR1f1V1jQMG
+         b9Z4wBoEKednVgD4ZWO4u91w7IcWHZo7leE83GOQFJWtNtlAJMWK2wsMLqr4iGH8uC
+         vY3zzvsRKW5jppW6k5iXSiPw94yHMr1pv0aqvzNs=
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Yang Li <abaci-bugfix@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH 2/7] media: atomisp: move a debug printf to a better place
-Date:   Thu,  4 Nov 2021 12:05:51 +0000
-Message-Id: <b068833be0d0ff71f63ab55f5c90d04ed514c90e.1636026959.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1636026959.git.mchehab+huawei@kernel.org>
-References: <cover.1636026959.git.mchehab+huawei@kernel.org>
+        niklas.soderlund+renesas@ragnatech.se
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>
+References: <20211005085750.138151-1-tomi.valkeinen@ideasonboard.com>
+ <20211005085750.138151-26-tomi.valkeinen@ideasonboard.com>
+ <c3f939a1-81ac-d2a1-d669-9ae59143c07f@xs4all.nl>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH v9 25/36] media: add V4L2_SUBDEV_FL_MULTIPLEXED
+Message-ID: <ed32f24a-da36-3218-7887-0aed23fe87ec@ideasonboard.com>
+Date:   Thu, 4 Nov 2021 14:06:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <c3f939a1-81ac-d2a1-d669-9ae59143c07f@xs4all.nl>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The sensor width/height report is alread being printed after
-its calculus. The only reason for an extra debug printk is
-when dis is used. So, change its message to reflect and move
-it to be inside the if checks.
+On 12/10/2021 17:48, Hans Verkuil wrote:
+> On 05/10/2021 10:57, Tomi Valkeinen wrote:
+>> Add subdev flag V4L2_SUBDEV_FL_MULTIPLEXED. It is used to indicate that
+>> the subdev supports the new API with multiplexed streams (routing,
+>> stream configs).
+>>
+>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>> ---
+>>   include/media/v4l2-subdev.h | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+>>
+>> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+>> index b3a72c98a2d3..7f9c83fac020 100644
+>> --- a/include/media/v4l2-subdev.h
+>> +++ b/include/media/v4l2-subdev.h
+>> @@ -888,6 +888,17 @@ struct v4l2_subdev_internal_ops {
+>>    * should set this flag.
+>>    */
+>>   #define V4L2_SUBDEV_FL_HAS_EVENTS		(1U << 3)
+>> +/*
+>> + * Set this flag if this subdev supports multiplexed streams. This means
+>> + * that the driver supports routing and handles the stream parameter in its
+>> + * v4l2_subdev_pad_ops handlers. More specifically, this means:
+>> + *
+>> + * - Centrally managed active state is enabled
+>> + * - Legacy pad config is _not_ supported (state->pads)
+> 
+> I'm not sure what is meant with this. Can you elaborate?
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
+It means that a subdev with V4L2_SUBDEV_FL_MULTIPLEXED cannot use the 
+legacy pads array in the state (state->pads is NULL), as multiplexed 
+streams requires streams support. For streams you need the routing & 
+stream configs, added in the following patches.
 
-To mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 0/7] at: https://lore.kernel.org/all/cover.1636026959.git.mchehab+huawei@kernel.org/
+  Tomi
 
- drivers/staging/media/atomisp/pci/atomisp_cmd.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-index feb75491a273..76c9e89afb48 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-@@ -5583,6 +5583,10 @@ static int atomisp_set_fmt_to_snr(struct video_device *vdev,
- 				       pad, set_fmt, &pad_state, &vformat);
- 		if (ret)
- 			return ret;
-+
-+		dev_dbg(isp->dev, "video dis: sensor width: %d, height: %d\n",
-+			ffmt->width, ffmt->height);
-+
- 		if (ffmt->width < req_ffmt->width ||
- 		    ffmt->height < req_ffmt->height) {
- 			req_ffmt->height -= dvs_env_h;
-@@ -5593,8 +5597,6 @@ static int atomisp_set_fmt_to_snr(struct video_device *vdev,
- 			asd->params.video_dis_en = false;
- 		}
- 	}
--	dev_dbg(isp->dev, "sensor width: %d, height: %d\n",
--		ffmt->width, ffmt->height);
- 	vformat.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 	ret = v4l2_subdev_call(isp->inputs[asd->input_curr].camera, pad,
- 			       set_fmt, NULL, &vformat);
--- 
-2.31.1
+> Regards,
+> 
+> 	Hans
+> 
+>> + * - Routing ioctls are available
+>> + * - Multiple streams per pad are supported
+>> + */
+>> +#define V4L2_SUBDEV_FL_MULTIPLEXED		(1U << 4)
+>>   
+>>   struct regulator_bulk_data;
+>>   
+>>
+> 
 
