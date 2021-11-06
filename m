@@ -2,131 +2,160 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0109C433F5
-	for <linux-media@archiver.kernel.org>; Sat,  6 Nov 2021 14:12:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A825C433F5
+	for <linux-media@archiver.kernel.org>; Sat,  6 Nov 2021 15:54:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B812060F55
-	for <linux-media@archiver.kernel.org>; Sat,  6 Nov 2021 14:12:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE0286124D
+	for <linux-media@archiver.kernel.org>; Sat,  6 Nov 2021 15:54:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbhKFOOy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 6 Nov 2021 10:14:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46114 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229932AbhKFOOx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 6 Nov 2021 10:14:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1636207931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NvL28t+9mmNIhKid1W8YhAFvBVkKSYd5UykSql3UdJ8=;
-        b=DSL/CjF1Mv6scTJaU+PJR0JTpOOL56zOjxyTtYSS1hoY5jGOD5J4j1jwHuYIzWUDmX1PeE
-        lyAyyX0r6g+CkRRErnUfehrl5H5+ZvWN1lOKTiFpF4fkHFLKGR03w/+UJpMIUFkJ1P/TTC
-        lnAb/EmAhrlNjoWb3o8CXeYPZNxQXLQ=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-125-uljQJUAqOF6Mbytv8_6-Rw-1; Sat, 06 Nov 2021 10:12:10 -0400
-X-MC-Unique: uljQJUAqOF6Mbytv8_6-Rw-1
-Received: by mail-ed1-f70.google.com with SMTP id s6-20020a056402520600b003e2dea4f9b4so8250037edd.12
-        for <linux-media@vger.kernel.org>; Sat, 06 Nov 2021 07:12:09 -0700 (PDT)
+        id S233935AbhKFP52 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 6 Nov 2021 11:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231545AbhKFP51 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 6 Nov 2021 11:57:27 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D2DC061570;
+        Sat,  6 Nov 2021 08:54:46 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id k22so824919iol.13;
+        Sat, 06 Nov 2021 08:54:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iiKkWXx7LH2mtsbKdfcA3IaZmnBXPN3UgFdD8y0kBYA=;
+        b=MJxwBVe9vLmvxQwX+/3/BR4kcgDSfMwKNajXuRCbZSQXxFYDunWJ8Q0+HSe7Hq/IKn
+         qw4sCGPdv/TEkP6fm9DH6+01JgDt0ANlSOwFgn5jU0EtOch35OOrDTdFmPJ7nknZgoJr
+         Ty+qxgkBgSNiN+dzo0hJtwBnmhEl2+Qck8f5LXeAk/08dweFu1/MIIrfPgIl5ZKm6dpl
+         ACwhe8NDeG/ypLFfBB2Upq92BbqcCpOvtnX2ZMcqCA/i5Cqy31eTMVGPMboLbaG1Y9/b
+         77pP2jOmvtkpT2WPsd4fX/DoancCOYhqejRuNZAh95OITWsRCmlIsUb9p3pHVqHjWXFi
+         0Wew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=NvL28t+9mmNIhKid1W8YhAFvBVkKSYd5UykSql3UdJ8=;
-        b=d9vpLm/Y60OtxHbuws8Y8C7NGZd9WV4nlvmhy+YSFMybHyoGZDFWGXmU3o6A91CTVi
-         wIuue2z6Hw4XJCCKSVLelYRouVYJzigZyt6fb1YtHt/Z3MkrimNSSYmkEJRUBtuiXiON
-         ZCGP36OHN1XFgla13GVLvgv/ct3fm0c2TlzbflqW4Bv4dBUt4W6LSHEyYDNGtXuX3L/R
-         AqPd7CFcnGpDCY04FxAqf7pfJnxIW020yKqSiIx3uCdPPLWagjfwRBO5nUDionKT5U2N
-         Gpq/vWYfNp3mZmLqFLldAnqQpKhZpMvZDJgiCKlkpmrUibxlt/cjfOgFWtegslNcuuT+
-         A01A==
-X-Gm-Message-State: AOAM533+3EasVTT0nDp9DdiKx9iJRYV9AExVTFAws3asvQVnaQuiQ0Iu
-        4Ud0TQpHuU2gwxLAuF+fwRwlH+maNPz++Ja0JfRuCAiR9ZEXq/8zKlzA/CJIykyRLX+8+V37KkU
-        ft30FaiHQ5yGd0jgjxG7Fgvk=
-X-Received: by 2002:a17:906:6b1a:: with SMTP id q26mr77714810ejr.185.1636207928567;
-        Sat, 06 Nov 2021 07:12:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyZAKFHxsHAxT8AQIMcGt+HZHLg18xc7Trn1BTg6tRegrsxDmthab5sZ61MbsKL0W4N18i7JA==
-X-Received: by 2002:a17:906:6b1a:: with SMTP id q26mr77714790ejr.185.1636207928410;
-        Sat, 06 Nov 2021 07:12:08 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id sg17sm5793569ejc.72.2021.11.06.07.12.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Nov 2021 07:12:07 -0700 (PDT)
-Message-ID: <3e2a32c3-1e42-a510-6010-6be07bdd101d@redhat.com>
-Date:   Sat, 6 Nov 2021 15:12:07 +0100
+        bh=iiKkWXx7LH2mtsbKdfcA3IaZmnBXPN3UgFdD8y0kBYA=;
+        b=BA3JNacb5nt7EMqB/dCpGZB+7dAoFIXnpsFdYN86SLaRALPOn3NO/83/5spS9gDtiZ
+         O8/SW5vAqVsTpEPUp3kRgVZVOW7DIKYxx2jaizUJETW/ft7sQUEYPc1EkYFUkL4E9U73
+         LSG44ECf0OZDFKyOfOk0/si79bQfYt21iCgYRRdkexsFffN/wCnALfkFBO8CSxN/7HXr
+         M9rJqLDQey+6TrfHffYVO+A0DqsIHM92DxQSCx//wX7PhwVwmkLAuOf+06WNYEf4X/PA
+         Uus3MWks3gx6HBqOAYs8fDSnj9xL4aRcSu18YQUuXRzZ7On3OhppWYZd/Jna6kWqwQ3V
+         rBlg==
+X-Gm-Message-State: AOAM532RuQb0WDhf4sByZnKrJLIhx9KozDGz/q9OqHBk4cCrLvOw7sBE
+        Fz7IsvizukiKojDMMKw2UHA=
+X-Google-Smtp-Source: ABdhPJxtrSSYCX6qkHYipUtxezBT7pSTriqytk8UjlFhB6d5r7EJeLQHagN9vMzwwHmiq3/E09KJgg==
+X-Received: by 2002:a05:6602:1607:: with SMTP id x7mr4941365iow.134.1636214085658;
+        Sat, 06 Nov 2021 08:54:45 -0700 (PDT)
+Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:64ba:1c0f:6d36:c11d])
+        by smtp.gmail.com with ESMTPSA id d2sm5718313ilg.77.2021.11.06.08.54.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Nov 2021 08:54:44 -0700 (PDT)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     tharvey@gateworks.com, frieder.schrempf@kontron.de,
+        linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        aford@beaconembedded.com, cstevens@beaconembedded.com,
+        jagan@amarulasolutions.com, Adam Ford <aford173@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V2 1/5] soc: imx: imx8m-blk-ctrl: Fix imx8mm mipi reset
+Date:   Sat,  6 Nov 2021 10:54:23 -0500
+Message-Id: <20211106155427.753197-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: Fwd: Surface Go VCM type (was: Need to pass
- acpi_enforce_resources=lax on the Surface Go (version1))
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        libcamera-devel@lists.libcamera.org
-References: <e2312277-f967-7d3f-5ce9-fbb197d35fd6@gmail.com>
- <3b61bb2d-1136-cf35-ba7a-724da9642855@gmail.com>
- <418dc16a-2a03-7604-a8e2-31c5ddfcf436@redhat.com>
- <58dabc46-211c-844d-3ed3-fd2411936d6d@gmail.com>
- <8d0470d3-7356-b476-6807-5c8606ee3545@redhat.com>
- <YYQi+zpAxPDvdCHx@smile.fi.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YYQi+zpAxPDvdCHx@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Most of the blk-ctrl reset bits are found in one register, however
+there are two bits in offset 8 for pulling the MIPI DPHY out of reset
+and these need to be set when IMX8MM_DISPBLK_PD_MIPI_CSI is brought
+out of reset or the MIPI_CSI hangs.
 
-On 11/4/21 19:14, Andy Shevchenko wrote:
-> On Thu, Nov 04, 2021 at 03:49:48PM +0100, Hans de Goede wrote:
->> On 11/2/21 00:43, Daniel Scally wrote:
-> 
-> ...
-> 
->> Ok, I've figured this out now, with the attached patch (which also
->> explains what is going on) as well as an updated tps68470_board_data.c
->> with updated regulator_init_data for the VCM (also attached), the driver
->> can now successfully talk to the VCM in probe() while we are NOT
->> streaming from the ov8865.
-> 
-> Thanks, Hans.
-> 
-> ...
-> 
->> const struct int3472_tps68470_board_data *int3472_tps68470_get_board_data(const char *dev_name)
->> {
->> 	const struct int3472_tps68470_board_data *board_data;
->> 	const struct dmi_system_id *match;
->>
->> 	match = dmi_first_match(int3472_tps68470_board_data_table);
->> 	while (match) {
->> 		board_data = match->driver_data;
->> 		if (strcmp(board_data->dev_name, dev_name) == 0)
->> 			return board_data;
-> 
->> 		dmi_first_match(++match);
-> 
-> Not sure I understood the purpose of the call.
+Fixes: 926e57c065df ("soc: imx: imx8m-blk-ctrl: add DISP blk-ctrl")
+Signed-off-by: Adam Ford <aford173@gmail.com>
+---
 
-You are right , that should have a "match = " in front of it, but
-I actually like this form found else where better:
+V2:  Make a note that the extra register is only for Mini/Nano DISPLAY_BLK_CTRL
+     Rename the new register to mipi_phy_rst_mask
+     Encapsulate the edits to this register with an if-statement
 
-        for (match = dmi_first_match(int3472_tps68470_board_data_table);
-             match;
-             match = dmi_first_match(match + 1)) {
+ drivers/soc/imx/imx8m-blk-ctrl.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-That IMHO makes the whole code a lot clearer, so I'll switch to that for
-the next version, thank you for catching this.
-
-Regards,
-
-Hans
+diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
+index 519b3651d1d9..581eb4bc7f7d 100644
+--- a/drivers/soc/imx/imx8m-blk-ctrl.c
++++ b/drivers/soc/imx/imx8m-blk-ctrl.c
+@@ -17,6 +17,7 @@
+ 
+ #define BLK_SFT_RSTN	0x0
+ #define BLK_CLK_EN	0x4
++#define BLK_MIPI_RESET_DIV	0x8 /* Mini/Nano DISPLAY_BLK_CTRL only */
+ 
+ struct imx8m_blk_ctrl_domain;
+ 
+@@ -36,6 +37,15 @@ struct imx8m_blk_ctrl_domain_data {
+ 	const char *gpc_name;
+ 	u32 rst_mask;
+ 	u32 clk_mask;
++
++	/*
++	 * i.MX8M Mini and Nano have a third DISPLAY_BLK_CTRL register
++	 * which is used to control the reset for the MIPI Phy.
++	 * Since it's only present in certain circumstances,
++	 * an if-statement should be used before setting and clearing this
++	 * register.
++	 */
++	u32 mipi_phy_rst_mask;
+ };
+ 
+ #define DOMAIN_MAX_CLKS 3
+@@ -78,6 +88,8 @@ static int imx8m_blk_ctrl_power_on(struct generic_pm_domain *genpd)
+ 
+ 	/* put devices into reset */
+ 	regmap_clear_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
++	if (data->mipi_phy_rst_mask)
++		regmap_clear_bits(bc->regmap, BLK_MIPI_RESET_DIV, data->mipi_phy_rst_mask);
+ 
+ 	/* enable upstream and blk-ctrl clocks to allow reset to propagate */
+ 	ret = clk_bulk_prepare_enable(data->num_clks, domain->clks);
+@@ -99,6 +111,8 @@ static int imx8m_blk_ctrl_power_on(struct generic_pm_domain *genpd)
+ 
+ 	/* release reset */
+ 	regmap_set_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
++	if (data->mipi_phy_rst_mask)
++		regmap_set_bits(bc->regmap, BLK_MIPI_RESET_DIV, data->mipi_phy_rst_mask);
+ 
+ 	/* disable upstream clocks */
+ 	clk_bulk_disable_unprepare(data->num_clks, domain->clks);
+@@ -120,6 +134,9 @@ static int imx8m_blk_ctrl_power_off(struct generic_pm_domain *genpd)
+ 	struct imx8m_blk_ctrl *bc = domain->bc;
+ 
+ 	/* put devices into reset and disable clocks */
++	if (data->mipi_phy_rst_mask)
++		regmap_clear_bits(bc->regmap, BLK_MIPI_RESET_DIV, data->mipi_phy_rst_mask);
++
+ 	regmap_clear_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
+ 	regmap_clear_bits(bc->regmap, BLK_CLK_EN, data->clk_mask);
+ 
+@@ -488,6 +505,7 @@ static const struct imx8m_blk_ctrl_domain_data imx8mm_disp_blk_ctl_domain_data[]
+ 		.gpc_name = "mipi-csi",
+ 		.rst_mask = BIT(3) | BIT(4),
+ 		.clk_mask = BIT(10) | BIT(11),
++		.mipi_phy_rst_mask = BIT(16) | BIT(17),
+ 	},
+ };
+ 
+-- 
+2.32.0
 
