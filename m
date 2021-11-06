@@ -2,211 +2,133 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FAFBC433EF
-	for <linux-media@archiver.kernel.org>; Sat,  6 Nov 2021 12:06:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6650C433FE
+	for <linux-media@archiver.kernel.org>; Sat,  6 Nov 2021 12:39:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A8326127C
-	for <linux-media@archiver.kernel.org>; Sat,  6 Nov 2021 12:06:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76AAB6125F
+	for <linux-media@archiver.kernel.org>; Sat,  6 Nov 2021 12:39:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbhKFMJD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 6 Nov 2021 08:09:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39322 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232950AbhKFMJC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 6 Nov 2021 08:09:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F95561266;
-        Sat,  6 Nov 2021 12:06:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636200381;
-        bh=Mg0z1ibHmm42Iu1qcKyelNXmwwXddybaIqthcUrSF+M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=sEmiSkXcQ/82VFDUGE2cteb5H7VSVesqpljFR1JdhRuAGKI25uHyIsY9A10yHiil0
-         WKCxEU9qrCoW4HBMjszB1VPgaYuOg/LLCzyLu8RZvIgj17VZHI8owyQcIeG5Y06yJQ
-         y3lq2pmeJV6SrdUc8Eesn0pshHlGJncpdRa38E0r+1j6OxbrgqferFyiV70Umhxlrs
-         pSGoXNXrxIwRgdrUP/MEh/x3m76LoUp+zxkL5sUczhCnOf3LnWIPQw8pCGG7V+Wgr5
-         2LDjcm4L5gXX5JviUxK4MEnwEsqJNFTdjcpAHry2zrblCxeu7l/8LWtUDV43n+KaxA
-         5Cj2hiu5Z++AQ==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mjKSg-0006rF-7M; Sat, 06 Nov 2021 12:06:18 +0000
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        Alan <alan@linux.intel.com>, Alex Dewar <alex.dewar90@gmail.com>,
-        Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Baokun Li <libaokun1@huawei.com>,
-        Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kaixu Xia <kaixuxia@tencent.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH] media: atomisp: get rid of ISP2401_NEW_INPUT_SYSTEM
-Date:   Sat,  6 Nov 2021 12:06:17 +0000
-Message-Id: <1885b71956770c4fab463fd338165ae3670da0c1.1636200371.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.33.1
+        id S232984AbhKFMlj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 6 Nov 2021 08:41:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41718 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229669AbhKFMlj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 6 Nov 2021 08:41:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1636202337;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EG9nttygUp8iT/S+pFBMUQdNV7m/LTMOi7o8pXce84k=;
+        b=QEGp/INpj6Y7hZO2EfmCv4ewR3lUqh0XMaUTG4buMO7DnUgKSfvwV5XSDvh8SfXF2s76DJ
+        kcim+ldN2Js2TKumW+D1VAXl+vLLOdcEaWdx2bh91omwHyJ5OQkFVQcIHPiScvSzgeBdPg
+        e7K1hTtJwku1P3mqDfTabY2JKcKywbA=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-249-FlrrqKegN5exUW8k5FniOw-1; Sat, 06 Nov 2021 08:38:54 -0400
+X-MC-Unique: FlrrqKegN5exUW8k5FniOw-1
+Received: by mail-ed1-f69.google.com with SMTP id f20-20020a0564021e9400b003e2ad3eae74so11163239edf.5
+        for <linux-media@vger.kernel.org>; Sat, 06 Nov 2021 05:38:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EG9nttygUp8iT/S+pFBMUQdNV7m/LTMOi7o8pXce84k=;
+        b=5Sv/w4+hyoEaffzwhgXkPTw2BGOqxNZhj0IWqrdaGOLi1mIfDYwjsmvhlmbCuoIBmc
+         p/1OpA6/13npdwPHBC1oiTHQDkmFK84yucAJWZY/8Jwamwd+TpN+3KnLK2ZKKBPJg2L3
+         oRhqM5w0AJE7O2YsB6BnXRTG879ytbr+BaTYp2D8PS1gnSxV0eVRWOxLsSDcIQKBNbOD
+         jrzjT4BCFDn8JcGBXVNOO/AEq63vBAq3oW8WX7fkU7fU/2bOGr5GUA5AFr/LpP2n+B8o
+         VLjmYPuU4iWjKYvI6BkB5b67f0eqPICmorpWkzsJMZd5EatnfcJalDUNGRFFcfTXMmI0
+         xKcg==
+X-Gm-Message-State: AOAM532HMlHjzMOMT+slN7x9Yxxbsd0oQezUwi1hoLc988BSb1F59T5Y
+        mMKDAw0g9CmR0WM2vHD9EGWCQ1xcC2EP4NaDm8t5pF6WeuLo8j06Se9l0ci1aKHm3DxmuS1/RO6
+        kYYfhOoqC9EvtjQvMNJP2Swo=
+X-Received: by 2002:aa7:c34c:: with SMTP id j12mr71058680edr.31.1636202333459;
+        Sat, 06 Nov 2021 05:38:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx+330raMVTbfw7psS1HzmdrXQ5Qs5ZFWSJIKPGzPjh7mjMVO+gM+JFNF/OBKRsVgxTXEkq/Q==
+X-Received: by 2002:aa7:c34c:: with SMTP id j12mr71058658edr.31.1636202333312;
+        Sat, 06 Nov 2021 05:38:53 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id i22sm6048032edu.93.2021.11.06.05.38.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 Nov 2021 05:38:52 -0700 (PDT)
+Message-ID: <28823616-9622-29d4-75d6-cfef0d4f7323@redhat.com>
+Date:   Sat, 6 Nov 2021 13:38:52 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH media-staging regression fix] media: videobuf2-dma-sg: Fix
+ buf->vb NULL pointer dereference
+Content-Language: en-US
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        linux-media@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+References: <20211101145355.533704-1-hdegoede@redhat.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20211101145355.533704-1-hdegoede@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-All ISP2401 devices use the new input system. So, get rid
-of the remaining definitions, replacing them by runtime
-checks for BYT/CHT when applicable.
+Hi,
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/staging/media/atomisp/Makefile        |  2 +-
- .../staging/media/atomisp/pci/atomisp_cmd.c   | 19 +++++++++++--------
- .../media/atomisp/pci/atomisp_compat_css20.c  |  4 ++--
- .../staging/media/atomisp/pci/atomisp_fops.c  |  4 +---
- .../staging/media/atomisp/pci/atomisp_v4l2.c  | 14 ++------------
- 5 files changed, 17 insertions(+), 26 deletions(-)
+On 11/1/21 15:53, Hans de Goede wrote:
+> Commit a4b83deb3e76 ("media: videobuf2: rework vb2_mem_ops API")
+> added a new vb member to struct vb2_dma_sg_buf, but it only added
+> code setting this to the vb2_dma_sg_alloc() function and not to the
+> vb2_dma_sg_get_userptr() and vb2_dma_sg_attach_dmabuf() which also
+> create vb2_dma_sg_buf objects.
+> 
+> This is causing a crash due to a NULL pointer deref when using
+> libcamera on devices with an Intel IPU3 (qcam app).
+> 
+> Fix these crashes by assigning buf->vb in the other 2 functions too,
+> note libcamera tests the vb2_dma_sg_get_userptr() path, the change
+> to the vb2_dma_sg_attach_dmabuf() path is untested.
+> 
+> Fixes: a4b83deb3e76 ("media: videobuf2: rework vb2_mem_ops API")
+> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-diff --git a/drivers/staging/media/atomisp/Makefile b/drivers/staging/media/atomisp/Makefile
-index a23c04cf7f34..a98204e9b20f 100644
---- a/drivers/staging/media/atomisp/Makefile
-+++ b/drivers/staging/media/atomisp/Makefile
-@@ -319,7 +319,7 @@ ifeq ($(CONFIG_VIDEO_ATOMISP_ISP2401),y)
- atomisp-objs += \
- 	$(obj-cht) \
- 	pci/runtime/isys/src/ibuf_ctrl_rmgr.o
--DEFINES += -DISP2401 -DISP2401_NEW_INPUT_SYSTEM
-+DEFINES += -DISP2401
- endif
- 
- ccflags-y += $(INCLUDES) $(DEFINES) -fno-common
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-index 0ddee36cdcd7..4ef5d728cd2f 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-@@ -5156,11 +5156,11 @@ static int css_input_resolution_changed(struct atomisp_sub_device *asd,
- 	dev_dbg(asd->isp->dev, "css_input_resolution_changed to %ux%u\n",
- 		ffmt->width, ffmt->height);
- 
--#if defined(ISP2401_NEW_INPUT_SYSTEM)
--	atomisp_css_input_set_two_pixels_per_clock(asd, false);
--#else
--	atomisp_css_input_set_two_pixels_per_clock(asd, true);
--#endif
-+	if (IS_ISP2401)
-+		atomisp_css_input_set_two_pixels_per_clock(asd, false);
-+	else
-+		atomisp_css_input_set_two_pixels_per_clock(asd, true);
-+
- 	if (asd->continuous_mode->val) {
- 		/* Note for all checks: ffmt includes pad_w+pad_h */
- 		if (asd->run_mode->val == ATOMISP_RUN_MODE_VIDEO ||
-@@ -5494,9 +5494,14 @@ static void atomisp_get_dis_envelop(struct atomisp_sub_device *asd,
- static void atomisp_check_copy_mode(struct atomisp_sub_device *asd,
- 				    int source_pad, struct v4l2_pix_format *f)
- {
--#if defined(ISP2401_NEW_INPUT_SYSTEM)
- 	struct v4l2_mbus_framefmt *sink, *src;
- 
-+	if (!IS_ISP2401) {
-+		/* Only used for the new input system */
-+		asd->copy_mode = false;
-+		return;
-+	}
-+
- 	sink = atomisp_subdev_get_ffmt(&asd->subdev, NULL,
- 				       V4L2_SUBDEV_FORMAT_ACTIVE, ATOMISP_SUBDEV_PAD_SINK);
- 	src = atomisp_subdev_get_ffmt(&asd->subdev, NULL,
-@@ -5510,8 +5515,6 @@ static void atomisp_check_copy_mode(struct atomisp_sub_device *asd,
- 	      sensor[asd->sensor_curr].stream_num > 1)))
- 		asd->copy_mode = true;
- 	else
--#endif
--		/* Only used for the new input system */
- 		asd->copy_mode = false;
- 
- 	dev_dbg(asd->isp->dev, "copy_mode: %d\n", asd->copy_mode);
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-index a8972b231e06..da177a8e78e3 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-@@ -972,7 +972,7 @@ int atomisp_css_irq_translate(struct atomisp_device *isp,
- void atomisp_css_rx_get_irq_info(enum mipi_port_id port,
- 				 unsigned int *infos)
- {
--#ifndef ISP2401_NEW_INPUT_SYSTEM
-+#ifndef IS_ISP2401
- 	ia_css_isys_rx_get_irq_info(port, infos);
- #else
- 	*infos = 0;
-@@ -982,7 +982,7 @@ void atomisp_css_rx_get_irq_info(enum mipi_port_id port,
- void atomisp_css_rx_clear_irq_info(enum mipi_port_id port,
- 				   unsigned int infos)
- {
--#ifndef ISP2401_NEW_INPUT_SYSTEM
-+#ifndef IS_ISP2401
- 	ia_css_isys_rx_clear_irq_info(port, infos);
- #endif
- }
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-index 4a7e5f2fe436..036a265502fe 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
-@@ -464,13 +464,11 @@ int atomisp_qbuffers_to_css(struct atomisp_sub_device *asd)
- 		css_capture_pipe_id = IA_CSS_PIPE_ID_CAPTURE;
- 	}
- 
--#ifdef ISP2401_NEW_INPUT_SYSTEM
--	if (asd->copy_mode) {
-+	if (IS_ISP2401 && asd->copy_mode) {
- 		css_capture_pipe_id = IA_CSS_PIPE_ID_COPY;
- 		css_preview_pipe_id = IA_CSS_PIPE_ID_COPY;
- 		css_video_pipe_id = IA_CSS_PIPE_ID_COPY;
- 	}
--#endif
- 
- 	if (asd->yuvpp_mode) {
- 		capture_pipe = &asd->video_out_capture;
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-index bbef485ee15c..0223e3dd95a6 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
-@@ -1635,12 +1635,7 @@ static int atomisp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
- 		pdev->d3cold_delay = 0;
- 		break;
- 	case ATOMISP_PCI_DEVICE_SOC_ANN:
--		isp->media_dev.hw_revision = (
--#ifdef ISP2401_NEW_INPUT_SYSTEM
--						 ATOMISP_HW_REVISION_ISP2401
--#else
--						 ATOMISP_HW_REVISION_ISP2401_LEGACY
--#endif
-+		isp->media_dev.hw_revision = (	 ATOMISP_HW_REVISION_ISP2401
- 						 << ATOMISP_HW_REVISION_SHIFT);
- 		isp->media_dev.hw_revision |= pdev->revision < 2 ?
- 					      ATOMISP_HW_STEPPING_A0 : ATOMISP_HW_STEPPING_B0;
-@@ -1648,12 +1643,7 @@ static int atomisp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
- 		isp->hpll_freq = HPLL_FREQ_1600MHZ;
- 		break;
- 	case ATOMISP_PCI_DEVICE_SOC_CHT:
--		isp->media_dev.hw_revision = (
--#ifdef ISP2401_NEW_INPUT_SYSTEM
--						 ATOMISP_HW_REVISION_ISP2401
--#else
--						 ATOMISP_HW_REVISION_ISP2401_LEGACY
--#endif
-+		isp->media_dev.hw_revision = (	 ATOMISP_HW_REVISION_ISP2401
- 						 << ATOMISP_HW_REVISION_SHIFT);
- 		isp->media_dev.hw_revision |= pdev->revision < 2 ?
- 					      ATOMISP_HW_STEPPING_A0 : ATOMISP_HW_STEPPING_B0;
--- 
-2.33.1
+Ping ? This is still an issue in the current media-staging tree.
+
+Regards,
+
+Hans
+
+
+> ---
+>  drivers/media/common/videobuf2/videobuf2-dma-sg.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+> index 33ee63a99139..0452ed9fac95 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
+> @@ -241,6 +241,7 @@ static void *vb2_dma_sg_get_userptr(struct vb2_buffer *vb, struct device *dev,
+>  	buf->offset = vaddr & ~PAGE_MASK;
+>  	buf->size = size;
+>  	buf->dma_sgt = &buf->sg_table;
+> +	buf->vb = vb;
+>  	vec = vb2_create_framevec(vaddr, size);
+>  	if (IS_ERR(vec))
+>  		goto userptr_fail_pfnvec;
+> @@ -642,6 +643,7 @@ static void *vb2_dma_sg_attach_dmabuf(struct vb2_buffer *vb, struct device *dev,
+>  	buf->dma_dir = vb->vb2_queue->dma_dir;
+>  	buf->size = size;
+>  	buf->db_attach = dba;
+> +	buf->vb = vb;
+>  
+>  	return buf;
+>  }
+> 
 
