@@ -2,122 +2,130 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90953C433EF
-	for <linux-media@archiver.kernel.org>; Sun,  7 Nov 2021 17:16:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94F4DC433F5
+	for <linux-media@archiver.kernel.org>; Sun,  7 Nov 2021 17:55:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 77DF860EBD
-	for <linux-media@archiver.kernel.org>; Sun,  7 Nov 2021 17:16:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 637AF60FD7
+	for <linux-media@archiver.kernel.org>; Sun,  7 Nov 2021 17:55:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235952AbhKGRTS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 7 Nov 2021 12:19:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25230 "EHLO
+        id S235013AbhKGRxK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 7 Nov 2021 12:53:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38466 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235939AbhKGRTR (ORCPT
+        by vger.kernel.org with ESMTP id S234980AbhKGRxI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 7 Nov 2021 12:19:17 -0500
+        Sun, 7 Nov 2021 12:53:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1636305394;
+        s=mimecast20190719; t=1636307424;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WiPLWJPgTA6gAhs9VVSBRkfSI3oaxNGGr5gWgMBCnms=;
-        b=V+hyZflDqt/ieuOMePoIACBAeTz6MQVWUeFtv04Mey6ng6WopyDqDN+TROW8mW93nlWZzd
-        3wuo1OuA/CssMXKsdO92z1pcGJJc6AkI4UTzmOD98SkIkCuDmK2KufpvlKgOJRdairpSEw
-        RLDn6CNcZgXXy/MHTX62xGwENmdac40=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VI9/oTkMv73lXfxkfvV9yRrXnTPAd4jUWgjMM+1DFzc=;
+        b=iQCzE5lx3FRgSo9dRKc5dJ4+ki1/CJftaDiXIY8qEXVP1oapdoP5RHc0M/12AxgdFMyKyC
+        yMdHvlpb3xU4qGP2bxSI8QOmYUsNvJy+43CooPASmCViICC5ze+aq53FPctLYatXXMZV/Q
+        0g3SFI0jL8wDqeT7n3ytXW0+axrhoNA=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-455-9C25friiPU-VnG2Q_i6LMQ-1; Sun, 07 Nov 2021 12:16:01 -0500
-X-MC-Unique: 9C25friiPU-VnG2Q_i6LMQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+ us-mta-325-iyjgleweNyaCyb-fmeh8gQ-1; Sun, 07 Nov 2021 12:50:21 -0500
+X-MC-Unique: iyjgleweNyaCyb-fmeh8gQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 743A28042CF;
-        Sun,  7 Nov 2021 17:15:59 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B6C6F100C662;
+        Sun,  7 Nov 2021 17:50:18 +0000 (UTC)
 Received: from x1.localdomain (unknown [10.39.192.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 50F2057CD3;
-        Sun,  7 Nov 2021 17:15:57 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 65EB619730;
+        Sun,  7 Nov 2021 17:50:14 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Tsuchiya Yuto <kitakar@gmail.com>,
         Andy Shevchenko <andy@infradead.org>,
         Yury Luneff <yury.lunev@gmail.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 03/11] media: atomisp-ov2680: Push the input_lock taking up into ov2680_s_power()
-Date:   Sun,  7 Nov 2021 18:15:41 +0100
-Message-Id: <20211107171549.267583-4-hdegoede@redhat.com>
-In-Reply-To: <20211107171549.267583-1-hdegoede@redhat.com>
-References: <20211107171549.267583-1-hdegoede@redhat.com>
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        libcamera-devel@lists.libcamera.org
+Subject: [RFC] media: Auto exposure/gain support for atomisp / libcamera integration ?
+Date:   Sun,  7 Nov 2021 18:50:13 +0100
+Message-Id: <20211107175013.355188-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ov2680_s_power() is the only caller of ov2680_init(), push the input_lock
-taking from ov2680_init() up into ov2680_s_power(), this way the new
-power_on bool is also protected by it.
+Hi All,
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- .../media/atomisp/i2c/atomisp-ov2680.c        | 20 ++++++++-----------
- 1 file changed, 8 insertions(+), 12 deletions(-)
+Now that we have the atomisp2 driver running on some devices like
+the Asus T101HA; and with the exposure + gain controls for the ov2680
+sensor found on that laptop fixed:
 
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-index 7b7cf7a68823..2721223ebcde 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-@@ -655,21 +655,11 @@ static int ov2680_init_registers(struct v4l2_subdev *sd)
- 
- static int ov2680_init(struct v4l2_subdev *sd)
- {
--	struct ov2680_device *dev = to_ov2680_sensor(sd);
--
--	int ret;
--
--	mutex_lock(&dev->input_lock);
--
- 	/* restore settings */
- 	ov2680_res = ov2680_res_preview;
- 	N_RES = N_RES_PREVIEW;
- 
--	ret = ov2680_init_registers(sd);
--
--	mutex_unlock(&dev->input_lock);
--
--	return ret;
-+	return ov2680_init_registers(sd);
- }
- 
- static int power_ctrl(struct v4l2_subdev *sd, bool flag)
-@@ -817,15 +807,21 @@ static int power_down(struct v4l2_subdev *sd)
- 
- static int ov2680_s_power(struct v4l2_subdev *sd, int on)
- {
-+	struct ov2680_device *dev = to_ov2680_sensor(sd);
- 	int ret;
- 
-+	mutex_lock(&dev->input_lock);
-+
- 	if (on == 0) {
- 		ret = power_down(sd);
- 	} else {
- 		ret = power_up(sd);
- 		if (!ret)
--			return ov2680_init(sd);
-+			ret = ov2680_init(sd);
- 	}
-+
-+	mutex_unlock(&dev->input_lock);
-+
- 	return ret;
- }
- 
--- 
-2.31.1
+https://lore.kernel.org/linux-media/20211107171549.267583-1-hdegoede@redhat.com/
+
+I believe we need to start thinking about various userspace API
+concerns. Thanks to Mauro's great work on various V4L2 API things
+are starting to work (somewhat) with regular V4L2 apps, but we really
+also need some processing / 3A stuff to make the cameras really
+usable.
+
+The most important thing needed is automatic exposure + gain control,
+ATM this relies on a custom ATOMISP ioctl, but I believe that we can
+just export the controls as regular v4l2 controls on the sensor subdev,
+at least for the ov2680 the exposure is already exported this way
+but it is read-only. Does anyone see any problems with just making
+these normal v4l2 controls on the sensor subdev ?
+
+We can then simulate the custom ATOMISP ioctl through the subdevs,
+or we can just remove it alltogether.
+
+Once we have the controls available this way I think we should write
+a libcamera plugin, which like the older versions of the Rasberry Pi
+plugin (if I've understood things correctly) won't use the MC framework
+for now. I believe we first need to understand the atomisp code better
+before we add MC support (*). But I still believe that an (experimental)
+plugin would be good, both to get something usable so that we can get
+more testers / more people interested in contributing.
+Another reason is to have another use-case where apps need to support
+libcamera to work properly (like on IPU3 devices) which will hopefully
+motivate people working on apps to put more effort in supporting libcamera
+(preferably through the new pipewire libcamera plugin so that things
+will also work in a flatpack sandbox).
+
+###
+
+On other thing which I'm wondering about is the need to call S_INPUT to
+select front / back in this list from Mauro:
+
+	$ for i in $(ls /dev/video*|sort -k2 -to -n); do echo -n $i:; v4l2-ctl -D -d $i|grep Name; done
+	/dev/video0:	Name             : ATOMISP ISP CAPTURE output
+	/dev/video1:	Name             : ATOMISP ISP VIEWFINDER output
+	/dev/video2:	Name             : ATOMISP ISP PREVIEW output
+	/dev/video3:	Name             : ATOMISP ISP VIDEO output
+	/dev/video4:	Name             : ATOMISP ISP ACC
+	/dev/video5:	Name             : ATOMISP ISP MEMORY input
+	/dev/video6:	Name             : ATOMISP ISP CAPTURE output
+	/dev/video7:	Name             : ATOMISP ISP VIEWFINDER output
+	/dev/video8:	Name             : ATOMISP ISP PREVIEW output
+	/dev/video9:	Name             : ATOMISP ISP VIDEO output
+	/dev/video10:	Name             : ATOMISP ISP ACC
+
+I notice that everything is listed twice, I wonder if we can use /dev/video2
+with input 0 together with /dev/video8 for input 1, if that is possible then
+we might set a different default input on each.
+
+And maybe also make them /dev/video0 (already done I see) and /dev/video1,
+possibly combined with a module-option to hide the others for now. This
+should make things better for regular apps. OTOH if we go the libcamera
+route then this is not really necessary I guess?
+
+Regards,
+
+Hans
+
+*) I do believe that in the end MC support makes sense at least
+to tie together the 
 
