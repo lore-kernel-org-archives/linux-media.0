@@ -2,182 +2,95 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78F74C433EF
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48E2EC433EF
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:09:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6563761B32
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:08:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31A0C61B31
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:09:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241925AbhKIBLl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:11:41 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:42080 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242136AbhKIBJm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Nov 2021 20:09:42 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1A90gj1h050854;
-        Tue, 9 Nov 2021 08:42:45 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from [192.168.2.115] (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 9 Nov
- 2021 09:05:59 +0800
-Message-ID: <acff05a4-38a5-4765-c6ff-011a58caf260@aspeedtech.com>
-Date:   Tue, 9 Nov 2021 09:05:59 +0800
+        id S237623AbhKIBL4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:11:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39772 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242176AbhKIBJt (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:09:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 062FF61A65;
+        Tue,  9 Nov 2021 01:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636419867;
+        bh=EjAYMVikh+ar3WB5M1uox3DB/K28A+dIc56LbYZC5DM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HOmHWeZwe/pmGdxGA/dPvGuYezpwn9XKxb6tBdJXWRLTX3Jw/ShH4W2Kwf1ps7Nn1
+         CWsPBn4nyEtCjOgPM7C9/QJs33PrM9Yx7LIw4AafS1tx/mXMP0QFA7sgJqYHqh6pjC
+         N+RAHYNzNo1Jj3EE+c4EDZpJ7jjttZIFNFaosyGHKN98KBFxAqq8MPvL1/l24AyI3F
+         y9d3dSS6AstJ26O2Fktx7cOPAFM7XeCmZ1XwqUjiOO4Urf1Brd0jIncZWzk/poQe7M
+         +uHlOOxDdKqMgRhIhej8tdr6ltUOnhxonICz0BImogAb1EFcxb5zD8Llfyp5oBNYL3
+         aROQucGEJwDmA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Charan Teja Reddy <charante@codeaurora.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Sasha Levin <sashal@kernel.org>, sumit.semwal@linaro.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: [PATCH AUTOSEL 5.4 01/74] dma-buf: WARN on dmabuf release with pending attachments
+Date:   Mon,  8 Nov 2021 12:48:28 -0500
+Message-Id: <20211108174942.1189927-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] media: aspeed: use reset to replace clk off/on
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        "eajames@linux.ibm.com" <eajames@linux.ibm.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211103054316.25272-1-jammy_huang@aspeedtech.com>
- <883dd517-7996-8c44-8cea-1c8838b367b6@linux.intel.com>
- <HK0PR06MB272258A4BA760E70CF609888F18E9@HK0PR06MB2722.apcprd06.prod.outlook.com>
- <398d37a5-509f-b78b-360b-990d256bde63@xs4all.nl>
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-In-Reply-To: <398d37a5-509f-b78b-360b-990d256bde63@xs4all.nl>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1A90gj1h050854
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dear Hans,
+From: Charan Teja Reddy <charante@codeaurora.org>
 
-On 2021/11/8 下午 04:53, Hans Verkuil wrote:
-> Hi Jammy,
->
-> On 05/11/2021 02:27, Jammy Huang wrote:
->> Hi Jae,
->>
->> OK, I found it.
->> Thanks for your help.
-> So just so I understand this correctly: this patch can be dropped, right?
->
-> Regards,
->
-> 	Hans
+[ Upstream commit f492283b157053e9555787262f058ae33096f568 ]
 
-Yes, aspeed clk driver will reset the related engine at clk-enabled.
+It is expected from the clients to follow the below steps on an imported
+dmabuf fd:
+a) dmabuf = dma_buf_get(fd) // Get the dmabuf from fd
+b) dma_buf_attach(dmabuf); // Clients attach to the dmabuf
+   o Here the kernel does some slab allocations, say for
+dma_buf_attachment and may be some other slab allocation in the
+dmabuf->ops->attach().
+c) Client may need to do dma_buf_map_attachment().
+d) Accordingly dma_buf_unmap_attachment() should be called.
+e) dma_buf_detach () // Clients detach to the dmabuf.
+   o Here the slab allocations made in b) are freed.
+f) dma_buf_put(dmabuf) // Can free the dmabuf if it is the last
+reference.
 
-Thus, this modification isn't necessary.
+Now say an erroneous client failed at step c) above thus it directly
+called dma_buf_put(), step f) above. Considering that it may be the last
+reference to the dmabuf, buffer will be freed with pending attachments
+left to the dmabuf which can show up as the 'memory leak'. This should
+at least be reported as the WARN().
 
->> Regards,
->> Jammy Huang
->>
->> Tel: 886-3-575-1185  ext.8630
->>
->> ************* Email Confidentiality Notice ********************
->> DISCLAIMER:
->> This message (and any attachments) may contain legally privileged and/or other confidential information. If you have received it in error, please notify the sender by reply e-mail and immediately delete the e-mail and any attachments without copying or disclosing the contents. Thank you.
->>
->> -----Original Message-----
->> From: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
->> Sent: Thursday, November 4, 2021 11:54 PM
->> To: Jammy Huang <jammy_huang@aspeedtech.com>; eajames@linux.ibm.com; mchehab@kernel.org; joel@jms.id.au; andrew@aj.id.au; linux-media@vger.kernel.org; openbmc@lists.ozlabs.org; linux-arm-kernel@lists.infradead.org; linux-aspeed@lists.ozlabs.org; linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH] media: aspeed: use reset to replace clk off/on
->>
->> Hi Jammy,
->>
->> On 11/2/2021 10:43 PM, Jammy Huang wrote:
->>> reset should be more proper than clk off/on to bring HW back to good
->>> state.
->>>
->>> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
->>> ---
->>>    drivers/media/platform/aspeed-video.c | 22 +++++++++++++++++++---
->>>    1 file changed, 19 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/media/platform/aspeed-video.c
->>> b/drivers/media/platform/aspeed-video.c
->>> index fea5e4d0927e..10d182139809 100644
->>> --- a/drivers/media/platform/aspeed-video.c
->>> +++ b/drivers/media/platform/aspeed-video.c
->>> @@ -23,6 +23,7 @@
->>>    #include <linux/workqueue.h>
->>>    #include <linux/debugfs.h>
->>>    #include <linux/ktime.h>
->>> +#include <linux/reset.h>
->>>    #include <media/v4l2-ctrls.h>
->>>    #include <media/v4l2-dev.h>
->>>    #include <media/v4l2-device.h>
->>> @@ -220,6 +221,7 @@ struct aspeed_video {
->>>    	void __iomem *base;
->>>    	struct clk *eclk;
->>>    	struct clk *vclk;
->>> +	struct reset_control *reset;
->>>    
->>>    	struct device *dev;
->>>    	struct v4l2_ctrl_handler ctrl_handler; @@ -554,6 +556,13 @@ static
->>> void aspeed_video_on(struct aspeed_video *video)
->>>    	set_bit(VIDEO_CLOCKS_ON, &video->flags);
->>>    }
->>>    
->>> +static void aspeed_video_reset(struct aspeed_video *v) {
->>> +	reset_control_assert(v->reset);
->>> +	udelay(100);
->>> +	reset_control_deassert(v->reset);
->>> +}
->>> +
->>>    static void aspeed_video_bufs_done(struct aspeed_video *video,
->>>    				   enum vb2_buffer_state state)
->>>    {
->>> @@ -574,7 +583,9 @@ static void aspeed_video_irq_res_change(struct aspeed_video *video, ulong delay)
->>>    	set_bit(VIDEO_RES_CHANGE, &video->flags);
->>>    	clear_bit(VIDEO_FRAME_INPRG, &video->flags);
->>>    
->>> -	aspeed_video_off(video);
->>> +	aspeed_video_write(video, VE_INTERRUPT_CTRL, 0);
->>> +	aspeed_video_write(video, VE_INTERRUPT_STATUS, 0xffffffff);
->>> +	aspeed_video_reset(video);
->>>    	aspeed_video_bufs_done(video, VB2_BUF_STATE_ERROR);
->>>    
->>>    	schedule_delayed_work(&video->res_work, delay); @@ -1507,8 +1518,7
->>> @@ static void aspeed_video_stop_streaming(struct vb2_queue *q)
->>>    		 * Need to force stop any DMA and try and get HW into a good
->>>    		 * state for future calls to start streaming again.
->>>    		 */
->>> -		aspeed_video_off(video);
->>> -		aspeed_video_on(video);
->>> +		aspeed_video_reset(video);
->> You can find the ECLK configuration in 'clk-aspeed.c' or in 'clk-ast2600.c' that it's coupled with the video engine reset (SCU04[6] for AST2500 / SCU040[6] for AST2600). It means that if we call
->> clk_disable() and clk_enable() through aspeed_video_off() and aspeed_video_on(), the video engine reset will be implicitly asserted and de-asserted by the clock driver so the reset mechanism is already in the existing code.
->>
->> Thanks,
->> Jae
->>
->>>    		aspeed_video_init_regs(video);
->>>    
->>> @@ -1715,6 +1725,12 @@ static int aspeed_video_init(struct aspeed_video *video)
->>>    		return rc;
->>>    	}
->>>    
->>> +	video->reset = devm_reset_control_get(dev, NULL);
->>> +	if (IS_ERR(video->reset)) {
->>> +		dev_err(dev, "Unable to get reset\n");
->>> +		return PTR_ERR(video->reset);
->>> +	}
->>> +
->>>    	video->eclk = devm_clk_get(dev, "eclk");
->>>    	if (IS_ERR(video->eclk)) {
->>>    		dev_err(dev, "Unable to get ECLK\n");
->>>
+Signed-off-by: Charan Teja Reddy <charante@codeaurora.org>
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/1627043468-16381-1-git-send-email-charante@codeaurora.org
+Signed-off-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/dma-buf/dma-buf.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index 758de0e9b2ddc..16bbc9bc9e6d1 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -79,6 +79,7 @@ static void dma_buf_release(struct dentry *dentry)
+ 	if (dmabuf->resv == (struct dma_resv *)&dmabuf[1])
+ 		dma_resv_fini(dmabuf->resv);
+ 
++	WARN_ON(!list_empty(&dmabuf->attachments));
+ 	module_put(dmabuf->owner);
+ 	kfree(dmabuf->name);
+ 	kfree(dmabuf);
 -- 
-Best Regards
-Jammy
+2.33.0
 
