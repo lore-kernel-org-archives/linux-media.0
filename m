@@ -2,41 +2,40 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E997C433FE
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25C21C4332F
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:06:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 49D8661AEB
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:06:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 12AFB61AE3
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:06:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239701AbhKIBJa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:09:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60452 "EHLO mail.kernel.org"
+        id S242110AbhKIBJb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:09:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60498 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239732AbhKIBHZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:07:25 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E8DD613A6;
-        Tue,  9 Nov 2021 01:03:02 +0000 (UTC)
+        id S239956AbhKIBHb (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:07:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1132C6162E;
+        Tue,  9 Nov 2021 01:03:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636419783;
-        bh=6XPr30Qa6htGATQEnJrk0YD7dgGT0l9kyX5Ji03LveA=;
+        s=k20201202; t=1636419785;
+        bh=fJKt79npfQTWKKmxqFy13G2LlyTw9LUirXRUVbIsj2g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SfBzC18qBHc8BVy9+Pyn70WecYGuzCZ5IGfvgRl+INwnMSLoOnQm5EOr/Qh9RyNQW
-         bnHw1RYHf5fti4Bl5xv185D8qXKSh2xEyVcVsAj3/6lyaKVZxVntN7wphN2b6lv519
-         jWzsPUa6AqNdtHH08IUPHoO7qvNSqActJvqKUA+D2s//3MOqiPeiFq2YyTolFcAKa7
-         X7KMxH5unn3ow2p2mTR1/yd+XpEeaf0vDRLrVcR73eZ1AWty20vLE4pi5ze7gXPGzU
-         j7ZCUMOCbtaAUbEIttZE7787ojmUi1eoal3DbyyeGDCYBT9SuzSX2x7Idlzgq3hFPB
-         SfpujbfwgCImg==
+        b=aJeskcPRdooyq0orFEyf21i30HTeabn5+F/Ye1sTZm1lAPseHneo0gG8mHyrQhqf5
+         t+bDcYflPCzINokv7Tyxh/jAp9hyc0cv9soCjQ9giA9Yf9IjWxxFEU14DU2bA9IPEo
+         wQt168ZU50+kzYExA39LY5lPoZLDysufRBi/DAXjprLFleWICO/TkZd1O4ZX7wnc/3
+         DYUoZGTmdJ+m9fIIJWqvwjNLPPkUThVtBnU+gt3ccC2TIwXC549eQ83JF4kL4W3fac
+         B+XbR5lhpv0/2zuJ6Wbe+ZhAMvdCsjtDh4Vy11GfHFiPzdtwnVZ/s6qhqbQYR95B12
+         lhB2q6wMQeGxg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+Cc:     Evgeny Novikov <novikov@ispras.ru>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 040/138] media: uvcvideo: Return -EIO for control errors
-Date:   Mon,  8 Nov 2021 12:45:06 -0500
-Message-Id: <20211108174644.1187889-40-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, dwlsalmeida@gmail.com,
+        mchehab@kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 042/138] media: vidtv: Fix memory leak in remove
+Date:   Mon,  8 Nov 2021 12:45:08 -0500
+Message-Id: <20211108174644.1187889-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211108174644.1187889-1-sashal@kernel.org>
 References: <20211108174644.1187889-1-sashal@kernel.org>
@@ -48,46 +47,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ricardo Ribalda <ribalda@chromium.org>
+From: Evgeny Novikov <novikov@ispras.ru>
 
-[ Upstream commit ffccdde5f0e17d2f0d788a9d831a027187890eaa ]
+[ Upstream commit 76e21bb8be4f5f987f3006d197196fe6af63f656 ]
 
-The device is doing something unexpected with the control. Either because
-the protocol is not properly implemented or there has been a HW error.
+vidtv_bridge_remove() releases and cleans up everything except for dvb
+itself. The patch adds this missed release.
 
-Fixes v4l2-compliance:
+Found by Linux Driver Verification project (linuxtesting.org).
 
-Control ioctls (Input 0):
-                fail: v4l2-test-controls.cpp(448): s_ctrl returned an error (22)
-        test VIDIOC_G/S_CTRL: FAIL
-                fail: v4l2-test-controls.cpp(698): s_ext_ctrls returned an error (22)
-        test VIDIOC_G/S/TRY_EXT_CTRLS: FAIL
-
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_video.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/test-drivers/vidtv/vidtv_bridge.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index e16464606b140..9f37eaf28ce7e 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -115,6 +115,11 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
- 	case 5: /* Invalid unit */
- 	case 6: /* Invalid control */
- 	case 7: /* Invalid Request */
-+		/*
-+		 * The firmware has not properly implemented
-+		 * the control or there has been a HW error.
-+		 */
-+		return -EIO;
- 	case 8: /* Invalid value within range */
- 		return -EINVAL;
- 	default: /* reserved or unknown */
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.c b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
+index 75617709c8ce2..0f6d998d18dc0 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_bridge.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
+@@ -557,6 +557,7 @@ static int vidtv_bridge_remove(struct platform_device *pdev)
+ 	dvb_dmxdev_release(&dvb->dmx_dev);
+ 	dvb_dmx_release(&dvb->demux);
+ 	dvb_unregister_adapter(&dvb->adapter);
++	kfree(dvb);
+ 	dev_info(&pdev->dev, "Successfully removed vidtv\n");
+ 
+ 	return 0;
 -- 
 2.33.0
 
