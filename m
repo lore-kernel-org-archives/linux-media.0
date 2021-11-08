@@ -2,107 +2,120 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD369C433F5
-	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 16:39:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5170AC433EF
+	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 17:36:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 95DC361207
-	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 16:39:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2AA4C61288
+	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 17:36:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240078AbhKHQly (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 11:41:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34632 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236528AbhKHQlx (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Nov 2021 11:41:53 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9167961054;
-        Mon,  8 Nov 2021 16:39:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636389549;
-        bh=a6NTFs2KSKUTtge7RtoR+4/5YHytkD4pKor5SU+QaZ8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=b9f28QHm13W2ui+DJ8Nkic0yst26y3MyI7Pzg/n7nIRUcowjjAJi0CQKekeCT2pFj
-         0Cp4WTK8PjDbIo+QSE3yvQrLl+aNdF78zZjBLE8dUHuiGs1MNA2oy/UYRu2boEBAkF
-         4pgLf/LY9jQaOrbRM7xKuOl4FBik963q+DWdxGLk5ouAkrJJRQ4oinP840ehWBdb60
-         DqrEgfB14zp/d55Ji+aUntKaNy/ltYhHdWCw/2JA5vY87CcONwWpao9UA2VweuQUIx
-         8OyNLiYAgMsAg6eG4hSIu06Md/MEKANEV39W6TGHIi1WfUemFdaEnP2xP6Ums9ajTF
-         lwBgfNLNSBn8w==
-Date:   Mon, 8 Nov 2021 16:39:02 +0000
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Tsuchiya Yuto <kitakar@gmail.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Patrik Gfeller <patrik.gfeller@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        Deepak R Varma <drv@mailo.com>,
-        Alex Dewar <alex.dewar90@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/17] media: atomisp: pci: use IA_CSS_ERROR() for error
- messages in sh_css_mipi.c
-Message-ID: <20211108163902.58e12e76@sal.lan>
-In-Reply-To: <ff2ac6cb74e98a5e9b0f537ea468322e6379620e.camel@gmail.com>
-References: <20211017161958.44351-1-kitakar@gmail.com>
-        <20211017161958.44351-7-kitakar@gmail.com>
-        <20211102113540.GD2794@kadam>
-        <ff2ac6cb74e98a5e9b0f537ea468322e6379620e.camel@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        id S240700AbhKHRjS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 12:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240611AbhKHRjQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Nov 2021 12:39:16 -0500
+Received: from lb2-smtp-cloud7.xs4all.net (lb2-smtp-cloud7.xs4all.net [IPv6:2001:888:0:108::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A8BC061570
+        for <linux-media@vger.kernel.org>; Mon,  8 Nov 2021 09:36:31 -0800 (PST)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id k8ZFmiTjMFZvck8ZImwDam; Mon, 08 Nov 2021 18:36:29 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1636392989; bh=0vNSPtBF57FlZoVCYEhGC2ydYSUbsvQT+EYf+YjVNUw=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=TKxMj/q1x06fLQEoylUkTcv3rBXIvz5GYDlC2zELeYhwjW16Yqo7SNNA8tSvDmnhf
+         n3soWWeLaYV6LRVcDhRcMMrh8rFzw5dNNzX01iOmCNuzTIZuDdWsPCkcE0e36PjHhe
+         ZNAozupZaA7CJMIMeCG2dNfF9pfsqM55u5T4ViOXvmwb8hKIjwEAF91XJg54daHGqR
+         erTwzQCyft6B0wTO1IlcJ1XDZw9W/7+wFEH95tE8n809hDOVaHxY1uY6agrdA1kLS1
+         C2R+5DUmmExEW4ueqQfjkWALqIVcI0vS2/W6tIaNjEoY+gp24m8cZVd6EveE/pO3Dv
+         ZSTol8brQ30hw==
+Subject: Re: [PATCH 3/4] rcar-vin: Stop stream when subdevice signal transfer
+ error
+To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>
+References: <20211108160220.767586-1-niklas.soderlund+renesas@ragnatech.se>
+ <20211108160220.767586-4-niklas.soderlund+renesas@ragnatech.se>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <1fddc966-5a23-63b4-185e-c17aa6d65b54@xs4all.nl>
+Date:   Mon, 8 Nov 2021 18:36:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20211108160220.767586-4-niklas.soderlund+renesas@ragnatech.se>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfBu6pxMXszuJmhAfHT4PuAtG4kDY7zaxy6DHIUVyPMtMWeCNOL1MgaTuowrVidlrqON29En7eA+1Z3Mt0UNkK6NGd4PpOzpPda0l53+1Vl4Y60PyELiD
+ i9ipVBwwSw9xb+nJBV5gLC/90gIlOXzB4W8NWY/ZjacWzO0BHbr/+0bfmWhAIc/xhxMiZd6nzKROY/OM+hQ2oshjlSW4WugNGY2CmKiW0xT6iPlXiH2S4p6+
+ +/4BFfZCuovfSGPIbIMY4jMS9+mIQavorik8sOFKA7PBQX1tNCGW5YgblRWD1n0puFy/AcVSz74NqfDWvbzw/hpHPEnoaxR6MGSR983xTW2UTRtvcZkGpR7g
+ jX3aZ9+G
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Tue, 09 Nov 2021 00:39:16 +0900
-Tsuchiya Yuto <kitakar@gmail.com> escreveu:
-
-> <removed Alan from Cc as the mail address not reachable>
+On 08/11/2021 17:02, Niklas Söderlund wrote:
+> When a subdevice signals a transfer error stop the VIN in addition to
+> informing user-space of the event.
 > 
-> On Tue, 2021-11-02 at 14:35 +0300, Dan Carpenter wrote:
-> > On Mon, Oct 18, 2021 at 01:19:46AM +0900, Tsuchiya Yuto wrote:  
-> > >  .../staging/media/atomisp/pci/sh_css_mipi.c   | 32 ++++++++-----------
-> > >  1 file changed, 13 insertions(+), 19 deletions(-)
-> > > 
-> > > diff --git a/drivers/staging/media/atomisp/pci/sh_css_mipi.c b/drivers/staging/media/atomisp/pci/sh_css_mipi.c
-> > > index c1f2f6151c5f..de56a1da754d 100644
-> > > --- a/drivers/staging/media/atomisp/pci/sh_css_mipi.c
-> > > +++ b/drivers/staging/media/atomisp/pci/sh_css_mipi.c
-> > > @@ -434,9 +434,8 @@ allocate_mipi_frames(struct ia_css_pipe *pipe,
-> > >  
-> > >  	if ((!IS_ISP2401 && port >= N_CSI_PORTS) ||
-> > >  	    (IS_ISP2401 && err)) {
-> > > -		ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE,
-> > > -				    "allocate_mipi_frames(%p) exit: error: port is not correct (port=%d).\n",
-> > > -				    pipe, port);
-> > > +		IA_CSS_ERROR("allocate_mipi_frames(%p) exit: port is not correct (port=%d).",
-> > > +			     pipe, port);  
-> > 
-> > Not related to this patch but these printks should be using __func__
-> > instead of hard coding it.  
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> ---
+> * Changes since v3
+> - Switch to new V4L2_EVENT_XFER_ERROR from V4L2_EVENT_EOS.
+> - Call vb2_queue_error() when encountering the event.
 > 
-> OK, considering that I'll add a separate space issue fix patch in v2 as
-> discussed in another mail, I'll also add the separate fix for minor
-> issue fixes here, including the usage of `__func__` and dropping
-> the unneeded newline `\n` I'm currently doing while here.
+> * Changes since v2
+> - Log using vin_dbg() instead of v4l2_info().
+> ---
+>  drivers/media/platform/rcar-vin/rcar-v4l2.c | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+> index a5bfa76fdac6e55a..bf17fdefe90aabf5 100644
+> --- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
+> +++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+> @@ -992,9 +992,24 @@ void rvin_v4l2_unregister(struct rvin_dev *vin)
+>  static void rvin_notify_video_device(struct rvin_dev *vin,
+>  				     unsigned int notification, void *arg)
+>  {
+> +	const struct v4l2_event *event;
+> +
+>  	switch (notification) {
+>  	case V4L2_DEVICE_NOTIFY_EVENT:
+> -		v4l2_event_queue(&vin->vdev, arg);
+> +		event = arg;
+> +
+> +		switch (event->type) {
+> +		case V4L2_EVENT_XFER_ERROR:
+> +			vin_dbg(vin,
+> +				"Subdevice signaled transfer error, stopping.\n");
+> +			rvin_stop_streaming(vin);
+> +			vb2_queue_error(&vin->queue);
 
-Better to keep the \n. The right fix - not only here but everywhere - would
-be to convert all those into dev_info/dev_dbg/..., but this is a huge
-change.
+Hmm, wouldn't it be the case that every driver that calls vb2_queue_error()
+would also have to send this new event? Would it be possible to modify
+vb2_queue_error() to raise this event? I haven't analyzed all the drivers
+that call this function to see if that makes sense.
 
-I would prefer to do such changes on a separate patch series that
-will do only this kind of changes. After the conversion, the string
-should finish with a \n. So, dropping it will just make the conversion
-more error-prone.
+Perhaps a separate new function vb2_queue_error_with_event() would also be
+an option.
 
 Regards,
-Mauro
 
+	Hans
+
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +
+> +		v4l2_event_queue(&vin->vdev, event);
+>  		break;
+>  	default:
+>  		break;
 > 
-> Regards,
-> Tsuchiya Yuto
-> 
+
