@@ -2,40 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F04AEC433FE
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:02:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50C02C433F5
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:02:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DA45561502
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:02:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3830A619E5
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:02:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239212AbhKIBFS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:05:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60936 "EHLO mail.kernel.org"
+        id S237937AbhKIBFi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:05:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60044 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241746AbhKIBEC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:04:02 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DFA34617E4;
-        Tue,  9 Nov 2021 01:01:16 +0000 (UTC)
+        id S241769AbhKIBET (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:04:19 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C00E76124D;
+        Tue,  9 Nov 2021 01:01:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636419677;
-        bh=fJKt79npfQTWKKmxqFy13G2LlyTw9LUirXRUVbIsj2g=;
+        s=k20201202; t=1636419680;
+        bh=hCBZVbn5ACGsSoRa85leu+ceg8jHthpi32UI/d/3jZQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Agh7yvozJSN9dS2DV1b9ww271TMYs2NNmedHPyGcp0V0rXKonHfeLUm0tLC03KMFn
-         NWcCwewNsjghm2H6sJ5tf4xEnu5FY5xJnBvtqpvTSuysrL4375SCsTyg3SFCDJHEjs
-         AlcFYc+FgOrIghS0JOGpBfxyrSCE7mzuAGC6VcaJn/t96sR7RK1vq6ZqlmTuGEW3gW
-         4u1lP3aY78H9KwCNN5jrSmtHuvC8/pThSXgwijNB1q4EHow8GsGD7XKecg9JTjW6Fg
-         vyl2kdVuVRP8SOfPA9q65nmCgtdNDp640hp4PUnO3au3FuFDOhNoCcOKW/9O3i36xj
-         swKe3Vnvkey9g==
+        b=YGAsnJ6u4iJpYmHjC+w183slSvA5hHn+5izqp/tn0uKWmtM2p65fZ8Q1hEsRn1WxE
+         Ea66bXMNyERAIbtJHdFSMkPK473ouz2okzv7nopkIWNZxh2s1Kp0a7O2R2sYIoFKKy
+         gtARW/9nTOMiejW4tNFe1ICHiA0PHVXLFH3+f/k97beG+UGEvGQ4IPmJc4EMc/29du
+         m7sLFZoy7fz2RQb/etuqss4FygOmJ3oO+cLzFeCokVT1uSYijBPKDwhREWqLtJ2Qkv
+         rb3EEW3kqYTnqDZ5RSpQKH4ez4RWommwtPWVzVsKp5m/s8p9QvWUPVWg0EEEy5H3xO
+         xegv9QfmEa30Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
+Cc:     Nadezda Lutovinova <lutovinova@ispras.ru>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, dwlsalmeida@gmail.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 045/146] media: vidtv: Fix memory leak in remove
-Date:   Mon,  8 Nov 2021 12:43:12 -0500
-Message-Id: <20211108174453.1187052-45-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, a.hajda@samsung.com,
+        mchehab@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 047/146] media: s5p-mfc: Add checking to s5p_mfc_probe().
+Date:   Mon,  8 Nov 2021 12:43:14 -0500
+Message-Id: <20211108174453.1187052-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211108174453.1187052-1-sashal@kernel.org>
 References: <20211108174453.1187052-1-sashal@kernel.org>
@@ -47,35 +48,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Evgeny Novikov <novikov@ispras.ru>
+From: Nadezda Lutovinova <lutovinova@ispras.ru>
 
-[ Upstream commit 76e21bb8be4f5f987f3006d197196fe6af63f656 ]
+[ Upstream commit cdfaf4752e6915a4b455ad4400133e540e4dc965 ]
 
-vidtv_bridge_remove() releases and cleans up everything except for dvb
-itself. The patch adds this missed release.
+If of_device_get_match_data() return NULL,
+then null pointer dereference occurs in  s5p_mfc_init_pm().
+The patch adds checking if dev->variant is NULL.
 
 Found by Linux Driver Verification project (linuxtesting.org).
 
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/test-drivers/vidtv/vidtv_bridge.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/s5p-mfc/s5p_mfc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.c b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-index 75617709c8ce2..0f6d998d18dc0 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
-@@ -557,6 +557,7 @@ static int vidtv_bridge_remove(struct platform_device *pdev)
- 	dvb_dmxdev_release(&dvb->dmx_dev);
- 	dvb_dmx_release(&dvb->demux);
- 	dvb_unregister_adapter(&dvb->adapter);
-+	kfree(dvb);
- 	dev_info(&pdev->dev, "Successfully removed vidtv\n");
+diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc.c b/drivers/media/platform/s5p-mfc/s5p_mfc.c
+index c763c0a03140c..f336a95432732 100644
+--- a/drivers/media/platform/s5p-mfc/s5p_mfc.c
++++ b/drivers/media/platform/s5p-mfc/s5p_mfc.c
+@@ -1288,6 +1288,10 @@ static int s5p_mfc_probe(struct platform_device *pdev)
+ 	}
  
- 	return 0;
+ 	dev->variant = of_device_get_match_data(&pdev->dev);
++	if (!dev->variant) {
++		dev_err(&pdev->dev, "Failed to get device MFC hardware variant information\n");
++		return -ENOENT;
++	}
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	dev->regs_base = devm_ioremap_resource(&pdev->dev, res);
 -- 
 2.33.0
 
