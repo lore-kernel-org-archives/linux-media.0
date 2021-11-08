@@ -2,44 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6FB0C433F5
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29EEBC433FE
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:14:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E7BCE61353
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:14:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 143D2614C8
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:14:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242439AbhKIBR1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:17:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39772 "EHLO mail.kernel.org"
+        id S242450AbhKIBR3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:17:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39718 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242146AbhKIBLy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S242407AbhKIBLy (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 8 Nov 2021 20:11:54 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5BF6161A8D;
-        Tue,  9 Nov 2021 01:05:03 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 61884619EC;
+        Tue,  9 Nov 2021 01:05:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636419904;
-        bh=i6jWeeqOD0/qiaPBSregEny3dWEgc7cIDgs3yisbJtc=;
+        s=k20201202; t=1636419901;
+        bh=PltFew8cSxT9J4N2kIO5GraBRERaDZL3wUDLRl1ndGY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rLl62tLtZiu8Yb1VdD/cmCjdg+9Bl9z5zAEYv6HHJjUQuxU80ShIBV0R1uP7g7nhj
-         +Uv81/tFkG4T21Xb77dEXKaEjFwzewwoNdXfyiczriKnSKd7sL2qIGzenJkQ68Weip
-         6TTCDrGg/OwEiRtQ2eWIpgx4voQq0z0Fna1ypI8M/DQZZXacIR5kw8FplLx1oKW2DD
-         jzbtQJ2HL/D7+T0pIw9h9e6rBsX985Ghl7gXDtGlXCOETY6TIxvpXm4RosrhqfseBR
-         5EMUQvT8zgCEoITYZxvOdXz/z7bBGPmbQBwT4CuGRCL+PqG1mcG3DkeAeki/z6Np9Y
-         VXAfn7axUIzsQ==
+        b=gZzQWFxqIhv7nqNfMwMBw3b9V2Ib5Eh6WKkJ4YPpAEtIhVHCq9oP062fvhc/BJUdl
+         fN6m4qvirznCb5SaosFmLimBpzmtbLj2Ua7Zp1b7OCfl9RofmxUQI4+OOfKb/7VWRe
+         6XUNb4TLLOLTEUiAFM1eoKGgGF9VMT0QQVnvO7BRkeAW3+Cidd/eb2yRpOSzBVElR8
+         ZvoO1umrvJypeoDZJ9LbS7XVGwPHTcojh0i1uNwIAMbuz2pN/v298efRsBd7ma6+z7
+         9V+gRozUKqtcQU8MWINa91f3k7S3aKGO7Lcrl94ST/nUgioSSWe0k88H73ZWOVtzIR
+         lOFffUcBUeBpQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitriy Ulitin <ulitin@ispras.ru>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+Cc:     Dirk Bender <d.bender@phytec.de>,
+        Stefan Riedmueller <s.riedmueller@phytec.de>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, hugues.fruchet@foss.st.com,
-        mchehab@kernel.org, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 21/74] media: stm32: Potential NULL pointer dereference in dcmi_irq_thread()
-Date:   Mon,  8 Nov 2021 12:48:48 -0500
-Message-Id: <20211108174942.1189927-21-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 19/74] media: mt9p031: Fix corrupted frame after restarting stream
+Date:   Mon,  8 Nov 2021 12:48:46 -0500
+Message-Id: <20211108174942.1189927-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211108174942.1189927-1-sashal@kernel.org>
 References: <20211108174942.1189927-1-sashal@kernel.org>
@@ -51,92 +49,87 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dmitriy Ulitin <ulitin@ispras.ru>
+From: Dirk Bender <d.bender@phytec.de>
 
-[ Upstream commit 548fa43a58696450c15b8f5564e99589c5144664 ]
+[ Upstream commit 0961ba6dd211a4a52d1dd4c2d59be60ac2dc08c7 ]
 
-At the moment of enabling irq handling:
+To prevent corrupted frames after starting and stopping the sensor its
+datasheet specifies a specific pause sequence to follow:
 
-1922 ret = devm_request_threaded_irq(&pdev->dev, irq, dcmi_irq_callback,
-1923			dcmi_irq_thread, IRQF_ONESHOT,
-1924			dev_name(&pdev->dev), dcmi);
+Stopping:
+	Set Pause_Restart Bit -> Set Restart Bit -> Set Chip_Enable Off
 
-there is still uninitialized field sd_format of struct stm32_dcmi *dcmi.
-If an interrupt occurs in the interval between the installation of the
-interrupt handler and the initialization of this field, NULL pointer
-dereference happens.
+Restarting:
+	Set Chip_Enable On -> Clear Pause_Restart Bit
 
-This field is dereferenced in the handler function without any check:
+The Restart Bit is cleared automatically and must not be cleared
+manually as this would cause undefined behavior.
 
-457 if (dcmi->sd_format->fourcc == V4L2_PIX_FMT_JPEG &&
-458	    dcmi->misr & IT_FRAME) {
-
-The patch moves interrupt handler installation
-after initialization of the sd_format field that happens in
-dcmi_graph_notify_complete() via dcmi_set_default_fmt().
-
-Found by Linux Driver Verification project (linuxtesting.org).
-
-Signed-off-by: Dmitriy Ulitin <ulitin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Signed-off-by: Dirk Bender <d.bender@phytec.de>
+Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/stm32/stm32-dcmi.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ drivers/media/i2c/mt9p031.c | 28 +++++++++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-index d41475f56ab54..72798aae7a628 100644
---- a/drivers/media/platform/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/stm32/stm32-dcmi.c
-@@ -135,6 +135,7 @@ struct stm32_dcmi {
- 	int				sequence;
- 	struct list_head		buffers;
- 	struct dcmi_buf			*active;
-+	int			irq;
+diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
+index dc23b9ed510a4..18440c5104ad9 100644
+--- a/drivers/media/i2c/mt9p031.c
++++ b/drivers/media/i2c/mt9p031.c
+@@ -78,7 +78,9 @@
+ #define		MT9P031_PIXEL_CLOCK_INVERT		(1 << 15)
+ #define		MT9P031_PIXEL_CLOCK_SHIFT(n)		((n) << 8)
+ #define		MT9P031_PIXEL_CLOCK_DIVIDE(n)		((n) << 0)
+-#define MT9P031_FRAME_RESTART				0x0b
++#define MT9P031_RESTART					0x0b
++#define		MT9P031_FRAME_PAUSE_RESTART		(1 << 1)
++#define		MT9P031_FRAME_RESTART			(1 << 0)
+ #define MT9P031_SHUTTER_DELAY				0x0c
+ #define MT9P031_RST					0x0d
+ #define		MT9P031_RST_ENABLE			1
+@@ -445,9 +447,23 @@ static int mt9p031_set_params(struct mt9p031 *mt9p031)
+ static int mt9p031_s_stream(struct v4l2_subdev *subdev, int enable)
+ {
+ 	struct mt9p031 *mt9p031 = to_mt9p031(subdev);
++	struct i2c_client *client = v4l2_get_subdevdata(subdev);
++	int val;
+ 	int ret;
  
- 	struct v4l2_device		v4l2_dev;
- 	struct video_device		*vdev;
-@@ -1720,6 +1721,14 @@ static int dcmi_graph_notify_complete(struct v4l2_async_notifier *notifier)
- 		return ret;
- 	}
- 
-+	ret = devm_request_threaded_irq(dcmi->dev, dcmi->irq, dcmi_irq_callback,
-+					dcmi_irq_thread, IRQF_ONESHOT,
-+					dev_name(dcmi->dev), dcmi);
-+	if (ret) {
-+		dev_err(dcmi->dev, "Unable to request irq %d\n", dcmi->irq);
-+		return ret;
-+	}
+ 	if (!enable) {
++		/* enable pause restart */
++		val = MT9P031_FRAME_PAUSE_RESTART;
++		ret = mt9p031_write(client, MT9P031_RESTART, val);
++		if (ret < 0)
++			return ret;
 +
- 	return 0;
++		/* enable restart + keep pause restart set */
++		val |= MT9P031_FRAME_RESTART;
++		ret = mt9p031_write(client, MT9P031_RESTART, val);
++		if (ret < 0)
++			return ret;
++
+ 		/* Stop sensor readout */
+ 		ret = mt9p031_set_output_control(mt9p031,
+ 						 MT9P031_OUTPUT_CONTROL_CEN, 0);
+@@ -467,6 +483,16 @@ static int mt9p031_s_stream(struct v4l2_subdev *subdev, int enable)
+ 	if (ret < 0)
+ 		return ret;
+ 
++	/*
++	 * - clear pause restart
++	 * - don't clear restart as clearing restart manually can cause
++	 *   undefined behavior
++	 */
++	val = MT9P031_FRAME_RESTART;
++	ret = mt9p031_write(client, MT9P031_RESTART, val);
++	if (ret < 0)
++		return ret;
++
+ 	return mt9p031_pll_enable(mt9p031);
  }
  
-@@ -1881,6 +1890,8 @@ static int dcmi_probe(struct platform_device *pdev)
- 	if (irq <= 0)
- 		return irq ? irq : -ENXIO;
- 
-+	dcmi->irq = irq;
-+
- 	dcmi->res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (!dcmi->res) {
- 		dev_err(&pdev->dev, "Could not get resource\n");
-@@ -1893,14 +1904,6 @@ static int dcmi_probe(struct platform_device *pdev)
- 		return PTR_ERR(dcmi->regs);
- 	}
- 
--	ret = devm_request_threaded_irq(&pdev->dev, irq, dcmi_irq_callback,
--					dcmi_irq_thread, IRQF_ONESHOT,
--					dev_name(&pdev->dev), dcmi);
--	if (ret) {
--		dev_err(&pdev->dev, "Unable to request irq %d\n", irq);
--		return ret;
--	}
--
- 	mclk = devm_clk_get(&pdev->dev, "mclk");
- 	if (IS_ERR(mclk)) {
- 		if (PTR_ERR(mclk) != -EPROBE_DEFER)
 -- 
 2.33.0
 
