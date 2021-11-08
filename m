@@ -2,45 +2,43 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 334E8C4332F
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:06:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27E71C433EF
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:07:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F97561AAB
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:06:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1766461AFC
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:07:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236076AbhKIBJf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:09:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33368 "EHLO mail.kernel.org"
+        id S242152AbhKIBJn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:09:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60570 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240067AbhKIBHj (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:07:39 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 60095619F7;
-        Tue,  9 Nov 2021 01:03:06 +0000 (UTC)
+        id S239340AbhKIBHt (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:07:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2018061452;
+        Tue,  9 Nov 2021 01:03:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636419787;
-        bh=QJctPq2mvvXd9D5+REVvKRYsNwuWRooixOau3OZ0qMo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F/uySRPbopQ5y4NVAiDRyTm5CrFsFMDK26gZdtglO/G45P3gYTRJik0DMyougBuLt
-         1ewDqWEysyQE3wskFUHTE95L4kiMLS8v4+zM295R3fOeZABBrn14pXWDuNXaLd5jyY
-         iI1PeVD0nEBXc5w8zjkhV18TkFNxXlujEjoEMUSc2A6kH7qb7gJyP1j7+ZDnhWRTlc
-         cmTY8M1B4dvSC6oELiuB5e3ayBt3X6R+GdDFadr2kojlf5vpRM4KC62NEMCwttShQo
-         0AQFgdUIc6sS9hp5VCg5mF6SV62HqhlVdcQSQizORvC8YFSVa90BoZNnCy2aFogzHA
-         i42zpeag264qQ==
+        s=k20201202; t=1636419798;
+        bh=xbBnIUX/zyaJx7lBhF4iyaKWUIKp0gzgpFILNaZqnwY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mmy2IAwcmn0rf43MkV4cKBBHvUMY2P73K2MdK3BxGlQ3BiJnEjyTa8NLqPs3mPgDf
+         s5sOhANzHx9H5GqH9bSySZU7bljZRSp9q5zX12g3X/goF2rRA1Q1MXjctYMJlshq1d
+         xiqtRe/4cJw3JKwxyOQR4FAIvDpkNX6jgsvNALFZZR+VMWG9H1ATfT7eZTPxmjaXQW
+         3fVbyGmZkidGD5XvN1wYmbDmLsSoYjMGyWpHraq2GFqDUxL7eGE6nZ+XOAT/5fVB4L
+         Y3xz9PYFqAr1VvhCMkP4FgnUFbiWAHKM4it9fvgasi94ChZc3xG/TnGweVtohsAcwT
+         UjjyHyVqRRODg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tuo Li <islituo@gmail.com>, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, a.hajda@samsung.com,
-        mchehab@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 043/138] media: s5p-mfc: fix possible null-pointer dereference in s5p_mfc_probe()
-Date:   Mon,  8 Nov 2021 12:45:09 -0500
-Message-Id: <20211108174644.1187889-43-sashal@kernel.org>
+Cc:     Charan Teja Reddy <charante@codeaurora.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Sasha Levin <sashal@kernel.org>, sumit.semwal@linaro.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: [PATCH AUTOSEL 5.10 001/101] dma-buf: WARN on dmabuf release with pending attachments
+Date:   Mon,  8 Nov 2021 12:46:51 -0500
+Message-Id: <20211108174832.1189312-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211108174644.1187889-1-sashal@kernel.org>
-References: <20211108174644.1187889-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -48,46 +46,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Tuo Li <islituo@gmail.com>
+From: Charan Teja Reddy <charante@codeaurora.org>
 
-[ Upstream commit 8515965e5e33f4feb56134348c95953f3eadfb26 ]
+[ Upstream commit f492283b157053e9555787262f058ae33096f568 ]
 
-The variable pdev is assigned to dev->plat_dev, and dev->plat_dev is
-checked in:
-  if (!dev->plat_dev)
+It is expected from the clients to follow the below steps on an imported
+dmabuf fd:
+a) dmabuf = dma_buf_get(fd) // Get the dmabuf from fd
+b) dma_buf_attach(dmabuf); // Clients attach to the dmabuf
+   o Here the kernel does some slab allocations, say for
+dma_buf_attachment and may be some other slab allocation in the
+dmabuf->ops->attach().
+c) Client may need to do dma_buf_map_attachment().
+d) Accordingly dma_buf_unmap_attachment() should be called.
+e) dma_buf_detach () // Clients detach to the dmabuf.
+   o Here the slab allocations made in b) are freed.
+f) dma_buf_put(dmabuf) // Can free the dmabuf if it is the last
+reference.
 
-This indicates both dev->plat_dev and pdev can be NULL. If so, the
-function dev_err() is called to print error information.
-  dev_err(&pdev->dev, "No platform data specified\n");
+Now say an erroneous client failed at step c) above thus it directly
+called dma_buf_put(), step f) above. Considering that it may be the last
+reference to the dmabuf, buffer will be freed with pending attachments
+left to the dmabuf which can show up as the 'memory leak'. This should
+at least be reported as the WARN().
 
-However, &pdev->dev is an illegal address, and it is dereferenced in
-dev_err().
-
-To fix this possible null-pointer dereference, replace dev_err() with
-mfc_err().
-
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Tuo Li <islituo@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Charan Teja Reddy <charante@codeaurora.org>
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/1627043468-16381-1-git-send-email-charante@codeaurora.org
+Signed-off-by: Christian König <christian.koenig@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/s5p-mfc/s5p_mfc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma-buf/dma-buf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc.c b/drivers/media/platform/s5p-mfc/s5p_mfc.c
-index eba2b9f040df0..c763c0a03140c 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc.c
-+++ b/drivers/media/platform/s5p-mfc/s5p_mfc.c
-@@ -1283,7 +1283,7 @@ static int s5p_mfc_probe(struct platform_device *pdev)
- 	spin_lock_init(&dev->condlock);
- 	dev->plat_dev = pdev;
- 	if (!dev->plat_dev) {
--		dev_err(&pdev->dev, "No platform data specified\n");
-+		mfc_err("No platform data specified\n");
- 		return -ENODEV;
- 	}
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index 922416b3aaceb..93e9bf7382595 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -79,6 +79,7 @@ static void dma_buf_release(struct dentry *dentry)
+ 	if (dmabuf->resv == (struct dma_resv *)&dmabuf[1])
+ 		dma_resv_fini(dmabuf->resv);
  
++	WARN_ON(!list_empty(&dmabuf->attachments));
+ 	module_put(dmabuf->owner);
+ 	kfree(dmabuf->name);
+ 	kfree(dmabuf);
 -- 
 2.33.0
 
