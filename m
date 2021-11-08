@@ -2,147 +2,163 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ECB5C433F5
-	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 01:06:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25899C433EF
+	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 04:23:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F0C360F59
-	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 01:06:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F0C8961265
+	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 04:23:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233424AbhKHBJR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 7 Nov 2021 20:09:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
+        id S237414AbhKHEZ5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 7 Nov 2021 23:25:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbhKHBJR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 7 Nov 2021 20:09:17 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DA6C061570;
-        Sun,  7 Nov 2021 17:06:33 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id m14so55224118edd.0;
-        Sun, 07 Nov 2021 17:06:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SxkLDbGHglFcMJ320qkunpCfzACuTzqWrBM19bfpkyY=;
-        b=YqcEw6vjqvRz+P2iMseihLSK3l3NVSC+XL4D6FhJnHvYpHwMhYMNWNIi4UMAnzV/ka
-         RkDhHEKEH4s78/4uRbXPZ7Omr8L3lO6XNRlOviKaXsAfDQ5BZOcpoMjjANUl4rSsE3Sc
-         EFKjAt8c9urY7VO2wAoLAmBbYmZrSHqYJqGJ6OQO/YwPmVkR8YyHgCj+3X/lyzHMUaeS
-         ONgZbK5Kjng1ngleg8AGb59SjlDBgfWuf/vgY8LgsiY+lkYV6uaMb5zAJtinDmvomXA/
-         XZq48dS0qC42/5JDT6ztELK9ZBHRSym7seckEAewncWuZ8687bRev9WF6253C3Z7tz2L
-         xVkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SxkLDbGHglFcMJ320qkunpCfzACuTzqWrBM19bfpkyY=;
-        b=ASk/WsLS9d3+ryULFg8KlSslxFEz6yHdaV7uE4EkqO3Fz8RGYeGzdXphkoB8FxTFyC
-         6YTKElXcwUkYntDlEpILLYsziIRt6ukGewz6g7aJGhWR7kVGF79Kj1UbLWdyxxP+cDjU
-         hNUlCvrv1DZ0wPPnpsv7l2emJvz32H+ctKSV0G3+IDMF5lQFm/kIGFVNZ5nEYRs9ths4
-         JqpfFsJyZVntooyEEGjpzCMtzl7DgRteCuR7OVDlHYVtxhGv/vtKFpB7elWGLhodcB66
-         jk/33gTRCynJvT35mGaRcQwd/hhYp962j68hkxQ2HV78dQCLZAAN7TFxy6RrF/BJbbPq
-         YaZA==
-X-Gm-Message-State: AOAM530rs6dW9/++XPwyHSONelrP3UvaG2MNBYyksn8qYHYxPYc8YdIx
-        vPG0eIUOwIqWpOuUWp7yazTd3xAvFfrgRyJwaMGW75TIACcb52K+
-X-Google-Smtp-Source: ABdhPJzGAJzzLaQa4ReJP2Ms5Y5t+tpJHHEhHpHwiNuwmjTfexkyXaUX8kD2IcG9VNNAR6+xL3nvYP8fm+5ilEh87AM=
-X-Received: by 2002:a17:907:7f25:: with SMTP id qf37mr57503825ejc.147.1636333592008;
- Sun, 07 Nov 2021 17:06:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20211101095539.423246-1-mudongliangabcd@gmail.com>
- <20211101183249.GA28019@kili> <76e1264b-87d3-c7cb-c9d5-bcf461fbb2bf@gmail.com>
- <CAD-N9QVxOObXE-voToHxFTDyJtyZ0PjWg6JQ-rQB5dB2ivrjtA@mail.gmail.com> <20211102135054.GG2914@kadam>
-In-Reply-To: <20211102135054.GG2914@kadam>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Mon, 8 Nov 2021 09:06:06 +0800
-Message-ID: <CAD-N9QVbdoD0_akRbaHrZiW4bQqBx=Z=3PC2V8_VDfUNaRdupg@mail.gmail.com>
-Subject: Re: [PATCH] media: em28xx: fix memory leak in em28xx_init_dev
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        syzbot <syzkaller@googlegroups.com>, linux-media@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S234867AbhKHEZ5 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 7 Nov 2021 23:25:57 -0500
+Received: from lb1-smtp-cloud7.xs4all.net (lb1-smtp-cloud7.xs4all.net [IPv6:2001:888:0:108::1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15103C061570
+        for <linux-media@vger.kernel.org>; Sun,  7 Nov 2021 20:23:12 -0800 (PST)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id jwBUmcyryFZvcjwBZmtVWg; Mon, 08 Nov 2021 05:23:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1636345389; bh=vVXRf9Z5SNKnA6lA6HxYT1ojxQveBHlyQGu5C1adl7c=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=hVXebrazlf3P5JyGYfDfi9HfQ3uVAps4MxUo2zDdzJLPZPpXha4eUc7+E1w9/9jAW
+         Yp/woDZdcWbhgXUCpH/byeQoQPrRJPEe9Z2rbh8dbNkBhFUrtSNk9lyS8pESPXRUDz
+         Kqd4Lw87levWQtuk8D8E8IkDdH+rtaTwDM3UYiLIwJkque0J9qXqmM53vmrf9G857T
+         pGPF2UGRylZ8tDfMxYbEgh/XvICPCtKInPVejAdHjQ+HLFUh/n1t7R833nKjmzXqI7
+         Rzkmhw+SZJ6pCTdmKqK79S/gmean3xFdY4bbPDQIU+ZM7AzEm0hp2G7fJ+AB5kWUP0
+         m3cTJxTT3WA8g==
+Message-ID: <f354bbdd5f068549d9e2ce2d9f9ea3ae@smtp-cloud7.xs4all.net>
+Date:   Mon, 08 Nov 2021 05:23:04 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4xfBjUvvTRtKQhR9GpWn6w6NqzBmzu7eJuvtARp5tzpcatv/7qnj1Cg/N2sjH2KgCCdR0dAl/ix3/P64fat7ARH2zJHVpFTOtioCcPsxHrl5LPix053RCF
+ bF1nUYaYOF8mU8FfiLPa3+SIce0VjpBz4pNfh7rNLTBdaq9Cc+X/JhTMyjszYBR28sqczyccHSOEJA==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Nov 2, 2021 at 9:51 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> On Tue, Nov 02, 2021 at 02:31:26PM +0800, Dongliang Mu wrote:
-> > On Tue, Nov 2, 2021 at 3:28 AM Pavel Skripkin <paskripkin@gmail.com> wrote:
-> > >
-> > > On 11/1/21 21:32, Dan Carpenter wrote:
-> > > > On Mon, Nov 01, 2021 at 05:55:39PM +0800, Dongliang Mu wrote:
-> > > >> In the em28xx_init_rev, if em28xx_audio_setup fails, this function fails
-> > > >> to deallocate the media_dev allocated in the em28xx_media_device_init.
-> > > >>
-> > > >> Fix this by adding em28xx_unregister_media_device to free media_dev.
-> > > >>
-> > > >> BTW, this patch is tested in my local syzkaller instance, and it can
-> > > >> prevent the memory leak from occurring again.
-> > > >>
-> > > >> CC: Pavel Skripkin <paskripkin@gmail.com>
-> > > >> Fixes: 37ecc7b1278f ("[media] em28xx: add media controller support")
-> > > >> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > > >> Reported-by: syzbot <syzkaller@googlegroups.com>
-> > > >
-> > > > Is this really a syzbot warning?  If so it should be in the format:
-> > > >
-> > > > Reported-by: syzbot+4c4ffd1e1094dae61035@syzkaller.appspotmail.com
-> > > >
-> > > > Syzbot is different from syzkaller.  Syzkaller is the fuzzer and syzbot
-> > > > is the program which reports syzkaller bugs.
-> > > >
-> > >
-> > > Bug report is from his local instance. He just wants to give credit to
-> > > syzbot for finding it
-> >
-> > Hi Dan,
-> >
-> > just as explained by Pavel, I leveraged the local syzkaller instance
-> > to find this bug.
-> >
-> > I can modify it to "Reported-by: syzkaller
-> > <syzkaller@googlegroups.com>", this one looks better.
-> >
->
-> No need for a Reported-by at all, but if you want to credit syzkaller
-> that's an okay format.
->
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Hi all,
+Results of the daily build of media_tree:
 
-do I need to send a v2 patch with a new Reported-by tag?
+date:			Mon Nov  8 05:00:13 CET 2021
+media-tree git hash:	3c7a2a27549c97f36d698791dcfa4f349b499f95
+media_build git hash:	c3d4780fa10bc38eb9dc462275fac019c8d693d5
+v4l-utils git hash:	2d8584dad450f4904f968e5bcbfd6351dd0b55ef
+edid-decode git hash:	b00755e34eb12aa92416aaf1bb7b02603131afe0
+gcc version:		i686-linux-gcc (GCC) 11.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.3
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.3
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: f1c67b200f199ca44b793327582bb643ecabd35f
+host hardware:		x86_64
+host os:		5.14.0-2-amd64
 
-> > >
-> > > >> ---
-> > > >>  drivers/media/usb/em28xx/em28xx-cards.c | 19 +++++++++++++------
-> > > >>  1 file changed, 13 insertions(+), 6 deletions(-)
-> > > >>
-> > > >> diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
-> > > >> index c1e0dccb7408..fca68939ca50 100644
-> > > >> --- a/drivers/media/usb/em28xx/em28xx-cards.c
-> > > >> +++ b/drivers/media/usb/em28xx/em28xx-cards.c
-> > > >> @@ -3625,8 +3625,10 @@ static int em28xx_init_dev(struct em28xx *dev, struct usb_device *udev,
-> > > >>
-> > > >
-> > > > There is no check to see if the em28xx_media_device_init() fails.  I
-> > >
-> > > I guess, it should work, since there a lot of checks to see if this
-> > > pointer is valid, i.e driver can work even without this pointer, AFAIK
-> > >
-> > > > don't love that we call unregister() to undo the init() but it seems
-> > > > like it should work...
-> > >
-> > > Same here, but it is out of scope of this patch :)
-> >
-> > >From the implementation, em28xx_media_device_init and
-> > em28xx_unregister_media_device should not be a pair of functions
-> > (do/undo).
-> >
->
-> That's how it is now, but it's not necessarily how it should be.  Anyway,
-> it's unrelated to you patch.  Just forget I mentioned it.
->
-> regards,
-> dan carpenter
->
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-mips: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-4.4.283-i686: OK
+linux-4.4.283-x86_64: OK
+linux-4.5.7-i686: WARNINGS
+linux-4.5.7-x86_64: WARNINGS
+linux-4.6.7-i686: WARNINGS
+linux-4.6.7-x86_64: WARNINGS
+linux-4.7.10-i686: WARNINGS
+linux-4.7.10-x86_64: WARNINGS
+linux-4.8.17-i686: WARNINGS
+linux-4.8.17-x86_64: WARNINGS
+linux-4.9.246-i686: OK
+linux-4.9.246-x86_64: OK
+linux-4.10.17-i686: WARNINGS
+linux-4.10.17-x86_64: WARNINGS
+linux-4.11.12-i686: WARNINGS
+linux-4.11.12-x86_64: WARNINGS
+linux-4.12.14-i686: WARNINGS
+linux-4.12.14-x86_64: WARNINGS
+linux-4.13.16-i686: WARNINGS
+linux-4.13.16-x86_64: WARNINGS
+linux-4.14.246-i686: OK
+linux-4.14.246-x86_64: OK
+linux-4.15.18-i686: WARNINGS
+linux-4.15.18-x86_64: WARNINGS
+linux-4.16.18-i686: WARNINGS
+linux-4.16.18-x86_64: WARNINGS
+linux-4.17.19-i686: WARNINGS
+linux-4.17.19-x86_64: WARNINGS
+linux-4.18.20-i686: WARNINGS
+linux-4.18.20-x86_64: WARNINGS
+linux-4.19.206-i686: OK
+linux-4.19.206-x86_64: OK
+linux-4.20.17-i686: WARNINGS
+linux-4.20.17-x86_64: WARNINGS
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.144-i686: OK
+linux-5.4.144-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.18-i686: OK
+linux-5.8.18-x86_64: OK
+linux-5.9.16-i686: OK
+linux-5.9.16-x86_64: OK
+linux-5.10.62-i686: OK
+linux-5.10.62-x86_64: OK
+linux-5.11.22-i686: OK
+linux-5.11.22-x86_64: OK
+linux-5.12.19-i686: OK
+linux-5.12.19-x86_64: OK
+linux-5.13.14-i686: OK
+linux-5.13.14-x86_64: OK
+linux-5.14.1-i686: OK
+linux-5.14.1-x86_64: OK
+linux-5.15.1-i686: OK
+linux-5.15.1-x86_64: OK
+apps: WARNINGS
+spec-git: OK
+sparse: WARNINGS
+smatch: ERRORS
+kerneldoc: WARNINGS
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Monday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Monday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
