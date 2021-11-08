@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35A8BC433FE
-	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 16:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 225E0C4167B
+	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 16:02:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F0376109E
-	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 16:02:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0930861186
+	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 16:02:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239411AbhKHQFf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 11:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
+        id S239463AbhKHQFh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 11:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbhKHQFe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Nov 2021 11:05:34 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFC8C061570
-        for <linux-media@vger.kernel.org>; Mon,  8 Nov 2021 08:02:49 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id d24so27784114wra.0
-        for <linux-media@vger.kernel.org>; Mon, 08 Nov 2021 08:02:49 -0800 (PST)
+        with ESMTP id S239434AbhKHQFf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Nov 2021 11:05:35 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30B7C061714
+        for <linux-media@vger.kernel.org>; Mon,  8 Nov 2021 08:02:50 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id n29so16034759wra.11
+        for <linux-media@vger.kernel.org>; Mon, 08 Nov 2021 08:02:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8vAP0/smT10scjNRgPBTGipkba7IQbJFUmVsZltLLbM=;
-        b=NlJ0dzrhwsI+PIHtV8DNA9if9rCTIRo07+Kp12SmuZF9yrnHvT9kwDNOrTUlO42f+S
-         On/UlC6AYqt5WUYBBOwD3XIeFde3M4UMZvqtevR9gatyeFykuCItvt4HyhGEqPxSfjCg
-         cqWPidWFTjZ2jbMSvjZHeS5mvemYY/FhHTNZWvUtrO2mCacgfh/HRaoF4S8g1L3O9q3E
-         orZVKESdLKXvin0pEQ9DytuTgsIaaRylfUz0hlULEUIUC9bE/BybeGUS08E7Oespk+WZ
-         JP5kPtWFkdiwfHdt9nJxgA67NZabDgVlAFkr1ZNE5i8C7WlIOBRIXRG5kcbxcwDdpu2i
-         YXjw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=StolZF6As2JqwmKdnDrgpcrLCxn6sqYLr+z2iBrARUI=;
+        b=Lzg9V3LwIO6BW8VHcKU+IXsxZw+mqxMRO8eTgcCvVyuyje9NQIxapwWKYGP/M4xCZF
+         GREtinyfPzfLTOUUtax0pHMFGNyCzH2hCskcTj+opo7BlL0tIhCAeeTV5RVhprFdEgex
+         1DWghRYQvBqRtSDqcuzsP1K1/gUAg5ObWOlZH0EITR417zkrAdfSrOgEzkbFYu2urK+G
+         i5Z7jCNIIPPrVN29yG9MEFmuVrZOC9MnMhDMncPe/fzW4vcVkQ6drEcBX8psisbzr1T5
+         B3ZJVHvUX6FUVRU3w2Dm4zaJyNpj3fxVH9Tv2t/fJj8caqlLqY3p59hgzO1lyIBjHBle
+         bgtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8vAP0/smT10scjNRgPBTGipkba7IQbJFUmVsZltLLbM=;
-        b=A5dHqJmD3GAsRolgKEiLJ13hFrUP3UhlN/A8DnBktpdaIoypiLxTPuyXlYu9st7b+o
-         s1IU3HypbaJ4ISbnBZm1Fc2pTt02kTVNAXPnSmwWmAi3ie8bOrQiTQfpenbSRro7FI49
-         q/R6p3XxiF+mNOMn6OI8sQ4WBUa8NDj3dQtLw92IfiqONvJCBRfW21UCEGPqTADPbMrI
-         JTMvMcLgQwbrvs/Ttn45vpJaPRtBBDi2d5wupo12pQK96ZD8HAbh6FyNe9rdvKqKokcM
-         +clc7+Aeu28a0rwxQfJw0BsDCChOy1b6RWyDp5vDUlvxbDAbsYeMq4TlXmL9ii8TYRaH
-         Ap9w==
-X-Gm-Message-State: AOAM532i5upFvQFn+9+zWjpLW7smFMi9r1v92o94P6vxUiPjvq2qE+Ra
-        vfBY8w6+pRblhwBknZungbKZCUGZW+A2hA==
-X-Google-Smtp-Source: ABdhPJxKzkpGXl2/zwCLSevFelF00cNosG3fmT9AeS80//iffmC+gEFqc3A4Rkl8LK/WccvlwedDwg==
-X-Received: by 2002:adf:d1c2:: with SMTP id b2mr189788wrd.369.1636387368467;
-        Mon, 08 Nov 2021 08:02:48 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=StolZF6As2JqwmKdnDrgpcrLCxn6sqYLr+z2iBrARUI=;
+        b=l0gVvJ1O8ALHdrk+6H5Dle0O+w0lRk/HhdTW20lFgMA7iXBJtx6/MKLB9RnzZkGOFm
+         zskZ6D/xlLwiM0kFUvbzv12ITvZz9jMjUplkl5VDoLo1Pv71wcrncGhsJS43PJ1beRNa
+         fvOqNqyEX35Xszc0Go5F5qs6h3kB3VvOA0Z1oC7XFQfsbkQyZ8i8NvGjNhYM9wuFutg9
+         kxln74seNYXYetrMqOxfv1IOFxWAVv68Iq/6KsjmcMMrQqgArDYqQaX/rlF0EPho8O2c
+         cMFcgiVpX+ZK3nn8jiEVEial9MB6PxRjiNxh6NUo62PQVRdLol9thuctn7oJ7ye7YJ/g
+         T5Ug==
+X-Gm-Message-State: AOAM533gfdXplrUxwfxzw3VVTtalkiO+dZ5Opnkiq6wf7OWVX+/EDh6q
+        c126Ww0utPQteDRzpPF4D7Wj3g==
+X-Google-Smtp-Source: ABdhPJy7LHQJ5T1HTh4q+oz4n3P6YUYylIxM0wTwWI8oE1itpbmEYXg7r9t0vXP4WQV9v/IJe4xjKA==
+X-Received: by 2002:adf:e7cf:: with SMTP id e15mr206664wrn.287.1636387369594;
+        Mon, 08 Nov 2021 08:02:49 -0800 (PST)
 Received: from bismarck.berto.se (p54ac5892.dip0.t-ipconnect.de. [84.172.88.146])
-        by smtp.googlemail.com with ESMTPSA id d16sm12703176wmb.37.2021.11.08.08.02.47
+        by smtp.googlemail.com with ESMTPSA id d16sm12703176wmb.37.2021.11.08.08.02.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Nov 2021 08:02:48 -0800 (PST)
+        Mon, 08 Nov 2021 08:02:49 -0800 (PST)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -57,10 +57,12 @@ To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
 Cc:     linux-renesas-soc@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH 0/4] media: videobuf2: Add a transfer error event
-Date:   Mon,  8 Nov 2021 17:02:16 +0100
-Message-Id: <20211108160220.767586-1-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH 2/4] media: videobuf2: Add a transfer error event
+Date:   Mon,  8 Nov 2021 17:02:18 +0100
+Message-Id: <20211108160220.767586-3-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211108160220.767586-1-niklas.soderlund+renesas@ragnatech.se>
+References: <20211108160220.767586-1-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -68,43 +70,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Add a new V4L2_EVENT_XFER_ERROR event to signal if a unrecoverable error
+happens during video transfer.
 
-This series adds a new V4L2 event, V4L2_EVENT_XFER_ERROR. This new event 
-is intended to be used when a device in the capturing pipeline 
-encounters an unrecoverable error and needs to inform the capturing 
-application thru the video node about the error.
+The use-case that sparked this new event is to signal to the video
+device driver that an error has happen on the CSI-2 bus from the CSI-2
+receiver subdevice.
 
-The fist use-case for this is also demonstrated in this series by the 
-R-Car CSI-2 receiver that generates the new event when it detects an 
-error on the bus.
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+---
+ Documentation/userspace-api/media/v4l/vidioc-dqevent.rst     | 5 +++++
+ Documentation/userspace-api/media/videodev2.h.rst.exceptions | 1 +
+ include/uapi/linux/videodev2.h                               | 1 +
+ 3 files changed, 7 insertions(+)
 
-Patch 1/4 is a bug fix for the R-Car VIN driver that was found while 
-working on this series. This patch is good to be picked-up on it's own 
-but is a requirement for later patches in this series so I have opted to 
-include it here as the first patch. 
-
-Patch 2/4 adds the new V4L2 event. While patch 3/4 and 4/4 makes use of 
-it in the R-Car capture pipeline. Careful readers will note that the 
-last to patches already have a patch history. This is because they have 
-been part of an earlier attempt a while back to solve this issue in a 
-different way, and during those discussions the need for this new event 
-was found.
-
-Niklas Söderlund (4):
-  media: rcar-vin: Free buffers with error if hardware stop fails
-  media: videobuf2: Add a transfer error event
-  rcar-vin: Stop stream when subdevice signal transfer error
-  rcar-csi2: Do not try to recover after transfer error
-
- .../userspace-api/media/v4l/vidioc-dqevent.rst  |  5 +++++
- .../media/videodev2.h.rst.exceptions            |  1 +
- drivers/media/platform/rcar-vin/rcar-csi2.c     | 17 +++++++++--------
- drivers/media/platform/rcar-vin/rcar-dma.c      | 10 ++++++++++
- drivers/media/platform/rcar-vin/rcar-v4l2.c     | 17 ++++++++++++++++-
- include/uapi/linux/videodev2.h                  |  1 +
- 6 files changed, 42 insertions(+), 9 deletions(-)
-
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst b/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
+index 6eb40073c906deba..84984641c9351aa9 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-dqevent.rst
+@@ -182,6 +182,11 @@ call.
+ 	the regions changes. This event has a struct
+ 	:c:type:`v4l2_event_motion_det`
+ 	associated with it.
++    * - ``V4L2_EVENT_XFER_ERROR``
++      - 7
++      - This event is triggered when an transfer error is detected while
++        streaming. For example if a unrecoverable error is detected on a video
++        bus in the pipeline.
+     * - ``V4L2_EVENT_PRIVATE_START``
+       - 0x08000000
+       - Base event number for driver-private events.
+diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+index eb0b1cd37abd9381..7ed9884b879c888e 100644
+--- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
++++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+@@ -498,6 +498,7 @@ replace define V4L2_EVENT_CTRL event-type
+ replace define V4L2_EVENT_FRAME_SYNC event-type
+ replace define V4L2_EVENT_SOURCE_CHANGE event-type
+ replace define V4L2_EVENT_MOTION_DET event-type
++replace define V4L2_EVENT_XFER_ERROR event-type
+ replace define V4L2_EVENT_PRIVATE_START event-type
+ 
+ replace define V4L2_EVENT_CTRL_CH_VALUE ctrl-changes-flags
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index f118fe7a9f58d240..48d4738eb862418b 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -2373,6 +2373,7 @@ struct v4l2_streamparm {
+ #define V4L2_EVENT_FRAME_SYNC			4
+ #define V4L2_EVENT_SOURCE_CHANGE		5
+ #define V4L2_EVENT_MOTION_DET			6
++#define V4L2_EVENT_XFER_ERROR			7
+ #define V4L2_EVENT_PRIVATE_START		0x08000000
+ 
+ /* Payload for V4L2_EVENT_VSYNC */
 -- 
 2.33.1
 
