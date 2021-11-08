@@ -2,42 +2,43 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 722E9C4321E
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:06:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2045C433FE
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:06:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5FC3661B02
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:06:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B36A361ACE
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:06:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239580AbhKIBJT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:09:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60848 "EHLO mail.kernel.org"
+        id S239911AbhKIBJW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:09:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60366 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238752AbhKIBHB (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:07:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2C66C6124D;
-        Tue,  9 Nov 2021 01:02:52 +0000 (UTC)
+        id S238361AbhKIBHD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:07:03 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 55418614C8;
+        Tue,  9 Nov 2021 01:02:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636419773;
-        bh=XYUZB8pR/teBlpBJrwe+Ygcg07nPnBAF3eRFhC0HolM=;
+        s=k20201202; t=1636419778;
+        bh=a1EA5gTGciR1EIXkrUGu4uto/FG7wMENA7BFoVxUw3A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tOix3Sje6TJwKy4KNYbQFELlsU0mvAE0Ni3JmUMCpxr7h4V/HGStEAbMYiZ/plDIV
-         uA3r19ymfOIiIix1It43wDQLjnNkYphBozb/YbgHKWLrTX2yr3Xz20VmmVj5Df5iRr
-         6i8X9QGJAw8wyY7MhSSdUByud3YCTXlfN+y4aI0ivdmYJbtgkrHDcYqECeK7QWDYdg
-         n5Xabi/+0nB5bXvsZ9bWsCG8DfDhYzFGbj5gg/PgvUlHzi6f18A+VM0wlkkB38oxQe
-         HdHCEDOLuvK1fa0JK+hgGC+RHICqRJLdSt/R0P99mEK1IJ3BAlA+BtmruLm3tatjGg
-         YcmOj0IjPm7xQ==
+        b=bwvcH5WJojOB86aKZjvsGPLL6iuYZeA5vtdy6kZPJaQJEa0M2MAabMrt1WnjmWJBx
+         HSksHXOQ+HUM9s++bg0SokA/SOqY14xe1KgsMm9i3HynAKiNYwXLvKuH1s3G7Hbv/z
+         AbsMKT12weRT+k+gv2BjLguf7a1gL390zRVzCiZ028OUC1wDjvByrp1Egm0w9o53B/
+         8nYN9QqgQ2OxasrXOqEddBadJnlBWHNK/y9zZIqPAJTKmu7jq74/IorivCikinxl4e
+         xTtkPIqGa6iIJhXBbDs1BoiCyo08usGlFIMB0+S2x5LfkM4fGQnGsSLA3B1GhsuPHq
+         ZieZOSeXL8IUg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dirk Bender <d.bender@phytec.de>,
-        Stefan Riedmueller <s.riedmueller@phytec.de>,
+Cc:     Evgeny Novikov <novikov@ispras.ru>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 035/138] media: mt9p031: Fix corrupted frame after restarting stream
-Date:   Mon,  8 Nov 2021 12:45:01 -0500
-Message-Id: <20211108174644.1187889-35-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, alex.dewar90@gmail.com,
+        colin.king@canonical.com, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.14 037/138] media: atomisp: Fix error handling in probe
+Date:   Mon,  8 Nov 2021 12:45:03 -0500
+Message-Id: <20211108174644.1187889-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211108174644.1187889-1-sashal@kernel.org>
 References: <20211108174644.1187889-1-sashal@kernel.org>
@@ -49,87 +50,121 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dirk Bender <d.bender@phytec.de>
+From: Evgeny Novikov <novikov@ispras.ru>
 
-[ Upstream commit 0961ba6dd211a4a52d1dd4c2d59be60ac2dc08c7 ]
+[ Upstream commit e16f5e39acd6d10cc63ae39bc0a77188ed828f22 ]
 
-To prevent corrupted frames after starting and stopping the sensor its
-datasheet specifies a specific pause sequence to follow:
+There were several issues with handling errors in lm3554_probe():
+- Probe did not set the error code when v4l2_ctrl_handler_init() failed.
+- It intermixed gotos for handling errors of v4l2_ctrl_handler_init()
+  and media_entity_pads_init().
+- It did not set the error code for failures of v4l2_ctrl_new_custom().
+- Probe did not free resources in case of failures of
+  atomisp_register_i2c_module().
 
-Stopping:
-	Set Pause_Restart Bit -> Set Restart Bit -> Set Chip_Enable Off
+The patch fixes all these issues.
 
-Restarting:
-	Set Chip_Enable On -> Clear Pause_Restart Bit
+Found by Linux Driver Verification project (linuxtesting.org).
 
-The Restart Bit is cleared automatically and must not be cleared
-manually as this would cause undefined behavior.
-
-Signed-off-by: Dirk Bender <d.bender@phytec.de>
-Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Link: https://lore.kernel.org/linux-media/20210810162943.19852-1-novikov@ispras.ru
+Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/mt9p031.c | 28 +++++++++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
+ .../media/atomisp/i2c/atomisp-lm3554.c        | 37 ++++++++++++-------
+ 1 file changed, 24 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
-index 6eb88ef997836..3ae1b28c8351b 100644
---- a/drivers/media/i2c/mt9p031.c
-+++ b/drivers/media/i2c/mt9p031.c
-@@ -78,7 +78,9 @@
- #define		MT9P031_PIXEL_CLOCK_INVERT		(1 << 15)
- #define		MT9P031_PIXEL_CLOCK_SHIFT(n)		((n) << 8)
- #define		MT9P031_PIXEL_CLOCK_DIVIDE(n)		((n) << 0)
--#define MT9P031_FRAME_RESTART				0x0b
-+#define MT9P031_RESTART					0x0b
-+#define		MT9P031_FRAME_PAUSE_RESTART		(1 << 1)
-+#define		MT9P031_FRAME_RESTART			(1 << 0)
- #define MT9P031_SHUTTER_DELAY				0x0c
- #define MT9P031_RST					0x0d
- #define		MT9P031_RST_ENABLE			1
-@@ -444,9 +446,23 @@ static int mt9p031_set_params(struct mt9p031 *mt9p031)
- static int mt9p031_s_stream(struct v4l2_subdev *subdev, int enable)
- {
- 	struct mt9p031 *mt9p031 = to_mt9p031(subdev);
-+	struct i2c_client *client = v4l2_get_subdevdata(subdev);
-+	int val;
- 	int ret;
+diff --git a/drivers/staging/media/atomisp/i2c/atomisp-lm3554.c b/drivers/staging/media/atomisp/i2c/atomisp-lm3554.c
+index 362ed44b4effa..e046489cd253b 100644
+--- a/drivers/staging/media/atomisp/i2c/atomisp-lm3554.c
++++ b/drivers/staging/media/atomisp/i2c/atomisp-lm3554.c
+@@ -835,7 +835,6 @@ static int lm3554_probe(struct i2c_client *client)
+ 	int err = 0;
+ 	struct lm3554 *flash;
+ 	unsigned int i;
+-	int ret;
  
- 	if (!enable) {
-+		/* enable pause restart */
-+		val = MT9P031_FRAME_PAUSE_RESTART;
-+		ret = mt9p031_write(client, MT9P031_RESTART, val);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* enable restart + keep pause restart set */
-+		val |= MT9P031_FRAME_RESTART;
-+		ret = mt9p031_write(client, MT9P031_RESTART, val);
-+		if (ret < 0)
-+			return ret;
-+
- 		/* Stop sensor readout */
- 		ret = mt9p031_set_output_control(mt9p031,
- 						 MT9P031_OUTPUT_CONTROL_CEN, 0);
-@@ -466,6 +482,16 @@ static int mt9p031_s_stream(struct v4l2_subdev *subdev, int enable)
- 	if (ret < 0)
- 		return ret;
+ 	flash = kzalloc(sizeof(*flash), GFP_KERNEL);
+ 	if (!flash)
+@@ -844,7 +843,7 @@ static int lm3554_probe(struct i2c_client *client)
+ 	flash->pdata = lm3554_platform_data_func(client);
+ 	if (IS_ERR(flash->pdata)) {
+ 		err = PTR_ERR(flash->pdata);
+-		goto fail1;
++		goto free_flash;
+ 	}
  
-+	/*
-+	 * - clear pause restart
-+	 * - don't clear restart as clearing restart manually can cause
-+	 *   undefined behavior
-+	 */
-+	val = MT9P031_FRAME_RESTART;
-+	ret = mt9p031_write(client, MT9P031_RESTART, val);
-+	if (ret < 0)
-+		return ret;
-+
- 	return mt9p031_pll_enable(mt9p031);
- }
+ 	v4l2_i2c_subdev_init(&flash->sd, client, &lm3554_ops);
+@@ -852,12 +851,12 @@ static int lm3554_probe(struct i2c_client *client)
+ 	flash->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 	flash->mode = ATOMISP_FLASH_MODE_OFF;
+ 	flash->timeout = LM3554_MAX_TIMEOUT / LM3554_TIMEOUT_STEPSIZE - 1;
+-	ret =
++	err =
+ 	    v4l2_ctrl_handler_init(&flash->ctrl_handler,
+ 				   ARRAY_SIZE(lm3554_controls));
+-	if (ret) {
++	if (err) {
+ 		dev_err(&client->dev, "error initialize a ctrl_handler.\n");
+-		goto fail3;
++		goto unregister_subdev;
+ 	}
  
+ 	for (i = 0; i < ARRAY_SIZE(lm3554_controls); i++)
+@@ -866,14 +865,15 @@ static int lm3554_probe(struct i2c_client *client)
+ 
+ 	if (flash->ctrl_handler.error) {
+ 		dev_err(&client->dev, "ctrl_handler error.\n");
+-		goto fail3;
++		err = flash->ctrl_handler.error;
++		goto free_handler;
+ 	}
+ 
+ 	flash->sd.ctrl_handler = &flash->ctrl_handler;
+ 	err = media_entity_pads_init(&flash->sd.entity, 0, NULL);
+ 	if (err) {
+ 		dev_err(&client->dev, "error initialize a media entity.\n");
+-		goto fail2;
++		goto free_handler;
+ 	}
+ 
+ 	flash->sd.entity.function = MEDIA_ENT_F_FLASH;
+@@ -884,16 +884,27 @@ static int lm3554_probe(struct i2c_client *client)
+ 
+ 	err = lm3554_gpio_init(client);
+ 	if (err) {
+-		dev_err(&client->dev, "gpio request/direction_output fail");
+-		goto fail3;
++		dev_err(&client->dev, "gpio request/direction_output fail.\n");
++		goto cleanup_media;
++	}
++
++	err = atomisp_register_i2c_module(&flash->sd, NULL, LED_FLASH);
++	if (err) {
++		dev_err(&client->dev, "fail to register atomisp i2c module.\n");
++		goto uninit_gpio;
+ 	}
+-	return atomisp_register_i2c_module(&flash->sd, NULL, LED_FLASH);
+-fail3:
++
++	return 0;
++
++uninit_gpio:
++	lm3554_gpio_uninit(client);
++cleanup_media:
+ 	media_entity_cleanup(&flash->sd.entity);
++free_handler:
+ 	v4l2_ctrl_handler_free(&flash->ctrl_handler);
+-fail2:
++unregister_subdev:
+ 	v4l2_device_unregister_subdev(&flash->sd);
+-fail1:
++free_flash:
+ 	kfree(flash);
+ 
+ 	return err;
 -- 
 2.33.0
 
