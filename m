@@ -2,49 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CDD4C433EF
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:15:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 019D6C433FE
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:15:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C0FC6128B
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:15:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E21726134F
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:15:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242722AbhKIBR7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:17:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44184 "EHLO mail.kernel.org"
+        id S242554AbhKIBRj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:17:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38612 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242910AbhKIBOd (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:14:33 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0EFD361AD0;
-        Tue,  9 Nov 2021 01:05:53 +0000 (UTC)
+        id S241468AbhKIBMo (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:12:44 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CB32761A7F;
+        Tue,  9 Nov 2021 01:05:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636419955;
-        bh=HHNgnnC0YH+UQ2SkIlv++jtsxO7zKOpuQ4wWcjuxFCY=;
+        s=k20201202; t=1636419911;
+        bh=yATXGdaUzZgEZsx70fgb68NdEgPLCYLLlzykAUdNEcA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G8uOdoWHBChJ7itRoPun0CxCIH4UizQKVl7ucfkj3TPnZHEjHl13njjMKw7c6jWec
-         Fn2zwARUPFgW1wFkzRY6iFHVq3/eYbcoO87g+c7wo0Zib1tNhntC4VvETy1ZQsOabb
-         8T/KZsfoAiw7nelWl5eH84kxuyzL4GY9i2ndYCWbbC1qAz5VonRl6xXmOuXxbtgQHM
-         /vDS/zMoaMKqJiOQBJREB4yfTEU1yVmq6vXfCW61hMIZVu8iHX0sS6kmzwiCB8R/HR
-         w+7DHOQVkhE0oGDqEnIKPMPlMTf/9zDTDPf1TNZLmEMOWSAiirNELFniw9/clnRuka
-         XnPYPlYEbUwbw==
+        b=S3N4n6cu9D3xQrERafZPllKFwj5zJ4kaKt2vK4nQ9+bLrALk2qxT1yleEUawjECIg
+         gphgfDAizfPgTxjN+1rusYOWbkyBn5LbS4CHKIR3fSFMBhOrK71eJUlWE1EyNNI9Ee
+         Qv3G0L5RqmJyISBRX9upt3309rCPQHL1qOoiULfUaXmyX8OCDUP2M/KXgoakV3lSo2
+         UxNQb4+mb/EdT9mE5hYCmJc0KDfzOV9W0ZVgzyfoCrMGmXOJ87qlvF7TJwcP5PWKAU
+         4MpcETP7NVJ8FuELHXpt8CyyfVNisCNrbCa3FD0zbMW4uNEdnoQo1fEyPFYh0M53La
+         sZcONrvbhyPVg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Nadezda Lutovinova <lutovinova@ispras.ru>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, niklas.soderlund@ragnatech.se,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 22/47] media: rcar-csi2: Add checking to rcsi2_start_receiver()
-Date:   Mon,  8 Nov 2021 12:50:06 -0500
-Message-Id: <20211108175031.1190422-22-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, a.hajda@samsung.com,
+        mchehab@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 26/74] media: s5p-mfc: Add checking to s5p_mfc_probe().
+Date:   Mon,  8 Nov 2021 12:48:53 -0500
+Message-Id: <20211108174942.1189927-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211108175031.1190422-1-sashal@kernel.org>
-References: <20211108175031.1190422-1-sashal@kernel.org>
+In-Reply-To: <20211108174942.1189927-1-sashal@kernel.org>
+References: <20211108174942.1189927-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -54,38 +50,37 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Nadezda Lutovinova <lutovinova@ispras.ru>
 
-[ Upstream commit fc41665498332ad394b7db37f23e9394096ddc71 ]
+[ Upstream commit cdfaf4752e6915a4b455ad4400133e540e4dc965 ]
 
-If rcsi2_code_to_fmt() return NULL, then null pointer dereference occurs
-in the next cycle. That should not be possible now but adding checking
-protects from future bugs.
-The patch adds checking if format is NULL.
+If of_device_get_match_data() return NULL,
+then null pointer dereference occurs in  s5p_mfc_init_pm().
+The patch adds checking if dev->variant is NULL.
 
 Found by Linux Driver Verification project (linuxtesting.org).
 
 Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/rcar-vin/rcar-csi2.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/platform/s5p-mfc/s5p_mfc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index dc5ae8025832a..23f55514b002a 100644
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -474,6 +474,8 @@ static int rcsi2_start(struct rcar_csi2 *priv)
+diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc.c b/drivers/media/platform/s5p-mfc/s5p_mfc.c
+index f8a5ed6bb9d7a..9faecd049002f 100644
+--- a/drivers/media/platform/s5p-mfc/s5p_mfc.c
++++ b/drivers/media/platform/s5p-mfc/s5p_mfc.c
+@@ -1284,6 +1284,10 @@ static int s5p_mfc_probe(struct platform_device *pdev)
+ 	}
  
- 	/* Code is validated in set_fmt. */
- 	format = rcsi2_code_to_fmt(priv->mf.code);
-+	if (!format)
-+		return -EINVAL;
+ 	dev->variant = of_device_get_match_data(&pdev->dev);
++	if (!dev->variant) {
++		dev_err(&pdev->dev, "Failed to get device MFC hardware variant information\n");
++		return -ENOENT;
++	}
  
- 	/*
- 	 * Enable all Virtual Channels.
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	dev->regs_base = devm_ioremap_resource(&pdev->dev, res);
 -- 
 2.33.0
 
