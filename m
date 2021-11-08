@@ -2,46 +2,49 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DFCFC433FE
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:15:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CDD4C433EF
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:15:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDF596134F
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:15:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C0FC6128B
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:15:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242577AbhKIBRl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:17:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39746 "EHLO mail.kernel.org"
+        id S242722AbhKIBR7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:17:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44184 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242613AbhKIBNz (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:13:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7071661A86;
-        Tue,  9 Nov 2021 01:05:41 +0000 (UTC)
+        id S242910AbhKIBOd (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:14:33 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0EFD361AD0;
+        Tue,  9 Nov 2021 01:05:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636419942;
-        bh=svtFdkae/ZD9yRAAJPa+Y8uFXyDBZcu1Qh/8cbt7Wvk=;
+        s=k20201202; t=1636419955;
+        bh=HHNgnnC0YH+UQ2SkIlv++jtsxO7zKOpuQ4wWcjuxFCY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=npMIMND/4Iu0sIpz/m98ubyquvZc1XNmSHxbKMCF5ERGHghHGCaPpuy0fyUPqnaee
-         3C3lfKZnpc+24AFoQxsJSGNvWXitKt0E2Tm8Y3DSV5HLu3NiJbCfffpIFw/D2Qc1np
-         s8posSFXAWrFd3Ohy/6IAgYvt2exdeUt9dIiB969SJGEHRv5P/jvGTjdrHvjPDo6wK
-         Ls/QiOC3TfqEikbdnUFBqHonprQkNxzXUaMbYaysivmiQpEK097zo0TnF/wgcPRRBJ
-         SrmP2saNenSi2VzJFRkYq3h/gLxXUI5qWb+6Qs+ralOfOEQD1uk/K0Vw9PkFhA9MrK
-         19OLX1LkPJJAQ==
+        b=G8uOdoWHBChJ7itRoPun0CxCIH4UizQKVl7ucfkj3TPnZHEjHl13njjMKw7c6jWec
+         Fn2zwARUPFgW1wFkzRY6iFHVq3/eYbcoO87g+c7wo0Zib1tNhntC4VvETy1ZQsOabb
+         8T/KZsfoAiw7nelWl5eH84kxuyzL4GY9i2ndYCWbbC1qAz5VonRl6xXmOuXxbtgQHM
+         /vDS/zMoaMKqJiOQBJREB4yfTEU1yVmq6vXfCW61hMIZVu8iHX0sS6kmzwiCB8R/HR
+         w+7DHOQVkhE0oGDqEnIKPMPlMTf/9zDTDPf1TNZLmEMOWSAiirNELFniw9/clnRuka
+         XnPYPlYEbUwbw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dirk Bender <d.bender@phytec.de>,
-        Stefan Riedmueller <s.riedmueller@phytec.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Nadezda Lutovinova <lutovinova@ispras.ru>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 14/47] media: mt9p031: Fix corrupted frame after restarting stream
-Date:   Mon,  8 Nov 2021 12:49:58 -0500
-Message-Id: <20211108175031.1190422-14-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, niklas.soderlund@ragnatech.se,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 22/47] media: rcar-csi2: Add checking to rcsi2_start_receiver()
+Date:   Mon,  8 Nov 2021 12:50:06 -0500
+Message-Id: <20211108175031.1190422-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211108175031.1190422-1-sashal@kernel.org>
 References: <20211108175031.1190422-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -49,87 +52,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dirk Bender <d.bender@phytec.de>
+From: Nadezda Lutovinova <lutovinova@ispras.ru>
 
-[ Upstream commit 0961ba6dd211a4a52d1dd4c2d59be60ac2dc08c7 ]
+[ Upstream commit fc41665498332ad394b7db37f23e9394096ddc71 ]
 
-To prevent corrupted frames after starting and stopping the sensor its
-datasheet specifies a specific pause sequence to follow:
+If rcsi2_code_to_fmt() return NULL, then null pointer dereference occurs
+in the next cycle. That should not be possible now but adding checking
+protects from future bugs.
+The patch adds checking if format is NULL.
 
-Stopping:
-	Set Pause_Restart Bit -> Set Restart Bit -> Set Chip_Enable Off
+Found by Linux Driver Verification project (linuxtesting.org).
 
-Restarting:
-	Set Chip_Enable On -> Clear Pause_Restart Bit
-
-The Restart Bit is cleared automatically and must not be cleared
-manually as this would cause undefined behavior.
-
-Signed-off-by: Dirk Bender <d.bender@phytec.de>
-Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/mt9p031.c | 28 +++++++++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
+ drivers/media/platform/rcar-vin/rcar-csi2.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
-index 715be3632b01a..eb08acf43e3a2 100644
---- a/drivers/media/i2c/mt9p031.c
-+++ b/drivers/media/i2c/mt9p031.c
-@@ -81,7 +81,9 @@
- #define		MT9P031_PIXEL_CLOCK_INVERT		(1 << 15)
- #define		MT9P031_PIXEL_CLOCK_SHIFT(n)		((n) << 8)
- #define		MT9P031_PIXEL_CLOCK_DIVIDE(n)		((n) << 0)
--#define MT9P031_FRAME_RESTART				0x0b
-+#define MT9P031_RESTART					0x0b
-+#define		MT9P031_FRAME_PAUSE_RESTART		(1 << 1)
-+#define		MT9P031_FRAME_RESTART			(1 << 0)
- #define MT9P031_SHUTTER_DELAY				0x0c
- #define MT9P031_RST					0x0d
- #define		MT9P031_RST_ENABLE			1
-@@ -448,9 +450,23 @@ static int mt9p031_set_params(struct mt9p031 *mt9p031)
- static int mt9p031_s_stream(struct v4l2_subdev *subdev, int enable)
- {
- 	struct mt9p031 *mt9p031 = to_mt9p031(subdev);
-+	struct i2c_client *client = v4l2_get_subdevdata(subdev);
-+	int val;
- 	int ret;
+diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+index dc5ae8025832a..23f55514b002a 100644
+--- a/drivers/media/platform/rcar-vin/rcar-csi2.c
++++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+@@ -474,6 +474,8 @@ static int rcsi2_start(struct rcar_csi2 *priv)
  
- 	if (!enable) {
-+		/* enable pause restart */
-+		val = MT9P031_FRAME_PAUSE_RESTART;
-+		ret = mt9p031_write(client, MT9P031_RESTART, val);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* enable restart + keep pause restart set */
-+		val |= MT9P031_FRAME_RESTART;
-+		ret = mt9p031_write(client, MT9P031_RESTART, val);
-+		if (ret < 0)
-+			return ret;
-+
- 		/* Stop sensor readout */
- 		ret = mt9p031_set_output_control(mt9p031,
- 						 MT9P031_OUTPUT_CONTROL_CEN, 0);
-@@ -470,6 +486,16 @@ static int mt9p031_s_stream(struct v4l2_subdev *subdev, int enable)
- 	if (ret < 0)
- 		return ret;
+ 	/* Code is validated in set_fmt. */
+ 	format = rcsi2_code_to_fmt(priv->mf.code);
++	if (!format)
++		return -EINVAL;
  
-+	/*
-+	 * - clear pause restart
-+	 * - don't clear restart as clearing restart manually can cause
-+	 *   undefined behavior
-+	 */
-+	val = MT9P031_FRAME_RESTART;
-+	ret = mt9p031_write(client, MT9P031_RESTART, val);
-+	if (ret < 0)
-+		return ret;
-+
- 	return mt9p031_pll_enable(mt9p031);
- }
- 
+ 	/*
+ 	 * Enable all Virtual Channels.
 -- 
 2.33.0
 
