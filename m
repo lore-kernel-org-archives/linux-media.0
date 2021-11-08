@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48E5AC433EF
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:14:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A8D3C433F5
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:15:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3518961353
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:14:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19EFD619E8
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:15:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242580AbhKIBRm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:17:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39834 "EHLO mail.kernel.org"
+        id S242625AbhKIBRq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:17:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242626AbhKIBN4 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:13:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7720A6137F;
-        Tue,  9 Nov 2021 01:05:44 +0000 (UTC)
+        id S242728AbhKIBOM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:14:12 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3F26161A09;
+        Tue,  9 Nov 2021 01:05:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636419945;
-        bh=MM9cwbHgrj77IxwphTaDtjRZFY/LPDOsxisHP0Wf3DI=;
+        s=k20201202; t=1636419948;
+        bh=vX3XEse8BNh+6SkQZ8/Qtrl79RAZXOZ0Sx1Lyy6b0Wc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W5tsBuABIIheQVQPSmlyAhmEvGIYKGqaRR4LhyuS/BD4ohrt38ofLE2jOJPQwMH9x
-         uRXHb6qYYpIzDab0SIW95KTTwL/37hgiv1mzsuAdYu8PRdffrE5vhJ3mr1rhnK0DXk
-         vg0nrxrbK86weYwpWPGTgI+Z7zL6JDr1vqiuuhJiVKOfXhmg6eRGNhvu6hz8mcxUY5
-         OzpLLl3kSrD0o3vh3ZFnOvarlRVc0QCfSuPyZJupOPNU1P05PXneK5z4ouBv3YH+kZ
-         NF8eHoM2uwhnl5XwRbB3tXDXunxMt2FCvSj3z8rvJeD85H6YlPB0XHNt2TypzxQu27
-         f0xCrhyb1dJRw==
+        b=uDsgX7L/30EqwdAXRhhneVY5P09ra/RRKObuQWIO2PTw4kKskG+Uwgxb6FeR0D4GN
+         F1rDnCcl7qsFjdR80QxiU9cLkOCM54afwnQAE7LKNPqnWZTkHDDZvuxsn/QIVsRLad
+         e7x6HKGhdORmHChQ5/65OFdfd5TuOzSwwagJFVQ9n1YJ1qxcocA5xBZ0Ppf+qqIEac
+         39q24qUZ+bY5BIuRrXy/nsYdpufXK5R+7vfsOCVAmLxEfLRZugtXIoGTVMPo6VIIUN
+         XZQlZ/GzVk3+RQdOgrYIf7o62c5FEPqUw6B+Iv4xHHkTYrub92bEqbVunLyews4iZF
+         7Uj+ljEjumW7w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+Cc:     Tuo Li <islituo@gmail.com>, TOTE Robot <oslab@tsinghua.edu.cn>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
+        Sasha Levin <sashal@kernel.org>, a.hajda@samsung.com,
+        mchehab@kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 16/47] media: uvcvideo: Set capability in s_param
-Date:   Mon,  8 Nov 2021 12:50:00 -0500
-Message-Id: <20211108175031.1190422-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 18/47] media: s5p-mfc: fix possible null-pointer dereference in s5p_mfc_probe()
+Date:   Mon,  8 Nov 2021 12:50:02 -0500
+Message-Id: <20211108175031.1190422-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211108175031.1190422-1-sashal@kernel.org>
 References: <20211108175031.1190422-1-sashal@kernel.org>
@@ -48,45 +48,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ricardo Ribalda <ribalda@chromium.org>
+From: Tuo Li <islituo@gmail.com>
 
-[ Upstream commit 97a2777a96070afb7da5d587834086c0b586c8cc ]
+[ Upstream commit 8515965e5e33f4feb56134348c95953f3eadfb26 ]
 
-Fixes v4l2-compliance:
+The variable pdev is assigned to dev->plat_dev, and dev->plat_dev is
+checked in:
+  if (!dev->plat_dev)
 
-Format ioctls (Input 0):
-                warn: v4l2-test-formats.cpp(1339): S_PARM is supported but doesn't report V4L2_CAP_TIMEPERFRAME
-                fail: v4l2-test-formats.cpp(1241): node->has_frmintervals && !cap->capability
+This indicates both dev->plat_dev and pdev can be NULL. If so, the
+function dev_err() is called to print error information.
+  dev_err(&pdev->dev, "No platform data specified\n");
 
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+However, &pdev->dev is an illegal address, and it is dereferenced in
+dev_err().
+
+To fix this possible null-pointer dereference, replace dev_err() with
+mfc_err().
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Tuo Li <islituo@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_v4l2.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/media/platform/s5p-mfc/s5p_mfc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 2ca1e8ce6159d..e858f4f189ed9 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -474,10 +474,13 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
- 	uvc_simplify_fraction(&timeperframe.numerator,
- 		&timeperframe.denominator, 8, 333);
+diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc.c b/drivers/media/platform/s5p-mfc/s5p_mfc.c
+index 4b8516c35bc20..80bb58d31c3f6 100644
+--- a/drivers/media/platform/s5p-mfc/s5p_mfc.c
++++ b/drivers/media/platform/s5p-mfc/s5p_mfc.c
+@@ -1276,7 +1276,7 @@ static int s5p_mfc_probe(struct platform_device *pdev)
+ 	spin_lock_init(&dev->condlock);
+ 	dev->plat_dev = pdev;
+ 	if (!dev->plat_dev) {
+-		dev_err(&pdev->dev, "No platform data specified\n");
++		mfc_err("No platform data specified\n");
+ 		return -ENODEV;
+ 	}
  
--	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
- 		parm->parm.capture.timeperframe = timeperframe;
--	else
-+		parm->parm.capture.capability = V4L2_CAP_TIMEPERFRAME;
-+	} else {
- 		parm->parm.output.timeperframe = timeperframe;
-+		parm->parm.output.capability = V4L2_CAP_TIMEPERFRAME;
-+	}
- 
- 	return 0;
- }
 -- 
 2.33.0
 
