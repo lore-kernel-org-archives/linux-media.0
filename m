@@ -2,64 +2,65 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5589BC43219
-	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 16:02:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 722FEC4167D
+	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 16:02:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3725961279
-	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 16:02:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E38661279
+	for <linux-media@archiver.kernel.org>; Mon,  8 Nov 2021 16:02:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbhKHQFg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 11:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
+        id S239466AbhKHQFi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 11:05:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239355AbhKHQFf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Nov 2021 11:05:35 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB73C061764
-        for <linux-media@vger.kernel.org>; Mon,  8 Nov 2021 08:02:50 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id d3so27740986wrh.8
-        for <linux-media@vger.kernel.org>; Mon, 08 Nov 2021 08:02:50 -0800 (PST)
+        with ESMTP id S239380AbhKHQFg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Nov 2021 11:05:36 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CDCC061767
+        for <linux-media@vger.kernel.org>; Mon,  8 Nov 2021 08:02:51 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id d27so27767955wrb.6
+        for <linux-media@vger.kernel.org>; Mon, 08 Nov 2021 08:02:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=m1WqzcjlgMOIezM3Do4q/Hqs3GubepKnTprvWPIb2Vg=;
-        b=sA/zVbmFu61dEZxvBhXBQWZcR+W4FNHy55CU08xUYyQQqmDEUmZ6Jeh3PMJeeLz71f
-         xcioG9il13KMQhbAQoI8QuUL5clyQjeGEA9H+U+10hS2+M8QL25G6AKWegWkf6QmWWf6
-         Gm7bJdU9TUWei9s/jENpgWFGpulPfSl5DYevmZvvWYOw36xxmMAJF6Wq3zLqg8X9JU5R
-         wqgWzGa9T/eisPDRt6gmIJ16JaKZuCDh0tc+9kB8UuwG7PQjM7POWRu6GVKDQabe+IAu
-         nSJZ+lgxz55mAeNZvQGFDCV1LG8htD9EfqY+cO9+cyMJJwy9ndLDCtAK/DnfMyAJaz4t
-         fXyg==
+        bh=qyp9SrPyLgYIMuwT9MuDBXOOdH5XssHnAfufE4fLJtg=;
+        b=teDNng7JJhTgR6g//mAv6tFTA1F2vNBlEujo2RboVanS1aqq2v4MkPHC6ALJXenAMz
+         rB9Vp8uLnztnLunjD05H6IQFuoXn7aUYpacPx8js0xETcPHHZcnkkykzYn0h/k3K6nzA
+         T2wb046BpRLZD/WIFzKgqFIMPO323ntLKIMTt07jg6blQDWy2UHE4RCLsY2xu5hoICHg
+         0gFLKLgWHnI2Cw4X1F78xs16J0tPkIKjqjFY4Yow5pK5z2qPe4IqIEmXNtQc0tODCIUN
+         PQOsSFAYJVUUBiWA6kugzTNlLR2XkNu2amwTQQmu1OoAGgkSgK7ryS1FxAQsqE6rMPkV
+         VaIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=m1WqzcjlgMOIezM3Do4q/Hqs3GubepKnTprvWPIb2Vg=;
-        b=TtSf5gMFn4imBNNllTGvwkFgDepG1qih1ga+uSuUj7LfQ9aNakfdBtXGXJIrx5ZnE3
-         r/MkNPTRNfkwI1DZ5M9IpYM7tJaWgwTlNd1qE6z2wm/dFp1Kc9QOWAtGpKl+Hl9L2k5p
-         +s5dN9p68ze1XAnh+bhVQZo5zMOQTs5mu4EPmG15FXr8qo7+IF37Qb1wSxToYwVzczsi
-         T7LQCZ1xw9bulk6k2paeBhbmFiYeEx0BvvOhuBs/ceUe72kwNpWkXyWkowFgyNJyB3p8
-         jeLFI7Bpd9xLVzWRoVXYUsY2ieolVikKF21lwyiyFpCwWh4N/aCUHOX0F9VQKzQv8p8D
-         0UXA==
-X-Gm-Message-State: AOAM533Zv2kPWPUvcUCpIK5pxaygCR+ZFKogeao5vfiyrwlW0XK2lCJ5
-        odm+XcIS2/p7T758HN0BPkBreA==
-X-Google-Smtp-Source: ABdhPJzcHbVKB3IgU5vC1uiyzzMhri/gd0h3nG9NyH8NzUyg74mSz/ZHlH15/grVx6pPxl72ytofpw==
-X-Received: by 2002:adf:e8c8:: with SMTP id k8mr225459wrn.135.1636387369022;
-        Mon, 08 Nov 2021 08:02:49 -0800 (PST)
+        bh=qyp9SrPyLgYIMuwT9MuDBXOOdH5XssHnAfufE4fLJtg=;
+        b=uM/7YPatWHUtlvJVXevYceUowB7yyhSLaNVIH3/gll/yWHAYZD1M90PCXdYTADB5C4
+         Zs6jbyCLOGZh7b7kCBFFbWRDFXM8XXjTK/wFdM4yzOuFzk9RoaY6ewNfDYWBhVFyX6ki
+         +zlZWXPUYIX/RkPdbH8oJJBQIakupVx07WxXo5CPp6fcGNZ/dd0pd3UAXRIcoTGjTexy
+         34o59Zvp87NeyOlkDs9sA9sFLuoWICvHeKP8zDDhmJcje0WImV+1/4MB59/b4UaeyM8t
+         igCAbm5Teaib4KZHzZNW7yzEDCT/GSz7gUn3aRUJwru1qfMK3wIMnz9SnCp7+O0fMb1F
+         m83Q==
+X-Gm-Message-State: AOAM533xlP7iezpe3Ab8fzQ9/mbrukW7LyTLlIfq7ZiP9SF/IffCwQmv
+        MUEnNPAwEuzNedIn4zwcP1Fc50cn/Cyu0iWR
+X-Google-Smtp-Source: ABdhPJzgV6DxAZiDjIs+PPHKUUwVqT+TIl1sbEIpjk8sXV0LxUM75hu0sHADPa+HtDYeSpyeSGQgvg==
+X-Received: by 2002:a05:6000:1b8f:: with SMTP id r15mr246622wru.27.1636387370197;
+        Mon, 08 Nov 2021 08:02:50 -0800 (PST)
 Received: from bismarck.berto.se (p54ac5892.dip0.t-ipconnect.de. [84.172.88.146])
-        by smtp.googlemail.com with ESMTPSA id d16sm12703176wmb.37.2021.11.08.08.02.48
+        by smtp.googlemail.com with ESMTPSA id d16sm12703176wmb.37.2021.11.08.08.02.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Nov 2021 08:02:48 -0800 (PST)
+        Mon, 08 Nov 2021 08:02:49 -0800 (PST)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH 1/4] media: rcar-vin: Free buffers with error if hardware stop fails
-Date:   Mon,  8 Nov 2021 17:02:17 +0100
-Message-Id: <20211108160220.767586-2-niklas.soderlund+renesas@ragnatech.se>
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>
+Subject: [PATCH 3/4] rcar-vin: Stop stream when subdevice signal transfer error
+Date:   Mon,  8 Nov 2021 17:02:19 +0100
+Message-Id: <20211108160220.767586-4-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211108160220.767586-1-niklas.soderlund+renesas@ragnatech.se>
 References: <20211108160220.767586-1-niklas.soderlund+renesas@ragnatech.se>
@@ -70,40 +71,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The driver already have logic to detect if it fails to stop properly and
-report this error to the user. The driver however did not report the
-unused buffers or buffers given to the hardware (if any) with an error,
-the buffers where instead returned to user-space in the active state.
-
-Build on the existing detection of the error condition and correctly
-return the buffers with an error if it triggers.
+When a subdevice signals a transfer error stop the VIN in addition to
+informing user-space of the event.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/platform/rcar-vin/rcar-dma.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+* Changes since v3
+- Switch to new V4L2_EVENT_XFER_ERROR from V4L2_EVENT_EOS.
+- Call vb2_queue_error() when encountering the event.
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
-index 25ead9333d0046e7..79bb9081853f8781 100644
---- a/drivers/media/platform/rcar-vin/rcar-dma.c
-+++ b/drivers/media/platform/rcar-vin/rcar-dma.c
-@@ -1371,6 +1371,16 @@ void rvin_stop_streaming(struct rvin_dev *vin)
- 
- 	spin_unlock_irqrestore(&vin->qlock, flags);
- 
-+	/* If something went wrong, free buffers with an error. */
-+	if (!buffersFreed) {
-+		return_unused_buffers(vin, VB2_BUF_STATE_ERROR);
-+		for (i = 0; i < HW_BUFFER_NUM; i++) {
-+			if (vin->buf_hw[i].buffer)
-+				vb2_buffer_done(&vin->buf_hw[i].buffer->vb2_buf,
-+						VB2_BUF_STATE_ERROR);
-+		}
-+	}
+* Changes since v2
+- Log using vin_dbg() instead of v4l2_info().
+---
+ drivers/media/platform/rcar-vin/rcar-v4l2.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+index a5bfa76fdac6e55a..bf17fdefe90aabf5 100644
+--- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+@@ -992,9 +992,24 @@ void rvin_v4l2_unregister(struct rvin_dev *vin)
+ static void rvin_notify_video_device(struct rvin_dev *vin,
+ 				     unsigned int notification, void *arg)
+ {
++	const struct v4l2_event *event;
 +
- 	rvin_set_stream(vin, 0);
- 
- 	/* disable interrupts */
+ 	switch (notification) {
+ 	case V4L2_DEVICE_NOTIFY_EVENT:
+-		v4l2_event_queue(&vin->vdev, arg);
++		event = arg;
++
++		switch (event->type) {
++		case V4L2_EVENT_XFER_ERROR:
++			vin_dbg(vin,
++				"Subdevice signaled transfer error, stopping.\n");
++			rvin_stop_streaming(vin);
++			vb2_queue_error(&vin->queue);
++			break;
++		default:
++			break;
++		}
++
++		v4l2_event_queue(&vin->vdev, event);
+ 		break;
+ 	default:
+ 		break;
 -- 
 2.33.1
 
