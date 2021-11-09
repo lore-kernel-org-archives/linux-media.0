@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08426C4332F
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:24:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DD73C43217
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:24:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EB5A4610A2
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:24:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08680610A8
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:24:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242895AbhKIB0r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:26:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46194 "EHLO mail.kernel.org"
+        id S243097AbhKIB0s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:26:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47860 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239997AbhKIBVd (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:21:33 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E00A361B2B;
-        Tue,  9 Nov 2021 01:08:28 +0000 (UTC)
+        id S242860AbhKIBVe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:21:34 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BB06661B1E;
+        Tue,  9 Nov 2021 01:08:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636420109;
-        bh=V7UmU5M+SBDr7VI4X2s/NYlrFzggs5XaFNUgQh2sRnw=;
+        s=k20201202; t=1636420112;
+        bh=Xvip36oCyCXhVCDD2f1axnCfsa43jG9xmFBr55XnKVc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nigo/gOU7dhmcNBDgjblRtE+Euf8Xp80pSc6VvJKt2lrosEIi9qh7xTXNPcKEucHR
-         T1jsbcZVpCz18v0xnO/ryPB9oHdHKU8YIFka6EatZlE5nXPiGwy6NMiH9jE5gxziAS
-         r/t+GZu7hcv9vPeQoBqbDwt+JmCQzRSlT77Lh9iW2Rp8nyQ2z+aZb6yn4qqwwzrBsl
-         g47v4NByOZAyebg07bsUSWNbzkq2y5AVzFPpAgsBnh4BdiFuF8AKR9AgDKjr7PGkvj
-         aM/33aggZX9Ugd4jMX92wmGIeiObM158u6tWMXITeF8dr09xBz2VxkgcfhdNzes7o3
-         5E/DqoY2fYb2Q==
+        b=fbVwTR+p9gFT4yYizPw0HcpBB0rrSEiFjICZBew9RenI0ERLXHknPIf/BmZuVZUPa
+         AWOL1GC0ULbyg+HTwko1DAcBCjeS8Bqps4jbplFT+Oz9ATw4loz2glh34r/z7s29OK
+         7nO2OCctTYeC32KTcOYP4687HpkpYw4wBa9nmQR6fJkC2TVEgmdwhwhijLPQIVzOYa
+         9a/N4/1kabqT3tT1UuZS970PtyBcXr/CT4p3Zt24RxJJ9WUrrS0D24WgtZXsy/aV6b
+         4gWjXdeDo9L7Sv2AW4qpgRwoht+utj+0MXmIpNM8YDZasMUhPR7bY3dg7eobxsUUIK
+         bv27gsJK9hCbw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+Cc:     Rajat Asthana <rajatasthana4@gmail.com>,
+        syzbot+4d3749e9612c2cfab956@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 12/33] media: uvcvideo: Set capability in s_param
-Date:   Mon,  8 Nov 2021 20:07:46 -0500
-Message-Id: <20211109010807.1191567-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 14/33] media: mceusb: return without resubmitting URB in case of -EPROTO error.
+Date:   Mon,  8 Nov 2021 20:07:48 -0500
+Message-Id: <20211109010807.1191567-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211109010807.1191567-1-sashal@kernel.org>
 References: <20211109010807.1191567-1-sashal@kernel.org>
@@ -48,45 +48,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ricardo Ribalda <ribalda@chromium.org>
+From: Rajat Asthana <rajatasthana4@gmail.com>
 
-[ Upstream commit 97a2777a96070afb7da5d587834086c0b586c8cc ]
+[ Upstream commit 476db72e521983ecb847e4013b263072bb1110fc ]
 
-Fixes v4l2-compliance:
+Syzkaller reported a warning called "rcu detected stall in dummy_timer".
 
-Format ioctls (Input 0):
-                warn: v4l2-test-formats.cpp(1339): S_PARM is supported but doesn't report V4L2_CAP_TIMEPERFRAME
-                fail: v4l2-test-formats.cpp(1241): node->has_frmintervals && !cap->capability
+The error seems to be an error in mceusb_dev_recv(). In the case of
+-EPROTO error, the routine immediately resubmits the URB. Instead it
+should return without resubmitting URB.
 
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reported-by: syzbot+4d3749e9612c2cfab956@syzkaller.appspotmail.com
+Signed-off-by: Rajat Asthana <rajatasthana4@gmail.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_v4l2.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/media/rc/mceusb.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 4a270f88aa18c..2b1e06e825f0d 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -451,10 +451,13 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
- 	uvc_simplify_fraction(&timeperframe.numerator,
- 		&timeperframe.denominator, 8, 333);
- 
--	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
- 		parm->parm.capture.timeperframe = timeperframe;
--	else
-+		parm->parm.capture.capability = V4L2_CAP_TIMEPERFRAME;
-+	} else {
- 		parm->parm.output.timeperframe = timeperframe;
-+		parm->parm.output.capability = V4L2_CAP_TIMEPERFRAME;
-+	}
- 
- 	return 0;
- }
+diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
+index d9f88a4a96bd1..b78d70685b1c3 100644
+--- a/drivers/media/rc/mceusb.c
++++ b/drivers/media/rc/mceusb.c
+@@ -1090,6 +1090,7 @@ static void mceusb_dev_recv(struct urb *urb)
+ 	case -ECONNRESET:
+ 	case -ENOENT:
+ 	case -EILSEQ:
++	case -EPROTO:
+ 	case -ESHUTDOWN:
+ 		usb_unlink_urb(urb);
+ 		return;
 -- 
 2.33.0
 
