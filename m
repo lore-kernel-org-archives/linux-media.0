@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 509FFC4332F
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:24:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD7BC433FE
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:24:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D0FF610A3
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:24:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 49D76610A3
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:24:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243104AbhKIB0t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:26:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46222 "EHLO mail.kernel.org"
+        id S241934AbhKIB0u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:26:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46484 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241808AbhKIBVe (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:21:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3B4F461B2C;
-        Tue,  9 Nov 2021 01:08:30 +0000 (UTC)
+        id S243689AbhKIBVy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:21:54 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4A41761359;
+        Tue,  9 Nov 2021 01:08:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636420111;
-        bh=dTg/yNAUnvDS1H7l1tqqToSBagvSeQxGASeVqlgRDO0=;
+        s=k20201202; t=1636420120;
+        bh=4QXA8Sz8+uy2QwtIoTw8eT2RxQ41eRuIz/FE6ziP7eI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mAjQPMsk8H2avLWwKYTuZPe+dLlV49jiSmR4Kl2bEgl/fYgG5e1S84Wrztxx5AZpi
-         kCB+mJFjG5DuI5NeL32BNI/qy20sJ4XUCwM1il6rVezltLzW+zoy43XPtEUus5UrVe
-         8+2f98dlf0dbpugiCshSLFdko9qX9MsCrqdfF5nKb9gdMhRlR/4U3Zhh982u21l5ns
-         RBkBf2IbuEoBsyBsST2ifPD8bqNPQ80BVlhghQwiSyjJALrYfn4tK8NfdaxT0RoEOP
-         GJ3KCqnrROCCpzweggL6NM6A2f3Y4MIFwiqa6GcEEH2mu/m11niq0HjQOgXMm339z7
-         nsaYCpWjhnDSw==
+        b=jxj4OWR3EsrUZLYH5DBrfUA7UVCg1WNKoGFlDRWBwFW5nN9C6iDBsXtoK1tsIJ17l
+         gHn3ypguqZDwTt+QD/ZXpmCAb1CatH4aMFxIuXRrqZpgpEoOK0BHrroInRSA2OmFMh
+         9cJqZgWXLy2fGnvarGNEHXJjDJJ6O59zY7P6eqeu6w0bmxNTUeEAxIUOZyTqa8RYcg
+         LIPF9CHUcjx1hjlvKSGiS1VHTccaxqL3Xub+rTdn4w+4777B6Lw0TtkBr/TIofFY1S
+         00k4S+BIKqhuyhPnXG3wwOaQGagUkbF8etDmzF1p32WpWi/EbSOB7dXveBAyBJJC7n
+         VX2l9T/0UGVQg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tuo Li <islituo@gmail.com>, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+        syzbot+e27b4fd589762b0b9329@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, a.hajda@samsung.com,
-        mchehab@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 13/33] media: s5p-mfc: fix possible null-pointer dereference in s5p_mfc_probe()
-Date:   Mon,  8 Nov 2021 20:07:47 -0500
-Message-Id: <20211109010807.1191567-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 17/33] media: usb: dvd-usb: fix uninit-value bug in dibusb_read_eeprom_byte()
+Date:   Mon,  8 Nov 2021 20:07:51 -0500
+Message-Id: <20211109010807.1191567-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211109010807.1191567-1-sashal@kernel.org>
 References: <20211109010807.1191567-1-sashal@kernel.org>
@@ -48,45 +48,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Tuo Li <islituo@gmail.com>
+From: Anant Thazhemadam <anant.thazhemadam@gmail.com>
 
-[ Upstream commit 8515965e5e33f4feb56134348c95953f3eadfb26 ]
+[ Upstream commit 899a61a3305d49e8a712e9ab20d0db94bde5929f ]
 
-The variable pdev is assigned to dev->plat_dev, and dev->plat_dev is
-checked in:
-  if (!dev->plat_dev)
+In dibusb_read_eeprom_byte(), if dibusb_i2c_msg() fails, val gets
+assigned an value that's not properly initialized.
+Using kzalloc() in place of kmalloc() for the buffer fixes this issue,
+as the val can now be set to 0 in the event dibusb_i2c_msg() fails.
 
-This indicates both dev->plat_dev and pdev can be NULL. If so, the
-function dev_err() is called to print error information.
-  dev_err(&pdev->dev, "No platform data specified\n");
-
-However, &pdev->dev is an illegal address, and it is dereferenced in
-dev_err().
-
-To fix this possible null-pointer dereference, replace dev_err() with
-mfc_err().
-
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Tuo Li <islituo@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+e27b4fd589762b0b9329@syzkaller.appspotmail.com
+Tested-by: syzbot+e27b4fd589762b0b9329@syzkaller.appspotmail.com
+Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/s5p-mfc/s5p_mfc.c | 2 +-
+ drivers/media/usb/dvb-usb/dibusb-common.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc.c b/drivers/media/platform/s5p-mfc/s5p_mfc.c
-index 8051c13456922..0ff972b8d9671 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc.c
-+++ b/drivers/media/platform/s5p-mfc/s5p_mfc.c
-@@ -1160,7 +1160,7 @@ static int s5p_mfc_probe(struct platform_device *pdev)
- 	spin_lock_init(&dev->condlock);
- 	dev->plat_dev = pdev;
- 	if (!dev->plat_dev) {
--		dev_err(&pdev->dev, "No platform data specified\n");
-+		mfc_err("No platform data specified\n");
- 		return -ENODEV;
- 	}
+diff --git a/drivers/media/usb/dvb-usb/dibusb-common.c b/drivers/media/usb/dvb-usb/dibusb-common.c
+index bcacb0f220282..3e45642ae186b 100644
+--- a/drivers/media/usb/dvb-usb/dibusb-common.c
++++ b/drivers/media/usb/dvb-usb/dibusb-common.c
+@@ -226,7 +226,7 @@ int dibusb_read_eeprom_byte(struct dvb_usb_device *d, u8 offs, u8 *val)
+ 	u8 *buf;
+ 	int rc;
+ 
+-	buf = kmalloc(2, GFP_KERNEL);
++	buf = kzalloc(2, GFP_KERNEL);
+ 	if (!buf)
+ 		return -ENOMEM;
  
 -- 
 2.33.0
