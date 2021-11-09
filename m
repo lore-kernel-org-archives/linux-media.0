@@ -2,41 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38587C433FE
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:18:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E398C433FE
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:23:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 25838611BF
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:18:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A6A6610A2
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:23:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242037AbhKIBUm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:20:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46484 "EHLO mail.kernel.org"
+        id S242929AbhKIB0b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:26:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46194 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241845AbhKIBRw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:17:52 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A1DF6105A;
-        Tue,  9 Nov 2021 01:07:18 +0000 (UTC)
+        id S242200AbhKIBRb (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:17:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EE9F9610A0;
+        Tue,  9 Nov 2021 01:07:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636420039;
-        bh=aS48cdu/g7cxpO4hT84SWpmFYddKWPbxux5idUI8kbA=;
+        s=k20201202; t=1636420032;
+        bh=x8znMbaNFwLAFSwKlod6IXPp3KHL4qybQ2KedJqD8/w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lEy7lr82aFXIZ9M+u+mCcxN5HBFXbbR9CxqBlPCHxU9Td6SO9zeXCdC661H0WnxJR
-         liO4LBPWwHUrF6jdrr3D7KUd3YMlDUB8EGYedtEa9fF0y+Uyos1dxNDZcV36R7ja+M
-         hEGIiPXJlsgfjFK91pkcTaQYNUQiAt0WEMSWqRVLG56DL8TZ4SFKO50OVdv8NpNyq8
-         Ci1i0Us22bJO9lp4CGaQD1BihF7scKTemhUyEmStQ6qqtev7RvmAJo+vIziEYMOzpb
-         1dBOgEOnJM7e19XRL2IBv7JlKggvqNBbJL54/3DYOqSDSnvNGJmZmipnEoS7gwIxnh
-         HavIaPF+zPbmg==
+        b=JhA87ryp4oW2Yll4aywwDYRrkeJqxRS1TAJ4uruKijrqYGCZyhhOxxbrNBzjTYD3H
+         2xOp7iz1QOWI2FakpxjSoklEX17auGD/NUERoo4IcHNP2F/iW1e6xpgrf+hI3t14OD
+         hAKuRmH3VJ6TlAfCR24qSmK+dnlV2UG+gKMp61lS/j4b4zuEkxB5hPzPcjKX8DT0xT
+         KCn0WALkkkqcDfx8baJspnzX5li/uZI9aNs6iJD3x5TBl59me+WorJIuw39hBeWJOG
+         b2rvOQtajxP2yQoJzmAK1d4aHBSYCktH6yYw0A4FQrf6MggKUqUTm4IzK0GrcknOAI
+         IErnkHpIT558w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Rajat Asthana <rajatasthana4@gmail.com>,
-        syzbot+4d3749e9612c2cfab956@syzkaller.appspotmail.com,
-        Sean Young <sean@mess.org>,
+Cc:     Dirk Bender <d.bender@phytec.de>,
+        Stefan Riedmueller <s.riedmueller@phytec.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
+        Sasha Levin <sashal@kernel.org>,
+        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 17/39] media: mceusb: return without resubmitting URB in case of -EPROTO error.
-Date:   Mon,  8 Nov 2021 20:06:27 -0500
-Message-Id: <20211109010649.1191041-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 12/39] media: mt9p031: Fix corrupted frame after restarting stream
+Date:   Mon,  8 Nov 2021 20:06:22 -0500
+Message-Id: <20211109010649.1191041-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211109010649.1191041-1-sashal@kernel.org>
 References: <20211109010649.1191041-1-sashal@kernel.org>
@@ -48,37 +49,87 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Rajat Asthana <rajatasthana4@gmail.com>
+From: Dirk Bender <d.bender@phytec.de>
 
-[ Upstream commit 476db72e521983ecb847e4013b263072bb1110fc ]
+[ Upstream commit 0961ba6dd211a4a52d1dd4c2d59be60ac2dc08c7 ]
 
-Syzkaller reported a warning called "rcu detected stall in dummy_timer".
+To prevent corrupted frames after starting and stopping the sensor its
+datasheet specifies a specific pause sequence to follow:
 
-The error seems to be an error in mceusb_dev_recv(). In the case of
--EPROTO error, the routine immediately resubmits the URB. Instead it
-should return without resubmitting URB.
+Stopping:
+	Set Pause_Restart Bit -> Set Restart Bit -> Set Chip_Enable Off
 
-Reported-by: syzbot+4d3749e9612c2cfab956@syzkaller.appspotmail.com
-Signed-off-by: Rajat Asthana <rajatasthana4@gmail.com>
-Signed-off-by: Sean Young <sean@mess.org>
+Restarting:
+	Set Chip_Enable On -> Clear Pause_Restart Bit
+
+The Restart Bit is cleared automatically and must not be cleared
+manually as this would cause undefined behavior.
+
+Signed-off-by: Dirk Bender <d.bender@phytec.de>
+Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/mceusb.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/i2c/mt9p031.c | 28 +++++++++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
-index bbbbfd697f9c4..035b2455b26aa 100644
---- a/drivers/media/rc/mceusb.c
-+++ b/drivers/media/rc/mceusb.c
-@@ -1080,6 +1080,7 @@ static void mceusb_dev_recv(struct urb *urb)
- 	case -ECONNRESET:
- 	case -ENOENT:
- 	case -EILSEQ:
-+	case -EPROTO:
- 	case -ESHUTDOWN:
- 		usb_unlink_urb(urb);
- 		return;
+diff --git a/drivers/media/i2c/mt9p031.c b/drivers/media/i2c/mt9p031.c
+index 91d822fc4443a..8e6ad6a6e68cb 100644
+--- a/drivers/media/i2c/mt9p031.c
++++ b/drivers/media/i2c/mt9p031.c
+@@ -81,7 +81,9 @@
+ #define		MT9P031_PIXEL_CLOCK_INVERT		(1 << 15)
+ #define		MT9P031_PIXEL_CLOCK_SHIFT(n)		((n) << 8)
+ #define		MT9P031_PIXEL_CLOCK_DIVIDE(n)		((n) << 0)
+-#define MT9P031_FRAME_RESTART				0x0b
++#define MT9P031_RESTART					0x0b
++#define		MT9P031_FRAME_PAUSE_RESTART		(1 << 1)
++#define		MT9P031_FRAME_RESTART			(1 << 0)
+ #define MT9P031_SHUTTER_DELAY				0x0c
+ #define MT9P031_RST					0x0d
+ #define		MT9P031_RST_ENABLE			1
+@@ -448,9 +450,23 @@ static int mt9p031_set_params(struct mt9p031 *mt9p031)
+ static int mt9p031_s_stream(struct v4l2_subdev *subdev, int enable)
+ {
+ 	struct mt9p031 *mt9p031 = to_mt9p031(subdev);
++	struct i2c_client *client = v4l2_get_subdevdata(subdev);
++	int val;
+ 	int ret;
+ 
+ 	if (!enable) {
++		/* enable pause restart */
++		val = MT9P031_FRAME_PAUSE_RESTART;
++		ret = mt9p031_write(client, MT9P031_RESTART, val);
++		if (ret < 0)
++			return ret;
++
++		/* enable restart + keep pause restart set */
++		val |= MT9P031_FRAME_RESTART;
++		ret = mt9p031_write(client, MT9P031_RESTART, val);
++		if (ret < 0)
++			return ret;
++
+ 		/* Stop sensor readout */
+ 		ret = mt9p031_set_output_control(mt9p031,
+ 						 MT9P031_OUTPUT_CONTROL_CEN, 0);
+@@ -470,6 +486,16 @@ static int mt9p031_s_stream(struct v4l2_subdev *subdev, int enable)
+ 	if (ret < 0)
+ 		return ret;
+ 
++	/*
++	 * - clear pause restart
++	 * - don't clear restart as clearing restart manually can cause
++	 *   undefined behavior
++	 */
++	val = MT9P031_FRAME_RESTART;
++	ret = mt9p031_write(client, MT9P031_RESTART, val);
++	if (ret < 0)
++		return ret;
++
+ 	return mt9p031_pll_enable(mt9p031);
+ }
+ 
 -- 
 2.33.0
 
