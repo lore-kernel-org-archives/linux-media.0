@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7CC7C433F5
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:23:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 209ADC43219
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:23:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 954B2610A2
-	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:23:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E478610A8
+	for <linux-media@archiver.kernel.org>; Tue,  9 Nov 2021 01:23:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243050AbhKIB0j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Nov 2021 20:26:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44184 "EHLO mail.kernel.org"
+        id S242325AbhKIB0m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Nov 2021 20:26:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44358 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242517AbhKIBRf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:17:35 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DEA84611BF;
-        Tue,  9 Nov 2021 01:07:16 +0000 (UTC)
+        id S243083AbhKIBTM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:19:12 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B77DD61186;
+        Tue,  9 Nov 2021 01:07:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636420037;
-        bh=dCwoXnhB7rCQYl8wLUkS+EPFS16+T+dDRIuuteO4X8c=;
+        s=k20201202; t=1636420046;
+        bh=4QXA8Sz8+uy2QwtIoTw8eT2RxQ41eRuIz/FE6ziP7eI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EZK9PK07Q6ox5zdcF1wqH8eVBkYnYvtrI9iHCSY22r9DCFE9vSNTq+4UwmZ1ntgI7
-         4Z6zE7X2fPB2W2VfQCqbrhqDCG7Xf6bAls0+Trkod2u+87qhVX4AMUhCDfOv7i+wfR
-         WWJonEgW/bkddy9NLQEj38pvmhrKVXr1XWWBcfnSEGi+ZDv6YAjRCCG2BveGDPzosH
-         OE8aOwX0FsLxZZ4JmaS155wjdtK51CV61pY46jlawVuqEVIf6+SGN7/3y+XV870jpt
-         3ON+8rfgdJGb5pYTLCL8WIWjsuyaDTcZEmjvuLQzMhmoLmkHi5xvaMAduq+pDhj+Zw
-         pTJ0ltR5C7hYw==
+        b=UaoIK7eMXdWKhMU6GpgjLX4o0qLVqmdREv2k8pPNSCf57r2QSweIWvo0h96BsiiCO
+         tRIDt1ZtKkrI9CRDfWZyq9c1mooduO8WvTl5EWaIzOf6Jm8kSfR47UY/fqTanxIat3
+         5Hjlchd5w3rMp29nj7ymGNkjvRJrnaJVin6/TgIKPWvV4L1Q6FX+DjIq/qTv+XJdEg
+         59016TqidIhgpA7UoKNi9HzF76GyaOIBQlKMhHq7W/EoiPyHrKwfcikOeZy4UJ9YS1
+         aN92+doX/ORncqsgHl5D8NmNc1K8I4Orm8EFJc93mD0SeC0uto1uWC6amvAaX7JIqY
+         2kZGpCf40Ct2g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nadezda Lutovinova <lutovinova@ispras.ru>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+        syzbot+e27b4fd589762b0b9329@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, a.hajda@samsung.com,
-        mchehab@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 16/39] media: s5p-mfc: Add checking to s5p_mfc_probe().
-Date:   Mon,  8 Nov 2021 20:06:26 -0500
-Message-Id: <20211109010649.1191041-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 20/39] media: usb: dvd-usb: fix uninit-value bug in dibusb_read_eeprom_byte()
+Date:   Mon,  8 Nov 2021 20:06:30 -0500
+Message-Id: <20211109010649.1191041-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211109010649.1191041-1-sashal@kernel.org>
 References: <20211109010649.1191041-1-sashal@kernel.org>
@@ -48,39 +48,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Nadezda Lutovinova <lutovinova@ispras.ru>
+From: Anant Thazhemadam <anant.thazhemadam@gmail.com>
 
-[ Upstream commit cdfaf4752e6915a4b455ad4400133e540e4dc965 ]
+[ Upstream commit 899a61a3305d49e8a712e9ab20d0db94bde5929f ]
 
-If of_device_get_match_data() return NULL,
-then null pointer dereference occurs in  s5p_mfc_init_pm().
-The patch adds checking if dev->variant is NULL.
+In dibusb_read_eeprom_byte(), if dibusb_i2c_msg() fails, val gets
+assigned an value that's not properly initialized.
+Using kzalloc() in place of kmalloc() for the buffer fixes this issue,
+as the val can now be set to 0 in the event dibusb_i2c_msg() fails.
 
-Found by Linux Driver Verification project (linuxtesting.org).
-
-Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+e27b4fd589762b0b9329@syzkaller.appspotmail.com
+Tested-by: syzbot+e27b4fd589762b0b9329@syzkaller.appspotmail.com
+Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/s5p-mfc/s5p_mfc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/usb/dvb-usb/dibusb-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc.c b/drivers/media/platform/s5p-mfc/s5p_mfc.c
-index 63d46fae9b289..75be40608bae8 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc.c
-+++ b/drivers/media/platform/s5p-mfc/s5p_mfc.c
-@@ -1285,6 +1285,10 @@ static int s5p_mfc_probe(struct platform_device *pdev)
- 	}
+diff --git a/drivers/media/usb/dvb-usb/dibusb-common.c b/drivers/media/usb/dvb-usb/dibusb-common.c
+index bcacb0f220282..3e45642ae186b 100644
+--- a/drivers/media/usb/dvb-usb/dibusb-common.c
++++ b/drivers/media/usb/dvb-usb/dibusb-common.c
+@@ -226,7 +226,7 @@ int dibusb_read_eeprom_byte(struct dvb_usb_device *d, u8 offs, u8 *val)
+ 	u8 *buf;
+ 	int rc;
  
- 	dev->variant = of_device_get_match_data(&pdev->dev);
-+	if (!dev->variant) {
-+		dev_err(&pdev->dev, "Failed to get device MFC hardware variant information\n");
-+		return -ENOENT;
-+	}
+-	buf = kmalloc(2, GFP_KERNEL);
++	buf = kzalloc(2, GFP_KERNEL);
+ 	if (!buf)
+ 		return -ENOMEM;
  
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	dev->regs_base = devm_ioremap_resource(&pdev->dev, res);
 -- 
 2.33.0
 
