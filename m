@@ -2,22 +2,22 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62A45C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2E66C433FE
 	for <linux-media@archiver.kernel.org>; Wed, 10 Nov 2021 08:00:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 459F2611ED
+	by mail.kernel.org (Postfix) with ESMTP id BF7426112F
 	for <linux-media@archiver.kernel.org>; Wed, 10 Nov 2021 08:00:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbhKJIDa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Nov 2021 03:03:30 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:64823 "EHLO
+        id S230027AbhKJIDb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Nov 2021 03:03:31 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:40407 "EHLO
         twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbhKJID3 (ORCPT
+        with ESMTP id S229983AbhKJID3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 10 Nov 2021 03:03:29 -0500
 Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1AA7amEY018229;
-        Wed, 10 Nov 2021 15:36:48 +0800 (GMT-8)
+        by twspam01.aspeedtech.com with ESMTP id 1AA7alox018228;
+        Wed, 10 Nov 2021 15:36:47 +0800 (GMT-8)
         (envelope-from jammy_huang@aspeedtech.com)
 Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
  (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 10 Nov
@@ -27,9 +27,9 @@ To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
         <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
         <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
         <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] media: aspeed: Fix incorrect resolution detected
-Date:   Wed, 10 Nov 2021 16:00:12 +0800
-Message-ID: <20211110080012.20759-3-jammy_huang@aspeedtech.com>
+Subject: [PATCH v2 1/2] media: aspeed: Add macro for the fields of the mode-detect registers
+Date:   Wed, 10 Nov 2021 16:00:11 +0800
+Message-ID: <20211110080012.20759-2-jammy_huang@aspeedtech.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211110080012.20759-1-jammy_huang@aspeedtech.com>
 References: <20211110080012.20759-1-jammy_huang@aspeedtech.com>
@@ -40,38 +40,56 @@ X-Originating-IP: [192.168.2.115]
 X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
  (192.168.0.24)
 X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1AA7amEY018229
+X-MAIL: twspam01.aspeedtech.com 1AA7alox018228
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-During successive timing-change, resolution detected could be incorrect,
-for example. Using remote KVM to do Centos-8.2 installation, the timing
-detected could be only 1920x471 for 1920x1200.
+VE_MODE_DT_HOR_TOLER: the tolerance in detecting for stable horizontal
+signal.
+VE_MODE_DT_VER_TOLER: the tolerance in detecting for stable vertical
+signal.
+VE_MODE_DT_HOR_STABLE: the minimum required count in detecting stable
+HSYNC signal to set mode detection horizontal signal stable.
+VE_MODE_DT_VER_STABLE: the minimum required count in detecting stable
+VSYNC signal to set mode detection vertical signal stable.
 
-Increase min-required-count of stable signal to fix the problem.
-
-Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
 Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
 ---
- drivers/media/platform/aspeed-video.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/aspeed-video.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index 996afbb87ee9..625a77ddb479 100644
+index 5da52646b298..996afbb87ee9 100644
 --- a/drivers/media/platform/aspeed-video.c
 +++ b/drivers/media/platform/aspeed-video.c
-@@ -1208,8 +1208,8 @@ static void aspeed_video_init_regs(struct aspeed_video *video)
- 	aspeed_video_write(video, VE_MODE_DETECT,
- 			   FIELD_PREP(VE_MODE_DT_HOR_TOLER, 2) |
- 			   FIELD_PREP(VE_MODE_DT_VER_TOLER, 2) |
--			   FIELD_PREP(VE_MODE_DT_HOR_STABLE, 6) |
--			   FIELD_PREP(VE_MODE_DT_VER_STABLE, 6) |
-+			   FIELD_PREP(VE_MODE_DT_HOR_STABLE, 10) |
-+			   FIELD_PREP(VE_MODE_DT_VER_STABLE, 10) |
- 			   FIELD_PREP(VE_MODE_DT_EDG_THROD, 0x65));
+@@ -196,6 +196,12 @@
+ #define  VE_INTERRUPT_VSYNC_DESC	BIT(11)
+ 
+ #define VE_MODE_DETECT			0x30c
++#define  VE_MODE_DT_HOR_TOLER		GENMASK(31, 28)
++#define  VE_MODE_DT_VER_TOLER		GENMASK(27, 24)
++#define  VE_MODE_DT_HOR_STABLE		GENMASK(23, 20)
++#define  VE_MODE_DT_VER_STABLE		GENMASK(19, 16)
++#define  VE_MODE_DT_EDG_THROD		GENMASK(15, 8)
++
+ #define VE_MEM_RESTRICT_START		0x310
+ #define VE_MEM_RESTRICT_END		0x314
+ 
+@@ -1199,7 +1205,12 @@ static void aspeed_video_init_regs(struct aspeed_video *video)
+ 	aspeed_video_write(video, VE_SCALING_FILTER3, 0x00200000);
+ 
+ 	/* Set mode detection defaults */
+-	aspeed_video_write(video, VE_MODE_DETECT, 0x22666500);
++	aspeed_video_write(video, VE_MODE_DETECT,
++			   FIELD_PREP(VE_MODE_DT_HOR_TOLER, 2) |
++			   FIELD_PREP(VE_MODE_DT_VER_TOLER, 2) |
++			   FIELD_PREP(VE_MODE_DT_HOR_STABLE, 6) |
++			   FIELD_PREP(VE_MODE_DT_VER_STABLE, 6) |
++			   FIELD_PREP(VE_MODE_DT_EDG_THROD, 0x65));
  
  	aspeed_video_write(video, VE_BCD_CTRL, 0);
+ }
 -- 
 2.25.1
 
