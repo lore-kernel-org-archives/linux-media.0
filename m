@@ -2,87 +2,170 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A32CAC433F5
-	for <linux-media@archiver.kernel.org>; Wed, 10 Nov 2021 14:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE3A2C43217
+	for <linux-media@archiver.kernel.org>; Wed, 10 Nov 2021 15:02:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 856C761205
-	for <linux-media@archiver.kernel.org>; Wed, 10 Nov 2021 14:58:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ABA4C60F90
+	for <linux-media@archiver.kernel.org>; Wed, 10 Nov 2021 15:02:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbhKJPA5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Nov 2021 10:00:57 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:55752 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232186AbhKJPA5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Nov 2021 10:00:57 -0500
-Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1mkp3A-007RMZ-L9; Wed, 10 Nov 2021 14:58:08 +0000
-Received: from ip6-localhost ([::1] helo=localhost.localdomain)
-        by slave0 with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1mkp38-005U1O-Lb; Wed, 10 Nov 2021 14:58:06 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.17] Various fixes/enhancements (#78322)
-Date:   Wed, 10 Nov 2021 14:58:06 +0000
-Message-Id: <20211110145806.1306996-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <734bd659-3f59-63a1-dbf8-28e50ff733e4@xs4all.nl>
-References: 
+        id S232505AbhKJPFR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Nov 2021 10:05:17 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:45778 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232391AbhKJPFI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 10 Nov 2021 10:05:08 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AAEHiPq019003;
+        Wed, 10 Nov 2021 16:01:51 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=selector1;
+ bh=fy0nJ4jsnYOrNbmlnWpKKRsONkGfDSFo37lhgrdZifo=;
+ b=jCblevN4sArT3TbOfud8zxCq510ZtTMzk0aebTHg9A8mMWr4mHYulSD4POfb3PkRdJw/
+ f3psof2GVLL5A0ahcjIdxuKwQh/qmwB/ZHhVdF42ENbIlsAkpaHcrQ44oMs5SNCo1IGs
+ V/1EERuuFD9AZ1eHoARiAxoA59FBLifz03K90sjv2OCsNStKTSdItvQLmsGmZ5udzfc+
+ 2yv9CsZ4R8bb0KKCDBg7iE+p5zfOBhTmpNAMDa4g43gHBCC+iqKjTddE2ktYRpmG3/W1
+ Pg1qPjJR6dr2Vm77FT7oueoLlDUM2+hTpmmSw2ukMZGby9fRv1BY6i9wXixO1xE9c/FN QA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3c7ufnfufj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Nov 2021 16:01:51 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 32367100034;
+        Wed, 10 Nov 2021 16:01:51 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 154B5207568;
+        Wed, 10 Nov 2021 16:01:51 +0100 (CET)
+Received: from localhost (10.75.127.49) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 10 Nov 2021 16:01:50
+ +0100
+From:   <patrice.chotard@foss.st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        maxime coquelin <mcoquelin.stm32@gmail.com>,
+        alexandre torgue <alexandre.torgue@foss.st.com>,
+        michael turquette <mturquette@baylibre.com>,
+        stephen boyd <sboyd@kernel.org>,
+        herbert xu <herbert@gondor.apana.org.au>,
+        "david s . miller" <davem@davemloft.net>,
+        david airlie <airlied@linux.ie>,
+        daniel vetter <daniel@ffwll.ch>,
+        thierry reding <thierry.reding@gmail.com>,
+        sam ravnborg <sam@ravnborg.org>,
+        yannick fertre <yannick.fertre@foss.st.com>,
+        "philippe cornu" <philippe.cornu@foss.st.com>,
+        benjamin gaignard <benjamin.gaignard@linaro.org>,
+        vinod koul <vkoul@kernel.org>,
+        ohad ben-cohen <ohad@wizery.com>,
+        bjorn andersson <bjorn.andersson@linaro.org>,
+        baolin wang <baolin.wang7@gmail.com>,
+        jonathan cameron <jic23@kernel.org>,
+        "lars-peter clausen" <lars@metafoo.de>,
+        olivier moysan <olivier.moysan@foss.st.com>,
+        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matt Mackall <mpm@selenic.com>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        "dillon min" <dillon.minfei@gmail.com>,
+        Marek Vasut <marex@denx.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Lionel Debieve <lionel.debieve@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        pascal Paillet <p.paillet@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        "Jose Abreu" <joabreu@synopsys.com>,
+        Le Ray <erwan.leray@foss.st.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <dmaengine@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-media@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <netdev@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>
+Subject: [PATCH v3 2/5] dt-bindings: mfd: timers: Update maintainers for st,stm32-timers
+Date:   Wed, 10 Nov 2021 16:01:41 +0100
+Message-ID: <20211110150144.18272-3-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211110150144.18272-1-patrice.chotard@foss.st.com>
+References: <20211110150144.18272-1-patrice.chotard@foss.st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-10_05,2021-11-08_02,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/734bd659-3f59-63a1-dbf8-28e50ff733e4@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/155652/
-Build time: 00:25:25
-Link: https://lore.kernel.org/linux-media/734bd659-3f59-63a1-dbf8-28e50ff733e4@xs4all.nl
+Benjamin has left the company, remove his name from maintainers.
 
-gpg: Signature made Wed 10 Nov 2021 10:02:56 AM UTC
-gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
-gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
-gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [unknown]
-gpg: Note: This key has expired!
-Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
-     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml | 1 -
+ 1 file changed, 1 deletion(-)
 
-Summary: got 2/19 patches with issues, being 1 at build time
-
-Error/warnings:
-
-patches/0001-media-aspeed-fix-mode-detect-always-time-out-at-2nd-.patch:
-
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-	../drivers/staging/media/atomisp/pci/atomisp_fops.c: ../drivers/staging/media/atomisp/pci/atomisp_fops.c:904 atomisp_open() warn: variable dereferenced before check 'asd' (see line 807)
-	../drivers/staging/media/atomisp/pci/atomisp_cmd.c: ../drivers/staging/media/atomisp/pci/atomisp_cmd.c:5548 atomisp_set_fmt_to_snr() warn: variable dereferenced before check 'asd' (see line 5540)
-
-    allyesconfig: return code #0:
-	../drivers/media/cec/core/cec-adap.c: ../drivers/media/cec/core/cec-adap.c:926 cec_transmit_msg_fh() warn: '&data->list' not removed from list
-	../drivers/media/rc/meson-ir-tx.c:22: warning: expecting prototype for meson(). Prototype was for DEVICE_NAME() instead
-	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
-	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-	../drivers/media/usb/pvrusb2/pvrusb2-encoder.c: ../drivers/media/usb/pvrusb2/pvrusb2-encoder.c:288 pvr2_encoder_cmd() warn: inconsistent indenting
-	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:1730 pvr2_hdw_set_streaming() warn: inconsistent indenting
-	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3461 pvr2_hdw_cpufw_set_enabled() warn: inconsistent indenting
-	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3501 pvr2_hdw_cpufw_get() warn: inconsistent indenting
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2868 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
-
-patches/0006-dt-bindings-adv748x-Convert-bindings-to-json-schema.patch:
-
-   checkpatch.pl:
-	$ cat patches/0006-dt-bindings-adv748x-Convert-bindings-to-json-schema.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:32: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
-	-:150: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
+diff --git a/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml b/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml
+index dace35362a7a..210a7c85b884 100644
+--- a/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml
++++ b/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml
+@@ -17,7 +17,6 @@ description: |
+       programmable prescaler.
+ 
+ maintainers:
+-  - Benjamin Gaignard <benjamin.gaignard@st.com>
+   - Fabrice Gasnier <fabrice.gasnier@st.com>
+ 
+ properties:
+-- 
+2.17.1
 
