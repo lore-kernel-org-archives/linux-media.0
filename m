@@ -2,152 +2,125 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A7A2C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 10 Nov 2021 19:53:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A062CC433FE
+	for <linux-media@archiver.kernel.org>; Thu, 11 Nov 2021 00:28:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E275761038
-	for <linux-media@archiver.kernel.org>; Wed, 10 Nov 2021 19:53:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82B0D61279
+	for <linux-media@archiver.kernel.org>; Thu, 11 Nov 2021 00:28:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbhKJT40 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Nov 2021 14:56:26 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:42895 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbhKJT4Y (ORCPT
+        id S231612AbhKKAb3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Nov 2021 19:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230311AbhKKAb2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Nov 2021 14:56:24 -0500
-Received: by mail-ot1-f43.google.com with SMTP id g91-20020a9d12e4000000b0055ae68cfc3dso5557492otg.9;
-        Wed, 10 Nov 2021 11:53:36 -0800 (PST)
+        Wed, 10 Nov 2021 19:31:28 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F31C061766
+        for <linux-media@vger.kernel.org>; Wed, 10 Nov 2021 16:28:40 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id e11so8494785ljo.13
+        for <linux-media@vger.kernel.org>; Wed, 10 Nov 2021 16:28:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GCOj+BlvfKYSuqLtbvE4odReGkR+x7ddg+lGcbsxXNo=;
+        b=I4PiIjQQw4yYoL5Zu7lCoXuFFIkSMbgIeUa2km18W/NP5MUDe6/qO4wxfMPlfC6+NR
+         WITLXGH4RecuQkk87lm89WlTtkbKkUjhePhwUzFBh7SumXaclw5OXxDrMQDOxM8EGxNf
+         J6Gix0eaJwbicM89BLmNhknqhpVtIr8Ube/j9182EZd8t+/8nGWTfdBcD81X6X5iGkD2
+         G3u528VqLoivfjd/v41rorFoVdYBDiHiwHeFAsb1B7ZL7dS90WUpmyHlbl3ip/Mk7qYX
+         EfXJ6x2PACKrqORBaIVzZHTghmKDAUfYAYwrvsMcVl/Ba41x+2V/+RpDN3cjMfQYkCRq
+         18fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rtQL/sbdzpxz6Lu8ElJAZUiYQnGOPRjAvEo183EhEZQ=;
-        b=Y+G/EpUnkYeRwidEQcxcB/bCKh8UXs/sQt22sSAO1wgkYWmb6nrJ7MuuHhQul2ci8j
-         2CwHUXM2ymOtKrduUBQB+2NKgfo1yAiFZ3j6AQ3PxM07YMklELUttcvWqG0omYwHl/sV
-         yq8ZNsn3uiX3CnIQsK4DPopYdZ06Tq2RKg71EImg75aZyWplCShG2+E4b+BN9TypjKq/
-         mxKnFrAPVWtMfZ5FpoGYvy/PhT51mw5okPo70sezswBDfmXPIo1gcvzoTOUMmdMFJ1J6
-         XUoK7OrbJdyduylqzZ0cXRPntrMYyIIcF9X993qFHhgxve4XP2bRPSjR8QOauLAvH5kc
-         sZwA==
-X-Gm-Message-State: AOAM532SQ0biJ93+S/ljBKB2KNqVAnkdvc6jx23hWkd0WvEF1lIpE4E4
-        TbYwou8v7aIAf5FdWCwmag==
-X-Google-Smtp-Source: ABdhPJzPMoAqV3AUGDDa1G/mcQBg1/+e3vLu75Mv4kA30QovRpmA/hmvXuDtC6I5AysjT0t7pidUQg==
-X-Received: by 2002:a9d:6a4e:: with SMTP id h14mr1449816otn.134.1636574015905;
-        Wed, 10 Nov 2021 11:53:35 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id j7sm129827oon.13.2021.11.10.11.53.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Nov 2021 11:53:35 -0800 (PST)
-Received: (nullmailer pid 1864115 invoked by uid 1000);
-        Wed, 10 Nov 2021 19:53:32 -0000
-Date:   Wed, 10 Nov 2021 13:53:32 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     patrice.chotard@foss.st.com
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        alexandre torgue <alexandre.torgue@foss.st.com>,
-        jonathan cameron <jic23@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        olivier moysan <olivier.moysan@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-watchdog@vger.kernel.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        maxime coquelin <mcoquelin.stm32@gmail.com>,
-        Matt Mackall <mpm@selenic.com>, vinod koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        baolin wang <baolin.wang7@gmail.com>,
-        linux-spi@vger.kernel.org, david airlie <airlied@linux.ie>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        netdev@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        ohad ben-cohen <ohad@wizery.com>, linux-gpio@vger.kernel.org,
-        Jose Abreu <joabreu@synopsys.com>,
-        Le Ray <erwan.leray@foss.st.com>,
-        herbert xu <herbert@gondor.apana.org.au>,
-        michael turquette <mturquette@baylibre.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        linux-serial@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        "david s . miller" <davem@davemloft.net>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        linux-i2c@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        thierry reding <thierry.reding@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        philippe cornu <philippe.cornu@foss.st.com>,
-        linux-rtc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        alsa-devel@alsa-project.org, Zhang Rui <rui.zhang@intel.com>,
-        linux-crypto@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-iio@vger.kernel.org, pascal Paillet <p.paillet@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        stephen boyd <sboyd@kernel.org>,
-        dillon min <dillon.minfei@gmail.com>,
-        devicetree@vger.kernel.org,
-        yannick fertre <yannick.fertre@foss.st.com>,
-        linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        linux-phy@lists.infradead.org,
-        benjamin gaignard <benjamin.gaignard@linaro.org>,
-        sam ravnborg <sam@ravnborg.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>, Marek Vasut <marex@denx.de>,
-        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
-        daniel vetter <daniel@ffwll.ch>, Marc Zyngier <maz@kernel.org>,
-        bjorn andersson <bjorn.andersson@linaro.org>,
-        lars-peter clausen <lars@metafoo.de>
-Subject: Re: [PATCH v3 2/5] dt-bindings: mfd: timers: Update maintainers for
- st,stm32-timers
-Message-ID: <YYwjPAoCtuM6iycz@robh.at.kernel.org>
-References: <20211110150144.18272-1-patrice.chotard@foss.st.com>
- <20211110150144.18272-3-patrice.chotard@foss.st.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GCOj+BlvfKYSuqLtbvE4odReGkR+x7ddg+lGcbsxXNo=;
+        b=Lt0CCf3hgiB/KkvkAdtLEyXb56P5wtRmDdy5igUqkGjjgi1rT9IvjSzD8ohvUjXBvT
+         YN58gIBdknYgvI0+6d7nn2UAW118vzrUH505rJfal+6StctnBanovJjaA+pmSy2M7VIn
+         fx8AdQUV/2RHPyVeY63s1kqK1YEA8RjWlBe18zJeYdbH1DfKUOQymQYqla5MwPzupcH2
+         PFvGpbYzPxXIE43B+14GXBiD9o4B2Y73gsyTtj7q/pLbZNvqtlnjVhH/cXFCA4evCuDo
+         Lbmke7CwGKD5mufLrH37KsuGylr2VC19b7nJb84eryM9IBts+QLUJk64dG0STWmn7KeP
+         1sdw==
+X-Gm-Message-State: AOAM532x3bwxkgpKDqPoBH/f9sQtPPV78CtYMh0u2gcvKvY5ppN4VFG+
+        /Bn/YIQZr7v7RTGRtsOT8ee33zAYhfPzBZAj3JHWug==
+X-Google-Smtp-Source: ABdhPJw2IeInRMNWDtqc21Dd9YVDXzYuOF1rzMxUeYINwuJKSe/nAHpHAyNZ2VJTjAd6BjYlK0kwF4xc5+rBEc50uWQ=
+X-Received: by 2002:a2e:95d3:: with SMTP id y19mr3128383ljh.175.1636590518733;
+ Wed, 10 Nov 2021 16:28:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211110150144.18272-3-patrice.chotard@foss.st.com>
+References: <20211029214833.2615274-1-tadeusz.struk@linaro.org>
+In-Reply-To: <20211029214833.2615274-1-tadeusz.struk@linaro.org>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 10 Nov 2021 16:28:26 -0800
+Message-ID: <CALAqxLVd6F4RXy-H1y=mPR42RxXYr+0iDGws__k3DZSZD-22qg@mail.gmail.com>
+Subject: Re: [PATCH v2] media: venus: Synchronize probe() between venus_core
+ and enc/dec
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>
+Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 10 Nov 2021 16:01:41 +0100, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
-> 
-> Benjamin has left the company, remove his name from maintainers.
-> 
-> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> ---
->  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
+On Fri, Oct 29, 2021 at 2:48 PM Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
+>
+> Venus video encode/decode hardware driver consists of three modules.
+> The parent module venus-core, and two sub modules venus-enc and venus-dec.
+> The venus-core module allocates a common structure that is used by the
+> enc/dec modules, loads the firmware, and performs some common hardware
+> initialization. Since the three modules are loaded one after the other,
+> and their probe functions can run in parallel it is possible that
+> the venc_probe and vdec_probe functions can finish before the core
+> venus_probe function, which then can fail when, for example it
+> fails to load the firmware. In this case the subsequent call to venc_open
+> causes an Oops as it tries to dereference already uninitialized structures
+> through dev->parent and the system crashes in __pm_runtime_resume() as in
+> the trace below:
+>
+> [   26.064835][  T485] Internal error: Oops: 96000006 [#1] PREEMPT SMP
+> [   26.270914][  T485] Hardware name: Thundercomm Dragonboard 845c (DT)
+> [   26.285019][  T485] pc : __pm_runtime_resume+0x34/0x178
+> [   26.286374][  T213] lt9611 10-003b: hdmi cable connected
+> [   26.290285][  T485] lr : venc_open+0xc0/0x278 [venus_enc]
+> [   26.290326][  T485] Call trace:
+> [   26.290328][  T485]  __pm_runtime_resume+0x34/0x178
+> [   26.290330][  T485]  venc_open+0xc0/0x278 [venus_enc]
+> [   26.290335][  T485]  v4l2_open+0x184/0x294
+> [   26.290340][  T485]  chrdev_open+0x468/0x5c8
+> [   26.290344][  T485]  do_dentry_open+0x260/0x54c
+> [   26.290349][  T485]  path_openat+0xbe8/0xd5c
+> [   26.290352][  T485]  do_filp_open+0xb8/0x168
+> [   26.290354][  T485]  do_sys_openat2+0xa4/0x1e8
+> [   26.290357][  T485]  __arm64_compat_sys_openat+0x70/0x9c
+> [   26.290359][  T485]  invoke_syscall+0x60/0x170
+> [   26.290363][  T485]  el0_svc_common+0xb8/0xf8
+> [   26.290365][  T485]  do_el0_svc_compat+0x20/0x30
+> [   26.290367][  T485]  el0_svc_compat+0x24/0x84
+> [   26.290372][  T485]  el0t_32_sync_handler+0x7c/0xbc
+> [   26.290374][  T485]  el0t_32_sync+0x1b8/0x1bc
+> [   26.290381][  T485] ---[ end trace 04ca7c088b4c1a9c ]---
+> [   26.290383][  T485] Kernel panic - not syncing: Oops: Fatal exception
+>
+> This can be fixed by synchronizing the three probe functions and
+> only allowing the venc_probe() and vdec_probe() to pass when venus_probe()
+> returns success.
+>
+> Changes in v2:
+> - Change locking from mutex_lock to mutex_trylock
+>   in venc_probe and vdec_probe to avoid potential deadlock.
+>
+> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-Lee indicated he was going to pick this one up, so:
+Just wanted to ping folks on this patch, as it does resolve a frequent
+crash that we see on db845c/RB3 and RB5 hardware, so it would be nice
+to see it land & backported to -stable.
 
-Acked-by: Rob Herring <robh@kernel.org>
+thanks
+-john
