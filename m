@@ -2,156 +2,85 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46FECC433FE
-	for <linux-media@archiver.kernel.org>; Thu, 11 Nov 2021 16:09:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA717C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 11 Nov 2021 16:10:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 33C7461989
-	for <linux-media@archiver.kernel.org>; Thu, 11 Nov 2021 16:09:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A40CE61252
+	for <linux-media@archiver.kernel.org>; Thu, 11 Nov 2021 16:10:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234197AbhKKQL4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Nov 2021 11:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234210AbhKKQLx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Nov 2021 11:11:53 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FF7C061767
-        for <linux-media@vger.kernel.org>; Thu, 11 Nov 2021 08:09:03 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so4779774wmd.1
-        for <linux-media@vger.kernel.org>; Thu, 11 Nov 2021 08:09:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KTr2hlEs3fhrfyCHJRixMjf7mHq1FwDDfsgtIrdGmoc=;
-        b=ITXWaszsNaOGXDHdI/IulyHYKkar7xN65aXRn/81pxKpvVZ3z/ZfnVm32P5d22hUT+
-         Dt3hSzGXJbA8YvcuEQE0K1O1geqwAOEDz7EGYrboGpD3r2eUYATAla7CpF8y4bBJHS18
-         wHGGoQTk7/KXf2AeOirRthYdjvdNfX1gnWvTbtHeots1k4LLCcPj0ArNLEwZb6ppPOya
-         U+LXsngL+folCA+DSd6zi9MUuFlGKYtp2tnZ/bYrqAQMhbAQJ/ERMEgDIeo1q0rX5tN0
-         eZmS8B8ToDO87AZFGvYIP32pJbXVSk9HvMf2qhurR9vvlJSqBN7t8ql1Fi79O3sWw/V5
-         3dnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KTr2hlEs3fhrfyCHJRixMjf7mHq1FwDDfsgtIrdGmoc=;
-        b=XiWDEGPkg7NXGTX4AAzUIDVfF2SvwwID0yMvCpkAfIaw0WA1MYdBNatCmPfN1+Rwua
-         niY/u+CxC1h6vO+upyI2vov5+Z6MB4DAWRThew1FskuwxC6yZUMjZ3Y1dRSesVR/xf/z
-         DCODtWouSy0AoTTk/tnmWBHBvsYk533uu7Cy8YOOycfbXOCktET1HkouDXnVUSZUkSQl
-         Z62WpQl/fsmwgPgtsQK5X72nufV/BTc+NRM+qhIQY80cX+FjdttS+UJA6PwuuAQE36eZ
-         FYB8yLxrie5RICjB/rmfuQswjO8uqZQbF0rYj6L28IsadATBA0rr4mhDD7tKY0gQ0mOP
-         DSGQ==
-X-Gm-Message-State: AOAM530uD8aTHAR4OcW5ykTnmJd4hdO9ZsYpM1NUYetPgje5pl1+yfg7
-        txR0NLlBp+dY+R3NssJHTbroQw==
-X-Google-Smtp-Source: ABdhPJzVCx0kzZgQI6mfiqiPahjmKUAtmPdLfLLOHJszASu7wvy0GunOgEzS/Deu32hslBRoBltdzw==
-X-Received: by 2002:a1c:23cb:: with SMTP id j194mr27126364wmj.13.1636646942455;
-        Thu, 11 Nov 2021 08:09:02 -0800 (PST)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id x8sm3245558wrw.6.2021.11.11.08.09.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Nov 2021 08:09:01 -0800 (PST)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     inux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        robert.foss@linaro.org, jonathan@marek.ca
-Cc:     andrey.konovalov@linaro.org, todor.too@gmail.com,
-        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
-        jgrahsl@snap.com, hfink@snap.com, bryan.odonoghue@linaro.org
-Subject: [PATCH 18/18] media: camss: Do vfe_get/vfe_put for csid on sm8250
-Date:   Thu, 11 Nov 2021 16:10:38 +0000
-Message-Id: <20211111161038.3936217-19-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211111161038.3936217-1-bryan.odonoghue@linaro.org>
-References: <20211111161038.3936217-1-bryan.odonoghue@linaro.org>
+        id S233892AbhKKQM4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Nov 2021 11:12:56 -0500
+Received: from mga17.intel.com ([192.55.52.151]:30729 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233940AbhKKQMz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 11 Nov 2021 11:12:55 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10165"; a="213663626"
+X-IronPort-AV: E=Sophos;i="5.87,226,1631602800"; 
+   d="scan'208";a="213663626"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2021 08:10:04 -0800
+X-IronPort-AV: E=Sophos;i="5.87,226,1631602800"; 
+   d="scan'208";a="534447537"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2021 08:10:00 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mlCe5-005nYt-Ji;
+        Thu, 11 Nov 2021 18:09:49 +0200
+Date:   Thu, 11 Nov 2021 18:09:49 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tsuchiya Yuto <kitakar@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Nable <nable.maininbox@googlemail.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        "andrey.i.trufanov" <andrey.i.trufanov@gmail.com>,
+        Patrik Gfeller <patrik.gfeller@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH 04/17] media: atomisp: pci: do not use err var when
+ checking port validity for ISP2400
+Message-ID: <YY1ATbqn2fAg8Oct@smile.fi.intel.com>
+References: <20211017161958.44351-1-kitakar@gmail.com>
+ <20211017161958.44351-5-kitakar@gmail.com>
+ <20211026092637.196447aa@sal.lan>
+ <1a295721fd1f1e512cd54a659a250aef162bfb6f.camel@gmail.com>
+ <20211028123944.66c212c1@sal.lan>
+ <af7cdf9de020171567c2e75b713deb2ed073e4e3.camel@gmail.com>
+ <20211101141058.36ea2c8e@sal.lan>
+ <ab48bd8c69273e8b18ff652f3615b2698a777092.camel@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ab48bd8c69273e8b18ff652f3615b2698a777092.camel@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The sm8250 CAMSS CSID depends on the VFE it is attached to being powered on
-and clocked prior to taking the CSID out of reset.
+On Thu, Nov 11, 2021 at 11:34:23PM +0900, Tsuchiya Yuto wrote:
+> On Mon, 2021-11-01 at 14:10 +0000, Mauro Carvalho Chehab wrote:
+> > Em Mon, 01 Nov 2021 22:38:55 +0900
+> > Tsuchiya Yuto <kitakar@gmail.com> escreveu:
 
-It is possible to open just the CSID subdev from libcamera and attempt to
-bring the CSID block up.
+...
 
-If we do not first bring up the VFE the CSID will fail to come out of
-reset.
+> The full output of the make error is here:
+> 
+>         ("NOTE: issue: some undeclared errors")
+>         https://github.com/kitakar5525/linux-kernel/commit/a932d16681f941161385659b9d0316a3a4975e86
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/media/platform/qcom/camss/camss-csid.c | 12 +++++++++++-
- drivers/media/platform/qcom/camss/camss-vfe.c  |  4 ++--
- drivers/media/platform/qcom/camss/camss-vfe.h  |  3 +++
- 3 files changed, 16 insertions(+), 3 deletions(-)
+I just realize that we may do at some point
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-index 9ef6fbbeeddf..e6835b92695b 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid.c
-@@ -156,10 +156,18 @@ static int csid_set_clock_rates(struct csid_device *csid)
- static int csid_set_power(struct v4l2_subdev *sd, int on)
- {
- 	struct csid_device *csid = v4l2_get_subdevdata(sd);
--	struct device *dev = csid->camss->dev;
-+	struct camss *camss = csid->camss;
-+	struct device *dev = camss->dev;
-+	struct vfe_device *vfe = &camss->vfe[csid->id];
- 	int ret;
- 
- 	if (on) {
-+		if (camss->version == CAMSS_8250) {
-+			ret = vfe_get(vfe);
-+			if (ret < 0)
-+				return ret;
-+		}
-+
- 		ret = pm_runtime_resume_and_get(dev);
- 		if (ret < 0)
- 			return ret;
-@@ -204,6 +212,8 @@ static int csid_set_power(struct v4l2_subdev *sd, int on)
- 		camss_disable_clocks(csid->nclocks, csid->clock);
- 		ret = csid->vdda ? regulator_disable(csid->vdda) : 0;
- 		pm_runtime_put_sync(dev);
-+		if (camss->version == CAMSS_8250)
-+			vfe_put(vfe);
- 	}
- 
- 	return ret;
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index 5b5fe620914d..703ea39f1262 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -575,7 +575,7 @@ static int vfe_check_clock_rates(struct vfe_device *vfe)
-  *
-  * Return 0 on success or a negative error code otherwise
-  */
--static int vfe_get(struct vfe_device *vfe)
-+int vfe_get(struct vfe_device *vfe)
- {
- 	int ret;
- 
-@@ -637,7 +637,7 @@ static int vfe_get(struct vfe_device *vfe)
-  * vfe_put - Power down VFE module
-  * @vfe: VFE Device
-  */
--static void vfe_put(struct vfe_device *vfe)
-+void vfe_put(struct vfe_device *vfe)
- {
- 	mutex_lock(&vfe->power_lock);
- 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
-index 6500474a749e..0eba04eb9b77 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.h
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.h
-@@ -203,4 +203,7 @@ extern const struct vfe_hw_ops vfe_ops_4_8;
- extern const struct vfe_hw_ops vfe_ops_170;
- extern const struct vfe_hw_ops vfe_ops_480;
- 
-+int vfe_get(struct vfe_device *vfe);
-+void vfe_put(struct vfe_device *vfe);
-+
- #endif /* QC_MSM_CAMSS_VFE_H */
+cflags-y += -Werror
+
+to avoid changes that breaks build (with warnings). And also I would suggest
+to run build with `make W=1 C=1 CF=-D__CHECK_ENDIAN__ ...`
+
 -- 
-2.33.0
+With Best Regards,
+Andy Shevchenko
+
 
