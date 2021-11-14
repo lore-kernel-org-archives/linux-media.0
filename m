@@ -2,55 +2,55 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD4A9C433FE
-	for <linux-media@archiver.kernel.org>; Sun, 14 Nov 2021 22:24:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CA88C433EF
+	for <linux-media@archiver.kernel.org>; Sun, 14 Nov 2021 22:24:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B761961156
-	for <linux-media@archiver.kernel.org>; Sun, 14 Nov 2021 22:24:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EDD2F6112E
+	for <linux-media@archiver.kernel.org>; Sun, 14 Nov 2021 22:24:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234872AbhKNW1X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Nov 2021 17:27:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
+        id S234904AbhKNW1Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Nov 2021 17:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231968AbhKNW1R (ORCPT
+        with ESMTP id S231469AbhKNW1R (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 14 Nov 2021 17:27:17 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF77C061767;
-        Sun, 14 Nov 2021 14:24:19 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bi37so33329609lfb.5;
-        Sun, 14 Nov 2021 14:24:19 -0800 (PST)
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205A2C061746;
+        Sun, 14 Nov 2021 14:24:18 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b1so32406523lfs.13;
+        Sun, 14 Nov 2021 14:24:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KAUkz2SRPh78XWLAzuTkM/CtAlT6USvDgmC5PSJlsC4=;
-        b=IkfTsXNX2YKbkn4lfSWNNpx04E2sE+JT0mqnydwTWOcL3viNEeFO8WQbWDiUIuMv9L
-         9+Z4blaVKFFiq288OO/ZHDd10I55kjAuCcDSPJGXij4zWGSmbPjJOg0CZwXuEbWwsfqz
-         JzeGPtv3t3UZmHiPX+xOfMU8ZdbGwP3df5dAkLPKAmx6I9mV44g5SGX0elwaEzdX6Q0n
-         xKjoDDS21+WDJTGY//tmTUVJbQQ5L7/kP9NWpZiIVidetsmkWsfDv2sQDm3ez2opda6D
-         7hrI/gJ8M6cUQ6H1cG7dyRFEfmdGi654RIlbERMeajRFKQ/5OsRKN7oMRddFimPzGKb2
-         Njjg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=48XZovVNV/PbOzkLzCtoiEWbflOcMGPbMrTaZE0X8FE=;
+        b=UgVvGAMFXb9vtVkKql7iJujsrJJqhAwxQCwiHDvRzTQUi+Fb6GwlYbhcFSPnNajD05
+         afV/+a/LFb5zr1xGqCW+HdhvA1sWz5ABHcKVXLVkQY6Wgyg+vX7jH/eUZSb33nE+zgFu
+         l4ilY16549yC28TBbZ8kCsB0o+qfcgaPCggv2GOH1CiJemJ/tv83Xc89wyUn6cd9k8IR
+         GiLXCRs2deXQDGs7nmlf01X4Fx4fMqu8qgBMqSzbtLwzntDHT+/6jwf0onpM24cQWPN7
+         eHaqitDTh7ETVe7o/oJnqg9Hfq64ld/xGddxuYCSbyjoqWDnS/v2A6jMfQlYio7DEftP
+         zjnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KAUkz2SRPh78XWLAzuTkM/CtAlT6USvDgmC5PSJlsC4=;
-        b=4tk0jVY6vbneYblVjTKuY1mmMSaht5lr1+UmQQZYQkN5yjZ3VBo/+kTU4rNCzv3OWv
-         5uql1usnRre10E9P/WBbqLhZQl3nh5tAEBxJ8b+dYxFRW9YgwS9xwJCAr4MKPDQqViLj
-         8eOCoO6DzoxuOC0wbEMwb7ptnzLWSV4RLzMkBk2nU0dWq+Rma7cn3hdKlU5kB0b3iCF2
-         12sZq4zelZy+AulpTOFY4Yj3elqTY7LFFItoLU4aFbPv2AVUI18SKA3yXFjI03bGFajR
-         r4mHeU10/dOBbXraFl4+p/XejoQ4CY1x9T1Y6VlKuQpNtUcFb4D1sHMdEZ1YrD+Qgv+K
-         33Ng==
-X-Gm-Message-State: AOAM531aIHQG5DNpB3a257cVlsx9FBqDeWMkYUDSTtQlJjImva6iBWCE
-        nTLV3on8vrTnyeJxqsvBRsM=
-X-Google-Smtp-Source: ABdhPJxYMrC3XGSSkzeRtsVyfysLitYoXFFyVKPySBwCCul3412jKa6/XnksEzH0Wh6Gv2vGsb6GoQ==
-X-Received: by 2002:a05:6512:3b0a:: with SMTP id f10mr29917406lfv.410.1636928657801;
-        Sun, 14 Nov 2021 14:24:17 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=48XZovVNV/PbOzkLzCtoiEWbflOcMGPbMrTaZE0X8FE=;
+        b=T5fjqei5QZM0rcYtECzY5e7yvd3SOTmg49KCuItydiQppsJUybpEzksKzpNvDxWYfz
+         uUiRDfunbroMmTtM1NfBlUsXqHg1mos3dWhIsbwgtmV9VtV3EFpdctVdfspyMqizaFge
+         7gTfFxnYJXIRcBtnNmcWpOi14iUkzsm60tKPHxe8/pgTJ3WdmJlgsOXYqKZ/zaM19NxB
+         q0G+daFsvFzmREYSU3gwzycWosVy2kQMYqYTh7oTOaS05c420dV3B0SuhIXUasSe5G/g
+         mBaMTIRfX+cM36LIJEr8qKjhLMG/jviSnZfDrGT6RAAGvkacyhc8BuqYQQGuYjpcYnYr
+         pHdg==
+X-Gm-Message-State: AOAM533mu60WceRcBUz09MGBvdQEINtGjFdN0tT1IaiiYG5n1zRibRbi
+        Y8MAjmklC4luF/wJQEiL1m4=
+X-Google-Smtp-Source: ABdhPJx7CA5hvSVinPXfamTs948Bg57tl1gmgxN88USRgOgCCEs84DwQyamqOWvJJDHXts2zZMMzTA==
+X-Received: by 2002:a05:6512:c28:: with SMTP id z40mr29762557lfu.457.1636928656490;
+        Sun, 14 Nov 2021 14:24:16 -0800 (PST)
 Received: from localhost.localdomain (46-138-46-211.dynamic.spd-mgts.ru. [46.138.46.211])
-        by smtp.gmail.com with ESMTPSA id d6sm1223339lfi.52.2021.11.14.14.24.17
+        by smtp.gmail.com with ESMTPSA id d6sm1223339lfi.52.2021.11.14.14.24.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Nov 2021 14:24:17 -0800 (PST)
+        Sun, 14 Nov 2021 14:24:16 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -60,42 +60,34 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/3] media: staging: tegra-vde: Properly mark invalid entries
-Date:   Mon, 15 Nov 2021 01:23:52 +0300
-Message-Id: <20211114222353.22435-3-digetx@gmail.com>
+Subject: [PATCH v1 0/3] Add NVIDIA Tegra114 support to video decoder driver
+Date:   Mon, 15 Nov 2021 01:23:50 +0300
+Message-Id: <20211114222353.22435-1-digetx@gmail.com>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211114222353.22435-1-digetx@gmail.com>
-References: <20211114222353.22435-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+Video decoder of Tegra114/124 SoCs uses additional memory buffer required
+for decoding of protected content. We won't support that content, but it
+is impossible to disable access to the buffer, hence a stub buffer needs
+to be provided. This series enables decoder driver only for Tegra114
+because Tegra124 support requires more non-trivial changes on both kernel
+and userspace sides.
 
-Entries in the reference picture list are marked as invalid by setting
-the frame ID to 0x3f.
+Dmitry Osipenko (1):
+  media: staging: tegra-vde: Reorder misc device registration
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/staging/media/tegra-vde/vde.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thierry Reding (2):
+  media: staging: tegra-vde: Support reference picture marking
+  media: staging: tegra-vde: Properly mark invalid entries
 
-diff --git a/drivers/staging/media/tegra-vde/vde.c b/drivers/staging/media/tegra-vde/vde.c
-index 42da57f191ef..ba7ef280423b 100644
---- a/drivers/staging/media/tegra-vde/vde.c
-+++ b/drivers/staging/media/tegra-vde/vde.c
-@@ -336,7 +336,7 @@ static void tegra_vde_setup_iram_tables(struct tegra_vde *vde,
- 			value |= frame->frame_num;
- 		} else {
- 			aux_addr = 0x6ADEAD00;
--			value = 0;
-+			value = 0x3f;
- 		}
- 
- 		tegra_vde_setup_iram_entry(vde, 0, i, value, aux_addr);
+ drivers/staging/media/tegra-vde/vde.c | 143 +++++++++++++++++++++++---
+ drivers/staging/media/tegra-vde/vde.h |  18 ++++
+ 2 files changed, 148 insertions(+), 13 deletions(-)
+
 -- 
 2.33.1
 
