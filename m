@@ -2,100 +2,166 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8299EC433F5
-	for <linux-media@archiver.kernel.org>; Sun, 14 Nov 2021 22:49:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 114C2C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 15 Nov 2021 05:57:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A68C60C4A
-	for <linux-media@archiver.kernel.org>; Sun, 14 Nov 2021 22:49:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1C9C61AAA
+	for <linux-media@archiver.kernel.org>; Mon, 15 Nov 2021 05:57:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbhKNWwF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Nov 2021 17:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
+        id S230105AbhKOF7z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Nov 2021 00:59:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbhKNWvZ (ORCPT
+        with ESMTP id S229915AbhKOF7y (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Nov 2021 17:51:25 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD4AC061767;
-        Sun, 14 Nov 2021 14:48:29 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id b1so32505589lfs.13;
-        Sun, 14 Nov 2021 14:48:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ukIDuU6IlT+86rCbL8zG0hZeRU+DOUqbYsBqeamrzG4=;
-        b=gc7lEoxEblf+lqkcWvb1ovyp45r96q6ZXcGWz8TUEKk1dl3sAJ0cYQgCNnrv7Xfmfz
-         F3dmQdq0XABP0kx07QUaVgdC152tDCGgVhxLfaDmKmDpr5EPafLtH14RyW0cc4QhVT+I
-         kuf6UzBFkfcQ9GtLEBjEh4iKHwhI+e9qsFl3U1eQUgN8+DQSjbwMR7wWhz9aoIuBMFIO
-         P489YXVM96jGobvUkB250f/4QF7T4xYEjdsX8uV+0s3vje7NV0XywfJsLEmBHRBiGJkX
-         R/ytKrqTFhPbVHKS9URThGzwBbcsXyzsapK3uJxbzOnubcWPT0JcX9JrOMOG5QVdCRK8
-         6SYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ukIDuU6IlT+86rCbL8zG0hZeRU+DOUqbYsBqeamrzG4=;
-        b=hcBZ1pHpazfpBP5Qzp5zTNxWlGRv7DirrcJRgNPlp6kHzvVcFPvQzobJvUVyKUcGRJ
-         hw5/Z13AUrllQOHaJ9p477J+34ZZ0HEDfpe0mLX3XobQ04FYY5zaNf0uXInhgPlFTawh
-         T8zMi068fExSHfQccZlmEpe1dN67h759wYS1DZwSxvnUBAixdPOgX4sTrrBP5a7SMNEH
-         hHSn1/7LvCUoWySH9IHA2ruU2fNWTy1lGs3qyoEALkxbrMy9pjlaRTWgmfQcsKRwtLGM
-         IpmzJT39Anjs2dDC15uwWZE3hKAQvgxwjImeMsY7oyidMyMbD5aoqjf5OxM8j1/OXCta
-         wSWA==
-X-Gm-Message-State: AOAM530LSAlqg38SDYc4J+M+535hELXBIoPD3pfroA6OTLy8R89jiolT
-        3loPIYYxd6GOSywn3YuVPrU=
-X-Google-Smtp-Source: ABdhPJx1HJ/U08X2T1uvRiZzPj/CNGmMlyAz/lzuqpzE2X9ZsB8VQxSKym1zKmQPOuj4OWRC2/Cr3g==
-X-Received: by 2002:a05:6512:1093:: with SMTP id j19mr31596154lfg.340.1636930107901;
-        Sun, 14 Nov 2021 14:48:27 -0800 (PST)
-Received: from localhost.localdomain (46-138-46-211.dynamic.spd-mgts.ru. [46.138.46.211])
-        by smtp.gmail.com with ESMTPSA id h1sm1228591lfu.277.2021.11.14.14.48.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Nov 2021 14:48:27 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anton Bambura <jenneron@protonmail.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] media: staging: tegra-vde: Properly mark invalid entries
-Date:   Mon, 15 Nov 2021 01:47:31 +0300
-Message-Id: <20211114224732.11550-3-digetx@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211114224732.11550-1-digetx@gmail.com>
-References: <20211114224732.11550-1-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 15 Nov 2021 00:59:54 -0500
+Received: from lb2-smtp-cloud8.xs4all.net (lb2-smtp-cloud8.xs4all.net [IPv6:2001:888:0:108::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF6AC061746
+        for <linux-media@vger.kernel.org>; Sun, 14 Nov 2021 21:56:59 -0800 (PST)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id mUz6mEiLO8wPvmUzAmkLBW; Mon, 15 Nov 2021 06:56:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1636955816; bh=8SV1fGWUl8Wnh8n7Ta4C7q2TV2bvir2QXqJPAkrSfSw=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=QtpAcFM81yffTzO5NukwkCxwpWq+4IcubBmyPq2U2EagJ7nlmdG7uIE8YxbL5z90q
+         TCsPBm/McYaBd1bRE3e0myL/RVmGwT4fp3A5jV6VCp7GZDyXleo3wVMWlcAYYerWWx
+         VnzpIT0Tr/OOCVXloyyjqXlOtU1t4r/fjnbaVEEMRv26BqAqRCVUiX00R9JnoL2uDb
+         l+4frV/H3OfoMGcc7uVmLAznMFD3KmqSY2shh3nrb65z+TW2cvUEDtUo5c2JjqqpOw
+         iUcOUCNyT8+GmZgdAtVNESx41DNk6ruce6+6Or0H3sJXHPGHoI3+veiJseHNheB2j6
+         wDGQ7JcKGv7Dw==
+Message-ID: <277a2a5cb3402eaf9e6108f2abc264ef@smtp-cloud8.xs4all.net>
+Date:   Mon, 15 Nov 2021 06:56:51 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4xfBLi/s7ta/nio3pbYHiHDEQqIpf5j6gGJBZksWhwGI7JdusPwPBSUcyl2d5leunwBFYEY9APVQb7iCs6gMVChswE7aH3wfrMI5LNqKpnqwxhITocT+UL
+ KMSco9OQFTuw+uA36+TO3o9VDDfBVY6S3C0kv5z+XyGTQ4ZzZe9+9KcHFtc0NgG7arN14zqbV9N0Ww==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Entries in the reference picture list are marked as invalid by setting
-the frame ID to 0x3f.
+Results of the daily build of media_tree:
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/staging/media/tegra-vde/vde.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+date:			Mon Nov 15 05:00:13 CET 2021
+media-tree git hash:	80ffa82f80bf89b19de5dc5d556ffecc0a2a54be
+media_build git hash:	2b23b3dfc87e992739203b263fbb9c7365831fcb
+v4l-utils git hash:	79b4354f1c470527ace542fa0e0e9f551aed6c62
+edid-decode git hash:	b00755e34eb12aa92416aaf1bb7b02603131afe0
+gcc version:		i686-linux-gcc (GCC) 11.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.3
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.3
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 5e723ffd4a51b66192db1b1919d84b0925398188
+host hardware:		x86_64
+host os:		5.14.0-2-amd64
 
-diff --git a/drivers/staging/media/tegra-vde/vde.c b/drivers/staging/media/tegra-vde/vde.c
-index 81f3e9e7e4d6..f4f65eb78d44 100644
---- a/drivers/staging/media/tegra-vde/vde.c
-+++ b/drivers/staging/media/tegra-vde/vde.c
-@@ -340,7 +340,7 @@ static void tegra_vde_setup_iram_tables(struct tegra_vde *vde,
- 			value |= frame->frame_num;
- 		} else {
- 			aux_addr = 0x6ADEAD00;
--			value = 0;
-+			value = 0x3f;
- 		}
- 
- 		tegra_vde_setup_iram_entry(vde, 0, i, value, aux_addr);
--- 
-2.33.1
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-mips: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-4.4.283-i686: OK
+linux-4.4.283-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.246-i686: OK
+linux-4.9.246-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.246-i686: OK
+linux-4.14.246-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.206-i686: OK
+linux-4.19.206-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.144-i686: OK
+linux-5.4.144-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.18-i686: OK
+linux-5.8.18-x86_64: OK
+linux-5.9.16-i686: OK
+linux-5.9.16-x86_64: OK
+linux-5.10.62-i686: OK
+linux-5.10.62-x86_64: OK
+linux-5.11.22-i686: OK
+linux-5.11.22-x86_64: OK
+linux-5.12.19-i686: OK
+linux-5.12.19-x86_64: OK
+linux-5.13.14-i686: OK
+linux-5.13.14-x86_64: OK
+linux-5.14.1-i686: OK
+linux-5.14.1-x86_64: OK
+linux-5.15.1-i686: OK
+linux-5.15.1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 0
+virtme-32: ERRORS: Final Summary: 3100, Succeeded: 3099, Failed: 1, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: WARNINGS
 
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Monday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Monday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
