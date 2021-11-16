@@ -2,156 +2,137 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90CF3C433FE
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 06:00:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B76BC433F5
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 07:57:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D15F63212
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 06:00:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 812D561BFA
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 07:57:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbhKPGDA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Nov 2021 01:03:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        id S231534AbhKPH76 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Nov 2021 02:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239127AbhKPGCX (ORCPT
+        with ESMTP id S231429AbhKPH74 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Nov 2021 01:02:23 -0500
-Received: from lb2-smtp-cloud7.xs4all.net (lb2-smtp-cloud7.xs4all.net [IPv6:2001:888:0:108::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC79AC06BA83
-        for <linux-media@vger.kernel.org>; Mon, 15 Nov 2021 21:46:01 -0800 (PST)
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id mrI3mQ0qYCMnAmrI7mL5oo; Tue, 16 Nov 2021 06:45:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1637041559; bh=Dp4ivIvYgWYiK53FAJGQyh8vYwbx4I9hrMJ89d10Kf0=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=VkL1Vz5LC/skJ+klXYsbltGYO/PdidDxxkbLMA6pkQXMto1kh+gS4y0gcB1Z5h1nt
-         0hIaV2xcjg4OjhSO1KOBSDPQcVJE0chwcIkSFtB7luOql2v0ngLJn0Q83qn7KJJPMc
-         Z2GodcxoaM9h/2B66oyzfr+UEZRlrqyszzvxeqILwLJnjXaNCrpgz99DEr0BZwU+D/
-         yw9GqDcn13/mTwGhKkpSamgMG+LLr8JcPmrm0eQm5fIrJsevYC0ESKqiWub5awxklo
-         NusPWcOqwqZb7Ut4Uv3QuyGdrnWZbZXItb0yAwf+rcxIfeYD4ZVaoVVoAxx+zcfqf0
-         ZPSmKM6ue33dw==
-Message-ID: <c903815c5489e1bc4a6af33197c411aa@smtp-cloud7.xs4all.net>
-Date:   Tue, 16 Nov 2021 06:45:55 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: ERRORS
-X-CMAE-Envelope: MS4xfJn7+cYsyYdZDseN+wUrdLsJXzrNfD95ghRMMWt40EZwtEiw/mY90FeoJ2VQ4XuCKB94y60HAmZMRCse2gDC+4CeKoBLB5ToLJb3KF0EkZccZQTmNnUN
- tjWwSxPzuOPiVQlCbR2mW2MXU8Ybw0RMU5/JHBeT2UTiq8vHs7Fw4l1BSWapxgwx69fyEbWMYOGtpA==
+        Tue, 16 Nov 2021 02:59:56 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FABAC061570
+        for <linux-media@vger.kernel.org>; Mon, 15 Nov 2021 23:56:59 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1mmtKr-0004aV-87; Tue, 16 Nov 2021 08:56:57 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1mmtKq-0004Qq-7w; Tue, 16 Nov 2021 08:56:56 +0100
+Date:   Tue, 16 Nov 2021 08:56:56 +0100
+From:   Sascha Hauer <sha@pengutronix.de>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Christian =?iso-8859-15?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>, linaro-mm-sig@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org
+Subject: Re: [PATCH 12/26] drm/scheduler: use new iterator in
+ drm_sched_job_add_implicit_dependencies v2
+Message-ID: <20211116075656.GD6556@pengutronix.de>
+References: <20210917123513.1106-1-christian.koenig@amd.com>
+ <20210917123513.1106-13-christian.koenig@amd.com>
+ <20211115140353.GC6556@pengutronix.de>
+ <YZJp8Uj4NpeP+zui@phenom.ffwll.local>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YZJp8Uj4NpeP+zui@phenom.ffwll.local>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 08:55:02 up 271 days, 11:18, 130 users,  load average: 0.29, 0.23,
+ 0.19
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+On Mon, Nov 15, 2021 at 03:08:49PM +0100, Daniel Vetter wrote:
+> On Mon, Nov 15, 2021 at 03:03:53PM +0100, Sascha Hauer wrote:
+> > Hi,
+> > 
+> > On Fri, Sep 17, 2021 at 02:34:59PM +0200, Christian König wrote:
+> > > Simplifying the code a bit.
+> > > 
+> > > v2: use dma_resv_for_each_fence
+> > > 
+> > > Signed-off-by: Christian König <christian.koenig@amd.com>
+> > > ---
+> > >  drivers/gpu/drm/scheduler/sched_main.c | 26 ++++++--------------------
+> > >  1 file changed, 6 insertions(+), 20 deletions(-)
+> > > 
+> > > diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+> > > index 042c16b5d54a..5bc5f775abe1 100644
+> > > --- a/drivers/gpu/drm/scheduler/sched_main.c
+> > > +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> > > @@ -699,30 +699,16 @@ int drm_sched_job_add_implicit_dependencies(struct drm_sched_job *job,
+> > >  					    struct drm_gem_object *obj,
+> > >  					    bool write)
+> > >  {
+> > > +	struct dma_resv_iter cursor;
+> > > +	struct dma_fence *fence;
+> > >  	int ret;
+> > > -	struct dma_fence **fences;
+> > > -	unsigned int i, fence_count;
+> > > -
+> > > -	if (!write) {
+> > > -		struct dma_fence *fence = dma_resv_get_excl_unlocked(obj->resv);
+> > > -
+> > > -		return drm_sched_job_add_dependency(job, fence);
+> > > -	}
+> > > -
+> > > -	ret = dma_resv_get_fences(obj->resv, NULL, &fence_count, &fences);
+> > > -	if (ret || !fence_count)
+> > > -		return ret;
+> > >  
+> > > -	for (i = 0; i < fence_count; i++) {
+> > > -		ret = drm_sched_job_add_dependency(job, fences[i]);
+> > > +	dma_resv_for_each_fence(&cursor, obj->resv, write, fence) {
+> > > +		ret = drm_sched_job_add_dependency(job, fence);
+> > >  		if (ret)
+> > > -			break;
+> > > +			return ret;
+> > >  	}
+> > > -
+> > > -	for (; i < fence_count; i++)
+> > > -		dma_fence_put(fences[i]);
+> > > -	kfree(fences);
+> > > -	return ret;
+> > > +	return 0;
+> > >  }
+> > >  EXPORT_SYMBOL(drm_sched_job_add_implicit_dependencies);
+> > >  
+> > 
+> > This patch lets the panfrost driver explode on v5.16-rc1 with the
+> > following. I didn't bisect it, but it goes away when I revert this
+> > patch. I only started weston, nothing more.
+> > 
+> > Any idea what goes wrong here?
+> 
+> Should be fixed in 13e9e30cafea1, but Christian pushed it to the wrong
+> patch so it missed -rc1.
 
-Results of the daily build of media_tree:
+I can confirm 13e9e30cafea1 fixes the issue, thanks
 
-date:			Tue Nov 16 05:00:13 CET 2021
-media-tree git hash:	5efe5721c18c326036ca71bec4fb56472e1f9350
-media_build git hash:	2b23b3dfc87e992739203b263fbb9c7365831fcb
-v4l-utils git hash:	79b4354f1c470527ace542fa0e0e9f551aed6c62
-edid-decode git hash:	b00755e34eb12aa92416aaf1bb7b02603131afe0
-gcc version:		i686-linux-gcc (GCC) 11.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.3
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.3
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 50ecc9c97dabf8f455ff6c90fe71e86d7bc0a297
-host hardware:		x86_64
-host os:		5.14.0-2-amd64
+Sascha
 
-linux-git-sh: OK
-linux-git-arm-davinci: OK
-linux-git-arm-at91: OK
-linux-git-arm-stm32: OK
-linux-git-mips: OK
-linux-git-arm-pxa: OK
-linux-git-arm-multi: OK
-linux-git-arm64: OK
-linux-git-powerpc64: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-4.4.283-i686: ERRORS
-linux-4.4.283-x86_64: ERRORS
-linux-4.5.7-i686: ERRORS
-linux-4.5.7-x86_64: ERRORS
-linux-4.6.7-i686: ERRORS
-linux-4.6.7-x86_64: ERRORS
-linux-4.7.10-i686: ERRORS
-linux-4.7.10-x86_64: ERRORS
-linux-4.8.17-i686: ERRORS
-linux-4.8.17-x86_64: ERRORS
-linux-4.9.246-i686: ERRORS
-linux-4.9.246-x86_64: ERRORS
-linux-4.10.17-i686: ERRORS
-linux-4.10.17-x86_64: ERRORS
-linux-4.11.12-i686: ERRORS
-linux-4.11.12-x86_64: ERRORS
-linux-4.12.14-i686: ERRORS
-linux-4.12.14-x86_64: ERRORS
-linux-4.13.16-i686: ERRORS
-linux-4.13.16-x86_64: ERRORS
-linux-4.14.246-i686: ERRORS
-linux-4.14.246-x86_64: ERRORS
-linux-4.15.18-i686: ERRORS
-linux-4.15.18-x86_64: ERRORS
-linux-4.16.18-i686: ERRORS
-linux-4.16.18-x86_64: ERRORS
-linux-4.17.19-i686: ERRORS
-linux-4.17.19-x86_64: ERRORS
-linux-4.18.20-i686: ERRORS
-linux-4.18.20-x86_64: ERRORS
-linux-4.19.206-i686: ERRORS
-linux-4.19.206-x86_64: ERRORS
-linux-4.20.17-i686: ERRORS
-linux-4.20.17-x86_64: ERRORS
-linux-5.0.21-i686: ERRORS
-linux-5.0.21-x86_64: ERRORS
-linux-5.1.21-i686: ERRORS
-linux-5.1.21-x86_64: ERRORS
-linux-5.2.21-i686: ERRORS
-linux-5.2.21-x86_64: ERRORS
-linux-5.3.18-i686: ERRORS
-linux-5.3.18-x86_64: ERRORS
-linux-5.4.144-i686: ERRORS
-linux-5.4.144-x86_64: ERRORS
-linux-5.5.19-i686: ERRORS
-linux-5.5.19-x86_64: ERRORS
-linux-5.6.19-i686: ERRORS
-linux-5.6.19-x86_64: ERRORS
-linux-5.7.19-i686: ERRORS
-linux-5.7.19-x86_64: ERRORS
-linux-5.8.18-i686: ERRORS
-linux-5.8.18-x86_64: ERRORS
-linux-5.9.16-i686: ERRORS
-linux-5.9.16-x86_64: ERRORS
-linux-5.10.62-i686: ERRORS
-linux-5.10.62-x86_64: ERRORS
-linux-5.11.22-i686: ERRORS
-linux-5.11.22-x86_64: ERRORS
-linux-5.12.19-i686: ERRORS
-linux-5.12.19-x86_64: ERRORS
-linux-5.13.14-i686: ERRORS
-linux-5.13.14-x86_64: ERRORS
-linux-5.14.1-i686: ERRORS
-linux-5.14.1-x86_64: ERRORS
-linux-5.15.1-i686: ERRORS
-linux-5.15.1-x86_64: ERRORS
-linux-5.16-rc1-i686: ERRORS
-linux-5.16-rc1-x86_64: ERRORS
-apps: OK
-spec-git: OK
-virtme: ERRORS: Final Summary: 2989, Succeeded: 2987, Failed: 2, Warnings: 0
-virtme-32: ERRORS: Final Summary: 3100, Succeeded: 3099, Failed: 1, Warnings: 0
-sparse: WARNINGS
-smatch: WARNINGS
-kerneldoc: WARNINGS
 
-Logs weren't copied as they are too large (872 kB)
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
