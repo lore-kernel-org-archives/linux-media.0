@@ -2,50 +2,46 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42815C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12F8EC433F5
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2CFEE61BF4
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1E1C6141B
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235249AbhKPLcs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Nov 2021 06:32:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35200 "EHLO mail.kernel.org"
+        id S235266AbhKPLcu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Nov 2021 06:32:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35198 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235030AbhKPLc3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235043AbhKPLc3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 16 Nov 2021 06:32:29 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8282261BD3;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9687B61BF5;
         Tue, 16 Nov 2021 11:29:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637062148;
-        bh=paX1NcGqaRuZDTYMaz3hJFdjIFsWmOGpcYD5MKo09HI=;
+        bh=8aIzejT9R8r2TfeRROVk+42WeMa9j/dB6aFaZiU+h/g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DqecrIVKX3gkKt6kTP4R84IdkNIBRer3dQhmc02t/pdBq/L1PkLCOi/vO4CCW6I2D
-         Vv+a4SnWQ2vWo3TqZ56cMQgsRlm9oU7/XqaAlcL3/Ox8Sgh3wiN2yasqy00fPB/Ovh
-         D9F6TR6kqbxlcpBHl0bz82ukfdDNzxcbbVB/FjY7zHRogoicGskBAivc+vBHsC7jvW
-         VH/oDW1NjcyMC8S1VQMYc6Qn3ySXaaV6GOK6xpcQKyNKKHMvNDkcQ4nIToQft5lOtP
-         GMXTDx1KDaSE9eiF4hfWuzpjlFIKp0x4M+fF+Lw1muAk3szKbn6QjV5hGSSfoekfIg
-         DjpPsktr4sV9A==
+        b=lfpWdiJOo1jgtPr/GkkikkLKFHKM/6x9k0s36QcXEh4MSP2filaFjrfnS50roQZcq
+         UDDRCwArrVKtsB5Gle4aZjljc7hJgcdPM81YFn0BfvMIHz1jkXe/uafuYFXyIuTuuq
+         VC/VXPVZAfs6L849Q8I9CNnAjsqN9M4LZ9E3Sg/HsP92SX7apP2J1KyeGor0++HzrE
+         rGqmSiFSXAweJhTiD0u5+TCUC38Ok9qSoluV2jos3lExCzK8DoXPGcR6u4l0vqsDBD
+         jovb+/RJ0KYt9aneI/5rp40ZYfz2QhErbgFD7JH6ZS4Hir+/erce/sJoYs8YAY0AfV
+         Y3aZMEmgX/YHQ==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mmwe9-008QfC-BS; Tue, 16 Nov 2021 11:29:05 +0000
+        id 1mmwe9-008Qfm-JJ; Tue, 16 Nov 2021 11:29:05 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Martiros Shakhzadyan <vrzh@vrzh.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH 02/23] media: atomisp: get rid of if CONFIG_ON_FRAME_ENQUEUE
-Date:   Tue, 16 Nov 2021 11:28:43 +0000
-Message-Id: <ef712e076740f5f47ac2c58d384f9ac5ce809604.1637061474.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 14/23] media: atomisp: drop crop code at stream create function
+Date:   Tue, 16 Nov 2021 11:28:55 +0000
+Message-Id: <c50051630e36643d2e0a9f424e4191af294b745c.1637061474.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637061474.git.mchehab+huawei@kernel.org>
 References: <cover.1637061474.git.mchehab+huawei@kernel.org>
@@ -57,7 +53,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is not used with supported firmwares, so get rid of such code.
+The firmware choosen for ISP2401 doesn't support it.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -65,113 +61,213 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1637061474.git.mchehab+huawei@kernel.org/
 
- drivers/staging/media/atomisp/pci/sh_css.c    | 38 -------------------
- .../media/atomisp/pci/sh_css_internal.h       | 12 ------
- 2 files changed, 50 deletions(-)
+ drivers/staging/media/atomisp/pci/sh_css.c | 164 ---------------------
+ 1 file changed, 164 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index c714c15c49d2..bd3f96bd7d6d 100644
+index d1074c3d56c6..6f1dca0788b4 100644
 --- a/drivers/staging/media/atomisp/pci/sh_css.c
 +++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -384,10 +384,6 @@ ia_css_get_acc_configs(
-     struct ia_css_pipe *pipe,
-     struct ia_css_isp_config *config);
+@@ -400,17 +400,7 @@ static unsigned int get_crop_columns_for_bayer_order(const struct
+ 	ia_css_stream_config *config);
+ static void get_pipe_extra_pixel(struct ia_css_pipe *pipe,
+ 				 unsigned int *extra_row, unsigned int *extra_column);
+-static int
+-aspect_ratio_crop_init(struct ia_css_stream *curr_stream,
+-		       struct ia_css_pipe *pipes[],
+-		       bool *do_crop_status);
  
--#if CONFIG_ON_FRAME_ENQUEUE()
--static int set_config_on_frame_enqueue(struct ia_css_frame_info
--	*info, struct frame_data_wrapper *frame);
+-static bool
+-aspect_ratio_crop_check(bool enabled, struct ia_css_pipe *curr_pipe);
+-
+-static int
+-aspect_ratio_crop(struct ia_css_pipe *curr_pipe,
+-		  struct ia_css_resolution *effective_res);
+ #endif
+ 
+ static void
+@@ -8999,9 +8989,6 @@ ia_css_stream_create(const struct ia_css_stream_config *stream_config,
+ 	int err = -EINVAL;
+ 	struct ia_css_metadata_info md_info;
+ 	struct ia_css_resolution effective_res;
+-#ifdef ISP2401
+-	bool aspect_ratio_crop_enabled = false;
 -#endif
  
- #ifdef ISP2401
- static unsigned int get_crop_lines_for_bayer_order(const struct
-@@ -4071,15 +4067,6 @@ ia_css_pipe_enqueue_buffer(struct ia_css_pipe *pipe,
- 				    "ia_css_pipe_enqueue_buffer() buf_type=%d, data(DDR address)=0x%x\n",
- 				    buf_type, buffer->data.frame->data);
- 
--#if CONFIG_ON_FRAME_ENQUEUE()
--		return_err = set_config_on_frame_enqueue(
--				 &buffer->data.frame->info,
--				 &ddr_buffer.payload.frame);
--		if (return_err) {
--			IA_CSS_LEAVE_ERR(return_err);
--			return return_err;
--		}
--#endif
+ 	IA_CSS_ENTER("num_pipes=%d", num_pipes);
+ 	ia_css_debug_dump_stream_config(stream_config, num_pipes);
+@@ -9178,14 +9165,6 @@ ia_css_stream_create(const struct ia_css_stream_config *stream_config,
+ 		IA_CSS_LOG("mode sensor/default");
  	}
  
- 	/* start of test for using rmgr for acq/rel memory */
-@@ -10311,31 +10298,6 @@ void ia_css_pipe_map_queue(struct ia_css_pipe *pipe, bool map)
- 	IA_CSS_LEAVE("");
+-#ifdef ISP2401
+-	err = aspect_ratio_crop_init(curr_stream, pipes,
+-				     &aspect_ratio_crop_enabled);
+-	if (err) {
+-		IA_CSS_LEAVE_ERR(err);
+-		goto ERR;
+-	}
+-#endif
+ 	for (i = 0; i < num_pipes; i++) {
+ 		struct ia_css_resolution effective_res;
+ 
+@@ -9198,22 +9177,6 @@ ia_css_stream_create(const struct ia_css_stream_config *stream_config,
+ 		if (effective_res.height == 0 || effective_res.width == 0) {
+ 			effective_res = curr_pipe->stream->config.input_config.effective_res;
+ 
+-#if defined(ISP2401)
+-			/* The aspect ratio cropping is currently only
+-			    * supported on the new input system. */
+-			if (aspect_ratio_crop_check(aspect_ratio_crop_enabled, curr_pipe)) {
+-				struct ia_css_resolution crop_res;
+-
+-				err = aspect_ratio_crop(curr_pipe, &crop_res);
+-				if (!err) {
+-					effective_res = crop_res;
+-				} else {
+-					/* in case of error fallback to default
+-					    * effective resolution from driver. */
+-					IA_CSS_LOG("aspect_ratio_crop() failed with err(%d)", err);
+-				}
+-			}
+-#endif
+ 			curr_pipe->config.input_effective_res = effective_res;
+ 		}
+ 		IA_CSS_LOG("effective_res=%dx%d",
+@@ -10470,133 +10433,6 @@ ia_css_pipe_update_qos_ext_mapped_arg(struct ia_css_pipe *pipe,
+ 	return err;
  }
  
--#if CONFIG_ON_FRAME_ENQUEUE()
--static int set_config_on_frame_enqueue(struct ia_css_frame_info
--	*info, struct frame_data_wrapper *frame)
+-#ifdef ISP2401
+-static int
+-aspect_ratio_crop_init(struct ia_css_stream *curr_stream,
+-		       struct ia_css_pipe *pipes[],
+-		       bool *do_crop_status)
 -{
--	frame->config_on_frame_enqueue.padded_width = 0;
+-	int err = 0;
+-	int i;
+-	struct ia_css_pipe *curr_pipe;
+-	u32 pipe_mask = 0;
 -
--	/* currently we support configuration on frame enqueue only on YUV formats */
--	/* on other formats the padded_width is zeroed for no configuration override */
--	switch (info->format) {
--	case IA_CSS_FRAME_FORMAT_YUV420:
--	case IA_CSS_FRAME_FORMAT_NV12:
--		if (info->padded_width > info->res.width)
--			frame->config_on_frame_enqueue.padded_width = info->padded_width;
--		else if ((info->padded_width < info->res.width) && (info->padded_width > 0))
--			return -EINVAL;
+-	if ((!curr_stream) ||
+-	    (curr_stream->num_pipes == 0) ||
+-	    (!pipes) ||
+-	    (!do_crop_status)) {
+-		err = -EINVAL;
+-		IA_CSS_LEAVE_ERR(err);
+-		return err;
+-	}
 -
--		/* nothing to do if width == padded width or padded width is zeroed (the same) */
+-	for (i = 0; i < curr_stream->num_pipes; i++) {
+-		curr_pipe = pipes[i];
+-		pipe_mask |= (1 << curr_pipe->config.mode);
+-	}
+-
+-	*do_crop_status =
+-	(((pipe_mask & (1 << IA_CSS_PIPE_MODE_PREVIEW)) ||
+-	    (pipe_mask & (1 << IA_CSS_PIPE_MODE_VIDEO))) &&
+-	    (pipe_mask & (1 << IA_CSS_PIPE_MODE_CAPTURE)) &&
+-	    curr_stream->config.continuous);
+-	return 0;
+-}
+-
+-static bool
+-aspect_ratio_crop_check(bool enabled, struct ia_css_pipe *curr_pipe)
+-{
+-	bool status = false;
+-
+-	if ((curr_pipe) && enabled) {
+-		if ((curr_pipe->config.mode == IA_CSS_PIPE_MODE_PREVIEW) ||
+-		    (curr_pipe->config.mode == IA_CSS_PIPE_MODE_VIDEO) ||
+-		    (curr_pipe->config.mode == IA_CSS_PIPE_MODE_CAPTURE))
+-			status = true;
+-	}
+-
+-	return status;
+-}
+-
+-static int
+-aspect_ratio_crop(struct ia_css_pipe *curr_pipe,
+-		  struct ia_css_resolution *effective_res)
+-{
+-	int err = 0;
+-	struct ia_css_resolution crop_res;
+-	struct ia_css_resolution *in_res = NULL;
+-	struct ia_css_resolution *out_res = NULL;
+-	bool use_bds_output_info = false;
+-	bool use_vf_pp_in_res = false;
+-	bool use_capt_pp_in_res = false;
+-
+-	if ((!curr_pipe) ||
+-	    (!effective_res)) {
+-		err = -EINVAL;
+-		IA_CSS_LEAVE_ERR(err);
+-		return err;
+-	}
+-
+-	if ((curr_pipe->config.mode != IA_CSS_PIPE_MODE_PREVIEW) &&
+-	    (curr_pipe->config.mode != IA_CSS_PIPE_MODE_VIDEO) &&
+-	    (curr_pipe->config.mode != IA_CSS_PIPE_MODE_CAPTURE)) {
+-		err = -EINVAL;
+-		IA_CSS_LEAVE_ERR(err);
+-		return err;
+-	}
+-
+-	use_bds_output_info =
+-	((curr_pipe->bds_output_info.res.width != 0) &&
+-	    (curr_pipe->bds_output_info.res.height != 0));
+-
+-	use_vf_pp_in_res =
+-	((curr_pipe->config.vf_pp_in_res.width != 0) &&
+-	    (curr_pipe->config.vf_pp_in_res.height != 0));
+-
+-	use_capt_pp_in_res =
+-	((curr_pipe->config.capt_pp_in_res.width != 0) &&
+-	    (curr_pipe->config.capt_pp_in_res.height != 0));
+-
+-	in_res = &curr_pipe->stream->config.input_config.effective_res;
+-	out_res = &curr_pipe->output_info[0].res;
+-
+-	switch (curr_pipe->config.mode) {
+-	case IA_CSS_PIPE_MODE_PREVIEW:
+-		if (use_bds_output_info)
+-			out_res = &curr_pipe->bds_output_info.res;
+-		else if (use_vf_pp_in_res)
+-			out_res = &curr_pipe->config.vf_pp_in_res;
 -		break;
+-	case IA_CSS_PIPE_MODE_VIDEO:
+-		if (use_bds_output_info)
+-			out_res = &curr_pipe->bds_output_info.res;
+-		break;
+-	case IA_CSS_PIPE_MODE_CAPTURE:
+-		if (use_capt_pp_in_res)
+-			out_res = &curr_pipe->config.capt_pp_in_res;
+-		break;
+-	case IA_CSS_PIPE_MODE_ACC:
+-	case IA_CSS_PIPE_MODE_COPY:
+-	case IA_CSS_PIPE_MODE_YUVPP:
 -	default:
+-		IA_CSS_ERROR("aspect ratio cropping invalid args: mode[%d]\n",
+-			     curr_pipe->config.mode);
+-		assert(0);
 -		break;
 -	}
 -
--	return 0;
+-	err = ia_css_frame_find_crop_resolution(in_res, out_res, &crop_res);
+-	if (!err)
+-		*effective_res = crop_res;
+-	else
+-		/* in case of error fallback to default
+-		    * effective resolution from driver. */
+-		IA_CSS_LOG("ia_css_frame_find_crop_resolution() failed with err(%d)", err);
+-
+-	return err;
 -}
 -#endif
- 
- int
- ia_css_unlock_raw_frame(struct ia_css_stream *stream, uint32_t exp_id)
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_internal.h b/drivers/staging/media/atomisp/pci/sh_css_internal.h
-index 92fb7e67610c..f26df3f44a7a 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_internal.h
-+++ b/drivers/staging/media/atomisp/pci/sh_css_internal.h
-@@ -687,8 +687,6 @@ struct sh_css_sp_output {
- 	unsigned int		sw_interrupt_value[SH_CSS_NUM_SDW_IRQS];
- };
- 
--#define CONFIG_ON_FRAME_ENQUEUE() 0
 -
- /**
-  * @brief Data structure for the circular buffer.
-  * The circular buffer is empty if "start == end". The
-@@ -726,9 +724,6 @@ struct sh_css_hmm_buffer {
- 			u32	exp_id;
- 			u32	isp_parameters_id; /** Unique ID to track which config was
- 								actually applied to a particular frame */
--#if CONFIG_ON_FRAME_ENQUEUE()
--			struct sh_css_config_on_frame_enqueue config_on_frame_enqueue;
--#endif
- 		} frame;
- 		ia_css_ptr ddr_ptrs;
- 	} payload;
-@@ -744,16 +739,9 @@ struct sh_css_hmm_buffer {
- 	clock_value_t isys_eof_clock_tick;
- };
- 
--#if CONFIG_ON_FRAME_ENQUEUE()
--#define SIZE_OF_FRAME_STRUCT						\
--	(SIZE_OF_HRT_VADDRESS +						\
--	(3 * sizeof(uint32_t)) +					\
--	sizeof(uint32_t))
--#else
- #define SIZE_OF_FRAME_STRUCT						\
- 	(SIZE_OF_HRT_VADDRESS +						\
- 	(3 * sizeof(uint32_t)))
--#endif
- 
- #define SIZE_OF_PAYLOAD_UNION						\
- 	(MAX(MAX(MAX(MAX(						\
+ static void
+ sh_css_hmm_buffer_record_init(void)
+ {
 -- 
 2.33.1
 
