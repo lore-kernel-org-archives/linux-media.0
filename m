@@ -2,50 +2,49 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 893B8C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:32:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA72EC433F5
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:32:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5D7FE613AD
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:32:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B698E613AD
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:32:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbhKPLfI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Nov 2021 06:35:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35390 "EHLO mail.kernel.org"
+        id S235392AbhKPLfJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Nov 2021 06:35:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35168 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235135AbhKPLcl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235133AbhKPLcl (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 16 Nov 2021 06:32:41 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B4C1363213;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AA42C63220;
         Tue, 16 Nov 2021 11:29:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637062148;
-        bh=5lb+VVTdBmVUhauXjjhq3dpB2TX8upwkl7EqKv4fXiU=;
+        bh=NPm8N4ShvwZEb63+8x3Mv3yvsEQXpPLe5iTnhSZmgA4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ugIwfIk0SAoCMco9ueHVivlZimyckcitHvYi6OUnUSrujYVhV6jB+lb7yw9KWu3GA
-         DXKrEpTvHMe262kFDLmzrGI9hoIc4iQv5KvNl26FMnohsDtHOx+nsO2AQq4TsNRYGK
-         dwqr22sZGQM3HbL4+lPk/FvdMTSeHR3R2Hy+3XSZd62Eu/68L1LxGnRt1raZHeGb/S
-         SfAy+yxew7b5++sVQYTzU0Ul0F3jcfo6Z48RuTBW8ZZqJnNUdY35J4DCS8uikj6jMc
-         olxDzA/0r+rO1dcSXTR0GoUSluCLTildjgZ5T0Qj/3CjfwqDzO27rqYUJIFUfxLdHo
-         DpuoXVeF1nBKg==
+        b=SAZUpXgWzraGgfICJE+EUV4QP4Y6+xxNyzjrlJYxz7TQ+iZXygp3VOody0y/ROylY
+         ClX8u3tOCSBDEqzQztLS6aqmlILni2bBn7I4oJ5s/+So9hpZ+O88NSazYU6ovKuk2V
+         XKGZNVc+oGYo9cgN+4Z+28DFkSYw9aJHsxSVtgpj0sOiyOi8CmgvjEe5RhEeo7W2YV
+         BYuiQkc8UlEphLEIUdO1AeqN6tACNbMX9csuWq80r4NWXt5ZLyFDSAw0uuHWKxMwxi
+         R1wyIS4C1NAKzoFAGcaaWJ9ASkEykYg0eG6Crc7NWZEcd+Kyj0JpNLFGxvfV72TvjL
+         TLGQFU7mux5gA==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mmwe9-008QfX-GK; Tue, 16 Nov 2021 11:29:05 +0000
+        id 1mmwe9-008Qg7-N8; Tue, 16 Nov 2021 11:29:05 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Alex Dewar <alex.dewar90@gmail.com>,
         Deepak R Varma <drv@mailo.com>,
-        Ding Xiang <dingxiang@cmss.chinamobile.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Martiros Shakhzadyan <vrzh@vrzh.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Yang Li <abaci-bugfix@linux.alibaba.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH 09/23] media: atomisp: remove #ifdef HAS_OUTPUT_SYSTEM
-Date:   Tue, 16 Nov 2021 11:28:50 +0000
-Message-Id: <198fee2609f7f1d1c780d58dbb16a1042d8f419c.1637061474.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 21/23] media: atomisp: warn if mipi de-allocation failed
+Date:   Tue, 16 Nov 2021 11:29:02 +0000
+Message-Id: <ed5523284722c3d8a3b8fe5913ff51ee21d52af8.1637061474.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637061474.git.mchehab+huawei@kernel.org>
 References: <cover.1637061474.git.mchehab+huawei@kernel.org>
@@ -57,8 +56,9 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-None of the firmwares we use has support for it. So, drop the
-unused code.
+There's a note at the uninit function that warns about issues
+with mipi frames de-allocation. print a warning if the problem
+ever happens.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -66,44 +66,70 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1637061474.git.mchehab+huawei@kernel.org/
 
- drivers/staging/media/atomisp/pci/sh_css.c        | 2 --
- drivers/staging/media/atomisp/pci/sh_css_params.c | 3 ---
- 2 files changed, 5 deletions(-)
+ drivers/staging/media/atomisp/pci/sh_css.c      |  6 +++++-
+ drivers/staging/media/atomisp/pci/sh_css_mipi.c | 11 +++++++++++
+ drivers/staging/media/atomisp/pci/sh_css_mipi.h |  2 ++
+ 3 files changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index 51dbd4e495d0..3a347b72e4bd 100644
+index 12dfecbb6145..8bcf610ccae3 100644
 --- a/drivers/staging/media/atomisp/pci/sh_css.c
 +++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -5507,7 +5507,6 @@ static int load_video_binaries(struct ia_css_pipe *pipe)
- 	(void)continuous;
- #endif
+@@ -20,6 +20,8 @@
  
--#if !defined(HAS_OUTPUT_SYSTEM)
- 	if (pipe->enable_viewfinder[IA_CSS_PIPE_OUTPUT_STAGE_0] && need_vf_pp) {
- 		struct ia_css_binary_descr vf_pp_descr;
+ #include "hmm.h"
  
-@@ -5533,7 +5532,6 @@ static int load_video_binaries(struct ia_css_pipe *pipe)
- 		if (err)
- 			return err;
- 	}
--#endif
++#include "atomisp_internal.h"
++
+ #include "ia_css.h"
+ #include "sh_css_hrt.h"		/* only for file 2 MIPI */
+ #include "ia_css_buffer.h"
+@@ -2286,7 +2288,9 @@ ia_css_uninit(void)
+ 	sh_css_params_free_default_gdc_lut();
  
- 	err = allocate_delay_frames(pipe);
+ 	/* TODO: JB: implement decent check and handling of freeing mipi frames */
+-	//assert(ref_count_mipi_allocation == 0); //mipi frames are not freed
++	if (!mipi_is_free())
++		dev_warn(atomisp_dev, "mipi frames are not freed.\n");
++
+ 	/* cleanup generic data */
+ 	sh_css_params_uninit();
+ 	ia_css_refcount_uninit();
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_mipi.c b/drivers/staging/media/atomisp/pci/sh_css_mipi.c
+index 87f1df575d9f..cfaa4719177c 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_mipi.c
++++ b/drivers/staging/media/atomisp/pci/sh_css_mipi.c
+@@ -261,6 +261,17 @@ mipi_init(void)
+ 		ref_count_mipi_allocation[i] = 0;
+ }
  
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-index ccc007879564..b3ef6b4c3225 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-@@ -96,9 +96,6 @@
++bool mipi_is_free(void)
++{
++	unsigned int i;
++
++	for (i = 0; i < N_CSI_PORTS; i++)
++		if (ref_count_mipi_allocation[i])
++			return false;
++
++	return true;
++}
++
+ int
+ calculate_mipi_buff_size(
+     struct ia_css_stream_config *stream_cfg,
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_mipi.h b/drivers/staging/media/atomisp/pci/sh_css_mipi.h
+index 52f08a103883..dffec2205620 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_mipi.h
++++ b/drivers/staging/media/atomisp/pci/sh_css_mipi.h
+@@ -23,6 +23,8 @@
+ void
+ mipi_init(void);
  
- #include "xnr/xnr_3.0/ia_css_xnr3.host.h"
++bool mipi_is_free(void);
++
+ int
+ allocate_mipi_frames(struct ia_css_pipe *pipe, struct ia_css_stream_info *info);
  
--#if defined(HAS_OUTPUT_SYSTEM)
--#include <components/output_system/sc_output_system_1.0/host/output_system.host.h>
--#endif
- 
- #include "sh_css_frac.h"
- #include "ia_css_bufq.h"
 -- 
 2.33.1
 
