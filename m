@@ -2,49 +2,43 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B762C4321E
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 258F3C433FE
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3504563210
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E2BD63223
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235098AbhKPLce (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Nov 2021 06:32:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34766 "EHLO mail.kernel.org"
+        id S235107AbhKPLcd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Nov 2021 06:32:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34522 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235083AbhKPLcF (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235077AbhKPLcF (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 16 Nov 2021 06:32:05 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5314A61B39;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1966061360;
         Tue, 16 Nov 2021 11:29:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637062148;
-        bh=l7NZiSDJabx9ABJweVm8PSddhwj8pVnGlFgRNwIG9r0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AR4PxvAvohd8nE29x8vJ75xYXcvjYDk6kRIG5TUesXvWSwqniq4Ba8fyjDuD+72e1
-         6r8H+3u+cCCp4uS27GeVkMcZZ9v99pQeNz05bs1Ojn/Zn/sGU6yAN4ceRm7Am6KEYo
-         zjqW2s8YhwIWGjz9DuaJhn1ffkxCc/uunpgCnMulLb+F7yUZHQJg+ilGf6dxgezRRS
-         bwbw8kOrIdalBWFHX9+McB7soD12IYv2HyVRcgkmlRlpAew7Gpn6/KWGMhKq7zusXB
-         6SHmWleMAO5e8EHMLMQ/YzMYd9ORZfOxFLzNZTZXITIqZb4ywjRjP1RkPzpeSe1fy+
-         mBB2Ds/WZlblg==
+        bh=sbQUWbkKMQcMFCkCOVifskmdo2GFngWUi5Cf2N0FhSc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TxTpSCPdqBgqJtC/2O0IOqli/CGu8kh1KfofpeeoB9ac6EpLS7ZXq9zDPyq0v1FJ/
+         b6zmdEcTv0HIQrIXvqcdZPobXwRxbU5LaxDVm5hiU1uunJ4G05OHR8Hc22YyKjjaJJ
+         e+o4VVLP//r4s4M/gGYnkgE/sR6x7tGYRlrUlL+bU4NHHvtEQrDYE2gmYq67ikn6S+
+         iCeP8R/49zHcbxDzZ3ZSZLfVAk35ZM4XIauaqRR+zke1cCvtWBufkgpHKbxqvDamIR
+         Bk1BVD40OGEVu2aufHPApK3kk+QrdH8w4ub8r732evf75ZeotlWaMa1q056BGm349X
+         obmQN9iHK0E3w==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mmwe9-008QfU-Fj; Tue, 16 Nov 2021 11:29:05 +0000
+        id 1mmwe9-008Qf6-A9; Tue, 16 Nov 2021 11:29:05 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Martiros Shakhzadyan <vrzh@vrzh.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH 08/23] media: atomisp: drop an useless #ifdef ISP2401
-Date:   Tue, 16 Nov 2021 11:28:49 +0000
-Message-Id: <2ee0cc013a060a634fefbd75f4ea1179dd57eb66.1637061474.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 00/23] Make the code closer to candrpv_0415 firmware
+Date:   Tue, 16 Nov 2021 11:28:41 +0000
+Message-Id: <cover.1637061474.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1637061474.git.mchehab+huawei@kernel.org>
-References: <cover.1637061474.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -53,33 +47,62 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Yocto Aero driver for ISP2401 sets my_css_save.loaded_fw.
-As we're using the same firmware, remove the ifdef there.
+As we adopt for ISP2401 the candrpv_0415_20150521_0458, which
+comes together with the Intel Aero device driver, makes the code at sh_css
+a lot closer to the Aero driver.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
+Tested on Asus T101HA.
 
-To mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1637061474.git.mchehab+huawei@kernel.org/
+Mauro Carvalho Chehab (23):
+  media: atomisp: get rid of phys event abstractions
+  media: atomisp: get rid of if CONFIG_ON_FRAME_ENQUEUE
+  media: atomisp: shift some structs from input_system_local
+  media: atomisp: ia_css_stream.h: remove ifdefs from the header
+  media: atomisp: fix comments coding style at sh_css.c
+  media: atomisp: Avoid some {} just to define new vars
+  media: atomisp: drop two vars that are currently ignored
+  media: atomisp: drop an useless #ifdef ISP2401
+  media: atomisp: remove #ifdef HAS_OUTPUT_SYSTEM
+  media: atomisp: drop #ifdef SH_CSS_ENABLE_PER_FRAME_PARAMS
+  media: atomisp: drop #ifdef WITH_PC_MONITORING
+  media: atomisp: remove #ifdef SH_CSS_ENABLE_METADATA
+  media: atomisp: solve #ifdef HAS_NO_PACKED_RAW_PIXELS
+  media: atomisp: drop crop code at stream create function
+  media: atomisp: get rid of ia_css_stream_load()
+  media: atomisp: unify ia_css_stream stop logic
+  media: atomisp: drop ia_css_pipe_update_qos_ext_mapped_arg
+  media: atomisp: drop a dead code
+  media: atomisp: get rid of some weird warn-suppress logic
+  media: atomisp: drop check_pipe_resolutions() logic
+  media: atomisp: warn if mipi de-allocation failed
+  media: atomisp: make sh_css similar to Intel Aero driver
+  media: atomisp: get rid of #ifdef ISP_VEC_NELEMS
 
- drivers/staging/media/atomisp/pci/sh_css.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ .../staging/media/atomisp/pci/atomisp_cmd.c   |    2 +-
+ .../media/atomisp/pci/atomisp_compat.h        |    2 -
+ .../media/atomisp/pci/atomisp_compat_css20.c  |   10 +-
+ .../pci/camera/pipe/src/pipe_binarydesc.c     |    2 -
+ .../media/atomisp/pci/ia_css_event_public.h   |   17 +-
+ .../media/atomisp/pci/ia_css_pipe_public.h    |   23 -
+ .../staging/media/atomisp/pci/ia_css_stream.h |    4 -
+ .../media/atomisp/pci/ia_css_stream_public.h  |    9 -
+ .../media/atomisp/pci/input_system_local.h    |  134 ++
+ .../pci/isp/modes/interface/isp_const.h       |   10 -
+ .../atomisp/pci/isp2400_input_system_local.h  |  126 --
+ .../atomisp/pci/isp2401_input_system_local.h  |   26 -
+ .../pci/runtime/pipeline/src/pipeline.c       |    3 +-
+ drivers/staging/media/atomisp/pci/sh_css.c    | 1918 +++++------------
+ .../staging/media/atomisp/pci/sh_css_defs.h   |   10 -
+ .../media/atomisp/pci/sh_css_internal.h       |   26 +-
+ .../staging/media/atomisp/pci/sh_css_mipi.c   |   15 +-
+ .../staging/media/atomisp/pci/sh_css_mipi.h   |    2 +
+ .../staging/media/atomisp/pci/sh_css_params.c |   20 -
+ drivers/staging/media/atomisp/pci/sh_css_sp.c |   22 +-
+ drivers/staging/media/atomisp/pci/sh_css_sp.h |    7 +-
+ .../staging/media/atomisp/pci/system_global.h |    3 -
+ 22 files changed, 723 insertions(+), 1668 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index 3aa4f8bc39c4..51dbd4e495d0 100644
---- a/drivers/staging/media/atomisp/pci/sh_css.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -1742,9 +1742,8 @@ ia_css_init(struct device *dev, const struct ia_css_env *env,
- 			return err;
- 		}
- 		fw_explicitly_loaded = false;
--#ifndef ISP2401
-+
- 		my_css_save.loaded_fw = (struct ia_css_fw *)fw;
--#endif
- 	}
- 	if (!sh_css_setup_spctrl_config(&sh_css_sp_fw, SP_PROG_NAME, &spctrl_cfg))
- 		return -EINVAL;
 -- 
 2.33.1
+
 
