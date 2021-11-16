@@ -2,46 +2,50 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D79D1C433FE
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42815C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2DA963246
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2CFEE61BF4
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbhKPLcl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Nov 2021 06:32:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35168 "EHLO mail.kernel.org"
+        id S235249AbhKPLcs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Nov 2021 06:32:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234927AbhKPLcY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Nov 2021 06:32:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7281761B51;
+        id S235030AbhKPLc3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 16 Nov 2021 06:32:29 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8282261BD3;
         Tue, 16 Nov 2021 11:29:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637062148;
-        bh=gWp7Q5OcUMbSrjA+glZBbTwuIwaxNfe2bcpzG3cOVCY=;
+        bh=paX1NcGqaRuZDTYMaz3hJFdjIFsWmOGpcYD5MKo09HI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cv7FEYP+1nvzx/kKLe67UukYPs3r3VEOlT2ICQCCgSG/vMIKupsWBZ4TU6+JKMb30
-         mFfmXIuCB/eTGYhvfMOX83JOWVrEwRom2PEHT0Qch5q/xyd86x4Pd+62SP80aGG0ph
-         6SkqLbSvVvRGRbrtrveiOC2dBVNyOf1idaaxoyaFdq4YYSyqMNvlI1TtVktzMlkm6z
-         M/G1jc4dxRNrVJHANto+0ANUv2veacDN+vBQoRenDvWZ2SaUVlIcx9lqU6KDS9+2MJ
-         8/howmFBpIA2k85GuwaFeSZaHlMfpMC0z5oNGQcgdNpUNtI+LNSAyAicdbOj3EBrah
-         Muc2cFYZzA3Tg==
+        b=DqecrIVKX3gkKt6kTP4R84IdkNIBRer3dQhmc02t/pdBq/L1PkLCOi/vO4CCW6I2D
+         Vv+a4SnWQ2vWo3TqZ56cMQgsRlm9oU7/XqaAlcL3/Ox8Sgh3wiN2yasqy00fPB/Ovh
+         D9F6TR6kqbxlcpBHl0bz82ukfdDNzxcbbVB/FjY7zHRogoicGskBAivc+vBHsC7jvW
+         VH/oDW1NjcyMC8S1VQMYc6Qn3ySXaaV6GOK6xpcQKyNKKHMvNDkcQ4nIToQft5lOtP
+         GMXTDx1KDaSE9eiF4hfWuzpjlFIKp0x4M+fF+Lw1muAk3szKbn6QjV5hGSSfoekfIg
+         DjpPsktr4sV9A==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mmwe9-008QfO-EU; Tue, 16 Nov 2021 11:29:05 +0000
+        id 1mmwe9-008QfC-BS; Tue, 16 Nov 2021 11:29:05 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Martiros Shakhzadyan <vrzh@vrzh.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH 06/23] media: atomisp: Avoid some {} just to define new vars
-Date:   Tue, 16 Nov 2021 11:28:47 +0000
-Message-Id: <36eeb875621908a8304940c79d52f7ece969b24b.1637061474.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 02/23] media: atomisp: get rid of if CONFIG_ON_FRAME_ENQUEUE
+Date:   Tue, 16 Nov 2021 11:28:43 +0000
+Message-Id: <ef712e076740f5f47ac2c58d384f9ac5ce809604.1637061474.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637061474.git.mchehab+huawei@kernel.org>
 References: <cover.1637061474.git.mchehab+huawei@kernel.org>
@@ -53,9 +57,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are a couple of places where {} are used just to
-define a new var. Just move the var to the top of the function
-and get rid of that ugly blocks.
+This is not used with supported firmwares, so get rid of such code.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -63,126 +65,113 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1637061474.git.mchehab+huawei@kernel.org/
 
- drivers/staging/media/atomisp/pci/sh_css.c | 51 +++++++++-------------
- 1 file changed, 20 insertions(+), 31 deletions(-)
+ drivers/staging/media/atomisp/pci/sh_css.c    | 38 -------------------
+ .../media/atomisp/pci/sh_css_internal.h       | 12 ------
+ 2 files changed, 50 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index 5ee777909cce..ac3519d08971 100644
+index c714c15c49d2..bd3f96bd7d6d 100644
 --- a/drivers/staging/media/atomisp/pci/sh_css.c
 +++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -3884,6 +3884,7 @@ preview_start(struct ia_css_pipe *pipe)
- 	enum ia_css_input_mode preview_pipe_input_mode;
- 	const struct ia_css_coordinate *coord = NULL;
- 	const struct ia_css_isp_parameters *params = NULL;
-+	unsigned int thread_id;
+@@ -384,10 +384,6 @@ ia_css_get_acc_configs(
+     struct ia_css_pipe *pipe,
+     struct ia_css_isp_config *config);
  
- 	IA_CSS_ENTER_PRIVATE("pipe = %p", pipe);
- 	if ((!pipe) || (!pipe->stream) || (pipe->mode != IA_CSS_PIPE_ID_PREVIEW)) {
-@@ -3907,17 +3908,13 @@ preview_start(struct ia_css_pipe *pipe)
- 	}
- 	send_raw_frames(pipe);
+-#if CONFIG_ON_FRAME_ENQUEUE()
+-static int set_config_on_frame_enqueue(struct ia_css_frame_info
+-	*info, struct frame_data_wrapper *frame);
+-#endif
  
--	{
--		unsigned int thread_id;
-+	ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
-+	copy_ovrd = 1 << thread_id;
+ #ifdef ISP2401
+ static unsigned int get_crop_lines_for_bayer_order(const struct
+@@ -4071,15 +4067,6 @@ ia_css_pipe_enqueue_buffer(struct ia_css_pipe *pipe,
+ 				    "ia_css_pipe_enqueue_buffer() buf_type=%d, data(DDR address)=0x%x\n",
+ 				    buf_type, buffer->data.frame->data);
  
--		ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
--		copy_ovrd = 1 << thread_id;
--
--		if (pipe->stream->cont_capt) {
--			ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(capture_pipe),
--							 &thread_id);
--			copy_ovrd |= 1 << thread_id;
+-#if CONFIG_ON_FRAME_ENQUEUE()
+-		return_err = set_config_on_frame_enqueue(
+-				 &buffer->data.frame->info,
+-				 &ddr_buffer.payload.frame);
+-		if (return_err) {
+-			IA_CSS_LEAVE_ERR(return_err);
+-			return return_err;
 -		}
-+	if (pipe->stream->cont_capt) {
-+		ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(capture_pipe),
-+						    &thread_id);
-+		copy_ovrd |= 1 << thread_id;
+-#endif
  	}
  
- 	if (IS_ISP2401) {
-@@ -5653,9 +5650,9 @@ static int video_start(struct ia_css_pipe *pipe)
- 	struct ia_css_pipe *copy_pipe, *capture_pipe;
- 	enum sh_css_pipe_config_override copy_ovrd;
- 	enum ia_css_input_mode video_pipe_input_mode;
+ 	/* start of test for using rmgr for acq/rel memory */
+@@ -10311,31 +10298,6 @@ void ia_css_pipe_map_queue(struct ia_css_pipe *pipe, bool map)
+ 	IA_CSS_LEAVE("");
+ }
+ 
+-#if CONFIG_ON_FRAME_ENQUEUE()
+-static int set_config_on_frame_enqueue(struct ia_css_frame_info
+-	*info, struct frame_data_wrapper *frame)
+-{
+-	frame->config_on_frame_enqueue.padded_width = 0;
 -
- 	const struct ia_css_coordinate *coord = NULL;
- 	const struct ia_css_isp_parameters *params = NULL;
-+	unsigned int thread_id;
- 
- 	IA_CSS_ENTER_PRIVATE("pipe = %p", pipe);
- 	if ((!pipe) || (pipe->mode != IA_CSS_PIPE_ID_VIDEO)) {
-@@ -5677,17 +5674,14 @@ static int video_start(struct ia_css_pipe *pipe)
- 		return err;
- 
- 	send_raw_frames(pipe);
--	{
--		unsigned int thread_id;
- 
--		ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
--		copy_ovrd = 1 << thread_id;
-+	ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
-+	copy_ovrd = 1 << thread_id;
- 
--		if (pipe->stream->cont_capt) {
--			ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(capture_pipe),
--							 &thread_id);
--			copy_ovrd |= 1 << thread_id;
--		}
-+	if (pipe->stream->cont_capt) {
-+		ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(capture_pipe),
-+						    &thread_id);
-+		copy_ovrd |= 1 << thread_id;
- 	}
- 
- 	if (IS_ISP2401) {
-@@ -7254,6 +7248,7 @@ static int yuvpp_start(struct ia_css_pipe *pipe)
- 	int err = 0;
- 	enum sh_css_pipe_config_override copy_ovrd;
- 	enum ia_css_input_mode yuvpp_pipe_input_mode;
-+	unsigned int thread_id;
- 
- 	IA_CSS_ENTER_PRIVATE("pipe = %p", pipe);
- 	if ((!pipe) || (pipe->mode != IA_CSS_PIPE_ID_YUVPP)) {
-@@ -7273,12 +7268,8 @@ static int yuvpp_start(struct ia_css_pipe *pipe)
- 		return err;
- 	}
- 
--	{
--		unsigned int thread_id;
+-	/* currently we support configuration on frame enqueue only on YUV formats */
+-	/* on other formats the padded_width is zeroed for no configuration override */
+-	switch (info->format) {
+-	case IA_CSS_FRAME_FORMAT_YUV420:
+-	case IA_CSS_FRAME_FORMAT_NV12:
+-		if (info->padded_width > info->res.width)
+-			frame->config_on_frame_enqueue.padded_width = info->padded_width;
+-		else if ((info->padded_width < info->res.width) && (info->padded_width > 0))
+-			return -EINVAL;
 -
--		ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
--		copy_ovrd = 1 << thread_id;
+-		/* nothing to do if width == padded width or padded width is zeroed (the same) */
+-		break;
+-	default:
+-		break;
 -	}
-+	ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
-+	copy_ovrd = 1 << thread_id;
+-
+-	return 0;
+-}
+-#endif
  
- 	start_pipe(pipe, copy_ovrd, yuvpp_pipe_input_mode);
+ int
+ ia_css_unlock_raw_frame(struct ia_css_stream *stream, uint32_t exp_id)
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_internal.h b/drivers/staging/media/atomisp/pci/sh_css_internal.h
+index 92fb7e67610c..f26df3f44a7a 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_internal.h
++++ b/drivers/staging/media/atomisp/pci/sh_css_internal.h
+@@ -687,8 +687,6 @@ struct sh_css_sp_output {
+ 	unsigned int		sw_interrupt_value[SH_CSS_NUM_SDW_IRQS];
+ };
  
-@@ -8105,6 +8096,7 @@ create_host_capture_pipeline(struct ia_css_pipe *pipe)
- static int capture_start(struct ia_css_pipe *pipe)
- {
- 	struct ia_css_pipeline *me;
-+	unsigned int thread_id;
+-#define CONFIG_ON_FRAME_ENQUEUE() 0
+-
+ /**
+  * @brief Data structure for the circular buffer.
+  * The circular buffer is empty if "start == end". The
+@@ -726,9 +724,6 @@ struct sh_css_hmm_buffer {
+ 			u32	exp_id;
+ 			u32	isp_parameters_id; /** Unique ID to track which config was
+ 								actually applied to a particular frame */
+-#if CONFIG_ON_FRAME_ENQUEUE()
+-			struct sh_css_config_on_frame_enqueue config_on_frame_enqueue;
+-#endif
+ 		} frame;
+ 		ia_css_ptr ddr_ptrs;
+ 	} payload;
+@@ -744,16 +739,9 @@ struct sh_css_hmm_buffer {
+ 	clock_value_t isys_eof_clock_tick;
+ };
  
- 	int err = 0;
- 	enum sh_css_pipe_config_override copy_ovrd;
-@@ -8145,12 +8137,9 @@ static int capture_start(struct ia_css_pipe *pipe)
+-#if CONFIG_ON_FRAME_ENQUEUE()
+-#define SIZE_OF_FRAME_STRUCT						\
+-	(SIZE_OF_HRT_VADDRESS +						\
+-	(3 * sizeof(uint32_t)) +					\
+-	sizeof(uint32_t))
+-#else
+ #define SIZE_OF_FRAME_STRUCT						\
+ 	(SIZE_OF_HRT_VADDRESS +						\
+ 	(3 * sizeof(uint32_t)))
+-#endif
  
- #endif
- 
--	{
--		unsigned int thread_id;
-+	ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
-+	copy_ovrd = 1 << thread_id;
- 
--		ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
--		copy_ovrd = 1 << thread_id;
--	}
- 	start_pipe(pipe, copy_ovrd, pipe->stream->config.mode);
- 
- #if !defined(ISP2401)
+ #define SIZE_OF_PAYLOAD_UNION						\
+ 	(MAX(MAX(MAX(MAX(						\
 -- 
 2.33.1
 
