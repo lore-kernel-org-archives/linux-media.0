@@ -2,378 +2,294 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CC8CC433EF
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:32:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 986F3C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:43:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 792996141B
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:32:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73CC0633D5
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:43:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235510AbhKPLfS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Nov 2021 06:35:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35184 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235189AbhKPLco (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Nov 2021 06:32:44 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A213261BF6;
-        Tue, 16 Nov 2021 11:29:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637062148;
-        bh=pLvEitHi25Sj0Gs1Tw+e+91BublgvdDb7EyvZ6K2fS4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gFYaD7kyGDOi7qKzBvRQbMIyVIhUjM93lpCM27NKlarfQJL3799coXafLhzZdqyYb
-         RGuerRjykx10fYh+R+3hCiIXXwJZuKiWIj8fm+gxsIqjvhb5RDm13LzNg5jPNWL5FB
-         oLxi15g5Ra5yTOkhOoLaWV8Bfh0Lh9qg0/sKc9W9pOwrVwVtzqmTYP6Egi8Cj2iQKb
-         JJU4f2r+3I6fHkHlHIY7Iu6YFXlmgWdFdkRa/7zmPU8KwYPF2xYfLLuhzd45ogSuap
-         qeMucDTAMJv1g/eaHco+Z4TCLlTDUuw4GkV5beaV0x5bTify/ikEvT++Q2106rYmkg
-         fGg7d2TzkqFBQ==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mmwe9-008QgA-Ne; Tue, 16 Nov 2021 11:29:05 +0000
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S235353AbhKPLpx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Nov 2021 06:45:53 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:48828 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235005AbhKPLpt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 16 Nov 2021 06:45:49 -0500
+X-UUID: 8b2e313bbecd436fadeb9039d1e675d3-20211116
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=ehLRWIvN/Vbo7MUdogH2RR6ce82KmTl9eWn+pnC8mhk=;
+        b=jIyTWFdtLkwPcUh2WBS+H1OFV8Kah/zntGt9pSlsiM7hJT8vZ/Z4gjx8/G5x7VXPjLmPmjkuu4XMol9a7bpSSF8w6pExcc7HOUAyVmGoWZgF4+zJHB8CQ4FZL+mW9EimBE7fE1VXJacITLaGmzvsGHWyVfvKEw2S1kBDEkh8d1o=;
+X-UUID: 8b2e313bbecd436fadeb9039d1e675d3-20211116
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1863436103; Tue, 16 Nov 2021 19:42:47 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 16 Nov 2021 19:42:45 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 16 Nov 2021 19:42:44 +0800
+Message-ID: <3090aba86fbe22c014c0df0f5ce933fdf19b3952.camel@mediatek.com>
+Subject: Re: [PATCH v10, 00/19] Support multi hardware decode using
+ of_platform_populate
+From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+CC:     Alexandre Courbot <acourbot@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Martiros Shakhzadyan <vrzh@vrzh.net>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        "Tiffany Lin" <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH 22/23] media: atomisp: make sh_css similar to Intel Aero driver
-Date:   Tue, 16 Nov 2021 11:29:03 +0000
-Message-Id: <3ce81621f5fe97c490745185260f70ddb401b0ec.1637061474.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1637061474.git.mchehab+huawei@kernel.org>
-References: <cover.1637061474.git.mchehab+huawei@kernel.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        "Benjamin Gaignard" <benjamin.gaignard@collabora.com>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "Hsin-Yi Wang" <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        "Dafna Hirschfeld" <dafna.hirschfeld@collabora.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-media <linux-media@vger.kernel.org>
+Date:   Tue, 16 Nov 2021 19:42:44 +0800
+In-Reply-To: <CAAEAJfDrCihxPEnV8K=Unj7ejzqgcUOrP9pZO71DYDHCtWDdVQ@mail.gmail.com>
+References: <20211111041500.17363-1-yunfei.dong@mediatek.com>
+         <CAAEAJfDrCihxPEnV8K=Unj7ejzqgcUOrP9pZO71DYDHCtWDdVQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As we're using the firmware from Intel Aero, ensure that the
-logic inside sh_css as similar as possible to such driver.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
-
-To mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1637061474.git.mchehab+huawei@kernel.org/
-
- drivers/staging/media/atomisp/pci/sh_css.c | 150 +++------------------
- 1 file changed, 19 insertions(+), 131 deletions(-)
-
-diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index 8bcf610ccae3..e5e22f966286 100644
---- a/drivers/staging/media/atomisp/pci/sh_css.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -210,7 +210,6 @@ ia_css_pipe_check_format(struct ia_css_pipe *pipe,
- 
- /* ISP 2401 */
- static int
--static int
- ia_css_pipe_load_extension(struct ia_css_pipe *pipe,
- 			   struct ia_css_fw_info *firmware);
- 
-@@ -1023,17 +1022,6 @@ sh_css_config_input_network(struct ia_css_stream *stream)
- 			pipe = stream->last_pipe->pipe_settings.video.copy_pipe;
- 	} else {
- 		pipe = stream->last_pipe;
--		if (stream->last_pipe->config.mode == IA_CSS_PIPE_MODE_CAPTURE) {
--			/*
--			 * We need to poll the ISYS HW in capture_indication itself
--			 * for "non-continuous" capture usecase for getting accurate
--			 * isys frame capture timestamps.
--			 * This is because the capturepipe propcessing takes longer
--			 * to execute than the input system frame capture.
--			 * 2401 specific
--			 */
--			early_polling = true;
--		}
- 	}
- 
- 	if (!pipe)
-@@ -2695,17 +2683,6 @@ load_preview_binaries(struct ia_css_pipe *pipe)
- 	if (err)
- 		return err;
- 
--	if (IS_ISP2401) {
--		/* The delay latency determines the number of invalid frames after
--		* a stream is started. */
--		pipe->num_invalid_frames = pipe->dvs_frame_delay;
--		pipe->info.num_invalid_frames = pipe->num_invalid_frames;
--
--		ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE,
--				    "load_preview_binaries() num_invalid_frames=%d dvs_frame_delay=%d\n",
--				    pipe->num_invalid_frames, pipe->dvs_frame_delay);
--	}
--
- 	/* The vf_pp binary is needed when (further) YUV downscaling is required */
- 	need_vf_pp |= mycs->preview_binary.out_frame_info[0].res.width != pipe_out_info->res.width;
- 	need_vf_pp |= mycs->preview_binary.out_frame_info[0].res.height != pipe_out_info->res.height;
-@@ -4847,6 +4824,8 @@ sh_css_pipe_get_grid_info(struct ia_css_pipe *pipe,
- 		ia_css_binary_dvs_stat_grid_info(binary, info, pipe);
- 	} else {
- 		memset(&info->dvs_grid, 0, sizeof(info->dvs_grid));
-+		memset(&info->dvs_grid.dvs_stat_grid_info, 0,
-+			   sizeof(info->dvs_grid.dvs_stat_grid_info));
- 	}
- 
- 	if (binary) {
-@@ -5173,35 +5152,10 @@ static int load_video_binaries(struct ia_css_pipe *pipe)
- 		return err;
- 
- 	if (mycs->video_binary.info->sp.enable.block_output) {
--		unsigned int tnr_width;
--		unsigned int tnr_height;
--
- 		tnr_info = mycs->video_binary.out_frame_info[0];
- 
--		if (IS_ISP2401) {
--			/* Select resolution for TNR. If
--			* output_system_in_resolution(GDC_out_resolution) is
--			* being used, then select that as it will also be in resolution for
--			* TNR. At present, it only make sense for Skycam */
--			if (pipe->config.output_system_in_res.width &&
--			    pipe->config.output_system_in_res.height) {
--				tnr_width = pipe->config.output_system_in_res.width;
--				tnr_height = pipe->config.output_system_in_res.height;
--			} else {
--				tnr_width = tnr_info.res.width;
--				tnr_height = tnr_info.res.height;
--			}
--
--			/* Make tnr reference buffers output block width(in pix) align */
--			tnr_info.res.width  = CEIL_MUL(tnr_width,
--						       (mycs->video_binary.info->sp.block.block_width * ISP_NWAY));
--			tnr_info.padded_width = tnr_info.res.width;
--		} else {
--			tnr_height = tnr_info.res.height;
--		}
--
- 		/* Make tnr reference buffers output block height align */
--		tnr_info.res.height = CEIL_MUL(tnr_height,
-+		tnr_info.res.height = CEIL_MUL(tnr_info.res.height,
- 					       mycs->video_binary.info->sp.block.output_block_height);
- 	} else {
- 		tnr_info = mycs->video_binary.internal_frame_info;
-@@ -5434,12 +5388,6 @@ static bool need_capture_pp(
- 	assert(pipe);
- 	assert(pipe->mode == IA_CSS_PIPE_ID_CAPTURE);
- 
--	if (IS_ISP2401) {
--		/* ldc and capture_pp are not supported in the same pipeline */
--		if (need_capt_ldc(pipe))
--			return false;
--	}
--
- 	/* determine whether we need to use the capture_pp binary.
- 	 * This is needed for:
- 	 *   1. XNR or
-@@ -5648,33 +5596,13 @@ static int load_primary_binaries(
- 
- 	/* TODO Do we disable ldc for skycam */
- 	need_ldc = need_capt_ldc(pipe);
--	if (IS_ISP2401 && need_ldc) {
--		/* ldc and capt_pp are not supported in the same pipeline */
--		struct ia_css_binary_descr capt_ldc_descr;
--
--		ia_css_pipe_get_ldc_binarydesc(pipe,
--					       &capt_ldc_descr, &prim_out_info,
--					       &capt_pp_out_info);
--
--		err = ia_css_binary_find(&capt_ldc_descr,
--					 &mycs->capture_ldc_binary);
--		if (err) {
--			IA_CSS_LEAVE_ERR_PRIVATE(err);
--			return err;
--		}
--		need_pp = false;
--		need_ldc = false;
--	}
- 
- 	/* we build up the pipeline starting at the end */
- 	/* Capture post-processing */
- 	if (need_pp) {
- 		struct ia_css_binary_descr capture_pp_descr;
- 
--		if (!IS_ISP2401)
--			capt_pp_in_info = need_ldc ? &capt_ldc_out_info : &prim_out_info;
--		else
--			capt_pp_in_info = &prim_out_info;
-+		capt_pp_in_info = need_ldc ? &capt_ldc_out_info : &prim_out_info;
- 
- 		ia_css_pipe_get_capturepp_binarydesc(pipe,
- 						     &capture_pp_descr,
-@@ -7575,7 +7503,6 @@ create_host_regular_capture_pipeline(struct ia_css_pipe *pipe)
- 		}
- 	}
- 
--#ifndef ISP2401
- 	if (need_pp && current_stage) {
- 		struct ia_css_frame *local_in_frame = NULL;
- 
-@@ -7595,20 +7522,6 @@ create_host_regular_capture_pipeline(struct ia_css_pipe *pipe)
- 		}
- 		err = add_capture_pp_stage(pipe, me, local_in_frame,
- 					   need_yuv_pp ? NULL : out_frame,
--#else
--	/* ldc and capture_pp not supported in same pipeline */
--	if (need_ldc && current_stage) {
--		in_frame = current_stage->args.out_frame[0];
--		ia_css_pipe_util_set_output_frames(out_frames, 0, out_frame);
--		ia_css_pipe_get_generic_stage_desc(&stage_desc, capture_ldc_binary,
--						   out_frames, in_frame, NULL);
--		err = ia_css_pipeline_create_and_add_stage(me, &stage_desc,
--							   NULL);
--	} else if (need_pp && current_stage) {
--		in_frame = current_stage->args.out_frame[0];
--		err = add_capture_pp_stage(pipe, me, in_frame,
--					   need_yuv_pp ? NULL : out_frame,
--#endif
- 					   capture_pp_binary,
- 					   &current_stage);
- 		if (err) {
-@@ -7722,7 +7635,7 @@ static int capture_start(struct ia_css_pipe *pipe)
- 		IA_CSS_LEAVE_ERR_PRIVATE(err);
- 		return err;
- 	}
--#elif defined(ISP2401)
-+#else
- 	if (pipe->config.mode != IA_CSS_PIPE_MODE_COPY) {
- 		err = send_mipi_frames(pipe);
- 		if (err) {
-@@ -7730,7 +7643,6 @@ static int capture_start(struct ia_css_pipe *pipe)
- 			return err;
- 		}
- 	}
--
- #endif
- 
- 	ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
-@@ -8176,9 +8088,7 @@ sh_css_init_host_sp_control_vars(void)
- 	unsigned int HIVE_ADDR_host_sp_queues_initialized;
- 	unsigned int HIVE_ADDR_sp_sleep_mode;
- 	unsigned int HIVE_ADDR_ia_css_dmaproxy_sp_invalidate_tlb;
--#ifndef ISP2401
- 	unsigned int HIVE_ADDR_sp_stop_copy_preview;
--#endif
- 	unsigned int HIVE_ADDR_host_sp_com;
- 	unsigned int o = offsetof(struct host_sp_communication, host2sp_command)
- 			    / sizeof(int);
-@@ -8195,9 +8105,7 @@ sh_css_init_host_sp_control_vars(void)
- 	    fw->info.sp.host_sp_queues_initialized;
- 	HIVE_ADDR_sp_sleep_mode = fw->info.sp.sleep_mode;
- 	HIVE_ADDR_ia_css_dmaproxy_sp_invalidate_tlb = fw->info.sp.invalidate_tlb;
--#ifndef ISP2401
- 	HIVE_ADDR_sp_stop_copy_preview = fw->info.sp.stop_copy_preview;
--#endif
- 	HIVE_ADDR_host_sp_com = fw->info.sp.host_sp_com;
- 
- 	sp_dmem_store_uint32(SP0_ID,
-@@ -8213,11 +8121,9 @@ sh_css_init_host_sp_control_vars(void)
- 	sp_dmem_store_uint32(SP0_ID,
- 			     (unsigned int)sp_address_of(ia_css_dmaproxy_sp_invalidate_tlb),
- 			     (uint32_t)(false));
--#ifndef ISP2401
- 	sp_dmem_store_uint32(SP0_ID,
- 			     (unsigned int)sp_address_of(sp_stop_copy_preview),
- 			     my_css.stop_copy_preview ? (uint32_t)(1) : (uint32_t)(0));
--#endif
- 	store_sp_array_uint(host_sp_com, o, host2sp_cmd_ready);
- 
- 	for (i = 0; i < N_CSI_PORTS; i++) {
-@@ -8937,9 +8843,7 @@ ia_css_stream_create(const struct ia_css_stream_config *stream_config,
- 		if (num_pipes >= 2) {
- 			curr_stream->cont_capt = true;
- 			curr_stream->disable_cont_vf = curr_stream->config.disable_cont_viewfinder;
--
--			if (!IS_ISP2401)
--				curr_stream->stop_copy_preview = my_css.stop_copy_preview;
-+			curr_stream->stop_copy_preview = my_css.stop_copy_preview;
- 		}
- 
- 		/* Create copy pipe here, since it may not be exposed to the driver */
-@@ -8997,16 +8901,15 @@ ia_css_stream_create(const struct ia_css_stream_config *stream_config,
- 		/* set current stream */
- 		curr_pipe->stream = curr_stream;
- 
--		if (!IS_ISP2401) {
--			/* take over effective info */
-+		/* take over effective info */
-+
-+		effective_res = curr_pipe->config.input_effective_res;
-+		err = ia_css_util_check_res(
-+			effective_res.width,
-+			effective_res.height);
-+		if (err)
-+			goto ERR;
- 
--			effective_res = curr_pipe->config.input_effective_res;
--			err = ia_css_util_check_res(
--				effective_res.width,
--				effective_res.height);
--			if (err)
--				goto ERR;
--		}
- 		/* sensor binning per pipe */
- 		if (sensor_binning_changed)
- 			sh_css_pipe_free_shading_table(curr_pipe);
-@@ -9031,9 +8934,6 @@ ia_css_stream_create(const struct ia_css_stream_config *stream_config,
- 				goto ERR;
- 		}
- 
--		if (IS_ISP2401)
--			pipe_info->output_system_in_res_info = curr_pipe->config.output_system_in_res;
--
- 		if (!spcopyonly) {
- 			if (!IS_ISP2401)
- 				err = sh_css_pipe_get_shading_info(curr_pipe,
-@@ -9133,8 +9033,6 @@ ia_css_stream_destroy(struct ia_css_stream *stream)
- 	if ((stream->last_pipe) &&
- 	    ia_css_pipeline_is_mapped(stream->last_pipe->pipe_num)) {
- #if defined(ISP2401)
--		bool free_mpi;
--
- 		for (i = 0; i < stream->num_pipes; i++) {
- 			struct ia_css_pipe *entry = stream->pipes[i];
- 			unsigned int sp_thread_id;
-@@ -9158,13 +9056,7 @@ ia_css_stream_destroy(struct ia_css_stream *stream)
- 				}
- 			}
- 		}
--		free_mpi = stream->config.mode == IA_CSS_INPUT_MODE_BUFFERED_SENSOR;
--		if (IS_ISP2401) {
--			free_mpi |= stream->config.mode == IA_CSS_INPUT_MODE_TPG;
--			free_mpi |= stream->config.mode == IA_CSS_INPUT_MODE_PRBS;
--		}
--
--		if (free_mpi) {
-+		if (stream->config.mode == IA_CSS_INPUT_MODE_BUFFERED_SENSOR) {
- 			for (i = 0; i < stream->num_pipes; i++) {
- 				struct ia_css_pipe *entry = stream->pipes[i];
- 				/*
-@@ -9699,14 +9591,10 @@ ia_css_stop_sp(void)
- 	}
- 
- 	/* For now, stop whole SP */
--	if (!IS_ISP2401) {
--		sh_css_write_host2sp_command(host2sp_cmd_terminate);
--	} else {
--		if (!sh_css_write_host2sp_command(host2sp_cmd_terminate)) {
--			IA_CSS_ERROR("Call to 'sh-css_write_host2sp_command()' failed");
--			ia_css_debug_dump_sp_sw_debug_info();
--			ia_css_debug_dump_debug_info(NULL);
--		}
-+	if (!sh_css_write_host2sp_command(host2sp_cmd_terminate)) {
-+		IA_CSS_ERROR("Call to 'sh-css_write_host2sp_command()' failed");
-+		ia_css_debug_dump_sp_sw_debug_info();
-+		ia_css_debug_dump_debug_info(NULL);
- 	}
- 
- 	sh_css_sp_set_sp_running(false);
--- 
-2.33.1
+SGkgRXplcXVpZWwsDQoNClRoYW5rcyBmb3IgeW91IHN1Z2dlc3Rpb24uDQpPbiBTdW4sIDIwMjEt
+MTEtMTQgYXQgMTk6MDQgLTAzMDAsIEV6ZXF1aWVsIEdhcmNpYSB3cm90ZToNCj4gSGkgWXVuZmVp
+LA0KPiANCj4gT24gVGh1LCAxMSBOb3YgMjAyMSBhdCAwMToxNSwgWXVuZmVpIERvbmcgPHl1bmZl
+aS5kb25nQG1lZGlhdGVrLmNvbT4NCj4gd3JvdGU6DQo+ID4gDQo+ID4gVGhpcyBzZXJpZXMgYWRk
+cyBzdXBwb3J0IGZvciBtdWx0aSBoYXJkd2FyZSBkZWNvZGUgaW50byBtdGstdmNvZGVjLCANCj4g
+PiBieSBmaXJzdCBhZGRpbmcgdXNlDQo+ID4gb2ZfcGxhdGZvcm1fcG9wdWxhdGUgdG8gbWFuYWdl
+IGVhY2ggaGFyZHdhcmUgaW5mb3JtYXRpb246DQo+ID4gaW50ZXJydXB0LCBjbG9jaywgcmVnaXN0
+ZXINCj4gPiBiYXNlcyBhbmQgcG93ZXIuIFNlY29uZGx5IGFkZCBjb3JlIHdvcmsgcXVldWUgdG8g
+ZGVhbCB3aXRoIGNvcmUNCj4gPiBoYXJkd2FyZSBtZXNzYWdlLA0KPiA+IGF0IHRoZSBzYW1lIHRp
+bWUsIGFkZCBtc2cgcXVldWUgZm9yIGRpZmZlcmVudCBoYXJkd2FyZSBzaGFyZQ0KPiA+IG1lc3Nh
+Z2VzLiBMYXN0bHksIHRoZQ0KPiA+IGFyY2hpdGVjdHVyZSBvZiBkaWZmZXJlbnQgc3BlY3MgYXJl
+IG5vdCB0aGUgc2FtZSwgdXNpbmcgc3BlY3MgdHlwZQ0KPiA+IHRvIHNlcGFyYXRlIHRoZW0uDQo+
+ID4gDQo+ID4gVGhpcyBzZXJpZXMgaGFzIGJlZW4gdGVzdGVkIHdpdGggYm90aCBNVDgxODMgYW5k
+IE1UODE3My4gRGVjb2RpbmcNCj4gPiB3YXMgd29ya2luZyBmb3IgYm90aCBjaGlwcy4NCj4gPiAN
+Cj4gDQo+IEhvdyBhcmUgeW91IHRlc3RpbmcgRGVjb2Rpbmc/IElmIHlvdSBhcmUgcnVubmluZyBz
+b21lIHRlc3Qgc3VpdGUsIGl0DQo+IHdvdWxkDQo+IGJlIGdvb2QgdG8gYWRkIHN1Y2ggaW5mb3Jt
+YXRpb24uDQo+IA0KRm9yIDgxODMgYW5kIDgxNzMsIHRoZXNlIHBhdGNoZXMgZG9uJ3QgaGF2ZSBp
+bmZsdWVuY2UgZm9yIHRoZW0sIGNhbg0Kd29yayB3ZWxsLg0KDQpUaGVzZSBwYXRjaGVzIGFyZSB1
+c2VkIGZvciBtdDgxOTIgYW5kIDgxOTUuIFdlIGRvIGN0cy9ndHMvc3RyZXNzIHRlc3QNCnRvIGNo
+ZWNrIG91ciBkcml2ZXJzLg0KPiBBcmUgeW91IHRlc3Rpbmcgc29tZSBlZGdlLWNhc2VzIHN1Y2gg
+YXMgcGFyYWxsZWwvY29uY3VycmVudCBkZWNvZGluZywNCj4gcmVtb3ZpbmcgdGhlIGRyaXZlciB3
+aGlsZSBzdHJlYW1pbmcsIGFuZCBzbyBvbj8gVGhpcyBzaG91bGQgaGVscA0KPiBjYXRjaA0KPiBz
+b21lIHR5cGljYWwgaXNzdWVzLg0KPiANCj4gVGhhbmtzLA0KPiBFemVxdWllbA0KPiANClRoYW5r
+cywNCll1bmZlaSBEb25nDQo+ID4gUGF0Y2hlcyAxfjMgcmV3cml0ZSBnZXQgcmVnaXN0ZXIgYmFz
+ZXMgYW5kIHBvd2VyIG9uL29mZiBpbnRlcmZhY2UuDQo+ID4gUGF0Y2hlcyA0IGV4cG9ydCBkZWNv
+ZGVyIHBtIGludGVyZmFjZXMuDQo+ID4gUGF0Y2hlcyA1IGFkZCB0byBzdXBwb3J0IDgxOTIuDQo+
+ID4gUGF0Y2ggNiBzdXBwb3J0IG11bHRpIGhhcmR3YXJlLg0KPiA+IFBhdGNoIDcgc2VwYXJhdGUg
+dmlkZW8gZW5jb2RlciBhbmQgZGVjb2RlciBkb2N1bWVudA0KPiA+IFBhdGNoIDgtMTcgYWRkIGlu
+dGVyZmFjZXMgdG8gc3VwcG9ydCBjb3JlIGhhcmR3YXJlLg0KPiA+IFBhdGNoIDE4LTE5IHJlbW92
+ZSBtdGtfdmNvZGVjX3JlbGVhc2VfZGVjL2VuY19wbSBpbnRlcmZhY2VzLg0KPiA+IC0tLQ0KPiA+
+IGNoYW5nZXMgY29tcGFyZWQgd2l0aCB2OToNCj4gPiAtIG5lZWQgbm90IHRvIGJ1aWxkIGtvLCBq
+dXN0IGV4cG9ydCBwbSBpbnRlcmZhY2VzIGZvciBwYXRjaCAwNC8xOS4NCj4gPiAtIGZpeCBjb21t
+ZW50cyBmb3IgcGF0Y2ggMDYvMTkNCj4gPiANCj4gPiBjaGFuZ2VzIGNvbXBhcmVkIHdpdGggdjg6
+DQo+ID4gLSBhZGQgbmV3IHBhdGNoIDE4fjE5IHRvIHJlbW92ZSBtdGtfdmNvZGVjX3JlbGVhc2Vf
+ZGUvZW5jX3BtDQo+ID4gaW50ZXJmYWNlcy4NCj4gPiAtIGZpeCBzcGVsbGluZyBtaXN0YWtlcyBm
+b3IgcGF0Y2ggMTcvMTkNCj4gPiAtIGZpeCB5YW1sIGNvbW1lbnRzIGZvciBwYXRjaCAxNS8xOQ0K
+PiA+IA0KPiA+IENoYW5nZXMgY29tcGFyZWQgd2l0aCB2NzoNCj4gPiAtIGFkZCBuZXcgcGF0Y2gg
+NCB0byBidWlsZCBkZWNvZGVyIHBtIGZpbGUgYXMgbW9kdWxlDQo+ID4gLSBhZGQgbmV3IHBhdGNo
+IDUgdG8gc3VwcG9ydCA4MTkyDQo+ID4gLSBmaXggY29tbWVudHMgZm9yIHBhdGNoIDYvMTcNCj4g
+PiAtIGNoYW5nZSBzb21lIGxvZ2ljIGZvciB1c2luZyB3b3JrIHF1ZXVlIGluc3RlYWQgb2YgY3Jl
+YXRlIHRocmVhZA0KPiA+IGZvciBjb3JlIGhhcmR3YXJlIGRlY29kZSBmb3IgcGF0Y2ggMTAvMTcN
+Cj4gPiAtIHVzaW5nIHdvcmsgcXVldWUgZm9yIGhhcmR3YXJlIGRlY29kZSBpbnN0ZWFkIG9mIGNy
+ZWF0ZSB0aHJlYWQgZm9yDQo+ID4gcGF0Y2ggMTMvMTcNCj4gPiAtIGFkZCByZXR1cmVuIHZhbHVl
+IGZvciBwYXRjaCAxNC8xNw0KPiA+IC0gZml4IHlhbWwgY2hlY2sgZmFpbCAxNS8xNw0KPiA+IA0K
+PiA+IENoYW5nZXMgY29tcGFyZWQgd2l0aCB2NjoNCj4gPiAtIFVzZSBvZl9wbGF0Zm9ybV9wb3B1
+bGF0ZSB0byBtYW5hZ2UgbXVsdGkgaGFyZHdhcmUsIG5vdCBjb21wb25lbnQNCj4gPiBmcmFtZXdv
+cmsgZm9yIHBhdGNoIDQvMTUNCj4gPiAtIFJlLXdyaXRlIGR0c2kgZG9jdW1lbnQgZm9yIGhhcmR3
+YXJlIGFyY2hpdGVjdHVyZSBjaGFuZ2VkIGZvcg0KPiA+IHBhdGNoIDEzLzE1IC1UaGUgZHRzaSB3
+aWxsIHdyaXRlIGxpa2UgYmVsb3cgaW4gcGF0Y2ggMTMvMTU6DQo+ID4gICAgIHZjb2RlY19kZWM6
+IHZjb2RlY19kZWNAMTYwMDAwMDAgew0KPiA+ICAgICAgICAgY29tcGF0aWJsZSA9ICJtZWRpYXRl
+ayxtdDgxOTItdmNvZGVjLWRlYyI7DQo+ID4gICAgICAgICAjYWRkcmVzcy1jZWxscyA9IDwyPjsN
+Cj4gPiAgICAgICAgICNzaXplLWNlbGxzID0gPDI+Ow0KPiA+ICAgICAgICAgcmFuZ2VzOw0KPiA+
+ICAgICAgICAgcmVnID0gPDAgMHgxNjAwMDAwMCAwIDB4MTAwMD47ICAgICAgICAgIC8qIFZERUNf
+U1lTICovDQo+ID4gICAgICAgICBtZWRpYXRlayxzY3AgPSA8JnNjcD47DQo+ID4gICAgICAgICBp
+b21tdXMgPSA8JmlvbW11MCBNNFVfUE9SVF9MNF9WREVDX01DX0VYVD47DQo+ID4gICAgICAgICBk
+bWEtcmFuZ2VzID0gPDB4MSAweDAgMHgwIDB4NDAwMDAwMDAgMHgwIDB4ZmZmMDAwMDA+Ow0KPiA+
+ICAgICAgICAgdmNvZGVjX2xhdCB7DQo+ID4gICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJtZWRp
+YXRlayxtdGstdmNvZGVjLWxhdCI7DQo+ID4gICAgICAgICAgICAgcmVnID0gPDAgMHgxNjAxMDAw
+MCAwIDB4ODAwPjsgICAgICAgICAgICAgICAvKg0KPiA+IFZERUNfTUlTQyAqLw0KPiA+ICAgICAg
+ICAgICAgIHJlZy1uYW1lID0gInJlZy1taXNjIjsNCj4gPiAgICAgICAgICAgICBpbnRlcnJ1cHRz
+ID0gPEdJQ19TUEkgNDI2IElSUV9UWVBFX0xFVkVMX0hJR0ggMD47DQo+ID4gICAgICAgICAgICAg
+aW9tbXVzID0gPCZpb21tdTAgTTRVX1BPUlRfTDVfVkRFQ19MQVQwX1ZMRF9FWFQ+LA0KPiA+ICAg
+ICAgICAgICAgICAgICAgPCZpb21tdTAgTTRVX1BPUlRfTDVfVkRFQ19MQVQwX1ZMRDJfRVhUPiwN
+Cj4gPiAgICAgICAgICAgICAgICAgIDwmaW9tbXUwIE00VV9QT1JUX0w1X1ZERUNfTEFUMF9BVkNf
+TVZfRVhUPiwNCj4gPiAgICAgICAgICAgICAgICAgIDwmaW9tbXUwIE00VV9QT1JUX0w1X1ZERUNf
+TEFUMF9QUkVEX1JEX0VYVD4sDQo+ID4gICAgICAgICAgICAgICAgICA8JmlvbW11MCBNNFVfUE9S
+VF9MNV9WREVDX0xBVDBfVElMRV9FWFQ+LA0KPiA+ICAgICAgICAgICAgICAgICAgPCZpb21tdTAg
+TTRVX1BPUlRfTDVfVkRFQ19MQVQwX1dETUFfRVhUPiwNCj4gPiAgICAgICAgICAgICAgICAgIDwm
+aW9tbXUwIE00VV9QT1JUX0w1X1ZERUNfTEFUMF9SR19DVFJMX0RNQV9FWFQ+LA0KPiA+ICAgICAg
+ICAgICAgICAgICAgPCZpb21tdTAgTTRVX1BPUlRfTDVfVkRFQ19VRk9fRU5DX0VYVD47DQo+ID4g
+ICAgICAgICAgICAgY2xvY2tzID0gPCZ0b3Bja2dlbiBDTEtfVE9QX1ZERUNfU0VMPiwNCj4gPiAg
+ICAgICAgICAgICAgICAgIDwmdmRlY3N5c19zb2MgQ0xLX1ZERUNfU09DX1ZERUM+LA0KPiA+ICAg
+ICAgICAgICAgICAgICAgPCZ2ZGVjc3lzX3NvYyBDTEtfVkRFQ19TT0NfTEFUPiwNCj4gPiAgICAg
+ICAgICAgICAgICAgIDwmdmRlY3N5c19zb2MgQ0xLX1ZERUNfU09DX0xBUkIxPiwNCj4gPiAgICAg
+ICAgICAgICAgICAgIDwmdG9wY2tnZW4gQ0xLX1RPUF9NQUlOUExMX0Q0PjsNCj4gPiAgICAgICAg
+ICAgICBjbG9jay1uYW1lcyA9ICJ2ZGVjLXNlbCIsICJ2ZGVjLXNvYy12ZGVjIiwgInZkZWMtc29j
+LQ0KPiA+IGxhdCIsDQo+ID4gICAgICAgICAgICAgICAgICAgInZkZWMtdmRlYyIsICJ2ZGVjLXRv
+cCI7DQo+ID4gICAgICAgICAgICAgYXNzaWduZWQtY2xvY2tzID0gPCZ0b3Bja2dlbiBDTEtfVE9Q
+X1ZERUNfU0VMPjsNCj4gPiAgICAgICAgICAgICBhc3NpZ25lZC1jbG9jay1wYXJlbnRzID0gPCZ0
+b3Bja2dlbg0KPiA+IENMS19UT1BfTUFJTlBMTF9END47DQo+ID4gICAgICAgICAgICAgcG93ZXIt
+ZG9tYWlucyA9IDwmc3BtIE1UODE5Ml9QT1dFUl9ET01BSU5fVkRFQz47DQo+ID4gICAgICAgICB9
+Ow0KPiA+IA0KPiA+ICAgICAgICAgdmNvZGVjX2NvcmUgew0KPiA+ICAgICAgICAgICAgIGNvbXBh
+dGlibGUgPSAibWVkaWF0ZWssbXRrLXZjb2RlYy1jb3JlIjsNCj4gPiAgICAgICAgICAgICByZWcg
+PSA8MCAweDE2MDI1MDAwIDAgMHgxMDAwPjsgICAgICAgICAgICAgIC8qDQo+ID4gVkRFQ19DT1JF
+X01JU0MgKi8NCj4gPiAgICAgICAgICAgICByZWctbmFtZXMgPSAicmVnLW1pc2MiOw0KPiA+ICAg
+ICAgICAgICAgIGludGVycnVwdHMgPSA8R0lDX1NQSSA0MjUgSVJRX1RZUEVfTEVWRUxfSElHSCAw
+PjsNCj4gPiAgICAgICAgICAgICBpb21tdXMgPSA8JmlvbW11MCBNNFVfUE9SVF9MNF9WREVDX01D
+X0VYVD4sDQo+ID4gICAgICAgICAgICAgICAgICA8JmlvbW11MCBNNFVfUE9SVF9MNF9WREVDX1VG
+T19FWFQ+LA0KPiA+ICAgICAgICAgICAgICAgICAgPCZpb21tdTAgTTRVX1BPUlRfTDRfVkRFQ19Q
+UF9FWFQ+LA0KPiA+ICAgICAgICAgICAgICAgICAgPCZpb21tdTAgTTRVX1BPUlRfTDRfVkRFQ19Q
+UkVEX1JEX0VYVD4sDQo+ID4gICAgICAgICAgICAgICAgICA8JmlvbW11MCBNNFVfUE9SVF9MNF9W
+REVDX1BSRURfV1JfRVhUPiwNCj4gPiAgICAgICAgICAgICAgICAgIDwmaW9tbXUwIE00VV9QT1JU
+X0w0X1ZERUNfUFBXUkFQX0VYVD4sDQo+ID4gICAgICAgICAgICAgICAgICA8JmlvbW11MCBNNFVf
+UE9SVF9MNF9WREVDX1RJTEVfRVhUPiwNCj4gPiAgICAgICAgICAgICAgICAgIDwmaW9tbXUwIE00
+VV9QT1JUX0w0X1ZERUNfVkxEX0VYVD4sDQo+ID4gICAgICAgICAgICAgICAgICA8JmlvbW11MCBN
+NFVfUE9SVF9MNF9WREVDX1ZMRDJfRVhUPiwNCj4gPiAgICAgICAgICAgICAgICAgIDwmaW9tbXUw
+IE00VV9QT1JUX0w0X1ZERUNfQVZDX01WX0VYVD4sDQo+ID4gICAgICAgICAgICAgICAgICA8Jmlv
+bW11MCBNNFVfUE9SVF9MNF9WREVDX1JHX0NUUkxfRE1BX0VYVD47DQo+ID4gICAgICAgICAgICAg
+Y2xvY2tzID0gPCZ0b3Bja2dlbiBDTEtfVE9QX1ZERUNfU0VMPiwNCj4gPiAgICAgICAgICAgICAg
+ICAgIDwmdmRlY3N5cyBDTEtfVkRFQ19WREVDPiwNCj4gPiAgICAgICAgICAgICAgICAgIDwmdmRl
+Y3N5cyBDTEtfVkRFQ19MQVQ+LA0KPiA+ICAgICAgICAgICAgICAgICAgPCZ2ZGVjc3lzIENMS19W
+REVDX0xBUkIxPiwNCj4gPiAgICAgICAgICAgICAgICAgIDwmdG9wY2tnZW4gQ0xLX1RPUF9NQUlO
+UExMX0Q0PjsNCj4gPiAgICAgICAgICAgICBjbG9jay1uYW1lcyA9ICJ2ZGVjLXNlbCIsICJ2ZGVj
+LXNvYy12ZGVjIiwgInZkZWMtc29jLQ0KPiA+IGxhdCIsDQo+ID4gICAgICAgICAgICAgICAgICAg
+InZkZWMtdmRlYyIsICJ2ZGVjLXRvcCI7DQo+ID4gICAgICAgICAgICAgYXNzaWduZWQtY2xvY2tz
+ID0gPCZ0b3Bja2dlbiBDTEtfVE9QX1ZERUNfU0VMPjsNCj4gPiAgICAgICAgICAgICBhc3NpZ25l
+ZC1jbG9jay1wYXJlbnRzID0gPCZ0b3Bja2dlbg0KPiA+IENMS19UT1BfTUFJTlBMTF9END47DQo+
+ID4gICAgICAgICAgICAgcG93ZXItZG9tYWlucyA9IDwmc3BtIE1UODE5Ml9QT1dFUl9ET01BSU5f
+VkRFQzI+Ow0KPiA+ICAgICAgICAgfTsNCj4gPiAgICAgfTsNCj4gPiANCj4gPiBDaGFuZ2VzIGNv
+bXBhcmVkIHdpdGggdjU6DQo+ID4gLSBBZGQgZGVjb2RlciBoYXJkd2FyZSBibG9jayBkaWFncmFt
+IGZvciBwYXRjaCAxMy8xNQ0KPiA+IA0KPiA+IENoYW5nZXMgY29tcGFyZWQgd2l0aCB2NDoNCj4g
+PiAtIEZpeCBjb21tZW50cyBmb3IgcGF0Y2ggNC8xNQ0KPiA+ICAgPj4gKyAgICAgaWYgKGRldi0+
+aXNfY29tcF9zdXBwb3J0ZWQpIHsNCj4gPiAgID4+ICsgICAgICAgICAgICAgcmV0ID0gbXRrX3Zj
+b2RlY19pbml0X21hc3RlcihkZXYpOw0KPiA+ICAgPj4gKyAgICAgICAgICAgICBpZiAocmV0IDwg
+MCkNCj4gPiAgID4+ICsgICAgICAgICAgICAgICAgICAgICBnb3RvIGVycl9jb21wb25lbnRfbWF0
+Y2g7DQo+ID4gICA+PiArICAgICB9IGVsc2Ugew0KPiA+ICAgPj4gKyAgICAgICAgICAgICBwbGF0
+Zm9ybV9zZXRfZHJ2ZGF0YShwZGV2LCBkZXYpOw0KPiA+ICAgPj4gKyAgICAgfQ0KPiA+ICAgRml4
+IHBsYXRmb3JtX3NldF9kcnZkYXRhLg0KPiA+IC0gRml4IGJ1aWxkIGVycm9yIGZvciBwYXRjaCA5
+LzE1DQo+ID4gLSBBZGQgZGVwZW5kIHBhdGNoIGluIGNhc2Ugb2YgZXJyb3IgaGVhZGVyIGZpbGUg
+Zm9yIHBhdGNoIDEzLzE1DQo+ID4gDQo+ID4gQ2hhbmdlcyBjb21wYXJlZCB3aXRoIHYzOg0KPiA+
+IC0gRml4IHJldHVybiB2YWx1ZSBmb3IgcGF0Y2ggMS8xNQ0KPiA+IC0gRml4IGNvbW1lbnRzIGZv
+ciBwYXRjaCA0LzE1DQo+ID4gICA+IExvb2tpbmcgdXAgIm1lZGlhdGVrLG10ay12Y29kZWMtY29y
+ZSIgdG8gZGV0ZXJtaW5lIGlmIGl0IHVzZXMNCj4gPiBjb21wb25lbnQgZnJhbXdvcmsgc291bmRz
+IGxpa2UuLi4NCj4gPiAgIEFkZCBwcmFtZXRlciBpbiBwZGF0YSwgZm9yIGFsbCBwbGF0Zm9ybSB3
+aWxsIHVzZSBjb21wb2VudCBhZnRlcg0KPiA+IG10ODE4Mw0KPiA+IA0KPiA+ICAgPj4gKyAgICAg
+aWYgKGRldi0+aXNfY29tcF9zdXBwb3J0ZWQpIHsNCj4gPiAgID4+ICsgICAgICAgICAgICAgcmV0
+ID0gbXRrX3Zjb2RlY19pbml0X21hc3RlcihkZXYpOw0KPiA+ICAgPj4gKyAgICAgICAgICAgICBp
+ZiAocmV0IDwgMCkNCj4gPiAgID4+ICsgICAgICAgICAgICAgICAgICAgICBnb3RvIGVycl9jb21w
+b25lbnRfbWF0Y2g7DQo+ID4gICA+PiArICAgICB9IGVsc2Ugew0KPiA+ICAgPj4gKyAgICAgICAg
+ICAgICBwbGF0Zm9ybV9zZXRfZHJ2ZGF0YShwZGV2LCBkZXYpOw0KPiA+ICAgPj4gKyAgICAgfQ0K
+PiA+ICAgPiArIEhhcyBhc2tlZCB0aGUgc2FtZSBxdWVzdGlvbiBpbiBbMV0uICBXaHkgaXQgcmVt
+b3ZlcyB0aGUNCj4gPiAgID4gK3BsYXRmb3JtX3NldF9kcnZkYXRhKCkgYWJvdmU/ICBtdGtfdmNv
+ZGVjX2luaXRfbWFzdGVyKCkgYWxzbw0KPiA+IGNhbGxzIHBsYXRmb3JtX3NldF9kcnZkYXRhKCku
+DQo+ID4gICBNdXN0IGNhbGwgY29tcG9uZW50X21hc3Rlcl9hZGRfd2l0aF9tYXRjaCBhZnRlcg0K
+PiA+IHBsYXRmb3JtX3NldF9kcnZkYXRhIGZvciBjb21wb25lbnQgYXJjaGl0ZWN0dXJlLg0KPiA+
+IC0gRml4IHlhbWwgZmlsZXMgY2hlY2sgZmFpbCBmb3IgcGF0Y2ggNS8xNQ0KPiA+IC0gRml4IHlh
+bWwgZmlsZSBjaGVjayBmYWlsIGZvciBwYXRjaCAxNC8xNQ0KPiA+IA0KPiA+IENoYW5nZXMgY29t
+cGFyZWQgd2l0aCB2MToNCj4gPiAtIEZpeCBtYW55IGNvbW1lbnRzIGZvciBwYXRjaCAzLzE0DQo+
+ID4gLSBSZW1vdmUgdW5uZWNlc3NhcnkgY29kZSBmb3IgcGF0Y2ggNC8xNA0KPiA+IC0gVXNpbmcg
+ZW51bSBtdGtfdmRlY19od19jb3VudCBpbnN0ZWFkIG9mIG1hZ2ljIG51bWJlcnMgZm9yIHBhdGNo
+DQo+ID4gNi8xNA0KPiA+IC0gUmVjb25zdHJ1Y3RlZCBnZXQvcHV0IGxhdCBidWZmZXIgZm9yIGxh
+dCBhbmQgY29yZSBoYXJkd2FyZSBmb3INCj4gPiBwYXRjaCA3LzE0DQo+ID4gLSBVc2luZyB5YW1s
+IGZvcm1hdCB0byBpbnN0ZWFkIG9mIHR4dCBmaWxlIGZvciBwYXRjaCAxMi8xNA0KPiA+IA0KPiA+
+IFl1bmZlaSBEb25nICgxOSk6DQo+ID4gICBtZWRpYTogbXRrLXZjb2RlYzogR2V0IG51bWJlcnMg
+b2YgcmVnaXN0ZXIgYmFzZXMgZnJvbSBEVA0KPiA+ICAgbWVkaWE6IG10ay12Y29kZWM6IEFsaWdu
+IHZjb2RlYyB3YWtlIHVwIGludGVycnVwdCBpbnRlcmZhY2UNCj4gPiAgIG1lZGlhOiBtdGstdmNv
+ZGVjOiBSZWZhY3RvciB2Y29kZWMgcG0gaW50ZXJmYWNlDQo+ID4gICBtZWRpYTogbXRrLXZjb2Rl
+YzogZXhwb3J0IGRlY29kZXIgcG0gZnVuY3Rpb25zDQo+ID4gICBtZWRpYTogbXRrLXZjb2RlYzog
+U3VwcG9ydCBNVDgxOTINCj4gPiAgIG1lZGlhOiBtdGstdmNvZGVjOiBNYW5hZ2UgbXVsdGkgaGFy
+ZHdhcmUgaW5mb3JtYXRpb24NCj4gPiAgIGR0LWJpbmRpbmdzOiBtZWRpYTogbXRrLXZjb2RlYzog
+U2VwYXJhdGUgdmlkZW8gZW5jb2RlciBhbmQNCj4gPiBkZWNvZGVyDQo+ID4gICAgIGR0LWJpbmRp
+bmdzDQo+ID4gICBtZWRpYTogbXRrLXZjb2RlYzogVXNlIHB1cmUgc2luZ2xlIGNvcmUgZm9yIE1U
+ODE4Mw0KPiA+ICAgbWVkaWE6IG10ay12Y29kZWM6IEFkZCBpcnEgaW50ZXJmYWNlIGZvciBtdWx0
+aSBoYXJkd2FyZQ0KPiA+ICAgbWVkaWE6IG10ay12Y29kZWM6IEFkZCBtc2cgcXVldWUgZmVhdHVy
+ZSBmb3IgbGF0IGFuZCBjb3JlDQo+ID4gYXJjaGl0ZWN0dXJlDQo+ID4gICBtZWRpYTogbXRrLXZj
+b2RlYzogR2VuZXJhbGl6ZSBwb3dlciBhbmQgY2xvY2sgb24vb2ZmIGludGVyZmFjZXMNCj4gPiAg
+IG1lZGlhOiBtdGstdmNvZGVjOiBBZGQgbmV3IGludGVyZmFjZSB0byBsb2NrIGRpZmZlcmVudCBo
+YXJkd2FyZQ0KPiA+ICAgbWVkaWE6IG10ay12Y29kZWM6IEFkZCB3b3JrIHF1ZXVlIGZvciBjb3Jl
+IGhhcmR3YXJlIGRlY29kZQ0KPiA+ICAgbWVkaWE6IG10ay12Y29kZWM6IFN1cHBvcnQgMzRiaXRz
+IGRtYSBhZGRyZXNzIGZvciB2ZGVjDQo+ID4gICBkdC1iaW5kaW5nczogbWVkaWE6IG10ay12Y29k
+ZWM6IEFkZHMgZGVjb2RlciBkdC1iaW5kaW5ncyBmb3INCj4gPiBtdDgxOTINCj4gPiAgIG1lZGlh
+OiBtdGstdmNvZGVjOiBBZGQgY29yZSBkZWMgYW5kIGRlYyBlbmQgaXBpIG1zZw0KPiA+ICAgbWVk
+aWE6IG10ay12Y29kZWM6IFVzZSBjb2RlYyB0eXBlIHRvIHNlcGFyYXRlIGRpZmZlcmVudCBoYXJk
+d2FyZQ0KPiA+ICAgbWVkaWE6IG10ay12Y29kZWM6IFJlbW92ZSBtdGtfdmNvZGVjX3JlbGVhc2Vf
+ZGVjX3BtDQo+ID4gICBtZWRpYTogbXRrLXZjb2RlYzogUmVtb3ZlIG10a192Y29kZWNfcmVsZWFz
+ZV9lbmNfcG0NCj4gPiANCj4gPiAgLi4uL21lZGlhL21lZGlhdGVrLHZjb2RlYy1kZWNvZGVyLnlh
+bWwgICAgICAgIHwgMTc2ICsrKysrKysrKysrDQo+ID4gIC4uLi9tZWRpYS9tZWRpYXRlayx2Y29k
+ZWMtZW5jb2Rlci55YW1sICAgICAgICB8IDE4NyArKysrKysrKysrKysNCj4gPiAgLi4uL21lZGlh
+L21lZGlhdGVrLHZjb2RlYy1zdWJkZXYtZGVjb2Rlci55YW1sIHwgMjYxDQo+ID4gKysrKysrKysr
+KysrKysrKw0KPiA+ICAuLi4vYmluZGluZ3MvbWVkaWEvbWVkaWF0ZWstdmNvZGVjLnR4dCAgICAg
+ICAgfCAxMzEgLS0tLS0tLS0NCj4gPiAgZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9tdGstdmNvZGVj
+L01ha2VmaWxlICAgIHwgICA2ICstDQo+ID4gIC4uLi9wbGF0Zm9ybS9tdGstdmNvZGVjL210a192
+Y29kZWNfZGVjLmMgICAgICB8ICAgNCArLQ0KPiA+ICAuLi4vcGxhdGZvcm0vbXRrLXZjb2RlYy9t
+dGtfdmNvZGVjX2RlYy5oICAgICAgfCAgIDEgKw0KPiA+ICAuLi4vcGxhdGZvcm0vbXRrLXZjb2Rl
+Yy9tdGtfdmNvZGVjX2RlY19kcnYuYyAgfCAyMTkgKysrKysrKysrKystLS0NCj4gPiAgLi4uL3Bs
+YXRmb3JtL210ay12Y29kZWMvbXRrX3Zjb2RlY19kZWNfaHcuYyAgIHwgMTcyICsrKysrKysrKysr
+DQo+ID4gIC4uLi9wbGF0Zm9ybS9tdGstdmNvZGVjL210a192Y29kZWNfZGVjX2h3LmggICB8ICA1
+NSArKysrDQo+ID4gIC4uLi9wbGF0Zm9ybS9tdGstdmNvZGVjL210a192Y29kZWNfZGVjX3BtLmMg
+ICB8IDEwNCArKysrKy0tDQo+ID4gIC4uLi9wbGF0Zm9ybS9tdGstdmNvZGVjL210a192Y29kZWNf
+ZGVjX3BtLmggICB8ICAxMiArLQ0KPiA+ICAuLi4vbXRrLXZjb2RlYy9tdGtfdmNvZGVjX2RlY19z
+dGF0ZWZ1bC5jICAgICAgfCAgIDIgKw0KPiA+ICAuLi4vbXRrLXZjb2RlYy9tdGtfdmNvZGVjX2Rl
+Y19zdGF0ZWxlc3MuYyAgICAgfCAgMjAgKysNCj4gPiAgLi4uL3BsYXRmb3JtL210ay12Y29kZWMv
+bXRrX3Zjb2RlY19kcnYuaCAgICAgIHwgIDc1ICsrKystDQo+ID4gIC4uLi9wbGF0Zm9ybS9tdGst
+dmNvZGVjL210a192Y29kZWNfZW5jX2Rydi5jICB8ICAyMSArLQ0KPiA+ICAuLi4vcGxhdGZvcm0v
+bXRrLXZjb2RlYy9tdGtfdmNvZGVjX2VuY19wbS5jICAgfCAgMTAgKy0NCj4gPiAgLi4uL3BsYXRm
+b3JtL210ay12Y29kZWMvbXRrX3Zjb2RlY19lbmNfcG0uaCAgIHwgICAzICstDQo+ID4gIC4uLi9w
+bGF0Zm9ybS9tdGstdmNvZGVjL210a192Y29kZWNfaW50ci5jICAgICB8ICAyNyArLQ0KPiA+ICAu
+Li4vcGxhdGZvcm0vbXRrLXZjb2RlYy9tdGtfdmNvZGVjX2ludHIuaCAgICAgfCAgIDQgKy0NCj4g
+PiAgLi4uL3BsYXRmb3JtL210ay12Y29kZWMvbXRrX3Zjb2RlY191dGlsLmMgICAgIHwgIDg3ICsr
+KysrLQ0KPiA+ICAuLi4vcGxhdGZvcm0vbXRrLXZjb2RlYy9tdGtfdmNvZGVjX3V0aWwuaCAgICAg
+fCAgIDggKy0NCj4gPiAgLi4uL3BsYXRmb3JtL210ay12Y29kZWMvdmRlYy92ZGVjX2gyNjRfaWYu
+YyAgIHwgICAyICstDQo+ID4gIC4uLi9tdGstdmNvZGVjL3ZkZWMvdmRlY19oMjY0X3JlcV9pZi5j
+ICAgICAgICB8ICAgMiArLQ0KPiA+ICAuLi4vcGxhdGZvcm0vbXRrLXZjb2RlYy92ZGVjL3ZkZWNf
+dnA4X2lmLmMgICAgfCAgIDIgKy0NCj4gPiAgLi4uL3BsYXRmb3JtL210ay12Y29kZWMvdmRlYy92
+ZGVjX3ZwOV9pZi5jICAgIHwgICAyICstDQo+ID4gIC4uLi9tZWRpYS9wbGF0Zm9ybS9tdGstdmNv
+ZGVjL3ZkZWNfZHJ2X2lmLmMgICB8ICAyMSArLQ0KPiA+ICAuLi4vbWVkaWEvcGxhdGZvcm0vbXRr
+LXZjb2RlYy92ZGVjX2lwaV9tc2cuaCAgfCAgMTYgKy0NCj4gPiAgLi4uL3BsYXRmb3JtL210ay12
+Y29kZWMvdmRlY19tc2dfcXVldWUuYyAgICAgIHwgMjg2DQo+ID4gKysrKysrKysrKysrKysrKysr
+DQo+ID4gIC4uLi9wbGF0Zm9ybS9tdGstdmNvZGVjL3ZkZWNfbXNnX3F1ZXVlLmggICAgICB8IDE0
+OCArKysrKysrKysNCj4gPiAgLi4uL21lZGlhL3BsYXRmb3JtL210ay12Y29kZWMvdmRlY192cHVf
+aWYuYyAgIHwgIDQ2ICsrLQ0KPiA+ICAuLi4vbWVkaWEvcGxhdGZvcm0vbXRrLXZjb2RlYy92ZGVj
+X3ZwdV9pZi5oICAgfCAgMjIgKysNCj4gPiAgLi4uL3BsYXRmb3JtL210ay12Y29kZWMvdmVuYy92
+ZW5jX2gyNjRfaWYuYyAgIHwgICAyICstDQo+ID4gIC4uLi9wbGF0Zm9ybS9tdGstdmNvZGVjL3Zl
+bmMvdmVuY192cDhfaWYuYyAgICB8ICAgMiArLQ0KPiA+ICAzNCBmaWxlcyBjaGFuZ2VkLCAxODQx
+IGluc2VydGlvbnMoKyksIDI5NSBkZWxldGlvbnMoLSkNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
+DQo+ID4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21lZGlhL21lZGlhdGVrLHZj
+b2RlYy0NCj4gPiBkZWNvZGVyLnlhbWwNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0DQo+ID4gRG9j
+dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21lZGlhL21lZGlhdGVrLHZjb2RlYy0NCj4g
+PiBlbmNvZGVyLnlhbWwNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0DQo+ID4gRG9jdW1lbnRhdGlv
+bi9kZXZpY2V0cmVlL2JpbmRpbmdzL21lZGlhL21lZGlhdGVrLHZjb2RlYy1zdWJkZXYtDQo+ID4g
+ZGVjb2Rlci55YW1sDQo+ID4gIGRlbGV0ZSBtb2RlIDEwMDY0NA0KPiA+IERvY3VtZW50YXRpb24v
+ZGV2aWNldHJlZS9iaW5kaW5ncy9tZWRpYS9tZWRpYXRlay12Y29kZWMudHh0DQo+ID4gIGNyZWF0
+ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay0NCj4gPiB2Y29kZWMvbXRr
+X3Zjb2RlY19kZWNfaHcuYw0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9tZWRpYS9w
+bGF0Zm9ybS9tdGstDQo+ID4gdmNvZGVjL210a192Y29kZWNfZGVjX2h3LmgNCj4gPiAgY3JlYXRl
+IG1vZGUgMTAwNjQ0IGRyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbXRrLQ0KPiA+IHZjb2RlYy92ZGVj
+X21zZ19xdWV1ZS5jDQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL21lZGlhL3BsYXRm
+b3JtL210ay0NCj4gPiB2Y29kZWMvdmRlY19tc2dfcXVldWUuaA0KPiA+IA0KPiA+IC0tDQo+ID4g
+Mi4yNS4xDQo+ID4gDQo=
 
