@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86C86C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 951A8C43217
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 718C2613AD
-	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8316C61B60
+	for <linux-media@archiver.kernel.org>; Tue, 16 Nov 2021 11:29:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235176AbhKPLcn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Nov 2021 06:32:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35170 "EHLO mail.kernel.org"
+        id S235234AbhKPLcr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Nov 2021 06:32:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35214 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234995AbhKPLcY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Nov 2021 06:32:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 762D261B60;
+        id S235046AbhKPLca (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 16 Nov 2021 06:32:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A93A463214;
         Tue, 16 Nov 2021 11:29:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637062148;
-        bh=zpQY7juBexiXSWxCm3fVIy2Cj+UKtwRGhsoo1azEha0=;
+        bh=w1Oh57VTXacjdF95neV/28695ca59OqlfX1MdvU6ZwE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MUaeF7mMiLQ98bdpXSsk5UGEyGfwflBId1FxaljRyU31VdEAaJMI5Pb+74PMaa71R
-         c9s48go//0mmcOEmLHOOcJ8oTeMPcoPUIYJWWilEOlVPXRsWB5m79NQ/neGzHDfknF
-         VNIYsaDC5E9yH7fv4Tv/e9Q1YRiXjXmVNqhbYpZR+6B+FmVlIBnt6UAblKOvKhWJQK
-         Xwl5v5m56T4Ouw9Wj4zH309ZihTV5mFDWmDDPrHwQ/wXYehLcP4ZMryL2pk6W1JAIs
-         KBDJeQPPvBkzaV7rhwFz5bUgU2PtcWd3XFw2dTP2LBMvSiEXoXt0KVTf2g3ZW7yF8I
-         aRZ35Frs2Tj4Q==
+        b=DT7hfPOrvgV/CHu/82PDkIwUY+9NUdhjFUMBkZBN1B0DeOpmPyB191YNV7VDknnhu
+         n4VYXFTKVF1EY067JSgRjIFWCtt5HGphxzP1gUQHcB9n/jbQyfaMbt5H2DQ6LhzGjQ
+         K4e+yZpk9ci13JtgS4GZkOM+0Y7Y8JzE7XZCnqvDIhKB5lsOujkipiLMMrluoJC/OY
+         CX69I9aZoDURzxPadbxpxE+efOnMEWA/L3avtzJHRYYJZ39co6O+wrqUfcfsoH83Dt
+         OvQFdHw+R84+bANhv8frU1XLvV7KgpSomqvbiPuKv0J1W5sdXvh9iT6DJuQx2JqMBi
+         QjDCG6okN0mgg==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mmwe9-008Qfy-Lf; Tue, 16 Nov 2021 11:29:05 +0000
+        id 1mmwe9-008Qg4-Md; Tue, 16 Nov 2021 11:29:05 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
@@ -39,9 +39,9 @@ Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH 18/23] media: atomisp: drop a dead code
-Date:   Tue, 16 Nov 2021 11:28:59 +0000
-Message-Id: <d1fb52a308bf0559bd00f62162e7cbe22fe606c9.1637061474.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 20/23] media: atomisp: drop check_pipe_resolutions() logic
+Date:   Tue, 16 Nov 2021 11:29:01 +0000
+Message-Id: <e5b368d3a565fb3abcf12ebf834bf2c9944eab90.1637061474.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637061474.git.mchehab+huawei@kernel.org>
 References: <cover.1637061474.git.mchehab+huawei@kernel.org>
@@ -53,9 +53,9 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There's a commented dead code related to some future thing
-to be implemented. As this won't happen, as it would require
-a newer firmware, just drop the code.
+Such function doesn't exist on Intel Aero driver. As we're using
+its firmware, it may mean that this is not compatible with the
+current file. So, drop it.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -63,52 +63,90 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1637061474.git.mchehab+huawei@kernel.org/
 
- drivers/staging/media/atomisp/pci/sh_css.c | 31 ----------------------
- 1 file changed, 31 deletions(-)
+ drivers/staging/media/atomisp/pci/sh_css.c | 56 ----------------------
+ 1 file changed, 56 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index 766d92a4c2eb..5d022bb373a6 100644
+index 6970cf8a5dfe..12dfecbb6145 100644
 --- a/drivers/staging/media/atomisp/pci/sh_css.c
 +++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -3833,38 +3833,7 @@ ia_css_pipe_enqueue_buffer(struct ia_css_pipe *pipe,
+@@ -208,8 +208,6 @@ ia_css_pipe_check_format(struct ia_css_pipe *pipe,
+ 
+ /* ISP 2401 */
+ static int
+-check_pipe_resolutions(const struct ia_css_pipe *pipe);
+-
+ static int
+ ia_css_pipe_load_extension(struct ia_css_pipe *pipe,
+ 			   struct ia_css_fw_info *firmware);
+@@ -8689,49 +8687,6 @@ metadata_info_init(const struct ia_css_metadata_config *mdc,
+ 	return 0;
+ }
+ 
+-/* ISP2401 */
+-static int check_pipe_resolutions(const struct ia_css_pipe *pipe)
+-{
+-	int err = 0;
+-
+-	IA_CSS_ENTER_PRIVATE("");
+-
+-	if (!pipe || !pipe->stream) {
+-		IA_CSS_ERROR("null arguments");
+-		err = -EINVAL;
+-		goto EXIT;
+-	}
+-
+-	if (ia_css_util_check_res(pipe->config.input_effective_res.width,
+-				  pipe->config.input_effective_res.height) != 0) {
+-		IA_CSS_ERROR("effective resolution not supported");
+-		err = -EINVAL;
+-		goto EXIT;
+-	}
+-	if (!ia_css_util_resolution_is_zero(
+-		pipe->stream->config.input_config.input_res)) {
+-		if (!ia_css_util_res_leq(pipe->config.input_effective_res,
+-					 pipe->stream->config.input_config.input_res)) {
+-			IA_CSS_ERROR("effective resolution is larger than input resolution");
+-			err = -EINVAL;
+-			goto EXIT;
+-		}
+-	}
+-	if (!ia_css_util_resolution_is_even(pipe->config.output_info[0].res)) {
+-		IA_CSS_ERROR("output resolution must be even");
+-		err = -EINVAL;
+-		goto EXIT;
+-	}
+-	if (!ia_css_util_resolution_is_even(pipe->config.vf_output_info[0].res)) {
+-		IA_CSS_ERROR("VF resolution must be even");
+-		err = -EINVAL;
+-		goto EXIT;
+-	}
+-EXIT:
+-	IA_CSS_LEAVE_ERR_PRIVATE(err);
+-	return err;
+-}
+-
+ int
+ ia_css_stream_create(const struct ia_css_stream_config *stream_config,
+ 		     int num_pipes,
+@@ -8941,17 +8896,6 @@ ia_css_stream_create(const struct ia_css_stream_config *stream_config,
+ 			   effective_res.height);
  	}
  
- 	buf_type = buffer->type;
--	/* following code will be enabled when IA_CSS_BUFFER_TYPE_SEC_OUTPUT_FRAME
--	   is removed */
--#if 0
--	if (buf_type == IA_CSS_BUFFER_TYPE_OUTPUT_FRAME) {
--		bool found_pipe = false;
- 
--		for (i = 0; i < IA_CSS_PIPE_MAX_OUTPUT_STAGE; i++) {
--			if ((buffer->data.frame->info.res.width == pipe->output_info[i].res.width) &&
--			    (buffer->data.frame->info.res.height == pipe->output_info[i].res.height)) {
--				buf_type += i;
--				found_pipe = true;
--				break;
+-	if (IS_ISP2401) {
+-		for (i = 0; i < num_pipes; i++) {
+-			if (pipes[i]->config.mode != IA_CSS_PIPE_MODE_ACC &&
+-			    pipes[i]->config.mode != IA_CSS_PIPE_MODE_COPY) {
+-				err = check_pipe_resolutions(pipes[i]);
+-				if (err)
+-					goto ERR;
 -			}
 -		}
--		if (!found_pipe)
--			return -EINVAL;
 -	}
--	if (buf_type == IA_CSS_BUFFER_TYPE_VF_OUTPUT_FRAME) {
--		bool found_pipe = false;
 -
--		for (i = 0; i < IA_CSS_PIPE_MAX_OUTPUT_STAGE; i++) {
--			if ((buffer->data.frame->info.res.width == pipe->vf_output_info[i].res.width) &&
--			    (buffer->data.frame->info.res.height == pipe->vf_output_info[i].res.height)) {
--				buf_type += i;
--				found_pipe = true;
--				break;
--			}
--		}
--		if (!found_pipe)
--			return -EINVAL;
--	}
--#endif
- 	pipe_id = pipe->mode;
- 
- 	IA_CSS_LOG("pipe_id=%d, buf_type=%d", pipe_id, buf_type);
+ 	err = ia_css_stream_isp_parameters_init(curr_stream);
+ 	if (err)
+ 		goto ERR;
 -- 
 2.33.1
 
