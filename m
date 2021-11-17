@@ -2,53 +2,43 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12562C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:57:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D87C9C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:57:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA84963264
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:56:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B78C76321B
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:57:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235788AbhKQJ74 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Nov 2021 04:59:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35290 "EHLO mail.kernel.org"
+        id S235799AbhKQJ75 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Nov 2021 04:59:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35282 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235741AbhKQJ7z (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235768AbhKQJ7z (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 17 Nov 2021 04:59:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3FEA661B42;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 42CDF61BD2;
         Wed, 17 Nov 2021 09:56:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637143017;
-        bh=NBQtSlDWfs2XCTUyNsNfvSddkY1koyz3bFeL6w3SY8Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=okqXZtYx8UUpJFxYjiOZyNuSVynJl/EB3nu1/lwsZ/Tebl5AdLWlh2jI5VrsQGsaW
-         7yR1kpozBSQXPHOek7YvqLLqxqCW2X/YqPk7AQRUdLBwMbTQwVheIH2cuVNiXlS2iZ
-         xg2x9c4BDh8PibiGIoC4iZqy0oqqRjsz+Py2TDTwnvXchuCnn0rFXQ3DMWhWpGLZnq
-         I5qqQxFX+BFbhy/fPh2Mn3Mku/km265IhtzczIcCHlV5NnQZWn25Jw4m2XvjPZGf46
-         qRUpgk/1FYevuMHfpqhDb8nougEsYr/fFo83vvCPKQc+xR/8iw1CT/b5am+9wjxqa5
-         q8Jq8+mm7498g==
+        bh=NK9F7iRTBM1/CzDwAYQhJi9TgsotU7EOz58bIbq9ChM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=F0gbIzwPFmh4iCrat9iJ7oqOZs6FK3HWgWlC019RdOglT/n9E7QW0iG4IMUCO3nIw
+         7D/GJozEiVJLbGav5iVxiUR/rQaWkpilKvbrioCfbmhEiykttozLM3Sxns9c0Kt5v3
+         OoBYJcu25kJbmaOd0CzpjPgpPMGjIBUmAkMXw1Kg180YpslTNjTMjwstSH18/1LAOJ
+         PDWK1xOAAIxccuSBGU+NajeG4/u5y8DQuiBJ3D63eam8HL9fyZ9kOrYqsPcf561/GY
+         hFqsBBSxXhPMXQrYk8P/difVnf3HLLpf1Tll52uC1rdNnfkR8MOMUGIjjegjpIooL8
+         R0DTmTyibwTJg==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mnHgV-00DIUj-7h; Wed, 17 Nov 2021 09:56:55 +0000
+        id 1mnHgV-00DIUN-3j; Wed, 17 Nov 2021 09:56:55 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Deepak R Varma <drv@mailo.com>,
-        Ding Xiang <dingxiang@cmss.chinamobile.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Yang Li <abaci-bugfix@linux.alibaba.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH v2 07/12] media: atomisp: remove #ifdef HAS_NO_HMEM
-Date:   Wed, 17 Nov 2021 09:56:49 +0000
-Message-Id: <63705da3dfc8922a2dbfc3c805a5faadb4416954.1637142905.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 00/12] media: atomisp: reduce the gap for ISP2401
+Date:   Wed, 17 Nov 2021 09:56:42 +0000
+Message-Id: <cover.1637142905.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1637142905.git.mchehab+huawei@kernel.org>
-References: <cover.1637142905.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -57,146 +47,66 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is not defined anywhere, so, solve the ifdefs, getting
-rid of them.
+As the driver and the firmware are closely bound each other and we're
+using the Intel Aero firmware, with is widely available, make the sh_css
+code closer to the OOT device driver for such board.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
+As a plus, it reduces the number of #ifdefs inside the code.
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH v2 00/12] at: https://lore.kernel.org/all/cover.1637142905.git.mchehab+huawei@kernel.org/
+Patch 1: drop several boilerplate files;
+Patch 2 and above: reduce sh_css gap.
 
- .../atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.c   |  2 --
- .../raw_aa_binning_1.0/ia_css_raa.host.c               |  2 --
- .../pci/isp/kernels/s3a/s3a_1.0/ia_css_s3a.host.c      |  5 -----
- .../media/atomisp/pci/runtime/binary/src/binary.c      |  4 ----
- drivers/staging/media/atomisp/pci/sh_css_params.c      | 10 ----------
- 5 files changed, 23 deletions(-)
+- v2: patch 12/13 from the past review was merged with 08/13.
 
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.c
-index 82aa69b74677..2091f001502d 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.c
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/bh/bh_2/ia_css_bh.host.c
-@@ -13,7 +13,6 @@
-  * more details.
-  */
- 
--#if !defined(HAS_NO_HMEM)
- 
- #include "ia_css_types.h"
- #include "sh_css_internal.h"
-@@ -63,4 +62,3 @@ ia_css_bh_encode(
- 	    uDIGIT_FITTING(from->ae_y_coef_b, 16, SH_CSS_AE_YCOEF_SHIFT);
- }
- 
--#endif
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/raw_aa_binning/raw_aa_binning_1.0/ia_css_raa.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/raw_aa_binning/raw_aa_binning_1.0/ia_css_raa.host.c
-index 29c707ecf9f3..9b756daddee0 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/raw_aa_binning/raw_aa_binning_1.0/ia_css_raa.host.c
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/raw_aa_binning/raw_aa_binning_1.0/ia_css_raa.host.c
-@@ -13,7 +13,6 @@
-  * more details.
-  */
- 
--#if !defined(HAS_NO_HMEM)
- 
- #include "ia_css_types.h"
- #include "sh_css_internal.h"
-@@ -32,4 +31,3 @@ ia_css_raa_encode(
- 	(void)from;
- }
- 
--#endif
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/s3a/s3a_1.0/ia_css_s3a.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/s3a/s3a_1.0/ia_css_s3a.host.c
-index ba52c80df4a5..bd7b89d9475b 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/s3a/s3a_1.0/ia_css_s3a.host.c
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/s3a/s3a_1.0/ia_css_s3a.host.c
-@@ -227,10 +227,6 @@ ia_css_s3a_hmem_decode(
-     struct ia_css_3a_statistics *host_stats,
-     const struct ia_css_bh_table *hmem_buf)
- {
--#if defined(HAS_NO_HMEM)
--	(void)host_stats;
--	(void)hmem_buf;
--#else
- 	struct ia_css_3a_rgby_output	*out_ptr;
- 	int			i;
- 
-@@ -291,7 +287,6 @@ ia_css_s3a_hmem_decode(
- 	out_ptr[0].g -= diff;
- 	out_ptr[0].b -= diff;
- 	out_ptr[0].y -= diff;
--#endif
- }
- 
- void
-diff --git a/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c b/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
-index 851e1d34a521..bbb93cb8c070 100644
---- a/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
-@@ -805,11 +805,7 @@ ia_css_binary_3a_grid_info(const struct ia_css_binary *binary,
- 	s3a_info->deci_factor_log2  = binary->deci_factor_log2;
- 	s3a_info->elem_bit_depth    = SH_CSS_BAYER_BITS;
- 	s3a_info->use_dmem          = binary->info->sp.s3a.s3atbl_use_dmem;
--#if defined(HAS_NO_HMEM)
--	s3a_info->has_histogram     = 1;
--#else
- 	s3a_info->has_histogram     = 0;
--#endif
- 	IA_CSS_LEAVE_ERR_PRIVATE(err);
- 	return err;
- }
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-index f3f8d99c84a4..41ed8e4600ff 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-@@ -16,12 +16,10 @@
- #include "gdc_device.h"		/* gdc_lut_store(), ... */
- #include "isp.h"			/* ISP_VEC_ELEMBITS */
- #include "vamem.h"
--#if !defined(HAS_NO_HMEM)
- #ifndef __INLINE_HMEM__
- #define __INLINE_HMEM__
- #endif
- #include "hmem.h"
--#endif /* !defined(HAS_NO_HMEM) */
- #define IA_CSS_INCLUDE_PARAMETERS
- #define IA_CSS_INCLUDE_ACC_PARAMETERS
- 
-@@ -1489,10 +1487,8 @@ ia_css_translate_3a_statistics(
- 		ia_css_s3a_vmem_decode(host_stats, isp_stats->vmem_stats_hi,
- 				       isp_stats->vmem_stats_lo);
- 	}
--#if !defined(HAS_NO_HMEM)
- 	IA_CSS_LOG("3A: HMEM");
- 	ia_css_s3a_hmem_decode(host_stats, isp_stats->hmem_stats);
--#endif
- 
- 	IA_CSS_LEAVE("void");
- }
-@@ -2157,9 +2153,7 @@ ia_css_isp_3a_statistics_allocate(const struct ia_css_3a_grid_info *grid)
- 		me->vmem_size = ISP_S3ATBL_HI_LO_STRIDE_BYTES *
- 				grid->aligned_height;
- 	}
--#if !defined(HAS_NO_HMEM)
- 	me->hmem_size = sizeof_hmem(HMEM0_ID);
--#endif
- 
- 	/* All subsections need to be aligned to the system bus width */
- 	me->dmem_size = CEIL_MUL(me->dmem_size, HIVE_ISP_DDR_WORD_BYTES);
-@@ -4148,12 +4142,8 @@ ia_css_3a_statistics_allocate(const struct ia_css_3a_grid_info *grid)
- 	me->data = kvmalloc(grid_size * sizeof(*me->data), GFP_KERNEL);
- 	if (!me->data)
- 		goto err;
--#if !defined(HAS_NO_HMEM)
- 	/* No weighted histogram, no structure, treat the histogram data as a byte dump in a byte array */
- 	me->rgby_data = kvmalloc(sizeof_hmem(HMEM0_ID), GFP_KERNEL);
--#else
--	me->rgby_data = NULL;
--#endif
- 
- 	IA_CSS_LEAVE("return=%p", me);
- 	return me;
+Mauro Carvalho Chehab (12):
+  media: atomisp: drop empty files
+  media: atomisp: simplify sh_css_defs.h
+  media: atomisp: sh_css_metrics: drop some unused code
+  media: atomisp: sh_css_mipi: cleanup the code
+  media: atomisp: sh_css_params: remove tests for ISP2401
+  media: atomisp: sh_css_params: cleanup the code
+  media: atomisp: remove #ifdef HAS_NO_HMEM
+  media: atomisp: get rid of USE_WINDOWS_BINNING_FACTOR tests
+  media: atomisp: get rid of #ifdef HAS_BL
+  media: atomisp: get rid of sctbl_legacy_*
+  media: atomisp: sh_css_param_shading: fix comments coding style
+  media: atomisp: sh_css_sp: better support the current firmware
+
+ drivers/staging/media/atomisp/Makefile        |   4 -
+ .../staging/media/atomisp/pci/atomisp_cmd.c   |  28 +--
+ .../staging/media/atomisp/pci/ia_css_pipe.h   |   4 +-
+ .../media/atomisp/pci/ia_css_stream_public.h  |  10 +-
+ .../pci/isp/kernels/bh/bh_2/ia_css_bh.host.c  |   2 -
+ .../raw_aa_binning_1.0/ia_css_raa.host.c      |   2 -
+ .../isp/kernels/s3a/s3a_1.0/ia_css_s3a.host.c |   5 -
+ .../isp/kernels/tnr/tnr_1.0/ia_css_tnr.host.c |   6 +-
+ .../kernels/tnr/tnr_1.0/ia_css_tnr_param.h    |   4 +-
+ .../pci/isp/modes/interface/isp_const.h       |   4 +-
+ .../runtime/binary/interface/ia_css_binary.h  |   2 -
+ .../atomisp/pci/runtime/binary/src/binary.c   |  18 +-
+ .../pci/runtime/debug/src/ia_css_debug.c      |   2 +-
+ drivers/staging/media/atomisp/pci/sh_css.c    |  16 +-
+ .../staging/media/atomisp/pci/sh_css_defs.h   |  48 +---
+ .../media/atomisp/pci/sh_css_firmware.h       |   3 -
+ .../media/atomisp/pci/sh_css_internal.h       |   2 +-
+ .../media/atomisp/pci/sh_css_metadata.c       |  17 --
+ .../media/atomisp/pci/sh_css_metrics.c        |  25 --
+ .../staging/media/atomisp/pci/sh_css_mipi.c   | 159 +++----------
+ .../staging/media/atomisp/pci/sh_css_mipi.h   |  15 --
+ .../staging/media/atomisp/pci/sh_css_morph.c  |  17 --
+ .../media/atomisp/pci/sh_css_param_shading.c  |  80 +++----
+ .../staging/media/atomisp/pci/sh_css_params.c | 219 ++----------------
+ .../staging/media/atomisp/pci/sh_css_params.h |   8 -
+ .../media/atomisp/pci/sh_css_shading.c        |  17 --
+ drivers/staging/media/atomisp/pci/sh_css_sp.c |  17 +-
+ .../staging/media/atomisp/pci/sh_css_stream.c |  17 --
+ 28 files changed, 149 insertions(+), 602 deletions(-)
+ delete mode 100644 drivers/staging/media/atomisp/pci/sh_css_metadata.c
+ delete mode 100644 drivers/staging/media/atomisp/pci/sh_css_morph.c
+ delete mode 100644 drivers/staging/media/atomisp/pci/sh_css_shading.c
+ delete mode 100644 drivers/staging/media/atomisp/pci/sh_css_stream.c
+
 -- 
 2.33.1
+
 
