@@ -2,155 +2,156 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1029C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 19:34:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 615DEC433F5
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 21:03:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9AC6560EC0
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 19:34:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 488E961B64
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 21:03:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240537AbhKQThT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Nov 2021 14:37:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45526 "EHLO mail.kernel.org"
+        id S240161AbhKQVGZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Nov 2021 16:06:25 -0500
+Received: from mga14.intel.com ([192.55.52.115]:52739 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240506AbhKQThL (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Nov 2021 14:37:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C2E4E61BFB;
-        Wed, 17 Nov 2021 19:34:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637177650;
-        bh=bNH4TlgQ+lg/SdNYNZKDeseEUp9in8zyWU06Z5yoQ0I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MFD9dGMkyLmxotmkTd/vqTbPf2deg8WOvypcyaSV1D2picBq1vzP/xFwYFUy9xPnB
-         HSWGQHuH8hZ2dzvUYuQeSQJHoOqk5tEX16uTlJL32WkZc9IyaROW/Sp6iXi5lt0M/b
-         bEgx37oQD3n3jXI9JhQGYtDS29FO8YKEQvk8u6HiQCMMzemHGkVvwH9pNuCi5MfOT4
-         vcZIbVwm7AWJX+TCQdzn/49YAE8cpwAdVaYsVHfiayLkssZT+3gIIh7OdpJ/Wi6ifZ
-         9WH/l6sjfQv/dwq5aQHx7Na+t2VF/1JlrlyAePrdNot+wpc7zc/IsBhmwtUNT2QKDh
-         N/jNp8NO7EbCw==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mnQh6-00DXHf-1m; Wed, 17 Nov 2021 19:34:08 +0000
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kaixu Xia <kaixuxia@tencent.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Matthias Maennich <maennich@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH 2/8] media: atomisp: get rid of set pipe version custom ctrl
-Date:   Wed, 17 Nov 2021 19:34:00 +0000
-Message-Id: <3d93044724f204f3a61af6b71e77b5f310018eea.1637177402.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1637177402.git.mchehab+huawei@kernel.org>
-References: <cover.1637177402.git.mchehab+huawei@kernel.org>
+        id S230433AbhKQVGZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Nov 2021 16:06:25 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10171"; a="234294690"
+X-IronPort-AV: E=Sophos;i="5.87,241,1631602800"; 
+   d="scan'208";a="234294690"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2021 13:03:26 -0800
+X-IronPort-AV: E=Sophos;i="5.87,241,1631602800"; 
+   d="scan'208";a="536439178"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2021 13:03:24 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 2EF7C2030F;
+        Wed, 17 Nov 2021 23:03:22 +0200 (EET)
+Date:   Wed, 17 Nov 2021 23:03:22 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Eugen.Hristev@microchip.com
+Cc:     leonl@leopardimaging.com, linux-media@vger.kernel.org,
+        skomatineni@nvidia.com, luca@lucaceresoli.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: i2c: imx274: fix s_frame_interval runtime resume
+ not requested
+Message-ID: <YZVuGrkKTrvQC/Qm@paasikivi.fi.intel.com>
+References: <20211117154009.261787-1-eugen.hristev@microchip.com>
+ <YZUptcn1isWQuCdq@paasikivi.fi.intel.com>
+ <97fbf01c-6cfb-7ab9-f045-383a1e4053c2@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <97fbf01c-6cfb-7ab9-f045-383a1e4053c2@microchip.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It doesn't make sense to have a control for that. Besides that,
-the Intel Aero implementation doesn't have, which means that
-even the custom control is not used in practice, at least
-outside Android.
+Hi Eugen,
 
-So, get rid of it.
+On Wed, Nov 17, 2021 at 04:52:40PM +0000, Eugen.Hristev@microchip.com wrote:
+> On 11/17/21 6:11 PM, Sakari Ailus wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > Hi Eugen,
+> > 
+> > On Wed, Nov 17, 2021 at 05:40:09PM +0200, Eugen Hristev wrote:
+> >> pm_runtime_resume_and_get should be called when the s_frame_interval
+> >> is called.
+> >>
+> >> The driver will try to access device registers to configure VMAX, coarse
+> >> time and exposure.
+> >>
+> >> Currently if the runtime is not resumed, this fails:
+> >>   # media-ctl -d /dev/media0 --set-v4l2 '"IMX274 1-001a":0[fmt:SRGGB10_1X10/3840x2
+> >> 160@1/10]'
+> >>
+> >> IMX274 1-001a: imx274_binning_goodness: ask 3840x2160, size 3840x2160, goodness 0
+> >> IMX274 1-001a: imx274_binning_goodness: ask 3840x2160, size 1920x1080, goodness -3000
+> >> IMX274 1-001a: imx274_binning_goodness: ask 3840x2160, size 1280x720, goodness -4000
+> >> IMX274 1-001a: imx274_binning_goodness: ask 3840x2160, size 1280x540, goodness -4180
+> >> IMX274 1-001a: __imx274_change_compose: selected 1x1 binning
+> >> IMX274 1-001a: imx274_set_frame_interval: input frame interval = 1 / 10
+> >> IMX274 1-001a: imx274_read_mbreg : addr 0x300e, val=0x1 (2 bytes)
+> >> IMX274 1-001a: imx274_set_frame_interval : register SVR = 1
+> >> IMX274 1-001a: imx274_read_mbreg : addr 0x30f6, val=0x6a8 (2 bytes)
+> >> IMX274 1-001a: imx274_set_frame_interval : register HMAX = 1704
+> >> IMX274 1-001a: imx274_set_frame_length : input length = 2112
+> >> IMX274 1-001a: imx274_write_mbreg : i2c bulk write failed, 30f8 = 884 (3 bytes)
+> >> IMX274 1-001a: imx274_set_frame_length error = -121
+> >> IMX274 1-001a: imx274_set_frame_interval error = -121
+> >> Unable to setup formats: Remote I/O error (121)
+> >>
+> >> The device is not resumed thus the remote I/O error.
+> >>
+> >> Setting the frame interval works at streaming time, because
+> >> pm_runtime_resume_and_get is called at s_stream time before sensor setup.
+> >> The failure happens when only the s_frame_interval is called separately
+> >> independently on streaming time.
+> >>
+> >> Fixes: ad97bc37426c ("media: i2c: imx274: Add IMX274 power on and off sequence"
+> >> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> >> ---
+> >>   drivers/media/i2c/imx274.c | 5 +++++
+> >>   1 file changed, 5 insertions(+)
+> >>
+> >> diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+> >> index e89ef35a71c5..6e63fdcc5e46 100644
+> >> --- a/drivers/media/i2c/imx274.c
+> >> +++ b/drivers/media/i2c/imx274.c
+> >> @@ -1420,6 +1420,10 @@ static int imx274_s_frame_interval(struct v4l2_subdev *sd,
+> >>        int min, max, def;
+> >>        int ret;
+> >>
+> >> +     ret = pm_runtime_resume_and_get(&imx274->client->dev);
+> >> +     if (ret < 0)
+> >> +             return ret;
+> >> +
+> >>        mutex_lock(&imx274->lock);
+> >>        ret = imx274_set_frame_interval(imx274, fi->interval);
+> >>
+> >> @@ -1451,6 +1455,7 @@ static int imx274_s_frame_interval(struct v4l2_subdev *sd,
+> >>
+> >>   unlock:
+> >>        mutex_unlock(&imx274->lock);
+> >> +     pm_runtime_put(&imx274->client->dev);
+> >>
+> >>        return ret;
+> >>   }
+> > 
+> > If the device is powered off in the end, could you instead not power it on
+> > in the first place? I.e. see how this works for the s_ctrl() callback.
+> 
+> 
+> Hi Sakari,
+> 
+> I tried this initially, as in s_ctrl,
+> 
+>          if (!pm_runtime_get_if_in_use(&imx274->client->dev)) 
+> 
+>                  return 0;
+> 
+> 
+> However, if the device is powered off, the s_frame_interval does not do 
+> anything (return 0), and the frame interval is not changed. Not even the 
+> internal structure frame_interval is updated (as this is updated after 
+> configuring the actual device).
+> And in consequence media-ctl -p will still print the old frame interval.
+> 
+> So either we power on the device to set everything, or, things have to 
+> be set in the software struct and written once streaming starts.
+> I am in favor of the first option (hence the patch), to avoid having 
+> configuration that was requested but not written to the device itself.
+> The second option would require some rework to move the software part 
+> before the hardware part, and to assume that the hardware part never 
+> fails in bounds or by other reason (or the software part would be no 
+> longer consistent)
+> 
+> What do you think ?
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
+Seems reasonable, but the driver is hardly doing this in an exemplary way.
+Still the rework might not worth the small gain. I'll take this one then.
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 0/8] at: https://lore.kernel.org/all/cover.1637177402.git.mchehab+huawei@kernel.org/
-
- .../media/atomisp/pci/atomisp_compat_css20.c  |  9 --------
- .../media/atomisp/pci/atomisp_subdev.c        | 23 -------------------
- .../media/atomisp/pci/atomisp_subdev.h        |  1 -
- 3 files changed, 33 deletions(-)
-
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-index 7edee293b132..1173be0e72b0 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-@@ -611,15 +611,6 @@ static void __apply_additional_pipe_config(
- 		if (stream_env->pipe_configs[pipe_id].
- 		    default_capture_config.mode == IA_CSS_CAPTURE_MODE_RAW)
- 			stream_env->pipe_configs[pipe_id].enable_dz = false;
--
--		if (IS_ISP2401) {
--			/* the isp default to use ISP2.2 and the camera hal will
--			* control whether use isp2.7 */
--			if (asd->select_isp_version->val == ATOMISP_CSS_ISP_PIPE_VERSION_2_7)
--				stream_env->pipe_configs[pipe_id].isp_pipe_version =  SH_CSS_ISP_PIPE_VERSION_2_7;
--			else
--				stream_env->pipe_configs[pipe_id].isp_pipe_version = SH_CSS_ISP_PIPE_VERSION_2_2;
--		}
- 		break;
- 	case IA_CSS_PIPE_ID_VIDEO:
- 		/* enable reduced pipe to have binary
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.c b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-index a3f3c42f9db7..1807cfa786a7 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-@@ -1058,24 +1058,6 @@ static const struct v4l2_ctrl_config ctrl_depth_mode = {
- 	.def = 0,
- };
- 
--/*
-- * Control for selectting ISP version
-- *
-- * When enabled, that means ISP version will be used ISP2.7. when disable, the
-- * isp will default to use ISP2.2.
-- * Note: Make sure set this configuration before creating stream.
-- */
--static const struct v4l2_ctrl_config ctrl_select_isp_version = {
--	.ops = &ctrl_ops,
--	.id = V4L2_CID_ATOMISP_SELECT_ISP_VERSION,
--	.type = V4L2_CTRL_TYPE_BOOLEAN,
--	.name = "Select Isp version",
--	.min = 0,
--	.max = 1,
--	.step = 1,
--	.def = 0,
--};
--
- static void atomisp_init_subdev_pipe(struct atomisp_sub_device *asd,
- 				     struct atomisp_video_pipe *pipe, enum v4l2_buf_type buf_type)
- {
-@@ -1223,11 +1205,6 @@ static int isp_subdev_init_entities(struct atomisp_sub_device *asd)
- 	    v4l2_ctrl_new_custom(&asd->ctrl_handler,
- 				 &ctrl_disable_dz,
- 				 NULL);
--	if (IS_ISP2401) {
--		asd->select_isp_version = v4l2_ctrl_new_custom(&asd->ctrl_handler,
--							       &ctrl_select_isp_version,
--							       NULL);
--	}
- 
- 	/* Make controls visible on subdev as well. */
- 	asd->subdev.ctrl_handler = &asd->ctrl_handler;
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.h b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-index a8d210ea5f8b..7d731f1fee72 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-@@ -319,7 +319,6 @@ struct atomisp_sub_device {
- 
- 	/* ISP2401 */
- 	struct v4l2_ctrl *ion_dev_fd;
--	struct v4l2_ctrl *select_isp_version;
- 
- 	struct v4l2_ctrl *disable_dz;
- 
 -- 
-2.33.1
+Kind regards,
 
+Sakari Ailus
