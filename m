@@ -2,43 +2,53 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2488C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 19:34:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11A66C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 19:34:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E63F61BD2
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 19:34:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E09A361BF4
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 19:34:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240511AbhKQThM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Nov 2021 14:37:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45386 "EHLO mail.kernel.org"
+        id S240516AbhKQThO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Nov 2021 14:37:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45406 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229554AbhKQThJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S236117AbhKQThJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 17 Nov 2021 14:37:09 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 99CC960EC0;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A317461B30;
         Wed, 17 Nov 2021 19:34:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637177650;
-        bh=jMlKOq75JKI6mQX7Vkxy7abjzXkoN9hP1je25Y0LlS4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=d+mk+LXmGvla5lkPux/RfA83vIVfe988HZQOQCglO7C1b732wK7A2ZmCdaiV4NQPU
-         9tw4oeSIJDZvI+AZo7EdJ1+CMoYCCjzNNpmnytk2N7z/kEhYci83ejaO4V9yqDjSpo
-         FlBPfSzndA2EGeAJ9IKH7kctg8InHkBO3B0u5Gxk8kXT+TTCFKrDz+nNmq/1didz5v
-         atfwHAEa321Ms2r54jvyI6HtV4dOPiGA4w9m9qzlZ0LTplcABwrIKWRtuPW2TFlsot
-         lUsh9b364IjtIX1bpnmtk/gOj57ssILrx3P/v62TXgw3pG8o6miRxEjXDRfsOG6WBT
-         TBafJZ21mgyJw==
+        bh=sj2B2huQwh59FpOjf6V0Y3pZFT+H8BQMKj48jrEM3yQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BIBDz4SFD1hSPtPnvBlFQw/7rDY7MQUud0V7eBYcF4Pm1t3rNmLcjLT5cALd9gJUS
+         f+K89NZ+LVk4E5ssd2vkDPeFIsBYJTy8cmcwuDnI/vqtt4OJl+EdQfXbWtB4BJmKcd
+         ZeZiwblZandJAyDS8ssAUs5NF45zQjYcrZznQUa3j+5qe2rixG7CwSILzb0DokIWBh
+         /DkvR4WtYFDx3va+FYmTowfb3YRV0g1rqW8xWgHI61Gtgn6zphFIHvvXCWTJTG0Cw4
+         Q5zrhSpvFMoDFNhP7G0eExpWNIiFXDdUU5fixVifCXS0LOrAY/Zn6vrJH2SG/V0U87
+         70dKHXPQQ1SJg==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mnQh6-00DXHZ-0f; Wed, 17 Nov 2021 19:34:08 +0000
+        id 1mnQh6-00DXHx-5R; Wed, 17 Nov 2021 19:34:08 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kaixu Xia <kaixuxia@tencent.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH 0/8] media: atomisp: sync the remaining code with Aero firmware
-Date:   Wed, 17 Nov 2021 19:33:58 +0000
-Message-Id: <cover.1637177402.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 8/8] media: atomisp: cleanup qbuf logic
+Date:   Wed, 17 Nov 2021 19:34:06 +0000
+Message-Id: <198e1aae6e4e5d9970f0e5c885cb627ea144d515.1637177402.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1637177402.git.mchehab+huawei@kernel.org>
+References: <cover.1637177402.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -47,38 +57,58 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There are still a couple of things that are aiming firmware versions newer
-or different than Intel Aero firmware:
-    https://github.com/intel-aero/meta-intel-aero-base/blob/master/recipes-kernel/linux/linux-yocto/shisp_2401a0_v21.bin
+The logic there is meant to be used by newer firmwares.
+clean it up, in order to make compatible with the chosen
+firmware version.
 
-As the code should be in sync with the firmware, change the remaining
-code to be compatible with the firmware.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
 
-After this series, except if some mistakes were made, the atomisp code
-is now in sync with the Aero firmware.
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH 0/8] at: https://lore.kernel.org/all/cover.1637177402.git.mchehab+huawei@kernel.org/
 
-Mauro Carvalho Chehab (8):
-  media: atomisp: atomisp_cmd: make it more compatible with firmware
-  media: atomisp: get rid of set pipe version custom ctrl
-  media: atomisp: simplify binary.c
-  media: atomisp: binary.c: drop logic incompatible with firmware
-  media: atomisp: pipe_binarydesc: drop logic incompatible with firmware
-  media: atomisp: frame.c: drop a now-unused function
-  media: atomisp: add YUVPP at __atomisp_get_pipe() logic
-  media: atomisp: cleanup qbuf logic
+ .../staging/media/atomisp/pci/atomisp_ioctl.c | 19 -------------------
+ 1 file changed, 19 deletions(-)
 
- .../staging/media/atomisp/pci/atomisp_cmd.c   |  20 +-
- .../media/atomisp/pci/atomisp_compat_css20.c  |   9 -
- .../staging/media/atomisp/pci/atomisp_ioctl.c |  19 -
- .../media/atomisp/pci/atomisp_subdev.c        |  23 -
- .../media/atomisp/pci/atomisp_subdev.h        |   1 -
- .../pci/camera/pipe/src/pipe_binarydesc.c     |  18 +-
- .../atomisp/pci/runtime/binary/src/binary.c   | 489 +-----------------
- .../runtime/frame/interface/ia_css_frame.h    |  19 -
- .../atomisp/pci/runtime/frame/src/frame.c     |  70 ---
- 9 files changed, 27 insertions(+), 641 deletions(-)
-
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+index b2d3b8349234..562789c75299 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+@@ -1457,25 +1457,8 @@ static int atomisp_qbuf(struct file *file, void *fh, struct v4l2_buffer *buf)
+ 	    pipe->capq.streaming &&
+ 	    !asd->enable_raw_buffer_lock->val &&
+ 	    asd->params.offline_parm.num_captures == 1) {
+-		if (!IS_ISP2401) {
+ 			asd->pending_capture_request++;
+ 			dev_dbg(isp->dev, "Add one pending capture request.\n");
+-		} else {
+-			if (asd->re_trigger_capture) {
+-				ret = atomisp_css_offline_capture_configure(asd,
+-					asd->params.offline_parm.num_captures,
+-					asd->params.offline_parm.skip_frames,
+-					asd->params.offline_parm.offset);
+-				asd->re_trigger_capture = false;
+-				dev_dbg(isp->dev, "%s Trigger capture again ret=%d\n",
+-					__func__, ret);
+-
+-			} else {
+-				asd->pending_capture_request++;
+-				asd->re_trigger_capture = false;
+-				dev_dbg(isp->dev, "Add one pending capture request.\n");
+-			}
+-		}
+ 	}
+ 	rt_mutex_unlock(&isp->mutex);
+ 
+@@ -1868,8 +1851,6 @@ static int atomisp_streamon(struct file *file, void *fh,
+ 
+ 	/* Reset pending capture request count. */
+ 	asd->pending_capture_request = 0;
+-	if (IS_ISP2401)
+-		asd->re_trigger_capture = false;
+ 
+ 	if ((atomisp_subdev_streaming_count(asd) > sensor_start_stream) &&
+ 	    (!isp->inputs[asd->input_curr].camera_caps->multi_stream_ctrl)) {
 -- 
 2.33.1
-
 
