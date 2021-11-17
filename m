@@ -2,350 +2,147 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF580C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11B1FC433FE
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:27:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B86BF613A2
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:26:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E793F63214
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:27:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235089AbhKQJ2s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Nov 2021 04:28:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58812 "EHLO mail.kernel.org"
+        id S234503AbhKQJaj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Nov 2021 04:30:39 -0500
+Received: from comms.puri.sm ([159.203.221.185]:51378 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234622AbhKQJ2k (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Nov 2021 04:28:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D288A613A2;
-        Wed, 17 Nov 2021 09:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637141142;
-        bh=TmI5smJW7BBcnDb91N1SI3C/Ux8ypdlebUo9S3DBjfw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OoNK5lVgIUR97g1mHnmGzwYZGMcg6Eh7Ct/hJd7bkvgv0MuPAZbKX9NbVAe19dgWW
-         CA9uqSXsYZ45C/aTYr3vOaStT6sTkRQ/KjQFchWSB9dFA8AQwmpoYzqr+9/uG8c/lS
-         8hbQFYK8P+ugAAMPOGzS+Qrjo5/1N7yD1IQ+kWJLrhxklSIRa/eEekkcjMPOS7czM7
-         SE+B2azWP9vhEw4OrUCshiUHZnJUAIAf5zMtvXiXgVUIXIHUp4aXPPQOK2LHenmKWV
-         FgMIIsQfCb+tum/LMClxu61tVupw1DXsDbWyPnhD4xeN9XfyMv8A/YfdMteD20HhGs
-         WuB9I0gUtL9vQ==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mnHCF-00Cb5m-7p; Wed, 17 Nov 2021 09:25:39 +0000
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alex Dewar <alex.dewar90@gmail.com>,
-        Deepak R Varma <drv@mailo.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH 04/13] media: atomisp: sh_css_mipi: cleanup the code
-Date:   Wed, 17 Nov 2021 09:25:29 +0000
-Message-Id: <a152c9fdfa9362068fee1e2c70c7087fd30d6c53.1637140900.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1637140900.git.mchehab+huawei@kernel.org>
-References: <cover.1637140900.git.mchehab+huawei@kernel.org>
+        id S233303AbhKQJaa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Nov 2021 04:30:30 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 979DFDF722;
+        Wed, 17 Nov 2021 01:27:31 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 4qV44hPShOAV; Wed, 17 Nov 2021 01:27:30 -0800 (PST)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     rmfrfs@gmail.com, laurent.pinchart@ideasonboard.com,
+        mchehab@kernel.org, robh@kernel.org, shawnguo@kernel.org
+Cc:     kernel@pengutronix.de, kernel@puri.sm, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: [PATCH 1/2] media: imx: imx7-media-csi: add support for imx8mq
+Date:   Wed, 17 Nov 2021 10:27:09 +0100
+Message-Id: <20211117092710.3084034-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-With the ISP2401 firmware we're using, the code differences
-are not that much from ISP2400. Cleanup the code in order
-to make it closer to Intel Aero driver.
+Modeled after the NXP driver mx6s_capture.c that this driver is based on,
+imx8mq needs different settings for the baseaddr_switch mechanism. Define
+the needed bits and set that for imx8mq.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Without these settings, the system will "sometimes" hang completely when
+starting to stream (the interrupt will never be called).
+
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 ---
+ drivers/staging/media/imx/imx7-media-csi.c | 34 ++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 00/13] at: https://lore.kernel.org/all/cover.1637140900.git.mchehab+huawei@kernel.org/
-
- .../staging/media/atomisp/pci/sh_css_mipi.c   | 159 +++++-------------
- .../staging/media/atomisp/pci/sh_css_mipi.h   |  15 --
- 2 files changed, 38 insertions(+), 136 deletions(-)
-
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_mipi.c b/drivers/staging/media/atomisp/pci/sh_css_mipi.c
-index cfaa4719177c..0acf75497ae7 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_mipi.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_mipi.c
-@@ -33,47 +33,6 @@
- static u32
- ref_count_mipi_allocation[N_CSI_PORTS]; /* Initialized in mipi_init */
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index 2288dadb2683..8619cf2fc694 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -12,6 +12,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/module.h>
++#include <linux/of_device.h>
+ #include <linux/of_graph.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/platform_device.h>
+@@ -122,6 +123,10 @@
+ #define BIT_DATA_FROM_MIPI		BIT(22)
+ #define BIT_MIPI_YU_SWAP		BIT(21)
+ #define BIT_MIPI_DOUBLE_CMPNT		BIT(20)
++#define BIT_MASK_OPTION_FIRST_FRAME	(0 << 18)
++#define BIT_MASK_OPTION_CSI_EN		(1 << 18)
++#define BIT_MASK_OPTION_SECOND_FRAME	(2 << 18)
++#define BIT_MASK_OPTION_ON_DATA		(3 << 18)
+ #define BIT_BASEADDR_CHG_ERR_EN		BIT(9)
+ #define BIT_BASEADDR_SWITCH_SEL		BIT(5)
+ #define BIT_BASEADDR_SWITCH_EN		BIT(4)
+@@ -154,6 +159,12 @@
+ #define CSI_CSICR18			0x48
+ #define CSI_CSICR19			0x4c
  
--/*
-- * Check if a source port or TPG/PRBS ID is valid
-- */
--static bool ia_css_mipi_is_source_port_valid(struct ia_css_pipe *pipe,
--	unsigned int *pport)
--{
--	bool ret = true;
--	unsigned int port = 0;
--	unsigned int max_ports = 0;
--
--	switch (pipe->stream->config.mode) {
--	case IA_CSS_INPUT_MODE_BUFFERED_SENSOR:
--		port = (unsigned int)pipe->stream->config.source.port.port;
--		max_ports = N_CSI_PORTS;
--		break;
--	case IA_CSS_INPUT_MODE_TPG:
--		port = (unsigned int)pipe->stream->config.source.tpg.id;
--		max_ports = N_CSS_TPG_IDS;
--		break;
--	case IA_CSS_INPUT_MODE_PRBS:
--		port = (unsigned int)pipe->stream->config.source.prbs.id;
--		max_ports = N_CSS_PRBS_IDS;
--		break;
--	default:
--		assert(false);
--		ret = false;
--		break;
--	}
--
--	if (ret) {
--		assert(port < max_ports);
--
--		if (port >= max_ports)
--			ret = false;
--	}
--
--	*pport = port;
--
--	return ret;
--}
--
- /* Assumptions:
-  *	- A line is multiple of 4 bytes = 1 word.
-  *	- Each frame has SOF and EOF (each 1 word).
-@@ -227,6 +186,10 @@ ia_css_mipi_frame_calculate_size(const unsigned int width,
- 	return err;
- }
- 
-+/*
-+ * Check if a source port or TPG/PRBS ID is valid
-+ */
++enum imx_soc {
++	IMX6UL = 0,
++	IMX7,
++	IMX8MQ,
++};
 +
- #if !defined(ISP2401)
- int
- ia_css_mipi_frame_enable_check_on_size(const enum mipi_port_id port,
-@@ -272,16 +235,20 @@ bool mipi_is_free(void)
- 	return true;
+ struct imx7_csi {
+ 	struct device *dev;
+ 	struct v4l2_subdev sd;
+@@ -189,6 +200,8 @@ struct imx7_csi {
+ 	bool is_csi2;
+ 
+ 	struct completion last_eof_completion;
++
++	enum imx_soc type;
+ };
+ 
+ static struct imx7_csi *
+@@ -537,6 +550,16 @@ static void imx7_csi_deinit(struct imx7_csi *csi,
+ 	clk_disable_unprepare(csi->mclk);
  }
  
--int
--calculate_mipi_buff_size(
--    struct ia_css_stream_config *stream_cfg,
--    unsigned int *size_mem_words)
-+#if defined(ISP2401)
-+/*
-+ * @brief Calculate the required MIPI buffer sizes.
-+ * Based on the stream configuration, calculate the
-+ * required MIPI buffer sizes (in DDR words).
-+ *
-+ * @param[in]   stream_cfg              Point to the target stream configuration
-+ * @param[out]  size_mem_words  MIPI buffer size in DDR words.
-+ *
-+ * @return
-+ */
-+static int calculate_mipi_buff_size(struct ia_css_stream_config *stream_cfg,
-+				    unsigned int *size_mem_words)
++static void imx8mq_baseaddr_switch(struct imx7_csi *csi)
++{
++	u32 cr18 = imx7_csi_reg_read(csi, CSI_CSICR18);
++
++	cr18 |= BIT_BASEADDR_SWITCH_EN | BIT_BASEADDR_SWITCH_SEL |
++		BIT_BASEADDR_CHG_ERR_EN;
++	cr18 |= BIT_MASK_OPTION_SECOND_FRAME;
++	imx7_csi_reg_write(csi, cr18, CSI_CSICR18);
++}
++
+ static void imx7_csi_enable(struct imx7_csi *csi)
  {
--#if !defined(ISP2401)
--	int err = -EINVAL;
--	(void)stream_cfg;
--	(void)size_mem_words;
--#else
- 	unsigned int width;
- 	unsigned int height;
- 	enum atomisp_input_format format;
-@@ -373,26 +340,9 @@ calculate_mipi_buff_size(
- 	*size_mem_words = mem_words_per_buff;
+ 	/* Clear the Rx FIFO and reflash the DMA controller. */
+@@ -551,7 +574,11 @@ static void imx7_csi_enable(struct imx7_csi *csi)
  
- 	IA_CSS_LEAVE_ERR(err);
--#endif
- 	return err;
+ 	/* Enable the RxFIFO DMA and the CSI. */
+ 	imx7_csi_dmareq_rff_enable(csi);
++
+ 	imx7_csi_hw_enable(csi);
++
++	if (csi->type == IMX8MQ)
++		imx8mq_baseaddr_switch(csi);
  }
--
--static bool buffers_needed(struct ia_css_pipe *pipe)
--{
--	if (!IS_ISP2401) {
--		if (pipe->stream->config.mode == IA_CSS_INPUT_MODE_BUFFERED_SENSOR)
--			return true;
--		else
--			return false;
--	}
--
--	if (pipe->stream->config.mode == IA_CSS_INPUT_MODE_BUFFERED_SENSOR ||
--	    pipe->stream->config.mode == IA_CSS_INPUT_MODE_TPG ||
--	    pipe->stream->config.mode == IA_CSS_INPUT_MODE_PRBS)
--		return true;
--
--	return false;
--}
-+#endif
  
- int
- allocate_mipi_frames(struct ia_css_pipe *pipe,
-@@ -422,45 +372,25 @@ allocate_mipi_frames(struct ia_css_pipe *pipe,
- 	}
+ static void imx7_csi_disable(struct imx7_csi *csi)
+@@ -1155,6 +1182,8 @@ static int imx7_csi_probe(struct platform_device *pdev)
+ 	if (IS_ERR(csi->regbase))
+ 		return PTR_ERR(csi->regbase);
  
- #endif
--
--	if (!buffers_needed(pipe)) {
-+	if (pipe->stream->config.mode != IA_CSS_INPUT_MODE_BUFFERED_SENSOR) {
- 		ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE,
- 				    "allocate_mipi_frames(%p) exit: no buffers needed for pipe mode.\n",
- 				    pipe);
- 		return 0; /* AM TODO: Check  */
- 	}
++	csi->type = (enum imx_soc)of_device_get_match_data(&pdev->dev);
++
+ 	spin_lock_init(&csi->irqlock);
+ 	mutex_init(&csi->lock);
  
--	if (!IS_ISP2401) {
--		port = (unsigned int)pipe->stream->config.source.port.port;
--	} else {
--		/* Returns true if port is valid. So, invert it */
--		err = !ia_css_mipi_is_source_port_valid(pipe, &port);
--	}
--
--	assert(port < N_CSI_PORTS);
--
--	if ((!IS_ISP2401 && port >= N_CSI_PORTS) ||
--	    (IS_ISP2401 && err)) {
-+	port = (unsigned int)pipe->stream->config.source.port.port;
-+	if (port >= N_CSI_PORTS) {
- 		IA_CSS_ERROR("allocate_mipi_frames(%p) exit: port is not correct (port=%d).",
- 			     pipe, port);
- 		return -EINVAL;
- 	}
+@@ -1249,8 +1278,9 @@ static int imx7_csi_remove(struct platform_device *pdev)
+ }
  
- #ifdef ISP2401
--	err = calculate_mipi_buff_size(
--	    &pipe->stream->config,
--	    &my_css.mipi_frame_size[port]);
--#endif
--
--#if !defined(ISP2401)
--	if (ref_count_mipi_allocation[port] != 0) {
--		ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE,
--				    "allocate_mipi_frames(%p) exit: already allocated for this port (port=%d).\n",
--				    pipe, port);
--		return 0;
--	}
--#else
--	/* 2401 system allows multiple streams to use same physical port. This is not
-+	err = calculate_mipi_buff_size(&pipe->stream->config,
-+				       &my_css.mipi_frame_size[port]);
-+	/*
-+	 * 2401 system allows multiple streams to use same physical port. This is not
- 	 * true for 2400 system. Currently 2401 uses MIPI buffers as a temporary solution.
- 	 * TODO AM: Once that is changed (removed) this code should be removed as well.
- 	 * In that case only 2400 related code should remain.
-@@ -472,6 +402,13 @@ allocate_mipi_frames(struct ia_css_pipe *pipe,
- 				    pipe, port);
- 		return 0;
- 	}
-+#else
-+	if (ref_count_mipi_allocation[port] != 0) {
-+		ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE,
-+				    "allocate_mipi_frames(%p) exit: already allocated for this port (port=%d).\n",
-+				    pipe, port);
-+		return 0;
-+	}
- #endif
- 
- 	ref_count_mipi_allocation[port]++;
-@@ -552,23 +489,15 @@ free_mipi_frames(struct ia_css_pipe *pipe)
- 			return -EINVAL;
- 		}
- 
--		if (!buffers_needed(pipe)) {
-+		if (pipe->stream->config.mode != IA_CSS_INPUT_MODE_BUFFERED_SENSOR) {
- 			IA_CSS_ERROR("free_mipi_frames(%p) exit: wrong mode.",
- 				     pipe);
- 			return err;
- 		}
- 
--		if (!IS_ISP2401) {
--			port = (unsigned int)pipe->stream->config.source.port.port;
--		} else {
--			/* Returns true if port is valid. So, invert it */
--			err = !ia_css_mipi_is_source_port_valid(pipe, &port);
--		}
-+		port = (unsigned int)pipe->stream->config.source.port.port;
- 
--		assert(port < N_CSI_PORTS);
--
--		if ((!IS_ISP2401 && port >= N_CSI_PORTS) ||
--		    (IS_ISP2401 && err)) {
-+		if (port >= N_CSI_PORTS) {
- 			IA_CSS_ERROR("free_mipi_frames(%p, %d) exit: pipe port is not correct.",
- 				     pipe, port);
- 			return err;
-@@ -647,11 +576,7 @@ send_mipi_frames(struct ia_css_pipe *pipe)
- {
- 	int err = -EINVAL;
- 	unsigned int i;
--#ifndef ISP2401
- 	unsigned int port;
--#else
--	unsigned int port = 0;
--#endif
- 
- 	IA_CSS_ENTER_PRIVATE("pipe=%p", pipe);
- 
-@@ -664,23 +589,15 @@ send_mipi_frames(struct ia_css_pipe *pipe)
- 
- 	/* multi stream video needs mipi buffers */
- 	/* nothing to be done in other cases. */
--	if (!buffers_needed(pipe)) {
-+	if (pipe->stream->config.mode != IA_CSS_INPUT_MODE_BUFFERED_SENSOR) {
- 		IA_CSS_LOG("nothing to be done for this mode");
- 		return 0;
- 		/* TODO: AM: maybe this should be returning an error. */
- 	}
- 
--	if (!IS_ISP2401) {
--		port = (unsigned int)pipe->stream->config.source.port.port;
--	} else {
--		/* Returns true if port is valid. So, invert it */
--		err = !ia_css_mipi_is_source_port_valid(pipe, &port);
--	}
-+	port = (unsigned int)pipe->stream->config.source.port.port;
- 
--	assert(port < N_CSI_PORTS);
--
--	if ((!IS_ISP2401 && port >= N_CSI_PORTS) ||
--	    (IS_ISP2401 && err)) {
-+	if (port >= N_CSI_PORTS) {
- 		IA_CSS_ERROR("send_mipi_frames(%p) exit: invalid port specified (port=%d).",
- 			     pipe, port);
- 		return err;
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_mipi.h b/drivers/staging/media/atomisp/pci/sh_css_mipi.h
-index dffec2205620..e6c86d0ac483 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_mipi.h
-+++ b/drivers/staging/media/atomisp/pci/sh_css_mipi.h
-@@ -34,19 +34,4 @@ free_mipi_frames(struct ia_css_pipe *pipe);
- int
- send_mipi_frames(struct ia_css_pipe *pipe);
- 
--/**
-- * @brief Calculate the required MIPI buffer sizes.
-- * Based on the stream configuration, calculate the
-- * required MIPI buffer sizes (in DDR words).
-- *
-- * @param[in]	stream_cfg		Point to the target stream configuration
-- * @param[out]	size_mem_words	MIPI buffer size in DDR words.
-- *
-- * @return
-- */
--int
--calculate_mipi_buff_size(
--    struct ia_css_stream_config *stream_cfg,
--    unsigned int *size_mem_words);
--
- #endif /* __SH_CSS_MIPI_H */
+ static const struct of_device_id imx7_csi_of_match[] = {
+-	{ .compatible = "fsl,imx7-csi" },
+-	{ .compatible = "fsl,imx6ul-csi" },
++	{ .compatible = "fsl,imx8mq-csi", .data = (void *)IMX8MQ },
++	{ .compatible = "fsl,imx7-csi", .data = (void *)IMX7 },
++	{ .compatible = "fsl,imx6ul-csi", .data = (void *)IMX6UL },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, imx7_csi_of_match);
 -- 
-2.33.1
+2.30.2
 
