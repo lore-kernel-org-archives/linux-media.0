@@ -2,50 +2,58 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B13D7C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:57:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EA8BC433EF
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:57:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 969E661AED
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:57:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5290E61C32
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:57:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235928AbhKQKAK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Nov 2021 05:00:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35352 "EHLO mail.kernel.org"
+        id S235774AbhKQKAL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Nov 2021 05:00:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35354 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235780AbhKQJ74 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235779AbhKQJ74 (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 17 Nov 2021 04:59:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4938861C32;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 565CC63240;
         Wed, 17 Nov 2021 09:56:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637143017;
-        bh=cOHNPRljCx70ZxxdMzVwTvVmVM3KMeVN9oY3o6+dXks=;
+        bh=hU4aXPS5oNpl8elBR+O7lPiEbB1yHv8IUjjn3AbYGy0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CgpLwzjJh+JtOa+x6/Y3eKE1BvEVUnjLWbkfTZi0TFnbKmczsNvRZ093ifsU0r4Hx
-         FlYdrUokrkqtGKBHGhz9c15cP0DvhFSR86HUQMd8p2SJ9/njKWxe0u/wwE4r5bnHxW
-         NxDJI7UM4kjhA9wSCKh7u/dzf+ZpTdTFGLcYmLIUrwYUrZetLLVSQfxA5jLw4f9nbB
-         XGs6PG7/ib1smwG+mzYJLZ1JR/xJnJrpBpA5KtgQnZnMbYyRO3zK9UAK2NPLTzBfI9
-         jSPVCrMytdamjH1KIMVkGKEGzHQoQx++/kK6K3t5muATjcPBrQO7vbrD2NG175gq09
-         rdjTpOUMVj6pQ==
+        b=EQyHJw+N0PNn3Z4RHyB0hFkcG13ftQYkEvo+AfpjEhv7xr+Dp3yNNG8hWhXRD0GMJ
+         CUaht8uIttjiOlb8r9E0J8WDNeZawA1CVIBj5gDvQh4hxV4l1aOed7JIJRmKNUdwmw
+         C8f1JJ4Sv11TRb4BnHslmpHP8GRBT4KF5zvE8YFYq5BDX/t9ferqmEfNawxikMI7Lh
+         CLc2qcpdfNyPoJimUN+rbqJVxm7JQetO/9PbwNgTZ699lZpFJN4ZfPYpllLA2A3Osk
+         skzXRRFM+B9ACT1OT5WmuUF78uxiZaY0lDzV5B2aFd6C+TgonIg1dPtMw2v5sPXAmq
+         L4I63KpyBAKNw==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mnHgV-00DIUd-6a; Wed, 17 Nov 2021 09:56:55 +0000
+        id 1mnHgV-00DIUU-4r; Wed, 17 Nov 2021 09:56:55 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Deepak R Varma <drv@mailo.com>,
-        Ding Xiang <dingxiang@cmss.chinamobile.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Alex Dewar <alex.dewar90@gmail.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Kaixu Xia <kaixuxia@tencent.com>,
+        Martiros Shakhzadyan <vrzh@vrzh.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
         Yang Li <abaci-bugfix@linux.alibaba.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH v2 05/12] media: atomisp: sh_css_params: remove tests for ISP2401
-Date:   Wed, 17 Nov 2021 09:56:47 +0000
-Message-Id: <037de9f2b2c1a1c250f166134b9aec47c1298f83.1637142905.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 02/12] media: atomisp: simplify sh_css_defs.h
+Date:   Wed, 17 Nov 2021 09:56:44 +0000
+Message-Id: <839467839ca0a664da0d1e16d402b61c7cea1bbc.1637142905.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637142905.git.mchehab+huawei@kernel.org>
 References: <cover.1637142905.git.mchehab+huawei@kernel.org>
@@ -57,9 +65,9 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Those tests are related to the input system, which is the same
-for the chosen firmware, so both ISP2400 and ISP2401 will be
-identical with that regards.
+There are several unused macros. Simplify the logic there, making
+it closer to the Intel Aero driver and the corresponding firmware,
+as this is what we have widely available for this device.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -67,217 +75,321 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/12] at: https://lore.kernel.org/all/cover.1637142905.git.mchehab+huawei@kernel.org/
 
- .../staging/media/atomisp/pci/sh_css_params.c | 117 ++----------------
- 1 file changed, 8 insertions(+), 109 deletions(-)
+ .../staging/media/atomisp/pci/atomisp_cmd.c   | 28 +++--------
+ .../staging/media/atomisp/pci/ia_css_pipe.h   |  4 +-
+ .../isp/kernels/tnr/tnr_1.0/ia_css_tnr.host.c |  6 +--
+ .../kernels/tnr/tnr_1.0/ia_css_tnr_param.h    |  4 +-
+ .../pci/isp/modes/interface/isp_const.h       |  4 +-
+ .../atomisp/pci/runtime/binary/src/binary.c   |  8 ++--
+ .../pci/runtime/debug/src/ia_css_debug.c      |  2 +-
+ drivers/staging/media/atomisp/pci/sh_css.c    | 10 ++--
+ .../staging/media/atomisp/pci/sh_css_defs.h   | 48 ++++---------------
+ .../media/atomisp/pci/sh_css_internal.h       |  2 +-
+ 10 files changed, 36 insertions(+), 80 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-index 448b07162382..68d8f54473ea 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-@@ -104,15 +104,10 @@
- 	(sizeof(char) * (binary)->in_frame_info.res.height * \
- 	 (binary)->in_frame_info.padded_width)
- 
--#define ISP2400_SCTBL_BYTES(binary) \
-+#define SCTBL_BYTES(binary) \
- 	(sizeof(unsigned short) * (binary)->sctbl_height * \
- 	 (binary)->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS)
- 
--#define ISP2401_SCTBL_BYTES(binary) \
--	(sizeof(unsigned short) * max((binary)->sctbl_height, (binary)->sctbl_legacy_height) * \
--			/* height should be the larger height between new api and legacy api */ \
--	 (binary)->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS)
--
- #define MORPH_PLANE_BYTES(binary) \
- 	(SH_CSS_MORPH_TABLE_ELEM_BYTES * (binary)->morph_tbl_aligned_width * \
- 	 (binary)->morph_tbl_height)
-@@ -1611,18 +1606,6 @@ ia_css_set_param_exceptions(const struct ia_css_pipe *pipe,
- 	params->dp_config.r  = params->wb_config.r;
- 	params->dp_config.b  = params->wb_config.b;
- 	params->dp_config.gb = params->wb_config.gb;
--
--	if (IS_ISP2401) {
--		assert(pipe);
--		assert(pipe->mode < IA_CSS_PIPE_ID_NUM);
--
--		if (pipe->mode < IA_CSS_PIPE_ID_NUM) {
--			params->pipe_dp_config[pipe->mode].gr = params->wb_config.gr;
--			params->pipe_dp_config[pipe->mode].r  = params->wb_config.r;
--			params->pipe_dp_config[pipe->mode].b  = params->wb_config.b;
--			params->pipe_dp_config[pipe->mode].gb = params->wb_config.gb;
--		}
--	}
- }
- 
- /* ISP2401 */
-@@ -2072,16 +2055,6 @@ sh_css_init_isp_params_from_config(struct ia_css_pipe *pipe,
- 	params->output_frame = config->output_frame;
- 	params->isp_parameters_id = config->isp_config_id;
- 
--	/* Currently we do not offer CSS interface to set different
--	 * configurations for DPC, i.e. depending on DPC being enabled
--	 * before (NORM+OBC) or after. The folllowing code to set the
--	 * DPC configuration should be updated when this interface is made
--	 * available */
--	if (IS_ISP2401) {
--		sh_css_set_dp_config(pipe, params, config->dp_config);
--		ia_css_set_param_exceptions(pipe, params);
--	}
--
- 	if (0 ==
- 	    sh_css_select_dp_10bpp_config(pipe, &is_dp_10bpp)) {
- 		/* return an error when both DPC and BDS is enabled by the
-@@ -2096,8 +2069,7 @@ sh_css_init_isp_params_from_config(struct ia_css_pipe *pipe,
- 		goto exit;
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+index 4783590969b6..7181b901cde4 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+@@ -3617,18 +3617,10 @@ int atomisp_cp_lsc_table(struct atomisp_sub_device *asd,
  	}
  
--	if (!IS_ISP2401)
--		ia_css_set_param_exceptions(pipe, params);
-+	ia_css_set_param_exceptions(pipe, params);
- 
- exit:
- 	IA_CSS_LEAVE_ERR_PRIVATE(err);
-@@ -2514,29 +2486,7 @@ sh_css_init_isp_params_from_global(struct ia_css_stream *stream,
- 		ia_css_set_ob_config(params, &default_ob_config);
- 		ia_css_set_dp_config(params, &default_dp_config);
- 
--		if (!IS_ISP2401) {
--			ia_css_set_param_exceptions(pipe_in, params);
--		} else {
--			for (i = 0; i < stream->num_pipes; i++) {
--				if (sh_css_select_dp_10bpp_config(stream->pipes[i],
--								&is_dp_10bpp) == 0) {
--					/* set the return value as false if both DPC and
--					* BDS is enabled by the user. But we do not return
--					* the value immediately to enable internal firmware
--					* feature testing. */
--					if (is_dp_10bpp) {
--						sh_css_set_dp_config(stream->pipes[i], params, &default_dp_10bpp_config);
--					} else {
--						sh_css_set_dp_config(stream->pipes[i], params, &default_dp_config);
--					}
--				} else {
--					retval = false;
--					goto exit;
--				}
--
--				ia_css_set_param_exceptions(stream->pipes[i], params);
--			}
+ 	/* Shading table size per color */
+-	if (!IS_ISP2401) {
+-		if (st->width > ISP2400_SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR ||
+-		    st->height > ISP2400_SH_CSS_MAX_SCTBL_HEIGHT_PER_COLOR) {
+-			dev_err(asd->isp->dev, "shading table w/h validate failed!");
+-			return -EINVAL;
 -		}
-+		ia_css_set_param_exceptions(pipe_in, params);
+-	} else {
+-		if (st->width > ISP2401_SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR ||
+-		    st->height > ISP2401_SH_CSS_MAX_SCTBL_HEIGHT_PER_COLOR) {
+-			dev_err(asd->isp->dev, "shading table w/h validate failed!");
+-			return -EINVAL;
+-		}
++	if (st->width > SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR ||
++	    st->height > SH_CSS_MAX_SCTBL_HEIGHT_PER_COLOR) {
++		dev_err(asd->isp->dev, "shading table w/h validate failed!");
++		return -EINVAL;
+ 	}
  
- 		ia_css_set_de_config(params, &default_de_config);
- 		ia_css_set_gc_config(params, &default_gc_config);
-@@ -2641,20 +2591,9 @@ sh_css_init_isp_params_from_global(struct ia_css_stream *stream,
- 				retval = false;
- 				goto exit;
+ 	shading_table = atomisp_css_shading_table_alloc(st->width, st->height);
+@@ -6181,15 +6173,9 @@ int atomisp_set_shading_table(struct atomisp_sub_device *asd,
+ 	}
+ 
+ 	/* Shading table size per color */
+-	if (!IS_ISP2401) {
+-		if (user_shading_table->width > ISP2400_SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR ||
+-		    user_shading_table->height > ISP2400_SH_CSS_MAX_SCTBL_HEIGHT_PER_COLOR)
+-			return -EINVAL;
+-	} else {
+-		if (user_shading_table->width > ISP2401_SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR ||
+-		    user_shading_table->height > ISP2401_SH_CSS_MAX_SCTBL_HEIGHT_PER_COLOR)
+-			return -EINVAL;
+-	}
++	if (user_shading_table->width > SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR ||
++	    user_shading_table->height > SH_CSS_MAX_SCTBL_HEIGHT_PER_COLOR)
++		return -EINVAL;
+ 
+ 	shading_table = atomisp_css_shading_table_alloc(
+ 			    user_shading_table->width, user_shading_table->height);
+diff --git a/drivers/staging/media/atomisp/pci/ia_css_pipe.h b/drivers/staging/media/atomisp/pci/ia_css_pipe.h
+index bb0abf9bffb1..fb58535bff40 100644
+--- a/drivers/staging/media/atomisp/pci/ia_css_pipe.h
++++ b/drivers/staging/media/atomisp/pci/ia_css_pipe.h
+@@ -33,7 +33,7 @@ struct ia_css_preview_settings {
+ 
+ 	/* 2401 only for these two - do we in fact use them for anything real */
+ 	struct ia_css_frame *delay_frames[MAX_NUM_VIDEO_DELAY_FRAMES];
+-	struct ia_css_frame *tnr_frames[NUM_TNR_FRAMES];
++	struct ia_css_frame *tnr_frames[NUM_VIDEO_TNR_FRAMES];
+ 
+ 	struct ia_css_pipe *copy_pipe;
+ 	struct ia_css_pipe *capture_pipe;
+@@ -81,7 +81,7 @@ struct ia_css_video_settings {
+ 	struct ia_css_binary vf_pp_binary;
+ 	struct ia_css_binary *yuv_scaler_binary;
+ 	struct ia_css_frame *delay_frames[MAX_NUM_VIDEO_DELAY_FRAMES];
+-	struct ia_css_frame *tnr_frames[NUM_TNR_FRAMES];
++	struct ia_css_frame *tnr_frames[NUM_VIDEO_TNR_FRAMES];
+ 	struct ia_css_frame *vf_pp_in_frame;
+ 	struct ia_css_pipe *copy_pipe;
+ 	struct ia_css_pipe *capture_pipe;
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/tnr/tnr_1.0/ia_css_tnr.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/tnr/tnr_1.0/ia_css_tnr.host.c
+index 7177cf292fb0..53050c0c49fc 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/tnr/tnr_1.0/ia_css_tnr.host.c
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/tnr/tnr_1.0/ia_css_tnr.host.c
+@@ -84,7 +84,7 @@ int ia_css_tnr_config(struct sh_css_isp_tnr_isp_config *to,
+ 		return ret;
+ 	to->width_a_over_b = elems_a / to->port_b.elems;
+ 	to->frame_height = from->tnr_frames[0]->info.res.height;
+-	for (i = 0; i < NUM_TNR_FRAMES; i++) {
++	for (i = 0; i < NUM_VIDEO_TNR_FRAMES; i++) {
+ 		to->tnr_frame_addr[i] = from->tnr_frames[i]->data +
+ 					from->tnr_frames[i]->planes.yuyv.offset;
+ 	}
+@@ -102,7 +102,7 @@ int ia_css_tnr_configure(const struct ia_css_binary     *binary,
+ 	struct ia_css_tnr_configuration config;
+ 	unsigned int i;
+ 
+-	for (i = 0; i < NUM_TNR_FRAMES; i++)
++	for (i = 0; i < NUM_VIDEO_TNR_FRAMES; i++)
+ 		config.tnr_frames[i] = frames[i];
+ 
+ 	return ia_css_configure_tnr(binary, &config);
+@@ -115,7 +115,7 @@ ia_css_init_tnr_state(
+ {
+ 	(void)size;
+ 
+-	assert(NUM_TNR_FRAMES >= 2);
++	assert(NUM_VIDEO_TNR_FRAMES >= 2);
+ 	assert(sizeof(*state) == size);
+ 	state->tnr_in_buf_idx = 0;
+ 	state->tnr_out_buf_idx = 1;
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/tnr/tnr_1.0/ia_css_tnr_param.h b/drivers/staging/media/atomisp/pci/isp/kernels/tnr/tnr_1.0/ia_css_tnr_param.h
+index 60a2542cf685..551dd5cfa9f1 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/tnr/tnr_1.0/ia_css_tnr_param.h
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/tnr/tnr_1.0/ia_css_tnr_param.h
+@@ -28,14 +28,14 @@ struct sh_css_isp_tnr_params {
+ };
+ 
+ struct ia_css_tnr_configuration {
+-	const struct ia_css_frame *tnr_frames[NUM_TNR_FRAMES];
++	const struct ia_css_frame *tnr_frames[NUM_VIDEO_TNR_FRAMES];
+ };
+ 
+ struct sh_css_isp_tnr_isp_config {
+ 	u32 width_a_over_b;
+ 	u32 frame_height;
+ 	struct dma_port_config port_b;
+-	ia_css_ptr tnr_frame_addr[NUM_TNR_FRAMES];
++	ia_css_ptr tnr_frame_addr[NUM_VIDEO_TNR_FRAMES];
+ };
+ 
+ #endif /* __IA_CSS_TNR_PARAM_H */
+diff --git a/drivers/staging/media/atomisp/pci/isp/modes/interface/isp_const.h b/drivers/staging/media/atomisp/pci/isp/modes/interface/isp_const.h
+index e5c595e5020b..bfe4f5976771 100644
+--- a/drivers/staging/media/atomisp/pci/isp/modes/interface/isp_const.h
++++ b/drivers/staging/media/atomisp/pci/isp/modes/interface/isp_const.h
+@@ -154,9 +154,9 @@ more details.
+ /* [isp vmem] table size[vectors] per line per color (GR,R,B,GB),
+    multiples of NWAY */
+ #define ISP2400_SCTBL_VECTORS_PER_LINE_PER_COLOR \
+-	CEIL_DIV(ISP2400_SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR, ISP_VEC_NELEMS)
++	CEIL_DIV(SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR, ISP_VEC_NELEMS)
+ #define ISP2401_SCTBL_VECTORS_PER_LINE_PER_COLOR \
+-	CEIL_DIV(ISP2401_SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR, ISP_VEC_NELEMS)
++	CEIL_DIV(SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR, ISP_VEC_NELEMS)
+ /* [isp vmem] table size[vectors] per line for 4colors (GR,R,B,GB),
+    multiples of NWAY */
+ #define SCTBL_VECTORS_PER_LINE \
+diff --git a/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c b/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
+index 8c0e02e4e1af..851e1d34a521 100644
+--- a/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
++++ b/drivers/staging/media/atomisp/pci/runtime/binary/src/binary.c
+@@ -1336,12 +1336,12 @@ ia_css_binary_fill_info(const struct ia_css_binary_xinfo *xinfo,
+ 	if (info->enable.sc)
+ 	{
+ 		if (!IS_ISP2401) {
+-			binary->sctbl_width_per_color = _ISP2400_SCTBL_WIDTH_PER_COLOR(sc_3a_dis_padded_width, s3a_log_deci);
+-			binary->sctbl_aligned_width_per_color = ISP2400_SH_CSS_MAX_SCTBL_ALIGNED_WIDTH_PER_COLOR;
+-			binary->sctbl_height = _ISP2400_SCTBL_HEIGHT(sc_3a_dis_height, s3a_log_deci);
++			binary->sctbl_width_per_color = _ISP_SCTBL_WIDTH_PER_COLOR(sc_3a_dis_padded_width, s3a_log_deci);
++			binary->sctbl_aligned_width_per_color = SH_CSS_MAX_SCTBL_ALIGNED_WIDTH_PER_COLOR;
++			binary->sctbl_height = _ISP_SCTBL_HEIGHT(sc_3a_dis_height, s3a_log_deci);
+ 		} else {
+ 			binary->sctbl_width_per_color = _ISP2401_SCTBL_WIDTH_PER_COLOR(isp_internal_width, s3a_log_deci);
+-			binary->sctbl_aligned_width_per_color = ISP2401_SH_CSS_MAX_SCTBL_ALIGNED_WIDTH_PER_COLOR;
++			binary->sctbl_aligned_width_per_color = SH_CSS_MAX_SCTBL_ALIGNED_WIDTH_PER_COLOR;
+ 			binary->sctbl_height = _ISP2401_SCTBL_HEIGHT(isp_internal_height, s3a_log_deci);
+ 			binary->sctbl_legacy_width_per_color  = _ISP_SCTBL_LEGACY_WIDTH_PER_COLOR(sc_3a_dis_padded_width, s3a_log_deci);
+ 			binary->sctbl_legacy_height = _ISP_SCTBL_LEGACY_HEIGHT(sc_3a_dis_height, s3a_log_deci);
+diff --git a/drivers/staging/media/atomisp/pci/runtime/debug/src/ia_css_debug.c b/drivers/staging/media/atomisp/pci/runtime/debug/src/ia_css_debug.c
+index 05ce0f73f5ae..f46238725eea 100644
+--- a/drivers/staging/media/atomisp/pci/runtime/debug/src/ia_css_debug.c
++++ b/drivers/staging/media/atomisp/pci/runtime/debug/src/ia_css_debug.c
+@@ -2821,7 +2821,7 @@ ia_css_debug_pipe_graph_dump_stage(
+ 		    "in", true);
+ 	}
+ 
+-	for (i = 0; i < NUM_TNR_FRAMES; i++) {
++	for (i = 0; i < NUM_VIDEO_TNR_FRAMES; i++) {
+ 		if (stage->args.tnr_frames[i]) {
+ 			ia_css_debug_pipe_graph_dump_frame(
+ 			    stage->args.tnr_frames[i], id,
+diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
+index e5e22f966286..acaa4c8b1884 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css.c
++++ b/drivers/staging/media/atomisp/pci/sh_css.c
+@@ -1261,7 +1261,7 @@ void sh_css_binary_args_reset(struct sh_css_binary_args *args)
+ {
+ 	unsigned int i;
+ 
+-	for (i = 0; i < NUM_TNR_FRAMES; i++)
++	for (i = 0; i < NUM_VIDEO_TNR_FRAMES; i++)
+ 		args->tnr_frames[i] = NULL;
+ 	for (i = 0; i < MAX_NUM_VIDEO_DELAY_FRAMES; i++)
+ 		args->delay_frames[i] = NULL;
+@@ -2228,10 +2228,10 @@ ia_css_pipe_destroy(struct ia_css_pipe *pipe)
  			}
--			if (IS_ISP2401) {
--				if (stream->pipes[i]->mode < IA_CSS_PIPE_ID_NUM) {
--					sh_css_set_dp_config(stream->pipes[i], params,
--							    &stream_params->pipe_dp_config[stream->pipes[i]->mode]);
--					ia_css_set_param_exceptions(stream->pipes[i], params);
--				} else {
--					retval = false;
--					goto exit;
--				}
--			}
  		}
+ #ifndef ISP2401
+-		ia_css_frame_free_multiple(NUM_TNR_FRAMES,
++		ia_css_frame_free_multiple(NUM_VIDEO_TNR_FRAMES,
+ 					   pipe->pipe_settings.video.tnr_frames);
+ #else
+-		ia_css_frame_free_multiple(NUM_TNR_FRAMES,
++		ia_css_frame_free_multiple(NUM_VIDEO_TNR_FRAMES,
+ 					   pipe->pipe_settings.video.tnr_frames);
+ #endif
+ 		ia_css_frame_free_multiple(MAX_NUM_VIDEO_DELAY_FRAMES,
+@@ -3424,7 +3424,7 @@ static int create_host_video_pipeline(struct ia_css_pipe *pipe)
+ 	if (video_stage) {
+ 		int frm;
  
--		if (!IS_ISP2401)
--			ia_css_set_param_exceptions(pipe_in, params);
-+		ia_css_set_param_exceptions(pipe_in, params);
- 
- 		params->fpn_config.data = stream_params->fpn_config.data;
- 		params->config_changed[IA_CSS_FPN_ID] =
-@@ -2806,10 +2745,7 @@ int ia_css_pipe_set_bci_scaler_lut(struct ia_css_pipe *pipe,
- 	pipe->scaler_pp_lut = mmgr_NULL;
- 
- 	if (!stream_started) {
--		if (!IS_ISP2401)
--			pipe->scaler_pp_lut = hmm_alloc(sizeof(zoom_table), HMM_BO_PRIVATE, 0, NULL, 0);
--		else
--			pipe->scaler_pp_lut = sh_css_params_alloc_gdc_lut();
-+		pipe->scaler_pp_lut = hmm_alloc(sizeof(zoom_table), HMM_BO_PRIVATE, 0, NULL, 0);
- 
- 		if (pipe->scaler_pp_lut == mmgr_NULL) {
- 			ia_css_debug_dtrace(IA_CSS_DEBUG_ERROR,
-@@ -2851,10 +2787,7 @@ int sh_css_params_map_and_store_default_gdc_lut(void)
- 
- 	host_lut_store((void *)zoom_table);
- 
--	if (!IS_ISP2401)
--		default_gdc_lut = hmm_alloc(sizeof(zoom_table), HMM_BO_PRIVATE, 0, NULL, 0);
--	else
--		default_gdc_lut = sh_css_params_alloc_gdc_lut();
-+	default_gdc_lut = hmm_alloc(sizeof(zoom_table), HMM_BO_PRIVATE, 0, NULL, 0);
- 
- 	if (default_gdc_lut == mmgr_NULL)
- 		return -ENOMEM;
-@@ -3450,18 +3383,12 @@ sh_css_params_write_to_ddr_internal(
- 
- 	if (binary->info->sp.enable.sc) {
- 		u32 enable_conv;
--		size_t bytes;
--
--		if (!IS_ISP2401)
--			bytes = ISP2400_SCTBL_BYTES(binary);
--		else
--			bytes = ISP2401_SCTBL_BYTES(binary);
- 
- 		enable_conv = params->shading_settings.enable_shading_table_conversion;
- 
- 		buff_realloced = reallocate_buffer(&ddr_map->sc_tbl,
- 						   &ddr_map_size->sc_tbl,
--						   bytes,
-+						   SCTBL_BYTES(binary),
- 						   params->sc_table_changed,
- 						   &err);
- 		if (err) {
-@@ -3546,28 +3473,6 @@ sh_css_params_write_to_ddr_internal(
+-		for (frm = 0; frm < NUM_TNR_FRAMES; frm++) {
++		for (frm = 0; frm < NUM_VIDEO_TNR_FRAMES; frm++) {
+ 			video_stage->args.tnr_frames[frm] =
+ 			    pipe->pipe_settings.video.tnr_frames[frm];
  		}
- 	}
+@@ -5163,7 +5163,7 @@ static int load_video_binaries(struct ia_css_pipe *pipe)
+ 	tnr_info.format = IA_CSS_FRAME_FORMAT_YUV_LINE;
+ 	tnr_info.raw_bit_depth = SH_CSS_TNR_BIT_DEPTH;
  
--	/* DPC configuration is made pipe specific to allow flexibility in positioning of the
--	 * DPC kernel. The code below sets the pipe specific configuration to
--	 * individual binaries. */
--	if (IS_ISP2401 &&
--	    params->pipe_dpc_config_changed[pipe_id] && binary->info->sp.enable.dpc) {
--		unsigned int size   =
--		    stage->binary->info->mem_offsets.offsets.param->dmem.dp.size;
--
--		unsigned int offset =
--		    stage->binary->info->mem_offsets.offsets.param->dmem.dp.offset;
--
--		if (size) {
--			ia_css_dp_encode((struct sh_css_isp_dp_params *)
--					 &binary->mem_params.params[IA_CSS_PARAM_CLASS_PARAM][IA_CSS_ISP_DMEM].address[offset],
--					 &params->pipe_dp_config[pipe_id], size);
--
--			params->isp_params_changed = true;
--			params->isp_mem_params_changed[pipe_id][stage->stage_num][IA_CSS_ISP_DMEM] =
--			    true;
--		}
--	}
--
- 	if (params->config_changed[IA_CSS_MACC_ID] && binary->info->sp.enable.macc) {
- 		unsigned int i, j, idx;
- 		unsigned int idx_map[] = {
-@@ -3649,13 +3554,7 @@ sh_css_params_write_to_ddr_internal(
- 			if (!params->pipe_dvs_6axis_config[pipe_id]) {
- 				struct ia_css_resolution dvs_offset = {0};
+-	for (i = 0; i < NUM_TNR_FRAMES; i++) {
++	for (i = 0; i < NUM_VIDEO_TNR_FRAMES; i++) {
+ 		if (mycs->tnr_frames[i]) {
+ 			ia_css_frame_free(mycs->tnr_frames[i]);
+ 			mycs->tnr_frames[i] = NULL;
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_defs.h b/drivers/staging/media/atomisp/pci/sh_css_defs.h
+index 239230ae4b4b..7eb10b226f0a 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_defs.h
++++ b/drivers/staging/media/atomisp/pci/sh_css_defs.h
+@@ -168,50 +168,20 @@ RGB[0,8191],coef[-8192,8191] -> RGB[0,8191]
+ #define SH_CSS_MORPH_TABLE_ELEMS_PER_DDR_WORD \
+ 	(HIVE_ISP_DDR_WORD_BYTES / SH_CSS_MORPH_TABLE_ELEM_BYTES)
  
--				if (!IS_ISP2401) {
--					dvs_offset.width = (PIX_SHIFT_FILTER_RUN_IN_X + binary->dvs_envelope.width) / 2;
--				} else {
--					if (binary->dvs_envelope.width || binary->dvs_envelope.height) {
--						dvs_offset.width  = (PIX_SHIFT_FILTER_RUN_IN_X + binary->dvs_envelope.width) / 2;
--					}
--				}
-+				dvs_offset.width = (PIX_SHIFT_FILTER_RUN_IN_X + binary->dvs_envelope.width) / 2;
- 				dvs_offset.height = (PIX_SHIFT_FILTER_RUN_IN_Y + binary->dvs_envelope.height) / 2;
+-#define ISP2400_SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR   (SH_CSS_MAX_BQ_GRID_WIDTH + 1)
+-#define ISP2400_SH_CSS_MAX_SCTBL_HEIGHT_PER_COLOR   (SH_CSS_MAX_BQ_GRID_HEIGHT + 1)
++#define SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR   (SH_CSS_MAX_BQ_GRID_WIDTH + 1)
++#define SH_CSS_MAX_SCTBL_HEIGHT_PER_COLOR   (SH_CSS_MAX_BQ_GRID_HEIGHT + 1)
  
- 				params->pipe_dvs_6axis_config[pipe_id] =
+-#define ISP2400_SH_CSS_MAX_SCTBL_ALIGNED_WIDTH_PER_COLOR \
+-	CEIL_MUL(ISP2400_SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR, ISP_VEC_NELEMS)
+-
+-/* TODO: I will move macros of "*_SCTBL_*" to SC kernel.
+-   "+ 2" should be "+ SH_CSS_SCTBL_CENTERING_MARGIN + SH_CSS_SCTBL_LAST_GRID_COUNT". (michie, Sep/23/2014) */
+-#define ISP2401_SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR   (SH_CSS_MAX_BQ_GRID_WIDTH + 2)
+-#define ISP2401_SH_CSS_MAX_SCTBL_HEIGHT_PER_COLOR   (SH_CSS_MAX_BQ_GRID_HEIGHT + 2)
+-
+-#define ISP2401_SH_CSS_MAX_SCTBL_ALIGNED_WIDTH_PER_COLOR \
+-	CEIL_MUL(ISP2400_SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR, ISP_VEC_NELEMS)
++#define SH_CSS_MAX_SCTBL_ALIGNED_WIDTH_PER_COLOR \
++	CEIL_MUL(SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR, ISP_VEC_NELEMS)
+ 
+ /* Each line of this table is aligned to the maximum line width. */
+ #define SH_CSS_MAX_S3ATBL_WIDTH              SH_CSS_MAX_BQ_GRID_WIDTH
+ 
+ /* Video mode specific DVS define */
+ /* The video binary supports a delay of 1 or 2 frames */
+-#define VIDEO_FRAME_DELAY		2
++#define MAX_DVS_FRAME_DELAY		2
+ /* +1 because DVS reads the previous and writes the current frame concurrently */
+-#define MAX_NUM_VIDEO_DELAY_FRAMES	(VIDEO_FRAME_DELAY + 1)
+-
+-/* Preview mode specific DVS define. */
+-/* In preview we only need GDC functionality (and not the DVS functionality) */
+-/* The minimum number of DVS frames you need is 2, one were GDC reads from and another where GDC writes into */
+-#define NUM_PREVIEW_DVS_FRAMES		(2)
+-
+-/* TNR is no longer exclusive to video, SkyCam preview has TNR too (same kernel as video).
+- * All uses the generic define NUM_TNR_FRAMES. The define NUM_VIDEO_TNR_FRAMES has been deprecated.
+- *
+- * Notes
+- * 1) The value depends on the used TNR kernel and is not something that depends on the mode
+- *    and it is not something you just could choice.
+- * 2) For the luma only pipeline a version that supports two different sets of TNR reference frames
+- * is being used.
+- *.
+- */
+-#define NUM_VALID_TNR_REF_FRAMES		(1) /* At least one valid TNR reference frame is required */
+-#define NUM_TNR_FRAMES_PER_REF_BUF_SET		(2)
+-/* In luma-only mode alternate illuminated frames are supported, that requires two double buffers */
+-#define NUM_TNR_REF_BUF_SETS	(1)
+-
+-#define NUM_TNR_FRAMES		(NUM_TNR_FRAMES_PER_REF_BUF_SET * NUM_TNR_REF_BUF_SETS)
++#define MAX_NUM_VIDEO_DELAY_FRAMES	(MAX_DVS_FRAME_DELAY + 1)
+ 
+ #define NUM_VIDEO_TNR_FRAMES		2
+ 
+@@ -240,11 +210,11 @@ RGB[0,8191],coef[-8192,8191] -> RGB[0,8191]
+ 	CEIL_MUL(_ISP_MORPH_TABLE_WIDTH(width), \
+ 		 SH_CSS_MORPH_TABLE_ELEMS_PER_DDR_WORD)
+ 
+-#define _ISP2400_SCTBL_WIDTH_PER_COLOR(input_width, deci_factor_log2) \
++#define _ISP_SCTBL_WIDTH_PER_COLOR(input_width, deci_factor_log2) \
+ 	(ISP_BQ_GRID_WIDTH(input_width, deci_factor_log2) + 1)
+-#define _ISP2400_SCTBL_HEIGHT(input_height, deci_factor_log2) \
++#define _ISP_SCTBL_HEIGHT(input_height, deci_factor_log2) \
+ 	(ISP_BQ_GRID_HEIGHT(input_height, deci_factor_log2) + 1)
+-#define _ISP2400_SCTBL_ALIGNED_WIDTH_PER_COLOR(input_width, deci_factor_log2) \
++#define _ISP_SCTBL_ALIGNED_WIDTH_PER_COLOR(input_width, deci_factor_log2) \
+ 	CEIL_MUL(_ISP_SCTBL_WIDTH_PER_COLOR(input_width, deci_factor_log2), \
+ 		 ISP_VEC_NELEMS)
+ 
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_internal.h b/drivers/staging/media/atomisp/pci/sh_css_internal.h
+index 735540eceb37..435b3cedd1c3 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_internal.h
++++ b/drivers/staging/media/atomisp/pci/sh_css_internal.h
+@@ -270,7 +270,7 @@ struct sh_css_binary_args {
+ 	struct ia_css_frame *in_frame;	     /* input frame */
+ 	const struct ia_css_frame
+ 		*delay_frames[MAX_NUM_VIDEO_DELAY_FRAMES];   /* reference input frame */
+-	const struct ia_css_frame *tnr_frames[NUM_TNR_FRAMES];   /* tnr frames */
++	const struct ia_css_frame *tnr_frames[NUM_VIDEO_TNR_FRAMES];   /* tnr frames */
+ 	struct ia_css_frame
+ 		*out_frame[IA_CSS_BINARY_MAX_OUTPUT_PORTS];      /* output frame */
+ 	struct ia_css_frame *out_vf_frame;   /* viewfinder output frame */
 -- 
 2.33.1
 
