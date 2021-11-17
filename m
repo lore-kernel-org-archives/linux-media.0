@@ -2,108 +2,175 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D093EC433EF
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:16:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ADCBC433EF
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:25:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B16116321B
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:16:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02DC96324B
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:25:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234911AbhKQJTu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Nov 2021 04:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234309AbhKQJTt (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Nov 2021 04:19:49 -0500
-Received: from lb2-smtp-cloud9.xs4all.net (lb2-smtp-cloud9.xs4all.net [IPv6:2001:888:0:108::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1D8C061570
-        for <linux-media@vger.kernel.org>; Wed, 17 Nov 2021 01:16:50 -0800 (PST)
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id nH3dmNViV1HGJnH3gmpCzj; Wed, 17 Nov 2021 10:16:48 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1637140608; bh=9/7MVjrm0TR+bztMekG2XEk85y7EF/yz/i2IVX2bv9A=;
-        h=To:From:Subject:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=Xx6UGMc8LVOsfTeL4oGH8Vq1w0L+2miMxgCIEdQt18I+q+p5oEkJYxGRxvgQRBxuc
-         UDABSPT9GPkgmd0/A7REAGy+fvGCPx8zietAUsgFFTgqhXMjdP6S5DLtFrFQDJBhVb
-         Tf798V3MKFZG0R1neAFSYZS1Hhs4aED/t730LameXlgI9NCkmNuWt62hDhE9Z4R8Ha
-         SyvL6/Sqvce/3ewRqAmaYBRXiv/VQZc4ESGBRrKdVyoCEZOKRXY5YG47cJYNNoYcbh
-         hsiQoxTrg1veolIrcNlFCS1VN50vDHfhUMwysO3gR4E7vey286ITkwmDjWvXPSTHBF
-         K+jhHzRjrQybQ==
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Johan Hovold <johan@kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.17] Various fixes/enhancements
-Message-ID: <21f4ea07-24ea-7b8c-18a3-e69c0dbb095d@xs4all.nl>
-Date:   Wed, 17 Nov 2021 10:16:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S235022AbhKQJ2k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Nov 2021 04:28:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58782 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231737AbhKQJ2k (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Nov 2021 04:28:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E094163236;
+        Wed, 17 Nov 2021 09:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637141141;
+        bh=JPtfiDskqRu45fZUTwHrZSkZPXeeu6UODoEyeI/gEPA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kZlEf/t/s1b6SPbTXNywQQ8W5Wv69/SwRTuAWcg5Zkt+EpcNXZEVVNB9xmKMEVjie
+         F8CW5Hv+TLFTOitnD7KmTJsA2L9p4w4edlKO8pTDwxO1+/Uf6cUjBRwYu3JkoaTj8D
+         QRohhS/WTOb3ZD/wMtwrqKEH8rjfk2I3+upEqD+/lPAmPWTrj5vErSPj3r004R6h8V
+         V0CZAoDVtrZyLVNRocoE8RKXOoLsqwY48HE14CxGvtpwaE85qv2HPe9TEVRNWtmN66
+         bV7lZ0KEJlMDPYJUrQVmF37UuG7GzFN5VH9eFtjCEfDsmm9VoYUyFngxPYM2olFE8D
+         i3PrKnMZqaT1A==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1mnHCF-00Cb67-BZ; Wed, 17 Nov 2021 09:25:39 +0000
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH 11/13] media: atomisp: sh_css_param_shading: fix comments coding style
+Date:   Wed, 17 Nov 2021 09:25:36 +0000
+Message-Id: <e388d845e26d77b339e49f7d00105d031db7055e.1637140900.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1637140900.git.mchehab+huawei@kernel.org>
+References: <cover.1637140900.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfD+3fof9nuAWrOD+CAlrqJif6x3TKxaF+7WXeRLOLoCIoomC9NIflBMn0E3BlSSDed9J44nSt/P4afVKAWl6g9gka4RY8sDX5mIzqVN8fuvppiVxG+5s
- HYQmfr6JnO/rlHoAsANJCgKSQYs4yo6doIwy0wX7AiEvrol2uxiYb3ha1dLiGmsgpiGAG6Id36rdCE/DzfF2A/Ss2KAxIkptoNIqGsZhI8sDa0yFIUhB+q92
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The following changes since commit 96977c97e2c76f48d5e1f28ff5c6cd6f83a91ced:
+The comments are not following Kernel coding style.
 
-  media: atomisp: get rid of #ifdef ISP_VEC_NELEMS (2021-11-16 11:49:43 +0000)
+Also, there are two missing comments that are found at the Intel Aero
+device driver code. Add them.
 
-are available in the Git repository at:
+No functional changes.
 
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.17b
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
 
-for you to fetch changes up to 27a538222948cee5f81140e0a49ecdc2097e7a38:
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH 00/13] at: https://lore.kernel.org/all/cover.1637140900.git.mchehab+huawei@kernel.org/
 
-  media: coda: V4L2_PIX_FMT_GREY for coda960 JPEG Encoder (2021-11-17 10:05:49 +0100)
+ .../media/atomisp/pci/sh_css_param_shading.c  | 52 +++++++++++++------
+ 1 file changed, 37 insertions(+), 15 deletions(-)
 
-----------------------------------------------------------------
-Tag branch
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_param_shading.c b/drivers/staging/media/atomisp/pci/sh_css_param_shading.c
+index 02faf5069bb8..90b5f9014c5e 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_param_shading.c
++++ b/drivers/staging/media/atomisp/pci/sh_css_param_shading.c
+@@ -118,8 +118,10 @@ crop_and_interpolate(unsigned int cropped_width,
+ 		int ty, src_y0, src_y1;
+ 		unsigned int sy0, sy1, dy0, dy1, divy;
+ 
+-		/* calculate target point and make sure it falls within
+-		   the table */
++		/*
++		 * calculate target point and make sure it falls within
++		 * the table
++		 */
+ 		ty = out_start_row + i * out_cell_size;
+ 
+ 		/* calculate closest source points in shading table and
+@@ -166,19 +168,24 @@ crop_and_interpolate(unsigned int cropped_width,
+ 			src_x1 = clamp(src_x1, 0, (int)table_width - 1);
+ 			tx = min(clamp(tx, 0, (int)sensor_width - 1),
+ 				 (int)table_cell_w);
+-			/* calculate closest source points for distance
+-			   computation */
++			/*
++			 * calculate closest source points for distance
++			 * computation
++			 */
+ 			sx0 = min(src_x0 * in_cell_size, sensor_width - 1);
+ 			sx1 = min(src_x1 * in_cell_size, sensor_width - 1);
+-			/* calculate distances between source and target
+-			   pixels */
++			/*
++			 * calculate distances between source and target
++			 * pixels
++			 */
+ 			dx0 = tx - sx0;
+ 			dx1 = sx1 - tx;
+ 			divx = sx1 - sx0;
+ 			/* if we're at the edge, we just use the closest
+-			   point still in the grid. We make up for the divider
+-			   in this case by setting the distance to
+-			   out_cell_size, since it's actually 0. */
++			 * point still in the grid. We make up for the divider
++			 * in this case by setting the distance to
++			 * out_cell_size, since it's actually 0.
++			 */
+ 			if (divx == 0) {
+ 				dx0 = 1;
+ 				divx = 1;
+@@ -271,14 +278,26 @@ prepare_shading_table(const struct ia_css_shading_table *in_table,
+ 		      bds_denominator -
+ 		      binary->info->sp.pipeline.top_cropping;
+ 
++	/*
++	 * We take into account the binning done by the sensor. We do this
++	 * by cropping the non-binned part of the shading table and then
++	 * increasing the size of a grid cell with this same binning factor.
++	 */
+ 	input_width   *= sensor_binning;
+ 	input_height  *= sensor_binning;
++	/*
++	 * We also scale the padding by the same binning factor. This will
++	 * make it much easier later on to calculate the padding of the
++	 * shading table.
++	 */
+ 	left_padding  *= sensor_binning;
+ 	right_padding *= sensor_binning;
+ 	top_padding   *= sensor_binning;
+ 
+-	/* during simulation, the used resolution can exceed the sensor
+-	   resolution, so we clip it. */
++	/*
++	 * during simulation, the used resolution can exceed the sensor
++	 * resolution, so we clip it.
++	 */
+ 	input_width  = min(input_width,  in_table->sensor_width);
+ 	input_height = min(input_height, in_table->sensor_height);
+ 
+@@ -296,8 +315,10 @@ prepare_shading_table(const struct ia_css_shading_table *in_table,
+ 	result->sensor_height = in_table->sensor_height;
+ 	result->fraction_bits = in_table->fraction_bits;
+ 
+-	/* now we crop the original shading table and then interpolate to the
+-	   requested resolution and decimation factor. */
++	/*
++	 * now we crop the original shading table and then interpolate to the
++	 * requested resolution and decimation factor.
++	 */
+ 	for (i = 0; i < IA_CSS_SC_NUM_COLORS; i++) {
+ 		crop_and_interpolate(input_width, input_height,
+ 				     left_padding, right_padding, top_padding,
+@@ -354,9 +375,10 @@ ia_css_shading_table_free(struct ia_css_shading_table *table)
+ 	if (!table)
+ 		return;
+ 
+-	/* We only output logging when the table is not NULL, otherwise
++	/*
++	 * We only output logging when the table is not NULL, otherwise
+ 	 * logs will give the impression that a table was freed.
+-	 * */
++	 */
+ 	IA_CSS_ENTER("");
+ 
+ 	for (i = 0; i < IA_CSS_SC_NUM_COLORS; i++) {
+-- 
+2.33.1
 
-----------------------------------------------------------------
-Dafna Hirschfeld (2):
-      media: mtk-vcodec: enc: add vp8 profile ctrl
-      meida: mtk-vcodec: remove unused func parameter
-
-Dorota Czaplejewicz (1):
-      media: imx: Remove unused functions
-
-Johan Hovold (8):
-      media: mceusb: fix control-message timeouts
-      media: redrat3: fix control-message timeouts
-      media: flexcop-usb: fix control-message timeouts
-      media: cpia2: fix control-message timeouts
-      media: em28xx: fix control-message timeouts
-      media: pvrusb2: fix control-message timeouts
-      media: s2255: fix control-message timeouts
-      media: stk1160: fix control-message timeouts
-
-Martin Weber (1):
-      media: coda: V4L2_PIX_FMT_GREY for coda960 JPEG Encoder
-
-Niklas Söderlund (1):
-      media: rcar-vin: Free buffers with error if hardware stop fails
-
- drivers/media/platform/coda/coda-common.c             |  8 +++++++-
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c    | 10 ++++++++++
- drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c |  9 +++------
- drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c  |  3 +--
- drivers/media/platform/mtk-vcodec/venc_vpu_if.c       |  1 -
- drivers/media/platform/mtk-vcodec/venc_vpu_if.h       |  1 -
- drivers/media/platform/rcar-vin/rcar-dma.c            | 10 ++++++++++
- drivers/media/rc/mceusb.c                             |  8 ++++----
- drivers/media/rc/redrat3.c                            | 22 +++++++++++-----------
- drivers/media/usb/b2c2/flexcop-usb.c                  | 10 +++++-----
- drivers/media/usb/b2c2/flexcop-usb.h                  | 12 ++++++------
- drivers/media/usb/cpia2/cpia2_usb.c                   |  4 ++--
- drivers/media/usb/em28xx/em28xx-core.c                |  4 ++--
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c               |  8 ++++----
- drivers/media/usb/s2255/s2255drv.c                    |  4 ++--
- drivers/media/usb/stk1160/stk1160-core.c              |  4 ++--
- drivers/staging/media/imx/imx-media-utils.c           | 42 ------------------------------------------
- drivers/staging/media/imx/imx-media.h                 |  4 ----
- 18 files changed, 69 insertions(+), 95 deletions(-)
