@@ -2,50 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44A35C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:25:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 057BBC433FE
+	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:25:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2AC3E613A2
+	by mail.kernel.org (Postfix) with ESMTP id D8BFD6324B
 	for <linux-media@archiver.kernel.org>; Wed, 17 Nov 2021 09:25:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235117AbhKQJ2v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Nov 2021 04:28:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58816 "EHLO mail.kernel.org"
+        id S235126AbhKQJ2w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Nov 2021 04:28:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58824 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234606AbhKQJ2k (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S235007AbhKQJ2k (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 17 Nov 2021 04:28:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CFC1063214;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F067463240;
         Wed, 17 Nov 2021 09:25:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637141142;
-        bh=V73MI/BChgm8hYCvohrJL80G5P1g7QeONIsqxwwzSQ0=;
+        bh=/w8qGkF1hWlUq4AmjGfz1b+POlJBLcRk1dT4kXfEkWA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uOVxiymnjnaBM+sBbkSqR0qjMO+X7ak0/6hQIcLcBup5YngLQ5ogRzXfFJIqQkUgZ
-         MMqXTyIfKslvWyADOY4cxDHO0fKWagWtoJ1tas0TvHGFD/ItTu2ETJPKPrXOGrV0m7
-         fGtxfHstqQ573oO+LMzzSCvDahsFcFd35U+4MMV+vCVylv8DPIyndny3iCtQUeQpaX
-         ori7c7svplY+4n1T2zuUzQ/qaEZANPqDYvuv642uSkJf5Tj+SDDqsiHIE2gLoDCmsP
-         7Jat5BbGVo5/oo4qd6nPaee7rFyaWbdfgLnGlEtZmBKFKf/yCDPmhhjC9JjWjX8XxY
-         ZvqMmdEYdxJTQ==
+        b=HeVTyRl/9TD1/YZEzIuvx9s6eo0jGY03GLUnipV7hTGS4XWAcBzicOyOedW1KwYlg
+         U2MrAL1VGBlEb1KlfMpBOvW5qiVXzVuZ7lZaVLWh2e7IPih6xyOgUeCkgbozLHQN6z
+         hoPr5HQqbRCuIiFTfqwjuXyL7cbqasy8QnKAWWRAZe20HQnNAD4MoszwzS4+NhKggp
+         to94YNk6vCTbmLlIlc5UzaxhUQnpfh++Scyi0RvsSLcEme9qfEl1Rayo+mx/erIWVD
+         rG59NTohBYjgRBk/XxbE3YTC0u/MAqlqehhhRsyyb0MeWMaU5CJVgozDuOO7oi5rof
+         4Tx574Kcj6LyA==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mnHCF-00Cb5p-8Q; Wed, 17 Nov 2021 09:25:39 +0000
+        id 1mnHCF-00Cb5d-5x; Wed, 17 Nov 2021 09:25:39 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Deepak R Varma <drv@mailo.com>,
-        Ding Xiang <dingxiang@cmss.chinamobile.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Yang Li <abaci-bugfix@linux.alibaba.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH 05/13] media: atomisp: sh_css_params: remove tests for ISP2401
-Date:   Wed, 17 Nov 2021 09:25:30 +0000
-Message-Id: <ca86b465c7230ce6e476840818ecb2be189faf02.1637140900.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 01/13] media: atomisp: drop empty files
+Date:   Wed, 17 Nov 2021 09:25:26 +0000
+Message-Id: <45ad66591a7441277ee2660e1a6b5c10c7f09178.1637140900.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637140900.git.mchehab+huawei@kernel.org>
 References: <cover.1637140900.git.mchehab+huawei@kernel.org>
@@ -57,9 +51,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Those tests are related to the input system, which is the same
-for the chosen firmware, so both ISP2400 and ISP2401 will be
-identical with that regards.
+There's nothing inside such files. Just drop them.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -67,217 +59,134 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/13] at: https://lore.kernel.org/all/cover.1637140900.git.mchehab+huawei@kernel.org/
 
- .../staging/media/atomisp/pci/sh_css_params.c | 117 ++----------------
- 1 file changed, 8 insertions(+), 109 deletions(-)
+ drivers/staging/media/atomisp/Makefile          |  4 ----
+ .../staging/media/atomisp/pci/sh_css_metadata.c | 17 -----------------
+ .../staging/media/atomisp/pci/sh_css_morph.c    | 17 -----------------
+ .../staging/media/atomisp/pci/sh_css_shading.c  | 17 -----------------
+ .../staging/media/atomisp/pci/sh_css_stream.c   | 17 -----------------
+ 5 files changed, 72 deletions(-)
+ delete mode 100644 drivers/staging/media/atomisp/pci/sh_css_metadata.c
+ delete mode 100644 drivers/staging/media/atomisp/pci/sh_css_morph.c
+ delete mode 100644 drivers/staging/media/atomisp/pci/sh_css_shading.c
+ delete mode 100644 drivers/staging/media/atomisp/pci/sh_css_stream.c
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-index 448b07162382..68d8f54473ea 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-@@ -104,15 +104,10 @@
- 	(sizeof(char) * (binary)->in_frame_info.res.height * \
- 	 (binary)->in_frame_info.padded_width)
- 
--#define ISP2400_SCTBL_BYTES(binary) \
-+#define SCTBL_BYTES(binary) \
- 	(sizeof(unsigned short) * (binary)->sctbl_height * \
- 	 (binary)->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS)
- 
--#define ISP2401_SCTBL_BYTES(binary) \
--	(sizeof(unsigned short) * max((binary)->sctbl_height, (binary)->sctbl_legacy_height) * \
--			/* height should be the larger height between new api and legacy api */ \
--	 (binary)->sctbl_aligned_width_per_color * IA_CSS_SC_NUM_COLORS)
+diff --git a/drivers/staging/media/atomisp/Makefile b/drivers/staging/media/atomisp/Makefile
+index a7ad8cfab602..2485d7b3fee2 100644
+--- a/drivers/staging/media/atomisp/Makefile
++++ b/drivers/staging/media/atomisp/Makefile
+@@ -27,20 +27,16 @@ atomisp-objs += \
+ 	pci/sh_css_firmware.o \
+ 	pci/sh_css_host_data.o \
+ 	pci/sh_css_hrt.o \
+-	pci/sh_css_metadata.o \
+ 	pci/sh_css_metrics.o \
+ 	pci/sh_css_mipi.o \
+ 	pci/sh_css_mmu.o \
+-	pci/sh_css_morph.o \
+ 	pci/sh_css.o \
+ 	pci/sh_css_param_dvs.o \
+ 	pci/sh_css_param_shading.o \
+ 	pci/sh_css_params.o \
+ 	pci/sh_css_properties.o \
+-	pci/sh_css_shading.o \
+ 	pci/sh_css_sp.o \
+ 	pci/sh_css_stream_format.o \
+-	pci/sh_css_stream.o \
+ 	pci/sh_css_version.o \
+ 	pci/base/circbuf/src/circbuf.o \
+ 	pci/base/refcount/src/refcount.o \
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_metadata.c b/drivers/staging/media/atomisp/pci/sh_css_metadata.c
+deleted file mode 100644
+index 04a4b7da85e2..000000000000
+--- a/drivers/staging/media/atomisp/pci/sh_css_metadata.c
++++ /dev/null
+@@ -1,17 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Support for Intel Camera Imaging ISP subsystem.
+- * Copyright (c) 2015, Intel Corporation.
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms and conditions of the GNU General Public License,
+- * version 2, as published by the Free Software Foundation.
+- *
+- * This program is distributed in the hope it will be useful, but WITHOUT
+- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+- * more details.
+- */
 -
- #define MORPH_PLANE_BYTES(binary) \
- 	(SH_CSS_MORPH_TABLE_ELEM_BYTES * (binary)->morph_tbl_aligned_width * \
- 	 (binary)->morph_tbl_height)
-@@ -1611,18 +1606,6 @@ ia_css_set_param_exceptions(const struct ia_css_pipe *pipe,
- 	params->dp_config.r  = params->wb_config.r;
- 	params->dp_config.b  = params->wb_config.b;
- 	params->dp_config.gb = params->wb_config.gb;
+-/* This file will contain the code to implement the functions declared in ia_css_metadata.h
+-   and associated helper functions */
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_morph.c b/drivers/staging/media/atomisp/pci/sh_css_morph.c
+deleted file mode 100644
+index edd1da941ccb..000000000000
+--- a/drivers/staging/media/atomisp/pci/sh_css_morph.c
++++ /dev/null
+@@ -1,17 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Support for Intel Camera Imaging ISP subsystem.
+- * Copyright (c) 2015, Intel Corporation.
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms and conditions of the GNU General Public License,
+- * version 2, as published by the Free Software Foundation.
+- *
+- * This program is distributed in the hope it will be useful, but WITHOUT
+- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+- * more details.
+- */
 -
--	if (IS_ISP2401) {
--		assert(pipe);
--		assert(pipe->mode < IA_CSS_PIPE_ID_NUM);
+-/* This file will contain the code to implement the functions declared in ia_css_morph.h
+-   and associated helper functions */
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_shading.c b/drivers/staging/media/atomisp/pci/sh_css_shading.c
+deleted file mode 100644
+index 462caf9cb571..000000000000
+--- a/drivers/staging/media/atomisp/pci/sh_css_shading.c
++++ /dev/null
+@@ -1,17 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Support for Intel Camera Imaging ISP subsystem.
+- * Copyright (c) 2015, Intel Corporation.
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms and conditions of the GNU General Public License,
+- * version 2, as published by the Free Software Foundation.
+- *
+- * This program is distributed in the hope it will be useful, but WITHOUT
+- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+- * more details.
+- */
 -
--		if (pipe->mode < IA_CSS_PIPE_ID_NUM) {
--			params->pipe_dp_config[pipe->mode].gr = params->wb_config.gr;
--			params->pipe_dp_config[pipe->mode].r  = params->wb_config.r;
--			params->pipe_dp_config[pipe->mode].b  = params->wb_config.b;
--			params->pipe_dp_config[pipe->mode].gb = params->wb_config.gb;
--		}
--	}
- }
- 
- /* ISP2401 */
-@@ -2072,16 +2055,6 @@ sh_css_init_isp_params_from_config(struct ia_css_pipe *pipe,
- 	params->output_frame = config->output_frame;
- 	params->isp_parameters_id = config->isp_config_id;
- 
--	/* Currently we do not offer CSS interface to set different
--	 * configurations for DPC, i.e. depending on DPC being enabled
--	 * before (NORM+OBC) or after. The folllowing code to set the
--	 * DPC configuration should be updated when this interface is made
--	 * available */
--	if (IS_ISP2401) {
--		sh_css_set_dp_config(pipe, params, config->dp_config);
--		ia_css_set_param_exceptions(pipe, params);
--	}
+-/* This file will contain the code to implement the functions declared in ia_css_shading.h
+-   and associated helper functions */
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_stream.c b/drivers/staging/media/atomisp/pci/sh_css_stream.c
+deleted file mode 100644
+index a768ce90f51c..000000000000
+--- a/drivers/staging/media/atomisp/pci/sh_css_stream.c
++++ /dev/null
+@@ -1,17 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Support for Intel Camera Imaging ISP subsystem.
+- * Copyright (c) 2015, Intel Corporation.
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms and conditions of the GNU General Public License,
+- * version 2, as published by the Free Software Foundation.
+- *
+- * This program is distributed in the hope it will be useful, but WITHOUT
+- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+- * more details.
+- */
 -
- 	if (0 ==
- 	    sh_css_select_dp_10bpp_config(pipe, &is_dp_10bpp)) {
- 		/* return an error when both DPC and BDS is enabled by the
-@@ -2096,8 +2069,7 @@ sh_css_init_isp_params_from_config(struct ia_css_pipe *pipe,
- 		goto exit;
- 	}
- 
--	if (!IS_ISP2401)
--		ia_css_set_param_exceptions(pipe, params);
-+	ia_css_set_param_exceptions(pipe, params);
- 
- exit:
- 	IA_CSS_LEAVE_ERR_PRIVATE(err);
-@@ -2514,29 +2486,7 @@ sh_css_init_isp_params_from_global(struct ia_css_stream *stream,
- 		ia_css_set_ob_config(params, &default_ob_config);
- 		ia_css_set_dp_config(params, &default_dp_config);
- 
--		if (!IS_ISP2401) {
--			ia_css_set_param_exceptions(pipe_in, params);
--		} else {
--			for (i = 0; i < stream->num_pipes; i++) {
--				if (sh_css_select_dp_10bpp_config(stream->pipes[i],
--								&is_dp_10bpp) == 0) {
--					/* set the return value as false if both DPC and
--					* BDS is enabled by the user. But we do not return
--					* the value immediately to enable internal firmware
--					* feature testing. */
--					if (is_dp_10bpp) {
--						sh_css_set_dp_config(stream->pipes[i], params, &default_dp_10bpp_config);
--					} else {
--						sh_css_set_dp_config(stream->pipes[i], params, &default_dp_config);
--					}
--				} else {
--					retval = false;
--					goto exit;
--				}
--
--				ia_css_set_param_exceptions(stream->pipes[i], params);
--			}
--		}
-+		ia_css_set_param_exceptions(pipe_in, params);
- 
- 		ia_css_set_de_config(params, &default_de_config);
- 		ia_css_set_gc_config(params, &default_gc_config);
-@@ -2641,20 +2591,9 @@ sh_css_init_isp_params_from_global(struct ia_css_stream *stream,
- 				retval = false;
- 				goto exit;
- 			}
--			if (IS_ISP2401) {
--				if (stream->pipes[i]->mode < IA_CSS_PIPE_ID_NUM) {
--					sh_css_set_dp_config(stream->pipes[i], params,
--							    &stream_params->pipe_dp_config[stream->pipes[i]->mode]);
--					ia_css_set_param_exceptions(stream->pipes[i], params);
--				} else {
--					retval = false;
--					goto exit;
--				}
--			}
- 		}
- 
--		if (!IS_ISP2401)
--			ia_css_set_param_exceptions(pipe_in, params);
-+		ia_css_set_param_exceptions(pipe_in, params);
- 
- 		params->fpn_config.data = stream_params->fpn_config.data;
- 		params->config_changed[IA_CSS_FPN_ID] =
-@@ -2806,10 +2745,7 @@ int ia_css_pipe_set_bci_scaler_lut(struct ia_css_pipe *pipe,
- 	pipe->scaler_pp_lut = mmgr_NULL;
- 
- 	if (!stream_started) {
--		if (!IS_ISP2401)
--			pipe->scaler_pp_lut = hmm_alloc(sizeof(zoom_table), HMM_BO_PRIVATE, 0, NULL, 0);
--		else
--			pipe->scaler_pp_lut = sh_css_params_alloc_gdc_lut();
-+		pipe->scaler_pp_lut = hmm_alloc(sizeof(zoom_table), HMM_BO_PRIVATE, 0, NULL, 0);
- 
- 		if (pipe->scaler_pp_lut == mmgr_NULL) {
- 			ia_css_debug_dtrace(IA_CSS_DEBUG_ERROR,
-@@ -2851,10 +2787,7 @@ int sh_css_params_map_and_store_default_gdc_lut(void)
- 
- 	host_lut_store((void *)zoom_table);
- 
--	if (!IS_ISP2401)
--		default_gdc_lut = hmm_alloc(sizeof(zoom_table), HMM_BO_PRIVATE, 0, NULL, 0);
--	else
--		default_gdc_lut = sh_css_params_alloc_gdc_lut();
-+	default_gdc_lut = hmm_alloc(sizeof(zoom_table), HMM_BO_PRIVATE, 0, NULL, 0);
- 
- 	if (default_gdc_lut == mmgr_NULL)
- 		return -ENOMEM;
-@@ -3450,18 +3383,12 @@ sh_css_params_write_to_ddr_internal(
- 
- 	if (binary->info->sp.enable.sc) {
- 		u32 enable_conv;
--		size_t bytes;
--
--		if (!IS_ISP2401)
--			bytes = ISP2400_SCTBL_BYTES(binary);
--		else
--			bytes = ISP2401_SCTBL_BYTES(binary);
- 
- 		enable_conv = params->shading_settings.enable_shading_table_conversion;
- 
- 		buff_realloced = reallocate_buffer(&ddr_map->sc_tbl,
- 						   &ddr_map_size->sc_tbl,
--						   bytes,
-+						   SCTBL_BYTES(binary),
- 						   params->sc_table_changed,
- 						   &err);
- 		if (err) {
-@@ -3546,28 +3473,6 @@ sh_css_params_write_to_ddr_internal(
- 		}
- 	}
- 
--	/* DPC configuration is made pipe specific to allow flexibility in positioning of the
--	 * DPC kernel. The code below sets the pipe specific configuration to
--	 * individual binaries. */
--	if (IS_ISP2401 &&
--	    params->pipe_dpc_config_changed[pipe_id] && binary->info->sp.enable.dpc) {
--		unsigned int size   =
--		    stage->binary->info->mem_offsets.offsets.param->dmem.dp.size;
--
--		unsigned int offset =
--		    stage->binary->info->mem_offsets.offsets.param->dmem.dp.offset;
--
--		if (size) {
--			ia_css_dp_encode((struct sh_css_isp_dp_params *)
--					 &binary->mem_params.params[IA_CSS_PARAM_CLASS_PARAM][IA_CSS_ISP_DMEM].address[offset],
--					 &params->pipe_dp_config[pipe_id], size);
--
--			params->isp_params_changed = true;
--			params->isp_mem_params_changed[pipe_id][stage->stage_num][IA_CSS_ISP_DMEM] =
--			    true;
--		}
--	}
--
- 	if (params->config_changed[IA_CSS_MACC_ID] && binary->info->sp.enable.macc) {
- 		unsigned int i, j, idx;
- 		unsigned int idx_map[] = {
-@@ -3649,13 +3554,7 @@ sh_css_params_write_to_ddr_internal(
- 			if (!params->pipe_dvs_6axis_config[pipe_id]) {
- 				struct ia_css_resolution dvs_offset = {0};
- 
--				if (!IS_ISP2401) {
--					dvs_offset.width = (PIX_SHIFT_FILTER_RUN_IN_X + binary->dvs_envelope.width) / 2;
--				} else {
--					if (binary->dvs_envelope.width || binary->dvs_envelope.height) {
--						dvs_offset.width  = (PIX_SHIFT_FILTER_RUN_IN_X + binary->dvs_envelope.width) / 2;
--					}
--				}
-+				dvs_offset.width = (PIX_SHIFT_FILTER_RUN_IN_X + binary->dvs_envelope.width) / 2;
- 				dvs_offset.height = (PIX_SHIFT_FILTER_RUN_IN_Y + binary->dvs_envelope.height) / 2;
- 
- 				params->pipe_dvs_6axis_config[pipe_id] =
+-/* This file will contain the code to implement the functions declared in ia_css_stream.h
+-   and associated helper functions */
 -- 
 2.33.1
 
