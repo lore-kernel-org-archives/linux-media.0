@@ -2,85 +2,122 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6356AC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 18 Nov 2021 07:17:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4618EC433F5
+	for <linux-media@archiver.kernel.org>; Thu, 18 Nov 2021 07:41:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A931611CC
-	for <linux-media@archiver.kernel.org>; Thu, 18 Nov 2021 07:17:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 22B8161AFB
+	for <linux-media@archiver.kernel.org>; Thu, 18 Nov 2021 07:41:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243710AbhKRHU3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Nov 2021 02:20:29 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:36503 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243690AbhKRHUX (ORCPT
+        id S243655AbhKRHoJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Nov 2021 02:44:09 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:23325 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243567AbhKRHoJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Nov 2021 02:20:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1637219844; x=1668755844;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zRAeZCYa4NAS9qCMxMUo8oi7QA94Zfv6TYf1xH0Ja3U=;
-  b=g/7BRzHZyFmU8Fdq9t8oFtzFpHlREWTQ4hRnw5cGeuO9qBC/QE9bN+4j
-   Rd38LqL3RZERUAeITekEPFkn/jas49cEZ8eGFnw8KKmmCTdswdG6XF/tG
-   81/98ePE02Jez566IWAXL8ZGOXC1P9VeRmDCwn/uiw3hlKjrnKGa1XA+4
-   Y9DbTjmu+gUPJ2bAPfcgnBlQQ0j3UGIlLaEklW04KiMX065wfuNC78ysw
-   v5BDf8ts+WHD6zE+NYkVbWleWVURoj1b8W0xRtpCalff4awBLYy74PECx
-   Kt4qRC0rmci6aWjIj97C4nT0fI6oguA7D632l6s7dMZ1PFGDn/i9cdJDT
-   g==;
-IronPort-SDR: +bz2zeS6C0DvXqQFYzZvTXE/jpSCZN7TusASMM0A5wIJi+AjpugurLAsjLnPGu1VJtS0Lxf5j3
- FwsioPLat75VPWVMMareCWjkzPBiyeCm783ZA00YwjCvnQo0/fecukgdCJzT0OoVOnjiIXbf9a
- vS90lp9mZeniImff5yiqIanhTegSNto5wX8vB5ehYgE6HminU+78lCv1JVwjydO0bSx1ae5aBZ
- 1PfxRybhwue2SGEm3/HhDpcRHbFHF1S97vjAcdH/K6Qfx2fLnYlrIMC6RzhzI9ohmHB5IbMknG
- S0VAept0HtUxWRA6xfn0Kh23
-X-IronPort-AV: E=Sophos;i="5.87,243,1631602800"; 
-   d="scan'208";a="76837084"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Nov 2021 00:17:23 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 18 Nov 2021 00:17:23 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 18 Nov 2021 00:17:20 -0700
-From:   Eugen Hristev <eugen.hristev@microchip.com>
-To:     <leonl@leopardimaging.com>, <linux-media@vger.kernel.org>
-CC:     <skomatineni@nvidia.com>, <sakari.ailus@linux.intel.com>,
-        <luca@lucaceresoli.net>, <linux-kernel@vger.kernel.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH] media: i2c: imx274: fix trivial typo expsoure/exposure
-Date:   Thu, 18 Nov 2021 09:17:15 +0200
-Message-ID: <20211118071715.280548-1-eugen.hristev@microchip.com>
+        Thu, 18 Nov 2021 02:44:09 -0500
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 1AI7GOWO076134;
+        Thu, 18 Nov 2021 15:16:24 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 18 Nov
+ 2021 15:40:10 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <hverkuil-cisco@xs4all.nl>,
+        <sakari.ailus@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <laurent.pinchart@ideasonboard.com>, <linux-media@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 01/10] media: aspeed: move err-handling together to the bottom
+Date:   Thu, 18 Nov 2021 15:40:22 +0800
+Message-ID: <20211118074030.685-2-jammy_huang@aspeedtech.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211118074030.685-1-jammy_huang@aspeedtech.com>
+References: <20211118074030.685-1-jammy_huang@aspeedtech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 1AI7GOWO076134
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix typo expsoure/exposure
+refine aspeed_video_setup_video() flow.
 
-Fixes: 0985dd306f72 ("media: imx274: V4l2 driver for Sony imx274 CMOS sensor")
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
 ---
- drivers/media/i2c/imx274.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v5:
+  - no update
+v4:
+  - no update
+v3:
+  - no update
+v2:
+  - no update
+---
+ drivers/media/platform/aspeed-video.c | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
-index 6e63fdcc5e46..106706abc72a 100644
---- a/drivers/media/i2c/imx274.c
-+++ b/drivers/media/i2c/imx274.c
-@@ -1515,7 +1515,7 @@ static int imx274_s_stream(struct v4l2_subdev *sd, int on)
- 			goto fail;
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index fea5e4d0927e..f5c40d6b4ece 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -1641,11 +1641,8 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
  
- 		/*
--		 * update frame rate & expsoure. if the last mode is different,
-+		 * update frame rate & exposure. if the last mode is different,
- 		 * HMAX could be changed. As the result, frame rate & exposure
- 		 * are changed.
- 		 * gain is not affected.
+ 	rc = video->ctrl_handler.error;
+ 	if (rc) {
+-		v4l2_ctrl_handler_free(&video->ctrl_handler);
+-		v4l2_device_unregister(v4l2_dev);
+-
+ 		dev_err(video->dev, "Failed to init controls: %d\n", rc);
+-		return rc;
++		goto err_ctrl_init;
+ 	}
+ 
+ 	v4l2_dev->ctrl_handler = &video->ctrl_handler;
+@@ -1663,11 +1660,8 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
+ 
+ 	rc = vb2_queue_init(vbq);
+ 	if (rc) {
+-		v4l2_ctrl_handler_free(&video->ctrl_handler);
+-		v4l2_device_unregister(v4l2_dev);
+-
+ 		dev_err(video->dev, "Failed to init vb2 queue\n");
+-		return rc;
++		goto err_vb2_init;
+ 	}
+ 
+ 	vdev->queue = vbq;
+@@ -1685,15 +1679,19 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
+ 	video_set_drvdata(vdev, video);
+ 	rc = video_register_device(vdev, VFL_TYPE_GRABBER, 0);
+ 	if (rc) {
+-		vb2_queue_release(vbq);
+-		v4l2_ctrl_handler_free(&video->ctrl_handler);
+-		v4l2_device_unregister(v4l2_dev);
+-
+ 		dev_err(video->dev, "Failed to register video device\n");
+-		return rc;
++		goto err_video_reg;
+ 	}
+ 
+ 	return 0;
++
++err_video_reg:
++	vb2_queue_release(vbq);
++err_vb2_init:
++err_ctrl_init:
++	v4l2_ctrl_handler_free(&video->ctrl_handler);
++	v4l2_device_unregister(v4l2_dev);
++	return rc;
+ }
+ 
+ static int aspeed_video_init(struct aspeed_video *video)
 -- 
 2.25.1
 
