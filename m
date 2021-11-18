@@ -2,26 +2,26 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7393FC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 18 Nov 2021 07:43:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA272C433FE
+	for <linux-media@archiver.kernel.org>; Thu, 18 Nov 2021 07:43:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A4CC61AF7
-	for <linux-media@archiver.kernel.org>; Thu, 18 Nov 2021 07:43:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AFD2361AF7
+	for <linux-media@archiver.kernel.org>; Thu, 18 Nov 2021 07:43:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243933AbhKRHqV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Nov 2021 02:46:21 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:18517 "EHLO
+        id S243971AbhKRHqa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Nov 2021 02:46:30 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:44526 "EHLO
         twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243928AbhKRHpp (ORCPT
+        with ESMTP id S243899AbhKRHpv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Nov 2021 02:45:45 -0500
+        Thu, 18 Nov 2021 02:45:51 -0500
 Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1AI7GOq4076133;
-        Thu, 18 Nov 2021 15:16:24 +0800 (GMT-8)
+        by twspam01.aspeedtech.com with ESMTP id 1AI7GPF7076141;
+        Thu, 18 Nov 2021 15:16:25 +0800 (GMT-8)
         (envelope-from jammy_huang@aspeedtech.com)
 Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
  (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 18 Nov
- 2021 15:40:10 +0800
+ 2021 15:40:11 +0800
 From:   Jammy Huang <jammy_huang@aspeedtech.com>
 To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
         <andrew@aj.id.au>, <hverkuil-cisco@xs4all.nl>,
@@ -29,10 +29,12 @@ To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
         <laurent.pinchart@ideasonboard.com>, <linux-media@vger.kernel.org>,
         <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
         <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 00/10] add aspeed-jpeg support for aspeed-video
-Date:   Thu, 18 Nov 2021 15:40:21 +0800
-Message-ID: <20211118074030.685-1-jammy_huang@aspeedtech.com>
+Subject: [PATCH v5 06/10] media: v4l2-ctrls: Reserve controls for ASPEED
+Date:   Thu, 18 Nov 2021 15:40:27 +0800
+Message-ID: <20211118074030.685-7-jammy_huang@aspeedtech.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211118074030.685-1-jammy_huang@aspeedtech.com>
+References: <20211118074030.685-1-jammy_huang@aspeedtech.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -40,49 +42,42 @@ X-Originating-IP: [192.168.2.115]
 X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
  (192.168.0.24)
 X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1AI7GOq4076133
+X-MAIL: twspam01.aspeedtech.com 1AI7GPF7076141
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The aim of this series is to add aspeed-jpeg support for aspeed-video
-driver.
+Reserve controls for ASPEED video family. Aspeed video engine contains a
+few features which improve video quality, reduce amount of compressed
+data, and etc. Hence, 16 controls are reserved for these aspeed
+proprietary features.
 
-To achieve this major goal some refactors are included.
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+---
+v5:
+  - no update
+v4:
+  - new
+---
+ include/uapi/linux/v4l2-controls.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-In the last, debugfs information is also updated per this change.
-
-Changes in v5:
- - Use model data to tell different soc
-
-Changes in v4:
- - Add definition for the Aspeed JPEG format
- - Reserve controls for ASPEED
- - Use s_fmt to update format rather than new control
- - Update aspeed hq quality range, 1 ~ 12
-
-
-Jammy Huang (10):
-  media: aspeed: move err-handling together to the bottom
-  media: aspeed: use v4l2_info/v4l2_warn/v4l2_dbg for log
-  media: aspeed: add more debug log messages
-  media: aspeed: refactor to gather format/compress settings
-  media: v4l: Add definition for the Aspeed JPEG format
-  media: v4l2-ctrls: Reserve controls for ASPEED
-  media: aspeed: use model-data
-  media: aspeed: Support aspeed mode to reduce compressed data
-  media: aspeed: add comments and macro
-  media: aspeed: Extend debug message
-
- .../media/uapi/v4l/pixfmt-reserved.rst        |  12 +
- drivers/media/platform/aspeed-video.c         | 534 ++++++++++++++----
- drivers/media/v4l2-core/v4l2-ioctl.c          |   1 +
- include/uapi/linux/aspeed-video.h             |  15 +
- include/uapi/linux/v4l2-controls.h            |   5 +
- include/uapi/linux/videodev2.h                |   1 +
- 6 files changed, 467 insertions(+), 101 deletions(-)
- create mode 100644 include/uapi/linux/aspeed-video.h
-
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index a2669b79b294..e7c425a6fa9f 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -192,6 +192,11 @@ enum v4l2_colorfx {
+  * We reserve 16 controls for this driver. */
+ #define V4L2_CID_USER_IMX_BASE			(V4L2_CID_USER_BASE + 0x10b0)
+ 
++/* The base for the aspeed driver controls.
++ * We reserve 16 controls for this driver.
++ */
++#define V4L2_CID_USER_ASPEED_BASE		(V4L2_CID_USER_BASE + 0x10c0)
++
+ /* MPEG-class control IDs */
+ /* The MPEG controls are applicable to all codec controls
+  * and the 'MPEG' part of the define is historical */
 -- 
 2.25.1
 
