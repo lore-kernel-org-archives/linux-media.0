@@ -2,42 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65C80C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 09:26:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9130BC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 09:26:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239048AbhKVJ3X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Nov 2021 04:29:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59084 "EHLO mail.kernel.org"
+        id S229906AbhKVJ3Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Nov 2021 04:29:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59080 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238944AbhKVJ3W (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S238645AbhKVJ3W (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 22 Nov 2021 04:29:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0C33260F6B;
-        Mon, 22 Nov 2021 09:26:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EB9D760F5A;
+        Mon, 22 Nov 2021 09:26:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637573176;
-        bh=vwguznC0LIciCvAwhzGbB97MM3fdENySXXEsqm6FmRQ=;
+        bh=uoub8lwyF2e3h3UBzOFi3xispO3LB4G9st/Fel8Wp50=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qv6HXkwuoviE/85V5MWT7j0d/2BY2hNVKRJbsg9fOBcxe7Q+gK+p+tCLsDbwBj1dh
-         5nFuKLAyZTR610P04fNIvuy4/unLd/ZkAY+V0RwnWBThtmlBiOPMmoVd7/wvYWIP4o
-         PCKNeRLBfeTQs7CXFqaQ75M0iyGXFkiFd0X4/Gn7d2u8On2B7GDHevifXYv85R8x0i
-         aX6jmdw36TA1vq4nYPG1ety9pe/B+kcWyVZM0TlNcAWo9AnpZ6UY549Nl/Ij3BYGRU
-         T3/YTHG/qlSEZMEK5b/LXICzHjDuc29M/9MlyOlsMx6anWAh8XbU5gdrcJQid1x4vS
-         VVA52i3h2pvmw==
+        b=pTX9d95MMRvuWjs/BaYuivPCoDz2i4E7nA8oQoApfB75GcCLrMNdRm/VHe7VqXVvJ
+         +XSuzKH0Fy3BAXCqG0SduN3koTJJmbc4v9t8pdb3tERtJ6xsWFReLLUy3/WAEnhgsm
+         eGFMWb1Ei7Mh02lmOsRGqZUkqypifcHrFfuUEeFAL2h6mPeP5XqL8/wOE5SpfSKIi7
+         L4nBecV5EnaKJ2VpkH7qBp/HQZk6cTAqNptuhXupu2kHBpDybMSeH8jymmysMvKzec
+         /lbxNSm0y9cjUePL2+7isJ5Vqa1WmvxTTRPxA+nNNHCnhLdzKqGCoTJohXGEuqNO3F
+         w4sSgkkwEANdw==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mp5aX-003hie-72; Mon, 22 Nov 2021 09:26:13 +0000
+        id 1mp5aX-003hiS-58; Mon, 22 Nov 2021 09:26:13 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Lukas Middendorf <kernel@tuxforce.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH 10/10] media: omap3isp: avoid warnings at IS_OUT_OF_BOUNDS()
-Date:   Mon, 22 Nov 2021 09:26:12 +0000
-Message-Id: <b70f819b11e024649f113be1158f34b24914a1ed.1637573097.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 06/10] media: dvb-core: dvb_frontend: address some clang warnings
+Date:   Mon, 22 Nov 2021 09:26:08 +0000
+Message-Id: <fe70cb9f32c41265de21129d26f1122e2849b842.1637573097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637573097.git.mchehab+huawei@kernel.org>
 References: <cover.1637573097.git.mchehab+huawei@kernel.org>
@@ -49,23 +51,12 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Clang with W=1 produces the following warnings:
+The typecasts at the dvb-core generate clang warnings when W=1
+is enabled.
 
-drivers/media/platform/omap3isp/isph3a_af.c:173:6: error: result of comparison of constant 256 with expression of type '__u8' (aka 'unsigned char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-        if (IS_OUT_OF_BOUNDS(paxel_cfg->height, OMAP3ISP_AF_PAXEL_HEIGHT_MIN,
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/media/platform/omap3isp/isph3a_af.c:24:33: note: expanded from macro 'IS_OUT_OF_BOUNDS'
-        (((value) < (min)) || ((value) > (max)))
-                               ~~~~~~~ ^ ~~~~~
-drivers/media/platform/omap3isp/isph3a_af.c:179:6: error: result of comparison of constant 256 with expression of type '__u8' (aka 'unsigned char') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-        if (IS_OUT_OF_BOUNDS(paxel_cfg->width, OMAP3ISP_AF_PAXEL_WIDTH_MIN,
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/media/platform/omap3isp/isph3a_af.c:24:33: note: expanded from macro 'IS_OUT_OF_BOUNDS'
-        (((value) < (min)) || ((value) > (max)))
-                               ~~~~~~~ ^ ~~~~~
-2 errors generated.
-
-Use a typecast to avoid such warnings.
+The warns are harmless, but they cause the build to break with
+CONFIG_WERROR, so do the cast on a way that it won't produce
+warnings anymore.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -73,22 +64,47 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/10] at: https://lore.kernel.org/all/cover.1637573097.git.mchehab+huawei@kernel.org/
 
- drivers/media/platform/omap3isp/isph3a_af.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/dvb-core/dvb_frontend.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/omap3isp/isph3a_af.c b/drivers/media/platform/omap3isp/isph3a_af.c
-index a65cfdfa9637..de7b116d0122 100644
---- a/drivers/media/platform/omap3isp/isph3a_af.c
-+++ b/drivers/media/platform/omap3isp/isph3a_af.c
-@@ -21,7 +21,7 @@
- #include "ispstat.h"
+diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
+index 8fc59f3cfb6c..48e735cdbe6b 100644
+--- a/drivers/media/dvb-core/dvb_frontend.c
++++ b/drivers/media/dvb-core/dvb_frontend.c
+@@ -2554,8 +2554,7 @@ static int dvb_frontend_handle_ioctl(struct file *file,
  
- #define IS_OUT_OF_BOUNDS(value, min, max)		\
--	(((value) < (min)) || ((value) > (max)))
-+	((((unsigned int)value) < (min)) || (((unsigned int)value) > (max)))
+ 	case FE_DISEQC_SEND_BURST:
+ 		if (fe->ops.diseqc_send_burst) {
+-			err = fe->ops.diseqc_send_burst(fe,
+-						(enum fe_sec_mini_cmd)parg);
++			err = fe->ops.diseqc_send_burst(fe, (long)parg);
+ 			fepriv->state = FESTATE_DISEQC;
+ 			fepriv->status = 0;
+ 		}
+@@ -2563,9 +2562,8 @@ static int dvb_frontend_handle_ioctl(struct file *file,
  
- static void h3a_af_setup_regs(struct ispstat *af, void *priv)
- {
+ 	case FE_SET_TONE:
+ 		if (fe->ops.set_tone) {
+-			err = fe->ops.set_tone(fe,
+-					       (enum fe_sec_tone_mode)parg);
+-			fepriv->tone = (enum fe_sec_tone_mode)parg;
++			fepriv->tone = (long)parg;
++			err = fe->ops.set_tone(fe, fepriv->tone);
+ 			fepriv->state = FESTATE_DISEQC;
+ 			fepriv->status = 0;
+ 		}
+@@ -2573,9 +2571,8 @@ static int dvb_frontend_handle_ioctl(struct file *file,
+ 
+ 	case FE_SET_VOLTAGE:
+ 		if (fe->ops.set_voltage) {
+-			err = fe->ops.set_voltage(fe,
+-						  (enum fe_sec_voltage)parg);
+-			fepriv->voltage = (enum fe_sec_voltage)parg;
++			fepriv->voltage = (long)parg;
++			err = fe->ops.set_voltage(fe, fepriv->voltage);
+ 			fepriv->state = FESTATE_DISEQC;
+ 			fepriv->status = 0;
+ 		}
 -- 
 2.33.1
 
