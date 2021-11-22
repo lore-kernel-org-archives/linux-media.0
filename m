@@ -2,43 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25A39C4332F
-	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 09:26:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6B23C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 09:26:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239077AbhKVJ30 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Nov 2021 04:29:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59058 "EHLO mail.kernel.org"
+        id S239088AbhKVJ31 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Nov 2021 04:29:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59130 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232383AbhKVJ3W (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S239024AbhKVJ3W (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 22 Nov 2021 04:29:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E6A6B604DA;
-        Mon, 22 Nov 2021 09:26:15 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 123E360F94;
+        Mon, 22 Nov 2021 09:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637573176;
-        bh=oAnn+EVwkewlNETnxaYIhl5BiF6hjTjrZ8WGo7X1wck=;
+        bh=/6WJgmxHsldFG8WQEw4YO71q1zqG0O4P07uLKTGweRA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K2w6+8SqvI+ALOEr4RAcNwHLphEGZZUCIqfS8IytbNfIfVaaA8K4YRtZTOx1ta4bo
-         EHIOp0CU0qN9vRCRgYZfYCk1JIQKMIwqHG6usE4KBzcten2W9+XQKBoGtLv0W/0SSP
-         W8QelQYX2xK3W95zDY31zerMXqkN+Ua1mQjEF7zcGtzLZXn7n3avGdwjE/9Fh1/JzZ
-         1xlmym/0vBmuWqDEw+ThlujVKyBzyHcws3JTWzuQdH/RGdMD73cerwcqsJ/V6sMj6F
-         vTdKwaHIGLhOG2w4B/Mi6XUSyLg2OLAWIFFWu7lWHbD924pP+A7Mtya/kSEYomKo+3
-         XajkXey7LjEQg==
+        b=iLaR8tV/5o+/7qew2X9/D/QMucPsulC3Kzopwr+QqjiJpz2piLh/zsDK1Ce60dIu4
+         CyZyzGm7ll7WE5qT/maj/6DucxKBf+mvJg/xUxyo8dt4rz8c9nyukRYh3RYXw3LULo
+         RSzIwbfmoCVA6/wTWSmiT1ELvJjoPVZPVMnF17K//4OeYUpy1YDYx71bhJy9IcD3/7
+         FrEGNKnWrMECAWmcSex30ZFuoADmqEH6KVa3jreaPoMXq+c9X9iLWSzvb4HgDfmgpU
+         u3RMC0AdaKMoXsvpl+qXI3mkKTEXZZU5THtNgQgSss5vpOMtEkqah1V7LnbVjfjB5t
+         B37cffoofOQTA==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mp5aX-003hiP-4g; Mon, 22 Nov 2021 09:26:13 +0000
+        id 1mp5aX-003hiG-39; Mon, 22 Nov 2021 09:26:13 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andy Walls <awalls@md.metrocast.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH 05/10] media: mc: mark a debug function with __maybe_unused
-Date:   Mon, 22 Nov 2021 09:26:07 +0000
-Message-Id: <8a18223a184901971137954903ad59bd152d0d47.1637573097.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 02/10] media: ivtv: drop an unused macro
+Date:   Mon, 22 Nov 2021 09:26:04 +0000
+Message-Id: <9543b4e3206621e1e45f7e3a5841359a3a53686d.1637573097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637573097.git.mchehab+huawei@kernel.org>
 References: <cover.1637573097.git.mchehab+huawei@kernel.org>
@@ -50,12 +49,10 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The gobj_type() function translates the media object type into
-a name, being useful for debugging purposes. It is currently
-not used, but let's keep it around, as it can be useful.
+The macro p_to_snd_ivtv_card() is just a variant for container_of(),
+not actually used inside the code. So, drop it.
 
-So, mark it with __maybe_unused, in order to shut up a
-clang warning.
+This address a clang warning.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -63,22 +60,26 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/10] at: https://lore.kernel.org/all/cover.1637573097.git.mchehab+huawei@kernel.org/
 
- drivers/media/mc/mc-entity.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/pci/ivtv/ivtv-alsa-main.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index f40f41977142..b0ea145ac9c0 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -14,7 +14,7 @@
- #include <media/media-entity.h>
- #include <media/media-device.h>
+diff --git a/drivers/media/pci/ivtv/ivtv-alsa-main.c b/drivers/media/pci/ivtv/ivtv-alsa-main.c
+index 4cefdb2e4d40..9e13a7128a53 100644
+--- a/drivers/media/pci/ivtv/ivtv-alsa-main.c
++++ b/drivers/media/pci/ivtv/ivtv-alsa-main.c
+@@ -48,12 +48,6 @@ struct snd_ivtv_card *to_snd_ivtv_card(struct v4l2_device *v4l2_dev)
+ 	return to_ivtv(v4l2_dev)->alsa;
+ }
  
--static inline const char *gobj_type(enum media_gobj_type type)
-+static inline __maybe_unused const char *gobj_type(enum media_gobj_type type)
+-static inline
+-struct snd_ivtv_card *p_to_snd_ivtv_card(struct v4l2_device **v4l2_dev)
+-{
+-	return container_of(v4l2_dev, struct snd_ivtv_card, v4l2_dev);
+-}
+-
+ static void snd_ivtv_card_free(struct snd_ivtv_card *itvsc)
  {
- 	switch (type) {
- 	case MEDIA_GRAPH_ENTITY:
+ 	if (itvsc == NULL)
 -- 
 2.33.1
 
