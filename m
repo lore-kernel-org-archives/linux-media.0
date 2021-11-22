@@ -2,79 +2,92 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C209C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 09:26:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32C52C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 09:58:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239148AbhKVJ3h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Nov 2021 04:29:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59126 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239022AbhKVJ3W (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Nov 2021 04:29:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 11C3E60F70;
-        Mon, 22 Nov 2021 09:26:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637573176;
-        bh=2TBPg9ri3q38X3YzSB4nmTwNdwJiq6mEQ0j1aWUitBY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B84vH1e1fzwmGhPur9mgGPea5csWUT52nXqaSWhd+uN/Z80YyNOFURB0k6flekuo+
-         Z3Oq54nfUziyrdnZ3Tgf8sjf1+JD27YuIl2WTDZHKOi8y9QSJyOk0kJMWRbi1Xyaxa
-         NjrcbpCOkQgO/PZqr/r0lMh2RteK4/J1QFaoZgMeaOyZCSRNnh/zdPs7GbV5DxjjHI
-         pC8fuubG+oMECxzjUhtEoH7nBNjicpWiIZMiqSMAqhydCbbsSJgTjmXy/DbNiS31A+
-         Hf9CgoZTaJP/Rh0L8tBnboMKara2JlmrHGLEwfKrHuB3gVuOe042xRrj6aB8T7CqYZ
-         szvojkfHSinvQ==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mp5aX-003hib-6d; Mon, 22 Nov 2021 09:26:13 +0000
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+        id S238774AbhKVKB2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Nov 2021 05:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229906AbhKVKBZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Nov 2021 05:01:25 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E5BC061574;
+        Mon, 22 Nov 2021 01:58:17 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B542814C3;
+        Mon, 22 Nov 2021 10:58:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1637575095;
+        bh=f2jhVUKv6s52hV3/IC2eYnDVlUxjKpkzOLepxVO4OCs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GMb8ZXQSzMcCf3qh2k4HBpdL+jyckPVLAt/ycXNiRg8SDjchu3EUqxViqdC2CKReF
+         sMaC0OnKG7tjH9gKXMWDvrOYWENRgKMfajuf4G2NPqEIB9MzANVz6A2nXJ2s8ig1iy
+         IzeNv208YSiF5Pq4pgZoG5Iis1lbENhbE0dnEKWU=
+Date:   Mon, 22 Nov 2021 11:57:50 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH 09/10] media: omap3isp: mark isp_isr_dbg as __maybe_unused
-Date:   Mon, 22 Nov 2021 09:26:11 +0000
-Message-Id: <4293d53b747388a65ea06382e2041ae6322ecd89.1637573097.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1637573097.git.mchehab+huawei@kernel.org>
+Subject: Re: [PATCH 05/10] media: mc: mark a debug function with
+ __maybe_unused
+Message-ID: <YZtpnjPcGxVwhe61@pendragon.ideasonboard.com>
 References: <cover.1637573097.git.mchehab+huawei@kernel.org>
+ <8a18223a184901971137954903ad59bd152d0d47.1637573097.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8a18223a184901971137954903ad59bd152d0d47.1637573097.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This function is only used for debugging purposes. When DEBUG
-is disabled, it becomes unused, causing a clang warning with W=1.
+Hi Mauro,
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
+Thank you for the patch.
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 00/10] at: https://lore.kernel.org/all/cover.1637573097.git.mchehab+huawei@kernel.org/
+On Mon, Nov 22, 2021 at 09:26:07AM +0000, Mauro Carvalho Chehab wrote:
+> The gobj_type() function translates the media object type into
+> a name, being useful for debugging purposes. It is currently
+> not used, but let's keep it around, as it can be useful.
 
- drivers/media/platform/omap3isp/isp.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Don't we usually remove dead code, and add it back later when and if
+needed, unless we know the code will be used in the near future ? I
+don't care too much either way.
 
-diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-index 6de377ce281d..4c937f3f323e 100644
---- a/drivers/media/platform/omap3isp/isp.c
-+++ b/drivers/media/platform/omap3isp/isp.c
-@@ -476,7 +476,8 @@ void omap3isp_hist_dma_done(struct isp_device *isp)
- 	}
- }
- 
--static inline void isp_isr_dbg(struct isp_device *isp, u32 irqstatus)
-+static inline void __maybe_unused isp_isr_dbg(struct isp_device *isp,
-+					      u32 irqstatus)
- {
- 	static const char *name[] = {
- 		"CSIA_IRQ",
+> So, mark it with __maybe_unused, in order to shut up a
+> clang warning.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH 00/10] at: https://lore.kernel.org/all/cover.1637573097.git.mchehab+huawei@kernel.org/
+> 
+>  drivers/media/mc/mc-entity.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+> index f40f41977142..b0ea145ac9c0 100644
+> --- a/drivers/media/mc/mc-entity.c
+> +++ b/drivers/media/mc/mc-entity.c
+> @@ -14,7 +14,7 @@
+>  #include <media/media-entity.h>
+>  #include <media/media-device.h>
+>  
+> -static inline const char *gobj_type(enum media_gobj_type type)
+> +static inline __maybe_unused const char *gobj_type(enum media_gobj_type type)
+>  {
+>  	switch (type) {
+>  	case MEDIA_GRAPH_ENTITY:
+
 -- 
-2.33.1
+Regards,
 
+Laurent Pinchart
