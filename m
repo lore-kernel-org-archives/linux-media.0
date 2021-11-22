@@ -2,61 +2,76 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD953C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 11:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 197E9C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 12:05:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236514AbhKVLdP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Nov 2021 06:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237365AbhKVLdO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Nov 2021 06:33:14 -0500
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E22C061574
-        for <linux-media@vger.kernel.org>; Mon, 22 Nov 2021 03:30:06 -0800 (PST)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 8730FC63A5; Mon, 22 Nov 2021 11:30:02 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1637580602; bh=/1da65a+UD+VfrEsLyVjKXP4RM9QyzJ5GHb/G7pbub8=;
-        h=Date:From:To:Subject:From;
-        b=ha6n44EOHd4fPsyV2PRp8jUD/OH8c19hyZAn6e2/sp2sKuG0GhoJAdVvO2Sp8F5/X
-         SkCzcGP2uC7fegcAaX6zHeF8xszhHEEONeYQ7Z02jad7Yafu6G5TwKlhn23SLyxHj4
-         uAsqved7MPv3wSDsJmjZ3bAlCaw/GdWr/o3bPSivtrHd5GgKG/ehiTSZwpNQGHZwWO
-         GMKpb7n9K/DtkDIklSG4nDR4lw5q1rcGPUAByezYYId91GHueyI8Duw+On4ZSutLi0
-         ghq2e3CR+/2g2Q7LNZhVFI8zBDbaifmxIupBnn7vc3mLWKjQj1fed6f3bJZPzo8Q1b
-         ZsmdzxAwm50EA==
-Date:   Mon, 22 Nov 2021 11:30:02 +0000
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL FOR v5.16] sparse fix
-Message-ID: <20211122113002.GA5912@gofer.mess.org>
+        id S239426AbhKVMIq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Nov 2021 07:08:46 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:42978 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230425AbhKVMIq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Nov 2021 07:08:46 -0500
+Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1mp84o-006XLt-HN; Mon, 22 Nov 2021 12:05:38 +0000
+Received: from ip6-localhost ([::1] helo=localhost.localdomain)
+        by slave0 with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1mp84k-00BVca-To; Mon, 22 Nov 2021 12:05:34 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.16] sparse fix (#78660)
+Date:   Mon, 22 Nov 2021 12:05:34 +0000
+Message-Id: <20211122120534.2743114-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211122113002.GA5912@gofer.mess.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The following changes since commit 0d2517b3765aa331aee0a95f9b8072062d6bb7e5:
+From: builder@linuxtv.org
 
-  media: hantro: Support NV12 on the G2 core (2021-11-22 07:53:37 +0000)
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20211122113002.GA5912@gofer.mess.org/
+Build log: https://builder.linuxtv.org/job/patchwork/159044/
+Build time: 00:20:03
+Link: https://lore.kernel.org/linux-media/20211122113002.GA5912@gofer.mess.org
 
-are available in the Git repository at:
+gpg: Signature made Mon 22 Nov 2021 11:24:16 AM UTC
+gpg:                using RSA key A624251A26084A9ED9E4C8B6425F639D3960FA9E
+gpg:                issuer "sean@mess.org"
+gpg: Good signature from "Sean Young <sean@mess.org>" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: A624 251A 2608 4A9E D9E4  C8B6 425F 639D 3960 FA9E
 
-  git://linuxtv.org/syoung/media_tree.git tags/v5.17b
+Summary: got 1/1 patches with issues, being 1 at build time, plus one error when buinding PDF document
 
-for you to fetch changes up to 572799dfa023b2902223d5696031eebd13ee2d11:
+Error/warnings:
 
-  media: meson-ir-tx: remove incorrect doc comment (2021-11-22 11:23:32 +0000)
+patches/0001-media-meson-ir-tx-remove-incorrect-doc-comment.patch:
 
-----------------------------------------------------------------
-v5.17b
+    allyesconfig: return code #0:
+	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
 
-----------------------------------------------------------------
-Sean Young (1):
-      media: meson-ir-tx: remove incorrect doc comment
+    allyesconfig: return code #0:
+	../drivers/media/cec/core/cec-adap.c: ../drivers/media/cec/core/cec-adap.c:926 cec_transmit_msg_fh() warn: '&data->list' not removed from list
+	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
+	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
+	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
+	../drivers/media/usb/pvrusb2/pvrusb2-encoder.c: ../drivers/media/usb/pvrusb2/pvrusb2-encoder.c:288 pvr2_encoder_cmd() warn: inconsistent indenting
+	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:1730 pvr2_hdw_set_streaming() warn: inconsistent indenting
+	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3461 pvr2_hdw_cpufw_set_enabled() warn: inconsistent indenting
+	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3501 pvr2_hdw_cpufw_get() warn: inconsistent indenting
 
- drivers/media/rc/meson-ir-tx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Error #512 when building PDF docs
+
