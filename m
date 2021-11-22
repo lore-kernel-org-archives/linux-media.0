@@ -2,160 +2,93 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51602C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 07:27:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 252DBC433EF
+	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 07:27:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232801AbhKVHa3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Nov 2021 02:30:29 -0500
-Received: from comms.puri.sm ([159.203.221.185]:58866 "EHLO comms.puri.sm"
+        id S238735AbhKVHa4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Nov 2021 02:30:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48436 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233435AbhKVHa2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Nov 2021 02:30:28 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id C06B7E139C;
-        Sun, 21 Nov 2021 23:27:21 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 436LXCLEsQLl; Sun, 21 Nov 2021 23:27:20 -0800 (PST)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     martin.kepplinger@puri.sm, laurent.pinchart@ideasonboard.com,
-        mchehab@kernel.org, rmfrfs@gmail.com
-Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de, kernel@puri.sm,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        robh@kernel.org, shawnguo@kernel.org
-Subject: [PATCH v3 1/2] media: imx: imx7-media-csi: add support for imx8mq
-Date:   Mon, 22 Nov 2021 08:27:07 +0100
-Message-Id: <20211122072708.95269-1-martin.kepplinger@puri.sm>
+        id S233435AbhKVHay (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Nov 2021 02:30:54 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B7E8E60E0B;
+        Mon, 22 Nov 2021 07:27:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637566068;
+        bh=Ly/0T2OAUzTynxpf9QpH0VIk84ZehGQBwIxIsl8it18=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kCvjnExUjW0IDDkPIJKOVLsubbbx2w2oCWKIjhUjZyMGlVOlDPoe5YhfpXYLRvMl6
+         PphjgmkFDBBGQQxjTQdyXfPNPlJlnozXNOCev9Vakyk7fbdz0OdG1BV890/6/VHOu7
+         gB/2dWFnduONks8nPt8O/hwltbkt5Z/ugv8Wbd3yk7X7TbPL5PufHi6kmCto3MHmNZ
+         ULSqJ7eAxKalEWffNwbzFSOmR9u0S8vzF1gzI8XGGemSUB1Sdk5v7XDRnKP1M/o831
+         lOdZYckHHbWqpeCS78mWXf/qdl0MQJ0oObM3ZMbQ5YN8ybrL0feni88PTKLQDfZQPr
+         ZoJdOcsXnpfEQ==
+Date:   Mon, 22 Nov 2021 07:27:43 +0000
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL for v5.16-rc3] media fixes
+Message-ID: <20211122072743.4caac49f@sal.lan>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Modeled after the NXP driver mx6s_capture.c that this driver is based on,
-imx8mq needs different settings for the baseaddr_switch mechanism. Define
-the needed bits and set that for imx8mq.
+Hi Linus,
 
-Without these settings, the system will "sometimes" hang completely when
-starting to stream (the interrupt will never be called).
+Please pull from:
+	  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.16-2
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
----
+For:
 
-revision history
-----------------
-v3:
- * fix compiler warning when assigning a 64 bit (void *) to an int
- * add Ruis' Acked-by tag
+  - A fix at VIDIOC_DQEVENT ioctl handling for 32-bit userspace
+    with a 64-bit Kernel;
+  - A regression fix at videobuf2 core;
+  - A fix at CEC core when handling non-block transmit;
+  - hi846: fix a clang warning.
 
-v2: (thank you Rui and Laurent)
- * rename function and enum
- * remove unrealted newline
- * add Laurents reviewed tag to the bindings patch
- https://lore.kernel.org/linux-media/20211118063347.3370678-1-martin.kepplinger@puri.sm/
-
-v1:
-https://lore.kernel.org/linux-media/20211117092710.3084034-1-martin.kepplinger@puri.sm/T/#t
+Regards,
+Mauro
 
 
+The following changes since commit 57c3b9f55ba875a6f6295fa59f0bdc0a01c544f8:
 
- drivers/staging/media/imx/imx7-media-csi.c | 32 ++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
+  media: venus: core: Add sdm660 DT compatible and resource struct (2021-10-21 14:26:19 +0100)
 
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 2288dadb2683..32311fc0e2a4 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -12,6 +12,7 @@
- #include <linux/interrupt.h>
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
-+#include <linux/of_device.h>
- #include <linux/of_graph.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
-@@ -122,6 +123,10 @@
- #define BIT_DATA_FROM_MIPI		BIT(22)
- #define BIT_MIPI_YU_SWAP		BIT(21)
- #define BIT_MIPI_DOUBLE_CMPNT		BIT(20)
-+#define BIT_MASK_OPTION_FIRST_FRAME	(0 << 18)
-+#define BIT_MASK_OPTION_CSI_EN		(1 << 18)
-+#define BIT_MASK_OPTION_SECOND_FRAME	(2 << 18)
-+#define BIT_MASK_OPTION_ON_DATA		(3 << 18)
- #define BIT_BASEADDR_CHG_ERR_EN		BIT(9)
- #define BIT_BASEADDR_SWITCH_SEL		BIT(5)
- #define BIT_BASEADDR_SWITCH_EN		BIT(4)
-@@ -154,6 +159,11 @@
- #define CSI_CSICR18			0x48
- #define CSI_CSICR19			0x4c
- 
-+enum imx_csi_model {
-+	IMX7_CSI_IMX7 = 0,
-+	IMX7_CSI_IMX8MQ,
-+};
-+
- struct imx7_csi {
- 	struct device *dev;
- 	struct v4l2_subdev sd;
-@@ -189,6 +199,8 @@ struct imx7_csi {
- 	bool is_csi2;
- 
- 	struct completion last_eof_completion;
-+
-+	enum imx_csi_model model;
- };
- 
- static struct imx7_csi *
-@@ -537,6 +549,16 @@ static void imx7_csi_deinit(struct imx7_csi *csi,
- 	clk_disable_unprepare(csi->mclk);
- }
- 
-+static void imx7_csi_baseaddr_switch_on_second_frame(struct imx7_csi *csi)
-+{
-+	u32 cr18 = imx7_csi_reg_read(csi, CSI_CSICR18);
-+
-+	cr18 |= BIT_BASEADDR_SWITCH_EN | BIT_BASEADDR_SWITCH_SEL |
-+		BIT_BASEADDR_CHG_ERR_EN;
-+	cr18 |= BIT_MASK_OPTION_SECOND_FRAME;
-+	imx7_csi_reg_write(csi, cr18, CSI_CSICR18);
-+}
-+
- static void imx7_csi_enable(struct imx7_csi *csi)
- {
- 	/* Clear the Rx FIFO and reflash the DMA controller. */
-@@ -552,6 +574,9 @@ static void imx7_csi_enable(struct imx7_csi *csi)
- 	/* Enable the RxFIFO DMA and the CSI. */
- 	imx7_csi_dmareq_rff_enable(csi);
- 	imx7_csi_hw_enable(csi);
-+
-+	if (csi->model == IMX7_CSI_IMX8MQ)
-+		imx7_csi_baseaddr_switch_on_second_frame(csi);
- }
- 
- static void imx7_csi_disable(struct imx7_csi *csi)
-@@ -1155,6 +1180,8 @@ static int imx7_csi_probe(struct platform_device *pdev)
- 	if (IS_ERR(csi->regbase))
- 		return PTR_ERR(csi->regbase);
- 
-+	csi->model = (enum imx_csi_model)(uintptr_t)of_device_get_match_data(&pdev->dev);
-+
- 	spin_lock_init(&csi->irqlock);
- 	mutex_init(&csi->lock);
- 
-@@ -1249,8 +1276,9 @@ static int imx7_csi_remove(struct platform_device *pdev)
- }
- 
- static const struct of_device_id imx7_csi_of_match[] = {
--	{ .compatible = "fsl,imx7-csi" },
--	{ .compatible = "fsl,imx6ul-csi" },
-+	{ .compatible = "fsl,imx8mq-csi", .data = (void *)IMX7_CSI_IMX8MQ },
-+	{ .compatible = "fsl,imx7-csi", .data = (void *)IMX7_CSI_IMX7 },
-+	{ .compatible = "fsl,imx6ul-csi", .data = (void *)IMX7_CSI_IMX7 },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, imx7_csi_of_match);
--- 
-2.30.2
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.16-2
+
+for you to fetch changes up to 62456590b84965ad8d633dbd8f8c75fcf1e765d6:
+
+  media: hi846: remove the of_match_ptr macro (2021-11-19 05:56:07 +0000)
+
+----------------------------------------------------------------
+media fixes for v5.16-rc3
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      media: v4l2-core: fix VIDIOC_DQEVENT handling on non-x86
+
+Hans Verkuil (1):
+      media: cec: copy sequence field for the reply
+
+Hans de Goede (1):
+      media: videobuf2-dma-sg: Fix buf->vb NULL pointer dereference
+
+Martin Kepplinger (2):
+      media: hi846: include property.h instead of of_graph.h
+      media: hi846: remove the of_match_ptr macro
+
+ drivers/media/cec/core/cec-adap.c                 |  1 +
+ drivers/media/common/videobuf2/videobuf2-dma-sg.c |  2 ++
+ drivers/media/i2c/hi846.c                         |  4 +--
+ drivers/media/v4l2-core/v4l2-compat-ioctl32.c     | 41 ++++++++++-------------
+ 4 files changed, 22 insertions(+), 26 deletions(-)
 
