@@ -2,42 +2,43 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6B23C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 09:26:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CD12C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 09:26:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239088AbhKVJ31 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Nov 2021 04:29:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59130 "EHLO mail.kernel.org"
+        id S239095AbhKVJ33 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Nov 2021 04:29:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59124 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239024AbhKVJ3W (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S239021AbhKVJ3W (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 22 Nov 2021 04:29:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 123E360F94;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1204460F93;
         Mon, 22 Nov 2021 09:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637573176;
-        bh=/6WJgmxHsldFG8WQEw4YO71q1zqG0O4P07uLKTGweRA=;
+        bh=dJPMNlK3b/bJuvSAkvT2aybug3z8MKZYIr2jaPmK8p4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iLaR8tV/5o+/7qew2X9/D/QMucPsulC3Kzopwr+QqjiJpz2piLh/zsDK1Ce60dIu4
-         CyZyzGm7ll7WE5qT/maj/6DucxKBf+mvJg/xUxyo8dt4rz8c9nyukRYh3RYXw3LULo
-         RSzIwbfmoCVA6/wTWSmiT1ELvJjoPVZPVMnF17K//4OeYUpy1YDYx71bhJy9IcD3/7
-         FrEGNKnWrMECAWmcSex30ZFuoADmqEH6KVa3jreaPoMXq+c9X9iLWSzvb4HgDfmgpU
-         u3RMC0AdaKMoXsvpl+qXI3mkKTEXZZU5THtNgQgSss5vpOMtEkqah1V7LnbVjfjB5t
-         B37cffoofOQTA==
+        b=p4D3825Q6PZGHQdPE9aQn1qmp0gbwN4Rk0UTervPwm4V70Jt65Bm+kb/sH6XIV5/X
+         emphTAtNwehfROg7TV2U3PPVslFSpZ2BlvVwbVYKPlECcwGxZnrLtNWMy7GxnRon3W
+         LuF4aN+SCPH1dPaSShn4baW4TFcPkH6wV1TXJULGea2DwO2+KhhCB9shMTXBrffmly
+         XI013kIBJABZ3e8IZD3Oo5xZCszplXAj5Eq7z594F6AXyXZebHBOW+xBNt2pF9EkrY
+         6REQ6Fh0/UI/5dC1Dc7WZdJp88AYTk28bly/tbW8rfIfjVuOE5Dk8sq1L3a7KpZKRY
+         IRcsUuX79vcmg==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mp5aX-003hiG-39; Mon, 22 Nov 2021 09:26:13 +0000
+        id 1mp5aX-003hiD-2e; Mon, 22 Nov 2021 09:26:13 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Walls <awalls@md.metrocast.net>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH 02/10] media: ivtv: drop an unused macro
-Date:   Mon, 22 Nov 2021 09:26:04 +0000
-Message-Id: <9543b4e3206621e1e45f7e3a5841359a3a53686d.1637573097.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 01/10] media: cx25821: drop duplicated i2c_slave_did_ack()
+Date:   Mon, 22 Nov 2021 09:26:03 +0000
+Message-Id: <140dfc36fbd3b759a47e972774b362894f43911f.1637573097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637573097.git.mchehab+huawei@kernel.org>
 References: <cover.1637573097.git.mchehab+huawei@kernel.org>
@@ -49,10 +50,11 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The macro p_to_snd_ivtv_card() is just a variant for container_of(),
-not actually used inside the code. So, drop it.
+This function is defined twice, one at cx25821-i2c and the other
+inside cx25821-core. It turns that only the first
+is actually used inside the code.
 
-This address a clang warning.
+This causes a clang warning.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -60,26 +62,27 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/10] at: https://lore.kernel.org/all/cover.1637573097.git.mchehab+huawei@kernel.org/
 
- drivers/media/pci/ivtv/ivtv-alsa-main.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/media/pci/cx25821/cx25821-core.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/drivers/media/pci/ivtv/ivtv-alsa-main.c b/drivers/media/pci/ivtv/ivtv-alsa-main.c
-index 4cefdb2e4d40..9e13a7128a53 100644
---- a/drivers/media/pci/ivtv/ivtv-alsa-main.c
-+++ b/drivers/media/pci/ivtv/ivtv-alsa-main.c
-@@ -48,12 +48,6 @@ struct snd_ivtv_card *to_snd_ivtv_card(struct v4l2_device *v4l2_dev)
- 	return to_ivtv(v4l2_dev)->alsa;
+diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
+index 40c10ca94def..3078a39f0b95 100644
+--- a/drivers/media/pci/cx25821/cx25821-core.c
++++ b/drivers/media/pci/cx25821/cx25821-core.c
+@@ -337,13 +337,6 @@ static int cx25821_risc_decode(u32 risc)
+ 	return incr[risc >> 28] ? incr[risc >> 28] : 1;
  }
  
--static inline
--struct snd_ivtv_card *p_to_snd_ivtv_card(struct v4l2_device **v4l2_dev)
+-static inline int i2c_slave_did_ack(struct i2c_adapter *i2c_adap)
 -{
--	return container_of(v4l2_dev, struct snd_ivtv_card, v4l2_dev);
+-	struct cx25821_i2c *bus = i2c_adap->algo_data;
+-	struct cx25821_dev *dev = bus->dev;
+-	return cx_read(bus->reg_stat) & 0x01;
 -}
 -
- static void snd_ivtv_card_free(struct snd_ivtv_card *itvsc)
+ static void cx25821_registers_init(struct cx25821_dev *dev)
  {
- 	if (itvsc == NULL)
+ 	u32 tmp;
 -- 
 2.33.1
 
