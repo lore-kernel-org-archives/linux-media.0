@@ -2,41 +2,48 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C221C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08B74C433EF
 	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 09:26:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239137AbhKVJ3f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Nov 2021 04:29:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59122 "EHLO mail.kernel.org"
+        id S239070AbhKVJ30 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Nov 2021 04:29:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59076 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239002AbhKVJ3W (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S234761AbhKVJ3W (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Mon, 22 Nov 2021 04:29:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0FEE860F6E;
-        Mon, 22 Nov 2021 09:26:16 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EDC3E60F5B;
+        Mon, 22 Nov 2021 09:26:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637573176;
-        bh=IFDTMmTh8HFMsvlLSyw8+5NpCNZ/IGPyxSr0OJMAc9A=;
+        bh=utrYONIryoh2Eca6ndcd8c6SanN6tqGHUHOVSgYssps=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IEBaaXQjSewfSfM8OxNh+rGrwuxaT6sGPUhT1L3laKny5POk+eehD/o6ZtgZ5x3BV
-         j3E13u+Bj2rd4YdRPs5Mu/3KGzjq/b0J7vXUI6U0ti50sLcpJC2YFpr/doo0xigfk8
-         lLUd8NSszW1T5YckppNIhuP4yq0i9mGWqV1MHY7aDkqYsTfRUEF565jT7GXFI+/+Ai
-         wmSj7YHAouePOGcETcIwQIaVtbl+hGxwP6SQCgrpHsHTbooFcC7wqfZKTvFr7kicfb
-         O/Kig92CXOxFFYv6xlthwBBHw2DcHJ2ZN3cNWozG8PZw1MYtQ5zSqXAQqo5MrRnqqz
-         9R9VcSjtVUEpw==
+        b=MDYt3oeJfFqVS6J9tMGhkYNeFHVkpXhkLHoTWEPWwq6zUgsck58Ye1jWaNzi0AUs0
+         RA5Ao23dX8z2chZVTdU6NFHKXM7PXGZgj8VH/6f4zNZgWVXoSbNUHUpgnV8OARtMPm
+         +U41ga/Ssz2Efu1doWC0ReNDCD4x906ksd/V7cqs33URcFtQiwhFuogtESZOp/uIW8
+         cv/KQfhEWC/iF2Uq5euIfa7jrrG6AzgUeSTTkmaJH7/w6zX4/5oEXr2gchiAnmmTHD
+         8LoTaqqpXPqIYJb0+Uuk9URVlcsOZv/NpNpbl37SmQMZobsHK+kLX+/qUUumSEHF+T
+         i6G6rUnED/Taw==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mp5aX-003hiM-47; Mon, 22 Nov 2021 09:26:13 +0000
+        id 1mp5aX-003hiY-69; Mon, 22 Nov 2021 09:26:13 +0000
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Evgeny Novikov <novikov@ispras.ru>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Helen Koike <helen.koike@collabora.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Leon Romanovsky <leon@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH 04/10] media: stb6100: mark a currently unused function as such
-Date:   Mon, 22 Nov 2021 09:26:06 +0000
-Message-Id: <7c6019a794f8d009ce931197943fe4871cd6d6c3.1637573097.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 08/10] media: marvell-ccic: drop to_cam() unused function
+Date:   Mon, 22 Nov 2021 09:26:10 +0000
+Message-Id: <dc1b7d18939cffaec84436654b2323f314d25a6a.1637573097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637573097.git.mchehab+huawei@kernel.org>
 References: <cover.1637573097.git.mchehab+huawei@kernel.org>
@@ -48,12 +55,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The stb6100_normalise_regs() function is not used with current
-boards, but the driver says that some devices could need it.
-Ok, we could simply drop it, but as there's a macro to mark
-unused functions, use it.
-
-This should shut up a clang warning.
+This function is an alias for container_of() that it is currently
+not used, causing clang warnings. So, drop it.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -61,22 +64,27 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/10] at: https://lore.kernel.org/all/cover.1637573097.git.mchehab+huawei@kernel.org/
 
- drivers/media/dvb-frontends/stb6100.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/marvell-ccic/cafe-driver.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/stb6100.c b/drivers/media/dvb-frontends/stb6100.c
-index d541d6613610..ea1d260e4d70 100644
---- a/drivers/media/dvb-frontends/stb6100.c
-+++ b/drivers/media/dvb-frontends/stb6100.c
-@@ -110,7 +110,7 @@ static const struct stb6100_regmask stb6100_template[] = {
- /*
-  * Currently unused. Some boards might need it in the future
+diff --git a/drivers/media/platform/marvell-ccic/cafe-driver.c b/drivers/media/platform/marvell-ccic/cafe-driver.c
+index b61b9d9551af..03dcf8bf705e 100644
+--- a/drivers/media/platform/marvell-ccic/cafe-driver.c
++++ b/drivers/media/platform/marvell-ccic/cafe-driver.c
+@@ -139,13 +139,6 @@ struct cafe_camera {
   */
--static inline void stb6100_normalise_regs(u8 regs[])
-+static __maybe_unused inline void stb6100_normalise_regs(u8 regs[])
- {
- 	int i;
+ #define CAFE_SMBUS_TIMEOUT (HZ)  /* generous */
  
+-static inline struct cafe_camera *to_cam(struct v4l2_device *dev)
+-{
+-	struct mcam_camera *m = container_of(dev, struct mcam_camera, v4l2_dev);
+-	return container_of(m, struct cafe_camera, mcam);
+-}
+-
+-
+ static int cafe_smbus_write_done(struct mcam_camera *mcam)
+ {
+ 	unsigned long flags;
 -- 
 2.33.1
 
