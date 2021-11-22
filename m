@@ -2,224 +2,130 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 074E3C4332F
-	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 18:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2B9FC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 22 Nov 2021 18:47:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239968AbhKVSl6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Nov 2021 13:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
+        id S240408AbhKVSub (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Nov 2021 13:50:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235182AbhKVSl4 (ORCPT
+        with ESMTP id S240097AbhKVSuW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Nov 2021 13:41:56 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F65C061574;
-        Mon, 22 Nov 2021 10:38:49 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id h16-20020a9d7990000000b0055c7ae44dd2so30098740otm.10;
-        Mon, 22 Nov 2021 10:38:49 -0800 (PST)
+        Mon, 22 Nov 2021 13:50:22 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52A9C061748;
+        Mon, 22 Nov 2021 10:47:15 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id g14so81320384edb.8;
+        Mon, 22 Nov 2021 10:47:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UHFB4okDolhXrN2KtXNKGXY4xx9A6ENlJZJpcpYJSa4=;
-        b=iF32sjGrzSvaDDiDrzm4Jn8+gNbGxPrbBxZFxi4uCknK7CkuUHGcqoOD65h4RyWxyF
-         y+wOmbGDPKkCG8jIqPGxKaFK0D3GvGCi7E7vj/rSSTElZKQ4I+sO6sAsXlhvWm4LJdnp
-         2KvDVCusXICAOU/8p8E70quXduhRoLziMS5wtCLJdF0xE54KuxD1Hx/LXZJoPAM3DNL1
-         BkvRF4pmS6od3lYRUbwlZMx97PcjFnI9HdmkEczPsl3ta8bzsAye+LybTN6gfUn7gNW8
-         MLS92ARh+GguAjdL9uq+LetI8B96GaD9Vc3Ip4BN7Uy3BSXQIu3jgX7O1p5U0Obaav48
-         V51g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=gKAd13ADpuT/g6/zKOnVkwtQVM57IaAtbrKHSQ6bV6A=;
+        b=hJgWH6pywF6UW/vvgqL5V57IsYjartVT3mGfw0/TKtJdbMM6QX9VaQxCzXFli4T+UF
+         Fwvk67TmcufffHzSglF0gQ92NJn6LauHY7+LrSFO1ZlV8cIIheDiwrNETelXdTGeZ6uX
+         L1WKUwr1HAo4sBkS2r3Jia8/FFwn4pYQYAAtw88A1nnzYBQaEy67+5yAjwfyUKehmq+R
+         LV3KZLaE5Xgmo5lAxh+DMQMuBkUnBO1V6x+68ix3x1DiXUFqX4owFOOrUoagQtZiZJVW
+         ihakzwSByhoTxJGQHjtSZoTW+UY+cQ9g3MvtxzO0a2XBpl+EKQ1VAmp6tUyf/mZU+Jw0
+         xxcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UHFB4okDolhXrN2KtXNKGXY4xx9A6ENlJZJpcpYJSa4=;
-        b=wI6BKtLTjV71b36AuQa7eqeNpGoXyn1KTwsO+7skapVw+pmDbPKZmEh5H0sXecgQnt
-         yzJKt3KdhxBEAKbKcI8rSlhhEm/A4oZHuvvRZaObwtKQzlgvzMPHfGguy9imT/JcpjPs
-         I6XIlPCY8ETNjuOdWot9trq43v/2ZY4ki8uYzXC+qzEIgRO0AFRzV9hHjtkPA78ksFXK
-         futpmcQkacgTtsGbQt1gOephKyFO0eOGBW2j8cC8cild9soZ8YMcmBNn4Zk3rn1SOaxP
-         uPb25fsRYJ9hB3FsWqlRBxnxq6tUXiZRFaIAozbkbuoe0thxa6DODfQT+PD3xGAzWfQp
-         V3fw==
-X-Gm-Message-State: AOAM532lDdsUO3aNW37ss9kreDysmNYReVetgXnabQmUDkyYTfjx1cCb
-        yq2KAvvSNAzYtPgE/p1uNDk=
-X-Google-Smtp-Source: ABdhPJwfr5gWpFAYZtUOP0l+WeTUOCLuMHjoxvBl19lgRYsYRNjGQbRkBWj0P0bUDebnG/bzTCmu0Q==
-X-Received: by 2002:a9d:5190:: with SMTP id y16mr27309322otg.364.1637606329228;
-        Mon, 22 Nov 2021 10:38:49 -0800 (PST)
-Received: from [10.62.118.101] (cpe-24-31-246-181.kc.res.rr.com. [24.31.246.181])
-        by smtp.gmail.com with ESMTPSA id f18sm1729016otl.28.2021.11.22.10.38.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Nov 2021 10:38:48 -0800 (PST)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <a18f44bf-e590-0ebe-00c0-5658f3a51d86@lwfinger.net>
-Date:   Mon, 22 Nov 2021 12:38:41 -0600
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=gKAd13ADpuT/g6/zKOnVkwtQVM57IaAtbrKHSQ6bV6A=;
+        b=Bw2QzpfsrWYCzKLwANRIxgJWUUWnHo+OiAyuhNlVlv2MlzSuKeNZIzweaX21vzXBsk
+         A+vArFk9aLMTAXxlIkq9VkMsyrlSmoSQrp9DvRX6mRiD2UhTCNwgq7wlZP6If08pCa1Q
+         W4BKqENrMem5NebWb3Yo0rlp3txV0AnWU9IFBKwWVgIBXNAb495hDGqFRJ8RiwAaSfj0
+         1pPT3+khBz7rEIaSqr9wGahLtuWg35Jypukj44Kvuo+PpQb0lGDHipPBIYXsFkdh5jDO
+         SJx4RZFpITfBxGB2O+SVrYM7OtronSThxGH53/YqatW0RAskaAik5USMIbrvx93GYSWn
+         cePw==
+X-Gm-Message-State: AOAM531f0/XD8xk7Nh3IaASJ/YgoE6YJm93V8uTjdvo/drfskiUc7e01
+        SEDTlnAprGYUH33qi9uxASrxxRCZArIl6g==
+X-Google-Smtp-Source: ABdhPJxgENTrJeEAp2FSu442LZx+8rnzsygJjMZ5AXrx66h6EMWLyfL6qetx5t+R4vKDqAWaXyJSuA==
+X-Received: by 2002:aa7:cada:: with SMTP id l26mr68753520edt.376.1637606834429;
+        Mon, 22 Nov 2021 10:47:14 -0800 (PST)
+Received: from kista.localdomain (cpe-86-58-29-253.static.triera.net. [86.58.29.253])
+        by smtp.gmail.com with ESMTPSA id h10sm4512312edr.95.2021.11.22.10.47.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Nov 2021 10:47:14 -0800 (PST)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     linux-media@vger.kernel.org
+Cc:     ezequiel@vanguardiasur.com.ar, nicolas.dufresne@collabora.com,
+        mchehab@kernel.org, robh+dt@kernel.org, mripard@kernel.org,
+        wens@csie.org, p.zabel@pengutronix.de, andrzej.p@collabora.com,
+        gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH 2/7] media: hantro: vp9: use double buffering if needed
+Date:   Mon, 22 Nov 2021 19:46:57 +0100
+Message-Id: <20211122184702.768341-3-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.34.0
+In-Reply-To: <20211122184702.768341-1-jernej.skrabec@gmail.com>
+References: <20211122184702.768341-1-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH/RFC 17/17] rtw89: Use bitfield helpers
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Paul Walmsley <paul@pwsan.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Benoit Parrot <bparrot@ti.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-References: <cover.1637592133.git.geert+renesas@glider.be>
- <f7b81122f7596fa004188bfae68f25a68c2d2392.1637592133.git.geert+renesas@glider.be>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <f7b81122f7596fa004188bfae68f25a68c2d2392.1637592133.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 11/22/21 09:54, Geert Uytterhoeven wrote:
-> Use the field_{get,prep}() helpers, instead of open-coding the same
-> operations.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> Compile-tested only.
-> Marked RFC, as this depends on [PATCH 01/17], but follows a different
-> path to upstream.
-> ---
->   drivers/net/wireless/realtek/rtw89/core.h | 38 ++++-------------------
->   1 file changed, 6 insertions(+), 32 deletions(-)
+Some G2 variants need double buffering to be enabled in order to work
+correctly, like that found in Allwinner H6 SoC.
 
-Tested-by: Larry Finger <Larry,Finger@lwfinger.net>
+Add platform quirk for that.
 
-Larry
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+---
+ drivers/staging/media/hantro/hantro.h            | 2 ++
+ drivers/staging/media/hantro/hantro_g2_regs.h    | 1 +
+ drivers/staging/media/hantro/hantro_g2_vp9_dec.c | 2 ++
+ 3 files changed, 5 insertions(+)
 
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw89/core.h b/drivers/net/wireless/realtek/rtw89/core.h
-> index c2885e4dd882f045..f9c0300ec373aaf2 100644
-> --- a/drivers/net/wireless/realtek/rtw89/core.h
-> +++ b/drivers/net/wireless/realtek/rtw89/core.h
-> @@ -2994,81 +2994,55 @@ rtw89_write32_clr(struct rtw89_dev *rtwdev, u32 addr, u32 bit)
->   static inline u32
->   rtw89_read32_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask)
->   {
-> -	u32 shift = __ffs(mask);
-> -	u32 orig;
-> -	u32 ret;
-> -
-> -	orig = rtw89_read32(rtwdev, addr);
-> -	ret = (orig & mask) >> shift;
-> -
-> -	return ret;
-> +	return field_get(mask, rtw89_read32(rtwdev, addr));
->   }
->   
->   static inline u16
->   rtw89_read16_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask)
->   {
-> -	u32 shift = __ffs(mask);
-> -	u32 orig;
-> -	u32 ret;
-> -
-> -	orig = rtw89_read16(rtwdev, addr);
-> -	ret = (orig & mask) >> shift;
-> -
-> -	return ret;
-> +	return field_get(mask, rtw89_read16(rtwdev, addr));
->   }
->   
->   static inline u8
->   rtw89_read8_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask)
->   {
-> -	u32 shift = __ffs(mask);
-> -	u32 orig;
-> -	u32 ret;
-> -
-> -	orig = rtw89_read8(rtwdev, addr);
-> -	ret = (orig & mask) >> shift;
-> -
-> -	return ret;
-> +	return field_get(mask, rtw89_read8(rtwdev, addr));
->   }
->   
->   static inline void
->   rtw89_write32_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask, u32 data)
->   {
-> -	u32 shift = __ffs(mask);
->   	u32 orig;
->   	u32 set;
->   
->   	WARN(addr & 0x3, "should be 4-byte aligned, addr = 0x%08x\n", addr);
->   
->   	orig = rtw89_read32(rtwdev, addr);
-> -	set = (orig & ~mask) | ((data << shift) & mask);
-> +	set = (orig & ~mask) | field_prep(mask, data);
->   	rtw89_write32(rtwdev, addr, set);
->   }
->   
->   static inline void
->   rtw89_write16_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask, u16 data)
->   {
-> -	u32 shift;
->   	u16 orig, set;
->   
->   	mask &= 0xffff;
-> -	shift = __ffs(mask);
->   
->   	orig = rtw89_read16(rtwdev, addr);
-> -	set = (orig & ~mask) | ((data << shift) & mask);
-> +	set = (orig & ~mask) | field_prep(mask, data);
->   	rtw89_write16(rtwdev, addr, set);
->   }
->   
->   static inline void
->   rtw89_write8_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask, u8 data)
->   {
-> -	u32 shift;
->   	u8 orig, set;
->   
->   	mask &= 0xff;
-> -	shift = __ffs(mask);
->   
->   	orig = rtw89_read8(rtwdev, addr);
-> -	set = (orig & ~mask) | ((data << shift) & mask);
-> +	set = (orig & ~mask) | field_prep(mask, data);
->   	rtw89_write8(rtwdev, addr, set);
->   }
->   
-> 
+diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
+index 33eb3e092cc1..d03824fa3222 100644
+--- a/drivers/staging/media/hantro/hantro.h
++++ b/drivers/staging/media/hantro/hantro.h
+@@ -73,6 +73,7 @@ struct hantro_irq {
+  * @num_clocks:			number of clocks in the array
+  * @reg_names:			array of register range names
+  * @num_regs:			number of register range names in the array
++ * @double_buffer:		core needs double buffering
+  */
+ struct hantro_variant {
+ 	unsigned int enc_offset;
+@@ -94,6 +95,7 @@ struct hantro_variant {
+ 	int num_clocks;
+ 	const char * const *reg_names;
+ 	int num_regs;
++	unsigned int double_buffer : 1;
+ };
+ 
+ /**
+diff --git a/drivers/staging/media/hantro/hantro_g2_regs.h b/drivers/staging/media/hantro/hantro_g2_regs.h
+index 9c857dd1ad9b..15a391a4650e 100644
+--- a/drivers/staging/media/hantro/hantro_g2_regs.h
++++ b/drivers/staging/media/hantro/hantro_g2_regs.h
+@@ -270,6 +270,7 @@
+ #define g2_apf_threshold	G2_DEC_REG(55, 0, 0xffff)
+ 
+ #define g2_clk_gate_e		G2_DEC_REG(58, 16, 0x1)
++#define g2_double_buffer_e	G2_DEC_REG(58, 15, 0x1)
+ #define g2_buswidth		G2_DEC_REG(58, 8,  0x7)
+ #define g2_max_burst		G2_DEC_REG(58, 0,  0xff)
+ 
+diff --git a/drivers/staging/media/hantro/hantro_g2_vp9_dec.c b/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
+index e04242d10fa2..d4fc649a4da1 100644
+--- a/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
++++ b/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
+@@ -847,6 +847,8 @@ config_registers(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_frame *dec_p
+ 	hantro_reg_write(ctx->dev, &g2_clk_gate_e, 1);
+ 	hantro_reg_write(ctx->dev, &g2_max_cb_size, 6);
+ 	hantro_reg_write(ctx->dev, &g2_min_cb_size, 3);
++	if (ctx->dev->variant->double_buffer)
++		hantro_reg_write(ctx->dev, &g2_double_buffer_e, 1);
+ 
+ 	config_output(ctx, dst, dec_params);
+ 
+-- 
+2.34.0
 
