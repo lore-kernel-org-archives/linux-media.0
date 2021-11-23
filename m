@@ -2,116 +2,113 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 007DEC433FE
-	for <linux-media@archiver.kernel.org>; Tue, 23 Nov 2021 11:22:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01648C43219
+	for <linux-media@archiver.kernel.org>; Tue, 23 Nov 2021 11:24:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236057AbhKWLZ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Nov 2021 06:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236039AbhKWLZ2 (ORCPT
+        id S236111AbhKWL1z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Nov 2021 06:27:55 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:33990 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236097AbhKWL1y (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Nov 2021 06:25:28 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834DEC061574;
-        Tue, 23 Nov 2021 03:22:20 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id 6067A1F4197A
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1637666539; bh=PBtrVueCq3tmvWtlDU2yVa4NxTm9tEbs7ezcIMVF6mU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ant/0iSEfOetB3rzdly/nH/Bl9Qamh7a33r5df/m71IQS825rZ+bGTsuaGPgBuSdt
-         b6nOBza61O2QqJSuhXL2hLlKMPfkXB9jNBAt0CDZKBcLKrVPWRbVS5ENPI9JOlB/ZL
-         j7VYxNJ1OoVSEm+S072GDpINrEVMCaLaoQ/TdKUA/lrQEEQu9XawdIe1dZi46bNRYK
-         0AwFMKvb3tAAW32AOveePty95p8xrSh+9VPktX20R+lKCo6/1MV9odRUPBrQkjrfgR
-         qisGchn8vytOlbsuymVe6SeJK4IReC1lZvsBqeWY+vgIC/Akx7UB0F2iOjLOCPc1JJ
-         hJUYGCQE3MHRw==
-Subject: Re: [PATCH 2/7] media: hantro: vp9: use double buffering if needed
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-media@vger.kernel.org
-Cc:     ezequiel@vanguardiasur.com.ar, nicolas.dufresne@collabora.com,
-        mchehab@kernel.org, robh+dt@kernel.org, mripard@kernel.org,
-        wens@csie.org, p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-References: <20211122184702.768341-1-jernej.skrabec@gmail.com>
- <20211122184702.768341-3-jernej.skrabec@gmail.com>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <55bb35b0-b98b-9961-aa95-554f8af141f5@collabora.com>
-Date:   Tue, 23 Nov 2021 12:22:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20211122184702.768341-3-jernej.skrabec@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Tue, 23 Nov 2021 06:27:54 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 210DC1FD39;
+        Tue, 23 Nov 2021 11:24:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1637666684; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UFMk9Bgs0C48EUfsk3ZFvxtIETbpuVrnTCZsE9y/THg=;
+        b=B5wgrGMQxccfarx7KLxD/v3wx8FzL961VMxubhW0cO/WUVPlEQomF+nVuFGnnBslrEEhT1
+        xudqYqMaf+YphX2nzCoCbfB0B6g9AeH9QfhE7lu7z3ACo7VQrklZRhovUB+NCMR7oDuaNe
+        0hq0zD2HZHDxU7bsE6McRJtXzhuF0Ds=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1637666684;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UFMk9Bgs0C48EUfsk3ZFvxtIETbpuVrnTCZsE9y/THg=;
+        b=JvnlyRw9hsp7oaQ0km8FOqiXL/FSSMsTm/BLHjKdYHEZKscA/ru44PAvFmPvH3xzeJazLO
+        xpP7CG8EyA51s0BA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id E56A2A3B85;
+        Tue, 23 Nov 2021 11:24:41 +0000 (UTC)
+Date:   Tue, 23 Nov 2021 12:24:41 +0100
+Message-ID: <s5hwnkz9ksm.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Paul Walmsley <paul@pwsan.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH/RFC 16/17] ALSA: ice1724: Use bitfield helpers
+In-Reply-To: <45fa162856814176045ffbb49ee64cf0ea7e00bc.1637592133.git.geert+renesas@glider.be>
+References: <cover.1637592133.git.geert+renesas@glider.be>
+        <45fa162856814176045ffbb49ee64cf0ea7e00bc.1637592133.git.geert+renesas@glider.be>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-W dniu 22.11.2021 o 19:46, Jernej Skrabec pisze:
-> Some G2 variants need double buffering to be enabled in order to work
-> correctly, like that found in Allwinner H6 SoC.
+On Mon, 22 Nov 2021 16:54:09 +0100,
+Geert Uytterhoeven wrote:
 > 
-> Add platform quirk for that.
+> Use the field_{get,prep}() helpers, instead of open-coding the same
+> operations.
 > 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > ---
->   drivers/staging/media/hantro/hantro.h            | 2 ++
->   drivers/staging/media/hantro/hantro_g2_regs.h    | 1 +
->   drivers/staging/media/hantro/hantro_g2_vp9_dec.c | 2 ++
->   3 files changed, 5 insertions(+)
-> 
-> diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-> index 33eb3e092cc1..d03824fa3222 100644
-> --- a/drivers/staging/media/hantro/hantro.h
-> +++ b/drivers/staging/media/hantro/hantro.h
-> @@ -73,6 +73,7 @@ struct hantro_irq {
->    * @num_clocks:			number of clocks in the array
->    * @reg_names:			array of register range names
->    * @num_regs:			number of register range names in the array
-> + * @double_buffer:		core needs double buffering
->    */
->   struct hantro_variant {
->   	unsigned int enc_offset;
-> @@ -94,6 +95,7 @@ struct hantro_variant {
->   	int num_clocks;
->   	const char * const *reg_names;
->   	int num_regs;
-> +	unsigned int double_buffer : 1;
->   };
->   
->   /**
-> diff --git a/drivers/staging/media/hantro/hantro_g2_regs.h b/drivers/staging/media/hantro/hantro_g2_regs.h
-> index 9c857dd1ad9b..15a391a4650e 100644
-> --- a/drivers/staging/media/hantro/hantro_g2_regs.h
-> +++ b/drivers/staging/media/hantro/hantro_g2_regs.h
-> @@ -270,6 +270,7 @@
->   #define g2_apf_threshold	G2_DEC_REG(55, 0, 0xffff)
->   
->   #define g2_clk_gate_e		G2_DEC_REG(58, 16, 0x1)
-> +#define g2_double_buffer_e	G2_DEC_REG(58, 15, 0x1)
->   #define g2_buswidth		G2_DEC_REG(58, 8,  0x7)
->   #define g2_max_burst		G2_DEC_REG(58, 0,  0xff)
->   
-> diff --git a/drivers/staging/media/hantro/hantro_g2_vp9_dec.c b/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
-> index e04242d10fa2..d4fc649a4da1 100644
-> --- a/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
-> +++ b/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
-> @@ -847,6 +847,8 @@ config_registers(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_frame *dec_p
->   	hantro_reg_write(ctx->dev, &g2_clk_gate_e, 1);
->   	hantro_reg_write(ctx->dev, &g2_max_cb_size, 6);
->   	hantro_reg_write(ctx->dev, &g2_min_cb_size, 3);
-> +	if (ctx->dev->variant->double_buffer)
-> +		hantro_reg_write(ctx->dev, &g2_double_buffer_e, 1);
->   
->   	config_output(ctx, dst, dec_params);
->   
-> 
+> Compile-tested only.
+> Marked RFC, as this depends on [PATCH 01/17], but follows a different
+> path to upstream.
 
+Acked-by: Takashi Iwai <tiwai@suse.de>
+
+
+thanks,
+
+Takashi
