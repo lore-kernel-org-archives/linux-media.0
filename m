@@ -2,110 +2,122 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6581C433FE
-	for <linux-media@archiver.kernel.org>; Tue, 23 Nov 2021 09:47:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3C12C43217
+	for <linux-media@archiver.kernel.org>; Tue, 23 Nov 2021 10:15:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234170AbhKWJul (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Nov 2021 04:50:41 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:59886 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234136AbhKWJuk (ORCPT
+        id S235323AbhKWKSa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Nov 2021 05:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235308AbhKWKS3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Nov 2021 04:50:40 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0797BA1B;
-        Tue, 23 Nov 2021 10:47:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1637660851;
-        bh=6vADgbssraBLDOIKrkf2AvmyACKPaDSUjAS9OI3rwS4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tdu54CA0m5zh7iSTvLL1iDk438RVN2zDGwnKwD0rXHizm4DX4KrttwZts3F5zLPIS
-         JqEiHWI2P1NnRU5RvoJ58La8ZDOHC4p82/qNF+D2hAWl6vvtByinARTDjaB2i+O18+
-         +nYco/ONNigFh1Q8bCZUvQWJwnzTKSb9QLBJ2V/Y=
-Date:   Tue, 23 Nov 2021 11:47:08 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Adam Ford <aford173@gmail.com>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Schrempf Frieder <frieder.schrempf@kontron.de>,
-        linux-media <linux-media@vger.kernel.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        cstevens@beaconembedded.com,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Peng Fan <peng.fan@nxp.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: (EXT) Re: [PATCH V2 4/5] arm64: dts: imx8mm-beacon: Enable
- OV5640 Camera
-Message-ID: <YZy4nFgkIyNXpIo3@pendragon.ideasonboard.com>
-References: <20211106155427.753197-1-aford173@gmail.com>
- <20211106155427.753197-4-aford173@gmail.com>
- <YZrTyVJR8VN6dQAf@pendragon.ideasonboard.com>
- <CAHCN7xK=SNgiC2kRzX4gftjkZX4Ms8PVbL69n7+eR-EAe68xag@mail.gmail.com>
- <YZwyhWPJVlC0JmpK@pendragon.ideasonboard.com>
- <0c3b4cdd075919ca5cc27c56e792f510e3b76cd7.camel@ew.tq-group.com>
+        Tue, 23 Nov 2021 05:18:29 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B171DC06173E
+        for <linux-media@vger.kernel.org>; Tue, 23 Nov 2021 02:15:21 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1mpSpb-0002qu-OW; Tue, 23 Nov 2021 11:15:19 +0100
+Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1mpSpb-000agQ-2u; Tue, 23 Nov 2021 11:15:18 +0100
+Received: from mtr by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1mpSpZ-00FLLc-KK; Tue, 23 Nov 2021 11:15:17 +0100
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Marek Vasut <marex@denx.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        p.zabel@pengutronix.de, Ian Arkver <ian.arkver.dev@gmail.com>,
+        kernel@pengutronix.de, Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH v8 1/3] media: imx6-mipi-csi2: use pre_streamon callback to set sensor into LP11
+Date:   Tue, 23 Nov 2021 11:15:15 +0100
+Message-Id: <20211123101517.3656935-2-m.tretter@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211123101517.3656935-1-m.tretter@pengutronix.de>
+References: <20211123101517.3656935-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0c3b4cdd075919ca5cc27c56e792f510e3b76cd7.camel@ew.tq-group.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Alexander,
+Step 5 expects that the sensor is in LP11 mode. Use the new
+pre_streamon callback to signal the sensor that it should switch into
+LP11.
 
-On Tue, Nov 23, 2021 at 08:38:47AM +0100, Alexander Stein wrote:
-> Am Dienstag, dem 23.11.2021 um 02:15 +0200 schrieb Laurent Pinchart:
-> > On Sun, Nov 21, 2021 at 09:07:26PM -0600, Adam Ford wrote:
-> > > On Sun, Nov 21, 2021 at 5:18 PM Laurent Pinchart wrote:
-> > > > On Sat, Nov 06, 2021 at 10:54:26AM -0500, Adam Ford wrote:
-> > > > > The baseboard has support for a TDNext 5640 Camera which
-> > > > > uses an OV5640 connected to a 2-lane CSI2 interface.
-> > > > > 
-> > > > > With the CSI and mipi_csi2 drivers pointing to an OV5640 camera, the media
-> > > > > pipeline can be configured with the following:
-> > > > > 
-> > > > >     media-ctl --links "'ov5640 1-003c':0->'imx7-mipi-csis.0':0[1]"
-> > > > > 
-> > > > > The camera and various nodes in the pipeline can be configured for UYVY:
-> > > > >     media-ctl -v -V "'ov5640 1-003c':0 [fmt:UYVY8_1X16/640x480 field:none]"
-> > > > >     media-ctl -v -V "'csi':0 [fmt:UYVY8_1X16/640x480 field:none]"
-> > > > > 
-> > > > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > > > 
-> > > > As the ov5640 is on an add-on module, would a DT overlay be better ?
-> > > 
-> > > At least for the Beacon / LogicPD boards, I would prefer to avoid the
-> > > overlays.  We have an i.M6Q and an OMAP3 board with cameras enabled in
-> > > our development kit device trees.  If the cameras are not connected,
-> > > they just display a message that the cameras are not communicating and
-> > > move on.  I'm OK with that.
-> > 
-> > You know the board better than I do, so I won't push against this, but I
-> > still think it may not lead to the best user experience, especially if a
-> > user wanted to connect a different sensor to the development board.
-> 
-> I see the advantages of overlays compared to "stacked" .dts files. But
-> is there any general supported interface how to actually apply an overlay?
-> Documentation/devicetree/overlay-notes.rst
-> states of_overlay_fdt_apply() but there is only exactly one user in-
-> kernel (rcar-du). Is it expected that the bootloader like u-boot shall
-> apply the .dtbo files?
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+Changelog:
 
-I believe the boot loader is expected to apply overlays nowadays, yes.
-That's my personal workflow.
+v8: none
 
+v7: none
+
+v6: none
+
+v5:
+
+- ignore -ENOIOCTLCMD of pre_streamon for backwards compatibility
+
+v4:
+
+- new patch
+---
+ drivers/staging/media/imx/imx6-mipi-csi2.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/staging/media/imx/imx6-mipi-csi2.c b/drivers/staging/media/imx/imx6-mipi-csi2.c
+index a0941fc2907b..558b256ac935 100644
+--- a/drivers/staging/media/imx/imx6-mipi-csi2.c
++++ b/drivers/staging/media/imx/imx6-mipi-csi2.c
+@@ -382,13 +382,17 @@ static int csi2_start(struct csi2_dev *csi2)
+ 	csi2_enable(csi2, true);
+ 
+ 	/* Step 5 */
++	ret = v4l2_subdev_call(csi2->src_sd, video, pre_streamon,
++			       V4L2_SUBDEV_PRE_STREAMON_FL_MANUAL_LP);
++	if (ret && ret != -ENOIOCTLCMD)
++		goto err_assert_reset;
+ 	csi2_dphy_wait_stopstate(csi2, lanes);
+ 
+ 	/* Step 6 */
+ 	ret = v4l2_subdev_call(csi2->src_sd, video, s_stream, 1);
+ 	ret = (ret && ret != -ENOIOCTLCMD) ? ret : 0;
+ 	if (ret)
+-		goto err_assert_reset;
++		goto err_stop_lp11;
+ 
+ 	/* Step 7 */
+ 	ret = csi2_dphy_wait_clock_lane(csi2);
+@@ -399,6 +403,8 @@ static int csi2_start(struct csi2_dev *csi2)
+ 
+ err_stop_upstream:
+ 	v4l2_subdev_call(csi2->src_sd, video, s_stream, 0);
++err_stop_lp11:
++	v4l2_subdev_call(csi2->src_sd, video, post_streamoff);
+ err_assert_reset:
+ 	csi2_enable(csi2, false);
+ err_disable_clk:
+@@ -410,6 +416,7 @@ static void csi2_stop(struct csi2_dev *csi2)
+ {
+ 	/* stop upstream */
+ 	v4l2_subdev_call(csi2->src_sd, video, s_stream, 0);
++	v4l2_subdev_call(csi2->src_sd, video, post_streamoff);
+ 
+ 	csi2_enable(csi2, false);
+ 	clk_disable_unprepare(csi2->pix_clk);
 -- 
-Regards,
+2.30.2
 
-Laurent Pinchart
