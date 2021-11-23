@@ -2,198 +2,226 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84DE4C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 23 Nov 2021 14:22:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 927C4C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 23 Nov 2021 14:22:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237991AbhKWOZT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Nov 2021 09:25:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        id S238047AbhKWOZ5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Nov 2021 09:25:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238059AbhKWOZS (ORCPT
+        with ESMTP id S230356AbhKWOZ5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Nov 2021 09:25:18 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13988C061714
-        for <linux-media@vger.kernel.org>; Tue, 23 Nov 2021 06:22:10 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id 137so15358528wma.1
-        for <linux-media@vger.kernel.org>; Tue, 23 Nov 2021 06:22:10 -0800 (PST)
+        Tue, 23 Nov 2021 09:25:57 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7B8C061574;
+        Tue, 23 Nov 2021 06:22:48 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id m27so91123397lfj.12;
+        Tue, 23 Nov 2021 06:22:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Zs/CUVLGUkgg0Mmeetef1+lFQcZyZCfqjZa/gpAFc9k=;
-        b=BJWs7xWQOwsmhKXBuvGw4AOVJf0T4UhO8xiZqEZh/vPvZMXbnw+Urq4YnCNYK/RjJq
-         zqw+8//KZ9jpthCQeAg397QuX7nWoPTr5ZPYL/jDN0p/lZvdnDAM6xDm+GhDNuKb+fNe
-         D+ufaEoXkm9cXNsQ0HNyqYNM9XN8al7LI1IVWZyKw963Z8FiE4KIrCxZ0w9rqld3FNUm
-         8NZMO3U8yr2vpAkr2yeILe2E/anggh+jA4FIQ4v/AZDYVYJw/FYom5rAfqYDW3nzF5Sk
-         nSZfvcRbsK2D2a6B9dxmA4/NUhGDXGBT7KG2ZpUd3XJJ0qCrv2s+WxXb+eDZeSzfE2eF
-         g0bw==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=ZMeCrLa15OccbLKstH+rkvmxcTzmqdGm6G4k7JN2u+g=;
+        b=cEA/8Yj3ZxwMyab/D+fVwK4RTjrmX0j2GCb4Ssn+y+V7q/YU0rEjTXnDzuzFi7aGjz
+         ekpnz5cGZQGxa1KleqE8XEKEhsyGaaluJ6taCNpiBlBMGrUVXvCF22jiOzJJ2+BOrv5D
+         Do+tRFepLNOKwqqiCPVRmGiGlDFdYlh6oZg7fcOj+76JxN9WXF3XbUBsGNQLQ1dJFAy6
+         lXbi9+siENQKlhnoEJCsUeiUJQTg0mNKpQQ++7CPGn+i1v3kMyXQ2mFf8QMSL4g6HA6w
+         mkkrpfN6Ja+mC6e8DXi/MoR01glt/rrPyMNgXCwObvjGTTi5haF48feknRjPjYJOl/iF
+         TEuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Zs/CUVLGUkgg0Mmeetef1+lFQcZyZCfqjZa/gpAFc9k=;
-        b=iFAuEZZGr8julQhaf0uMD4ecga5youIl+UEl0VbmLnR3rb9TTnnakXPSM4Ubnn/3+7
-         FUKRWQ22hP4fnk/Xn+p9bWS5icLWMJzSnDjrtSNVpQa5JEEi1pkz37BMeZGikp+uZxWG
-         5QfEonIHz2myLRDYtNsjUYY1hhUGXk8HSFhtQmeYo1K0AnAYfTYw6tykZAV72snwPsmM
-         N1wIkY6b8fltHfBd/q2H2d4p6bWe7BPNdO4oZmXs3CJCsqWc/bPjY2yhv21QlFi/1E+c
-         4xBddzFwHkKMKuoFLwLLEdQZJSM3DjGEH7PAvhR7KvHQgqEMcJzuzvCHcFOlYpFEuTwr
-         IzCQ==
-X-Gm-Message-State: AOAM533ImC2sfVby0LCvoQ+guRv/GlbghiGKxqopGraXT3suOs/SOzKe
-        lVZgqz7g2dpYD4WvXrnwQbbgpaf86G4=
-X-Google-Smtp-Source: ABdhPJzziBcWJMjfV3QcpKN9Asg0M8E/MHmWxFskjrUoqmrsnXz74QuM50S2j84z1Ic3yjGrdepXhQ==
-X-Received: by 2002:a05:600c:4e91:: with SMTP id f17mr3648100wmq.195.1637677318184;
-        Tue, 23 Nov 2021 06:21:58 -0800 (PST)
-Received: from abel.fritz.box (p57b0b77b.dip0.t-ipconnect.de. [87.176.183.123])
-        by smtp.gmail.com with ESMTPSA id t8sm1645928wmq.32.2021.11.23.06.21.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Nov 2021 06:21:57 -0800 (PST)
-From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
-        <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To:     sumit.semwal@linaro.org, daniel@ffwll.ch
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 24/26] dma-buf: wait for map to complete for static attachments
-Date:   Tue, 23 Nov 2021 15:21:09 +0100
-Message-Id: <20211123142111.3885-25-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211123142111.3885-1-christian.koenig@amd.com>
-References: <20211123142111.3885-1-christian.koenig@amd.com>
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZMeCrLa15OccbLKstH+rkvmxcTzmqdGm6G4k7JN2u+g=;
+        b=Fc9utTiKvuwzR+GaBchTBKbhdzbiD9DemK9hXl1fAEQ9XsgIfQB65zQEwkgFyU5qNs
+         ZE3zsW7jdRI9P5elSLhGmtHFR0iK9nqJVNcZi/MmMdsKy3TQfLRas3iI7y2WxrTCHttk
+         eTqwmSPo2rwtfDP4UmoFdUlvX/KmbjFxOv4JVAIzhSoLVGSxYo18hhmx819gL4JAP8ul
+         fCWzPIlIvi/rSYMo3lhbDvDK4dWuUNJpyHK1sFTWxq4o7pesLbKnaxj1quT4vTqachbH
+         Wl/3Usun7ijTJWHWCYNMO9itlyk/YNvn+BlBB9/UsM7mkaCkcqtLZ+UC8IIkd/CTsHOU
+         R70w==
+X-Gm-Message-State: AOAM532c7TgrZbMAY6+l28QV9auS6JJnVMr/WCoxeT3R+H+ODj8TpN5b
+        6/SZeXZU7QKJp6kBJPXZZwM=
+X-Google-Smtp-Source: ABdhPJy0vZYWPE8GVIFIH55E4+lUDNDWf9juiW+Ga+3y1umlsbNJgY0+I6R8hvXP1yOqqlPwoIyrTQ==
+X-Received: by 2002:a05:6512:519:: with SMTP id o25mr5136057lfb.422.1637677366940;
+        Tue, 23 Nov 2021 06:22:46 -0800 (PST)
+Received: from [192.168.2.145] (94-29-48-99.dynamic.spd-mgts.ru. [94.29.48.99])
+        by smtp.googlemail.com with ESMTPSA id v198sm1304911lfa.89.2021.11.23.06.22.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Nov 2021 06:22:46 -0800 (PST)
+Subject: Re: [PATCH v2] i2c: tegra: Add ACPI support
+To:     Akhil R <akhilrajeev@nvidia.com>, andy.shevchenko@gmail.com,
+        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
+        jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
+        sumit.semwal@linaro.org, thierry.reding@gmail.com
+References: <1637328734-20576-1-git-send-email-akhilrajeev@nvidia.com>
+ <1637651753-5067-1-git-send-email-akhilrajeev@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <eebf20ea-6a7f-1120-5ad8-b6dc1f9935e6@gmail.com>
+Date:   Tue, 23 Nov 2021 17:22:45 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <1637651753-5067-1-git-send-email-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We have previously done that in the individual drivers but it is
-more defensive to move that into the common code.
+23.11.2021 10:15, Akhil R пишет:
+> Add support for ACPI based device registration so that the driver
+> can be also enabled through ACPI table.
+> 
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>  drivers/i2c/busses/i2c-tegra.c | 52 ++++++++++++++++++++++++++++++++----------
+>  1 file changed, 40 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index c883044..8e47889 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -6,6 +6,7 @@
+>   * Author: Colin Cross <ccross@android.com>
+>   */
+>  
+> +#include <linux/acpi.h>
+>  #include <linux/bitfield.h>
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+> @@ -608,6 +609,7 @@ static int tegra_i2c_wait_for_config_load(struct tegra_i2c_dev *i2c_dev)
+>  static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+>  {
+>  	u32 val, clk_divisor, clk_multiplier, tsu_thd, tlow, thigh, non_hs_mode;
+> +	acpi_handle handle = ACPI_HANDLE(i2c_dev->dev);
+>  	int err;
+>  
+>  	/*
+> @@ -618,7 +620,11 @@ static int tegra_i2c_init(struct tegra_i2c_dev *i2c_dev)
+>  	 * emit a noisy warning on error, which won't stay unnoticed and
+>  	 * won't hose machine entirely.
+>  	 */
+> -	err = reset_control_reset(i2c_dev->rst);
+> +	if (handle && acpi_has_method(handle, "_RST"))
 
-Dynamic attachments should wait for map operations to complete by themselves.
+Which SoC version doesn't have "_RST" method? If neither, then please
+remove this check.
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
----
- drivers/dma-buf/dma-buf.c                   | 18 +++++++++++++++---
- drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c | 14 +-------------
- drivers/gpu/drm/nouveau/nouveau_prime.c     | 17 +----------------
- drivers/gpu/drm/radeon/radeon_prime.c       | 16 +++-------------
- 4 files changed, 20 insertions(+), 45 deletions(-)
+> +		err = (acpi_evaluate_object(handle, "_RST", NULL, NULL));
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 528983d3ba64..d3dd602c4753 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -660,12 +660,24 @@ static struct sg_table * __map_dma_buf(struct dma_buf_attachment *attach,
- 				       enum dma_data_direction direction)
- {
- 	struct sg_table *sg_table;
-+	signed long ret;
- 
- 	sg_table = attach->dmabuf->ops->map_dma_buf(attach, direction);
-+	if (IS_ERR_OR_NULL(sg_table))
-+		return sg_table;
-+
-+	if (!dma_buf_attachment_is_dynamic(attach)) {
-+		ret = dma_resv_wait_timeout(attach->dmabuf->resv,
-+					    DMA_RESV_USAGE_KERNEL, true,
-+					    MAX_SCHEDULE_TIMEOUT);
-+		if (ret < 0) {
-+			attach->dmabuf->ops->unmap_dma_buf(attach, sg_table,
-+							   direction);
-+			return ERR_PTR(ret);
-+		}
-+	}
- 
--	if (!IS_ERR_OR_NULL(sg_table))
--		mangle_sg_table(sg_table);
--
-+	mangle_sg_table(sg_table);
- 	return sg_table;
- }
- 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
-index ae6ab93c868b..57a7a603f987 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
-@@ -105,21 +105,9 @@ static int amdgpu_dma_buf_pin(struct dma_buf_attachment *attach)
- {
- 	struct drm_gem_object *obj = attach->dmabuf->priv;
- 	struct amdgpu_bo *bo = gem_to_amdgpu_bo(obj);
--	int r;
- 
- 	/* pin buffer into GTT */
--	r = amdgpu_bo_pin(bo, AMDGPU_GEM_DOMAIN_GTT);
--	if (r)
--		return r;
--
--	if (bo->tbo.moving) {
--		r = dma_fence_wait(bo->tbo.moving, true);
--		if (r) {
--			amdgpu_bo_unpin(bo);
--			return r;
--		}
--	}
--	return 0;
-+	return amdgpu_bo_pin(bo, AMDGPU_GEM_DOMAIN_GTT);
- }
- 
- /**
-diff --git a/drivers/gpu/drm/nouveau/nouveau_prime.c b/drivers/gpu/drm/nouveau/nouveau_prime.c
-index 60019d0532fc..347488685f74 100644
---- a/drivers/gpu/drm/nouveau/nouveau_prime.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_prime.c
-@@ -93,22 +93,7 @@ int nouveau_gem_prime_pin(struct drm_gem_object *obj)
- 	if (ret)
- 		return -EINVAL;
- 
--	ret = ttm_bo_reserve(&nvbo->bo, false, false, NULL);
--	if (ret)
--		goto error;
--
--	if (nvbo->bo.moving)
--		ret = dma_fence_wait(nvbo->bo.moving, true);
--
--	ttm_bo_unreserve(&nvbo->bo);
--	if (ret)
--		goto error;
--
--	return ret;
--
--error:
--	nouveau_bo_unpin(nvbo);
--	return ret;
-+	return 0;
- }
- 
- void nouveau_gem_prime_unpin(struct drm_gem_object *obj)
-diff --git a/drivers/gpu/drm/radeon/radeon_prime.c b/drivers/gpu/drm/radeon/radeon_prime.c
-index 4a90807351e7..42a87948e28c 100644
---- a/drivers/gpu/drm/radeon/radeon_prime.c
-+++ b/drivers/gpu/drm/radeon/radeon_prime.c
-@@ -77,19 +77,9 @@ int radeon_gem_prime_pin(struct drm_gem_object *obj)
- 
- 	/* pin buffer into GTT */
- 	ret = radeon_bo_pin(bo, RADEON_GEM_DOMAIN_GTT, NULL);
--	if (unlikely(ret))
--		goto error;
--
--	if (bo->tbo.moving) {
--		ret = dma_fence_wait(bo->tbo.moving, false);
--		if (unlikely(ret)) {
--			radeon_bo_unpin(bo);
--			goto error;
--		}
--	}
--
--	bo->prime_shared_count++;
--error:
-+	if (likely(ret == 0))
-+		bo->prime_shared_count++;
-+
- 	radeon_bo_unreserve(bo);
- 	return ret;
- }
--- 
-2.25.1
+Please remove parens around acpi_evaluate_object(). Why you added them?
 
+> +	else
+> +		err = reset_control_reset(i2c_dev->rst);
+> +
+>  	WARN_ON_ONCE(err);
+>  
+>  	if (i2c_dev->is_dvc)
+> @@ -1627,12 +1633,12 @@ static void tegra_i2c_parse_dt(struct tegra_i2c_dev *i2c_dev)
+>  	bool multi_mode;
+>  	int err;
+>  
+> -	err = of_property_read_u32(np, "clock-frequency",
+> -				   &i2c_dev->bus_clk_rate);
+> +	err = device_property_read_u32(i2c_dev->dev, "clock-frequency",
+> +				       &i2c_dev->bus_clk_rate);
+>  	if (err)
+>  		i2c_dev->bus_clk_rate = I2C_MAX_STANDARD_MODE_FREQ;
+>  
+> -	multi_mode = of_property_read_bool(np, "multi-master");
+> +	multi_mode = device_property_read_bool(i2c_dev->dev, "multi-master");
+>  	i2c_dev->multimaster_mode = multi_mode;
+>  
+>  	if (of_device_is_compatible(np, "nvidia,tegra20-i2c-dvc"))
+> @@ -1642,10 +1648,25 @@ static void tegra_i2c_parse_dt(struct tegra_i2c_dev *i2c_dev)
+>  		i2c_dev->is_vi = true;
+>  }
+How are you going to differentiate the VI I2C from a non-VI? This
+doesn't look right.
+
+
+>  
+> +static int tegra_i2c_init_reset(struct tegra_i2c_dev *i2c_dev)
+> +{
+> +	if (has_acpi_companion(i2c_dev->dev))
+> +		return 0;
+> +
+> +	i2c_dev->rst = devm_reset_control_get_exclusive(i2c_dev->dev, "i2c");
+> +	if (IS_ERR(i2c_dev->rst))
+> +		return PTR_ERR(i2c_dev->rst);
+> +
+> +	return 0;
+> +}
+> +
+>  static int tegra_i2c_init_clocks(struct tegra_i2c_dev *i2c_dev)
+>  {
+>  	int err;
+>  
+> +	if (has_acpi_companion(i2c_dev->dev))
+> +		return 0;
+> +
+>  	i2c_dev->clocks[i2c_dev->nclocks++].id = "div-clk";
+>  
+>  	if (i2c_dev->hw == &tegra20_i2c_hw || i2c_dev->hw == &tegra30_i2c_hw)
+> @@ -1720,7 +1741,7 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+>  	init_completion(&i2c_dev->msg_complete);
+>  	init_completion(&i2c_dev->dma_complete);
+>  
+> -	i2c_dev->hw = of_device_get_match_data(&pdev->dev);
+> +	i2c_dev->hw = device_get_match_data(&pdev->dev);
+>  	i2c_dev->cont_id = pdev->id;
+>  	i2c_dev->dev = &pdev->dev;
+>  
+> @@ -1746,15 +1767,13 @@ static int tegra_i2c_probe(struct platform_device *pdev)
+>  	if (err)
+>  		return err;
+>  
+> -	i2c_dev->rst = devm_reset_control_get_exclusive(i2c_dev->dev, "i2c");
+> -	if (IS_ERR(i2c_dev->rst)) {
+> -		dev_err_probe(i2c_dev->dev, PTR_ERR(i2c_dev->rst),
+> -			      "failed to get reset control\n");
+> -		return PTR_ERR(i2c_dev->rst);
+> -	}
+> -
+>  	tegra_i2c_parse_dt(i2c_dev);
+>  
+> +	err = tegra_i2c_init_reset(i2c_dev);
+> +	if (err)
+> +		return dev_err_probe(i2c_dev->dev, err,
+> +				      "failed to get reset control\n");
+
+This is inconsistent with tegra_i2c_init_clocks() which returns err
+directly and prints error message within the function. Please move the
+dev_err_probe() into tegra_i2c_init_reset() to make it consistent, like
+I suggested before.
+
+Please don't reply with a new version of the patch to the old thread,
+always send a new version separately. Otherwise it's more difficult to
+follow patches.
+
+Lastly, each new version of a patch must contain changelog. I don't see
+changelog here, please add it to v3 after the " ---" separator of the
+commit message. Thanks!
+
+Example:
+
+ Commit message.
+
+ Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+ ---
+  drivers/i2c/busses/i2c-tegra.c | 52
+++++++++++++++++++++++++++++++++----------
+  1 file changed, 40 insertions(+), 12 deletions(-)
+
+Changelog:
+
+v3: bla-bla-bla
+
+v2: bla-bla-bla
+
+diff ...
