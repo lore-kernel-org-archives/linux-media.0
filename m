@@ -2,62 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2C51C433F5
-	for <linux-media@archiver.kernel.org>; Tue, 23 Nov 2021 00:01:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6163AC433F5
+	for <linux-media@archiver.kernel.org>; Tue, 23 Nov 2021 00:01:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbhKWAEL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Nov 2021 19:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35470 "EHLO
+        id S231150AbhKWAEN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Nov 2021 19:04:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232579AbhKWADu (ORCPT
+        with ESMTP id S232867AbhKWADt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Nov 2021 19:03:50 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE337C06173E
-        for <linux-media@vger.kernel.org>; Mon, 22 Nov 2021 16:00:41 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id d27so35752074wrb.6
-        for <linux-media@vger.kernel.org>; Mon, 22 Nov 2021 16:00:41 -0800 (PST)
+        Mon, 22 Nov 2021 19:03:49 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBD9C0613E1
+        for <linux-media@vger.kernel.org>; Mon, 22 Nov 2021 16:00:40 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so640648wme.0
+        for <linux-media@vger.kernel.org>; Mon, 22 Nov 2021 16:00:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=eBgM5YIUKdVJWZmB9Bdu+nzzi7aCarsQ2Djtv4VPP7w=;
-        b=jmgNmeljKZxDQ8ypUvfQj1hXYQ7NX2p9+2EgzAvsHjxCE1qyPLpTiouc4HVVHG8qt+
-         rECNUUyfucevmbny9f0u4ePsImSzTega970upIWXSQlSsm/XPUdaR7UjH3KGGk9xEAIU
-         eD4Ndwu/COxxBj497eCKoOcpmUDr+HTBIMqtKs16xnVga/QoNtMHko7cVI9gst4vBF7R
-         oLkw3KN1JCgZKr/LE0FVUd55J+OM76o/dz11X/GdES1Ww1jh/+S/Xr5Ksb3/gAgde2wg
-         yEqcXNkSL8cV2/LklQPfQnjH3MGeUWz4wXLNoSTyWCl0Ve8VC6KDIBi/tOLr+Xv120MW
-         LQXw==
+        bh=nmycPypIJ0tQoO6fOl5oVytxmaegv4XnGAjK0yMO+p0=;
+        b=SV0nCM6oVVOmXRjSvIvFfpafcNz4W7cSMvE4zhsTI5TmGUl/vZ3WoNwBcvNm3Ea42i
+         bstZCxGFsBSvu2s08w3zlsPhaHlOOp1qw1T8XyeTQzNkSn16mWHGYceqHpM+WsJf4v4w
+         Fqzr+3uMZZjiZ6Mx0LQv4RPzVhKA4JGjwoxKpJaDFYdj0KyUmnNjTs3qey3MIiUb5Phd
+         d4KEJxs3vLDNxSSrgp7dsDWbwa4x+WmV7T+GNhVDNyJpxDbWw3ue7VNnMmgtueTNrqKy
+         tnBf54euEK2OVHm037T37h8p9xeylKjjpvHqZxLCa05vYZ+7JbjnqNKN2cWHwE6PvyI3
+         N8rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=eBgM5YIUKdVJWZmB9Bdu+nzzi7aCarsQ2Djtv4VPP7w=;
-        b=VGkIT3qhLEUTkN5UDMg+twg2vVR2CgxMP8A/kRqemZ751iyYBbo3Amw8ATXHotbB/8
-         4DRIWbDHan4QB7GhwTW7QEBoa0sZW2Y0kY6Ph7gIKStEVB0cQN/e96DsVBpIbNtJ+b3c
-         uFTJqKmTF79qDRIJaO3YGzZiaTNFluu++eqxz8+7csq9B0ApFdfPdrIX/Z6U90quhBoE
-         LflGMyA7jPX+FIJwBqpIbxNp1+GMKvFm9nie95ATxoM3wUyoau0+lBkOvl86btdQ/y2a
-         hjoIdi14OMnaDsrBY+91TSDOk0IyX6pxi04BcMi9oysfYqAPexeuSopGbLLKPr8xO53c
-         52fw==
-X-Gm-Message-State: AOAM530SOCz3Wb6JarttkkiOmtKZMw1lmeCIjZ+AJf/0fm89Irta81+s
-        p27d0iyRXvGRMmUXhirTTeEwo6xJv58=
-X-Google-Smtp-Source: ABdhPJx1AsUGxU8WbEHjG7ez5adJ+QVHAlCDaHp282cWptVQupr1GRfr9g9hpfa97r/zTfu86AjNvg==
-X-Received: by 2002:a5d:4b0e:: with SMTP id v14mr1750227wrq.196.1637625640651;
-        Mon, 22 Nov 2021 16:00:40 -0800 (PST)
+        bh=nmycPypIJ0tQoO6fOl5oVytxmaegv4XnGAjK0yMO+p0=;
+        b=Z+/tGCEXBt5jLFSSjlu8F8+sDVdM4hqH9b2c9sM8F1Hab+dnFy0A4YI+EWJ0MiGb2H
+         Uw+cSSlQZ9O7JQ9GPHYSwtYZqungs/AnV/P4/kibpPhLY+3VgZPKOyS2EFw23Y7APPKu
+         t+t+rzdDK0u06H34vN5NXkSC6ujNDuB8QXFqmp/V+AW+HVwP12e2gL8uur3s5nKFkERy
+         dRq1HJthDPDg5oNRr/IiA3J/4OpEKwaoQIHFYwyBCpLvV46/NXxV8PdwFWO7xhdknkW1
+         h4TmqOLokKNeKNeyEWw9ls6+Rc8ovpt+Y/MmoBEhpfNj1pDYNp+9ovnqtEDVFqp5Dxrs
+         +VaA==
+X-Gm-Message-State: AOAM5320pQMAVEs+BR7ohtw2K70UsmyRF4l4CjtdXO/NY5wQgc3fsti+
+        KvFxYy+vIAEjjY1z2vDAOLbW8oWMuK8=
+X-Google-Smtp-Source: ABdhPJxPuOWcToVlO2dKUIQhkGpMchzoAsnNFg/FL137ckpd4JwSRUliAzNqpNYpjHAuv43F/P6fhA==
+X-Received: by 2002:a05:600c:1e8d:: with SMTP id be13mr34779858wmb.79.1637625638733;
+        Mon, 22 Nov 2021 16:00:38 -0800 (PST)
 Received: from localhost.localdomain (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id s13sm23650782wmc.47.2021.11.22.16.00.39
+        by smtp.gmail.com with ESMTPSA id s13sm23650782wmc.47.2021.11.22.16.00.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Nov 2021 16:00:40 -0800 (PST)
+        Mon, 22 Nov 2021 16:00:38 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-media@vger.kernel.org, paul.kocialkowski@bootlin.com
 Cc:     sakari.ailus@linux.intel.com, andriy.shevchenko@linux.intel.com,
         laurent.pinchart@ideasonboard.com, yong.zhi@intel.com,
         bingbu.cao@intel.com, jeanmichel.hautbois@ideasonboard.com,
-        kieran.bingham@ideasonboard.com, hdegoede@redhat.com,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v5 17/17] media: ipu3-cio2: Add INT347A to cio2-bridge
-Date:   Tue, 23 Nov 2021 00:00:17 +0000
-Message-Id: <20211123000017.43187-18-djrscally@gmail.com>
+        kieran.bingham@ideasonboard.com, hdegoede@redhat.com
+Subject: [PATCH v5 15/17] media: i2c: Use dev_err_probe() in ov8865
+Date:   Tue, 23 Nov 2021 00:00:15 +0000
+Message-Id: <20211123000017.43187-16-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211123000017.43187-1-djrscally@gmail.com>
 References: <20211123000017.43187-1-djrscally@gmail.com>
@@ -67,34 +66,84 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-ACPI _HID INT347A represents the OV8865 sensor, the driver for which can
-support the platforms that the cio2-bridge serves. Add it to the array
-of supported sensors so the bridge will connect the sensor to the CIO2
-device.
+There is a chance that regulator_get() returns -EPROBE_DEFER, in which
+case printing an error message is undesirable. To avoid spurious messages
+in dmesg in the event that -EPROBE_DEFER is returned, use dev_err_probe()
+on error paths for regulator_get().
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v5: 
 
 	- None
 
- drivers/media/pci/intel/ipu3/cio2-bridge.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/i2c/ov8865.c | 46 +++++++++++++++++---------------------
+ 1 file changed, 20 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu3/cio2-bridge.c b/drivers/media/pci/intel/ipu3/cio2-bridge.c
-index 0b586b4e537e..4550be801311 100644
---- a/drivers/media/pci/intel/ipu3/cio2-bridge.c
-+++ b/drivers/media/pci/intel/ipu3/cio2-bridge.c
-@@ -22,6 +22,8 @@
- static const struct cio2_sensor_config cio2_supported_sensors[] = {
- 	/* Omnivision OV5693 */
- 	CIO2_SENSOR_CONFIG("INT33BE", 0),
-+	/* Omnivision OV8865 */
-+	CIO2_SENSOR_CONFIG("INT347A", 1, 360000000),
- 	/* Omnivision OV2680 */
- 	CIO2_SENSOR_CONFIG("OVTI2680", 0),
- };
+diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
+index 1cc9f78bb97a..1aa577dba0a3 100644
+--- a/drivers/media/i2c/ov8865.c
++++ b/drivers/media/i2c/ov8865.c
+@@ -2957,6 +2957,26 @@ static int ov8865_probe(struct i2c_client *client)
+ 	sensor->dev = dev;
+ 	sensor->i2c_client = client;
+ 
++	/* Regulators */
++
++	/* DVDD: digital core */
++	sensor->dvdd = devm_regulator_get(dev, "dvdd");
++	if (IS_ERR(sensor->dvdd))
++		return dev_err_probe(dev, PTR_ERR(sensor->dvdd),
++				     "cannot get DVDD regulator\n");
++
++	/* DOVDD: digital I/O */
++	sensor->dovdd = devm_regulator_get(dev, "dovdd");
++	if (IS_ERR(sensor->dovdd))
++		return dev_err_probe(dev, PTR_ERR(sensor->dovdd),
++				     "cannot get DOVDD regulator\n");
++
++	/* AVDD: analog */
++	sensor->avdd = devm_regulator_get(dev, "avdd");
++	if (IS_ERR(sensor->avdd))
++		return dev_err_probe(dev, PTR_ERR(sensor->avdd),
++				     "cannot get AVDD (analog) regulator\n");
++
+ 	/* Graph Endpoint */
+ 
+ 	handle = fwnode_graph_get_next_endpoint(dev_fwnode(dev), NULL);
+@@ -2987,32 +3007,6 @@ static int ov8865_probe(struct i2c_client *client)
+ 		goto error_endpoint;
+ 	}
+ 
+-	/* Regulators */
+-
+-	/* DVDD: digital core */
+-	sensor->dvdd = devm_regulator_get(dev, "dvdd");
+-	if (IS_ERR(sensor->dvdd)) {
+-		dev_err(dev, "cannot get DVDD (digital core) regulator\n");
+-		ret = PTR_ERR(sensor->dvdd);
+-		goto error_endpoint;
+-	}
+-
+-	/* DOVDD: digital I/O */
+-	sensor->dovdd = devm_regulator_get(dev, "dovdd");
+-	if (IS_ERR(sensor->dovdd)) {
+-		dev_err(dev, "cannot get DOVDD (digital I/O) regulator\n");
+-		ret = PTR_ERR(sensor->dovdd);
+-		goto error_endpoint;
+-	}
+-
+-	/* AVDD: analog */
+-	sensor->avdd = devm_regulator_get(dev, "avdd");
+-	if (IS_ERR(sensor->avdd)) {
+-		dev_err(dev, "cannot get AVDD (analog) regulator\n");
+-		ret = PTR_ERR(sensor->avdd);
+-		goto error_endpoint;
+-	}
+-
+ 	/* External Clock */
+ 
+ 	sensor->extclk = devm_clk_get(dev, NULL);
 -- 
 2.25.1
 
