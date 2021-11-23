@@ -2,116 +2,116 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB258C433F5
-	for <linux-media@archiver.kernel.org>; Tue, 23 Nov 2021 00:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C572C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 23 Nov 2021 00:00:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbhKWADi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Nov 2021 19:03:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35454 "EHLO
+        id S232674AbhKWADm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Nov 2021 19:03:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbhKWADe (ORCPT
+        with ESMTP id S232563AbhKWADg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Nov 2021 19:03:34 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFAAC06174A
-        for <linux-media@vger.kernel.org>; Mon, 22 Nov 2021 16:00:25 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id d5so35748665wrc.1
-        for <linux-media@vger.kernel.org>; Mon, 22 Nov 2021 16:00:25 -0800 (PST)
+        Mon, 22 Nov 2021 19:03:36 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61FCC06175B
+        for <linux-media@vger.kernel.org>; Mon, 22 Nov 2021 16:00:28 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id az34-20020a05600c602200b0033bf8662572so494724wmb.0
+        for <linux-media@vger.kernel.org>; Mon, 22 Nov 2021 16:00:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N+G7K+/x8Ee9T4dkAqN65fUVLPz05VL4EgyaUucj7DU=;
-        b=YTLZoSC6il0mzFaiFBV+OJBNwNRlqApvtDieLBEgEVScHXeblfaAewCogtsHOWRRrO
-         bDziOaKOGL7tUPAIyYJwali5MGP2wAJGWUoOLSOGIZLi+7p8dCk5X8FQ3w8hhJfzXrhC
-         nef7hkN2GHZJD5cwuO5GCyVthoBRsVGt7A4DB/NCWBJyN6LkDjVFCyv2gJ2yjX/FkFsA
-         OU+pgA1Wa8ghqy69ywAmfOTpiTpt4AZFINUyAx42Dl5G6fZDL3u1Oaefd9f+hRTSXAsS
-         2JgfMerAkaDvUeKe1pp+lTPo6Jcds4Lz78IUK6maYGVMxXb8E6hEC6z0zhEoISl+4jA/
-         MagQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=N5VLlSGrPMPQfxfPi/xiMtdvJoInSe41Unx5TPzmG8w=;
+        b=kU79JDH+dF8FIUpNKxA7uIEvH5Dnj4JtOAP9Xg5bTVMzvKoCpxOgNofdEZ41XYko3Z
+         6XetyMvzFHMx5lKbmCwUrU3+OkRiLx8EX/FGv/FT+jiA6nnjMI6lsT9U2vANX5hIJ5XH
+         lb+xp2gKK8ienzCqXTLx4NOLr/rxpgxwFNJ3+SdMfNu9SfjwnYLtt3oMOOz/U6Pi/6MJ
+         U0nQhFhStBA4SigO5Is46tDTyWGFqfeBdvfLVY6t16gxsZSc99HCrtEDdjw63MWGDmI4
+         NwDtf/vHQjsFW2pf2LlXGZWFVIr9WQHfntvBkfYVcXU8II6keFr0HOGQd60033rN5Ee2
+         lZAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N+G7K+/x8Ee9T4dkAqN65fUVLPz05VL4EgyaUucj7DU=;
-        b=NFZdkKqJVMF6OANbh5ZLu/JyRLsi/VNeh1H2EpjqbuSlL9R9fA2L79RmMndWJazgZ9
-         2yWSAcaGjUbNRz2Z9DMgw5b5TlAKvZw7YKqlWMVcejLMRF6G85IcnXC6GTps5Ksf9lZb
-         xnNtrhqNEa+4ThQhOcz80gr7Y0naHWpVKkjhcCRU43hTTzU9+/V4ylHQBXizPIb4KKbE
-         74m4daEOLHpeYRhLEDU9nrfhCimP81zery5abPI0nEZn/ywTGP5s+raM/4DcS6vNkW/w
-         GjwT2hGdWGD5m2R5UZ3VCxnoDTh0yAXLW067t8bDIMzHNz+/7t7f4mBTaMM+nuh4jUWU
-         gn7w==
-X-Gm-Message-State: AOAM532jD7TZbofKBJBkzseAKXocpaLm4dO1XgHrGLMl5QdbG/+k2FUg
-        ONLX7l8GQmT1bt95iRM0f8kjJ88R5QA=
-X-Google-Smtp-Source: ABdhPJyEZOoXMHVQOaaaAiVZtwVCt1UnYg0wyULIIXVGdOMFGFBx+LQr4VtrvGuNDwOSWKutAxB/jQ==
-X-Received: by 2002:a5d:6785:: with SMTP id v5mr1740437wru.380.1637625624542;
-        Mon, 22 Nov 2021 16:00:24 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=N5VLlSGrPMPQfxfPi/xiMtdvJoInSe41Unx5TPzmG8w=;
+        b=oD0Lziu0goVswSU3P/K15Itlb2aZn8RHWDWuFXnSeHs1XosvTZdFz1XxT5P/lhac1P
+         eaTny9yEpIZf4B7lmmsdouW1Cd5UEltnL5WlizC44up3OjYxfyUNYjqodS9ChaaT1YRd
+         eKSef5lBBFz4icQQRdn6jRDWW9rcCQfAoxwLnYK6qFQqRtDMoFJQHaFNk4P3dygBhZ4H
+         2Wu44ddnHqIThlMomRFLr0+W60v0/rZQT8Q8W7FbSGeSyTPP4k6iyKa00ZfYhre9hX6I
+         8pXnXgNzFZEFgkNqMvP3kANTHnEDWVpglNfCTCwjUZMa6fRho60L3v4GX2/JL+kphqz1
+         iNJg==
+X-Gm-Message-State: AOAM530oceyyjsc0OyZ2OqqH675WGkr6Ir170JxxqSyWjGqeItFthrR/
+        ZUet9AQV6nixERALE8qT/Q4O7iPygaE=
+X-Google-Smtp-Source: ABdhPJxjXoZJG26E5yGkWSEgDVMI/BslWv6uqGBwpLu1uQTY6pMn3wxbhBZvgk5jg2arvUZZIBpa3w==
+X-Received: by 2002:a1c:1d48:: with SMTP id d69mr1366524wmd.143.1637625627363;
+        Mon, 22 Nov 2021 16:00:27 -0800 (PST)
 Received: from localhost.localdomain (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id s13sm23650782wmc.47.2021.11.22.16.00.23
+        by smtp.gmail.com with ESMTPSA id s13sm23650782wmc.47.2021.11.22.16.00.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Nov 2021 16:00:24 -0800 (PST)
+        Mon, 22 Nov 2021 16:00:27 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-media@vger.kernel.org, paul.kocialkowski@bootlin.com
 Cc:     sakari.ailus@linux.intel.com, andriy.shevchenko@linux.intel.com,
         laurent.pinchart@ideasonboard.com, yong.zhi@intel.com,
         bingbu.cao@intel.com, jeanmichel.hautbois@ideasonboard.com,
         kieran.bingham@ideasonboard.com, hdegoede@redhat.com
-Subject: [PATCH v5 00/17] Extensions to ov8865 driver
-Date:   Tue, 23 Nov 2021 00:00:00 +0000
-Message-Id: <20211123000017.43187-1-djrscally@gmail.com>
+Subject: [PATCH v5 03/17] media: i2c: Add ACPI support to ov8865
+Date:   Tue, 23 Nov 2021 00:00:03 +0000
+Message-Id: <20211123000017.43187-4-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211123000017.43187-1-djrscally@gmail.com>
+References: <20211123000017.43187-1-djrscally@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello all
+The ov8865 sensor is sometimes found on x86 platforms enumerated via ACPI.
+Add an ACPI match table to the driver so that it's probed on those
+platforms.
 
-This series extends the ov8865 driver with:
+Signed-off-by: Daniel Scally <djrscally@gmail.com>
+---
+Changes in v5: 
 
-* Support for binding to ACPI enumerated devices.
-* Support for a 19.2MHz clock in addition to existing 24MHz clock support
-* Another v4l2_subdev_pad_ops callback
-* 4 more V4L2 controls
-* makes the driver supported by the cio2-bridge
+	- None
 
-There's also a little bit of tidying that I did along the way.
+ drivers/media/i2c/ov8865.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-The series is tested on an MS Surface Go 2.
-
-Thanks
-Dan
-
-Series level changes since v4:
-
-	- Moved the two patches fixing issues to the head of the series and
-	added Fixes tags
-	- Added a new patch fixing the maximum gain value
-
-Daniel Scally (16):
-  media: i2c: Re-order runtime pm initialisation
-  media: i2c: Add ACPI support to ov8865
-  media: i2c: Fix incorrect value in comment
-  media: i2c: Defer probe if not endpoint found
-  media: i2c: Support 19.2MHz input clock in ov8865
-  media: i2c: Add .get_selection() support to ov8865
-  media: i2c: Switch control to V4L2_CID_ANALOGUE_GAIN
-  media: i2c: Add vblank control to ov8865
-  media: i2c: Add hblank control to ov8865
-  media: i2c: Update HTS values in ov8865
-  media: i2c: cap exposure at height + vblank in ov8865
-  media: i2c: Add controls from fwnode to ov8865
-  media: i2c: Switch exposure control unit to lines
-  media: i2c: Use dev_err_probe() in ov8865
-  media: i2c: Fix max gain in ov8865
-  media: ipu3-cio2: Add INT347A to cio2-bridge
-
-Hans de Goede (1):
-  media: i2c: ov8865: Fix lockdep error
-
- drivers/media/i2c/ov8865.c                 | 466 +++++++++++++++------
- drivers/media/pci/intel/ipu3/cio2-bridge.c |   2 +
- 2 files changed, 334 insertions(+), 134 deletions(-)
-
+diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
+index fe064e716ea8..9f1c0d66c4f9 100644
+--- a/drivers/media/i2c/ov8865.c
++++ b/drivers/media/i2c/ov8865.c
+@@ -9,6 +9,7 @@
+ #include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/i2c.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/of_graph.h>
+ #include <linux/pm_runtime.h>
+@@ -2948,6 +2949,12 @@ static const struct dev_pm_ops ov8865_pm_ops = {
+ 	SET_RUNTIME_PM_OPS(ov8865_suspend, ov8865_resume, NULL)
+ };
+ 
++static const struct acpi_device_id ov8865_acpi_match[] = {
++	{"INT347A"},
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, ov8865_acpi_match);
++
+ static const struct of_device_id ov8865_of_match[] = {
+ 	{ .compatible = "ovti,ov8865" },
+ 	{ }
+@@ -2958,6 +2965,7 @@ static struct i2c_driver ov8865_driver = {
+ 	.driver = {
+ 		.name = "ov8865",
+ 		.of_match_table = ov8865_of_match,
++		.acpi_match_table = ov8865_acpi_match,
+ 		.pm = &ov8865_pm_ops,
+ 	},
+ 	.probe_new = ov8865_probe,
 -- 
 2.25.1
 
