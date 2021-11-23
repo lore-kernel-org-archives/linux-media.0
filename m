@@ -2,160 +2,182 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98141C433FE
-	for <linux-media@archiver.kernel.org>; Tue, 23 Nov 2021 11:09:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32E3CC433F5
+	for <linux-media@archiver.kernel.org>; Tue, 23 Nov 2021 11:15:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233564AbhKWLMU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Nov 2021 06:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbhKWLMU (ORCPT
+        id S234718AbhKWLSu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Nov 2021 06:18:50 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:64626 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229719AbhKWLSt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Nov 2021 06:12:20 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CCEC061574;
-        Tue, 23 Nov 2021 03:09:12 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id 289601F454F9
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1637665746; bh=NuYVgYcm/5QmTwPPl+jnnTdg3Amocx5TpmqHRzUvEcg=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=LSqSWvdz2ir1uJRRRP+MYhzzqSCvQZXUIBGUzi1rgAsuwV6O1MxSQ8YhOI51oH/dp
-         H6HzqaI4iRClnWmQhWz6yBILvWHnjD1XuG0EKeHg1L/go7KulSSW9x82lw6wv0PR5S
-         eDjKRYx8ohBfs2Q55Mr18weoiX70ePI50Ll/OGLSWQlV7LMzcwCsBEFiHpHDv4n8dr
-         gvfHlQ8ysV5xX0Nnxf7fp4FdFkmA3ftpCeqf2f+xhJGxdyGdDacAsL65jeVuuSqbE5
-         T2CzggMgSeNlZh9480EWQJbSyKQutbEpimE2LUk+2F0bnWe4bU7aldi3NXvPjDQ96D
-         pLUQPB/xWapxg==
-Subject: Re: [PATCH 1/7] media: hantro: add support for reset lines
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-media@vger.kernel.org
-Cc:     ezequiel@vanguardiasur.com.ar, nicolas.dufresne@collabora.com,
-        mchehab@kernel.org, robh+dt@kernel.org, mripard@kernel.org,
-        wens@csie.org, p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-References: <20211122184702.768341-1-jernej.skrabec@gmail.com>
- <20211122184702.768341-2-jernej.skrabec@gmail.com>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <08e80e9e-f646-72e4-e4d4-f8e6310228f1@collabora.com>
-Date:   Tue, 23 Nov 2021 12:09:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 23 Nov 2021 06:18:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1637666142; x=1669202142;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kC31hnj9WPlZ84dBlAtnqPaxVZ19JscwubUD9amKJ4s=;
+  b=efs7iKAvht8N7Nkl2lhpMrjY4bwj7/AvWqZx4x/RB2s6ON/q1/SA/35n
+   Cqr/uzBJaKmAPkWk7xR3KSQlwrVuQs3rerZUZdNP46CUPfU3yYsqLsAl0
+   uih09tORWmBCQlGzB2/XklXcUxu+Bs5ivWWrNUrfWxN8I5BMtuZ/Es2I5
+   5vFyDrtZpqV0/GYiFiCecsmOJt4Dx866B0yh8DgEqBBOZcTz7NIzP083P
+   j97GOFzWDijJb/60Wmfnavkss/DRpSDb+FK4rUTgk4qkBk/rhhZ5dUtX8
+   2TSpXbQGmIJTHKFypAEoTCwz3bA3WGvYueM0EG2of2AYNvq5OCpaxgD3a
+   g==;
+IronPort-SDR: wnixdWkZMvTjZ7CrO78Cr4cPBSBKnMsGqxKiOPTAP2i7d+7sA8KtagOttoOHGytrEsVOnkh9ff
+ VHaZX4f5lve31eGJTlhplG1SVYCT30xL3SefjDOiMDHYtSa+dmOAF5i4V5ogM+RZa7n9vCblI9
+ f68U4uJN4KTuaShvAIqi7LFi9RlMKdiMW+RJizPF5i0aS9YgkbK9cgXYAPm4JDzbXX/2N4lOPF
+ xoRNUahqpumfp5BmHLcqu/Lttrhq0Z36d5MDJBpl/JnU9Lzyd3/vgphHBDeYKx586dJqDvkARj
+ WjKwAlRnlYlacIasW9ybaU24
+X-IronPort-AV: E=Sophos;i="5.87,257,1631602800"; 
+   d="scan'208";a="144278723"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2021 04:15:41 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 23 Nov 2021 04:15:40 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 23 Nov 2021 04:15:32 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <leonl@leopardimaging.com>, <linux-media@vger.kernel.org>
+CC:     <skomatineni@nvidia.com>, <sakari.ailus@linux.intel.com>,
+        <luca@lucaceresoli.net>, <linux-kernel@vger.kernel.org>,
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [PATCH 1/2] media: i2c: imx274: simplify probe function by adding local variable dev
+Date:   Tue, 23 Nov 2021 13:15:20 +0200
+Message-ID: <20211123111521.593863-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20211122184702.768341-2-jernej.skrabec@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jernej,
+Simplify probe function by adding a local variable dev instead of using
+&client->dev all the time.
 
-Thanks for the patch.
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
+ drivers/media/i2c/imx274.c | 39 ++++++++++++++++++--------------------
+ 1 file changed, 18 insertions(+), 21 deletions(-)
 
-W dniu 22.11.2021 o 19:46, Jernej Skrabec pisze:
-> Some SoCs like Allwinner H6 use reset lines for resetting Hantro G2. Add
-> support for them.
-> 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
->   drivers/staging/media/hantro/hantro.h     |  3 +++
->   drivers/staging/media/hantro/hantro_drv.c | 15 ++++++++++++++-
->   2 files changed, 17 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-> index 7da23f7f207a..33eb3e092cc1 100644
-> --- a/drivers/staging/media/hantro/hantro.h
-> +++ b/drivers/staging/media/hantro/hantro.h
-> @@ -16,6 +16,7 @@
->   #include <linux/videodev2.h>
->   #include <linux/wait.h>
->   #include <linux/clk.h>
-> +#include <linux/reset.h>
->   
->   #include <media/v4l2-ctrls.h>
->   #include <media/v4l2-device.h>
-> @@ -171,6 +172,7 @@ hantro_vdev_to_func(struct video_device *vdev)
->    * @dev:		Pointer to device for convenient logging using
->    *			dev_ macros.
->    * @clocks:		Array of clock handles.
-> + * @resets:		Array of reset handles.
->    * @reg_bases:		Mapped addresses of VPU registers.
->    * @enc_base:		Mapped address of VPU encoder register for convenience.
->    * @dec_base:		Mapped address of VPU decoder register for convenience.
-> @@ -190,6 +192,7 @@ struct hantro_dev {
->   	struct platform_device *pdev;
->   	struct device *dev;
->   	struct clk_bulk_data *clocks;
-> +	struct reset_control *resets;
->   	void __iomem **reg_bases;
->   	void __iomem *enc_base;
->   	void __iomem *dec_base;
-> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-> index ab2467998d29..8c3de31f51b3 100644
-> --- a/drivers/staging/media/hantro/hantro_drv.c
-> +++ b/drivers/staging/media/hantro/hantro_drv.c
-> @@ -905,6 +905,10 @@ static int hantro_probe(struct platform_device *pdev)
->   			return PTR_ERR(vpu->clocks[0].clk);
->   	}
->   
-> +	vpu->resets = devm_reset_control_array_get(&pdev->dev, false, true);
-> +	if (IS_ERR(vpu->resets))
-> +		return PTR_ERR(vpu->resets);
-> +
->   	num_bases = vpu->variant->num_regs ?: 1;
->   	vpu->reg_bases = devm_kcalloc(&pdev->dev, num_bases,
->   				      sizeof(*vpu->reg_bases), GFP_KERNEL);
-> @@ -978,10 +982,16 @@ static int hantro_probe(struct platform_device *pdev)
->   	pm_runtime_use_autosuspend(vpu->dev);
->   	pm_runtime_enable(vpu->dev);
->   
-> +	ret = reset_control_deassert(vpu->resets);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Failed to deassert resets\n");
-> +		return ret;
-> +	}
-> +
->   	ret = clk_bulk_prepare(vpu->variant->num_clocks, vpu->clocks);
->   	if (ret) {
->   		dev_err(&pdev->dev, "Failed to prepare clocks\n");
-> -		return ret;
-> +		goto err_rst_assert;
-
-Before your patch is applied if clk_bulk_prepare() fails, we
-simply return on the spot. After the patch is applied not only
-do you...
-
->   	}
->   
->   	ret = v4l2_device_register(&pdev->dev, &vpu->v4l2_dev);
-> @@ -1037,6 +1047,8 @@ static int hantro_probe(struct platform_device *pdev)
->   	v4l2_device_unregister(&vpu->v4l2_dev);
->   err_clk_unprepare:
->   	clk_bulk_unprepare(vpu->variant->num_clocks, vpu->clocks);
-> +err_rst_assert:
-> +	reset_control_assert(vpu->resets);
-
-...revert the effect of reset_control_deassert(), you also...
-
->   	pm_runtime_dont_use_autosuspend(vpu->dev);
->   	pm_runtime_disable(vpu->dev);
-
-... do pm_*() stuff. Is there any reason why this is needed?
-
-Andrzej
-
->   	return ret;
-> @@ -1055,6 +1067,7 @@ static int hantro_remove(struct platform_device *pdev)
->   	v4l2_m2m_release(vpu->m2m_dev);
->   	v4l2_device_unregister(&vpu->v4l2_dev);
->   	clk_bulk_unprepare(vpu->variant->num_clocks, vpu->clocks);
-> +	reset_control_assert(vpu->resets);
->   	pm_runtime_dont_use_autosuspend(vpu->dev);
->   	pm_runtime_disable(vpu->dev);
->   	return 0;
-> 
+diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+index 25a4ef8f6187..e31f006b10d9 100644
+--- a/drivers/media/i2c/imx274.c
++++ b/drivers/media/i2c/imx274.c
+@@ -1961,23 +1961,23 @@ static int imx274_probe(struct i2c_client *client)
+ {
+ 	struct v4l2_subdev *sd;
+ 	struct stimx274 *imx274;
++	struct device *dev = &client->dev;
+ 	int ret;
+ 
+ 	/* initialize imx274 */
+-	imx274 = devm_kzalloc(&client->dev, sizeof(*imx274), GFP_KERNEL);
++	imx274 = devm_kzalloc(dev, sizeof(*imx274), GFP_KERNEL);
+ 	if (!imx274)
+ 		return -ENOMEM;
+ 
+ 	mutex_init(&imx274->lock);
+ 
+-	imx274->inck = devm_clk_get_optional(&client->dev, "inck");
++	imx274->inck = devm_clk_get_optional(dev, "inck");
+ 	if (IS_ERR(imx274->inck))
+ 		return PTR_ERR(imx274->inck);
+ 
+-	ret = imx274_regulators_get(&client->dev, imx274);
++	ret = imx274_regulators_get(dev, imx274);
+ 	if (ret) {
+-		dev_err(&client->dev,
+-			"Failed to get power regulators, err: %d\n", ret);
++		dev_err(dev, "Failed to get power regulators, err: %d\n", ret);
+ 		return ret;
+ 	}
+ 
+@@ -1996,7 +1996,7 @@ static int imx274_probe(struct i2c_client *client)
+ 	/* initialize regmap */
+ 	imx274->regmap = devm_regmap_init_i2c(client, &imx274_regmap_config);
+ 	if (IS_ERR(imx274->regmap)) {
+-		dev_err(&client->dev,
++		dev_err(dev,
+ 			"regmap init failed: %ld\n", PTR_ERR(imx274->regmap));
+ 		ret = -ENODEV;
+ 		goto err_regmap;
+@@ -2013,34 +2013,32 @@ static int imx274_probe(struct i2c_client *client)
+ 	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
+ 	ret = media_entity_pads_init(&sd->entity, 1, &imx274->pad);
+ 	if (ret < 0) {
+-		dev_err(&client->dev,
++		dev_err(dev,
+ 			"%s : media entity init Failed %d\n", __func__, ret);
+ 		goto err_regmap;
+ 	}
+ 
+ 	/* initialize sensor reset gpio */
+-	imx274->reset_gpio = devm_gpiod_get_optional(&client->dev, "reset",
++	imx274->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+ 						     GPIOD_OUT_HIGH);
+ 	if (IS_ERR(imx274->reset_gpio)) {
+ 		if (PTR_ERR(imx274->reset_gpio) != -EPROBE_DEFER)
+-			dev_err(&client->dev, "Reset GPIO not setup in DT");
++			dev_err(dev, "Reset GPIO not setup in DT");
+ 		ret = PTR_ERR(imx274->reset_gpio);
+ 		goto err_me;
+ 	}
+ 
+ 	/* power on the sensor */
+-	ret = imx274_power_on(&client->dev);
++	ret = imx274_power_on(dev);
+ 	if (ret < 0) {
+-		dev_err(&client->dev,
+-			"%s : imx274 power on failed\n", __func__);
++		dev_err(dev, "%s : imx274 power on failed\n", __func__);
+ 		goto err_me;
+ 	}
+ 
+ 	/* initialize controls */
+ 	ret = v4l2_ctrl_handler_init(&imx274->ctrls.handler, 4);
+ 	if (ret < 0) {
+-		dev_err(&client->dev,
+-			"%s : ctrl handler init Failed\n", __func__);
++		dev_err(dev, "%s : ctrl handler init Failed\n", __func__);
+ 		goto err_power_off;
+ 	}
+ 
+@@ -2083,23 +2081,22 @@ static int imx274_probe(struct i2c_client *client)
+ 	/* register subdevice */
+ 	ret = v4l2_async_register_subdev(sd);
+ 	if (ret < 0) {
+-		dev_err(&client->dev,
+-			"%s : v4l2_async_register_subdev failed %d\n",
++		dev_err(dev, "%s : v4l2_async_register_subdev failed %d\n",
+ 			__func__, ret);
+ 		goto err_ctrls;
+ 	}
+ 
+-	pm_runtime_set_active(&client->dev);
+-	pm_runtime_enable(&client->dev);
+-	pm_runtime_idle(&client->dev);
++	pm_runtime_set_active(dev);
++	pm_runtime_enable(dev);
++	pm_runtime_idle(dev);
+ 
+-	dev_info(&client->dev, "imx274 : imx274 probe success !\n");
++	dev_info(dev, "imx274 : imx274 probe success !\n");
+ 	return 0;
+ 
+ err_ctrls:
+ 	v4l2_ctrl_handler_free(&imx274->ctrls.handler);
+ err_power_off:
+-	imx274_power_off(&client->dev);
++	imx274_power_off(dev);
+ err_me:
+ 	media_entity_cleanup(&sd->entity);
+ err_regmap:
+-- 
+2.25.1
 
