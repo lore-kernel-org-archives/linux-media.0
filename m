@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDF29C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 24 Nov 2021 17:57:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE457C4321E
+	for <linux-media@archiver.kernel.org>; Wed, 24 Nov 2021 17:57:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350097AbhKXSAr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Nov 2021 13:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
+        id S1350110AbhKXSAt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Nov 2021 13:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350074AbhKXSAq (ORCPT
+        with ESMTP id S1350112AbhKXSAs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Nov 2021 13:00:46 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BD1C061574
-        for <linux-media@vger.kernel.org>; Wed, 24 Nov 2021 09:57:36 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id i12so3224855wmq.4
-        for <linux-media@vger.kernel.org>; Wed, 24 Nov 2021 09:57:36 -0800 (PST)
+        Wed, 24 Nov 2021 13:00:48 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EFBC061574
+        for <linux-media@vger.kernel.org>; Wed, 24 Nov 2021 09:57:38 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so2797087wmc.2
+        for <linux-media@vger.kernel.org>; Wed, 24 Nov 2021 09:57:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SuWrMG0bo45Jb11rqxnKYmyuhg+LmcaZSa2mZISuLUo=;
-        b=sglImkKtxlMBmZOZvRs1PZgED27DTeGlOb3wkQIGVCKDj5QPNjNVURn1C11F7pS3YO
-         5lKRmg7lufwHQLZYFVjiBpYxK0duDglejIlCYoAo00Y65gpAjbk+MmH4X2DPVkPkoebW
-         mJ1pmJz72ifh0HOL+L02lM9MPwU2+Ka2Yf6wRwprf73+mRlcOh2Mk1Z5C7P2tuzwj9RY
-         RevkVuR95AORQYkJULRcyktisHZ6x/d/3lxXC49LiOd7FK7YnGW5BEcWSE7X8eEKGU8u
-         Mk7pHbQemMrL3B9IMXoLGTjvtlCuGEBkZ3SzN2oE7fNBwF1zNUbWZBYMbJuqHWfJzzK+
-         LUcQ==
+        bh=kYz3E7PVORTIaf/UdhSwT1/zCSO6K7cYJ65ZDegeuJw=;
+        b=EbRum58Yd4NevUekyl1jgbAcBZpuw7i9Bk3zLoOzdtK14n7A+soROYrNYvbpnHBRF4
+         nbH0zNQrOPjF5oAxLdp0hUH8segazqVQIOqvwYyZ5rQHCmF3y0LuUuK7yHnq9kDh3yKk
+         EO7dbhtzPapAqeY1l3MSPb0NDVLrNnAecTdvwEoXu9s7GB+USfA0lT08s0nIM3nvXZF8
+         vO7cwqXOhLK/fl2+al0zYa9ll0/qWENjnoiKr5AfS6Z3YwIqwiqFbONrK8l3J/xI7PGr
+         8I7KLXDUF9XQA5uj9+KMs22jqivgRK/cj6wUvHLt1dMYx7lb6uomlYZTbxzhX6XutrxU
+         l/Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=SuWrMG0bo45Jb11rqxnKYmyuhg+LmcaZSa2mZISuLUo=;
-        b=pdXtGrKcWqEAMPG95DXHmWnzU7QKWQwRpkN3WxnN6tsrGor2fguFk5QSyB3lDrqzfT
-         ALSbe4MYjCg/BprG95yswiCLYuU1MjgxV+rfKsxMtKq+DdeKwQ5u6MQCEB9cM+Il4Pmt
-         fsWpxc9ahEByoGfozETYo2Pk3YDa/c2YMmKKCbiBlkreaul9Bj2IgiOo/YLEReqxdccA
-         et+AiHcyyyJjhsArA0wnT0W1CjaeLJzmVKQcb76YBf8nHuyL9keTXcu5+U4gXmX3jWan
-         Kg0gZTD9/M/4d2nLjkJ4ZNlHnTP3oBMNicqniz+3Qp8VmJvnaiCiiCdOsL6mbomdLQTf
-         sFHg==
-X-Gm-Message-State: AOAM531dMWOQyRtQLpNjHVaaf5txXAhd/WPtnIRZHFNq4ibVC1YweW/O
-        sWfIdv5PNnvR/HfuW9hI8yN46Q==
-X-Google-Smtp-Source: ABdhPJysnqCsSv4fmVpZfv794YhFPbYPseSnBKbff6zmYLfptGkvC3LR7jlZDJx50fBAF9LrpDd3VQ==
-X-Received: by 2002:a05:600c:501f:: with SMTP id n31mr18068305wmr.101.1637776654723;
-        Wed, 24 Nov 2021 09:57:34 -0800 (PST)
+        bh=kYz3E7PVORTIaf/UdhSwT1/zCSO6K7cYJ65ZDegeuJw=;
+        b=MMGJ9B8Rv6IZ4RqOsDuCh9MKltYsU75zRgnn3XQ9m8fHT6mmG8gCio4XtpXHCm9zzA
+         PXFA14fZnFqMgpIl7S7R5JXtEyUjcwTff2zxDF8TR8PeQvbO2IiSXod67D/Asz3jCZAO
+         H0rA8ZJFzCEnWIcT/VmrKCOLwUROBeZ4hpoUeCrnvIfWOem8gexf6zJE9Mi0CqF7aZgH
+         aHGbBDvjmMRSGQVzeNz+Ub+QBwe560QKrFoR+wLMCdwQUC/QIK6ELyxppztiKMm6VnCP
+         rXcvERCM5tHAVn+rltQtbBN+b3y21INzBxqdfQ9L6/DdPr2xPkmQPUdJskyYYZm3ojJD
+         hSiQ==
+X-Gm-Message-State: AOAM532NkzI6ZILf0TO2KirbE5cO60JxuMb0lGLeOw8K1TuqTs2ignkX
+        9gElyWcvvL2IcfpoZpl1rvlNFw==
+X-Google-Smtp-Source: ABdhPJyenib1UQ2nmv4ekM9ANKSizbi674NWYXO9CBwfMRwhUrHN2KG6G6mJwxRnzT2BaZEZr6NXiA==
+X-Received: by 2002:a05:600c:1e06:: with SMTP id ay6mr18929231wmb.64.1637776656945;
+        Wed, 24 Nov 2021 09:57:36 -0800 (PST)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id s24sm380576wmj.26.2021.11.24.09.57.33
+        by smtp.gmail.com with ESMTPSA id s24sm380576wmj.26.2021.11.24.09.57.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Nov 2021 09:57:34 -0800 (PST)
+        Wed, 24 Nov 2021 09:57:36 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
         robert.foss@linaro.org, jonathan@marek.ca
 Cc:     andrey.konovalov@linaro.org, todor.too@gmail.com,
         agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
         jgrahsl@snap.com, hfink@snap.com, bryan.odonoghue@linaro.org
-Subject: [PATCH v2 15/19] media: camss: add support for V4L2_PIX_FMT_GREY for sdm845 HW
-Date:   Wed, 24 Nov 2021 17:59:17 +0000
-Message-Id: <20211124175921.1048375-16-bryan.odonoghue@linaro.org>
+Subject: [PATCH v2 17/19] media: camss: Add SM8250 bandwdith configuration support
+Date:   Wed, 24 Nov 2021 17:59:19 +0000
+Message-Id: <20211124175921.1048375-18-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211124175921.1048375-1-bryan.odonoghue@linaro.org>
 References: <20211124175921.1048375-1-bryan.odonoghue@linaro.org>
@@ -66,75 +66,190 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jonathan Marek <jonathan@marek.ca>
+Downstream makes some pretty explicit comments about voting for bus
+bandwidth prior to camcc_camnoc_axi_clk_src. Working with camx downstream
+also shows that the bandwidth vote is required to get that root clock
+working.
 
-Add this common format to the various format lists relevant to sdm845.
+Add a simple mechanism to declare set and unset named NOCs. Whereas the
+objective is to enable the sm8250 specifically the code has been
+implemented to allow setting of whatever NOCs different SoCs using this
+driver may require.
 
-Signed-off-by: Jonathan Marek <jonathan@marek.ca>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Tested-by: Julian Grahsl <jgrahsl@snap.com>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/camss/camss-csid-170.c | 7 +++++++
- drivers/media/platform/qcom/camss/camss-csiphy.c   | 1 +
- drivers/media/platform/qcom/camss/camss-vfe.c      | 1 +
- drivers/media/platform/qcom/camss/camss-video.c    | 2 ++
- 4 files changed, 11 insertions(+)
+ drivers/media/platform/qcom/camss/camss.c | 81 +++++++++++++++++++++++
+ drivers/media/platform/qcom/camss/camss.h | 17 +++++
+ 2 files changed, 98 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
-index 22a7d7ad6340..9e54d251793f 100644
---- a/drivers/media/platform/qcom/camss/camss-csid-170.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
-@@ -262,6 +262,13 @@ static const struct csid_format csid_formats[] = {
- 		10,
- 		1,
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 066639db9f18..d9905e737d88 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -8,6 +8,7 @@
+  * Copyright (C) 2015-2018 Linaro Ltd.
+  */
+ #include <linux/clk.h>
++#include <linux/interconnect.h>
+ #include <linux/media-bus-format.h>
+ #include <linux/media.h>
+ #include <linux/module.h>
+@@ -841,6 +842,29 @@ static const struct resources vfe_res_8250[] = {
  	},
-+	{
-+		MEDIA_BUS_FMT_Y8_1X8,
-+		DATA_TYPE_RAW_8BIT,
-+		DECODE_FORMAT_UNCOMPRESSED_8_BIT,
-+		8,
-+		1,
-+	},
- 	{
- 		MEDIA_BUS_FMT_Y10_1X10,
- 		DATA_TYPE_RAW_10BIT,
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index 24eec16197e7..de1e81bb97c9 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -94,6 +94,7 @@ static const struct csiphy_format csiphy_formats_sdm845[] = {
- 	{ MEDIA_BUS_FMT_SGBRG14_1X14, 14 },
- 	{ MEDIA_BUS_FMT_SGRBG14_1X14, 14 },
- 	{ MEDIA_BUS_FMT_SRGGB14_1X14, 14 },
-+	{ MEDIA_BUS_FMT_Y8_1X8, 8 },
- 	{ MEDIA_BUS_FMT_Y10_1X10, 10 },
  };
  
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index 165b404761db..3d2f554a4ef7 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -118,6 +118,7 @@ static const struct vfe_format formats_rdi_845[] = {
- 	{ MEDIA_BUS_FMT_SGBRG14_1X14, 14 },
- 	{ MEDIA_BUS_FMT_SGRBG14_1X14, 14 },
- 	{ MEDIA_BUS_FMT_SRGGB14_1X14, 14 },
-+	{ MEDIA_BUS_FMT_Y8_1X8, 8 },
- 	{ MEDIA_BUS_FMT_Y10_1X10, 10 },
- 	{ MEDIA_BUS_FMT_Y10_2X8_PADHI_LE, 16 },
++static const struct resources_icc icc_res_sm8250[] = {
++	{
++		.name = "cam_ahb",
++		.icc_bw_tbl.avg = 38400,
++		.icc_bw_tbl.peak = 76800,
++	},
++	{
++		.name = "cam_hf_0_mnoc",
++		.icc_bw_tbl.avg = 2097152,
++		.icc_bw_tbl.peak = 2097152,
++	},
++	{
++		.name = "cam_sf_0_mnoc",
++		.icc_bw_tbl.avg = 0,
++		.icc_bw_tbl.peak = 2097152,
++	},
++	{
++		.name = "cam_sf_icp_mnoc",
++		.icc_bw_tbl.avg = 2097152,
++		.icc_bw_tbl.peak = 2097152,
++	},
++};
++
+ /*
+  * camss_add_clock_margin - Add margin to clock frequency rate
+  * @rate: Clock frequency rate
+@@ -1470,6 +1494,29 @@ static int camss_configure_pd(struct camss *camss)
+ 	return ret;
+ }
+ 
++static int camss_icc_get(struct camss *camss)
++{
++	const struct resources_icc *icc_res;
++	int nbr_icc_paths = 0;
++	int i;
++
++	if (camss->version == CAMSS_8250) {
++		icc_res = &icc_res_sm8250[0];
++		nbr_icc_paths =	ICC_SM8250_COUNT;
++	}
++
++	for (i = 0; i < nbr_icc_paths; i++) {
++		camss->icc_path[i] = devm_of_icc_get(camss->dev,
++						     icc_res[i].name);
++		if (IS_ERR(camss->icc_path[i]))
++			return PTR_ERR(camss->icc_path[i]);
++
++		camss->icc_bw_tbl[i] = icc_res[i].icc_bw_tbl;
++	}
++
++	return 0;
++}
++
+ /*
+  * camss_probe - Probe CAMSS platform device
+  * @pdev: Pointer to CAMSS platform device
+@@ -1562,6 +1609,10 @@ static int camss_probe(struct platform_device *pdev)
+ 		goto err_cleanup;
+ 	}
+ 
++	ret = camss_icc_get(camss);
++	if (ret < 0)
++		goto err_cleanup;
++
+ 	ret = camss_init_subdevices(camss);
+ 	if (ret < 0)
+ 		goto err_cleanup;
+@@ -1695,11 +1746,41 @@ MODULE_DEVICE_TABLE(of, camss_dt_match);
+ 
+ static int __maybe_unused camss_runtime_suspend(struct device *dev)
+ {
++	struct camss *camss = dev_get_drvdata(dev);
++	int nbr_icc_paths = 0;
++	int i;
++	int ret;
++
++	if (camss->version == CAMSS_8250)
++		nbr_icc_paths =	ICC_SM8250_COUNT;
++
++	for (i = 0; i < nbr_icc_paths; i++) {
++		ret = icc_set_bw(camss->icc_path[i], 0, 0);
++		if (ret)
++			return ret;
++	}
++
+ 	return 0;
+ }
+ 
+ static int __maybe_unused camss_runtime_resume(struct device *dev)
+ {
++	struct camss *camss = dev_get_drvdata(dev);
++	int nbr_icc_paths = 0;
++	int i;
++	int ret;
++
++	if (camss->version == CAMSS_8250)
++		nbr_icc_paths =	ICC_SM8250_COUNT;
++
++	for (i = 0; i < nbr_icc_paths; i++) {
++		ret = icc_set_bw(camss->icc_path[i],
++				 camss->icc_bw_tbl[i].avg,
++				 camss->icc_bw_tbl[i].peak);
++		if (ret)
++			return ret;
++	}
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+index 377e2474a485..9c644e638a94 100644
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -56,6 +56,16 @@ struct resources_ispif {
+ 	char *interrupt;
  };
-diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
-index f282275af626..54e77d30d452 100644
---- a/drivers/media/platform/qcom/camss/camss-video.c
-+++ b/drivers/media/platform/qcom/camss/camss-video.c
-@@ -176,6 +176,8 @@ static const struct camss_format_info formats_rdi_845[] = {
- 	  { { 1, 1 } }, { { 1, 1 } }, { 14 } },
- 	{ MEDIA_BUS_FMT_SRGGB14_1X14, V4L2_PIX_FMT_SRGGB14P, 1,
- 	  { { 1, 1 } }, { { 1, 1 } }, { 14 } },
-+	{ MEDIA_BUS_FMT_Y8_1X8, V4L2_PIX_FMT_GREY, 1,
-+	  { { 1, 1 } }, { { 1, 1 } }, { 8 } },
- 	{ MEDIA_BUS_FMT_Y10_1X10, V4L2_PIX_FMT_Y10P, 1,
- 	  { { 1, 1 } }, { { 1, 1 } }, { 10 } },
- 	{ MEDIA_BUS_FMT_Y10_2X8_PADHI_LE, V4L2_PIX_FMT_Y10, 1,
+ 
++struct icc_bw_tbl {
++	u32 avg;
++	u32 peak;
++};
++
++struct resources_icc {
++	char *name;
++	struct icc_bw_tbl icc_bw_tbl;
++};
++
+ enum pm_domain {
+ 	PM_DOMAIN_VFE0 = 0,
+ 	PM_DOMAIN_VFE1 = 1,
+@@ -72,6 +82,11 @@ enum camss_version {
+ 	CAMSS_8250,
+ };
+ 
++enum icc_count {
++	ICC_DEFAULT_COUNT = 0,
++	ICC_SM8250_COUNT = 4,
++};
++
+ struct camss {
+ 	enum camss_version version;
+ 	struct v4l2_device v4l2_dev;
+@@ -88,6 +103,8 @@ struct camss {
+ 	atomic_t ref_count;
+ 	struct device *genpd[PM_DOMAIN_GEN2_COUNT];
+ 	struct device_link *genpd_link[PM_DOMAIN_GEN2_COUNT];
++	struct icc_path *icc_path[ICC_SM8250_COUNT];
++	struct icc_bw_tbl icc_bw_tbl[ICC_SM8250_COUNT];
+ };
+ 
+ struct camss_camera_interface {
 -- 
 2.33.0
 
