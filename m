@@ -2,92 +2,87 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 754C4C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 24 Nov 2021 19:14:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB266C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 24 Nov 2021 19:22:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351000AbhKXTQi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Nov 2021 14:16:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52492 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350949AbhKXTQg (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Nov 2021 14:16:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 802686102A;
-        Wed, 24 Nov 2021 19:13:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637781206;
-        bh=minbWLEAqIe1znplAKAXLGbHWJ/vTNi2mDHC75qZtFY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NI0DboG7UY6oIeVWycluSUF00L7ZIS8mLogUvnivxCSH8vTkHCIQ8syIx+BeKGv4Y
-         hpLBzFc5LmsIarHAhuGevxazWi9SYP1My2LWusbRn+BXLzg3bHaemj2laeEcxPoyS8
-         a+MJ06f4XuG6K1rLIDcMbRTtzEacS0k7OQgrSDMg1pJ4/n0sfRpBK5iGON42PU79+7
-         uBcy6KVu0/mEcHCWWi+3AkRJnSUiFYZn84L9EqqsaA70urQKuX47YA57Spnr0pwijv
-         p0w8LOta+/cIiPhuoOW+e2riaBFK5+EOTW91dWljxyeJY7S50WO23ow3lR2Ko9sZfM
-         bucELO4HRIjfg==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mpxhs-004Q53-FM; Wed, 24 Nov 2021 20:13:24 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        id S244840AbhKXTZV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Nov 2021 14:25:21 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:51233 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243524AbhKXTZT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 24 Nov 2021 14:25:19 -0500
+Received: from mail-wm1-f50.google.com ([209.85.128.50]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MulVd-1mY1YC0V19-00rnZF; Wed, 24 Nov 2021 20:22:07 +0100
+Received: by mail-wm1-f50.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so2973822wmd.1;
+        Wed, 24 Nov 2021 11:22:07 -0800 (PST)
+X-Gm-Message-State: AOAM530Y8T9MVAZaaG/zDSsDvnv79rTzglEiOySjgIrPEgyeYvz/pRp9
+        IeOJwLETOIRZX8gLOwnh3Uv5KpyXywqVa5qcPeE=
+X-Google-Smtp-Source: ABdhPJyA967xXsVVOdLJdkVj5zYgmz3qs3/FxEAJIV2nNiYoRheYa4DjM+GWWKPY+38aCDJUPzvYqT2XNbgtE7c9kMM=
+X-Received: by 2002:a1c:770e:: with SMTP id t14mr17497596wmi.173.1637781726785;
+ Wed, 24 Nov 2021 11:22:06 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1637781097.git.mchehab+huawei@kernel.org> <63ecb865c4f2b81862f5e6ac0dea497d3e0baca3.1637781097.git.mchehab+huawei@kernel.org>
+In-Reply-To: <63ecb865c4f2b81862f5e6ac0dea497d3e0baca3.1637781097.git.mchehab+huawei@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 24 Nov 2021 20:21:50 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2ez6nEw4d+Mqa3XXAz0RFTZHunqqRj6sCt7Y_Eqqs0rw@mail.gmail.com>
+Message-ID: <CAK8P3a2ez6nEw4d+Mqa3XXAz0RFTZHunqqRj6sCt7Y_Eqqs0rw@mail.gmail.com>
+Subject: Re: [PATCH 18/20] media: mtk-mdp: address a clang warning
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linuxarm <linuxarm@huawei.com>,
+        Mauro Carvalho Chehab <mauro.chehab@huawei.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH 01/20] media: adv7842: get rid of two unused functions
-Date:   Wed, 24 Nov 2021 20:13:04 +0100
-Message-Id: <e97de1cfd545c5861634619112770cf0710a6241.1637781097.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1637781097.git.mchehab+huawei@kernel.org>
-References: <cover.1637781097.git.mchehab+huawei@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:vWb0aqbCgPPx+8oSG3he29TFEVIpooUUVX6BaNktpTLtvW02HP/
+ b2o8/9YCE4SlU7lnmuPfJaTm65yRBsbizRVtehR1RXGBjMHxCC/5ZaGhCKEB+UOZ89OGJsL
+ vETdcB+eYvEPhiBdW1fkx8/7Q1wnLmki2yvmsNPVZwuE9ejMvzq1ySIHzQwlhne/kTNTqXo
+ z4qhtHohZjCOlNKDGgc2Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Ijx3qnJwyzY=:4vsRg5vCMHLDN9IuuVP3ak
+ 2+dvgVJHBqqYNHMW10TIy5zUOeR1zVY4RZCStkfSJIy+DTpniOEwxyT5lFyzV3tv3VHS2DAJ4
+ LBmaTbMsFSk5gWGSfczlTnYf/KEXz7hDHUd19JThQSO0rGq32FYHzmnGtlzR9S3eQiojBiVb8
+ UlQPM9yVlxJ3U45wdf92WjxCNPjOP157SIwt04ITS3PG0GtIhmFzD2imTg1FU2ATzmvJA+iQp
+ QrQsMiesev7/o+zZtAQHxg4aRBLEuUO/QNlN5zHYgfRGviermpkeVGBThVrtvCh9ehR4o5oyW
+ Z6qrAeB+ofnu4Xm579lp6NQ2MzObdKORGXDzZVgcs5bvPGnbV0P0vbTukpeXB7CqXvBR27jja
+ VNFJca3JwKh1AfeJQcmHdT7rpQGaD1eYjW0+96cNHOfcOwmnf3SHKmWAAKtkgU9R63xkfd0zc
+ vig52UH0ojb/C14bdKAUkqSo09Xx49OCOzQBumJdUexaa5UMOhUZa7fm9qSFLvrtMb0J5cc5s
+ HhgmVjO8l1LW1rrGnYRhz8QwFPZWpm1Jew+CPP+EkOW0fMib+0zuhgLEWr7yFhDh0Eprluzns
+ 1lCgpr5Rh78P9ZewU/u6caDmnt19kn869i3LsMniNVucT14NcOyLTvRfoEIzg2vlSWXIJf21i
+ /fmXOFb5fmYhCDmxfYyKzbzPT7Fff8jOhMXo+0yqAT2bRFQmMIGM7IwEpHHTysWcaB+U=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Those functions just call a V4L2 core macro, and aren't used
-anywhere. Get rid of them, in order to avoid clang warnings with
-W=1.
+On Wed, Nov 24, 2021 at 8:13 PM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> The typecasts at the dvb-core generate clang warnings when W=1
+> is enabled.
+>
+> Such warning is harmless, but it causes the build to break with
+> CONFIG_WERROR and W=1 with clang, so do the cast on a way that
+> it won't produce warnings anymore.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
+>
+> -               comp_type = (enum mtk_mdp_comp_type)of_id->data;
+> +               comp_type = (long)of_id->data;
 
- drivers/media/i2c/adv7842.c | 10 ----------
- 1 file changed, 10 deletions(-)
+I would generally use (uintptr_t) for this purpose, but the effect is the same.
 
-diff --git a/drivers/media/i2c/adv7842.c b/drivers/media/i2c/adv7842.c
-index 7f8acbdf0db4..9d6eed0f8281 100644
---- a/drivers/media/i2c/adv7842.c
-+++ b/drivers/media/i2c/adv7842.c
-@@ -256,21 +256,11 @@ static inline struct v4l2_subdev *to_sd(struct v4l2_ctrl *ctrl)
- 	return &container_of(ctrl->handler, struct adv7842_state, hdl)->sd;
- }
- 
--static inline unsigned hblanking(const struct v4l2_bt_timings *t)
--{
--	return V4L2_DV_BT_BLANKING_WIDTH(t);
--}
--
- static inline unsigned htotal(const struct v4l2_bt_timings *t)
- {
- 	return V4L2_DV_BT_FRAME_WIDTH(t);
- }
- 
--static inline unsigned vblanking(const struct v4l2_bt_timings *t)
--{
--	return V4L2_DV_BT_BLANKING_HEIGHT(t);
--}
--
- static inline unsigned vtotal(const struct v4l2_bt_timings *t)
- {
- 	return V4L2_DV_BT_FRAME_HEIGHT(t);
--- 
-2.33.1
-
+        Arnd
