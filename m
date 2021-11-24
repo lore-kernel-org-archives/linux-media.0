@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48504C43219
-	for <linux-media@archiver.kernel.org>; Wed, 24 Nov 2021 17:57:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 473C5C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 24 Nov 2021 17:57:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349990AbhKXSAf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Nov 2021 13:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
+        id S1350003AbhKXSAg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Nov 2021 13:00:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349918AbhKXSAd (ORCPT
+        with ESMTP id S1349997AbhKXSAf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Nov 2021 13:00:33 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E3BC061574
-        for <linux-media@vger.kernel.org>; Wed, 24 Nov 2021 09:57:22 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id c4so5676875wrd.9
-        for <linux-media@vger.kernel.org>; Wed, 24 Nov 2021 09:57:22 -0800 (PST)
+        Wed, 24 Nov 2021 13:00:35 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767D9C061574
+        for <linux-media@vger.kernel.org>; Wed, 24 Nov 2021 09:57:25 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so2779350wms.3
+        for <linux-media@vger.kernel.org>; Wed, 24 Nov 2021 09:57:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xIsh/cU40ccDZcwP6YbI9udJahz0E6Lgg6Vk1iR/MMI=;
-        b=hoIwiomiumHA8TmSf7CZ0EdLDq/xEdboVgNmQH73oie4C98LqFsyZ1tnE9Z+vNSr1u
-         cDuxAfZ9Vy/JO0BdWVdgyTGWN8ZSQOC4/qNPybIJwhpKWPqcFLR6HSS7TsOyXa7EOCvb
-         W58PX0JWs3TgXjUYiy1TYcLLFMM2gerneLqhXt5mKsGXIgFS27lSRXUwJInVNPzuCJpb
-         c8IQgFTJ1wVVfJMkGypJ3opNz8L8NgqiFlF2SOxepsq5SpOdeQ/snkPbURxuAPx7WWgU
-         eFypH28Dxj36ru/oW6OESdFgdVHZqF3NyrOVLEZMT1HK6Y/ZIElVSzEAi8u8mSSzyu0P
-         a0xA==
+        bh=9LOd5vHs/ORxT5LhEKnfe+7vy+TLpsio9syefLLL+g4=;
+        b=DWuZFwkJwygETxJbvJvMQwmnPCYo6SB1Pt14vmaRtZkFLaCf4TIGZihX6B1PdS8gSs
+         onrSvJ50HgQSYgPFT3T7cpcwL9Fw5HGEUzJy1f48UwdrrmZb2axFM0NoJ5DZeY0pJ7OS
+         ApPsQw64gxfjn10Ag02GvfURGQrtC7UROOztSHAR9MNU/wWnxNu15QHGiYfMFEgkHPqD
+         JGBefx1nMGOHbNQc0/q4z/X1kA0vFCRn7sgrmgqw4qSWaTqBD3JwF22UUVABNdn3RWoT
+         Xd9nqSlIWleLNQe6UDc5RjI5Ou5ljMfxU/9DI4+IhZmmsgvyYlHm3EZ7xsLmLmARYUwh
+         AK/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xIsh/cU40ccDZcwP6YbI9udJahz0E6Lgg6Vk1iR/MMI=;
-        b=vlRW6ilXnhGWYN610HPU0JR732V7lBUbZQQ1RTSSRpzkRFCtgCicDeZasBKdTO+xcg
-         n4wrTWpvK4WBK29lwYtUzRZmjNqslZj/vDY7uDE9KcvkTwAr0fi6eCkg9SZrhOU9Tcmr
-         668eIFFpbXqcovHQIQeRBdkVTUk4Zu7C2MIWR2iZqpwMvvRu/MnsvYri+Qxqc9tKGOsZ
-         9F7EDuE1ghrGIu9f1ndFxQB2WkiXT0xJakGGVW69mFuzQn6t7N3RPJw7dTLcntWcjpht
-         CsEAkKAuMLhbXo12gFGS76SAgQdbcIsHDVvk0nuw6oK4yWg7gQP+RJ+Fxsnd9q5lrZzC
-         BByA==
-X-Gm-Message-State: AOAM533nJsigLaK38hKYnwQ4lMfwVltXI1Ehkk6aMsPsD2d7bi4O8FuZ
-        5lzl+Bg9UHIw/xykNIGzWPilpQ==
-X-Google-Smtp-Source: ABdhPJzkYK4VaI7FgqL68JyPQ5wwc668CUKMV/nroRt3pR/XNQiCLcZqpThXW1StltiWhUMvGx9dQw==
-X-Received: by 2002:adf:e0d0:: with SMTP id m16mr21168997wri.74.1637776641210;
-        Wed, 24 Nov 2021 09:57:21 -0800 (PST)
+        bh=9LOd5vHs/ORxT5LhEKnfe+7vy+TLpsio9syefLLL+g4=;
+        b=lPIdRx4xpD4ieDWkiTEQGeXLSlyVUd0IxrZZOZBQ8l+hZfIW5YtYwec0SHVVGJH+Lp
+         SXOgkhWUl/EnxkMRn+7shHUne56uVCNM5/7FoZh/u3wWVtnj77AStTbHvFdxvF8k8tLj
+         Ep4616X/4uu+Gr0IGAHHURpeZFE4ZmYHjLSIIvR6MRvsZ9fuaAxG4UcyME+6C2vAfbG4
+         CM1rU6iHy4S2z0EFCkB1bj4+JoWaiP6XGmC0/TnSjhXqI/e2wnyURjrbeFwMmpgTcSHq
+         eKhrcTvfp6fmjzKxXx2J6p+fFuq9UjQsGLLmlZtJptEX2SAAw3SBwz4Jdg4TKgYnDNTp
+         XVQA==
+X-Gm-Message-State: AOAM532fxsfT89wzyPgAQk+q59wPzQ5BmEfmc4f3zGeDohkBtAVZ5/qD
+        pjlzQXHOeiqr/h4eiwFhs/h2Iw==
+X-Google-Smtp-Source: ABdhPJzce4RexUXvytzXq9+8SsyMw+RSIGnurzc+FZCKIA6bvi394N7i1J98nIJSDdKw9xC5OVyQeg==
+X-Received: by 2002:a1c:1b08:: with SMTP id b8mr16773376wmb.28.1637776644042;
+        Wed, 24 Nov 2021 09:57:24 -0800 (PST)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id s24sm380576wmj.26.2021.11.24.09.57.19
+        by smtp.gmail.com with ESMTPSA id s24sm380576wmj.26.2021.11.24.09.57.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Nov 2021 09:57:20 -0800 (PST)
+        Wed, 24 Nov 2021 09:57:23 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
         robert.foss@linaro.org, jonathan@marek.ca
 Cc:     andrey.konovalov@linaro.org, todor.too@gmail.com,
         agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
         jgrahsl@snap.com, hfink@snap.com, bryan.odonoghue@linaro.org
-Subject: [PATCH v2 02/19] media: camss: csiphy-3ph: don't print HW version as an error
-Date:   Wed, 24 Nov 2021 17:59:04 +0000
-Message-Id: <20211124175921.1048375-3-bryan.odonoghue@linaro.org>
+Subject: [PATCH v2 05/19] media: camss: csid-170: fix non-10bit formats
+Date:   Wed, 24 Nov 2021 17:59:07 +0000
+Message-Id: <20211124175921.1048375-6-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211124175921.1048375-1-bryan.odonoghue@linaro.org>
 References: <20211124175921.1048375-1-bryan.odonoghue@linaro.org>
@@ -68,31 +68,43 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Jonathan Marek <jonathan@marek.ca>
 
-Avoid unnecessary noise in normal usage (it prints every time CSIPHY is
-powered on).
+Use the decode_format/data_type from the "format" struct instead of a
+hardcoded 10-bit format.
 
+Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
 Signed-off-by: Jonathan Marek <jonathan@marek.ca>
 Reviewed-by: Robert Foss <robert.foss@linaro.org>
 Tested-by: Julian Grahsl <jgrahsl@snap.com>
 Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/qcom/camss/camss-csid-170.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-index e318c822ab04..5948abdcd220 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-@@ -163,7 +163,7 @@ static void csiphy_hw_version_read(struct csiphy_device *csiphy,
- 	hw_version |= readl_relaxed(csiphy->base +
- 				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(15)) << 24;
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
+index ac22ff29d2a9..aa65043c3303 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-170.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
+@@ -366,7 +366,7 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+ 			val |= input_format->width & 0x1fff << TPG_DT_n_CFG_0_FRAME_WIDTH;
+ 			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_0(0));
  
--	dev_err(dev, "CSIPHY 3PH HW Version = 0x%08x\n", hw_version);
-+	dev_dbg(dev, "CSIPHY 3PH HW Version = 0x%08x\n", hw_version);
- }
+-			val = DATA_TYPE_RAW_10BIT << TPG_DT_n_CFG_1_DATA_TYPE;
++			val = format->data_type << TPG_DT_n_CFG_1_DATA_TYPE;
+ 			writel_relaxed(val, csid->base + CSID_TPG_DT_n_CFG_1(0));
  
- /*
+ 			val = tg->mode << TPG_DT_n_CFG_2_PAYLOAD_MODE;
+@@ -382,8 +382,9 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+ 		val = 1 << RDI_CFG0_BYTE_CNTR_EN;
+ 		val |= 1 << RDI_CFG0_FORMAT_MEASURE_EN;
+ 		val |= 1 << RDI_CFG0_TIMESTAMP_EN;
++		/* note: for non-RDI path, this should be format->decode_format */
+ 		val |= DECODE_FORMAT_PAYLOAD_ONLY << RDI_CFG0_DECODE_FORMAT;
+-		val |= DATA_TYPE_RAW_10BIT << RDI_CFG0_DATA_TYPE;
++		val |= format->data_type << RDI_CFG0_DATA_TYPE;
+ 		val |= vc << RDI_CFG0_VIRTUAL_CHANNEL;
+ 		val |= dt_id << RDI_CFG0_DT_ID;
+ 		writel_relaxed(val, csid->base + CSID_RDI_CFG0(0));
 -- 
 2.33.0
 
