@@ -2,42 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7723C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC322C433FE
 	for <linux-media@archiver.kernel.org>; Wed, 24 Nov 2021 19:13:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351230AbhKXTQs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Nov 2021 14:16:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52872 "EHLO mail.kernel.org"
+        id S1351216AbhKXTQr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Nov 2021 14:16:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52782 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351113AbhKXTQm (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Nov 2021 14:16:42 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7BDE5610E8;
+        id S1351097AbhKXTQl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 24 Nov 2021 14:16:41 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F3C061058;
         Wed, 24 Nov 2021 19:13:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637781211;
-        bh=s74V3GxdYYJTz+2GcE2sG2QwoR8/KQlxxxsyyTkQRCY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V7KMfkRFwLW8uAAPcabxno83SEf9MwBa8McDunMaV3aday6eJS0BluwutiKfdAQz/
-         TRia0Wq0ikGhGnjuhCFBAp2V8xcYdgTeUwGQ4xuzMMzH2PY2N7YWr+pHfWjzV0yKAo
-         Fy6Pd00WnkKeafML4l+0Z+at/bJWoClro9XbdokF8Orjjaw1VIaP3TcSqWr9G88Krj
-         BhIK1tQTQHXIs0ROZA/p1Uw5WBqMrSVfzyZ0tQrs9aoAeIu57cgwpws+8VXJDkw4L8
-         nuMbtLRa2QdpMEyz3Ql3NL/Jy3eyp6Q36qBL99JyRQWxJFa7HaAnxQY4azEiW+RKw6
-         eDxydcRL0CCeA==
+        bh=ShVkegqqlX9t3NgDlpdxjJkZAHHvUFAOs0QktUXWaRU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JIPgVQG3LDY5LNEy7Z/faVPS18QIVYSpCdrmNV0RLG6Q1njtwPhcvrv7OBO3+7Wi5
+         fg5JlbrEm2Wg6L/E8YSB0hKu20+VA1KuMhtyRVALaxKGjWbRFBjGIFlJhHi9wf9S4R
+         auZDiv2kx5dj6jSh53Zq6PZ21yjcsxzVzdQHUQgSGNjUKctEUU09E9oRip3y4igX1K
+         cwLDePxNW8/es+iXmX5r3az0ypdnogpJP9lh7RceFlHG3Wa+fAJeknC3SdyHHKXZum
+         ZRdsPu+gqIz1mchnAbaI07zLtdwBCVXNdO4Vriy113unQ1nq61PimTpY3SDS44zW2x
+         C9rQwPqdmBvGg==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mpxhs-004Q5o-LU; Wed, 24 Nov 2021 20:13:24 +0100
+        id 1mpxhs-004Q50-Eq; Wed, 24 Nov 2021 20:13:24 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Andy Gross <agross@kernel.org>, Antti Palosaari <crope@iki.fi>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Malcolm Priestley <tvboxspy@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 14/20] media: adv7511: drop unused functions
-Date:   Wed, 24 Nov 2021 20:13:17 +0100
-Message-Id: <031cdb0042f8239a6746831f5c8f89cf4aef6107.1637781097.git.mchehab+huawei@kernel.org>
+        Robert Foss <robert.foss@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        llvm@lists.linux.dev
+Subject: [PATCH 00/20] Solve the remaining issues with clang and W=1 on media
+Date:   Wed, 24 Nov 2021 20:13:03 +0100
+Message-Id: <cover.1637781097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1637781097.git.mchehab+huawei@kernel.org>
-References: <cover.1637781097.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -46,51 +55,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Those are aliases for another function and not used at the
-current implementation. So, just drop it.
+Currently, using clang with W=1 and CONFIG_WERROR causes media to break.
+This is reported by builder.linuxtv.org.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
+This series solve the remaining issues.
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
+Mauro Carvalho Chehab (20):
+  media: adv7842: get rid of two unused functions
+  media: saa7134-go7007: get rid of to_state() function
+  media: davinci: get rid of an unused function
+  media: drxd: drop offset var from DownloadMicrocode()
+  media: drxk: drop operation_mode from set_dvbt()
+  media: m88ds3103: drop reg11 calculus from m88ds3103b_select_mclk()
+  media: si21xx: report eventual errors at set_frontend
+  media: solo6x10: add _maybe_unused to currently unused functions
+  media: si470x: fix printk warnings with clang
+  media: radio-si476x: drop a container_of() abstraction macro
+  media: lmedm04: don't ignore errors when setting a filter
+  media: au0828-i2c: drop a duplicated function
+  media: adv7604 add _maybe_unused to currently unused functions
+  media: adv7511: drop unused functions
+  media: imx290: mark read reg function as __maybe_unused
+  media: davinci: vpbe_osd: mark read reg function as __maybe_unused
+  media: qcom: camss: mark read reg function as  __maybe_unused
+  media: mtk-mdp: address a clang warning
+  media: cobalt: drop an unused variable
+  media: mxl5005s: drop some dead code
 
- drivers/media/i2c/adv7511-v4l2.c | 22 ----------------------
- 1 file changed, 22 deletions(-)
+ drivers/media/dvb-frontends/drxd_hard.c       |  8 -------
+ drivers/media/dvb-frontends/drxk_hard.c       |  6 -----
+ drivers/media/dvb-frontends/m88ds3103.c       |  6 +----
+ drivers/media/dvb-frontends/si21xx.c          |  7 +++---
+ drivers/media/i2c/adv7511-v4l2.c              | 22 -------------------
+ drivers/media/i2c/adv7604.c                   | 18 +++++++--------
+ drivers/media/i2c/adv7842.c                   | 10 ---------
+ drivers/media/i2c/imx290.c                    |  2 +-
+ drivers/media/pci/cobalt/cobalt-cpld.c        |  5 +----
+ drivers/media/pci/saa7134/saa7134-go7007.c    |  7 +-----
+ .../media/pci/solo6x10/solo6x10-v4l2-enc.c    | 12 +++++-----
+ drivers/media/platform/davinci/vpbe_osd.c     |  2 +-
+ drivers/media/platform/davinci/vpif_capture.c | 11 ----------
+ drivers/media/platform/mtk-mdp/mtk_mdp_core.c |  2 +-
+ .../media/platform/qcom/camss/camss-vfe-170.c |  2 +-
+ drivers/media/radio/radio-si476x.c            |  6 -----
+ drivers/media/radio/si470x/radio-si470x-i2c.c |  4 ++--
+ drivers/media/radio/si470x/radio-si470x-usb.c |  8 +++----
+ drivers/media/tuners/mxl5005s.c               | 14 +-----------
+ drivers/media/usb/au0828/au0828-i2c.c         |  7 ------
+ drivers/media/usb/dvb-usb-v2/lmedm04.c        |  3 +++
+ 21 files changed, 36 insertions(+), 126 deletions(-)
 
-diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
-index 41f4e749a859..8e13cae40ec5 100644
---- a/drivers/media/i2c/adv7511-v4l2.c
-+++ b/drivers/media/i2c/adv7511-v4l2.c
-@@ -270,28 +270,6 @@ static int adv7511_pktmem_rd(struct v4l2_subdev *sd, u8 reg)
- 	return adv_smbus_read_byte_data(state->i2c_pktmem, reg);
- }
- 
--static int adv7511_pktmem_wr(struct v4l2_subdev *sd, u8 reg, u8 val)
--{
--	struct adv7511_state *state = get_adv7511_state(sd);
--	int ret;
--	int i;
--
--	for (i = 0; i < 3; i++) {
--		ret = i2c_smbus_write_byte_data(state->i2c_pktmem, reg, val);
--		if (ret == 0)
--			return 0;
--	}
--	v4l2_err(sd, "%s: i2c write error\n", __func__);
--	return ret;
--}
--
--/* To set specific bits in the register, a clear-mask is given (to be AND-ed),
--   and then the value-mask (to be OR-ed). */
--static inline void adv7511_pktmem_wr_and_or(struct v4l2_subdev *sd, u8 reg, u8 clr_mask, u8 val_mask)
--{
--	adv7511_pktmem_wr(sd, reg, (adv7511_pktmem_rd(sd, reg) & clr_mask) | val_mask);
--}
--
- static inline bool adv7511_have_hotplug(struct v4l2_subdev *sd)
- {
- 	return adv7511_rd(sd, 0x42) & MASK_ADV7511_HPD_DETECT;
 -- 
 2.33.1
+
 
