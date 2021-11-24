@@ -2,45 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1918FC433F5
-	for <linux-media@archiver.kernel.org>; Wed, 24 Nov 2021 19:14:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD14AC433EF
+	for <linux-media@archiver.kernel.org>; Wed, 24 Nov 2021 19:14:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351205AbhKXTRF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Nov 2021 14:17:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53154 "EHLO mail.kernel.org"
+        id S1351334AbhKXTRG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Nov 2021 14:17:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53136 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351196AbhKXTQq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1351187AbhKXTQq (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 24 Nov 2021 14:16:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8167561057;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 715AE604D1;
         Wed, 24 Nov 2021 19:13:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637781216;
-        bh=RqPUjoOPCU3I2CzaPrffX4izZPgRyIi+ecwcGiqNlSo=;
+        bh=gHNlvFuvp7pBQTa3UhrpW3kfmpC3Up1K10+Lv71IU4o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T6b9U6ea/cOFBpV7kurTKz2bAtK7TzZvfKZqUlaCB3gd88m/IbufB3jamUitTa8bk
-         csFAQCVghwLeaHtnBdfbJFHQMeb+N2F0qPuvJqayo+tR5C9MFqgI7oM6Nu4csceLcP
-         TE9Z5MePY0fYqCENrCtVglkuUUrgxX3uT5E5/YCRn0Buc450gEPxA4dmaS9je7oSm/
-         A6qrTjRiEspLL9X7sq6fYk3DdZidsQhUY1FR6KAk2fU2eZYkwD9ONnjO6XekVhZwjw
-         6DfSc5h4xDvwZwVYw7MLEGPw6fhlj3Un3HnEJrRu/zyrHbtXoeCJkA6fdIR2DJNzqO
-         x89WTLJ4S7P7g==
+        b=B31HiaKbFidWXbfwPrdvCnENO4dhSY92pcM0DGe/DJkc5c6xmYNhHkXsz0J03oRIU
+         Gz7OeAbFyIKJ6qOMZ98m4Nl90fZxFSocPiBm3Fsz66JDwUwo07J1Q6reuxwYISdsYp
+         COAilNJhQbSGKNDt0yS9+bnSpYhDGRFz3w5+R2Grt/8Mhloi4aP5L/Jda3NCdZJimI
+         VX4SAYRAphY+iTjWu+h4WnewTTLmZN/uJjeXOIIiq4TgmWcjqnHUVa0a9P2LVjma7u
+         J/5ro6ymzKCVzJd5yjGN9Me5+Le6GCye+3jxL7+B9zCrMPvrEv7vAY9nXivu1F1YHO
+         faUm8jjnyB5wA==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mpxhs-004Q5x-Mz; Wed, 24 Nov 2021 20:13:24 +0100
+        id 1mpxhs-004Q5r-M0; Wed, 24 Nov 2021 20:13:24 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH 17/20] media: qcom: camss: mark read reg function as  __maybe_unused
-Date:   Wed, 24 Nov 2021 20:13:20 +0100
-Message-Id: <c33a6897f5a0803b3fde93fcf4ad652c0915db54.1637781097.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH 15/20] media: imx290: mark read reg function as __maybe_unused
+Date:   Wed, 24 Nov 2021 20:13:18 +0100
+Message-Id: <163ccefbbdf07512fe1a84c1531754df75a64378.1637781097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637781097.git.mchehab+huawei@kernel.org>
 References: <cover.1637781097.git.mchehab+huawei@kernel.org>
@@ -62,22 +59,22 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
 
- drivers/media/platform/qcom/camss/camss-vfe-170.c | 2 +-
+ drivers/media/i2c/imx290.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-index 5c083d70d495..455ae1a819e6 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-@@ -191,7 +191,7 @@ static u32 vfe_hw_version(struct vfe_device *vfe)
- 	return hw_version;
+diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+index bf7a6c37ca5d..caab830f8c72 100644
+--- a/drivers/media/i2c/imx290.c
++++ b/drivers/media/i2c/imx290.c
+@@ -363,7 +363,7 @@ static inline struct imx290 *to_imx290(struct v4l2_subdev *_sd)
+ 	return container_of(_sd, struct imx290, sd);
  }
  
--static inline void vfe_reg_clr(struct vfe_device *vfe, u32 reg, u32 clr_bits)
-+static inline void __maybe_unused vfe_reg_clr(struct vfe_device *vfe, u32 reg, u32 clr_bits)
+-static inline int imx290_read_reg(struct imx290 *imx290, u16 addr, u8 *value)
++static inline int __maybe_unused imx290_read_reg(struct imx290 *imx290, u16 addr, u8 *value)
  {
- 	u32 bits = readl_relaxed(vfe->base + reg);
- 
+ 	unsigned int regval;
+ 	int ret;
 -- 
 2.33.1
 
