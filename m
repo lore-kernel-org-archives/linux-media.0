@@ -2,46 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3572DC433EF
-	for <linux-media@archiver.kernel.org>; Wed, 24 Nov 2021 19:13:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5339C4332F
+	for <linux-media@archiver.kernel.org>; Wed, 24 Nov 2021 19:13:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351287AbhKXTQ6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Nov 2021 14:16:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53250 "EHLO mail.kernel.org"
+        id S1351177AbhKXTRD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Nov 2021 14:17:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53146 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351245AbhKXTQs (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Nov 2021 14:16:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C7876109E;
+        id S1351188AbhKXTQq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 24 Nov 2021 14:16:46 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 743106101D;
         Wed, 24 Nov 2021 19:13:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1637781216;
-        bh=7ACxNdIYeMx8BUyKvevWfbu+SlAB3f7acPwte6T0ctw=;
+        bh=BVy8LxPgjJhwYfZYArqytmdzHj8T7GuBuT8nt7c89XM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UvF1O2K2wz8dTg8lVTJTsof9T5iLyiw4owWRk2izeBHKRcG+Abhny1WbI4EmdgzAD
-         U5a0pKb0WQcWlAi4Io5/jfeS2d2w4zE6yWNec3/1tIl/hTHESOx7082s0y/H8GC6T9
-         d6+kAcc0gUG/mbbEdvxN53xxP1ATPmlgS+wL1hqWXaxE4nLhB9Lri2pCi/aZBhfdvU
-         AIf7snghwdHLS9B6FuqViHSDnYuA/qP8tGcRr7yPEJdtahQhrp+xLIWvgGS0RWR+e2
-         WLVJHbaUUExcGZtWYgkl5wcXfK2WUKVK79AN3njb0ba9nwyHqcmuhSadFb8b+8qZmd
-         SpqY/WqAY6kIQ==
+        b=koiubTcPPYoitRgtbq7KMcXFaXkrkFRBIxBgv/kwfEDIAynEnMEgPTzg9sCDBolhz
+         HtpouwfLfjNt5k46eHao6f6AFLWKRG7+gNXaCprdHKOXJw9pYEmlev5X0ZdJ4KTf89
+         HE7qNtP7vxhsF7AXVtX5pu99MR1rzZPQuuFtZ5gcTyHtgBmKboK4MnDwRo5rtH1DFf
+         0P2yKOI49+XfMlYTI7sTs8yQASktGpLXDs/yOmeE1ZtoUj0JOaPFPKNEtzULnpFwpt
+         nGeBa8JqCVC/nf6xP2BGRjQ0/mZKqKTPzj9TKPTapdz9AhhHx/ZCmuyInRP1/wAozq
+         e3TkB98ncOz6Q==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mpxhs-004Q60-Nr; Wed, 24 Nov 2021 20:13:24 +0100
+        id 1mpxhs-004Q5u-MR; Wed, 24 Nov 2021 20:13:24 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH 18/20] media: mtk-mdp: address a clang warning
-Date:   Wed, 24 Nov 2021 20:13:21 +0100
-Message-Id: <63ecb865c4f2b81862f5e6ac0dea497d3e0baca3.1637781097.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 16/20] media: davinci: vpbe_osd: mark read reg function as __maybe_unused
+Date:   Wed, 24 Nov 2021 20:13:19 +0100
+Message-Id: <7236261ada02edac81d05d8c08864d7aed8f2bfd.1637781097.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1637781097.git.mchehab+huawei@kernel.org>
 References: <cover.1637781097.git.mchehab+huawei@kernel.org>
@@ -53,12 +49,9 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The typecasts at the dvb-core generate clang warnings when W=1
-is enabled.
-
-Such warning is harmless, but it causes the build to break with
-CONFIG_WERROR and W=1 with clang, so do the cast on a way that
-it won't produce warnings anymore.
+Such function is currently unused, but could be needed in the
+future. So, keep it, marking it as __maybe_unused, in order to
+avoid a clang W=1 error.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
@@ -66,22 +59,22 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
 
- drivers/media/platform/mtk-mdp/mtk_mdp_core.c | 2 +-
+ drivers/media/platform/davinci/vpbe_osd.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
-index 976aa1f4829b..11285717577f 100644
---- a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
-+++ b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
-@@ -148,7 +148,7 @@ static int mtk_mdp_probe(struct platform_device *pdev)
- 			continue;
- 		}
+diff --git a/drivers/media/platform/davinci/vpbe_osd.c b/drivers/media/platform/davinci/vpbe_osd.c
+index 91b571a0ac2c..6b36cae5e6c1 100644
+--- a/drivers/media/platform/davinci/vpbe_osd.c
++++ b/drivers/media/platform/davinci/vpbe_osd.c
+@@ -45,7 +45,7 @@ static const struct platform_device_id vpbe_osd_devtype[] = {
+ MODULE_DEVICE_TABLE(platform, vpbe_osd_devtype);
  
--		comp_type = (enum mtk_mdp_comp_type)of_id->data;
-+		comp_type = (long)of_id->data;
+ /* register access routines */
+-static inline u32 osd_read(struct osd_state *sd, u32 offset)
++static inline u32 __maybe_unused osd_read(struct osd_state *sd, u32 offset)
+ {
+ 	struct osd_state *osd = sd;
  
- 		comp = devm_kzalloc(dev, sizeof(*comp), GFP_KERNEL);
- 		if (!comp) {
 -- 
 2.33.1
 
