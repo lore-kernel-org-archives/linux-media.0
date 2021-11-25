@@ -2,134 +2,88 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A4E3C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 25 Nov 2021 15:57:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56472C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 25 Nov 2021 15:58:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346976AbhKYQAo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Nov 2021 11:00:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348870AbhKYP6o (ORCPT
+        id S1356033AbhKYQCI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Nov 2021 11:02:08 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40628 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232892AbhKYQAH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Nov 2021 10:58:44 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B95FC061399
-        for <linux-media@vger.kernel.org>; Thu, 25 Nov 2021 07:47:27 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id r8so12522157wra.7
-        for <linux-media@vger.kernel.org>; Thu, 25 Nov 2021 07:47:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=GrYTK8K69bBPxxO0M+FvuVC8uOT906Mq4gG8ozU4uk4=;
-        b=d3wDvLB9aibDUksaMaJq0BzCsxenfX7o/qh4G09m6w3hGehD+WLtkdEKOfV/7xmM4p
-         o1alxzNE3KLzxu4Ad0ohpwHVVU1k6iqQd5mAQ6qjNGXOdwNMEZBir978i8nB25cdn6JY
-         n2oFt7seHvCaEi8DaO6BIa6O8e0mZYu8KAOKU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=GrYTK8K69bBPxxO0M+FvuVC8uOT906Mq4gG8ozU4uk4=;
-        b=TCb2ikXwGZFQ1iH5wL4vlEt0IZrnt3Vygt2lptnR5RcqpO+Lo+u11uDmRkv3Dvqnq3
-         hfCIZnNkW0/7hcKqIhYM+sTzA+xMJsilDHL2MpMWB2R1660umdd2FD9sncGE9k0gHkJi
-         IGsPUzUD8ay8/30KvoZ6p7Ri/INb6Ux/xln8KhGvT+tm5tnVTD9qKpA+W6gAVfS9VsZO
-         MGSaiHvkQd83fcTK4BC/VOGIsds3z2sZLjsM7266Vz68leWa+6ZJ6US3ihCo24hkueG7
-         82DmVqAbY1VWz5CH9IqBMqzcNNrW0/9VxJskAXAVoaHJGxxgOAeHlqDw5XZORgOnixly
-         gy8w==
-X-Gm-Message-State: AOAM530KDwx2GLjXTDf4Y6iGv8opXhoq0JInfhWskXiYNCQqPp1t2Uv2
-        Frx9K+op89D/pcLAU/mjgh5kWA==
-X-Google-Smtp-Source: ABdhPJyJKxgo85AFU7bZqlQKZR/U22Xtoer9r53DLE3Pttwt+lXpKP86T5A0OTOsLHUXdHbcZKm8Dw==
-X-Received: by 2002:a5d:50c7:: with SMTP id f7mr7272141wrt.327.1637855246069;
-        Thu, 25 Nov 2021 07:47:26 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id f18sm3113464wre.7.2021.11.25.07.47.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Nov 2021 07:47:25 -0800 (PST)
-Date:   Thu, 25 Nov 2021 16:47:23 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>
-Cc:     sumit.semwal@linaro.org, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH 19/26] drm: support more than one write fence in
- drm_gem_plane_helper_prepare_fb
-Message-ID: <YZ+wCxjFSI4EAIvx@phenom.ffwll.local>
-References: <20211123142111.3885-1-christian.koenig@amd.com>
- <20211123142111.3885-20-christian.koenig@amd.com>
+        Thu, 25 Nov 2021 11:00:07 -0500
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:2581:f820:804e:edb9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 6C9131F464B1;
+        Thu, 25 Nov 2021 15:56:53 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1637855813; bh=gY+zp9vPvH8Yfyvu4eMVhjohWxix4aAoiT0fFLyuGyc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=d6EhfGJWltZKcP2P4XEpqUawVG3xWktoaszQ4AwlUA19QRsRO3BK/Yc+N6SJyrfWk
+         UCUKbM5abqyzV3BUH1P6dMbc/Zy40Ja9iYInXHWUpO9HCs0+zkJ3Ca/ZSLmIMNLYbp
+         Pnj+cKyhWTYffAyh9Da6vx6qcuMutMDgpjZ3WShYMpXCXG6h5x8YNlRbdXLo/PsOmJ
+         pN5sN7XeJgSoqXfbZXOPD+5OJcCn+ED3fKcAPevtEJpfKwDuc0a7FA9vxEv+Lcurp+
+         GEK9HAss9dbm9kDoK5EJ9qPsm2LeYtVVbkiHaugYEYrjuGZoYbCf4hx3m2/MUGYl8D
+         XdhES0Jf0MEsA==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v3 0/4] media: HEVC: RPS clean up
+Date:   Thu, 25 Nov 2021 16:56:46 +0100
+Message-Id: <20211125155650.630977-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211123142111.3885-20-christian.koenig@amd.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 03:21:04PM +0100, Christian König wrote:
-> Use dma_resv_get_singleton() here to eventually get more than one write
-> fence as single fence.
+This series aims to clean up Reference Picture Set usage and flags.
 
-Yeah this is nice, atomic commit helpers not supporting multiple write
-fences was really my main worry in this entire endeavour. Otherwise looks
-all rather reasonable.
+Long term flag was named with RPS prefix while it is not used for RPS
+but for mark long term references in DBP. Remane it and remove the two
+other useless RPS flags.
 
-I'll try to find some review bandwidth, but would be really if you can
-volunteer others too (especially making sure ttm drivers set the KERNEL
-fences correctly in all cases).
--Daniel
+Clarify documentation about RPS lists content and make sure that Hantro
+driver use them correctly (i.e without look up in DBP).
 
+version 3:
+- rebased on top of v5.16-rc1
 
-> 
-> Signed-off-by: Christian König <christian.koenig@amd.com>
-> ---
->  drivers/gpu/drm/drm_gem_atomic_helper.c | 18 +++++++-----------
->  1 file changed, 7 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_gem_atomic_helper.c b/drivers/gpu/drm/drm_gem_atomic_helper.c
-> index c3189afe10cb..9338ddb7edff 100644
-> --- a/drivers/gpu/drm/drm_gem_atomic_helper.c
-> +++ b/drivers/gpu/drm/drm_gem_atomic_helper.c
-> @@ -143,25 +143,21 @@
->   */
->  int drm_gem_plane_helper_prepare_fb(struct drm_plane *plane, struct drm_plane_state *state)
->  {
-> -	struct dma_resv_iter cursor;
->  	struct drm_gem_object *obj;
->  	struct dma_fence *fence;
-> +	int ret;
->  
->  	if (!state->fb)
->  		return 0;
->  
->  	obj = drm_gem_fb_get_obj(state->fb, 0);
-> -	dma_resv_iter_begin(&cursor, obj->resv, false);
-> -	dma_resv_for_each_fence_unlocked(&cursor, fence) {
-> -		/* TODO: Currently there should be only one write fence, so this
-> -		 * here works fine. But drm_atomic_set_fence_for_plane() should
-> -		 * be changed to be able to handle more fences in general for
-> -		 * multiple BOs per fb anyway. */
-> -		dma_fence_get(fence);
-> -		break;
-> -	}
-> -	dma_resv_iter_end(&cursor);
-> +	ret = dma_resv_get_singleton(obj->resv, false, &fence);
-> +	if (ret)
-> +		return ret;
->  
-> +	/* TODO: drm_atomic_set_fence_for_plane() should be changed to be able
-> +	 * to handle more fences in general for multiple BOs per fb.
-> +	 */
->  	drm_atomic_set_fence_for_plane(state, fence);
->  	return 0;
->  }
-> -- 
-> 2.25.1
-> 
+version 2:
+- change DPB field name from rps to flags
+
+Please note that the only purpose of commits 3 and 4 is to allow to test
+G2 hardware block for IMX8MQ until a proper solution isuing power domain
+can be found. Do not merge them.
+
+GStreamer HEVC plugin merge request can be found here:
+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1079
+
+With those piece of code fluster score is 77/147.
+
+Benjamin Gaignard (4):
+  media: hevc: Remove RPS named flags
+  media: hevc: Embedded indexes in RPS
+  media: hantro: Use syscon instead of 'ctrl' register
+  arm64: dts: imx8mq: Add node to G2 hardware
+
+ .../media/v4l/ext-ctrls-codec.rst             | 14 +++---
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     | 43 +++++++++++++----
+ drivers/staging/media/hantro/hantro.h         |  5 +-
+ .../staging/media/hantro/hantro_g2_hevc_dec.c | 27 +++--------
+ drivers/staging/media/hantro/imx8m_vpu_hw.c   | 48 ++++++++++++-------
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  |  2 +-
+ include/media/hevc-ctrls.h                    |  6 +--
+ 7 files changed, 84 insertions(+), 61 deletions(-)
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.30.2
+
