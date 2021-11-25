@@ -2,196 +2,275 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF19FC433FE
-	for <linux-media@archiver.kernel.org>; Thu, 25 Nov 2021 13:34:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 994ABC433EF
+	for <linux-media@archiver.kernel.org>; Thu, 25 Nov 2021 13:42:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348335AbhKYNh7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Nov 2021 08:37:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
+        id S1355373AbhKYNp4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Nov 2021 08:45:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354971AbhKYNfz (ORCPT
+        with ESMTP id S1355601AbhKYNnz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Nov 2021 08:35:55 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F507C0613F4
-        for <linux-media@vger.kernel.org>; Thu, 25 Nov 2021 05:23:45 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id az37so12211075uab.13
-        for <linux-media@vger.kernel.org>; Thu, 25 Nov 2021 05:23:45 -0800 (PST)
+        Thu, 25 Nov 2021 08:43:55 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5E0C06137A
+        for <linux-media@vger.kernel.org>; Thu, 25 Nov 2021 05:34:24 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id f18so16411939lfv.6
+        for <linux-media@vger.kernel.org>; Thu, 25 Nov 2021 05:34:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pD+qJk3r29qPwzJLYfks/oabSI7Y6YhNSM12M9kudsA=;
-        b=J8uByjrN3pIMyLs+oh8F1h51AEiVYGcn/jk6MaCawLgGb4CapJzoFhR0hQKkiQWrEh
-         xKIta24WH4WpCzvI7EIBkg+W6diz1AMrs5Nh5DWnQ17/D1qf7KcJlWZydHbexMjaU0FZ
-         6cO8NeT+7ZFSfHD3SUwtJ2YpxDY9gtwdnbcM+LqO2cSdDvD0pxxXL7jQHFJFJtFlpW78
-         EXpF6w7NvojJcmLBeousUkR+ZeJtQR0X35kMvVAuQ/xzdDhW73D7FpwNWjgCLvULsJY1
-         sEM8l0tNEuPJIsEtq7GxesgoWAZ1LHRcd6g6qsstxazhIP3WaJQ6ie4vvUpt4+Cqu0ic
-         sGig==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=db5HEtPRT5vnfvKDwx5CZIuanUw/kLArBlssnR6z0lo=;
+        b=R2RhyjSODyQ7y6VsD7zdBO2dg8Jxpb0Bqct7+hPYJLD9E9dzi0mc6yEGIsCrECV86t
+         TcGOrDNuSsgRg656oxaXzSK4QRasudzyZCvxJkWCAM/rMg3Va9a+HAE6a42DUPvwXM3j
+         MgJl6wWQkyo0F9216TeZ/cWgsfk1hT2Q1eiqPTOWx1WXg+5fEV3LT7k/UuHavBFZzFW8
+         Uk6sYtpEIlSjV1rTxU4mUiZLqduIXr2bkBTxyHpZ+oEO434RCgR89onepTkcAjxrUKcj
+         O8qTh05s55wcS5NjomxH2zLLiYrCHGL56NVY4DZNmr0oBgbwhtjI386lT6UBmbqY8tck
+         fYQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pD+qJk3r29qPwzJLYfks/oabSI7Y6YhNSM12M9kudsA=;
-        b=oQ5Cre9dB3tRa7NNIa3qo+Wk2oDL+gJZr6wH3TXOiSJYhPsysbin5lUll0rS9LsvEx
-         TzrRNbFLvKClXsF1tESLVuQfj/kIsP2ls+RftHIfFZzomf/v7lLe//rljKdW4Txfncjn
-         LDhwxRTHsRn6Kf7K+ZawYMBlrh7IcJQM98d/EYM8TA5/Rz+DONAE83c3ppNIJ+eFjJxZ
-         zEhngGnWBAwJBh07BnVzMZx4XJRbmN1lhg4RFEA34EoTkoa9hzKee3eGu6zI8FyxXEgd
-         RysrXeVICmH9S1Ewk8u5pv9+a4AZjxbdjVldKIJ8psZb/CzvRBSL16ohn+B5jqx80jjR
-         fMdw==
-X-Gm-Message-State: AOAM5316WbC71xJzdsG6ULsycDNuH+sgfaYdKzsz1JsbYrMlbjw2F0/r
-        q6B0Sk90yQ1CfC46iAt3oJDc0g==
-X-Google-Smtp-Source: ABdhPJzRdO7QoZ3b2O8Hj0UdN3JVKR91c4TnqnGBSgCpEcjeZkf5dyufcKOuzsSpQNPw3BaQ4UsNCQ==
-X-Received: by 2002:a67:2fd0:: with SMTP id v199mr8700734vsv.35.1637846618499;
-        Thu, 25 Nov 2021 05:23:38 -0800 (PST)
-Received: from eze-laptop (host208.201-253-22.telecom.net.ar. [201.253.22.208])
-        by smtp.gmail.com with ESMTPSA id q9sm1674052vkn.44.2021.11.25.05.23.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Nov 2021 05:23:37 -0800 (PST)
-Date:   Thu, 25 Nov 2021 10:23:32 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: hantro: Hook up RK3399 JPEG encoder output
-Message-ID: <YZ+OVEKrvsbbQrjn@eze-laptop>
-References: <20211119074654.470729-1-wenst@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=db5HEtPRT5vnfvKDwx5CZIuanUw/kLArBlssnR6z0lo=;
+        b=erumFwlwYBmfIeUmdQDzu0R7AZyI2agnZwkvu9YO5QnrT0vzhOcSLzzvPD/oRFIcKb
+         6ynygf1qzGoTIehC2MiqpPs6OYBSRUQZUUSrAaakSZJ72RNaR+t1RsULaCI07zF+G5CM
+         oA4hCS20SoxmdlsYt1Aw5RtZ+t6X/KH87vJBkvGHy6WQOzV7wYzWAIkjYU7FZEd45tkt
+         kF0gye+zgraTzOqgaA1NcwCXTTZBrhTo608KjSx8ayPPQ1mQivDKavwGsJNCLQJqUPz8
+         HBBukiZcf/811yfv+h/Tnj5WFypoNnOJo7q+dwB6XPuXgICnhhiy0hMrrKhBQ+w9gbjr
+         Ok9A==
+X-Gm-Message-State: AOAM533v5PrKcptWD9JAwOZiP6DVlPyjUWxX3usq5bK/s2E9K2MSH1LN
+        bQNGyXmk+ekd6C5PhIWJ3awpbF8Y5D4mizr1XD1EaNzFVQMhpw==
+X-Google-Smtp-Source: ABdhPJxhm1sCdOjpP+cdCkZX4jwjZwbT27ili5fQK6rOhtrObDitoN9dWYJJ9ZtFe3SVReOsAmTUYOdMUrlmySvPPCM=
+X-Received: by 2002:a05:6512:110c:: with SMTP id l12mr23249870lfg.224.1637847262850;
+ Thu, 25 Nov 2021 05:34:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211119074654.470729-1-wenst@chromium.org>
+References: <a348a21b-b069-19b5-2565-d70e3161f2b5@xs4all.nl>
+In-Reply-To: <a348a21b-b069-19b5-2565-d70e3161f2b5@xs4all.nl>
+From:   Dillon Min <dillon.minfei@gmail.com>
+Date:   Thu, 25 Nov 2021 21:33:46 +0800
+Message-ID: <CAL9mu0+nyYSKbq0TnaPk5j-mYYXF3efyp290N_WHdJOkNoFfsg@mail.gmail.com>
+Subject: Re: [PATCH] v4l2-compliance: detect no-mmu systems
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Chen-Yu,
+Hi Hans,
 
-On Fri, Nov 19, 2021 at 03:46:54PM +0800, Chen-Yu Tsai wrote:
-> The JPEG encoder found in the Hantro H1 encoder block only produces a
-> raw entropy-encoded scan. The driver is responsible for building a JPEG
-> compliant bitstream and placing the entropy-encoded scan in it. Right
-> now the driver uses a bounce buffer for the hardware to output the raw
-> scan to.
-> 
-> In commit e765dba11ec2 ("hantro: Move hantro_enc_buf_finish to JPEG
-> codec_ops.done"), the code that copies the raw scan from the bounce
-> buffer to the capture buffer was moved, but was only hooked up for the
-> Hantro H1 (then RK3288) variant. The RK3399 variant was broken,
-> producing a JPEG bitstream without the scan, and the capture buffer's
-> .bytesused field unset.
-> 
-> Fix this by duplicating the code that is executed when the JPEG encoder
-> finishes encoding a frame. As the encoded length is read back from
-> hardware, and the variants having different register layouts, the
-> code is duplicated rather than shared.
-> 
-> Fixes: e765dba11ec2 ("hantro: Move hantro_enc_buf_finish to JPEG codec_ops.done")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-
-Thanks a lot for fixing this.
-
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-
+On Thu, 25 Nov 2021 at 21:14, Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+>
+> Check if the OS has an MMU. If not, then skip tests that only work for
+> systems that have an MMU.
+>
+> The safest and most generic method I found is the FIONBIO ioctl that is
+> available for any file descriptor and is a write-only ioctl, so no memory
+> will be accidentally written. On a MMU system this will return EFAULT, and
+> on a ucLinux system this will return 0.
+>
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 > ---
-> This was developed on the downstream ChromeOS 5.10 kernel (with a hack
-> for .data_offset) and tested with ChromeOS's jpeg_encode_accelerator_unittest
-> patched to accept non-JFIF JPEG streams (https://crrev.com/c/3291480).
-> 
-> This was then forward-ported to mainline (name and filename changes) and
-> compile tested only.
-> 
+> Dillon, the original RFC patch (1) I posted to fix this in the kernel is not
+> the correct method. See:
+>
+> https://stackoverflow.com/questions/24755103/how-to-handle-null-pointer-argument-to-ioctl-system-call
+
+Thanks for the detailed information.
+
+>
+> So instead I try to detect if there is an MMU in v4l2-compliance and, if not,
+> just skip those tests that require an MMU.
+>
+> Can you test this patch?
+
+Sure, I'll test it then update the result.
+
+>
+> Thanks!
+>
+>         Hans
+>
+> 1: https://patchwork.linuxtv.org/project/linux-media/patch/3acd9ee4-5a58-6ed4-17fe-61596a5252b8@xs4all.nl/
 > ---
->  .../staging/media/hantro/hantro_h1_jpeg_enc.c   |  2 +-
->  drivers/staging/media/hantro/hantro_hw.h        |  3 ++-
->  .../media/hantro/rockchip_vpu2_hw_jpeg_enc.c    | 17 +++++++++++++++++
->  drivers/staging/media/hantro/rockchip_vpu_hw.c  |  5 +++--
->  4 files changed, 23 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c b/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
-> index 56cf261a8e95..9cd713c02a45 100644
-> --- a/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
-> +++ b/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
-> @@ -140,7 +140,7 @@ int hantro_h1_jpeg_enc_run(struct hantro_ctx *ctx)
->  	return 0;
->  }
->  
-> -void hantro_jpeg_enc_done(struct hantro_ctx *ctx)
-> +void hantro_h1_jpeg_enc_done(struct hantro_ctx *ctx)
+> diff --git a/utils/v4l2-compliance/v4l2-compliance.cpp b/utils/v4l2-compliance/v4l2-compliance.cpp
+> index 0eeabb2d..c53a55ba 100644
+> --- a/utils/v4l2-compliance/v4l2-compliance.cpp
+> +++ b/utils/v4l2-compliance/v4l2-compliance.cpp
+> @@ -88,6 +88,7 @@ bool is_vivid;
+>  bool is_uvcvideo;
+>  int media_fd = -1;
+>  unsigned warnings;
+> +bool has_mmu = true;
+>
+>  static unsigned color_component;
+>  static unsigned color_skip;
+> @@ -152,8 +153,21 @@ static struct option long_options[] = {
+>
+>  static void print_sha()
 >  {
->  	struct hantro_dev *vpu = ctx->dev;
->  	u32 bytesused = vepu_read(vpu, H1_REG_STR_BUF_LIMIT) / 8;
-> diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-> index 267a6d33a47b..60d4602d33ed 100644
-> --- a/drivers/staging/media/hantro/hantro_hw.h
-> +++ b/drivers/staging/media/hantro/hantro_hw.h
-> @@ -239,7 +239,8 @@ int hantro_h1_jpeg_enc_run(struct hantro_ctx *ctx);
->  int rockchip_vpu2_jpeg_enc_run(struct hantro_ctx *ctx);
->  int hantro_jpeg_enc_init(struct hantro_ctx *ctx);
->  void hantro_jpeg_enc_exit(struct hantro_ctx *ctx);
-> -void hantro_jpeg_enc_done(struct hantro_ctx *ctx);
-> +void hantro_h1_jpeg_enc_done(struct hantro_ctx *ctx);
-> +void rockchip_vpu2_jpeg_enc_done(struct hantro_ctx *ctx);
->  
->  dma_addr_t hantro_h264_get_ref_buf(struct hantro_ctx *ctx,
->  				   unsigned int dpb_idx);
-> diff --git a/drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c b/drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c
-> index 991213ce1610..5d9ff420f0b5 100644
-> --- a/drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c
-> +++ b/drivers/staging/media/hantro/rockchip_vpu2_hw_jpeg_enc.c
-> @@ -171,3 +171,20 @@ int rockchip_vpu2_jpeg_enc_run(struct hantro_ctx *ctx)
->  
->  	return 0;
->  }
+> +       int fd = open("/dev/null", O_RDONLY);
 > +
-> +void rockchip_vpu2_jpeg_enc_done(struct hantro_ctx *ctx)
-> +{
-> +	struct hantro_dev *vpu = ctx->dev;
-> +	u32 bytesused = vepu_read(vpu, VEPU_REG_STR_BUF_LIMIT) / 8;
-> +	struct vb2_v4l2_buffer *dst_buf = hantro_get_dst_buf(ctx);
-> +
-> +	/*
-> +	 * TODO: Rework the JPEG encoder to eliminate the need
-> +	 * for a bounce buffer.
-> +	 */
-> +	memcpy(vb2_plane_vaddr(&dst_buf->vb2_buf, 0) +
-> +	       ctx->vpu_dst_fmt->header_size,
-> +	       ctx->jpeg_enc.bounce_buffer.cpu, bytesused);
-> +	vb2_set_plane_payload(&dst_buf->vb2_buf, 0,
-> +			      ctx->vpu_dst_fmt->header_size + bytesused);
-> +}
-> diff --git a/drivers/staging/media/hantro/rockchip_vpu_hw.c b/drivers/staging/media/hantro/rockchip_vpu_hw.c
-> index d4f52957cc53..0c22039162a0 100644
-> --- a/drivers/staging/media/hantro/rockchip_vpu_hw.c
-> +++ b/drivers/staging/media/hantro/rockchip_vpu_hw.c
-> @@ -343,7 +343,7 @@ static const struct hantro_codec_ops rk3066_vpu_codec_ops[] = {
->  		.run = hantro_h1_jpeg_enc_run,
->  		.reset = rockchip_vpu1_enc_reset,
->  		.init = hantro_jpeg_enc_init,
-> -		.done = hantro_jpeg_enc_done,
-> +		.done = hantro_h1_jpeg_enc_done,
->  		.exit = hantro_jpeg_enc_exit,
->  	},
->  	[HANTRO_MODE_H264_DEC] = {
-> @@ -371,7 +371,7 @@ static const struct hantro_codec_ops rk3288_vpu_codec_ops[] = {
->  		.run = hantro_h1_jpeg_enc_run,
->  		.reset = rockchip_vpu1_enc_reset,
->  		.init = hantro_jpeg_enc_init,
-> -		.done = hantro_jpeg_enc_done,
-> +		.done = hantro_h1_jpeg_enc_done,
->  		.exit = hantro_jpeg_enc_exit,
->  	},
->  	[HANTRO_MODE_H264_DEC] = {
-> @@ -399,6 +399,7 @@ static const struct hantro_codec_ops rk3399_vpu_codec_ops[] = {
->  		.run = rockchip_vpu2_jpeg_enc_run,
->  		.reset = rockchip_vpu2_enc_reset,
->  		.init = hantro_jpeg_enc_init,
-> +		.done = rockchip_vpu2_jpeg_enc_done,
->  		.exit = hantro_jpeg_enc_exit,
->  	},
->  	[HANTRO_MODE_H264_DEC] = {
-> -- 
-> 2.34.0.rc2.393.gf8c9666880-goog
-> 
+> +       if (fd >= 0) {
+> +               // FIONBIO is a write-only ioctl that takes an int argument that
+> +               // enables (!= 0) or disables (== 0) nonblocking mode of a fd.
+> +               //
+> +               // Passing a nullptr should return EFAULT on MMU capable machines,
+> +               // and it works if there is no MMU.
+> +               has_mmu = ioctl(fd, FIONBIO, nullptr);
+> +               close(fd);
+> +       }
+>         printf("v4l2-compliance %s%s, ", PACKAGE_VERSION, STRING(GIT_COMMIT_CNT));
+> -       printf("%zd bits, %zd-bit time_t\n", sizeof(void *) * 8, sizeof(time_t) * 8);
+> +       printf("%zd bits, %zd-bit time_t%s\n",
+> +              sizeof(void *) * 8, sizeof(time_t) * 8,
+> +              has_mmu ? "" : ", has no MMU");
+>         if (strlen(STRING(GIT_SHA)))
+>                 printf("v4l2-compliance SHA: %s %s\n",
+>                        STRING(GIT_SHA), STRING(GIT_COMMIT_DATE));
+> @@ -623,9 +637,9 @@ static int testCap(struct node *node)
+>                 V4L2_CAP_VIDEO_M2M;
+>
+>         memset(&vcap, 0xff, sizeof(vcap));
+> -       // Must always be there
+> -       fail_on_test(doioctl(node, VIDIOC_QUERYCAP, nullptr) != EFAULT);
+>         fail_on_test(doioctl(node, VIDIOC_QUERYCAP, &vcap));
+> +       if (has_mmu)
+> +               fail_on_test(doioctl(node, VIDIOC_QUERYCAP, nullptr) != EFAULT);
+>         fail_on_test(check_ustring(vcap.driver, sizeof(vcap.driver)));
+>         fail_on_test(check_ustring(vcap.card, sizeof(vcap.card)));
+>         fail_on_test(check_ustring(vcap.bus_info, sizeof(vcap.bus_info)));
+> @@ -988,11 +1002,10 @@ void testNode(struct node &node, struct node &node_m2m_cap, struct node &expbuf_
+>         }
+>
+>         if (driver.empty())
+> -               printf("Compliance test for device %s%s:\n\n",
+> -                      node.device, node.g_direct() ? "" : " (using libv4l2)");
+> +               printf("Compliance test for device ");
+>         else
+> -               printf("Compliance test for %s device %s%s:\n\n",
+> -                      driver.c_str(), node.device, node.g_direct() ? "" : " (using libv4l2)");
+> +               printf("Compliance test for %s device ", driver.c_str());
+> +       printf("%s%s:\n\n", node.device, node.g_direct() ? "" : " (using libv4l2)");
+>
+>         if (node.g_caps() & (V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_VBI_CAPTURE |
+>                          V4L2_CAP_VIDEO_CAPTURE_MPLANE | V4L2_CAP_SLICED_VBI_CAPTURE |
+> diff --git a/utils/v4l2-compliance/v4l2-compliance.h b/utils/v4l2-compliance/v4l2-compliance.h
+> index e73ebdd3..7255161f 100644
+> --- a/utils/v4l2-compliance/v4l2-compliance.h
+> +++ b/utils/v4l2-compliance/v4l2-compliance.h
+> @@ -58,6 +58,7 @@ extern bool is_uvcvideo; // We're testing the uvc driver
+>  extern int kernel_version;
+>  extern int media_fd;
+>  extern unsigned warnings;
+> +extern bool has_mmu;
+>
+>  enum poll_mode {
+>         POLL_MODE_NONE,
+> diff --git a/utils/v4l2-compliance/v4l2-test-io-config.cpp b/utils/v4l2-compliance/v4l2-test-io-config.cpp
+> index 6f2a9ba9..dcab40b8 100644
+> --- a/utils/v4l2-compliance/v4l2-test-io-config.cpp
+> +++ b/utils/v4l2-compliance/v4l2-test-io-config.cpp
+> @@ -577,6 +577,8 @@ static int checkEdid(struct node *node, unsigned pad, bool is_input)
+>                 fail_on_test(edid.blocks == 0 || edid.blocks >= 256);
+>                 fail_on_test(edid.pad != pad);
+>         }
+> +       if (!has_mmu)
+> +               return 0;
+>         edid.blocks = 1;
+>         edid.pad = pad;
+>         edid.edid = nullptr;
+> diff --git a/utils/v4l2-compliance/v4l2-test-media.cpp b/utils/v4l2-compliance/v4l2-test-media.cpp
+> index ef2982c0..28af0d83 100644
+> --- a/utils/v4l2-compliance/v4l2-test-media.cpp
+> +++ b/utils/v4l2-compliance/v4l2-test-media.cpp
+> @@ -32,8 +32,9 @@ int testMediaDeviceInfo(struct node *node)
+>         struct media_device_info mdinfo;
+>
+>         memset(&mdinfo, 0xff, sizeof(mdinfo));
+> -       fail_on_test(doioctl(node, MEDIA_IOC_DEVICE_INFO, nullptr) != EFAULT);
+>         fail_on_test(doioctl(node, MEDIA_IOC_DEVICE_INFO, &mdinfo));
+> +       if (has_mmu)
+> +               fail_on_test(doioctl(node, MEDIA_IOC_DEVICE_INFO, nullptr) != EFAULT);
+>         fail_on_test(check_0(mdinfo.reserved, sizeof(mdinfo.reserved)));
+>         fail_on_test(check_string(mdinfo.driver, sizeof(mdinfo.driver)));
+>         fail_on_test(mdinfo.model[0] && check_string(mdinfo.model, sizeof(mdinfo.model)));
+> @@ -127,21 +128,23 @@ int testMediaTopology(struct node *node)
+>         fail_on_test(topology.reserved2);
+>         fail_on_test(topology.reserved3);
+>         fail_on_test(topology.reserved4);
+> -       topology.ptr_entities = 4;
+> -       fail_on_test(doioctl(node, MEDIA_IOC_G_TOPOLOGY, &topology) != EFAULT);
+> -       topology.ptr_entities = 0;
+> -       topology.ptr_interfaces = 4;
+> -       fail_on_test(topology.num_interfaces &&
+> -                    doioctl(node, MEDIA_IOC_G_TOPOLOGY, &topology) != EFAULT);
+> -       topology.ptr_interfaces = 0;
+> -       topology.ptr_pads = 4;
+> -       fail_on_test(topology.num_pads &&
+> -                    doioctl(node, MEDIA_IOC_G_TOPOLOGY, &topology) != EFAULT);
+> -       topology.ptr_pads = 0;
+> -       topology.ptr_links = 4;
+> -       fail_on_test(topology.num_links &&
+> -                    doioctl(node, MEDIA_IOC_G_TOPOLOGY, &topology) != EFAULT);
+> -       topology.ptr_links = 0;
+> +       if (has_mmu) {
+> +               topology.ptr_entities = 4;
+> +               fail_on_test(doioctl(node, MEDIA_IOC_G_TOPOLOGY, &topology) != EFAULT);
+> +               topology.ptr_entities = 0;
+> +               topology.ptr_interfaces = 4;
+> +               fail_on_test(topology.num_interfaces &&
+> +                            doioctl(node, MEDIA_IOC_G_TOPOLOGY, &topology) != EFAULT);
+> +               topology.ptr_interfaces = 0;
+> +               topology.ptr_pads = 4;
+> +               fail_on_test(topology.num_pads &&
+> +                            doioctl(node, MEDIA_IOC_G_TOPOLOGY, &topology) != EFAULT);
+> +               topology.ptr_pads = 0;
+> +               topology.ptr_links = 4;
+> +               fail_on_test(topology.num_links &&
+> +                            doioctl(node, MEDIA_IOC_G_TOPOLOGY, &topology) != EFAULT);
+> +               topology.ptr_links = 0;
+> +       }
+>         v2_ents = new media_v2_entity[topology.num_entities];
+>         memset(v2_ents, 0xff, topology.num_entities * sizeof(*v2_ents));
+>         topology.ptr_entities = (uintptr_t)v2_ents;
+> @@ -394,12 +397,14 @@ int testMediaEnum(struct node *node)
+>                 fail_on_test(links.entity != ent.id);
+>                 fail_on_test(links.pads);
+>                 fail_on_test(links.links);
+> -               links.pads = (struct media_pad_desc *)4;
+> -               fail_on_test(ent.pads && doioctl(node, MEDIA_IOC_ENUM_LINKS, &links) != EFAULT);
+> -               links.pads = nullptr;
+> -               links.links = (struct media_link_desc *)4;
+> -               fail_on_test(ent.links && doioctl(node, MEDIA_IOC_ENUM_LINKS, &links) != EFAULT);
+> -               links.links = nullptr;
+> +               if (has_mmu) {
+> +                       links.pads = (struct media_pad_desc *)4;
+> +                       fail_on_test(ent.pads && doioctl(node, MEDIA_IOC_ENUM_LINKS, &links) != EFAULT);
+> +                       links.pads = nullptr;
+> +                       links.links = (struct media_link_desc *)4;
+> +                       fail_on_test(ent.links && doioctl(node, MEDIA_IOC_ENUM_LINKS, &links) != EFAULT);
+> +                       links.links = nullptr;
+> +               }
+>                 links.pads = new media_pad_desc[ent.pads];
+>                 memset(links.pads, 0xff, ent.pads * sizeof(*links.pads));
+>                 links.links = new media_link_desc[ent.links];
+> diff --git a/utils/v4l2-compliance/v4l2-test-subdevs.cpp b/utils/v4l2-compliance/v4l2-test-subdevs.cpp
+> index 68f97205..f3d85771 100644
+> --- a/utils/v4l2-compliance/v4l2-test-subdevs.cpp
+> +++ b/utils/v4l2-compliance/v4l2-test-subdevs.cpp
+> @@ -33,8 +33,9 @@ int testSubDevCap(struct node *node)
+>
+>         memset(&caps, 0xff, sizeof(caps));
+>         // Must always be there
+> -       fail_on_test(doioctl(node, VIDIOC_SUBDEV_QUERYCAP, nullptr) != EFAULT);
+>         fail_on_test(doioctl(node, VIDIOC_SUBDEV_QUERYCAP, &caps));
+> +       if (has_mmu)
+> +               fail_on_test(doioctl(node, VIDIOC_SUBDEV_QUERYCAP, nullptr) != EFAULT);
+>         fail_on_test(check_0(caps.reserved, sizeof(caps.reserved)));
+>         fail_on_test((caps.version >> 16) < 5);
+>         fail_on_test(caps.capabilities & ~VALID_SUBDEV_CAPS);
+
+Best Regards
+Dillon
