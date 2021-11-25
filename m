@@ -2,219 +2,110 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6721EC433F5
-	for <linux-media@archiver.kernel.org>; Thu, 25 Nov 2021 15:21:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DDFCC433FE
+	for <linux-media@archiver.kernel.org>; Thu, 25 Nov 2021 15:43:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356016AbhKYPYl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Nov 2021 10:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231849AbhKYPWj (ORCPT
+        id S1356033AbhKYPqs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Nov 2021 10:46:48 -0500
+Received: from relay11.mail.gandi.net ([217.70.178.231]:60087 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356112AbhKYPos (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Nov 2021 10:22:39 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2861C06179C;
-        Thu, 25 Nov 2021 07:18:37 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id r11so27018506edd.9;
-        Thu, 25 Nov 2021 07:18:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1xr0dJj7uqeb5C+Hg2DQB8dv6zi5yHSnunEXhTvGiX8=;
-        b=pUsSZLBVCVdSPnTayCU62AadL4O5dkTndVJQhRwYosarpiSVh1n0IyD91VdUTwACXG
-         fUii6bn9kBb6KFZ4zJ6tlxmnor8T59iDLZmTEVFDMlRuUk/HWGv3vpHRkfU4FQW0+nSm
-         TCjaYl2Y2ZjzaUOn8aBuUJD/KJ90pLVtbVDzrk3Kkv8ofKmQWgeQ36rcgpnSXOnBB8+G
-         fn78a2PB2aX9nqh35J0yFhr5hYJduaYoV9zwMliFcjXmUe2X3DrAm01eJt3fwKni8T1F
-         tD0RRICagbhSrh7WOclOaCsTLh2vJNGRgZmRV4s/ngv1nhRCHXf4b870jBEzl17JpUE9
-         Q/yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1xr0dJj7uqeb5C+Hg2DQB8dv6zi5yHSnunEXhTvGiX8=;
-        b=IEMizpVcpmRvp/7+cJJaqkZf7pFzEckZzaZ86lpoeDTCmqnHGhJQ5oso51ZN4ZPTu2
-         Dc+g631+MjxHsTIdUd498p0HoFsuGCeZtpEVeOMOG0ZGvuG8IbsRw/vxDs5z/K9DSNl3
-         go2sM0yDXal0VQuKuy7i8RDqSMKM6k47WFNgUJpRhiFK1jTyAr0SXGwrBSt6tT8Nupyl
-         MJnOX4EhqX4Ze26FOvbn6eJdTyJFokioXpvm7rj/x4YL3QuUp6vcuy14jpviQ1GU1pY/
-         V/3DG4oFRdvoD4LicgutAqZUpHUcB3e6d9Rk3DmrShinTl2SDikc4PYDPp/U/S9bW1iP
-         2Gbg==
-X-Gm-Message-State: AOAM530Pe7L2sE0+2F3Yzmwlorp+N77rAIwkjN3qjnBp8zPqldxkkw/B
-        e6e80kh0W4IMUMoCqeMqVsgARMf/o29CZWLT4Ac=
-X-Google-Smtp-Source: ABdhPJzXSR7WPQpbtY11tiK82bRbpa5B2Ft4LojeTmHAmk/c/+qZchj7etfnP4C9pRT5DjY47q1nBfRRWNgNI410ES8=
-X-Received: by 2002:a05:6402:2751:: with SMTP id z17mr38138223edd.296.1637853515965;
- Thu, 25 Nov 2021 07:18:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20211106155427.753197-1-aford173@gmail.com> <YZrHWkbYkrILP9oo@pendragon.ideasonboard.com>
- <CAHCN7xLwYcS55N7SNT4k3NqF=Lgdjfe92nJHSVMKkhCuSAPaYw@mail.gmail.com> <CAMty3ZDCCRXLvHaoW=8gqq+3B0j4uQvAk72YjXKr=cxuf7GAkg@mail.gmail.com>
-In-Reply-To: <CAMty3ZDCCRXLvHaoW=8gqq+3B0j4uQvAk72YjXKr=cxuf7GAkg@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Thu, 25 Nov 2021 09:18:24 -0600
-Message-ID: <CAHCN7xLrg-7CALY9Gre3OLfwAUed3veF1oZpvLvyE+aw7is_TQ@mail.gmail.com>
-Subject: Re: [PATCH V2 1/5] soc: imx: imx8m-blk-ctrl: Fix imx8mm mipi reset
-To:     Jagan Teki <jagan@amarulasolutions.com>
+        Thu, 25 Nov 2021 10:44:48 -0500
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id ED19C10000A;
+        Thu, 25 Nov 2021 15:41:33 +0000 (UTC)
+Date:   Thu, 25 Nov 2021 16:42:25 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Schrempf Frieder <frieder.schrempf@kontron.de>,
+        Adam Ford <aford173@gmail.com>,
         linux-media <linux-media@vger.kernel.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        cstevens@beaconembedded.com, Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        cstevens@beaconembedded.com
+Subject: Re: LP-11 Timeout on RZ/G2 with ov5640
+Message-ID: <20211125154225.doqtnzgv4t73usph@uno.localdomain>
+References: <CAHCN7xLncsxHcTirn+U1d_x08x=F+txhiJ+LF9GAi5rWnJMUCQ@mail.gmail.com>
+ <YZ64wsMUVz37YlBF@pendragon.ideasonboard.com>
+ <YZ85/TT9AmJh1G/w@valkosipuli.retiisi.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YZ85/TT9AmJh1G/w@valkosipuli.retiisi.eu>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 11:42 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
+Hello
+G
+On Thu, Nov 25, 2021 at 09:23:41AM +0200, Sakari Ailus wrote:
+> Hi Laurent,
 >
-> On Tue, Nov 23, 2021 at 7:29 PM Adam Ford <aford173@gmail.com> wrote:
+> On Thu, Nov 25, 2021 at 12:12:18AM +0200, Laurent Pinchart wrote:
+> > Hi Adam,
 > >
-> > On Sun, Nov 21, 2021 at 4:25 PM Laurent Pinchart
-> > <laurent.pinchart@ideasonboard.com> wrote:
+> > (CC'ing Sakari)
+> >
+> > On Wed, Nov 24, 2021 at 03:16:57PM -0600, Adam Ford wrote:
+> > > I am trying to use an OV5640 camera sensor that I've used on both an
+> > > i.MX6Q and an i.MX8M Mini (with good success) on an RZ/G2[MNH] board
+> > > connected to the 2-lane CSI interface.
 > > >
-> > > Hi Adam,
+> > > I can get the media-ctl to show the routings, and sometimes I can get
+> > > streaming.  Often, I get a timeout:
 > > >
-> > > On Sat, Nov 06, 2021 at 10:54:23AM -0500, Adam Ford wrote:
-> > > > Most of the blk-ctrl reset bits are found in one register, however
-> > > > there are two bits in offset 8 for pulling the MIPI DPHY out of reset
-> > > > and these need to be set when IMX8MM_DISPBLK_PD_MIPI_CSI is brought
-> > > > out of reset or the MIPI_CSI hangs.
-> > > >
-> > > > Fixes: 926e57c065df ("soc: imx: imx8m-blk-ctrl: add DISP blk-ctrl")
-> > > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > > > ---
-> > > >
-> > > > V2:  Make a note that the extra register is only for Mini/Nano DISPLAY_BLK_CTRL
-> > > >      Rename the new register to mipi_phy_rst_mask
-> > > >      Encapsulate the edits to this register with an if-statement
-> > > >
-> > > >  drivers/soc/imx/imx8m-blk-ctrl.c | 18 ++++++++++++++++++
-> > > >  1 file changed, 18 insertions(+)
-> > > >
-> > > > diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
-> > > > index 519b3651d1d9..581eb4bc7f7d 100644
-> > > > --- a/drivers/soc/imx/imx8m-blk-ctrl.c
-> > > > +++ b/drivers/soc/imx/imx8m-blk-ctrl.c
-> > > > @@ -17,6 +17,7 @@
-> > > >
-> > > >  #define BLK_SFT_RSTN 0x0
-> > > >  #define BLK_CLK_EN   0x4
-> > > > +#define BLK_MIPI_RESET_DIV   0x8 /* Mini/Nano DISPLAY_BLK_CTRL only */
-> > > >
-> > > >  struct imx8m_blk_ctrl_domain;
-> > > >
-> > > > @@ -36,6 +37,15 @@ struct imx8m_blk_ctrl_domain_data {
-> > > >       const char *gpc_name;
-> > > >       u32 rst_mask;
-> > > >       u32 clk_mask;
-> > > > +
-> > > > +     /*
-> > > > +      * i.MX8M Mini and Nano have a third DISPLAY_BLK_CTRL register
-> > > > +      * which is used to control the reset for the MIPI Phy.
-> > > > +      * Since it's only present in certain circumstances,
-> > > > +      * an if-statement should be used before setting and clearing this
-> > > > +      * register.
-> > > > +      */
-> > > > +     u32 mipi_phy_rst_mask;
-> > > >  };
-> > > >
-> > > >  #define DOMAIN_MAX_CLKS 3
-> > > > @@ -78,6 +88,8 @@ static int imx8m_blk_ctrl_power_on(struct generic_pm_domain *genpd)
-> > > >
-> > > >       /* put devices into reset */
-> > > >       regmap_clear_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
-> > > > +     if (data->mipi_phy_rst_mask)
-> > > > +             regmap_clear_bits(bc->regmap, BLK_MIPI_RESET_DIV, data->mipi_phy_rst_mask);
-> > > >
-> > > >       /* enable upstream and blk-ctrl clocks to allow reset to propagate */
-> > > >       ret = clk_bulk_prepare_enable(data->num_clks, domain->clks);
-> > > > @@ -99,6 +111,8 @@ static int imx8m_blk_ctrl_power_on(struct generic_pm_domain *genpd)
-> > > >
-> > > >       /* release reset */
-> > > >       regmap_set_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
-> > > > +     if (data->mipi_phy_rst_mask)
-> > > > +             regmap_set_bits(bc->regmap, BLK_MIPI_RESET_DIV, data->mipi_phy_rst_mask);
-> > > >
-> > > >       /* disable upstream clocks */
-> > > >       clk_bulk_disable_unprepare(data->num_clks, domain->clks);
-> > > > @@ -120,6 +134,9 @@ static int imx8m_blk_ctrl_power_off(struct generic_pm_domain *genpd)
-> > > >       struct imx8m_blk_ctrl *bc = domain->bc;
-> > > >
-> > > >       /* put devices into reset and disable clocks */
-> > > > +     if (data->mipi_phy_rst_mask)
-> > > > +             regmap_clear_bits(bc->regmap, BLK_MIPI_RESET_DIV, data->mipi_phy_rst_mask);
-> > > > +
+> > >      rcar-csi2 fea80000.csi2: Timeout waiting for LP-11 state
 > > >
-> > > Is it the best option to enable/disable both the master and slave MIPI
-> > > DPHY, regardless of whether they're used or not ? Or would it be better
-> > > to implement a reset controller to expose the two resets independently,
-> > > and acquire them from the corresponding display and camera drivers ?
+> > > Looking at the various mailing list e-mails for the LP-11, it's
+> > > unclear to me if the timeout is caused by the sensor not doing
+> > > something correctly or the CSI2 misbehaving.
 > >
-> > In some early attempts to implement the blk-ctrl driver, there was an
-> > attempt to enable a reset controller, but it caused some hanging and
-> > issues with suspend-resume due to chicken-egg issues where some items
-> > were coming up in the wrong order.  I think the decision was made to
-> > make the resets part of the power domain so it's very clear that the
-> > order of operations.  Lucas might be able to elaborate more on this.
+> > Before transitioning to the high speed (HS) mode, the D-PHY transmitter
+> > must drive the lane in the LP-11 state. This is the idle state of the
+> > lane when powered up and when not in the ultra low-power state (ULPS).
+> > The transition to HS mode on the receiver side involves observing the
+> > LP-11 state. Many D-PHY RX require configuring the PHY when the lane is
+> > in LP-11 state, and only then starting the sensor to transition to HS.
+> > This requires powering up the D-PHY TX and going to idle mode, which
+> > most sensors support. As we're deprecating the .s_power() subdev
+> > operation, however, we have no way to power up the sensor without
+> > starting it before the D-PHY RX gets configured.
 >
-> I think supporting via phy driver make sense to me since this resent
-> is DPHY specific and nothing related to blk-ctrl.
-
-I would disagree that isn't not blk-ctrl.  The blk-ctrl controls the
-reset lines for the CSI and enables clocks.  The additional register
-does the same thing to the MIPI CSI and DSI.  The imx7-mipi-csis
-driver configures the dphy already, but this reset bit is not part of
-its IP block.  It seems weird to me that a phy driver would reference
-a phy driver.
-
+> That's not true anymore. Please see:
+>
+> <URL:https://hverkuil.home.xs4all.nl/spec/driver-api/tx-rx.html#lp-11-and-lp-111-modes>
+>
+> Not all sensors can do this without tricks though.
 >
 > >
-> > If bits 16 and 17 can act independently and bit 16 only impacts the
-> > CSI  and doesn't require bit 17, it seems reasonable to me to have the
-> > power-domain part of  the CSI, since this would only be enabled when
-> > the CSI is active.  The power domain is idled when the CSI is idled
-> > which would effectively place the phy in and out of reset only
-> > depending on the state of the CSI.  I am guessing this reset bit
-> > should be assigned to DISPBLK_PD_MIPI_CSI and not
-> > DISPBLK_PD_CSI_BRIDGE, but I can run some more tests.
+> > In some cases, the D-PHY RX can handle the power up sequence
+> > automatically. They can be fully configured (from a software point of
+> > view) while the lane is in the power down state LP-00, and they then
+> > handle the transition to the stop state LP-11 and to the HS mode
+> > automatically. This isn't true for all receivers, some need software
+> > configuration after the data lane reaches the LP-11 state and before it
+> > transitions to HS mode. According to the documentation, the R-Car CSI-2
+> > receiver requires software intervention between LP-11 and HS mode at
+> > least on V3M and E3. There's also a software configuration step on H3,
+> > M3N, V3H and V3U, but there's a chance that one could possibly be
+> > bypassed.
 > >
-> > AFAIK, there is no phy driver for the CSI like there is the DSI, so
-> > adding that would require additional work to the CSI driver to work
-> > around this quirk.  We don't have an acceptable DSI driver yet, so I'd
-> > like to push a V3 with just the corresponding bit enabled for MIPI_CSI
-> > after some testing.  FWICT, NXP set both bits 16 and 17 in their ATF
-> > gpc code, and it never gets cleared, so I think having the bit set and
-> > cleared on demand is an improvement.
->
-> How about using the previous one that Marek sent. Add it via CSI
-> pipeline and i think it would directly.
+> > > I was hoping someone might have some suggestions of things I can try.
+> >
+> > I would first try to power up the sensor at probe time and keep it power
+> > forever, to see if it solves your issue. If it does, then introducing a
+> > CSI-2-specific subdev operation to power up the sensor (or officially
+> > de-deprecating .s_power() for this use case) could be an option to fix
+> > the issue properly.
 
-That driver specifically addresses the DSI phy and bringing it out of
-reset is just one small part of what that driver does.  I don't think
-adding CSI functionality to it would be appropriate for that driver as
-they are separate IP blocks.
+What about .pre_streamon video op ?
+Should it fit here ?
 
-If people don't want the blk-ctl to control this bit, I would advocate
-we should do a separate reset controller to be referenced byt the
-mipi-csis driver, but that was proposed before and declined.  Since
-blt-ctrl already is pulling seemingly unrelated IP blocks by
-controlling their clocks and resets.  The fact that NXP included it in
-their ATF power-domain controller tells me they considered it related
-to power domains and/or resets and not an explicit phy driver.
-
-adam
 
 >
-> https://www.spinics.net/lists/devicetree/msg381691.html
+> --
+> Kind regards,
 >
-> Jagan.
+> Sakari Ailus
