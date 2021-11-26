@@ -2,66 +2,62 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFE15C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 26 Nov 2021 20:25:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18616C433EF
+	for <linux-media@archiver.kernel.org>; Fri, 26 Nov 2021 20:32:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242218AbhKZU2y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Nov 2021 15:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbhKZU0x (ORCPT
+        id S238042AbhKZUfi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Nov 2021 15:35:38 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58404 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232675AbhKZUdh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Nov 2021 15:26:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50422C061574;
-        Fri, 26 Nov 2021 12:22:49 -0800 (PST)
+        Fri, 26 Nov 2021 15:33:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E32F1B8272C;
-        Fri, 26 Nov 2021 20:22:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10D1C9305B;
-        Fri, 26 Nov 2021 20:22:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B083762281;
+        Fri, 26 Nov 2021 20:30:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBEDC004E1;
+        Fri, 26 Nov 2021 20:30:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637958166;
-        bh=9j0724BF59xz5hgcXRsM5EU2xOSwmkgZb6y8/qpKBvY=;
+        s=k20201202; t=1637958623;
+        bh=3Ez6hA3NWEj59LlRB6xO3PkLztU9xFstRwP/8ZIKVA8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X2OelROH+EgtX/xn8VUQCk1zozAR8YL/IKP2wk+myP3f0UgtVUQHJcHMqkiMwDTc2
-         mmXXywHqgJqOzyPMxDFPVAKCAG2FBba9b0TruAnE4vx8qS9DFMDNosyW9BvVUpJVxq
-         geRDKK9VdPLceF7K4bYhXwz8rwCWovKF4C50XBR4oHHiunYAmsfQCzdvjoOMdPfviJ
-         InrNec4gascC6Z8tR6eXzq9EOhbnP0lgTE4Bd8dhooef9EQJhzgi1AFOgeXdzlOMcn
-         ZfbgkqSonVzL4Q+UvR7ZjCzXh5Ap1bVabRvlul/tPlXeV2Ehb8eJNQYUii5cXBkml/
-         jN3AgorHHL+cQ==
-Date:   Fri, 26 Nov 2021 13:22:41 -0700
+        b=T9FCRVny5e1JIkFI3G1lmXSqqcPcOPcS7T6tIkDpk/NtS5zcn+LPAOJTDnnN2oZ1V
+         PUDPCyAA1pEiacX9GOds6TwlXmVRB8xpkyrFJMZ0GcojhZjxBQKa7301muEHsNDTlC
+         cR1yWKhe7vjR6lxgQpu94posgZ3m8Pi7/2gYeXCBHp0W86gnurL10N3y/HEpP6Tcnj
+         POFF0MArPuvXCSYkZPIEfGtuM5n/Y0M8mZlNwlSgPY0yj0lJ0qkIG8wpddw7cozL+q
+         cj12iZscxh8mMTCSp2BDnSUyQYD/J6DzSP/lueLosi5/B8aKEZILK1gaKQOgmvWbmr
+         pQHKxe3c/UNGQ==
+Date:   Fri, 26 Nov 2021 13:30:17 -0700
 From:   Nathan Chancellor <nathan@kernel.org>
 To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Bixuan Cui <cuibixuan@huawei.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 12/20] media: au0828-i2c: drop a duplicated function
-Message-ID: <YaFCESx6o6wD6Wac@archlinux-ax161>
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 20/20] media: mxl5005s: drop some dead code
+Message-ID: <YaFD2RmjE1QlBKr9@archlinux-ax161>
 References: <cover.1637781097.git.mchehab+huawei@kernel.org>
- <1c5aeba00713d643e6f5600090b68e3d3689c5dd.1637781097.git.mchehab+huawei@kernel.org>
+ <b1b447e2f3e1ec0c3e9716f4f74d056461f69ab3.1637781097.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1c5aeba00713d643e6f5600090b68e3d3689c5dd.1637781097.git.mchehab+huawei@kernel.org>
+In-Reply-To: <b1b447e2f3e1ec0c3e9716f4f74d056461f69ab3.1637781097.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 08:13:15PM +0100, Mauro Carvalho Chehab wrote:
-> This function is not used and it is identical to
-> i2c_slave_did_read_ack(). So, just drop it.
-
-Not quite, i2c_slave_did_write_ack() checks against
-AU0828_I2C_STATUS_NO_WRITE_ACK, whereas i2c_slave_did_read_ack() checks
-against AU0828_I2C_STATUS_NO_READ_ACK.
-
+On Wed, Nov 24, 2021 at 08:13:23PM +0100, Mauro Carvalho Chehab wrote:
+> As reported by clang (with W=1), the ctrlVal var is never used.
+> 
+> Yet, there are even some loops to estimate it. As this is dead
+> code, remove it. If ever needed, someone could revert this
+> patch.
+> 
 > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-
-Regardless of that, it is unused and I do not see anywhere obvious where
-it should be.
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
@@ -70,27 +66,56 @@ Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 > To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 > See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
 > 
->  drivers/media/usb/au0828/au0828-i2c.c | 7 -------
->  1 file changed, 7 deletions(-)
+>  drivers/media/tuners/mxl5005s.c | 14 +-------------
+>  1 file changed, 1 insertion(+), 13 deletions(-)
 > 
-> diff --git a/drivers/media/usb/au0828/au0828-i2c.c b/drivers/media/usb/au0828/au0828-i2c.c
-> index 708f01ab47fa..749f90d73b5b 100644
-> --- a/drivers/media/usb/au0828/au0828-i2c.c
-> +++ b/drivers/media/usb/au0828/au0828-i2c.c
-> @@ -23,13 +23,6 @@ MODULE_PARM_DESC(i2c_scan, "scan i2c bus at insmod time");
->  #define I2C_WAIT_DELAY 25
->  #define I2C_WAIT_RETRY 1000
->  
-> -static inline int i2c_slave_did_write_ack(struct i2c_adapter *i2c_adap)
-> -{
-> -	struct au0828_dev *dev = i2c_adap->algo_data;
-> -	return au0828_read(dev, AU0828_I2C_STATUS_201) &
-> -		AU0828_I2C_STATUS_NO_WRITE_ACK ? 0 : 1;
-> -}
-> -
->  static inline int i2c_slave_did_read_ack(struct i2c_adapter *i2c_adap)
+> diff --git a/drivers/media/tuners/mxl5005s.c b/drivers/media/tuners/mxl5005s.c
+> index f6e82a8e7d37..ab4c43df9d18 100644
+> --- a/drivers/media/tuners/mxl5005s.c
+> +++ b/drivers/media/tuners/mxl5005s.c
+> @@ -3414,9 +3414,8 @@ static u16 MXL_ControlWrite_Group(struct dvb_frontend *fe, u16 controlNum,
+>  	u32 value, u16 controlGroup)
 >  {
->  	struct au0828_dev *dev = i2c_adap->algo_data;
+>  	struct mxl5005s_state *state = fe->tuner_priv;
+> -	u16 i, j, k;
+> +	u16 i, j;
+>  	u32 highLimit;
+> -	u32 ctrlVal;
+>  
+>  	if (controlGroup == 1) /* Initial Control */ {
+>  
+> @@ -3432,9 +3431,6 @@ static u16 MXL_ControlWrite_Group(struct dvb_frontend *fe, u16 controlNum,
+>  							(u8)(state->Init_Ctrl[i].bit[j]),
+>  							(u8)((value>>j) & 0x01));
+>  					}
+> -					ctrlVal = 0;
+> -					for (k = 0; k < state->Init_Ctrl[i].size; k++)
+> -						ctrlVal += state->Init_Ctrl[i].val[k] * (1 << k);
+>  				} else
+>  					return -1;
+>  			}
+> @@ -3454,9 +3450,6 @@ static u16 MXL_ControlWrite_Group(struct dvb_frontend *fe, u16 controlNum,
+>  							(u8)(state->CH_Ctrl[i].bit[j]),
+>  							(u8)((value>>j) & 0x01));
+>  					}
+> -					ctrlVal = 0;
+> -					for (k = 0; k < state->CH_Ctrl[i].size; k++)
+> -						ctrlVal += state->CH_Ctrl[i].val[k] * (1 << k);
+>  				} else
+>  					return -1;
+>  			}
+> @@ -3477,11 +3470,6 @@ static u16 MXL_ControlWrite_Group(struct dvb_frontend *fe, u16 controlNum,
+>  							(u8)(state->MXL_Ctrl[i].bit[j]),
+>  							(u8)((value>>j) & 0x01));
+>  					}
+> -					ctrlVal = 0;
+> -					for (k = 0; k < state->MXL_Ctrl[i].size; k++)
+> -						ctrlVal += state->
+> -							MXL_Ctrl[i].val[k] *
+> -							(1 << k);
+>  				} else
+>  					return -1;
+>  			}
 > -- 
 > 2.33.1
 > 
