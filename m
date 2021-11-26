@@ -2,222 +2,189 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10FD0C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 26 Nov 2021 11:39:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E86DC43217
+	for <linux-media@archiver.kernel.org>; Fri, 26 Nov 2021 11:48:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233163AbhKZLmx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Nov 2021 06:42:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345516AbhKZLkx (ORCPT
+        id S1345405AbhKZLvR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Nov 2021 06:51:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40430 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345348AbhKZLtQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Nov 2021 06:40:53 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DEBC07E5C5
-        for <linux-media@vger.kernel.org>; Fri, 26 Nov 2021 03:01:40 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id p2so17719613uad.11
-        for <linux-media@vger.kernel.org>; Fri, 26 Nov 2021 03:01:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VfCtaX4nYDdpJw7ayQvcL4LVofxZOCQFKwISJsQg6bs=;
-        b=st1LsY3L1javWhtNrW1s+bzHDmqdKGtHJgpAXf7gEYNBtxodIgNXvEEuaQsJrUadVN
-         HqgSORuLHm4AHe+/7G5BZXMXl2FM8NemGXiav0qL799Ed0xbPcMYxLV/+dBkNEeKpbDp
-         z/Oy7DayhfYWWamCaAo3qM04ZByVPpEWPVGMnBHwkJmqoY2a+ajvqRiM8Wz6Mg2fgwmU
-         qiKvUrNXshZgrzzmDYApeotkdMdTF9NZCwMdrPjHbZ8UVY9jfbt9bIli51OrwfwMMx6G
-         1X/TnjXyRGnxRkknK2uS09DXjzugR01Y2DG/C68H5pkVIoZJjTGo9URxhiCuy9uSf0/4
-         sc/w==
+        Fri, 26 Nov 2021 06:49:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637927163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c1ya2zAC+GLUoT5O0PKB3gUVIZyk51duRXmMGKOgUc4=;
+        b=UWEUWbfolEyBTP5kP/4FHgZktfqhwzZUH3emD8oALL2xAH7OHW8MHxUmrYS9xMk/P1meK8
+        /6NxtyJrVRuimFJjq4hC9f5fWZuJS/RWjv7cIeNAnjXuhrd30l1J9CBIf9mtPfO8iRSY8K
+        hLVkio6dUvFFouvqqfMZR03CleIWCv0=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-558-x_AUpjWPPzCHZzB5HdJ1aQ-1; Fri, 26 Nov 2021 06:46:02 -0500
+X-MC-Unique: x_AUpjWPPzCHZzB5HdJ1aQ-1
+Received: by mail-ed1-f70.google.com with SMTP id l15-20020a056402124f00b003e57269ab87so7840124edw.6
+        for <linux-media@vger.kernel.org>; Fri, 26 Nov 2021 03:46:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VfCtaX4nYDdpJw7ayQvcL4LVofxZOCQFKwISJsQg6bs=;
-        b=QZZpfqLvCUCV8Nv7WbiFIzDrDW0Gqo09ILp6AcovirhMkMm36MoYQDQR1NXMouK8+o
-         JDWRZs/STr/fktzUH1zMfTpoULPZxbexlp2qF7rEI77G0jRUMo/GD/rolCO/RI92xE/p
-         kX5lDkTIlQ92C1qTwiQ675wad+Mm73FBuA59q2nftmFMZ0LXroj5elDU2ZnyF93QYVlj
-         NN1pC5m6ufHxiZ2I/mqX/tESU255VUfMv9pcyppf83zyzqqRFvKKtxOJgA45Zdmcnq9D
-         MM4s212ALmyKg2nZg9Jtee8CXBDcSaEHViKriGSiHgnlZsliOe/TE8FOlbFXI/to9krK
-         wHvw==
-X-Gm-Message-State: AOAM530un8GoQ2B/6u5FlBd0p5ctG4NSJ6POS2VfVxRvHhK8PndkxWxj
-        Ce8kYxQtu7M8og7sQ4Y4x0TB/w==
-X-Google-Smtp-Source: ABdhPJy4vNwDp7VWQDYoJrfz1AV/MW3mIe7R1va7IunkR7hg03NRJHn3eTZH3Ptcyx884GW2gGe5pQ==
-X-Received: by 2002:a67:f64c:: with SMTP id u12mr15740354vso.69.1637924499584;
-        Fri, 26 Nov 2021 03:01:39 -0800 (PST)
-Received: from eze-laptop ([2803:9800:98c2:8470:9f4:8e2a:88e5:ec01])
-        by smtp.gmail.com with ESMTPSA id i1sm3093486vkn.55.2021.11.26.03.01.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Nov 2021 03:01:38 -0800 (PST)
-Date:   Fri, 26 Nov 2021 08:01:34 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, kernel@collabora.com
-Subject: Re: [PATCH v3 3/4] media: hantro: Use syscon instead of 'ctrl'
- register
-Message-ID: <YaC+jkYwouR9Aa0s@eze-laptop>
-References: <20211125155650.630977-1-benjamin.gaignard@collabora.com>
- <20211125155650.630977-4-benjamin.gaignard@collabora.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=c1ya2zAC+GLUoT5O0PKB3gUVIZyk51duRXmMGKOgUc4=;
+        b=Dx9TKDuNACba1VZWf9SZ2Wl9BtFOjElZS5N0kJwyf++NjwClVzypkhdvMcD2F8VtKP
+         JRgba+NFzxQy3MgcjxICJ/MP3zT9xovEJ4ZJ0C9onoxZAorsvHhLYR1f0Lh18btzafrR
+         ZHQSVBH5Ube8LslvKE5bHFV3JvDS96e/whty8CEyeukJ5f+DlC4lJvICYuilo9sZ2hJF
+         A2Gwgeybs0Pf0BQT8gv3jvjm5fJ6RQytIX9BfSecqNuatFlaBaJ2/qcY1z3Qki5GpwDN
+         XKtVyTX8JqBUQCD9no+Fwiu0RxE4iXcQE6oIUSlxpsYRYBMORvaRAZUfC5KYK/Og3hhX
+         YFLA==
+X-Gm-Message-State: AOAM533LmkDxNVXVi0fyd4ipYKAcrK6+gIDXrkBs2a8KdJVDmmkHK17d
+        F4s8f5x+ihdHHYGwZoTuN0z8YypS24/FVWvnyQdflvcslSV9BgneWkuEFUAy2/7h9dEhiElx+ug
+        5+nGXHXQW/gZo/6rWsMDRB+w=
+X-Received: by 2002:a17:906:8c3:: with SMTP id o3mr38686178eje.10.1637927161125;
+        Fri, 26 Nov 2021 03:46:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwQ7am4Ala1kqDx7YmdB+rbbqSZypeAXzclZOGZ1kAkUizNdbpr5ikUpVseAcA4iSm5SH/CwA==
+X-Received: by 2002:a17:906:8c3:: with SMTP id o3mr38686160eje.10.1637927160921;
+        Fri, 26 Nov 2021 03:46:00 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id f7sm3747090edl.33.2021.11.26.03.46.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Nov 2021 03:46:00 -0800 (PST)
+Message-ID: <2fd5400e-e587-54d2-1071-ad8df49a8a68@redhat.com>
+Date:   Fri, 26 Nov 2021 12:45:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211125155650.630977-4-benjamin.gaignard@collabora.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v6 07/15] platform/x86: int3472: Enable I2c daisy chain
+Content-Language: en-US
+To:     Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20211125165412.535063-1-hdegoede@redhat.com>
+ <20211125165412.535063-8-hdegoede@redhat.com>
+ <YaAel9HuAvemRg2s@pendragon.ideasonboard.com>
+ <03306e12-40ec-39ab-3b40-42b0395e1b65@redhat.com>
+ <4ab5efa7-65b0-009c-293a-d7a49776e78d@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <4ab5efa7-65b0-009c-293a-d7a49776e78d@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Benjamin,
+Hi,
 
-On Thu, Nov 25, 2021 at 04:56:49PM +0100, Benjamin Gaignard wrote:
-> In order to be able to share the control hardware block between
-> VPUs use a syscon instead a ioremap it in the driver.
-> To keep the compatibility with older DT if 'nxp,imx8mq-vpu-ctrl'
-> phandle is not found look at 'ctrl' reg-name.
-> With the method it becomes useless to provide a list of register
-> names so remove it.
+On 11/26/21 12:39, Daniel Scally wrote:
+> Hello
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> On 26/11/2021 11:30, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 11/26/21 00:39, Laurent Pinchart wrote:
+>>> Hi Hans,
+>>>
+>>> Thank you for the patch.
+>>>
+>>> On Thu, Nov 25, 2021 at 05:54:04PM +0100, Hans de Goede wrote:
+>>>> From: Daniel Scally <djrscally@gmail.com>
+>>>>
+>>>> The TPS68470 PMIC has an I2C passthrough mode through which I2C traffic
+>>>> can be forwarded to a device connected to the PMIC as though it were
+>>>> connected directly to the system bus. Enable this mode when the chip
+>>>> is initialised.
+>>> Is there any drawback doing this unconditionally, if nothing is
+>>> connected to the bus on the other side (including no pull-ups) ?
+>> I actually never took a really close look at this patch, I just
+>> sorta inherited it from Daniel.
+>>
+>> Now that I have taken a close look, I see that it is setting the
+>> exact same bits as which get set when enabling the VSIO regulator.
+>>
+>> The idea here is that the I2C-passthrough only gets enabled when
+>> the VSIO regulator is turned on, because some sensors end up
+>> shorting the I2C pins to ground when the sensor is not powered.
+>>
+>> Since we set these bits when powering up the VSIO regulator
+>> and since we do that before trying to talk to the sensor
+>> I don't think that we need this (hack) anymore.
+>>
+>> I will give things a try without this change and if things
+>> still work I will drop this patch from the set.
+>>
+>> Daniel, what do you think?
 > 
-> Please note that the only purpose of this commit is to allow to test
-> G2 hardware block for IMX8MQ until a proper solution isuing power domain
-> can be found. Do not merge it.
+> 
+> Humm, we're only using the VSIO regulator with the VCM though right?
 
-It's been too many months waiting for the BLK-CTRL to be solved.
-Perhaps we can consider merging this approach instead.
+Nope, there is a mapping from VSIO to dovdd for the ov8865 in the
+board_data; and I'm pretty sure I copied that from your earlier
+attempts at getting regulator lookups registered :)
 
-Thanks,
-Ezequiel
+And even if the VSIO regulator was only used by the VCM, then it would
+get turned off after probing the VCM, clearing the 2 bits which this
+commit sets. Which would break things if we did not re-enable it when
+the ov8865 needs it.
 
-> ---
->  drivers/staging/media/hantro/hantro.h       |  5 ++-
->  drivers/staging/media/hantro/imx8m_vpu_hw.c | 48 +++++++++++++--------
->  2 files changed, 34 insertions(+), 19 deletions(-)
+> Which might not be on when the ov8865 tries to probe. I haven't tried
+> without this patch to be honest; I set it because that was what Windows
+> does when powering on the PMIC.
+
+See above, I'm pretty sure we can do without this patch which means
+that the INT3472 code will no longer be poking at the PMIC directly
+itself, which is good :)
+
+Anyways I'll give this a try sometime next week and then drop the
+patch.
+
+Regards,
+
+Hans
+
+
+
+
+>>>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>>>> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+>>>> ---
+>>>>  .../x86/intel/int3472/intel_skl_int3472_tps68470.c         | 7 +++++++
+>>>>  1 file changed, 7 insertions(+)
+>>>>
+>>>> diff --git a/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c b/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
+>>>> index c05b4cf502fe..42e688f4cad4 100644
+>>>> --- a/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
+>>>> +++ b/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
+>>>> @@ -45,6 +45,13 @@ static int tps68470_chip_init(struct device *dev, struct regmap *regmap)
+>>>>  		return ret;
+>>>>  	}
+>>>>  
+>>>> +	/* Enable I2C daisy chain */
+>>>> +	ret = regmap_write(regmap, TPS68470_REG_S_I2C_CTL, 0x03);
+>>>> +	if (ret) {
+>>>> +		dev_err(dev, "Failed to enable i2c daisy chain\n");
+>>>> +		return ret;
+>>>> +	}
+>>>> +
+>>>>  	dev_info(dev, "TPS68470 REVID: 0x%02x\n", version);
+>>>>  
+>>>>  	return 0;
 > 
-> diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-> index 7da23f7f207a..616b5a6854cd 100644
-> --- a/drivers/staging/media/hantro/hantro.h
-> +++ b/drivers/staging/media/hantro/hantro.h
-> @@ -13,6 +13,7 @@
->  #define HANTRO_H_
->  
->  #include <linux/platform_device.h>
-> +#include <linux/regmap.h>
->  #include <linux/videodev2.h>
->  #include <linux/wait.h>
->  #include <linux/clk.h>
-> @@ -174,7 +175,7 @@ hantro_vdev_to_func(struct video_device *vdev)
->   * @reg_bases:		Mapped addresses of VPU registers.
->   * @enc_base:		Mapped address of VPU encoder register for convenience.
->   * @dec_base:		Mapped address of VPU decoder register for convenience.
-> - * @ctrl_base:		Mapped address of VPU control block.
-> + * @ctrl_base:		Regmap of VPU control block.
->   * @vpu_mutex:		Mutex to synchronize V4L2 calls.
->   * @irqlock:		Spinlock to synchronize access to data structures
->   *			shared with interrupt handlers.
-> @@ -193,7 +194,7 @@ struct hantro_dev {
->  	void __iomem **reg_bases;
->  	void __iomem *enc_base;
->  	void __iomem *dec_base;
-> -	void __iomem *ctrl_base;
-> +	struct regmap *ctrl_base;
->  
->  	struct mutex vpu_mutex;	/* video_device lock */
->  	spinlock_t irqlock;
-> diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-> index 1a43f6fceef9..d7a63b41eb0e 100644
-> --- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
-> +++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-> @@ -7,6 +7,7 @@
->  
->  #include <linux/clk.h>
->  #include <linux/delay.h>
-> +#include <linux/mfd/syscon.h>
->  
->  #include "hantro.h"
->  #include "hantro_jpeg.h"
-> @@ -25,30 +26,28 @@
->  #define CTRL_G1_PP_FUSE		0x0c
->  #define CTRL_G2_DEC_FUSE	0x10
->  
-> +static const struct regmap_config ctrl_regmap_ctrl = {
-> +	.reg_bits = 32,
-> +	.val_bits = 32,
-> +	.reg_stride = 0x14,
-> +};
-> +
->  static void imx8m_soft_reset(struct hantro_dev *vpu, u32 reset_bits)
->  {
-> -	u32 val;
-> -
->  	/* Assert */
-> -	val = readl(vpu->ctrl_base + CTRL_SOFT_RESET);
-> -	val &= ~reset_bits;
-> -	writel(val, vpu->ctrl_base + CTRL_SOFT_RESET);
-> +	regmap_update_bits(vpu->ctrl_base, CTRL_SOFT_RESET, reset_bits, 0);
->  
->  	udelay(2);
->  
->  	/* Release */
-> -	val = readl(vpu->ctrl_base + CTRL_SOFT_RESET);
-> -	val |= reset_bits;
-> -	writel(val, vpu->ctrl_base + CTRL_SOFT_RESET);
-> +	regmap_update_bits(vpu->ctrl_base, CTRL_SOFT_RESET,
-> +			   reset_bits, reset_bits);
->  }
->  
->  static void imx8m_clk_enable(struct hantro_dev *vpu, u32 clock_bits)
->  {
-> -	u32 val;
-> -
-> -	val = readl(vpu->ctrl_base + CTRL_CLOCK_ENABLE);
-> -	val |= clock_bits;
-> -	writel(val, vpu->ctrl_base + CTRL_CLOCK_ENABLE);
-> +	regmap_update_bits(vpu->ctrl_base, CTRL_CLOCK_ENABLE,
-> +			   clock_bits, clock_bits);
->  }
->  
->  static int imx8mq_runtime_resume(struct hantro_dev *vpu)
-> @@ -65,9 +64,9 @@ static int imx8mq_runtime_resume(struct hantro_dev *vpu)
->  	imx8m_clk_enable(vpu, CLOCK_G1 | CLOCK_G2);
->  
->  	/* Set values of the fuse registers */
-> -	writel(0xffffffff, vpu->ctrl_base + CTRL_G1_DEC_FUSE);
-> -	writel(0xffffffff, vpu->ctrl_base + CTRL_G1_PP_FUSE);
-> -	writel(0xffffffff, vpu->ctrl_base + CTRL_G2_DEC_FUSE);
-> +	regmap_write(vpu->ctrl_base, CTRL_G1_DEC_FUSE, 0xffffffff);
-> +	regmap_write(vpu->ctrl_base, CTRL_G1_PP_FUSE, 0xffffffff);
-> +	regmap_write(vpu->ctrl_base, CTRL_G2_DEC_FUSE, 0xffffffff);
->  
->  	clk_bulk_disable_unprepare(vpu->variant->num_clocks, vpu->clocks);
->  
-> @@ -211,7 +210,22 @@ static irqreturn_t imx8m_vpu_g2_irq(int irq, void *dev_id)
->  
->  static int imx8mq_vpu_hw_init(struct hantro_dev *vpu)
->  {
-> -	vpu->ctrl_base = vpu->reg_bases[vpu->variant->num_regs - 1];
-> +	struct device_node *np = vpu->dev->of_node;
-> +
-> +	vpu->ctrl_base = syscon_regmap_lookup_by_phandle(np, "nxp,imx8m-vpu-ctrl");
-> +	if (IS_ERR(vpu->ctrl_base)) {
-> +		struct resource *res;
-> +		void __iomem *ctrl;
-> +
-> +		res = platform_get_resource_byname(vpu->pdev, IORESOURCE_MEM, "ctrl");
-> +		ctrl = devm_ioremap_resource(vpu->dev, res);
-> +		if (IS_ERR(ctrl))
-> +			return PTR_ERR(ctrl);
-> +
-> +		vpu->ctrl_base = devm_regmap_init_mmio(vpu->dev, ctrl, &ctrl_regmap_ctrl);
-> +		if (IS_ERR(vpu->ctrl_base))
-> +			return PTR_ERR(vpu->ctrl_base);
-> +	}
->  
->  	return 0;
->  }
-> -- 
-> 2.30.2
-> 
+
