@@ -2,149 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F5F9C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 26 Nov 2021 09:58:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AE06C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 26 Nov 2021 10:01:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376623AbhKZKBT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Nov 2021 05:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376668AbhKZJ7S (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Nov 2021 04:59:18 -0500
-Received: from lb2-smtp-cloud7.xs4all.net (lb2-smtp-cloud7.xs4all.net [IPv6:2001:888:0:108::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D31AC0613BE;
-        Fri, 26 Nov 2021 01:51:14 -0800 (PST)
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id qXskmvVhfCMnAqXsnm454V; Fri, 26 Nov 2021 10:51:12 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1637920272; bh=wwzI3VoyEYmtBsgGNBifRdMLW2LyrKs+jO1kug593yM=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=dgg6f34bbn691bofe96KM0Pg4dPnTiyMy9mS+z5eERFVjygMOr3Ii1g9a6cioVisI
-         8Mg7/1FQoWoQSmuDS6WvrsPcRXA+K/btrTcmswOTQMkY+BYkEAo/T+VvTWPQTeIDbg
-         RjPrRdeIz6unTxnUuVRDpaqUULZsMJswU53z9d/02amA7aLpz3PcSSG53tmYWas7hk
-         kJEWsevU9sPMpgzytxg0/zmRsweJ73maQHsBH7j3Zquwj4vRtrbO2OZ7Yv8RLCD+QC
-         MF5EaEzfCD6fQFU09xwJodegDARr2V0kwjWKzOOOKM2WsuUai1kwqHG9sXydcL4x4y
-         cEm2D2VJ/FcoQ==
-Subject: Re: [PATCH v5 00/10] add aspeed-jpeg support for aspeed-video
-To:     Jammy Huang <jammy_huang@aspeedtech.com>, eajames@linux.ibm.com,
-        mchehab@kernel.org, joel@jms.id.au, andrew@aj.id.au,
-        sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
-        laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20211118074030.685-1-jammy_huang@aspeedtech.com>
- <5ab806d1-e407-1fa4-83ec-93ebe8df7db4@xs4all.nl>
- <b6ba49f3-a9ed-f5e6-959c-309db8cce7f6@aspeedtech.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <6e0da74e-ddce-3c94-42a1-f98833489d60@xs4all.nl>
-Date:   Fri, 26 Nov 2021 10:51:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S1353520AbhKZKEz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Nov 2021 05:04:55 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:37650 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236287AbhKZKCy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 26 Nov 2021 05:02:54 -0500
+Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1mqY16-00C2Hl-NV; Fri, 26 Nov 2021 09:59:40 +0000
+Received: from ip6-localhost ([::1] helo=localhost.localdomain)
+        by slave0 with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1mqY14-009ago-9J; Fri, 26 Nov 2021 09:59:38 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.17] Venus updates (#78837)
+Date:   Fri, 26 Nov 2021 09:59:38 +0000
+Message-Id: <20211126095938.2285940-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211126093243.1254176-1-stanimir.varbanov@linaro.org>
+References: 
 MIME-Version: 1.0
-In-Reply-To: <b6ba49f3-a9ed-f5e6-959c-309db8cce7f6@aspeedtech.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfB0UtWbHxvwAoex8UP08tXClqJfplYH9f0YmKmIDGbgQ8hYJJ32UphAtCJIOorIMwEyq5qqwAxNa0izrTaL3Nx6kGIE19Ztp78bpjBjnOrczpnZ0w23W
- VliKrgY1zmR35rJUqweLeURxvzzGZFzKqWEZiuCf1VlVvqpKBzPQCmmCr24lHPIvWHyiqGzTEFoMwSts/ol/YMOb8JyxB5dSFFRdG+i/w5Ph0qQgHkYssaNA
- IFNxGKFNgOyCNfzDyP4X1RwbIMaosacxCqnY2RShMsb1GzzQLcQgnX5wSesk7/9Qksp2suqtWH4t0fjYyYkTWxOaylEzvGTC4N4NKMv/4JzbsWCRP3qHrdh0
- fo+aAVNyh5BqaoqWwhT3bDBsfjuc+zwnlV4NFvooFuqFhBoonu+9X/Dt3K4/NertOYr750DiHnAiUuwBMeGTlBv3U+qthz0ELf29+a58PemOkyJ/QY6t7Rix
- 65zZV8Rg7dakVvWVyQHWouIjfMlxlNWTBM5Pf4GwXmAU3PNHFckjgvtryEvMDrH8SnICSXb0pCD9gimTp/+dMDp469BfGzY5xbzEmMU1ze2iHnqvGYTq7/qp
- toPLbBX2iAqOQ90uyiVLYt4Pg1J8DuAOR+okXK3BxH91HkY7PPUgbvV+xxaIasjBvLkn5g/b9miY+eBG1QXxx8wk
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 26/11/2021 09:17, Jammy Huang wrote:
-> Hi Hans,
-> 
-> Please refer to Page 132, 'Video stream data format – ASPEED mode compression' of
-> https://github.com/AspeedTech-BMC/openbmc/releases/download/v07.02/SDK_User_Guide_v07.02.pdf
-> 
-> Is above information enough??
+From: builder@linuxtv.org
 
-Hmm, close. It would need some additional information, possibly documented in the source
-code:
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/20211126093243.1254176-1-stanimir.varbanov@linaro.org/
+Build log: https://builder.linuxtv.org/job/patchwork/160156/
+Build time: 00:17:35
+Link: https://lore.kernel.org/linux-media/20211126093243.1254176-1-stanimir.varbanov@linaro.org
 
-- What is the Frame Header? (the doc just says that it is different, but not what it actually is)
-- What is the EOI code? Is it equal to 'FEND'? (not quite clear to me)
+gpg: Signature made Fri 26 Nov 2021 09:26:20 AM UTC
+gpg:                using RSA key E1558C2497CE3CCC2B5AA30F25B55FC81B7035F2
+gpg: Good signature from "Stanimir Varbanov <stanimir.varbanov@linaro.org>" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 34CF E039 8A16 AD93 18FD  D5E8 A6D0 26D8 E358 14D4
+     Subkey fingerprint: E155 8C24 97CE 3CCC 2B5A  A30F 25B5 5FC8 1B70 35F2
 
-I think the documentation looks sufficient once those two items are addressed.
+Summary: got 1/4 patches with issues, being 1 at build time, plus one error when buinding PDF document
 
-> Or maybe we can postpone this series until the source code for this format ready.
-> I think I can accomplish it by the end of this year.
+Error/warnings:
 
-That's quite soon, so perhaps that would be the best approach. That way you also
-know exactly what information is missing from the SDK User Guide, and if that is
-documented, then this format can be used in the kernel.
+patches/0001-venus-correct-low-power-frequency-calculation-for-en.patch:
 
-But several of the patches in the series are independent of the new jpeg format,
-so it might be useful to get those in first.
+    allyesconfig: return code #0:
+	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
 
-Regards,
+    allyesconfig: return code #0:
+	../drivers/media/cec/core/cec-adap.c: ../drivers/media/cec/core/cec-adap.c:926 cec_transmit_msg_fh() warn: '&data->list' not removed from list
+	../drivers/media/rc/meson-ir-tx.c:22: warning: expecting prototype for meson(). Prototype was for DEVICE_NAME() instead
+	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
+	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1981 vivid_create_instance() parse error: turning off implications after 60 seconds
+	../drivers/media/usb/pvrusb2/pvrusb2-encoder.c: ../drivers/media/usb/pvrusb2/pvrusb2-encoder.c:288 pvr2_encoder_cmd() warn: inconsistent indenting
+	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:1730 pvr2_hdw_set_streaming() warn: inconsistent indenting
+	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3461 pvr2_hdw_cpufw_set_enabled() warn: inconsistent indenting
+	../drivers/media/usb/pvrusb2/pvrusb2-hdw.c: ../drivers/media/usb/pvrusb2/pvrusb2-hdw.c:3501 pvr2_hdw_cpufw_get() warn: inconsistent indenting
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
+	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
+	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2874 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
 
-	Hans
 
-> 
-> On 2021/11/25 下午 10:31, Hans Verkuil wrote:
->> Hi Jammy,
->>
->> I suggest posting a v3 that moves the patches that deal with the
->> Aspeed JPEG format to the end of the series. That way I can easily
->> merge the patches up to that point, and the Aspeed JPEG support can
->> be handled separately.
->>
->> I'm not sure if it can be merged without that format being documented,
->> either in pixfmt-reserved.rst, by implementing support for it in
->> libv4lconvert from v4l-utils, or by providing a URL to some other
->> publicly available source code. We really don't like adding pixel
->> formats that cannot be interpreted by someone without access to the
->> datasheets.
->>
->> Regards,
->>
->> 	Hans
->>
->> On 18/11/2021 08:40, Jammy Huang wrote:
->>> The aim of this series is to add aspeed-jpeg support for aspeed-video
->>> driver.
->>>
->>> To achieve this major goal some refactors are included.
->>>
->>> In the last, debugfs information is also updated per this change.
->>>
->>> Changes in v5:
->>>   - Use model data to tell different soc
->>>
->>> Changes in v4:
->>>   - Add definition for the Aspeed JPEG format
->>>   - Reserve controls for ASPEED
->>>   - Use s_fmt to update format rather than new control
->>>   - Update aspeed hq quality range, 1 ~ 12
->>>
->>>
->>> Jammy Huang (10):
->>>    media: aspeed: move err-handling together to the bottom
->>>    media: aspeed: use v4l2_info/v4l2_warn/v4l2_dbg for log
->>>    media: aspeed: add more debug log messages
->>>    media: aspeed: refactor to gather format/compress settings
->>>    media: v4l: Add definition for the Aspeed JPEG format
->>>    media: v4l2-ctrls: Reserve controls for ASPEED
->>>    media: aspeed: use model-data
->>>    media: aspeed: Support aspeed mode to reduce compressed data
->>>    media: aspeed: add comments and macro
->>>    media: aspeed: Extend debug message
->>>
->>>   .../media/uapi/v4l/pixfmt-reserved.rst        |  12 +
->>>   drivers/media/platform/aspeed-video.c         | 534 ++++++++++++++----
->>>   drivers/media/v4l2-core/v4l2-ioctl.c          |   1 +
->>>   include/uapi/linux/aspeed-video.h             |  15 +
->>>   include/uapi/linux/v4l2-controls.h            |   5 +
->>>   include/uapi/linux/videodev2.h                |   1 +
->>>   6 files changed, 467 insertions(+), 101 deletions(-)
->>>   create mode 100644 include/uapi/linux/aspeed-video.h
->>>
+Error #512 when building PDF docs
 
