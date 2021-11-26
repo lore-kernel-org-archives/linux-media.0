@@ -2,101 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69C69C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 26 Nov 2021 01:04:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DC68C433EF
+	for <linux-media@archiver.kernel.org>; Fri, 26 Nov 2021 03:02:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239799AbhKZBH5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Nov 2021 20:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243282AbhKZBF4 (ORCPT
+        id S1345036AbhKZDFS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Nov 2021 22:05:18 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:43028 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237257AbhKZDDL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Nov 2021 20:05:56 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB676C061574;
-        Thu, 25 Nov 2021 17:02:43 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id p8so2039812ljo.5;
-        Thu, 25 Nov 2021 17:02:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=d5eybHUeaAVMy2um3rYiSgMu1qvMcc0ni9BDBOieeBo=;
-        b=L+idWAu/GRgivG969p6gm/LH2qCEWB+i5m44beTgr6Uwa6hzdF2k4qBXhNZeLU6USE
-         AChTYSdb57Vipf33dqjoqCKu1B+j/3EdyNxE5ANPzoyzy+oQH7DItcOOPiRN+nBk6eln
-         8vcYABfJvDkeBwWC3fOVs5RcaHdQB0We53YH82o2z1iLmpNx7s50b0+/P9aMv7k1uYBq
-         g+l7gx5pk1mJEwMf+kGfYz4+xFF4dHaybX0F6HJASGO3/nx4QKR0vbOkxR5UTV1Eq56L
-         5L+D/+ft8wytUEy1smK5cMwSCidZTxDJ0slNHrk6jafsCTGdF1tbyrPZeqewO9cssL2x
-         X6lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=d5eybHUeaAVMy2um3rYiSgMu1qvMcc0ni9BDBOieeBo=;
-        b=QG6HSVvds8BapiYBrlDwJ39sLlNRbxtKE6Pd9BOBBgCHv1ZfWZe9Si4ytL90ML5w6j
-         OKuPVM8gyN3luS9deN9rKZBraTUT93XlDy4EvnyFyQEk8fg5ER/I6ZT5oyMJq6MrDaEO
-         spgWsVcF+X4XLnYabzu+6XKlghuT8ncCcZVhTtikv7Mmynuj3B6mJcnTIqves9eIQ9Qc
-         uOmKcelQy49rKTwLhnJgeFmZ1s9m6Lf04eXCUX5a+V3PaRhYEoNWfDSLkXIG8nhTAem3
-         sxDJ7J9ceyXvCC+jMaFK/1OhLmuR19gRmO4kNZTbtsMUKq8MGhMAl6JMAM2KvqSaWKDf
-         14qA==
-X-Gm-Message-State: AOAM532NVR4IkeAkJM2aFyZ83VAvWWfwdYjLC2Zz4IknLoSqCbrWibne
-        K5pdJipheinrpj/WjI6UK98=
-X-Google-Smtp-Source: ABdhPJwDlHo4lbJIQNIvxCxi52QGGUiKS4o/tEWhT6OWWbm2bP2UQs/NTgNq7wKFmXqO8NiR+HnQ9Q==
-X-Received: by 2002:a05:651c:238:: with SMTP id z24mr30440552ljn.84.1637888562022;
-        Thu, 25 Nov 2021 17:02:42 -0800 (PST)
-Received: from [192.168.2.145] (94-29-48-99.dynamic.spd-mgts.ru. [94.29.48.99])
-        by smtp.googlemail.com with ESMTPSA id f6sm363021ljm.48.2021.11.25.17.02.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Nov 2021 17:02:41 -0800 (PST)
-Subject: Re: [PATCH v4] i2c: tegra: Add the ACPI support
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     andy.shevchenko@gmail.com, christian.koenig@amd.com,
-        dri-devel@lists.freedesktop.org, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, linaro-mm-sig@lists.linaro.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        p.zabel@pengutronix.de, sumit.semwal@linaro.org,
-        thierry.reding@gmail.com
-References: <1637859224-5179-1-git-send-email-akhilrajeev@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <08781b22-2d96-6605-06ea-6911a4837474@gmail.com>
-Date:   Fri, 26 Nov 2021 04:02:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 25 Nov 2021 22:03:11 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C09C5340;
+        Fri, 26 Nov 2021 03:59:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1637895598;
+        bh=/0ZzhPI0j/d+Wdz9SOsh304ntMwGlhRenuwekVGpHqk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MAvPMWUcNoSuM+Gs1kq16S6nXwGCwZY7nqS4hD/52wfkjX14dELCE+VgqJgowG1d8
+         A69tvO+0pMw4CXyYMJ5AROZkNw/FqRI8A6UXgSYDdCWJx6bLmxWpWHT1bId5AQgPx0
+         NeKINRPuh5iHA6WWYTQDOpfZAC2YJ4M7RwwYqIrM=
+Date:   Fri, 26 Nov 2021 04:59:34 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        hanlinchen@chromium.org, tfiga@chromium.org, hdegoede@redhat.com,
+        kieran.bingham@ideasonboard.com
+Subject: Re: [RFC PATCH 0/2] Introduce ancillary links
+Message-ID: <YaBNlpcr+i6s5rng@pendragon.ideasonboard.com>
+References: <20211126001603.41148-1-djrscally@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1637859224-5179-1-git-send-email-akhilrajeev@nvidia.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <20211126001603.41148-1-djrscally@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-25.11.2021 19:53, Akhil R пишет:
-> Add support for the ACPI based device registration so that the driver
-> can be also enabled through ACPI table.
+On Fri, Nov 26, 2021 at 12:16:01AM +0000, Daniel Scally wrote:
+> Hello all
 > 
-> This does not include the ACPI support for Tegra VI and DVC I2C.
+> This series is not yet ready to merge, but I wanted to share it as I know some
+> other folks are working in similar areas at the moment (and I am including the
+> libcamera devel list for the same reason)
+
+Seems you forgot to CC libcamera-devel :-) Let's fix that on v2.
+
+> At present there's no means in the kernel of describing the supporting
+> relationship between subdevices that work together to form an effective single
+> unit - the type example in this case being a camera sensor and its
+> corresponding vcm. To attempt to solve that, this series adds a new type of
+> media link called MEDIA_LNK_FL_ANCILLARY_LINK, which connects two instances of
+> struct media_entity. Further work would be needed to document it properly, and
+> there may be ramifications within the v4l2-core which I have not yet discovered
+> (a lot of places seem to assume that media_entity->links means pad-2-pad links,
+> so some extra work might be needed to validate the link type before doing any
+> thing to them).
 > 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  drivers/i2c/busses/i2c-tegra.c | 52 ++++++++++++++++++++++++++++++++----------
->  1 file changed, 40 insertions(+), 12 deletions(-)
+> The mechanism of connection I have modelled as a notifier and async subdev,
+> which seemed the best route since sensor drivers already typically will call
+> v4l2_async_register_subdev_sensor() on probe, and that function already looks
+> for a reference to a firmware node with the reference named "lens-focus". To
+> avoid boilerplate in the sensor drivers, I added some new functions in
+> v4l2-async that are called in v4l2_async_match_notify() to create the ancillary
+> links - checking the entity.function of both notifier and subdev to make sure
+> that's appropriate. I haven't gone further than that yet, but I suspect we could
+> cut down on code elsewhere by, for example, also creating pad-to-pad links in
+> the same place.
 > 
-> v4 changes:
->   * changed has_acpi_companion to ACPI_HANDLE for consistency across 
->     all functions
-> v3 - https://lkml.org/lkml/2021/11/25/173
-> v2 - https://lkml.org/lkml/2021/11/23/82
-> v1 - https://lkml.org/lkml/2021/11/19/393
+> Thoughts and comments very welcome :)
+> 
+> Dan
+> 
+> Daniel Scally (2):
+>   media: entity: Add support for ancillary links
+>   media: v4l2-async: Create links during v4l2_async_match_notify()
+> 
+>  drivers/media/mc/mc-entity.c         | 30 ++++++++++++++++
+>  drivers/media/v4l2-core/v4l2-async.c | 51 ++++++++++++++++++++++++++++
+>  include/media/media-entity.h         | 30 ++++++++++++++++
+>  include/uapi/linux/media.h           |  1 +
+>  4 files changed, 112 insertions(+)
+> 
 
-Andy suggested to make v5 with extra patch that will make use of the
-generic i2c_timings, but it should be a separate change.
+-- 
+Regards,
 
-This patch is good to me. Please provide the full changelog for each
-version next time, instead of the links. Thanks!
-
-If you'll make v5, then feel free to add my r-b:
-
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Laurent Pinchart
