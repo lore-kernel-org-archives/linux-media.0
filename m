@@ -2,192 +2,210 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5625C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 26 Nov 2021 12:28:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71075C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 26 Nov 2021 12:31:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240021AbhKZMba (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Nov 2021 07:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbhKZM33 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Nov 2021 07:29:29 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C220C08C5DA;
-        Fri, 26 Nov 2021 03:56:14 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id j3so18148910wrp.1;
-        Fri, 26 Nov 2021 03:56:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=FjiDebeN0lftz9SIBVsy6WJxvM/l3Hn6Nmxtkdqni4Q=;
-        b=qV59eAZvwVT28HDrcNzurtuW8qs60Idx7SSZRN9FdnyyNugUBTneHz/X8BbSom+Z1M
-         FFMacGSf/yxmIocne/ESqk797izSzsl0zwq2x5T1LtE4DJnz1Reh0lJKpbLTeXWO0rj5
-         9HBk0KmDA3+OnrTaG4/bfBNt/rfhnivxrjflJzSuvH/OKfqln4diqOEZl7uE1VcIhE+m
-         GWaKb+CQxgLCkHCCEQpQdNoIDijAt2a0E8uM+fhYQLDvRfNEoXUGjXZzkTgcIw7T2Tp0
-         FII8k3XvwMmffzfIZPlTJh4/eMfb+xXov9RUY7mNhj9BRbQjckh7AWLjwqPXf5M0w0I4
-         tGow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=FjiDebeN0lftz9SIBVsy6WJxvM/l3Hn6Nmxtkdqni4Q=;
-        b=lCByU3f0B5ufhtD32kXeMylQfmSZAQBw4xJa3fXvULVCnZ38S1NlihoSyBE4I9dwoN
-         T+vxvLAWuIWYa1P7EhcHgx1TNGVwNQWp7MKqhSeC7Y184OhfO63+QahBcdn2Y4BMMeI7
-         sKKpY/yWYFH8epG76qysRIQWkMz390pw3+Ymjj6n5rLsqxcNrlBqw2sIzAQ7tb8+147R
-         5dfMsRNHLmcLFQuCE6bDU5UxE3adBQ1y+f65GVcMp/4LP8Gcc0qPkx+lg8Hrwl8VRtBy
-         +9TmbQeYzQ161jKIvmYO8Rtn358NoMio8GzAJpe607jHGJGumJGUNjsPO5/hmRbYoPXh
-         ZsvQ==
-X-Gm-Message-State: AOAM533bS5l1zGecK2RUs4F08r0p9ozTotsuUbSEhwUVfO/EFtoMd7Eo
-        U2iXwGE9I86dMNg7tASp5qI=
-X-Google-Smtp-Source: ABdhPJzfUgA3+l4rR+XNu5HeQbUXPQ1u3phKl+rWgA+uxctzFaji7KrNTSrX0cUbU77wZeGV2rlWOA==
-X-Received: by 2002:adf:c10e:: with SMTP id r14mr13062187wre.558.1637927772579;
-        Fri, 26 Nov 2021 03:56:12 -0800 (PST)
-Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id p13sm10797690wmi.0.2021.11.26.03.56.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Nov 2021 03:56:12 -0800 (PST)
-Subject: Re: [PATCH v6 07/15] platform/x86: int3472: Enable I2c daisy chain
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20211125165412.535063-1-hdegoede@redhat.com>
- <20211125165412.535063-8-hdegoede@redhat.com>
- <YaAel9HuAvemRg2s@pendragon.ideasonboard.com>
- <03306e12-40ec-39ab-3b40-42b0395e1b65@redhat.com>
- <4ab5efa7-65b0-009c-293a-d7a49776e78d@gmail.com>
- <2fd5400e-e587-54d2-1071-ad8df49a8a68@redhat.com>
-From:   Daniel Scally <djrscally@gmail.com>
-Message-ID: <ef123ea0-f51f-50e1-dbc2-c442a97722e4@gmail.com>
-Date:   Fri, 26 Nov 2021 11:56:11 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1345972AbhKZMeg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Nov 2021 07:34:36 -0500
+Received: from mga09.intel.com ([134.134.136.24]:37544 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347215AbhKZMce (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 26 Nov 2021 07:32:34 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="235478921"
+X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
+   d="scan'208";a="235478921"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 04:29:21 -0800
+X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
+   d="scan'208";a="607851585"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 04:29:19 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 6306820165;
+        Fri, 26 Nov 2021 14:28:47 +0200 (EET)
+Date:   Fri, 26 Nov 2021 14:28:47 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     mchehab@kernel.org, broonie@kernel.org, kernel@puri.sm,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pm@vger.kernel.org, Angus Ainslie <angus@akkea.ca>
+Subject: Re: [PATCH v2] media: i2c: dw9714: add optional regulator support
+Message-ID: <YaDS/+QbTWRl3cOS@paasikivi.fi.intel.com>
+References: <20211126090107.1243558-1-martin.kepplinger@puri.sm>
+ <YaC6nZIQOsrpBY8V@paasikivi.fi.intel.com>
+ <8d72c895ece6dce7d8badb241eebcbe076a03f81.camel@puri.sm>
 MIME-Version: 1.0
-In-Reply-To: <2fd5400e-e587-54d2-1071-ad8df49a8a68@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8d72c895ece6dce7d8badb241eebcbe076a03f81.camel@puri.sm>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Fri, Nov 26, 2021 at 12:06:03PM +0100, Martin Kepplinger wrote:
+> Am Freitag, dem 26.11.2021 um 12:44 +0200 schrieb Sakari Ailus:
+> > Hi Martin,
+> > 
+> > On Fri, Nov 26, 2021 at 10:01:07AM +0100, Martin Kepplinger wrote:
+> > > From: Angus Ainslie <angus@akkea.ca>
+> > > 
+> > > Allow the dw9714 to control a regulator and adjust suspend() and
+> > > resume()
+> > > to support both runtime and system pm.
+> > > 
+> > > Signed-off-by: Angus Ainslie <angus@akkea.ca>
+> > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > > ---
+> > > 
+> > > revision history
+> > > ----------------
+> > > 
+> > > v2: (thank you Mark)
+> > >  * simplify the regulator_get_optional() error path
+> > >  * fix regulator usage during probe()
+> > > 
+> > > v1:
+> > > https://lore.kernel.org/linux-media/20211125080922.978583-1-martin.kepplinger@puri.sm/
+> > > 
+> > > 
+> > > 
+> > >  drivers/media/i2c/dw9714.c | 39
+> > > ++++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 39 insertions(+)
+> > > 
+> > > diff --git a/drivers/media/i2c/dw9714.c
+> > > b/drivers/media/i2c/dw9714.c
+> > > index 3863dfeb8293..e8cc19b89861 100644
+> > > --- a/drivers/media/i2c/dw9714.c
+> > > +++ b/drivers/media/i2c/dw9714.c
+> > > @@ -5,6 +5,7 @@
+> > >  #include <linux/i2c.h>
+> > >  #include <linux/module.h>
+> > >  #include <linux/pm_runtime.h>
+> > > +#include <linux/regulator/consumer.h>
+> > >  #include <media/v4l2-ctrls.h>
+> > >  #include <media/v4l2-device.h>
+> > >  #include <media/v4l2-event.h>
+> > > @@ -36,6 +37,7 @@ struct dw9714_device {
+> > >         struct v4l2_ctrl_handler ctrls_vcm;
+> > >         struct v4l2_subdev sd;
+> > >         u16 current_val;
+> > > +       struct regulator *vcc;
+> > >  };
+> > >  
+> > >  static inline struct dw9714_device *to_dw9714_vcm(struct v4l2_ctrl
+> > > *ctrl)
+> > > @@ -145,6 +147,21 @@ static int dw9714_probe(struct i2c_client
+> > > *client)
+> > >         if (dw9714_dev == NULL)
+> > >                 return -ENOMEM;
+> > >  
+> > > +       dw9714_dev->vcc = devm_regulator_get_optional(&client->dev,
+> > > "vcc");
+> > 
+> > You you used regular devm_regulator_get(), you could remove the error
+> > handling below. If there's no regulator, you'll simply get a dummy
+> > one.
+> 
+> ok thanks
+> 
+> 
+> > 
+> > > +       if (IS_ERR(dw9714_dev->vcc)) {
+> > > +               dev_dbg(&client->dev, "No vcc regulator found:
+> > > %ld\n",
+> > > +                       PTR_ERR(dw9714_dev->vcc));
+> > > +               dw9714_dev->vcc = NULL;
+> > > +       }
+> > > +
+> > > +       if (dw9714_dev->vcc) {
+> > 
+> > With (dummy) regulators, these checks become unnecessary.
+> > 
+> > > +               rval = regulator_enable(dw9714_dev->vcc);
+> > > +               if (rval < 0) {
+> > > +                       dev_err(&client->dev, "failed to enable
+> > > vcc: %d\n", rval);
+> > > +                       return rval;
+> > > +               }
+> > > +       }
+> > > +
+> > >         v4l2_i2c_subdev_init(&dw9714_dev->sd, client, &dw9714_ops);
+> > >         dw9714_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+> > >                                 V4L2_SUBDEV_FL_HAS_EVENTS;
+> > > @@ -200,6 +217,9 @@ static int __maybe_unused
+> > > dw9714_vcm_suspend(struct device *dev)
+> > >         struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
+> > >         int ret, val;
+> > >  
+> > > +       if (pm_runtime_suspended(&client->dev))
+> > > +               return 0;
+> > 
+> > This can't take place in a runtime PM suspend callback. You'll need
+> > to add
+> > system suspend callback for this.
+> 
+> but this function is both the system and runtime suspend callback.
+> doesn't splitting up the callbacks just add lines of code
+> unnecessarily?
 
-On 26/11/2021 11:45, Hans de Goede wrote:
-> Hi,
->
-> On 11/26/21 12:39, Daniel Scally wrote:
->> Hello
->>
->> On 26/11/2021 11:30, Hans de Goede wrote:
->>> Hi,
->>>
->>> On 11/26/21 00:39, Laurent Pinchart wrote:
->>>> Hi Hans,
->>>>
->>>> Thank you for the patch.
->>>>
->>>> On Thu, Nov 25, 2021 at 05:54:04PM +0100, Hans de Goede wrote:
->>>>> From: Daniel Scally <djrscally@gmail.com>
->>>>>
->>>>> The TPS68470 PMIC has an I2C passthrough mode through which I2C traffic
->>>>> can be forwarded to a device connected to the PMIC as though it were
->>>>> connected directly to the system bus. Enable this mode when the chip
->>>>> is initialised.
->>>> Is there any drawback doing this unconditionally, if nothing is
->>>> connected to the bus on the other side (including no pull-ups) ?
->>> I actually never took a really close look at this patch, I just
->>> sorta inherited it from Daniel.
->>>
->>> Now that I have taken a close look, I see that it is setting the
->>> exact same bits as which get set when enabling the VSIO regulator.
->>>
->>> The idea here is that the I2C-passthrough only gets enabled when
->>> the VSIO regulator is turned on, because some sensors end up
->>> shorting the I2C pins to ground when the sensor is not powered.
->>>
->>> Since we set these bits when powering up the VSIO regulator
->>> and since we do that before trying to talk to the sensor
->>> I don't think that we need this (hack) anymore.
->>>
->>> I will give things a try without this change and if things
->>> still work I will drop this patch from the set.
->>>
->>> Daniel, what do you think?
->>
->> Humm, we're only using the VSIO regulator with the VCM though right?
-> Nope, there is a mapping from VSIO to dovdd for the ov8865 in the
-> board_data; and I'm pretty sure I copied that from your earlier
-> attempts at getting regulator lookups registered :)
+Hmm. After thinking about this a little, I think this could indeed work.
 
-Oh yeah derp; I was looking at the supply names rather than the
-regulator names, my bad!
-> And even if the VSIO regulator was only used by the VCM, then it would
-> get turned off after probing the VCM, clearing the 2 bits which this
-> commit sets. Which would break things if we did not re-enable it when
-> the ov8865 needs it.
->
->> Which might not be on when the ov8865 tries to probe. I haven't tried
->> without this patch to be honest; I set it because that was what Windows
->> does when powering on the PMIC.
-> See above, I'm pretty sure we can do without this patch which means
-> that the INT3472 code will no longer be poking at the PMIC directly
-> itself, which is good :)
+Yeah, please leave it as-is.
 
+> 
+> > 
+> > > +
+> > >         for (val = dw9714_dev->current_val & ~(DW9714_CTRL_STEPS -
+> > > 1);
+> > >              val >= 0; val -= DW9714_CTRL_STEPS) {
+> > >                 ret = dw9714_i2c_write(client,
+> > > @@ -208,6 +228,13 @@ static int __maybe_unused
+> > > dw9714_vcm_suspend(struct device *dev)
+> > >                         dev_err_once(dev, "%s I2C failure: %d",
+> > > __func__, ret);
+> > >                 usleep_range(DW9714_CTRL_DELAY_US,
+> > > DW9714_CTRL_DELAY_US + 10);
+> > >         }
+> > > +
+> > > +       if (dw9714_dev->vcc) {
+> > > +               ret = regulator_disable(dw9714_dev->vcc);
+> > > +               if (ret)
+> > > +                       dev_err(dev, "Failed to disable vcc: %d\n",
+> > > ret);
+> > > +       }
+> > > +
+> > >         return 0;
+> > >  }
+> > >  
+> > > @@ -224,6 +251,18 @@ static int  __maybe_unused
+> > > dw9714_vcm_resume(struct device *dev)
+> > >         struct dw9714_device *dw9714_dev = sd_to_dw9714_vcm(sd);
+> > >         int ret, val;
+> > >  
+> > > +       if (pm_runtime_suspended(&client->dev))
+> > 
+> > Same for this one.
+> > 
+> > > +               return 0;
+> > > +
+> > > +       if (dw9714_dev->vcc) {
+> > > +               ret = regulator_enable(dw9714_dev->vcc);
+> > > +               if (ret) {
+> > > +                       dev_err(dev, "Failed to enable vcc: %d\n",
+> > > ret);
+> > > +                       return ret;
+> > > +               }
+> > > +               usleep_range(1000, 2000);
+> > > +       }
+> > > +
+> > >         for (val = dw9714_dev->current_val % DW9714_CTRL_STEPS;
+> > >              val < dw9714_dev->current_val + DW9714_CTRL_STEPS - 1;
+> > >              val += DW9714_CTRL_STEPS) {
+> > 
+> 
+> 
 
-Yeah, in that case I think you're right and this can be dropped.
-
-> Anyways I'll give this a try sometime next week and then drop the
-> patch.
-
-
-Sounds good
-
->
-> Regards,
->
-> Hans
->
->
->
->
->>>>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->>>>> Signed-off-by: Daniel Scally <djrscally@gmail.com>
->>>>> ---
->>>>>  .../x86/intel/int3472/intel_skl_int3472_tps68470.c         | 7 +++++++
->>>>>  1 file changed, 7 insertions(+)
->>>>>
->>>>> diff --git a/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c b/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
->>>>> index c05b4cf502fe..42e688f4cad4 100644
->>>>> --- a/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
->>>>> +++ b/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
->>>>> @@ -45,6 +45,13 @@ static int tps68470_chip_init(struct device *dev, struct regmap *regmap)
->>>>>  		return ret;
->>>>>  	}
->>>>>  
->>>>> +	/* Enable I2C daisy chain */
->>>>> +	ret = regmap_write(regmap, TPS68470_REG_S_I2C_CTL, 0x03);
->>>>> +	if (ret) {
->>>>> +		dev_err(dev, "Failed to enable i2c daisy chain\n");
->>>>> +		return ret;
->>>>> +	}
->>>>> +
->>>>>  	dev_info(dev, "TPS68470 REVID: 0x%02x\n", version);
->>>>>  
->>>>>  	return 0;
+-- 
+Sakari Ailus
