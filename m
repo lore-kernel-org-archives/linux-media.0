@@ -2,165 +2,92 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2B87C433F5
-	for <linux-media@archiver.kernel.org>; Sat, 27 Nov 2021 06:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BFDEC433EF
+	for <linux-media@archiver.kernel.org>; Sat, 27 Nov 2021 09:51:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239817AbhK0GFI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 27 Nov 2021 01:05:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
+        id S1354021AbhK0JzG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 27 Nov 2021 04:55:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbhK0GDH (ORCPT
+        with ESMTP id S1353584AbhK0JxF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 27 Nov 2021 01:03:07 -0500
-Received: from lb2-smtp-cloud9.xs4all.net (lb2-smtp-cloud9.xs4all.net [IPv6:2001:888:0:108::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFDFC061756
-        for <linux-media@vger.kernel.org>; Fri, 26 Nov 2021 21:58:55 -0800 (PST)
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id qqjJmGnBl1HGJqqjbm5njh; Sat, 27 Nov 2021 06:58:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1637992731; bh=jVtVzPcre3TA6rGNZZlIcWdMnNzfIpTGFhziJLFkCWw=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=Z0ZPS9xuUViQwH7VodJUc4r0ctCmu7ok4sq/9/9pl9XuC7tPnb4/ff/dvQZ9GLTMQ
-         MbH/ff5a+78tAzcV18XmxsOdoCxqyNi7rWtlp1kDAXvpXEmxvG7VMoWI3xqNmQKevK
-         bhCwXXC0pwotDkTEVJrCXI0LV69+AleKXA5uiljHu15lDYThJ2qY1avbXbmisj3WHx
-         wJVO3RXkhJRarEY55GKSKoeHXCm7/uWHwqM4ZgzGeupmQ6AtBOdxo5eLoAQFWd3Aia
-         6ou/zdd/G50AwYl9mWotUrOAtSm6iPcqrUJV9bTiBhmPib2fbH/sbwqHaLB03UV+VV
-         a3nje/VCO0zGw==
-Message-ID: <924f3d43752ef4b38b80e13bdc926cad@smtp-cloud9.xs4all.net>
-Date:   Sat, 27 Nov 2021 06:58:33 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: ERRORS
-X-CMAE-Envelope: MS4xfI8QVGdwMtT0Z+AcWw/+xqYAJ1h2GqBhZQcOmT1Bd2ZHgCMbjIzlhN/RlHA5MCygTdO9d6UN/NOeJoF8pf9JrSlEzVcl80m47QsEDtiLmHMXYUEOtge3
- QPvBpC2Z81es8aiE/fpscJDxckF+4CTCEv1Ipefl4Ado7tMgiOgME+sArsu83DduhWneJ6i++rwv6A==
+        Sat, 27 Nov 2021 04:53:05 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A536C061746;
+        Sat, 27 Nov 2021 01:49:51 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id b40so30228878lfv.10;
+        Sat, 27 Nov 2021 01:49:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4dvE+ch/nK/kBBnPMxA7WcMHh6CQ4+F3d1jcet3ts9E=;
+        b=ZXuIR2mSzWESYoGxApxyDpzUZ7G9DWJus7hcVkGx5nQJ4UeELMyJ/lQiabT9sZ5Wck
+         jRFwzfU41LyA7/qTY2jI+WV3tk5iYy1GSsawVGH7YUX5a+YNppPuQobRMKvbyroBDy3n
+         n8Z3PyyR7vm2NPYGJFkMC4yWu3xlkZBlrCZ+WM+vzokTmvNwzYWeu3XdwqCDLNMXjH7B
+         OpsS8el+slyxIa0w8Mt1Yv43KZvD3bnyEjc8OEHbOcH0LOTRGJwh45Kx0GOta+X8vFqb
+         85DUALpHlFBzem+7+TinTX/0+mw8ICYTBZTsCnqVjFoSuac4jxzimeIpmFFqS8RpjbL2
+         mrtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4dvE+ch/nK/kBBnPMxA7WcMHh6CQ4+F3d1jcet3ts9E=;
+        b=jLuvsJgEtBmiKrV9o/5dwzij7WIFBunf2b429JPbIqzOotGy8fKlgSBeoI6zm0vNfy
+         +mnc/QwxkBym9eUYH/TR+lSl+MAjsfgWkWwOstf6ou34uBFbHFlafeiLe3bC4xFczPTM
+         51Rex/2IHPHjY7PBpBvwnbe/Bp2+jc0mNc2hqYkvel6E8fUdCsicCTMwKG0Uqn7H6/o2
+         nl8lAnzw+QK7WnTeUad9az27vQp/ZpV2WIpV/l6YWXAG0VIJrAV3xkA6GKr1w+UK8oNm
+         rDisQhblk6rZRx5ThlVszujKG7e7vpIPvKNa6mbDLUcirqs8tlmn1YB+Wz3eUUYL90b0
+         BMXg==
+X-Gm-Message-State: AOAM531qRpZ0bkiuOqMnITxamVK42f1RUnd50qguPsyTqsIxhDLy4Pxr
+        bIffvlsoFv1Sj3MAIEzcHiI=
+X-Google-Smtp-Source: ABdhPJwfnbwzqV+ykIQ/LK2UA5l0Ll8vWjs+AQqxLyu+TGPMiTQkbN3nRbqiaeJnvRMk82/2oUYU3g==
+X-Received: by 2002:ac2:5499:: with SMTP id t25mr35000401lfk.674.1638006589932;
+        Sat, 27 Nov 2021 01:49:49 -0800 (PST)
+Received: from localhost.localdomain (h-155-4-221-129.NA.cust.bahnhof.se. [155.4.221.129])
+        by smtp.gmail.com with ESMTPSA id g10sm704582lfv.113.2021.11.27.01.49.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Nov 2021 01:49:49 -0800 (PST)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] media: staging: max96712: Constify static v4l2_subdev_ops
+Date:   Sat, 27 Nov 2021 10:49:44 +0100
+Message-Id: <20211127094945.27985-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+The only usage of max96712_subdev_ops is to pass its address to
+v4l2_i2c_subdev_init() which takes a pointer to const struct
+v4l2_subdev_ops as argument. Make it const to allow the compiler to put
+it in read-only memory.
 
-Results of the daily build of media_tree:
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+---
+ drivers/staging/media/max96712/max96712.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-date:			Sat Nov 27 05:00:13 CET 2021
-media-tree git hash:	b1b447e2f3e1ec0c3e9716f4f74d056461f69ab3
-media_build git hash:	90bf75007a9f73a3bfd144cae29e05229e702035
-v4l-utils git hash:	c01c6f78adde6ecfd0ef800e381aed27bea7808b
-edid-decode git hash:	b00755e34eb12aa92416aaf1bb7b02603131afe0
-gcc version:		i686-linux-gcc (GCC) 11.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.3
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.3
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 7696c77a86087f681c8864e9ed957938d5b69aaf
-host hardware:		x86_64
-host os:		5.14.0-2-amd64
+diff --git a/drivers/staging/media/max96712/max96712.c b/drivers/staging/media/max96712/max96712.c
+index 847e2ffd4f53..9bc72d9a858b 100644
+--- a/drivers/staging/media/max96712/max96712.c
++++ b/drivers/staging/media/max96712/max96712.c
+@@ -250,7 +250,7 @@ static const struct v4l2_subdev_pad_ops max96712_pad_ops = {
+ 	.set_fmt = max96712_get_pad_format,
+ };
+ 
+-static struct v4l2_subdev_ops max96712_subdev_ops = {
++static const struct v4l2_subdev_ops max96712_subdev_ops = {
+ 	.video = &max96712_video_ops,
+ 	.pad = &max96712_pad_ops,
+ };
+-- 
+2.34.1
 
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-mips: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-arm-multi: OK
-linux-git-arm64: OK
-linux-git-powerpc64: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-4.4.283-i686: OK
-linux-4.4.283-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.246-i686: OK
-linux-4.9.246-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.246-i686: OK
-linux-4.14.246-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.206-i686: OK
-linux-4.19.206-x86_64: OK
-linux-4.20.17-i686: OK
-linux-4.20.17-x86_64: OK
-linux-5.0.21-i686: OK
-linux-5.0.21-x86_64: OK
-linux-5.1.21-i686: OK
-linux-5.1.21-x86_64: OK
-linux-5.2.21-i686: OK
-linux-5.2.21-x86_64: OK
-linux-5.3.18-i686: OK
-linux-5.3.18-x86_64: OK
-linux-5.4.144-i686: OK
-linux-5.4.144-x86_64: OK
-linux-5.5.19-i686: OK
-linux-5.5.19-x86_64: OK
-linux-5.6.19-i686: OK
-linux-5.6.19-x86_64: OK
-linux-5.7.19-i686: OK
-linux-5.7.19-x86_64: OK
-linux-5.8.18-i686: OK
-linux-5.8.18-x86_64: OK
-linux-5.9.16-i686: OK
-linux-5.9.16-x86_64: OK
-linux-5.10.62-i686: OK
-linux-5.10.62-x86_64: OK
-linux-5.11.22-i686: OK
-linux-5.11.22-x86_64: OK
-linux-5.12.19-i686: OK
-linux-5.12.19-x86_64: OK
-linux-5.13.14-i686: OK
-linux-5.13.14-x86_64: OK
-linux-5.14.1-i686: OK
-linux-5.14.1-x86_64: OK
-linux-5.15.1-i686: OK
-linux-5.15.1-x86_64: OK
-linux-5.16-rc1-i686: OK
-linux-5.16-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: WARNINGS: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 1
-virtme-32: ERRORS: Final Summary: 3100, Succeeded: 3089, Failed: 11, Warnings: 0
-sparse: WARNINGS
-smatch: WARNINGS
-kerneldoc: WARNINGS
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-32.log
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
