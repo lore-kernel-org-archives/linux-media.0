@@ -2,49 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C5E4C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 10:07:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70B1EC433EF
+	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 10:07:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240316AbhK2KKz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S239729AbhK2KKz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 29 Nov 2021 05:10:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243537AbhK2KIy (ORCPT
+        with ESMTP id S243281AbhK2KIy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 29 Nov 2021 05:08:54 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B68C0698C2;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A21C0698C3;
         Mon, 29 Nov 2021 01:47:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8782E61263;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3AFA61265;
         Mon, 29 Nov 2021 09:47:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E37C53FD4;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79BDBC58325;
         Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1638179276;
-        bh=Fp7arA5lBUk6fO+z1FEqsXv9rP6Nf7CrzZDn+sfxLds=;
+        bh=INPTpNH82uZnt9Dd9GOkeIbAFEVs1Y0clSg4UoK9T8A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X1ruu5h3vaAuIaDwY2Y7R357Md4qbqysmgOA2tTiziJsy+WBnTgSNpSGAKlwqL/a2
-         AW12kPHjgcVylpo9lehquP4lBlAPuda4ESqJ3BMG8vTKdSn3QkA6mzARZf70Tujq9n
-         j5MkW+Xcy7qmABb6uwy4RaUyzMeVRhDxHPOn3TRDpk1m3gTdkDvSTmptU6uZ49BWUM
-         UQNpjQ/MCZzca+HEF0HX/5HXXoM4eyazantRBZU5R5jAbJHOqt7T8ggc0W3JykwyAT
-         CzEXWOZYAHYRxyjrExMlPPzN+a0NDKmdXjLuMVBZxe1+uKheTE/IdnNq4UU4vDVExB
-         eANb/wNGOSLhQ==
+        b=VsPOUxP1Fi7Th/1KlzEPtARVVMaRY6WLk9lWcaqVjJT/gA5PpcYArqyf0A+wqsfyU
+         8DbFAkOQWLhvgV0vTSN56Ld6f4w7CMcOsHBJ7Hf7NzgnOvSsXg4luYkkQWnSCfQNcg
+         O1nA3mCgwDKCn2l2YV6VtFJY5UIACP/XQYi+iE+9vQcd0f9anaID8G0YCtgl+c1L3X
+         gXBpcfIoSfRyKuIuuTo4hiz+eSKVJA3ew1wD3RxcfYAj1rvbRfqT08FkwlPMp3fd3P
+         600/Yj3jTKGmwxh2vmNm+JZUKf6q8G51yv+dY9iVD340C/Y2WJSXwg1hiQcLWeOCBU
+         riVwaUIBBFFQA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mrdGM-000RBC-Aa; Mon, 29 Nov 2021 10:47:54 +0100
+        id 1mrdGM-000RBK-Cu; Mon, 29 Nov 2021 10:47:54 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v2 05/20] media: drxk: drop operation_mode from set_dvbt()
-Date:   Mon, 29 Nov 2021 10:47:37 +0100
-Message-Id: <28e38377afa7535cb1ede125b8aa987bbf9b4f27.1638179135.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 07/20] media: si21xx: report eventual errors at set_frontend
+Date:   Mon, 29 Nov 2021 10:47:39 +0100
+Message-Id: <e955d3f208794bc9589401f316910f30afb93aa6.1638179135.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638179135.git.mchehab+huawei@kernel.org>
 References: <cover.1638179135.git.mchehab+huawei@kernel.org>
@@ -56,86 +54,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This var is set, but never used. So, drop it.
+If an error occurs while setting the registers at set_frontend,
+it is silently ignored. Yet, the variable status is updated.
+
+Change the logic to return an error if it fails to write values
+to the registers.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
 
 See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
 
- drivers/media/dvb-frontends/drxk_hard.c | 23 +++++------------------
- 1 file changed, 5 insertions(+), 18 deletions(-)
+ drivers/media/dvb-frontends/si21xx.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-frontends/drxk_hard.c
-index d7fc2595f15b..9430295a8175 100644
---- a/drivers/media/dvb-frontends/drxk_hard.c
-+++ b/drivers/media/dvb-frontends/drxk_hard.c
-@@ -3720,7 +3720,6 @@ static int set_dvbt(struct drxk_state *state, u16 intermediate_freqk_hz,
- {
- 	u16 cmd_result = 0;
- 	u16 transmission_params = 0;
--	u16 operation_mode = 0;
- 	u32 iqm_rc_rate_ofs = 0;
- 	u32 bandwidth = 0;
- 	u16 param1;
-@@ -3759,10 +3758,8 @@ static int set_dvbt(struct drxk_state *state, u16 intermediate_freqk_hz,
- 	/* mode */
- 	switch (state->props.transmission_mode) {
- 	case TRANSMISSION_MODE_AUTO:
--	default:
--		operation_mode |= OFDM_SC_RA_RAM_OP_AUTO_MODE__M;
--		fallthrough;	/* try first guess DRX_FFTMODE_8K */
- 	case TRANSMISSION_MODE_8K:
-+	default:
- 		transmission_params |= OFDM_SC_RA_RAM_OP_PARAM_MODE_8K;
- 		break;
- 	case TRANSMISSION_MODE_2K:
-@@ -3773,9 +3770,7 @@ static int set_dvbt(struct drxk_state *state, u16 intermediate_freqk_hz,
- 	/* guard */
- 	switch (state->props.guard_interval) {
- 	default:
--	case GUARD_INTERVAL_AUTO:
--		operation_mode |= OFDM_SC_RA_RAM_OP_AUTO_GUARD__M;
--		fallthrough;	/* try first guess DRX_GUARD_1DIV4 */
-+	case GUARD_INTERVAL_AUTO: /* try first guess DRX_GUARD_1DIV4 */
- 	case GUARD_INTERVAL_1_4:
- 		transmission_params |= OFDM_SC_RA_RAM_OP_PARAM_GUARD_4;
- 		break;
-@@ -3794,11 +3789,7 @@ static int set_dvbt(struct drxk_state *state, u16 intermediate_freqk_hz,
- 	switch (state->props.hierarchy) {
- 	case HIERARCHY_AUTO:
- 	case HIERARCHY_NONE:
--	default:
--		operation_mode |= OFDM_SC_RA_RAM_OP_AUTO_HIER__M;
--		/* try first guess SC_RA_RAM_OP_PARAM_HIER_NO */
--		/* transmission_params |= OFDM_SC_RA_RAM_OP_PARAM_HIER_NO; */
--		fallthrough;
-+	default:	/* try first guess SC_RA_RAM_OP_PARAM_HIER_NO */
- 	case HIERARCHY_1:
- 		transmission_params |= OFDM_SC_RA_RAM_OP_PARAM_HIER_A1;
- 		break;
-@@ -3814,9 +3805,7 @@ static int set_dvbt(struct drxk_state *state, u16 intermediate_freqk_hz,
- 	/* modulation */
- 	switch (state->props.modulation) {
- 	case QAM_AUTO:
--	default:
--		operation_mode |= OFDM_SC_RA_RAM_OP_AUTO_CONST__M;
--		fallthrough;	/* try first guess DRX_CONSTELLATION_QAM64 */
-+	default:	/* try first guess DRX_CONSTELLATION_QAM64 */
- 	case QAM_64:
- 		transmission_params |= OFDM_SC_RA_RAM_OP_PARAM_CONST_QAM64;
- 		break;
-@@ -3857,9 +3846,7 @@ static int set_dvbt(struct drxk_state *state, u16 intermediate_freqk_hz,
- 	/* coderate */
- 	switch (state->props.code_rate_HP) {
- 	case FEC_AUTO:
--	default:
--		operation_mode |= OFDM_SC_RA_RAM_OP_AUTO_RATE__M;
--		fallthrough;	/* try first guess DRX_CODERATE_2DIV3 */
-+	default:	/* try first guess DRX_CODERATE_2DIV3 */
- 	case FEC_2_3:
- 		transmission_params |= OFDM_SC_RA_RAM_OP_PARAM_RATE_2_3;
- 		break;
+diff --git a/drivers/media/dvb-frontends/si21xx.c b/drivers/media/dvb-frontends/si21xx.c
+index e31eb2c5cc4c..001b23588389 100644
+--- a/drivers/media/dvb-frontends/si21xx.c
++++ b/drivers/media/dvb-frontends/si21xx.c
+@@ -711,7 +711,7 @@ static int si21xx_set_frontend(struct dvb_frontend *fe)
+ 	int i;
+ 	bool inband_interferer_div2[ALLOWABLE_FS_COUNT];
+ 	bool inband_interferer_div4[ALLOWABLE_FS_COUNT];
+-	int status;
++	int status = 0;
+ 
+ 	/* allowable sample rates for ADC in MHz */
+ 	int afs[ALLOWABLE_FS_COUNT] = { 200, 192, 193, 194, 195,
+@@ -747,8 +747,6 @@ static int si21xx_set_frontend(struct dvb_frontend *fe)
+ 	rf_freq = 10 * c->frequency ;
+ 	data_rate = c->symbol_rate / 100;
+ 
+-	status = PASS;
+-
+ 	band_low = (rf_freq - lnb_lo) - ((lnb_uncertanity * 200)
+ 					+ (data_rate * 135)) / 200;
+ 
+@@ -832,6 +830,9 @@ static int si21xx_set_frontend(struct dvb_frontend *fe)
+ 	state->fs = sample_rate;/*ADC MHz*/
+ 	si21xx_setacquire(fe, c->symbol_rate, c->fec_inner);
+ 
++	if (status)
++		return -EREMOTEIO;
++
+ 	return 0;
+ }
+ 
 -- 
 2.33.1
 
