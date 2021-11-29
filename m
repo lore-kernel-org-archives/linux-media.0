@@ -2,261 +2,91 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A63FAC433FE
-	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 23:14:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F4E5C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 23:15:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232681AbhK2XSK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Nov 2021 18:18:10 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:50160 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232579AbhK2XRq (ORCPT
+        id S231610AbhK2XS5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Nov 2021 18:18:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231734AbhK2XSq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:17:46 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1A9FE110E;
-        Tue, 30 Nov 2021 00:14:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638227667;
-        bh=2E+nUCq0kD9wspQ2Su7Ab9gxQat9yZe+28mwUrZmAno=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fGG51HIXuge1nvZ0KUeUTbWlwcpzRxIF/iBkOW1qUFAHRfWDQBpvmiVKMVt3xK8GA
-         9Ful7fN/tDBTrwQ6dLPbo7XMb/yKF0vfCYJ6UtHK3FjmaQM20zQSSe0r/Gfz72+fx5
-         61jC5Vv1/jnYoMxJyaq1oQtXd9ThYq6hQiS8T8KM=
-Date:   Tue, 30 Nov 2021 01:14:02 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Eugen Hristev <eugen.hristev@microchip.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jacopo@jmondi.org, sakari.ailus@iki.fi, nicolas.ferre@microchip.com
-Subject: Re: [PATCH v2 02/25] dt-bindings: media: atmel: csi2dc: add bindings
- for microchip csi2dc
-Message-ID: <YaVeunGtt4bgmITl@pendragon.ideasonboard.com>
-References: <20211112142509.2230884-1-eugen.hristev@microchip.com>
- <20211112142509.2230884-3-eugen.hristev@microchip.com>
+        Mon, 29 Nov 2021 18:18:46 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BADC096751;
+        Mon, 29 Nov 2021 15:06:29 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id j3so40227821wrp.1;
+        Mon, 29 Nov 2021 15:06:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MIbZUt/YFgWRfyP/uXvxQWzY6RB+wFRt4dt1V30FGkg=;
+        b=Wr2c/Dakc89dINMCpGVmmSgkuaFb96bJvgg6Lratrao/MuWUSrAHxvzVQIVoaxkJSn
+         l2iEM01jacukj6GsQ09Z9rezsHNWBuiNXJwuGEi+1uiINAWWZyYM22rBg1oMvZnfWaHc
+         h6UDEpZfTgBf83+/AvRfPqSPJeR4RJVxkYK19050Sh6HQ4C4j86dyRCNIfAWgPL0867B
+         djMo31UIHRBvlYKhJULi/F78udFQQFMrh+Nwj89Ymq+pTYqS1Pa4RATiPutsIvpSxcNk
+         TVT66okLupg27o03asdx13avEGpYGN7Z2y3qHXNalUwN54KCNekh+1A+Tt3om0Y5DaTD
+         uIGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MIbZUt/YFgWRfyP/uXvxQWzY6RB+wFRt4dt1V30FGkg=;
+        b=7cTLFmXAwk/CJFcvYzDh61vM9eNQWjfTisOQ+XgNoxGq5B2KsRjyMHfQbKqZdIqySl
+         vi3AAOJ/RbsBMJw3QCMnIeOOX+jBW1Egmw0QE8WT/9BZZlIj4JxqY1tVbRNTq+HyEYqX
+         NBCK7/qYcmgaCjFCjar3LrhCBe3eJPuXESZzbjH0wvpBONS5WtIf9X4ZnLq9iw+ihw1W
+         IwbIlU4UtgHlxqIWkZ5wUsnO1J8kDg6PK7Gwg/SyMuPvVh/mhjFegQ8o/PM/H8NFgd6J
+         vk4oujU6f0yvLZfjhIkfDBKXEQPkOOaHpSO3Q4ZsMW/WIxewBruHYUv7mcOwZPYAoK+Y
+         yEwg==
+X-Gm-Message-State: AOAM5333/VE/2+Q8Ad4G1JS7MZzs00D8JNLgBTOLCLKaY0RMd7Yzz3WT
+        XAkVWCFi1EJBVg==
+X-Google-Smtp-Source: ABdhPJzKV1nYUF1XunQDqsImT/BMVzjWBD/ZtbatqJyIP557SuvlaBHZ0QnZVC9qC4FJg4NX1FO+0Q==
+X-Received: by 2002:a5d:568c:: with SMTP id f12mr36446791wrv.240.1638227188186;
+        Mon, 29 Nov 2021 15:06:28 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id 8sm552690wmg.24.2021.11.29.15.06.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 15:06:27 -0800 (PST)
+From:   Colin Ian King <colin.i.king@googlemail.com>
+X-Google-Original-From: Colin Ian King <colin.i.king@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: atomisp: make array idx_map static const
+Date:   Mon, 29 Nov 2021 23:06:26 +0000
+Message-Id: <20211129230626.549090-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211112142509.2230884-3-eugen.hristev@microchip.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Eugen,
+Don't populate the array idx_map on the stack but instead make it
+static const. Also makes the object code smaller by 16 bytes.
 
-Thank you for the patch.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/staging/media/atomisp/pci/sh_css_params.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, Nov 12, 2021 at 04:24:46PM +0200, Eugen Hristev wrote:
-> Add bindings documentation for Microchip CSI2 Demultiplexer controller.
-> 
-> CSI2DC is a demultiplexer from Synopsys IDI interface specification to
-> parallel interface connection or direct memory access.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> ---
-> Changes in v2:
-> - changed the endpoint/port references as suggested by Rob
-> 
-> Changes in this version :
-> - fixed 'sink' name to be actually source.
-> - added dma properties and example with dma
-> 
-> Previous change log:
-> Changes in v5:
-> - modified bindings as per Rob Herring review
-> 
-> Changes in v4:
-> - Removed property for inter-line-delay and for clock continuous/non-continuous
-> - Removed virtual channel by reg for second endpoint
-> 
-> Changes in v3:
-> - Removed some text from description, as it was explained in the schema
-> - fixed other things as per Rob's review
-> - moved some text inside the schema, like the clock description
-> 
-> Changes in v2:
-> - fixed warnings reported by dt_binding_check
-> 
->  .../bindings/media/microchip,csi2dc.yaml      | 159 ++++++++++++++++++
->  1 file changed, 159 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml b/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-> new file mode 100644
-> index 000000000000..45418c964bf3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
-> @@ -0,0 +1,159 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/microchip,csi2dc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip CSI2 Demux Controller (CSI2DC)
-> +
-> +maintainers:
-> +  - Eugen Hristev <eugen.hristev@microchip.com>
-> +
-> +description:
-> +  CSI2DC - Camera Serial Interface 2 Demux Controller
-> +
-> +  CSI2DC is a hardware block that receives incoming data from an IDI interface
-> +  and filters packets based on their data type and virtual channel identifier,
-> +  then converts the byte stream into a cross clock domain to a pixel stream
-> +  to a parallel interface that can be read by a sensor controller.
-> +  IDI interface is Synopsys proprietary.
-> +
-> +  CSI2DC provides two pipes, one video pipe and one data pipe. Video pipe
-> +  is connected to a sensor controller and the data pipe is accessible
-> +  as a DMA slave port to a DMA controller.
-> +
-> +  CSI2DC supports a single 'port' node as a sink port with Synopsys 32-bit
-> +  IDI interface. The connected endpoint must be a IDI interface compatible
-> +  device , that can provide 32-bit IDI interface connection as source port.
-
-s/ , //
-
-> +  This port is mandatory.
-> +
-> +  CSI2DC supports one 'port' node as source port with parallel interface.
-> +  This is called video pipe.
-> +  This port has an 'endpoint' that can be connected to a sink port of another
-> +  controller (next in pipeline).
-> +
-> +  CSI2DC also supports direct access to the data through AHB, via DMA channel,
-> +  called data pipe.
-> +  Because of this, the source 'port' child node (second) is not mandatory.
-> +  If the source 'port' child node is missing, only data pipe is available.
-> +  For data pipe to be available, a dma controller must be referenced.
-
-Ports are hardware elements, so in that sense they should exist if the
-hardware is synthesized with the port, even when the port isn't
-connected. Connections are then described by endpoints. I think both
-port@0 and port@1 should be required, and the above description updated
-accordingly.
-
-> +
-> +properties:
-> +  compatible:
-> +    const: microchip,sama7g5-csi2dc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    description:
-> +      CSI2DC must have two clocks to function correctly. One clock is the
-> +      peripheral clock for the inside functionality of the hardware block.
-> +      This is named 'pclk'. The second clock must be the cross domain clock,
-> +      in which CSI2DC will perform clock crossing. This clock must be fed
-> +      by the next controller in pipeline, which usually is a sensor controller.
-> +      Normally this clock should be given by this sensor controller who
-> +      is also a clock source. This clock is named 'scck', sensor controller clock.
-> +    items:
-> +      - const: pclk
-> +      - const: scck
-> +
-> +  dmas:
-> +    maxItems: 1
-> +
-> +  dma-names:
-> +    const: rx
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description:
-> +          Input port node, single endpoint describing the input port.
-> +
-> +        properties:
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +            description: Endpoint connected to input device
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description:
-> +          Output port node, single endpoint describing the output port.
-> +
-> +        properties:
-> +          endpoint:
-> +            unevaluatedProperties: false
-> +            $ref: video-interfaces.yaml#
-> +            description: Endpoint connected to output device
-> +
-> +    required:
-> +      - port@0
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - ports
-> +
-> +examples:
-> +  # Example for connecting to a parallel sensor controller block
-> +  - |
-> +    csi2dc@e1404000 {
-> +        compatible = "microchip,sama7g5-csi2dc";
-> +        reg = <0xe1404000 0x500>;
-> +        clocks = <&pclk>, <&scck>;
-> +        clock-names = "pclk", "scck";
-> +
-> +        ports {
-> +               #address-cells = <1>;
-> +               #size-cells = <0>;
-> +               port@0 {
-> +                       reg = <0>; /* must be 0, first child port */
-> +                       csi2dc_in: endpoint { /* input from IDI interface */
-> +                               remote-endpoint = <&csi2host_out>;
-> +                       };
-> +               };
-> +
-> +               port@1 {
-> +                       reg = <1>; /* must be 1, second child port */
-> +                       csi2dc_out: endpoint {
-> +                               remote-endpoint = <&xisc_in>; /* output to sensor controller */
-> +                       };
-> +               };
-> +        };
-> +    };
-> +
-> +  # Example for connecting to a DMA master as an AHB slave
-> +  - |
-> +    #include <dt-bindings/dma/at91.h>
-> +    csi2dc@e1404000 {
-> +        compatible = "microchip,sama7g5-csi2dc";
-> +        reg = <0xe1404000 0x500>;
-> +        clocks = <&pclk>, <&scck>;
-> +        clock-names = "pclk", "scck";
-> +        dmas = <&dma0 AT91_XDMAC_DT_PERID(34)>;
-> +        dma-names = "rx";
-> +
-> +        ports {
-> +               #address-cells = <1>;
-> +               #size-cells = <0>;
-> +               port@0 {
-> +                       reg = <0>; /* must be 0, first child port */
-> +                       csi2dc_input: endpoint { /* input from IDI interface */
-> +                               remote-endpoint = <&csi2host_out>;
-> +                       };
-> +               };
-> +        };
-> +    };
-> +
-> +...
-
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
+index 41ed8e4600ff..09f87c285b8d 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_params.c
++++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
+@@ -3399,7 +3399,7 @@ sh_css_params_write_to_ddr_internal(
+ 
+ 	if (params->config_changed[IA_CSS_MACC_ID] && binary->info->sp.enable.macc) {
+ 		unsigned int i, j, idx;
+-		unsigned int idx_map[] = {
++		static const unsigned int idx_map[] = {
+ 			0, 1, 3, 2, 6, 7, 5, 4, 12, 13, 15, 14, 10, 11, 9, 8
+ 		};
+ 
 -- 
-Regards,
+2.33.1
 
-Laurent Pinchart
