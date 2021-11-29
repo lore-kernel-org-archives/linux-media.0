@@ -2,166 +2,72 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B250C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 22:40:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92460C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 23:12:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbhK2Wnp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Nov 2021 17:43:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234617AbhK2WnJ (ORCPT
+        id S237132AbhK2XQB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Nov 2021 18:16:01 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:44577 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234537AbhK2XPx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:43:09 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04697C04C31A
-        for <linux-media@vger.kernel.org>; Mon, 29 Nov 2021 10:56:57 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id m15so17070550pgu.11
-        for <linux-media@vger.kernel.org>; Mon, 29 Nov 2021 10:56:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jXj5bTskBhM/inldINGFbo3ZZXdzWlhgorUbjoQAtas=;
-        b=Lmn6AsNCssbYh6bNKKH6i6K2CJ6w+hfTb9W0XlxElmbvxxgeqsv2pQBe1P0DeAb5mf
-         TrOC61nmzwEvKBzNB4gldDuPfgynMGjjTkQXy3iONEpuocFvW877d9XY1PMT2IQiPuFc
-         pzGHYoTnfpnhOAtqXW8VUVIK/hU7KSQ02Xf8bhDtV6pdxtfxA5DfKvPwUKTRseI8Krbp
-         J2TyYWjbQE6B50juuPKsYyQWcYTpFZi1bRP/xk9YNIggq7Rh4QUpvXwiIFICOk4ZUos8
-         chEpkA85G5M44HYyJLAfwGc8NGNDcqIzRskR/j+bJIZuAWEDSy/9OnmuSCEuEy6Zw0d5
-         RvOg==
+        Mon, 29 Nov 2021 18:15:53 -0500
+Received: by mail-ot1-f53.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso27664816otj.11;
+        Mon, 29 Nov 2021 15:12:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jXj5bTskBhM/inldINGFbo3ZZXdzWlhgorUbjoQAtas=;
-        b=Z4bgCL/WeAGhQ+eNc5GCakzzaxejWQfkDmAubHAjdKxhhjGq5ctEKNzyE1UJY9aHmB
-         11IjR4BS7nlyCr/uYOkx0dYum6/f/TzRsdE0NvpriOKayUtV6iJLpwgGUY7KQ1kmV997
-         JXXLUqJ9OQFSPmLuyQN+ye1GnYVVmBcEZkl1azs/9UDY1X6opTwE7pqCx6CYDyDKNirj
-         WScHZ/WLRo7sU2SuDgOKsd21C3oANI2EVwqOT6Rkb9mM5YzHOZbLlGK06ae0oOpB23/o
-         tVs0wP6ujNM/+SzFoIJfdy8XexReAag5d1a8qV/jEk9xwWjPqGg4K1MF0Yj8+lsztSPF
-         EkEA==
-X-Gm-Message-State: AOAM532O8/tEmxXk2ZkKzPVFT2G4szxiCx3+pXoaZi9ogeQSApvRJEi2
-        MDfzeVGtU/qABGPf7pqjoOa0YcwOZok1Rd+N5U7LYw==
-X-Google-Smtp-Source: ABdhPJw3Pvd2m+oeVtAYOMti2klhh9NIOU3uqMbIsXqzXYUhkGcKUSybIrkrs7v4GuExpBWgJs9t1jjA0qQNoD8X1pA=
-X-Received: by 2002:a63:4244:: with SMTP id p65mr36817494pga.440.1638212216494;
- Mon, 29 Nov 2021 10:56:56 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xvaWNOHxIX5RQDegrPAkNqp+TbGhYaJoM7ojwcLXG0k=;
+        b=XFttEqfrL8eO+Z+QetzVDWBugsSNgxZtAwEXY1k83kLICYq8KRl+A502ZuvJood92B
+         z0GHmDY19W++IVnGoiPgBVZL8uOHMusC85VrGzBlrMU7Yt8Osg1jZLZ+yUFaJK6secCJ
+         Wb10tExLckIpubJmVXiixLsTXep82BNRHrsoDuresJ98ZAl0//1XrNiQnvwoN5YWtgrx
+         o7oZJfa1qQ4tZpKlWUEeR11kE7GhLdSC2qruptP2T6G+U/6PpunHtwS2Bznzlc5hT6cJ
+         IGFDUuc7/5YMtgMSU86XaPYCcgCuNy094D5C91ZFzefZxD+sguerJ23+g7q971pJVI50
+         vuvQ==
+X-Gm-Message-State: AOAM531ceCTSg9RquSuwajyIzasu2l5FeAUohPOhZJIPQEAtrZtOIKWw
+        j8Nfl4wsbRhLS/Wjb/hYrw==
+X-Google-Smtp-Source: ABdhPJzrih+obICiu/TVSMEEZYpJytpel1DHE1SZn5KyWgNg2OIz1uW2EsNEa2nmDMz91dgwpPY1WA==
+X-Received: by 2002:a05:6830:199:: with SMTP id q25mr47326858ota.150.1638227555071;
+        Mon, 29 Nov 2021 15:12:35 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id e16sm2443380ook.38.2021.11.29.15.12.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 15:12:34 -0800 (PST)
+Received: (nullmailer pid 788051 invoked by uid 1000);
+        Mon, 29 Nov 2021 23:12:33 -0000
+Date:   Mon, 29 Nov 2021 17:12:33 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Chen-Yu Tsai <wens@csie.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] dt-bindings: media: Add compatible for D1
+Message-ID: <YaVeYd939OMtSJTI@robh.at.kernel.org>
+References: <20211119031519.23430-1-samuel@sholland.org>
 MIME-Version: 1.0
-References: <20211106155427.753197-1-aford173@gmail.com> <20211106155427.753197-4-aford173@gmail.com>
- <YZrTyVJR8VN6dQAf@pendragon.ideasonboard.com> <CAHCN7xK=SNgiC2kRzX4gftjkZX4Ms8PVbL69n7+eR-EAe68xag@mail.gmail.com>
- <YZwyhWPJVlC0JmpK@pendragon.ideasonboard.com> <0c3b4cdd075919ca5cc27c56e792f510e3b76cd7.camel@ew.tq-group.com>
- <YZy4nFgkIyNXpIo3@pendragon.ideasonboard.com>
-In-Reply-To: <YZy4nFgkIyNXpIo3@pendragon.ideasonboard.com>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Mon, 29 Nov 2021 10:56:45 -0800
-Message-ID: <CAJ+vNU3BtKABmBNcqdcrXmmqHzkoOZ9hJwEhC11WLh4w2popyA@mail.gmail.com>
-Subject: Re: (EXT) Re: [PATCH V2 4/5] arm64: dts: imx8mm-beacon: Enable OV5640 Camera
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Adam Ford <aford173@gmail.com>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Schrempf Frieder <frieder.schrempf@kontron.de>,
-        linux-media <linux-media@vger.kernel.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        cstevens@beaconembedded.com,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Peng Fan <peng.fan@nxp.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211119031519.23430-1-samuel@sholland.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 1:47 AM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Alexander,
->
-> On Tue, Nov 23, 2021 at 08:38:47AM +0100, Alexander Stein wrote:
-> > Am Dienstag, dem 23.11.2021 um 02:15 +0200 schrieb Laurent Pinchart:
-> > > On Sun, Nov 21, 2021 at 09:07:26PM -0600, Adam Ford wrote:
-> > > > On Sun, Nov 21, 2021 at 5:18 PM Laurent Pinchart wrote:
-> > > > > On Sat, Nov 06, 2021 at 10:54:26AM -0500, Adam Ford wrote:
-> > > > > > The baseboard has support for a TDNext 5640 Camera which
-> > > > > > uses an OV5640 connected to a 2-lane CSI2 interface.
-> > > > > >
-> > > > > > With the CSI and mipi_csi2 drivers pointing to an OV5640 camera, the media
-> > > > > > pipeline can be configured with the following:
-> > > > > >
-> > > > > >     media-ctl --links "'ov5640 1-003c':0->'imx7-mipi-csis.0':0[1]"
-> > > > > >
-> > > > > > The camera and various nodes in the pipeline can be configured for UYVY:
-> > > > > >     media-ctl -v -V "'ov5640 1-003c':0 [fmt:UYVY8_1X16/640x480 field:none]"
-> > > > > >     media-ctl -v -V "'csi':0 [fmt:UYVY8_1X16/640x480 field:none]"
-> > > > > >
-> > > > > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > > > >
-> > > > > As the ov5640 is on an add-on module, would a DT overlay be better ?
-> > > >
-> > > > At least for the Beacon / LogicPD boards, I would prefer to avoid the
-> > > > overlays.  We have an i.M6Q and an OMAP3 board with cameras enabled in
-> > > > our development kit device trees.  If the cameras are not connected,
-> > > > they just display a message that the cameras are not communicating and
-> > > > move on.  I'm OK with that.
-> > >
-> > > You know the board better than I do, so I won't push against this, but I
-> > > still think it may not lead to the best user experience, especially if a
-> > > user wanted to connect a different sensor to the development board.
-> >
-> > I see the advantages of overlays compared to "stacked" .dts files. But
-> > is there any general supported interface how to actually apply an overlay?
-> > Documentation/devicetree/overlay-notes.rst
-> > states of_overlay_fdt_apply() but there is only exactly one user in-
-> > kernel (rcar-du). Is it expected that the bootloader like u-boot shall
-> > apply the .dtbo files?
->
-> I believe the boot loader is expected to apply overlays nowadays, yes.
-> That's my personal workflow.
->
+On Thu, 18 Nov 2021 21:15:17 -0600, Samuel Holland wrote:
+> D1 contains a video engine similar to the one in other sunxi SoCs.
+> Add a compatible for it.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+>  .../bindings/media/allwinner,sun4i-a10-video-engine.yaml         | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-That is my understanding as well. I believe the support to apply dt
-overlays within Linux (which the rpi kernel still uses) never got
-merged due to race conditions so the focus was moved to bootloader.
-
-I also have begun submitting some dt overlay files [1] [2] which I
-will likely repost later this week removing the RFC.
-
-My understanding is that these should be '.dtbo' files in the Linux
-Makefile which are handled. My boards use the U-Boot bootloader and to
-handle the dt overlays there you need to:
-- set CONFIG_OF_LIBFDT_OVERLAY=y which gives you the 'fdt apply' command
-- use 'fdt addr <addr> && fdt resize && fdt apply <loadaddr>' prior to
-booting with booti
-- Note that there is some support at the FIT level as well for
-overlays if you need them applied to U-Boot's live dt (I don't for my
-needs)
-
-In my U-Boot environment I use scripts for loading the fdt and
-applying the overlays. For example for booting kernel/dtb from network
-I use:
-boot_net setenv fsload tftpboot; run loadfdt && run apply_overlays &&
-$fsload $kernel_addr_r venice/Image && booti $kernel_addr_r -
-$fdt_addr_r
-loadfdt if $fsload $fdt_addr_r $dir/$fdt_file1; then echo loaded
-$fdt_file1; elif $fsload $fdt_addr_r $dir/$fdt_file2; then echo loaded
-$fdt_file2; elif $fsload $fdt_addr_r $dir/$fdt_file3; then echo loaded
-$fdt_file3; elif $fsload $fdt_addr_r $dir/$fdt_file4; then echo loaded
-$fdt_file4; elif $fsload $fdt_addr_r $dir/$fdt_file5; then echo loaded
-$fdt_file5; fi
-apply_overlays fdt addr $fdt_addr_r && fdt resize && for i in
-"$fdt_overlays"; do $fsload $loadaddr $dir/$i && fdt apply $loadaddr
-&& echo applied $i...; done
-
-Best regards,
-
-Tim
-[1] https://www.spinics.net/lists/arm-kernel/msg933447.html
-[2] https://www.spinics.net/lists/arm-kernel/msg933638.html
+Acked-by: Rob Herring <robh@kernel.org>
