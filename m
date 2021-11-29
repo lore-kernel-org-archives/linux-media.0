@@ -2,49 +2,50 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E30C8C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 10:08:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FEF2C433FE
+	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 10:08:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351353AbhK2KL4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Nov 2021 05:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        id S1352065AbhK2KL7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Nov 2021 05:11:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237431AbhK2KJy (ORCPT
+        with ESMTP id S237047AbhK2KJ5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:09:54 -0500
+        Mon, 29 Nov 2021 05:09:57 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5ACBC0698CA;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1132C0698CB;
         Mon, 29 Nov 2021 01:47:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3105B80E29;
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7D97B80E61;
         Mon, 29 Nov 2021 09:47:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50E90C53FCF;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5453AC53FAD;
         Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1638179276;
-        bh=rzDLCKSxsaxbNkqeAch3s8qyQjDd6iwHRnT2T+rfJhg=;
+        bh=k/r/HEftU56EeEP2U5xn5dg4W7rEwcQiF7pmRR/y6tE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tbxD8oa5Sg6I8rmBkL1nzKCY+Z87YxDK1bnmirgGiJEY2oJspfGWfpNzs+Y0hzyqo
-         ET0hwq9SmZL2t3f5bK9NX6nz0TMxYX3vJzn8dykWZnvEZSUYvP2KpLEW7noAYb1s/F
-         v15Yol4e9CJ20HMB7w/zHhDi9mxgZnOwDTOg5+o13VBcIW6dErEKTtTREpqhZOKNkv
-         QyDxCN7/tgobF+UC8v2H+BF22563JGFnu5Igd44nZib/l1EOdHdxZLsotNEfJjaPGk
-         5bMdeZLQ7iIWsfWPlLt16jgxFG5KYXLssqFgNETy4q/EtMvNRUkvTYdjc9pFXmHihO
-         FklT4Naj5t4NQ==
+        b=Njibk+EORllBjF9kVb+169wlt6RjTpgLm6rzZgdaZWthQrMe/1OaoW7ewzdKwgPlu
+         wHSkuYANdXAJbqAnlFol+3opi3u4MiUBEqBdlUt6zlehYNNt1pJMVNOGqRs+6FvPx1
+         F8ZDTeUstIRjUsQ9xdap3qdZCv7afdffharO+BwN7OBmhinaeWuBi5A9lshOiIOHwf
+         K9FSjZIevwXHUHwrcz+8JNJs2bsqp0aW/QRpXPpaWnI5Wc3qnXVcj/fO2cZNQH3zfU
+         iiCKmA02+wezuPwUzpcMCrAjfFviUWnYByV4o84F4bsX5qVkPOx2kP1Zn/G3ihTyFm
+         wQDo3w7o3dOTw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mrdGM-000RB2-7U; Mon, 29 Nov 2021 10:47:54 +0100
+        id 1mrdGM-000RAz-5t; Mon, 29 Nov 2021 10:47:54 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2 03/20] media: davinci: get rid of an unused function
-Date:   Mon, 29 Nov 2021 10:47:35 +0100
-Message-Id: <7447911ef26de9ac73265df6aee306fbe59691a0.1638179135.git.mchehab+huawei@kernel.org>
+        llvm@lists.linux.dev
+Subject: [PATCH v2 02/20] media: saa7134-go7007: get rid of to_state() function
+Date:   Mon, 29 Nov 2021 10:47:34 +0100
+Message-Id: <8efe1d7c0023ce124fa9984095f5bc7198c71c82.1638179135.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638179135.git.mchehab+huawei@kernel.org>
 References: <cover.1638179135.git.mchehab+huawei@kernel.org>
@@ -56,8 +57,15 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vpif_get_default_field() seems to be some left-over from a
-past code that sets the field order.
+This is just an alias for container_of() and it is used only
+on a commented code. The commented code actually is an issue that
+require fixes, so, move the container_of() call to the commented
+code, and drop the unused function.
+
+This way, a fix for the function could be added later without
+needing to re-add to_state() function.
+
+This fixes a clang W=1 warning.
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
@@ -65,31 +73,34 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
 See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
 
- drivers/media/platform/davinci/vpif_capture.c | 11 -----------
- 1 file changed, 11 deletions(-)
+ drivers/media/pci/saa7134/saa7134-go7007.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/davinci/vpif_capture.c b/drivers/media/platform/davinci/vpif_capture.c
-index ae92e2c206d0..aba105fa7ef9 100644
---- a/drivers/media/platform/davinci/vpif_capture.c
-+++ b/drivers/media/platform/davinci/vpif_capture.c
-@@ -618,17 +618,6 @@ static void vpif_calculate_offsets(struct channel_obj *ch)
- 	ch->vpifparams.video_params.stdid = vpifparams->std_info.stdid;
- }
+diff --git a/drivers/media/pci/saa7134/saa7134-go7007.c b/drivers/media/pci/saa7134/saa7134-go7007.c
+index f319edb39c0e..da83893ffee9 100644
+--- a/drivers/media/pci/saa7134/saa7134-go7007.c
++++ b/drivers/media/pci/saa7134/saa7134-go7007.c
+@@ -56,11 +56,6 @@ struct saa7134_go7007 {
+ 	dma_addr_t bottom_dma;
+ };
  
--/**
-- * vpif_get_default_field() - Get default field type based on interface
-- * @iface: ptr to vpif interface
-- */
--static inline enum v4l2_field vpif_get_default_field(
--				struct vpif_interface *iface)
+-static inline struct saa7134_go7007 *to_state(struct v4l2_subdev *sd)
 -{
--	return (iface->if_type == VPIF_IF_RAW_BAYER) ? V4L2_FIELD_NONE :
--						V4L2_FIELD_INTERLACED;
+-	return container_of(sd, struct saa7134_go7007, sd);
 -}
 -
- /**
-  * vpif_config_addr() - function to configure buffer address in vpif
-  * @ch: channel ptr
+ static const struct go7007_board_info board_voyager = {
+ 	.flags		 = 0,
+ 	.sensor_flags	 = GO7007_SENSOR_656 |
+@@ -385,7 +380,7 @@ MODULE_FIRMWARE("go7007/go7007tv.bin");
+ static int saa7134_go7007_s_std(struct v4l2_subdev *sd, v4l2_std_id norm)
+ {
+ #if 0
+-	struct saa7134_go7007 *saa = to_state(sd);
++	struct saa7134_go7007 *saa = container_of(sd, struct saa7134_go7007, sd);
+ 	struct saa7134_dev *dev = saa->dev;
+ 
+ 	return saa7134_s_std_internal(dev, NULL, norm);
 -- 
 2.33.1
 
