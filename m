@@ -2,102 +2,127 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39988C4332F
-	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 09:00:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 389CEC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 09:50:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239727AbhK2JDX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Nov 2021 04:03:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237704AbhK2JBP (ORCPT
+        id S245498AbhK2JxY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Nov 2021 04:53:24 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53440 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245364AbhK2JvP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Nov 2021 04:01:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D093DC0613FB;
-        Mon, 29 Nov 2021 00:46:47 -0800 (PST)
+        Mon, 29 Nov 2021 04:51:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E4396121C;
-        Mon, 29 Nov 2021 08:46:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2523EC53FAD;
-        Mon, 29 Nov 2021 08:46:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFF5E6126D;
+        Mon, 29 Nov 2021 09:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9494CC58332;
+        Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638175606;
-        bh=oaLcDR+6x2GaOYtTmlKovn8ka1IF1mNadAa/b6xBwck=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pg7ZEiGG4J5cFQgcqe6beVg4tjKtyzfpJ+htRrxFTjSijtioif8Dg/tPOGgHU7Msk
-         Q19ml6+MomEAXzIODPSPIWb1zoNoAX19UP2bd1rL+ZnzPYyQavsUmZOfURVc3UhHDN
-         snOOXQ3fCC1L6pGxH2xRN8mWlPd71GPnK6e3nQHSqrrYQySduzwa/HTbA0CZmfoiZv
-         vV0R0jFaK/J95RXMTTETTdM5oIOk3s7D8RfhP/w/p/g0ksj0M3FZiGKGbYn9zyOr1q
-         5wjV9DRAWnR/GS/qBUVO7MfRiX1XxiGzQUrsh5M/0mRaXYpZlZlOrTzh2KEcUrmvCu
-         ny64YgQN6h8eg==
-Date:   Mon, 29 Nov 2021 09:46:43 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     andy.shevchenko@gmail.com, christian.koenig@amd.com,
-        digetx@gmail.com, dri-devel@lists.freedesktop.org,
-        jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
+        s=k20201202; t=1638179276;
+        bh=UVxFR05FKMhOYLbyC9BEQE9pXiwUc5eHmgE5lfAnxhI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=o/pdwFHOU9TVEpdPPb2IJ76QsNuU6pWoBy9UOglfJshvug865l6fNdIwmW5fPfKKZ
+         vTgHcW/DiAZ1IiGB3fHAArL9bV/0dnD98UNom4jNxcjhQpCugchUDxy53Y1oMqIiHj
+         500XRR7o8hK+h/FXMyMDBNtMIMYboEvZsGch5VmDe1ZlsiZX50IxQwPRB7XrNkV4AV
+         IsIvJahlaOizMOyeJKsEdg1Jat1tw5dMPhuiEbTZqOnJ+XARhifkEb5w1sXk0CVosd
+         0QKyMJG8zPP1oPdYc7WXy0OoGfUeYVWPLFSd4/e5DvIgmUitxjY/jjCh3liWSFRP6B
+         NZXseLLNigLOA==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1mrdGM-000RBS-GG; Mon, 29 Nov 2021 10:47:54 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Kees Cook <keescook@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
-        sumit.semwal@linaro.org, thierry.reding@gmail.com
-Subject: Re: [PATCH v4] i2c: tegra: Add the ACPI support
-Message-ID: <YaSTcx7sZfn0cZ4i@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Akhil R <akhilrajeev@nvidia.com>, andy.shevchenko@gmail.com,
-        christian.koenig@amd.com, digetx@gmail.com,
-        dri-devel@lists.freedesktop.org, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, linaro-mm-sig@lists.linaro.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        p.zabel@pengutronix.de, sumit.semwal@linaro.org,
-        thierry.reding@gmail.com
-References: <1637859224-5179-1-git-send-email-akhilrajeev@nvidia.com>
+        llvm@lists.linux.dev
+Subject: [PATCH v2 09/20] media: si470x: fix printk warnings with clang
+Date:   Mon, 29 Nov 2021 10:47:41 +0100
+Message-Id: <442df11dd08158df88e95a457175a65f20dc8369.1638179135.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1638179135.git.mchehab+huawei@kernel.org>
+References: <cover.1638179135.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iDFdsTcaXlfLI7aZ"
-Content-Disposition: inline
-In-Reply-To: <1637859224-5179-1-git-send-email-akhilrajeev@nvidia.com>
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Clang doesn't like "%hu" on macros:
 
---iDFdsTcaXlfLI7aZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+	drivers/media/radio/si470x/radio-si470x-i2c.c:414:4: error: format specifies type 'unsigned short' but the argument has type 'int' [-Werror,-Wformat]
+	drivers/media/radio/si470x/radio-si470x-i2c.c:417:4: error: format specifies type 'unsigned short' but the argument has type 'int' [-Werror,-Wformat]
 
-On Thu, Nov 25, 2021 at 10:23:44PM +0530, Akhil R wrote:
-> Add support for the ACPI based device registration so that the driver
-> can be also enabled through ACPI table.
->=20
-> This does not include the ACPI support for Tegra VI and DVC I2C.
->=20
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+Besides that, changeset cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of unnecessary %h[xudi] and %hh[xudi]")
+dropped recomendation of using %h.
 
-Applied to for-next, thanks!
+So, just replace them with "%u".
 
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
 
---iDFdsTcaXlfLI7aZ
-Content-Type: application/pgp-signature; name="signature.asc"
+See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
 
------BEGIN PGP SIGNATURE-----
+ drivers/media/radio/si470x/radio-si470x-i2c.c | 4 ++--
+ drivers/media/radio/si470x/radio-si470x-usb.c | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkk3MACgkQFA3kzBSg
-KbbDPg//YV1hcN80cjWSN7APDde7BabZiypwDgo8ZFZOkOsbZ2VOzZXpgyn42+4y
-3TyxXQDyO3xpqfsC0AaYnK/cGc1QqJC9xAKE4VeogWXC1yw9zPs1/UptGtvEPjAV
-wPR3TsJxNZYlEAfXkTlI5iFQh85893vXGxX+5t9XnXjLSWqawgF97UPcohaliALQ
-mtZhFbXEXccJujSSXUkmBZeSYi1YV8N23HO6kx7YjQ+DxgAjCdPXxLlHOSBhg9fe
-7nWlRC/+uUZr7hdkrD/jqi3wzXkHaiWKb0slAqmZdunzFvFpocDgIPaBazBhsbln
-Pu5RFoFpdZKqp+lP2c7RsnjU5SU9ptWxMy6HZKq6sdjNrNPAC9U8vZdVlax7kar2
-oxbhZ685bIQVtk9ep+X49eo15JN1xm+grQcTmvPpNr9mVBOEyItviBqD53kyCfFa
-P2RTudptER0hoN5gVG8m5c04qFeLQfR49kLI02zLmsyQJZE/AEkvMYiy8G/ETOei
-eOkD1A11JUgkDG3ZzkqODI2MLkhyGwHi4DyA60Xw3FX6kktcJqrAK4RT+1Cn+4fk
-Jb+Bb7PTLV0osT6H0XSGXv55Zbt9A9F5mvnQAKpnvk+vmhbmUGcS4yPnLWKi41s+
-qdute+3i7oHiAjXQfcPJ0eWVRPO5GzVwUE+MF3B4XHxg5jL0OYM=
-=PuO7
------END PGP SIGNATURE-----
+diff --git a/drivers/media/radio/si470x/radio-si470x-i2c.c b/drivers/media/radio/si470x/radio-si470x-i2c.c
+index a972c0705ac7..7ea7c6326f53 100644
+--- a/drivers/media/radio/si470x/radio-si470x-i2c.c
++++ b/drivers/media/radio/si470x/radio-si470x-i2c.c
+@@ -410,10 +410,10 @@ static int si470x_i2c_probe(struct i2c_client *client)
+ 			radio->registers[DEVICEID], radio->registers[SI_CHIPID]);
+ 	if ((radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE) < RADIO_FW_VERSION) {
+ 		dev_warn(&client->dev,
+-			"This driver is known to work with firmware version %hu,\n",
++			"This driver is known to work with firmware version %u,\n",
+ 			RADIO_FW_VERSION);
+ 		dev_warn(&client->dev,
+-			"but the device has firmware version %hu.\n",
++			"but the device has firmware version %u.\n",
+ 			radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE);
+ 		version_warning = 1;
+ 	}
+diff --git a/drivers/media/radio/si470x/radio-si470x-usb.c b/drivers/media/radio/si470x/radio-si470x-usb.c
+index 3f8634a46573..1e70e6971fe4 100644
+--- a/drivers/media/radio/si470x/radio-si470x-usb.c
++++ b/drivers/media/radio/si470x/radio-si470x-usb.c
+@@ -681,10 +681,10 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
+ 			radio->registers[DEVICEID], radio->registers[SI_CHIPID]);
+ 	if ((radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE) < RADIO_FW_VERSION) {
+ 		dev_warn(&intf->dev,
+-			"This driver is known to work with firmware version %hu,\n",
++			"This driver is known to work with firmware version %u,\n",
+ 			RADIO_FW_VERSION);
+ 		dev_warn(&intf->dev,
+-			"but the device has firmware version %hu.\n",
++			"but the device has firmware version %u.\n",
+ 			radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE);
+ 		version_warning = 1;
+ 	}
+@@ -698,10 +698,10 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
+ 			radio->software_version, radio->hardware_version);
+ 	if (radio->hardware_version < RADIO_HW_VERSION) {
+ 		dev_warn(&intf->dev,
+-			"This driver is known to work with hardware version %hu,\n",
++			"This driver is known to work with hardware version %u,\n",
+ 			RADIO_HW_VERSION);
+ 		dev_warn(&intf->dev,
+-			"but the device has hardware version %hu.\n",
++			"but the device has hardware version %u.\n",
+ 			radio->hardware_version);
+ 		version_warning = 1;
+ 	}
+-- 
+2.33.1
 
---iDFdsTcaXlfLI7aZ--
