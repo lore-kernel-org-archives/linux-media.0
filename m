@@ -2,47 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70B1EC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 10:07:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACF47C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 10:08:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239729AbhK2KKz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Nov 2021 05:10:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37916 "EHLO
+        id S1344770AbhK2KLU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Nov 2021 05:11:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243281AbhK2KIy (ORCPT
+        with ESMTP id S245186AbhK2KJU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:08:54 -0500
+        Mon, 29 Nov 2021 05:09:20 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A21C0698C3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E93C0698C4;
         Mon, 29 Nov 2021 01:47:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3AFA61265;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1945561274;
+        Mon, 29 Nov 2021 09:47:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17490C93056;
         Mon, 29 Nov 2021 09:47:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79BDBC58325;
-        Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638179276;
-        bh=INPTpNH82uZnt9Dd9GOkeIbAFEVs1Y0clSg4UoK9T8A=;
+        s=k20201202; t=1638179277;
+        bh=g7axgzCcZGn/eeA1irl2Ht+bPVY0TQVNksswKwdV460=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VsPOUxP1Fi7Th/1KlzEPtARVVMaRY6WLk9lWcaqVjJT/gA5PpcYArqyf0A+wqsfyU
-         8DbFAkOQWLhvgV0vTSN56Ld6f4w7CMcOsHBJ7Hf7NzgnOvSsXg4luYkkQWnSCfQNcg
-         O1nA3mCgwDKCn2l2YV6VtFJY5UIACP/XQYi+iE+9vQcd0f9anaID8G0YCtgl+c1L3X
-         gXBpcfIoSfRyKuIuuTo4hiz+eSKVJA3ew1wD3RxcfYAj1rvbRfqT08FkwlPMp3fd3P
-         600/Yj3jTKGmwxh2vmNm+JZUKf6q8G51yv+dY9iVD340C/Y2WJSXwg1hiQcLWeOCBU
-         riVwaUIBBFFQA==
+        b=BeyQubmuGPslQehBh6n2w+Qk+OC0h7H+dSEAMsDwXRHOR5ge0JmWQPtkv82y4Akgn
+         eucesC14ZOxrgtVjuAyE8l6EIcns2wO6CWGBXeGNcdHihCZe3tkAGmV2C6Ebp9ctrG
+         wAdiMvqTr5ovJCh8JTgM3VmhwHmpsZ1zQf108T1AJAC6No8aOIHrg7F2PHaRv18ols
+         s2o6ifx+hkB/+DpOVcwvldgKImrmws1HvtCty/h68l/7KP+01S6b8PnsrwZigsAwr0
+         RoUm9shvYenAL/XO0f220yrMDbGWzqTMYr3iRI1xB1WV8ueaOA+GffSnrCYmvY2Qs6
+         8Sme4GhwJZwBg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mrdGM-000RBK-Cu; Mon, 29 Nov 2021 10:47:54 +0100
+        id 1mrdGM-000RBy-Un; Mon, 29 Nov 2021 10:47:54 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v2 07/20] media: si21xx: report eventual errors at set_frontend
-Date:   Mon, 29 Nov 2021 10:47:39 +0100
-Message-Id: <e955d3f208794bc9589401f316910f30afb93aa6.1638179135.git.mchehab+huawei@kernel.org>
+        Todor Tomov <todor.too@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH v2 17/20] media: camss: Remove unused static function
+Date:   Mon, 29 Nov 2021 10:47:49 +0100
+Message-Id: <f1b1507dd460eb050dd1817bd11d664e1cba0f6e.1638179135.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638179135.git.mchehab+huawei@kernel.org>
 References: <cover.1638179135.git.mchehab+huawei@kernel.org>
@@ -54,52 +59,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If an error occurs while setting the registers at set_frontend,
-it is silently ignored. Yet, the variable status is updated.
+From: Robert Foss <robert.foss@linaro.org>
 
-Change the logic to return an error if it fails to write values
-to the registers.
+vfe_reg_clr() is not used in camss-vfe-170.c, and can be removed.
 
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
 
 See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
 
- drivers/media/dvb-frontends/si21xx.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/platform/qcom/camss/camss-vfe-170.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/si21xx.c b/drivers/media/dvb-frontends/si21xx.c
-index e31eb2c5cc4c..001b23588389 100644
---- a/drivers/media/dvb-frontends/si21xx.c
-+++ b/drivers/media/dvb-frontends/si21xx.c
-@@ -711,7 +711,7 @@ static int si21xx_set_frontend(struct dvb_frontend *fe)
- 	int i;
- 	bool inband_interferer_div2[ALLOWABLE_FS_COUNT];
- 	bool inband_interferer_div4[ALLOWABLE_FS_COUNT];
--	int status;
-+	int status = 0;
- 
- 	/* allowable sample rates for ADC in MHz */
- 	int afs[ALLOWABLE_FS_COUNT] = { 200, 192, 193, 194, 195,
-@@ -747,8 +747,6 @@ static int si21xx_set_frontend(struct dvb_frontend *fe)
- 	rf_freq = 10 * c->frequency ;
- 	data_rate = c->symbol_rate / 100;
- 
--	status = PASS;
--
- 	band_low = (rf_freq - lnb_lo) - ((lnb_uncertanity * 200)
- 					+ (data_rate * 135)) / 200;
- 
-@@ -832,6 +830,9 @@ static int si21xx_set_frontend(struct dvb_frontend *fe)
- 	state->fs = sample_rate;/*ADC MHz*/
- 	si21xx_setacquire(fe, c->symbol_rate, c->fec_inner);
- 
-+	if (status)
-+		return -EREMOTEIO;
-+
- 	return 0;
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+index 5c083d70d495..f524af712a84 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+@@ -191,13 +191,6 @@ static u32 vfe_hw_version(struct vfe_device *vfe)
+ 	return hw_version;
  }
  
+-static inline void vfe_reg_clr(struct vfe_device *vfe, u32 reg, u32 clr_bits)
+-{
+-	u32 bits = readl_relaxed(vfe->base + reg);
+-
+-	writel_relaxed(bits & ~clr_bits, vfe->base + reg);
+-}
+-
+ static inline void vfe_reg_set(struct vfe_device *vfe, u32 reg, u32 set_bits)
+ {
+ 	u32 bits = readl_relaxed(vfe->base + reg);
 -- 
 2.33.1
 
