@@ -2,51 +2,50 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B998C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 10:08:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E875EC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 10:08:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352812AbhK2KMA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Nov 2021 05:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
+        id S1352490AbhK2KL7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Nov 2021 05:11:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238905AbhK2KJ6 (ORCPT
+        with ESMTP id S238876AbhK2KJ6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 29 Nov 2021 05:09:58 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6415DC0698CD;
-        Mon, 29 Nov 2021 01:48:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089F0C0698CC;
+        Mon, 29 Nov 2021 01:47:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E521B80E75;
-        Mon, 29 Nov 2021 09:47:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 051B6C53FD3;
+        by ams.source.kernel.org (Postfix) with ESMTPS id C80B5B80E62;
         Mon, 29 Nov 2021 09:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BD25C53FD0;
+        Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638179277;
-        bh=cvDcFaDZVEW1u/gAhNbQDP9i1EmPWvMAVO+rzVJt8UA=;
+        s=k20201202; t=1638179276;
+        bh=Dl4PsWpdjqElHMy7Xe1wnMBXy8V8aqd1CbbHT17BCQs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vDA1Q9rsnDrm+hHvttboWsJuGAPuy/3d9fyfQ23IueJVZbr+aMpCOqklJt3U+ORoK
-         t1pIY4Rg1GwFFFV/Uaa7XIDE4Wq1WaMA2TOoM+xz6CRYjGoHzZYsj7Lbqq7PotdSSt
-         bWUq0GoNdKaTuy3SW5bsyqQFEH8mzpCQzPmhyo2RFATHGSg2n5tpqLX+6NH1UGnIhU
-         iqCJ6t9+iL0/zADu5LeVTsmhL4vYZv0l9TgAin5nPbpJ+8MmuQrJHmdD0uTwlSC0cV
-         czb3TDNao9phOiHV3T4t3vQH8l6OXXXhAwpVTS8EUInQme+bL+orlxiv2o/IG5UVl8
-         S67L0j8X/zr+w==
+        b=XYOcXgDdgiySXP6eKKtxNnCx3F+qo8nNXnc3y8vqzZR4Ev+D+vBFHVqpyYfp3xxt7
+         JcwFNrWTH2VWQHd79Adu2pPgVxcU/IbYvaUGIqtXCk5d61eHhC5Bc1ek+of+Yo5LvW
+         zZLOxHvAfovhoR5r/TiHB/MnzSaPdwx5tvOEWldJfvty3WRi1AP5rNt3/q8/GNDlCL
+         Ct0e/WAKDfBnTakiopIfBToqrsQFsNzPmRu8Mym7ZDpCHvLLV4ZMvoAjpH6YCwCZBA
+         rHxdYVSPaI+m7S+C0GqKwoSfcLY8M4RmH71D6PbsAvvW8b4tcWt1UhA5ZR7KWFEBHD
+         M+Zuu0fhnXInQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mrdGM-000RBu-SX; Mon, 29 Nov 2021 10:47:54 +0100
+        id 1mrdGM-000RB8-90; Mon, 29 Nov 2021 10:47:54 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v2 16/20] media: davinci: vpbe_osd: mark read reg function as __always_unused
-Date:   Mon, 29 Nov 2021 10:47:48 +0100
-Message-Id: <0c086fea0d3f0771f6c8627e99edb719e282a49c.1638179135.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 04/20] media: drxd: drop offset var from DownloadMicrocode()
+Date:   Mon, 29 Nov 2021 10:47:36 +0100
+Message-Id: <54a313c07f938258eba9038031b3bd4fb64712c0.1638179135.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638179135.git.mchehab+huawei@kernel.org>
 References: <cover.1638179135.git.mchehab+huawei@kernel.org>
@@ -58,31 +57,69 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Such function is currently unused, but could be needed in the
-future. So, keep it, marking it as __always_unused, in order to
-avoid a clang W=1 error.
+The offset is not needed, and it is never used, as the pointer
+itself is already incremented.
 
+So, drop it, in order to solve a W=1 clang warning.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
 
 See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
 
- drivers/media/platform/davinci/vpbe_osd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/dvb-frontends/drxd_hard.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/media/platform/davinci/vpbe_osd.c b/drivers/media/platform/davinci/vpbe_osd.c
-index 91b571a0ac2c..32f7ef547c82 100644
---- a/drivers/media/platform/davinci/vpbe_osd.c
-+++ b/drivers/media/platform/davinci/vpbe_osd.c
-@@ -45,7 +45,7 @@ static const struct platform_device_id vpbe_osd_devtype[] = {
- MODULE_DEVICE_TABLE(platform, vpbe_osd_devtype);
+diff --git a/drivers/media/dvb-frontends/drxd_hard.c b/drivers/media/dvb-frontends/drxd_hard.c
+index a7eb81df88c2..9860cae65f1c 100644
+--- a/drivers/media/dvb-frontends/drxd_hard.c
++++ b/drivers/media/dvb-frontends/drxd_hard.c
+@@ -914,44 +914,36 @@ static int DownloadMicrocode(struct drxd_state *state,
+ 	u32 Address;
+ 	u16 nBlocks;
+ 	u16 BlockSize;
+-	u32 offset = 0;
+ 	int i, status = 0;
  
- /* register access routines */
--static inline u32 osd_read(struct osd_state *sd, u32 offset)
-+static inline u32 __always_unused osd_read(struct osd_state *sd, u32 offset)
- {
- 	struct osd_state *osd = sd;
+ 	pSrc = (u8 *) pMCImage;
+ 	/* We're not using Flags */
+ 	/* Flags = (pSrc[0] << 8) | pSrc[1]; */
+ 	pSrc += sizeof(u16);
+-	offset += sizeof(u16);
+ 	nBlocks = (pSrc[0] << 8) | pSrc[1];
+ 	pSrc += sizeof(u16);
+-	offset += sizeof(u16);
  
+ 	for (i = 0; i < nBlocks; i++) {
+ 		Address = (pSrc[0] << 24) | (pSrc[1] << 16) |
+ 		    (pSrc[2] << 8) | pSrc[3];
+ 		pSrc += sizeof(u32);
+-		offset += sizeof(u32);
+ 
+ 		BlockSize = ((pSrc[0] << 8) | pSrc[1]) * sizeof(u16);
+ 		pSrc += sizeof(u16);
+-		offset += sizeof(u16);
+ 
+ 		/* We're not using Flags */
+ 		/* u16 Flags = (pSrc[0] << 8) | pSrc[1]; */
+ 		pSrc += sizeof(u16);
+-		offset += sizeof(u16);
+ 
+ 		/* We're not using BlockCRC */
+ 		/* u16 BlockCRC = (pSrc[0] << 8) | pSrc[1]; */
+ 		pSrc += sizeof(u16);
+-		offset += sizeof(u16);
+ 
+ 		status = WriteBlock(state, Address, BlockSize,
+ 				    pSrc, DRX_I2C_CLEARCRC);
+ 		if (status < 0)
+ 			break;
+ 		pSrc += BlockSize;
+-		offset += BlockSize;
+ 	}
+ 
+ 	return status;
 -- 
 2.33.1
 
