@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E39B9C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 13:27:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CE56C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 13:27:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236202AbhK2NbI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Nov 2021 08:31:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
+        id S245277AbhK2NbO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Nov 2021 08:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbhK2N3I (ORCPT
+        with ESMTP id S237340AbhK2N3N (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:29:08 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4569C0048F2
-        for <linux-media@vger.kernel.org>; Mon, 29 Nov 2021 04:07:38 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m25-20020a7bcb99000000b0033aa12cdd33so5789069wmi.1
-        for <linux-media@vger.kernel.org>; Mon, 29 Nov 2021 04:07:38 -0800 (PST)
+        Mon, 29 Nov 2021 08:29:13 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560F8C0048F5
+        for <linux-media@vger.kernel.org>; Mon, 29 Nov 2021 04:07:41 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id d24so36330373wra.0
+        for <linux-media@vger.kernel.org>; Mon, 29 Nov 2021 04:07:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BLWj/fhnjrVXXgIZh+35PyfbaELKgXrNzdGXr64Mrg8=;
-        b=D7Ax0EUcrgwyQnjr23C+hC5rJiVgoQTd93vaEnF2DvY/zswLfKXemcck0ne0mjm6pk
-         qvpQK+PHIsTzGTPZmNbFv7/b4Iar3wHqe2Dpstn8619cDA2/GV2yBxrsRuHBbvAQaWwV
-         eCXpfohsxe9iVmfY/d8FCDHZXW/IY7tuozCjxZCpuiD1D6/93s5jsyOTFM32wE4EoQ6C
-         9qkwYRiarVslepNVh++f4sCCKhOwKS0021ateLYMMqvgRLcZ9xqTX7i9alqRSmI3tpjp
-         kWgTO9ru4JDaPgh4Mv1nLDdObEBl//40fb8IS41MxRNvTsnalyojKMX8eWprV/cHIh8T
-         ZKWg==
+        bh=iXk/BAglFY4+iArSPyqj5oNvQDhYe5ziG2iDX3cCpzk=;
+        b=HwL7JeXwfoagXZaDlHM/xWxm2tVFNdIXBGGWKgUZ+lIqlD6LRb2FoT/no/wTqp3+K7
+         f0TI8gOfVx5BaLr0Lqq+95Lq4Uy1XoYU66mRGrlMLW8fwwwTtZXtfy3OKPVc8pwi9g06
+         JmPYjvJd4eP6ORjmR2XV2AMrbPQzDrtr87Uq23oX0JaYovH4AoZsUakH0VNOr1AJ60Iu
+         483jQzZwRyUwznLwYrTE7DKhbCfasMNiqlZ3l5wLKg1QyDfjumc78dubh6VR7dXBQuoG
+         Kiwffruk9LzDgZcyDH3hgn+rxd65N7XXVxZR4SB065woHwCy/vfH1Z9IIDhnYssXYiAj
+         Iecg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BLWj/fhnjrVXXgIZh+35PyfbaELKgXrNzdGXr64Mrg8=;
-        b=H34XbqbE2RW5hM8LXxxXSLea07tjuqtoptJ2VvgvF1olukEygZxQN2Bs4I+iWrcaiP
-         +kwErrONn1fHBHilfybvEc9YmSh5yi7va/8JQtw0k75nYovETE1Se7WvsMw4ouDpoPh+
-         7pDL8WzovUj6XcY6bhBlgsx7sBk2IEmdtZMB5EJyCraMXq5G80cDqcr6xV+DL3QSZ8f2
-         fYQYRTvR6UHaknqp5VU4SMJeiDqFDvQhc75q21d6O3ClDzPFGdjTCYrajhmRz+F+B41E
-         oLwCfW0eHDbgT+fgiIeNQ+rjPZkh4ThUxqBZZuSZ3ZZ8k2AU78CUyfLTUH2jMNdRa2qI
-         K7Ug==
-X-Gm-Message-State: AOAM530nGKfyfHkA0vxEv1MgRs4BEx41zTknOfAbzopnTzJA4pxXr2c2
-        RR/c9qxlr0Fl4oENswMCpYw=
-X-Google-Smtp-Source: ABdhPJxOUx5jxEcqwGDCyWTT2q9olhl9g/j6/p3LNonDWSpKALILyHHVoIu5k/QXFsD/XDnX8dr6NA==
-X-Received: by 2002:a05:600c:3494:: with SMTP id a20mr36322544wmq.195.1638187657198;
-        Mon, 29 Nov 2021 04:07:37 -0800 (PST)
+        bh=iXk/BAglFY4+iArSPyqj5oNvQDhYe5ziG2iDX3cCpzk=;
+        b=KdSUysaeEtpk6CjwO2pWUmwlIh1PKf/LCBiF+nuCzpQRjUOI2sDW1OCNkLzA+Vs6rk
+         zrXTN2XkAJdo/aunql1nU7yDsBBRlK3UEjCB+AY0rbaQeepf6r9kXhdOs1jBMY/87t8e
+         KmPy7jCFfou53fA2IrJJk0BaIagyqsk5/yCCC61cKC26kbsVeiG+j85pvoj/9G5tsA3d
+         DqLsgSaJLkorbIIJb8D3oIJUIP+q5MwzAK5qzDcJclJPLUJK0b8M4QlxxzCRhpm6CqhD
+         9UcU8JD+vjU4pprTVpnul8MTt1OMdbIkl75m0n/8FCMaAj6u4BuZxNqmES8/Yb+cuKRL
+         GyJA==
+X-Gm-Message-State: AOAM5324S7RS0zpqcHOCCGPysoHF5xB0f34nAZBdXJvgp57LqHXjq94Y
+        5hV+YvTYUF8sziSXN19Q83s=
+X-Google-Smtp-Source: ABdhPJw74jwTZqQ764rBYdIn7m6M3TW7UaeH8cSMqKWCvirfeGdXBaqAWFhEIFMg95nJU2zdeSPbrg==
+X-Received: by 2002:adf:e286:: with SMTP id v6mr33223065wri.565.1638187659838;
+        Mon, 29 Nov 2021 04:07:39 -0800 (PST)
 Received: from abel.fritz.box (p57b0b77b.dip0.t-ipconnect.de. [87.176.183.123])
-        by smtp.gmail.com with ESMTPSA id b6sm20415234wmq.45.2021.11.29.04.07.36
+        by smtp.gmail.com with ESMTPSA id b6sm20415234wmq.45.2021.11.29.04.07.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 04:07:36 -0800 (PST)
+        Mon, 29 Nov 2021 04:07:39 -0800 (PST)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     daniel@ffwll.ch
 Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 25/28] dma-buf: add DMA_RESV_USAGE_BOOKKEEP
-Date:   Mon, 29 Nov 2021 13:06:56 +0100
-Message-Id: <20211129120659.1815-26-christian.koenig@amd.com>
+Subject: [PATCH 28/28] drm/ttm: remove bo->moving
+Date:   Mon, 29 Nov 2021 13:06:59 +0100
+Message-Id: <20211129120659.1815-29-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211129120659.1815-1-christian.koenig@amd.com>
 References: <20211129120659.1815-1-christian.koenig@amd.com>
@@ -67,325 +67,308 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add an usage for submissions independent of implicit sync but still
-interesting for memory management.
+This is now handled by the DMA-buf framework in the dma_resv obj.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/dma-buf/dma-resv.c                     |  2 +-
- drivers/dma-buf/st-dma-resv.c                  |  2 +-
- .../gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c   |  2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c        |  4 ++--
- drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c         |  2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c       |  2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c        |  2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c         |  6 +++---
- drivers/gpu/drm/i915/gem/i915_gem_lmem.c       |  2 +-
- drivers/gpu/drm/i915/gem/i915_gem_userptr.c    |  2 +-
- drivers/gpu/drm/qxl/qxl_debugfs.c              |  2 +-
- drivers/gpu/drm/radeon/radeon_gem.c            |  2 +-
- drivers/gpu/drm/radeon/radeon_mn.c             |  2 +-
- drivers/gpu/drm/ttm/ttm_bo.c                   | 14 +++++++-------
- include/linux/dma-resv.h                       | 18 +++++++++++++++++-
- 15 files changed, 40 insertions(+), 24 deletions(-)
+ .../gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c  | 13 ++++---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_object.c    |  7 ++--
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm_cpu.c    | 11 +++---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c   | 11 ++++--
+ drivers/gpu/drm/ttm/ttm_bo.c                  | 10 ++----
+ drivers/gpu/drm/ttm/ttm_bo_util.c             |  7 ----
+ drivers/gpu/drm/ttm/ttm_bo_vm.c               | 34 +++++++------------
+ drivers/gpu/drm/vmwgfx/vmwgfx_resource.c      |  6 ----
+ include/drm/ttm/ttm_bo_api.h                  |  2 --
+ 9 files changed, 40 insertions(+), 61 deletions(-)
 
-diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
-index a2a0b5b6c107..a058a3e805ab 100644
---- a/drivers/dma-buf/dma-resv.c
-+++ b/drivers/dma-buf/dma-resv.c
-@@ -548,7 +548,7 @@ int dma_resv_copy_fences(struct dma_resv *dst, struct dma_resv *src)
- 
- 	list = NULL;
- 
--	dma_resv_iter_begin(&cursor, src, DMA_RESV_USAGE_READ);
-+	dma_resv_iter_begin(&cursor, src, DMA_RESV_USAGE_BOOKKEEP);
- 	dma_resv_for_each_fence_unlocked(&cursor, f) {
- 
- 		if (dma_resv_iter_is_restarted(&cursor)) {
-diff --git a/drivers/dma-buf/st-dma-resv.c b/drivers/dma-buf/st-dma-resv.c
-index 062b57d63fa6..8ace9e84c845 100644
---- a/drivers/dma-buf/st-dma-resv.c
-+++ b/drivers/dma-buf/st-dma-resv.c
-@@ -296,7 +296,7 @@ int dma_resv(void)
- 	int r;
- 
- 	spin_lock_init(&fence_lock);
--	for (usage = DMA_RESV_USAGE_KERNEL; usage <= DMA_RESV_USAGE_READ;
-+	for (usage = DMA_RESV_USAGE_KERNEL; usage <= DMA_RESV_USAGE_BOOKKEEP;
- 	     ++usage) {
- 		r = subtests(tests, (void *)(unsigned long)usage);
- 		if (r)
 diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-index 4a469831afe3..bbfd7a1e42e8 100644
+index bbfd7a1e42e8..7bd39e5d36dd 100644
 --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
 +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-@@ -246,7 +246,7 @@ static int amdgpu_amdkfd_remove_eviction_fence(struct amdgpu_bo *bo,
- 	 */
- 	replacement = dma_fence_get_stub();
- 	dma_resv_replace_fences(bo->tbo.base.resv, ef->base.context,
--				replacement, DMA_RESV_USAGE_READ);
-+				replacement, DMA_RESV_USAGE_BOOKKEEP);
- 	dma_fence_put(replacement);
- 	return 0;
- }
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c
-index 490d2a7a3e2b..ddf46802b1ff 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ids.c
-@@ -111,7 +111,7 @@ void amdgpu_pasid_free_delayed(struct dma_resv *resv,
- 	struct dma_fence *fence;
+@@ -2330,6 +2330,8 @@ int amdgpu_amdkfd_gpuvm_restore_process_bos(void *info, struct dma_fence **ef)
+ 		struct amdgpu_bo *bo = mem->bo;
+ 		uint32_t domain = mem->domain;
+ 		struct kfd_mem_attachment *attachment;
++		struct dma_resv_iter cursor;
++		struct dma_fence *fence;
+ 
+ 		total_size += amdgpu_bo_size(bo);
+ 
+@@ -2344,10 +2346,13 @@ int amdgpu_amdkfd_gpuvm_restore_process_bos(void *info, struct dma_fence **ef)
+ 				goto validate_map_fail;
+ 			}
+ 		}
+-		ret = amdgpu_sync_fence(&sync_obj, bo->tbo.moving);
+-		if (ret) {
+-			pr_debug("Memory eviction: Sync BO fence failed. Try again\n");
+-			goto validate_map_fail;
++		dma_resv_for_each_fence(&cursor, bo->tbo.base.resv,
++					DMA_RESV_USAGE_KERNEL, fence) {
++			ret = amdgpu_sync_fence(&sync_obj, fence);
++			if (ret) {
++				pr_debug("Memory eviction: Sync BO fence failed. Try again\n");
++				goto validate_map_fail;
++			}
+ 		}
+ 		list_for_each_entry(attachment, &mem->attachments, list) {
+ 			if (!attachment->is_mapped)
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
+index a40ede9bccd0..3881a503a7bf 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
+@@ -608,9 +608,8 @@ int amdgpu_bo_create(struct amdgpu_device *adev,
+ 		if (unlikely(r))
+ 			goto fail_unreserve;
+ 
+-		amdgpu_bo_fence(bo, fence, false);
+-		dma_fence_put(bo->tbo.moving);
+-		bo->tbo.moving = dma_fence_get(fence);
++		dma_resv_add_fence(bo->tbo.base.resv, fence,
++				   DMA_RESV_USAGE_KERNEL);
+ 		dma_fence_put(fence);
+ 	}
+ 	if (!bp->resv)
+@@ -1290,7 +1289,7 @@ void amdgpu_bo_release_notify(struct ttm_buffer_object *bo)
+ 
+ 	r = amdgpu_fill_buffer(abo, AMDGPU_POISON, bo->base.resv, &fence);
+ 	if (!WARN_ON(r)) {
+-		amdgpu_bo_fence(abo, fence, false);
++		dma_resv_add_fence(bo->base.resv, fence, DMA_RESV_USAGE_KERNEL);
+ 		dma_fence_put(fence);
+ 	}
+ 
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_cpu.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_cpu.c
+index e3fbf0f10add..31913ae86de6 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_cpu.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_cpu.c
+@@ -74,13 +74,12 @@ static int amdgpu_vm_cpu_update(struct amdgpu_vm_update_params *p,
+ {
+ 	unsigned int i;
+ 	uint64_t value;
+-	int r;
++	long r;
+ 
+-	if (vmbo->bo.tbo.moving) {
+-		r = dma_fence_wait(vmbo->bo.tbo.moving, true);
+-		if (r)
+-			return r;
+-	}
++	r = dma_resv_wait_timeout(vmbo->bo.tbo.base.resv, DMA_RESV_USAGE_KERNEL,
++				  true, MAX_SCHEDULE_TIMEOUT);
++	if (r < 0)
++		return r;
+ 
+ 	pe += (unsigned long)amdgpu_bo_kptr(&vmbo->bo);
+ 
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c
+index dbb551762805..bdb44cee19d3 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c
+@@ -204,14 +204,19 @@ static int amdgpu_vm_sdma_update(struct amdgpu_vm_update_params *p,
+ 	struct amdgpu_bo *bo = &vmbo->bo;
+ 	enum amdgpu_ib_pool_type pool = p->immediate ? AMDGPU_IB_POOL_IMMEDIATE
+ 		: AMDGPU_IB_POOL_DELAYED;
++	struct dma_resv_iter cursor;
+ 	unsigned int i, ndw, nptes;
++	struct dma_fence *fence;
+ 	uint64_t *pte;
  	int r;
  
--	r = dma_resv_get_singleton(resv, DMA_RESV_USAGE_READ, &fence);
-+	r = dma_resv_get_singleton(resv, DMA_RESV_USAGE_BOOKKEEP, &fence);
- 	if (r)
- 		goto fallback;
+ 	/* Wait for PD/PT moves to be completed */
+-	r = amdgpu_sync_fence(&p->job->sync, bo->tbo.moving);
+-	if (r)
+-		return r;
++	dma_resv_for_each_fence(&cursor, bo->tbo.base.resv,
++				DMA_RESV_USAGE_KERNEL, fence) {
++		r = amdgpu_sync_fence(&p->job->sync, fence);
++		if (r)
++			return r;
++	}
  
-@@ -139,7 +139,7 @@ void amdgpu_pasid_free_delayed(struct dma_resv *resv,
- 	/* Not enough memory for the delayed delete, as last resort
- 	 * block for all the fences to complete.
- 	 */
--	dma_resv_wait_timeout(resv, DMA_RESV_USAGE_READ,
-+	dma_resv_wait_timeout(resv, DMA_RESV_USAGE_BOOKKEEP,
- 			      false, MAX_SCHEDULE_TIMEOUT);
- 	amdgpu_pasid_free(pasid);
- }
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c
-index 86f5248676b0..b86c0b8252a5 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c
-@@ -75,7 +75,7 @@ static bool amdgpu_mn_invalidate_gfx(struct mmu_interval_notifier *mni,
- 
- 	mmu_interval_set_seq(mni, cur_seq);
- 
--	r = dma_resv_wait_timeout(bo->tbo.base.resv, DMA_RESV_USAGE_READ,
-+	r = dma_resv_wait_timeout(bo->tbo.base.resv, DMA_RESV_USAGE_BOOKKEEP,
- 				  false, MAX_SCHEDULE_TIMEOUT);
- 	mutex_unlock(&adev->notifier_lock);
- 	if (r <= 0)
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-index 183623806056..1447f009a957 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-@@ -260,7 +260,7 @@ int amdgpu_sync_resv(struct amdgpu_device *adev, struct amdgpu_sync *sync,
- 		return -EINVAL;
- 
- 	/* TODO: Use DMA_RESV_USAGE_READ here */
--	dma_resv_for_each_fence(&cursor, resv, DMA_RESV_USAGE_READ, f) {
-+	dma_resv_for_each_fence(&cursor, resv, DMA_RESV_USAGE_BOOKKEEP, f) {
- 		dma_fence_chain_for_each(f, f) {
- 			struct dma_fence_chain *chain = to_dma_fence_chain(f);
- 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index fd339762f534..3740d6e788ef 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -1361,7 +1361,7 @@ static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
- 	 * be resident to run successfully
- 	 */
- 	dma_resv_for_each_fence(&resv_cursor, bo->base.resv,
--				DMA_RESV_USAGE_READ, f) {
-+				DMA_RESV_USAGE_BOOKKEEP, f) {
- 		if (amdkfd_fence_check_mm(f, current->mm))
- 			return false;
- 	}
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-index 9eac1e783bbb..6a3ccd344a9f 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-@@ -2105,7 +2105,7 @@ static void amdgpu_vm_prt_fini(struct amdgpu_device *adev, struct amdgpu_vm *vm)
- 	struct dma_resv_iter cursor;
- 	struct dma_fence *fence;
- 
--	dma_resv_for_each_fence(&cursor, resv, DMA_RESV_USAGE_READ, fence) {
-+	dma_resv_for_each_fence(&cursor, resv, DMA_RESV_USAGE_BOOKKEEP, fence) {
- 		/* Add a callback for each fence in the reservation object */
- 		amdgpu_vm_prt_get(adev);
- 		amdgpu_vm_add_prt_cb(adev, fence);
-@@ -2707,7 +2707,7 @@ bool amdgpu_vm_evictable(struct amdgpu_bo *bo)
- 		return true;
- 
- 	/* Don't evict VM page tables while they are busy */
--	if (!dma_resv_test_signaled(bo->tbo.base.resv, DMA_RESV_USAGE_READ))
-+	if (!dma_resv_test_signaled(bo->tbo.base.resv, DMA_RESV_USAGE_BOOKKEEP))
- 		return false;
- 
- 	/* Try to block ongoing updates */
-@@ -2888,7 +2888,7 @@ void amdgpu_vm_adjust_size(struct amdgpu_device *adev, uint32_t min_vm_size,
- long amdgpu_vm_wait_idle(struct amdgpu_vm *vm, long timeout)
- {
- 	timeout = dma_resv_wait_timeout(vm->root.bo->tbo.base.resv,
--					DMA_RESV_USAGE_READ,
-+					DMA_RESV_USAGE_BOOKKEEP,
- 					true, timeout);
- 	if (timeout <= 0)
- 		return timeout;
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_lmem.c b/drivers/gpu/drm/i915/gem/i915_gem_lmem.c
-index a200d3e66573..4115a222a853 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_lmem.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_lmem.c
-@@ -66,7 +66,7 @@ bool __i915_gem_object_is_lmem(struct drm_i915_gem_object *obj)
- 	struct intel_memory_region *mr = READ_ONCE(obj->mm.region);
- 
- #ifdef CONFIG_LOCKDEP
--	GEM_WARN_ON(dma_resv_test_signaled(obj->base.resv, DMA_RESV_USAGE_READ) &&
-+	GEM_WARN_ON(dma_resv_test_signaled(obj->base.resv, DMA_RESV_USAGE_BOOKKEEP) &&
- 		    i915_gem_object_evictable(obj));
- #endif
- 	return mr && (mr->type == INTEL_MEMORY_LOCAL ||
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
-index 0ccb91385f84..67b1fa845f22 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
-@@ -85,7 +85,7 @@ static bool i915_gem_userptr_invalidate(struct mmu_interval_notifier *mni,
- 		return true;
- 
- 	/* we will unbind on next submission, still have userptr pins */
--	r = dma_resv_wait_timeout(obj->base.resv, DMA_RESV_USAGE_READ, false,
-+	r = dma_resv_wait_timeout(obj->base.resv, DMA_RESV_USAGE_BOOKKEEP, false,
- 				  MAX_SCHEDULE_TIMEOUT);
- 	if (r <= 0)
- 		drm_err(&i915->drm, "(%ld) failed to wait for idle\n", r);
-diff --git a/drivers/gpu/drm/qxl/qxl_debugfs.c b/drivers/gpu/drm/qxl/qxl_debugfs.c
-index 33e5889d6608..2d9ed3b94574 100644
---- a/drivers/gpu/drm/qxl/qxl_debugfs.c
-+++ b/drivers/gpu/drm/qxl/qxl_debugfs.c
-@@ -62,7 +62,7 @@ qxl_debugfs_buffers_info(struct seq_file *m, void *data)
- 		int rel = 0;
- 
- 		dma_resv_iter_begin(&cursor, bo->tbo.base.resv,
--				    DMA_RESV_USAGE_READ);
-+				    DMA_RESV_USAGE_BOOKKEEP);
- 		dma_resv_for_each_fence_unlocked(&cursor, fence) {
- 			if (dma_resv_iter_is_restarted(&cursor))
- 				rel = 0;
-diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
-index 71bf9299e45c..9587ab88bedd 100644
---- a/drivers/gpu/drm/radeon/radeon_gem.c
-+++ b/drivers/gpu/drm/radeon/radeon_gem.c
-@@ -162,7 +162,7 @@ static int radeon_gem_set_domain(struct drm_gem_object *gobj,
- 	if (domain == RADEON_GEM_DOMAIN_CPU) {
- 		/* Asking for cpu access wait for object idle */
- 		r = dma_resv_wait_timeout(robj->tbo.base.resv,
--					  DMA_RESV_USAGE_READ,
-+					  DMA_RESV_USAGE_BOOKKEEP,
- 					  true, 30 * HZ);
- 		if (!r)
- 			r = -EBUSY;
-diff --git a/drivers/gpu/drm/radeon/radeon_mn.c b/drivers/gpu/drm/radeon/radeon_mn.c
-index 68ebeb1bdfff..29fe8423bd90 100644
---- a/drivers/gpu/drm/radeon/radeon_mn.c
-+++ b/drivers/gpu/drm/radeon/radeon_mn.c
-@@ -66,7 +66,7 @@ static bool radeon_mn_invalidate(struct mmu_interval_notifier *mn,
- 		return true;
- 	}
- 
--	r = dma_resv_wait_timeout(bo->tbo.base.resv, DMA_RESV_USAGE_READ,
-+	r = dma_resv_wait_timeout(bo->tbo.base.resv, DMA_RESV_USAGE_BOOKKEEP,
- 				  false, MAX_SCHEDULE_TIMEOUT);
- 	if (r <= 0)
- 		DRM_ERROR("(%ld) failed to wait for user bo\n", r);
+ 	do {
+ 		ndw = p->num_dw_left;
 diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
-index ad83f42fc9ee..d3527d3f7b18 100644
+index d3527d3f7b18..7b9e0f46f121 100644
 --- a/drivers/gpu/drm/ttm/ttm_bo.c
 +++ b/drivers/gpu/drm/ttm/ttm_bo.c
-@@ -272,7 +272,7 @@ static void ttm_bo_flush_all_fences(struct ttm_buffer_object *bo)
- 	struct dma_resv_iter cursor;
- 	struct dma_fence *fence;
+@@ -468,7 +468,6 @@ static void ttm_bo_release(struct kref *kref)
+ 	dma_resv_unlock(bo->base.resv);
  
--	dma_resv_iter_begin(&cursor, resv, DMA_RESV_USAGE_READ);
-+	dma_resv_iter_begin(&cursor, resv, DMA_RESV_USAGE_BOOKKEEP);
- 	dma_resv_for_each_fence_unlocked(&cursor, fence) {
- 		if (!fence->ops->signaled)
- 			dma_fence_enable_sw_signaling(fence);
-@@ -301,7 +301,7 @@ static int ttm_bo_cleanup_refs(struct ttm_buffer_object *bo,
- 	struct dma_resv *resv = &bo->base._resv;
- 	int ret;
+ 	atomic_dec(&ttm_glob.bo_count);
+-	dma_fence_put(bo->moving);
+ 	bo->destroy(bo);
+ }
  
--	if (dma_resv_test_signaled(resv, DMA_RESV_USAGE_READ))
-+	if (dma_resv_test_signaled(resv, DMA_RESV_USAGE_BOOKKEEP))
- 		ret = 0;
- 	else
- 		ret = -EBUSY;
-@@ -313,7 +313,7 @@ static int ttm_bo_cleanup_refs(struct ttm_buffer_object *bo,
- 			dma_resv_unlock(bo->base.resv);
- 		spin_unlock(&bo->bdev->lru_lock);
+@@ -737,9 +736,8 @@ int ttm_mem_evict_first(struct ttm_device *bdev,
+ }
  
--		lret = dma_resv_wait_timeout(resv, DMA_RESV_USAGE_READ,
-+		lret = dma_resv_wait_timeout(resv, DMA_RESV_USAGE_BOOKKEEP,
- 					     interruptible,
- 					     30 * HZ);
- 
-@@ -418,7 +418,7 @@ static void ttm_bo_release(struct kref *kref)
- 			 * fences block for the BO to become idle
- 			 */
- 			dma_resv_wait_timeout(bo->base.resv,
--					      DMA_RESV_USAGE_READ, false,
-+					      DMA_RESV_USAGE_BOOKKEEP, false,
- 					      30 * HZ);
- 		}
- 
-@@ -429,7 +429,7 @@ static void ttm_bo_release(struct kref *kref)
- 		ttm_mem_io_free(bdev, bo->resource);
+ /*
+- * Add the last move fence to the BO and reserve a new shared slot. We only use
+- * a shared slot to avoid unecessary sync and rely on the subsequent bo move to
+- * either stall or use an exclusive fence respectively set bo->moving.
++ * Add the last move fence to the BO as kernel dependency and reserve a new
++ * fence slot.
+  */
+ static int ttm_bo_add_move_fence(struct ttm_buffer_object *bo,
+ 				 struct ttm_resource_manager *man,
+@@ -769,9 +767,6 @@ static int ttm_bo_add_move_fence(struct ttm_buffer_object *bo,
+ 		dma_fence_put(fence);
+ 		return ret;
  	}
+-
+-	dma_fence_put(bo->moving);
+-	bo->moving = fence;
+ 	return 0;
+ }
  
--	if (!dma_resv_test_signaled(bo->base.resv, DMA_RESV_USAGE_READ) ||
-+	if (!dma_resv_test_signaled(bo->base.resv, DMA_RESV_USAGE_BOOKKEEP) ||
- 	    !dma_resv_trylock(bo->base.resv)) {
- 		/* The BO is not idle, resurrect it for delayed destroy */
- 		ttm_bo_flush_all_fences(bo);
-@@ -1074,13 +1074,13 @@ int ttm_bo_wait(struct ttm_buffer_object *bo,
- 	long timeout = 15 * HZ;
+@@ -978,7 +973,6 @@ int ttm_bo_init_reserved(struct ttm_device *bdev,
+ 	bo->bdev = bdev;
+ 	bo->type = type;
+ 	bo->page_alignment = page_alignment;
+-	bo->moving = NULL;
+ 	bo->pin_count = 0;
+ 	bo->sg = sg;
+ 	if (resv) {
+diff --git a/drivers/gpu/drm/ttm/ttm_bo_util.c b/drivers/gpu/drm/ttm/ttm_bo_util.c
+index b9cfb62c4b6e..95de2691ee7c 100644
+--- a/drivers/gpu/drm/ttm/ttm_bo_util.c
++++ b/drivers/gpu/drm/ttm/ttm_bo_util.c
+@@ -229,7 +229,6 @@ static int ttm_buffer_object_transfer(struct ttm_buffer_object *bo,
+ 	atomic_inc(&ttm_glob.bo_count);
+ 	INIT_LIST_HEAD(&fbo->base.ddestroy);
+ 	INIT_LIST_HEAD(&fbo->base.lru);
+-	fbo->base.moving = NULL;
+ 	drm_vma_node_reset(&fbo->base.base.vma_node);
  
- 	if (no_wait) {
--		if (dma_resv_test_signaled(bo->base.resv, DMA_RESV_USAGE_READ))
-+		if (dma_resv_test_signaled(bo->base.resv, DMA_RESV_USAGE_BOOKKEEP))
- 			return 0;
- 		else
- 			return -EBUSY;
- 	}
- 
--	timeout = dma_resv_wait_timeout(bo->base.resv, DMA_RESV_USAGE_READ,
-+	timeout = dma_resv_wait_timeout(bo->base.resv, DMA_RESV_USAGE_BOOKKEEP,
- 					interruptible, timeout);
- 	if (timeout < 0)
- 		return timeout;
-diff --git a/include/linux/dma-resv.h b/include/linux/dma-resv.h
-index 29d799991496..07ae5b00c1fa 100644
---- a/include/linux/dma-resv.h
-+++ b/include/linux/dma-resv.h
-@@ -55,7 +55,7 @@ struct dma_resv_list;
-  * This enum describes the different use cases for a dma_resv object and
-  * controls which fences are returned when queried.
-  *
-- * An important fact is that there is the order KERNEL<WRITE<READ and
-+ * An important fact is that there is the order KERNEL<WRITE<READ<BOOKKEEP and
-  * when the dma_resv object is asked for fences for one use case the fences
-  * for the lower use case are returned as well.
-  *
-@@ -93,6 +93,22 @@ enum dma_resv_usage {
- 	 * an implicit read dependency.
+ 	kref_init(&fbo->base.kref);
+@@ -496,9 +495,6 @@ static int ttm_bo_move_to_ghost(struct ttm_buffer_object *bo,
+ 	 * operation has completed.
  	 */
- 	DMA_RESV_USAGE_READ,
-+
-+	/**
-+	 * @DMA_RESV_USAGE_BOOKKEEP: No implicit sync.
-+	 *
-+	 * This should be used by submissions which don't want to participate in
-+	 * implicit synchronization.
-+	 *
-+	 * The most common case are submissions with explicit synchronization,
-+	 * but also things like preemption fences as well as page table updates
-+	 * might use this.
-+	 *
-+	 * The kernel memory management *always* need to wait for those fences
-+	 * before moving or freeing the resource protected by the dma_resv
-+	 * object.
-+	 */
-+	DMA_RESV_USAGE_BOOKKEEP
- };
  
- /**
+-	dma_fence_put(bo->moving);
+-	bo->moving = dma_fence_get(fence);
+-
+ 	ret = ttm_buffer_object_transfer(bo, &ghost_obj);
+ 	if (ret)
+ 		return ret;
+@@ -543,9 +539,6 @@ static void ttm_bo_move_pipeline_evict(struct ttm_buffer_object *bo,
+ 	spin_unlock(&from->move_lock);
+ 
+ 	ttm_resource_free(bo, &bo->resource);
+-
+-	dma_fence_put(bo->moving);
+-	bo->moving = dma_fence_get(fence);
+ }
+ 
+ int ttm_bo_move_accel_cleanup(struct ttm_buffer_object *bo,
+diff --git a/drivers/gpu/drm/ttm/ttm_bo_vm.c b/drivers/gpu/drm/ttm/ttm_bo_vm.c
+index 08ba083a80d2..5b324f245265 100644
+--- a/drivers/gpu/drm/ttm/ttm_bo_vm.c
++++ b/drivers/gpu/drm/ttm/ttm_bo_vm.c
+@@ -46,17 +46,13 @@
+ static vm_fault_t ttm_bo_vm_fault_idle(struct ttm_buffer_object *bo,
+ 				struct vm_fault *vmf)
+ {
+-	vm_fault_t ret = 0;
+-	int err = 0;
+-
+-	if (likely(!bo->moving))
+-		goto out_unlock;
++	long err = 0;
+ 
+ 	/*
+ 	 * Quick non-stalling check for idle.
+ 	 */
+-	if (dma_fence_is_signaled(bo->moving))
+-		goto out_clear;
++	if (dma_resv_test_signaled(bo->base.resv, DMA_RESV_USAGE_KERNEL))
++		return 0;
+ 
+ 	/*
+ 	 * If possible, avoid waiting for GPU with mmap_lock
+@@ -64,34 +60,30 @@ static vm_fault_t ttm_bo_vm_fault_idle(struct ttm_buffer_object *bo,
+ 	 * is the first attempt.
+ 	 */
+ 	if (fault_flag_allow_retry_first(vmf->flags)) {
+-		ret = VM_FAULT_RETRY;
+ 		if (vmf->flags & FAULT_FLAG_RETRY_NOWAIT)
+-			goto out_unlock;
++			return VM_FAULT_RETRY;
+ 
+ 		ttm_bo_get(bo);
+ 		mmap_read_unlock(vmf->vma->vm_mm);
+-		(void) dma_fence_wait(bo->moving, true);
++		(void)dma_resv_wait_timeout(bo->base.resv,
++					    DMA_RESV_USAGE_KERNEL, true,
++					    MAX_SCHEDULE_TIMEOUT);
+ 		dma_resv_unlock(bo->base.resv);
+ 		ttm_bo_put(bo);
+-		goto out_unlock;
++		return VM_FAULT_RETRY;
+ 	}
+ 
+ 	/*
+ 	 * Ordinary wait.
+ 	 */
+-	err = dma_fence_wait(bo->moving, true);
+-	if (unlikely(err != 0)) {
+-		ret = (err != -ERESTARTSYS) ? VM_FAULT_SIGBUS :
++	err = dma_resv_wait_timeout(bo->base.resv, DMA_RESV_USAGE_KERNEL, true,
++				    MAX_SCHEDULE_TIMEOUT);
++	if (unlikely(err < 0)) {
++		return (err != -ERESTARTSYS) ? VM_FAULT_SIGBUS :
+ 			VM_FAULT_NOPAGE;
+-		goto out_unlock;
+ 	}
+ 
+-out_clear:
+-	dma_fence_put(bo->moving);
+-	bo->moving = NULL;
+-
+-out_unlock:
+-	return ret;
++	return 0;
+ }
+ 
+ static unsigned long ttm_bo_io_mem_pfn(struct ttm_buffer_object *bo,
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_resource.c b/drivers/gpu/drm/vmwgfx/vmwgfx_resource.c
+index 9e3dcbb573e7..40cc2c13e963 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_resource.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_resource.c
+@@ -1166,12 +1166,6 @@ int vmw_resources_clean(struct vmw_buffer_object *vbo, pgoff_t start,
+ 		*num_prefault = __KERNEL_DIV_ROUND_UP(last_cleaned - res_start,
+ 						      PAGE_SIZE);
+ 		vmw_bo_fence_single(bo, NULL);
+-		if (bo->moving)
+-			dma_fence_put(bo->moving);
+-
+-		return dma_resv_get_singleton(bo->base.resv,
+-					      DMA_RESV_USAGE_KERNEL,
+-					      &bo->moving);
+ 	}
+ 
+ 	return 0;
+diff --git a/include/drm/ttm/ttm_bo_api.h b/include/drm/ttm/ttm_bo_api.h
+index cd785cfa3123..9798eb097c13 100644
+--- a/include/drm/ttm/ttm_bo_api.h
++++ b/include/drm/ttm/ttm_bo_api.h
+@@ -98,7 +98,6 @@ struct ttm_tt;
+  * @lru: List head for the lru list.
+  * @ddestroy: List head for the delayed destroy list.
+  * @swap: List head for swap LRU list.
+- * @moving: Fence set when BO is moving
+  * @offset: The current GPU offset, which can have different meanings
+  * depending on the memory type. For SYSTEM type memory, it should be 0.
+  * @cur_placement: Hint of current placement.
+@@ -151,7 +150,6 @@ struct ttm_buffer_object {
+ 	 * Members protected by a bo reservation.
+ 	 */
+ 
+-	struct dma_fence *moving;
+ 	unsigned priority;
+ 	unsigned pin_count;
+ 
 -- 
 2.25.1
 
