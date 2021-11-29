@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89AADC433F5
-	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 10:08:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E30C8C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 10:08:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350665AbhK2KLw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Nov 2021 05:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37662 "EHLO
+        id S1351353AbhK2KL4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Nov 2021 05:11:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234924AbhK2KJv (ORCPT
+        with ESMTP id S237431AbhK2KJy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:09:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D34C0698C9;
+        Mon, 29 Nov 2021 05:09:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5ACBC0698CA;
         Mon, 29 Nov 2021 01:47:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 710F06129E;
-        Mon, 29 Nov 2021 09:47:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3005C9039C;
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3105B80E29;
+        Mon, 29 Nov 2021 09:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50E90C53FCF;
         Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1638179276;
-        bh=YlKZnWxAnzvzgRkW58KVzO1NH7YwxG8b4dfk4+1g7WA=;
+        bh=rzDLCKSxsaxbNkqeAch3s8qyQjDd6iwHRnT2T+rfJhg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IaYNnMhUgeuxefx7BBPsTqNpGJAbJfwuIxSLPx+KA6ewujY+L5rTPUb0u+usXowaB
-         Rfymx9vSlJAtHV5qpUL3gL7AauCLlZvwxO3+j0/cdy2IuvT951pKoG7Qob3CC9di6r
-         VhTZMfKlkwiFnhJUmZc+PVG4KPLpogFmG7+wDV3V5ymr2eD6ECPvrt+qtDmew21FKp
-         16yZGgNbaXif8rsPNaGamfgr+75GO9H/Bgy3uAOoL6b7B+uZXA8vUOu/juhIhrO5cZ
-         5pxQ9t3ndWf1yVe1/SycXA5ykhAKDakXKx0fD1NIBfMewlOgl5L8viFkQLpNZcMWwZ
-         lw11h/uj5B+MQ==
+        b=tbxD8oa5Sg6I8rmBkL1nzKCY+Z87YxDK1bnmirgGiJEY2oJspfGWfpNzs+Y0hzyqo
+         ET0hwq9SmZL2t3f5bK9NX6nz0TMxYX3vJzn8dykWZnvEZSUYvP2KpLEW7noAYb1s/F
+         v15Yol4e9CJ20HMB7w/zHhDi9mxgZnOwDTOg5+o13VBcIW6dErEKTtTREpqhZOKNkv
+         QyDxCN7/tgobF+UC8v2H+BF22563JGFnu5Igd44nZib/l1EOdHdxZLsotNEfJjaPGk
+         5bMdeZLQ7iIWsfWPlLt16jgxFG5KYXLssqFgNETy4q/EtMvNRUkvTYdjc9pFXmHihO
+         FklT4Naj5t4NQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mrdGM-000RBm-Oa; Mon, 29 Nov 2021 10:47:54 +0100
+        id 1mrdGM-000RB2-7U; Mon, 29 Nov 2021 10:47:54 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2 14/20] media: adv7511: drop unused functions
-Date:   Mon, 29 Nov 2021 10:47:46 +0100
-Message-Id: <b9078d405c0cd22176acad69ffac531f60baf8bb.1638179135.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 03/20] media: davinci: get rid of an unused function
+Date:   Mon, 29 Nov 2021 10:47:35 +0100
+Message-Id: <7447911ef26de9ac73265df6aee306fbe59691a0.1638179135.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638179135.git.mchehab+huawei@kernel.org>
 References: <cover.1638179135.git.mchehab+huawei@kernel.org>
@@ -56,8 +56,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Those are aliases for another function and not used at the
-current implementation. So, just drop it.
+vpif_get_default_field() seems to be some left-over from a
+past code that sets the field order.
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
@@ -65,42 +65,31 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
 See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
 
- drivers/media/i2c/adv7511-v4l2.c | 22 ----------------------
- 1 file changed, 22 deletions(-)
+ drivers/media/platform/davinci/vpif_capture.c | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
-index 41f4e749a859..8e13cae40ec5 100644
---- a/drivers/media/i2c/adv7511-v4l2.c
-+++ b/drivers/media/i2c/adv7511-v4l2.c
-@@ -270,28 +270,6 @@ static int adv7511_pktmem_rd(struct v4l2_subdev *sd, u8 reg)
- 	return adv_smbus_read_byte_data(state->i2c_pktmem, reg);
+diff --git a/drivers/media/platform/davinci/vpif_capture.c b/drivers/media/platform/davinci/vpif_capture.c
+index ae92e2c206d0..aba105fa7ef9 100644
+--- a/drivers/media/platform/davinci/vpif_capture.c
++++ b/drivers/media/platform/davinci/vpif_capture.c
+@@ -618,17 +618,6 @@ static void vpif_calculate_offsets(struct channel_obj *ch)
+ 	ch->vpifparams.video_params.stdid = vpifparams->std_info.stdid;
  }
  
--static int adv7511_pktmem_wr(struct v4l2_subdev *sd, u8 reg, u8 val)
+-/**
+- * vpif_get_default_field() - Get default field type based on interface
+- * @iface: ptr to vpif interface
+- */
+-static inline enum v4l2_field vpif_get_default_field(
+-				struct vpif_interface *iface)
 -{
--	struct adv7511_state *state = get_adv7511_state(sd);
--	int ret;
--	int i;
--
--	for (i = 0; i < 3; i++) {
--		ret = i2c_smbus_write_byte_data(state->i2c_pktmem, reg, val);
--		if (ret == 0)
--			return 0;
--	}
--	v4l2_err(sd, "%s: i2c write error\n", __func__);
--	return ret;
+-	return (iface->if_type == VPIF_IF_RAW_BAYER) ? V4L2_FIELD_NONE :
+-						V4L2_FIELD_INTERLACED;
 -}
 -
--/* To set specific bits in the register, a clear-mask is given (to be AND-ed),
--   and then the value-mask (to be OR-ed). */
--static inline void adv7511_pktmem_wr_and_or(struct v4l2_subdev *sd, u8 reg, u8 clr_mask, u8 val_mask)
--{
--	adv7511_pktmem_wr(sd, reg, (adv7511_pktmem_rd(sd, reg) & clr_mask) | val_mask);
--}
--
- static inline bool adv7511_have_hotplug(struct v4l2_subdev *sd)
- {
- 	return adv7511_rd(sd, 0x42) & MASK_ADV7511_HPD_DETECT;
+ /**
+  * vpif_config_addr() - function to configure buffer address in vpif
+  * @ch: channel ptr
 -- 
 2.33.1
 
