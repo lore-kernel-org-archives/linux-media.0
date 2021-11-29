@@ -2,101 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CCC7C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 11:03:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B854FC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 11:42:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238600AbhK2LHA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Nov 2021 06:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235838AbhK2LE7 (ORCPT
+        id S243556AbhK2Lpw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Nov 2021 06:45:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34450 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233009AbhK2Lnt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:04:59 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971FDC0613FA;
-        Mon, 29 Nov 2021 02:19:30 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id j2so40633428ybg.9;
-        Mon, 29 Nov 2021 02:19:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ppG/ZLMPwOtn6jb5uz3xg0bkyKQKbtFMdorf6y+f5O8=;
-        b=fH0Z+H11NlvR2Vo3lKedItgHqleYX6iHBY+IGVtYaZjg+fDnsbzHXbPU+hxwM5OZzD
-         /wRycMore58LZFi2gM/Hvc3sgfqq1hU9GP7q2sNcSRNIqIneoCJcaTcAs2INj8VXI/5l
-         9M1fdnpMcVoWPRukw7kMFMIMOwcOk5cOb+lYzZBvubIjXuhmFIQpFfLlyyV7jKaXyq/X
-         0J+bGNT7h7wcZ9azbn3Nov2S0Z/8RQQdGfxNz9tRnuMFCTHTdHHfRdT1TzWRJDAo9ytt
-         DLTxXQu4VIXN6HIvp60bjA2OtOG5h0dwdLfc9bVIn2dsCCwnq71bsrDdJUAZEoypEWYj
-         qKsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ppG/ZLMPwOtn6jb5uz3xg0bkyKQKbtFMdorf6y+f5O8=;
-        b=wDhUrEsHeieZ89FzlLY/8TBBhTXtBqoKIcQvax/fvI+HfoQHt2cJYWgt3ZG3HvxVBb
-         2y30lkP/c3NWKxvMSgbCIxF9T26MPoa4cJ4C3Y+xQnjJ3mvkYvdaHsvnt3m58Aec6ih8
-         f+sAGf884KtJ9Aq2I721prpSY2bYFz2JMTXlcd/wVVjIKhPvSPS4s/xahZTAybuT/0W3
-         Gbh3S2NKd+6OTT+Ezt4QWoI8Tv7TkVLTBk4duR9AocdthFBYtx8FyOFy3cn26pAI3b48
-         iqct032+f993TxG0EzpPuYzZN6BPW9MTWUA7VdvSIUHdXr2kdFMlLkqHAosm0gmRyPCs
-         2TGQ==
-X-Gm-Message-State: AOAM530n+GO9R/8up/6/FmeKcd0nFr1HYhpIT3UDo2q/uQVSG/l+5gnK
-        RDdFJ+ACuUvGXNtfy3ujYkeVnRT5mpDkHxF24n4=
-X-Google-Smtp-Source: ABdhPJzG7Lik7bR0zFFLYlNQEHnT5wMALB0Xeav5csPj+MAzakqOJjCvBkEbkO/PqI3cA8q0BuWMFqAVoWf0kx9DPEY=
-X-Received: by 2002:a25:abe3:: with SMTP id v90mr34015526ybi.315.1638181169899;
- Mon, 29 Nov 2021 02:19:29 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1638179135.git.mchehab+huawei@kernel.org> <0c086fea0d3f0771f6c8627e99edb719e282a49c.1638179135.git.mchehab+huawei@kernel.org>
-In-Reply-To: <0c086fea0d3f0771f6c8627e99edb719e282a49c.1638179135.git.mchehab+huawei@kernel.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 29 Nov 2021 10:19:04 +0000
-Message-ID: <CA+V-a8tDNmNDoOGyt-qD13Rk1ta8_EqNBydSpvGW_X-LcD76BQ@mail.gmail.com>
-Subject: Re: [PATCH v2 16/20] media: davinci: vpbe_osd: mark read reg function
- as __always_unused
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+        Mon, 29 Nov 2021 06:43:49 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CCACB80ED0;
+        Mon, 29 Nov 2021 11:40:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31FDDC004E1;
+        Mon, 29 Nov 2021 11:40:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638186029;
+        bh=n+pTQw/BCa3IBVkxZCQt663ROWCmgz8ezH0i6qWNGJ4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MUD4HMSH5oEc0UmxxL2esec50P9hY3A0wpRvE8EdRyhUUvQeBC1GxLQccdT98YHpt
+         UGbMctBp2jMceX0TMKrpL0AiYoXaVQrMURrOfg1xyr+P8zoNtrysYgC7x2TijGAt6l
+         VKDaiBa+bRX9Vrh9IX1pjySo2u7ySDaj8MRa7tL07H69VHgrenZE9jJWFGtv3EnA9Z
+         z5a7H9x3+X8WfuVnO7LhtY16B/S6URIMMbO098oXGfgEY+UUesl2QvY9fLxCvLnWqa
+         4NmVrAZJgheBmbrB8DkVK3ZWYyXCzXqleA5R9rihpbpqUBX7XUa/ABbYQNNuiZoEHF
+         pxMj0U2c0NVJg==
+Date:   Mon, 29 Nov 2021 12:40:24 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Joe Perches <joe@perches.com>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Kees Cook <keescook@chromium.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v2 09/20] media: si470x: fix printk warnings with clang
+Message-ID: <20211129124024.5cd16580@coco.lan>
+In-Reply-To: <a22c082a661df0b548511f282fcc519a11bb3340.camel@perches.com>
+References: <cover.1638179135.git.mchehab+huawei@kernel.org>
+        <442df11dd08158df88e95a457175a65f20dc8369.1638179135.git.mchehab+huawei@kernel.org>
+        <a22c082a661df0b548511f282fcc519a11bb3340.camel@perches.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 9:48 AM Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org> wrote:
->
-> Such function is currently unused, but could be needed in the
-> future. So, keep it, marking it as __always_unused, in order to
-> avoid a clang W=1 error.
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->
-> See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
->
->  drivers/media/platform/davinci/vpbe_osd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-Reviewed-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
+Em Mon, 29 Nov 2021 02:10:14 -0800
+Joe Perches <joe@perches.com> escreveu:
 
-Cheers,
-Prabhakar
+> On Mon, 2021-11-29 at 10:47 +0100, Mauro Carvalho Chehab wrote:
+> > Clang doesn't like "%hu" on macros:
+> > 
+> > 	drivers/media/radio/si470x/radio-si470x-i2c.c:414:4: error: format specifies type 'unsigned short' but the argument has type 'int' [-Werror,-Wformat]
+> > 	drivers/media/radio/si470x/radio-si470x-i2c.c:417:4: error: format specifies type 'unsigned short' but the argument has type 'int' [-Werror,-Wformat]
+> > 
+> > Besides that, changeset cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of unnecessary %h[xudi] and %hh[xudi]")
+> > dropped recomendation of using %h.
+> > 
+> > So, just replace them with "%u".  
+> 
+> And perhaps change these to single dev_warn calls instead of multiple calls.
+> 
+> > diff --git a/drivers/media/radio/si470x/radio-si470x-i2c.c b/drivers/media/radio/si470x/radio-si470x-i2c.c  
+> []
+> > @@ -410,10 +410,10 @@ static int si470x_i2c_probe(struct i2c_client *client)
+> >  			radio->registers[DEVICEID], radio->registers[SI_CHIPID]);
+> >  	if ((radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE) < RADIO_FW_VERSION) {
+> >  		dev_warn(&client->dev,
+> > -			"This driver is known to work with firmware version %hu,\n",
+> > +			"This driver is known to work with firmware version %u,\n",
+> >  			RADIO_FW_VERSION);
+> >  		dev_warn(&client->dev,
+> > -			"but the device has firmware version %hu.\n",
+> > +			"but the device has firmware version %u.\n",
+> >  			radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE);  
+> 
+> 		dev_warn(&client->dev,
+> 			"This driver is known to work with firmware version %u, but the device has firmware version %u\n",
+> 			RADIO_FW_VERSION, radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE);
+> 
+> etc...
+> 
+> 
 
-> diff --git a/drivers/media/platform/davinci/vpbe_osd.c b/drivers/media/platform/davinci/vpbe_osd.c
-> index 91b571a0ac2c..32f7ef547c82 100644
-> --- a/drivers/media/platform/davinci/vpbe_osd.c
-> +++ b/drivers/media/platform/davinci/vpbe_osd.c
-> @@ -45,7 +45,7 @@ static const struct platform_device_id vpbe_osd_devtype[] = {
->  MODULE_DEVICE_TABLE(platform, vpbe_osd_devtype);
->
->  /* register access routines */
-> -static inline u32 osd_read(struct osd_state *sd, u32 offset)
-> +static inline u32 __always_unused osd_read(struct osd_state *sd, u32 offset)
->  {
->         struct osd_state *osd = sd;
->
-> --
-> 2.33.1
->
+Good idea. As this will touch on other things, I'll submit it on a
+separate patch.
+
+Regards,
+Mauro
+
+
+
+Thanks,
+Mauro
