@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7E54C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 13:27:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B1D6C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 13:27:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbhK2NaW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Nov 2021 08:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
+        id S234285AbhK2Nac (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Nov 2021 08:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbhK2N2R (ORCPT
+        with ESMTP id S232934AbhK2N22 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:28:17 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4690C09B073
-        for <linux-media@vger.kernel.org>; Mon, 29 Nov 2021 04:07:25 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id i8-20020a7bc948000000b0030db7b70b6bso16615567wml.1
-        for <linux-media@vger.kernel.org>; Mon, 29 Nov 2021 04:07:25 -0800 (PST)
+        Mon, 29 Nov 2021 08:28:28 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB28C09B076
+        for <linux-media@vger.kernel.org>; Mon, 29 Nov 2021 04:07:27 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id a9so36271493wrr.8
+        for <linux-media@vger.kernel.org>; Mon, 29 Nov 2021 04:07:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ao0QlwnIR0BPrNFzKmnkW6LgKGwtPEdX/Cj9AXAbbyo=;
-        b=jevFp14fe/qtyapDl2L94QQ1SJX8LTYt3/+Rk4yVNJ3D2j5rmp+A8waLILQZZN8qma
-         lpSd5jyBKq6/U5YB0uJt2bFs5rd+tzmIAdq34vOZV0VzBln/Xd9KeLJ2mwUMwehhm/UM
-         oB4hERJvA5y/cggH8/Qs/BnimO8KVZW+3N9amUOAyc2lmiPsPbyrg0uRuK61mWnLeTJJ
-         RGQGh7lgy6gFq6OqFrcb/5DP/vYw1xI6uRaOU/UxUH/uzJ0nAUVDyoldPUMSrpWzkQqt
-         +b3y5OGU7wX8o3T6ub4a9aJunF4d6Kes/W69EwIZzrYW5YpdRudDZrs2CRzgN7kLWxUn
-         zTPA==
+        bh=xR1nHIQR+HY5rurJTXhG523nepCCoi6AKz+ZxgPV9e4=;
+        b=PrARlWxKE10sEnLh/awOxujQsuzZME2kfIbZ+NkhLa+a1Qwd2/2TqBRn0A5c6/U+/H
+         6cze3wVzcIwRa5jjPtk1yQFK1it42KOsc0sNHCn1mnIhM4+GyfkCZoVfDiuSrnASA9vH
+         wHoxJ4svxVIoKDsb3JHo0J94QdXFxViXp3S6M/PBc60kQNefGtT6wk1U4ee0/YeJk4mj
+         JfWgPkr4UhBwlZeeoJaD0bRumi/tTc/PeO3CDiQ4LG21GIaroOmlXTuF7EvxwIfhaVoR
+         IENliQaPJQdjz9B63cWkJ/0fU5uDoP2kGhujJGfAtObxIZKwCFEV1beEvQReHNPlywyD
+         ib4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ao0QlwnIR0BPrNFzKmnkW6LgKGwtPEdX/Cj9AXAbbyo=;
-        b=ncnxduu1zJcP4xPJZak3HJMOn+BE1HAQ6jBBpXNzHBseMSCeJT+/Sf/88FNZDOZfZf
-         lmr5QJemYbiIoTyThfEal3xZqkYjrSyO60ppyhm4Xzx2FEq6VUgoiXeIi05WJepzZ9Q+
-         EQhJSZryMuN+daamGiXVtcAzs3vW0Thf43417VW4HJUDURT0Ctsk1Jm09dgnYihiwkgi
-         rLRobmDcTr5tBWEX3+mylDiXiM/JcPIePuf3crGz9Z2oNBoTIfiXPTJU7xouuJyTbi1g
-         IYc2R+kFqzGDp4CB7DErjp5fJZDrTPeLkDyO1mXUw3rS6RFEaNHK89zm4k6TQ8OUBH0m
-         JYOA==
-X-Gm-Message-State: AOAM532GNhDxq+MvBlFiQNbnz/jKQFfOhrixSP0ZnrjeaHJrYk0w0Bv/
-        NhYZbyn8igO4H/o0+pH6oi0=
-X-Google-Smtp-Source: ABdhPJyrnR/81obxJKIzYMVAvUsSU+yK/bVJWztl2phcRNfRcgdST2eKpZZ6arJm8pKSG7JHstJPaQ==
-X-Received: by 2002:a1c:448b:: with SMTP id r133mr36603134wma.85.1638187643831;
-        Mon, 29 Nov 2021 04:07:23 -0800 (PST)
+        bh=xR1nHIQR+HY5rurJTXhG523nepCCoi6AKz+ZxgPV9e4=;
+        b=sECj7sEdjYpq6cDkOvfB0VyEUmtd2YgaoLxgZ69WOqYejX0oZTG3ch7qzEQ53+kbf1
+         X/WQffDj/sckmCTwORBV9DjU6fY73RIukeg1EYCbDRW0sNlQV0WK6PbEqzvNRchi+EVh
+         yacxGp9hUaZ1unlvd30lL2hmqHGAM5G9DgmTSP9oUbLVZegfX4l1IUs8w8c9y1dv39d5
+         RZqmbknieT4ZF+jshrd192P6BvWTxWKNSnvFG9fidTW972jtL2SQQ9sHSdDnh8z2UpCz
+         7Sl7sZTY6KyhVKaGKs9cDdjwrYo3rHrWDq8D4X2eFAwiO9JxdKi9qs8Grij76n+EAmam
+         eluw==
+X-Gm-Message-State: AOAM531uG07QOslRhGhhkBz/WtgEBdFU2ulYO66BzLGbyHeTeGJ48Onx
+        RIdJzxJjvF/klylN1LtKpu0=
+X-Google-Smtp-Source: ABdhPJzzdlceodIRBmlFEQhUB8Cs4Zy3gLWxC1Aw5MEGHc38yEUkK/zYjhOxO867+NmHzoUgucPFdQ==
+X-Received: by 2002:a05:6000:2ae:: with SMTP id l14mr33388815wry.142.1638187646630;
+        Mon, 29 Nov 2021 04:07:26 -0800 (PST)
 Received: from abel.fritz.box (p57b0b77b.dip0.t-ipconnect.de. [87.176.183.123])
-        by smtp.gmail.com with ESMTPSA id b6sm20415234wmq.45.2021.11.29.04.07.23
+        by smtp.gmail.com with ESMTPSA id b6sm20415234wmq.45.2021.11.29.04.07.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 04:07:23 -0800 (PST)
+        Mon, 29 Nov 2021 04:07:26 -0800 (PST)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     daniel@ffwll.ch
 Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 16/28] dma-buf: finally make dma_resv_excl_fence private
-Date:   Mon, 29 Nov 2021 13:06:47 +0100
-Message-Id: <20211129120659.1815-17-christian.koenig@amd.com>
+Subject: [PATCH 19/28] drm: support more than one write fence in drm_gem_plane_helper_prepare_fb
+Date:   Mon, 29 Nov 2021 13:06:50 +0100
+Message-Id: <20211129120659.1815-20-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211129120659.1815-1-christian.koenig@amd.com>
 References: <20211129120659.1815-1-christian.koenig@amd.com>
@@ -67,70 +67,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Drivers should never touch this directly.
+Use dma_resv_get_singleton() here to eventually get more than one write
+fence as single fence.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/dma-buf/dma-resv.c | 17 +++++++++++++++++
- include/linux/dma-resv.h   | 17 -----------------
- 2 files changed, 17 insertions(+), 17 deletions(-)
+ drivers/gpu/drm/drm_gem_atomic_helper.c | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
-index 694716a3d66d..9acceabc9399 100644
---- a/drivers/dma-buf/dma-resv.c
-+++ b/drivers/dma-buf/dma-resv.c
-@@ -147,6 +147,23 @@ void dma_resv_fini(struct dma_resv *obj)
- }
- EXPORT_SYMBOL(dma_resv_fini);
+diff --git a/drivers/gpu/drm/drm_gem_atomic_helper.c b/drivers/gpu/drm/drm_gem_atomic_helper.c
+index c3189afe10cb..9338ddb7edff 100644
+--- a/drivers/gpu/drm/drm_gem_atomic_helper.c
++++ b/drivers/gpu/drm/drm_gem_atomic_helper.c
+@@ -143,25 +143,21 @@
+  */
+ int drm_gem_plane_helper_prepare_fb(struct drm_plane *plane, struct drm_plane_state *state)
+ {
+-	struct dma_resv_iter cursor;
+ 	struct drm_gem_object *obj;
+ 	struct dma_fence *fence;
++	int ret;
  
-+/**
-+ * dma_resv_excl_fence - return the object's exclusive fence
-+ * @obj: the reservation object
-+ *
-+ * Returns the exclusive fence (if any). Caller must either hold the objects
-+ * through dma_resv_lock() or the RCU read side lock through rcu_read_lock(),
-+ * or one of the variants of each
-+ *
-+ * RETURNS
-+ * The exclusive fence or NULL
-+ */
-+static inline struct dma_fence *
-+dma_resv_excl_fence(struct dma_resv *obj)
-+{
-+	return rcu_dereference_check(obj->fence_excl, dma_resv_held(obj));
-+}
-+
- /**
-  * dma_resv_shared_list - get the reservation object's shared fence list
-  * @obj: the reservation object
-diff --git a/include/linux/dma-resv.h b/include/linux/dma-resv.h
-index cdfbbda6f600..40ac9d486f8f 100644
---- a/include/linux/dma-resv.h
-+++ b/include/linux/dma-resv.h
-@@ -412,23 +412,6 @@ static inline void dma_resv_unlock(struct dma_resv *obj)
- 	ww_mutex_unlock(&obj->lock);
- }
+ 	if (!state->fb)
+ 		return 0;
  
--/**
-- * dma_resv_excl_fence - return the object's exclusive fence
-- * @obj: the reservation object
-- *
-- * Returns the exclusive fence (if any). Caller must either hold the objects
-- * through dma_resv_lock() or the RCU read side lock through rcu_read_lock(),
-- * or one of the variants of each
-- *
-- * RETURNS
-- * The exclusive fence or NULL
-- */
--static inline struct dma_fence *
--dma_resv_excl_fence(struct dma_resv *obj)
--{
--	return rcu_dereference_check(obj->fence_excl, dma_resv_held(obj));
--}
--
- void dma_resv_init(struct dma_resv *obj);
- void dma_resv_fini(struct dma_resv *obj);
- int dma_resv_reserve_shared(struct dma_resv *obj, unsigned int num_fences);
+ 	obj = drm_gem_fb_get_obj(state->fb, 0);
+-	dma_resv_iter_begin(&cursor, obj->resv, false);
+-	dma_resv_for_each_fence_unlocked(&cursor, fence) {
+-		/* TODO: Currently there should be only one write fence, so this
+-		 * here works fine. But drm_atomic_set_fence_for_plane() should
+-		 * be changed to be able to handle more fences in general for
+-		 * multiple BOs per fb anyway. */
+-		dma_fence_get(fence);
+-		break;
+-	}
+-	dma_resv_iter_end(&cursor);
++	ret = dma_resv_get_singleton(obj->resv, false, &fence);
++	if (ret)
++		return ret;
+ 
++	/* TODO: drm_atomic_set_fence_for_plane() should be changed to be able
++	 * to handle more fences in general for multiple BOs per fb.
++	 */
+ 	drm_atomic_set_fence_for_plane(state, fence);
+ 	return 0;
+ }
 -- 
 2.25.1
 
