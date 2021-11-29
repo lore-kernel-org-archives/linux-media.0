@@ -2,48 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 069D9C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 09:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96465C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 29 Nov 2021 09:50:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346699AbhK2Jxe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Nov 2021 04:53:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34590 "EHLO
+        id S1347084AbhK2Jxh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Nov 2021 04:53:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34610 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245375AbhK2JvQ (ORCPT
+        with ESMTP id S245377AbhK2JvR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Nov 2021 04:51:16 -0500
+        Mon, 29 Nov 2021 04:51:17 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B766B80E66;
-        Mon, 29 Nov 2021 09:47:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78D07C58324;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11201B80E70;
+        Mon, 29 Nov 2021 09:47:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D3AC58334;
         Mon, 29 Nov 2021 09:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1638179276;
-        bh=55eT3wgWOJhie6F7iqSlU4bA4FiL270RS5JqRpvLTyY=;
+        bh=saFeHFW6YIuQRRVUW9F5rGW6Xsrq+9cWY9rHYQr/MjA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZDZBxWs/BcZKGatNB4UlPCgcj4fLrgtWWovVsjozNIUXdDPWJCyVj5ZrZE0pK7K3f
-         RHQW7tBJLDfdtef2a300EVWrP5XnD5OkWNrX1IqAQr+C7BTgergTGJXAkRjVEfnhuR
-         Tw5YCI5divZ9H1yEJ7E6XUZR92xXyme2NyL/y9KKe07EGb/X5gzJo+aPyyhTKSKYjK
-         twTiw73T4LsRnmeEJYWwS/FzuXM57A4N9XWhqgOKhB3Mrn5ktWttWc00F1/iTfFnWK
-         eO/IS9QeVXVTxSMj6P5YFws4pZ7iKaCtSG09GRghHBmCRSxOJE+/EF8RF3O5a/7bKO
-         tkHWmpHfVJVfA==
+        b=kgyMz/XtYIHS5P2y6KuGpHbvSkMIx48H8roSDgkCoqmRWtoXUa8cWwjivaDYCWo8Q
+         DJ9VE5fWGMc6y6CHIamWtXUkCtg7hLZYc9wMQnIyAMrMySsBc/uuUd3kwy+cbVxo23
+         T708FErwhWzgJD1Tbn9OEA4qyV4gQATWvMePATH7ISoIG50h/X+JyRKZk8Rx5k5V6n
+         y8MmlkXuefjtGTi7C/D4VF9gKe15SgacupDBCBBQdJtNsp9l8YzsuPiGZhVlJRVtsy
+         MBUH3sx0siWX+lTxv74mQD7sIBqTp5zzxmrQWSsMmzLmMpzXvGHfHCLkTonEUsaf5L
+         U7nvyUoIRsQNw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mrdGM-000RBG-Bp; Mon, 29 Nov 2021 10:47:54 +0100
+        id 1mrdGM-000RBe-Ko; Mon, 29 Nov 2021 10:47:54 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Antti Palosaari <crope@iki.fi>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH v2 06/20] media: m88ds3103: drop reg11 calculus from m88ds3103b_select_mclk()
-Date:   Mon, 29 Nov 2021 10:47:38 +0100
-Message-Id: <535b7e2c4d48e14aed70b70231306b0f6263f103.1638179135.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v2 12/20] media: au0828-i2c: drop a duplicated function
+Date:   Mon, 29 Nov 2021 10:47:44 +0100
+Message-Id: <644a5d27b84bfc10219c2c9583fa61d06615de1f.1638179135.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638179135.git.mchehab+huawei@kernel.org>
 References: <cover.1638179135.git.mchehab+huawei@kernel.org>
@@ -55,9 +52,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This value is never used at the code. So, drop it.
-
-Solves a W=1 clang warning.
+This function is not used, so, just drop it.
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
@@ -65,40 +60,27 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
 See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
 
- drivers/media/dvb-frontends/m88ds3103.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/media/usb/au0828/au0828-i2c.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/m88ds3103.c b/drivers/media/dvb-frontends/m88ds3103.c
-index 02e8aa11e36e..bce0f42f3d19 100644
---- a/drivers/media/dvb-frontends/m88ds3103.c
-+++ b/drivers/media/dvb-frontends/m88ds3103.c
-@@ -451,7 +451,7 @@ static int m88ds3103b_select_mclk(struct m88ds3103_dev *dev)
+diff --git a/drivers/media/usb/au0828/au0828-i2c.c b/drivers/media/usb/au0828/au0828-i2c.c
+index 708f01ab47fa..749f90d73b5b 100644
+--- a/drivers/media/usb/au0828/au0828-i2c.c
++++ b/drivers/media/usb/au0828/au0828-i2c.c
+@@ -23,13 +23,6 @@ MODULE_PARM_DESC(i2c_scan, "scan i2c bus at insmod time");
+ #define I2C_WAIT_DELAY 25
+ #define I2C_WAIT_RETRY 1000
  
- static int m88ds3103b_set_mclk(struct m88ds3103_dev *dev, u32 mclk_khz)
+-static inline int i2c_slave_did_write_ack(struct i2c_adapter *i2c_adap)
+-{
+-	struct au0828_dev *dev = i2c_adap->algo_data;
+-	return au0828_read(dev, AU0828_I2C_STATUS_201) &
+-		AU0828_I2C_STATUS_NO_WRITE_ACK ? 0 : 1;
+-}
+-
+ static inline int i2c_slave_did_read_ack(struct i2c_adapter *i2c_adap)
  {
--	u8 reg11 = 0x0A, reg15, reg16, reg1D, reg1E, reg1F, tmp;
-+	u8 reg15, reg16, reg1D, reg1E, reg1F, tmp;
- 	u8 sm, f0 = 0, f1 = 0, f2 = 0, f3 = 0;
- 	u16 pll_div_fb, N;
- 	u32 div;
-@@ -480,8 +480,6 @@ static int m88ds3103b_set_mclk(struct m88ds3103_dev *dev, u32 mclk_khz)
- 	div /= mclk_khz;
- 
- 	if (dev->cfg->ts_mode == M88DS3103_TS_SERIAL) {
--		reg11 |= 0x02;
--
- 		if (div <= 32) {
- 			N = 2;
- 
-@@ -532,8 +530,6 @@ static int m88ds3103b_set_mclk(struct m88ds3103_dev *dev, u32 mclk_khz)
- 		else if ((f3 < 8) && (f3 != 0))
- 			f3 = 8;
- 	} else {
--		reg11 &= ~0x02;
--
- 		if (div <= 32) {
- 			N = 2;
- 
+ 	struct au0828_dev *dev = i2c_adap->algo_data;
 -- 
 2.33.1
 
