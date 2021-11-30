@@ -2,26 +2,26 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8455C4332F
-	for <linux-media@archiver.kernel.org>; Tue, 30 Nov 2021 14:17:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EF03C43217
+	for <linux-media@archiver.kernel.org>; Tue, 30 Nov 2021 14:17:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242175AbhK3OUi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S242135AbhK3OUi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 30 Nov 2021 09:20:38 -0500
 Received: from perceval.ideasonboard.com ([213.167.242.64]:41004 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242128AbhK3OUT (ORCPT
+        with ESMTP id S242141AbhK3OUV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:20:19 -0500
+        Tue, 30 Nov 2021 09:20:21 -0500
 Received: from deskari.lan (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7999C3527;
-        Tue, 30 Nov 2021 15:16:59 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 03EFF352E;
+        Tue, 30 Nov 2021 15:17:00 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638281820;
-        bh=IcgowDqEyiYUjutx7kWHD8Heq5EHz4xcWnRp1SfIqog=;
+        s=mail; t=1638281821;
+        bh=ne7aU8zGTOMobFh9aw8doZ+SvUBpeO5/P1a+GeylQhA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wyiw3jYhZS+RjdtHbLlw5wMSbuhFwndsEZyrjfrG6MpE2zAQblVwvOUJp/KnX2p4i
-         0GwTMgeDGXTJg+4g69nDOdFwa55C/wowKLbgKahgr3ZVxNQzAhmnyVjcaBWdri0DK6
-         Dw1YE6fU12sODxqZn2XetW6HSLfy4SLeJ6+JLofo=
+        b=h6Wh/3zHsKdMhZzCbObHsdjaOEND+tPOmOouF9Jii2em+/I/U/KkXIvmwf0XzXCnc
+         UxidTEoZxKyJakCtxWVONQcG5p3sf/Hzfpnqq8H7ghaG0MRrqfesGbQ7t+hxMMVMrZ
+         6Qo/sbGVayYi06xT1q+krnRUlpI3zChepu6wY584=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -31,9 +31,9 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Pratyush Yadav <p.yadav@ti.com>
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v10 34/38] media: subdev: add "opposite" stream helper funcs
-Date:   Tue, 30 Nov 2021 16:15:32 +0200
-Message-Id: <20211130141536.891878-35-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v10 36/38] media: subdev: add v4l2_subdev_set_routing_with_fmt() helper
+Date:   Tue, 30 Nov 2021 16:15:34 +0200
+Message-Id: <20211130141536.891878-37-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211130141536.891878-1-tomi.valkeinen@ideasonboard.com>
 References: <20211130141536.891878-1-tomi.valkeinen@ideasonboard.com>
@@ -43,122 +43,77 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add two helper functions to make dealing with streams easier:
-
-v4l2_subdev_routing_find_opposite_end - given a routing table and a pad
-+ stream, return the pad + stream on the opposite side of the subdev.
-
-v4l2_subdev_state_get_opposite_stream_format - return a pointer to the
-format on the pad + stream on the opposite side from the given pad +
-stream.
+v4l2_subdev_set_routing_with_fmt() is the same as
+v4l2_subdev_set_routing(), but additionally initializes all the streams
+with the given format.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 47 +++++++++++++++++++++++++++
- include/media/v4l2-subdev.h           | 36 ++++++++++++++++++++
- 2 files changed, 83 insertions(+)
+ drivers/media/v4l2-core/v4l2-subdev.c | 22 ++++++++++++++++++++++
+ include/media/v4l2-subdev.h           | 16 ++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
 diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 5245ec219ee1..13a092442cd4 100644
+index 8469c56ae870..83ff15dc440a 100644
 --- a/drivers/media/v4l2-core/v4l2-subdev.c
 +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -1489,3 +1489,50 @@ v4l2_state_get_stream_format(struct v4l2_subdev_state *state, unsigned int pad,
- 	return NULL;
+@@ -1469,6 +1469,28 @@ int v4l2_subdev_set_routing(struct v4l2_subdev *sd,
  }
- EXPORT_SYMBOL_GPL(v4l2_state_get_stream_format);
-+
-+int v4l2_subdev_routing_find_opposite_end(const struct v4l2_subdev_krouting *routing,
-+					  u32 pad, u32 stream, u32 *other_pad,
-+					  u32 *other_stream)
+ EXPORT_SYMBOL_GPL(v4l2_subdev_set_routing);
+ 
++int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
++				     struct v4l2_subdev_state *state,
++				     struct v4l2_subdev_krouting *routing,
++				     const struct v4l2_mbus_framefmt *fmt)
 +{
++	struct v4l2_subdev_stream_configs *stream_configs;
 +	unsigned int i;
-+
-+	for (i = 0; i < routing->num_routes; ++i) {
-+		struct v4l2_subdev_route *route = &routing->routes[i];
-+
-+		if (route->source_pad == pad &&
-+		    route->source_stream == stream) {
-+			if (other_pad)
-+				*other_pad = route->sink_pad;
-+			if (other_stream)
-+				*other_stream = route->sink_stream;
-+			return 0;
-+		}
-+
-+		if (route->sink_pad == pad && route->sink_stream == stream) {
-+			if (other_pad)
-+				*other_pad = route->source_pad;
-+			if (other_stream)
-+				*other_stream = route->source_stream;
-+			return 0;
-+		}
-+	}
-+
-+	return -EINVAL;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_subdev_routing_find_opposite_end);
-+
-+struct v4l2_mbus_framefmt *
-+v4l2_subdev_state_get_opposite_stream_format(struct v4l2_subdev_state *state,
-+					     u32 pad, u32 stream)
-+{
-+	u32 other_pad, other_stream;
 +	int ret;
 +
-+	ret = v4l2_subdev_routing_find_opposite_end(&state->routing, pad, stream,
-+						    &other_pad, &other_stream);
++	ret = v4l2_subdev_set_routing(sd, state, routing);
 +	if (ret)
-+		return NULL;
++		return ret;
 +
-+	return v4l2_state_get_stream_format(state, other_pad, other_stream);
++	stream_configs = &state->stream_configs;
++
++	for (i = 0; i < stream_configs->num_configs; ++i)
++		stream_configs->configs[i].fmt = *fmt;
++
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(v4l2_subdev_state_get_opposite_stream_format);
++EXPORT_SYMBOL_GPL(v4l2_subdev_set_routing_with_fmt);
++
+ struct v4l2_mbus_framefmt *
+ v4l2_state_get_stream_format(struct v4l2_subdev_state *state, unsigned int pad,
+ 			     u32 stream)
 diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 7d7ef36e2597..b1761da83533 100644
+index 65c62a889f6c..2c70d92e497b 100644
 --- a/include/media/v4l2-subdev.h
 +++ b/include/media/v4l2-subdev.h
-@@ -1503,4 +1503,40 @@ struct v4l2_mbus_framefmt *
- v4l2_state_get_stream_format(struct v4l2_subdev_state *state, unsigned int pad,
- 			     u32 stream);
+@@ -1488,6 +1488,22 @@ int v4l2_subdev_set_routing(struct v4l2_subdev *sd,
+ 			    struct v4l2_subdev_state *state,
+ 			    struct v4l2_subdev_krouting *routing);
  
 +/**
-+ * v4l2_subdev_routing_find_opposite_end() - Find the opposite stream
-+ * @routing: routing used to find the opposite side
-+ * @pad: pad id
-+ * @stream: stream id
-+ * @other_pad: pointer used to return the opposite pad
-+ * @other_stream: pointer used to return the opposite stream
++ * v4l2_subdev_set_routing_with_fmt() - Set given routing and format to subdev
++ *					state
++ * @sd: The subdevice
++ * @state: The subdevice state
++ * @routing: Routing that will be copied to subdev state
++ * @fmt: Format used to initialize all the streams
 + *
-+ * This function uses the routing table to find the pad + stream which is
-+ * opposite the given pad + stream.
-+ *
-+ * @other_pad and/or @other_stream can be NULL if the caller does not need the
-+ * value.
-+ *
-+ * Returns 0 on success, or -EINVAL if no matching route is found.
++ * This is the same as v4l2_subdev_set_routing, but additionally initializes
++ * all the streams using the given format.
 + */
-+int v4l2_subdev_routing_find_opposite_end(const struct v4l2_subdev_krouting *routing,
-+					  u32 pad, u32 stream, u32 *other_pad,
-+					  u32 *other_stream);
++int v4l2_subdev_set_routing_with_fmt(struct v4l2_subdev *sd,
++				     struct v4l2_subdev_state *state,
++				     struct v4l2_subdev_krouting *routing,
++				     const struct v4l2_mbus_framefmt *fmt);
 +
-+/**
-+ * v4l2_subdev_state_get_opposite_stream_format() - Get pointer to opposite
-+ *                                                  stream format
-+ * @state: subdevice state
-+ * @pad: pad id
-+ * @stream: stream id
-+ *
-+ * This returns a pointer to &struct v4l2_mbus_framefmt for the pad + stream
-+ * that is opposite the given pad + stream in the subdev state.
-+ *
-+ * If the state does not contain the given pad + stream, NULL is returned.
-+ */
-+struct v4l2_mbus_framefmt *
-+v4l2_subdev_state_get_opposite_stream_format(struct v4l2_subdev_state *state,
-+					     u32 pad, u32 stream);
-+
- #endif
+ /**
+  * v4l2_state_get_stream_format() - Get pointer to a stream format
+  * @state: subdevice state
 -- 
 2.25.1
 
