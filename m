@@ -2,27 +2,27 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9006DC4167B
-	for <linux-media@archiver.kernel.org>; Wed,  1 Dec 2021 09:51:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A85E2C4167D
+	for <linux-media@archiver.kernel.org>; Wed,  1 Dec 2021 09:51:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348388AbhLAJyc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Dec 2021 04:54:32 -0500
+        id S1348386AbhLAJye (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Dec 2021 04:54:34 -0500
 Received: from mailgw01.mediatek.com ([60.244.123.138]:48416 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1348356AbhLAJy3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Dec 2021 04:54:29 -0500
-X-UUID: 5a3283146a6a4d8da7d26dd6fa7355df-20211201
-X-UUID: 5a3283146a6a4d8da7d26dd6fa7355df-20211201
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        with ESMTP id S1348352AbhLAJyb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Dec 2021 04:54:31 -0500
+X-UUID: 8e6ccbb1809a4fff9eedfb4a988e3c0e-20211201
+X-UUID: 8e6ccbb1809a4fff9eedfb4a988e3c0e-20211201
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1500848343; Wed, 01 Dec 2021 17:51:05 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1374917804; Wed, 01 Dec 2021 17:51:08 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 1 Dec 2021 17:51:03 +0800
+ 15.0.1497.2; Wed, 1 Dec 2021 17:51:07 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 1 Dec 2021 17:51:03 +0800
+ Transport; Wed, 1 Dec 2021 17:51:07 +0800
 From:   Moudy Ho <moudy.ho@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -50,9 +50,9 @@ CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <moudy.ho@mediatek.com>, <jason-jh.lin@mediatek.com>,
         <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
         <srv_heupstream@mediatek.com>
-Subject: [PATCH v9 4/7] soc: mediatek: mutex: add functions that operate registers by CMDQ
-Date:   Wed, 1 Dec 2021 17:50:28 +0800
-Message-ID: <20211201095031.31606-5-moudy.ho@mediatek.com>
+Subject: [PATCH v9 6/7] dts: arm64: mt8183: add Mediatek MDP3 nodes
+Date:   Wed, 1 Dec 2021 17:50:30 +0800
+Message-ID: <20211201095031.31606-7-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20211201095031.31606-1-moudy.ho@mediatek.com>
 References: <20211201095031.31606-1-moudy.ho@mediatek.com>
@@ -63,157 +63,153 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Considering that some functions have timing requirements
-in specific situation, this patch adds several interface that
-operate registers by CMDQ.
+Add device nodes for Media Data Path 3 (MDP3) modules.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- drivers/soc/mediatek/mtk-mutex.c       | 65 +++++++++++++++++++++++++-
- include/linux/soc/mediatek/mtk-mutex.h |  6 +++
- 2 files changed, 70 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 115 ++++++++++++++++++++++-
+ 1 file changed, 114 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-index e5e6255f5b84..320d0b72c78d 100644
---- a/drivers/soc/mediatek/mtk-mutex.c
-+++ b/drivers/soc/mediatek/mtk-mutex.c
-@@ -7,10 +7,14 @@
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-+#include <linux/of_address.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/soc/mediatek/mtk-mmsys.h>
- #include <linux/soc/mediatek/mtk-mutex.h>
-+#include <linux/soc/mediatek/mtk-cmdq.h>
-+
-+#define MTK_MUTEX_ENABLE			BIT(0)
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index ba4584faca5a..e4dc76b04438 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1325,6 +1325,85 @@
+ 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
+ 		};
  
- #define MT2701_MUTEX0_MOD0			0x2c
- #define MT2701_MUTEX0_SOF0			0x30
-@@ -155,6 +159,8 @@ struct mtk_mutex_ctx {
- 	void __iomem			*regs;
- 	struct mtk_mutex		mutex[10];
- 	const struct mtk_mutex_data	*data;
-+	phys_addr_t			addr;
-+	u8				subsys_id;
- };
++		mdp3_rdma0: mdp3_rdma0@14001000 {
++			compatible = "mediatek,mt8183-mdp3",
++				     "mediatek,mt8183-mdp3-rdma";
++			mediatek,scp = <&scp>;
++			mediatek,mdp3-id = <0>;
++			mediatek,mdp3-comps = "mediatek,mt8183-mdp3-dl1",
++					      "mediatek,mt8183-mdp3-dl2",
++					      "mediatek,mt8183-mdp3-path1",
++					      "mediatek,mt8183-mdp3-path2",
++					      "mediatek,mt8183-mdp3-imgi",
++					      "mediatek,mt8183-mdp3-exto";
++			mediatek,mdp3-comp-ids = <0 1 0 1 0 1>;
++			reg = <0 0x14001000 0 0x1000>,
++			      <0 0x14000000 0 0x1000>,
++			      <0 0x14005000 0 0x1000>,
++			      <0 0x14006000 0 0x1000>,
++			      <0 0x15020000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x1000 0x1000>,
++						  <&gce SUBSYS_1400XXXX 0 0x1000>,
++						  <&gce SUBSYS_1400XXXX 0x5000 0x1000>,
++						  <&gce SUBSYS_1400XXXX 0x6000 0x1000>,
++						  <&gce SUBSYS_1502XXXX 0 0x1000>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_MDP_RDMA0>,
++				 <&mmsys CLK_MM_MDP_RSZ1>,
++				 <&mmsys CLK_MM_MDP_DL_TXCK>,
++				 <&mmsys CLK_MM_MDP_DL_RX>,
++				 <&mmsys CLK_MM_IPU_DL_TXCK>,
++				 <&mmsys CLK_MM_IPU_DL_RX>;
++			iommus = <&iommu M4U_PORT_MDP_RDMA0>;
++			mediatek,mmsys = <&mmsys>;
++			mediatek,mm-mutex = <&mutex>;
++			mediatek,mailbox-gce = <&gce>;
++			mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
++				 <&gce 21 CMDQ_THR_PRIO_LOWEST 0>,
++				 <&gce 22 CMDQ_THR_PRIO_LOWEST 0>,
++				 <&gce 23 CMDQ_THR_PRIO_LOWEST 0>;
++			gce-subsys = <&gce 0x14000000 SUBSYS_1400XXXX>,
++				     <&gce 0x14010000 SUBSYS_1401XXXX>,
++				     <&gce 0x14020000 SUBSYS_1402XXXX>,
++				     <&gce 0x15020000 SUBSYS_1502XXXX>;
++		};
++
++		mdp3_rsz0: mdp3_rsz0@14003000 {
++			compatible = "mediatek,mt8183-mdp3-rsz";
++			mediatek,mdp3-id = <0>;
++			reg = <0 0x14003000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x3000 0x1000>;
++			clocks = <&mmsys CLK_MM_MDP_RSZ0>;
++		};
++
++		mdp3_rsz1: mdp3_rsz1@14004000 {
++			compatible = "mediatek,mt8183-mdp3-rsz";
++			mediatek,mdp3-id = <1>;
++			reg = <0 0x14004000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x4000 0x1000>;
++			clocks = <&mmsys CLK_MM_MDP_RSZ1>;
++		};
++
++		mdp3_wrot0: mdp3_wrot0@14005000 {
++			compatible = "mediatek,mt8183-mdp3-wrot";
++			mediatek,mdp3-id = <0>;
++			reg = <0 0x14005000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x5000 0x1000>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_MDP_WROT0>;
++			iommus = <&iommu M4U_PORT_MDP_WROT0>;
++		};
++
++		mdp3_wdma: mdp3_wdma@14006000 {
++			compatible = "mediatek,mt8183-mdp3-wdma";
++			mediatek,mdp3-id = <0>;
++			reg = <0 0x14006000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x6000 0x1000>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_MDP_WDMA0>;
++			iommus = <&iommu M4U_PORT_MDP_WDMA0>;
++		};
++
+ 		ovl0: ovl@14008000 {
+ 			compatible = "mediatek,mt8183-disp-ovl";
+ 			reg = <0 0x14008000 0 0x1000>;
+@@ -1449,7 +1528,33 @@
+ 			interrupts = <GIC_SPI 217 IRQ_TYPE_LEVEL_LOW>;
+ 			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+ 			mediatek,gce-events = <CMDQ_EVENT_MUTEX_STREAM_DONE0>,
+-					      <CMDQ_EVENT_MUTEX_STREAM_DONE1>;
++					      <CMDQ_EVENT_MUTEX_STREAM_DONE1>,
++					      <CMDQ_EVENT_MDP_RDMA0_SOF>,
++					      <CMDQ_EVENT_MDP_RDMA0_EOF>,
++					      <CMDQ_EVENT_MDP_RSZ0_SOF>,
++					      <CMDQ_EVENT_MDP_RSZ1_SOF>,
++					      <CMDQ_EVENT_MDP_TDSHP_SOF>,
++					      <CMDQ_EVENT_MDP_WROT0_SOF>,
++					      <CMDQ_EVENT_MDP_WROT0_EOF>,
++					      <CMDQ_EVENT_MDP_WDMA0_SOF>,
++					      <CMDQ_EVENT_MDP_WDMA0_EOF>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_0>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_1>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_2>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_3>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_4>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_5>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_6>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_7>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_8>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_9>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_10>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_11>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_12>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_13>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_14>,
++					      <CMDQ_EVENT_WPE_A_DONE>,
++					      <CMDQ_EVENT_SPE_B_DONE>;
+ 		};
  
- static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-@@ -475,6 +481,25 @@ void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_remove_comp);
+ 		larb0: larb@14017000 {
+@@ -1473,6 +1578,14 @@
+ 			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+ 		};
  
-+void mtk_mutex_add_mod_by_cmdq(struct mtk_mutex *mutex, u32 mod,
-+			       struct mmsys_cmdq_cmd *cmd)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+	unsigned int offset;
++		mdp3_ccorr: mdp3_ccorr@1401c000 {
++			compatible = "mediatek,mt8183-mdp3-ccorr";
++			mediatek,mdp3-id = <0>;
++			reg = <0 0x1401c000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0xc000 0x1000>;
++			clocks = <&mmsys CLK_MM_MDP_CCORR>;
++		};
 +
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg, mutex->id);
-+	cmdq_pkt_write_mask(cmd->pkt, mtx->subsys_id, mtx->addr + offset,
-+			    mod, mtx->data->mutex_mdp_mod_mask);
-+
-+	offset = DISP_REG_MUTEX_SOF(mtx->data->mutex_sof_reg, mutex->id);
-+	cmdq_pkt_write_mask(cmd->pkt, mtx->subsys_id, mtx->addr + offset,
-+			    0, mtx->data->mutex_mdp_sof_mask);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_add_mod_by_cmdq);
-+
- void mtk_mutex_enable(struct mtk_mutex *mutex)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-@@ -486,6 +511,20 @@ void mtk_mutex_enable(struct mtk_mutex *mutex)
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_enable);
- 
-+void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-+			      struct mmsys_cmdq_cmd *cmd)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	cmdq_pkt_write_mask(cmd->pkt, mtx->subsys_id,
-+			    mtx->addr + DISP_REG_MUTEX_EN(mutex->id),
-+			    MTK_MUTEX_ENABLE, MTK_MUTEX_ENABLE);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_enable_by_cmdq);
-+
- void mtk_mutex_disable(struct mtk_mutex *mutex)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-@@ -497,6 +536,20 @@ void mtk_mutex_disable(struct mtk_mutex *mutex)
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_disable);
- 
-+void mtk_mutex_disable_by_cmdq(struct mtk_mutex *mutex,
-+			       struct mmsys_cmdq_cmd *cmd)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	cmdq_pkt_write_mask(cmd->pkt, mtx->subsys_id,
-+			    mtx->addr + DISP_REG_MUTEX_EN(mutex->id),
-+			    0x0, MTK_MUTEX_ENABLE);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_disable_by_cmdq);
-+
- void mtk_mutex_acquire(struct mtk_mutex *mutex)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-@@ -524,7 +577,8 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct mtk_mutex_ctx *mtx;
--	struct resource *regs;
-+	struct cmdq_client_reg cmdq_reg;
-+	struct resource *regs, addr;
- 	int i;
- 
- 	mtx = devm_kzalloc(dev, sizeof(*mtx), GFP_KERNEL);
-@@ -545,6 +599,15 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	if (of_address_to_resource(dev->of_node, 0, &addr) < 0)
-+		mtx->addr = 0L;
-+	else
-+		mtx->addr = addr.start;
-+
-+	if (cmdq_dev_get_client_reg(dev, &cmdq_reg, 0) != 0)
-+		dev_info(dev, "cmdq subsys id has not been set\n");
-+	mtx->subsys_id = cmdq_reg.subsys;
-+
- 	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	mtx->regs = devm_ioremap_resource(dev, regs);
- 	if (IS_ERR(mtx->regs)) {
-diff --git a/include/linux/soc/mediatek/mtk-mutex.h b/include/linux/soc/mediatek/mtk-mutex.h
-index 099ddb025d79..86c17c024d83 100644
---- a/include/linux/soc/mediatek/mtk-mutex.h
-+++ b/include/linux/soc/mediatek/mtk-mutex.h
-@@ -16,8 +16,14 @@ struct mtk_mutex *mtk_mutex_mdp_get(struct device *dev,
- int mtk_mutex_prepare(struct mtk_mutex *mutex);
- void mtk_mutex_add_comp(struct mtk_mutex *mutex,
- 			enum mtk_ddp_comp_id id);
-+void mtk_mutex_add_mod_by_cmdq(struct mtk_mutex *mutex, u32 mod,
-+			       struct mmsys_cmdq_cmd *cmd);
- void mtk_mutex_enable(struct mtk_mutex *mutex);
-+void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-+			      struct mmsys_cmdq_cmd *cmd);
- void mtk_mutex_disable(struct mtk_mutex *mutex);
-+void mtk_mutex_disable_by_cmdq(struct mtk_mutex *mutex,
-+			       struct mmsys_cmdq_cmd *cmd);
- void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
- 			   enum mtk_ddp_comp_id id);
- void mtk_mutex_unprepare(struct mtk_mutex *mutex);
+ 		imgsys: syscon@15020000 {
+ 			compatible = "mediatek,mt8183-imgsys", "syscon";
+ 			reg = <0 0x15020000 0 0x1000>;
 -- 
 2.18.0
 
