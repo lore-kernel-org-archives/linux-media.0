@@ -2,164 +2,217 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C88EFC433FE
-	for <linux-media@archiver.kernel.org>; Thu,  2 Dec 2021 05:57:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7474C433F5
+	for <linux-media@archiver.kernel.org>; Thu,  2 Dec 2021 06:13:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344972AbhLBGAx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Dec 2021 01:00:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233170AbhLBGAw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Dec 2021 01:00:52 -0500
-Received: from lb1-smtp-cloud7.xs4all.net (lb1-smtp-cloud7.xs4all.net [IPv6:2001:888:0:108::1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A039C061574
-        for <linux-media@vger.kernel.org>; Wed,  1 Dec 2021 21:57:30 -0800 (PST)
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id sf5ymfJa9f6qjsf5ymFXHh; Thu, 02 Dec 2021 06:57:27 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1638424647; bh=JspbDFTfkruxHVgFgOWrcwl0jDsblcntHF5j3jbS3g4=;
-        h=Message-ID:Date:From:To:Subject:From:Subject;
-        b=Fhoyqintazm7rvIzmc8vRreIWq+z+zQyfJEgi4kyh30HPMtkFG0XkSrsSRuT9lXD9
-         dIMriBPDATr5WogO/etzFbIUCchq36QFKbUDex7oOV17ajEzIRlulf/9Y/thQybmMm
-         K05o8G4B5KCNHcay+gSerxSgGyyt+pAfGJCugxM0rSYqliGUWCPRjAffw9FiLbI9F9
-         Ut5AQpMLsQZvIwvF2Ba2tDwClOG7guZq1H6d30spsf1NGiVPzKUqBNxYJF0AEKSNbL
-         DaHdQcioK6lMoZ1cG9XvYGC/rVwT48ujo4Knejxe3khjAmuo2eN8KbKqUEpa3NlRVS
-         +mcOKs5NgEycQ==
-Message-ID: <3c5d1193344b5abee16bd6f029eb5a67@smtp-cloud7.xs4all.net>
-Date:   Thu, 02 Dec 2021 06:57:25 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4xfOiD11qWY2mcAhWxnObit02BDxgeUwuWDscGy8lamRCs9XRGdMI15sCc3AhSzH26s3z5hTyy/2DGiev449YBatE26L0/sZlA47nHvCVJgVnz3WIol0aF
- 4EeGiAcZAo6QqEaS8wIrbJZuxF5iuhrCQ72BD1aEwK2k7eSm29/cI9Z8cET2N2xwX7XEOiCgPPmpHw==
+        id S1355727AbhLBGQw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Dec 2021 01:16:52 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:49276 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1355710AbhLBGQv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Dec 2021 01:16:51 -0500
+X-UUID: 1060ed4a51f14b9a91119903e376dcf7-20211202
+X-UUID: 1060ed4a51f14b9a91119903e376dcf7-20211202
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 193532354; Thu, 02 Dec 2021 14:13:27 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 2 Dec 2021 14:13:25 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 2 Dec 2021 14:13:25 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
+        <moudy.ho@mediatek.com>, <jason-jh.lin@mediatek.com>,
+        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
+        <srv_heupstream@mediatek.com>
+Subject: [PATCH v10 3/4] soc: mediatek: mutex: add support for MDP
+Date:   Thu, 2 Dec 2021 14:13:21 +0800
+Message-ID: <20211202061322.19917-4-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20211202061322.19917-1-moudy.ho@mediatek.com>
+References: <20211202061322.19917-1-moudy.ho@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+For the purpose of module independence, related settings should be moved
+from MDP to the corresponding driver.
+This patch adds more 8183 MDP settings and interface.
 
-Results of the daily build of media_tree:
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/soc/mediatek/mtk-mutex.c       | 68 ++++++++++++++++++++++++++
+ include/linux/soc/mediatek/mtk-mutex.h |  3 ++
+ 2 files changed, 71 insertions(+)
 
-date:			Thu Dec  2 05:00:11 CET 2021
-media-tree git hash:	8cc7a1b2aca067397a016cdb971a5e6ad9b640c7
-media_build git hash:	90bf75007a9f73a3bfd144cae29e05229e702035
-v4l-utils git hash:	c01c6f78adde6ecfd0ef800e381aed27bea7808b
-edid-decode git hash:	b00755e34eb12aa92416aaf1bb7b02603131afe0
-gcc version:		i686-linux-gcc (GCC) 11.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.3
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.3
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 7696c77a86087f681c8864e9ed957938d5b69aaf
-host hardware:		x86_64
-host os:		5.14.0-2-amd64
+diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+index 2ca55bb5a8be..5525c5dbfe8e 100644
+--- a/drivers/soc/mediatek/mtk-mutex.c
++++ b/drivers/soc/mediatek/mtk-mutex.c
+@@ -119,6 +119,18 @@
+ #define MT8183_MUTEX_EOF_DSI0			(MT8183_MUTEX_SOF_DSI0 << 6)
+ #define MT8183_MUTEX_EOF_DPI0			(MT8183_MUTEX_SOF_DPI0 << 6)
+ 
++#define MT8183_MUTEX_MDP_START			5
++#define MT8183_MUTEX_MDP_MOD_MASK		0x07FFFFFF
++#define MT8183_MUTEX_MDP_SOF_MASK		0x00000007
++#define MT8183_MUTEX_MOD_MDP_RDMA0		BIT(2)
++#define MT8183_MUTEX_MOD_MDP_RSZ0		BIT(4)
++#define MT8183_MUTEX_MOD_MDP_RSZ1		BIT(5)
++#define MT8183_MUTEX_MOD_MDP_TDSHP0		BIT(6)
++#define MT8183_MUTEX_MOD_MDP_WROT0		BIT(7)
++#define MT8183_MUTEX_MOD_MDP_WDMA		BIT(8)
++#define MT8183_MUTEX_MOD_MDP_AAL0		BIT(23)
++#define MT8183_MUTEX_MOD_MDP_CCORR0		BIT(24)
++
+ struct mtk_mutex {
+ 	int id;
+ 	bool claimed;
+@@ -139,6 +151,10 @@ struct mtk_mutex_data {
+ 	const unsigned int *mutex_sof;
+ 	const unsigned int mutex_mod_reg;
+ 	const unsigned int mutex_sof_reg;
++	const unsigned int *mutex_mdp_offset;
++	const unsigned int *mutex_mdp_mod;
++	const unsigned int mutex_mdp_mod_mask;
++	const unsigned int mutex_mdp_sof_mask;
+ 	const bool no_clk;
+ };
+ 
+@@ -226,6 +242,17 @@ static const unsigned int mt8183_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+ 	[DDP_COMPONENT_WDMA0] = MT8183_MUTEX_MOD_DISP_WDMA0,
+ };
+ 
++static const unsigned int mt8183_mutex_mdp_mod[MDP_MAX_COMP_COUNT] = {
++	[MDP_COMP_RDMA0] = MT8183_MUTEX_MOD_MDP_RDMA0,
++	[MDP_COMP_RSZ0] = MT8183_MUTEX_MOD_MDP_RSZ0,
++	[MDP_COMP_RSZ1] = MT8183_MUTEX_MOD_MDP_RSZ1,
++	[MDP_COMP_TDSHP0] = MT8183_MUTEX_MOD_MDP_TDSHP0,
++	[MDP_COMP_WROT0] = MT8183_MUTEX_MOD_MDP_WROT0,
++	[MDP_COMP_WDMA] = MT8183_MUTEX_MOD_MDP_WDMA,
++	[MDP_COMP_AAL0] = MT8183_MUTEX_MOD_MDP_AAL0,
++	[MDP_COMP_CCORR0] = MT8183_MUTEX_MOD_MDP_CCORR0,
++};
++
+ static const unsigned int mt8192_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+ 	[DDP_COMPONENT_AAL0] = MT8192_MUTEX_MOD_DISP_AAL0,
+ 	[DDP_COMPONENT_CCORR] = MT8192_MUTEX_MOD_DISP_CCORR0,
+@@ -264,6 +291,14 @@ static const unsigned int mt8183_mutex_sof[MUTEX_SOF_DSI3 + 1] = {
+ 	[MUTEX_SOF_DPI0] = MT8183_MUTEX_SOF_DPI0 | MT8183_MUTEX_EOF_DPI0,
+ };
+ 
++/* indicate which mutex is used by each pipepline */
++static const unsigned int mt8183_mutex_mdp_offset[MDP_PIPE_MAX] = {
++	[MDP_PIPE_IMGI] = MT8183_MUTEX_MDP_START,
++	[MDP_PIPE_RDMA0] = MT8183_MUTEX_MDP_START + 1,
++	[MDP_PIPE_WPEI] = MT8183_MUTEX_MDP_START + 2,
++	[MDP_PIPE_WPEI2] = MT8183_MUTEX_MDP_START + 3
++};
++
+ static const struct mtk_mutex_data mt2701_mutex_driver_data = {
+ 	.mutex_mod = mt2701_mutex_mod,
+ 	.mutex_sof = mt2712_mutex_sof,
+@@ -298,6 +333,10 @@ static const struct mtk_mutex_data mt8183_mutex_driver_data = {
+ 	.mutex_sof = mt8183_mutex_sof,
+ 	.mutex_mod_reg = MT8183_MUTEX0_MOD0,
+ 	.mutex_sof_reg = MT8183_MUTEX0_SOF0,
++	.mutex_mdp_offset = mt8183_mutex_mdp_offset,
++	.mutex_mdp_mod = mt8183_mutex_mdp_mod,
++	.mutex_mdp_mod_mask = MT8183_MUTEX_MDP_MOD_MASK,
++	.mutex_mdp_sof_mask = MT8183_MUTEX_MDP_SOF_MASK,
+ 	.no_clk = true,
+ };
+ 
+@@ -323,6 +362,21 @@ struct mtk_mutex *mtk_mutex_get(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(mtk_mutex_get);
+ 
++struct mtk_mutex *mtk_mutex_mdp_get(struct device *dev,
++				    enum mtk_mdp_pipe_id id)
++{
++	struct mtk_mutex_ctx *mtx = dev_get_drvdata(dev);
++	int i = mtx->data->mutex_mdp_offset[id];
++
++	if (!mtx->mutex[i].claimed) {
++		mtx->mutex[i].claimed = true;
++		return &mtx->mutex[i];
++	}
++
++	return ERR_PTR(-EBUSY);
++}
++EXPORT_SYMBOL_GPL(mtk_mutex_mdp_get);
++
+ void mtk_mutex_put(struct mtk_mutex *mutex)
+ {
+ 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
+@@ -442,6 +496,20 @@ void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
+ }
+ EXPORT_SYMBOL_GPL(mtk_mutex_remove_comp);
+ 
++u32 mtk_mutex_get_mdp_mod(struct mtk_mutex *mutex,enum mtk_mdp_comp_id id)
++{
++	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
++						 mutex[mutex->id]);
++
++	WARN_ON(&mtx->mutex[mutex->id] != mutex);
++
++	if (mtx->data->mutex_mdp_mod)
++		return mtx->data->mutex_mdp_mod[id];
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(mtk_mutex_get_mdp_mod);
++
+ void mtk_mutex_enable(struct mtk_mutex *mutex)
+ {
+ 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
+diff --git a/include/linux/soc/mediatek/mtk-mutex.h b/include/linux/soc/mediatek/mtk-mutex.h
+index 6fe4ffbde290..b2608f4220ee 100644
+--- a/include/linux/soc/mediatek/mtk-mutex.h
++++ b/include/linux/soc/mediatek/mtk-mutex.h
+@@ -11,9 +11,12 @@ struct device;
+ struct mtk_mutex;
+ 
+ struct mtk_mutex *mtk_mutex_get(struct device *dev);
++struct mtk_mutex *mtk_mutex_mdp_get(struct device *dev,
++				    enum mtk_mdp_pipe_id id);
+ int mtk_mutex_prepare(struct mtk_mutex *mutex);
+ void mtk_mutex_add_comp(struct mtk_mutex *mutex,
+ 			enum mtk_ddp_comp_id id);
++u32 mtk_mutex_get_mdp_mod(struct mtk_mutex *mutex, enum mtk_mdp_comp_id id);
+ void mtk_mutex_enable(struct mtk_mutex *mutex);
+ void mtk_mutex_disable(struct mtk_mutex *mutex);
+ void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
+-- 
+2.18.0
 
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-stm32: OK
-linux-git-mips: OK
-linux-git-arm-pxa: OK
-linux-git-arm64: OK
-linux-git-powerpc64: OK
-linux-git-arm-multi: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-4.4.283-i686: OK
-linux-4.4.283-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.246-i686: OK
-linux-4.9.246-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.246-i686: OK
-linux-4.14.246-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.206-i686: OK
-linux-4.19.206-x86_64: OK
-linux-4.20.17-i686: OK
-linux-4.20.17-x86_64: OK
-linux-5.0.21-i686: OK
-linux-5.0.21-x86_64: OK
-linux-5.1.21-i686: OK
-linux-5.1.21-x86_64: OK
-linux-5.2.21-i686: OK
-linux-5.2.21-x86_64: OK
-linux-5.3.18-i686: OK
-linux-5.3.18-x86_64: OK
-linux-5.4.144-i686: OK
-linux-5.4.144-x86_64: OK
-linux-5.5.19-i686: OK
-linux-5.5.19-x86_64: OK
-linux-5.6.19-i686: OK
-linux-5.6.19-x86_64: OK
-linux-5.7.19-i686: OK
-linux-5.7.19-x86_64: OK
-linux-5.8.18-i686: OK
-linux-5.8.18-x86_64: OK
-linux-5.9.16-i686: OK
-linux-5.9.16-x86_64: OK
-linux-5.10.62-i686: OK
-linux-5.10.62-x86_64: OK
-linux-5.11.22-i686: OK
-linux-5.11.22-x86_64: OK
-linux-5.12.19-i686: OK
-linux-5.12.19-x86_64: OK
-linux-5.13.14-i686: OK
-linux-5.13.14-x86_64: OK
-linux-5.14.1-i686: OK
-linux-5.14.1-x86_64: OK
-linux-5.15.1-i686: OK
-linux-5.15.1-x86_64: OK
-linux-5.16-rc1-i686: OK
-linux-5.16-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: WARNINGS: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 1
-virtme-32: OK: Final Summary: 3100, Succeeded: 3100, Failed: 0, Warnings: 0
-sparse: WARNINGS
-smatch: WARNINGS
-kerneldoc: WARNINGS
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Thursday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-32.log
-http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Thursday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
