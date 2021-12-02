@@ -2,178 +2,142 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6A7AC433EF
-	for <linux-media@archiver.kernel.org>; Thu,  2 Dec 2021 03:36:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA5D2C433FE
+	for <linux-media@archiver.kernel.org>; Thu,  2 Dec 2021 03:45:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355221AbhLBDj1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Dec 2021 22:39:27 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:52306 "EHLO
+        id S1355234AbhLBDtP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Dec 2021 22:49:15 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:43420 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1355206AbhLBDjU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Dec 2021 22:39:20 -0500
-X-UUID: 35066ef134af4aa2affe830ba67adfab-20211202
-X-UUID: 35066ef134af4aa2affe830ba67adfab-20211202
+        with ESMTP id S1344740AbhLBDtO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Dec 2021 22:49:14 -0500
+X-UUID: 40e87af1f94b4283bbd4877a2a8e8e77-20211202
+X-UUID: 40e87af1f94b4283bbd4877a2a8e8e77-20211202
 Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
+        (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1064289280; Thu, 02 Dec 2021 11:35:53 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 2 Dec 2021 11:35:52 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 2 Dec
- 2021 11:35:51 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 2 Dec 2021 11:35:51 +0800
-Message-ID: <0d3f33e26b67cabc82246c49c0e952194a9a88c1.camel@mediatek.com>
-Subject: Re: [PATCH v9 7/7] media: platform: mtk-mdp3: add Mediatek MDP3
- driver
-From:   moudy ho <moudy.ho@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+        with ESMTP id 1994595644; Thu, 02 Dec 2021 11:45:50 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 2 Dec 2021 11:45:49 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 2 Dec
+ 2021 11:45:48 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Thu, 2 Dec 2021 11:45:47 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Tzung-Bi Shih" <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tomasz Figa <tfiga@google.com>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        "Maoguang Meng" <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
-        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
-        <river.cheng@mediatek.com>, <srv_heupstream@mediatek.com>
-Date:   Thu, 2 Dec 2021 11:35:51 +0800
-In-Reply-To: <103b1664-d04c-c1fc-ff4c-e2c92ce45ee8@collabora.com>
-References: <20211201095031.31606-1-moudy.ho@mediatek.com>
-         <20211201095031.31606-8-moudy.ho@mediatek.com>
-         <103b1664-d04c-c1fc-ff4c-e2c92ce45ee8@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v12, 01/19] media: mtk-vcodec: Get numbers of register bases from DT
+Date:   Thu, 2 Dec 2021 11:45:26 +0800
+Message-ID: <20211202034544.2750-2-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211202034544.2750-1-yunfei.dong@mediatek.com>
+References: <20211202034544.2750-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 2021-12-01 at 11:37 +0100, AngeloGioacchino Del Regno wrote:
-> Il 01/12/21 10:50, Moudy Ho ha scritto:
-> > This patch adds driver for Mediatek's Media Data Path ver.3 (MDP3).
-> > It provides the following functions:
-> >    color transform, format conversion, resize, crop, rotate, flip
-> >    and additional image quality enhancement.
-> > 
-> > The MDP3 driver is mainly used for Google Chromebook products to
-> > import the new architecture to set the HW settings as shown below:
-> >    User -> V4L2 framework
-> >      -> MDP3 driver -> SCP (setting calculations)
-> >        -> MDP3 driver -> CMDQ (GCE driver) -> HW
-> > 
-> > Each modules' related operation control is sited in mtk-mdp3-comp.c
-> > Each modules' register table is defined in file with "mdp_reg_"
-> > prefix
-> > GCE related API, operation control  sited in mtk-mdp3-cmdq.c
-> > V4L2 m2m device functions are implemented in mtk-mdp3-m2m.c
-> > Probe, power, suspend/resume, system level functions are defined in
-> > mtk-mdp3-core.c
-> > 
-> > Signed-off-by: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
-> > Signed-off-by: daoyuan huang <daoyuan.huang@mediatek.com>
-> > Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > ---
-> >   drivers/media/platform/Kconfig                |   19 +
-> >   drivers/media/platform/Makefile               |    2 +
-> >   drivers/media/platform/mtk-mdp3/Makefile      |    6 +
-> >   .../media/platform/mtk-mdp3/mdp_reg_ccorr.h   |   19 +
-> >   drivers/media/platform/mtk-mdp3/mdp_reg_isp.h |   27 +
-> >   .../media/platform/mtk-mdp3/mdp_reg_rdma.h    |   65 +
-> >   drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h |   39 +
-> >   .../media/platform/mtk-mdp3/mdp_reg_wdma.h    |   47 +
-> >   .../media/platform/mtk-mdp3/mdp_reg_wrot.h    |   55 +
-> >   drivers/media/platform/mtk-mdp3/mtk-img-ipi.h |  280 ++++
-> >   .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.c   |  514 +++++++
-> >   .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.h   |   46 +
-> >   .../media/platform/mtk-mdp3/mtk-mdp3-comp.c   | 1264
-> > +++++++++++++++++
-> >   .../media/platform/mtk-mdp3/mtk-mdp3-comp.h   |  147 ++
-> >   .../media/platform/mtk-mdp3/mtk-mdp3-core.c   |  338 +++++
-> >   .../media/platform/mtk-mdp3/mtk-mdp3-core.h   |   76 +
-> >   .../media/platform/mtk-mdp3/mtk-mdp3-m2m.c    |  789 ++++++++++
-> >   .../media/platform/mtk-mdp3/mtk-mdp3-m2m.h    |   49 +
-> >   .../media/platform/mtk-mdp3/mtk-mdp3-regs.c   |  737 ++++++++++
-> >   .../media/platform/mtk-mdp3/mtk-mdp3-regs.h   |  372 +++++
-> >   .../media/platform/mtk-mdp3/mtk-mdp3-vpu.c    |  312 ++++
-> >   .../media/platform/mtk-mdp3/mtk-mdp3-vpu.h    |   78 +
-> >   22 files changed, 5281 insertions(+)
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/Makefile
-> >   create mode 100644 drivers/media/platform/mtk-
-> > mdp3/mdp_reg_ccorr.h
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_isp.h
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_rdma.h
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_wdma.h
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_wrot.h
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-img-ipi.h
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
-> > cmdq.c
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
-> > cmdq.h
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
-> > comp.c
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
-> > comp.h
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
-> > core.c
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
-> > core.h
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.c
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.h
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
-> > regs.c
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
-> > regs.h
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.c
-> >   create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.h
-> > 
-> 
-> snip...
-> 
-> > diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
-> > b/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
-> > new file mode 100644
-> > index 000000000000..a643f3ee928b
-> > --- /dev/null
-> > +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
-> > @@ -0,0 +1,514 @@
-> 
-> Looks like you forgot to check my review comments to this entire
-> file.
-> Can you please send a new version after applying the changes to this
-> file
-> suggested in my review of series v8?
-Hi Angelo,
+Different platforms may have different numbers of register bases. Gets the
+numbers of register bases from dts (sizeof(u32) * 4 bytes for each).
 
-Thanks for the reminder and sorry for my carelessness. Considering the
-compatibility of subsequent chips and function independence, I plan to
-move those mutex mod definition to the corresponding driver, and
-release next version ASAP.
+Reviewed-by: Tzung-Bi Shih<tzungbi@google.com>
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+---
+ .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  | 37 ++++++++++++++-----
+ 1 file changed, 28 insertions(+), 9 deletions(-)
 
-Thanks & Regards,
-Moudy Ho
-> Thanks.
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+index e6e6a8203eeb..59caf2163349 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+@@ -78,6 +78,30 @@ static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
+ 	return IRQ_HANDLED;
+ }
+ 
++static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_dev *dev)
++{
++	struct platform_device *pdev = dev->plat_dev;
++	int reg_num, i;
++
++	/* Sizeof(u32) * 4 bytes for each register base. */
++	reg_num = of_property_count_elems_of_size(pdev->dev.of_node, "reg",
++		sizeof(u32) * 4);
++	if (reg_num <= 0 || reg_num > NUM_MAX_VDEC_REG_BASE) {
++		dev_err(&pdev->dev, "Invalid register property size: %d\n", reg_num);
++		return -EINVAL;
++	}
++
++	for (i = 0; i < reg_num; i++) {
++		dev->reg_base[i] = devm_platform_ioremap_resource(pdev, i);
++		if (IS_ERR(dev->reg_base[i]))
++			return PTR_ERR(dev->reg_base[i]);
++
++		mtk_v4l2_debug(2, "reg[%d] base=%p", i, dev->reg_base[i]);
++	}
++
++	return 0;
++}
++
+ static int fops_vcodec_open(struct file *file)
+ {
+ 	struct mtk_vcodec_dev *dev = video_drvdata(file);
+@@ -206,7 +230,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	phandle rproc_phandle;
+ 	enum mtk_vcodec_fw_type fw_type;
+-	int i, ret;
++	int ret;
+ 
+ 	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
+ 	if (!dev)
+@@ -238,14 +262,9 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		goto err_dec_pm;
+ 	}
+ 
+-	for (i = 0; i < NUM_MAX_VDEC_REG_BASE; i++) {
+-		dev->reg_base[i] = devm_platform_ioremap_resource(pdev, i);
+-		if (IS_ERR((__force void *)dev->reg_base[i])) {
+-			ret = PTR_ERR((__force void *)dev->reg_base[i]);
+-			goto err_res;
+-		}
+-		mtk_v4l2_debug(2, "reg[%d] base=%p", i, dev->reg_base[i]);
+-	}
++	ret = mtk_vcodec_get_reg_bases(dev);
++	if (ret)
++		goto err_res;
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+ 	if (res == NULL) {
+-- 
+2.25.1
 
