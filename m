@@ -2,122 +2,164 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B900C433F5
-	for <linux-media@archiver.kernel.org>; Thu,  2 Dec 2021 04:18:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C88EFC433FE
+	for <linux-media@archiver.kernel.org>; Thu,  2 Dec 2021 05:57:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355376AbhLBEVT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Dec 2021 23:21:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S1344972AbhLBGAx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Dec 2021 01:00:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355289AbhLBEVD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Dec 2021 23:21:03 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9058CC061574;
-        Wed,  1 Dec 2021 20:17:38 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id k21so33790250ioh.4;
-        Wed, 01 Dec 2021 20:17:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qPKRVwQNVkeF/2oHH9nBkzmtasV/VsF5J8RVzD1HMKo=;
-        b=Aq4IF80sKC/8Nq8jG04N1gWMBtSXqubOSOku8KlTeCFN+5a3qnWSGbAeo8be+KzAM0
-         lUNnQVW7Du7W7T2UK5JDDltBHd2klfq5rm8LRWj51/wYCA3xGeRFmKp+XKufK6QfoJd3
-         umg5LLYu8uT5O8g1lu6lRHLFNM8mnDke5hO6Vgc3Km+I1d+Cb0y1dOby0VyEEXUv5HTm
-         7FlFSnStWTENCIooxmhmseRZ1+kXUPzIjmJCaPoDLIwmmwPD2M718j/Pi3jLN/TH8GX/
-         K7hP6wpxPI/+lkgVVhjAm1V2EangV9aShZaOGMnJsExHsdq/7IBusxq2Lxu4mbm8AAMT
-         5Sig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qPKRVwQNVkeF/2oHH9nBkzmtasV/VsF5J8RVzD1HMKo=;
-        b=MmdnUwQlKkZYbevOcYyqUfmQtfO+g5xcVkdIcmmuQXmZUvp8XTx0QWsNkofJFKdxMw
-         dlIX+S2MrszG8nnXQ4HUD9YNd/vN9NNojY4aA0OlcugBWTkFc42LIlwpTlJCZcNadtUk
-         5xCOnHrbSWO9w4hQCWANI+le8f8JMRne2zQQvHAaJ2rfyrtW9Oa1X6VR5jF54JjPa+DW
-         CrFq92UPWRtmssWbj/+eu5shXd+lGol9dlswsqLqHjAsA/XVuYW2USSa3P7XcJsCvrvZ
-         OFX6gK7fXhsQt0b3cDgoupjqdUgbugN5AFQaSe8nzqWYD0mJOm/58/uAfr+hkvE51c+d
-         MpHA==
-X-Gm-Message-State: AOAM532e3SIRXGn+Gyv2y86H4WEkJXuj+8CnOITT5fvvFqQl6nFgZgXB
-        sTY4LDweRelAbCIs92Ls6fDubIDqwMYykrsN
-X-Google-Smtp-Source: ABdhPJxU4grEfANbv0EA6rQMSvRxuU7fvEMYT9BFGz6z7/Gf0+x1CBURE4kpWtALUj5mk0dVs+XXlQ==
-X-Received: by 2002:a5d:97c3:: with SMTP id k3mr13150301ios.191.1638418657366;
-        Wed, 01 Dec 2021 20:17:37 -0800 (PST)
-Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:c405:2c26:c2b8:506e])
-        by smtp.gmail.com with ESMTPSA id t14sm1030603ilh.62.2021.12.01.20.17.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 20:17:36 -0800 (PST)
-From:   Adam Ford <aford173@gmail.com>
+        with ESMTP id S233170AbhLBGAw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Dec 2021 01:00:52 -0500
+Received: from lb1-smtp-cloud7.xs4all.net (lb1-smtp-cloud7.xs4all.net [IPv6:2001:888:0:108::1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A039C061574
+        for <linux-media@vger.kernel.org>; Wed,  1 Dec 2021 21:57:30 -0800 (PST)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id sf5ymfJa9f6qjsf5ymFXHh; Thu, 02 Dec 2021 06:57:27 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1638424647; bh=JspbDFTfkruxHVgFgOWrcwl0jDsblcntHF5j3jbS3g4=;
+        h=Message-ID:Date:From:To:Subject:From:Subject;
+        b=Fhoyqintazm7rvIzmc8vRreIWq+z+zQyfJEgi4kyh30HPMtkFG0XkSrsSRuT9lXD9
+         dIMriBPDATr5WogO/etzFbIUCchq36QFKbUDex7oOV17ajEzIRlulf/9Y/thQybmMm
+         K05o8G4B5KCNHcay+gSerxSgGyyt+pAfGJCugxM0rSYqliGUWCPRjAffw9FiLbI9F9
+         Ut5AQpMLsQZvIwvF2Ba2tDwClOG7guZq1H6d30spsf1NGiVPzKUqBNxYJF0AEKSNbL
+         DaHdQcioK6lMoZ1cG9XvYGC/rVwT48ujo4Knejxe3khjAmuo2eN8KbKqUEpa3NlRVS
+         +mcOKs5NgEycQ==
+Message-ID: <3c5d1193344b5abee16bd6f029eb5a67@smtp-cloud7.xs4all.net>
+Date:   Thu, 02 Dec 2021 06:57:25 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     ezequiel@vanguardiasur.com.ar, tharvey@gateworks.com,
-        nicolas@ndufresne.ca, aford@beaconembedded.com,
-        hverkuil-cisco@xs4all.nl, Adam Ford <aford173@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev
-Subject: [RFC V3 0/2] arm64: imx8mm: Enable Hantro VPUs
-Date:   Wed,  1 Dec 2021 22:16:25 -0600
-Message-Id: <20211202041627.291625-1-aford173@gmail.com>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4xfOiD11qWY2mcAhWxnObit02BDxgeUwuWDscGy8lamRCs9XRGdMI15sCc3AhSzH26s3z5hTyy/2DGiev449YBatE26L0/sZlA47nHvCVJgVnz3WIol0aF
+ 4EeGiAcZAo6QqEaS8wIrbJZuxF5iuhrCQ72BD1aEwK2k7eSm29/cI9Z8cET2N2xwX7XEOiCgPPmpHw==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The i.MX8M has two Hantro video decoders, called G1 and G2 which appear
-to be related to the video decoders used on the i.MX8MQ, but because of
-how the Mini handles the power domains, the VPU driver does not need to
-handle all the functions, so a new compatible flag is required.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-V3 is rebased from git://linuxtv.org/hverkuil/media_tree.git for-v5.17c
-This branch has support for VP9.
+Results of the daily build of media_tree:
 
-I set cma=512M, but this may not be enough memory as some tests appeard to run out of memory
+date:			Thu Dec  2 05:00:11 CET 2021
+media-tree git hash:	8cc7a1b2aca067397a016cdb971a5e6ad9b640c7
+media_build git hash:	90bf75007a9f73a3bfd144cae29e05229e702035
+v4l-utils git hash:	c01c6f78adde6ecfd0ef800e381aed27bea7808b
+edid-decode git hash:	b00755e34eb12aa92416aaf1bb7b02603131afe0
+gcc version:		i686-linux-gcc (GCC) 11.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.3
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.3
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 7696c77a86087f681c8864e9ed957938d5b69aaf
+host hardware:		x86_64
+host os:		5.14.0-2-amd64
 
-V3 of this series has several changes:
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-mips: OK
+linux-git-arm-pxa: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-4.4.283-i686: OK
+linux-4.4.283-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.246-i686: OK
+linux-4.9.246-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.246-i686: OK
+linux-4.14.246-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.206-i686: OK
+linux-4.19.206-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.144-i686: OK
+linux-5.4.144-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.18-i686: OK
+linux-5.8.18-x86_64: OK
+linux-5.9.16-i686: OK
+linux-5.9.16-x86_64: OK
+linux-5.10.62-i686: OK
+linux-5.10.62-x86_64: OK
+linux-5.11.22-i686: OK
+linux-5.11.22-x86_64: OK
+linux-5.12.19-i686: OK
+linux-5.12.19-x86_64: OK
+linux-5.13.14-i686: OK
+linux-5.13.14-x86_64: OK
+linux-5.14.1-i686: OK
+linux-5.14.1-x86_64: OK
+linux-5.15.1-i686: OK
+linux-5.15.1-x86_64: OK
+linux-5.16-rc1-i686: OK
+linux-5.16-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 1
+virtme-32: OK: Final Summary: 3100, Succeeded: 3100, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: WARNINGS
 
-Update imx8m_vpu_hw to add missing 'reg' reference names for G2 and include references to VP9
-Update device tree to remove IMX8MQ_VPU_RESET, remove some duplicate vpu clock parenting
-Fix missing reg-names from vpu_g2 node.
-Apply patch [1] to manage the power domains powering down.
-[1] - https://lore.kernel.org/linux-arm-kernel/20211016210547.171717-1-marex@denx.de/t/
+Detailed results are available here:
 
-With the above, the following Fluster scores are produced:
+http://www.xs4all.nl/~hverkuil/logs/Thursday.log
 
-G1:
-./fluster.py run -dGStreamer-H.264-V4L2SL-Gst1.0
-Ran 90/135 tests successfully               in 74.406 secs
+Detailed regression test results are available here:
 
-./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0
-Ran 55/61 tests successfully               in 8.080 secs
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-dmesg.log
 
-G2:
-./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0
-Ran 127/303 tests successfully               in 203.873 secs
+Full logs are available here:
 
-Fluster and G-Streamer were both built from their respective git repos using their respective master/main branches.
+http://www.xs4all.nl/~hverkuil/logs/Thursday.tar.bz2
 
+The Media Infrastructure API from this daily build is here:
 
-Adam Ford (2):
-  media: hantro: Add support for i.MX8M Mini
-  arm64: dts: imx8mm: Enable VPU-G1 and VPU-G2
-
- arch/arm64/boot/dts/freescale/imx8mm.dtsi   | 41 +++++++++++++
- drivers/staging/media/hantro/hantro_drv.c   |  2 +
- drivers/staging/media/hantro/hantro_hw.h    |  2 +
- drivers/staging/media/hantro/imx8m_vpu_hw.c | 65 +++++++++++++++++++++
- 4 files changed, 110 insertions(+)
-
--- 
-2.32.0
-
+http://www.xs4all.nl/~hverkuil/spec/index.html
