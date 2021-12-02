@@ -2,35 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16EE4C433FE
-	for <linux-media@archiver.kernel.org>; Thu,  2 Dec 2021 03:46:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 093F1C433FE
+	for <linux-media@archiver.kernel.org>; Thu,  2 Dec 2021 03:46:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355339AbhLBDth (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Dec 2021 22:49:37 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:37328 "EHLO
+        id S1355377AbhLBDtq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Dec 2021 22:49:46 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:37470 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1355341AbhLBDtb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Dec 2021 22:49:31 -0500
-X-UUID: c8a9943ccb534760b41d9f4c44862a8a-20211202
-X-UUID: c8a9943ccb534760b41d9f4c44862a8a-20211202
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        with ESMTP id S1355383AbhLBDte (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Dec 2021 22:49:34 -0500
+X-UUID: 03b51be68d174819bacc2b5664aeeff3-20211202
+X-UUID: 03b51be68d174819bacc2b5664aeeff3-20211202
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 898186281; Thu, 02 Dec 2021 11:46:06 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 2 Dec 2021 11:46:06 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 2 Dec
- 2021 11:46:04 +0800
+        with ESMTP id 1883365087; Thu, 02 Dec 2021 11:46:09 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 2 Dec 2021 11:46:07 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Thu, 2 Dec 2021 11:46:03 +0800
+ 15.0.1497.2 via Frontend Transport; Thu, 2 Dec 2021 11:46:06 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Tzung-Bi Shih" <tzungbi@chromium.org>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
         Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -46,15 +43,16 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         Irui Wang <irui.wang@mediatek.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v12, 12/19] media: mtk-vcodec: Add new interface to lock different hardware
-Date:   Thu, 2 Dec 2021 11:45:37 +0800
-Message-ID: <20211202034544.2750-13-yunfei.dong@mediatek.com>
+Subject: [PATCH v12,14/19] media: mtk-vcodec: Support 34bits dma address for vdec
+Date:   Thu, 2 Dec 2021 11:45:39 +0800
+Message-ID: <20211202034544.2750-15-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211202034544.2750-1-yunfei.dong@mediatek.com>
 References: <20211202034544.2750-1-yunfei.dong@mediatek.com>
@@ -66,74 +64,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For add new hardware, not only need to lock lat hardware, also
-need to lock core hardware in case of different instance start
-to decoder at the same time.
+Use the dma_set_mask_and_coherent helper to set vdec
+DMA bit mask to support 34bits iova space(16GB) that
+the mt8192 iommu HW support.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Whole the iova range separate to 0~4G/4G~8G/8G~12G/12G~16G,
+regarding which iova range VDEC actually locate, it
+depends on the dma-ranges property of vdec dtsi node.
+
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c     | 4 ++--
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 6 +++---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h     | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-index 2b334a8a81c6..130ecef2e766 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-@@ -105,12 +105,12 @@ static int vidioc_decoder_cmd(struct file *file, void *priv,
- 
- void mtk_vdec_unlock(struct mtk_vcodec_ctx *ctx)
- {
--	mutex_unlock(&ctx->dev->dec_mutex);
-+	mutex_unlock(&ctx->dev->dec_mutex[ctx->hw_id]);
- }
- 
- void mtk_vdec_lock(struct mtk_vcodec_ctx *ctx)
- {
--	mutex_lock(&ctx->dev->dec_mutex);
-+	mutex_lock(&ctx->dev->dec_mutex[ctx->hw_id]);
- }
- 
- void mtk_vcodec_dec_release(struct mtk_vcodec_ctx *ctx)
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index 81b5ea98201e..d460703f335d 100644
+index 4fbff61d2334..cdbe5ffeae26 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -309,7 +309,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 	struct video_device *vfd_dec;
- 	phandle rproc_phandle;
- 	enum mtk_vcodec_fw_type fw_type;
--	int ret;
-+	int i, ret;
- 
- 	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
- 	if (!dev)
-@@ -341,8 +341,8 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		goto err_dec_pm;
+@@ -352,6 +352,14 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		}
  	}
  
--	mutex_init(&dev->dec_mutex);
--	mutex_init(&dev->dev_mutex);
-+	for (i = 0; i < MTK_VDEC_HW_MAX; i++)
-+		mutex_init(&dev->dec_mutex[i]);
++	if (of_get_property(pdev->dev.of_node, "dma-ranges", NULL)) {
++		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(34));
++		if (ret) {
++			mtk_v4l2_err("Failed to set mask");
++			goto err_core_workq;
++		}
++	}
++
+ 	for (i = 0; i < MTK_VDEC_HW_MAX; i++)
+ 		mutex_init(&dev->dec_mutex[i]);
  	spin_lock_init(&dev->irqlock);
- 
- 	snprintf(dev->v4l2_dev.name, sizeof(dev->v4l2_dev.name), "%s",
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index 5d5376fcf0a7..cbaed96dcfa2 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -499,7 +499,7 @@ struct mtk_vcodec_dev {
- 	int dec_irq;
- 	int enc_irq;
- 
--	struct mutex dec_mutex;
-+	struct mutex dec_mutex[MTK_VDEC_HW_MAX];
- 	struct mutex enc_mutex;
- 
- 	struct mtk_vcodec_pm pm;
 -- 
 2.25.1
 
