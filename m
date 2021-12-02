@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB739C4332F
-	for <linux-media@archiver.kernel.org>; Thu,  2 Dec 2021 03:46:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AA7AC4321E
+	for <linux-media@archiver.kernel.org>; Thu,  2 Dec 2021 03:46:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355267AbhLBDtV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Dec 2021 22:49:21 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:36824 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1355240AbhLBDtT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Dec 2021 22:49:19 -0500
-X-UUID: 6e13d4d1b9e34d5f90fa1e38a7b29095-20211202
-X-UUID: 6e13d4d1b9e34d5f90fa1e38a7b29095-20211202
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        id S1355256AbhLBDtU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Dec 2021 22:49:20 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:43602 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1355239AbhLBDtS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Dec 2021 22:49:18 -0500
+X-UUID: 165ced0aa7b24edfaedb5ef7b77fb669-20211202
+X-UUID: 165ced0aa7b24edfaedb5ef7b77fb669-20211202
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1928347293; Thu, 02 Dec 2021 11:45:53 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1191518788; Thu, 02 Dec 2021 11:45:54 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 2 Dec 2021 11:45:50 +0800
+ 15.2.792.15; Thu, 2 Dec 2021 11:45:52 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Thu, 2 Dec 2021 11:45:48 +0800
+ 15.0.1497.2 via Frontend Transport; Thu, 2 Dec 2021 11:45:51 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -50,9 +50,9 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v12, 02/19] media: mtk-vcodec: Align vcodec wake up interrupt interface
-Date:   Thu, 2 Dec 2021 11:45:27 +0800
-Message-ID: <20211202034544.2750-3-yunfei.dong@mediatek.com>
+Subject: [PATCH v12, 04/19] media: mtk-vcodec: export decoder pm functions
+Date:   Thu, 2 Dec 2021 11:45:29 +0800
+Message-ID: <20211202034544.2750-5-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211202034544.2750-1-yunfei.dong@mediatek.com>
 References: <20211202034544.2750-1-yunfei.dong@mediatek.com>
@@ -64,81 +64,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Vdec and venc can use the same function to wake up interrupt event.
+When mtk vcodec decoder is build as a module, we need to export
+mtk-vcodec-dec pm functions to make them visible by the other components.
 
-Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Steve Cho <stevecho@chromium.org>
+Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 9 +--------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h     | 8 ++++++++
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c | 8 --------
- 3 files changed, 9 insertions(+), 16 deletions(-)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index 59caf2163349..055d50e52720 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -31,13 +31,6 @@
- module_param(mtk_v4l2_dbg_level, int, 0644);
- module_param(mtk_vcodec_dbg, bool, 0644);
- 
--/* Wake up context wait_queue */
--static void wake_up_ctx(struct mtk_vcodec_ctx *ctx)
--{
--	ctx->int_cond = 1;
--	wake_up_interruptible(&ctx->queue);
--}
--
- static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
- {
- 	struct mtk_vcodec_dev *dev = priv;
-@@ -69,7 +62,7 @@ static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
- 	writel((readl(vdec_misc_addr) & ~VDEC_IRQ_CLR),
- 		dev->reg_base[VDEC_MISC] + VDEC_IRQ_CFG_REG);
- 
--	wake_up_ctx(ctx);
-+	wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED);
- 
- 	mtk_v4l2_debug(3,
- 			"mtk_vcodec_dec_irq_handler :wake up ctx %d, dec_done_status=%x",
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index 581522177308..1d2370608d0d 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -473,4 +473,12 @@ static inline struct mtk_vcodec_ctx *ctrl_to_ctx(struct v4l2_ctrl *ctrl)
- 	return container_of(ctrl->handler, struct mtk_vcodec_ctx, ctrl_hdl);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+index 20bd157a855c..221cf60e9fbf 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+@@ -77,12 +77,14 @@ int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
+ 	put_device(pm->larbvdec);
+ 	return ret;
  }
++EXPORT_SYMBOL_GPL(mtk_vcodec_init_dec_pm);
  
-+/* Wake up context wait_queue */
-+static inline void wake_up_ctx(struct mtk_vcodec_ctx *ctx, unsigned int reason)
-+{
-+	ctx->int_cond = 1;
-+	ctx->int_type = reason;
-+	wake_up_interruptible(&ctx->queue);
-+}
-+
- #endif /* _MTK_VCODEC_DRV_H_ */
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-index eed67394cf46..7c3487fb3498 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-@@ -65,14 +65,6 @@ static const struct mtk_video_fmt mtk_video_formats_capture_vp8[] =  {
- 	},
- };
- 
--/* Wake up context wait_queue */
--static void wake_up_ctx(struct mtk_vcodec_ctx *ctx, unsigned int reason)
--{
--	ctx->int_cond = 1;
--	ctx->int_type = reason;
--	wake_up_interruptible(&ctx->queue);
--}
--
- static void clean_irq_status(unsigned int irq_status, void __iomem *addr)
+ void mtk_vcodec_release_dec_pm(struct mtk_vcodec_pm *pm)
  {
- 	if (irq_status & MTK_VENC_IRQ_STATUS_PAUSE)
+ 	pm_runtime_disable(pm->dev);
+ 	put_device(pm->larbvdec);
+ }
++EXPORT_SYMBOL_GPL(mtk_vcodec_release_dec_pm);
+ 
+ int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
+ {
+@@ -94,6 +96,7 @@ int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(mtk_vcodec_dec_pw_on);
+ 
+ void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
+ {
+@@ -103,6 +106,7 @@ void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
+ 	if (ret)
+ 		mtk_v4l2_err("pm_runtime_put_sync fail %d", ret);
+ }
++EXPORT_SYMBOL_GPL(mtk_vcodec_dec_pw_off);
+ 
+ void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
+ {
+@@ -129,6 +133,7 @@ void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
+ 	for (i -= 1; i >= 0; i--)
+ 		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
+ }
++EXPORT_SYMBOL_GPL(mtk_vcodec_dec_clock_on);
+ 
+ void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm)
+ {
+@@ -139,3 +144,4 @@ void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm)
+ 	for (i = dec_clk->clk_num - 1; i >= 0; i--)
+ 		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
+ }
++EXPORT_SYMBOL_GPL(mtk_vcodec_dec_clock_off);
 -- 
 2.25.1
 
