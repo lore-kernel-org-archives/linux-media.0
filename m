@@ -2,1775 +2,236 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 028EEC433F5
-	for <linux-media@archiver.kernel.org>; Fri,  3 Dec 2021 04:55:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8396C433FE
+	for <linux-media@archiver.kernel.org>; Fri,  3 Dec 2021 05:20:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378475AbhLCE7D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Dec 2021 23:59:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354774AbhLCE7C (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Dec 2021 23:59:02 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290B6C061757
-        for <linux-media@vger.kernel.org>; Thu,  2 Dec 2021 20:55:39 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id s9so1662528qvk.12
-        for <linux-media@vger.kernel.org>; Thu, 02 Dec 2021 20:55:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=S7eTEJQUX1QivoeqUU/Yb/rEtQZYaET79BQDbSupiRE=;
-        b=c31B/zGRrVUQkqx5hMUskugH5oO8I0UYbI9GlaeCmPZyNajLwOqVO1K6TNJax4nSq6
-         svJwg1labt4lf6hgRhuE/cnMHAo/kbFh5MtaHVFucihgo9dhiCZWL8gp2Pmsmx/rU+We
-         kR9xc7v2JBQlIZdGcXpth+ic6NNeKaROG3io+WSVldj5W97pFI7L6GF/c6mbrlGuki4y
-         1v9tRnvfD4M4PvJvksF/qLFRkQRodin6sQmGkNJtxe5JLmvAEEJe3NvVjsOFG3FPBbJe
-         Qz1oLpfdoBnqc2XDdVxCMPrF7G9SleTy4gpSgtiLvtzp+gs3dlMnvyIRd8hJPlfiWkct
-         rO+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=S7eTEJQUX1QivoeqUU/Yb/rEtQZYaET79BQDbSupiRE=;
-        b=m9Ub2P6fFyKPyfwxNBgD4gSUasZlbU11jP86vgGDKFmKmU3yxjDsLiB46K83j1StdS
-         rUvieifAZfQ+gOz9rc9VN8Gg5lbr7Ev/mUfQ5UMYpwzl3XZ70rjWl0YWpLqEU87fMc/I
-         vo5w4JqDDrcS3LX6P4VwK3Qau1YCex9eZnlZl0dOR2C0MLjz6+zQu+/CpkVSQBJnz5/X
-         j9/IJuwSch8wY635ebt7a/GPaEnKQFLYvs+vOAw7iGEQy8lRjDJr1zULmdNuz+SZXrwe
-         CQEcPvGIAklb3KDkAVZhexVmg4TwdwOYGaNKcAi3LTe9SOcwf3r0t55KEwy8Iz9VfDEh
-         VKMg==
-X-Gm-Message-State: AOAM5302Tr2+tTNEpKPz0yuywEl/WRu4R77d6DqfBRIHI19Uy7iJqK1j
-        NvKjxUIezCkttv/1X/nlWRIFfg==
-X-Google-Smtp-Source: ABdhPJzm+Lg7gu+cCgu3aRkGqT/a2xrNA8hcM86zkKN0JuhY03929PpsnnirhEVV/UYYDIpGZedW3w==
-X-Received: by 2002:a05:6214:c81:: with SMTP id r1mr17992182qvr.111.1638507337883;
-        Thu, 02 Dec 2021 20:55:37 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id q12sm1508951qtx.16.2021.12.02.20.55.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 20:55:37 -0800 (PST)
-Message-ID: <fceda1576bcb2fc4e576b59e09214ab1320558b3.camel@ndufresne.ca>
-Subject: Re: [PATCH v13 08/13] media: amphion: add v4l2 m2m vpu decoder
- stateful driver
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de
-Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, aisheng.dong@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Date:   Thu, 02 Dec 2021 23:55:36 -0500
-In-Reply-To: <9122e66af668c095548321d45dec33a3fd6ee77d.1638263914.git.ming.qian@nxp.com>
-References: <cover.1638263914.git.ming.qian@nxp.com>
-         <9122e66af668c095548321d45dec33a3fd6ee77d.1638263914.git.ming.qian@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
+        id S1355412AbhLCFXh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Dec 2021 00:23:37 -0500
+Received: from mail-eopbgr140077.outbound.protection.outlook.com ([40.107.14.77]:16662
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1350529AbhLCFXe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 3 Dec 2021 00:23:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n7iZ3cDdYIgVKUBMQHsBWfwv6xe0A4gVfRKR4W0TX0EMPzFwsAHIEF0avaLTHVn5nFKLX84/Jj6EaL1jolc2exhLoWL78YNK+dWizdv70lP7GvMTXJYzmyEx1MHPXDMaYeK384iHKkqzO5qSJ4UpRjtonpIYrjUdJ6LOrlkRcJwLMqaGbtm6KKKpDG3fgLtwrHjAV0i92ygI/C4j0BFXqBVueajKt1DS8HVR63le8+LpPU1bIgRWT9yA536zH6P5ERGGZ8uSFyatzVFI1S31IIqVdTOfgmQtlvURDDeLQQQPxKpjbY/1HyXxlZwHLr9V6NEOZrRPfMRhLzY+vtLBjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZN8JFlpH7Z1mf5RSRGjVTYgf4mkcxPAimjQomGuVofo=;
+ b=oMcPi5Hq+8DhLhp++nkVqyweUzPZorGI0gkNtsN3/2m0TUpfY43NNZUDLOpmUTrcJbLIaVN9P6KK3SeMZ7lYbBwB96MucJWetBVOz6Lq3M4vP7XUBumfvmg/rgop3IDxddMNFrLxSgpUwMgrCBrNZyk1DNxcxufadFSCpd8w2SQdtWeaZSQBYBiXZzJlCPVOHx5EJFNqTnwNKES0fuyNSBTWVfWbJ2NYFCzKJavasiSZ8drbcMkISMjaPQxDedGF/8eRltCsAI5y+ryWQj52YC4e+GrrvOx6qpJ/C3Am8SEuxPKlryEc75367Zf5mmBddL81k0jgGonnQnR4jrv/cw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZN8JFlpH7Z1mf5RSRGjVTYgf4mkcxPAimjQomGuVofo=;
+ b=QGPYOui2lt1L+yOqEm71OSSctLqVjzoGDsl9KiyS4RY5A1jhef2GsEn6clQeUGxsk9ovTgVCNCmoi7YiJbQda9tsJJL5xg+NIfVG9mLtQ0ErLf/t2M+S/uhEG3o19Y6QR45hxq3613T+XmNYOuGvgSU35QvWqLv0QjzIrROphfA=
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by AM6PR0402MB3480.eurprd04.prod.outlook.com (2603:10a6:209:e::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Fri, 3 Dec
+ 2021 05:20:08 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::fc3a:8aea:2c92:3886]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::fc3a:8aea:2c92:3886%5]) with mapi id 15.20.4734.028; Fri, 3 Dec 2021
+ 05:20:07 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+CC:     "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [EXT] Re: [PATCH v12 00/13] amphion video decoder/encoder driver
+Thread-Topic: [EXT] Re: [PATCH v12 00/13] amphion video decoder/encoder driver
+Thread-Index: AQHX1UX9FZgXdhHdu0aj4y6UzYn6WqwRlHeAgADanLCAAG2egIAA8C0ggACs9YCAAPadQIAK3EqAgAATR0A=
+Date:   Fri, 3 Dec 2021 05:20:07 +0000
+Message-ID: <AM6PR04MB6341500264AD986B2016FB45E76A9@AM6PR04MB6341.eurprd04.prod.outlook.com>
+References: <cover.1636445575.git.ming.qian@nxp.com>
+         <9947131322e034bb6336802e5afb4b6132ca5071.camel@ndufresne.ca>
+         <AM6PR04MB6341BF1FB2A839961DBADF4EE7619@AM6PR04MB6341.eurprd04.prod.outlook.com>
+         <9b7fd6802c89c5d3bb6a42b44f13a90f6c3caf22.camel@ndufresne.ca>
+         <AM6PR04MB6341F599A97253C1BA812467E7629@AM6PR04MB6341.eurprd04.prod.outlook.com>
+         <0deb3fa15dd162d7c7b6dbe24821fdf9523dddd3.camel@ndufresne.ca>
+         <DB8PR04MB6346B64E4129D81BA0CF0A1CE7639@DB8PR04MB6346.eurprd04.prod.outlook.com>
+ <a77c2fca8bd1e95e1948d3fa98fe106c228221c7.camel@ndufresne.ca>
+In-Reply-To: <a77c2fca8bd1e95e1948d3fa98fe106c228221c7.camel@ndufresne.ca>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 404b17c9-18bd-467b-3193-08d9b61c9252
+x-ms-traffictypediagnostic: AM6PR0402MB3480:
+x-microsoft-antispam-prvs: <AM6PR0402MB34809A8323C5E419A6CBB69EE76A9@AM6PR0402MB3480.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WdiKixsbO4pxAZ+DbGQ6ZLpsbrQNawlK3C6mdVGxrAxaYfbXA0Z2ld8FPi9l3LmCfF3I0rlHwLqcisi95l1UC3kMXekoA+D5Jh53LqPjthau8kAyKxAADSmQ+ANXdu+QPzYCrXwm30Zr873K6od7AwyTsBAiFJdi0IVkKM5pfTQpPs6n5xvoQnqGPwi2usGwg+Q1kCA+p2lXYBoQuAKWSj1MtoVjUms9R/h9dyiBeuTZZJESnIFnxsORQA2htw7LJEbG954QaUkuht+DjESUuTAcGiBFBXL7eVZSwvby/C2+iWjKQavewL6geQ0MsBYYUov9CsQSu6WrpbGsiZbHkV/BxldFZlR85yJtGPjBZa/6PW+fsHw3YwEc7xKVV6IRbuVqMIzVRHPUmySanin8u7ePrBy4melwHa0deExxVHN6NJSJ7ct9tTuxwxFasU2kAbVAZbpzJ+MZa7sYEkwHVom0fqk2QODatROz19hh2/UgOtqpuECMqBGd3/AQ9J3t3U/k7JxIhMWI0t7zlg5mfK13IO7ofMGH+ohwOvznWnobwdZF2U0/gAqddD4KQ5ABO3JBguZSNjPAzDdX1EmW1efDlKB/srCvOu+47hfzEUy3gMbrawNaQ03raO77aZKBNfVi7LcH1ongP2Qi484GYV764N+s1EXghNShIz5GlcuRYh+oUDXD4ZMZqOt7AWyS9wFWNQXa9RWRjIFBvHSEcw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(54906003)(7416002)(6506007)(26005)(53546011)(86362001)(508600001)(8936002)(38070700005)(2906002)(19627235002)(71200400001)(52536014)(76116006)(8676002)(66574015)(66556008)(7696005)(316002)(64756008)(66446008)(66946007)(33656002)(9686003)(44832011)(5660300002)(4326008)(110136005)(83380400001)(38100700002)(55016003)(186003)(122000001)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aGZzWGY3TVN3ZXdKQjk4c2dIaVhib0luOEdsRkowWGtWYmpPVUZwYXI5cDRP?=
+ =?utf-8?B?dkU3NS92NHJiRmRpN2JENGdjZmZWMldJdFJ2bkdKWDM0MWNMVVNtRXRkQVQy?=
+ =?utf-8?B?RjgwVTVYNkMrWHJYQ1IzUlhScHpOdlIwc2lyc1BMK2RNQS9WRzFwRk1yWXRj?=
+ =?utf-8?B?RmcxMk95U2pIT2Y1TmFHdmVQY3M1Rkxza1g2MlhrWklaSWYyWkRXaUxpR0dn?=
+ =?utf-8?B?VnZSb1NrVGJkenZRMU5UajEwMFkxZ3hWOEVOejl3Ync5RHF2TVpEbW4rQjUv?=
+ =?utf-8?B?cW1nNEpIR3lzL0VGM1RLektoV2xoRlFLRW0vTUZsTWY1MlprZzRLcjVIWkt6?=
+ =?utf-8?B?d1RlcXlsNVc2Y2QxY2kzQnlTdWU0dzNOVkk0T2M1K1lIOVh6UjQ0YmFOY1FQ?=
+ =?utf-8?B?NHZTN1g5SjR4MXV2SThDbTVSdjF3Uy9yM0hzaUVCcTYwcVFXMTFoZEtFbXdy?=
+ =?utf-8?B?anFJamVKdWhEV2xGQU5uUU5acjBzT0V6RE9Cb3ZNN2N5N2V1L3c0QStFNlht?=
+ =?utf-8?B?SWJwMkdzeHhXUzFHcC8wV09uUEJFN1RacnhnRlF0YUVZM2JzUUpnVml2WFc5?=
+ =?utf-8?B?Unkrc0dIb1VlcFc0S3hXYnBtVE9vSmIydWo4VGp5Tmp1TzRNOEhvQk9tNW44?=
+ =?utf-8?B?d1JzbmtuZU1OS1JEb2FoeWF3Vy9kY3ZjNnN4blZtblhqWmxiSzBJWWJLOFRv?=
+ =?utf-8?B?U1ByM0YwNWpzbGZKdVNFUjVyTWtnZDA0ZmlKWmRMU2N0UjNFVzFtOFBpUDRH?=
+ =?utf-8?B?TVE3Yk9mQXRxL0ZDSnA3TUJ4YjhoQ2hBTXRrVGJTRk5xalFVVGdCb0VXR0d4?=
+ =?utf-8?B?WGQ0K1VmMm9RdXBva1M3Q1djMis1TjlNbkdid1IzNk0vWkE4MmtRcG53UWRy?=
+ =?utf-8?B?MEN1d2ZOcGdNSHB4Qk5HdlBZak5rQWxycGt5K2RRMUl4eGRSVFhUbXJBb2h6?=
+ =?utf-8?B?QjdXb3NIUmNzT3pJd28wV214Qkd5YVpBS0RURDhHTHA1bVVKWTNZOE1MUlph?=
+ =?utf-8?B?bTlKcGI5MWZmTGRZQnM1RmEydUJvU3NGenlkNXYybmlKMmtTWlN0cGVvQ1ZT?=
+ =?utf-8?B?RHc4aEZWWWRveisybW05L2dJa2NrUDk1ODQwL1JXNnpDc1ZNekJBODJWRjZ3?=
+ =?utf-8?B?RnFFVG52SGtxdXBkeEdOV25LendVaUQ5clRRaTdqZDhzMmY5eitldmNuaDlw?=
+ =?utf-8?B?NWhTSVdQc25TWjdQRGRNWkFXcU93eVduT1F1c2RrWFhaTEx2MmltZVhvTEFl?=
+ =?utf-8?B?YnNmZStRNllPOEpqWmRML1cxTXVWM3QzTERyczNBWDRXOFlxbzZ1NWlNclQx?=
+ =?utf-8?B?SnhkcWk0bnFQVUxuQ1FiMlZiNWlSNnE4WXlCemNDTDdsbDJudnVPekhON0RJ?=
+ =?utf-8?B?V2tDMlBSMUNsNC9XNXhsRXBvV2hQNWl4RThyZ3Z4SlJmL0FpdWNyUHlIazI1?=
+ =?utf-8?B?NEVzMWhPa2NHKzhOYlgvZkJUUmpQT1dKdjZzdkRHS3N4NThNR1oxVS9jR2t0?=
+ =?utf-8?B?eVJSK01HQkNjemQ0N2FPRWFFRGtnN2N2UzFtT3B4b1JYRzlPbmlzY3QzbEhY?=
+ =?utf-8?B?Vno5dXc2OHpaY3EwU2hwMU44MzBUeWFRS3R0TS9DYmM3MHJBZDdIeVRWa2ZP?=
+ =?utf-8?B?YzNETW9iNnRGVGpHREV5UVNIRndlSzRBR0twZ2phY2dtSW5zT3hMWTNYWlRZ?=
+ =?utf-8?B?NG1Cc0k1czllU28rK3Y0Y1ZPc1NUOW1GZVRKTXNoNDV6Qm5ZZjg1TzdkOGx3?=
+ =?utf-8?B?Ni9DS0J4SUhXMmcwUFJHc2xuTjFpNHRQSTFGdGQ0b1NkdWtJL2h1aFFCWVRV?=
+ =?utf-8?B?T3c0QTkyanp5ZWJ0a0F6M0RlVUYrUTdPUi9LZlVESFZNVlAxakdFeXE1NGJs?=
+ =?utf-8?B?RjltNWIwM2dDRk1Wc0JVVlUzS29OY0c5UkpOakJKWnhJa0VQS01Sc2hod0w1?=
+ =?utf-8?B?OWZsQSt0RC9KL2k4SUNVS0NBVDRFT2FmWmJYenhPZ3VPelpBL3M5cW9WYTRx?=
+ =?utf-8?B?dHNjZVVFOHhVZmlJbkVKbm5YbmhWVUVmVHdrUU9wbmxUREdEQzlOWTU5Ujda?=
+ =?utf-8?B?S1Zpcm05NGJLU0hDdGUyeXFzTG1PbmpmdU1NMXRubzl5R0p5bWhqUURUUGU2?=
+ =?utf-8?B?U2tkR1pVM2tmNHA4WHJVa1JWdkhGbytEVnRFNWhueHNHYmI0eGd0TXJjQURJ?=
+ =?utf-8?B?Snc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 404b17c9-18bd-467b-3193-08d9b61c9252
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Dec 2021 05:20:07.8966
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: p0SwoJehnR2YrR7BYR1dSFBdsxfQMprOWYgP677z9rArLFpHvq49nSej0dcmKr9hZbmDNGyJkLHzE8MgAmmlgQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3480
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le mardi 30 novembre 2021 à 17:48 +0800, Ming Qian a écrit :
-> This consists of video decoder implementation plus decoder controls.
-> 
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> Signed-off-by: Shijie Qin <shijie.qin@nxp.com>
-> Signed-off-by: Zhou Peng <eagle.zhou@nxp.com>
-> ---
->  drivers/media/platform/amphion/vdec.c | 1680 +++++++++++++++++++++++++
->  1 file changed, 1680 insertions(+)
->  create mode 100644 drivers/media/platform/amphion/vdec.c
-> 
-> diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
-> new file mode 100644
-> index 000000000000..a66d34d02a50
-> --- /dev/null
-> +++ b/drivers/media/platform/amphion/vdec.c
-> @@ -0,0 +1,1680 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2020-2021 NXP
-> + */
-> +
-> +#include <linux/init.h>
-> +#include <linux/interconnect.h>
-> +#include <linux/ioctl.h>
-> +#include <linux/list.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/videodev2.h>
-> +#include <media/v4l2-device.h>
-> +#include <media/v4l2-event.h>
-> +#include <media/v4l2-mem2mem.h>
-> +#include <media/v4l2-ioctl.h>
-> +#include <media/videobuf2-v4l2.h>
-> +#include <media/videobuf2-dma-contig.h>
-> +#include <media/videobuf2-vmalloc.h>
-> +#include "vpu.h"
-> +#include "vpu_defs.h"
-> +#include "vpu_core.h"
-> +#include "vpu_helpers.h"
-> +#include "vpu_v4l2.h"
-> +#include "vpu_cmds.h"
-> +#include "vpu_rpc.h"
-> +
-> +#define VDEC_FRAME_DEPTH		256
-> +#define VDEC_MIN_BUFFER_CAP		8
-> +
-> +struct vdec_fs_info {
-> +	char name[8];
-> +	u32 type;
-> +	u32 max_count;
-> +	u32 req_count;
-> +	u32 count;
-> +	u32 index;
-> +	u32 size;
-> +	struct vpu_buffer buffer[32];
-> +	u32 tag;
-> +};
-> +
-> +struct vdec_t {
-> +	u32 seq_hdr_found;
-> +	struct vpu_buffer udata;
-> +	struct vpu_decode_params params;
-> +	struct vpu_dec_codec_info codec_info;
-> +	enum vpu_codec_state state;
-> +
-> +	struct vpu_vb2_buffer *slots[VB2_MAX_FRAME];
-> +	u32 req_frame_count;
-> +	struct vdec_fs_info mbi;
-> +	struct vdec_fs_info dcp;
-> +	u32 seq_tag;
-> +
-> +	bool reset_codec;
-> +	bool fixed_fmt;
-> +	u32 decoded_frame_count;
-> +	u32 display_frame_count;
-> +	u32 sequence;
-> +	u32 eos_received;
-> +	bool is_source_changed;
-> +	u32 source_change;
-> +	u32 drain;
-> +	u32 ts_pre_count;
-> +	u32 frame_depth;
-> +	s64 ts_start;
-> +	s64 ts_input;
-> +	s64 timestamp;
-> +};
-> +
-> +static const struct vpu_format vdec_formats[] = {
-> +	{
-> +		.pixfmt = V4L2_PIX_FMT_NV12MT_8L128,
-> +		.num_planes = 2,
-> +		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-> +	},
-> +	{
-> +		.pixfmt = V4L2_PIX_FMT_NV12MT_10BE_8L128,
-> +		.num_planes = 2,
-> +		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-> +	},
-> +	{
-> +		.pixfmt = V4L2_PIX_FMT_H264,
-> +		.num_planes = 1,
-> +		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-> +		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
-> +	},
-> +	{
-> +		.pixfmt = V4L2_PIX_FMT_H264_MVC,
-> +		.num_planes = 1,
-> +		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-> +		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
-> +	},
-> +	{
-> +		.pixfmt = V4L2_PIX_FMT_HEVC,
-> +		.num_planes = 1,
-> +		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-> +		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
-> +	},
-> +	{
-> +		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_G,
-> +		.num_planes = 1,
-> +		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-> +		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
-> +	},
-> +	{
-> +		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
-> +		.num_planes = 1,
-> +		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-> +		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
-> +	},
-> +	{
-> +		.pixfmt = V4L2_PIX_FMT_MPEG2,
-> +		.num_planes = 1,
-> +		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-> +		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
-> +	},
-> +	{
-> +		.pixfmt = V4L2_PIX_FMT_MPEG4,
-> +		.num_planes = 1,
-> +		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-> +		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
-> +	},
-> +	{
-> +		.pixfmt = V4L2_PIX_FMT_XVID,
-> +		.num_planes = 1,
-> +		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-> +		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
-> +	},
-> +	{
-> +		.pixfmt = V4L2_PIX_FMT_VP8,
-> +		.num_planes = 1,
-> +		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-> +		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
-> +	},
-> +	{
-> +		.pixfmt = V4L2_PIX_FMT_H263,
-> +		.num_planes = 1,
-> +		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-> +		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION
-> +	},
-> +	{0, 0, 0, 0},
-> +};
-> +
-> +static const struct v4l2_ctrl_ops vdec_ctrl_ops = {
-> +	.g_volatile_ctrl = vpu_helper_g_volatile_ctrl,
-> +};
-> +
-> +static int vdec_ctrl_init(struct vpu_inst *inst)
-> +{
-> +	struct v4l2_ctrl *ctrl;
-> +	int ret;
-> +
-> +	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 20);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ctrl = v4l2_ctrl_new_std(&inst->ctrl_handler, &vdec_ctrl_ops,
-> +			V4L2_CID_MIN_BUFFERS_FOR_CAPTURE, 1, 32, 1, 2);
-> +	if (ctrl)
-> +		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
-> +
-> +	ctrl = v4l2_ctrl_new_std(&inst->ctrl_handler, &vdec_ctrl_ops,
-> +			V4L2_CID_MIN_BUFFERS_FOR_OUTPUT, 1, 32, 1, 2);
-> +	if (ctrl)
-> +		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
-> +
-> +	ret = v4l2_ctrl_handler_setup(&inst->ctrl_handler);
-> +	if (ret) {
-> +		dev_err(inst->dev, "[%d] setup ctrls fail, ret = %d\n", inst->id, ret);
-> +		v4l2_ctrl_handler_free(&inst->ctrl_handler);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void vdec_set_last_buffer_dequeued(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	if (vdec->eos_received) {
-> +		if (!vpu_set_last_buffer_dequeued(inst))
-> +			vdec->eos_received--;
-> +	}
-> +}
-> +
-> +static void vdec_handle_resolution_change(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	struct vb2_queue *q;
-> +
-> +	if (inst->state != VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE)
-> +		return;
-> +	if (!vdec->source_change)
-> +		return;
-> +
-> +	q = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
-> +	if (!list_empty(&q->done_list))
-> +		return;
-> +
-> +	vdec->source_change--;
-> +	vpu_notify_source_change(inst);
-> +}
-> +
-> +static int vdec_update_state(struct vpu_inst *inst,
-> +		enum vpu_codec_state state, u32 force)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	enum vpu_codec_state pre_state = inst->state;
-> +
-> +	if (state == VPU_CODEC_STATE_SEEK) {
-> +		if (inst->state == VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE)
-> +			vdec->state = inst->state;
-> +		else
-> +			vdec->state = VPU_CODEC_STATE_ACTIVE;
-> +	}
-> +	if (inst->state != VPU_CODEC_STATE_SEEK || force)
-> +		inst->state = state;
-> +	else if (state == VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE)
-> +		vdec->state = VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE;
-> +
-> +	if (inst->state != pre_state)
-> +		vpu_trace(inst->dev, "[%d] %d -> %d\n", inst->id, pre_state, inst->state);
-> +
-> +	if (inst->state == VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE)
-> +		vdec_handle_resolution_change(inst);
-> +
-> +	return 0;
-> +}
-> +
-> +static int vdec_querycap(struct file *file, void *fh, struct v4l2_capability *cap)
-> +{
-> +	strscpy(cap->driver, "amphion-vpu", sizeof(cap->driver));
-> +	strscpy(cap->card, "amphion vpu decoder", sizeof(cap->card));
-> +	strscpy(cap->bus_info, "platform: amphion-vpu", sizeof(cap->bus_info));
-> +
-> +	return 0;
-> +}
-> +
-> +static int vdec_enum_fmt(struct file *file, void *fh, struct v4l2_fmtdesc *f)
-> +{
-> +	struct vpu_inst *inst = to_inst(file);
-> +	struct vdec_t *vdec = inst->priv;
-> +	const struct vpu_format *fmt;
-> +	int ret = -EINVAL;
-> +
-> +	vpu_inst_lock(inst);
-> +	if (!V4L2_TYPE_IS_OUTPUT(f->type) && vdec->fixed_fmt) {
-> +		if (f->index == 0) {
-> +			f->pixelformat = inst->cap_format.pixfmt;
-> +			f->flags = inst->cap_format.flags;
-> +			ret = 0;
-> +		}
-> +	} else {
-> +		fmt = vpu_helper_enum_format(inst, f->type, f->index);
-> +		memset(f->reserved, 0, sizeof(f->reserved));
-> +		if (!fmt)
-> +			goto exit;
-> +
-> +		f->pixelformat = fmt->pixfmt;
-> +		f->flags = fmt->flags;
-> +		ret = 0;
-> +	}
-> +
-> +exit:
-> +	vpu_inst_unlock(inst);
-> +	return ret;
-> +}
-> +
-> +static int vdec_g_fmt(struct file *file, void *fh, struct v4l2_format *f)
-> +{
-> +	struct vpu_inst *inst = to_inst(file);
-> +	struct vdec_t *vdec = inst->priv;
-> +	struct v4l2_pix_format_mplane *pixmp = &f->fmt.pix_mp;
-> +	struct vpu_format *cur_fmt;
-> +	int i;
-> +
-> +	cur_fmt = vpu_get_format(inst, f->type);
-> +
-> +	pixmp->pixelformat = cur_fmt->pixfmt;
-> +	pixmp->num_planes = cur_fmt->num_planes;
-> +	pixmp->width = cur_fmt->width;
-> +	pixmp->height = cur_fmt->height;
-> +	pixmp->field = cur_fmt->field;
-> +	pixmp->flags = cur_fmt->flags;
-> +	for (i = 0; i < pixmp->num_planes; i++) {
-> +		pixmp->plane_fmt[i].bytesperline = cur_fmt->bytesperline[i];
-> +		pixmp->plane_fmt[i].sizeimage = cur_fmt->sizeimage[i];
-> +	}
-> +
-> +	f->fmt.pix_mp.colorspace = vdec->codec_info.color_primaries;
-> +	f->fmt.pix_mp.xfer_func = vdec->codec_info.transfer_chars;
-> +	f->fmt.pix_mp.ycbcr_enc = vdec->codec_info.matrix_coeffs;
-> +	f->fmt.pix_mp.quantization = vdec->codec_info.full_range;
-> +
-> +	return 0;
-> +}
-> +
-> +static int vdec_try_fmt(struct file *file, void *fh, struct v4l2_format *f)
-> +{
-> +	struct vpu_inst *inst = to_inst(file);
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	vpu_try_fmt_common(inst, f);
-> +
-> +	vpu_inst_lock(inst);
-> +	if (vdec->fixed_fmt) {
-> +		f->fmt.pix_mp.colorspace = vdec->codec_info.color_primaries;
-> +		f->fmt.pix_mp.xfer_func = vdec->codec_info.transfer_chars;
-> +		f->fmt.pix_mp.ycbcr_enc = vdec->codec_info.matrix_coeffs;
-> +		f->fmt.pix_mp.quantization = vdec->codec_info.full_range;
-> +	} else {
-> +		f->fmt.pix_mp.colorspace = V4L2_COLORSPACE_DEFAULT;
-> +		f->fmt.pix_mp.xfer_func = V4L2_XFER_FUNC_DEFAULT;
-> +		f->fmt.pix_mp.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-> +		f->fmt.pix_mp.quantization = V4L2_QUANTIZATION_DEFAULT;
-> +	}
-> +	vpu_inst_unlock(inst);
-> +
-> +	return 0;
-> +}
-> +
-> +static int vdec_s_fmt_common(struct vpu_inst *inst, struct v4l2_format *f)
-> +{
-> +	struct v4l2_pix_format_mplane *pixmp = &f->fmt.pix_mp;
-> +	const struct vpu_format *fmt;
-> +	struct vpu_format *cur_fmt;
-> +	struct vb2_queue *q;
-> +	struct vdec_t *vdec = inst->priv;
-> +	int i;
-> +
-> +	q = v4l2_m2m_get_vq(inst->fh.m2m_ctx, f->type);
-> +	if (!q)
-> +		return -EINVAL;
-> +	if (vb2_is_streaming(q))
-> +		return -EBUSY;
-> +
-> +	fmt = vpu_try_fmt_common(inst, f);
-> +	if (!fmt)
-> +		return -EINVAL;
-> +
-> +	cur_fmt = vpu_get_format(inst, f->type);
-> +	if (V4L2_TYPE_IS_OUTPUT(f->type) && inst->state != VPU_CODEC_STATE_DEINIT) {
-> +		if (cur_fmt->pixfmt != fmt->pixfmt ||
-> +		    (pixmp->width && cur_fmt->width != pixmp->width) ||
-> +		    (pixmp->height && cur_fmt->height != pixmp->height)) {
-> +			vdec->reset_codec = true;
-> +			vdec->fixed_fmt = false;
-> +		}
-> +	}
-> +	cur_fmt->pixfmt = fmt->pixfmt;
-> +	if (V4L2_TYPE_IS_OUTPUT(f->type) || !vdec->fixed_fmt) {
-> +		cur_fmt->num_planes = fmt->num_planes;
-> +		cur_fmt->flags = fmt->flags;
-> +		cur_fmt->width = pixmp->width;
-> +		cur_fmt->height = pixmp->height;
-> +		for (i = 0; i < fmt->num_planes; i++) {
-> +			cur_fmt->sizeimage[i] = pixmp->plane_fmt[i].sizeimage;
-> +			cur_fmt->bytesperline[i] = pixmp->plane_fmt[i].bytesperline;
-> +		}
-> +		if (pixmp->field != V4L2_FIELD_ANY)
-> +			cur_fmt->field = pixmp->field;
-> +	} else {
-> +		pixmp->num_planes = cur_fmt->num_planes;
-> +		pixmp->width = cur_fmt->width;
-> +		pixmp->height = cur_fmt->height;
-> +		for (i = 0; i < pixmp->num_planes; i++) {
-> +			pixmp->plane_fmt[i].bytesperline = cur_fmt->bytesperline[i];
-> +			pixmp->plane_fmt[i].sizeimage = cur_fmt->sizeimage[i];
-> +		}
-> +		pixmp->field = cur_fmt->field;
-> +	}
-> +
-> +	if (!vdec->fixed_fmt) {
-> +		if (V4L2_TYPE_IS_OUTPUT(f->type)) {
-> +			vdec->params.codec_format = cur_fmt->pixfmt;
-> +			vdec->codec_info.color_primaries = f->fmt.pix_mp.colorspace;
-> +			vdec->codec_info.transfer_chars = f->fmt.pix_mp.xfer_func;
-> +			vdec->codec_info.matrix_coeffs = f->fmt.pix_mp.ycbcr_enc;
-> +			vdec->codec_info.full_range = f->fmt.pix_mp.quantization;
-> +		} else {
-> +			vdec->params.output_format = cur_fmt->pixfmt;
-> +			inst->crop.left = 0;
-> +			inst->crop.top = 0;
-> +			inst->crop.width = cur_fmt->width;
-> +			inst->crop.height = cur_fmt->height;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int vdec_s_fmt(struct file *file, void *fh, struct v4l2_format *f)
-> +{
-> +	struct vpu_inst *inst = to_inst(file);
-> +	struct v4l2_pix_format_mplane *pixmp = &f->fmt.pix_mp;
-> +	struct vdec_t *vdec = inst->priv;
-> +	int ret = 0;
-> +
-> +	vpu_inst_lock(inst);
-> +	ret = vdec_s_fmt_common(inst, f);
-> +	if (ret)
-> +		goto exit;
-> +
-> +	if (V4L2_TYPE_IS_OUTPUT(f->type) && !vdec->fixed_fmt) {
-> +		struct v4l2_format fc;
-> +
-> +		memset(&fc, 0, sizeof(fc));
-> +		fc.type = inst->cap_format.type;
-> +		fc.fmt.pix_mp.pixelformat = inst->cap_format.pixfmt;
-> +		fc.fmt.pix_mp.width = pixmp->width;
-> +		fc.fmt.pix_mp.height = pixmp->height;
-> +		vdec_s_fmt_common(inst, &fc);
-> +	}
-> +
-> +	f->fmt.pix_mp.colorspace = vdec->codec_info.color_primaries;
-> +	f->fmt.pix_mp.xfer_func = vdec->codec_info.transfer_chars;
-> +	f->fmt.pix_mp.ycbcr_enc = vdec->codec_info.matrix_coeffs;
-> +	f->fmt.pix_mp.quantization = vdec->codec_info.full_range;
-> +
-> +exit:
-> +	vpu_inst_unlock(inst);
-> +	return ret;
-> +}
-> +
-> +static int vdec_g_selection(struct file *file, void *fh,
-> +					struct v4l2_selection *s)
-> +{
-> +	struct vpu_inst *inst = to_inst(file);
-> +
-> +	if (s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE &&
-> +			s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
-> +		return -EINVAL;
-> +
-> +	switch (s->target) {
-> +	case V4L2_SEL_TGT_COMPOSE:
-> +	case V4L2_SEL_TGT_COMPOSE_DEFAULT:
-> +	case V4L2_SEL_TGT_COMPOSE_PADDED:
-> +		s->r = inst->crop;
-> +		break;
-> +	case V4L2_SEL_TGT_COMPOSE_BOUNDS:
-> +		s->r.left = 0;
-> +		s->r.top = 0;
-> +		s->r.width = inst->cap_format.width;
-> +		s->r.height = inst->cap_format.height;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int vdec_drain(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	if (!vdec->drain)
-> +		return 0;
-> +
-> +	if (v4l2_m2m_num_src_bufs_ready(inst->fh.m2m_ctx))
-> +		return 0;
-> +
-> +	if (!vdec->params.frame_count) {
-> +		vpu_set_last_buffer_dequeued(inst);
-> +		return 0;
-> +	}
-> +
-> +	vpu_iface_add_scode(inst, SCODE_PADDING_EOS);
-> +	vdec->params.end_flag = 1;
-> +	vpu_iface_set_decode_params(inst, &vdec->params, 1);
-> +	vdec->drain = 0;
-> +	vpu_trace(inst->dev, "[%d] frame_count = %d\n", inst->id, vdec->params.frame_count);
-> +
-> +	return 0;
-> +}
-> +
-> +static int vdec_cmd_start(struct vpu_inst *inst)
-> +{
-> +	if (inst->state == VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE)
-> +		vdec_update_state(inst, VPU_CODEC_STATE_ACTIVE, 0);
-> +	vpu_process_capture_buffer(inst);
-> +	return 0;
-> +}
-> +
-> +static int vdec_cmd_stop(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	vpu_trace(inst->dev, "[%d]\n", inst->id);
-> +
-> +	if (inst->state == VPU_CODEC_STATE_DEINIT) {
-> +		vpu_set_last_buffer_dequeued(inst);
-> +	} else {
-> +		vdec->drain = 1;
-> +		vdec_drain(inst);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int vdec_decoder_cmd(struct file *file,
-> +		void *fh,
-> +		struct v4l2_decoder_cmd *cmd)
-> +{
-> +	struct vpu_inst *inst = to_inst(file);
-> +	int ret;
-> +
-> +	ret = v4l2_m2m_ioctl_try_decoder_cmd(file, fh, cmd);
-> +	if (ret)
-> +		return ret;
-> +
-> +	vpu_inst_lock(inst);
-> +	switch (cmd->cmd) {
-> +	case V4L2_DEC_CMD_START:
-> +		vdec_cmd_start(inst);
-> +		break;
-> +	case V4L2_DEC_CMD_STOP:
-> +		vdec_cmd_stop(inst);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +	vpu_inst_unlock(inst);
-> +
-> +	return 0;
-> +}
-> +
-> +static int vdec_subscribe_event(struct v4l2_fh *fh,
-> +		const struct v4l2_event_subscription *sub)
-> +{
-> +	switch (sub->type) {
-> +	case V4L2_EVENT_EOS:
-> +		return v4l2_event_subscribe(fh, sub, 0, NULL);
-> +	case V4L2_EVENT_SOURCE_CHANGE:
-> +		return v4l2_src_change_event_subscribe(fh, sub);
-> +	case V4L2_EVENT_CTRL:
-> +		return v4l2_ctrl_subscribe_event(fh, sub);
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct v4l2_ioctl_ops vdec_ioctl_ops = {
-> +	.vidioc_querycap               = vdec_querycap,
-> +	.vidioc_enum_fmt_vid_cap       = vdec_enum_fmt,
-> +	.vidioc_enum_fmt_vid_out       = vdec_enum_fmt,
-> +	.vidioc_g_fmt_vid_cap_mplane   = vdec_g_fmt,
-> +	.vidioc_g_fmt_vid_out_mplane   = vdec_g_fmt,
-> +	.vidioc_try_fmt_vid_cap_mplane = vdec_try_fmt,
-> +	.vidioc_try_fmt_vid_out_mplane = vdec_try_fmt,
-> +	.vidioc_s_fmt_vid_cap_mplane   = vdec_s_fmt,
-> +	.vidioc_s_fmt_vid_out_mplane   = vdec_s_fmt,
-> +	.vidioc_g_selection            = vdec_g_selection,
-> +	.vidioc_try_decoder_cmd        = v4l2_m2m_ioctl_try_decoder_cmd,
-> +	.vidioc_decoder_cmd            = vdec_decoder_cmd,
-> +	.vidioc_subscribe_event        = vdec_subscribe_event,
-> +	.vidioc_unsubscribe_event      = v4l2_event_unsubscribe,
-> +	.vidioc_reqbufs                = v4l2_m2m_ioctl_reqbufs,
-> +	.vidioc_create_bufs	       = v4l2_m2m_ioctl_create_bufs,
-> +	.vidioc_prepare_buf	       = v4l2_m2m_ioctl_prepare_buf,
-> +	.vidioc_querybuf               = v4l2_m2m_ioctl_querybuf,
-> +	.vidioc_qbuf                   = v4l2_m2m_ioctl_qbuf,
-> +	.vidioc_expbuf                 = v4l2_m2m_ioctl_expbuf,
-> +	.vidioc_dqbuf                  = v4l2_m2m_ioctl_dqbuf,
-> +	.vidioc_streamon               = v4l2_m2m_ioctl_streamon,
-> +	.vidioc_streamoff              = v4l2_m2m_ioctl_streamoff,
-> +};
-> +
-> +static bool vdec_check_ready(struct vpu_inst *inst, unsigned int type)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	if (V4L2_TYPE_IS_OUTPUT(type)) {
-> +		if (vdec->ts_pre_count >= vdec->frame_depth)
-> +			return false;
-> +		return true;
-> +	}
-> +
-> +	if (vdec->req_frame_count)
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
-> +static int vdec_frame_decoded(struct vpu_inst *inst, void *arg)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	struct vpu_dec_pic_info *info = arg;
-> +	struct vpu_vb2_buffer *vpu_buf;
-> +	int ret = 0;
-> +
-> +	if (!info || info->id >= ARRAY_SIZE(vdec->slots))
-> +		return -EINVAL;
-> +
-> +	vpu_inst_lock(inst);
-> +	vpu_buf = vdec->slots[info->id];
-> +	if (!vpu_buf) {
-> +		dev_err(inst->dev, "[%d] decoded invalid frame[%d]\n", inst->id, info->id);
-> +		ret = -EINVAL;
-> +		goto exit;
-> +	}
-> +	if (vpu_buf->state == VPU_BUF_STATE_DECODED)
-> +		dev_info(inst->dev, "[%d] buf[%d] has been decoded\n", inst->id, info->id);
-> +	vpu_buf->state = VPU_BUF_STATE_DECODED;
-> +	vdec->decoded_frame_count++;
-> +	if (vdec->ts_pre_count >= info->consumed_count)
-> +		vdec->ts_pre_count -= info->consumed_count;
-> +	else
-> +		vdec->ts_pre_count = 0;
-> +exit:
-> +	vpu_inst_unlock(inst);
-> +
-> +	return ret;
-> +}
-> +
-> +static struct vpu_vb2_buffer *vdec_find_buffer(struct vpu_inst *inst, u32 luma)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(vdec->slots); i++) {
-> +		if (!vdec->slots[i])
-> +			continue;
-> +		if (luma == vdec->slots[i]->luma)
-> +			return vdec->slots[i];
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
-> +static void vdec_buf_done(struct vpu_inst *inst, struct vpu_frame_info *frame)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	struct vpu_vb2_buffer *vpu_buf;
-> +	struct vb2_v4l2_buffer *vbuf;
-> +	u32 sequence;
-> +
-> +	if (!frame)
-> +		return;
-> +
-> +	vpu_inst_lock(inst);
-> +	sequence = vdec->sequence++;
-> +	vpu_buf = vdec_find_buffer(inst, frame->luma);
-> +	vpu_inst_unlock(inst);
-> +	if (!vpu_buf) {
-> +		dev_err(inst->dev, "[%d] can't find buffer, id = %d, addr = 0x%x\n",
-> +				inst->id, frame->id, frame->luma);
-> +		return;
-> +	}
-> +	if (frame->skipped) {
-> +		dev_dbg(inst->dev, "[%d] frame skip\n", inst->id);
-> +		return;
-> +	}
-> +
-> +	vbuf = &vpu_buf->m2m_buf.vb;
-> +	if (vbuf->vb2_buf.index != frame->id)
-> +		dev_err(inst->dev, "[%d] buffer id(%d, %d) dismatch\n",
-> +				inst->id, vbuf->vb2_buf.index, frame->id);
-> +
-> +	if (vpu_buf->state != VPU_BUF_STATE_DECODED)
-> +		dev_err(inst->dev, "[%d] buffer(%d) ready without decoded\n",
-> +				inst->id, frame->id);
-> +	vpu_buf->state = VPU_BUF_STATE_READY;
-> +	vb2_set_plane_payload(&vbuf->vb2_buf, 0, inst->cap_format.sizeimage[0]);
-> +	vb2_set_plane_payload(&vbuf->vb2_buf, 1, inst->cap_format.sizeimage[1]);
-> +	vbuf->vb2_buf.timestamp = frame->timestamp;
-> +	vbuf->field = inst->cap_format.field;
-> +	vbuf->sequence = sequence;
-> +	dev_dbg(inst->dev, "[%d][OUTPUT TS]%32lld\n", inst->id, frame->timestamp);
-> +
-> +	v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_DONE);
-> +	vpu_inst_lock(inst);
-> +	vdec->timestamp = frame->timestamp;
-> +	vdec->display_frame_count++;
-> +	vpu_inst_unlock(inst);
-> +	dev_dbg(inst->dev, "[%d] decoded : %d, display : %d, sequence : %d\n",
-> +			inst->id,
-> +			vdec->decoded_frame_count,
-> +			vdec->display_frame_count,
-> +			vdec->sequence);
-> +}
-> +
-> +static void vdec_stop_done(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	vpu_inst_lock(inst);
-> +	vdec_update_state(inst, VPU_CODEC_STATE_DEINIT, 0);
-> +	vdec->seq_hdr_found = 0;
-> +	vdec->req_frame_count = 0;
-> +	vdec->reset_codec = false;
-> +	vdec->fixed_fmt = false;
-> +	vdec->params.end_flag = 0;
-> +	vdec->drain = 0;
-> +	vdec->ts_pre_count = 0;
-> +	vdec->timestamp = VPU_INVALID_TIMESTAMP;
-> +	vdec->ts_start = VPU_INVALID_TIMESTAMP;
-> +	vdec->ts_input = VPU_INVALID_TIMESTAMP;
-> +	vdec->params.frame_count = 0;
-> +	vdec->decoded_frame_count = 0;
-> +	vdec->display_frame_count = 0;
-> +	vdec->sequence = 0;
-> +	vdec->eos_received = 0;
-> +	vdec->is_source_changed = false;
-> +	vdec->source_change = 0;
-> +	vpu_inst_unlock(inst);
-> +}
-> +
-> +static bool vdec_check_source_change(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	const struct vpu_format *fmt;
-> +	int i;
-> +
-> +	if (!vb2_is_streaming(v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx)))
-> +		return true;
-> +	fmt = vpu_helper_find_format(inst, inst->cap_format.type, vdec->codec_info.pixfmt);
-> +	if (inst->cap_format.pixfmt != vdec->codec_info.pixfmt)
-> +		return true;
-> +	if (inst->cap_format.width != vdec->codec_info.decoded_width)
-> +		return true;
-> +	if (inst->cap_format.height != vdec->codec_info.decoded_height)
-> +		return true;
-> +	if (vpu_get_num_buffers(inst, inst->cap_format.type) < inst->min_buffer_cap)
-> +		return true;
-> +	if (inst->crop.left != vdec->codec_info.offset_x)
-> +		return true;
-> +	if (inst->crop.top != vdec->codec_info.offset_y)
-> +		return true;
-> +	if (inst->crop.width != vdec->codec_info.width)
-> +		return true;
-> +	if (inst->crop.height != vdec->codec_info.height)
-> +		return true;
-> +	if (fmt && inst->cap_format.num_planes != fmt->num_planes)
-> +		return true;
-> +	for (i = 0; i < inst->cap_format.num_planes; i++) {
-> +		if (inst->cap_format.bytesperline[i] != vdec->codec_info.bytesperline[i])
-> +			return true;
-> +		if (inst->cap_format.sizeimage[i] != vdec->codec_info.sizeimage[i])
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +static void vdec_init_fmt(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	const struct vpu_format *fmt;
-> +	int i;
-> +
-> +	fmt = vpu_helper_find_format(inst, inst->cap_format.type, vdec->codec_info.pixfmt);
-> +	inst->out_format.width = vdec->codec_info.width;
-> +	inst->out_format.height = vdec->codec_info.height;
-> +	inst->cap_format.width = vdec->codec_info.decoded_width;
-> +	inst->cap_format.height = vdec->codec_info.decoded_height;
-> +	inst->cap_format.pixfmt = vdec->codec_info.pixfmt;
-> +	if (fmt) {
-> +		inst->cap_format.num_planes = fmt->num_planes;
-> +		inst->cap_format.flags = fmt->flags;
-> +	}
-> +	for (i = 0; i < inst->cap_format.num_planes; i++) {
-> +		inst->cap_format.bytesperline[i] = vdec->codec_info.bytesperline[i];
-> +		inst->cap_format.sizeimage[i] = vdec->codec_info.sizeimage[i];
-> +	}
-> +	if (vdec->codec_info.progressive)
-> +		inst->cap_format.field = V4L2_FIELD_NONE;
-> +	else
-> +		inst->cap_format.field = V4L2_FIELD_INTERLACED;
-
-As a followup, this should be conditional to the chosen pixel format. If I
-understood correct, you produce interlaced is only produce for linear NV12, for
-tiled the fields are outputed seperated in their respective v4l2_buffer. Note
-sure where yet, but the V4L2 spec requires you to pair the fields by using the
-same seq_num on both.
-
-> +	if (vdec->codec_info.color_primaries == V4L2_COLORSPACE_DEFAULT)
-> +		vdec->codec_info.color_primaries = V4L2_COLORSPACE_REC709;
-> +	if (vdec->codec_info.transfer_chars == V4L2_XFER_FUNC_DEFAULT)
-> +		vdec->codec_info.transfer_chars = V4L2_XFER_FUNC_709;
-> +	if (vdec->codec_info.matrix_coeffs == V4L2_YCBCR_ENC_DEFAULT)
-> +		vdec->codec_info.matrix_coeffs = V4L2_YCBCR_ENC_709;
-> +	if (vdec->codec_info.full_range == V4L2_QUANTIZATION_DEFAULT)
-> +		vdec->codec_info.full_range = V4L2_QUANTIZATION_LIM_RANGE;
-> +}
-> +
-> +static void vdec_init_crop(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	inst->crop.left = vdec->codec_info.offset_x;
-> +	inst->crop.top = vdec->codec_info.offset_y;
-> +	inst->crop.width = vdec->codec_info.width;
-> +	inst->crop.height = vdec->codec_info.height;
-> +}
-> +
-> +static void vdec_init_mbi(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	vdec->mbi.size = vdec->codec_info.mbi_size;
-> +	vdec->mbi.max_count = ARRAY_SIZE(vdec->mbi.buffer);
-> +	scnprintf(vdec->mbi.name, sizeof(vdec->mbi.name), "mbi");
-> +	vdec->mbi.type = MEM_RES_MBI;
-> +	vdec->mbi.tag = vdec->seq_tag;
-> +}
-> +
-> +static void vdec_init_dcp(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	vdec->dcp.size = vdec->codec_info.dcp_size;
-> +	vdec->dcp.max_count = ARRAY_SIZE(vdec->dcp.buffer);
-> +	scnprintf(vdec->dcp.name, sizeof(vdec->dcp.name), "dcp");
-> +	vdec->dcp.type = MEM_RES_DCP;
-> +	vdec->dcp.tag = vdec->seq_tag;
-> +}
-> +
-> +static void vdec_request_one_fs(struct vdec_fs_info *fs)
-> +{
-> +	WARN_ON(!fs);
-> +
-> +	fs->req_count++;
-> +	if (fs->req_count > fs->max_count)
-> +		fs->req_count = fs->max_count;
-> +}
-> +
-> +static int vdec_alloc_fs_buffer(struct vpu_inst *inst, struct vdec_fs_info *fs)
-> +{
-> +	struct vpu_buffer *buffer;
-> +
-> +	if (!inst || !fs || !fs->size)
-> +		return -EINVAL;
-> +
-> +	if (fs->count >= fs->req_count)
-> +		return -EINVAL;
-> +
-> +	buffer = &fs->buffer[fs->count];
-> +	if (buffer->virt && buffer->length >= fs->size)
-> +		return 0;
-> +
-> +	vpu_free_dma(buffer);
-> +	buffer->length = fs->size;
-> +	return vpu_alloc_dma(inst->core, buffer);
-> +}
-> +
-> +static void vdec_alloc_fs(struct vpu_inst *inst, struct vdec_fs_info *fs)
-> +{
-> +	int ret;
-> +
-> +	while (fs->count < fs->req_count) {
-> +		ret = vdec_alloc_fs_buffer(inst, fs);
-> +		if (ret)
-> +			break;
-> +		fs->count++;
-> +	}
-> +}
-> +
-> +static void vdec_clear_fs(struct vdec_fs_info *fs)
-> +{
-> +	u32 i;
-> +
-> +	if (!fs)
-> +		return;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(fs->buffer); i++)
-> +		vpu_free_dma(&fs->buffer[i]);
-> +	memset(fs, 0, sizeof(*fs));
-> +}
-> +
-> +static int vdec_response_fs(struct vpu_inst *inst, struct vdec_fs_info *fs)
-> +{
-> +	struct vpu_fs_info info;
-> +	int ret;
-> +
-> +	if (fs->index >= fs->count)
-> +		return 0;
-> +
-> +	memset(&info, 0, sizeof(info));
-> +	info.id = fs->index;
-> +	info.type = fs->type;
-> +	info.tag = fs->tag;
-> +	info.luma_addr = fs->buffer[fs->index].phys;
-> +	info.luma_size = fs->buffer[fs->index].length;
-> +	ret = vpu_session_alloc_fs(inst, &info);
-> +	if (ret)
-> +		return ret;
-> +
-> +	fs->index++;
-> +	return 0;
-> +}
-> +
-> +static int vdec_response_frame_abnormal(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	struct vpu_fs_info info;
-> +
-> +	if (!vdec->req_frame_count)
-> +		return 0;
-> +
-> +	memset(&info, 0, sizeof(info));
-> +	info.type = MEM_RES_FRAME;
-> +	info.tag = vdec->seq_tag + 0xf0;
-> +	vpu_session_alloc_fs(inst, &info);
-> +	vdec->req_frame_count--;
-> +
-> +	return 0;
-> +}
-> +
-> +static int vdec_response_frame(struct vpu_inst *inst, struct vb2_v4l2_buffer *vbuf)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	struct vpu_vb2_buffer *vpu_buf;
-> +	struct vpu_fs_info info;
-> +	int ret;
-> +
-> +	if (inst->state != VPU_CODEC_STATE_ACTIVE)
-> +		return -EINVAL;
-> +
-> +	if (!vdec->req_frame_count)
-> +		return -EINVAL;
-> +
-> +	if (!vbuf)
-> +		return -EINVAL;
-> +
-> +	if (vdec->slots[vbuf->vb2_buf.index]) {
-> +		dev_err(inst->dev, "[%d] repeat alloc fs %d\n",
-> +				inst->id, vbuf->vb2_buf.index);
-> +		return -EINVAL;
-> +	}
-> +
-> +	dev_dbg(inst->dev, "[%d] state = %d, alloc fs %d, tag = 0x%x\n",
-> +		inst->id, inst->state, vbuf->vb2_buf.index, vdec->seq_tag);
-> +	vpu_buf = to_vpu_vb2_buffer(vbuf);
-> +
-> +	memset(&info, 0, sizeof(info));
-> +	info.id = vbuf->vb2_buf.index;
-> +	info.type = MEM_RES_FRAME;
-> +	info.tag = vdec->seq_tag;
-> +	info.luma_addr = vpu_get_vb_phy_addr(&vbuf->vb2_buf, 0);
-> +	info.luma_size = inst->cap_format.sizeimage[0];
-> +	info.chroma_addr = vpu_get_vb_phy_addr(&vbuf->vb2_buf, 1);
-> +	info.chromau_size = inst->cap_format.sizeimage[1];
-> +	info.bytesperline = inst->cap_format.bytesperline[0];
-> +	ret = vpu_session_alloc_fs(inst, &info);
-> +	if (ret)
-> +		return ret;
-> +
-> +	vpu_buf->tag = info.tag;
-> +	vpu_buf->luma = info.luma_addr;
-> +	vpu_buf->chroma_u = info.chromau_size;
-> +	vpu_buf->chroma_v = 0;
-> +	vpu_buf->state = VPU_BUF_STATE_INUSE;
-> +	vdec->slots[info.id] = vpu_buf;
-> +	vdec->req_frame_count--;
-> +
-> +	return 0;
-> +}
-> +
-> +static void vdec_response_fs_request(struct vpu_inst *inst, bool force)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	int i;
-> +	int ret;
-> +
-> +	if (force) {
-> +		for (i = vdec->req_frame_count; i > 0; i--)
-> +			vdec_response_frame_abnormal(inst);
-> +		return;
-> +	}
-> +
-> +	for (i = vdec->req_frame_count; i > 0; i--) {
-> +		ret = vpu_process_capture_buffer(inst);
-> +		if (ret)
-> +			break;
-> +		if (vdec->eos_received)
-> +			break;
-> +	}
-> +
-> +	for (i = vdec->mbi.index; i < vdec->mbi.count; i++) {
-> +		if (vdec_response_fs(inst, &vdec->mbi))
-> +			break;
-> +		if (vdec->eos_received)
-> +			break;
-> +	}
-> +	for (i = vdec->dcp.index; i < vdec->dcp.count; i++) {
-> +		if (vdec_response_fs(inst, &vdec->dcp))
-> +			break;
-> +		if (vdec->eos_received)
-> +			break;
-> +	}
-> +}
-> +
-> +static void vdec_response_fs_release(struct vpu_inst *inst, u32 id, u32 tag)
-> +{
-> +	struct vpu_fs_info info;
-> +
-> +	memset(&info, 0, sizeof(info));
-> +	info.id = id;
-> +	info.tag = tag;
-> +	vpu_session_release_fs(inst, &info);
-> +}
-> +
-> +static void vdec_recycle_buffer(struct vpu_inst *inst, struct vb2_v4l2_buffer *vbuf)
-> +{
-> +	if (!inst || !vbuf)
-> +		return;
-> +
-> +	if (vbuf->vb2_buf.state != VB2_BUF_STATE_ACTIVE)
-> +		return;
-> +	if (vpu_find_buf_by_idx(inst, vbuf->vb2_buf.type, vbuf->vb2_buf.index))
-> +		return;
-> +	v4l2_m2m_buf_queue(inst->fh.m2m_ctx, vbuf);
-> +}
-> +
-> +static void vdec_clear_slots(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	struct vpu_vb2_buffer *vpu_buf;
-> +	struct vb2_v4l2_buffer *vbuf;
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(vdec->slots); i++) {
-> +		if (!vdec->slots[i])
-> +			continue;
-> +
-> +		vpu_buf = vdec->slots[i];
-> +		vbuf = &vpu_buf->m2m_buf.vb;
-> +
-> +		vdec_response_fs_release(inst, i, vpu_buf->tag);
-> +		vdec_recycle_buffer(inst, vbuf);
-> +		vdec->slots[i]->state = VPU_BUF_STATE_IDLE;
-> +		vdec->slots[i] = NULL;
-> +	}
-> +}
-> +
-> +static void vdec_event_seq_hdr(struct vpu_inst *inst,
-> +				struct vpu_dec_codec_info *hdr)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	vpu_inst_lock(inst);
-> +	memcpy(&vdec->codec_info, hdr, sizeof(vdec->codec_info));
-> +
-> +	vpu_trace(inst->dev, "[%d] %d x %d, crop : (%d, %d) %d x %d, %d, %d\n",
-> +			inst->id,
-> +			vdec->codec_info.decoded_width,
-> +			vdec->codec_info.decoded_height,
-> +			vdec->codec_info.offset_x,
-> +			vdec->codec_info.offset_y,
-> +			vdec->codec_info.width,
-> +			vdec->codec_info.height,
-> +			hdr->num_ref_frms,
-> +			hdr->num_dpb_frms);
-> +	inst->min_buffer_cap = hdr->num_ref_frms + hdr->num_dpb_frms;
-> +	vdec->is_source_changed = vdec_check_source_change(inst);
-> +	vdec_init_fmt(inst);
-> +	vdec_init_crop(inst);
-> +	vdec_init_mbi(inst);
-> +	vdec_init_dcp(inst);
-> +	if (!vdec->seq_hdr_found) {
-> +		vdec->seq_tag = vdec->codec_info.tag;
-> +		if (vdec->is_source_changed) {
-> +			vdec_update_state(inst, VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE, 0);
-> +			vpu_notify_source_change(inst);
-> +			vdec->is_source_changed = false;
-> +		}
-> +	}
-> +	if (vdec->seq_tag != vdec->codec_info.tag) {
-> +		vdec_response_fs_request(inst, true);
-> +		vpu_trace(inst->dev, "[%d] seq tag change: %d -> %d\n",
-> +				inst->id, vdec->seq_tag, vdec->codec_info.tag);
-> +	}
-> +	vdec->seq_hdr_found++;
-> +	vdec->fixed_fmt = true;
-> +	vpu_inst_unlock(inst);
-> +}
-> +
-> +static void vdec_event_resolution_change(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	vpu_trace(inst->dev, "[%d]\n", inst->id);
-> +	vpu_inst_lock(inst);
-> +	vdec->seq_tag = vdec->codec_info.tag;
-> +	vdec_clear_fs(&vdec->mbi);
-> +	vdec_clear_fs(&vdec->dcp);
-> +	vdec_clear_slots(inst);
-> +	vdec_init_mbi(inst);
-> +	vdec_init_dcp(inst);
-> +	if (vdec->is_source_changed) {
-> +		vdec_update_state(inst, VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE, 0);
-> +		vdec->source_change++;
-> +		vdec_handle_resolution_change(inst);
-> +		vdec->is_source_changed = false;
-> +	}
-> +	vpu_inst_unlock(inst);
-> +}
-> +
-> +static void vdec_event_req_fs(struct vpu_inst *inst, struct vpu_fs_info *fs)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	if (!fs)
-> +		return;
-> +
-> +	vpu_inst_lock(inst);
-> +
-> +	switch (fs->type) {
-> +	case MEM_RES_FRAME:
-> +		vdec->req_frame_count++;
-> +		break;
-> +	case MEM_RES_MBI:
-> +		vdec_request_one_fs(&vdec->mbi);
-> +		break;
-> +	case MEM_RES_DCP:
-> +		vdec_request_one_fs(&vdec->dcp);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	vdec_alloc_fs(inst, &vdec->mbi);
-> +	vdec_alloc_fs(inst, &vdec->dcp);
-> +
-> +	vdec_response_fs_request(inst, false);
-> +
-> +	vpu_inst_unlock(inst);
-> +}
-> +
-> +static void vdec_evnet_rel_fs(struct vpu_inst *inst, struct vpu_fs_info *fs)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	struct vpu_vb2_buffer *vpu_buf;
-> +	struct vb2_v4l2_buffer *vbuf;
-> +
-> +	if (!fs || fs->id >= ARRAY_SIZE(vdec->slots))
-> +		return;
-> +	if (fs->type != MEM_RES_FRAME)
-> +		return;
-> +
-> +	if (fs->id >= vpu_get_num_buffers(inst, inst->cap_format.type)) {
-> +		dev_err(inst->dev, "[%d] invalid fs(%d) to release\n", inst->id, fs->id);
-> +		return;
-> +	}
-> +
-> +	vpu_inst_lock(inst);
-> +	vpu_buf = vdec->slots[fs->id];
-> +	vdec->slots[fs->id] = NULL;
-> +
-> +	if (!vpu_buf) {
-> +		dev_dbg(inst->dev, "[%d] fs[%d] has bee released\n", inst->id, fs->id);
-> +		goto exit;
-> +	}
-> +
-> +	if (vpu_buf->state == VPU_BUF_STATE_DECODED) {
-> +		dev_dbg(inst->dev, "[%d] frame skip\n", inst->id);
-> +		vdec->sequence++;
-> +	}
-> +
-> +	vdec_response_fs_release(inst, fs->id, vpu_buf->tag);
-> +	vbuf = &vpu_buf->m2m_buf.vb;
-> +	if (vpu_buf->state != VPU_BUF_STATE_READY)
-> +		vdec_recycle_buffer(inst, vbuf);
-> +
-> +	vpu_buf->state = VPU_BUF_STATE_IDLE;
-> +	vpu_process_capture_buffer(inst);
-> +
-> +exit:
-> +	vpu_inst_unlock(inst);
-> +}
-> +
-> +static void vdec_event_eos(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	vpu_trace(inst->dev, "[%d] input : %d, decoded : %d, display : %d, sequence : %d\n",
-> +			inst->id,
-> +			vdec->params.frame_count,
-> +			vdec->decoded_frame_count,
-> +			vdec->display_frame_count,
-> +			vdec->sequence);
-> +	vpu_inst_lock(inst);
-> +	vdec->eos_received++;
-> +	vdec->fixed_fmt = false;
-> +	inst->min_buffer_cap = VDEC_MIN_BUFFER_CAP;
-> +	vdec_update_state(inst, VPU_CODEC_STATE_DRAIN, 0);
-> +	vdec_set_last_buffer_dequeued(inst);
-> +	vpu_inst_unlock(inst);
-> +}
-> +
-> +static void vdec_event_notify(struct vpu_inst *inst, u32 event, void *data)
-> +{
-> +	switch (event) {
-> +	case VPU_MSG_ID_SEQ_HDR_FOUND:
-> +		vdec_event_seq_hdr(inst, data);
-> +		break;
-> +	case VPU_MSG_ID_RES_CHANGE:
-> +		vdec_event_resolution_change(inst);
-> +		break;
-> +	case VPU_MSG_ID_FRAME_REQ:
-> +		vdec_event_req_fs(inst, data);
-> +		break;
-> +	case VPU_MSG_ID_FRAME_RELEASE:
-> +		vdec_evnet_rel_fs(inst, data);
-> +		break;
-> +	case VPU_MSG_ID_PIC_EOS:
-> +		vdec_event_eos(inst);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +}
-> +
-> +static int vdec_process_output(struct vpu_inst *inst, struct vb2_buffer *vb)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	struct vb2_v4l2_buffer *vbuf;
-> +	struct vpu_vb2_buffer *vpu_buf;
-> +	struct vpu_rpc_buffer_desc desc;
-> +	s64 timestamp;
-> +	u32 free_space;
-> +	int ret;
-> +
-> +	vbuf = to_vb2_v4l2_buffer(vb);
-> +	vpu_buf = to_vpu_vb2_buffer(vbuf);
-> +	dev_dbg(inst->dev, "[%d] dec output [%d] %d : %ld\n",
-> +		inst->id, vbuf->sequence, vb->index, vb2_get_plane_payload(vb, 0));
-> +
-> +	if (inst->state == VPU_CODEC_STATE_DEINIT)
-> +		return -EINVAL;
-> +	if (vdec->reset_codec)
-> +		return -EINVAL;
-> +
-> +	if (inst->state == VPU_CODEC_STATE_STARTED)
-> +		vdec_update_state(inst, VPU_CODEC_STATE_ACTIVE, 0);
-> +
-> +	ret = vpu_iface_get_stream_buffer_desc(inst, &desc);
-> +	if (ret)
-> +		return ret;
-> +
-> +	free_space = vpu_helper_get_free_space(inst);
-> +	if (free_space < vb2_get_plane_payload(vb, 0) + 0x40000)
-> +		return -ENOMEM;
-> +
-> +	timestamp = vb->timestamp;
-> +	if (timestamp >= 0 && vdec->ts_start < 0)
-> +		vdec->ts_start = timestamp;
-> +	if (vdec->ts_input < timestamp)
-> +		vdec->ts_input = timestamp;
-> +
-> +	ret = vpu_iface_input_frame(inst, vb);
-> +	if (ret < 0)
-> +		return -ENOMEM;
-> +
-> +	dev_dbg(inst->dev, "[%d][INPUT  TS]%32lld\n", inst->id, vb->timestamp);
-> +	vdec->ts_pre_count++;
-> +	vdec->params.frame_count++;
-> +
-> +	v4l2_m2m_src_buf_remove_by_buf(inst->fh.m2m_ctx, vbuf);
-> +	vpu_buf->state = VPU_BUF_STATE_IDLE;
-> +	v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_DONE);
-> +
-> +	if (vdec->drain)
-> +		vdec_drain(inst);
-> +
-> +	return 0;
-> +}
-> +
-> +static int vdec_process_capture(struct vpu_inst *inst, struct vb2_buffer *vb)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-> +	int ret;
-> +
-> +	if (inst->state == VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE)
-> +		return -EINVAL;
-> +	if (vdec->reset_codec)
-> +		return -EINVAL;
-> +
-> +	ret = vdec_response_frame(inst, vbuf);
-> +	if (ret)
-> +		return ret;
-> +	v4l2_m2m_dst_buf_remove_by_buf(inst->fh.m2m_ctx, vbuf);
-> +	return 0;
-> +}
-> +
-> +static void vdec_on_queue_empty(struct vpu_inst *inst, u32 type)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	if (V4L2_TYPE_IS_OUTPUT(type))
-> +		return;
-> +
-> +	vdec_handle_resolution_change(inst);
-> +	if (vdec->eos_received)
-> +		vdec_set_last_buffer_dequeued(inst);
-> +}
-> +
-> +static void vdec_abort(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	struct vpu_rpc_buffer_desc desc;
-> +	int ret;
-> +
-> +	vpu_trace(inst->dev, "[%d] state = %d\n", inst->id, inst->state);
-> +	vpu_iface_add_scode(inst, SCODE_PADDING_ABORT);
-> +	vdec->params.end_flag = 1;
-> +	vpu_iface_set_decode_params(inst, &vdec->params, 1);
-> +
-> +	vpu_session_abort(inst);
-> +
-> +	ret = vpu_iface_get_stream_buffer_desc(inst, &desc);
-> +	if (!ret)
-> +		vpu_iface_update_stream_buffer(inst, desc.rptr, 1);
-> +
-> +	vpu_session_rst_buf(inst);
-> +	vpu_trace(inst->dev, "[%d] input : %d, decoded : %d, display : %d, sequence : %d\n",
-> +			inst->id,
-> +			vdec->params.frame_count,
-> +			vdec->decoded_frame_count,
-> +			vdec->display_frame_count,
-> +			vdec->sequence);
-> +	vdec->params.end_flag = 0;
-> +	vdec->drain = 0;
-> +	vdec->ts_pre_count = 0;
-> +	vdec->timestamp = VPU_INVALID_TIMESTAMP;
-> +	vdec->ts_start = VPU_INVALID_TIMESTAMP;
-> +	vdec->ts_input = VPU_INVALID_TIMESTAMP;
-> +	vdec->params.frame_count = 0;
-> +	vdec->decoded_frame_count = 0;
-> +	vdec->display_frame_count = 0;
-> +	vdec->sequence = 0;
-> +}
-> +
-> +static void vdec_stop(struct vpu_inst *inst, bool free)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	vdec_clear_slots(inst);
-> +	if (inst->state != VPU_CODEC_STATE_DEINIT)
-> +		vpu_session_stop(inst);
-> +	vdec_clear_fs(&vdec->mbi);
-> +	vdec_clear_fs(&vdec->dcp);
-> +	if (free) {
-> +		vpu_free_dma(&vdec->udata);
-> +		vpu_free_dma(&inst->stream_buffer);
-> +	}
-> +	vdec_update_state(inst, VPU_CODEC_STATE_DEINIT, 1);
-> +	vdec->reset_codec = false;
-> +}
-> +
-> +static void vdec_release(struct vpu_inst *inst)
-> +{
-> +	if (inst->id != VPU_INST_NULL_ID)
-> +		vpu_trace(inst->dev, "[%d]\n", inst->id);
-> +	vpu_inst_lock(inst);
-> +	vdec_stop(inst, true);
-> +	vpu_inst_unlock(inst);
-> +}
-> +
-> +static void vdec_cleanup(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec;
-> +
-> +	if (!inst)
-> +		return;
-> +
-> +	vdec = inst->priv;
-> +	if (vdec)
-> +		vfree(vdec);
-> +	inst->priv = NULL;
-> +	vfree(inst);
-> +}
-> +
-> +static void vdec_init_params(struct vdec_t *vdec)
-> +{
-> +	vdec->params.frame_count = 0;
-> +	vdec->params.end_flag = 0;
-> +}
-> +
-> +static int vdec_start(struct vpu_inst *inst)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	int stream_buffer_size;
-> +	int ret;
-> +
-> +	if (inst->state != VPU_CODEC_STATE_DEINIT)
-> +		return 0;
-> +
-> +	vpu_trace(inst->dev, "[%d]\n", inst->id);
-> +	if (!vdec->udata.virt) {
-> +		vdec->udata.length = 0x1000;
-> +		ret = vpu_alloc_dma(inst->core, &vdec->udata);
-> +		if (ret) {
-> +			dev_err(inst->dev, "[%d] alloc udata fail\n", inst->id);
-> +			goto error;
-> +		}
-> +	}
-> +
-> +	if (!inst->stream_buffer.virt) {
-> +		stream_buffer_size = vpu_iface_get_stream_buffer_size(inst->core);
-> +		if (stream_buffer_size > 0) {
-> +			inst->stream_buffer.length = stream_buffer_size;
-> +			ret = vpu_alloc_dma(inst->core, &inst->stream_buffer);
-> +			if (ret) {
-> +				dev_err(inst->dev, "[%d] alloc stream buffer fail\n", inst->id);
-> +				goto error;
-> +			}
-> +			inst->use_stream_buffer = true;
-> +		}
-> +	}
-> +
-> +	if (inst->use_stream_buffer)
-> +		vpu_iface_config_stream_buffer(inst, &inst->stream_buffer);
-> +	vpu_iface_init_instance(inst);
-> +	vdec->params.udata.base = vdec->udata.phys;
-> +	vdec->params.udata.size = vdec->udata.length;
-> +	ret = vpu_iface_set_decode_params(inst, &vdec->params, 0);
-> +	if (ret) {
-> +		dev_err(inst->dev, "[%d] set decode params fail\n", inst->id);
-> +		goto error;
-> +	}
-> +
-> +	vdec_init_params(vdec);
-> +	ret = vpu_session_start(inst);
-> +	if (ret) {
-> +		dev_err(inst->dev, "[%d] start fail\n", inst->id);
-> +		goto error;
-> +	}
-> +
-> +	vdec_update_state(inst, VPU_CODEC_STATE_STARTED, 0);
-> +
-> +	return 0;
-> +error:
-> +	vpu_free_dma(&vdec->udata);
-> +	vpu_free_dma(&inst->stream_buffer);
-> +	return ret;
-> +}
-> +
-> +static int vdec_start_session(struct vpu_inst *inst, u32 type)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	int ret = 0;
-> +
-> +	if (V4L2_TYPE_IS_OUTPUT(type)) {
-> +		if (vdec->reset_codec)
-> +			vdec_stop(inst, false);
-> +		if (inst->state == VPU_CODEC_STATE_DEINIT) {
-> +			ret = vdec_start(inst);
-> +			if (ret)
-> +				return ret;
-> +		}
-> +	}
-> +
-> +	if (V4L2_TYPE_IS_OUTPUT(type)) {
-> +		if (inst->state == VPU_CODEC_STATE_SEEK)
-> +			vdec_update_state(inst, vdec->state, 1);
-> +		vdec->eos_received = 0;
-> +		vpu_process_output_buffer(inst);
-> +	} else {
-> +		vdec_cmd_start(inst);
-> +	}
-> +	if (inst->state == VPU_CODEC_STATE_ACTIVE)
-> +		vdec_response_fs_request(inst, false);
-> +
-> +	return ret;
-> +}
-> +
-> +static int vdec_stop_session(struct vpu_inst *inst, u32 type)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +
-> +	if (inst->state == VPU_CODEC_STATE_DEINIT)
-> +		return 0;
-> +
-> +	if (V4L2_TYPE_IS_OUTPUT(type)) {
-> +		vdec_update_state(inst, VPU_CODEC_STATE_SEEK, 0);
-> +		vdec->drain = 0;
-> +	} else {
-> +		if (inst->state != VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE)
-> +			vdec_abort(inst);
-> +
-> +		vdec->eos_received = 0;
-> +		vdec_clear_slots(inst);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int vdec_get_debug_info(struct vpu_inst *inst, char *str, u32 size, u32 i)
-> +{
-> +	struct vdec_t *vdec = inst->priv;
-> +	int num = -1;
-> +
-> +	switch (i) {
-> +	case 0:
-> +		num = scnprintf(str, size,
-> +				"req_frame_count = %d\ninterlaced = %d\n",
-> +				vdec->req_frame_count,
-> +				vdec->codec_info.progressive ? 0 : 1);
-> +		break;
-> +	case 1:
-> +		num = scnprintf(str, size,
-> +				"mbi: size = 0x%x request = %d, alloc = %d, response = %d\n",
-> +				vdec->mbi.size,
-> +				vdec->mbi.req_count,
-> +				vdec->mbi.count,
-> +				vdec->mbi.index);
-> +		break;
-> +	case 2:
-> +		num = scnprintf(str, size,
-> +				"dcp: size = 0x%x request = %d, alloc = %d, response = %d\n",
-> +				vdec->dcp.size,
-> +				vdec->dcp.req_count,
-> +				vdec->dcp.count,
-> +				vdec->dcp.index);
-> +		break;
-> +	case 3:
-> +		num = scnprintf(str, size, "input_frame_count = %d\n", vdec->params.frame_count);
-> +		break;
-> +	case 4:
-> +		num = scnprintf(str, size, "decoded_frame_count = %d\n", vdec->decoded_frame_count);
-> +		break;
-> +	case 5:
-> +		num = scnprintf(str, size, "display_frame_count = %d\n", vdec->display_frame_count);
-> +		break;
-> +	case 6:
-> +		num = scnprintf(str, size, "sequence = %d\n", vdec->sequence);
-> +		break;
-> +	case 7:
-> +		num = scnprintf(str, size, "drain = %d, eos = %d, source_change = %d\n",
-> +				vdec->drain, vdec->eos_received, vdec->source_change);
-> +		break;
-> +	case 8:
-> +		num = scnprintf(str, size, "ts_pre_count = %d, frame_depth = %d\n",
-> +				vdec->ts_pre_count, vdec->frame_depth);
-> +		break;
-> +	case 9:
-> +		num = scnprintf(str, size, "fps = %d/%d\n",
-> +				vdec->codec_info.frame_rate.numerator,
-> +				vdec->codec_info.frame_rate.denominator);
-> +		break;
-> +	case 10:
-> +	{
-> +		s64 timestamp = vdec->timestamp;
-> +		s64 ts_start = vdec->ts_start;
-> +		s64 ts_input = vdec->ts_input;
-> +
-> +		num = scnprintf(str, size, "timestamp = %9lld.%09lld(%9lld.%09lld, %9lld.%09lld)\n",
-> +				timestamp / NSEC_PER_SEC,
-> +				timestamp % NSEC_PER_SEC,
-> +				ts_start / NSEC_PER_SEC,
-> +				ts_start % NSEC_PER_SEC,
-> +				ts_input / NSEC_PER_SEC,
-> +				ts_input % NSEC_PER_SEC);
-> +	}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return num;
-> +}
-> +
-> +static struct vpu_inst_ops vdec_inst_ops = {
-> +	.ctrl_init = vdec_ctrl_init,
-> +	.check_ready = vdec_check_ready,
-> +	.buf_done = vdec_buf_done,
-> +	.get_one_frame = vdec_frame_decoded,
-> +	.stop_done = vdec_stop_done,
-> +	.event_notify = vdec_event_notify,
-> +	.release = vdec_release,
-> +	.cleanup = vdec_cleanup,
-> +	.start = vdec_start_session,
-> +	.stop = vdec_stop_session,
-> +	.process_output = vdec_process_output,
-> +	.process_capture = vdec_process_capture,
-> +	.on_queue_empty = vdec_on_queue_empty,
-> +	.get_debug_info = vdec_get_debug_info,
-> +	.wait_prepare = vpu_inst_unlock,
-> +	.wait_finish = vpu_inst_lock,
-> +};
-> +
-> +static void vdec_init(struct file *file)
-> +{
-> +	struct vpu_inst *inst = to_inst(file);
-> +	struct vdec_t *vdec;
-> +	struct v4l2_format f;
-> +
-> +	vdec = inst->priv;
-> +	vdec->frame_depth = VDEC_FRAME_DEPTH;
-> +	vdec->timestamp = VPU_INVALID_TIMESTAMP;
-> +	vdec->ts_start = VPU_INVALID_TIMESTAMP;
-> +	vdec->ts_input = VPU_INVALID_TIMESTAMP;
-> +
-> +	memset(&f, 0, sizeof(f));
-> +	f.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-> +	f.fmt.pix_mp.pixelformat = V4L2_PIX_FMT_H264;
-> +	f.fmt.pix_mp.width = 1280;
-> +	f.fmt.pix_mp.height = 720;
-> +	f.fmt.pix_mp.field = V4L2_FIELD_NONE;
-> +	vdec_s_fmt(file, &inst->fh, &f);
-> +
-> +	memset(&f, 0, sizeof(f));
-> +	f.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-> +	f.fmt.pix_mp.pixelformat = V4L2_PIX_FMT_NV12MT_8L128;
-> +	f.fmt.pix_mp.width = 1280;
-> +	f.fmt.pix_mp.height = 720;
-> +	f.fmt.pix_mp.field = V4L2_FIELD_NONE;
-> +	vdec_s_fmt(file, &inst->fh, &f);
-> +}
-> +
-> +static int vdec_open(struct file *file)
-> +{
-> +	struct vpu_inst *inst;
-> +	struct vdec_t *vdec;
-> +	int ret;
-> +
-> +	inst = vzalloc(sizeof(*inst));
-> +	if (!inst)
-> +		return -ENOMEM;
-> +
-> +	vdec = vzalloc(sizeof(*vdec));
-> +	if (!vdec) {
-> +		vfree(inst);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	inst->ops = &vdec_inst_ops;
-> +	inst->formats = vdec_formats;
-> +	inst->type = VPU_CORE_TYPE_DEC;
-> +	inst->priv = vdec;
-> +
-> +	ret = vpu_v4l2_open(file, inst);
-> +	if (ret)
-> +		return ret;
-> +
-> +	vdec->fixed_fmt = false;
-> +	inst->min_buffer_cap = VDEC_MIN_BUFFER_CAP;
-> +	vdec_init(file);
-> +
-> +	return 0;
-> +}
-> +
-> +static __poll_t vdec_poll(struct file *file, poll_table *wait)
-> +{
-> +	struct vpu_inst *inst = to_inst(file);
-> +	struct vb2_queue *src_q, *dst_q;
-> +	__poll_t ret;
-> +
-> +	ret = v4l2_m2m_fop_poll(file, wait);
-> +	src_q = v4l2_m2m_get_src_vq(inst->fh.m2m_ctx);
-> +	dst_q = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
-> +	if (vb2_is_streaming(src_q) && !vb2_is_streaming(dst_q))
-> +		ret &= (~EPOLLERR);
-> +	if (!src_q->error && !dst_q->error &&
-> +	    (vb2_is_streaming(src_q) && list_empty(&src_q->queued_list)) &&
-> +	    (vb2_is_streaming(dst_q) && list_empty(&dst_q->queued_list)))
-> +		ret &= (~EPOLLERR);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct v4l2_file_operations vdec_fops = {
-> +	.owner = THIS_MODULE,
-> +	.open = vdec_open,
-> +	.release = vpu_v4l2_close,
-> +	.unlocked_ioctl = video_ioctl2,
-> +	.poll = vdec_poll,
-> +	.mmap = v4l2_m2m_fop_mmap,
-> +};
-> +
-> +const struct v4l2_ioctl_ops *vdec_get_ioctl_ops(void)
-> +{
-> +	return &vdec_ioctl_ops;
-> +}
-> +
-> +const struct v4l2_file_operations *vdec_get_fops(void)
-> +{
-> +	return &vdec_fops;
-> +}
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBOaWNvbGFzIER1ZnJlc25lIFtt
+YWlsdG86bmljb2xhc0BuZHVmcmVzbmUuY2FdDQo+IFNlbnQ6IEZyaWRheSwgRGVjZW1iZXIgMywg
+MjAyMSAxMjoxMCBQTQ0KPiBUbzogTWluZyBRaWFuIDxtaW5nLnFpYW5AbnhwLmNvbT47IG1jaGVo
+YWJAa2VybmVsLm9yZzsNCj4gc2hhd25ndW9Aa2VybmVsLm9yZzsgcm9iaCtkdEBrZXJuZWwub3Jn
+OyBzLmhhdWVyQHBlbmd1dHJvbml4LmRlDQo+IENjOiBodmVya3VpbC1jaXNjb0B4czRhbGwubmw7
+IGtlcm5lbEBwZW5ndXRyb25peC5kZTsgZmVzdGV2YW1AZ21haWwuY29tOw0KPiBkbC1saW51eC1p
+bXggPGxpbnV4LWlteEBueHAuY29tPjsgQWlzaGVuZyBEb25nIDxhaXNoZW5nLmRvbmdAbnhwLmNv
+bT47DQo+IGxpbnV4LW1lZGlhQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2Vy
+bmVsLm9yZzsNCj4gZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWFybS1rZXJuZWxA
+bGlzdHMuaW5mcmFkZWFkLm9yZw0KPiBTdWJqZWN0OiBSZTogW0VYVF0gUmU6IFtQQVRDSCB2MTIg
+MDAvMTNdIGFtcGhpb24gdmlkZW8gZGVjb2Rlci9lbmNvZGVyDQo+IGRyaXZlcg0KPiANCj4gQ2F1
+dGlvbjogRVhUIEVtYWlsDQo+IA0KPiBMZSB2ZW5kcmVkaSAyNiBub3ZlbWJyZSAyMDIxIMOgIDA2
+OjMxICswMDAwLCBNaW5nIFFpYW4gYSDDqWNyaXQgOg0KPiA+ID4gLS0tLS1PcmlnaW5hbCBNZXNz
+YWdlLS0tLS0NCj4gPiA+IEZyb206IE5pY29sYXMgRHVmcmVzbmUgW21haWx0bzpuaWNvbGFzQG5k
+dWZyZXNuZS5jYV0NCj4gPiA+IFNlbnQ6IFRodXJzZGF5LCBOb3ZlbWJlciAyNSwgMjAyMSAxMToz
+NiBQTQ0KPiA+ID4gVG86IE1pbmcgUWlhbiA8bWluZy5xaWFuQG54cC5jb20+OyBtY2hlaGFiQGtl
+cm5lbC5vcmc7DQo+ID4gPiBzaGF3bmd1b0BrZXJuZWwub3JnOyByb2JoK2R0QGtlcm5lbC5vcmc7
+IHMuaGF1ZXJAcGVuZ3V0cm9uaXguZGUNCj4gPiA+IENjOiBodmVya3VpbC1jaXNjb0B4czRhbGwu
+bmw7IGtlcm5lbEBwZW5ndXRyb25peC5kZTsNCj4gPiA+IGZlc3RldmFtQGdtYWlsLmNvbTsgZGwt
+bGludXgtaW14IDxsaW51eC1pbXhAbnhwLmNvbT47IEFpc2hlbmcgRG9uZw0KPiA+ID4gPGFpc2hl
+bmcuZG9uZ0BueHAuY29tPjsgbGludXgtbWVkaWFAdmdlci5rZXJuZWwub3JnOw0KPiA+ID4gbGlu
+dXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc7DQo+
+ID4gPiBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcNCj4gPiA+IFN1YmplY3Q6
+IFJlOiBbRVhUXSBSZTogW1BBVENIIHYxMiAwMC8xM10gYW1waGlvbiB2aWRlbw0KPiA+ID4gZGVj
+b2Rlci9lbmNvZGVyIGRyaXZlcg0KPiA+ID4NCj4gPiA+IENhdXRpb246IEVYVCBFbWFpbA0KPiA+
+ID4NCj4gPiA+IExlIGpldWRpIDI1IG5vdmVtYnJlIDIwMjEgw6AgMDU6MjUgKzAwMDAsIE1pbmcg
+UWlhbiBhIMOpY3JpdCA6DQo+ID4gPiA+IEZvciB0ZXN0IFtKQ1QtVkMtSEVWQ19WMV0gKEdTdHJl
+YW1lci1ILjI2NS1WNEwyLUdzdDEuMCkNCj4gPiA+ID4gVlBTU1BTUFBTX0FfTWFpbkNvbmNlcHRf
+MSwgVGhlIHZwdSByZXBvcnQgYW4gdW5zdXBwb3J0ZWQgbWVzc2FnZQ0KPiA+ID4gPiB0bw0KPiA+
+ID4gZHJpdmVyLCBzbyBkcml2ZXIgcmVwb3J0IHBvbGxlcnIgdG8gZ3N0cmVhbWVyLg0KPiA+ID4g
+PiBCdXQgdGhpcyBzdHJlYW0gY2FuIGJlIGRlY29kZWQgdXNpbmcgdGhlIGFtcGhpb24gdnB1IHdo
+ZW4gSSB0ZXN0DQo+ID4gPiA+IGl0IHVzaW5nIG91ciB1bml0IHRlc3QsIEkgY2hlY2tlZCB0aGUg
+ZGlmZmVyZW5jZSwgdGhlcmUgYXJlIG1hbnkNCj4gPiA+ID4gdnBzLCBzcHMgYW5kIHBwcyBhdCB0
+aGUgYmVnaW5uaW5nLCBnc3RyZWFtZXIgd2lsbCBza2lwIHRoZSBmaXJzdA0KPiA+ID4gPiB2cHUg
+YW5kIHR3byBwcHMsIHRvdGFsbHkgc2tpcCA1NiBieXRlcy4gSXQgbGVkcyB0byB2cHUgY2FuJ3QN
+Cj4gPiA+ID4gZGVjb2RlIEFuZCBvdXIgdW5pdCB0ZXN0IHdvbid0DQo+ID4gPiBza2lwIGFudGhp
+bmcsIHNvIHRoZSB2cHUgY2FuIGRlY29kZSB0aGUgc3RyZWFtLg0KPiA+ID4NCj4gPiA+IFRoaXMg
+c3BlY2lmaWMgdGVzdCB0cmlnZ2VycyBhIGJ1ZyBpbiBHU3RyZWFtZXIgSEVWQyBwYXJzZXIsIEkn
+bQ0KPiA+ID4gYXdhcmUgb2YgdGhpcyBvbmUsIGFuZCBpdCBpcyBvbiBteSB0b2RvIHRvIGZpeCAo
+anVzdCBub3QgYXMgdHJpdmlhbA0KPiA+ID4gYXMgaXQgbG9va3MgbGlrZSwgdGhlIFZDTCBuYWwg
+ZGV0ZWN0aW9uIGNvZGUgd2FzIGltcGxlbWVudGVkIHdyb25nDQo+ID4gPiBhbmQgdGhhdCBlbmRl
+ZCB1cCBsZWFraW5nIGludG8gdGhlIHJlc3Qgb2YgdGhlIGRlc2lnbikuIFRoaXMNCj4gPiA+IHNw
+ZWNpZmljIHRlc3Qgd2lsbCBvZiBjb3Vyc2UgYmUgbWFya2VkIGFuZCBza2lwcGVkIGZvciBDSSB0
+ZXN0IHRoYXQNCj4gPiA+IHVzZXMgR1N0cmVhbWVyLg0KPiA+ID4NCj4gPiA+IHJlZ2FyZHMsDQo+
+ID4gPiBOaWNvbGFzDQo+ID4NCj4gPiBIaSBOaWNvbGFzLA0KPiA+DQo+ID4gICAgIEZvciB0aGUg
+aDI2NCBkZWNvZGVyIHRlc3QsIElmIEkgdGVzdCB3aXRoIG91ciB1bml0IHRlc3QgdG9vbCwgdGhl
+DQo+ID4gcmVzdWx0IGlzIDEyNC8xMzUgdGVzdHMgc3VjY2Vzc2Z1bGx5LCBCdXQgb25seSA3NS8x
+MzUgdGVzdHMNCj4gPiBzdWNjZXNzZnVsbHkgd2hlbiB0ZXN0IHVzaW5nIGdzdHJlYW1lci4NCj4g
+PiAgICAgVGhlcmUgYXJlIDQ5IHRlc3RzIHdpdGggZGlmZmVyZW50IHJlc3VsdHMsIGFuZCBhbGwg
+b2YgdGhlIDQ5IHRlc3QNCj4gPiBzdHJlYW1zIGFyZSBpbnRlcmxhY2VkIHN0cmVhbS4NCj4gPiBU
+aGUgYW1waGlvbiB2cHUgd2lsbCBvdXRwdXQgdGhlIGludGVybGFjZWQgZnJhbWUgZGlyZWN0bHks
+IGl0IHdvbid0DQo+ID4gbWVyZ2UgdGhlIGludGVybGFjZWQgdHdvIHBhcnRzIGludG8gb25lIHBy
+b2dyZXNzaXZlIGZyYW1lLg0KPiA+ICAgICAgQW5kIHRoZSBnc3RyZWFtZXIgdGlsZWQgdW5wYWNr
+IGZ1bmN0aW9uKHVucGFja19OVjEyX1RJTEVEKSB3b24ndA0KPiA+IGhhbmRsZSB0aGUgaW50ZXJs
+YWNlZCBjYXNlLCBzbyB0aGUgb3V0cHV0IGZyYW1lIGlzIGFibm9ybWFsLCBhbmQgbGVkIHRvIHRl
+c3QNCj4gZmFpbC4NCj4gPiAgICAgIEkgdGhpbmsgaXQgc2hvdWxkIGJlIGEgaGFyZHdhcmUgbGlt
+aXRhdGlvbiBvZiB0aGUgYW1waGlvbiB2cHUuDQo+ID4gQW5kIG1heWJlDQo+IA0KPiBJZiB0aGlz
+IGlzIHRoZSBjYXNlLCBpdCBuZWVkcyB0byBiZSBzaWduYWxlZCBhcyBBTFRFUk5BVEUgKGlmIHlv
+dSBoYXZlIDEgdjRsMg0KPiBidWZmZXIgcGVyIGZpZWxkKSBvciBTRVEgaWYgdGhleSBhcmUgc3Rv
+cmVkIGluIHRoZSBzYW1lIHY0bDJfYnVmZmVyIGJ1dCBvbiB0b3Agb2YNCj4gZWFjaCBvdGhlciBp
+bnN0ZWFkIG9mIGludGVybGVhdmVkLg0KPiANCj4gU29tZSBiaXQgYWJvdXQgdGhpcyBtaWdodCBu
+b3Qgd2UgYWxsIHdpcmVkIHByb3Blcmx5LCBJIGhhdmUgb25seSB0ZXN0ZWQNCj4gYWx0ZXJuYXRl
+IGZpZWxkIGZvciBjYXB0dXJlIGRldmljZXMgKFhpbGlueCBaaW5xTVApLiBQbGVhc2UgY2hlY2sg
+dGhlIHNpZ25hbGxpbmcNCj4gb2YgaW50ZXJsYWNlIGZpZWxkIGluIHlvdXIgZHJpdmVyLCBJJ2xs
+IGNoZWNrIHRoZSBzdGF0ZSBvZiBHU3RyZWFtZXIgaW4gdGhpcyByZWdhcmQuDQoNCg0KVGhlIHR3
+byBmaWVsZHMgYXJlIHN0b3JlZCBpbiB0aGUgc2FtZSB2NGwyX2J1ZmZlciwgSSdsbCBjaGFuZ2Ug
+dGhlIGZpbGVkIHRvIFY0TDJfRklFTERfU0VRX1RCIGFuZCB0ZXN0IGl0IGFnYWluLg0KDQo+IA0K
+PiA+IHRoZSBnc3RyZWFtZXIgdmlkZW9jb252ZXJ0IGNhbiBoYW5kbGUgaXQuDQo+ID4gVGhlIGlu
+dGVybGFjZWQgbGlzdCBpcyBhcyBiZWxvdzoNCj4gPiBbSlZULUFWQ19WMV0gY2FiYWNfbW90X2Zs
+ZDBfZnVsbA0KPiA+IFtKVlQtQVZDX1YxXSBjYWJhY19tb3RfbWJhZmYwX2Z1bGwNCj4gPiBbSlZU
+LUFWQ19WMV0gY2FiYWNfbW90X3BpY2FmZjBfZnVsbA0KPiA+IFtKVlQtQVZDX1YxXSBDQUJSRUYz
+X1NhbmRfRA0KPiA+IFtKVlQtQVZDX1YxXSBDQUZJMV9TVkFfQw0KPiA+IFtKVlQtQVZDX1YxXSBD
+QU1BMV9Tb255X0MNCj4gPiBbSlZULUFWQ19WMV0gQ0FNQTFfVE9TSElCQV9CDQo+ID4gW0pWVC1B
+VkNfVjFdIENBTUEzX1NhbmRfRQ0KPiA+IFtKVlQtQVZDX1YxXSBDQU1BQ0kzX1NvbnlfQw0KPiA+
+IFtKVlQtQVZDX1YxXSBDQU1BTkwxX1RPU0hJQkFfQg0KPiA+IFtKVlQtQVZDX1YxXSBDQU1BTkwy
+X1RPU0hJQkFfQg0KPiA+IFtKVlQtQVZDX1YxXSBDQU1BTkwzX1NhbmRfRQ0KPiA+IFtKVlQtQVZD
+X1YxXSBDQU1BU0wzX1NvbnlfQg0KPiA+IFtKVlQtQVZDX1YxXSBDQU1QX01PVF9NQkFGRl9MMzAN
+Cj4gPiBbSlZULUFWQ19WMV0gQ0FNUF9NT1RfTUJBRkZfTDMxDQo+ID4gW0pWVC1BVkNfVjFdIENB
+TkxNQTJfU29ueV9DDQo+ID4gW0pWVC1BVkNfVjFdIENBTkxNQTNfU29ueV9DDQo+ID4gW0pWVC1B
+VkNfVjFdIENBUEExX1RPU0hJQkFfQg0KPiA+IFtKVlQtQVZDX1YxXSBDQVBBTUEzX1NhbmRfRg0K
+PiA+IFtKVlQtQVZDX1YxXSBjYXZsY19tb3RfZmxkMF9mdWxsX0INCj4gPiBbSlZULUFWQ19WMV0g
+Y2F2bGNfbW90X21iYWZmMF9mdWxsX0INCj4gPiBbSlZULUFWQ19WMV0gY2F2bGNfbW90X3BpY2Fm
+ZjBfZnVsbF9CDQo+ID4gW0pWVC1BVkNfVjFdIENWQ0FOTE1BMl9Tb255X0MNCj4gPiBbSlZULUFW
+Q19WMV0gQ1ZGSTFfU29ueV9EDQo+ID4gW0pWVC1BVkNfVjFdIENWRkkxX1NWQV9DDQo+ID4gW0pW
+VC1BVkNfVjFdIENWRkkyX1NvbnlfSA0KPiA+IFtKVlQtQVZDX1YxXSBDVkZJMl9TVkFfQw0KPiA+
+IFtKVlQtQVZDX1YxXSBDVk1BMV9Tb255X0QNCj4gPiBbSlZULUFWQ19WMV0gQ1ZNQTFfVE9TSElC
+QV9CDQo+ID4gW0pWVC1BVkNfVjFdIENWTUFOTDFfVE9TSElCQV9CDQo+ID4gW0pWVC1BVkNfVjFd
+IENWTUFOTDJfVE9TSElCQV9CDQo+ID4gW0pWVC1BVkNfVjFdIENWTUFQQVFQM19Tb255X0UNCj4g
+PiBbSlZULUFWQ19WMV0gQ1ZNQVFQMl9Tb255X0cNCj4gPiBbSlZULUFWQ19WMV0gQ1ZNQVFQM19T
+b255X0QNCj4gPiBbSlZULUFWQ19WMV0gQ1ZNUF9NT1RfRkxEX0wzMF9CDQo+ID4gW0pWVC1BVkNf
+VjFdIENWTVBfTU9UX0ZSTV9MMzFfQg0KPiA+IFtKVlQtQVZDX1YxXSBDVk5MRkkxX1NvbnlfQw0K
+PiA+IFtKVlQtQVZDX1YxXSBDVk5MRkkyX1NvbnlfSA0KPiA+IFtKVlQtQVZDX1YxXSBDVlBBMV9U
+T1NISUJBX0INCj4gPiBbSlZULUFWQ19WMV0gRkkxX1NvbnlfRQ0KPiA+IFtKVlQtQVZDX1YxXSBN
+UjZfQlRfQg0KPiA+IFtKVlQtQVZDX1YxXSBNUjdfQlRfQg0KPiA+IFtKVlQtQVZDX1YxXSBNUjhf
+QlRfQg0KPiA+IFtKVlQtQVZDX1YxXSBNUjlfQlRfQg0KPiA+IFtKVlQtQVZDX1YxXSBTaGFycF9N
+UF9GaWVsZF8xX0INCj4gPiBbSlZULUFWQ19WMV0gU2hhcnBfTVBfRmllbGRfMl9CDQo+ID4gW0pW
+VC1BVkNfVjFdIFNoYXJwX01QX0ZpZWxkXzNfQg0KPiA+IFtKVlQtQVZDX1YxXSBTaGFycF9NUF9Q
+QUZGXzFyMg0KPiA+IFtKVlQtQVZDX1YxXSBTaGFycF9NUF9QQUZGXzJyDQo+ID4NCg0K
