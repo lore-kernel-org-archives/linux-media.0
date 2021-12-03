@@ -2,119 +2,97 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0272BC433FE
-	for <linux-media@archiver.kernel.org>; Fri,  3 Dec 2021 10:29:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7759CC4332F
+	for <linux-media@archiver.kernel.org>; Fri,  3 Dec 2021 10:29:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351580AbhLCKdE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Dec 2021 05:33:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43756 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1379895AbhLCKcu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:32:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638527366;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T2+AwRj+ZiBhyp2J/82AV82UtWxOkqwxVAxE0QlxyME=;
-        b=czMUR74Q2DruPLIK8980aiurpj64KkRGij0XK/2cUv+pzSEU5pgiAAysn5b5c/Q0kq+4k2
-        ZZTJ7GVwzKr7vcVVKDlpUx16UkCcP/XseVmj4WB5sblLOD+ctptkMHiwLn6Jqm4nDE4l99
-        9SikWaGKgxatl4LaSInrloayAKE5c1M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-312-g_JuYZcmMxKCJIRvuystRw-1; Fri, 03 Dec 2021 05:29:21 -0500
-X-MC-Unique: g_JuYZcmMxKCJIRvuystRw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1379952AbhLCKdH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Dec 2021 05:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379913AbhLCKcv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Dec 2021 05:32:51 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE180C061759;
+        Fri,  3 Dec 2021 02:29:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 333B41023F4D;
-        Fri,  3 Dec 2021 10:29:19 +0000 (UTC)
-Received: from x1.localdomain.com (unknown [10.39.194.90])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CC5874ABAD;
-        Fri,  3 Dec 2021 10:29:13 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        by sin.source.kernel.org (Postfix) with ESMTPS id B28EECE2595;
+        Fri,  3 Dec 2021 10:29:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6E9BC53FD1;
+        Fri,  3 Dec 2021 10:29:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638527363;
+        bh=2aTe9OD0sbvi4LQYZJMiS/c/nCst/rZuoFn1NalolJM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L9lxR3z2Xlv5OFIxdpZjF7EfSgYc1tA0y8SoPqaVyx2KSu912PqF69c4E8l4w1XBE
+         qFYWhsmeYPYNN3nS0MjMeJtVcgKftmdiNmBUAegyEapTlTW3AbcoBKIDCA1+Pv7N76
+         3xLpzKxgNaW/XfZtS3J600V3YSzOWsiZ2tdb5CvQpj88Ex+dwsJPHK1zR0e/IeyspN
+         by4oBBusuXMrop6llhkbiKslOhqEl8XPo1/rTxqG2S/XNbnfB3Tu1DcvVdHQSrCORQ
+         uRUlqbEEOeJ3Mry3zJUV8QiKME/Qaf94qJsm5/LNcYicujjUGeoaseLACstXFscVep
+         eG5WhYWthF6jw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mt5oR-00024M-Um; Fri, 03 Dec 2021 11:29:08 +0100
+Date:   Fri, 3 Dec 2021 11:29:07 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v7 02/14] i2c: acpi: Use acpi_dev_ready_for_enumeration() helper
-Date:   Fri,  3 Dec 2021 11:28:45 +0100
-Message-Id: <20211203102857.44539-3-hdegoede@redhat.com>
-In-Reply-To: <20211203102857.44539-1-hdegoede@redhat.com>
-References: <20211203102857.44539-1-hdegoede@redhat.com>
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] media: uvcvideo: fix division by zero at stream start
+Message-ID: <Yanxc/229JFkuP/v@hovoldconsulting.com>
+References: <20211026095511.26673-1-johan@kernel.org>
+ <163524570516.1184428.14632987312253060787@Monstersaurus>
+ <YXfjSJ+fm+LV/m+M@pendragon.ideasonboard.com>
+ <YXfvXzgnvPVqwqZs@hovoldconsulting.com>
+ <YXh4NqnpzOnPiA5/@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YXh4NqnpzOnPiA5/@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The clk and regulator frameworks expect clk/regulator consumer-devices
-to have info about the consumed clks/regulators described in the device's
-fw_node.
+Hi Laurent,
 
-To work around cases where this info is not present in the firmware tables,
-which is often the case on x86/ACPI devices, both frameworks allow the
-provider-driver to attach info about consumers to the clks/regulators
-when registering these.
+On Wed, Oct 27, 2021 at 12:50:46AM +0300, Laurent Pinchart wrote:
+> Hi Johan,
+> 
+> On Tue, Oct 26, 2021 at 02:06:55PM +0200, Johan Hovold wrote:
+> > On Tue, Oct 26, 2021 at 02:15:20PM +0300, Laurent Pinchart wrote:
+> > > On Tue, Oct 26, 2021 at 11:55:05AM +0100, Kieran Bingham wrote:
+> > > > Quoting Johan Hovold (2021-10-26 10:55:11)
+> > > > > Add the missing bulk-endpoint max-packet sanity check to probe() to
+> > > > > avoid division by zero in uvc_alloc_urb_buffers() in case a malicious
+> > > > > device has broken descriptors (or when doing descriptor fuzz testing).
+> > > > > 
+> > > > > Note that USB core will reject URBs submitted for endpoints with zero
+> > > > > wMaxPacketSize but that drivers doing packet-size calculations still
+> > > > > need to handle this (cf. commit 2548288b4fb0 ("USB: Fix: Don't skip
+> > > > > endpoint descriptors with maxpacket=0")).
+> > > > > 
+> > > > > Fixes: c0efd232929c ("V4L/DVB (8145a): USB Video Class driver")
+> > > > > Cc: stable@vger.kernel.org      # 2.6.26
+> > > > > Signed-off-by: Johan Hovold <johan@kernel.org>
 
-This causes problems with the probe ordering wrt drivers for consumers
-of these clks/regulators. Since the lookups are only registered when the
-provider-driver binds, trying to get these clks/regulators before then
-results in a -ENOENT error for clks and a dummy regulator for regulators.
+> > Note however the copy-paste error in the commit message mentioning
+> > probe(), which is indeed where this would typically be handled.
+> > 
+> > Do you want me to resend or can you change
+> > 
+> > 	s/probe()/uvc_video_start_transfer()/
+> > 
+> > in the commit message when applying if you think this is acceptable as
+> > is?
+> 
+> I can fix this when applying.
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-To ensure the correct probe-ordering the ACPI core has code to defer the
-enumeration of consumers affected by this until the providers are ready.
+I noticed that this one hasn't showed up in linux-next yet. Do you still
+have it in your queue or do you want me to resend?
 
-Call the new acpi_dev_ready_for_enumeration() helper to avoid
-enumerating / instantiating i2c-clients too early.
-
-Acked-by: Wolfram Sang <wsa@kernel.org>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/i2c/i2c-core-acpi.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index 92c1cc07ed46..04338cbd08a9 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -144,9 +144,12 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
- 	struct list_head resource_list;
- 	int ret;
- 
--	if (acpi_bus_get_status(adev) || !adev->status.present)
-+	if (acpi_bus_get_status(adev))
- 		return -EINVAL;
- 
-+	if (!acpi_dev_ready_for_enumeration(adev))
-+		return -ENODEV;
-+
- 	if (acpi_match_device_ids(adev, i2c_acpi_ignored_device_ids) == 0)
- 		return -ENODEV;
- 
--- 
-2.33.1
-
+Johan
