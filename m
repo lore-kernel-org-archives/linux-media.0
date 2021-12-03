@@ -2,60 +2,74 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 471DEC433EF
-	for <linux-media@archiver.kernel.org>; Fri,  3 Dec 2021 09:32:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81223C433F5
+	for <linux-media@archiver.kernel.org>; Fri,  3 Dec 2021 09:43:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351375AbhLCJfa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Dec 2021 04:35:30 -0500
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:41192 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351014AbhLCJf3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:35:29 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0UzGGkdh_1638523919;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UzGGkdh_1638523919)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 03 Dec 2021 17:32:03 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     Felix.Kuehling@amd.com
-Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        sumit.semwal@linaro.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] drm/amdkfd: Use max() instead of doing it manually
-Date:   Fri,  3 Dec 2021 17:31:53 +0800
-Message-Id: <1638523913-117827-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S1351406AbhLCJqu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Dec 2021 04:46:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242976AbhLCJqu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Dec 2021 04:46:50 -0500
+Received: from lb1-smtp-cloud9.xs4all.net (lb1-smtp-cloud9.xs4all.net [IPv6:2001:888:0:108::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E43C06173E
+        for <linux-media@vger.kernel.org>; Fri,  3 Dec 2021 01:43:25 -0800 (PST)
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id t567mQ8znDFskt56BmNOcs; Fri, 03 Dec 2021 10:43:23 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
+        t=1638524603; bh=VRqxBUvHXR9p+u29GYmJtOk1DDU3u4oUg+r14RMy/K8=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From:
+         Subject;
+        b=K6B/Oyrk21OTKMvLAJ5MNLNfV+7X0kKa13YM7SncxzVwHk7woki7WYUQqU/OY707N
+         4G1kuQVsyTJOLHlhXCJLiVt7MIQGJCHRhw8BHsdWhiqk5OayLhOoDA1pew5WZu0jVe
+         eDbfAxJpnWNmLgnBl7ttC7l3YPzK1lZNVxzgeTFpsCL8jRSIzR68kcxO0Jd7JQLXU9
+         G+hTAUzcQzOMb4lg9psp8Oqbz6dpMXaokR6I+iW0bzufMOEOEgsx17nJZE2Np94TS4
+         KT9WhlBOZxbGf6XRAQhh2L5aGfxhGHKqIkHPRLAcvD4FRL47zB2GwmmL3TmEX/lBhl
+         PoOGLvt88pegg==
+Message-ID: <b881c5b5-ee29-f250-5270-66c9d7357c94@xs4all.nl>
+Date:   Fri, 3 Dec 2021 10:43:19 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.3.2
+Subject: Re: ovm6211 linux driver
+Content-Language: en-US
+To:     Petko Manolov <petko.manolov@konsulko.com>,
+        linux-media@vger.kernel.org
+References: <YanepzHYQMH/DfHY@karbon.home.net>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <YanepzHYQMH/DfHY@karbon.home.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfKcut1mV5IY+8mZVEVeAORHblGjC2UnkA1SzxWNSHW6GTpFmehlc9VHShzVuBnmJF139OgYpUvFQEQns/9yIBZeZaj6KoVg40C0cVPAumIRTLVmE0TaU
+ 7xCeuExVutzE2oA7zAdjYp4KBC6xB/XQNu0ccHcBe5LVklyDv6xPnIurNdUTqRXtAGunr4xHuOoXm5NFmnEj2Bp4cmhoZDWLm0Rvr2Y3X3gEktn/0ba1vlg6
+ xeYSbZ2qI2Xct4XjEAVNqg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix following coccicheck warning:
+Hi Petko,
 
-./drivers/gpu/drm/amd/amdkfd/kfd_svm.c:2193:16-17: WARNING opportunity
-for max().
+On 03/12/2021 10:08, Petko Manolov wrote:
+> 	Hi guys,
+> 
+> On request by certain company we've developed a media driver for OmniVision's 
+> ovm6211 camera sensor.  We just got permission to mainline the code.  How shall 
+> i proceed?
+> 
+> 
+> cheers,
+> Petko
+> 
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You found the correct mailinglist, so that's good :-)
 
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-index f2db49c..4f7e7b1 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-@@ -2190,7 +2190,7 @@ void schedule_deferred_list_work(struct svm_range_list *svms)
- 
- 	start = mni->interval_tree.start;
- 	last = mni->interval_tree.last;
--	start = (start > range->start ? start : range->start) >> PAGE_SHIFT;
-+	start = max(start, range->start) >> PAGE_SHIFT;
- 	last = (last < (range->end - 1) ? last : range->end - 1) >> PAGE_SHIFT;
- 	pr_debug("[0x%lx 0x%lx] range[0x%lx 0x%lx] notifier[0x%lx 0x%lx] %d\n",
- 		 start, last, range->start >> PAGE_SHIFT,
--- 
-1.8.3.1
+This is a good starting page:
 
+https://www.linuxtv.org/wiki/index.php/Developer_section
+
+Check the 'Kernel driver development' - 'Submitting Your Work:' links.
+
+Regards,
+
+	Hans
