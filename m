@@ -2,84 +2,84 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3446C433F5
-	for <linux-media@archiver.kernel.org>; Fri,  3 Dec 2021 22:13:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48550C433EF
+	for <linux-media@archiver.kernel.org>; Fri,  3 Dec 2021 22:13:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383348AbhLCWQ3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1383351AbhLCWQ3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 3 Dec 2021 17:16:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241447AbhLCWQ2 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Dec 2021 17:16:28 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2881EC061751
-        for <linux-media@vger.kernel.org>; Fri,  3 Dec 2021 14:13:03 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id a9so8542227wrr.8
-        for <linux-media@vger.kernel.org>; Fri, 03 Dec 2021 14:13:03 -0800 (PST)
+        with ESMTP id S1383349AbhLCWQ3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Dec 2021 17:16:29 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EC4C061751
+        for <linux-media@vger.kernel.org>; Fri,  3 Dec 2021 14:13:04 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id p18so3427081wmq.5
+        for <linux-media@vger.kernel.org>; Fri, 03 Dec 2021 14:13:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=konsulko.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TeaVVat+uqXQ9a2d42rwWaESeZknVMt1u7vcRb14yTA=;
-        b=utJN1xVDTrixRELo/ED+ayOLJH6xtbwjNn53cW0GcHy+IqqYlHUvpBlg/GeY9ayiZi
-         aC8rIIa6bKoFwDTQhr0o0WLHILIKRd9kMHMCTHoCZ4iItqndxWodr4tSvCczwHtaAdqN
-         Ghkevcs+gktN5ZHeOemMLBfy3SErZG6Bo4RlA=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zklKn/bDTlrcVJ9rP836gkaxg/cLp9SeOEeQUV1jW1I=;
+        b=XS5iPkbdeTiA3vSNy8PiqNHCxXfpSmM0GIWib5pvOd7274LHravET/u7KNXRzw943l
+         uLW8XmR1KXH3J4H0x7qqTRR+KYP53mu4Ii7Wd4/apY+5qQTRwxxINBYb1xFTDiwW6iOS
+         Z6iUsgVTbUNZb8FTWCY1Q6TSTRWmpwrLwEgto=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TeaVVat+uqXQ9a2d42rwWaESeZknVMt1u7vcRb14yTA=;
-        b=zPMa4kFvx5wPN7I3rN0iOOKr879mMjX8lt0Kd6MajqgvgsdZci06kKEATgxnUuiTHj
-         Avp8o48D+iD62I9w++xnv6r9TxA1J9OM035xDavABPzeJbA4Zrevvw2WlfX4akPkjYVv
-         5tfORR4ELuhuNuS8OU3GY8EEU7C5I1CSkVZRPyEcFfV3NimYKqqVQPzXczl7qL5DOo97
-         EsVL6Yn+Rgz7GWiIj5vEwoYGsMe/RhCx0SeZ6A6WRTYNgPv7WUeDrrmod8v61nW863PR
-         NPFEIyqY4dE4DSNraGkrPxulOeiT7OjofBXzLYhk0NbzaXokm5Ab2seoVRZXySYL7zud
-         BfSQ==
-X-Gm-Message-State: AOAM531eH8oP8gyAS3QxQsWHIDlpgI2SiswDrRx+mpoqIH3HwU1yRcoV
-        Cegw8yey4IuyQyimH2q3gkUIDKlukx8Yww==
-X-Google-Smtp-Source: ABdhPJzyzpGAFgrt2yUMTsorFqX0BexlucMItVislU8X+Smf2u9G+h1D5X83OEf1dO2NmWPQEOhtZQ==
-X-Received: by 2002:a05:6000:15c8:: with SMTP id y8mr3007303wry.305.1638569581554;
-        Fri, 03 Dec 2021 14:13:01 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zklKn/bDTlrcVJ9rP836gkaxg/cLp9SeOEeQUV1jW1I=;
+        b=q28XXdU8yLHkNCI0CpHeGrp7K9KsEYQI/hgKT/Pa1oy0YGrPgtTNNWlWmTO6PsqF65
+         qyPCvNwUyjxE+msmOXe7QGw/81A1YVkyEGJ+bm25V4DH+dyHQl6p8FkJbheG6rtpQtDY
+         8Vw9uoE1peONIiKPU0V4vK4aIh4P/yLbWWh0fidWK0WhN08cZzdzmdKCBXM+RRCqJSIC
+         aXLwjnss/v+4w0VAmmIK7Snd1F0F4cSiCbbZYpUrs6VhkFr2diVKeov2vGhzZaLgKDWi
+         in2kuUG0KuaBkzD0T5C0QZotMjAHg689xUIpzc8Ky8yp8A6vtOCpL4xkSh4Jm1tOOA9U
+         x1SA==
+X-Gm-Message-State: AOAM530m4vbOALpfU3ksTjKOsokSPjVU0XzWHQSK0RzNR9QVprnzjVw+
+        SsO3updTK0c6aT+ekkwJ9agKpAY6L5YQxw==
+X-Google-Smtp-Source: ABdhPJx1yyuuszoZA+Fpd1OU61tmpHlyp426cjzL4I28ICT8KVhWOZxD8iBR+05BrFRiFMk2fjHmzg==
+X-Received: by 2002:a7b:c007:: with SMTP id c7mr18367516wmb.82.1638569582962;
+        Fri, 03 Dec 2021 14:13:02 -0800 (PST)
 Received: from taos.k.g (lan.nucleusys.com. [92.247.61.126])
-        by smtp.gmail.com with ESMTPSA id f7sm7849710wmg.6.2021.12.03.14.13.00
+        by smtp.gmail.com with ESMTPSA id f7sm7849710wmg.6.2021.12.03.14.13.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 14:13:01 -0800 (PST)
+        Fri, 03 Dec 2021 14:13:02 -0800 (PST)
 From:   Petko Manolov <petko.manolov@konsulko.com>
 To:     linux-media@vger.kernel.org
 Cc:     Petko Manolov <petko.manolov@konsulko.com>
-Subject: [RFC PATCH 0/5] omv6211 linux kernel driver
-Date:   Sat,  4 Dec 2021 00:12:42 +0200
-Message-Id: <20211203221247.46324-1-petko.manolov@konsulko.com>
+Subject: [RFC PATCH 2/5] adds ovm6211 entry to Kconfig
+Date:   Sat,  4 Dec 2021 00:12:44 +0200
+Message-Id: <20211203221247.46324-3-petko.manolov@konsulko.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211203221247.46324-1-petko.manolov@konsulko.com>
+References: <20211203221247.46324-1-petko.manolov@konsulko.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series adds ovm6211 driver into the staging directory.  It also creates
-media/i2c entry, where ovm6211.c lives for now, to mimic the generic media
-source tree.
-
-It is also marked as RFC because i expect some insonsistencies with V4L2.
-
-Petko Manolov (5):
-  adds ovm6211 driver to staging
-  adds ovm6211 entry to Kconfig
-  adds ovm6211 entry to Makefile
-  adds drivers/staging/media/i2c/Kconfig entry
-  adds i2c/ explicitly to Makefile
-
- drivers/staging/media/Kconfig       |    2 +
- drivers/staging/media/Makefile      |    1 +
- drivers/staging/media/i2c/Kconfig   |    9 +
- drivers/staging/media/i2c/Makefile  |    1 +
- drivers/staging/media/i2c/ovm6211.c | 1156 +++++++++++++++++++++++++++
- 5 files changed, 1169 insertions(+)
+Signed-off-by: Petko Manolov <petko.manolov@konsulko.com>
+---
+ drivers/staging/media/i2c/Kconfig | 9 +++++++++
+ 1 file changed, 9 insertions(+)
  create mode 100644 drivers/staging/media/i2c/Kconfig
- create mode 100644 drivers/staging/media/i2c/Makefile
- create mode 100644 drivers/staging/media/i2c/ovm6211.c
 
+diff --git a/drivers/staging/media/i2c/Kconfig b/drivers/staging/media/i2c/Kconfig
+new file mode 100644
+index 000000000000..2744f654121a
+--- /dev/null
++++ b/drivers/staging/media/i2c/Kconfig
+@@ -0,0 +1,9 @@
++config VIDEO_OVM6211
++	tristate "OmniVision OVM6211 sensor support"
++	depends on I2C && VIDEO_V4L2
++	help
++	  This is a Video4Linux2 sensor driver for the OmniVision
++	  OVM6211 camera.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called ovm6211.
 -- 
 2.30.2
 
