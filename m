@@ -2,74 +2,78 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84F96C433FE
-	for <linux-media@archiver.kernel.org>; Fri,  3 Dec 2021 09:43:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50582C433F5
+	for <linux-media@archiver.kernel.org>; Fri,  3 Dec 2021 09:44:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351548AbhLCJrJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Dec 2021 04:47:09 -0500
-Received: from mout.gmx.net ([212.227.15.15]:46877 "EHLO mout.gmx.net"
+        id S1379648AbhLCJsM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Dec 2021 04:48:12 -0500
+Received: from mga03.intel.com ([134.134.136.65]:57888 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242976AbhLCJrJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:47:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1638524624;
-        bh=FjKExa76ozvVRIDLYJk+r4KJYyZ+SL5HkthLbOqQE6E=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=WpX0NaI5QMRykdqsz6iOn6zgo/4GzhP0ezG3mkJcIslNPtb/opO9fYBHZeliMt5Jk
-         T2N9aOdwR2aSLnmHo01bfttgv1Dkeokg0FqNEZezOltVSVB/snEgcKPA6Y84AGWgs1
-         ztvOSAGjKUuFAeNm5aBJ4fCkDuCYVDz1oJHehsZU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [91.65.60.26] ([91.65.60.26]) by web-mail.gmx.net
- (3c-app-gmx-bs49.server.lan [172.19.170.102]) (via HTTP); Fri, 3 Dec 2021
- 10:43:43 +0100
+        id S1379642AbhLCJsL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 3 Dec 2021 04:48:11 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236886214"
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="236886214"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 01:42:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="655897030"
+Received: from stinkbox.fi.intel.com (HELO stinkbox) ([10.237.72.171])
+  by fmsmga001.fm.intel.com with SMTP; 03 Dec 2021 01:42:07 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Fri, 03 Dec 2021 11:42:06 +0200
+Date:   Fri, 3 Dec 2021 11:42:06 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     Felix.Kuehling@amd.com, airlied@linux.ie, Xinhui.Pan@amd.com,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH] drm/amdkfd: Use max() instead of doing it manually
+Message-ID: <YanmbhwDrdpu+Zup@intel.com>
+References: <1638523913-117827-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Message-ID: <trinity-10035eaf-27d8-484e-b722-c2fbcf4d9215-1638524623919@3c-app-gmx-bs49>
-From:   Robert Schlabbach <Robert.Schlabbach@gmx.net>
-To:     Petko Manolov <petko.manolov@konsulko.com>
-Cc:     linux-media@vger.kernel.org
-Subject: Aw: ovm6211 linux driver
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 3 Dec 2021 10:43:43 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <YanepzHYQMH/DfHY@karbon.home.net>
-References: <YanepzHYQMH/DfHY@karbon.home.net>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:k2pBxWZRR97py4AVQCHb1a7xZKCkOLZFsUPTozieNdfFE6bFwL4HWKH+SxcqMDos+Zblu
- jz9xBjEn3np6AnlYbJufcvqz7Mb7i1/5Vwp7dnX/JgLwzL8N0Goo7532I+GSHMtaVBhaYxSjV5e1
- hp+2b54VXncZTRhLKnbKdM5RGdTyApY6Prtf6qnz5zc/3kXCxPHFDATjcgsmHLrBVjFxwuXUTNCB
- f4HU5sYl/BiaftzKVNvQlnjrZNkvl0ymsfaoaUnEguCdW52AT/dM789ZFHusIVGATY00PxjyfLqJ
- WM=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UekAcMwU5VE=:3FbQylf5vc+385K+tA6pr3
- U1h2Kl6cTIPpa0+vXjrYMXet9k8MUCqcS3tL5afUoC6Ui+Tt3OqR9z7CxuvLYb/6liY6j4E/P
- 4LCP3FC4lZO05dc/gkR42J8GnuPWN1zzWG6zryylq9o1ECpot7xUoSwykcpwBwzgUer4aXadX
- wJQCJ7/XtkdXyBTynm/YyRNRNixrNFzCcFmjo1qoM7McQgeF9v8A13nbqG+gtfB8E675+qHqk
- 0MX2A+lzOlcdmYQA/GUKAQVXqrRIvzgKVohopgzCVsxZsM7FSgCZt6vtQ4LCBtgYNlM/xUBir
- yWSC4x9V826LYZ2nKkcuWPZqE6Mj/IoKRrMFTqdsiFoOjzBwRdc2oWwzj9AIJ6VVD8cxoHFIW
- 8fX0/ZHoxACJLA0p6geVS5LUoyZpYEkY1BPv6Kh6Nzv4fM6JrhQwgapFnXOPRf/xxGXOfRY1V
- qAD9wgcE9t89RdECsEkUWWtcCWE0TqcqWvyIdWOD1EbKxIQjpRcdb83+vB0LhvZgQJhC9Ak86
- g2EGbRShwzee8yYz7NTAsizdt6u4dz0soTLtB5vC8ce2uDMoIORdIqwscEKH96va0k+EOSddO
- uyZs1yTtUimYQP1zI6SlozAAlHz6sv+jcp21P/Cad1co3HoUkUORbam6A3rfa13L5vxtS02Oa
- d4WaUzCN+ZXR07llejPTtTGrtp+tX+2AkRo/MTJHOMb0romsQ7Q0lchmfwYBDi0bbza3gaSMH
- gmwXceTsCNT3ICvoHZxaMyNkOohLTMrAQqugijcWbXF9CrjGcsmQpa7ewIeWV1ihTh7+JiRQr
- 5wFgqiH
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1638523913-117827-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+X-Patchwork-Hint: comment
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From:=C2=A0"Petko Manolov" <petko=2Emanolov@konsulko=2Ecom>
-> On request by certain company we've developed a media driver for OmniVis=
-ion's
-> ovm6211 camera sensor=2E We just got permission to mainline the code=2E =
-How shall
-> i proceed?
+On Fri, Dec 03, 2021 at 05:31:53PM +0800, Jiapeng Chong wrote:
+> Fix following coccicheck warning:
+> 
+> ./drivers/gpu/drm/amd/amdkfd/kfd_svm.c:2193:16-17: WARNING opportunity
+> for max().
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+> index f2db49c..4f7e7b1 100644
+> --- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+> @@ -2190,7 +2190,7 @@ void schedule_deferred_list_work(struct svm_range_list *svms)
+>  
+>  	start = mni->interval_tree.start;
+>  	last = mni->interval_tree.last;
+> -	start = (start > range->start ? start : range->start) >> PAGE_SHIFT;
+> +	start = max(start, range->start) >> PAGE_SHIFT;
+>  	last = (last < (range->end - 1) ? last : range->end - 1) >> PAGE_SHIFT;
 
-Hi Petko, the Linux kernel documentation has all the information you need:
+There's an open coded min() on the very next line.
 
-https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/stable/linux=2Egit/tre=
-e/Documentation/process/submitting-patches=2Erst
+>  	pr_debug("[0x%lx 0x%lx] range[0x%lx 0x%lx] notifier[0x%lx 0x%lx] %d\n",
+>  		 start, last, range->start >> PAGE_SHIFT,
+> -- 
+> 1.8.3.1
 
-Best Regards,
--Robert
+-- 
+Ville Syrjälä
+Intel
