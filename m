@@ -2,1231 +2,248 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A82DDC433FE
-	for <linux-media@archiver.kernel.org>; Fri,  3 Dec 2021 22:13:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5346DC433F5
+	for <linux-media@archiver.kernel.org>; Sat,  4 Dec 2021 02:39:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383353AbhLCWQa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Dec 2021 17:16:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241447AbhLCWQ3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Dec 2021 17:16:29 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0122C061353
-        for <linux-media@vger.kernel.org>; Fri,  3 Dec 2021 14:13:04 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so3263248wmc.2
-        for <linux-media@vger.kernel.org>; Fri, 03 Dec 2021 14:13:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lGM6bQtdtGQaNLh3ynDuzhkg/yMcOjdXFLQnKa1XmU4=;
-        b=bsAyY2basTBl5i2r5r6OIeVNEuadPEL0Ktb/Z5OM3U80t5dUlWwYFm68HX2sZkiywN
-         ik6L5VjnZDlWq2qV203EEvl7UejYv6Bi3RuGp4TMKqTdoPll/gN327nnNcCO2oMgQZwE
-         UeBh3hE3HnvbRxFsAxVg5omQuLGCfY7G5/X3Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lGM6bQtdtGQaNLh3ynDuzhkg/yMcOjdXFLQnKa1XmU4=;
-        b=ERixNkuWtc4+1ShSArqqsP4iCP9PcoC2XvZwgRjSqqhvCWBsNr0jevBV++e/N97Wse
-         F8NePnmUluchydP0D7cTbsIG+sdU9wz6lqhhHosu+JF0gjQrAezcHbh1gAFZZYZwEqUQ
-         Zlv7DauGcGCgq9GpieHdDQVFHX8KymVRu2ZrBouBVYgG+6bjjfDkC7qZkcTMFoyT+usI
-         qHQ9v8uE0NXqXINDh8Mb97LdBvlppfhBWOmwPtjgGPi1gr9A/JynSoGwjwbyuaxF6tSf
-         K/OgDUfzmqOxR5Qr5Hz7Rv6tucI+rNtOtx6WhVcO5nnczCF6fWC3pFdwGpMdbgxkzHFE
-         ZI4Q==
-X-Gm-Message-State: AOAM532VyWGhJngFKCjNHQsZ/v7z0pTaGuu/ocJUkZ07lsiSkGvvFzB+
-        Z5IFRjgWK8oYFOq4bHWsk/9bmy2XlHW6Nw==
-X-Google-Smtp-Source: ABdhPJyLxk62f9sK0bRKT+Hu4eiEv+zyBSr8R20DBexEkiHsBZyqp0y4kn1Rqgk0bJ1IuSIlVwFWvg==
-X-Received: by 2002:a05:600c:1c8d:: with SMTP id k13mr18135302wms.177.1638569582364;
-        Fri, 03 Dec 2021 14:13:02 -0800 (PST)
-Received: from taos.k.g (lan.nucleusys.com. [92.247.61.126])
-        by smtp.gmail.com with ESMTPSA id f7sm7849710wmg.6.2021.12.03.14.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 14:13:02 -0800 (PST)
-From:   Petko Manolov <petko.manolov@konsulko.com>
-To:     linux-media@vger.kernel.org
-Cc:     Petko Manolov <petko.manolov@konsulko.com>
-Subject: [RFC PATCH 1/5] adds ovm6211 driver to staging
-Date:   Sat,  4 Dec 2021 00:12:43 +0200
-Message-Id: <20211203221247.46324-2-petko.manolov@konsulko.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211203221247.46324-1-petko.manolov@konsulko.com>
-References: <20211203221247.46324-1-petko.manolov@konsulko.com>
+        id S1384104AbhLDCmx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Dec 2021 21:42:53 -0500
+Received: from mail-eopbgr40069.outbound.protection.outlook.com ([40.107.4.69]:37966
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239083AbhLDCmw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 3 Dec 2021 21:42:52 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Tgu1c+/ok3adSRm7niS2geO11QZFmNWGL3JoB7sLdt5aoWceXRMuCLUKql2cLZ8gmNBJyCIJcgu3auew7lc8DM8iwkReF5J4QirjM8b4G/7GTrRmBbT6WKhe5jsCEz3G0hVwybzG72fW1+kv0qFQDOCAaDDyRND6xzJNZ+Yyf/ZXBuT8tXTPX7P+LC7JQhztp9i00vV1wQndzD9GABlSH7Iwe1Lz4NvGaaOh+PLTFUHSfRg51JhBtR/vBrPOFw8SkdFyDzogiSjszQfixYh1z1XkV4psup2RZPawzkxfvrLCw3Xbn8OF4fTtErU3CD3TIHU2BP6bQqID93GaUxEX3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C/e6qkjAMjEWAru6EpyoOB+kJV6j9cA1HLE6y2RgO1Y=;
+ b=FOLdNYnVa4faL5TQ4V8Wd+C0niW9fCgex5sQPKFIseLx5ys9VMT6rEN46DTmulTohKLVxeNqXubHHUbly0VnnpPsbC5IunXhEBwqXSRHGxUtLH1TsfLSCEjzkFonFfWa1xbXQEDLtva6WptdtjNGii5mIzGI1HzwPCkmA/udfwU+k4FpMFxL/kYewmevYFV5bSi3XS/rQ1xgh25YBtJP6tKNDlY3r3zRmrPcZdz9KWMvQnY3a3dY3bi4IXvezp0tpezqPGVSc+ydcWedPXWHASg1KjxSQrcXCJcFaNo0ZK7D1yEB+ft4q6zcLK7VedIjZv8EcP32qwHZMZTRP9ngZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=C/e6qkjAMjEWAru6EpyoOB+kJV6j9cA1HLE6y2RgO1Y=;
+ b=Tk2b87zs4B9+ckKGsO4mw4WlH6bwSFOwu/92f9d7vrQQT7hQ3Ht2EsC2V2sd5jAOq5895DMbMaBRK3xWShQ8EjH1U5vjyEOA2LhPp4pXE9+yCpog8YBTcHbgabTQe+6Ev+ObQPg3s+VSByMaAV4rdgy9i8Nd43iMdElpHwHSLK8=
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by AM5PR0401MB2435.eurprd04.prod.outlook.com (2603:10a6:203:36::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Sat, 4 Dec
+ 2021 02:39:25 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::fc3a:8aea:2c92:3886]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::fc3a:8aea:2c92:3886%5]) with mapi id 15.20.4734.028; Sat, 4 Dec 2021
+ 02:39:25 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+CC:     "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [EXT] Re: [PATCH v13 08/13] media: amphion: add v4l2 m2m vpu
+ decoder stateful driver
+Thread-Topic: [EXT] Re: [PATCH v13 08/13] media: amphion: add v4l2 m2m vpu
+ decoder stateful driver
+Thread-Index: AQHX5c0LA8QwmwTrsU+sSndqn0F2gawgOGoAgAAIJXCAAAkU4IAAmmiAgADAW3A=
+Date:   Sat, 4 Dec 2021 02:39:25 +0000
+Message-ID: <AM6PR04MB63410E8101984945F6F1442BE76B9@AM6PR04MB6341.eurprd04.prod.outlook.com>
+References: <cover.1638263914.git.ming.qian@nxp.com>
+         <9122e66af668c095548321d45dec33a3fd6ee77d.1638263914.git.ming.qian@nxp.com>
+         <fceda1576bcb2fc4e576b59e09214ab1320558b3.camel@ndufresne.ca>
+         <AM6PR04MB6341AC4C0057B09DB8A58234E76A9@AM6PR04MB6341.eurprd04.prod.outlook.com>
+         <AM6PR04MB6341537EBD82451CA14A5E3EE76A9@AM6PR04MB6341.eurprd04.prod.outlook.com>
+ <7e63c1665c96feccadd9c05dc603349b3a93900d.camel@ndufresne.ca>
+In-Reply-To: <7e63c1665c96feccadd9c05dc603349b3a93900d.camel@ndufresne.ca>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 269d4251-be44-41b2-c793-08d9b6cf492a
+x-ms-traffictypediagnostic: AM5PR0401MB2435:
+x-microsoft-antispam-prvs: <AM5PR0401MB243580C0C9805771B466A7CBE76B9@AM5PR0401MB2435.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1360;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 32qK7Ezc1drjkDXw95pQm0gJv9bIqKQGSmqA8cgfYk6nELnxzGZNxF7moyYjuK56rP4qgrWf22ALeyx8597UgUQVbSMuuRIffNcEAqJTk/APHT92kfCLzMd3296VX+bLQ7nnd9rG32hvXb+X3mLoaNMbQhNQQHtFWUTlBxekzM44r/tPdVbcSQvLNiTcn2ALhF8jjqwYMtcYam6UK+TP5J1h4vrpPggYbA+ULTifizYQvV73VO+M8f1xYm7h/8Rgyd7jFIgwfah9RVYJxNtrTFgsWeTigS9sxT7J+4Tt4mq9DofR82uJKo144117HsNHi4THp97EjpnByKPgOtseTrm79KG0uiAqAXye46BEgz5RpnUrekHJOp11036C7FgUsltOVU4D5sDCiPThxqUTGygwShQNBqPBZup2oK71eF0ijWD1pjGbZ73130ieUnia1KRi/gc4f876t1DHFXr3gYz01mLMyYrSDycxUofwydT4bqxJUDmt+o1yoyNW37ZJWia7RcpIdBXns81aIpJ9SQ5G9WWEg3Qh6biofe7mweeNhdKAm3/CWcjEbxYx7s9e7O5wjVuWk+xqBDJeyo23Y07P96RAxzdDi+v/dKwUH25KWjALxoduLPfTa9tpoBArH7YN0aNOUeIj8rhIKe9wPFG63IiU4L+tSN18eAiZvpzurY+xYg5EXluULqTEysGcQq17Qj9VLY+py2uFqvYiBw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(38070700005)(122000001)(9686003)(2906002)(508600001)(5660300002)(44832011)(6506007)(110136005)(53546011)(52536014)(186003)(26005)(66574015)(8676002)(8936002)(55016003)(83380400001)(7416002)(54906003)(86362001)(33656002)(4326008)(76116006)(66946007)(316002)(71200400001)(7696005)(66446008)(66556008)(64756008)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZEM2ek1LQzYxRHZOWVpwOW5xQXNwYnhDdUZaZWhJY2V3VHdEeGwrS2JSQ3E2?=
+ =?utf-8?B?Ry9id3QzTDE3dFBOMmNZRS9DSEJ1K1RnQ0NHOUNoV2RnZEpJcTI4dWNlQnds?=
+ =?utf-8?B?M01ManNNVlBzVmppQWdyenVqYnEzemVoVmg0TXZweFF4ZzJla29LZ2VZY09W?=
+ =?utf-8?B?VW5adWlwTUlxakZoTEZLQ3V0Uk5aNWlzWVo2T0tYZWF6YnFlY1lJa1B2aTZn?=
+ =?utf-8?B?N2tEUkI2SmFiMHFrMTFtM1BvVVIzQitCdEFsOUZFaDVCYjNwbCtJRnNYdDl0?=
+ =?utf-8?B?RTgrbVRmSFBYMTExeERUZWJITUE2ZmJnU0k0U2oyV3I1R2lnK3NFM0NaVkVW?=
+ =?utf-8?B?cW1YQnphbmttVHVydnhtRzZRVXEzbERaVXE3ZWFlV0FwREtudWppZFZkVExv?=
+ =?utf-8?B?ajQyZVFUdDlTc2pYUnN3bVRTbWZad3JpQ0RaL05LUUxQRTV5dmx1M25CM3dw?=
+ =?utf-8?B?WDlDNG5KWkF5TXQ2UWN2OVFJOW8vdnIrOU1rTHZBbGtOMXVOaHdKQnE4TUNB?=
+ =?utf-8?B?ZCs3cE52Y24xbGI5NHEwN1JBZU0vREdKMEVCRXZMenh6NFlRdDVxVnYvOE5x?=
+ =?utf-8?B?VVYxblpvdzlEMXNXRVdKUEdTZWtnUkM1YTFFZUw4SU96aktrRnEwa0VOUzBp?=
+ =?utf-8?B?WGdNN09Yd0RwZVpYM1I5eFlQS0JCbEk0S1RDTi9CVnN4dW5VcEVrZExXdVRE?=
+ =?utf-8?B?UGdvLzRoSEJKeU8ydTNIZkwvZlViRWJuZjlTN0o3dlRtaWNZVmNXbnlWZTZp?=
+ =?utf-8?B?V2liNU1VRWd0Tm9wYTNuenppR3VNakZ1cE9aS3hiLzFxdEtrTEhlRk53MkdQ?=
+ =?utf-8?B?MjVvNjB2SU9DUlNiaGVMVDYvVDJ5d3ZMYVJRbmhMTytGS2dpM2pQWUk5SkFi?=
+ =?utf-8?B?eWltYm84emE2U3duTTRuWWxTRy9IYVNWeEdEVDNldldsVXN5UzNhOFNMM082?=
+ =?utf-8?B?RXNGWFcyVXdoM0tXYU9TU05yaVRTNVpJeDVkVlZxTk94dGlsNHNxeXRYTVFM?=
+ =?utf-8?B?dnl4SkorT3RiQXh4YXJYNGcxekg4WUx5ZGRGem44MHRiY2RLelZvUThxSVVJ?=
+ =?utf-8?B?ZlZmZ0RCZ1pHVkhDNWNzc3pMc3hJQXNnUWprNkMzQ0JUU1NhaVJ5cE1vNHc1?=
+ =?utf-8?B?alVYV1Z0OE5vb2FDRGd3WGdXNUpMR3RhbGNCZ0Jjd09vbkVFbUNaTnJvb2M2?=
+ =?utf-8?B?VDA2U1ZQTUNaUUcvdDlpYklrdHlPZnJJSVN2S2s0aU5qdGRuRHI2Kzd5Y1lL?=
+ =?utf-8?B?VkJPeDJ0YUZhVHh2VmdaT3I5V01HUnNCQ1dDdU5EMmNkUkdkR0ZBTUpiUWtv?=
+ =?utf-8?B?NlJWRVA4ZTk4Rm9FNzFtZlc1ekxwS2x4ZFRJSDhZMllhMGhSeFJ1eXUwZEdx?=
+ =?utf-8?B?eGQ4d0ZTbVFmQ0Fra3ZYcHRhdWYxUGRSSmlTSVQ1K2xRVGR6bkFTRGNpQUlz?=
+ =?utf-8?B?TUZhdVkrWVBjR3g4enJhaUFlc0hodGtyY0lGajZTdE9UUTdZSnJtbzA3RUZ3?=
+ =?utf-8?B?TDdlQVlubVFDRnFDeVFvRTBPaHBNVXNSdWd3dExPaU9xUFMzQTZVMGJRZDRK?=
+ =?utf-8?B?ekw1S2dIQit1SlZqbXM1L0Y2bndYajBtb3doN1g5QUNiYzNaWlNkdG8vZWNp?=
+ =?utf-8?B?eG9ydnBnZzcrWjZYL2U3aVZ0cWVSQzh3NFMvM0lDT1NzRnZDYWhsaG05SVBS?=
+ =?utf-8?B?TUVXVGM3QnhRRzBYMG5nNzloWXBEMXV0NDJaVi9SeXJySjhnSFNOWUM5SmJG?=
+ =?utf-8?B?MkE3UUVxYXBZbVFpVy9qOVd0Umdpajc1eEVNd01raXJWQnNuWWRoRDVYcTU0?=
+ =?utf-8?B?Q1YvQTFBWDQ2eGpMckFVSWo0ZzduSFllQVphc1M1MXRTbnpKaEFGQ3A5ajBl?=
+ =?utf-8?B?ZWM4OVBlL2grOTZXYnBvMnJCNjQrdlNkdFFCVDg2aFduZm5ES2UvSTNnamxZ?=
+ =?utf-8?B?MzFtbGhINEM1a1Q3RWdqZEQ2cFlzV3FKNm5USzhTa1FteGY5TTd0Zm8wYkZN?=
+ =?utf-8?B?b29jVE9LMlpjeFRnZ3VGWGVkL29IK2VVMThkdVJDZWxpQ2liZWpOTGJoeEN5?=
+ =?utf-8?B?d1I3R0ZQQ0lqclFhYUpXa2FYNlduZDVQa2RHTjd1UEcxbDBkWmpHZU1LS1Vp?=
+ =?utf-8?B?SXlNWE9HbGYydGFTcVVZOU5JYlhnNC9EaUlTakRIaEJJRjVnUU1ZS1lJbC9S?=
+ =?utf-8?B?dXc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 269d4251-be44-41b2-c793-08d9b6cf492a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Dec 2021 02:39:25.0612
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ChTT/FPZES3b8yaCIvhPGUSnbrutzPUehUERm78d2yW7qs3KCkCel7I6kNw7nGi+BETiX1RLyj8A01nLPvbQTw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0401MB2435
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Signed-off-by: Petko Manolov <petko.manolov@konsulko.com>
----
- drivers/staging/media/i2c/ovm6211.c | 1156 +++++++++++++++++++++++++++
- 1 file changed, 1156 insertions(+)
- create mode 100644 drivers/staging/media/i2c/ovm6211.c
-
-diff --git a/drivers/staging/media/i2c/ovm6211.c b/drivers/staging/media/i2c/ovm6211.c
-new file mode 100644
-index 000000000000..a89c5167a892
---- /dev/null
-+++ b/drivers/staging/media/i2c/ovm6211.c
-@@ -0,0 +1,1156 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Based on ov5640.c that lives in the same directory.
-+ *
-+ * Copyright (C) 2021 Petko Manolov <petko.manolov@konsulko.com>
-+ * Copyright (C) 2021 DEKA Research & Development Corp.
-+ */
-+
-+#define	DEBUG
-+
-+#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/clkdev.h>
-+#include <linux/ctype.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+#include <linux/of_device.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <media/v4l2-async.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-event.h>
-+#include <media/v4l2-fwnode.h>
-+#include <media/v4l2-subdev.h>
-+
-+/* Min/max system clock (xvclk) frequencies */
-+#define OVM6211_XVCLK_MIN	 6000000
-+#define OVM6211_XVCLK_MAX	27000000
-+
-+/* begin of OVM6211 definitions */
-+/* System Control */
-+#define OVM6211_SC_MODE_SELECT		0x0100
-+#define OVM6211_SC_SOFTWARE_RESET	0x0103
-+#define OVM6211_SC_SCCB_ID1		0x0109
-+#define OVM6211_SC_CHIP_ID_HIGH		0x300a
-+#define OVM6211_SC_CHIP_ID_LOW		0x300b
-+#define OVM6211_SC_REG0C		0x300c
-+#define OVM6211_SC_REG10		0x3010
-+#define OVM6211_SC_MIPI_PHY		0x3012
-+#define OVM6211_SC_MIPI_PHY2		0x3013
-+#define OVM6211_SC_MIPI_SC_CTRL0	0x3014
-+#define OVM6211_SC_MIPI_SC_CTRL1	0x3015
-+#define OVM6211_SC_CLKRST0		0x3016
-+#define OVM6211_SC_CLKRST1		0x3017
-+#define OVM6211_SC_CLKRST2		0x3018
-+#define OVM6211_SC_CLKRST3		0x3019
-+#define OVM6211_SC_CLKRST4		0x301a
-+#define OVM6211_SC_CLKRST5		0x301b
-+#define OVM6211_SC_CLKRST6		0x301c
-+#define OVM6211_SC_CLOCK_SEL		0x301e
-+#define OVM6211_SC_MISC_CTRL		0x301f
-+#define OVM6211_SC_LOW_PWR_CTRL		0x3023
-+#define OVM6211_SC_REG27		0x3027
-+#define OVM6211_SC_GP_IO_IN1		0x3029
-+#define OVM6211_SC_GP_IO_IN2		0x302a
-+#define OVM6211_SC_SCCB_ID2		0x302b
-+#define OVM6211_SC_AUTO_SLEEP_PERIOD0	0x302c
-+#define OVM6211_SC_AUTO_SLEEP_PERIOD1	0x302d
-+#define OVM6211_SC_AUTO_SLEEP_PERIOD2	0x302e
-+#define OVM6211_SC_AUTO_SLEEP_PERIOD3	0x302f
-+#define OVM6211_SC_LP_CTRL0		0x3030
-+#define OVM6211_SC_REG37		0x3037
-+#define OVM6211_SC_REG3B		0x303b
-+/* PLL Control */
-+#define OVM6211_PLL_PLL0		0x3080
-+#define OVM6211_PLL_PLL1		0x3081
-+#define OVM6211_PLL_PLL2		0x3082
-+#define OVM6211_PLL_PLL18		0x3098
-+#define OVM6211_PLL_PLL19		0x3099
-+#define OVM6211_PLL_PLL1A		0x309a
-+#define OVM6211_PLL_PLL1B		0x309b
-+#define OVM6211_PLL_PLL1C		0x309c
-+#define OVM6211_PLL_PLL1D		0x309d
-+#define OVM6211_PLL_PLL1E		0x309e
-+#define OVM6211_PLL_PLL1F		0x309f
-+#define OVM6211_PLL_VT_PIX_CLK_DIV	0x30b0
-+#define OVM6211_PLL_VT_SYS_CLK_DIV	0x30b1
-+#define OVM6211_PLL_MULTIPLIER		0x30b3
-+#define OVM6211_PLL_PLL1_PRE_PLL_DIV	0x30b4
-+#define OVM6211_PLL_PLL1_OP_PIX_CLK_DIV	0x30b5
-+#define OVM6211_PLL_PLL1_OP_SYS_CLK_DIV	0x30b6
-+/* SCCB and group hold */
-+#define OVM6211_SB_SRB_CTRL		0x3106
-+#define OVM6211_SB_SWITCH		0x31ff
-+/* AEC/AGC */
-+#define OVM6211_AEC_EXPO1		0x3500
-+#define OVM6211_AEC_EXPO2		0x3501
-+#define OVM6211_AEC_EXPO3		0x3502
-+#define OVM6211_AEC_MANUAL		0x3503
-+#define OVM6211_AGC_MAN_SNR_GAIN1	0x3504
-+#define OVM6211_AGC_MAN_SNR_GAIN2	0x3505
-+/* timing conrol registers */
-+#define	OVM6211_TVTS_HI			0x380e
-+#define	OVM6211_TVTS_LO			0x380f
-+/*Strobe frame span registers*/
-+#define OVM6211_STROBE_SPAN1		0x3b8d
-+#define OVM6211_STROBE_SPAN2		0x3b8e
-+#define OVM6211_STROBE_SPAN3		0x3b8f
-+/* format control */
-+#define OVM6211_DATA_MAX_H		0x4300
-+#define OVM6211_DATA_MIN_H		0x4301
-+#define OVM6211_CLIP_L			0x4302
-+#define OVM6211_FORMAT_CTRL3		0x4303
-+#define OVM6211_FORMAT_CTRL4		0x4304
-+#define OVM6211_VSYNC_WIDTH_H		0x4311
-+#define OVM6211_VSYNC_WIDTH_L		0x4312
-+#define OVM6211_VSYNC_CTRL		0x4313
-+#define OVM6211_VSYNC_DELAY1		0x4314
-+#define OVM6211_VSYNC_DELAY2		0x4315
-+#define OVM6211_VSYNC_DELAY3		0x4316
-+#define OVM6211_TST_PATTERN_CTRL	0x4320
-+/* MIPI */
-+#define OVM6211_MIPI_CTRL00		0x4800
-+#define OVM6211_MIPI_CTRL01		0x4801
-+#define OVM6211_MIPI_CTRL02		0x4802
-+#define OVM6211_MIPI_CTRL03		0x4803
-+#define OVM6211_MIPI_CTRL04		0x4804
-+#define OVM6211_MIPI_CTRL05		0x4805
-+#define OVM6211_MIPI_CTRL06		0x4806
-+#define OVM6211_MIPI_MAX_FRAME_COUNT_H	0x4810
-+#define OVM6211_MIPI_MAX_FRAME_COUNT_L	0x4811
-+#define OVM6211_MIPI_SHORT_PKT_COUNTER_H	0x4812
-+#define OVM6211_MIPI_SHORT_PKT_COUNTER_L	0x4813
-+#define OVM6211_MIPI_CTRL14		0x4814
-+#define OVM6211_MIPI_DT_SPKT		0x4815
-+#define OVM6211_MIPI_REG_MAX_H		0x4835
-+#define OVM6211_MIPI_REG_MAX_L		0x4836
-+#define OVM6211_PCLK_PERIOD		0x4837
-+#define OVM6211_WKUP_DLY		0x4838
-+#define OVM6211_DIR_DLY			0x483a
-+#define OVM6211_MIPI_LP_GPIO		0x483b
-+#define OVM6211_MIPI_CTRL3C		0x483c
-+#define OVM6211_T_TA_GO			0x483d
-+#define OVM6211_T_TA_SURE		0x483e
-+#define OVM6211_T_TA_GET		0x483f
-+#define OVM6211_MIPI_CLIP_MAX_H		0x4846
-+#define OVM6211_MIPI_CLIP_MAX_L		0x4847
-+#define OVM6211_MIPI_CLIP_MIN_H		0x4848
-+#define OVM6211_MIPI_CLIP_MIN_L		0x4848
-+#define OVM6211_REG_INTR_MAN		0x4850
-+#define OVM6211_REG_TX_WR		0x4851
-+/* ISP top */
-+#define OVM6211_ISP_CTRL00		0x5000
-+#define OVM6211_ISP_CTRL01		0x5001
-+#define OVM6211_ISP_CTRL02		0x5002
-+#define OVM6211_ISP_CTRL03		0x5003
-+#define OVM6211_ISP_CTRL04		0x5004
-+#define OVM6211_ISP_CTRL05		0x5005
-+#define OVM6211_ISP_CTRL06		0x5006
-+#define OVM6211_ISP_CTRL07		0x5007
-+#define OVM6211_ISP_CTRL08		0x5008
-+#define OVM6211_ISP_CTRL09		0x5009
-+/* window control */
-+#define OVM6211_MAN_XSTART_OFF_H	0x5a00
-+#define OVM6211_MAN_XSTART_OFF_L	0x5a01
-+#define OVM6211_MAN_YSTART_OFF_H	0x5a02
-+#define OVM6211_MAN_YSTART_OFF_L	0x5a03
-+#define OVM6211_MAN_WIN_WIDTH_H		0x5a04
-+#define OVM6211_MAN_WIN_WIDTH_L		0x5a05
-+#define OVM6211_MAN_WIN_HEIGHT_H	0x5a06
-+#define OVM6211_MAN_WIN_HEIGHT_L	0x5a07
-+#define OVM6211_WIN_MAN			0x5a08
-+
-+#define	OVM6211_LAST_REG		0x5e08
-+/* end of OVM6211 definitions */
-+
-+enum ovm6211_mode_id {
-+	OVM6211_MODE_Y8_400_200 = 0,
-+	OVM6211_MODE_Y8_400_400,
-+	OVM6211_NUM_MODES,
-+};
-+
-+struct ovm6211_pixfmt {
-+	u32 code;
-+	u32 colorspace;
-+};
-+
-+static const struct ovm6211_pixfmt ovm6211_formats[] = {
-+	{ MEDIA_BUS_FMT_Y8_1X8,   V4L2_COLORSPACE_RAW, },
-+	{ MEDIA_BUS_FMT_Y8_1X8,   V4L2_COLORSPACE_RAW, },
-+};
-+
-+enum ovm6211_framerate_ids {
-+	OVM6211_10_FPS = 0,
-+	OVM6211_15_FPS,
-+	OVM6211_30_FPS,
-+	OVM6211_45_FPS,
-+	OVM6211_60_FPS,
-+	OVM6211_NUM_FRAMERATES,
-+};
-+
-+static const int ovm6211_framerates[] = {
-+	[OVM6211_10_FPS] = 10,
-+	[OVM6211_15_FPS] = 15,
-+	[OVM6211_30_FPS] = 30,
-+	[OVM6211_45_FPS] = 45,
-+	[OVM6211_60_FPS] = 60,
-+};
-+
-+/* regulator supplies */
-+static const char * const ovm6211_supply_name[] = {
-+	"dovdd",
-+	"avdd",
-+};
-+
-+#define OVM6211_NUM_SUPPLIES ARRAY_SIZE(ovm6211_supply_name)
-+
-+static const struct regmap_config ovm6211_regmap_config = {
-+	.reg_bits       = 16,
-+	.val_bits       = 8,
-+	.max_register   = OVM6211_LAST_REG,
-+	.cache_type	= REGCACHE_NONE,
-+};
-+
-+struct reg_value {
-+	u16 reg_addr;
-+	u8 val;
-+	u8 mask;
-+	u32 delay_ms;
-+};
-+
-+struct ovm6211_mode_info {
-+	enum ovm6211_mode_id id;
-+	u32 width;
-+	u32 height;
-+	const struct reg_value *reg_data;
-+	u32 reg_data_size;
-+	u32 pixel_clock;
-+};
-+
-+struct ovm6211_ctrls {
-+	struct v4l2_ctrl_handler handler;
-+	struct {
-+		struct v4l2_ctrl *auto_exp;
-+		struct v4l2_ctrl *exposure;
-+	};
-+	struct {
-+		struct v4l2_ctrl *auto_gain;
-+		struct v4l2_ctrl *gain;
-+	};
-+	struct v4l2_ctrl *brightness;
-+	struct v4l2_ctrl *light_freq;
-+	struct v4l2_ctrl *saturation;
-+	struct v4l2_ctrl *contrast;
-+	struct v4l2_ctrl *hue;
-+	struct v4l2_ctrl *test_pattern;
-+	struct v4l2_ctrl *link_freq;
-+	struct v4l2_ctrl *pixel_clock;
-+};
-+
-+struct ovm6211_dev {
-+	struct i2c_client *i2c_client;
-+	struct regmap *regmap;
-+	struct v4l2_subdev sd;
-+	struct media_pad pad;
-+	struct v4l2_fwnode_endpoint ep; /* the parsed DT endpoint info */
-+	struct clk *xclk; /* system clock to OVM6211 */
-+	u32 xclk_freq;
-+
-+	struct regulator_bulk_data supplies[OVM6211_NUM_SUPPLIES];
-+	struct gpio_desc *reset_gpio;
-+	struct gpio_desc *pwdn_gpio;
-+
-+	struct mutex lock;
-+
-+	struct v4l2_mbus_framefmt fmt;
-+
-+	const struct ovm6211_mode_info *cur_mode;
-+	enum ovm6211_framerate_ids cur_fr_id;
-+	struct v4l2_fract frame_interval;
-+
-+	struct ovm6211_ctrls ctrls;
-+
-+	u32 exposure;
-+	bool pending_mode_change;
-+	bool pending_fi_change;
-+	bool streaming;
-+};
-+
-+static inline struct ovm6211_dev *to_ovm6211_dev(struct v4l2_subdev *sd)
-+{
-+	return container_of(sd, struct ovm6211_dev, sd);
-+}
-+
-+static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
-+{
-+	return &container_of(ctrl->handler, struct ovm6211_dev,
-+			     ctrls.handler)->sd;
-+}
-+
-+static const struct reg_value ovm6211_init_y8_400_400[] = {
-+	{0x0103, 0x01, 0, 0}, {0x0100, 0x00, 0, 0}, {0x3005, 0x08, 0, 0},
-+	{0x3013, 0x12, 0, 0}, {0x3014, 0x04, 0, 0}, {0x3016, 0x10, 0, 0},
-+	{0x3017, 0x00, 0, 0}, {0x3018, 0x00, 0, 0}, {0x301a, 0x00, 0, 0},
-+	{0x301b, 0x00, 0, 0}, {0x301c, 0x00, 0, 0}, {0x3037, 0xf0, 0, 0},
-+	{0x3080, 0x01, 0, 0}, {0x3081, 0x00, 0, 0}, {0x3082, 0x01, 0, 0},
-+	{0x3098, 0x04, 0, 0}, {0x3099, 0x28, 0, 0}, {0x309a, 0x06, 0, 0},
-+	{0x309b, 0x04, 0, 0}, {0x309c, 0x00, 0, 0}, {0x309d, 0x00, 0, 0},
-+	{0x309e, 0x01, 0, 0}, {0x309f, 0x00, 0, 0}, {0x30b0, 0x08, 0, 0},
-+	{0x30b1, 0x02, 0, 0}, {0x30b2, 0x00, 0, 0}, {0x30b3, 0x28, 0, 0},
-+	{0x30b4, 0x02, 0, 0}, {0x30b5, 0x00, 0, 0}, {0x3106, 0xd9, 0, 0},
-+	{0x3500, 0x00, 0, 0}, {0x3501, 0x1b, 0, 0}, {0x3502, 0x20, 0, 0},
-+	{0x3503, 0x07, 0, 0}, {0x3509, 0x10, 0, 0}, {0x350b, 0x10, 0, 0},
-+	{0x3600, 0xfc, 0, 0}, {0x3620, 0xb7, 0, 0}, {0x3621, 0x05, 0, 0},
-+	{0x3626, 0x31, 0, 0}, {0x3627, 0x40, 0, 0}, {0x3632, 0xa3, 0, 0},
-+	{0x3633, 0x34, 0, 0}, {0x3634, 0x40, 0, 0}, {0x3636, 0x00, 0, 0},
-+	{0x3660, 0x80, 0, 0}, {0x3662, 0x03, 0, 0}, {0x3664, 0xf0, 0, 0},
-+	{0x366a, 0x10, 0, 0}, {0x366b, 0x06, 0, 0}, {0x3680, 0xf4, 0, 0},
-+	{0x3681, 0x50, 0, 0}, {0x3682, 0x00, 0, 0}, {0x3708, 0x20, 0, 0},
-+	{0x3709, 0x40, 0, 0}, {0x370d, 0x03, 0, 0}, {0x373b, 0x02, 0, 0},
-+	{0x373c, 0x08, 0, 0}, {0x3742, 0x00, 0, 0}, {0x3744, 0x16, 0, 0},
-+	{0x3745, 0x08, 0, 0}, {0x3781, 0xfc, 0, 0}, {0x3788, 0x00, 0, 0},
-+	{0x3800, 0x00, 0, 0}, {0x3801, 0x04, 0, 0}, {0x3802, 0x00, 0, 0},
-+	{0x3803, 0x04, 0, 0}, {0x3804, 0x01, 0, 0}, {0x3805, 0x9b, 0, 0},
-+	{0x3806, 0x01, 0, 0}, {0x3807, 0x9b, 0, 0}, {0x3808, 0x01, 0, 0},
-+	{0x3809, 0x90, 0, 0}, {0x380a, 0x01, 0, 0}, {0x380b, 0x90, 0, 0},
-+	{0x380c, 0x05, 0, 0}, {0x380d, 0xf2, 0, 0}, {0x380e, 0x03, 0, 0},
-+	{0x380f, 0x6c, 0, 0}, {0x3810, 0x00, 0, 0}, {0x3811, 0x04, 0, 0},
-+	{0x3812, 0x00, 0, 0}, {0x3813, 0x04, 0, 0}, {0x3814, 0x11, 0, 0},
-+	{0x3815, 0x11, 0, 0}, {0x3820, 0x00, 0, 0}, {0x3821, 0x00, 0, 0},
-+	{0x382b, 0xfa, 0, 0}, {0x382f, 0x04, 0, 0}, {0x3832, 0x00, 0, 0},
-+	{0x3833, 0x05, 0, 0}, {0x3834, 0x00, 0, 0}, {0x3835, 0x05, 0, 0},
-+	{0x3882, 0x04, 0, 0}, {0x3883, 0x00, 0, 0}, {0x38a4, 0x10, 0, 0},
-+	{0x38a5, 0x00, 0, 0}, {0x38b1, 0x03, 0, 0}, {0x3b80, 0x00, 0, 0},
-+	{0x3b81, 0xff, 0, 0}, {0x3b82, 0x10, 0, 0}, {0x3b83, 0x00, 0, 0},
-+	{0x3b84, 0x08, 0, 0}, {0x3b85, 0x00, 0, 0}, {0x3b86, 0x01, 0, 0},
-+	{0x3b87, 0x00, 0, 0}, {0x3b88, 0x00, 0, 0}, {0x3b89, 0x00, 0, 0},
-+	{0x3b8a, 0x00, 0, 0}, {0x3b8b, 0x05, 0, 0}, {0x3b8c, 0x00, 0, 0},
-+	{0x3b8d, 0x00, 0, 0}, {0x3b8e, 0x01, 0, 0}, {0x3b8f, 0xb2, 0, 0},
-+	{0x3b94, 0x05, 0, 0}, {0x3b95, 0xf2, 0, 0}, {0x3b96, 0xc0, 0, 0},
-+	{0x4004, 0x04, 0, 0}, {0x404e, 0x01, 0, 0}, {0x4801, 0x0f, 0, 0},
-+	{0x4806, 0x0f, 0, 0}, {0x4837, 0x43, 0, 0}, {0x5a08, 0x00, 0, 0},
-+	{0x5a01, 0x00, 0, 0}, {0x5a03, 0x00, 0, 0}, {0x5a04, 0x10, 0, 0},
-+	{0x5a05, 0xa0, 0, 0}, {0x5a06, 0x0c, 0, 0}, {0x5a07, 0x78, 0, 0},
-+};
-+
-+static const struct reg_value ovm6211_init_y8_400_200[] = {
-+	{0x0103, 0x01, 0, 0}, {0x0100, 0x00, 0, 0}, {0x3005, 0x08, 0, 0},
-+	{0x3013, 0x12, 0, 0}, {0x3014, 0x04, 0, 0}, {0x3016, 0x10, 0, 0},
-+	{0x3017, 0x00, 0, 0}, {0x3018, 0x00, 0, 0}, {0x301a, 0x00, 0, 0},
-+	{0x301b, 0x00, 0, 0}, {0x301c, 0x00, 0, 0}, {0x3037, 0xf0, 0, 0},
-+	{0x3080, 0x01, 0, 0}, {0x3081, 0x00, 0, 0}, {0x3082, 0x01, 0, 0},
-+	{0x3098, 0x04, 0, 0}, {0x3099, 0x28, 0, 0}, {0x309a, 0x06, 0, 0},
-+	{0x309b, 0x04, 0, 0}, {0x309c, 0x00, 0, 0}, {0x309d, 0x00, 0, 0},
-+	{0x309e, 0x01, 0, 0}, {0x309f, 0x00, 0, 0}, {0x30b0, 0x08, 0, 0},
-+	{0x30b1, 0x02, 0, 0}, {0x30b2, 0x00, 0, 0}, {0x30b3, 0x28, 0, 0},
-+	{0x30b4, 0x02, 0, 0}, {0x30b5, 0x00, 0, 0}, {0x3106, 0xd9, 0, 0},
-+	{0x3500, 0x00, 0, 0}, {0x3501, 0x1b, 0, 0}, {0x3502, 0x20, 0, 0},
-+	{0x3503, 0x07, 0, 0}, {0x3509, 0x10, 0, 0}, {0x350b, 0x10, 0, 0},
-+	{0x3600, 0xfc, 0, 0}, {0x3620, 0xb7, 0, 0}, {0x3621, 0x05, 0, 0},
-+	{0x3626, 0x31, 0, 0}, {0x3627, 0x40, 0, 0}, {0x3632, 0xa3, 0, 0},
-+	{0x3633, 0x34, 0, 0}, {0x3634, 0x40, 0, 0}, {0x3636, 0x00, 0, 0},
-+	{0x3660, 0x80, 0, 0}, {0x3662, 0x03, 0, 0}, {0x3664, 0xf0, 0, 0},
-+	{0x366a, 0x10, 0, 0}, {0x366b, 0x06, 0, 0}, {0x3680, 0xf4, 0, 0},
-+	{0x3681, 0x50, 0, 0}, {0x3682, 0x00, 0, 0}, {0x3708, 0x20, 0, 0},
-+	{0x3709, 0x40, 0, 0}, {0x370d, 0x03, 0, 0}, {0x373b, 0x02, 0, 0},
-+	{0x373c, 0x08, 0, 0}, {0x3742, 0x00, 0, 0}, {0x3744, 0x16, 0, 0},
-+	{0x3745, 0x08, 0, 0}, {0x3781, 0xfc, 0, 0}, {0x3788, 0x00, 0, 0},
-+	{0x3800, 0x00, 0, 0}, {0x3801, 0x04, 0, 0}, {0x3802, 0x00, 0, 0},
-+	{0x3803, 0x04, 0, 0}, {0x3804, 0x01, 0, 0}, {0x3805, 0x9b, 0, 0},
-+	{0x3806, 0x01, 0, 0}, {0x3807, 0x9b, 0, 0},
-+	{0x3808, 0x01, 0, 0},	// W
-+	{0x3809, 0x90, 0, 0},	// W
-+	{0x380a, 0x00, 0, 0},	// H
-+	{0x380b, 0xc8, 0, 0},	// H
-+	{0x380c, 0x05, 0, 0}, {0x380d, 0xf2, 0, 0}, {0x380e, 0x0d, 0, 0},
-+	{0x380f, 0xb0, 0, 0},
-+	{0x3810, 0x00, 0, 0},	// W off
-+	{0x3811, 0x04, 0, 0},	// W off: 4 + (400 - x_width)/2
-+	{0x3812, 0x00, 0, 0},	// H off
-+	{0x3813, 0x9a, 0, 0},	// H off: 4 + (400 - y_height)/2
-+	{0x3814, 0x11, 0, 0},
-+	{0x3815, 0x11, 0, 0}, {0x3820, 0x00, 0, 0}, {0x3821, 0x00, 0, 0},
-+	{0x382b, 0xfa, 0, 0}, {0x382f, 0x04, 0, 0}, {0x3832, 0x00, 0, 0},
-+	{0x3833, 0x05, 0, 0}, {0x3834, 0x00, 0, 0}, {0x3835, 0x05, 0, 0},
-+	{0x3882, 0x04, 0, 0}, {0x3883, 0x00, 0, 0}, {0x38a4, 0x10, 0, 0},
-+	{0x38a5, 0x00, 0, 0}, {0x38b1, 0x03, 0, 0}, {0x3b80, 0x00, 0, 0},
-+	{0x3b81, 0xff, 0, 0}, {0x3b82, 0x10, 0, 0}, {0x3b83, 0x00, 0, 0},
-+	{0x3b84, 0x08, 0, 0}, {0x3b85, 0x00, 0, 0}, {0x3b86, 0x01, 0, 0},
-+	{0x3b87, 0x00, 0, 0}, {0x3b88, 0x00, 0, 0}, {0x3b89, 0x00, 0, 0},
-+	{0x3b8a, 0x00, 0, 0}, {0x3b8b, 0x05, 0, 0}, {0x3b8c, 0x00, 0, 0},
-+	{0x3b8d, 0x00, 0, 0}, {0x3b8e, 0x01, 0, 0}, {0x3b8f, 0xb2, 0, 0},
-+	{0x3b94, 0x05, 0, 0}, {0x3b95, 0xf2, 0, 0}, {0x3b96, 0xc0, 0, 0},
-+	{0x4004, 0x04, 0, 0}, {0x404e, 0x01, 0, 0}, {0x4801, 0x0f, 0, 0},
-+	{0x4806, 0x0f, 0, 0}, {0x4837, 0x43, 0, 0}, {0x5a08, 0x00, 0, 0},
-+	{0x5a01, 0x00, 0, 0}, {0x5a03, 0x00, 0, 0}, {0x5a04, 0x10, 0, 0},
-+	{0x5a05, 0xa0, 0, 0}, {0x5a06, 0x0c, 0, 0}, {0x5a07, 0x78, 0, 0},
-+};
-+
-+/* power-on sensor init reg table */
-+static const struct ovm6211_mode_info *ovm6211_mode_init_data;
-+
-+static struct ovm6211_mode_info
-+ovm6211_mode_data[OVM6211_NUM_MODES] = {
-+	{OVM6211_MODE_Y8_400_200,
-+	 400, 200,
-+	 ovm6211_init_y8_400_200,
-+	 ARRAY_SIZE(ovm6211_init_y8_400_200),
-+	 400 * 400 * 60 * 2,
-+	},
-+	{OVM6211_MODE_Y8_400_400,
-+	 400, 400,
-+	 ovm6211_init_y8_400_400,
-+	 ARRAY_SIZE(ovm6211_init_y8_400_400),
-+	 400 * 400 * 60 * 2,
-+	},
-+};
-+
-+static const s64 link_freq_menu_items[] = {
-+	0,
-+};
-+
-+#ifdef CONFIG_VIDEO_ADV_DEBUG
-+static int ovm6211_get_register(struct v4l2_subdev *sd,
-+				struct v4l2_dbg_register *reg)
-+{
-+	struct ovm6211_dev *sensor = to_ovm6211_dev(sd);
-+	struct regmap *regmap = sensor->regmap;
-+	unsigned int val = 0;
-+	int ret;
-+
-+	ret = regmap_read(regmap, reg->reg, &val);
-+	reg->val = val;
-+	reg->size = 1;
-+
-+	return ret;
-+}
-+
-+static int ovm6211_set_register(struct v4l2_subdev *sd,
-+				const struct v4l2_dbg_register *reg)
-+{
-+	struct ovm6211_dev *sensor = to_ovm6211_dev(sd);
-+	struct regmap *regmap = sensor->regmap;
-+
-+	return regmap_write(regmap, reg->reg, reg->val & 0xff);
-+}
-+#endif
-+
-+static int ovm6211_write_reg(struct ovm6211_dev *sensor, u16 reg, u8 val)
-+{
-+	struct i2c_client *client = sensor->i2c_client;
-+	struct regmap *regmap = sensor->regmap;
-+	int ret;
-+
-+	ret = regmap_write(regmap, reg, val);
-+	if (ret < 0)
-+		dev_err(&client->dev, "error writing reg %u\n", reg);
-+
-+	return ret;
-+}
-+
-+static int ovm6211_read_reg(struct ovm6211_dev *sensor, u16 reg, u8 *val)
-+{
-+	struct i2c_client *client = sensor->i2c_client;
-+	struct regmap *regmap = sensor->regmap;
-+	unsigned int r;
-+	int ret;
-+
-+	ret = regmap_read(regmap, reg, &r);
-+	if (ret < 0)
-+		dev_err(&client->dev, "error reading reg %u\n", reg);
-+	*val = r & 0xff;
-+
-+	return ret;
-+}
-+
-+static int ovm6211_mod_reg(struct ovm6211_dev *sensor, u16 reg, u8 mask, u8 val)
-+{
-+	u8 readval;
-+	int ret;
-+
-+	ret = ovm6211_read_reg(sensor, reg, &readval);
-+	if (ret)
-+		return ret;
-+
-+	readval &= ~mask;
-+	val &= mask;
-+	val |= readval;
-+
-+	return ovm6211_write_reg(sensor, reg, val);
-+}
-+
-+static int ovm6211_load_regs(struct ovm6211_dev *sensor,
-+			     const struct ovm6211_mode_info *mode)
-+{
-+	const struct reg_value *regs = mode->reg_data;
-+	unsigned int i;
-+	u32 delay_ms;
-+	u16 reg_addr;
-+	u8 mask, val;
-+	int ret = 0;
-+
-+	for (i = 0; i < mode->reg_data_size; ++i, ++regs) {
-+		delay_ms = regs->delay_ms;
-+		reg_addr = regs->reg_addr;
-+		val = regs->val;
-+		mask = regs->mask;
-+		if (mask)
-+			ret = ovm6211_mod_reg(sensor, reg_addr, mask, val);
-+		else
-+			ret = ovm6211_write_reg(sensor, reg_addr, val);
-+		if (ret)
-+			break;
-+
-+		if (delay_ms) {
-+			usleep_range(1000 * delay_ms, 1000 * delay_ms + 100);
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+static void ovm6211_soft_reset(struct ovm6211_dev *sensor)
-+{
-+	ovm6211_write_reg(sensor, OVM6211_SC_SOFTWARE_RESET, 0x01);
-+	usleep_range(5000, 9000);
-+	ovm6211_write_reg(sensor, OVM6211_SC_SOFTWARE_RESET, 0x00);
-+}
-+
-+static int ovm6211_set_exposure(struct ovm6211_dev *sensor, u32 exposure)
-+{
-+	u32 ce;
-+	u8 v;
-+
-+	ovm6211_read_reg(sensor, OVM6211_TVTS_HI, &v);
-+	ce = v << 8;
-+	ovm6211_read_reg(sensor, OVM6211_TVTS_LO, &v);
-+	ce |= v;
-+	ce -= 4;
-+
-+	if (ce < exposure)
-+		exposure = ce;
-+
-+	ovm6211_mod_reg(sensor, OVM6211_AEC_MANUAL, 1, 1);
-+	ovm6211_write_reg(sensor, OVM6211_AEC_EXPO1, (exposure >> 12) & 0x0f);
-+	ovm6211_write_reg(sensor, OVM6211_AEC_EXPO2, (exposure >>  4) & 0xff);
-+	ovm6211_write_reg(sensor, OVM6211_AEC_EXPO3, (exposure <<  4) & 0xf0);
-+
-+	/* set strobe width equal to exposure time */
-+	ovm6211_write_reg(sensor, OVM6211_STROBE_SPAN1, (exposure >> 16) & 0xff);
-+	ovm6211_write_reg(sensor, OVM6211_STROBE_SPAN2, (exposure >>  8) & 0xff);
-+	ovm6211_write_reg(sensor, OVM6211_STROBE_SPAN3, (exposure)       & 0xff);
-+
-+	return 0;
-+}
-+
-+static int internal_set_stream(struct ovm6211_dev *sensor, bool on)
-+{
-+	u8 hi, lo;
-+
-+	if (sensor->pending_fi_change == false)
-+		goto stream;
-+
-+	switch (sensor->cur_fr_id) {
-+	case OVM6211_10_FPS:
-+		hi = 0x14;
-+		lo = 0x88;
-+		break;
-+	case OVM6211_15_FPS:
-+		hi = 0x0d;
-+		lo = 0xb0;
-+		break;
-+	case OVM6211_30_FPS:
-+		hi = 0x06;
-+		lo = 0xd8;
-+		break;
-+	case OVM6211_45_FPS:
-+		hi=0x04;
-+		lo = 0x90;
-+		break;
-+	case OVM6211_60_FPS:
-+		hi=0x03;
-+		lo = 0x6c;
-+		break;
-+	case OVM6211_NUM_FRAMERATES:
-+		return -EINVAL;
-+	}
-+
-+	sensor->pending_fi_change = false;
-+	ovm6211_write_reg(sensor, OVM6211_TVTS_HI, hi);
-+	ovm6211_write_reg(sensor, OVM6211_TVTS_LO, lo);
-+stream:
-+	ovm6211_write_reg(sensor, OVM6211_SC_MODE_SELECT, 0);
-+	if (on) {
-+		usleep_range(4000, 5000);
-+		if (sensor->exposure)
-+			ovm6211_set_exposure(sensor, sensor->exposure);
-+		ovm6211_write_reg(sensor, OVM6211_SC_MODE_SELECT, 1);
-+		sensor->streaming = true;
-+	} else {
-+		sensor->streaming = false;
-+	}
-+
-+	return 0;
-+}
-+
-+static struct ovm6211_mode_info *ovm6211_find_mode(int w, int h)
-+{
-+	return v4l2_find_nearest_size(ovm6211_mode_data,
-+				      ARRAY_SIZE(ovm6211_mode_data),
-+				      width, height, w, h);
-+}
-+
-+static int ovm6211_set_mode(struct ovm6211_dev *sensor)
-+{
-+	const struct ovm6211_mode_info *mode = sensor->cur_mode;
-+
-+	ovm6211_soft_reset(sensor);
-+	ovm6211_load_regs(sensor, mode);
-+
-+	return 0;
-+}
-+
-+/* --------------- Subdev Operations --------------- */
-+
-+static int ovm6211_get_fmt(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_state *state,
-+			   struct v4l2_subdev_format *format)
-+{
-+	struct ovm6211_dev *sensor = to_ovm6211_dev(sd);
-+	struct v4l2_mbus_framefmt *fmt;
-+
-+	if (format->pad != 0)
-+		return -EINVAL;
-+
-+	mutex_lock(&sensor->lock);
-+
-+	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
-+		fmt = v4l2_subdev_get_try_format(&sensor->sd, state, format->pad);
-+		format->format = *fmt;
-+	} else {
-+		/* these are hardcoded as we don't support anything else */
-+		format->format.colorspace  = V4L2_COLORSPACE_RAW;
-+		format->format.field = V4L2_FIELD_NONE;
-+		format->format.code = MEDIA_BUS_FMT_Y8_1X8;
-+		format->format.width = sensor->cur_mode->width;
-+		format->format.height = sensor->cur_mode->height;
-+	}
-+
-+	mutex_unlock(&sensor->lock);
-+
-+	return 0;
-+}
-+
-+u32 ovm6211_set_pix_clk(struct ovm6211_dev *sensor, const struct ovm6211_mode_info *nm)
-+{
-+	u32 s, fmt, fps, ret;
-+
-+	/* x * y * [1|2] * y8/y10 * fps */
-+	s = nm->width * nm->height;
-+	fmt = 1;
-+	fps = ovm6211_framerates[sensor->cur_fr_id];
-+	ret = s * fmt * fps * 2;
-+
-+	return ret;
-+}
-+
-+static int ovm6211_set_fmt(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_state *state,
-+			   struct v4l2_subdev_format *format)
-+{
-+	struct ovm6211_dev *sensor = to_ovm6211_dev(sd);
-+	struct v4l2_mbus_framefmt *fmt = &format->format;
-+	struct ovm6211_mode_info *mode;
-+
-+	if (format->pad != 0)
-+		return -EINVAL;
-+
-+	if (sensor->streaming)
-+		return -EBUSY;
-+
-+	mutex_lock(&sensor->lock);
-+
-+	/* these are hardcoded as we don't support anything else */
-+	format->format.colorspace  = V4L2_COLORSPACE_RAW;
-+	format->format.field = V4L2_FIELD_NONE;
-+	format->format.code = MEDIA_BUS_FMT_Y8_1X8;
-+	mode = ovm6211_find_mode(format->format.width, format->format.height);
-+	format->format.width = mode->width;
-+	format->format.height = mode->height;
-+
-+	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
-+		fmt = v4l2_subdev_get_try_format(&sensor->sd, state, format->pad);
-+		*fmt = format->format;
-+		goto out;
-+	}
-+	/* V4L2_SUBDEV_FORMAT_TRY_ACTIVE */
-+	sensor->cur_mode = mode;
-+out:
-+	mutex_unlock(&sensor->lock);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Sensor Controls.
-+ */
-+
-+static int ovm6211_set_ctrl_exposure(struct ovm6211_dev *sensor, enum
-+				     v4l2_exposure_auto_type auto_exposure)
-+{
-+	struct ovm6211_ctrls *ctrls = &sensor->ctrls;
-+
-+	if (auto_exposure == V4L2_EXPOSURE_AUTO) {
-+		sensor->exposure = 0;
-+	} else {
-+		sensor->exposure = ctrls->exposure->val;
-+		ovm6211_set_exposure(sensor, sensor->exposure);
-+	}
-+
-+	return 0;
-+}
-+
-+static int ovm6211_set_ctrl_gain(struct ovm6211_dev *sensor, bool auto_gain)
-+{
-+	return 0;
-+}
-+
-+static int ovm6211_s_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
-+	struct ovm6211_dev *sensor = to_ovm6211_dev(sd);
-+	int ret;
-+
-+	/* v4l2_ctrl_lock() locks our own mutex */
-+
-+	/*
-+	 * If the device is not powered up by the host driver do
-+	 * not apply any controls to H/W at this time. Instead
-+	 * the controls will be restored right after power-up.
-+	 */
-+	switch (ctrl->id) {
-+	case V4L2_CID_GAIN:
-+		ret = ovm6211_set_ctrl_gain(sensor, ctrl->val);
-+		break;
-+	case V4L2_CID_EXPOSURE_AUTO:
-+		ret = ovm6211_set_ctrl_exposure(sensor, ctrl->val);
-+		break;
-+#if 0
-+	case V4L2_CID_AUTO_WHITE_BALANCE:
-+		ret = ovm6211_set_ctrl_white_balance(sensor, ctrl->val);
-+		break;
-+	case V4L2_CID_HUE:
-+		ret = ovm6211_set_ctrl_hue(sensor, ctrl->val);
-+		break;
-+	case V4L2_CID_CONTRAST:
-+		ret = ovm6211_set_ctrl_contrast(sensor, ctrl->val);
-+		break;
-+	case V4L2_CID_SATURATION:
-+		ret = ovm6211_set_ctrl_saturation(sensor, ctrl->val);
-+		break;
-+	case V4L2_CID_TEST_PATTERN:
-+		ret = ovm6211_set_ctrl_test_pattern(sensor, ctrl->val);
-+		break;
-+	case V4L2_CID_POWER_LINE_FREQUENCY:
-+		ret = ovm6211_set_ctrl_light_freq(sensor, ctrl->val);
-+		break;
-+#endif
-+	case V4L2_CID_LINK_FREQ:
-+		return 0;
-+	case V4L2_CID_PIXEL_RATE:
-+		return 0;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_ctrl_ops ovm6211_ctrl_ops = {
-+	.s_ctrl = ovm6211_s_ctrl,
-+};
-+
-+static int ovm6211_init_controls(struct ovm6211_dev *sensor)
-+{
-+	const struct v4l2_ctrl_ops *ops = &ovm6211_ctrl_ops;
-+	struct ovm6211_ctrls *ctrls = &sensor->ctrls;
-+	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
-+	int ret;
-+
-+	v4l2_ctrl_handler_init(hdl, 32);
-+
-+	/* we can use our own mutex for the ctrl lock */
-+	hdl->lock = &sensor->lock;
-+
-+	ctrls->auto_exp = v4l2_ctrl_new_std_menu(hdl, ops, V4L2_CID_EXPOSURE_AUTO,
-+						 V4L2_EXPOSURE_MANUAL, 0,
-+						 V4L2_EXPOSURE_AUTO);
-+	ctrls->exposure = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE,
-+					    0, 65535, 1, 0);
-+	ctrls->gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_GAIN,
-+					0, 1023, 1, 0);
-+
-+	v4l2_ctrl_auto_cluster(3, &ctrls->auto_exp, 0, false);
-+
-+	ctrls->saturation = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_SATURATION,
-+					      0, 255, 1, 64);
-+	ctrls->hue = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HUE,
-+				       0, 359, 1, 0);
-+	ctrls->contrast = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_CONTRAST,
-+					    0, 255, 1, 0);
-+	ctrls->light_freq =
-+		v4l2_ctrl_new_std_menu(hdl, ops,
-+				       V4L2_CID_POWER_LINE_FREQUENCY,
-+				       V4L2_CID_POWER_LINE_FREQUENCY_AUTO, 0,
-+				       V4L2_CID_POWER_LINE_FREQUENCY_50HZ);
-+	ctrls->link_freq = v4l2_ctrl_new_int_menu(hdl, ops, V4L2_CID_LINK_FREQ,
-+						  0, 0, link_freq_menu_items);
-+	ctrls->pixel_clock = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_PIXEL_RATE,
-+						    1, INT_MAX, 1, 38400000);
-+
-+	if (hdl->error) {
-+		ret = hdl->error;
-+		goto free_ctrls;
-+	}
-+
-+	ctrls->gain->flags |= V4L2_CTRL_FLAG_VOLATILE;
-+	ctrls->exposure->flags |= V4L2_CTRL_FLAG_VOLATILE;
-+
-+	sensor->sd.ctrl_handler = hdl;
-+	return 0;
-+
-+free_ctrls:
-+	v4l2_ctrl_handler_free(hdl);
-+	return ret;
-+}
-+
-+static int ovm6211_g_frame_interval(struct v4l2_subdev *sd,
-+				    struct v4l2_subdev_frame_interval *fi)
-+{
-+	struct ovm6211_dev *sensor = to_ovm6211_dev(sd);
-+
-+	mutex_lock(&sensor->lock);
-+	fi->interval = sensor->frame_interval;
-+	mutex_unlock(&sensor->lock);
-+
-+	return 0;
-+}
-+
-+static int internal_set_frame_interval(struct ovm6211_dev *sensor, struct
-+				       v4l2_subdev_frame_interval *fi)
-+{
-+	u32 fr_rate;
-+	int i, max, ret = -EINVAL;
-+
-+	if (fi->interval.numerator == 0)
-+		goto out;
-+
-+	fr_rate = fi->interval.denominator / fi->interval.numerator;
-+
-+	max = ARRAY_SIZE(ovm6211_framerates);
-+	for (i = 0; i < max; i++) {
-+		if (ovm6211_framerates[i] == fr_rate)
-+			break;
-+	}
-+
-+	if (i == max)
-+		goto out;
-+
-+	sensor->cur_fr_id = i;
-+	sensor->frame_interval = fi->interval;
-+	ret = 0;
-+out:
-+	return ret;
-+}
-+
-+static int ovm6211_s_frame_interval(struct v4l2_subdev *sd,
-+				    struct v4l2_subdev_frame_interval *fi)
-+{
-+	struct ovm6211_dev *sensor = to_ovm6211_dev(sd);
-+	int ret;
-+
-+	mutex_lock(&sensor->lock);
-+	ret = internal_set_frame_interval(sensor, fi);
-+	sensor->pending_fi_change = true;
-+	mutex_unlock(&sensor->lock);
-+
-+	return ret;
-+}
-+
-+static int ovm6211_enum_mbus_code(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_state *state,
-+				  struct v4l2_subdev_mbus_code_enum *code)
-+{
-+	if (code->pad != 0)
-+		return -EINVAL;
-+	if (code->index >= ARRAY_SIZE(ovm6211_formats))
-+		return -EINVAL;
-+
-+	code->code = ovm6211_formats[code->index].code;
-+
-+	return 0;
-+}
-+
-+static int ovm6211_s_stream(struct v4l2_subdev *sd, int enable)
-+{
-+	struct ovm6211_dev *sensor = to_ovm6211_dev(sd);
-+	int ret = 0;
-+
-+	mutex_lock(&sensor->lock);
-+
-+	if (enable)
-+		ret = ovm6211_set_mode(sensor);
-+	internal_set_stream(sensor, enable);
-+
-+	mutex_unlock(&sensor->lock);
-+
-+	return ret;
-+}
-+
-+static int ovm6211_set_power(struct v4l2_subdev *sd, int on)
-+{
-+	return 0;
-+}
-+
-+static const struct v4l2_subdev_core_ops ovm6211_core_ops = {
-+#ifdef CONFIG_VIDEO_ADV_DEBUG
-+	.g_register = ovm6211_get_register,
-+	.s_register = ovm6211_set_register,
-+#endif
-+	.s_power = ovm6211_set_power,
-+};
-+
-+static const struct v4l2_subdev_video_ops ovm6211_video_ops = {
-+	.g_frame_interval = ovm6211_g_frame_interval,
-+	.s_frame_interval = ovm6211_s_frame_interval,
-+	.s_stream = ovm6211_s_stream,
-+};
-+
-+static const struct v4l2_subdev_pad_ops ovm6211_pad_ops = {
-+	.enum_mbus_code = ovm6211_enum_mbus_code,
-+	.get_fmt = ovm6211_get_fmt,
-+	.set_fmt = ovm6211_set_fmt,
-+};
-+
-+static const struct v4l2_subdev_ops ovm6211_subdev_ops = {
-+	.core = &ovm6211_core_ops,
-+	.video = &ovm6211_video_ops,
-+	.pad = &ovm6211_pad_ops,
-+};
-+
-+static int ovm6211_get_regulators(struct ovm6211_dev *sensor)
-+{
-+	int i;
-+
-+	for (i = 0; i < OVM6211_NUM_SUPPLIES; i++)
-+		sensor->supplies[i].supply = ovm6211_supply_name[i];
-+
-+	return devm_regulator_bulk_get(&sensor->i2c_client->dev,
-+				       OVM6211_NUM_SUPPLIES,
-+				       sensor->supplies);
-+}
-+
-+static int ovm6211_check_chip_id(struct ovm6211_dev *sensor)
-+{
-+	struct i2c_client *client = sensor->i2c_client;
-+	struct regmap *regmap = sensor->regmap;
-+	unsigned int cid;
-+	int ret = 0;
-+
-+	ret = regmap_read(regmap, OVM6211_SC_CHIP_ID_HIGH, &cid);
-+	if (ret || cid != 0x67) {
-+		ret = ENXIO;
-+		goto err;
-+	}
-+
-+	ret = regmap_read(regmap, OVM6211_SC_CHIP_ID_LOW, &cid);
-+	if (ret || cid != 0x10) {
-+		ret = -ENXIO;
-+		goto err;
-+	}
-+
-+	ret = regmap_read(regmap, OVM6211_SC_REG0C, &cid);
-+	if (ret)
-+		goto err;
-+
-+	dev_info(&client->dev,"found OVM6211, sub revision: 0x%02X\n", cid);
-+	return 0;
-+err:
-+	dev_err(&client->dev, "failed to detect OVM6211\n");
-+	return ret;
-+}
-+
-+static int ovm6211_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct fwnode_handle *endpoint;
-+	struct ovm6211_dev *sensor;
-+	struct v4l2_mbus_framefmt *fmt;
-+	int ret;
-+
-+	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
-+	if (!sensor)
-+		return -ENOMEM;
-+
-+	sensor->i2c_client = client;
-+
-+	/*
-+	 * default init sequence initialize sensor to
-+	 * YUV422 UYVY VGA@30fps
-+	 */
-+	fmt = &sensor->fmt;
-+	fmt->code = MEDIA_BUS_FMT_Y8_1X8;
-+	fmt->colorspace = V4L2_COLORSPACE_RAW;
-+	fmt->field = V4L2_FIELD_NONE;
-+	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-+	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
-+	fmt->width = 400;
-+	fmt->height = 200;
-+
-+	sensor->frame_interval.numerator = 1;
-+	sensor->frame_interval.denominator = ovm6211_framerates[OVM6211_45_FPS];
-+	sensor->cur_fr_id = OVM6211_45_FPS;
-+	ovm6211_mode_init_data = &ovm6211_mode_data[OVM6211_MODE_Y8_400_200];
-+	sensor->cur_mode = ovm6211_mode_init_data;
-+
-+	sensor->ep.bus_type = V4L2_MBUS_CSI2_DPHY;
-+	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev), NULL);
-+	if (!endpoint) {
-+		dev_err(dev, "endpoint node not found\n");
-+		return -EINVAL;
-+	}
-+
-+	ret = v4l2_fwnode_endpoint_parse(endpoint, &sensor->ep);
-+	fwnode_handle_put(endpoint);
-+	if (ret) {
-+		dev_err(dev, "Could not parse endpoint\n");
-+		return ret;
-+	}
-+
-+	/* get system clock (xclk) */
-+	sensor->xclk = devm_clk_get(dev, "xvclk");
-+	if (IS_ERR(sensor->xclk)) {
-+		dev_err(dev, "failed to get xvclk\n");
-+		return PTR_ERR(sensor->xclk);
-+	}
-+
-+	sensor->xclk_freq = clk_get_rate(sensor->xclk);
-+	if (sensor->xclk_freq < OVM6211_XVCLK_MIN ||
-+	    sensor->xclk_freq > OVM6211_XVCLK_MAX) {
-+		dev_err(dev, "xvclk frequency out of range: %d Hz\n",
-+			sensor->xclk_freq);
-+		return -EINVAL;
-+	}
-+
-+	/* request optional power down pin */
-+	sensor->pwdn_gpio = devm_gpiod_get_optional(dev, "powerdown",
-+						    GPIOD_OUT_HIGH);
-+	if (IS_ERR(sensor->pwdn_gpio))
-+		return PTR_ERR(sensor->pwdn_gpio);
-+
-+	/* request optional reset pin */
-+	sensor->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-+						     GPIOD_OUT_HIGH);
-+	if (IS_ERR(sensor->reset_gpio))
-+		return PTR_ERR(sensor->reset_gpio);
-+
-+	sensor->regmap = devm_regmap_init_i2c(client, &ovm6211_regmap_config);
-+	if (IS_ERR(sensor->regmap)) {
-+		dev_err(dev, "regmap init failed\n");
-+		return PTR_ERR(sensor->regmap);
-+	}
-+
-+	v4l2_i2c_subdev_init(&sensor->sd, client, &ovm6211_subdev_ops);
-+
-+	sensor->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-+			    V4L2_SUBDEV_FL_HAS_EVENTS;
-+	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
-+	sensor->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-+	ret = media_entity_pads_init(&sensor->sd.entity, 1, &sensor->pad);
-+	if (ret)
-+		return ret;
-+
-+	ret = ovm6211_get_regulators(sensor);
-+	if (ret)
-+		return ret;
-+
-+	ret = ovm6211_set_power(&sensor->sd, 1);
-+	if (ret)
-+		return ret;
-+
-+	mutex_init(&sensor->lock);
-+
-+	ret = ovm6211_check_chip_id(sensor);
-+	if (ret)
-+		goto entity_cleanup;
-+
-+	ret = ovm6211_init_controls(sensor);
-+	if (ret)
-+		goto entity_cleanup;
-+
-+	ret = v4l2_async_register_subdev_sensor(&sensor->sd);
-+	if (ret)
-+		goto free_ctrls;
-+
-+	ovm6211_load_regs(sensor, ovm6211_mode_init_data);
-+
-+	dev_dbg(dev, "%s() completed\n", __func__);
-+	return 0;
-+
-+free_ctrls:
-+	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
-+entity_cleanup:
-+	media_entity_cleanup(&sensor->sd.entity);
-+	mutex_destroy(&sensor->lock);
-+	return ret;
-+}
-+
-+static int ovm6211_remove(struct i2c_client *client)
-+{
-+	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-+	struct ovm6211_dev *sensor = to_ovm6211_dev(sd);
-+
-+	v4l2_async_unregister_subdev(&sensor->sd);
-+	media_entity_cleanup(&sensor->sd.entity);
-+	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
-+	mutex_destroy(&sensor->lock);
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id ovm6211_id[] = {
-+	{ "ovm6211", 0 },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(i2c, ovm6211_id);
-+
-+static const struct of_device_id ovm6211_dt_ids[] = {
-+	{ .compatible = "ovti,ovm6211" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ovm6211_dt_ids);
-+
-+static struct i2c_driver ovm6211_i2c_driver = {
-+	.driver = {
-+		.name  = "ovm6211",
-+		.of_match_table	= ovm6211_dt_ids,
-+	},
-+	.id_table = ovm6211_id,
-+	.probe_new = ovm6211_probe,
-+	.remove   = ovm6211_remove,
-+};
-+
-+module_i2c_driver(ovm6211_i2c_driver);
-+
-+MODULE_AUTHOR("Petko Manolov <petko.manolov@konsulko.com>");
-+MODULE_DESCRIPTION("OVM6211 MIPI Camera Subdev Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.30.2
-
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IE5pY29sYXMgRHVmcmVzbmUg
+W21haWx0bzpuaWNvbGFzQG5kdWZyZXNuZS5jYV0NCj4gU2VudDogRnJpZGF5LCBEZWNlbWJlciAz
+LCAyMDIxIDExOjEwIFBNDQo+IFRvOiBNaW5nIFFpYW4gPG1pbmcucWlhbkBueHAuY29tPjsgbWNo
+ZWhhYkBrZXJuZWwub3JnOw0KPiBzaGF3bmd1b0BrZXJuZWwub3JnOyByb2JoK2R0QGtlcm5lbC5v
+cmc7IHMuaGF1ZXJAcGVuZ3V0cm9uaXguZGUNCj4gQ2M6IGh2ZXJrdWlsLWNpc2NvQHhzNGFsbC5u
+bDsga2VybmVsQHBlbmd1dHJvbml4LmRlOyBmZXN0ZXZhbUBnbWFpbC5jb207DQo+IGRsLWxpbnV4
+LWlteCA8bGludXgtaW14QG54cC5jb20+OyBBaXNoZW5nIERvbmcgPGFpc2hlbmcuZG9uZ0BueHAu
+Y29tPjsNCj4gbGludXgtbWVkaWFAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5r
+ZXJuZWwub3JnOw0KPiBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsgbGludXgtYXJtLWtlcm5l
+bEBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IFN1YmplY3Q6IFJlOiBbRVhUXSBSZTogW1BBVENIIHYx
+MyAwOC8xM10gbWVkaWE6IGFtcGhpb246IGFkZCB2NGwyIG0ybSB2cHUNCj4gZGVjb2RlciBzdGF0
+ZWZ1bCBkcml2ZXINCj4gDQo+IENhdXRpb246IEVYVCBFbWFpbA0KPiANCj4gTGUgdmVuZHJlZGkg
+MDMgZMOpY2VtYnJlIDIwMjEgw6AgMDY6MDEgKzAwMDAsIE1pbmcgUWlhbiBhIMOpY3JpdCA6DQo+
+ID4gPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+ID4gRnJvbTogTWluZyBRaWFuDQo+
+ID4gPiBTZW50OiBGcmlkYXksIERlY2VtYmVyIDMsIDIwMjEgMTo0MyBQTQ0KPiA+ID4gVG86IE5p
+Y29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPjsgbWNoZWhhYkBrZXJuZWwub3Jn
+Ow0KPiA+ID4gc2hhd25ndW9Aa2VybmVsLm9yZzsgcm9iaCtkdEBrZXJuZWwub3JnOyBzLmhhdWVy
+QHBlbmd1dHJvbml4LmRlDQo+ID4gPiBDYzogaHZlcmt1aWwtY2lzY29AeHM0YWxsLm5sOyBrZXJu
+ZWxAcGVuZ3V0cm9uaXguZGU7DQo+ID4gPiBmZXN0ZXZhbUBnbWFpbC5jb207IGRsLWxpbnV4LWlt
+eCA8bGludXgtaW14QG54cC5jb20+OyBBaXNoZW5nIERvbmcNCj4gPiA+IDxhaXNoZW5nLmRvbmdA
+bnhwLmNvbT47IGxpbnV4LW1lZGlhQHZnZXIua2VybmVsLm9yZzsNCj4gPiA+IGxpbnV4LWtlcm5l
+bEB2Z2VyLmtlcm5lbC5vcmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnOw0KPiA+ID4gbGlu
+dXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnDQo+ID4gPiBTdWJqZWN0OiBSRTogW0VY
+VF0gUmU6IFtQQVRDSCB2MTMgMDgvMTNdIG1lZGlhOiBhbXBoaW9uOiBhZGQgdjRsMg0KPiA+ID4g
+bTJtIHZwdSBkZWNvZGVyIHN0YXRlZnVsIGRyaXZlcg0KPiA+ID4NCj4gPiA+ID4gLS0tLS1Pcmln
+aW5hbCBNZXNzYWdlLS0tLS0NCj4gPiA+ID4gRnJvbTogTmljb2xhcyBEdWZyZXNuZSBbbWFpbHRv
+Om5pY29sYXNAbmR1ZnJlc25lLmNhXQ0KPiA+ID4gPiBTZW50OiBGcmlkYXksIERlY2VtYmVyIDMs
+IDIwMjEgMTI6NTYgUE0NCj4gPiA+ID4gVG86IE1pbmcgUWlhbiA8bWluZy5xaWFuQG54cC5jb20+
+OyBtY2hlaGFiQGtlcm5lbC5vcmc7DQo+ID4gPiA+IHNoYXduZ3VvQGtlcm5lbC5vcmc7IHJvYmgr
+ZHRAa2VybmVsLm9yZzsgcy5oYXVlckBwZW5ndXRyb25peC5kZQ0KPiA+ID4gPiBDYzogaHZlcmt1
+aWwtY2lzY29AeHM0YWxsLm5sOyBrZXJuZWxAcGVuZ3V0cm9uaXguZGU7DQo+ID4gPiA+IGZlc3Rl
+dmFtQGdtYWlsLmNvbTsgZGwtbGludXgtaW14IDxsaW51eC1pbXhAbnhwLmNvbT47IEFpc2hlbmcg
+RG9uZw0KPiA+ID4gPiA8YWlzaGVuZy5kb25nQG54cC5jb20+OyBsaW51eC1tZWRpYUB2Z2VyLmtl
+cm5lbC5vcmc7DQo+ID4gPiA+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGRldmljZXRy
+ZWVAdmdlci5rZXJuZWwub3JnOw0KPiA+ID4gPiBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJh
+ZGVhZC5vcmcNCj4gPiA+ID4gU3ViamVjdDogW0VYVF0gUmU6IFtQQVRDSCB2MTMgMDgvMTNdIG1l
+ZGlhOiBhbXBoaW9uOiBhZGQgdjRsMiBtMm0NCj4gPiA+ID4gdnB1IGRlY29kZXIgc3RhdGVmdWwg
+ZHJpdmVyDQo+ID4gPiA+DQo+ID4gPiA+IENhdXRpb246IEVYVCBFbWFpbA0KPiA+ID4gPg0KPiA+
+ID4gPiBMZSBtYXJkaSAzMCBub3ZlbWJyZSAyMDIxIMOgIDE3OjQ4ICswODAwLCBNaW5nIFFpYW4g
+YSDDqWNyaXQgOg0KPiA+ID4gPiA+IFRoaXMgY29uc2lzdHMgb2YgdmlkZW8gZGVjb2RlciBpbXBs
+ZW1lbnRhdGlvbiBwbHVzIGRlY29kZXIgY29udHJvbHMuDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBT
+aWduZWQtb2ZmLWJ5OiBNaW5nIFFpYW4gPG1pbmcucWlhbkBueHAuY29tPg0KPiA+ID4gPiA+IFNp
+Z25lZC1vZmYtYnk6IFNoaWppZSBRaW4gPHNoaWppZS5xaW5AbnhwLmNvbT4NCj4gPiA+ID4gPiBT
+aWduZWQtb2ZmLWJ5OiBaaG91IFBlbmcgPGVhZ2xlLnpob3VAbnhwLmNvbT4NCj4gPiA+ID4gPiAt
+LS0NCj4gPiA+ID4gPiAgZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9hbXBoaW9uL3ZkZWMuYyB8IDE2
+ODANCj4gPiA+ID4gKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiA+ID4NCj4gPiA+DQo+ID4g
+PiA+ID4gKw0KPiA+ID4gPiA+ICtzdGF0aWMgdm9pZCB2ZGVjX2luaXRfZm10KHN0cnVjdCB2cHVf
+aW5zdCAqaW5zdCkgew0KPiA+ID4gPiA+ICsgICAgIHN0cnVjdCB2ZGVjX3QgKnZkZWMgPSBpbnN0
+LT5wcml2Ow0KPiA+ID4gPiA+ICsgICAgIGNvbnN0IHN0cnVjdCB2cHVfZm9ybWF0ICpmbXQ7DQo+
+ID4gPiA+ID4gKyAgICAgaW50IGk7DQo+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ICsgICAgIGZtdCA9
+IHZwdV9oZWxwZXJfZmluZF9mb3JtYXQoaW5zdCwgaW5zdC0+Y2FwX2Zvcm1hdC50eXBlLA0KPiA+
+ID4gPiB2ZGVjLT5jb2RlY19pbmZvLnBpeGZtdCk7DQo+ID4gPiA+ID4gKyAgICAgaW5zdC0+b3V0
+X2Zvcm1hdC53aWR0aCA9IHZkZWMtPmNvZGVjX2luZm8ud2lkdGg7DQo+ID4gPiA+ID4gKyAgICAg
+aW5zdC0+b3V0X2Zvcm1hdC5oZWlnaHQgPSB2ZGVjLT5jb2RlY19pbmZvLmhlaWdodDsNCj4gPiA+
+ID4gPiArICAgICBpbnN0LT5jYXBfZm9ybWF0LndpZHRoID0gdmRlYy0+Y29kZWNfaW5mby5kZWNv
+ZGVkX3dpZHRoOw0KPiA+ID4gPiA+ICsgICAgIGluc3QtPmNhcF9mb3JtYXQuaGVpZ2h0ID0gdmRl
+Yy0+Y29kZWNfaW5mby5kZWNvZGVkX2hlaWdodDsNCj4gPiA+ID4gPiArICAgICBpbnN0LT5jYXBf
+Zm9ybWF0LnBpeGZtdCA9IHZkZWMtPmNvZGVjX2luZm8ucGl4Zm10Ow0KPiA+ID4gPiA+ICsgICAg
+IGlmIChmbXQpIHsNCj4gPiA+ID4gPiArICAgICAgICAgICAgIGluc3QtPmNhcF9mb3JtYXQubnVt
+X3BsYW5lcyA9IGZtdC0+bnVtX3BsYW5lczsNCj4gPiA+ID4gPiArICAgICAgICAgICAgIGluc3Qt
+PmNhcF9mb3JtYXQuZmxhZ3MgPSBmbXQtPmZsYWdzOw0KPiA+ID4gPiA+ICsgICAgIH0NCj4gPiA+
+ID4gPiArICAgICBmb3IgKGkgPSAwOyBpIDwgaW5zdC0+Y2FwX2Zvcm1hdC5udW1fcGxhbmVzOyBp
+KyspIHsNCj4gPiA+ID4gPiArICAgICAgICAgICAgIGluc3QtPmNhcF9mb3JtYXQuYnl0ZXNwZXJs
+aW5lW2ldID0NCj4gPiA+ID4gdmRlYy0+Y29kZWNfaW5mby5ieXRlc3BlcmxpbmVbaV07DQo+ID4g
+PiA+ID4gKyAgICAgICAgICAgICBpbnN0LT5jYXBfZm9ybWF0LnNpemVpbWFnZVtpXSA9DQo+ID4g
+PiA+IHZkZWMtPmNvZGVjX2luZm8uc2l6ZWltYWdlW2ldOw0KPiA+ID4gPiA+ICsgICAgIH0NCj4g
+PiA+ID4gPiArICAgICBpZiAodmRlYy0+Y29kZWNfaW5mby5wcm9ncmVzc2l2ZSkNCj4gPiA+ID4g
+PiArICAgICAgICAgICAgIGluc3QtPmNhcF9mb3JtYXQuZmllbGQgPSBWNEwyX0ZJRUxEX05PTkU7
+DQo+ID4gPiA+ID4gKyAgICAgZWxzZQ0KPiA+ID4gPiA+ICsgICAgICAgICAgICAgaW5zdC0+Y2Fw
+X2Zvcm1hdC5maWVsZCA9IFY0TDJfRklFTERfSU5URVJMQUNFRDsNCj4gPiA+ID4NCj4gPiA+ID4g
+QXMgYSBmb2xsb3d1cCwgdGhpcyBzaG91bGQgYmUgY29uZGl0aW9uYWwgdG8gdGhlIGNob3NlbiBw
+aXhlbCBmb3JtYXQuDQo+ID4gPiA+IElmIEkgdW5kZXJzdG9vZCBjb3JyZWN0LCB5b3UgcHJvZHVj
+ZSBpbnRlcmxhY2VkIGlzIG9ubHkgcHJvZHVjZQ0KPiA+ID4gPiBmb3IgbGluZWFyIE5WMTIsIGZv
+ciB0aWxlZCB0aGUgZmllbGRzIGFyZSBvdXRwdXRlZCBzZXBlcmF0ZWQgaW4NCj4gPiA+ID4gdGhl
+aXIgcmVzcGVjdGl2ZSB2NGwyX2J1ZmZlci4gTm90ZSBzdXJlIHdoZXJlIHlldCwgYnV0IHRoZSBW
+NEwyDQo+ID4gPiA+IHNwZWMgcmVxdWlyZXMgeW91IHRvIHBhaXIgdGhlIGZpZWxkcyBieSB1c2lu
+ZyB0aGUgc2FtZSBzZXFfbnVtIG9uIGJvdGguDQo+ID4gPg0KPiA+ID4gVGhlIGFtcGhpb24gdnB1
+IHdpbGwgc3RvcmUgdGhlIHR3byBmaWVsZHMgaW50byBvbmUgdjRsMl9idWYsIFNvIEknbGwNCj4g
+PiA+IGNoYW5nZSBWNEwyX0ZJRUxEX0lOVEVSTEFDRUQgdG8gVjRMMl9GSUVMRF9TRVFfVEINCj4g
+PiA+DQo+ID4NCj4gPiBIaSBOaWNvbGFzLA0KPiA+ICAgICBTZWVtcyBnc3RyZWFtZXIgZG9lc24n
+dCBzdXBwb3J0IFY0TDJfRklFTERfU0VRX1RCIHlldC4NCj4gPg0KPiA+ICAgc3dpdGNoIChmbXQu
+Zm10LnBpeC5maWVsZCkgew0KPiA+ICAgICBjYXNlIFY0TDJfRklFTERfQU5ZOg0KPiA+ICAgICBj
+YXNlIFY0TDJfRklFTERfTk9ORToNCj4gPiAgICAgICBpbnRlcmxhY2VfbW9kZSA9IEdTVF9WSURF
+T19JTlRFUkxBQ0VfTU9ERV9QUk9HUkVTU0lWRTsNCj4gPiAgICAgICBicmVhazsNCj4gPiAgICAg
+Y2FzZSBWNEwyX0ZJRUxEX0lOVEVSTEFDRUQ6DQo+ID4gICAgIGNhc2UgVjRMMl9GSUVMRF9JTlRF
+UkxBQ0VEX1RCOg0KPiA+ICAgICBjYXNlIFY0TDJfRklFTERfSU5URVJMQUNFRF9CVDoNCj4gPiAg
+ICAgICBpbnRlcmxhY2VfbW9kZSA9IEdTVF9WSURFT19JTlRFUkxBQ0VfTU9ERV9JTlRFUkxFQVZF
+RDsNCj4gPiAgICAgICBicmVhazsNCj4gPiAgICAgY2FzZSBWNEwyX0ZJRUxEX0FMVEVSTkFURToN
+Cj4gPiAgICAgICBpbnRlcmxhY2VfbW9kZSA9IEdTVF9WSURFT19JTlRFUkxBQ0VfTU9ERV9BTFRF
+Uk5BVEU7DQo+ID4gICAgICAgYnJlYWs7DQo+ID4gICAgIGRlZmF1bHQ6DQo+ID4gICAgICAgZ290
+byB1bnN1cHBvcnRlZF9maWVsZDsNCj4gPiAgIH0NCj4gDQo+IFRoaXMgaXMgY29ycmVjdCwgSSBo
+YWQgbmV2ZXIgaGFkIHRoZSBjaGFuY2UgdG8gaW1wbGVtZW50IGl0LiBTbyBmYXIgSSBvbmx5IGtu
+b3cNCj4gSU1YNiBjYW1lcmEgcGlwZWxpbmUgcHJvZHVjaW5nIHRoYXQsIGJ1dCByYXJlbHkgdXNl
+ZCBpbiBwcmFjdGljZS4gV2hhdA0KPiBtYXR0ZXJzIGhlcmUgaXMgdGhhdCB5b3VyIGRyaXZlciBk
+b2VzIHJlcG9ydCB0aGUgcmlnaHQgaW5mb3JtYXRpb24gc28gdGhhdA0KPiB1c2Vyc3BhY2UgZG9u
+J3QgZ2V0IGZvb2xlZCBpbnRvIHRoaW5raW5nIGl0J3MgaW50ZXJsZWF2ZWQuDQo+IA0KT0ssIHRo
+ZW4gbm8gcHJvYmxlbS4NCg0KPiA+DQo+ID4gPiA+DQo+ID4gPiA+ID4gKyAgICAgaWYgKHZkZWMt
+PmNvZGVjX2luZm8uY29sb3JfcHJpbWFyaWVzID09DQo+ID4gPiBWNEwyX0NPTE9SU1BBQ0VfREVG
+QVVMVCkNCj4gPiA+ID4gPiArICAgICAgICAgICAgIHZkZWMtPmNvZGVjX2luZm8uY29sb3JfcHJp
+bWFyaWVzID0NCj4gPiA+ID4gVjRMMl9DT0xPUlNQQUNFX1JFQzcwOTsNCj4gPiA+ID4gPiArICAg
+ICBpZiAodmRlYy0+Y29kZWNfaW5mby50cmFuc2Zlcl9jaGFycyA9PQ0KPiBWNEwyX1hGRVJfRlVO
+Q19ERUZBVUxUKQ0KPiA+ID4gPiA+ICsgICAgICAgICAgICAgdmRlYy0+Y29kZWNfaW5mby50cmFu
+c2Zlcl9jaGFycyA9DQo+IFY0TDJfWEZFUl9GVU5DXzcwOTsNCj4gPiA+ID4gPiArICAgICBpZiAo
+dmRlYy0+Y29kZWNfaW5mby5tYXRyaXhfY29lZmZzID09DQo+IFY0TDJfWUNCQ1JfRU5DX0RFRkFV
+TFQpDQo+ID4gPiA+ID4gKyAgICAgICAgICAgICB2ZGVjLT5jb2RlY19pbmZvLm1hdHJpeF9jb2Vm
+ZnMgPQ0KPiBWNEwyX1lDQkNSX0VOQ183MDk7DQo+ID4gPiA+ID4gKyAgICAgaWYgKHZkZWMtPmNv
+ZGVjX2luZm8uZnVsbF9yYW5nZSA9PQ0KPiBWNEwyX1FVQU5USVpBVElPTl9ERUZBVUxUKQ0KPiA+
+ID4gPiA+ICsgICAgICAgICAgICAgdmRlYy0+Y29kZWNfaW5mby5mdWxsX3JhbmdlID0NCj4gPiA+
+ID4gVjRMMl9RVUFOVElaQVRJT05fTElNX1JBTkdFOw0KPiA+ID4gPiA+ICt9DQo+ID4gPiA+ID4g
+Kw0KDQo=
