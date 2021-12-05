@@ -2,119 +2,97 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72F09C433EF
-	for <linux-media@archiver.kernel.org>; Sat,  4 Dec 2021 20:56:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B889C433EF
+	for <linux-media@archiver.kernel.org>; Sun,  5 Dec 2021 00:17:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353461AbhLDU7t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 4 Dec 2021 15:59:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        id S229883AbhLEAUs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 4 Dec 2021 19:20:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243137AbhLDU7t (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 4 Dec 2021 15:59:49 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C42BC061751
-        for <linux-media@vger.kernel.org>; Sat,  4 Dec 2021 12:56:23 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id t26so15203586lfk.9
-        for <linux-media@vger.kernel.org>; Sat, 04 Dec 2021 12:56:23 -0800 (PST)
+        with ESMTP id S229512AbhLEAUq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 4 Dec 2021 19:20:46 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C15DC061751;
+        Sat,  4 Dec 2021 16:17:20 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id u17so6726082wrt.3;
+        Sat, 04 Dec 2021 16:17:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=OPvjDBqjKrEr3rCU6Ypf1Nh6PeMaDSW0GSJx+jjs91E=;
-        b=WN5Df8voZmPhnJyeK9VVbRxtRFeqrC9aRt0puxIPsiByy8EMh2f3kSeuhOBVeyrk8F
-         Y43UgQdzOKtl0cjeyp6OYNdgLOR85GhKqcPEBZ8BgGttzRxM6dDjtQ5VLjujqcZERMSu
-         Y7+QTQ+GuldBr9PwgG9gN+74TX3RLuF0kiOiaiKIjEqqoRTKrG3QPDBOEBEsA4d+C7zK
-         PuXhuuEMGZNS/y/7IsF2j4Ba8xY/bC/63BjekMo0L4XnIMkB9Inq8JlSimxOxndnWj2E
-         pkbb+INiKfi/z+qCdpBuIyW07NrhTZ/3MccMnYEDQL+OCFikAuAN/H8xinzTBHTcI492
-         ZquQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZT8uH+WZYKbbbA52e1mD7F2y2MEMzSLs39hZ2g9wA4o=;
+        b=KPbWipGF9NN5VmLf95S54L22RiZUamWDBWtWklREvuxwXPrnlh8NRSbAnpjKnX8EDj
+         GlzYua17dO6Dx1Uiu7UMY8W2+8eCXIKh2o4bXqMO2ZjEJcprllnKkrOnH75FQEMqAdSa
+         92ZGwM0B9DloU+dKbehCRq6dGDIWfurJmc1mL5EJho9cQr5b00TLvMiGbenXUtIuvfBH
+         eOvW+89a2VVehNIdfvemNfrtFZ5/qqeGwO0wF+TfEGisYpF35d0zH/uEbCOPp8IN56ig
+         idvpDlKglI3CayAycMeexGEY0oyN2r4ghxOppJ7AWR0yvujkDbW+Y/KnfSymHx2S/Kfh
+         CagA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=OPvjDBqjKrEr3rCU6Ypf1Nh6PeMaDSW0GSJx+jjs91E=;
-        b=PeDTghTkKfhpvld1kL0Gn/JdYZPg+bo//sqLzZuLhlMqGsCVZWL1GdWCW1eVRKc5wh
-         hvSK+fRLhFSqcn3RrE0AY6LWfnexnNpXYPDYqwh/U6ftibO7nrZHBejljk2g4P4952EB
-         dcoQfaefh9nP5qdEl1dZCPU5a92f3N9qffRPmOl6s4JRybwRGjSOayhOn4bQf2dE2lUA
-         AW3FPKfUz+a5SsQcd80NgOtJuN1xxQCvdkZ3LibA5zSl6jUB3LVnhrPiNhtJfToflkce
-         wXR45dHSx+qx5Wtt7f3fdBSgsgyNpZjQDhmhXCEzf2nmw2SU4eAxV47xZUSUUIbnGI9k
-         BrcA==
-X-Gm-Message-State: AOAM533Ci+ENy3Dscww7+G/u2CENm+G8lywTZyU/Z2e8PAggioc2IkLf
-        ybl7kN/FkQyVGP5ttyZpic3Eqg==
-X-Google-Smtp-Source: ABdhPJylUmg0TqiyMASBi1dvn+e6etre5OB39NT/92hJJcQMpFMxUcZv2KoIWwS/j07aDs6muTugQg==
-X-Received: by 2002:a05:6512:3ca1:: with SMTP id h33mr25609312lfv.640.1638651381507;
-        Sat, 04 Dec 2021 12:56:21 -0800 (PST)
-Received: from localhost (h-46-59-88-219.A463.priv.bahnhof.se. [46.59.88.219])
-        by smtp.gmail.com with ESMTPSA id 190sm939797ljf.4.2021.12.04.12.56.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZT8uH+WZYKbbbA52e1mD7F2y2MEMzSLs39hZ2g9wA4o=;
+        b=1etYmGb39k3KJmeKV/svCJIXm+He2a85uLet8B0CMwXlWOP1TPyLgHk8ixSMkjn27M
+         il8BO1FeP6bLsZE1XQL+HhhcYp6729dDW237legWtbYBkwlGV49YCowsdT7P/WyOg66m
+         ROuCp5a+/VIQsY0pxuQoXEjI7IsYl6QfR5r3L2lUdITEzcAk0EnD+yEB9uaNItKjPozh
+         AIVhAAol7lAGk+K9dRlKFqt1FKyJfmO1XiSX1o1I2LXEfMCRYnN8duOuzC/wlMstVFBS
+         dPAkzaDR1Vw20xHn+nFSm3NMSX9QJGZ4AG5K9CCDJI06465yUMCNxjTI8z0OWRTxzBxH
+         anQQ==
+X-Gm-Message-State: AOAM530R4g9VL+S29iXtqU0jN6obcveZgvOMpYdzM9uAJYn9g6Y09M3y
+        cWle7dBU4yjCqbySlm8nkGO7TVrS9WMITQ==
+X-Google-Smtp-Source: ABdhPJzIOV28vkE7Pge5Zpr2lvVGDACk/1izBZLlOk1DUonIBDpy4A/Sd2MgCq0qaQX92WqsvolTwg==
+X-Received: by 2002:adf:8bd8:: with SMTP id w24mr32610946wra.540.1638663438766;
+        Sat, 04 Dec 2021 16:17:18 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id b11sm9053931wmj.35.2021.12.04.16.17.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 12:56:20 -0800 (PST)
-Date:   Sat, 4 Dec 2021 21:56:19 +0100
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: staging: max96712: add V4L2 dependencies
-Message-ID: <YavV85Xj0589TQwe@oden.dyn.berto.se>
-References: <20211204174559.1146671-1-arnd@kernel.org>
+        Sat, 04 Dec 2021 16:17:18 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: saa7146: remove redundant assignments of i to zero
+Date:   Sun,  5 Dec 2021 00:17:17 +0000
+Message-Id: <20211205001717.178416-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211204174559.1146671-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Arnd,
+The variable i is assigned the value 0 and each time the value is
+never read after it has been assigned. The assignments are redundant
+and can be removed.
 
-Thanks for your patch.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/media/pci/saa7146/mxb.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-I'm sorry for introducing the fault in the first place, Sakari already 
-sent a fix for my mistake [1]. Just waiting for Mauro to pick it up.
-
-1. https://patchwork.linuxtv.org/project/linux-media/patch/20211126080623.1587610-1-sakari.ailus@linux.intel.com/
-
-On 2021-12-04 18:45:48 +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Without the extra dependencies, I run into randconfig build failures:
-> 
-> WARNING: unmet direct dependencies detected for VIDEO_V4L2_SUBDEV_API
->   Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=n] && MEDIA_CONTROLLER [=y]
->   Selected by [y]:
->   - VIDEO_MAX96712 [=y] && STAGING [=y] && STAGING_MEDIA [=y] && MEDIA_SUPPORT [=y] && I2C [=y] && OF_GPIO [=y]
-> 
-> aarch64-linux-ld: drivers/staging/media/max96712/max96712.o: in function `max96712_probe':
-> max96712.c:(.text+0x1b8): undefined reference to `v4l2_fwnode_endpoint_parse'
-> aarch64-linux-ld: max96712.c:(.text+0x374): undefined reference to `v4l2_ctrl_handler_init_class'
-> aarch64-linux-ld: max96712.c:(.text+0x3b0): undefined reference to `v4l2_ctrl_new_std'
-> 
-> Fixes: 5814f32fef13 ("media: staging: max96712: Add basic support for MAX96712 GMSL2 deserializer")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/staging/media/max96712/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/staging/media/max96712/Kconfig b/drivers/staging/media/max96712/Kconfig
-> index 258d47644cbd..62534110ca3b 100644
-> --- a/drivers/staging/media/max96712/Kconfig
-> +++ b/drivers/staging/media/max96712/Kconfig
-> @@ -3,6 +3,7 @@ config VIDEO_MAX96712
->  	tristate "Maxim MAX96712 Quad GMSL2 Deserializer support"
->  	depends on I2C
->  	depends on OF_GPIO
-> +	depends on VIDEO_DEV && VIDEO_V4L2
->  	select V4L2_FWNODE
->  	select VIDEO_V4L2_SUBDEV_API
->  	select MEDIA_CONTROLLER
-> -- 
-> 2.29.2
-> 
-
+diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
+index 73fc901ecf3d..ae958ff206b2 100644
+--- a/drivers/media/pci/saa7146/mxb.c
++++ b/drivers/media/pci/saa7146/mxb.c
+@@ -340,7 +340,7 @@ static int mxb_init_done(struct saa7146_dev* dev)
+ 	struct tuner_setup tun_setup;
+ 	v4l2_std_id std = V4L2_STD_PAL_BG;
+ 
+-	int i = 0, err = 0;
++	int i, err = 0;
+ 
+ 	/* mute audio on tea6420s */
+ 	tea6420_route(mxb, 6);
+@@ -349,7 +349,6 @@ static int mxb_init_done(struct saa7146_dev* dev)
+ 	saa7111a_call(mxb, video, s_std, std);
+ 
+ 	/* select tuner-output on saa7111a */
+-	i = 0;
+ 	saa7111a_call(mxb, video, s_routing, SAA7115_COMPOSITE0,
+ 		SAA7111_FMT_CCIR, 0);
+ 
 -- 
-Kind Regards,
-Niklas Söderlund
+2.33.1
+
