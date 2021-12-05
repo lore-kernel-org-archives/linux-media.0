@@ -2,54 +2,54 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A48DDC433FE
-	for <linux-media@archiver.kernel.org>; Sun,  5 Dec 2021 09:02:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B655C433EF
+	for <linux-media@archiver.kernel.org>; Sun,  5 Dec 2021 09:02:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232719AbhLEJF3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 5 Dec 2021 04:05:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
+        id S232727AbhLEJFb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 5 Dec 2021 04:05:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbhLEJF2 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Dec 2021 04:05:28 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298C6C061751
-        for <linux-media@vger.kernel.org>; Sun,  5 Dec 2021 01:02:01 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id w1so30159657edc.6
-        for <linux-media@vger.kernel.org>; Sun, 05 Dec 2021 01:02:01 -0800 (PST)
+        with ESMTP id S232726AbhLEJF3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 5 Dec 2021 04:05:29 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF57C0613F8
+        for <linux-media@vger.kernel.org>; Sun,  5 Dec 2021 01:02:02 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id e3so30285943edu.4
+        for <linux-media@vger.kernel.org>; Sun, 05 Dec 2021 01:02:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=konsulko.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BkllAYoHT1d4g58oaIBTjo78DyD65U3ROTueHEEQZhQ=;
-        b=esJB/GisnBOrlPLsHmdDrefWKkoOuIQ+HLqal1ubxFldmm7pS1N0l4MI6tw8m4BSKo
-         AJh6/jdIpW7qxe3BB/1xAdq5Dv+2rZK+HOZWi3SR9maDTLwl2rre5xNnOKnJcM50jUhO
-         TPtknNSwXFj9kRH9X9+syFBSE578aKdXA7//E=
+        bh=Tvc+uZInx3k8MrEByxSHttKZs3Fai2Uq5Zu34fIedjU=;
+        b=AvMAShKOUIY9XXKnwe+5LZen2TaNUA3bsCgHjtUEGjVIG6AvPIDH4LuYaodoAPnI02
+         b6m19sc+ZBE4B+8Ho3n+jEaMaOvOJjnHP7njYXueNU0IaAVjVfT1mDCxsiilgUkYWyd9
+         23xLFDUvb0UQIlJqfuxkUFcP/gHextKnS1Nu4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BkllAYoHT1d4g58oaIBTjo78DyD65U3ROTueHEEQZhQ=;
-        b=zxqzyZbtT2mNtrvUY4HU+T7qXnK6+Sz0BBgf25RQX67pt/a+XjW3WnRo+cpXAQxgpe
-         H6Xtf8m0k97cCmuNrHUB0tXlrUjtBMeEKVfXFrHgGQJJ6ACeNBc6sMY07IG+tY3QF2aa
-         RXk1OpPg/9BmetuLGFweCWWnlUINi4j4qmyU0ao7K99mSIS25llNbpcTIgbeyxU7fW2o
-         kSi8ILhDFEkUfrhiHRFAWvs3YF2vVFLvin5T0MUfG+VcUR9SqkFWQ/FEs266FwpsUC1F
-         9nFX/7d1QnDSsDCP8egDMBiy4aY3vbspnpYvzcVXuTV2B1GvewdSJWdfNUv000zT8UpP
-         SEUQ==
-X-Gm-Message-State: AOAM530hD+/m/vh/3o9YaW++mr8wztKS3GDSVmbN21uvBX1D/EjPVP48
-        xbbyO9Yv2oLQbPcU/ToycZifWPE3Hrg7CA==
-X-Google-Smtp-Source: ABdhPJy4y6UPjg0PbmUxI4vpfMuhwEIyPLSr195Yqz6Ggtas9mgxKUyIR/tpk5jCtGOVqCvo1KQfgw==
-X-Received: by 2002:a17:907:90c3:: with SMTP id gk3mr36633456ejb.282.1638694919366;
-        Sun, 05 Dec 2021 01:01:59 -0800 (PST)
+        bh=Tvc+uZInx3k8MrEByxSHttKZs3Fai2Uq5Zu34fIedjU=;
+        b=2NINMORJzLGRG0BuJhpYr1yRNoZfnYXgtZC50MrzUMMFuwdJo6MA4u7gpLzNa/1rYD
+         ws4iMXjc0++2cYqcNf7lJ01Rcm1jv/qhvXS7TZEuc9BcE0wsNhv8el9loe7WZAT/Ymkn
+         F1WSpXLQ54F088LHNDJWQ5YmshVRzlUC/nPMbyfvyQu61cLq3K5YUsCqbIrWBfyiOtFa
+         1kOdIFV7eO/GhSbI4x34086e7eiDD7V2sXD+5wovf0BizQSIstXZC8ZL/fH5GRS4u+Il
+         r+1Hnyvcs+N9L1FKm9fkyRnfnU6Jd9RSvOyt7HYFvJZNy2bCqOTix1QjeTzKg2M29tVa
+         r0tw==
+X-Gm-Message-State: AOAM5331Ay3ZTwxK8QCT7o6/CaBDZ/d4EG6ZedvBiKPc8uLotYI0Hgyl
+        8UeQKl+Y9d2zWpQcRMTDCLJh9RpKxoRO0A==
+X-Google-Smtp-Source: ABdhPJy6Qpomjort6jh02katlPpnxxy7lMoq7ioqFNGH5zIsrOl3E4emaui1HU6kvVdjWT5DANLa/Q==
+X-Received: by 2002:a17:906:e103:: with SMTP id gj3mr36983716ejb.456.1638694920820;
+        Sun, 05 Dec 2021 01:02:00 -0800 (PST)
 Received: from taos.k.g (lan.nucleusys.com. [92.247.61.126])
-        by smtp.gmail.com with ESMTPSA id dm6sm4921492ejc.89.2021.12.05.01.01.58
+        by smtp.gmail.com with ESMTPSA id dm6sm4921492ejc.89.2021.12.05.01.02.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 01:01:59 -0800 (PST)
+        Sun, 05 Dec 2021 01:02:00 -0800 (PST)
 From:   Petko Manolov <petko.manolov@konsulko.com>
 To:     linux-media@vger.kernel.org
 Cc:     Petko Manolov <petko.manolov@konsulko.com>
-Subject: [RFC PATCH v1 3/5] adds ovm6211 entry to Makefile
-Date:   Sun,  5 Dec 2021 11:01:47 +0200
-Message-Id: <20211205090149.5221-3-petko.manolov@konsulko.com>
+Subject: [RFC PATCH v1 5/5] adds i2c/ explicitly to Makefile
+Date:   Sun,  5 Dec 2021 11:01:49 +0200
+Message-Id: <20211205090149.5221-5-petko.manolov@konsulko.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211205090149.5221-1-petko.manolov@konsulko.com>
 References: <20211205090149.5221-1-petko.manolov@konsulko.com>
@@ -61,17 +61,18 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Signed-off-by: Petko Manolov <petko.manolov@konsulko.com>
 ---
- drivers/staging/media/i2c/Makefile | 1 +
+ drivers/staging/media/Makefile | 1 +
  1 file changed, 1 insertion(+)
- create mode 100644 drivers/staging/media/i2c/Makefile
 
-diff --git a/drivers/staging/media/i2c/Makefile b/drivers/staging/media/i2c/Makefile
-new file mode 100644
-index 000000000000..4d6f2956b3f1
---- /dev/null
-+++ b/drivers/staging/media/i2c/Makefile
-@@ -0,0 +1 @@
-+obj-$(CONFIG_VIDEO_OVM6211) += ovm6211.o
+diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
+index 7e2c86e3695d..338c08d2429a 100644
+--- a/drivers/staging/media/Makefile
++++ b/drivers/staging/media/Makefile
+@@ -12,3 +12,4 @@ obj-$(CONFIG_VIDEO_HANTRO)	+= hantro/
+ obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
+ obj-$(CONFIG_VIDEO_ZORAN)	+= zoran/
+ obj-$(CONFIG_DVB_AV7110)	+= av7110/
++obj-y				+= i2c/
 -- 
 2.30.2
 
