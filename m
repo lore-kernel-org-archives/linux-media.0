@@ -2,39 +2,39 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 822E8C433F5
-	for <linux-media@archiver.kernel.org>; Mon,  6 Dec 2021 13:16:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CC55C4332F
+	for <linux-media@archiver.kernel.org>; Mon,  6 Dec 2021 13:16:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244223AbhLFNUX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Dec 2021 08:20:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
+        id S244221AbhLFNUY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Dec 2021 08:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244214AbhLFNUW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Dec 2021 08:20:22 -0500
+        with ESMTP id S244222AbhLFNUX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Dec 2021 08:20:23 -0500
 Received: from lb1-smtp-cloud8.xs4all.net (lb1-smtp-cloud8.xs4all.net [IPv6:2001:888:0:108::1b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C6FC0613F8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C5CC061746
         for <linux-media@vger.kernel.org>; Mon,  6 Dec 2021 05:16:53 -0800 (PST)
 Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id uDrMmpEGIQyExuDrPm2JUf; Mon, 06 Dec 2021 14:16:52 +0100
+        id uDrMmpEGIQyExuDrQm2JV9; Mon, 06 Dec 2021 14:16:52 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1638796612; bh=CrLBmkwSELvVmTheaFu8QBeazdfNj4H2YIkCWYVH99E=;
+        t=1638796612; bh=wDlxuOjkqosGn4T9TGH4LNfOHmXo2nv8CM7lQwvVcFs=;
         h=From:To:Subject:Date:Message-Id:MIME-Version:From:Subject;
-        b=cN1cKbgAKOA3XywU5E4Oe4zJzzjGpFh2///C0013bXhpUdPeHLJ94kgKcJ7wltABw
-         gIL/JDUEteQiP2U3ePzg5e2zf3qSryE6wh+2ZzF1+Vy7AZwTV93KtrPvJdDPdZsgNQ
-         ycAM7khEwmG4bZ7geqGLfVcITeZhkWdHckqfoypvcYEsrTTqHI/ZUQPWxJkXV+9OTG
-         0Wuoxovbrkly34y1nkpUcTcE1idmWbBBG0bB+QzJOG3H3P+TvgebpzJMl1oxDUoxk7
-         FvdiFu6mNppUxN5hTU6acsCS6quEPZyUCbYBw4KrceCr3G7+16zMiQQn2T0gi6DoPs
-         9dXAazVaL9Hzg==
+        b=B/5fp0F6Mx83yVfGBbeqxPJYwR1eI2cdFzmislaR1BVzfjhFIIGFfvuxcPRpy8G6j
+         cPJ3ukngVU3ljkigWct9RBJQR+av5UVpqTQ38i259Z3wY7DUvLJaUVfCR37OVCEXoc
+         EI/rfgRxm4U7PYHa9sdPRP8W03zNOb2+j8mWwcp3gMZhWKoV0T//feb8HKsji9h/5S
+         Pkvzz26eOYucr55/X15nQUYjAVxeIk3uWpd/+k4R2IhghS6GtoyDgQlyRv1SzE+XJ/
+         TcNcX1EP8OYDwu08KzFwZzA18wClnPLlwcG9xPYcA/d+SZ3RvQJfq+uErxm5+x2ytj
+         KC0DkDq9JJkgg==
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-gpio@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [RFC PATCH 1/3] pinctrl/core: check that can_sleep is true in pinctrl_gpio_direction()
-Date:   Mon,  6 Dec 2021 14:16:46 +0100
-Message-Id: <20211206131648.1521868-2-hverkuil-cisco@xs4all.nl>
+Subject: [RFC PATCH 3/3] pinctrl-sunxi: don't call pinctrl_gpio_direction()
+Date:   Mon,  6 Dec 2021 14:16:48 +0100
+Message-Id: <20211206131648.1521868-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211206131648.1521868-1-hverkuil-cisco@xs4all.nl>
 References: <20211206131648.1521868-1-hverkuil-cisco@xs4all.nl>
@@ -48,63 +48,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since pinctrl_gpio_direction() takes a mutex, the gpio driver must
-have can_sleep set to true. If not, then this function will call
-WARN_ON (only once per pin controller) to tell the developer that
-something must be done: either set can_sleep to true, or set the
-direction in the combine gpio/pinctrl driver itself without calling
-pinctrl_gpio_direction_input/output.
+Set the direction directly without calling pinctrl_gpio_direction().
+This avoids the mutex_lock() calls in that function, which would
+invalid the can_sleep = false.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/pinctrl/core.c | 11 +++++++++++
- drivers/pinctrl/core.h |  4 ++++
- 2 files changed, 15 insertions(+)
+ drivers/pinctrl/sunxi/pinctrl-sunxi.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/core.c b/drivers/pinctrl/core.c
-index ffe39336fcac..886242d08dcf 100644
---- a/drivers/pinctrl/core.c
-+++ b/drivers/pinctrl/core.c
-@@ -845,6 +845,17 @@ static int pinctrl_gpio_direction(unsigned gpio, bool input)
- 
- 	mutex_lock(&pctldev->mutex);
- 
-+	if (!pctldev->checked_can_sleep) {
-+		struct gpio_chip *chip = gpio_to_chip(gpio);
+diff --git a/drivers/pinctrl/sunxi/pinctrl-sunxi.c b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
+index 862c84efb718..80d6750c74a6 100644
+--- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
++++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
+@@ -835,7 +835,9 @@ static const struct pinmux_ops sunxi_pmx_ops = {
+ static int sunxi_pinctrl_gpio_direction_input(struct gpio_chip *chip,
+ 					unsigned offset)
+ {
+-	return pinctrl_gpio_direction_input(chip->base + offset);
++	struct sunxi_pinctrl *pctl = gpiochip_get_data(chip);
 +
-+		pctldev->checked_can_sleep = true;
-+		/*
-+		 * This pin controller can sleep, so check that the gpio
-+		 * controller sets can_sleep to true.
-+		 */
-+		WARN_ON(chip && !chip->can_sleep);
-+	}
-+
- 	/* Convert to the pin controllers number space */
- 	pin = gpio_to_pin(range, gpio);
- 	ret = pinmux_gpio_direction(pctldev, range, pin, input);
-diff --git a/drivers/pinctrl/core.h b/drivers/pinctrl/core.h
-index 840103c40c14..ae14b4e69b7b 100644
---- a/drivers/pinctrl/core.h
-+++ b/drivers/pinctrl/core.h
-@@ -38,6 +38,9 @@ struct pinctrl_gpio_range;
-  * @hog_sleep: sleep state for pins hogged by this device
-  * @mutex: mutex taken on each pin controller specific action
-  * @device_root: debugfs root for this device
-+ * @checked_can_sleep: used internally to warn once if pinctrl_gpio_direction()
-+ *	is called from a gpio driver that didn't set @can_sleep to true.
-+ *	pinctrl_gpio_direction() uses mutexes, so it can sleep.
-  */
- struct pinctrl_dev {
- 	struct list_head node;
-@@ -62,6 +65,7 @@ struct pinctrl_dev {
- #ifdef CONFIG_DEBUG_FS
- 	struct dentry *device_root;
- #endif
-+	bool checked_can_sleep;
- };
++	return sunxi_pmx_gpio_set_direction(pctl->pctl_dev, NULL, offset, true);
+ }
  
- /**
+ static int sunxi_pinctrl_gpio_get(struct gpio_chip *chip, unsigned offset)
+@@ -885,8 +887,10 @@ static void sunxi_pinctrl_gpio_set(struct gpio_chip *chip,
+ static int sunxi_pinctrl_gpio_direction_output(struct gpio_chip *chip,
+ 					unsigned offset, int value)
+ {
++	struct sunxi_pinctrl *pctl = gpiochip_get_data(chip);
++
+ 	sunxi_pinctrl_gpio_set(chip, offset, value);
+-	return pinctrl_gpio_direction_output(chip->base + offset);
++	return sunxi_pmx_gpio_set_direction(pctl->pctl_dev, NULL, offset, false);
+ }
+ 
+ static int sunxi_pinctrl_gpio_of_xlate(struct gpio_chip *gc,
 -- 
 2.33.0
 
