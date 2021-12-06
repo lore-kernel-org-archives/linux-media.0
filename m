@@ -2,82 +2,95 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45622C433EF
-	for <linux-media@archiver.kernel.org>; Mon,  6 Dec 2021 15:17:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30474C433EF
+	for <linux-media@archiver.kernel.org>; Mon,  6 Dec 2021 15:26:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbhLFPVR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Dec 2021 10:21:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbhLFPT3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Dec 2021 10:19:29 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112C0C0698CE
-        for <linux-media@vger.kernel.org>; Mon,  6 Dec 2021 07:13:43 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id y7so7295236plp.0
-        for <linux-media@vger.kernel.org>; Mon, 06 Dec 2021 07:13:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cnQqBSAo+K5oxr9l26dxH3RShjXf+td6E+PHuLLI4y8=;
-        b=VQIiWgpFRexhnDvLc40hcuZW7IZloc67v1EO6pDc4gDJnAh0CPsQ5fznnTZhQcFJXW
-         ktjxw6RbnBpLiUVoQ/VacQo/TSIwujyyBjZaLSEgclpiWnMOU0wdE/lJEBphP9+pWKl1
-         MLh+Ujy0n3oE+c9MqT0iP4kmn7D/myUpNO+J5WgQ7hnBstrPn6rVBDc6ScOZQCYHYQoj
-         +aICtAZrE2isxEmPRNrM5erhDnCag58kMThzQA/slIoLTYR09wAa1WJmPubjtobDJ1XZ
-         9q3B9k6Z9uz/EgFWcroiQpydY7/DYNHpq0fI+n4mKDIt2+NZ47cNlDIXk/1cTE+i5Yn5
-         t7eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cnQqBSAo+K5oxr9l26dxH3RShjXf+td6E+PHuLLI4y8=;
-        b=KguO94ScRzv4MIuHTJMW73MwNEuTuElYIWFPymV6cEaXvcdz8qzj8zQpipcedxuHXU
-         J7fON660FC2D6AXl42Y59272ikOe24lcO+GnRnTZYF9MeKDyosAFo6/eRABjVgCYNjQx
-         weMbp+gGzNnp0ejqStp0/Qj2yL8stuuA9oDRGAmD+xdHZ5oizoAib3e5LE4LRAgpmZQ1
-         2h1HF+VFPWURrNtDn2CJSqgUT8rJff5ZQZnickgoDSFuOEzaa8YlEhYH0B3yrG1QN2oF
-         EO6lkquadgbJlJEBZBJIBWd616dLKc/3P4oI3ZYFSD8Fh8UoqwDpHq0OrDOUzbwf15WP
-         yxTg==
-X-Gm-Message-State: AOAM53336GeEIkA5+OsOxUBBsF3JKaoNfx4T8VxaaEbdb5jziKqATmoN
-        Txl4ZUMhC2ecUwMP8DjeJOAE7pfjkk4fv4mlXfxDHw==
-X-Google-Smtp-Source: ABdhPJxLJ6uUWWiSZlny/JEj/mVjhmgg6C7BE3VsA338kjFc2t92GnAbloeXMtJTb10Jeu46/eWHG5/ObtlkLgQyN8c=
-X-Received: by 2002:a17:903:2004:b0:142:6344:2c08 with SMTP id
- s4-20020a170903200400b0014263442c08mr44072941pla.51.1638803620589; Mon, 06
- Dec 2021 07:13:40 -0800 (PST)
+        id S1358064AbhLFP3m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Dec 2021 10:29:42 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:58376 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1356562AbhLFP1j (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 6 Dec 2021 10:27:39 -0500
+Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1muFqb-0099Ro-KI; Mon, 06 Dec 2021 15:24:09 +0000
+Received: from ip6-localhost ([::1] helo=localhost.localdomain)
+        by slave0 with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1muFqY-0082Xq-7M; Mon, 06 Dec 2021 15:24:07 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.17] Mediatek improvements (#79174)
+Date:   Mon,  6 Dec 2021 15:24:05 +0000
+Message-Id: <20211206152405.1916360-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <e85c97e7-cdd1-db38-5c9a-5455cd83e6ad@xs4all.nl>
+References: 
 MIME-Version: 1.0
-References: <20211118124819.1902427-1-robert.foss@linaro.org>
- <20211118124819.1902427-4-robert.foss@linaro.org> <Ya4nEMnZ3zQiXbaR@ripper>
-In-Reply-To: <Ya4nEMnZ3zQiXbaR@ripper>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 6 Dec 2021 16:13:29 +0100
-Message-ID: <CAG3jFytNQHK=dTHGzd57V_m_6YNwtD2zRYgBSjykd3whzqy9pQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] arm64: dts: qcom: apq8016-sbc: Remove clock-lanes
- property from &camss node
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     agross@kernel.org, todor.too@gmail.com, mchehab@kernel.org,
-        robh+dt@kernel.org, angelogioacchino.delregno@somainline.org,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, 6 Dec 2021 at 16:05, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
->
-> On Thu 18 Nov 04:48 PST 2021, Robert Foss wrote:
->
-> > The clock-lanes property is no longer used as it is not programmable by
-> > the CSIPHY hardware block of Qcom ISPs and should be removed.
-> >
-> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
->
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->
-> Although I'd be happy to take the two dts patches through the Qualcomm
-> tree, once the driver changes has landed.
+From: builder@linuxtv.org
 
-Thanks Bjorn. I'll split the series and submit two fully reviewed v4 series.
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/e85c97e7-cdd1-db38-5c9a-5455cd83e6ad@xs4all.nl/
+Build log: https://builder.linuxtv.org/job/patchwork/163085/
+Build time: 00:20:36
+Link: https://lore.kernel.org/linux-media/e85c97e7-cdd1-db38-5c9a-5455cd83e6ad@xs4all.nl
+
+gpg: Signature made Mon 06 Dec 2021 02:43:51 PM UTC
+gpg:                using RSA key AAA7FFBA4D2D77EF4CAEA1421326E0CD23ABDCE5
+gpg: Good signature from "Hans Verkuil <hverkuil-cisco@xs4all.nl>" [unknown]
+gpg:                 aka "Hans Verkuil <hverkuil@xs4all.nl>" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 052C DE7B C215 053B 689F  1BCA BD2D 6148 6614 3B4C
+     Subkey fingerprint: AAA7 FFBA 4D2D 77EF 4CAE  A142 1326 E0CD 23AB DCE5
+
+Summary: got 3/15 patches with issues, being 1 at build time, plus one error when buinding PDF document
+
+Error/warnings:
+
+patches/0001-dt-bindings-mediatek-convert-mtk-jpeg-decoder-encode.patch:
+
+    allyesconfig: return code #0:
+	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+
+    allyesconfig: return code #0:
+	../drivers/media/rc/meson-ir-tx.c:22: warning: expecting prototype for meson(). Prototype was for DEVICE_NAME() instead
+	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
+	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+	../drivers/media/i2c/ov8865.c: ../drivers/media/i2c/ov8865.c:2841 ov8865_get_selection() warn: inconsistent indenting
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
+	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
+	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2874 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+
+   checkpatch.pl:
+	$ cat patches/0001-dt-bindings-mediatek-convert-mtk-jpeg-decoder-encode.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:23: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
+	-:26: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
+	-:66: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
+	-:165: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
+	-:202: WARNING: DT binding docs and includes should be a separate patch. See: Documentation/devicetree/bindings/submitting-patches.rst
+
+patches/0004-iommu-mediatek-v1-Free-the-existed-fwspec-if-the-mas.patch:
+
+   checkpatch.pl:
+	$ cat patches/0004-iommu-mediatek-v1-Free-the-existed-fwspec-if-the-mas.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:36: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+patches/0007-iommu-mediatek-Add-device_link-between-the-consumer-.patch:
+
+   checkpatch.pl:
+	$ cat patches/0007-iommu-mediatek-Add-device_link-between-the-consumer-.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:47: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+
+Error #512 when building PDF docs
+
