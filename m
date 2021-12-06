@@ -2,292 +2,157 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CEC7C433F5
-	for <linux-media@archiver.kernel.org>; Mon,  6 Dec 2021 18:06:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97A2AC433F5
+	for <linux-media@archiver.kernel.org>; Mon,  6 Dec 2021 19:05:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346526AbhLFSKO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Dec 2021 13:10:14 -0500
-Received: from gofer.mess.org ([88.97.38.141]:57015 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238530AbhLFSKN (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 6 Dec 2021 13:10:13 -0500
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 791E0C63C2; Mon,  6 Dec 2021 18:06:43 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1638814003; bh=5UsiuUCw3vbuWHb3TEEmtbmhwrRimdqfPJQvlqrpC5g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bqpalmOKNiE6c0F8iRxZc3XgYeokbxpnGXh6lYIURHETReU36FBZ6pLUMaUGpawfa
-         9pLdUGFGaY1v/PzNgKSkZgrFxU+LUfkjZvQRkk65fS0TYSWPJTIIghPfqsk0x6k0ro
-         AI7YxbFboumqv/gABQxIGc93sDt5wluJ1Tec7zKJ8mCkhdgL1POEQ49zZ9kAGOF0uV
-         dMhdWMjw2Ip93A1ep5W+HYbLXvoOjqAfhxiG1edKFFz0wZU88cnXDu0ZbBWJSGytMf
-         zsE274ke9fJMDCjw5xBjnLLvMPFV89XGzDlXdcAlIt5gRGtrJNpbeVEPu/XPKg2rng
-         nAvfhESXtTe3A==
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Cc:     =?UTF-8?q?=D0=9C=D0=B8=D1=85=D0=B0=D0=B8=D0=BB?= 
-        <vrserver1@gmail.com>
-Subject: [PATCH v4l-utils] ir-ctl: allow for different gaps to be specified
-Date:   Mon,  6 Dec 2021 18:06:43 +0000
-Message-Id: <20211206180643.2690-1-sean@mess.org>
-X-Mailer: git-send-email 2.20.1
+        id S1348222AbhLFTIi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Dec 2021 14:08:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347046AbhLFTIi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Dec 2021 14:08:38 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A79EC061746
+        for <linux-media@vger.kernel.org>; Mon,  6 Dec 2021 11:05:09 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id i13so10834187qvm.1
+        for <linux-media@vger.kernel.org>; Mon, 06 Dec 2021 11:05:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=Bc6SGKQNlMFh9taK81eaVOm8+Noh1ocBxGN8bqECuqk=;
+        b=tSTX6CVKOlJcxtnIXzTwvjih4g9VupPHqBfCCpeawQ1csVcTqeSor0FqXaDLcOVoto
+         SkDMTCTaROpRgpmx6SLtt7xtyKRW+AAF16z6QuNpHpJH1NwOQJBhp5rjlYa5jTPp3xkR
+         Lv737niiytUuvSFQILx0sDCVkNSvEOpHo+KmX8y3N1AaLFQ5YEmJdBBw7vbpZHFYDvks
+         H4VrREJ78AsSpJoOQiX9JCzgz+Zv4lBHzR6bGFa5Z2iCW3wWgOzPs4bAodPyEZ3x68+m
+         LyoRRaxFTXJqV9uZcUdnYXYgn83ZNvB4r8zV6K3quKdCfV6zuFw57GMo9RGwpudOb+Ob
+         Vncw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=Bc6SGKQNlMFh9taK81eaVOm8+Noh1ocBxGN8bqECuqk=;
+        b=ryva0FncltsMX+vjaKWCkM+LM7Gv0FhLbSVaBnNe4R+r7Zzh7EovXusUS5yFpRIS90
+         DnT5lANuLReJIFnFks5dVAoyrpEYQREfOXmZYmKZ2u17G21VDKstZTc1PgzBbI32C5Jc
+         MdH+wSHTsh7evIq00zNOKw+diV1kAZznYHdYzceGdiCEawbclw4SN6+koW64QmTfgion
+         HHlL/PJEg1XPVjAap5P91cnG5ezLP3zOm/iNCJGaEVmwE1hs2E7obHFZiSwwwSfhEzj5
+         BZ+3mD9AS7YJXMHzxMiQEaTsM8n1DNIBlKbTKxgGf5Nut1BkguciW9xCznyaPcycX80V
+         N54Q==
+X-Gm-Message-State: AOAM533r/5cklhXsr8Egj907giXQcwx670imCeRZbyKNVlNL7zyWqC7K
+        rJoVjf1JUITYxkR0sOHtePowJA==
+X-Google-Smtp-Source: ABdhPJyzfE7VvZ03mSWFEoCHvAWa5ou1h9E4HstNlAcV0HyPMH1PrFVEgBSZun35WQhcbrUSoBqAoA==
+X-Received: by 2002:a05:6214:c47:: with SMTP id r7mr39609317qvj.51.1638817508236;
+        Mon, 06 Dec 2021 11:05:08 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (mtl.collabora.ca. [66.171.169.34])
+        by smtp.gmail.com with ESMTPSA id d19sm8064502qtb.47.2021.12.06.11.05.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 11:05:07 -0800 (PST)
+Message-ID: <b4bfa8b8f3d8f25c48a3b0b81a0e87dc90f111af.camel@ndufresne.ca>
+Subject: [REGRESSION] Re: [PATCH v10 11/21] media: uvcvideo: Set unique vdev
+ name based in type
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org
+Cc:     linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>
+Date:   Mon, 06 Dec 2021 14:05:06 -0500
+In-Reply-To: <20210618122923.385938-12-ribalda@chromium.org>
+References: <20210618122923.385938-1-ribalda@chromium.org>
+         <20210618122923.385938-12-ribalda@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For example:
+Hi Ricard, 
 
-ir-ctl --send=part1 --gap=10000 --send=part2 --gap=20000 --send=part3
+Le vendredi 18 juin 2021 à 14:29 +0200, Ricardo Ribalda a écrit :
+> All the entities must have a unique name. We can have a descriptive and
+> unique name by appending the function and the entity->id.
 
-This would introduce a gap of 10000 microseconds between part1 and
-part2, and 20000 microseconds between part2 and part3.
+Thanks for your work. The only issue is that unfortunately this change cause an
+important regression for users. All UVC cameras in all UIs seems to no longer
+include any information about the camera. As an example, I have two cameras on
+my system and Firefox, Chrome, Cheese, Zoom and MS Team all agree that my camera
+are now:
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- utils/ir-ctl/ir-ctl.c | 122 +++++++++++++++++++++---------------------
- 1 file changed, 60 insertions(+), 62 deletions(-)
+  Video Capture 4
+  Video Capture 5
 
-diff --git a/utils/ir-ctl/ir-ctl.c b/utils/ir-ctl/ir-ctl.c
-index 34cde11e..c3a34d3f 100644
---- a/utils/ir-ctl/ir-ctl.c
-+++ b/utils/ir-ctl/ir-ctl.c
-@@ -66,14 +66,19 @@
- const char *argp_program_version = "IR ctl version " V4L_UTILS_VERSION;
- const char *argp_program_bug_address = "Sean Young <sean@mess.org>";
- 
-+enum send_ty {
-+	SEND_RAW,
-+	SEND_SCANCODE,
-+	SEND_KEYCODE,
-+	SEND_GAP,
-+};
- /*
-  * Since this program drives the lirc interface, use the same terminology
-  */
- struct send {
- 	struct send *next;
- 	const char *fname;
--	bool is_scancode;
--	bool is_keycode;
-+	enum send_ty ty;
- 	union {
- 		struct {
- 			unsigned carrier;
-@@ -85,6 +90,7 @@ struct send {
- 			unsigned protocol;
- 		};
- 		char	keycode[1];
-+		int	gap;
- 	};
- };
- 
-@@ -223,8 +229,7 @@ static struct send *read_file_pulse_space(struct arguments *args, const char *fn
- 		fprintf(stderr, _("Failed to allocate memory\n"));
- 		return NULL;
- 	}
--	f->is_scancode = false;
--	f->is_keycode = false;
-+	f->ty = SEND_RAW;
- 	f->carrier = UNSET;
- 	f->fname = fname;
- 
-@@ -393,8 +398,7 @@ static struct send *read_file_raw(struct arguments *args, const char *fname, FIL
- 		fclose(input);
- 		return NULL;
- 	}
--	f->is_scancode = false;
--	f->is_keycode = false;
-+	f->ty = SEND_RAW;
- 	f->carrier = UNSET;
- 	f->fname = fname;
- 
-@@ -549,14 +553,32 @@ static struct send *read_scancode(const char *name)
- 		return NULL;
- 	}
- 
--	f->is_scancode = true;
--	f->is_keycode = false;
-+	f->ty = SEND_SCANCODE;
- 	f->scancode = scancode;
- 	f->protocol = proto;
- 
- 	return f;
- }
- 
-+static void add_to_send_list(struct arguments *arguments, struct send *send)
-+{
-+	send->next = NULL;
-+
-+	if (arguments->send == NULL)
-+		arguments->send = send;
-+	else {
-+		// introduce gap
-+		struct send *gap = malloc(sizeof(*gap));
-+		gap->ty = SEND_GAP;
-+		gap->gap = arguments->gap;
-+		gap->next = send;
-+
-+		struct send *p = arguments->send;
-+		while (p->next) p = p->next;
-+		p->next = gap;
-+	}
-+}
-+
- static error_t parse_opt(int k, char *arg, struct argp_state *state)
- {
- 	struct arguments *arguments = state->input;
-@@ -664,14 +686,7 @@ static error_t parse_opt(int k, char *arg, struct argp_state *state)
- 		if (s == NULL)
- 			exit(EX_DATAERR);
- 
--		s->next = NULL;
--		if (arguments->send == NULL)
--			arguments->send = s;
--		else {
--			struct send *p = arguments->send;
--			while (p->next) p = p->next;
--			p->next = s;
--		}
-+		add_to_send_list(arguments, s);
- 		break;
- 	case 'S':
- 		if (arguments->receive || arguments->features)
-@@ -680,14 +695,7 @@ static error_t parse_opt(int k, char *arg, struct argp_state *state)
- 		if (s == NULL)
- 			exit(EX_DATAERR);
- 
--		s->next = NULL;
--		if (arguments->send == NULL)
--			arguments->send = s;
--		else {
--			struct send *p = arguments->send;
--			while (p->next) p = p->next;
--			p->next = s;
--		}
-+		add_to_send_list(arguments, s);
- 		break;
- 
- 	case 'K':
-@@ -696,18 +704,10 @@ static error_t parse_opt(int k, char *arg, struct argp_state *state)
- 		s = malloc(sizeof(*s) + strlen(arg));
- 		if (s == NULL)
- 			exit(EX_DATAERR);
--
--		s->next = NULL;
- 		strcpy(s->keycode, arg);
--		s->is_scancode = false;
--		s->is_keycode = true;
--		if (arguments->send == NULL)
--			arguments->send = s;
--		else {
--			struct send *p = arguments->send;
--			while (p->next) p = p->next;
--			p->next = s;
--		}
-+		s->ty = SEND_KEYCODE;
-+
-+		add_to_send_list(arguments, s);
- 		break;
- 
- 	case 'k':
-@@ -757,8 +757,7 @@ static struct send* convert_keycode(struct keymap *map, const char *keycode)
- 				s = malloc(sizeof(*s) + re->raw_length * sizeof(int));
- 				s->len = re->raw_length;
- 				memcpy(s->buf, re->raw, s->len * sizeof(int));
--				s->is_scancode = false;
--				s->is_keycode = false;
-+				s->ty = SEND_RAW;
- 				s->carrier = keymap_param(map, "carrier", 0);
- 				s->next = NULL;
- 			}
-@@ -783,16 +782,14 @@ static struct send* convert_keycode(struct keymap *map, const char *keycode)
- 				s = malloc(sizeof(*s));
- 				s->protocol = proto;
- 				s->scancode = se->scancode;
--				s->is_scancode = true;
--				s->is_keycode = false;
-+				s->ty = SEND_SCANCODE;
- 				s->next = NULL;
- 			} else if (encode_bpf_protocol(map, se->scancode,
- 						       buf, &length)) {
- 				s = malloc(sizeof(*s) + sizeof(int) * length);
- 				s->len = length;
- 				memcpy(s->buf, buf, length * sizeof(int));
--				s->is_scancode = false;
--				s->is_keycode = false;
-+				s->ty = SEND_RAW;
- 				s->carrier = keymap_param(map, "carrier", 0);
- 				s->next = NULL;
- 			} else {
-@@ -1049,7 +1046,7 @@ static int lirc_send(struct arguments *args, int fd, unsigned features, struct s
- 		return EX_UNAVAILABLE;
- 	}
- 
--	if (f->is_scancode) {
-+	if (f->ty == SEND_SCANCODE) {
- 		if (args->verbose)
- 			printf("Sending to kernel encoder protocol:%s scancode:0x%x\n",
- 			       protocol_name(f->protocol), f->scancode);
-@@ -1075,7 +1072,7 @@ static int lirc_send(struct arguments *args, int fd, unsigned features, struct s
- 		return EX_UNAVAILABLE;
- 	}
- 
--	if (f->is_scancode) {
-+	if (f->ty == SEND_SCANCODE) {
- 		// encode scancode
- 		enum rc_proto proto = f->protocol;
- 		if (!protocol_encoder_available(proto)) {
-@@ -1265,29 +1262,30 @@ int main(int argc, char *argv[])
- 	struct send *s = args.send;
- 	while (s) {
- 		struct send *next = s->next;
--		if (s != args.send)
--			usleep(args.gap);
--
--		if (s->is_keycode) {
--			struct send *k;
-+		if (s->ty == SEND_GAP) {
-+			usleep(s->gap);
-+		} else {
-+			if (s->ty == SEND_KEYCODE) {
-+				struct send *k;
- 
--			if (!args.keymap) {
--				fprintf(stderr, _("error: no keymap specified\n"));
--				exit(EX_DATAERR);
--			}
-+				if (!args.keymap) {
-+					fprintf(stderr, _("error: no keymap specified\n"));
-+					exit(EX_DATAERR);
-+				}
- 
--			k = convert_keycode(args.keymap, s->keycode);
--			if (!k)
--				exit(EX_DATAERR);
-+				k = convert_keycode(args.keymap, s->keycode);
-+				if (!k)
-+					exit(EX_DATAERR);
- 
--			free(s);
--			s = k;
--		}
-+				free(s);
-+				s = k;
-+			}
- 
--		rc = lirc_send(&args, fd, features, s);
--		if (rc) {
--			close(fd);
--			exit(rc);
-+			rc = lirc_send(&args, fd, features, s);
-+			if (rc) {
-+				close(fd);
-+				exit(rc);
-+			}
- 		}
- 
- 		free(s);
--- 
-2.33.1
+Previously they would be shown as something like:
+
+  StreamCam
+  Integrated
+
+We should probably revert this change quickly before it get deployed more
+widely, I have notice the backport being sent for 5.4, 5.10 and 5.14. I'm using
+5.15 shipped by Fedora team.
+
+As a proper solution, maybe I could suggest to keep using dev->name, but trim it
+enough to fit the " N" string to guaranty that you have enough space in this
+limited 32 char string and use that instead ? This should fit the uniqueness
+requirement without the sacrifice of the only possibly useful information we had
+in that limited string.
+
+regards,
+Nicolas
+
+> 
+> This is even resilent to multi chain devices.
+> 
+> Fixes v4l2-compliance:
+> Media Controller ioctls:
+>                 fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
+>         test MEDIA_IOC_G_TOPOLOGY: FAIL
+>                 fail: v4l2-test-media.cpp(394): num_data_links != num_links
+> 	test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 14b60792ffab..037bf80d1100 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -2194,6 +2194,7 @@ int uvc_register_video_device(struct uvc_device *dev,
+>  			      const struct v4l2_file_operations *fops,
+>  			      const struct v4l2_ioctl_ops *ioctl_ops)
+>  {
+> +	const char *name;
+>  	int ret;
+>  
+>  	/* Initialize the video buffers queue. */
+> @@ -2222,16 +2223,20 @@ int uvc_register_video_device(struct uvc_device *dev,
+>  	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+>  	default:
+>  		vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
+> +		name = "Video Capture";
+>  		break;
+>  	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
+>  		vdev->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
+> +		name = "Video Output";
+>  		break;
+>  	case V4L2_BUF_TYPE_META_CAPTURE:
+>  		vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
+> +		name = "Metadata";
+>  		break;
+>  	}
+>  
+> -	strscpy(vdev->name, dev->name, sizeof(vdev->name));
+> +	snprintf(vdev->name, sizeof(vdev->name), "%s %u", name,
+> +		 stream->header.bTerminalLink);
+>  
+>  	/*
+>  	 * Set the driver data before calling video_register_device, otherwise
 
