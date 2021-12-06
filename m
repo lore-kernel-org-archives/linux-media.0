@@ -2,102 +2,158 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 669EBC433EF
-	for <linux-media@archiver.kernel.org>; Mon,  6 Dec 2021 14:25:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41D0BC433F5
+	for <linux-media@archiver.kernel.org>; Mon,  6 Dec 2021 14:37:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344084AbhLFO2y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Dec 2021 09:28:54 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:46673 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236352AbhLFO2x (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Dec 2021 09:28:53 -0500
-Received: by mail-oi1-f176.google.com with SMTP id s139so21661152oie.13;
-        Mon, 06 Dec 2021 06:25:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=1UM6mk2YqDOCPpxKmVW4hUay67A5ShMZFccLmrgtyws=;
-        b=l1m+dAcvG6tuwyX2hv9sWXpKM9QC6dCJWTxsGuZf/wEe/H1RdrQ4BQ03FxzoEWyOHe
-         J5eGPTIhetFLIZUpl+xLlcnIgk7UBpWc9Z51k+diCzBs/ADTm488hqhnEsMK/cEKRW8/
-         8BkxxZlVfrqVAz8Dmv92lT82mq2+sI2laEYTiNZoP+sETzrF9DbKN4UUpMq9/S3H+zte
-         OQam/nwpFIBqEO8ot0jT4IT9ywd747TiQ4ykpjfYWruyMqD7U1ZbLZ2Hd5i38YjrEgvE
-         6zEFjSHtwknKkiIsmUbuvYvygB9wzYzPfz3kxWT6CzYCWsd7B6TMnknbrR6TQivhX/fh
-         Bh3g==
-X-Gm-Message-State: AOAM5337mmYznMCBu8dpkzTzxweqAFZu81MS0pZf6fowiglJZPlp6Sl4
-        w+BDrf8CvU4K/DTcIQCSo0ejeg+utQ==
-X-Google-Smtp-Source: ABdhPJwHh7iLhlSQhwyOIjqD6otmwOl55D4ggjQJihayjKesYaNOleTLyfqMib/TY7E6KZA+XSLjEA==
-X-Received: by 2002:aca:1c02:: with SMTP id c2mr24930352oic.53.1638800724490;
-        Mon, 06 Dec 2021 06:25:24 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id x12sm2181654oom.44.2021.12.06.06.25.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 06:25:23 -0800 (PST)
-Received: (nullmailer pid 1976291 invoked by uid 1000);
-        Mon, 06 Dec 2021 14:25:22 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        benjamin.gaignard@collabora.com, cphealy@gmail.com,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-staging@lists.linux.dev, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, nicolas@ndufresne.ca,
-        Fabio Estevam <festevam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>
-In-Reply-To: <20211205181618.1041699-3-aford173@gmail.com>
-References: <20211205181618.1041699-1-aford173@gmail.com> <20211205181618.1041699-3-aford173@gmail.com>
-Subject: Re: [RFC 2/5] dt-bindings: soc: add binding for i.MX8MQ VPU blk-ctrl
-Date:   Mon, 06 Dec 2021 08:25:22 -0600
-Message-Id: <1638800722.475991.1976290.nullmailer@robh.at.kernel.org>
+        id S1344364AbhLFOki (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Dec 2021 09:40:38 -0500
+Received: from gofer.mess.org ([88.97.38.141]:54155 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344015AbhLFOki (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 6 Dec 2021 09:40:38 -0500
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 9B765C603C; Mon,  6 Dec 2021 14:37:08 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1638801428; bh=U0tk56XprXZCOh//Hxbx2CiZTaBUINfgSaJredGFmWE=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=YB1KyzjEkwcyhETVd6mbgXKh0d17Wvq6V3+ffkW6/VQBrk+00Cyf0iGx4ar+KUDfg
+         oaT1Cb/H+CqP2Sp7BkYEYHWEyJVM95SE/SpT7w5Y5j/D34pFcQ8FXXmaFHFpJaaYPS
+         9i9Y3vnFJMoytqeVUiG+ebacmChKPEwQ9+fQL1uazFuvl29dR6XJ5m9/GM0OChmAUX
+         CE+POWcXq+nWvqyIro7D4CJrwrs7Et2GSs8L9fGCZA1tvspBp0Jl3Nr54204dm5/CC
+         Q/Is9sEcOmFLBh9o9CxKoTWMVDIx/a32MECK9Aj/WB8eISE/bSVC9l2EPzlVk/bAO8
+         L7EmcABtapS6w==
+From:   Sean Young <sean@mess.org>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH 2/2] media: streamzap: remove redundant gap calculations
+Date:   Mon,  6 Dec 2021 14:37:08 +0000
+Message-Id: <9bc3bacf8d97b219d055929fddb5e46ec5eacf34.1638801410.git.sean@mess.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <3756e0cf7c64858510531867a9c10dbd80c1ee40.1638801410.git.sean@mess.org>
+References: <3756e0cf7c64858510531867a9c10dbd80c1ee40.1638801410.git.sean@mess.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, 05 Dec 2021 12:16:15 -0600, Adam Ford wrote:
-> From: Lucas Stach <l.stach@pengutronix.de>
-> 
-> This adds the DT binding for the i.MX8MQ VPU blk-ctrl.
-> 
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> ---
->  .../soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml      | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml
-> 
+The lirc driver already introduces gaps, so there is no need for this in
+the driver.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Signed-off-by: Sean Young <sean@mess.org>
+---
+ drivers/media/rc/streamzap.c | 55 ++++++------------------------------
+ 1 file changed, 8 insertions(+), 47 deletions(-)
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.example.dt.yaml: blk-ctrl@38320000: compatible: ['fsl,imx8mq-vpu-blk-ctrl', 'syscon'] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.example.dt.yaml: blk-ctrl@38320000: compatible: Additional items are not allowed ('syscon' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1563759
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/drivers/media/rc/streamzap.c b/drivers/media/rc/streamzap.c
+index 39856af16305..71ad750730fc 100644
+--- a/drivers/media/rc/streamzap.c
++++ b/drivers/media/rc/streamzap.c
+@@ -21,7 +21,6 @@
+ #include <linux/device.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
+-#include <linux/ktime.h>
+ #include <linux/usb.h>
+ #include <linux/usb/input.h>
+ #include <media/rc-core.h>
+@@ -75,13 +74,6 @@ struct streamzap_ir {
+ 
+ 	/* track what state we're in */
+ 	enum StreamzapDecoderState decoder_state;
+-	/* tracks whether we are currently receiving some signal */
+-	bool			idle;
+-	/* sum of signal lengths received since signal start */
+-	unsigned long		sum;
+-	/* start time of signal; necessary for gap tracking */
+-	ktime_t			signal_last;
+-	ktime_t			signal_start;
+ 
+ 	char			phys[64];
+ };
+@@ -115,37 +107,11 @@ static void sz_push(struct streamzap_ir *sz, struct ir_raw_event rawir)
+ static void sz_push_full_pulse(struct streamzap_ir *sz,
+ 			       unsigned char value)
+ {
+-	struct ir_raw_event rawir = {};
+-
+-	if (sz->idle) {
+-		int delta;
+-
+-		sz->signal_last = sz->signal_start;
+-		sz->signal_start = ktime_get_real();
+-
+-		delta = ktime_us_delta(sz->signal_start, sz->signal_last);
+-		rawir.pulse = false;
+-		if (delta > (15 * USEC_PER_SEC)) {
+-			/* really long time */
+-			rawir.duration = IR_MAX_DURATION;
+-		} else {
+-			rawir.duration = delta;
+-			rawir.duration -= sz->sum;
+-			rawir.duration = (rawir.duration > IR_MAX_DURATION) ?
+-					 IR_MAX_DURATION : rawir.duration;
+-		}
+-		sz_push(sz, rawir);
+-
+-		sz->idle = false;
+-		sz->sum = 0;
+-	}
++	struct ir_raw_event rawir = {
++		.pulse = true,
++		.duration = value * SZ_RESOLUTION + SZ_RESOLUTION / 2,
++	};
+ 
+-	rawir.pulse = true;
+-	rawir.duration = ((int) value) * SZ_RESOLUTION;
+-	rawir.duration += SZ_RESOLUTION / 2;
+-	sz->sum += rawir.duration;
+-	rawir.duration = (rawir.duration > IR_MAX_DURATION) ?
+-			 IR_MAX_DURATION : rawir.duration;
+ 	sz_push(sz, rawir);
+ }
+ 
+@@ -158,12 +124,11 @@ static void sz_push_half_pulse(struct streamzap_ir *sz,
+ static void sz_push_full_space(struct streamzap_ir *sz,
+ 			       unsigned char value)
+ {
+-	struct ir_raw_event rawir = {};
++	struct ir_raw_event rawir = {
++		.pulse = false,
++		.duration = value * SZ_RESOLUTION + SZ_RESOLUTION / 2,
++	};
+ 
+-	rawir.pulse = false;
+-	rawir.duration = ((int) value) * SZ_RESOLUTION;
+-	rawir.duration += SZ_RESOLUTION / 2;
+-	sz->sum += rawir.duration;
+ 	sz_push(sz, rawir);
+ }
+ 
+@@ -235,7 +200,6 @@ static void streamzap_callback(struct urb *urb)
+ 					.pulse = false,
+ 					.duration = sz->rdev->timeout
+ 				};
+-				sz->idle = true;
+ 				sz_push(sz, rawir);
+ 			} else {
+ 				sz_push_full_space(sz, sz->buf_in[i]);
+@@ -368,7 +332,6 @@ static int streamzap_probe(struct usb_interface *intf,
+ 	if (!sz->rdev)
+ 		goto rc_dev_fail;
+ 
+-	sz->idle = true;
+ 	sz->decoder_state = PulseSpace;
+ 	/* FIXME: don't yet have a way to set this */
+ 	sz->rdev->timeout = SZ_TIMEOUT * SZ_RESOLUTION;
+@@ -379,8 +342,6 @@ static int streamzap_probe(struct usb_interface *intf,
+ 	sz->max_timeout = SZ_TIMEOUT * SZ_RESOLUTION;
+ 	#endif
+ 
+-	sz->signal_start = ktime_get_real();
+-
+ 	/* Complete final initialisations */
+ 	usb_fill_int_urb(sz->urb_in, usbdev, pipe, sz->buf_in,
+ 			 maxp, (usb_complete_t)streamzap_callback,
+-- 
+2.33.1
 
