@@ -2,92 +2,115 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 955B8C433FE
-	for <linux-media@archiver.kernel.org>; Wed,  8 Dec 2021 18:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD322C433EF
+	for <linux-media@archiver.kernel.org>; Wed,  8 Dec 2021 22:37:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238589AbhLHSMa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Dec 2021 13:12:30 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:56212 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238595AbhLHSMa (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Dec 2021 13:12:30 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AAE02B6C;
-        Wed,  8 Dec 2021 19:08:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638986935;
-        bh=cVwKBuf2ylTjXOyFg6YXy2e0YGftv+YEhXfIrIDfRgU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QAjspCf1lUmofvxxtNuquqh+ZmXAPNNYidftziel2UJud67rX0raVtoXejp2ikNbI
-         1YcyJNgeCh84qiQPDuE/nVc8dpwdrz65U4ho8KWI0XaM0wG9O29SZqRrl79mG6P938
-         qbsTS2VZBy/5fJJ71CY/bqx7iuJBQS4JNa9hSTS4=
-Date:   Wed, 8 Dec 2021 20:08:26 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH] media: i2c: max9286: Use dev_err_probe() helper
-Message-ID: <YbD0mpnMA4Gqx1RJ@pendragon.ideasonboard.com>
-References: <20211208121756.3051565-1-niklas.soderlund+renesas@ragnatech.se>
- <CAMuHMdX+ogLKoyinu1taCm1BjmiKo8bnFh3Z+Df18jonKT6nKA@mail.gmail.com>
+        id S233943AbhLHWlM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Dec 2021 17:41:12 -0500
+Received: from mout.gmx.net ([212.227.17.21]:36115 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229533AbhLHWlL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 8 Dec 2021 17:41:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1639003053;
+        bh=AWA9692cJSEtkUfRwqBpwz0feFUfCFHaLrm6VZa3cSw=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=K3e4K4wv3mLV22M49S++KIwn57TuBtbDxa3eFCx5h7cijvspOyg+qRbJ5cu6BFmCP
+         HDB9LS8rRvUriHSX6W5KYsDQ5viNdvv3nX6iEZQtbJRrVwQV0hDOSZmmPK9c3UeI4i
+         nGZxOZbXtpX5g+xJkuJqlGfky3FOX3cCOkuTiMOU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [91.65.60.26] ([91.65.60.26]) by web-mail.gmx.net
+ (3c-app-gmx-bap08.server.lan [172.19.172.78]) (via HTTP); Wed, 8 Dec 2021
+ 23:37:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdX+ogLKoyinu1taCm1BjmiKo8bnFh3Z+Df18jonKT6nKA@mail.gmail.com>
+Message-ID: <trinity-7e7d5b59-e213-481b-9b1b-ae9d0819a33c-1639003053723@3c-app-gmx-bap08>
+From:   Robert Schlabbach <robert_s@gmx.net>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [PATCH 3/3] media: si2157: rework the firmware load logic
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 8 Dec 2021 23:37:33 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <842e61352a54e9f1a7f44c4e3250a055c2d45e13.1638958050.git.mchehab+huawei@kernel.org>
+References: <cover.1638958050.git.mchehab+huawei@kernel.org>
+ <842e61352a54e9f1a7f44c4e3250a055c2d45e13.1638958050.git.mchehab+huawei@kernel.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:fsAwsr9zfamWPubZIHVRKUiZTnQFmXFbS4967f87SArSJaqMcAQGH5KVXQkNABJJtW2CR
+ qeg8VLp/lcrB/NP5EZ5UctIaB+rlxJqtkxCbwT/eA/44ZxfoGXIP0mW4wW3SCB2armQO78Rp7M/P
+ +/IPAfBNkSeJy86+4yc8x3DMV3BGDrgPZi50iRThG9E1iASS5VpT3gBfyaiXzV+26za6TQ+1V1Uy
+ JgiguEwx5ldsYIkmqBrDqFLoTIUSzFXt1Lfi+zCEFAnPzynJtyASgJkjSW4PH7PxNTlTddQQP6UY
+ NQ=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:unuG6y316xs=:qGjuVt83faebt5BpjV3vwz
+ x0pjZBMQJsLFCuyh/wiQPlVVNumrI79YFg6bmlg1C1c+w9hme0pKcD6j9AZmvv5HyVMYvktKx
+ ks3IRclMvAius5kGexynYp2TN/jhn3Doac8aFdw7wQaiddlVouzRigS6RpOP3mL4t4FUgRZDc
+ uUduZxkGJrau970D/GkVljn1T34mJ3HwDtGZSfj0CStS0d866DZh7KWuKwlfWY+wSoOmlesPs
+ xiU71bK14W7UgAtQi3FMui8ZGmLSj55/N79D+C/th4DPkggyAwJRnqvtqAGv15nkkFtQXaL6b
+ wSOkFd5giPP+zExcmFsjCwW23lehpzIXQ2BF0SJk53ETahiI/yQeerd+nlcUyF+lv/lLr7MDS
+ Ur/O9H+G8UabrT38OfEUtFZNn9qTEYQ5diev4PE+Ax8KDON6d+ut6KVb0gXv3C+SCT5dVAfqs
+ pKM89MfHqdkczcFqzjWM4YlSAkf9v4oyzgvJIlT5AYGvqrmn0W83zFoBIVmeTC9aOnBP3v2oD
+ IDITmEp+UdE1x7yp2fnQkE8lz4lLkatVrxzAHCf9c2YZLbdKdlqqsjY85dAnjwtlFOdSx0fVe
+ rHlbD5uaYo63r968nkF8/6LUAR1EcrZ0bHGJTrtwNNnwWaGpPJEWLPy86/YRZb2PL6SN6tvFq
+ Y1hVxVvlOGxLh1MhruKFzspFL9gMrx3KcdpM9C9roHFM49GITxXSifpLluQnvnrz74t9PS8/B
+ vxqvoqS+TQg5hAh5lGWnDk1qr69aX84+O3YwV4WhiDKe6+qGINRxOxiv+uwT13GDTgIZrduwY
+ 00Ih0uF
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 01:29:57PM +0100, Geert Uytterhoeven wrote:
-> On Wed, Dec 8, 2021 at 1:18 PM Niklas Söderlund wrote:
-> > Use the dev_err_probe() helper, instead of open-coding the same
-> > operation. While at it retrieve the error once and use it from
-> > 'ret' instead of retrieving it twice.
-> >
-> > Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> 
-> I guess that's too much credit for me ;-)
-> 
-> > Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> 
-> > --- a/drivers/media/i2c/max9286.c
-> > +++ b/drivers/media/i2c/max9286.c
-> > @@ -1295,11 +1295,9 @@ static int max9286_probe(struct i2c_client *client)
-> >
-> >         priv->regulator = devm_regulator_get(&client->dev, "poc");
-> >         if (IS_ERR(priv->regulator)) {
-> > -               if (PTR_ERR(priv->regulator) != -EPROBE_DEFER)
-> > -                       dev_err(&client->dev,
-> > -                               "Unable to get PoC regulator (%ld)\n",
-> > -                               PTR_ERR(priv->regulator));
-> >                 ret = PTR_ERR(priv->regulator);
-> > +               dev_err_probe(&client->dev, ret,
-> > +                             "Unable to get PoC regulator\n");
-> 
-> You can even combine these two, as dev_err_probe() was designed
-> to streamline error handling, and thus returns the error again:
-> 
->     ret = dev_err_probe(&client->dev, PTR_ERR(priv->regulator),
->                         "Unable to get PoC regulator\n");
+> Loading a firmware file should not be mandatory, as devices
+> could work with an eeprom firmware, if available.
+>
+> Yet, using the eeprom firmware could lead into unpredictable
+> results, so the best is to warn about that.
 
-With or witout that,
+As there is no proof of an EEPROM being involved in any of
+that, but strong evidence that all these devices actually have
+an embedded firmware ROM, I propose changing that to "ROM"
+instead.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> + bool warn_firmware_not_loaded =3D false;
+> unsigned int chip_id, xtal_trim;
+> - unsigned int fw_required;
+> + bool fw_required =3D true;
 
-> >                 goto err_powerdown;
-> >         }
-> 
-> Regardless:
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+To me, this is getting too ugly. All these per-model special
+flags set somewhere in the code.
 
--- 
-Regards,
+I propose removing BOTH these flags. Review of the SiLabs code
+revealed:
 
-Laurent Pinchart
+1. ALL of the tuner models this driver supports have a firmware
+   patch from SiLabs available.
+
+2. NONE of them seems to require it. At least all the SiLabs
+   drivers allow disabling the download.
+
+So my proposal is:
+
+1. Add firmware download support to all tuner models (this
+   means adding some new firmware file names)
+
+2. When a firmware file is not available, log an info (not
+   warning) message and proceed.
+
+None of the above boolean flags are needed then. The
+dont_load_firmware flag from the config should of course be
+kept as it is.
+
+> + dev_warn(&client->dev, "firmware file '%s' not found. Using firmware f=
+rom eeprom.\n",
+
+Aside from using dev_info instead and changing the text to
+"ROM firmware will be used.", this would also be a duplicate
+message, as firmware_request() also logs a message when a
+requested firmware file is not found.
+
+So I propose also changing the firmware_request() call to
+request_firmware_nowarn() instead to suppress the message
+from the firmware loader.
+
+Best Regards,
+-Robert Schlabbach
