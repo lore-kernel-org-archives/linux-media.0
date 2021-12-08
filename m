@@ -2,109 +2,141 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D2C4C433EF
-	for <linux-media@archiver.kernel.org>; Wed,  8 Dec 2021 22:37:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DA55C433FE
+	for <linux-media@archiver.kernel.org>; Wed,  8 Dec 2021 22:50:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237587AbhLHWlS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Dec 2021 17:41:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S240648AbhLHWyM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Dec 2021 17:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236539AbhLHWlS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Dec 2021 17:41:18 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8F7C061746;
-        Wed,  8 Dec 2021 14:37:45 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id t9so6632128wrx.7;
-        Wed, 08 Dec 2021 14:37:45 -0800 (PST)
+        with ESMTP id S235310AbhLHWyL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Dec 2021 17:54:11 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0355DC061746;
+        Wed,  8 Dec 2021 14:50:38 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id 14so4597806ioe.2;
+        Wed, 08 Dec 2021 14:50:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ltEh61NUR5opsmEls4nl8qwF170eYcG3QnbnvsYmLkc=;
-        b=Vv1SnbI3Hnmh/yVAYnhqqnaCYZW/MWbUHZQ574aDiL95EWaS9us80hpNVP57iFaGSm
-         331JvFk7M8N0PL1+E3v1P0NRDUsDEWGWqoUttdDvUJtD9zVPm0D6J9juH6yLmNYDVpr2
-         Uos/3n84IFMmegHCsQQx3NzhrLTTnhLKoWRGa8IZsGZlA16khSgixXfW5qALU7s0QFjw
-         1AIGn69RFK+U1rVSib/xnGAaF7wYj1kj2lwZrUgVwuFnDcWtZF6ulKibSybipdjo8e+w
-         qXHC7sYYsd5kV+kFkU9xOrVvLMVRIcBLmGVQCKl4v3vrkIfUxhrJs5iVQB8riA5ejioJ
-         QKlg==
+        bh=mMi1WPOBzI4R2YZ5HVYQx/dnfliDDCI8Msm6WyR+eh4=;
+        b=XcTrSwtnNRn21WNNBvMrv1NLcY+Mu2z72raACo/rJ6Taqa/EMOV2oNk4pwj4EmSvLt
+         luGUbISzvvMt4KSslR634zeGU7QYraSlBBEYjYNASBeA99EN9gyzY0p3wkqYQQhmphEs
+         8l6EQVJ9oSaQ7qdsh3KMQ5fyqkh0iQTq9sXGOyz+HT58120MR9jLg5eqv6VmCk0b0gqW
+         34LQEiA0JxmeDCBx2kRlrxNHM5UZLoMzC557S3/8Anr6qDjJTuoMvojX8ltnjNtmc2Lp
+         sdaKeArGSaq2svysxh0W+nXexC/NVpk3OK92mdkaPLWl6MwyxoTVlfMCYz+CxLRAeJ0i
+         tSyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ltEh61NUR5opsmEls4nl8qwF170eYcG3QnbnvsYmLkc=;
-        b=u40gJFakYa9mJeM0S0jMhqBHp2ZPryxNZWJWJKA5JIaJAINqhN+aV8PeV7qX03cGbX
-         hQiDlX5C3A7dZryscv6/YAmbyvgqA8Mszvt//rudfgShVLtrv0jMwdrKZmjRfQ3ft/Qj
-         GzYikPqh6dyWW+hOVVAbg+ylsbWdtinADOtmoULdeH2EUHFfsRCIDYO1ovl9rLOTR8uv
-         qOLFm9ytvfubqX0+aevYwCipTfXl8dZDZ85m0fgISBg6oqiZAOdEGEFJo6B+eLWuH5hK
-         LSLYbF/fKSn0posNmgE9fO/gJAFZ4EW1XyHaz2Xbljbf5Mmp30dY8qmMdCFPMNVaz9fQ
-         1GUw==
-X-Gm-Message-State: AOAM530OHhQp6mBnRomNRc9ZpRnd6KXC3Yhb205gFSNnY/KsqHMb6W/R
-        guAlA1DcmRH7AicpSSALgio=
-X-Google-Smtp-Source: ABdhPJw14QKUmBDLUvt7AbHOxb6KmnlLuia4Ejrt7gieEu7zj7nD8l/9Pf/+40qNSkKWuBwex673fg==
-X-Received: by 2002:adf:dc12:: with SMTP id t18mr1808383wri.566.1639003064320;
-        Wed, 08 Dec 2021 14:37:44 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id n184sm6957308wme.2.2021.12.08.14.37.42
+        bh=mMi1WPOBzI4R2YZ5HVYQx/dnfliDDCI8Msm6WyR+eh4=;
+        b=ggcxL0UyDMH17Fv6R8hUbFKVo5asIfw0SlsplkJ1kAJyLMqDbnNdWqvzrnU6qNmhpd
+         95tgs/si8ynPfEsy9gSsuJIbCFeC5JjvzyQVLCcBvtwKvobfxp5/gqdYxY17Shi3Q+8x
+         clHliwc5yK0/NuzHPvxvQE1lCycpd3yRUYSBhRufWlDmEWfxCOwq2V06e0jQbeYI9HI5
+         ylDH4rIK3ayRXHsAz3cuam+9wbRVk7C1sAJ3P46EBKQHpBkxmhtGNO0e0VpyZ2sxHE8H
+         sSjrSwnnl6fb0h29FezkmcZoReoDdtM0vqzQot/C3ov5ovtmkUGrOQIiYGcN5ui/V4cG
+         Omhg==
+X-Gm-Message-State: AOAM5334rLyGf/NKYcfC++zsWu9m7/a0pCwPzQJBQygJp9v4ZWxYq0RX
+        U9roa3jbhU76U0QR9OZ5feQTrBoPYfjcGQ==
+X-Google-Smtp-Source: ABdhPJzZJP3Os1XE981Rf8W5rVV6iSlxLLkvkEoeb5qMER1aAj+4hxIA+fbfp5SLUrLTyxyWqwN1AA==
+X-Received: by 2002:a6b:b490:: with SMTP id d138mr10603468iof.180.1639003837735;
+        Wed, 08 Dec 2021 14:50:37 -0800 (PST)
+Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:269a:1aa2:f1d9:8dbb])
+        by smtp.gmail.com with ESMTPSA id t6sm2378751ioi.51.2021.12.08.14.50.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 14:37:43 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     kys@microsoft.com
-Cc:     haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, davem@davemloft.net, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH] net: mana: Fix memory leak in mana_hwc_create_wq
-Date:   Wed,  8 Dec 2021 23:37:23 +0100
-Message-Id: <20211208223723.18520-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 08 Dec 2021 14:50:37 -0800 (PST)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-media@vger.kernel.org
+Cc:     benjamin.gaignard@collabora.com, cphealy@gmail.com,
+        aford@beaconembedded.com, nicolas@ndufresne.ca,
+        Adam Ford <aford173@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH 00/10] media: hantro: imx8mq/imx8mm: Let VPU decoders get controlled by vpu-blk-ctrl
+Date:   Wed,  8 Dec 2021 16:50:19 -0600
+Message-Id: <20211208225030.2018923-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If allocating the DMA buffer fails, mana_hwc_destroy_wq was called
-without previously storing the pointer to the queue.
+Both the i.MX8MQ and i.MX8MM have G1 and G2 decoders.
+The two decoders are similar, but the imx8mm lacks the
+post-processor, so they will have distinct compatible flags.
+Splitting the i.MX8MQ VPU into G1 and G2 makes it easier to
+control them independently since the TRM of both the i.MX8MQ and
+i.MX8MM list them as distinct IP blocks.  With them being split,
+the power-domain can shift to the vpu-blk-ctrl which is available
+on both i.MX8MQ and i.MX8MM but some of bits are different, so
+they'll have separate device tree bindings.
+Lastly, with the G1 and G2 operational, enable the i.MX8MM.
+On the i.MX8MM, the clock speed of 600MHz was chosen to match
+the default of the kernel repo from NXP and can be overwritten
+by board files for anyone who under/over volts the power rail.
 
-In order to avoid leaking the pointer to the queue, store it as soon as
-it is allocated.
+The repo used as the starting point was:
+   git://linuxtv.org/hverkuil/media_tree.git for-v5.17e
 
-Addresses-Coverity-ID: 1484720 ("Resource leak")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/net/ethernet/microsoft/mana/hw_channel.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+This media hantro group has been especially helpful in helping
+me get up to speed on how it works.
 
-diff --git a/drivers/net/ethernet/microsoft/mana/hw_channel.c b/drivers/net/ethernet/microsoft/mana/hw_channel.c
-index 34b971ff8ef8..078d6a5a0768 100644
---- a/drivers/net/ethernet/microsoft/mana/hw_channel.c
-+++ b/drivers/net/ethernet/microsoft/mana/hw_channel.c
-@@ -480,16 +480,16 @@ static int mana_hwc_create_wq(struct hw_channel_context *hwc,
- 	if (err)
- 		goto out;
- 
--	err = mana_hwc_alloc_dma_buf(hwc, q_depth, max_msg_size,
--				     &hwc_wq->msg_buf);
--	if (err)
--		goto out;
--
- 	hwc_wq->hwc = hwc;
- 	hwc_wq->gdma_wq = queue;
- 	hwc_wq->queue_depth = q_depth;
- 	hwc_wq->hwc_cq = hwc_cq;
- 
-+	err = mana_hwc_alloc_dma_buf(hwc, q_depth, max_msg_size,
-+				     &hwc_wq->msg_buf);
-+	if (err)
-+		goto out;
-+
- 	*hwc_wq_ptr = hwc_wq;
- 	return 0;
- out:
+Fluster was run on the i.MX8M Mini at 600 MHz:
+
+./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0
+Ran 55/61 tests successfully               in 8.299 secs
+
+./fluster.py run -dGStreamer-H.264-V4L2SL-Gst1.0
+Ran 90/135 tests successfully               in 71.200 secs
+
+./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0
+Ran 139/303 tests successfully               in 218.079 secs
+
+
+Adam Ford (7):
+  dt-bindings: media: nxp,imx8mq-vpu: Support split G1 and G2 nodes with
+    vpu-blk-ctrl
+  media: hantro: Allow i.MX8MQ G1 and G2 to run independently
+  arm64: dts: imx8mq: Enable both G1 and G2 VPU's with vpu-blk-ctrl
+  arm64: dts: imx8mm: Fix VPU Hanging
+  dt-bindings: media: nxp,imx8mq-vpu: Enable support for i.MX8M Mini
+  media: hantro: Add support for i.MX8MM
+  arm64: dts: imx8mm: Enable Hantro G1 and G2 video decoders
+
+Lucas Stach (3):
+  dt-bindings: power: imx8mq: add defines for VPU blk-ctrl domains
+  dt-bindings: soc: add binding for i.MX8MQ VPU blk-ctrl
+  soc: imx: imx8m-blk-ctrl: add i.MX8MQ VPU blk-ctrl
+
+ .../bindings/media/nxp,imx8mq-vpu.yaml        | 85 ++++++++++++++-----
+ .../soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml      | 71 ++++++++++++++++
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     | 29 ++++++-
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     | 69 +++++++++------
+ drivers/soc/imx/imx8m-blk-ctrl.c              | 68 ++++++++++++++-
+ drivers/staging/media/hantro/hantro_drv.c     |  3 +
+ drivers/staging/media/hantro/hantro_hw.h      |  3 +
+ drivers/staging/media/hantro/imx8m_vpu_hw.c   | 84 +++++++++++++++---
+ include/dt-bindings/power/imx8mq-power.h      |  3 +
+ 9 files changed, 357 insertions(+), 58 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml
+
+base-commit: d1888b0bfd2ddef2e8a81505ffa200b92cc32e0c
+
 -- 
-2.25.1
+2.32.0
 
