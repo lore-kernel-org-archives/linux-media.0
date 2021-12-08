@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE81AC433FE
-	for <linux-media@archiver.kernel.org>; Wed,  8 Dec 2021 12:08:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43F54C4332F
+	for <linux-media@archiver.kernel.org>; Wed,  8 Dec 2021 12:08:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbhLHMLt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Dec 2021 07:11:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36308 "EHLO
+        id S233093AbhLHMLu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Dec 2021 07:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232909AbhLHMLo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Dec 2021 07:11:44 -0500
+        with ESMTP id S233064AbhLHMLr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Dec 2021 07:11:47 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4AEC061746;
-        Wed,  8 Dec 2021 04:08:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B428C0617A2;
+        Wed,  8 Dec 2021 04:08:15 -0800 (PST)
 Received: from localhost.localdomain (unknown [IPv6:2a00:c281:1230:3700:51d0:7039:5913:64d3])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 8C9EB1F45CA2;
-        Wed,  8 Dec 2021 12:08:10 +0000 (GMT)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 32EAE1F45CD8;
+        Wed,  8 Dec 2021 12:08:13 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638965291; bh=MaW1bAocTnYI0OuXYXK0SxPq8wDjTv9Gv1PqEfPZu2A=;
+        t=1638965294; bh=G9wyjm+JcpBuGTU5PaSnqlWsQq2znoMjrDZdkywQlnY=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jjgMZjhwkPkAM1oPyq3VkeyrQe8sgIpKSmT5wUqN+/y1bxPSf/egn5QFQiyiWe3di
-         SpmqbzqtecudsZh3h/bapXrjW01wlWQ8hUQFUcrrU6K0xE+ReV222RmQrkk1eLclgQ
-         rJKR7i0ZA7k0op1HeiLw2gadna5xsAovm6d9m9P34M+1RcRp6fkiLnupQxCZyV030j
-         SxKZP5tLAa0XtRwl8yOAKsnMlmkE2PcLh9wSrwYgvrclqSyhaUnNrtvDXhik5nBfP5
-         B+8ekIt3CdetHeEa0xwvQ1uJbanswfW2w22fdYTl+1L1MpDKJB/joxM29gsqjCJbDh
-         x+M8G8wITR4oA==
+        b=kb9C2fVQI5+8rtQymm3l8HLiyN1QCH1KfHOfc2PhFGn8d4y6GjxkbBlNqwN+BWm8r
+         tch0oDrm0FD0HQdryvlsVIfJJ0dusjcsu2ADofkLLCSrNiFxzl5Ay5tGUcX/vRNjtu
+         XG9fcXd7SfGgSRwLqI5j9+emeLaPrb5hXG4cR/ltLxktw69haPyl5fE2wG9ubSqsZS
+         /utSX3pQofgpXnRw3rJz+I1lKY5tZXhenJxqYb+3VgBZMuCiiphKm9mU2BXHI6f4dO
+         JvyNF2dk2EPtspUhBswvj2ItrSCam2agdjtme10+dlxlepmxpFM6GtmItR2U+vr7Nt
+         LeT/rOo5k21/w==
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     iommu@lists.linux-foundation.org, Yong Wu <yong.wu@mediatek.com>,
         Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
@@ -39,9 +39,9 @@ To:     iommu@lists.linux-foundation.org, Yong Wu <yong.wu@mediatek.com>,
         support), linux-kernel@vger.kernel.org (open list),
         dafna.hirschfeld@collabora.com, kernel@collabora.com,
         linux-media@vger.kernel.org, sebastian.reichel@collabora.com
-Subject: [PATCH v2 3/5] iommu/mediatek: Remove the power status checking in tlb flush all
-Date:   Wed,  8 Dec 2021 14:07:42 +0200
-Message-Id: <20211208120744.2415-4-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v2 5/5] iommu/mediatek: Always tlb_flush_all when each PM resume
+Date:   Wed,  8 Dec 2021 14:07:44 +0200
+Message-Id: <20211208120744.2415-6-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211208120744.2415-1-dafna.hirschfeld@collabora.com>
 References: <20211208120744.2415-1-dafna.hirschfeld@collabora.com>
@@ -51,50 +51,47 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Yong Wu <yong.wu@mediatek.com>
 
-To simplify the code, Remove the power status checking in the
-tlb_flush_all, remove this:
-   if (pm_runtime_get_if_in_use(data->dev) <= 0)
-	    continue;
+Prepare for 2 HWs that sharing pgtable in different power-domains.
 
-The mtk_iommu_tlb_flush_all is called from
-a) isr
-b) tlb flush range fail case
-c) iommu_create_device_direct_mappings
+When there are 2 M4U HWs, it may has problem in the flush_range in which
+we get the pm_status via the m4u dev, BUT that function don't reflect the
+real power-domain status of the HW since there may be other HW also use
+that power-domain.
 
-In first two cases, the power and clock are always enabled.
-In the third case tlb flush is unnecessary because in a later patch
-in the series a full flush from the pm_runtime_resume callback is added.
+DAM allocation is often done while the allocating device is runtime
+suspended. In such a case the iommu will also be suspended and partial
+flushing of the tlb will not be executed.
+Therefore, we add a tlb_flush_all in the pm_runtime_resume to make
+sure the tlb is always clean.
 
-In addition, writing the tlb control register when the iommu is not resumed
-is ok and the write is ignored.
+In other case, the iommu's power should be active via device
+link with smi.
 
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-[refactor commit log]
+[move the call to mtk_iommu_tlb_flush_all to the bottom of resume cb, improve doc/log]
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 ---
- drivers/iommu/mtk_iommu.c | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/iommu/mtk_iommu.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index dd2c08c54df4..e30ac68fab48 100644
+index 195a411e3087..4799cd06511b 100644
 --- a/drivers/iommu/mtk_iommu.c
 +++ b/drivers/iommu/mtk_iommu.c
-@@ -210,15 +210,10 @@ static struct mtk_iommu_domain *to_mtk_domain(struct iommu_domain *dom)
- 
- static void mtk_iommu_tlb_flush_all(struct mtk_iommu_data *data)
- {
--	if (pm_runtime_get_if_in_use(data->dev) <= 0)
--		return;
--
- 	writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
- 		       data->base + data->plat_data->inv_sel_reg);
- 	writel_relaxed(F_ALL_INVLD, data->base + REG_MMU_INVALIDATE);
- 	wmb(); /* Make sure the tlb flush all done */
--
--	pm_runtime_put(data->dev);
+@@ -997,6 +997,13 @@ static int __maybe_unused mtk_iommu_runtime_resume(struct device *dev)
+ 	writel_relaxed(reg->ivrp_paddr, base + REG_MMU_IVRP_PADDR);
+ 	writel_relaxed(reg->vld_pa_rng, base + REG_MMU_VLD_PA_RNG);
+ 	writel(m4u_dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_MASK, base + REG_MMU_PT_BASE_ADDR);
++
++	/*
++	 * Users may allocate dma buffer before they call pm_runtime_get,
++	 * in which case it will lack the necessary tlb flush.
++	 * Thus, make sure to update the tlb after each PM resume.
++	 */
++	mtk_iommu_tlb_flush_all(data);
+ 	return 0;
  }
  
- static void mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
 -- 
 2.17.1
 
