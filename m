@@ -2,218 +2,171 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50757C433F5
-	for <linux-media@archiver.kernel.org>; Thu,  9 Dec 2021 16:38:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13028C433EF
+	for <linux-media@archiver.kernel.org>; Thu,  9 Dec 2021 17:52:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241233AbhLIQlz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 Dec 2021 11:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
+        id S235869AbhLIRzu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 Dec 2021 12:55:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241250AbhLIQlx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Dec 2021 11:41:53 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBC5C061A32
-        for <linux-media@vger.kernel.org>; Thu,  9 Dec 2021 08:38:18 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id 8so5925801pfo.4
-        for <linux-media@vger.kernel.org>; Thu, 09 Dec 2021 08:38:18 -0800 (PST)
+        with ESMTP id S230094AbhLIRzt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 Dec 2021 12:55:49 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C25C061746
+        for <linux-media@vger.kernel.org>; Thu,  9 Dec 2021 09:52:16 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so4750920wmd.1
+        for <linux-media@vger.kernel.org>; Thu, 09 Dec 2021 09:52:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=XIWAlclISqLqVZ4fRSoN98EYOrbeHDE9G5UV/J5AqJc=;
-        b=kwytV/KMewUmDWtOJyCZp716nKMqO3YkHmDZulL8AHr+bTivS/8Zcyqvi5qs4vznzu
-         xzVS5eiaUAwhOWIBpub5KjsKoDc92D6rELfnR/bDSM5Yd+GDe55aZF7NVBore31eZXcr
-         9RQb8LE4DB1cUn+mWHQDVLYSUg0S0lao18Ogo=
+        bh=Bd8+kTrTfhFU5QWPnGzZKoBEXJcLIGbK/BR+H+0gbYw=;
+        b=XbFa42nnAwDGxO66/HbO3nB2gPzLqX2MOc+1zouWEXl3y62x+JQixZnni2tTWFd1CI
+         mFZs+VL2zwSM+nOzrmeBxhvLkGHZZUO24TnH0JAKdpbly1p+jK6L5LOjAaTq7kqR70/q
+         dH/ZA0AQho791bypxmO/O605uUfAUi5Mam0+utMXeo2MO9Zr3FJNU8Mb3QX+q7RFD06O
+         DfNKHxZ4UU4Cor8daNfV2JclnpukSCkUS0TXtEkM+6bjsBMz8CJpl5Q9x2jJe4KLtejM
+         ggJMrX5P1niJ6l+JHs2F/aRrfM8IxpyGzvibQ/im15eeGdFDrxxN8oLO5Odg1QHUWYb2
+         YngA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XIWAlclISqLqVZ4fRSoN98EYOrbeHDE9G5UV/J5AqJc=;
-        b=S3hbUPHbobzwA4HbLa/sJXefrQIQ73gJ6pnk8vOINu/RYLESbZB2tJrgpfmQ5su0LX
-         HnX/1AbZtMJkk6KQKYrn6Ragrqs8ypvhbuq9SF9a5hbJa1dCgmvCKujI9A0RQuzPfX4v
-         ZPIgIlvufi2Ph58QFtqiF0wmUpWJigE04QmP1Lu3e4G9OaSGjcNd1x+KFH5kw3BrWG3V
-         JYmHqKycdI88fUMZ4KcojlMob660614oSgjWxOb/RWNxH+HL1rWBl6oiQ5YSBdNJ5phQ
-         Gk1Be+QjytUYXk+uD+M3SMpDvuVXFROjSEr9+bjPgdxyCvOFz13D6KciWCqJTHuYrEMm
-         OsCw==
-X-Gm-Message-State: AOAM533nusaEmJdldJtEt+icoLgTK7T6aIfeMUT8uLFhRM9m5JEPZFOD
-        vQY1emEUgSlipa4ZHPFA1Zzn5g==
-X-Google-Smtp-Source: ABdhPJwM+U9294o+lCojT+6u6ijmR3fo/V/A//k0Ne81kyfVEY9DQhsu03XodsKNObSLag06y15Wkg==
-X-Received: by 2002:a63:90c7:: with SMTP id a190mr35608096pge.526.1639067897780;
-        Thu, 09 Dec 2021 08:38:17 -0800 (PST)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:edb5:3ef8:a855:9380])
-        by smtp.gmail.com with ESMTPSA id k14sm229483pff.6.2021.12.09.08.38.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Dec 2021 08:38:17 -0800 (PST)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] media: v4l2-mem2mem: Apply DST_QUEUE_OFF_BASE on MMAP buffers across ioctls
-Date:   Fri, 10 Dec 2021 00:38:03 +0800
-Message-Id: <20211209163803.1239386-1-wenst@chromium.org>
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Bd8+kTrTfhFU5QWPnGzZKoBEXJcLIGbK/BR+H+0gbYw=;
+        b=RLbTKeTouDAU+09xPSR9pxY2bdt1T941CBTIlspXB/DZFJKRQY3/eDc2QmXVTjsUra
+         +hwMCJlthGuCQbA4BEFpWg/xbsdXrgt7q81eI8gulk0h1qZLUDv+CDGqQl76mNmuP9ph
+         e0bwDvwdyzSYzGHCo9yiTLlWdOCq4Jn9TbOwpVAV5lkIP9N1wyVcLaYedsu0jsSsOLUh
+         cR7LsHD8V2IhOwLTAhuqpKe7bO/GIUWgDsSpntYMQlsQmjcyBW2xEuRur5wuRKXNmeWq
+         4E4bt394nGujq2+Wf6rJ6hFUgRAcGgG4sPyHVXBQ93/ZNiz+Mq2h+1hiW1q1qdghULuM
+         aHVQ==
+X-Gm-Message-State: AOAM531Vc0bxMQFmpH7G3r2omg63qGKxHJXEWikatiukv5q0NT5TKL26
+        lYQRK+ekpF5+Xl+9d4Xjo5aD6Q==
+X-Google-Smtp-Source: ABdhPJyMie+a/YOeewKo1Obvu7zuEr3tSxdpZfoN/rSq9A/nErVJDjjw8oiP8Y9G/3nEDK98Fbtfqg==
+X-Received: by 2002:a05:600c:3b27:: with SMTP id m39mr9397831wms.132.1639072334313;
+        Thu, 09 Dec 2021 09:52:14 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:ee1f:92e9:bcbf:be87? ([2001:861:44c0:66c0:ee1f:92e9:bcbf:be87])
+        by smtp.gmail.com with ESMTPSA id b197sm449999wmb.24.2021.12.09.09.52.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Dec 2021 09:52:13 -0800 (PST)
+Subject: Re: [PATCH] media: meson: vdec: potential dereference of null pointer
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com
+Cc:     linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211209085840.2081024-1-jiasheng@iscas.ac.cn>
+ <bfd1801c-9d1e-0574-a237-711d3d5ae755@xs4all.nl>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <0c1fadf0-e7ba-fb7a-822d-6787f78faaad@baylibre.com>
+Date:   Thu, 9 Dec 2021 18:52:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <bfd1801c-9d1e-0574-a237-711d3d5ae755@xs4all.nl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-DST_QUEUE_OFF_BASE is applied to offset/mem_offset on MMAP capture buffers
-only for the VIDIOC_QUERYBUF ioctl, while the userspace fields (including
-offset/mem_offset) are filled in for VIDIOC_{QUERY,PREPARE,Q,DQ}BUF
-ioctls. This leads to differences in the values presented to userspace.
-If userspace attempts to mmap the capture buffer directly using values
-from DQBUF, it will fail.
+Hi,
 
-Move the code that applies the magic offset into a helper, and call
-that helper from all four ioctl entry points.
+On 09/12/2021 12:58, Hans Verkuil wrote:
+> On 09/12/2021 09:58, Jiasheng Jiang wrote:
+>> he return value of kzalloc() needs to be checked.
+>> To avoid use of null pointer in case of the failure of alloc.
+>>
+>> Fixes: 876f123b8956 ("media: meson: vdec: bring up to compliance")
+>> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+>> ---
+>>  drivers/staging/media/meson/vdec/vdec_helpers.c | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
+>> index 7f07a9175815..025885fcfec6 100644
+>> --- a/drivers/staging/media/meson/vdec/vdec_helpers.c
+>> +++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
+>> @@ -234,6 +234,8 @@ void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+>>  	unsigned long flags;
+>>  
+>>  	new_ts = kzalloc(sizeof(*new_ts), GFP_KERNEL);
+>> +	if (!new_ts)
+>> +		return;
+> 
+> While this avoids dereferencing a NULL pointer, this error isn't propagated to the
+> caller. And I'm not sure if that's right.
+> 
+> Neil, what should be done in this case?
+> 
+> Regards,
+> 
+> 	Hans
+> 
+>>  	new_ts->ts = ts;
+>>  	new_ts->tc = tc;
+>>  	new_ts->offset = offset;
+>>
+> 
 
-Fixes: 7f98639def42 ("V4L/DVB: add memory-to-memory device helper framework for videobuf")
-Fixes: 908a0d7c588e ("[media] v4l: mem2mem: port to videobuf2")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
----
-Changes since v1:
+Probably something like this:
 
-  - Bail out directly without adjusting offsets if the respective
-    vb2_*() calls failed
+===================><=============================
+diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
+index db7022707ff8..df733eff9ac7 100644
+--- a/drivers/staging/media/meson/vdec/esparser.c
++++ b/drivers/staging/media/meson/vdec/esparser.c
+@@ -328,7 +328,11 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
 
-This was tested on RK3399 with
+        offset = esparser_get_offset(sess);
 
-    gst-launch-1.0 videotestsrc num-buffers=2 ! v4l2jpegenc ! fakesink
+-       amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
++       ret = amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
++       if (ret) {
++               v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
++               return ret;
++       }
+        dev_dbg(core->dev, "esparser: ts = %llu pld_size = %u offset = %08X flags = %08X\n",
+                vb->timestamp, payload_size, offset, vbuf->flags);
 
-and verifying the values using the V4L2 debug messages:
-
-    video2: VIDIOC_QUERYBUF: 00:00:00.000000 index=0, type=vid-cap-mplane, request_fd=0, flags=0x00004000, field=any, sequence=0, memory=mmap
-    plane 0: bytesused=0, data_offset=0x00000000, offset/userptr=0x40000000, length=2097152
-    timecode=00:00:00 type=0, flags=0x00000000, frames=0, userbits=0x00000000
-    video2: VIDIOC_QUERYBUF: 00:00:00.000000 index=0, type=vid-out-mplane, request_fd=0, flags=0x00004000, field=any, sequence=0, memory=mmap
-    plane 0: bytesused=0, data_offset=0x00000000, offset/userptr=0x0, length=153600
-    timecode=00:00:00 type=0, flags=0x00000000, frames=0, userbits=0x00000000
-
-    video2: VIDIOC_QBUF: 00:00:00.000000 index=0, type=vid-cap-mplane, request_fd=0, flags=0x00004003, field=any, sequence=0, memory=mmap
-    plane 0: bytesused=2097152, data_offset=0x00000000, offset/userptr=0x40000000, length=2097152
-    timecode=00:00:00 type=0, flags=0x00000000, frames=0, userbits=0x00000000
-    video2: VIDIOC_QBUF: 00:00:00.000000 index=0, type=vid-out-mplane, request_fd=0, flags=0x00004003, field=none, sequence=0, memory=mmap
-    plane 0: bytesused=153600, data_offset=0x00000000, offset/userptr=0x0, length=153600
-    timecode=00:00:00 type=0, flags=0x00000000, frames=0, userbits=0x00000000
-
-    video2: VIDIOC_DQBUF: 00:00:00.000000 index=0, type=vid-cap-mplane, request_fd=0, flags=0x00004001, field=none, sequence=0, memory=mmap
-    plane 0: bytesused=6324, data_offset=0x00000000, offset/userptr=0x40000000, length=2097152
-    timecode=00:00:00 type=0, flags=0x00000000, frames=0, userbits=0x00000000
-    video2: VIDIOC_DQBUF: 00:00:00.000000 index=0, type=vid-out-mplane, request_fd=0, flags=0x00004001, field=none, sequence=0, memory=mmap
-    plane 0: bytesused=153600, data_offset=0x00000000, offset/userptr=0x0, length=153600
-    timecode=00:00:00 type=0, flags=0x00000000, frames=0, userbits=0x00000000
-
-Gstreamer doesn't do PREPAREBUF calls, so that path was not verified.
-However the code changes are exactly the same, so I'm quite confident
-about them.
-
----
- drivers/media/v4l2-core/v4l2-mem2mem.c | 53 ++++++++++++++++++++------
- 1 file changed, 41 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-index e2654b422334..3bac9e373502 100644
---- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-+++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -585,19 +585,14 @@ int v4l2_m2m_reqbufs(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
+index b9125c295d1d..593b2ccbece2 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.c
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
+@@ -227,13 +227,15 @@ int amvdec_set_canvases(struct amvdec_session *sess,
  }
- EXPORT_SYMBOL_GPL(v4l2_m2m_reqbufs);
- 
--int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
--		      struct v4l2_buffer *buf)
-+static void v4l2_m2m_adjust_mem_offset(struct vb2_queue *vq,
-+				       struct v4l2_buffer *buf)
+ EXPORT_SYMBOL_GPL(amvdec_set_canvases);
+
+-void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+-                  struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
++int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
++                 struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
  {
--	struct vb2_queue *vq;
--	int ret = 0;
--	unsigned int i;
--
--	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
--	ret = vb2_querybuf(vq, buf);
--
- 	/* Adjust MMAP memory offsets for the CAPTURE queue */
- 	if (buf->memory == V4L2_MEMORY_MMAP && V4L2_TYPE_IS_CAPTURE(vq->type)) {
- 		if (V4L2_TYPE_IS_MULTIPLANAR(vq->type)) {
-+			unsigned int i;
-+
- 			for (i = 0; i < buf->length; ++i)
- 				buf->m.planes[i].m.mem_offset
- 					+= DST_QUEUE_OFF_BASE;
-@@ -605,8 +600,23 @@ int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- 			buf->m.offset += DST_QUEUE_OFF_BASE;
- 		}
- 	}
-+}
- 
--	return ret;
-+int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
-+		      struct v4l2_buffer *buf)
-+{
-+	struct vb2_queue *vq;
-+	int ret = 0;
-+
-+	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
-+	ret = vb2_querybuf(vq, buf);
-+	if (ret)
-+		return ret;
-+
-+	/* Adjust MMAP memory offsets for the CAPTURE queue */
-+	v4l2_m2m_adjust_mem_offset(vq, buf);
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(v4l2_m2m_querybuf);
- 
-@@ -763,6 +773,9 @@ int v4l2_m2m_qbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- 	if (ret)
- 		return ret;
- 
-+	/* Adjust MMAP memory offsets for the CAPTURE queue */
-+	v4l2_m2m_adjust_mem_offset(vq, buf);
-+
- 	/*
- 	 * If the capture queue is streaming, but streaming hasn't started
- 	 * on the device, but was asked to stop, mark the previously queued
-@@ -784,9 +797,17 @@ int v4l2_m2m_dqbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- 		   struct v4l2_buffer *buf)
- {
- 	struct vb2_queue *vq;
-+	int ret;
- 
- 	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
--	return vb2_dqbuf(vq, buf, file->f_flags & O_NONBLOCK);
-+	ret = vb2_dqbuf(vq, buf, file->f_flags & O_NONBLOCK);
-+	if (ret)
-+		return ret;
-+
-+	/* Adjust MMAP memory offsets for the CAPTURE queue */
-+	v4l2_m2m_adjust_mem_offset(vq, buf);
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(v4l2_m2m_dqbuf);
- 
-@@ -795,9 +816,17 @@ int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- {
- 	struct video_device *vdev = video_devdata(file);
- 	struct vb2_queue *vq;
-+	int ret;
- 
- 	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
--	return vb2_prepare_buf(vq, vdev->v4l2_dev->mdev, buf);
-+	ret = vb2_prepare_buf(vq, vdev->v4l2_dev->mdev, buf);
-+	if (ret)
-+		return ret;
-+
-+	/* Adjust MMAP memory offsets for the CAPTURE queue */
-+	v4l2_m2m_adjust_mem_offset(vq, buf);
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(v4l2_m2m_prepare_buf);
- 
--- 
-2.34.1.400.ga245620fadb-goog
+        struct amvdec_timestamp *new_ts;
+        unsigned long flags;
 
+        new_ts = kzalloc(sizeof(*new_ts), GFP_KERNEL);
++       if (!new_ts)
++               return -ENOMEM;
+        new_ts->ts = ts;
+        new_ts->tc = tc;
+        new_ts->offset = offset;
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
+index 88137d15aa3a..4bf3e61d081b 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.h
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
+@@ -56,8 +56,8 @@ void amvdec_dst_buf_done_offset(struct amvdec_session *sess,
+  * @offset: offset in the VIFIFO where the associated packet was written
+  * @flags: the vb2_v4l2_buffer flags
+  */
+-void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+-                  struct v4l2_timecode tc, u32 offset, u32 flags);
++int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
++                 struct v4l2_timecode tc, u32 offset, u32 flags);
+ void amvdec_remove_ts(struct amvdec_session *sess, u64 ts);
+
+ /**
