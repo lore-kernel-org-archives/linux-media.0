@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1275C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 10 Dec 2021 07:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF2EFC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 10 Dec 2021 07:59:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236077AbhLJIAn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Dec 2021 03:00:43 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:54456 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235960AbhLJIAl (ORCPT
+        id S237958AbhLJIDd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Dec 2021 03:03:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231806AbhLJIDd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Dec 2021 03:00:41 -0500
+        Fri, 10 Dec 2021 03:03:33 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBDFC061746;
+        Thu,  9 Dec 2021 23:59:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E880CCE29D8;
-        Fri, 10 Dec 2021 07:57:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE679C00446;
-        Fri, 10 Dec 2021 07:57:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8F6F5CE2A2C;
+        Fri, 10 Dec 2021 07:59:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B87D0C341C8;
+        Fri, 10 Dec 2021 07:59:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639123022;
-        bh=fbV6jnRImt77kPNxzcy/mg18kVek5MEGJZ+W4KsRu9s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tl0LYYMywy/PxftZX5ppzTy6dXCK1W1TI2sjpt2DU5fqNTFhizS/+sxNcd5sld3PN
-         PYR8KUJzv8aoqodKHNuT/eHcZK8b2c9eZYmqjaOHdQ9OFQ7Kp9StoOXgpu2NSoztXM
-         gDjvf4PFnCEVsUsqR+5Wui+zH80zh7ibGkQgp0882mVPm4vyA1mGuj8rqnXCulY9zq
-         tMlTn8llli1xbW0gcsWV7LkiwKDqolpHSKRwrC0qF1tmCJkMxNRCNprVfj6elTnTlT
-         NswyfxGG8duix6w+9W160l0f9Ye0FWQ4C5obSBLbr8ohaTtjvac23E8eD/4QqzIFke
-         owRt0rQ8fzZIQ==
+        s=k20201202; t=1639123194;
+        bh=Nf+Wcdf04qf2Nlhbx2KQt1pzdfSFDlEh5q45kHafA08=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YXGJe3h1nzK/olC++6chtobUC26on3d+t3ZQl75gynrPzIaEAsq2c5SOj5EmSa1Hb
+         j/GV7k1VRfHuH+B1lgYOdLvTMRk14wWJT4MWSXe1l9POArcggrBaFo0FkRS6U0Aop7
+         uZda8DWIdzzNFfu97JR5+ZltHzD2PC6UjLfLlMxQEiq+cdLiJLZBZfvCWCAVSqLSKQ
+         wHL3JN9M15CYfnxWb17c/QIe0f/e8n5b9GfrAw6sutiTsj2RONNJCBYF21bWiIvNcI
+         vGJs9TWRFi47CYEeQNHL1w45OZTmBDKraSs9ZfeIM+o2dbhdb2aipRk4Q9M18Ruz5S
+         VI+kFctIQPr4w==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mvam4-000BVZ-Rm; Fri, 10 Dec 2021 08:57:00 +0100
+        id 1mvaoq-000BYg-MA; Fri, 10 Dec 2021 08:59:52 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Robert Schlabbach <robert_s@gmx.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Antti Palosaari <crope@iki.fi>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH v3 2/4] media: si2157: Add optional firmware download
-Date:   Fri, 10 Dec 2021 08:56:57 +0100
-Message-Id: <68cd904138504a94c5e592b50547e0a22cd33d4d.1639120421.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH RFC] media: si2157: get rid of chiptype data
+Date:   Fri, 10 Dec 2021 08:59:50 +0100
+Message-Id: <7dfc5692c89a4017591f475341f7178e473f7bb1.1639123045.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1639120421.git.mchehab+huawei@kernel.org>
-References: <cover.1639120421.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -53,84 +53,151 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Robert Schlabbach <robert_s@gmx.net>
+The driver should be capable of autodetecting its type, so no
+need to pass it via device driver's data.
 
-The Si2157 (A30) is functional with the ROM firmware 3.0.5, but can also
-be patched at runtime, e.g. to firmware 3.1.3. However, although a
-firmware filename for its firmware patch exists, that has only been used
-for the Si2177 (A30) so far (which indeed takes the binary identical
-firmware patch).
-
-Add support for downloading firmware patches into the Si2157 (A30), but
-make it optional, so that initialization can succeed with and without a
-firmware patch being available. Keep the use of request_firmware() for
-this purpose rather than firmware_request_nowarn(), so that the warning
-in the log makes users aware that it is possible to provide a firmware
-for this tuner.
-
-The firmware patch is probably also optional for other (if not all)
-tuners supported by the driver, but since I do not have the others
-available to test, they are kept mandatory for now to avoid regressions.
-
-Signed-off-by: Robert Schlabbach <robert_s@gmx.net>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
 
-See [PATCH v3 0/4] at: https://lore.kernel.org/all/cover.1639120421.git.mchehab+huawei@kernel.org/
+This is RFC, as this patch could potentially cause regressions, if some of the
+data there would actually be quirks needed by some specific devices. 
 
- drivers/media/tuners/si2157.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ drivers/media/tuners/si2157.c      | 40 +++++++++++++++++-------------
+ drivers/media/tuners/si2157_priv.h |  7 +-----
+ 2 files changed, 24 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
-index 481a5db7fb69..ed28672c060d 100644
+index bb590395e81a..8c33c412a203 100644
 --- a/drivers/media/tuners/si2157.c
 +++ b/drivers/media/tuners/si2157.c
-@@ -130,6 +130,7 @@ static int si2157_init(struct dvb_frontend *fe)
- 	struct i2c_client *client = fe->tuner_priv;
- 	struct si2157_dev *dev = i2c_get_clientdata(client);
- 	unsigned int chip_id, xtal_trim;
-+	unsigned int fw_required;
- 	struct si2157_cmd cmd;
- 	const char *fw_name;
- 	int ret;
-@@ -198,6 +199,10 @@ static int si2157_init(struct dvb_frontend *fe)
- 	#define SI2146_A10 ('A' << 24 | 46 << 16 | '1' << 8 | '0' << 0)
- 	#define SI2141_A10 ('A' << 24 | 41 << 16 | '1' << 8 | '0' << 0)
+@@ -185,6 +185,9 @@ static int si2157_find_and_load_firmware(struct dvb_frontend *fe)
+ 		return -EINVAL;
+ 	}
  
-+	/* assume firmware is required, unless verified not to be */
-+	/* only the SI2157_A30 has been verified not to yet */
-+	fw_required = true;
++	/* Update the part id based on device's report */
++	dev->part_id = part_id;
 +
- 	switch (chip_id) {
- 	case SI2158_A20:
- 	case SI2148_A20:
-@@ -206,10 +211,13 @@ static int si2157_init(struct dvb_frontend *fe)
- 	case SI2141_A10:
- 		fw_name = SI2141_A10_FIRMWARE;
- 		break;
--	case SI2177_A30:
--		fw_name = SI2157_A30_FIRMWARE;
--		break;
- 	case SI2157_A30:
-+		fw_name = SI2157_A30_FIRMWARE;
-+		fw_required = false;
-+		break;
-+	case SI2177_A30:
-+		fw_name = SI2157_A30_FIRMWARE;
-+		break;
- 	case SI2147_A30:
- 	case SI2146_A10:
- 		fw_name = NULL;
-@@ -230,6 +238,9 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	dev_info(&client->dev,
+ 		 "found a 'Silicon Labs Si21%d-%c%c%c ROM 0x%02x'\n",
+ 		 part_id, cmd.args[1], cmd.args[3], cmd.args[4], rom_id);
+@@ -235,10 +238,10 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	dev->if_frequency = 0; /* we no longer know current tuner state */
  
- 	ret = si2157_load_firmware(fe, fw_name);
- 	if (ret) {
-+		if (!fw_required)
-+			goto skip_fw_download;
-+
- 		dev_err(&client->dev, "firmware file '%s' not found\n",
- 			fw_name);
+ 	/* power up */
+-	if (dev->chiptype == SI2157_CHIPTYPE_SI2146) {
++	if (dev->part_id == SI2146) {
+ 		memcpy(cmd.args, "\xc0\x05\x01\x00\x00\x0b\x00\x00\x01", 9);
+ 		cmd.wlen = 9;
+-	} else if (dev->chiptype == SI2157_CHIPTYPE_SI2141) {
++	} else if (dev->part_id == SI2141) {
+ 		memcpy(cmd.args, "\xc0\x00\x0d\x0e\x00\x01\x01\x01\x01\x03", 10);
+ 		cmd.wlen = 10;
+ 	} else {
+@@ -247,11 +250,11 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	}
+ 	cmd.rlen = 1;
+ 	ret = si2157_cmd_execute(client, &cmd);
+-	if (ret && (dev->chiptype != SI2157_CHIPTYPE_SI2141 || ret != -EAGAIN))
++	if (ret && (dev->part_id != SI2141 || ret != -EAGAIN))
  		goto err;
+ 
+ 	/* Si2141 needs a second command before it answers the revision query */
+-	if (dev->chiptype == SI2157_CHIPTYPE_SI2141) {
++	if (dev->part_id == SI2141) {
+ 		memcpy(cmd.args, "\xc0\x08\x01\x02\x00\x00\x01", 7);
+ 		cmd.wlen = 7;
+ 		ret = si2157_cmd_execute(client, &cmd);
+@@ -493,7 +496,7 @@ static int si2157_set_params(struct dvb_frontend *fe)
+ 	if (ret)
+ 		goto err;
+ 
+-	if (dev->chiptype == SI2157_CHIPTYPE_SI2146)
++	if (dev->part_id == SI2146)
+ 		memcpy(cmd.args, "\x14\x00\x02\x07\x00\x01", 6);
+ 	else
+ 		memcpy(cmd.args, "\x14\x00\x02\x07\x00\x00", 6);
+@@ -560,9 +563,9 @@ static int si2157_set_analog_params(struct dvb_frontend *fe,
+ 	u8 color = 0;    /* 0=NTSC/PAL, 0x10=SECAM */
+ 	u8 invert_analog = 1; /* analog tuner spectrum; 0=normal, 1=inverted */
+ 
+-	if (dev->chiptype != SI2157_CHIPTYPE_SI2157) {
+-		dev_info(&client->dev, "Analog tuning not supported for chiptype=%u\n",
+-			 dev->chiptype);
++	if (dev->part_id != SI2157) {
++		dev_info(&client->dev, "Analog tuning not supported on Si21%d\n",
++			 dev->part_id);
+ 		ret = -EINVAL;
+ 		goto err;
+ 	}
+@@ -874,7 +877,7 @@ static int si2157_probe(struct i2c_client *client,
+ 	dev->inversion = cfg->inversion;
+ 	dev->dont_load_firmware = cfg->dont_load_firmware;
+ 	dev->if_port = cfg->if_port;
+-	dev->chiptype = (u8)id->driver_data;
++	dev->part_id = (u8)id->driver_data;
+ 	dev->if_frequency = 5000000; /* default value of property 0x0706 */
+ 	mutex_init(&dev->i2c_mutex);
+ 	INIT_DELAYED_WORK(&dev->stat_work, si2157_stat_work);
+@@ -917,10 +920,8 @@ static int si2157_probe(struct i2c_client *client,
+ 	}
+ #endif
+ 
+-	dev_info(&client->dev, "Silicon Labs %s successfully attached\n",
+-			dev->chiptype == SI2157_CHIPTYPE_SI2141 ?  "Si2141" :
+-			dev->chiptype == SI2157_CHIPTYPE_SI2146 ?
+-			"Si2146" : "Si2147/2148/2157/2158");
++	dev_info(&client->dev, "Silicon Labs Si21%d successfully attached\n",
++		 dev->part_id);
+ 
+ 	return 0;
+ 
+@@ -953,11 +954,16 @@ static int si2157_remove(struct i2c_client *client)
+ 	return 0;
+ }
+ 
++/*
++ * The part_id used here will only be used on buggy devices that don't
++ * accept firmware uploads. Non-buggy devices should just use "si2157" for
++ * all SiLabs TER tuners, as the driver should auto-detect it.
++ */
+ static const struct i2c_device_id si2157_id_table[] = {
+-	{"si2157", SI2157_CHIPTYPE_SI2157},
+-	{"si2146", SI2157_CHIPTYPE_SI2146},
+-	{"si2141", SI2157_CHIPTYPE_SI2141},
+-	{"si2177", SI2157_CHIPTYPE_SI2177},
++	{"si2157", SI2157},
++	{"si2146", SI2146},
++	{"si2141", SI2141},
++	{"si2177", SI2177},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(i2c, si2157_id_table);
+diff --git a/drivers/media/tuners/si2157_priv.h b/drivers/media/tuners/si2157_priv.h
+index 0db21b082ba9..df17a5f03561 100644
+--- a/drivers/media/tuners/si2157_priv.h
++++ b/drivers/media/tuners/si2157_priv.h
+@@ -26,7 +26,7 @@ struct si2157_dev {
+ 	unsigned int active:1;
+ 	unsigned int inversion:1;
+ 	unsigned int dont_load_firmware:1;
+-	u8 chiptype;
++	u8 part_id;
+ 	u8 if_port;
+ 	u32 if_frequency;
+ 	u32 bandwidth;
+@@ -58,11 +58,6 @@ struct si2157_tuner_info {
+ 	const char		*fw_name, *fw_alt_name;
+ };
+ 
+-#define SI2157_CHIPTYPE_SI2157 0
+-#define SI2157_CHIPTYPE_SI2146 1
+-#define SI2157_CHIPTYPE_SI2141 2
+-#define SI2157_CHIPTYPE_SI2177 3
+-
+ /* firmware command struct */
+ #define SI2157_ARGLEN      30
+ struct si2157_cmd {
 -- 
 2.33.1
+
 
