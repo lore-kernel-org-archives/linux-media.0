@@ -2,175 +2,541 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 724C5C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 10 Dec 2021 12:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2C33C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 10 Dec 2021 12:58:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241335AbhLJMv2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Dec 2021 07:51:28 -0500
-Received: from mail-dm6nam12on2053.outbound.protection.outlook.com ([40.107.243.53]:63968
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229989AbhLJMv1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Dec 2021 07:51:27 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hFX1z86a6PTVLblldlRH0wMfJGPeG9uccOUcT/vmLbYJRoZA60Zw7iu/NVvP8No8qoL+nzUv2wYVjhvFV/sI1IhvPoFQLSDDVctIJDieWP9526sweBSCgXHbMOP06YJN/ZpeHkC40CAKoeQkJnbfbTWot2oVPopK8aEvmhbaaMnIedTpCeCRsPmTGd3JaHP264Y69EZOMui4zGtmCVUSjxH9QdVcu+RwAAAwD70nyrbsk/N9jsx4lDNTLIDstQMQKg9vPVd/tbvrpCwnGUO7rGhceawKacivpO5nSLVOLGgDtwsnenxwFYoiMeGQ2kQ7KM5RNl2xJ7Lxmxcy2vxP3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SqO5KBE8zl5SR+4rxcsQRVL4bcjPEqIkjw9pqWRNH9s=;
- b=E/e0W7/vs33Cp24pBJHfzTvCG+08pG6pmOIOqajOa638lXA68k+rfxYCO+MYtKSA46aU1AgR6ko/S/A8Wp/rtMFwjomqTjafxcwWyXzBN4pVU30ZeDm55O7J8L72gPOK6Flrs76yfelqV/xRmHHVpQiGmQQb8Hlt7lU7EVW3IBNHywyN+dyIE+FPi8Hj4HBdKCU9ERYob4k6JMsJXY+sFMXUvlqdzYxxn5JTysIvYNdWPrHovEwTYdv3c5rMeV4wOgR8kmYw7wZ9o4zHIzw73uKXlWzXt9XXKY2XOAyv3tZmSa2PUn/o1LlSMFxrPLOvj3e1/iqza8aZArRM84njvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SqO5KBE8zl5SR+4rxcsQRVL4bcjPEqIkjw9pqWRNH9s=;
- b=4lESrgzf9YS1paZG13zxmo3DLBgAgC+mC/HbgXvMv9M8njFV1ey5FBa+jxTS398Gt06iBya0GK8Yn/geuIyksEgNC+cb/i47kh8JdWkIaAaJ1BItH7cAoTcK8QZhZ8IdWRqnJiG1bi2S63EtfDLW67HSX+yVZnD+OrMnXE5owYU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
- (2603:10b6:301:5a::14) by MWHPR12MB1776.namprd12.prod.outlook.com
- (2603:10b6:300:113::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Fri, 10 Dec
- 2021 12:47:49 +0000
-Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
- ([fe80::d16c:a6d5:5d2e:f9d4]) by MWHPR1201MB0192.namprd12.prod.outlook.com
- ([fe80::d16c:a6d5:5d2e:f9d4%12]) with mapi id 15.20.4755.027; Fri, 10 Dec
- 2021 12:47:49 +0000
-Subject: Re: [RFC PATCH v4 0/2] RDMA/rxe: Add dma-buf support
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Shunsuke Mie <mie@igel.co.jp>
-Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Doug Ledford <dledford@redhat.com>,
-        Jianxin Xiong <jianxin.xiong@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Sean Hefty <sean.hefty@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>,
-        Tomohito Esaki <etom@igel.co.jp>
-References: <20211122110817.33319-1-mie@igel.co.jp>
- <CANXvt5oB8_2sDGccSiTMqeLYGi3Vuo-6NnHJ9PGgZZMv=fnUVw@mail.gmail.com>
- <20211207171447.GA6467@ziepe.ca>
- <CANXvt5rCayOcengPr7Z_aFmJaXwWj9VcWZbaHnuHj6=2CkPndA@mail.gmail.com>
- <20211210124204.GG6467@ziepe.ca>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Message-ID: <880e25ad-4fe9-eacd-a971-993eaea37fc4@amd.com>
-Date:   Fri, 10 Dec 2021 13:47:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <20211210124204.GG6467@ziepe.ca>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: AM6P192CA0019.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:209:83::32) To MWHPR1201MB0192.namprd12.prod.outlook.com
- (2603:10b6:301:5a::14)
+        id S241243AbhLJNCQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Dec 2021 08:02:16 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:41527 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233777AbhLJNCP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 10 Dec 2021 08:02:15 -0500
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id BE07DE0007;
+        Fri, 10 Dec 2021 12:58:36 +0000 (UTC)
+Date:   Fri, 10 Dec 2021 13:59:29 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Eugen.Hristev@microchip.com
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
+        Nicolas.Ferre@microchip.com
+Subject: Re: [PATCH v2 03/25] media: atmel: introduce microchip csi2dc driver
+Message-ID: <20211210125929.uykudrsjo6bm3v4d@uno.localdomain>
+References: <20211112142509.2230884-1-eugen.hristev@microchip.com>
+ <20211112142509.2230884-4-eugen.hristev@microchip.com>
+ <20211206105142.chmrks6sueohw7sx@uno.localdomain>
+ <1fca04a4-ab5c-15cc-61ab-829d39a63ec8@microchip.com>
+ <20211206120630.mlciq2662azznesu@uno.localdomain>
+ <3d5cf51e-3ea0-9fff-b9f8-cd0eadb4ea2b@microchip.com>
 MIME-Version: 1.0
-Received: from [192.168.178.21] (87.176.191.248) by AM6P192CA0019.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:83::32) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Fri, 10 Dec 2021 12:47:43 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e2cad2fd-5bd3-4e75-1d88-08d9bbdb459c
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1776:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB1776EE83ED363A3373B186D783719@MWHPR12MB1776.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mhki8zptHHRm3yHZLhdcaSKAkbhEACbUPgOBuMJd4pEj/nbIFCLfy2F6jn6q8WwV7P3nY+8qArKUzAVJYPZy7RA57ZjtRgbALSSjkQrITxLNzrWiUH7izVUfW8tibiqz7ZuOKgSI8pAmn4y7WhI+gwBGa9mH2/je2gB4H/YIWGFhKLI8l+7HMlm2tXyT6mdmETepTotv4w5Igln0eTPTMl/3njO/dZSMMyMTB0rOnZQDhHQ8Ug0omxLUjDb7BF35YgqIVo0bZ/G7Rk+3nPGHltAki1zPB0vqmJ+psz7UoQ2qGRe0uYhfqrxk27msROv8aVQY5voUoeZ7MwLQsAv8AHeb9xk7seEdxgJRwKKcDIiGzhyeeFQZ9pHH47O+yIpx6kYplLtLG6C+ZviWeF3m+qfSSHzs5X+EdkjJ4cStgRjVW92a64vrTZZbT2LRvgNgzxn4L+0DltoKdmI7smCZjZWMFdqngtnTxSfbo+E3//5Vre+7TSWKGpNKtzmInYBdCx16mD9CfYS34b8uEYiy1tDgj6gEVvnnW61SB9scm97ScxAepOhzMnXy5h3qpAXr2ZM6w9gBgT7L97bPeat5kXlDDjcaxXUZmvgcCalTi8A32Q67MP14r+PONXPpSPo7DPh3T7AmMbvpIkveR4hKfK+fHkVGXQ3x48BzZyxWZFEmYGn/MdeZyqor12ONmPfav+9EDlqy3GN9/+Ryecj+iAiizb6gs2RPatHpCBF8vnWuwH/hj/pLQGtoIfXjxsX/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1201MB0192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(110136005)(316002)(31686004)(26005)(16576012)(83380400001)(86362001)(508600001)(7416002)(8676002)(66946007)(8936002)(66556008)(6666004)(66476007)(2616005)(2906002)(36756003)(956004)(38100700002)(31696002)(4326008)(5660300002)(54906003)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TGlCYzhNSUV0ejBHQWNtQUw3c2t6RXNGQ1pvb3hrM1BPekJ1cUwxQk42dTBl?=
- =?utf-8?B?NzVKelQweGhsai8xMWVvUUhMR1hCREZ2VjdIbVdLQjhHVkgxZlVsSTd6bjlM?=
- =?utf-8?B?WXNTaUltVG9tdklVTXpSeUV6UUpRTTh3QjdXNDVMbHAxTmJKeWh3WFo1V1d3?=
- =?utf-8?B?WTFSQmlhRGlDNTROS09PTjU3LzRpVG1BRlNPYklOd1o1YlVVUTh5TnpIZU1a?=
- =?utf-8?B?OSttZmtmaTdVOVVtRlhKRUU1N3NsUC8rc2J1SklkZnFvUzFsV28wZjFMOGp0?=
- =?utf-8?B?a0xBWGNKV0ttVkIyUWdhSGE4cHhMSUZJV3hCalB6ZTZCdk5nYW54Y1NDMEpR?=
- =?utf-8?B?ZDFyb21XT2d3UncxNm05UDVCNUIwOFNCQWJjVXFvQ05PNy9ZUUx4UzVmaDNP?=
- =?utf-8?B?elR3dWd6c3RFajJyaGxhZzJNeExsdEFNMEpFN3lDaFcweXRyUUVyenFhenR0?=
- =?utf-8?B?YitLRGRDbGxkTHNFcWprUVpITjJCQzdnSEduSkRtUHRHaXRBVW5BaDZyYTkr?=
- =?utf-8?B?MmNrU1phRjRYVVVTMFN1L2dYSkxuNm1heXk1cjhQcDFMWkFKTjQ0Q2h1SXhs?=
- =?utf-8?B?VU5mSW0wTGZ6Z0IyNzB0YW1rZG91VHJ4YnYwVFcwaE1Va2hjRStwUXdEb2Jr?=
- =?utf-8?B?WnRYdUZKbHI3OWFkeUFPa3YrOGgzdms4Y255Wk1KNnNFZjZFY0hMN0Z3R0ZC?=
- =?utf-8?B?V1Z2MjdpQnlmTW51UXVBNVRLczFJejB0NFFkMU1hM2llbXF4M2xqUzRmQlFG?=
- =?utf-8?B?YkYwNVRqY0RuNm9FbTdadG0yWTRvREQvM0VWQnV4WE0rZGluanV5cjdFVkcz?=
- =?utf-8?B?Ry9GNjJxYW8xZXBJckRNMUl3Mlpua2Y2aFA5Z0tGallkSzZVQkdlYzlGejFp?=
- =?utf-8?B?UDNXNmpGdDZZWk5OK1hDQ2RuQmFNbnR6cHBhNDFmbkJwRllxcUtxSGhkdmJq?=
- =?utf-8?B?MHlnV2N2dWJIZ2VvaENWN3lSQjJ2R1ZLdm1XM2NKeUZhVGNRaHN3a21hYS9R?=
- =?utf-8?B?ZUZFT21ORFhwK1FYTFQzbjJhS0gzKzUzVzdoMHROMjIyRE1ZREt1SkNWY2RV?=
- =?utf-8?B?bkd6RmhqM2pEenozV29nbGhHWWhqbDJGSm1MM3NvYWtyVG1TK3kwTXVUL0Qr?=
- =?utf-8?B?SS9OYlB2OWJwcVVtVUoybzRBZ2dEbUFoSnd5NmZMb1lmWmNiYXFiTGdJbnM0?=
- =?utf-8?B?cEVIeUdXZWt2U2Zoc1JITUtuUEg3Z283THZmZ0kvN0plTUwyaWY5cXBCanBU?=
- =?utf-8?B?Y2JZbVRnbjJ1bUlrTkFabjI1SUpiZGE3THRYb21uSTd6emtMOThjRHdpdnA3?=
- =?utf-8?B?Y1RCOWY2U0E4U1c0dWs4TnNLQTc2TEVzZHA1TWJiY2FJYUV4ZGM5YmVwWnRw?=
- =?utf-8?B?czg1NnVPMUVIWXR5c1VJNStGRTZKZVBMNlNFUkRJNG4yYm9SKzkvdXNDcVpl?=
- =?utf-8?B?WnlvL0tVYkRBa1R5RXZTWlFWWVdHUTkvcWlrY0Z5WUFyNExRRUVTSEFIb244?=
- =?utf-8?B?dVMxSGhLbU9DNDFSL1dNcytCU1IxRFVma240SmNQMmpCVmVTejJvREZ0UlFX?=
- =?utf-8?B?a0djRHlXbktPN0JmZ011WHNXUDNmZTE3b1dYTTJGOE5SZjhFOENWZHBXN1Fz?=
- =?utf-8?B?V0V5MTJNOERzc3lvUk5TZ290L294akVRU3dPQnZvTElyWURyMlNDTkF5cGxN?=
- =?utf-8?B?SmJwa005WDVzV1cybW5OVUc0UStHeFhoMGxFSmU4UnFDUDIwRkNpWGlDczFC?=
- =?utf-8?B?bmpEZHRQdnVQMmw2a1lHeFAzNW9ZcUJ1bkEwaklwc2sxNk41Z0xSelh2NFBS?=
- =?utf-8?B?ZGtrOG1oUnNnbmpBbktrTnNlVHBlK2twSDVVV2pRUWtGTjFlRlM0cVVlcVRF?=
- =?utf-8?B?YTcwWjhIWWYvRWdkWHdoeGlSOG5FaVhITmFDWStuRTZYTUJxcys5TUZQTml6?=
- =?utf-8?B?bUk0bDlPQXdmWG15WUc5ZlR1cUY5alVUWUNYRys1bUs1L0JwcndOTjZ5TzND?=
- =?utf-8?B?UVZzei9rWG5RSHU0YzNXdjIzZmJkZi9JNmhBcWloaHpOMXdpZEE2aTFDaGRs?=
- =?utf-8?B?SnNiRVVobkZDbFJOb0FBM2llL29Ha3kzV3Z4QnR0TVNCVlI5VGoreE91ek9i?=
- =?utf-8?Q?p33U=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e2cad2fd-5bd3-4e75-1d88-08d9bbdb459c
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1201MB0192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 12:47:49.2975
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YWQuidDOvIGPLeBPoh9GgBm51gaFoVk2lXUiso8e/QFU49T3CqzosjeE5tjRK4fd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1776
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3d5cf51e-3ea0-9fff-b9f8-cd0eadb4ea2b@microchip.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 10.12.21 um 13:42 schrieb Jason Gunthorpe:
-> On Fri, Dec 10, 2021 at 08:29:24PM +0900, Shunsuke Mie wrote:
->> Hi Jason,
->> Thank you for replying.
->>
->> 2021年12月8日(水) 2:14 Jason Gunthorpe <jgg@ziepe.ca>:
->>> On Fri, Dec 03, 2021 at 12:51:44PM +0900, Shunsuke Mie wrote:
->>>> Hi maintainers,
->>>>
->>>> Could you please review this patch series?
->>> Why is it RFC?
->>>
->>> I'm confused why this is useful?
->>>
->>> This can't do copy from MMIO memory, so it shouldn't be compatible
->>> with things like Gaudi - does something prevent this?
->> I think if an export of the dma-buf supports vmap, CPU is able to access the
->> mmio memory.
->>
->> Is it wrong? If this is wrong, there is no advantages this changes..
-> I don't know what the dmabuf folks did, but yes, it is wrong.
+Hello Eugen
+
+On Fri, Dec 10, 2021 at 11:07:15AM +0000, Eugen.Hristev@microchip.com wrote:
+> On 12/6/21 2:06 PM, Jacopo Mondi wrote:
+> > Hi Eugen
+> >
+> > On Mon, Dec 06, 2021 at 11:42:25AM +0000, Eugen.Hristev@microchip.com wrote:
+> >> On 12/6/21 12:51 PM, Jacopo Mondi wrote:
+> >>> Hello Eugen
+> >>>
+> >>>       thanks for addressing all my previous comments, just a few more
+> >>>       things and the driver looks good to me
+> >>
+> >> Thanks for reviewing. I tried my best to accomodate your suggestions.
+> >>>
+> >>> On Fri, Nov 12, 2021 at 04:24:47PM +0200, Eugen Hristev wrote:
+
+[snip]
+
+> >>>> +
+> >>>> +static int csi2dc_probe(struct platform_device *pdev)
+> >>>> +{
+> >>>> +     struct device *dev = &pdev->dev;
+> >>>> +     struct csi2dc_device *csi2dc;
+> >>>> +     int ret = 0;
+> >>>> +     u32 ver;
+> >>>> +
+> >>>> +     csi2dc = devm_kzalloc(dev, sizeof(*csi2dc), GFP_KERNEL);
+> >>>> +     if (!csi2dc)
+> >>>> +             return -ENOMEM;
+> >>>> +
+> >>>> +     csi2dc->dev = dev;
+> >>>> +
+> >>>> +     csi2dc->base = devm_platform_ioremap_resource(pdev, 0);
+> >>>> +     if (IS_ERR(csi2dc->base)) {
+> >>>> +             dev_err(dev, "base address not set\n");
+> >>>> +             return PTR_ERR(csi2dc->base);
+> >>>> +     }
+> >>>> +
+> >>>> +     csi2dc->pclk = devm_clk_get(dev, "pclk");
+> >>>> +     if (IS_ERR(csi2dc->pclk)) {
+> >>>> +             ret = PTR_ERR(csi2dc->pclk);
+> >>>> +             dev_err(dev, "failed to get pclk: %d\n", ret);
+> >>>> +             return ret;
+> >>>> +     }
+> >>>> +
+> >>>> +     csi2dc->scck = devm_clk_get(dev, "scck");
+> >>>> +     if (IS_ERR(csi2dc->scck)) {
+> >>>> +             ret = PTR_ERR(csi2dc->scck);
+> >>>> +             dev_err(dev, "failed to get scck: %d\n", ret);
+> >>>> +             return ret;
+> >>>> +     }
+> >>>> +
+> >>>> +     v4l2_subdev_init(&csi2dc->csi2dc_sd, &csi2dc_subdev_ops);
+> >>>> +
+> >>>> +     csi2dc->csi2dc_sd.owner = THIS_MODULE;
+> >>>> +     csi2dc->csi2dc_sd.dev = dev;
+> >>>> +     snprintf(csi2dc->csi2dc_sd.name, sizeof(csi2dc->csi2dc_sd.name),
+> >>>> +              "csi2dc");
+> >>>> +
+> >>>> +     csi2dc->csi2dc_sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> >>>> +     csi2dc->csi2dc_sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
+> >>>> +
+> >>>> +     platform_set_drvdata(pdev, csi2dc);
+> >>>> +
+> >>>> +     ret = csi2dc_of_parse(csi2dc, dev->of_node);
+> >>>> +     if (ret)
+> >>>> +             goto csi2dc_probe_cleanup_entity;
+> >>>> +
+> >>>> +     csi2dc->pads[CSI2DC_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
+> >>>> +     if (csi2dc->video_pipe)
+> >>>> +             csi2dc->pads[CSI2DC_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
+> >>>> +
+> >>>> +     ret = media_entity_pads_init(&csi2dc->csi2dc_sd.entity,
+> >>>> +                                  csi2dc->video_pipe ? CSI2DC_PADS_NUM : 1,
+> >>>> +                                  csi2dc->pads);
+> >>>> +     if (ret < 0) {
+> >>>> +             dev_err(dev, "media entity init failed\n");
+> >>>> +             goto csi2dc_probe_cleanup_notifier;
+> >>>> +     }
+> >>>> +
+> >>>> +     csi2dc_default_format(csi2dc);
+> >>>> +
+> >>>> +     /* turn power on to validate capabilities */
+> >>>> +     ret = csi2dc_power(csi2dc, true);
+> >>>> +     if (ret < 0)
+> >>>> +             goto csi2dc_probe_cleanup_notifier;
+> >>>> +
+> >>>> +     pm_runtime_set_active(dev);
+> >>>> +     pm_runtime_enable(dev);
+> >>>> +     ver = csi2dc_readl(csi2dc, CSI2DC_VERSION);
+> >>>
+> >>> Shouldn't you verify that the version is the expected one, or that, at
+> >>> least the device can be accessed ?
+> >>
+> >> If the read from the register worked, the device can be accessed. If the
+> >> device won't respond to this, we will get a bus fault or a freeze.
+> >> And printing the version number can help all the time by inspecting the
+> >> bootlog to see if something valid was printed.
+> >> Version changes from product to product but seeing a bootlog later will
+> >> make us easily understand which product was it, and if the version was
+> >> read correctly
+> >>
+> >>>
+> >>>> +     pm_request_idle(dev);
+> >>>
+> >>> I'm not well versed when it comes to runtime_pm but I can read that
+> >>>
+> >>> Documentation/power/runtime_pm.rst-  `int pm_request_idle(struct device *dev);`
+> >>> Documentation/power/runtime_pm.rst-    - submit a request to execute the subsystem-level idle callback for the
+> >>> Documentation/power/runtime_pm.rst-      device (the request is represented by a work item in pm_wq); returns 0 on
+> >>> Documentation/power/runtime_pm.rst-      success or error code if the request has not been queued up
+> >>>
+> >>> And looking below you have
+> >>>
+> >>> +static const struct dev_pm_ops csi2dc_dev_pm_ops = {
+> >>> +       SET_RUNTIME_PM_OPS(csi2dc_runtime_suspend, csi2dc_runtime_resume, NULL)
+> >>> +};
+> >>>
+> >>> Which expands to
+> >>>
+> >>> include/linux/pm.h:     SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
+> >>>
+> >>> so it seems to me you've no idle func defined, hence you above call
+> >>> has no effect so you're device stays powered on after your above call
+> >>> to
+> >>>
+> >>>           ret = csi2dc_power(csi2dc, true);
+> >>>
+> >>> Also trying to suspend using runtime_pm while having powered on by
+> >>> calling the resume function directly would leave the pm status
+> >>> unbalanced ?
+> >>>
+> >>> I would raher call pm_runtime_resume() and
+> >>> pm_runtime_suspend() or call the power routine directly, and later
+> >>> enable pm_runtime
+> >>>
+> >>>           csi2dc_power(true)
+> >>>           readl();
+> >>>           csi2fd_power(false);
+> >>>
+> >>>           pm_runtime_set_active();
+> >>>           pm_runtime_enable();
+> >>>
+> >>>           v4l2_async_register();
+> >>>
+> >>> Again, not well versed in runtime_pm, so don't assume the above makes
+> >>> sense :)
+> >>
+> >> I am not versed in runtime_pm either, I will try to remove this
+> >> 'pm_request_idle' to see what happens at the first
+> >> pm_runtime_resume_and_get, and print messages in power on/power off to
+> >> see how and when they are called.
+> >>
+> >
 >
-> IOMEM must be touched using only special accessors, some platforms
-> crash if you don't do this. Even x86 will crash if you touch it with
-> something like an XMM optimized memcpy.
 >
-> Christian? If the vmap succeeds what rules must the caller use to
-> access the memory?
+> Hi Jacopo,
+>
+> I added traces in my power on / power off functions to see who calls them.
+>
+> Here is the log :
+>
+> power on
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 1 at
+> drivers/media/platform/atmel/microchip-csi2dc.c:331 csi2dc_power+0xd0/0x134
+> Modules linked in:
+> CPU: 0 PID: 1 Comm: swapper Not tainted 5.16.0-rc4+ #62
+> Hardware name: Microchip SAMA7
+> [<c010b9dc>] (unwind_backtrace) from [<c010975c>] (show_stack+0x10/0x14)
+> [<c010975c>] (show_stack) from [<c0755aa0>] (__warn+0xd0/0x128)
+> [<c0755aa0>] (__warn) from [<c0755b70>] (warn_slowpath_fmt+0x78/0xac)
+> [<c0755b70>] (warn_slowpath_fmt) from [<c0501114>] (csi2dc_power+0xd0/0x134)
+> [<c0501114>] (csi2dc_power) from [<c05012dc>] (csi2dc_probe+0x158/0x23c)
+> [<c05012dc>] (csi2dc_probe) from [<c04067cc>] (platform_probe+0x5c/0xb8)
+> [<c04067cc>] (platform_probe) from [<c04043f8>]
+> (really_probe.part.0+0x9c/0x32c)
+> [<c04043f8>] (really_probe.part.0) from [<c0404730>]
+> (__driver_probe_device+0xa8/0x13c)
+> [<c0404730>] (__driver_probe_device) from [<c04047f8>]
+> (driver_probe_device+0x34/0x108)
+> [<c04047f8>] (driver_probe_device) from [<c0404ea0>]
+> (__driver_attach+0xb4/0x180)
+> [<c0404ea0>] (__driver_attach) from [<c040245c>]
+> (bus_for_each_dev+0x74/0xc0)
+> [<c040245c>] (bus_for_each_dev) from [<c0403804>]
+> (bus_add_driver+0x15c/0x1e0)
+> [<c0403804>] (bus_add_driver) from [<c040572c>] (driver_register+0x8c/0x124)
+> [<c040572c>] (driver_register) from [<c01014b0>]
+> (do_one_initcall+0x54/0x1d0)
+> [<c01014b0>] (do_one_initcall) from [<c0b0114c>]
+> (kernel_init_freeable+0x19c/0x200)
+> [<c0b0114c>] (kernel_init_freeable) from [<c075c9e0>]
+> (kernel_init+0x18/0x128)
+> [<c075c9e0>] (kernel_init) from [<c0100140>] (ret_from_fork+0x14/0x34)
+> Exception stack(0xc4033fb0 to 0xc4033ff8)
+> 3fa0:                                     00000000 00000000 00000000
+> 00000000
+> 3fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+> 00000000
+> 3fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> ---[ end trace a5faddd6c4e11ca2 ]---
+> microchip-csi2dc e1404000.csi2dc: Microchip CSI2DC version 145
+> power off
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 28 at
+> drivers/media/platform/atmel/microchip-csi2dc.c:335
+> csi2dc_runtime_suspend+0x34/0x6c
+> Modules linked in:
+> CPU: 0 PID: 28 Comm: kworker/0:9 Tainted: G        W         5.16.0-rc4+ #62
+> Hardware name: Microchip SAMA7
+> Workqueue: pm pm_runtime_work
+> [<c010b9dc>] (unwind_backtrace) from [<c010975c>] (show_stack+0x10/0x14)
+> [<c010975c>] (show_stack) from [<c0755aa0>] (__warn+0xd0/0x128)
+> [<c0755aa0>] (__warn) from [<c0755b70>] (warn_slowpath_fmt+0x78/0xac)
+> [<c0755b70>] (warn_slowpath_fmt) from [<c075b4cc>]
+> (csi2dc_runtime_suspend+0x34/0x6c)
+> [<c075b4cc>] (csi2dc_runtime_suspend) from [<c04114b8>]
+> (__rpm_callback+0x30/0xe4)
+> [<c04114b8>] (__rpm_callback) from [<c04115cc>] (rpm_callback+0x60/0x64)
+> [<c04115cc>] (rpm_callback) from [<c0410e28>] (rpm_suspend+0xd0/0x4bc)
+> [<c0410e28>] (rpm_suspend) from [<c041244c>] (pm_runtime_work+0x90/0x98)
+> [<c041244c>] (pm_runtime_work) from [<c012b568>]
+> (process_one_work+0x198/0x410)
+> [<c012b568>] (process_one_work) from [<c012b85c>] (worker_thread+0x7c/0x570)
+> [<c012b85c>] (worker_thread) from [<c0132168>] (kthread+0x154/0x174)
+> [<c0132168>] (kthread) from [<c0100140>] (ret_from_fork+0x14/0x34)
+> Exception stack(0xc4327fb0 to 0xc4327ff8)
+> 7fa0:                                     00000000 00000000 00000000
+> 00000000
+> 7fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+> 00000000
+> 7fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> ---[ end trace a5faddd6c4e11ca3 ]---
+> >
+>
+>
+> So it looks like after probing is finished, the runtime PM system
+> switches the device back to suspend mode (as probably there are no 'get'
+> operations on it ).
+>
+> I removed the pm_request_idle as it looks you are right, it does nothing.
+>
+> When trying to capture a frame, this happens:
+>
+> # cam -c1 -C1
+> [0:01:14.779664000] [229]  INFO IPAManager ipa_manager.cpp:138 libcamera
+> is not installed. Adding '//src/ipa' to the IPA search path
+> [0:01:14.784039600] [229]  WARN IPAManager ipa_manager.cpp:149 No IPA
+> found in '/usr/lib/libcamera'
+> [0:01:14.784219400] [229]  INFO Camera camera_manager.cpp:293 libcamera
+> v0.0.0+60036-2021.11-rc1-182-gd72a7997-dirty (2021-11-15T11:27:09+02:00)
+> [0:01:14.800801800] [230]  WARN CameraSensor camera_sensor.cpp:197
+> 'imx219 1-0010': Recommended V4L2 control 0x009a0922 not supported
+> [0:01:14.800952200] [230]  WARN CameraSensor camera_sensor.cpp:249
+> 'imx219 1-0010': The sensor kernel driver needs to be fixed
+> [0:01:14.801018400] [230]  WARN CameraSensor camera_sensor.cpp:251
+> 'imx219 1-0010': See Documentation/sensor_driver_requirements.rst in the
+> libcamera sources for more information
+> [0:01:14.803197200] [230]  WARN CameraSensor camera_sensor.cpp:414
+> 'imx219 1-0010': Failed to retrieve the camera location
+> [0:01:14.805444000] [230]  WARN V4L2 v4l2_pixelformat.cpp:287
+> Unsupported V4L2 pixel format Y16
+> [0:01:14.805541200] [230]  WARN V4L2 v4l2_pixelformat.cpp:287
+> Unsupported V4L2 pixel format AR12
+> [0:01:14.805612200] [230]  WARN V4L2 v4l2_pixelformat.cpp:287
+> Unsupported V4L2 pixel format AR15
+> Using camera /base/soc/flexcom@e2818000/i2c@600/camera@10 as cam0
+> [0:01:14.806657000] [229]  INFO Camera camera.cpp:945 configuring
+> streams: (0) 3264x2464-R8
+> power on
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 230 at
+> drivers/media/platform/atmel/microchip-csi2dc.c:331 csi2dc_power+0xd0/0x134
+> Modules linked in: imx219 dw_csi dw_dphy
+> CPU: 0 PID: 230 Comm: cam Tainted: G        W         5.16.0-rc4+ #63
+> Hardware name: Microchip SAMA7
+> [<c010b9dc>] (unwind_backtrace) from [<c010975c>] (show_stack+0x10/0x14)
+> [<c010975c>] (show_stack) from [<c0755aa0>] (__warn+0xd0/0x128)
+> [<c0755aa0>] (__warn) from [<c0755b70>] (warn_slowpath_fmt+0x78/0xac)
+> [<c0755b70>] (warn_slowpath_fmt) from [<c0501114>] (csi2dc_power+0xd0/0x134)
+> [<c0501114>] (csi2dc_power) from [<c04114b8>] (__rpm_callback+0x30/0xe4)
+> [<c04114b8>] (__rpm_callback) from [<c04115cc>] (rpm_callback+0x60/0x64)
+> [<c04115cc>] (rpm_callback) from [<c0411984>] (rpm_resume+0x3b4/0x550)
+> [<c0411984>] (rpm_resume) from [<c0411b54>] (__pm_runtime_resume+0x34/0x3c)
+> [<c0411b54>] (__pm_runtime_resume) from [<c0500dcc>]
+> (csi2dc_s_stream+0xb8/0x330)
+> [<c0500dcc>] (csi2dc_s_stream) from [<c04fee9c>]
+> (isc_start_streaming+0x3a4/0x498)
+> [<c04fee9c>] (isc_start_streaming) from [<c04f5280>]
+> (vb2_start_streaming+0x98/0x1a8)
+> [<c04f5280>] (vb2_start_streaming) from [<c04f57d0>]
+> (vb2_core_qbuf+0x440/0x5d4)
+> [<c04f57d0>] (vb2_core_qbuf) from [<c04f9490>] (vb2_qbuf+0x80/0xdc)
+> [<c04f9490>] (vb2_qbuf) from [<c04dd0dc>] (__video_do_ioctl+0x234/0x490)
+> [<c04dd0dc>] (__video_do_ioctl) from [<c04de410>]
+> (video_usercopy+0x1b4/0x550)
+> [<c04de410>] (video_usercopy) from [<c01e77b8>] (sys_ioctl+0x224/0xa0c)
+> [<c01e77b8>] (sys_ioctl) from [<c0100060>] (ret_fast_syscall+0x0/0x50)
+> Exception stack(0xc46e7fa8 to 0xc46e7ff0)
+> 7fa0:                   b5d07088 b5d113c8 00000011 c044560f b66da594
+> b6e14000
+> 7fc0: b5d07088 b5d113c8 b66da594 00000036 b66da5d8 fffffff8 b66da6cc
+> b66da8e0
+> 7fe0: b6fb63a8 b66da57c b6f70d88 b6ba9fec
+> ---[ end trace 7204e1871cae96e7 ]---
+> cam0dw-csi e1400000.csi2host: number of lanes: 2
+>
+> phy phy-e1400040.dphy.0: PHY Stop state not reached 0
+> 75.378082power off
+>   ------------[ cut here ]----e-------
+> 4WARNING: CPU: 0 PID: 230 at
+> drivers/media/platform/atmel/microchip-csi2dc.c:335
+> csi2dc_runtime_suspend+0x34/0x6c
+> Modules linked in: imx219 dw_csi dw_dphy
+> CPU: 0 PID: 230 Comm: cam Tainted: G        W         5.16.0-rc4+ #63
+> Hardware name: Microchip SAMA7
+> [<c010b9dc>] (unwind_backtrace) from [<c010975c>] (show_stack+0x10/0x14)
+> [<c010975c>] (show_stack) from [<c0755aa0>] (__warn+0xd0/0x128)
+> [<c0755aa0>] (__warn) from [<c0755b70>] (warn_slowpath_fmt+0x78/0xac)
+> [<c0755b70>] (warn_slowpath_fmt) from [<c075b4cc>]
+> (csi2dc_runtime_suspend+0x34/0x6c)
+> [<c075b4cc>] (csi2dc_runtime_suspend) from [<c04114b8>]
+> (__rpm_callback+0x30/0xe4)
+> [<c04114b8>] (__rpm_callback) from [<c04115cc>] (rpm_callback+0x60/0x64)
+> [<c04115cc>] (rpm_callback) from [<c0410e28>] (rpm_suspend+0xd0/0x4bc)
+> [<c0410e28>] (rpm_suspend) from [<c041136c>] (__pm_runtime_idle+0x3c/0x4c)
+> [<c041136c>] (__pm_runtime_idle) from [<c0500d98>]
+> (csi2dc_s_stream+0x84/0x330)
+> [<c0500d98>] (csi2dc_s_stream) from [<c04fcc7c>]
+> (isc_stop_streaming+0x134/0x174)
+> [<c04fcc7c>] (isc_stop_streaming) from [<c04f5dd8>]
+> (__vb2_queue_cancel+0x28/0x2a4)
+> [<c04f5dd8>] (__vb2_queue_cancel) from [<c04f606c>]
+> (vb2_core_streamoff+0x18/0xac)
+> [<c04f606c>] (vb2_core_streamoff) from [<c04dd0dc>]
+> (__video_do_ioctl+0x234/0x490)
+> [<c04dd0dc>] (__video_do_ioctl) from [<c04de410>]
+> (video_usercopy+0x1b4/0x550)
+> [<c04de410>] (video_usercopy) from [<c01e77b8>] (sys_ioctl+0x224/0xa0c)
+> [<c01e77b8>] (sys_ioctl) from [<c0100060>] (ret_fast_syscall+0x0/0x50)
+> Exception stack(0xc46e7fa8 to 0xc46e7ff0)
+> 7fa0:                   b5d07088 b6fb5d58 00000011 40045613 b5d071bc
+> 00000001
+> 7fc0: b5d07088 b6fb5d58 b5d01e20 00000036 b5d008b8 00000000 b5d01e20
+> 0054ec00
+> 7fe0: b6fb63a8 b66da7b4 b6f70d88 b6ba9fec
+> ---[ end trace 7204e1871cae96e8 ]---
+> #
+> #
+>
+> Which is expected, on start streaming, the power on is called, and on
+> stop streaming the power off.
+>
+>
+> So it looks like the driver does pm_runtime_set_active, meaning the
+> power state is active (which is something that I do by calling first
+> csi2dc_power(true)), and after probing is done, it's automatically sent
+> to suspend mode.
+>
+> So if I do csi2dc_power(false) before finish probing, there will be a
+> problem because it will be called again by the subsystem, leading to
+> issues with double clock unpreparing... etc.
+>
+> So you are fine with this sequence?
+>
+> ..init this..
+> ..init that..
+> csi2dc_power(true)
+> readl();
+>
+> pm_runtime_set_active();
+> pm_runtime_enable();
+>
+> ..finish probing..
+>
 
-See dma-buf-map.h and especially struct dma_buf_map.
+Thanks for the detailed analysis !
 
-MMIO memory is perfectly supported here and actually the most common case.
+If it all works like it's expected and the device gets powered off
+after probe and works well at s_stream() time, I'm of course ok with
+that :)
 
-Christian.
+Thanks
+
 
 >
-> Jason
-
+> Thanks again,
+> Eugen
+>
+>
+> >>
+> >>>
+> >>>> +
+> >>>> +     /*
+> >>>> +      * we must register the subdev after PM runtime has been requested,
+> >>>> +      * otherwise we might bound immediately and request pm_runtime_resume
+> >>>> +      * before runtime_enable.
+> >>>> +      */
+> >>>> +     ret = v4l2_async_register_subdev(&csi2dc->csi2dc_sd);
+> >>>> +     if (ret) {
+> >>>> +             dev_err(csi2dc->dev, "failed to register the subdevice\n");
+> >>>> +             goto csi2dc_probe_cleanup_notifier;
+> >>>> +     }
+> >>>> +
+> >>>> +     dev_info(dev, "Microchip CSI2DC version %x\n", ver);
+> >>>> +
+> >>>> +     return 0;
+> >>>> +
+> >>>> +csi2dc_probe_cleanup_notifier:
+> >>>> +     v4l2_async_nf_cleanup(&csi2dc->notifier);
+> >>>> +csi2dc_probe_cleanup_entity:
+> >>>> +     media_entity_cleanup(&csi2dc->csi2dc_sd.entity);
+> >>>
+> >>> I wasn't honestly expecting this
+> >>>
+> >>> /**
+> >>>    * media_entity_cleanup() - free resources associated with an entity
+> >>>    *
+> >>>    * @entity:     entity where the pads belong
+> >>>    *
+> >>>    * This function must be called during the cleanup phase after unregistering
+> >>>    * the entity (currently, it does nothing).
+> >>>    */
+> >>> #if IS_ENABLED(CONFIG_MEDIA_CONTROLLER)
+> >>> static inline void media_entity_cleanup(struct media_entity *entity) {}
+> >>>
+> >>> :)
+> >>
+> >> I saw it as well. But I thought that who knows, in the future it might
+> >> do something, so it's better to have it in the driver rather than not
+> >> have it at all.
+> >>
+> >>
+> >> Thanks again for reviewing,
+> >> Eugen
+> >>
+> >>>
+> >>>> +
+> >>>> +     return ret;
+> >>>> +}
+> >>>> +
+> >>>> +static int csi2dc_remove(struct platform_device *pdev)
+> >>>> +{
+> >>>> +     struct csi2dc_device *csi2dc = platform_get_drvdata(pdev);
+> >>>> +
+> >>>> +     pm_runtime_disable(&pdev->dev);
+> >>>> +
+> >>>> +     v4l2_async_unregister_subdev(&csi2dc->csi2dc_sd);
+> >>>> +     v4l2_async_nf_unregister(&csi2dc->notifier);
+> >>>> +     v4l2_async_nf_cleanup(&csi2dc->notifier);
+> >>>> +     media_entity_cleanup(&csi2dc->csi2dc_sd.entity);
+> >>>> +
+> >>>> +     return 0;
+> >>>> +}
+> >>>> +
+> >>>> +static int __maybe_unused csi2dc_runtime_suspend(struct device *dev)
+> >>>> +{
+> >>>> +     struct csi2dc_device *csi2dc = dev_get_drvdata(dev);
+> >>>> +
+> >>>> +     return csi2dc_power(csi2dc, false);
+> >>>> +}
+> >>>> +
+> >>>> +static int __maybe_unused csi2dc_runtime_resume(struct device *dev)
+> >>>> +{
+> >>>> +     struct csi2dc_device *csi2dc = dev_get_drvdata(dev);
+> >>>> +
+> >>>> +     return csi2dc_power(csi2dc, true);
+> >>>> +}
+> >>>> +
+> >>>> +static const struct dev_pm_ops csi2dc_dev_pm_ops = {
+> >>>> +     SET_RUNTIME_PM_OPS(csi2dc_runtime_suspend, csi2dc_runtime_resume, NULL)
+> >>>> +};
+> >>>> +
+> >>>> +static const struct of_device_id csi2dc_of_match[] = {
+> >>>> +     { .compatible = "microchip,sama7g5-csi2dc" },
+> >>>> +     { }
+> >>>> +};
+> >>>> +
+> >>>> +MODULE_DEVICE_TABLE(of, csi2dc_of_match);
+> >>>> +
+> >>>> +static struct platform_driver csi2dc_driver = {
+> >>>> +     .probe  = csi2dc_probe,
+> >>>> +     .remove = csi2dc_remove,
+> >>>> +     .driver = {
+> >>>> +             .name =                 "microchip-csi2dc",
+> >>>> +             .pm =                   &csi2dc_dev_pm_ops,
+> >>>> +             .of_match_table =       of_match_ptr(csi2dc_of_match),
+> >>>> +     },
+> >>>> +};
+> >>>> +
+> >>>> +module_platform_driver(csi2dc_driver);
+> >>>> +
+> >>>> +MODULE_AUTHOR("Eugen Hristev <eugen.hristev@microchip.com>");
+> >>>> +MODULE_DESCRIPTION("Microchip CSI2 Demux Controller driver");
+> >>>> +MODULE_LICENSE("GPL v2");
+> >>>> --
+> >>>> 2.25.1
+> >>>>
+> >>
+>
