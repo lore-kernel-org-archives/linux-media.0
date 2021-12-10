@@ -2,109 +2,150 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F71DC433FE
-	for <linux-media@archiver.kernel.org>; Fri, 10 Dec 2021 07:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC67AC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 10 Dec 2021 07:57:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbhLJHnv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Dec 2021 02:43:51 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:36458 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230138AbhLJHns (ORCPT
+        id S236024AbhLJIAm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Dec 2021 03:00:42 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:54460 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235454AbhLJIAl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Dec 2021 02:43:48 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BA1aYmq012128;
-        Fri, 10 Dec 2021 08:39:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=y8fXV96zWdDMZeLFEEa1AkerZm20bgHfV165wlhhHdQ=;
- b=3vx+nwIFetFFP8jvuCz0gkpk4l9X4p8XBaUZVtFjiQQJc47k/00AzqDvgswjHDMin+Nh
- zRRSmAzhCaqF3ogT7Vzpod1ybIg1ka92RX38FjAoNUjmY7o0LjLGpXrRi+DuRIzPrGy3
- xtCnPUcJa5ycU4GPCKuSZ7QtIrdtjo4NA77FvS7Fak3sjrZ6BGHKsXeSxUrJk82tygJ6
- XTdZZpyD6dutg4j1C1Wjnh9luEmkxGr/Bm47hXJ9craxjyYzDtkzhu5KkUSuaM7Cbe5x
- m1y3pDEAigteKYYJD6RSR7en8kCQPatGstcliAYaKuiedYxDrtfMoArDz/aknuK94ibV 8A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cuf7sw5bw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Dec 2021 08:39:51 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3C02010002A;
-        Fri, 10 Dec 2021 08:39:50 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2102821CA77;
-        Fri, 10 Dec 2021 08:39:50 +0100 (CET)
-Received: from lmecxl0573.lme.st.com (10.75.127.51) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 10 Dec
- 2021 08:39:49 +0100
-Subject: Re: [PATCH] media: c8sectpfe: fix double free in configure_channels()
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Peter Griffin <peter.griffin@linaro.org>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-media@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
-References: <20211208073544.GA22020@kili>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-Message-ID: <c7cc65ab-e778-cde5-1496-d0f0929b822c@foss.st.com>
-Date:   Fri, 10 Dec 2021 08:39:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 10 Dec 2021 03:00:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F3E31CE2A2C;
+        Fri, 10 Dec 2021 07:57:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9760C341CA;
+        Fri, 10 Dec 2021 07:57:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639123023;
+        bh=iyhRVtN2E2di8t+lsSwTTzfRVzT0KnrO8XlPwFB3E1Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SJ/KnWfBPUdL+B0wxYewhlCdFzsksomo43bQhen87oAm9AEyy7rcX7q74qEvZ1rZ4
+         zP67URv0q1NDKrx2SXlxGxmz2iTusm88tPIzLhDB2VUDKBRvTyrINGQ3xHqNILuZn0
+         8Bd73uwPpLuRB/R7sXLOUa6gPXUkGjNGs4VPVgxiJiW9bMG0Ul852QoMLiC4K0GDBE
+         KaGLtjXwNrtljDHMrREt16vkQ2dBgekRUNmjAzhbyFbg0PPmS5+SDCiQfAolS5KmUD
+         /CGd6iKmAr0pfPV0y6yNz6f+038ltbIzjpWQZJWz+6FRkzOpQCs/jDT8smTUG9185z
+         UAx467cc8aknQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1mvam4-000BVe-T4; Fri, 10 Dec 2021 08:57:00 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Robert Schlabbach" <robert_s@gmx.net>,
+        Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v3 3/4] media: si2157: rework the firmware load logic
+Date:   Fri, 10 Dec 2021 08:56:58 +0100
+Message-Id: <4b3956d77835c22e2c2c342f6e30a408c956f558.1639120421.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1639120421.git.mchehab+huawei@kernel.org>
+References: <cover.1639120421.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20211208073544.GA22020@kili>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-10_02,2021-12-08_01,2021-12-02_01
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dan
+Loading a firmware file should not be mandatory, as devices
+could work with an eeprom firmware, if available.
 
-On 12/8/21 8:35 AM, Dan Carpenter wrote:
-> The configure_channels() function has a double free because
-> configure_memdma_and_inputblock() calls free_input_block() and then
-> it's called again in the error handling code.
-> 
-> Fixes: c5f5d0f99794 ("[media] c8sectpfe: STiH407/10 Linux DVB demux support")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
->  drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
-> index e1f520903248..7bb1384e4bad 100644
-> --- a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
-> +++ b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-core.c
-> @@ -925,7 +925,6 @@ static int c8sectpfe_remove(struct platform_device *pdev)
->  static int configure_channels(struct c8sectpfei *fei)
->  {
->  	int index = 0, ret;
-> -	struct channel_info *tsin;
->  	struct device_node *child, *np = fei->dev->of_node;
->  
->  	/* iterate round each tsin and configure memdma descriptor and IB hw */
-> @@ -943,10 +942,9 @@ static int configure_channels(struct c8sectpfei *fei)
->  	return 0;
->  
->  err_unmap:
-> -	for (index = 0; index < fei->tsin_count; index++) {
-> -		tsin = fei->channel_data[index];
-> -		free_input_block(fei, tsin);
-> -	}
-> +	while (--index >= 0)
-> +		free_input_block(fei, fei->channel_data[index]);
-> +
->  	return ret;
->  }
->  
-> 
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Yet, using the eeprom firmware could lead into unpredictable
+results, so the best is to warn about that.
 
-Thanks
-Patrice
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+
+See [PATCH v3 0/4] at: https://lore.kernel.org/all/cover.1639120421.git.mchehab+huawei@kernel.org/
+
+ drivers/media/tuners/si2157.c | 31 ++++++++++++++++++-------------
+ 1 file changed, 18 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
+index ed28672c060d..5f4ae8593864 100644
+--- a/drivers/media/tuners/si2157.c
++++ b/drivers/media/tuners/si2157.c
+@@ -129,8 +129,9 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
+ 	struct i2c_client *client = fe->tuner_priv;
+ 	struct si2157_dev *dev = i2c_get_clientdata(client);
++	bool warn_firmware_not_loaded = false;
+ 	unsigned int chip_id, xtal_trim;
+-	unsigned int fw_required;
++	bool fw_required = true;
+ 	struct si2157_cmd cmd;
+ 	const char *fw_name;
+ 	int ret;
+@@ -199,10 +200,6 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	#define SI2146_A10 ('A' << 24 | 46 << 16 | '1' << 8 | '0' << 0)
+ 	#define SI2141_A10 ('A' << 24 | 41 << 16 | '1' << 8 | '0' << 0)
+ 
+-	/* assume firmware is required, unless verified not to be */
+-	/* only the SI2157_A30 has been verified not to yet */
+-	fw_required = true;
+-
+ 	switch (chip_id) {
+ 	case SI2158_A20:
+ 	case SI2148_A20:
+@@ -212,9 +209,8 @@ static int si2157_init(struct dvb_frontend *fe)
+ 		fw_name = SI2141_A10_FIRMWARE;
+ 		break;
+ 	case SI2157_A30:
+-		fw_name = SI2157_A30_FIRMWARE;
+ 		fw_required = false;
+-		break;
++		fallthrough;
+ 	case SI2177_A30:
+ 		fw_name = SI2157_A30_FIRMWARE;
+ 		break;
+@@ -237,12 +233,11 @@ static int si2157_init(struct dvb_frontend *fe)
+ 		goto skip_fw_download;
+ 
+ 	ret = si2157_load_firmware(fe, fw_name);
+-	if (ret) {
+-		if (!fw_required)
+-			goto skip_fw_download;
+-
+-		dev_err(&client->dev, "firmware file '%s' not found\n",
+-			fw_name);
++	if (fw_required && ret == -ENOENT)
++		warn_firmware_not_loaded = true;
++	else if (ret < 0) {
++		dev_err(&client->dev, "error %d when loading firmware file '%s'\n",
++			ret, fw_name);
+ 		goto err;
+ 	}
+ 
+@@ -263,6 +258,11 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	if (ret)
+ 		goto err;
+ 
++	if (warn_firmware_not_loaded) {
++		dev_warn(&client->dev, "firmware file '%s' not found. Using firmware from eeprom.\n",
++			 fw_name);
++		warn_firmware_not_loaded = false;
++	}
+ 	dev_info(&client->dev, "firmware version: %c.%c.%d\n",
+ 			cmd.args[6], cmd.args[7], cmd.args[8]);
+ 
+@@ -298,6 +298,11 @@ static int si2157_init(struct dvb_frontend *fe)
+ 	return 0;
+ 
+ err:
++	if (warn_firmware_not_loaded)
++		dev_err(&client->dev,
++			"firmware file '%s' not found. Can't continue without a firmware.\n",
++			fw_name);
++
+ 	dev_dbg(&client->dev, "failed=%d\n", ret);
+ 	return ret;
+ }
+-- 
+2.33.1
+
