@@ -2,32 +2,31 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C19DC4332F
-	for <linux-media@archiver.kernel.org>; Fri, 10 Dec 2021 17:26:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EE3CC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 10 Dec 2021 17:26:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244474AbhLJRaV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Dec 2021 12:30:21 -0500
+        id S244484AbhLJRaW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 Dec 2021 12:30:22 -0500
 Received: from mailgw02.mediatek.com ([210.61.82.184]:48784 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S244464AbhLJRaU (ORCPT
+        with ESMTP id S244460AbhLJRaV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:30:20 -0500
-X-UUID: cb1fa888e9de4774a350af8a2122c70e-20211211
-X-UUID: cb1fa888e9de4774a350af8a2122c70e-20211211
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        Fri, 10 Dec 2021 12:30:21 -0500
+X-UUID: cc5b368096fe44c9831be78be0aa153d-20211211
+X-UUID: cc5b368096fe44c9831be78be0aa153d-20211211
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <flora.fu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 814626988; Sat, 11 Dec 2021 01:26:40 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Sat, 11 Dec 2021 01:26:39 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 11 Dec
- 2021 01:26:39 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1342538033; Sat, 11 Dec 2021 01:26:45 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 11 Dec 2021 01:26:43 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 11 Dec
+ 2021 01:26:43 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 11 Dec 2021 01:26:38 +0800
+ Transport; Sat, 11 Dec 2021 01:26:43 +0800
 From:   Flora Fu <flora.fu@mediatek.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -41,9 +40,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         <dri-devel@lists.freedesktop.org>,
         <linaro-mm-sig@lists.linaro.org>, Flora Fu <flora.fu@mediatek.com>,
         JB Tsai <jb.tsai@mediatek.com>
-Subject: [PATCH 03/17] dt-bindings: remoteproc: mediatek: Add APU rproc compatible
-Date:   Sat, 11 Dec 2021 01:25:51 +0800
-Message-ID: <20211210172605.30618-4-flora.fu@mediatek.com>
+Subject: [PATCH 06/17] mailbox: mediatek: add mtk-apu-mailbox driver
+Date:   Sat, 11 Dec 2021 01:25:54 +0800
+Message-ID: <20211210172605.30618-7-flora.fu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20211210172605.30618-1-flora.fu@mediatek.com>
 References: <20211210172605.30618-1-flora.fu@mediatek.com>
@@ -54,129 +53,220 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add new binding document for the APU remote processor.
-The initial version is used for MT8192 SOC.
+Add mtk-apu-mailbox driver to support communication with
+APU remote microprocessor.
 
 Signed-off-by: Pi-Cheng Chen <pi-cheng.chen@mediatek.com>
 Signed-off-by: Flora Fu <flora.fu@mediatek.com>
 
 ---
- .../bindings/remoteproc/mediatek,apu-rv.yaml  | 106 ++++++++++++++++++
- 1 file changed, 106 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/remoteproc/mediatek,apu-rv.yaml
+ drivers/mailbox/Kconfig           |   9 ++
+ drivers/mailbox/Makefile          |   2 +
+ drivers/mailbox/mtk-apu-mailbox.c | 162 ++++++++++++++++++++++++++++++
+ 3 files changed, 173 insertions(+)
+ create mode 100644 drivers/mailbox/mtk-apu-mailbox.c
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/mediatek,apu-rv.yaml b/Documentation/devicetree/bindings/remoteproc/mediatek,apu-rv.yaml
+diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
+index d9cd3606040e..aeaaadd4cb8d 100644
+--- a/drivers/mailbox/Kconfig
++++ b/drivers/mailbox/Kconfig
+@@ -238,6 +238,15 @@ config STM32_IPCC
+ 	  with hardware for Inter-Processor Communication Controller (IPCC)
+ 	  between processors. Say Y here if you want to have this support.
+ 
++config MTK_APU_MBOX
++	tristate "MediaTek APU Mailbox Support"
++	depends on ARCH_MEDIATEK || COMPILE_TEST
++	help
++	  Say yes here to add support for the MediaTek APU Mailbox
++	  driver. The mailbox implementation provides access from the
++	  application processor to the MediaTek AI Processing Unit.
++	  If unsure say N.
++
+ config MTK_CMDQ_MBOX
+ 	tristate "MediaTek CMDQ Mailbox Support"
+ 	depends on ARCH_MEDIATEK || COMPILE_TEST
+diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
+index 338cc05e5431..e24ad25c3378 100644
+--- a/drivers/mailbox/Makefile
++++ b/drivers/mailbox/Makefile
+@@ -49,6 +49,8 @@ obj-$(CONFIG_TEGRA_HSP_MBOX)	+= tegra-hsp.o
+ 
+ obj-$(CONFIG_STM32_IPCC) 	+= stm32-ipcc.o
+ 
++obj-$(CONFIG_MTK_APU_MBOX)	+= mtk-apu-mailbox.o
++
+ obj-$(CONFIG_MTK_CMDQ_MBOX)	+= mtk-cmdq-mailbox.o
+ 
+ obj-$(CONFIG_ZYNQMP_IPI_MBOX)	+= zynqmp-ipi-mailbox.o
+diff --git a/drivers/mailbox/mtk-apu-mailbox.c b/drivers/mailbox/mtk-apu-mailbox.c
 new file mode 100644
-index 000000000000..c390b85040eb
+index 000000000000..860db0504907
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/remoteproc/mediatek,apu-rv.yaml
-@@ -0,0 +1,106 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2021 (C) MediaTek Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/remoteproc/mediatek,apu-rv.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/mailbox/mtk-apu-mailbox.c
+@@ -0,0 +1,162 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2021 MediaTek Inc.
++ */
 +
-+title: MediaTek APU remote processor controller bindings
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/of_irq.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/mailbox_controller.h>
 +
-+description: |
-+  APU integrated subsystem having MD32RV33 (MD32) that runs tinysys.
-+  The tinysys runs on a microprocessor in APU.
-+  Its firmware is loaded and booted from Kernel side.
-+  Kernel and tinysys uses IPI to send and receive messages.
++#define INBOX		(0x0)
++#define OUTBOX		(0x20)
++#define INBOX_IRQ	(0xc0)
++#define OUTBOX_IRQ	(0xc4)
++#define INBOX_IRQ_MASK	(0xd0)
 +
-+maintainers:
-+  - Flora Fu <flora.fu@mediatek.com>
-+  - Pi-Cheng Chen <pi-cheng.chen@mediatek.com>
++#define MSG_MBOX_SLOTS	(4)
 +
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - mediatek,mt8192-apusys-rv
-+      - const: simple-mfd
++struct mtk_apu_mailbox {
++	struct device *dev;
++	void __iomem *regs;
++	spinlock_t lock; /* register access lock */
++	struct mbox_controller controller;
++	u32 msgs[MSG_MBOX_SLOTS];
++};
 +
-+  reg:
-+    minItems: 1
++static irqreturn_t mtk_apu_mailbox_threaded_irq(int irq, void *dev_id)
++{
++	struct mtk_apu_mailbox *mbox = dev_id;
++	struct mbox_chan *link = &mbox->controller.chans[0];
++	int i;
 +
-+  reg-names:
-+    minItems: 1
++	for (i = 0; i < MSG_MBOX_SLOTS; i++)
++		mbox->msgs[i] = readl(mbox->regs + OUTBOX + i * sizeof(u32));
 +
-+  power-domains:
-+    maxItems: 1
++	mbox_chan_received_data(link, &mbox->msgs);
++	writel(readl(mbox->regs + OUTBOX_IRQ), mbox->regs + OUTBOX_IRQ);
 +
-+  iommus:
-+    maxItems: 1
++	return IRQ_HANDLED;
++}
 +
-+  interrupts:
-+    description: List of interrupts.
++static int mtk_apu_mailbox_send_data(struct mbox_chan *chan, void *data)
++{
++	struct mtk_apu_mailbox *mbox = container_of(chan->mbox,
++						    struct mtk_apu_mailbox,
++						    controller);
++	int i;
 +
-+  interrupt-names:
-+    description: Name list of interrupts.
++	spin_lock(&mbox->lock);
++	writel(~BIT(MSG_MBOX_SLOTS - 1), mbox->regs + INBOX_IRQ_MASK);
++	for (i = 0; i < MSG_MBOX_SLOTS; i++)
++		writel(((u32 *)data)[i], mbox->regs + INBOX + i * sizeof(u32));
++	spin_unlock(&mbox->lock);
 +
-+  mboxes:
-+    maxItems: 1
++	return 0;
++}
 +
-+required:
-+  - compatible
-+  - reg
-+  - power-domains
-+  - interrupts
-+  - mboxes
++static bool mtk_apu_mailbox_last_tx_done(struct mbox_chan *chan)
++{
++	struct mtk_apu_mailbox *mbox = container_of(chan->mbox,
++						    struct mtk_apu_mailbox,
++						    controller);
 +
-+additionalProperties:
-+  type: object
-+  description:
-+    Represent subnodes that will register as rpmsg devices.
-+  properties:
-+    compatible:
-+      enum:
-+        - mediatek,apu-ctrl-rpmsg
-+        - mediatek,apupwr-tx-rpmsg
-+        - mediatek,apupwr-rx-rpmsg
-+        - mediatek,apu-mdw-rpmsg
-+    mediatek,rpmsg-name:
-+      $ref: /schemas/types.yaml#/definitions/string-array
-+      description:
-+        Contains the name for the rpmsg device. Used to match
-+        the subnode to rpmsg device announced by APU.
-+  required:
-+    - compatible
++	return readl(mbox->regs + INBOX_IRQ) == 0;
++}
 +
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8192-clk.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/memory/mt8192-larb-port.h>
++static const struct mbox_chan_ops mtk_apu_mailbox_ops = {
++	.send_data = mtk_apu_mailbox_send_data,
++	.last_tx_done = mtk_apu_mailbox_last_tx_done,
++};
 +
-+    apusys_rv@19001000 {
-+      compatible = "mediatek,mt8192-apusys-rv", "simple-mfd";
-+      reg = <0x19001000 0x1000>;
-+      reg-names = "md32_sysctrl";
-+      power-domains = <&apuspm 0>;
-+      iommus = <&iommu_apu IOMMU_PORT_APU_DATA>;
-+      interrupts = <GIC_SPI 393 IRQ_TYPE_LEVEL_HIGH 0>;
-+      interrupt-names = "apu_wdt";
-+      mboxes = <&apu_mailbox 0>;
-+      apu_ctrl {
-+        compatible = "mediatek,apu-ctrl-rpmsg";
-+        mediatek,rpmsg-name = "apu-ctrl-rpmsg";
-+      };
-+      apu_pwr_tx {
-+        compatible = "mediatek,apupwr-tx-rpmsg";
-+        mediatek,rpmsg-name = "apupwr-tx-rpmsg";
-+      };
-+      apu_pwr_rx {
-+        compatible = "mediatek,apupwr-rx-rpmsg";
-+        mediatek,rpmsg-name = "apupwr-rx-rpmsg";
-+      };
-+      apu_mdw_rpmsg {
-+        compatible = "mediatek,apu-mdw-rpmsg";
-+        mediatek,rpmsg-name = "apu-mdw-rpmsg";
-+      };
-+    };
++static int mtk_apu_mailbox_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct resource *res;
++	struct mtk_apu_mailbox *mbox;
++	int ret = 0;
++
++	mbox = devm_kzalloc(dev, sizeof(*mbox), GFP_KERNEL);
++	if (!mbox)
++		return -ENOMEM;
++
++	mbox->dev = dev;
++	platform_set_drvdata(pdev, mbox);
++	spin_lock_init(&mbox->lock);
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -ENODEV;
++
++	mbox->regs = devm_ioremap_resource(dev, res);
++	if (IS_ERR(mbox->regs))
++		return PTR_ERR(mbox->regs);
++
++	ret = devm_request_threaded_irq(dev,
++					irq_of_parse_and_map(dev->of_node, 0),
++					NULL, mtk_apu_mailbox_threaded_irq,
++					IRQF_ONESHOT, dev_name(dev), mbox);
++	if (ret) {
++		dev_err(dev, "Failed to register apu mailbox IRQ: %d\n", ret);
++		return -ENODEV;
++	}
++
++	mbox->controller.txdone_irq = false;
++	mbox->controller.txdone_poll = true;
++	mbox->controller.txpoll_period = 1;
++	mbox->controller.ops = &mtk_apu_mailbox_ops;
++	mbox->controller.dev = dev;
++	mbox->controller.num_chans = 1;
++	mbox->controller.chans = devm_kcalloc(dev, mbox->controller.num_chans,
++					      sizeof(*mbox->controller.chans),
++					      GFP_KERNEL);
++	if (!mbox->controller.chans)
++		return -ENOMEM;
++
++	ret = devm_mbox_controller_register(dev, &mbox->controller);
++	if (ret)
++		return ret;
++
++	dev_info(dev, "registered apu mailbox\n");
++
++	return 0;
++}
++
++static int mtk_apu_mailbox_remove(struct platform_device *pdev)
++{
++	return 0;
++}
++
++static const struct of_device_id mtk_apu_mailbox_of_match[] = {
++	{.compatible = "mediatek,mtk-apu-mailbox"},
++	{}
++};
++MODULE_DEVICE_TABLE(of, mtk_apu_mailbox_of_match);
++
++static struct platform_driver mtk_apu_mailbox_driver = {
++	.probe = mtk_apu_mailbox_probe,
++	.remove = mtk_apu_mailbox_remove,
++	.driver = {
++		.name = "mtk-apu-mailbox",
++		.of_match_table = mtk_apu_mailbox_of_match,
++	},
++};
++
++static int __init apu_mailbox_init(void)
++{
++	return platform_driver_register(&mtk_apu_mailbox_driver);
++}
++
++static void __exit apu_mailbox_exit(void)
++{
++	platform_driver_unregister(&mtk_apu_mailbox_driver);
++}
++
++module_init(apu_mailbox_init);
++module_exit(apu_mailbox_exit);
++MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("APU Mailbox Driver");
 -- 
 2.18.0
 
