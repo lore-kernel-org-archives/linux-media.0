@@ -2,101 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D07DC433F5
-	for <linux-media@archiver.kernel.org>; Mon, 13 Dec 2021 14:27:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1359C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 13 Dec 2021 20:13:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239180AbhLMO1q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Dec 2021 09:27:46 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:57004 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239139AbhLMO1q (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:27:46 -0500
-Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1mwmIq-001XRS-ML; Mon, 13 Dec 2021 14:27:44 +0000
-Received: from ip6-localhost ([::1] helo=localhost.localdomain)
-        by slave0 with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1mwmIo-00EJN3-Cp; Mon, 13 Dec 2021 14:27:42 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR 5.17] V4L2 patches (#79352)
-Date:   Mon, 13 Dec 2021 14:27:42 +0000
-Message-Id: <20211213142742.3411007-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <YbdPdh/ivnjZKIOA@valkosipuli.retiisi.eu>
-References: 
+        id S242767AbhLMUNz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Dec 2021 15:13:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242604AbhLMUNy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 13 Dec 2021 15:13:54 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD2BC061748
+        for <linux-media@vger.kernel.org>; Mon, 13 Dec 2021 12:13:54 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id d10so33022098lfg.6
+        for <linux-media@vger.kernel.org>; Mon, 13 Dec 2021 12:13:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Inc9uwWHZAbgsb1N/697Z2eLvfAIiFt1soOcNLmt1G8=;
+        b=6oLIom7ZwqLYzavR342gVTMOEeigQLXjS/ORPSdo8LbI1Ju5TKXSt6zhKtnE5z1oLS
+         BQ//Klh6xjFKlwXLZidL92utkY0TXuskOdTNfPlk46UWBTTW6r3MPJr9wwKtzDqnqUKC
+         wYR6ErbJ/+o+NsVwPXDeB1e7R4bVPNtVtwSNYtB2u26jNokH4hsEbKyLKH7o/WVahfz+
+         qCq1T0KvZYjItdNpSi984BtjT+/7b8YD+GshHdfBea8ASzdrUUaJH23FMf0McSQVTH/c
+         ByA9jyKgFBaH5vGI3qYzlC7tXBrA1h1r9qMXEBI7Szke/j3RtPPPIjhKCZF1ycM2z47q
+         8h+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Inc9uwWHZAbgsb1N/697Z2eLvfAIiFt1soOcNLmt1G8=;
+        b=AXdtv3rsFie88Ld+Vb1ewIxXy1dtRwcM98JeNi+pn4a4nQF4e5eaz2QSeq5zOP7bQA
+         qFmiTOrYBUEPsnrG9pKTV968RRG74E7HLXyySo3QvZqj+ALCYsjYddRKSKL5b6DpfBmB
+         7LonTfQsc9Cp6J8EmV535gaUUwT6fAPoFAyuU3X3zn702lxyqH8TETWfIL8y9XfFynz0
+         IwPMNxnaWgOp7W/lwgpajoL8ozBUp8OmHiDQhqbj5qWRg8XrHZ3TJlSxWpHknsonA+/n
+         TdP8kqqgZbltCiIS0ffW39JhBsIv/icQff3f/TsqMhOhw1BZjZbMGEeifs777biesYE1
+         R+7g==
+X-Gm-Message-State: AOAM5334MZTQcz+w2O2KqYjdyyvvUS7SGxdqjT4yp51sgUimK94e4Cip
+        3izTrw1ovdAv8RPl2c6y8Gh2yw==
+X-Google-Smtp-Source: ABdhPJy5+hI4Th1rzQy0VsBWT6017dzMDLjnH12PdagwvSjIvTACVRclon2FTbZbTDF5VNQ9LzTcyw==
+X-Received: by 2002:a05:6512:23a7:: with SMTP id c39mr470971lfv.655.1639426432419;
+        Mon, 13 Dec 2021 12:13:52 -0800 (PST)
+Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id g26sm1528888ljn.107.2021.12.13.12.13.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Dec 2021 12:13:51 -0800 (PST)
+Subject: Re: [PATCH] media: vsp1: mask interrupts before enabling
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Koji Matsuoka <koji.matsuoka.xm@renesas.com>
+References: <20210926155356.23861-1-nikita.yoush@cogentembedded.com>
+ <163455832550.1371157.18009256492359430197@Monstersaurus>
+ <f91c4f16-fd81-5d70-0146-e9aa2d128da9@cogentembedded.com>
+ <163585162705.1097798.16604551366893944884@Monstersaurus>
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Message-ID: <4f2a2dc5-f145-ce20-eebe-08a6e084ef66@cogentembedded.com>
+Date:   Mon, 13 Dec 2021 23:13:50 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <163585162705.1097798.16604551366893944884@Monstersaurus>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Hi.
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/YbdPdh/ivnjZKIOA@valkosipuli.retiisi.eu/
-Build log: https://builder.linuxtv.org/job/patchwork/165075/
-Build time: 00:35:23
-Link: https://lore.kernel.org/linux-media/YbdPdh/ivnjZKIOA@valkosipuli.retiisi.eu
+Now I'm finally looking at this again.
 
-gpg: Signature made Mon 13 Dec 2021 12:05:48 PM UTC
-gpg:                using DSA key 53AC58A5F5948636C04A1BF8141DFA54A1EC8DEA
-gpg:                issuer "sakari.ailus@linux.intel.com"
-gpg: Good signature from "Sakari Ailus <sakari.ailus@linux.intel.com>" [unknown]
-gpg: WARNING: This key is not certified with a trusted signature!
-gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: F0D0 377A 0D4F 25A7 9238  EFE5 6D40 361B 6E28 C193
-     Subkey fingerprint: 53AC 58A5 F594 8636 C04A  1BF8 141D FA54 A1EC 8DEA
+> I think I would rather see the code to reset them done in
+> vsp1_reset_wpf(), rather than in probe directly as that is what we are
+> doing, and is I believe already in the call path.
 
-Summary: got 3/5 patches with issues, being 2 at build time, plus one error when buinding PDF document
+Could you please explain, how that is intended to be called on the probe path?
 
-Error/warnings:
+As far as can read from the code, vsp1_reset_wpf() is only called from vsp1_device_init(), which in turn 
+is called only from PM resume hook and only if vsp1->info is already set. However, in the probe path, 
+pm_runtime_enable() is called before vsp1->info is set.
 
-patches/0001-max96712-Depend-on-VIDEO_V4L2.patch:
-
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-
-    allyesconfig: return code #0:
-	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
-	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-	../drivers/media/rc/meson-ir-tx.c:22: warning: expecting prototype for meson(). Prototype was for DEVICE_NAME() instead
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
-	../drivers/media/i2c/ov8865.c: ../drivers/media/i2c/ov8865.c:2841 ov8865_get_selection() warn: inconsistent indenting
-	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1981 vivid_create_instance() parse error: turning off implications after 60 seconds
-	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2874 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-
-patches/0004-media-dt-bindings-Add-Intersil-ISL79987-DT-bindings.patch:
-
-   checkpatch.pl:
-	$ cat patches/0004-media-dt-bindings-Add-Intersil-ISL79987-DT-bindings.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:23: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-
-patches/0005-media-i2c-isl7998x-Add-driver-for-Intersil-ISL7998x.patch:
-
-    allyesconfig: return code #0:
-	../drivers/media/i2c/ov8865.c: ../drivers/media/i2c/ov8865.c:2841 ov8865_get_selection() warn: inconsistent indenting
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
-	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2864 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-
-   checkpatch.pl:
-	$ cat patches/0005-media-i2c-isl7998x-Add-driver-for-Intersil-ISL7998x.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:59: WARNING: please write a paragraph that describes the config symbol fully
-	-:879: CHECK: Alignment should match open parenthesis
-	-:1165: ERROR: Macros with complex values should be enclosed in parentheses
-	-:1165: CHECK: Macro argument reuse 'page' - possible side-effects?
-	-:1193: ERROR: Macros with complex values should be enclosed in parentheses
-	-:1193: CHECK: Macro argument reuse 'page' - possible side-effects?
-	-:1227: ERROR: Macros with complex values should be enclosed in parentheses
-	-:1227: CHECK: Macro argument reuse 'page' - possible side-effects?
-
-
-Error #512 when building PDF docs
-
+Nikita
