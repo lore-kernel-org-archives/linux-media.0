@@ -2,124 +2,143 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4625C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 13 Dec 2021 13:49:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89750C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 13 Dec 2021 13:50:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234793AbhLMNtw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Dec 2021 08:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbhLMNtv (ORCPT
+        id S237947AbhLMNuI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Dec 2021 08:50:08 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:24085 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233633AbhLMNuI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:49:51 -0500
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9491BC061574
-        for <linux-media@vger.kernel.org>; Mon, 13 Dec 2021 05:49:51 -0800 (PST)
-Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id B531E1B001CF
-        for <linux-media@vger.kernel.org>; Mon, 13 Dec 2021 15:49:45 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1639403385;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=ghxVV0QJ9VZbIXcHVmwM/z2Zle1+Q8CvriR2byako6M=;
-        b=VHW1RjfnBpd1/cDDiUYmvaL94lAs8WxbcnXgWmjx1sAPpBl/VI/8Dvox8c+zFMr20ADxqm
-        Ma53ttaQlXPB9nYakP3ALNq4V7nDhkS+eVtcbYgYo15udHkdUA9ZdgQwBXRVKSvVeXciGw
-        VABilOztn/Lf4sM6WZ1hrVDF/5olCDIlDsldn+QKwUQpyKO8y9B+YHNbg4STrm9wlKkC5G
-        BtIfssuMzd97Eeti6z9FMXeE41OlP0rUAOvC+pJpddHIa6n8Jqzt5nbZG+B0b1yf1JDTIe
-        c4TxOtFgwWB95vKqyBz7NSvwhN8jpBw98VGqpPeztU8dhcMvnkIRTU1Gz236sQ==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 60F03634C91
-        for <linux-media@vger.kernel.org>; Mon, 13 Dec 2021 15:49:42 +0200 (EET)
-Date:   Mon, 13 Dec 2021 15:49:42 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL FOR 5.17] V4L2 patches
-Message-ID: <YbdPdh/ivnjZKIOA@valkosipuli.retiisi.eu>
+        Mon, 13 Dec 2021 08:50:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1639403407; x=1670939407;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=H78wXTXXuw8PaU+PgD8S4+N9qMEmQIjcQi7EIS13OcA=;
+  b=yAcDLR2+ZNkdI/n9s1QhHY8T1P9fAKk9kfCoTyrU+Dw5qgCmeaHif6NU
+   9EJHmOnIfTQYCjpyIwjF+dBAm2Tvei1szdacdjQReaxXchUeAoJbyygAv
+   2EA60+SgSdRVoY62f3iYhchMVFGdHWpMYtAPoGj2zB3u1XdNyWYUc9E8g
+   y+52vTnQxpKIP3S9fCQGocnOHhTfMVcE0a9/oQ394aVcJ54z6t3OxHFvt
+   1M1wi8Do49tSg7BsSbjTLqDpKi9UXr322se8bUoQXuhuQAFMztehtif/X
+   vk7l2jfgnvaPVlxOonkzkUDk1dha58buGXN82hjMnI4/mEIKZxyI925mo
+   A==;
+IronPort-SDR: eWBff/uRDr2Z5xSKXWdtV1ZbhOTVSwHfufL4EFuH6rV3LSBYs/2Y7mmbWuEvZX3Fg+3X4cP14b
+ eRYmrwfriQnxSg3qVgGgUaND0SlIvz1rfWNjtEJBzrlV1nRaYMy1eWZJB/yjQ/fBGyYgfbti83
+ HvEqpg2weyjCC+j9oJmBN9KgSeNSZigONOIlee9jsDC0EWvQA05rd6QLDa3CwB1B3Fql0c52wu
+ PQsiibf2mdlzwGrKpxLdpcN5XHNHetgHYqwnnLiEbyFIbFTNXuCda9MEZoAS8+Dd2BMg4YDMnd
+ hdDWRTv/cmCt7cXAhmQRpyQs
+X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
+   d="scan'208";a="139571324"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Dec 2021 06:50:07 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 13 Dec 2021 06:50:06 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 13 Dec 2021 06:49:54 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <linux-media@vger.kernel.org>, <robh+dt@kernel.org>,
+        <jacopo@jmondi.org>, <laurent.pinchart@ideasonboard.com>,
+        <sakari.ailus@iki.fi>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <nicolas.ferre@microchip.com>,
+        "Eugen Hristev" <eugen.hristev@microchip.com>
+Subject: [PATCH v3 00/23] media: atmel: atmel-isc: implement media controller
+Date:   Mon, 13 Dec 2021 15:49:17 +0200
+Message-ID: <20211213134940.324266-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1639403385; a=rsa-sha256;
-        cv=none;
-        b=LDjmbEJHRYBCscCCnL5kGZDChxHT7TyW7v1FDucxwzyu+M96ZwIO+WMaelSQlM/N3s4Vf7
-        6/GiJ4/4pXu6r46DWoJk2Png3REvgNNjo18pm/9PhJZpmLQGQLGuwfBqt5CDWuhJkNjYzs
-        NAbqVi+ySjIfq5a5Um3crtCR+mq3O6Y/so5Cu0Gi/JUuZKu9SIEkyYqj0s68R9DgX7ehaT
-        siOe5RhBgyrbl7IU9FmPVPE964vQnbqWk3R5sHgG99urpSp0wnsxcI8DptFhZASnBfV9Fa
-        w+eopaIzB/Uc5b+RQtXskF+FIWTTxQyBOXew7Nhm1JT7MwbnY354lW1U830ryA==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1639403385;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=ghxVV0QJ9VZbIXcHVmwM/z2Zle1+Q8CvriR2byako6M=;
-        b=nX1qK66cEu9b745PC5svO7mvNAAa6OCa+TISIBE9sA1cUOW/1pQkYfwUh0Z6YMVLPw3q0t
-        LGgbGmAAUF5+B9RkF4OZtEXuUUwuXYHrgc5QGGtkC0Rg/M7J2Oze39Qg5Bq9jzPBDSxwIo
-        DP15VZds68pp6ppqpJIMJyt+/kxsn8XuuvJ7zZWhfmREC935mbx+P2QsisXPQM4Ion8Tvk
-        BybXJXCXL7aWwGelyWQflbiFrlscH9nIayRDm7/e71pKwRfRBUoiOpefdHovxB42AvlXmF
-        zmJIDis2VeXHzVJJhnSkOebJYOByN0Xy+tTb2HRnKwh170Ixf1ww4ILeAl6Pbg==
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+This series is the v3 of the series that attempts to support media controller
+in the atmel ISC and XISC drivers.
+This series also includes the csi2dc driver which was previously sent in a
+separate series:
+https://www.spinics.net/lists/linux-media/msg181042.html
+https://www.spinics.net/lists/linux-media/msg181044.html
+The driver now addresses comments received in latest v5 series from last year.
 
-Here's a few patches for 5.17. In particular, included are isl79987 driver
-from Michale Tretter and Marek Vasut, and a dependency fix for the recently
-added max96712 driver.
+The series includes some minor changes and fixes that improve the isc common
+code base, like removing the enum frameintervals VIDIOC, fixing bytesperline
+for planar formats, etc.
 
-Please pull.
+Many thanks to folks from libcamera who helped a lot with understanding
+how a media controller driver should behave.
+
+Feedback is welcome !
+
+Changes in v3:
+- change in bindings, small fixes in csi2dc driver and conversion to mc
+for the isc-base.
+- removed some MAINTAINERS patches and used patterns in MAINTAINERS
+
+Changes in v2:
+- integrated many changes suggested by Jacopo in the review of the v1 series.
+- add a few new patches
 
 
-The following changes since commit 4383cfa18c5bbc5b9b6a9e77adc12aec1c20b72d:
+Eugen Hristev (23):
+  MAINTAINERS: add microchip csi2dc
+  dt-bindings: media: atmel: csi2dc: add bindings for microchip csi2dc
+  media: atmel: introduce microchip csi2dc driver
+  media: atmel: atmel-isc: split the clock code into separate source
+    file
+  media: atmel: atmel-isc: replace video device name with module name
+  media: atmel: atmel-sama7g5-isc: fix ispck leftover
+  media: atmel: atmel-isc-base: use streaming status when queueing
+    buffers
+  media: atmel: atmel-isc-base: remove frameintervals VIDIOC
+  media: atmel: atmel-isc-base: report frame sizes as full supported
+    range
+  media: atmel: atmel-isc-base: implement mbus_code support in enumfmt
+  media: atmel: atmel-isc-base: fix bytesperline value for planar
+    formats
+  media: atmel: atmel-isc: implement media controller
+  ARM: dts: at91: sama7g5: add nodes for video capture
+  ARM: configs: at91: sama7: add xisc and csi2dc
+  ARM: multi_v7_defconfig: add atmel video pipeline modules
+  media: atmel: atmel-sama5d2-isc: fix wrong mask in YUYV format check
+  media: atmel: atmel-isc-base: use mutex to lock awb workqueue from
+    streaming
+  media: atmel: atmel-isc-base: add wb debug messages
+  media: atmel: atmel-isc-base: clamp wb gain coefficients
+  media: atmel: atmel-sama7g5-isc: fix UYVY input format mbus_code typo
+  media: atmel: atmel-isc: add raw Bayer 8bit 10bit output formats
+  media: atmel: atmel-isc: compact the controller formats list
+  media: atmel: atmel-isc: change format propagation to subdev into only
+    verification
 
-  Merge tag 'v5.16-rc4' into media_tree (2021-12-07 11:29:41 +0100)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/sailus/media_tree.git tags/for-5.17-2-signed
-
-for you to fetch changes up to 0541ae639fb1165fb309ebf58605f901146c2535:
-
-  media: i2c: isl7998x: Add driver for Intersil ISL7998x (2021-12-08 09:51:54 +0200)
-
-----------------------------------------------------------------
-V4L2 patches for 5.17
-
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      media: i2c: max9286: Get rid of duplicate of_node assignment
-
-Marek Vasut (2):
-      media: dt-bindings: Add Intersil ISL79987 DT bindings
-      media: i2c: isl7998x: Add driver for Intersil ISL7998x
-
-Michael Tretter (1):
-      media: imx6-mipi-csi2: use pre_streamon callback to set sensor into LP11
-
-Sakari Ailus (1):
-      max96712: Depend on VIDEO_V4L2
-
- .../bindings/media/i2c/isil,isl79987.yaml          |  113 ++
- MAINTAINERS                                        |    8 +
- drivers/media/i2c/Kconfig                          |   10 +
- drivers/media/i2c/Makefile                         |    1 +
- drivers/media/i2c/isl7998x.c                       | 1543 ++++++++++++++++++++
- drivers/media/i2c/max9286.c                        |    1 -
- drivers/staging/media/imx/imx6-mipi-csi2.c         |    9 +-
- drivers/staging/media/max96712/Kconfig             |    1 +
- include/uapi/linux/v4l2-controls.h                 |    6 +
- 9 files changed, 1690 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/isil,isl79987.yaml
- create mode 100644 drivers/media/i2c/isl7998x.c
+ .../bindings/media/microchip,csi2dc.yaml      | 197 +++++
+ MAINTAINERS                                   |  14 +-
+ arch/arm/boot/dts/sama7g5.dtsi                |  48 ++
+ arch/arm/configs/multi_v7_defconfig           |   3 +
+ arch/arm/configs/sama7_defconfig              |   2 +
+ drivers/media/platform/Makefile               |   1 +
+ drivers/media/platform/atmel/Kconfig          |  15 +
+ drivers/media/platform/atmel/Makefile         |   4 +-
+ drivers/media/platform/atmel/atmel-isc-base.c | 790 ++++++-----------
+ drivers/media/platform/atmel/atmel-isc-clk.c  | 311 +++++++
+ drivers/media/platform/atmel/atmel-isc-mc.c   | 287 +++++++
+ drivers/media/platform/atmel/atmel-isc.h      |  49 ++
+ .../media/platform/atmel/atmel-sama5d2-isc.c  |  59 +-
+ .../media/platform/atmel/atmel-sama7g5-isc.c  |  72 +-
+ .../media/platform/atmel/microchip-csi2dc.c   | 806 ++++++++++++++++++
+ 15 files changed, 2085 insertions(+), 573 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
+ create mode 100644 drivers/media/platform/atmel/atmel-isc-clk.c
+ create mode 100644 drivers/media/platform/atmel/atmel-isc-mc.c
+ create mode 100644 drivers/media/platform/atmel/microchip-csi2dc.c
 
 -- 
-Sakari Ailus
+2.25.1
+
