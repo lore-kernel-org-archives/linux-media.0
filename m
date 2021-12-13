@@ -2,118 +2,124 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B06E0C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 13 Dec 2021 13:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4625C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 13 Dec 2021 13:49:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237761AbhLMNkO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Dec 2021 08:40:14 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:25757 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237740AbhLMNkN (ORCPT
+        id S234793AbhLMNtw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Dec 2021 08:49:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233958AbhLMNtv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Dec 2021 08:40:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639402813; x=1670938813;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=+A9fEozVZHok3npBonJzIZu/ogaEiI/8H2o3VCeFoNg=;
-  b=Q2lBCvpanL+IibzhJ0jgQ2YQy0SmRlSWR9H2fSA91dozI+kLDcgN4CIp
-   0j2WKImSPEK7lsE4WLHgjsowHCwBbVNELioSfdtE7lHMfn8K07Q3xPP6M
-   M5oU2endFH6ehBDAM4F9iVUEDGIp5v9xeDxgtCq6gfQ+daR/i5L42Z57g
-   7uzwT847O1EJa153AAZHtYcdktI6kGDQTLFmzxx0OJCjOx+0TZv9EI8Xh
-   cokNPvWcABqcboWCE9zVGeKLFLj7cjKIAvUyIz4/sQQloOmKjOoNH5GHd
-   hHvWxjn39UiTn1fkiqWKFA9IuZ17BbeQaA2HIoOR/+ca3qdIqzPcSz4c7
-   A==;
-IronPort-SDR: 3pLTKlHHa9aGl6CpaQK2IoFrv9t/rE4xoPmOO7VLF9Sj7KsKgOmqyD1iIND4qYB5lHWJXjrN2d
- PSSo3pwCcTUQbHqPywhzYaOBW+n5Sqh9Fb1qqNOXIc1pabKPY/9tLARZKDib8vqpecCU2T0ey0
- la1gynJXlOksfF4F45RYD7tTFBaOxBMyCrX2zEpHowzTdpe6zqiXxZYHwmOiFwaJtacdhfhelW
- /xSKWVGAi9gZ1Q10H4BTXr5wbeCJaFqBxr9t0ph00YKI4EOcYYu7e5BW9S97rMAA5xtMPtwsyk
- 0ZVJ6tkVHGIqv0wEvjmgdOXL
-X-IronPort-AV: E=Sophos;i="5.88,202,1635231600"; 
-   d="scan'208";a="139570623"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Dec 2021 06:40:11 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 13 Dec 2021 06:40:12 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 13 Dec 2021 06:40:10 -0700
-Subject: Re: [PATCH v2 01/25] MAINTAINERS: add microchip csi2dc
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jacopo@jmondi.org>,
-        <sakari.ailus@iki.fi>
-References: <20211112142509.2230884-1-eugen.hristev@microchip.com>
- <20211112142509.2230884-2-eugen.hristev@microchip.com>
- <YaVe1sNFQfYEVtKh@pendragon.ideasonboard.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-Message-ID: <25c5a4dd-0927-5b78-e32c-9254fcca29b0@microchip.com>
-Date:   Mon, 13 Dec 2021 14:40:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Mon, 13 Dec 2021 08:49:51 -0500
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9491BC061574
+        for <linux-media@vger.kernel.org>; Mon, 13 Dec 2021 05:49:51 -0800 (PST)
+Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id B531E1B001CF
+        for <linux-media@vger.kernel.org>; Mon, 13 Dec 2021 15:49:45 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1639403385;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=ghxVV0QJ9VZbIXcHVmwM/z2Zle1+Q8CvriR2byako6M=;
+        b=VHW1RjfnBpd1/cDDiUYmvaL94lAs8WxbcnXgWmjx1sAPpBl/VI/8Dvox8c+zFMr20ADxqm
+        Ma53ttaQlXPB9nYakP3ALNq4V7nDhkS+eVtcbYgYo15udHkdUA9ZdgQwBXRVKSvVeXciGw
+        VABilOztn/Lf4sM6WZ1hrVDF/5olCDIlDsldn+QKwUQpyKO8y9B+YHNbg4STrm9wlKkC5G
+        BtIfssuMzd97Eeti6z9FMXeE41OlP0rUAOvC+pJpddHIa6n8Jqzt5nbZG+B0b1yf1JDTIe
+        c4TxOtFgwWB95vKqyBz7NSvwhN8jpBw98VGqpPeztU8dhcMvnkIRTU1Gz236sQ==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 60F03634C91
+        for <linux-media@vger.kernel.org>; Mon, 13 Dec 2021 15:49:42 +0200 (EET)
+Date:   Mon, 13 Dec 2021 15:49:42 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL FOR 5.17] V4L2 patches
+Message-ID: <YbdPdh/ivnjZKIOA@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
-In-Reply-To: <YaVe1sNFQfYEVtKh@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1639403385; a=rsa-sha256;
+        cv=none;
+        b=LDjmbEJHRYBCscCCnL5kGZDChxHT7TyW7v1FDucxwzyu+M96ZwIO+WMaelSQlM/N3s4Vf7
+        6/GiJ4/4pXu6r46DWoJk2Png3REvgNNjo18pm/9PhJZpmLQGQLGuwfBqt5CDWuhJkNjYzs
+        NAbqVi+ySjIfq5a5Um3crtCR+mq3O6Y/so5Cu0Gi/JUuZKu9SIEkyYqj0s68R9DgX7ehaT
+        siOe5RhBgyrbl7IU9FmPVPE964vQnbqWk3R5sHgG99urpSp0wnsxcI8DptFhZASnBfV9Fa
+        w+eopaIzB/Uc5b+RQtXskF+FIWTTxQyBOXew7Nhm1JT7MwbnY354lW1U830ryA==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1639403385;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=ghxVV0QJ9VZbIXcHVmwM/z2Zle1+Q8CvriR2byako6M=;
+        b=nX1qK66cEu9b745PC5svO7mvNAAa6OCa+TISIBE9sA1cUOW/1pQkYfwUh0Z6YMVLPw3q0t
+        LGgbGmAAUF5+B9RkF4OZtEXuUUwuXYHrgc5QGGtkC0Rg/M7J2Oze39Qg5Bq9jzPBDSxwIo
+        DP15VZds68pp6ppqpJIMJyt+/kxsn8XuuvJ7zZWhfmREC935mbx+P2QsisXPQM4Ion8Tvk
+        BybXJXCXL7aWwGelyWQflbiFrlscH9nIayRDm7/e71pKwRfRBUoiOpefdHovxB42AvlXmF
+        zmJIDis2VeXHzVJJhnSkOebJYOByN0Xy+tTb2HRnKwh170Ixf1ww4ILeAl6Pbg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 30/11/2021 at 00:14, Laurent Pinchart wrote:
-> Hi Eugen,
-> 
-> Thank you for the patch.
-> 
-> On Fri, Nov 12, 2021 at 04:24:45PM +0200, Eugen Hristev wrote:
->> Add Microchip CSI2DC driver in the list.
->>
->> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Hi Mauro,
 
-If needed:
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Here's a few patches for 5.17. In particular, included are isl79987 driver
+from Michale Tretter and Marek Vasut, and a dependency fix for the recently
+added max96712 driver.
 
-Thanks a lot Eugen!
-Best regards,
-   Nicolas
+Please pull.
 
->> ---
->>   MAINTAINERS | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 486bdf97f754..545c642c937f 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -12422,6 +12422,13 @@ L:   alsa-devel@alsa-project.org (moderated for non-subscribers)
->>   S:   Supported
->>   F:   sound/soc/atmel
->>
->> +MICROCHIP CSI2DC DRIVER
->> +M:   Eugen Hristev <eugen.hristev@microchip.com>
->> +L:   linux-media@vger.kernel.org
->> +S:   Supported
->> +F:   Documentation/devicetree/bindings/media/microchip,csi2dc.yaml
->> +F:   drivers/media/platform/atmel/microchip-csi2dc.c
->> +
->>   MICROCHIP ECC DRIVER
->>   M:   Tudor Ambarus <tudor.ambarus@microchip.com>
->>   L:   linux-crypto@vger.kernel.org
-> 
-> --
-> Regards,
-> 
-> Laurent Pinchart
-> 
 
+The following changes since commit 4383cfa18c5bbc5b9b6a9e77adc12aec1c20b72d:
+
+  Merge tag 'v5.16-rc4' into media_tree (2021-12-07 11:29:41 +0100)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/sailus/media_tree.git tags/for-5.17-2-signed
+
+for you to fetch changes up to 0541ae639fb1165fb309ebf58605f901146c2535:
+
+  media: i2c: isl7998x: Add driver for Intersil ISL7998x (2021-12-08 09:51:54 +0200)
+
+----------------------------------------------------------------
+V4L2 patches for 5.17
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      media: i2c: max9286: Get rid of duplicate of_node assignment
+
+Marek Vasut (2):
+      media: dt-bindings: Add Intersil ISL79987 DT bindings
+      media: i2c: isl7998x: Add driver for Intersil ISL7998x
+
+Michael Tretter (1):
+      media: imx6-mipi-csi2: use pre_streamon callback to set sensor into LP11
+
+Sakari Ailus (1):
+      max96712: Depend on VIDEO_V4L2
+
+ .../bindings/media/i2c/isil,isl79987.yaml          |  113 ++
+ MAINTAINERS                                        |    8 +
+ drivers/media/i2c/Kconfig                          |   10 +
+ drivers/media/i2c/Makefile                         |    1 +
+ drivers/media/i2c/isl7998x.c                       | 1543 ++++++++++++++++++++
+ drivers/media/i2c/max9286.c                        |    1 -
+ drivers/staging/media/imx/imx6-mipi-csi2.c         |    9 +-
+ drivers/staging/media/max96712/Kconfig             |    1 +
+ include/uapi/linux/v4l2-controls.h                 |    6 +
+ 9 files changed, 1690 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/isil,isl79987.yaml
+ create mode 100644 drivers/media/i2c/isl7998x.c
 
 -- 
-Nicolas Ferre
+Sakari Ailus
