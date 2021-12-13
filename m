@@ -2,31 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C51C8C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 13 Dec 2021 08:42:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B4B9C433FE
+	for <linux-media@archiver.kernel.org>; Mon, 13 Dec 2021 08:42:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233238AbhLMImI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Dec 2021 03:42:08 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:48420 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233329AbhLMImF (ORCPT
+        id S233316AbhLMImC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Dec 2021 03:42:02 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:47620 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233280AbhLMIl5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:42:05 -0500
-X-UUID: aed8a04bb7b0456f8120e2226d4f7650-20211213
-X-UUID: aed8a04bb7b0456f8120e2226d4f7650-20211213
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        Mon, 13 Dec 2021 03:41:57 -0500
+X-UUID: 495608bd9b3b4a509f2f86a7b8c86522-20211213
+X-UUID: 495608bd9b3b4a509f2f86a7b8c86522-20211213
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 780386265; Mon, 13 Dec 2021 16:42:03 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 13 Dec 2021 16:42:02 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 13 Dec
- 2021 16:42:01 +0800
+        with ESMTP id 1569395751; Mon, 13 Dec 2021 16:41:54 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 13 Dec 2021 16:41:53 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Mon, 13 Dec 2021 16:41:59 +0800
+ 15.0.1497.2 via Frontend Transport; Mon, 13 Dec 2021 16:41:52 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -53,9 +51,9 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v13, 13/19] media: mtk-vcodec: Add work queue for core hardware decode
-Date:   Mon, 13 Dec 2021 16:41:35 +0800
-Message-ID: <20211213084141.13363-14-yunfei.dong@mediatek.com>
+Subject: [PATCH v13, 08/19] media: mtk-vcodec: Use pure single core for MT8183
+Date:   Mon, 13 Dec 2021 16:41:30 +0800
+Message-ID: <20211213084141.13363-9-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211213084141.13363-1-yunfei.dong@mediatek.com>
 References: <20211213084141.13363-1-yunfei.dong@mediatek.com>
@@ -67,194 +65,81 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add work queue to process core hardware information.
-First, get lat_buf from message queue, then call core
-hardware of each codec(H264/VP9/AV1) to decode, finally
-puts lat_buf back to the message.
+Separates different architecture for hardware: pure_sin_core
+and lat_sin_core. MT8183 is pure single core. Uses .hw_arch to
+distinguish.
 
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  | 16 +++++++-
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  3 ++
- .../platform/mtk-vcodec/vdec_msg_queue.c      | 41 ++++++++++++++++---
- .../platform/mtk-vcodec/vdec_msg_queue.h      |  8 ++--
- 4 files changed, 57 insertions(+), 11 deletions(-)
+ .../platform/mtk-vcodec/mtk_vcodec_dec_stateful.c      |  1 +
+ .../platform/mtk-vcodec/mtk_vcodec_dec_stateless.c     |  2 ++
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h     | 10 ++++++++++
+ 3 files changed, 13 insertions(+)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index e058c93d7588..81f6968540c1 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -339,6 +339,17 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		goto err_dec_pm;
- 	}
- 
-+	if (IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch)) {
-+		vdec_msg_queue_init_ctx(&dev->msg_queue_core_ctx, MTK_VDEC_CORE);
-+		dev->core_workqueue = alloc_ordered_workqueue("core-decoder",
-+			WQ_MEM_RECLAIM | WQ_FREEZABLE);
-+		if (!dev->core_workqueue) {
-+			mtk_v4l2_err("Failed to create core workqueue");
-+			ret = -EINVAL;
-+			goto err_res;
-+		}
-+	}
-+
- 	for (i = 0; i < MTK_VDEC_HW_MAX; i++)
- 		mutex_init(&dev->dec_mutex[i]);
- 	spin_lock_init(&dev->irqlock);
-@@ -349,7 +360,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
- 	if (ret) {
- 		mtk_v4l2_err("v4l2_device_register err=%d", ret);
--		goto err_res;
-+		goto err_core_workq;
- 	}
- 
- 	init_waitqueue_head(&dev->queue);
-@@ -448,6 +459,9 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 	video_unregister_device(vfd_dec);
- err_dec_alloc:
- 	v4l2_device_unregister(&dev->v4l2_dev);
-+err_core_workq:
-+	if (IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch))
-+		destroy_workqueue(dev->core_workqueue);
- err_res:
- 	mtk_vcodec_release_dec_pm(&dev->pm);
- err_dec_pm:
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index cbaed96dcfa2..a558cc16026d 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -27,6 +27,7 @@
- #define MTK_VCODEC_MAX_PLANES	3
- #define MTK_V4L2_BENCHMARK	0
- #define WAIT_INTR_TIMEOUT_MS	1000
-+#define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
- 
- /*
-  * enum mtk_hw_reg_idx - MTK hw register base index
-@@ -464,6 +465,7 @@ struct mtk_vcodec_enc_pdata {
-  * @dec_capability: used to identify decode capability, ex: 4k
-  * @enc_capability: used to identify encode capability
-  *
-+ * @core_workqueue: queue used for core hardware decode
-  * @msg_queue_core_ctx: msg queue context used for core workqueue
-  *
-  * @subdev_dev: subdev hardware device
-@@ -506,6 +508,7 @@ struct mtk_vcodec_dev {
- 	unsigned int dec_capability;
- 	unsigned int enc_capability;
- 
-+	struct workqueue_struct *core_workqueue;
- 	struct vdec_msg_queue_ctx msg_queue_core_ctx;
- 
- 	void *subdev_dev[MTK_VDEC_HW_MAX];
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
-index 913aefa67618..24f1d03df9f1 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
-@@ -68,6 +68,9 @@ int vdec_msg_queue_qbuf(struct vdec_msg_queue_ctx *msg_ctx, struct vdec_lat_buf
- 
- 	if (msg_ctx->hardware_index != MTK_VDEC_CORE)
- 		wake_up_all(&msg_ctx->ready_to_use);
-+	else
-+		queue_work(buf->ctx->dev->core_workqueue,
-+			&buf->ctx->msg_queue.core_work);
- 
- 	mtk_v4l2_debug(3, "enqueue buf type: %d addr: 0x%p num: %d",
- 		msg_ctx->hardware_index, buf, msg_ctx->ready_num);
-@@ -169,8 +172,7 @@ bool vdec_msg_queue_wait_lat_buf_full(struct vdec_msg_queue *msg_queue)
- 	return false;
- }
- 
--void vdec_msg_queue_deinit(
--	struct vdec_msg_queue *msg_queue,
-+void vdec_msg_queue_deinit(struct vdec_msg_queue *msg_queue,
- 	struct mtk_vcodec_ctx *ctx)
- {
- 	struct vdec_lat_buf *lat_buf;
-@@ -196,10 +198,36 @@ void vdec_msg_queue_deinit(
- 	}
- }
- 
--int vdec_msg_queue_init(
--	struct vdec_msg_queue *msg_queue,
--	struct mtk_vcodec_ctx *ctx,
--	core_decode_cb_t core_decode,
-+static void vdec_msg_queue_core_work(struct work_struct *work)
-+{
-+	struct vdec_msg_queue *msg_queue =
-+		container_of(work, struct vdec_msg_queue, core_work);
-+	struct mtk_vcodec_ctx *ctx =
-+		container_of(msg_queue, struct mtk_vcodec_ctx, msg_queue);
-+	struct mtk_vcodec_dev *dev = ctx->dev;
-+	struct vdec_lat_buf *lat_buf;
-+
-+	lat_buf = vdec_msg_queue_dqbuf(&dev->msg_queue_core_ctx);
-+	if (!lat_buf)
-+		return;
-+
-+	ctx = lat_buf->ctx;
-+	mtk_vcodec_set_curr_ctx(dev, ctx, MTK_VDEC_CORE);
-+
-+	lat_buf->core_decode(lat_buf);
-+
-+	mtk_vcodec_set_curr_ctx(dev, NULL, MTK_VDEC_CORE);
-+	vdec_msg_queue_qbuf(&ctx->msg_queue.lat_ctx, lat_buf);
-+
-+	if (!list_empty(&ctx->msg_queue.lat_ctx.ready_queue)) {
-+		mtk_v4l2_debug(3, "re-schedule to decode for core",
-+			dev->msg_queue_core_ctx.ready_num);
-+		queue_work(dev->core_workqueue, &msg_queue->core_work);
-+	}
-+}
-+
-+int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
-+	struct mtk_vcodec_ctx *ctx,	core_decode_cb_t core_decode,
- 	int private_size)
- {
- 	struct vdec_lat_buf *lat_buf;
-@@ -210,6 +238,7 @@ int vdec_msg_queue_init(
- 		return 0;
- 
- 	vdec_msg_queue_init_ctx(&msg_queue->lat_ctx, MTK_VDEC_LAT0);
-+	INIT_WORK(&msg_queue->core_work, vdec_msg_queue_core_work);
- 	msg_queue->wdma_addr.size = vde_msg_queue_get_trans_size(
- 		ctx->picinfo.buf_w, ctx->picinfo.buf_h);
- 
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.h b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.h
-index 21a9c0aeb1b4..43eae638a2a8 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.h
-+++ b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.h
-@@ -67,6 +67,7 @@ struct vdec_lat_buf {
-  * @wdma_addr: wdma address used for ube
-  * @wdma_rptr_addr: ube read point
-  * @wdma_wptr_addr: ube write point
-+ * @core_work: core hardware work
-  * @lat_ctx: used to store lat buffer list
-  */
- struct vdec_msg_queue {
-@@ -76,6 +77,7 @@ struct vdec_msg_queue {
- 	uint64_t wdma_rptr_addr;
- 	uint64_t wdma_wptr_addr;
- 
-+	struct work_struct core_work;
- 	struct vdec_msg_queue_ctx lat_ctx;
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
+index c7f9259ad094..04ca43c77e5f 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
+@@ -626,4 +626,5 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata = {
+ 	.worker = mtk_vdec_worker,
+ 	.flush_decoder = mtk_vdec_flush_decoder,
+ 	.is_subdev_supported = false,
++	.hw_arch = MTK_VDEC_PURE_SINGLE_CORE,
+ };
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+index f76cfd07c78d..6c67b7f65f9c 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+@@ -358,6 +358,7 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
+ 	.worker = mtk_vdec_worker,
+ 	.flush_decoder = mtk_vdec_flush_decoder,
+ 	.is_subdev_supported = false,
++	.hw_arch = MTK_VDEC_PURE_SINGLE_CORE,
  };
  
-@@ -86,10 +88,8 @@ struct vdec_msg_queue {
-  * @core_decode: core decode callback for each codec
-  * @private_size: the private data size used to share with core
-  */
--int vdec_msg_queue_init(
--	struct vdec_msg_queue *msg_queue,
--	struct mtk_vcodec_ctx *ctx,
--	core_decode_cb_t core_decode,
-+int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
-+	struct mtk_vcodec_ctx *ctx,	core_decode_cb_t core_decode,
- 	int private_size);
+ /* This platform data is used for one lat and one core architecture. */
+@@ -376,4 +377,5 @@ const struct mtk_vcodec_dec_pdata mtk_lat_sig_core_pdata = {
+ 	.worker = mtk_vdec_worker,
+ 	.flush_decoder = mtk_vdec_flush_decoder,
+ 	.is_subdev_supported = true,
++	.hw_arch = MTK_VDEC_LAT_SINGLE_CORE,
+ };
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index 2160f26263ef..79957222c979 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -324,6 +324,14 @@ enum mtk_chip {
+ 	MTK_MT8195,
+ };
  
++/**
++ * struct mtk_vdec_hw_arch - Used to separate different hardware architecture
++ */
++enum mtk_vdec_hw_arch {
++	MTK_VDEC_PURE_SINGLE_CORE,
++	MTK_VDEC_LAT_SINGLE_CORE,
++};
++
  /**
+  * struct mtk_vcodec_dec_pdata - compatible data for each IC
+  * @init_vdec_params: init vdec params
+@@ -342,6 +350,7 @@ enum mtk_chip {
+  * @num_framesizes: count of video decoder frame sizes
+  *
+  * @chip: chip this decoder is compatible with
++ * @hw_arch: hardware arch is used to separate pure_sin_core and lat_sin_core
+  *
+  * @is_subdev_supported: whether support parent-node architecture(subdev)
+  * @uses_stateless_api: whether the decoder uses the stateless API with requests
+@@ -364,6 +373,7 @@ struct mtk_vcodec_dec_pdata {
+ 	const int num_framesizes;
+ 
+ 	enum mtk_chip chip;
++	enum mtk_vdec_hw_arch hw_arch;
+ 
+ 	bool is_subdev_supported;
+ 	bool uses_stateless_api;
 -- 
 2.25.1
 
