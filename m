@@ -2,61 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3549AC433F5
-	for <linux-media@archiver.kernel.org>; Tue, 14 Dec 2021 16:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54959C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 14 Dec 2021 16:17:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235763AbhLNQRE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Dec 2021 11:17:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
+        id S235772AbhLNQRI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Dec 2021 11:17:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235746AbhLNQRA (ORCPT
+        with ESMTP id S235740AbhLNQRD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:17:00 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55BEC061748
-        for <linux-media@vger.kernel.org>; Tue, 14 Dec 2021 08:16:59 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id u17so33297695wrt.3
-        for <linux-media@vger.kernel.org>; Tue, 14 Dec 2021 08:16:59 -0800 (PST)
+        Tue, 14 Dec 2021 11:17:03 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC83C061751
+        for <linux-media@vger.kernel.org>; Tue, 14 Dec 2021 08:17:02 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so14094396wme.4
+        for <linux-media@vger.kernel.org>; Tue, 14 Dec 2021 08:17:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ICPd1tzuZ7vBRZTDItUFPBijrAJP5npUCpdRZVWQpyc=;
-        b=thEVmTMs5DTlfoOpHzrZBD3PjLUeTbdsz83ia8HE/GBuuJb3YB2bU7kE5zgt1NmQHY
-         8Lx4HBTEa1gHjH3mflr8GhyyRiHwpj09aDDkafUV/EeooIDzhpzo/sQ59Fcf9FNFRdXz
-         YumV6DQC/UR3QF7g44Q8oOV9XhfDLBdTsPSBZpfxrG4CtlTGe57S86sj8PdB4Hcd49mK
-         E9TYa5zVccNh6uUrlrpiJui5qBWp4yqpJTcb5xwtzAm/XL1St/KHMpXcc1YKxoG5+a64
-         lnk9glkaPAVVTLs7FD+J4ENPZ7UCo/WF+mjRd5b3Nvc41SGEit1Lz887JtjZoOOvMhmC
-         6rng==
+        bh=wrJsFtsuhtmLSJTTjlYvfNHYFw/pI3X8Oa33ZAzpSDM=;
+        b=kZHKqp9yyvcmhytOSIWGLFtmRf0wd7t8lKKCUbHH3jmUD/6CKDF+dOuwhpDIADAIOC
+         VDF+rlH1t0LjkIfDF4qq0jwzZypNZP9Ak7gH1NKrRItJJ7ufpH6Qf7uFxK6Kqh/b+oAc
+         XTWW0bizCMjbpGVCtiBrMWt6/nB/rJ68ZWc3+UFdgpoGBX6qQRXKMxtV644Z6lobHftx
+         EwYewMz06AGiI97RTHU3CaafXEgJMvCF7hR/Y4iXEYVdgqGs6g0QgP5KCojKvTiYMStd
+         guxnjgC+I0eGxpg1849YD0B96QyWj6tewmZHiX0L4s+RDfZRK83mO7zuIuDH1dhfLOYE
+         2bXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ICPd1tzuZ7vBRZTDItUFPBijrAJP5npUCpdRZVWQpyc=;
-        b=mqQuIWp5piBSk/Xt/WrvCHmAuZUQyecT10lDSqKmw2eNyA37nXK2tlJthV1XPtnBnH
-         wfwOM2fzhKa4WQmt6ptgqRief9+fGJg9FtNjSi3QXtUmhwEO0s+kwVH2tC9NYowk/tYI
-         iNDvL/P7snEJmBZcqJTQy5aOXhRsW5zWaRk/Y41IYzxnCco6aCKApjl0mxjgrtNpNJOY
-         hteR7k0Bl6oSgYJv+jz8THEJQpKmx9j1I6ZB8C7UM6XFzbIG6u1RKC9WIQ+l3Cnz8EpU
-         q3YJvvneLhTWOvLwgqSsDRFmVLQsCb1OHie7hkWtAbIjYumXRlCZkSHKtrnbEc974r23
-         6n/g==
-X-Gm-Message-State: AOAM531F25JUuknAnE8xUS7wb7oCsXKsWKEMIpgN6PeX8LmTYbM7Ovvo
-        lYDEdlI82wRIPQwjX4/2tMwR+A==
-X-Google-Smtp-Source: ABdhPJwH7Eq9WQ+rKmlD9G25wOEd94cIlE4mLnuQP9/3kScvz7wHibZZ0qa118cUbUU6v0O5fG5mDA==
-X-Received: by 2002:a05:6000:1048:: with SMTP id c8mr6488849wrx.352.1639498618220;
-        Tue, 14 Dec 2021 08:16:58 -0800 (PST)
+        bh=wrJsFtsuhtmLSJTTjlYvfNHYFw/pI3X8Oa33ZAzpSDM=;
+        b=MMzho1TtF6JTOEdbLxhOzec7Y2UZSNWZ/E/SUOBbM/r5S3Di+Iyjp/EtHlLb/EQrtb
+         MUI/+tm3bl3z0I2WTAu4dPhQTRitlZ1uCtAGZ9BNQkxN6OGY2FTyXlaWWkYwvaUqwigJ
+         YPmNM4uhs0v9J4isEKrD1R2Q6A9AzxICGZxnCZ4ewUCPHEjkJlXLfSCt7jE9CBLlWoDt
+         AKFgaRrpUmJzqYlp+lufM/9Ms20xIuFGYaF69Dj5WISplHR9psO/zpgwl8PBOhAo3mRI
+         CwL+TwDMq8b39hjwW3ioLaLhyR3hGybTr3o3WWW6TthleDBW+V4/nocLVwRzJL3kvr4V
+         1BLg==
+X-Gm-Message-State: AOAM530XPjhYjWg5/FOxGsTGcpPUAergs6713ztNsgVxNo4zn/gnSks2
+        L5JlULXQwSdCCg00yt8438sGcdhZ9aHEWJJb
+X-Google-Smtp-Source: ABdhPJyD/VPTazW+yxv00pyfOaW0IYRXn/a0BIPW8dVg9XI/oBl+yweYxgfPwERXa22rX7ifKTGPQw==
+X-Received: by 2002:a1c:6a13:: with SMTP id f19mr8237955wmc.89.1639498620640;
+        Tue, 14 Dec 2021 08:17:00 -0800 (PST)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id a9sm295116wrt.66.2021.12.14.08.16.57
+        by smtp.googlemail.com with ESMTPSA id a9sm295116wrt.66.2021.12.14.08.16.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 08:16:57 -0800 (PST)
+        Tue, 14 Dec 2021 08:17:00 -0800 (PST)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl, gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev, mjpeg-users@lists.sourceforge.net,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
         Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v4 15/18] staging: media: zoran: fix various V4L2 compliance errors
-Date:   Tue, 14 Dec 2021 16:16:33 +0000
-Message-Id: <20211214161636.1886900-16-clabbe@baylibre.com>
+Subject: [PATCH v4 18/18] staging: media: zoran: drop read/write support
+Date:   Tue, 14 Dec 2021 16:16:36 +0000
+Message-Id: <20211214161636.1886900-19-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211214161636.1886900-1-clabbe@baylibre.com>
 References: <20211214161636.1886900-1-clabbe@baylibre.com>
@@ -66,96 +66,68 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil@xs4all.nl>
+From: Hans Verkuil <hans.verkuil@cisco.com>
 
-This fixes several issues found with 'v4l2-compliance -s':
+This makes no sense for MJPEG formats and it is just easier to
+drop support for this altogether.
 
-1) read()/write() is supported, but not reported in the capabilities
-2) S_STD(G_STD()) failed: setting the same standard should just return 0.
-3) G_PARM failed to set readbuffers.
-4) different field values in the format vs. what v4l2_buffer reported.
-5) zero the sequence number when starting streaming.
-6) drop VB_USERPTR: makes no sense with dma_contig streaming.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
  drivers/staging/media/zoran/zoran_card.c   |  2 +-
- drivers/staging/media/zoran/zoran_driver.c | 13 ++++++++++---
- 2 files changed, 11 insertions(+), 4 deletions(-)
+ drivers/staging/media/zoran/zoran_driver.c | 12 ------------
+ 2 files changed, 1 insertion(+), 13 deletions(-)
 
 diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
-index 59df1e7691f9..e6d3558323a9 100644
+index e6d3558323a9..59df1e7691f9 100644
 --- a/drivers/staging/media/zoran/zoran_card.c
 +++ b/drivers/staging/media/zoran/zoran_card.c
 @@ -879,7 +879,7 @@ static int zoran_init_video_device(struct zoran *zr, struct video_device *video_
  	*video_dev = zoran_template;
  	video_dev->v4l2_dev = &zr->v4l2_dev;
  	video_dev->lock = &zr->lock;
--	video_dev->device_caps = V4L2_CAP_STREAMING | dir;
-+	video_dev->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_READWRITE | dir;
+-	video_dev->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_READWRITE | dir;
++	video_dev->device_caps = V4L2_CAP_STREAMING | dir;
  
  	strscpy(video_dev->name, ZR_DEVNAME(zr), sizeof(video_dev->name));
  	/*
 diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
-index 32d76876c683..dd19ee023d91 100644
+index 013efdecd582..4304b7e21709 100644
 --- a/drivers/staging/media/zoran/zoran_driver.c
 +++ b/drivers/staging/media/zoran/zoran_driver.c
-@@ -253,8 +253,6 @@ static int zoran_querycap(struct file *file, void *__fh, struct v4l2_capability
- 	strscpy(cap->card, ZR_DEVNAME(zr), sizeof(cap->card));
- 	strscpy(cap->driver, "zoran", sizeof(cap->driver));
- 	snprintf(cap->bus_info, sizeof(cap->bus_info), "PCI:%s", pci_name(zr->pci_dev));
--	cap->device_caps = zr->video_dev->device_caps;
--	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
- 	return 0;
+@@ -734,15 +734,6 @@ static int zoran_s_selection(struct file *file, void *__fh, struct v4l2_selectio
+ 	return res;
  }
  
-@@ -580,6 +578,9 @@ static int zoran_s_std(struct file *file, void *__fh, v4l2_std_id std)
- 	struct zoran *zr = video_drvdata(file);
- 	int res = 0;
- 
-+	if (zr->norm == std)
-+		return 0;
-+
- 	if (zr->running != ZORAN_MAP_MODE_NONE)
- 		return -EBUSY;
- 
-@@ -737,6 +738,7 @@ static int zoran_g_parm(struct file *file, void *priv, struct v4l2_streamparm *p
- 	if (parm->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
- 		return -EINVAL;
- 
-+	parm->parm.capture.readbuffers = 9;
- 	return 0;
- }
- 
-@@ -867,6 +869,10 @@ int zr_set_buf(struct zoran *zr)
- 		vbuf = &buf->vbuf;
- 
- 		buf->vbuf.field = V4L2_FIELD_INTERLACED;
-+		if (BUZ_MAX_HEIGHT < (zr->v4l_settings.height * 2))
-+			buf->vbuf.field = V4L2_FIELD_INTERLACED;
-+		else
-+			buf->vbuf.field = V4L2_FIELD_TOP;
- 		vb2_set_plane_payload(&buf->vbuf.vb2_buf, 0, zr->buffer_size);
- 		vb2_buffer_done(&buf->vbuf.vb2_buf, VB2_BUF_STATE_DONE);
- 		zr->inuse[0] = NULL;
-@@ -927,6 +933,7 @@ static int zr_vb2_start_streaming(struct vb2_queue *vq, unsigned int count)
- 		zr->stat_com[j] = cpu_to_le32(1);
- 		zr->inuse[j] = NULL;
- 	}
-+	zr->vbseq = 0;
- 
- 	if (zr->map_mode != ZORAN_MAP_MODE_RAW) {
- 		pci_info(zr->pci_dev, "START JPG\n");
-@@ -1017,7 +1024,7 @@ int zoran_queue_init(struct zoran *zr, struct vb2_queue *vq, int dir)
- 	vq->dev = &zr->pci_dev->dev;
- 	vq->type = dir;
- 
--	vq->io_modes = VB2_USERPTR | VB2_DMABUF | VB2_MMAP | VB2_READ | VB2_WRITE;
-+	vq->io_modes = VB2_DMABUF | VB2_MMAP | VB2_READ | VB2_WRITE;
- 	vq->drv_priv = zr;
- 	vq->buf_struct_size = sizeof(struct zr_buffer);
- 	vq->ops = &zr_video_qops;
+-static int zoran_g_parm(struct file *file, void *priv, struct v4l2_streamparm *parm)
+-{
+-	if (parm->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-		return -EINVAL;
+-
+-	parm->parm.capture.readbuffers = 9;
+-	return 0;
+-}
+-
+ /*
+  * Output is disabled temporarily
+  * Zoran is picky about jpeg data it accepts. At least it seems to unsupport COM and APPn.
+@@ -750,7 +741,6 @@ static int zoran_g_parm(struct file *file, void *priv, struct v4l2_streamparm *p
+  */
+ static const struct v4l2_ioctl_ops zoran_ioctl_ops = {
+ 	.vidioc_querycap		    = zoran_querycap,
+-	.vidioc_g_parm			    = zoran_g_parm,
+ 	.vidioc_s_selection		    = zoran_s_selection,
+ 	.vidioc_g_selection		    = zoran_g_selection,
+ 	.vidioc_enum_input		    = zoran_enum_input,
+@@ -786,8 +776,6 @@ static const struct v4l2_file_operations zoran_fops = {
+ 	.unlocked_ioctl = video_ioctl2,
+ 	.open		= v4l2_fh_open,
+ 	.release	= vb2_fop_release,
+-	.read		= vb2_fop_read,
+-	.write		= vb2_fop_write,
+ 	.mmap		= vb2_fop_mmap,
+ 	.poll		= vb2_fop_poll,
+ };
 -- 
 2.32.0
 
