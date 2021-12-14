@@ -2,42 +2,116 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53AC8C433F5
-	for <linux-media@archiver.kernel.org>; Tue, 14 Dec 2021 14:20:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2554C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 14 Dec 2021 14:44:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234873AbhLNOUT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Dec 2021 09:20:19 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:45986 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232574AbhLNOUS (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:20:18 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1mx8f8-002uB9-Qu; Tue, 14 Dec 2021 14:20:14 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1mx8f7-005NdU-AW; Tue, 14 Dec 2021 14:20:12 +0000
-Date:   Tue, 14 Dec 2021 14:20:12 +0000 (UTC)
-From:   Jenkins Builder Robot <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        mchehab@linuxtv.org
-Message-ID: <551824050.3.1639491612773@builder.linuxtv.org>
-In-Reply-To: <847982460.0.1639488290053@builder.linuxtv.org>
-References: <847982460.0.1639488290053@builder.linuxtv.org>
-Subject: Jenkins build is back to normal : media_stage_gcc #16
+        id S234975AbhLNOoR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Dec 2021 09:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232847AbhLNOoR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 14 Dec 2021 09:44:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CB5C061574;
+        Tue, 14 Dec 2021 06:44:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6FF9EB819E2;
+        Tue, 14 Dec 2021 14:44:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 951E5C34601;
+        Tue, 14 Dec 2021 14:44:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639493054;
+        bh=8kE25lHJX38zMYqV26wAuz0kRQbim0EKFMko/TuL3ys=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UrAA9n3JIlqfRx72ruF3mVgM9KP5nDEjQIBuPfresFgCEmarF5Fh4jk0icEhgErLY
+         uufVVRt2+yXAd/FKLgYN1JwjjhkOOwkl8miq9pBznBh9aE2MHIvSA7hbeHbtqSSmF3
+         7S63tDasO/FbzKIQkgNXJgCiDsgEO664LYvFOSk/ZaKeP4FT9QYgOPjrkvOqzaV+3x
+         n2ozNvt5EYWJK/r7CQNNmZbkU/5OC8vcFsnsCxm/L2AIyrKyJtt5Gn5PC1ibvMu3pB
+         DUyRfXU2trDc7hCV8hWeF1uZn/3obYcX7xAozSxGPSWePytP/WZfsCycrQ4wyo4KJJ
+         qMXZn9nLXNW3g==
+Date:   Tue, 14 Dec 2021 15:44:09 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org
+Subject: Re: [PATCH v2 0/4] uvc: Restore old vdev name
+Message-ID: <20211214154409.292c1173@coco.lan>
+In-Reply-To: <20211207003840.1212374-1-ribalda@chromium.org>
+References: <20211207003840.1212374-1-ribalda@chromium.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
-X-Jenkins-Job: media_stage_gcc
-X-Jenkins-Result: SUCCESS
-Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-See <https://builder.linuxtv.org/job/media_stage_gcc/16/display/redirect?page=changes>
+Em Tue,  7 Dec 2021 01:38:36 +0100
+Ricardo Ribalda <ribalda@chromium.org> escreveu:
 
+> In order to have unique entity names, we decided to change the name of
+> the video devices with their functionality.
+> 
+> This has resulted in some (all?) GUIs showing not useful names.
+> 
+> This patchset reverts the original patch and introduces a new one to
+> allow having different entity and vdev names.
+> 
+> Since some distros have ported the reverted patch to their stable
+> kernels, it would be great if we can get this sent asap, to avoid making
+> more people angry ;).
+
+Yeah, patch 1 of this series makes a lot sense. Reporting a camera
+as "Video Capture" doesn't seem too nice, specially if multiple
+UVC cameras are present.
+
+Yet, I'm a little in doubt about patch 4/4, for a couple of reasons:
+
+1. IMO, on *all* devices (not only uvc), it makes sense to add a "Metadata" 
+   at the name string for the metadata devnodes.
+
+   So, I would implement such logic at V4L2 core instead.
+
+2. Such metadata string should be there not only for the entity name,
+   but also for vdev->name;
+
+3. I would, instead, set the device name as:
+
+	vdev->name = "Meta: <foo>"
+
+   for the meta devnodes, as the string size is limited.
+
+4. As almost all devices have either video capture or video
+   output, I can't see any value to unconditionally add
+   "Video Capture"/"Video Output" strings. It would only make
+   sense to have them on devices that report having both.
+
+Regards,
+Mauro
+
+> 
+> v2:
+>  - Add Documentation
+>  - Mark maybe unused variables as __maybe_unused
+>  - Add Suggested-by
+> 
+> Ricardo Ribalda (4):
+>   Revert "media: uvcvideo: Set unique vdev name based in type"
+>   media: v4l2-dev.c: Allow driver-defined entity names
+>   media: Documentation/driver-api: Document entity name
+>   media: uvcvideo: Set unique entity name based in type
+> 
+>  Documentation/driver-api/media/v4l2-dev.rst |  4 ++++
+>  drivers/media/usb/uvc/uvc_driver.c          | 14 +++++++++++---
+>  drivers/media/v4l2-core/v4l2-dev.c          |  4 +++-
+>  3 files changed, 18 insertions(+), 4 deletions(-
+
+Thanks,
+Mauro
