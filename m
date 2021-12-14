@@ -2,105 +2,104 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F4EAC4332F
-	for <linux-media@archiver.kernel.org>; Tue, 14 Dec 2021 16:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55AA5C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 14 Dec 2021 16:18:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235706AbhLNQRL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Dec 2021 11:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235684AbhLNQRA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:17:00 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E24C061574
-        for <linux-media@vger.kernel.org>; Tue, 14 Dec 2021 08:17:00 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id i8-20020a7bc948000000b0030db7b70b6bso16628643wml.1
-        for <linux-media@vger.kernel.org>; Tue, 14 Dec 2021 08:17:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yfJZtohVWDSZMzjIFwnIJSA32PL2KWx5qeRnts2nEJc=;
-        b=WRjX41ehg7tciFFyuUTxc/2pAQAgBOczsZ1wOBkNu9SkIKofB5qwSh65Y2JXD/fSt6
-         cVGQuYsv6LmXoJHcwimQvOALb8GzauatmczbDujeftSOyWBwFK9PNwP5k7/02sK30t/T
-         G6kgUHJTD9Y3MkSBsHGkVItKWCSuynRtYM92UewPaLNPos1e7Ua7Esj5QwMRD2WDNZDp
-         pnYHBfs/wxNw846mwfjY+7gsv2zumarrT5fS/3UJKP3hBX9vAiZf8YxQqUMyhyzhibho
-         56TBaLydOPoetIsFqKhivK5vprH6W2J6dozBVeN1feZYUqDpy/0qi0jp9xG8h4q0jU5g
-         H08A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yfJZtohVWDSZMzjIFwnIJSA32PL2KWx5qeRnts2nEJc=;
-        b=gFNO0Uxx4OVZn3Mv3lw/z0aLnfLAnl0CLNFO++pbe3/s805+yChKskJKSDmv01rfJv
-         y1r/znp5xHT+AVpS0XvGDLcglWi8UwuhqjSZKlvlCpJ8D48XF7ZPCjta6ngM7FZKQp88
-         QJGgjesE/YWkhzKrDfQ/hCWhGXaWTOOcvtWOPXiGPuijxM/W3DGmbVCr20+HX1IS6RiR
-         V2aQ4G0tYzlF9q7Sopg0SOa38K9B6tf0doKG/a2Ay2E3c4HKN3fM2jpLv5Lt3TJqeWXM
-         9IrhHw4svPmwmA4t4wGtMFaYfY5G0fG8W6tCakklG+U2IcrXLm2LWk7uHLR8t8zY84+x
-         cacQ==
-X-Gm-Message-State: AOAM533EWt9xXlKXCUWSeaJL46WoMmAZBQq88P/VRZDBmdtcDcVRsxO2
-        +sokIWzbQfqBJKtDcl12UszE0Q==
-X-Google-Smtp-Source: ABdhPJyEECFe5E5h2hoiIPTiQTsMGX5ROjNLPvytp+z8hY51tg+CyIAMgQrNSBpvSwVes3YzLv5CEQ==
-X-Received: by 2002:a1c:9d13:: with SMTP id g19mr47518896wme.41.1639498619019;
-        Tue, 14 Dec 2021 08:16:59 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id a9sm295116wrt.66.2021.12.14.08.16.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 08:16:58 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     mchehab@kernel.org, hverkuil@xs4all.nl, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, mjpeg-users@lists.sourceforge.net,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v4 16/18] staging: media: zoran: fix TRY_FMT handling
-Date:   Tue, 14 Dec 2021 16:16:34 +0000
-Message-Id: <20211214161636.1886900-17-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211214161636.1886900-1-clabbe@baylibre.com>
-References: <20211214161636.1886900-1-clabbe@baylibre.com>
+        id S231497AbhLNQSt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Dec 2021 11:18:49 -0500
+Received: from retiisi.eu ([95.216.213.190]:50618 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229616AbhLNQSs (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 14 Dec 2021 11:18:48 -0500
+Received: from lanttu.localdomain (unknown [192.168.2.193])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 1FCE6634C91;
+        Tue, 14 Dec 2021 18:18:40 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     bingbu.cao@intel.com
+Subject: [PATCH 1/1] Update Intel-submitted camera sensor driver contacts
+Date:   Tue, 14 Dec 2021 18:17:47 +0200
+Message-Id: <20211214161747.75300-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hans.verkuil@cisco.com>
+Hyungwoo's e-mail no longer works so I presume he's left the company. Drop
+Hyungwoo as maintainer on ov5670 driver and remove his e-mail from other
+sensor drivers.
 
-TRY_FMT must not set actual capture values (zr->buffer_size in
-this case), since it is a 'try' only.
-
-zoran_try_fmt_vid_cap() also didn't fill in fmt->fmt.pix.bytesperline
-and fmt->fmt.pix.sizeimage correctly.
-
-Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/staging/media/zoran/zoran_driver.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ MAINTAINERS                 | 1 -
+ drivers/media/i2c/imx319.c  | 2 +-
+ drivers/media/i2c/imx355.c  | 2 +-
+ drivers/media/i2c/ov13858.c | 2 +-
+ drivers/media/i2c/ov5670.c  | 2 +-
+ 5 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
-index dd19ee023d91..367fe4be8357 100644
---- a/drivers/staging/media/zoran/zoran_driver.c
-+++ b/drivers/staging/media/zoran/zoran_driver.c
-@@ -398,7 +398,6 @@ static int zoran_try_fmt_vid_out(struct file *file, void *__fh,
- 				V4L2_FIELD_TOP : V4L2_FIELD_BOTTOM);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 38235471fed0..79fd8a012893 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14106,7 +14106,6 @@ F:	drivers/media/i2c/ov5647.c
  
- 	fmt->fmt.pix.sizeimage = zoran_v4l2_calc_bufsize(&settings);
--	zr->buffer_size = fmt->fmt.pix.sizeimage;
- 	fmt->fmt.pix.bytesperline = 0;
- 	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
- 	return res;
-@@ -433,6 +432,8 @@ static int zoran_try_fmt_vid_cap(struct file *file, void *__fh,
- 	bpp = DIV_ROUND_UP(zoran_formats[i].depth, 8);
- 	v4l_bound_align_image(&fmt->fmt.pix.width, BUZ_MIN_WIDTH, BUZ_MAX_WIDTH, bpp == 2 ? 1 : 2,
- 		&fmt->fmt.pix.height, BUZ_MIN_HEIGHT, BUZ_MAX_HEIGHT, 0, 0);
-+	fmt->fmt.pix.bytesperline = fmt->fmt.pix.width * bpp;
-+	fmt->fmt.pix.sizeimage = fmt->fmt.pix.bytesperline * fmt->fmt.pix.height;
- 	return 0;
- }
+ OMNIVISION OV5670 SENSOR DRIVER
+ M:	Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>
+-M:	Hyungwoo Yang <hyungwoo.yang@intel.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
+diff --git a/drivers/media/i2c/imx319.c b/drivers/media/i2c/imx319.c
+index daa976858e29..a2b5a34de76b 100644
+--- a/drivers/media/i2c/imx319.c
++++ b/drivers/media/i2c/imx319.c
+@@ -2565,6 +2565,6 @@ module_i2c_driver(imx319_i2c_driver);
+ MODULE_AUTHOR("Qiu, Tianshu <tian.shu.qiu@intel.com>");
+ MODULE_AUTHOR("Rapolu, Chiranjeevi <chiranjeevi.rapolu@intel.com>");
+ MODULE_AUTHOR("Bingbu Cao <bingbu.cao@intel.com>");
+-MODULE_AUTHOR("Yang, Hyungwoo <hyungwoo.yang@intel.com>");
++MODULE_AUTHOR("Yang, Hyungwoo");
+ MODULE_DESCRIPTION("Sony imx319 sensor driver");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/media/i2c/imx355.c b/drivers/media/i2c/imx355.c
+index cb51c81786bd..3922b9305978 100644
+--- a/drivers/media/i2c/imx355.c
++++ b/drivers/media/i2c/imx355.c
+@@ -1851,6 +1851,6 @@ module_i2c_driver(imx355_i2c_driver);
+ MODULE_AUTHOR("Qiu, Tianshu <tian.shu.qiu@intel.com>");
+ MODULE_AUTHOR("Rapolu, Chiranjeevi <chiranjeevi.rapolu@intel.com>");
+ MODULE_AUTHOR("Bingbu Cao <bingbu.cao@intel.com>");
+-MODULE_AUTHOR("Yang, Hyungwoo <hyungwoo.yang@intel.com>");
++MODULE_AUTHOR("Yang, Hyungwoo");
+ MODULE_DESCRIPTION("Sony imx355 sensor driver");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/media/i2c/ov13858.c b/drivers/media/i2c/ov13858.c
+index b4d22f5d9933..d5fe67c763f7 100644
+--- a/drivers/media/i2c/ov13858.c
++++ b/drivers/media/i2c/ov13858.c
+@@ -1818,6 +1818,6 @@ module_i2c_driver(ov13858_i2c_driver);
  
+ MODULE_AUTHOR("Kan, Chris <chris.kan@intel.com>");
+ MODULE_AUTHOR("Rapolu, Chiranjeevi <chiranjeevi.rapolu@intel.com>");
+-MODULE_AUTHOR("Yang, Hyungwoo <hyungwoo.yang@intel.com>");
++MODULE_AUTHOR("Yang, Hyungwoo");
+ MODULE_DESCRIPTION("Omnivision ov13858 sensor driver");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
+index 251f459ab484..165cb34ca202 100644
+--- a/drivers/media/i2c/ov5670.c
++++ b/drivers/media/i2c/ov5670.c
+@@ -2585,6 +2585,6 @@ static struct i2c_driver ov5670_i2c_driver = {
+ module_i2c_driver(ov5670_i2c_driver);
+ 
+ MODULE_AUTHOR("Rapolu, Chiranjeevi <chiranjeevi.rapolu@intel.com>");
+-MODULE_AUTHOR("Yang, Hyungwoo <hyungwoo.yang@intel.com>");
++MODULE_AUTHOR("Yang, Hyungwoo");
+ MODULE_DESCRIPTION("Omnivision ov5670 sensor driver");
+ MODULE_LICENSE("GPL v2");
 -- 
-2.32.0
+2.30.2
 
