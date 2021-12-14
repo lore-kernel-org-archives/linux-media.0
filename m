@@ -2,61 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 763D5C4332F
-	for <linux-media@archiver.kernel.org>; Tue, 14 Dec 2021 16:18:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B30E9C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 14 Dec 2021 16:18:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233492AbhLNQS5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Dec 2021 11:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
+        id S233565AbhLNQS6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Dec 2021 11:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235669AbhLNQQw (ORCPT
+        with ESMTP id S235733AbhLNQQ6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:16:52 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2F5C06173F
-        for <linux-media@vger.kernel.org>; Tue, 14 Dec 2021 08:16:51 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id y196so14629555wmc.3
-        for <linux-media@vger.kernel.org>; Tue, 14 Dec 2021 08:16:51 -0800 (PST)
+        Tue, 14 Dec 2021 11:16:58 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07924C061574
+        for <linux-media@vger.kernel.org>; Tue, 14 Dec 2021 08:16:58 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id z8-20020a05600c220800b0034565e837b6so101168wml.1
+        for <linux-media@vger.kernel.org>; Tue, 14 Dec 2021 08:16:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TsNFpY1RRkr+DNPQxSAx+z1PDhyA43H0wT6kfJ2Z97I=;
-        b=r2KgfOmb4y/Ab/0mkI4tt7WWdvvqhTCbve13AEruCqs1m8cQ6GMW+iCB/Nl6T5ijHd
-         0z4TqVTqnOgCtgoIuSJY4qua46CSaPqxrBroEKC0DS2/cbRyJsDHLVEUFZ2w4XI/sISG
-         GRGuoTT+PWiukf+Mwr0Pvo2HWRekn6wf6nLvUNXED/Qyi/sukQulC+kMqMfWhh27c0B4
-         c3FoRy/+MeswvAkJjeZx4mzPMCe5my7ZV1UTwPBHEWZCJJMQ0GbtT9DaTz8z6IpeQs+o
-         flflL1EmId2IOw0bTo6RF/u7+MlVdm+bC50+2yG5Enx1auGOeI7g3eXHbv7vrViv2obm
-         HkKw==
+        bh=5DMKsH1cCiElIcvlchVrud05bdBtUx8WxuBusFpvIlQ=;
+        b=xty511YeuRTDMbnIO3IEz89SkP9HsC/N6v112nakzzwPZAEgplHV6cYWMBlRmVbNFD
+         Hw9o23EQFloHp/o8WLnLIG8novQzwcegulCnIW9HO4iHXTwrNIjAFi1+WdrRLAUmw0o/
+         iBVzL0UQN0KE8GZGl/kI2r0ltq4a5589tDlLl2gX+EIdiAcPEiDbZdsCp36tc0m5r6xA
+         MRKh9sJx4fgRGTZBf7hh0N4CwZDx12GqMFoneAPR6StIRIwSLt30/JX+KZ+rabxlTmMi
+         x31sQJJhVG+myeWdcppENgbBhOU9OmewYynqhvHtgw1d2kY1a0aTcyyw6UjiFvs+K6w3
+         EEFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TsNFpY1RRkr+DNPQxSAx+z1PDhyA43H0wT6kfJ2Z97I=;
-        b=Qm2GmCqGyiZLEdEy+9fRrtBHmWA3uJDB/FzMupzHhU1+9JTixZMIIN+KwBljpVr++j
-         h6IHs4AoMNOtp60AWuFot5kF8/b2OJ6ksyPnA6hhAiryP4s/WlwNH0hToEpeCBimVAYM
-         uZrAVk2r92NTVLCR4ifCo9qaszNlz2cDosCyieC4CD34Wb3ukd88IxLZjBcldPLNfiX9
-         k3tdJ/IcdbGEqErEN0QfcMXXtNdkABrMgMz/iGyvXHEvEzXHd+oW9KnYs6ZgCy7rnnma
-         RYTGGXxHS1eiTFGi4YVzjfsCcJ+UP1CeBze1y+HDG5MD4GlESCabCsfHqOipNqHmkZpO
-         tAgw==
-X-Gm-Message-State: AOAM532rOu5k8AwqfzQqG3lhBhCxMUyWziuXGxPQtDRzJrEEaHGmKVIT
-        48god62t2pJK5Fs53uzLxBDDFQ==
-X-Google-Smtp-Source: ABdhPJx37pLCNLvqnCrEl6O5Qe/Rq60aJvQbHzOdJsWEFbxCtoEvmyIGJewcsg/q1i3nBKkL4mAsxw==
-X-Received: by 2002:a1c:9d13:: with SMTP id g19mr47517867wme.41.1639498610376;
-        Tue, 14 Dec 2021 08:16:50 -0800 (PST)
+        bh=5DMKsH1cCiElIcvlchVrud05bdBtUx8WxuBusFpvIlQ=;
+        b=IV3aC29msuInY2Jl3o+cClytR5haCtwa9CNrIOwJPScZnT45OshGGZiGTwlFE/RFqJ
+         z0r7zmsvO929o9MIIlLU1emk0WlTIhnHnMW6VAleE+PUatCq6FpWpExHtBu0QfRm1D7G
+         35WGYOhiARoC1ojrQc2XICR6NqFDB0tsGb/In5bmPYxuNyBzxkCmf3kTMlAm3b9ccqGF
+         +sI16QC9Qo/im5Mql0qbPuJZk1dqrBN/IGwp5/ToI3shj7WLFf4RB6XB+LPV0UqK0HnA
+         ARaDAOeh2gUIP7rI3D9XqjiDYQ2PtpZFgulw+2P/rlvaTJf09cDfW4jdf/W7+j9ZRaYu
+         4C+w==
+X-Gm-Message-State: AOAM533NM8Ub32e0vUiPSLz4MfIyjjGYxCYJWcbaZPx6BeL55bYI03xB
+        vrC5Pk+fj4y5h6jgic70OHvYWA==
+X-Google-Smtp-Source: ABdhPJxbC5ThkNwS+fn4bggjwWj1iTz5yWy2QITxtbnVLkM3XfCqpR8BEbecGTpn1TJ0uEhDwtG4dQ==
+X-Received: by 2002:a7b:c257:: with SMTP id b23mr8287134wmj.67.1639498616631;
+        Tue, 14 Dec 2021 08:16:56 -0800 (PST)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id a9sm295116wrt.66.2021.12.14.08.16.49
+        by smtp.googlemail.com with ESMTPSA id a9sm295116wrt.66.2021.12.14.08.16.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Dec 2021 08:16:50 -0800 (PST)
+        Tue, 14 Dec 2021 08:16:51 -0800 (PST)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl, gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-staging@lists.linux.dev, mjpeg-users@lists.sourceforge.net,
-        Corentin Labbe <clabbe@baylibre.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v4 11/18] staging: media: zoran: fix usage of vb2_dma_contig_set_max_seg_size
-Date:   Tue, 14 Dec 2021 16:16:29 +0000
-Message-Id: <20211214161636.1886900-12-clabbe@baylibre.com>
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH v4 13/18] staging: media: zoran: fix counting buffer in reserve
+Date:   Tue, 14 Dec 2021 16:16:31 +0000
+Message-Id: <20211214161636.1886900-14-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211214161636.1886900-1-clabbe@baylibre.com>
 References: <20211214161636.1886900-1-clabbe@baylibre.com>
@@ -66,35 +65,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vb2_dma_contig_set_max_seg_size need to have a size in parameter and not
-a DMA_BIT_MASK().
-While fixing this issue, also fix error handling of all DMA size
-setting.
+After each capture, zoran driver complains that it remains some unused
+buffer. This is due to a missing count handling.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: d4ae3689226e5 ("media: zoran: device support only 32bit DMA address")
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/staging/media/zoran/zoran_card.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/staging/media/zoran/zoran_driver.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
-index a00ad40244d0..4ea2fbf189b9 100644
---- a/drivers/staging/media/zoran/zoran_card.c
-+++ b/drivers/staging/media/zoran/zoran_card.c
-@@ -1282,8 +1282,10 @@ static int zoran_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
+index 31993c266976..32d76876c683 100644
+--- a/drivers/staging/media/zoran/zoran_driver.c
++++ b/drivers/staging/media/zoran/zoran_driver.c
+@@ -887,6 +887,7 @@ int zr_set_buf(struct zoran *zr)
+ 		return -EINVAL;
+ 	}
+ 	list_del(&buf->queue);
++	zr->buf_in_reserve--;
+ 	spin_unlock_irqrestore(&zr->queued_bufs_lock, flags);
  
- 	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
- 	if (err)
--		return -ENODEV;
--	vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
-+		return err;
-+	err = vb2_dma_contig_set_max_seg_size(&pdev->dev, U32_MAX);
-+	if (err)
-+		return err;
- 
- 	nr = zoran_num++;
- 	if (nr >= BUZ_MAX) {
+ 	vbuf = &buf->vbuf;
 -- 
 2.32.0
 
