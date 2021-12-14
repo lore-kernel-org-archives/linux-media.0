@@ -2,141 +2,101 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CFAEC433F5
-	for <linux-media@archiver.kernel.org>; Tue, 14 Dec 2021 19:02:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D7D0C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 14 Dec 2021 21:22:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237242AbhLNTB7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Dec 2021 14:01:59 -0500
-Received: from mga01.intel.com ([192.55.52.88]:51005 "EHLO mga01.intel.com"
+        id S231909AbhLNVWV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Dec 2021 16:22:21 -0500
+Received: from mga02.intel.com ([134.134.136.20]:54898 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234390AbhLNTB6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Dec 2021 14:01:58 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="263200679"
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="263200679"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 10:32:22 -0800
-X-IronPort-AV: E=Sophos;i="5.88,205,1635231600"; 
-   d="scan'208";a="661540417"
+        id S231845AbhLNVWU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 14 Dec 2021 16:22:20 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="226366167"
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="226366167"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 13:22:19 -0800
+X-IronPort-AV: E=Sophos;i="5.88,206,1635231600"; 
+   d="scan'208";a="463977346"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 10:32:18 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2021 13:22:17 -0800
 Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id C7C0B20462;
-        Tue, 14 Dec 2021 20:32:16 +0200 (EET)
-Date:   Tue, 14 Dec 2021 20:32:16 +0200
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 023D4200D3;
+        Tue, 14 Dec 2021 23:22:15 +0200 (EET)
+Date:   Tue, 14 Dec 2021 23:22:14 +0200
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Jammy Huang <jammy_huang@aspeedtech.com>, hverkuil-cisco@xs4all.nl,
-        gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
-        eajames@linux.ibm.com, joel@jms.id.au, andrew@aj.id.au,
-        linux-media@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] media: aspeed: move err-handling together to the
- bottom
-Message-ID: <YbjjMDQ+V6ilbQvj@paasikivi.fi.intel.com>
-References: <20211206004811.1118-1-jammy_huang@aspeedtech.com>
- <20211214155300.0132946e@coco.lan>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     linux-media@vger.kernel.org, libcamera-devel@lists.libcamera.org,
+        laurent.pinchart@ideasonboard.com, hanlinchen@chromium.org,
+        tfiga@chromium.org, hdegoede@redhat.com,
+        kieran.bingham@ideasonboard.com, hpa@redhat.com
+Subject: Re: [PATCH 3/5] media: entity: Skip non-data links in graph iteration
+Message-ID: <YbkLBobSglC1sgsF@paasikivi.fi.intel.com>
+References: <20211213232849.40071-1-djrscally@gmail.com>
+ <20211213232849.40071-4-djrscally@gmail.com>
+ <Ybixw0dIZyC6wQL4@paasikivi.fi.intel.com>
+ <955c5e8e-d898-9987-4f21-f7dacb6b178e@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214155300.0132946e@coco.lan>
+In-Reply-To: <955c5e8e-d898-9987-4f21-f7dacb6b178e@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+Hi Daniel,
 
-On Tue, Dec 14, 2021 at 03:53:00PM +0100, Mauro Carvalho Chehab wrote:
-> Em Mon, 6 Dec 2021 08:48:11 +0800
-> Jammy Huang <jammy_huang@aspeedtech.com> escreveu:
+On Tue, Dec 14, 2021 at 04:14:21PM +0000, Daniel Scally wrote:
+> Hi Sakari
 > 
-> > refine aspeed_video_setup_video() flow.
+> On 14/12/2021 15:01, Sakari Ailus wrote:
+> > Hi Daniel,
+> >
+> > On Mon, Dec 13, 2021 at 11:28:47PM +0000, Daniel Scally wrote:
+> >> When iterating over the media graph, don't follow links that are not
+> >> pad-to-pad links.
+> >>
+> >> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+> >> ---
+> >> Changes since the rfc:
+> >>
+> >> 	- new patch
+> >>
+> >>  drivers/media/mc/mc-entity.c | 8 ++++++++
+> >>  1 file changed, 8 insertions(+)
+> >>
+> >> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+> >> index d79eb88bc167..aeddc3f6310e 100644
+> >> --- a/drivers/media/mc/mc-entity.c
+> >> +++ b/drivers/media/mc/mc-entity.c
+> >> @@ -325,6 +325,14 @@ static void media_graph_walk_iter(struct media_graph *graph)
+> >>  
+> >>  	link = list_entry(link_top(graph), typeof(*link), list);
+> >>  
+> >> +	/* If the link is not a pad-to-pad link, don't follow it */
+> > This comment should mention data links, not pad-to-pad links.
 > 
-> Why? It makes no difference where the error handling code is. Let's
-> keep it as preferred by the driver's author ;-)
+> 
+> I wondered about the terminology of this actually...since we create
+> those links with media_create_pad_link(), and they're called pad-to-pad
+> links in the documentation [1], but in other cases called data links. Do
+> we need to fix those other references too?
+> 
+> 
+> 
+> [1] https://www.kernel.org/doc/html/v5.0/media/kapi/mc-core.html#links
 
-Doing error handling can be done in different ways of course, but I think
-it's easier to see it's right as it's done by this patch. Of course the
-original author's --- like anyone else's --- review wouldn't hurt. But I
-see he hasn't reviewed other recent patches to the driver either.
+Good point.
 
-A better description would be nice though, including capital letter
-beginning a sentence.
+There were only one type of links before the interface links were
+introduced. Some of the documentation seems to discuss pad links whereas
+the corresponding macro name is MEDIA_LNK_FL_DATA_LINK. What the links
+really represent is flow of data.
 
-> 
-> Regards,
-> Mauro
-> 
-> > 
-> > Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
-> > ---
-> > v2:
-> >  - remove change-id in comment
-> > ---
-> >  drivers/media/platform/aspeed-video.c | 24 +++++++++++-------------
-> >  1 file changed, 11 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-> > index fea5e4d0927e..f5c40d6b4ece 100644
-> > --- a/drivers/media/platform/aspeed-video.c
-> > +++ b/drivers/media/platform/aspeed-video.c
-> > @@ -1641,11 +1641,8 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
-> >  
-> >  	rc = video->ctrl_handler.error;
-> >  	if (rc) {
-> > -		v4l2_ctrl_handler_free(&video->ctrl_handler);
-> > -		v4l2_device_unregister(v4l2_dev);
-> > -
-> >  		dev_err(video->dev, "Failed to init controls: %d\n", rc);
-> > -		return rc;
-> > +		goto err_ctrl_init;
-> >  	}
-> >  
-> >  	v4l2_dev->ctrl_handler = &video->ctrl_handler;
-> > @@ -1663,11 +1660,8 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
-> >  
-> >  	rc = vb2_queue_init(vbq);
-> >  	if (rc) {
-> > -		v4l2_ctrl_handler_free(&video->ctrl_handler);
-> > -		v4l2_device_unregister(v4l2_dev);
-> > -
-> >  		dev_err(video->dev, "Failed to init vb2 queue\n");
-> > -		return rc;
-> > +		goto err_vb2_init;
-> >  	}
-> >  
-> >  	vdev->queue = vbq;
-> > @@ -1685,15 +1679,19 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
-> >  	video_set_drvdata(vdev, video);
-> >  	rc = video_register_device(vdev, VFL_TYPE_GRABBER, 0);
-> >  	if (rc) {
-> > -		vb2_queue_release(vbq);
-> > -		v4l2_ctrl_handler_free(&video->ctrl_handler);
-> > -		v4l2_device_unregister(v4l2_dev);
-> > -
-> >  		dev_err(video->dev, "Failed to register video device\n");
-> > -		return rc;
-> > +		goto err_video_reg;
-> >  	}
-> >  
-> >  	return 0;
-> > +
-> > +err_video_reg:
-> > +	vb2_queue_release(vbq);
-> > +err_vb2_init:
-> > +err_ctrl_init:
-> > +	v4l2_ctrl_handler_free(&video->ctrl_handler);
-> > +	v4l2_device_unregister(v4l2_dev);
-> > +	return rc;
-> >  }
-> >  
-> >  static int aspeed_video_init(struct aspeed_video *video)
-> 
-> 
-> 
-> Thanks,
-> Mauro
+It would be good to align this, although that should probably be done in a
+different context from this patchset.
 
 -- 
+Kind regards,
+
 Sakari Ailus
