@@ -2,104 +2,110 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55AA5C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 14 Dec 2021 16:18:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89F8CC433EF
+	for <linux-media@archiver.kernel.org>; Tue, 14 Dec 2021 16:18:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbhLNQSt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Dec 2021 11:18:49 -0500
-Received: from retiisi.eu ([95.216.213.190]:50618 "EHLO hillosipuli.retiisi.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229616AbhLNQSs (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Dec 2021 11:18:48 -0500
-Received: from lanttu.localdomain (unknown [192.168.2.193])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 1FCE6634C91;
-        Tue, 14 Dec 2021 18:18:40 +0200 (EET)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     bingbu.cao@intel.com
-Subject: [PATCH 1/1] Update Intel-submitted camera sensor driver contacts
-Date:   Tue, 14 Dec 2021 18:17:47 +0200
-Message-Id: <20211214161747.75300-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        id S235661AbhLNQQu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Dec 2021 11:16:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231547AbhLNQQt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 14 Dec 2021 11:16:49 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC86AC061574
+        for <linux-media@vger.kernel.org>; Tue, 14 Dec 2021 08:16:48 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id z206so407987wmc.1
+        for <linux-media@vger.kernel.org>; Tue, 14 Dec 2021 08:16:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=nB4e6hJ4iiTdgUlpoHX4JiHqvuWD9iBvhiQUSGuoJO4=;
+        b=59L0AuG56Iu6wwan57pufjqXT1E/Ejz7PsGUmlgkWNgVwSn99f/tO3kplfpUM5b/3X
+         Y11pSsiW5S2/GPySPaDzI7Y9AJi9WUmq1kzr7gJL9i5zTlHA7oW7FJ97MOTiCNayOKvT
+         aoF96qlX3EBEU1FtkSxP2uOlO0g6WqXI/ErLkTiBfWSHLsIc3E4bQAQ6gNF2AAo9fb8X
+         iN8ys2RvdQr8bCwEsN2i+dwvZkoO7rGymUsul20Pnh9RDGZUmGhbZZ7mumBPXOAkSjwj
+         4ZcvvTsVit8Rn2CRd+l7wrLmP7BruIB1588cwg5NXZ2X9lcraRf0j+k3fk17GjMQXNZV
+         OrxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=nB4e6hJ4iiTdgUlpoHX4JiHqvuWD9iBvhiQUSGuoJO4=;
+        b=Ct3QysFYp8ax6evBXa6IPOv5K1+PCHe4tbQL3CV9ObvMOcmMI+uGA+mgUHiBXSun5t
+         3LVIFgm1XMs1R3Kg0CVstfteOwY2XPNN9NXvbh58LB4n+Q6jelxx5a3VDbe8Uwsskwyu
+         0Bl80TL6u05mGL+DAlR6xrZgal2K52/xcjDTrgHOelyeBkxrxXftlwd0tF9JD3vfuGhH
+         0kriw7Szz1cr7beDh//Vv2of9dCVImI9RnlQP/kev22qOvRUmhMix33HgkMtVyn74MKk
+         Owc6vMQwidxIsBMqV6PFPcf4kB5iIzQfTQVBwzNvhLT5CyDUejBVNNsjdt31jLo80K3w
+         TKeA==
+X-Gm-Message-State: AOAM530d5JXSlOY8HespNPpGwGB/M0115esypj4Jjjus9N4iwTOLW6O1
+        QfdiVcUBycBLBR6rRl6Ezlv9Ow==
+X-Google-Smtp-Source: ABdhPJyNUjeIiGBnw2kscF6JUnOWj7m4wL9wSYkMZkYG1aCLf2zXnYTHDMKbZQk0kFLEsXPlzGVx8w==
+X-Received: by 2002:a7b:cc96:: with SMTP id p22mr7978156wma.69.1639498607266;
+        Tue, 14 Dec 2021 08:16:47 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id a9sm295116wrt.66.2021.12.14.08.16.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Dec 2021 08:16:46 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     mchehab@kernel.org, hverkuil@xs4all.nl, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, mjpeg-users@lists.sourceforge.net,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH v4 07/18] staging: media: zoran: remove vidmem
+Date:   Tue, 14 Dec 2021 16:16:25 +0000
+Message-Id: <20211214161636.1886900-8-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211214161636.1886900-1-clabbe@baylibre.com>
+References: <20211214161636.1886900-1-clabbe@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hyungwoo's e-mail no longer works so I presume he's left the company. Drop
-Hyungwoo as maintainer on ov5670 driver and remove his e-mail from other
-sensor drivers.
+The vidmem parameter is no longer necessary since we removed framebuffer
+support.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- MAINTAINERS                 | 1 -
- drivers/media/i2c/imx319.c  | 2 +-
- drivers/media/i2c/imx355.c  | 2 +-
- drivers/media/i2c/ov13858.c | 2 +-
- drivers/media/i2c/ov5670.c  | 2 +-
- 5 files changed, 4 insertions(+), 5 deletions(-)
+ drivers/staging/media/zoran/zoran_card.c | 15 ---------------
+ 1 file changed, 15 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 38235471fed0..79fd8a012893 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14106,7 +14106,6 @@ F:	drivers/media/i2c/ov5647.c
+diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
+index a7750442ef9e..9cd49f85a56e 100644
+--- a/drivers/staging/media/zoran/zoran_card.c
++++ b/drivers/staging/media/zoran/zoran_card.c
+@@ -39,17 +39,6 @@ static int card[BUZ_MAX] = { [0 ... (BUZ_MAX - 1)] = -1 };
+ module_param_array(card, int, NULL, 0444);
+ MODULE_PARM_DESC(card, "Card type");
  
- OMNIVISION OV5670 SENSOR DRIVER
- M:	Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>
--M:	Hyungwoo Yang <hyungwoo.yang@intel.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
-diff --git a/drivers/media/i2c/imx319.c b/drivers/media/i2c/imx319.c
-index daa976858e29..a2b5a34de76b 100644
---- a/drivers/media/i2c/imx319.c
-+++ b/drivers/media/i2c/imx319.c
-@@ -2565,6 +2565,6 @@ module_i2c_driver(imx319_i2c_driver);
- MODULE_AUTHOR("Qiu, Tianshu <tian.shu.qiu@intel.com>");
- MODULE_AUTHOR("Rapolu, Chiranjeevi <chiranjeevi.rapolu@intel.com>");
- MODULE_AUTHOR("Bingbu Cao <bingbu.cao@intel.com>");
--MODULE_AUTHOR("Yang, Hyungwoo <hyungwoo.yang@intel.com>");
-+MODULE_AUTHOR("Yang, Hyungwoo");
- MODULE_DESCRIPTION("Sony imx319 sensor driver");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/media/i2c/imx355.c b/drivers/media/i2c/imx355.c
-index cb51c81786bd..3922b9305978 100644
---- a/drivers/media/i2c/imx355.c
-+++ b/drivers/media/i2c/imx355.c
-@@ -1851,6 +1851,6 @@ module_i2c_driver(imx355_i2c_driver);
- MODULE_AUTHOR("Qiu, Tianshu <tian.shu.qiu@intel.com>");
- MODULE_AUTHOR("Rapolu, Chiranjeevi <chiranjeevi.rapolu@intel.com>");
- MODULE_AUTHOR("Bingbu Cao <bingbu.cao@intel.com>");
--MODULE_AUTHOR("Yang, Hyungwoo <hyungwoo.yang@intel.com>");
-+MODULE_AUTHOR("Yang, Hyungwoo");
- MODULE_DESCRIPTION("Sony imx355 sensor driver");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/media/i2c/ov13858.c b/drivers/media/i2c/ov13858.c
-index b4d22f5d9933..d5fe67c763f7 100644
---- a/drivers/media/i2c/ov13858.c
-+++ b/drivers/media/i2c/ov13858.c
-@@ -1818,6 +1818,6 @@ module_i2c_driver(ov13858_i2c_driver);
+-/*
+- * The video mem address of the video card. The driver has a little database
+- * for some videocards to determine it from there. If your video card is not
+- * in there you have either to give it to the driver as a parameter or set
+- * in a VIDIOCSFBUF ioctl
+- */
+-
+-static unsigned long vidmem;	/* default = 0 - Video memory base address */
+-module_param_hw(vidmem, ulong, iomem, 0444);
+-MODULE_PARM_DESC(vidmem, "Default video memory base address");
+-
+ /* Default input and video norm at startup of the driver. */
  
- MODULE_AUTHOR("Kan, Chris <chris.kan@intel.com>");
- MODULE_AUTHOR("Rapolu, Chiranjeevi <chiranjeevi.rapolu@intel.com>");
--MODULE_AUTHOR("Yang, Hyungwoo <hyungwoo.yang@intel.com>");
-+MODULE_AUTHOR("Yang, Hyungwoo");
- MODULE_DESCRIPTION("Omnivision ov13858 sensor driver");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
-index 251f459ab484..165cb34ca202 100644
---- a/drivers/media/i2c/ov5670.c
-+++ b/drivers/media/i2c/ov5670.c
-@@ -2585,6 +2585,6 @@ static struct i2c_driver ov5670_i2c_driver = {
- module_i2c_driver(ov5670_i2c_driver);
+ static unsigned int default_input;	/* default 0 = Composite, 1 = S-Video */
+@@ -1218,10 +1207,6 @@ static int zoran_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 		jpg_bufsize = 8192;
+ 	if (jpg_bufsize > (512 * 1024))
+ 		jpg_bufsize = 512 * 1024;
+-	/* Use parameter for vidmem or try to find a video card */
+-	if (vidmem)
+-		pci_info(pdev, "%s: Using supplied video memory base address @ 0x%lx\n",
+-			 ZORAN_NAME, vidmem);
  
- MODULE_AUTHOR("Rapolu, Chiranjeevi <chiranjeevi.rapolu@intel.com>");
--MODULE_AUTHOR("Yang, Hyungwoo <hyungwoo.yang@intel.com>");
-+MODULE_AUTHOR("Yang, Hyungwoo");
- MODULE_DESCRIPTION("Omnivision ov5670 sensor driver");
- MODULE_LICENSE("GPL v2");
+ 	/* some mainboards might not do PCI-PCI data transfer well */
+ 	if (pci_pci_problems & (PCIPCI_FAIL | PCIAGP_FAIL | PCIPCI_ALIMAGIK))
 -- 
-2.30.2
+2.32.0
 
