@@ -2,34 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0056C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 15 Dec 2021 06:59:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7505EC4332F
+	for <linux-media@archiver.kernel.org>; Wed, 15 Dec 2021 06:59:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240381AbhLOG7o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Dec 2021 01:59:44 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:34038 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S240353AbhLOG7j (ORCPT
+        id S240401AbhLOG7q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Dec 2021 01:59:46 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:52216 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S240346AbhLOG7i (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Dec 2021 01:59:39 -0500
-X-UUID: 40d7d2158a0749588d135162ee6c86b8-20211215
-X-UUID: 40d7d2158a0749588d135162ee6c86b8-20211215
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        Wed, 15 Dec 2021 01:59:38 -0500
+X-UUID: d18215e442a3414cb37c7f5a110d3dc9-20211215
+X-UUID: d18215e442a3414cb37c7f5a110d3dc9-20211215
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2087014236; Wed, 15 Dec 2021 14:59:35 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1352448132; Wed, 15 Dec 2021 14:59:33 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 15 Dec 2021 14:59:34 +0800
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 15 Dec 2021 14:59:31 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Wed, 15 Dec 2021 14:59:33 +0800
+ 15.0.1497.2 via Frontend Transport; Wed, 15 Dec 2021 14:59:30 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Tzung-Bi Shih" <tzungbi@chromium.org>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
         Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -45,15 +44,16 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         Irui Wang <irui.wang@mediatek.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v1, 05/12] media: mtk-vcodec: Call v4l2_m2m_set_dst_buffered() set capture buffer buffered
-Date:   Wed, 15 Dec 2021 14:59:19 +0800
-Message-ID: <20211215065926.8761-6-yunfei.dong@mediatek.com>
+Subject: [PATCH v1, 03/12] media: mtk-vcodec: get frame buffer size from scp
+Date:   Wed, 15 Dec 2021 14:59:17 +0800
+Message-ID: <20211215065926.8761-4-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211215065926.8761-1-yunfei.dong@mediatek.com>
 References: <20211215065926.8761-1-yunfei.dong@mediatek.com>
@@ -67,30 +67,224 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Yunfei Dong <yunfei.dong@mediatek.corp-partner.google.com>
 
-For lat and core architecture, just need to get output buffer for lat
-decode. For core hardware need to get lat's message and capture buffer.
-In order to let lat and core decode in parallel, need to set capture
-buffer buffered.
+Different capture buffer format has different buffer size, need to get
+real buffer size according to buffer type from scp.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../platform/mtk-vcodec/mtk_vcodec_dec.c      |  2 +
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  2 +
+ .../media/platform/mtk-vcodec/vdec_ipi_msg.h  | 36 +++++++++++++
+ .../media/platform/mtk-vcodec/vdec_vpu_if.c   | 51 +++++++++++++++++++
+ .../media/platform/mtk-vcodec/vdec_vpu_if.h   | 15 ++++++
+ 5 files changed, 106 insertions(+)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-index 1a4013f4fb83..0d19b0f67fd6 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-@@ -315,6 +315,9 @@ static void mtk_init_vdec_params(struct mtk_vcodec_ctx *ctx)
- 	src_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
- 				 V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+index 130ecef2e766..87891ebd7246 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+@@ -466,6 +466,8 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
+ 			}
+ 			ctx->state = MTK_STATE_INIT;
+ 		}
++	} else {
++		ctx->capture_fourcc = fmt->fourcc;
+ 	}
  
-+	if (ctx->dev->vdec_pdata->hw_arch != MTK_VDEC_PURE_SINGLE_CORE)
-+		v4l2_m2m_set_dst_buffered(ctx->m2m_ctx, 1);
+ 	/*
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index e9a31306b956..fc2c23deb825 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -277,6 +277,7 @@ struct vdec_pic_info {
+  *		     to be used with encoder and stateful decoder.
+  * @is_flushing: set to true if flushing is in progress.
+  * @current_codec: current set input codec, in V4L2 pixel format
++ * @capture_fourcc: capture queue type, in V4L2 pixel format
+  *
+  * @colorspace: enum v4l2_colorspace; supplemental to pixelformat
+  * @ycbcr_enc: enum v4l2_ycbcr_encoding, Y'CbCr encoding
+@@ -322,6 +323,7 @@ struct mtk_vcodec_ctx {
+ 	bool is_flushing;
+ 
+ 	u32 current_codec;
++	u32 capture_fourcc;
+ 
+ 	enum v4l2_colorspace colorspace;
+ 	enum v4l2_ycbcr_encoding ycbcr_enc;
+diff --git a/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h b/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
+index 5daca8d52ebb..d00e555cf27a 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
++++ b/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
+@@ -20,6 +20,7 @@ enum vdec_ipi_msgid {
+ 	AP_IPIMSG_DEC_RESET = 0xA004,
+ 	AP_IPIMSG_DEC_CORE = 0xA005,
+ 	AP_IPIMSG_DEC_CORE_END = 0xA006,
++	AP_IPIMSG_DEC_GET_PARAM = 0xA007,
+ 
+ 	VPU_IPIMSG_DEC_INIT_ACK = 0xB000,
+ 	VPU_IPIMSG_DEC_START_ACK = 0xB001,
+@@ -28,6 +29,7 @@ enum vdec_ipi_msgid {
+ 	VPU_IPIMSG_DEC_RESET_ACK = 0xB004,
+ 	VPU_IPIMSG_DEC_CORE_ACK = 0xB005,
+ 	VPU_IPIMSG_DEC_CORE_END_ACK = 0xB006,
++	VPU_IPIMSG_DEC_GET_PARAM_ACK = 0xB007,
+ };
+ 
+ /**
+@@ -114,4 +116,38 @@ struct vdec_vpu_ipi_init_ack {
+ 	uint32_t inst_id;
+ };
+ 
++/**
++ * struct vdec_ap_ipi_get_param - for AP_IPIMSG_SET_PARAM
++ * @msg_id	: AP_IPIMSG_DEC_START
++ * @inst_id     : instance ID. Used if the ABI version >= 2.
++ * @data	: picture information
++ * @param_type	: get param type
++ * @codec_type	: Codec fourcc
++ */
++struct vdec_ap_ipi_get_param {
++	uint32_t msg_id;
++	uint32_t inst_id;
++	uint32_t data[4];
++	uint32_t param_type;
++	uint32_t codec_type;
++};
 +
- 	/* Support request api for output plane */
- 	src_vq->supports_requests = true;
- 	src_vq->requires_requests = true;
++
++/**
++ * struct vdec_vpu_ipi_init_ack - for VPU_IPIMSG_DEC_INIT_ACK
++ * @msg_id	: VPU_IPIMSG_DEC_INIT_ACK
++ * @status	: VPU exeuction result
++ * @ap_inst_addr	: AP vcodec_vpu_inst instance address
++ * @data     : picture information from SCP.
++ * @param_type	: get param type
++ */
++struct vdec_vpu_ipi_get_param_ack {
++	uint32_t msg_id;
++	int32_t status;
++	uint64_t ap_inst_addr;
++	uint32_t data[4];
++	uint32_t param_type;
++	uint32_t reserved;
++};
++
+ #endif
+diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
+index 21f6d9c5a371..6f9bcc2b0bb9 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
++++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
+@@ -54,6 +54,27 @@ static void handle_init_ack_msg(const struct vdec_vpu_ipi_init_ack *msg)
+ 	}
+ }
+ 
++static void handle_get_param_msg_ack(
++	const struct vdec_vpu_ipi_get_param_ack *msg)
++{
++	struct vdec_vpu_inst *vpu = (struct vdec_vpu_inst *)
++					(unsigned long)msg->ap_inst_addr;
++
++	mtk_vcodec_debug(vpu, "+ ap_inst_addr = 0x%llx", msg->ap_inst_addr);
++
++	/* param_type is enum vdec_get_param_type */
++	switch(msg->param_type) {
++	case 2:
++		vpu->fb_sz[0] = msg->data[0];
++		vpu->fb_sz[1] = msg->data[1];
++		break;
++	default:
++		mtk_vcodec_err(vpu, "invalid get param type=%d", msg->param_type);
++		vpu->failure = 1;
++		break;
++	}
++}
++
+ /*
+  * vpu_dec_ipi_handler - Handler for VPU ipi message.
+  *
+@@ -89,6 +110,9 @@ static void vpu_dec_ipi_handler(void *data, unsigned int len, void *priv)
+ 		case VPU_IPIMSG_DEC_CORE_END_ACK:
+ 			break;
+ 
++		case VPU_IPIMSG_DEC_GET_PARAM_ACK:
++			handle_get_param_msg_ack(data);
++			break;
+ 		default:
+ 			mtk_vcodec_err(vpu, "invalid msg=%X", msg->msg_id);
+ 			break;
+@@ -217,6 +241,33 @@ int vpu_dec_start(struct vdec_vpu_inst *vpu, uint32_t *data, unsigned int len)
+ 	return err;
+ }
+ 
++int vpu_dec_get_param(struct vdec_vpu_inst *vpu, uint32_t *data,
++	unsigned int len, unsigned int param_type)
++{
++	struct vdec_ap_ipi_get_param msg;
++	int i;
++	int err;
++
++	mtk_vcodec_debug_enter(vpu);
++
++	if (len > ARRAY_SIZE(msg.data)) {
++		mtk_vcodec_err(vpu, "invalid len = %d\n", len);
++		return -EINVAL;
++	}
++
++	memset(&msg, 0, sizeof(msg));
++	msg.msg_id = AP_IPIMSG_DEC_GET_PARAM;
++	msg.inst_id = vpu->inst_id;
++	for (i = 0; i < len; i++)
++		msg.data[i] = data[i];
++	msg.param_type = param_type;
++	msg.codec_type = vpu->codec_type;
++
++	err = vcodec_vpu_send_msg(vpu, (void *)&msg, sizeof(msg));
++	mtk_vcodec_debug(vpu, "- ret=%d", err);
++	return err;
++}
++
+ int vpu_dec_core(struct vdec_vpu_inst *vpu)
+ {
+ 	return vcodec_send_ap_ipi(vpu, AP_IPIMSG_DEC_CORE);
+diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
+index 4cb3c7f5a3ad..963f8d4877b7 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
++++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
+@@ -28,6 +28,8 @@ struct mtk_vcodec_ctx;
+  * @wq          : wait queue to wait VPU message ack
+  * @handler     : ipi handler for each decoder
+  * @codec_type     : use codec type to separate different codecs
++ * @capture_type    : used capture type to separate different capture format
++ * @fb_sz  : frame buffer size of each plane
+  */
+ struct vdec_vpu_inst {
+ 	int id;
+@@ -42,6 +44,8 @@ struct vdec_vpu_inst {
+ 	wait_queue_head_t wq;
+ 	mtk_vcodec_ipi_handler handler;
+ 	unsigned int codec_type;
++	unsigned int capture_type;
++	unsigned int fb_sz[2];
+ };
+ 
+ /**
+@@ -104,4 +108,15 @@ int vpu_dec_core(struct vdec_vpu_inst *vpu);
+  */
+ int vpu_dec_core_end(struct vdec_vpu_inst *vpu);
+ 
++/**
++ * vpu_dec_get_param - get param from scp
++ *
++ * @vpu : instance for vdec_vpu_inst
++ * @data: meta data to pass bitstream info to VPU decoder
++ * @len : meta data length
++ * @param_type : get param type
++ */
++int vpu_dec_get_param(struct vdec_vpu_inst *vpu, uint32_t *data,
++	unsigned int len, unsigned int param_type);
++
+ #endif
 -- 
 2.25.1
 
