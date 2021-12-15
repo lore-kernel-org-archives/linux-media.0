@@ -2,399 +2,403 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2B24C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 15 Dec 2021 06:36:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66191C4332F
+	for <linux-media@archiver.kernel.org>; Wed, 15 Dec 2021 06:59:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbhLOGgY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Dec 2021 01:36:24 -0500
-Received: from mail-dm6nam12on2059.outbound.protection.outlook.com ([40.107.243.59]:2400
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233763AbhLOGgX (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Dec 2021 01:36:23 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gSBlVyS8mKTBIiDxM1LUo4kXyErIzes6bPaRRweE0AedpHjDi3VbJK+dCvvpBOHYaDLpnQ1TVELrX/DohPa6w5jupBYb1o/xZHcV4J1QW9hzHB4QPjmMoCoHKWM02Lb+mYyWOj1N4e1m5siVRrhes+v6y5vif6Cc8sQ/llthCbcgH8VyKCSTkqaANvMD3vdUyUSpDXQMorRO9tlind0ObIn8ossOsXSgMMxpMxuhxnfsopzxHbvZ8gvw2Zgiskyn3QMU5Ay0+hRlpTUoCtMSKyXWe15rhr7c5fJ9E0/BLjMkNDoNnvp5MjN7pcbQMYihUqQUVuY7j9P6e+DSM50Z5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MkJpTDEOV/NhgHyFM+e4uQDJbN4TeUz8jCzJdL9i+S4=;
- b=CtpwVQEPKMoteIRrIdtf9OjJM431Z1bb1xPSKeZLxxgWo7y91yAcnkbjMf9d42pgpmdTGMDRp3QDqZ2FxqabcAjIlGjUqWhbjS8L13J3FT10C3K4gKQLtyv5eWrBkGr6q2ZhknKVxum+7k3ib6wTFPliyHjRXfLRnHkqii56tDtHPpb6boe3AYeQcupo2sAAMry0azdm+zipwKHqMYkqc5tnfUIwjX6vab9UQgN3jiXwSn54OX8fb6yuvYVSVjz0FxZ3NNH7BwDMFVe+yDCf2RPeg/JhbftMQsTb3dd2CARZr8A2+f8KHwr3lVYe6Xsoq8l8SzdwOaL5sP7AMdQHVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MkJpTDEOV/NhgHyFM+e4uQDJbN4TeUz8jCzJdL9i+S4=;
- b=I+/duAwmcUfJkeZfcmifX6OczL7tSu6UPOQcdyXPNDHbP70kU+g5MsqsiXRmpnqo9fvR5VABzE1QqmyXFKvhRcVlt/IznOTxY1E0tQ8cMvVqCOultZSmsy1oOPdqFx7Nsd3uR4d3+2j8idvxLmYHwn6hZ1kzW2x3ELEMM+rluMY=
-Received: from DM5PR18CA0067.namprd18.prod.outlook.com (2603:10b6:3:22::29) by
- DM4PR12MB5165.namprd12.prod.outlook.com (2603:10b6:5:394::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4801.14; Wed, 15 Dec 2021 06:36:21 +0000
-Received: from DM6NAM11FT029.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:22:cafe::a3) by DM5PR18CA0067.outlook.office365.com
- (2603:10b6:3:22::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17 via Frontend
- Transport; Wed, 15 Dec 2021 06:36:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT029.mail.protection.outlook.com (10.13.173.23) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4778.13 via Frontend Transport; Wed, 15 Dec 2021 06:36:21 +0000
-Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 15 Dec
- 2021 00:36:17 -0600
-From:   Huang Rui <ray.huang@amd.com>
-To:     <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        "Sumit Semwal" <sumit.semwal@linaro.org>
-CC:     <amd-gfx@lists.freedesktop.org>, <linux-media@vger.kernel.org>,
-        "Alex Deucher" <alexander.deucher@amd.com>,
-        Monk Liu <Monk.Liu@amd.com>,
-        "Andrey Grodzovsky" <andrey.grodzovsky@amd.com>,
-        Huang Rui <ray.huang@amd.com>
-Subject: [PATCH v3] drm/amdgpu: introduce new amdgpu_fence object to indicate the job embedded fence
-Date:   Wed, 15 Dec 2021 14:35:51 +0800
-Message-ID: <20211215063551.2810601-1-ray.huang@amd.com>
+        id S240315AbhLOG7f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Dec 2021 01:59:35 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:33856 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S240305AbhLOG7e (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 15 Dec 2021 01:59:34 -0500
+X-UUID: 0e18659cda374022af40f8cdce489d33-20211215
+X-UUID: 0e18659cda374022af40f8cdce489d33-20211215
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1176855560; Wed, 15 Dec 2021 14:59:31 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 15 Dec 2021 14:59:29 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 15 Dec
+ 2021 14:59:28 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Wed, 15 Dec 2021 14:59:27 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Tzung-Bi Shih" <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v1, 01/12] media: mtk-vcodec: Add vdec enable/disable hardware helpers
+Date:   Wed, 15 Dec 2021 14:59:15 +0800
+Message-ID: <20211215065926.8761-2-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211215065926.8761-1-yunfei.dong@mediatek.com>
+References: <20211215065926.8761-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2f0bdeb9-50c1-4037-3760-08d9bf953539
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5165:EE_
-X-Microsoft-Antispam-PRVS: <DM4PR12MB51656D10661E3385D4BD8402EC769@DM4PR12MB5165.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:142;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MLpmukgoMXfinB+YEdS1CWX8Q6/15fRuyqv4ooO4rdwzuV9S7yOg6SPKdYDdaMPVsRofU8JlA7VJwpmeUYbDPiT0PXv0NuL8XIuQDievv2JIXyzpXeww9x6tcj04ZEbzDbTUGF0m0aFscZvuzL2aZKpFGp6NhiwIScTX2Sh5anSulitjsVFsdNAEVavuuQb0TH6UkGGrwVE5X1azb2k0+78BVXJenVG6JO0qD195offHAXFah49XvW66DJb7xR8v9GnBu4vG6xxTlRwzTg1W0wLvGrrAX5ifth8e0MCheGahnMSRW3YaoqRYWhLsHk3DmyKlBuDkvvIKxgHV7JkpY+8uJNDCTqjxFW1kg+YB+PvaiCFF/9rz1cY57xmuR9l3DaWJi0G14elBwOo46EdNi511HM0/6am60Yv4GkRdgjHprDuGhVOwUqvm2LbkLojJnncFwZ5hw1Vej8wfeJ/pE7EvGgyf8/1LtSRXQ2GbjpGJ9H0Aa9hAY80ca0xZdIQ/eP/oBAG3/9lLSxF0CbIxqt8utzMzuo5sr0+htOd+lIWrkBXj8luqsP7Rnq6DkFNjAfm3SyHC38N5XIovo3SDtG0UbClJKk9nPR1HFVhU9+108V7m1ymyZw/pKJobgUdH+sHtFzvSDYl3N/KUSM+DTP/wO3rW76VSd/RIwv3L1IWddHXvLiqcu7+qbqkyWlLeKFac6KRcpdtv/Q5oF6UXs0/kz+8S4VafHlGvQjAvAaPW9O1y5E+v0SamXXuA58hvW3V1WFM9ffxwwmAQZyd52Jrj+8Q9NkHmIqMzLaICn3g=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(70586007)(36860700001)(2906002)(356005)(8676002)(83380400001)(81166007)(36756003)(7696005)(426003)(40460700001)(8936002)(47076005)(70206006)(508600001)(86362001)(316002)(2616005)(5660300002)(6666004)(26005)(186003)(16526019)(4326008)(1076003)(30864003)(82310400004)(54906003)(336012)(110136005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2021 06:36:21.2672
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f0bdeb9-50c1-4037-3760-08d9bf953539
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT029.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5165
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The job embedded fence donesn't initialize the flags at
-dma_fence_init(). Then we will go a wrong way in
-amdgpu_fence_get_timeline_name callback and trigger a null pointer panic
-once we enabled the trace event here. So introduce new amdgpu_fence
-object to indicate the job embedded fence.
+From: Yunfei Dong <yunfei.dong@mediatek.corp-partner.google.com>
 
-[  156.131790] BUG: kernel NULL pointer dereference, address: 00000000000002a0
-[  156.131804] #PF: supervisor read access in kernel mode
-[  156.131811] #PF: error_code(0x0000) - not-present page
-[  156.131817] PGD 0 P4D 0
-[  156.131824] Oops: 0000 [#1] PREEMPT SMP PTI
-[  156.131832] CPU: 6 PID: 1404 Comm: sdma0 Tainted: G           OE     5.16.0-rc1-custom #1
-[  156.131842] Hardware name: Gigabyte Technology Co., Ltd. Z170XP-SLI/Z170XP-SLI-CF, BIOS F20 11/04/2016
-[  156.131848] RIP: 0010:strlen+0x0/0x20
-[  156.131859] Code: 89 c0 c3 0f 1f 80 00 00 00 00 48 01 fe eb 0f 0f b6 07 38 d0 74 10 48 83 c7 01 84 c0 74 05 48 39 f7 75 ec 31 c0 c3 48 89 f8 c3 <80> 3f 00 74 10 48 89 f8 48 83 c0 01 80 38 00 75 f7 48 29 f8 c3 31
-[  156.131872] RSP: 0018:ffff9bd0018dbcf8 EFLAGS: 00010206
-[  156.131880] RAX: 00000000000002a0 RBX: ffff8d0305ef01b0 RCX: 000000000000000b
-[  156.131888] RDX: ffff8d03772ab924 RSI: ffff8d0305ef01b0 RDI: 00000000000002a0
-[  156.131895] RBP: ffff9bd0018dbd60 R08: ffff8d03002094d0 R09: 0000000000000000
-[  156.131901] R10: 000000000000005e R11: 0000000000000065 R12: ffff8d03002094d0
-[  156.131907] R13: 000000000000001f R14: 0000000000070018 R15: 0000000000000007
-[  156.131914] FS:  0000000000000000(0000) GS:ffff8d062ed80000(0000) knlGS:0000000000000000
-[  156.131923] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  156.131929] CR2: 00000000000002a0 CR3: 000000001120a005 CR4: 00000000003706e0
-[  156.131937] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  156.131942] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  156.131949] Call Trace:
-[  156.131953]  <TASK>
-[  156.131957]  ? trace_event_raw_event_dma_fence+0xcc/0x200
-[  156.131973]  ? ring_buffer_unlock_commit+0x23/0x130
-[  156.131982]  dma_fence_init+0x92/0xb0
-[  156.131993]  amdgpu_fence_emit+0x10d/0x2b0 [amdgpu]
-[  156.132302]  amdgpu_ib_schedule+0x2f9/0x580 [amdgpu]
-[  156.132586]  amdgpu_job_run+0xed/0x220 [amdgpu]
+Lock, power and clock are highly coupled operations. Adds vdec
+enable/disable hardware helpers and uses them.
 
-Signed-off-by: Huang Rui <ray.huang@amd.com>
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
+ .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |   5 -
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   | 162 +++++++++++-------
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.h   |   6 +-
+ .../media/platform/mtk-vcodec/vdec_drv_if.c   |  20 +--
+ .../platform/mtk-vcodec/vdec_msg_queue.c      |   2 +
+ 5 files changed, 110 insertions(+), 85 deletions(-)
 
-V1 -> V2: add another amdgpu_fence_ops which is for job-embedded fence.
-V2 -> V3: use amdgpu_fence_driver_clear_job_fences abstract the job fence
-clearing operation.
-
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  11 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c  | 126 ++++++++++++++-------
- drivers/gpu/drm/amd/amdgpu/amdgpu_ring.h   |   4 +-
- 3 files changed, 90 insertions(+), 51 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index 5625f7736e37..fecf7a09e5a2 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -4456,7 +4456,7 @@ int amdgpu_device_mode1_reset(struct amdgpu_device *adev)
- int amdgpu_device_pre_asic_reset(struct amdgpu_device *adev,
- 				 struct amdgpu_reset_context *reset_context)
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+index 3f8f3309cf9d..3cbdbf1ad3e5 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+@@ -223,9 +223,6 @@ static int fops_vcodec_open(struct file *file)
+ 	mtk_vcodec_dec_set_default_params(ctx);
+ 
+ 	if (v4l2_fh_is_singular(&ctx->fh)) {
+-		ret = mtk_vcodec_dec_pw_on(dev, MTK_VDEC_LAT0);
+-		if (ret < 0)
+-			goto err_load_fw;
+ 		/*
+ 		 * Does nothing if firmware was already loaded.
+ 		 */
+@@ -282,8 +279,6 @@ static int fops_vcodec_release(struct file *file)
+ 	v4l2_m2m_ctx_release(ctx->m2m_ctx);
+ 	mtk_vcodec_dec_release(ctx);
+ 
+-	if (v4l2_fh_is_singular(&ctx->fh))
+-		mtk_vcodec_dec_pw_off(dev, MTK_VDEC_LAT0);
+ 	v4l2_fh_del(&ctx->fh);
+ 	v4l2_fh_exit(&ctx->fh);
+ 	v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+index b9f5ef979c69..aa24e073e3b2 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+@@ -80,74 +80,31 @@ int mtk_vcodec_init_dec_clk(struct platform_device *pdev,
+ }
+ EXPORT_SYMBOL_GPL(mtk_vcodec_init_dec_clk);
+ 
+-int mtk_vcodec_dec_pw_on(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
++static int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
  {
--	int i, j, r = 0;
-+	int i, r = 0;
- 	struct amdgpu_job *job = NULL;
- 	bool need_full_reset =
- 		test_bit(AMDGPU_NEED_FULL_RESET, &reset_context->flags);
-@@ -4478,15 +4478,8 @@ int amdgpu_device_pre_asic_reset(struct amdgpu_device *adev,
+-	struct mtk_vdec_hw_dev *subdev_dev;
+-	struct mtk_vcodec_pm *pm;
+ 	int ret;
  
- 		/*clear job fence from fence drv to avoid force_completion
- 		 *leave NULL and vm flush fence in fence drv */
--		for (j = 0; j <= ring->fence_drv.num_fences_mask; j++) {
--			struct dma_fence *old, **ptr;
-+		amdgpu_fence_driver_clear_job_fences(ring);
- 
--			ptr = &ring->fence_drv.fences[j];
--			old = rcu_dereference_protected(*ptr, 1);
--			if (old && test_bit(AMDGPU_FENCE_FLAG_EMBED_IN_JOB_BIT, &old->flags)) {
--				RCU_INIT_POINTER(*ptr, NULL);
--			}
+-	if (vdec_dev->vdec_pdata->is_subdev_supported) {
+-		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, hw_idx);
+-		if (!subdev_dev) {
+-			mtk_v4l2_err("Failed to get hw dev\n");
+-			return -EINVAL;
 -		}
- 		/* after all hw jobs are reset, hw fence is meaningless, so force_completion */
- 		amdgpu_fence_driver_force_completion(ring);
- 	}
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-index 3b7e86ea7167..db41d16838b9 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-@@ -77,11 +77,13 @@ void amdgpu_fence_slab_fini(void)
-  * Cast helper
-  */
- static const struct dma_fence_ops amdgpu_fence_ops;
-+static const struct dma_fence_ops amdgpu_job_fence_ops;
- static inline struct amdgpu_fence *to_amdgpu_fence(struct dma_fence *f)
- {
- 	struct amdgpu_fence *__f = container_of(f, struct amdgpu_fence, base);
- 
--	if (__f->base.ops == &amdgpu_fence_ops)
-+	if (__f->base.ops == &amdgpu_fence_ops ||
-+	    __f->base.ops == &amdgpu_job_fence_ops)
- 		return __f;
- 
- 	return NULL;
-@@ -158,19 +160,18 @@ int amdgpu_fence_emit(struct amdgpu_ring *ring, struct dma_fence **f, struct amd
- 	}
- 
- 	seq = ++ring->fence_drv.sync_seq;
--	if (job != NULL && job->job_run_counter) {
-+	if (job && job->job_run_counter) {
- 		/* reinit seq for resubmitted jobs */
- 		fence->seqno = seq;
- 	} else {
--		dma_fence_init(fence, &amdgpu_fence_ops,
--				&ring->fence_drv.lock,
--				adev->fence_context + ring->idx,
--				seq);
+-		pm = &subdev_dev->pm;
+-	} else {
+-		pm = &vdec_dev->pm;
 -	}
 -
--	if (job != NULL) {
--		/* mark this fence has a parent job */
--		set_bit(AMDGPU_FENCE_FLAG_EMBED_IN_JOB_BIT, &fence->flags);
-+		if (job)
-+			dma_fence_init(fence, &amdgpu_job_fence_ops,
-+				       &ring->fence_drv.lock,
-+				       adev->fence_context + ring->idx, seq);
-+		else
-+			dma_fence_init(fence, &amdgpu_fence_ops,
-+				       &ring->fence_drv.lock,
-+				       adev->fence_context + ring->idx, seq);
- 	}
+ 	ret = pm_runtime_resume_and_get(pm->dev);
+ 	if (ret)
+ 		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
  
- 	amdgpu_ring_emit_fence(ring, ring->fence_drv.gpu_addr,
-@@ -620,6 +621,25 @@ void amdgpu_fence_driver_hw_init(struct amdgpu_device *adev)
- 	}
+ 	return ret;
  }
+-EXPORT_SYMBOL_GPL(mtk_vcodec_dec_pw_on);
  
-+/**
-+ * amdgpu_fence_clear_job_fences - clear job embedded fences of ring
-+ *
-+ * @ring: fence of the ring to be cleared
-+ *
-+ */
-+void amdgpu_fence_driver_clear_job_fences(struct amdgpu_ring *ring)
-+{
-+	int i;
-+	struct dma_fence *old, **ptr;
+-void mtk_vcodec_dec_pw_off(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
++static void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
+ {
+-	struct mtk_vdec_hw_dev *subdev_dev;
+-	struct mtk_vcodec_pm *pm;
+ 	int ret;
+ 
+-	if (vdec_dev->vdec_pdata->is_subdev_supported) {
+-		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, hw_idx);
+-		if (!subdev_dev) {
+-			mtk_v4l2_err("Failed to get hw dev\n");
+-			return;
+-		}
+-		pm = &subdev_dev->pm;
+-	} else {
+-		pm = &vdec_dev->pm;
+-	}
+-
+ 	ret = pm_runtime_put_sync(pm->dev);
+ 	if (ret)
+ 		mtk_v4l2_err("pm_runtime_put_sync fail %d", ret);
+ }
+-EXPORT_SYMBOL_GPL(mtk_vcodec_dec_pw_off);
+ 
+-void mtk_vcodec_dec_clock_on(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
++static void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
+ {
+-	struct mtk_vdec_hw_dev *subdev_dev;
+-	struct mtk_vcodec_pm *pm;
+ 	struct mtk_vcodec_clk *dec_clk;
+ 	int ret, i;
+ 
+-	if (vdec_dev->vdec_pdata->is_subdev_supported) {
+-		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, hw_idx);
+-		if (!subdev_dev) {
+-			mtk_v4l2_err("Failed to get hw dev\n");
+-			return;
+-		}
+-		pm = &subdev_dev->pm;
+-		enable_irq(subdev_dev->dec_irq);
+-	} else {
+-		pm = &vdec_dev->pm;
+-		enable_irq(vdec_dev->dec_irq);
+-	}
+-
+ 	dec_clk = &pm->vdec_clk;
+ 	for (i = 0; i < dec_clk->clk_num; i++) {
+ 		ret = clk_prepare_enable(dec_clk->clk_info[i].vcodec_clk);
+@@ -169,31 +126,112 @@ void mtk_vcodec_dec_clock_on(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
+ 	for (i -= 1; i >= 0; i--)
+ 		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
+ }
+-EXPORT_SYMBOL_GPL(mtk_vcodec_dec_clock_on);
+ 
+-void mtk_vcodec_dec_clock_off(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
++static void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm)
+ {
+-	struct mtk_vdec_hw_dev *subdev_dev;
+-	struct mtk_vcodec_pm *pm;
+ 	struct mtk_vcodec_clk *dec_clk;
+ 	int i;
+ 
++	dec_clk = &pm->vdec_clk;
++	mtk_smi_larb_put(pm->larbvdec);
++	for (i = dec_clk->clk_num - 1; i >= 0; i--)
++		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
++}
 +
-+	for (i = 0; i <= ring->fence_drv.num_fences_mask; i++) {
-+		ptr = &ring->fence_drv.fences[i];
-+		old = rcu_dereference_protected(*ptr, 1);
-+		if (old && old->ops == &amdgpu_job_fence_ops)
-+			RCU_INIT_POINTER(*ptr, NULL);
++static void mtk_vcodec_dec_enable_irq(struct mtk_vcodec_dev *vdec_dev, int comp_idx)
++ {
++	struct mtk_vdec_hw_dev *subdev_dev;
++
++	if (!test_bit(comp_idx, vdec_dev->subdev_bitmap))
++		return;
++
+ 	if (vdec_dev->vdec_pdata->is_subdev_supported) {
+-		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, hw_idx);
+-		if (!subdev_dev) {
++		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, comp_idx);
++		if (subdev_dev)
++			enable_irq(subdev_dev->dec_irq);
++		else
++			mtk_v4l2_err("Failed to get hw dev\n");
++	} else {
++		enable_irq(vdec_dev->dec_irq);
 +	}
 +}
 +
- /**
-  * amdgpu_fence_driver_force_completion - force signal latest fence of ring
-  *
-@@ -643,16 +663,14 @@ static const char *amdgpu_fence_get_driver_name(struct dma_fence *fence)
- 
- static const char *amdgpu_fence_get_timeline_name(struct dma_fence *f)
- {
--	struct amdgpu_ring *ring;
-+	return (const char *)to_amdgpu_fence(f)->ring->name;
-+}
- 
--	if (test_bit(AMDGPU_FENCE_FLAG_EMBED_IN_JOB_BIT, &f->flags)) {
--		struct amdgpu_job *job = container_of(f, struct amdgpu_job, hw_fence);
-+static const char *amdgpu_job_fence_get_timeline_name(struct dma_fence *f)
++static void mtk_vcodec_dec_disable_irq(struct mtk_vcodec_dev *vdec_dev, int comp_idx)
 +{
-+	struct amdgpu_job *job = container_of(f, struct amdgpu_job, hw_fence);
- 
--		ring = to_amdgpu_ring(job->base.sched);
--	} else {
--		ring = to_amdgpu_fence(f)->ring;
--	}
--	return (const char *)ring->name;
-+	return (const char *)to_amdgpu_ring(job->base.sched)->name;
- }
- 
- /**
-@@ -665,18 +683,25 @@ static const char *amdgpu_fence_get_timeline_name(struct dma_fence *f)
-  */
- static bool amdgpu_fence_enable_signaling(struct dma_fence *f)
- {
--	struct amdgpu_ring *ring;
-+	if (!timer_pending(&to_amdgpu_fence(f)->ring->fence_drv.fallback_timer))
-+		amdgpu_fence_schedule_fallback(to_amdgpu_fence(f)->ring);
- 
--	if (test_bit(AMDGPU_FENCE_FLAG_EMBED_IN_JOB_BIT, &f->flags)) {
--		struct amdgpu_job *job = container_of(f, struct amdgpu_job, hw_fence);
-+	return true;
-+}
- 
--		ring = to_amdgpu_ring(job->base.sched);
--	} else {
--		ring = to_amdgpu_fence(f)->ring;
--	}
-+/**
-+ * amdgpu_job_fence_enable_signaling - enable signalling on job fence
-+ * @f: fence
-+ *
-+ * This is the simliar function with amdgpu_fence_enable_signaling above, it
-+ * only handles the job embedded fence.
-+ */
-+static bool amdgpu_job_fence_enable_signaling(struct dma_fence *f)
-+{
-+	struct amdgpu_job *job = container_of(f, struct amdgpu_job, hw_fence);
- 
--	if (!timer_pending(&ring->fence_drv.fallback_timer))
--		amdgpu_fence_schedule_fallback(ring);
-+	if (!timer_pending(&to_amdgpu_ring(job->base.sched)->fence_drv.fallback_timer))
-+		amdgpu_fence_schedule_fallback(to_amdgpu_ring(job->base.sched));
- 
- 	return true;
- }
-@@ -692,19 +717,23 @@ static void amdgpu_fence_free(struct rcu_head *rcu)
- {
- 	struct dma_fence *f = container_of(rcu, struct dma_fence, rcu);
- 
--	if (test_bit(AMDGPU_FENCE_FLAG_EMBED_IN_JOB_BIT, &f->flags)) {
--	/* free job if fence has a parent job */
--		struct amdgpu_job *job;
--
--		job = container_of(f, struct amdgpu_job, hw_fence);
--		kfree(job);
--	} else {
- 	/* free fence_slab if it's separated fence*/
--		struct amdgpu_fence *fence;
-+	kmem_cache_free(amdgpu_fence_slab, to_amdgpu_fence(f));
-+}
- 
--		fence = to_amdgpu_fence(f);
--		kmem_cache_free(amdgpu_fence_slab, fence);
--	}
-+/**
-+ * amdgpu_job_fence_free - free up the job with embedded fence
-+ *
-+ * @rcu: RCU callback head
-+ *
-+ * Free up the job with embedded fence after the RCU grace period.
-+ */
-+static void amdgpu_job_fence_free(struct rcu_head *rcu)
-+{
-+	struct dma_fence *f = container_of(rcu, struct dma_fence, rcu);
++	struct mtk_vdec_hw_dev *subdev_dev;
 +
-+	/* free job if fence has a parent job */
-+	kfree(container_of(f, struct amdgpu_job, hw_fence));
- }
++	if (!test_bit(comp_idx, vdec_dev->subdev_bitmap))
++		return;
++
++	if (vdec_dev->vdec_pdata->is_subdev_supported) {
++		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, comp_idx);
++		if (subdev_dev)
++			disable_irq(subdev_dev->dec_irq);
++		else
+ 			mtk_v4l2_err("Failed to get hw dev\n");
+-			return;
+-		}
+-		pm = &subdev_dev->pm;
+-		disable_irq(subdev_dev->dec_irq);
+ 	} else {
+-		pm = &vdec_dev->pm;
+ 		disable_irq(vdec_dev->dec_irq);
+ 	}
++}
  
- /**
-@@ -720,6 +749,19 @@ static void amdgpu_fence_release(struct dma_fence *f)
- 	call_rcu(&f->rcu, amdgpu_fence_free);
- }
- 
-+/**
-+ * amdgpu_job_fence_release - callback that job embedded fence can be freed
-+ *
-+ * @f: fence
-+ *
-+ * This is the simliar function with amdgpu_fence_release above, it
-+ * only handles the job embedded fence.
-+ */
-+static void amdgpu_job_fence_release(struct dma_fence *f)
+-	dec_clk = &pm->vdec_clk;
+-	mtk_smi_larb_put(pm->larbvdec);
+-	for (i = dec_clk->clk_num - 1; i >= 0; i--)
+-		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
++static struct mtk_vcodec_pm *mtk_vcodec_dec_get_pm(struct mtk_vcodec_dev *vdec_dev,
++	int comp_idx)
 +{
-+	call_rcu(&f->rcu, amdgpu_job_fence_free);
++	struct mtk_vdec_hw_dev *subdev_dev;
++
++	if (!test_bit(comp_idx, vdec_dev->subdev_bitmap))
++		return NULL;
++
++	if (vdec_dev->vdec_pdata->is_subdev_supported) {
++		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, comp_idx);
++		if (subdev_dev)
++			return &subdev_dev->pm;
++
++		mtk_v4l2_err("Failed to get hw dev\n");
++		return NULL;
++	}
++
++	return &vdec_dev->pm;
 +}
 +
- static const struct dma_fence_ops amdgpu_fence_ops = {
- 	.get_driver_name = amdgpu_fence_get_driver_name,
- 	.get_timeline_name = amdgpu_fence_get_timeline_name,
-@@ -727,6 +769,12 @@ static const struct dma_fence_ops amdgpu_fence_ops = {
- 	.release = amdgpu_fence_release,
- };
++void mtk_vcodec_dec_enable_hardware(struct mtk_vcodec_ctx *ctx, int comp_idx)
++{
++	struct mtk_vcodec_pm *pm;
++
++	mutex_lock(&ctx->dev->dec_mutex[comp_idx]);
++	if (IS_VDEC_LAT_ARCH(ctx->dev->vdec_pdata->hw_arch) &&
++		comp_idx == MTK_VDEC_CORE) {
++		pm = mtk_vcodec_dec_get_pm(ctx->dev, MTK_VDEC_LAT0);
++		mtk_vcodec_dec_pw_on(pm);
++		mtk_vcodec_dec_clock_on(pm);
++	}
++
++	pm = mtk_vcodec_dec_get_pm(ctx->dev, comp_idx);
++	if (pm) {
++		mtk_vcodec_dec_pw_on(pm);
++		mtk_vcodec_dec_clock_on(pm);
++	}
++
++	mtk_vcodec_dec_enable_irq(ctx->dev, comp_idx);
++}
++EXPORT_SYMBOL_GPL(mtk_vcodec_dec_enable_hardware);
++
++void mtk_vcodec_dec_disable_hardware(struct mtk_vcodec_ctx *ctx, int comp_idx)
++{
++	struct mtk_vcodec_pm *pm;
++
++	mtk_vcodec_dec_disable_irq(ctx->dev, comp_idx);
++
++	pm = mtk_vcodec_dec_get_pm(ctx->dev, comp_idx);
++	mtk_vcodec_dec_clock_off(pm);
++	mtk_vcodec_dec_pw_off(pm);
++
++	if (IS_VDEC_LAT_ARCH(ctx->dev->vdec_pdata->hw_arch) &&
++		comp_idx == MTK_VDEC_CORE) {
++		pm = mtk_vcodec_dec_get_pm(ctx->dev, MTK_VDEC_LAT0);
++		mtk_vcodec_dec_clock_off(pm);
++		mtk_vcodec_dec_pw_off(pm);
++	}
++	mutex_unlock(&ctx->dev->dec_mutex[comp_idx]);
+ }
+-EXPORT_SYMBOL_GPL(mtk_vcodec_dec_clock_off);
++EXPORT_SYMBOL_GPL(mtk_vcodec_dec_disable_hardware);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+index c4121df9764f..f68ae3bd43a1 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+@@ -12,9 +12,7 @@
+ int mtk_vcodec_init_dec_clk(struct platform_device *pdev,
+ 	struct mtk_vcodec_pm *pm);
  
-+static const struct dma_fence_ops amdgpu_job_fence_ops = {
-+	.get_driver_name = amdgpu_fence_get_driver_name,
-+	.get_timeline_name = amdgpu_job_fence_get_timeline_name,
-+	.enable_signaling = amdgpu_job_fence_enable_signaling,
-+	.release = amdgpu_job_fence_release,
-+};
+-int mtk_vcodec_dec_pw_on(struct mtk_vcodec_dev *vdec_dev, int hw_idx);
+-void mtk_vcodec_dec_pw_off(struct mtk_vcodec_dev *vdec_dev, int hw_idx);
+-void mtk_vcodec_dec_clock_on(struct mtk_vcodec_dev *vdec_dev, int hw_idx);
+-void mtk_vcodec_dec_clock_off(struct mtk_vcodec_dev *vdec_dev, int hw_idx);
++void mtk_vcodec_dec_enable_hardware(struct mtk_vcodec_ctx *ctx, int comp_idx);
++void mtk_vcodec_dec_disable_hardware(struct mtk_vcodec_ctx *ctx, int comp_idx);
  
- /*
-  * Fence debugfs
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.h
-index 4d380e79752c..fae7d185ad0d 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.h
-@@ -53,9 +53,6 @@ enum amdgpu_ring_priority_level {
- #define AMDGPU_FENCE_FLAG_INT           (1 << 1)
- #define AMDGPU_FENCE_FLAG_TC_WB_ONLY    (1 << 2)
+ #endif /* _MTK_VCODEC_DEC_PM_H_ */
+diff --git a/drivers/media/platform/mtk-vcodec/vdec_drv_if.c b/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
+index 05a5b240e906..c93dd0ea3537 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
++++ b/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
+@@ -38,11 +38,9 @@ int vdec_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
+ 		return -EINVAL;
+ 	}
  
--/* fence flag bit to indicate the face is embedded in job*/
--#define AMDGPU_FENCE_FLAG_EMBED_IN_JOB_BIT		(DMA_FENCE_FLAG_USER_BITS + 1)
+-	mtk_vdec_lock(ctx);
+-	mtk_vcodec_dec_clock_on(ctx->dev, ctx->hw_id);
++	mtk_vcodec_dec_enable_hardware(ctx, ctx->hw_id);
+ 	ret = ctx->dec_if->init(ctx);
+-	mtk_vcodec_dec_clock_off(ctx->dev, ctx->hw_id);
+-	mtk_vdec_unlock(ctx);
++	mtk_vcodec_dec_disable_hardware(ctx, ctx->hw_id);
+ 
+ 	return ret;
+ }
+@@ -70,15 +68,11 @@ int vdec_if_decode(struct mtk_vcodec_ctx *ctx, struct mtk_vcodec_mem *bs,
+ 	if (!ctx->drv_handle)
+ 		return -EIO;
+ 
+-	mtk_vdec_lock(ctx);
 -
- #define to_amdgpu_ring(s) container_of((s), struct amdgpu_ring, sched)
++	mtk_vcodec_dec_enable_hardware(ctx, ctx->hw_id);
+ 	mtk_vcodec_set_curr_ctx(ctx->dev, ctx, ctx->hw_id);
+-	mtk_vcodec_dec_clock_on(ctx->dev, ctx->hw_id);
+ 	ret = ctx->dec_if->decode(ctx->drv_handle, bs, fb, res_chg);
+-	mtk_vcodec_dec_clock_off(ctx->dev, ctx->hw_id);
+ 	mtk_vcodec_set_curr_ctx(ctx->dev, NULL, ctx->hw_id);
+-
+-	mtk_vdec_unlock(ctx);
++	mtk_vcodec_dec_disable_hardware(ctx, ctx->hw_id);
  
- #define AMDGPU_IB_POOL_SIZE	(1024 * 1024)
-@@ -114,6 +111,7 @@ struct amdgpu_fence_driver {
- 	struct dma_fence		**fences;
- };
+ 	return ret;
+ }
+@@ -103,11 +97,9 @@ void vdec_if_deinit(struct mtk_vcodec_ctx *ctx)
+ 	if (!ctx->drv_handle)
+ 		return;
  
-+void amdgpu_fence_driver_clear_job_fences(struct amdgpu_ring *ring);
- void amdgpu_fence_driver_force_completion(struct amdgpu_ring *ring);
+-	mtk_vdec_lock(ctx);
+-	mtk_vcodec_dec_clock_on(ctx->dev, ctx->hw_id);
++	mtk_vcodec_dec_enable_hardware(ctx, ctx->hw_id);
+ 	ctx->dec_if->deinit(ctx->drv_handle);
+-	mtk_vcodec_dec_clock_off(ctx->dev, ctx->hw_id);
+-	mtk_vdec_unlock(ctx);
++	mtk_vcodec_dec_disable_hardware(ctx, ctx->hw_id);
  
- int amdgpu_fence_driver_init_ring(struct amdgpu_ring *ring,
+ 	ctx->drv_handle = NULL;
+ }
+diff --git a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
+index 24f1d03df9f1..2f54d04b8bdf 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
++++ b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
+@@ -212,11 +212,13 @@ static void vdec_msg_queue_core_work(struct work_struct *work)
+ 		return;
+ 
+ 	ctx = lat_buf->ctx;
++	mtk_vcodec_dec_enable_hardware(ctx, MTK_VDEC_CORE);
+ 	mtk_vcodec_set_curr_ctx(dev, ctx, MTK_VDEC_CORE);
+ 
+ 	lat_buf->core_decode(lat_buf);
+ 
+ 	mtk_vcodec_set_curr_ctx(dev, NULL, MTK_VDEC_CORE);
++	mtk_vcodec_dec_disable_hardware(ctx, MTK_VDEC_CORE);
+ 	vdec_msg_queue_qbuf(&ctx->msg_queue.lat_ctx, lat_buf);
+ 
+ 	if (!list_empty(&ctx->msg_queue.lat_ctx.ready_queue)) {
 -- 
 2.25.1
 
