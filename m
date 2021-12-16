@@ -2,52 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 934C6C433EF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Dec 2021 11:13:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD2E0C4332F
+	for <linux-media@archiver.kernel.org>; Thu, 16 Dec 2021 11:13:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236577AbhLPLNm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Dec 2021 06:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S236501AbhLPLNr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Dec 2021 06:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236547AbhLPLNa (ORCPT
+        with ESMTP id S236580AbhLPLNi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Dec 2021 06:13:30 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114B4C061401;
-        Thu, 16 Dec 2021 03:13:30 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id x6so34407357iol.13;
-        Thu, 16 Dec 2021 03:13:30 -0800 (PST)
+        Thu, 16 Dec 2021 06:13:38 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D1AC061746;
+        Thu, 16 Dec 2021 03:13:38 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id m9so34770150iop.0;
+        Thu, 16 Dec 2021 03:13:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Rzx5jUD4NI/pFUe7ZWnx346ZCIBslKEARnIfPCiUHoo=;
-        b=DnuiV6eiFqI00zTgvM7m1LhO6d/zeQM2+V2LNGcA9GATvj1AYF3A5x/zl1yzezm57t
-         ZCkYJ03zDGLelHhDZNzVAnhZvyRb9Lyf4AmMDp8CmNmNXCHN4il2WDj7QV5J+IOrL1Lq
-         hFaM2u0dym9Up7+3KFflN/a2sb+fy05GcAQGfnLTOvHnNN5iK1uOR9TWG39ajuFNoaIc
-         q4qx1WEKm1FQcNk0VtgPNnQNGge8oUZ5rhNRVE3dUl2tGQc0VLLTTLlF3r4SOlbkFWl6
-         XjszjdQjWmefW5I7CR3yblxZYNDznHgJYBvU7C1/TVq0PP875zRp6AszUcgWcVdc5lPV
-         AvIw==
+        bh=pVwaRVsa/dCilPzHdFqGN9Zx3nJSGjB1MUq/Bb2332o=;
+        b=cZVEJud2C0aEg+ZduYDuA4QjJMzZ2lC3neSwmZNaVBq6FvNN6qPcLZSYvbclDlSyU3
+         AXZdMyrKQh9LariRRwTHSiGtGItJYRXHkY99B7zIBitRVwAs++9b+laiCYJHitzJly3w
+         83cVRWIkpw+z7PKysXYz0Ao/g/CIkw7Y7ys+tsxsm8CGszJ8xz953p3w9/z4wp9nDvoz
+         hwL4kFybhHqESG+/J0ZyMBdtTKyVCEmvwxnzPoKH98/v1snfM36ouIW2XAEfvVd7ky2l
+         BMo+E7QiQLnv81f7NiKI/4kXngLJX8CGScY50USh/VwmlNYSUSEE6KLhQXeHAG27ztVw
+         X0Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Rzx5jUD4NI/pFUe7ZWnx346ZCIBslKEARnIfPCiUHoo=;
-        b=eiY4RPSF5Z3XCbMRe3JJSZ8UQG5E6SqMcv3XVSSbgt06WSX5vTjpRGO0GN++q1O+tB
-         RIrsNN4HA602jhbzklxcIeq8qeDfcMe16TiB7laLtIA21fz03AyGMd9IQrD6vGT3HPRf
-         PrXiiCuH0KHY9nKNvYnNc28MI5NBbs+z9lfqabQ6lbjS59b5vwLrEwFU4l1BidIGEzy1
-         o7lDA7W1rQZ6SszSZoY89OFWKUOfWsszmunXauroC3lSAkMGJWeZfXPZYrz+RM/ptAnG
-         7JOzFkc6RBgbFNUjHbQkxFS0vfXh3W28w7zc4bi/tMk8PoLIEU3O6wd3OkNS+Gn8G1+V
-         /CDQ==
-X-Gm-Message-State: AOAM532Vz0iuCHHev8IGCQBlkAUHMJlVv4iNjjo3T1pjKMz8UL6cpvoy
-        E2kc2Sv4S0oNPzfJzUbVILEAHVs+FImlNhvL
-X-Google-Smtp-Source: ABdhPJxnTsd/C+zIC5V2sOoMCQpF5gaWY0Z8fXHYbMfArLEgXOTaqamjaTuo5pq7NJtHFdhYgHqAjA==
-X-Received: by 2002:a02:c6c5:: with SMTP id r5mr9114049jan.110.1639653208910;
-        Thu, 16 Dec 2021 03:13:28 -0800 (PST)
+        bh=pVwaRVsa/dCilPzHdFqGN9Zx3nJSGjB1MUq/Bb2332o=;
+        b=cnfY1Uo5ZbRn2QNXCWrN9DO8GvFmThU852zzttYqqynZ+snCnqKNneIRWTi/YsF8Lc
+         OGkFN7saAQteVu4MS27tFgyun5PkV4Siew4TJ1uSui8ktQgEwZ85BoS3UptT0kP5W1cP
+         sc39vTubHRaL6wImXMzonwkE2T8hdEnzWhJL13qIB2mBN3GoIgNFpe+W+How/uzHmpJT
+         nEt8qVBRmgZW5VWZfIrobYzgPSkY8+fOze0fmyaA0HcWIfN4JtUpcKMsXV/POXvi/aRN
+         mA5uXIaioTyGVJkqjuEqKkG+dw3u2DQ4TTVn5Xut94l4wklXcliw9kij6Ts3BhsOrk+Z
+         THbw==
+X-Gm-Message-State: AOAM532weUEcL6w2ON3ppHLeargJp+L7DU8qy0/Esj3uAIOP0wOTzQs2
+        EVOnU+PT6TuC7l5vPXEydfI+oLHBOPqXi7r2
+X-Google-Smtp-Source: ABdhPJy4sVeIMJwIQeYCLkxihsRkUDA6hNdXUFrl/38M/QwdiwK4gdsBdINrQVePG+rQxgbfDGuQSg==
+X-Received: by 2002:a05:6638:3784:: with SMTP id w4mr9112168jal.144.1639653217362;
+        Thu, 16 Dec 2021 03:13:37 -0800 (PST)
 Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:fe22:1652:55f7:5197])
-        by smtp.gmail.com with ESMTPSA id h1sm3090946iow.31.2021.12.16.03.13.27
+        by smtp.gmail.com with ESMTPSA id h1sm3090946iow.31.2021.12.16.03.13.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 03:13:28 -0800 (PST)
+        Thu, 16 Dec 2021 03:13:36 -0800 (PST)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     abel.vesa@nxp.com, aford@beaconembedded.com,
@@ -67,9 +67,9 @@ Cc:     abel.vesa@nxp.com, aford@beaconembedded.com,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH V2 06/10] arm64: dts: imx8mq: Enable both G1 and G2 VPU's with vpu-blk-ctrl
-Date:   Thu, 16 Dec 2021 05:12:51 -0600
-Message-Id: <20211216111256.2362683-7-aford173@gmail.com>
+Subject: [PATCH V2 09/10] media: hantro: Add support for i.MX8MM
+Date:   Thu, 16 Dec 2021 05:12:54 -0600
+Message-Id: <20211216111256.2362683-10-aford173@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211216111256.2362683-1-aford173@gmail.com>
 References: <20211216111256.2362683-1-aford173@gmail.com>
@@ -79,98 +79,68 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-With the Hantro G1 and G2 now setup to run independently, update
-the device tree to allow both to operate.  This requires the
-vpu-blk-ctrl node to be configured.  Since vpu-blk-ctrl needs
-certain clock enabled to handle the gating of the G1 and G2
-fuses, the clock-parents and clock-rates for the various VPU's
-to be moved into the pgc_vpu because they cannot get re-parented
-once enabled, and the pgc_vpu is the highest in the chain.
+The i.MX8MM has a G1 and G2 video decoder, so add support in
+the driver for it with the post-processing removed.
 
 Signed-off-by: Adam Ford <aford173@gmail.com>
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-index 972766b67a15..5029c121d48b 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-@@ -711,7 +711,21 @@ pgc_gpu: power-domain@5 {
- 					pgc_vpu: power-domain@6 {
- 						#power-domain-cells = <0>;
- 						reg = <IMX8M_POWER_DOMAIN_VPU>;
--						clocks = <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-+						clocks = <&clk IMX8MQ_CLK_VPU_DEC_ROOT>,
-+							 <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-+							 <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-+						assigned-clocks = <&clk IMX8MQ_CLK_VPU_G1>,
-+								  <&clk IMX8MQ_CLK_VPU_G2>,
-+								  <&clk IMX8MQ_CLK_VPU_BUS>,
-+								  <&clk IMX8MQ_VPU_PLL_BYPASS>;
-+						assigned-clock-parents = <&clk IMX8MQ_VPU_PLL_OUT>,
-+									 <&clk IMX8MQ_VPU_PLL_OUT>,
-+									 <&clk IMX8MQ_SYS1_PLL_800M>,
-+									 <&clk IMX8MQ_VPU_PLL>;
-+						assigned-clock-rates = <600000000>,
-+								       <600000000>,
-+								       <800000000>,
-+								       <0>;
- 					};
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index e7afda388ee5..118c4fa3d556 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -608,6 +608,8 @@ static const struct of_device_id of_hantro_match[] = {
+ 	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
+ #endif
+ #ifdef CONFIG_VIDEO_HANTRO_IMX8M
++	{ .compatible = "nxp,imx8mm-vpu-g1", .data = &imx8mm_vpu_g1_variant, },
++	{ .compatible = "nxp,imx8mm-vpu-g2", .data = &imx8mm_vpu_g2_variant },
+ 	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
+ 	{ .compatible = "nxp,imx8mq-vpu-g1", .data = &imx8mq_vpu_g1_variant },
+ 	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant },
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 96b14b43a4af..6ae1aeed2e16 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -299,6 +299,8 @@ enum hantro_enc_fmt {
+ 	ROCKCHIP_VPU_ENC_FMT_UYVY422 = 3,
+ };
  
- 					pgc_disp: power-domain@7 {
-@@ -1432,30 +1446,31 @@ usb3_phy1: usb-phy@382f0040 {
- 			status = "disabled";
- 		};
- 
--		vpu: video-codec@38300000 {
--			compatible = "nxp,imx8mq-vpu";
--			reg = <0x38300000 0x10000>,
--			      <0x38310000 0x10000>,
--			      <0x38320000 0x10000>;
--			reg-names = "g1", "g2", "ctrl";
--			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "g1", "g2";
-+		vpu_g1: video-codec@38300000 {
-+			compatible = "nxp,imx8mq-vpu-g1";
-+			reg = <0x38300000 0x10000>;
-+			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>;
-+			power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G1>;
-+		};
++extern const struct hantro_variant imx8mm_vpu_g1_variant;
++extern const struct hantro_variant imx8mm_vpu_g2_variant;
+ extern const struct hantro_variant imx8mq_vpu_g1_variant;
+ extern const struct hantro_variant imx8mq_vpu_g2_variant;
+ extern const struct hantro_variant imx8mq_vpu_variant;
+diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+index 4925f2a07d4c..dc7fc19283e8 100644
+--- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
++++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+@@ -347,3 +347,26 @@ const struct hantro_variant imx8mq_vpu_g2_variant = {
+ 	.clk_names = imx8mq_g2_clk_names,
+ 	.num_clocks = ARRAY_SIZE(imx8mq_g2_clk_names),
+ };
 +
-+		vpu_g2: video-codec@38310000 {
-+			compatible = "nxp,imx8mq-vpu-g2";
-+			reg = <0x38310000 0x10000>;
-+			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-+			power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G2>;
-+		};
++const struct hantro_variant imx8mm_vpu_g1_variant = {
++	.dec_fmts = imx8m_vpu_dec_fmts,
++	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_dec_fmts),
++	.codec = HANTRO_MPEG2_DECODER | HANTRO_VP8_DECODER |
++		 HANTRO_H264_DECODER,
++	.codec_ops = imx8mq_vpu_g1_codec_ops,
++	.irqs = imx8mq_irqs,
++	.num_irqs = ARRAY_SIZE(imx8mq_irqs),
++	.clk_names = imx8mq_g1_clk_names,
++	.num_clocks = ARRAY_SIZE(imx8mq_g1_clk_names),
++};
 +
-+		vpu_blk_ctrl: blk-ctrl@38320000 {
-+			compatible = "fsl,imx8mq-vpu-blk-ctrl";
-+			reg = <0x38320000 0x100>;
-+			power-domains = <&pgc_vpu>, <&pgc_vpu>, <&pgc_vpu>;
-+			power-domain-names = "bus", "g1", "g2";
- 			clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
--				 <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
--				 <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
--			clock-names = "g1", "g2", "bus";
--			assigned-clocks = <&clk IMX8MQ_CLK_VPU_G1>,
--					  <&clk IMX8MQ_CLK_VPU_G2>,
--					  <&clk IMX8MQ_CLK_VPU_BUS>,
--					  <&clk IMX8MQ_VPU_PLL_BYPASS>;
--			assigned-clock-parents = <&clk IMX8MQ_VPU_PLL_OUT>,
--						 <&clk IMX8MQ_VPU_PLL_OUT>,
--						 <&clk IMX8MQ_SYS1_PLL_800M>,
--						 <&clk IMX8MQ_VPU_PLL>;
--			assigned-clock-rates = <600000000>, <600000000>,
--					       <800000000>, <0>;
--			power-domains = <&pgc_vpu>;
-+				 <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-+			clock-names = "g1", "g2";
-+			#power-domain-cells = <1>;
- 		};
- 
- 		pcie0: pcie@33800000 {
++const struct hantro_variant imx8mm_vpu_g2_variant = {
++	.dec_fmts = imx8m_vpu_g2_dec_fmts,
++	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_g2_dec_fmts),
++	.codec = HANTRO_HEVC_DECODER | HANTRO_VP9_DECODER,
++	.codec_ops = imx8mq_vpu_g2_codec_ops,
++	.irqs = imx8mq_g2_irqs,
++	.num_irqs = ARRAY_SIZE(imx8mq_g2_irqs),
++	.clk_names = imx8mq_g2_clk_names,
++	.num_clocks = ARRAY_SIZE(imx8mq_g2_clk_names),
++};
 -- 
 2.32.0
 
