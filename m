@@ -2,140 +2,138 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6A64C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 16 Dec 2021 15:18:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEDAAC433EF
+	for <linux-media@archiver.kernel.org>; Thu, 16 Dec 2021 16:06:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbhLPPSM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Dec 2021 10:18:12 -0500
-Received: from mga01.intel.com ([192.55.52.88]:27706 "EHLO mga01.intel.com"
+        id S238939AbhLPQG6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Dec 2021 11:06:58 -0500
+Received: from meesny.iki.fi ([195.140.195.201]:48676 "EHLO meesny.iki.fi"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232605AbhLPPSL (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Dec 2021 10:18:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639667891; x=1671203891;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Sj3XHCLBEEWpQ+x2/i2MjFTaTVO1ZOBXBg0AInTZJVc=;
-  b=l7ysjpgnN8ehWL7cmHylSF9K1NlvyC4JMDfJxi9oQ9DW/RF0fTys95jV
-   WI8+ZsrdMVUoePpM58f2rSY/5tG9eNyIW4ZapVXcQLbj7sVDnRM0+Roza
-   VAXGQqyoiGs59BCUZ03jMTkpKwYInQ/JlMQdZ87Qy9kvFTmflQQo+Ho0d
-   PK1F73IRueVEq2W9U2/GNIaSZryRv8rtDbQKsQI69tOq6NYS7xTceTbc8
-   hfGxfrAmdtMXv+3ki8LgWLTwM+z9+/x0qsYapRI7qHXLmkmEWfiVZxDUg
-   ErNMB4CjTAd5UB6yrL/84ARMl9a9sVSVW9Vh1mINNJmJLF1h0wDywaHpL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="263681381"
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="263681381"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 07:18:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="546012901"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 16 Dec 2021 07:18:08 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxsWF-0003NX-TC; Thu, 16 Dec 2021 15:18:07 +0000
-Date:   Thu, 16 Dec 2021 23:17:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH v16, 13/19] media: mtk-vcodec: Add work queue for core
- hardware decode
-Message-ID: <202112162312.CKVSGb5P-lkp@intel.com>
-References: <20211216094552.19104-14-yunfei.dong@mediatek.com>
+        id S238861AbhLPQGv (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 Dec 2021 11:06:51 -0500
+Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id C41D72067E;
+        Thu, 16 Dec 2021 18:06:49 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1639670809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=bz1RfdFo0nnYNYeu6J+BkgWlcCFi5f/Q1ybmg6NPCN8=;
+        b=YTvMIGXt/e0qIGTpCrUG67R2ckvK6uZDDReHVaXJI+aq6NhzmOxQZfyHT3dfA7TNDX1V7F
+        6uh4y9RLVg3mmnVbBDr7xvVKlDEhnbCUJVs6gNcsptiFIvgs7RzEOiV04IEro8XcrM4M4Y
+        lGh/NwNKjx8UMeJpWZqt/zks/yqOk68=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 0FB5B634C94;
+        Thu, 16 Dec 2021 18:06:48 +0200 (EET)
+Date:   Thu, 16 Dec 2021 18:06:48 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     linux-media@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [GIT PULL FOR 5.17] Ipu3-cio2 VCM on Windows BIOS
+Message-ID: <YbtkGLF1cNN6d2cC@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211216094552.19104-14-yunfei.dong@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1639670809; a=rsa-sha256; cv=none;
+        b=CiHpSVeVhwxwpuKlTDJnObHbYWFoFblkDR2O1FVqpYj13FRKfs7T4+DAp3hmAgVYbiK35H
+        CsQT8xqGBUdnPnctzPVKjUEfI4WjWKpyDUsSAhs3yqtJnOKK4GsojNZRT39f2U6RUJ/MFh
+        Uer2/4DtGAuhnesqpEoAEBOg0W1VPjE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1639670809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=bz1RfdFo0nnYNYeu6J+BkgWlcCFi5f/Q1ybmg6NPCN8=;
+        b=VusdPTUCG7CWTS9zcjxWEa0lfDriJwzH+suiv785T/9i465x3pIYOT1+zRcH8qEKPtmzns
+        sQzbIlul9HZfOalWH/1urnIZRdR2xdDqqVXpZe/+VQnNeGmuQKCUf74RmyOagZQp169JBR
+        C4dvDB4olBOlPvhGcR82vPgNkueQr0s=
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Yunfei,
+Hi Mauro,
 
-Thank you for the patch! Perhaps something to improve:
+Here are ipu3-cio2 patches for supporting VCM on those laptops shipped with
+Windows from Hans de Goede, on top of an immutable branch on rc1.
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on next-20211215]
-[cannot apply to v5.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I pulled Hans's branch on the media tree master and applied the media
+patches there. I hope this is fine.
 
-url:    https://github.com/0day-ci/linux/commits/Yunfei-Dong/Support-multi-hardware-decode-using-of_platform_populate/20211216-174823
-base:   git://linuxtv.org/media_tree.git master
-config: alpha-randconfig-r033-20211216 (https://download.01.org/0day-ci/archive/20211216/202112162312.CKVSGb5P-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/7ce79e6a446bd8e992083b0fb72f0934009ca99d
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Yunfei-Dong/Support-multi-hardware-decode-using-of_platform_populate/20211216-174823
-        git checkout 7ce79e6a446bd8e992083b0fb72f0934009ca99d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/media/platform/mtk-vcodec/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/alpha/include/asm/bug.h:23,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/current.h:5,
-                    from ./arch/alpha/include/generated/asm/current.h:1,
-                    from include/linux/sched.h:12,
-                    from include/linux/freezer.h:8,
-                    from drivers/media/platform/mtk-vcodec/vdec_msg_queue.c:7:
-   drivers/media/platform/mtk-vcodec/vdec_msg_queue.c: In function 'vdec_msg_queue_core_work':
->> include/linux/kern_levels.h:5:25: warning: too many arguments for format [-Wformat-extra-args]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/printk.h:422:25: note: in definition of macro 'printk_index_wrap'
-     422 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/linux/printk.h:132:17: note: in expansion of macro 'printk'
-     132 |                 printk(fmt, ##__VA_ARGS__);             \
-         |                 ^~~~~~
-   include/linux/printk.h:580:9: note: in expansion of macro 'no_printk'
-     580 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~
-   include/linux/kern_levels.h:15:25: note: in expansion of macro 'KERN_SOH'
-      15 | #define KERN_DEBUG      KERN_SOH "7"    /* debug-level messages */
-         |                         ^~~~~~~~
-   include/linux/printk.h:580:19: note: in expansion of macro 'KERN_DEBUG'
-     580 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |                   ^~~~~~~~~~
-   drivers/media/platform/mtk-vcodec/mtk_vcodec_util.h:39:45: note: in expansion of macro 'pr_debug'
-      39 | #define mtk_v4l2_debug(level, fmt, args...) pr_debug(fmt, ##args)
-         |                                             ^~~~~~~~
-   drivers/media/platform/mtk-vcodec/vdec_msg_queue.c:223:17: note: in expansion of macro 'mtk_v4l2_debug'
-     223 |                 mtk_v4l2_debug(3, "re-schedule to decode for core",
-         |                 ^~~~~~~~~~~~~~
+Please pull.
 
 
-vim +5 include/linux/kern_levels.h
+The following changes since commit 9b4d7b5c81a2578e080da33b5cddc3149fa611aa:
 
-314ba3520e513a Joe Perches 2012-07-30  4  
-04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
-04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
-04d2c8c83d0e3a Joe Perches 2012-07-30  7  
+  media: bttv: use DEVICE_ATTR_RO() helper macro (2021-12-07 11:29:58 +0100)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+are available in the Git repository at:
+
+  git://linuxtv.org/sailus/media_tree.git tags/for-5.17-hans-signed
+
+for you to fetch changes up to e41aa17756846f7796771566c4baab5d96117ae1:
+
+  media: ipu3-cio2: Add support for instantiating i2c-clients for VCMs (2021-12-16 16:28:59 +0200)
+
+----------------------------------------------------------------
+Hans's ipu3-cio2 patches on top of INT3472 stuff
+
+----------------------------------------------------------------
+Hans de Goede (12):
+      ACPI: delay enumeration of devices with a _DEP pointing to an INT3472 device
+      i2c: acpi: Use acpi_dev_ready_for_enumeration() helper
+      i2c: acpi: Add i2c_acpi_new_device_by_fwnode() function
+      platform_data: Add linux/platform_data/tps68470.h file
+      platform/x86: int3472: Split into 2 drivers
+      platform/x86: int3472: Add get_sensor_adev_and_name() helper
+      platform/x86: int3472: Pass tps68470_clk_platform_data to the tps68470-regulator MFD-cell
+      platform/x86: int3472: Pass tps68470_regulator_platform_data to the tps68470-regulator MFD-cell
+      platform/x86: int3472: Deal with probe ordering issues
+      media: ipu3-cio2: Defer probing until the PMIC is fully setup
+      media: ipu3-cio2: Call cio2_bridge_init() before anything else
+      media: ipu3-cio2: Add support for instantiating i2c-clients for VCMs
+
+Sakari Ailus (1):
+      Merge tag 'platform-drivers-x86-int3472-1' of https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86 into for-5.17-stable
+
+ drivers/acpi/scan.c                                |  37 +++++-
+ drivers/i2c/i2c-core-acpi.c                        |  22 +++-
+ drivers/media/pci/intel/ipu3/cio2-bridge.c         |  92 +++++++++++++
+ drivers/media/pci/intel/ipu3/cio2-bridge.h         |  16 ++-
+ drivers/media/pci/intel/ipu3/ipu3-cio2-main.c      |  10 +-
+ drivers/platform/x86/intel/int3472/Makefile        |   9 +-
+ ...472_clk_and_regulator.c => clk_and_regulator.c} |   2 +-
+ drivers/platform/x86/intel/int3472/common.c        |  82 ++++++++++++
+ .../{intel_skl_int3472_common.h => common.h}       |   6 +-
+ .../{intel_skl_int3472_discrete.c => discrete.c}   |  51 +++++---
+ .../x86/intel/int3472/intel_skl_int3472_common.c   | 106 ---------------
+ .../{intel_skl_int3472_tps68470.c => tps68470.c}   |  92 +++++++++++--
+ drivers/platform/x86/intel/int3472/tps68470.h      |  25 ++++
+ .../x86/intel/int3472/tps68470_board_data.c        | 145 +++++++++++++++++++++
+ include/acpi/acpi_bus.h                            |   5 +-
+ include/linux/i2c.h                                |  17 ++-
+ include/linux/platform_data/tps68470.h             |  35 +++++
+ 17 files changed, 584 insertions(+), 168 deletions(-)
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_clk_and_regulator.c => clk_and_regulator.c} (99%)
+ create mode 100644 drivers/platform/x86/intel/int3472/common.c
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_common.h => common.h} (94%)
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_discrete.c => discrete.c} (91%)
+ delete mode 100644 drivers/platform/x86/intel/int3472/intel_skl_int3472_common.c
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_tps68470.c => tps68470.c} (56%)
+ create mode 100644 drivers/platform/x86/intel/int3472/tps68470.h
+ create mode 100644 drivers/platform/x86/intel/int3472/tps68470_board_data.c
+ create mode 100644 include/linux/platform_data/tps68470.h
+
+-- 
+Kind regards,
+
+Sakari Ailus
