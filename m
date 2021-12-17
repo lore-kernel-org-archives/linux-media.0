@@ -2,145 +2,133 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62A12C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 16 Dec 2021 23:03:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4119CC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 17 Dec 2021 01:55:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236531AbhLPXD5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Dec 2021 18:03:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbhLPXD5 (ORCPT
+        id S232178AbhLQBzp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Dec 2021 20:55:45 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:33716 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232160AbhLQBzp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Dec 2021 18:03:57 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CC6C061574
-        for <linux-media@vger.kernel.org>; Thu, 16 Dec 2021 15:03:56 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id y12so991713eda.12
-        for <linux-media@vger.kernel.org>; Thu, 16 Dec 2021 15:03:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4XGBi9AWqlgW2iEFwQL1/1nQ3YHkq178Ji39UpQv5Mc=;
-        b=5Z/zpo/llfSzl3vtey+5DTAVBphRj7/CDJ9pOYMjp3eqjbJXmr/AEdLxoqB69mFv5j
-         ZpwLQI2rHW7KiiUd8nvbKYaBDF7hBvG1sITJkCnUq2r3HhLPikA52eYtnpIS8WB94HPh
-         K5++om3EAiuvbLWowQ4mrDzb6BJQUbeomwO4G5kkrc/hm8MyeVdr3IdRfWVlRIHsBnB0
-         SZDB77wt9U079h1sU4FLwKwQ2VBgNHae7A/yaW8mYjJy5az1ZTi8VDdO1vC9woQKGaFc
-         bM2PAcIX0LN3bauj8SGE+llAKBWqtX8LLgNyFd3MnoXhKqBccaqVcOp90/uwWN21dVsC
-         tW1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4XGBi9AWqlgW2iEFwQL1/1nQ3YHkq178Ji39UpQv5Mc=;
-        b=CZCFeZhQ7x/HOXuE0Py+pEzKVlu8x1eOSp0NExEXQ7Ma+q4WO19NwrkT+6LYeOGM1V
-         4DcokgW728qoWU1vj+28XyZg1WmaTC14ZKu1iisCXOfiRzNwyJ/cIrQFdSwnIVsk4s79
-         KcD8/efi965piZSBDV54lfnvfzf77Vlz4pXxHnnUOeO+H4S/bfb8UH1iB5D7s+ALT+qs
-         Umj/1VV8NrpD+oA8TmPG9GHHFmneEoiB09Oh9KoPJKPTa96RMPMyRMM9q7rq43RmZ6qP
-         x76vd/dmpQPn417oEz7MRCHQkse5/sf02t2tQvS2R/JWkOUTLiWO/N0VrBj/yeiV3YFm
-         GKCA==
-X-Gm-Message-State: AOAM530RWW5KiG68lpytiBcc6TyK8ybNmtJ1HmghUKrpJTtlVmPwOUJT
-        vcbOsiK8FwWoYUr1jcbxxmpuXyxa1p0MQtr3zZV1NQ==
-X-Google-Smtp-Source: ABdhPJwik5gP8WcxT/LlRWowNvewmqUiNaIiabdowVwZ57bu4+JUk4W5a8admDXC7cAvMFqmgEIUFgnO/YFxPYict7s=
-X-Received: by 2002:a17:907:9608:: with SMTP id gb8mr243974ejc.301.1639695835285;
- Thu, 16 Dec 2021 15:03:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20211216111256.2362683-1-aford173@gmail.com> <20211216111256.2362683-9-aford173@gmail.com>
- <YbuqpayfYVPp1dTe@robh.at.kernel.org> <CAHCN7xLGeu4=CwqCv8BBowuQQ5t9iFDQV0adPNmy9dufW8soAg@mail.gmail.com>
-In-Reply-To: <CAHCN7xLGeu4=CwqCv8BBowuQQ5t9iFDQV0adPNmy9dufW8soAg@mail.gmail.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Thu, 16 Dec 2021 20:03:43 -0300
-Message-ID: <CAAEAJfCNQJ+fQzTMM27usxaHhVNa5ime62UKvvbn1U=LSFNg_A@mail.gmail.com>
-Subject: Re: [PATCH V2 08/10] dt-bindings: media: nxp,imx8mq-vpu: Add support
- for G1 and G2 on imx8mm
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Thu, 16 Dec 2021 20:55:45 -0500
+X-UUID: fc2a9b2531a44d5ea3bf407746a9d2ff-20211217
+X-UUID: fc2a9b2531a44d5ea3bf407746a9d2ff-20211217
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 115382907; Fri, 17 Dec 2021 09:55:40 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 17 Dec 2021 09:55:39 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Fri, 17 Dec 2021 09:55:37 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Tzung-Bi Shih" <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        "open list:HANTRO VPU CODEC DRIVER" 
-        <linux-rockchip@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v17, 05/19] media: mtk-vcodec: Support MT8192
+Date:   Fri, 17 Dec 2021 09:55:16 +0800
+Message-ID: <20211217015530.23720-6-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211217015530.23720-1-yunfei.dong@mediatek.com>
+References: <20211217015530.23720-1-yunfei.dong@mediatek.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Adam,
+From: Yunfei Dong <yunfei.dong@mediatek.corp-partner.google.com>
 
-On Thu, 16 Dec 2021 at 18:21, Adam Ford <aford173@gmail.com> wrote:
->
-> On Thu, Dec 16, 2021 at 3:07 PM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Thu, Dec 16, 2021 at 05:12:53AM -0600, Adam Ford wrote:
-> > > The i.MX8M mini appears to have a similar G1 and G2 decoder but the
-> > > post-procesing isn't present, so different compatible flags are requred.
-> >
-> > post-processing
-> >
-> > > Since all the other parameters are the same with imx8mq, just add
-> > > the new compatible flags to nxp,imx8mq-vpu.yaml.
-> > >
-> > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> > > index c1e157251de7..b1f24c48c73b 100644
-> > > --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> > > +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-> > > @@ -5,7 +5,7 @@
-> > >  $id: "http://devicetree.org/schemas/media/nxp,imx8mq-vpu.yaml#"
-> > >  $schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > >
-> > > -title: Hantro G1/G2 VPU codecs implemented on i.MX8MQ SoCs
-> > > +title: Hantro G1/G2 VPU codecs implemented on i.MX8MQ/i.MX8MM SoCs
-> >
-> > Just 'i.MX8' so we don't have to change this everytime?
->
-> Are you OK with i.MX8M?  8MQ, 8MM, and 8MP all appear to have G1 and
-> G2 decoders.  The i.MX8 is different.
-> >
-> > >
-> > >  maintainers:
-> > >    - Philipp Zabel <p.zabel@pengutronix.de>
-> > > @@ -20,6 +20,8 @@ properties:
-> > >          deprecated: true
-> > >        - const: nxp,imx8mq-vpu-g1
-> > >        - const: nxp,imx8mq-vpu-g2
-> > > +      - const: nxp,imx8mm-vpu-g1
-> > > +      - const: nxp,imx8mm-vpu-g2
-> >
-> > Not compatible with the imx8mq variants?
->
-> No, the structures associated with these compatible flags telling the
-> driver what features are available have options for the post-processor
-> in the 8MQ which are not present in the 8MM.
->
+Adds MT8192's compatible "mediatek,mt8192-vcodec-dec".
+Adds MT8192's device private data mtk_lat_sig_core_pdata.
 
-Just as G1 and G2 are different blocks, their "post-processor"
-features are really different too.
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../media/platform/mtk-vcodec/mtk_vcodec_dec.h   |  1 +
+ .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c     |  4 ++++
+ .../mtk-vcodec/mtk_vcodec_dec_stateless.c        | 16 ++++++++++++++++
+ 3 files changed, 21 insertions(+)
 
-The G2 core typically produces a tiled format, NV12_4L4,
-and it an inline post-processor to convert that to linear NV12.
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.h
+index e08886a600a3..66cd6d2242c3 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.h
+@@ -68,6 +68,7 @@ extern const struct v4l2_m2m_ops mtk_vdec_m2m_ops;
+ extern const struct media_device_ops mtk_vcodec_media_ops;
+ extern const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata;
+ extern const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata;
++extern const struct mtk_vcodec_dec_pdata mtk_lat_sig_core_pdata;
+ 
+ 
+ /*
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+index af235fa4c487..c17927f79e22 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+@@ -392,6 +392,10 @@ static const struct of_device_id mtk_vcodec_match[] = {
+ 		.compatible = "mediatek,mt8183-vcodec-dec",
+ 		.data = &mtk_vdec_8183_pdata,
+ 	},
++	{
++		.compatible = "mediatek,mt8192-vcodec-dec",
++		.data = &mtk_lat_sig_core_pdata,
++	},
+ 	{},
+ };
+ 
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+index 3d9f47555884..183cd67a334a 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+@@ -357,3 +357,19 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
+ 	.worker = mtk_vdec_worker,
+ 	.flush_decoder = mtk_vdec_flush_decoder,
+ };
++
++const struct mtk_vcodec_dec_pdata mtk_lat_sig_core_pdata = {
++	.chip = MTK_MT8192,
++	.init_vdec_params = mtk_init_vdec_params,
++	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
++	.vdec_vb2_ops = &mtk_vdec_request_vb2_ops,
++	.vdec_formats = mtk_video_formats,
++	.num_formats = NUM_FORMATS,
++	.default_out_fmt = &mtk_video_formats[DEFAULT_OUT_FMT_IDX],
++	.default_cap_fmt = &mtk_video_formats[DEFAULT_CAP_FMT_IDX],
++	.vdec_framesizes = mtk_vdec_framesizes,
++	.num_framesizes = NUM_SUPPORTED_FRAMESIZE,
++	.uses_stateless_api = true,
++	.worker = mtk_vdec_worker,
++	.flush_decoder = mtk_vdec_flush_decoder,
++};
+-- 
+2.25.1
 
-How does this work on the 8MM? What pixel format does it
-produce natively?
-
-It's hard to imagine the G2 block doesn't do linear NV12,
-so I'm inclined to think it has that post-processing feature.
-
-Thanks,
-Ezequiel
