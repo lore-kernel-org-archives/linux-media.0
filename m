@@ -2,87 +2,258 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66ECBC433EF
-	for <linux-media@archiver.kernel.org>; Fri, 17 Dec 2021 11:01:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D37AC433FE
+	for <linux-media@archiver.kernel.org>; Fri, 17 Dec 2021 11:07:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbhLQLBY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Dec 2021 06:01:24 -0500
-Received: from fs-relay10.fsi.ne.jp ([219.99.167.74]:36716 "EHLO
-        fs-relay10.fsi.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbhLQLBY (ORCPT
+        id S233118AbhLQLHT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Dec 2021 06:07:19 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:55217 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235099AbhLQLHS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Dec 2021 06:01:24 -0500
-X-Greylist: delayed 1971 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 Dec 2021 06:01:23 EST
-Received: from fsi.ne.jp (check08.fsi.ne.jp [219.99.163.129])
-        by fs-relay10.fsi.ne.jp (Postfix) with ESMTP id C7BBF411EB0E
-        for <linux-media@vger.kernel.org>; Fri, 17 Dec 2021 19:28:30 +0900 (JST)
-Received: from check08.fsi.ne.jp (check08.fsi.ne.jp [127.0.0.1])
-        by pps.spam (8.16.0.36/8.16.0.36) with SMTP id 1BHAESb4008603
-        for <linux-media@vger.kernel.org>; Fri, 17 Dec 2021 19:28:30 +0900
-Received: from sh-gw01.fsi.ne.jp (sh-gw01.fsi.ne.jp [219.99.165.203])
-        by check08.fsi.ne.jp with ESMTP id 3cxjy0f0tm-7
-        for <linux-media@vger.kernel.org>; Fri, 17 Dec 2021 19:28:30 +0900
-Received: from c17.future-shop.jp (c17.future-shop.jp [219.99.165.106])
-        by sh-gw01.fsi.ne.jp (Postfix) with ESMTP id 44E54C5ADB
-        for <linux-media@vger.kernel.org>; Fri, 17 Dec 2021 19:28:30 +0900 (JST)
-Received: from www.boxbank.jp (cmsftp06.future-shop.jp [219.99.169.46])
-        by c17.future-shop.jp (Postfix) with ESMTPSA id 426411E0403
-        for <linux-media@vger.kernel.org>; Fri, 17 Dec 2021 19:28:30 +0900 (JST)
-Date:   Fri, 17 Dec 2021 10:28:30 +0000
-To:     linux-media@vger.kernel.org
-From:   =?ISO-2022-JP?B?GyRCJUAlcyVcITwla0RMSE4kTiVcJUMlLyU5JVAlcyUvGyhC?= 
-        <desk@boxbank.jp>
-Reply-To: desk@boxbank.jp
-Subject: =?ISO-2022-JP?B?GyRCJUAlcyVcITwla0RMSE4kTiVcJUMlLyU5JVAlcyUvGyhCIBskQiQqTGQkJDlnJG8kOyQkJD8kQCQtJCIkaiQsJEgkJiQ0JDYkJCReJDckPxsoQg==?=
-Message-ID: <X0eB3aylmsNoIw01iou2SQ7Rgya4zuUduTGvZTAIXc@www.boxbank.jp>
-X-Mailer: WPMailSMTP/Mailer/smtp 2.5.1
+        Fri, 17 Dec 2021 06:07:18 -0500
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 204DB24000E;
+        Fri, 17 Dec 2021 11:07:14 +0000 (UTC)
+Date:   Fri, 17 Dec 2021 12:08:08 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Thomas Nizan <tnizan@witekio.com>
+Subject: Re: [PATCH 2/3] media: i2c: max9286: Add support for port regulators
+Message-ID: <20211217110808.rn6lw2htbxlzgdcl@uno.localdomain>
+References: <20211216220946.20771-1-laurent.pinchart+renesas@ideasonboard.com>
+ <20211216220946.20771-3-laurent.pinchart+renesas@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-2022-JP
-X-Proofpoint-ORIG-GUID: XERzwT1t6UAILBsdTLEC0XYMP3f4bxuC
-X-Proofpoint-GUID: XERzwT1t6UAILBsdTLEC0XYMP3f4bxuC
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.790
- definitions=2021-12-16_05:2021-12-15,2021-12-16 signatures=0
-X-Proofpoint-Spam-Details: rule=spam policy=default score=100 spamscore=100 phishscore=0
- suspectscore=0 adultscore=0 malwarescore=0 mlxlogscore=-1000 mlxscore=100
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112170059
-X-NAI-Spam-Level: **********
-X-NAI-Spam-Score: 100
-X-NAI-Spam-Flag: YES
-X-NAI-Spam-Adjust: 0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211216220946.20771-3-laurent.pinchart+renesas@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-?? Louisa liked you! Click Here: https://bit.ly/3yzIW9R?uhxb ?? 様
+Hi Laurent,
 
-この度は、お問い合わせをいただきありがとうございます。
-ダンボールと梱包資材の【ボックスバンク】です。
+On Fri, Dec 17, 2021 at 12:09:45AM +0200, Laurent Pinchart wrote:
+> From: Thomas Nizan <tnizan@witekio.com>
+>
+> Allow users to use one PoC regulator per port, instead of a global
+> regulator.
+>
+> The properties '^port[0-3]-poc-supply$' in the DT node are used to
+> indicate the regulators for individual ports.
+>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-下記　お問い合わせ（ご依頼）の件、確かに承りました。
-改めて担当者よりご連絡をさせていただきます。
+These patches will badly conflic with the gpio-poc series :(
 
-※通常1〜3日以内にお返事させていただいておりますが、
-休日・業務等の都合により、お返事に時間のかかることがございますので、
-あらかじめご了承ください。
+> ---
+>  drivers/media/i2c/max9286.c | 112 +++++++++++++++++++++++++++++++-----
+>  1 file changed, 98 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+> index 7c663fd587bb..fa2f6a823fe6 100644
+> --- a/drivers/media/i2c/max9286.c
+> +++ b/drivers/media/i2c/max9286.c
+> @@ -136,8 +136,10 @@
+>  #define MAX9286_SRC_PAD			4
+>
+>  struct max9286_source {
+> +	unsigned int index;
 
-受付番号：202112170
+Can't you use the to_index() macro ?
 
-希望商品：その他
-内容:pwyjrx
+>  	struct v4l2_subdev *sd;
+>  	struct fwnode_handle *fwnode;
+> +	struct regulator *regulator;
+>  };
+>
+>  struct max9286_asd {
+> @@ -1072,6 +1074,49 @@ static int max9286_register_gpio(struct max9286_priv *priv)
+>  	return ret;
+>  }
+>
+> +static int max9286_poc_power_on(struct max9286_priv *priv)
+> +{
+> +	struct max9286_source *source;
+> +	unsigned int enabled = 0;
+> +	int ret;
+> +
+> +	/* Enable the global regulator if available. */
+> +	if (priv->regulator)
+> +		return regulator_enable(priv->regulator);
+> +
+> +	/* Otherwise use the per-port regulators. */
+> +	for_each_source(priv, source) {
+> +		ret = regulator_enable(source->regulator);
+> +		if (ret < 0)
+> +			goto error;
+> +
+> +		enabled |= BIT(source->index);
+> +	}
+> +
+> +	return 0;
+> +
+> +error:
+> +	for_each_source(priv, source) {
+> +		if (enabled & BIT(source->index))
+> +			regulator_disable(source->regulator);
 
-※お見積もりのご依頼などはお時間をいただく場合がございます。
+I would if a regulator can be unconditionally disabled...
 
-このメールに心当たりの無い場合は、お手数ですが
-下記連絡先までお問い合わせください。
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static void max9286_poc_power_off(struct max9286_priv *priv)
+> +{
+> +	struct max9286_source *source;
+> +
+> +	if (priv->regulator) {
+> +		regulator_disable(priv->regulator);
+> +		return;
+> +	}
+> +
+> +	for_each_source(priv, source)
+> +		regulator_disable(source->regulator);
+> +}
+> +
+>  static int max9286_init(struct device *dev)
+>  {
+>  	struct max9286_priv *priv;
+> @@ -1082,9 +1127,9 @@ static int max9286_init(struct device *dev)
+>  	priv = i2c_get_clientdata(client);
+>
+>  	/* Enable the bus power. */
+> -	ret = regulator_enable(priv->regulator);
+> +	ret = max9286_poc_power_on(priv);
+>  	if (ret < 0) {
+> -		dev_err(&client->dev, "Unable to turn PoC on\n");
+> +		dev_err(dev, "Unable to turn PoC on\n");
+>  		return ret;
+>  	}
+>
+> @@ -1118,7 +1163,7 @@ static int max9286_init(struct device *dev)
+>  err_v4l2_register:
+>  	max9286_v4l2_unregister(priv);
+>  err_regulator:
+> -	regulator_disable(priv->regulator);
+> +	max9286_poc_power_off(priv);
+>
+>  	return ret;
+>  }
+> @@ -1215,6 +1260,7 @@ static int max9286_parse_dt(struct max9286_priv *priv)
+>  		}
+>
+>  		source = &priv->sources[ep.port];
+> +		source->index = ep.port;
+>  		source->fwnode = fwnode_graph_get_remote_endpoint(
+>  						of_fwnode_handle(node));
+>  		if (!source->fwnode) {
+> @@ -1249,6 +1295,50 @@ static int max9286_parse_dt(struct max9286_priv *priv)
+>  	return 0;
+>  }
+>
+> +static int max9286_get_poc_supplies(struct max9286_priv *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	struct max9286_source *source;
+> +
+> +	/*
+> +	 * Start by getting the global regulator. Usage of the exclusive API is
+> +	 * required to receive an error in case the supply isn't specified in
+> +	 * the device tree.
+> +	 */
+> +	priv->regulator = devm_regulator_get_exclusive(dev, "poc");
 
-■━━━━━━━━━━━━━━━━━━━━━━■
-　　ダンボールと梱包資材の
-　　【ボックスバンク】
-■━━━━━━━━━━━━━━━━━━━━━━■
-　　ヌーブ株式会社
-　　営業時間：11時〜16時（土日祝日除く）
-　　TEL:　0120-858545　Email:　desk@boxbank.jp
-　　URL:　https://www.boxbank.jp
-■━━━━━━━━━━━━━━━━━━━━━━■
+doesn't get_optional() return -ENODEV if there's no such regulator too
+without locking the usage of the regulator ? Oh wait, maybe we want
+exclusive locking ? :)
 
+> +	if (!IS_ERR(priv->regulator))
+> +		return 0;
+> +
+> +	if (PTR_ERR(priv->regulator) != -ENODEV) {
+> +		if (PTR_ERR(priv->regulator) != -EPROBE_DEFER)
+> +			dev_err(dev, "Unable to get PoC regulator: %ld\n",
+> +				PTR_ERR(priv->regulator));
+> +		return PTR_ERR(priv->regulator);
+> +	}
+> +
+> +	/* If there's no global regulator, get per-port regulators. */
+> +	dev_dbg(dev,
+> +		"No global PoC regulator, looking for per-port regulators\n");
+> +	priv->regulator = NULL;
+> +
+> +	for_each_source(priv, source) {
+> +		char name[10];
+> +
+> +		snprintf(name, sizeof(name), "port%u-poc", source->index);
+> +		source->regulator = devm_regulator_get_exclusive(dev, name);
+
+I guess the fact we don't have a fixed number of sources makes it even
+harder to use the _bulk version of the regulators API...
+
+> +		if (IS_ERR(source->regulator)) {
+> +			if (PTR_ERR(source->regulator) != -EPROBE_DEFER)
+> +				dev_err(dev,
+> +					"Unable to get port %u PoC regulator: %ld\n",
+> +					source->index,
+> +					PTR_ERR(source->regulator));
+> +			return PTR_ERR(source->regulator);
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int max9286_probe(struct i2c_client *client)
+>  {
+>  	struct max9286_priv *priv;
+> @@ -1293,17 +1383,11 @@ static int max9286_probe(struct i2c_client *client)
+>  	if (ret)
+>  		goto err_powerdown;
+>
+> -	priv->regulator = devm_regulator_get(&client->dev, "poc");
+> -	if (IS_ERR(priv->regulator)) {
+> -		if (PTR_ERR(priv->regulator) != -EPROBE_DEFER)
+> -			dev_err(&client->dev,
+> -				"Unable to get PoC regulator (%ld)\n",
+> -				PTR_ERR(priv->regulator));
+> -		ret = PTR_ERR(priv->regulator);
+> -		goto err_powerdown;
+> -	}
+> -
+>  	ret = max9286_parse_dt(priv);
+> +	if (ret)
+> +		goto err_cleanup_dt;
+> +
+> +	ret = max9286_get_poc_supplies(priv);
+>  	if (ret)
+>  		goto err_powerdown;
+
+I think the error path is wrong, you should cleanup_dt here.
+
+Thanks
+   j
+
+>
+> @@ -1329,7 +1413,7 @@ static int max9286_remove(struct i2c_client *client)
+>
+>  	max9286_v4l2_unregister(priv);
+>
+> -	regulator_disable(priv->regulator);
+> +	max9286_poc_power_off(priv);
+>
+>  	gpiod_set_value_cansleep(priv->gpiod_pwdn, 0);
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
+>
