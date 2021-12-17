@@ -2,103 +2,283 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CD95C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 17 Dec 2021 09:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8F70C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 17 Dec 2021 10:07:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbhLQJyf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Dec 2021 04:54:35 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:27994 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234601AbhLQJyc (ORCPT
+        id S234669AbhLQKHO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 Dec 2021 05:07:14 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:46475 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231968AbhLQKHN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Dec 2021 04:54:32 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1BH9SGjY026174;
-        Fri, 17 Dec 2021 17:28:16 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 17 Dec
- 2021 17:53:46 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
-        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/4] media: aspeed: Correct value for h-total-pixels
-Date:   Fri, 17 Dec 2021 17:54:00 +0800
-Message-ID: <20211217095403.2618-2-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211217095403.2618-1-jammy_huang@aspeedtech.com>
-References: <20211217095403.2618-1-jammy_huang@aspeedtech.com>
+        Fri, 17 Dec 2021 05:07:13 -0500
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id B396F240015;
+        Fri, 17 Dec 2021 10:07:10 +0000 (UTC)
+Date:   Fri, 17 Dec 2021 11:08:02 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH 2/2] media: subdev: Extend routing validation helper
+Message-ID: <20211217100802.yb5fskdyhhknmzxk@uno.localdomain>
+References: <20211216131510.12308-1-laurent.pinchart+renesas@ideasonboard.com>
+ <20211216131510.12308-3-laurent.pinchart+renesas@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1BH9SGjY026174
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211216131510.12308-3-laurent.pinchart+renesas@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Previous reg-field, 0x98[11:0], stands for the period of the detected
-hsync signal.
-Use the correct reg, 0xa0, to get h-total in pixels.
+Hi Laurent,
 
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
----
- drivers/media/platform/aspeed-video.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+On Thu, Dec 16, 2021 at 03:15:10PM +0200, Laurent Pinchart wrote:
+> There are more common constraints on routing than the ones validated by
+> v4l2_subdev_routing_validate_1_to_1(). Extend the function to support
+> more validation, conditioned by constraint flags.
+>
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index b388bc56ce81..d5f77b205175 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -166,7 +166,7 @@
- #define  VE_SRC_TB_EDGE_DET_BOT		GENMASK(28, VE_SRC_TB_EDGE_DET_BOT_SHF)
- 
- #define VE_MODE_DETECT_STATUS		0x098
--#define  VE_MODE_DETECT_H_PIXELS	GENMASK(11, 0)
-+#define  VE_MODE_DETECT_H_PERIOD	GENMASK(11, 0)
- #define  VE_MODE_DETECT_V_LINES_SHF	16
- #define  VE_MODE_DETECT_V_LINES		GENMASK(27, VE_MODE_DETECT_V_LINES_SHF)
- #define  VE_MODE_DETECT_STATUS_VSYNC	BIT(28)
-@@ -177,6 +177,8 @@
- #define  VE_SYNC_STATUS_VSYNC_SHF	16
- #define  VE_SYNC_STATUS_VSYNC		GENMASK(27, VE_SYNC_STATUS_VSYNC_SHF)
- 
-+#define VE_H_TOTAL_PIXELS		0x0A0
-+
- #define VE_INTERRUPT_CTRL		0x304
- #define VE_INTERRUPT_STATUS		0x308
- #define  VE_INTERRUPT_MODE_DETECT_WD	BIT(0)
-@@ -938,6 +940,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 	u32 src_lr_edge;
- 	u32 src_tb_edge;
- 	u32 sync;
-+	u32 htotal;
- 	struct v4l2_bt_timings *det = &video->detected_timings;
- 
- 	det->width = MIN_WIDTH;
-@@ -983,6 +986,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 		src_tb_edge = aspeed_video_read(video, VE_SRC_TB_EDGE_DET);
- 		mds = aspeed_video_read(video, VE_MODE_DETECT_STATUS);
- 		sync = aspeed_video_read(video, VE_SYNC_STATUS);
-+		htotal = aspeed_video_read(video, VE_H_TOTAL_PIXELS);
- 
- 		video->frame_bottom = (src_tb_edge & VE_SRC_TB_EDGE_DET_BOT) >>
- 			VE_SRC_TB_EDGE_DET_BOT_SHF;
-@@ -999,8 +1003,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 			VE_SRC_LR_EDGE_DET_RT_SHF;
- 		video->frame_left = src_lr_edge & VE_SRC_LR_EDGE_DET_LEFT;
- 		det->hfrontporch = video->frame_left;
--		det->hbackporch = (mds & VE_MODE_DETECT_H_PIXELS) -
--			video->frame_right;
-+		det->hbackporch = htotal - video->frame_right;
- 		det->hsync = sync & VE_SYNC_STATUS_HSYNC;
- 		if (video->frame_left > video->frame_right)
- 			continue;
--- 
-2.25.1
+I'm debated: is this sweet or over-designed ? :)
 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> ---
+>  drivers/media/v4l2-core/v4l2-subdev.c | 97 ++++++++++++++++++++++++---
+>  include/media/v4l2-subdev.h           | 41 ++++++++---
+>  2 files changed, 121 insertions(+), 17 deletions(-)
+>
+> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> index 73ee7f01838f..e7fb694cc5df 100644
+> --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> @@ -9,6 +9,7 @@
+>   */
+>
+>  #include <linux/ioctl.h>
+> +#include <linux/limits.h>
+>  #include <linux/mm.h>
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+> @@ -1582,29 +1583,107 @@ int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_subdev_get_fmt);
+>
+> -int v4l2_subdev_routing_validate_1_to_1(const struct v4l2_subdev_krouting *routing)
+> +int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
+> +				 const struct v4l2_subdev_krouting *routing,
+> +				 enum v4l2_subdev_routing_restriction disallow)
+>  {
+> +	u32 *remote_pads = NULL;
+>  	unsigned int i, j;
+> +	int ret = -EINVAL;
+> +
+> +	if (disallow & V4L2_SUBDEV_ROUTING_NO_STREAM_MIX) {
+
+The STREAM_MIX in particular makes me wonder what use case is this
+for.
+
+> +		remote_pads = kcalloc(sd->entity.num_pads, sizeof(*remote_pads),
+> +				      GFP_KERNEL);
+> +		if (!remote_pads)
+> +			return -ENOMEM;
+> +
+> +		for (i = 0; i < sd->entity.num_pads; ++i)
+> +			remote_pads[i] = U32_MAX;
+> +	}
+>
+>  	for (i = 0; i < routing->num_routes; ++i) {
+>  		const struct v4l2_subdev_route *route = &routing->routes[i];
+>
+> +		/* Validate the sink and source pad numbers. */
+> +		if (route->sink_pad >= sd->entity.num_pads ||
+> +		    !(sd->entity.pads[route->sink_pad].flags & MEDIA_PAD_FL_SINK)) {
+> +			dev_dbg(sd->dev, "route %u sink (%u) is not a sink pad\n",
+> +				i, route->sink_pad);
+> +			goto out;
+> +		}
+> +
+> +		if (route->source_pad >= sd->entity.num_pads ||
+> +		    !(sd->entity.pads[route->source_pad].flags & MEDIA_PAD_FL_SOURCE)) {
+> +			dev_dbg(sd->dev, "route %u source (%u) is not a source pad\n",
+> +				i, route->source_pad);
+> +			goto out;
+> +		}
+> +
+> +		/*
+> +		 * V4L2_SUBDEV_ROUTING_NO_STREAM_MIX: Streams on the same pad
+> +		 * may not be routed to streams on different pads.
+
+s/on the same/from the same/ ?
+s/may/shall ?
+
+> +		 */
+> +		if (disallow & V4L2_SUBDEV_ROUTING_NO_STREAM_MIX) {
+> +			if (remote_pads[route->sink_pad] != U32_MAX &&
+> +			    remote_pads[route->sink_pad] != route->source_pad) {
+> +				dev_dbg(sd->dev,
+> +					"route %u attempts to mix %s streams\n",
+> +					i, "sink");
+> +				goto out;
+> +			}
+> +
+> +			if (remote_pads[route->source_pad] != U32_MAX &&
+> +			    remote_pads[route->source_pad] != route->sink_pad) {
+> +				dev_dbg(sd->dev,
+> +					"route %u attempts to mix %s streams\n",
+> +					i, "source");
+> +				goto out;
+> +			}
+> +
+> +			remote_pads[route->sink_pad] = route->source_pad;
+> +			remote_pads[route->source_pad] = route->sink_pad;
+> +		}
+> +
+>  		for (j = i + 1; j < routing->num_routes; ++j) {
+>  			const struct v4l2_subdev_route *r = &routing->routes[j];
+>
+> -			if (route->sink_pad == r->sink_pad &&
+> -			    route->sink_stream == r->sink_stream)
+> -				return -EINVAL;
+> +			/*
+> +			 * V4L2_SUBDEV_ROUTING_NO_1_TO_N: No two routes can
+> +			 * originate from the same (sink) stream.
+> +			 */
+> +			if ((disallow & V4L2_SUBDEV_ROUTING_NO_1_TO_N) &&
+> +			    route->sink_pad == r->sink_pad &&
+> +			    route->sink_stream == r->sink_stream) {
+> +				dev_dbg(sd->dev,
+> +					"routes %u and %u originate from same sink (%u/%u)\n",
+> +					i, j, route->sink_pad,
+> +					route->sink_stream);
+> +				goto out;
+> +			}
+>
+> -			if (route->source_pad == r->source_pad &&
+> -			    route->source_stream == r->source_stream)
+> -				return -EINVAL;
+> +			/*
+> +			 * V4L2_SUBDEV_ROUTING_NO_N_TO_1: No two routes can end
+> +			 * at the same (source) stream.
+> +			 */
+> +			if ((disallow & V4L2_SUBDEV_ROUTING_NO_N_TO_1) &&
+> +			    route->source_pad == r->source_pad &&
+> +			    route->source_stream == r->source_stream) {
+> +				dev_dbg(sd->dev,
+> +					"routes %u and %u end at same source (%u/%u)\n",
+> +					i, j, route->source_pad,
+> +					route->source_stream);
+> +				goto out;
+> +			}
+>  		}
+>  	}
+>
+> -	return 0;
+> +	ret = 0;
+> +
+> +out:
+> +	kfree(remote_pads);
+> +	return ret;
+>  }
+> -EXPORT_SYMBOL_GPL(v4l2_subdev_routing_validate_1_to_1);
+> +EXPORT_SYMBOL_GPL(v4l2_subdev_routing_validate);
+>
+>  struct v4l2_subdev_route *
+>  __v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
+> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> index aff1fb3a30d5..65c3e419a57d 100644
+> --- a/include/media/v4l2-subdev.h
+> +++ b/include/media/v4l2-subdev.h
+> @@ -1573,18 +1573,43 @@ int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
+>  			struct v4l2_subdev_format *format);
+>
+>  /**
+> - * v4l2_subdev_routing_validate_1_to_1() - Verify that all streams are
+> - *                                         non-overlapping 1-to-1 streams
+> - * @routing: routing to verify
+> + * enum v4l2_subdev_routing_restriction - Subdevice internal routing restrictions
+>   *
+> - * This verifies that the given routing contains only non-overlapping 1-to-1
+> - * streams. In other words, no two streams have the same source or sink
+> - * stream ID on a single pad. This is the most common case of routing
+> - * supported by devices.
+> + * @V4L2_SUBDEV_ROUTING_NO_1_TO_N:
+> + * 	an input stream may not be routed to multiple output streams (stream
+
+very minor nit: can we enforce the usage of 'sink' and 'source' for
+streams instead of using 'input' and 'output' ?
+
+> + * 	duplication)
+> + * @V4L2_SUBDEV_ROUTING_NO_N_TO_1:
+> + *	multiple input streams may not be routed to the same output stream
+> + *	(stream merging)
+> + * @V4L2_SUBDEV_ROUTING_NO_STREAM_MIX:
+> + *	streams on the same pad may not be routed to streams on different pads
+> + * @V4L2_SUBDEV_ROUTING_ONLY_1_TO_1:
+> + *	only non-overlapping 1-to-1 stream routing is allowed (a combination of
+> + *	@V4L2_SUBDEV_ROUTING_NO_1_TO_N and @V4L2_SUBDEV_ROUTING_NO_N_TO_1)
+> + */
+> +enum v4l2_subdev_routing_restriction {
+
+I've seen that you rebased max9286 on this and there the
+v4l2_subdev_routing_validate() function is called with a '0' disallow
+flag. Should a V4L2_SUBDEV_ROUTING_SIMPLE = 0 field be added here ?
+
+> +	V4L2_SUBDEV_ROUTING_NO_1_TO_N = BIT(0),
+> +	V4L2_SUBDEV_ROUTING_NO_N_TO_1 = BIT(1),
+> +	V4L2_SUBDEV_ROUTING_NO_STREAM_MIX = BIT(2),
+> +	V4L2_SUBDEV_ROUTING_ONLY_1_TO_1 =
+> +		V4L2_SUBDEV_ROUTING_NO_1_TO_N |
+> +		V4L2_SUBDEV_ROUTING_NO_N_TO_1,
+
+OR-ing NO_1_TO_N, NO_N_TO_1 and NO_STREAM_MIX gives a
+ROUTING_PASSTHROUGH ? (ie all the streams from one sink pad are routed to
+exactly one stream on a source pad). Is this a valid constraint ?
+
+Using the max9286 as an example, and for the sake of discussion I
+would have defined constrains in terms of the entity capabilities
+
+- A MUXER can route streams from multiple sink pads to streams of a
+  source pad -> sink streams shall be equal to 0 - This is the typical
+  CSI-2 transmitter
+
+- A DEMUXER can route streams from a single sink pad to streams of
+  multiple source pad -> source streams shall be equal to 0 - This is
+  the typical CSI-2 receiver
+
+Which is a simpler case to start with (and would have allowed me to
+remove most of the custom validation from the driver).
+
+On top of this, the validation above about how streams could be
+demuxed/coalesced together might apply on top ? (I admit it is not
+totally clear to how streams coalescing would work, in example for
+video/embedded data transmission on the same VC).
+
+Thanks
+   j
+
+> +};
+> +
+> +/**
+> + * v4l2_subdev_routing_validate() - Verify that routes comply with driver
+> + *				    constraints
+> + * @sd: The subdevice
+> + * @routing: Routing to verify
+> + * @disallow: Restrictions on routes
+> + *
+> + * This verifies that the given routing complies with the @disallow contraints.
+>   *
+>   * Returns 0 on success, error value otherwise.
+>   */
+> -int v4l2_subdev_routing_validate_1_to_1(const struct v4l2_subdev_krouting *routing);
+> +int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
+> +				 const struct v4l2_subdev_krouting *routing,
+> +				 enum v4l2_subdev_routing_restriction disallow);
+>
+>  struct v4l2_subdev_route *
+>  __v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
+> --
+> Regards,
+>
+> Laurent Pinchart
+>
