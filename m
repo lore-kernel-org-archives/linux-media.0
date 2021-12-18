@@ -2,105 +2,170 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28D1CC433EF
-	for <linux-media@archiver.kernel.org>; Sat, 18 Dec 2021 01:58:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AF89C433EF
+	for <linux-media@archiver.kernel.org>; Sat, 18 Dec 2021 05:46:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbhLRB6P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 Dec 2021 20:58:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbhLRB6P (ORCPT
+        id S232072AbhLRFqK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 18 Dec 2021 00:46:10 -0500
+Received: from ewsoutbound.kpnmail.nl ([195.121.94.185]:37863 "EHLO
+        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232066AbhLRFqJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 Dec 2021 20:58:15 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063E5C061574;
-        Fri, 17 Dec 2021 17:58:15 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id m24so3303670pls.10;
-        Fri, 17 Dec 2021 17:58:15 -0800 (PST)
+        Sat, 18 Dec 2021 00:46:09 -0500
+X-KPN-MessageId: 2e4fd51d-5fc5-11ec-a0ab-005056999439
+Received: from smtp.kpnmail.nl (unknown [10.31.155.8])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 2e4fd51d-5fc5-11ec-a0ab-005056999439;
+        Sat, 18 Dec 2021 06:41:43 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pFfNVSOltuNWp1wMtI3hg/qMObF7DQ/1Aun+IfAtVr8=;
-        b=Ku2yX3hNsH1XjBVY62B25nOIqkkNt+zmO+8g5n+lPfF75Uze5Tam4vlb1rWefeX0tQ
-         jGr/W02uNdbacnH0FuFZjctXsxa26d9e/0MzE9yJCNwSY88Q2g/300ORMOJQRuhGfxPf
-         ea84uiFj+ShaVJIP0LMO66MPHnSKDDfmQEZUxiH4lRUiyfAO9bN8WkrfmmTLWxmxV+ie
-         YK6C/Pn1QjfjCuChIUxzOs4MCsXRGzsrqjuul/dztx6ugdKnSbhCUYitwWTMKgeUd16V
-         jybCQzyUJ5NLbWMO324vcBmue+7HLvpi80Us5fk6TovQ2wQg+GyHkqIupQZbjs4N/quS
-         w/uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pFfNVSOltuNWp1wMtI3hg/qMObF7DQ/1Aun+IfAtVr8=;
-        b=0m427m2SFF37JWNjbj4g4kCYgDfPKdrEeRnvtKHwNA4ur79pdUz0NoMvyoJYGbrhtD
-         dUEr3mp9ubT54J2iwzeWmCW/xGwFb3WRanA6a2eIravFGfRP6hXe9mufNB0xEo3wRMbV
-         TR1oru/oL9dQUCZbxFMShli+BbFbop0MnO4Bcb/+F/aTptYUsIHnmGyb2wPqkgwfx2Zr
-         0YIlW6hJeh4H80ooFvQDCNcMDah/+mEMK/stwM0b7P+trNBVQo52/LJnLovYijEGJsS7
-         WFSZt+mHhGqNcjMtgQ6uyPpcIKu7rzczIBMhqKh0bEcEIhD7zZxApfR1mhq71WOWlr/+
-         KxRw==
-X-Gm-Message-State: AOAM530r5BO+ZuhnSxahaTJwGUFUsziwfzU3KJKW7E6W/u+2Th7Cxsw0
-        GC26SlVUQMRTZX9AodYBe14=
-X-Google-Smtp-Source: ABdhPJzB8JazEJhP+/mJKteVGLQBI8KNkSAxq2OHSWjU+1dJJCp9aBhu/oGvEjtTneUzIRrqMt7hLg==
-X-Received: by 2002:a17:902:bc41:b0:148:aef6:b5ad with SMTP id t1-20020a170902bc4100b00148aef6b5admr6073087plz.27.1639792694595;
-        Fri, 17 Dec 2021 17:58:14 -0800 (PST)
-Received: from debian11-dev-61.localdomain (192.243.120.180.16clouds.com. [192.243.120.180])
-        by smtp.gmail.com with ESMTPSA id n14sm404657pgd.80.2021.12.17.17.58.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 17:58:14 -0800 (PST)
-From:   davidcomponentone@gmail.com
-To:     mchehab@kernel.org
-Cc:     davidcomponentone@gmail.com, arnd@arndb.de,
-        hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] media: saa7134: use swap() to make code cleaner
-Date:   Sat, 18 Dec 2021 09:58:02 +0800
-Message-Id: <021c7dbfec45346672d1773bd322c00b62906e54.1639791971.git.yang.guang5@zte.com.cn>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        d=xs4all.nl; s=xs4all01;
+        h=subject:to:from:date:message-id;
+        bh=GLMgliNZvuB45s9cSYmO1GsBV6GSt5sQgQuS7JPnMGA=;
+        b=dx7B5b5SMs1oUACVGFnBIGv+OYGntVJDkTD0ClQLCvYjEe/+ApT3ttQMFQrig+iA1v79ML301t5jr
+         jxmbnuegNzZgkf/AIuJ3diXZQUjMcb/W915bI9DrhKuAaf5J9GP2qVIKz2s3EmwULhLNcgyJpasK7I
+         dTTQeJnrFTlD4xJQvE+5G++qVfCEuzDhtFyrYcDBT2P0NBvZaSGnLiGrLzPvghzsm7EiyFXuk6NGpL
+         TyuKOBMebVL8t9LO92HEseYxvQYlqXywB5ULOvXzaOpFkfcPYYi1jH5+oCkIQGYwyyW6MU2DabiIl6
+         +humwVw2eLiR5JWb8UibMM/7oEcUbKQ==
+Message-ID: <da924f50-5fc5-11ec-a83c-00505699d6e5@smtp.kpnmail.nl>
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|Fa3XcRPuMklnHCG5jfDtJ9VJmnH3H1Q5mO71r/cq2nJmh9NlQ6xS16d2iODNsgv
+ PhVO3pXcKBcSk/y/o3PD8wg==
+X-Originating-IP: 80.101.105.217
+Received: from localhost (marune.xs4all.nl [80.101.105.217])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id da621203-5fc5-11ec-a83c-00505699d6e5;
+        Sat, 18 Dec 2021 06:46:32 +0100 (CET)
+Date:   Sat, 18 Dec 2021 06:46:05 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yang Guang <yang.guang5@zte.com.cn>
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Use the macro 'swap()' defined in 'include/linux/minmax.h' to avoid
-opencoding it.
+Results of the daily build of media_tree:
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: David Yang <davidcomponentone@gmail.com>
-Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
----
- drivers/media/pci/saa7134/saa7134-video.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+date:			Sat Dec 18 05:00:12 CET 2021
+media-tree git hash:	68b9bcc8a534cd11fe55f8bc82f948aae7d81b3c
+media_build git hash:	7a9f6b78c746e1ad87a8a46736851a3078cd5a92
+v4l-utils git hash:	6c905930e8e9bdf485f857ea8aadcaffbfd0943d
+edid-decode git hash:	f20c85d7b4c537e0d458f85c4da9f45cd3c0fbd2
+gcc version:		i686-linux-gcc (GCC) 11.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		v0.6.3-349-gb21d5e09
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		v0.5.0-7537-ga9e379d05
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 113d52660b1fa16141bccb95d4bdbd2a4bd90d26
+host hardware:		x86_64
+host os:		5.15.0-2-amd64
 
-diff --git a/drivers/media/pci/saa7134/saa7134-video.c b/drivers/media/pci/saa7134/saa7134-video.c
-index 374c8e1087de..6f4132058c35 100644
---- a/drivers/media/pci/saa7134/saa7134-video.c
-+++ b/drivers/media/pci/saa7134/saa7134-video.c
-@@ -823,7 +823,7 @@ static int buffer_activate(struct saa7134_dev *dev,
- {
- 	struct saa7134_dmaqueue *dmaq = buf->vb2.vb2_buf.vb2_queue->drv_priv;
- 	unsigned long base,control,bpl;
--	unsigned long bpl_uv,lines_uv,base2,base3,tmp; /* planar */
-+	unsigned long bpl_uv, lines_uv, base2, base3; /* planar */
- 
- 	video_dbg("buffer_activate buf=%p\n", buf);
- 	buf->top_seen = 0;
-@@ -869,9 +869,7 @@ static int buffer_activate(struct saa7134_dev *dev,
- 		base2    = base + bpl * dev->height;
- 		base3    = base2 + bpl_uv * lines_uv;
- 		if (dev->fmt->uvswap) {
--			tmp = base2;
--			base2 = base3;
--			base3 = tmp;
-+			swap(base2, base3);
- 		}
- 		video_dbg("uv: bpl=%ld lines=%ld base2/3=%ld/%ld\n",
- 			bpl_uv,lines_uv,base2,base3);
--- 
-2.30.2
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-mips: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-arm-multi: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-4.4.283-i686: OK
+linux-4.4.283-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.246-i686: OK
+linux-4.9.246-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.246-i686: OK
+linux-4.14.246-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.206-i686: OK
+linux-4.19.206-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.144-i686: OK
+linux-5.4.144-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.18-i686: OK
+linux-5.8.18-x86_64: OK
+linux-5.9.16-i686: OK
+linux-5.9.16-x86_64: OK
+linux-5.10.62-i686: OK
+linux-5.10.62-x86_64: OK
+linux-5.11.22-i686: OK
+linux-5.11.22-x86_64: OK
+linux-5.12.19-i686: OK
+linux-5.12.19-x86_64: OK
+linux-5.13.14-i686: OK
+linux-5.13.14-x86_64: OK
+linux-5.14.1-i686: OK
+linux-5.14.1-x86_64: OK
+linux-5.15.1-i686: OK
+linux-5.15.1-x86_64: OK
+linux-5.16-rc1-i686: OK
+linux-5.16-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 0
+virtme-32: OK: Final Summary: 3100, Succeeded: 3100, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: WARNINGS
 
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
