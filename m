@@ -2,36 +2,39 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA292C4321E
-	for <linux-media@archiver.kernel.org>; Wed, 22 Dec 2021 14:20:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89278C4167B
+	for <linux-media@archiver.kernel.org>; Wed, 22 Dec 2021 14:20:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245687AbhLVOU5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Dec 2021 09:20:57 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48750 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241186AbhLVOUy (ORCPT
+        id S245698AbhLVOU6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Dec 2021 09:20:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60362 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245664AbhLVOUy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 22 Dec 2021 09:20:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC526C061401;
+        Wed, 22 Dec 2021 06:20:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 490B0B81CD6;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8248AB81CF1;
         Wed, 22 Dec 2021 14:20:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1215AC36AE8;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DAB9C36AEB;
         Wed, 22 Dec 2021 14:20:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1640182852;
-        bh=p2tpqMrb/8u2b/uYsVHFj/Wz9xJRNpu0RJPMbbPGvlE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a3BASscMyF0R4HGLKoTEBurIYADhcBzP9jhTmWA4UdQjbSbv0Va/qUJF9eWHmHBby
-         TSNqk70vB47i2IQH4aI6VGQMb077ogJb87lAYEeChGTDhc/oekuvyNBBL7+OwbNn2g
-         jBt6fIK6CQxomlYAUiZviTe/cS7ZitShwlvida/wneRTIcmMJPj6Et/7ahLSZre3hJ
-         7DkqUUxW98ihcbGN8fYiGZCm3+NBpXtIQs35pI40F6HP3rR5cvOg2FH9ivhmfCqyhn
-         O/bPV6nouRJILBXUCgIwkWmtu9XnI4TmzGX+F/3QUPidHHpk3lS4f7kWy7/yBig28x
-         4+GaJumA8w2+w==
+        bh=VgxL4j+yOUkkk/vgfENOj/oZDG5YSOK8ngjyMZDyut8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Jr81o+Pbylb9Zl6RTIzCV+ueTnDPnNKOSiIFSoJwUrvNawpwHWZf61w9IUTvECZZa
+         yFogu82GASsZQKJ/rupRax/B5p2rFJBcmFhmIx/74ZixZq9OZBIAC9raQsKLWYM9W+
+         T14V0zufJmY6hraNzalXYQDv+Hl0+llPQnLYpZEERwF8NOxuEwoBbXRNRmit8Ia4Ph
+         0juFIbpsXh664ZvM1jtZItdQWhJjLqxU9ofxWA2vl3k2VbeLtzWKoRLpp3f5adWtT0
+         93N+WjY2rC9OH1MyArFS/d6W2fxmao5IJvVgRv1D5P8v/XNqVSRAxl2QBzSbAWRY3Z
+         W1xZocEqi5r7g==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1n02U0-0007ul-P5; Wed, 22 Dec 2021 15:20:44 +0100
+        id 1n02Tz-0007uh-TY; Wed, 22 Dec 2021 15:20:44 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -39,65 +42,36 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Kevin Hilman <khilman@baylibre.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH 2/4] media: davinci: vpif: fix unbalanced runtime PM enable
-Date:   Wed, 22 Dec 2021 15:20:23 +0100
-Message-Id: <20211222142025.30364-3-johan@kernel.org>
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 0/4] media: davinci: vpif: fix use-after-free on driver unbind
+Date:   Wed, 22 Dec 2021 15:20:21 +0100
+Message-Id: <20211222142025.30364-1-johan@kernel.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211222142025.30364-1-johan@kernel.org>
-References: <20211222142025.30364-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make sure to disable runtime PM before returning on probe errors.
+When scanning the tree for drivers that did not handle platform-device
+registration failures properly I stumbled upon this driver, which also
+failed to deregister device structures before freeing them.
 
-Fixes: 479f7a118105 ("[media] davinci: vpif: adaptions for DT support")
-Cc: stable@vger.kernel.org      # 4.12: 4024d6f601e3c
-Cc: Kevin Hilman <khilman@baylibre.com>
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/media/platform/davinci/vpif.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+Included are also some related runtime PM imbalance fixes and a printk
+clean up.
 
-diff --git a/drivers/media/platform/davinci/vpif.c b/drivers/media/platform/davinci/vpif.c
-index 9752a5ec36f7..1f5eacf48580 100644
---- a/drivers/media/platform/davinci/vpif.c
-+++ b/drivers/media/platform/davinci/vpif.c
-@@ -428,6 +428,7 @@ static int vpif_probe(struct platform_device *pdev)
- 	static struct resource *res_irq;
- 	struct platform_device *pdev_capture, *pdev_display;
- 	struct device_node *endpoint = NULL;
-+	int ret;
- 
- 	vpif_base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(vpif_base))
-@@ -456,8 +457,8 @@ static int vpif_probe(struct platform_device *pdev)
- 	res_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
- 	if (!res_irq) {
- 		dev_warn(&pdev->dev, "Missing IRQ resource.\n");
--		pm_runtime_put(&pdev->dev);
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto err_put_rpm;
- 	}
- 
- 	pdev_capture = devm_kzalloc(&pdev->dev, sizeof(*pdev_capture),
-@@ -491,6 +492,12 @@ static int vpif_probe(struct platform_device *pdev)
- 	}
- 
- 	return 0;
-+
-+err_put_rpm:
-+	pm_runtime_put(&pdev->dev);
-+	pm_runtime_disable(&pdev->dev);
-+
-+	return ret;
- }
- 
- static int vpif_remove(struct platform_device *pdev)
+Johan
+
+
+Johan Hovold (4):
+  media: davinci: vpif: fix unbalanced runtime PM get
+  media: davinci: vpif: fix unbalanced runtime PM enable
+  media: davinci: vpif: fix use-after-free on driver unbind
+  media: davinci: vpif: drop probe printk
+
+ drivers/media/platform/davinci/vpif.c | 111 +++++++++++++++++++-------
+ 1 file changed, 81 insertions(+), 30 deletions(-)
+
 -- 
 2.32.0
 
