@@ -2,101 +2,231 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8590CC4332F
-	for <linux-media@archiver.kernel.org>; Wed, 22 Dec 2021 14:13:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D8BBC433EF
+	for <linux-media@archiver.kernel.org>; Wed, 22 Dec 2021 14:20:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245607AbhLVONP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 Dec 2021 09:13:15 -0500
-Received: from ewsoutbound.kpnmail.nl ([195.121.94.170]:55400 "EHLO
-        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbhLVONN (ORCPT
+        id S245676AbhLVOU4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 Dec 2021 09:20:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237093AbhLVOUx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 Dec 2021 09:13:13 -0500
-X-KPN-MessageId: 274244dc-6331-11ec-8a6e-005056ab378f
-Received: from smtp.kpnmail.nl (unknown [10.31.155.38])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id 274244dc-6331-11ec-8a6e-005056ab378f;
-        Wed, 22 Dec 2021 15:12:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:from:to:subject:mime-version:date:message-id;
-        bh=D7qUlmyWyRiBM87fcOPYLUo3TqeXcR8SLDEfqWVhTeE=;
-        b=tQQnRIjzHhP68s+68bMajYZC+ii1qI3/L3IXMw5kKGRQhGTvePFDJL5KOaiwJFupzjV6tU87E0sxw
-         inac2+cllLahPQMZVciYEYYUfCQ0BbOBoLQXtkMiC55lnGj0pyOBzcwE60TJ9m4bZ2vlY4GNXf6sLd
-         1bsAwShfFsqMMMEltfQsSmbXiuxctI1MLY8+Az6hwEZ+2tn8ZmfibNgtRdhg22CfpLOKiAbOUSGdQx
-         AFfBZHg13pBsKdZCnj+C+eKZ+/NDU2jeQPk57vVoBrd/2i5OGSwsUjjeqwMUjPwFfMgKD+DgFPcxPY
-         nS/l81eNrXE1uOUCfWDQ5WOMQ+EF1lg==
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|qg0CkmnxFkjnY6FZyiTdaeY6kx8pktK47rEV/taqXLOMDWKl4uNrWffXrYj8eka
- wfPHVTauMYkr6gD6uVRS4Gg==
-X-Originating-IP: 80.101.105.217
-Received: from [192.168.1.10] (marune.xs4all.nl [80.101.105.217])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id 4bcaacaa-6331-11ec-94d2-005056abf0db;
-        Wed, 22 Dec 2021 15:13:12 +0100 (CET)
-Message-ID: <04e5c9b4-2a96-6b5f-7c26-89e1cbf8576f@xs4all.nl>
-Date:   Wed, 22 Dec 2021 15:13:11 +0100
+        Wed, 22 Dec 2021 09:20:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A9DC061574;
+        Wed, 22 Dec 2021 06:20:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6F2B61AE4;
+        Wed, 22 Dec 2021 14:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B735C36AEC;
+        Wed, 22 Dec 2021 14:20:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640182852;
+        bh=GH8ZhuVCZyxWDQtV2NsW9yVCJnRzBkxIGGv9E/ld4eQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pA0JFQIOx/0bkHM6KmThO17osjriKyZev8M4Z9JwbCfIHyup7y3DVHOeNwcotJNuo
+         dtG1+h4yfhm3Vl3bzvskkmGkmEkl3ucrTzdAjHGaFhLws/WUHmPxoafnpzb95HHDHd
+         1nSjmt6WKQZExdF9xAbr2k9Rmru2wNNsAcVUhtf3cfUIfEd+vfGmSDW9znB1B4YaQs
+         crPy24YcFjnma5NHn1LyHHr/vha9MxXUtKyDtxJBr3/OcZGXruAWlIUmlS9dQ/kd6q
+         xXSYVN7tC25tUaqvEXDk+poZcMTCEN1bh+0TD6iBL3eXC+tzZq5rtiSEUNYyvnIsVx
+         80aB1yXzpV+mA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1n02U0-0007uo-RF; Wed, 22 Dec 2021 15:20:44 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH 3/4] media: davinci: vpif: fix use-after-free on driver unbind
+Date:   Wed, 22 Dec 2021 15:20:24 +0100
+Message-Id: <20211222142025.30364-4-johan@kernel.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211222142025.30364-1-johan@kernel.org>
+References: <20211222142025.30364-1-johan@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v4 0/2] Remove clock-lanes DT property from CAMSS
-Content-Language: en-US
-To:     Robert Foss <robert.foss@linaro.org>, todor.too@gmail.com,
-        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
-        robh+dt@kernel.org, angelogioacchino.delregno@somainline.org,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-References: <20211206151811.39271-1-robert.foss@linaro.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20211206151811.39271-1-robert.foss@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Robert,
+The driver allocates and registers two platform device structures during
+probe, but the devices were never deregistered on driver unbind.
 
-I posted a PR for Bryan's 'CAMSS: Add SM8250 support' series, but your patch series
-clashes with his. Can you rebase this series on top of Bryan's work?
+This results in a use-after-free on driver unbind as the device
+structures were allocated using devres and would be freed by driver
+core when remove() returns.
 
-You can use this branch I made for the PR if you want:
+Fix this by adding the missing deregistration calls to the remove()
+callback and failing probe on registration errors.
 
-https://git.linuxtv.org/hverkuil/media_tree.git/log/?h=for-v5.17j
+Note that the platform device structures must be freed using a proper
+release callback to avoid leaking associated resources like device
+names.
 
-Thanks!
+Fixes: 479f7a118105 ("[media] davinci: vpif: adaptions for DT support")
+Cc: stable@vger.kernel.org      # 4.12
+Cc: Kevin Hilman <khilman@baylibre.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/media/platform/davinci/vpif.c | 97 ++++++++++++++++++++-------
+ 1 file changed, 71 insertions(+), 26 deletions(-)
 
-	Hans
-
-On 06/12/2021 16:18, Robert Foss wrote:
-> Changes since v3:
->  - Split patches heading for Media and ARM64 tress
->    into two seperate series
-> 
-> Changes since v2:
->  - Stephan: Rebased on v5.16-rc1
->  - Stephan: Fixed 3/4 commit message title
-> 
-> Changes since v1:
->  - Rob: Instead of documenting and fixing the use of the clock-lanes
->    property, remove it, since it is is not programmable and
->    therefore shouldn't be exposed in the DT.
-> 
-> Robert Foss (2):
->   media: camss: csiphy: Move to hardcode CSI Clock Lane number
->   media: dt-bindings: media: camss: Remove clock-lane property
-> 
->  .../bindings/media/qcom,msm8916-camss.yaml    | 10 ---------
->  .../bindings/media/qcom,msm8996-camss.yaml    | 20 ------------------
->  .../bindings/media/qcom,sdm660-camss.yaml     | 20 ------------------
->  .../bindings/media/qcom,sdm845-camss.yaml     | 17 ---------------
->  .../qcom/camss/camss-csiphy-2ph-1-0.c         | 19 +++++++++++++++--
->  .../qcom/camss/camss-csiphy-3ph-1-0.c         | 17 ++++++++++++++-
->  .../media/platform/qcom/camss/camss-csiphy.c  | 21 +------------------
->  .../media/platform/qcom/camss/camss-csiphy.h  |  7 +++++++
->  8 files changed, 41 insertions(+), 90 deletions(-)
-> 
+diff --git a/drivers/media/platform/davinci/vpif.c b/drivers/media/platform/davinci/vpif.c
+index 1f5eacf48580..4a260f4ed236 100644
+--- a/drivers/media/platform/davinci/vpif.c
++++ b/drivers/media/platform/davinci/vpif.c
+@@ -41,6 +41,11 @@ MODULE_ALIAS("platform:" VPIF_DRIVER_NAME);
+ #define VPIF_CH2_MAX_MODES	15
+ #define VPIF_CH3_MAX_MODES	2
+ 
++struct vpif_data {
++	struct platform_device *capture;
++	struct platform_device *display;
++};
++
+ DEFINE_SPINLOCK(vpif_lock);
+ EXPORT_SYMBOL_GPL(vpif_lock);
+ 
+@@ -423,17 +428,31 @@ int vpif_channel_getfid(u8 channel_id)
+ }
+ EXPORT_SYMBOL(vpif_channel_getfid);
+ 
++static void vpif_pdev_release(struct device *dev)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++
++	kfree(pdev);
++}
++
+ static int vpif_probe(struct platform_device *pdev)
+ {
+ 	static struct resource *res_irq;
+ 	struct platform_device *pdev_capture, *pdev_display;
+ 	struct device_node *endpoint = NULL;
++	struct vpif_data *data;
+ 	int ret;
+ 
+ 	vpif_base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(vpif_base))
+ 		return PTR_ERR(vpif_base);
+ 
++	data = kzalloc(sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, data);
++
+ 	pm_runtime_enable(&pdev->dev);
+ 	pm_runtime_get(&pdev->dev);
+ 
+@@ -461,49 +480,75 @@ static int vpif_probe(struct platform_device *pdev)
+ 		goto err_put_rpm;
+ 	}
+ 
+-	pdev_capture = devm_kzalloc(&pdev->dev, sizeof(*pdev_capture),
+-				    GFP_KERNEL);
+-	if (pdev_capture) {
+-		pdev_capture->name = "vpif_capture";
+-		pdev_capture->id = -1;
+-		pdev_capture->resource = res_irq;
+-		pdev_capture->num_resources = 1;
+-		pdev_capture->dev.dma_mask = pdev->dev.dma_mask;
+-		pdev_capture->dev.coherent_dma_mask = pdev->dev.coherent_dma_mask;
+-		pdev_capture->dev.parent = &pdev->dev;
+-		platform_device_register(pdev_capture);
+-	} else {
+-		dev_warn(&pdev->dev, "Unable to allocate memory for pdev_capture.\n");
++	pdev_capture = kzalloc(sizeof(*pdev_capture), GFP_KERNEL);
++	if (!pdev_capture) {
++		ret = -ENOMEM;
++		goto err_put_rpm;
+ 	}
+ 
+-	pdev_display = devm_kzalloc(&pdev->dev, sizeof(*pdev_display),
+-				    GFP_KERNEL);
+-	if (pdev_display) {
+-		pdev_display->name = "vpif_display";
+-		pdev_display->id = -1;
+-		pdev_display->resource = res_irq;
+-		pdev_display->num_resources = 1;
+-		pdev_display->dev.dma_mask = pdev->dev.dma_mask;
+-		pdev_display->dev.coherent_dma_mask = pdev->dev.coherent_dma_mask;
+-		pdev_display->dev.parent = &pdev->dev;
+-		platform_device_register(pdev_display);
+-	} else {
+-		dev_warn(&pdev->dev, "Unable to allocate memory for pdev_display.\n");
++	pdev_capture->name = "vpif_capture";
++	pdev_capture->id = -1;
++	pdev_capture->resource = res_irq;
++	pdev_capture->num_resources = 1;
++	pdev_capture->dev.dma_mask = pdev->dev.dma_mask;
++	pdev_capture->dev.coherent_dma_mask = pdev->dev.coherent_dma_mask;
++	pdev_capture->dev.parent = &pdev->dev;
++	pdev_capture->dev.release = vpif_pdev_release;
++
++	ret = platform_device_register(pdev_capture);
++	if (ret)
++		goto err_put_pdev_capture;
++
++	pdev_display = kzalloc(sizeof(*pdev_display), GFP_KERNEL);
++	if (!pdev_display) {
++		ret = -ENOMEM;
++		goto err_put_pdev_capture;
+ 	}
+ 
++	pdev_display->name = "vpif_display";
++	pdev_display->id = -1;
++	pdev_display->resource = res_irq;
++	pdev_display->num_resources = 1;
++	pdev_display->dev.dma_mask = pdev->dev.dma_mask;
++	pdev_display->dev.coherent_dma_mask = pdev->dev.coherent_dma_mask;
++	pdev_display->dev.parent = &pdev->dev;
++	pdev_display->dev.release = vpif_pdev_release;
++
++	ret = platform_device_register(pdev_display);
++	if (ret)
++		goto err_put_pdev_display;
++
++	data->capture = pdev_capture;
++	data->display = pdev_display;
++
+ 	return 0;
+ 
++err_put_pdev_display:
++	platform_device_put(pdev_display);
++err_put_pdev_capture:
++	platform_device_put(pdev_capture);
+ err_put_rpm:
+ 	pm_runtime_put(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
++	kfree(data);
+ 
+ 	return ret;
+ }
+ 
+ static int vpif_remove(struct platform_device *pdev)
+ {
++	struct vpif_data *data = platform_get_drvdata(pdev);
++
++	if (data->capture)
++		platform_device_unregister(data->capture);
++	if (data->display)
++		platform_device_unregister(data->display);
++
+ 	pm_runtime_put(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
++
++	kfree(data);
++
+ 	return 0;
+ }
+ 
+-- 
+2.32.0
 
