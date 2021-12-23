@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 846E6C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 19:17:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A01F9C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 19:17:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350030AbhLWTQ7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Dec 2021 14:16:59 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:48618 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350037AbhLWTQ5 (ORCPT
+        id S1350080AbhLWTRM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Dec 2021 14:17:12 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:51924 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350078AbhLWTRF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Dec 2021 14:16:57 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGbxH031731;
-        Thu, 23 Dec 2021 13:16:37 -0600
+        Thu, 23 Dec 2021 14:17:05 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJH0Ja116980;
+        Thu, 23 Dec 2021 13:17:00 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640286997;
-        bh=WkoZc2a2gk1txwTl3OXBZp8HVwX+d+ozeJF+A2BoGBQ=;
+        s=ti-com-17Q1; t=1640287020;
+        bh=QIRk9ky66i0l/47EYbX9zuqS4WVNoPhKK5v5XZuiyGw=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=wafi04jXLZr6kxug6+nxQ0uxBvcpbI62JxSo8WHCLmAQ57isjO/0Zwes98lEL6z5G
-         2m4m0b8WQ6lcERqVgMLS29iaOMO7/n9uAw9pLhCLl/Gpp3ydG89vStvs3VdvDdE8tR
-         WoyM5x0YT0c8+s2/vg6D8UYsv/6MH5Y7ryN0Bft0=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BNJGbSw006581
+        b=UB4f+nQRt46l2i4IlL15do+2CDPxJgtsB1kk2Pi2Dd1UM108qQxjELtMbwKAZXKBc
+         IE90Oe/heSEgeUUT92XU41mZMVqhdqRtrz9ustFSSkAhuAPTRyt4U1OshlSgby4zRi
+         37Fm63yzgB7OkFm6eHTLXwNndbD99CTxoQhM9lp8=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BNJH0H2080048
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Dec 2021 13:16:37 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 23 Dec 2021 13:17:00 -0600
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
- Dec 2021 13:16:36 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ Dec 2021 13:17:00 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 23 Dec 2021 13:16:36 -0600
+ Frontend Transport; Thu, 23 Dec 2021 13:17:00 -0600
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGGQR006164;
-        Thu, 23 Dec 2021 13:16:33 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGGQX006164;
+        Thu, 23 Dec 2021 13:16:57 -0600
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 CC:     Pratyush Yadav <p.yadav@ti.com>,
@@ -52,9 +52,9 @@ CC:     Pratyush Yadav <p.yadav@ti.com>,
         <niklas.soderlund+renesas@ragnatech.se>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-media@vger.kernel.org>
-Subject: [PATCH v5 04/14] media: cadence: csi2rx: Add external DPHY support
-Date:   Fri, 24 Dec 2021 00:46:05 +0530
-Message-ID: <20211223191615.17803-5-p.yadav@ti.com>
+Subject: [PATCH v5 10/14] media: Re-structure TI platform drivers
+Date:   Fri, 24 Dec 2021 00:46:11 +0530
+Message-ID: <20211223191615.17803-11-p.yadav@ti.com>
 X-Mailer: git-send-email 2.33.1.835.ge9e5ba39a7
 In-Reply-To: <20211223191615.17803-1-p.yadav@ti.com>
 References: <20211223191615.17803-1-p.yadav@ti.com>
@@ -66,197 +66,191 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some platforms like TI's J721E can have the CSI2RX paired with an
-external DPHY. Add support to enable and configure the DPHY using the
-generic PHY framework.
+The ti-vpe/ sub-directory does not only contain the VPE-specific things.
+It also contains the CAL driver, which is a completely different
+subsystem. This is also not a good place to add new drivers for other TI
+platforms since they will all get mixed up.
+
+Separate the VPE and CAL parts into different sub-directories and rename
+the ti-vpe/ sub-directory to ti/. This is now the place where new TI
+platform drivers can be added.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 ---
+Compile tested only. There should be no functional change.
 
 Changes in v5:
-- Only error out when phy_pm_runtime_get_sync() returns a negative
-  value. A positive value can be returned if the phy was already
-  resumed.
-- Do not query the source subdev for format. Use the newly added
-  internal format instead.
-
-Changes in v4:
-- Drop the call to set PHY submode. It is now being done via compatible
-  on the DPHY side.
+- Add Laurent's R-by.
 
 Changes in v3:
-- Use v4l2_get_link_freq() to calculate pixel clock.
+- Add Tomi's R-by.
 
 Changes in v2:
-- Use phy_pm_runtime_get_sync() and phy_pm_runtime_put() before making
-  calls to set PHY mode, etc. to make sure it is ready.
+- New in v2.
 
- drivers/media/platform/cadence/cdns-csi2rx.c | 98 ++++++++++++++++++--
- 1 file changed, 88 insertions(+), 10 deletions(-)
+ MAINTAINERS                                              | 3 ++-
+ drivers/media/platform/Makefile                          | 2 +-
+ drivers/media/platform/ti/Makefile                       | 3 +++
+ drivers/media/platform/ti/cal/Makefile                   | 3 +++
+ drivers/media/platform/{ti-vpe => ti/cal}/cal-camerarx.c | 0
+ drivers/media/platform/{ti-vpe => ti/cal}/cal-video.c    | 0
+ drivers/media/platform/{ti-vpe => ti/cal}/cal.c          | 0
+ drivers/media/platform/{ti-vpe => ti/cal}/cal.h          | 0
+ drivers/media/platform/{ti-vpe => ti/cal}/cal_regs.h     | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/Makefile       | 4 ----
+ drivers/media/platform/{ti-vpe => ti/vpe}/csc.c          | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/csc.h          | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/sc.c           | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/sc.h           | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/sc_coeff.h     | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.c        | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.h        | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpdma_priv.h   | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpe.c          | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpe_regs.h     | 0
+ 20 files changed, 9 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/media/platform/ti/Makefile
+ create mode 100644 drivers/media/platform/ti/cal/Makefile
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal-camerarx.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal-video.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/cal}/cal_regs.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/Makefile (78%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/csc.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/csc.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/sc.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/sc.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/sc_coeff.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma_priv.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpe.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpe_regs.h (100%)
 
-diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index 4a2a5a9d019b..afd4a0da8235 100644
---- a/drivers/media/platform/cadence/cdns-csi2rx.c
-+++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -30,6 +30,12 @@
- #define CSI2RX_STATIC_CFG_DLANE_MAP(llane, plane)	((plane) << (16 + (llane) * 4))
- #define CSI2RX_STATIC_CFG_LANES_MASK			GENMASK(11, 8)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 16bc8cdc1492..3b8fa4e5047f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19299,7 +19299,8 @@ W:	http://linuxtv.org/
+ Q:	http://patchwork.linuxtv.org/project/linux-media/list/
+ F:	Documentation/devicetree/bindings/media/ti,cal.yaml
+ F:	Documentation/devicetree/bindings/media/ti,vpe.yaml
+-F:	drivers/media/platform/ti-vpe/
++F:	drivers/media/platform/ti/cal/
++F:	drivers/media/platform/ti/vpe/
  
-+#define CSI2RX_DPHY_LANE_CTRL_REG		0x40
-+#define CSI2RX_DPHY_CL_RST			BIT(16)
-+#define CSI2RX_DPHY_DL_RST(i)			BIT((i) + 12)
-+#define CSI2RX_DPHY_CL_EN			BIT(4)
-+#define CSI2RX_DPHY_DL_EN(i)			BIT(i)
-+
- #define CSI2RX_STREAM_BASE(n)		(((n) + 1) * 0x100)
+ TI WILINK WIRELESS DRIVERS
+ L:	linux-wireless@vger.kernel.org
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 19bcbced7382..ba9405ab2490 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -15,7 +15,7 @@ obj-$(CONFIG_VIDEO_PXA27x)	+= pxa_camera.o
  
- #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
-@@ -137,6 +143,57 @@ static void csi2rx_reset(struct csi2rx_priv *csi2rx)
- 	writel(0, csi2rx->base + CSI2RX_SOFT_RESET_REG);
- }
+ obj-$(CONFIG_VIDEO_VIU) += fsl-viu.o
  
-+static int csi2rx_configure_external_dphy(struct csi2rx_priv *csi2rx)
-+{
-+	union phy_configure_opts opts = { };
-+	struct phy_configure_opts_mipi_dphy *cfg = &opts.mipi_dphy;
-+	const struct csi2rx_fmt *fmt;
-+	s64 pixel_clock;
-+	int ret;
-+	u8 bpp;
-+	bool got_pm = true;
-+
-+	fmt = csi2rx_get_fmt_by_code(csi2rx->fmt.code);
-+	bpp = fmt->bpp;
-+
-+	/*
-+	 * Do not divide by the number of lanes here. That will be done by
-+	 * phy_mipi_dphy_get_default_config().
-+	 */
-+	pixel_clock = v4l2_get_link_freq(csi2rx->source_subdev->ctrl_handler,
-+					 1, 2);
-+	if (pixel_clock < 0)
-+		return pixel_clock;
-+
-+	ret = phy_mipi_dphy_get_default_config(pixel_clock, bpp,
-+					       csi2rx->num_lanes, cfg);
-+	if (ret)
-+		return ret;
-+
-+	ret = phy_pm_runtime_get_sync(csi2rx->dphy);
-+	if (ret == -ENOTSUPP)
-+		got_pm = false;
-+	else if (ret < 0)
-+		return ret;
-+
-+	ret = phy_power_on(csi2rx->dphy);
-+	if (ret)
-+		goto out;
-+
-+	ret = phy_configure(csi2rx->dphy, &opts);
-+	if (ret) {
-+		/* Can't do anything if it fails. Ignore the return value. */
-+		phy_power_off(csi2rx->dphy);
-+		goto out;
-+	}
-+
-+out:
-+	if (got_pm)
-+		phy_pm_runtime_put(csi2rx->dphy);
-+
-+	return ret;
-+}
-+
- static int csi2rx_start(struct csi2rx_priv *csi2rx)
- {
- 	unsigned int i;
-@@ -175,6 +232,17 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
- 	if (ret)
- 		goto err_disable_pclk;
+-obj-y	+= ti-vpe/
++obj-y	+= ti/
  
-+	/* Enable DPHY clk and data lanes. */
-+	if (csi2rx->dphy) {
-+		reg = CSI2RX_DPHY_CL_EN | CSI2RX_DPHY_CL_RST;
-+		for (i = 0; i < csi2rx->num_lanes; i++) {
-+			reg |= CSI2RX_DPHY_DL_EN(csi2rx->lanes[i] - 1);
-+			reg |= CSI2RX_DPHY_DL_RST(csi2rx->lanes[i] - 1);
-+		}
-+
-+		writel(reg, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
-+	}
-+
- 	/*
- 	 * Create a static mapping between the CSI virtual channels
- 	 * and the output stream.
-@@ -205,10 +273,21 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
- 	if (ret)
- 		goto err_disable_pixclk;
+ obj-$(CONFIG_VIDEO_MX2_EMMAPRP)		+= mx2_emmaprp.o
+ obj-$(CONFIG_VIDEO_CODA)		+= coda/
+diff --git a/drivers/media/platform/ti/Makefile b/drivers/media/platform/ti/Makefile
+new file mode 100644
+index 000000000000..bbc737ccbbea
+--- /dev/null
++++ b/drivers/media/platform/ti/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++obj-y += cal/
++obj-y += vpe/
+diff --git a/drivers/media/platform/ti/cal/Makefile b/drivers/media/platform/ti/cal/Makefile
+new file mode 100644
+index 000000000000..45ac35585f0b
+--- /dev/null
++++ b/drivers/media/platform/ti/cal/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_VIDEO_TI_CAL) += ti-cal.o
++ti-cal-y := cal.o cal-camerarx.o cal-video.o
+diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti/cal/cal-camerarx.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/cal-camerarx.c
+rename to drivers/media/platform/ti/cal/cal-camerarx.c
+diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti/cal/cal-video.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/cal-video.c
+rename to drivers/media/platform/ti/cal/cal-video.c
+diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti/cal/cal.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/cal.c
+rename to drivers/media/platform/ti/cal/cal.c
+diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti/cal/cal.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/cal.h
+rename to drivers/media/platform/ti/cal/cal.h
+diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti/cal/cal_regs.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/cal_regs.h
+rename to drivers/media/platform/ti/cal/cal_regs.h
+diff --git a/drivers/media/platform/ti-vpe/Makefile b/drivers/media/platform/ti/vpe/Makefile
+similarity index 78%
+rename from drivers/media/platform/ti-vpe/Makefile
+rename to drivers/media/platform/ti/vpe/Makefile
+index ad624056e039..3fadfe084f87 100644
+--- a/drivers/media/platform/ti-vpe/Makefile
++++ b/drivers/media/platform/ti/vpe/Makefile
+@@ -10,7 +10,3 @@ ti-sc-y := sc.o
+ ti-csc-y := csc.o
  
-+	if (csi2rx->dphy) {
-+		ret = csi2rx_configure_external_dphy(csi2rx);
-+		if (ret) {
-+			dev_err(csi2rx->dev,
-+				"Failed to configure external DPHY: %d\n", ret);
-+			goto err_disable_sysclk;
-+		}
-+	}
-+
- 	clk_disable_unprepare(csi2rx->p_clk);
- 
- 	return 0;
- 
-+err_disable_sysclk:
-+	clk_disable_unprepare(csi2rx->sys_clk);
- err_disable_pixclk:
- 	for (; i > 0; i--)
- 		clk_disable_unprepare(csi2rx->pixel_clk[i - 1]);
-@@ -236,6 +315,13 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
- 
- 	if (v4l2_subdev_call(csi2rx->source_subdev, video, s_stream, false))
- 		dev_warn(csi2rx->dev, "Couldn't disable our subdev\n");
-+
-+	if (csi2rx->dphy) {
-+		writel(0, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
-+
-+		if (phy_power_off(csi2rx->dphy))
-+			dev_warn(csi2rx->dev, "Couldn't power off DPHY\n");
-+	}
- }
- 
- static int csi2rx_s_stream(struct v4l2_subdev *subdev, int enable)
-@@ -438,15 +524,6 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
- 		return PTR_ERR(csi2rx->dphy);
- 	}
- 
--	/*
--	 * FIXME: Once we'll have external D-PHY support, the check
--	 * will need to be removed.
--	 */
--	if (csi2rx->dphy) {
--		dev_err(&pdev->dev, "External D-PHY not supported yet\n");
--		return -EINVAL;
--	}
+ ccflags-$(CONFIG_VIDEO_TI_VPE_DEBUG) += -DDEBUG
 -
- 	ret = clk_prepare_enable(csi2rx->p_clk);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Couldn't prepare and enable P clock\n");
-@@ -476,7 +553,7 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
- 	 * FIXME: Once we'll have internal D-PHY support, the check
- 	 * will need to be removed.
- 	 */
--	if (csi2rx->has_internal_dphy) {
-+	if (!csi2rx->dphy && csi2rx->has_internal_dphy) {
- 		dev_err(&pdev->dev, "Internal D-PHY not supported yet\n");
- 		return -EINVAL;
- 	}
-@@ -601,6 +678,7 @@ static int csi2rx_probe(struct platform_device *pdev)
- 	dev_info(&pdev->dev,
- 		 "Probed CSI2RX with %u/%u lanes, %u streams, %s D-PHY\n",
- 		 csi2rx->num_lanes, csi2rx->max_lanes, csi2rx->max_streams,
-+		 csi2rx->dphy ? "external" :
- 		 csi2rx->has_internal_dphy ? "internal" : "no");
- 
- 	return 0;
+-obj-$(CONFIG_VIDEO_TI_CAL) += ti-cal.o
+-
+-ti-cal-y := cal.o cal-camerarx.o cal-video.o
+diff --git a/drivers/media/platform/ti-vpe/csc.c b/drivers/media/platform/ti/vpe/csc.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/csc.c
+rename to drivers/media/platform/ti/vpe/csc.c
+diff --git a/drivers/media/platform/ti-vpe/csc.h b/drivers/media/platform/ti/vpe/csc.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/csc.h
+rename to drivers/media/platform/ti/vpe/csc.h
+diff --git a/drivers/media/platform/ti-vpe/sc.c b/drivers/media/platform/ti/vpe/sc.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/sc.c
+rename to drivers/media/platform/ti/vpe/sc.c
+diff --git a/drivers/media/platform/ti-vpe/sc.h b/drivers/media/platform/ti/vpe/sc.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/sc.h
+rename to drivers/media/platform/ti/vpe/sc.h
+diff --git a/drivers/media/platform/ti-vpe/sc_coeff.h b/drivers/media/platform/ti/vpe/sc_coeff.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/sc_coeff.h
+rename to drivers/media/platform/ti/vpe/sc_coeff.h
+diff --git a/drivers/media/platform/ti-vpe/vpdma.c b/drivers/media/platform/ti/vpe/vpdma.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpdma.c
+rename to drivers/media/platform/ti/vpe/vpdma.c
+diff --git a/drivers/media/platform/ti-vpe/vpdma.h b/drivers/media/platform/ti/vpe/vpdma.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpdma.h
+rename to drivers/media/platform/ti/vpe/vpdma.h
+diff --git a/drivers/media/platform/ti-vpe/vpdma_priv.h b/drivers/media/platform/ti/vpe/vpdma_priv.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpdma_priv.h
+rename to drivers/media/platform/ti/vpe/vpdma_priv.h
+diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti/vpe/vpe.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpe.c
+rename to drivers/media/platform/ti/vpe/vpe.c
+diff --git a/drivers/media/platform/ti-vpe/vpe_regs.h b/drivers/media/platform/ti/vpe/vpe_regs.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpe_regs.h
+rename to drivers/media/platform/ti/vpe/vpe_regs.h
 -- 
 2.33.1.835.ge9e5ba39a7
 
