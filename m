@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A0E6C433FE
-	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 19:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 846E6C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 19:17:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350069AbhLWTRD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Dec 2021 14:17:03 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:47606 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350051AbhLWTRB (ORCPT
+        id S1350030AbhLWTQ7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Dec 2021 14:16:59 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:48618 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350037AbhLWTQ5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Dec 2021 14:17:01 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGuYu029389;
-        Thu, 23 Dec 2021 13:16:56 -0600
+        Thu, 23 Dec 2021 14:16:57 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGbxH031731;
+        Thu, 23 Dec 2021 13:16:37 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640287017;
-        bh=GhdMeUU0MDNpTPESfpgGY/7A/kMeZbWC9DeYjW298TE=;
+        s=ti-com-17Q1; t=1640286997;
+        bh=WkoZc2a2gk1txwTl3OXBZp8HVwX+d+ozeJF+A2BoGBQ=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=LqiNrsq50A6dsAf8+k1dpyOVvQM4YtGEsm3fas445CexTLQTT2XKeYjO1ELVnqYeK
-         Bra6CXOcNY7+3y40y9e45+c1A3DSKf6I15bMCd/6JysEdUVt/nVsLIiR4EV++rcsxh
-         ilBtizhtjyrnxO4Z72KA6DFGngIlDpLxfhZw8Xi8=
+        b=wafi04jXLZr6kxug6+nxQ0uxBvcpbI62JxSo8WHCLmAQ57isjO/0Zwes98lEL6z5G
+         2m4m0b8WQ6lcERqVgMLS29iaOMO7/n9uAw9pLhCLl/Gpp3ydG89vStvs3VdvDdE8tR
+         WoyM5x0YT0c8+s2/vg6D8UYsv/6MH5Y7ryN0Bft0=
 Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BNJGusd079999
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BNJGbSw006581
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Dec 2021 13:16:56 -0600
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE112.ent.ti.com
+        Thu, 23 Dec 2021 13:16:37 -0600
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE112.ent.ti.com
  (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
- Dec 2021 13:16:56 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ Dec 2021 13:16:36 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 23 Dec 2021 13:16:56 -0600
+ Frontend Transport; Thu, 23 Dec 2021 13:16:36 -0600
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGGQW006164;
-        Thu, 23 Dec 2021 13:16:53 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGGQR006164;
+        Thu, 23 Dec 2021 13:16:33 -0600
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 CC:     Pratyush Yadav <p.yadav@ti.com>,
@@ -52,9 +52,9 @@ CC:     Pratyush Yadav <p.yadav@ti.com>,
         <niklas.soderlund+renesas@ragnatech.se>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-media@vger.kernel.org>
-Subject: [PATCH v5 09/14] media: cadence: csi2rx: Add link validation
-Date:   Fri, 24 Dec 2021 00:46:10 +0530
-Message-ID: <20211223191615.17803-10-p.yadav@ti.com>
+Subject: [PATCH v5 04/14] media: cadence: csi2rx: Add external DPHY support
+Date:   Fri, 24 Dec 2021 00:46:05 +0530
+Message-ID: <20211223191615.17803-5-p.yadav@ti.com>
 X-Mailer: git-send-email 2.33.1.835.ge9e5ba39a7
 In-Reply-To: <20211223191615.17803-1-p.yadav@ti.com>
 References: <20211223191615.17803-1-p.yadav@ti.com>
@@ -66,44 +66,197 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add media link validation to make sure incorrectly configured pipelines
-are caught. Since there is no support for transcoding, rely on the
-default link validation function to make sure formats across source and
-sink pads are the same.
+Some platforms like TI's J721E can have the CSI2RX paired with an
+external DPHY. Add support to enable and configure the DPHY using the
+generic PHY framework.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 
 ---
 
 Changes in v5:
-- New in v5.
+- Only error out when phy_pm_runtime_get_sync() returns a negative
+  value. A positive value can be returned if the phy was already
+  resumed.
+- Do not query the source subdev for format. Use the newly added
+  internal format instead.
 
- drivers/media/platform/cadence/cdns-csi2rx.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Changes in v4:
+- Drop the call to set PHY submode. It is now being done via compatible
+  on the DPHY side.
+
+Changes in v3:
+- Use v4l2_get_link_freq() to calculate pixel clock.
+
+Changes in v2:
+- Use phy_pm_runtime_get_sync() and phy_pm_runtime_put() before making
+  calls to set PHY mode, etc. to make sure it is ready.
+
+ drivers/media/platform/cadence/cdns-csi2rx.c | 98 ++++++++++++++++++--
+ 1 file changed, 88 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index 53659776a906..119c7540c75a 100644
+index 4a2a5a9d019b..afd4a0da8235 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -492,6 +492,10 @@ static const struct v4l2_subdev_ops csi2rx_subdev_ops = {
- 	.pad		= &csi2rx_pad_ops,
- };
+@@ -30,6 +30,12 @@
+ #define CSI2RX_STATIC_CFG_DLANE_MAP(llane, plane)	((plane) << (16 + (llane) * 4))
+ #define CSI2RX_STATIC_CFG_LANES_MASK			GENMASK(11, 8)
  
-+static struct media_entity_operations csi2rx_media_ops = {
-+	.link_validate = v4l2_subdev_link_validate,
-+};
++#define CSI2RX_DPHY_LANE_CTRL_REG		0x40
++#define CSI2RX_DPHY_CL_RST			BIT(16)
++#define CSI2RX_DPHY_DL_RST(i)			BIT((i) + 12)
++#define CSI2RX_DPHY_CL_EN			BIT(4)
++#define CSI2RX_DPHY_DL_EN(i)			BIT(i)
 +
- static int csi2rx_async_bound(struct v4l2_async_notifier *notifier,
- 			      struct v4l2_subdev *s_subdev,
- 			      struct v4l2_async_subdev *asd)
-@@ -691,6 +695,7 @@ static int csi2rx_probe(struct platform_device *pdev)
- 	for (i = CSI2RX_PAD_SOURCE_STREAM0; i < CSI2RX_PAD_MAX; i++)
- 		csi2rx->pads[i].flags = MEDIA_PAD_FL_SOURCE;
- 	csi2rx->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	csi2rx->subdev.entity.ops = &csi2rx_media_ops;
+ #define CSI2RX_STREAM_BASE(n)		(((n) + 1) * 0x100)
  
- 	ret = media_entity_pads_init(&csi2rx->subdev.entity, CSI2RX_PAD_MAX,
- 				     csi2rx->pads);
+ #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
+@@ -137,6 +143,57 @@ static void csi2rx_reset(struct csi2rx_priv *csi2rx)
+ 	writel(0, csi2rx->base + CSI2RX_SOFT_RESET_REG);
+ }
+ 
++static int csi2rx_configure_external_dphy(struct csi2rx_priv *csi2rx)
++{
++	union phy_configure_opts opts = { };
++	struct phy_configure_opts_mipi_dphy *cfg = &opts.mipi_dphy;
++	const struct csi2rx_fmt *fmt;
++	s64 pixel_clock;
++	int ret;
++	u8 bpp;
++	bool got_pm = true;
++
++	fmt = csi2rx_get_fmt_by_code(csi2rx->fmt.code);
++	bpp = fmt->bpp;
++
++	/*
++	 * Do not divide by the number of lanes here. That will be done by
++	 * phy_mipi_dphy_get_default_config().
++	 */
++	pixel_clock = v4l2_get_link_freq(csi2rx->source_subdev->ctrl_handler,
++					 1, 2);
++	if (pixel_clock < 0)
++		return pixel_clock;
++
++	ret = phy_mipi_dphy_get_default_config(pixel_clock, bpp,
++					       csi2rx->num_lanes, cfg);
++	if (ret)
++		return ret;
++
++	ret = phy_pm_runtime_get_sync(csi2rx->dphy);
++	if (ret == -ENOTSUPP)
++		got_pm = false;
++	else if (ret < 0)
++		return ret;
++
++	ret = phy_power_on(csi2rx->dphy);
++	if (ret)
++		goto out;
++
++	ret = phy_configure(csi2rx->dphy, &opts);
++	if (ret) {
++		/* Can't do anything if it fails. Ignore the return value. */
++		phy_power_off(csi2rx->dphy);
++		goto out;
++	}
++
++out:
++	if (got_pm)
++		phy_pm_runtime_put(csi2rx->dphy);
++
++	return ret;
++}
++
+ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ {
+ 	unsigned int i;
+@@ -175,6 +232,17 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 	if (ret)
+ 		goto err_disable_pclk;
+ 
++	/* Enable DPHY clk and data lanes. */
++	if (csi2rx->dphy) {
++		reg = CSI2RX_DPHY_CL_EN | CSI2RX_DPHY_CL_RST;
++		for (i = 0; i < csi2rx->num_lanes; i++) {
++			reg |= CSI2RX_DPHY_DL_EN(csi2rx->lanes[i] - 1);
++			reg |= CSI2RX_DPHY_DL_RST(csi2rx->lanes[i] - 1);
++		}
++
++		writel(reg, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
++	}
++
+ 	/*
+ 	 * Create a static mapping between the CSI virtual channels
+ 	 * and the output stream.
+@@ -205,10 +273,21 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 	if (ret)
+ 		goto err_disable_pixclk;
+ 
++	if (csi2rx->dphy) {
++		ret = csi2rx_configure_external_dphy(csi2rx);
++		if (ret) {
++			dev_err(csi2rx->dev,
++				"Failed to configure external DPHY: %d\n", ret);
++			goto err_disable_sysclk;
++		}
++	}
++
+ 	clk_disable_unprepare(csi2rx->p_clk);
+ 
+ 	return 0;
+ 
++err_disable_sysclk:
++	clk_disable_unprepare(csi2rx->sys_clk);
+ err_disable_pixclk:
+ 	for (; i > 0; i--)
+ 		clk_disable_unprepare(csi2rx->pixel_clk[i - 1]);
+@@ -236,6 +315,13 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ 
+ 	if (v4l2_subdev_call(csi2rx->source_subdev, video, s_stream, false))
+ 		dev_warn(csi2rx->dev, "Couldn't disable our subdev\n");
++
++	if (csi2rx->dphy) {
++		writel(0, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
++
++		if (phy_power_off(csi2rx->dphy))
++			dev_warn(csi2rx->dev, "Couldn't power off DPHY\n");
++	}
+ }
+ 
+ static int csi2rx_s_stream(struct v4l2_subdev *subdev, int enable)
+@@ -438,15 +524,6 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+ 		return PTR_ERR(csi2rx->dphy);
+ 	}
+ 
+-	/*
+-	 * FIXME: Once we'll have external D-PHY support, the check
+-	 * will need to be removed.
+-	 */
+-	if (csi2rx->dphy) {
+-		dev_err(&pdev->dev, "External D-PHY not supported yet\n");
+-		return -EINVAL;
+-	}
+-
+ 	ret = clk_prepare_enable(csi2rx->p_clk);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Couldn't prepare and enable P clock\n");
+@@ -476,7 +553,7 @@ static int csi2rx_get_resources(struct csi2rx_priv *csi2rx,
+ 	 * FIXME: Once we'll have internal D-PHY support, the check
+ 	 * will need to be removed.
+ 	 */
+-	if (csi2rx->has_internal_dphy) {
++	if (!csi2rx->dphy && csi2rx->has_internal_dphy) {
+ 		dev_err(&pdev->dev, "Internal D-PHY not supported yet\n");
+ 		return -EINVAL;
+ 	}
+@@ -601,6 +678,7 @@ static int csi2rx_probe(struct platform_device *pdev)
+ 	dev_info(&pdev->dev,
+ 		 "Probed CSI2RX with %u/%u lanes, %u streams, %s D-PHY\n",
+ 		 csi2rx->num_lanes, csi2rx->max_lanes, csi2rx->max_streams,
++		 csi2rx->dphy ? "external" :
+ 		 csi2rx->has_internal_dphy ? "internal" : "no");
+ 
+ 	return 0;
 -- 
 2.33.1.835.ge9e5ba39a7
 
