@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F71FC433FE
-	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 19:16:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE00BC433FE
+	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 19:16:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349986AbhLWTQn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Dec 2021 14:16:43 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:47550 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349976AbhLWTQl (ORCPT
+        id S1350001AbhLWTQr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Dec 2021 14:16:47 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:48584 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349984AbhLWTQq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Dec 2021 14:16:41 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGTsX029332;
-        Thu, 23 Dec 2021 13:16:29 -0600
+        Thu, 23 Dec 2021 14:16:46 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGfdt031738;
+        Thu, 23 Dec 2021 13:16:41 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640286989;
-        bh=tf7QjMy6/O08JUi4bDn00cAzmkD9YB4PSicvbkyMLic=;
+        s=ti-com-17Q1; t=1640287001;
+        bh=UOBoBf5jPZmq44GOkxtvSQRyD77EhLUs4Xa2ASMj/QI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=H95qSyxwiVWFYKKAOEveGnflnM6heDkrH2dByBVBtO041R6vweWMA62p3W056CjFR
-         VCweWPB/Vb8XiyIyYUCmslth072keC8es91gfFr/QfrPsw1F77K7Cp14SVuPoKT5L7
-         OLsY09hFCr/UsQ3rLupIlELqmdexXMyq/LB/uayo=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BNJGTGg079679
+        b=IrLNwhyEpfSX8nToCy2oSsmwhwDRZw8DFM2g2w5HTKQXOxjNKIvq7w7azHAL6Cay2
+         eBQTPPEQ4jYsrnjSkqNfPg2s9cwFy8AjKHcrZfTTQwiLp3kRL/sqM5lE34Vh44+E3p
+         UbnuWRCZ5VkQ3eewBQLrfiS1vB4utSoyNkO3ePUo=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BNJGfdC124494
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Dec 2021 13:16:29 -0600
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 23 Dec 2021 13:16:41 -0600
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
- Dec 2021 13:16:28 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ Dec 2021 13:16:40 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 23 Dec 2021 13:16:28 -0600
+ Frontend Transport; Thu, 23 Dec 2021 13:16:40 -0600
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGGQP006164;
-        Thu, 23 Dec 2021 13:16:25 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGGQS006164;
+        Thu, 23 Dec 2021 13:16:37 -0600
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 CC:     Pratyush Yadav <p.yadav@ti.com>,
@@ -52,9 +52,9 @@ CC:     Pratyush Yadav <p.yadav@ti.com>,
         <niklas.soderlund+renesas@ragnatech.se>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-media@vger.kernel.org>
-Subject: [PATCH v5 02/14] media: cadence: csi2rx: Cleanup media entity properly
-Date:   Fri, 24 Dec 2021 00:46:03 +0530
-Message-ID: <20211223191615.17803-3-p.yadav@ti.com>
+Subject: [PATCH v5 05/14] media: cadence: csi2rx: Soft reset the streams before starting capture
+Date:   Fri, 24 Dec 2021 00:46:06 +0530
+Message-ID: <20211223191615.17803-6-p.yadav@ti.com>
 X-Mailer: git-send-email 2.33.1.835.ge9e5ba39a7
 In-Reply-To: <20211223191615.17803-1-p.yadav@ti.com>
 References: <20211223191615.17803-1-p.yadav@ti.com>
@@ -66,40 +66,58 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Call media_entity_cleanup() in probe error path and remove to make sure
-the media entity is cleaned up properly.
+This resets the stream state machines and FIFOs, giving them a clean
+slate. On J721E if the streams are not reset before starting the
+capture, the captured frame gets wrapped around vertically on every run
+after the first.
 
-Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 ---
 
 Changes in v5:
-- New in v5.
+- Make i unsigned.
+- Add Laurent's R-by.
 
- drivers/media/platform/cadence/cdns-csi2rx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index 2a23da6a0b8e..2547903f2e8e 100644
+index afd4a0da8235..baf8ec649a25 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -471,6 +471,7 @@ static int csi2rx_probe(struct platform_device *pdev)
- err_cleanup:
- 	v4l2_async_nf_unregister(&csi2rx->notifier);
- 	v4l2_async_nf_cleanup(&csi2rx->notifier);
-+	media_entity_cleanup(&csi2rx->subdev.entity);
- err_free_priv:
- 	kfree(csi2rx);
- 	return ret;
-@@ -483,6 +484,7 @@ static int csi2rx_remove(struct platform_device *pdev)
- 	v4l2_async_nf_unregister(&csi2rx->notifier);
- 	v4l2_async_nf_cleanup(&csi2rx->notifier);
- 	v4l2_async_unregister_subdev(&csi2rx->subdev);
-+	media_entity_cleanup(&csi2rx->subdev.entity);
- 	kfree(csi2rx);
+@@ -39,6 +39,7 @@
+ #define CSI2RX_STREAM_BASE(n)		(((n) + 1) * 0x100)
  
- 	return 0;
+ #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
++#define CSI2RX_STREAM_CTRL_SOFT_RST			BIT(4)
+ #define CSI2RX_STREAM_CTRL_START			BIT(0)
+ 
+ #define CSI2RX_STREAM_DATA_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x008)
+@@ -135,12 +136,22 @@ struct csi2rx_priv *v4l2_subdev_to_csi2rx(struct v4l2_subdev *subdev)
+ 
+ static void csi2rx_reset(struct csi2rx_priv *csi2rx)
+ {
++	unsigned int i;
++
+ 	writel(CSI2RX_SOFT_RESET_PROTOCOL | CSI2RX_SOFT_RESET_FRONT,
+ 	       csi2rx->base + CSI2RX_SOFT_RESET_REG);
+ 
+ 	udelay(10);
+ 
+ 	writel(0, csi2rx->base + CSI2RX_SOFT_RESET_REG);
++
++	/* Reset individual streams. */
++	for (i = 0; i < csi2rx->max_streams; i++) {
++		writel(CSI2RX_STREAM_CTRL_SOFT_RST,
++		       csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
++		usleep_range(10, 20);
++		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
++	}
+ }
+ 
+ static int csi2rx_configure_external_dphy(struct csi2rx_priv *csi2rx)
 -- 
 2.33.1.835.ge9e5ba39a7
 
