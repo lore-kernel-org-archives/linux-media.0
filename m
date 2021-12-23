@@ -2,41 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3FD7C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 17:31:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A930C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 17:31:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbhLWRbY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Dec 2021 12:31:24 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:6988 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1349668AbhLWRbN (ORCPT
+        id S1349615AbhLWRb0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Dec 2021 12:31:26 -0500
+Received: from relmlor2.renesas.com ([210.160.252.172]:29810 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1349598AbhLWRbH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Dec 2021 12:31:13 -0500
+        Thu, 23 Dec 2021 12:31:07 -0500
 X-IronPort-AV: E=Sophos;i="5.88,230,1635174000"; 
-   d="scan'208";a="104503626"
+   d="scan'208";a="104983913"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 24 Dec 2021 02:31:10 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 24 Dec 2021 02:31:06 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 800B040C4DD0;
-        Fri, 24 Dec 2021 02:31:07 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 9ADFD40C4DB3;
+        Fri, 24 Dec 2021 02:31:04 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     linux-media@vger.kernel.org,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
+        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         linux-renesas-soc@vger.kernel.org,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 12/13] media: mtk-vpu: Drop unnecessary call to platform_get_resource()
-Date:   Thu, 23 Dec 2021 17:30:13 +0000
-Message-Id: <20211223173015.22251-13-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 11/13] media: s5p-g2d: Use platform_get_irq() to get the interrupt
+Date:   Thu, 23 Dec 2021 17:30:12 +0000
+Message-Id: <20211223173015.22251-12-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211223173015.22251-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20211223173015.22251-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -44,48 +39,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-mtk_vpu_probe() calls platform_get_resource(pdev, IORESOURCE_IRQ, ..)
-to check if IRQ resource exists and later calls
-platform_get_irq(pdev, ..) to get the actual IRQ.
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypasses the hierarchical setup and messes up the
+irq chaining.
 
-This patch drops an unnecessary call to platform_get_resource() and
-checks the return value of platform_get_irq(pdev, ..) to make sure the
-IRQ line is valid.
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq().
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/media/platform/mtk-vpu/mtk_vpu.c | 10 +++-------
+ drivers/media/platform/s5p-g2d/g2d.c | 10 +++-------
  1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c b/drivers/media/platform/mtk-vpu/mtk_vpu.c
-index 7bd715fc844d..47b684b92f81 100644
---- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
-+++ b/drivers/media/platform/mtk-vpu/mtk_vpu.c
-@@ -810,7 +810,6 @@ static int mtk_vpu_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/s5p-g2d/g2d.c b/drivers/media/platform/s5p-g2d/g2d.c
+index fa0bb31bd2b9..dd8864779a7c 100644
+--- a/drivers/media/platform/s5p-g2d/g2d.c
++++ b/drivers/media/platform/s5p-g2d/g2d.c
+@@ -623,7 +623,6 @@ static int g2d_probe(struct platform_device *pdev)
  {
- 	struct mtk_vpu *vpu;
- 	struct device *dev;
+ 	struct g2d_dev *dev;
+ 	struct video_device *vfd;
 -	struct resource *res;
+ 	const struct of_device_id *of_id;
  	int ret = 0;
  
- 	dev_dbg(&pdev->dev, "initialization\n");
-@@ -908,13 +907,10 @@ static int mtk_vpu_probe(struct platform_device *pdev)
- 	init_waitqueue_head(&vpu->run.wq);
- 	init_waitqueue_head(&vpu->ack_wq);
+@@ -664,14 +663,11 @@ static int g2d_probe(struct platform_device *pdev)
+ 		goto put_clk_gate;
+ 	}
  
 -	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
 -	if (!res) {
--		dev_err(dev, "get IRQ resource failed.\n");
+-		dev_err(&pdev->dev, "failed to find IRQ\n");
 -		ret = -ENXIO;
 +	ret = platform_get_irq(pdev, 0);
 +	if (ret < 0)
- 		goto free_p_mem;
+ 		goto unprep_clk_gate;
 -	}
--	vpu->reg.irq = platform_get_irq(pdev, 0);
-+	vpu->reg.irq = ret;
- 	ret = devm_request_irq(dev, vpu->reg.irq, vpu_irq_handler, 0,
- 			       pdev->name, vpu);
- 	if (ret) {
+ 
+-	dev->irq = res->start;
++	dev->irq = ret;
+ 
+ 	ret = devm_request_irq(&pdev->dev, dev->irq, g2d_isr,
+ 						0, pdev->name, dev);
 -- 
 2.17.1
 
