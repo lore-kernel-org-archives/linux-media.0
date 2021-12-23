@@ -2,41 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAC59C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 19:16:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C474C433FE
+	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 19:16:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349947AbhLWTQd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Dec 2021 14:16:33 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:51806 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244821AbhLWTQc (ORCPT
+        id S1349971AbhLWTQi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Dec 2021 14:16:38 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:48564 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349967AbhLWTQh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Dec 2021 14:16:32 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGPeX116813;
-        Thu, 23 Dec 2021 13:16:25 -0600
+        Thu, 23 Dec 2021 14:16:37 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGX9F031716;
+        Thu, 23 Dec 2021 13:16:33 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640286985;
-        bh=nwwld5OgWWX2rCypcvfqeWC/in7Aq4Ky8XkQKe0QcxY=;
+        s=ti-com-17Q1; t=1640286993;
+        bh=FcWD7n6VkAN+74nl1acWQBFr0n0exn0pGopGVCbNxng=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=O/mv/BM3UDRuUtfj4Iig9MZkRfn8RyixpD0MhfIHNnmGzcn7vSwpg8K84dDGOAPyg
-         N+Hm5wmEjTnC6Zs59qSrRB/o9ZMlChls42hwBOpXgHLHv8d9pge2c99auuldogwOQ3
-         ne7A3dI9JeJnD5WkRPPQa/ivhhEAG558SjHSxaGE=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BNJGPlG017955
+        b=vQICtSgRuIrFVlNkL3w7xgj3Oy4AX71ygMDqYvmopbtJiPlssYjo6Qb7gk8dCrBe+
+         /I1IbGxOVG30TOTj+fzGs1Zw8YMioC56cA9NmoM7dKhAw9Ma/ykquQDpyFWH5qNiss
+         aLQu1kyj1Q0CW/psJ0+GRnCsekbge41lxR5KLcYY=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BNJGXqq124430
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Dec 2021 13:16:25 -0600
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 23 Dec 2021 13:16:33 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 23
- Dec 2021 13:16:24 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ Dec 2021 13:16:32 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 23 Dec 2021 13:16:24 -0600
+ Frontend Transport; Thu, 23 Dec 2021 13:16:32 -0600
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGGQO006164;
-        Thu, 23 Dec 2021 13:16:21 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BNJGGQQ006164;
+        Thu, 23 Dec 2021 13:16:29 -0600
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 CC:     Pratyush Yadav <p.yadav@ti.com>,
@@ -52,9 +52,9 @@ CC:     Pratyush Yadav <p.yadav@ti.com>,
         <niklas.soderlund+renesas@ragnatech.se>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-media@vger.kernel.org>
-Subject: [PATCH v5 01/14] media: cadence: csi2rx: Unregister v4l2 async notifier
-Date:   Fri, 24 Dec 2021 00:46:02 +0530
-Message-ID: <20211223191615.17803-2-p.yadav@ti.com>
+Subject: [PATCH v5 03/14] media: cadence: csi2rx: Add get_fmt and set_fmt pad ops
+Date:   Fri, 24 Dec 2021 00:46:04 +0530
+Message-ID: <20211223191615.17803-4-p.yadav@ti.com>
 X-Mailer: git-send-email 2.33.1.835.ge9e5ba39a7
 In-Reply-To: <20211223191615.17803-1-p.yadav@ti.com>
 References: <20211223191615.17803-1-p.yadav@ti.com>
@@ -66,63 +66,203 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The notifier is added to the global notifier list when registered. When
-the module is removed, the struct csi2rx_priv in which the notifier is
-embedded, is destroyed. As a result the notifier list has a reference to
-a notifier that no longer exists. This causes invalid memory accesses
-when the list is iterated over. Similar for when the probe fails.
+The format is needed to calculate the link speed for the external DPHY
+configuration. It is not right to query the format from the source
+subdev. Add get_fmt and set_fmt pad operations so that the format can be
+configured and correct bpp be selected.
 
-Unregister and clean up the notifier to avoid this.
-
-Fixes: 1fc3b37f34f6 ("media: v4l: cadence: Add Cadence MIPI-CSI2 RX driver")
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 ---
 
 Changes in v5:
-- Cleanup notifier in csi2rx_parse_dt() after the call to
-  v4l2_async_nf_add_fwnode_remote().
+- Use YUV 1X16 formats instead of 2X8.
+- New in v5.
 
-Changes in v3:
-- New in v3.
-
- drivers/media/platform/cadence/cdns-csi2rx.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 137 +++++++++++++++++++
+ 1 file changed, 137 insertions(+)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index cc3ebb0d96f6..2a23da6a0b8e 100644
+index 2547903f2e8e..4a2a5a9d019b 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -404,8 +404,10 @@ static int csi2rx_parse_dt(struct csi2rx_priv *csi2rx)
- 	asd = v4l2_async_nf_add_fwnode_remote(&csi2rx->notifier, fwh,
- 					      struct v4l2_async_subdev);
- 	of_node_put(ep);
--	if (IS_ERR(asd))
-+	if (IS_ERR(asd)) {
-+		v4l2_async_nf_cleanup(&csi2rx->notifier);
- 		return PTR_ERR(asd);
-+	}
+@@ -54,6 +54,11 @@ enum csi2rx_pads {
+ 	CSI2RX_PAD_MAX,
+ };
  
- 	csi2rx->notifier.ops = &csi2rx_notifier_ops;
++struct csi2rx_fmt {
++	u32				code;
++	u8				bpp;
++};
++
+ struct csi2rx_priv {
+ 	struct device			*dev;
+ 	unsigned int			count;
+@@ -79,12 +84,43 @@ struct csi2rx_priv {
+ 	struct v4l2_subdev		subdev;
+ 	struct v4l2_async_notifier	notifier;
+ 	struct media_pad		pads[CSI2RX_PAD_MAX];
++	struct v4l2_mbus_framefmt	fmt;
  
-@@ -467,6 +469,7 @@ static int csi2rx_probe(struct platform_device *pdev)
- 	return 0;
+ 	/* Remote source */
+ 	struct v4l2_subdev		*source_subdev;
+ 	int				source_pad;
+ };
  
- err_cleanup:
-+	v4l2_async_nf_unregister(&csi2rx->notifier);
- 	v4l2_async_nf_cleanup(&csi2rx->notifier);
- err_free_priv:
- 	kfree(csi2rx);
-@@ -477,6 +480,8 @@ static int csi2rx_remove(struct platform_device *pdev)
++static const struct csi2rx_fmt formats[] = {
++	{
++		.code	= MEDIA_BUS_FMT_YUYV8_1X16,
++		.bpp	= 16,
++	},
++	{
++		.code	= MEDIA_BUS_FMT_UYVY8_1X16,
++		.bpp	= 16,
++	},
++	{
++		.code	= MEDIA_BUS_FMT_YVYU8_1X16,
++		.bpp	= 16,
++	},
++	{
++		.code	= MEDIA_BUS_FMT_VYUY8_1X16,
++		.bpp	= 16,
++	},
++};
++
++static const struct csi2rx_fmt *csi2rx_get_fmt_by_code(u32 code)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(formats); i++)
++		if (formats[i].code == code)
++			return &formats[i];
++
++	return NULL;
++}
++
+ static inline
+ struct csi2rx_priv *v4l2_subdev_to_csi2rx(struct v4l2_subdev *subdev)
  {
- 	struct csi2rx_priv *csi2rx = platform_get_drvdata(pdev);
+@@ -236,12 +272,109 @@ static int csi2rx_s_stream(struct v4l2_subdev *subdev, int enable)
+ 	return ret;
+ }
  
-+	v4l2_async_nf_unregister(&csi2rx->notifier);
-+	v4l2_async_nf_cleanup(&csi2rx->notifier);
- 	v4l2_async_unregister_subdev(&csi2rx->subdev);
- 	kfree(csi2rx);
++static struct v4l2_mbus_framefmt *
++csi2rx_get_pad_format(struct csi2rx_priv *csi2rx,
++		      struct v4l2_subdev_state *state,
++		      unsigned int pad, u32 which)
++{
++	switch (which) {
++	case V4L2_SUBDEV_FORMAT_TRY:
++		return v4l2_subdev_get_try_format(&csi2rx->subdev, state, pad);
++	case V4L2_SUBDEV_FORMAT_ACTIVE:
++		return &csi2rx->fmt;
++	default:
++		return NULL;
++	}
++}
++
++static int csi2rx_get_fmt(struct v4l2_subdev *subdev,
++			  struct v4l2_subdev_state *state,
++			  struct v4l2_subdev_format *format)
++{
++	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++	struct v4l2_mbus_framefmt *framefmt;
++
++	mutex_lock(&csi2rx->lock);
++
++	framefmt = csi2rx_get_pad_format(csi2rx, state, format->pad,
++					 format->which);
++	mutex_unlock(&csi2rx->lock);
++
++	if (!framefmt)
++		return -EINVAL;
++
++	format->format = *framefmt;
++
++	return 0;
++}
++
++static int csi2rx_set_fmt(struct v4l2_subdev *subdev,
++			  struct v4l2_subdev_state *state,
++			  struct v4l2_subdev_format *format)
++{
++	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++	struct v4l2_mbus_framefmt *framefmt;
++	const struct csi2rx_fmt *fmt;
++
++	/* No transcoding, source and sink formats must match. */
++	if (format->pad != CSI2RX_PAD_SINK)
++		return csi2rx_get_fmt(subdev, state, format);
++
++	fmt = csi2rx_get_fmt_by_code(format->format.code);
++	if (!fmt)
++		return -EOPNOTSUPP;
++
++	format->format.field = V4L2_FIELD_NONE;
++
++	mutex_lock(&csi2rx->lock);
++	framefmt = csi2rx_get_pad_format(csi2rx, state, format->pad,
++					 format->which);
++	if (!framefmt) {
++		mutex_unlock(&csi2rx->lock);
++		return -EINVAL;
++	}
++
++	*framefmt = format->format;
++	mutex_unlock(&csi2rx->lock);
++
++	return 0;
++}
++
++static int csi2rx_init_cfg(struct v4l2_subdev *subdev,
++			   struct v4l2_subdev_state *state)
++{
++	struct v4l2_subdev_format format = {
++		.which = state ? V4L2_SUBDEV_FORMAT_TRY
++			: V4L2_SUBDEV_FORMAT_ACTIVE,
++		.pad = CSI2RX_PAD_SINK,
++		.format = {
++			.width = 640,
++			.height = 480,
++			.code = MEDIA_BUS_FMT_UYVY8_1X16,
++			.field = V4L2_FIELD_NONE,
++			.colorspace = V4L2_COLORSPACE_SRGB,
++			.ycbcr_enc = V4L2_YCBCR_ENC_601,
++			.quantization = V4L2_QUANTIZATION_LIM_RANGE,
++			.xfer_func = V4L2_XFER_FUNC_SRGB,
++		},
++	};
++
++	return csi2rx_set_fmt(subdev, state, &format);
++}
++
++static const struct v4l2_subdev_pad_ops csi2rx_pad_ops = {
++	.get_fmt	= csi2rx_get_fmt,
++	.set_fmt	= csi2rx_set_fmt,
++	.init_cfg	= csi2rx_init_cfg,
++};
++
+ static const struct v4l2_subdev_video_ops csi2rx_video_ops = {
+ 	.s_stream	= csi2rx_s_stream,
+ };
  
+ static const struct v4l2_subdev_ops csi2rx_subdev_ops = {
+ 	.video		= &csi2rx_video_ops,
++	.pad		= &csi2rx_pad_ops,
+ };
+ 
+ static int csi2rx_async_bound(struct v4l2_async_notifier *notifier,
+@@ -457,6 +590,10 @@ static int csi2rx_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_cleanup;
+ 
++	ret = csi2rx_init_cfg(&csi2rx->subdev, NULL);
++	if (ret)
++		goto err_cleanup;
++
+ 	ret = v4l2_async_register_subdev(&csi2rx->subdev);
+ 	if (ret < 0)
+ 		goto err_cleanup;
 -- 
 2.33.1.835.ge9e5ba39a7
 
