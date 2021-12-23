@@ -2,36 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A930C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 17:31:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2131C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 17:31:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349615AbhLWRb0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Dec 2021 12:31:26 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:29810 "EHLO
+        id S1349672AbhLWRbb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Dec 2021 12:31:31 -0500
+Received: from relmlor2.renesas.com ([210.160.252.172]:13098 "EHLO
         relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1349598AbhLWRbH (ORCPT
+        by vger.kernel.org with ESMTP id S1349679AbhLWRbP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Dec 2021 12:31:07 -0500
+        Thu, 23 Dec 2021 12:31:15 -0500
 X-IronPort-AV: E=Sophos;i="5.88,230,1635174000"; 
-   d="scan'208";a="104983913"
+   d="scan'208";a="104983923"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 24 Dec 2021 02:31:06 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 24 Dec 2021 02:31:14 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 9ADFD40C4DB3;
-        Fri, 24 Dec 2021 02:31:04 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 659A740C4DAD;
+        Fri, 24 Dec 2021 02:31:11 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     linux-media@vger.kernel.org,
-        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         linux-renesas-soc@vger.kernel.org,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 11/13] media: s5p-g2d: Use platform_get_irq() to get the interrupt
-Date:   Thu, 23 Dec 2021 17:30:12 +0000
-Message-Id: <20211223173015.22251-12-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 13/13] media: coda: Use platform_get_irq() to get the interrupt
+Date:   Thu, 23 Dec 2021 17:30:14 +0000
+Message-Id: <20211223173015.22251-14-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211223173015.22251-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20211223173015.22251-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -50,39 +55,36 @@ code use platform_get_irq().
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/media/platform/s5p-g2d/g2d.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/media/platform/coda/imx-vdoa.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/s5p-g2d/g2d.c b/drivers/media/platform/s5p-g2d/g2d.c
-index fa0bb31bd2b9..dd8864779a7c 100644
---- a/drivers/media/platform/s5p-g2d/g2d.c
-+++ b/drivers/media/platform/s5p-g2d/g2d.c
-@@ -623,7 +623,6 @@ static int g2d_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/coda/imx-vdoa.c b/drivers/media/platform/coda/imx-vdoa.c
+index 00643f37b3e6..c70871bae193 100644
+--- a/drivers/media/platform/coda/imx-vdoa.c
++++ b/drivers/media/platform/coda/imx-vdoa.c
+@@ -284,7 +284,6 @@ EXPORT_SYMBOL(vdoa_context_configure);
+ static int vdoa_probe(struct platform_device *pdev)
  {
- 	struct g2d_dev *dev;
- 	struct video_device *vfd;
+ 	struct vdoa_data *vdoa;
 -	struct resource *res;
- 	const struct of_device_id *of_id;
- 	int ret = 0;
+ 	int ret;
  
-@@ -664,14 +663,11 @@ static int g2d_probe(struct platform_device *pdev)
- 		goto put_clk_gate;
- 	}
+ 	ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
+@@ -309,10 +308,10 @@ static int vdoa_probe(struct platform_device *pdev)
+ 	if (IS_ERR(vdoa->regs))
+ 		return PTR_ERR(vdoa->regs);
  
 -	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res) {
--		dev_err(&pdev->dev, "failed to find IRQ\n");
--		ret = -ENXIO;
+-	if (!res)
+-		return -EINVAL;
+-	ret = devm_request_threaded_irq(&pdev->dev, res->start, NULL,
 +	ret = platform_get_irq(pdev, 0);
 +	if (ret < 0)
- 		goto unprep_clk_gate;
--	}
- 
--	dev->irq = res->start;
-+	dev->irq = ret;
- 
- 	ret = devm_request_irq(&pdev->dev, dev->irq, g2d_isr,
- 						0, pdev->name, dev);
++		return ret;
++	ret = devm_request_threaded_irq(&pdev->dev, ret, NULL,
+ 					vdoa_irq_handler, IRQF_ONESHOT,
+ 					"vdoa", vdoa);
+ 	if (ret < 0) {
 -- 
 2.17.1
 
