@@ -2,38 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3D20C4332F
-	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 17:31:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3FD7C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 17:31:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349642AbhLWRbV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Dec 2021 12:31:21 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:27593 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1349650AbhLWRbF (ORCPT
+        id S231547AbhLWRbY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Dec 2021 12:31:24 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:6988 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1349668AbhLWRbN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Dec 2021 12:31:05 -0500
+        Thu, 23 Dec 2021 12:31:13 -0500
 X-IronPort-AV: E=Sophos;i="5.88,230,1635174000"; 
-   d="scan'208";a="104983907"
+   d="scan'208";a="104503626"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 24 Dec 2021 02:31:03 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 24 Dec 2021 02:31:10 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 551B140C4DAD;
-        Fri, 24 Dec 2021 02:31:01 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 800B040C4DD0;
+        Fri, 24 Dec 2021 02:31:07 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     linux-media@vger.kernel.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+        Matthias Brugger <matthias.bgg@gmail.com>
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         linux-renesas-soc@vger.kernel.org,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 10/13] media: exynos4-is: Use platform_get_irq() to get the interrupt
-Date:   Thu, 23 Dec 2021 17:30:11 +0000
-Message-Id: <20211223173015.22251-11-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH 12/13] media: mtk-vpu: Drop unnecessary call to platform_get_resource()
+Date:   Thu, 23 Dec 2021 17:30:13 +0000
+Message-Id: <20211223173015.22251-13-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211223173015.22251-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20211223173015.22251-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -41,91 +44,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+mtk_vpu_probe() calls platform_get_resource(pdev, IORESOURCE_IRQ, ..)
+to check if IRQ resource exists and later calls
+platform_get_irq(pdev, ..) to get the actual IRQ.
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq().
+This patch drops an unnecessary call to platform_get_resource() and
+checks the return value of platform_get_irq(pdev, ..) to make sure the
+IRQ line is valid.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/media/platform/exynos4-is/fimc-core.c | 11 +++++------
- drivers/media/platform/exynos4-is/fimc-lite.c | 11 +++++------
- 2 files changed, 10 insertions(+), 12 deletions(-)
+ drivers/media/platform/mtk-vpu/mtk_vpu.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/exynos4-is/fimc-core.c b/drivers/media/platform/exynos4-is/fimc-core.c
-index bfdee771cef9..91cc8d58a663 100644
---- a/drivers/media/platform/exynos4-is/fimc-core.c
-+++ b/drivers/media/platform/exynos4-is/fimc-core.c
-@@ -926,6 +926,7 @@ static int fimc_probe(struct platform_device *pdev)
- 	struct fimc_dev *fimc;
- 	struct resource *res;
+diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c b/drivers/media/platform/mtk-vpu/mtk_vpu.c
+index 7bd715fc844d..47b684b92f81 100644
+--- a/drivers/media/platform/mtk-vpu/mtk_vpu.c
++++ b/drivers/media/platform/mtk-vpu/mtk_vpu.c
+@@ -810,7 +810,6 @@ static int mtk_vpu_probe(struct platform_device *pdev)
+ {
+ 	struct mtk_vpu *vpu;
+ 	struct device *dev;
+-	struct resource *res;
  	int ret = 0;
-+	int irq;
  
- 	fimc = devm_kzalloc(dev, sizeof(*fimc), GFP_KERNEL);
- 	if (!fimc)
-@@ -965,11 +966,9 @@ static int fimc_probe(struct platform_device *pdev)
- 	if (IS_ERR(fimc->regs))
- 		return PTR_ERR(fimc->regs);
+ 	dev_dbg(&pdev->dev, "initialization\n");
+@@ -908,13 +907,10 @@ static int mtk_vpu_probe(struct platform_device *pdev)
+ 	init_waitqueue_head(&vpu->run.wq);
+ 	init_waitqueue_head(&vpu->ack_wq);
  
 -	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (res == NULL) {
--		dev_err(dev, "Failed to get IRQ resource\n");
--		return -ENXIO;
+-	if (!res) {
+-		dev_err(dev, "get IRQ resource failed.\n");
+-		ret = -ENXIO;
++	ret = platform_get_irq(pdev, 0);
++	if (ret < 0)
+ 		goto free_p_mem;
 -	}
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
- 
- 	ret = fimc_clk_get(fimc);
- 	if (ret)
-@@ -986,7 +985,7 @@ static int fimc_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		return ret;
- 
--	ret = devm_request_irq(dev, res->start, fimc_irq_handler,
-+	ret = devm_request_irq(dev, irq, fimc_irq_handler,
- 			       0, dev_name(dev), fimc);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to install irq (%d)\n", ret);
-diff --git a/drivers/media/platform/exynos4-is/fimc-lite.c b/drivers/media/platform/exynos4-is/fimc-lite.c
-index aaa3af0493ce..9b7cc9564cf1 100644
---- a/drivers/media/platform/exynos4-is/fimc-lite.c
-+++ b/drivers/media/platform/exynos4-is/fimc-lite.c
-@@ -1454,6 +1454,7 @@ static int fimc_lite_probe(struct platform_device *pdev)
- 	struct fimc_lite *fimc;
- 	struct resource *res;
- 	int ret;
-+	int irq;
- 
- 	if (!dev->of_node)
- 		return -ENODEV;
-@@ -1485,17 +1486,15 @@ static int fimc_lite_probe(struct platform_device *pdev)
- 	if (IS_ERR(fimc->regs))
- 		return PTR_ERR(fimc->regs);
- 
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (res == NULL) {
--		dev_err(dev, "Failed to get IRQ resource\n");
--		return -ENXIO;
--	}
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
- 
- 	ret = fimc_lite_clk_get(fimc);
- 	if (ret)
- 		return ret;
- 
--	ret = devm_request_irq(dev, res->start, flite_irq_handler,
-+	ret = devm_request_irq(dev, irq, flite_irq_handler,
- 			       0, dev_name(dev), fimc);
+-	vpu->reg.irq = platform_get_irq(pdev, 0);
++	vpu->reg.irq = ret;
+ 	ret = devm_request_irq(dev, vpu->reg.irq, vpu_irq_handler, 0,
+ 			       pdev->name, vpu);
  	if (ret) {
- 		dev_err(dev, "Failed to install irq (%d)\n", ret);
 -- 
 2.17.1
 
