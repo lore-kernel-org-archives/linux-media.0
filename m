@@ -2,110 +2,141 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E34CC433FE
-	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 18:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A51CC433F5
+	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 19:10:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349916AbhLWSsN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Dec 2021 13:48:13 -0500
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:52795 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349895AbhLWSsG (ORCPT
+        id S229616AbhLWTKF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Dec 2021 14:10:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236259AbhLWTKE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:48:06 -0500
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id AF3ED1BF206;
-        Thu, 23 Dec 2021 18:48:01 +0000 (UTC)
-Date:   Thu, 23 Dec 2021 19:48:56 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: [PATCH v6 2/2] Driver for ON Semi AR0521 camera sensor
-Message-ID: <20211223184856.v34ecibwzepahsju@uno.localdomain>
-References: <m3ee63hkuu.fsf@t19.piap.pl>
- <m35yrfhkaf.fsf@t19.piap.pl>
- <cee1bbe6c8dda1c79ba19f7bbf68fc1d74558cae.camel@perches.com>
+        Thu, 23 Dec 2021 14:10:04 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DFFC061401
+        for <linux-media@vger.kernel.org>; Thu, 23 Dec 2021 11:10:04 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id f5so25001839edq.6
+        for <linux-media@vger.kernel.org>; Thu, 23 Dec 2021 11:10:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EWeO8NP8v5E5zUlHq5t/wKxLy6NSHQhAIjoiIwb3K9k=;
+        b=JQiiYIZrNtqInGMhwtn3ZjG0zbNsjPlJCa5DVGoIeSQqGgYHiBNhKQKoLkRtddQQPX
+         bhDRWKT8zVCfn6OOOOWIQVEgAuU2xp7BUQrkCCvvFwMle3GVxE1gFBIxpB9eELg1GFTB
+         2LFLyjZt6x17Q6Uq4p1Nv4XMC1kIBIzH5EkaI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EWeO8NP8v5E5zUlHq5t/wKxLy6NSHQhAIjoiIwb3K9k=;
+        b=WeTKr+KZDhWL6PUSsmJXd20/rdFp2h7BNFOkv74rG1TT5t2jj5mJpqKICDh4bjgdWd
+         nU5S0B6AgWDWgJGJfbdGbAVRSXjmGnnnpX2OHWcjJ/t3L/43F4WC96SkbQBkuVOBJ4jH
+         kcYKmUoxUar3dIbFya2+5CjtSG395mBPYupUiqyzfL6r3OMBPX/THNFu34AIlyJJcUV3
+         aBOi4eFn7xy60/deXGrJoM7FgyPStlB5qvoQV1uIjrks8tb//p0AUfs+Gjo2y67eOz8y
+         iM6HCHBIEgJ+l/ODf5DQS3QZUkezlMJ74aLPt/QqoKlmZVvck9ePVmTSdA2peGRk1g7v
+         Zs7Q==
+X-Gm-Message-State: AOAM5326yYYTdRrb8rmXEupv7flTbL+0OkPOYYILZcRMgfneuMv8lWo9
+        zKfuzeYUx5ZcUkp38GduVULDcJ7nFXXGlI9l
+X-Google-Smtp-Source: ABdhPJwYXOC1m2IcfFbJn+AQs4pj+T4UqPJM3fgUIw5uiAGU8gm1Y1MTIXqp6OwsaRDpulW5/2D2vA==
+X-Received: by 2002:a17:906:5502:: with SMTP id r2mr1824006ejp.627.1640286602586;
+        Thu, 23 Dec 2021 11:10:02 -0800 (PST)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id ho9sm2000369ejc.86.2021.12.23.11.10.01
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Dec 2021 11:10:02 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id o20so24946477eds.10
+        for <linux-media@vger.kernel.org>; Thu, 23 Dec 2021 11:10:01 -0800 (PST)
+X-Received: by 2002:a17:906:6848:: with SMTP id a8mr2820960ejs.40.1640286601417;
+ Thu, 23 Dec 2021 11:10:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cee1bbe6c8dda1c79ba19f7bbf68fc1d74558cae.camel@perches.com>
+References: <06c00e24-cdad-8776-9fc1-2c0f3db5af9a@selasky.org>
+In-Reply-To: <06c00e24-cdad-8776-9fc1-2c0f3db5af9a@selasky.org>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 23 Dec 2021 20:09:49 +0100
+X-Gmail-Original-Message-ID: <CANiDSCtB=mu6wtZxkck3E0GnJT7OOVXKDe+yzEFK+ygsDwoxKg@mail.gmail.com>
+Message-ID: <CANiDSCtB=mu6wtZxkck3E0GnJT7OOVXKDe+yzEFK+ygsDwoxKg@mail.gmail.com>
+Subject: Re: [PATCH] Make sure we parse really received data.
+To:     Hans Petter Selasky <hps@selasky.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Joe,
-  sorry to jump in
+Hi Hans
 
-On Thu, Dec 23, 2021 at 09:49:58AM -0800, Joe Perches wrote:
-> On Thu, 2021-12-23 at 08:06 +0100, Krzysztof Hałasa wrote:
-> > The driver has been extensively tested in an i.MX6-based system.
-> > AR0521 is a 5.7 mm x 4.3 mm, 5 MPix RGGB MIPI/HiSPi BSI CMOS sensor
-> > from On Semiconductor.
->
-> trivial notes:
->
-> > diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-> []
-> > +/* External clock (extclk) frequencies */
-> > +#define AR0521_EXTCLK_MIN	  (10 * 1000 * 1000)
->
-> Generally, adding a prefix like AR0521_ to defines that are
-> locally defined in a single file unnecessarily increases
-> identifier length.
->
-> It makes using short line lengths difficult.
->
-> e.g. Using this identifier anywhere
->
-> > +#define AR0521_REG_HISPI_CONTROL_STATUS_FRAMER_TEST_MODE_ENABLE 0x80
->
-> Many of the 80 column line lengths and line wrapping used in this
-> file are not really nice to read.  I believe you don't have to be
-> strict about 80 column lines.
->
+Thanks for your patch
 
-Krzysztof first version had much longer lines, and in facts it has
-been asked by me to reduce them to 80 cols. The media subsystem
-requires to validate patches with
+On Thu, 23 Dec 2021 at 16:42, Hans Petter Selasky <hps@selasky.org> wrote:
+>
+> Hi,
+>
+> USB control requests may return less data than we ask for.
+> Found using valgrind and webcamd on FreeBSD.
 
-        ./scripts/checkpatch.pl --strict --max-line-length=80
+If the usb control request returns less data, then the checks for
+ret!=size will trigger.
 
-We longly debated this and I believe it's now generally accepted to go
-over 80 when it makes sense, but not regularly span to 120 cols like
-in the previous version.
+Am I missing something obvious?
 
-I think this 80-cols limit not being an hard limit anymore is doing
-more worse than good, as each subsystem applies a different rule, and
-I know how frustrating is for Krzysztof to be pushed in different
-direction, as the same happened to me when I contributed to other
-subsystems and I've been asked to span to 100 cols while I was trying
-to stay in 80 no matter what.
+Best regards
 
-Thanks
-   j
 
-> > +#define be		cpu_to_be16
 >
-> It's a pity there's no way to declare an array with all members
-> having a specific endianness.  Making sure all elements in these
-> arrays are declared with be() is tedious.
+> ==15522== Conditional jump or move depends on uninitialised value(s)
+> ==15522==    at 0x662EF4: uvc_fixup_video_ctrl (uvc_video.c:135)
+> ==15522==    by 0x662EF4: uvc_get_video_ctrl (uvc_video.c:297)
+> ==15522==    by 0x6640B0: uvc_video_init (uvc_video.c:2078)
+> ==15522==    by 0x65E79D: uvc_register_video (uvc_driver.c:2258)
+> ==15522==    by 0x65E79D: uvc_register_terms (uvc_driver.c:2300)
+> ==15522==    by 0x65E79D: uvc_register_chains (uvc_driver.c:2321)
+> ==15522==    by 0x65E79D: uvc_probe (uvc_driver.c:2463)
+> ==15522==    by 0x3C8F46: usb_linux_probe_p (linux_usb.c:449)
+> ==15522==    by 0x75B4B2: main (webcamd.c:1021)
+> ==15522==  Uninitialised value was created by a heap allocation
+> ==15522==    at 0x4853844: malloc (in
+> /usr/local/libexec/valgrind/vgpreload_memcheck-amd64-freebsd.so)
+> ==15522==    by 0x3BC8A4: kmalloc (linux_func.c:1807)
+> ==15522==    by 0x662C8C: uvc_get_video_ctrl (uvc_video.c:229)
+> ==15522==    by 0x6640B0: uvc_video_init (uvc_video.c:2078)
+> ==15522==    by 0x65E79D: uvc_register_video (uvc_driver.c:2258)
+> ==15522==    by 0x65E79D: uvc_register_terms (uvc_driver.c:2300)
+> ==15522==    by 0x65E79D: uvc_register_chains (uvc_driver.c:2321)
+> ==15522==    by 0x65E79D: uvc_probe (uvc_driver.c:2463)
+> ==15522==    by 0x3C8F46: usb_linux_probe_p (linux_usb.c:449)
+> ==15522==    by 0x75B4B2: main (webcamd.c:1021)
 >
-> > +#define AR0521_NUM_SUPPLIES ARRAY_SIZE(ar0521_supply_names)
+> Signed-off-by: Hans Petter Selasky <hps@selasky.org>
+> ---
+>   drivers/media/usb/uvc/uvc_video.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
 >
-> It's almost always better to use ARRAY_SIZE directly and not
-> use a #define for the array size.
+> diff --git a/drivers/media/usb/uvc/uvc_video.c
+> b/drivers/media/usb/uvc/uvc_video.c
+> index 9f37eaf28ce7..6233703f9a50 100644
+> --- a/drivers/media/usb/uvc/uvc_video.c
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -258,7 +258,11 @@ static int uvc_get_video_ctrl(struct uvc_streaming
+> *stream,
+>                         query == UVC_GET_DEF)
+>                 return -EIO;
 >
-> > +static int ar0521_set_gains(struct ar0521_dev *sensor)
-> > +{
-> []
-> > +	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
+> -       data = kmalloc(size, GFP_KERNEL);
+> +       /*
+> +        * Make sure we parse really received data
+> +        * by allocating a zeroed buffer.
+> +        */
+> +       data = kzalloc(size, GFP_KERNEL);
+>         if (data == NULL)
+>                 return -ENOMEM;
 >
-> ftrace works and perhaps all the similar debug logging uses aren't
-> really necessary.
->
->
+> --
+> 2.34.1
+
+
+
+-- 
+Ricardo Ribalda
