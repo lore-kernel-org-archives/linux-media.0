@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05205C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 24 Dec 2021 08:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DCF7C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 24 Dec 2021 08:43:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352050AbhLXInZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 Dec 2021 03:43:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S1352066AbhLXIn1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 Dec 2021 03:43:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352047AbhLXInW (ORCPT
+        with ESMTP id S1352070AbhLXIn0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 Dec 2021 03:43:22 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F095C061757
-        for <linux-media@vger.kernel.org>; Fri, 24 Dec 2021 00:43:22 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id m1so7309497pfk.8
-        for <linux-media@vger.kernel.org>; Fri, 24 Dec 2021 00:43:22 -0800 (PST)
+        Fri, 24 Dec 2021 03:43:26 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D9BC061401
+        for <linux-media@vger.kernel.org>; Fri, 24 Dec 2021 00:43:26 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id g22so7137115pgn.1
+        for <linux-media@vger.kernel.org>; Fri, 24 Dec 2021 00:43:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sV79zWvBxTOqiRZPPrLUHjZwFpDP1ZUgCFSQrPsf5D0=;
-        b=BLVFhC+h53krTnpc+WG9bIg2JTuQleaJrdnZ5YXjAD3Ln3kK/uLw9Pt4feMO/A4CCQ
-         g+9vSojwHSMRX29Sxqozsxs5oTBoXmGz0fDPBDyuNyhSxLKEvK7/Z14FTqYhgiwCZSr7
-         RXx4T/BqM3kwo8PWegvZox7nbr48TjLAFPpfU=
+        bh=V96MCrbuR3Cmo1QVQzxpqsi+EQJPA/QIWspHhrAknFM=;
+        b=ReCdFld7cLRApbe6SnnREZYfmIU0RcbRDBmmnqe94U4ghsTmrWoWtRGyuVcdLv0Cvh
+         koAodEaY+50Vg+QPhpVBofstR7JJJCw53QBki/gDLSV6kp56h4qKqd+HPN+9B5mLWbP8
+         sda5TpVrDtXTGEzwCEUWPd15aRIhv+frOnbD0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sV79zWvBxTOqiRZPPrLUHjZwFpDP1ZUgCFSQrPsf5D0=;
-        b=R+JuyWYat9EbDmrZewSNoI8pCixG4U/juEW3l29Tl5xzEdaBU0dKVR7wUH3mTHT+Ks
-         +hxkH+POy3JXTkybEOromLIWg+l0aKbZihs8We7wXNWwBTq1DIU3eJKzOnQ3H3ao+GL0
-         6l2Aq8DLWtbubariTMWqyEGr1SCdLCOcHR4ubKeXo+T7oe+k/avQhbtqW43gxTKH6Mrt
-         mhU1K/IwG7iQOtekPTfAl7bv6DapXr4ukIiv69mBlXl6CJ2XfdPWYhPh3Fe7v6NUYFwQ
-         uPnpYKsdbazKj0y0s6csqtvwBQWJvlD0qemzuHqC+g0YbfC+TZjxNnIdnRK8LJvtDxvx
-         +iEw==
-X-Gm-Message-State: AOAM531jVsDLqlqNZwmwuwVWHpZ0Su/O1YO/6WiiQx2xQV2eKU/q/GDj
-        AhIPIcjgKdtshJFm3nDYTZsf/g==
-X-Google-Smtp-Source: ABdhPJy3lka870xa8XlfbNt22sIwH0/xXExdqyGdWA4JxBQGedOAgCWjbfJVSbfkPnLbjyVrgC8Plg==
-X-Received: by 2002:a05:6a00:21c8:b0:4a8:125:de32 with SMTP id t8-20020a056a0021c800b004a80125de32mr5969607pfj.49.1640335401680;
-        Fri, 24 Dec 2021 00:43:21 -0800 (PST)
+        bh=V96MCrbuR3Cmo1QVQzxpqsi+EQJPA/QIWspHhrAknFM=;
+        b=LuoICKND4W7CMXiJS4xljMVgU3bY56XP44cpy6lL1HI12pee2s+FnbW6SCpajzinDI
+         gXPfNbx1YIv5i3BrEU0tXcwRVr02QJFAZkCmT9vbsCME1iPQPVGD9ZscCffCS7QfTs9/
+         MiSrFxGyxZD82+3xagH5W50CekjVcqhz0RSKXhRuxL+ffcEmuwS2zLMymrvEckpJVckV
+         omW3TbD9AMfTRh5AXfS24QH5aJtavJ1hsUjbd0aH89wiYypI0G4RPGsUS+wfcdp41MhB
+         G+pFcED40SuRA4l0aoJ+c4PpE1APp8zz7PFA5a7bCIVlv+SP4Wy3UAqMCSoHNec8WIAc
+         Otng==
+X-Gm-Message-State: AOAM531RICWk5cd1Qzcui2pm+ZWKn+JPYt1vdX3SgHULNaCJfMLCO2AK
+        7mdkYAFI4ionF6Sj2VvqZSbiaw==
+X-Google-Smtp-Source: ABdhPJycSb22GWmoTlWD+t4pDQjqs8Efzd6cRWdANOKAxMm8MlvU3BBpMjxjkO9FubRD/Q7BSmpdaA==
+X-Received: by 2002:a63:6ac9:: with SMTP id f192mr5281162pgc.79.1640335406365;
+        Fri, 24 Dec 2021 00:43:26 -0800 (PST)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:fd40:cbd0:c42a:3c26])
-        by smtp.gmail.com with ESMTPSA id p13sm436369pgl.23.2021.12.24.00.43.19
+        by smtp.gmail.com with ESMTPSA id p13sm436369pgl.23.2021.12.24.00.43.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Dec 2021 00:43:21 -0800 (PST)
+        Fri, 24 Dec 2021 00:43:26 -0800 (PST)
 From:   Chen-Yu Tsai <wenst@chromium.org>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -55,9 +55,9 @@ Cc:     Tomasz Figa <tfiga@chromium.org>,
         Chen-Yu Tsai <wenst@chromium.org>, linux-media@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH RFT 2/7] media: hantro: Fix overfill bottom register field name
-Date:   Fri, 24 Dec 2021 16:42:43 +0800
-Message-Id: <20211224084248.3070568-3-wenst@chromium.org>
+Subject: [PATCH RFT 4/7] media: hantro: jpeg: Add JFIF APP0 segment to JPEG encoder output
+Date:   Fri, 24 Dec 2021 16:42:45 +0800
+Message-Id: <20211224084248.3070568-5-wenst@chromium.org>
 X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
 In-Reply-To: <20211224084248.3070568-1-wenst@chromium.org>
 References: <20211224084248.3070568-1-wenst@chromium.org>
@@ -67,54 +67,72 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Hantro H1 hardware can crop off pixels from the right and bottom of
-the source frame. These are controlled with the H1_REG_IN_IMG_CTRL_OVRFLB
-and H1_REG_IN_IMG_CTRL_OVRFLR in the H1_REG_IN_IMG_CTRL register.
+While the V4L2_PIX_FMT_JPEG format doesn't specify any requirements for
+the APP0 or APP1 segments, it would be nice if the output is JFIF
+compliant. While some programs can read JPEG streams that aren't, some
+guess work is involved.
 
-The ChromeOS kernel driver that this was based on incorrectly added the
-_D4 suffix H1_REG_IN_IMG_CTRL_OVRFLB. This field crops the bottom of the
-input frame, and the number is _not_ divided by 4. [1]
+Add the standard JFIF APP0 segment to the JPEG header, so that the JPEG
+encoder output is JFIF compliant.
 
-Correct the name to avoid confusion when crop support with the selection
-API is added.
-
-[1] https://chromium.googlesource.com/chromiumos/third_party/kernel/+/refs/ \
-	heads/chromeos-4.19/drivers/staging/media/hantro/hantro_h1_vp8_enc.c#377
-
-Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
-Fixes: a29add8c9bb2 ("media: rockchip/vpu: rename from rockchip to hantro")
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/staging/media/hantro/hantro_h1_jpeg_enc.c | 2 +-
- drivers/staging/media/hantro/hantro_h1_regs.h     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/media/hantro/hantro_jpeg.c | 21 +++++++++++++--------
+ drivers/staging/media/hantro/hantro_jpeg.h |  2 +-
+ 2 files changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c b/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
-index 03db1c3444f8..96153c755fb8 100644
---- a/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
-+++ b/drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
-@@ -23,7 +23,7 @@ static void hantro_h1_set_src_img_ctrl(struct hantro_dev *vpu,
+diff --git a/drivers/staging/media/hantro/hantro_jpeg.c b/drivers/staging/media/hantro/hantro_jpeg.c
+index df62fbdff7c9..7d4018bd6876 100644
+--- a/drivers/staging/media/hantro/hantro_jpeg.c
++++ b/drivers/staging/media/hantro/hantro_jpeg.c
+@@ -12,15 +12,15 @@
+ #include "hantro_jpeg.h"
+ #include "hantro.h"
  
- 	reg = H1_REG_IN_IMG_CTRL_ROW_LEN(pix_fmt->width)
- 		| H1_REG_IN_IMG_CTRL_OVRFLR_D4(0)
--		| H1_REG_IN_IMG_CTRL_OVRFLB_D4(0)
-+		| H1_REG_IN_IMG_CTRL_OVRFLB(0)
- 		| H1_REG_IN_IMG_CTRL_FMT(ctx->vpu_src_fmt->enc_fmt);
- 	vepu_write_relaxed(vpu, reg, H1_REG_IN_IMG_CTRL);
- }
-diff --git a/drivers/staging/media/hantro/hantro_h1_regs.h b/drivers/staging/media/hantro/hantro_h1_regs.h
-index d6e9825bb5c7..30e7e7b920b5 100644
---- a/drivers/staging/media/hantro/hantro_h1_regs.h
-+++ b/drivers/staging/media/hantro/hantro_h1_regs.h
-@@ -47,7 +47,7 @@
- #define H1_REG_IN_IMG_CTRL				0x03c
- #define     H1_REG_IN_IMG_CTRL_ROW_LEN(x)		((x) << 12)
- #define     H1_REG_IN_IMG_CTRL_OVRFLR_D4(x)		((x) << 10)
--#define     H1_REG_IN_IMG_CTRL_OVRFLB_D4(x)		((x) << 6)
-+#define     H1_REG_IN_IMG_CTRL_OVRFLB(x)		((x) << 6)
- #define     H1_REG_IN_IMG_CTRL_FMT(x)			((x) << 2)
- #define H1_REG_ENC_CTRL0				0x040
- #define    H1_REG_ENC_CTRL0_INIT_QP(x)			((x) << 26)
+-#define LUMA_QUANT_OFF		7
+-#define CHROMA_QUANT_OFF	72
+-#define HEIGHT_OFF		141
+-#define WIDTH_OFF		143
++#define LUMA_QUANT_OFF		25
++#define CHROMA_QUANT_OFF	90
++#define HEIGHT_OFF		159
++#define WIDTH_OFF		161
+ 
+-#define HUFF_LUMA_DC_OFF	160
+-#define HUFF_LUMA_AC_OFF	193
+-#define HUFF_CHROMA_DC_OFF	376
+-#define HUFF_CHROMA_AC_OFF	409
++#define HUFF_LUMA_DC_OFF	178
++#define HUFF_LUMA_AC_OFF	211
++#define HUFF_CHROMA_DC_OFF	394
++#define HUFF_CHROMA_AC_OFF	427
+ 
+ /* Default tables from JPEG ITU-T.81
+  * (ISO/IEC 10918-1) Annex K, tables K.1 and K.2
+@@ -144,6 +144,11 @@ static const unsigned char hantro_jpeg_header[JPEG_HEADER_SIZE] = {
+ 	/* SOI */
+ 	0xff, 0xd8,
+ 
++	/* JFIF-APP0 */
++	0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46,
++	0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01,
++	0x00, 0x00,
++
+ 	/* DQT */
+ 	0xff, 0xdb, 0x00, 0x84,
+ 
+diff --git a/drivers/staging/media/hantro/hantro_jpeg.h b/drivers/staging/media/hantro/hantro_jpeg.h
+index 035ab25b803f..f33c492134e4 100644
+--- a/drivers/staging/media/hantro/hantro_jpeg.h
++++ b/drivers/staging/media/hantro/hantro_jpeg.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0+ */
+ 
+-#define JPEG_HEADER_SIZE	601
++#define JPEG_HEADER_SIZE	619
+ #define JPEG_QUANT_SIZE		64
+ 
+ struct hantro_jpeg_ctx {
 -- 
 2.34.1.448.ga2b2bfdf31-goog
 
