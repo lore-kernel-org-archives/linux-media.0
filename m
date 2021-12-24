@@ -2,619 +2,186 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6E86C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 24 Dec 2021 01:29:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DDFBC433FE
+	for <linux-media@archiver.kernel.org>; Fri, 24 Dec 2021 03:03:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350793AbhLXB3S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Dec 2021 20:29:18 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:22290 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350726AbhLXB3O (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Dec 2021 20:29:14 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1BO1M74W007689;
-        Fri, 24 Dec 2021 09:22:07 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 24 Dec
- 2021 09:27:37 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <hverkuil-cisco@xs4all.nl>, <sakari.ailus@linux.intel.com>,
-        <gregkh@linuxfoundation.org>, <eajames@linux.ibm.com>,
-        <mchehab@kernel.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
-        <linux-media@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 3/4] media: aspeed: Support aspeed mode to reduce compressed data
-Date:   Fri, 24 Dec 2021 09:27:37 +0800
-Message-ID: <20211224012738.1551-4-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211224012738.1551-1-jammy_huang@aspeedtech.com>
-References: <20211224012738.1551-1-jammy_huang@aspeedtech.com>
+        id S1351081AbhLXDDS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Dec 2021 22:03:18 -0500
+Received: from mail-eopbgr80088.outbound.protection.outlook.com ([40.107.8.88]:25326
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1351076AbhLXDDR (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 23 Dec 2021 22:03:17 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l1EVy3QwHE0g3W6yAAEHfgR1KTI7jQtrZYHO4DWL5H2z1SykP9ZMdhufnlIZv05ZtHlHpsiav4rPpVP5Go5lY6czNYSp98kbL+T2DwO/kRiI/muxskeIIImq8YBsMKzliVX3WB/YTR1RbU1+b7oh05vo82/sXC51WGsJDbjpcpW8geUWIa2M0biVUA10XZLsx6afKNbpe0ePwPlaydf3ceObXvGb3R5h3eUmVNFY1Kch5+fMTbv4xILJiwktpsemLaG3giOegzIh9UgM8XBsxlFupG98BDAAbZWvlgH2Ym2Bdg4kY0HIPk9RPBqJYaqq4WSziRrYxcTQnhoC2Nqu2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XivBjGzXt4JdBM8TWOFYepActdojMCZqmTiaYNXY5bw=;
+ b=l/nhELycH8TWWQjRv8YnEPsqDghA7HEWg9nwASs9bl8kRdcwdSepbojA09S2LlfU5gahKr4qjjDD2IqOkApVGJG/XmUjQRU9fH9QLYzwsFB0okrYQtA3MY12tDd62Yvx1hpI+ba8QzqpeptFKSpv1CJK74PMpxZJzk7YsrSjneJDtMBXHdmrjeEMRZSI5BjeZ9HwRydMObwGHIm6O5revCmH3+40IJEKWTA9Nd8s1n65an3MEodZYM9ryaMlMhs+EyPHwDihtTgqXBtbSQN8ZQNHCx5RnGujP8w5qIlaKM17ECYl2S0oSaVKgbTn73B0wYXmx9LcEoe+hUktHqZDHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XivBjGzXt4JdBM8TWOFYepActdojMCZqmTiaYNXY5bw=;
+ b=Ya/cpu6smEtQJJ0YJxMLSzlkzmV1EU5Wq1w0s9iDIY0CE8KupWB/BdokYMu6CIWcKHahT7vs9wjbMS+3lY2J2X1DePNb0x6qrIscOVdwLaXP9KSU9lenSSMe9PALhoMky2lgbKVU3LzCH1aCaM4bFplK7A1ViHhMjmShA/niM6E=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by AM5PR04MB3266.eurprd04.prod.outlook.com (2603:10a6:206:6::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.19; Fri, 24 Dec
+ 2021 03:03:15 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::b9f1:7371:3484:95b2]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::b9f1:7371:3484:95b2%4]) with mapi id 15.20.4823.021; Fri, 24 Dec 2021
+ 03:03:15 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        mirela.rabulea@oss.nxp.com
+Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v1] media: imx-jpeg: use NV12M to represent non contiguous NV12
+Date:   Fri, 24 Dec 2021 11:02:41 +0800
+Message-Id: <20211224030241.4624-1-ming.qian@nxp.com>
+X-Mailer: git-send-email 2.33.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0059.apcprd02.prod.outlook.com
+ (2603:1096:4:54::23) To AM6PR04MB6341.eurprd04.prod.outlook.com
+ (2603:10a6:20b:d8::14)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1BO1M74W007689
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4b347ee6-43fa-4a8e-9bf5-08d9c689ed82
+X-MS-TrafficTypeDiagnostic: AM5PR04MB3266:EE_
+X-Microsoft-Antispam-PRVS: <AM5PR04MB32664BEA26E20A08FFDDCA7EE77F9@AM5PR04MB3266.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:785;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KsA2FZm0FsNh+PkTV3FzeSW5Su7cbFhuwxIV77t94xHq8l1K8BR+nkL8ULW8rxjufSYrdnlH8uWiH2tJq1ZbTBo9oRcdHydh62LA7JI8l9iwlMcpejFsXjvdJfz/C6uE91CGz165mpPFPi8AnF+7CiAoAN9i4V47b31J7TyJRz3weQ18Ii4zrcL1oN41qoJgM0QzTMWB9Cie0WBK6k2INVe1VCLiF5kwaT/IDTRpTGhP/SCyvD0S8ZAxZ1ogQVg/tREaoUgFjeehqmU052uFhkmIERRJtDuFInsk4d77hJLjBY801RULOtrCICHqnf/ETsnt4KS6Mt0UmMrSpfaH5OW79L5tf/LxD+Z0jhA5UCs7+3Cpasn1MHkXZ4BghLq4iDJHJWVAMzQUKPgm/QbbcNK3G+rpDvWGWcbg9GndQg3l7QTgtCdDhROhNlO/nRnQul9Ai6mqnIzE/mgHYHuamCBOX4fuIkkGR4GSjpsRg64IIFTUt/gEvo1AFoQpYjG0eiTAQVAT0+UrEyLLa2C+Pf1oNSDZh815lstfvVQSnFnTJhzxpy6BCohpv9xuI92bfE8Zyc8iXyKtouRMjOxTWSumK0JFVWb+DrjbVJsYFR8XUYa8GEaZT22nH1Tq6JtBNL33lTFbgf3qDeLIfIeweXfz15g+MF7q0t1Q7ZzHLbEjwPqyqTllALQ5BptCu4IXduJX4O0VcVjzBjd/0npU9g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(86362001)(44832011)(6512007)(83380400001)(36756003)(2616005)(316002)(52116002)(1076003)(66556008)(8676002)(4326008)(6666004)(38100700002)(5660300002)(2906002)(66946007)(7416002)(6506007)(8936002)(186003)(26005)(38350700002)(508600001)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IwkKJdq9Ku5DEvI2pzsgWuf3hYD/E6QVMNzjXNQgtmByNUlcBkef5TuS7BwL?=
+ =?us-ascii?Q?9+/tT6N5MVQobSzB7ENoWtW0dK2drKul89y+GFiNBgmcHLPPLlICIZj7JD/B?=
+ =?us-ascii?Q?I9c26r706VpILRoxpNQsBVRNi1iRXiLB6m0Wwnj1JdQ50bCydZM1/gI1ux4U?=
+ =?us-ascii?Q?FQYzUyGinlod36O8fTNxHGpGNVCM24ZJQVH7qVPFXdy/BLry5WWx2qd+XwB3?=
+ =?us-ascii?Q?c5j4cDChFb2ns/DobYRInb1zLAuQXaEkBpm5KXzWF3T+JnMo3AN22glYTfvs?=
+ =?us-ascii?Q?JbcL3N/tB+GJH3wer1JiYQbZRavRB4MdQnBFTULnEwefKo/+uIy0rUpBHpwH?=
+ =?us-ascii?Q?8geK0UIEhX3PC773XKtYBAq2hIMwr38QSpj2O6kzB+MzI/ehuzfQahlmbdvb?=
+ =?us-ascii?Q?EiZviI+nim4rw+c0ahZEUBle6OlTpw/VFqEJw7Z3IDjn4PhwmMRwT8mJILKn?=
+ =?us-ascii?Q?SeAHtqVq2nRy4BXsNAKpv7Rqu/E4QmgRDCUFHJPycnJ9u/NpynaerIRI0hrD?=
+ =?us-ascii?Q?zzmAZpLo4edmYoDkIjMdp7aGXJlGpcrglRSGXMiSLQLbGABpdiYkqE2YQUCX?=
+ =?us-ascii?Q?u9gDHQ46n7+LBXppvXwUxsXhYHPmV8a2Swf+U2gZzkQEmBiRGMToNbT6Tgpf?=
+ =?us-ascii?Q?hhZqjhQn4+xxgBbpxf5J2X/yZgCFlEwVHE1hlfRNyJMBPuyf2vvWhanvv3Pi?=
+ =?us-ascii?Q?gQV44JWt6O85mXpxB+DgtGdGFTZQBxyG5ydJUYcnMLcs7+6ISxLXvmltaM8S?=
+ =?us-ascii?Q?KVVFVNikFDEfZug+hQueJ09YaX6FxG0lIPg4MhIhODEmZlfg0ZIkMG08p5KR?=
+ =?us-ascii?Q?69VsMkraogsvTodE/mE4mxR1Jeg0H+pTCr6M8V4URLck8Glo6ROeoF41Vc+M?=
+ =?us-ascii?Q?8rvi++uD8Whwg84sQ3qliUzf/DDWg4gYSb5mTndRZHdFL4orevfkusK91FxP?=
+ =?us-ascii?Q?JtsiJjeRSlJP4OWFDxggRjIt9KslXs3Ok7JYGUfkDrypSLRf39VBDJjmjcOr?=
+ =?us-ascii?Q?zecEeT1tDLFOeHCCbDQUk9CKqOjIWZDGLl0u/retKqgAz1uat9wbW+c6mjeX?=
+ =?us-ascii?Q?2gxZoC1gWX3W2rUaV/rlZxSP/mD+Ec5UffQs44SQ+pvfbxkWPeA39Bbkh+3f?=
+ =?us-ascii?Q?uQV/+c6TaH9oF65h2absXslcApEws9I4u74p3p2C0A6RSltjakXRkr1PiM21?=
+ =?us-ascii?Q?NgAj0eR7phDPNJGlhk56qWv6zaN1enFsIOyRBt/Bd62T96iOPdMfJ3g3Y8ui?=
+ =?us-ascii?Q?f7EqDdw4mUQGUoafINmaIAPuJlt/0JXlVKqrV2w0+L0icMLjxydr+qNIOpOL?=
+ =?us-ascii?Q?bWWh4OIm0G75Xo9eB5ZmSN096WMaWErfqeRatiNZnCN0KDR6pkF1D20TBj8v?=
+ =?us-ascii?Q?h6/1h1xCPpQqvDF1XBq/n72xTiDsAvEkrd4Ql32pWotfMNsFhh25j0I+j7cs?=
+ =?us-ascii?Q?nick1Z2NQR20fq8/cmdLuA1UKsHaWSG/gevusrw0O+XDDbuOFKejxqd99Sko?=
+ =?us-ascii?Q?HXOurh7VNPGMgxbbHneX7iyN8tSY/svkB0CfxuvxUp1TeUthe412JuGH2s+z?=
+ =?us-ascii?Q?mEDCJsRaXwPJh54cO0yaP1r8QzHPiTYXZSVsLZY26vca0GN5ZMw9KDnPYxhp?=
+ =?us-ascii?Q?Wc77ZBvVb22b6W3JpVlB9z8=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b347ee6-43fa-4a8e-9bf5-08d9c689ed82
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Dec 2021 03:03:14.9089
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DK6sQXItDK0Xm+3d/+eGN+bJ6S243p16zvJlCPVA88/KXR+rA2060ZIVv3+5yxTtzQe9lVxN3U1xbW1CYGMABQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR04MB3266
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-aspeed supports differential jpeg format which only compress the parts
-which are changed. In this way, it reduces both the amount of data to be
-transferred by network and those to be decoded on the client side.
+V4L2_PIX_FMT_NV12 requires num_planes equals to 1,
+V4L2_PIX_FMT_NV12M requires num_planes equals to 2.
+and mxc-jpeg supports 2 planes for nv12,
+so we should use 4L2_PIX_FMT_NV12M instead of V4L2_PIX_FMT_NV12,
+otherwise it will confuses gstreamer and prevent encoding and decoding.
 
-3 new ctrls are added:
-* Aspeed Compression Scheme: to control aspeed's compression scheme
-  0: DCT Only, 1: DCT VQ mix 2-color, 2: DCT VQ mix 4-color
-  This is AST2400 only. It will adapt JPEG or VQ encoding method according
-  to the context automatically.
-* Aspeed HQ Mode: to control aspeed's high quality(2-pass) compression mode
-  This only works with yuv444 subsampling.
-* Aspeed HQ Quality: to control the quality of aspeed's HQ mode
-  only useful if Aspeed HQ mode is enabled
-
-Aspeed JPEG Format requires an additional buffer, called bcd, to store
-the information about which macro block in the new frame is different
-from the previous one.
-
-To have bcd correctly working, we need to swap the buffers for src0/1 to
-make src1 refer to previous frame and src0 to the coming new frame.
-
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+Signed-off-by: Ming Qian <ming.qian@nxp.com>
+Signed-off-by: Shijie Qin <shijie.qin@nxp.com>
+Signed-off-by: Zhou Peng <eagle.zhou@nxp.com>
+Reviewed-by: Mirela Rabulea <mirela.rabulea@oss.nxp.com>
 ---
-v8:
-  - no update
-v7:
-  - rename compression_mode as compression_scheme
-  - add reset bcd buffer every 8 frames to generate an I frame
-  - update commit message
-v6:
-  - no update
-v5:
-  - use runtime configuration to handle differences between soc
-  - add aspeed_video_swap_src_buf().
-v4
-  - add include/uapi/linux/aspeed-video.h for V4L2_CID_ASPEED_XXX
-  - add aspeed_video_set_format
-  - remove aspeed_ctrl_format
-  - add variable, format, to replace partial_jpeg
-  - modify aspeed_ctrl_HQ_jpeg_quality's range
-  - reduce bcd buffer size
-  - update commit message
-v3:
-  - 'compression mode' only available for G4
-v2:
-  - update commit message
-  - use v4l2_xxx log rather than self-defined macro
----
- drivers/media/platform/aspeed-video.c | 252 ++++++++++++++++++++++++--
- include/uapi/linux/aspeed-video.h     |  15 ++
- 2 files changed, 248 insertions(+), 19 deletions(-)
- create mode 100644 include/uapi/linux/aspeed-video.h
+ drivers/media/platform/imx-jpeg/mxc-jpeg.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index 2f7451f06c24..c0cfcf98659d 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -31,6 +31,7 @@
- #include <media/v4l2-ioctl.h>
- #include <media/videobuf2-dma-contig.h>
- #include <linux/videodev2.h>
-+#include <uapi/linux/aspeed-video.h>
- 
- #define ASPEED_VIDEO_V4L2_MIN_BUF_REQ 3
- 
-@@ -57,6 +58,7 @@
- 
- #define VE_MAX_SRC_BUFFER_SIZE		0x8ca000 /* 1920 * 1200, 32bpp */
- #define VE_JPEG_HEADER_SIZE		0x006000 /* 512 * 12 * 4 */
-+#define VE_BCD_BUFF_SIZE		0x9000 /* (1920/8) * (1200/8) */
- 
- #define VE_PROTECTION_KEY		0x000
- #define  VE_PROTECTION_KEY_UNLOCK	0x1a038aa8
-@@ -107,6 +109,13 @@
- #define VE_SCALING_FILTER2		0x020
- #define VE_SCALING_FILTER3		0x024
- 
-+#define VE_BCD_CTRL			0x02C
-+#define  VE_BCD_CTRL_EN_BCD		BIT(0)
-+#define  VE_BCD_CTRL_EN_ABCD		BIT(1)
-+#define  VE_BCD_CTRL_EN_CB		BIT(2)
-+#define  VE_BCD_CTRL_THR		GENMASK(23, 16)
-+#define  VE_BCD_CTRL_ABCD_THR		GENMASK(31, 24)
-+
- #define VE_CAP_WINDOW			0x030
- #define VE_COMP_WINDOW			0x034
- #define VE_COMP_PROC_OFFSET		0x038
-@@ -115,6 +124,7 @@
- #define VE_SRC0_ADDR			0x044
- #define VE_SRC_SCANLINE_OFFSET		0x048
- #define VE_SRC1_ADDR			0x04c
-+#define VE_BCD_ADDR			0x050
- #define VE_COMP_ADDR			0x054
- 
- #define VE_STREAM_BUF_SIZE		0x058
-@@ -135,6 +145,8 @@
- #define  VE_COMP_CTRL_HQ_DCT_CHR	GENMASK(26, 22)
- #define  VE_COMP_CTRL_HQ_DCT_LUM	GENMASK(31, 27)
- 
-+#define VE_CB_ADDR			0x06C
-+
- #define AST2400_VE_COMP_SIZE_READ_BACK	0x078
- #define AST2600_VE_COMP_SIZE_READ_BACK	0x084
- 
-@@ -202,6 +214,12 @@ enum {
- 	VIDEO_CLOCKS_ON,
- };
- 
-+enum aspeed_video_format {
-+	VIDEO_FMT_STANDARD = 0,
-+	VIDEO_FMT_ASPEED,
-+	VIDEO_FMT_MAX = VIDEO_FMT_ASPEED
-+};
-+
- struct aspeed_video_addr {
- 	unsigned int size;
- 	dma_addr_t dma;
-@@ -234,9 +252,14 @@ struct aspeed_video_perf {
-  * @max_compressed_size:holds max compressed stream's size
-  * @srcs:		holds the buffer information for srcs
-  * @jpeg:		holds the buffer information for jpeg header
-+ * @bcd:		holds the buffer information for bcd work
-  * @yuv420:		a flag raised if JPEG subsampling is 420
-+ * @format:		holds the video format
-+ * @hq_mode:		a flag raised if HQ is enabled. Only for VIDEO_FMT_ASPEED
-  * @frame_rate:		holds the frame_rate
-  * @jpeg_quality:	holds jpeq's quality (0~11)
-+ * @jpeg_hq_quality:	holds hq's quality (1~12) only if hq_mode enabled
-+ * @compression_scheme:	holds image coding scheme of aspeed jpeg
-  * @frame_bottom:	end position of video data in vertical direction
-  * @frame_left:		start position of video data in horizontal direction
-  * @frame_right:	end position of video data in horizontal direction
-@@ -271,10 +294,15 @@ struct aspeed_video {
- 	unsigned int max_compressed_size;
- 	struct aspeed_video_addr srcs[2];
- 	struct aspeed_video_addr jpeg;
-+	struct aspeed_video_addr bcd;
- 
- 	bool yuv420;
-+	enum aspeed_video_format format;
-+	bool hq_mode;
- 	unsigned int frame_rate;
- 	unsigned int jpeg_quality;
-+	unsigned int jpeg_hq_quality;
-+	unsigned int compression_scheme;
- 
- 	unsigned int frame_bottom;
- 	unsigned int frame_left;
-@@ -443,8 +471,20 @@ static const struct v4l2_dv_timings_cap aspeed_video_timings_cap = {
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
+index 4ca96cf9def7..7c0366f5f801 100644
+--- a/drivers/media/platform/imx-jpeg/mxc-jpeg.c
++++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
+@@ -96,7 +96,7 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
  	},
- };
+ 	{
+ 		.name		= "YUV420", /* 1st plane = Y, 2nd plane = UV */
+-		.fourcc		= V4L2_PIX_FMT_NV12,
++		.fourcc		= V4L2_PIX_FMT_NV12M,
+ 		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_420,
+ 		.nc		= 3,
+ 		.depth		= 12, /* 6 bytes (4Y + UV) for 4 pixels */
+@@ -404,7 +404,7 @@ static enum mxc_jpeg_image_format mxc_jpeg_fourcc_to_imgfmt(u32 fourcc)
+ 		return MXC_JPEG_GRAY;
+ 	case V4L2_PIX_FMT_YUYV:
+ 		return MXC_JPEG_YUV422;
+-	case V4L2_PIX_FMT_NV12:
++	case V4L2_PIX_FMT_NV12M:
+ 		return MXC_JPEG_YUV420;
+ 	case V4L2_PIX_FMT_YUV24:
+ 		return MXC_JPEG_YUV444;
+@@ -673,7 +673,7 @@ static int mxc_jpeg_fixup_sof(struct mxc_jpeg_sof *sof,
+ 	_bswap16(&sof->width);
  
-+static const char * const compress_scheme_str[] = {"DCT Only",
-+	"DCT VQ mix 2-color", "DCT VQ mix 4-color"};
-+static const char * const format_str[] = {"Standard JPEG",
-+	"Aspeed JPEG"};
-+
- static unsigned int debug;
+ 	switch (fourcc) {
+-	case V4L2_PIX_FMT_NV12:
++	case V4L2_PIX_FMT_NV12M:
+ 		sof->components_no = 3;
+ 		sof->comp[0].v = 0x2;
+ 		sof->comp[0].h = 0x2;
+@@ -709,7 +709,7 @@ static int mxc_jpeg_fixup_sos(struct mxc_jpeg_sos *sos,
+ 	u8 *sof_u8 = (u8 *)sos;
  
-+static bool aspeed_video_alloc_buf(struct aspeed_video *video,
-+				   struct aspeed_video_addr *addr,
-+				   unsigned int size);
-+
-+static void aspeed_video_free_buf(struct aspeed_video *video,
-+				  struct aspeed_video_addr *addr);
-+
- static void aspeed_video_init_jpeg_table(u32 *table, bool yuv420)
- {
- 	int i;
-@@ -532,6 +572,7 @@ static int aspeed_video_start_frame(struct aspeed_video *video)
- 	unsigned long flags;
- 	struct aspeed_video_buffer *buf;
- 	u32 seq_ctrl = aspeed_video_read(video, VE_SEQ_CTRL);
-+	bool bcd_buf_need = (video->format != VIDEO_FMT_STANDARD);
- 
- 	if (video->v4l2_input_status) {
- 		v4l2_warn(&video->v4l2_dev, "No signal; don't start frame\n");
-@@ -544,6 +585,20 @@ static int aspeed_video_start_frame(struct aspeed_video *video)
- 		return -EBUSY;
- 	}
- 
-+	if (bcd_buf_need && !video->bcd.size) {
-+		if (!aspeed_video_alloc_buf(video, &video->bcd,
-+					    VE_BCD_BUFF_SIZE)) {
-+			dev_err(video->dev, "Failed to allocate BCD buffer\n");
-+			dev_err(video->dev, "don't start frame\n");
-+			return -ENOMEM;
-+		}
-+		aspeed_video_write(video, VE_BCD_ADDR, video->bcd.dma);
-+		v4l2_dbg(1, debug, &video->v4l2_dev, "bcd addr(%#x) size(%d)\n",
-+			 video->bcd.dma, video->bcd.size);
-+	} else if (!bcd_buf_need && video->bcd.size) {
-+		aspeed_video_free_buf(video, &video->bcd);
-+	}
-+
- 	spin_lock_irqsave(&video->lock, flags);
- 	buf = list_first_entry_or_null(&video->buffers,
- 				       struct aspeed_video_buffer, link);
-@@ -640,6 +695,24 @@ static void aspeed_video_irq_res_change(struct aspeed_video *video, ulong delay)
- 	schedule_delayed_work(&video->res_work, delay);
- }
- 
-+static void aspeed_video_swap_src_buf(struct aspeed_video *v)
-+{
-+	if (v->format == VIDEO_FMT_STANDARD)
-+		return;
-+
-+	/* Reset bcd buffer to have a full frame update every 8 frames.  */
-+	if (IS_ALIGNED(v->sequence, 8))
-+		memset((u8 *)v->bcd.virt, 0x00, VE_BCD_BUFF_SIZE);
-+
-+	if (v->sequence & 0x01) {
-+		aspeed_video_write(v, VE_SRC0_ADDR, v->srcs[1].dma);
-+		aspeed_video_write(v, VE_SRC1_ADDR, v->srcs[0].dma);
-+	} else {
-+		aspeed_video_write(v, VE_SRC0_ADDR, v->srcs[0].dma);
-+		aspeed_video_write(v, VE_SRC1_ADDR, v->srcs[1].dma);
-+	}
-+}
-+
- /*
-  * Interrupts that we don't use but have to explicitly ignore because the
-  * hardware asserts them even when they're disabled in the VE_INTERRUPT_CTRL
-@@ -691,6 +764,7 @@ static irqreturn_t aspeed_video_irq(int irq, void *arg)
- 
- 	if (sts & VE_INTERRUPT_COMP_COMPLETE) {
- 		struct aspeed_video_buffer *buf;
-+		bool empty = true;
- 		u32 frame_size = aspeed_video_read(video,
- 						   video->config.comp_size_read);
- 
-@@ -704,13 +778,23 @@ static irqreturn_t aspeed_video_irq(int irq, void *arg)
- 		if (buf) {
- 			vb2_set_plane_payload(&buf->vb.vb2_buf, 0, frame_size);
- 
--			if (!list_is_last(&buf->link, &video->buffers)) {
-+			/*
-+			 * aspeed_jpeg requires continuous update.
-+			 * On the contrary, standard jpeg can keep last buffer
-+			 * to always have the latest result.
-+			 */
-+			if (video->format == VIDEO_FMT_STANDARD &&
-+			    list_is_last(&buf->link, &video->buffers)) {
-+				empty = false;
-+				v4l2_warn(&video->v4l2_dev, "skip to keep last frame updated\n");
-+			} else {
- 				buf->vb.vb2_buf.timestamp = ktime_get_ns();
- 				buf->vb.sequence = video->sequence++;
- 				buf->vb.field = V4L2_FIELD_NONE;
- 				vb2_buffer_done(&buf->vb.vb2_buf,
- 						VB2_BUF_STATE_DONE);
- 				list_del(&buf->link);
-+				empty = list_empty(&video->buffers);
- 			}
- 		}
- 		spin_unlock(&video->lock);
-@@ -724,7 +808,10 @@ static irqreturn_t aspeed_video_irq(int irq, void *arg)
- 		aspeed_video_write(video, VE_INTERRUPT_STATUS,
- 				   VE_INTERRUPT_COMP_COMPLETE);
- 		sts &= ~VE_INTERRUPT_COMP_COMPLETE;
--		if (test_bit(VIDEO_STREAMING, &video->flags) && buf)
-+
-+		aspeed_video_swap_src_buf(video);
-+
-+		if (test_bit(VIDEO_STREAMING, &video->flags) && !empty)
- 			aspeed_video_start_frame(video);
- 	}
- 
-@@ -983,10 +1070,14 @@ static void aspeed_video_set_resolution(struct aspeed_video *video)
- 				   FIELD_PREP(VE_TGS_FIRST, video->frame_top) |
- 				   FIELD_PREP(VE_TGS_LAST,
- 					      video->frame_bottom + 1));
--		aspeed_video_update(video, VE_CTRL, 0, VE_CTRL_INT_DE);
-+		aspeed_video_update(video, VE_CTRL,
-+				    VE_CTRL_INT_DE | VE_CTRL_DIRECT_FETCH,
-+				    VE_CTRL_INT_DE);
- 	} else {
- 		v4l2_dbg(1, debug, &video->v4l2_dev, "Capture: Direct Mode\n");
--		aspeed_video_update(video, VE_CTRL, 0, VE_CTRL_DIRECT_FETCH);
-+		aspeed_video_update(video, VE_CTRL,
-+				    VE_CTRL_INT_DE | VE_CTRL_DIRECT_FETCH,
-+				    VE_CTRL_DIRECT_FETCH);
- 	}
- 
- 	size *= 4;
-@@ -1021,35 +1112,71 @@ static void aspeed_video_set_resolution(struct aspeed_video *video)
- 
- static void aspeed_video_update_regs(struct aspeed_video *video)
- {
--	u32 comp_ctrl = VE_COMP_CTRL_RSVD |
--		FIELD_PREP(VE_COMP_CTRL_DCT_LUM, video->jpeg_quality) |
--		FIELD_PREP(VE_COMP_CTRL_DCT_CHR, video->jpeg_quality | 0x10);
-+	u8 jpeg_hq_quality = clamp((int)video->jpeg_hq_quality - 1, 0,
-+				   ASPEED_VIDEO_JPEG_NUM_QUALITIES - 1);
-+	u32 comp_ctrl =	FIELD_PREP(VE_COMP_CTRL_DCT_LUM, video->jpeg_quality) |
-+		FIELD_PREP(VE_COMP_CTRL_DCT_CHR, video->jpeg_quality | 0x10) |
-+		FIELD_PREP(VE_COMP_CTRL_EN_HQ, video->hq_mode) |
-+		FIELD_PREP(VE_COMP_CTRL_HQ_DCT_LUM, jpeg_hq_quality) |
-+		FIELD_PREP(VE_COMP_CTRL_HQ_DCT_CHR, jpeg_hq_quality | 0x10);
- 	u32 ctrl = 0;
--	u32 seq_ctrl = video->config.jpeg_mode;
-+	u32 seq_ctrl = 0;
- 
--	v4l2_dbg(1, debug, &video->v4l2_dev, "framerate(%d)\n",
--		 video->frame_rate);
--	v4l2_dbg(1, debug, &video->v4l2_dev, "subsample(%s)\n",
-+	v4l2_dbg(1, debug, &video->v4l2_dev, "framerate(%d)\n", video->frame_rate);
-+	v4l2_dbg(1, debug, &video->v4l2_dev, "jpeg format(%s) subsample(%s)\n",
-+		 format_str[video->format],
- 		 video->yuv420 ? "420" : "444");
- 	v4l2_dbg(1, debug, &video->v4l2_dev, "compression quality(%d)\n",
- 		 video->jpeg_quality);
-+	v4l2_dbg(1, debug, &video->v4l2_dev, "hq_mode(%s) hq_quality(%d)\n",
-+		 video->hq_mode ? "on" : "off", video->jpeg_hq_quality);
-+	v4l2_dbg(1, debug, &video->v4l2_dev, "compression scheme(%s)\n",
-+		 compress_scheme_str[video->compression_scheme]);
-+
-+	if (video->format == VIDEO_FMT_ASPEED)
-+		aspeed_video_update(video, VE_BCD_CTRL, 0, VE_BCD_CTRL_EN_BCD);
-+	else
-+		aspeed_video_update(video, VE_BCD_CTRL, VE_BCD_CTRL_EN_BCD, 0);
- 
- 	if (video->frame_rate)
- 		ctrl |= FIELD_PREP(VE_CTRL_FRC, video->frame_rate);
- 
-+	if (video->format == VIDEO_FMT_STANDARD) {
-+		comp_ctrl &= ~FIELD_PREP(VE_COMP_CTRL_EN_HQ, video->hq_mode);
-+		seq_ctrl |= video->config.jpeg_mode;
-+	}
-+
- 	if (video->yuv420)
- 		seq_ctrl |= VE_SEQ_CTRL_YUV420;
- 
- 	if (video->jpeg.virt)
- 		aspeed_video_update_jpeg_table(video->jpeg.virt, video->yuv420);
- 
-+	if (video->config.version == 4) {
-+		switch (video->compression_scheme) {
-+		case 0:	//DCT only
-+			comp_ctrl |= VE_COMP_CTRL_VQ_DCT_ONLY;
-+			break;
-+		case 1:	//DCT VQ mix 2-color
-+			comp_ctrl &= ~(VE_COMP_CTRL_VQ_4COLOR |
-+				     VE_COMP_CTRL_VQ_DCT_ONLY);
-+			break;
-+		case 2:	//DCT VQ mix 4-color
-+			comp_ctrl |= VE_COMP_CTRL_VQ_4COLOR;
-+			break;
-+		}
-+	}
-+
- 	/* Set control registers */
- 	aspeed_video_update(video, VE_SEQ_CTRL,
- 			    video->config.jpeg_mode | VE_SEQ_CTRL_YUV420,
- 			    seq_ctrl);
- 	aspeed_video_update(video, VE_CTRL, VE_CTRL_FRC, ctrl);
- 	aspeed_video_update(video, VE_COMP_CTRL,
--			    VE_COMP_CTRL_DCT_LUM | VE_COMP_CTRL_DCT_CHR,
-+			    VE_COMP_CTRL_DCT_LUM | VE_COMP_CTRL_DCT_CHR |
-+			    VE_COMP_CTRL_EN_HQ | VE_COMP_CTRL_HQ_DCT_LUM |
-+			    VE_COMP_CTRL_HQ_DCT_CHR | VE_COMP_CTRL_VQ_4COLOR |
-+			    VE_COMP_CTRL_VQ_DCT_ONLY,
- 			    comp_ctrl);
- }
- 
-@@ -1081,6 +1208,8 @@ static void aspeed_video_init_regs(struct aspeed_video *video)
- 
- 	/* Set mode detection defaults */
- 	aspeed_video_write(video, VE_MODE_DETECT, 0x22666500);
-+
-+	aspeed_video_write(video, VE_BCD_CTRL, 0);
- }
- 
- static void aspeed_video_start(struct aspeed_video *video)
-@@ -1114,6 +1243,9 @@ static void aspeed_video_stop(struct aspeed_video *video)
- 	if (video->srcs[1].size)
- 		aspeed_video_free_buf(video, &video->srcs[1]);
- 
-+	if (video->bcd.size)
-+		aspeed_video_free_buf(video, &video->bcd);
-+
- 	video->v4l2_input_status = V4L2_IN_ST_NO_SIGNAL;
- 	video->flags = 0;
- }
-@@ -1132,10 +1264,12 @@ static int aspeed_video_querycap(struct file *file, void *fh,
- static int aspeed_video_enum_format(struct file *file, void *fh,
- 				    struct v4l2_fmtdesc *f)
- {
-+	struct aspeed_video *video = video_drvdata(file);
-+
- 	if (f->index)
- 		return -EINVAL;
- 
--	f->pixelformat = V4L2_PIX_FMT_JPEG;
-+	f->pixelformat = video->pix_fmt.pixelformat;
- 
- 	return 0;
- }
-@@ -1150,6 +1284,29 @@ static int aspeed_video_get_format(struct file *file, void *fh,
- 	return 0;
- }
- 
-+static int aspeed_video_set_format(struct file *file, void *fh,
-+				   struct v4l2_format *f)
-+{
-+	struct aspeed_video *video = video_drvdata(file);
-+
-+	if (vb2_is_busy(&video->queue))
-+		return -EBUSY;
-+
-+	switch (f->fmt.pix.pixelformat) {
-+	case V4L2_PIX_FMT_JPEG:
-+		video->format = VIDEO_FMT_STANDARD;
-+		break;
-+	case V4L2_PIX_FMT_AJPG:
-+		video->format = VIDEO_FMT_ASPEED;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	video->pix_fmt.pixelformat = f->fmt.pix.pixelformat;
-+
-+	return 0;
-+}
-+
- static int aspeed_video_enum_input(struct file *file, void *fh,
- 				   struct v4l2_input *inp)
- {
-@@ -1367,7 +1524,7 @@ static const struct v4l2_ioctl_ops aspeed_video_ioctl_ops = {
- 
- 	.vidioc_enum_fmt_vid_cap = aspeed_video_enum_format,
- 	.vidioc_g_fmt_vid_cap = aspeed_video_get_format,
--	.vidioc_s_fmt_vid_cap = aspeed_video_get_format,
-+	.vidioc_s_fmt_vid_cap = aspeed_video_set_format,
- 	.vidioc_try_fmt_vid_cap = aspeed_video_get_format,
- 
- 	.vidioc_reqbufs = vb2_ioctl_reqbufs,
-@@ -1416,6 +1573,24 @@ static int aspeed_video_set_ctrl(struct v4l2_ctrl *ctrl)
- 		if (test_bit(VIDEO_STREAMING, &video->flags))
- 			aspeed_video_update_regs(video);
+ 	switch (fourcc) {
+-	case V4L2_PIX_FMT_NV12:
++	case V4L2_PIX_FMT_NV12M:
+ 		sos->components_no = 3;
  		break;
-+	case V4L2_CID_ASPEED_COMPRESSION_SCHEME:
-+		if (video->config.version > 4)
-+			return -EINVAL;
-+
-+		video->compression_scheme = ctrl->val;
-+		if (test_bit(VIDEO_STREAMING, &video->flags))
-+			aspeed_video_update_regs(video);
-+		break;
-+	case V4L2_CID_ASPEED_HQ_MODE:
-+		video->hq_mode = ctrl->val;
-+		if (test_bit(VIDEO_STREAMING, &video->flags))
-+			aspeed_video_update_regs(video);
-+		break;
-+	case V4L2_CID_ASPEED_HQ_JPEG_QUALITY:
-+		video->jpeg_hq_quality = ctrl->val;
-+		if (test_bit(VIDEO_STREAMING, &video->flags))
-+			aspeed_video_update_regs(video);
-+		break;
- 	default:
- 		return -EINVAL;
+ 	case V4L2_PIX_FMT_YUYV:
+@@ -1183,7 +1183,7 @@ static void mxc_jpeg_bytesperline(struct mxc_jpeg_q_data *q,
+ 		/* bytesperline unused for compressed formats */
+ 		q->bytesperline[0] = 0;
+ 		q->bytesperline[1] = 0;
+-	} else if (q->fmt->fourcc == V4L2_PIX_FMT_NV12) {
++	} else if (q->fmt->fourcc == V4L2_PIX_FMT_NV12M) {
+ 		/* When the image format is planar the bytesperline value
+ 		 * applies to the first plane and is divided by the same factor
+ 		 * as the width field for the other planes
+@@ -1215,7 +1215,7 @@ static void mxc_jpeg_sizeimage(struct mxc_jpeg_q_data *q)
+ 	} else {
+ 		q->sizeimage[0] = q->bytesperline[0] * q->h;
+ 		q->sizeimage[1] = 0;
+-		if (q->fmt->fourcc == V4L2_PIX_FMT_NV12)
++		if (q->fmt->fourcc == V4L2_PIX_FMT_NV12M)
+ 			q->sizeimage[1] = q->sizeimage[0] / 2;
  	}
-@@ -1427,6 +1602,39 @@ static const struct v4l2_ctrl_ops aspeed_video_ctrl_ops = {
- 	.s_ctrl = aspeed_video_set_ctrl,
- };
- 
-+static const struct v4l2_ctrl_config aspeed_ctrl_compression_scheme = {
-+	.ops = &aspeed_video_ctrl_ops,
-+	.id = V4L2_CID_ASPEED_COMPRESSION_SCHEME,
-+	.name = "Aspeed Compression SCHEME",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.min = 0,
-+	.max = 2,
-+	.step = 1,
-+	.def = 0,
-+};
-+
-+static const struct v4l2_ctrl_config aspeed_ctrl_HQ_mode = {
-+	.ops = &aspeed_video_ctrl_ops,
-+	.id = V4L2_CID_ASPEED_HQ_MODE,
-+	.name = "Aspeed HQ Mode",
-+	.type = V4L2_CTRL_TYPE_BOOLEAN,
-+	.min = false,
-+	.max = true,
-+	.step = 1,
-+	.def = false,
-+};
-+
-+static const struct v4l2_ctrl_config aspeed_ctrl_HQ_jpeg_quality = {
-+	.ops = &aspeed_video_ctrl_ops,
-+	.id = V4L2_CID_ASPEED_HQ_JPEG_QUALITY,
-+	.name = "Aspeed HQ Quality",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.min = 1,
-+	.max = ASPEED_VIDEO_JPEG_NUM_QUALITIES,
-+	.step = 1,
-+	.def = 1,
-+};
-+
- static void aspeed_video_resolution_work(struct work_struct *work)
- {
- 	struct delayed_work *dwork = to_delayed_work(work);
-@@ -1693,6 +1901,7 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
- 	struct v4l2_device *v4l2_dev = &video->v4l2_dev;
- 	struct vb2_queue *vbq = &video->queue;
- 	struct video_device *vdev = &video->vdev;
-+	struct v4l2_ctrl_handler *hdl = &video->ctrl_handler;
- 	int rc;
- 
- 	video->pix_fmt.pixelformat = V4L2_PIX_FMT_JPEG;
-@@ -1707,22 +1916,26 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
- 		return rc;
- 	}
- 
--	v4l2_ctrl_handler_init(&video->ctrl_handler, 2);
--	v4l2_ctrl_new_std(&video->ctrl_handler, &aspeed_video_ctrl_ops,
-+	v4l2_ctrl_handler_init(hdl, 5);
-+	v4l2_ctrl_new_std(hdl, &aspeed_video_ctrl_ops,
- 			  V4L2_CID_JPEG_COMPRESSION_QUALITY, 0,
- 			  ASPEED_VIDEO_JPEG_NUM_QUALITIES - 1, 1, 0);
--	v4l2_ctrl_new_std_menu(&video->ctrl_handler, &aspeed_video_ctrl_ops,
-+	v4l2_ctrl_new_std_menu(hdl, &aspeed_video_ctrl_ops,
- 			       V4L2_CID_JPEG_CHROMA_SUBSAMPLING,
- 			       V4L2_JPEG_CHROMA_SUBSAMPLING_420, mask,
- 			       V4L2_JPEG_CHROMA_SUBSAMPLING_444);
-+	if (video->config.version == 4)
-+		v4l2_ctrl_new_custom(hdl, &aspeed_ctrl_compression_scheme, NULL);
-+	v4l2_ctrl_new_custom(hdl, &aspeed_ctrl_HQ_mode, NULL);
-+	v4l2_ctrl_new_custom(hdl, &aspeed_ctrl_HQ_jpeg_quality, NULL);
- 
--	rc = video->ctrl_handler.error;
-+	rc = hdl->error;
- 	if (rc) {
- 		dev_err(video->dev, "Failed to init controls: %d\n", rc);
- 		goto err_ctrl_init;
- 	}
- 
--	v4l2_dev->ctrl_handler = &video->ctrl_handler;
-+	v4l2_dev->ctrl_handler = hdl;
- 
- 	vbq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
- 	vbq->io_modes = VB2_MMAP | VB2_READ | VB2_DMABUF;
-@@ -1863,6 +2076,7 @@ static int aspeed_video_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	video->frame_rate = 30;
-+	video->jpeg_hq_quality = 1;
- 	video->dev = &pdev->dev;
- 	spin_lock_init(&video->lock);
- 	mutex_init(&video->video_lock);
-diff --git a/include/uapi/linux/aspeed-video.h b/include/uapi/linux/aspeed-video.h
-new file mode 100644
-index 000000000000..63f0432192a5
---- /dev/null
-+++ b/include/uapi/linux/aspeed-video.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Copyright (C) 2021 ASPEED Technology Inc.
-+ */
-+
-+#ifndef _UAPI_LINUX_ASPEED_VIDEO_H
-+#define _UAPI_LINUX_ASPEED_VIDEO_H
-+
-+#include <linux/v4l2-controls.h>
-+
-+#define V4L2_CID_ASPEED_COMPRESSION_SCHEME	(V4L2_CID_USER_ASPEED_BASE  + 1)
-+#define V4L2_CID_ASPEED_HQ_MODE			(V4L2_CID_USER_ASPEED_BASE  + 2)
-+#define V4L2_CID_ASPEED_HQ_JPEG_QUALITY		(V4L2_CID_USER_ASPEED_BASE  + 3)
-+
-+#endif /* _UAPI_LINUX_ASPEED_VIDEO_H */
+ }
+
+base-commit: 68b9bcc8a534cd11fe55f8bc82f948aae7d81b3c
 -- 
-2.25.1
+2.33.0
 
