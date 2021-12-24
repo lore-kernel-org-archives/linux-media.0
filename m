@@ -2,86 +2,149 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F24DC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 23 Dec 2021 20:27:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBFA2C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 24 Dec 2021 01:29:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350221AbhLWU1m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 Dec 2021 15:27:42 -0500
-Received: from relay034.a.hostedemail.com ([64.99.140.34]:59301 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234114AbhLWU1m (ORCPT
+        id S1350732AbhLXB3N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 Dec 2021 20:29:13 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:42098 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245231AbhLXB3M (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 Dec 2021 15:27:42 -0500
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay02.hostedemail.com (Postfix) with ESMTP id 02B37217FD;
-        Thu, 23 Dec 2021 20:27:39 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id 6C5576000D;
-        Thu, 23 Dec 2021 20:27:34 +0000 (UTC)
-Message-ID: <2135f71822711698ecfdaa5f0267e0324e424248.camel@perches.com>
-Subject: Re: [PATCH v6 2/2] Driver for ON Semi AR0521 camera sensor
-From:   Joe Perches <joe@perches.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Krzysztof =?UTF-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Date:   Thu, 23 Dec 2021 12:27:36 -0800
-In-Reply-To: <02c71d9fe95f72c5aa5a01adadda8fb7e756fae1.camel@perches.com>
-References: <m3ee63hkuu.fsf@t19.piap.pl> <m35yrfhkaf.fsf@t19.piap.pl>
-         <cee1bbe6c8dda1c79ba19f7bbf68fc1d74558cae.camel@perches.com>
-         <20211223184856.v34ecibwzepahsju@uno.localdomain>
-         <02c71d9fe95f72c5aa5a01adadda8fb7e756fae1.camel@perches.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Thu, 23 Dec 2021 20:29:12 -0500
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 1BO1M74X007689;
+        Fri, 24 Dec 2021 09:22:08 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 24 Dec
+ 2021 09:27:37 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <hverkuil-cisco@xs4all.nl>, <sakari.ailus@linux.intel.com>,
+        <gregkh@linuxfoundation.org>, <eajames@linux.ibm.com>,
+        <mchehab@kernel.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
+        <linux-media@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 4/4] media: aspeed: Extend debug message
+Date:   Fri, 24 Dec 2021 09:27:38 +0800
+Message-ID: <20211224012738.1551-5-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211224012738.1551-1-jammy_huang@aspeedtech.com>
+References: <20211224012738.1551-1-jammy_huang@aspeedtech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 6C5576000D
-X-Stat-Signature: oryznni7orai4xz5hpb9rarsuzeeq18h
-X-Rspamd-Server: rspamout02
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/LvrMcnUh7u0lsb7sYPZ7gbjNPuYXMEfA=
-X-HE-Tag: 1640291254-457205
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 1BO1M74X007689
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 2021-12-23 at 12:13 -0800, Joe Perches wrote:
-> On Thu, 2021-12-23 at 19:48 +0100, Jacopo Mondi wrote:
-> > The media subsystem requires to validate patches with
-> > 
-> >         ./scripts/checkpatch.pl --strict --max-line-length=80
-> > 
-> > We longly debated this and I believe it's now generally accepted to go
-> > over 80 when it makes sense, but not regularly span to 120 cols like
-> > in the previous version.
-[]
-> Perhaps there should be a MAINTAINERS P: entry for this requirement.
-> 
-> From MAINTAINERS:
-> 
-> 	P: Subsystem Profile document for more details submitting
-> 	   patches to the given subsystem. This is either an in-tree file,
-> 	   or a URI. See Documentation/maintainer/maintainer-entry-profile.rst
-> 	   for details.
+updated as below:
 
-Perhaps:
+Capture:
+  Mode                : Direct fetch
+  VGA bpp mode        : 32
+  Signal              : lock
+  Width               : 1920
+  Height              : 1080
+  FRC                 : 0
+
+Compression:
+  Format              : JPEG
+  Subsampling         : 444
+  Quality             : 4
+
+Performance:
+  Frame#              : 4
+  Frame Duration(ms)  :
+    Now               : 22
+    Min               : 21
+    Max               : 22
+  FPS                 : 45
+
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+v8:
+  - no update
+v7:
+  - update debugfs message. Aspeed-jpeg's compression parameters only shown
+    if it's aspeed jpeg now
+v6:
+  - no update
+v5:
+  - no update
+v4:
+  - update debugfs log
+v3:
+  - no update
+v2:
+  - update commit message
+---
+ drivers/media/platform/aspeed-video.c | 35 +++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cd55b83878e05..bbfcb8e7eef06 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11977,6 +11977,7 @@ L:	linux-media@vger.kernel.org
- S:	Maintained
- W:	https://linuxtv.org
- Q:	http://patchwork.kernel.org/project/linux-media/list/
-+P:	https://linuxtv.org/downloads/v4l-dvb-apis-new/driver-api/maintainer-entry-profile.html
- T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/admin-guide/media/
- F:	Documentation/devicetree/bindings/media/
-
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index c0cfcf98659d..b388bc56ce81 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -1835,10 +1835,29 @@ static const struct vb2_ops aspeed_video_vb2_ops = {
+ static int aspeed_video_debugfs_show(struct seq_file *s, void *data)
+ {
+ 	struct aspeed_video *v = s->private;
++	u32 val08;
+ 
+ 	seq_puts(s, "\n");
+ 
+ 	seq_puts(s, "Capture:\n");
++	val08 = aspeed_video_read(v, VE_CTRL);
++	if (FIELD_GET(VE_CTRL_DIRECT_FETCH, val08)) {
++		seq_printf(s, "  %-20s:\tDirect fetch\n", "Mode");
++		seq_printf(s, "  %-20s:\t%s\n", "VGA bpp mode",
++			   FIELD_GET(VE_CTRL_INT_DE, val08) ? "16" : "32");
++	} else {
++		seq_printf(s, "  %-20s:\tSync\n", "Mode");
++		seq_printf(s, "  %-20s:\t%s\n", "Video source",
++			   FIELD_GET(VE_CTRL_SOURCE, val08) ?
++			   "external" : "internal");
++		seq_printf(s, "  %-20s:\t%s\n", "DE source",
++			   FIELD_GET(VE_CTRL_INT_DE, val08) ?
++			   "internal" : "external");
++		seq_printf(s, "  %-20s:\t%s\n", "Cursor overlay",
++			   FIELD_GET(VE_CTRL_AUTO_OR_CURSOR, val08) ?
++			   "Without" : "With");
++	}
++
+ 	seq_printf(s, "  %-20s:\t%s\n", "Signal",
+ 		   v->v4l2_input_status ? "Unlock" : "Lock");
+ 	seq_printf(s, "  %-20s:\t%d\n", "Width", v->pix_fmt.width);
+@@ -1847,6 +1866,22 @@ static int aspeed_video_debugfs_show(struct seq_file *s, void *data)
+ 
+ 	seq_puts(s, "\n");
+ 
++	seq_puts(s, "Compression:\n");
++	seq_printf(s, "  %-20s:\t%s\n", "Format", format_str[v->format]);
++	seq_printf(s, "  %-20s:\t%s\n", "Subsampling",
++		   v->yuv420 ? "420" : "444");
++	seq_printf(s, "  %-20s:\t%d\n", "Quality", v->jpeg_quality);
++	if (v->format == VIDEO_FMT_ASPEED) {
++		seq_printf(s, "  %-20s:\t%s\n", "HQ Mode",
++			   v->hq_mode ? "on" : "off");
++		seq_printf(s, "  %-20s:\t%d\n", "HQ Quality",
++			   v->hq_mode ? v->jpeg_hq_quality : 0);
++		seq_printf(s, "  %-20s:\t%s\n", "Coding Scheme",
++			   compress_scheme_str[v->compression_scheme]);
++	}
++
++	seq_puts(s, "\n");
++
+ 	seq_puts(s, "Performance:\n");
+ 	seq_printf(s, "  %-20s:\t%d\n", "Frame#", v->sequence);
+ 	seq_printf(s, "  %-20s:\n", "Frame Duration(ms)");
+-- 
+2.25.1
 
