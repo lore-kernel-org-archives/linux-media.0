@@ -2,248 +2,302 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 422E7C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 27 Dec 2021 06:36:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F57DC433EF
+	for <linux-media@archiver.kernel.org>; Mon, 27 Dec 2021 07:06:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235348AbhL0Ggc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 Dec 2021 01:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S235420AbhL0HG3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 Dec 2021 02:06:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235318AbhL0Ggc (ORCPT
+        with ESMTP id S229490AbhL0HG3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 Dec 2021 01:36:32 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA65C06173E;
-        Sun, 26 Dec 2021 22:36:30 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id g132so9083094wmg.2;
-        Sun, 26 Dec 2021 22:36:30 -0800 (PST)
+        Mon, 27 Dec 2021 02:06:29 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEDBC06173E
+        for <linux-media@vger.kernel.org>; Sun, 26 Dec 2021 23:06:28 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id i5so10507331uaq.10
+        for <linux-media@vger.kernel.org>; Sun, 26 Dec 2021 23:06:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aVsAoP2T3tzUodu4VGKyNEW0sphmTDDncHzes2frrOs=;
-        b=bQQ8nvrhuvCETjMeJ9h0Eb9hkbJIrbr4SKihusqXFjU+d5gf0mXDgdRUp+z7hJfvQb
-         JjxSVDl8TXXdkcyei7e9eeEp6Dztxbw6yS2hMjGq2t1ICy3jp5FK3pozZB49Y1Dj/gyD
-         4kK9mVxp06A19aXks8CQ4v9NgZBMA0pYoWRPuu5z62JbZQz7+37zEzdA6WRxblez0GvE
-         fTTkwV99WTStkviHBP2J6Af8V8mTbbXWgg1WVdK6mpv1fmmV1ao0zImxMmExWnaUGnYO
-         /Hly8+mtu6fqnqt0ElKuwfknZ2WQ80kP6dhOAetBMLRAqA5nkKYWteI+mo0xYyJBNFDp
-         ltwg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4FLR5aRa6nhcAgyU88oGHnr22kyfHCN3jOQK5fS/Kkc=;
+        b=M0PfZbMlw980hwdVk9JbyWaetJDLPWLwxYeBHJdEl2uuiJ8GnjnEPfcxX0K8CQR/n4
+         V4QK4xZ5M1mZXcLBSs7h6N1U4dRbPnw31gHEJs57N/bhAM6moXrSxwLfv2P+yF3k81zp
+         9BTuY0mt3jxwVqUh25JSB2TvEHEtVAxQXrOAY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aVsAoP2T3tzUodu4VGKyNEW0sphmTDDncHzes2frrOs=;
-        b=U1kSKX7Zf9G1e7Px0yhPs77flEWITo/i9s3CcIu/e2Yv9SF14OrsSunjiNP2l8m5Sd
-         04Vb+lFhy86E1o4Zt/wm3h/r0dMdOKrPYrc5LBVBJCIj4OC/6F4NBmLdguj4CkW4ziCt
-         MfseP3PtN4e75egN2NBLW9GU4vZndoGTruoQH+n6XNW2xpY8Ipy8pJu3aENHccsrTsop
-         nydJEKWpCyMThjuMLkjMOdDriZX+zvqxZnKqIRGPHNMWb2WYk7W0HkKhXrxksz6H+TDP
-         VkaXMP/Ngcu6GeDw0E+pdoPdgGZNdspR5fJLvPOYmAkXd6hgs4fy6HbXDLH/IGGjGnF9
-         veCA==
-X-Gm-Message-State: AOAM531zbbeT1kWeQBKBliUsS7Jcj2/gAxEpQZCfW04Cmq0moSPat4IH
-        h14OpIBH6GYs/pMGZTT3a6s=
-X-Google-Smtp-Source: ABdhPJysdnMAvIRMu3NQjqh3TRsP70+m9zCz27aJbE26CBqDoMBfIJyJ9lkILTCCw6d9dhVfu1YpMg==
-X-Received: by 2002:a1c:494:: with SMTP id 142mr12441200wme.191.1640586988638;
-        Sun, 26 Dec 2021 22:36:28 -0800 (PST)
-Received: from ownia.. ([103.105.48.220])
-        by smtp.gmail.com with ESMTPSA id g8sm14153982wmh.17.2021.12.26.22.36.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Dec 2021 22:36:28 -0800 (PST)
-From:   Weizhao Ouyang <o451686892@gmail.com>
-To:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>, christian.koenig@amd.com
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        Weizhao Ouyang <o451686892@gmail.com>
-Subject: [PATCH] dma-buf: heaps: Fix mutex lock area and generalize struct dma_heap_attachment
-Date:   Mon, 27 Dec 2021 14:36:19 +0800
-Message-Id: <20211227063619.215692-1-o451686892@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4FLR5aRa6nhcAgyU88oGHnr22kyfHCN3jOQK5fS/Kkc=;
+        b=7B2keKMQky+onwQqKLIAcwGh8JigxHTYgLPYUfDiuBKrQhzOuPkZkYwY/Rj8hGcMs/
+         PhwoLJ4XzefaorwIOLUvPuYovh46SpEiK7XgYNu8k7gw811sc6WM1oVFqG64W3PlDz7e
+         Z6yTtbhOB7QQDysjYx2OWRbAbKXcViGxszg4DRpJwWlnCUR37+8Qmil+ZIhnbl+XlfQR
+         MGuKwr+jtmL1RPFGePy/6G+4oR/VT9JezDiM0tyE36RyPodNyzveXZXvKHhhKdHc7x7R
+         VSB/0PyyDS6bw5xfcLKov8oh73KBa2poMe6bz8Lv/JLi5vT9IGGAd30kYEYMhYv/JeN1
+         ieQQ==
+X-Gm-Message-State: AOAM533ODQicOhzVUsyNzGFsk/KhxIle3/qk2qWjugXsvxC/PIRuI+bD
+        obojLROp05+VL0KlzgprKTM32oHPYR7uFA==
+X-Google-Smtp-Source: ABdhPJx2kjPddioVU8bBGiDvD+2KoT9BUcB5Qe6Sh1BCFpG6WJh67mTKSQM/eokMKTIuvFTekDYHoA==
+X-Received: by 2002:a67:f799:: with SMTP id j25mr4103593vso.75.1640588788011;
+        Sun, 26 Dec 2021 23:06:28 -0800 (PST)
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
+        by smtp.gmail.com with ESMTPSA id m62sm62357uam.0.2021.12.26.23.06.27
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Dec 2021 23:06:27 -0800 (PST)
+Received: by mail-ua1-f47.google.com with SMTP id p37so25305252uae.8
+        for <linux-media@vger.kernel.org>; Sun, 26 Dec 2021 23:06:27 -0800 (PST)
+X-Received: by 2002:a05:6102:3218:: with SMTP id r24mr4753042vsf.74.1640588787493;
+ Sun, 26 Dec 2021 23:06:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211117130635.11633-1-dafna.hirschfeld@collabora.com> <20211117130635.11633-6-dafna.hirschfeld@collabora.com>
+In-Reply-To: <20211117130635.11633-6-dafna.hirschfeld@collabora.com>
+From:   Alexandre Courbot <acourbot@chromium.org>
+Date:   Mon, 27 Dec 2021 16:06:16 +0900
+X-Gmail-Original-Message-ID: <CAPBb6MXyV7K3NuSLCWApC_TNjhFW=+3Eb_7d2028Nyno7fnkMA@mail.gmail.com>
+Message-ID: <CAPBb6MXyV7K3NuSLCWApC_TNjhFW=+3Eb_7d2028Nyno7fnkMA@mail.gmail.com>
+Subject: Re: [PATCH v2 5/7] media: mtk-vcodec: replace func vidioc_try_fmt
+ with two funcs for out/cap
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        kernel@collabora.com, Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        courbot@chromium.org, Dafna Hirschfeld <dafna3@gmail.com>,
+        eizan@chromium.org, houlong.wei@mediatek.com,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Irui Wang <irui.wang@mediatek.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?TWFvZ3VhbmcgTWVuZyAo5a2f5q+b5bm/KQ==?= 
+        <maoguang.meng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        minghsiu.tsai@mediatek.com, Tomasz Figa <tfiga@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix cma_heap_buffer mutex lock area to protect vmap_cnt and vaddr. And
-move struct dma_heap_attachment to dma-heap.h so that vendor dma heaps
-can use it, the same behaviour as struct dma_buf_attachment.
+On Wed, Nov 17, 2021 at 10:07 PM Dafna Hirschfeld
+<dafna.hirschfeld@collabora.com> wrote:
+>
+> The function vidioc_try_fmt has a big 'if-else' for
+> the capture and output cases. There is hardly any code
+> outside of that condition. It is therefore better to split
+> that functions into two different functions, one for each case.
+>
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 
-Fixes: a5d2d29e24be ("dma-buf: heaps: Move heap-helper logic into the cma_heap implementation")
-Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
----
- drivers/dma-buf/heaps/cma_heap.c    | 25 ++++++++++---------------
- drivers/dma-buf/heaps/system_heap.c | 12 ++----------
- include/linux/dma-heap.h            | 15 +++++++++++++++
- 3 files changed, 27 insertions(+), 25 deletions(-)
+Makes much more sense that way, thanks!
 
-diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-buf/heaps/cma_heap.c
-index 0c05b79870f9..23dad5b6421e 100644
---- a/drivers/dma-buf/heaps/cma_heap.c
-+++ b/drivers/dma-buf/heaps/cma_heap.c
-@@ -40,13 +40,6 @@ struct cma_heap_buffer {
- 	void *vaddr;
- };
- 
--struct dma_heap_attachment {
--	struct device *dev;
--	struct sg_table table;
--	struct list_head list;
--	bool mapped;
--};
--
- static int cma_heap_attach(struct dma_buf *dmabuf,
- 			   struct dma_buf_attachment *attachment)
- {
-@@ -58,7 +51,7 @@ static int cma_heap_attach(struct dma_buf *dmabuf,
- 	if (!a)
- 		return -ENOMEM;
- 
--	ret = sg_alloc_table_from_pages(&a->table, buffer->pages,
-+	ret = sg_alloc_table_from_pages(a->table, buffer->pages,
- 					buffer->pagecount, 0,
- 					buffer->pagecount << PAGE_SHIFT,
- 					GFP_KERNEL);
-@@ -90,7 +83,7 @@ static void cma_heap_detach(struct dma_buf *dmabuf,
- 	list_del(&a->list);
- 	mutex_unlock(&buffer->lock);
- 
--	sg_free_table(&a->table);
-+	sg_free_table(a->table);
- 	kfree(a);
- }
- 
-@@ -98,12 +91,12 @@ static struct sg_table *cma_heap_map_dma_buf(struct dma_buf_attachment *attachme
- 					     enum dma_data_direction direction)
- {
- 	struct dma_heap_attachment *a = attachment->priv;
--	struct sg_table *table = &a->table;
-+	struct sg_table *table = a->table;
- 	int ret;
- 
- 	ret = dma_map_sgtable(attachment->dev, table, direction, 0);
- 	if (ret)
--		return ERR_PTR(-ENOMEM);
-+		return ERR_PTR(ret);
- 	a->mapped = true;
- 	return table;
- }
-@@ -124,14 +117,15 @@ static int cma_heap_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
- 	struct cma_heap_buffer *buffer = dmabuf->priv;
- 	struct dma_heap_attachment *a;
- 
-+	mutex_lock(&buffer->lock);
-+
- 	if (buffer->vmap_cnt)
- 		invalidate_kernel_vmap_range(buffer->vaddr, buffer->len);
- 
--	mutex_lock(&buffer->lock);
- 	list_for_each_entry(a, &buffer->attachments, list) {
- 		if (!a->mapped)
- 			continue;
--		dma_sync_sgtable_for_cpu(a->dev, &a->table, direction);
-+		dma_sync_sgtable_for_cpu(a->dev, a->table, direction);
- 	}
- 	mutex_unlock(&buffer->lock);
- 
-@@ -144,14 +138,15 @@ static int cma_heap_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
- 	struct cma_heap_buffer *buffer = dmabuf->priv;
- 	struct dma_heap_attachment *a;
- 
-+	mutex_lock(&buffer->lock);
-+
- 	if (buffer->vmap_cnt)
- 		flush_kernel_vmap_range(buffer->vaddr, buffer->len);
- 
--	mutex_lock(&buffer->lock);
- 	list_for_each_entry(a, &buffer->attachments, list) {
- 		if (!a->mapped)
- 			continue;
--		dma_sync_sgtable_for_device(a->dev, &a->table, direction);
-+		dma_sync_sgtable_for_device(a->dev, a->table, direction);
- 	}
- 	mutex_unlock(&buffer->lock);
- 
-diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
-index ab7fd896d2c4..aac8fc660ea6 100644
---- a/drivers/dma-buf/heaps/system_heap.c
-+++ b/drivers/dma-buf/heaps/system_heap.c
-@@ -17,7 +17,6 @@
- #include <linux/highmem.h>
- #include <linux/mm.h>
- #include <linux/module.h>
--#include <linux/scatterlist.h>
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
- 
-@@ -33,13 +32,6 @@ struct system_heap_buffer {
- 	void *vaddr;
- };
- 
--struct dma_heap_attachment {
--	struct device *dev;
--	struct sg_table *table;
--	struct list_head list;
--	bool mapped;
--};
--
- #define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP)
- #define MID_ORDER_GFP (LOW_ORDER_GFP | __GFP_NOWARN)
- #define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
-@@ -68,7 +60,7 @@ static struct sg_table *dup_sg_table(struct sg_table *table)
- 	ret = sg_alloc_table(new_table, table->orig_nents, GFP_KERNEL);
- 	if (ret) {
- 		kfree(new_table);
--		return ERR_PTR(-ENOMEM);
-+		return ERR_PTR(ret);
- 	}
- 
- 	new_sg = new_table->sgl;
-@@ -94,7 +86,7 @@ static int system_heap_attach(struct dma_buf *dmabuf,
- 	table = dup_sg_table(&buffer->sg_table);
- 	if (IS_ERR(table)) {
- 		kfree(a);
--		return -ENOMEM;
-+		return PTR_ERR(table);
- 	}
- 
- 	a->table = table;
-diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
-index 0c05561cad6e..7d02aefe0e78 100644
---- a/include/linux/dma-heap.h
-+++ b/include/linux/dma-heap.h
-@@ -11,6 +11,7 @@
- 
- #include <linux/cdev.h>
- #include <linux/types.h>
-+#include <linux/scatterlist.h>
- 
- struct dma_heap;
- 
-@@ -41,6 +42,20 @@ struct dma_heap_export_info {
- 	void *priv;
- };
- 
-+/**
-+ * struct dma_heap_attachment - holds device-heap attachment data
-+ * @dev:	device attached to the heap
-+ * @table:	sgtables for tracking the associated pages
-+ * @list:	list of dma_heap_attachment
-+ * @mapped:	true if attachment is actually mapped on the device
-+ */
-+struct dma_heap_attachment {
-+	struct device *dev;
-+	struct sg_table *table;
-+	struct list_head list;
-+	bool mapped;
-+};
-+
- /**
-  * dma_heap_get_drvdata() - get per-heap driver data
-  * @heap: DMA-Heap to retrieve private data for
--- 
-2.32.0
+Reviewed-by: Alexandre Courbot <acourbot@chromium.org>
 
+
+> ---
+>  .../platform/mtk-vcodec/mtk_vcodec_enc.c      | 149 +++++++++---------
+>  1 file changed, 72 insertions(+), 77 deletions(-)
+>
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+> index fb3cf804c96a..be28f2401839 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+> @@ -263,87 +263,82 @@ static struct mtk_q_data *mtk_venc_get_q_data(struct mtk_vcodec_ctx *ctx,
+>         return &ctx->q_data[MTK_Q_DATA_DST];
+>  }
+>
+> +static void vidioc_try_fmt_cap(struct v4l2_format *f)
+> +{
+> +       f->fmt.pix_mp.field = V4L2_FIELD_NONE;
+> +       f->fmt.pix_mp.num_planes = 1;
+> +       f->fmt.pix_mp.plane_fmt[0].bytesperline = 0;
+> +       f->fmt.pix_mp.flags = 0;
+> +}
+> +
+>  /* V4L2 specification suggests the driver corrects the format struct if any of
+>   * the dimensions is unsupported
+>   */
+> -static int vidioc_try_fmt(struct mtk_vcodec_ctx *ctx, struct v4l2_format *f,
+> -                         const struct mtk_video_fmt *fmt)
+> +static int vidioc_try_fmt_out(struct mtk_vcodec_ctx *ctx, struct v4l2_format *f,
+> +                             const struct mtk_video_fmt *fmt)
+>  {
+>         struct v4l2_pix_format_mplane *pix_fmt_mp = &f->fmt.pix_mp;
+> +       int tmp_w, tmp_h;
+> +       unsigned int max_width, max_height;
+>
+>         pix_fmt_mp->field = V4L2_FIELD_NONE;
+>
+> -       if (f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
+> -               pix_fmt_mp->num_planes = 1;
+> -               pix_fmt_mp->plane_fmt[0].bytesperline = 0;
+> -       } else if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
+> -               int tmp_w, tmp_h;
+> -               unsigned int max_width, max_height;
+> -
+> -               if (ctx->dev->enc_capability & MTK_VENC_4K_CAPABILITY_ENABLE) {
+> -                       max_width = MTK_VENC_4K_MAX_W;
+> -                       max_height = MTK_VENC_4K_MAX_H;
+> -               } else {
+> -                       max_width = MTK_VENC_HD_MAX_W;
+> -                       max_height = MTK_VENC_HD_MAX_H;
+> -               }
+> +       if (ctx->dev->enc_capability & MTK_VENC_4K_CAPABILITY_ENABLE) {
+> +               max_width = MTK_VENC_4K_MAX_W;
+> +               max_height = MTK_VENC_4K_MAX_H;
+> +       } else {
+> +               max_width = MTK_VENC_HD_MAX_W;
+> +               max_height = MTK_VENC_HD_MAX_H;
+> +       }
+>
+> -               pix_fmt_mp->height = clamp(pix_fmt_mp->height,
+> -                                       MTK_VENC_MIN_H,
+> -                                       max_height);
+> -               pix_fmt_mp->width = clamp(pix_fmt_mp->width,
+> -                                       MTK_VENC_MIN_W,
+> -                                       max_width);
+> +       pix_fmt_mp->height = clamp(pix_fmt_mp->height, MTK_VENC_MIN_H, max_height);
+> +       pix_fmt_mp->width = clamp(pix_fmt_mp->width, MTK_VENC_MIN_W, max_width);
+>
+> -               /* find next closer width align 16, heign align 32, size align
+> -                * 64 rectangle
+> -                */
+> -               tmp_w = pix_fmt_mp->width;
+> -               tmp_h = pix_fmt_mp->height;
+> -               v4l_bound_align_image(&pix_fmt_mp->width,
+> -                                       MTK_VENC_MIN_W,
+> -                                       max_width, 4,
+> -                                       &pix_fmt_mp->height,
+> -                                       MTK_VENC_MIN_H,
+> -                                       max_height, 5, 6);
+> -
+> -               if (pix_fmt_mp->width < tmp_w &&
+> -                       (pix_fmt_mp->width + 16) <= max_width)
+> -                       pix_fmt_mp->width += 16;
+> -               if (pix_fmt_mp->height < tmp_h &&
+> -                       (pix_fmt_mp->height + 32) <= max_height)
+> -                       pix_fmt_mp->height += 32;
+> -
+> -               mtk_v4l2_debug(0,
+> -                       "before resize width=%d, height=%d, after resize width=%d, height=%d, sizeimage=%d %d",
+> -                       tmp_w, tmp_h, pix_fmt_mp->width,
+> -                       pix_fmt_mp->height,
+> -                       pix_fmt_mp->plane_fmt[0].sizeimage,
+> -                       pix_fmt_mp->plane_fmt[1].sizeimage);
+> -
+> -               pix_fmt_mp->num_planes = fmt->num_planes;
+> -               pix_fmt_mp->plane_fmt[0].sizeimage =
+> -                               pix_fmt_mp->width * pix_fmt_mp->height +
+> -                               ((ALIGN(pix_fmt_mp->width, 16) * 2) * 16);
+> -               pix_fmt_mp->plane_fmt[0].bytesperline = pix_fmt_mp->width;
+> -
+> -               if (pix_fmt_mp->num_planes == 2) {
+> -                       pix_fmt_mp->plane_fmt[1].sizeimage =
+> -                               (pix_fmt_mp->width * pix_fmt_mp->height) / 2 +
+> -                               (ALIGN(pix_fmt_mp->width, 16) * 16);
+> -                       pix_fmt_mp->plane_fmt[2].sizeimage = 0;
+> -                       pix_fmt_mp->plane_fmt[1].bytesperline =
+> -                                                       pix_fmt_mp->width;
+> -                       pix_fmt_mp->plane_fmt[2].bytesperline = 0;
+> -               } else if (pix_fmt_mp->num_planes == 3) {
+> -                       pix_fmt_mp->plane_fmt[1].sizeimage =
+> -                       pix_fmt_mp->plane_fmt[2].sizeimage =
+> -                               (pix_fmt_mp->width * pix_fmt_mp->height) / 4 +
+> -                               ((ALIGN(pix_fmt_mp->width, 16) / 2) * 16);
+> -                       pix_fmt_mp->plane_fmt[1].bytesperline =
+> -                               pix_fmt_mp->plane_fmt[2].bytesperline =
+> -                               pix_fmt_mp->width / 2;
+> -               }
+> +       /* find next closer width align 16, heign align 32, size align
+> +        * 64 rectangle
+> +        */
+> +       tmp_w = pix_fmt_mp->width;
+> +       tmp_h = pix_fmt_mp->height;
+> +       v4l_bound_align_image(&pix_fmt_mp->width,
+> +                             MTK_VENC_MIN_W,
+> +                             max_width, 4,
+> +                             &pix_fmt_mp->height,
+> +                             MTK_VENC_MIN_H,
+> +                             max_height, 5, 6);
+> +
+> +       if (pix_fmt_mp->width < tmp_w && (pix_fmt_mp->width + 16) <= max_width)
+> +               pix_fmt_mp->width += 16;
+> +       if (pix_fmt_mp->height < tmp_h && (pix_fmt_mp->height + 32) <= max_height)
+> +               pix_fmt_mp->height += 32;
+> +
+> +       mtk_v4l2_debug(0, "before resize w=%d, h=%d, after resize w=%d, h=%d, sizeimage=%d %d",
+> +                      tmp_w, tmp_h, pix_fmt_mp->width,
+> +                      pix_fmt_mp->height,
+> +                      pix_fmt_mp->plane_fmt[0].sizeimage,
+> +                      pix_fmt_mp->plane_fmt[1].sizeimage);
+> +
+> +       pix_fmt_mp->num_planes = fmt->num_planes;
+> +       pix_fmt_mp->plane_fmt[0].sizeimage =
+> +                       pix_fmt_mp->width * pix_fmt_mp->height +
+> +                       ((ALIGN(pix_fmt_mp->width, 16) * 2) * 16);
+> +       pix_fmt_mp->plane_fmt[0].bytesperline = pix_fmt_mp->width;
+> +
+> +       if (pix_fmt_mp->num_planes == 2) {
+> +               pix_fmt_mp->plane_fmt[1].sizeimage =
+> +                       (pix_fmt_mp->width * pix_fmt_mp->height) / 2 +
+> +                       (ALIGN(pix_fmt_mp->width, 16) * 16);
+> +               pix_fmt_mp->plane_fmt[2].sizeimage = 0;
+> +               pix_fmt_mp->plane_fmt[1].bytesperline =
+> +                                               pix_fmt_mp->width;
+> +               pix_fmt_mp->plane_fmt[2].bytesperline = 0;
+> +       } else if (pix_fmt_mp->num_planes == 3) {
+> +               pix_fmt_mp->plane_fmt[1].sizeimage =
+> +               pix_fmt_mp->plane_fmt[2].sizeimage =
+> +                       (pix_fmt_mp->width * pix_fmt_mp->height) / 4 +
+> +                       ((ALIGN(pix_fmt_mp->width, 16) / 2) * 16);
+> +               pix_fmt_mp->plane_fmt[1].bytesperline =
+> +                       pix_fmt_mp->plane_fmt[2].bytesperline =
+> +                       pix_fmt_mp->width / 2;
+>         }
+>
+>         pix_fmt_mp->flags = 0;
+> @@ -432,9 +427,7 @@ static int vidioc_venc_s_fmt_cap(struct file *file, void *priv,
+>         }
+>
+>         q_data->fmt = fmt;
+> -       ret = vidioc_try_fmt(ctx, f, q_data->fmt);
+> -       if (ret)
+> -               return ret;
+> +       vidioc_try_fmt_cap(f);
+>
+>         q_data->coded_width = f->fmt.pix_mp.width;
+>         q_data->coded_height = f->fmt.pix_mp.height;
+> @@ -494,7 +487,7 @@ static int vidioc_venc_s_fmt_out(struct file *file, void *priv,
+>                 f->fmt.pix.pixelformat = fmt->fourcc;
+>         }
+>
+> -       ret = vidioc_try_fmt(ctx, f, fmt);
+> +       ret = vidioc_try_fmt_out(ctx, f, fmt);
+>         if (ret)
+>                 return ret;
+>
+> @@ -572,7 +565,9 @@ static int vidioc_try_fmt_vid_cap_mplane(struct file *file, void *priv,
+>         f->fmt.pix_mp.quantization = ctx->quantization;
+>         f->fmt.pix_mp.xfer_func = ctx->xfer_func;
+>
+> -       return vidioc_try_fmt(ctx, f, fmt);
+> +       vidioc_try_fmt_cap(f);
+> +
+> +       return 0;
+>  }
+>
+>  static int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv,
+> @@ -594,7 +589,7 @@ static int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv,
+>                 f->fmt.pix_mp.xfer_func = V4L2_XFER_FUNC_DEFAULT;
+>         }
+>
+> -       return vidioc_try_fmt(ctx, f, fmt);
+> +       return vidioc_try_fmt_out(ctx, f, fmt);
+>  }
+>
+>  static int vidioc_venc_g_selection(struct file *file, void *priv,
+> --
+> 2.17.1
+>
