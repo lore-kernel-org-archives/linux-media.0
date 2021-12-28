@@ -2,33 +2,37 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB7DEC43217
-	for <linux-media@archiver.kernel.org>; Tue, 28 Dec 2021 09:42:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11194C4167B
+	for <linux-media@archiver.kernel.org>; Tue, 28 Dec 2021 09:42:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236064AbhL1JmL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 Dec 2021 04:42:11 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:49922 "EHLO
+        id S236113AbhL1JmK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 Dec 2021 04:42:10 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:50080 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236015AbhL1JmC (ORCPT
+        with ESMTP id S236016AbhL1JmC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 28 Dec 2021 04:42:02 -0500
-X-UUID: ade9b90949654ee09d75cbd4951798f7-20211228
-X-UUID: ade9b90949654ee09d75cbd4951798f7-20211228
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+X-UUID: bbdd72bd979b435c866db5eabc2570eb-20211228
+X-UUID: bbdd72bd979b435c866db5eabc2570eb-20211228
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1939391826; Tue, 28 Dec 2021 17:41:50 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 28 Dec 2021 17:41:49 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 475259560; Tue, 28 Dec 2021 17:41:54 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 28 Dec 2021 17:41:53 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 28 Dec
+ 2021 17:41:52 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 28 Dec 2021 17:41:47 +0800
+ Transport; Tue, 28 Dec 2021 17:41:50 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
+        "Tzung-Bi Shih" <tzungbi@chromium.org>,
         Tiffany Lin <tiffany.lin@mediatek.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -44,17 +48,18 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         Irui Wang <irui.wang@mediatek.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
+        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v2, 00/12] media: mtk-vcodec: support for MT8192 decoder
-Date:   Tue, 28 Dec 2021 17:41:34 +0800
-Message-ID: <20211228094146.20505-1-yunfei.dong@mediatek.com>
+Subject: [PATCH v2, 02/12] media: mtk-vcodec: Using firmware type to separate different firmware architecture
+Date:   Tue, 28 Dec 2021 17:41:36 +0800
+Message-ID: <20211228094146.20505-3-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211228094146.20505-1-yunfei.dong@mediatek.com>
+References: <20211228094146.20505-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -63,76 +68,114 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series adds support for mt8192 h264 decoder. Firstly, need to refactor
-power/clock/interrupt interfaces for mt8192 is lat and core architecture.
+From: Yunfei Dong <yunfei.dong@mediatek.corp-partner.google.com>
 
-Secondly, add new functions to get frame buffer size and resolution according
-to decoder capability from scp side. Then add callback function to get/put
-capture buffer in order to enable lat and core decoder in parallel. 
+MT8173 platform use vpu firmware, mt8183/mt8192 will use scp
+firmware instead, using chip name is not reasonable to separate
+different firmware architecture. Using firmware type is much better.
 
-Then add to support MT21C compressed mode and fix v4l2-compliance fail.
-
-Lastly, extract H264 request api driver to let mt8183 and mt8192 use the same
-code, and adds mt8192 frame based h264 driver for stateless decoder.
-
-Patches 1 refactor power/clock/interrupt interface.
-Patches 2~4 get frame buffer size and resolution according to decoder capability.
-Patches 5~6 enable lat and core decode in parallel.
-Patch 7~10 Add to support MT21C compressed mode and fix v4l2-compliance fail.
-Patch 11~12 extract h264 driver and add mt8192 frame based driver for h264 decoder.
-----
-Dependents on "Support multi hardware decode using of_platform_populate"[1].
-
-This patches are the second part used to add mt8192 h264 decoder. And the base part is [1].
-
-[1]https://patchwork.linuxtv.org/project/linux-media/cover/20211215061552.8523-1-yunfei.dong@mediatek.com/
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
-changes compared with v1:
-- rewrite commit message for patch 12.
-- rewrite cover-letter message.
----
-Yunfei Dong (12):
-  media: mtk-vcodec: Add vdec enable/disable hardware helpers
-  media: mtk-vcodec: Using firmware type to separate different firmware
-    architecture
-  media: mtk-vcodec: get capture queue buffer size from scp
-  media: mtk-vcodec: Read max resolution from dec_capability
-  media: mtk-vcodec: Call v4l2_m2m_set_dst_buffered() set capture buffer
-    buffered
-  media: mtk-vcodec: Refactor get and put capture buffer flow
-  media: mtk-vcodec: Refactor supported vdec formats and framesizes
-  media: mtk-vcodec: Add format to support MT21C
-  media: mtk-vcodec: disable vp8 4K capability
-  media: mtk-vcodec: Fix v4l2-compliance fail
-  media: mtk-vcodec: Extract H264 common code
-  media: mtk-vcodec: Add h264 decoder driver for mt8192
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c | 1 -
+ .../media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c    | 2 --
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h          | 2 --
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c           | 6 ++++++
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h           | 1 +
+ drivers/media/platform/mtk-vcodec/vdec_vpu_if.c             | 4 ++--
+ 6 files changed, 9 insertions(+), 7 deletions(-)
 
- drivers/media/platform/mtk-vcodec/Makefile    |   2 +
- .../platform/mtk-vcodec/mtk_vcodec_dec.c      |  49 +-
- .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |   5 -
- .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   | 168 +++--
- .../platform/mtk-vcodec/mtk_vcodec_dec_pm.h   |   6 +-
- .../mtk-vcodec/mtk_vcodec_dec_stateful.c      |  14 +-
- .../mtk-vcodec/mtk_vcodec_dec_stateless.c     | 246 +++++--
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  27 +-
- .../media/platform/mtk-vcodec/mtk_vcodec_fw.c |   6 +
- .../media/platform/mtk-vcodec/mtk_vcodec_fw.h |   1 +
- .../mtk-vcodec/vdec/vdec_h264_req_common.c    | 303 +++++++++
- .../mtk-vcodec/vdec/vdec_h264_req_common.h    | 247 +++++++
- .../mtk-vcodec/vdec/vdec_h264_req_if.c        | 402 +-----------
- .../mtk-vcodec/vdec/vdec_h264_req_lat_if.c    | 620 ++++++++++++++++++
- .../media/platform/mtk-vcodec/vdec_drv_if.c   |  28 +-
- .../media/platform/mtk-vcodec/vdec_drv_if.h   |   1 +
- .../media/platform/mtk-vcodec/vdec_ipi_msg.h  |  36 +
- .../platform/mtk-vcodec/vdec_msg_queue.c      |   2 +
- .../media/platform/mtk-vcodec/vdec_vpu_if.c   |  55 +-
- .../media/platform/mtk-vcodec/vdec_vpu_if.h   |  15 +
- include/linux/remoteproc/mtk_scp.h            |   2 +
- 21 files changed, 1680 insertions(+), 555 deletions(-)
- create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_common.c
- create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_common.h
- create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_lat_if.c
-
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
+index 04ca43c77e5f..7966c132be8f 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
+@@ -613,7 +613,6 @@ static struct vb2_ops mtk_vdec_frame_vb2_ops = {
+ };
+ 
+ const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata = {
+-	.chip = MTK_MT8173,
+ 	.init_vdec_params = mtk_init_vdec_params,
+ 	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
+ 	.vdec_vb2_ops = &mtk_vdec_frame_vb2_ops,
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+index 23d997ac114d..5aebf88f997b 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+@@ -343,7 +343,6 @@ static struct vb2_ops mtk_vdec_request_vb2_ops = {
+ };
+ 
+ const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
+-	.chip = MTK_MT8183,
+ 	.init_vdec_params = mtk_init_vdec_params,
+ 	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
+ 	.vdec_vb2_ops = &mtk_vdec_request_vb2_ops,
+@@ -362,7 +361,6 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
+ 
+ /* This platform data is used for one lat and one core architecture. */
+ const struct mtk_vcodec_dec_pdata mtk_lat_sig_core_pdata = {
+-	.chip = MTK_MT8192,
+ 	.init_vdec_params = mtk_init_vdec_params,
+ 	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
+ 	.vdec_vb2_ops = &mtk_vdec_request_vb2_ops,
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index 3fc747cea5c9..a23a7646437c 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -367,7 +367,6 @@ enum mtk_vdec_hw_arch {
+  * @vdec_framesizes: supported video decoder frame sizes
+  * @num_framesizes: count of video decoder frame sizes
+  *
+- * @chip: chip this decoder is compatible with
+  * @hw_arch: hardware arch is used to separate pure_sin_core and lat_sin_core
+  *
+  * @is_subdev_supported: whether support parent-node architecture(subdev)
+@@ -390,7 +389,6 @@ struct mtk_vcodec_dec_pdata {
+ 	const struct mtk_codec_framesizes *vdec_framesizes;
+ 	const int num_framesizes;
+ 
+-	enum mtk_chip chip;
+ 	enum mtk_vdec_hw_arch hw_arch;
+ 
+ 	bool is_subdev_supported;
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c
+index 94b39ae5c2e1..556e54aadac9 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c
+@@ -65,3 +65,9 @@ int mtk_vcodec_fw_ipi_send(struct mtk_vcodec_fw *fw, int id, void *buf,
+ 	return fw->ops->ipi_send(fw, id, buf, len, wait);
+ }
+ EXPORT_SYMBOL_GPL(mtk_vcodec_fw_ipi_send);
++
++int mtk_vcodec_fw_get_type(struct mtk_vcodec_fw *fw)
++{
++	return fw->type;
++}
++EXPORT_SYMBOL_GPL(mtk_vcodec_fw_get_type);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h
+index 539bb626772c..acd355961e3a 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h
+@@ -39,5 +39,6 @@ int mtk_vcodec_fw_ipi_register(struct mtk_vcodec_fw *fw, int id,
+ 			       const char *name, void *priv);
+ int mtk_vcodec_fw_ipi_send(struct mtk_vcodec_fw *fw, int id,
+ 			   void *buf, unsigned int len, unsigned int wait);
++int mtk_vcodec_fw_get_type(struct mtk_vcodec_fw *fw);
+ 
+ #endif /* _MTK_VCODEC_FW_H_ */
+diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
+index c84fac52fe26..21f6d9c5a371 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
++++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
+@@ -33,8 +33,8 @@ static void handle_init_ack_msg(const struct vdec_vpu_ipi_init_ack *msg)
+ 	 */
+ 	vpu->inst_id = 0xdeadbeef;
+ 
+-	/* Firmware version field does not exist on MT8173. */
+-	if (vpu->ctx->dev->vdec_pdata->chip == MTK_MT8173)
++	/* VPU firmware does not contain a version field. */
++	if (mtk_vcodec_fw_get_type(vpu->ctx->dev->fw_handler) == VPU)
+ 		return;
+ 
+ 	/* Check firmware version. */
 -- 
 2.25.1
 
