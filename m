@@ -2,108 +2,122 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DEDFC433F5
-	for <linux-media@archiver.kernel.org>; Fri, 31 Dec 2021 10:14:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 174F6C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 31 Dec 2021 23:15:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbhLaKOx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 31 Dec 2021 05:14:53 -0500
-Received: from mga05.intel.com ([192.55.52.43]:55695 "EHLO mga05.intel.com"
+        id S231905AbhLaXPT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 31 Dec 2021 18:15:19 -0500
+Received: from mga03.intel.com ([134.134.136.65]:61946 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229817AbhLaKOw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 31 Dec 2021 05:14:52 -0500
+        id S230094AbhLaXPT (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 31 Dec 2021 18:15:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640945692; x=1672481692;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9SVjFtwpFH3eE3tW553DPJvfT99G2uhL/beuIf3vfuY=;
-  b=CD6lmexWRVDj9q708+SEbgAxJmKSzu8jjnIXbXdXZvrep2eafDvmrn4/
-   YlqxxwKGpuFW7yHd434T27JP5jyDtQeVBQBGZ5V/Nupxk/qB3tk7x+4t7
-   WsQIfxGGZrZAp2+aXXenwCjaJx5BrAdx0nScV0pEOrFSSWLzLczKHvbpn
-   +peLoSbq8dC3JlrLM00p/w7fWy+JVenLcegSX+pNqytIbnTVBICe7AX//
-   s+5VLN+MCP3tJLaldT98LpUc6bEzZyayCPb1uthjSWMOk+g63gNQ31JXC
-   c32dduuW427EUo21YiXT3xJqJGznZutYfgL6ltdPY1fdh34zsBSJiAMEy
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="328131149"
-X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="328131149"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 02:14:52 -0800
+  t=1640992519; x=1672528519;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ss1AmmwAamG5zaDC3MSix1KO5b50rmc1BE1GSp6jhXA=;
+  b=GdGiQLgaInqeaBBneVNTYQtz1b7IQg9tlecdc9iNnGr1ya6+GBnIjZkv
+   wKE4dW3ceqCQAHv3oFFHO92PmCx1QcNLhcmNNjEqHFkLbIXF/4MRqy3WA
+   QwK9VUFWtiHe5W4QNdZtFtGPh+2AK8+NPe4D+Txcf6MzviPK9tmqufveN
+   gMory/xjpqXguYAw2JluDbjuwbOGtMh8pO+W76nV6HeirYjNvoUoba5Qj
+   Yz2VgEZjZFqgqWUkURHdzU83XAhaRV1oBLTEmVmIc8DahnnyUgH0HUSqm
+   YuUV/rHFSc82Dw1lzlu7vutU/NJ1W99osRRRj6969nNivhXHO5DYMA4df
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="241806064"
+X-IronPort-AV: E=Sophos;i="5.88,252,1635231600"; 
+   d="scan'208";a="241806064"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 15:15:18 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="470915852"
+X-IronPort-AV: E=Sophos;i="5.88,252,1635231600"; 
+   d="scan'208";a="687591931"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 31 Dec 2021 02:14:50 -0800
+  by orsmga005.jf.intel.com with ESMTP; 31 Dec 2021 15:15:16 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1n3Evy-000B9o-3o; Fri, 31 Dec 2021 10:14:50 +0000
-Date:   Fri, 31 Dec 2021 18:14:09 +0800
+        id 1n3R7D-000BmS-Gf; Fri, 31 Dec 2021 23:15:15 +0000
+Date:   Sat, 1 Jan 2022 07:14:23 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [mchehab-experimental:master 115/390]
- drivers/staging/media/atomisp//pci/isp2400_input_system_local.h:32:40:
- warning: redefinition of typedef 'input_system_cfg2400_t' is a C11 feature
-Message-ID: <202112311809.bEKUPkjh-lkp@intel.com>
+To:     Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH v6 2/2] Driver for ON Semi AR0521 camera sensor
+Message-ID: <202201010737.V5A5o9x5-lkp@intel.com>
+References: <m35yrfhkaf.fsf@t19.piap.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <m35yrfhkaf.fsf@t19.piap.pl>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+Hi "Krzysztof,
 
-FYI, the error/warning still remains.
+I love your patch! Yet something to improve:
 
-tree:   https://git.linuxtv.org/mchehab/experimental.git master
-head:   68b9bcc8a534cd11fe55f8bc82f948aae7d81b3c
-commit: 4005ecee616a51cb0305d8e3664af45376e7cf65 [115/390] media: atomisp: shift some structs from input_system_local
-config: x86_64-randconfig-a014-20211231 (https://download.01.org/0day-ci/archive/20211231/202112311809.bEKUPkjh-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7cd109b92c72855937273a6c8ab19016fbe27d33)
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linus/master v5.16-rc7 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Krzysztof-Ha-asa/On-Semi-AR0521-sensor-driver/20211223-150758
+base:   git://linuxtv.org/media_tree.git master
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220101/202201010737.V5A5o9x5-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add mchehab-experimental https://git.linuxtv.org/mchehab/experimental.git
-        git fetch --no-tags mchehab-experimental master
-        git checkout 4005ecee616a51cb0305d8e3664af45376e7cf65
+        # https://github.com/0day-ci/linux/commit/664482ab74a2331a7a7ead9256b0455cfc3334c7
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Krzysztof-Ha-asa/On-Semi-AR0521-sensor-driver/20211223-150758
+        git checkout 664482ab74a2331a7a7ead9256b0455cfc3334c7
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/staging/media/atomisp/
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/staging/media/atomisp/pci/atomisp_cmd.c:44:
-   In file included from drivers/staging/media/atomisp//pci/atomisp_tables.h:23:
-   In file included from drivers/staging/media/atomisp//pci/sh_css_params.h:30:
-   In file included from drivers/staging/media/atomisp//pci/runtime/pipeline/interface/ia_css_pipeline.h:19:
-   In file included from drivers/staging/media/atomisp//pci/sh_css_internal.h:28:
-   In file included from drivers/staging/media/atomisp//pci/hive_isp_css_include/input_system.h:34:
-   In file included from drivers/staging/media/atomisp//pci/input_system_local.h:144:
->> drivers/staging/media/atomisp//pci/isp2400_input_system_local.h:32:40: warning: redefinition of typedef 'input_system_cfg2400_t' is a C11 feature [-Wtypedef-redefinition]
-   typedef struct input_system_cfg2400_s           input_system_cfg2400_t;
-                                                   ^
-   drivers/staging/media/atomisp//pci/input_system_local.h:22:40: note: previous definition is here
-   typedef struct input_system_cfg2400_s           input_system_cfg2400_t;
-                                                   ^
-   1 warning generated.
+   In file included from include/linux/device.h:25,
+                    from include/linux/pm_runtime.h:11,
+                    from drivers/media/i2c/ar0521.c:10:
+>> drivers/media/i2c/ar0521.c:1029:21: error: initialization of 'int (*)(struct device *)' from incompatible pointer type 'void (*)(struct device *)' [-Werror=incompatible-pointer-types]
+    1029 |  SET_RUNTIME_PM_OPS(ar0521_power_off, ar0521_power_on, NULL)
+         |                     ^~~~~~~~~~~~~~~~
+   include/linux/pm.h:341:21: note: in definition of macro 'SET_RUNTIME_PM_OPS'
+     341 |  .runtime_suspend = suspend_fn, \
+         |                     ^~~~~~~~~~
+   drivers/media/i2c/ar0521.c:1029:21: note: (near initialization for 'ar0521_pm_ops.runtime_suspend')
+    1029 |  SET_RUNTIME_PM_OPS(ar0521_power_off, ar0521_power_on, NULL)
+         |                     ^~~~~~~~~~~~~~~~
+   include/linux/pm.h:341:21: note: in definition of macro 'SET_RUNTIME_PM_OPS'
+     341 |  .runtime_suspend = suspend_fn, \
+         |                     ^~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
-vim +/input_system_cfg2400_t +32 drivers/staging/media/atomisp//pci/isp2400_input_system_local.h
+vim +1029 drivers/media/i2c/ar0521.c
 
-ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_common/host/input_system_local.h Mauro Carvalho Chehab 2020-04-19  31  
-ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_common/host/input_system_local.h Mauro Carvalho Chehab 2020-04-19 @32  typedef struct input_system_cfg2400_s		input_system_cfg2400_t;
-ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_common/host/input_system_local.h Mauro Carvalho Chehab 2020-04-19  33  
-
-:::::: The code at line 32 was first introduced by commit
-:::::: ad85094b293e40e7a2f831b0311a389d952ebd5e Revert "media: staging: atomisp: Remove driver"
-
-:::::: TO: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-:::::: CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+  1026	
+  1027	static const struct dev_pm_ops ar0521_pm_ops = {
+  1028		SET_SYSTEM_SLEEP_PM_OPS(ar0521_suspend, ar0521_resume)
+> 1029		SET_RUNTIME_PM_OPS(ar0521_power_off, ar0521_power_on, NULL)
+  1030	};
+  1031	static const struct of_device_id ar0521_dt_ids[] = {
+  1032		{.compatible = "onnn,ar0521"},
+  1033		{}
+  1034	};
+  1035	MODULE_DEVICE_TABLE(of, ar0521_dt_ids);
+  1036	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
