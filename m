@@ -2,40 +2,35 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5031C433EF
-	for <linux-media@archiver.kernel.org>; Sat,  1 Jan 2022 18:28:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73B0BC35268
+	for <linux-media@archiver.kernel.org>; Sat,  1 Jan 2022 18:28:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232660AbiAAS2T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 1 Jan 2022 13:28:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbiAAS2T (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 1 Jan 2022 13:28:19 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED8AC061574;
-        Sat,  1 Jan 2022 10:28:18 -0800 (PST)
+        id S232676AbiAAS2V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 1 Jan 2022 13:28:21 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:41358 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232644AbiAAS2U (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 1 Jan 2022 13:28:20 -0500
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B133E1540;
-        Sat,  1 Jan 2022 19:28:15 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B86E41C2A;
+        Sat,  1 Jan 2022 19:28:18 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1641061696;
-        bh=bQYUIcZSpusmxSxGxJjRaukEsY0BUnBNolRA68fd2TQ=;
+        s=mail; t=1641061699;
+        bh=JY2EI5SBxo1VKLIWuKjo2aA/oopc8B5/4cdYuD3mU24=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mSzo2EF0+BU8STmhKcQLVE2rC7/VsGDdH4is3EbgwMezZRNDx47i329GWSz7xbFsV
-         gQfiS920ozZa7cH7+lQbis3UF1+UO0+MWOzOOE02RMITtLarJORliGcozY/FReqvZc
-         BtwURHmisrboVhhG3f8at+R6cuHJfIlqwumrwTj8=
+        b=PKHks2BfGo5mYm2FR+fqLDL7jvVx+r8m+VKCbWdnd39C82ko8tVVRMJoIlS2HIdht
+         a8T8he/FPQ9TZKk4TzxDJ/oFV4SejeCkk9/2GQW8vJj7nFQJoBvlURGfItFYBZskgk
+         lsH61min2v4cJjEvOTRolxh9ONPBOuqJbYUWMJ9w=
 From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org,
         Jacopo Mondi <jacopo@jmondi.org>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Thomas Nizan <tnizan@witekio.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: [PATCH v2 04/11] media: i2c: max9286: Add support for port regulators
-Date:   Sat,  1 Jan 2022 20:27:59 +0200
-Message-Id: <20220101182806.19311-5-laurent.pinchart+renesas@ideasonboard.com>
+        Thomas Nizan <tnizan@witekio.com>
+Subject: [PATCH v2 08/11] media: i2c: max9286: Define macros for all bits of register 0x15
+Date:   Sat,  1 Jan 2022 20:28:03 +0200
+Message-Id: <20220101182806.19311-9-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220101182806.19311-1-laurent.pinchart+renesas@ideasonboard.com>
 References: <20220101182806.19311-1-laurent.pinchart+renesas@ideasonboard.com>
@@ -45,191 +40,71 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Thomas Nizan <tnizan@witekio.com>
+Macros are easier to read than numerical values.
 
-Allow users to use one PoC regulator per port, instead of a global
-regulator.
-
-The properties '^port[0-3]-poc-supply$' in the DT node are used to
-indicate the regulators for individual ports.
-
-Signed-off-by: Thomas Nizan <tnizan@witekio.com>
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
-Changes since v1:
-
-- Use to_index()
-- Use dev_err_probe()
-- Fix error path in probe()
-- Use devm_regulator_get_optional() instead of
-  devm_regulator_get_exclusive()
----
- drivers/media/i2c/max9286.c | 107 +++++++++++++++++++++++++++++++-----
- 1 file changed, 94 insertions(+), 13 deletions(-)
+ drivers/media/i2c/max9286.c | 27 ++++++++++++++++++---------
+ 1 file changed, 18 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-index eb2b8e42335b..15c80034e3a4 100644
+index 24c2bf4fda53..4b69bd036ca6 100644
 --- a/drivers/media/i2c/max9286.c
 +++ b/drivers/media/i2c/max9286.c
-@@ -138,6 +138,7 @@
- struct max9286_source {
- 	struct v4l2_subdev *sd;
- 	struct fwnode_handle *fwnode;
-+	struct regulator *regulator;
- };
+@@ -80,10 +80,13 @@
+ #define MAX9286_DATATYPE_RGB565		(1 << 0)
+ #define MAX9286_DATATYPE_RGB888		(0 << 0)
+ /* Register 0x15 */
++#define MAX9286_CSI_IMAGE_TYP		BIT(7)
+ #define MAX9286_VC(n)			((n) << 5)
+ #define MAX9286_VCTYPE			BIT(4)
+ #define MAX9286_CSIOUTEN		BIT(3)
+-#define MAX9286_0X15_RESV		(3 << 0)
++#define MAX9286_SWP_ENDIAN		BIT(2)
++#define MAX9286_EN_CCBSYB_CLK_STR	BIT(1)
++#define MAX9286_EN_GPI_CCBSYB		BIT(0)
+ /* Register 0x1b */
+ #define MAX9286_SWITCHIN(n)		(1 << ((n) + 4))
+ #define MAX9286_ENEQ(n)			(1 << (n))
+@@ -525,10 +528,12 @@ static void max9286_set_video_format(struct max9286_priv *priv,
+ 		return;
  
- struct max9286_asd {
-@@ -1071,6 +1072,49 @@ static int max9286_register_gpio(struct max9286_priv *priv)
- 	return ret;
- }
+ 	/*
+-	 * Video format setup:
+-	 * Disable CSI output, VC is set according to Link number.
++	 * Video format setup: disable CSI output, set VC according to Link
++	 * number, enable I2C clock stretching when CCBSY is low, enable CCBSY
++	 * in external GPI-to-GPO mode.
+ 	 */
+-	max9286_write(priv, 0x15, MAX9286_VCTYPE | MAX9286_0X15_RESV);
++	max9286_write(priv, 0x15, MAX9286_VCTYPE | MAX9286_EN_CCBSYB_CLK_STR |
++		      MAX9286_EN_GPI_CCBSYB);
  
-+static int max9286_poc_power_on(struct max9286_priv *priv)
-+{
-+	struct max9286_source *source;
-+	unsigned int enabled = 0;
-+	int ret;
-+
-+	/* Enable the global regulator if available. */
-+	if (priv->regulator)
-+		return regulator_enable(priv->regulator);
-+
-+	/* Otherwise use the per-port regulators. */
-+	for_each_source(priv, source) {
-+		ret = regulator_enable(source->regulator);
-+		if (ret < 0)
-+			goto error;
-+
-+		enabled |= BIT(to_index(priv, source));
-+	}
-+
-+	return 0;
-+
-+error:
-+	for_each_source(priv, source) {
-+		if (enabled & BIT(to_index(priv, source)))
-+			regulator_disable(source->regulator);
-+	}
-+
-+	return ret;
-+}
-+
-+static void max9286_poc_power_off(struct max9286_priv *priv)
-+{
-+	struct max9286_source *source;
-+
-+	if (priv->regulator) {
-+		regulator_disable(priv->regulator);
-+		return;
-+	}
-+
-+	for_each_source(priv, source)
-+		regulator_disable(source->regulator);
-+}
-+
- static int max9286_init(struct device *dev)
- {
- 	struct max9286_priv *priv;
-@@ -1081,9 +1125,9 @@ static int max9286_init(struct device *dev)
- 	priv = i2c_get_clientdata(client);
+ 	/* Enable CSI-2 Lane D0-D3 only, DBL mode. */
+ 	max9286_write(priv, 0x12, MAX9286_CSIDBL | MAX9286_DBL |
+@@ -810,13 +815,17 @@ static int max9286_s_stream(struct v4l2_subdev *sd, int enable)
+ 		}
  
- 	/* Enable the bus power. */
--	ret = regulator_enable(priv->regulator);
-+	ret = max9286_poc_power_on(priv);
- 	if (ret < 0) {
--		dev_err(&client->dev, "Unable to turn PoC on\n");
-+		dev_err(dev, "Unable to turn PoC on\n");
- 		return ret;
- 	}
+ 		/*
+-		 * Enable CSI output, VC set according to link number.
+-		 * Bit 7 must be set (chip manual says it's 0 and reserved).
++		 * Configure the CSI-2 output to line interleaved mode (W x (N
++		 * x H), as opposed to the (N x W) x H mode that outputs the
++		 * images stitched side-by-side) and enable it.
+ 		 */
+-		max9286_write(priv, 0x15, 0x80 | MAX9286_VCTYPE |
+-			      MAX9286_CSIOUTEN | MAX9286_0X15_RESV);
++		max9286_write(priv, 0x15, MAX9286_CSI_IMAGE_TYP | MAX9286_VCTYPE |
++			      MAX9286_CSIOUTEN | MAX9286_EN_CCBSYB_CLK_STR |
++			      MAX9286_EN_GPI_CCBSYB);
+ 	} else {
+-		max9286_write(priv, 0x15, MAX9286_VCTYPE | MAX9286_0X15_RESV);
++		max9286_write(priv, 0x15, MAX9286_VCTYPE |
++			      MAX9286_EN_CCBSYB_CLK_STR |
++			      MAX9286_EN_GPI_CCBSYB);
  
-@@ -1117,7 +1161,7 @@ static int max9286_init(struct device *dev)
- err_v4l2_register:
- 	max9286_v4l2_unregister(priv);
- err_regulator:
--	regulator_disable(priv->regulator);
-+	max9286_poc_power_off(priv);
- 
- 	return ret;
- }
-@@ -1248,6 +1292,47 @@ static int max9286_parse_dt(struct max9286_priv *priv)
- 	return 0;
- }
- 
-+static int max9286_get_poc_supplies(struct max9286_priv *priv)
-+{
-+	struct device *dev = &priv->client->dev;
-+	struct max9286_source *source;
-+	int ret;
-+
-+	/* Start by getting the global regulator. */
-+	priv->regulator = devm_regulator_get_optional(dev, "poc");
-+	if (!IS_ERR(priv->regulator))
-+		return 0;
-+
-+	if (PTR_ERR(priv->regulator) != -ENODEV) {
-+		if (PTR_ERR(priv->regulator) != -EPROBE_DEFER)
-+			dev_err(dev, "Unable to get PoC regulator: %ld\n",
-+				PTR_ERR(priv->regulator));
-+		return PTR_ERR(priv->regulator);
-+	}
-+
-+	/* If there's no global regulator, get per-port regulators. */
-+	dev_dbg(dev,
-+		"No global PoC regulator, looking for per-port regulators\n");
-+	priv->regulator = NULL;
-+
-+	for_each_source(priv, source) {
-+		unsigned int index = to_index(priv, source);
-+		char name[10];
-+
-+		snprintf(name, sizeof(name), "port%u-poc", index);
-+		source->regulator = devm_regulator_get(dev, name);
-+		if (IS_ERR(source->regulator)) {
-+			ret = PTR_ERR(source->regulator);
-+			dev_err_probe(dev, ret,
-+				      "Unable to get port %u PoC regulator\n",
-+				      index);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int max9286_probe(struct i2c_client *client)
- {
- 	struct max9286_priv *priv;
-@@ -1292,17 +1377,13 @@ static int max9286_probe(struct i2c_client *client)
- 	if (ret)
- 		goto err_powerdown;
- 
--	priv->regulator = devm_regulator_get(&client->dev, "poc");
--	if (IS_ERR(priv->regulator)) {
--		ret = PTR_ERR(priv->regulator);
--		dev_err_probe(&client->dev, ret,
--			      "Unable to get PoC regulator\n");
--		goto err_powerdown;
--	}
--
- 	ret = max9286_parse_dt(priv);
- 	if (ret)
--		goto err_powerdown;
-+		goto err_cleanup_dt;
-+
-+	ret = max9286_get_poc_supplies(priv);
-+	if (ret)
-+		goto err_cleanup_dt;
- 
- 	ret = max9286_init(&client->dev);
- 	if (ret < 0)
-@@ -1326,7 +1407,7 @@ static int max9286_remove(struct i2c_client *client)
- 
- 	max9286_v4l2_unregister(priv);
- 
--	regulator_disable(priv->regulator);
-+	max9286_poc_power_off(priv);
- 
- 	gpiod_set_value_cansleep(priv->gpiod_pwdn, 0);
- 
+ 		/* Stop all cameras. */
+ 		for_each_source(priv, source)
 -- 
 Regards,
 
