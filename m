@@ -2,101 +2,142 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB441C433FE
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jan 2022 01:13:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF76FC433EF
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jan 2022 06:36:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236848AbiAEBNG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jan 2022 20:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235704AbiAEBNG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jan 2022 20:13:06 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B36C061784
-        for <linux-media@vger.kernel.org>; Tue,  4 Jan 2022 17:13:05 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id w20so70572369wra.9
-        for <linux-media@vger.kernel.org>; Tue, 04 Jan 2022 17:13:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=Y0KciWPHS+7t8CGq6Wq/QQ1/2ZHQZ790+qvoj+GfYMk=;
-        b=FrV2qJaHKU8mK1S8aLLlqCL3WRNin4Q2a8BJgke1x4qFgO0lC1t7LURRekgKY3lxcf
-         Hpb11T2xIUdKgyuDIaOsTp09kVj2q/Z2j/N2cz9DtrxgY3AkHLvRhAaoqHpgJ1KnvIDW
-         IM8zNNvONR9SeT8fnMvtO78uhLlvAadNkIUqzgadyPEjHg6c2coYrk+oItRxflPR+8Hr
-         A5sZKxSbGnYo1lGPD6oC1yekatIg9eVDyhafn9l90ryAvnxCp/wTYrG2rHhrrsb1cX2c
-         3yJ9bBUZOcb6s/mwBHFULN6I0ZKrbbpk1zaj6RnD0o+2KXEtbWoS+cjIJnNLziwJZlIh
-         7g3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=Y0KciWPHS+7t8CGq6Wq/QQ1/2ZHQZ790+qvoj+GfYMk=;
-        b=gsCL87EoI9qgoSVh5HH+35QZ/fTTmajJfPzQEElEJ/i2wFBUiFkEUFOzJAiUoMsH+3
-         heaKlCbcMfjZ57E7msJfcJGFh0XY1dG/fs/lhrIAl1a14Xu8h9TsAbfh3URvMmMxjPax
-         c6HmoLxSJSAdVA/xhZ6k5iSiYKe7Jpr1w3CIa5TIp/eY6/vvsNP63QOCEoSBE6qB4cji
-         XRUBw/CxexoZYVJecCEA8UcHXpNgSinzkpSgQSjkaBAtrPuEylkwXNVVOggsKU4JAHY9
-         fhHc/dw6KEeoxqz9RtbXsA9ZCZsPmo7bPfrwdJc6E8vefZwReMGEX0/CMSM/x2uaxJ/Z
-         bNAQ==
-X-Gm-Message-State: AOAM533t7xTcWNscB7VchQa0T2WH2c5qb8inK2MlGFtTeoQX+E2KRTuS
-        +UensWJZ9SY2lnANefwKZrCOlw==
-X-Google-Smtp-Source: ABdhPJyu0LGMuXZK3/xPBUu0pu2cEpXz1sF9u6D2nP9qjmPlPAovCjSD9xz3Nc4KTIYi0mINtTKqyw==
-X-Received: by 2002:a5d:59ad:: with SMTP id p13mr43489062wrr.602.1641345184297;
-        Tue, 04 Jan 2022 17:13:04 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id ay39sm972064wmb.29.2022.01.04.17.13.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 17:13:03 -0800 (PST)
-Message-ID: <8d66b058-690c-281d-2f4f-774681cf4dda@linaro.org>
-Date:   Wed, 5 Jan 2022 01:15:13 +0000
+        id S233241AbiAEGgA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Jan 2022 01:36:00 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:54224 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231960AbiAEGgA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jan 2022 01:36:00 -0500
+X-UUID: 74e77be901fe420393d4d2238783a093-20220105
+X-UUID: 74e77be901fe420393d4d2238783a093-20220105
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <guangming.cao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 295248893; Wed, 05 Jan 2022 14:35:55 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 5 Jan 2022 14:35:54 +0800
+Received: from mszswglt01.gcn.mediatek.inc (10.16.20.20) by
+ mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.0.1497.2 via Frontend Transport; Wed, 5 Jan 2022 14:35:53 +0800
+From:   <guangming.cao@mediatek.com>
+To:     <christian.koenig@amd.com>
+CC:     <Brian.Starkey@arm.com>, <benjamin.gaignard@linaro.org>,
+        <bo.song@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <guangming.cao@mediatek.com>, <jianjiao.zeng@mediatek.com>,
+        <john.stultz@linaro.org>, <labbott@redhat.com>,
+        <libo.kang@mediatek.com>, <linaro-mm-sig@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <lmark@codeaurora.org>,
+        <matthias.bgg@gmail.com>, <mingyuan.ma@mediatek.com>,
+        <sumit.semwal@linaro.org>, <wsd_upstream@mediatek.com>,
+        <yf.wang@mediatek.com>
+Subject: Re: [PATCH v2] dma-buf: dma-heap: Add a size check for allocation
+Date:   Wed, 5 Jan 2022 14:36:43 +0800
+Message-ID: <20220105063643.119874-1-guangming.cao@mediatek.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <c05749d0-4c24-8763-a459-27257b2524ed@amd.com>
+References: <c05749d0-4c24-8763-a459-27257b2524ed@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH v3 01/19] media: dt-bindings: media: camss: Add
- qcom,sm8250-camss binding
-Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>
-Cc:     jonathan@marek.ca, andrey.konovalov@linaro.org,
-        todor.too@gmail.com, agross@kernel.org, bjorn.andersson@linaro.org,
-        jgrahsl@snap.com, hfink@snap.com, dmitry.baryshkov@linaro.org,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        hverkuil@xs4all.nl, mchehab@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org
-References: <20211222003751.2461466-1-bryan.odonoghue@linaro.org>
- <20211222003751.2461466-2-bryan.odonoghue@linaro.org>
- <1d753716-ba3c-8fb6-eeaf-7c68ef0c6e5c@linaro.org>
- <80123075-17c5-663a-b175-a3b2cba22b9b@linaro.org>
- <6baa737b-441a-3dfe-f363-aaf4d4fd62c8@linaro.org>
-In-Reply-To: <6baa737b-441a-3dfe-f363-aaf4d4fd62c8@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 04/01/2022 20:44, Bryan O'Donoghue wrote:
-> Please don't apply V3 for now
+From: Guangming.Cao <guangming.cao@mediatek.com>
 
-I see the pull-request is already active
+On Tue, 2022-01-04 at 08:47 +0100, Christian K鰊ig wrote:
+> Am 03.01.22 um 19:57 schrieb John Stultz:
+> > On Mon, Dec 27, 2021 at 1:52 AM <guangming.cao@mediatek.com> wrote:
+> > > From: Guangming <Guangming.Cao@mediatek.com>
+> > > 
+> > 
+> > Thanks for submitting this!
+> > 
+> > > Add a size check for allcation since the allocation size is
+> > 
+> > nit: "allocation" above.
+> > 
+> > > always less than the total DRAM size.
+> > 
+> > In general, it might be good to add more context to the commit
+> > message
+> > to better answer *why* this change is needed rather than what the
+> > change is doing.  ie: What negative thing happens without this
+> > change?
+> > And so how does this change avoid or improve things?
+> 
+> Completely agree, just one little addition: Could you also add this
+> why 
+> as comment to the code?
+> 
+> When we stumble over this five years from now it is absolutely not 
+> obvious why we do this.
+> 
+> Thanks,
+> Christian.
+> 
+Thanks for your reply!
+I will update the related reason in the patch later.
 
-That's no problem I'll make a new patchset to
+The reason for adding this check is that we met a case that the user
+sent an invalid size(It seems it's a negative value, MSB is 0xff, it's
+larger than DRAM size after convert it to size_t) to dma-heap to alloc
+memory, and this allocation was running on a process(such as "gralloc"
+on Android device) can't be killed by OOM flow, and we also couldn't
+find the related dmabuf in "dma_buf_debug_show" because the related
+dmabuf was not exported yet since the allocation is still on going.
 
-- Add regulator-bulk support to camss
-- Fixing RB3/SDM845
-- Fixing RB5/SM8250
-- Fixing SDM660
-   These three platforms work fine as is we just
-   need to fixup the description of the regulators
+Since this invalid argument case can be prevented at dma-heap side, so,
+I added this size check, and moreover, to let debug it easily, I also
+added logs when size is bigger than a threshold we set in mtk system
+heap.
+If you think that print logs in dma-heap framework is better, I will
+update it in next version.
 
-- And add in the sensors for the RB5 which
-   is where most of the changes to my branch are
-   and have no been submitted to this list yet
+If you have better solution(such as dump the size under allocating
+in "dma_buf_debug_show", which maybe need add global variable to record
+it), please kindly let me know.
+Thanks :)
+Guangming
 
-Seems less confusing that way. I'll see if I can get that patchset out 
-tomorrow
-
----
-bod
+> > 
+> > 
+> > > Signed-off-by: Guangming <Guangming.Cao@mediatek.com>
+> > > Signed-off-by: jianjiao zeng <jianjiao.zeng@mediatek.com>
+> > > ---
+> > > v2: 1. update size limitation as total_dram page size.
+> > >      2. update commit message
+> > > ---
+> > >   drivers/dma-buf/dma-heap.c | 2 ++
+> > >   1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-
+> > > heap.c
+> > > index 56bf5ad01ad5..e39d2be98d69 100644
+> > > --- a/drivers/dma-buf/dma-heap.c
+> > > +++ b/drivers/dma-buf/dma-heap.c
+> > > @@ -55,6 +55,8 @@ static int dma_heap_buffer_alloc(struct
+> > > dma_heap *heap, size_t len,
+> > >          struct dma_buf *dmabuf;
+> > >          int fd;
+> > > 
+> > > +       if (len / PAGE_SIZE > totalram_pages())
+> > > +               return -EINVAL;
+> > 
+> > This seems sane. I know ION used to have some 1/2 of memory cap to
+> > avoid unnecessary memory pressure on crazy allocations.
+> > 
+> > Could you send again with an improved commit message?
+> > 
+> > thanks
+> > -john
+> 
+> 
