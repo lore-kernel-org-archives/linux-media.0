@@ -2,722 +2,200 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08FD2C433EF
-	for <linux-media@archiver.kernel.org>; Fri,  7 Jan 2022 21:26:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88F41C433EF
+	for <linux-media@archiver.kernel.org>; Sat,  8 Jan 2022 06:07:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiAGV0R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 7 Jan 2022 16:26:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiAGV0R (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 7 Jan 2022 16:26:17 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16BFC061746
-        for <linux-media@vger.kernel.org>; Fri,  7 Jan 2022 13:26:15 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id y130so20318066ybe.8
-        for <linux-media@vger.kernel.org>; Fri, 07 Jan 2022 13:26:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XdO46iwq1tC1PiG2BhQ2UNEb6Gb2VExfKjJyu5wm2Ws=;
-        b=C8Vcv2Ezv3cekid5UOpypBsAlYRjaCbi5ai8FHrtp7e8RCF0MId0EWzg669laqOqDH
-         PIPHBsTf5dpX1BNDoldlq5xZUizSl0GTb8t+ZGsXo9YTj/Gd0CK1hQJ0XdmV3jPOURK0
-         daWYhW/FBEwCvGEExHS2p68SmrQ6MgwByYA0hb5+tql+mp9Y+78uTkrBimFO1+0KGFOK
-         Yul1TofKEJKRAYleR5+Ut59sF62HoC/2X+blpKZ2kLH756qUBnra0ChItDiE9+XTwacO
-         JU6QMFK9aY5VNi+nR1ch7DEQ+FSbDvp5Y9c1jaUbNEZmhx2ugRVkd3GKs15JzLLFc9vv
-         OWGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XdO46iwq1tC1PiG2BhQ2UNEb6Gb2VExfKjJyu5wm2Ws=;
-        b=Mpa+qO242cHCyAqLDGYER3ceQh9OlJRvYJ3/LEX95FHNZcUVrAvje0U00qrYf24IsC
-         vnB+Jh2XSxKqAvLpxIMPOhdUKuMGFJ5SAw6tSVeUPRKG37Qgl/vXlFp4umTSRAnpI5rI
-         vtVCwEHkQRC5IRXTOnbAtohYiECL2FY4wqeF6EgocytPOg3vpSLDnXPZYxHr8QgswojD
-         v33A/yhHWQIznm7dU79LfTDsjLc1W3C0j9cKMO+ApCCAKCyU53HEczjl+SWA+hLwmJax
-         DoJe4YMjwD8cP9XHihlRaO0VsntWpN2siaFyD1TgjCBDJ1PJLkqJ+knOcQ1jaTgsRKfQ
-         fC+Q==
-X-Gm-Message-State: AOAM533ZZOWLKRDeUKIy1WsiJN6/Kv4BFlhhDfIvBx3whkzE3814k0z3
-        9ccV0z5OVzVtgT+INk5bht3fsBcYJVFYPEDCeCi4Uw==
-X-Google-Smtp-Source: ABdhPJz9JQoQMjz23R4lhU1eQlYWtDJpGhd6nfJRmRAgKuDUlIfQQROD6hWnMr4w45Fb1LKkCw3QYJplXPyPyEgfKl4=
-X-Received: by 2002:a25:b315:: with SMTP id l21mr65037465ybj.207.1641590774480;
- Fri, 07 Jan 2022 13:26:14 -0800 (PST)
+        id S232935AbiAHGHm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 8 Jan 2022 01:07:42 -0500
+Received: from mga04.intel.com ([192.55.52.120]:23779 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229913AbiAHGHl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 8 Jan 2022 01:07:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641622061; x=1673158061;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iFnm1+bUL3YvHnsySUYNgqV5f3qovLQYV6y6T14WesM=;
+  b=KHSvbnti3GC5Rn4ptHF1nK+Q/NLBy7yMbxHnPHOJdKMMrEV5FCdVZK9M
+   NjD/UEEuHQWpadS62FxBO5+82BuoQLHEKbK95FXwfgVipjM0vsXPvRm0P
+   INTPUfMaWZXz1r9Rqqln+r31h8CwT5PDdynwOBAtXBGMpjxmsb267UOGw
+   u45ZAt4PfaECibBPjHcfbED49/tpan2z/aG+fV8neIBce/x7krKuNNmta
+   72OX9DNzc2UPSHB+NvxYrFN58yzz9DHGuWj7WWna3F5gZsR1p8gljMtG7
+   RJVWajetvqCHNZOEgh+TlOyhc5kvHtKDIgx7lCUpnRe0XVBoMvyPDtkdD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10220"; a="241803599"
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="241803599"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 22:07:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,272,1635231600"; 
+   d="scan'208";a="575325702"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Jan 2022 22:07:39 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n64t8-0000Jo-OW; Sat, 08 Jan 2022 06:07:38 +0000
+Date:   Sat, 8 Jan 2022 14:07:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: drivers/media/i2c/ov5648.c:2035:39: warning: taking address of
+ packed member 'handler' of class or structure 'ov5648_ctrls' may result in
+ an unaligned pointer value
+Message-ID: <202201081304.I6PRwgoL-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220104235148.21320-1-hridya@google.com> <49b29081-42df-ffcd-8fea-bd819499ff1b@amd.com>
- <CA+wgaPMWT0s0KNo_wM7jU+bH626OAVtn77f7_WX=E1wyU8aBzg@mail.gmail.com>
- <3a29914d-0c7b-1f10-49cb-dbc1cc6e52b0@amd.com> <CA+wgaPOmRTAuXiSRRmj-s=3d2W6ny=EMFtroOShYKrp0u+xF+g@mail.gmail.com>
-In-Reply-To: <CA+wgaPOmRTAuXiSRRmj-s=3d2W6ny=EMFtroOShYKrp0u+xF+g@mail.gmail.com>
-From:   Hridya Valsaraju <hridya@google.com>
-Date:   Fri, 7 Jan 2022 13:25:38 -0800
-Message-ID: <CA+wgaPO81R+NckRt0nzZazxs9fqSC_V_wyChU=kcMqJ01WxXNw@mail.gmail.com>
-Subject: Re: [PATCH] dma-buf: Move sysfs work out of DMA-BUF export/release path
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        john.stultz@linaro.org, surenb@google.com, kaleshsingh@google.com,
-        tjmercier@google.com, keescook@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 10:17 AM Hridya Valsaraju <hridya@google.com> wrote:
->
-> On Fri, Jan 7, 2022 at 2:22 AM Christian K=C3=B6nig <christian.koenig@amd=
-.com> wrote:
-> >
-> > Am 06.01.22 um 20:04 schrieb Hridya Valsaraju:
-> > > On Thu, Jan 6, 2022 at 12:59 AM Christian K=C3=B6nig
-> > > <christian.koenig@amd.com> wrote:
-> > >> Am 05.01.22 um 00:51 schrieb Hridya Valsaraju:
-> > >>> Recently, we noticed an issue where a process went into direct recl=
-aim
-> > >>> while holding the kernfs rw semaphore for sysfs in write(exclusive)
-> > >>> mode. This caused processes who were doing DMA-BUF exports and rele=
-ases
-> > >>> to go into uninterruptible sleep since they needed to acquire the s=
-ame
-> > >>> semaphore for the DMA-BUF sysfs entry creation/deletion. In order t=
-o avoid
-> > >>> blocking DMA-BUF export/release for an indeterminate amount of time
-> > >>> while another process is holding the sysfs rw semaphore in exclusiv=
-e
-> > >>> mode, this patch moves the per-buffer sysfs file creation/deleteion=
- to
-> > >>> a kthread.
-> > >> Well I absolutely don't think that this is justified.
-> > >>
-> > >> You adding tons of complexity here just to avoid the overhead of
-> > >> creating the sysfs files while exporting DMA-bufs which is an operat=
-ion
-> > >> which should be done exactly once in the lifecycle for the most comm=
-on
-> > >> use case.
-> > >>
-> > >> Please explain further why that should be necessary.
-> > > Hi Christian,
-> > >
-> > > We noticed that the issue sometimes causes the exporting process to g=
-o
-> > > to the uninterrupted sleep state for tens of milliseconds which
-> > > unfortunately leads to user-perceptible UI jank. This is the reason
-> > > why we are trying to move the sysfs entry creation and deletion out o=
-f
-> > > the DMA-BUF export/release path. I will update the commit message to
-> > > include the same in the next revision.
-> >
-> > That is still not a justification for this change. The question is why
-> > do you need that in the first place?
-> >
-> > Exporting a DMA-buf should be something would should be very rarely,
-> > e.g. only at the start of an application.
->
-> Hi Christian,
->
-> Yes, that is correct. Noticeable jank caused by the issue is not
-> present at all times and happens on UI transitions(for example during
-> app launches and exits) when there are several DMA-BUFs being exported
-> and released. This is especially true in the case of the camera app
-> since it exports and releases a relatively larger number of DMA-BUFs
-> during launch and exit respectively.
->
-> Regards,
-> Hridya
->
-> >
-> > So this strongly looks like you are trying to optimize for an use case
-> > where we should probably rethink what userspace is doing here instead.
+Hi Paul,
 
-Hello Christian,
+FYI, the error/warning still remains.
 
-If you don't mind, could you please elaborate on the above statement?
-Thanks in advance for the guidance!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d1587f7bfe9a0f97a75d42ac1489aeda551106bc
+commit: e43ccb0a045f34838b786e8021dc4838b4af5c38 media: i2c: Add support for the OV5648 image sensor
+date:   12 months ago
+config: mips-buildonly-randconfig-r002-20220107 (https://download.01.org/0day-ci/archive/20220108/202201081304.I6PRwgoL-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 32167bfe64a4c5dd4eb3f7a58e24f4cba76f5ac2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e43ccb0a045f34838b786e8021dc4838b4af5c38
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e43ccb0a045f34838b786e8021dc4838b4af5c38
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/hid/ drivers/media/i2c/ drivers/media/v4l2-core/ fs/
 
-Regards,
-Hridya
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> >
-> > If we would want to go down this route you would need to change all the
-> > drivers implementing the DMA-buf export functionality to avoid
-> > uninterruptible sleep as well and that is certainly something I would N=
-AK.
-> >
-> > Regards,
-> > Christian.
-> >
-> > >
-> > > Thanks,
-> > > Hridya
-> > >
-> > >
-> > >> Regards,
-> > >> Christian.
-> > >>
-> > >>> Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF =
-stats in sysfs")
-> > >>> Signed-off-by: Hridya Valsaraju <hridya@google.com>
-> > >>> ---
-> > >>>    drivers/dma-buf/dma-buf-sysfs-stats.c | 343 ++++++++++++++++++++=
-++++--
-> > >>>    include/linux/dma-buf.h               |  46 ++++
-> > >>>    2 files changed, 366 insertions(+), 23 deletions(-)
-> > >>>
-> > >>> diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-bu=
-f/dma-buf-sysfs-stats.c
-> > >>> index 053baadcada9..3251fdf2f05f 100644
-> > >>> --- a/drivers/dma-buf/dma-buf-sysfs-stats.c
-> > >>> +++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
-> > >>> @@ -7,13 +7,39 @@
-> > >>>
-> > >>>    #include <linux/dma-buf.h>
-> > >>>    #include <linux/dma-resv.h>
-> > >>> +#include <linux/freezer.h>
-> > >>>    #include <linux/kobject.h>
-> > >>> +#include <linux/kthread.h>
-> > >>> +#include <linux/list.h>
-> > >>>    #include <linux/printk.h>
-> > >>> +#include <linux/sched/signal.h>
-> > >>>    #include <linux/slab.h>
-> > >>>    #include <linux/sysfs.h>
-> > >>>
-> > >>>    #include "dma-buf-sysfs-stats.h"
-> > >>>
-> > >>> +struct dmabuf_kobj_work {
-> > >>> +     struct list_head list;
-> > >>> +     struct dma_buf_sysfs_entry *sysfs_entry;
-> > >>> +     struct dma_buf_sysfs_entry_metadata *sysfs_metadata;
-> > >>> +     unsigned long uid;
-> > >>> +};
-> > >>> +
-> > >>> +/* Both kobject setup and teardown work gets queued on the list. *=
-/
-> > >>> +static LIST_HEAD(dmabuf_kobj_work_list);
-> > >>> +
-> > >>> +/* dmabuf_kobj_list_lock protects dmabuf_kobj_work_list. */
-> > >>> +static DEFINE_SPINLOCK(dmabuf_kobj_list_lock);
-> > >>> +
-> > >>> +/*
-> > >>> + * dmabuf_sysfs_show_lock prevents a race between a DMA-BUF sysfs =
-file being
-> > >>> + * read and the DMA-BUF being freed by protecting sysfs_entry->dma=
-buf.
-> > >>> + */
-> > >>> +static DEFINE_SPINLOCK(dmabuf_sysfs_show_lock);
-> > >>> +
-> > >>> +static struct task_struct *dmabuf_kobject_task;
-> > >>> +static wait_queue_head_t dmabuf_kobject_waitqueue;
-> > >>> +
-> > >>>    #define to_dma_buf_entry_from_kobj(x) container_of(x, struct dma=
-_buf_sysfs_entry, kobj)
-> > >>>
-> > >>>    /**
-> > >>> @@ -64,15 +90,26 @@ static ssize_t dma_buf_stats_attribute_show(str=
-uct kobject *kobj,
-> > >>>        struct dma_buf_stats_attribute *attribute;
-> > >>>        struct dma_buf_sysfs_entry *sysfs_entry;
-> > >>>        struct dma_buf *dmabuf;
-> > >>> +     int ret;
-> > >>>
-> > >>>        attribute =3D to_dma_buf_stats_attr(attr);
-> > >>>        sysfs_entry =3D to_dma_buf_entry_from_kobj(kobj);
-> > >>> +
-> > >>> +     /*
-> > >>> +      * acquire dmabuf_sysfs_show_lock to prevent a race with the =
-DMA-BUF
-> > >>> +      * being freed while sysfs_entry->dmabuf is being accessed.
-> > >>> +      */
-> > >>> +     spin_lock(&dmabuf_sysfs_show_lock);
-> > >>>        dmabuf =3D sysfs_entry->dmabuf;
-> > >>>
-> > >>> -     if (!dmabuf || !attribute->show)
-> > >>> +     if (!dmabuf || !attribute->show) {
-> > >>> +             spin_unlock(&dmabuf_sysfs_show_lock);
-> > >>>                return -EIO;
-> > >>> +     }
-> > >>>
-> > >>> -     return attribute->show(dmabuf, attribute, buf);
-> > >>> +     ret =3D attribute->show(dmabuf, attribute, buf);
-> > >>> +     spin_unlock(&dmabuf_sysfs_show_lock);
-> > >>> +     return ret;
-> > >>>    }
-> > >>>
-> > >>>    static const struct sysfs_ops dma_buf_stats_sysfs_ops =3D {
-> > >>> @@ -118,33 +155,275 @@ static struct kobj_type dma_buf_ktype =3D {
-> > >>>        .default_groups =3D dma_buf_stats_default_groups,
-> > >>>    };
-> > >>>
-> > >>> -void dma_buf_stats_teardown(struct dma_buf *dmabuf)
-> > >>> +/* Statistics files do not need to send uevents. */
-> > >>> +static int dmabuf_sysfs_uevent_filter(struct kset *kset, struct ko=
-bject *kobj)
-> > >>>    {
-> > >>> -     struct dma_buf_sysfs_entry *sysfs_entry;
-> > >>> +     return 0;
-> > >>> +}
-> > >>>
-> > >>> -     sysfs_entry =3D dmabuf->sysfs_entry;
-> > >>> -     if (!sysfs_entry)
-> > >>> -             return;
-> > >>> +static const struct kset_uevent_ops dmabuf_sysfs_no_uevent_ops =3D=
- {
-> > >>> +     .filter =3D dmabuf_sysfs_uevent_filter,
-> > >>> +};
-> > >>> +
-> > >>> +/* setup of sysfs entries done asynchronously in the worker thread=
-. */
-> > >>> +static void dma_buf_sysfs_stats_setup_work(struct dmabuf_kobj_work=
- *kobject_work)
-> > >>> +{
-> > >>> +     struct dma_buf_sysfs_entry *sysfs_entry =3D kobject_work->sys=
-fs_entry;
-> > >>> +     struct dma_buf_sysfs_entry_metadata *sysfs_metadata =3D
-> > >>> +                     kobject_work->sysfs_metadata;
-> > >>> +     bool free_metadata =3D false;
-> > >>> +
-> > >>> +     int ret =3D kobject_init_and_add(&sysfs_entry->kobj, &dma_buf=
-_ktype, NULL,
-> > >>> +                                    "%lu", kobject_work->uid);
-> > >>> +     if (ret) {
-> > >>> +             kobject_put(&sysfs_entry->kobj);
-> > >>> +
-> > >>> +             spin_lock(&sysfs_metadata->sysfs_entry_lock);
-> > >>> +             if (sysfs_metadata->status =3D=3D SYSFS_ENTRY_INIT_AB=
-ORTED) {
-> > >>> +                     /*
-> > >>> +                      * SYSFS_ENTRY_INIT_ABORTED means that the DM=
-A-BUF has already
-> > >>> +                      * been freed. At this point, its safe to fre=
-e the memory for
-> > >>> +                      * the sysfs_metadata;
-> > >>> +                      */
-> > >>> +                     free_metadata =3D true;
-> > >>> +             } else {
-> > >>> +                     /*
-> > >>> +                      * The DMA-BUF has not yet been freed, set th=
-e status to
-> > >>> +                      * sysfs_entry_error so that when the DMA-BUF=
- gets
-> > >>> +                      * freed, we know there is no need to teardow=
-n the sysfs
-> > >>> +                      * entry.
-> > >>> +                      */
-> > >>> +                     sysfs_metadata->status =3D SYSFS_ENTRY_ERROR;
-> > >>> +             }
-> > >>> +             goto unlock;
-> > >>> +     }
-> > >>> +
-> > >>> +     /*
-> > >>> +      * If the DMA-BUF has not yet been released, status would sti=
-ll be
-> > >>> +      * SYSFS_ENTRY_INIT_IN_PROGRESS. We set the status as initial=
-ized.
-> > >>> +      */
-> > >>> +     spin_lock(&sysfs_metadata->sysfs_entry_lock);
-> > >>> +     if (sysfs_metadata->status =3D=3D SYSFS_ENTRY_INIT_IN_PROGRES=
-S) {
-> > >>> +             sysfs_metadata->status =3D SYSFS_ENTRY_INITIALIZED;
-> > >>> +             goto unlock;
-> > >>> +     }
-> > >>>
-> > >>> +     /*
-> > >>> +      * At this point the status is SYSFS_ENTRY_INIT_ABORTED which=
- means
-> > >>> +      * that the DMA-BUF has already been freed. Hence, we cleanup=
- the
-> > >>> +      * sysfs_entry and its metadata since neither of them are nee=
-ded
-> > >>> +      * anymore.
-> > >>> +      */
-> > >>> +     free_metadata =3D true;
-> > >>>        kobject_del(&sysfs_entry->kobj);
-> > >>>        kobject_put(&sysfs_entry->kobj);
-> > >>> +
-> > >>> +unlock:
-> > >>> +     spin_unlock(&sysfs_metadata->sysfs_entry_lock);
-> > >>> +     if (free_metadata) {
-> > >>> +             kfree(kobject_work->sysfs_metadata);
-> > >>> +             kobject_work->sysfs_metadata =3D NULL;
-> > >>> +     }
-> > >>>    }
-> > >>>
-> > >>> +/* teardown of sysfs entries done asynchronously in the worker thr=
-ead. */
-> > >>> +static void dma_buf_sysfs_stats_teardown_work(struct dmabuf_kobj_w=
-ork *kobject_work)
-> > >>> +{
-> > >>> +     struct dma_buf_sysfs_entry *sysfs_entry =3D kobject_work->sys=
-fs_entry;
-> > >>>
-> > >>> -/* Statistics files do not need to send uevents. */
-> > >>> -static int dmabuf_sysfs_uevent_filter(struct kset *kset, struct ko=
-bject *kobj)
-> > >>> +     kobject_del(&sysfs_entry->kobj);
-> > >>> +     kobject_put(&sysfs_entry->kobj);
-> > >>> +
-> > >>> +     kfree(kobject_work->sysfs_metadata);
-> > >>> +     kobject_work->sysfs_metadata =3D NULL;
-> > >>> +}
-> > >>> +
-> > >>> +/* do setup or teardown of sysfs entries as required */
-> > >>> +static void do_kobject_work(struct dmabuf_kobj_work *kobject_work)
-> > >>>    {
-> > >>> +     struct dma_buf_sysfs_entry_metadata *sysfs_metadata;
-> > >>> +     bool setup_needed =3D false;
-> > >>> +     bool teardown_needed =3D false;
-> > >>> +
-> > >>> +     sysfs_metadata =3D kobject_work->sysfs_metadata;
-> > >>> +     spin_lock(&sysfs_metadata->sysfs_entry_lock);
-> > >>> +     if (sysfs_metadata->status =3D=3D SYSFS_ENTRY_UNINITIALIZED) =
-{
-> > >>> +             setup_needed =3D true;
-> > >>> +             sysfs_metadata->status =3D SYSFS_ENTRY_INIT_IN_PROGRE=
-SS;
-> > >>> +     } else if (sysfs_metadata->status =3D=3D SYSFS_ENTRY_INITIALI=
-ZED) {
-> > >>> +             teardown_needed =3D true;
-> > >>> +     }
-> > >>> +
-> > >>> +     /*
-> > >>> +      * It is ok to release the sysfs_entry_lock here.
-> > >>> +      *
-> > >>> +      * If setup_needed is true, we check the status again after t=
-he kobject
-> > >>> +      * initialization to see if it has been set to SYSFS_ENTRY_IN=
-IT_ABORTED
-> > >>> +      * and if so teardown the kobject.
-> > >>> +      *
-> > >>> +      * If teardown_needed is true, there are no more changes expe=
-cted to the
-> > >>> +      * status.
-> > >>> +      *
-> > >>> +      * If neither setup_needed nor teardown needed are true, it
-> > >>> +      * means the DMA-BUF was freed before we got around to settin=
-g up the
-> > >>> +      * sysfs entry and hence we just need to release the metadata=
- and
-> > >>> +      * return.
-> > >>> +      */
-> > >>> +     spin_unlock(&kobject_work->sysfs_metadata->sysfs_entry_lock);
-> > >>> +
-> > >>> +     if (setup_needed)
-> > >>> +             dma_buf_sysfs_stats_setup_work(kobject_work);
-> > >>> +     else if (teardown_needed)
-> > >>> +             dma_buf_sysfs_stats_teardown_work(kobject_work);
-> > >>> +     else
-> > >>> +             kfree(kobject_work->sysfs_metadata);
-> > >>> +
-> > >>> +     kfree(kobject_work);
-> > >>> +}
-> > >>> +
-> > >>> +static struct dmabuf_kobj_work *get_next_kobj_work(void)
-> > >>> +{
-> > >>> +     struct dmabuf_kobj_work *kobject_work;
-> > >>> +
-> > >>> +     spin_lock(&dmabuf_kobj_list_lock);
-> > >>> +     kobject_work =3D list_first_entry_or_null(&dmabuf_kobj_work_l=
-ist,
-> > >>> +                                             struct dmabuf_kobj_wo=
-rk, list);
-> > >>> +     if (kobject_work)
-> > >>> +             list_del(&kobject_work->list);
-> > >>> +     spin_unlock(&dmabuf_kobj_list_lock);
-> > >>> +     return kobject_work;
-> > >>> +}
-> > >>> +
-> > >>> +static int kobject_work_thread(void *data)
-> > >>> +{
-> > >>> +     struct dmabuf_kobj_work *kobject_work;
-> > >>> +
-> > >>> +     while (1) {
-> > >>> +             wait_event_freezable(dmabuf_kobject_waitqueue,
-> > >>> +                                  (kobject_work =3D get_next_kobj_=
-work()));
-> > >>> +             do_kobject_work(kobject_work);
-> > >>> +     }
-> > >>> +
-> > >>>        return 0;
-> > >>>    }
-> > >>>
-> > >>> -static const struct kset_uevent_ops dmabuf_sysfs_no_uevent_ops =3D=
- {
-> > >>> -     .filter =3D dmabuf_sysfs_uevent_filter,
-> > >>> -};
-> > >>> +static int kobject_worklist_init(void)
-> > >>> +{
-> > >>> +     init_waitqueue_head(&dmabuf_kobject_waitqueue);
-> > >>> +     dmabuf_kobject_task =3D kthread_run(kobject_work_thread, NULL=
-,
-> > >>> +                                       "%s", "dmabuf-kobject-worke=
-r");
-> > >>> +     if (IS_ERR(dmabuf_kobject_task)) {
-> > >>> +             pr_err("Creating thread for deferred sysfs entry crea=
-tion/deletion failed\n");
-> > >>> +             return PTR_ERR(dmabuf_kobject_task);
-> > >>> +     }
-> > >>> +     sched_set_normal(dmabuf_kobject_task, MAX_NICE);
-> > >>> +
-> > >>> +     return 0;
-> > >>> +}
-> > >>> +
-> > >>> +static void deferred_kobject_create(struct dmabuf_kobj_work *kobje=
-ct_work)
-> > >>> +{
-> > >>> +     INIT_LIST_HEAD(&kobject_work->list);
-> > >>> +
-> > >>> +     spin_lock(&dmabuf_kobj_list_lock);
-> > >>> +
-> > >>> +     list_add_tail(&kobject_work->list, &dmabuf_kobj_work_list);
-> > >>> +
-> > >>> +     spin_unlock(&dmabuf_kobj_list_lock);
-> > >>> +
-> > >>> +     wake_up(&dmabuf_kobject_waitqueue);
-> > >>> +}
-> > >>> +
-> > >>> +
-> > >>> +void dma_buf_stats_teardown(struct dma_buf *dmabuf)
-> > >>> +{
-> > >>> +     struct dma_buf_sysfs_entry *sysfs_entry;
-> > >>> +     struct dma_buf_sysfs_entry_metadata *sysfs_metadata;
-> > >>> +     struct dmabuf_kobj_work *kobj_work;
-> > >>> +
-> > >>> +     sysfs_entry =3D dmabuf->sysfs_entry;
-> > >>> +     if (!sysfs_entry)
-> > >>> +             return;
-> > >>> +
-> > >>> +     sysfs_metadata =3D dmabuf->sysfs_entry_metadata;
-> > >>> +     if (!sysfs_metadata)
-> > >>> +             return;
-> > >>> +
-> > >>> +     spin_lock(&sysfs_metadata->sysfs_entry_lock);
-> > >>> +
-> > >>> +     if (sysfs_metadata->status =3D=3D SYSFS_ENTRY_UNINITIALIZED |=
-|
-> > >>> +         sysfs_metadata->status =3D=3D SYSFS_ENTRY_INIT_IN_PROGRES=
-S) {
-> > >>> +             /*
-> > >>> +              * The sysfs entry for this buffer has not yet been i=
-nitialized,
-> > >>> +              * we set the status to SYSFS_ENTRY_INIT_ABORTED to a=
-bort the
-> > >>> +              * initialization.
-> > >>> +              */
-> > >>> +             sysfs_metadata->status =3D SYSFS_ENTRY_INIT_ABORTED;
-> > >>> +             spin_unlock(&sysfs_metadata->sysfs_entry_lock);
-> > >>> +
-> > >>> +             /*
-> > >>> +              * In case kobject initialization completes right as =
-we release
-> > >>> +              * the sysfs_entry_lock, disable show() for the sysfs=
- entry by
-> > >>> +              * setting sysfs_entry->dmabuf to NULL to prevent a r=
-ace.
-> > >>> +              */
-> > >>> +             spin_lock(&dmabuf_sysfs_show_lock);
-> > >>> +             sysfs_entry->dmabuf =3D NULL;
-> > >>> +             spin_unlock(&dmabuf_sysfs_show_lock);
-> > >>> +
-> > >>> +             return;
-> > >>> +     }
-> > >>> +
-> > >>> +     if (sysfs_metadata->status =3D=3D SYSFS_ENTRY_INITIALIZED) {
-> > >>> +             /*
-> > >>> +              * queue teardown work only if sysfs_entry is fully i=
-nititalized.
-> > >>> +              * It is ok to release the sysfs_entry_lock here sinc=
-e the
-> > >>> +              * status can no longer change.
-> > >>> +              */
-> > >>> +             spin_unlock(&sysfs_metadata->sysfs_entry_lock);
-> > >>> +
-> > >>> +             /*
-> > >>> +              * Meanwhile disable show() for the sysfs entry to av=
-oid a race
-> > >>> +              * between teardown and show().
-> > >>> +              */
-> > >>> +             spin_lock(&dmabuf_sysfs_show_lock);
-> > >>> +             sysfs_entry->dmabuf =3D NULL;
-> > >>> +             spin_unlock(&dmabuf_sysfs_show_lock);
-> > >>> +
-> > >>> +             kobj_work =3D kzalloc(sizeof(struct dmabuf_kobj_work)=
-, GFP_KERNEL);
-> > >>> +             if (!kobj_work) {
-> > >>> +                     /* do the teardown immediately. */
-> > >>> +                     kobject_del(&sysfs_entry->kobj);
-> > >>> +                     kobject_put(&sysfs_entry->kobj);
-> > >>> +                     kfree(sysfs_metadata);
-> > >>> +             } else {
-> > >>> +                     /* queue teardown work. */
-> > >>> +                     kobj_work->sysfs_entry =3D dmabuf->sysfs_entr=
-y;
-> > >>> +                     kobj_work->sysfs_metadata =3D dmabuf->sysfs_e=
-ntry_metadata;
-> > >>> +                     deferred_kobject_create(kobj_work);
-> > >>> +             }
-> > >>> +
-> > >>> +             return;
-> > >>> +     }
-> > >>> +
-> > >>> +     /*
-> > >>> +      * status is SYSFS_ENTRY_INIT_ERROR so we only need to free t=
-he
-> > >>> +      * metadata.
-> > >>> +      */
-> > >>> +     spin_unlock(&sysfs_metadata->sysfs_entry_lock);
-> > >>> +     kfree(dmabuf->sysfs_entry_metadata);
-> > >>> +     dmabuf->sysfs_entry_metadata =3D NULL;
-> > >>> +}
-> > >>>
-> > >>>    static struct kset *dma_buf_stats_kset;
-> > >>>    static struct kset *dma_buf_per_buffer_stats_kset;
-> > >>>    int dma_buf_init_sysfs_statistics(void)
-> > >>>    {
-> > >>> +     int ret;
-> > >>> +
-> > >>> +     ret =3D kobject_worklist_init();
-> > >>> +     if (ret)
-> > >>> +             return ret;
-> > >>> +
-> > >>>        dma_buf_stats_kset =3D kset_create_and_add("dmabuf",
-> > >>>                                                 &dmabuf_sysfs_no_ue=
-vent_ops,
-> > >>>                                                 kernel_kobj);
-> > >>> @@ -171,7 +450,8 @@ void dma_buf_uninit_sysfs_statistics(void)
-> > >>>    int dma_buf_stats_setup(struct dma_buf *dmabuf)
-> > >>>    {
-> > >>>        struct dma_buf_sysfs_entry *sysfs_entry;
-> > >>> -     int ret;
-> > >>> +     struct dma_buf_sysfs_entry_metadata *sysfs_metadata;
-> > >>> +     struct dmabuf_kobj_work *kobj_work;
-> > >>>
-> > >>>        if (!dmabuf || !dmabuf->file)
-> > >>>                return -EINVAL;
-> > >>> @@ -188,18 +468,35 @@ int dma_buf_stats_setup(struct dma_buf *dmabu=
-f)
-> > >>>        sysfs_entry->kobj.kset =3D dma_buf_per_buffer_stats_kset;
-> > >>>        sysfs_entry->dmabuf =3D dmabuf;
-> > >>>
-> > >>> +     sysfs_metadata =3D kzalloc(sizeof(struct dma_buf_sysfs_entry_=
-metadata),
-> > >>> +                              GFP_KERNEL);
-> > >>> +     if (!sysfs_metadata) {
-> > >>> +             kfree(sysfs_entry);
-> > >>> +             return -ENOMEM;
-> > >>> +     }
-> > >>> +
-> > >>>        dmabuf->sysfs_entry =3D sysfs_entry;
-> > >>>
-> > >>> -     /* create the directory for buffer stats */
-> > >>> -     ret =3D kobject_init_and_add(&sysfs_entry->kobj, &dma_buf_kty=
-pe, NULL,
-> > >>> -                                "%lu", file_inode(dmabuf->file)->i=
-_ino);
-> > >>> -     if (ret)
-> > >>> -             goto err_sysfs_dmabuf;
-> > >>> +     sysfs_metadata->status =3D SYSFS_ENTRY_UNINITIALIZED;
-> > >>> +     spin_lock_init(&sysfs_metadata->sysfs_entry_lock);
-> > >>>
-> > >>> -     return 0;
-> > >>> +     dmabuf->sysfs_entry_metadata =3D sysfs_metadata;
-> > >>>
-> > >>> -err_sysfs_dmabuf:
-> > >>> -     kobject_put(&sysfs_entry->kobj);
-> > >>> -     dmabuf->sysfs_entry =3D NULL;
-> > >>> -     return ret;
-> > >>> +     kobj_work =3D kzalloc(sizeof(struct dmabuf_kobj_work), GFP_KE=
-RNEL);
-> > >>> +     if (!kobj_work) {
-> > >>> +             kfree(sysfs_entry);
-> > >>> +             kfree(sysfs_metadata);
-> > >>> +             return -ENOMEM;
-> > >>> +     }
-> > >>> +
-> > >>> +     kobj_work->sysfs_entry =3D dmabuf->sysfs_entry;
-> > >>> +     kobj_work->sysfs_metadata =3D dmabuf->sysfs_entry_metadata;
-> > >>> +     /*
-> > >>> +      * stash the inode number in struct dmabuf_kobj_work since se=
-tup
-> > >>> +      * might race with DMA-BUF teardown.
-> > >>> +      */
-> > >>> +     kobj_work->uid =3D file_inode(dmabuf->file)->i_ino;
-> > >>> +
-> > >>> +     deferred_kobject_create(kobj_work);
-> > >>> +     return 0;
-> > >>>    }
-> > >>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> > >>> index 7ab50076e7a6..0597690023a0 100644
-> > >>> --- a/include/linux/dma-buf.h
-> > >>> +++ b/include/linux/dma-buf.h
-> > >>> @@ -287,6 +287,50 @@ struct dma_buf_ops {
-> > >>>        void (*vunmap)(struct dma_buf *dmabuf, struct dma_buf_map *m=
-ap);
-> > >>>    };
-> > >>>
-> > >>> +#ifdef CONFIG_DMABUF_SYSFS_STATS
-> > >>> +enum sysfs_entry_status {
-> > >>> +     SYSFS_ENTRY_UNINITIALIZED,
-> > >>> +     SYSFS_ENTRY_INIT_IN_PROGRESS,
-> > >>> +     SYSFS_ENTRY_ERROR,
-> > >>> +     SYSFS_ENTRY_INIT_ABORTED,
-> > >>> +     SYSFS_ENTRY_INITIALIZED,
-> > >>> +};
-> > >>> +
-> > >>> +/*
-> > >>> + * struct dma_buf_sysfs_entry_metadata - Holds the current status =
-for the
-> > >>> + * DMA-BUF sysfs entry.
-> > >>> + *
-> > >>> + * @status: holds the current status for the DMA-BUF sysfs entry. =
-The status of
-> > >>> + * the sysfs entry has the following path.
-> > >>> + *
-> > >>> + *                   SYSFS_ENTRY_UNINITIALIZED
-> > >>> + *            __________________|____________________
-> > >>> + *           |                                       |
-> > >>> + *     SYSFS_ENTRY_INIT_IN_PROGRESS      SYSFS_ENTRY_INIT_ABORTED =
-(DMA-BUF
-> > >>> + *           |                                                    =
- gets freed
-> > >>> + *           |                                                    =
- before
-> > >>> + *           |                                                    =
- init)
-> > >>> + *   ________|_____________________________________
-> > >>> + *   |                         |                   |
-> > >>> + * SYSFS_ENTRY_INITIALIZED     |       SYSFS_ENTRY_INIT_ABORTED
-> > >>> + *                             |               (DMA-BUF gets freed=
- during kobject
-> > >>> + *                             |               init)
-> > >>> + *                             |
-> > >>> + *                             |
-> > >>> + *                 SYSFS_ENTRY_ERROR
-> > >>> + *                 (error during kobject init)
-> > >>> + *
-> > >>> + * @sysfs_entry_lock: protects access to @status.
-> > >>> + */
-> > >>> +struct dma_buf_sysfs_entry_metadata {
-> > >>> +     enum sysfs_entry_status status;
-> > >>> +     /*
-> > >>> +      * Protects sysfs_entry_metadata->status
-> > >>> +      */
-> > >>> +     spinlock_t sysfs_entry_lock;
-> > >>> +};
-> > >>> +#endif
-> > >>> +
-> > >>>    /**
-> > >>>     * struct dma_buf - shared buffer object
-> > >>>     *
-> > >>> @@ -452,6 +496,8 @@ struct dma_buf {
-> > >>>                struct kobject kobj;
-> > >>>                struct dma_buf *dmabuf;
-> > >>>        } *sysfs_entry;
-> > >>> +
-> > >>> +     struct dma_buf_sysfs_entry_metadata *sysfs_entry_metadata;
-> > >>>    #endif
-> > >>>    };
-> > >>>
-> >
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/i2c/ov5648.c:2035:39: warning: taking address of packed member 'handler' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           struct v4l2_ctrl_handler *handler = &ctrls->handler;
+                                                ^~~~~~~~~~~~~~
+>> drivers/media/i2c/ov5648.c:2054:29: warning: taking address of packed member 'exposure_auto' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           v4l2_ctrl_auto_cluster(2, &ctrls->exposure_auto, 1, true);
+                                      ^~~~~~~~~~~~~~~~~~~~
+>> drivers/media/i2c/ov5648.c:2064:29: warning: taking address of packed member 'gain_auto' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           v4l2_ctrl_auto_cluster(2, &ctrls->gain_auto, 0, true);
+                                      ^~~~~~~~~~~~~~~~
+>> drivers/media/i2c/ov5648.c:2080:29: warning: taking address of packed member 'white_balance_auto' of class or structure 'ov5648_ctrls' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           v4l2_ctrl_auto_cluster(3, &ctrls->white_balance_auto, 0, false);
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings generated.
+
+
+vim +2035 drivers/media/i2c/ov5648.c
+
+  2031	
+  2032	static int ov5648_ctrls_init(struct ov5648_sensor *sensor)
+  2033	{
+  2034		struct ov5648_ctrls *ctrls = &sensor->ctrls;
+> 2035		struct v4l2_ctrl_handler *handler = &ctrls->handler;
+  2036		const struct v4l2_ctrl_ops *ops = &ov5648_ctrl_ops;
+  2037		int ret;
+  2038	
+  2039		v4l2_ctrl_handler_init(handler, 32);
+  2040	
+  2041		/* Use our mutex for ctrl locking. */
+  2042		handler->lock = &sensor->mutex;
+  2043	
+  2044		/* Exposure */
+  2045	
+  2046		ctrls->exposure_auto = v4l2_ctrl_new_std_menu(handler, ops,
+  2047							      V4L2_CID_EXPOSURE_AUTO,
+  2048							      V4L2_EXPOSURE_MANUAL, 0,
+  2049							      V4L2_EXPOSURE_AUTO);
+  2050	
+  2051		ctrls->exposure = v4l2_ctrl_new_std(handler, ops, V4L2_CID_EXPOSURE,
+  2052						    16, 1048575, 16, 512);
+  2053	
+> 2054		v4l2_ctrl_auto_cluster(2, &ctrls->exposure_auto, 1, true);
+  2055	
+  2056		/* Gain */
+  2057	
+  2058		ctrls->gain_auto =
+  2059			v4l2_ctrl_new_std(handler, ops, V4L2_CID_AUTOGAIN, 0, 1, 1, 1);
+  2060	
+  2061		ctrls->gain = v4l2_ctrl_new_std(handler, ops, V4L2_CID_GAIN, 16, 1023,
+  2062						16, 16);
+  2063	
+> 2064		v4l2_ctrl_auto_cluster(2, &ctrls->gain_auto, 0, true);
+  2065	
+  2066		/* White Balance */
+  2067	
+  2068		ctrls->white_balance_auto =
+  2069			v4l2_ctrl_new_std(handler, ops, V4L2_CID_AUTO_WHITE_BALANCE, 0,
+  2070					  1, 1, 1);
+  2071	
+  2072		ctrls->red_balance = v4l2_ctrl_new_std(handler, ops,
+  2073						       V4L2_CID_RED_BALANCE, 0, 4095,
+  2074						       1, 1024);
+  2075	
+  2076		ctrls->blue_balance = v4l2_ctrl_new_std(handler, ops,
+  2077							V4L2_CID_BLUE_BALANCE, 0, 4095,
+  2078							1, 1024);
+  2079	
+> 2080		v4l2_ctrl_auto_cluster(3, &ctrls->white_balance_auto, 0, false);
+  2081	
+  2082		/* Flip */
+  2083	
+  2084		v4l2_ctrl_new_std(handler, ops, V4L2_CID_HFLIP, 0, 1, 1, 0);
+  2085		v4l2_ctrl_new_std(handler, ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
+  2086	
+  2087		/* Test Pattern */
+  2088	
+  2089		v4l2_ctrl_new_std_menu_items(handler, ops, V4L2_CID_TEST_PATTERN,
+  2090					     ARRAY_SIZE(ov5648_test_pattern_menu) - 1,
+  2091					     0, 0, ov5648_test_pattern_menu);
+  2092	
+  2093		/* MIPI CSI-2 */
+  2094	
+  2095		ctrls->link_freq =
+  2096			v4l2_ctrl_new_int_menu(handler, NULL, V4L2_CID_LINK_FREQ,
+  2097					       ARRAY_SIZE(ov5648_link_freq_menu) - 1,
+  2098					       0, ov5648_link_freq_menu);
+  2099	
+  2100		ctrls->pixel_rate =
+  2101			v4l2_ctrl_new_std(handler, NULL, V4L2_CID_PIXEL_RATE, 1,
+  2102					  INT_MAX, 1, 1);
+  2103	
+  2104		if (handler->error) {
+  2105			ret = handler->error;
+  2106			goto error_ctrls;
+  2107		}
+  2108	
+  2109		ctrls->exposure->flags |= V4L2_CTRL_FLAG_VOLATILE;
+  2110		ctrls->gain->flags |= V4L2_CTRL_FLAG_VOLATILE;
+  2111	
+  2112		ctrls->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+  2113		ctrls->pixel_rate->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+  2114	
+  2115		sensor->subdev.ctrl_handler = handler;
+  2116	
+  2117		return 0;
+  2118	
+  2119	error_ctrls:
+  2120		v4l2_ctrl_handler_free(handler);
+  2121	
+  2122		return ret;
+  2123	}
+  2124	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
