@@ -2,62 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 643A1C4332F
-	for <linux-media@archiver.kernel.org>; Sun,  9 Jan 2022 02:47:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28618C433EF
+	for <linux-media@archiver.kernel.org>; Sun,  9 Jan 2022 02:47:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235094AbiAICrF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 8 Jan 2022 21:47:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        id S235109AbiAICrH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 8 Jan 2022 21:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235100AbiAICrE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 8 Jan 2022 21:47:04 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6D4C061401
-        for <linux-media@vger.kernel.org>; Sat,  8 Jan 2022 18:47:03 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id k18so19452530wrg.11
-        for <linux-media@vger.kernel.org>; Sat, 08 Jan 2022 18:47:03 -0800 (PST)
+        with ESMTP id S235103AbiAICrG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 8 Jan 2022 21:47:06 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14909C061747
+        for <linux-media@vger.kernel.org>; Sat,  8 Jan 2022 18:47:06 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id n19-20020a7bc5d3000000b003466ef16375so7686338wmk.1
+        for <linux-media@vger.kernel.org>; Sat, 08 Jan 2022 18:47:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZhVNeBs7vzyROSZpuaXTYGD6xm3M8v73/QT84NJecB8=;
-        b=ciMo0djpXFXBlackzsTMPliC28rb6byUGCUJp01rgrVj4PYlSXt4v7yCmh4bKfk2r6
-         tvZIcT/hYKYodpwqXJ9nUd8KGaYXYbpO9SwbBet2F1b0hmpsHm5pEyY1I/lF27R2UEMw
-         zhim6znrmafogvpr9FQrxZfrXkswgRmfoiUeEiMsokaI81Ty+ZTu2tD3FsXUlu8dWT+Q
-         ht50ZYJUkq+NTXd9JZvUGCxFKR3YObvEXUsC6vFBOXsMJ5Z4plP+Mf8RaTHNE8hJG1Uc
-         l1AiuVt0YHXl3nCKZyDM3y2mN2IBrcYBTfodNMLh5DRp2ouwkeEQRe8YMx6ekZNpjk6Z
-         hOfA==
+        bh=P5MT7rEoiiCVz2gFm3EQaB2V5VAMjaCUk3cu8vjhwBg=;
+        b=s4QDAkrsbWWo6Op4Bso41dYSVGBQ6LLu61q/iu0h/7q4ZEr5wvuSBdqC7UlxMYWe9F
+         LsuuEAgyokh8rIVuXJyLR0/cG8+EAOkfGzxMyBgPyUFjuT04JiL7JqAKLmaGbvMBzCEs
+         87sYK+95NA5L5+pEhcui2NeiAGQc5iRfkDyMzFDU7wOgZQeg4t3XZgmjED2RdzevL8+j
+         efZ8f/hmlEggdblxpC3VNOB22/Ui6DHapKJb6wk51sthiYCDRILqs3YaeT3KT29pNQWt
+         lTJO+ZBddOy4FLA4F1M2BrZeqQ1jqx7Qu/KkH8v+snagVxEov3NqdB9I7GAqcaGskT1r
+         iJug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZhVNeBs7vzyROSZpuaXTYGD6xm3M8v73/QT84NJecB8=;
-        b=C880bHpseVfe5BLLdH6+4sKlz1DZm8PVajWXFIkNTjv+s6V6DPH2yt6HO0fs/sV3/f
-         yoYUvgrdsXhaWcI3R2k6tyhf6PtrFigrDBcWSClLwnfL1B2ufFRTvvkjJS1nmPHqaZ12
-         p6NJOHmx/p1m2MeW1DeGoCRvvOZ1w+X7o4VauJ9x3PD15upriiCaDuxZG1pBKXifUs7p
-         mlEfb9IQRS9Wyts/UagBDGiQPAacTgsK1dSIfHFN8pnk+2knOCRFVVVW0b4n2UpKisxw
-         nOd6HiHVPHyD56kI2mzxH0GE6qn3kGWkGZMccrBNwIooapgdEDjENttbQWOo55yi0v+1
-         oXvg==
-X-Gm-Message-State: AOAM533tAfwPOzzOysIW/ZdO/YudaueGCgSod/kh90Eg/VkGw9BIXy8h
-        hgaGtNI2lvAP4117Tr4ySouTPg==
-X-Google-Smtp-Source: ABdhPJwY30Ib6h3mW2+HA2MZmdHyS2szKOqpIHzgIJZ2Ek6wEVXfTxOQZXvjWBTTeBHjzmF5XVfFRQ==
-X-Received: by 2002:adf:f90c:: with SMTP id b12mr53550210wrr.123.1641696422424;
-        Sat, 08 Jan 2022 18:47:02 -0800 (PST)
+        bh=P5MT7rEoiiCVz2gFm3EQaB2V5VAMjaCUk3cu8vjhwBg=;
+        b=4wbrVTTG7cGzXGMkISzYrw0CKWi1bTYeX06YqsCjp0RB2ukNgrIT4xXBuGa59ciQol
+         lgrTiD/60Tnghg4UTTyD+mODJpfpeYpJ56ads/OFFP2nomfsCiKRyii8ex6Hmns00RM/
+         1+XYdy1HVEpKkduMEO7NBxlGjBnpPJoNpWRYVG72vEz/AzoVh3dt1xikrlMt6MDMArE9
+         S6VMmIW1RQ1UM2UoJJpR1Rl+zxtQhF0tTtwBRgUB3AOM33RRDbtT5U1sPyGgiZjj/XCd
+         jbMVQe6ibgOyvL87NTjPOJC3mG9S+qA2RhZfvrbLhyQX/Ff/4kj34xYN2mqPsl2lwvoA
+         yQOQ==
+X-Gm-Message-State: AOAM533O0c7AHgdXWYK84FiAW6hi6AakApv9RRT42v7dRjZ2AXihQdC8
+        U1zPxGzUL0wbS5kVxwxwhfRMsGd+JghoxQ==
+X-Google-Smtp-Source: ABdhPJySua1hDFonprSsYul58orghyPVu/tAE9uq2rOtsCJ4iSxANWWAFHGV03Benjfn+g3o310Big==
+X-Received: by 2002:a05:600c:5027:: with SMTP id n39mr16622051wmr.148.1641696424723;
+        Sat, 08 Jan 2022 18:47:04 -0800 (PST)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id l13sm3341748wrs.73.2022.01.08.18.47.01
+        by smtp.gmail.com with ESMTPSA id l13sm3341748wrs.73.2022.01.08.18.47.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 18:47:02 -0800 (PST)
+        Sat, 08 Jan 2022 18:47:04 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
         mchehab@kernel.org, hverkuil@xs4all.nl, robert.foss@linaro.org
 Cc:     jonathan@marek.ca, andrey.konovalov@linaro.org,
         todor.too@gmail.com, agross@kernel.org, bjorn.andersson@linaro.org,
         jgrahsl@snap.com, hfink@snap.com, vladimir.zapolskiy@linaro.org,
-        dmitry.baryshkov@linaro.org, bryan.odonoghue@linaro.org,
-        devicetree@vger.kernel.org, robh@kernel.org
-Subject: [PATCH v2 1/8] media: dt-bindings: media: camss: Fixup vdda regulator descriptions sdm845
-Date:   Sun,  9 Jan 2022 02:49:03 +0000
-Message-Id: <20220109024910.2041763-2-bryan.odonoghue@linaro.org>
+        dmitry.baryshkov@linaro.org, bryan.odonoghue@linaro.org
+Subject: [PATCH v2 3/8] arm64: dts: qcom: sdm845: Rename camss vdda-supply to vdda-phy-supply
+Date:   Sun,  9 Jan 2022 02:49:05 +0000
+Message-Id: <20220109024910.2041763-4-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220109024910.2041763-1-bryan.odonoghue@linaro.org>
 References: <20220109024910.2041763-1-bryan.odonoghue@linaro.org>
@@ -67,60 +66,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If we review the schematic for RB3 Thundercomm document Turbox-845 we see
-that the CAMSS CSI PHY has the same basic power-rail layout as UFS, PCIe
-and USB PHYs.
+The dts entry vdda-supply connects to a common vdda-phy-supply rail. Rename
+to reflect what the functionality is.
 
-We should therefore have two regulator declarations as is the case for UFS,
-PCIe and USB.
-
-Cc: devicetree@vger.kernel.org
-Cc: robh@kernel.org
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- .../bindings/media/qcom,sdm845-camss.yaml          | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml
-index 9ca5dfa7f2260..ae0642b9ae5ec 100644
---- a/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml
-@@ -203,9 +203,13 @@ properties:
-       - const: vfe1
-       - const: vfe_lite
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+index 13f80a0b6faaa..c4db88dbf8766 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+@@ -1115,7 +1115,7 @@ &cci {
+ };
  
--  vdda-supply:
-+  vdda-phy-supply:
-     description:
--      Definition of the regulator used as analog power supply.
-+      Phandle to a regulator supply to PHY core block.
-+
-+  vdda-pll-supply:
-+    description:
-+      Phandle to 1.8V regulator supply to PHY refclk pll block.
+ &camss {
+-	vdda-supply = <&vreg_l1a_0p875>;
++	vdda-phy-supply = <&vreg_l1a_0p875>;
  
- required:
-   - clock-names
-@@ -217,7 +221,8 @@ required:
-   - power-domains
-   - reg
-   - reg-names
--  - vdda-supply
-+  - vdda-phy-supply
-+  - vdda-pll-supply
+ 	status = "ok";
  
- additionalProperties: false
- 
-@@ -361,7 +366,8 @@ examples:
-           "vfe1",
-           "vfe_lite";
- 
--        vdda-supply = <&reg_2v8>;
-+        vdda-phy-supply = <&vreg_l1a_0p875>;
-+        vdda-pll-supply = <&vreg_l26a_1p2>;
- 
-         ports {
-           #address-cells = <1>;
 -- 
 2.33.0
 
