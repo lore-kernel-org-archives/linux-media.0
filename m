@@ -2,353 +2,169 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFBABC433FE
-	for <linux-media@archiver.kernel.org>; Sun,  9 Jan 2022 02:47:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 204F0C433F5
+	for <linux-media@archiver.kernel.org>; Sun,  9 Jan 2022 05:52:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235107AbiAICrM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 8 Jan 2022 21:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235120AbiAICrJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 8 Jan 2022 21:47:09 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34348C06173F
-        for <linux-media@vger.kernel.org>; Sat,  8 Jan 2022 18:47:09 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id r9so17737746wrg.0
-        for <linux-media@vger.kernel.org>; Sat, 08 Jan 2022 18:47:09 -0800 (PST)
+        id S231261AbiAIFwS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 9 Jan 2022 00:52:18 -0500
+Received: from ewsoutbound.kpnmail.nl ([195.121.94.169]:29286 "EHLO
+        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229960AbiAIFwQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 9 Jan 2022 00:52:16 -0500
+X-KPN-MessageId: b824fc86-710f-11ec-9abf-005056abad63
+Received: from smtp.kpnmail.nl (unknown [10.31.155.37])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id b824fc86-710f-11ec-9abf-005056abad63;
+        Sun, 09 Jan 2022 06:48:06 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ewneygIu5sp2ry7vV6FPAxx3wUrO69utitNS/lJDT2c=;
-        b=XwPUFVcKQ1NASqWB0Bn3woZ4zesJMLYCACuUXhrQpDcOP//z1DYL2BKV3AXHDGOEMV
-         rfJ70lKaSFvZebe/xBicE608x++5O6+rMmPhWl7AC6Af/McHcn5Pz71OuWt/fz+0g8Tm
-         LvpRpG/vINnbYm+dvN9d9yTrie8Pa94HlEc5Wj3NyRnqp7JfKJ2hmx8yU6451cjk89AA
-         NBigilRMBSclkXVOggzv8e9oEYJXAlPvtGdggGc1f0Ym8dw17jBNrrDlUHZQKXcjmhH7
-         dw0/Ff8MmJZ2VbDQ4bvd1CilbgbzNOWhFtA9RhDgedDr+KTcqbvzD5xQmGWWqTqqclIW
-         X11g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ewneygIu5sp2ry7vV6FPAxx3wUrO69utitNS/lJDT2c=;
-        b=uOlgbhvmN+kp0v8G+uPTcHrPPtIPPtC9FtIyW3CplKIDhYrBhrDFDLHP/c1CByWA/v
-         FSJgRH/LZUZpoOHqUrIqs+FjQbLD3Y0ZD85MdLQzwIhb9E7C1iZ+Uy6RxYL02xaAUix2
-         BMsq/yy7zBcXh9X0/5vq3I+wESRnL0o7yxI0Ehre2V8Ns8UDt7IDfPu8NWv4d25l0h/w
-         Nfh01bsc/o5uPFxGLHuuLI0b5l3gpo9OvECFdTnwDAZ0dyu9cyzk5SIOYL777DjbC7XH
-         5XWhzLlRw5oSxNwObIiewZDjD0gXiG+qg8fMIXYolBYnuw4laTWMqcPWhf0VEwqhzCYA
-         pKeg==
-X-Gm-Message-State: AOAM531TSpVoQaAcJZGtuB32gZ7T2V8m+B7DFTEdERBMRAE0RUHJ+ROo
-        DuOm6SFTOdrtIk6/UEpjTefMxw==
-X-Google-Smtp-Source: ABdhPJzXbQ0WT960nsBurf6gsBUDg/DdE3QIVK1jUveXzFNK/nvFA5vZsKAo/iTcl7p23FAfMR894A==
-X-Received: by 2002:a05:6000:2a3:: with SMTP id l3mr57994061wry.289.1641696427838;
-        Sat, 08 Jan 2022 18:47:07 -0800 (PST)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id l13sm3341748wrs.73.2022.01.08.18.47.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 18:47:07 -0800 (PST)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        mchehab@kernel.org, hverkuil@xs4all.nl, robert.foss@linaro.org
-Cc:     jonathan@marek.ca, andrey.konovalov@linaro.org,
-        todor.too@gmail.com, agross@kernel.org, bjorn.andersson@linaro.org,
-        jgrahsl@snap.com, hfink@snap.com, vladimir.zapolskiy@linaro.org,
-        dmitry.baryshkov@linaro.org, bryan.odonoghue@linaro.org
-Subject: [PATCH v2 6/8] media: camss: Set unused regulators to the empty set
-Date:   Sun,  9 Jan 2022 02:49:08 +0000
-Message-Id: <20220109024910.2041763-7-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220109024910.2041763-1-bryan.odonoghue@linaro.org>
-References: <20220109024910.2041763-1-bryan.odonoghue@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        d=xs4all.nl; s=xs4all01;
+        h=subject:to:from:date:message-id;
+        bh=6v1Jt3OvuqPlvblNROnZwijbZ5mKetvg0D4lC5NxML0=;
+        b=DnBS+NrU4RMUnCcWHat1jx90ojFFBnrfDhq89ErBsoz0qP5gvXK4CBB/0ZehNNdRLDvfWlg29y+GX
+         w83Zu2TlYPCBsG3MKkSticOhPZKUO71FlD9pLfWbE2L8Az2jLc5tsFgnB96hbdqG37XAHq2JchG+X7
+         FI6R7x141cPsfonvxayfG3odEtzJO6upoiCg9/sIG7K+0lp6XrMRc8iCbaMZdEjtdQqUaAT1/tFUjD
+         S78VFPqNWoKKZ2Y54vwaGb4ZTwoam2bcb2OmGPrkpDYHv0QsL3n+IkQQ7XaQAHPU/s+S/ycXAaeaS7
+         EqBcIC77r71l36EgV7ExD6mUcSDnixg==
+Message-ID: <4afb64bb-7110-11ec-83ab-005056ab1411@smtp.kpnmail.nl>
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|TtOyzQqonCcqCSJ2GV1j7GkI9YCmeaisFibs6NBd+yxsZSJ/VpcBDAqdgqLYyts
+ COUw1RjsHzcOF85cCUUiJ1Q==
+X-Originating-IP: 193.91.129.219
+Received: from localhost (cdb815bc1.dhcp.as2116.net [193.91.129.219])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id 4ab6849b-7110-11ec-83ab-005056ab1411;
+        Sun, 09 Jan 2022 06:52:13 +0100 (CET)
+Date:   Sun, 09 Jan 2022 06:52:12 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If a CAMSS block has no regulator set the regulator array to the empty set
-as opposed to setting the first element of the array to NULL.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/media/platform/qcom/camss/camss.c | 60 +++++++++++------------
- 1 file changed, 30 insertions(+), 30 deletions(-)
+Results of the daily build of media_tree:
 
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index 419c48c4f1d52..dcb37a739c95b 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -34,7 +34,7 @@
- static const struct resources csiphy_res_8x16[] = {
- 	/* CSIPHY0 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "top_ahb", "ispif_ahb", "ahb", "csiphy0_timer" },
- 		.clock_rate = { { 0 },
- 				{ 0 },
-@@ -46,7 +46,7 @@ static const struct resources csiphy_res_8x16[] = {
- 
- 	/* CSIPHY1 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "top_ahb", "ispif_ahb", "ahb", "csiphy1_timer" },
- 		.clock_rate = { { 0 },
- 				{ 0 },
-@@ -107,7 +107,7 @@ static const struct resources_ispif ispif_res_8x16 = {
- static const struct resources vfe_res_8x16[] = {
- 	/* VFE0 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "top_ahb", "vfe0", "csi_vfe0",
- 			   "vfe_ahb", "vfe_axi", "ahb" },
- 		.clock_rate = { { 0 },
-@@ -129,7 +129,7 @@ static const struct resources vfe_res_8x16[] = {
- static const struct resources csiphy_res_8x96[] = {
- 	/* CSIPHY0 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "top_ahb", "ispif_ahb", "ahb", "csiphy0_timer" },
- 		.clock_rate = { { 0 },
- 				{ 0 },
-@@ -141,7 +141,7 @@ static const struct resources csiphy_res_8x96[] = {
- 
- 	/* CSIPHY1 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "top_ahb", "ispif_ahb", "ahb", "csiphy1_timer" },
- 		.clock_rate = { { 0 },
- 				{ 0 },
-@@ -153,7 +153,7 @@ static const struct resources csiphy_res_8x96[] = {
- 
- 	/* CSIPHY2 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "top_ahb", "ispif_ahb", "ahb", "csiphy2_timer" },
- 		.clock_rate = { { 0 },
- 				{ 0 },
-@@ -249,7 +249,7 @@ static const struct resources_ispif ispif_res_8x96 = {
- static const struct resources vfe_res_8x96[] = {
- 	/* VFE0 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "top_ahb", "ahb", "vfe0", "csi_vfe0", "vfe_ahb",
- 			   "vfe0_ahb", "vfe_axi", "vfe0_stream"},
- 		.clock_rate = { { 0 },
-@@ -267,7 +267,7 @@ static const struct resources vfe_res_8x96[] = {
- 
- 	/* VFE1 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "top_ahb", "ahb", "vfe1", "csi_vfe1", "vfe_ahb",
- 			   "vfe1_ahb", "vfe_axi", "vfe1_stream"},
- 		.clock_rate = { { 0 },
-@@ -287,7 +287,7 @@ static const struct resources vfe_res_8x96[] = {
- static const struct resources csiphy_res_660[] = {
- 	/* CSIPHY0 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "top_ahb", "ispif_ahb", "ahb", "csiphy0_timer",
- 			   "csi0_phy", "csiphy_ahb2crif" },
- 		.clock_rate = { { 0 },
-@@ -301,7 +301,7 @@ static const struct resources csiphy_res_660[] = {
- 
- 	/* CSIPHY1 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "top_ahb", "ispif_ahb", "ahb", "csiphy1_timer",
- 			   "csi1_phy", "csiphy_ahb2crif" },
- 		.clock_rate = { { 0 },
-@@ -315,7 +315,7 @@ static const struct resources csiphy_res_660[] = {
- 
- 	/* CSIPHY2 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "top_ahb", "ispif_ahb", "ahb", "csiphy2_timer",
- 			   "csi2_phy", "csiphy_ahb2crif" },
- 		.clock_rate = { { 0 },
-@@ -425,7 +425,7 @@ static const struct resources_ispif ispif_res_660 = {
- static const struct resources vfe_res_660[] = {
- 	/* VFE0 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "throttle_axi", "top_ahb", "ahb", "vfe0",
- 			   "csi_vfe0", "vfe_ahb", "vfe0_ahb", "vfe_axi",
- 			   "vfe0_stream"},
-@@ -446,7 +446,7 @@ static const struct resources vfe_res_660[] = {
- 
- 	/* VFE1 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "throttle_axi", "top_ahb", "ahb", "vfe1",
- 			   "csi_vfe1", "vfe_ahb", "vfe1_ahb", "vfe_axi",
- 			   "vfe1_stream"},
-@@ -469,7 +469,7 @@ static const struct resources vfe_res_660[] = {
- static const struct resources csiphy_res_845[] = {
- 	/* CSIPHY0 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "camnoc_axi", "soc_ahb", "slow_ahb_src",
- 				"cpas_ahb", "cphy_rx_src", "csiphy0",
- 				"csiphy0_timer_src", "csiphy0_timer" },
-@@ -487,7 +487,7 @@ static const struct resources csiphy_res_845[] = {
- 
- 	/* CSIPHY1 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "camnoc_axi", "soc_ahb", "slow_ahb_src",
- 				"cpas_ahb", "cphy_rx_src", "csiphy1",
- 				"csiphy1_timer_src", "csiphy1_timer" },
-@@ -505,7 +505,7 @@ static const struct resources csiphy_res_845[] = {
- 
- 	/* CSIPHY2 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "camnoc_axi", "soc_ahb", "slow_ahb_src",
- 				"cpas_ahb", "cphy_rx_src", "csiphy2",
- 				"csiphy2_timer_src", "csiphy2_timer" },
-@@ -523,7 +523,7 @@ static const struct resources csiphy_res_845[] = {
- 
- 	/* CSIPHY3 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "camnoc_axi", "soc_ahb", "slow_ahb_src",
- 				"cpas_ahb", "cphy_rx_src", "csiphy3",
- 				"csiphy3_timer_src", "csiphy3_timer" },
-@@ -605,7 +605,7 @@ static const struct resources csid_res_845[] = {
- static const struct resources vfe_res_845[] = {
- 	/* VFE0 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "camnoc_axi", "cpas_ahb", "slow_ahb_src",
- 				"soc_ahb", "vfe0", "vfe0_axi",
- 				"vfe0_src", "csi0",
-@@ -625,7 +625,7 @@ static const struct resources vfe_res_845[] = {
- 
- 	/* VFE1 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "camnoc_axi", "cpas_ahb", "slow_ahb_src",
- 				"soc_ahb", "vfe1", "vfe1_axi",
- 				"vfe1_src", "csi1",
-@@ -645,7 +645,7 @@ static const struct resources vfe_res_845[] = {
- 
- 	/* VFE-lite */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "camnoc_axi", "cpas_ahb", "slow_ahb_src",
- 				"soc_ahb", "vfe_lite",
- 				"vfe_lite_src", "csi2",
-@@ -666,7 +666,7 @@ static const struct resources vfe_res_845[] = {
- static const struct resources csiphy_res_8250[] = {
- 	/* CSIPHY0 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "csiphy0", "csiphy0_timer" },
- 		.clock_rate = { { 400000000 },
- 				{ 300000000 } },
-@@ -675,7 +675,7 @@ static const struct resources csiphy_res_8250[] = {
- 	},
- 	/* CSIPHY1 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "csiphy1", "csiphy1_timer" },
- 		.clock_rate = { { 400000000 },
- 				{ 300000000 } },
-@@ -684,7 +684,7 @@ static const struct resources csiphy_res_8250[] = {
- 	},
- 	/* CSIPHY2 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "csiphy2", "csiphy2_timer" },
- 		.clock_rate = { { 400000000 },
- 				{ 300000000 } },
-@@ -693,7 +693,7 @@ static const struct resources csiphy_res_8250[] = {
- 	},
- 	/* CSIPHY3 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "csiphy3", "csiphy3_timer" },
- 		.clock_rate = { { 400000000 },
- 				{ 300000000 } },
-@@ -702,7 +702,7 @@ static const struct resources csiphy_res_8250[] = {
- 	},
- 	/* CSIPHY4 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "csiphy4", "csiphy4_timer" },
- 		.clock_rate = { { 400000000 },
- 				{ 300000000 } },
-@@ -711,7 +711,7 @@ static const struct resources csiphy_res_8250[] = {
- 	},
- 	/* CSIPHY5 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "csiphy5", "csiphy5_timer" },
- 		.clock_rate = { { 400000000 },
- 				{ 300000000 } },
-@@ -772,7 +772,7 @@ static const struct resources csid_res_8250[] = {
- static const struct resources vfe_res_8250[] = {
- 	/* VFE0 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "camnoc_axi_src", "slow_ahb_src", "cpas_ahb",
- 			   "camnoc_axi", "vfe0_ahb", "vfe0_areg", "vfe0",
- 			   "vfe0_axi", "cam_hf_axi" },
-@@ -790,7 +790,7 @@ static const struct resources vfe_res_8250[] = {
- 	},
- 	/* VFE1 */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "camnoc_axi_src", "slow_ahb_src", "cpas_ahb",
- 			   "camnoc_axi", "vfe1_ahb", "vfe1_areg", "vfe1",
- 			   "vfe1_axi", "cam_hf_axi" },
-@@ -808,7 +808,7 @@ static const struct resources vfe_res_8250[] = {
- 	},
- 	/* VFE2 (lite) */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "camnoc_axi_src", "slow_ahb_src", "cpas_ahb",
- 			   "camnoc_axi", "vfe_lite_ahb", "vfe_lite_axi",
- 			   "vfe_lite", "cam_hf_axi" },
-@@ -825,7 +825,7 @@ static const struct resources vfe_res_8250[] = {
- 	},
- 	/* VFE3 (lite) */
- 	{
--		.regulators = { NULL },
-+		.regulators = {},
- 		.clock = { "camnoc_axi_src", "slow_ahb_src", "cpas_ahb",
- 			   "camnoc_axi", "vfe_lite_ahb", "vfe_lite_axi",
- 			   "vfe_lite", "cam_hf_axi" },
--- 
-2.33.0
+date:			Sun Jan  9 05:00:19 CET 2022
+media-tree git hash:	68b9bcc8a534cd11fe55f8bc82f948aae7d81b3c
+media_build git hash:	7a9f6b78c746e1ad87a8a46736851a3078cd5a92
+v4l-utils git hash:	d4b7017466a9f0d7603404629e8248c66007bfb9
+edid-decode git hash:	6514c9d9b18160fe9f09d3d70f99dda85d6fca71
+gcc version:		i686-linux-gcc (GCC) 11.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.3
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.3
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 113d52660b1fa16141bccb95d4bdbd2a4bd90d26
+host hardware:		x86_64
+host os:		5.15.0-2-amd64
 
+linux-git-sh: OK
+linux-git-arm-davinci: OK
+linux-git-arm-at91: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-4.4.283-i686: OK
+linux-4.4.283-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.246-i686: OK
+linux-4.9.246-x86_64: OK
+linux-4.10.17-i686: ERRORS
+linux-4.10.17-x86_64: ERRORS
+linux-4.11.12-i686: ERRORS
+linux-4.11.12-x86_64: ERRORS
+linux-4.12.14-i686: ERRORS
+linux-4.12.14-x86_64: ERRORS
+linux-4.13.16-i686: ERRORS
+linux-4.13.16-x86_64: ERRORS
+linux-4.14.246-i686: ERRORS
+linux-4.14.246-x86_64: ERRORS
+linux-4.15.18-i686: ERRORS
+linux-4.15.18-x86_64: ERRORS
+linux-4.16.18-i686: ERRORS
+linux-4.16.18-x86_64: ERRORS
+linux-4.17.19-i686: ERRORS
+linux-4.17.19-x86_64: ERRORS
+linux-4.18.20-i686: ERRORS
+linux-4.18.20-x86_64: ERRORS
+linux-4.19.206-i686: ERRORS
+linux-4.19.206-x86_64: ERRORS
+linux-4.20.17-i686: ERRORS
+linux-4.20.17-x86_64: ERRORS
+linux-5.0.21-i686: ERRORS
+linux-5.0.21-x86_64: ERRORS
+linux-5.1.21-i686: ERRORS
+linux-5.1.21-x86_64: ERRORS
+linux-5.2.21-i686: ERRORS
+linux-5.2.21-x86_64: ERRORS
+linux-5.3.18-i686: ERRORS
+linux-5.3.18-x86_64: ERRORS
+linux-5.4.144-i686: ERRORS
+linux-5.4.144-x86_64: ERRORS
+linux-5.5.19-i686: ERRORS
+linux-5.5.19-x86_64: ERRORS
+linux-5.6.19-i686: ERRORS
+linux-5.6.19-x86_64: ERRORS
+linux-5.7.19-i686: ERRORS
+linux-5.7.19-x86_64: ERRORS
+linux-5.8.18-i686: ERRORS
+linux-5.8.18-x86_64: ERRORS
+linux-5.9.16-i686: ERRORS
+linux-5.9.16-x86_64: ERRORS
+linux-5.10.62-i686: ERRORS
+linux-5.10.62-x86_64: ERRORS
+linux-5.11.22-i686: ERRORS
+linux-5.11.22-x86_64: ERRORS
+linux-5.12.19-i686: ERRORS
+linux-5.12.19-x86_64: ERRORS
+linux-5.13.14-i686: ERRORS
+linux-5.13.14-x86_64: ERRORS
+linux-5.14.1-i686: ERRORS
+linux-5.14.1-x86_64: ERRORS
+linux-5.15.1-i686: ERRORS
+linux-5.15.1-x86_64: ERRORS
+linux-5.16-rc1-i686: OK
+linux-5.16-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: Warnings: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 1
+virtme-32: Errors: Final Summary: 3100, Succeeded: 3089, Failed: 11, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
+kerneldoc: WARNINGS
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
