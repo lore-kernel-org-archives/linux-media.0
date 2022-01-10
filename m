@@ -2,83 +2,91 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E885DC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 10 Jan 2022 13:10:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0BDEC433FE
+	for <linux-media@archiver.kernel.org>; Mon, 10 Jan 2022 14:46:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbiAJNKg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Jan 2022 08:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
+        id S235708AbiAJOqE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Jan 2022 09:46:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiAJNKf (ORCPT
+        with ESMTP id S234981AbiAJOqE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:10:35 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121D9C06173F;
-        Mon, 10 Jan 2022 05:10:35 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 83F15A50;
-        Mon, 10 Jan 2022 14:10:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1641820233;
-        bh=bbN0HHwtV7n8wJWLf+LzZvANW6C6Q4kQcvHiYiRl2UA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qh4gowx+DfZAVH8U+27K2rwObgfsZ/UdeqlNbn9DCO26cZ1s4dea9rksUKUDEmCEj
-         fVke0nGZwt/Hf/o3rfmfoHaw5u9UKAWSC9mK/s8tNWq/OKR1U7dkItZIKdIK8ZVCS7
-         Zln3WUybIW0FeKzC6rwNdtw8D5fQNQPMjJxD5WDY=
-Date:   Mon, 10 Jan 2022 15:10:25 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     mchehab@kernel.org, robh@kernel.org, sakari.ailus@linux.intel.com,
-        geert@linux-m68k.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] dt-bindings: media: hynix,hi846: add
- link-frequencies description
-Message-ID: <YdwwQSpKJuGraKmg@pendragon.ideasonboard.com>
-References: <20220110123804.377944-1-martin.kepplinger@puri.sm>
- <20220110123804.377944-2-martin.kepplinger@puri.sm>
+        Mon, 10 Jan 2022 09:46:04 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65594C061748
+        for <linux-media@vger.kernel.org>; Mon, 10 Jan 2022 06:46:04 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id t18so2635895plg.9
+        for <linux-media@vger.kernel.org>; Mon, 10 Jan 2022 06:46:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3u/nL4+caw2Jc6IrZh81voTa4JaYMHLEUh8UW2kMetU=;
+        b=Coa54SP3EZ0u2iOAHnQzPsnXwqYKLKpQ+Ogki3z4yqL5nrh9xPva9o39S5DdVOXTrG
+         DL0vfNmNXJR9hkJKx2aitxhyM/LM0epvyQfLadl0aq2T8ysglO2Uvc3Mr4iMsvrKgwiC
+         3ad4wPTW1lmpbHwdgyc8m+n10Y7P/k+EuDHWuubOOUurVLWZoB5nf9zcHnrPRTtFfsHR
+         jLWzTJFZzEz2dxH4r9qXDdWoZxaNzROuiSooR/BlHrHuYChtrqDuUmCrQNnS5TbhMqsX
+         MiJRlxqvaM5w3frycJuGyZL3P4gE9nogsii/JeakVAwO0LJk7G8xLZzbHGFIZ/t44FgR
+         4AwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3u/nL4+caw2Jc6IrZh81voTa4JaYMHLEUh8UW2kMetU=;
+        b=iVZWpVxBjtlD+rAUutVsKl/vssoT1eNcDM9YyRLZFJpHrR2PSgeMXUc1DQH9DndvQa
+         Rzx4J0D+wYOJCYjV7zAQo3rz/rZSqbsdGzkB3bibzVySzmpktvAIj+owQVrxyRdBWiY6
+         9VfO3aTWmpFX6gAEk35aB62Cv4ezsBbry5fnowd6Uds+XIFfLAtK0yqEq+oVYxG1vLSt
+         olWrqu5GCNc3JyizSImXoCwk4JLjMXP+VRk6wbQ9obsW9d6Oq+8gsvrqRE5us7A6Kfm6
+         ++cONb9GjjfUz4k84rpFpHxO2xsbTHYiBNPmzMAvVGcWdJhqPPwnSRRL9ctZPNUfQuDn
+         FKWg==
+X-Gm-Message-State: AOAM5333kNmGuRuMp8cowGGdIog/8hz/cFHhOp24RzyoNjQ3xwMtS6Zl
+        MLM+18Y6GQbR/H9CG/zyJK7jSmqT+ocD1bA0ysTDuQ==
+X-Google-Smtp-Source: ABdhPJxkj9vZBJ5acFie1CWTAvpX5sUJm13cdTZeiLum3gzwMZ/po9/Md+Al1zj/iwQZKt4Gu/OrmhQMbpQTwrE22fU=
+X-Received: by 2002:a17:90a:5295:: with SMTP id w21mr28949560pjh.179.1641825963818;
+ Mon, 10 Jan 2022 06:46:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220110123804.377944-2-martin.kepplinger@puri.sm>
+References: <20220109024910.2041763-1-bryan.odonoghue@linaro.org> <20220109024910.2041763-5-bryan.odonoghue@linaro.org>
+In-Reply-To: <20220109024910.2041763-5-bryan.odonoghue@linaro.org>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 10 Jan 2022 15:45:52 +0100
+Message-ID: <CAG3jFyu3XuKjFM7Vv7nE+EomCCf7rDXtA+Zgt0pN=MCDmDcp_Q@mail.gmail.com>
+Subject: Re: [PATCH v2 4/8] arm64: dts: qcom: sdm845: Add camss vdda-pll-supply
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        mchehab@kernel.org, hverkuil@xs4all.nl, jonathan@marek.ca,
+        andrey.konovalov@linaro.org, todor.too@gmail.com,
+        agross@kernel.org, bjorn.andersson@linaro.org, jgrahsl@snap.com,
+        hfink@snap.com, vladimir.zapolskiy@linaro.org,
+        dmitry.baryshkov@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Martin,
-
-Thank you for the patch.
-
-On Mon, Jan 10, 2022 at 01:38:04PM +0100, Martin Kepplinger wrote:
-> link-frequencies is required but only mentioned in the example. Add
-> it to the description.
-> 
-> Fixes: f3ce7200ca18 ("media: dt-bindings: media: document SK Hynix Hi-846 MIPI CSI-2 8M pixel sensor")
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
+On Sun, 9 Jan 2022 at 03:47, Bryan O'Donoghue
+<bryan.odonoghue@linaro.org> wrote:
+>
+> Add in the missing vdda-pll-supply rail description.
+>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->  Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-> index e61255cf3fb9..6b917337ceac 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-> @@ -68,8 +68,11 @@ properties:
->                    - const: 1
->                    - const: 2
->  
-> +          link-frequencies: true
-> +
->          required:
->            - data-lanes
-> +          - link-frequencies
->  
->  required:
->    - compatible
+>  arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> index c4db88dbf8766..f7bfd69b13620 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> @@ -1116,6 +1116,7 @@ &cci {
+>
+>  &camss {
+>         vdda-phy-supply = <&vreg_l1a_0p875>;
+> +       vdda-pll-supply = <&vreg_l26a_1p2>;
+>
+>         status = "ok";
+>
+> --
+> 2.33.0
+>
 
--- 
-Regards,
-
-Laurent Pinchart
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
