@@ -2,32 +2,31 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18070C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 10 Jan 2022 08:35:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE891C433FE
+	for <linux-media@archiver.kernel.org>; Mon, 10 Jan 2022 08:36:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241320AbiAJIfy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Jan 2022 03:35:54 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:52604 "EHLO
+        id S241360AbiAJIf7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Jan 2022 03:35:59 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:52622 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S241401AbiAJIe4 (ORCPT
+        with ESMTP id S241406AbiAJIe4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 10 Jan 2022 03:34:56 -0500
-X-UUID: 6300b06f1fac464fa6cc25a6e74fd4cb-20220110
-X-UUID: 6300b06f1fac464fa6cc25a6e74fd4cb-20220110
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+X-UUID: 31eb9187574448e691db08b03cfc2007-20220110
+X-UUID: 31eb9187574448e691db08b03cfc2007-20220110
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1744730731; Mon, 10 Jan 2022 16:34:53 +0800
+        with ESMTP id 383103116; Mon, 10 Jan 2022 16:34:50 +0800
 Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 10 Jan 2022 16:34:52 +0800
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 10 Jan 2022 16:34:49 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
  (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 10 Jan
- 2022 16:34:51 +0800
+ 2022 16:34:48 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 10 Jan 2022 16:34:49 +0800
+ Transport; Mon, 10 Jan 2022 16:34:46 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -57,9 +56,9 @@ CC:     George Sun <george.sun@mediatek.com>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v4, 04/15] media: mtk-vcodec: Read max resolution from dec_capability
-Date:   Mon, 10 Jan 2022 16:34:31 +0800
-Message-ID: <20220110083442.32604-5-yunfei.dong@mediatek.com>
+Subject: [PATCH v4, 02/15] media: mtk-vcodec: Using firmware type to separate different firmware architecture
+Date:   Mon, 10 Jan 2022 16:34:29 +0800
+Message-ID: <20220110083442.32604-3-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220110083442.32604-1-yunfei.dong@mediatek.com>
 References: <20220110083442.32604-1-yunfei.dong@mediatek.com>
@@ -71,140 +70,205 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Supported max resolution for different platforms are not the same: 2K
-or 4K, getting it according to dec_capability.
+MT8173 platform use vpu firmware, mt8183/mt8192 will use scp
+firmware instead, using chip name is not reasonable to separate
+different firmware architecture. Using firmware type is much better.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 Reviewed-by: Tzung-Bi Shih<tzungbi@google.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../platform/mtk-vcodec/mtk_vcodec_dec.c      | 31 +++++++++++--------
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  4 +++
- 2 files changed, 22 insertions(+), 13 deletions(-)
+ .../platform/mtk-vcodec/mtk_vcodec_dec_stateful.c   |  1 -
+ .../platform/mtk-vcodec/mtk_vcodec_dec_stateless.c  |  2 --
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h  | 13 -------------
+ .../media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c  |  5 -----
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c   |  6 ++++++
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h   |  1 +
+ drivers/media/platform/mtk-vcodec/vdec_vpu_if.c     |  4 ++--
+ drivers/media/platform/mtk-vcodec/venc_vpu_if.c     |  2 +-
+ 8 files changed, 10 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-index 130ecef2e766..65a224d788bf 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-@@ -152,13 +152,15 @@ void mtk_vcodec_dec_set_default_params(struct mtk_vcodec_ctx *ctx)
- 	q_data->coded_height = DFT_CFG_HEIGHT;
- 	q_data->fmt = ctx->dev->vdec_pdata->default_cap_fmt;
- 	q_data->field = V4L2_FIELD_NONE;
-+	ctx->max_width = MTK_VDEC_MAX_W;
-+	ctx->max_height = MTK_VDEC_MAX_H;
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
+index 04ca43c77e5f..7966c132be8f 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
+@@ -613,7 +613,6 @@ static struct vb2_ops mtk_vdec_frame_vb2_ops = {
+ };
  
- 	v4l_bound_align_image(&q_data->coded_width,
- 				MTK_VDEC_MIN_W,
--				MTK_VDEC_MAX_W, 4,
-+				ctx->max_width, 4,
- 				&q_data->coded_height,
- 				MTK_VDEC_MIN_H,
--				MTK_VDEC_MAX_H, 5, 6);
-+				ctx->max_height, 5, 6);
+ const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata = {
+-	.chip = MTK_MT8173,
+ 	.init_vdec_params = mtk_init_vdec_params,
+ 	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
+ 	.vdec_vb2_ops = &mtk_vdec_frame_vb2_ops,
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+index 23d997ac114d..5aebf88f997b 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
+@@ -343,7 +343,6 @@ static struct vb2_ops mtk_vdec_request_vb2_ops = {
+ };
  
- 	q_data->sizeimage[0] = q_data->coded_width * q_data->coded_height;
- 	q_data->bytesperline[0] = q_data->coded_width;
-@@ -217,17 +219,17 @@ static int vidioc_vdec_subscribe_evt(struct v4l2_fh *fh,
- 	}
- }
+ const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
+-	.chip = MTK_MT8183,
+ 	.init_vdec_params = mtk_init_vdec_params,
+ 	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
+ 	.vdec_vb2_ops = &mtk_vdec_request_vb2_ops,
+@@ -362,7 +361,6 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
  
--static int vidioc_try_fmt(struct v4l2_format *f,
--			  const struct mtk_video_fmt *fmt)
-+static int vidioc_try_fmt(struct mtk_vcodec_ctx *ctx,
-+	struct v4l2_format *f, const struct mtk_video_fmt *fmt)
- {
- 	struct v4l2_pix_format_mplane *pix_fmt_mp = &f->fmt.pix_mp;
- 
- 	pix_fmt_mp->field = V4L2_FIELD_NONE;
- 
- 	pix_fmt_mp->width =
--		clamp(pix_fmt_mp->width, MTK_VDEC_MIN_W, MTK_VDEC_MAX_W);
-+		clamp(pix_fmt_mp->width, MTK_VDEC_MIN_W, ctx->max_width);
- 	pix_fmt_mp->height =
--		clamp(pix_fmt_mp->height, MTK_VDEC_MIN_H, MTK_VDEC_MAX_H);
-+		clamp(pix_fmt_mp->height, MTK_VDEC_MIN_H, ctx->max_height);
- 
- 	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
- 		pix_fmt_mp->num_planes = 1;
-@@ -245,16 +247,16 @@ static int vidioc_try_fmt(struct v4l2_format *f,
- 		tmp_h = pix_fmt_mp->height;
- 		v4l_bound_align_image(&pix_fmt_mp->width,
- 					MTK_VDEC_MIN_W,
--					MTK_VDEC_MAX_W, 6,
-+					ctx->max_width, 6,
- 					&pix_fmt_mp->height,
- 					MTK_VDEC_MIN_H,
--					MTK_VDEC_MAX_H, 6, 9);
-+					ctx->max_height, 6, 9);
- 
- 		if (pix_fmt_mp->width < tmp_w &&
--			(pix_fmt_mp->width + 64) <= MTK_VDEC_MAX_W)
-+			(pix_fmt_mp->width + 64) <= ctx->max_width)
- 			pix_fmt_mp->width += 64;
- 		if (pix_fmt_mp->height < tmp_h &&
--			(pix_fmt_mp->height + 64) <= MTK_VDEC_MAX_H)
-+			(pix_fmt_mp->height + 64) <= ctx->max_height)
- 			pix_fmt_mp->height += 64;
- 
- 		mtk_v4l2_debug(0,
-@@ -294,7 +296,7 @@ static int vidioc_try_fmt_vid_cap_mplane(struct file *file, void *priv,
- 		fmt = mtk_vdec_find_format(f, dec_pdata);
- 	}
- 
--	return vidioc_try_fmt(f, fmt);
-+	return vidioc_try_fmt(ctx, f, fmt);
- }
- 
- static int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv,
-@@ -317,7 +319,7 @@ static int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv,
- 		return -EINVAL;
- 	}
- 
--	return vidioc_try_fmt(f, fmt);
-+	return vidioc_try_fmt(ctx, f, fmt);
- }
- 
- static int vidioc_vdec_g_selection(struct file *file, void *priv,
-@@ -445,7 +447,7 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
- 		return -EINVAL;
- 
- 	q_data->fmt = fmt;
--	vidioc_try_fmt(f, q_data->fmt);
-+	vidioc_try_fmt(ctx, f, q_data->fmt);
- 	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
- 		q_data->sizeimage[0] = pix_mp->plane_fmt[0].sizeimage;
- 		q_data->coded_width = pix_mp->width;
-@@ -545,6 +547,9 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
- 				fsize->stepwise.min_height,
- 				fsize->stepwise.max_height,
- 				fsize->stepwise.step_height);
-+
-+		ctx->max_width = fsize->stepwise.max_width;
-+		ctx->max_height = fsize->stepwise.max_height;
- 		return 0;
- 	}
- 
+ /* This platform data is used for one lat and one core architecture. */
+ const struct mtk_vcodec_dec_pdata mtk_lat_sig_core_pdata = {
+-	.chip = MTK_MT8192,
+ 	.init_vdec_params = mtk_init_vdec_params,
+ 	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
+ 	.vdec_vb2_ops = &mtk_vdec_request_vb2_ops,
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index 45d9e1be7063..199f5f0b9152 100644
+index 3fc747cea5c9..45d9e1be7063 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -287,6 +287,8 @@ struct vdec_pic_info {
-  *	  mtk_video_dec_buf.
-  * @hw_id: hardware index used to identify different hardware.
-  *
-+ * @max_width: hardware supported max width
-+ * @max_height: hardware supported max height
-  * @msg_queue: msg queue used to store lat buffer information.
-  */
- struct mtk_vcodec_ctx {
-@@ -332,6 +334,8 @@ struct mtk_vcodec_ctx {
- 	struct mutex lock;
- 	int hw_id;
- 
-+	unsigned int max_width;
-+	unsigned int max_height;
+@@ -335,13 +335,6 @@ struct mtk_vcodec_ctx {
  	struct vdec_msg_queue msg_queue;
  };
  
+-enum mtk_chip {
+-	MTK_MT8173,
+-	MTK_MT8183,
+-	MTK_MT8192,
+-	MTK_MT8195,
+-};
+-
+ /**
+  * struct mtk_vdec_hw_arch - Used to separate different hardware architecture
+  */
+@@ -367,7 +360,6 @@ enum mtk_vdec_hw_arch {
+  * @vdec_framesizes: supported video decoder frame sizes
+  * @num_framesizes: count of video decoder frame sizes
+  *
+- * @chip: chip this decoder is compatible with
+  * @hw_arch: hardware arch is used to separate pure_sin_core and lat_sin_core
+  *
+  * @is_subdev_supported: whether support parent-node architecture(subdev)
+@@ -390,7 +382,6 @@ struct mtk_vcodec_dec_pdata {
+ 	const struct mtk_codec_framesizes *vdec_framesizes;
+ 	const int num_framesizes;
+ 
+-	enum mtk_chip chip;
+ 	enum mtk_vdec_hw_arch hw_arch;
+ 
+ 	bool is_subdev_supported;
+@@ -400,8 +391,6 @@ struct mtk_vcodec_dec_pdata {
+ /**
+  * struct mtk_vcodec_enc_pdata - compatible data for each IC
+  *
+- * @chip: chip this encoder is compatible with
+- *
+  * @uses_ext: whether the encoder uses the extended firmware messaging format
+  * @min_bitrate: minimum supported encoding bitrate
+  * @max_bitrate: maximum supported encoding bitrate
+@@ -412,8 +401,6 @@ struct mtk_vcodec_dec_pdata {
+  * @core_id: stand for h264 or vp8 encode index
+  */
+ struct mtk_vcodec_enc_pdata {
+-	enum mtk_chip chip;
+-
+ 	bool uses_ext;
+ 	unsigned long min_bitrate;
+ 	unsigned long max_bitrate;
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
+index 507ad1ea2104..3ac6969c54c0 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
+@@ -378,7 +378,6 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ }
+ 
+ static const struct mtk_vcodec_enc_pdata mt8173_avc_pdata = {
+-	.chip = MTK_MT8173,
+ 	.capture_formats = mtk_video_formats_capture_h264,
+ 	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
+ 	.output_formats = mtk_video_formats_output,
+@@ -389,7 +388,6 @@ static const struct mtk_vcodec_enc_pdata mt8173_avc_pdata = {
+ };
+ 
+ static const struct mtk_vcodec_enc_pdata mt8173_vp8_pdata = {
+-	.chip = MTK_MT8173,
+ 	.capture_formats = mtk_video_formats_capture_vp8,
+ 	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_vp8),
+ 	.output_formats = mtk_video_formats_output,
+@@ -400,7 +398,6 @@ static const struct mtk_vcodec_enc_pdata mt8173_vp8_pdata = {
+ };
+ 
+ static const struct mtk_vcodec_enc_pdata mt8183_pdata = {
+-	.chip = MTK_MT8183,
+ 	.uses_ext = true,
+ 	.capture_formats = mtk_video_formats_capture_h264,
+ 	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
+@@ -412,7 +409,6 @@ static const struct mtk_vcodec_enc_pdata mt8183_pdata = {
+ };
+ 
+ static const struct mtk_vcodec_enc_pdata mt8192_pdata = {
+-	.chip = MTK_MT8192,
+ 	.uses_ext = true,
+ 	.capture_formats = mtk_video_formats_capture_h264,
+ 	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
+@@ -424,7 +420,6 @@ static const struct mtk_vcodec_enc_pdata mt8192_pdata = {
+ };
+ 
+ static const struct mtk_vcodec_enc_pdata mt8195_pdata = {
+-	.chip = MTK_MT8195,
+ 	.uses_ext = true,
+ 	.capture_formats = mtk_video_formats_capture_h264,
+ 	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c
+index 94b39ae5c2e1..556e54aadac9 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.c
+@@ -65,3 +65,9 @@ int mtk_vcodec_fw_ipi_send(struct mtk_vcodec_fw *fw, int id, void *buf,
+ 	return fw->ops->ipi_send(fw, id, buf, len, wait);
+ }
+ EXPORT_SYMBOL_GPL(mtk_vcodec_fw_ipi_send);
++
++int mtk_vcodec_fw_get_type(struct mtk_vcodec_fw *fw)
++{
++	return fw->type;
++}
++EXPORT_SYMBOL_GPL(mtk_vcodec_fw_get_type);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h
+index 539bb626772c..acd355961e3a 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw.h
+@@ -39,5 +39,6 @@ int mtk_vcodec_fw_ipi_register(struct mtk_vcodec_fw *fw, int id,
+ 			       const char *name, void *priv);
+ int mtk_vcodec_fw_ipi_send(struct mtk_vcodec_fw *fw, int id,
+ 			   void *buf, unsigned int len, unsigned int wait);
++int mtk_vcodec_fw_get_type(struct mtk_vcodec_fw *fw);
+ 
+ #endif /* _MTK_VCODEC_FW_H_ */
+diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
+index c84fac52fe26..21f6d9c5a371 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
++++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
+@@ -33,8 +33,8 @@ static void handle_init_ack_msg(const struct vdec_vpu_ipi_init_ack *msg)
+ 	 */
+ 	vpu->inst_id = 0xdeadbeef;
+ 
+-	/* Firmware version field does not exist on MT8173. */
+-	if (vpu->ctx->dev->vdec_pdata->chip == MTK_MT8173)
++	/* VPU firmware does not contain a version field. */
++	if (mtk_vcodec_fw_get_type(vpu->ctx->dev->fw_handler) == VPU)
+ 		return;
+ 
+ 	/* Check firmware version. */
+diff --git a/drivers/media/platform/mtk-vcodec/venc_vpu_if.c b/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
+index e7899d8a3e4e..d3570c4c177d 100644
+--- a/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
++++ b/drivers/media/platform/mtk-vcodec/venc_vpu_if.c
+@@ -18,7 +18,7 @@ static void handle_enc_init_msg(struct venc_vpu_inst *vpu, const void *data)
+ 					     msg->vpu_inst_addr);
+ 
+ 	/* Firmware version field value is unspecified on MT8173. */
+-	if (vpu->ctx->dev->venc_pdata->chip == MTK_MT8173)
++	if (mtk_vcodec_fw_get_type(vpu->ctx->dev->fw_handler) == VPU)
+ 		return;
+ 
+ 	/* Check firmware version. */
 -- 
 2.25.1
 
