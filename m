@@ -2,31 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85F3FC4332F
-	for <linux-media@archiver.kernel.org>; Mon, 10 Jan 2022 08:36:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B254C43217
+	for <linux-media@archiver.kernel.org>; Mon, 10 Jan 2022 08:36:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240865AbiAJIgX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Jan 2022 03:36:23 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:50534 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S240898AbiAJIfm (ORCPT
+        id S241562AbiAJIgZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Jan 2022 03:36:25 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:52604 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S241243AbiAJIfn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Jan 2022 03:35:42 -0500
-X-UUID: 0d86845c9dff4b45b93b681617d014fe-20220110
-X-UUID: 0d86845c9dff4b45b93b681617d014fe-20220110
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        Mon, 10 Jan 2022 03:35:43 -0500
+X-UUID: 06c9cec9eff64ddfaeb02d59d55730f2-20220110
+X-UUID: 06c9cec9eff64ddfaeb02d59d55730f2-20220110
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1744221489; Mon, 10 Jan 2022 16:35:01 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 10 Jan 2022 16:35:00 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 10 Jan
- 2022 16:34:59 +0800
+        with ESMTP id 1936200613; Mon, 10 Jan 2022 16:35:04 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 10 Jan 2022 16:35:02 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 10 Jan 2022 16:34:57 +0800
+ Transport; Mon, 10 Jan 2022 16:35:00 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -56,9 +54,9 @@ CC:     George Sun <george.sun@mediatek.com>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v4, 09/15] media: mtk-vcodec: disable vp8 4K capability
-Date:   Mon, 10 Jan 2022 16:34:36 +0800
-Message-ID: <20220110083442.32604-10-yunfei.dong@mediatek.com>
+Subject: [PATCH v4, 11/15] media: mtk-vcodec: record capture queue format type
+Date:   Mon, 10 Jan 2022 16:34:38 +0800
+Message-ID: <20220110083442.32604-12-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220110083442.32604-1-yunfei.dong@mediatek.com>
 References: <20220110083442.32604-1-yunfei.dong@mediatek.com>
@@ -70,27 +68,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For vp8 not support 4K, need to disable it.
+Capture queue format type is difference for different platform,
+need to calculate capture buffer size according to capture queue
+format type in scp.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c | 2 ++
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h | 2 ++
+ 2 files changed, 4 insertions(+)
 
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-index 519f2b9d9b5b..34ee4a0092ff 100644
+index 75210eb829d0..4533cb44551d 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-@@ -532,7 +532,8 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
- 		fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
- 		fsize->stepwise = dec_pdata->vdec_framesizes[i].stepwise;
- 		if (!(ctx->dev->dec_capability &
--				VCODEC_CAPABILITY_4K_DISABLED)) {
-+				VCODEC_CAPABILITY_4K_DISABLED) &&
-+				fsize->pixel_format != V4L2_PIX_FMT_VP8_FRAME) {
- 			mtk_v4l2_debug(3, "4K is enabled");
- 			fsize->stepwise.max_width =
- 					VCODEC_DEC_4K_CODED_WIDTH;
+@@ -468,6 +468,8 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
+ 			}
+ 			ctx->state = MTK_STATE_INIT;
+ 		}
++	} else {
++		ctx->capture_fourcc = fmt->fourcc;
+ 	}
+ 
+ 	/*
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index 12a2baaf9e81..4981760226b5 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -277,6 +277,7 @@ struct vdec_pic_info {
+  *		     to be used with encoder and stateful decoder.
+  * @is_flushing: set to true if flushing is in progress.
+  * @current_codec: current set input codec, in V4L2 pixel format
++ * @capture_fourcc: capture queue type in V4L2 pixel format
+  *
+  * @colorspace: enum v4l2_colorspace; supplemental to pixelformat
+  * @ycbcr_enc: enum v4l2_ycbcr_encoding, Y'CbCr encoding
+@@ -324,6 +325,7 @@ struct mtk_vcodec_ctx {
+ 	bool is_flushing;
+ 
+ 	u32 current_codec;
++	u32 capture_fourcc;
+ 
+ 	enum v4l2_colorspace colorspace;
+ 	enum v4l2_ycbcr_encoding ycbcr_enc;
 -- 
 2.25.1
 
