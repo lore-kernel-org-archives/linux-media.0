@@ -2,31 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ADAFC4167E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93B82C43219
 	for <linux-media@archiver.kernel.org>; Tue, 11 Jan 2022 10:57:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349437AbiAKK5z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Jan 2022 05:57:55 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:48502 "EHLO
+        id S1349446AbiAKK54 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Jan 2022 05:57:56 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48528 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349397AbiAKK5u (ORCPT
+        with ESMTP id S1349401AbiAKK5u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 11 Jan 2022 05:57:50 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 47C8A1F43A30
+        with ESMTPSA id 9C4581F43A34
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1641898668;
-        bh=z7dhA4q/V4tftc+cZa+nBqU+2vdxSivbhiKy1h+7qtQ=;
+        bh=NvBp4xkPJVbNU3MK/oJVdRowkuSL4h8ZkX5EWIFweAI=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=RRaYOVQpussaCc+0yRBL6RBG5qsxzVLHCsJN2oZEWUjvH48V2MO743x7hHveXauoF
-         +3Nha4N37fz8qj+kkWoc+sjcU3rEDzW3vnYJbVCqfjC1Jv2SI4Q6zDZ/SnkzbZPV5x
-         OlxczaXehAvI/3oePC6t5A90g330Z/J5+sFtMLG5VbhN933DtEr9MMwqfhbINiJaCp
-         N6cyz5EWmr2G8xsfA7HPK07hnVgeonTE77IrbWGCKc94cmXSnuco7AMQQLVPsnF2Tf
-         EMkhNj53mj8kA9OBp4UXrXGHXfz/W1TxYphtIJNijCt/kSZ72W8xMJOeSFAZlb5Wx6
-         IgspKKiIJdMzQ==
-Subject: Re: [PATCH v9 08/15] drm/mediatek: Add pm runtime support for ovl and
- rdma
+        b=U90UTcwrcHl7lAE18Dd1C2v+QTtECGqSHw6u7imCFmXlIJL8hlnErzEALxjHebYGo
+         +fX9GGbwyyHdQr6yWIf1R+4fIiSzm0ohVZ9OFu0EJURw3P+45Ov1dfR4XQ+l6wAu5w
+         SqLnH3tJ/SqyxTnzhU5uzPKBkh/Upr5Ew6S7bis+rrdnmMuCaLIcC4LV1rwxeKbaP8
+         GPViTBYhTVDaZe4JzcIT8jTKycSTqNkRWe2QbsOA3XcTj1HRzpsYp/TDvR92B+YJP2
+         +1pyNwJm+S7KfKQ0YFaT768zI5+B0U2sipkCh2WkA24w6qQeSUfCNhohyyI3vlbx6L
+         XipzmjZI9bz0Q==
+Subject: Re: [PATCH v9 07/15] media: mtk-mdp: Get rid of mtk_smi_larb_get/put
 To:     Yong Wu <yong.wu@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Joerg Roedel <joro@8bytes.org>,
@@ -42,28 +41,28 @@ Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         Evan Green <evgreen@chromium.org>,
         Eizan Miyamoto <eizan@chromium.org>,
         Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, mingyuan.ma@mediatek.com,
+        linux-arm-kernel@lists.infradead.org, mingyuan.ma@mediatek.com,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Philipp Zabel <p.zabel@pengutronix.de>, libo.kang@mediatek.com,
         yi.kuo@mediatek.com, linux-mediatek@lists.infradead.org,
+        Houlong Wei <houlong.wei@mediatek.com>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Tiffany Lin <tiffany.lin@mediatek.com>, anan.sun@mediatek.com,
         srv_heupstream@mediatek.com, acourbot@chromium.org,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
         linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
         iommu@lists.linux-foundation.org, Daniel Vetter <daniel@ffwll.ch>,
         Robin Murphy <robin.murphy@arm.com>
 References: <20211112105509.12010-1-yong.wu@mediatek.com>
- <20211112105509.12010-9-yong.wu@mediatek.com>
+ <20211112105509.12010-8-yong.wu@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Message-ID: <ae5c8350-75c1-b90e-3bad-78c19154d7bd@collabora.com>
-Date:   Tue, 11 Jan 2022 11:57:43 +0100
+Message-ID: <16f77e36-fffe-d2d3-2c7c-6412a038238c@collabora.com>
+Date:   Tue, 11 Jan 2022 11:57:44 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211112105509.12010-9-yong.wu@mediatek.com>
+In-Reply-To: <20211112105509.12010-8-yong.wu@mediatek.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -72,21 +71,16 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Il 12/11/21 11:55, Yong Wu ha scritto:
-> From: Yongqiang Niu <yongqiang.niu@mediatek.com>
+> MediaTek IOMMU has already added the device_link between the consumer
+> and smi-larb device. If the mdp device call the pm_runtime_get_sync,
+> the smi-larb's pm_runtime_get_sync also be called automatically.
 > 
-> Prepare for smi cleaning up "mediatek,larb".
-> 
-> Display use the dispsys device to call pm_rumtime_get_sync before.
-> This patch add pm_runtime_xx with ovl and rdma device whose nodes has
-> "iommus" property, then display could help pm_runtime_get for smi via
-> ovl or rdma device.
-> 
-> CC: CK Hu <ck.hu@mediatek.com>
-> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+> CC: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
+> CC: Houlong Wei <houlong.wei@mediatek.com>
 > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> (Yong: Use pm_runtime_resume_and_get instead of pm_runtime_get_sync)
-> Acked-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Tested-by: Frank Wunderlich <frank-w@public-files.de> # BPI-R2/MT7623
+> Reviewed-by: Evan Green <evgreen@chromium.org>
+> Reviewed-by: Houlong Wei <houlong.wei@mediatek.com>
+> Reviewed-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
