@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89A12C43217
-	for <linux-media@archiver.kernel.org>; Tue, 11 Jan 2022 10:57:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5E6DC4167D
+	for <linux-media@archiver.kernel.org>; Tue, 11 Jan 2022 10:57:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349364AbiAKK5s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Jan 2022 05:57:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S1349399AbiAKK5t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Jan 2022 05:57:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349375AbiAKK5r (ORCPT
+        with ESMTP id S1349380AbiAKK5s (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 11 Jan 2022 05:57:47 -0500
+        Tue, 11 Jan 2022 05:57:48 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1B6C061748;
-        Tue, 11 Jan 2022 02:57:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCEBC06173F;
+        Tue, 11 Jan 2022 02:57:47 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 182ED1F43A1E
+        with ESMTPSA id B54741F43A25
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641898665;
-        bh=YF4OVUlLPdRcXd495FYHFEnvLOeAT5zjs+cfWkZQ59c=;
+        s=mail; t=1641898666;
+        bh=maGqzHJF1qFn8YKWg9shIrk4zVnFg7j3EfcNnyXvWMQ=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=UumELe331t1PFXufN9ry/eKcEnjWq1ai+QnEAtw/Iq+rujrT6UazNURDOWpI4l/YS
-         DaYfvjVzPHgd8i5WXITii9uvsu17sos/JR06eYl2pNqo+Yr2RHBy3lKtW8/48Wv26+
-         /T6y448GWREpcy/pSXwcLPSx3BHCHHhnNgmSO0qD3b9QRxnkStz8HvxoDyTusUcCR3
-         tnWG+OURtbhUhUZegFFSAF2zdAnzDrBoEP4vfOSPZ43mfYH+u4g+DgBhdcH0kUMYBl
-         3uWGwmOxK0PkokHmXCkSwG/o2zipwv3ZRQACcJ/iFnUYKooefLBk8kgqcsBJBFK9s9
-         bRSdTFDstZjwg==
-Subject: Re: [PATCH v9 11/15] media: mtk-vcodec: dec: Remove
- mtk_vcodec_release_dec_pm
+        b=HZkHz0nQROPx25h6qtaZxGqYzpJ+jqQ3E2tvndUtqx5zSK4/6YamfBMOn57h1VViS
+         tDnmXLgQSVIXrFpnRdAwHyXtnoOk/6AmNvF5DCDPNQdI8XMB5NLwdpDA32+bUddvSN
+         T8oeVqYEuMeGwz1toI4JC3fj89vH5Lct3ABcIJJRZeWFAzXEoLk/yz5V/1qIVZc7B8
+         mMH+LT0cw//r5gkhHNmyIkTCrhYACZIwSi5VhWAkWdsj1l8AwL+aMKtXYISuf4A9Cb
+         ltoaglJimM5z3UlKd7dN7IllEJAg0IT3ZAANbRj9dSag6EsraheiOnR2ri3yVqtYKa
+         ANuSuMNnm0jLw==
+Subject: Re: [PATCH v9 10/15] media: mtk-vcodec: Get rid of
+ mtk_smi_larb_get/put
 To:     Yong Wu <yong.wu@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Joerg Roedel <joro@8bytes.org>,
@@ -39,10 +39,10 @@ To:     Yong Wu <yong.wu@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
         Will Deacon <will.deacon@arm.com>,
         dri-devel@lists.freedesktop.org, yf.wang@mediatek.com,
         anthony.huang@mediatek.com, youlin.pei@mediatek.com,
+        Irui Wang <irui.wang@mediatek.com>,
         Evan Green <evgreen@chromium.org>,
         Eizan Miyamoto <eizan@chromium.org>,
         Matthias Kaehlcke <mka@chromium.org>,
@@ -57,15 +57,15 @@ Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         iommu@lists.linux-foundation.org, Daniel Vetter <daniel@ffwll.ch>,
         Robin Murphy <robin.murphy@arm.com>
 References: <20211112105509.12010-1-yong.wu@mediatek.com>
- <20211112105509.12010-12-yong.wu@mediatek.com>
+ <20211112105509.12010-11-yong.wu@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Message-ID: <0a9e348b-fac5-c93b-b4c4-1d834c96c195@collabora.com>
-Date:   Tue, 11 Jan 2022 11:57:41 +0100
+Message-ID: <4803854b-99b6-278c-f76a-f66e59307871@collabora.com>
+Date:   Tue, 11 Jan 2022 11:57:42 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211112105509.12010-12-yong.wu@mediatek.com>
+In-Reply-To: <20211112105509.12010-11-yong.wu@mediatek.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -74,18 +74,17 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Il 12/11/21 11:55, Yong Wu ha scritto:
-> After this patchset, mtk_vcodec_release_dec_pm has only one line.
-> then remove that function. Use pm_runtime_disable directly instead.
-> 
-> For symmetry, move the pm_runtime_enable out from
-> mtk_vcodec_init_dec_pm, then mtk_vcodec_init_dec_pm only operate for
-> the clocks, rename it from the _pm to _clk.
-> 
-> No functional change.
+> MediaTek IOMMU has already added the device_link between the consumer
+> and smi-larb device. If the vcodec device call the pm_runtime_get_sync,
+> the smi-larb's pm_runtime_get_sync also be called automatically.
 > 
 > CC: Tiffany Lin <tiffany.lin@mediatek.com>
-> CC: Yunfei Dong <yunfei.dong@mediatek.com>
+> CC: Irui Wang <irui.wang@mediatek.com>
 > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> Reviewed-by: Evan Green <evgreen@chromium.org>
+> Acked-by: Tiffany Lin <tiffany.lin@mediatek.com>
+> Reviewed-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 
