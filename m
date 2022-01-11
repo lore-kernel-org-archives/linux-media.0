@@ -2,74 +2,112 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4794FC433F5
-	for <linux-media@archiver.kernel.org>; Tue, 11 Jan 2022 17:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D093C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 11 Jan 2022 19:31:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344138AbiAKRki (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Jan 2022 12:40:38 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:55612 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343983AbiAKRkf (ORCPT
+        id S235969AbiAKTbW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Jan 2022 14:31:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235839AbiAKTbW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 11 Jan 2022 12:40:35 -0500
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E4CF9340;
-        Tue, 11 Jan 2022 18:40:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1641922834;
-        bh=unsOPN5uRnvfu4mw3ZzfkPgBAGkc3Q9S11AaXfySRRU=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=UHuBqpvKxWuM0ZnBMK4P0LUJ0vJkPIOBRAtFTn0TgkXjQjEl6++GEKflWya5hvQ8m
-         Y7oFMjlEixKRcNjW1hd8j6Ac99thDK5QwOtGIysm7zzZQ41rZECeISymyzVF9MeThG
-         qGXickBrjddg5nEuVuqgHkgevoMTwtbYQ7i/93yQ=
-Content-Type: text/plain; charset="utf-8"
+        Tue, 11 Jan 2022 14:31:22 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C660CC06173F;
+        Tue, 11 Jan 2022 11:31:21 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id v186so28840ybg.1;
+        Tue, 11 Jan 2022 11:31:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ynbqr0wi2/VtsdbQavXJS7nZj8ACuHscRkWjTklM/hM=;
+        b=V+lU/fYhP6eAi8gy8f63ftwQQMcDtC+NH4rx5JmUQENQH84B+PlnYLqe+ErfU1agad
+         N/nRk3z4oVIILPeiz3sr4BGbzCYQXnHIT3FdxvnpnR+t3wRvMV1sNdTf+SRHPr9Xij9+
+         U4m+fwWbZ1065HhB9HaW7roza7sb2XoDDqh3ls4Ppb1uleKc8h+TzWMndacmFXuyGHGe
+         9g5tqFybKgf8qMDkjBbe8Ft2DElXq17PrXMKsvH8/IS2SPZeGWBHoWxgpLKOL6noot+I
+         BoWgjnLxiU+shqU7B3SoNKxwrSEMHM/v+N7r5H02o+f7MhP9kUcfaJJHwSlL3nGccrBW
+         E+6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ynbqr0wi2/VtsdbQavXJS7nZj8ACuHscRkWjTklM/hM=;
+        b=f/s7hTNj5eURvScfabetnwr5QGtLp/Z5YaEVt5LZI6QRz+hbbMqlDjSpLICmXylSgH
+         OuQotyuvsPqYkab9GGdbiBIPM7lqj+Y+nfzNeBYiwS/cuwYoMSQsoXJg7ulf6/5UZIeb
+         iA5MJZFKosc6J7KCNa0IE8M40MsAZWv43e02nRuu4ymyaSq6HotQ24zMRJBVLRi3fHz+
+         6RHgdG9J/Odiz9MlISc/BODCRR3LkM1LCmBf56g22nYRZLd4AqnCi3tJa/jjg44Cbx7D
+         vUZLHgx4AXAheU7pcaLwrNaRUVyHRlTtHyzEKBzUlWHN4ZsT1xjFZ4lGb+9zgsz9YTPY
+         J6SA==
+X-Gm-Message-State: AOAM533DlCIKMJ6HJzWhGm+/GpZWv+x5iGj1HenezPrj+l1dsqEa+/Wk
+        Nqp0in8da37ckOxsNPXwimbhYzfqyo4IBCtyoiI=
+X-Google-Smtp-Source: ABdhPJzXzgBVE32TUw+VVIrjIvulHLCAjN20s6KbIS5ra0vt5/2nb7X1MIUUG0p+Mbesi/ce+7BegWUK+6t3odbUY+8=
+X-Received: by 2002:a05:6902:4e9:: with SMTP id w9mr6864881ybs.186.1641929481089;
+ Tue, 11 Jan 2022 11:31:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220111164855.147487-1-dlp@qtec.com>
-References: <20220111164855.147487-1-dlp@qtec.com>
-Subject: Re: [PATCH] media: docs: Change unintended assignment in v4l
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Daniel Lundberg Pedersen <dlp@qtec.com>
-To:     Daniel Lundberg Pedersen <dlp@qtec.com>,
-        linux-media@vger.kernel.org, mchehab@kernel.org
-Date:   Tue, 11 Jan 2022 17:40:31 +0000
-Message-ID: <164192283176.10801.16438722671029975593@Monstersaurus>
-User-Agent: alot/0.10
+References: <20220111002314.15213-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220111002314.15213-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <0bfff433-e216-6f9d-d225-9f07ac48013a@xs4all.nl> <CA+V-a8sszaUP6o6LJgDX49oPGVQFOc6G0vtY3p6sz4JNm=xB4A@mail.gmail.com>
+ <df687e82-3e9e-4df6-ac3c-ee2e1355779c@xs4all.nl>
+In-Reply-To: <df687e82-3e9e-4df6-ac3c-ee2e1355779c@xs4all.nl>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 11 Jan 2022 19:30:55 +0000
+Message-ID: <CA+V-a8tuVoYmLbi45d70MBhVDKdg4eUFbE64bTja1WyNmZ89Xw@mail.gmail.com>
+Subject: Re: [PATCH v2 06/13] media: davinci: vpif: Use platform_get_irq_optional()
+ to get the interrupt
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Quoting Daniel Lundberg Pedersen (2022-01-11 16:48:55)
-> Example should be comparing errno to EINTR instead of doing assignment.
->=20
+Hi Hans,
 
-Ouch - that's not helpful in documentation indeed.
-Good spot, and fix.
-
-It might help to say 'in v4l2grab' in the $SUBJECT rather than 'v4l' as
-that would be a bit more specific.
-
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-
-> Signed-off-by: Daniel Lundberg Pedersen <dlp@qtec.com>
-> ---
->  Documentation/userspace-api/media/v4l/v4l2grab.c.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/userspace-api/media/v4l/v4l2grab.c.rst b/Docum=
-entation/userspace-api/media/v4l/v4l2grab.c.rst
-> index eaa0f95048e7..c98a78d63a8b 100644
-> --- a/Documentation/userspace-api/media/v4l/v4l2grab.c.rst
-> +++ b/Documentation/userspace-api/media/v4l/v4l2grab.c.rst
-> @@ -134,7 +134,7 @@ file: media/v4l/v4l2grab.c
->                             tv.tv_usec =3D 0;
-> =20
->                             r =3D select(fd + 1, &fds, NULL, NULL, &tv);
-> -                   } while ((r =3D=3D -1 && (errno =3D EINTR)));
-> +                   } while ((r =3D=3D -1 && (errno =3D=3D EINTR)));
->                     if (r =3D=3D -1) {
->                             perror("select");
->                             return errno;
-> --=20
-> 2.33.1
+On Tue, Jan 11, 2022 at 10:45 AM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
 >
+> On 11/01/2022 11:43, Lad, Prabhakar wrote:
+> > Hi Hans,
+> >
+> > On Tue, Jan 11, 2022 at 10:25 AM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+> >>
+> >> Hi Prabhakar,
+> >>
+> >> On 11/01/2022 01:23, Lad Prabhakar wrote:
+> >>> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> >>> allocation of IRQ resources in DT core code, this causes an issue
+> >>> when using hierarchical interrupt domains using "interrupts" property
+> >>> in the node as this bypasses the hierarchical setup and messes up the
+> >>> irq chaining.
+> >>>
+> >>> In preparation for removal of static setup of IRQ resource from DT core
+> >>> code use platform_get_irq_optional().
+> >>>
+> >>> While at it, propagate error code in case devm_request_irq() fails
+> >>> instead of returning -EINVAL in vpif_display.c.
+> >>
+> >> Please note that this patch clashes with [1], for which I just posted a PR [2].
+> >>
+> > Ouch, I think I had a comment for patch#2 which needed to be addressed
+> > (I was nitpicking anyway) so I was hoping this will go in first.
+>
+> Patch 2 was fine since that change makes sense when looking at patch 3.
+>
+Agreed.
+
+> >
+> >> So once [2] is merged you'll need to rebase this patch.
+> >>
+> > Ok, do you want me to just re-send this patch alone or the entire series?
+>
+> Either works.
+>
+Will just send this  alone patch as v3.
+
+Cheers,
+Prabhakar
