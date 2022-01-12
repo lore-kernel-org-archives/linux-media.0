@@ -2,29 +2,31 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83D89C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jan 2022 09:50:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2E52C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 12 Jan 2022 09:50:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352322AbiALJuQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Jan 2022 04:50:16 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:46780 "EHLO
+        id S1352394AbiALJuW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Jan 2022 04:50:22 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:46722 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1352286AbiALJtz (ORCPT
+        with ESMTP id S1352259AbiALJtx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:49:55 -0500
-X-UUID: 9ba22167f417475ab94cb5078288e0ab-20220112
-X-UUID: 9ba22167f417475ab94cb5078288e0ab-20220112
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        Wed, 12 Jan 2022 04:49:53 -0500
+X-UUID: adf1ae7ded354f79865a17a2189196ae-20220112
+X-UUID: adf1ae7ded354f79865a17a2189196ae-20220112
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1327875115; Wed, 12 Jan 2022 17:49:50 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 12 Jan 2022 17:49:49 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 125177249; Wed, 12 Jan 2022 17:49:48 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 12 Jan 2022 17:49:47 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Jan
+ 2022 17:49:46 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 12 Jan 2022 17:49:48 +0800
+ Transport; Wed, 12 Jan 2022 17:49:45 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -54,9 +56,9 @@ CC:     George Sun <george.sun@mediatek.com>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v18, 15/19] dt-bindings: media: mtk-vcodec: Adds decoder dt-bindings for mt8192
-Date:   Wed, 12 Jan 2022 17:49:19 +0800
-Message-ID: <20220112094923.16839-16-yunfei.dong@mediatek.com>
+Subject: [PATCH v18, 13/19] media: mtk-vcodec: Add work queue for core hardware decode
+Date:   Wed, 12 Jan 2022 17:49:17 +0800
+Message-ID: <20220112094923.16839-14-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220112094923.16839-1-yunfei.dong@mediatek.com>
 References: <20220112094923.16839-1-yunfei.dong@mediatek.com>
@@ -68,286 +70,166 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds decoder dt-bindings for mt8192.
+Add work queue to process core hardware information.
+First, get lat_buf from message queue, then call core
+hardware of each codec(H264/VP9/AV1) to decode, finally
+puts lat_buf back to the message.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Steve Cho <stevecho@chromium.org>
 ---
- .../media/mediatek,vcodec-subdev-decoder.yaml | 265 ++++++++++++++++++
- 1 file changed, 265 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+ .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  | 16 +++++++++-
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  3 ++
+ .../platform/mtk-vcodec/vdec_msg_queue.c      | 32 +++++++++++++++++++
+ .../platform/mtk-vcodec/vdec_msg_queue.h      |  2 ++
+ 4 files changed, 52 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-new file mode 100644
-index 000000000000..d587fc3e39fb
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-@@ -0,0 +1,265 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+index 471b8c6ba7f2..10215ccc85f7 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+@@ -311,6 +311,17 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 		goto err_dec_pm;
+ 	}
+ 
++	if (IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch)) {
++		vdec_msg_queue_init_ctx(&dev->msg_queue_core_ctx, MTK_VDEC_CORE);
++		dev->core_workqueue = alloc_ordered_workqueue("core-decoder",
++			WQ_MEM_RECLAIM | WQ_FREEZABLE);
++		if (!dev->core_workqueue) {
++			mtk_v4l2_err("Failed to create core workqueue");
++			ret = -EINVAL;
++			goto err_res;
++		}
++	}
 +
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/media/mediatek,vcodec-subdev-decoder.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ 	for (i = 0; i < MTK_VDEC_HW_MAX; i++)
+ 		mutex_init(&dev->dec_mutex[i]);
+ 	mutex_init(&dev->dev_mutex);
+@@ -322,7 +333,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
+ 	if (ret) {
+ 		mtk_v4l2_err("v4l2_device_register err=%d", ret);
+-		goto err_res;
++		goto err_core_workq;
+ 	}
+ 
+ 	init_waitqueue_head(&dev->queue);
+@@ -423,6 +434,9 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 	video_unregister_device(vfd_dec);
+ err_dec_alloc:
+ 	v4l2_device_unregister(&dev->v4l2_dev);
++err_core_workq:
++	if (IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch))
++		destroy_workqueue(dev->core_workqueue);
+ err_res:
+ 	mtk_vcodec_release_dec_pm(&dev->pm);
+ err_dec_pm:
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index ae8e9adb389a..55e4ce2c2135 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -27,6 +27,7 @@
+ #define MTK_VCODEC_MAX_PLANES	3
+ #define MTK_V4L2_BENCHMARK	0
+ #define WAIT_INTR_TIMEOUT_MS	1000
++#define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
+ 
+ /*
+  * enum mtk_hw_reg_idx - MTK hw register base index
+@@ -464,6 +465,7 @@ struct mtk_vcodec_enc_pdata {
+  * @dec_capability: used to identify decode capability, ex: 4k
+  * @enc_capability: used to identify encode capability
+  *
++ * @core_workqueue: queue used for core hardware decode
+  * @msg_queue_core_ctx: msg queue context used for core workqueue
+  *
+  * @subdev_dev: subdev hardware device
+@@ -507,6 +509,7 @@ struct mtk_vcodec_dev {
+ 	unsigned int dec_capability;
+ 	unsigned int enc_capability;
+ 
++	struct workqueue_struct *core_workqueue;
+ 	struct vdec_msg_queue_ctx msg_queue_core_ctx;
+ 
+ 	void *subdev_dev[MTK_VDEC_HW_MAX];
+diff --git a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
+index 59dbb5c369bd..d6b919a61e04 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
++++ b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.c
+@@ -68,6 +68,9 @@ int vdec_msg_queue_qbuf(struct vdec_msg_queue_ctx *msg_ctx, struct vdec_lat_buf
+ 
+ 	if (msg_ctx->hardware_index != MTK_VDEC_CORE)
+ 		wake_up_all(&msg_ctx->ready_to_use);
++	else
++		queue_work(buf->ctx->dev->core_workqueue,
++			&buf->ctx->msg_queue.core_work);
+ 
+ 	mtk_v4l2_debug(3, "enqueue buf type: %d addr: 0x%p num: %d",
+ 		msg_ctx->hardware_index, buf, msg_ctx->ready_num);
+@@ -194,6 +197,34 @@ void vdec_msg_queue_deinit(struct vdec_msg_queue *msg_queue,
+ 	}
+ }
+ 
++static void vdec_msg_queue_core_work(struct work_struct *work)
++{
++	struct vdec_msg_queue *msg_queue =
++		container_of(work, struct vdec_msg_queue, core_work);
++	struct mtk_vcodec_ctx *ctx =
++		container_of(msg_queue, struct mtk_vcodec_ctx, msg_queue);
++	struct mtk_vcodec_dev *dev = ctx->dev;
++	struct vdec_lat_buf *lat_buf;
 +
-+title: Mediatek Video Decode Accelerator With Multi Hardware
++	lat_buf = vdec_msg_queue_dqbuf(&dev->msg_queue_core_ctx);
++	if (!lat_buf)
++		return;
 +
-+maintainers:
-+  - Yunfei Dong <yunfei.dong@mediatek.com>
++	ctx = lat_buf->ctx;
++	mtk_vcodec_set_curr_ctx(dev, ctx, MTK_VDEC_CORE);
 +
-+description: |
-+  Mediatek Video Decode is the video decode hardware present in Mediatek
-+  SoCs which supports high resolution decoding functionalities. Required
-+  parent and child device node.
++	lat_buf->core_decode(lat_buf);
 +
-+  About the Decoder Hardware Block Diagram, please check below:
++	mtk_vcodec_set_curr_ctx(dev, NULL, MTK_VDEC_CORE);
++	vdec_msg_queue_qbuf(&ctx->msg_queue.lat_ctx, lat_buf);
 +
-+    +---------------------------------+------------------------------------+
-+    |                                 |                                    |
-+    | input -> lat HW -> lat buffer --|--> lat buffer -> core HW -> output |
-+    |            ||                   |                     ||             |
-+    +------------||-------------------+---------------------||-------------+
-+              lat workqueue           |              core workqueue     <parent>
-+    -------------||-----------------------------------------||------------------
-+                 ||                                         ||          <child>
-+                 \/ <----------------HW index-------------->\/
-+           +------------------------------------------------------+
-+           |                    enable/disable                    |
-+           |           clk     power    irq    iommu              |
-+           |                 (lat/lat soc/core0/core1)            |
-+           +------------------------------------------------------+
++	if (!list_empty(&ctx->msg_queue.lat_ctx.ready_queue)) {
++		mtk_v4l2_debug(3, "re-schedule to decode for core: %d",
++			dev->msg_queue_core_ctx.ready_num);
++		queue_work(dev->core_workqueue, &msg_queue->core_work);
++	}
++}
 +
-+  As above, there are parent and child devices, child mean each hardware. The child device
-+  controls the information of each hardware independent which include clk/power/irq.
-+
-+  There are two workqueues in parent device: lat workqueue and core workqueue. They are used
-+  to lat and core hardware deocder. Lat workqueue need to get input bitstream and lat buffer,
-+  then enable lat to decode, writing the result to lat buffer, dislabe hardware when lat decode
-+  done. Core workqueue need to get lat buffer and output buffer, then enable core to decode,
-+  writing the result to output buffer, disable hardware when core decode done. These two
-+  hardwares will decode each frame cyclically.
-+
-+  For the smi common may not the same for each hardware, can't combine all hardware in one node,
-+  or leading to iommu fault when access dram data.
-+
-+properties:
-+  compatible:
-+    const: mediatek,mt8192-vcodec-dec
-+
-+  reg:
-+    maxItems: 1
-+
-+  iommus:
-+    minItems: 1
-+    maxItems: 32
-+    description: |
-+      List of the hardware port in respective IOMMU block for current Socs.
-+      Refer to bindings/iommu/mediatek,iommu.yaml.
-+
-+  mediatek,scp:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    maxItems: 1
-+    description: |
-+      The node of system control processor (SCP), using
-+      the remoteproc & rpmsg framework.
-+
-+  dma-ranges:
-+    maxItems: 1
-+    description: |
-+      Describes the physical address space of IOMMU maps to memory.
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 1
-+
-+  ranges: true
-+
-+# Required child node:
-+patternProperties:
-+  '^vcodec-lat@[0-9a-f]+$':
-+    type: object
-+
-+    properties:
-+      compatible:
-+        const: mediatek,mtk-vcodec-lat
-+
-+      reg:
-+        maxItems: 1
-+
-+      interrupts:
-+        maxItems: 1
-+
-+      iommus:
-+        minItems: 1
-+        maxItems: 32
-+        description: |
-+          List of the hardware port in respective IOMMU block for current Socs.
-+          Refer to bindings/iommu/mediatek,iommu.yaml.
-+
-+      clocks:
-+        maxItems: 5
-+
-+      clock-names:
-+        items:
-+          - const: sel
-+          - const: soc-vdec
-+          - const: soc-lat
-+          - const: vdec
-+          - const: top
-+
-+      assigned-clocks:
-+        maxItems: 1
-+
-+      assigned-clock-parents:
-+        maxItems: 1
-+
-+      power-domains:
-+        maxItems: 1
-+
-+    required:
-+      - compatible
-+      - reg
-+      - interrupts
-+      - iommus
-+      - clocks
-+      - clock-names
-+      - assigned-clocks
-+      - assigned-clock-parents
-+      - power-domains
-+
-+    additionalProperties: false
-+
-+  '^vcodec-core@[0-9a-f]+$':
-+    type: object
-+
-+    properties:
-+      compatible:
-+        const: mediatek,mtk-vcodec-core
-+
-+      reg:
-+        maxItems: 1
-+
-+      interrupts:
-+        maxItems: 1
-+
-+      iommus:
-+        minItems: 1
-+        maxItems: 32
-+        description: |
-+          List of the hardware port in respective IOMMU block for current Socs.
-+          Refer to bindings/iommu/mediatek,iommu.yaml.
-+
-+      clocks:
-+        maxItems: 5
-+
-+      clock-names:
-+        items:
-+          - const: sel
-+          - const: soc-vdec
-+          - const: soc-lat
-+          - const: vdec
-+          - const: top
-+
-+      assigned-clocks:
-+        maxItems: 1
-+
-+      assigned-clock-parents:
-+        maxItems: 1
-+
-+      power-domains:
-+        maxItems: 1
-+
-+    required:
-+      - compatible
-+      - reg
-+      - interrupts
-+      - iommus
-+      - clocks
-+      - clock-names
-+      - assigned-clocks
-+      - assigned-clock-parents
-+      - power-domains
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - iommus
-+  - mediatek,scp
-+  - dma-ranges
-+  - ranges
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/memory/mt8192-larb-port.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/clock/mt8192-clk.h>
-+    #include <dt-bindings/power/mt8192-power.h>
-+
-+    video-codec@16000000 {
-+        compatible = "mediatek,mt8192-vcodec-dec";
-+        mediatek,scp = <&scp>;
-+        iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
-+        dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges = <0 0x16000000 0x40000>;
-+        reg = <0x16000000 0x1000>;		/* VDEC_SYS */
-+        vcodec-lat@10000 {
-+            compatible = "mediatek,mtk-vcodec-lat";
-+            reg = <0x10000 0x800>;
-+            interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH 0>;
-+            iommus = <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD_EXT>,
-+                <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD2_EXT>,
-+                <&iommu0 M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT>,
-+                <&iommu0 M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT>,
-+                <&iommu0 M4U_PORT_L5_VDEC_LAT0_TILE_EXT>,
-+                <&iommu0 M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
-+                <&iommu0 M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
-+                <&iommu0 M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
-+            clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-+                <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-+                <&vdecsys_soc CLK_VDEC_SOC_LAT>,
-+                <&vdecsys_soc CLK_VDEC_SOC_LARB1>,
-+                <&topckgen CLK_TOP_MAINPLL_D4>;
-+            clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
-+            assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
-+            assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
-+            power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
-+        };
-+
-+        vcodec-core@25000 {
-+            compatible = "mediatek,mtk-vcodec-core";
-+            reg = <0x25000 0x1000>;
-+            interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH 0>;
-+            iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>,
-+                <&iommu0 M4U_PORT_L4_VDEC_UFO_EXT>,
-+                <&iommu0 M4U_PORT_L4_VDEC_PP_EXT>,
-+                <&iommu0 M4U_PORT_L4_VDEC_PRED_RD_EXT>,
-+                <&iommu0 M4U_PORT_L4_VDEC_PRED_WR_EXT>,
-+                <&iommu0 M4U_PORT_L4_VDEC_PPWRAP_EXT>,
-+                <&iommu0 M4U_PORT_L4_VDEC_TILE_EXT>,
-+                <&iommu0 M4U_PORT_L4_VDEC_VLD_EXT>,
-+                <&iommu0 M4U_PORT_L4_VDEC_VLD2_EXT>,
-+                <&iommu0 M4U_PORT_L4_VDEC_AVC_MV_EXT>,
-+                <&iommu0 M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
-+            clocks = <&topckgen CLK_TOP_VDEC_SEL>,
-+                <&vdecsys CLK_VDEC_VDEC>,
-+                <&vdecsys CLK_VDEC_LAT>,
-+                <&vdecsys CLK_VDEC_LARB1>,
-+                <&topckgen CLK_TOP_MAINPLL_D4>;
-+            clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
-+            assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
-+            assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
-+            power-domains = <&spm MT8192_POWER_DOMAIN_VDEC2>;
-+        };
-+    };
+ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
+ 	struct mtk_vcodec_ctx *ctx, core_decode_cb_t core_decode,
+ 	int private_size)
+@@ -206,6 +237,7 @@ int vdec_msg_queue_init(struct vdec_msg_queue *msg_queue,
+ 		return 0;
+ 
+ 	vdec_msg_queue_init_ctx(&msg_queue->lat_ctx, MTK_VDEC_LAT0);
++	INIT_WORK(&msg_queue->core_work, vdec_msg_queue_core_work);
+ 	msg_queue->wdma_addr.size = vde_msg_queue_get_trans_size(
+ 		ctx->picinfo.buf_w, ctx->picinfo.buf_h);
+ 
+diff --git a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.h b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.h
+index b793e23e628d..f62922753c64 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec_msg_queue.h
++++ b/drivers/media/platform/mtk-vcodec/vdec_msg_queue.h
+@@ -67,6 +67,7 @@ struct vdec_lat_buf {
+  * @wdma_addr: wdma address used for ube
+  * @wdma_rptr_addr: ube read point
+  * @wdma_wptr_addr: ube write point
++ * @core_work: core hardware work
+  * @lat_ctx: used to store lat buffer list
+  */
+ struct vdec_msg_queue {
+@@ -76,6 +77,7 @@ struct vdec_msg_queue {
+ 	uint64_t wdma_rptr_addr;
+ 	uint64_t wdma_wptr_addr;
+ 
++	struct work_struct core_work;
+ 	struct vdec_msg_queue_ctx lat_ctx;
+ };
+ 
 -- 
 2.25.1
 
