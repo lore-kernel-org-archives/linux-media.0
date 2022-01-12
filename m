@@ -2,31 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2332C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jan 2022 09:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FF85C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 12 Jan 2022 09:50:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352326AbiALJuE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Jan 2022 04:50:04 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:55814 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1352302AbiALJt5 (ORCPT
+        id S1352331AbiALJuF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Jan 2022 04:50:05 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:46780 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1352305AbiALJt5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 12 Jan 2022 04:49:57 -0500
-X-UUID: aa7c36f8f0524b09b1b529f14854b5f0-20220112
-X-UUID: aa7c36f8f0524b09b1b529f14854b5f0-20220112
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+X-UUID: c4c2ce988f124d01afa6cba3217d43b8-20220112
+X-UUID: c4c2ce988f124d01afa6cba3217d43b8-20220112
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1170847642; Wed, 12 Jan 2022 17:49:53 +0800
+        with ESMTP id 411509727; Wed, 12 Jan 2022 17:49:56 +0800
 Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 12 Jan 2022 17:49:52 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 12 Jan 2022 17:49:55 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
  (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Jan
- 2022 17:49:51 +0800
+ 2022 17:49:54 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 12 Jan 2022 17:49:49 +0800
+ Transport; Wed, 12 Jan 2022 17:49:53 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -56,9 +57,9 @@ CC:     George Sun <george.sun@mediatek.com>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v18, 16/19] media: mtk-vcodec: Add core dec and dec end ipi msg
-Date:   Wed, 12 Jan 2022 17:49:20 +0800
-Message-ID: <20220112094923.16839-17-yunfei.dong@mediatek.com>
+Subject: [PATCH v18, 18/19] media: mtk-vcodec: Remove mtk_vcodec_release_dec_pm
+Date:   Wed, 12 Jan 2022 17:49:22 +0800
+Message-ID: <20220112094923.16839-19-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220112094923.16839-1-yunfei.dong@mediatek.com>
 References: <20220112094923.16839-1-yunfei.dong@mediatek.com>
@@ -70,100 +71,154 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add core dec and dec end ipi msg:
-AP_IPIMSG_DEC_CORE/AP_IPIMSG_DEC_CORE_END.
+There are only two lines in mtk_vcodec_release_dec_pm, using
+pm_runtime_disable and put_device instead directly.
+
+Move pm_runtime_enable outside mtk_vcodec_init_dec_pm to symmetry with
+pm_runtime_disable, after that, rename mtk_vcodec_init_dec_pm to *_clk
+since it only has clock operations now.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Co-developed-by: Yong Wu <yong.wu@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../media/platform/mtk-vcodec/vdec_ipi_msg.h   |  4 ++++
- .../media/platform/mtk-vcodec/vdec_vpu_if.c    | 12 ++++++++++++
- .../media/platform/mtk-vcodec/vdec_vpu_if.h    | 18 ++++++++++++++++++
- 3 files changed, 34 insertions(+)
+ .../media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c   | 10 +++++++---
+ .../media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c    |  7 +++++--
+ .../media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c    | 12 ++----------
+ .../media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h    |  3 +--
+ 4 files changed, 15 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h b/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-index 5f45a537beb4..9d8079c4f976 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-+++ b/drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h
-@@ -18,12 +18,16 @@ enum vdec_ipi_msgid {
- 	AP_IPIMSG_DEC_END = 0xA002,
- 	AP_IPIMSG_DEC_DEINIT = 0xA003,
- 	AP_IPIMSG_DEC_RESET = 0xA004,
-+	AP_IPIMSG_DEC_CORE = 0xA005,
-+	AP_IPIMSG_DEC_CORE_END = 0xA006,
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+index 1c2b96b4930b..d44894fa2f6e 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+@@ -11,6 +11,7 @@
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+ #include <linux/of.h>
++#include <linux/pm_runtime.h>
+ #include <media/v4l2-event.h>
+ #include <media/v4l2-mem2mem.h>
+ #include <media/videobuf2-dma-contig.h>
+@@ -128,12 +129,13 @@ static int mtk_vcodec_init_dec_resources(struct mtk_vcodec_dev *dev)
+ 		return ret;
+ 	}
  
- 	VPU_IPIMSG_DEC_INIT_ACK = 0xB000,
- 	VPU_IPIMSG_DEC_START_ACK = 0xB001,
- 	VPU_IPIMSG_DEC_END_ACK = 0xB002,
- 	VPU_IPIMSG_DEC_DEINIT_ACK = 0xB003,
- 	VPU_IPIMSG_DEC_RESET_ACK = 0xB004,
-+	VPU_IPIMSG_DEC_CORE_ACK = 0xB005,
-+	VPU_IPIMSG_DEC_CORE_END_ACK = 0xB006,
- };
+-	ret = mtk_vcodec_init_dec_pm(pdev, &dev->pm);
++	ret = mtk_vcodec_init_dec_clk(pdev, &dev->pm);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "failed to get mt vcodec clock source");
+ 		return ret;
+ 	}
  
- /**
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-index 5dffc459a33d..bfd8e87dceff 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.c
-@@ -85,6 +85,8 @@ static void vpu_dec_ipi_handler(void *data, unsigned int len, void *priv)
- 		case VPU_IPIMSG_DEC_END_ACK:
- 		case VPU_IPIMSG_DEC_DEINIT_ACK:
- 		case VPU_IPIMSG_DEC_RESET_ACK:
-+		case VPU_IPIMSG_DEC_CORE_ACK:
-+		case VPU_IPIMSG_DEC_CORE_END_ACK:
- 			break;
- 
- 		default:
-@@ -191,11 +193,21 @@ int vpu_dec_start(struct vdec_vpu_inst *vpu, uint32_t *data, unsigned int len)
- 	return err;
++	pm_runtime_enable(&pdev->dev);
+ 	return 0;
  }
  
-+int vpu_dec_core(struct vdec_vpu_inst *vpu)
-+{
-+	return vcodec_send_ap_ipi(vpu, AP_IPIMSG_DEC_CORE);
-+}
-+
- int vpu_dec_end(struct vdec_vpu_inst *vpu)
- {
- 	return vcodec_send_ap_ipi(vpu, AP_IPIMSG_DEC_END);
+@@ -446,7 +448,8 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 	if (IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch))
+ 		destroy_workqueue(dev->core_workqueue);
+ err_res:
+-	mtk_vcodec_release_dec_pm(&dev->pm);
++	pm_runtime_disable(dev->pm.dev);
++	put_device(dev->pm.larbvdec);
+ err_dec_pm:
+ 	mtk_vcodec_fw_release(dev->fw_handler);
+ 	return ret;
+@@ -489,7 +492,8 @@ static int mtk_vcodec_dec_remove(struct platform_device *pdev)
+ 		video_unregister_device(dev->vfd_dec);
+ 
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+-	mtk_vcodec_release_dec_pm(&dev->pm);
++	pm_runtime_disable(dev->pm.dev);
++	put_device(dev->pm.larbvdec);
+ 	mtk_vcodec_fw_release(dev->fw_handler);
+ 	return 0;
+ }
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
+index 4f946e21b5d7..c853afe3b3f7 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_hw.c
+@@ -9,6 +9,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/slab.h>
+ 
+ #include "mtk_vcodec_drv.h"
+@@ -140,9 +141,10 @@ static int mtk_vdec_hw_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	subdev_dev->plat_dev = pdev;
+-	ret = mtk_vcodec_init_dec_pm(pdev, &subdev_dev->pm);
++	ret = mtk_vcodec_init_dec_clk(pdev, &subdev_dev->pm);
+ 	if (ret)
+ 		return ret;
++	pm_runtime_enable(&pdev->dev);
+ 
+ 	of_id = of_match_device(mtk_vdec_hw_match, dev);
+ 	if (!of_id) {
+@@ -181,7 +183,8 @@ static int mtk_vdec_hw_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, subdev_dev);
+ 	return 0;
+ err:
+-	mtk_vcodec_release_dec_pm(&subdev_dev->pm);
++	pm_runtime_disable(subdev_dev->pm.dev);
++	put_device(subdev_dev->pm.larbvdec);
+ 	return ret;
  }
  
-+int vpu_dec_core_end(struct vdec_vpu_inst *vpu)
-+{
-+	return vcodec_send_ap_ipi(vpu, AP_IPIMSG_DEC_CORE_END);
-+}
-+
- int vpu_dec_deinit(struct vdec_vpu_inst *vpu)
- {
- 	return vcodec_send_ap_ipi(vpu, AP_IPIMSG_DEC_DEINIT);
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-index c2ed5b6cab8b..ae24b75d1649 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-+++ b/drivers/media/platform/mtk-vcodec/vdec_vpu_if.h
-@@ -82,4 +82,22 @@ int vpu_dec_deinit(struct vdec_vpu_inst *vpu);
-  */
- int vpu_dec_reset(struct vdec_vpu_inst *vpu);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+index b91c29afdfde..37941e322a01 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+@@ -15,7 +15,7 @@
+ #include "mtk_vcodec_dec_pm.h"
+ #include "mtk_vcodec_util.h"
  
-+/**
-+ * vpu_dec_core - core start decoding, basically the function will be invoked once
-+ *                 every frame.
-+ *
-+ * @vpu : instance for vdec_vpu_inst
-+ */
-+int vpu_dec_core(struct vdec_vpu_inst *vpu);
-+
-+/**
-+ * vpu_dec_core_end - core end decoding, basically the function will be invoked once
-+ *               when core HW decoding done and receive interrupt successfully. The
-+ *               decoder in VPU will updata hardware information and deinit hardware
-+ *               and check if there is a new decoded frame available to display.
-+ *
-+ * @vpu : instance for vdec_vpu_inst
-+ */
-+int vpu_dec_core_end(struct vdec_vpu_inst *vpu);
-+
- #endif
+-int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
++int mtk_vcodec_init_dec_clk(struct platform_device *pdev,
+ 	struct mtk_vcodec_pm *pm)
+ {
+ 	struct device_node *node;
+@@ -73,20 +73,12 @@ int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
+ 		}
+ 	}
+ 
+-	pm_runtime_enable(&pdev->dev);
+ 	return 0;
+ put_device:
+ 	put_device(pm->larbvdec);
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(mtk_vcodec_init_dec_pm);
+-
+-void mtk_vcodec_release_dec_pm(struct mtk_vcodec_pm *pm)
+-{
+-	pm_runtime_disable(pm->dev);
+-	put_device(pm->larbvdec);
+-}
+-EXPORT_SYMBOL_GPL(mtk_vcodec_release_dec_pm);
++EXPORT_SYMBOL_GPL(mtk_vcodec_init_dec_clk);
+ 
+ int mtk_vcodec_dec_pw_on(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
+ {
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+index 6ae29fea4e7f..c4121df9764f 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h
+@@ -9,9 +9,8 @@
+ 
+ #include "mtk_vcodec_drv.h"
+ 
+-int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
++int mtk_vcodec_init_dec_clk(struct platform_device *pdev,
+ 	struct mtk_vcodec_pm *pm);
+-void mtk_vcodec_release_dec_pm(struct mtk_vcodec_pm *pm);
+ 
+ int mtk_vcodec_dec_pw_on(struct mtk_vcodec_dev *vdec_dev, int hw_idx);
+ void mtk_vcodec_dec_pw_off(struct mtk_vcodec_dev *vdec_dev, int hw_idx);
 -- 
 2.25.1
 
