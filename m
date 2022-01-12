@@ -2,146 +2,244 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E756C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jan 2022 09:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D961C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 12 Jan 2022 09:52:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352455AbiALJuk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Jan 2022 04:50:40 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:55234 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1352240AbiALJtm (ORCPT
+        id S238791AbiALJwX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Jan 2022 04:52:23 -0500
+Received: from ewsoutbound.kpnmail.nl ([195.121.94.170]:44017 "EHLO
+        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238636AbiALJwU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:49:42 -0500
-X-UUID: 5203086153404c70a3024864eee377a2-20220112
-X-UUID: 5203086153404c70a3024864eee377a2-20220112
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1129423590; Wed, 12 Jan 2022 17:49:39 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 12 Jan 2022 17:49:38 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 12 Jan 2022 17:49:36 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v18, 08/19] media: mtk-vcodec: Use pure single core for MT8183
-Date:   Wed, 12 Jan 2022 17:49:12 +0800
-Message-ID: <20220112094923.16839-9-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220112094923.16839-1-yunfei.dong@mediatek.com>
-References: <20220112094923.16839-1-yunfei.dong@mediatek.com>
+        Wed, 12 Jan 2022 04:52:20 -0500
+X-KPN-MessageId: 25afc66f-738d-11ec-8a6e-005056ab378f
+Received: from smtp.kpnmail.nl (unknown [10.31.155.40])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 25afc66f-738d-11ec-8a6e-005056ab378f;
+        Wed, 12 Jan 2022 10:51:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:from:to:subject:mime-version:date:message-id;
+        bh=JWV9gpnOFZc5xqMt+Kp1anWOuCekvScaCFHfyCKDtJ4=;
+        b=aKmLJTiY/rzEC8L6ExjRdR9TmpFTd+HlQrLDLWRiFI7ckQwyn9zPH0oFNGg9/P4GhbKZGojBaQ89U
+         A4/pPJRNcgjtS4nV298zVqq09YwJHjHV4Iz3iC3VKBycBzcY11t7RhqqYQowwmwKr6X1i+LdCJoOlK
+         LT0Axb8NYnyFL3kcLcD6n2HLHp0cK4tFchrlOWZkwLH9A97cba29cVuLf70fMKX3ZCS8JPAPUop8Oe
+         HudyOpuoYqKCUjtaapqYHUrmtBixpiuSsOqLOuh2Wo3jMPtBY3NNPmzaeHrAXgO2E+ZHm/Nvmo1x2P
+         OQk0Cjzku1Pqdvhl0VPGgS9OsgezGcQ==
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|RLFpkIQPsU3qAFZRoqXIb9KHg5nVlp/BoYgvbV+K8SrPJ2k9g7x+BVKOIX7aW3X
+ CqRvmVOypiPVvIeAstMxE9g==
+X-Originating-IP: 193.91.129.219
+Received: from [192.168.2.10] (cdb815bc1.dhcp.as2116.net [193.91.129.219])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id 5352fe80-738d-11ec-b76f-005056ab7584;
+        Wed, 12 Jan 2022 10:52:17 +0100 (CET)
+Message-ID: <aaa692f7-174a-83a9-8aae-64cda91044cb@xs4all.nl>
+Date:   Wed, 12 Jan 2022 10:52:16 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.4.1
+Subject: Re: [PATCH v3 07/23] media: atmel: atmel-isc-base: use streaming
+ status when queueing buffers
+Content-Language: en-US
+To:     Eugen.Hristev@microchip.com, jacopo@jmondi.org,
+        laurent.pinchart@ideasonboard.com
+Cc:     linux-media@vger.kernel.org, robh+dt@kernel.org,
+        sakari.ailus@iki.fi, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Nicolas.Ferre@microchip.com
+References: <20211213134940.324266-1-eugen.hristev@microchip.com>
+ <20211213134940.324266-8-eugen.hristev@microchip.com>
+ <c6adb59e-4554-dc08-3772-148eb22c29ba@xs4all.nl>
+ <5e4f591b-9105-9de0-5067-2bd82dc04983@microchip.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <5e4f591b-9105-9de0-5067-2bd82dc04983@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Separates different architecture for hardware: pure_sin_core
-and lat_sin_core. MT8183 is pure single core. Uses .hw_arch to
-distinguish.
+On 11/01/2022 17:38, Eugen.Hristev@microchip.com wrote:
+> On 1/11/22 5:53 PM, Hans Verkuil wrote:
+>> On 13/12/2021 14:49, Eugen Hristev wrote:
+>>> During experiments with libcamera, it looks like vb2_is_streaming returns
+>>> true before our start streaming is called.
+>>> Order of operations is streamon -> queue -> start_streaming
+>>> ISC would have started the DMA immediately when a buffer is being added
+>>> to the vbqueue if the queue is streaming.
+>>> It is more safe to start the DMA after the start streaming of the driver is
+>>> called.
+>>> Thus, even if vb2queue is streaming, add the buffer to the dma queue of the
+>>> driver instead of actually starting the DMA process, if the start streaming
+>>> has not been called yet.
+>>>
+>>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+>>> ---
+>>>   drivers/media/platform/atmel/atmel-isc-base.c | 17 ++++++++++-------
+>>>   1 file changed, 10 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+>>> index 26a6090f056c..e6c9071c04f0 100644
+>>> --- a/drivers/media/platform/atmel/atmel-isc-base.c
+>>> +++ b/drivers/media/platform/atmel/atmel-isc-base.c
+>>> @@ -441,12 +441,14 @@ static void isc_buffer_queue(struct vb2_buffer *vb)
+>>>        unsigned long flags;
+>>>
+>>>        spin_lock_irqsave(&isc->dma_queue_lock, flags);
+>>> -     if (!isc->cur_frm && list_empty(&isc->dma_queue) &&
+>>> -             vb2_is_streaming(vb->vb2_queue)) {
+>>> +
+>>> +     if (!isc->cur_frm && list_empty(&isc->dma_queue) && !isc->stop) {
+>>>                isc->cur_frm = buf;
+>>>                isc_start_dma(isc);
+>>> -     } else
+>>> +     } else {
+>>>                list_add_tail(&buf->list, &isc->dma_queue);
+>>> +     }
+>>> +
+>>>        spin_unlock_irqrestore(&isc->dma_queue_lock, flags);
+>>>   }
+>>
+>> Both the old and new code doesn't make a lot of sense.
+> 
+> Hello Hans,
+> 
+> I debated this a bit with Laurent when I initially wrote the patch.
+> 
+> The problem with the current code, or the current way things are 
+> working, is the fact that vb2_is_streaming returns true from the moment 
+> of streamon.
+> The DMA engine of the ISC is being started at the moment of 
+> start_streaming, and if buffers are being sent earlier/later, they are 
+> just added to the queue and DMA engine is restarted if it finished 
+> previously.
+> However if frames are added beforehand, like, first streamon, then add 
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../platform/mtk-vcodec/mtk_vcodec_dec_stateful.c      |  1 +
- .../platform/mtk-vcodec/mtk_vcodec_dec_stateless.c     |  2 ++
- drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h     | 10 ++++++++++
- 3 files changed, 13 insertions(+)
+beforehand -> afterwards?
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-index c7f9259ad094..04ca43c77e5f 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateful.c
-@@ -626,4 +626,5 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata = {
- 	.worker = mtk_vdec_worker,
- 	.flush_decoder = mtk_vdec_flush_decoder,
- 	.is_subdev_supported = false,
-+	.hw_arch = MTK_VDEC_PURE_SINGLE_CORE,
- };
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-index 3294c8957ae5..23d997ac114d 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_stateless.c
-@@ -357,6 +357,7 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
- 	.worker = mtk_vdec_worker,
- 	.flush_decoder = mtk_vdec_flush_decoder,
- 	.is_subdev_supported = false,
-+	.hw_arch = MTK_VDEC_PURE_SINGLE_CORE,
- };
- 
- /* This platform data is used for one lat and one core architecture. */
-@@ -375,4 +376,5 @@ const struct mtk_vcodec_dec_pdata mtk_lat_sig_core_pdata = {
- 	.worker = mtk_vdec_worker,
- 	.flush_decoder = mtk_vdec_flush_decoder,
- 	.is_subdev_supported = true,
-+	.hw_arch = MTK_VDEC_LAT_SINGLE_CORE,
- };
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index ab2004242c43..17e7deee10b5 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -324,6 +324,14 @@ enum mtk_chip {
- 	MTK_MT8195,
- };
- 
-+/*
-+ * enum mtk_vdec_hw_arch - Used to separate different hardware architecture
-+ */
-+enum mtk_vdec_hw_arch {
-+	MTK_VDEC_PURE_SINGLE_CORE,
-+	MTK_VDEC_LAT_SINGLE_CORE,
-+};
-+
- /**
-  * struct mtk_vcodec_dec_pdata - compatible data for each IC
-  * @init_vdec_params: init vdec params
-@@ -342,6 +350,7 @@ enum mtk_chip {
-  * @num_framesizes: count of video decoder frame sizes
-  *
-  * @chip: chip this decoder is compatible with
-+ * @hw_arch: hardware arch is used to separate pure_sin_core and lat_sin_core
-  *
-  * @is_subdev_supported: whether support parent-node architecture(subdev)
-  * @uses_stateless_api: whether the decoder uses the stateless API with requests
-@@ -364,6 +373,7 @@ struct mtk_vcodec_dec_pdata {
- 	const int num_framesizes;
- 
- 	enum mtk_chip chip;
-+	enum mtk_vdec_hw_arch hw_arch;
- 
- 	bool is_subdev_supported;
- 	bool uses_stateless_api;
--- 
-2.25.1
+> some frames, and then later call the start_streaming, ISC will crash. 
+> (as I said, DMA engine is prepared at start_streaming).
+> To avoid this, I changed the vb2_is_streaming calls to keeping an 
+> internal state of the streaming.
+> Do you think I should try another different approach to solve this ?
+> Perhaps do not prepare the ISC dma engine at start_streaming, but at 
+> another place ?
+> 
+> Laurent do you remember the talk we had about this problem a while back ?
+> 
+>>
+>> buf_queue is only called by vb2 if start_streaming has already been called or is
+>> about to be called.
+> 
+> That's a huge difference for ISC driver as it is today. start_streaming 
+> being called afterwards, means the ISC DMA engine is not started (not 
+> started streaming), hence a crash.
+
+The start_streaming op is called when streamon is called and if there are
+sufficient buffers (>= q->min_buffers_needed). If there are insufficient
+buffers at streamon time, then start_streaming is only called when the number
+of queued buffers reaches the minimum.
+
+vb2 has three different state checks that you can use:
+
+vb2_is_busy() is true if buffers are allocated. Typically this means that you
+can no longer do format changes or anything that might change the buffer
+sizes or layout.
+
+vb2_is_streaming() is true if streamon was called. If this is true, then vb2_is_busy()
+is also true.
+
+And finally vb2_start_streaming_called() is true if the start_streaming op
+was called (i.e. DMA is in progress). If this is true, then vb2_is_streaming is
+also true.
+
+Basically vb2_is_streaming() reports the streaming state that userspace sees,
+while vb2_start_streaming_called() reports the internal DMA streaming state.
+
+The confusion is probably that you were using vb2_is_streaming instead of
+vb2_start_streaming_called.
+
+> 
+>>
+>> Typically all that the buf_queue op does is to call list_add_tail(&buf->list, &isc->dma_queue);
+>> inside the spinlock.
+>>
+>>>
+>>> @@ -1014,7 +1016,7 @@ static int isc_s_fmt_vid_cap(struct file *file, void *priv,
+>>>   {
+>>>        struct isc_device *isc = video_drvdata(file);
+>>>
+>>> -     if (vb2_is_streaming(&isc->vb2_vidq))
+>>> +     if (!isc->stop)
+>>
+>> This is weird as well. Normally this calls vb2_is_busy to check if the
+>> queue is busy (that really means that buffers are already allocated, so
+>> changing the format isn't allowed anymore).
+> 
+> You think the query to the streaming status makes no sense here hence it 
+> should be removed completely ?
+
+Right. And instead check vb2_is_busy().
+
+I actually think that this is something that would fail with v4l2-compliance.
+
+Do you still run v4l2-compliance?
+
+> I can do that with a prequel patch if it's the case.
+
+Probably wise.
+
+Regards,
+
+	Hans
+
+> 
+> Thanks for reviewing,
+> 
+> Eugen
+> 
+>>
+>>>                return -EBUSY;
+>>>
+>>>        return isc_set_fmt(isc, f);
+>>> @@ -1536,7 +1538,7 @@ static int isc_s_awb_ctrl(struct v4l2_ctrl *ctrl)
+>>>
+>>>                isc_update_awb_ctrls(isc);
+>>>
+>>> -             if (vb2_is_streaming(&isc->vb2_vidq)) {
+>>> +             if (!isc->stop) {
+>>
+>> Ditto.
+>>
+>>>                        /*
+>>>                         * If we are streaming, we can update profile to
+>>>                         * have the new settings in place.
+>>> @@ -1552,8 +1554,7 @@ static int isc_s_awb_ctrl(struct v4l2_ctrl *ctrl)
+>>>                }
+>>>
+>>>                /* if we have autowhitebalance on, start histogram procedure */
+>>> -             if (ctrls->awb == ISC_WB_AUTO &&
+>>> -                 vb2_is_streaming(&isc->vb2_vidq) &&
+>>> +             if (ctrls->awb == ISC_WB_AUTO && !isc->stop &&
+>>>                    ISC_IS_FORMAT_RAW(isc->config.sd_format->mbus_code))
+>>>                        isc_set_histogram(isc, true);
+>>>
+>>> @@ -1829,6 +1830,8 @@ static int isc_async_complete(struct v4l2_async_notifier *notifier)
+>>>        struct vb2_queue *q = &isc->vb2_vidq;
+>>>        int ret = 0;
+>>>
+>>> +     isc->stop = true;
+>>> +
+>>
+>> I'm really not sure that you need the stop bool at all.
+>>
+>>>        INIT_WORK(&isc->awb_work, isc_awb_work);
+>>>
+>>>        ret = v4l2_device_register_subdev_nodes(&isc->v4l2_dev);
+>>
+>> Regards,
+>>
+>>          Hans
+>>
+> 
 
