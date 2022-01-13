@@ -2,85 +2,150 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EC6FC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 13 Jan 2022 15:55:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8A38C4332F
+	for <linux-media@archiver.kernel.org>; Thu, 13 Jan 2022 16:10:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234589AbiAMPz6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 13 Jan 2022 10:55:58 -0500
-Received: from [194.99.46.92] ([194.99.46.92]:46874 "EHLO
-        slot0.bluewaterleisure.com" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S233549AbiAMPz5 (ORCPT
+        id S229766AbiAMQKW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 13 Jan 2022 11:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229580AbiAMQKV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 13 Jan 2022 10:55:57 -0500
-X-Greylist: delayed 608 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 Jan 2022 10:55:57 EST
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=bluewaterleisure.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ker.mon@bluewaterleisure.com;
- bh=r3BQuCr4TfnoNcBsY2yXVbGxSzc=;
- b=Yug7jaj45Q+D7ZgAYXz+9vLz0aeN36/BHNY5Tl6+phtA/EbDNZO0Ff4flGcjzSpvU5yc4vxyCg0i
-   bsmFJXMiBMnAEz2mrxisCQvhEOIs9Y1V5naX59eg2/X99kn1QU+YVQESwDJfEiJoAwaMO6r9FpdH
-   oMfWSBhWK/QNWWILLOlSIZSUyExI1bCSr19lUyM7Iv5je1loBE9LUfoLI1vJOqXqiYUSSnGuF0NZ
-   MBDvB4cJSyGIDn8vDskZ7kozf4CnBHyaiXRerByRUE3vFqmI9BUkeyuBmDW88G2FpfmMH9ZHwvUC
-   7xuhJemEzzbTHUnDtKaK8j4oEdTY/+zg+GmdIA==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=bluewaterleisure.com;
- b=e3q4Q3ATBx5Fjx2hlvnxXg04CdM8g9eOF821j1qLpp4M+FefpulfquqDkBjwq1MkQzFS8frmA8Xw
-   pw5C3VdEkOYL4/CnXO6w89Rutu933sV4HEVwLoRXCWhG1t9j/LcerL1h48WdecKHLwiWMIyezP74
-   rR8g5MaOXTpk6ikX+0pHRVyx57TpkQ8A5uOTDXFFmT6noNWFSMuz2lcA1c+JbYLra+Z6O2eWDH+k
-   Dwp2iugGwiEo51HDxC0gKnFxlaVT0dpU+9GTrv+PHMsuVC6Stjy82QYY+WXKa0VaCqYmdlYmJ+ZE
-   Gze8upxqo9yoBSYq4GUEg+otV6726kFEMSJCiA==;
-Reply-To: mustafa.ayvaz@ayvazburosu.com
-From:   "Barrister Mustafa" <ker.mon@bluewaterleisure.com>
-To:     linux-media@vger.kernel.org
-Subject: Achtung:
-Date:   13 Jan 2022 16:36:02 +0100
-Message-ID: <20220113163602.CB3D7050E38B0C5E@bluewaterleisure.com>
+        Thu, 13 Jan 2022 11:10:21 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED18C061574;
+        Thu, 13 Jan 2022 08:10:21 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id bg19-20020a05600c3c9300b0034565e837b6so2693708wmb.1;
+        Thu, 13 Jan 2022 08:10:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SPmaJub/jt94ihGwagtrfHtir8UBrBvypTKNKojeyrA=;
+        b=BVBB+Qut1wf0yDLs2pgabC7QOG2Sq+20jm8ssrux8M/cL6yIEQ1cLoONRsJ3tAFOB7
+         mAVtexOZomadjCBu5HS3//ck38nB8thHf4Vsb7B2Gu4SmYo1PXrWLt2A/RhTYRAs6chT
+         A2yuc9kt7p1baJ7py4FCWgs7rw24L85tVk/4W8LVfElgZ03rT963kaaa4VkbN1DiwUXJ
+         qnZsvby+F23F9gT8jaP+rJib0mnv6iej7oPfza94pno6s+bMVe/moC6XsPcGH0KE1brn
+         /SZzMZYnKFEdbiVSWGxvCwwKgWv2AzgqwSWAiyOixbcDRB9AlAXLXpExApLKl7EkW3Oy
+         FPkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SPmaJub/jt94ihGwagtrfHtir8UBrBvypTKNKojeyrA=;
+        b=dQ9gccG12CqSEiKpACY/C7PlAQsCRfgUwgp+Bteq+i+dB7o5j5Ri4KT5fI+opJurTs
+         PdHFowPUowmxG3eMVriz8esY88HfXtcT28LAN9uei6Myj+AdnFiK475ryG0TQ1Tpl97I
+         ON3MJeNOGiRohnUnGiItUnOXcmz6MM6kj8OJkBZORxEHGnQdglk0rTGmKUGtjQdQ9wwj
+         NANXyilOXCc7MIU6sV+UroMbd28xbzkzPHKl5/uuUlnHMGmaV9eDIyRs+uvc/24lSkon
+         vU9YOr0AczNd3q9g+Fcl2vyKZYnHGntE/CjKZjB1eGARHaUszPn+A7+1E/WGWwAPUZVr
+         l9tA==
+X-Gm-Message-State: AOAM5303p1AsrO0DFLP1dLf9K8sPyg08jhuFkew6mhKnwh26ZHhhO5At
+        39qBRm93aYtSsk82PmWs+nc=
+X-Google-Smtp-Source: ABdhPJz71D45GcRwagirhvSlyWM52OERaCgTDonsBE7CR9XIAMLCsE2GIYUK2N2X+W/NKuR3LQ9Flg==
+X-Received: by 2002:a1c:7316:: with SMTP id d22mr11718665wmb.5.1642090219767;
+        Thu, 13 Jan 2022 08:10:19 -0800 (PST)
+Received: from [192.168.0.18] (81.172.62.207.dyn.user.ono.com. [81.172.62.207])
+        by smtp.gmail.com with ESMTPSA id f8sm9488614wmg.3.2022.01.13.08.10.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 08:10:19 -0800 (PST)
+Message-ID: <e940d705-2057-4d5e-0a21-8464ca04caaf@gmail.com>
+Date:   Thu, 13 Jan 2022 17:10:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v9 12/15] media: mtk-vcodec: enc: Remove
+ mtk_vcodec_release_enc_pm
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        David Airlie <airlied@linux.ie>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Will Deacon <will.deacon@arm.com>,
+        dri-devel@lists.freedesktop.org, yf.wang@mediatek.com,
+        anthony.huang@mediatek.com, youlin.pei@mediatek.com,
+        Irui Wang <irui.wang@mediatek.com>,
+        Evan Green <evgreen@chromium.org>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, mingyuan.ma@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>, libo.kang@mediatek.com,
+        yi.kuo@mediatek.com, linux-mediatek@lists.infradead.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>, anan.sun@mediatek.com,
+        srv_heupstream@mediatek.com, acourbot@chromium.org,
+        linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
+        iommu@lists.linux-foundation.org, Daniel Vetter <daniel@ffwll.ch>,
+        Robin Murphy <robin.murphy@arm.com>
+References: <20211112105509.12010-1-yong.wu@mediatek.com>
+ <20211112105509.12010-13-yong.wu@mediatek.com>
+ <68c3a573-8453-38e9-93b2-2067bedcd06f@collabora.com>
+ <4bd9e849-96dd-6f1c-2841-979459366ee5@collabora.com>
+ <fa9b2b73-c6bb-5737-93ac-ba2ab6b3b771@xs4all.nl>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <fa9b2b73-c6bb-5737-93ac-ba2ab6b3b771@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dear linux-media,
+Hi Hans,
 
-Ich bin Barrister Mustafa Ayvaz, ein pers=C3=B6nlicher Anwalt des=20
-verstorbenen Mr.
-Anderson, der an der Coronavirus-Krankheit starb, die er
-w=C3=A4hrend seiner Gesch=C3=A4ftsreise in China unter Vertrag genommen.=20=
+On 13/01/2022 11:15, Hans Verkuil wrote:
+> On 13/01/2022 11:11, AngeloGioacchino Del Regno wrote:
+>> Il 11/01/22 11:57, AngeloGioacchino Del Regno ha scritto:
+>>> Il 12/11/21 11:55, Yong Wu ha scritto:
+>>>> After this patchset, mtk_vcodec_release_enc_pm has only one line.
+>>>> then remove that function, use pm_runtime_disable instead.
+>>>>
+>>>> meanwhile, mtk_vcodec_init_enc_pm only operate for the clocks,
+>>>> rename it from the _pm to _clk.
+>>>>
+>>>> No functional change.
+>>>>
+>>>> CC: Tiffany Lin <tiffany.lin@mediatek.com>
+>>>> CC: Irui Wang <irui.wang@mediatek.com>
+>>>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+>>>
+>>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>
+>>
+>> Hello Yong,
+>> the mtk-vcodec patches were merged in Yunfei's vcodec patch series and Hans has
+>> scheduled that for v5.18.
+>>
+>> Can you please send a v10 and drop patches 10/15, 11/15, 12/15 (all of the
+>> media: mtk-vcodec: *) from this series?
+>>
+>> For the records, I think that after sending v10 this series is ready to be merged,
+>> as it was well reviewed and also tested on many MTK platforms.
+> 
+> Good to know. When I have the v10 I'll try to prioritize reviewing it and running
+> my usual tests.
+> 
+> Yong, please make sure you run 'checkpatch.pl --strict' over the v10 patches and fix
+> any issues (using common sense).
+> 
 
-Ich m=C3=B6chte, dass Sie freundlich sind und mit mir=20
-zusammenarbeiten, um das Geld zu sichern, das er hier in der=20
-T=C3=BCrkei auf der Bank hinterlassen hat, das sind drei Millionen=20
-dreihundertneunzigtausend Dollar.
+Can you please take me in the look when you take the patches. I'll take the DTS 
+related as soon as you queue up the others.
 
-Ich habe nach den n=C3=A4chsten Angeh=C3=B6rigen meines Verstorbenen=20
-gesucht
-Kunde, sind aber gescheitert, da ich seinen aktuellen Wohnsitz=20
-nicht habe
-und Kontaktdaten. Auf der Suche bin ich auf dich gesto=C3=9Fen
-Profil mit dem gleichen Nachnamen und am gleichen Ort mit
-die n=C3=A4chsten Angeh=C3=B6rigen. Ich habe mich entschieden, dich zu=20
-kontaktieren und dich als den
-Bonafide n=C3=A4chster Verwandter.
+Thanks!
+Matthias
 
-Ich erbitte Ihre Zustimmung, Sie als N=C3=A4chsten meiner Verwandten=20
-hervorzubringen
-verstorbener Kunde, da Sie beide denselben Nachnamen tragen. Der
-das Geld wird dann an Sie als Beg=C3=BCnstigten =C3=BCberwiesen und
-geteilt gem=C3=A4=C3=9F einem vorgeschlagenen Sharing-Muster/Verh=C3=A4ltni=
-s von=20
-60:40
-das sind 60 % f=C3=BCr mich und 40 % f=C3=BCr dich. Freundlich
-kontaktieren Sie mich sofort f=C3=BCr weitere Informationen.
-
-Danach schicke ich Ihnen die Details der Transaktion
-wird beginnen, Kontaktieren Sie mich f=C3=BCr weitere Informationen=20
-=C3=BCber mein
-E-Mail-Adressen unten.
-
-Gr=C3=BC=C3=9Fe
-Mustafa Ayvaz
-
-E-Mail: mustafa.ayvaz@ayvazburosu.com
-oder
-ayvazmustafa231@gmail.com
+> Regards,
+> 
+> 	Hans
+> 
+>>
+>> Thank you,
+>> - Angelo
+> 
