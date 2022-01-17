@@ -2,49 +2,49 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A0B2C4332F
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jan 2022 18:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86B18C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jan 2022 18:27:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242576AbiAQS1I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jan 2022 13:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
+        id S242594AbiAQS1J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jan 2022 13:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242074AbiAQS1E (ORCPT
+        with ESMTP id S242549AbiAQS1F (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jan 2022 13:27:04 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FDDC06173E
-        for <linux-media@vger.kernel.org>; Mon, 17 Jan 2022 10:27:03 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id k15so69067534edk.13
-        for <linux-media@vger.kernel.org>; Mon, 17 Jan 2022 10:27:03 -0800 (PST)
+        Mon, 17 Jan 2022 13:27:05 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47833C061574
+        for <linux-media@vger.kernel.org>; Mon, 17 Jan 2022 10:27:05 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id k15so69067768edk.13
+        for <linux-media@vger.kernel.org>; Mon, 17 Jan 2022 10:27:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cKwU2z0WzA6eXQxgtc3caEqVcpArN/pRGPxwhgA1Nc4=;
-        b=YTt7Qi7y/uU1VdwxKGR/sNUDhDVueC1mcA/WpAjQ9pPOiXP4tVdnt0G0LfVX1EOq2J
-         G+1VR4LBQ5d1z6WbledtfytoOVB6nEW4eFjQybcjraXgnMl/Edx83ZCq149HbhDeQai7
-         KCXAj+bC2Fk3bB9G4Gtlt+euMbd1IoqkiKYGk=
+        bh=RBVuDCA6PxzAB8/6X14DD9e2DOq4VKxggXT7kBuz94I=;
+        b=gXoyLaUc9QSPqYBy++Rm9nffYp7MQ+aG93TwTnQXgWNVvR5bnNpAiQ6V2eyEgsG3h8
+         GzUMl1mAHixJqPxrmf6awkMrxdhbK5Ep0mluJXR12HMH5y+yC65RZgdxdeFn3fr/dPhm
+         7UYdvoJLa9+bb1iAIMr6CDvwwlqZOBPPCWm8U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cKwU2z0WzA6eXQxgtc3caEqVcpArN/pRGPxwhgA1Nc4=;
-        b=yB6y9qNk6ljWTsORZYzIHww1W6ynqbe5qhaj+DS6F8vFRnefA6BjqwZ9lnTi7w0Hr3
-         7/3cuA4tylqG/4fDGDrQIpn8f3XkHp5Al+EJvM4J9dHedirU8B9YY4476D9VTMYR9Yi5
-         zkJB+ixivR20VvnLMoJsw5w9qoYS0/xHEBBQHw9aLV0yK1RzNcG9n3R354wNHEKUPqQD
-         k9cUi/+T1kFgHKT2gaGE3ozfYtlYMICL9UeOcg4eyIHDk/6OYJ5myMOm+djXqLeNoXzD
-         9BUFQp13a1gdViwMghTNYJESE4hYdoIlJ9CjEY8V00yOlX6onkt3LbYDFSlbm2M4+eJ3
-         2LIQ==
-X-Gm-Message-State: AOAM5337NEoVyeZkXSR3TizzS3zBg6/hbeLMtM6nuQlKXmZ6UgVUYBsX
-        pylwDZUJwmFhvafXUw009ckR2A==
-X-Google-Smtp-Source: ABdhPJzg0fiKPTbN7d9qhzbpAB13l0/jmPcmZm5H77obfav/9qZ6paGnpcIS0mqhaE+W202LBpGezw==
-X-Received: by 2002:a17:906:e295:: with SMTP id gg21mr18308367ejb.375.1642444022462;
-        Mon, 17 Jan 2022 10:27:02 -0800 (PST)
+        bh=RBVuDCA6PxzAB8/6X14DD9e2DOq4VKxggXT7kBuz94I=;
+        b=T2mp0+958CwYmO4puFoR1702CXmLF1Afuo5uSJLv4QoIfzUM4K2/63SH/GJfIwuNKc
+         799hlzPqpEkVTYN2xtEb1ZRRkQ8vJtyZui/x7WyfJYIPWZPK8J2hy1tL3vEoBs3Qmkfa
+         hBlCLO9eDftweuJp92Xe2p7em6AAEItmIjoV6GzWjw5NxLafi8niJP1mWBd5bKysV//s
+         PgaDtJIEMHEglkInMJobZJW0XEjtdQEQ8Pm8YNNV8YEP46osJUP6yRtdEiMTX/BbjCiK
+         m0yxyKgQ0WnYEfsQa1D9A1i0Ao/H6YU37epibp6Bas3jlXZXrEUjWBV0D0IO2pMtu1ZG
+         Y6JQ==
+X-Gm-Message-State: AOAM531BpBnjWUHil/DFlXG67RBPaxlp2rcwWB08O+urOtzN+3wXqL5T
+        BK1bXCxDi9pYumshh9Gouc+yDg==
+X-Google-Smtp-Source: ABdhPJxeScoNGqmuzJThlqjZB8RrFK16Y1iV+pilzVolfnayqinWPv1BRPufi97+Y9EfeJ9NnE9ojQ==
+X-Received: by 2002:a17:907:1007:: with SMTP id ox7mr15959810ejb.533.1642444023909;
+        Mon, 17 Jan 2022 10:27:03 -0800 (PST)
 Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id la10sm4657462ejc.22.2022.01.17.10.27.01
+        by smtp.gmail.com with ESMTPSA id la10sm4657462ejc.22.2022.01.17.10.27.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 10:27:02 -0800 (PST)
+        Mon, 17 Jan 2022 10:27:03 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -54,9 +54,9 @@ To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
         tfiga@chromium.org,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v3 1/3] media: v4l2-dev.c: Add Meta: to the name of metadata devices
-Date:   Mon, 17 Jan 2022 19:26:56 +0100
-Message-Id: <20220117182658.468993-2-ribalda@chromium.org>
+Subject: [PATCH v3 3/3] media: uvcvideo: Add a unique suffix to camera names
+Date:   Mon, 17 Jan 2022 19:26:58 +0100
+Message-Id: <20220117182658.468993-4-ribalda@chromium.org>
 X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
 In-Reply-To: <20220117182658.468993-1-ribalda@chromium.org>
 References: <20220117182658.468993-1-ribalda@chromium.org>
@@ -66,45 +66,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Devices with Metadata output (like uvc), create two video devices, one
-for the data itself and another one for the metadata.
-
-Add a "Meta: " to the beginning of the device name, as suggested by Mauro,
-to avoid having multiple devices with the same name.
+Some cameras have multiple data inputs (i.e. IR sensor and RGB sensor),
+append a unique number to the device name.
 
 Fixes v4l2-compliance:
-Media Controller ioctls:
-     fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
-   test MEDIA_IOC_G_TOPOLOGY: FAIL
-     fail: v4l2-test-media.cpp(394): num_data_links != num_links
-   test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
+    Media Controller ioctls:
+         fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
+       test MEDIA_IOC_G_TOPOLOGY: FAIL
+         fail: v4l2-test-media.cpp(394): num_data_links != num_links
+       test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
 
-Suggested-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/v4l2-core/v4l2-dev.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/media/usb/uvc/uvc_driver.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index d03ace324db0..98be80010702 100644
---- a/drivers/media/v4l2-core/v4l2-dev.c
-+++ b/drivers/media/v4l2-core/v4l2-dev.c
-@@ -901,6 +901,15 @@ int __video_register_device(struct video_device *vdev,
- 	if (WARN_ON(type != VFL_TYPE_SUBDEV && !vdev->device_caps))
- 		return -EINVAL;
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 5f394d4efc21..b17569fc4264 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2232,7 +2232,8 @@ int uvc_register_video_device(struct uvc_device *dev,
+ 		break;
+ 	}
  
-+	/* Add Meta: to metadata device names */
-+	if (vdev->device_caps &
-+	    (V4L2_CAP_META_CAPTURE | V4L2_CAP_META_OUTPUT)) {
-+		char aux[sizeof(vdev->name)];
-+
-+		snprintf(aux, sizeof(aux), "Meta: %s", vdev->name);
-+		strscpy(vdev->name, aux, sizeof(aux));
-+	}
-+
- 	/* v4l2_fh support */
- 	spin_lock_init(&vdev->fh_lock);
- 	INIT_LIST_HEAD(&vdev->fh_list);
+-	strscpy(vdev->name, dev->name, sizeof(vdev->name));
++	snprintf(vdev->name, sizeof(vdev->name), "%s %u", dev->name,
++		 stream->header.bTerminalLink);
+ 
+ 	/*
+ 	 * Set the driver data before calling video_register_device, otherwise
 -- 
 2.34.1.703.g22d0c6ccf7-goog
 
