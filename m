@@ -2,299 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1092C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jan 2022 12:09:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86478C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jan 2022 15:35:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236811AbiAQMJw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jan 2022 07:09:52 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:34554 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236760AbiAQMJv (ORCPT
+        id S240488AbiAQPfq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jan 2022 10:35:46 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:44686 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240489AbiAQPfp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jan 2022 07:09:51 -0500
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 38D65596;
-        Mon, 17 Jan 2022 13:09:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642421390;
-        bh=+fIlUxKgWiAhDk3+NeK46K+HXm8uAec1gra6f/nPfSc=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=DFHPpiYu7MsTK+wN3suBbqOMsxY1VDWtOMfaVlXaWHul1WqzSno5i8I65E4d0R+Kg
-         aqlZBrCRgQ3uIFyoa4TVxkTc/6yp4rr7Ir+LD/zrLMIzGvdQWqrCxX/CjSNcKHHfYp
-         ucNv6PhuMSXBrySVjDiSw24Csd3c3DmeIvuOpke8=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211216163439.139579-5-jacopo+renesas@jmondi.org>
-References: <20211216163439.139579-1-jacopo+renesas@jmondi.org> <20211216163439.139579-5-jacopo+renesas@jmondi.org>
-Subject: Re: [PATCH v8 4/7] arm64: dts: renesas: condor: Enable MAX9286
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Niklas =?utf-8?q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Date:   Mon, 17 Jan 2022 12:09:47 +0000
-Message-ID: <164242138750.10801.12504005374537076233@Monstersaurus>
-User-Agent: alot/0.10
+        Mon, 17 Jan 2022 10:35:45 -0500
+Received: by mail-oi1-f176.google.com with SMTP id s9so23894945oib.11;
+        Mon, 17 Jan 2022 07:35:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=PdccHlgr3Zdp1814HhFMrvJGIRgozixSM54SKvkFpnA=;
+        b=O9OfO7H6ehw2Fz7bnljDHfrVq+M8DdT3STpMcAPMhr3l6vcDBCK7ikieQ1t4bFINlN
+         Q9FbMmcxrqTqjz2p71JlE8aegdBOK9qsVFRGlWn77Ntwr6WGe690W/aNOOiexuRPVnE1
+         J/S7g25jn7wfTDPkn0o5aXG0leQfx6sA/ES/aarBlqmun4xIeryx2tdkzlOrMEsVd9xQ
+         0m+aQayb+88/6vvPg1FcqeVZMeyvd3GTpAXlSL4P9nNZbqOOz9X/2xISZ7s2YRKWEuwG
+         iKy80YesuUI8GlX6MBDSPfwlC/itByEnoOTxGbWnbuTzsRyh6e0/+BvE+z+Lz/xYFwBQ
+         CHig==
+X-Gm-Message-State: AOAM530+EKqZer71pICWhIK5nsrU+m8346X/iS27DwoQMpUl32PWad6N
+        MsPnogSdMdHQFLeg/26koQ==
+X-Google-Smtp-Source: ABdhPJyI7ICuL0OHDG+r1tYSyFFYh4imjg3J5ue8rDUn7lNU4uKpyUkRvJ3l09fkM1OiRFnGsbLg2A==
+X-Received: by 2002:a54:4402:: with SMTP id k2mr9876742oiw.131.1642433744862;
+        Mon, 17 Jan 2022 07:35:44 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id a28sm6389929oiy.4.2022.01.17.07.35.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 07:35:44 -0800 (PST)
+Received: (nullmailer pid 3923084 invoked by uid 1000);
+        Mon, 17 Jan 2022 15:35:42 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Irui Wang <irui.wang@mediatek.com>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>, linux-media@vger.kernel.org,
+        angelogioacchino.delregno@collabora.com,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-kernel@vger.kernel.org, Tzung-Bi Shih <tzungbi@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, srv_heupstream@mediatek.com,
+        Tomasz Figa <tfiga@google.com>, Yong Wu <yong.wu@mediatek.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220117120615.21687-4-irui.wang@mediatek.com>
+References: <20220117120615.21687-1-irui.wang@mediatek.com> <20220117120615.21687-4-irui.wang@mediatek.com>
+Subject: Re: [PATCH v2, 03/10] dt-bindings: media: mtk-vcodec: Adds encoder cores dt-bindings for mt8195
+Date:   Mon, 17 Jan 2022 09:35:42 -0600
+Message-Id: <1642433742.919482.3923083.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Quoting Jacopo Mondi (2021-12-16 16:34:36)
-> Enable the MAX9286 GMSL deserializers on Condor-V3H board.
->=20
-> Connected cameras should be defined in a device-tree overlay or included
-> after these definitions.
->=20
-> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-
-This looks good to me. It now enables the CSI2s, and the max9286 will
-have no children. Will this create a completed media graph that simply
-has no cameras connected? Or will the max9286 return a failure if there
-are no devices attached.
-
-I could look this up I guess, but I'm only curious of what potential
-side effects there are of having a now successfully probed CSI2
-receiver/VIN but without any cameras.
-
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-
-
+On Mon, 17 Jan 2022 20:06:08 +0800, Irui Wang wrote:
+> Adds encoder cores dt-bindings for mt8195
+> 
+> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
 > ---
->  .../boot/dts/renesas/r8a77980-condor.dts      | 193 ++++++++++++++++++
->  1 file changed, 193 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/renesas/r8a77980-condor.dts b/arch/arm64=
-/boot/dts/renesas/r8a77980-condor.dts
-> index 3d6d10c82f48..2eb2b852ddca 100644
-> --- a/arch/arm64/boot/dts/renesas/r8a77980-condor.dts
-> +++ b/arch/arm64/boot/dts/renesas/r8a77980-condor.dts
-> @@ -6,6 +6,8 @@
->   * Copyright (C) 2018 Cogent Embedded, Inc.
->   */
-> =20
-> +#include <dt-bindings/gpio/gpio.h>
-> +
->  /dts-v1/;
->  #include "r8a77980.dtsi"
->  #include <dt-bindings/gpio/gpio.h>
-> @@ -108,6 +110,34 @@ channel0 {
->         };
->  };
-> =20
-> +&csi40 {
-> +       status =3D "okay";
-> +
-> +       ports {
-> +               port@0 {
-> +                       csi40_in: endpoint {
-> +                               clock-lanes =3D <0>;
-> +                               data-lanes =3D <1 2 3 4>;
-> +                               remote-endpoint =3D <&max9286_out0>;
-> +                       };
-> +               };
-> +       };
-> +};
-> +
-> +&csi41 {
-> +       status =3D "okay";
-> +
-> +       ports {
-> +               port@0 {
-> +                       csi41_in: endpoint {
-> +                               clock-lanes =3D <0>;
-> +                               data-lanes =3D <1 2 3 4>;
-> +                               remote-endpoint =3D <&max9286_out1>;
-> +                       };
-> +               };
-> +       };
-> +};
-> +
->  &du {
->         clocks =3D <&cpg CPG_MOD 724>,
->                  <&x1_clk>;
-> @@ -200,6 +230,164 @@ adv7511_out: endpoint {
->         };
->  };
-> =20
-> +&i2c1 {
-> +       pinctrl-0 =3D <&i2c1_pins>;
-> +       pinctrl-names =3D "default";
-> +
-> +       status =3D "okay";
-> +       clock-frequency =3D <400000>;
-> +
-> +       gmsl0: gmsl-deserializer@48 {
-> +               compatible =3D "maxim,max9286";
-> +               reg =3D <0x48>;
-> +
-> +               maxim,gpio-poc =3D <0 GPIO_ACTIVE_LOW>;
-> +               enable-gpios =3D <&io_expander0 0 GPIO_ACTIVE_HIGH>;
-> +
-> +               ports {
-> +                       #address-cells =3D <1>;
-> +                       #size-cells =3D <0>;
-> +
-> +                       port@0 {
-> +                               reg =3D <0>;
-> +                       };
-> +
-> +                       port@1 {
-> +                               reg =3D <1>;
-> +                       };
-> +
-> +                       port@2 {
-> +                               reg =3D <2>;
-> +                       };
-> +
-> +                       port@3 {
-> +                               reg =3D <3>;
-> +                       };
-> +
-> +                       port@4 {
-> +                               reg =3D <4>;
-> +                               max9286_out0: endpoint {
-> +                                       clock-lanes =3D <0>;
-> +                                       data-lanes =3D <1 2 3 4>;
-> +                                       remote-endpoint =3D <&csi40_in>;
-> +                               };
-> +                       };
-> +               };
-> +
-> +               i2c-mux {
-> +                       #address-cells =3D <1>;
-> +                       #size-cells =3D <0>;
-> +
-> +                       i2c@0 {
-> +                               #address-cells =3D <1>;
-> +                               #size-cells =3D <0>;
-> +                               reg =3D <0>;
-> +
-> +                               status =3D "disabled";
-> +                       };
-> +
-> +                       i2c@1 {
-> +                               #address-cells =3D <1>;
-> +                               #size-cells =3D <0>;
-> +                               reg =3D <1>;
-> +
-> +                               status =3D "disabled";
-> +                       };
-> +
-> +                       i2c@2 {
-> +                               #address-cells =3D <1>;
-> +                               #size-cells =3D <0>;
-> +                               reg =3D <2>;
-> +
-> +                               status =3D "disabled";
-> +                       };
-> +
-> +                       i2c@3 {
-> +                               #address-cells =3D <1>;
-> +                               #size-cells =3D <0>;
-> +                               reg =3D <3>;
-> +
-> +                               status =3D "disabled";
-> +                       };
-> +               };
-> +       };
-> +
-> +       gmsl1: gmsl-deserializer@4a {
-> +               compatible =3D "maxim,max9286";
-> +               reg =3D <0x4a>;
-> +
-> +               maxim,gpio-poc =3D <0 GPIO_ACTIVE_LOW>;
-> +               enable-gpios =3D <&io_expander1 0 GPIO_ACTIVE_HIGH>;
-> +
-> +               ports {
-> +                       #address-cells =3D <1>;
-> +                       #size-cells =3D <0>;
-> +
-> +                       port@0 {
-> +                               reg =3D <0>;
-> +                       };
-> +
-> +                       port@1 {
-> +                               reg =3D <1>;
-> +                       };
-> +
-> +                       port@2 {
-> +                               reg =3D <2>;
-> +                       };
-> +
-> +                       port@3 {
-> +                               reg =3D <3>;
-> +                       };
-> +
-> +                       port@4 {
-> +                               reg =3D <4>;
-> +                               max9286_out1: endpoint {
-> +                                       clock-lanes =3D <0>;
-> +                                       data-lanes =3D <1 2 3 4>;
-> +                                       remote-endpoint =3D <&csi41_in>;
-> +                               };
-> +                       };
-> +               };
-> +
-> +               i2c-mux {
-> +                       #address-cells =3D <1>;
-> +                       #size-cells =3D <0>;
-> +
-> +                       i2c@0 {
-> +                               #address-cells =3D <1>;
-> +                               #size-cells =3D <0>;
-> +                               reg =3D <0>;
-> +
-> +                               status =3D "disabled";
-> +                       };
-> +
-> +                       i2c@1 {
-> +                               #address-cells =3D <1>;
-> +                               #size-cells =3D <0>;
-> +                               reg =3D <1>;
-> +
-> +                               status =3D "disabled";
-> +                       };
-> +
-> +                       i2c@2 {
-> +                               #address-cells =3D <1>;
-> +                               #size-cells =3D <0>;
-> +                               reg =3D <2>;
-> +
-> +                               status =3D "disabled";
-> +                       };
-> +
-> +                       i2c@3 {
-> +                               #address-cells =3D <1>;
-> +                               #size-cells =3D <0>;
-> +                               reg =3D <3>;
-> +
-> +                               status =3D "disabled";
-> +                       };
-> +               };
-> +       };
-> +};
-> +
->  &lvds0 {
->         status =3D "okay";
-> =20
-> @@ -256,6 +444,11 @@ i2c0_pins: i2c0 {
->                 function =3D "i2c0";
->         };
-> =20
-> +       i2c1_pins: i2c1 {
-> +               groups =3D "i2c1";
-> +               function =3D "i2c1";
-> +       };
-> +
->         mmc_pins: mmc {
->                 groups =3D "mmc_data8", "mmc_ctrl", "mmc_ds";
->                 function =3D "mmc";
-> --=20
-> 2.33.1
->
+>  .../media/mediatek,vcodec-encoder-core.yaml   | 214 ++++++++++++++++++
+>  1 file changed, 214 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.yaml
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.example.dts:20:18: fatal error: dt-bindings/memory/mt8195-memory-port.h: No such file or directory
+   20 |         #include <dt-bindings/memory/mt8195-memory-port.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1413: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1580741
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
