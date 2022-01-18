@@ -2,128 +2,146 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 424DDC433EF
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jan 2022 09:01:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31CD1C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jan 2022 09:12:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbiARJBr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Jan 2022 04:01:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S1345373AbiARJMK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Jan 2022 04:12:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiARJBr (ORCPT
+        with ESMTP id S1344572AbiARJMK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Jan 2022 04:01:47 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A9CC061574
-        for <linux-media@vger.kernel.org>; Tue, 18 Jan 2022 01:01:46 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id u21so76365831edd.5
-        for <linux-media@vger.kernel.org>; Tue, 18 Jan 2022 01:01:46 -0800 (PST)
+        Tue, 18 Jan 2022 04:12:10 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B71C061574;
+        Tue, 18 Jan 2022 01:12:09 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id g12so1544979ybh.4;
+        Tue, 18 Jan 2022 01:12:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mG7gOq/SSZLmMcy51IR+3veg90IBLDwrL2VOp0HPfVU=;
-        b=F3tG5daW7xkDe2egxnNps2tkaVjs43mZ6adzS9r+lPPCGfdXPmOIHxNYMYxWmJVlXC
-         Yl1cRM3w1yZ94pczfHlw1ZOnsDd3cY8q8JkOpgnVHEfzWe0GYaJqKUDZt801Qi9uUFIb
-         NsGTVxq0RJrRNF9/RmZCb/hf7AQrAhw9Js+BWnfjOZ5KGakuNlhA+xIhwixcO1Rcdgpb
-         /q8davOBZf28KZH0GVshq/WzvnaAVTJa3mbT5jtkomHysNpKHf97/rrH7wpyuT6JBrrf
-         hn4W+zdc7tp42FQ7i+cPBLnKMZRoRWuq2QIgcK4Nzhf66oE/4wSBwHw4D4icelETzJjY
-         51cQ==
+        bh=Ne2yS3M6r+X3snlxSY21OHEr1SOR5XEoclAR5B98t44=;
+        b=XKYVXtPB83h4wOT2O5dygkvDVmV8dJaEsMcKYzTQ29uh3bADqqZF7Eis/F0N34yRLM
+         a/yNvxpmnycfUhHpHvfyzfq+5s4YZ2hbhdZF2XvOW+BxGEjdlki8I7y9RcsQoc4ncNnG
+         7FOZhyF3P5gXPrS+U2lOlw/KKsb8tvc0wGHGkD4qyXRNWuhmibEtVtc8MUOcz9ZMiD11
+         Id/DCCXq1b7FS/DMPytRoEXzUbHaTPclBh4r9B9kRLH4ld6TJ9HobyurFDzfsI7yZjCl
+         eqwz5BswP44VObImqv1w9oQjCrfY2EHhYN28oDQqoJzoxNn/2OQcFPjmoWa8P7exRhoS
+         qFkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mG7gOq/SSZLmMcy51IR+3veg90IBLDwrL2VOp0HPfVU=;
-        b=uWqmMzUUL+37lp0AfpPUsf4AJ5EIJMvGMZaMc8WEoSdKhyKZPI285OTdGp779+FvmU
-         Kl9DTm+GmpUBaPduPSTSou1TzqDGQdy4UF0YRtulmMKfQ5MXXc8Ztt6BLjegZq3BUmgW
-         ewMug5s+LkDqCTsBZl57LDZDX1zY7KNVqaXq0cqVMFipNeDM6xzHE9s0O3w4px0F7/2V
-         i0u5QmAFNS4JphQqnccpfoLEV8VqOl5ZTYYEHCVr0cbQmhcVvxlefdWPCvr7hGPiv9ug
-         e88VfKITWp50Be946fmU5v8adPcuGAd4i1W0AhLEHHEdXV0Oe2tNRWLf+G7N4fGK2NI2
-         E9hQ==
-X-Gm-Message-State: AOAM5329ZONDcx8Dkc4BQQNdKsSWrGuux8NYFmGeILIGtyuGPqfU0jKb
-        wm7hrxkf6eOUIkNgXDfTkZk0g3Y7yqtBgf3jEwY=
-X-Google-Smtp-Source: ABdhPJxZEEFiAtJRlsVeQI0DAErrMlK/vkIDu+T+KICgzfC81hMTsX/cHS7WRtRQVKXVUd9qUMjLtxM1+fIWoId2poo=
-X-Received: by 2002:a17:907:968c:: with SMTP id hd12mr19357452ejc.639.1642496505416;
- Tue, 18 Jan 2022 01:01:45 -0800 (PST)
+        bh=Ne2yS3M6r+X3snlxSY21OHEr1SOR5XEoclAR5B98t44=;
+        b=SnbsO86tPvbpKbXzaKJhIEhQy1oXELiQSxyHTb03VYpuqIJ9jrGfCGZtoJJ8h7+bCt
+         I0dWB9Vg7nG3V80GwJg8ll9QmzDFodypI6Tt1nIM2EWaYbPfsbs+NeckijmbvBKZvOkF
+         NPdgFCzsQ3nJ++JskdpeyoP0gXY1FaTSzKv6Ovp6NAVNLWPm9NsQ5C3Ve6b7N8VSTo/N
+         BdeacCO6gBSlU7VSi7ULT725OkKcapswlZFW80sMZnpBuWVpKqfT+SVwljiYQY9Jiy2a
+         syNH/5KhVrk8oeg+tssjELclp7lCn/Pam2Owt8xH5tWRMZQb7fZkTt9WBSEhpcKJNN9d
+         JjFQ==
+X-Gm-Message-State: AOAM533nuCign0DtEgtmgCDz+/97BNm1hB6elgDwnZxinOLDD5ssC5tv
+        R4DHrlBu6tCTwxUtahgHLuOSgJzzE6GwyvIAAyo=
+X-Google-Smtp-Source: ABdhPJzU7hmei1k2Gqn7quas4QTgjv6Ss3bfBcfmvRzWY0rNXnrFlsMgoUHxsuO8Erv4yRotJW3XoHCeyxdZhdleQvk=
+X-Received: by 2002:a25:98c4:: with SMTP id m4mr31514243ybo.613.1642497128873;
+ Tue, 18 Jan 2022 01:12:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20220116215204.307649-1-hdegoede@redhat.com>
-In-Reply-To: <20220116215204.307649-1-hdegoede@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 18 Jan 2022 11:01:09 +0200
-Message-ID: <CAHp75VdkrxaskWfirJqgdXA7c9JFuN_TXBpKSwp9X-++Y4ex2g@mail.gmail.com>
-Subject: Re: [PATCH 0/9] media: atomisp: Fix AXP288 PMIC and dual-cam support
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Yury Luneff <yury.lunev@gmail.com>,
-        Nable <nable.maininbox@googlemail.com>,
-        "andrey.i.trufanov" <andrey.i.trufanov@gmail.com>,
-        Fabio Aiuto <fabioaiuto83@gmail.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-staging@lists.linux.dev
+References: <20220113103215.27080-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220117081110.bkwr3ttoexgr2wjt@uno.localdomain>
+In-Reply-To: <20220117081110.bkwr3ttoexgr2wjt@uno.localdomain>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 18 Jan 2022 09:11:42 +0000
+Message-ID: <CA+V-a8t=f14QH=M8p8mufeJsqddwOn6XPqFma5TEbfQ7XdLBZA@mail.gmail.com>
+Subject: Re: [PATCH] media: dt-bindings: media: renesas,csi2: Update
+ data-lanes property
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 11:52 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi All,
->
-> Here is a patch series fixing various bugs in the current
-> atomisp_gmin_platform AXP288 support (it was completely broken before
-> this series) as well as adding support for devices with front and back
-> sensors.
->
-> This has been tested on a Teclast Tbook11 and a
-> Trekstor Surftab Duo W1 10.1, both of which use ov2680 sensors as both
-> there front and back sensors.
->
-> I think this should also make things work on the Cyberbook T116,
-> but I did not get around to testing that yet.
->
-> This series also contains some code to try and get things to work on
-> Bay Trail devices. This at least makes the driver load, but it does
-> not work yet and actually getting it to work may very well be quite
-> tricky.
+Hi Jacopo,
 
-Thanks for the series! I have looked into all patches and I found them
-clean and good.
+Thank you for the review.
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+On Mon, Jan 17, 2022 at 8:11 AM Jacopo Mondi <jacopo@jmondi.org> wrote:
+>
+> Hello Prabhakar,
+>
+> On Thu, Jan 13, 2022 at 10:32:14AM +0000, Lad Prabhakar wrote:
+> > CSI-2 (CSI4LNK0) on R-Car and RZ/G2 supports 4-lane mode which is already
+> > handled by rcar-csi2.c driver. This patch updates the data-lanes property
+> > to describe the same.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >  .../devicetree/bindings/media/renesas,csi2.yaml          | 9 ++++++++-
+> >  1 file changed, 8 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/renesas,csi2.yaml b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > index e6a036721082..064a0a4c5737 100644
+> > --- a/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > +++ b/Documentation/devicetree/bindings/media/renesas,csi2.yaml
+> > @@ -67,7 +67,14 @@ properties:
+> >                  maxItems: 1
+> >
+> >                data-lanes:
+> > -                maxItems: 1
+> > +                items:
+> > +                  minItems: 1
+> > +                  maxItems: 4
+> > +                  items:
+> > +                    - const: 1
+> > +                    - const: 2
+> > +                    - const: 3
+> > +                    - const: 4
+>
+> Seeing "maxItems: 1" there confuses me too, as the property is an
+> array of data-lanes, but I'm afraid your change does not what you
+> intend as it would allow you to specify the number of data lanes as an
+> integer rather than as an array.
+>
+Agreed, what do you think of the below instead?
 
-> Regards,
->
-> Hans
->
->
-> Hans de Goede (9):
->   media: atomisp: Don't use ifdef on IS_ISP2401
->   media: atomisp: Don't use ifdef ISP2400
->   media: atomisp: Use irci_stable_candrpv_0415_20150423_1753 fw for byt
->   media: atomisp_gmin_platform: Fix axp_regulator_set() writing to the
->     wrong register
->   media: atomisp_gmin_platform: Add enable-count to
->     gmin_[v1p8|v2p8]_ctrl()
->   media: atomisp_gmin_platform: Set ELDO1 to 1.6V on devices with an
->     AXP288 PMIC
->   media: atomisp_gmin_platform: Do not turn ELDO2 off from axp_v1p8_on()
->   media: atomisp_gmin_platform: Base CsiPort default on detected CLK
->   media: atomisp_gmin_platform: Add DMI quirk to not turn AXP ELDO2
->     regulator off on some boards
->
->  .../media/atomisp/pci/atomisp_compat_css20.c  |   4 +-
->  .../media/atomisp/pci/atomisp_gmin_platform.c | 148 +++++++++++++-----
->  .../staging/media/atomisp/pci/atomisp_v4l2.c  |   2 +-
->  .../media/atomisp/pci/sh_css_firmware.c       |   4 +
->  4 files changed, 114 insertions(+), 44 deletions(-)
->
-> --
-> 2.33.1
->
+            properties:
+              data-lanes:
+                minItems: 1
+                maxItems: 4
+                items:
+                  maximum: 4
 
+The above should handle all the possible mix and match of the lanes.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> I think it would probably be correct to set
+>
+>                 data-lanes: true
+>
+> (maybe maxItems: 1 is correct already)
+>
+> And restrict the number of valid combinations in the board DTS file
+> with a construct like:
+>
+>     data-lanes:
+>       oneOf:
+>         - items:
+>             - const: 1
+>             - const: 2
+>             - const: 3
+>             - const: 4
+>         - items:
+>             - const: 1
+>             - const: 2
+>
+I haven't come across dts files having such constraints is it allowed,
+could you point me to a example.
+
+Cheers,
+Prabhakar
