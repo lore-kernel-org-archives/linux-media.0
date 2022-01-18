@@ -2,43 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A29A7C43217
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jan 2022 03:45:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61758C4332F
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jan 2022 03:46:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348406AbiARDps (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jan 2022 22:45:48 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48952 "EHLO
+        id S1347226AbiARDqt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jan 2022 22:46:49 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48216 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346058AbiARCmQ (ORCPT
+        with ESMTP id S1347237AbiARClB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:42:16 -0500
+        Mon, 17 Jan 2022 21:41:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75246B81263;
-        Tue, 18 Jan 2022 02:42:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 802B2C36AEB;
-        Tue, 18 Jan 2022 02:42:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57D7AB811CC;
+        Tue, 18 Jan 2022 02:40:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B427BC36AE3;
+        Tue, 18 Jan 2022 02:40:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473733;
-        bh=ixHiAAhTeUJ3CTD9gpQ0BpOp0z4g1efWh7BF2ublt54=;
+        s=k20201202; t=1642473658;
+        bh=1b6YLDjsUCQzFUYs8Px5c2cq/w57NeG2Q6+eG+HGcOs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cL1dQzgjQrXOIYXORx4q10YnjWZh18pFxR9ANEij+N/Tccb1e4JqQNWgUBLEkyjqL
-         ivHA4/XobCxbZ/N9OJ0UNt4OBeiS414U8i+d7yYGZtjw4ku0wxwKl8Coo9O/wj/Cfa
-         GFSWoGuFiaolO1vhTtK0Z8Ox/eUQwFiAQRhSnvAQJdOY6d5NQpQLTqX2kov2i4w+5v
-         R9BIGl5D5xsB4SS91/HjJ3khadY6J6bHA5St/flA6FzwyBKSxkYDaNpFYE+l0GaoXn
-         JpXajmC0eW/Ka6W9u7/3StjspwASTCebHsQog+xKJp79jmcZ1uKUcQv0wa+ZClBiwO
-         yOT2LpECfE6LA==
+        b=ubem+bjQl2Ugmvv7y22ehJLM/9P72vmfBOC8zcQmJIscbTQMG6fsg7KWwm6fbOiJe
+         Rznj+tCHQS8SzhZAgLb3uwCZZCXP72o1w2G3v3kvlmhs7dmhHXgWRpKXo911MslDUH
+         uSwh2F8JNxPXFJAI+8UR8okmBmgkvCkC5w/iHj6Y2RggWvgBSzaCyPs2T28Fh0RgwZ
+         TA/o0eK8QwzngaEoDOBYWGSjBMxLWEvISDDiuWIw/x7aMjQmZBH2uoJRpfgesKO+ok
+         ACvkdWd8QH6XRidKEISnkmUrJ3sjNclsH8eCrik3mORjhAEUl+PRGUTFy4ZOeBX0AD
+         mPD74rHwjMjhg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Hilliard <james.hilliard1@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
         Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 045/116] media: uvcvideo: Increase UVC_CTRL_CONTROL_TIMEOUT to 5 seconds.
-Date:   Mon, 17 Jan 2022 21:38:56 -0500
-Message-Id: <20220118024007.1950576-45-sashal@kernel.org>
+        gregkh@linuxfoundation.org, ndesaulniers@google.com, drv@mailo.com,
+        abaci-bugfix@linux.alibaba.com, colin.i.king@googlemail.com,
+        dingxiang@cmss.chinamobile.com, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.10 014/116] media: atomisp: handle errors at sh_css_create_isp_params()
+Date:   Mon, 17 Jan 2022 21:38:25 -0500
+Message-Id: <20220118024007.1950576-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220118024007.1950576-1-sashal@kernel.org>
 References: <20220118024007.1950576-1-sashal@kernel.org>
@@ -50,43 +52,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: James Hilliard <james.hilliard1@gmail.com>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit c8ed7d2f614cd8b315981d116c7a2fb01829500d ]
+[ Upstream commit 58043dbf6d1ae9deab4f5aa1e039c70112017682 ]
 
-Some uvc devices appear to require the maximum allowed USB timeout
-for GET_CUR/SET_CUR requests.
+The succ var tracks memory allocation erros on this function.
 
-So lets just bump the UVC control timeout to 5 seconds which is the
-same as the usb ctrl get/set defaults:
-USB_CTRL_GET_TIMEOUT 5000
-USB_CTRL_SET_TIMEOUT 5000
+Fix it, in order to stop this W=1 Werror in clang:
 
-It fixes the following runtime warnings:
-   Failed to query (GET_CUR) UVC control 11 on unit 2: -110 (exp. 1).
-   Failed to query (SET_CUR) UVC control 3 on unit 2: -110 (exp. 2).
+drivers/staging/media/atomisp/pci/sh_css_params.c:2430:7: error: variable 'succ' set but not used [-Werror,-Wunused-but-set-variable]
+        bool succ = true;
+             ^
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvcvideo.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/media/atomisp/pci/sh_css_params.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index a3dfacf069c44..c884020b28784 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -183,7 +183,7 @@
- /* Maximum status buffer size in bytes of interrupt URB. */
- #define UVC_MAX_STATUS_SIZE	16
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
+index 24fc497bd4915..8d6514c45eeb6 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_params.c
++++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
+@@ -2437,7 +2437,7 @@ sh_css_create_isp_params(struct ia_css_stream *stream,
+ 	unsigned int i;
+ 	struct sh_css_ddr_address_map *ddr_ptrs;
+ 	struct sh_css_ddr_address_map_size *ddr_ptrs_size;
+-	int err = 0;
++	int err;
+ 	size_t params_size;
+ 	struct ia_css_isp_parameters *params =
+ 	kvmalloc(sizeof(struct ia_css_isp_parameters), GFP_KERNEL);
+@@ -2482,7 +2482,11 @@ sh_css_create_isp_params(struct ia_css_stream *stream,
+ 	succ &= (ddr_ptrs->macc_tbl != mmgr_NULL);
  
--#define UVC_CTRL_CONTROL_TIMEOUT	500
-+#define UVC_CTRL_CONTROL_TIMEOUT	5000
- #define UVC_CTRL_STREAMING_TIMEOUT	5000
+ 	*isp_params_out = params;
+-	return err;
++
++	if (!succ)
++		return -ENOMEM;
++
++	return 0;
+ }
  
- /* Maximum allowed number of control mappings per device */
+ static bool
 -- 
 2.34.1
 
