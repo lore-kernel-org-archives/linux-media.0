@@ -2,121 +2,104 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25485C43219
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jan 2022 03:03:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06E81C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jan 2022 03:04:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345860AbiARDD5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jan 2022 22:03:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36072 "EHLO
+        id S1346151AbiARDD6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jan 2022 22:03:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350723AbiARCwP (ORCPT
+        with ESMTP id S1345536AbiARCxc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:52:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26D1C03F938;
-        Mon, 17 Jan 2022 18:43:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7146461127;
-        Tue, 18 Jan 2022 02:43:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FFC5C36AE3;
-        Tue, 18 Jan 2022 02:43:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473780;
-        bh=Mmov4kXM/0WU3bh6vK5IbxHSy3H97/BMQnWmsVg6fm0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uFfUwhzH/t6Ty8LosF3dTvjSyfwM38CHNM4VZbBbeajGeBRMEDvL5+ngqt2mZm+zY
-         TPTRKBYZPUbsH/oYKm3fbWWfPcpp2zbYuiKHel1QpDf2g3eKvaIyZnZ1Y4I5LqAJk3
-         hCgu1bMaYv+tctoyIO+zwWzpLhHPMgeUTbw+218FGJrNgsAxBYNOAPYlg7S1BBSUER
-         2JDW2JEo7ybtskCvzrTHhfgUyJBM9VIMQw5RNwe7XwMByMPLSMGJVyHYheRSqtT6LM
-         lKT8rRFmMYI56yyW5pv6Od9fSzg7V0u8L8YCG/3EJ+EKqGcSo2usZ7NX6J5B6HNyWM
-         Iw5w6eCUaRs3Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhou Qingyang <zhou1615@umn.edu>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
-        mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 069/116] media: saa7146: hexium_gemini: Fix a NULL pointer dereference in hexium_attach()
-Date:   Mon, 17 Jan 2022 21:39:20 -0500
-Message-Id: <20220118024007.1950576-69-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118024007.1950576-1-sashal@kernel.org>
-References: <20220118024007.1950576-1-sashal@kernel.org>
+        Mon, 17 Jan 2022 21:53:32 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33901C02B8D8
+        for <linux-media@vger.kernel.org>; Mon, 17 Jan 2022 18:43:39 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id y17so20966139qtx.9
+        for <linux-media@vger.kernel.org>; Mon, 17 Jan 2022 18:43:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=7X1Uvba4FRzkQNs3e8K7RvJSO7H6HBoP1FkghXLwh2c=;
+        b=sek46a/hazwPyMk4wZVq+CDV4DXbWpOPFHYhLYiac0qW5R9X8PC+vOBPuJJ4JiuRED
+         xoa95ljAZ9cBaVn0FL4qmVapGqBEKb1bdNvS7O3/woJEXd19uz44IxDyWj1c2i+KXA4L
+         61rF2Tz5gsSoldFd1ZDBtCS/UOhlxD4X1VHPGqnSJLp/9aNmbSNuBwyJmfSq9M68WBGo
+         uJoOwy5gyw0WXWcERPCo4U1BkMpkxTYkbVFbztGmvZzfOe6ljJDT+PN2Z7FyLRKLGFiK
+         JZ2EpM0xhjpEjoaIcpcuhKcL/760jVA5N8PbjcnG7EEaqavoCTpcFLsH16Hx+va7WLf/
+         8oDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=7X1Uvba4FRzkQNs3e8K7RvJSO7H6HBoP1FkghXLwh2c=;
+        b=zeATiUbBwNMWnj6sYeZarX8MbMgJuVD8e1SL/ZmYYT5qKfNDSuzT2IEPIGA0J22DXd
+         /rl0zWtDSQHnJq+GxWk8GaRQQBzNGKo40mBbgofIJm+/mMeGVFp5V7a7xUT2CeNM89tc
+         4cs//rDd90MahIR1XpAD2M/L19Aq3WDKNx2vfDhBCiskAtqyewd8orccw4vrkFz1dxDt
+         stYm4+T02szQV9kBV1Lqk/S3j3/Ye4IofT9yKqPtlh0JWvala+TuVYmiZx1ZgdI9YgJD
+         kKjn1OmcK+7zWptZdXTYeZCtRPnPkWiforxZdXzd80l3vAUROlTWM7TQ8BMbk2xu70/G
+         C7BA==
+X-Gm-Message-State: AOAM5305RDaMAJMtaCtuI//MIpoO8RRt6yodA7lzlGT1opoy9KRqbcd0
+        gwt2nHKMNKf5hNiKl+BaJjeYGA==
+X-Google-Smtp-Source: ABdhPJwZsjq2fQPyjmZ+V+4fehDe7Yi6eO75Umlfh+sZ96vubkEVxgbNhUHzyQcaGPg2Ev5vHPupZA==
+X-Received: by 2002:ac8:5bd6:: with SMTP id b22mr18740815qtb.481.1642473818298;
+        Mon, 17 Jan 2022 18:43:38 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id g20sm3644704qtb.49.2022.01.17.18.43.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 18:43:37 -0800 (PST)
+Message-ID: <26cd15bc1c5dfe3acf8bb280cf7542657cb8b291.camel@ndufresne.ca>
+Subject: Re: [PATCH v1 2/2] media: staging: tegra-vde: Support V4L stateless
+ video decoder API
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 17 Jan 2022 21:43:36 -0500
+In-Reply-To: <0ae51264-8578-0b4f-4348-7f7a239c98dc@gmail.com>
+References: <20220112153952.1291-1-digetx@gmail.com>
+         <20220112153952.1291-3-digetx@gmail.com>
+         <e5bcc0a6d283ce3ed0cfe7d318232fb878c1b47d.camel@ndufresne.ca>
+         <0ae51264-8578-0b4f-4348-7f7a239c98dc@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+Le mercredi 12 janvier 2022 à 22:04 +0300, Dmitry Osipenko a écrit :
+> > If so, I may suggest to drop this fallback, and propose an amendment to the
+> > spec, we can require flagging KEYFRAME/PFRAME/BFRAME on the OUTPUT buffer,
+> > this
+> > won't break any drivers/userland on other HW, and will benefit possibly
+> > other HW
+> > in the future. I can volunteer to patch GStreamer and LibreELEC ffmpeg if we
+> > agree to this. Not sure how it works for Chromium, or if it actually make
+> > sense
+> > to support here.
+> > 
+> > (expecting feedback from Hans and Ezequiel here)
+> 
+> Amending the spec will be great, although it's not clear how to flag
+> frame that consists of slices having different types.
 
-[ Upstream commit 3af86b046933ba513d08399dba0d4d8b50d607d0 ]
+As per spec, all slices of a frame must be of the same type. In short, there is
+no problem, adding new flags to the decode_params.flags is fine, and is backward
+compatible. I had a second thought that I'd probably prefer this over using the
+v4l2_buffer flags, but either way seems backward compatible.
 
-In hexium_attach(dev, info), saa7146_vv_init() is called to allocate
-a new memory for dev->vv_data. saa7146_vv_release() will be called on
-failure of saa7146_register_device(). There is a dereference of
-dev->vv_data in saa7146_vv_release(), which could lead to a NULL
-pointer dereference on failure of saa7146_vv_init().
+In H264, but also other CODEC, slices are have two types of parameters, some of
+the parameters are invariant between slices, but still duplicated so you can
+decode some of the frame, even if the very first slice is lost. We tried our
+best to place all the slice invariant parameters in decode_params to keep the
+slice_params as small as we could.
 
-Fix this bug by adding a check of saa7146_vv_init().
-
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_VIDEO_HEXIUM_GEMINI=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Link: https://lore.kernel.org/linux-media/20211203154030.111210-1-zhou1615@umn.edu
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/common/saa7146/saa7146_fops.c | 2 +-
- drivers/media/pci/saa7146/hexium_gemini.c   | 7 ++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
-index d6531874faa65..8047e305f3d01 100644
---- a/drivers/media/common/saa7146/saa7146_fops.c
-+++ b/drivers/media/common/saa7146/saa7146_fops.c
-@@ -523,7 +523,7 @@ int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
- 		ERR("out of memory. aborting.\n");
- 		kfree(vv);
- 		v4l2_ctrl_handler_free(hdl);
--		return -1;
-+		return -ENOMEM;
- 	}
- 
- 	saa7146_video_uops.init(dev,vv);
-diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
-index 2214c74bbbf15..3947701cd6c7e 100644
---- a/drivers/media/pci/saa7146/hexium_gemini.c
-+++ b/drivers/media/pci/saa7146/hexium_gemini.c
-@@ -284,7 +284,12 @@ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_d
- 	hexium_set_input(hexium, 0);
- 	hexium->cur_input = 0;
- 
--	saa7146_vv_init(dev, &vv_data);
-+	ret = saa7146_vv_init(dev, &vv_data);
-+	if (ret) {
-+		i2c_del_adapter(&hexium->i2c_adapter);
-+		kfree(hexium);
-+		return ret;
-+	}
- 
- 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
- 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
--- 
-2.34.1
+regards,
+Nicolas
 
