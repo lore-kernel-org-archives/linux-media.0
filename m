@@ -2,48 +2,46 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7F65C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jan 2022 02:48:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8B67C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jan 2022 03:03:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349251AbiARCr4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jan 2022 21:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347876AbiARCnT (ORCPT
+        id S1348374AbiARDDX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jan 2022 22:03:23 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35086 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349179AbiARCri (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:43:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1B9C08E86E;
-        Mon, 17 Jan 2022 18:37:17 -0800 (PST)
+        Mon, 17 Jan 2022 21:47:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9306EB8122D;
-        Tue, 18 Jan 2022 02:37:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84706C36AE3;
-        Tue, 18 Jan 2022 02:37:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7057612CC;
+        Tue, 18 Jan 2022 02:47:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E52FC36AEF;
+        Tue, 18 Jan 2022 02:47:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473435;
-        bh=zzwXETvO8DRgU0B6/KjTgVdtgOFdMCxyOYkTNdKrc3I=;
+        s=k20201202; t=1642474057;
+        bh=Bom9tySjE4yaK810prdtgeNbiLhRB7EH8JZuDDgOKlw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Msn1pebCcqhyA5yF95bYr8/oINVOOmAM6JpUS9dmW+eP2KxBqbSjq8ZKBPEr2XvxP
-         r830yowV4k4ZfsN7bcpZ3Wt47XHbrQbvv4JLNLsHKBOL7wNiCusFf+BpzorUWJE1gi
-         5xxAtIDPhlufVPUHMxg4l0YKNcsEZyobTy6NZqTU2KsbICcJ2tY7GGskVNRpkfjrwq
-         XInFAwEYiV3+OC21OZIWlETI/Lr/iDm4+DwU9hu+2K0Dx8nNIsm+Y/oTZb4E++oxAT
-         XVFu309y1I4/hlgvcx0qBDs5WA818cInlSCEqRBArH8xDSCIIvjEAOLEaljGe9dhVd
-         I8F9MgHXPXprw==
+        b=NAIKIaJ0zzf5FRjwyNcLILmNsUp8Mhi7kQF7NNTP75M9BnQFKkPq7i1VmRGMg99Ni
+         AOYjx7JbUk06rUFBPJ0qGHb0u02Z3DHDG+0Zn4bKdmhREAN3QTHKZzZS81Q/XltSv3
+         aB/72jYkW5Bs71eAn1dt5wIR/1n8LgmayG8lDir7PgOlNFJ4agV7ZVTt3ADnyYwei5
+         oNZPqqS3ZNdPuPRdNDcHl0l69VcyYgKevCCNWldlPm3W/23WcTbTP3kVD+yOAVhk7Q
+         EKBSQoncKzmcXbgXsUy5SKRjSZpRAP99nfwa5/Y6afpEnXB4TVzyXbouYoZi9CspoR
+         R23aRGFnTIDFQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhou Qingyang <zhou1615@umn.edu>,
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
-        mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 116/188] media: saa7146: hexium_gemini: Fix a NULL pointer dereference in hexium_attach()
-Date:   Mon, 17 Jan 2022 21:30:40 -0500
-Message-Id: <20220118023152.1948105-116-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 17/59] media: uvcvideo: Increase UVC_CTRL_CONTROL_TIMEOUT to 5 seconds.
+Date:   Mon, 17 Jan 2022 21:46:18 -0500
+Message-Id: <20220118024701.1952911-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
-References: <20220118023152.1948105-1-sashal@kernel.org>
+In-Reply-To: <20220118024701.1952911-1-sashal@kernel.org>
+References: <20220118024701.1952911-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,71 +50,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: James Hilliard <james.hilliard1@gmail.com>
 
-[ Upstream commit 3af86b046933ba513d08399dba0d4d8b50d607d0 ]
+[ Upstream commit c8ed7d2f614cd8b315981d116c7a2fb01829500d ]
 
-In hexium_attach(dev, info), saa7146_vv_init() is called to allocate
-a new memory for dev->vv_data. saa7146_vv_release() will be called on
-failure of saa7146_register_device(). There is a dereference of
-dev->vv_data in saa7146_vv_release(), which could lead to a NULL
-pointer dereference on failure of saa7146_vv_init().
+Some uvc devices appear to require the maximum allowed USB timeout
+for GET_CUR/SET_CUR requests.
 
-Fix this bug by adding a check of saa7146_vv_init().
+So lets just bump the UVC control timeout to 5 seconds which is the
+same as the usb ctrl get/set defaults:
+USB_CTRL_GET_TIMEOUT 5000
+USB_CTRL_SET_TIMEOUT 5000
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+It fixes the following runtime warnings:
+   Failed to query (GET_CUR) UVC control 11 on unit 2: -110 (exp. 1).
+   Failed to query (SET_CUR) UVC control 3 on unit 2: -110 (exp. 2).
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_VIDEO_HEXIUM_GEMINI=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Link: https://lore.kernel.org/linux-media/20211203154030.111210-1-zhou1615@umn.edu
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/common/saa7146/saa7146_fops.c | 2 +-
- drivers/media/pci/saa7146/hexium_gemini.c   | 7 ++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/usb/uvc/uvcvideo.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
-index baf5772c52a96..be32159777142 100644
---- a/drivers/media/common/saa7146/saa7146_fops.c
-+++ b/drivers/media/common/saa7146/saa7146_fops.c
-@@ -521,7 +521,7 @@ int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
- 		ERR("out of memory. aborting.\n");
- 		kfree(vv);
- 		v4l2_ctrl_handler_free(hdl);
--		return -1;
-+		return -ENOMEM;
- 	}
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index a738486fd9d64..839ba3cc53119 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -176,7 +176,7 @@
+ /* Maximum status buffer size in bytes of interrupt URB. */
+ #define UVC_MAX_STATUS_SIZE	16
  
- 	saa7146_video_uops.init(dev,vv);
-diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
-index 2214c74bbbf15..3947701cd6c7e 100644
---- a/drivers/media/pci/saa7146/hexium_gemini.c
-+++ b/drivers/media/pci/saa7146/hexium_gemini.c
-@@ -284,7 +284,12 @@ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_d
- 	hexium_set_input(hexium, 0);
- 	hexium->cur_input = 0;
+-#define UVC_CTRL_CONTROL_TIMEOUT	500
++#define UVC_CTRL_CONTROL_TIMEOUT	5000
+ #define UVC_CTRL_STREAMING_TIMEOUT	5000
  
--	saa7146_vv_init(dev, &vv_data);
-+	ret = saa7146_vv_init(dev, &vv_data);
-+	if (ret) {
-+		i2c_del_adapter(&hexium->i2c_adapter);
-+		kfree(hexium);
-+		return ret;
-+	}
- 
- 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
- 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+ /* Maximum allowed number of control mappings per device */
 -- 
 2.34.1
 
