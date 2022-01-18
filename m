@@ -2,48 +2,48 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9D4AC4332F
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jan 2022 03:36:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE507C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jan 2022 03:41:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346277AbiARDg2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jan 2022 22:36:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
+        id S1344719AbiARDls (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jan 2022 22:41:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353380AbiARDdX (ORCPT
+        with ESMTP id S1345277AbiARDEh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jan 2022 22:33:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9041CC03700A;
-        Mon, 17 Jan 2022 19:09:08 -0800 (PST)
+        Mon, 17 Jan 2022 22:04:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F877C0219FE;
+        Mon, 17 Jan 2022 18:48:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DCB360C49;
-        Tue, 18 Jan 2022 03:09:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F64C36AEF;
-        Tue, 18 Jan 2022 03:09:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 345DDB811D6;
+        Tue, 18 Jan 2022 02:48:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27E50C36AE3;
+        Tue, 18 Jan 2022 02:48:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642475347;
-        bh=C3A7l53Vz4Z6yLJ0779NqAjKBF2eewvXM/vs65DiBvY=;
+        s=k20201202; t=1642474089;
+        bh=1Dan8dXqoNzgwNf+GccsTIVQp+glgJ3SqFIhl/iSHJc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q6fL3R7UH+cZyf9bj39AmsEOYRfRVt2dJXG+78XinvnLyiG51elIkIuHkZBTu/X4Z
-         D8dfLhUWYrdaOfmnRyz3oPIWcEtdl+G+Mx0ucPs4BDZi39Em1b+zcHlYQqRl/RwMZi
-         5P85ntST8eYkL33EhGTlB9OhU2J+I4xjRRUq3L6rG/Lt0TlH4ssUBq3pIi6/Fsz/CX
-         byQDwZtSUBEXvhTVUL2R7SJZMeJRpakAVvufLtG7UP9kwXoZjZ0InKo5jBkeGFRpkp
-         QjW1z9YDRbBEqYXME/xc0DX5e1drhHtXuFFK8HhvOwMSJjE2sBIn1knLsBHyTd/rcc
-         v/5HmgI8jzHjQ==
+        b=ExUiUA17FX3MDS6TszeZsNFE63JdlTRd6hFrwoxufq7eWkYWsoQ/YYbgXKG0ezWss
+         ElzrohEQl/clOarKXHT0u3j2mBmhz4UMnsADkFun8z2rEQr5fnqit8+oa7hzR7HlUK
+         v9pzV0tqIPL1MTALYsRqa6HuwaFdeoGR4IzjC3rJgxDTyRMHJXUgiSRVcBcQuRow/b
+         Y7RlcXsinzMlBvL1jvBECD47M7cd7F4NaR9oDmjY+dm57WboKFL46C4e/IF51XOQ4w
+         OpMl7iv+URYOQjauOSG8otTiECJ4B9m4VcUyYUNIAZki0czERYN0RPOOd3al2CbWBS
+         xJDwAMziDBn0Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zhou Qingyang <zhou1615@umn.edu>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
         mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 16/29] media: saa7146: hexium_gemini: Fix a NULL pointer dereference in hexium_attach()
-Date:   Mon, 17 Jan 2022 22:08:09 -0500
-Message-Id: <20220118030822.1955469-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 31/59] media: saa7146: hexium_gemini: Fix a NULL pointer dereference in hexium_attach()
+Date:   Mon, 17 Jan 2022 21:46:32 -0500
+Message-Id: <20220118024701.1952911-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118030822.1955469-1-sashal@kernel.org>
-References: <20220118030822.1955469-1-sashal@kernel.org>
+In-Reply-To: <20220118024701.1952911-1-sashal@kernel.org>
+References: <20220118024701.1952911-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -87,7 +87,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
-index df1e8c975cd82..6d0a0b08853b4 100644
+index d4987fd05d05f..d91bd32bd1f04 100644
 --- a/drivers/media/common/saa7146/saa7146_fops.c
 +++ b/drivers/media/common/saa7146/saa7146_fops.c
 @@ -524,7 +524,7 @@ int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
@@ -100,7 +100,7 @@ index df1e8c975cd82..6d0a0b08853b4 100644
  
  	saa7146_video_uops.init(dev,vv);
 diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
-index 343cd75fcd8d1..f09f311a316f5 100644
+index 8c56d4c37a525..3513b1a6fcee9 100644
 --- a/drivers/media/pci/saa7146/hexium_gemini.c
 +++ b/drivers/media/pci/saa7146/hexium_gemini.c
 @@ -296,7 +296,12 @@ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_d
