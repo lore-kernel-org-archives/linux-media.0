@@ -2,48 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFCBBC433FE
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jan 2022 03:04:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D74A0C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jan 2022 03:04:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353696AbiARDET (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jan 2022 22:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S1346423AbiARDEV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jan 2022 22:04:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350213AbiARC5k (ORCPT
+        with ESMTP id S1353637AbiARDCQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:57:40 -0500
+        Mon, 17 Jan 2022 22:02:16 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F74C061366;
-        Mon, 17 Jan 2022 18:45:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40E9C08EBAF;
+        Mon, 17 Jan 2022 18:47:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB23E61302;
-        Tue, 18 Jan 2022 02:45:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DCA2C36AEB;
-        Tue, 18 Jan 2022 02:45:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49FB6612D1;
+        Tue, 18 Jan 2022 02:47:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3055C36AEB;
+        Tue, 18 Jan 2022 02:47:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473957;
-        bh=PwjgCXsxBBNDaqdajnAiUXq66v/vFynQ/z8Ps+IVHK4=;
+        s=k20201202; t=1642474061;
+        bh=NZ86/jhMQ53LYMnML1i/s5E3FRSxzSncXmKzzl4r9Tk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SZVlJl9prVUTWqBi3YwwopFleSHRKZhyuLFF3dJXvpwUNPTTuMywNILRQ0ykkw7bb
-         Vv17St4ActiaFr3CJPgYB4LMTuX0eQe+E+wStD8mgEEKzgRWm66y89TMtX8m4YmRiP
-         KXS2rmTf9yxD6pnfi56+rbK6TfxaHG9OGx7U0ru4OAwOa8tUxw71ZXO9wr+myRemaT
-         LHMHO2OqIwLN7wFN1BID9DjYo4twBXFtBkT7EkJgzmDJOt1pR9GSvkucSXtt40wIEO
-         i0IekBcyiq9Cjttu+UsyMoUSjc1RmrvPdSYxYz/TzErnLy4cLdymgDBpT43vbK/gsQ
-         JtFOEGKcCXG1A==
+        b=WRgmYrPRpKL5Y/1g3i9QzOwW8BXSokcBol5ywDdQr1x/r/Us1ZgaHREKseabCNlWr
+         xsBDMVtOu69Fi1zKur7YOa5wbpu4aFKWYdxUBYaeHAIjkFRj3kZzPtJeLIifC5IaMt
+         nQyrBq99se8JyaLetW45ilItTQ7on7C+Mo+CYXB7rsV2PU+LmSEsOkAyTLGwW6XPBy
+         WipHCrHL/ctzkG8vVCU89LnbbSVUtCoNJiBvJnzsXN2XwotxW3Isg+KXL5727Q0oSf
+         phJjt8lOb0txDqHtXBQJHnZurR8ZfRSyIf4vaYDUONvftv9u8W5tliCwAnqmhWH+za
+         EyHZ2h2a9UYpg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhou Qingyang <zhou1615@umn.edu>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        rkardell@mida.se, Sasha Levin <sashal@kernel.org>,
         mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 41/73] media: saa7146: hexium_gemini: Fix a NULL pointer dereference in hexium_attach()
-Date:   Mon, 17 Jan 2022 21:44:00 -0500
-Message-Id: <20220118024432.1952028-41-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 19/59] media: m920x: don't use stack on USB reads
+Date:   Mon, 17 Jan 2022 21:46:20 -0500
+Message-Id: <20220118024701.1952911-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118024432.1952028-1-sashal@kernel.org>
-References: <20220118024432.1952028-1-sashal@kernel.org>
+In-Reply-To: <20220118024701.1952911-1-sashal@kernel.org>
+References: <20220118024701.1952911-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,71 +51,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 3af86b046933ba513d08399dba0d4d8b50d607d0 ]
+[ Upstream commit a2ab06d7c4d6bfd0b545a768247a70463e977e27 ]
 
-In hexium_attach(dev, info), saa7146_vv_init() is called to allocate
-a new memory for dev->vv_data. saa7146_vv_release() will be called on
-failure of saa7146_register_device(). There is a dereference of
-dev->vv_data in saa7146_vv_release(), which could lead to a NULL
-pointer dereference on failure of saa7146_vv_init().
+Using stack-allocated pointers for USB message data don't work.
+This driver is almost OK with that, except for the I2C read
+logic.
 
-Fix this bug by adding a check of saa7146_vv_init().
+Fix it by using a temporary read buffer, just like on all other
+calls to m920x_read().
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_VIDEO_HEXIUM_GEMINI=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Link: https://lore.kernel.org/linux-media/20211203154030.111210-1-zhou1615@umn.edu
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Link: https://lore.kernel.org/all/ccc99e48-de4f-045e-0fe4-61e3118e3f74@mida.se/
+Reported-by: rkardell@mida.se
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/common/saa7146/saa7146_fops.c | 2 +-
- drivers/media/pci/saa7146/hexium_gemini.c   | 7 ++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/usb/dvb-usb/m920x.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
-index aabb830e74689..4b332ea986168 100644
---- a/drivers/media/common/saa7146/saa7146_fops.c
-+++ b/drivers/media/common/saa7146/saa7146_fops.c
-@@ -525,7 +525,7 @@ int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
- 		ERR("out of memory. aborting.\n");
- 		kfree(vv);
- 		v4l2_ctrl_handler_free(hdl);
--		return -1;
-+		return -ENOMEM;
- 	}
+diff --git a/drivers/media/usb/dvb-usb/m920x.c b/drivers/media/usb/dvb-usb/m920x.c
+index 22554d9abd432..3b2a0f36fc38e 100644
+--- a/drivers/media/usb/dvb-usb/m920x.c
++++ b/drivers/media/usb/dvb-usb/m920x.c
+@@ -277,6 +277,13 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
+ 			/* Should check for ack here, if we knew how. */
+ 		}
+ 		if (msg[i].flags & I2C_M_RD) {
++			char *read = kmalloc(1, GFP_KERNEL);
++			if (!read) {
++				ret = -ENOMEM;
++				kfree(read);
++				goto unlock;
++			}
++
+ 			for (j = 0; j < msg[i].len; j++) {
+ 				/* Last byte of transaction?
+ 				 * Send STOP, otherwise send ACK. */
+@@ -284,9 +291,12 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
  
- 	saa7146_video_uops.init(dev,vv);
-diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
-index f962269306707..86d4e2abed82a 100644
---- a/drivers/media/pci/saa7146/hexium_gemini.c
-+++ b/drivers/media/pci/saa7146/hexium_gemini.c
-@@ -284,7 +284,12 @@ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_d
- 	hexium_set_input(hexium, 0);
- 	hexium->cur_input = 0;
- 
--	saa7146_vv_init(dev, &vv_data);
-+	ret = saa7146_vv_init(dev, &vv_data);
-+	if (ret) {
-+		i2c_del_adapter(&hexium->i2c_adapter);
-+		kfree(hexium);
-+		return ret;
-+	}
- 
- 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
- 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+ 				if ((ret = m920x_read(d->udev, M9206_I2C, 0x0,
+ 						      0x20 | stop,
+-						      &msg[i].buf[j], 1)) != 0)
++						      read, 1)) != 0)
+ 					goto unlock;
++				msg[i].buf[j] = read[0];
+ 			}
++
++			kfree(read);
+ 		} else {
+ 			for (j = 0; j < msg[i].len; j++) {
+ 				/* Last byte of transaction? Then send STOP. */
 -- 
 2.34.1
 
