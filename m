@@ -2,156 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 945A0C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 19 Jan 2022 05:00:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED7BBC433EF
+	for <linux-media@archiver.kernel.org>; Wed, 19 Jan 2022 05:25:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiASFAr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Jan 2022 00:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiASFAo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Jan 2022 00:00:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00765C061574
-        for <linux-media@vger.kernel.org>; Tue, 18 Jan 2022 21:00:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 916356157B
-        for <linux-media@vger.kernel.org>; Wed, 19 Jan 2022 05:00:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7138C004E1
-        for <linux-media@vger.kernel.org>; Wed, 19 Jan 2022 05:00:42 +0000 (UTC)
-Date:   Wed, 19 Jan 2022 06:00:40 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-Message-Id: <20220119050042.A7138C004E1@smtp.kernel.org>
+        id S1349564AbiASFZW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Jan 2022 00:25:22 -0500
+Received: from mga17.intel.com ([192.55.52.151]:22332 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231512AbiASFZV (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 19 Jan 2022 00:25:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642569921; x=1674105921;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jxNeqgVlj8pAt66ohgmO6dNQRznGYQFGJGrNLuZfGE0=;
+  b=JGgtn20RNBylCrWoOp8Zll+27CSispjbqSrJVZGCNOLvSJnv1kHu46eU
+   Mwykqz7Q3Ohr/aoNEkkS2aoUxzfQF23rf+vEpc6ThKJa4rrqPUXjn8glC
+   zYjFnuSfWkX0Zun+fZ+42lO4Q6HfSNaBPHUGBNtuaIZjcnc4j0m0HBQ6a
+   HUz0WgT+7EK2NwJjZHD1N0HngkVWYkzEQj4qVi/IqK3r6sx3t99esuks/
+   xuIm41krfk5TtuPl5actZg+dBFQbMVquE8KWqfA0KP5tvrEXBAQHPhTl+
+   NtEJHCnL6DN8n8S2axdFxhZgSE47ikqfiohs17eq19aXwRch4vBW9C+HR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="225659262"
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="225659262"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 21:25:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
+   d="scan'208";a="767137048"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Jan 2022 21:25:19 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nA3TD-000DI8-4c; Wed, 19 Jan 2022 05:25:19 +0000
+Date:   Wed, 19 Jan 2022 13:24:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH] media: i2c: fix returnvar.cocci warnings
+Message-ID: <20220119052447.GA6019@12eccf4f161c>
+References: <202201191326.BbZWNNQm-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202201191326.BbZWNNQm-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+From: kernel test robot <lkp@intel.com>
 
-Results of the daily build of media_tree:
+drivers/media/i2c/ov5693.c:953:5-8: Unneeded variable: "ret". Return "0" on line 985
 
-date:			Wed Jan 19 05:00:11 CET 2022
-media-tree git hash:	5da908b7af4c3ebd6748069d7223dc7a1a98d834
-media_build git hash:	2fa76ec062aeaf93b647edbad1dd606e49fca4b3
-v4l-utils git hash:	9f0eab72e17e4167c2d4df790c7e384240ce5c37
-edid-decode git hash:	6514c9d9b18160fe9f09d3d70f99dda85d6fca71
-gcc version:		i686-linux-gcc (GCC) 11.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.3
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.3
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 563fd38b0ffa4952759ae8f89bfece067e99581d
-host hardware:		x86_64
-host os:		5.15.0-2-amd64
 
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-mips: OK
-linux-git-arm64: OK
-linux-git-powerpc64: OK
-linux-git-arm-multi: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-4.4.283-i686: OK
-linux-4.4.283-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.246-i686: OK
-linux-4.9.246-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.246-i686: OK
-linux-4.14.246-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.206-i686: OK
-linux-4.19.206-x86_64: OK
-linux-4.20.17-i686: OK
-linux-4.20.17-x86_64: OK
-linux-5.0.21-i686: OK
-linux-5.0.21-x86_64: OK
-linux-5.1.21-i686: OK
-linux-5.1.21-x86_64: OK
-linux-5.2.21-i686: OK
-linux-5.2.21-x86_64: OK
-linux-5.3.18-i686: OK
-linux-5.3.18-x86_64: OK
-linux-5.4.144-i686: OK
-linux-5.4.144-x86_64: OK
-linux-5.5.19-i686: OK
-linux-5.5.19-x86_64: OK
-linux-5.6.19-i686: OK
-linux-5.6.19-x86_64: OK
-linux-5.7.19-i686: OK
-linux-5.7.19-x86_64: OK
-linux-5.8.18-i686: OK
-linux-5.8.18-x86_64: OK
-linux-5.9.16-i686: OK
-linux-5.9.16-x86_64: OK
-linux-5.10.62-i686: OK
-linux-5.10.62-x86_64: OK
-linux-5.11.22-i686: OK
-linux-5.11.22-x86_64: OK
-linux-5.12.19-i686: OK
-linux-5.12.19-x86_64: OK
-linux-5.13.14-i686: OK
-linux-5.13.14-x86_64: OK
-linux-5.14.1-i686: OK
-linux-5.14.1-x86_64: OK
-linux-5.15.1-i686: OK
-linux-5.15.1-x86_64: OK
-linux-5.16.1-i686: OK
-linux-5.16.1-x86_64: OK
-apps: OK
-spec-git: OK
-sparse: WARNINGS
-smatch: WARNINGS
-kerneldoc: WARNINGS
+ Remove unneeded variable used to store return value.
 
-Detailed results are available here:
+Generated by: scripts/coccinelle/misc/returnvar.cocci
 
-http://www.xs4all.nl/WWW/logs/Wednesday.log
+CC: Daniel Scally <djrscally@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
 
-Detailed regression test results are available here:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   99613159ad749543621da8238acf1a122880144e
+commit: 89aef879cb537061f7a0948210fc00c5f1b5dfb4 media: i2c: Add support for ov5693 sensor
+:::::: branch date: 17 hours ago
+:::::: commit date: 7 weeks ago
 
-http://www.xs4all.nl/WWW/logs/Wednesday-test-media.log
-http://www.xs4all.nl/WWW/logs/Wednesday-test-media-32.log
-http://www.xs4all.nl/WWW/logs/Wednesday-test-media-dmesg.log
+ ov5693.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Full logs are available here:
-
-http://www.xs4all.nl/WWW/logs/Wednesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/WWW/spec/index.html
+--- a/drivers/media/i2c/ov5693.c
++++ b/drivers/media/i2c/ov5693.c
+@@ -950,7 +950,6 @@ static int ov5693_set_fmt(struct v4l2_su
+ 	unsigned int width, height;
+ 	unsigned int hblank;
+ 	int exposure_max;
+-	int ret = 0;
+ 
+ 	crop = __ov5693_get_pad_crop(ov5693, state, format->pad, format->which);
+ 
+@@ -982,7 +981,7 @@ static int ov5693_set_fmt(struct v4l2_su
+ 	format->format = *fmt;
+ 
+ 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
+-		return ret;
++		return 0;
+ 
+ 	mutex_lock(&ov5693->lock);
+ 
+@@ -1012,7 +1011,7 @@ static int ov5693_set_fmt(struct v4l2_su
+ 				     exposure_max));
+ 
+ 	mutex_unlock(&ov5693->lock);
+-	return ret;
++	return 0;
+ }
+ 
+ static int ov5693_get_selection(struct v4l2_subdev *sd,
