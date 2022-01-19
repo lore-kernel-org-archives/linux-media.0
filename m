@@ -2,42 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7993C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 19 Jan 2022 05:25:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DABCCC433EF
+	for <linux-media@archiver.kernel.org>; Wed, 19 Jan 2022 05:31:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiASFZe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Jan 2022 00:25:34 -0500
-Received: from mga02.intel.com ([134.134.136.20]:27455 "EHLO mga02.intel.com"
+        id S1344785AbiASFbB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Jan 2022 00:31:01 -0500
+Received: from mga05.intel.com ([192.55.52.43]:20785 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351311AbiASFZc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Jan 2022 00:25:32 -0500
+        id S231512AbiASFbA (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 19 Jan 2022 00:31:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642569932; x=1674105932;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XRKZHoPTIlJPnn5nPirLLDNEub9aS2hc9D+lBx+PkEg=;
-  b=OUzAD0NTLtSB50lF2F1bl/hIwW8S8ycgQPFvWH8XMux2W5Td/7zDwn1J
-   7+dXlj8khhD3Sm30EzB2dVG0JO9WQwhnLtkbBPUg4ptEGiOhYgOIDIrgj
-   8Z/weRo0Njo/i5Sp8mIUqG+y2KZh+tL6vqgy3NTQq+q1ghb0X6YhD+SZx
-   N3tYPAA8JdWvN2kFBTZ1PfvWYTVyex1fqII5O35bH5+o9y0u4X+Le4/C0
-   ij3gyAR+yIsVXDK4ndzDMUnq9DzLsTrbCeehnsJJofPU9AcaFgzrX/Fuk
-   TrV5bFiSAy6YL2l7ESfc1eEGe1Knew0Ch3FHjrugTi1UYJHLEWuQlUsoQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="232349041"
+  t=1642570260; x=1674106260;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/S6+4AaC4aquNAFqWSSro024H3tLteo4PdifLrqaHEw=;
+  b=KjtboQV98/K10ynSQdCJUOvfi4wOP83KZ84Iztc4CIBvqJcBBEgYWqpw
+   ffABBfPIeVQRYxGcJM4ClzSD4OyetMalXDY5bDkKhdyFkYHbCQrWdfeds
+   y9XIA6RbV+FVUALaxBJ+b7gBzXbIdveY0LyEI5jf9UHCpeAJDp5mrOBLA
+   97mRVFzmXCo1usWK1Xn9Y29uh6LsjVUthbptOFaIH4co5oukRFsIzHgpZ
+   rro3txDljmb0kuuuP6/ErQnza2mukSTXk27UcTrKMNkY9swgBQaD8qYOe
+   Zo/xcMA0KOpacaOO0qzDCb9l3RXWPN85ivVvR+QKibAvnSOpPKCl0Rgad
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10231"; a="331339098"
 X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="232349041"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 21:25:21 -0800
+   d="scan'208";a="331339098"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2022 21:27:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,298,1635231600"; 
-   d="scan'208";a="532104587"
+   d="scan'208";a="625758388"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 18 Jan 2022 21:25:19 -0800
+  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2022 21:27:19 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nA3TD-000DIA-59; Wed, 19 Jan 2022 05:25:19 +0000
-Date:   Wed, 19 Jan 2022 13:24:42 +0800
+        id 1nA3V9-000DIS-5h; Wed, 19 Jan 2022 05:27:19 +0000
+Date:   Wed, 19 Jan 2022 13:26:30 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Daniel Scally <djrscally@gmail.com>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
@@ -45,56 +44,36 @@ Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org,
         Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [PATCH] media: i2c: fix boolconv.cocci warnings
-Message-ID: <20220119052442.GA5060@12eccf4f161c>
-References: <202201191326.BbZWNNQm-lkp@intel.com>
+Subject: drivers/media/i2c/ov5693.c:989:46-51: WARNING: conversion to bool
+ not needed here
+Message-ID: <202201191326.BbZWNNQm-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202201191326.BbZWNNQm-lkp@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
-
-drivers/media/i2c/ov5693.c:989:46-51: WARNING: conversion to bool not needed here
-drivers/media/i2c/ov5693.c:991:46-51: WARNING: conversion to bool not needed here
-
- Remove unneeded conversion to bool
-
-Semantic patch information:
- Relational and logical operators evaluate to bool,
- explicit conversion is overly verbose and unneeded.
-
-Generated by: scripts/coccinelle/misc/boolconv.cocci
-
-CC: Daniel Scally <djrscally@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   99613159ad749543621da8238acf1a122880144e
 commit: 89aef879cb537061f7a0948210fc00c5f1b5dfb4 media: i2c: Add support for ov5693 sensor
-:::::: branch date: 17 hours ago
-:::::: commit date: 7 weeks ago
+date:   7 weeks ago
+config: arm64-randconfig-c004-20220117 (https://download.01.org/0day-ci/archive/20220119/202201191326.BbZWNNQm-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
 
- ov5693.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
---- a/drivers/media/i2c/ov5693.c
-+++ b/drivers/media/i2c/ov5693.c
-@@ -986,9 +986,9 @@ static int ov5693_set_fmt(struct v4l2_su
- 
- 	mutex_lock(&ov5693->lock);
- 
--	ov5693->mode.binning_x = hratio > 1 ? true : false;
-+	ov5693->mode.binning_x = hratio > 1;
- 	ov5693->mode.inc_x_odd = hratio > 1 ? 3 : 1;
--	ov5693->mode.binning_y = vratio > 1 ? true : false;
-+	ov5693->mode.binning_y = vratio > 1;
- 	ov5693->mode.inc_y_odd = vratio > 1 ? 3 : 1;
- 
- 	ov5693->mode.vts = __ov5693_calc_vts(fmt->height);
+
+cocci warnings: (new ones prefixed by >>)
+>> drivers/media/i2c/ov5693.c:989:46-51: WARNING: conversion to bool not needed here
+   drivers/media/i2c/ov5693.c:991:46-51: WARNING: conversion to bool not needed here
+--
+>> drivers/media/i2c/ov5693.c:953:5-8: Unneeded variable: "ret". Return "0" on line 985
+
+Please review and possibly fold the followup patch.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
