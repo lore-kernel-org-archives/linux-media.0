@@ -2,103 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D88FEC433EF
-	for <linux-media@archiver.kernel.org>; Fri, 21 Jan 2022 08:18:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95AC4C433EF
+	for <linux-media@archiver.kernel.org>; Fri, 21 Jan 2022 08:28:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379458AbiAUISy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Jan 2022 03:18:54 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:48796 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379433AbiAUISZ (ORCPT
+        id S1349730AbiAUI2r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Jan 2022 03:28:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349535AbiAUI2q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Jan 2022 03:18:25 -0500
-Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:d916:876:fa52:7241])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E81951273;
-        Fri, 21 Jan 2022 09:18:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642753101;
-        bh=g62rX4H5ojw3TBC5rBoXLBe/JwwWPY/fHbZ3UYFUP/Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LTTO06JZu+GazJe00N9u2tRIXpZjop6ARaNurKJe/z9E+6UHxS/eBXA/rHNMX7hTA
-         Hc4nJRcdkdAtoxhDNWh+ttmT6ZWagSOaK38DtLMGBDaGFdDNhMko7+Hqhcx+YITRGJ
-         qYgHvBk6dDmNG3wlWmOsVTyorulHaLUqbN0/33oE=
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-To:     jeanmichel.hautbois@ideasonboard.com
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
-        robh@kernel.org, tomi.valkeinen@ideasonboard.com
-Subject: [RFC PATCH v2 5/7] ARM: dts: bcm2711: Add unicam CSI nodes
-Date:   Fri, 21 Jan 2022 09:18:08 +0100
-Message-Id: <20220121081810.155500-6-jeanmichel.hautbois@ideasonboard.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220121081810.155500-1-jeanmichel.hautbois@ideasonboard.com>
-References: <20220121081810.155500-1-jeanmichel.hautbois@ideasonboard.com>
+        Fri, 21 Jan 2022 03:28:46 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D05EC061574
+        for <linux-media@vger.kernel.org>; Fri, 21 Jan 2022 00:28:46 -0800 (PST)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 35F4C240002;
+        Fri, 21 Jan 2022 08:28:42 +0000 (UTC)
+Date:   Fri, 21 Jan 2022 09:29:46 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Rui Miguel Silva <rmfrfs@gmail.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 0/2] staging: media: imx7-mipi-csis: Two small fixes
+Message-ID: <20220121082946.iucsh2czf6ltmg75@uno.localdomain>
+References: <20220119112024.11339-1-jacopo@jmondi.org>
+ <CH9SE3SLDYEU.2M560Q0RQ0L3C@arch-thunder>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CH9SE3SLDYEU.2M560Q0RQ0L3C@arch-thunder>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add both MIPI CSI-2 nodes in the core bcm2711 tree. Use the 3-cells
-interrupt declaration, corresponding clocks and default as disabled.
+Hi Rui
 
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
----
- arch/arm/boot/dts/bcm2711.dtsi | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+On Wed, Jan 19, 2022 at 04:21:15PM +0000, Rui Miguel Silva wrote:
+> Hey Jacopo,
+> both patches LGTM.
+>
+> I only have one nit with them...
+>
+> On Wed Jan 19, 2022 at 11:20 AM WET, Jacopo Mondi wrote:
+>
+> > Two small fixes for the imx7-mipi-csis driver.
+> >
+> > The second patch is required to correctly capture in packed YUV422 formats
+> >
+> > Thanks
+> >    j
+> >
+> > Jacopo Mondi (2):
+> >   staging: media: imx: imx7-mipi-csic: Resume on debug
+> >   staging: media: imx: imx7-mipi-csic: Set PIXEL_MODE for YUV422
+>                                       ^
+>                    here should be s (imx7-mipi-csis) on both patches
 
-diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
-index dff18fc9a906..077141df7024 100644
---- a/arch/arm/boot/dts/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/bcm2711.dtsi
-@@ -3,6 +3,7 @@
- 
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/soc/bcm2835-pm.h>
-+#include <dt-bindings/power/raspberrypi-power.h>
- 
- / {
- 	compatible = "brcm,bcm2711";
-@@ -293,6 +294,36 @@ hvs: hvs@7e400000 {
- 			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		csi0: csi1@7e800000 {
-+			compatible = "brcm,bcm2835-unicam";
-+			reg = <0x7e800000 0x800>,
-+			      <0x7e802000 0x4>;
-+			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clocks BCM2835_CLOCK_CAM0>,
-+				 <&firmware_clocks 4>;
-+			clock-names = "lp", "vpu";
-+			power-domains = <&power RPI_POWER_DOMAIN_UNICAM0>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#clock-cells = <1>;
-+			status="disabled";
-+		};
-+
-+		csi1: csi1@7e801000 {
-+			compatible = "brcm,bcm2835-unicam";
-+			reg = <0x7e801000 0x800>,
-+			      <0x7e802004 0x4>;
-+			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clocks BCM2835_CLOCK_CAM1>,
-+				 <&firmware_clocks 4>;
-+			clock-names = "lp", "vpu";
-+			power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#clock-cells = <1>;
-+			status="disabled";
-+		};
-+
- 		pixelvalve3: pixelvalve@7ec12000 {
- 			compatible = "brcm,bcm2711-pixelvalve3";
- 			reg = <0x7ec12000 0x100>;
--- 
-2.32.0
+Oh ups, I honestly thought at the time the IP core was called csic...
 
+>
+> Maybe Laurent could fix the typo on the pull, other than that:
+
+I owe an update to add an error check to 1/2 once Laurent (or someone
+with an i.MX8MM) tests 2/2, so I can fix the subject in v2.
+
+>
+> Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
+
+Thanks
+   j
+
+>
+> Cheers,
+>    Rui
+>
+> >
+> >  drivers/staging/media/imx/imx7-mipi-csis.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > --
+> > 2.34.1
+>
+>
+>
