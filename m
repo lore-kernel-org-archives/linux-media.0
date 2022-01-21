@@ -2,293 +2,268 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7273C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 21 Jan 2022 14:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CF83C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 21 Jan 2022 14:29:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380989AbiAUOMi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Jan 2022 09:12:38 -0500
-Received: from www.linuxtv.org ([130.149.80.248]:36736 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1380987AbiAUOMh (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Jan 2022 09:12:37 -0500
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1nAuea-001cUl-Dr; Fri, 21 Jan 2022 14:12:36 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1nAueY-00AKAc-H1; Fri, 21 Jan 2022 14:12:34 +0000
-Date:   Fri, 21 Jan 2022 14:12:33 +0000 (UTC)
-From:   Jenkins Builder Robot <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org
-Message-ID: <1682432619.0.1642774353901@builder.linuxtv.org>
-Subject: Build failed in Jenkins: linux-media #266
+        id S1350997AbiAUO3l (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Jan 2022 09:29:41 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:58862 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350952AbiAUO3Z (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 21 Jan 2022 09:29:25 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20LETKiY076213;
+        Fri, 21 Jan 2022 08:29:20 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1642775360;
+        bh=WQqkHJ+FgY4XE1bTzwmtfXIsd6N1b5dILusabLdQw3E=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=RojKiM5uatS60b8PsSFBOZZtElC4QOBvac3/cRN+ClXeo8dMzwn74RSZDIbQ6yIs1
+         AIOQY7oua3IBpcqaEoud7YtT8IttpTMBc/uymcUtIvNno0ZmwPwMi5ae9Q3bdaMgfY
+         2Q3PCDqLdI8iIVudfnVpAf76HGSX25ByacHQZi00=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20LETKCv064838
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 21 Jan 2022 08:29:20 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 21
+ Jan 2022 08:29:20 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 21 Jan 2022 08:29:20 -0600
+Received: from pratyush-4F-325.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20LET4Ho072129;
+        Fri, 21 Jan 2022 08:29:16 -0600
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     Pratyush Yadav <p.yadav@ti.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Nikhil Devshatwar <nikhil.nd@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Benoit Parrot <bparrot@ti.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>
+Subject: [PATCH v6 03/14] media: cadence: csi2rx: Add get_fmt and set_fmt pad ops
+Date:   Fri, 21 Jan 2022 19:58:53 +0530
+Message-ID: <20220121142904.4091481-4-p.yadav@ti.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220121142904.4091481-1-p.yadav@ti.com>
+References: <20220121142904.4091481-1-p.yadav@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
-X-Jenkins-Job: linux-media
-X-Jenkins-Result: FAILURE
-Auto-submitted: auto-generated
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-See <https://builder.linuxtv.org/job/linux-media/266/display/redirect>
+The format is needed to calculate the link speed for the external DPHY
+configuration. It is not right to query the format from the source
+subdev. Add get_fmt and set_fmt pad operations so that the format can be
+configured and correct bpp be selected.
 
-Changes:
+Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 
+---
 
-------------------------------------------
-[...truncated 22782 lines...]
-  CC [M]  drivers/staging/rtl8192e/rtl8192e/rtl_core.o
-  CC      drivers/iio/pressure/st_pressure_core.o
-  CC [M]  drivers/staging/rtl8723bs/hal/hal_pwr_seq.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalPhyRf.o
-  CC      drivers/iio/pressure/st_pressure_buffer.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalPwrSeqCmd.o
-  CC      drivers/iio/light/vcnl4000.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm.o
-  CC      drivers/iio/pressure/t5403.o
-  CC      drivers/iio/pressure/hp206c.o
-  CC [M]  drivers/staging/r8188eu/hal/odm_debug.o
-  CC      drivers/iio/pressure/zpa2326.o
-  CC      drivers/iio/pressure/zpa2326_i2c.o
-  CC [M]  drivers/staging/rtl8192e/rtl8192e/rtl_dm.o
-  CC      drivers/iio/light/vcnl4035.o
-  CC      drivers/iio/pressure/zpa2326_spi.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_CfoTracking.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_DIG.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_DynamicBBPowerSaving.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_DynamicTxPower.o
-  CC      drivers/iio/light/veml6030.o
-  CC      drivers/iio/light/veml6070.o
-  CC      drivers/iio/pressure/st_pressure_i2c.o
-  CC      drivers/iio/light/vl6180.o
-  CC      drivers/iio/light/zopt2201.o
-  CC [M]  drivers/staging/r8188eu/hal/odm_interface.o
-  CC [M]  drivers/staging/rtl8192e/rtl8192e/rtl_eeprom.o
-  CC [M]  drivers/staging/r8188eu/hal/odm_HWConfig.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_EdcaTurboCheck.o
-  CC      drivers/iio/pressure/st_pressure_spi.o
-  CC [M]  drivers/staging/r8188eu/hal/odm_RegConfig8188E.o
-  AR      drivers/iio/light/built-in.a
-  CC [M]  drivers/staging/r8188eu/hal/odm_RTL8188E.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_cmd.o
-  CC [M]  drivers/staging/rtl8192e/rtl8192e/rtl_ethtool.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_dm.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_HWConfig.o
-  AR      drivers/iio/pressure/built-in.a
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_hal_init.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_phycfg.o
-  CC [M]  drivers/staging/rtl8192e/rtl8192e/rtl_pci.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_rf6052.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_rxdesc.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.o
-  CC [M]  drivers/staging/vt6655/device_main.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_sreset.o
-  CC [M]  drivers/staging/vt6655/card.o
-  CC [M]  drivers/staging/rtl8192e/rtl8192e/rtl_pm.o
-  CC      drivers/iio/proximity/as3935.o
-  CC      drivers/iio/proximity/cros_ec_mkbp_proximity.o
-  CC [M]  drivers/staging/rtl8192e/rtl8192e/rtl_ps.o
-  CC [M]  drivers/staging/vt6656/main_usb.o
-  CC [M]  drivers/staging/rtl8723bs/hal/odm_RegConfig8723B.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188e_xmit.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188eu_led.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188eu_recv.o
-  CC      drivers/iio/proximity/isl29501.o
-  CC      drivers/iio/proximity/pulsedlight-lidar-lite-v2.o
-  CC [M]  drivers/staging/vt6655/channel.o
-  CC [M]  drivers/staging/vt6656/card.o
-  CC [M]  drivers/staging/rtl8192e/rtl8192e/rtl_wx.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_cmd.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_dm.o
-  CC [M]  drivers/staging/vt6655/mac.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.o
-  CC [M]  drivers/staging/r8188eu/hal/rtl8188eu_xmit.o
-  CC      drivers/iio/proximity/mb1232.o
-  CC      drivers/iio/proximity/ping.o
-  CC [M]  drivers/staging/vt6656/mac.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_phycfg.o
-  CC [M]  drivers/staging/vt6655/baseband.o
-  CC      drivers/iio/proximity/rfd77402.o
-  CC [M]  drivers/staging/r8188eu/hal/usb_halinit.o
-  CC      drivers/iio/proximity/srf04.o
-  LD [M]  drivers/staging/rtl8192e/rtl8192e/r8192e_pci.o
-  CC [M]  drivers/staging/r8188eu/hal/usb_ops_linux.o
-  LD [M]  drivers/staging/rtl8192e/rtllib.o
-  CC [M]  drivers/staging/r8188eu/os_dep/ioctl_linux.o
-  CC [M]  drivers/staging/r8188eu/os_dep/mlme_linux.o
-  CC [M]  drivers/staging/r8188eu/os_dep/os_intfs.o
-  CC      drivers/iio/proximity/srf08.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_rf6052.o
-  CC [M]  drivers/staging/r8188eu/os_dep/osdep_service.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723b_rxdesc.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723bs_recv.o
-  CC [M]  drivers/staging/vt6656/baseband.o
-  CC [M]  drivers/staging/vt6655/rxtx.o
-  CC [M]  drivers/staging/r8188eu/os_dep/recv_linux.o
-  CC      drivers/iio/proximity/sx9310.o
-  CC [M]  drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.o
-  CC [M]  drivers/staging/r8188eu/os_dep/usb_intf.o
-  CC [M]  drivers/staging/rtl8723bs/hal/sdio_halinit.o
-  CC [M]  drivers/staging/r8188eu/os_dep/usb_ops_linux.o
-  CC [M]  drivers/staging/vt6656/wcmd.o
-  CC [M]  drivers/staging/r8188eu/os_dep/xmit_linux.o
-  CC [M]  drivers/staging/vt6655/dpc.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_ap.o
-  CC      drivers/iio/proximity/sx9500.o
-  CC [M]  drivers/staging/rtl8723bs/hal/sdio_ops.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalBtc8723b1Ant.o
-  CC      drivers/iio/proximity/vcnl3020.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_br_ext.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalBtc8723b2Ant.o
-  CC [M]  drivers/staging/vt6656/rxtx.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalHWImg8723B_BB.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalHWImg8723B_MAC.o
-  CC [M]  drivers/staging/vt6655/power.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalHWImg8723B_RF.o
-  CC      drivers/iio/proximity/vl53l0x-i2c.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_cmd.o
-  CC [M]  drivers/staging/vt6655/srom.o
-  CC [M]  drivers/staging/vt6656/power.o
-  CC [M]  drivers/staging/vt6656/key.o
-  CC [M]  drivers/staging/vt6656/rf.o
-  CC [M]  drivers/staging/rtl8723bs/hal/HalPhyRf_8723B.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.o
-  CC [M]  drivers/staging/vt6656/usbpipe.o
-  AR      drivers/iio/proximity/built-in.a
-  CC [M]  drivers/staging/vt6655/key.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_efuse.o
-  CC [M]  drivers/staging/vt6656/channel.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/ioctl_linux.o
-  CC      drivers/iio/resolver/ad2s90.o
-  CC      drivers/iio/resolver/ad2s1200.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/mlme_linux.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/osdep_service.o
-  CC [M]  drivers/staging/vt6655/rf.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_ieee80211.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/os_intfs.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/recv_linux.o
-  AR      drivers/iio/resolver/built-in.a
-  CC [M]  drivers/staging/rtl8723bs/os_dep/sdio_intf.o
-  LD [M]  drivers/staging/vt6656/vt6656_stage.o
-  LD [M]  drivers/staging/vt6655/vt6655_stage.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/sdio_ops_linux.o
-  CC      drivers/iio/test/iio-test-format.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/wifi_regd.o
-  CC [M]  drivers/staging/rtl8723bs/os_dep/xmit_linux.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_ioctl_set.o
-  CC      drivers/iio/trigger/iio-trig-hrtimer.o
-  CC      drivers/iio/trigger/iio-trig-interrupt.o
-  CC [M]  drivers/staging/gdm724x/gdm_lte.o
-  CC      drivers/iio/temperature/iqs620at-temp.o
-  AR      drivers/iio/test/built-in.a
-  CC      drivers/iio/temperature/ltc2983.o
-  CC      drivers/iio/temperature/hid-sensor-temperature.o
-  CC      drivers/iio/trigger/stm32-lptimer-trigger.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_iol.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_led.o
-  LD [M]  drivers/staging/rtl8723bs/r8723bs.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_mlme.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_mlme_ext.o
-  CC      drivers/iio/temperature/maxim_thermocouple.o
-  CC [M]  drivers/staging/gdm724x/netlink_k.o
-  CC      drivers/iio/trigger/stm32-timer-trigger.o
-  CC      drivers/iio/trigger/iio-trig-sysfs.o
-  CC      drivers/iio/trigger/iio-trig-loop.o
-  CC [M]  drivers/staging/gdm724x/gdm_usb.o
-  AR      drivers/staging/built-in.a
-  CC [M]  drivers/staging/gdm724x/gdm_endian.o
-  CC      drivers/iio/temperature/max31856.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_pwrctrl.o
-  CC [M]  drivers/staging/gdm724x/gdm_tty.o
-  CC [M]  drivers/staging/gdm724x/gdm_mux.o
-  CC      drivers/iio/temperature/max31865.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_p2p.o
-  CC      drivers/iio/temperature/mlx90614.o
-  AR      drivers/iio/trigger/built-in.a
-  CC      drivers/iio/temperature/mlx90632.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_recv.o
-  LD [M]  drivers/staging/gdm724x/gdmulte.o
-  LD [M]  drivers/staging/gdm724x/gdmtty.o
-  CC      drivers/iio/temperature/tmp006.o
-  CC      drivers/iio/temperature/tmp007.o
-  CC      drivers/iio/temperature/tmp117.o
-  CC      drivers/iio/temperature/tsys01.o
-  CC      drivers/iio/temperature/tsys02d.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_rf.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_security.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_sta_mgt.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_wlan_util.o
-  CC [M]  drivers/staging/r8188eu/core/rtw_xmit.o
-  AR      drivers/iio/temperature/built-in.a
-  AR      drivers/iio/built-in.a
-  LD [M]  drivers/staging/r8188eu/r8188eu.o
-  AR      drivers/built-in.a
-  GEN     .version
-  CHK     include/generated/compile.h
-  UPD     include/generated/compile.h
-  CC      init/version.o
-  AR      init/built-in.a
-  LD      vmlinux.o
-  LD [M]  kernel/kheaders.ko
-make[1]: Leaving directory '/var/lib/jenkins/workspace/linux-media/x86_64_mod'
-+ make O=x86_64_yes allyesconfig
-make[1]: Entering directory '/var/lib/jenkins/workspace/linux-media/x86_64_yes'
-  GEN     Makefile
-#
-# configuration written to .config
-#
-make[1]: Leaving directory '/var/lib/jenkins/workspace/linux-media/x86_64_yes'
-+ ./scripts/config --file x86_64_yes/.config -d MODULE_SIG -d KEYS -d IMA -d CONFIG_DEBUG_INFO -d SYSTEM_TRUSTED_KEYRING -d MODVERSIONS
-+ make O=x86_64_yes -j9
-make[1]: Entering directory '/var/lib/jenkins/workspace/linux-media/x86_64_yes'
-  SYNC    include/config/auto.conf.cmd
-  GEN     Makefile
-  GEN     Makefile
-  DESCEND objtool
-  CALL    ../scripts/atomic/check-atomics.sh
-  CALL    ../scripts/checksyscalls.sh
-  CHK     include/generated/compile.h
-  CHK     kernel/kheaders_data.tar.xz
-  GEN     kernel/kheaders_data.tar.xz
-  CC      kernel/kheaders.o
-  AR      kernel/built-in.a
-  GEN     .version
-  CHK     include/generated/compile.h
-  UPD     include/generated/compile.h
-  CC      init/version.o
-  AR      init/built-in.a
-  LD      vmlinux.o
-  OBJTOOL vmlinux.o
-Killed
-make[1]: *** [/var/lib/jenkins/workspace/linux-media@2/Makefile:1161: vmlinux] Error 137
-make[1]: Leaving directory '/var/lib/jenkins/workspace/linux-media@2/arm_yes'
-make: *** [Makefile:219: __sub-make] Error 2
-[Pipeline] }
-[Pipeline] // node
-[Pipeline] }
-[Pipeline] // stage
-[Pipeline] }
-Failed in branch arm/aarch64 (builtin)
-  OBJTOOL vmlinux.o
-Killed
-make[1]: *** [/var/lib/jenkins/workspace/linux-media/Makefile:1161: vmlinux] Error 137
-make[1]: Leaving directory '/var/lib/jenkins/workspace/linux-media/x86_64_yes'
-make: *** [Makefile:219: __sub-make] Error 2
-[Pipeline] }
-[Pipeline] // node
-[Pipeline] }
-[Pipeline] // stage
-[Pipeline] }
-Failed in branch x86_64 (builtin/mod)
-[Pipeline] // parallel
-[Pipeline] }
-[Pipeline] // stage
-[Pipeline] stage
-[Pipeline] { (Declarative: Post Actions)
-[Pipeline] step
+Changes in v6:
+- Move the lock around the dereference for framefmt in
+  csi2rx_{get,set}_fmt() instead of when we get the pointer.
+- Do not return an error when an unsupported format is set. Instead
+  adjust the code to the first format in the list.
+- Not adding Laurent's R-by since I am making changes in
+  csi2rx_set_fmt() that he didn't explicitly recommend.
+
+Changes in v5:
+- Use YUV 1X16 formats instead of 2X8.
+- New in v5.
+
+ drivers/media/platform/cadence/cdns-csi2rx.c | 131 +++++++++++++++++++
+ 1 file changed, 131 insertions(+)
+
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index 2547903f2e8e..ae3ebdb3890d 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -54,6 +54,11 @@ enum csi2rx_pads {
+ 	CSI2RX_PAD_MAX,
+ };
+ 
++struct csi2rx_fmt {
++	u32				code;
++	u8				bpp;
++};
++
+ struct csi2rx_priv {
+ 	struct device			*dev;
+ 	unsigned int			count;
+@@ -79,12 +84,43 @@ struct csi2rx_priv {
+ 	struct v4l2_subdev		subdev;
+ 	struct v4l2_async_notifier	notifier;
+ 	struct media_pad		pads[CSI2RX_PAD_MAX];
++	struct v4l2_mbus_framefmt	fmt;
+ 
+ 	/* Remote source */
+ 	struct v4l2_subdev		*source_subdev;
+ 	int				source_pad;
+ };
+ 
++static const struct csi2rx_fmt formats[] = {
++	{
++		.code	= MEDIA_BUS_FMT_YUYV8_1X16,
++		.bpp	= 16,
++	},
++	{
++		.code	= MEDIA_BUS_FMT_UYVY8_1X16,
++		.bpp	= 16,
++	},
++	{
++		.code	= MEDIA_BUS_FMT_YVYU8_1X16,
++		.bpp	= 16,
++	},
++	{
++		.code	= MEDIA_BUS_FMT_VYUY8_1X16,
++		.bpp	= 16,
++	},
++};
++
++static const struct csi2rx_fmt *csi2rx_get_fmt_by_code(u32 code)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(formats); i++)
++		if (formats[i].code == code)
++			return &formats[i];
++
++	return NULL;
++}
++
+ static inline
+ struct csi2rx_priv *v4l2_subdev_to_csi2rx(struct v4l2_subdev *subdev)
+ {
+@@ -236,12 +272,103 @@ static int csi2rx_s_stream(struct v4l2_subdev *subdev, int enable)
+ 	return ret;
+ }
+ 
++static struct v4l2_mbus_framefmt *
++csi2rx_get_pad_format(struct csi2rx_priv *csi2rx,
++		      struct v4l2_subdev_state *state,
++		      unsigned int pad, u32 which)
++{
++	switch (which) {
++	case V4L2_SUBDEV_FORMAT_TRY:
++		return v4l2_subdev_get_try_format(&csi2rx->subdev, state, pad);
++	case V4L2_SUBDEV_FORMAT_ACTIVE:
++		return &csi2rx->fmt;
++	default:
++		return NULL;
++	}
++}
++
++static int csi2rx_get_fmt(struct v4l2_subdev *subdev,
++			  struct v4l2_subdev_state *state,
++			  struct v4l2_subdev_format *format)
++{
++	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++	struct v4l2_mbus_framefmt *framefmt;
++
++	framefmt = csi2rx_get_pad_format(csi2rx, state, format->pad,
++					 format->which);
++	if (!framefmt)
++		return -EINVAL;
++
++	mutex_lock(&csi2rx->lock);
++	format->format = *framefmt;
++	mutex_unlock(&csi2rx->lock);
++
++	return 0;
++}
++
++static int csi2rx_set_fmt(struct v4l2_subdev *subdev,
++			  struct v4l2_subdev_state *state,
++			  struct v4l2_subdev_format *format)
++{
++	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++	struct v4l2_mbus_framefmt *framefmt;
++
++	/* No transcoding, source and sink formats must match. */
++	if (format->pad != CSI2RX_PAD_SINK)
++		return csi2rx_get_fmt(subdev, state, format);
++
++	if (!csi2rx_get_fmt_by_code(format->format.code))
++		format->format.code = formats[0].code;
++
++	format->format.field = V4L2_FIELD_NONE;
++
++	framefmt = csi2rx_get_pad_format(csi2rx, state, format->pad,
++					 format->which);
++	if (!framefmt)
++		return -EINVAL;
++
++	mutex_lock(&csi2rx->lock);
++	*framefmt = format->format;
++	mutex_unlock(&csi2rx->lock);
++
++	return 0;
++}
++
++static int csi2rx_init_cfg(struct v4l2_subdev *subdev,
++			   struct v4l2_subdev_state *state)
++{
++	struct v4l2_subdev_format format = {
++		.which = state ? V4L2_SUBDEV_FORMAT_TRY
++			: V4L2_SUBDEV_FORMAT_ACTIVE,
++		.pad = CSI2RX_PAD_SINK,
++		.format = {
++			.width = 640,
++			.height = 480,
++			.code = MEDIA_BUS_FMT_UYVY8_1X16,
++			.field = V4L2_FIELD_NONE,
++			.colorspace = V4L2_COLORSPACE_SRGB,
++			.ycbcr_enc = V4L2_YCBCR_ENC_601,
++			.quantization = V4L2_QUANTIZATION_LIM_RANGE,
++			.xfer_func = V4L2_XFER_FUNC_SRGB,
++		},
++	};
++
++	return csi2rx_set_fmt(subdev, state, &format);
++}
++
++static const struct v4l2_subdev_pad_ops csi2rx_pad_ops = {
++	.get_fmt	= csi2rx_get_fmt,
++	.set_fmt	= csi2rx_set_fmt,
++	.init_cfg	= csi2rx_init_cfg,
++};
++
+ static const struct v4l2_subdev_video_ops csi2rx_video_ops = {
+ 	.s_stream	= csi2rx_s_stream,
+ };
+ 
+ static const struct v4l2_subdev_ops csi2rx_subdev_ops = {
+ 	.video		= &csi2rx_video_ops,
++	.pad		= &csi2rx_pad_ops,
+ };
+ 
+ static int csi2rx_async_bound(struct v4l2_async_notifier *notifier,
+@@ -457,6 +584,10 @@ static int csi2rx_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_cleanup;
+ 
++	ret = csi2rx_init_cfg(&csi2rx->subdev, NULL);
++	if (ret)
++		goto err_cleanup;
++
+ 	ret = v4l2_async_register_subdev(&csi2rx->subdev);
+ 	if (ret < 0)
+ 		goto err_cleanup;
+-- 
+2.34.1
+
