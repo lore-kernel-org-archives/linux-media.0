@@ -2,265 +2,163 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4035AC433EF
-	for <linux-media@archiver.kernel.org>; Sat, 22 Jan 2022 01:58:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 713F5C433F5
+	for <linux-media@archiver.kernel.org>; Sat, 22 Jan 2022 03:53:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbiAVB6w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 21 Jan 2022 20:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiAVB6w (ORCPT
+        id S232303AbiAVDx0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 21 Jan 2022 22:53:26 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:57762 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229453AbiAVDxZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 21 Jan 2022 20:58:52 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B4BC06173B;
-        Fri, 21 Jan 2022 17:58:51 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1BD47E1E;
-        Sat, 22 Jan 2022 02:58:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642816730;
-        bh=6qWbTP8t4J3aDfkgAX4A47Xj2L0NBv9CHlcHs5oqFPw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a8M2p8JyAGQCakvHKLtMAhMF3X5ZBoq/9SWcMtNVxcDm3iZGLXgYtKO9N3DFZ3Vam
-         SwL6yPpBFkBqHpWL7PaLGj/yLMMJdFUbF2EoBoCmRkQ2mQ9A7JZSWrv6wmafmR6YBT
-         B1osUhIo453QK6PloxV2ubQATfZYgDMUa2IIeSBo=
-Date:   Sat, 22 Jan 2022 03:58:33 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo+renesas@jmondi.org>
-Cc:     tomi.valkeinen@ideasonboard.com, sakari.ailus@linux.intel.com,
-        niklas.soderlund@ragnatech.se, kieran.bingham@ideasonboard.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Fri, 21 Jan 2022 22:53:25 -0500
+X-UUID: a95d656e13ed48c3909cec4a7f640fca-20220122
+X-UUID: a95d656e13ed48c3909cec4a7f640fca-20220122
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1784651416; Sat, 22 Jan 2022 11:53:20 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 22 Jan 2022 11:53:19 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 22 Jan 2022 11:53:17 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2 04/13] media: max9286: Use routes to configure link
- order
-Message-ID: <YetkyS+2bRn5ZslZ@pendragon.ideasonboard.com>
-References: <20211017182449.64192-1-jacopo+renesas@jmondi.org>
- <20211017182449.64192-5-jacopo+renesas@jmondi.org>
- <YetaeGNZdqelweo+@pendragon.ideasonboard.com>
- <YetchWNAPecrteG+@pendragon.ideasonboard.com>
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v6, 00/15] media: mtk-vcodec: support for MT8192 decoder
+Date:   Sat, 22 Jan 2022 11:53:01 +0800
+Message-ID: <20220122035316.18179-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YetchWNAPecrteG+@pendragon.ideasonboard.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+This series adds support for mt8192 h264/vp8/vp9 decoder drivers. Firstly, refactor
+power/clock/interrupt interfaces for mt8192 is lat and core architecture.
 
-Thinking even more about this.
+Secondly, add new functions to get frame buffer size and resolution according
+to decoder capability from scp side. Then add callback function to get/put
+capture buffer in order to enable lat and core decoder in parallel. 
 
-On Sat, Jan 22, 2022 at 03:23:19AM +0200, Laurent Pinchart wrote:
-> On Sat, Jan 22, 2022 at 03:14:33AM +0200, Laurent Pinchart wrote:
-> > On Sun, Oct 17, 2021 at 08:24:40PM +0200, Jacopo Mondi wrote:
-> > > Use the routing table to configure the link output order and link
-> > > masking.
-> > > 
-> > > The link output order defines the CSI-2 virtual channel a GSML stream
-> > 
-> > s/GSML/GMSL/
-> > 
-> > > is output on. Configure ordering at stream start time and at chip
-> > > setup time. This last step requires to move the chip initialization
-> > > function after the V4L2 setup phase as it requires the subdev state from
-> > > where the routing table is retrieved from to be initialized.
-> > > 
-> > > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> > > ---
-> > >  drivers/media/i2c/max9286.c | 103 ++++++++++++++++++++++--------------
-> > >  1 file changed, 64 insertions(+), 39 deletions(-)
-> > > 
-> > > diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-> > > index 2e635179aec0..3485478f08a5 100644
-> > > --- a/drivers/media/i2c/max9286.c
-> > > +++ b/drivers/media/i2c/max9286.c
-> > > @@ -500,6 +500,61 @@ static int max9286_check_config_link(struct max9286_priv *priv,
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +/*
-> > > + * Configure the links output order (which defines on which CSI-2 VC a
-> > > + * link is output on) and configure link masking.
-> > > + */
-> > > +static void max9286_config_links(struct max9286_priv *priv)
-> > > +{
-> > > +	const struct v4l2_subdev_krouting *routing;
-> > > +	struct v4l2_subdev_state *state;
-> > > +	u8 link_order = 0;
-> > > +	u8 vc_mask = 0xf;
-> > > +	unsigned int i;
-> > > +
-> > > +	state = v4l2_subdev_lock_active_state(&priv->sd);
-> > > +	routing = &state->routing;
-> > > +
-> > > +	for (i = 0; i < routing->num_routes; ++i) {
-> > > +		struct v4l2_subdev_route *route = &routing->routes[i];
-> 
-> And I think we should also ignore disabled routes, so using
-> 
-> 	for_each_active_route(&state->routing, route) {
-> 
-> is likely better too.
-> 
-> > > +
-> > > +		if (!(priv->route_mask & BIT(i)))
-> > 
-> > Shouldn't this be BIT(route->sink_pad), has route_mask stores a bitmask
-> > of sink pads (see max9286_set_routing()) ?
-> > 
-> > > +			continue;
-> > > +
-> > > +		/* Assign the CSI-2 VC using the source stream number. */
+Then add to support MT21C compressed mode and fix v4l2-compliance fail.
 
-Is this even correct ? The source stream number is arbitrary selected by
-userspace, and the MAX9286 requires (at least according to the comment
-in max9286_setup()) to assign orders sequentially from 0 without any
-hole. This code doesn't seem to guarantee that. Should we instead move
-the link_order table to this function and index it with priv->route_mask
-?
+Next, extract H264 request api driver to let mt8183 and mt8192 use the same
+code, and adds mt8192 frame based h264 driver for stateless decoder.
 
-> > > +		link_order |= route->source_stream << (2 * route->sink_pad);
-> > > +		vc_mask &= ~BIT(route->source_stream);
-> > > +	}
-> > > +
-> > > +	/*
-> > > +	 * This might look rather silly, but now that we have assigned a
-> > > +	 * VC to the enabled routes, we have to assign one to the disabled
-> > > +	 * routes as well, as there cannot be two sources with the same VC.
-> > > +	 */
-> > > +	for (i = 0; i < MAX9286_NUM_GMSL; ++i) {
-> > > +		unsigned int vc;
-> > > +
-> > > +		if (priv->route_mask & BIT(i))
-> > > +			continue;
-> > > +
-> > > +		/* ffs() counts from 1. */
-> > > +		vc = ffs(vc_mask) - 1;
-> > > +		link_order |= vc << (2 * i);
-> > > +		vc_mask &= ~BIT(vc);
-> > > +	}
+Lastly, add vp8 and vp9 stateless decoder drivers.
 
-This can then be dropped.
+Patches 1 refactor power/clock/interrupt interface.
+Patches 2~4 get frame buffer size and resolution according to decoder capability.
+Patches 5~6 enable lat and core decode in parallel.
+Patch 7~10 add to support MT21C compressed mode and fix v4l2-compliance fail.
+patch 11 record capture queue format type.
+Patch 12~13 extract h264 driver and add mt8192 frame based driver for h264 decoder.
+Patch 14~15 add vp8 and vp9 stateless decoder drivers.
+---
+changes compared with v5:
+- fix vp9 comments for patch 15
+- fix vp8 comments for patch 14.
+- fix comments for patch 12.
+- fix build errors.
+changes compared with v4:
+- fix checkpatch.pl fail.
+- fix kernel-doc fail.
+- rebase to the latest media codec driver.
+changes compared with v3:
+- remove enum mtk_chip for patch 2.
+- add vp8 stateless decoder drivers for patch 14.
+- add vp9 stateless decoder drivers for patch 15.
+changes compared with v2:
+- add new patch 11 to record capture queue format type.
+- separate patch 4 according to tzung-bi's suggestion.
+- re-write commit message for patch 5 according to tzung-bi's suggestion.
+changes compared with v1:
+- rewrite commit message for patch 12.
+- rewrite cover-letter message.
+---
+Yunfei Dong (15):
+  media: mtk-vcodec: Add vdec enable/disable hardware helpers
+  media: mtk-vcodec: Using firmware type to separate different firmware
+    architecture
+  media: mtk-vcodec: get capture queue buffer size from scp
+  media: mtk-vcodec: Read max resolution from dec_capability
+  media: mtk-vcodec: Call v4l2_m2m_set_dst_buffered() set capture buffer
+    buffered
+  media: mtk-vcodec: Refactor get and put capture buffer flow
+  media: mtk-vcodec: Refactor supported vdec formats and framesizes
+  media: mtk-vcodec: Add format to support MT21C
+  media: mtk-vcodec: disable vp8 4K capability
+  media: mtk-vcodec: Fix v4l2-compliance fail
+  media: mtk-vcodec: record capture queue format type
+  media: mtk-vcodec: Extract H264 common code
+  media: mtk-vcodec: support stateless H.264 decoding for mt8192
+  media: mtk-vcodec: support stateless VP8 decoding
+  media: mtk-vcodec: support stateless VP9 decoding
 
-The max9286_get_frame_desc() function will need to be updated
-accordingly.
-
-> > > +
-> > > +	/*
-> > > +	 * Use the enabled routes to enable GMSL links, configure the CSI-2
-> > > +	 * output order, mask unused links and autodetect link used as CSI
-> > > +	 * clock source.
-> > > +	 */
-> > > +	max9286_write(priv, 0x00, MAX9286_MSTLINKSEL_AUTO | priv->route_mask);
-> > > +	max9286_write(priv, 0x0b, link_order);
-> > > +	max9286_write(priv, 0x69, 0xf & ~priv->route_mask);
-> > > +
-> > > +	v4l2_subdev_unlock_state(state);
-> > > +}
-> > > +
-> > >  /* -----------------------------------------------------------------------------
-> > >   * V4L2 Subdev
-> > >   */
-> > > @@ -701,6 +756,8 @@ static int max9286_s_stream(struct v4l2_subdev *sd, int enable)
-> > >  	int ret;
-> > >  
-> > >  	if (enable) {
-> > > +		max9286_config_links(priv);
-> > > +
-> > >  		/*
-> > >  		 * The frame sync between cameras is transmitted across the
-> > >  		 * reverse channel as GPIO. We must open all channels while
-> > > @@ -1109,32 +1166,6 @@ static void max9286_v4l2_unregister(struct max9286_priv *priv)
-> > >  
-> > >  static int max9286_setup(struct max9286_priv *priv)
-> > >  {
-> > > -	/*
-> > > -	 * Link ordering values for all enabled links combinations. Orders must
-> > > -	 * be assigned sequentially from 0 to the number of enabled links
-> > > -	 * without leaving any hole for disabled links. We thus assign orders to
-> > > -	 * enabled links first, and use the remaining order values for disabled
-> > > -	 * links are all links must have a different order value;
-> > > -	 */
-> > > -	static const u8 link_order[] = {
-> > > -		(3 << 6) | (2 << 4) | (1 << 2) | (0 << 0), /* xxxx */
-> > > -		(3 << 6) | (2 << 4) | (1 << 2) | (0 << 0), /* xxx0 */
-> > > -		(3 << 6) | (2 << 4) | (0 << 2) | (1 << 0), /* xx0x */
-> > > -		(3 << 6) | (2 << 4) | (1 << 2) | (0 << 0), /* xx10 */
-> > > -		(3 << 6) | (0 << 4) | (2 << 2) | (1 << 0), /* x0xx */
-> > > -		(3 << 6) | (1 << 4) | (2 << 2) | (0 << 0), /* x1x0 */
-> > > -		(3 << 6) | (1 << 4) | (0 << 2) | (2 << 0), /* x10x */
-> > > -		(3 << 6) | (1 << 4) | (1 << 2) | (0 << 0), /* x210 */
-> > > -		(0 << 6) | (3 << 4) | (2 << 2) | (1 << 0), /* 0xxx */
-> > > -		(1 << 6) | (3 << 4) | (2 << 2) | (0 << 0), /* 1xx0 */
-> > > -		(1 << 6) | (3 << 4) | (0 << 2) | (2 << 0), /* 1x0x */
-> > > -		(2 << 6) | (3 << 4) | (1 << 2) | (0 << 0), /* 2x10 */
-> > > -		(1 << 6) | (0 << 4) | (3 << 2) | (2 << 0), /* 10xx */
-> > > -		(2 << 6) | (1 << 4) | (3 << 2) | (0 << 0), /* 21x0 */
-> > > -		(2 << 6) | (1 << 4) | (0 << 2) | (3 << 0), /* 210x */
-> > > -		(3 << 6) | (2 << 4) | (1 << 2) | (0 << 0), /* 3210 */
-> > > -	};
-> > > -
-> > >  	/*
-> > >  	 * Set the I2C bus speed.
-> > >  	 *
-> > > @@ -1144,13 +1175,7 @@ static int max9286_setup(struct max9286_priv *priv)
-> > >  	max9286_configure_i2c(priv, true);
-> > >  	max9286_reverse_channel_setup(priv, priv->init_rev_chan_mv);
-> > >  
-> > > -	/*
-> > > -	 * Enable GMSL links, mask unused ones and autodetect link
-> > > -	 * used as CSI clock source.
-> > > -	 */
-> > > -	max9286_write(priv, 0x00, MAX9286_MSTLINKSEL_AUTO | priv->route_mask);
-> > > -	max9286_write(priv, 0x0b, link_order[priv->route_mask]);
-> > > -	max9286_write(priv, 0x69, (0xf & ~priv->route_mask));
-> > > +	max9286_config_links(priv);
-> > 
-> > We could actually skip this, and only call
-> > 
-> > 	max9286_write(priv, 0x00, MAX9286_MSTLINKSEL_AUTO | priv->route_mask);
-> > 
-> > to enable the links. The link order and link masking is only needed when
-> > starting the streams, which is done by calling max9286_config_links() in
-> > max9286_s_stream().
-> > 
-> > >  
-> > >  	/*
-> > >  	 * Video format setup:
-> > > @@ -1324,12 +1349,6 @@ static int max9286_init(struct device *dev)
-> > >  	if (ret)
-> > >  		return ret;
-> > >  
-> > > -	ret = max9286_setup(priv);
-> > > -	if (ret) {
-> > > -		dev_err(dev, "Unable to setup max9286\n");
-> > > -		goto err_poc_disable;
-> > > -	}
-> > > -
-> > >  	/*
-> > >  	 * Register all V4L2 interactions for the MAX9286 and notifiers for
-> > >  	 * any subdevices connected.
-> > > @@ -1340,6 +1359,12 @@ static int max9286_init(struct device *dev)
-> > >  		goto err_poc_disable;
-> > >  	}
-> > >  
-> > > +	ret = max9286_setup(priv);
-> > > +	if (ret) {
-> > > +		dev_err(dev, "Unable to setup max9286\n");
-> > > +		goto err_poc_disable;
-> > > +	}
-> > > +
-> > 
-> > And with the above change, I think you can keep the max9286_setup() call
-> > where it was.
-> > 
-> > >  	ret = max9286_i2c_mux_init(priv);
-> > >  	if (ret) {
-> > >  		dev_err(dev, "Unable to initialize I2C multiplexer\n");
+ drivers/media/platform/mtk-vcodec/Makefile    |    4 +
+ .../platform/mtk-vcodec/mtk_vcodec_dec.c      |   47 +-
+ .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |    5 -
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   |  168 +-
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.h   |    6 +-
+ .../mtk-vcodec/mtk_vcodec_dec_stateful.c      |   14 +-
+ .../mtk-vcodec/mtk_vcodec_dec_stateless.c     |  282 ++-
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      |   40 +-
+ .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  |    5 -
+ .../media/platform/mtk-vcodec/mtk_vcodec_fw.c |    6 +
+ .../media/platform/mtk-vcodec/mtk_vcodec_fw.h |    1 +
+ .../mtk-vcodec/vdec/vdec_h264_req_common.c    |  310 +++
+ .../mtk-vcodec/vdec/vdec_h264_req_common.h    |  253 +++
+ .../mtk-vcodec/vdec/vdec_h264_req_if.c        |  440 +---
+ .../mtk-vcodec/vdec/vdec_h264_req_multi_if.c  |  614 +++++
+ .../mtk-vcodec/vdec/vdec_vp8_req_if.c         |  445 ++++
+ .../mtk-vcodec/vdec/vdec_vp9_req_lat_if.c     | 1971 +++++++++++++++++
+ .../media/platform/mtk-vcodec/vdec_drv_if.c   |   36 +-
+ .../media/platform/mtk-vcodec/vdec_drv_if.h   |    3 +
+ .../media/platform/mtk-vcodec/vdec_ipi_msg.h  |   36 +
+ .../platform/mtk-vcodec/vdec_msg_queue.c      |    2 +
+ .../media/platform/mtk-vcodec/vdec_vpu_if.c   |   53 +-
+ .../media/platform/mtk-vcodec/vdec_vpu_if.h   |   15 +
+ .../media/platform/mtk-vcodec/venc_vpu_if.c   |    2 +-
+ include/linux/remoteproc/mtk_scp.h            |    2 +
+ 25 files changed, 4174 insertions(+), 586 deletions(-)
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_common.c
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_common.h
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_multi_if.c
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_req_if.c
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_req_lat_if.c
 
 -- 
-Regards,
+2.25.1
 
-Laurent Pinchart
