@@ -2,26 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39D9FC433EF
-	for <linux-media@archiver.kernel.org>; Sun, 23 Jan 2022 16:09:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEA62C43217
+	for <linux-media@archiver.kernel.org>; Sun, 23 Jan 2022 16:09:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238437AbiAWQJX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S238440AbiAWQJX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sun, 23 Jan 2022 11:09:23 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:42248 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238441AbiAWQJW (ORCPT
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238446AbiAWQJW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 23 Jan 2022 11:09:22 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C8AC06173B;
+        Sun, 23 Jan 2022 08:09:22 -0800 (PST)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 12F48D89;
-        Sun, 23 Jan 2022 17:09:19 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0247225E;
+        Sun, 23 Jan 2022 17:09:16 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1642954159;
-        bh=G0WXKOmQnbxYH+3hvwFIRiDUDkWU5itgSjmHvhEC+60=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uAAbjcWcY6c0VpdLBBuVsCjECQK4qNcKGYxBml2rbVSdR92sr0jQddqskh3rMcniJ
-         4345t9Qpt/IgIKcOuGDbiFzV5TSzjRfpUN0v4/e7yb54HTnDB07k6Wn1P21M45L4TM
-         spJjqKIYgfPD3YmGOYoP6G1znphnfcKz8lFm6+i8=
+        s=mail; t=1642954157;
+        bh=gGqAnNSXfqGvE1bAbOp2NcHyz9dnl2btGOUK4uBAu4Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NYrTcD82aEtrqWB+19vtcWSL1YFjM2gzuBcinCxfoJ8dbhlE+IXVRoNhTGsqyRVRE
+         Ux6FW4k1I+d1gzWceRl2/IgR8VMXIjL0c19+qBeoL5KAHIZ8h3cOUamHKYEKI4QLmw
+         yxvMSOBqi8eUh7SgFfay5vATGJUdotWcDixoRa8U=
 From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org,
@@ -32,53 +35,46 @@ Cc:     linux-renesas-soc@vger.kernel.org,
         Maxime Ripard <mripard@kernel.org>,
         Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         Pratyush Yadav <p.yadav@ti.com>
-Subject: [PATCH 2/6] media: cadence: cdns-csi2tx: Use mipi-csi2.h
-Date:   Sun, 23 Jan 2022 18:08:53 +0200
-Message-Id: <20220123160857.24161-3-laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH 0/6] media: Centralize MIPI CSI-2 data types in shared header
+Date:   Sun, 23 Jan 2022 18:08:51 +0200
+Message-Id: <20220123160857.24161-1-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220123160857.24161-1-laurent.pinchart+renesas@ideasonboard.com>
-References: <20220123160857.24161-1-laurent.pinchart+renesas@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace the hardcoded MIPI CSI-2 data types with macros from
-mipi-csi2.h.
+Hello,
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
----
- drivers/media/platform/cadence/cdns-csi2tx.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+This short patch series is the result of me being fed up with seeing
+MIPI CSI-2 data types duplicated through drivers.
 
-diff --git a/drivers/media/platform/cadence/cdns-csi2tx.c b/drivers/media/platform/cadence/cdns-csi2tx.c
-index 8f8c36056354..58e405b69f67 100644
---- a/drivers/media/platform/cadence/cdns-csi2tx.c
-+++ b/drivers/media/platform/cadence/cdns-csi2tx.c
-@@ -15,6 +15,7 @@
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- 
-+#include <media/mipi-csi2.h>
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-fwnode.h>
-@@ -121,12 +122,12 @@ static const struct csi2tx_fmt csi2tx_formats[] = {
- 	{
- 		.mbus	= MEDIA_BUS_FMT_UYVY8_1X16,
- 		.bpp	= 2,
--		.dt	= 0x1e,
-+		.dt	= MIPI_CSI2_DT_YUV422_8B,
- 	},
- 	{
- 		.mbus	= MEDIA_BUS_FMT_RGB888_1X24,
- 		.bpp	= 3,
--		.dt	= 0x24,
-+		.dt	= MIPI_CSI2_DT_RGB888,
- 	},
- };
- 
+Patch 1/6 adds a new shared header to define the data types, and patches
+2/6 to 6/6 replace custom macros or hardcoded values in drivers. There
+are a few other drivers left that should still be updated, additional
+patches are welcome on top of this series :-)
+
+Laurent Pinchart (6):
+  media: Define MIPI CSI-2 data types in a shared header file
+  media: cadence: cdns-csi2tx: Use mipi-csi2.h
+  media: rcar-isp: Use mipi-csi2.h
+  media: rcar-csi2: Use mipi-csi2.h
+  media: rockchip: rkisp1: Use mipi-csi2.h
+  media: xilinx: csi2rxss: Use mipi-csi2.h
+
+ drivers/media/platform/cadence/cdns-csi2tx.c  |   5 +-
+ drivers/media/platform/rcar-isp.c             |  32 +++++-
+ drivers/media/platform/rcar-vin/rcar-csi2.c   |  57 ++++++++--
+ .../platform/rockchip/rkisp1/rkisp1-isp.c     |  34 +++---
+ .../platform/rockchip/rkisp1/rkisp1-regs.h    |  11 --
+ .../media/platform/xilinx/xilinx-csi2rxss.c   | 106 ++++++++----------
+ include/media/mipi-csi2.h                     |  45 ++++++++
+ 7 files changed, 183 insertions(+), 107 deletions(-)
+ create mode 100644 include/media/mipi-csi2.h
+
+
+base-commit: 68b9bcc8a534cd11fe55f8bc82f948aae7d81b3c
 -- 
 Regards,
 
