@@ -2,150 +2,195 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E482FC433EF
-	for <linux-media@archiver.kernel.org>; Sun, 23 Jan 2022 09:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC790C433EF
+	for <linux-media@archiver.kernel.org>; Sun, 23 Jan 2022 14:12:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232558AbiAWJub (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 23 Jan 2022 04:50:31 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:33348 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiAWJua (ORCPT
+        id S236690AbiAWOMP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 23 Jan 2022 09:12:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236678AbiAWOMP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 23 Jan 2022 04:50:30 -0500
-Received: from [IPv6:2a00:c281:1137:e00:a5d3:cad8:aea5:8082] (unknown [IPv6:2a00:c281:1137:e00:a5d3:cad8:aea5:8082])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D5A8C1F40AC5;
-        Sun, 23 Jan 2022 09:50:28 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1642931429;
-        bh=+eQA0k87rkrro6eXxggh6SN73i8YssjGx7BFERBAy3Q=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=jeaTKRdqmGRpw6CMPpecqzrEqUJGMb3CC0Y5XwIOgNEGSA+oGJnSaZYApygx4ix6d
-         B/qKzGRtVTBuErJkqgVjM3fEKxH4A8rof83BzTHPQyi4iyXDDnQo0jkaLrgYhaD26I
-         C5IeZW7SRnPJPb4Tlce5FdJo5eBvQxhgIEGwq6zD+ddpPgJ42gtZu2Vaxstzmv4tWm
-         ptwQOx1vVbOe4kBTvw3VkTaSjgtKbw6xSFmVKDswN4in7UIpdqIPj13zuFt24n+IVa
-         7A+DA2iKeZ4zRN2ALqlXlelBg4DcfX/jQwPe65tfqohlnWyz3nVJQ/MpVaiv9uXF3y
-         JzJMx2SIaSj1w==
-Subject: Re: [PATCH v2] media: rkisp1: fix grey format iommu page faults
-To:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Cc:     nicolas.dufresne@collabora.com, laurent.pinchart@ideasonboard.com,
-        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
-        sakari.ailus@linux.intel.com, mchehab@kernel.org
-References: <20211207115923.13639-1-dafna.hirschfeld@collabora.com>
- <164241927947.10801.12217816997308426483@Monstersaurus>
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Message-ID: <1f8350f4-a2dc-5405-b48b-e657124f119d@collabora.com>
-Date:   Sun, 23 Jan 2022 11:50:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sun, 23 Jan 2022 09:12:15 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1878C06173B;
+        Sun, 23 Jan 2022 06:12:14 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CD50825E;
+        Sun, 23 Jan 2022 15:12:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1642947133;
+        bh=3E28DxXQd2YpY+sZM2BLQPQxG28x6f1iBlrrj7SfgFo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pN7eKy9knRx4cTdht1WKWjFbjysweZuidzyM8gZgZnhibPlg8Su8WgA06FKS4Dy1l
+         +j8/EEwHFtn5Y4jP04PUUIXHmZefJdzUL3cg7dTsekJ69OAnN/iznTRbPZSmwtHhnc
+         Cc/QaBTmgTBoq2ZH6ATvz/3Udekp2+gRirFfVDlY=
+Date:   Sun, 23 Jan 2022 16:11:56 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jacopo Mondi <jacopo+renesas@jmondi.org>
+Cc:     tomi.valkeinen@ideasonboard.com, sakari.ailus@linux.intel.com,
+        niklas.soderlund@ragnatech.se, kieran.bingham@ideasonboard.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2 08/13] media: rcar-csi2: Add support for
+ v4l2_subdev_state
+Message-ID: <Ye1iLKDWseZInfnR@pendragon.ideasonboard.com>
+References: <20211017182449.64192-1-jacopo+renesas@jmondi.org>
+ <20211017182449.64192-9-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
-In-Reply-To: <164241927947.10801.12217816997308426483@Monstersaurus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211017182449.64192-9-jacopo+renesas@jmondi.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Jacopo,
 
+Thank you for the patch.
 
-On 17.01.22 13:34, Kieran Bingham wrote:
-> Hi Dafna,
-> 
-> Quoting Dafna Hirschfeld (2021-12-07 11:59:23)
->> Currently capturing grey format produces page faults
->> on both selfpath and mainpath. To support greyscale
->> we can capture YUV422 planar format and configure the U, V
->> buffers to the dummy buffer.
->>
->> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
->> ---
->> This is v2 of the patch "media: rkisp1: remove support for V4L2_PIX_FMT_GREY"
->> In v1 I removed the grey format. In this version it is 'fixed'
->>
->>   .../platform/rockchip/rkisp1/rkisp1-capture.c | 28 ++++++++++++++-----
->>   1 file changed, 21 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
->> index 768987d5f2dd..8e982dd0c740 100644
->> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
->> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
->> @@ -249,7 +249,7 @@ static const struct rkisp1_capture_fmt_cfg rkisp1_sp_fmts[] = {
->>                  .fourcc = V4L2_PIX_FMT_GREY,
->>                  .uv_swap = 0,
->>                  .write_format = RKISP1_MI_CTRL_SP_WRITE_PLA,
->> -               .output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV400,
->> +               .output_format = RKISP1_MI_CTRL_SP_OUTPUT_YUV422,
->>                  .mbus = MEDIA_BUS_FMT_YUYV8_2X8,
->>          },
->>          /* rgb */
->> @@ -631,12 +631,26 @@ static void rkisp1_set_next_buf(struct rkisp1_capture *cap)
->>                  rkisp1_write(cap->rkisp1,
->>                               buff_addr[RKISP1_PLANE_Y],
->>                               cap->config->mi.y_base_ad_init);
->> -               rkisp1_write(cap->rkisp1,
->> -                            buff_addr[RKISP1_PLANE_CB],
->> -                            cap->config->mi.cb_base_ad_init);
->> -               rkisp1_write(cap->rkisp1,
->> -                            buff_addr[RKISP1_PLANE_CR],
->> -                            cap->config->mi.cr_base_ad_init);
->> +               /*
->> +                * In order to support grey format we capture
->> +                * YUV422 planar format from the camera and
->> +                * set the U and V planes to the dummy buffer
->> +                */
->> +               if (cap->pix.cfg->fourcc == V4L2_PIX_FMT_GREY) {
->> +                       rkisp1_write(cap->rkisp1,
->> +                                    cap->buf.dummy.dma_addr,
->> +                                    cap->config->mi.cb_base_ad_init);
->> +                       rkisp1_write(cap->rkisp1,
->> +                                    cap->buf.dummy.dma_addr,
->> +                                    cap->config->mi.cr_base_ad_init);
->> +               } else {
->> +                       rkisp1_write(cap->rkisp1,
->> +                                    buff_addr[RKISP1_PLANE_CB],
->> +                                    cap->config->mi.cb_base_ad_init);
->> +                       rkisp1_write(cap->rkisp1,
->> +                                    buff_addr[RKISP1_PLANE_CR],
->> +                                    cap->config->mi.cr_base_ad_init);
->> +               }
->>          } else {
-> 
-> Looking at this function, I think I would have initialised a local array
-> of addresses (either to zero, or to the dummy address?) to then set
-> values when appropriate, and reduce the number of calls to
-> rkisp1_write() to a single set of three after the processing.
-> 
-> It might make the function simpler, and more readable, but it's more
-> effort, and this does look like it will solve the greyscale format issue
-> as discussed in earlier threads so I'd leave it up to you if you want to
-> refactor.
+On Sun, Oct 17, 2021 at 08:24:44PM +0200, Jacopo Mondi wrote:
+> Create and initialize the v4l2_subdev_state for the R-Car CSI-2 receiver
+> rder to prepare to support routing operations and multiplexed streams.
 
-Hi,
-Yes, I'll do that.
-Interestingly I found out that the patch causing the iommu page fault is
-
-https://www.spinics.net/lists/linux-media/msg176089.html
-
-Before that patch there are no iommu page faults but the video is corrupted.
-
-I can't explain how I didn't find it before, I clearly remember testing the grey format.
-
-Thanks,
-Dafna
-
-
-
+s/rder/in order/ ?
 
 > 
-> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> Create the subdevice state with v4l2_subdev_init_finalize() and
+> implement the init_cfg() operation to guarantee the state is initialized
+> correctly with a set of default routes.
 > 
+> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> ---
+>  drivers/media/platform/rcar-vin/rcar-csi2.c | 68 ++++++++++++++++++++-
+>  1 file changed, 66 insertions(+), 2 deletions(-)
 > 
->>                  /*
->>                   * Use the dummy space allocated by dma_alloc_coherent to
->> -- 
->> 2.17.1
->>
+> diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+> index e28eff039688..a74087b49e71 100644
+> --- a/drivers/media/platform/rcar-vin/rcar-csi2.c
+> +++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+> @@ -752,11 +752,65 @@ static int rcsi2_get_pad_format(struct v4l2_subdev *sd,
+>  	return 0;
+>  }
+>  
+> +static int rcsi2_init_cfg(struct v4l2_subdev *sd,
+> +			  struct v4l2_subdev_state *state)
+
+This could be moved before rcsi2_set_pad_format() to match the order in
+rcar_csi2_pad_ops. Up to you.
+
+> +{
+> +	/* Initialize 4 routes from each source pad to the single sink pad. */
+> +	struct v4l2_subdev_route routes[] = {
+> +		{
+> +			.sink_pad = RCAR_CSI2_SINK,
+> +			.sink_stream = 0,
+> +			.source_pad = RCAR_CSI2_SOURCE_VC0,
+> +			.source_stream = 0,
+> +			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
+> +		},
+> +		{
+> +			.sink_pad = RCAR_CSI2_SINK,
+> +			.sink_stream = 1,
+> +			.source_pad = RCAR_CSI2_SOURCE_VC1,
+> +			.source_stream = 0,
+> +			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
+> +		},
+> +		{
+> +			.sink_pad = RCAR_CSI2_SINK,
+> +			.sink_stream = 2,
+> +			.source_pad = RCAR_CSI2_SOURCE_VC2,
+> +			.source_stream = 0,
+> +			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
+> +		},
+> +		{
+> +			.sink_pad = RCAR_CSI2_SINK,
+> +			.sink_stream = 3,
+> +			.source_pad = RCAR_CSI2_SOURCE_VC3,
+> +			.source_stream = 0,
+> +			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
+> +		},
+> +	};
+> +
+> +	struct v4l2_subdev_krouting routing = {
+> +		.num_routes = ARRAY_SIZE(routes),
+> +		.routes = routes,
+> +	};
+> +
+> +	int ret = v4l2_routing_simple_verify(&routing);
+> +	if (ret)
+> +		return ret;
+> +
+> +	state = v4l2_subdev_validate_and_lock_state(sd, state);
+> +
+> +	ret = v4l2_subdev_set_routing(sd, state, &routing);
+> +
+> +	v4l2_subdev_unlock_state(state);
+
+I would squash this with 09/13 to avoid this intermediate state of
+dealing with routes manually in the .init_cfg() operation. The patch
+otherwise looks good to me.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +
+> +	return ret;
+> +}
+> +
+>  static const struct v4l2_subdev_video_ops rcar_csi2_video_ops = {
+>  	.s_stream = rcsi2_s_stream,
+>  };
+>  
+>  static const struct v4l2_subdev_pad_ops rcar_csi2_pad_ops = {
+> +	.init_cfg = rcsi2_init_cfg,
+>  	.set_fmt = rcsi2_set_pad_format,
+>  	.get_fmt = rcsi2_get_pad_format,
+>  };
+> @@ -1260,7 +1314,8 @@ static int rcsi2_probe(struct platform_device *pdev)
+>  	v4l2_set_subdevdata(&priv->subdev, &pdev->dev);
+>  	snprintf(priv->subdev.name, V4L2_SUBDEV_NAME_SIZE, "%s %s",
+>  		 KBUILD_MODNAME, dev_name(&pdev->dev));
+> -	priv->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE;
+> +	priv->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE |
+> +			     V4L2_SUBDEV_FL_MULTIPLEXED;
+>  
+>  	priv->subdev.entity.function = MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER;
+>  	priv->subdev.entity.ops = &rcar_csi2_entity_ops;
+> @@ -1276,14 +1331,22 @@ static int rcsi2_probe(struct platform_device *pdev)
+>  
+>  	pm_runtime_enable(&pdev->dev);
+>  
+> +	ret = v4l2_subdev_init_finalize(&priv->subdev);
+> +	if (ret)
+> +		goto error_pm;
+> +
+>  	ret = v4l2_async_register_subdev(&priv->subdev);
+>  	if (ret < 0)
+> -		goto error;
+> +		goto error_subdev;
+>  
+>  	dev_info(priv->dev, "%d lanes found\n", priv->lanes);
+>  
+>  	return 0;
+>  
+> +error_subdev:
+> +	v4l2_subdev_cleanup(&priv->subdev);
+> +error_pm:
+> +	pm_runtime_disable(&pdev->dev);
+>  error:
+>  	v4l2_async_notifier_unregister(&priv->notifier);
+>  	v4l2_async_notifier_cleanup(&priv->notifier);
+> @@ -1298,6 +1361,7 @@ static int rcsi2_remove(struct platform_device *pdev)
+>  	v4l2_async_notifier_unregister(&priv->notifier);
+>  	v4l2_async_notifier_cleanup(&priv->notifier);
+>  	v4l2_async_unregister_subdev(&priv->subdev);
+> +	v4l2_subdev_cleanup(&priv->subdev);
+>  
+>  	pm_runtime_disable(&pdev->dev);
+>  
+
+-- 
+Regards,
+
+Laurent Pinchart
