@@ -2,57 +2,56 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 591D6C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jan 2022 02:31:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52AA3C43219
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jan 2022 02:31:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240892AbiAXCbt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 23 Jan 2022 21:31:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
+        id S240855AbiAXCbz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 23 Jan 2022 21:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240865AbiAXCbm (ORCPT
+        with ESMTP id S240851AbiAXCbt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 23 Jan 2022 21:31:42 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E90C06173B;
-        Sun, 23 Jan 2022 18:31:41 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id h23so17705382iol.11;
-        Sun, 23 Jan 2022 18:31:41 -0800 (PST)
+        Sun, 23 Jan 2022 21:31:49 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D4AC06173D;
+        Sun, 23 Jan 2022 18:31:49 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id i14so12607612ila.11;
+        Sun, 23 Jan 2022 18:31:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=y0qZ67tpkeFBSJ9t9tgLEVEiGlxTQ2nB9WsG2l3ZlOQ=;
-        b=iPkHd1C+doSlRjE1qZo0dWd1BGCsSIHtFUaBZIBi7SqZq7NqZGzwBjHvdVfg8vxnIn
-         eAjMINqwCOZ7m8Ch0qlMjNZgeYNY/7o1OSASx7/9KM5DOEWZnd2fT5pXNknOJeykpzp+
-         eiu6N+ZvJw72629YDAIxO6MxbVgg7XrYMHucYz0LIOQGA3qb8tNo8RZn0MYm/FfRtbMz
-         VYlk/0KG+akLKMQ1DqK36AQLdGmariBzaAJdc9xBsetmr5ZWIBLYGZeHBhIytBcvDUw6
-         BWCeJoQZHffkw8xDiz3tIRG2ZoSnwPt/aYZ1zZSkN5ICmeqInnckYT7dMBWLXWinENdh
-         RMHg==
+        bh=mMhTEWTe94/lxvR3iguUuMULiaaMgsYkOT2qY7s3xZk=;
+        b=iJ2k95ZXWZirEU8bh7HgcSE0cLcZLG8UBsmAXLbZx9hvWK1MtzagTzps3fE9ud0Dt6
+         3dl1qjaI1gdmN1GxlYJXDkE+uXmsTyZazE2HLsJBU2WJoAIVn6+MJ58eC6ct/1/5xQzA
+         6sQTNCiu8F5Ijk7PTZpf8seB/5qcxwqwEuEs2RqnJCB6yEIXvGk6C/yTlt65lnn28k1J
+         Z1EdyWuI5GQSnSzct51pe3r/ejd2W0/roNplZDbgIOIDwBczinrOcMrEHFYfXRpW1z4C
+         SbRx4kyUvDow7ajO+pSP+CLVWn283R3l8Q0ow0zy3VNtA4K8Cs2LaTFD+TY2kKd7ZZwa
+         ISkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=y0qZ67tpkeFBSJ9t9tgLEVEiGlxTQ2nB9WsG2l3ZlOQ=;
-        b=3ccVoMpK6mMVpm7Ef52TGJmJf1B4dMiJ53PW7WIi1NcZqPYQihrxZ3HvLlsBwpxiZ5
-         sy3cYlSIaDPViRCkHejuiRikVHWn8IY4zg250uPO8EpnFzDuNiVMORoWPl1qmcJBkm8X
-         nm30aBz5ZL7ooMd/1Xy7Wm0cZo81NMS8El3I5/E/5PzbBTUskbSEWRfvBReMeiFcRg5g
-         Cb4QHnwwyo1oEUnoHnhlywZ5mw4/6gDVTc5TUHIISsKgeWBByTeQD7Vl4NWym7qrpcVm
-         AaqFeNvFB3xx8WLUO1rmFcaiE6IGGLVEyoVPK3X25o0FwIXqs2RVYUD7wPbDkEVYh03Z
-         rbSw==
-X-Gm-Message-State: AOAM531I26S/fdtOaOR9LNHchNeZL2Gv5RIsDoPprRJMz1xfN4jBBJcr
-        TDpnwFdwWjwlFDWTlo9pb9Ce4eEDpGA=
-X-Google-Smtp-Source: ABdhPJwTWD0sqVlemPzHrR/znGRysXOUccdjrkZ5rHuwWsFHTrINqiYX6kZ0bp26wW9rT6w8CY4f1g==
-X-Received: by 2002:a6b:f104:: with SMTP id e4mr799402iog.49.1642991500812;
-        Sun, 23 Jan 2022 18:31:40 -0800 (PST)
+        bh=mMhTEWTe94/lxvR3iguUuMULiaaMgsYkOT2qY7s3xZk=;
+        b=5Ruhcveys5yKcB0UKCvRtkZUPeHo/r6FhMMHsNkRM3+MU1I7hHVrl9k12ULD2R1iuf
+         u5d1xlsCWGkaZuPZmNDH0eX64GAU2j5nfH9dogCX+HKJoaKzRBBOPLVJX0P71qR3Mt06
+         2xZrQmYUobeVQbbCJ/YRlDHJYqi7vu3t0WFkqhkLdw2DQidv3AJwUYYx/oMvJiwfWulD
+         FRWV9Vy29MIDNWTZpRvm97I7rTn9KXNP9NxA3gQKBEOOwpYNgvE9YL1ZGlkxKcd6rViX
+         8F5AmeQhaZxRFKTNfT6Bwum05OBTfAo0FM1oH/o4jDnRxBTlvwTqN9hAdLYm4ZBLEHil
+         flzg==
+X-Gm-Message-State: AOAM530k1JYIvwfsIFBTmf2UdYq6Ij9b4K5dOxVPb6bFDyd+AArAv04C
+        jnApUuTdTyy26wN3E377PcCT1iudyXk=
+X-Google-Smtp-Source: ABdhPJwHTfqTsXF+kZcb3xdm1e8LTE53DcTCXSzva0z9kKf4O8RhDcx2Gr+M5yR2Za1D9tLhQp22Hg==
+X-Received: by 2002:a05:6e02:c71:: with SMTP id f17mr7680778ilj.309.1642991508220;
+        Sun, 23 Jan 2022 18:31:48 -0800 (PST)
 Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:582d:ad0e:e5a6:94b6])
-        by smtp.gmail.com with ESMTPSA id w4sm6625633ilq.56.2022.01.23.18.31.39
+        by smtp.gmail.com with ESMTPSA id w4sm6625633ilq.56.2022.01.23.18.31.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 18:31:40 -0800 (PST)
+        Sun, 23 Jan 2022 18:31:47 -0800 (PST)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
         aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
-        Rob Herring <robh@kernel.org>,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -65,9 +64,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
         Lucas Stach <l.stach@pengutronix.de>,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH V3 04/10] dt-bindings: media: nxp, imx8mq-vpu: Split G1 and G2 nodes
-Date:   Sun, 23 Jan 2022 20:31:18 -0600
-Message-Id: <20220124023125.414794-5-aford173@gmail.com>
+Subject: [PATCH V3 07/10] arm64: dts: imx8mm: Fix VPU Hanging
+Date:   Sun, 23 Jan 2022 20:31:21 -0600
+Message-Id: <20220124023125.414794-8-aford173@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220124023125.414794-1-aford173@gmail.com>
 References: <20220124023125.414794-1-aford173@gmail.com>
@@ -77,117 +76,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The G1 and G2 are independent and separate decoder blocks
-that are enabled by the vpu-blk-ctrl power-domain controller,
-which now has a proper driver.
+The vpumix power domain has a reset assigned to it, however
+when used, it causes a system hang.  Testing has shown that
+it does not appear to be needed anywhere.
 
-Because these blocks only share the power-domain, and can be
-independently fused out, update the bindings to support separate
-nodes for the G1 and G2 decoders with vpu-blk-ctrl power-domain
-support.
-
-The new DT + old kernel isn't a supported configuration.
-
+Fixes: d39d4bb15310 ("arm64: dts: imx8mm: add GPC node")
 Signed-off-by: Adam Ford <aford173@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 
-diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-index 762be3f96ce9..9c28d562112b 100644
---- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-+++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-@@ -15,33 +15,20 @@ description:
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+index f77f90ed416f..0c7a72c51a31 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+@@ -707,7 +707,6 @@ pgc_vpumix: power-domain@6 {
+ 						clocks = <&clk IMX8MM_CLK_VPU_DEC_ROOT>;
+ 						assigned-clocks = <&clk IMX8MM_CLK_VPU_BUS>;
+ 						assigned-clock-parents = <&clk IMX8MM_SYS_PLL1_800M>;
+-						resets = <&src IMX8MQ_RESET_VPU_RESET>;
+ 					};
  
- properties:
-   compatible:
--    const: nxp,imx8mq-vpu
-+    oneOf:
-+      - const: nxp,imx8mq-vpu
-+        deprecated: true
-+      - const: nxp,imx8mq-vpu-g1
-+      - const: nxp,imx8mq-vpu-g2
- 
-   reg:
--    maxItems: 3
--
--  reg-names:
--    items:
--      - const: g1
--      - const: g2
--      - const: ctrl
-+    maxItems: 1
- 
-   interrupts:
--    maxItems: 2
--
--  interrupt-names:
--    items:
--      - const: g1
--      - const: g2
-+    maxItems: 1
- 
-   clocks:
--    maxItems: 3
--
--  clock-names:
--    items:
--      - const: g1
--      - const: g2
--      - const: bus
-+    maxItems: 1
- 
-   power-domains:
-     maxItems: 1
-@@ -49,31 +36,33 @@ properties:
- required:
-   - compatible
-   - reg
--  - reg-names
-   - interrupts
--  - interrupt-names
-   - clocks
--  - clock-names
- 
- additionalProperties: false
- 
- examples:
-   - |
-         #include <dt-bindings/clock/imx8mq-clock.h>
-+        #include <dt-bindings/power/imx8mq-power.h>
-+        #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+        vpu_g1: video-codec@38300000 {
-+                compatible = "nxp,imx8mq-vpu-g1";
-+                reg = <0x38300000 0x10000>;
-+                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-+                clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>;
-+                power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G1>;
-+        };
-+  - |
-+        #include <dt-bindings/clock/imx8mq-clock.h>
-+        #include <dt-bindings/power/imx8mq-power.h>
-         #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
--        vpu: video-codec@38300000 {
--                compatible = "nxp,imx8mq-vpu";
--                reg = <0x38300000 0x10000>,
--                      <0x38310000 0x10000>,
--                      <0x38320000 0x10000>;
--                reg-names = "g1", "g2", "ctrl";
--                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
--                             <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
--                interrupt-names = "g1", "g2";
--                clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
--                         <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
--                         <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
--                clock-names = "g1", "g2", "bus";
--                power-domains = <&pgc_vpu>;
-+        vpu_g2: video-codec@38300000 {
-+                compatible = "nxp,imx8mq-vpu-g2";
-+                reg = <0x38310000 0x10000>;
-+                interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-+                clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-+                power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G2>;
-         };
+ 					pgc_vpu_g1: power-domain@7 {
 -- 
 2.32.0
 
