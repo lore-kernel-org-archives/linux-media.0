@@ -2,157 +2,184 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3B1EC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jan 2022 06:02:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2DE5C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jan 2022 07:40:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235535AbiAXGCp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Jan 2022 01:02:45 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53766 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbiAXGCp (ORCPT
+        id S241831AbiAXHku (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Jan 2022 02:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241806AbiAXHkt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Jan 2022 01:02:45 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 194D5B80DF2
-        for <linux-media@vger.kernel.org>; Mon, 24 Jan 2022 06:02:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 456D1C340E1
-        for <linux-media@vger.kernel.org>; Mon, 24 Jan 2022 06:02:42 +0000 (UTC)
-Date:   Mon, 24 Jan 2022 07:02:40 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-Message-Id: <20220124060242.456D1C340E1@smtp.kernel.org>
+        Mon, 24 Jan 2022 02:40:49 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CD9C06173B
+        for <linux-media@vger.kernel.org>; Sun, 23 Jan 2022 23:40:49 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id v13so11812728wrv.10
+        for <linux-media@vger.kernel.org>; Sun, 23 Jan 2022 23:40:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nkHC8QZFOIHT45+bm5mbkRLb4msTxzU2f5F+QSxdoAg=;
+        b=Qj2yBp4MqQ7KNASeGTANOuELaoriQPEus+Y5WG9R1BeNlKfWpoIpNdldl25Dp739sv
+         Az06vMnMIfiC9jcFemaGJdxt4ksPV3D8IgfABi+dTcLwDcZqSLP7Vwff05NY1nIIgwB7
+         FsEk327TEn7KK6LOlZL9hEkNA5+JAXfVE2iVj5qvBHsgqjzsdkq1s8DqvXnR3vmUCKbR
+         sKpTRuGMUEw5CVwsUHzceA0paF3lWmzHi84RljO6OMZlo15XXlrylqjBucdtB8Vnvt92
+         6nI85ykpmGtgGonR1HfNg8as0g/v75cbSo+t5WzkOHO4sdrYNuW8HTIb651QRaqtDXTq
+         LYGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nkHC8QZFOIHT45+bm5mbkRLb4msTxzU2f5F+QSxdoAg=;
+        b=zEx0XxV5tGEoqOapuTtZ8wvPhViONm7agnDqLd+cWweHLfElGguN/n2KXyhtwGfaLu
+         NktHkAFA5KkxoZ+mYMarfRBZkgVseEqcR5FxoDjVdw73Qqs99Edwcz5O1PjpabF1y8Zo
+         mjuCFCzimnEC8oOfO3kXEQAY6zg5RJ4jWxgvDHMTex12TTpf/hl5kqCs9b6Igz1fgr3+
+         JqT7YfJlYUDM0g/zj1LHeMmQfhTlldqKJFkbPT6csJlg0n8Haia8yvYtwDeI1LPdr2iz
+         1N9LuJ161R1mmuz1yPo5UEk698LFuII5cy9a/RqwKipz1vAdi2OZ5Hs+fB6HYFUdTnJj
+         gU6g==
+X-Gm-Message-State: AOAM531djZIofnLRyqeA1nO4Q9AXx54AzbmKtuLMxL0k1OgacT4xCYJ1
+        BaOQNFMKJgJAr28qq7sqn8E=
+X-Google-Smtp-Source: ABdhPJzhRxuEYmrw3Ii07RY11RBs/o/Fq2cYVaEP6QMU32uHoHeBFsvH7w6OILGVbItZxRNvx2es8Q==
+X-Received: by 2002:adf:d1c2:: with SMTP id b2mr6047282wrd.411.1643010047896;
+        Sun, 23 Jan 2022 23:40:47 -0800 (PST)
+Received: from abel.fritz.box (p57b0bff8.dip0.t-ipconnect.de. [87.176.191.248])
+        by smtp.gmail.com with ESMTPSA id u15sm516370wrs.17.2022.01.23.23.40.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jan 2022 23:40:47 -0800 (PST)
+From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
+        <ckoenig.leichtzumerken@gmail.com>
+X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+To:     thomas.hellstrom@linux.intel.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, daniel.vetter@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: [PATCH 1/9] dma-buf: consolidate dma_fence subclass checking
+Date:   Mon, 24 Jan 2022 08:40:38 +0100
+Message-Id: <20220124074046.4865-1-christian.koenig@amd.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Consolidate the wrapper functions to check for dma_fence
+subclasses in the dma_fence header.
 
-Results of the daily build of media_tree:
+This makes it easier to document and also check the different
+requirements for fence containers in the subclasses.
 
-date:			Mon Jan 24 05:00:13 CET 2022
-media-tree git hash:	7dc5fc6d3bd6779c4859d888221f47e986cb45b5
-media_build git hash:	2fa76ec062aeaf93b647edbad1dd606e49fca4b3
-v4l-utils git hash:	9f0eab72e17e4167c2d4df790c7e384240ce5c37
-edid-decode git hash:	6514c9d9b18160fe9f09d3d70f99dda85d6fca71
-gcc version:		i686-linux-gcc (GCC) 11.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.3
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.3
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 5f5b438852acd7412b4bf7d0bdbe50a7cdd9a2f0
-host hardware:		x86_64
-host os:		5.15.0-2-amd64
+Signed-off-by: Christian König <christian.koenig@amd.com>
+---
+ include/linux/dma-fence-array.h | 15 +------------
+ include/linux/dma-fence-chain.h |  3 +--
+ include/linux/dma-fence.h       | 38 +++++++++++++++++++++++++++++++++
+ 3 files changed, 40 insertions(+), 16 deletions(-)
 
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-stm32: OK
-linux-git-arm-pxa: OK
-linux-git-powerpc64: OK
-linux-git-mips: OK
-linux-git-arm-multi: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-4.4.283-i686: OK
-linux-4.4.283-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.246-i686: OK
-linux-4.9.246-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.246-i686: OK
-linux-4.14.246-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.206-i686: OK
-linux-4.19.206-x86_64: OK
-linux-4.20.17-i686: OK
-linux-4.20.17-x86_64: OK
-linux-5.0.21-i686: OK
-linux-5.0.21-x86_64: OK
-linux-5.1.21-i686: OK
-linux-5.1.21-x86_64: OK
-linux-5.2.21-i686: OK
-linux-5.2.21-x86_64: OK
-linux-5.3.18-i686: OK
-linux-5.3.18-x86_64: OK
-linux-5.4.144-i686: OK
-linux-5.4.144-x86_64: OK
-linux-5.5.19-i686: OK
-linux-5.5.19-x86_64: OK
-linux-5.6.19-i686: OK
-linux-5.6.19-x86_64: OK
-linux-5.7.19-i686: OK
-linux-5.7.19-x86_64: OK
-linux-5.8.18-i686: OK
-linux-5.8.18-x86_64: OK
-linux-5.9.16-i686: OK
-linux-5.9.16-x86_64: OK
-linux-5.10.62-i686: OK
-linux-5.10.62-x86_64: OK
-linux-5.11.22-i686: OK
-linux-5.11.22-x86_64: OK
-linux-5.12.19-i686: OK
-linux-5.12.19-x86_64: OK
-linux-5.13.14-i686: OK
-linux-5.13.14-x86_64: OK
-linux-5.14.1-i686: OK
-linux-5.14.1-x86_64: OK
-linux-5.15.1-i686: OK
-linux-5.15.1-x86_64: OK
-linux-5.16.1-i686: OK
-linux-5.16.1-x86_64: OK
-linux-5.17-rc1-i686: OK
-linux-5.17-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 0
-virtme-32: OK: Final Summary: 3100, Succeeded: 3100, Failed: 0, Warnings: 0
-sparse: WARNINGS
-smatch: WARNINGS
-kerneldoc: WARNINGS
+diff --git a/include/linux/dma-fence-array.h b/include/linux/dma-fence-array.h
+index 303dd712220f..fec374f69e12 100644
+--- a/include/linux/dma-fence-array.h
++++ b/include/linux/dma-fence-array.h
+@@ -45,19 +45,6 @@ struct dma_fence_array {
+ 	struct irq_work work;
+ };
+ 
+-extern const struct dma_fence_ops dma_fence_array_ops;
+-
+-/**
+- * dma_fence_is_array - check if a fence is from the array subsclass
+- * @fence: fence to test
+- *
+- * Return true if it is a dma_fence_array and false otherwise.
+- */
+-static inline bool dma_fence_is_array(struct dma_fence *fence)
+-{
+-	return fence->ops == &dma_fence_array_ops;
+-}
+-
+ /**
+  * to_dma_fence_array - cast a fence to a dma_fence_array
+  * @fence: fence to cast to a dma_fence_array
+@@ -68,7 +55,7 @@ static inline bool dma_fence_is_array(struct dma_fence *fence)
+ static inline struct dma_fence_array *
+ to_dma_fence_array(struct dma_fence *fence)
+ {
+-	if (fence->ops != &dma_fence_array_ops)
++	if (!fence || !dma_fence_is_array(fence))
+ 		return NULL;
+ 
+ 	return container_of(fence, struct dma_fence_array, base);
+diff --git a/include/linux/dma-fence-chain.h b/include/linux/dma-fence-chain.h
+index 54fe3443fd2c..ee906b659694 100644
+--- a/include/linux/dma-fence-chain.h
++++ b/include/linux/dma-fence-chain.h
+@@ -49,7 +49,6 @@ struct dma_fence_chain {
+ 	spinlock_t lock;
+ };
+ 
+-extern const struct dma_fence_ops dma_fence_chain_ops;
+ 
+ /**
+  * to_dma_fence_chain - cast a fence to a dma_fence_chain
+@@ -61,7 +60,7 @@ extern const struct dma_fence_ops dma_fence_chain_ops;
+ static inline struct dma_fence_chain *
+ to_dma_fence_chain(struct dma_fence *fence)
+ {
+-	if (!fence || fence->ops != &dma_fence_chain_ops)
++	if (!fence || !dma_fence_is_chain(fence))
+ 		return NULL;
+ 
+ 	return container_of(fence, struct dma_fence_chain, base);
+diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+index 1ea691753bd3..775cdc0b4f24 100644
+--- a/include/linux/dma-fence.h
++++ b/include/linux/dma-fence.h
+@@ -587,4 +587,42 @@ struct dma_fence *dma_fence_get_stub(void);
+ struct dma_fence *dma_fence_allocate_private_stub(void);
+ u64 dma_fence_context_alloc(unsigned num);
+ 
++extern const struct dma_fence_ops dma_fence_array_ops;
++extern const struct dma_fence_ops dma_fence_chain_ops;
++
++/**
++ * dma_fence_is_array - check if a fence is from the array subclass
++ * @fence: the fence to test
++ *
++ * Return true if it is a dma_fence_array and false otherwise.
++ */
++static inline bool dma_fence_is_array(struct dma_fence *fence)
++{
++	return fence->ops == &dma_fence_array_ops;
++}
++
++/**
++ * dma_fence_is_chain - check if a fence is from the chain subclass
++ * @fence: the fence to test
++ *
++ * Return true if it is a dma_fence_chain and false otherwise.
++ */
++static inline bool dma_fence_is_chain(struct dma_fence *fence)
++{
++	return fence->ops == &dma_fence_chain_ops;
++}
++
++/**
++ * dma_fence_is_container - check if a fence is a container for other fences
++ * @fence: the fence to test
++ *
++ * Return true if this fence is a container for other fences, false otherwise.
++ * This is important since we can't build up large fence structure or otherwise
++ * we run into recursion during operation on those fences.
++ */
++static inline bool dma_fence_is_container(struct dma_fence *fence)
++{
++	return dma_fence_is_array(fence) || dma_fence_is_chain(fence);
++}
++
+ #endif /* __LINUX_DMA_FENCE_H */
+-- 
+2.25.1
 
-Detailed results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Monday.log
-
-Detailed regression test results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Monday-test-media.log
-https://hverkuil.home.xs4all.nl/logs/Monday-test-media-32.log
-https://hverkuil.home.xs4all.nl/logs/Monday-test-media-dmesg.log
-
-Full logs are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Monday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-https://hverkuil.home.xs4all.nl/spec/index.html
