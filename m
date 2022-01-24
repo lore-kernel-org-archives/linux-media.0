@@ -2,52 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82634C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jan 2022 07:40:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF3C5C4332F
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jan 2022 07:40:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241912AbiAXHk5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Jan 2022 02:40:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S241923AbiAXHk6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Jan 2022 02:40:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235988AbiAXHky (ORCPT
+        with ESMTP id S241892AbiAXHk4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Jan 2022 02:40:54 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F73C06173B
-        for <linux-media@vger.kernel.org>; Sun, 23 Jan 2022 23:40:54 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id s18so11831334wrv.7
-        for <linux-media@vger.kernel.org>; Sun, 23 Jan 2022 23:40:54 -0800 (PST)
+        Mon, 24 Jan 2022 02:40:56 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2529C061401
+        for <linux-media@vger.kernel.org>; Sun, 23 Jan 2022 23:40:55 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id v123so22289062wme.2
+        for <linux-media@vger.kernel.org>; Sun, 23 Jan 2022 23:40:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=32x746+aqRVJfpOzq5mPUyMArnAKR0oshZjP3RNr6L8=;
-        b=mG9CH90QC3I0Kyzw5y97iSNP9PKE/WVtuooRunf7nd6IStTMUWHcpXD6CBgFSAzYcc
-         4nj0LnYyS4DS6WNAo7pgQp0P5OrOeTPnFgfGBFyIUgGqW/n9Nml/4rP6hhxrvPVIOWzT
-         9kCfjaCTyxQPQrTBwvJzzfSvZvbS4cLWCtyfIqFA8jYs/coBp6zCUlsv5gEuhNMgZM85
-         yctcg1vjOhrNtMASAKrp/iVmKCwmE4RYU8CYLR6OmR9JLXG7+qd4pMVIyf82yn0OjWPg
-         gcdEJntMlPDJLPBBIQ648UZr5CVOorNM/aGKcXOHOdRTKHhAHt+CBeGRGmFA3w/T88C7
-         aJsA==
+        bh=ZOOWkC73PSVhRT0FPLika7h1bqOJ9nqV8+v2bYOzvlk=;
+        b=TnBh+fIYWftha2w3/naklVERd4+PeVS6nK+c/kdOAJnA4MgoECHm/VhS7+dPvxxPJ/
+         xa4o/3zukPV2ZuRciIjCrLeRjpFq1oWSPIfIoNSuC8q0x8S89LFrva0n24JLVNC94c63
+         i5tl/FGmYut9jTBwlUY8IeIlrBhTBc94TNdFrWXcOpVhCYMuxggdQqdmEzHBMMVMotIN
+         u6SOjTEzTrrrt6xLtfShEIK4nW2nlCCiCVY3AiqioxwBK8kiKfmlv59XjIpmgAP439pU
+         YMoQDe8OzFWHXQhUsGzt9qZcb4LMO5J32SCWQ+dLMxURUr9/YZfU3/0rSMmnk2RYGyjB
+         OajQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=32x746+aqRVJfpOzq5mPUyMArnAKR0oshZjP3RNr6L8=;
-        b=NscfuOgXV1Y4QUufPT3IThUZCos489XZkq+gN6+b43tkVq2qLAEyCbMVISZc07yUBR
-         VtMSFCnFQkEACg6kghGlj6Ixk/rkQJ5aecUmqsoGTsI0X+36idEdEhB+Dj72LtwNfb8V
-         /m7Kv4wyfBYRDQTOhlyAU47hlTiylYVsEoLLTffuMLGEkOsAOjHjuML8VAUAo9/mW+Vh
-         +MRJCpMiOHqrrXQhpSycsd7+cMVuDmaAp05BXLkCxeoAKJMhwHSkJBiUQ5gkFN+ZwkeF
-         8HnKsFzJXVzz/HTd9enjZJNzqYiL7MmWy4vkLaj2kyAWJG9hEtbybKVuHPCnO6AXu9Hq
-         0k1w==
-X-Gm-Message-State: AOAM5305/0I2MIydzKaKcQbqS5XlR8Cptsq/vnF313uufu9tzj4Hvr9G
-        3bo8o367ku5KBbKji/Fn5rI=
-X-Google-Smtp-Source: ABdhPJwMln34ByUlknX94Kfn4e2Z9+KJmZUiiAPAAQbyVgCnwUNiQ9kwRWOqrhxswOPyncTsQLoDAw==
-X-Received: by 2002:a5d:6947:: with SMTP id r7mr13378665wrw.510.1643010052928;
-        Sun, 23 Jan 2022 23:40:52 -0800 (PST)
+        bh=ZOOWkC73PSVhRT0FPLika7h1bqOJ9nqV8+v2bYOzvlk=;
+        b=RUMwcKZXlHZ657bnM2Ux19+yg9w9GvuTunYGTNjTCRGKP8THMZNi1FF6qCdg95hPiW
+         KpzzdtecyVSUMQmQz8psv/HMUIer/G3jv0d7qIp+6D7slEyoOfICS+2Le9P4sxN32Csl
+         UWbXHG71rrzTXR3rs/6mCT309Nmot2d87QLQZ6LcNrlXIM+5ueBh0NE6Wdb/saVrtu6c
+         AAF3IWm+/uMCzczCq/k0f7LO6aPIiVURxGLY1/vgT63Eg8kC6RUnE3tY3FLxPdCHZc+B
+         EnTLzLY60eHsdZwmti7st9rEo05ciGs5Sr8u4tb5ravqXxCLHjyN2LdMmXQ8SjhYudAB
+         YmRw==
+X-Gm-Message-State: AOAM533RqibyQtarT2As4oY0csCzRtyPOTv6BH17+km6VxVWSMu/OGrd
+        OJoQnG6QHH/JDCfw1x6jr+Y=
+X-Google-Smtp-Source: ABdhPJxLKgXz1O9g3pJlePgtBPG5KpWlMynNepWzLwMTxgMkVdNR45ard+HWfBWT5Sxvx7h09sy7Nw==
+X-Received: by 2002:a05:600c:1d21:: with SMTP id l33mr637157wms.134.1643010054627;
+        Sun, 23 Jan 2022 23:40:54 -0800 (PST)
 Received: from abel.fritz.box (p57b0bff8.dip0.t-ipconnect.de. [87.176.191.248])
-        by smtp.gmail.com with ESMTPSA id u15sm516370wrs.17.2022.01.23.23.40.52
+        by smtp.gmail.com with ESMTPSA id u15sm516370wrs.17.2022.01.23.23.40.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 23:40:52 -0800 (PST)
+        Sun, 23 Jan 2022 23:40:54 -0800 (PST)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
@@ -55,9 +55,9 @@ To:     thomas.hellstrom@linux.intel.com, sumit.semwal@linaro.org,
         gustavo@padovan.org, daniel.vetter@ffwll.ch,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 7/9] drm/amdgpu: use dma_fence_chain_contained
-Date:   Mon, 24 Jan 2022 08:40:44 +0100
-Message-Id: <20220124074046.4865-7-christian.koenig@amd.com>
+Subject: [PATCH 9/9] drm/vmwgfx: remove vmw_wait_dma_fence
+Date:   Mon, 24 Jan 2022 08:40:46 +0100
+Message-Id: <20220124074046.4865-9-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220124074046.4865-1-christian.koenig@amd.com>
 References: <20220124074046.4865-1-christian.koenig@amd.com>
@@ -68,30 +68,103 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of manually extracting the fence.
+Decomposing fence containers don't seem to make any sense here.
+
+So just remove the function entirely and call dma_fence_wait() directly.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
+Cc: VMware Graphics <linux-graphics-maintainer@vmware.com>
+Cc: Zack Rusin <zackr@vmware.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c |  2 +-
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.c   | 46 -------------------------
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.h   |  3 --
+ 3 files changed, 1 insertion(+), 50 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-index f7d8487799b2..40e06745fae9 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_sync.c
-@@ -261,10 +261,9 @@ int amdgpu_sync_resv(struct amdgpu_device *adev, struct amdgpu_sync *sync,
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c b/drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c
+index 44ca23b0ea4e..0ff28f0e3eb4 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_execbuf.c
+@@ -4500,7 +4500,7 @@ int vmw_execbuf_ioctl(struct drm_device *dev, void *data,
+ 			goto mksstats_out;
+ 		}
  
- 	dma_resv_for_each_fence(&cursor, resv, true, f) {
- 		dma_fence_chain_for_each(f, f) {
--			struct dma_fence_chain *chain = to_dma_fence_chain(f);
-+			struct dma_fence *tmp = dma_fence_chain_contained(f);
+-		ret = vmw_wait_dma_fence(dev_priv->fman, in_fence);
++		ret = dma_fence_wait(in_fence, true);
+ 		if (ret)
+ 			goto out;
+ 	}
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c b/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c
+index c60d395f9e2e..430f83a1847c 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_fence.c
+@@ -621,52 +621,6 @@ int vmw_user_fence_create(struct drm_file *file_priv,
+ 	return ret;
+ }
  
--			if (amdgpu_sync_test_fence(adev, mode, owner, chain ?
--						   chain->fence : f)) {
-+			if (amdgpu_sync_test_fence(adev, mode, owner, tmp)) {
- 				r = amdgpu_sync_fence(sync, f);
- 				dma_fence_put(f);
- 				if (r)
+-
+-/**
+- * vmw_wait_dma_fence - Wait for a dma fence
+- *
+- * @fman: pointer to a fence manager
+- * @fence: DMA fence to wait on
+- *
+- * This function handles the case when the fence is actually a fence
+- * array.  If that's the case, it'll wait on each of the child fence
+- */
+-int vmw_wait_dma_fence(struct vmw_fence_manager *fman,
+-		       struct dma_fence *fence)
+-{
+-	struct dma_fence_array *fence_array;
+-	int ret = 0;
+-	int i;
+-
+-
+-	if (dma_fence_is_signaled(fence))
+-		return 0;
+-
+-	if (!dma_fence_is_array(fence))
+-		return dma_fence_wait(fence, true);
+-
+-	/* From i915: Note that if the fence-array was created in
+-	 * signal-on-any mode, we should *not* decompose it into its individual
+-	 * fences. However, we don't currently store which mode the fence-array
+-	 * is operating in. Fortunately, the only user of signal-on-any is
+-	 * private to amdgpu and we should not see any incoming fence-array
+-	 * from sync-file being in signal-on-any mode.
+-	 */
+-
+-	fence_array = to_dma_fence_array(fence);
+-	for (i = 0; i < fence_array->num_fences; i++) {
+-		struct dma_fence *child = fence_array->fences[i];
+-
+-		ret = dma_fence_wait(child, true);
+-
+-		if (ret < 0)
+-			return ret;
+-	}
+-
+-	return 0;
+-}
+-
+-
+ /*
+  * vmw_fence_fifo_down - signal all unsignaled fence objects.
+  */
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_fence.h b/drivers/gpu/drm/vmwgfx/vmwgfx_fence.h
+index 079ab4f3ba51..a7eee579c76a 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_fence.h
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_fence.h
+@@ -104,9 +104,6 @@ extern int vmw_user_fence_create(struct drm_file *file_priv,
+ 				 struct vmw_fence_obj **p_fence,
+ 				 uint32_t *p_handle);
+ 
+-extern int vmw_wait_dma_fence(struct vmw_fence_manager *fman,
+-			      struct dma_fence *fence);
+-
+ extern void vmw_fence_fifo_up(struct vmw_fence_manager *fman);
+ 
+ extern void vmw_fence_fifo_down(struct vmw_fence_manager *fman);
 -- 
 2.25.1
 
