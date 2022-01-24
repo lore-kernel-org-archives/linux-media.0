@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9497EC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jan 2022 19:29:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA9E5C433FE
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jan 2022 20:19:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345763AbiAXT3R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Jan 2022 14:29:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50512 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348040AbiAXT1N (ORCPT
+        id S1346865AbiAXUTG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Jan 2022 15:19:06 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37400 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354908AbiAXUNH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:27:13 -0500
+        Mon, 24 Jan 2022 15:13:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0C9FB8122C;
-        Mon, 24 Jan 2022 19:27:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12A7FC340E7;
-        Mon, 24 Jan 2022 19:27:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DCF061371;
+        Mon, 24 Jan 2022 20:13:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62ACCC340E5;
+        Mon, 24 Jan 2022 20:13:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052425;
+        s=korg; t=1643055184;
         bh=N7iqN2dtcEyo4qkf5F6uhGxw3W2pDTN7WGAfMlTzNYY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uwjxEx33cAJEo04u3CviaqKIkkt/EeUeWYu/1EKatk4nX10lJR5Tse7yr06AMzKkc
-         mo+vGraQvEIbHUDTLnz01EL58NFJZegSs1g0e5v1wtXKFygYxkOSUWzLLBS+IV6p0p
-         V339z8RN/lXTyk/NHwul0hYIAI+PHU5z1N+qyAXE=
+        b=iULFF34YQwaikxFUcgZWyy9upVa3ofcLkCM8+0bq4ureXg4fyCXamg+COgOz4Gdpo
+         x+dr54QSUuwGlaU87vWDX6iV3qJv7/5m38u5RLQh4z9Wrb6Qj2sxkRrsFyoqKsLMya
+         D1p6EH04a2ZYlao0OiNOTwEbQBfkUjeVH7Z4O8Tg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linaro-mm-sig@lists.linaro.org,
         =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
         <thomas.hellstrom@linux.intel.com>
-Subject: [PATCH 5.4 027/320] dma_fence_array: Fix PENDING_ERROR leak in dma_fence_array_signaled()
-Date:   Mon, 24 Jan 2022 19:40:11 +0100
-Message-Id: <20220124183954.683526569@linuxfoundation.org>
+Subject: [PATCH 5.15 068/846] dma_fence_array: Fix PENDING_ERROR leak in dma_fence_array_signaled()
+Date:   Mon, 24 Jan 2022 19:33:05 +0100
+Message-Id: <20220124184103.321401854@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
