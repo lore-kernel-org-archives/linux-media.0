@@ -2,157 +2,268 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2924FC433FE
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jan 2022 10:33:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02C77C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jan 2022 10:34:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358122AbiAYKco (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jan 2022 05:32:44 -0500
-Received: from mga05.intel.com ([192.55.52.43]:10127 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355727AbiAYK3I (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:29:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643106543; x=1674642543;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2R3DZV36aiJGj6333DSl6IxQRf+LOmclIxRWAZb98Po=;
-  b=DgOgXnGKAhdbBAptTJICK3ZiJyv0t9/CoMGv7u8asINAK2/buzGzV1Iz
-   AM1P27ThpFYE0GoJaNedPn/0ZMm+9QlnrtvMDgvcQSl3ecvabYa31Uwkn
-   fPPpd1BIynEnHBOAIw1hhW9bZSMrmVFbhasKDWdpMscdzcGgHy6RNvjcV
-   hsi0gujXcfEkbUjbtmZkn+Xqe4V5Yhsovw92OJqeyTnAYMecSoHmmtyOc
-   y95d2XzZ20wLwoimrINFOWMOLpJCMwf8vUx1V7CJYF7Yl6e/yCev9YK3X
-   PXfIi49NrIsySnfiD7yWQl+rpPVFb3lSstsKoCazDsohynw9YIFzMCneK
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="332626146"
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="332626146"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 02:23:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="580708360"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Jan 2022 02:23:37 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCIzA-000Jjq-Ab; Tue, 25 Jan 2022 10:23:36 +0000
-Date:   Tue, 25 Jan 2022 18:22:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de
-Cc:     kbuild-all@lists.01.org, hverkuil-cisco@xs4all.nl,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        aisheng.dong@nxp.com, linux-media@vger.kernel.org
-Subject: Re: [PATCH v15 05/13] media: amphion: implement vpu core
- communication based on mailbox
-Message-ID: <202201251843.dnXV2QBt-lkp@intel.com>
-References: <e79fdc909c88773516ef875bc07039af534ff182.1643077283.git.ming.qian@nxp.com>
+        id S1358238AbiAYKcs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jan 2022 05:32:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355846AbiAYK3U (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 25 Jan 2022 05:29:20 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0A1C061748
+        for <linux-media@vger.kernel.org>; Tue, 25 Jan 2022 02:29:16 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nCJ4Y-0002PK-AB; Tue, 25 Jan 2022 11:29:10 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nCJ4T-00CKAR-1G; Tue, 25 Jan 2022 11:29:04 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nCJ4R-001HhT-Dx; Tue, 25 Jan 2022 11:29:03 +0100
+Date:   Tue, 25 Jan 2022 11:29:03 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
+        Claudius Heine <ch@denx.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        dri-devel@lists.freedesktop.org, Jaroslav Kysela <perex@perex.cz>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Ajay Singh <ajay.kathat@microchip.com>,
+        linux-clk@vger.kernel.org,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Sidong Yang <realwakka@gmail.com>,
+        libertas-dev@lists.infradead.org, linux-omap@vger.kernel.org,
+        Antti Palosaari <crope@iki.fi>,
+        Jean Delvare <jdelvare@suse.com>, linux-serial@vger.kernel.org,
+        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
+        James Schulman <james.schulman@cirrus.com>,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Michael Walle <michael@walle.cc>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        kernel@pengutronix.de, linux-mtd@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        linux-wpan@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dan Robertson <dan@dlrobertson.com>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        David Airlie <airlied@linux.ie>,
+        linux-wireless@vger.kernel.org,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        dingsenjie <dingsenjie@yulong.com>, Heiko Schocher <hs@denx.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Matt Kline <matt@bitbashing.io>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        Ronald =?utf-8?B?VHNjaGFsw6Ry?= <ronald@innovation.ch>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>, linux-can@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Davidlohr Bueso <dbueso@suse.de>, UNGLinuxDriver@microchip.com,
+        linux-usb@vger.kernel.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-staging@lists.linux.dev, linux-iio@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        alsa-devel@alsa-project.org,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        netdev@vger.kernel.org, Wei Yongjun <weiyongjun1@huawei.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>,
+        linux-rtc@vger.kernel.org,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Aditya Srivastava <yashsri421@gmail.com>,
+        Varka Bhadram <varkabhadram@gmail.com>,
+        wengjianfeng <wengjianfeng@yulong.com>,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Mark Greer <mgreer@animalcreek.com>,
+        Mark Gross <markgross@kernel.org>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        linux-fbdev@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        linux-hwmon@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-mmc@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        patches@opensource.cirrus.com, Kent Gustavsson <kent@minoris.se>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Jiri Prchal <jiri.prchal@aksignal.cz>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Emma Anholt <emma@anholt.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Torin Cooper-Bennun <torin@maxiluxsystems.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-leds@vger.kernel.org,
+        Eric Piel <eric.piel@tremplin-utc.net>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Kopp <thomas.kopp@microchip.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        platform-driver-x86@vger.kernel.org,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Xue Liu <liuxuenetmail@gmail.com>,
+        David Lechner <david@lechnology.com>,
+        Will Deacon <will@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Yang Shen <shenyang39@huawei.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Takashi Iwai <tiwai@suse.com>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Colin Ian King <colin.king@intel.com>,
+        Helge Deller <deller@gmx.de>, Alan Ott <alan@signal11.us>
+Subject: Re: [PATCH 5/5] spi: make remove callback a void function
+Message-ID: <20220125102903.werurj56umtglcue@pengutronix.de>
+References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
+ <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
+ <20220125094759.000019c5@Huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="f3kckhw255f5ljnt"
 Content-Disposition: inline
-In-Reply-To: <e79fdc909c88773516ef875bc07039af534ff182.1643077283.git.ming.qian@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220125094759.000019c5@Huawei.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ming,
 
-Thank you for the patch! Perhaps something to improve:
+--f3kckhw255f5ljnt
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on e783362eb54cd99b2cac8b3a9aeac942e6f6ac07]
+[Dropped a few people from Cc that are not reachable (Harry Morris,
+Charles-Antoine Couret, Marco Felsch)]
 
-url:    https://github.com/0day-ci/linux/commits/Ming-Qian/amphion-video-decoder-encoder-driver/20220125-152112
-base:   e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220125/202201251843.dnXV2QBt-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/0c5b974ccd2c9ad228d908facc5c73e93c750600
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Ming-Qian/amphion-video-decoder-encoder-driver/20220125-152112
-        git checkout 0c5b974ccd2c9ad228d908facc5c73e93c750600
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/media/platform/amphion/
+On Tue, Jan 25, 2022 at 09:47:59AM +0000, Jonathan Cameron wrote:
+> On Sun, 23 Jan 2022 18:52:01 +0100
+> Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> wrote:
+>=20
+> > The value returned by an spi driver's remove function is mostly ignored.
+> > (Only an error message is printed if the value is non-zero that the
+> > error is ignored.)
+> >=20
+> > So change the prototype of the remove function to return no value. This
+> > way driver authors are not tempted to assume that passing an error to
+> > the upper layer is a good idea. All drivers are adapted accordingly.
+> > There is no intended change of behaviour, all callbacks were prepared to
+> > return 0 before.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> For iio drivers.
+>=20
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>=20
+> As you mention in the cover letter we'll be wanting an immutable
+> branch somewhere to pull into subsystem trees.
+>=20
+> Soon is good if possible as otherwise we'll end up with a bunch of merge
+> conflicts getting resolved in next.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, I considered creating a tag to pull already when sending out this
+series, but I guessed delaying that a little bit to give people the
+opportunity to ack would be a good idea.
 
-All warnings (new ones prefixed by >>):
+@broonie: Do you think this change is a good idea? Would you require
+some more acks for the preparatory patches? I had hoped to get Acks from
+the corresponding maintainers, maybe they are busy and missed this
+series as I put them on Cc: only. I promoted them to To: in this mail.
 
-   drivers/media/platform/amphion/vpu_core.c: In function 'vpu_core_register':
-   drivers/media/platform/amphion/vpu_core.c:246:28: error: implicit declaration of function 'vzalloc'; did you mean 'kvzalloc'? [-Werror=implicit-function-declaration]
-     246 |         core->msg_buffer = vzalloc(core->msg_buffer_size);
-         |                            ^~~~~~~
-         |                            kvzalloc
->> drivers/media/platform/amphion/vpu_core.c:246:26: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     246 |         core->msg_buffer = vzalloc(core->msg_buffer_size);
-         |                          ^
-   drivers/media/platform/amphion/vpu_core.c:270:17: error: implicit declaration of function 'vfree'; did you mean 'kvfree'? [-Werror=implicit-function-declaration]
-     270 |                 vfree(core->msg_buffer);
-         |                 ^~~~~
-         |                 kvfree
-   cc1: some warnings being treated as errors
+Or is it too ambitious to get this in during the next merge window?
 
+Best regards
+Uwe
 
-vim +246 drivers/media/platform/amphion/vpu_core.c
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-78cda8a2c04ed7f Ming Qian 2022-01-25  228  
-78cda8a2c04ed7f Ming Qian 2022-01-25  229  static int vpu_core_register(struct device *dev, struct vpu_core *core)
-78cda8a2c04ed7f Ming Qian 2022-01-25  230  {
-78cda8a2c04ed7f Ming Qian 2022-01-25  231  	struct vpu_dev *vpu = dev_get_drvdata(dev);
-78cda8a2c04ed7f Ming Qian 2022-01-25  232  	int ret = 0;
-78cda8a2c04ed7f Ming Qian 2022-01-25  233  
-78cda8a2c04ed7f Ming Qian 2022-01-25  234  	dev_dbg(core->dev, "register core %s\n", vpu_core_type_desc(core->type));
-78cda8a2c04ed7f Ming Qian 2022-01-25  235  	if (vpu_core_is_exist(vpu, core))
-78cda8a2c04ed7f Ming Qian 2022-01-25  236  		return 0;
-78cda8a2c04ed7f Ming Qian 2022-01-25  237  
-78cda8a2c04ed7f Ming Qian 2022-01-25  238  	core->workqueue = alloc_workqueue("vpu", WQ_UNBOUND | WQ_MEM_RECLAIM, 1);
-78cda8a2c04ed7f Ming Qian 2022-01-25  239  	if (!core->workqueue) {
-78cda8a2c04ed7f Ming Qian 2022-01-25  240  		dev_err(core->dev, "fail to alloc workqueue\n");
-78cda8a2c04ed7f Ming Qian 2022-01-25  241  		return -ENOMEM;
-78cda8a2c04ed7f Ming Qian 2022-01-25  242  	}
-78cda8a2c04ed7f Ming Qian 2022-01-25  243  	INIT_WORK(&core->msg_work, vpu_msg_run_work);
-78cda8a2c04ed7f Ming Qian 2022-01-25  244  	INIT_DELAYED_WORK(&core->msg_delayed_work, vpu_msg_delayed_work);
-78cda8a2c04ed7f Ming Qian 2022-01-25  245  	core->msg_buffer_size = roundup_pow_of_two(VPU_MSG_BUFFER_SIZE);
-78cda8a2c04ed7f Ming Qian 2022-01-25 @246  	core->msg_buffer = vzalloc(core->msg_buffer_size);
-78cda8a2c04ed7f Ming Qian 2022-01-25  247  	if (!core->msg_buffer) {
-78cda8a2c04ed7f Ming Qian 2022-01-25  248  		dev_err(core->dev, "failed allocate buffer for fifo\n");
-78cda8a2c04ed7f Ming Qian 2022-01-25  249  		ret = -ENOMEM;
-78cda8a2c04ed7f Ming Qian 2022-01-25  250  		goto error;
-78cda8a2c04ed7f Ming Qian 2022-01-25  251  	}
-78cda8a2c04ed7f Ming Qian 2022-01-25  252  	ret = kfifo_init(&core->msg_fifo, core->msg_buffer, core->msg_buffer_size);
-78cda8a2c04ed7f Ming Qian 2022-01-25  253  	if (ret) {
-78cda8a2c04ed7f Ming Qian 2022-01-25  254  		dev_err(core->dev, "failed init kfifo\n");
-78cda8a2c04ed7f Ming Qian 2022-01-25  255  		goto error;
-78cda8a2c04ed7f Ming Qian 2022-01-25  256  	}
-78cda8a2c04ed7f Ming Qian 2022-01-25  257  
-78cda8a2c04ed7f Ming Qian 2022-01-25  258  	list_add_tail(&core->list, &vpu->cores);
-78cda8a2c04ed7f Ming Qian 2022-01-25  259  
-78cda8a2c04ed7f Ming Qian 2022-01-25  260  	vpu_core_get_vpu(core);
-78cda8a2c04ed7f Ming Qian 2022-01-25  261  
-78cda8a2c04ed7f Ming Qian 2022-01-25  262  	if (vpu_iface_get_power_state(core))
-78cda8a2c04ed7f Ming Qian 2022-01-25  263  		ret = vpu_core_restore(core);
-78cda8a2c04ed7f Ming Qian 2022-01-25  264  	if (ret)
-78cda8a2c04ed7f Ming Qian 2022-01-25  265  		goto error;
-78cda8a2c04ed7f Ming Qian 2022-01-25  266  
-78cda8a2c04ed7f Ming Qian 2022-01-25  267  	return 0;
-78cda8a2c04ed7f Ming Qian 2022-01-25  268  error:
-78cda8a2c04ed7f Ming Qian 2022-01-25  269  	if (core->msg_buffer) {
-78cda8a2c04ed7f Ming Qian 2022-01-25  270  		vfree(core->msg_buffer);
-78cda8a2c04ed7f Ming Qian 2022-01-25  271  		core->msg_buffer = NULL;
-78cda8a2c04ed7f Ming Qian 2022-01-25  272  	}
-78cda8a2c04ed7f Ming Qian 2022-01-25  273  	if (core->workqueue) {
-78cda8a2c04ed7f Ming Qian 2022-01-25  274  		destroy_workqueue(core->workqueue);
-78cda8a2c04ed7f Ming Qian 2022-01-25  275  		core->workqueue = NULL;
-78cda8a2c04ed7f Ming Qian 2022-01-25  276  	}
-78cda8a2c04ed7f Ming Qian 2022-01-25  277  	return ret;
-78cda8a2c04ed7f Ming Qian 2022-01-25  278  }
-78cda8a2c04ed7f Ming Qian 2022-01-25  279  
+--f3kckhw255f5ljnt
+Content-Type: application/pgp-signature; name="signature.asc"
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHv0OwACgkQwfwUeK3K
+7AkwFgf/cvC/vOA1oS3kc72Sd8C1LyQHcuopONW8p32pISnzT5iekmQ30JqAKXUo
+gYYFlK5nfLHIm1fYZ1WRJHtupkslUM3aSSSaJ5aYxSpyV9BrfcYs6HZWs2hYlBDW
+YCYJmCIIr6DSDGEzoXxgZLaxgT1Tey1Dd4ibvvp/NatXvyNaV7ct0xAI9nCjbMY0
+1EiaOvq8p6Kl9AnXjcIeXL6NpYehHRyZQ4A7V5CsKSUssgKRBtQz8AJrbMTC2nwB
+m+l2NEaLkGNdMQ+bhmqNk7lOZPDrfXvqUuU6KwGKdK5ZSMfpGdSzzoHt4yw7X44w
+2CoQ9riN0BgZI5Ri36N0pdZxlEB8kA==
+=Ckzr
+-----END PGP SIGNATURE-----
+
+--f3kckhw255f5ljnt--
