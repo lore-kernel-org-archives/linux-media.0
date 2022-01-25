@@ -2,138 +2,102 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3034CC433F5
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jan 2022 16:51:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA8AFC433EF
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jan 2022 17:15:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586046AbiAYQvI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jan 2022 11:51:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
+        id S1456866AbiAYRPx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jan 2022 12:15:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1586500AbiAYQtn (ORCPT
+        with ESMTP id S239900AbiAYRNk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:49:43 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F57C0617A6
-        for <linux-media@vger.kernel.org>; Tue, 25 Jan 2022 08:48:09 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id c3-20020a9d6c83000000b00590b9c8819aso26963911otr.6
-        for <linux-media@vger.kernel.org>; Tue, 25 Jan 2022 08:48:09 -0800 (PST)
+        Tue, 25 Jan 2022 12:13:40 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74035C06178A;
+        Tue, 25 Jan 2022 09:12:27 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id e79so24458327iof.13;
+        Tue, 25 Jan 2022 09:12:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=T+/85uEpu2eNGNWD/5sNn1BpuagkYZLYJyTVK41DIzg=;
-        b=47+BmtZtou4NgWMqWFzPj44eXxCp4g8Py4gfRKN0aqs6+3kLX5R+LnAdpsgCatY21K
-         VSPva87aSIVmuGWoh0uDg2Pb8v8zvKWtEWTM0ur5k9KWk5/0mr7cd0Zr9SrEX484Q/lu
-         mEyKfgPi1rIRTUE4BM8GG1ivH842WQduqi0y6EW99HHrM51LTb8WBwqVm0Z5IwAm3hl1
-         AYFOi1/lE2MZ9HUlhac2QEqZk8z2uYbEBUd4M6fP39XSC9gZLHvn55X0Mbk5/pxlFp9z
-         Tc8eKughnD0QrvI2UIEcaHwHE7HvowgDeQWi71MsOmKI0F1/pzIKeksHCl6MOk8ymEaN
-         GaNw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=fa6XTevFEqtbC/DVeN/V/vlo7FN29Xl+JkqDuO3dnjc=;
+        b=W9ap+qvkTCG8bjc0uQsVrBYvZj+B6Rvoq6pwWYTLVUoilzUICwT2AXwpniH10xZ1uq
+         fUKZ9RiQFWI2INOumUpsFdJ92qRdGBLlMC4sgcC7hexgQX8yoIqWQmi2+sEuAUEOowIR
+         DZOI45GDFr2y8nALDb+hk9VuaZy/4zTuvZpI6tDFuWiZincB1L8RfzNkOaLhFVTvyGct
+         TUu8dM/96xsrK0KNQd5MSsZL6cWEQfq0p5q7/DQ9tISr37V9Dlt7RwoKaXJT/V17C8Wu
+         sVcNjMdhPdt8gMTRuqr7NtOX6PwxTafeRjOWDmZVOzM0kr4LFQ29VVSmSED74t6HxJ9/
+         G3jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T+/85uEpu2eNGNWD/5sNn1BpuagkYZLYJyTVK41DIzg=;
-        b=Ktpa3m3SNG3vWWXe5WrxB5xj6FDenTYUaDv2pKcNbQe6AMdoYsZ3lyUy5Fna/wP8u2
-         eJrPzAEDZlQJufAc1xHnfHGd65+hKa0Grtj9V0uCuRi6UaBt0MKqrMEudDQpPq9vQyGm
-         pnsDoQ9LSAUS55HRs/7wuFRMaRvWmvJBoj8ABD+fnseFh3BrLjAwzJbjuBrzV074/0Eb
-         XDgOUAPb6jWbpRjMF52onTTZQM+WkWiJ8RdXU8R/M+DtvOM4IcDJSPMI65yxG2ZYyHmf
-         YOYePTSmVuQm/b234Tq5k1s7caCKEKL1kaqpfzHJIMzL9hU9pp6um6UM24AT1seff6Ul
-         GfLw==
-X-Gm-Message-State: AOAM533CCYsi+/cFSrpSLyl9HSTivCNkNA2PeI3IUq6x6Z7Y4O+giZ1w
-        gzP94HlsnPof4OLugawOdItmIg==
-X-Google-Smtp-Source: ABdhPJxWeJgYFK/ES63uSI9wOGCbRto0EWrjGp0VbBNHViImFHdqyepe2K445KbXZQtPfMBmVOg2cQ==
-X-Received: by 2002:a9d:76d2:: with SMTP id p18mr16032229otl.226.1643129288610;
-        Tue, 25 Jan 2022 08:48:08 -0800 (PST)
-Received: from eze-laptop ([186.122.18.78])
-        by smtp.gmail.com with ESMTPSA id j19sm3696308ots.21.2022.01.25.08.48.03
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fa6XTevFEqtbC/DVeN/V/vlo7FN29Xl+JkqDuO3dnjc=;
+        b=tKpgQyTiJeG2JAZONRr0GipmZ0RzRNzfGsLfB79mdB6TwALtHOD8d14uE5wHFxrFmw
+         91W1dK7EGKzTUtkTYn2WquUINf9Wg/QASbmMp193l0NFY7xxDJVytLNWscZ2+gbFX/CN
+         CoN+1g4V7zPZoWCeK6ZJH1pzjR2MndslrOC6s7pS3SterMsVJ4yVUe1lEvk6+46EmdH8
+         +/s3/DRCWodXF15OnL1f7dn/pUjozY4qt3rRppn1SFqvrCiSpS9DQ7c7GC42G872nV6U
+         pSYezubRR2tRzM2jfeDmR1OFygevOGLFAgI0dIrk34ZvpbQ5XOgptfHv4rYnycu4XHUr
+         QxUw==
+X-Gm-Message-State: AOAM5312lWkGe5G5ZfPnth3C8VyHSN3w+l5iQpDHl1MjTvmgFXA09n2M
+        PwIvHQXJzkK6GfNmcKX0OyBvTufvfGg=
+X-Google-Smtp-Source: ABdhPJye5D11pR1pHEM0xttSm1nhgngvx9EPzIDrdcN8uSOlWKpqZa7TaFWo9wUdt1OTEK1fxYrw6Q==
+X-Received: by 2002:a5e:de4a:: with SMTP id e10mr5353405ioq.51.1643130746425;
+        Tue, 25 Jan 2022 09:12:26 -0800 (PST)
+Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:6592:b6fe:71b1:9f4c])
+        by smtp.gmail.com with ESMTPSA id m14sm8090291iov.0.2022.01.25.09.12.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 08:48:07 -0800 (PST)
-Date:   Tue, 25 Jan 2022 13:48:00 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        shawnguo@kernel.org, aford@beaconembedded.com,
+        Tue, 25 Jan 2022 09:12:25 -0800 (PST)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-media@vger.kernel.org
+Cc:     aford@beaconembedded.com, cphealy@gmail.com,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH V3 10/10] arm64: dts: imx8mm: Enable Hantro G1 and G2
- video decoders
-Message-ID: <YfApwHMi5IYxHtq8@eze-laptop>
-References: <20220124023125.414794-1-aford173@gmail.com>
- <20220124023125.414794-11-aford173@gmail.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH V4 02/11] dt-bindings: power: imx8mq: add defines for VPU blk-ctrl domains
+Date:   Tue, 25 Jan 2022 11:11:19 -0600
+Message-Id: <20220125171129.472775-3-aford173@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220125171129.472775-1-aford173@gmail.com>
+References: <20220125171129.472775-1-aford173@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124023125.414794-11-aford173@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Adam,
+From: Lucas Stach <l.stach@pengutronix.de>
 
-On Sun, Jan 23, 2022 at 08:31:24PM -0600, Adam Ford wrote:
-> There are two decoders on the i.MX8M Mini controlled by the
-> vpu-blk-ctrl.  The G1 supports H264 and VP8 while the
-> G2 support HEVC and VP9.
-> 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> 
+This adds the defines for the power domains provided by the VPU
+blk-ctrl on the i.MX8MQ.
 
-Looks good.
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Acked-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+diff --git a/include/dt-bindings/power/imx8mq-power.h b/include/dt-bindings/power/imx8mq-power.h
+index 8a513bd9166e..9f7d0f1e7c32 100644
+--- a/include/dt-bindings/power/imx8mq-power.h
++++ b/include/dt-bindings/power/imx8mq-power.h
+@@ -18,4 +18,7 @@
+ #define IMX8M_POWER_DOMAIN_MIPI_CSI2	9
+ #define IMX8M_POWER_DOMAIN_PCIE2	10
+ 
++#define IMX8MQ_VPUBLK_PD_G1		0
++#define IMX8MQ_VPUBLK_PD_G2		1
++
+ #endif
+-- 
+2.32.0
 
-Thanks,
-Ezequiel
-
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> index 0c7a72c51a31..98aec4421713 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> @@ -1272,6 +1272,22 @@ gpu_2d: gpu@38008000 {
->  			power-domains = <&pgc_gpu>;
->  		};
->  
-> +		vpu_g1: video-codec@38300000 {
-> +			compatible = "nxp,imx8mm-vpu-g1";
-> +			reg = <0x38300000 0x10000>;
-> +			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clk IMX8MM_CLK_VPU_G1_ROOT>;
-> +			power-domains = <&vpu_blk_ctrl IMX8MM_VPUBLK_PD_G1>;
-> +		};
-> +
-> +		vpu_g2: video-codec@38310000 {
-> +			compatible = "nxp,imx8mq-vpu-g2";
-> +			reg = <0x38310000 0x10000>;
-> +			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clk IMX8MM_CLK_VPU_G2_ROOT>;
-> +			power-domains = <&vpu_blk_ctrl IMX8MM_VPUBLK_PD_G2>;
-> +		};
-> +
->  		vpu_blk_ctrl: blk-ctrl@38330000 {
->  			compatible = "fsl,imx8mm-vpu-blk-ctrl", "syscon";
->  			reg = <0x38330000 0x100>;
-> @@ -1282,6 +1298,12 @@ vpu_blk_ctrl: blk-ctrl@38330000 {
->  				 <&clk IMX8MM_CLK_VPU_G2_ROOT>,
->  				 <&clk IMX8MM_CLK_VPU_H1_ROOT>;
->  			clock-names = "g1", "g2", "h1";
-> +			assigned-clocks = <&clk IMX8MM_CLK_VPU_G1>,
-> +					  <&clk IMX8MM_CLK_VPU_G2>;
-> +			assigned-clock-parents = <&clk IMX8MM_VPU_PLL_OUT>,
-> +						 <&clk IMX8MM_VPU_PLL_OUT>;
-> +			assigned-clock-rates = <600000000>,
-> +					       <600000000>;
->  			#power-domain-cells = <1>;
->  		};
->  
-> -- 
-> 2.32.0
-> 
