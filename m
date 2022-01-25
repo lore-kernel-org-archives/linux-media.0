@@ -2,52 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D2BCC4332F
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jan 2022 17:16:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6520C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jan 2022 17:16:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388214AbiAYRQg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jan 2022 12:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
+        id S1587321AbiAYRQs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jan 2022 12:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351700AbiAYRNu (ORCPT
+        with ESMTP id S242224AbiAYRNh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:13:50 -0500
+        Tue, 25 Jan 2022 12:13:37 -0500
 Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCF8C0617A3;
-        Tue, 25 Jan 2022 09:12:46 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id y17so5866180ilm.1;
-        Tue, 25 Jan 2022 09:12:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B38C061788;
+        Tue, 25 Jan 2022 09:12:25 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id d3so17388009ilr.10;
+        Tue, 25 Jan 2022 09:12:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RU3KIa4qrZXY9R48xjJEZLxL91fbwb33hYcDZGPVEeA=;
-        b=KHvX4bjGcFWJPXQ91el6u/lSljusxx8pbcvu7lMe5WJ9FwnlTXtJ69WFqEVLsE4976
-         RuF7fIouyHo1iSezLZbFkPem8wnA2SDnrF6rDwwnYZfdIbwv1dXNCkLCBTy+WpJydfm5
-         EqcVwTs5S1iFUN1XY7i4NIgw7SCwiNg0+j7y7/lWwOjBk3HPSxr9t9cYTZpcSGbPaIIq
-         or0eYS9JxmErq4ojq2ZQyvjFRmkcNA8Ava9Sm0s2Jg//dgpzGKZYQtbJibU+RLiyb1jV
-         SHJnDa+wuTcz0PNhOea/uzau8fwSq0CQtWw5Q1KBWhJunAzkSrfVScL4LrwCdHeluWx8
-         /w7A==
+        bh=WrtH5ghaKPN4zPq0sPHDAur3BisSAdvDShbVq3dIejA=;
+        b=qfiSSeIxefWvWW91HY1bM17R0N/s6o0+Yjh0p4BV/GcxYzIkNnorxVtPITTcwXvpI9
+         TLcDMfDF+wuNR5qhQUpsq2OOvaJ3QX+ase3dO7BliS2YLsm//qPllzUxk1yGEbhooRhO
+         i5U3KuLFBMsUzdAmQeMyD3aBKR/oaCtzEXjdcCwYf/zjkcyzDfZjLrnBnqtnlzwv0/Hy
+         AF0d+nV/lEjuL2TtWvolLPHu/Kt70emVwZQ2nmvHSTrvlzbt62kqHevDG5RHvfXTG8F3
+         Bp+FyZRL79jGpWuBhI6bp02kkU5zwaNlAA/fxQ/7+iw/TDCGgd5BIokiJwShQ1jDX1nB
+         exbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RU3KIa4qrZXY9R48xjJEZLxL91fbwb33hYcDZGPVEeA=;
-        b=xyR5r63bt2pPc/8yClL1+QKFsEPo2dcV3FyR24eQHpIiblNiU+tK7Ckh1qcGqFza2n
-         DwUlIv1jO/ym/Phc3bjTMbS1yHvQHG+EApyEsjZh7wrM9c1rGSEr460JI7Ylxw2+gh29
-         Ia9c+fY3PIfgzVol37oD13NpTDWMIOgCzAuVf2ncyXYvWkZcjJL/cy8dvZT+VSk6Io3Z
-         DqTp1iM6xgCIWWdxEt8PAjkxzih81bE1JeeU49bn+ZftGXyxO+B3p/aCNgmMQQP+QRqD
-         2KYVl5BLR12CHQBb7GnGZ9m1TK2bbgFbLMoFd3x0agb1gJ7BGCoXkags8ENUGyd/nBHg
-         QffQ==
-X-Gm-Message-State: AOAM532jnmVVANLINwaTxH8h3xGWBB3hej8a2zIqejcg+PMPOGxohls0
-        Ee0phqnxv6bZMK3IL0qShOraQJcD1e8=
-X-Google-Smtp-Source: ABdhPJysd/AktlKpxM3/2Jwk3iYtFwARQhWgrwR964Q7bKGasZLBkRVo7UQcFFUdCsdTaVEYa5IG8A==
-X-Received: by 2002:a92:cd85:: with SMTP id r5mr12345147ilb.182.1643130765506;
-        Tue, 25 Jan 2022 09:12:45 -0800 (PST)
+        bh=WrtH5ghaKPN4zPq0sPHDAur3BisSAdvDShbVq3dIejA=;
+        b=8MCGij8k/Cn4j664RWvg36AlE0uwWDK47QUstH+teNAHehoTxwm4USUFInO4xuGu8u
+         dmoARyZZw7jwVKk/SDrw1jck6FmzJnosPIBZTiDTPE2A2GuQmlKkzvk7mrNU+hVL/xk8
+         ROxmqOTuiU9gC3uphMa5/ysfIaKouU5mvKfxQle/kxkBF/mC01Yufc+woZcCA6gqiNUY
+         npXqawUVQ9QQWnt+vvpNRmeZrA4/XzrG+fjOYz/gXhnWzPOg/nzH53xR32+7kKOJ6QGK
+         tZx/BpTwlMX8UU42KbhGMqHQJAEqgO3s3JKnib7YIYgsVuFo+FKxMM7kP9auuq/DX75t
+         Sy5w==
+X-Gm-Message-State: AOAM532Ne8CYxAcB10XdoDwAc6RxrUdUJAA2LYaY3QfBxA33USS/w4VF
+        V5davxaEyrK+XxIz8rTCVZLwPm5yjm0=
+X-Google-Smtp-Source: ABdhPJzkxyIibb1FGTbKN+rTHBAFQa3lU1Qx2tprXS7p7+K9mSBL7V22s7wjlfzr5Avd5Q1iORjH7A==
+X-Received: by 2002:a05:6e02:12ca:: with SMTP id i10mr11495329ilm.284.1643130743930;
+        Tue, 25 Jan 2022 09:12:23 -0800 (PST)
 Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:6592:b6fe:71b1:9f4c])
-        by smtp.gmail.com with ESMTPSA id m14sm8090291iov.0.2022.01.25.09.12.44
+        by smtp.gmail.com with ESMTPSA id m14sm8090291iov.0.2022.01.25.09.12.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 09:12:44 -0800 (PST)
+        Tue, 25 Jan 2022 09:12:22 -0800 (PST)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     aford@beaconembedded.com, cphealy@gmail.com,
@@ -66,9 +66,9 @@ Cc:     aford@beaconembedded.com, cphealy@gmail.com,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH V4 09/11] dt-bindings: media: nxp, imx8mq-vpu: Add support for G1 on imx8mm
-Date:   Tue, 25 Jan 2022 11:11:26 -0600
-Message-Id: <20220125171129.472775-10-aford173@gmail.com>
+Subject: [PATCH V4 01/11] arm64: dts: imx8mq-tqma8mq: Remove redundant vpu reference
+Date:   Tue, 25 Jan 2022 11:11:18 -0600
+Message-Id: <20220125171129.472775-2-aford173@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220125171129.472775-1-aford173@gmail.com>
 References: <20220125171129.472775-1-aford173@gmail.com>
@@ -78,35 +78,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The i.MX8M mini appears to have a similar G1 decoder but the
-post-processing isn't present, so different compatible flag is required.
-Since all the other parameters are the same with imx8mq, just add
-the new compatible flag to nxp,imx8mq-vpu.yaml.
+The vpu is enabled by default, so there is no need to manually
+enable it.
 
 Signed-off-by: Adam Ford <aford173@gmail.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-index 9c28d562112b..7dc13a4b1805 100644
---- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-+++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-@@ -5,7 +5,7 @@
- $id: "http://devicetree.org/schemas/media/nxp,imx8mq-vpu.yaml#"
- $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi
+index 8aedcddfeab8..38ffcd145b33 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi
+@@ -272,10 +272,6 @@ &usdhc1 {
+ 	status = "okay";
+ };
  
--title: Hantro G1/G2 VPU codecs implemented on i.MX8MQ SoCs
-+title: Hantro G1/G2 VPU codecs implemented on i.MX8M SoCs
- 
- maintainers:
-   - Philipp Zabel <p.zabel@pengutronix.de>
-@@ -20,6 +20,7 @@ properties:
-         deprecated: true
-       - const: nxp,imx8mq-vpu-g1
-       - const: nxp,imx8mq-vpu-g2
-+      - const: nxp,imx8mm-vpu-g1
- 
-   reg:
-     maxItems: 1
+-&vpu {
+-	status = "okay";
+-};
+-
+ /* Attention: wdog reset forcing POR needs baseboard support */
+ &wdog1 {
+ 	status = "okay";
 -- 
 2.32.0
 
