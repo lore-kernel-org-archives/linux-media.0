@@ -2,361 +2,263 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75419C4332F
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jan 2022 09:15:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63D14C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jan 2022 09:36:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354907AbiAYJPl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jan 2022 04:15:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
+        id S1574798AbiAYJgh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jan 2022 04:36:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1454017AbiAYI5S (ORCPT
+        with ESMTP id S1573982AbiAYJa4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:57:18 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB2FC04965B
-        for <linux-media@vger.kernel.org>; Tue, 25 Jan 2022 00:02:56 -0800 (PST)
-Received: from localhost.localdomain (unknown [IPv6:2a00:c281:1137:e00:5903:19ba:8e99:7984])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 135EF1F43E20;
-        Tue, 25 Jan 2022 08:02:54 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643097775;
-        bh=k1vBY+tVVMeozFGqdPX6vnr57tjlNN2mxNYTTUMpTm0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PlGXFPbElPnZSwAYjiJpmQZngCNxxQEyVTgy40fOzyJTjvcsbsjKAdJ1/0fCpEnn4
-         NwPFBDhYh/+vBAHNnEKOjS9TTWXHa1FEDxtvuR1Sh9CzjRbLUl9ZRYm3xB5YoB5lgV
-         JcLMfM/eUhmRDnbhcSEAygAVvjXzcZD32s4L3pUBQHTDAoK8x8dUMT6GxRJkqxJob5
-         xBC1HePBZY7+wGkgXSNuespEZhd50e7eRNRiJzL2FjcaeEMF8eXTQPci3A1lQJnYpU
-         h63aB2yhnbHP9t8KqmxmNFr9n6kpU7e6cTrj1hdh+1LEFBeovzjHoND9ZITg6TfHIX
-         o51bJDBrj9KdQ==
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     ezequiel@vanguardiasur.com.ar
-Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        kernel@collabora.com, linux-media@vger.kernel.org,
-        laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl,
-        ribalda@chromium.org, tfiga@chromium.org, senozhatsky@google.com,
-        hch@lst.de, dafna3@gmail.com
-Subject: [PATCH v2 4/4] media: stk1160: use dma_alloc_noncontiguous API
-Date:   Tue, 25 Jan 2022 10:02:13 +0200
-Message-Id: <20220125080213.30090-5-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220125080213.30090-1-dafna.hirschfeld@collabora.com>
-References: <20220125080213.30090-1-dafna.hirschfeld@collabora.com>
+        Tue, 25 Jan 2022 04:30:56 -0500
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6DBC061781
+        for <linux-media@vger.kernel.org>; Tue, 25 Jan 2022 01:30:55 -0800 (PST)
+Received: by mail-ua1-x932.google.com with SMTP id n15so34711221uaq.5
+        for <linux-media@vger.kernel.org>; Tue, 25 Jan 2022 01:30:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=1mm7+Qmz3LImo4aFwbhXIFkzVEgm/HAOzd6fbdAVMrg=;
+        b=kCmCEgQ+xOVJqgvY6mIiDwGpng9RE64Ri/x5bVEJVgfKmrbder8yB0SJa9j3j/iO6u
+         VSlwxJi1GtMfRaX9rz0Fi8V70QZmpTm/yg+yqKEhFTP/kvAigM6NlkG016BHxBuEGBud
+         aKKG3vXyGKhkWECz7g02ij5pN8RBjRbfSAGJhF2s+s/E8Wzq61/RmUZzmkHINs6y38kj
+         8W/C1tUsfkR71I5xYVxyEgRhxjIz/FmTGO/CwLqL3papla/+aWUpb3kyrOT/GpbDGqeC
+         c1kCPdzAMoEjl9Ka3L/ozlubTR502/GpTZoRLS5kuqKqPkl9NQ2lJSPzTzJVIDppuhpp
+         EfLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1mm7+Qmz3LImo4aFwbhXIFkzVEgm/HAOzd6fbdAVMrg=;
+        b=HdKIscHJLFE5xf/zAplTrwQ+RquYhpqv7QoxO1+qtTj2SE28lBL4JKklXkCYIIKST8
+         GVu62fKNvcuWq9GSMZ4rukOs0VXSXKs/rZA4d8TzG6Mw715Gez/dT8v/Y2pKIVER08j0
+         gmS6nlueZ9dP//88ws6i86Wi0vr/LUOQpN3Xqz/xpeKzHJ6oodrJZK4xETEVHQAm9vVu
+         PvEDC994JGjBZrHsof8ysLCf6Js5aEYe9cVIs5lYjOQzd7b8wUy1Y6RdPnKrUuQLd3f2
+         iGbUJYy4t/Y3ffWqOuYjgjg8iMPCzZY3GVhdC/Hsm5Lm0efB/lLhREkV53qj+Zl9RoT9
+         6JCw==
+X-Gm-Message-State: AOAM5305128rTnSydv3Nhh4nF/WBWsAas2q9zosm3P5YVELFtfF3o1fA
+        7D3mC5Bq8dIJDQMvNcEn6CXuzc3xF7t37iJ7iog1ag==
+X-Google-Smtp-Source: ABdhPJwHGGkAwOnsd7qe0zHQAqHAUzi5PBqvJQ90yr1sdZ5zdG5wkLeKm2Z8HhNpFMDsTHL1nOGUCrWQS9pCXlyV9Y0=
+X-Received: by 2002:a67:8c2:: with SMTP id 185mr712613vsi.19.1643103053912;
+ Tue, 25 Jan 2022 01:30:53 -0800 (PST)
+MIME-Version: 1.0
+References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
+From:   Lee Jones <lee.jones@linaro.org>
+Date:   Tue, 25 Jan 2022 09:30:43 +0000
+Message-ID: <CAF2Aj3g0uxj7=m+USWz9QvmQ511DN83e9WsVDW-484aEdix4hg@mail.gmail.com>
+Subject: Re: [PATCH 0/5] spi: make remove callback a void function
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Mark Brown <broonie@kernel.org>,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Emma Anholt <emma@anholt.net>,
+        David Lechner <david@lechnology.com>,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dan Robertson <dan@dlrobertson.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Kent Gustavsson <kent@minoris.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Charles-Antoine Couret <charles-antoine.couret@nexvision.fr>,
+        Antti Palosaari <crope@iki.fi>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eric Piel <eric.piel@tremplin-utc.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Thomas Kopp <thomas.kopp@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Harry Morris <h.morris@cascoda.com>,
+        Varka Bhadram <varkabhadram@gmail.com>,
+        Xue Liu <liuxuenetmail@gmail.com>, Alan Ott <alan@signal11.us>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ajay Singh <ajay.kathat@microchip.com>,
+        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mark Greer <mgreer@animalcreek.com>,
+        Benson Leung <bleung@chromium.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        =?UTF-8?Q?Ronald_Tschal=C3=A4r?= <ronald@innovation.ch>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Heiko Schocher <hs@denx.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Matt Kline <matt@bitbashing.io>,
+        Torin Cooper-Bennun <torin@maxiluxsystems.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        Yang Shen <shenyang39@huawei.com>,
+        dingsenjie <dingsenjie@yulong.com>,
+        Aditya Srivastava <yashsri421@gmail.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michael Walle <michael@walle.cc>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        wengjianfeng <wengjianfeng@yulong.com>,
+        Sidong Yang <realwakka@gmail.com>,
+        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
+        Davidlohr Bueso <dbueso@suse.de>, Claudius Heine <ch@denx.de>,
+        Jiri Prchal <jiri.prchal@aksignal.cz>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        linux-wireless@vger.kernel.org, libertas-dev@lists.infradead.org,
+        platform-driver-x86@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        kernel@pengutronix.de, Noralf Tronnes <notro@tronnes.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Guenter Roeck <groeck@google.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace the urb buffers allocation to use the
-noncontiguous API. This improves performance on ARM
-platform since the previous dma allocation was
-coherent dma allocation which disables the cache on
-ARM platforms. With the noncontiguous API the cache
-is not disabled.
-The noncontiguous API requires the driver to
-handle synchronization.
-This commit is similar to this one for the uvc driver:
+My usual mailer won't let me reply to this many people, so I'm using Gmail.
 
-    https://lkml.org/lkml/2021/3/12/1506
+No idea what chaos this will cause, but here goes ...
 
-Performance tests on rock-pi4 (Arm64) shows about 15x
-improvements:
+> The value returned by an spi driver's remove function is mostly ignored.
+> (Only an error message is printed if the value is non-zero that the
+> error is ignored.)
+>
+> So change the prototype of the remove function to return no value. This
+> way driver authors are not tempted to assume that passing an error to
+> the upper layer is a good idea. All drivers are adapted accordingly.
+> There is no intended change of behaviour, all callbacks were prepared to
+> return 0 before.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
 
-== DMA NONCONTIGUOUS ==
-total durations: 20.63678480 sec
-urb processing durations: 0.286864889 sec
-uS/qty: 286864/2508 avg: 114.379 min: 0.583 max: 155.461 (uS)
-FPS: 24.92
-lost: 0 done: 500
-raw decode speed: 11.603 Gbits/s
-bytes 414831228.000
-bytes/urb: 165403
+[...]
 
-== DMA COHERENT ==
-total durations: 20.73551767 sec
-urb processing durations: 4.541559160 sec
-uS/qty: 4541559/2509 avg: 1810.107 min: 0.583 max: 2113.163 (uS)
-FPS: 24.90
-lost: 0 done: 500
-raw decode speed: 730.738 Mbits/s
-bytes 414785444.000
-bytes/urb: 165319
+>  drivers/mfd/arizona-spi.c                             |  4 +---
+>  drivers/mfd/da9052-spi.c                             |  3 +--
+>  drivers/mfd/ezx-pcap.c                                |  4 +---
+>  drivers/mfd/madera-spi.c                             |  4 +---
+>  drivers/mfd/mc13xxx-spi.c                           |  3 +--
+>  drivers/mfd/rsmu_spi.c                                |  4 +---
+>  drivers/mfd/stmpe-spi.c                               |  4 +---
+>  drivers/mfd/tps65912-spi.c                          |  4 +---
 
-Performance tests on x86 laptop show no significant
-difference:
+>  drivers/video/backlight/ams369fg06.c         |  3 +--
+>  drivers/video/backlight/corgi_lcd.c               |  3 +--
+>  drivers/video/backlight/ili922x.c                    |  3 +--
+>  drivers/video/backlight/l4f00242t03.c           |  3 +--
+>  drivers/video/backlight/lms501kf03.c            |  3 +--
+>  drivers/video/backlight/ltv350qv.c                 |  3 +--
+>  drivers/video/backlight/tdo24m.c                  |  3 +--
+>  drivers/video/backlight/tosa_lcd.c                |  4 +---
+>  drivers/video/backlight/vgg2432a4.c            |  4 +---
 
-== DMA NONCONTIGUOUS ==
-total durations: 20.220590102 sec
-urb processing durations: 0.63021818 sec
-uS/qty: 63021/2512 avg: 25.088 min: 0.138 max: 146.750 (uS)
-FPS: 24.72
-lost: 0 done: 500
-raw decode speed: 52.751 Gbits/s
-bytes 415421032.000
-bytes/urb: 165374
+If it's okay with Mark, it's okay with me.
 
-== DMA COHERENT ==
-total durations: 20.220475614 sec
-urb processing durations: 0.64751972 sec
-uS/qty: 64751/2512 avg: 25.777 min: 0.168 max: 132.250 (uS)
-FPS: 24.72
-lost: 0 done: 500
-raw decode speed: 51.927 Gbits/s
-bytes 415422794.000
-bytes/urb: 165375
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
----
- drivers/media/usb/stk1160/stk1160-v4l.c   |   4 +
- drivers/media/usb/stk1160/stk1160-video.c | 114 +++++++++++++---------
- drivers/media/usb/stk1160/stk1160.h       |  10 ++
- 3 files changed, 84 insertions(+), 44 deletions(-)
-
-diff --git a/drivers/media/usb/stk1160/stk1160-v4l.c b/drivers/media/usb/stk1160/stk1160-v4l.c
-index ebf245d44005..a1f785a5ffd8 100644
---- a/drivers/media/usb/stk1160/stk1160-v4l.c
-+++ b/drivers/media/usb/stk1160/stk1160-v4l.c
-@@ -232,6 +232,10 @@ static int stk1160_start_streaming(struct stk1160 *dev)
- 
- 	/* submit urbs and enables IRQ */
- 	for (i = 0; i < dev->isoc_ctl.num_bufs; i++) {
-+		struct stk1160_urb *stk_urb = &dev->isoc_ctl.urb_ctl[i];
-+
-+		dma_sync_sgtable_for_device(stk1160_get_dmadev(dev), stk_urb->sgt,
-+					    DMA_FROM_DEVICE);
- 		rc = usb_submit_urb(dev->isoc_ctl.urb_ctl[i].urb, GFP_KERNEL);
- 		if (rc) {
- 			stk1160_err("cannot submit urb[%d] (%d)\n", i, rc);
-diff --git a/drivers/media/usb/stk1160/stk1160-video.c b/drivers/media/usb/stk1160/stk1160-video.c
-index f3c0497a8539..6600afc565b8 100644
---- a/drivers/media/usb/stk1160/stk1160-video.c
-+++ b/drivers/media/usb/stk1160/stk1160-video.c
-@@ -295,7 +295,9 @@ static void stk1160_process_isoc(struct stk1160 *dev, struct urb *urb)
- static void stk1160_isoc_irq(struct urb *urb)
- {
- 	int i, rc;
--	struct stk1160 *dev = urb->context;
-+	struct stk1160_urb *stk_urb = urb->context;
-+	struct stk1160 *dev = stk_urb->dev;
-+	struct device *dma_dev = stk1160_get_dmadev(dev);
- 
- 	switch (urb->status) {
- 	case 0:
-@@ -310,6 +312,10 @@ static void stk1160_isoc_irq(struct urb *urb)
- 		return;
- 	}
- 
-+	invalidate_kernel_vmap_range(stk_urb->transfer_buffer,
-+				     urb->transfer_buffer_length);
-+	dma_sync_sgtable_for_cpu(dma_dev, stk_urb->sgt, DMA_FROM_DEVICE);
-+
- 	stk1160_process_isoc(dev, urb);
- 
- 	/* Reset urb buffers */
-@@ -318,6 +324,7 @@ static void stk1160_isoc_irq(struct urb *urb)
- 		urb->iso_frame_desc[i].actual_length = 0;
- 	}
- 
-+	dma_sync_sgtable_for_device(dma_dev, stk_urb->sgt, DMA_FROM_DEVICE);
- 	rc = usb_submit_urb(urb, GFP_ATOMIC);
- 	if (rc)
- 		stk1160_err("urb re-submit failed (%d)\n", rc);
-@@ -353,37 +360,34 @@ void stk1160_cancel_isoc(struct stk1160 *dev)
- 	stk1160_dbg("all urbs killed\n");
- }
- 
-+static void stk_free_urb_buffer(struct stk1160 *dev, struct stk1160_urb *stk_urb)
-+{
-+	struct device *dma_dev = stk1160_get_dmadev(dev);
-+
-+	dma_vunmap_noncontiguous(dma_dev, stk_urb->transfer_buffer);
-+	dma_free_noncontiguous(dma_dev, stk_urb->urb->transfer_buffer_length,
-+			       stk_urb->sgt, DMA_FROM_DEVICE);
-+	usb_free_urb(stk_urb->urb);
-+
-+	stk_urb->transfer_buffer = NULL;
-+	stk_urb->sgt = NULL;
-+	stk_urb->urb = NULL;
-+	stk_urb->dev = NULL;
-+	stk_urb->dma = 0;
-+}
-+
- /*
-  * Releases urb and transfer buffers
-  * Obviusly, associated urb must be killed before releasing it.
-  */
- void stk1160_free_isoc(struct stk1160 *dev)
- {
--	struct urb *urb;
- 	int i, num_bufs = dev->isoc_ctl.num_bufs;
- 
- 	stk1160_dbg("freeing %d urb buffers...\n", num_bufs);
- 
--	for (i = 0; i < num_bufs; i++) {
--
--		urb = dev->isoc_ctl.urb_ctl[i].urb;
--		if (urb) {
--
--			if (dev->isoc_ctl.urb_ctl[i].transfer_buffer) {
--#ifndef CONFIG_DMA_NONCOHERENT
--				usb_free_coherent(dev->udev,
--					urb->transfer_buffer_length,
--					dev->isoc_ctl.urb_ctl[i].transfer_buffer,
--					urb->transfer_dma);
--#else
--				kfree(dev->isoc_ctl.urb_ctl[i].transfer_buffer);
--#endif
--			}
--			usb_free_urb(urb);
--			dev->isoc_ctl.urb_ctl[i].urb = NULL;
--		}
--		dev->isoc_ctl.urb_ctl[i].transfer_buffer = NULL;
--	}
-+	for (i = 0; i < num_bufs; i++)
-+		stk_free_urb_buffer(dev, &dev->isoc_ctl.urb_ctl[i]);
- 
- 	dev->isoc_ctl.num_bufs = 0;
- 
-@@ -400,6 +404,41 @@ void stk1160_uninit_isoc(struct stk1160 *dev)
- 	stk1160_free_isoc(dev);
- }
- 
-+static int stk1160_fill_urb(struct stk1160 *dev, struct stk1160_urb *stk_urb,
-+			    int sb_size, int max_packets)
-+{
-+	struct device *dma_dev = stk1160_get_dmadev(dev);
-+
-+	stk_urb->urb = usb_alloc_urb(max_packets, GFP_KERNEL);
-+	if (!stk_urb->urb)
-+		return -ENOMEM;
-+	stk_urb->sgt = dma_alloc_noncontiguous(dma_dev, sb_size,
-+					       DMA_FROM_DEVICE, GFP_KERNEL, 0);
-+
-+	/*
-+	 * If the buffer allocation failed, we exit but return 0 since
-+	 * we allow the driver working with less buffers
-+	 */
-+	if (!stk_urb->sgt)
-+		goto free_urb;
-+
-+	stk_urb->transfer_buffer = dma_vmap_noncontiguous(dma_dev, sb_size,
-+							  stk_urb->sgt);
-+	if (!stk_urb->transfer_buffer)
-+		goto free_sgt;
-+
-+	stk_urb->dma = stk_urb->sgt->sgl->dma_address;
-+	stk_urb->dev = dev;
-+	return 0;
-+free_sgt:
-+	dma_free_noncontiguous(dma_dev, sb_size, stk_urb->sgt, DMA_FROM_DEVICE);
-+	stk_urb->sgt = NULL;
-+free_urb:
-+	usb_free_urb(stk_urb->urb);
-+	stk_urb->urb = NULL;
-+
-+	return 0;
-+}
- /*
-  * Allocate URBs
-  */
-@@ -407,6 +446,7 @@ int stk1160_alloc_isoc(struct stk1160 *dev)
- {
- 	struct urb *urb;
- 	int i, j, k, sb_size, max_packets, num_bufs;
-+	int ret;
- 
- 	/*
- 	 * It may be necessary to release isoc here,
-@@ -428,23 +468,14 @@ int stk1160_alloc_isoc(struct stk1160 *dev)
- 	/* allocate urbs and transfer buffers */
- 	for (i = 0; i < num_bufs; i++) {
- 
--		urb = usb_alloc_urb(max_packets, GFP_KERNEL);
--		if (!urb)
-+		ret = stk1160_fill_urb(dev, &dev->isoc_ctl.urb_ctl[i],
-+				       sb_size, max_packets);
-+		if (ret)
- 			goto free_i_bufs;
--		dev->isoc_ctl.urb_ctl[i].urb = urb;
--
--#ifndef CONFIG_DMA_NONCOHERENT
--		dev->isoc_ctl.urb_ctl[i].transfer_buffer =
--			usb_alloc_coherent(dev->udev, sb_size, GFP_KERNEL,
--					   &urb->transfer_dma);
--#else
--		dev->isoc_ctl.urb_ctl[i].transfer_buffer =
--			kmalloc(sb_size, GFP_KERNEL);
--#endif
--		if (!dev->isoc_ctl.urb_ctl[i].transfer_buffer) {
--			stk1160_err("cannot alloc %d bytes for tx[%d] buffer\n",
--				sb_size, i);
- 
-+		urb = dev->isoc_ctl.urb_ctl[i].urb;
-+
-+		if (!urb) {
- 			/* Not enough transfer buffers, so just give up */
- 			if (i < STK1160_MIN_BUFS)
- 				goto free_i_bufs;
-@@ -460,15 +491,12 @@ int stk1160_alloc_isoc(struct stk1160 *dev)
- 		urb->transfer_buffer = dev->isoc_ctl.urb_ctl[i].transfer_buffer;
- 		urb->transfer_buffer_length = sb_size;
- 		urb->complete = stk1160_isoc_irq;
--		urb->context = dev;
-+		urb->context = &dev->isoc_ctl.urb_ctl[i];
- 		urb->interval = 1;
- 		urb->start_frame = 0;
- 		urb->number_of_packets = max_packets;
--#ifndef CONFIG_DMA_NONCOHERENT
- 		urb->transfer_flags = URB_ISO_ASAP | URB_NO_TRANSFER_DMA_MAP;
--#else
--		urb->transfer_flags = URB_ISO_ASAP;
--#endif
-+		urb->transfer_dma = dev->isoc_ctl.urb_ctl[i].dma;
- 
- 		k = 0;
- 		for (j = 0; j < max_packets; j++) {
-@@ -492,8 +520,6 @@ int stk1160_alloc_isoc(struct stk1160 *dev)
- 	 * enough to work fine, so we just free the extra urb,
- 	 * store the allocated count and keep going, fingers crossed!
- 	 */
--	usb_free_urb(dev->isoc_ctl.urb_ctl[i].urb);
--	dev->isoc_ctl.urb_ctl[i].urb = NULL;
- 
- 	stk1160_warn("%d urbs allocated. Trying to continue...\n", i);
- 
-diff --git a/drivers/media/usb/stk1160/stk1160.h b/drivers/media/usb/stk1160/stk1160.h
-index 0c355bb078c1..7b498d14ed7a 100644
---- a/drivers/media/usb/stk1160/stk1160.h
-+++ b/drivers/media/usb/stk1160/stk1160.h
-@@ -16,6 +16,8 @@
- #include <media/videobuf2-v4l2.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-ctrls.h>
-+#include <linux/usb.h>
-+#include <linux/usb/hcd.h>
- 
- #define STK1160_VERSION		"0.9.5"
- #define STK1160_VERSION_NUM	0x000905
-@@ -87,6 +89,9 @@ struct stk1160_buffer {
- struct stk1160_urb {
- 	struct urb *urb;
- 	char *transfer_buffer;
-+	struct sg_table *sgt;
-+	struct stk1160 *dev;
-+	dma_addr_t dma;
- };
- 
- struct stk1160_isoc_ctl {
-@@ -190,3 +195,8 @@ void stk1160_select_input(struct stk1160 *dev);
- 
- /* Provided by stk1160-ac97.c */
- void stk1160_ac97_setup(struct stk1160 *dev);
-+
-+static inline struct device *stk1160_get_dmadev(struct stk1160 *dev)
-+{
-+	return bus_to_hcd(dev->udev->bus)->self.sysdev;
-+}
--- 
-2.17.1
-
+--=20
+Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+Linaro Services Principle Technical Lead
+Linaro.org =E2=94=82 Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
