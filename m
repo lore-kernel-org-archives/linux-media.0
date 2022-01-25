@@ -2,86 +2,165 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21A40C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jan 2022 08:06:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 020B6C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jan 2022 08:25:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377475AbiAYIGM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jan 2022 03:06:12 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:50298 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378396AbiAYICz (ORCPT
+        id S1346151AbiAYIZO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jan 2022 03:25:14 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:39130 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1449797AbiAYIUS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:02:55 -0500
-Received: from localhost.localdomain (unknown [IPv6:2a00:c281:1137:e00:5903:19ba:8e99:7984])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 174FF1F43DC8;
-        Tue, 25 Jan 2022 08:02:49 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643097770;
-        bh=wGCe52XawNVe4MubA5jJwdVFk61Wf8VXEXhFjZFenZw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RClvh8HLStSSIBIcEmHatIM1LyIr+8QvsA9sVIqNJec1y4Ir9xmxFqdk3xC13s63b
-         dh5Hwgs7+u/gmzCrG0709RFMFAJAtdxLTJ2JrrVKDSKL82O5iV7RlDhWs/ZHZEn/6x
-         mxtHSpskvIDiYQMOoO1REQbT1r6QU9GB3GGKWOJxaaxXDapkoTICE5/gLaaFnhC4Lq
-         oSIirL614pigO1lpJVdg9c4B3SIwM+o9foDp8JcGN1ncFcIUw6KpOVwXJOLIJQEHuq
-         NKc++MURK8KzJ9L6YKMst+psYK032F6CrNQkDfxuMr/HG80LnWpXytgbVl2RumAYPv
-         xWZpVGCseeLHA==
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     ezequiel@vanguardiasur.com.ar
-Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        kernel@collabora.com, linux-media@vger.kernel.org,
-        laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl,
-        ribalda@chromium.org, tfiga@chromium.org, senozhatsky@google.com,
-        hch@lst.de, dafna3@gmail.com
-Subject: [PATCH v2 0/4] stk1160: allocate urb buffs with the DMA noncontiguous API
-Date:   Tue, 25 Jan 2022 10:02:09 +0200
-Message-Id: <20220125080213.30090-1-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 25 Jan 2022 03:20:18 -0500
+X-UUID: 54edde21346943f9a2d85f5a21796c96-20220125
+X-UUID: 54edde21346943f9a2d85f5a21796c96-20220125
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 588502847; Tue, 25 Jan 2022 16:20:07 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 25 Jan 2022 16:20:05 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 25 Jan 2022 16:20:05 +0800
+Message-ID: <356f512b549f90b329775e249fd48eb2954ade02.camel@mediatek.com>
+Subject: Re: [PATCH v11 2/3] dts: arm64: mt8183: add Mediatek MDP3 nodes
+From:   moudy ho <moudy.ho@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        "Maoguang Meng" <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
+        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
+        <river.cheng@mediatek.com>, <srv_heupstream@mediatek.com>
+Date:   Tue, 25 Jan 2022 16:20:05 +0800
+In-Reply-To: <d61ec481-8059-a897-504a-0125f88fad61@collabora.com>
+References: <20220105093758.6850-1-moudy.ho@mediatek.com>
+         <20220105093758.6850-3-moudy.ho@mediatek.com>
+         <d61ec481-8059-a897-504a-0125f88fad61@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This set replaces urb buffers allocation to use the DMA
-noncontiguous API. Similarly to a commit sent to uvc: [1]
-This improves performance on ARM while not damaging performance
-on other platforms. The cpu performance on ARM
-improves because the new API does not cause the cache disable on ARM
-while the coherent API do.
-Measurements are shown in patch 4/4
+On Fri, 2022-01-21 at 12:58 +0100, AngeloGioacchino Del Regno wrote:
+> Il 05/01/22 10:37, Moudy Ho ha scritto:
+> > Add device nodes for Media Data Path 3 (MDP3) modules.
+> > 
+> > Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 108
+> > ++++++++++++++++++++++-
+> >   1 file changed, 107 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > index ba4584faca5a..b872ef1ff6b3 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > @@ -1325,6 +1325,79 @@
+> >   			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
+> > 0 0x1000>;
+> >   		};
+> >   
+> > +		mdp3_rdma0: mdp3_rdma0@14001000 {
+> > +			compatible = "mediatek,mt8183-mdp3",
+> > +				     "mediatek,mt8183-mdp3-rdma0";
+> > +			mediatek,scp = <&scp>;
+> > +			mediatek,mdp3-comps = "mediatek,mt8183-mdp3-
+> > dl1",
+> > +					      "mediatek,mt8183-mdp3-
+> > dl2",
+> > +					      "mediatek,mt8183-mdp3-
+> > path1",
+> > +					      "mediatek,mt8183-mdp3-
+> > path2",
+> > +					      "mediatek,mt8183-mdp3-
+> > imgi",
+> > +					      "mediatek,mt8183-mdp3-
+> > exto";
+> > +			reg = <0 0x14001000 0 0x1000>,
+> > +			      <0 0x14000000 0 0x1000>,
+> > +			      <0 0x14005000 0 0x1000>,
+> > +			      <0 0x14006000 0 0x1000>,
+> > +			      <0 0x15020000 0 0x1000>;
+> > +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
+> > 0x1000 0x1000>,
+> > +						  <&gce SUBSYS_1400XXXX
+> > 0 0x1000>,
+> > +						  <&gce SUBSYS_1400XXXX
+> > 0x5000 0x1000>,
+> > +						  <&gce SUBSYS_1400XXXX
+> > 0x6000 0x1000>,
+> > +						  <&gce SUBSYS_1502XXXX
+> > 0 0x1000>;
+> > +			power-domains = <&spm
+> > MT8183_POWER_DOMAIN_DISP>;
+> > +			clocks = <&mmsys CLK_MM_MDP_RDMA0>,
+> > +				 <&mmsys CLK_MM_MDP_RSZ1>,
+> > +				 <&mmsys CLK_MM_MDP_DL_TXCK>,
+> > +				 <&mmsys CLK_MM_MDP_DL_RX>,
+> > +				 <&mmsys CLK_MM_IPU_DL_TXCK>,
+> > +				 <&mmsys CLK_MM_IPU_DL_RX>;
+> > +			iommus = <&iommu M4U_PORT_MDP_RDMA0>;
+> > +			mediatek,mmsys = <&mmsys>;
+> > +			mediatek,mm-mutex = <&mutex>;
+> > +			mediatek,mailbox-gce = <&gce>;
+> > +			mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
+> > +				 <&gce 21 CMDQ_THR_PRIO_LOWEST>,
+> > +				 <&gce 22 CMDQ_THR_PRIO_LOWEST>,
+> > +				 <&gce 23 CMDQ_THR_PRIO_LOWEST>;
+> 
+> Hello Moudy,
+> the mboxes for gce 21, 22, 23 are missing the third cell. Please fix.
+> 
+> Regards,
+> Angelo
 
-[1] https://lkml.org/lkml/2021/3/12/1506
+Hi Angelo,
+Thanks for the reminder, but I'm a bit confused, the previous
+version(v10) mentioned that the current upstream mbox has only 2
+cells.
+So I should follow this rule to remove the extra 0 in the first item as
+follows:
+ +			mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST>,
+ +				 <&gce 21 CMDQ_THR_PRIO_LOWEST>,
+ +				 <&gce 22 CMDQ_THR_PRIO_LOWEST>,
+ +				 <&gce 23 CMDQ_THR_PRIO_LOWEST>;
 
-Patches Summary:
-* patches 1+2 are bug fixes.
-* patch 3 changes the way data is stored. This is a preparation
-to patch 4.
-* patch 4 is the change of API to use the noncontiguougs.
-
-Changes since v1:
-1. reduce line length to be not too longer than 80 char
-2. reformulate commit log of patch 4/4 and add measurements results
-3. in patch 4, invalidate the vmap range before the direct mapping range.
-4. test regressions for patches 1-3 (not including patch 4) and improve vars names
-5. patch 2 is a new bug fix I found
-6. patch 1 is extended to fix two cases of not allocating all intended urb buffers.
-
-Dafna Hirschfeld (4):
-  media: stk1160: fix number of buffers in case not all buffers are
-    created
-  media: stk1160: If start stream fails, return buffers with
-    VB2_BUF_STATE_QUEUED
-  media: stk1160: move transfer_buffer and urb to same struct
-    'stk1160_urb'
-  media: stk1160: use dma_alloc_noncontiguous API
-
- drivers/media/usb/stk1160/stk1160-core.c  |   2 +-
- drivers/media/usb/stk1160/stk1160-v4l.c   |  16 ++-
- drivers/media/usb/stk1160/stk1160-video.c | 142 ++++++++++++----------
- drivers/media/usb/stk1160/stk1160.h       |  23 +++-
- 4 files changed, 104 insertions(+), 79 deletions(-)
-
--- 
-2.17.1
+Thanks,
+Moudy Ho
+> 
+> > +			gce-subsys = <&gce 0x14000000 SUBSYS_1400XXXX>,
+> > +				     <&gce 0x14010000 SUBSYS_1401XXXX>,
+> > +				     <&gce 0x14020000 SUBSYS_1402XXXX>,
+> > +				     <&gce 0x15020000 SUBSYS_1502XXXX>;
+> > +		};
+> > +
+> 
+> 
 
