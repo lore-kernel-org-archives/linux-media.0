@@ -2,40 +2,40 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FFA7C4332F
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jan 2022 07:18:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C62A9C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jan 2022 07:18:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443857AbiAYHRs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jan 2022 02:17:48 -0500
-Received: from mail-eopbgr10041.outbound.protection.outlook.com ([40.107.1.41]:29494
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        id S1443888AbiAYHRx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jan 2022 02:17:53 -0500
+Received: from mail-am6eur05on2049.outbound.protection.outlook.com ([40.107.22.49]:56704
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1443155AbiAYHNV (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jan 2022 02:13:21 -0500
+        id S1443158AbiAYHNa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 25 Jan 2022 02:13:30 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UOeL1QlKhqttjO+yAvkoEwhOPlrhW5KevFLc/DlKPQeJGzcDg4iApHPpO7hrd7Xj4fYBiiUcu/2nj+I7TAYDsTkWWjegzY3y9FVFiYWy2vYqNsXmH8ZE9d6eqkaA+pHkGx7L4W6v1EF6mzyqTMLtlDBqZxTaeKatHPvg9HzDXDv1iUpK9V4HsJ0NozYchDGHev7STosJqxiRdfqhmsRwIIYAG7ITexX1imtfrUGn8nlmovbTyLV89XEIKksrTvrkfHT91P40mOPYQATICKzAXPUa7sT4qKmMaCUdSGvg2a81Dukg7MlZ/zcdExMx0up+VquvQO5Pp4gcqWTHiauXaw==
+ b=UdHSK6OnevdPJ0nBwvn1mMI3jWUV1NKG3mz5ziMxtn5IQU+2Mk6UnUYFzVMrA7WJvzT7cL2jwJAO79PzMtzMrx3aGTJRBXKdlxo1qM3Jh97OK3uS8OiiaUTF3rKXtIfjcomYjHH7QS4EtQlUwvGPaRh4auc+cClBaGZuZ432eo+u5OK/ZDWC2i6FnkEKu09nS/3E60t8yzhqsGhx3xioPYvyE4FEFW9DwV/ULoWLmKHFdgeFJ2lV++j5KiRHzx6kOYpeF+JzUEKP64wTIEG17rofF+08th8+Y7KwSGyqO7Yj05+PUkgDxwAOK7ljFJMhYfQ0CAEeRHuIj8mDBYdmNA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZZqbWHFLe4or8VOi5ZUHPNszswaVjZgkuXDknspj6r8=;
- b=Y+eZNq7EVfAhxMAVn24L1QmJoc7a+kbprOrQ6oKXSQ3vE8gwjpqHllex/HRMI3s17TS/ImAtpoJAp+k6VEiFThzq/bG8mr0+D6MS6CUqNJORItUFYFawaSMQzAXCQas1t+cWOlJOgLZDLXND7hPaWJ1DBiZOsZ4xrnfqHAfkRWtNeaHn5LHjWLYqfsSytrO+rjZcPwqXGhp91GEPd3nRpVwl+1dI1P350Rmb4ea+048O3hulHtdmMdEMwzy/K91F6nykqAnXCND4CK4vPT+vHh29qSNexiJbcis0oVLm8KMfni0f6eLjTlPtBieqFzKuFMuhv2g01keg7qfB7kU16w==
+ bh=5d+DTAQMAt0Syvo/dR8AqO27H2rV1VGBmRy537TrPtQ=;
+ b=i86aPh17Q9BG65cyESq+rN/kuZJa1NXW1zEPlnvOEtq+Oy+3HawUFztEqWH1z0wENiuOXfwNDGP8Qj1iZpolf/PEP4fjFDO97ZwtaWYuJVb5wY/pl17V/+IIQq4ra/2EuywkZph62WAd7PTUGYhg075XeBqTZkczoRjUti46yIc7tOyvre0vi5WD1/ss+zAWUGos0tobIS3gub+EWxXyrs1GHyJfwlm+v9VKDvJ4Wh2f3L8sF47QUKS9c2zUvbAw/s0lkAEgK3S278ySQ+hr5xks3EmQd/n4Weu0LNiefBTSaXUjT12wsxdIPdYBH4HyzPMtDWPgP8PkAUKgr4MAZQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZZqbWHFLe4or8VOi5ZUHPNszswaVjZgkuXDknspj6r8=;
- b=AaNtJcNLNXi6Xyueg/3GhiYg5OwnfXt1p6kupJWBXbTA2fRVd9VZjNEHzOCNwkLULoKBlQM9nUHb6saCHLHYjtQMrILwZE9f0p0p7Z0xiN3wpLdJLSi1HnoP7qaO8G6ULQt0Xgu1P6JqhLN8dMq6TDav62w4+X2RuJbwxnhFq7g=
+ bh=5d+DTAQMAt0Syvo/dR8AqO27H2rV1VGBmRy537TrPtQ=;
+ b=Sj56xtWB8XBCdcbmMqEEBcs7mk1jzYIA+G3sMJo5i66DBM41du8X/wYcH2vUwboIQG+FlSZ9h3nKhjVxdSYpJ8pqnKNI05zlJ5aDNNj+eCrdpd91T+csu1HUgmR6VmsTycej1pmpTTQ9dBPeLgoCKPI1+kzHdAZV4jcBOj+Wsb8=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by VI1PR04MB4094.eurprd04.prod.outlook.com (2603:10a6:803:43::32) with
+ by VI1PR04MB6157.eurprd04.prod.outlook.com (2603:10a6:803:f2::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.17; Tue, 25 Jan
- 2022 07:12:04 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Tue, 25 Jan
+ 2022 07:12:34 +0000
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::3d7e:6627:fdd0:9d13]) by AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::3d7e:6627:fdd0:9d13%4]) with mapi id 15.20.4909.017; Tue, 25 Jan 2022
- 07:12:04 +0000
+ 07:12:34 +0000
 From:   Ming Qian <ming.qian@nxp.com>
 To:     mchehab@kernel.org, shawnguo@kernel.org, robh+dt@kernel.org,
         s.hauer@pengutronix.de
@@ -43,9 +43,9 @@ Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
         festevam@gmail.com, linux-imx@nxp.com, aisheng.dong@nxp.com,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v15 03/13] media: amphion: add amphion vpu device driver
-Date:   Tue, 25 Jan 2022 15:11:19 +0800
-Message-Id: <e2c24babbc6b1a73ef6ab464237f08d3d2212ee9.1643077283.git.ming.qian@nxp.com>
+Subject: [PATCH v15 10/13] media: amphion: implement malone decoder rpc interface
+Date:   Tue, 25 Jan 2022 15:11:26 +0800
+Message-Id: <547f2801903a0b7678be2f1cd4d934e88a04273f.1643077283.git.ming.qian@nxp.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <cover.1643077283.git.ming.qian@nxp.com>
 References: <cover.1643077283.git.ming.qian@nxp.com>
@@ -55,731 +55,78 @@ X-ClientProxiedBy: SG2PR04CA0172.apcprd04.prod.outlook.com (2603:1096:4::34)
  To AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 82a6c2be-903e-41d8-ca6a-08d9dfd1fd21
-X-MS-TrafficTypeDiagnostic: VI1PR04MB4094:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR04MB409459849CA2DCCA9B1E48A0E75F9@VI1PR04MB4094.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2657;
+X-MS-Office365-Filtering-Correlation-Id: 0fcc927c-3058-40de-ddf8-08d9dfd20ef4
+X-MS-TrafficTypeDiagnostic: VI1PR04MB6157:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR04MB61573AF60F94D4C30792E6B0E75F9@VI1PR04MB6157.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:147;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: emscRYDtxfTI/CwgGFnA5YDjrQcrZ1D9gzO09BeVCKs2zBmRnXYiazMnU1R9NznN3WjWnZvgL3EnTIw71U11N0/GAmC51O3Vc3pNh087AMgQk9N8830EQqhfa4ja9BXauils3GViB/o6201KqGLIbcJuRO+kSsVwXBpY15dC1CW1Pn0/vdP2qtoX6dR9GgWysXTSECYsod4fAq2x9WZu4Wj/GdhNppYcOMqOKgJFs0/j//aSS+PIN+r0qVzeAaVkZdcEHJQ2sOc5UdBeMRw1WXb0Cy/Pu4H/dcHSyxd9Za3MZk1f7zqr6Kufnf6Ab2vbJbAyRfQ4fC+Vi0jnacBSucfjWmjsowo2WS3yayRsM6um32d+6gmwjOq6+1xmn8+OQnmGwMvxwHTNXMHRHZnuWIM5AqgFLH+pa1x3wbJzlFLNCSUpHCjM2rldnB9+OoSjFVIgue1juTvYAJaFodZC5kLg1GaNoXULMl5ymL9iD0ljWjM4blzJTF33adoIwjCdAbGehsVdxZhwIdPbxa85qMcHWCdARzvXFmtvfpW4DMN+z1Om8/uA/d/ANNWqR+/Zjzg3eDySIB73UDA9uXCdaUNI/TajOlXD0H6c+Bm8hwK3ILCaESul7QT9CEBT1i9rBtOpkjS+lkS4x6VXDqxxo9Vv8QIUZlj2HpdtPvYlsK6JFeo7Q4s1QHbjvhnU3hKY/la8pI175JH8NrCXRZ08FA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8936002)(6666004)(5660300002)(2616005)(7416002)(8676002)(36756003)(44832011)(86362001)(316002)(4326008)(38350700002)(6512007)(38100700002)(66476007)(66556008)(83380400001)(52116002)(6486002)(66946007)(6506007)(2906002)(186003)(26005)(30864003)(508600001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: iySpXalVBk3mzNCvhQZTCmbZJZ7Y53M175+pV/th3FkTfHF73SH+cQA6nmKFUQQ2znUKnCKRSXKDleDgwC75Frrr9u8VxnRn6iPpDUX+5h09/Q7BhZv3qqRkrxwiI9yiFAHVRQ/UxEOkzwi0SGjuPPMcV2HG5WLsGZGvBipFRA5Z5liGq4ebRyrPptvyQveoh/FIUO/wNgOi3oCm0AQsnFKr3JQpOn1Coq3K3mtmvJfl4+sB70ynRHCC2rOa1464Hau4wjNcZYwqP3kBQLHawJnapZ4IOJDYiJ4N2qwgTvWZzW1Y86mBFqo5MHoSV93kRIxvXlC0DTcNwPRKyLFy3ktELT8sJ8PxurnQO6t3bnKRWCSQ0XY0JH9bgAbBFMGq70x2XBXrCnQu5JawT8ln+86QDuy3ribXAJO28z10W1yX0WmcK4KfvQSSUaEGkYF/VTahghSgGjizKDKwVYQEaoMgBMSHt4JTi6wROJ/A3IipwN7sZchxNGEVGdtmrbDW4tRmB8Gbtcz32IZLwy15vTAQrHaqefwo+u9h1Zq1Sp/CNKlkpCB9O3p9HB/FxL+Kt31ad7aSqwAZSSBhlrRF7w2I2NfDvTYkhDYgpExqn2WrXQyyE71UQEnA1RYUKCeVoZtgPZ+6n+KFS8WUmcxW7+8GCTrz1tt5u4l6vzOucHo3j4y2JThZUfQgDQqsqPfXNeNqeAVDzT5b0pD68yi+1Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38350700002)(186003)(26005)(2616005)(38100700002)(2906002)(66946007)(66476007)(66556008)(7416002)(44832011)(30864003)(36756003)(8936002)(5660300002)(4326008)(8676002)(508600001)(52116002)(86362001)(316002)(6506007)(6512007)(6666004)(83380400001)(6486002)(559001)(579004)(20210929001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mPGfwmgsuZaXKGoh2cVCWau10vt9CfQZUFke6yyMIT+8t8rnfIQk4a5ET6iB?=
- =?us-ascii?Q?h3tqDyXD6wulmVlYR1EXk2OiAmFJJzQ59pyD6iwmHt+Po6h/dNV3FEpfyJWM?=
- =?us-ascii?Q?T+bneWNz8aDZW15tVxSwk6X/CeZHoTixbJDnuATfq9yawkXKdKHYGf/BwDzm?=
- =?us-ascii?Q?GJZwzG2E0vKdowL9wvirEHq8rlLgPsYdB+ZMIhf4ZcPlF9GXjSbLW+zC2OM5?=
- =?us-ascii?Q?77CDurMaPKRRq68o09RO7NMZjMIh/2kV7H+nVHFXZIVTCq3piVsINF+Ol93A?=
- =?us-ascii?Q?Y68J5E5dUHIRRc/xi0SCZDqYbsq/0/T//eHm2kEqg0E3ASE5ZiRvNmA+WELs?=
- =?us-ascii?Q?4o36/4uSrHYpJ+v68xQHXDt5n7FGWT7G4B2TW+imznNWZa7juvu9joUSP1Go?=
- =?us-ascii?Q?LLLKKAXkkbN1zn4qx4T1+uUNOwMt8adhmy9+/YxRem6c49aM8oZb4oENADp1?=
- =?us-ascii?Q?13H79g8vfHuI/incGicc/aUhHqspebxSgJH7rMyQ/84Rizod9KhsEBoOizT2?=
- =?us-ascii?Q?2NwI6ul/VenaB1sw6aZH50TCqUDlwuYFy9bFWbqXEPYt9i+aewhaPBJRwDZC?=
- =?us-ascii?Q?ZMrtYJQOM/uvkmqnY0ZY+Gea7VK9odLnttQNaRO1+FTiu34rri1zEw6cMRZ2?=
- =?us-ascii?Q?s354wDmROju684fzpHJk0KL6uSw5PUT605XRG2ZWmsm3UR7O834ix+ssU5fx?=
- =?us-ascii?Q?gTGU/jlYqYdT1KmTWE3bhuRU95B5fVODoDeyYWDmT6oBqbb0W9Xr9iJ1xuq7?=
- =?us-ascii?Q?EKeHhzIpdOQfgx3pfHNkVcsFAdwhjQDnsazynSwydoeIq+WRS7pr4TrAlm1X?=
- =?us-ascii?Q?xUKvhNxgG3gGUJeF/MFlU0z9UQv2at0xcb6dwzTuBK+4Kag23SMKGGS2UNzv?=
- =?us-ascii?Q?3zMiG7wq9TOBAxB+XqdQ3ePjKaxNq1qfOJ0XmiWpmMPJdeINbxPCeMqfAJGH?=
- =?us-ascii?Q?JmdT5HzAmW1D0uANbqjvWSRKSznrJx57O7l2JFMPT7lPlxjjXvrqNSx6xQKP?=
- =?us-ascii?Q?AsLRv3fGqLefcWZJhG2PM4jJOvxDZ7Cj9mC1mDOKF0w8NH8E06ky+sizZoe6?=
- =?us-ascii?Q?EybdoAfD6xxMrswzjr5/tleX1ouHHWa6OXvzsICp3FwMwVDjb6c7YOFH5cZ+?=
- =?us-ascii?Q?7qgGVZc7gfHeo36eQfuL+0YPMQENd7HtJ0Vd8klypUAbr9CUKcIDVhL4h3a4?=
- =?us-ascii?Q?6NcV3+VOL7IlISMTRVPO+DMghwcXBtwXo9Fdwui5x9enEfcdYESMNucukh+2?=
- =?us-ascii?Q?MiqNFDWlOVEbJ4YyzaRuj4T5n0gxFiltiPPC655JXSA/bU41T7ECkHxJWJmE?=
- =?us-ascii?Q?AAfBU1KSbmF0TfC2fy6e5IgJabOYmcpCvCFAPosE+no8q2GT8degBSSR4dRM?=
- =?us-ascii?Q?yrKkjn8dQMPaOUZggxvZc3Gt4CdawR5GAEAqnm0c6aVuqlRgPawROk3c85a1?=
- =?us-ascii?Q?kvDbJC7szE4qr7QcOpkb6lQ6ArhG73xDSZ5Zev0akfy5GozgwYQlw+FUhrx+?=
- =?us-ascii?Q?oBO1i5/ool7gpwEaWS5toA5zbBhgRaKZ1w7jQjYsA7VuP+SRRpb6UyVgBhX8?=
- =?us-ascii?Q?qksGZxVJR6mjATAqpD29kSqBc/ZuKZXmLxkTgP8myrT+X1w5t59+l+F9EHSz?=
- =?us-ascii?Q?ZHQQkwx+5xf1W0fmwWFDvcI=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5eNhQeHcjJcAhdOJOCrF420gFeNo1TI1WpH0q402RT5R2JBexzhQUexV+6Th?=
+ =?us-ascii?Q?a8N3hkvIWZtHjdDwHZX07wmBaNzYzrUMr+G4HB/0AQMMPqm3zN3hIyBEX58b?=
+ =?us-ascii?Q?25ghKnX8bQAzqMdyoohtZrDd18Q4m+CiFPlHhNH9H8Ku9wFmJ/b2Ih9V2Gq5?=
+ =?us-ascii?Q?CGJt2TysDpQZGh14sALfNe+W1goP0nTeZ2gNndLFpgfrarSqiFlFby7ol6/c?=
+ =?us-ascii?Q?hYpzCV6yo0iRfkifBxG53LzuczpLU7kero/m2IUALRW7PTtcscQPDfopzAK7?=
+ =?us-ascii?Q?mjVPeWYZHnanq148mZg0BWe4u7uHWXY0nCz90BQLY6eu3wsbI2WzrhLxWDS7?=
+ =?us-ascii?Q?jwwDHTkgCsG8a8IOPAPh7fvU+scdCA7Ax0nc2/Lh7gEZXRmn4nkKAHFtbdlK?=
+ =?us-ascii?Q?BqAKJBPIRbFKa2+Z5rGkqsrUE5+NvuKElt0wC5LeHGC7bz9SF6z49vI6yCZ8?=
+ =?us-ascii?Q?/yptGddTpxzB6tPnD4qS/wnHVP4b7Ihb+WA1X5+KQGBnOhb9JqKu5JcIpz+4?=
+ =?us-ascii?Q?za57zfFJJrpErxS8gNNLjaZIFfnmA0OG/gcOJTXhatkcQF/YwRlKUeDAvgyK?=
+ =?us-ascii?Q?LpefBEy3KyzoSx6hEsVlTVp+V2n8s+OeEteCfRaJSh8MV2filwt3T5NV2nXf?=
+ =?us-ascii?Q?hjX1Zc/Zl/78bgXRvY2h6auw6HwsWlRz1xcXzEBMjg9jYQepDp3NM6HKqMC/?=
+ =?us-ascii?Q?z4e7/o2pe6Q89nL/zynVdF9/Zua7/vCd4EszA0oVLUA0T0Ar9QecoH+D/Hdi?=
+ =?us-ascii?Q?787kJtRrIUhDmYdkGVX91Zn7q6iRd5G51wXsVrFSW39Kkn8dbWdW7o+lrwLX?=
+ =?us-ascii?Q?LYeeEepbEXU7M93H+HPhxRscBPGHEFHDXavikQ/JjrFuHRj2bRPCFcY+vCtv?=
+ =?us-ascii?Q?aQlUSkxGLVfGHWqY4tz7AsMG7BYT8EjAgL5yHQomqv437U63RYIgD67+HgoU?=
+ =?us-ascii?Q?Ususu+suQuQXi4Yu0qLBXmnK+5neeKBlXgDSTx+7RuN//MQB2l30Rz4MVqpu?=
+ =?us-ascii?Q?OOGaWeDgHXoyjXpuLecRy5SRTzkFvkJjL1inMbw2azpb91VboTNqrWVjgCj7?=
+ =?us-ascii?Q?6keP3l/6JzCDUPep+NfhkF8vlRiZX3utxZwvafvAAvGi+xfpYhZsNW9uhJ8J?=
+ =?us-ascii?Q?jGRs05PwveRxQm4jkJ7Lx96GBxyG1fUv1SZeV8Nk3XyMOCb9l//hJIDjlLLP?=
+ =?us-ascii?Q?mPkki8sWRwytt7ZcrxJFbgyjtIyTEBFHoQB+FMQjIstbe8k415neoq2Xahm1?=
+ =?us-ascii?Q?qXE7MtuV2mvDQGPwHXTLjMi2QN/jMds4dQOayu9i2JU2qutPNTFePpTVhrND?=
+ =?us-ascii?Q?htcM+IWxrOmLorHtnB5kuFoF9wCENlV5APQDwUVIY8iiDFjilKH4+aSClbv5?=
+ =?us-ascii?Q?0etN4SP7u1VVn2P+MM+AS3E/E0bFAKCg9Eorr+YfPTzaEaYztShMB4EqQaab?=
+ =?us-ascii?Q?oGr09ZkysqWS+sYmXzEPvmLuXuLqRevY9BvUFmVc+bCWQa5A9yKUWq/vzl4C?=
+ =?us-ascii?Q?W80ZXgRPJPFkGx3vuEqymG+zGi57CUtYS5zT5nY/8FWqo5DbyQdctq/ErniI?=
+ =?us-ascii?Q?Ap2gpgMlkWxFas3CDEkje9oTzfykkdQ562UGVollkp7wTUIDCwyZMkCiJFUv?=
+ =?us-ascii?Q?SP49TSFpy65I9Jn92fg33KM=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82a6c2be-903e-41d8-ca6a-08d9dfd1fd21
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fcc927c-3058-40de-ddf8-08d9dfd20ef4
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 07:12:04.2019
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 07:12:33.9346
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KDOJCxCpbWKe9ka9v2JuO2OEfxCTvzcc4Q6m5umY5EAANW79/mOZeXkQdcNr6cEfACI+yvMndgM9olU6yzLgPQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4094
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8ywcdJlRJg7OQTxWUYyorsrXv0uW6gRl18NS7ynAuc3U3YyA9koLSaiAW2Z0XmNDPJ/sjI1V4tGfUi0KyzSe8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6157
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The amphion vpu codec ip contains encoder and decoder.
-Windsor is the encoder, it supports to encode H.264.
-Malone is the decoder, it features a powerful
-video processing unit able to decode many formats,
-such as H.264, HEVC, and other formats.
-
-This Driver is for this IP that is based on the v4l2 mem2mem framework.
-
-Supported SoCs are: IMX8QXP, IMX8QM
+This part implements the malone decoder rpc interface.
 
 Signed-off-by: Ming Qian <ming.qian@nxp.com>
 Signed-off-by: Shijie Qin <shijie.qin@nxp.com>
 Signed-off-by: Zhou Peng <eagle.zhou@nxp.com>
-Reported-by: kernel test robot <lkp@intel.com>
 Tested-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- arch/arm64/configs/defconfig               |   1 +
- drivers/media/platform/Kconfig             |  19 ++
- drivers/media/platform/Makefile            |   2 +
- drivers/media/platform/amphion/Makefile    |  20 ++
- drivers/media/platform/amphion/vpu.h       | 356 +++++++++++++++++++++
- drivers/media/platform/amphion/vpu_defs.h  | 187 +++++++++++
- drivers/media/platform/amphion/vpu_drv.c   | 260 +++++++++++++++
- drivers/media/platform/amphion/vpu_imx8q.c | 271 ++++++++++++++++
- drivers/media/platform/amphion/vpu_imx8q.h | 115 +++++++
- 9 files changed, 1231 insertions(+)
- create mode 100644 drivers/media/platform/amphion/Makefile
- create mode 100644 drivers/media/platform/amphion/vpu.h
- create mode 100644 drivers/media/platform/amphion/vpu_defs.h
- create mode 100644 drivers/media/platform/amphion/vpu_drv.c
- create mode 100644 drivers/media/platform/amphion/vpu_imx8q.c
- create mode 100644 drivers/media/platform/amphion/vpu_imx8q.h
+ drivers/media/platform/amphion/vpu_malone.c | 1625 +++++++++++++++++++
+ drivers/media/platform/amphion/vpu_malone.h |   44 +
+ 2 files changed, 1669 insertions(+)
+ create mode 100644 drivers/media/platform/amphion/vpu_malone.c
+ create mode 100644 drivers/media/platform/amphion/vpu_malone.h
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 30516dc0b70e..5423075730f8 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -662,6 +662,7 @@ CONFIG_V4L_PLATFORM_DRIVERS=y
- CONFIG_VIDEO_RCAR_CSI2=m
- CONFIG_VIDEO_RCAR_VIN=m
- CONFIG_VIDEO_SUN6I_CSI=m
-+CONFIG_VIDEO_AMPHION_VPU=m
- CONFIG_V4L_MEM2MEM_DRIVERS=y
- CONFIG_VIDEO_SAMSUNG_S5P_JPEG=m
- CONFIG_VIDEO_SAMSUNG_S5P_MFC=m
-diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 9fbdba0fd1e7..947ae16c73f5 100644
---- a/drivers/media/platform/Kconfig
-+++ b/drivers/media/platform/Kconfig
-@@ -216,6 +216,25 @@ config VIDEO_RCAR_ISP
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called rcar-isp.
- 
-+config VIDEO_AMPHION_VPU
-+	tristate "Amphion VPU (Video Processing Unit) Codec IP"
-+	depends on ARCH_MXC || COMPILE_TEST
-+	depends on MEDIA_SUPPORT
-+	depends on VIDEO_DEV
-+	depends on VIDEO_V4L2
-+	select MEDIA_CONTROLLER
-+	select V4L2_MEM2MEM_DEV
-+	select VIDEOBUF2_DMA_CONTIG
-+	select VIDEOBUF2_VMALLOC
-+	help
-+	  Amphion VPU Codec IP contains two parts: Windsor and Malone.
-+	  Windsor is encoder that supports H.264, and Malone is decoder
-+	  that supports H.264, HEVC, and other video formats.
-+	  This is a V4L2 driver for NXP MXC 8Q video accelerator hardware.
-+	  It accelerates encoding and decoding operations on
-+	  various NXP SoCs.
-+	  To compile this driver as a module choose m here.
-+
- endif # V4L_PLATFORM_DRIVERS
- 
- menuconfig V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 19bcbced7382..53709df654ee 100644
---- a/drivers/media/platform/Makefile
-+++ b/drivers/media/platform/Makefile
-@@ -88,3 +88,5 @@ obj-$(CONFIG_VIDEO_QCOM_VENUS)		+= qcom/venus/
- obj-y					+= sunxi/
- 
- obj-$(CONFIG_VIDEO_MESON_GE2D)		+= meson/ge2d/
-+
-+obj-$(CONFIG_VIDEO_AMPHION_VPU)		+= amphion/
-diff --git a/drivers/media/platform/amphion/Makefile b/drivers/media/platform/amphion/Makefile
+diff --git a/drivers/media/platform/amphion/vpu_malone.c b/drivers/media/platform/amphion/vpu_malone.c
 new file mode 100644
-index 000000000000..80717312835f
+index 000000000000..76085b69af6d
 --- /dev/null
-+++ b/drivers/media/platform/amphion/Makefile
-@@ -0,0 +1,20 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Makefile for NXP VPU driver
-+
-+amphion-vpu-objs += vpu_drv.o \
-+			vpu_core.o \
-+			vpu_mbox.o \
-+			vpu_v4l2.o \
-+			vpu_helpers.o \
-+			vpu_cmds.o \
-+			vpu_msgs.o \
-+			vpu_rpc.o \
-+			vpu_imx8q.o \
-+			vpu_windsor.o \
-+			vpu_malone.o \
-+			vpu_color.o \
-+			vdec.o  \
-+			venc.o \
-+			vpu_dbg.o
-+
-+obj-$(CONFIG_VIDEO_AMPHION_VPU) += amphion-vpu.o
-diff --git a/drivers/media/platform/amphion/vpu.h b/drivers/media/platform/amphion/vpu.h
-new file mode 100644
-index 000000000000..6c6cdfcf5535
---- /dev/null
-+++ b/drivers/media/platform/amphion/vpu.h
-@@ -0,0 +1,356 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright 2020-2021 NXP
-+ */
-+
-+#ifndef _AMPHION_VPU_H
-+#define _AMPHION_VPU_H
-+
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-mem2mem.h>
-+#include <linux/mailbox_client.h>
-+#include <linux/mailbox_controller.h>
-+#include <linux/kfifo.h>
-+
-+#define VPU_TIMEOUT		msecs_to_jiffies(1000)
-+#define VPU_INST_NULL_ID	(-1L)
-+#define VPU_MSG_BUFFER_SIZE	(8192)
-+
-+enum imx_plat_type {
-+	IMX8QXP = 0,
-+	IMX8QM  = 1,
-+	IMX8DM,
-+	IMX8DX,
-+	PLAT_TYPE_RESERVED
-+};
-+
-+enum vpu_core_type {
-+	VPU_CORE_TYPE_ENC = 0,
-+	VPU_CORE_TYPE_DEC = 0x10,
-+};
-+
-+struct vpu_dev;
-+struct vpu_resources {
-+	enum imx_plat_type plat_type;
-+	u32 mreg_base;
-+	int (*setup)(struct vpu_dev *vpu);
-+	int (*setup_encoder)(struct vpu_dev *vpu);
-+	int (*setup_decoder)(struct vpu_dev *vpu);
-+	int (*reset)(struct vpu_dev *vpu);
-+};
-+
-+struct vpu_buffer {
-+	void *virt;
-+	dma_addr_t phys;
-+	u32 length;
-+	u32 bytesused;
-+	struct device *dev;
-+};
-+
-+struct vpu_func {
-+	struct video_device *vfd;
-+	struct v4l2_m2m_dev *m2m_dev;
-+	enum vpu_core_type type;
-+	int function;
-+};
-+
-+struct vpu_dev {
-+	void __iomem *base;
-+	struct platform_device *pdev;
-+	struct device *dev;
-+	struct mutex lock; /* protect vpu device */
-+	const struct vpu_resources *res;
-+	struct list_head cores;
-+
-+	struct v4l2_device v4l2_dev;
-+	struct vpu_func encoder;
-+	struct vpu_func decoder;
-+	struct media_device mdev;
-+
-+	struct delayed_work watchdog_work;
-+	void (*get_vpu)(struct vpu_dev *vpu);
-+	void (*put_vpu)(struct vpu_dev *vpu);
-+	void (*get_enc)(struct vpu_dev *vpu);
-+	void (*put_enc)(struct vpu_dev *vpu);
-+	void (*get_dec)(struct vpu_dev *vpu);
-+	void (*put_dec)(struct vpu_dev *vpu);
-+	atomic_t ref_vpu;
-+	atomic_t ref_enc;
-+	atomic_t ref_dec;
-+
-+	struct dentry *debugfs;
-+};
-+
-+struct vpu_format {
-+	u32 pixfmt;
-+	unsigned int num_planes;
-+	u32 type;
-+	u32 flags;
-+	u32 width;
-+	u32 height;
-+	u32 sizeimage[VIDEO_MAX_PLANES];
-+	u32 bytesperline[VIDEO_MAX_PLANES];
-+	u32 field;
-+};
-+
-+struct vpu_core_resources {
-+	enum vpu_core_type type;
-+	const char *fwname;
-+	u32 stride;
-+	u32 max_width;
-+	u32 min_width;
-+	u32 step_width;
-+	u32 max_height;
-+	u32 min_height;
-+	u32 step_height;
-+	u32 rpc_size;
-+	u32 fwlog_size;
-+	u32 act_size;
-+};
-+
-+struct vpu_mbox {
-+	char name[20];
-+	struct mbox_client cl;
-+	struct mbox_chan *ch;
-+	bool block;
-+};
-+
-+enum vpu_core_state {
-+	VPU_CORE_DEINIT = 0,
-+	VPU_CORE_ACTIVE,
-+	VPU_CORE_SNAPSHOT,
-+	VPU_CORE_HANG
-+};
-+
-+struct vpu_core {
-+	void __iomem *base;
-+	struct platform_device *pdev;
-+	struct device *dev;
-+	struct device *parent;
-+	struct device *pd;
-+	struct device_link *pd_link;
-+	struct mutex lock;     /* protect vpu core */
-+	struct mutex cmd_lock; /* Lock vpu command */
-+	struct list_head list;
-+	enum vpu_core_type type;
-+	int id;
-+	const struct vpu_core_resources *res;
-+	unsigned long instance_mask;
-+	u32 supported_instance_count;
-+	unsigned long hang_mask;
-+	u32 request_count;
-+	struct list_head instances;
-+	enum vpu_core_state state;
-+	u32 fw_version;
-+
-+	struct vpu_buffer fw;
-+	struct vpu_buffer rpc;
-+	struct vpu_buffer log;
-+	struct vpu_buffer act;
-+
-+	struct vpu_mbox tx_type;
-+	struct vpu_mbox tx_data;
-+	struct vpu_mbox rx;
-+	unsigned long cmd_seq;
-+
-+	wait_queue_head_t ack_wq;
-+	struct completion cmp;
-+	struct workqueue_struct *workqueue;
-+	struct work_struct msg_work;
-+	struct delayed_work msg_delayed_work;
-+	struct kfifo msg_fifo;
-+	void *msg_buffer;
-+	unsigned int msg_buffer_size;
-+
-+	struct vpu_dev *vpu;
-+	void *iface;
-+
-+	struct dentry *debugfs;
-+	struct dentry *debugfs_fwlog;
-+};
-+
-+enum vpu_codec_state {
-+	VPU_CODEC_STATE_DEINIT = 1,
-+	VPU_CODEC_STATE_CONFIGURED,
-+	VPU_CODEC_STATE_START,
-+	VPU_CODEC_STATE_STARTED,
-+	VPU_CODEC_STATE_ACTIVE,
-+	VPU_CODEC_STATE_SEEK,
-+	VPU_CODEC_STATE_STOP,
-+	VPU_CODEC_STATE_DRAIN,
-+	VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE,
-+};
-+
-+struct vpu_frame_info {
-+	u32 type;
-+	u32 id;
-+	u32 sequence;
-+	u32 luma;
-+	u32 chroma_u;
-+	u32 chroma_v;
-+	u32 data_offset;
-+	u32 flags;
-+	u32 skipped;
-+	s64 timestamp;
-+};
-+
-+struct vpu_inst;
-+struct vpu_inst_ops {
-+	int (*ctrl_init)(struct vpu_inst *inst);
-+	int (*start)(struct vpu_inst *inst, u32 type);
-+	int (*stop)(struct vpu_inst *inst, u32 type);
-+	int (*abort)(struct vpu_inst *inst);
-+	bool (*check_ready)(struct vpu_inst *inst, unsigned int type);
-+	void (*buf_done)(struct vpu_inst *inst, struct vpu_frame_info *frame);
-+	void (*event_notify)(struct vpu_inst *inst, u32 event, void *data);
-+	void (*release)(struct vpu_inst *inst);
-+	void (*cleanup)(struct vpu_inst *inst);
-+	void (*mem_request)(struct vpu_inst *inst,
-+			    u32 enc_frame_size,
-+			    u32 enc_frame_num,
-+			    u32 ref_frame_size,
-+			    u32 ref_frame_num,
-+			    u32 act_frame_size,
-+			    u32 act_frame_num);
-+	void (*input_done)(struct vpu_inst *inst);
-+	void (*stop_done)(struct vpu_inst *inst);
-+	int (*process_output)(struct vpu_inst *inst, struct vb2_buffer *vb);
-+	int (*process_capture)(struct vpu_inst *inst, struct vb2_buffer *vb);
-+	int (*get_one_frame)(struct vpu_inst *inst, void *info);
-+	void (*on_queue_empty)(struct vpu_inst *inst, u32 type);
-+	int (*get_debug_info)(struct vpu_inst *inst, char *str, u32 size, u32 i);
-+	void (*wait_prepare)(struct vpu_inst *inst);
-+	void (*wait_finish)(struct vpu_inst *inst);
-+};
-+
-+struct vpu_inst {
-+	struct list_head list;
-+	struct mutex lock; /* v4l2 and videobuf2 lock */
-+	struct vpu_dev *vpu;
-+	struct vpu_core *core;
-+	struct device *dev;
-+	int id;
-+
-+	struct v4l2_fh fh;
-+	struct v4l2_ctrl_handler ctrl_handler;
-+	atomic_t ref_count;
-+	int (*release)(struct vpu_inst *inst);
-+
-+	enum vpu_codec_state state;
-+	enum vpu_core_type type;
-+
-+	struct workqueue_struct *workqueue;
-+	struct work_struct msg_work;
-+	struct kfifo msg_fifo;
-+	u8 msg_buffer[VPU_MSG_BUFFER_SIZE];
-+
-+	struct vpu_buffer stream_buffer;
-+	bool use_stream_buffer;
-+	struct vpu_buffer act;
-+
-+	struct list_head cmd_q;
-+	void *pending;
-+
-+	struct vpu_inst_ops *ops;
-+	const struct vpu_format *formats;
-+	struct vpu_format out_format;
-+	struct vpu_format cap_format;
-+	u32 min_buffer_cap;
-+	u32 min_buffer_out;
-+
-+	struct v4l2_rect crop;
-+	u32 colorspace;
-+	u8 ycbcr_enc;
-+	u8 quantization;
-+	u8 xfer_func;
-+	u32 sequence;
-+	u32 extra_size;
-+
-+	u32 flows[16];
-+	u32 flow_idx;
-+
-+	pid_t pid;
-+	pid_t tgid;
-+	struct dentry *debugfs;
-+
-+	void *priv;
-+};
-+
-+#define call_vop(inst, op, args...)					\
-+	((inst)->ops->op ? (inst)->ops->op(inst, ##args) : 0)		\
-+
-+enum {
-+	VPU_BUF_STATE_IDLE = 0,
-+	VPU_BUF_STATE_INUSE,
-+	VPU_BUF_STATE_DECODED,
-+	VPU_BUF_STATE_READY,
-+	VPU_BUF_STATE_SKIP,
-+	VPU_BUF_STATE_ERROR
-+};
-+
-+struct vpu_vb2_buffer {
-+	struct v4l2_m2m_buffer m2m_buf;
-+	dma_addr_t luma;
-+	dma_addr_t chroma_u;
-+	dma_addr_t chroma_v;
-+	unsigned int state;
-+	u32 tag;
-+};
-+
-+void vpu_writel(struct vpu_dev *vpu, u32 reg, u32 val);
-+u32 vpu_readl(struct vpu_dev *vpu, u32 reg);
-+
-+static inline struct vpu_vb2_buffer *to_vpu_vb2_buffer(struct vb2_v4l2_buffer *vbuf)
-+{
-+	struct v4l2_m2m_buffer *m2m_buf = container_of(vbuf, struct v4l2_m2m_buffer, vb);
-+
-+	return container_of(m2m_buf, struct vpu_vb2_buffer, m2m_buf);
-+}
-+
-+static inline const char *vpu_core_type_desc(enum vpu_core_type type)
-+{
-+	return type == VPU_CORE_TYPE_ENC ? "encoder" : "decoder";
-+}
-+
-+static inline struct vpu_inst *to_inst(struct file *filp)
-+{
-+	return container_of(filp->private_data, struct vpu_inst, fh);
-+}
-+
-+#define ctrl_to_inst(ctrl)	\
-+	container_of((ctrl)->handler, struct vpu_inst, ctrl_handler)
-+
-+const struct v4l2_ioctl_ops *venc_get_ioctl_ops(void);
-+const struct v4l2_file_operations *venc_get_fops(void);
-+const struct v4l2_ioctl_ops *vdec_get_ioctl_ops(void);
-+const struct v4l2_file_operations *vdec_get_fops(void);
-+
-+int vpu_add_func(struct vpu_dev *vpu, struct vpu_func *func);
-+void vpu_remove_func(struct vpu_func *func);
-+
-+struct vpu_inst *vpu_inst_get(struct vpu_inst *inst);
-+void vpu_inst_put(struct vpu_inst *inst);
-+struct vpu_core *vpu_request_core(struct vpu_dev *vpu, enum vpu_core_type type);
-+void vpu_release_core(struct vpu_core *core);
-+int vpu_inst_register(struct vpu_inst *inst);
-+int vpu_inst_unregister(struct vpu_inst *inst);
-+const struct vpu_core_resources *vpu_get_resource(struct vpu_inst *inst);
-+
-+int vpu_inst_create_dbgfs_file(struct vpu_inst *inst);
-+int vpu_inst_remove_dbgfs_file(struct vpu_inst *inst);
-+int vpu_core_create_dbgfs_file(struct vpu_core *core);
-+int vpu_core_remove_dbgfs_file(struct vpu_core *core);
-+void vpu_inst_record_flow(struct vpu_inst *inst, u32 flow);
-+
-+int vpu_core_driver_init(void);
-+void vpu_core_driver_exit(void);
-+
-+extern bool debug;
-+#define vpu_trace(dev, fmt, arg...)					\
-+	do {								\
-+		if (debug)						\
-+			dev_info(dev, "%s: " fmt, __func__, ## arg);	\
-+	} while (0)
-+
-+#endif
-diff --git a/drivers/media/platform/amphion/vpu_defs.h b/drivers/media/platform/amphion/vpu_defs.h
-new file mode 100644
-index 000000000000..282664202dcf
---- /dev/null
-+++ b/drivers/media/platform/amphion/vpu_defs.h
-@@ -0,0 +1,187 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright 2020-2021 NXP
-+ */
-+
-+#ifndef _AMPHION_VPU_DEFS_H
-+#define _AMPHION_VPU_DEFS_H
-+
-+enum MSG_TYPE {
-+	INIT_DONE = 1,
-+	PRC_BUF_OFFSET,
-+	BOOT_ADDRESS,
-+	COMMAND,
-+	EVENT,
-+};
-+
-+enum {
-+	VPU_IRQ_CODE_BOOT_DONE = 0x55,
-+	VPU_IRQ_CODE_SNAPSHOT_DONE = 0xa5,
-+	VPU_IRQ_CODE_SYNC = 0xaa,
-+};
-+
-+enum {
-+	VPU_CMD_ID_NOOP = 0x0,
-+	VPU_CMD_ID_CONFIGURE_CODEC,
-+	VPU_CMD_ID_START,
-+	VPU_CMD_ID_STOP,
-+	VPU_CMD_ID_ABORT,
-+	VPU_CMD_ID_RST_BUF,
-+	VPU_CMD_ID_SNAPSHOT,
-+	VPU_CMD_ID_FIRM_RESET,
-+	VPU_CMD_ID_UPDATE_PARAMETER,
-+	VPU_CMD_ID_FRAME_ENCODE,
-+	VPU_CMD_ID_SKIP,
-+	VPU_CMD_ID_PARSE_NEXT_SEQ,
-+	VPU_CMD_ID_PARSE_NEXT_I,
-+	VPU_CMD_ID_PARSE_NEXT_IP,
-+	VPU_CMD_ID_PARSE_NEXT_ANY,
-+	VPU_CMD_ID_DEC_PIC,
-+	VPU_CMD_ID_FS_ALLOC,
-+	VPU_CMD_ID_FS_RELEASE,
-+	VPU_CMD_ID_TIMESTAMP,
-+	VPU_CMD_ID_DEBUG
-+};
-+
-+enum {
-+	VPU_MSG_ID_NOOP = 0x100,
-+	VPU_MSG_ID_RESET_DONE,
-+	VPU_MSG_ID_START_DONE,
-+	VPU_MSG_ID_STOP_DONE,
-+	VPU_MSG_ID_ABORT_DONE,
-+	VPU_MSG_ID_BUF_RST,
-+	VPU_MSG_ID_MEM_REQUEST,
-+	VPU_MSG_ID_PARAM_UPD_DONE,
-+	VPU_MSG_ID_FRAME_INPUT_DONE,
-+	VPU_MSG_ID_ENC_DONE,
-+	VPU_MSG_ID_DEC_DONE,
-+	VPU_MSG_ID_FRAME_REQ,
-+	VPU_MSG_ID_FRAME_RELEASE,
-+	VPU_MSG_ID_SEQ_HDR_FOUND,
-+	VPU_MSG_ID_RES_CHANGE,
-+	VPU_MSG_ID_PIC_HDR_FOUND,
-+	VPU_MSG_ID_PIC_DECODED,
-+	VPU_MSG_ID_PIC_EOS,
-+	VPU_MSG_ID_FIFO_LOW,
-+	VPU_MSG_ID_FIFO_HIGH,
-+	VPU_MSG_ID_FIFO_EMPTY,
-+	VPU_MSG_ID_FIFO_FULL,
-+	VPU_MSG_ID_BS_ERROR,
-+	VPU_MSG_ID_UNSUPPORTED,
-+	VPU_MSG_ID_TIMESTAMP_INFO,
-+
-+	VPU_MSG_ID_FIRMWARE_XCPT,
-+};
-+
-+enum VPU_ENC_MEMORY_RESOURSE {
-+	MEM_RES_ENC,
-+	MEM_RES_REF,
-+	MEM_RES_ACT
-+};
-+
-+enum VPU_DEC_MEMORY_RESOURCE {
-+	MEM_RES_FRAME,
-+	MEM_RES_MBI,
-+	MEM_RES_DCP
-+};
-+
-+enum VPU_SCODE_TYPE {
-+	SCODE_PADDING_EOS = 1,
-+	SCODE_PADDING_BUFFLUSH = 2,
-+	SCODE_PADDING_ABORT = 3,
-+	SCODE_SEQUENCE = 0x31,
-+	SCODE_PICTURE = 0x32,
-+	SCODE_SLICE = 0x33
-+};
-+
-+struct vpu_pkt_mem_req_data {
-+	u32 enc_frame_size;
-+	u32 enc_frame_num;
-+	u32 ref_frame_size;
-+	u32 ref_frame_num;
-+	u32 act_buf_size;
-+	u32 act_buf_num;
-+};
-+
-+struct vpu_enc_pic_info {
-+	u32 frame_id;
-+	u32 pic_type;
-+	u32 skipped_frame;
-+	u32 error_flag;
-+	u32 psnr;
-+	u32 frame_size;
-+	u32 wptr;
-+	u32 crc;
-+	s64 timestamp;
-+};
-+
-+struct vpu_dec_codec_info {
-+	u32 pixfmt;
-+	u32 num_ref_frms;
-+	u32 num_dpb_frms;
-+	u32 num_dfe_area;
-+	u32 color_primaries;
-+	u32 transfer_chars;
-+	u32 matrix_coeffs;
-+	u32 full_range;
-+	u32 vui_present;
-+	u32 progressive;
-+	u32 width;
-+	u32 height;
-+	u32 decoded_width;
-+	u32 decoded_height;
-+	struct v4l2_fract frame_rate;
-+	u32 dsp_asp_ratio;
-+	u32 level_idc;
-+	u32 bit_depth_luma;
-+	u32 bit_depth_chroma;
-+	u32 chroma_fmt;
-+	u32 mvc_num_views;
-+	u32 offset_x;
-+	u32 offset_y;
-+	u32 tag;
-+	u32 sizeimage[VIDEO_MAX_PLANES];
-+	u32 bytesperline[VIDEO_MAX_PLANES];
-+	u32 mbi_size;
-+	u32 dcp_size;
-+	u32 stride;
-+};
-+
-+struct vpu_dec_pic_info {
-+	u32 id;
-+	u32 luma;
-+	u32 start;
-+	u32 end;
-+	u32 pic_size;
-+	u32 stride;
-+	u32 skipped;
-+	s64 timestamp;
-+	u32 consumed_count;
-+};
-+
-+struct vpu_fs_info {
-+	u32 id;
-+	u32 type;
-+	u32 tag;
-+	u32 luma_addr;
-+	u32 luma_size;
-+	u32 chroma_addr;
-+	u32 chromau_size;
-+	u32 chromav_addr;
-+	u32 chromav_size;
-+	u32 bytesperline;
-+	u32 not_displayed;
-+};
-+
-+struct vpu_ts_info {
-+	s64 timestamp;
-+	u32 size;
-+};
-+
-+#define BITRATE_STEP		(1024)
-+#define BITRATE_MIN		(16 * BITRATE_STEP)
-+#define BITRATE_MAX		(240 * 1024 * BITRATE_STEP)
-+#define BITRATE_DEFAULT		(2 * 1024 * BITRATE_STEP)
-+#define BITRATE_DEFAULT_PEAK	(BITRATE_DEFAULT * 2)
-+
-+#endif
-diff --git a/drivers/media/platform/amphion/vpu_drv.c b/drivers/media/platform/amphion/vpu_drv.c
-new file mode 100644
-index 000000000000..83ca04452c02
---- /dev/null
-+++ b/drivers/media/platform/amphion/vpu_drv.c
-@@ -0,0 +1,260 @@
++++ b/drivers/media/platform/amphion/vpu_malone.c
+@@ -0,0 +1,1625 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright 2020-2021 NXP
@@ -791,651 +138,1668 @@ index 000000000000..83ca04452c02
 +#include <linux/list.h>
 +#include <linux/kernel.h>
 +#include <linux/module.h>
-+#include <linux/dma-map-ops.h>
 +#include <linux/of_device.h>
 +#include <linux/of_address.h>
 +#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/videodev2.h>
-+#include <linux/of_reserved_mem.h>
-+#include <media/v4l2-device.h>
++#include <linux/delay.h>
++#include <linux/rational.h>
 +#include <media/videobuf2-v4l2.h>
-+#include <media/v4l2-mem2mem.h>
-+#include <media/v4l2-ioctl.h>
-+#include <linux/debugfs.h>
++#include <media/videobuf2-dma-contig.h>
++#include <linux/videodev2.h>
 +#include "vpu.h"
++#include "vpu_rpc.h"
++#include "vpu_defs.h"
++#include "vpu_helpers.h"
++#include "vpu_v4l2.h"
++#include "vpu_cmds.h"
 +#include "vpu_imx8q.h"
++#include "vpu_malone.h"
 +
-+bool debug;
-+module_param(debug, bool, 0644);
++#define CMD_SIZE			25600
++#define MSG_SIZE			25600
++#define CODEC_SIZE			0x1000
++#define JPEG_SIZE			0x1000
++#define SEQ_SIZE			0x1000
++#define GOP_SIZE			0x1000
++#define PIC_SIZE			0x1000
++#define QMETER_SIZE			0x1000
++#define DBGLOG_SIZE			0x10000
++#define DEBUG_SIZE			0x80000
++#define ENG_SIZE			0x1000
++#define MALONE_SKIPPED_FRAME_ID		0x555
 +
-+void vpu_writel(struct vpu_dev *vpu, u32 reg, u32 val)
++#define MALONE_ALIGN_MBI		0x800
++#define MALONE_DCP_CHUNK_BIT		16
++#define MALONE_DCP_SIZE_MAX		0x3000000
++#define MALONE_DCP_SIZE_MIN		0x100000
++#define MALONE_DCP_FIXED_MB_ALLOC	250
++
++#define CONFIG_SET(val, cfg, pos, mask)		\
++		(*(cfg) |= (((val) << (pos)) & (mask)))
++//x means source data , y means destination data
++#define STREAM_CONFIG_FORMAT_SET(x, y)		CONFIG_SET(x, y, 0, 0x0000000F)
++#define STREAM_CONFIG_STRBUFIDX_SET(x, y)	CONFIG_SET(x, y, 8, 0x00000300)
++#define STREAM_CONFIG_NOSEQ_SET(x, y)		CONFIG_SET(x, y, 10, 0x00000400)
++#define STREAM_CONFIG_DEBLOCK_SET(x, y)		CONFIG_SET(x, y, 11, 0x00000800)
++#define STREAM_CONFIG_DERING_SET(x, y)		CONFIG_SET(x, y, 12, 0x00001000)
++#define STREAM_CONFIG_IBWAIT_SET(x, y)		CONFIG_SET(x, y, 13, 0x00002000)
++#define STREAM_CONFIG_FBC_SET(x, y)		CONFIG_SET(x, y, 14, 0x00004000)
++#define STREAM_CONFIG_PLAY_MODE_SET(x, y)	CONFIG_SET(x, y, 16, 0x00030000)
++#define STREAM_CONFIG_ENABLE_DCP_SET(x, y)	CONFIG_SET(x, y, 20, 0x00100000)
++#define STREAM_CONFIG_NUM_STR_BUF_SET(x, y)	CONFIG_SET(x, y, 21, 0x00600000)
++#define STREAM_CONFIG_MALONE_USAGE_SET(x, y)	CONFIG_SET(x, y, 23, 0x01800000)
++#define STREAM_CONFIG_MULTI_VID_SET(x, y)	CONFIG_SET(x, y, 25, 0x02000000)
++#define STREAM_CONFIG_OBFUSC_EN_SET(x, y)	CONFIG_SET(x, y, 26, 0x04000000)
++#define STREAM_CONFIG_RC4_EN_SET(x, y)		CONFIG_SET(x, y, 27, 0x08000000)
++#define STREAM_CONFIG_MCX_SET(x, y)		CONFIG_SET(x, y, 28, 0x10000000)
++#define STREAM_CONFIG_PES_SET(x, y)		CONFIG_SET(x, y, 29, 0x20000000)
++#define STREAM_CONFIG_NUM_DBE_SET(x, y)		CONFIG_SET(x, y, 30, 0x40000000)
++#define STREAM_CONFIG_FS_CTRL_MODE_SET(x, y)	CONFIG_SET(x, y, 31, 0x80000000)
++
++enum vpu_malone_stream_input_mode {
++	INVALID_MODE = 0,
++	FRAME_LVL,
++	NON_FRAME_LVL
++};
++
++enum vpu_malone_format {
++	MALONE_FMT_NULL = 0x0,
++	MALONE_FMT_AVC  = 0x1,
++	MALONE_FMT_MP2  = 0x2,
++	MALONE_FMT_VC1  = 0x3,
++	MALONE_FMT_AVS  = 0x4,
++	MALONE_FMT_ASP  = 0x5,
++	MALONE_FMT_JPG  = 0x6,
++	MALONE_FMT_RV   = 0x7,
++	MALONE_FMT_VP6  = 0x8,
++	MALONE_FMT_SPK  = 0x9,
++	MALONE_FMT_VP8  = 0xA,
++	MALONE_FMT_HEVC = 0xB,
++	MALONE_FMT_LAST = MALONE_FMT_HEVC
++};
++
++enum {
++	VID_API_CMD_NULL              = 0x00,
++	VID_API_CMD_PARSE_NEXT_SEQ    = 0x01,
++	VID_API_CMD_PARSE_NEXT_I      = 0x02,
++	VID_API_CMD_PARSE_NEXT_IP     = 0x03,
++	VID_API_CMD_PARSE_NEXT_ANY    = 0x04,
++	VID_API_CMD_DEC_PIC           = 0x05,
++	VID_API_CMD_UPDATE_ES_WR_PTR  = 0x06,
++	VID_API_CMD_UPDATE_ES_RD_PTR  = 0x07,
++	VID_API_CMD_UPDATE_UDATA      = 0x08,
++	VID_API_CMD_GET_FSINFO        = 0x09,
++	VID_API_CMD_SKIP_PIC          = 0x0a,
++	VID_API_CMD_DEC_CHUNK         = 0x0b,
++	VID_API_CMD_START             = 0x10,
++	VID_API_CMD_STOP              = 0x11,
++	VID_API_CMD_ABORT             = 0x12,
++	VID_API_CMD_RST_BUF           = 0x13,
++	VID_API_CMD_FS_RELEASE        = 0x15,
++	VID_API_CMD_MEM_REGION_ATTACH = 0x16,
++	VID_API_CMD_MEM_REGION_DETACH = 0x17,
++	VID_API_CMD_MVC_VIEW_SELECT   = 0x18,
++	VID_API_CMD_FS_ALLOC          = 0x19,
++	VID_API_CMD_DBG_GET_STATUS    = 0x1C,
++	VID_API_CMD_DBG_START_LOG     = 0x1D,
++	VID_API_CMD_DBG_STOP_LOG      = 0x1E,
++	VID_API_CMD_DBG_DUMP_LOG      = 0x1F,
++	VID_API_CMD_YUV_READY         = 0x20,
++	VID_API_CMD_TS                = 0x21,
++
++	VID_API_CMD_FIRM_RESET        = 0x40,
++
++	VID_API_CMD_SNAPSHOT          = 0xAA,
++	VID_API_CMD_ROLL_SNAPSHOT     = 0xAB,
++	VID_API_CMD_LOCK_SCHEDULER    = 0xAC,
++	VID_API_CMD_UNLOCK_SCHEDULER  = 0xAD,
++	VID_API_CMD_CQ_FIFO_DUMP      = 0xAE,
++	VID_API_CMD_DBG_FIFO_DUMP     = 0xAF,
++	VID_API_CMD_SVC_ILP           = 0xBB,
++	VID_API_CMD_FW_STATUS         = 0xF0,
++	VID_API_CMD_INVALID           = 0xFF
++};
++
++enum {
++	VID_API_EVENT_NULL			= 0x00,
++	VID_API_EVENT_RESET_DONE		= 0x01,
++	VID_API_EVENT_SEQ_HDR_FOUND		= 0x02,
++	VID_API_EVENT_PIC_HDR_FOUND		= 0x03,
++	VID_API_EVENT_PIC_DECODED		= 0x04,
++	VID_API_EVENT_FIFO_LOW			= 0x05,
++	VID_API_EVENT_FIFO_HIGH			= 0x06,
++	VID_API_EVENT_FIFO_EMPTY		= 0x07,
++	VID_API_EVENT_FIFO_FULL			= 0x08,
++	VID_API_EVENT_BS_ERROR			= 0x09,
++	VID_API_EVENT_UDATA_FIFO_UPTD		= 0x0A,
++	VID_API_EVENT_RES_CHANGE		= 0x0B,
++	VID_API_EVENT_FIFO_OVF			= 0x0C,
++	VID_API_EVENT_CHUNK_DECODED		= 0x0D,
++	VID_API_EVENT_REQ_FRAME_BUFF		= 0x10,
++	VID_API_EVENT_FRAME_BUFF_RDY		= 0x11,
++	VID_API_EVENT_REL_FRAME_BUFF		= 0x12,
++	VID_API_EVENT_STR_BUF_RST		= 0x13,
++	VID_API_EVENT_RET_PING			= 0x14,
++	VID_API_EVENT_QMETER			= 0x15,
++	VID_API_EVENT_STR_FMT_CHANGE		= 0x16,
++	VID_API_EVENT_FIRMWARE_XCPT		= 0x17,
++	VID_API_EVENT_START_DONE		= 0x18,
++	VID_API_EVENT_STOPPED			= 0x19,
++	VID_API_EVENT_ABORT_DONE		= 0x1A,
++	VID_API_EVENT_FINISHED			= 0x1B,
++	VID_API_EVENT_DBG_STAT_UPDATE		= 0x1C,
++	VID_API_EVENT_DBG_LOG_STARTED		= 0x1D,
++	VID_API_EVENT_DBG_LOG_STOPPED		= 0x1E,
++	VID_API_EVENT_DBG_LOG_UPDATED		= 0x1F,
++	VID_API_EVENT_DBG_MSG_DEC		= 0x20,
++	VID_API_EVENT_DEC_SC_ERR		= 0x21,
++	VID_API_EVENT_CQ_FIFO_DUMP		= 0x22,
++	VID_API_EVENT_DBG_FIFO_DUMP		= 0x23,
++	VID_API_EVENT_DEC_CHECK_RES		= 0x24,
++	VID_API_EVENT_DEC_CFG_INFO		= 0x25,
++	VID_API_EVENT_UNSUPPORTED_STREAM	= 0x26,
++	VID_API_EVENT_STR_SUSPENDED		= 0x30,
++	VID_API_EVENT_SNAPSHOT_DONE		= 0x40,
++	VID_API_EVENT_FW_STATUS                 = 0xF0,
++	VID_API_EVENT_INVALID			= 0xFF
++};
++
++struct vpu_malone_buffer_desc {
++	struct vpu_rpc_buffer_desc buffer;
++	u32 low;
++	u32 high;
++};
++
++struct vpu_malone_str_buffer {
++	u32 wptr;
++	u32 rptr;
++	u32 start;
++	u32 end;
++	u32 lwm;
++};
++
++struct vpu_malone_picth_info {
++	u32 frame_pitch;
++};
++
++struct vpu_malone_table_desc {
++	u32 array_base;
++	u32 size;
++};
++
++struct vpu_malone_dbglog_desc {
++	u32 addr;
++	u32 size;
++	u32 level;
++	u32 reserved;
++};
++
++struct vpu_malone_frame_buffer {
++	u32 addr;
++	u32 size;
++};
++
++struct vpu_malone_udata {
++	u32 base;
++	u32 total_size;
++	u32 slot_size;
++};
++
++struct vpu_malone_buffer_info {
++	u32 stream_input_mode;
++	u32 stream_pic_input_count;
++	u32 stream_pic_parsed_count;
++	u32 stream_buffer_threshold;
++	u32 stream_pic_end_flag;
++};
++
++struct vpu_malone_encrypt_info {
++	u32 rec4key[8];
++	u32 obfusc;
++};
++
++struct malone_iface {
++	u32 exec_base_addr;
++	u32 exec_area_size;
++	struct vpu_malone_buffer_desc cmd_buffer_desc;
++	struct vpu_malone_buffer_desc msg_buffer_desc;
++	u32 cmd_int_enable[VID_API_NUM_STREAMS];
++	struct vpu_malone_picth_info stream_pitch_info[VID_API_NUM_STREAMS];
++	u32 stream_config[VID_API_NUM_STREAMS];
++	struct vpu_malone_table_desc codec_param_tab_desc;
++	struct vpu_malone_table_desc jpeg_param_tab_desc;
++	u32 stream_buffer_desc[VID_API_NUM_STREAMS][VID_API_MAX_BUF_PER_STR];
++	struct vpu_malone_table_desc seq_info_tab_desc;
++	struct vpu_malone_table_desc pic_info_tab_desc;
++	struct vpu_malone_table_desc gop_info_tab_desc;
++	struct vpu_malone_table_desc qmeter_info_tab_desc;
++	u32 stream_error[VID_API_NUM_STREAMS];
++	u32 fw_version;
++	u32 fw_offset;
++	u32 max_streams;
++	struct vpu_malone_dbglog_desc dbglog_desc;
++	struct vpu_rpc_buffer_desc api_cmd_buffer_desc[VID_API_NUM_STREAMS];
++	struct vpu_malone_udata udata_buffer[VID_API_NUM_STREAMS];
++	struct vpu_malone_buffer_desc debug_buffer_desc;
++	struct vpu_malone_buffer_desc eng_access_buff_desc[VID_API_NUM_STREAMS];
++	u32 encrypt_info[VID_API_NUM_STREAMS];
++	struct vpu_rpc_system_config system_cfg;
++	u32 api_version;
++	struct vpu_malone_buffer_info stream_buff_info[VID_API_NUM_STREAMS];
++};
++
++struct malone_jpg_params {
++	u32 rotation_angle;
++	u32 horiz_scale_factor;
++	u32 vert_scale_factor;
++	u32 rotation_mode;
++	u32 rgb_mode;
++	u32 chunk_mode; /* 0 ~ 1 */
++	u32 last_chunk; /* 0 ~ 1 */
++	u32 chunk_rows; /* 0 ~ 255 */
++	u32 num_bytes;
++	u32 jpg_crop_x;
++	u32 jpg_crop_y;
++	u32 jpg_crop_width;
++	u32 jpg_crop_height;
++	u32 jpg_mjpeg_mode;
++	u32 jpg_mjpeg_interlaced;
++};
++
++struct malone_codec_params {
++	u32 disp_imm;
++	u32 fourcc;
++	u32 codec_version;
++	u32 frame_rate;
++	u32 dbglog_enable;
++	u32 bsdma_lwm;
++	u32 bbd_coring;
++	u32 bbd_s_thr_row;
++	u32 bbd_p_thr_row;
++	u32 bbd_s_thr_logo_row;
++	u32 bbd_p_thr_logo_row;
++	u32 bbd_s_thr_col;
++	u32 bbd_p_thr_col;
++	u32 bbd_chr_thr_row;
++	u32 bbd_chr_thr_col;
++	u32 bbd_uv_mid_level;
++	u32 bbd_excl_win_mb_left;
++	u32 bbd_excl_win_mb_right;
++};
++
++struct malone_padding_scode {
++	u32 scode_type;
++	u32 pixelformat;
++	u32 data[2];
++};
++
++struct malone_fmt_mapping {
++	u32 pixelformat;
++	enum vpu_malone_format malone_format;
++};
++
++struct malone_scode_t {
++	struct vpu_inst *inst;
++	struct vb2_buffer *vb;
++	u32 wptr;
++	u32 need_data;
++};
++
++struct malone_scode_handler {
++	u32 pixelformat;
++	int (*insert_scode_seq)(struct malone_scode_t *scode);
++	int (*insert_scode_pic)(struct malone_scode_t *scode);
++};
++
++struct vpu_dec_ctrl {
++	struct malone_codec_params *codec_param;
++	struct malone_jpg_params *jpg;
++	void *seq_mem;
++	void *pic_mem;
++	void *gop_mem;
++	void *qmeter_mem;
++	void *dbglog_mem;
++	struct vpu_malone_str_buffer *str_buf[VID_API_NUM_STREAMS];
++	u32 buf_addr[VID_API_NUM_STREAMS];
++};
++
++u32 vpu_malone_get_data_size(void)
 +{
-+	writel(val, vpu->base + reg);
++	return sizeof(struct vpu_dec_ctrl);
 +}
 +
-+u32 vpu_readl(struct vpu_dev *vpu, u32 reg)
++void vpu_malone_init_rpc(struct vpu_shared_addr *shared,
++			 struct vpu_buffer *rpc, dma_addr_t boot_addr)
 +{
-+	return readl(vpu->base + reg);
++	struct malone_iface *iface;
++	struct vpu_dec_ctrl *hc;
++	unsigned long base_phy_addr;
++	unsigned long phy_addr;
++	unsigned long offset;
++	unsigned int i;
++
++	if (rpc->phys < boot_addr)
++		return;
++
++	iface = rpc->virt;
++	base_phy_addr = rpc->phys - boot_addr;
++	hc = shared->priv;
++
++	shared->iface = iface;
++	shared->boot_addr = boot_addr;
++
++	iface->exec_base_addr = base_phy_addr;
++	iface->exec_area_size = rpc->length;
++
++	offset = sizeof(struct malone_iface);
++	phy_addr = base_phy_addr + offset;
++
++	shared->cmd_desc = &iface->cmd_buffer_desc.buffer;
++	shared->cmd_mem_vir = rpc->virt + offset;
++	iface->cmd_buffer_desc.buffer.start =
++	iface->cmd_buffer_desc.buffer.rptr =
++	iface->cmd_buffer_desc.buffer.wptr = phy_addr;
++	iface->cmd_buffer_desc.buffer.end = iface->cmd_buffer_desc.buffer.start + CMD_SIZE;
++	offset += CMD_SIZE;
++	phy_addr = base_phy_addr + offset;
++
++	shared->msg_desc = &iface->msg_buffer_desc.buffer;
++	shared->msg_mem_vir = rpc->virt + offset;
++	iface->msg_buffer_desc.buffer.start =
++	iface->msg_buffer_desc.buffer.wptr =
++	iface->msg_buffer_desc.buffer.rptr = phy_addr;
++	iface->msg_buffer_desc.buffer.end = iface->msg_buffer_desc.buffer.start + MSG_SIZE;
++	offset += MSG_SIZE;
++	phy_addr = base_phy_addr + offset;
++
++	iface->codec_param_tab_desc.array_base = phy_addr;
++	hc->codec_param = rpc->virt + offset;
++	offset += CODEC_SIZE;
++	phy_addr = base_phy_addr + offset;
++
++	iface->jpeg_param_tab_desc.array_base = phy_addr;
++	hc->jpg = rpc->virt + offset;
++	offset += JPEG_SIZE;
++	phy_addr = base_phy_addr + offset;
++
++	iface->seq_info_tab_desc.array_base = phy_addr;
++	hc->seq_mem = rpc->virt + offset;
++	offset += SEQ_SIZE;
++	phy_addr = base_phy_addr + offset;
++
++	iface->pic_info_tab_desc.array_base = phy_addr;
++	hc->pic_mem = rpc->virt + offset;
++	offset += PIC_SIZE;
++	phy_addr = base_phy_addr + offset;
++
++	iface->gop_info_tab_desc.array_base = phy_addr;
++	hc->gop_mem = rpc->virt + offset;
++	offset += GOP_SIZE;
++	phy_addr = base_phy_addr + offset;
++
++	iface->qmeter_info_tab_desc.array_base = phy_addr;
++	hc->qmeter_mem = rpc->virt + offset;
++	offset += QMETER_SIZE;
++	phy_addr = base_phy_addr + offset;
++
++	iface->dbglog_desc.addr = phy_addr;
++	iface->dbglog_desc.size = DBGLOG_SIZE;
++	hc->dbglog_mem = rpc->virt + offset;
++	offset += DBGLOG_SIZE;
++	phy_addr = base_phy_addr + offset;
++
++	for (i = 0; i < VID_API_NUM_STREAMS; i++) {
++		iface->eng_access_buff_desc[i].buffer.start =
++		iface->eng_access_buff_desc[i].buffer.wptr =
++		iface->eng_access_buff_desc[i].buffer.rptr = phy_addr;
++		iface->eng_access_buff_desc[i].buffer.end =
++			iface->eng_access_buff_desc[i].buffer.start + ENG_SIZE;
++		offset += ENG_SIZE;
++		phy_addr = base_phy_addr + offset;
++	}
++
++	for (i = 0; i < VID_API_NUM_STREAMS; i++) {
++		iface->encrypt_info[i] = phy_addr;
++		offset += sizeof(struct vpu_malone_encrypt_info);
++		phy_addr = base_phy_addr + offset;
++	}
++
++	rpc->bytesused = offset;
 +}
 +
-+static void vpu_dev_get(struct vpu_dev *vpu)
++void vpu_malone_set_log_buf(struct vpu_shared_addr *shared,
++			    struct vpu_buffer *log)
 +{
-+	if (atomic_inc_return(&vpu->ref_vpu) == 1 && vpu->res->setup)
-+		vpu->res->setup(vpu);
++	struct malone_iface *iface = shared->iface;
++
++	iface->debug_buffer_desc.buffer.start =
++	iface->debug_buffer_desc.buffer.wptr =
++	iface->debug_buffer_desc.buffer.rptr = log->phys - shared->boot_addr;
++	iface->debug_buffer_desc.buffer.end = iface->debug_buffer_desc.buffer.start + log->length;
 +}
 +
-+static void vpu_dev_put(struct vpu_dev *vpu)
++static u32 get_str_buffer_offset(u32 instance)
 +{
-+	atomic_dec(&vpu->ref_vpu);
++	return DEC_MFD_XREG_SLV_BASE + MFD_MCX + MFD_MCX_OFF * instance;
 +}
 +
-+static void vpu_enc_get(struct vpu_dev *vpu)
++void vpu_malone_set_system_cfg(struct vpu_shared_addr *shared,
++			       u32 regs_base, void __iomem *regs, u32 core_id)
 +{
-+	if (atomic_inc_return(&vpu->ref_enc) == 1 && vpu->res->setup_encoder)
-+		vpu->res->setup_encoder(vpu);
++	struct malone_iface *iface = shared->iface;
++	struct vpu_rpc_system_config *config = &iface->system_cfg;
++	struct vpu_dec_ctrl *hc = shared->priv;
++	int i;
++
++	vpu_imx8q_set_system_cfg_common(config, regs_base, core_id);
++	for (i = 0; i < VID_API_NUM_STREAMS; i++) {
++		u32 offset = get_str_buffer_offset(i);
++
++		hc->buf_addr[i] = regs_base + offset;
++		hc->str_buf[i] = regs + offset;
++	}
 +}
 +
-+static void vpu_enc_put(struct vpu_dev *vpu)
++u32 vpu_malone_get_version(struct vpu_shared_addr *shared)
 +{
-+	atomic_dec(&vpu->ref_enc);
++	struct malone_iface *iface = shared->iface;
++
++	return iface->fw_version;
 +}
 +
-+static void vpu_dec_get(struct vpu_dev *vpu)
++int vpu_malone_get_stream_buffer_size(struct vpu_shared_addr *shared)
 +{
-+	if (atomic_inc_return(&vpu->ref_dec) == 1 && vpu->res->setup_decoder)
-+		vpu->res->setup_decoder(vpu);
++	return 0xc00000;
 +}
 +
-+static void vpu_dec_put(struct vpu_dev *vpu)
++int vpu_malone_config_stream_buffer(struct vpu_shared_addr *shared,
++				    u32 instance,
++				    struct vpu_buffer *buf)
 +{
-+	atomic_dec(&vpu->ref_dec);
-+}
++	struct malone_iface *iface = shared->iface;
++	struct vpu_dec_ctrl *hc = shared->priv;
++	struct vpu_malone_str_buffer *str_buf = hc->str_buf[instance];
 +
-+static int vpu_init_media_device(struct vpu_dev *vpu)
-+{
-+	vpu->mdev.dev = vpu->dev;
-+	strscpy(vpu->mdev.model, "amphion-vpu", sizeof(vpu->mdev.model));
-+	strscpy(vpu->mdev.bus_info, "platform: amphion-vpu", sizeof(vpu->mdev.bus_info));
-+	media_device_init(&vpu->mdev);
-+	vpu->v4l2_dev.mdev = &vpu->mdev;
++	str_buf->start = buf->phys;
++	str_buf->rptr = buf->phys;
++	str_buf->wptr = buf->phys;
++	str_buf->end = buf->phys + buf->length;
++	str_buf->lwm = 0x1;
++
++	iface->stream_buffer_desc[instance][0] = hc->buf_addr[instance];
 +
 +	return 0;
 +}
 +
-+static int vpu_probe(struct platform_device *pdev)
++int vpu_malone_get_stream_buffer_desc(struct vpu_shared_addr *shared,
++				      u32 instance,
++				      struct vpu_rpc_buffer_desc *desc)
 +{
-+	struct device *dev = &pdev->dev;
-+	struct vpu_dev *vpu;
++	struct vpu_dec_ctrl *hc = shared->priv;
++	struct vpu_malone_str_buffer *str_buf = hc->str_buf[instance];
++
++	if (desc) {
++		desc->wptr = str_buf->wptr;
++		desc->rptr = str_buf->rptr;
++		desc->start = str_buf->start;
++		desc->end = str_buf->end;
++	}
++
++	return 0;
++}
++
++static void vpu_malone_update_wptr(struct vpu_malone_str_buffer *str_buf, u32 wptr)
++{
++	/*update wptr after data is written*/
++	mb();
++	str_buf->wptr = wptr;
++}
++
++static void vpu_malone_update_rptr(struct vpu_malone_str_buffer *str_buf, u32 rptr)
++{
++	/*update rptr after data is read*/
++	mb();
++	str_buf->rptr = rptr;
++}
++
++int vpu_malone_update_stream_buffer(struct vpu_shared_addr *shared,
++				    u32 instance, u32 ptr, bool write)
++{
++	struct vpu_dec_ctrl *hc = shared->priv;
++	struct vpu_malone_str_buffer *str_buf = hc->str_buf[instance];
++
++	if (write)
++		vpu_malone_update_wptr(str_buf, ptr);
++	else
++		vpu_malone_update_rptr(str_buf, ptr);
++
++	return 0;
++}
++
++static struct malone_fmt_mapping fmt_mappings[] = {
++	{V4L2_PIX_FMT_H264,        MALONE_FMT_AVC},
++	{V4L2_PIX_FMT_H264_MVC,    MALONE_FMT_AVC},
++	{V4L2_PIX_FMT_HEVC,        MALONE_FMT_HEVC},
++	{V4L2_PIX_FMT_VC1_ANNEX_G, MALONE_FMT_VC1},
++	{V4L2_PIX_FMT_VC1_ANNEX_L, MALONE_FMT_VC1},
++	{V4L2_PIX_FMT_MPEG2,       MALONE_FMT_MP2},
++	{V4L2_PIX_FMT_MPEG4,       MALONE_FMT_ASP},
++	{V4L2_PIX_FMT_XVID,        MALONE_FMT_ASP},
++	{V4L2_PIX_FMT_H263,        MALONE_FMT_ASP},
++	{V4L2_PIX_FMT_JPEG,        MALONE_FMT_JPG},
++	{V4L2_PIX_FMT_VP8,         MALONE_FMT_VP8},
++};
++
++static enum vpu_malone_format vpu_malone_format_remap(u32 pixelformat)
++{
++	u32 i;
++
++	for (i = 0; i < ARRAY_SIZE(fmt_mappings); i++) {
++		if (pixelformat == fmt_mappings[i].pixelformat)
++			return fmt_mappings[i].malone_format;
++	}
++
++	return MALONE_FMT_NULL;
++}
++
++static void vpu_malone_set_stream_cfg(struct vpu_shared_addr *shared,
++				      u32 instance,
++				      enum vpu_malone_format malone_format)
++{
++	struct malone_iface *iface = shared->iface;
++	u32 *curr_str_cfg = &iface->stream_config[instance];
++
++	*curr_str_cfg = 0;
++	STREAM_CONFIG_FORMAT_SET(malone_format, curr_str_cfg);
++	STREAM_CONFIG_STRBUFIDX_SET(0, curr_str_cfg);
++	STREAM_CONFIG_NOSEQ_SET(0, curr_str_cfg);
++	STREAM_CONFIG_DEBLOCK_SET(0, curr_str_cfg);
++	STREAM_CONFIG_DERING_SET(0, curr_str_cfg);
++	STREAM_CONFIG_PLAY_MODE_SET(0x3, curr_str_cfg);
++	STREAM_CONFIG_FS_CTRL_MODE_SET(0x1, curr_str_cfg);
++	STREAM_CONFIG_ENABLE_DCP_SET(1, curr_str_cfg);
++	STREAM_CONFIG_NUM_STR_BUF_SET(1, curr_str_cfg);
++	STREAM_CONFIG_MALONE_USAGE_SET(1, curr_str_cfg);
++	STREAM_CONFIG_MULTI_VID_SET(0, curr_str_cfg);
++	STREAM_CONFIG_OBFUSC_EN_SET(0, curr_str_cfg);
++	STREAM_CONFIG_RC4_EN_SET(0, curr_str_cfg);
++	STREAM_CONFIG_MCX_SET(1, curr_str_cfg);
++	STREAM_CONFIG_PES_SET(0, curr_str_cfg);
++	STREAM_CONFIG_NUM_DBE_SET(1, curr_str_cfg);
++}
++
++static int vpu_malone_set_params(struct vpu_shared_addr *shared,
++				 u32 instance,
++				 struct vpu_decode_params *params)
++{
++	struct malone_iface *iface = shared->iface;
++	struct vpu_dec_ctrl *hc = shared->priv;
++	enum vpu_malone_format malone_format;
++
++	malone_format = vpu_malone_format_remap(params->codec_format);
++	iface->udata_buffer[instance].base = params->udata.base;
++	iface->udata_buffer[instance].slot_size = params->udata.size;
++
++	vpu_malone_set_stream_cfg(shared, instance, malone_format);
++
++	if (malone_format == MALONE_FMT_JPG) {
++		//1:JPGD_MJPEG_MODE_A; 2:JPGD_MJPEG_MODE_B
++		hc->jpg[instance].jpg_mjpeg_mode = 1;
++		//0: JPGD_MJPEG_PROGRESSIVE
++		hc->jpg[instance].jpg_mjpeg_interlaced = 0;
++	}
++
++	hc->codec_param[instance].disp_imm = params->b_dis_reorder ? 1 : 0;
++	hc->codec_param[instance].dbglog_enable = 0;
++	iface->dbglog_desc.level = 0;
++
++	if (params->b_non_frame)
++		iface->stream_buff_info[instance].stream_input_mode = NON_FRAME_LVL;
++	else
++		iface->stream_buff_info[instance].stream_input_mode = FRAME_LVL;
++	iface->stream_buff_info[instance].stream_buffer_threshold = 0;
++	iface->stream_buff_info[instance].stream_pic_input_count = 0;
++
++	return 0;
++}
++
++static bool vpu_malone_is_non_frame_mode(struct vpu_shared_addr *shared, u32 instance)
++{
++	struct malone_iface *iface = shared->iface;
++
++	if (iface->stream_buff_info[instance].stream_input_mode == NON_FRAME_LVL)
++		return true;
++
++	return false;
++}
++
++static int vpu_malone_update_params(struct vpu_shared_addr *shared,
++				    u32 instance,
++				    struct vpu_decode_params *params)
++{
++	struct malone_iface *iface = shared->iface;
++
++	if (params->end_flag)
++		iface->stream_buff_info[instance].stream_pic_end_flag = params->end_flag;
++	params->end_flag = 0;
++
++	return 0;
++}
++
++int vpu_malone_set_decode_params(struct vpu_shared_addr *shared,
++				 u32 instance,
++				 struct vpu_decode_params *params,
++				 u32 update)
++{
++	if (!params)
++		return -EINVAL;
++
++	if (!update)
++		return vpu_malone_set_params(shared, instance, params);
++	else
++		return vpu_malone_update_params(shared, instance, params);
++}
++
++static struct vpu_pair malone_cmds[] = {
++	{VPU_CMD_ID_START, VID_API_CMD_START},
++	{VPU_CMD_ID_STOP, VID_API_CMD_STOP},
++	{VPU_CMD_ID_ABORT, VID_API_CMD_ABORT},
++	{VPU_CMD_ID_RST_BUF, VID_API_CMD_RST_BUF},
++	{VPU_CMD_ID_SNAPSHOT, VID_API_CMD_SNAPSHOT},
++	{VPU_CMD_ID_FIRM_RESET, VID_API_CMD_FIRM_RESET},
++	{VPU_CMD_ID_FS_ALLOC, VID_API_CMD_FS_ALLOC},
++	{VPU_CMD_ID_FS_RELEASE, VID_API_CMD_FS_RELEASE},
++	{VPU_CMD_ID_TIMESTAMP, VID_API_CMD_TS},
++	{VPU_CMD_ID_DEBUG, VID_API_CMD_FW_STATUS},
++};
++
++static struct vpu_pair malone_msgs[] = {
++	{VPU_MSG_ID_RESET_DONE, VID_API_EVENT_RESET_DONE},
++	{VPU_MSG_ID_START_DONE, VID_API_EVENT_START_DONE},
++	{VPU_MSG_ID_STOP_DONE, VID_API_EVENT_STOPPED},
++	{VPU_MSG_ID_ABORT_DONE, VID_API_EVENT_ABORT_DONE},
++	{VPU_MSG_ID_BUF_RST, VID_API_EVENT_STR_BUF_RST},
++	{VPU_MSG_ID_PIC_EOS, VID_API_EVENT_FINISHED},
++	{VPU_MSG_ID_SEQ_HDR_FOUND, VID_API_EVENT_SEQ_HDR_FOUND},
++	{VPU_MSG_ID_RES_CHANGE, VID_API_EVENT_RES_CHANGE},
++	{VPU_MSG_ID_PIC_HDR_FOUND, VID_API_EVENT_PIC_HDR_FOUND},
++	{VPU_MSG_ID_PIC_DECODED, VID_API_EVENT_PIC_DECODED},
++	{VPU_MSG_ID_DEC_DONE, VID_API_EVENT_FRAME_BUFF_RDY},
++	{VPU_MSG_ID_FRAME_REQ, VID_API_EVENT_REQ_FRAME_BUFF},
++	{VPU_MSG_ID_FRAME_RELEASE, VID_API_EVENT_REL_FRAME_BUFF},
++	{VPU_MSG_ID_FIFO_LOW, VID_API_EVENT_FIFO_LOW},
++	{VPU_MSG_ID_BS_ERROR, VID_API_EVENT_BS_ERROR},
++	{VPU_MSG_ID_UNSUPPORTED, VID_API_EVENT_UNSUPPORTED_STREAM},
++	{VPU_MSG_ID_FIRMWARE_XCPT, VID_API_EVENT_FIRMWARE_XCPT},
++};
++
++static void vpu_malone_pack_fs_alloc(struct vpu_rpc_event *pkt,
++				     struct vpu_fs_info *fs)
++{
++	const u32 fs_type[] = {
++		[MEM_RES_FRAME] = 0,
++		[MEM_RES_MBI] = 1,
++		[MEM_RES_DCP] = 2,
++	};
++
++	pkt->hdr.num = 7;
++	pkt->data[0] = fs->id | (fs->tag << 24);
++	pkt->data[1] = fs->luma_addr;
++	if (fs->type == MEM_RES_FRAME) {
++		/*
++		 * if luma_addr equal to chroma_addr,
++		 * means luma(plane[0]) and chromau(plane[1]) used the
++		 * same fd -- usage of NXP codec2. Need to manually
++		 * offset chroma addr.
++		 */
++		if (fs->luma_addr == fs->chroma_addr)
++			fs->chroma_addr = fs->luma_addr + fs->luma_size;
++		pkt->data[2] = fs->luma_addr + fs->luma_size / 2;
++		pkt->data[3] = fs->chroma_addr;
++		pkt->data[4] = fs->chroma_addr + fs->chromau_size / 2;
++		pkt->data[5] = fs->bytesperline;
++	} else {
++		pkt->data[2] = fs->luma_size;
++		pkt->data[3] = 0;
++		pkt->data[4] = 0;
++		pkt->data[5] = 0;
++	}
++	pkt->data[6] = fs_type[fs->type];
++}
++
++static void vpu_malone_pack_fs_release(struct vpu_rpc_event *pkt,
++				       struct vpu_fs_info *fs)
++{
++	pkt->hdr.num = 1;
++	pkt->data[0] = fs->id | (fs->tag << 24);
++}
++
++static void vpu_malone_pack_timestamp(struct vpu_rpc_event *pkt,
++				      struct vpu_ts_info *info)
++{
++	pkt->hdr.num = 3;
++	if (info->timestamp < 0) {
++		pkt->data[0] = (u32)-1;
++		pkt->data[1] = 0;
++	} else {
++		pkt->data[0] = info->timestamp / NSEC_PER_SEC;
++		pkt->data[1] = info->timestamp % NSEC_PER_SEC;
++	}
++	pkt->data[2] = info->size;
++}
++
++int vpu_malone_pack_cmd(struct vpu_rpc_event *pkt, u32 index, u32 id, void *data)
++{
 +	int ret;
 +
-+	dev_dbg(dev, "probe\n");
-+	vpu = devm_kzalloc(dev, sizeof(*vpu), GFP_KERNEL);
-+	if (!vpu)
-+		return -ENOMEM;
++	ret = vpu_find_dst_by_src(malone_cmds, ARRAY_SIZE(malone_cmds), id);
++	if (ret < 0)
++		return ret;
 +
-+	vpu->pdev = pdev;
-+	vpu->dev = dev;
-+	mutex_init(&vpu->lock);
-+	INIT_LIST_HEAD(&vpu->cores);
-+	platform_set_drvdata(pdev, vpu);
-+	atomic_set(&vpu->ref_vpu, 0);
-+	atomic_set(&vpu->ref_enc, 0);
-+	atomic_set(&vpu->ref_dec, 0);
-+	vpu->get_vpu = vpu_dev_get;
-+	vpu->put_vpu = vpu_dev_put;
-+	vpu->get_enc = vpu_enc_get;
-+	vpu->put_enc = vpu_enc_put;
-+	vpu->get_dec = vpu_dec_get;
-+	vpu->put_dec = vpu_dec_put;
++	pkt->hdr.id = ret;
++	pkt->hdr.num = 0;
++	pkt->hdr.index = index;
 +
-+	vpu->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(vpu->base))
-+		return PTR_ERR(vpu->base);
++	switch (id) {
++	case VPU_CMD_ID_FS_ALLOC:
++		vpu_malone_pack_fs_alloc(pkt, data);
++		break;
++	case VPU_CMD_ID_FS_RELEASE:
++		vpu_malone_pack_fs_release(pkt, data);
++		break;
++	case VPU_CMD_ID_TIMESTAMP:
++		vpu_malone_pack_timestamp(pkt, data);
++		break;
++	}
 +
-+	vpu->res = of_device_get_match_data(dev);
-+	if (!vpu->res)
-+		return -ENODEV;
++	pkt->hdr.index = index;
++	return 0;
++}
 +
-+	pm_runtime_enable(dev);
-+	ret = pm_runtime_get_sync(dev);
-+	if (ret)
-+		goto err_runtime_disable;
++int vpu_malone_convert_msg_id(u32 id)
++{
++	return vpu_find_src_by_dst(malone_msgs, ARRAY_SIZE(malone_msgs), id);
++}
 +
-+	pm_runtime_put_sync(dev);
++static void vpu_malone_fill_planes(struct vpu_dec_codec_info *info)
++{
++	u32 interlaced = info->progressive ? 0 : 1;
 +
-+	ret = v4l2_device_register(dev, &vpu->v4l2_dev);
-+	if (ret)
-+		goto err_vpu_deinit;
++	info->bytesperline[0] = 0;
++	info->sizeimage[0] = vpu_helper_get_plane_size(info->pixfmt,
++						       info->decoded_width,
++						       info->decoded_height,
++						       0,
++						       info->stride,
++						       interlaced,
++						       &info->bytesperline[0]);
++	info->bytesperline[1] = 0;
++	info->sizeimage[1] = vpu_helper_get_plane_size(info->pixfmt,
++						       info->decoded_width,
++						       info->decoded_height,
++						       1,
++						       info->stride,
++						       interlaced,
++						       &info->bytesperline[1]);
++}
 +
-+	vpu_init_media_device(vpu);
-+	vpu->encoder.type = VPU_CORE_TYPE_ENC;
-+	vpu->encoder.function = MEDIA_ENT_F_PROC_VIDEO_ENCODER;
-+	vpu->decoder.type = VPU_CORE_TYPE_DEC;
-+	vpu->decoder.function = MEDIA_ENT_F_PROC_VIDEO_DECODER;
-+	vpu_add_func(vpu, &vpu->decoder);
-+	vpu_add_func(vpu, &vpu->encoder);
-+	ret = media_device_register(&vpu->mdev);
-+	if (ret)
-+		goto err_vpu_media;
-+	vpu->debugfs = debugfs_create_dir("amphion_vpu", NULL);
++static void vpu_malone_init_seq_hdr(struct vpu_dec_codec_info *info)
++{
++	u32 chunks = info->num_dfe_area >> MALONE_DCP_CHUNK_BIT;
 +
-+	of_platform_populate(dev->of_node, NULL, NULL, dev);
++	vpu_malone_fill_planes(info);
++
++	info->mbi_size = (info->sizeimage[0] + info->sizeimage[1]) >> 2;
++	info->mbi_size = ALIGN(info->mbi_size, MALONE_ALIGN_MBI);
++
++	info->dcp_size = MALONE_DCP_SIZE_MAX;
++	if (chunks) {
++		u32 mb_num;
++		u32 mb_w;
++		u32 mb_h;
++
++		mb_w = DIV_ROUND_UP(info->decoded_width, 16);
++		mb_h = DIV_ROUND_UP(info->decoded_height, 16);
++		mb_num = mb_w * mb_h;
++		info->dcp_size = mb_num * MALONE_DCP_FIXED_MB_ALLOC * chunks;
++		info->dcp_size = clamp_t(u32, info->dcp_size,
++					 MALONE_DCP_SIZE_MIN, MALONE_DCP_SIZE_MAX);
++	}
++}
++
++static void vpu_malone_unpack_seq_hdr(struct vpu_rpc_event *pkt,
++				      struct vpu_dec_codec_info *info)
++{
++	info->num_ref_frms = pkt->data[0];
++	info->num_dpb_frms = pkt->data[1];
++	info->num_dfe_area = pkt->data[2];
++	info->progressive = pkt->data[3];
++	info->width = pkt->data[5];
++	info->height = pkt->data[4];
++	info->decoded_width = pkt->data[12];
++	info->decoded_height = pkt->data[11];
++	info->frame_rate.numerator = 1000;
++	info->frame_rate.denominator = pkt->data[8];
++	info->dsp_asp_ratio = pkt->data[9];
++	info->level_idc = pkt->data[10];
++	info->bit_depth_luma = pkt->data[13];
++	info->bit_depth_chroma = pkt->data[14];
++	info->chroma_fmt = pkt->data[15];
++	info->color_primaries = vpu_color_cvrt_primaries_i2v(pkt->data[16]);
++	info->transfer_chars = vpu_color_cvrt_transfers_i2v(pkt->data[17]);
++	info->matrix_coeffs = vpu_color_cvrt_matrix_i2v(pkt->data[18]);
++	info->full_range = vpu_color_cvrt_full_range_i2v(pkt->data[19]);
++	info->vui_present = pkt->data[20];
++	info->mvc_num_views = pkt->data[21];
++	info->offset_x = pkt->data[23];
++	info->offset_y = pkt->data[25];
++	info->tag = pkt->data[27];
++	if (info->bit_depth_luma > 8)
++		info->pixfmt = V4L2_PIX_FMT_NV12M_10BE_8L128;
++	else
++		info->pixfmt = V4L2_PIX_FMT_NV12M_8L128;
++	if (info->frame_rate.numerator && info->frame_rate.denominator) {
++		unsigned long n, d;
++
++		rational_best_approximation(info->frame_rate.numerator,
++					    info->frame_rate.denominator,
++					    info->frame_rate.numerator,
++					    info->frame_rate.denominator,
++					    &n, &d);
++		info->frame_rate.numerator = n;
++		info->frame_rate.denominator = d;
++	}
++	vpu_malone_init_seq_hdr(info);
++}
++
++static void vpu_malone_unpack_pic_info(struct vpu_rpc_event *pkt,
++				       struct vpu_dec_pic_info *info)
++{
++	info->id = pkt->data[7];
++	info->luma = pkt->data[0];
++	info->start = pkt->data[10];
++	info->end = pkt->data[12];
++	info->pic_size = pkt->data[11];
++	info->stride = pkt->data[5];
++	info->consumed_count = pkt->data[13];
++	if (info->id == MALONE_SKIPPED_FRAME_ID)
++		info->skipped = 1;
++	else
++		info->skipped = 0;
++}
++
++static void vpu_malone_unpack_req_frame(struct vpu_rpc_event *pkt,
++					struct vpu_fs_info *info)
++{
++	info->type = pkt->data[1];
++}
++
++static void vpu_malone_unpack_rel_frame(struct vpu_rpc_event *pkt,
++					struct vpu_fs_info *info)
++{
++	info->id = pkt->data[0];
++	info->type = pkt->data[1];
++	info->not_displayed = pkt->data[2];
++}
++
++static void vpu_malone_unpack_buff_rdy(struct vpu_rpc_event *pkt,
++				       struct vpu_dec_pic_info *info)
++{
++	info->id = pkt->data[0];
++	info->luma = pkt->data[1];
++	info->stride = pkt->data[3];
++	if (info->id == MALONE_SKIPPED_FRAME_ID)
++		info->skipped = 1;
++	else
++		info->skipped = 0;
++	info->timestamp = MAKE_TIMESTAMP(pkt->data[9], pkt->data[10]);
++}
++
++int vpu_malone_unpack_msg_data(struct vpu_rpc_event *pkt, void *data)
++{
++	if (!pkt || !data)
++		return -EINVAL;
++
++	switch (pkt->hdr.id) {
++	case VID_API_EVENT_SEQ_HDR_FOUND:
++		vpu_malone_unpack_seq_hdr(pkt, data);
++		break;
++	case VID_API_EVENT_PIC_DECODED:
++		vpu_malone_unpack_pic_info(pkt, data);
++		break;
++	case VID_API_EVENT_REQ_FRAME_BUFF:
++		vpu_malone_unpack_req_frame(pkt, data);
++		break;
++	case VID_API_EVENT_REL_FRAME_BUFF:
++		vpu_malone_unpack_rel_frame(pkt, data);
++		break;
++	case VID_API_EVENT_FRAME_BUFF_RDY:
++		vpu_malone_unpack_buff_rdy(pkt, data);
++		break;
++	}
 +
 +	return 0;
++}
 +
-+err_vpu_media:
-+	vpu_remove_func(&vpu->encoder);
-+	vpu_remove_func(&vpu->decoder);
-+	v4l2_device_unregister(&vpu->v4l2_dev);
-+err_vpu_deinit:
-+err_runtime_disable:
-+	pm_runtime_set_suspended(dev);
-+	pm_runtime_disable(dev);
++static const struct malone_padding_scode padding_scodes[] = {
++	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_H264,        {0x0B010000, 0}},
++	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_H264_MVC,    {0x0B010000, 0}},
++	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_HEVC,        {0x4A010000, 0x20}},
++	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_VC1_ANNEX_G, {0x0a010000, 0x0}},
++	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_VC1_ANNEX_L, {0x0a010000, 0x0}},
++	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_MPEG2,       {0xCC010000, 0x0}},
++	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_MPEG4,       {0xb1010000, 0x0}},
++	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_XVID,        {0xb1010000, 0x0}},
++	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_H263,        {0xb1010000, 0x0}},
++	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_VP8,         {0x34010000, 0x0}},
++	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_JPEG,        {0xefff0000, 0x0}},
++	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_H264,        {0x0B010000, 0}},
++	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_H264_MVC,    {0x0B010000, 0}},
++	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_HEVC,        {0x4A010000, 0x20}},
++	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_VC1_ANNEX_G, {0x0a010000, 0x0}},
++	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_VC1_ANNEX_L, {0x0a010000, 0x0}},
++	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_MPEG2,       {0xb7010000, 0x0}},
++	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_MPEG4,       {0xb1010000, 0x0}},
++	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_XVID,        {0xb1010000, 0x0}},
++	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_H263,        {0xb1010000, 0x0}},
++	{SCODE_PADDING_ABORT,    V4L2_PIX_FMT_VP8,         {0x34010000, 0x0}},
++	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_JPEG,        {0x0, 0x0}},
++	{SCODE_PADDING_BUFFLUSH, V4L2_PIX_FMT_H264,        {0x15010000, 0x0}},
++	{SCODE_PADDING_BUFFLUSH, V4L2_PIX_FMT_H264_MVC,    {0x15010000, 0x0}},
++};
++
++static const struct malone_padding_scode padding_scode_dft = {0x0, 0x0};
++
++static const struct malone_padding_scode *get_padding_scode(u32 type, u32 fmt)
++{
++	const struct malone_padding_scode *s;
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(padding_scodes); i++) {
++		s = &padding_scodes[i];
++
++		if (s->scode_type == type && s->pixelformat == fmt)
++			return s;
++	}
++
++	if (type != SCODE_PADDING_BUFFLUSH)
++		return &padding_scode_dft;
++
++	return NULL;
++}
++
++static int vpu_malone_add_padding_scode(struct vpu_buffer *stream_buffer,
++					struct vpu_malone_str_buffer *str_buf,
++					u32 pixelformat, u32 scode_type)
++{
++	u32 wptr;
++	u32 size;
++	u32 total_size = 0;
++	const struct malone_padding_scode *ps;
++	const u32 padding_size = 4096;
++	int ret;
++
++	ps = get_padding_scode(scode_type, pixelformat);
++	if (!ps)
++		return -EINVAL;
++
++	wptr = str_buf->wptr;
++	size = ALIGN(wptr, 4) - wptr;
++	if (size)
++		vpu_helper_memset_stream_buffer(stream_buffer, &wptr, 0, size);
++	total_size += size;
++
++	size = sizeof(ps->data);
++	ret = vpu_helper_copy_to_stream_buffer(stream_buffer, &wptr, size, (void *)ps->data);
++	if (ret < size)
++		return -EINVAL;
++	total_size += size;
++
++	size = padding_size - sizeof(ps->data);
++	vpu_helper_memset_stream_buffer(stream_buffer, &wptr, 0, size);
++	total_size += size;
++
++	vpu_malone_update_wptr(str_buf, wptr);
++	return total_size;
++}
++
++int vpu_malone_add_scode(struct vpu_shared_addr *shared,
++			 u32 instance,
++			 struct vpu_buffer *stream_buffer,
++			 u32 pixelformat,
++			 u32 scode_type)
++{
++	struct vpu_dec_ctrl *hc = shared->priv;
++	struct vpu_malone_str_buffer *str_buf = hc->str_buf[instance];
++	int ret = -EINVAL;
++
++	switch (scode_type) {
++	case SCODE_PADDING_EOS:
++	case SCODE_PADDING_ABORT:
++	case SCODE_PADDING_BUFFLUSH:
++		ret = vpu_malone_add_padding_scode(stream_buffer, str_buf, pixelformat, scode_type);
++		break;
++	default:
++		break;
++	}
 +
 +	return ret;
 +}
 +
-+static int vpu_remove(struct platform_device *pdev)
++#define MALONE_PAYLOAD_HEADER_SIZE		16
++#define MALONE_CODEC_VERSION_ID			0x1
++#define MALONE_CODEC_ID_VC1_SIMPLE		0x10
++#define MALONE_CODEC_ID_VC1_MAIN		0x11
++#define MALONE_CODEC_ID_ARV8			0x28
++#define MALONE_CODEC_ID_ARV9			0x29
++#define MALONE_CODEC_ID_VP6			0x36
++#define MALONE_CODEC_ID_VP8			0x36
++#define MALONE_CODEC_ID_DIVX3			0x38
++#define MALONE_CODEC_ID_SPK			0x39
++
++#define MALONE_VP8_IVF_SEQ_HEADER_LEN		32
++#define MALONE_VP8_IVF_FRAME_HEADER_LEN		8
++
++#define MALONE_VC1_RCV_CODEC_V1_VERSION		0x85
++#define MALONE_VC1_RCV_CODEC_V2_VERSION		0xC5
++#define MALONE_VC1_RCV_NUM_FRAMES		0xFF
++#define MALONE_VC1_RCV_SEQ_EXT_DATA_SIZE	4
++#define MALONE_VC1_RCV_SEQ_HEADER_LEN		20
++#define MALONE_VC1_RCV_PIC_HEADER_LEN		4
++#define MALONE_VC1_NAL_HEADER_LEN		4
++#define MALONE_VC1_CONTAIN_NAL(data)		(((data) & 0x00FFFFFF) == 0x00010000)
++
++static void set_payload_hdr(u8 *dst, u32 scd_type, u32 codec_id,
++			    u32 buffer_size, u32 width, u32 height)
 +{
-+	struct vpu_dev *vpu = platform_get_drvdata(pdev);
-+	struct device *dev = &pdev->dev;
++	unsigned int payload_size;
++	/* payload_size = buffer_size + itself_size(16) - start_code(4) */
++	payload_size = buffer_size + 12;
 +
-+	debugfs_remove_recursive(vpu->debugfs);
-+	vpu->debugfs = NULL;
++	dst[0] = 0x00;
++	dst[1] = 0x00;
++	dst[2] = 0x01;
++	dst[3] = scd_type;
 +
-+	pm_runtime_disable(dev);
++	/* length */
++	dst[4] = ((payload_size >> 16) & 0xff);
++	dst[5] = ((payload_size >> 8) & 0xff);
++	dst[6] = 0x4e;
++	dst[7] = ((payload_size >> 0) & 0xff);
 +
-+	media_device_unregister(&vpu->mdev);
-+	vpu_remove_func(&vpu->decoder);
-+	vpu_remove_func(&vpu->encoder);
-+	media_device_cleanup(&vpu->mdev);
-+	v4l2_device_unregister(&vpu->v4l2_dev);
-+	mutex_destroy(&vpu->lock);
++	/* Codec ID and Version */
++	dst[8] = codec_id;
++	dst[9] = MALONE_CODEC_VERSION_ID;
 +
-+	return 0;
++	/* width */
++	dst[10] = ((width >> 8) & 0xff);
++	dst[11] = ((width >> 0) & 0xff);
++	dst[12] = 0x58;
++
++	/* height */
++	dst[13] = ((height >> 8) & 0xff);
++	dst[14] = ((height >> 0) & 0xff);
++	dst[15] = 0x50;
 +}
 +
-+static int __maybe_unused vpu_runtime_resume(struct device *dev)
++static void set_vp8_ivf_seqhdr(u8 *dst, u32 width, u32 height)
 +{
-+	return 0;
++	/* 0-3byte signature "DKIF" */
++	dst[0] = 0x44;
++	dst[1] = 0x4b;
++	dst[2] = 0x49;
++	dst[3] = 0x46;
++	/* 4-5byte version: should be 0*/
++	dst[4] = 0x00;
++	dst[5] = 0x00;
++	/* 6-7 length of Header */
++	dst[6] = MALONE_VP8_IVF_SEQ_HEADER_LEN;
++	dst[7] = MALONE_VP8_IVF_SEQ_HEADER_LEN >> 8;
++	/* 8-11 VP8 fourcc */
++	dst[8] = 0x56;
++	dst[9] = 0x50;
++	dst[10] = 0x38;
++	dst[11] = 0x30;
++	/* 12-13 width in pixels */
++	dst[12] = width;
++	dst[13] = width >> 8;
++	/* 14-15 height in pixels */
++	dst[14] = height;
++	dst[15] = height >> 8;
++	/* 16-19 frame rate */
++	dst[16] = 0xe8;
++	dst[17] = 0x03;
++	dst[18] = 0x00;
++	dst[19] = 0x00;
++	/* 20-23 time scale */
++	dst[20] = 0x01;
++	dst[21] = 0x00;
++	dst[22] = 0x00;
++	dst[23] = 0x00;
++	/* 24-27 number frames */
++	dst[24] = 0xdf;
++	dst[25] = 0xf9;
++	dst[26] = 0x09;
++	dst[27] = 0x00;
++	/* 28-31 reserved */
 +}
 +
-+static int __maybe_unused vpu_runtime_suspend(struct device *dev)
++static void set_vp8_ivf_pichdr(u8 *dst, u32 frame_size)
 +{
-+	return 0;
++	/*
++	 * firmware just parse 64-bit timestamp(8 bytes).
++	 * As not transfer timestamp to firmware, use default value(ZERO).
++	 * No need to do anything here
++	 */
 +}
 +
-+static int __maybe_unused vpu_resume(struct device *dev)
++static void set_vc1_rcv_seqhdr(u8 *dst, u8 *src, u32 width, u32 height)
 +{
-+	return 0;
++	u32 frames = MALONE_VC1_RCV_NUM_FRAMES;
++	u32 ext_data_size = MALONE_VC1_RCV_SEQ_EXT_DATA_SIZE;
++
++	/* 0-2 Number of frames, used default value 0xFF */
++	dst[0] = frames;
++	dst[1] = frames >> 8;
++	dst[2] = frames >> 16;
++
++	/* 3 RCV version, used V1 */
++	dst[3] = MALONE_VC1_RCV_CODEC_V1_VERSION;
++
++	/* 4-7 extension data size */
++	dst[4] = ext_data_size;
++	dst[5] = ext_data_size >> 8;
++	dst[6] = ext_data_size >> 16;
++	dst[7] = ext_data_size >> 24;
++	/* 8-11 extension data */
++	dst[8] = src[0];
++	dst[9] = src[1];
++	dst[10] = src[2];
++	dst[11] = src[3];
++
++	/* height */
++	dst[12] = height;
++	dst[13] = (height >> 8) & 0xff;
++	dst[14] = (height >> 16) & 0xff;
++	dst[15] = (height >> 24) & 0xff;
++	/* width */
++	dst[16] = width;
++	dst[17] = (width >> 8) & 0xff;
++	dst[18] = (width >> 16) & 0xff;
++	dst[19] = (width >> 24) & 0xff;
 +}
 +
-+static int __maybe_unused vpu_suspend(struct device *dev)
++static void set_vc1_rcv_pichdr(u8 *dst, u32 buffer_size)
 +{
-+	return 0;
++	dst[0] = buffer_size;
++	dst[1] = buffer_size >> 8;
++	dst[2] = buffer_size >> 16;
++	dst[3] = buffer_size >> 24;
 +}
 +
-+static const struct dev_pm_ops vpu_pm_ops = {
-+	SET_RUNTIME_PM_OPS(vpu_runtime_suspend, vpu_runtime_resume, NULL)
-+	SET_SYSTEM_SLEEP_PM_OPS(vpu_suspend, vpu_resume)
-+};
++static void create_vc1_nal_pichdr(u8 *dst)
++{
++	/* need insert nal header: special ID */
++	dst[0] = 0x0;
++	dst[1] = 0x0;
++	dst[2] = 0x01;
++	dst[3] = 0x0D;
++}
 +
-+struct vpu_resources imx8qxp_res = {
-+	.plat_type = IMX8QXP,
-+	.mreg_base = 0x40000000,
-+	.setup = vpu_imx8q_setup,
-+	.setup_encoder = vpu_imx8q_setup_enc,
-+	.setup_decoder = vpu_imx8q_setup_dec,
-+	.reset = vpu_imx8q_reset
-+};
++static int vpu_malone_insert_scode_seq(struct malone_scode_t *scode, u32 codec_id, u32 ext_size)
++{
++	u8 hdr[MALONE_PAYLOAD_HEADER_SIZE];
++	int ret;
 +
-+struct vpu_resources imx8qm_res = {
-+	.plat_type = IMX8QM,
-+	.mreg_base = 0x40000000,
-+	.setup = vpu_imx8q_setup,
-+	.setup_encoder = vpu_imx8q_setup_enc,
-+	.setup_decoder = vpu_imx8q_setup_dec,
-+	.reset = vpu_imx8q_reset
-+};
++	set_payload_hdr(hdr,
++			SCODE_SEQUENCE,
++			codec_id,
++			ext_size,
++			scode->inst->out_format.width,
++			scode->inst->out_format.height);
++	ret = vpu_helper_copy_to_stream_buffer(&scode->inst->stream_buffer,
++					       &scode->wptr,
++					       sizeof(hdr),
++					       hdr);
++	return ret;
++}
 +
-+static const struct of_device_id vpu_dt_match[] = {
-+	{ .compatible = "nxp,imx8qxp-vpu", .data = &imx8qxp_res },
-+	{ .compatible = "nxp,imx8qm-vpu", .data = &imx8qm_res },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, vpu_dt_match);
++static int vpu_malone_insert_scode_pic(struct malone_scode_t *scode, u32 codec_id, u32 ext_size)
++{
++	u8 hdr[MALONE_PAYLOAD_HEADER_SIZE];
 +
-+static struct platform_driver amphion_vpu_driver = {
-+	.probe = vpu_probe,
-+	.remove = vpu_remove,
-+	.driver = {
-+		.name = "amphion-vpu",
-+		.of_match_table = vpu_dt_match,
-+		.pm = &vpu_pm_ops,
++	set_payload_hdr(hdr,
++			SCODE_PICTURE,
++			codec_id,
++			ext_size + vb2_get_plane_payload(scode->vb, 0),
++			scode->inst->out_format.width,
++			scode->inst->out_format.height);
++	return vpu_helper_copy_to_stream_buffer(&scode->inst->stream_buffer,
++						&scode->wptr,
++						sizeof(hdr),
++						hdr);
++}
++
++static int vpu_malone_insert_scode_vc1_g_pic(struct malone_scode_t *scode)
++{
++	struct vb2_v4l2_buffer *vbuf;
++	u8 nal_hdr[MALONE_VC1_NAL_HEADER_LEN];
++	u32 *data = NULL;
++
++	vbuf = to_vb2_v4l2_buffer(scode->vb);
++	data = vb2_plane_vaddr(scode->vb, 0);
++
++	if (vbuf->sequence == 0 || vpu_vb_is_codecconfig(vbuf))
++		return 0;
++	if (MALONE_VC1_CONTAIN_NAL(*data))
++		return 0;
++
++	create_vc1_nal_pichdr(nal_hdr);
++	return vpu_helper_copy_to_stream_buffer(&scode->inst->stream_buffer,
++						&scode->wptr,
++						sizeof(nal_hdr),
++						nal_hdr);
++}
++
++static int vpu_malone_insert_scode_vc1_l_seq(struct malone_scode_t *scode)
++{
++	int ret;
++	int size = 0;
++	u8 rcv_seqhdr[MALONE_VC1_RCV_SEQ_HEADER_LEN];
++
++	scode->need_data = 0;
++
++	ret = vpu_malone_insert_scode_seq(scode, MALONE_CODEC_ID_VC1_SIMPLE,
++					  sizeof(rcv_seqhdr));
++	if (ret < 0)
++		return ret;
++	size = ret;
++
++	set_vc1_rcv_seqhdr(rcv_seqhdr,
++			   vb2_plane_vaddr(scode->vb, 0),
++			   scode->inst->out_format.width,
++			   scode->inst->out_format.height);
++	ret = vpu_helper_copy_to_stream_buffer(&scode->inst->stream_buffer,
++					       &scode->wptr,
++					       sizeof(rcv_seqhdr),
++					       rcv_seqhdr);
++
++	if (ret < 0)
++		return ret;
++	size += ret;
++	return size;
++}
++
++static int vpu_malone_insert_scode_vc1_l_pic(struct malone_scode_t *scode)
++{
++	int ret;
++	int size = 0;
++	u8 rcv_pichdr[MALONE_VC1_RCV_PIC_HEADER_LEN];
++
++	ret = vpu_malone_insert_scode_pic(scode, MALONE_CODEC_ID_VC1_SIMPLE,
++					  sizeof(rcv_pichdr));
++	if (ret < 0)
++		return ret;
++	size = ret;
++
++	set_vc1_rcv_pichdr(rcv_pichdr, vb2_get_plane_payload(scode->vb, 0));
++	ret = vpu_helper_copy_to_stream_buffer(&scode->inst->stream_buffer,
++					       &scode->wptr,
++					       sizeof(rcv_pichdr),
++					       rcv_pichdr);
++	if (ret < 0)
++		return ret;
++	size += ret;
++	return size;
++}
++
++static int vpu_malone_insert_scode_vp8_seq(struct malone_scode_t *scode)
++{
++	int ret;
++	int size = 0;
++	u8 ivf_hdr[MALONE_VP8_IVF_SEQ_HEADER_LEN];
++
++	ret = vpu_malone_insert_scode_seq(scode, MALONE_CODEC_ID_VP8, sizeof(ivf_hdr));
++	if (ret < 0)
++		return ret;
++	size = ret;
++
++	set_vp8_ivf_seqhdr(ivf_hdr,
++			   scode->inst->out_format.width,
++			   scode->inst->out_format.height);
++	ret = vpu_helper_copy_to_stream_buffer(&scode->inst->stream_buffer,
++					       &scode->wptr,
++					       sizeof(ivf_hdr),
++					       ivf_hdr);
++	if (ret < 0)
++		return ret;
++	size += ret;
++
++	return size;
++}
++
++static int vpu_malone_insert_scode_vp8_pic(struct malone_scode_t *scode)
++{
++	int ret;
++	int size = 0;
++	u8 ivf_hdr[MALONE_VP8_IVF_FRAME_HEADER_LEN] = {0};
++
++	ret = vpu_malone_insert_scode_pic(scode, MALONE_CODEC_ID_VP8, sizeof(ivf_hdr));
++	if (ret < 0)
++		return ret;
++	size = ret;
++
++	set_vp8_ivf_pichdr(ivf_hdr, vb2_get_plane_payload(scode->vb, 0));
++	ret = vpu_helper_copy_to_stream_buffer(&scode->inst->stream_buffer,
++					       &scode->wptr,
++					       sizeof(ivf_hdr),
++					       ivf_hdr);
++	if (ret < 0)
++		return ret;
++	size += ret;
++
++	return size;
++}
++
++static const struct malone_scode_handler scode_handlers[] = {
++	{
++		/* fix me, need to swap return operation after gstreamer swap */
++		.pixelformat = V4L2_PIX_FMT_VC1_ANNEX_L,
++		.insert_scode_seq = vpu_malone_insert_scode_vc1_l_seq,
++		.insert_scode_pic = vpu_malone_insert_scode_vc1_l_pic,
++	},
++	{
++		.pixelformat = V4L2_PIX_FMT_VC1_ANNEX_G,
++		.insert_scode_pic = vpu_malone_insert_scode_vc1_g_pic,
++	},
++	{
++		.pixelformat = V4L2_PIX_FMT_VP8,
++		.insert_scode_seq = vpu_malone_insert_scode_vp8_seq,
++		.insert_scode_pic = vpu_malone_insert_scode_vp8_pic,
 +	},
 +};
 +
-+static int __init vpu_driver_init(void)
++static const struct malone_scode_handler *get_scode_handler(u32 pixelformat)
 +{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(scode_handlers); i++) {
++		if (scode_handlers[i].pixelformat == pixelformat)
++			return &scode_handlers[i];
++	}
++
++	return NULL;
++}
++
++static int vpu_malone_insert_scode(struct malone_scode_t *scode, u32 type)
++{
++	const struct malone_scode_handler *handler;
++	int ret = 0;
++
++	if (!scode || !scode->inst || !scode->vb)
++		return 0;
++
++	scode->need_data = 1;
++	handler = get_scode_handler(scode->inst->out_format.pixfmt);
++	if (!handler)
++		return 0;
++
++	switch (type) {
++	case SCODE_SEQUENCE:
++		if (handler->insert_scode_seq)
++			ret = handler->insert_scode_seq(scode);
++		break;
++	case SCODE_PICTURE:
++		if (handler->insert_scode_pic)
++			ret = handler->insert_scode_pic(scode);
++		break;
++	default:
++		break;
++	}
++
++	return ret;
++}
++
++static int vpu_malone_input_frame_data(struct vpu_malone_str_buffer *str_buf,
++				       struct vpu_inst *inst, struct vb2_buffer *vb,
++				       u32 disp_imm)
++{
++	struct malone_scode_t scode;
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	u32 wptr = str_buf->wptr;
++	int size = 0;
++	int ret = 0;
++
++	/*add scode: SCODE_SEQUENCE, SCODE_PICTURE, SCODE_SLICE*/
++	scode.inst = inst;
++	scode.vb = vb;
++	scode.wptr = wptr;
++	scode.need_data = 1;
++	if (vbuf->sequence == 0 || vpu_vb_is_codecconfig(vbuf))
++		ret = vpu_malone_insert_scode(&scode, SCODE_SEQUENCE);
++
++	if (ret < 0)
++		return -ENOMEM;
++	size += ret;
++	wptr = scode.wptr;
++	if (!scode.need_data) {
++		vpu_malone_update_wptr(str_buf, wptr);
++		return size;
++	}
++
++	ret = vpu_malone_insert_scode(&scode, SCODE_PICTURE);
++	if (ret < 0)
++		return -ENOMEM;
++	size += ret;
++	wptr = scode.wptr;
++
++	ret = vpu_helper_copy_to_stream_buffer(&inst->stream_buffer,
++					       &wptr,
++					       vb2_get_plane_payload(vb, 0),
++					       vb2_plane_vaddr(vb, 0));
++	if (ret < vb2_get_plane_payload(vb, 0))
++		return -ENOMEM;
++	size += ret;
++
++	vpu_malone_update_wptr(str_buf, wptr);
++
++	if (disp_imm && !vpu_vb_is_codecconfig(vbuf)) {
++		ret = vpu_malone_add_scode(inst->core->iface,
++					   inst->id,
++					   &inst->stream_buffer,
++					   inst->out_format.pixfmt,
++					   SCODE_PADDING_BUFFLUSH);
++		if (ret < 0)
++			return ret;
++		size += ret;
++	}
++
++	return size;
++}
++
++static int vpu_malone_input_stream_data(struct vpu_malone_str_buffer *str_buf,
++					struct vpu_inst *inst, struct vb2_buffer *vb)
++{
++	u32 wptr = str_buf->wptr;
++	int ret = 0;
++
++	ret = vpu_helper_copy_to_stream_buffer(&inst->stream_buffer,
++					       &wptr,
++					       vb2_get_plane_payload(vb, 0),
++					       vb2_plane_vaddr(vb, 0));
++	if (ret < vb2_get_plane_payload(vb, 0))
++		return -ENOMEM;
++
++	vpu_malone_update_wptr(str_buf, wptr);
++
++	return ret;
++}
++
++static int vpu_malone_input_ts(struct vpu_inst *inst, s64  timestamp, u32 size)
++{
++	struct vpu_ts_info info;
++
++	memset(&info, 0, sizeof(info));
++	info.timestamp = timestamp;
++	info.size = size;
++
++	return vpu_session_fill_timestamp(inst, &info);
++}
++
++int vpu_malone_input_frame(struct vpu_shared_addr *shared,
++			   struct vpu_inst *inst, struct vb2_buffer *vb)
++{
++	struct vpu_dec_ctrl *hc = shared->priv;
++	struct vb2_v4l2_buffer *vbuf;
++	struct vpu_malone_str_buffer *str_buf = hc->str_buf[inst->id];
++	u32 disp_imm = hc->codec_param[inst->id].disp_imm;
++	u32 size;
 +	int ret;
 +
-+	ret = platform_driver_register(&amphion_vpu_driver);
++	if (vpu_malone_is_non_frame_mode(shared, inst->id))
++		ret = vpu_malone_input_stream_data(str_buf, inst, vb);
++	else
++		ret = vpu_malone_input_frame_data(str_buf, inst, vb, disp_imm);
++	if (ret < 0)
++		return ret;
++	size = ret;
++
++	/*
++	 * if buffer only contain codec data, and the timestamp is invalid,
++	 * don't put the invalid timestamp to resync
++	 * merge the data to next frame
++	 */
++	vbuf = to_vb2_v4l2_buffer(vb);
++	if (vpu_vb_is_codecconfig(vbuf) && (s64)vb->timestamp < 0) {
++		inst->extra_size += size;
++		return 0;
++	}
++	if (inst->extra_size) {
++		size += inst->extra_size;
++		inst->extra_size = 0;
++	}
++
++	ret = vpu_malone_input_ts(inst, vb->timestamp, size);
 +	if (ret)
 +		return ret;
 +
-+	return vpu_core_driver_init();
-+}
-+
-+static void __exit vpu_driver_exit(void)
-+{
-+	vpu_core_driver_exit();
-+	platform_driver_unregister(&amphion_vpu_driver);
-+}
-+module_init(vpu_driver_init);
-+module_exit(vpu_driver_exit);
-+
-+MODULE_AUTHOR("Freescale Semiconductor, Inc.");
-+MODULE_DESCRIPTION("Linux VPU driver for Freescale i.MX8Q");
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/media/platform/amphion/vpu_imx8q.c b/drivers/media/platform/amphion/vpu_imx8q.c
-new file mode 100644
-index 000000000000..606cc53125f8
---- /dev/null
-+++ b/drivers/media/platform/amphion/vpu_imx8q.c
-@@ -0,0 +1,271 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2020-2021 NXP
-+ */
-+
-+#include <linux/init.h>
-+#include <linux/device.h>
-+#include <linux/ioctl.h>
-+#include <linux/list.h>
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/slab.h>
-+#include <linux/delay.h>
-+#include <linux/types.h>
-+#include "vpu.h"
-+#include "vpu_core.h"
-+#include "vpu_imx8q.h"
-+#include "vpu_rpc.h"
-+
-+#define IMX8Q_CSR_CM0Px_ADDR_OFFSET			0x00000000
-+#define IMX8Q_CSR_CM0Px_CPUWAIT				0x00000004
-+
-+#ifdef CONFIG_IMX_SCU
-+#include <linux/firmware/imx/ipc.h>
-+#include <linux/firmware/imx/svc/misc.h>
-+
-+#define VPU_DISABLE_BITS			0x7
-+#define VPU_IMX_DECODER_FUSE_OFFSET		14
-+#define VPU_ENCODER_MASK			0x1
-+#define VPU_DECODER_MASK			0x3UL
-+#define VPU_DECODER_H264_MASK			0x2UL
-+#define VPU_DECODER_HEVC_MASK			0x1UL
-+
-+static u32 imx8q_fuse;
-+
-+struct vpu_sc_msg_misc {
-+	struct imx_sc_rpc_msg hdr;
-+	u32 word;
-+} __packed;
-+#endif
-+
-+int vpu_imx8q_setup_dec(struct vpu_dev *vpu)
-+{
-+	const off_t offset = DEC_MFD_XREG_SLV_BASE + MFD_BLK_CTRL;
-+
-+	vpu_writel(vpu, offset + MFD_BLK_CTRL_MFD_SYS_CLOCK_ENABLE_SET, 0x1f);
-+	vpu_writel(vpu, offset + MFD_BLK_CTRL_MFD_SYS_RESET_SET, 0xffffffff);
-+
 +	return 0;
 +}
 +
-+int vpu_imx8q_setup_enc(struct vpu_dev *vpu)
++static bool vpu_malone_check_ready(struct vpu_shared_addr *shared, u32 instance)
 +{
-+	return 0;
++	struct malone_iface *iface = shared->iface;
++	struct vpu_rpc_buffer_desc *desc = &iface->api_cmd_buffer_desc[instance];
++	u32 size = desc->end - desc->start;
++	u32 rptr = desc->rptr;
++	u32 wptr = desc->wptr;
++	u32 used = (wptr + size - rptr) % size;
++
++	if (!size || used < size / 2)
++		return true;
++
++	return false;
 +}
 +
-+int vpu_imx8q_setup(struct vpu_dev *vpu)
++bool vpu_malone_is_ready(struct vpu_shared_addr *shared, u32 instance)
 +{
-+	const off_t offset = SCB_XREG_SLV_BASE + SCB_SCB_BLK_CTRL;
++	u32 cnt = 0;
 +
-+	vpu_readl(vpu, offset + 0x108);
-+
-+	vpu_writel(vpu, offset + SCB_BLK_CTRL_SCB_CLK_ENABLE_SET, 0x1);
-+	vpu_writel(vpu, offset + 0x190, 0xffffffff);
-+	vpu_writel(vpu, offset + SCB_BLK_CTRL_XMEM_RESET_SET, 0xffffffff);
-+	vpu_writel(vpu, offset + SCB_BLK_CTRL_SCB_CLK_ENABLE_SET, 0xE);
-+	vpu_writel(vpu, offset + SCB_BLK_CTRL_CACHE_RESET_SET, 0x7);
-+	vpu_writel(vpu, XMEM_CONTROL, 0x102);
-+
-+	vpu_readl(vpu, offset + 0x108);
-+
-+	return 0;
++	while (!vpu_malone_check_ready(shared, instance)) {
++		if (cnt > 30)
++			return false;
++		mdelay(1);
++		cnt++;
++	}
++	return true;
 +}
 +
-+static int vpu_imx8q_reset_enc(struct vpu_dev *vpu)
++int vpu_malone_pre_cmd(struct vpu_shared_addr *shared, u32 instance)
 +{
-+	return 0;
-+}
-+
-+static int vpu_imx8q_reset_dec(struct vpu_dev *vpu)
-+{
-+	const off_t offset = DEC_MFD_XREG_SLV_BASE + MFD_BLK_CTRL;
-+
-+	vpu_writel(vpu, offset + MFD_BLK_CTRL_MFD_SYS_RESET_CLR, 0xffffffff);
-+
-+	return 0;
-+}
-+
-+int vpu_imx8q_reset(struct vpu_dev *vpu)
-+{
-+	const off_t offset = SCB_XREG_SLV_BASE + SCB_SCB_BLK_CTRL;
-+
-+	vpu_writel(vpu, offset + SCB_BLK_CTRL_CACHE_RESET_CLR, 0x7);
-+	vpu_imx8q_reset_enc(vpu);
-+	vpu_imx8q_reset_dec(vpu);
-+
-+	return 0;
-+}
-+
-+int vpu_imx8q_set_system_cfg_common(struct vpu_rpc_system_config *config, u32 regs, u32 core_id)
-+{
-+	if (!config)
++	if (!vpu_malone_is_ready(shared, instance))
 +		return -EINVAL;
 +
-+	switch (core_id) {
-+	case 0:
-+		config->malone_base_addr[0] = regs + DEC_MFD_XREG_SLV_BASE;
-+		config->num_malones = 1;
-+		config->num_windsors = 0;
-+		break;
-+	case 1:
-+		config->windsor_base_addr[0] = regs + ENC_MFD_XREG_SLV_0_BASE;
-+		config->num_windsors = 1;
-+		config->num_malones = 0;
-+		break;
-+	case 2:
-+		config->windsor_base_addr[0] = regs + ENC_MFD_XREG_SLV_1_BASE;
-+		config->num_windsors = 1;
-+		config->num_malones = 0;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	if (config->num_windsors) {
-+		config->windsor_irq_pin[0x0][0x0] = WINDSOR_PAL_IRQ_PIN_L;
-+		config->windsor_irq_pin[0x0][0x1] = WINDSOR_PAL_IRQ_PIN_H;
-+	}
++	return 0;
++}
 +
-+	config->malone_base_addr[0x1] = 0x0;
-+	config->hif_offset[0x0] = MFD_HIF;
-+	config->hif_offset[0x1] = 0x0;
++int vpu_malone_post_cmd(struct vpu_shared_addr *shared, u32 instance)
++{
++	struct malone_iface *iface = shared->iface;
++	struct vpu_rpc_buffer_desc *desc = &iface->api_cmd_buffer_desc[instance];
 +
-+	config->dpv_base_addr = 0x0;
-+	config->dpv_irq_pin = 0x0;
-+	config->pixif_base_addr = regs + DEC_MFD_XREG_SLV_BASE + MFD_PIX_IF;
-+	config->cache_base_addr[0] = regs + MC_CACHE_0_BASE;
-+	config->cache_base_addr[1] = regs + MC_CACHE_1_BASE;
++	desc->wptr++;
++	if (desc->wptr == desc->end)
++		desc->wptr = desc->start;
 +
 +	return 0;
 +}
 +
-+int vpu_imx8q_boot_core(struct vpu_core *core)
++int vpu_malone_init_instance(struct vpu_shared_addr *shared, u32 instance)
 +{
-+	csr_writel(core, IMX8Q_CSR_CM0Px_ADDR_OFFSET, core->fw.phys);
-+	csr_writel(core, IMX8Q_CSR_CM0Px_CPUWAIT, 0);
-+	return 0;
-+}
++	struct malone_iface *iface = shared->iface;
++	struct vpu_rpc_buffer_desc *desc = &iface->api_cmd_buffer_desc[instance];
 +
-+int vpu_imx8q_get_power_state(struct vpu_core *core)
-+{
-+	if (csr_readl(core, IMX8Q_CSR_CM0Px_CPUWAIT) == 1)
-+		return 0;
-+	return 1;
-+}
-+
-+int vpu_imx8q_on_firmware_loaded(struct vpu_core *core)
-+{
-+	u8 *p;
-+
-+	p = core->fw.virt;
-+	p[16] = core->vpu->res->plat_type;
-+	p[17] = core->id;
-+	p[18] = 1;
++	desc->wptr = desc->rptr;
++	if (desc->wptr == desc->end)
++		desc->wptr = desc->start;
 +
 +	return 0;
 +}
 +
-+u32 vpu_imx8q_check_memory_region(dma_addr_t base, dma_addr_t addr, u32 size)
++u32 vpu_malone_get_max_instance_count(struct vpu_shared_addr *shared)
 +{
-+	const struct vpu_rpc_region_t imx8q_regions[] = {
-+		{0x00000000, 0x08000000, VPU_CORE_MEMORY_CACHED},
-+		{0x08000000, 0x10000000, VPU_CORE_MEMORY_UNCACHED},
-+		{0x10000000, 0x20000000, VPU_CORE_MEMORY_CACHED},
-+		{0x20000000, 0x40000000, VPU_CORE_MEMORY_UNCACHED}
-+	};
-+	int i;
++	struct malone_iface *iface = shared->iface;
 +
-+	if (addr < base)
-+		return VPU_CORE_MEMORY_INVALID;
-+
-+	addr -= base;
-+	for (i = 0; i < ARRAY_SIZE(imx8q_regions); i++) {
-+		const struct vpu_rpc_region_t *region = &imx8q_regions[i];
-+
-+		if (addr >= region->start && addr + size < region->end)
-+			return region->type;
-+	}
-+
-+	return VPU_CORE_MEMORY_INVALID;
++	return iface->max_streams;
 +}
-+
-+#ifdef CONFIG_IMX_SCU
-+static u32 vpu_imx8q_get_fuse(void)
-+{
-+	static u32 fuse_got;
-+	struct imx_sc_ipc *ipc;
-+	struct vpu_sc_msg_misc msg;
-+	struct imx_sc_rpc_msg *hdr = &msg.hdr;
-+	int ret;
-+
-+	if (fuse_got)
-+		return imx8q_fuse;
-+
-+	ret = imx_scu_get_handle(&ipc);
-+	if (ret) {
-+		pr_err("error: get sct handle fail: %d\n", ret);
-+		return 0;
-+	}
-+
-+	hdr->ver = IMX_SC_RPC_VERSION;
-+	hdr->svc = IMX_SC_RPC_SVC_MISC;
-+	hdr->func = IMX_SC_MISC_FUNC_OTP_FUSE_READ;
-+	hdr->size = 2;
-+
-+	msg.word = VPU_DISABLE_BITS;
-+
-+	ret = imx_scu_call_rpc(ipc, &msg, true);
-+	if (ret)
-+		return 0;
-+
-+	imx8q_fuse = msg.word;
-+	fuse_got = 1;
-+	return imx8q_fuse;
-+}
-+
-+bool vpu_imx8q_check_codec(enum vpu_core_type type)
-+{
-+	u32 fuse = vpu_imx8q_get_fuse();
-+
-+	if (type == VPU_CORE_TYPE_ENC) {
-+		if (fuse & VPU_ENCODER_MASK)
-+			return false;
-+	} else if (type == VPU_CORE_TYPE_DEC) {
-+		fuse >>= VPU_IMX_DECODER_FUSE_OFFSET;
-+		fuse &= VPU_DECODER_MASK;
-+
-+		if (fuse == VPU_DECODER_MASK)
-+			return false;
-+	}
-+	return true;
-+}
-+
-+bool vpu_imx8q_check_fmt(enum vpu_core_type type, u32 pixelfmt)
-+{
-+	u32 fuse = vpu_imx8q_get_fuse();
-+
-+	if (type == VPU_CORE_TYPE_DEC) {
-+		fuse >>= VPU_IMX_DECODER_FUSE_OFFSET;
-+		fuse &= VPU_DECODER_MASK;
-+
-+		if (fuse == VPU_DECODER_HEVC_MASK && pixelfmt == V4L2_PIX_FMT_HEVC)
-+			return false;
-+		if (fuse == VPU_DECODER_H264_MASK && pixelfmt == V4L2_PIX_FMT_H264)
-+			return false;
-+		if (fuse == VPU_DECODER_MASK)
-+			return false;
-+	}
-+
-+	return true;
-+}
-+#else
-+bool vpu_imx8q_check_codec(enum vpu_core_type type)
-+{
-+	return true;
-+}
-+
-+bool vpu_imx8q_check_fmt(enum vpu_core_type type, u32 pixelfmt)
-+{
-+	return true;
-+}
-+#endif
-diff --git a/drivers/media/platform/amphion/vpu_imx8q.h b/drivers/media/platform/amphion/vpu_imx8q.h
+diff --git a/drivers/media/platform/amphion/vpu_malone.h b/drivers/media/platform/amphion/vpu_malone.h
 new file mode 100644
-index 000000000000..d63a2747e29c
+index 000000000000..e5a5cbe9843e
 --- /dev/null
-+++ b/drivers/media/platform/amphion/vpu_imx8q.h
-@@ -0,0 +1,115 @@
++++ b/drivers/media/platform/amphion/vpu_malone.h
+@@ -0,0 +1,44 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright 2020-2021 NXP
 + */
 +
-+#ifndef _AMPHION_VPU_IMX8Q_H
-+#define _AMPHION_VPU_IMX8Q_H
++#ifndef _AMPHION_VPU_MALONE_H
++#define _AMPHION_VPU_MALONE_H
 +
-+#define SCB_XREG_SLV_BASE                               0x00000000
-+#define SCB_SCB_BLK_CTRL                                0x00070000
-+#define SCB_BLK_CTRL_XMEM_RESET_SET                     0x00000090
-+#define SCB_BLK_CTRL_CACHE_RESET_SET                    0x000000A0
-+#define SCB_BLK_CTRL_CACHE_RESET_CLR                    0x000000A4
-+#define SCB_BLK_CTRL_SCB_CLK_ENABLE_SET                 0x00000100
-+
-+#define XMEM_CONTROL                                    0x00041000
-+
-+#define	MC_CACHE_0_BASE					0x00060000
-+#define	MC_CACHE_1_BASE					0x00068000
-+
-+#define DEC_MFD_XREG_SLV_BASE                           0x00180000
-+#define ENC_MFD_XREG_SLV_0_BASE				0x00800000
-+#define ENC_MFD_XREG_SLV_1_BASE				0x00A00000
-+
-+#define MFD_HIF                                         0x0001C000
-+#define MFD_HIF_MSD_REG_INTERRUPT_STATUS                0x00000018
-+#define MFD_SIF                                         0x0001D000
-+#define MFD_SIF_CTRL_STATUS                             0x000000F0
-+#define MFD_SIF_INTR_STATUS                             0x000000F4
-+#define MFD_MCX                                         0x00020800
-+#define MFD_MCX_OFF                                     0x00000020
-+#define MFD_PIX_IF					0x00020000
-+
-+#define MFD_BLK_CTRL                                    0x00030000
-+#define MFD_BLK_CTRL_MFD_SYS_RESET_SET                  0x00000000
-+#define MFD_BLK_CTRL_MFD_SYS_RESET_CLR                  0x00000004
-+#define MFD_BLK_CTRL_MFD_SYS_CLOCK_ENABLE_SET           0x00000100
-+#define MFD_BLK_CTRL_MFD_SYS_CLOCK_ENABLE_CLR           0x00000104
-+
-+#define VID_API_NUM_STREAMS				8
-+#define VID_API_MAX_BUF_PER_STR				3
-+#define VID_API_MAX_NUM_MVC_VIEWS			4
-+#define MEDIAIP_MAX_NUM_MALONES				2
-+#define MEDIAIP_MAX_NUM_MALONE_IRQ_PINS			2
-+#define MEDIAIP_MAX_NUM_WINDSORS			1
-+#define MEDIAIP_MAX_NUM_WINDSOR_IRQ_PINS		2
-+#define MEDIAIP_MAX_NUM_CMD_IRQ_PINS			2
-+#define MEDIAIP_MAX_NUM_MSG_IRQ_PINS			1
-+#define MEDIAIP_MAX_NUM_TIMER_IRQ_PINS			4
-+#define MEDIAIP_MAX_NUM_TIMER_IRQ_SLOTS			4
-+
-+#define WINDSOR_PAL_IRQ_PIN_L				0x4
-+#define WINDSOR_PAL_IRQ_PIN_H				0x5
-+
-+struct vpu_rpc_system_config {
-+	u32 cfg_cookie;
-+
-+	u32 num_malones;
-+	u32 malone_base_addr[MEDIAIP_MAX_NUM_MALONES];
-+	u32 hif_offset[MEDIAIP_MAX_NUM_MALONES];
-+	u32 malone_irq_pin[MEDIAIP_MAX_NUM_MALONES][MEDIAIP_MAX_NUM_MALONE_IRQ_PINS];
-+	u32 malone_irq_target[MEDIAIP_MAX_NUM_MALONES][MEDIAIP_MAX_NUM_MALONE_IRQ_PINS];
-+
-+	u32 num_windsors;
-+	u32 windsor_base_addr[MEDIAIP_MAX_NUM_WINDSORS];
-+	u32 windsor_irq_pin[MEDIAIP_MAX_NUM_WINDSORS][MEDIAIP_MAX_NUM_WINDSOR_IRQ_PINS];
-+	u32 windsor_irq_target[MEDIAIP_MAX_NUM_WINDSORS][MEDIAIP_MAX_NUM_WINDSOR_IRQ_PINS];
-+
-+	u32 cmd_irq_pin[MEDIAIP_MAX_NUM_CMD_IRQ_PINS];
-+	u32 cmd_irq_target[MEDIAIP_MAX_NUM_CMD_IRQ_PINS];
-+
-+	u32 msg_irq_pin[MEDIAIP_MAX_NUM_MSG_IRQ_PINS];
-+	u32 msg_irq_target[MEDIAIP_MAX_NUM_MSG_IRQ_PINS];
-+
-+	u32 sys_clk_freq;
-+	u32 num_timers;
-+	u32 timer_base_addr;
-+	u32 timer_irq_pin[MEDIAIP_MAX_NUM_TIMER_IRQ_PINS];
-+	u32 timer_irq_target[MEDIAIP_MAX_NUM_TIMER_IRQ_PINS];
-+	u32 timer_slots[MEDIAIP_MAX_NUM_TIMER_IRQ_SLOTS];
-+
-+	u32 gic_base_addr;
-+	u32 uart_base_addr;
-+
-+	u32 dpv_base_addr;
-+	u32 dpv_irq_pin;
-+	u32 dpv_irq_target;
-+
-+	u32 pixif_base_addr;
-+
-+	u32 pal_trace_level;
-+	u32 pal_trace_destination;
-+
-+	u32 pal_trace_level1;
-+	u32 pal_trace_destination1;
-+
-+	u32 heap_base;
-+	u32 heap_size;
-+
-+	u32 cache_base_addr[2];
-+};
-+
-+int vpu_imx8q_setup_dec(struct vpu_dev *vpu);
-+int vpu_imx8q_setup_enc(struct vpu_dev *vpu);
-+int vpu_imx8q_setup(struct vpu_dev *vpu);
-+int vpu_imx8q_reset(struct vpu_dev *vpu);
-+int vpu_imx8q_set_system_cfg_common(struct vpu_rpc_system_config *config, u32 regs, u32 core_id);
-+int vpu_imx8q_boot_core(struct vpu_core *core);
-+int vpu_imx8q_get_power_state(struct vpu_core *core);
-+int vpu_imx8q_on_firmware_loaded(struct vpu_core *core);
-+u32 vpu_imx8q_check_memory_region(dma_addr_t base, dma_addr_t addr, u32 size);
-+bool vpu_imx8q_check_codec(enum vpu_core_type type);
-+bool vpu_imx8q_check_fmt(enum vpu_core_type type, u32 pixelfmt);
++u32 vpu_malone_get_data_size(void);
++void vpu_malone_init_rpc(struct vpu_shared_addr *shared,
++			 struct vpu_buffer *rpc, dma_addr_t boot_addr);
++void vpu_malone_set_log_buf(struct vpu_shared_addr *shared,
++			    struct vpu_buffer *log);
++void vpu_malone_set_system_cfg(struct vpu_shared_addr *shared,
++			       u32 regs_base, void __iomem *regs, u32 core_id);
++u32 vpu_malone_get_version(struct vpu_shared_addr *shared);
++int vpu_malone_get_stream_buffer_size(struct vpu_shared_addr *shared);
++int vpu_malone_config_stream_buffer(struct vpu_shared_addr *shared,
++				    u32 instance, struct vpu_buffer *buf);
++int vpu_malone_get_stream_buffer_desc(struct vpu_shared_addr *shared,
++				      u32 instance,
++				      struct vpu_rpc_buffer_desc *desc);
++int vpu_malone_update_stream_buffer(struct vpu_shared_addr *shared,
++				    u32 instance, u32 ptr, bool write);
++int vpu_malone_set_decode_params(struct vpu_shared_addr *shared,
++				 u32 instance,
++				 struct vpu_decode_params *params, u32 update);
++int vpu_malone_pack_cmd(struct vpu_rpc_event *pkt, u32 index, u32 id, void *data);
++int vpu_malone_convert_msg_id(u32 msg_id);
++int vpu_malone_unpack_msg_data(struct vpu_rpc_event *pkt, void *data);
++int vpu_malone_add_scode(struct vpu_shared_addr *shared,
++			 u32 instance,
++			 struct vpu_buffer *stream_buffer,
++			 u32 pixelformat,
++			 u32 scode_type);
++int vpu_malone_input_frame(struct vpu_shared_addr *shared,
++			   struct vpu_inst *inst, struct vb2_buffer *vb);
++bool vpu_malone_is_ready(struct vpu_shared_addr *shared, u32 instance);
++int vpu_malone_pre_cmd(struct vpu_shared_addr *shared, u32 instance);
++int vpu_malone_post_cmd(struct vpu_shared_addr *shared, u32 instance);
++int vpu_malone_init_instance(struct vpu_shared_addr *shared, u32 instance);
++u32 vpu_malone_get_max_instance_count(struct vpu_shared_addr *shared);
 +
 +#endif
 -- 
