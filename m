@@ -2,128 +2,107 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D5EBC433F5
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jan 2022 19:49:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 551C0C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jan 2022 03:23:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245679AbiA0Ttu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jan 2022 14:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbiA0Ttt (ORCPT
+        id S1345701AbiA1DXk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jan 2022 22:23:40 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:46482 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1345661AbiA1DXj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jan 2022 14:49:49 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCE2C061714
-        for <linux-media@vger.kernel.org>; Thu, 27 Jan 2022 11:49:49 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dafna)
-        with ESMTPSA id C32E11F45B31
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643312987;
-        bh=i4WqDFQpnOvVY8L4ENRTKrTT0b+qCdZ0ln0EeP4SJUk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=JwIS7Xll8UxRrCqnlIgxMlBELlos999AQhNlkfMvg6i3EPwei+tB2k/diZ5MrMeiU
-         SXLU71CCKe7C7pGdZbCWUIBa3I2UMAR0jjIHfjCNLSo4YCx9AOegyaqJo8WwLEzxeZ
-         ZKQDtVVjKR4PLwIrgwGHEDdFP1yO18LMcpQbdjp3jxOTm1vb+xSxiCETB5mIE6oTeS
-         S4NGfCo0yFNAbigqmB+c7jGt3Z/SEn/NIZUPNw+MoxE0E42Lpb16iwV6QCbNElB7+6
-         9OO+ppO3S7XTPEo+G1+KjwjXdKAVAhExRKZ1p8cSgTYSw4m7p0bIcVx/+57qg/HOh4
-         zNxRCFFqi//xg==
-Subject: Re: [PATCH v4 1/6] staging: media: wave5: Add vpuapi layer
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     Bob Beckett <bob.beckett@collabora.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>
-References: <20211201175613.13710-1-dafna.hirschfeld@collabora.com>
- <20211201175613.13710-2-dafna.hirschfeld@collabora.com>
- <CAFr9PX=6Pd1Rg=wJvpuX6WX63L=iAnwPA24e59An3Kac5f_vzA@mail.gmail.com>
- <cdd9b485-364f-c6bd-776f-a0ca2d260762@collabora.com>
- <e9905774-a994-6311-7b53-b40588d4f6ec@collabora.com>
- <CAFr9PXnnGc1TUQBeW8JW9qGewhU99gmRbvzZEsZaDmr12jMg0A@mail.gmail.com>
- <25e7d6db-1cff-6fd5-1071-1f21c5ff7a8a@collabora.com>
- <CAFr9PXkppeU-M2Sm7EQv3pO-1PzaD-UEckFWX=B_U8CKbzP7RA@mail.gmail.com>
- <b06402c9-e27e-f6e0-abd5-688106a36ba6@collabora.com>
- <CAFr9PXnn5EnApGk7vYcFEF0+J6kojhNTMspNnM8asN512fkTew@mail.gmail.com>
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Message-ID: <1bda0f7f-94ee-e598-4b92-d46512cba491@collabora.com>
-Date:   Thu, 27 Jan 2022 21:49:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 27 Jan 2022 22:23:39 -0500
+X-UUID: fd7f82c684c845a486f90e22294f715f-20220128
+X-UUID: fd7f82c684c845a486f90e22294f715f-20220128
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1175534248; Fri, 28 Jan 2022 11:23:35 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 28 Jan 2022 11:23:33 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 28 Jan
+ 2022 11:23:33 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 28 Jan 2022 11:23:31 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Tzung-Bi Shih" <tzungbi@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH] media: uapi: Init VP9 stateless decode params
+Date:   Fri, 28 Jan 2022 11:23:30 +0800
+Message-ID: <20220128032330.24045-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAFr9PXnn5EnApGk7vYcFEF0+J6kojhNTMspNnM8asN512fkTew@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi
+Init some of VP9 frame decode params to default value.
 
-On 22.01.22 15:45, Daniel Palmer wrote:
-> Hi Dafna,
-> 
-> On Sat, 22 Jan 2022 at 22:06, Dafna Hirschfeld
-> <dafna.hirschfeld@collabora.com> wrote:
->> Hi, I compared the flow of the probe between the ido-sbc2d70 and the beaglev on which I tested the driver.
->> I noticed that only on the ido-sbc2d70 the field p_attr->support_vcore_backbone is true which then cause accessing the reg W5_BACKBONE_BUS_CTRL_VCORE0
->> which is not mentioned in the Programmer's Guide I have. Not sure what's that mean.
-> 
-> Interesting. It's possible they've moved things around.
-> That gives me a good hint. I can compare what the code in the binary
-> module seems to be doing.
-> 
->> On the beaglev I have the flow for the case:
->>
->> p_attr->support_backbone = true;
->>
->> p_attr->support_vcore_backbone = false;
->> p_attr->support_vcpu_backbone = false;
->> p_attr->support_dual_core = false;
-> 
-> It's possible this is a slightly different version of this IP or they
-> moved things around.
-> They got rid of the product id register for example so it's possible
-> they removed other bits they thought they didn't need and there is
-> hardcoding in their version of the driver.
-> 
->> I wanted to ask, How did you set the dt-binding for the codec of the .dts file? Was it from a datasheet you have or was it from a reference source code? or both?
-> 
-> The vendor DTS is here:
-> https://github.com/linux-chenxing/linux-ssc325/blob/979122be45d470e959c2245c996fa93dea10069b/arch/arm/boot/dts/infinity2m.dtsi#L160
-> 
-> You'll notice the weird bank thing instead of reg. The bank has to be
-> multiplied by 0x200 to get the address.. but that result doesn't
-> actually line up with the real address. So I looked at the binary
-> module in ghidra and they have it hard coded there. It's a total mess.
+Fixes: b88dbe38dca8 ("media: uapi: Add VP9 stateless decoder controls")
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+---
+ drivers/media/v4l2-core/v4l2-ctrls-core.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Hi,
-which binary was that? the kernel module?
-So in your code the reg is 'reg = <0x344800 0x800>;' , is that what was hard coded?
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+index 54abe5245dcc..b25c77b8a445 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+@@ -112,6 +112,7 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+ 	struct v4l2_ctrl_mpeg2_picture *p_mpeg2_picture;
+ 	struct v4l2_ctrl_mpeg2_quantisation *p_mpeg2_quant;
+ 	struct v4l2_ctrl_vp8_frame *p_vp8_frame;
++	struct v4l2_ctrl_vp9_frame *p_vp9_frame;
+ 	struct v4l2_ctrl_fwht_params *p_fwht_params;
+ 	void *p = ptr.p + idx * ctrl->elem_size;
+ 
+@@ -152,6 +153,13 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+ 		p_vp8_frame = p;
+ 		p_vp8_frame->num_dct_parts = 1;
+ 		break;
++	case V4L2_CTRL_TYPE_VP9_FRAME:
++		p_vp9_frame = p;
++		p_vp9_frame->profile = 0;
++		p_vp9_frame->bit_depth = 8;
++		p_vp9_frame->flags |= V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING |
++			V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING;
++		break;
+ 	case V4L2_CTRL_TYPE_FWHT_PARAMS:
+ 		p_fwht_params = p;
+ 		p_fwht_params->version = V4L2_FWHT_VERSION;
+-- 
+2.25.1
 
-> 
-> For the IRQ and clocks it's a bit easier as there are headers:
-> https://github.com/linux-chenxing/linux-ssc325/blob/89341c7012404c72e192f198b2ea6405ec80d15d/drivers/sstar/include/infinity2m/irqs.h
-> https://github.com/linux-chenxing/linux-ssc325/blob/89341c7012404c72e192f198b2ea6405ec80d15d/drivers/sstar/include/infinity2m/reg_clks.h
-> 
->> Could you send me the resources you have for that?
->> Also, maybe you have the schematic for the board? could you also send that if you do?
-> 
-> I don't have a schematic for the board as they wouldn't send it to me.
-> I had to probe it with a multimeter.
-> I'm not sure the schematic helps too much though as everything is
-> internal to the SoC.
-> 
-> I have some messy notes here of what I found out so far, some dumps of
-> the vendor driver running etc:
-> https://github.com/linux-chenxing/linux-chenxing.org/blob/master/ip/vdec.md
-
-I see that you test the content of 0x1f344000 with 'devmem', what make you test this specific address?
-
-Thanks,
-Dafna
-
-> 
-> Cheers,
-> 
-> Daniel
-> 
