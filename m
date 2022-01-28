@@ -2,37 +2,37 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1EF5C43219
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jan 2022 08:36:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F5A2C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jan 2022 08:36:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347468AbiA1IgZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jan 2022 03:36:25 -0500
-Received: from mga17.intel.com ([192.55.52.151]:52654 "EHLO mga17.intel.com"
+        id S1347482AbiA1Igb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jan 2022 03:36:31 -0500
+Received: from mga17.intel.com ([192.55.52.151]:52651 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347381AbiA1IgW (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:36:22 -0500
+        id S1347437AbiA1IgX (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 28 Jan 2022 03:36:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643358982; x=1674894982;
+  t=1643358983; x=1674894983;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Z9ZeS5oFhGbrJNOTI/GRzNzkULBALELRHaczOGrNmEk=;
-  b=YM7PlpC5nj50IV54bLeK4XVTXt0JkZwQD/yPmHADy6K9akYvRYCSxpeY
-   XfFzjPMAcOSaPKT31493TJbxMp8jz+9jxoxqd+3LvxyBXWleaL4nzDQC9
-   7K9AYE1BjvS5YPkUFNOQdGjVR/1EoYZpo6bebHGXfa7/BE7/UgaR5yi7H
-   Jex36GKVS9oFzf963UmOflDcGnNQfvI2ZwktxhFMJIP6vNGXD+S/TWNWP
-   u30F7Vi7NOwLyIUPjtsI78KAC8DHQCUXgl2UbVj9FzkTJJtU/QdA8ZMee
-   KFiPpaYH0YT1ZBzDhf3vpIs6mqjtBkkPysUg9OVR5JaJ0zw4TGVqY432t
+  bh=/DxsEBKwfgW0rOPFfBesx2Q3+XXutgIiZyZTOdCGgx8=;
+  b=O1WV8fcZ7C3NYWaSQ7ZIxmOxGWPPsNcaxRgili1xHGx4C/pK6r/C2cTF
+   aTjz5qvwwvY9r+nfESEFRnfhmse4rUNzbloSvQfbeYGU7YYXQHJK1tlgG
+   KgK/v087x+8SHgshdb7JP2IJo02JFPjgeD9iW7RRVX5HGXGHP+nsZmo2O
+   6dG6QGt6kiyVvGEPXbLfSNSUZXk1AFtvIKHMlNhRgkRMc666vDI5NNWDw
+   NHuz8dCSUn3oAb4cr1JMA0ZzEf7a+2mASCEv4146Pn+2qwuRVlncGZYV8
+   xejDPLUHPEf2JW0S6aYkE7lxllQte9Lvl1qlRWyJAM7An9sZyN62HXb5/
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="227749375"
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="227749383"
 X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="227749375"
+   d="scan'208";a="227749383"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 00:36:17 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 00:36:18 -0800
 X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
-   d="scan'208";a="581788761"
+   d="scan'208";a="581788769"
 Received: from lucas-s2600cw.jf.intel.com ([10.165.21.202])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 00:36:16 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 00:36:17 -0800
 From:   Lucas De Marchi <lucas.demarchi@intel.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Cc:     srinivas.kandagatla@linaro.org, gregkh@linuxfoundation.org,
@@ -40,38 +40,95 @@ Cc:     srinivas.kandagatla@linaro.org, gregkh@linuxfoundation.org,
         daniel.vetter@ffwll.ch, airlied@linux.ie, lyude@redhat.com,
         tzimmermann@suse.de, linux-media@vger.kernel.org,
         nouveau@lists.freedesktop.org
-Subject: [PATCH 11/14] drm/radeon: Replace dma-buf-map with iosys-map
-Date:   Fri, 28 Jan 2022 00:36:23 -0800
-Message-Id: <20220128083626.3012259-12-lucas.demarchi@intel.com>
+Subject: [PATCH 13/14] Documentation: Refer to iosys-map instead of dma-buf-map
+Date:   Fri, 28 Jan 2022 00:36:25 -0800
+Message-Id: <20220128083626.3012259-14-lucas.demarchi@intel.com>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <20220128083626.3012259-1-lucas.demarchi@intel.com>
 References: <20220128083626.3012259-1-lucas.demarchi@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-iosys-map is the new name for dma-buf-map and will gain new
-capabitilities. Replace with the new API in radeon.
+dma-buf-map is being phased out in favor of the equivalent and renamed
+interface: iosys-map. Use the new header in documentation.
 
 Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
 ---
- drivers/gpu/drm/radeon/radeon_gem.c | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/driver-api/dma-buf.rst |  4 ++--
+ Documentation/gpu/todo.rst           | 20 ++++++++++----------
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
-index a36a4f2c76b0..f563284a7fac 100644
---- a/drivers/gpu/drm/radeon/radeon_gem.c
-+++ b/drivers/gpu/drm/radeon/radeon_gem.c
-@@ -26,6 +26,7 @@
-  *          Jerome Glisse
-  */
+diff --git a/Documentation/driver-api/dma-buf.rst b/Documentation/driver-api/dma-buf.rst
+index 2cd7db82d9fe..ea1e81894d7c 100644
+--- a/Documentation/driver-api/dma-buf.rst
++++ b/Documentation/driver-api/dma-buf.rst
+@@ -131,10 +131,10 @@ Kernel Functions and Structures Reference
+ Buffer Mapping Helpers
+ ~~~~~~~~~~~~~~~~~~~~~~
  
-+#include <linux/iosys-map.h>
- #include <linux/pci.h>
+-.. kernel-doc:: include/linux/dma-buf-map.h
++.. kernel-doc:: include/linux/iosys-map.h
+    :doc: overview
  
- #include <drm/drm_device.h>
+-.. kernel-doc:: include/linux/dma-buf-map.h
++.. kernel-doc:: include/linux/iosys-map.h
+    :internal:
+ 
+ Reservation Objects
+diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
+index 1b2372ef4131..ee842606e883 100644
+--- a/Documentation/gpu/todo.rst
++++ b/Documentation/gpu/todo.rst
+@@ -222,7 +222,7 @@ Convert drivers to use drm_fbdev_generic_setup()
+ Most drivers can use drm_fbdev_generic_setup(). Driver have to implement
+ atomic modesetting and GEM vmap support. Historically, generic fbdev emulation
+ expected the framebuffer in system memory or system-like memory. By employing
+-struct dma_buf_map, drivers with frambuffers in I/O memory can be supported
++struct iosys_map, drivers with frambuffers in I/O memory can be supported
+ as well.
+ 
+ Contact: Maintainer of the driver you plan to convert
+@@ -234,7 +234,7 @@ Reimplement functions in drm_fbdev_fb_ops without fbdev
+ 
+ A number of callback functions in drm_fbdev_fb_ops could benefit from
+ being rewritten without dependencies on the fbdev module. Some of the
+-helpers could further benefit from using struct dma_buf_map instead of
++helpers could further benefit from using struct iosys_map instead of
+ raw pointers.
+ 
+ Contact: Thomas Zimmermann <tzimmermann@suse.de>, Daniel Vetter
+@@ -434,19 +434,19 @@ Contact: Emil Velikov, respective driver maintainers
+ 
+ Level: Intermediate
+ 
+-Use struct dma_buf_map throughout codebase
+-------------------------------------------
++Use struct iosys_map throughout codebase
++----------------------------------------
+ 
+-Pointers to shared device memory are stored in struct dma_buf_map. Each
++Pointers to shared device memory are stored in struct iosys_map. Each
+ instance knows whether it refers to system or I/O memory. Most of the DRM-wide
+-interface have been converted to use struct dma_buf_map, but implementations
++interface have been converted to use struct iosys_map, but implementations
+ often still use raw pointers.
+ 
+-The task is to use struct dma_buf_map where it makes sense.
++The task is to use struct iosys_map where it makes sense.
+ 
+-* Memory managers should use struct dma_buf_map for dma-buf-imported buffers.
+-* TTM might benefit from using struct dma_buf_map internally.
+-* Framebuffer copying and blitting helpers should operate on struct dma_buf_map.
++* Memory managers should use struct iosys_map for dma-buf-imported buffers.
++* TTM might benefit from using struct iosys_map internally.
++* Framebuffer copying and blitting helpers should operate on struct iosys_map.
+ 
+ Contact: Thomas Zimmermann <tzimmermann@suse.de>, Christian König, Daniel Vetter
+ 
 -- 
 2.35.0
 
