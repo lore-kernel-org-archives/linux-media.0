@@ -2,117 +2,226 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54EBCC433FE
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jan 2022 08:34:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26951C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jan 2022 08:36:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347325AbiA1Ien (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jan 2022 03:34:43 -0500
-Received: from retiisi.eu ([95.216.213.190]:59030 "EHLO hillosipuli.retiisi.eu"
+        id S238971AbiA1IgM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jan 2022 03:36:12 -0500
+Received: from mga17.intel.com ([192.55.52.151]:52647 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347356AbiA1Ien (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jan 2022 03:34:43 -0500
-Received: from lanttu.localdomain (unknown [192.168.2.193])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id B8343634C91;
-        Fri, 28 Jan 2022 10:34:37 +0200 (EET)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
-Subject: [PATCH v2 0/4] Set bus_info field in framework
-Date:   Fri, 28 Jan 2022 10:33:05 +0200
-Message-Id: <20220128083309.213122-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        id S232312AbiA1IgL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 28 Jan 2022 03:36:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643358971; x=1674894971;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DLXlxavituReAC9ZkCslfVsSA1lC0SNjLHAttdTUiQs=;
+  b=JUt/EqbRTeRcdIzIyni2oqbbChsa41WAIAxB1pHNy+YAcGSN6NUkh8Jk
+   UMzU0L194CMvJdkbNJ8JkLleqhHnTg6e056hdnW0eQTeleOD8YHdhNPdh
+   B4lbFqUgS++YJDyJZF1ViAGebfY0kxgmJhxgPv0h5ypJwBy17JIfz5iNC
+   /3WAN25Qq9Ut4bpNduAM1DMZOJ49IZK/Dw8MO7/oo4tATVst1LDMQdD92
+   YNRNS6UoGZ3jpTtV5sohj0DLsbs3F/pqCL69+TO2kKb01B49EPfFVwRj0
+   7DbNsC4GasBOCNgfbr418Q61h9z9IJpaZOmVruPlJcURgLIaUTzNv1R6r
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10240"; a="227749348"
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="227749348"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 00:36:10 -0800
+X-IronPort-AV: E=Sophos;i="5.88,323,1635231600"; 
+   d="scan'208";a="581788712"
+Received: from lucas-s2600cw.jf.intel.com ([10.165.21.202])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2022 00:36:10 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     srinivas.kandagatla@linaro.org, gregkh@linuxfoundation.org,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        daniel.vetter@ffwll.ch, airlied@linux.ie, lyude@redhat.com,
+        tzimmermann@suse.de, linux-media@vger.kernel.org,
+        nouveau@lists.freedesktop.org
+Subject: [PATCH 00/14] Rename dma-buf-map
+Date:   Fri, 28 Jan 2022 00:36:12 -0800
+Message-Id: <20220128083626.3012259-1-lucas.demarchi@intel.com>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi folks,
+Motivation for this started in
+https://lore.kernel.org/lkml/20220126203702.1784589-1-lucas.demarchi@intel.com/
+when trying to extend the dma-buf-map API to cover new use cases: help a
+single driver with allocations and sharing code paths for IO and system
+memory. I'm leaving the API additions aside and first renaming the
+interface as requested.
 
-This innocuous-looking patchset moves setting the bus_info fields in
-struct media_device and struct v4l2_capability from drivers to the
-framework for PCI and platform devices. USB and I²C devices are possible,
-too, but not yet implemented. Using this is optional so that drivers which
-have special requirements or archaic bugs are unaffected.
+There are already some users in tree outside the context of dma-buf
+importer/exporter. So before extending the API, let's dissociate it from
+dma-buf.
 
-If people like this, I'll see if the same could be done to the driver
-fields.
+The iosys-map.h is introduced in the first patch in a way that allows
+the conversion of each driver to happen separately. After all the
+conversions are done we can remove the old one, which is the last patch.
+Another possible way is to squash everything and merge together,
+but I believe this would make much harder for review.
 
-I have patches for USB, too, but those require changes in USB core
-(namely exporting the relevant functions).
+The conversion was done with the following semantic patch:
 
-since v1:
+	@r1@
+	@@
+	- struct dma_buf_map
+	+ struct iosys_map
 
-- Make media_set_bus_info() a function, pass field size as an argument.
+	@r2@
+	@@
+	(
+	- DMA_BUF_MAP_INIT_VADDR
+	+ IOSYS_MAP_INIT_VADDR
+	|
+	- dma_buf_map_set_vaddr
+	+ iosys_map_set_vaddr
+	|
+	- dma_buf_map_set_vaddr_iomem
+	+ iosys_map_set_vaddr_iomem
+	|
+	- dma_buf_map_is_equal
+	+ iosys_map_is_equal
+	|
+	- dma_buf_map_is_null
+	+ iosys_map_is_null
+	|
+	- dma_buf_map_is_set
+	+ iosys_map_is_set
+	|
+	- dma_buf_map_clear
+	+ iosys_map_clear
+	|
+	- dma_buf_map_memcpy_to
+	+ iosys_map_memcpy_to
+	|
+	- dma_buf_map_incr
+	+ iosys_map_incr
+	)
 
-- Drop a few bad driver changes. Remove now-redundant local variables.
+	@@
+	@@
+	- #include <linux/dma-buf-map.h>
+	+ #include <linux/iosys-map.h>
 
-- Document the functionality for media_device_init(), V4L2 side doesn't
-  have a proper place for documentation and I don't think it's something
-  that should go to this set.
+and then some files had their includes adjusted so we can build
+everything on each commit in this series. Also some comments were update
+to remove mentions to dma-buf-map. Simply doing a sed to rename didn't
+work as dma-buf has some APIs using the dma_buf_map prefix.
 
-- Remove redundant kerneldoc in mc-device.c.
+Once finalized, I think most of this, if not all, could go through the
+drm-misc-next branch. I split i915, msm, nouveau, and radeon in their
+own patches in case it's preferred to take those through their own
+trees.
 
-- Set bus_info in querycap unconditionally, before calling driver callback
-  that can override it.
+Lucas De Marchi
 
-Sakari Ailus (4):
-  mc: Remove redundant documentation
-  mc: Provide a helper for setting bus_info field
-  mc: Set bus_info in media_device_init()
-  v4l: ioctl: Set bus_info in v4l_querycap()
+Lucas De Marchi (14):
+  iosys-map: Introduce renamed dma-buf-map
+  misc: fastrpc: Replace dma-buf-map with iosys-map
+  dma-buf: Replace dma-buf-map with iosys-map
+  media: Replace dma-buf-map with iosys-map
+  drm/ttm: Replace dma-buf-map with iosys-map
+  drm: Replace dma-buf-map with iosys-map in drivers
+  drm/i915: Replace dma-buf-map with iosys-map
+  drm/msm: Replace dma-buf-map with iosys-map
+  drm/nouveau: Replace dma-buf-map with iosys-map
+  drm/tegra: Replace dma-buf-map with iosys-map
+  drm/radeon: Replace dma-buf-map with iosys-map
+  drm: Replace dma-buf-map with iosys-map in common code
+  Documentation: Refer to iosys-map instead of dma-buf-map
+  dma-buf-map: Remove API in favor of iosys-map
 
- drivers/media/common/saa7146/saa7146_video.c  |  1 -
- drivers/media/mc/mc-device.c                  | 19 ++--------
- drivers/media/pci/bt8xx/bttv-driver.c         |  2 -
- drivers/media/pci/cx18/cx18-ioctl.c           |  2 -
- drivers/media/pci/cx88/cx88-blackbird.c       |  1 -
- drivers/media/pci/cx88/cx88-video.c           |  1 -
- drivers/media/pci/dt3155/dt3155.c             |  3 --
- drivers/media/pci/intel/ipu3/ipu3-cio2-main.c |  6 ---
- drivers/media/pci/ivtv/ivtv-ioctl.c           |  1 -
- drivers/media/pci/meye/meye.c                 |  1 -
- drivers/media/pci/saa7134/saa7134-video.c     |  1 -
- drivers/media/pci/saa7164/saa7164-encoder.c   |  1 -
- drivers/media/pci/saa7164/saa7164-vbi.c       |  1 -
- .../media/pci/solo6x10/solo6x10-v4l2-enc.c    |  2 -
- drivers/media/pci/solo6x10/solo6x10-v4l2.c    |  2 -
- drivers/media/pci/sta2x11/sta2x11_vip.c       |  2 -
- drivers/media/pci/tw5864/tw5864-video.c       |  1 -
- drivers/media/pci/tw68/tw68-video.c           |  3 --
- drivers/media/pci/tw686x/tw686x-video.c       |  2 -
- .../media/platform/allegro-dvt/allegro-core.c |  5 ---
- drivers/media/platform/davinci/vpbe_display.c |  2 -
- drivers/media/platform/davinci/vpif_capture.c |  2 -
- drivers/media/platform/davinci/vpif_display.c |  2 -
- drivers/media/platform/exynos-gsc/gsc-m2m.c   |  5 ---
- drivers/media/platform/exynos4-is/common.c    |  2 -
- drivers/media/platform/exynos4-is/fimc-lite.c |  4 --
- drivers/media/platform/imx-jpeg/mxc-jpeg.c    |  4 --
- .../media/platform/marvell-ccic/cafe-driver.c |  1 -
- .../media/platform/mtk-jpeg/mtk_jpeg_core.c   |  2 -
- .../media/platform/qcom/camss/camss-video.c   |  4 --
- drivers/media/platform/rcar-vin/rcar-core.c   |  2 -
- drivers/media/platform/rcar-vin/rcar-v4l2.c   |  4 --
- drivers/media/platform/rcar_jpu.c             |  2 -
- drivers/media/platform/s5p-jpeg/jpeg-core.c   |  2 -
- drivers/media/platform/s5p-mfc/s5p_mfc_dec.c  |  2 -
- drivers/media/platform/s5p-mfc/s5p_mfc_enc.c  |  2 -
- drivers/media/platform/stm32/stm32-dcmi.c     |  2 -
- .../platform/sunxi/sun4i-csi/sun4i_csi.c      |  2 -
- .../platform/sunxi/sun4i-csi/sun4i_v4l2.c     |  4 --
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      |  2 -
- drivers/media/platform/ti-vpe/cal-video.c     |  4 --
- drivers/media/platform/ti-vpe/cal.c           |  2 -
- drivers/media/platform/vsp1/vsp1_drv.c        |  2 -
- drivers/media/platform/vsp1/vsp1_histo.c      |  2 -
- drivers/media/platform/vsp1/vsp1_video.c      |  2 -
- drivers/media/radio/radio-maxiradio.c         |  2 -
- drivers/media/v4l2-core/v4l2-ioctl.c          |  4 ++
- include/media/media-device.h                  | 37 ++++++++++++++++---
- 48 files changed, 39 insertions(+), 125 deletions(-)
+ Documentation/driver-api/dma-buf.rst          |   4 +-
+ Documentation/gpu/todo.rst                    |  20 +-
+ MAINTAINERS                                   |   2 +-
+ drivers/dma-buf/dma-buf.c                     |  22 +-
+ drivers/dma-buf/heaps/cma_heap.c              |  10 +-
+ drivers/dma-buf/heaps/system_heap.c           |  10 +-
+ drivers/gpu/drm/ast/ast_drv.h                 |   2 +-
+ drivers/gpu/drm/ast/ast_mode.c                |   8 +-
+ drivers/gpu/drm/drm_cache.c                   |  18 +-
+ drivers/gpu/drm/drm_client.c                  |   9 +-
+ drivers/gpu/drm/drm_fb_helper.c               |  12 +-
+ drivers/gpu/drm/drm_gem.c                     |  12 +-
+ drivers/gpu/drm/drm_gem_cma_helper.c          |   9 +-
+ drivers/gpu/drm/drm_gem_framebuffer_helper.c  |  16 +-
+ drivers/gpu/drm/drm_gem_shmem_helper.c        |  15 +-
+ drivers/gpu/drm/drm_gem_ttm_helper.c          |   4 +-
+ drivers/gpu/drm/drm_gem_vram_helper.c         |  25 +-
+ drivers/gpu/drm/drm_internal.h                |   6 +-
+ drivers/gpu/drm/drm_mipi_dbi.c                |   8 +-
+ drivers/gpu/drm/drm_prime.c                   |   4 +-
+ drivers/gpu/drm/etnaviv/etnaviv_drv.h         |   2 +-
+ drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |   8 +-
+ drivers/gpu/drm/gud/gud_pipe.c                |   4 +-
+ drivers/gpu/drm/hyperv/hyperv_drm_modeset.c   |   5 +-
+ drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   8 +-
+ .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |   6 +-
+ .../gpu/drm/i915/gem/selftests/mock_dmabuf.c  |   6 +-
+ drivers/gpu/drm/lima/lima_gem.c               |   3 +-
+ drivers/gpu/drm/lima/lima_sched.c             |   4 +-
+ drivers/gpu/drm/mediatek/mtk_drm_gem.c        |   7 +-
+ drivers/gpu/drm/mediatek/mtk_drm_gem.h        |   5 +-
+ drivers/gpu/drm/mgag200/mgag200_mode.c        |   4 +-
+ drivers/gpu/drm/msm/msm_drv.h                 |   4 +-
+ drivers/gpu/drm/msm/msm_gem_prime.c           |   6 +-
+ drivers/gpu/drm/nouveau/nouveau_gem.c         |   2 +
+ drivers/gpu/drm/panfrost/panfrost_perfcnt.c   |  13 +-
+ drivers/gpu/drm/qxl/qxl_display.c             |   8 +-
+ drivers/gpu/drm/qxl/qxl_draw.c                |   6 +-
+ drivers/gpu/drm/qxl/qxl_drv.h                 |  10 +-
+ drivers/gpu/drm/qxl/qxl_object.c              |   8 +-
+ drivers/gpu/drm/qxl/qxl_object.h              |   4 +-
+ drivers/gpu/drm/qxl/qxl_prime.c               |   4 +-
+ drivers/gpu/drm/radeon/radeon_gem.c           |   1 +
+ drivers/gpu/drm/rockchip/rockchip_drm_gem.c   |   9 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_gem.h   |   5 +-
+ drivers/gpu/drm/tegra/gem.c                   |  10 +-
+ drivers/gpu/drm/tiny/cirrus.c                 |   8 +-
+ drivers/gpu/drm/tiny/gm12u320.c               |   7 +-
+ drivers/gpu/drm/ttm/ttm_bo_util.c             |  16 +-
+ drivers/gpu/drm/ttm/ttm_resource.c            |  26 +-
+ drivers/gpu/drm/ttm/ttm_tt.c                  |   6 +-
+ drivers/gpu/drm/udl/udl_modeset.c             |   3 +-
+ drivers/gpu/drm/vboxvideo/vbox_mode.c         |   4 +-
+ drivers/gpu/drm/virtio/virtgpu_prime.c        |   1 +
+ drivers/gpu/drm/vkms/vkms_composer.c          |   4 +-
+ drivers/gpu/drm/vkms/vkms_drv.h               |   6 +-
+ drivers/gpu/drm/vkms/vkms_plane.c             |   2 +-
+ drivers/gpu/drm/vkms/vkms_writeback.c         |   2 +-
+ drivers/gpu/drm/xen/xen_drm_front_gem.c       |   7 +-
+ drivers/gpu/drm/xen/xen_drm_front_gem.h       |   6 +-
+ .../common/videobuf2/videobuf2-dma-contig.c   |   8 +-
+ .../media/common/videobuf2/videobuf2-dma-sg.c |   9 +-
+ .../common/videobuf2/videobuf2-vmalloc.c      |  11 +-
+ drivers/misc/fastrpc.c                        |   4 +-
+ include/drm/drm_cache.h                       |   6 +-
+ include/drm/drm_client.h                      |   7 +-
+ include/drm/drm_gem.h                         |   6 +-
+ include/drm/drm_gem_atomic_helper.h           |   6 +-
+ include/drm/drm_gem_cma_helper.h              |   6 +-
+ include/drm/drm_gem_framebuffer_helper.h      |   8 +-
+ include/drm/drm_gem_shmem_helper.h            |  12 +-
+ include/drm/drm_gem_ttm_helper.h              |   6 +-
+ include/drm/drm_gem_vram_helper.h             |   9 +-
+ include/drm/drm_prime.h                       |   6 +-
+ include/drm/ttm/ttm_bo_api.h                  |  10 +-
+ include/drm/ttm/ttm_kmap_iter.h               |  10 +-
+ include/drm/ttm/ttm_resource.h                |   6 +-
+ include/linux/dma-buf-map.h                   | 266 ------------------
+ include/linux/dma-buf.h                       |  12 +-
+ include/linux/iosys-map.h                     | 257 +++++++++++++++++
+ 80 files changed, 579 insertions(+), 552 deletions(-)
+ delete mode 100644 include/linux/dma-buf-map.h
+ create mode 100644 include/linux/iosys-map.h
 
 -- 
-2.30.2
+2.35.0
 
