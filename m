@@ -2,74 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D144EC433F5
-	for <linux-media@archiver.kernel.org>; Mon, 31 Jan 2022 07:50:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C845C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 31 Jan 2022 09:06:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238778AbiAaHuM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 Jan 2022 02:50:12 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:37425 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237945AbiAaHuJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 Jan 2022 02:50:09 -0500
-Received: by mail-io1-f70.google.com with SMTP id q7-20020a6bf207000000b006129589cb60so9429662ioh.4
-        for <linux-media@vger.kernel.org>; Sun, 30 Jan 2022 23:50:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=mUUhKABASSDYvCUsc04M7XBtQBbnsrCUfjP/FgUZhxY=;
-        b=dopu9bREAQsmG6kde303M9p/o0g29P9bd0yoofcIztOFhage1XCu940GO9IOig7dnV
-         RMKPtOiq+WR3WQm0ad1sTgQYf8F+MFAZ09iF44kM0jfHZ4lVkGqOVs/ToDDobsqDbw1+
-         heQwLVBFpLvXvFKro0L3NJ0bCCEZh3grQ6gg6mztxRshE0VlaqjLvje7xvwxASED5dfH
-         gEsu+P4Wk4p+Dl5HwF8fNNnBvclYzjWoaBEL4uIgQ6KXTQaWxkI0L5gtt/V5yeA9c1Ay
-         czcse0znR70QK+Nc3hBVqQv66q7ZKKnrcyu++sUUDTgSAXQTyeiINNuuCDsw8BSNfBOf
-         K2Kg==
-X-Gm-Message-State: AOAM531EP2E0tuMsmzUeYKR9w9Do4fbbL0hPQJL1C0xa+fWPTS+B7ts5
-        ZNPOxa++H9360jucePRxZ0NjB+vDtC4CZgl2tII7+GvcLNq/
-X-Google-Smtp-Source: ABdhPJymwJlS8JsUdlrCW9lOYpIn2UaIQaZW0hA0lpGtEyFOwecg2a8tRTfuM68f+RfkiiN+E5hX3nWx76izWqmI0UiryQoaAMBM
+        id S234358AbiAaJGO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 Jan 2022 04:06:14 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:45686 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234044AbiAaJGO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 31 Jan 2022 04:06:14 -0500
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1nESdZ-00GAgL-8M; Mon, 31 Jan 2022 09:06:13 +0000
+Received: from localhost ([127.0.0.1] helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1nESdX-00D5xf-TX; Mon, 31 Jan 2022 09:06:11 +0000
+Date:   Mon, 31 Jan 2022 09:06:11 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org
+Message-ID: <330300924.0.1643619971348@builder.linuxtv.org>
+In-Reply-To: <510830889.0.1643534435059@builder.linuxtv.org>
+References: <510830889.0.1643534435059@builder.linuxtv.org>
+Subject: Jenkins build is back to normal : media-build #3787
 MIME-Version: 1.0
-X-Received: by 2002:a6b:d90c:: with SMTP id r12mr10512979ioc.99.1643615408629;
- Sun, 30 Jan 2022 23:50:08 -0800 (PST)
-Date:   Sun, 30 Jan 2022 23:50:08 -0800
-In-Reply-To: <0000000000008a7a1c05c9e53c87@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000942c2205d6dc0896@google.com>
-Subject: Re: [syzbot] WARNING in drm_gem_shmem_vm_open
-From:   syzbot <syzbot+91525b2bd4b5dff71619@syzkaller.appspotmail.com>
-To:     airlied@linux.ie, bugs-a21@moonlit-rail.com,
-        christian.koenig@amd.com, daniel.vetter@ffwll.ch,
-        daniel.vetter@intel.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, javierm@redhat.com,
-        linaro-mm-sig-owner@lists.linaro.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, maarten.lankhorst@linux.intel.com,
-        maxime@cerno.tech, melissa.srw@gmail.com, mripard@kernel.org,
-        sumit.semwal@linaro.org, syzkaller-bugs@googlegroups.com,
-        tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media-build
+X-Jenkins-Result: SUCCESS
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+See <https://builder.linuxtv.org/job/media-build/3787/display/redirect?page=changes>
 
-commit 0499f419b76f94ede08304aad5851144813ac55c
-Author: Javier Martinez Canillas <javierm@redhat.com>
-Date:   Mon Jan 10 09:56:25 2022 +0000
-
-    video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=126571e0700000
-start commit:   5d6ab0bb408f Merge tag 'xtensa-20211008' of git://github.c..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=32e6048063923b7b
-dashboard link: https://syzkaller.appspot.com/bug?extid=91525b2bd4b5dff71619
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11073300b00000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: video: vga16fb: Only probe for EGA and VGA 16 color graphic cards
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
