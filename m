@@ -2,106 +2,212 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D90FC433F5
-	for <linux-media@archiver.kernel.org>; Mon, 31 Jan 2022 10:20:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BDCBC433EF
+	for <linux-media@archiver.kernel.org>; Mon, 31 Jan 2022 12:29:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358081AbiAaKUZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 31 Jan 2022 05:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S236792AbiAaM34 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 31 Jan 2022 07:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348432AbiAaKUY (ORCPT
+        with ESMTP id S229786AbiAaM3z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 31 Jan 2022 05:20:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1D0C061714;
-        Mon, 31 Jan 2022 02:20:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBA3761363;
-        Mon, 31 Jan 2022 10:20:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E24C340E8;
-        Mon, 31 Jan 2022 10:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643624423;
-        bh=3FvrwIVyIouUVvMJY8LZ5TVwk/lR4V0MKYC+KqrJ+kI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b0xlS4YrpJ3Vgc9idqkgKGGjX9wev/5R4y/UjXEOFbxutTMyYxOq6TgtyC0WT18xE
-         Uo94rf2TZKDhOJR3an+0gBMPYIzsNe/XbZ0apYWFyaofsT8ncT/E1AkZQTOiB1E5UP
-         rpeEd9xtiASUFZRllfSpwBMJbGJvnLGWEUQmO/bxZMfWav7qm5C5WtWq0rf/2+T2dK
-         xlY40sbr5kFKuSD77j/aSc13UPHp4PU3FxAGVvWlg0NVoSylXZrsUhog88+LpFbbGF
-         nrsTPTUfETH3uH0pSPrq9n78u4/v322lQYV2bNg84jretTeWT+yo5YyNVTKCApReHM
-         E0iU+s1qo+j6A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nETn6-0002DQ-7P; Mon, 31 Jan 2022 11:20:08 +0100
-Date:   Mon, 31 Jan 2022 11:20:08 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH 2/4] media: davinci: vpif: fix unbalanced runtime PM
- enable
-Message-ID: <Yfe32PGiFNYvr2hh@hovoldconsulting.com>
-References: <20211222142025.30364-1-johan@kernel.org>
- <20211222142025.30364-3-johan@kernel.org>
- <CA+V-a8thJtWjL+2-TNdbZTe=hKCVYz2vwAL-uCNeW+-TmVKPVg@mail.gmail.com>
+        Mon, 31 Jan 2022 07:29:55 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63448C061714;
+        Mon, 31 Jan 2022 04:29:55 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id k18so25103422wrg.11;
+        Mon, 31 Jan 2022 04:29:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XfDEtvQ/tzVD1YeBowq1DH94HINF3JBGxRgfDDz4P9Q=;
+        b=W4NHjEA+9XVVL8xz6qTEqQvruINpNG1pl5p/yaTwPsUbqDWoTdwk6B90cytFkMTHZT
+         lrQuJGMCrkrs3FC5BaobUmorxlxni/0C26+D4VsSXYqKlUY8Ar8xiHI3b74c2sMVkTLU
+         gSKadOZdH4vnOVfaH7dEpE2s9zlDj36v/3eMYHeSfAyUcZJ1HDwwiM1nyWsQnV4O0yRb
+         O1xd+UqJM3rUINASsACdI5OKMhaHlXLsyvVO9ERwrZUlIgIG7kIn8nF6cUlGtvVMzycp
+         83qu/fIP/2WVZAxPlTcZxmh9pHc3byTUiIOGNQbWxrf5VMQI0tURoHxAzof9DE6mx1vg
+         FIAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XfDEtvQ/tzVD1YeBowq1DH94HINF3JBGxRgfDDz4P9Q=;
+        b=pB+fn8DDCI07v69lujnSCYAORy8YAhCznFgb57yOEw39spEtyPA8G+/pvj1b8TnRPI
+         hQFQIJeSBbq5ik0BDH49jl49fCSrAWo4RIdxUnJOGy6YTetfuB+UvnRYgggXINwSlpXm
+         brcmVg+N8XWgimjSEPTlEgfpa54RRafXCKUSIuj4ZLR59ROeaa3z/DtzaYhir1EpxoII
+         6J6QDlMkbcLVHuag+FwRkgxzv9JfvjQYUYO/G3rM1DQOwyDaT3enZn5AMoZW2R/kmgt5
+         Gje0TY4sfzgWPzDJKFlbjsd9dQmFn81aI9AH+fZis5d3Fsg8Of7P2pz6zslBhYnE4V+b
+         V/Mw==
+X-Gm-Message-State: AOAM531p10YYEUPiYv3Rz/m+8wBmQktZy86pwFLk9dRDHhUhI08IMMoe
+        oy8OdpBiNG6Qlsgy56OiLR8=
+X-Google-Smtp-Source: ABdhPJwKPAOlfE8A7dNEWpNDKJVV/rApo0lar6YbP+IVu/WUEb/GzeZxyimip5vdiaqDYs3eC4tjRQ==
+X-Received: by 2002:a05:6000:1548:: with SMTP id 8mr16792438wry.504.1643632193762;
+        Mon, 31 Jan 2022 04:29:53 -0800 (PST)
+Received: from [192.168.0.14] ([37.223.145.74])
+        by smtp.gmail.com with ESMTPSA id m12sm13729547wrp.61.2022.01.31.04.29.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 04:29:53 -0800 (PST)
+Message-ID: <5991ad51-4181-d445-284c-386447cffb95@gmail.com>
+Date:   Mon, 31 Jan 2022 13:29:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8thJtWjL+2-TNdbZTe=hKCVYz2vwAL-uCNeW+-TmVKPVg@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 02/13] iommu/mediatek-v1: Free the existed fwspec if
+ the master dev already has
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Yong Wu <yong.wu@mediatek.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, Joerg Roedel <jroedel@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        David Airlie <airlied@linux.ie>,
+        Evan Green <evgreen@chromium.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Will Deacon <will.deacon@arm.com>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
+        Matthias Kaehlcke <mka@chromium.org>, anan.sun@mediatek.com,
+        yi.kuo@mediatek.com, acourbot@chromium.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        anthony.huang@mediatek.com,
+        Frank Wunderlich <frank-w@public-files.de>,
+        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
+        libo.kang@mediatek.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+References: <20220117070510.17642-1-yong.wu@mediatek.com>
+ <20220117070510.17642-3-yong.wu@mediatek.com>
+ <20220128134055.720bb43c@coco.lan> <20220128134540.00c6c380@coco.lan>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220128134540.00c6c380@coco.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Lad,
 
-and sorry about the late reply.
 
-On Tue, Jan 04, 2022 at 06:11:08PM +0000, Lad, Prabhakar wrote:
-> Hi Johan,
+On 28/01/2022 13:45, Mauro Carvalho Chehab wrote:
+> Em Fri, 28 Jan 2022 13:40:55 +0100
+> Mauro Carvalho Chehab <mchehab@kernel.org> escreveu:
 > 
-> Thank you for the patch.
+>> Hi Matthias/Yong,
+>>
+>> Are you ok if this patch gets merged via the media tree together with the
+>> remaining series, or do you prefer to apply it via SoC tree instead?
 > 
-> On Wed, Dec 22, 2021 at 2:20 PM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > Make sure to disable runtime PM before returning on probe errors.
-> >
-> > Fixes: 479f7a118105 ("[media] davinci: vpif: adaptions for DT support")
-> > Cc: stable@vger.kernel.org      # 4.12: 4024d6f601e3c
-> > Cc: Kevin Hilman <khilman@baylibre.com>
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > ---
-> >  drivers/media/platform/davinci/vpif.c | 11 +++++++++--
-> >  1 file changed, 9 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/media/platform/davinci/vpif.c b/drivers/media/platform/davinci/vpif.c
-> > index 9752a5ec36f7..1f5eacf48580 100644
-> > --- a/drivers/media/platform/davinci/vpif.c
-> > +++ b/drivers/media/platform/davinci/vpif.c
-> > @@ -428,6 +428,7 @@ static int vpif_probe(struct platform_device *pdev)
-> >         static struct resource *res_irq;
-> >         struct platform_device *pdev_capture, *pdev_display;
-> >         struct device_node *endpoint = NULL;
-> > +       int ret;
-> >
-> >         vpif_base = devm_platform_ioremap_resource(pdev, 0);
-> >         if (IS_ERR(vpif_base))
-> > @@ -456,8 +457,8 @@ static int vpif_probe(struct platform_device *pdev)
-> >         res_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-> >         if (!res_irq) {
-> >                 dev_warn(&pdev->dev, "Missing IRQ resource.\n");
-> > -               pm_runtime_put(&pdev->dev);
-> Maybe just add pm_runtime_disable(&pdev->dev); here, rest diff won't
-> be required.
+> Same questions for other patches touching files outside drivers/media
+> on this pull request:
+> 
+> 	https://patchwork.kernel.org/project/linux-mediatek/patch/7af52d61-47c7-581d-62ed-76a7f8315b16@xs4all.nl/
+> 
 
-I chose to do it this way in order to make the following patches
-smaller and easier to review.
+Looks good to me.
 
-Thanks for reviewing.
+Please let me know once you accepted the pull request and I'll queue the DTS 
+related changes from this series.
 
-Johan
+Regards,
+Matthias
+
+> Like those:
+> 	0004-0013-iommu-mediatek-v1-Free-the-existed-fwspec-if-the-mas.patch
+> 	0005-0013-iommu-mediatek-Return-ENODEV-if-the-device-is-NULL.patch
+> 	0006-0013-iommu-mediatek-Add-probe_defer-for-smi-larb.patch
+> 	0007-0013-iommu-mediatek-Add-device_link-between-the-consumer-.patch
+> 
+> Regards,
+> Mauro
+> 
+>>
+>> Regards,
+>> Mauro
+>>
+>>
+>> Em Mon, 17 Jan 2022 15:04:59 +0800
+>> Yong Wu <yong.wu@mediatek.com> escreveu:
+>>
+>>> When the iommu master device enters of_iommu_xlate, the ops may be
+>>> NULL(iommu dev is defered), then it will initialize the fwspec here:
+>>>
+>>> [<c0c9c5bc>] (dev_iommu_fwspec_set) from [<c06bda80>]
+>>> (iommu_fwspec_init+0xbc/0xd4)
+>>> [<c06bd9c4>] (iommu_fwspec_init) from [<c06c0db4>]
+>>> (of_iommu_xlate+0x7c/0x12c)
+>>> [<c06c0d38>] (of_iommu_xlate) from [<c06c10e8>]
+>>> (of_iommu_configure+0x144/0x1e8)
+>>>
+>>> BUT the mtk_iommu_v1.c only supports arm32, the probing flow still is a bit
+>>> weird. We always expect create the fwspec internally. otherwise it will
+>>> enter here and return fail.
+>>>
+>>> static int mtk_iommu_create_mapping(struct device *dev,
+>>> 				    struct of_phandle_args *args)
+>>> {
+>>>          ...
+>>> 	if (!fwspec) {
+>>> 	        ....
+>>> 	} else if (dev_iommu_fwspec_get(dev)->ops != &mtk_iommu_ops) {
+>>>                  >>>>>>>>>>Enter here. return fail.<<<<<<<<<<<<
+>>> 		return -EINVAL;
+>>> 	}
+>>> 	...
+>>> }
+>>>
+>>> Thus, Free the existed fwspec if the master device already has fwspec.
+>>>
+>>> This issue is reported at:
+>>> https://lore.kernel.org/linux-mediatek/trinity-7d9ebdc9-4849-4d93-bfb5-429dcb4ee449-1626253158870@3c-app-gmx-bs01/
+>>>
+>>> Reported-by: Frank Wunderlich <frank-w@public-files.de>
+>>> Tested-by: Frank Wunderlich <frank-w@public-files.de> # BPI-R2/MT7623
+>>> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+>>> Acked-by: Joerg Roedel <jroedel@suse.de>
+>>> Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>> ---
+>>>   drivers/iommu/mtk_iommu_v1.c | 9 +++++++++
+>>>   1 file changed, 9 insertions(+)
+>>>
+>>> diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+>>> index be22fcf988ce..1467ba1e4417 100644
+>>> --- a/drivers/iommu/mtk_iommu_v1.c
+>>> +++ b/drivers/iommu/mtk_iommu_v1.c
+>>> @@ -425,6 +425,15 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
+>>>   	struct mtk_iommu_data *data;
+>>>   	int err, idx = 0;
+>>>   
+>>> +	/*
+>>> +	 * In the deferred case, free the existed fwspec.
+>>> +	 * Always initialize the fwspec internally.
+>>> +	 */
+>>> +	if (fwspec) {
+>>> +		iommu_fwspec_free(dev);
+>>> +		fwspec = dev_iommu_fwspec_get(dev);
+>>> +	}
+>>> +
+>>>   	while (!of_parse_phandle_with_args(dev->of_node, "iommus",
+>>>   					   "#iommu-cells",
+>>>   					   idx, &iommu_spec)) {
+>>
+>>
+>>
+>> Thanks,
+>> Mauro
+> 
+> 
+> 
+> Thanks,
+> Mauro
