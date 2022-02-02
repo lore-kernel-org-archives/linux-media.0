@@ -2,75 +2,131 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C2F5C433EF
-	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 15:41:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3F5BC433EF
+	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 15:48:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345516AbiBBPld (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Feb 2022 10:41:33 -0500
-Received: from mga07.intel.com ([134.134.136.100]:39227 "EHLO mga07.intel.com"
+        id S234774AbiBBPsU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Feb 2022 10:48:20 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:35914 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233663AbiBBPld (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 2 Feb 2022 10:41:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643816493; x=1675352493;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+XL8sWExGlCQGYkjQU1CnSiqHxTBUAUpqgt+jvAsg64=;
-  b=UxQFLGV89xpcqZ4uItwswAPTjpAFGbUrXbXzKWcPcEeFSDH318sEGWtT
-   VsrGFssX/HNDiSeRRmR+wbt7dlYXUjnR/osMby+kBKNrwVrQ8cIM+WjH/
-   AEN9uBJnl+S1ynUMKi+QeL4xE2WJmdm3YyDMEAn9SJR1E/h9P+lIm52am
-   hHBeiXtYF0MmO24b7dpH6jgVQiiKstpD4gPSfkjiwgRJV7fia4STypz3r
-   SuJYyI1MK0KsxALaaMaJUkwiwFVln37HCbcmq4nkJ7qtWCA7CyA2Os9kB
-   5STXSJM8qUvBV3pVOOX3WxFT4YwfNNkx+kSZqpvyYPljIB0UzMo1626R/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="311249800"
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="311249800"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 07:36:11 -0800
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="698929339"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 07:36:11 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id CCDC520482;
-        Wed,  2 Feb 2022 17:36:08 +0200 (EET)
-Date:   Wed, 2 Feb 2022 17:36:08 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH 1/1] media: i2c: ov08d10: Unlock on error in
- ov08d10_enum_frame_size()
-Message-ID: <Yfqk6HYZalUyAWPW@paasikivi.fi.intel.com>
-References: <20220202141121.238930-1-sakari.ailus@linux.intel.com>
- <YfqWzIyK+dX4+AVf@pendragon.ideasonboard.com>
+        id S233239AbiBBPsT (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Feb 2022 10:48:19 -0500
+Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1nFHrl-001pWZ-UQ; Wed, 02 Feb 2022 15:48:17 +0000
+Received: from ip6-localhost ([::1] helo=localhost.localdomain)
+        by slave0 with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1nFHri-009eS7-Uz; Wed, 02 Feb 2022 15:48:14 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL v3 FOR 5.18] V4L2 patches (#80454)
+Date:   Wed,  2 Feb 2022 15:48:14 +0000
+Message-Id: <20220202154814.2300405-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <YfqTl5GBCDRDLXl1@valkosipuli.retiisi.eu>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfqWzIyK+dX4+AVf@pendragon.ideasonboard.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+From: builder@linuxtv.org
 
-On Wed, Feb 02, 2022 at 04:35:56PM +0200, Laurent Pinchart wrote:
-> On Wed, Feb 02, 2022 at 04:11:21PM +0200, Sakari Ailus wrote:
-> > From: Dan Carpenter <dan.carpenter@oracle.com>
-> > 
-> > This error path needs to drop the mutex to avoid a deadlock.
-> > 
-> > Fixes: 7be91e02ed57 ("media: i2c: Add ov08d10 camera sensor driver")
-> > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> 
-> I want RAII in C :-)
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/YfqTl5GBCDRDLXl1@valkosipuli.retiisi.eu/
+Build log: https://builder.linuxtv.org/job/patchwork/179449/
+Build time: 00:13:11
+Link: https://lore.kernel.org/linux-media/YfqTl5GBCDRDLXl1@valkosipuli.retiisi.eu
 
-Oops. This wasn't the patch I intended to send. But thanks for the
-Reviewed-by: nonetheless. :-)
+gpg: Signature made Wed 02 Feb 2022 01:49:23 PM UTC
+gpg:                using DSA key 53AC58A5F5948636C04A1BF8141DFA54A1EC8DEA
+gpg:                issuer "sakari.ailus@linux.intel.com"
+gpg: Good signature from "Sakari Ailus <sakari.ailus@linux.intel.com>" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: F0D0 377A 0D4F 25A7 9238  EFE5 6D40 361B 6E28 C193
+     Subkey fingerprint: 53AC 58A5 F594 8636 C04A  1BF8 141D FA54 A1EC 8DEA
 
--- 
-Sakari Ailus
+Summary: got 7/10 patches with issues, being 5 at build time, plus one error when buinding PDF document
+
+Error/warnings:
+
+patches/0001-microchip-csi2dc-Remove-VC-support-for-now.patch:
+
+    allyesconfig: return code #0:
+	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+
+    allyesconfig: return code #0:
+	../drivers/media/rc/meson-ir-tx.c:22: warning: expecting prototype for meson(). Prototype was for DEVICE_NAME() instead
+	../drivers/media/i2c/ov08d10.c: ../drivers/media/i2c/ov08d10.c:1276 ov08d10_enum_frame_size() warn: inconsistent returns '&ov08d10->mutex'.
+	  Locked on  : 1268
+	  Unlocked on: 1276
+	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
+	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
+	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
+	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2900 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+
+patches/0002-media-v4l2-mediabus-Use-structures-to-describe-bus-c.patch:
+
+    allyesconfig: return code #0:
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
+	../drivers/media/i2c/ov08d10.c: ../drivers/media/i2c/ov08d10.c:1276 ov08d10_enum_frame_size() warn: inconsistent returns '&ov08d10->mutex'.
+	  Locked on  : 1268
+	  Unlocked on: 1276
+	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
+	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2888 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+
+patches/0003-media-v4l2-mediabus-Drop-legacy-V4L2_MBUS_CSI2_-_LAN.patch:
+
+    allyesconfig: return code #0:
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
+	../drivers/media/i2c/ov08d10.c: ../drivers/media/i2c/ov08d10.c:1276 ov08d10_enum_frame_size() warn: inconsistent returns '&ov08d10->mutex'.
+	  Locked on  : 1268
+	  Unlocked on: 1276
+	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
+	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2900 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+
+patches/0004-media-v4l2-mediabus-Drop-legacy-V4L2_MBUS_CSI2_CHANN.patch:
+
+    allyesconfig: return code #0:
+	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
+	../drivers/media/i2c/ov08d10.c: ../drivers/media/i2c/ov08d10.c:1276 ov08d10_enum_frame_size() warn: inconsistent returns '&ov08d10->mutex'.
+	  Locked on  : 1268
+	  Unlocked on: 1276
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
+	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2900 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+
+patches/0005-media-v4l2-mediabus-Drop-V4L2_MBUS_CSI2_CONTINUOUS_C.patch:
+
+    allyesconfig: return code #0:
+	../drivers/media/i2c/ov08d10.c: ../drivers/media/i2c/ov08d10.c:1276 ov08d10_enum_frame_size() warn: inconsistent returns '&ov08d10->mutex'.
+	  Locked on  : 1268
+	  Unlocked on: 1276
+	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
+	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
+	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2894 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+
+patches/0006-media-omap3isp-Use-struct_group-for-memcpy-region.patch:
+
+   checkpatch.pl:
+	$ cat patches/0006-media-omap3isp-Use-struct_group-for-memcpy-region.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:30: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+	-:105: CHECK: Alignment should match open parenthesis
+	-:122: CHECK: Alignment should match open parenthesis
+
+patches/0007-dt-binding-media-hynix-hi846-use-defs-port-base-port.patch:
+
+   checkpatch.pl:
+	$ cat patches/0007-dt-binding-media-hynix-hi846-use-defs-port-base-port.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:8: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+
+Error #512 when building PDF docs
+
