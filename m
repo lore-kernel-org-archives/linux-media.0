@@ -2,25 +2,25 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C066BC433FE
-	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 17:57:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A458C433FE
+	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 17:57:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346439AbiBBR5a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Feb 2022 12:57:30 -0500
+        id S1346578AbiBBR5w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Feb 2022 12:57:52 -0500
 Received: from perceval.ideasonboard.com ([213.167.242.64]:58274 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346465AbiBBR5W (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Feb 2022 12:57:22 -0500
+        with ESMTP id S1346499AbiBBR52 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Feb 2022 12:57:28 -0500
 Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:7139:eada:2ff6:73dd])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1DA451516;
-        Wed,  2 Feb 2022 18:56:52 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 67BE21850;
+        Wed,  2 Feb 2022 18:56:53 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643824612;
-        bh=xQPdfOYaPqm5LqRMzUqsI7qdKioFoUN0FG/TD8WEU2o=;
+        s=mail; t=1643824613;
+        bh=3lrGwNeqv8zUuSa8vZIr+ceF4CcaJqG9pp3tPlC2K/U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G5KX6yrXPzdAIFrb7CNQGEY8635x+qP6AmlCWP2x20Vok6TPq6ZekkWd0FBry+PGM
-         EVtEu4YTftoy/ILQ5yQIdtWi+r7H5Qfjzm+nHM7KQgs92v7vok8ImgLapxPFH3qOcj
-         952XaaNXzsWThRiXmbYpJRuVffoaIeg0DlNyndzw=
+        b=uYmuQ1hKzba11PQY9WPV1yOlDA1V8kdNg78UVgBUYTh0jmVHOar6yEiN5vaYTdhgH
+         +Fq7Zhq4rxGmIwZfYxF9BJRnEyXNXoR+x8E1R/lT6CY/hCOWJO2NX4i53QQGtOAyxb
+         7C/eTAmD0C1Rox0LvpmXdAR4rb1fepNfkpDtHNPo=
 From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 To:     jeanmichel.hautbois@ideasonboard.com
 Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
@@ -29,9 +29,9 @@ Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
         linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
         robh@kernel.org, tomi.valkeinen@ideasonboard.com
-Subject: [RFC PATCH v3 08/11] media: imx219: Introduce the set_routing operation
-Date:   Wed,  2 Feb 2022 18:56:36 +0100
-Message-Id: <20220202175639.149681-9-jeanmichel.hautbois@ideasonboard.com>
+Subject: [RFC PATCH v3 11/11] media: bcm283x: Include the imx219 node
+Date:   Wed,  2 Feb 2022 18:56:39 +0100
+Message-Id: <20220202175639.149681-12-jeanmichel.hautbois@ideasonboard.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
 References: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
@@ -41,65 +41,140 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As we want to use multiplexed streams API, we need to be able to set the
-pad routing. Introduce the set_routing operation.
+WARNING:
+This patch is only used to demonstrate how the imx219 node is included
+in the bcm2711-rpi-4-b device tree, and is not intended to be merged.
 
-As this operation is required for a multiplexed able sensor, add the
-V4L2_SUBDEV_FL_MULTIPLEXED flag.
+Configure the csi1 endpoint, add the imx219 node and connect it through
+the i2c mux.
 
 Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 ---
- drivers/media/i2c/imx219.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/bcm2711-rpi-4-b.dts     |   1 +
+ arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi | 102 ++++++++++++++++++++++
+ 2 files changed, 103 insertions(+)
+ create mode 100644 arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
 
-diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index b68d35046725..7d29cf2b06f8 100644
---- a/drivers/media/i2c/imx219.c
-+++ b/drivers/media/i2c/imx219.c
-@@ -817,6 +817,25 @@ static int _imx219_set_routing(struct v4l2_subdev *sd,
- 	return 0;
- }
+diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+index 4432412044de..f7625b70fe57 100644
+--- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
++++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
+@@ -4,6 +4,7 @@
+ #include "bcm2711-rpi.dtsi"
+ #include "bcm283x-rpi-usb-peripheral.dtsi"
+ #include "bcm283x-rpi-wifi-bt.dtsi"
++#include "bcm283x-rpi-imx219.dtsi"
  
-+static int imx219_set_routing(struct v4l2_subdev *sd,
-+			      struct v4l2_subdev_state *state,
-+			      enum v4l2_subdev_format_whence which,
-+			      struct v4l2_subdev_krouting *routing)
-+{
-+	int ret;
+ / {
+ 	compatible = "raspberrypi,4-model-b", "brcm,bcm2711";
+diff --git a/arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi b/arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
+new file mode 100644
+index 000000000000..f2c6a85fd731
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
+@@ -0,0 +1,102 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <dt-bindings/clock/bcm2835.h>
 +
-+	if (routing->num_routes == 0 || routing->num_routes > 2)
-+		return -EINVAL;
++/ {
++	compatible = "brcm,bcm2835";
 +
-+	v4l2_subdev_lock_state(state);
++	imx219_vdig: fixedregulator@1 {
++		compatible = "regulator-fixed";
++		regulator-name = "imx219_vdig";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++	};
 +
-+	ret = _imx219_set_routing(sd, state);
++	imx219_vddl: fixedregulator@2 {
++		compatible = "regulator-fixed";
++		regulator-name = "imx219_vddl";
++		regulator-min-microvolt = <1200000>;
++		regulator-max-microvolt = <1200000>;
++	};
 +
-+	v4l2_subdev_unlock_state(state);
++	imx219_clk: imx219_clk {
++		#clock-cells = <0>;
++		compatible = "fixed-clock";
++		clock-frequency = <24000000>;
++		clock-output-names = "24MHz-clock";
++	};
 +
-+	return ret;
-+}
++	cam1_reg: cam1_reg {
++		compatible = "regulator-fixed";
++		regulator-name = "imx219_vana";
++		enable-active-high;
++		status = "okay";
++		gpio = <&expgpio 5 GPIO_ACTIVE_HIGH>;
++	};
 +
- static int imx219_init_cfg(struct v4l2_subdev *sd,
- 			   struct v4l2_subdev_state *state)
- {
-@@ -1289,6 +1308,7 @@ static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
- 	.get_fmt		= imx219_get_pad_format,
- 	.set_fmt		= imx219_set_pad_format,
- 	.get_selection		= imx219_get_selection,
-+	.set_routing		= imx219_set_routing,
- 	.enum_frame_size	= imx219_enum_frame_size,
- };
- 
-@@ -1547,7 +1567,8 @@ static int imx219_probe(struct i2c_client *client)
- 
- 	/* Initialize subdev */
- 	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
--			    V4L2_SUBDEV_FL_HAS_EVENTS;
-+			    V4L2_SUBDEV_FL_HAS_EVENTS |
-+			    V4L2_SUBDEV_FL_MULTIPLEXED;
- 	imx219->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
- 
- 	/* Initialize source pad */
++	i2c0mux {
++		compatible = "i2c-mux-pinctrl";
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		i2c-parent = <&i2c0>;
++
++		pinctrl-names = "i2c0", "i2c_csi_dsi";
++		pinctrl-0 = <&i2c0_gpio0>;
++		pinctrl-1 = <&i2c0_gpio44>;
++
++		i2c@0 {
++			reg = <0>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		i2c@1 {
++			reg = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			imx219: sensor@10 {
++				compatible = "sony,imx219";
++				reg = <0x10>;
++				status = "okay";
++
++				clocks = <&imx219_clk>;
++				clock-names = "xclk";
++
++				VANA-supply = <&cam1_reg>;   /* 2.8v */
++				VDIG-supply = <&imx219_vdig>;   /* 1.8v */
++				VDDL-supply = <&imx219_vddl>;   /* 1.2v */
++
++				rotation = <0>;
++				orientation = <0>;
++
++				port {
++					imx219_0: endpoint {
++						remote-endpoint = <&csi1_ep>;
++						clock-lanes = <0>;
++						data-lanes = <1 2>;
++						clock-noncontinuous;
++						link-frequencies = /bits/ 64 <456000000>;
++					};
++				};
++			};
++		};
++	};
++};
++
++&csi1 {
++	status="okay";
++	num-data-lanes = <2>;
++	port {
++		csi1_ep: endpoint {
++			remote-endpoint = <&imx219_0>;
++			data-lanes = <1 2>;
++			clock-lanes = <0>;
++		};
++	};
++};
++
++&i2c0 {
++	/delete-property/ pinctrl-names;
++	/delete-property/ pinctrl-0;
++};
++
 -- 
 2.32.0
 
