@@ -2,195 +2,203 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E46E2C433F5
-	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 21:35:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D143CC433F5
+	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 21:49:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347658AbiBBVf5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Feb 2022 16:35:57 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:34954 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235880AbiBBVf4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Feb 2022 16:35:56 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9C3A7D88;
-        Wed,  2 Feb 2022 22:35:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643837754;
-        bh=tyoAC0kF55EgEW02omiC/CrYfRP3l2w/WOe9BLF9GtY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YDov88FcyvqJEkeHNA8CSh0GruEr41FlFndN43kWz8UnDUqanpIMjePWRg9TP/uHz
-         eVB4c3dOPi74eww0DO1q5dtimyopDASWo7V3NnKc0GbSrFlDGfjJTiwgRo/6QkoF6U
-         c5DGIn2uKepISq0csIH1qfhiREHOOca6Z3hFZm7w=
-Date:   Wed, 2 Feb 2022 23:35:31 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>, sakari.ailus@iki.fi,
-        hverkuil-cisco@xs4all.nl, mirela.rabulea@nxp.com,
-        xavier.roumegue@oss.nxp.com, tomi.valkeinen@ideasonboard.com,
-        hugues.fruchet@st.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
-        aford173@gmail.com, festevam@gmail.com,
-        Eugen.Hristev@microchip.com, jbrunet@baylibre.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 11/21] media: ov5640: Add VBLANK control
-Message-ID: <Yfr5I16pxs84Vcx2@pendragon.ideasonboard.com>
-References: <20220131143245.128089-1-jacopo@jmondi.org>
- <20220131143245.128089-12-jacopo@jmondi.org>
+        id S232562AbiBBVtA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Feb 2022 16:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229437AbiBBVs7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Feb 2022 16:48:59 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECC6C061714
+        for <linux-media@vger.kernel.org>; Wed,  2 Feb 2022 13:48:59 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id g18so728451wrb.6
+        for <linux-media@vger.kernel.org>; Wed, 02 Feb 2022 13:48:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=dKrNhjxZnRr3GwmN4wC37geXc+8FzlBlTKhpm5ZdPiA=;
+        b=B6+pONywolt9Yo5cnElNiTpbB52ukKio34H/oBcksKnyE44krUh/rD+EVfAcOuQMgW
+         Y1G8D/DHqcxXdUo315NNC8tjgKpv9XjO+W2jthjZFmXJrmUX0wKKdl85JW7UhQogi5Au
+         HqQa1TfTgh/Z56811acw1F3thoLTSYIPor9bb5o9t8stMNOeRNe3dPH0Av76F1vT8xhi
+         ItnFqmu9MesIfD9i5v1+snO1400MZjyR4o47WmzI2Xy2OioY7x/mhnOI+04RAun4D6pt
+         JJ4OgscsFegmTOGCKWmPJ8mZqpObeluX6kMTyLzYDYWXl3XKpY4kElVwie/ztu5ZY4Ls
+         jz5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dKrNhjxZnRr3GwmN4wC37geXc+8FzlBlTKhpm5ZdPiA=;
+        b=Ww5S0c3qqFSDdgzB6rTv1oQHzD2eKpOmu9+9bnZ2BpIKxSgJ68+PvLP6kD1n1BlLM0
+         3RIwQwT6Mt3bk9QHL9sVfHJAuOYg7JFIBfcsY7EuqvpC2v6PXbnL7OBgaGTjHv8iRUL2
+         XIKfrRQGi6JxpY8XlT9TUrORs2xPKGGBj5i8SvH3cEFHb/yhj9s9qB0YFfOq5pHM9wWw
+         LrErp0OHxUSKcibYLXKOY7os4g1qP2xmlcVOkKu8LLCKTeg9PZx+wkwJG3tZ0FzdJV9B
+         yHm3CL9Zl5kuLzbCmPUrB8ZzbqP6dBuMCzfMckonf1ElIqd/RsB4a7hYYM1z4pY0hsdR
+         NRBQ==
+X-Gm-Message-State: AOAM531D8+NtWbPAZIonSH5u4x6JyliJcFQqnudrsc/GjVh9MB4H3JG9
+        Yx31qSeFIBP+dK3OkAJrtPE=
+X-Google-Smtp-Source: ABdhPJwKoeMKgAp8csdr5fFOVxx3u6CBPGynoORELFM56rZyMjvEZAQyu4d6h5m//kK9g3ZATpw2Ug==
+X-Received: by 2002:a5d:5352:: with SMTP id t18mr17353429wrv.247.1643838537796;
+        Wed, 02 Feb 2022 13:48:57 -0800 (PST)
+Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
+        by smtp.gmail.com with ESMTPSA id z6sm5497243wmf.37.2022.02.02.13.48.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 13:48:57 -0800 (PST)
+Message-ID: <a535c8c6-b09f-5be3-5465-9ea3be38bc02@gmail.com>
+Date:   Wed, 2 Feb 2022 21:48:56 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220131143245.128089-12-jacopo@jmondi.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 6/6] media: v4l2-async: Create links during
+ v4l2_async_match_notify()
+Content-Language: en-US
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, libcamera-devel@lists.libcamera.org,
+        laurent.pinchart@ideasonboard.com, hanlinchen@chromium.org,
+        tfiga@chromium.org, hdegoede@redhat.com,
+        kieran.bingham@ideasonboard.com, hpa@redhat.com
+References: <20220130235821.48076-1-djrscally@gmail.com>
+ <20220130235821.48076-7-djrscally@gmail.com>
+ <YfqzdowSDlF9VwFP@paasikivi.fi.intel.com>
+From:   Daniel Scally <djrscally@gmail.com>
+In-Reply-To: <YfqzdowSDlF9VwFP@paasikivi.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+Hi Sakari
 
-Thank you for the patch.
+On 02/02/2022 16:38, Sakari Ailus wrote:
+> Hi Daniel,
+>
+> Thanks for the update.
+>
+> On Sun, Jan 30, 2022 at 11:58:21PM +0000, Daniel Scally wrote:
+>> Upon an async fwnode match, there's some typical behaviour that the
+>> notifier and matching subdev will want to do. For example, a notifier
+>> representing a sensor matching to an async subdev representing its
+>> VCM will want to create an ancillary link to expose that relationship
+>> to userspace.
+>>
+>> To avoid lots of code in individual drivers, try to build these links
+>> within v4l2 core.
+>>
+>> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+>> ---
+>> Changes since v1:
+>>
+>> 	- Added #ifdef guards for CONFIG_MEDIA_CONTROLLER
+>> 	- Some spelling and nomenclature cleanup (Laurent)
+>>
+>> Changes since the rfc:
+>>
+>> 	- None
+>>
+>>  drivers/media/v4l2-core/v4l2-async.c | 56 ++++++++++++++++++++++++++++
+>>  1 file changed, 56 insertions(+)
+>>
+>> diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+>> index 0404267f1ae4..8980534e755e 100644
+>> --- a/drivers/media/v4l2-core/v4l2-async.c
+>> +++ b/drivers/media/v4l2-core/v4l2-async.c
+>> @@ -275,6 +275,50 @@ v4l2_async_nf_try_complete(struct v4l2_async_notifier *notifier)
+>>  static int
+>>  v4l2_async_nf_try_all_subdevs(struct v4l2_async_notifier *notifier);
+>>  
+>> +static int
+>> +__v4l2_async_create_ancillary_link(struct v4l2_async_notifier *notifier,
+>> +				   struct v4l2_subdev *sd)
+>> +{
+>> +	struct media_link *link = NULL;
+>> +
+>> +#if IS_ENABLED(CONFIG_MEDIA_CONTROLLER)
+>> +
+>> +	if (sd->entity.function != MEDIA_ENT_F_LENS &&
+>> +	    sd->entity.function != MEDIA_ENT_F_FLASH)
+>> +		return -EINVAL;
+>> +
+>> +	link = media_create_ancillary_link(&notifier->sd->entity, &sd->entity);
+>> +
+>> +#endif
+>> +
+>> +	return IS_ERR(link) ? PTR_ERR(link) : 0;
+>> +}
+>> +
+>> +/*
+>> + * Create links on behalf of the notifier and subdev, where it's obvious what
+>> + * should be done. At the moment, we only support cases where the notifier
+>> + * is a camera sensor and the subdev is a lens controller.
+> I think I'd rather change this so that ancillary links are created for lens
+> and flash subdevs, independently of the function of the notifier subdev.
+>
+> Are there cases where this would go wrong currently, or in the future? I
+> can't think of any right now at least. I guess we could add more
+> information in the future to convey here if needed.
+I don't think doing that would go wrong anyhow...at least not that I
+could think of at the minute. My plan was to add a new function like
+__v4l2_async_create_data_links() and call that (from
+v4l2_async_try_create_links()) where the function of the notifier subdev
+was MEDIA_ENT_F_VID_IF_BRIDGE...you think we shouldn't be doing that? Or
+just that it should be separate?
+>> + *
+>> + * TODO: Create data links if the notifier's function is
+>> + * MEDIA_ENT_F_VID_IF_BRIDGE and the subdev's is MEDIA_ENT_F_CAM_SENSOR.
+>> + */
+>> +static int v4l2_async_try_create_links(struct v4l2_async_notifier *notifier,
+>> +				       struct v4l2_subdev *sd)
+> How about calling this v4l2_async_create_ancillary_links()?
 
-On Mon, Jan 31, 2022 at 03:32:35PM +0100, Jacopo Mondi wrote:
-> Add the VBLANK control which allows to select the duration of the
-> frame vertical blankings and allows to control the framerate.
-> 
-> The VBLANK control also modifies the exposure time range, which cannot
-> exceed the maximum frame length.
-> 
-> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> ---
->  drivers/media/i2c/ov5640.c | 50 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 50 insertions(+)
-> 
-> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-> index b2961e8e07c3..6eeb50724195 100644
-> --- a/drivers/media/i2c/ov5640.c
-> +++ b/drivers/media/i2c/ov5640.c
-> @@ -31,6 +31,10 @@
->  
->  #define OV5640_LINK_RATE_MAX	490000000U
->  
-> +/* FIXME: not documented. */
-> +#define OV5640_MIN_VBLANK	24
-> +#define OV5640_MAX_VTS		1968
-> +
->  #define OV5640_DEFAULT_SLAVE_ID 0x3c
->  
->  #define OV5640_REG_SYS_RESET02		0x3002
-> @@ -267,6 +271,7 @@ struct ov5640_ctrls {
->  	struct v4l2_ctrl *pixel_rate;
->  	struct v4l2_ctrl *link_freq;
->  	struct v4l2_ctrl *hblank;
-> +	struct v4l2_ctrl *vblank;
->  	struct {
->  		struct v4l2_ctrl *auto_exp;
->  		struct v4l2_ctrl *exposure;
-> @@ -2531,6 +2536,7 @@ static int ov5640_update_pixel_rate(struct ov5640_dev *sensor)
->  	struct v4l2_mbus_framefmt *fmt = &sensor->fmt;
->  	enum ov5640_pixel_rate_id pixel_rate_id = mode->pixel_rate;
->  	u32 num_lanes = sensor->ep.bus.mipi_csi2.num_data_lanes;
-> +	s64 exposure_val, exposure_max;
->  	unsigned int hblank;
->  	unsigned int i = 0;
->  	u32 pixel_rate;
-> @@ -2586,6 +2592,20 @@ static int ov5640_update_pixel_rate(struct ov5640_dev *sensor)
->  	__v4l2_ctrl_modify_range(sensor->ctrls.hblank,
->  				 hblank, hblank, 1, hblank);
->  
-> +	__v4l2_ctrl_modify_range(sensor->ctrls.vblank,
-> +				 OV5640_MIN_VBLANK,
-> +				 OV5640_MAX_VTS - mode->crop.height, 1,
-> +				 mode->vblank_def);
-> +	__v4l2_ctrl_s_ctrl(sensor->ctrls.vblank, mode->vblank_def);
-> +
-> +	exposure_max = mode->crop.height + mode->vblank_def - OV5640_MIN_VBLANK;
 
-There's typically a fixed margin of a few lines between the maximum
-exposure and the total vertical size, but that's usually smaller than
-the minimum vblank value. Are you sure OV5640_MIN_VBLANK is right here ?
+Sure
 
-> +	exposure_val = clamp((s64)sensor->ctrls.exposure->val,
-> +			     (s64)sensor->ctrls.exposure->minimum,
-> +			     (s64)exposure_max);
-> +	__v4l2_ctrl_modify_range(sensor->ctrls.exposure,
-> +				 sensor->ctrls.exposure->minimum,
-> +				 exposure_max, 1, exposure_val);
-> +
->  	return 0;
->  }
->  
-> @@ -2958,6 +2978,15 @@ static int ov5640_set_ctrl_vflip(struct ov5640_dev *sensor, int value)
->  			      (BIT(2) | BIT(1)) : 0);
->  }
->  
-> +static int ov5640_set_ctrl_vblank(struct ov5640_dev *sensor, int value)
-> +{
-> +	const struct ov5640_mode_info *mode = sensor->current_mode;
-> +
-> +	/* Update the VTOT timing register value. */
-> +	return ov5640_write_reg16(sensor, OV5640_REG_TIMING_VTS,
-> +				  mode->crop.height + value);
-> +}
-> +
->  static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
->  {
->  	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
-> @@ -2988,10 +3017,22 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
->  {
->  	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
->  	struct ov5640_dev *sensor = to_ov5640_dev(sd);
-> +	const struct ov5640_mode_info *mode = sensor->current_mode;
->  	int ret;
->  
->  	/* v4l2_ctrl_lock() locks our own mutex */
->  
-> +	switch (ctrl->id) {
-> +	case V4L2_CID_VBLANK:
-> +		/* Update the exposure range to the newly programmed vblank. */
-> +		unsigned int max = mode->crop.height + ctrl->val - OV5640_MIN_VBLANK;
-> +
-> +		__v4l2_ctrl_modify_range(sensor->ctrls.exposure,
-> +					 sensor->ctrls.exposure->minimum,
-> +					 max, sensor->ctrls.exposure->step, max);
+>
+>> +{
+>> +#if IS_ENABLED(CONFIG_MEDIA_CONTROLLER)
+>> +
+>> +	if (!notifier->sd)
+>> +		return 0;
+>> +
+>> +	switch (notifier->sd->entity.function) {
+>> +	case MEDIA_ENT_F_CAM_SENSOR:
+>> +		return __v4l2_async_create_ancillary_link(notifier, sd);
+>> +	}
+>> +
+>> +#endif
+>> +	return 0;
+>> +}
+>> +
+>>  static int v4l2_async_match_notify(struct v4l2_async_notifier *notifier,
+>>  				   struct v4l2_device *v4l2_dev,
+>>  				   struct v4l2_subdev *sd,
+>> @@ -293,6 +337,18 @@ static int v4l2_async_match_notify(struct v4l2_async_notifier *notifier,
+>>  		return ret;
+>>  	}
+>>  
+>> +	/*
+>> +	 * Depending of the function of the entities involved, we may want to
+>> +	 * create links between them (for example between a sensor and its lens
+>> +	 * or between a sensor's source pad and the connected device's sink
+>> +	 * pad).
+>> +	 */
+>> +	ret = v4l2_async_try_create_links(notifier, sd);
+>> +	if (ret) {
+> The notifier's bound function has been called already. The unbound function
+> needs to be thus called here, too.
 
-Should the default be set to mode->vblank_def ?
 
-> +		break;
-> +	}
-> +
->  	/*
->  	 * If the device is not powered up by the host driver do
->  	 * not apply any controls to H/W at this time. Instead
-> @@ -3031,6 +3072,9 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
->  	case V4L2_CID_VFLIP:
->  		ret = ov5640_set_ctrl_vflip(sensor, ctrl->val);
->  		break;
-> +	case V4L2_CID_VBLANK:
-> +		ret = ov5640_set_ctrl_vblank(sensor, ctrl->val);
-> +		break;
->  	default:
->  		ret = -EINVAL;
->  		break;
-> @@ -3050,6 +3094,7 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
->  	const struct v4l2_ctrl_ops *ops = &ov5640_ctrl_ops;
->  	struct ov5640_ctrls *ctrls = &sensor->ctrls;
->  	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
-> +	unsigned int max_vblank;
->  	unsigned int hblank;
->  	int ret;
->  
-> @@ -3073,6 +3118,11 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
->  	ctrls->hblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HBLANK, hblank,
->  					  hblank, 1, hblank);
->  
-> +	max_vblank = OV5640_MAX_VTS - mode->crop.height;
-> +	ctrls->vblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VBLANK,
-> +					  OV5640_MIN_VBLANK, max_vblank,
-> +					  1, mode->vblank_def);
-> +
->  	/* Auto/manual white balance */
->  	ctrls->auto_wb = v4l2_ctrl_new_std(hdl, ops,
->  					   V4L2_CID_AUTO_WHITE_BALANCE,
+Thank you, I'll do that in the next version
 
--- 
-Regards,
-
-Laurent Pinchart
+>
+>> +		v4l2_device_unregister_subdev(sd);
+>> +		return ret;
+>> +	}
+>> +
+>>  	/* Remove from the waiting list */
+>>  	list_del(&asd->list);
+>>  	sd->asd = asd;
