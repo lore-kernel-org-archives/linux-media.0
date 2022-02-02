@@ -2,303 +2,251 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3059C4332F
-	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 17:57:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FB57C4332F
+	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 18:24:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346525AbiBBR5w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Feb 2022 12:57:52 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:58272 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346449AbiBBR51 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Feb 2022 12:57:27 -0500
-Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:7139:eada:2ff6:73dd])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F1A601849;
-        Wed,  2 Feb 2022 18:56:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643824613;
-        bh=5CetPsMNqlbOx/W3JD3+AaeH0cV+k4nWAztBn5qAQck=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=crsG/hiSB0jo42beYxyj4/suHBv+NVJa0eejMFd7+2OwZgJd6ek07n+7yRsPAPCw2
-         Dg0ytG7p8XP6XnnuoHHAq4rQNUvPu+VAlFweZfzY1r4ZydOs9ABnec+3++rt962Fgg
-         zZCvnFRnVK6cZZuf41FUodKAnGBuI85ur/UzqLvE=
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-To:     jeanmichel.hautbois@ideasonboard.com
+        id S1346631AbiBBSY1 convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Feb 2022 13:24:27 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:41103 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346432AbiBBSY0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Feb 2022 13:24:26 -0500
+Received: from [192.168.1.107] ([37.4.249.169]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MCKSA-1n60uL2ncw-009T5h; Wed, 02 Feb 2022 19:24:07 +0100
+Subject: Re: [RFC PATCH v3 05/11] ARM: dts: bcm2711: Add unicam CSI nodes
+To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
         kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
         robh@kernel.org, tomi.valkeinen@ideasonboard.com
-Subject: [RFC PATCH v3 10/11] media: imx219: Add support for the V4L2 subdev active state
-Date:   Wed,  2 Feb 2022 18:56:38 +0100
-Message-Id: <20220202175639.149681-11-jeanmichel.hautbois@ideasonboard.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
 References: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
+ <20220202175639.149681-6-jeanmichel.hautbois@ideasonboard.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Autocrypt: addr=stefan.wahren@i2se.com; keydata=
+ LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
+ CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
+ bXlZd21DR0tqRnRMCi9Eb1VNRVZIRHhDSjQ3Qk1YbzM0NGZIVjFDM0FudWRnTjFCZWhMb0J0
+ TEh4bW5lQ3pnSDNLY1B0V1c3cHRqNEcKdEp2OUNRRFp5MjdTS29FUHh5YUk4Q0YweWdSeEpj
+ NzJNOUk5d21zUFo1YlVIc0x1WVdNcVE3SmNSbVBzNkQ4ZwpCa2srOC95bmdFeU5FeHd4SnBS
+ MXlsajVianhXREh5WVF2dUo1THpaS3VPOUxCM2xYVnNjNGJxWEVqYzZWRnVaCkZDQ2svc3lp
+ by9ZaHNlOE4rUXN4N01RYWd6NHdLVWtRUWJmWGcxVnFrVG5BaXZYczQyVm5Ja211NWd6SXcv
+ MHQKUkp2NTBGUmhIaHhweUtBSThCOG5oTjhRdng3TVZrUGM1dkRmZDN1R1lXNDdKUGhWUUJj
+ VXdKd05rLzQ5RjllQQp2ZzJtdE1QRm5GT1JrV1VSdlArRzZGSmZtNitDdk92N1lmUDF1ZXdB
+ aTRsbitKTzFnK2dqVklXbC9XSnB5MG5UCmlwZGZlSDlkSGtnU2lmUXVuWWN1Y2lzTXlvUmJG
+ OTU1dENna0VZOUVNRWRZMXQ4aUdEaUNnWDZzNTBMSGJpM2sKNDUzdWFjcHhmUVhTYUF3UGtz
+ bDhNa0NPc3YyZUVyNElOQ0hZUUR5WmljbEJ1dUNnOEVOYlI2QUdWdFpTUGNRYgplbnpTektS
+ Wm9POUNhcUlEK2ZhdkxpQi9kaHptSEErOWJnSWhtWGZ2WFJMRFp6ZThwbzFkeXQzRTFzaFhp
+ ZGRaClBBOE51SlZ6RUl0MmxtSTZWOHBaRHBuMjIxcmZLaml2UlFpYW9zNTRUZ1pqak1ZSTdu
+ bko3ZTZ4endBUkFRQUIKdENCVGRHVm1ZVzRnVjJGb2NtVnVJRHgzWVdoeVpXNXpkRUJuYlhn
+ dWJtVjBQb2tDTndRVEFRZ0FJUVVDWElkYwo0Z0liQXdVTENRZ0hBZ1lWQ0FrS0N3SUVGZ0lE
+ QVFJZUFRSVhnQUFLQ1JDVWdld1BFWkR5MjFPVEQvOUdpWkxkCnRSWWNteVJKZ2x0aVFRekFp
+ UWRjSUQ3OGxHb1dwL3grci92Y1U2YjZqdVl1ZVR3Z1Iwclc3djdsMklSQnlEN24KSEp4YSt0
+ SVNvUVpCZ2hvbE1JZmI5TXRoR09KTENZNzdrL1FoQWhuMzJOR1prZWp3OXR6a3MvNDBtclpT
+ VVQ4NApaeWJzUVhyTE0vSFI2VElJL0RlUEIwbktEM0ppcHBzMlVIUUQ5cUQySWpFd1NRUGxI
+ akNPckVaaDQ1UFo3bTkrClo5M0x6aVRlc1dabFlRdUxpSndzNHJLcHRIVzFkL3dSZWxzaG1t
+ NlFxY0wybDRDL2U0MGVEQjlncTRkU1poOVgKUEVZbGxpeU5RaDdhMkxTZHVtRTFyK2NTd0lq
+ RS91ZHRSdmRPOWFLb0psT2JVSzVkTmpTUEg3d0tUYndkWGRZRApHUHdEaFhkNThOQXdyK1BY
+ QmxQajB0STFMQ3ErTEJ4ZUt6aFdYK0dWcTlEb2pWanlVREV4Rk5Ga1h1b0M3ZzhtClY5VDB0
+ ZUJpdVpSbm91WEt3VjJGcHRaT0hIN0JVRVd0a0t0aGgxZXRmT1dwaWdCemtVN2JQc2ZJWVQr
+ cnk5dGIKMW9KK3Y0MVBOYXFaRW1QVXBKeHZmek5UN3Ayd01lRDdaajlmMHJ1YlJQdExBSjJR
+ R2pyRkhzdVh3QU9xcHl6ZQoxOEVidHNZazBOMHp1SEVoY2orUEJJQmZoMFlJWWQ1MW9mNkdJ
+ aU95UjlxMFhYdHBsVUo3VDIvSDF1UXFrWGxwCitnVzRWa2lmc2NJckl1eWZueFpXMTJlSXZq
+ NnlicVdMN2FZS0dZbVQ2aUxDUGJIWXlZY2F5bDRFa0ZjckNGN0UKZTBXVC9zY1ZNaE8vNVgv
+ SGFOQTVIQngvcjUycGdMY3Y0aTlNeExRbVUzUmxabUZ1SUZkaGFISmxiaUE4YzNSbApabUZ1
+ TG5kaGFISmxia0JwTW5ObExtTnZiVDZKQWpnRUV3RUNBQ0lGQWx0NmdCTUNHd01HQ3drSUJ3
+ TUNCaFVJCkFna0tDd1FXQWdNQkFoNEJBaGVBQUFvSkVKU0I3QThSa1BMYmpic1AvamdqYVNz
+ NUh0bGtBSXZXUytGcm15N2MKaG5jT0F4TFRWL0Q2UkV3SU95R0poRkt3d29pck55UTJnOXZV
+ YTNZQ1lDZjFmSjh3RWhhS09COWQwTHBNUm5MNApkRVQ4ZDgyMzhFL3BLK0hxTktpSXNKaHM2
+ SnNLOFpnalZRR3JtbWZua0dyWisxdjBIQnV4ZGljZ0duUC9XdHVBClVsOGw2Mi9BTGJheXlq
+ KzYxQ2xyc0V0UklhcU82N0xJWXdQaVBEUkkrWGlNek5pR3pIRi8xUTZHUjAyUkg2YTMKRjg5
+ ejhhUHhjSGkxWnZDdDJ5a3o2VUVjaHpQMHI1Z3FGSisvTC9VcHU4ME1YaVk0djVlSWFCNTJn
+ VlBnaXlNQQpsTDJkRHMxbUladm5yUkxSWTJ0YjNtQVlOa1Y1QjVJRFQzcGtXeTZrS281T0Nn
+ SytZZFlPUjhGTloyb04ydDhPCnJLK1ZudGFLN01NU0tIbG1ZL3NPd3RSbEVoMU9CbXJjQ3dH
+ d21wLzA1R2tSNDZmL0lzaFJWZUZPUmF3K0dBcXQKUDIrQ0ZhMkNOQS9JSG5aTm95aWtsRHpQ
+ UUhVVUdzck5wcERyaFg5Sm1oQm1nMXYyeXdIMU5YdTFpRGZQMUJBdwpLZ29rdDVmNVVhUkY5
+ c0FBNTN2V0V2YlVVTjllZXNGR0x6UFdkSkdRNWhwZC9WSDVJUXk5U0JyaC93SWNla3E1Cm4w
+ a042cGJUSHhHRTUyU2kvTVZJa05UdURaM2FwbjJqbERaNHBPdHBCWEkydlAzYlBPK05pcUJa
+ anNVM3R4TGkKV2R2MkZqeXp6NlhMUndlV1JZVkw1SGE2TER0eG9yMnZ1NlVQMDdwOXh6MXhS
+ WmFPRFczb1lsSEZ6WXBhNFc1ZwpMSGIybEVrSXVVZlNjaWNHYmpqQXRDbFRkR1ZtWVc0Z1Yy
+ Rm9jbVZ1SUR4emRHVm1ZVzR1ZDJGb2NtVnVRR2x1CkxYUmxZMmd1WTI5dFBva0NOd1FUQVFn
+ QUlRVUNYSWRlaHdJYkF3VUxDUWdIQWdZVkNBa0tDd0lFRmdJREFRSWUKQVFJWGdBQUtDUkNV
+ Z2V3UEVaRHkyeUhURC85VUY3UWxEa0d4elE3QWFDSTZOOTVpUWY4LzFvU1VhRE51Mlk2SQpL
+ K0R6UXBiMVRiVE9yM1ZKd3dZOGEzT1d6NU5MU09MTVdlVnh0K29zTW1sUUlHdWJEM09EWko4
+ aXpQbEcvSnJOCnQ1elNkbU41SUE1ZjNlc1dXUVZLdmdoWkFnVERxZHB2K1pIVzJFbXhuQUox
+ dUxGWFhlUWQzVVpjQzVyMy9nL3YKU2FNbzl4ZWszSjVtTnVEbTcxbEVXc0FzL0JBY0ZjK3lu
+ TGh4d0JXQld3c3Z3UjhiSHRKNURPTVd2YUt1RHNrcApJR0ZVZS9LYjJCK2pyYXZRM1RuNnMv
+ SHFKTTBjZXhTSHo1cGUrMHNHdlArdDlKNzIzNEJGUXdlRkV4cmlleThVCkl4T3I0WEFiYWFi
+ U3J5WW5VL3pWSDlVMWkyQUlRWk1XSkFldkN2VmdRL1UrTmVSaFh1ZGU5WVVtRE1EbzJzQjIK
+ VkFGRUFxaUYyUVVIUEEybThhN0VPM3lmTDRyTWswaUh6TElLdmg2L3JIOFFDWThpM1h4VE5M
+ OWlDTHpCV3UvTgpPbkNBYlMremx2TFphaVNNaDVFZnV4VHR2NFBsVmRFamY2MlArWkhJRDE2
+ Z1VEd0VtYXpMQU1yeDY2NmpINWt1ClVDVFZ5bWJMMFR2Qis2TDZBUmw4QU55TTRBRG1rV2tw
+ eU0yMmtDdUlTWUFFZlFSM3VXWFo5WWd4YVBNcWJWK3cKQnJoSmc0SGFONkM2eFRxR3YzcjRC
+ MmFxYjc3L0NWb1JKMVo5Y3BIQ3dpT3pJYUFtdnl6UFU2TXhDRFhaOEZnWQpsVDR2MjNHNWlt
+ SlAyemdYNXMrRjZBQ1VKOVVRUEQwdVRmK0o5RGEycitza2gvc1dPbloreWNvSE5CUXZvY1pF
+ Ck5BSFFmN2tDRFFSYmVvQVRBUkFBMkhkMGZzRFZLNzJSTFNESGJ5ME9oZ0RjRGxWQk0yTSto
+ WVlwTzNmWDFyKysKc2hpcVBLQ0hWQXNRNWJ4ZTdIbUppbUhhNEtLWXMya3YvbWx0L0NhdUNK
+ Ly9wbWN5Y0JNN0d2d25Lem11WHp1QQpHbVZUWkM2V1I1TGtha0ZydEhPelZtc0VHcE52NVJj
+ OWw2SFlGcExrYlNrVmk1U1BRWkp5K0VNZ01DRmdqclpmClZGNnlvdHdFMWFmN0hOdE1oTlBh
+ TEROMW9VS0Y1aitSeVJnNWl3SnVDRGtuSGp3QlFWNHBndzIvNXZTOEE3WlEKdjJNYlcvVExF
+ eXBLWGlmNzhJaGdBelh0RTJYck0xbi9vNlpINzFvUkZGS096NDJsRmR6ZHJTWDBZc3FYZ0hD
+ WAo1Z0l0TGZxemoxcHNNYTlvMWVpTlRFbTFkVlFyVHFueXMwbDE4b2FsUk5zd1lsUW1uWUJ3
+ cHdDa2FUSExNSHdLCmZHQmJvNWRMUEVzaHRWb3dJNm5zZ3FMVHlRSG1xSFlxVVpZSXBpZ21t
+ QzNTd0JXWTFWNmZmVUVta3FwQUFDRW4KTDQvZ1Vnbjd5US81ZDBzZXFuQXEycFNCSE1VVW9D
+ Y1R6RVFVV1ZraUR2M1JrN2hURm1oVHNNcTc4eHYyWFJzWApNUjZ5UWhTVFBGWkNZRFVFeEVs
+ RXNTbzlGV0hXcjZ6SHlZY2M4cURMRnZHOUZQaG1RdVQyczlCbHg2Z0kzMjNHCm5FcTFsd1dQ
+ SlZ6UDRqUWtKS0lBWHdGcHYrVzhDV0xxekRXT3ZkbHJEYVRhVk1zY0ZUZUg1VzZVcHJsNjVq
+ cUYKUUdNcGNSR0NzOEdDVVcxM0gwSXlPdFF0d1dYQTRueStTTDgxcHZpQW1hU1hVOGxhS2FS
+ dTkxVk9WYUY5ZjRzQQpFUUVBQVlrQ0h3UVlBUUlBQ1FVQ1czcUFFd0liREFBS0NSQ1VnZXdQ
+ RVpEeTIrb1hELzljSEhSa0JaT2ZrbVNxCjE0U3Z4MDYyUHRVMEtWNDcwVFNucC9qV29ZSm5L
+ SXczRzBtWElSZ3J0SDJkUHdwSWdWanNZeVJTVk1LbVNwdDUKWnJEZjlOdFRiTldnazhWb0xl
+ WnpZRW8rSjNvUHFGclRNczNhWVl2N2U0K0pLNjk1WW5tUSttT0Q5bmlhOTE1dApyNUFaajk1
+ VWZTVGx5VW15aWMxZDhvdnNmMWZQN1hDVVZSRmNSamZOZkRGMW9ML3BEZ01QNUdaMk93YVRl
+ am15CkN1SGpNOElSMUNpYXZCcFlEbUJuVFlrN1B0aHk2YXRXdllsMGZ5L0NxYWpUS3N4Nytw
+ OXh6aXU4WmZWWCtpS0IKQ2MrSGUrRURFZEdJRGh2TlovSVFIZk9CMlBVWFdHUytzOUZOVHhy
+ L0E2bkxHWG5BOVk2dzkzaVBkWUl3eFM3SwpYTG9LSmVlMTBEamx6c1lzUmZsRk9XMFpPaVNp
+ aElDWGlRVjF1cU02dHpGRzlndFJjaXVzNVVBdGhXYU8xT3dVClNDUW1mQ09tNGZ2TUlKSUE5
+ cnh0b1M2T3FSUWNpRjNjcm1vMHJKQ3ROMmF3WmZnaThYRWlmN2Q2aGp2MEVLTTkKWFpvaUFa
+ WVpEKy9pTG01VGFLV042b0dJdGkwVmpKdjhaWk9aT2ZDYjZ2cUZJa0pXK2FPdTRvclRMRk16
+ MjhhbwpVM1F5V3BOQzhGRm1kWXNWdWE4czZnTjFOSWE2eTNxYS9aQjhiQS9pa3k1OUFFejRp
+ RElScmdVek1FZzhBazdUCmZtMUtpWWVpVHRCRENvMjVCdlhqYnFzeXhrUUQxbmtSbTZGQVZ6
+ RXVPUEllOEp1cVcyeEQ5aXhHWXZqVTVoa1IKZ0pwM2dQNWIrY25HM0xQcXF1UTJFNmdvS1VN
+ TEFia0NEUVJiZmw5REFSQUFzRExjYStMbFAydm5mdEVHaHBjQQpCR1ZOUUVGbkdQckNhdVU2
+ SGhOODA1V3RQVHRtc1JPdUp6cWdVVDBtcHFXSWZacTZzTXd5dkhLOVRzL0tIM0paClVWYlJD
+ M3oyaDNLZmhIL0RhZjk1cGQ2bVBjL2g5dkYvT3kzK2VUV2hnR25QNmNBNWtsUitmTzFXaEc4
+ VnJpWHYKck5lUkcyMHN6emplSG9jblNJY1Q1WHVaUjB1REhPaUd4T2l6MXNNUkZUR3h6R095
+ MTlSOXJ2dTYzdGlJM2Q3dgpnYzc1T0NBZGtlQi9TZUNFbGFSdzBUZjdMWmJQampzRjI2M0JZ
+ bk1mNGtrTkVLdnFXY1UyaWNNcCtxZXpqeW5CCnB2ZXVlMHJDVFFCWUFRbG9GQ1ZUR0hyV1dB
+ NkQ0VzVPMkFmSWRJYzF1MUpDWnAyZjVMV1ZvVUZUVklyUW5RUVUKU0hDaWZyOU1aeExUdFBK
+ ZFU1Mm9TUHczZGs0aExQOGlKSUx1dnYvYXZhakNzUVlIRXR3WXNiZUZaeGl1TGdscApBN1lj
+ Sk5ObXBnQ3BNRDR3VWh2bEN0QUtOQlFXeXIyOTc2OThFUVRuNDZlQmVVNkttMkNpaFhrZ3dD
+ eWY4ZXlLCkxFM3NYZXdhcTVrZ1pXdk5xNml1NXFZSVJCOXl3K2NYYzYwZE9aRE9scTkzWDVT
+ QVJZemFvZXBrSHo0cmtMa1AKUG8rdENIeUhRUHNHblBYYzlXVDgwREM5Tm5KR2R2VWx5NXJk
+ TUk0eHBaeWdlb2tqd293VlFsUFV1Y1M2TXluNwpmOHc4Y2dmQjdDMklBSWNEeDJwUC9IendY
+ dmtDT1FOQTdtVjFsTTA4bitnVmtUcnpweGlwNURicTRDSW9ZeDJNCkpaVDhiR1JINlhqY1VE
+ S2EwOVFoeVpzQUVRRUFBWWtFUkFRWUFRZ0FEd1VDVzM1ZlF3SWJBZ1VKQThKbkFBSXAKQ1JD
+ VWdld1BFWkR5MjhGZElBUVpBUWdBQmdVQ1czNWZRd0FLQ1JCVnhETFBjVk1NamNkc0QvMFJo
+ QXN1UVlPeQpyMTNCbDNOaFhrWUFaR3AyWkZER3VrZTdPU2tWOG9qT09UZFR5ei9jT1JHQ2J5
+ ZEQrRGd2cUZ5VmRuT1hLZ08wCmxKbUd3ckdlTGRnZ0F2aDBpaHJwNU8wWVVKOWJCU1htR01t
+ UVRZSC9BbUxUR2FkYnVqQ1dqNWZGVWtDeXd4aW0KSHV5MFBiMjRwelR2UzUwR1k1WStxSDBG
+ SE5haWdka2tpV04zcnVnN0haRXUvQ3lsUFpqT1h6K0QxUVBNckV4dwo3ZC9NS2FiVis5YU5i
+ UVlabGRJajk4UXd2VUYxS1N6YThqbFVJdnBoUnEyN0FUOGZER1lHUGZERU1nMmNCT2FlCkty
+ N29uUXM0YjdhV082aWZEbHhRVHB6c3pvK0FuODA3Tk1TdFZFRmYrczNBaFZEM2U3bmY4SkJh
+ dmJWckFlMGsKb20yNm96elBubnh6K2xxVlZ0dzZVazRYTUl6dGl4L0h3SFl3dUNuY1VYWndL
+ MEkzeUFKd2pZd29vck9DaEozUwpFVWJKUVB0R3NneFJERXhWQkZlNk5MUC82MnhQOU82dGFj
+ d09kYjBNbVAxYjM5cFJBVEM3YmdkMWxkVUxpNzVaCmxKckowL1NpVkVyb3FOWXk3OXRmbWdB
+ WjJVeFptczlTckV5Nm85UVNmc24xYVh2K01QTDlKYUNHbWtQNnpiTFEKTm5kajBKY2FRbmtD
+ MHZneWRPMUJtNk11OTZQOXVmbEtaY0FTNndtTE01SWRIT3lqTDg4d0h3anVjakFPQnRjdwpw
+ MG9HVG5WT25Sc05ZU084VzhZWi9LZGJ1Nzg1ZGF6TXFKMmlOakFEdUJiZG02TjRqNUVkTW5r
+ TG4wQklmUEpwCmRnbTR2bDJVcExqd1JHci9NM3dtbTVwdnMrNnVCN2hrL0ZKaUQvNGxsRU5Q
+ NGVNMWg3U200aitWcTZOMSt6VEIKSVhKQWViSXFhc0RwNXlaUzdYcnk0STM2bjg1WEVZZkcw
+ MWx0QXlob05WMkRPOFNJUlFwdWkydHErOVJQM1JLMQpKREJ4eEVKWTJFTzVKWjhNeGFQSFEw
+ RFQwNWxSRmpLMkFsaGRFSXRqTGpwSjNmVW05c3FMeE1XeHpQNlV6M2lpCjJ1YTR1bnJ0Nk9D
+ VHFRd2lqRi8zYlRXaXd2VkFBSG5NRlVpb1hzaEhhb2hWRGNWZm5lSU1mVjBiUUNYWWkzTnAK
+ WTB2MFp3Y2lGSCtnU0M3cUQ2WE51aHBWR1NMNElpbGlGeS9TemNhSkV6QUhlTERTaFpQMkNX
+ ZG5DNHZnbDM3dApocHg4aDU1WWhKbjZIU3VVelBnaGFLdFZCMmsrajdaZXlaK1NGeHA3SXVi
+ SEN3TEhsUWhUNzVSd1EzaUF4S242CjBxajUxY1lUbnF4ZFpYVzZmSDNQa3VNellVNUdwcVIv
+ MU9sNWMvd2ZJNmc2QW04eUtXLzBFVUx0K0tuNExGc1MKbTdZM201SDV2MTJVNkpCWXZWK3Ix
+ M2paaW9zNEVFREU5M0Q1c05IMk1JeVJ6Q0RxMXpkZHQ0WHV5S0ZqUEtXMQo5aWJaRGZGVjdL
+ dUNzdnVMMjNzQmMxc0NNb3ArRTFtVC9ReE9JQTZvRFQxTVFzdHdPVnVReURDdi9PdktTZ2Z6
+ CjhGWEdMNkFQY2xqQ3FqOEFKaHhReXN4ZG9pUVA4bS92dStialdHR3Z4dzVzMWxncGlSRFRS
+ VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
+ bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
+ LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
+Message-ID: <84291425-6c7b-256a-24b6-c61197944211@i2se.com>
+Date:   Wed, 2 Feb 2022 19:24:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220202175639.149681-6-jeanmichel.hautbois@ideasonboard.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
+X-Provags-ID: V03:K1:rJlmDmj+jpWen5kOBtIXH9zKd5MyUuZxzIyZiK1l/PwEMsMgEa+
+ y4b2yeczSsUklBnqucuA7mwmV6d+eUdrlVdCClzC6ex6cgmXSECrz+n/6Z5dM1SgnNUWhl8
+ RA1slzv1WZUb9nnRa5c1v/UIMNdf/xtV/Tvzqhb0T1GT/Sz6RxSc5tSd3mJG8P4cSU5KhMd
+ kCwMIrTAkHsFxK6EspJvg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:jHcfnsiocQM=:xF3hmCR+hmODlDipCSJITB
+ MMjsLNgsuzfRWAqnMQVHNRLLAENKitb+5vSdJgwc41WUGMiCRf9l3LQsGwt8u4ywsQJmtZPvl
+ CBjhkddvcSLGX5aGrg+2MtxW7iD1FTZezNBoPkZMjkuYVpFGbsfe9ZxVd8RZk1y1CKnRQJHvs
+ rB+P1GY+/SonVIaM58GLIwQTjoEf0fN9gR2NxEIlj10tx9iEHGq8a9oErKscr03Ai4VqeBsLR
+ HTTRGbsa2aK+HMhmr9yi6sYaLEIo2G3ZqjJZyK+piOCK9h74oYwInZ3AY620I301n3T2KWVox
+ Sf95zFpN8hwJAGmNY0PE9/afUiKPm5m8TK5YvE9owxLOoM0XDBE3JP1ZxcVZod+5T6OgAXVfJ
+ 2OlKbolvCxcAjbmb6N1v3Kr/BfeZmM+MLu3QF3mrIgeTPpEm2enxEZ1M7PPuz9ciHOMOI7bjL
+ Mixbwto8gUdzBrrtiicl+Ylbl+vxIJfLesK2+kKkkPi1+72v9LmUGWcoeCVjPnpQOTgbLfGaB
+ Bx1lqCiaqfGwtL7e6iFg00JPX2p76j+RM32hZ4Be/MyTd1IOAtqeZ4VUIWiSZV3dKzO7tA2I0
+ K1HeEruSnL89LuH50qQ3D0i8HoTtIkDQqxn9nNu7nodeBQ5M4DdpaBcFJLc/x7DlGRjo9pmm6
+ cl+MR6W1Q1T/yOb/38azKbEKn7GAnFDpCGjDBFAWtkMR3sAj+YofuA92+wXxxnwY8YEKEJLpr
+ 3Q27UnJKYWWjIZRd
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that we have multiplexed streams support in the V4L2 API, add
-support for the subdev active state in the sensor.
+Hi Jean-Michel,
 
-In order to use state to manage the active configuration, we need to
-initialize the subdevice state with a call to
-v4l2_subdev_init_finalize() before registering it. The call to
-v4l2_subdev_cleanup() is also required to release the resources before
-unregistering.
+Am 02.02.22 um 18:56 schrieb Jean-Michel Hautbois:
+> Add both MIPI CSI-2 nodes in the core bcm2711 tree. Use the 3-cells
+> interrupt declaration, corresponding clocks and default as disabled.
+>
+> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+this patch needs an Ack from the BCM2835 maintainer(s), so please
+include them. scripts/get_maintainers.pl is your friend.
+> ---
+>  arch/arm/boot/dts/bcm2711.dtsi | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>
+> diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
+> index dff18fc9a906..9ad50d4c0c16 100644
+> --- a/arch/arm/boot/dts/bcm2711.dtsi
+> +++ b/arch/arm/boot/dts/bcm2711.dtsi
+> @@ -3,6 +3,7 @@
+>  
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/soc/bcm2835-pm.h>
+> +#include <dt-bindings/power/raspberrypi-power.h>
+The file bcm2711.dtsi is reserved for the BCM2711 SoC and shouldn't used
+for board specific stuff. So please ...
+>  
+>  / {
+>  	compatible = "brcm,bcm2711";
+> @@ -293,6 +294,30 @@ hvs: hvs@7e400000 {
+>  			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
+>  		};
+>  
+> +		csi0: csi@7e800000 {
+> +			compatible = "brcm,bcm2835-unicam";
+> +			reg = <0x7e800000 0x800>,
+> +			      <0x7e802000 0x4>;
+> +			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clocks BCM2835_CLOCK_CAM0>,
+> +				 <&firmware_clocks 4>;
+> +			clock-names = "lp", "vpu";
+> +			power-domains = <&power RPI_POWER_DOMAIN_UNICAM0>;
+move clocks property & power-domains property from this node and
+> +			status = "disabled";
+> +		};
+> +
+> +		csi1: csi@7e801000 {
+> +			compatible = "brcm,bcm2835-unicam";
+> +			reg = <0x7e801000 0x800>,
+> +			      <0x7e802004 0x4>;
+> +			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clocks BCM2835_CLOCK_CAM1>,
+> +				 <&firmware_clocks 4>;
+> +			clock-names = "lp", "vpu";
+> +			power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
 
-Accessing the configuration is then done after a call to
-v4l2_subdev_lock_state() and the set_fmt operation can then call
-v4l2_state_get_stream_format() directly.
+from this node to bcm2711-rpi.dtsi.
 
-The get_fmt operation does not need to be complex, and a simple call to
-v4l2_subdev_get_fmt will do the trick, as it will grab the configured
-format based on the state.
+Best regards
 
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
----
- drivers/media/i2c/imx219.c | 151 +++++++++++++++++++------------------
- 1 file changed, 77 insertions(+), 74 deletions(-)
-
-diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index 7c224d007f3e..88212f86ce9b 100644
---- a/drivers/media/i2c/imx219.c
-+++ b/drivers/media/i2c/imx219.c
-@@ -870,78 +870,43 @@ static int imx219_enum_frame_size(struct v4l2_subdev *sd,
- 				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
--	struct imx219 *imx219 = to_imx219(sd);
--	u32 code;
--
--	if (fse->index >= ARRAY_SIZE(supported_modes))
--		return -EINVAL;
--
--	mutex_lock(&imx219->mutex);
--	code = imx219_get_format_code(imx219, fse->code);
--	mutex_unlock(&imx219->mutex);
--	if (fse->code != code)
--		return -EINVAL;
-+	unsigned int i;
- 
--	fse->min_width = supported_modes[fse->index].width;
--	fse->max_width = fse->min_width;
--	fse->min_height = supported_modes[fse->index].height;
--	fse->max_height = fse->min_height;
-+	if (fse->stream == 0) {
-+		for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); ++i) {
-+			if (imx219_mbus_formats[i] == fse->code)
-+				break;
-+		}
- 
--	return 0;
--}
-+		if (i == ARRAY_SIZE(imx219_mbus_formats))
-+			return -EINVAL;
- 
--static void imx219_reset_colorspace(struct v4l2_mbus_framefmt *fmt)
--{
--	fmt->colorspace = V4L2_COLORSPACE_SRGB;
--	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
--	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
--							  fmt->colorspace,
--							  fmt->ycbcr_enc);
--	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
--}
-+		if (fse->index >= ARRAY_SIZE(supported_modes))
-+			return -EINVAL;
- 
--static void imx219_update_pad_format(struct imx219 *imx219,
--				     const struct imx219_mode *mode,
--				     struct v4l2_subdev_format *fmt)
--{
--	fmt->format.width = mode->width;
--	fmt->format.height = mode->height;
--	fmt->format.field = V4L2_FIELD_NONE;
--	imx219_reset_colorspace(&fmt->format);
--}
--
--static int __imx219_get_pad_format(struct imx219 *imx219,
--				   struct v4l2_subdev_state *sd_state,
--				   struct v4l2_subdev_format *fmt)
--{
--	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		struct v4l2_mbus_framefmt *try_fmt =
--			v4l2_subdev_get_try_format(&imx219->sd, sd_state,
--						   fmt->pad);
--		/* update the code which could change due to vflip or hflip: */
--		try_fmt->code = imx219_get_format_code(imx219, try_fmt->code);
--		fmt->format = *try_fmt;
-+		fse->min_width  = supported_modes[fse->index].width;
-+		fse->max_width  = fse->min_width;
-+		fse->max_height = supported_modes[fse->index].height;
-+		fse->min_height = fse->max_height;
- 	} else {
--		imx219_update_pad_format(imx219, imx219->mode, fmt);
--		fmt->format.code = imx219_get_format_code(imx219,
--							  imx219->fmt.code);
-+		if (fse->code != MEDIA_BUS_FMT_METADATA_8)
-+			return -EINVAL;
-+
-+		fse->min_width = IMX219_EMBEDDED_LINE_WIDTH;
-+		fse->max_width = fse->min_width;
-+		fse->min_height = IMX219_NUM_EMBEDDED_LINES;
-+		fse->max_height = fse->min_height;
- 	}
- 
- 	return 0;
- }
- 
--static int imx219_get_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_state *sd_state,
--				 struct v4l2_subdev_format *fmt)
-+static void imx219_update_metadata_pad_format(struct v4l2_subdev_format *fmt)
- {
--	struct imx219 *imx219 = to_imx219(sd);
--	int ret;
--
--	mutex_lock(&imx219->mutex);
--	ret = __imx219_get_pad_format(imx219, sd_state, fmt);
--	mutex_unlock(&imx219->mutex);
--
--	return ret;
-+	fmt->format.width = IMX219_EMBEDDED_LINE_WIDTH;
-+	fmt->format.height = IMX219_NUM_EMBEDDED_LINES;
-+	fmt->format.code = MEDIA_BUS_FMT_METADATA_8;
-+	fmt->format.field = V4L2_FIELD_NONE;
- }
- 
- static int imx219_set_pad_format(struct v4l2_subdev *sd,
-@@ -949,32 +914,58 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx219 *imx219 = to_imx219(sd);
-+	struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
- 	const struct imx219_mode *mode;
--	struct v4l2_mbus_framefmt *framefmt;
-+	struct v4l2_mbus_framefmt *format;
- 	int exposure_max, exposure_def, hblank;
- 	unsigned int i;
-+	int ret = 0;
- 
- 	mutex_lock(&imx219->mutex);
- 
-+	if (fmt->pad != 0) {
-+		dev_err(&client->dev, "%s Could not get pad %d\n", __func__,
-+			fmt->pad);
-+		ret = -EINVAL;
-+		goto done;
-+	}
-+
-+	if (fmt->stream == 1) {
-+		/* Only one embedded data mode is supported */
-+		imx219_update_metadata_pad_format(fmt);
-+		ret = 0;
-+		goto done;
-+	}
-+
- 	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
- 		if (imx219_mbus_formats[i] == fmt->format.code)
- 			break;
- 	if (i >= ARRAY_SIZE(imx219_mbus_formats))
- 		i = 0;
- 
--	/* Bayer order varies with flips */
--	fmt->format.code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
--
- 	mode = v4l2_find_nearest_size(supported_modes,
- 				      ARRAY_SIZE(supported_modes),
- 				      width, height,
- 				      fmt->format.width, fmt->format.height);
--	imx219_update_pad_format(imx219, mode, fmt);
--	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		framefmt = v4l2_subdev_get_try_format(sd, sd_state, fmt->pad);
--		*framefmt = fmt->format;
--	} else if (imx219->mode != mode ||
--		   imx219->fmt.code != fmt->format.code) {
-+
-+	v4l2_subdev_lock_state(sd_state);
-+
-+	/* Update the stored format and return it. */
-+	format = v4l2_state_get_stream_format(sd_state, fmt->pad, fmt->stream);
-+
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE && imx219->streaming) {
-+		ret = -EBUSY;
-+		goto err_state;
-+	}
-+
-+	/* Bayer order varies with flips */
-+	format->code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
-+	format->width = mode->width;
-+	format->height = mode->height;
-+	/* Bayer order varies with flips */
-+	fmt->format = *format;
-+
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
- 		imx219->fmt = fmt->format;
- 		imx219->mode = mode;
- 		/* Update limits and set FPS to default */
-@@ -1001,9 +992,12 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
- 					 hblank);
- 	}
- 
-+err_state:
-+	v4l2_subdev_unlock_state(sd_state);
-+done:
- 	mutex_unlock(&imx219->mutex);
- 
--	return 0;
-+	return ret;
- }
- 
- static int imx219_set_framefmt(struct imx219 *imx219)
-@@ -1305,7 +1299,7 @@ static const struct v4l2_subdev_video_ops imx219_video_ops = {
- static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
- 	.init_cfg		= imx219_init_cfg,
- 	.enum_mbus_code		= imx219_enum_mbus_code,
--	.get_fmt		= imx219_get_pad_format,
-+	.get_fmt		= v4l2_subdev_get_fmt,
- 	.set_fmt		= imx219_set_pad_format,
- 	.get_selection		= imx219_get_selection,
- 	.set_routing		= imx219_set_routing,
-@@ -1582,10 +1576,16 @@ static int imx219_probe(struct i2c_client *client)
- 		goto error_handler_free;
- 	}
- 
-+	ret = v4l2_subdev_init_finalize(sd);
-+	if (ret) {
-+		dev_err(dev, "failed to finalize sensor init: %d\n", ret);
-+		goto error_media_entity;
-+	}
-+
- 	ret = v4l2_async_register_subdev_sensor(sd);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to register sensor sub-device: %d\n", ret);
--		goto error_media_entity;
-+		goto error_free_state;
- 	}
- 
- 	/* Enable runtime PM and turn off the device */
-@@ -1595,6 +1595,8 @@ static int imx219_probe(struct i2c_client *client)
- 
- 	return 0;
- 
-+error_free_state:
-+	v4l2_subdev_cleanup(sd);
- error_media_entity:
- 	media_entity_cleanup(&sd->entity);
- 
-@@ -1613,6 +1615,7 @@ static int imx219_remove(struct i2c_client *client)
- 	struct imx219 *imx219 = to_imx219(sd);
- 
- 	v4l2_async_unregister_subdev(sd);
-+	v4l2_subdev_cleanup(sd);
- 	media_entity_cleanup(&sd->entity);
- 	imx219_free_controls(imx219);
- 
--- 
-2.32.0
+> +			status = "disabled";
+> +		};
+> +
+>  		pixelvalve3: pixelvalve@7ec12000 {
+>  			compatible = "brcm,bcm2711-pixelvalve3";
+>  			reg = <0x7ec12000 0x100>;
 
