@@ -2,58 +2,133 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71F43C3525C
-	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 11:02:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76B26C433EF
+	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 11:12:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343657AbiBBLCM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Feb 2022 06:02:12 -0500
-Received: from mail.profitfirm24.com.pl ([212.237.10.110]:58954 "EHLO
-        mail.profitfirm24.com.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343617AbiBBLCL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Feb 2022 06:02:11 -0500
-Received: by mail.profitfirm24.com.pl (Postfix, from userid 1001)
-        id 04B6CA8125; Tue,  1 Feb 2022 09:17:37 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitfirm24.com.pl;
-        s=mail; t=1643707405;
-        bh=M1ZVeu3q6Upppe+FUx/3rgI7MKJXh389NZDbgCK1SX4=;
-        h=Date:From:To:Subject:From;
-        b=ybSjuIVNzxsNBIMGCZUY5MyqX+lRSH5JjAp0hyATDFAnqN4ybuzm5qKRFqtWk29J2
-         L2h0VYiICtlRLoW+m4+t5SEBEOr1XvRTglNEAp12nz0L/fanUoEYVr5rLwGrrpFBBB
-         Tow0dC+4WU1pX4dw4RN4V3icgz+SrcOqFSQmJmtm0lFveq1Pr02RREYr3mhRmfp1NV
-         8Hh9afns4D7fkR655Tn7eP3OzbheHhK08qFJj8rmwv2hvlRKuvYwNpOJt7RagQqVTl
-         vYEoDZKm6SPrHARsOdqIJjL5aH20yTNGpGbYXsKrfdT0Gxeqki8Qvc7E2knBmSOXjU
-         YBsjZEHxfQAgw==
-Received: by profitfirm24.com.pl for <linux-media@vger.kernel.org>; Tue,  1 Feb 2022 09:17:20 GMT
-Message-ID: <20220201074652-0.1.b.2z0v.0.k140lbvpnj@profitfirm24.com.pl>
-Date:   Tue,  1 Feb 2022 09:17:20 GMT
-From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
-        <arkadiusz.sokolowski@profitfirm24.com.pl>
-To:     <linux-media@vger.kernel.org>
-Subject: Koszty instalacji fotowoltaicznej
-X-Mailer: mail.profitfirm24.com.pl
+        id S1343781AbiBBLMD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Feb 2022 06:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239930AbiBBLMC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Feb 2022 06:12:02 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73178C06173D
+        for <linux-media@vger.kernel.org>; Wed,  2 Feb 2022 03:12:02 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b9so39852992lfq.6
+        for <linux-media@vger.kernel.org>; Wed, 02 Feb 2022 03:12:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=WowO/tbBN3GmrEExtkfItSPMYGr3cW8sawMMl7HgwRs=;
+        b=Ki7UBLEWceEgRkfHsxjilLw1gR6tQ8CpS1Tg7mAJDBKSXFbfEyA38UjP2Yhlow49IC
+         ty+tq4RdOraeZymEoliHNo1njGTay9iCfW0hrCpNg2Hh/hA/WMfTPILoQvrgJkAbm+wq
+         ImcJHUclBiftxNxSpPPqYmp9W4ceyQrxv114GGa5t2KUjdBDBLMD/zpJzK4NLyUjFZgT
+         D9pJ291zEH4TPHYuDMuYM5qPtgWS07uKbGNRdDRSYbl+lRDBhgOYP7cLo5dKWoL3qThc
+         s9oTLqr+wayFfAmek0bgiw7uzuwUNhy+eqjZVe003WCLmI8b15p7Mu5Sr6UFsnLd37Mx
+         1MRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=WowO/tbBN3GmrEExtkfItSPMYGr3cW8sawMMl7HgwRs=;
+        b=b9zLFA5t1mr+GvZx+nKoeXjD+S5KRgSWzvLiR8dpbKZaP+okwYnPWXAHqI7beMkfwC
+         3N1qQR7bLDh6WpB5KcxEugZcjKKFgLV3P3iLUXNm/Fm8JmLYAw7KtbNA+1h41nXXNUzz
+         UyQAvVIVEZ46PzuR1c9dLsaJuhfOIhEJYg8w1trKkEH73g3OO7gTzYuro3szMlJtZKo0
+         LMzpOgN6+3jugs4GyylS4AO7KVnewIo/RpI7gVCaA572rANbFGH0YfA3fkko85HnW1KH
+         1fc3D/o//BxX/63PaKHQZehTB5U5DV3h/yPvWafjt6AK3UIh/1CZzsEg1C7kqSTUPLSa
+         85ZA==
+X-Gm-Message-State: AOAM532Ns8HzMmOXBIUJpDhUFkO0/lzAO/kjyEZuL3NEQd1tDa/lBsEl
+        XYWpbepvq/1uVMa7mvOPUzKXHA==
+X-Google-Smtp-Source: ABdhPJzoVKGNC+ExaA03bZR1aySv64t3gjKX6TLygqnlu+9A3J0QrBXVTKdXgTFqcG41WMKwf+xPvA==
+X-Received: by 2002:a05:6512:1043:: with SMTP id c3mr22674272lfb.103.1643800320805;
+        Wed, 02 Feb 2022 03:12:00 -0800 (PST)
+Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
+        by smtp.gmail.com with ESMTPSA id u21sm2433153ljo.81.2022.02.02.03.12.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 03:12:00 -0800 (PST)
+Date:   Wed, 2 Feb 2022 12:11:59 +0100
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vladimir Barinov <vladimir.barinov@cogentembedded.com>
+Subject: Re: [PATCH] media: rcar-vin: require master VIN only for CSI source
+Message-ID: <Yfpm/7p/O4WPpx3m@oden.dyn.berto.se>
+References: <20220202104700.3329055-1-nikita.yoush@cogentembedded.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220202104700.3329055-1-nikita.yoush@cogentembedded.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi Nikita,
 
-stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
- obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
+Thanks for your work.
 
-Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
-acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
-ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
+On 2022-02-02 13:47:00 +0300, Nikita Yushchenko wrote:
+> Hardware limitations on VINs that can be used at the same time cover only
+> CSI data source. For parallel source, any single VIN can work.
+> 
+> This patch moves check for master VIN availability in
+> rvin_csi2_link_notify() below processing the parallel case.
+> 
+> This fixes media-ctl usage on KF board when both CSI and parallel cameras
+> are in use on the same system. In such a setup, VINs 0-3 are used for
+> CSI cameras and VIN5 is used for parallel camera.
 
-Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
-=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
-=2E
+I agree this issue needs to be addressed and I think the use-case is 
+covered in the patch 1/3 in the VIN routing series [1]. I don't have 
+access to King Fisher hardware so I can't test it, if you do could you 
+test that series and see if it fix the issue?
 
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
+1. [PATCH v3 0/3] media: rcar-{csi2,vin}: Move to full Virtual Channel routing per CSI-2 IP
+   https://lore.kernel.org/linux-renesas-soc/20220124124858.571363-4-niklas.soderlund+renesas@ragnatech.se/T/
 
+> 
+> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+> ---
+>  drivers/media/platform/rcar-vin/rcar-core.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
+> index 0186ae235113..038ee187f95a 100644
+> --- a/drivers/media/platform/rcar-vin/rcar-core.c
+> +++ b/drivers/media/platform/rcar-vin/rcar-core.c
+> @@ -826,11 +826,6 @@ static int rvin_csi2_link_notify(struct media_link *link, u32 flags,
+>  	vin = container_of(vdev, struct rvin_dev, vdev);
+>  	master_id = rvin_group_id_to_master(vin->id);
+>  
+> -	if (WARN_ON(!group->vin[master_id])) {
+> -		ret = -ENODEV;
+> -		goto out;
+> -	}
+> -
+>  	/* Build a mask for already enabled links. */
+>  	for (i = master_id; i < master_id + 4; i++) {
+>  		if (!group->vin[i])
+> @@ -878,6 +873,11 @@ static int rvin_csi2_link_notify(struct media_link *link, u32 flags,
+>  		goto out;
+>  	}
+>  
+> +	if (WARN_ON(!group->vin[master_id])) {
+> +		ret = -ENODEV;
+> +		goto out;
+> +	}
+> +
+>  	channel = rvin_group_csi_pad_to_channel(link->source->index);
+>  	mask_new = mask & rvin_csi2_get_mask(vin, csi_id, channel);
+>  	vin_dbg(vin, "Try link change mask: 0x%x new: 0x%x\n", mask, mask_new);
+> -- 
+> 2.30.2
+> 
 
-Pozdrawiam
-Arkadiusz Soko=C5=82owski
+-- 
+Kind Regards,
+Niklas Söderlund
