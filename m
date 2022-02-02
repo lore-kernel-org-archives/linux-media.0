@@ -2,28 +2,25 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B70EBC43217
-	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 17:57:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35591C433EF
+	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 17:57:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346432AbiBBR5Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Feb 2022 12:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346425AbiBBR5N (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Feb 2022 12:57:13 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3A2C06173B;
-        Wed,  2 Feb 2022 09:57:12 -0800 (PST)
+        id S233691AbiBBR5R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Feb 2022 12:57:17 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:58274 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241948AbiBBR5O (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Feb 2022 12:57:14 -0500
 Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:7139:eada:2ff6:73dd])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7B7F5D97;
-        Wed,  2 Feb 2022 18:56:49 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D065914C3;
+        Wed,  2 Feb 2022 18:56:50 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643824609;
-        bh=gQW6rIcJEbXKCWQJrx+5bX/2dvSKaZOaNpWU2LZIWXc=;
+        s=mail; t=1643824611;
+        bh=KyONaE2bw8eeU2QVSSOtMb72b8vOSRepSkFdLO6DQfQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VVAYmcd4XUtj4VSaky2Eiq+KwcntJiHLXAWA/EWOj+Z+fG5ERVSYnljZ538E3BdSJ
-         Bghsbf05jwtmbJrIb8Oh3eG/WSOOvjHLjYZYT2EihnIW6yGPoMqIT5WWCzRPq26hNu
-         i0GB5PierPUxattNE7gTR1dIlbjvlGzAub0w78X8=
+        b=YKMWjm5IBL7GO+EtAVqGFgVv7pIwAYufGgmPR1nZhlu63Kq+jppY3yEHT7Bn0K0B0
+         9Qrb4QRW1wPzR6gqQ8U/KAOPRFrYtdruF2ng4oB4397OYCuWrJEp8SP+A0M/H1vfDF
+         zCD1C5hLjVh+/xI5mauPIiOBrlFqVfCnhU7im1k4=
 From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 To:     jeanmichel.hautbois@ideasonboard.com
 Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
@@ -32,9 +29,9 @@ Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
         linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
         robh@kernel.org, tomi.valkeinen@ideasonboard.com
-Subject: [RFC PATCH v3 02/11] media: v4l: Add V4L2-PIX-FMT-Y14P format
-Date:   Wed,  2 Feb 2022 18:56:30 +0100
-Message-Id: <20220202175639.149681-3-jeanmichel.hautbois@ideasonboard.com>
+Subject: [RFC PATCH v3 05/11] ARM: dts: bcm2711: Add unicam CSI nodes
+Date:   Wed,  2 Feb 2022 18:56:33 +0100
+Message-Id: <20220202175639.149681-6-jeanmichel.hautbois@ideasonboard.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
 References: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
@@ -44,128 +41,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is a packed grey-scale image format with a depth of 14 bits per
-pixel. Every four consecutive samples are packed into seven bytes. Each
-of the first four bytes contain the eight high order bits of the pixels,
-and the three following bytes contains the six least significants bits
-of each pixel, in the same order.
-
-As the other formats only needed 5 bytes before, append two bytes in the
-documentation array.
+Add both MIPI CSI-2 nodes in the core bcm2711 tree. Use the 3-cells
+interrupt declaration, corresponding clocks and default as disabled.
 
 Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../media/v4l/pixfmt-yuv-luma.rst             | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ arch/arm/boot/dts/bcm2711.dtsi | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-index d37ce6027095..c64485b03d27 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-@@ -36,6 +36,8 @@ are often referred to as greyscale formats.
-       - Byte 2
-       - Byte 3
-       - Byte 4
-+      - Byte 5
-+      - Byte 6
+diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
+index dff18fc9a906..9ad50d4c0c16 100644
+--- a/arch/arm/boot/dts/bcm2711.dtsi
++++ b/arch/arm/boot/dts/bcm2711.dtsi
+@@ -3,6 +3,7 @@
  
-     * .. _V4L2-PIX-FMT-GREY:
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/soc/bcm2835-pm.h>
++#include <dt-bindings/power/raspberrypi-power.h>
  
-@@ -47,6 +49,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
+ / {
+ 	compatible = "brcm,bcm2711";
+@@ -293,6 +294,30 @@ hvs: hvs@7e400000 {
+ 			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
  
-     * .. _V4L2-PIX-FMT-Y10:
- 
-@@ -58,6 +62,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y10BPACK:
- 
-@@ -69,6 +75,8 @@ are often referred to as greyscale formats.
-       - Y'\ :sub:`1`\ [3:0] Y'\ :sub:`2`\ [9:6]
-       - Y'\ :sub:`2`\ [5:0] Y'\ :sub:`3`\ [9:8]
-       - Y'\ :sub:`3`\ [7:0]
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y10P:
- 
-@@ -80,6 +88,8 @@ are often referred to as greyscale formats.
-       - Y'\ :sub:`2`\ [9:2]
-       - Y'\ :sub:`3`\ [9:2]
-       - Y'\ :sub:`3`\ [1:0] Y'\ :sub:`2`\ [1:0] Y'\ :sub:`1`\ [1:0] Y'\ :sub:`0`\ [1:0]
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y12:
- 
-@@ -91,6 +101,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y12P:
- 
-@@ -102,6 +114,8 @@ are often referred to as greyscale formats.
-       - Y'\ :sub:`1`\ [3:0] Y'\ :sub:`0`\ [3:0]
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y14:
- 
-@@ -113,6 +127,21 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
++		csi0: csi@7e800000 {
++			compatible = "brcm,bcm2835-unicam";
++			reg = <0x7e800000 0x800>,
++			      <0x7e802000 0x4>;
++			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&clocks BCM2835_CLOCK_CAM0>,
++				 <&firmware_clocks 4>;
++			clock-names = "lp", "vpu";
++			power-domains = <&power RPI_POWER_DOMAIN_UNICAM0>;
++			status = "disabled";
++		};
 +
-+    * .. _V4L2-PIX-FMT-Y14P:
++		csi1: csi@7e801000 {
++			compatible = "brcm,bcm2835-unicam";
++			reg = <0x7e801000 0x800>,
++			      <0x7e802004 0x4>;
++			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&clocks BCM2835_CLOCK_CAM1>,
++				 <&firmware_clocks 4>;
++			clock-names = "lp", "vpu";
++			power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
++			status = "disabled";
++		};
 +
-+      - ``V4L2_PIX_FMT_Y14P``
-+      - 'Y14P'
-+
-+      - Y'\ :sub:`0`\ [13:6]
-+      - Y'\ :sub:`1`\ [13:6]
-+      - Y'\ :sub:`2`\ [13:6]
-+      - Y'\ :sub:`3`\ [13:6]
-+      - Y'\ :sub:`1`\ [1:0] Y'\ :sub:`0`\ [5:0]
-+      - Y'\ :sub:`2`\ [3:0] Y'\ :sub:`1`\ [5:2]
-+      - Y'\ :sub:`3`\ [5:0] Y'\ :sub:`2`\ [5:4]
- 
-     * .. _V4L2-PIX-FMT-Y16:
- 
-@@ -124,6 +153,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y16-BE:
- 
-@@ -135,6 +166,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
- .. raw:: latex
- 
+ 		pixelvalve3: pixelvalve@7ec12000 {
+ 			compatible = "brcm,bcm2711-pixelvalve3";
+ 			reg = <0x7ec12000 0x100>;
 -- 
 2.32.0
 
