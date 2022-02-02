@@ -2,25 +2,25 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEA28C433F5
-	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 17:57:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 638F6C433F5
+	for <linux-media@archiver.kernel.org>; Wed,  2 Feb 2022 17:57:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346443AbiBBR5W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Feb 2022 12:57:22 -0500
+        id S1346469AbiBBR51 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Feb 2022 12:57:27 -0500
 Received: from perceval.ideasonboard.com ([213.167.242.64]:58272 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346435AbiBBR5R (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Feb 2022 12:57:17 -0500
+        with ESMTP id S1346464AbiBBR5W (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Feb 2022 12:57:22 -0500
 Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:7139:eada:2ff6:73dd])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 44C4114CD;
-        Wed,  2 Feb 2022 18:56:51 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 879EB1544;
+        Wed,  2 Feb 2022 18:56:52 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643824611;
-        bh=wgv85acUrshpXd7kh0STF4RCGXeDk6NtpmEK6eEeSyI=;
+        s=mail; t=1643824612;
+        bh=7P8zmIp04YDN3+i1i3KJjkUj+aOMuxjdMxXla3XMhQM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LvUGbaMOlWtY6lDHozbWnBD1lRiuujBGBzdSuc1Qw54T1dp+/IZZcaW5pYLYGqBNR
-         6yAsiTMtn/2coqyXqLE1c53udQV47boc+HFVbRw88DydrNCWV6bq2VSylpOtvcBqVA
-         8ACzsT2gJV8qnOpWeWaeHDMu+8DDKdvJjivRyUzI=
+        b=t5nMt03E8apAlzwBMdK1cl5enBgQsOqWsGtEsVstIJiP41jzWbK+5Mi3LEk2arAkm
+         OOFDvY9Y6R2KWw6iSIkAkMcejD0JI3aa56icqKnzdz1QgKbawfn1wC4PBwpegos//F
+         m+LnC8ocLxrOvEOR7KE7WXawufNtjtp7NF7zG4AU=
 From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 To:     jeanmichel.hautbois@ideasonboard.com
 Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
@@ -29,9 +29,9 @@ Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
         linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
         robh@kernel.org, tomi.valkeinen@ideasonboard.com
-Subject: [RFC PATCH v3 06/11] media: imx219: Rename mbus codes array
-Date:   Wed,  2 Feb 2022 18:56:34 +0100
-Message-Id: <20220202175639.149681-7-jeanmichel.hautbois@ideasonboard.com>
+Subject: [RFC PATCH v3 09/11] media: imx219: use a local v4l2_subdev to simplify reading
+Date:   Wed,  2 Feb 2022 18:56:37 +0100
+Message-Id: <20220202175639.149681-10-jeanmichel.hautbois@ideasonboard.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
 References: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
@@ -41,82 +41,73 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The imx219 is using the name codes[] for the mbus format which is not
-easy to read and know what it means. Change it to imx219_mbus_formats.
+There is no need to dereference the imx219 structure. Use a local
+v4l2_subdev instead.
 
 Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 ---
- drivers/media/i2c/imx219.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/media/i2c/imx219.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index e10af3f74b38..74dba5e61201 100644
+index 7d29cf2b06f8..7c224d007f3e 100644
 --- a/drivers/media/i2c/imx219.c
 +++ b/drivers/media/i2c/imx219.c
-@@ -429,7 +429,7 @@ static const char * const imx219_supply_name[] = {
-  * - v flip
-  * - h&v flips
-  */
--static const u32 codes[] = {
-+static const u32 imx219_mbus_formats[] = {
- 	MEDIA_BUS_FMT_SRGGB10_1X10,
- 	MEDIA_BUS_FMT_SGRBG10_1X10,
- 	MEDIA_BUS_FMT_SGBRG10_1X10,
-@@ -655,17 +655,17 @@ static u32 imx219_get_format_code(struct imx219 *imx219, u32 code)
- 
- 	lockdep_assert_held(&imx219->mutex);
- 
--	for (i = 0; i < ARRAY_SIZE(codes); i++)
--		if (codes[i] == code)
-+	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
-+		if (imx219_mbus_formats[i] == code)
- 			break;
- 
--	if (i >= ARRAY_SIZE(codes))
-+	if (i >= ARRAY_SIZE(imx219_mbus_formats))
- 		i = 0;
- 
- 	i = (i & ~3) | (imx219->vflip->val ? 2 : 0) |
- 	    (imx219->hflip->val ? 1 : 0);
- 
--	return codes[i];
-+	return imx219_mbus_formats[i];
- }
- 
- static void imx219_set_default_format(struct imx219 *imx219)
-@@ -808,11 +808,11 @@ static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
+@@ -1492,6 +1492,7 @@ static int imx219_check_hwcfg(struct device *dev)
+ static int imx219_probe(struct i2c_client *client)
  {
- 	struct imx219 *imx219 = to_imx219(sd);
+ 	struct device *dev = &client->dev;
++	struct v4l2_subdev *sd;
+ 	struct imx219 *imx219;
+ 	int ret;
  
--	if (code->index >= (ARRAY_SIZE(codes) / 4))
-+	if (code->index >= (ARRAY_SIZE(imx219_mbus_formats) / 4))
- 		return -EINVAL;
+@@ -1499,7 +1500,8 @@ static int imx219_probe(struct i2c_client *client)
+ 	if (!imx219)
+ 		return -ENOMEM;
  
- 	mutex_lock(&imx219->mutex);
--	code->code = imx219_get_format_code(imx219, codes[code->index * 4]);
-+	code->code = imx219_get_format_code(imx219, imx219_mbus_formats[code->index * 4]);
- 	mutex_unlock(&imx219->mutex);
+-	v4l2_i2c_subdev_init(&imx219->sd, client, &imx219_subdev_ops);
++	sd = &imx219->sd;
++	v4l2_i2c_subdev_init(sd, client, &imx219_subdev_ops);
  
+ 	/* Check the hardware configuration in device tree */
+ 	if (imx219_check_hwcfg(dev))
+@@ -1566,21 +1568,21 @@ static int imx219_probe(struct i2c_client *client)
+ 		goto error_power_off;
+ 
+ 	/* Initialize subdev */
+-	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+-			    V4L2_SUBDEV_FL_HAS_EVENTS |
+-			    V4L2_SUBDEV_FL_MULTIPLEXED;
+-	imx219->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
++	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
++		     V4L2_SUBDEV_FL_HAS_EVENTS |
++		     V4L2_SUBDEV_FL_MULTIPLEXED;
++	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
+ 
+ 	/* Initialize source pad */
+ 	imx219->pad.flags = MEDIA_PAD_FL_SOURCE;
+ 
+-	ret = media_entity_pads_init(&imx219->sd.entity, 1, &imx219->pad);
++	ret = media_entity_pads_init(&sd->entity, 1, &imx219->pad);
+ 	if (ret) {
+ 		dev_err(dev, "failed to init entity pads: %d\n", ret);
+ 		goto error_handler_free;
+ 	}
+ 
+-	ret = v4l2_async_register_subdev_sensor(&imx219->sd);
++	ret = v4l2_async_register_subdev_sensor(sd);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to register sensor sub-device: %d\n", ret);
+ 		goto error_media_entity;
+@@ -1594,7 +1596,7 @@ static int imx219_probe(struct i2c_client *client)
  	return 0;
-@@ -908,14 +908,14 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
  
- 	mutex_lock(&imx219->mutex);
+ error_media_entity:
+-	media_entity_cleanup(&imx219->sd.entity);
++	media_entity_cleanup(&sd->entity);
  
--	for (i = 0; i < ARRAY_SIZE(codes); i++)
--		if (codes[i] == fmt->format.code)
-+	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
-+		if (imx219_mbus_formats[i] == fmt->format.code)
- 			break;
--	if (i >= ARRAY_SIZE(codes))
-+	if (i >= ARRAY_SIZE(imx219_mbus_formats))
- 		i = 0;
- 
- 	/* Bayer order varies with flips */
--	fmt->format.code = imx219_get_format_code(imx219, codes[i]);
-+	fmt->format.code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
- 
- 	mode = v4l2_find_nearest_size(supported_modes,
- 				      ARRAY_SIZE(supported_modes),
+ error_handler_free:
+ 	imx219_free_controls(imx219);
 -- 
 2.32.0
 
