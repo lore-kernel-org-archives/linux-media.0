@@ -2,25 +2,25 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4D59C433F5
-	for <linux-media@archiver.kernel.org>; Thu,  3 Feb 2022 17:51:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97465C4321E
+	for <linux-media@archiver.kernel.org>; Thu,  3 Feb 2022 17:51:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240220AbiBCRvA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Feb 2022 12:51:00 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:59002 "EHLO
+        id S1353152AbiBCRvD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Feb 2022 12:51:03 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:59048 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353088AbiBCRuf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Feb 2022 12:50:35 -0500
+        with ESMTP id S1353221AbiBCRus (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Feb 2022 12:50:48 -0500
 Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:5173:4d3f:4ddc:2012])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1D28C1305;
-        Thu,  3 Feb 2022 18:50:27 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 861C915AF;
+        Thu,  3 Feb 2022 18:50:28 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643910627;
-        bh=mu4gWY+HeVUSCmEF7oM19oJFgLFFgV/KfVfLe6PmYxo=;
+        s=mail; t=1643910628;
+        bh=xQPdfOYaPqm5LqRMzUqsI7qdKioFoUN0FG/TD8WEU2o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rz1KMlpR+u1KFmCgtt2lU1GhrVbMmvJN0BXCqKHvCamtl8HHB62kuiMWY5w7+LoIn
-         keyIbzUep3juI4zYyJrvQrT9IZlABosOEIN+oYfYrYOjz1ODqhkyzSbOLQEyQQLb9M
-         5iH1pJSr2LUzw1LqkmHqiKSy1o34qzxY/VYar2SY=
+        b=vQbbsuH5e9POxqOOKZDs9xFefO2nnoi0snKDVU8UwlB/9iAyDT7iiuop0IGcS+pBG
+         QldlvpM1Dq2t94fvDzgRmR4+2qyBgfA3ohqIVh8HFt1+piSjg7gUtTSTBM5+cnjs89
+         8RU6OG9FLLGRWyOdPbIWzttRSN2JsJpdeK/TAlJo=
 From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 To:     jeanmichel.hautbois@ideasonboard.com
 Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
@@ -30,9 +30,9 @@ Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
         lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
         robh@kernel.org, tomi.valkeinen@ideasonboard.com,
         nsaenz@kernel.org, bcm-kernel-feedback-list@broadcom.com
-Subject: [RFC PATCH v4 06/12] ARM: dts: bcm2711: Add unicam CSI nodes
-Date:   Thu,  3 Feb 2022 18:50:03 +0100
-Message-Id: <20220203175009.558868-7-jeanmichel.hautbois@ideasonboard.com>
+Subject: [RFC PATCH v4 09/12] media: imx219: Introduce the set_routing operation
+Date:   Thu,  3 Feb 2022 18:50:06 +0100
+Message-Id: <20220203175009.558868-10-jeanmichel.hautbois@ideasonboard.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
 References: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
@@ -42,75 +42,65 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add both MIPI CSI-2 nodes in the core bcm2711 tree. Use the 3-cells
-interrupt declaration, corresponding clocks and default as disabled.
+As we want to use multiplexed streams API, we need to be able to set the
+pad routing. Introduce the set_routing operation.
+
+As this operation is required for a multiplexed able sensor, add the
+V4L2_SUBDEV_FL_MULTIPLEXED flag.
 
 Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 ---
- arch/arm/boot/dts/bcm2711-rpi.dtsi | 15 +++++++++++++++
- arch/arm/boot/dts/bcm2711.dtsi     | 16 ++++++++++++++++
- 2 files changed, 31 insertions(+)
+ drivers/media/i2c/imx219.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/bcm2711-rpi.dtsi b/arch/arm/boot/dts/bcm2711-rpi.dtsi
-index ca266c5d9f9b..97ee494891af 100644
---- a/arch/arm/boot/dts/bcm2711-rpi.dtsi
-+++ b/arch/arm/boot/dts/bcm2711-rpi.dtsi
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "bcm2835-rpi.dtsi"
+diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+index b68d35046725..7d29cf2b06f8 100644
+--- a/drivers/media/i2c/imx219.c
++++ b/drivers/media/i2c/imx219.c
+@@ -817,6 +817,25 @@ static int _imx219_set_routing(struct v4l2_subdev *sd,
+ 	return 0;
+ }
  
-+#include <dt-bindings/power/raspberrypi-power.h>
- #include <dt-bindings/reset/raspberrypi,firmware-reset.h>
- 
- / {
-@@ -18,6 +19,20 @@ aliases {
- 	};
++static int imx219_set_routing(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *state,
++			      enum v4l2_subdev_format_whence which,
++			      struct v4l2_subdev_krouting *routing)
++{
++	int ret;
++
++	if (routing->num_routes == 0 || routing->num_routes > 2)
++		return -EINVAL;
++
++	v4l2_subdev_lock_state(state);
++
++	ret = _imx219_set_routing(sd, state);
++
++	v4l2_subdev_unlock_state(state);
++
++	return ret;
++}
++
+ static int imx219_init_cfg(struct v4l2_subdev *sd,
+ 			   struct v4l2_subdev_state *state)
+ {
+@@ -1289,6 +1308,7 @@ static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
+ 	.get_fmt		= imx219_get_pad_format,
+ 	.set_fmt		= imx219_set_pad_format,
+ 	.get_selection		= imx219_get_selection,
++	.set_routing		= imx219_set_routing,
+ 	.enum_frame_size	= imx219_enum_frame_size,
  };
  
-+&csi0 {
-+	clocks = <&clocks BCM2835_CLOCK_CAM0>,
-+		 <&firmware_clocks 4>;
-+	clock-names = "lp", "vpu";
-+	power-domains = <&power RPI_POWER_DOMAIN_UNICAM0>;
-+};
-+
-+&csi1 {
-+	clocks = <&clocks BCM2835_CLOCK_CAM1>,
-+		 <&firmware_clocks 4>;
-+	clock-names = "lp", "vpu";
-+	power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
-+};
-+
- &firmware {
- 	firmware_clocks: clocks {
- 		compatible = "raspberrypi,firmware-clocks";
-diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
-index dff18fc9a906..312a74601839 100644
---- a/arch/arm/boot/dts/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/bcm2711.dtsi
-@@ -293,6 +293,22 @@ hvs: hvs@7e400000 {
- 			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
- 		};
+@@ -1547,7 +1567,8 @@ static int imx219_probe(struct i2c_client *client)
  
-+		csi0: csi@7e800000 {
-+			compatible = "brcm,bcm2835-unicam";
-+			reg = <0x7e800000 0x800>,
-+			      <0x7e802000 0x4>;
-+			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+		};
-+
-+		csi1: csi@7e801000 {
-+			compatible = "brcm,bcm2835-unicam";
-+			reg = <0x7e801000 0x800>,
-+			      <0x7e802004 0x4>;
-+			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+		};
-+
- 		pixelvalve3: pixelvalve@7ec12000 {
- 			compatible = "brcm,bcm2711-pixelvalve3";
- 			reg = <0x7ec12000 0x100>;
+ 	/* Initialize subdev */
+ 	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+-			    V4L2_SUBDEV_FL_HAS_EVENTS;
++			    V4L2_SUBDEV_FL_HAS_EVENTS |
++			    V4L2_SUBDEV_FL_MULTIPLEXED;
+ 	imx219->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+ 
+ 	/* Initialize source pad */
 -- 
 2.32.0
 
