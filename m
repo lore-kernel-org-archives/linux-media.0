@@ -2,295 +2,98 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9A7DC433EF
-	for <linux-media@archiver.kernel.org>; Thu,  3 Feb 2022 11:36:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47979C433F5
+	for <linux-media@archiver.kernel.org>; Thu,  3 Feb 2022 12:33:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350200AbiBCLgs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Feb 2022 06:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237503AbiBCLgr (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Feb 2022 06:36:47 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D1FC06173D
-        for <linux-media@vger.kernel.org>; Thu,  3 Feb 2022 03:36:47 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id b13so5397209edn.0
-        for <linux-media@vger.kernel.org>; Thu, 03 Feb 2022 03:36:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vFy48ZZiU8QAY9/PLWSNOvL9jOGgbaoU12BTjZhog7Y=;
-        b=mMcdGxMtuo6M+460mzP5SzpBNrbzI6tUkqeMYttEMODU6LTLjXAO0U46aRsT20IH7d
-         KycfwJjPq/+FCEb9HUoDiO1x3TnIWz8YufiJt6CVqurYl86lnKge8OuJLqdzt8FAjBhf
-         6Wkq/dbSe7q/5Nt8m5GBr0IBzb3PXDnaz4598QUXh62dFnbBJUZtnWWWA37tN56P8ewj
-         0WLg8Y6aCJ5/210fJzQfyqnKylDYRX5XQo30ilFNaMsahH7zBpgXvQkYw8OJZKhsE64H
-         8GRJ6ksyflJ37pSgHG0Uuwj5W+6fnlqnhsdkbHM8tV2r3LhowHsVYPmea2/0uLN+L529
-         /9kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vFy48ZZiU8QAY9/PLWSNOvL9jOGgbaoU12BTjZhog7Y=;
-        b=i74HroWQNIBbL1/kBsu/WJarGNfaL99sAFTdF77ymsaEaECQjsua0jCIAtub0cBv79
-         Zsd7tsXR+ffIOZPgYbgFiQJI26LaCxsFS1N7dF35ohkoTlqj4guS0lAfgyR6cm1tIFEk
-         hprQx4rNHSAzSQZdg4MvbFoDT99oyorXRUejC/XL1tOPtbcoZaEyaWFj2QYXx8c+H/EH
-         st/C7fbosIJ0J7JsS/AeUK+20TexhjU50txjx/FX/CzGy4biMqYIOwAK99Z/k/GDRRHM
-         Ncf6/IpbJReI9YNuRYXojzWQ1hFagZqfbEr2xUf5xJ4wTH4ZyvWD6v2LclGOZZQ5aeK0
-         TCSg==
-X-Gm-Message-State: AOAM533QLErjX5QfZ/N2QogeoSqd/toEQ5wkRJNQI2AuDCZYAA1DspJ6
-        BpoxS4JB6mH6unVY5avtT/+MzMuT1KD+WEG5Z07HPA==
-X-Google-Smtp-Source: ABdhPJyzZe0U19wP90fnne4tM9FZZhDvI3v/CBdvI+Vq6vmEDqqklUOSzy/nRsN3cZvIKJEl9FWda7h6IYpW2TXcwNE=
-X-Received: by 2002:a05:6402:5191:: with SMTP id q17mr35177389edd.395.1643888205646;
- Thu, 03 Feb 2022 03:36:45 -0800 (PST)
+        id S1350537AbiBCMd2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Feb 2022 07:33:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37247 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229653AbiBCMd0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 3 Feb 2022 07:33:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643891605;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ygLyhz4TBQI+mv4Im/MJmdf3FjsrWIB3jzek5GHAWM0=;
+        b=IEB7ZXdfvHFj21tv1EBuubbOg3ns4Jp6DvKRACpqqF8W26ybLPnyifLpsq0pCuJgvIqc0W
+        azaeuv1Ktx7l2RiNa+9JJum/B/KhqOZnZolvDayAfhlAUrXJe22CY0dUvUcOJTze454wqS
+        xtOFn+BKZJOOTJU47FxN3/1/xCP6erA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-626-rh8yodhVPNu2xWLgWIFtrw-1; Thu, 03 Feb 2022 07:33:24 -0500
+X-MC-Unique: rh8yodhVPNu2xWLgWIFtrw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1C3EE1006AA4;
+        Thu,  3 Feb 2022 12:33:23 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.196.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CE49E7D71E;
+        Thu,  3 Feb 2022 12:33:21 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-media@vger.kernel.org,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Subject: [PATCH v2 1/1] media: i2c: ov5648: Fix lockdep error
+Date:   Thu,  3 Feb 2022 13:33:12 +0100
+Message-Id: <20220203123312.505318-2-hdegoede@redhat.com>
+In-Reply-To: <20220203123312.505318-1-hdegoede@redhat.com>
+References: <20220203123312.505318-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-References: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
- <20220202175639.149681-4-jeanmichel.hautbois@ideasonboard.com>
- <cfa2f751-2988-c372-4bcb-30080efed587@i2se.com> <9bce4322-881e-06a7-d6a4-431b1417ced5@ideasonboard.com>
- <YfsHTXxx/VDHR9Jn@pendragon.ideasonboard.com>
-In-Reply-To: <YfsHTXxx/VDHR9Jn@pendragon.ideasonboard.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Thu, 3 Feb 2022 11:36:29 +0000
-Message-ID: <CAPY8ntA+kLof=NEcXPSrKWZKfKduOYWBNgSJVwMnYCF1U1aGKQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 03/11] media: dt-bindings: media: Add bindings for bcm2835-unicam
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        devicetree@vger.kernel.org, kernel-list@raspberrypi.com,
-        linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Naushir Patuck <naush@raspberrypi.com>, robh@kernel.org,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jean-Michel and Laurent
+ov5648_state_init() calls ov5648_state_mipi_configure() which uses
+__v4l2_ctrl_s_ctrl[_int64](). This means that sensor->mutex (which
+is also sensor->ctrls.handler.lock) must be locked before calling
+ov5648_state_init().
 
-n Wed, 2 Feb 2022 at 22:36, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Jean-Michel,
->
-> On Wed, Feb 02, 2022 at 11:09:20PM +0100, Jean-Michel Hautbois wrote:
-> > On 02/02/2022 19:33, Stefan Wahren wrote:
-> > > Hi Jean-Michel,
-> > >
-> > > please drop the first "media:" before dt-bindings.
-> > >
-> > > Am 02.02.22 um 18:56 schrieb Jean-Michel Hautbois:
-> > >> Introduce the dt-bindings documentation for bcm2835 CCP2/CSI2 Unicam
-> > >> camera interface. Also add a MAINTAINERS entry for it.
-> > >>
-> > >> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> > >> Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
-> > >> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboar=
-d.com>
-> > >> ---
-> > >> Dave: I assumed you were the maintainer for this file, as I based it=
- on the
-> > >> bcm2835-unicam.txt file. Are  you happy to be added directly as the
-> > >> maintainer, or should this be specified as "Raspberry Pi Kernel
-> > >> Maintenance <kernel-list@raspberrypi.com>"
+ov5648_state_mipi_configure() is also used in other places where
+the lock is already held so it cannot be changed itself.
 
-Probably easiest to switch to "Raspberry Pi Kernel Maintenance
-<kernel-list@raspberrypi.com>".
-That list didn't exist when I originally wrote the doc, and it just
-makes life easier should I decide to move on (not planning it). Naush
-is on that list too.
+Note this is based on an identical (tested) fix for the ov8865 driver,
+this has only been compile-tested.
 
-> > >> ---
-> > >>   .../bindings/media/brcm,bcm2835-unicam.yaml   | 107 ++++++++++++++=
-++++
-> > >>   MAINTAINERS                                   |   7 ++
-> > >>   2 files changed, 114 insertions(+)
-> > >>   create mode 100644 Documentation/devicetree/bindings/media/brcm,bc=
-m2835-unicam.yaml
-> > >>
-> > >> diff --git a/Documentation/devicetree/bindings/media/brcm,bcm2835-un=
-icam.yaml b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yam=
-l
-> > >> new file mode 100644
-> > >> index 000000000000..5bf41a8834fa
-> > >> --- /dev/null
-> > >> +++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.ya=
-ml
-> > >> @@ -0,0 +1,107 @@
-> > >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > >> +%YAML 1.2
-> > >> +---
-> > >> +$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
-> > >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > >> +
-> > >> +title: Broadcom BCM283x Camera Interface (Unicam)
-> > >> +
-> > >> +maintainers:
-> > >> +  - Dave Stevenson <dave.stevenson@raspberrypi.com>
-> > >> +
-> > >> +description: |-
-> > >> +  The Unicam block on BCM283x SoCs is the receiver for either
-> > >> +  CSI-2 or CCP2 data from image sensors or similar devices.
-> > >> +
-> > >> +  The main platform using this SoC is the Raspberry Pi family of bo=
-ards.
-> > >> +  On the Pi the VideoCore firmware can also control this hardware b=
-lock,
-> > >> +  and driving it from two different processors will cause issues.
-> > >> +  To avoid this, the firmware checks the device tree configuration
-> > >> +  during boot. If it finds device tree nodes starting by csi then
-> > >> +  it will stop the firmware accessing the block, and it can then
-> > >> +  safely be used via the device tree binding.
-> > >> +
-> > >> +properties:
-> > >> +  compatible:
-> > >> +    const: brcm,bcm2835-unicam
-> > >> +
-> > >> +  reg:
-> > >> +    maxItems: 2
-> > >
-> > > I would be nice to have reg-names here similar to the clocks.
-> >
-> > Sure, I just don't know what the names are ;-).
->
-> Please discuss this with the Rasperry Pi developers to figure out then.
+Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+Changes in v2:
+- Move the taking of the mutex to inside ov5648_state_init()
+---
+ drivers/media/i2c/ov5648.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-It's the "Unicam" and "Clock Manager Image" (CMI) blocks respectively.
+diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
+index 947d437ed0ef..01e22c535267 100644
+--- a/drivers/media/i2c/ov5648.c
++++ b/drivers/media/i2c/ov5648.c
+@@ -1778,8 +1778,14 @@ static int ov5648_state_configure(struct ov5648_sensor *sensor,
+ 
+ static int ov5648_state_init(struct ov5648_sensor *sensor)
+ {
+-	return ov5648_state_configure(sensor, &ov5648_modes[0],
+-				      ov5648_mbus_codes[0]);
++	int ret;
++
++	mutex_lock(&sensor->mutex);
++	ret = ov5648_state_configure(sensor, &ov5648_modes[0],
++				     ov5648_mbus_codes[0]);
++	mutex_unlock(&sensor->mutex);
++
++	return ret;
+ }
+ 
+ /* Sensor Base */
+-- 
+2.33.1
 
-CMI is only 4 registers. It provides high speed clock source selection
-for the two Unicam blocks, a camera test block that has never been
-used, and one of the USB controllers. Each peripheral is controlled by
-a separate register.
-It was discussed previously and viewed as not worthwhile creating a
-full clock driver for it.
-
-> > >> +
-> > >> +  interrupts:
-> > >> +    maxItems: 1
-> > >> +
-> > >> +  clocks:
-> > >> +    items:
-> > >> +      - description: Clock for the camera.
->
-> This also seems weird, as far as I know the SoC doesn't output a clock
-> for the camera sensor (and it should be specified in the camera sensor
-> DT node if it did anyway).
-
-It's the clocks to Unicam, not to the camera / sensor.
-
-The LP clock drives the LP state machine of Unicam for the relevant
-DPHY state transitions.
-The VPU or core clock is needed to ensure that the other bus systems
-are running fast enough for the data generated.
-
-  Dave
-
-> > >> +      - description: Clock for the vpu.
-> > >> +
-> > >> +  clock-names:
-> > >> +    items:
-> > >> +      - const: lp
-> > >> +      - const: vpu
-> > >> +
-> > >> +  power-domains:
-> > >> +    items:
-> > >> +      - description: Unicam power domain
-> > >> +
-> > >> +  num-data-lanes:
->
-> This is a vendor-specific property and thus requires a vendor prefix.
->
-> > >> +    items:
-> > >> +      - enum: [ 2, 4 ]
-> > >> +
-> > >> +  port:
-> > >> +    additionalProperties: false
-> > >> +    $ref: /schemas/graph.yaml#/$defs/port-base
-> > >> +
-> > >> +    properties:
-> > >> +      endpoint:
-> > >> +        $ref: /schemas/media/video-interfaces.yaml#
-> > >> +        unevaluatedProperties: false
-> > >> +
-> > >> +        properties:
-> > >> +          data-lanes: true
-> > >> +          link-frequencies: true
-> > >> +
-> > >> +        required:
-> > >> +          - data-lanes
-> > >> +          - link-frequencies
-> > >> +
-> > >> +    required:
-> > >> +      - endpoint
-> > >> +
-> > >> +required:
-> > >> +  - compatible
-> > >> +  - reg
-> > >> +  - interrupts
-> > >> +  - clocks
-> > >> +  - clock-names
-> > >> +  - power-domains
-> > >> +  - num-data-lanes
-> > >> +  - port
-> > >> +
-> > >> +additionalProperties: False
-> > >> +
-> > >> +examples:
-> > >> +  - |
-> > >> +    #include <dt-bindings/clock/bcm2835.h>
-> > >> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > >> +    #include <dt-bindings/power/raspberrypi-power.h>
-> > >> +    csi1: csi@7e801000 {
-> > >> +        compatible =3D "brcm,bcm2835-unicam";
-> > >> +        reg =3D <0x7e801000 0x800>,
-> > >> +              <0x7e802004 0x4>;
-> > >> +        interrupts =3D <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-> > >> +        clocks =3D <&clocks BCM2835_CLOCK_CAM1>,
-> > >> +                 <&firmware_clocks 4>;
-> > >> +        clock-names =3D "lp", "vpu";
-> > >> +        power-domains =3D <&power RPI_POWER_DOMAIN_UNICAM1>;
-> > >> +        num-data-lanes =3D <2>;
-> > >> +        port {
-> > >> +                csi1_ep: endpoint {
-> > >> +                        remote-endpoint =3D <&imx219_0>;
-> > >> +                        data-lanes =3D <1 2>;
-> > >> +                        link-frequencies =3D /bits/ 64 <456000000>;
-> > >> +                };
-> > >> +        };
-> > >> +    };
-> > >> +...
-> > >> diff --git a/MAINTAINERS b/MAINTAINERS
-> > >> index a0770a861ca4..29344ea86847 100644
-> > >> --- a/MAINTAINERS
-> > >> +++ b/MAINTAINERS
-> > >> @@ -3670,6 +3670,13 @@ N:  bcm113*
-> > >>   N:       bcm216*
-> > >>   N:       kona
-> > >>
-> > >> +BROADCOM BCM2835 CAMERA DRIVER
-> > >> +M:        Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.=
-com>
-> > >> +L:        linux-media@vger.kernel.org
-> > >> +S:        Maintained
-> > >> +F:        Documentation/devicetree/bindings/media/brcm,bcm2835-unic=
-am.yaml
-> > >> +F:        arch/arm/boot/dts/bcm283x*
-> > >> +
-> > >
-> > > I suggest to make the MAINTAINERS changes a single separate patch
-> > > instead of small incremental changes.
-> >
-> > I can make it a separate patch, indeed.
-> >
-> > >>   BROADCOM BCM47XX MIPS ARCHITECTURE
-> > >>   M:       Hauke Mehrtens <hauke@hauke-m.de>
-> > >>   M:       Rafa=C5=82 Mi=C5=82ecki <zajec5@gmail.com>
->
-> --
-> Regards,
->
-> Laurent Pinchart
