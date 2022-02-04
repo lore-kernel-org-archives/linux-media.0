@@ -2,59 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB5AEC433F5
-	for <linux-media@archiver.kernel.org>; Fri,  4 Feb 2022 12:15:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38794C433F5
+	for <linux-media@archiver.kernel.org>; Fri,  4 Feb 2022 12:15:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358631AbiBDMPb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Feb 2022 07:15:31 -0500
+        id S1358644AbiBDMPf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Feb 2022 07:15:35 -0500
 Received: from mx1.tq-group.com ([93.104.207.81]:57007 "EHLO mx1.tq-group.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358587AbiBDMP2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 4 Feb 2022 07:15:28 -0500
+        id S1358618AbiBDMPb (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 4 Feb 2022 07:15:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1643976928; x=1675512928;
+  t=1643976931; x=1675512931;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WX0S5yywfJteoi/TvV8TssMpvmQJ3W0EAQZbPxU9SAY=;
-  b=T7K5cViJke0Teckn5Lk0mmJ3LhyyYPVUoiM18lLNrGSumiHzJylrJKSO
-   IGAJEgUK1Xaf7xck5f4/vG3w+AJG2S3jPVcEQ69CJ+cEL9LGV0J8Kex40
-   FS4mnJV6nbTLBnGPUYGrS1+KsRZ0Qxwl28kGz+dbLzT/2Kvlwhdw2pSeg
-   w3dZ1duPw3mu7d7f5cbxN/2cL94fUsc37HaMbF7G/xTYyx+HWXJu0xkwX
-   X436ccqnyfUctfJ2AGiid1ruB2sagUQZ/YFxVQfz2UTqgHeuDvl/IKDak
-   4G/F0sPBhstxG4jUPWoAw7WF242wT1HPva9Wx4feByb06yPRFYTlNAsmN
-   Q==;
+  bh=taegKBe3B6246OHrJbDhTlLs+K0S36GFwVLsplN0Alo=;
+  b=LKDDtkSyBXrhRzQYmqJFWPuumYe9/YSzh8DhHAxkfnetG/d6OngVBRoH
+   jW53CHSkWyEKfTxT5bEDuluu00p/5N0Eudsg89X0q+6ihv8cubLuS2lY7
+   B/4C/4dvE7QNwJUr8tXj8GS1+9g5yEcMuKaC3XUPRATjYlqJr2eOA9OQC
+   jR9EKhV35BqW+MghpxydccNj9nlFy45UxIHJvRxCQS7wNcpcYXcYMyoSg
+   te7WWJYgPgmPkXCPiJeNAUti+Hm4Pruh5ruRjx6Vd6DmrkC3WD44xTT+a
+   gNGjpzlFQhmMC9kIm+sKAPj/+yjlSmzTZcFNLXNiXkuNA+Zzf00C2Rqh2
+   g==;
 X-IronPort-AV: E=Sophos;i="5.88,342,1635199200"; 
-   d="scan'208";a="21903438"
+   d="scan'208";a="21903441"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 04 Feb 2022 13:15:26 +0100
+  by mx1-pgp.tq-group.com with ESMTP; 04 Feb 2022 13:15:30 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
   by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 04 Feb 2022 13:15:26 +0100
+  Fri, 04 Feb 2022 13:15:30 +0100
 X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 04 Feb 2022 13:15:26 +0100
+        by tq-pgp-pr1.tq-net.de on Fri, 04 Feb 2022 13:15:30 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1643976926; x=1675512926;
+  t=1643976930; x=1675512930;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WX0S5yywfJteoi/TvV8TssMpvmQJ3W0EAQZbPxU9SAY=;
-  b=UNFkcce9q6budxdHMNO+j4l/CwIDPZuVxW1Nz0ysYQ9GbAPUbSlNyFIP
-   VI0OHH3sxX7/zQ7b14VXozFCEqBdqyb+/KRXq7Ng+9CS0dc8xCFdN6JYX
-   h/mK2SQxQ7MqCjov6EXNr5ndPkGfeMcXTRmm+Y8KUg1hqmTpoOy3X7ei6
-   lui4d6HbmzT4aLSi9LtnW6rz/krFy3wDqa2seirQfvGIqNKH80xehZ7v+
-   Vrczd38PFJWWMgOzsojS8dstUifJhgTOC+WcSb+yDjL/h6EMU5vCn5xiZ
-   u4vrqwLd2RcuOJuYjUMGxHkcBRPUa+ysiJh5TcQS3X3dzDq+d7kk3w65w
+  bh=taegKBe3B6246OHrJbDhTlLs+K0S36GFwVLsplN0Alo=;
+  b=NXPtm3fIYC66UJm/bN5rv2cxL+dSKaNWpWIlkUT2fa+hr52eoAdlol8+
+   EkerhLLp2+J/6/iRGybkEeJRaFQVZkrhEHw9dfigo97ZKgcnk9c/OhKCv
+   ZGAKMfsmw5pqzCLeMY/otNFxgcNNkWcSG2cvtv3Y/qrDjIjG3vZ9hLYWa
+   8qMlFAsMUyNJvSYzYQO2XxhMwpiCjrYcKgUIkOjeyJEtlkfHPOWr8Tmnu
+   0Y7dHv5n0eEFp41Jb9D53d5f+Tb8EjKeeNvNHTJGRs9mj2xpHoHXYUozK
+   jPv3qHvK20QynDXDJsINfWx4MmAWsmj1ZpFb7t34Nd7WCY6101tpPilMD
    A==;
 X-IronPort-AV: E=Sophos;i="5.88,342,1635199200"; 
-   d="scan'208";a="21903437"
+   d="scan'208";a="21903427"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 04 Feb 2022 13:15:26 +0100
+  by mx1.tq-group.com with ESMTP; 04 Feb 2022 13:15:24 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 6D5A7280065;
-        Fri,  4 Feb 2022 13:15:26 +0100 (CET)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id ACA3D280065;
+        Fri,  4 Feb 2022 13:15:24 +0100 (CET)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -68,12 +68,12 @@ To:     Steve Longerbeam <slongerbeam@gmail.com>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] [DNI] arm64: dts: tqma8mqml: add IMX327 MIPI-CSI overlay
-Date:   Fri,  4 Feb 2022 13:15:14 +0100
-Message-Id: <20220204121514.2762676-9-alexander.stein@ew.tq-group.com>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Subject: [PATCH 2/8] media: imx: Forward type of hardware implementation
+Date:   Fri,  4 Feb 2022 13:15:08 +0100
+Message-Id: <20220204121514.2762676-3-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
 References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
@@ -83,129 +83,111 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
----
- arch/arm64/boot/dts/freescale/Makefile        |  4 +
- .../imx8mm-tqma8mqml-mba8mx-imx327.dts        | 95 +++++++++++++++++++
- 2 files changed, 99 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx-imx327.dts
+From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 852615febf9a..5ef8ff05452e 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -57,6 +57,10 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-edimm2.2.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-kontron-n801x-s.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-nitrogen-r2.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-tqma8mqml-mba8mx.dtb
+Pass down the hardware type so imx_media_mbus_fmt_to_pix_fmt can do
+the actual switch.
+
+Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+Changes in comparison to original commit from Dorota:
+* is_imx56 is used instead of enum
+
+ drivers/staging/media/imx/imx-media-capture.c | 15 +++++++++------
+ drivers/staging/media/imx/imx-media-utils.c   |  3 ++-
+ drivers/staging/media/imx/imx-media.h         |  3 ++-
+ 3 files changed, 13 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
+index b61bf9f8ddf8..8aad6d6d350e 100644
+--- a/drivers/staging/media/imx/imx-media-capture.c
++++ b/drivers/staging/media/imx/imx-media-capture.c
+@@ -139,7 +139,8 @@ static int capture_g_fmt_vid_cap(struct file *file, void *fh,
+ }
+ 
+ static const struct imx_media_pixfmt *
+-__capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose)
++__capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose,
++		  bool is_imx56)
+ {
+ 	struct v4l2_mbus_framefmt fmt_src;
+ 	const struct imx_media_pixfmt *cc;
+@@ -171,7 +172,7 @@ __capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose)
+ 	}
+ 
+ 	v4l2_fill_mbus_format(&fmt_src, pixfmt, 0);
+-	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src, cc);
++	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src, cc, is_imx56);
+ 
+ 	if (compose) {
+ 		compose->width = fmt_src.width;
+@@ -184,7 +185,9 @@ __capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose)
+ static int capture_try_fmt_vid_cap(struct file *file, void *fh,
+ 				   struct v4l2_format *f)
+ {
+-	__capture_try_fmt(&f->fmt.pix, NULL);
++	struct capture_priv *priv = video_drvdata(file);
 +
-+tqma8mqml-mba8mx-imx327-dtbs += imx8mm-tqma8mqml-mba8mx.dtb imx8mm-tqma8mqml-mba8mx-imx327.dtbo
-+dtb-$(CONFIG_ARCH_MXC) += tqma8mqml-mba8mx-imx327.dtb
-+
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-var-som-symphony.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw71xx-0x.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx-imx327.dts b/arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx-imx327.dts
-new file mode 100644
-index 000000000000..3f1223d4d73b
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx-imx327.dts
-@@ -0,0 +1,95 @@
-+// SPDX-License-Identifier: (GPL-2.0-or-later OR MIT)
-+/*
-+ * Copyright 2021 TQ-Systems GmbH
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+
-+/dts-v1/;
-+/plugin/;
-+
-+&{/} {
-+	compatible = "tq,imx8mm-tqma8mqml-mba8mx", "tq,imx8mm-tqma8mqml", "fsl,imx8mm";
-+
-+	sensor_clk: sensor-clk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <37125000>;
-+	};
-+};
-+
-+&csi {
-+       status = "okay";
-+};
-+
-+&i2c3 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	vc_fpga: fpga@10 {
-+		reg = <0x10>;
-+		compatible = "vc,fpga";
-+
-+		vc_fpga_reg: regulator {
-+			regulator-name = "CAM_VCC";
-+		};
-+
-+		vc_fpga_reset: reset {
-+			#reset-cells = <0>;
-+		};
-+
-+		vc_fpga_gpio: gpio-chip {
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+		};
-+	};
-+
-+	sony_imx327: camera@1a {
-+		#address-cells = <0x1>;
-+		#size-cells = <0x0>;
-+		reg = <0x1a>;
-+
-+		compatible = "sony,imx327", "sony,imx290";
-+
-+		clock-names = "xclk";
-+		clocks = <&sensor_clk>;
-+		clock-frequency = <37125000>;
-+
-+		vdd-supply = <&vc_fpga_reg>;
-+
-+		vdda-supply = <&vc_fpga_reg>;
-+		vddd-supply = <&vc_fpga_reg>;
-+		vdddo-supply = <&vc_fpga_reg>;
-+
-+		reset-gpios = <&vc_fpga_gpio 0 GPIO_ACTIVE_HIGH>;
-+
-+		port@0 {
-+			reg = <0>;
-+
-+			sony_imx327_ep0: endpoint {
-+				remote-endpoint = <&imx8mm_mipi_csi_in>;
-+				data-lanes = <1 2>;
-+				clock-lanes = <0>;
-+				clock-noncontinuous = <1>;
-+				link-frequencies = /bits/ 64 <445500000 297000000>;
-+			};
-+		};
-+	};
-+};
-+
-+&mipi_csi {
-+       status = "okay";
-+
-+       ports {
-+               #address-cells = <1>;
-+               #size-cells = <0>;
-+
-+               port@0 {
-+                       reg = <0>;
-+                       imx8mm_mipi_csi_in: endpoint {
-+                               remote-endpoint = <&sony_imx327_ep0>;
-+                               data-lanes = <1 2>;
-+                       };
-+               };
-+       };
-+};
-\ No newline at end of file
++	__capture_try_fmt(&f->fmt.pix, NULL, priv->is_imx56);
+ 	return 0;
+ }
+ 
+@@ -199,7 +202,7 @@ static int capture_s_fmt_vid_cap(struct file *file, void *fh,
+ 		return -EBUSY;
+ 	}
+ 
+-	cc = __capture_try_fmt(&f->fmt.pix, &priv->vdev.compose);
++	cc = __capture_try_fmt(&f->fmt.pix, &priv->vdev.compose, priv->is_imx56);
+ 
+ 	priv->vdev.cc = cc;
+ 	priv->vdev.fmt = f->fmt.pix;
+@@ -418,7 +421,7 @@ __capture_legacy_try_fmt(struct capture_priv *priv,
+ 		}
+ 	}
+ 
+-	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src->format, cc);
++	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src->format, cc, priv->is_imx56);
+ 
+ 	return cc;
+ }
+@@ -889,7 +892,7 @@ static int capture_init_format(struct capture_priv *priv)
+ 		fmt_src.format.height = IMX_MEDIA_DEF_PIX_HEIGHT;
+ 	}
+ 
+-	imx_media_mbus_fmt_to_pix_fmt(&vdev->fmt, &fmt_src.format, NULL);
++	imx_media_mbus_fmt_to_pix_fmt(&vdev->fmt, &fmt_src.format, NULL, priv->is_imx56);
+ 	vdev->compose.width = fmt_src.format.width;
+ 	vdev->compose.height = fmt_src.format.height;
+ 
+diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
+index 94bc866ca28c..0daa6aad45f4 100644
+--- a/drivers/staging/media/imx/imx-media-utils.c
++++ b/drivers/staging/media/imx/imx-media-utils.c
+@@ -518,7 +518,8 @@ EXPORT_SYMBOL_GPL(imx_media_try_colorimetry);
+ 
+ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
+ 				  const struct v4l2_mbus_framefmt *mbus,
+-				  const struct imx_media_pixfmt *cc)
++				  const struct imx_media_pixfmt *cc,
++				  bool is_imx56)
+ {
+ 	u32 width;
+ 	u32 stride;
+diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+index 73e8e6e0d8e8..2be1bc97955c 100644
+--- a/drivers/staging/media/imx/imx-media.h
++++ b/drivers/staging/media/imx/imx-media.h
+@@ -198,7 +198,8 @@ void imx_media_try_colorimetry(struct v4l2_mbus_framefmt *tryfmt,
+ 			       bool ic_route);
+ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
+ 				  const struct v4l2_mbus_framefmt *mbus,
+-				  const struct imx_media_pixfmt *cc);
++				  const struct imx_media_pixfmt *cc,
++				  bool is_imx56);
+ void imx_media_grp_id_to_sd_name(char *sd_name, int sz,
+ 				 u32 grp_id, int ipu_id);
+ struct v4l2_subdev *
 -- 
 2.25.1
 
