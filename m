@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFAB0C433FE
-	for <linux-media@archiver.kernel.org>; Fri,  4 Feb 2022 12:15:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCE27C433FE
+	for <linux-media@archiver.kernel.org>; Fri,  4 Feb 2022 12:15:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358690AbiBDMPg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Feb 2022 07:15:36 -0500
+        id S1358576AbiBDMPn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Feb 2022 07:15:43 -0500
 Received: from mx1.tq-group.com ([93.104.207.81]:57020 "EHLO mx1.tq-group.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358632AbiBDMPb (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 4 Feb 2022 07:15:31 -0500
+        id S1358662AbiBDMPe (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 4 Feb 2022 07:15:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1643976931; x=1675512931;
+  t=1643976934; x=1675512934;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0jzXBJ2fXI0x5vj73g1ujzvH0lAWyzFDAhA3RZ/VINw=;
-  b=VSPezzx57EcOfoO3hIHruy6TNfAVVoECJMZ5j0aQbJDK50F95YkMEB4j
-   xInuJea3ZMEXxf7d1YMj6JoNDGx8Q+nwOJ8E14+otYB5WBCvkf+B3hFjo
-   HvsJaaYxe3GdxSYZbwLm397DKjA6sxuKxBjieH9vAFru/8D16X5g1oSYt
-   ISFi/8gpk7fZ+VGLPO7S1GQKAW+oCc3dSPIfda/MUGwDzZd4Qo2WI+/Ql
-   Tgob3qf4cqqoRyuQpKshkyX8P8mGJGVN1DskU+F7M8uPiev2tPyctIhy1
-   M0Dzfl02sCQy59gL4dMTTllPPPMl9wGQTtb6Cwb5PKgvGgEBnmOLiIamE
-   A==;
+  bh=wxzlrhc4NRiZGi76LZW5C2eEFoWSR5gV+Yrp/AZNDME=;
+  b=OfUdnJa1G/hmBovLC1ygxQHVCDQSzizePd0DYa6qbZpK1VYwZq6D8Rm7
+   lyzP2ayLmfa+BtaEESPL0/x391Vqh1m/zyyokHi6sk9hwTHW77SY/OboE
+   O3XxQd689YskBNnx2jMsYs7fbzr1JmB14nYKHoFwJnC6eiheG3YPOKfEm
+   ADfTykG+Ys+Wv+GaLLfrqlT8VrYhBBRHhMppe4QBVetnt56nRO+oBt8zG
+   Rz/VVzFaIC0rj1NORphDLZC5R/4CaHxWcqhjDosM5qFt35o3rP7BGwtEN
+   0sK2XVvAYnPqpskUzT+lBXz4k7uozaZ9xWsDEg7S/qelT9tft/ZZnuiFY
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.88,342,1635199200"; 
-   d="scan'208";a="21903442"
+   d="scan'208";a="21903444"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 04 Feb 2022 13:15:30 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -38,22 +38,22 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1643976930; x=1675512930;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0jzXBJ2fXI0x5vj73g1ujzvH0lAWyzFDAhA3RZ/VINw=;
-  b=R6gpuAoIf49JVzbVHQPb3QEtmtWLxhWw5u0ePtET9fj7uT5jkAC8Brxk
-   ytKIjqreYVLLi1pZo4iQxcgTq/s/i4FalQBxdaxl6LKBqeKM1TQ/vwEmm
-   +dOvjifaP/4z1XkhQyjYBsUZRwHsPkLBtbKUpra1C1NGkm4rVLPsYiOXI
-   hu66VYjKhCexBE0Gkj0dfxa37LS7XdAxWtYUaYbo5tHFvC3+IydXz342j
-   Me9V0J5akErmJy0PmNsp9oW/3xmMFUsNrR67ety7U6cETSUKb6ss1Chh1
-   cZd3RGRwr6R38QSPatmhUx9GxGO+KknMYWqMTFF03MQQVQEKknLpwWQXz
-   Q==;
+  bh=wxzlrhc4NRiZGi76LZW5C2eEFoWSR5gV+Yrp/AZNDME=;
+  b=M2TltVT6lr+eQS8IzKEtkI2FlEQDvXhnt93Q/Kcryg9f/56KiGAY6L+X
+   OO+DeFuvGn7+9h18ih075dR3jETsTCh+J04ULa7a5/px+kKcveZPKjRaH
+   WBKgOhAX9BHBTMyePPbq3gAtTw97728+JAuAg/mRgd5/higVxxtI1I6D7
+   CzzSx9H61CYy3uryj3vwiUCsp6RLExdaKVwWjSjb/BKo674jFT82b9v8p
+   tjKOlf2OSWPSYm9KtAwSo7uFFKiQJXyrUZW9NRKpgaaASmAf+qnf9UH0M
+   RJbZVG/cjZe3AVauClUzWkTHg5mIOCpEv6kDifd+aZ5VM80EZKrknwTPP
+   A==;
 X-IronPort-AV: E=Sophos;i="5.88,342,1635199200"; 
-   d="scan'208";a="21903426"
+   d="scan'208";a="21903428"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 04 Feb 2022 13:15:24 +0100
+  by mx1.tq-group.com with ESMTP; 04 Feb 2022 13:15:25 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 63E87280075;
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id F12C9280075;
         Fri,  4 Feb 2022 13:15:24 +0100 (CET)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Steve Longerbeam <slongerbeam@gmail.com>,
@@ -71,9 +71,9 @@ To:     Steve Longerbeam <slongerbeam@gmail.com>,
 Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: [PATCH 1/8] media: imx: Store the type of hardware implementation
-Date:   Fri,  4 Feb 2022 13:15:07 +0100
-Message-Id: <20220204121514.2762676-2-alexander.stein@ew.tq-group.com>
+Subject: [PATCH 3/8] media: imx: Use dedicated format handler for i.MX7/8
+Date:   Fri,  4 Feb 2022 13:15:09 +0100
+Message-Id: <20220204121514.2762676-4-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
 References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
@@ -85,112 +85,93 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
 
-The driver covers i.MX5/6, as well as i.MX7/8 hardware.
-Those implementations differ, e.g. in the sizes of buffers they accept.
-
-Some functionality should be abstracted, and storing type achieves that.
+This splits out a format handler which takes into account
+the capabilities of the i.MX7/8 video device,
+as opposed to the default handler compatible with both i.MX5/6 and i.MX7/8.
 
 Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
 Changes in comparison to original commit from Dorota:
-* Applied the suggestion from Hans at [1].
+* is_imx56 is used instead of enum
 
-[1] https://patchwork.linuxtv.org/project/linux-media/patch/20211104113631.206899-2-dorota.czaplejewicz@puri.sm/
+ drivers/staging/media/imx/imx-media-utils.c | 56 +++++++++++++++++++--
+ 1 file changed, 52 insertions(+), 4 deletions(-)
 
- drivers/staging/media/imx/imx-ic-prpencvf.c   | 3 ++-
- drivers/staging/media/imx/imx-media-capture.c | 5 ++++-
- drivers/staging/media/imx/imx-media-csi.c     | 3 ++-
- drivers/staging/media/imx/imx-media.h         | 3 ++-
- drivers/staging/media/imx/imx7-media-csi.c    | 3 ++-
- 5 files changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
-index 9b81cfbcd777..caaaac1a515a 100644
---- a/drivers/staging/media/imx/imx-ic-prpencvf.c
-+++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
-@@ -1266,7 +1266,8 @@ static int prp_registered(struct v4l2_subdev *sd)
+diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
+index 0daa6aad45f4..32aaa2e81bea 100644
+--- a/drivers/staging/media/imx/imx-media-utils.c
++++ b/drivers/staging/media/imx/imx-media-utils.c
+@@ -516,10 +516,9 @@ void imx_media_try_colorimetry(struct v4l2_mbus_framefmt *tryfmt,
+ }
+ EXPORT_SYMBOL_GPL(imx_media_try_colorimetry);
  
- 	priv->vdev = imx_media_capture_device_init(ic_priv->ipu_dev,
- 						   &ic_priv->sd,
--						   PRPENCVF_SRC_PAD, true);
-+						   PRPENCVF_SRC_PAD, true,
-+						   true);
- 	if (IS_ERR(priv->vdev))
- 		return PTR_ERR(priv->vdev);
- 
-diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-index 93ba09236010..b61bf9f8ddf8 100644
---- a/drivers/staging/media/imx/imx-media-capture.c
-+++ b/drivers/staging/media/imx/imx-media-capture.c
-@@ -47,6 +47,7 @@ struct capture_priv {
- 	struct v4l2_ctrl_handler ctrl_hdlr;	/* Controls inherited from subdevs */
- 
- 	bool legacy_api;			/* Use the legacy (pre-MC) API */
-+	bool is_imx56;				/* Hardware is i.MX5/i.MX6 */
- };
- 
- #define to_capture_priv(v) container_of(v, struct capture_priv, vdev)
-@@ -957,7 +958,8 @@ EXPORT_SYMBOL_GPL(imx_media_capture_device_unregister);
- 
- struct imx_media_video_dev *
- imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
--			      int pad, bool legacy_api)
-+			      int pad, bool legacy_api,
-+			      bool is_imx56)
+-int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
+-				  const struct v4l2_mbus_framefmt *mbus,
+-				  const struct imx_media_pixfmt *cc,
+-				  bool is_imx56)
++static int imx56_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
++					   const struct v4l2_mbus_framefmt *mbus,
++					   const struct imx_media_pixfmt *cc)
  {
- 	struct capture_priv *priv;
- 	struct video_device *vfd;
-@@ -972,6 +974,7 @@ imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
- 	priv->src_sd_pad = pad;
- 	priv->dev = dev;
- 	priv->legacy_api = legacy_api;
-+	priv->is_imx56 = is_imx56;
+ 	u32 width;
+ 	u32 stride;
+@@ -568,6 +567,55 @@ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
  
- 	mutex_init(&priv->mutex);
- 	INIT_LIST_HEAD(&priv->ready_q);
-diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
-index bd7f156f2d52..c8f6add00dbb 100644
---- a/drivers/staging/media/imx/imx-media-csi.c
-+++ b/drivers/staging/media/imx/imx-media-csi.c
-@@ -1803,7 +1803,8 @@ static int csi_registered(struct v4l2_subdev *sd)
- 	}
+ 	return 0;
+ }
++
++static int imx78_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
++					   const struct v4l2_mbus_framefmt *mbus,
++					   const struct imx_media_pixfmt *cc)
++{
++	int ret;
++
++	if (!cc)
++		cc = imx_media_find_mbus_format(mbus->code, PIXFMT_SEL_ANY);
++
++	if (!cc)
++		return -EINVAL;
++	/*
++	 * The hardware can handle line lengths divisible by 4 pixels
++	 * as long as the whole buffer size ends up divisible by 8 bytes.
++	 * If not, use the value of 8 pixels recommended in the datasheet.
++	 */
++	ret = v4l2_fill_pixfmt(pix, cc->fourcc,
++			       round_up(mbus->width, 4), mbus->height);
++	if (ret)
++		return ret;
++
++	/* Only 8bits-per-pixel formats may need to get aligned to 8 pixels,
++	 * because both 10-bit and 16-bit pixels occupy 2 bytes.
++	 * In those, 4-pixel aligmnent is equal to 8-byte alignment.
++	 */
++	if (pix->sizeimage % 8 != 0)
++		ret = v4l2_fill_pixfmt(pix, cc->fourcc,
++				       round_up(mbus->width, 8), mbus->height);
++
++	pix->colorspace = mbus->colorspace;
++	pix->xfer_func = mbus->xfer_func;
++	pix->ycbcr_enc = mbus->ycbcr_enc;
++	pix->quantization = mbus->quantization;
++	pix->field = mbus->field;
++
++	return ret;
++}
++
++int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
++				  const struct v4l2_mbus_framefmt *mbus,
++				  const struct imx_media_pixfmt *cc,
++				  bool is_imx56)
++{
++	if (is_imx56)
++		return imx56_media_mbus_fmt_to_pix_fmt(pix, mbus, cc);
++	else
++		return imx78_media_mbus_fmt_to_pix_fmt(pix, mbus, cc);
++}
+ EXPORT_SYMBOL_GPL(imx_media_mbus_fmt_to_pix_fmt);
  
- 	priv->vdev = imx_media_capture_device_init(priv->sd.dev, &priv->sd,
--						   CSI_SRC_PAD_IDMAC, true);
-+						   CSI_SRC_PAD_IDMAC, true,
-+						   true);
- 	if (IS_ERR(priv->vdev)) {
- 		ret = PTR_ERR(priv->vdev);
- 		goto free_fim;
-diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
-index f263fc3adbb9..73e8e6e0d8e8 100644
---- a/drivers/staging/media/imx/imx-media.h
-+++ b/drivers/staging/media/imx/imx-media.h
-@@ -282,7 +282,8 @@ int imx_media_ic_unregister(struct v4l2_subdev *sd);
- /* imx-media-capture.c */
- struct imx_media_video_dev *
- imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
--			      int pad, bool legacy_api);
-+			      int pad, bool legacy_api,
-+			      bool is_imx56);
- void imx_media_capture_device_remove(struct imx_media_video_dev *vdev);
- int imx_media_capture_device_register(struct imx_media_video_dev *vdev,
- 				      u32 link_flags);
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 32311fc0e2a4..158d2a736c6d 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -1039,7 +1039,8 @@ static int imx7_csi_registered(struct v4l2_subdev *sd)
- 	}
- 
- 	csi->vdev = imx_media_capture_device_init(csi->sd.dev, &csi->sd,
--						  IMX7_CSI_PAD_SRC, false);
-+						  IMX7_CSI_PAD_SRC, false,
-+						  false);
- 	if (IS_ERR(csi->vdev))
- 		return PTR_ERR(csi->vdev);
- 
+ void imx_media_free_dma_buf(struct device *dev,
 -- 
 2.25.1
 
