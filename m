@@ -2,33 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BC44C433EF
-	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 18:57:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D042DC4332F
+	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 18:57:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381887AbiBES5o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 5 Feb 2022 13:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381466AbiBESz4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 13:55:56 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF36C061353
-        for <linux-media@vger.kernel.org>; Sat,  5 Feb 2022 10:55:36 -0800 (PST)
+        id S1381238AbiBES55 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 5 Feb 2022 13:57:57 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:39641 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234644AbiBESz7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 13:55:59 -0500
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 552FF240011;
-        Sat,  5 Feb 2022 18:55:33 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id A3FF3240003;
+        Sat,  5 Feb 2022 18:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644087335;
+        t=1644087358;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nAEGfQDJ0sLUOXQFQuKZ7RzdheNIg4Vw/eOZrL/G0qM=;
-        b=J7J/7ad8perCvZH7629BPuOL3H5HnNNr+nM+/eAvAwsVNo/SlI9aWPHDWEbvHbRT5i5Ga7
-        Ac3TniUEOg+pPj6giMPcq6LBUS58lgHb4q5oAsK7VkF/uLRsq/MuzWv1/ZMLbbLwZiIlHD
-        he4WeFMLipnNbFVtRmdaXkWzZHLyNbcKyOtDSq5qnrPkHZEo5NWW9MFH/q/uq6Vsdkj2Fb
-        uBRh7+F/IZwT+maLNRGryiQYozSvQ6JrfqJUQiZbl88DQ/ZVzpIouEknSvFE3GgKjPDPxA
-        h+1MjjdZKz+uOSdrhJq7sdLhLd/dgLfFu8l/kpFroigBRMRjcmjzsyM0ADjLIg==
+        bh=n3m3Og33Oaa0ifBzHUzds0NzafQ33b9Uc4yxcoylEos=;
+        b=Hv1PwvwP2blMefIR+65AHAHxIwl791IZa7vdb4Ue9GN2DhTRULx6sjiob/b58t7EdpHWBO
+        DcL6P/3qepEa5Zo0+mY6koecBuquH8YXQKJKhiZNjS915La9pq7v41P5lgnAOgdT6bcFgU
+        HdDg22Qsz6iplRFDUO4NQMRJJpQMjbSddWFeI/8Yk4pl11EfYX4XGe54QW9VPvYgrMRTlM
+        1SwOIKl0f5o82R1eYhR73QLfwn2Ku73eokSBeJM+kW0jHaQL/WFIYOjXa3uBl496tFKXXs
+        v251M87VU+JYYxOq4JJ/P7+RNlU+TsyZtdyI1Mqus3F9qoruwWLdQru5BR2pZw==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
@@ -47,507 +44,348 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Helen Koike <helen.koike@collabora.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v2 32/66] media: sun6i-csi: Add capture state using vsync for page flip
-Date:   Sat,  5 Feb 2022 19:53:55 +0100
-Message-Id: <20220205185429.2278860-33-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v2 46/66] media: sun6i-csi: Configure registers from format tables
+Date:   Sat,  5 Feb 2022 19:54:09 +0100
+Message-Id: <20220205185429.2278860-47-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
 References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This introduces a new state structure and associated helpers for
-capture, which handles the buffer queue and state for each submitted
-buffer.
+Switch over to using the static format table descriptions to configure
+registers. Rework the hardware configuration helpers to leverage
+information from the format structures and benefit from their logic.
+Remove the previous dedicated helpers.
 
-Besides from the code refactoring, this changes the page flip point
-to vsync instead of frame done, which allows working with only
-two buffers without losing frames. This is apparently a more
-appropriate thing to do with this controller.
+The intention is to make the interaction between the different formats
+and the hardware side more visible and clear.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      |   4 +
- .../platform/sunxi/sun6i-csi/sun6i_csi.h      |   3 -
- .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 259 ++++++++++--------
- .../sunxi/sun6i-csi/sun6i_csi_capture.h       |  23 +-
- 4 files changed, 165 insertions(+), 124 deletions(-)
+ .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 210 +++---------------
+ .../platform/sunxi/sun6i-csi/sun6i_csi_reg.h  |  55 -----
+ 2 files changed, 36 insertions(+), 229 deletions(-)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index 834fc8c17189..1b5995e68be5 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -566,6 +566,7 @@ void sun6i_csi_set_stream(struct sun6i_csi_device *csi_dev, bool enable)
- 
- 	regmap_write(regmap, CSI_CH_INT_STA_REG, 0xFF);
- 	regmap_write(regmap, CSI_CH_INT_EN_REG,
-+		     CSI_CH_INT_EN_VS_INT_EN |
- 		     CSI_CH_INT_EN_HB_OF_INT_EN |
- 		     CSI_CH_INT_EN_FIFO2_OF_INT_EN |
- 		     CSI_CH_INT_EN_FIFO1_OF_INT_EN |
-@@ -686,6 +687,9 @@ static irqreturn_t sun6i_csi_isr(int irq, void *private)
- 	if (status & CSI_CH_INT_STA_FD_PD)
- 		sun6i_csi_capture_frame_done(csi_dev);
- 
-+	if (status & CSI_CH_INT_STA_VS_PD)
-+		sun6i_csi_capture_sync(csi_dev);
-+
- 	regmap_write(regmap, CSI_CH_INT_STA_REG, status);
- 
- 	return IRQ_HANDLED;
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-index a53c98507f37..741cacaa43e1 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-@@ -26,9 +26,6 @@ enum sun6i_csi_port {
- struct sun6i_csi_buffer {
- 	struct vb2_v4l2_buffer		v4l2_buffer;
- 	struct list_head		list;
--
--	dma_addr_t			dma_addr;
--	bool				queued_to_csi;
- };
- 
- /**
 diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-index 1ebc2d825838..bcbb4ffbb517 100644
+index 8e71c81cd54f..1a5797454beb 100644
 --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
 +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-@@ -90,8 +90,13 @@ static void
- sun6i_csi_capture_buffer_configure(struct sun6i_csi_device *csi_dev,
- 				   struct sun6i_csi_buffer *csi_buffer)
- {
--	csi_buffer->queued_to_csi = true;
--	sun6i_csi_update_buf_addr(csi_dev, csi_buffer->dma_addr);
-+	struct vb2_buffer *vb2_buffer;
-+	dma_addr_t address;
-+
-+	vb2_buffer = &csi_buffer->v4l2_buffer.vb2_buf;
-+	address = vb2_dma_contig_plane_dma_addr(vb2_buffer, 0);
-+
-+	sun6i_csi_update_buf_addr(csi_dev, address);
- }
- 
- static void sun6i_csi_capture_configure(struct sun6i_csi_device *csi_dev)
-@@ -108,6 +113,119 @@ static void sun6i_csi_capture_configure(struct sun6i_csi_device *csi_dev)
- 	sun6i_csi_update_config(csi_dev, &config);
- }
- 
-+/* State */
-+
-+static void sun6i_csi_capture_state_cleanup(struct sun6i_csi_device *csi_dev,
-+					    bool error)
-+{
-+	struct sun6i_csi_capture_state *state = &csi_dev->capture.state;
-+	struct sun6i_csi_buffer **csi_buffer_states[] = {
-+		&state->pending, &state->current, &state->complete,
-+	};
-+	struct sun6i_csi_buffer *csi_buffer;
-+	struct vb2_buffer *vb2_buffer;
-+	unsigned long flags;
-+	unsigned int i;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+
-+	for (i = 0; i < ARRAY_SIZE(csi_buffer_states); i++) {
-+		csi_buffer = *csi_buffer_states[i];
-+		if (!csi_buffer)
-+			continue;
-+
-+		vb2_buffer = &csi_buffer->v4l2_buffer.vb2_buf;
-+		vb2_buffer_done(vb2_buffer, error ? VB2_BUF_STATE_ERROR :
-+				VB2_BUF_STATE_QUEUED);
-+
-+		*csi_buffer_states[i] = NULL;
-+	}
-+
-+	list_for_each_entry(csi_buffer, &state->queue, list) {
-+		vb2_buffer = &csi_buffer->v4l2_buffer.vb2_buf;
-+		vb2_buffer_done(vb2_buffer, error ? VB2_BUF_STATE_ERROR :
-+				VB2_BUF_STATE_QUEUED);
-+	}
-+
-+	INIT_LIST_HEAD(&state->queue);
-+
-+	spin_unlock_irqrestore(&state->lock, flags);
-+}
-+
-+static void sun6i_csi_capture_state_update(struct sun6i_csi_device *csi_dev)
-+{
-+	struct sun6i_csi_capture_state *state = &csi_dev->capture.state;
-+	struct sun6i_csi_buffer *csi_buffer;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+
-+	if (list_empty(&state->queue))
-+		goto complete;
-+
-+	if (state->pending)
-+		goto complete;
-+
-+	csi_buffer = list_first_entry(&state->queue, struct sun6i_csi_buffer,
-+				      list);
-+
-+	sun6i_csi_capture_buffer_configure(csi_dev, csi_buffer);
-+
-+	list_del(&csi_buffer->list);
-+
-+	state->pending = csi_buffer;
-+
-+complete:
-+	spin_unlock_irqrestore(&state->lock, flags);
-+}
-+
-+static void sun6i_csi_capture_state_complete(struct sun6i_csi_device *csi_dev)
-+{
-+	struct sun6i_csi_capture_state *state = &csi_dev->capture.state;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+
-+	if (!state->pending)
-+		goto complete;
-+
-+	state->complete = state->current;
-+	state->current = state->pending;
-+	state->pending = NULL;
-+
-+	if (state->complete) {
-+		struct sun6i_csi_buffer *csi_buffer = state->complete;
-+		struct vb2_buffer *vb2_buffer =
-+			&csi_buffer->v4l2_buffer.vb2_buf;
-+
-+		vb2_buffer->timestamp = ktime_get_ns();
-+		csi_buffer->v4l2_buffer.sequence = state->sequence;
-+
-+		vb2_buffer_done(vb2_buffer, VB2_BUF_STATE_DONE);
-+
-+		state->complete = NULL;
-+	}
-+
-+complete:
-+	spin_unlock_irqrestore(&state->lock, flags);
-+}
-+
-+void sun6i_csi_capture_frame_done(struct sun6i_csi_device *csi_dev)
-+{
-+	struct sun6i_csi_capture_state *state = &csi_dev->capture.state;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+	state->sequence++;
-+	spin_unlock_irqrestore(&state->lock, flags);
-+}
-+
-+void sun6i_csi_capture_sync(struct sun6i_csi_device *csi_dev)
-+{
-+	sun6i_csi_capture_state_complete(csi_dev);
-+	sun6i_csi_capture_state_update(csi_dev);
-+}
-+
- /* Queue */
- 
- static int sun6i_csi_capture_queue_setup(struct vb2_queue *queue,
-@@ -117,8 +235,7 @@ static int sun6i_csi_capture_queue_setup(struct vb2_queue *queue,
- 					 struct device *alloc_devs[])
- {
- 	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(queue);
--	struct sun6i_csi_capture *capture = &csi_dev->capture;
--	unsigned int size = capture->format.fmt.pix.sizeimage;
-+	unsigned int size = csi_dev->capture.format.fmt.pix.sizeimage;
- 
- 	if (*planes_count)
- 		return sizes[0] < size ? -EINVAL : 0;
-@@ -135,8 +252,6 @@ static int sun6i_csi_capture_buffer_prepare(struct vb2_buffer *buffer)
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
- 	struct v4l2_device *v4l2_dev = &csi_dev->v4l2.v4l2_dev;
- 	struct vb2_v4l2_buffer *v4l2_buffer = to_vb2_v4l2_buffer(buffer);
--	struct sun6i_csi_buffer *csi_buffer =
--		container_of(v4l2_buffer, struct sun6i_csi_buffer, v4l2_buffer);
- 	unsigned long size = capture->format.fmt.pix.sizeimage;
- 
- 	if (vb2_plane_size(buffer, 0) < size) {
-@@ -147,7 +262,6 @@ static int sun6i_csi_capture_buffer_prepare(struct vb2_buffer *buffer)
- 
- 	vb2_set_plane_payload(buffer, 0, size);
- 
--	csi_buffer->dma_addr = vb2_dma_contig_plane_dma_addr(buffer, 0);
- 	v4l2_buffer->field = capture->format.fmt.pix.field;
- 
- 	return 0;
-@@ -156,16 +270,15 @@ static int sun6i_csi_capture_buffer_prepare(struct vb2_buffer *buffer)
- static void sun6i_csi_capture_buffer_queue(struct vb2_buffer *buffer)
- {
- 	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(buffer->vb2_queue);
--	struct sun6i_csi_capture *capture = &csi_dev->capture;
-+	struct sun6i_csi_capture_state *state = &csi_dev->capture.state;
- 	struct vb2_v4l2_buffer *v4l2_buffer = to_vb2_v4l2_buffer(buffer);
- 	struct sun6i_csi_buffer *csi_buffer =
- 		container_of(v4l2_buffer, struct sun6i_csi_buffer, v4l2_buffer);
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&capture->dma_queue_lock, flags);
--	csi_buffer->queued_to_csi = false;
--	list_add_tail(&csi_buffer->list, &capture->dma_queue);
--	spin_unlock_irqrestore(&capture->dma_queue_lock, flags);
-+	spin_lock_irqsave(&state->lock, flags);
-+	list_add_tail(&csi_buffer->list, &state->queue);
-+	spin_unlock_irqrestore(&state->lock, flags);
- }
- 
- static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
-@@ -173,18 +286,16 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- {
- 	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(queue);
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
-+	struct sun6i_csi_capture_state *state = &capture->state;
- 	struct video_device *video_dev = &capture->video_dev;
--	struct sun6i_csi_buffer *buf;
--	struct sun6i_csi_buffer *next_buf;
- 	struct v4l2_subdev *subdev;
--	unsigned long flags;
- 	int ret;
- 
--	capture->sequence = 0;
-+	state->sequence = 0;
- 
- 	ret = media_pipeline_start(&video_dev->entity, &video_dev->pipe);
- 	if (ret < 0)
--		goto error_dma_queue_flush;
-+		goto error_state;
- 
- 	if (capture->mbus_code == 0) {
- 		ret = -EINVAL;
-@@ -197,37 +308,17 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- 		goto error_media_pipeline;
+@@ -319,163 +319,6 @@ sun6i_csi_capture_buffer_configure(struct sun6i_csi_device *csi_dev,
  	}
- 
-+	/* Configure */
-+
- 	sun6i_csi_capture_configure(csi_dev);
- 
--	spin_lock_irqsave(&capture->dma_queue_lock, flags);
-+	/* State Update */
- 
--	buf = list_first_entry(&capture->dma_queue,
--			       struct sun6i_csi_buffer, list);
--	sun6i_csi_capture_buffer_configure(csi_dev, buf);
-+	sun6i_csi_capture_state_update(csi_dev);
- 
--	sun6i_csi_set_stream(csi_dev, true);
-+	/* Enable */
- 
--	/*
--	 * CSI will lookup the next dma buffer for next frame before the
--	 * the current frame done IRQ triggered. This is not documented
--	 * but reported by Ondřej Jirman.
--	 * The BSP code has workaround for this too. It skip to mark the
--	 * first buffer as frame done for VB2 and pass the second buffer
--	 * to CSI in the first frame done ISR call. Then in second frame
--	 * done ISR call, it mark the first buffer as frame done for VB2
--	 * and pass the third buffer to CSI. And so on. The bad thing is
--	 * that the first buffer will be written twice and the first frame
--	 * is dropped even the queued buffer is sufficient.
--	 * So, I make some improvement here. Pass the next buffer to CSI
--	 * just follow starting the CSI. In this case, the first frame
--	 * will be stored in first buffer, second frame in second buffer.
--	 * This method is used to avoid dropping the first frame, it
--	 * would also drop frame when lacking of queued buffer.
--	 */
--	next_buf = list_next_entry(buf, list);
--	sun6i_csi_capture_buffer_configure(csi_dev, next_buf);
--
--	spin_unlock_irqrestore(&capture->dma_queue_lock, flags);
-+	sun6i_csi_set_stream(csi_dev, true);
- 
- 	ret = v4l2_subdev_call(subdev, video, s_stream, 1);
- 	if (ret && ret != -ENOIOCTLCMD)
-@@ -241,13 +332,8 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- error_media_pipeline:
- 	media_pipeline_stop(&video_dev->entity);
- 
--error_dma_queue_flush:
--	spin_lock_irqsave(&capture->dma_queue_lock, flags);
--	list_for_each_entry(buf, &capture->dma_queue, list)
--		vb2_buffer_done(&buf->v4l2_buffer.vb2_buf,
--				VB2_BUF_STATE_QUEUED);
--	INIT_LIST_HEAD(&capture->dma_queue);
--	spin_unlock_irqrestore(&capture->dma_queue_lock, flags);
-+error_state:
-+	sun6i_csi_capture_state_cleanup(csi_dev, false);
- 
- 	return ret;
  }
-@@ -257,8 +343,6 @@ static void sun6i_csi_capture_stop_streaming(struct vb2_queue *queue)
- 	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(queue);
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
- 	struct v4l2_subdev *subdev;
--	unsigned long flags;
--	struct sun6i_csi_buffer *buf;
  
- 	subdev = sun6i_csi_capture_remote_subdev(capture, NULL);
- 	if (subdev)
-@@ -268,59 +352,7 @@ static void sun6i_csi_capture_stop_streaming(struct vb2_queue *queue)
- 
- 	media_pipeline_stop(&capture->video_dev.entity);
- 
--	/* Release all active buffers */
--	spin_lock_irqsave(&capture->dma_queue_lock, flags);
--	list_for_each_entry(buf, &capture->dma_queue, list)
--		vb2_buffer_done(&buf->v4l2_buffer.vb2_buf, VB2_BUF_STATE_ERROR);
--	INIT_LIST_HEAD(&capture->dma_queue);
--	spin_unlock_irqrestore(&capture->dma_queue_lock, flags);
+-static enum csi_input_fmt get_csi_input_format(struct sun6i_csi_device *csi_dev,
+-					       u32 mbus_code, u32 pixformat)
+-{
+-	/* non-YUV */
+-	if ((mbus_code & 0xF000) != 0x2000)
+-		return CSI_INPUT_FORMAT_RAW;
+-
+-	switch (pixformat) {
+-	case V4L2_PIX_FMT_YUYV:
+-	case V4L2_PIX_FMT_YVYU:
+-	case V4L2_PIX_FMT_UYVY:
+-	case V4L2_PIX_FMT_VYUY:
+-		return CSI_INPUT_FORMAT_RAW;
+-	default:
+-		break;
+-	}
+-
+-	/* not support YUV420 input format yet */
+-	dev_dbg(csi_dev->dev, "Select YUV422 as default input format of CSI.\n");
+-	return CSI_INPUT_FORMAT_YUV422;
 -}
 -
--void sun6i_csi_capture_frame_done(struct sun6i_csi_device *csi_dev)
+-static enum csi_output_fmt
+-get_csi_output_format(struct sun6i_csi_device *csi_dev, u32 pixformat,
+-		      u32 field)
 -{
--	struct sun6i_csi_capture *capture = &csi_dev->capture;
--	struct sun6i_csi_buffer *buf;
--	struct sun6i_csi_buffer *next_buf;
--	struct vb2_v4l2_buffer *v4l2_buffer;
+-	bool buf_interlaced = false;
 -
--	spin_lock(&capture->dma_queue_lock);
+-	if (field == V4L2_FIELD_INTERLACED
+-	    || field == V4L2_FIELD_INTERLACED_TB
+-	    || field == V4L2_FIELD_INTERLACED_BT)
+-		buf_interlaced = true;
 -
--	buf = list_first_entry(&capture->dma_queue,
--			       struct sun6i_csi_buffer, list);
--	if (list_is_last(&buf->list, &capture->dma_queue)) {
--		dev_dbg(csi_dev->dev, "Frame dropped!\n");
--		goto complete;
+-	switch (pixformat) {
+-	case V4L2_PIX_FMT_SBGGR8:
+-	case V4L2_PIX_FMT_SGBRG8:
+-	case V4L2_PIX_FMT_SGRBG8:
+-	case V4L2_PIX_FMT_SRGGB8:
+-		return buf_interlaced ? CSI_FRAME_RAW_8 : CSI_FIELD_RAW_8;
+-	case V4L2_PIX_FMT_SBGGR10:
+-	case V4L2_PIX_FMT_SGBRG10:
+-	case V4L2_PIX_FMT_SGRBG10:
+-	case V4L2_PIX_FMT_SRGGB10:
+-		return buf_interlaced ? CSI_FRAME_RAW_10 : CSI_FIELD_RAW_10;
+-	case V4L2_PIX_FMT_SBGGR12:
+-	case V4L2_PIX_FMT_SGBRG12:
+-	case V4L2_PIX_FMT_SGRBG12:
+-	case V4L2_PIX_FMT_SRGGB12:
+-		return buf_interlaced ? CSI_FRAME_RAW_12 : CSI_FIELD_RAW_12;
+-
+-	case V4L2_PIX_FMT_YUYV:
+-	case V4L2_PIX_FMT_YVYU:
+-	case V4L2_PIX_FMT_UYVY:
+-	case V4L2_PIX_FMT_VYUY:
+-		return buf_interlaced ? CSI_FRAME_RAW_8 : CSI_FIELD_RAW_8;
+-
+-	case V4L2_PIX_FMT_NV12_16L16:
+-		return buf_interlaced ? CSI_FRAME_MB_YUV420 :
+-					CSI_FIELD_MB_YUV420;
+-	case V4L2_PIX_FMT_NV12:
+-	case V4L2_PIX_FMT_NV21:
+-		return buf_interlaced ? CSI_FRAME_UV_CB_YUV420 :
+-					CSI_FIELD_UV_CB_YUV420;
+-	case V4L2_PIX_FMT_YUV420:
+-	case V4L2_PIX_FMT_YVU420:
+-		return buf_interlaced ? CSI_FRAME_PLANAR_YUV420 :
+-					CSI_FIELD_PLANAR_YUV420;
+-	case V4L2_PIX_FMT_NV16:
+-	case V4L2_PIX_FMT_NV61:
+-		return buf_interlaced ? CSI_FRAME_UV_CB_YUV422 :
+-					CSI_FIELD_UV_CB_YUV422;
+-	case V4L2_PIX_FMT_YUV422P:
+-		return buf_interlaced ? CSI_FRAME_PLANAR_YUV422 :
+-					CSI_FIELD_PLANAR_YUV422;
+-
+-	case V4L2_PIX_FMT_RGB565:
+-	case V4L2_PIX_FMT_RGB565X:
+-		return buf_interlaced ? CSI_FRAME_RGB565 : CSI_FIELD_RGB565;
+-
+-	case V4L2_PIX_FMT_JPEG:
+-		return buf_interlaced ? CSI_FRAME_RAW_8 : CSI_FIELD_RAW_8;
+-
+-	default:
+-		dev_warn(csi_dev->dev, "Unsupported pixformat: 0x%x\n", pixformat);
+-		break;
 -	}
 -
--	next_buf = list_next_entry(buf, list);
--	/* If a new buffer (#next_buf) had not been queued to CSI, the old
--	 * buffer (#buf) is still holding by CSI for storing the next
--	 * frame. So, we queue a new buffer (#next_buf) to CSI then wait
--	 * for next ISR call.
--	 */
--	if (!next_buf->queued_to_csi) {
--		sun6i_csi_capture_buffer_configure(csi_dev, next_buf);
--		dev_dbg(csi_dev->dev, "Frame dropped!\n");
--		goto complete;
+-	return CSI_FIELD_RAW_8;
+-}
+-
+-static enum csi_input_seq get_csi_input_seq(struct sun6i_csi_device *csi_dev,
+-					    u32 mbus_code, u32 pixformat)
+-{
+-	/* Input sequence does not apply to non-YUV formats */
+-	if ((mbus_code & 0xF000) != 0x2000)
+-		return 0;
+-
+-	switch (pixformat) {
+-	case V4L2_PIX_FMT_NV12_16L16:
+-	case V4L2_PIX_FMT_NV12:
+-	case V4L2_PIX_FMT_NV16:
+-	case V4L2_PIX_FMT_YUV420:
+-	case V4L2_PIX_FMT_YUV422P:
+-		switch (mbus_code) {
+-		case MEDIA_BUS_FMT_UYVY8_2X8:
+-		case MEDIA_BUS_FMT_UYVY8_1X16:
+-			return CSI_INPUT_SEQ_UYVY;
+-		case MEDIA_BUS_FMT_VYUY8_2X8:
+-		case MEDIA_BUS_FMT_VYUY8_1X16:
+-			return CSI_INPUT_SEQ_VYUY;
+-		case MEDIA_BUS_FMT_YUYV8_2X8:
+-		case MEDIA_BUS_FMT_YUYV8_1X16:
+-			return CSI_INPUT_SEQ_YUYV;
+-		case MEDIA_BUS_FMT_YVYU8_1X16:
+-		case MEDIA_BUS_FMT_YVYU8_2X8:
+-			return CSI_INPUT_SEQ_YVYU;
+-		default:
+-			dev_warn(csi_dev->dev, "Unsupported mbus code: 0x%x\n",
+-				 mbus_code);
+-			break;
+-		}
+-		break;
+-	case V4L2_PIX_FMT_NV21:
+-	case V4L2_PIX_FMT_NV61:
+-	case V4L2_PIX_FMT_YVU420:
+-		switch (mbus_code) {
+-		case MEDIA_BUS_FMT_UYVY8_2X8:
+-		case MEDIA_BUS_FMT_UYVY8_1X16:
+-			return CSI_INPUT_SEQ_VYUY;
+-		case MEDIA_BUS_FMT_VYUY8_2X8:
+-		case MEDIA_BUS_FMT_VYUY8_1X16:
+-			return CSI_INPUT_SEQ_UYVY;
+-		case MEDIA_BUS_FMT_YUYV8_2X8:
+-		case MEDIA_BUS_FMT_YUYV8_1X16:
+-			return CSI_INPUT_SEQ_YVYU;
+-		case MEDIA_BUS_FMT_YVYU8_1X16:
+-		case MEDIA_BUS_FMT_YVYU8_2X8:
+-			return CSI_INPUT_SEQ_YUYV;
+-		default:
+-			dev_warn(csi_dev->dev, "Unsupported mbus code: 0x%x\n",
+-				 mbus_code);
+-			break;
+-		}
+-		break;
+-
+-	case V4L2_PIX_FMT_YUYV:
+-		return CSI_INPUT_SEQ_YUYV;
+-
+-	default:
+-		dev_warn(csi_dev->dev, "Unsupported pixformat: 0x%x, defaulting to YUYV\n",
+-			 pixformat);
+-		break;
 -	}
 -
--	list_del(&buf->list);
--	v4l2_buffer = &buf->v4l2_buffer;
--	v4l2_buffer->vb2_buf.timestamp = ktime_get_ns();
--	v4l2_buffer->sequence = capture->sequence;
--	vb2_buffer_done(&v4l2_buffer->vb2_buf, VB2_BUF_STATE_DONE);
+-	return CSI_INPUT_SEQ_YUYV;
+-}
 -
--	/* Prepare buffer for next frame but one.  */
--	if (!list_is_last(&next_buf->list, &capture->dma_queue)) {
--		next_buf = list_next_entry(next_buf, list);
--		sun6i_csi_capture_buffer_configure(csi_dev, next_buf);
--	} else {
--		dev_dbg(csi_dev->dev, "Next frame will be dropped!\n");
--	}
--
--complete:
--	capture->sequence++;
--	spin_unlock(&capture->dma_queue_lock);
-+	sun6i_csi_capture_state_cleanup(csi_dev, true);
- }
- 
- static const struct vb2_ops sun6i_csi_capture_queue_ops = {
-@@ -635,6 +667,7 @@ static const struct media_entity_operations sun6i_csi_capture_media_ops = {
- int sun6i_csi_capture_setup(struct sun6i_csi_device *csi_dev)
+ static void
+ sun6i_csi_capture_configure_interface(struct sun6i_csi_device *csi_dev)
  {
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
-+	struct sun6i_csi_capture_state *state = &capture->state;
- 	struct v4l2_device *v4l2_dev = &csi_dev->v4l2.v4l2_dev;
- 	struct v4l2_subdev *bridge_subdev = &csi_dev->bridge.subdev;
- 	struct video_device *video_dev = &capture->video_dev;
-@@ -644,6 +677,11 @@ int sun6i_csi_capture_setup(struct sun6i_csi_device *csi_dev)
- 	struct v4l2_pix_format *pix_format = &format.fmt.pix;
- 	int ret;
+@@ -570,6 +413,8 @@ sun6i_csi_capture_configure_interface(struct sun6i_csi_device *csi_dev)
+ static void sun6i_csi_capture_configure_format(struct sun6i_csi_device *csi_dev)
+ {
+ 	struct regmap *regmap = csi_dev->regmap;
++	const struct sun6i_csi_bridge_format *bridge_format;
++	const struct sun6i_csi_capture_format *capture_format;
+ 	u32 mbus_code, pixelformat, field;
+ 	u8 input_format, input_yuv_seq, output_format;
+ 	u32 value = 0;
+@@ -577,9 +422,29 @@ static void sun6i_csi_capture_configure_format(struct sun6i_csi_device *csi_dev)
+ 	sun6i_csi_capture_format(csi_dev, &pixelformat, &field);
+ 	sun6i_csi_bridge_format(csi_dev, &mbus_code, NULL);
  
-+	/* State */
+-	input_format = get_csi_input_format(csi_dev, mbus_code, pixelformat);
+-	input_yuv_seq = get_csi_input_seq(csi_dev, mbus_code, pixelformat);
+-	output_format = get_csi_output_format(csi_dev, pixelformat, field);
++	bridge_format = sun6i_csi_bridge_format_find(mbus_code);
++	if (WARN_ON(!bridge_format))
++		return;
 +
-+	INIT_LIST_HEAD(&state->queue);
-+	spin_lock_init(&state->lock);
++	input_format = bridge_format->input_format;
++	input_yuv_seq = bridge_format->input_yuv_seq;
 +
- 	/* Media Entity */
++	capture_format = sun6i_csi_capture_format_find(pixelformat);
++	if (WARN_ON(!capture_format))
++		return;
++
++	if (capture_format->input_format_raw)
++		input_format = SUN6I_CSI_INPUT_FMT_RAW;
++
++	if (capture_format->input_yuv_seq_invert)
++		input_yuv_seq = bridge_format->input_yuv_seq_invert;
++
++	if (field == V4L2_FIELD_INTERLACED ||
++	    field == V4L2_FIELD_INTERLACED_TB ||
++	    field == V4L2_FIELD_INTERLACED_BT)
++		output_format = capture_format->output_format_field;
++	else
++		output_format = capture_format->output_format_frame;
  
- 	video_dev->entity.ops = &sun6i_csi_capture_media_ops;
-@@ -656,13 +694,6 @@ int sun6i_csi_capture_setup(struct sun6i_csi_device *csi_dev)
- 	if (ret < 0)
- 		return ret;
+ 	value |= SUN6I_CSI_CH_CFG_OUTPUT_FMT(output_format);
+ 	value |= SUN6I_CSI_CH_CFG_INPUT_FMT(input_format);
+@@ -598,6 +463,7 @@ static void sun6i_csi_capture_configure_format(struct sun6i_csi_device *csi_dev)
+ static void sun6i_csi_capture_configure_window(struct sun6i_csi_device *csi_dev)
+ {
+ 	struct regmap *regmap = csi_dev->regmap;
++	const struct sun6i_csi_capture_format *format;
+ 	const struct v4l2_format_info *info;
+ 	u32 hsize_len, vsize_len;
+ 	u32 luma_line, chroma_line = 0;
+@@ -607,23 +473,19 @@ static void sun6i_csi_capture_configure_window(struct sun6i_csi_device *csi_dev)
+ 	sun6i_csi_capture_dimensions(csi_dev, &width, &height);
+ 	sun6i_csi_capture_format(csi_dev, &pixelformat, &field);
  
--	/* DMA queue */
++	format = sun6i_csi_capture_format_find(pixelformat);
++	if (WARN_ON(!format))
++		return;
++
+ 	hsize_len = width;
+ 	vsize_len = height;
+ 
+-	switch (pixelformat) {
+-	case V4L2_PIX_FMT_YUYV:
+-	case V4L2_PIX_FMT_YVYU:
+-	case V4L2_PIX_FMT_UYVY:
+-	case V4L2_PIX_FMT_VYUY:
+-		/*
+-		 * Horizontal length should be 2 times of width for packed
+-		 * YUV formats.
+-		 */
+-		hsize_len *= 2;
+-		break;
+-	default:
+-		break;
+-	}
++	/*
++	 * When using 8-bit raw input/output (for packed YUV), we need to adapt
++	 * the width to account for the difference in bpp when it's not 8-bit.
++	 */
++	if (format->hsize_len_factor)
++		hsize_len *= format->hsize_len_factor;
+ 
+ 	regmap_write(regmap, SUN6I_CSI_CH_HSIZE_REG,
+ 		     SUN6I_CSI_CH_HSIZE_LEN(hsize_len) |
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_reg.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_reg.h
+index 9b0326d6ba3c..1e4a07f26d1d 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_reg.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_reg.h
+@@ -180,59 +180,4 @@
+ #define SUN6I_CSI_CH_FIFO_STAT_REG		0x98
+ #define SUN6I_CSI_CH_PCLK_STAT_REG		0x9c
+ 
+-/*
+- * csi input data format
+- */
+-enum csi_input_fmt {
+-	CSI_INPUT_FORMAT_RAW		= 0,
+-	CSI_INPUT_FORMAT_YUV422		= 3,
+-	CSI_INPUT_FORMAT_YUV420		= 4,
+-};
 -
--	INIT_LIST_HEAD(&capture->dma_queue);
--	spin_lock_init(&capture->dma_queue_lock);
+-/*
+- * csi output data format
+- */
+-enum csi_output_fmt {
+-	/* only when input format is RAW */
+-	CSI_FIELD_RAW_8			= 0,
+-	CSI_FIELD_RAW_10		= 1,
+-	CSI_FIELD_RAW_12		= 2,
+-	CSI_FIELD_RGB565		= 4,
+-	CSI_FIELD_RGB888		= 5,
+-	CSI_FIELD_PRGB888		= 6,
+-	CSI_FRAME_RAW_8			= 8,
+-	CSI_FRAME_RAW_10		= 9,
+-	CSI_FRAME_RAW_12		= 10,
+-	CSI_FRAME_RGB565		= 12,
+-	CSI_FRAME_RGB888		= 13,
+-	CSI_FRAME_PRGB888		= 14,
 -
--	capture->sequence = 0;
+-	/* only when input format is YUV422 */
+-	CSI_FIELD_PLANAR_YUV422		= 0,
+-	CSI_FIELD_PLANAR_YUV420		= 1,
+-	CSI_FRAME_PLANAR_YUV420		= 2,
+-	CSI_FRAME_PLANAR_YUV422		= 3,
+-	CSI_FIELD_UV_CB_YUV422		= 4,
+-	CSI_FIELD_UV_CB_YUV420		= 5,
+-	CSI_FRAME_UV_CB_YUV420		= 6,
+-	CSI_FRAME_UV_CB_YUV422		= 7,
+-	CSI_FIELD_MB_YUV422		= 8,
+-	CSI_FIELD_MB_YUV420		= 9,
+-	CSI_FRAME_MB_YUV420		= 10,
+-	CSI_FRAME_MB_YUV422		= 11,
+-	CSI_FIELD_UV_CB_YUV422_10	= 12,
+-	CSI_FIELD_UV_CB_YUV420_10	= 13,
+-};
 -
- 	/* Queue */
- 
- 	mutex_init(&capture->lock);
-@@ -672,14 +703,12 @@ int sun6i_csi_capture_setup(struct sun6i_csi_device *csi_dev)
- 	queue->buf_struct_size = sizeof(struct sun6i_csi_buffer);
- 	queue->ops = &sun6i_csi_capture_queue_ops;
- 	queue->mem_ops = &vb2_dma_contig_memops;
-+	queue->min_buffers_needed = 2;
- 	queue->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
- 	queue->lock = &capture->lock;
- 	queue->dev = csi_dev->dev;
- 	queue->drv_priv = csi_dev;
- 
--	/* Make sure non-dropped frame. */
--	queue->min_buffers_needed = 3;
+-/*
+- * csi YUV input data sequence
+- */
+-enum csi_input_seq {
+-	/* only when input format is YUV422 */
+-	CSI_INPUT_SEQ_YUYV = 0,
+-	CSI_INPUT_SEQ_YVYU,
+-	CSI_INPUT_SEQ_UYVY,
+-	CSI_INPUT_SEQ_VYUY,
+-};
 -
- 	ret = vb2_queue_init(queue);
- 	if (ret) {
- 		v4l2_err(v4l2_dev, "failed to initialize vb2 queue: %d\n", ret);
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-index 36bba31fcb48..7fa66a2af5ec 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-@@ -13,23 +13,34 @@
- 
- struct sun6i_csi_device;
- 
-+#undef current
-+struct sun6i_csi_capture_state {
-+	struct list_head		queue;
-+	spinlock_t			lock; /* Queue and buffers lock. */
-+
-+	struct sun6i_csi_buffer		*pending;
-+	struct sun6i_csi_buffer		*current;
-+	struct sun6i_csi_buffer		*complete;
-+
-+	unsigned int			sequence;
-+};
-+
- struct sun6i_csi_capture {
-+	struct sun6i_csi_capture_state	state;
-+
- 	struct video_device		video_dev;
- 	struct vb2_queue		queue;
- 	struct mutex			lock; /* Queue lock. */
- 	struct media_pad		pad;
- 
--	struct list_head		dma_queue;
--	spinlock_t			dma_queue_lock; /* DMA queue lock. */
--
- 	struct v4l2_format		format;
- 	u32				mbus_code;
--	unsigned int			sequence;
- };
- 
-+void sun6i_csi_capture_sync(struct sun6i_csi_device *csi_dev);
-+void sun6i_csi_capture_frame_done(struct sun6i_csi_device *csi_dev);
-+
- int sun6i_csi_capture_setup(struct sun6i_csi_device *csi_dev);
- void sun6i_csi_capture_cleanup(struct sun6i_csi_device *csi_dev);
- 
--void sun6i_csi_capture_frame_done(struct sun6i_csi_device *csi_dev);
--
- #endif /* __SUN6I_CAPTURE_H__ */
+ #endif /* __SUN6I_CSI_REG_H__ */
 -- 
 2.34.1
 
