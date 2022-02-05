@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E17A4C433FE
-	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 18:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 801D5C433EF
+	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 18:59:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382143AbiBES7P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 5 Feb 2022 13:59:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46234 "EHLO
+        id S1381889AbiBES7m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 5 Feb 2022 13:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381404AbiBES46 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 13:56:58 -0500
+        with ESMTP id S1381465AbiBES5n (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 13:57:43 -0500
 Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1D9C03FED3;
-        Sat,  5 Feb 2022 10:56:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A010C03FEDB;
+        Sat,  5 Feb 2022 10:56:23 -0800 (PST)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2DA42240018;
-        Sat,  5 Feb 2022 18:56:05 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4002024001F;
+        Sat,  5 Feb 2022 18:56:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644087366;
+        t=1644087381;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SMCULc6HrPXZzioFZHc2jhN/9bV7Xz9OY1iLkG08uy0=;
-        b=UAZbgpiHK+JaZAjN3tWaPhzuYQq9gDsTD1qOGHDu8X8VGU6xO75SBLRMKvegGnRaUANpb5
-        GAU6cJUKJ4umnbDElxMuftMtiMmcKH1T/9/9S7tB+TSa5qVnyLk8ctCCpnPXYW/sxFkpJw
-        gDWLC5jHHwXVZHp+wYwMG7zIzwjYoTQGIFxFLQudM456XwzPlJQPlhBTr39YQfT86KzuJF
-        RJgcydfREpUn9bEm2vpktZoKLE8919c2Tqme5jgb7kix9Z84roEpoItpgGBEsWDluKkObR
-        N6LXSxwTPK7s78fK12sJkXh6Ra7kVoc1TmHbYZRQ2LZ+uDy/ZMK0yDrBRQhHsQ==
+        bh=lzYEV15xzku+y6IihxRZLFkuLWL8R00vJmdalNUtBmc=;
+        b=MYkS4EhaaywVXqr2wgBxKHdx/kQZ2HQdCmK8qLCCc5LTYKSEh0/eFFI/ysJUseIUnkVU8f
+        9QEW6k2AqIzh4VqsMb4T9IPfIhukNT1DZm5Y2i1XglNeQCmEZUBOx6WgTzl1vCfaa7bCWU
+        KwQZJvX0hRHYMpo3RFSmE2cb3/i0RMqQo/qvJm6s/MiRNgqw6fATmOJw31ZH4LvA05ookT
+        AWoTsqWmqEz1/v3thLFYemWGg6Q+eFIboDpJ38BYdL0D2A4Ay1seVg5k5aiGUdlJV7kR8m
+        Lb16LI9oLqpuMx8LIVY1pP8kYgVBI6BeB2KQgRCj/c/Tw/JP7Rl/dNZhzkeSNg==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
@@ -47,9 +47,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Helen Koike <helen.koike@collabora.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v2 51/66] media: sun6i-csi: Unset bridge source on capture streamon fail
-Date:   Sat,  5 Feb 2022 19:54:14 +0100
-Message-Id: <20220205185429.2278860-52-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v2 60/66] MAINTAINERS: Add myself as sun6i-csi maintainer and rename/move entry
+Date:   Sat,  5 Feb 2022 19:54:23 +0100
+Message-Id: <20220205185429.2278860-61-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
 References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
@@ -59,30 +59,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In cases where the media pipeline start fails but our bridge
-has already registered a source, the source remains set and
-the bridge code is not called.
+Given the substantial rework of the driver that I carried out and the
+knowledge acquired about the hardware along the way, make myself a
+maintainer of the sun6i-csi driver.
 
-Clean it in capture streamon error handler to avoid the issue.
+Also rename and move the entry while at it since the driver is not
+specific to the V3s.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c | 2 ++
- 1 file changed, 2 insertions(+)
+ MAINTAINERS | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-index 4315e197d53f..6033acaa9564 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-@@ -628,6 +628,8 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- error_state:
- 	sun6i_csi_capture_state_cleanup(csi_dev, false);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 46582119e767..0e65b9e5123f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -751,6 +751,15 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
+ F:	drivers/media/platform/sunxi/sun4i-csi/
  
-+	csi_dev->bridge.source = NULL;
++ALLWINNER A31 CSI DRIVER
++M:	Yong Deng <yong.deng@magewell.com>
++M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
++F:	drivers/media/platform/sunxi/sun6i-csi/
 +
- 	return ret;
- }
+ ALLWINNER A31 MIPI CSI-2 BRIDGE DRIVER
+ M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+ L:	linux-media@vger.kernel.org
+@@ -5064,14 +5073,6 @@ M:	Jaya Kumar <jayakumar.alsa@gmail.com>
+ S:	Maintained
+ F:	sound/pci/cs5535audio/
  
+-CSI DRIVERS FOR ALLWINNER V3s
+-M:	Yong Deng <yong.deng@magewell.com>
+-L:	linux-media@vger.kernel.org
+-S:	Maintained
+-T:	git git://linuxtv.org/media_tree.git
+-F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
+-F:	drivers/media/platform/sunxi/sun6i-csi/
+-
+ CW1200 WLAN driver
+ M:	Solomon Peachy <pizza@shaftnet.org>
+ S:	Maintained
 -- 
 2.34.1
 
