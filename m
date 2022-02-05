@@ -2,111 +2,121 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C72DC433EF
-	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 10:29:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13BC4C433FE
+	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 14:01:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236138AbiBEK3A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 5 Feb 2022 05:29:00 -0500
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:59569 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233088AbiBEK27 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 5 Feb 2022 05:28:59 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 893B73200BD2;
-        Sat,  5 Feb 2022 05:28:58 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sat, 05 Feb 2022 05:28:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=kDIVNzj7Wmv2um
-        X4p4+USo9n563udVzIVi1lCU9eBZc=; b=hdDALldVe6+S/QPKYThCWr9wp/sddm
-        ozGHp8eHCO+O+3eyOxcuWnVcaHVU0btXIBy5wmMvUuZp1byAzP4MVm0xrplNwyr5
-        ChBJEVr4XEcDAUuaR80u2auxRRbm7n9ozIJJrbatdaeLGuOQOMc9Kkin5z/mEo/b
-        Nhuu2YaBk9MV5V2VrhOXoO0M/YoPMXjWr6YruYGrMWZlGm933yLzl01qWzokmWiL
-        5m9A7SQwVqU1YeaZrU3XOwwT3Zhls6DoiFVW3b22gIzlYkfZu0JKi1WyxLuiIN5r
-        nhWdM+bfNI5Zt0ATUtbVpWvZs6wFKH7ZDQgo9WuEXd/hBCanQC4qAIwQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=kDIVNzj7Wmv2umX4p4+USo9n563udVzIVi1lCU9eB
-        Zc=; b=Seku+8XrNnyp/Jl+m462wmfmYKcsMxjPAshO7AGHuhsFz0frJVC3YBT6w
-        SWmO4FKUBharAWxlDG1nVzEoAyHlLcfURlhqRMjfJe7xCp4HkhpxDVGS1Lfg+qx7
-        kGtJz0EXTlPe5909vYZx7pB4356I00ICm/pncsI+YFwQB9celWstwhONrW2s0t/y
-        9Bg4I4eNUTLoieCt9McLkDkCJZybYdKaDOfumHr7H1tH6pACJAfPwH/5ntw4DWZF
-        sXJPH3PPxu1ugdxlbu5ml+1hvw9Ox6Lfd/dsHGb4DW6+CaQ/dqAPOkX/7FtC1euE
-        aklyppyMvZt/V505WlSpBSrh2JDlQ==
-X-ME-Sender: <xms:aVH-Ya8lU-te0HbneRWha2h86S8WIjZ0XWDdvyjrdm5h_trw-zeOiw>
-    <xme:aVH-YathjK3Jteh-eNMxNYbp_i6OgU1EwMWOdhMq9qsUK8cwLcysLEBe_riyeIVFQ
-    aD0EXTQZ-bjKTXWcoM>
-X-ME-Received: <xmr:aVH-YQCQiU9jhIYug_i98FdGdZIxXiVIZx_yWhJlp93czYNyaPWqDQfYuzJhjiYJaPuyF1Ol0YEd1at0vAZ298DYsaA7sQHBCq3c2dw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrhedugddujecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggugfgjsehtqhertddttdejnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepgfejjeekjedttdethedtfeelteefffduvdevvdfhtdeiudetleejgeelfeef
-    uedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:aVH-YSe81XnDWXCNubtmtEbXYS8ajf5nVZyAg6RRtgk_Y5G2oz1WYg>
-    <xmx:aVH-YfPqQ2kRi3_Nmf3zsJI-nMsz4flxH-2BL5P0qxMcn1jbkzVBbw>
-    <xmx:aVH-Ycn366n9gyzlkRLv_7iNmnC-irmo95TlKSYVRk_5u90OC2FMnw>
-    <xmx:alH-YaesTX34_qQChH6ZwNwT0Uq0xAy6ZDAOgDz8VmS_wOCsY-QCnQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 5 Feb 2022 05:28:56 -0500 (EST)
-Date:   Sat, 5 Feb 2022 11:28:53 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        mchehab@kernel.org, wens@csie.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: cedrus: Add watchdog for job completion
-Message-ID: <20220205102853.54wcmxzalb7uj7n6@houat>
-References: <20220201183324.493542-1-jernej.skrabec@gmail.com>
- <YfztZE8ymJ5RERTq@aptenodytes>
- <12946098.uLZWGnKmhe@jernej-laptop>
+        id S1380069AbiBEOBn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 5 Feb 2022 09:01:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238816AbiBEOBm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 09:01:42 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4E7C061346
+        for <linux-media@vger.kernel.org>; Sat,  5 Feb 2022 06:01:38 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id m11so19494845edi.13
+        for <linux-media@vger.kernel.org>; Sat, 05 Feb 2022 06:01:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/T0j4YmGJcgpIu421P1/dimIR0CxdCqo8uH7IcJ/4gQ=;
+        b=ycgJvcnTlpqZNVhoA9CjXAOtRLtmOrllHT1AJKLyornTNPy09m2qelUk1JxtgQwfsh
+         Emsd2HifHnckUBnGChCm10HiE0IGAta4CrWgFdqWXZTB0d/+t1dZw4cE8uESEFK/KosN
+         bnscZp2nSU9kcgN5jFuravGijoeZsmlL4Rmxva3vPzZlmXfGdBzwtPTh5tkcYcKs0Koh
+         648OpvPXCqky7qcStI1CCBKxOht54+wepTL893Z13+mx+caKvBtpIh8t3q5S1jZcrj/I
+         6mHMOlPCdcHY24RFD7mDo+S1PDZm58w+2q5k9PldbILlFD8u9WGQYAvzqjmpAvBTctw1
+         TYNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/T0j4YmGJcgpIu421P1/dimIR0CxdCqo8uH7IcJ/4gQ=;
+        b=khvfagffaZ3egklAuq+MyA8ldjtk9MRqWIZg7wbrkfWFl0eBUvc734n1oH4D6b75tW
+         Iig3ewUvaRNL1XTj/hBL9NlEGb+XmWzi7U7zsbY9mOpx+vGa/nNZI19QFjvh3Cd+mMUK
+         uB74Z5g8rag88c77IY4BkMCxvNuEo2f7SY1nzxuP4hqZlIPcwHO8G+JI04CfbaYd+ghy
+         rMmLfTmuBwuOIHkNdDPn9qyWBTq5fbVQAz5+hXhuaJaw0KahfFZ14+jgGx1AGJxAPGYv
+         gAqvgVDOv/wFULmPkwgLXaEXN0kKMZJafW3k1JXLCARIwjODbzBNKAic9Vv+/43C+Ike
+         XY9g==
+X-Gm-Message-State: AOAM5305OqsQe+HugO5KAgniyUeQSVPhAe+uckS4CZQsAVQS6SZNkXw0
+        JZ8XtOO+UShl+U+ORVwQYv1LbpTfZjxG/5nxGmYSNA==
+X-Google-Smtp-Source: ABdhPJxjORbMvr+wAzN/c18pI3z16Av5bxvxOpm75K+cTPP+HabLnq/blEZ/OGup/Zv8zvg4hjtNH/oISTd1EXOz5/M=
+X-Received: by 2002:a05:6402:34c2:: with SMTP id w2mr4442225edc.357.1644069696418;
+ Sat, 05 Feb 2022 06:01:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <12946098.uLZWGnKmhe@jernej-laptop>
+References: <20220125171129.472775-1-aford173@gmail.com> <20220125171129.472775-3-aford173@gmail.com>
+ <43e29322-fc4d-2c72-86b2-1f41fb05a2f9@xs4all.nl>
+In-Reply-To: <43e29322-fc4d-2c72-86b2-1f41fb05a2f9@xs4all.nl>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Sat, 5 Feb 2022 11:01:23 -0300
+Message-ID: <CAAEAJfDfd83LWOZmcg-==JTs7QHveT3dQ=BdnFc21=zZXrTxuA@mail.gmail.com>
+Subject: Re: [PATCH V4 02/11] dt-bindings: power: imx8mq: add defines for VPU
+ blk-ctrl domains
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        linux-media <linux-media@vger.kernel.org>,
+        Adam Ford <aford173@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 08:40:21AM +0100, Jernej =C5=A0krabec wrote:
-> > > +void cedrus_watchdog(struct work_struct *work)
-> > > +{
-> > > +	struct cedrus_dev *dev;
-> > > +	struct cedrus_ctx *ctx;
-> > > +
-> > > +	dev =3D container_of(to_delayed_work(work),
-> > > +			   struct cedrus_dev, watchdog_work);
-> > > +
-> > > +	ctx =3D v4l2_m2m_get_curr_priv(dev->m2m_dev);
-> > > +	if (!ctx)
-> > > +		return;
-> > > +
-> > > +	v4l2_err(&dev->v4l2_dev, "frame processing timed out!\n");
-> > > +	reset_control_reset(dev->rstc);
-> >=20
-> > I don't think playing with the reset is the right approach here.
-> > First we don't really know if the reset is shared or not, so this might=
- have
-> > no effect.
->=20
-> AFAIK only few reset lines are shared in all Allwinner SoC, never for Ced=
-rus=20
-> and even then, this is considered as HW issue. So, I'm good with using re=
-set=20
-> line. This principle is also taken from Hantro driver.
+Hi Shawn, Hans,
 
-Also, we got the reset handle through reset_control_get_exclusive, so
-we're guaranteed to be the only user.
+On Thu, 27 Jan 2022 at 05:46, Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>
+> Shawn,
+>
+> Can you take patches 2-4 of this series or shall I? In the latter case I
+> need your Acked-by for these three patches.
+>
 
-Maxime
+Gentle reminder about these patches.
+
+Thanks!
+Ezequiel
+
+
+> Regards,
+>
+>         Hans
+>
+> On 25/01/2022 18:11, Adam Ford wrote:
+> > From: Lucas Stach <l.stach@pengutronix.de>
+> >
+> > This adds the defines for the power domains provided by the VPU
+> > blk-ctrl on the i.MX8MQ.
+> >
+> > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> > Acked-by: Rob Herring <robh@kernel.org>
+> >
+> > diff --git a/include/dt-bindings/power/imx8mq-power.h b/include/dt-bindings/power/imx8mq-power.h
+> > index 8a513bd9166e..9f7d0f1e7c32 100644
+> > --- a/include/dt-bindings/power/imx8mq-power.h
+> > +++ b/include/dt-bindings/power/imx8mq-power.h
+> > @@ -18,4 +18,7 @@
+> >  #define IMX8M_POWER_DOMAIN_MIPI_CSI2 9
+> >  #define IMX8M_POWER_DOMAIN_PCIE2     10
+> >
+> > +#define IMX8MQ_VPUBLK_PD_G1          0
+> > +#define IMX8MQ_VPUBLK_PD_G2          1
+> > +
+> >  #endif
+>
