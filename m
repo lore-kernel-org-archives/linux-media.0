@@ -2,121 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13BC4C433FE
-	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 14:01:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88E96C4167B
+	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 18:54:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380069AbiBEOBn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 5 Feb 2022 09:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238816AbiBEOBm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 09:01:42 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4E7C061346
-        for <linux-media@vger.kernel.org>; Sat,  5 Feb 2022 06:01:38 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id m11so19494845edi.13
-        for <linux-media@vger.kernel.org>; Sat, 05 Feb 2022 06:01:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/T0j4YmGJcgpIu421P1/dimIR0CxdCqo8uH7IcJ/4gQ=;
-        b=ycgJvcnTlpqZNVhoA9CjXAOtRLtmOrllHT1AJKLyornTNPy09m2qelUk1JxtgQwfsh
-         Emsd2HifHnckUBnGChCm10HiE0IGAta4CrWgFdqWXZTB0d/+t1dZw4cE8uESEFK/KosN
-         bnscZp2nSU9kcgN5jFuravGijoeZsmlL4Rmxva3vPzZlmXfGdBzwtPTh5tkcYcKs0Koh
-         648OpvPXCqky7qcStI1CCBKxOht54+wepTL893Z13+mx+caKvBtpIh8t3q5S1jZcrj/I
-         6mHMOlPCdcHY24RFD7mDo+S1PDZm58w+2q5k9PldbILlFD8u9WGQYAvzqjmpAvBTctw1
-         TYNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/T0j4YmGJcgpIu421P1/dimIR0CxdCqo8uH7IcJ/4gQ=;
-        b=khvfagffaZ3egklAuq+MyA8ldjtk9MRqWIZg7wbrkfWFl0eBUvc734n1oH4D6b75tW
-         Iig3ewUvaRNL1XTj/hBL9NlEGb+XmWzi7U7zsbY9mOpx+vGa/nNZI19QFjvh3Cd+mMUK
-         uB74Z5g8rag88c77IY4BkMCxvNuEo2f7SY1nzxuP4hqZlIPcwHO8G+JI04CfbaYd+ghy
-         rMmLfTmuBwuOIHkNdDPn9qyWBTq5fbVQAz5+hXhuaJaw0KahfFZ14+jgGx1AGJxAPGYv
-         gAqvgVDOv/wFULmPkwgLXaEXN0kKMZJafW3k1JXLCARIwjODbzBNKAic9Vv+/43C+Ike
-         XY9g==
-X-Gm-Message-State: AOAM5305OqsQe+HugO5KAgniyUeQSVPhAe+uckS4CZQsAVQS6SZNkXw0
-        JZ8XtOO+UShl+U+ORVwQYv1LbpTfZjxG/5nxGmYSNA==
-X-Google-Smtp-Source: ABdhPJxjORbMvr+wAzN/c18pI3z16Av5bxvxOpm75K+cTPP+HabLnq/blEZ/OGup/Zv8zvg4hjtNH/oISTd1EXOz5/M=
-X-Received: by 2002:a05:6402:34c2:: with SMTP id w2mr4442225edc.357.1644069696418;
- Sat, 05 Feb 2022 06:01:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20220125171129.472775-1-aford173@gmail.com> <20220125171129.472775-3-aford173@gmail.com>
- <43e29322-fc4d-2c72-86b2-1f41fb05a2f9@xs4all.nl>
-In-Reply-To: <43e29322-fc4d-2c72-86b2-1f41fb05a2f9@xs4all.nl>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Sat, 5 Feb 2022 11:01:23 -0300
-Message-ID: <CAAEAJfDfd83LWOZmcg-==JTs7QHveT3dQ=BdnFc21=zZXrTxuA@mail.gmail.com>
-Subject: Re: [PATCH V4 02/11] dt-bindings: power: imx8mq: add defines for VPU
- blk-ctrl domains
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Chris Healy <cphealy@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        id S1381049AbiBESyo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 5 Feb 2022 13:54:44 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:34451 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358317AbiBESyn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 13:54:43 -0500
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8CD26240002;
+        Sat,  5 Feb 2022 18:54:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644087282;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2/xu3hAtIBOWd+KCnFmzXwlyYrEkfN5VTs0idJ4hc5I=;
+        b=OLmTKT6anszjEQxSYcOhR8iI7S7a95IAwH5bqilJOumk5CfMfJsMZUAKlw/7yByGvALBwy
+        rCqHLTX95g/krIoIeIbw71ZgtV8GtWiYINgMb7YSwY5iXaoEaK07NrnDxOEEesIBNnAxPP
+        LTxDJQ2JbLnnVhijD5ZQ49hNkQnFS/jKt0cteDTI+nIb+AELxTvRkJhyBWJc+FJLy5TxvZ
+        9sFTBIaa3UfJnYNyiF0HWftWLamuAhG28UZK986Eq18Z2/8031GKqP/S2W5E0CC+vVQeJg
+        Cx+dIcuZWqA+NyXpPltyTz77qljicjtPsb0OM4yLItkyfmbJCDIjpffBKSceWA==
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     Yong Deng <yong.deng@magewell.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        linux-media <linux-media@vger.kernel.org>,
-        Adam Ford <aford173@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v2 01/66] ARM: dts: sun8i: v3s: Move the csi1 block to follow address order
+Date:   Sat,  5 Feb 2022 19:53:24 +0100
+Message-Id: <20220205185429.2278860-2-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Shawn, Hans,
+The csi1 block node was mistakenly added before the gic node, although
+its address comes after the gic's. Move the node to its correct
+position.
 
-On Thu, 27 Jan 2022 at 05:46, Hans Verkuil <hverkuil@xs4all.nl> wrote:
->
-> Shawn,
->
-> Can you take patches 2-4 of this series or shall I? In the latter case I
-> need your Acked-by for these three patches.
->
+Fixes: 90e048101fa1 ("ARM: dts: sun8i: V3/V3s/S3/S3L: add CSI1 device node")
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+---
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-Gentle reminder about these patches.
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index b30bc1a25ebb..084323d5c61c 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -593,6 +593,17 @@ spi0: spi@1c68000 {
+ 			#size-cells = <0>;
+ 		};
+ 
++		gic: interrupt-controller@1c81000 {
++			compatible = "arm,gic-400";
++			reg = <0x01c81000 0x1000>,
++			      <0x01c82000 0x2000>,
++			      <0x01c84000 0x2000>,
++			      <0x01c86000 0x2000>;
++			interrupt-controller;
++			#interrupt-cells = <3>;
++			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
++		};
++
+ 		csi1: camera@1cb4000 {
+ 			compatible = "allwinner,sun8i-v3s-csi";
+ 			reg = <0x01cb4000 0x3000>;
+@@ -604,16 +615,5 @@ csi1: camera@1cb4000 {
+ 			resets = <&ccu RST_BUS_CSI>;
+ 			status = "disabled";
+ 		};
+-
+-		gic: interrupt-controller@1c81000 {
+-			compatible = "arm,gic-400";
+-			reg = <0x01c81000 0x1000>,
+-			      <0x01c82000 0x2000>,
+-			      <0x01c84000 0x2000>,
+-			      <0x01c86000 0x2000>;
+-			interrupt-controller;
+-			#interrupt-cells = <3>;
+-			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+-		};
+ 	};
+ };
+-- 
+2.34.1
 
-Thanks!
-Ezequiel
-
-
-> Regards,
->
->         Hans
->
-> On 25/01/2022 18:11, Adam Ford wrote:
-> > From: Lucas Stach <l.stach@pengutronix.de>
-> >
-> > This adds the defines for the power domains provided by the VPU
-> > blk-ctrl on the i.MX8MQ.
-> >
-> > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> > Acked-by: Rob Herring <robh@kernel.org>
-> >
-> > diff --git a/include/dt-bindings/power/imx8mq-power.h b/include/dt-bindings/power/imx8mq-power.h
-> > index 8a513bd9166e..9f7d0f1e7c32 100644
-> > --- a/include/dt-bindings/power/imx8mq-power.h
-> > +++ b/include/dt-bindings/power/imx8mq-power.h
-> > @@ -18,4 +18,7 @@
-> >  #define IMX8M_POWER_DOMAIN_MIPI_CSI2 9
-> >  #define IMX8M_POWER_DOMAIN_PCIE2     10
-> >
-> > +#define IMX8MQ_VPUBLK_PD_G1          0
-> > +#define IMX8MQ_VPUBLK_PD_G2          1
-> > +
-> >  #endif
->
