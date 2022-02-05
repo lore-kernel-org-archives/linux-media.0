@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B2CCC433FE
-	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 18:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3088C433F5
+	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 18:57:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381285AbiBES5Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 5 Feb 2022 13:57:25 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:42319 "EHLO
+        id S1381130AbiBES5b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 5 Feb 2022 13:57:31 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:39013 "EHLO
         relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381439AbiBESzq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 13:55:46 -0500
+        with ESMTP id S239403AbiBESzt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 13:55:49 -0500
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B576824000C;
-        Sat,  5 Feb 2022 18:55:41 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id BC4B5240010;
+        Sat,  5 Feb 2022 18:55:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644087343;
+        t=1644087348;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=o1scdHc6tq5fphoNpmwGzAjfF/vxtSqOqbNge2zy7mc=;
-        b=V3eSA5pgLZt5N1g6tJXTrawdx1vbSQhmic8LSYxe/ba0chaRWcXtg0JtORefnuKLZkMgyG
-        90SRNnC7EmBbJ1vJAmN0ddcLZwuGNaK1ktoZtMxAmpITufhMCdzNdiz9m5p4nazMk4QjVC
-        wfuh9oy+G21ck8tHEGwCJlYko755ngxF5rnkPYG2sSR3pKFDnJyO9tG/Ln9EF6n71htWJ0
-        oTzeMOWYlW1mavwIR643xTlY4tdlCCUHkO5NJwQ0qbX8RXv1zCjMpg+PjTfyqOKw2bVUte
-        l8pRK1AGud+PsX5h0//zKpkmwNcCh1ks+6HhkT9mt4+9yONjQ1ZLwh+0qvoAsA==
+        bh=h75JqJgq6QG+QOajI+uXIxRh4Nj5dGBymygUtKmDRes=;
+        b=JZzyEEQE91vY0aTTIZs5rZcxQDqtAH20J36gTZWsh2QwLca6y5yIY8WGY/o9R1gKx9gzO/
+        MsfPl91BGIxchRs9ARg8MjkM7QTHsN6yy8gwpP8pLg5mzJageBnvNaZYmagsyqj+K3gm7+
+        vOsSablNoBhsHHjBUmv9arVDe5toKXH+UNFMNr0SNgCnt7PpmI09Cqpz37loFoCVSvzBjZ
+        jlK/DRN52VocOG74Oqw911gR2se7P4FtqzRnS+FwXlRPLcAovQQDm7zHontyyQM9xLWgpJ
+        e8xxFAkxcc23j6b3O77MbmTREs+xwtuplWTPUHXXVqf6VAr6qKibg1cq24OoeA==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
@@ -44,9 +44,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Helen Koike <helen.koike@collabora.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v2 37/66] media: sun6i-csi: Move power management to runtime pm in capture
-Date:   Sat,  5 Feb 2022 19:54:00 +0100
-Message-Id: <20220205185429.2278860-38-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v2 40/66] media: sun6i-csi: Remove custom format helper and rework configure
+Date:   Sat,  5 Feb 2022 19:54:03 +0100
+Message-Id: <20220205185429.2278860-41-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
 References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
@@ -56,201 +56,183 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Let's just enable the module when we start using it (at stream on)
-and benefit from runtime pm instead of enabling it at first open.
-
-Also reorder the call to v4l2_pipeline_pm_get.
+Remove the custom sun6i_csi_get_bpp helper in favor of common v4l2
+infrastructure and rework the related window configuration code.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 24 -----------
- .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  7 ----
- .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 41 ++++++++++---------
- 3 files changed, 22 insertions(+), 50 deletions(-)
+ .../platform/sunxi/sun6i-csi/sun6i_csi.h      | 49 -------------
+ .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 70 +++++++++----------
+ 2 files changed, 35 insertions(+), 84 deletions(-)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index 22779baf8c09..7e3727c86e7a 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -148,30 +148,6 @@ bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
- 	return false;
- }
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+index c37bbab93cd5..c687213924d4 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+@@ -57,55 +57,6 @@ struct sun6i_csi_device {
+ bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
+ 				   u32 pixformat, u32 mbus_code);
  
--int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable)
+-/* get bpp form v4l2 pixformat */
+-static inline int sun6i_csi_get_bpp(unsigned int pixformat)
 -{
--	struct device *dev = csi_dev->dev;
--	struct regmap *regmap = csi_dev->regmap;
--	int ret;
--
--	if (!enable) {
--		regmap_update_bits(regmap, SUN6I_CSI_EN_REG,
--				   SUN6I_CSI_EN_CSI_EN, 0);
--		pm_runtime_put(dev);
--
--		return 0;
+-	switch (pixformat) {
+-	case V4L2_PIX_FMT_SBGGR8:
+-	case V4L2_PIX_FMT_SGBRG8:
+-	case V4L2_PIX_FMT_SGRBG8:
+-	case V4L2_PIX_FMT_SRGGB8:
+-	case V4L2_PIX_FMT_JPEG:
+-		return 8;
+-	case V4L2_PIX_FMT_SBGGR10:
+-	case V4L2_PIX_FMT_SGBRG10:
+-	case V4L2_PIX_FMT_SGRBG10:
+-	case V4L2_PIX_FMT_SRGGB10:
+-		return 10;
+-	case V4L2_PIX_FMT_SBGGR12:
+-	case V4L2_PIX_FMT_SGBRG12:
+-	case V4L2_PIX_FMT_SGRBG12:
+-	case V4L2_PIX_FMT_SRGGB12:
+-	case V4L2_PIX_FMT_NV12_16L16:
+-	case V4L2_PIX_FMT_NV12:
+-	case V4L2_PIX_FMT_NV21:
+-	case V4L2_PIX_FMT_YUV420:
+-	case V4L2_PIX_FMT_YVU420:
+-		return 12;
+-	case V4L2_PIX_FMT_YUYV:
+-	case V4L2_PIX_FMT_YVYU:
+-	case V4L2_PIX_FMT_UYVY:
+-	case V4L2_PIX_FMT_VYUY:
+-	case V4L2_PIX_FMT_NV16:
+-	case V4L2_PIX_FMT_NV61:
+-	case V4L2_PIX_FMT_YUV422P:
+-	case V4L2_PIX_FMT_RGB565:
+-	case V4L2_PIX_FMT_RGB565X:
+-		return 16;
+-	case V4L2_PIX_FMT_RGB24:
+-	case V4L2_PIX_FMT_BGR24:
+-		return 24;
+-	case V4L2_PIX_FMT_RGB32:
+-	case V4L2_PIX_FMT_BGR32:
+-		return 32;
+-	default:
+-		WARN(1, "Unsupported pixformat: 0x%x\n", pixformat);
+-		break;
 -	}
--
--	ret = pm_runtime_resume_and_get(dev);
--	if (ret < 0)
--		return ret;
--
--	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN,
--			   SUN6I_CSI_EN_CSI_EN);
 -
 -	return 0;
 -}
 -
- static enum csi_input_fmt get_csi_input_format(struct sun6i_csi_device *csi_dev,
- 					       u32 mbus_code, u32 pixformat)
- {
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-index 1f235b8e240c..0271587e8520 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-@@ -74,13 +74,6 @@ struct sun6i_csi_device {
- bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
- 				   u32 pixformat, u32 mbus_code);
+ int sun6i_csi_v4l2_complete(struct sun6i_csi_device *csi_dev);
  
--/**
-- * sun6i_csi_set_power() - power on/off the csi
-- * @csi:	pointer to the csi
-- * @enable:	on/off
-- */
--int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable);
--
- /**
-  * sun6i_csi_update_config() - update the csi register settings
-  * @csi:	pointer to the csi
+ #endif /* __SUN6I_CSI_H__ */
 diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-index ab6e298864ed..05eb9aae2975 100644
+index 9c8b33c7e59c..f977b89dcea2 100644
 --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
 +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-@@ -6,6 +6,7 @@
-  */
+@@ -483,68 +483,68 @@ static void sun6i_csi_capture_configure_format(struct sun6i_csi_device *csi_dev)
  
- #include <linux/of.h>
-+#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- 
- #include <media/v4l2-device.h>
-@@ -141,6 +142,9 @@ static void sun6i_csi_capture_enable(struct sun6i_csi_device *csi_dev)
+ static void sun6i_csi_capture_configure_window(struct sun6i_csi_device *csi_dev)
  {
- 	struct regmap *regmap = csi_dev->regmap;
++	struct regmap *regmap = csi_dev->regmap;
++	const struct v4l2_format_info *info;
++	u32 hsize_len, vsize_len;
++	u32 luma_line, chroma_line = 0;
+ 	u32 pixelformat, field;
+ 	u32 width, height;
+-	u32 bytesperline_y;
+-	u32 bytesperline_c;
+-	u32 hor_len;
  
-+	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN,
-+			   SUN6I_CSI_EN_CSI_EN);
-+
- 	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, SUN6I_CSI_CAP_VCAP_ON,
- 			   SUN6I_CSI_CAP_VCAP_ON);
- }
-@@ -150,6 +154,7 @@ static void sun6i_csi_capture_disable(struct sun6i_csi_device *csi_dev)
- 	struct regmap *regmap = csi_dev->regmap;
+ 	sun6i_csi_capture_dimensions(csi_dev, &width, &height);
+ 	sun6i_csi_capture_format(csi_dev, &pixelformat, &field);
  
- 	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, SUN6I_CSI_CAP_VCAP_ON, 0);
-+	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN, 0);
- }
+-	hor_len = width;
++	hsize_len = width;
++	vsize_len = height;
  
- static void
-@@ -382,6 +387,7 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
- 	struct sun6i_csi_capture_state *state = &capture->state;
- 	struct video_device *video_dev = &capture->video_dev;
-+	struct device *dev = csi_dev->dev;
- 	struct v4l2_subdev *subdev;
- 	int ret;
- 
-@@ -402,6 +408,12 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- 		goto error_media_pipeline;
+ 	switch (pixelformat) {
+ 	case V4L2_PIX_FMT_YUYV:
+ 	case V4L2_PIX_FMT_YVYU:
+ 	case V4L2_PIX_FMT_UYVY:
+ 	case V4L2_PIX_FMT_VYUY:
+-		dev_dbg(csi_dev->dev,
+-			"Horizontal length should be 2 times of width for packed YUV formats!\n");
+-		hor_len = width * 2;
++		/*
++		 * Horizontal length should be 2 times of width for packed
++		 * YUV formats.
++		 */
++		hsize_len *= 2;
+ 		break;
+ 	default:
+ 		break;
  	}
  
-+	/* PM */
+-	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_HSIZE_REG,
+-		     SUN6I_CSI_CH_HSIZE_LEN(hor_len) |
++	regmap_write(regmap, SUN6I_CSI_CH_HSIZE_REG,
++		     SUN6I_CSI_CH_HSIZE_LEN(hsize_len) |
+ 		     SUN6I_CSI_CH_HSIZE_START(0));
+-	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_VSIZE_REG,
+-		     SUN6I_CSI_CH_VSIZE_LEN(height) |
 +
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
-+		goto error_media_pipeline;
++	regmap_write(regmap, SUN6I_CSI_CH_VSIZE_REG,
++		     SUN6I_CSI_CH_VSIZE_LEN(vsize_len) |
+ 		     SUN6I_CSI_CH_VSIZE_START(0));
+ 
+ 	switch (pixelformat) {
+-	case V4L2_PIX_FMT_NV12_16L16:
+-	case V4L2_PIX_FMT_NV12:
+-	case V4L2_PIX_FMT_NV21:
+-	case V4L2_PIX_FMT_NV16:
+-	case V4L2_PIX_FMT_NV61:
+-		bytesperline_y = width;
+-		bytesperline_c = width;
++	case V4L2_PIX_FMT_RGB565X:
++		luma_line = width * 2;
+ 		break;
+-	case V4L2_PIX_FMT_YUV420:
+-	case V4L2_PIX_FMT_YVU420:
+-		bytesperline_y = width;
+-		bytesperline_c = width / 2;
++	case V4L2_PIX_FMT_NV12_16L16:
++		luma_line = width;
++		chroma_line = width;
+ 		break;
+-	case V4L2_PIX_FMT_YUV422P:
+-		bytesperline_y = width;
+-		bytesperline_c = width / 2;
++	case V4L2_PIX_FMT_JPEG:
++		luma_line = width;
+ 		break;
+-	default: /* raw */
+-		dev_dbg(csi_dev->dev,
+-			"Calculating pixelformat(0x%x)'s bytesperline as a packed format\n",
+-			pixelformat);
+-		bytesperline_y = (sun6i_csi_get_bpp(pixelformat) *
+-				  width) / 8;
+-		bytesperline_c = 0;
++	default:
++		info = v4l2_format_info(pixelformat);
++		if (WARN_ON(!info))
++			return;
 +
- 	/* Clear */
- 
- 	sun6i_csi_capture_irq_clear(csi_dev);
-@@ -429,6 +441,8 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- 	sun6i_csi_capture_disable(csi_dev);
- 	sun6i_csi_capture_irq_disable(csi_dev);
- 
-+	pm_runtime_put(dev);
++		luma_line = width * info->bpp[0];
 +
- error_media_pipeline:
- 	media_pipeline_stop(&video_dev->entity);
++		if (info->comp_planes > 1)
++			chroma_line = width * info->bpp[1] / info->hdiv;
+ 		break;
+ 	}
  
-@@ -442,6 +456,7 @@ static void sun6i_csi_capture_stop_streaming(struct vb2_queue *queue)
- {
- 	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(queue);
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
-+	struct device *dev = csi_dev->dev;
- 	struct v4l2_subdev *subdev;
+-	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_BUF_LEN_REG,
+-		     SUN6I_CSI_CH_BUF_LEN_CHROMA_LINE(bytesperline_c) |
+-		     SUN6I_CSI_CH_BUF_LEN_LUMA_LINE(bytesperline_y));
++	regmap_write(regmap, SUN6I_CSI_CH_BUF_LEN_REG,
++		     SUN6I_CSI_CH_BUF_LEN_CHROMA_LINE(chroma_line) |
++		     SUN6I_CSI_CH_BUF_LEN_LUMA_LINE(luma_line));
+ }
  
- 	subdev = sun6i_csi_capture_remote_subdev(capture, NULL);
-@@ -451,6 +466,8 @@ static void sun6i_csi_capture_stop_streaming(struct vb2_queue *queue)
- 	sun6i_csi_capture_disable(csi_dev);
- 	sun6i_csi_capture_irq_disable(csi_dev);
- 
-+	pm_runtime_put(dev);
-+
- 	media_pipeline_stop(&capture->video_dev.entity);
- 
- 	sun6i_csi_capture_state_cleanup(csi_dev, true);
-@@ -635,27 +652,20 @@ static int sun6i_csi_capture_open(struct file *file)
- 	if (mutex_lock_interruptible(&capture->lock))
- 		return -ERESTARTSYS;
- 
--	ret = v4l2_fh_open(file);
-+	ret = v4l2_pipeline_pm_get(&capture->video_dev.entity);
- 	if (ret < 0)
- 		goto error_lock;
- 
--	ret = v4l2_pipeline_pm_get(&capture->video_dev.entity);
-+	ret = v4l2_fh_open(file);
- 	if (ret < 0)
--		goto error_v4l2_fh;
--
--	/* Power on at first open. */
--	if (v4l2_fh_is_singular_file(file)) {
--		ret = sun6i_csi_set_power(csi_dev, true);
--		if (ret < 0)
--			goto error_v4l2_fh;
--	}
-+		goto error_pipeline;
- 
- 	mutex_unlock(&capture->lock);
- 
- 	return 0;
- 
--error_v4l2_fh:
--	v4l2_fh_release(file);
-+error_pipeline:
-+	v4l2_pipeline_pm_put(&capture->video_dev.entity);
- 
- error_lock:
- 	mutex_unlock(&capture->lock);
-@@ -667,19 +677,12 @@ static int sun6i_csi_capture_close(struct file *file)
- {
- 	struct sun6i_csi_device *csi_dev = video_drvdata(file);
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
--	bool last_close;
- 
- 	mutex_lock(&capture->lock);
- 
--	last_close = v4l2_fh_is_singular_file(file);
--
- 	_vb2_fop_release(file, NULL);
- 	v4l2_pipeline_pm_put(&capture->video_dev.entity);
- 
--	/* Power off at last close. */
--	if (last_close)
--		sun6i_csi_set_power(csi_dev, false);
--
- 	mutex_unlock(&capture->lock);
- 
- 	return 0;
+ static void sun6i_csi_capture_configure(struct sun6i_csi_device *csi_dev)
 -- 
 2.34.1
 
