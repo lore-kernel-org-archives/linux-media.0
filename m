@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E296CC4332F
-	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 18:56:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07FDFC433FE
+	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 18:56:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381512AbiBES4F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 5 Feb 2022 13:56:05 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:52873 "EHLO
+        id S1381524AbiBES4H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 5 Feb 2022 13:56:07 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:36681 "EHLO
         relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381207AbiBESzK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 13:55:10 -0500
+        with ESMTP id S1381062AbiBESzG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 13:55:06 -0500
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DB76E24000B;
-        Sat,  5 Feb 2022 18:55:07 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5B9A524000D;
+        Sat,  5 Feb 2022 18:55:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644087309;
+        t=1644087305;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=thQFXb+Mbfog5Wu3+RYgHAOHMpkNUMkaPZldQzKOFCI=;
-        b=POBS8qNGo79IGw+1tA4WMVk+b2+4QVJqDCBrSuj64Npk2IBHMtMxSOuXgberW/bWGUnYQs
-        6dOtimeBK873korpK0pFVujnFlTcnAQJNJb+mbPJMI3xa84kbKYi576E2ZK+L3zy2o4H/C
-        JEA3fN0QjWE0rTOAbQwoXalgUb11YtWpaov5Z2pRMw/yuZKyL1vBkQAXa9gKBUDvpjdcDx
-        bvV1tzVMZQuMFoz7uMl5F6WZocWujfhIK731EeRTO6uGqB+IKnUDFg7wCY2IGKg8uTk5K+
-        S9i2NLavH3Hue1GGIZBGLMH16UAej4HkKMUBm9PoilD0yqaiFGZM94+7xitXbg==
+        bh=MhiHRsL0yzLC6uTSUm3nvN8Ru2hsN0kI74zny5+cDl8=;
+        b=j+3HtCvcG9gSCcg2FQRozNh5VNadHeSPWdGynVvoRq8tSj5LmTNEggJ61PRSFeRslMjQu+
+        yjetcJBiAB4PUlt0tb0UyO6snuYkvIVYLWhxKtAnlvtfK4VB2Whg5aoEXRgByjwfLAV1l0
+        rcL7sC2dTBE3Ga7b/MfH7J9ph/i52qHypEBt/LIcMznV39pCFHIbFBgwf9gTR3yGpj+wri
+        EaEPmsCIYrO1vaG820iUdMiuvLYOk0SHRaRwXeotZ+GKs/ebBdQ3Brl7O6DdFCcLxjvs6J
+        o5/bPYt0f7qx3Y+T7Kp8DqF4JBZI2qD8rl0xLqOHifeVNKMU67oAOSoFZeE6iQ==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
@@ -44,9 +44,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Helen Koike <helen.koike@collabora.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v2 17/66] media: sun6i-csi: Define and use driver name and (reworked) description
-Date:   Sat,  5 Feb 2022 19:53:40 +0100
-Message-Id: <20220205185429.2278860-18-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v2 15/66] ARM: dts: sun8i: a83t: Add MIPI CSI-2 controller node
+Date:   Sat,  5 Feb 2022 19:53:38 +0100
+Message-Id: <20220205185429.2278860-16-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
 References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
@@ -56,90 +56,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add proper defines for driver name and description instead of
-MODULE_NAME and hardcoding (cosmetics).
+MIPI CSI-2 is supported on the A83T with a dedicated controller that
+covers both the protocol and D-PHY. It can be connected to the CSI
+interface as a V4L2 subdev through the fwnode graph.
 
-Also rework the description while at it to mention the hardware
-generation that the driver supports and remove the video capture
-mentions since it applies to the whole media device.
+This is not done by default since connecting the bridge without a
+subdev attached to it will cause a failure on the CSI driver.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c | 14 ++++++--------
- drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h |  3 +++
- 2 files changed, 9 insertions(+), 8 deletions(-)
+ arch/arm/boot/dts/sun8i-a83t.dtsi | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index fc96921b0583..43dcd8117d3f 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -27,8 +27,6 @@
- #include "sun6i_csi.h"
- #include "sun6i_csi_reg.h"
+diff --git a/arch/arm/boot/dts/sun8i-a83t.dtsi b/arch/arm/boot/dts/sun8i-a83t.dtsi
+index 82fdb04122ca..ecf9f3b2c0c0 100644
+--- a/arch/arm/boot/dts/sun8i-a83t.dtsi
++++ b/arch/arm/boot/dts/sun8i-a83t.dtsi
+@@ -1064,6 +1064,32 @@ csi: camera@1cb0000 {
+ 			status = "disabled";
+ 		};
  
--#define MODULE_NAME	"sun6i-csi"
--
- struct sun6i_csi_dev {
- 	struct sun6i_csi		csi;
- 	struct device			*dev;
-@@ -730,7 +728,7 @@ static int sun6i_csi_v4l2_init(struct sun6i_csi *csi)
- 	int ret;
- 
- 	csi->media_dev.dev = csi->dev;
--	strscpy(csi->media_dev.model, "Allwinner Video Capture Device",
-+	strscpy(csi->media_dev.model, SUN6I_CSI_DESCRIPTION,
- 		sizeof(csi->media_dev.model));
- 	csi->media_dev.hw_revision = 0;
- 	snprintf(csi->media_dev.bus_info, sizeof(csi->media_dev.bus_info),
-@@ -755,7 +753,7 @@ static int sun6i_csi_v4l2_init(struct sun6i_csi *csi)
- 		goto free_ctrl;
- 	}
- 
--	ret = sun6i_video_init(&csi->video, csi, "sun6i-csi");
-+	ret = sun6i_video_init(&csi->video, csi, SUN6I_CSI_NAME);
- 	if (ret)
- 		goto unreg_v4l2;
- 
-@@ -870,8 +868,8 @@ static int sun6i_csi_resource_request(struct sun6i_csi_dev *sdev,
- 	if (irq < 0)
- 		return -ENXIO;
- 
--	ret = devm_request_irq(&pdev->dev, irq, sun6i_csi_isr, 0, MODULE_NAME,
--			       sdev);
-+	ret = devm_request_irq(&pdev->dev, irq, sun6i_csi_isr, 0,
-+			       SUN6I_CSI_NAME, sdev);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Cannot request csi IRQ\n");
- 		return ret;
-@@ -924,12 +922,12 @@ static struct platform_driver sun6i_csi_platform_driver = {
- 	.probe = sun6i_csi_probe,
- 	.remove = sun6i_csi_remove,
- 	.driver = {
--		.name = MODULE_NAME,
-+		.name = SUN6I_CSI_NAME,
- 		.of_match_table = of_match_ptr(sun6i_csi_of_match),
- 	},
- };
- module_platform_driver(sun6i_csi_platform_driver);
- 
--MODULE_DESCRIPTION("Allwinner V3s Camera Sensor Interface driver");
-+MODULE_DESCRIPTION("Allwinner A31 Camera Sensor Interface driver");
- MODULE_AUTHOR("Yong Deng <yong.deng@magewell.com>");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-index 3a38d107ae3f..e04f3c3fa27b 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-@@ -14,6 +14,9 @@
- 
- #include "sun6i_video.h"
- 
-+#define SUN6I_CSI_NAME		"sun6i-csi"
-+#define SUN6I_CSI_DESCRIPTION	"Allwinner A31 CSI Device"
++		mipi_csi2: csi@1cb1000 {
++			compatible = "allwinner,sun8i-a83t-mipi-csi2";
++			reg = <0x01cb1000 0x1000>;
++			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_CSI>,
++				 <&ccu CLK_CSI_SCLK>,
++				 <&ccu CLK_MIPI_CSI>,
++				 <&ccu CLK_CSI_MISC>;
++			clock-names = "bus", "mod", "mipi", "misc";
++			resets = <&ccu RST_BUS_CSI>;
++			status = "disabled";
 +
- struct sun6i_csi;
- 
- /**
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				mipi_csi2_in: port@0 {
++					reg = <0>;
++				};
++
++				mipi_csi2_out: port@1 {
++					reg = <1>;
++				};
++			};
++		};
++
+ 		hdmi: hdmi@1ee0000 {
+ 			compatible = "allwinner,sun8i-a83t-dw-hdmi";
+ 			reg = <0x01ee0000 0x10000>;
 -- 
 2.34.1
 
