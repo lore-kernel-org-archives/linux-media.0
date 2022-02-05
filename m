@@ -2,30 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A7D7C433EF
-	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 18:56:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC437C43217
+	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 18:56:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381485AbiBESz7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 5 Feb 2022 13:55:59 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:39641 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381189AbiBESz0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 13:55:26 -0500
+        id S1381206AbiBES4E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 5 Feb 2022 13:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381085AbiBESzB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Feb 2022 13:55:01 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D3BC043186
+        for <linux-media@vger.kernel.org>; Sat,  5 Feb 2022 10:54:58 -0800 (PST)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 46E76240002;
-        Sat,  5 Feb 2022 18:55:23 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id C4C91240004;
+        Sat,  5 Feb 2022 18:54:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644087324;
+        t=1644087297;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GwbC5gn4h2V2gFK4wGghF7MDfEkNG/IYlc1iEgQerj0=;
-        b=L1JXL3Qty8YbjkBCLhJVJAw9Iqd4UQldBGCTyzEEJkgRDRu2AsUoq3UeW7TuMfbaxUNkwa
-        m7infW20DxJQin+WbsuHe6ut42BABmKqYtmwLcdl+VBCTcFFktcTdJkK6v2rPxSxoBezmP
-        pydAO11+Uh9weVgn9rbYVfZv2SeAv8i0y+pifvy7y8ZqW0/WAqPVzNd6F/RmlyN1lE5E2w
-        bHH8ptkwgdHAqjiat3CtNSiwIVmPcBVI0DJFqBpSVVhvj8CZa4h/q5EuF/zkHeEiy3oQQw
-        uIhGXLGdmytN6Udakwg1xk1B1D7pX6ghmO2Jpuv8BN+St7Tx755v3iKDpTnVzA==
+        bh=AkCUFwi2J94S15k7JkU9goJLycFgn6HTv5Orvy3MRa0=;
+        b=ZLQdaBZwYXCBbqHkCDF3izo/hbLxX+IM2FQgeAc0oXwkSxqQB7NFNtscrT8M1Tg9XS0nsH
+        OFG5oKC3xe81ceoLlBOcRNa2vuYXuBOUP+XgzbucAwwC1qusTMbbyLxH8H6lHRvCfpsj1b
+        XU+QwJK0bHbAYadoBzLgJvfRdsHDsxaONgYezB7TausHVH4rvvYDYGtXyRBLL5Iwwt94my
+        8J95GDe9YU1ujtN8EMxgf92uJrPZIIlfF/RHJW61AY4WqAPvfn38N04Eox0Mpm1lUWHbBS
+        jBaGNSV7xkA7sbpNrerGzFjGjArITjsp9//nLL0BAn/sz74pFMDRmQ8Uze3W9g==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
@@ -44,9 +47,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Helen Koike <helen.koike@collabora.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v2 26/66] media: sun6i-csi: Register the media device after creation
-Date:   Sat,  5 Feb 2022 19:53:49 +0100
-Message-Id: <20220205185429.2278860-27-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v2 10/66] MAINTAINERS: Add entry for the Allwinner A31 MIPI CSI-2 bridge driver
+Date:   Sat,  5 Feb 2022 19:53:33 +0100
+Message-Id: <20220205185429.2278860-11-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
 References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
@@ -56,50 +59,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There is no particular need to register the media device in the
-subdev notify complete callback.
-
-Register it in the v4l2 code instead where it's more in-context.
+Add myself as maintainer of the Allwinner A31 MIPI CSI-2 bridge media
+driver.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index 688288afae68..6f04f86504bf 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -638,7 +638,7 @@ static int sun6i_subdev_notify_complete(struct v4l2_async_notifier *notifier)
- 	if (ret < 0)
- 		return ret;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 79fd8a012893..040c54b2d767 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -751,6 +751,14 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
+ F:	drivers/media/platform/sunxi/sun4i-csi/
  
--	return media_device_register(&v4l2->media_dev);
-+	return 0;
- }
- 
- static const struct v4l2_async_notifier_operations sun6i_csi_async_ops = {
-@@ -687,6 +687,12 @@ static int sun6i_csi_v4l2_setup(struct sun6i_csi_device *csi_dev)
- 
- 	media_device_init(media_dev);
- 
-+	ret = media_device_register(media_dev);
-+	if (ret) {
-+		dev_err(dev, "failed to register media device: %d\n", ret);
-+		goto error_media;
-+	}
++ALLWINNER A31 MIPI CSI-2 BRIDGE DRIVER
++M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
++F:	drivers/media/platform/sunxi/sun6i-mipi-csi2/
 +
- 	/* V4L2 Control Handler */
- 
- 	ret = v4l2_ctrl_handler_init(&v4l2->ctrl_handler, 0);
-@@ -746,6 +752,7 @@ static int sun6i_csi_v4l2_setup(struct sun6i_csi_device *csi_dev)
- 	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
- 
- error_media:
-+	media_device_unregister(media_dev);
- 	media_device_cleanup(media_dev);
- 
- 	return ret;
+ ALLWINNER CPUFREQ DRIVER
+ M:	Yangtao Li <tiny.windzz@gmail.com>
+ L:	linux-pm@vger.kernel.org
 -- 
 2.34.1
 
