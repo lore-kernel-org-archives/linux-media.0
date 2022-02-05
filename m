@@ -2,147 +2,88 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6A8AC433FE
-	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 02:23:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58296C433EF
+	for <linux-media@archiver.kernel.org>; Sat,  5 Feb 2022 02:58:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378969AbiBECXU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Feb 2022 21:23:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
+        id S1352271AbiBEC6q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Feb 2022 21:58:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238225AbiBECXT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Feb 2022 21:23:19 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33D8C061347;
-        Fri,  4 Feb 2022 18:23:18 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A876E472;
-        Sat,  5 Feb 2022 03:23:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644027795;
-        bh=8Gxgs/LVp8UXOT1xU7N2J6LDQ9LAZmNhrPd3LDIdlMo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NCNAtwUHtLHwGFxaEF2imjparL0hfE4rzgnfLYW6qlioSE7/xW5JH9C1IJPEBx2ru
-         4DT6SluBZkEN+jVpXsMh3VN9pXV0FcCvKOXCs/jOvYZaKXArGVhsjCUQym1zsKPI2B
-         TefR05bvw6QBik7WRO50TPU5MSRMbP+xQBioJDj0=
-Date:   Sat, 5 Feb 2022 04:22:51 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     jeanmichel.hautbois@ideasonboard.com,
-        linux-arm-kernel@lists.infradead.org,
-        dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
-        robh@kernel.org, tomi.valkeinen@ideasonboard.com,
-        nsaenz@kernel.org, bcm-kernel-feedback-list@broadcom.com
-Subject: Re: (EXT) [RFC PATCH v4 03/12] dt-bindings: media: Add bindings for
- bcm2835-unicam
-Message-ID: <Yf3fe2F88SNcl2Jd@pendragon.ideasonboard.com>
-References: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
- <20220203175009.558868-4-jeanmichel.hautbois@ideasonboard.com>
- <7954256.DvuYhMxLoT@steina-w>
+        with ESMTP id S231124AbiBEC6o (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Feb 2022 21:58:44 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67BDC061346
+        for <linux-media@vger.kernel.org>; Fri,  4 Feb 2022 18:58:40 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso10603493wmh.4
+        for <linux-media@vger.kernel.org>; Fri, 04 Feb 2022 18:58:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iGtpqcp1nHTS80waP6AzkzibIOxQhqD+Ab5mRyforrU=;
+        b=Mx7SrGWFZb350t8S4ZKdmBAAl81kfjQpbppGEMYVxgrpeouyUEM8ucUj/RzMMgBv9e
+         OjFsqyGk3jZ72RrkEcWpJg6REmTtKG+5dZllyYe8SbkMwSPM6iztNdtvGY1yRN/axugV
+         FZppoJQ3Ul0OwSiWinynLh7CxqvapjnTnmDGrvx0JD+c6Wlc3kQIIogYxbw8m/sskspH
+         j8RzEm4exFw8BKwHfWsge6CfBg5hY2EyVnsU6SIaOPnPsOJNF3kHQWGH0FQQC27jYjqx
+         9EviOEkieME90XE/wN8gb1BBiktYCjPMEk4Qbkpf6h4YIQnl1zaRJMyAnrR4wWeE8OUZ
+         VNFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iGtpqcp1nHTS80waP6AzkzibIOxQhqD+Ab5mRyforrU=;
+        b=h9gfkdPaxiOhXu8sDL5Lr0s6JWcm54F09R+S9GutFXd30PwlYFLs9vg0zJHnX4myZe
+         QmpJsfYD2WktxeGrCBq0iI/LoxNqXuA2TtZsZa/usvKj2TrvyrpoPyuUg+4JlUtxM0Qd
+         dhdWmSr49N5/TG7EEESZysi+8sonJHBzaeOWgvCSW/n7X/AysODPCG1/uVoweYOYwLpp
+         dxn6GfgVw1UEGhM5YZt6H363jqTlFg6wdId9YAbPPYe9RTVkfKKKZdCg9wftMf57fHCa
+         mzXxPHr7ltbe3Z7siXzWS/rinUCSMe7jZKvesxUe2Pvs3T4WyaytUyp+Z0iPr8EN22jL
+         RBNw==
+X-Gm-Message-State: AOAM531ilG6cPYShd5zMLgpa7K6BqtN/yRfxLzHPQIdRHDfb5hC8Ivut
+        NnZTtIqsQWDvzMW8HM3MCMCkVw==
+X-Google-Smtp-Source: ABdhPJy2PjTZnYDHNFOhpwZFISfWQNB/U6N6fWmzQBFkOmx3Px5mK+uEBU37uS1cq25i4vPYVJ162w==
+X-Received: by 2002:a7b:cf3a:: with SMTP id m26mr1292714wmg.4.1644029919074;
+        Fri, 04 Feb 2022 18:58:39 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id h18sm3965302wro.9.2022.02.04.18.58.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 18:58:38 -0800 (PST)
+Message-ID: <a71ea5e6-30f5-827b-413b-f2b39e285a6c@linaro.org>
+Date:   Sat, 5 Feb 2022 02:58:37 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7954256.DvuYhMxLoT@steina-w>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v3 0/8] camss: Fixup multiple VDDA regulator support
+Content-Language: en-US
+To:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        mchehab@kernel.org, hverkuil@xs4all.nl, robert.foss@linaro.org
+Cc:     jonathan@marek.ca, andrey.konovalov@linaro.org,
+        todor.too@gmail.com, agross@kernel.org, bjorn.andersson@linaro.org,
+        jgrahsl@snap.com, hfink@snap.com, vladimir.zapolskiy@linaro.org,
+        dmitry.baryshkov@linaro.org
+References: <20220111125212.2343184-1-bryan.odonoghue@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20220111125212.2343184-1-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Alexander,
+On 11/01/2022 12:52, Bryan O'Donoghue wrote:
+> V3:
+> - Adds Robert's R-B for 7/8 patches
+> - 5/8 should be a NOP, for the sake of procedure left out Robert's RB
 
-On Fri, Feb 04, 2022 at 09:50:06AM +0100, Alexander Stein wrote:
-> Am Donnerstag, 3. Februar 2022, 18:50:00 CET schrieb Jean-Michel Hautbois:
-> > Introduce the dt-bindings documentation for bcm2835 CCP2/CSI2 Unicam
-> > camera interface. Also add a MAINTAINERS entry for it.
-> > 
-> > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> > Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
-> > Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-> > 
-> > ---
-> > v4:
-> > - make MAINTAINERS its own patch
-> > - describe the reg and clocks correctly
-> > - use a vendor entry for the number of data lanes
-> > ---
-> >  .../bindings/media/brcm,bcm2835-unicam.yaml   | 110 ++++++++++++++++++
-> >  1 file changed, 110 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
-> > b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml new file
-> > mode 100644
-> > index 000000000000..0725a0267c60
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
-> > @@ -0,0 +1,110 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Broadcom BCM283x Camera Interface (Unicam)
-> > +
-> > +maintainers:
-> > +  - Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
-> > +
-> > +description: |-
-> > +  The Unicam block on BCM283x SoCs is the receiver for either
-> > +  CSI-2 or CCP2 data from image sensors or similar devices.
-> > +
-> > +  The main platform using this SoC is the Raspberry Pi family of boards.
-> > +  On the Pi the VideoCore firmware can also control this hardware block,
-> > +  and driving it from two different processors will cause issues.
-> > +  To avoid this, the firmware checks the device tree configuration
-> > +  during boot. If it finds device tree nodes starting by csi then
-> > +  it will stop the firmware accessing the block, and it can then
-> > +  safely be used via the device tree binding.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: brcm,bcm2835-unicam
-> > +
-> > +  reg:
-> > +    items:
-> > +      - description: Unicam block.
-> > +      - description: Clock Manager Image (CMI) block.
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Clock to drive the LP state machine of Unicam.
-> > +      - description: Clock for the vpu (core clock).
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: lp
-> > +      - const: vpu
-> > +
-> > +  power-domains:
-> > +    items:
-> > +      - description: Unicam power domain
-> > +
-> > +  brcm,num-data-lanes:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [ 2, 4 ]
-> > +    description: Number of data lanes on the csi bus
-> 
-> There is already data-lanes in Documentation/devicetree/bindings/media/video-
-> interfaces.yaml. AFAICS these two are identical. Can't the video-
-> interface.yaml be used for this? I'm no expert TBH.
+Hi Hans, Michael
 
-This is the number of data lanes that the Unicam instance supports.
-There are two Unicam instances, and they can have 2 or 4 data lanes
-depending on the SoC. The data-lanes endpoint property indicates the
-number of lanes used on a particular board.
+This still applies and works on 5.18h any chance of getting a PR ?
 
--- 
-Regards,
+ssh://git@git.linaro.org/people/bryan.odonoghue/kernel.git / 
+br-v5.18h+camss-fixes
 
-Laurent Pinchart
+RB from Rob Herring and Robert Foss - included
+Vladimir gave his tested-by too
+
+---
+bod
