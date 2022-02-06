@@ -2,136 +2,116 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82E9FC433F5
-	for <linux-media@archiver.kernel.org>; Sun,  6 Feb 2022 13:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B03E1C433EF
+	for <linux-media@archiver.kernel.org>; Sun,  6 Feb 2022 18:46:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242601AbiBFN7C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 6 Feb 2022 08:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S241997AbiBFSqs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 6 Feb 2022 13:46:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241785AbiBFN6v (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 6 Feb 2022 08:58:51 -0500
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C00C03FED7;
-        Sun,  6 Feb 2022 05:58:44 -0800 (PST)
-Received: from [77.244.183.192] (port=63680 helo=melee.fritz.box)
-        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1nGgCy-00059v-LP; Sun, 06 Feb 2022 12:59:56 +0100
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        with ESMTP id S232836AbiBFSqs (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 6 Feb 2022 13:46:48 -0500
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FB1C06173B;
+        Sun,  6 Feb 2022 10:46:47 -0800 (PST)
+Received: by mail-oo1-f52.google.com with SMTP id v17-20020a4ac911000000b002eac41bb3f4so11293843ooq.10;
+        Sun, 06 Feb 2022 10:46:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=FNvvSF/XGKK6zmkaAdsGDR7wXk1nrQ8gxJ4ArdT4S0s=;
+        b=C4G7iv5rJSPp7zCZs+10PDBvLco60oyHERmALmswQlB/+4c8HqscsHNKc0HR4cDr9J
+         GyXckvshD+qnyhHHMQIFUiT6sdgTuJCj4vb//JydQP2Jzb7sxa38jq1y8XQZQ25KbGHR
+         e0a+lYKLX+GNJhbKqh53CzWVIl+W/9Nlzc0XTE5XiozQUxi5dIXirs7CLr6BAymQPgQ8
+         T+nXCjpYWyc2xAG7He1emmDjRPkrXSBEyc8C+1XycOqux6L4S0xFgw4N/vaTbF8nk2Uy
+         x6vPA1iR+iTK4XPpt9BIdsRpjs2ZH06/k7/XjtEaXOBOTJOW3Ta5tCARSQjVtv/hdDu4
+         rVwA==
+X-Gm-Message-State: AOAM5334b26qUTTUAukSwaDeSCK0kEQDaK81jViXqP+LLGNeTygU+nVt
+        SoVPngZuuHnfU0nHRtpO2w==
+X-Google-Smtp-Source: ABdhPJyygVn+coOiAAa9SX41FonfloJDi8YPPOaW3QvJEzjcIz4SXPLYTfAFsXCfBZinTyUjb0xxfQ==
+X-Received: by 2002:a05:6870:76ae:: with SMTP id dx46mr2598733oab.17.1644173206566;
+        Sun, 06 Feb 2022 10:46:46 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id m7sm3129558ots.32.2022.02.06.10.46.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Feb 2022 10:46:45 -0800 (PST)
+Received: (nullmailer pid 2818867 invoked by uid 1000);
+        Sun, 06 Feb 2022 18:46:44 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     matti.vaittinen@fi.rohmeurope.com,
+        Jacopo Mondi <jacopo@jmondi.org>,
         Wolfram Sang <wsa@the-dreams.de>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
         Peter Rosin <peda@axentia.se>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        matti.vaittinen@fi.rohmeurope.com
-Subject: [RFCv3 0/6] Hi,
-Date:   Sun,  6 Feb 2022 12:59:33 +0100
-Message-Id: <20220206115939.3091265-1-luca@lucaceresoli.net>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>
+In-Reply-To: <20220206115939.3091265-5-luca@lucaceresoli.net>
+References: <20220206115939.3091265-1-luca@lucaceresoli.net> <20220206115939.3091265-5-luca@lucaceresoli.net>
+Subject: Re: [RFCv3 4/6] media: dt-bindings: add DS90UB954-Q1 video deserializer
+Date:   Sun, 06 Feb 2022 12:46:44 -0600
+Message-Id: <1644173204.724898.2818866.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-this RFCv3, codename "FOSDEM Fries", of RFC patches to support the TI
-DS90UB9xx serializer/deserializer chipsets with I2C address translation.
+On Sun, 06 Feb 2022 12:59:37 +0100, Luca Ceresoli wrote:
+> Describe the Texas Instruments DS90UB954-Q1, a 2-input MIPI CSI-2 video
+> deserializer with I2C Address Translator and remote GPIOs.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> ---
+> 
+> Changes RFCv2 -> RFCv3:
+> 
+>  - rewrite in yaml
+>  - use new layout based on remote-chips under the main deser node
+>  - new clock configuration based on common clock framework
+> 
+> Changes RFCv1 -> RFCv2:
+> 
+>  - add explicit aliases for the FPD-link RX ports (optional)
+>  - add proper remote GPIO description
+> ---
+>  .../bindings/media/i2c/ti,ds90ub954-q1.yaml   | 235 ++++++++++++++++++
+>  MAINTAINERS                                   |   6 +
+>  2 files changed, 241 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml
+> 
 
-I sent RFCv2 back in 2019 (!). After that I have applied most of the
-improvements proposed during code review, most notably device tree
-representation and proper use of kernel abstractions for clocks and GPIO. I
-have also done many improvements all over the drivers code.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-However I still don't consider these drivers "ready", hence the RFC status.
+yamllint warnings/errors:
 
-One reason is that, while the I2C ATR idea has been considered good by
-Wolfram, its implementation requires I2C core changes that have been tried
-but never made it to mainline. I think that discussion needs to be reopened
-and work has to be done on that side. Thus for the time being this code
-still has the alias pool: it is an interim solution until I2C core is
-ready.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml: properties:reg-names: {'description': 'Names of I2C address used to communicate with the chip, must match\nthe "reg" values; mandatory if there are 2 or more addresses.\n"main" is the main I2C address, used to access shared registers.\n"rxport0" and "rxport1" are the I2C alias to access FPD-link RX\nport specific registers; must not be used by other slaves on the\nsame bus. "ser0" and "ser1" are the I2C alias to access the remote\nserializer connected on each FPD-link RX port; must not be used by\nother slaves on the same bus.\n', 'minItems': 1, 'maxItems': 5, 'items': [{'const': 'main'}, {'const': 'rxport0'}, {'const': 'rxport1'}, {'const': 'ser0'}, {'const': 'ser1'}]} should not be valid under {'required': ['maxItems']}
+	hint: "maxItems" is not needed with an "items" list
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml: ignoring, error in schema: properties: reg-names
+Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.example.dt.yaml:0:0: /example-0/i2c@0/deser@3d: failed to match any schema with compatible: ['ti,ds90ub954-q1']
 
-Also be aware that the only hardware where I sould test this code runs a
-v4.19 kernel. I cannot guarantee it will work perfectly on mainline.
+doc reference errors (make refcheckdocs):
 
-And since my hardware has only one camera connected to each deserializer I
-dropped support. However I wrote the code to be able to easily add support
-for 2 and 4 camera inputs as well as 2 CSI-2 outputs (DS90UB960).
+See https://patchwork.ozlabs.org/patch/1588972
 
-Finally, I dropped all attempts at supporting hotplug. The goals I had 2+
-years ago are not reasonably doable even with current kernels. Luckily all
-the users that I talked with are happy without hotplug. For this reason I
-simplified the serializer management in the DS90UB954 driver by keeping the
-serializer always instantiated.
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-Even with the above limitations I felt I'd send this v3 anyway since
-several people have contacted me since v2 asking whether this
-implementation has made progress towards mainline. Some even improved on
-top of my code it their own forks. As I cannot afford to work on this topic
-in the near future, here is the latest and greatest version I can produce,
-with all the improvements I made so far.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-That's all, enjoy the code!
+pip3 install dtschema --upgrade
 
-References:
-
-[RFCv2] https://lore.kernel.org/lkml/20190723203723.11730-1-luca@lucaceresoli.net/
-[RFCv1] https://lore.kernel.org/linux-media/20190108223953.9969-1-luca@lucaceresoli.net/
-
-Best regards.
-Luca
-
-Luca Ceresoli (6):
-  i2c: core: let adapters be notified of client attach/detach
-  i2c: add I2C Address Translator (ATR) support
-  media: dt-bindings: add DS90UB953-Q1 video serializer
-  media: dt-bindings: add DS90UB954-Q1 video deserializer
-  media: ds90ub954: new driver for TI DS90UB954-Q1 video deserializer
-  media: ds90ub953: new driver for TI DS90UB953-Q1 video serializer
-
- .../bindings/media/i2c/ti,ds90ub953-q1.yaml   |   96 +
- .../bindings/media/i2c/ti,ds90ub954-q1.yaml   |  235 +++
- MAINTAINERS                                   |   22 +
- drivers/i2c/Kconfig                           |    9 +
- drivers/i2c/Makefile                          |    1 +
- drivers/i2c/i2c-atr.c                         |  557 ++++++
- drivers/i2c/i2c-core-base.c                   |   18 +-
- drivers/media/i2c/Kconfig                     |   22 +
- drivers/media/i2c/Makefile                    |    3 +
- drivers/media/i2c/ds90ub953.c                 |  560 ++++++
- drivers/media/i2c/ds90ub954.c                 | 1648 +++++++++++++++++
- include/dt-bindings/media/ds90ub953.h         |   16 +
- include/linux/i2c-atr.h                       |   82 +
- include/linux/i2c.h                           |   16 +
- 14 files changed, 3284 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub954-q1.yaml
- create mode 100644 drivers/i2c/i2c-atr.c
- create mode 100644 drivers/media/i2c/ds90ub953.c
- create mode 100644 drivers/media/i2c/ds90ub954.c
- create mode 100644 include/dt-bindings/media/ds90ub953.h
- create mode 100644 include/linux/i2c-atr.h
-
--- 
-2.25.1
+Please check and re-submit.
 
