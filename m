@@ -2,200 +2,223 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B17B8C433EF
-	for <linux-media@archiver.kernel.org>; Sun,  6 Feb 2022 13:09:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3C6FC433FE
+	for <linux-media@archiver.kernel.org>; Sun,  6 Feb 2022 13:57:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238395AbiBFNJ3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 6 Feb 2022 08:09:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
+        id S240442AbiBFN5x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 6 Feb 2022 08:57:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236193AbiBFNJ2 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 6 Feb 2022 08:09:28 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E969C06173B
-        for <linux-media@vger.kernel.org>; Sun,  6 Feb 2022 05:09:25 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id cf2so8291205edb.9
-        for <linux-media@vger.kernel.org>; Sun, 06 Feb 2022 05:09:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MHIz3Dwre4tP6Q9bEyDnouvCJsPoMkCD31ljHi1figY=;
-        b=n4em8JyzX1Xmca5wj9Ex2hf6ab5VBqAE25+S/+kRckovgV+6/U2epazWCx43iWv9cR
-         aYDRm2UNdFB3lDdMZ/ECBez5QZgn48O5vx3i90N+sjYAt+RsD7/xHRWAZs6GDtZsENeU
-         wKgXB0gG8CnR1ZwL63F4/oB6nfNTM3MD4PMZ9E90zbQlp9XkQ4b6jzgVEodLrl7yy5op
-         a3h6ep2+ZYf07EVsa2eBQsz20wUqmHvl+VVoF2orEgIuwe6rWh/+ukf9aNTog3YXEzDv
-         g12lqmS0M3+b3z6drByy6kZPBZLngY1vT3W4k/9h2izHFNbhSCzcWeNQjmqTxfTCU1ws
-         kvmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MHIz3Dwre4tP6Q9bEyDnouvCJsPoMkCD31ljHi1figY=;
-        b=IXe1GR5Ux+WEK36Yx2kDbp7z9mjcPh7RYPC8pd2HCz+/aAiRRPFLfM8faAYMI0yjy4
-         D7JxyGfglvusMP+UjzMHheKCquc/ChB+LMFBZ3XZLCBd2sjcUDROv4xucmZ3d00s3rAT
-         mojcUuUQUx8f7ffzERp6K4NkclTMJcbthyYdA8dreRPuw/XdNUtFAKDzWPS5uFyyifBv
-         2qNk8yEgt633zKLFPwRXx088kzmS5FeQNUluAPwnuTEDzAVjSlQ6DiraH/IoeokdxztG
-         a06GVav/ykpCW152dtVd69SQKQj0TXJ6ZXWz5fPZPZ3Xo20dasvjwn1WA9fq3QL5jhTz
-         Ta+w==
-X-Gm-Message-State: AOAM530IH8ESDYYuJw3EMQrkNaielPT3F0KnVu/um+no5dvwfF3Ovcem
-        CuYIRV2Hs8i2ayiNpv5x5M5x0r+qxKJDEgcPV9FPXQ==
-X-Google-Smtp-Source: ABdhPJzIGdBf/BwLMf3qdRE5GZYN+c8/w4PVd7M5MgrPgzYMrAWBQIf/AaIXvRrJOY+pnPtpOYwtHhAfQprBX/EXA/o=
-X-Received: by 2002:a05:6402:84a:: with SMTP id b10mr8849389edz.143.1644152964025;
- Sun, 06 Feb 2022 05:09:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20220201183324.493542-1-jernej.skrabec@gmail.com>
-In-Reply-To: <20220201183324.493542-1-jernej.skrabec@gmail.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Sun, 6 Feb 2022 10:09:11 -0300
-Message-ID: <CAAEAJfALjVhrLcVbS0vyXXPJUy1tmv4PcMbWxte0u9htn+myjw@mail.gmail.com>
-Subject: Re: [PATCH] media: cedrus: Add watchdog for job completion
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        with ESMTP id S233988AbiBFN5w (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 6 Feb 2022 08:57:52 -0500
+X-Greylist: delayed 7071 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 05:57:50 PST
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B474CC043182;
+        Sun,  6 Feb 2022 05:57:50 -0800 (PST)
+Received: from [77.244.183.192] (port=63680 helo=melee.fritz.box)
+        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nGgDK-00059v-PZ; Sun, 06 Feb 2022 13:00:18 +0100
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Peter Rosin <peda@axentia.se>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        matti.vaittinen@fi.rohmeurope.com
+Subject: [RFCv3 3/6] media: dt-bindings: add DS90UB953-Q1 video serializer
+Date:   Sun,  6 Feb 2022 12:59:36 +0100
+Message-Id: <20220206115939.3091265-4-luca@lucaceresoli.net>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220206115939.3091265-1-luca@lucaceresoli.net>
+References: <20220206115939.3091265-1-luca@lucaceresoli.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Describe the Texas Instruments DS90UB953-Q1, a MIPI CSI-2 video serializer
+with I2C Address Translator and remote GPIOs.
 
-On Tue, 1 Feb 2022 at 15:34, Jernej Skrabec <jernej.skrabec@gmail.com> wrote:
->
-> Currently, if job is not completed for whatever reason, userspace
-> application can hang on ioctl and thus become unkillable.
->
-> In order to prevent that, implement watchdog, which will complete job
-> after 2 seconds with error state.
->
-> Concept is borrowed from hantro driver.
->
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-This has been very useful developing Hantro,
-to get some indication of hardware being programmed wrongly:
+---
 
-Patch looks correct.
+Changes RFCv2 -> RFCv3:
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+ - rewrite in yaml
 
+Changes RFCv1 -> RFCv2: none, this patch is new in RFCv2
+---
+ .../bindings/media/i2c/ti,ds90ub953-q1.yaml   | 96 +++++++++++++++++++
+ MAINTAINERS                                   |  7 ++
+ include/dt-bindings/media/ds90ub953.h         | 16 ++++
+ 3 files changed, 119 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
+ create mode 100644 include/dt-bindings/media/ds90ub953.h
 
-> ---
->  drivers/staging/media/sunxi/cedrus/cedrus.c   |  2 ++
->  drivers/staging/media/sunxi/cedrus/cedrus.h   |  3 +++
->  .../staging/media/sunxi/cedrus/cedrus_dec.c   |  4 +++
->  .../staging/media/sunxi/cedrus/cedrus_hw.c    | 25 +++++++++++++++++++
->  .../staging/media/sunxi/cedrus/cedrus_hw.h    |  2 ++
->  5 files changed, 36 insertions(+)
->
-> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-> index 4a4b714b0f26..68b3dcdb5df3 100644
-> --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-> +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-> @@ -439,6 +439,8 @@ static int cedrus_probe(struct platform_device *pdev)
->
->         mutex_init(&dev->dev_mutex);
->
-> +       INIT_DELAYED_WORK(&dev->watchdog_work, cedrus_watchdog);
-> +
->         ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
->         if (ret) {
->                 dev_err(&pdev->dev, "Failed to register V4L2 device\n");
-> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/staging/media/sunxi/cedrus/cedrus.h
-> index c345f2984041..3bc094eb497f 100644
-> --- a/drivers/staging/media/sunxi/cedrus/cedrus.h
-> +++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
-> @@ -24,6 +24,7 @@
->
->  #include <linux/iopoll.h>
->  #include <linux/platform_device.h>
-> +#include <linux/workqueue.h>
->
->  #define CEDRUS_NAME                    "cedrus"
->
-> @@ -194,6 +195,8 @@ struct cedrus_dev {
->         struct reset_control    *rstc;
->
->         unsigned int            capabilities;
-> +
-> +       struct delayed_work     watchdog_work;
->  };
->
->  extern struct cedrus_dec_ops cedrus_dec_ops_mpeg2;
-> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
-> index a16c1422558f..9c7200299465 100644
-> --- a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
-> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
-> @@ -97,4 +97,8 @@ void cedrus_device_run(void *priv)
->                 v4l2_ctrl_request_complete(src_req, &ctx->hdl);
->
->         dev->dec_ops[ctx->current_codec]->trigger(ctx);
-> +
-> +       /* Start the watchdog timer. */
-> +       schedule_delayed_work(&dev->watchdog_work,
-> +                             msecs_to_jiffies(2000));
->  }
-> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
-> index 2d7663726467..a6470a89851e 100644
-> --- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
-> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
-> @@ -118,6 +118,13 @@ static irqreturn_t cedrus_irq(int irq, void *data)
->         enum vb2_buffer_state state;
->         enum cedrus_irq_status status;
->
-> +       /*
-> +        * If cancel_delayed_work returns false it means watchdog already
-> +        * executed and finished the job.
-> +        */
-> +       if (!cancel_delayed_work(&dev->watchdog_work))
-> +               return IRQ_HANDLED;
-> +
->         ctx = v4l2_m2m_get_curr_priv(dev->m2m_dev);
->         if (!ctx) {
->                 v4l2_err(&dev->v4l2_dev,
-> @@ -143,6 +150,24 @@ static irqreturn_t cedrus_irq(int irq, void *data)
->         return IRQ_HANDLED;
->  }
->
-> +void cedrus_watchdog(struct work_struct *work)
-> +{
-> +       struct cedrus_dev *dev;
-> +       struct cedrus_ctx *ctx;
-> +
-> +       dev = container_of(to_delayed_work(work),
-> +                          struct cedrus_dev, watchdog_work);
-> +
-> +       ctx = v4l2_m2m_get_curr_priv(dev->m2m_dev);
-> +       if (!ctx)
-> +               return;
-> +
-> +       v4l2_err(&dev->v4l2_dev, "frame processing timed out!\n");
-> +       reset_control_reset(dev->rstc);
-> +       v4l2_m2m_buf_done_and_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx,
-> +                                        VB2_BUF_STATE_ERROR);
-> +}
-> +
->  int cedrus_hw_suspend(struct device *device)
->  {
->         struct cedrus_dev *dev = dev_get_drvdata(device);
-> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h b/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
-> index 45f641f0bfa2..7c92f00e36da 100644
-> --- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
-> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
-> @@ -28,4 +28,6 @@ int cedrus_hw_resume(struct device *device);
->  int cedrus_hw_probe(struct cedrus_dev *dev);
->  void cedrus_hw_remove(struct cedrus_dev *dev);
->
-> +void cedrus_watchdog(struct work_struct *work);
-> +
->  #endif
-> --
-> 2.35.1
->
+diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
+new file mode 100644
+index 000000000000..2a836a3e65e9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
+@@ -0,0 +1,96 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2019 Renesas Electronics Corp.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub953-q1.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments DS90UB953-Q1 video serializer
++
++maintainers:
++  - Luca Ceresoli <luca@lucaceresoli.net>
++
++description: |
++  The TI DS90UB953-Q1 is a MIPI CSI-2 video serializer that forwards a MIPI
++  CSI-2 input video stream over an FPD Link 3 connection to a remote
++  deserializer. It also allows access to I2C and GPIO from the deserializer.
++
++  The DT definitions can be found in include/dt-bindings/media/ds90ub953.h
++
++  When used as a the remote counterpart of a deserializer (e.g. the
++  DS90UB954-Q1), the serializer is described in the
++  "deserializer/remote-chips/remote-chip@[01]" node.
++
++properties:
++  compatible:
++    const: ti,ds90ub953-q1
++
++  reg:
++    description: |
++      Index of the remote (serializer) RX port that this serializer is
++      connected to.
++    maxItems: 1
++
++  clocks:
++    description: FPD-Link line rate (provided by the deserializer)
++    maxItems: 1
++
++  gpio-controller: true
++
++  '#gpio-cells':
++    const: 2
++
++  '#clock-cells':
++    const: 0
++
++  ti,gpio-functions:
++    description: |
++      A list of 4 values defining how the 4 GPIO pins are connected in
++      hardware; possible values are:
++      - DS90_GPIO_FUNC_UNUSED (0): the GPIO is not unused
++      - DS90_GPIO_FUNC_INPUT (1): the GPIO is an input to the ds90ub953,
++        the remote chip (deserializer) can read its value
++      - DS90_GPIO_FUNC_OUTPUT_REMOTE (2): the GPIO is an output from the
++        ds90ub953, the remote chip (deserializer) can set its value
++      For unspecified values the GPIO is assumed to be unused.
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    maxItems: 4
++
++patternProperties:
++  '^ti,ds90ub953-q1-(clk|d[0-3])-inv-pol-quirk$':
++    description: |
++      The MIPI CSI-2 input clock lane or any of the data lanes has inverted
++      polarity in hardware
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - gpio-controller
++  - '#gpio-cells'
++  - '#clock-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/media/ds90ub953.h>
++    remote-chips {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      remote-chip@0 {
++        reg = <0>;
++        compatible = "ti,ds90ub953-q1";
++        clocks = <&deser>;
++        ti,gpio-functions =
++          <DS90_GPIO_FUNC_UNUSED
++          DS90_GPIO_FUNC_OUTPUT_REMOTE
++          DS90_GPIO_FUNC_UNUSED
++          DS90_GPIO_FUNC_UNUSED>;
++
++        gpio-controller;
++        #gpio-cells = <2>;
++        #clock-cells = <0>;
++      };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7383aec87e4a..4429ce035496 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19090,6 +19090,13 @@ F:	include/linux/dma/k3-udma-glue.h
+ F:	include/linux/dma/ti-cppi5.h
+ F:	include/linux/dma/k3-psil.h
+ 
++TEXAS INSTRUMENTS DS90UB953 VIDEO SERIALIZER DRIVER
++M:	Luca Ceresoli <luca@lucaceresoli.net>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/i2c/ti,ds90ub953-q1.yaml
++F:	include/dt-bindings/media/ds90ub953.h
++
+ TEXAS INSTRUMENTS' SYSTEM CONTROL INTERFACE (TISCI) PROTOCOL DRIVER
+ M:	Nishanth Menon <nm@ti.com>
+ M:	Tero Kristo <kristo@kernel.org>
+diff --git a/include/dt-bindings/media/ds90ub953.h b/include/dt-bindings/media/ds90ub953.h
+new file mode 100644
+index 000000000000..5359432968e9
+--- /dev/null
++++ b/include/dt-bindings/media/ds90ub953.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/**
++ * Definitions for the Texas Instruments DS90UB953-Q1 video serializer
++ *
++ * Copyright (c) 2019 Luca Ceresoli <luca@lucaceresoli.net>
++ */
++
++#ifndef _DS90UB953_H
++#define _DS90UB953_H
++
++#define DS90_GPIO_FUNC_UNUSED             0
++#define DS90_GPIO_FUNC_INPUT              1
++#define DS90_GPIO_FUNC_OUTPUT_REMOTE      2
++#define DS90_GPIO_N_FUNCS                 3
++
++#endif /* _DS90UB953_H */
+-- 
+2.25.1
+
