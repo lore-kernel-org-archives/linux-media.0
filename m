@@ -2,186 +2,110 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22252C433FE
-	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 16:08:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1454BC433EF
+	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 16:22:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243771AbiBGQHY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Feb 2022 11:07:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
+        id S239305AbiBGQUy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Feb 2022 11:20:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377919AbiBGP5G (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 10:57:06 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0C8C0401CC
-        for <linux-media@vger.kernel.org>; Mon,  7 Feb 2022 07:57:05 -0800 (PST)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id B681D4000B;
-        Mon,  7 Feb 2022 15:57:00 +0000 (UTC)
-Date:   Mon, 7 Feb 2022 16:58:07 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     slongerbeam@gmail.com, sakari.ailus@iki.fi,
-        hverkuil-cisco@xs4all.nl, mirela.rabulea@nxp.com,
-        xavier.roumegue@oss.nxp.com, tomi.valkeinen@ideasonboard.com,
-        hugues.fruchet@st.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
-        aford173@gmail.com, festevam@gmail.com,
-        eugen.hristev@microchip.com, jbrunet@baylibre.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 12/21] media: ov5640: Fix durations to comply with FPS
-Message-ID: <20220207155807.pqyfhrpf354ktgar@uno.localdomain>
-References: <20220131143245.128089-1-jacopo@jmondi.org>
- <20220131144444.129036-1-jacopo@jmondi.org>
- <Yfr8RIRGiSs89D4z@pendragon.ideasonboard.com>
+        with ESMTP id S1387107AbiBGQL2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 11:11:28 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD882C0401CC
+        for <linux-media@vger.kernel.org>; Mon,  7 Feb 2022 08:11:27 -0800 (PST)
+Received: from deskari.lan (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5610B340;
+        Mon,  7 Feb 2022 17:11:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644250284;
+        bh=zYD+ZbJr7xWXhhJkky32537TJfI8AR73bYZB7X21nPI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XgmWQ6uduQsVmy9dLvyWEm3kn1Yz5pBiWwal6jeAt1MjXOe0vWAu2tto4mw/nPJ02
+         3yBtzVuIFDyHleSJXDHJyXXb/4dTT4Et0Mc5jGOSM01OiRXYRfxPwGcnQLol5yt0G8
+         UJuhyHMDAYS4YSk9pZqdtaWlCJI0O/R3cTJfE+HY=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Pratyush Yadav <p.yadav@ti.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 0/7] v4l: subdev active state
+Date:   Mon,  7 Feb 2022 18:11:00 +0200
+Message-Id: <20220207161107.1166376-1-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yfr8RIRGiSs89D4z@pendragon.ideasonboard.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+Hi,
 
-On Wed, Feb 02, 2022 at 11:48:52PM +0200, Laurent Pinchart wrote:
-> Hi Jacopo,
->
-> Thank you for the patch.
->
-> On Mon, Jan 31, 2022 at 03:44:40PM +0100, Jacopo Mondi wrote:
-> > Now that the frame duration can be controlled by tuning the VBLANK
-> > duration, fix all modes to comply with the reported FPS.
-> >
-> > All modes run at 30 FPS except for full-resolution mode 2592x1944
-> > which runs at 15FPS.
-> >
-> > Tested on a 2 data lanes setup in UYVY and RGB565 modes.
-> >
-> > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> > ---
-> >  drivers/media/i2c/ov5640.c | 30 +++++++++++++++---------------
-> >  1 file changed, 15 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-> > index 6eeb50724195..2176fa0b8eae 100644
-> > --- a/drivers/media/i2c/ov5640.c
-> > +++ b/drivers/media/i2c/ov5640.c
-> > @@ -611,8 +611,8 @@ ov5640_mode_data[OV5640_NUM_MODES] = {
-> >  			.width	= 160,
-> >  			.height	= 120,
-> >  		},
-> > -		.ppl		= 1896,
-> > -		.vblank_def	= 864,
-> > +		.ppl		= 1600,
-> > +		.vblank_def	= 878,
->
-> The total number of pixels is changed from 1896 * (120+864) = 1865664 to
-> 1600 * (120+878) = 1596800. The latter produces 30.06fps with a 48 Mp/s
-> rate, which certainly seems better than the 25.73fps produced by the
-> format. I wonder, though, if this has always been wrong, or if the
-> incorrect frame rate got introduced earlier in this series.
->
+This is v3 of the subdev active state series. Changes since v2:
 
-Ideally, the values there come from the existing tables. I could have
-introduced mistakes of course, but not changed those numbers
-internally. With the current implementation I recall the framerate was
-not accurate I can't tell if that's because the PLL is wrongly
-programmed or because of wrong timings.
+- Doc improvements
+- Allow state->lock to be set by the driver (similarly to v4l2_ctrl_handler)
+- Rename fields in 'struct v4l2_subdev_pad_config' and drop the try_ prefix.
+- Add v4l2_subdev_get_locked_active_state(), which calls lockdep_assert_locked() and returns the state.
+- Changed v4l2_subdev_get_active_state() to call lockdep_assert_not_locked()
 
-> Also, how did you pick a htot value of 1600 ?
->
+The idea with the v4l2_subdev_get_active_state /
+v4l2_subdev_get_locked_active_state change is to have a lockdep_assert
+called. Roughly I think there are two cases where the
+v4l2_subdev_get_active_state could be called:
 
-mmm, it was a value that allowed me to range in a decent interval of
-vblank values. Found by experiments I have to admit, not planned.
-It could prbably be better estimated...
+- With the intention of just passing it forward to another subdev, in
+  which case the state must _not_ be locked. Here
+  v4l2_subdev_get_active_state() can be called.
 
+- With the intention of using the state in a case where the state is
+  known to be already locked. Here v4l2_subdev_get_locked_active_state()
+  can be called.
 
-> >  		.reg_data	= ov5640_setting_QQVGA_160_120,
-> >  		.reg_data_size	= ARRAY_SIZE(ov5640_setting_QQVGA_160_120),
-> >  		.max_fps	= OV5640_30_FPS
-> > @@ -633,8 +633,8 @@ ov5640_mode_data[OV5640_NUM_MODES] = {
-> >  			.width	= 176,
-> >  			.height	= 144,
-> >  		},
-> > -		.ppl		= 1896,
-> > -		.vblank_def	= 840,
-> > +		.ppl		= 1600,
-> > +		.vblank_def	= 854,
-> >  		.reg_data	= ov5640_setting_QCIF_176_144,
-> >  		.reg_data_size	= ARRAY_SIZE(ov5640_setting_QCIF_176_144),
-> >  		.max_fps	= OV5640_30_FPS
-> > @@ -655,8 +655,8 @@ ov5640_mode_data[OV5640_NUM_MODES] = {
-> >  			.width	= 320,
-> >  			.height	= 240,
-> >  		},
-> > -		.ppl		= 1896,
-> > -		.vblank_def	= 744,
-> > +		.ppl		= 1600,
-> > +		.vblank_def	= 760,
-> >  		.reg_data	= ov5640_setting_QVGA_320_240,
-> >  		.reg_data_size	= ARRAY_SIZE(ov5640_setting_QVGA_320_240),
-> >  		.max_fps	= OV5640_30_FPS
-> > @@ -677,8 +677,8 @@ ov5640_mode_data[OV5640_NUM_MODES] = {
-> >  			.width	= 640,
-> >  			.height	= 480,
-> >  		},
-> > -		.ppl		= 1896,
-> > -		.vblank_def	= 600,
-> > +		.ppl		= 1600,
-> > +		.vblank_def	= 520,
-> >  		.reg_data	= ov5640_setting_VGA_640_480,
-> >  		.reg_data_size	= ARRAY_SIZE(ov5640_setting_VGA_640_480),
-> >  		.max_fps	= OV5640_60_FPS
-> > @@ -700,7 +700,7 @@ ov5640_mode_data[OV5640_NUM_MODES] = {
-> >  			.height	= 480,
-> >  		},
-> >  		.ppl		= 1896,
-> > -		.vblank_def	= 504,
-> > +		.vblank_def	= 1206,
-> >  		.reg_data	= ov5640_setting_NTSC_720_480,
-> >  		.reg_data_size	= ARRAY_SIZE(ov5640_setting_NTSC_720_480),
-> >  		.max_fps	= OV5640_30_FPS
-> > @@ -722,7 +722,7 @@ ov5640_mode_data[OV5640_NUM_MODES] = {
-> >  			.height	= 576,
-> >  		},
-> >  		.ppl		= 1896,
-> > -		.vblank_def	= 408,
-> > +		.vblank_def	= 1110,
-> >  		.reg_data	= ov5640_setting_PAL_720_576,
-> >  		.reg_data_size	= ARRAY_SIZE(ov5640_setting_PAL_720_576),
-> >  		.max_fps	= OV5640_30_FPS
-> > @@ -744,7 +744,7 @@ ov5640_mode_data[OV5640_NUM_MODES] = {
-> >  			.height	= 768,
-> >  		},
-> >  		.ppl		= 1896,
-> > -		.vblank_def	= 312,
-> > +		.vblank_def	= 918,
-> >  		.reg_data	= ov5640_setting_XGA_1024_768,
-> >  		.reg_data_size	= ARRAY_SIZE(ov5640_setting_XGA_1024_768),
-> >  		.max_fps	= OV5640_30_FPS
-> > @@ -765,8 +765,8 @@ ov5640_mode_data[OV5640_NUM_MODES] = {
-> >  			.width	= 1280,
-> >  			.height	= 720,
-> >  		},
-> > -		.ppl		= 1896,
-> > -		.vblank_def	= 20,
-> > +		.ppl		= 1600,
-> > +		.vblank_def	= 560,
-> >  		.reg_data	= ov5640_setting_720P_1280_720,
-> >  		.reg_data_size	= ARRAY_SIZE(ov5640_setting_720P_1280_720),
-> >  		.max_fps	= OV5640_30_FPS
-> > @@ -787,8 +787,8 @@ ov5640_mode_data[OV5640_NUM_MODES] = {
-> >  			.width	= 1920,
-> >  			.height	= 1080,
-> >  		},
-> > -		.ppl		= 2500,
-> > -		.vblank_def	= 40,
-> > +		.ppl		= 2234,
-> > +		.vblank_def	= 24,
-> >  		.reg_data	= ov5640_setting_1080P_1920_1080,
-> >  		.reg_data_size	= ARRAY_SIZE(ov5640_setting_1080P_1920_1080),
-> >  		.max_fps	= OV5640_30_FPS
->
-> --
-> Regards,
->
-> Laurent Pinchart
+The state->lock change hopefully solves Sakari's concerns about the
+locking between controls and state.
+
+ Tomi
+
+Tomi Valkeinen (7):
+  media: subdev: rename subdev-state alloc & free
+  media: subdev: add active state to struct v4l2_subdev
+  media: subdev: pass also the active state to subdevs from ioctls
+  media: subdev: add subdev state locking
+  media: subdev: Add v4l2_subdev_lock_and_return_state()
+  media: Documentation: add documentation about subdev state
+  media: subdev: rename v4l2_subdev_pad_config.try_* fields
+
+ .../driver-api/media/v4l2-subdev.rst          |  60 ++++++
+ drivers/media/i2c/adv7183.c                   |   2 +-
+ drivers/media/i2c/imx274.c                    |  12 +-
+ drivers/media/i2c/mt9m001.c                   |   2 +-
+ drivers/media/i2c/mt9m111.c                   |   2 +-
+ drivers/media/i2c/mt9t112.c                   |   2 +-
+ drivers/media/i2c/mt9v011.c                   |   2 +-
+ drivers/media/i2c/mt9v111.c                   |   4 +-
+ drivers/media/i2c/ov2640.c                    |   2 +-
+ drivers/media/i2c/ov6650.c                    |  18 +-
+ drivers/media/i2c/ov772x.c                    |   2 +-
+ drivers/media/i2c/ov9640.c                    |   2 +-
+ drivers/media/i2c/rj54n1cb0c.c                |   2 +-
+ drivers/media/i2c/saa6752hs.c                 |   2 +-
+ drivers/media/i2c/sr030pc30.c                 |   2 +-
+ drivers/media/i2c/tw9910.c                    |   2 +-
+ drivers/media/i2c/vs6624.c                    |   2 +-
+ drivers/media/platform/atmel/atmel-isc-base.c |   8 +-
+ drivers/media/platform/atmel/atmel-isi.c      |   8 +-
+ drivers/media/platform/rcar-vin/rcar-v4l2.c   |   9 +-
+ drivers/media/platform/vsp1/vsp1_entity.c     |  10 +-
+ drivers/media/v4l2-core/v4l2-subdev.c         | 126 +++++++++--
+ drivers/staging/media/tegra-video/vi.c        |  10 +-
+ include/media/v4l2-subdev.h                   | 201 ++++++++++++++++--
+ 24 files changed, 415 insertions(+), 77 deletions(-)
+
+-- 
+2.25.1
+
