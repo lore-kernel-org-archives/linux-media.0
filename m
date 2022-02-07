@@ -2,222 +2,221 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E324C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D042C433FE
 	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 15:56:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344552AbiBGPzf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Feb 2022 10:55:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
+        id S236871AbiBGPze (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Feb 2022 10:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345569AbiBGPv1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 10:51:27 -0500
-X-Greylist: delayed 52220 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 07:51:25 PST
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A201AC0401CE;
-        Mon,  7 Feb 2022 07:51:25 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 54D34340;
-        Mon,  7 Feb 2022 16:51:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644249083;
-        bh=Kg8KkyXqodwxnkoOUnTFgILuDislMphNhCMp4Cyt3k0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d+p/yyLLVWoFHaQMa3PKOYne2f5NsLX/aSXsN5whwh5fbgyeQpYs8XdYey0+Cmdzm
-         wzUhiqC1tH8lsKZPl6Eninn4/oSoKEz/NKHoSjt3wcCtb6Np67rcbw0PDyekIXy8+L
-         kBpaesRvFQGudsLOVg3bNSdwSx4HeFms+1kyhIT4=
-Date:   Mon, 7 Feb 2022 17:51:21 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 61/66] dt-bindings: media: Add Allwinner A31 ISP
- bindings documentation
-Message-ID: <YgE/+UmP4nJVxtRT@pendragon.ideasonboard.com>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-62-paul.kocialkowski@bootlin.com>
+        with ESMTP id S1386296AbiBGPqf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 10:46:35 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB91C0401CC
+        for <linux-media@vger.kernel.org>; Mon,  7 Feb 2022 07:46:34 -0800 (PST)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id D3209100002;
+        Mon,  7 Feb 2022 15:46:28 +0000 (UTC)
+Date:   Mon, 7 Feb 2022 16:47:35 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     slongerbeam@gmail.com, sakari.ailus@iki.fi,
+        hverkuil-cisco@xs4all.nl, mirela.rabulea@nxp.com,
+        xavier.roumegue@oss.nxp.com, tomi.valkeinen@ideasonboard.com,
+        hugues.fruchet@st.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
+        aford173@gmail.com, festevam@gmail.com,
+        eugen.hristev@microchip.com, jbrunet@baylibre.com,
+        mchehab@kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH 14/21] media: ov5640: Implement get_selection
+Message-ID: <20220207154735.sqbqe4gpovvpybod@uno.localdomain>
+References: <20220131143245.128089-1-jacopo@jmondi.org>
+ <20220131144444.129036-1-jacopo@jmondi.org>
+ <20220131144444.129036-3-jacopo@jmondi.org>
+ <YfsF247w8mPNH5e4@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220205185429.2278860-62-paul.kocialkowski@bootlin.com>
+In-Reply-To: <YfsF247w8mPNH5e4@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Paul,
+Hi Laurent
 
-Thank you for the patch.
+On Thu, Feb 03, 2022 at 12:29:47AM +0200, Laurent Pinchart wrote:
+> Hi Jacopo,
+>
+> Thank you for the patch.
+>
+> On Mon, Jan 31, 2022 at 03:44:42PM +0100, Jacopo Mondi wrote:
+> > Implement the get_selection pad operation for the OV5640 sensor driver.
+> >
+> > The supported targets report the sensor's native size, the active pixel
+> > array size and the analog crop rectangle from which the image is
+> > produced.
+> >
+> > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+> > ---
+> >  drivers/media/i2c/ov5640.c | 61 ++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 61 insertions(+)
+> >
+> > diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+> > index 762bdca83aec..ae22300b9655 100644
+> > --- a/drivers/media/i2c/ov5640.c
+> > +++ b/drivers/media/i2c/ov5640.c
+> > @@ -35,6 +35,13 @@
+> >  #define OV5640_MIN_VBLANK	24
+> >  #define OV5640_MAX_VTS		1968
+> >
+> > +#define OV5640_NATIVE_WIDTH		2624
+> > +#define OV5640_NATIVE_HEIGHT		1964
+> > +#define OV5640_PIXEL_ARRAY_TOP		8
+> > +#define OV5640_PIXEL_ARRAY_LEFT		16
+> > +#define OV5640_PIXEL_ARRAY_WIDTH	2592
+> > +#define OV5640_PIXEL_ARRAY_HEIGHT	1944
+>
+> According to the datasheet, the sensor has 8 black lines, 6 dummy lines,
+> 1944 active lines and 6 dummy lines. Horizontally, it has 16 dummy
+> columns, 2592 active columns, and 16 dummy columns. If "pixel array" is
+> meant to refer to the active area (I dislike the "active" name here, as
+> the dummy lines and columns are typically "active" too, but that's a
+> digression), then top should be 14.
+>
 
-On Sat, Feb 05, 2022 at 07:54:24PM +0100, Paul Kocialkowski wrote:
-> This introduces YAML bindings documentation for the Allwinner A31 Image
-> Signal Processor (ISP).
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  .../media/allwinner,sun6i-a31-isp.yaml        | 117 ++++++++++++++++++
->  1 file changed, 117 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> new file mode 100644
-> index 000000000000..2d87022c43ce
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> @@ -0,0 +1,117 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
-> +
-> +maintainers:
-> +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - allwinner,sun6i-a31-isp
-> +      - allwinner,sun8i-v3s-isp
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Bus Clock
-> +      - description: Module Clock
-> +      - description: DRAM Clock
+Corret, I have only considered the 8 black lines, but dummy too are
+'active but not valid' ones.
 
-That's interesting, does the ISP have a dedicated DRAM ?
+I'll change to 14
 
-> +
-> +  clock-names:
-> +    items:
-> +      - const: bus
-> +      - const: mod
-> +      - const: ram
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        description: CSI0 input port
-> +
-> +        properties:
-> +          reg:
-> +            const: 0
-> +
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
+> > +
+> >  #define OV5640_DEFAULT_SLAVE_ID 0x3c
+> >
+> >  #define OV5640_REG_SYS_RESET02		0x3002
+> > @@ -2667,6 +2674,52 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
+> >  	return ret;
+> >  }
+> >
+> > +static int ov5640_get_selection(struct v4l2_subdev *sd,
+> > +				struct v4l2_subdev_state *sd_state,
+> > +				struct v4l2_subdev_selection *sel)
+> > +{
+> > +	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+> > +	const struct ov5640_mode_info *mode = sensor->current_mode;
+> > +	const struct v4l2_rect *analog_crop = &mode->analog_crop;
+> > +	const struct v4l2_rect *crop = &mode->crop;
+> > +
+> > +	switch (sel->target) {
+> > +	case V4L2_SEL_TGT_CROP: {
+> > +		mutex_lock(&sensor->lock);
+> > +
+> > +		sel->r.top = analog_crop->top + OV5640_PIXEL_ARRAY_TOP;
+> > +		sel->r.left = analog_crop->left + OV5640_PIXEL_ARRAY_LEFT;
+> > +		sel->r.width = analog_crop->width
+> > +			     - analog_crop->left - crop->left;
+>
+> Why do you subtract the left coordinates here ?
+>
 
-If no other property than remote-endpoint are allowed, I'd write
+As the analog_crop->width is defined from the full pixel array size
+(black + dummy + active). The TGT_CROP rectangle width and height
+should instead report the dimensions of the portion of the pixel array
+size which is processed to obtain the final image, and thus the
+vertical and horizontal offsets should be subtracted
 
-          endpoint:
-            $ref: video-interfaces.yaml#
-	    remote-endpoint: true
-            additionalProperties: false
 
-Same below.
+    full                            analog_crop.width
+     |                              (0x3804, 0x3805) = 2624
+     |                                   |
+     V                                   V
+  -> +-----------------------------------+
+     |                                   |
+     x-----------------------------------|
+     |  x----  TGT_CROP width  ----------|
+     |  |                                |
+     |  |                                |
+     |  |                                |
+     |  |                                |
+     |  |                                |
+     |  |                                |
+     |  |                                |
+     +--|--------------------------------+
+     |  |
+     |  |-> crop.left = 16
+     |
+     |-> analog_crop.left = 0
 
-> +
-> +        additionalProperties: false
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        description: CSI1 input port
-> +
-> +        properties:
-> +          reg:
-> +            const: 0
 
-This should be 1.
 
-> +
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +        additionalProperties: false
-> +
-> +    anyOf:
-> +      - required:
-> +        - port@0
-> +      - required:
-> +        - port@1
-
-As ports are an intrinsic property of the ISP, both should be required,
-but they don't have to be connected.
-
-By the way, how do you select at runtime which CSI-2 RX the ISP gets its
-image stream from ? Is it configured through registers of the ISP ?
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-> +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
-> +
-> +    isp: isp@1cb8000 {
-> +        compatible = "allwinner,sun8i-v3s-isp";
-> +        reg = <0x01cb8000 0x1000>;
-> +        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&ccu CLK_BUS_CSI>,
-> +             <&ccu CLK_CSI1_SCLK>,
-> +             <&ccu CLK_DRAM_CSI>;
-> +        clock-names = "bus", "mod", "ram";
-> +        resets = <&ccu RST_BUS_CSI>;
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            port@0 {
-> +                reg = <0>;
-> +
-> +                isp_in_csi0: endpoint {
-> +                    remote-endpoint = <&csi0_out_isp>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
-
--- 
-Regards,
-
-Laurent Pinchart
+> > +		sel->r.height = analog_crop->height
+> > +			      - analog_crop->top - crop->top;
+> > +
+> > +		mutex_unlock(&sensor->lock);
+> > +
+> > +		return 0;
+> > +	}
+> > +
+> > +	case V4L2_SEL_TGT_NATIVE_SIZE:
+> > +		sel->r.top = 0;
+> > +		sel->r.left = 0;
+> > +		sel->r.width = OV5640_NATIVE_WIDTH;
+> > +		sel->r.height = OV5640_NATIVE_HEIGHT;
+> > +
+> > +		return 0;
+> > +
+> > +	case V4L2_SEL_TGT_CROP_DEFAULT:
+> > +	case V4L2_SEL_TGT_CROP_BOUNDS:
+> > +		sel->r.top = OV5640_PIXEL_ARRAY_TOP;
+> > +		sel->r.left = OV5640_PIXEL_ARRAY_LEFT;
+> > +		sel->r.width = OV5640_PIXEL_ARRAY_WIDTH;
+> > +		sel->r.height = OV5640_PIXEL_ARRAY_HEIGHT;
+>
+> In libcamera we use V4L2_SEL_TGT_CROP_BOUNDS to set PixelArraySize,
+> ignoring the left and top coordinates, and V4L2_SEL_TGT_CROP_DEFAULT to
+> to set the PixelArrayActiveAreas property relative to PixelArraySize.
+> This means that non-zero values for the left and top coordinates of
+> V4L2_SEL_TGT_CROP_BOUNDS will cause issues. Is this an issue in
+> libcamera, or should V4L2_SEL_TGT_CROP_BOUNDS be changed here ?
+>
+> The related question is, can we read the optical black lines and the
+> dummy lines and columns ?
+>
+> > +
+> > +		return 0;
+> > +	}
+> > +
+> > +	return -EINVAL;
+> > +}
+> > +
+> >  static int ov5640_set_framefmt(struct ov5640_dev *sensor,
+> >  			       struct v4l2_mbus_framefmt *format)
+> >  {
+> > @@ -3369,6 +3422,7 @@ static const struct v4l2_subdev_pad_ops ov5640_pad_ops = {
+> >  	.enum_mbus_code = ov5640_enum_mbus_code,
+> >  	.get_fmt = ov5640_get_fmt,
+> >  	.set_fmt = ov5640_set_fmt,
+> > +	.get_selection = ov5640_get_selection,
+> >  	.enum_frame_size = ov5640_enum_frame_size,
+> >  	.enum_frame_interval = ov5640_enum_frame_interval,
+> >  };
+> > @@ -3383,9 +3437,16 @@ static int ov5640_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+> >  {
+> >  	struct v4l2_mbus_framefmt *try_fmt =
+> >  		v4l2_subdev_get_try_format(sd, fh->state, 0);
+> > +	struct v4l2_rect *try_crop =
+> > +		v4l2_subdev_get_try_crop(sd, fh->state, 0);
+> >
+> >  	*try_fmt = ov5640_default_fmt;
+> >
+> > +	try_crop->left = OV5640_PIXEL_ARRAY_LEFT;
+> > +	try_crop->top = OV5640_PIXEL_ARRAY_TOP;
+> > +	try_crop->width = OV5640_PIXEL_ARRAY_WIDTH;
+> > +	try_crop->height = OV5640_PIXEL_ARRAY_HEIGHT;
+> > +
+> >  	return 0;
+> >  }
+> >
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
