@@ -2,134 +2,177 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24D1FC43219
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B6D4C433FE
 	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 10:01:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239522AbiBGKAt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Feb 2022 05:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
+        id S236114AbiBGKAs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Feb 2022 05:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351004AbiBGJzi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 04:55:38 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4889C043188;
-        Mon,  7 Feb 2022 01:55:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1644227738; x=1675763738;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ZZVRjRyATxf2Qkee+j9MOy2u+QDZKwKyc2bx88y3hm0=;
-  b=OL1lJBJZb9xi8XIXgGWMST9Zs3EBiRSQXhAnLlh2MnDc7DXQDjjXfmFF
-   Z0f+XuNT0qRhDXvuK5Q5vM41cx3zHkRsRo/PtxQBGIQoksUlrPhCnrcVE
-   cOyXzY4mLbGgDjO+vtOVzP9B6R5u+SfEkrV3JPqHlT2rQDJufP/E+sv4C
-   CHT4cDVkLoNzyZsqwNvACc90HlJPAuCn37QJ0chOi0kYnq8RPyfy01dCD
-   MyowkI0QNUUkUZicgZQxRWk8LzZZZqoAm96VOsgRM/hE8yV6naflH+41Z
-   9MkbXgFEM32RS072i2DvSOfe85pDhoZdZ0vzlT4ZXzrbiXHDGjIJfsZDb
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
-   d="scan'208";a="21927972"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 07 Feb 2022 10:55:35 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 07 Feb 2022 10:55:35 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 07 Feb 2022 10:55:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1644227735; x=1675763735;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ZZVRjRyATxf2Qkee+j9MOy2u+QDZKwKyc2bx88y3hm0=;
-  b=lbxml+8Wn9Pzsc8pbu6YdlJ4pqaflfVEsVk/UDk89REMBuvD/cP50XUq
-   mzkyiaoDX+QZhACO0e6MBTAZB36UgXq6nTYFDb4wmBcTgxShyXiBrWSh6
-   zqVAs8Npx/cz57tKRElBvS0ev3Y1wbfS37iyD3Qdmjq0FU0AEBXErpFKg
-   JrKqWXL2U4X6dX1QTAGjZNw54k4jDRY2kPkhLjDKYM0v/qe6JebMjdl4R
-   FuEsH4Cy94yIBmu+bDDaoHjjeyWtnBKIKT0e45gXnNL6XvweRMRCO10ku
-   zd9x6lHhy3PrHis0cx13prilAP1MUcm2KlpX37FRvyp39WYx5oFbzvgvM
-   g==;
-X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
-   d="scan'208";a="21927971"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 07 Feb 2022 10:55:35 +0100
-Received: from steina-w.localnet (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 930E1280065;
-        Mon,  7 Feb 2022 10:55:35 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        with ESMTP id S236505AbiBGJoX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 04:44:23 -0500
+X-Greylist: delayed 3633 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 01:44:21 PST
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8400AC043181;
+        Mon,  7 Feb 2022 01:44:21 -0800 (PST)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7CCA8240008;
+        Mon,  7 Feb 2022 09:44:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644227059;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6KUt7aT0vf3HkBvqg1m3IH1dZxNe1djrpK9xW+fnoQw=;
+        b=NkrfXNXYCHbTieByp9pVKjdSsJHaXqLnlqhNJGbny2eQ/2CsZrUdW2mSW8BFideJw1mHR7
+        15E1pOBLcS9Zp/1a1+f6oN2t/XT5OKikI5lpiYSLG2Zsg02H2FT2KS4iKkG/crYs0wRf/d
+        LdAbBUGvjGFfl0ceKgyWRSvFGkoenC8W/DHCeWzBHaqNAWaq5hcmZziIcYMn2MBYgGQERM
+        SJJqkl47m6fRQi+eSFynQYJiS+deVZKhB4CRpVfmFn9Iveedvri6/XWxuSJSUDSrowXNWy
+        N2qKe3FTk9/WTFe/Qpb4KssN0vY9p4sxkx+Snv5XDpdBc1wcZwbKDvlk4nw8Nw==
+Date:   Mon, 7 Feb 2022 10:44:16 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     Samuel Holland <samuel@sholland.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-staging@lists.linux.dev, Yong Deng <yong.deng@magewell.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: (EXT) Re: [PATCH 5/8] media: imx: imx7_mipi_csis: store colorspace in set_fmt as well
-Date:   Mon, 07 Feb 2022 10:55:33 +0100
-Message-ID: <22528721.6Emhk5qWAg@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <Yf3uZ9fzQ4UM76gs@pendragon.ideasonboard.com>
-References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com> <20220204121514.2762676-6-alexander.stein@ew.tq-group.com> <Yf3uZ9fzQ4UM76gs@pendragon.ideasonboard.com>
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 02/66] dt-bindings: interconnect: sunxi: Add V3s mbus
+ compatible
+Message-ID: <YgDp8HzmcS8Nkn0q@aptenodytes>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <5386b1f5-9e75-4ce3-6641-bd7667c85d42@sholland.org>
+ <YgDbv8aQEOOjwTb0@aptenodytes>
+ <8021451.T7Z3S40VBb@jernej-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="10LvNQVJYUIIwFrj"
+Content-Disposition: inline
+In-Reply-To: <8021451.T7Z3S40VBb@jernej-laptop>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
 
-Am Samstag, 5. Februar 2022, 04:26:31 CET schrieb Laurent Pinchart:
-> Hi Alexander,
-> 
-> Thank you for the patch.
-> 
-> On Fri, Feb 04, 2022 at 01:15:11PM +0100, Alexander Stein wrote:
-> > Without this the default (SMPTE 170M) from init_cfg stays unchanged.
-> > Even after configuring 'srgb' colorspace (or 'raw')
-> > $ media-ctl -V "'csis-32e30000.mipi-csi':0 [colorspace:srgb]"
-> > the colorspace does not change at all:
-> > $ media-ctl --get-v4l2 "'csis-32e30000.mipi-csi':0"
-> > 
-> >   [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:smpte170m xfer:709
-> >   
-> >    ycbcr:601 quantization:lim-range]
-> > 
-> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > ---
-> > 
-> >  drivers/staging/media/imx/imx7-mipi-csis.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c
-> > b/drivers/staging/media/imx/imx7-mipi-csis.c index
-> > a22d0e6b3d44..7b0e57efcf82 100644
-> > --- a/drivers/staging/media/imx/imx7-mipi-csis.c
-> > +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-> > @@ -1062,6 +1062,7 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *sd,
-> > 
-> >  	fmt->code = csis_fmt->code;
-> >  	fmt->width = sdformat->format.width;
-> >  	fmt->height = sdformat->format.height;
-> > 
-> > +	fmt->colorspace = sdformat->format.colorspace;
-> 
-> Looks good, but shouldn't you also store the other colorspace-related
-> fields (ycbcr_enc, quantization and xfer_func) ?
+--10LvNQVJYUIIwFrj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for that feedback. Sounds reasonable, will do that. 
+Hi Jernej,
 
-Regards,
-Alexander
+On Mon 07 Feb 22, 09:50, Jernej =C5=A0krabec wrote:
+> Hi Paul,
+>=20
+> Dne ponedeljek, 07. februar 2022 ob 09:43:43 CET je Paul Kocialkowski=20
+> napisal(a):
+> > Hi,
+> >=20
+> > On Sat 05 Feb 22, 14:14, Samuel Holland wrote:
+> > > On 2/5/22 12:53 PM, Paul Kocialkowski wrote:
+> > > > Since the V3s uses the internal mbus, document its compatible.
+> > > >=20
+> > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > > ---
+> > > >=20
+> > > >  .../devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml  |=
+ 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >=20
+> > > > diff --git
+> > > > a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-m=
+bus.
+> > > > yaml
+> > > > b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-m=
+bus.
+> > > > yaml index 29c9961ee2d8..b67bf9261a6a 100644
+> > > > ---
+> > > > a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-m=
+bus.
+> > > > yaml +++
+> > > > b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-m=
+bus.
+> > > > yaml> >=20
+> > > > @@ -31,6 +31,7 @@ properties:
+> > > >        - allwinner,sun5i-a13-mbus
+> > > >        - allwinner,sun8i-h3-mbus
+> > > >        - allwinner,sun8i-r40-mbus
+> > > >=20
+> > > > +      - allwinner,sun8i-v3s-mbus
+> > >=20
+> > > Please enable the expanded binding added in commit 245578ba9f03
+> > > ("dt-bindings: arm: sunxi: Expand MBUS binding")[1] by adding the new
+> > > compatible to the "if" block lower in the file. That way we can add V=
+3S
+> > > devfreq support in the future without changing that binding.
+> >=20
+> > I had missed that new driver but surely I will expand the updated bindi=
+ng.
+> >=20
+> > By the way do you have an explanation about the cell index given to the
+> > interconnects (after &mbus)?
+>=20
+> This is mbus channel. You can find appropriate one checking DRAM driver i=
+n U-
+> Boot, where mbus is configured.
 
+Thanks, that's exactly what I was looking for! Looks like in my case
+MBUS_PORT_CSI will be used both for CSI and ISP.
 
+For the record it's also defined in the BSP kernel at:
+include/linux/sunxi_mbus.h
 
+Thanks,
+
+Paul
+
+> Best regards,
+> Jernej
+>=20
+> >=20
+> > Paul
+> >=20
+> > > Regards,
+> > > Samuel
+> > >=20
+> > > [1]: https://git.kernel.org/torvalds/c/245578ba9f03
+> > >=20
+> > > >        - allwinner,sun50i-a64-mbus
+> > > >   =20
+> > > >    reg:
+>=20
+>=20
+>=20
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--10LvNQVJYUIIwFrj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIA6fAACgkQ3cLmz3+f
+v9Fywwf/eKwq4XMLDo180gX6Pm1kgA2v/uxUB0R0xsoXaELb6IluwiuPO0jVvNCN
+rYT26DH13eSTfZtHD9UlCMb7J1PO4lGT+FeVURUWx7tnX8m5r2H0H66VqyAdlPUT
+mOunobehDH81Sl2Pj7FDVa1jyA8Bg/CZwnCxKi7cwLyg4EvFxQCYG3AxKb30UZya
+WcQcmj84SGHps/X1XdbS1vnllGv9e9mE9FvaVdi+WZ4iUzcQOwCXpMsYiWoc0YdV
+LhUCUeGeAqr9STaTz7ZDCPBMUjNtnONtTiDcyDIMcAIWshytEl2S2sKkpy4o8c8V
+caHW8IBvVlyHHv9YjOnNRf5ysP3T7g==
+=vjaa
+-----END PGP SIGNATURE-----
+
+--10LvNQVJYUIIwFrj--
