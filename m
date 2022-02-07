@@ -2,235 +2,374 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85815C4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F254C43217
 	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 16:22:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244781AbiBGQVa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1343663AbiBGQVa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 7 Feb 2022 11:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239346AbiBGQJW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 11:09:22 -0500
-X-Greylist: delayed 1076 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 08:09:21 PST
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58757C0401D2;
-        Mon,  7 Feb 2022 08:09:21 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 95CCC340;
-        Mon,  7 Feb 2022 17:09:19 +0100 (CET)
+        with ESMTP id S1387354AbiBGQLf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 11:11:35 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A366EC0401CC
+        for <linux-media@vger.kernel.org>; Mon,  7 Feb 2022 08:11:34 -0800 (PST)
+Received: from deskari.lan (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5F693119F;
+        Mon,  7 Feb 2022 17:11:27 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644250159;
-        bh=4a6oyH40Csn50dUhVk1KKkhWqQ+bT0AQuD8nF5SL40Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BjnDuSwJb7zSiLkq8jUPy87i86c/x8YPcQgITE7qtB6aMKmQkRGRJBy/mXUrT5wiS
-         UFKmU9sVo1jhp1siSPFBNdhP5/+HTcmDw/ZJG72onGz6ggZMRoSmaOzYuUutBa/+5+
-         TQPkXjgQ4skbl4oTC1mFEoZ3pUrC0BOs7fpCsuW8=
-Date:   Mon, 7 Feb 2022 18:09:17 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
+        s=mail; t=1644250287;
+        bh=ziv2H30M7dLpCKcj+ubBaqXEIgsUmh2KG/Ey7YXHrQE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=sSwqlaU97I+A5MwuSpG2/Xmsys5ZysYy7O7/lK4YbHzolzbhEZ8F7IWcHHocYfQ9N
+         GZMtB+xv5AkmrsW17ZnQQRlmhRfsPqWDFlzMuC/6tFypm2pdgnn5hE9VviNWgA5ny6
+         lfSwEHfVf5C0Cd9GaBfGYYbZWfcEY5G+49HEncw0=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        niklas.soderlund+renesas@ragnatech.se,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 08/66] dt-bindings: media: Add Allwinner A31 MIPI
- CSI-2 bindings documentation
-Message-ID: <YgFELcVluEqr9LAH@pendragon.ideasonboard.com>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-9-paul.kocialkowski@bootlin.com>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Pratyush Yadav <p.yadav@ti.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 4/7] media: subdev: add subdev state locking
+Date:   Mon,  7 Feb 2022 18:11:04 +0200
+Message-Id: <20220207161107.1166376-5-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220207161107.1166376-1-tomi.valkeinen@ideasonboard.com>
+References: <20220207161107.1166376-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220205185429.2278860-9-paul.kocialkowski@bootlin.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Paul,
+The V4L2 subdevs have managed without centralized locking for the state
+(previously pad_config), as the try-state is supposedly safe (although I
+believe two TRY ioctls for the same fd would race), and the
+active-state, and its locking, is managed by the drivers internally.
 
-Thank you for the patch.
+We now have active-state in a centralized position, and need locking.
+Strictly speaking the locking is only needed for new drivers that use
+the new state, as the current drivers continue behaving as they used to.
 
-On Sat, Feb 05, 2022 at 07:53:31PM +0100, Paul Kocialkowski wrote:
-> This introduces YAML bindings documentation for the Allwinner A31 MIPI
-> CSI-2 controller.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> Reviewed-by: Maxime Ripard <mripard@kernel.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../media/allwinner,sun6i-a31-mipi-csi2.yaml  | 142 ++++++++++++++++++
->  1 file changed, 142 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
-> new file mode 100644
-> index 000000000000..09207904b6db
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
-> @@ -0,0 +1,142 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-mipi-csi2.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Allwinner A31 MIPI CSI-2 Device Tree Bindings
-> +
-> +maintainers:
-> +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: allwinner,sun6i-a31-mipi-csi2
-> +      - items:
-> +          - const: allwinner,sun8i-v3s-mipi-csi2
-> +          - const: allwinner,sun6i-a31-mipi-csi2
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Bus Clock
-> +      - description: Module Clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: bus
-> +      - const: mod
-> +
-> +  phys:
-> +    maxItems: 1
-> +    description: MIPI D-PHY
-> +
-> +  phy-names:
-> +    items:
-> +      - const: dphy
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        description: Input port, connect to a MIPI CSI-2 sensor
-> +
-> +        properties:
-> +          reg:
-> +            const: 0
-> +
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +            properties:
-> +              data-lanes:
-> +                minItems: 1
-> +                maxItems: 4
-> +
-> +            required:
-> +              - data-lanes
-> +
-> +        additionalProperties: false
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        description: Output port, connect to a CSI controller
-> +
-> +        properties:
-> +          reg:
-> +            const: 1
-> +
-> +          endpoint:
-> +            $ref: video-interfaces.yaml#
-> +            unevaluatedProperties: false
-> +
-> +        additionalProperties: false
+Add a mutex to the struct v4l2_subdev_state, along with a few helper
+functions for locking/unlocking.
 
-The two ports should be required.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - phys
-> +  - phy-names
-
-And ports should be required here.
-
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/platform/rcar-vin/rcar-v4l2.c |  7 +-
+ drivers/media/platform/vsp1/vsp1_entity.c   |  8 +-
+ drivers/media/v4l2-core/v4l2-subdev.c       | 39 ++++++++--
+ drivers/staging/media/tegra-video/vi.c      |  8 +-
+ include/media/v4l2-subdev.h                 | 81 ++++++++++++++++++++-
+ 5 files changed, 132 insertions(+), 11 deletions(-)
 
-> +  - resets
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-> +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
-> +
-> +    mipi_csi2: csi@1cb1000 {
-> +        compatible = "allwinner,sun8i-v3s-mipi-csi2",
-> +                     "allwinner,sun6i-a31-mipi-csi2";
-> +        reg = <0x01cb1000 0x1000>;
-> +        interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&ccu CLK_BUS_CSI>,
-> +                 <&ccu CLK_CSI1_SCLK>;
-> +        clock-names = "bus", "mod";
-> +        resets = <&ccu RST_BUS_CSI>;
-> +
-> +        phys = <&dphy>;
-> +        phy-names = "dphy";
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            mipi_csi2_in: port@0 {
-> +                reg = <0>;
-> +
-> +                mipi_csi2_in_ov5648: endpoint {
-> +                    data-lanes = <1 2 3 4>;
-> +
-> +                    remote-endpoint = <&ov5648_out_mipi_csi2>;
-> +                };
-> +            };
-> +
-> +            mipi_csi2_out: port@1 {
-> +                reg = <1>;
-> +
-> +                mipi_csi2_out_csi0: endpoint {
-> +                    remote-endpoint = <&csi0_in_mipi_csi2>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
-
+diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+index 5aae01456c04..3759f4619a77 100644
+--- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+@@ -255,6 +255,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+ {
+ 	struct v4l2_subdev *sd = vin_to_source(vin);
+ 	struct v4l2_subdev_state *sd_state;
++	static struct lock_class_key key;
+ 	struct v4l2_subdev_format format = {
+ 		.which = which,
+ 		.pad = vin->parallel.source_pad,
+@@ -263,7 +264,11 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+ 	u32 width, height;
+ 	int ret;
+ 
+-	sd_state = __v4l2_subdev_state_alloc(sd);
++	/*
++	 * FIXME: Drop this call, drivers are not supposed to use
++	 * __v4l2_subdev_state_alloc().
++	 */
++	sd_state = __v4l2_subdev_state_alloc(sd, "rvin:state->lock", &key);
+ 	if (IS_ERR(sd_state))
+ 		return PTR_ERR(sd_state);
+ 
+diff --git a/drivers/media/platform/vsp1/vsp1_entity.c b/drivers/media/platform/vsp1/vsp1_entity.c
+index 869cadc1468d..a116a3362f9e 100644
+--- a/drivers/media/platform/vsp1/vsp1_entity.c
++++ b/drivers/media/platform/vsp1/vsp1_entity.c
+@@ -613,6 +613,7 @@ int vsp1_entity_init(struct vsp1_device *vsp1, struct vsp1_entity *entity,
+ 		     const char *name, unsigned int num_pads,
+ 		     const struct v4l2_subdev_ops *ops, u32 function)
+ {
++	static struct lock_class_key key;
+ 	struct v4l2_subdev *subdev;
+ 	unsigned int i;
+ 	int ret;
+@@ -675,7 +676,12 @@ int vsp1_entity_init(struct vsp1_device *vsp1, struct vsp1_entity *entity,
+ 	 * Allocate the pad configuration to store formats and selection
+ 	 * rectangles.
+ 	 */
+-	entity->config = __v4l2_subdev_state_alloc(&entity->subdev);
++	/*
++	 * FIXME: Drop this call, drivers are not supposed to use
++	 * __v4l2_subdev_state_alloc().
++	 */
++	entity->config = __v4l2_subdev_state_alloc(&entity->subdev,
++						   "vsp1:config->lock", &key);
+ 	if (IS_ERR(entity->config)) {
+ 		media_entity_cleanup(&entity->subdev.entity);
+ 		return PTR_ERR(entity->config);
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 32598d20fe35..a30e156d5303 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -27,8 +27,9 @@
+ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
+ {
+ 	struct v4l2_subdev_state *state;
++	static struct lock_class_key key;
+ 
+-	state = __v4l2_subdev_state_alloc(sd);
++	state = __v4l2_subdev_state_alloc(sd, "fh->state->lock", &key);
+ 	if (IS_ERR(state))
+ 		return PTR_ERR(state);
+ 
+@@ -914,7 +915,9 @@ int v4l2_subdev_link_validate(struct media_link *link)
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate);
+ 
+-struct v4l2_subdev_state *__v4l2_subdev_state_alloc(struct v4l2_subdev *sd)
++struct v4l2_subdev_state *
++__v4l2_subdev_state_alloc(struct v4l2_subdev *sd, const char *lock_name,
++			  struct lock_class_key *lock_key)
+ {
+ 	struct v4l2_subdev_state *state;
+ 	int ret;
+@@ -923,6 +926,9 @@ struct v4l2_subdev_state *__v4l2_subdev_state_alloc(struct v4l2_subdev *sd)
+ 	if (!state)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	__mutex_init(&state->_lock, lock_name, lock_key);
++	state->lock = &state->_lock;
++
+ 	if (sd->entity.num_pads) {
+ 		state->pads = kvmalloc_array(sd->entity.num_pads,
+ 					     sizeof(*state->pads),
+@@ -954,16 +960,19 @@ void __v4l2_subdev_state_free(struct v4l2_subdev_state *state)
+ 	if (!state)
+ 		return;
+ 
++	mutex_destroy(&state->_lock);
++
+ 	kvfree(state->pads);
+ 	kfree(state);
+ }
+ EXPORT_SYMBOL_GPL(__v4l2_subdev_state_free);
+ 
+-int v4l2_subdev_init_finalize(struct v4l2_subdev *sd)
++int __v4l2_subdev_init_finalize(struct v4l2_subdev *sd, const char *name,
++				struct lock_class_key *key)
+ {
+ 	struct v4l2_subdev_state *state;
+ 
+-	state = __v4l2_subdev_state_alloc(sd);
++	state = __v4l2_subdev_state_alloc(sd, name, key);
+ 	if (IS_ERR(state))
+ 		return PTR_ERR(state);
+ 
+@@ -971,7 +980,7 @@ int v4l2_subdev_init_finalize(struct v4l2_subdev *sd)
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(v4l2_subdev_init_finalize);
++EXPORT_SYMBOL_GPL(__v4l2_subdev_init_finalize);
+ 
+ void v4l2_subdev_cleanup(struct v4l2_subdev *sd)
+ {
+@@ -980,6 +989,26 @@ void v4l2_subdev_cleanup(struct v4l2_subdev *sd)
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_cleanup);
+ 
++struct v4l2_subdev_state *v4l2_subdev_lock_active_state(struct v4l2_subdev *sd)
++{
++	mutex_lock(sd->active_state->lock);
++
++	return sd->active_state;
++}
++EXPORT_SYMBOL_GPL(v4l2_subdev_lock_active_state);
++
++void v4l2_subdev_lock_state(struct v4l2_subdev_state *state)
++{
++	mutex_lock(state->lock);
++}
++EXPORT_SYMBOL_GPL(v4l2_subdev_lock_state);
++
++void v4l2_subdev_unlock_state(struct v4l2_subdev_state *state)
++{
++	mutex_unlock(state->lock);
++}
++EXPORT_SYMBOL_GPL(v4l2_subdev_unlock_state);
++
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+ 
+ void v4l2_subdev_init(struct v4l2_subdev *sd, const struct v4l2_subdev_ops *ops)
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index dc16406ff7dc..8e184aa4c252 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -491,6 +491,7 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+ 				      struct v4l2_pix_format *pix)
+ {
+ 	const struct tegra_video_format *fmtinfo;
++	static struct lock_class_key key;
+ 	struct v4l2_subdev *subdev;
+ 	struct v4l2_subdev_format fmt;
+ 	struct v4l2_subdev_state *sd_state;
+@@ -507,7 +508,12 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+ 	if (!subdev)
+ 		return -ENODEV;
+ 
+-	sd_state = __v4l2_subdev_state_alloc(subdev);
++	/*
++	 * FIXME: Drop this call, drivers are not supposed to use
++	 * __v4l2_subdev_state_alloc().
++	 */
++	sd_state = __v4l2_subdev_state_alloc(subdev, "tegra:state->lock",
++					     &key);
+ 	if (IS_ERR(sd_state))
+ 		return PTR_ERR(sd_state);
+ 	/*
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index f481fafe8e4b..e9aa38dc6489 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -658,6 +658,8 @@ struct v4l2_subdev_pad_config {
+ /**
+  * struct v4l2_subdev_state - Used for storing subdev state information.
+  *
++ * @_lock: default for 'lock'
++ * @lock: mutex for the state. May be replaced by the user.
+  * @pads: &struct v4l2_subdev_pad_config array
+  *
+  * This structure only needs to be passed to the pad op if the 'which' field
+@@ -665,6 +667,9 @@ struct v4l2_subdev_pad_config {
+  * %V4L2_SUBDEV_FORMAT_ACTIVE it is safe to pass %NULL.
+  */
+ struct v4l2_subdev_state {
++	/* lock for the struct v4l2_subdev_state fields */
++	struct mutex _lock;
++	struct mutex *lock;
+ 	struct v4l2_subdev_pad_config *pads;
+ };
+ 
+@@ -1157,10 +1162,14 @@ int v4l2_subdev_link_validate(struct media_link *link);
+  * __v4l2_subdev_state_alloc - allocate v4l2_subdev_state
+  *
+  * @sd: pointer to &struct v4l2_subdev for which the state is being allocated.
++ * @lock_name: name of the state lock
++ * @key: lock_class_key for the lock
+  *
+  * Must call __v4l2_subdev_state_free() when state is no longer needed.
+  */
+-struct v4l2_subdev_state *__v4l2_subdev_state_alloc(struct v4l2_subdev *sd);
++struct v4l2_subdev_state *__v4l2_subdev_state_alloc(struct v4l2_subdev *sd,
++						    const char *lock_name,
++						    struct lock_class_key *key);
+ 
+ /**
+  * __v4l2_subdev_state_free - free a v4l2_subdev_state
+@@ -1183,7 +1192,16 @@ void __v4l2_subdev_state_free(struct v4l2_subdev_state *state);
+  *
+  * The user must call v4l2_subdev_cleanup() when the subdev is being removed.
+  */
+-int v4l2_subdev_init_finalize(struct v4l2_subdev *sd);
++#define v4l2_subdev_init_finalize(sd)                                          \
++	({                                                                     \
++		static struct lock_class_key __key;                            \
++		const char *name = KBUILD_BASENAME                             \
++			":" __stringify(__LINE__) ":sd->active_state->lock";   \
++		__v4l2_subdev_init_finalize(sd, name, &__key);                 \
++	})
++
++int __v4l2_subdev_init_finalize(struct v4l2_subdev *sd, const char *name,
++				struct lock_class_key *key);
+ 
+ /**
+  * v4l2_subdev_cleanup() - Releases the resources allocated by the subdevice
+@@ -1200,14 +1218,71 @@ void v4l2_subdev_cleanup(struct v4l2_subdev *sd);
+  * @sd: The subdevice
+  *
+  * Returns the active state for the subdevice, or NULL if the subdev does not
+- * support active state.
++ * support active state. If the state is not NULL, calls
++ * lockdep_assert_not_held() to issue a warning if the state is locked.
++ *
++ * This function is to be used e.g. when getting the active state for the sole
++ * purpose of passing it forward, without accessing the state fields.
+  */
+ static inline struct v4l2_subdev_state *
+ v4l2_subdev_get_active_state(struct v4l2_subdev *sd)
+ {
++	if (sd->active_state)
++		lockdep_assert_not_held(sd->active_state->lock);
++	return sd->active_state;
++}
++
++/**
++ * v4l2_subdev_get_locked_active_state() - Checks that the active subdev state
++ *					   is locked and returns it
++ *
++ * @sd: The subdevice
++ *
++ * Returns the active state for the subdevice, or NULL if the subdev does not
++ * support active state. If the state is not NULL, calls lockdep_assert_held()
++ * to issue a warning if the state is not locked.
++ *
++ * This function is to be used when the caller knows that the active state is
++ * already locked.
++ */
++static inline struct v4l2_subdev_state *
++v4l2_subdev_get_locked_active_state(struct v4l2_subdev *sd)
++{
++	if (sd->active_state)
++		lockdep_assert_held(sd->active_state->lock);
+ 	return sd->active_state;
+ }
+ 
++/**
++ * v4l2_subdev_lock_active_state() - Locks and returns the active subdev state
++ *				     for the subdevice
++ * @sd: The subdevice
++ *
++ * Returns the locked active state for the subdevice, or NULL if the subdev
++ * does not support active state.
++ *
++ * The state must be unlocked with v4l2_subdev_unlock_state() after use.
++ */
++struct v4l2_subdev_state *v4l2_subdev_lock_active_state(struct v4l2_subdev *sd);
++
++/**
++ * v4l2_subdev_lock_state() - Locks the subdev state
++ * @state: The subdevice state
++ *
++ * Locks the given subdev state.
++ *
++ * The state must be unlocked with v4l2_subdev_unlock_state() after use.
++ */
++void v4l2_subdev_lock_state(struct v4l2_subdev_state *state);
++
++/**
++ * v4l2_subdev_unlock_state() - Unlocks the subdev state
++ * @state: The subdevice state
++ *
++ * Unlocks the given subdev state.
++ */
++void v4l2_subdev_unlock_state(struct v4l2_subdev_state *state);
++
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+ 
+ /**
 -- 
-Regards,
+2.25.1
 
-Laurent Pinchart
