@@ -2,145 +2,114 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4A97C433EF
-	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 10:52:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52A3FC433EF
+	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 12:48:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236645AbiBGKwh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Feb 2022 05:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
+        id S1343697AbiBGMqg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Feb 2022 07:46:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352721AbiBGKpv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 05:45:51 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FFAC043181;
-        Mon,  7 Feb 2022 02:45:49 -0800 (PST)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0B2B840013;
-        Mon,  7 Feb 2022 10:45:45 +0000 (UTC)
-Date:   Mon, 7 Feb 2022 11:46:52 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Eugen Hristev <eugen.hristev@microchip.com>
-Cc:     robh+dt@kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, jacopo+renesas@jmondi.org,
-        hverkuil-cisco@xs4all.nl, nicolas.ferre@microchip.com,
-        sakari.ailus@iki.fi, laurent.pinchart@ideasonboard.com,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Subject: Re: [PATCH v4 01/11] media: atmel: atmel-isc: replace 'stop'
- variable with vb2 calls
-Message-ID: <20220207104652.zovthrwpdi5cnvdm@uno.localdomain>
-References: <20220121131416.603972-1-eugen.hristev@microchip.com>
- <20220121131416.603972-2-eugen.hristev@microchip.com>
+        with ESMTP id S1445235AbiBGMlq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 07:41:46 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 04:33:16 PST
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3873E031013
+        for <linux-media@vger.kernel.org>; Mon,  7 Feb 2022 04:33:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644237196; x=1675773196;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vhBTmSn8UkwEjJUl4ynGb5kIz8nOXSvEwd6JGQ6YNy8=;
+  b=Fqqw2uJCw845MkNJjpNiX3L97JVrpmHB5bo4rB7smUNqLd7JgRnI5+La
+   7bnxHYR5l0g/GbRWEtOiK3kiHr2QN5fdfRopPkn0AMdTt0l7BXJ1FDqgZ
+   4zyRYq17+BKXPbmbTFhQTxKpok2zjdHT1Fdur8ehclsToTzFQy7Xp3/NA
+   t2Uz/4TJfXvnB0Ozy8v4e0n0FVi2CYRnPNs1we2Ci1y37pFfnD2b25Sh3
+   NthxJ1bdoG0uTdQOnrJSC7iCe8HEPVOfTMNPx4lMI2bb8+mkJJjQTiw4b
+   CtGzVqyPgcANV/zNMYuFjzUuKfv8+Hfkegr3eLA18kTJIpF+wOnN3nJZw
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="228674150"
+X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
+   d="scan'208";a="228674150"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 04:32:13 -0800
+X-IronPort-AV: E=Sophos;i="5.88,349,1635231600"; 
+   d="scan'208";a="621535538"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 04:32:11 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nH3Al-001tq2-Md;
+        Mon, 07 Feb 2022 14:31:11 +0200
+Date:   Mon, 7 Feb 2022 14:31:11 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+Cc:     gregkh@linuxfoundation.org, joe@perches.com, kitakar@gmail.com,
+        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        tomi.valkeinen@ideasonboard.com, dan.carpenter@oracle.com
+Subject: Re: [PATCH] staging: media: atomisp: Use GENMASK instead of manual
+ masking
+Message-ID: <YgERD7JdlqdaNHuA@smile.fi.intel.com>
+References: <20220206185830.39360-1-mosescb.dev@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220121131416.603972-2-eugen.hristev@microchip.com>
+In-Reply-To: <20220206185830.39360-1-mosescb.dev@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Eugen,
+On Sun, Feb 06, 2022 at 07:58:30PM +0100, Moses Christopher Bollavarapu wrote:
+> There is a GENMASK macro available in linux/bits.h, for masking.
+> 
+> Example: GENMASK(3, 0) = 0b00001111 (same as (1 << 4) - 1)
 
-On Fri, Jan 21, 2022 at 03:14:06PM +0200, Eugen Hristev wrote:
-> The stop variable is redundant as the state of the streaming can be obtained
-> by calling vb2_start_streaming_called(&isc->vb2_vidq) or by calling
-> vb2_is_busy(&isc->vb2_vidq).
-> Thus, remove the stop variable completely.
->
-> Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-I trust yours and Hans' judgment here.
-The patch looks sane
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-
-Thanks
+> Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
 > ---
-> Changes in v4:
-> - new patch
->
->  drivers/media/platform/atmel/atmel-isc-base.c | 12 +++++-------
->  drivers/media/platform/atmel/atmel-isc.h      |  2 --
->  2 files changed, 5 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-> index db15770d5b88..9c62d0ae7887 100644
-> --- a/drivers/media/platform/atmel/atmel-isc-base.c
-> +++ b/drivers/media/platform/atmel/atmel-isc-base.c
-> @@ -362,7 +362,6 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
->  	spin_lock_irqsave(&isc->dma_queue_lock, flags);
->
->  	isc->sequence = 0;
-> -	isc->stop = false;
->  	reinit_completion(&isc->comp);
->
->  	isc->cur_frm = list_first_entry(&isc->dma_queue,
-> @@ -403,8 +402,6 @@ static void isc_stop_streaming(struct vb2_queue *vq)
->
->  	v4l2_ctrl_activate(isc->do_wb_ctrl, false);
->
-> -	isc->stop = true;
-> -
->  	/* Wait until the end of the current frame */
->  	if (isc->cur_frm && !wait_for_completion_timeout(&isc->comp, 5 * HZ))
->  		v4l2_err(&isc->v4l2_dev,
-> @@ -1029,7 +1026,7 @@ static int isc_s_fmt_vid_cap(struct file *file, void *priv,
->  {
->  	struct isc_device *isc = video_drvdata(file);
->
-> -	if (vb2_is_streaming(&isc->vb2_vidq))
-> +	if (vb2_is_busy(&isc->vb2_vidq))
->  		return -EBUSY;
->
->  	return isc_set_fmt(isc, f);
-> @@ -1236,7 +1233,8 @@ irqreturn_t isc_interrupt(int irq, void *dev_id)
->  			isc->cur_frm = NULL;
->  		}
->
-> -		if (!list_empty(&isc->dma_queue) && !isc->stop) {
-> +		if (!list_empty(&isc->dma_queue) &&
-> +		    vb2_start_streaming_called(&isc->vb2_vidq)) {
->  			isc->cur_frm = list_first_entry(&isc->dma_queue,
->  						     struct isc_buffer, list);
->  			list_del(&isc->cur_frm->list);
-> @@ -1244,7 +1242,7 @@ irqreturn_t isc_interrupt(int irq, void *dev_id)
->  			isc_start_dma(isc);
->  		}
->
-> -		if (isc->stop)
-> +		if (!vb2_start_streaming_called(&isc->vb2_vidq))
->  			complete(&isc->comp);
->
->  		ret = IRQ_HANDLED;
-> @@ -1398,7 +1396,7 @@ static void isc_awb_work(struct work_struct *w)
->  	int ret;
->
->  	/* streaming is not active anymore */
-> -	if (isc->stop)
-> +	if (!vb2_start_streaming_called(&isc->vb2_vidq))
+>  drivers/staging/media/atomisp/pci/atomisp_compat_css20.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+> index 1173be0e72b0..a345fa1d7de9 100644
+> --- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+> +++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+> @@ -40,6 +40,7 @@
+>  
+>  #include <linux/io.h>
+>  #include <linux/pm_runtime.h>
+
+> +#include <linux/bits.h>
+
+Probably this can be still ordered.
+
+>  /* Assume max number of ACC stages */
+>  #define MAX_ACC_STAGES	20
+> @@ -1913,11 +1914,11 @@ void atomisp_css_input_set_mode(struct atomisp_sub_device *asd,
+>  			    &asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream_config;
+>  		s_config->mode = IA_CSS_INPUT_MODE_TPG;
+>  		s_config->source.tpg.mode = IA_CSS_TPG_MODE_CHECKERBOARD;
+> -		s_config->source.tpg.x_mask = (1 << 4) - 1;
+> +		s_config->source.tpg.x_mask = GENMASK(3, 0);
+>  		s_config->source.tpg.x_delta = -2;
+> -		s_config->source.tpg.y_mask = (1 << 4) - 1;
+> +		s_config->source.tpg.y_mask = GENMASK(3, 0);
+>  		s_config->source.tpg.y_delta = 3;
+> -		s_config->source.tpg.xy_mask = (1 << 8) - 1;
+> +		s_config->source.tpg.xy_mask = GENMASK(7, 0);
 >  		return;
->
->  	if (ctrls->hist_stat != HIST_ENABLED)
-> diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/media/platform/atmel/atmel-isc.h
-> index 07fa6dbf8460..5fbf52a9080b 100644
-> --- a/drivers/media/platform/atmel/atmel-isc.h
-> +++ b/drivers/media/platform/atmel/atmel-isc.h
-> @@ -201,7 +201,6 @@ struct isc_reg_offsets {
->   * @dma_queue:		the queue for dma buffers
->   * @cur_frm:		current isc frame/buffer
->   * @sequence:		current frame number
-> - * @stop:		true if isc is not streaming, false if streaming
->   * @comp:		completion reference that signals frame completion
->   *
->   * @fmt:		current v42l format
-> @@ -276,7 +275,6 @@ struct isc_device {
->  	struct list_head	dma_queue;
->  	struct isc_buffer	*cur_frm;
->  	unsigned int		sequence;
-> -	bool			stop;
->  	struct completion	comp;
->
->  	struct v4l2_format	fmt;
-> --
-> 2.25.1
->
+>  	}
+>  
+> -- 
+> 2.30.2
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
