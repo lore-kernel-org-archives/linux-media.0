@@ -2,103 +2,119 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01C99C433EF
-	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 09:34:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC44AC433F5
+	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 10:00:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237295AbiBGJd4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Feb 2022 04:33:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
+        id S244554AbiBGKAK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Feb 2022 05:00:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344934AbiBGJYh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 04:24:37 -0500
+        with ESMTP id S245274AbiBGJ4k (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 04:56:40 -0500
 Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAE2C043181;
-        Mon,  7 Feb 2022 01:24:36 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id F0CBB5801A4;
-        Mon,  7 Feb 2022 04:24:35 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2DEC043188;
+        Mon,  7 Feb 2022 01:56:39 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 19A9B5801B1;
+        Mon,  7 Feb 2022 04:56:39 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 07 Feb 2022 04:24:35 -0500
+  by compute1.internal (MEProxy); Mon, 07 Feb 2022 04:56:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=iSknFfgihoz9cY
-        jsB49tquH7M9oK6rXonBcNar0/E6w=; b=g06c28B6jZMt5BHIajzts1tMVOsqxC
-        jd9VJqjCvqxWawTL04UEtBO402ejuO2BSppxfhK7mVpZDtWDHwYjSljNfJuEM7Nz
-        ROEPvsrFj/y9Nj+RS6owvposXMs92XTRrEUNTgF7XA7zUxkZ4V9LlUFbA/cne7xE
-        wFknzRrCOYNbooIIefbVEYPmFAiCtEphcDFpcfEqxu6Lb7hAkdidGxczqKui24LF
-        jpYRaCPNqnSJUIfOKutuAwvXw3Rl8NSwLtKu0KxIl/y+HnA5WaPKFRMvoEQMCpCP
-        HEmzcfJTGzKjduBVl+G6D7/lITGlLmm//A1I1YEHxBdOSbmnF7CgYdvA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=iSknFfgihoz9cYjsB49tquH7M9oK6rXonBcNar0/E
-        6w=; b=U1NT+MWLZ02mQOf8kBE+uK6kts+S3hxLpE3s9F/l9KARcbtBnkX24Dze9
-        0nLSgthgM4jwzWQeg2ceeqN98JQmIgTwmAUeN3kuUsLsbC9ytF+8+zIP7aNZcoXr
-        7rdrkMpLbm3lPxGj58ChTfGU1UH+wsAKRu3bJu5+/O3qbRMcK1Nt5xBqyf6tgQay
-        nMbvZ11ZjtA8eTkwk8dMzEdc6Yaa9xcR2+v9Ok52pNSzeL1J1u8GdsdYoY1KyKoH
-        zwrM8UW4grEHLGxcB5p43jwDT6LvU5XlsDI7A3MPGUciSmAmK+cza/GCH49KgNEq
-        F1/H/vKq9TjZOse52afHeqLbTAVKg==
-X-ME-Sender: <xms:U-UAYrtIwQgHFPDLxj7aSE8LhyJCOSMRhFSXzMak2ZkkS38Q2AnZLw>
-    <xme:U-UAYscV_t-YFP4sAMikMj1PTrODEkbNC_71S2rCWe7mt3r8muudddDli-aZnLb-R
-    agRmGjSfcJzjIxCZrs>
-X-ME-Received: <xmr:U-UAYuxnlEN7l3AOzw-FLDOYfanDql-QHmgM4P3C1Vux9JVwKZsIHeCarqW12AnZ0GJR4srNMjFiaTWhrIc7oLhxZeiVFPUbFsIT2PQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheehgddtudcutefuodetggdotefrodftvf
+        :subject:to:to; s=fm2; bh=kGIMVYhKNCUOPYuVWpsXpzFka3m2RK9MnBQ1Zh
+        CUJw0=; b=W/NE6I+eNlpjh6UO5VSgb7pJjCD4kgvHSRxmCyUQY2alPdd9ud2Csy
+        Rg/0mLwlxFzml9FA630Z6UN9/dJZ91di1AxwMoBIGnWAuRClF1r2OeTPCpgbTCL/
+        sGntx8DNrjEvHA0fg8E/vayRNBgHIjg2LTgo1wLh/HiXAjF/wjQUoX3BrNcb3aJw
+        yHlo387UzHeAE0cQ6Fyk8x3spQ2JRjjJ1QNn6qn5Zyu0wm+w8nVL2ukxHkEFBTGR
+        mN5xk4oocy3yGeordrzMszSH/AfSeR5y3T42Pxhk99OngnAXUcXHazqBDAQ8zdUw
+        /HS7UNGbuq6jfRgEmIXK4CnJN4qoiDpA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=kGIMVYhKNCUOPYuVW
+        psXpzFka3m2RK9MnBQ1ZhCUJw0=; b=T4pixUTz9EGQeZ5nMxygyybJID341dNQu
+        9gvL3iVHPDruyI9/kNiLP/nmgNaVSmfpYKO7vQlbscnu1dF0K+wDaRNy/E0C0Ean
+        MM5eONfdQdFs6MD19CZhVH2Vfa1Puj8WfM+iOpLHz394w0+L6m1Rt46mr4Xd2KJ2
+        VRsGxh8Us0ve+cd7IVv9YJk4CTBNTBIEH/YiLyB5bkoEewG4sExvMqLHU/pl1MAL
+        rli8hB1Ksd4n4wW5JV0G9ratwqf8kRY3oWx3bt5VqssspLJ1Ww0Ut/PBF2mgHDNY
+        l2HH7aZHSjOP1HiFqbVsgymDWbi1eO7GhS2+Mu5BxGyq9w9+uJO5w==
+X-ME-Sender: <xms:1uwAYmCd4dWfTFwbmZMzaIzU4qwW7XvrdOok8Iz7_VDd1yJjluPsHA>
+    <xme:1uwAYghe6mBViOZMM9FzfrDrQkNvnPc9jwihc497M-lCkvJ-I1EwB4NKwqe8oT5TU
+    dfyE6ZtJVeVGA4WT9A>
+X-ME-Received: <xmr:1uwAYpmRBWuemiFFlQvB3RgOILvxo-1O0Pbw0BISlKnp1tUxUhtxfJQ-cuAaQcptH1tkAWFLs3I9DXSk4ugb2qd_augvSuTL_eA0smA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheehgddtkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenog
-    fuohhrthgvugftvggtihhpvdculdegtddmnecujfgurhephffvufffkffojghfgggtgfes
-    thekredtredtjeenucfhrhhomhepofgrgihimhgvucftihhprghrugcuoehmrgigihhmvg
-    estggvrhhnohdrthgvtghhqeenucggtffrrghtthgvrhhnpeejuefggeekfffgueevtddv
-    udffhfejffejjedvvdduudethefhfefhfeegieekkeenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:U-UAYqOzAdYqqOUabPejPK6EimsjHVm5IoKEm3U65YxSM92QgGQXbg>
-    <xmx:U-UAYr-ypdbGSOKY6fGtF9fOWZgG6FvEfpbpe7CtxfgQncI4cD5axA>
-    <xmx:U-UAYqVRHy5_7nEa8vahYdXNkEwxhxcQgzsTDUixHv96wQJzPVVz6w>
-    <xmx:U-UAYmf9k2mUC6x-QrtJd2Lhz-x1iKtyulTQ34erSqwk9rkJCiGSXg>
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:1uwAYkzgHb5EfN9-i9d458PWYAM8GUHuZ-rFIOsa3oIRsMtjYKWN8g>
+    <xmx:1uwAYrSMkLR0RcApVpl6j1G6eqwy2SN0Rl010dxnffzbn7LlSQE94Q>
+    <xmx:1uwAYvY8zA4DTe3_dQjXZ5bjFVEn7ZdbAalQtAvCB0jkjdHGwWwF9g>
+    <xmx:1-wAYsJjFnQwWw7aXHbVGFPdqU3iO8pJbDfGoUbBz4VlDSG1Kj_1Lw>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Feb 2022 04:24:34 -0500 (EST)
+ 7 Feb 2022 04:56:38 -0500 (EST)
+Date:   Mon, 7 Feb 2022 10:56:36 +0100
 From:   Maxime Ripard <maxime@cerno.tech>
-To:     linux-sunxi@lists.linux.dev, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Maxime Ripard <maxime@cerno.tech>, Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Helen Koike <helen.koike@collabora.com>,
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
         Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: (subset) [PATCH v2 01/66] ARM: dts: sun8i: v3s: Move the csi1 block to follow address order
-Date:   Mon,  7 Feb 2022 10:24:31 +0100
-Message-Id: <164422586926.25686.14643523821893289727.b4-ty@cerno.tech>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220205185429.2278860-2-paul.kocialkowski@bootlin.com>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com> <20220205185429.2278860-2-paul.kocialkowski@bootlin.com>
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 24/66] media: sun6i-csi: Tidy up video code
+Message-ID: <20220207095636.qoqagsavskhlrng7@houat>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-25-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pyrsjzli2thxv5dg"
+Content-Disposition: inline
+In-Reply-To: <20220205185429.2278860-25-paul.kocialkowski@bootlin.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, 5 Feb 2022 19:53:24 +0100, Paul Kocialkowski wrote:
-> The csi1 block node was mistakenly added before the gic node, although
-> its address comes after the gic's. Move the node to its correct
-> position.
-> 
-> 
 
-Applied to sunxi/linux.git (sunxi/dt-for-5.18).
+--pyrsjzli2thxv5dg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks!
+On Sat, Feb 05, 2022 at 07:53:47PM +0100, Paul Kocialkowski wrote:
+> Some code cleanups, renames, variable lowerings and moving things around =
+for
+> better organization. No functional change intended.
+>=20
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+
+Reviewed-by: Maxime Ripard <maxime@cerno.tech>
+
 Maxime
+
+--pyrsjzli2thxv5dg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgDs1AAKCRDj7w1vZxhR
+xQKnAQCMUjpfUgamt9vxCE20zE0gPD6E4cQ4Qn5ABCapBEwBMAEAvy8vHSWgmZqd
+l7MgNjmOqkikWP952Y5ku+UaAbTVFA0=
+=XZPY
+-----END PGP SIGNATURE-----
+
+--pyrsjzli2thxv5dg--
