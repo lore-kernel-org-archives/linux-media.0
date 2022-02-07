@@ -2,118 +2,283 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1645C4167E
-	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 09:23:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CFCBC4332F
+	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 09:24:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236042AbiBGJWh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Feb 2022 04:22:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
+        id S244822AbiBGJWo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Feb 2022 04:22:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245314AbiBGJNI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 04:13:08 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9236C043185;
-        Mon,  7 Feb 2022 01:13:07 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 2A2875800FE;
-        Mon,  7 Feb 2022 04:13:07 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 07 Feb 2022 04:13:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=qLSCGH0RRyPL+HW9Z2e/mHoD755JpEut5CNQEN
-        vEneQ=; b=ClmO9I5a6y5kK0j81cwsKebakL3jiaA65SCTuOColr6pDdjC1+c5fK
-        8qrZQQae1IMcbt9WOHtBEesXU8f11tPGbWTHsSzojOfiLJUart2mP6Tz65l2xX8Q
-        3FVVq8Q7Arj15m2p9AoRzembtXnsz6dD7od4NOwK5r9YEswWyBpmEi/nBtGo3tPP
-        rXwu66Q3oNPa/bKiKJwqKomBb6xwTyis5BUOh/5f0+bKo8rBJH+yxrk17xD80M3t
-        4qSx+DdaBgLBcpQKJdONfLvWO7AoidXjQqdHq6sao1VWGT1Hf0/qc1N3gfhskhkB
-        4CqC5FH/ild8aojhp/JX3qfON7U2aNbA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=qLSCGH0RRyPL+HW9Z
-        2e/mHoD755JpEut5CNQENvEneQ=; b=IhsZ0TP0BqhdKfiHlHCj/6jcP6Q7W/vOk
-        YKA5qUjYTlQi2HVS+aSdWKciGc6uE/8vcgFo8XZ/GDcv/5eSvZ5p6q6ZOcnr+HwN
-        zMfYDXiH/RyJCLxFiJ7ovsiKxgM22HTEVIJzYoV/cChhvVu+8X4aKUpRB9iJyuoT
-        8JM1SY05SYwDitf+hpze3g5oPIbnt3LurYcmQNsKP39sqsalBLpabm73W/tuWpvU
-        2zNPQrv9UlcQg1q+dPwZQ/nLtPlOrNvCSZGsR0X0Xn8iZvc7n3fR63qLL8hRZtla
-        UuvN+sBTjeTmbs6XfnSJAAfBueeXa7dDo7K65G+eIaB0qMdxtAZTQ==
-X-ME-Sender: <xms:ouIAYvS72L2ywHs712zopqFdkfBchJXhHc67d0i-pAKH3urb1XzImQ>
-    <xme:ouIAYgxbC7MkgQr37cU0nkzCEw4chCP5wTxslyNQf4xEKRZVzDzZ7b_ToY_JWVHGA
-    X-pDKiWbK7tNqKgPz0>
-X-ME-Received: <xmr:ouIAYk3kEr6iPGf6M2HWA973maxTKkH8UavJhg-1GVz80CMZ__glG5Zh7yx4cw1J23WZ5867wjFQCokyyAlxAFuaC2rwzQ3Rg4jDQ4M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheehucetufdoteggodetrfdotffvucfrrh
-    hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhmvgcutfhi
-    phgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrthhtvghrnh
-    epleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieehgedunecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimh
-    gvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:ouIAYvDOB2l77RitIJC-9Qq7UBEyTtA1EwJaGNxSKogopg819ko24Q>
-    <xmx:ouIAYoiAwt0iqH0plXpyW_JTvYNQiSopbJ_3BhKFyxkGrB_7M3amrQ>
-    <xmx:ouIAYjqGkRmXM7OAGazuh10uvTopi2O15JZ4rfaDww1omDTtu182vQ>
-    <xmx:o-IAYha7Jg3BY7BcreyYo_NCDnITADZRmu3BBr5tuLksZOeFq9qMkA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Feb 2022 04:13:06 -0500 (EST)
-Date:   Mon, 7 Feb 2022 10:13:05 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
+        with ESMTP id S1354897AbiBGJWd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 04:22:33 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC4EC043181;
+        Mon,  7 Feb 2022 01:22:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1644225750; x=1675761750;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=LF/zFQV6Qwy5MAPcX4cN38iqSsremnh4cnUn5ng85pc=;
+  b=XbAmqizWbcXsPMu7NL8lB/BYVFBHMQnSUYnEoHVwSWb4WCTS5EWIW+LP
+   ezLO+rq7Zjjqy3UQap/6kijZg2jobDHS489I/XSf4BqbwllcF0HaMEpBb
+   Qoo2ykDeww1Q4vG+lKWg8Pm3tCqK9DNNXNbToYxZo18IgDNOFQBmkLHPt
+   L4e3/eHzMb2dFniEBsszpB88Q7ENRcuJXoCXvmcmylgtUC3jK65Jolxhq
+   O1hc7OWBTbcEEae1mo4k+E8TMviZBa3DAtee0IU+A+i6EalKXz5hzd6SP
+   +NGdvS7zcAsgG9sgxaZKbo1tgiv2XBrDOuODY9lca8YI1jZar/RBeYlbi
+   A==;
+X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
+   d="scan'208";a="21926828"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 07 Feb 2022 10:22:28 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 07 Feb 2022 10:22:28 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 07 Feb 2022 10:22:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1644225748; x=1675761748;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=LF/zFQV6Qwy5MAPcX4cN38iqSsremnh4cnUn5ng85pc=;
+  b=eGLWidI7FUHvb4Bi9ukH7Ftizr5zd2TNXD+pK43dIwIdqqpG5o0hpsJh
+   w19PhxzBrR0Fnf9OpgGgpRMpsg0uCbwVFIn8h0SSUTTU9dCRAdg91XIjt
+   wE2raFYJHCAO/SMiKc9iRsJuDbrMYE2urrCSMnckJ03BDS2ccbcKq+YRc
+   dpCZDD67cUFt6vm74K6yhTMHkFj1cW7MibI9EIsjyIzXx1CDjP1I5lGd6
+   xdJ7pW17LfibJwJIp0j0BSEZ8JdyxCGD7wgT/7Wu+OUPKvNTDqDz2DdpQ
+   L7mDPsCQlDmzVe1RF21WWITMGY5Y9LnhB5C/7dvIGYdeagoltKrkhMSIz
+   g==;
+X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
+   d="scan'208";a="21926827"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 07 Feb 2022 10:22:28 +0100
+Received: from steina-w.localnet (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 0358D280065;
+        Mon,  7 Feb 2022 10:22:27 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 20/66] media: sun6i-csi: Tidy up platform code
-Message-ID: <20220207091305.wzfhgyhqdvmbwv26@houat>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-21-paul.kocialkowski@bootlin.com>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: (EXT) Re: [PATCH 1/8] media: imx: Store the type of hardware implementation
+Date:   Mon, 07 Feb 2022 10:22:25 +0100
+Message-ID: <3650787.kQq0lBPeGt@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <Yf3tPuwbyz5UU6eC@pendragon.ideasonboard.com>
+References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com> <20220204121514.2762676-2-alexander.stein@ew.tq-group.com> <Yf3tPuwbyz5UU6eC@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zn33dzpi5f5xuniy"
-Content-Disposition: inline
-In-Reply-To: <20220205185429.2278860-21-paul.kocialkowski@bootlin.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Laurent,
 
---zn33dzpi5f5xuniy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Am Samstag, 5. Februar 2022, 04:21:34 CET schrieb Laurent Pinchart:
+> Hi Alexander and Dorota,
+> 
+> On Fri, Feb 04, 2022 at 01:15:07PM +0100, Alexander Stein wrote:
+> > From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > 
+> > The driver covers i.MX5/6, as well as i.MX7/8 hardware.
+> > Those implementations differ, e.g. in the sizes of buffers they accept.
+> > 
+> > Some functionality should be abstracted, and storing type achieves that.
+> 
+> I think that longer term (which ideally shouldn't be too far in the
+> future) we should decouple the i.MX5/6 and i.MX7/8 drivers (this naming
+> is actually not quite correct, there are i.MX6 SoCs that have a CSI
+> bridge, not an IPUv3). The platforms are completely different at the
+> hardware level, they shouldn't share the same code. That would allow us
+> to evolve the CSI bridge driver independently from the IPUv3 driver, and
+> move it from staging to drivers/media/.
 
-On Sat, Feb 05, 2022 at 07:53:43PM +0100, Paul Kocialkowski wrote:
-> Various renames, variables lowering and other cosmetic changes in the
-> platform-support code. No functional change intended.
->=20
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+That sounds reasonable. Although I'm not sure where to start. Split it for 
+i.MX6 in the first place (CSI bridge vs. IPUv3)? Or start splitting across 
+i.MX generation? I've yet to have broad knowledge about the internals to be 
+able to come up with a good decision.
 
-Reviewed-by: Maxime Ripard <maxime@cerno.tech>
+> I'm not against merging this if it can help short term, but please also
+> feel free to start decoupling the drivers, even if it results in some
+> duplicated code.
 
-Maxime
+Thanks for willing to accept this short term patches. I'm hesitating to 
+decoupling for now as I haven't fully grasped all the details and small 
+similarities and differences.
 
---zn33dzpi5f5xuniy
-Content-Type: application/pgp-signature; name="signature.asc"
+> > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > ---
+> > Changes in comparison to original commit from Dorota:
+> > * Applied the suggestion from Hans at [1].
+> > 
+> > [1]
+> > https://patchwork.linuxtv.org/project/linux-media/patch/20211104113631.20
+> > 6899-2-dorota.czaplejewicz@puri.sm/> 
+> >  drivers/staging/media/imx/imx-ic-prpencvf.c   | 3 ++-
+> >  drivers/staging/media/imx/imx-media-capture.c | 5 ++++-
+> >  drivers/staging/media/imx/imx-media-csi.c     | 3 ++-
+> >  drivers/staging/media/imx/imx-media.h         | 3 ++-
+> >  drivers/staging/media/imx/imx7-media-csi.c    | 3 ++-
+> >  5 files changed, 12 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c
+> > b/drivers/staging/media/imx/imx-ic-prpencvf.c index
+> > 9b81cfbcd777..caaaac1a515a 100644
+> > --- a/drivers/staging/media/imx/imx-ic-prpencvf.c
+> > +++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
+> > @@ -1266,7 +1266,8 @@ static int prp_registered(struct v4l2_subdev *sd)
+> > 
+> >  	priv->vdev = imx_media_capture_device_init(ic_priv->ipu_dev,
+> >  	
+> >  						   &ic_priv-
+>sd,
+> > 
+> > -						   
+PRPENCVF_SRC_PAD, true);
+> > +						   
+PRPENCVF_SRC_PAD, true,
+> > +						   true);
+> > 
+> >  	if (IS_ERR(priv->vdev))
+> >  	
+> >  		return PTR_ERR(priv->vdev);
+> > 
+> > diff --git a/drivers/staging/media/imx/imx-media-capture.c
+> > b/drivers/staging/media/imx/imx-media-capture.c index
+> > 93ba09236010..b61bf9f8ddf8 100644
+> > --- a/drivers/staging/media/imx/imx-media-capture.c
+> > +++ b/drivers/staging/media/imx/imx-media-capture.c
+> > @@ -47,6 +47,7 @@ struct capture_priv {
+> > 
+> >  	struct v4l2_ctrl_handler ctrl_hdlr;	/* Controls inherited 
+from subdevs
+> >  	*/
+> >  	
+> >  	bool legacy_api;			/* Use the legacy (pre-
+MC) API */
+> > 
+> > +	bool is_imx56;				/* Hardware 
+is i.MX5/i.MX6 */
+> 
+> Can we create an enum type instead, to make the code more explicit ?
 
------BEGIN PGP SIGNATURE-----
+I don't mind. So I will pick up the original patches from Dorota at [1] 
+instead which already had an enum.
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgDioQAKCRDj7w1vZxhR
-xfZSAQD9zXv8azZLXEezoQC3ws4048ji/X/17zUo4FiyDc+csgD8DQDo7XmeUDwY
-ZqXOeUrxj6ly/YWrY7r3NDGlsxfIVww=
-=Sg3F
------END PGP SIGNATURE-----
+Best regards,
+Alexander
 
---zn33dzpi5f5xuniy--
+[1] https://patchwork.kernel.org/project/linux-arm-kernel/patch/
+20211104113631.206899-2-dorota.czaplejewicz@puri.sm/
+
+> >  };
+> >  
+> >  #define to_capture_priv(v) container_of(v, struct capture_priv, vdev)
+> > 
+> > @@ -957,7 +958,8 @@
+> > EXPORT_SYMBOL_GPL(imx_media_capture_device_unregister);
+> > 
+> >  struct imx_media_video_dev *
+> >  imx_media_capture_device_init(struct device *dev, struct v4l2_subdev
+> >  *src_sd,> 
+> > -			      int pad, bool legacy_api)
+> > +			      int pad, bool legacy_api,
+> > +			      bool is_imx56)
+> > 
+> >  {
+> >  
+> >  	struct capture_priv *priv;
+> >  	struct video_device *vfd;
+> > 
+> > @@ -972,6 +974,7 @@ imx_media_capture_device_init(struct device *dev,
+> > struct v4l2_subdev *src_sd,> 
+> >  	priv->src_sd_pad = pad;
+> >  	priv->dev = dev;
+> >  	priv->legacy_api = legacy_api;
+> > 
+> > +	priv->is_imx56 = is_imx56;
+> > 
+> >  	mutex_init(&priv->mutex);
+> >  	INIT_LIST_HEAD(&priv->ready_q);
+> > 
+> > diff --git a/drivers/staging/media/imx/imx-media-csi.c
+> > b/drivers/staging/media/imx/imx-media-csi.c index
+> > bd7f156f2d52..c8f6add00dbb 100644
+> > --- a/drivers/staging/media/imx/imx-media-csi.c
+> > +++ b/drivers/staging/media/imx/imx-media-csi.c
+> > @@ -1803,7 +1803,8 @@ static int csi_registered(struct v4l2_subdev *sd)
+> > 
+> >  	}
+> >  	
+> >  	priv->vdev = imx_media_capture_device_init(priv->sd.dev, &priv->sd,
+> > 
+> > -						   
+CSI_SRC_PAD_IDMAC, true);
+> > +						   
+CSI_SRC_PAD_IDMAC, true,
+> > +						   true);
+> > 
+> >  	if (IS_ERR(priv->vdev)) {
+> >  	
+> >  		ret = PTR_ERR(priv->vdev);
+> >  		goto free_fim;
+> > 
+> > diff --git a/drivers/staging/media/imx/imx-media.h
+> > b/drivers/staging/media/imx/imx-media.h index f263fc3adbb9..73e8e6e0d8e8
+> > 100644
+> > --- a/drivers/staging/media/imx/imx-media.h
+> > +++ b/drivers/staging/media/imx/imx-media.h
+> > @@ -282,7 +282,8 @@ int imx_media_ic_unregister(struct v4l2_subdev *sd);
+> > 
+> >  /* imx-media-capture.c */
+> >  struct imx_media_video_dev *
+> >  imx_media_capture_device_init(struct device *dev, struct v4l2_subdev
+> >  *src_sd,> 
+> > -			      int pad, bool legacy_api);
+> > +			      int pad, bool legacy_api,
+> > +			      bool is_imx56);
+> > 
+> >  void imx_media_capture_device_remove(struct imx_media_video_dev *vdev);
+> >  int imx_media_capture_device_register(struct imx_media_video_dev *vdev,
+> >  
+> >  				      u32 link_flags);
+> > 
+> > diff --git a/drivers/staging/media/imx/imx7-media-csi.c
+> > b/drivers/staging/media/imx/imx7-media-csi.c index
+> > 32311fc0e2a4..158d2a736c6d 100644
+> > --- a/drivers/staging/media/imx/imx7-media-csi.c
+> > +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> > @@ -1039,7 +1039,8 @@ static int imx7_csi_registered(struct v4l2_subdev
+> > *sd)> 
+> >  	}
+> >  	
+> >  	csi->vdev = imx_media_capture_device_init(csi->sd.dev, &csi->sd,
+> > 
+> > -						  
+IMX7_CSI_PAD_SRC, false);
+> > +						  
+IMX7_CSI_PAD_SRC, false,
+> > +						  false);
+> > 
+> >  	if (IS_ERR(csi->vdev))
+> >  	
+> >  		return PTR_ERR(csi->vdev);
+
+
+
+
