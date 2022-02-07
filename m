@@ -2,148 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD8E3C43217
-	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 09:24:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01C99C433EF
+	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 09:34:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234227AbiBGJX6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Feb 2022 04:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
+        id S237295AbiBGJd4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Feb 2022 04:33:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344157AbiBGJTa (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 04:19:30 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20358C043185
-        for <linux-media@vger.kernel.org>; Mon,  7 Feb 2022 01:19:29 -0800 (PST)
-Received: from [192.168.1.111] (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 74062A04;
-        Mon,  7 Feb 2022 10:19:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644225566;
-        bh=LvrtLfKjAbXFFYLR7ufJMFfENdcFOTymnjiwJ24x2FM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mcsuTBJIhyhJZEs4XzS1+KHM3AMjqPMV6937id+mh617KIVK5p459itcwazT4N7WB
-         7/nJrQqG8af5Pvm2JzXog4E2n92CoCJK3U4BfFqNU3yFdf6SzHKiQaWW1CtUJRQkkt
-         +11cQco4C5iEVfKZK7M4ZsDPfHCxoFF1qmmREaQ0=
-Message-ID: <27b84528-e2ae-2f6a-53bd-481ded10ad02@ideasonboard.com>
-Date:   Mon, 7 Feb 2022 11:19:23 +0200
+        with ESMTP id S1344934AbiBGJYh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 04:24:37 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAE2C043181;
+        Mon,  7 Feb 2022 01:24:36 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id F0CBB5801A4;
+        Mon,  7 Feb 2022 04:24:35 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 07 Feb 2022 04:24:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=iSknFfgihoz9cY
+        jsB49tquH7M9oK6rXonBcNar0/E6w=; b=g06c28B6jZMt5BHIajzts1tMVOsqxC
+        jd9VJqjCvqxWawTL04UEtBO402ejuO2BSppxfhK7mVpZDtWDHwYjSljNfJuEM7Nz
+        ROEPvsrFj/y9Nj+RS6owvposXMs92XTRrEUNTgF7XA7zUxkZ4V9LlUFbA/cne7xE
+        wFknzRrCOYNbooIIefbVEYPmFAiCtEphcDFpcfEqxu6Lb7hAkdidGxczqKui24LF
+        jpYRaCPNqnSJUIfOKutuAwvXw3Rl8NSwLtKu0KxIl/y+HnA5WaPKFRMvoEQMCpCP
+        HEmzcfJTGzKjduBVl+G6D7/lITGlLmm//A1I1YEHxBdOSbmnF7CgYdvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=iSknFfgihoz9cYjsB49tquH7M9oK6rXonBcNar0/E
+        6w=; b=U1NT+MWLZ02mQOf8kBE+uK6kts+S3hxLpE3s9F/l9KARcbtBnkX24Dze9
+        0nLSgthgM4jwzWQeg2ceeqN98JQmIgTwmAUeN3kuUsLsbC9ytF+8+zIP7aNZcoXr
+        7rdrkMpLbm3lPxGj58ChTfGU1UH+wsAKRu3bJu5+/O3qbRMcK1Nt5xBqyf6tgQay
+        nMbvZ11ZjtA8eTkwk8dMzEdc6Yaa9xcR2+v9Ok52pNSzeL1J1u8GdsdYoY1KyKoH
+        zwrM8UW4grEHLGxcB5p43jwDT6LvU5XlsDI7A3MPGUciSmAmK+cza/GCH49KgNEq
+        F1/H/vKq9TjZOse52afHeqLbTAVKg==
+X-ME-Sender: <xms:U-UAYrtIwQgHFPDLxj7aSE8LhyJCOSMRhFSXzMak2ZkkS38Q2AnZLw>
+    <xme:U-UAYscV_t-YFP4sAMikMj1PTrODEkbNC_71S2rCWe7mt3r8muudddDli-aZnLb-R
+    agRmGjSfcJzjIxCZrs>
+X-ME-Received: <xmr:U-UAYuxnlEN7l3AOzw-FLDOYfanDql-QHmgM4P3C1Vux9JVwKZsIHeCarqW12AnZ0GJR4srNMjFiaTWhrIc7oLhxZeiVFPUbFsIT2PQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheehgddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenog
+    fuohhrthgvugftvggtihhpvdculdegtddmnecujfgurhephffvufffkffojghfgggtgfes
+    thekredtredtjeenucfhrhhomhepofgrgihimhgvucftihhprghrugcuoehmrgigihhmvg
+    estggvrhhnohdrthgvtghhqeenucggtffrrghtthgvrhhnpeejuefggeekfffgueevtddv
+    udffhfejffejjedvvdduudethefhfefhfeegieekkeenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:U-UAYqOzAdYqqOUabPejPK6EimsjHVm5IoKEm3U65YxSM92QgGQXbg>
+    <xmx:U-UAYr-ypdbGSOKY6fGtF9fOWZgG6FvEfpbpe7CtxfgQncI4cD5axA>
+    <xmx:U-UAYqVRHy5_7nEa8vahYdXNkEwxhxcQgzsTDUixHv96wQJzPVVz6w>
+    <xmx:U-UAYmf9k2mUC6x-QrtJd2Lhz-x1iKtyulTQ34erSqwk9rkJCiGSXg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 7 Feb 2022 04:24:34 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     linux-sunxi@lists.linux.dev, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Maxime Ripard <maxime@cerno.tech>, Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Helen Koike <helen.koike@collabora.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: (subset) [PATCH v2 01/66] ARM: dts: sun8i: v3s: Move the csi1 block to follow address order
+Date:   Mon,  7 Feb 2022 10:24:31 +0100
+Message-Id: <164422586926.25686.14643523821893289727.b4-ty@cerno.tech>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220205185429.2278860-2-paul.kocialkowski@bootlin.com>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com> <20220205185429.2278860-2-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 6/6] media: Documentation: add documentation about
- subdev state
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Pratyush Yadav <p.yadav@ti.com>
-References: <20211217135022.364954-1-tomi.valkeinen@ideasonboard.com>
- <20211217135022.364954-7-tomi.valkeinen@ideasonboard.com>
- <YcDDzzX3XNlE/K05@paasikivi.fi.intel.com>
- <YcGSG8PHXNHa7VKv@pendragon.ideasonboard.com>
- <YcGsDvZK9AIuitsA@paasikivi.fi.intel.com>
- <YcGtimscb6edlqys@pendragon.ideasonboard.com>
- <YcG2EGCw6b9X2dLr@paasikivi.fi.intel.com>
- <YcJqklqTlwghqn8P@pendragon.ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <YcJqklqTlwghqn8P@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 22/12/2021 02:00, Laurent Pinchart wrote:
-
->>>>>>> +:c:func:`v4l2_subdev_lock_state()`. The driver must then call
->>>>>>> +:c:func:`v4l2_subdev_unlock_state()` to unlock the state when done.
->>>>>>> +
->>>>>>> +Operations that do not receive a state parameter implicitly operate on the
->>>>>>> +subdevice active state, which drivers can exclusively access by
->>>>>>> +calling :c:func:`v4l2_subdev_lock_active_state()`. The sub-device active state
->>>>>>> +must equally be released by calling :c:func:`v4l2_subdev_unlock_state()`.
->>>>>>> +
->>>>>>> +Drivers must never manually access the state stored in the :c:type:`v4l2_subdev`
->>>>>>> +or in the file-handle without going through the designated helpers.
->>>>>>
->>>>>> Have you thought how this will interact with controls?
->>>>>>
->>>>>> Generally active state information exists for a device in struct
->>>>>> v4l2_subdev_state as well as the device's control handler as control
->>>>>> values. Controls have dependencies to other state information (active and
->>>>>> try).
->>>>>>
->>>>>> Until now, drivers have been responsible for serialising access to this
->>>>>> state on their own, mostly using a single mutex. Controls require a mutex
->>>>>> as well, but it's the same mutex independently of whether a driver is
->>>>>> dealing with active or try subdev state.
->>>>>>
->>>>>> In other words, if the above is assumed, when you're dealing with try state
->>>>>> that has dependencies to controls, you have to hold both that try state's
->>>>>> mutex as well as the control handler's mutex.
->>>>>
->>>>> Going forward, I think we should store the controls in the subdev state.
->>>>> That will require a uAPI extension to pass a `which` parameter to the
->>>>> control ioctls, and deprecated the control TRY ioctl on subdevs.
->>>>> Interactions between controls and pad formats will be easier to test, as
->>>>> applications will be able to set controls in the TRY state, interacting
->>>>> with the TRY formats. We will also need to rework the control handler
->>>>> operations to split .s_ctrl() in two, with one function to adjust a
->>>>> control value and one function to apply it.
->>>>>
->>>>> In the meantime, I think we'll need to acquire both locks, or possibly
->>>>> use the active state lock as the control handler lock.
->>>>
->>>> Note that also trying controls requires locking the control handler,
->>>> meaning that the control handler's mutex may not be the same as the active
->>>> state mutex (unless access also to try state is serialised using the same
->>>> mutex).
->>>>
->>>> What I'm saying is that to make this better usable with controls, changes
->>>> will be needed somewhere as the locking scheme is a poor match with that of
->>>> controls currently. Just saying the mutexes are acquired in a certain
->>>> order and pushing the problem to drivers is not a great solution.
->>>
->>> Could you maybe provide an example of existing subdev driver code that
->>> showcases this issue ? I'm not sure we really understand each other
->>> here.
->>
->> Whenever you're dealing with both controls and something in the state. Also
->> you've got a problem if the sensor driver does I²C writes to more than
->> 8-bit registers in 8-bit chunks and relies on hardware caching some values
->> before the entire register is updated.
->>
->> For instance, in the CCS driver, computing the PLL tree configuration
->> requires state (subdev format and selection rectangles) as well as control
->> values as input from multiple sub-devices. I suppose this is the case with
->> many sensor drivers --- I just know CCS best.
->>
->> The current implementation uses a single mutex for all controls and
->> subdevs.
+On Sat, 5 Feb 2022 19:53:24 +0100, Paul Kocialkowski wrote:
+> The csi1 block node was mistakenly added before the gic node, although
+> its address comes after the gic's. Move the node to its correct
+> position.
 > 
-> For a single subdev, that could be done by setting
-> v4l2_ctrl_handler.lock to &v4l2_subdev.active_state->lock.
+> 
 
-That would only cover the active state, not the try state.
+Applied to sunxi/linux.git (sunxi/dt-for-5.18).
 
-I made a test change by changing the subdev state to have 'struct mutex 
-_lock' and 'struct mutex *lock', similar to the struct 
-v4l2_ctrl_handler. The driver could then, in its init_cfg(), set the 
-state->lock to either v4l2_ctrl_handler.lock or a lock in the driver's 
-private data.
-
-This kind of lock sharing makes me a bit uncomfortable (although the 
-controls are already allowing this, and a driver private mutex can be 
-set as the ctrl lock): if I call v4l2_subdev_lock_active_state(), I 
-don't expect the controls to be locked too.
-
-Then again, if I think about this as the subdev state really containing 
-three parts: 1) the subdev active & try states, 2) controls, 3) driver 
-private data, then it kind of makes sense. In the long run we could move 
-towards combining these pieces together, and thus cleaning up the state 
-management and locking.
-
-  Tomi
+Thanks!
+Maxime
