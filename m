@@ -2,189 +2,153 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01AEBC3526E
-	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 16:22:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2178CC35272
+	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 16:22:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378557AbiBGQVg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1379095AbiBGQVg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 7 Feb 2022 11:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387318AbiBGQLc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 11:11:32 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FC6C0401CC
-        for <linux-media@vger.kernel.org>; Mon,  7 Feb 2022 08:11:31 -0800 (PST)
-Received: from deskari.lan (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DB7ADA50;
-        Mon,  7 Feb 2022 17:11:25 +0100 (CET)
+        with ESMTP id S1387604AbiBGQQJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 11:16:09 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F3EC0401CE;
+        Mon,  7 Feb 2022 08:16:08 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 85524A50;
+        Mon,  7 Feb 2022 17:16:06 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644250286;
-        bh=l/IKKsHxfdUmNfTtZKyfENLUdkJZDep2cJsnkQ8CYVQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=em4lZE7gzrZAKsb9L27NN95pmLSWzCVwy5XcJSoCyLfoUISmC0AXm7xdA4d+GujhR
-         gbeOCNl7ca89kusUERERF5EUQ8vobndng78lX84lR8CDsSppQcVoCDY9z8V935uDSw
-         QUxLg72AR6aO8rpRIiVIQ3vY4iw/aNyHid7yY4VQ=
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        niklas.soderlund+renesas@ragnatech.se,
+        s=mail; t=1644250566;
+        bh=aFkueRgWrJNvd3R2K1xflySlUNscsWztv2uokuEkh9I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nZK1tUgx86ylAnUIWlj2XVGt9I3p8J0h+L4yS9X2FR2ac1TZVfsz+sqmw6q32FLt2
+         XBqJkltHOP84U3EkM6TflyU7nJTEp9yKRVvxoTkwwTap+mD0HWlOmAPjAMPuXn4L/f
+         ACf9R+pOSDDzhStzAqw8cmk9fwefENv7D+vHkZjY=
+Date:   Mon, 7 Feb 2022 18:16:04 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Pratyush Yadav <p.yadav@ti.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v3 2/7] media: subdev: add active state to struct v4l2_subdev
-Date:   Mon,  7 Feb 2022 18:11:02 +0200
-Message-Id: <20220207161107.1166376-3-tomi.valkeinen@ideasonboard.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220207161107.1166376-1-tomi.valkeinen@ideasonboard.com>
-References: <20220207161107.1166376-1-tomi.valkeinen@ideasonboard.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 63/66] staging: media: Add support for the Allwinner
+ A31 ISP
+Message-ID: <YgFFxMd2htKvX0K1@pendragon.ideasonboard.com>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-64-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220205185429.2278860-64-paul.kocialkowski@bootlin.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a new 'active_state' field to struct v4l2_subdev to which we can
-store the active state of a subdev. This will place the subdev
-configuration into a known place, allowing us to use the state directly
-from the v4l2 framework, thus simplifying the drivers.
+Hi Paul,
 
-Also add functions v4l2_subdev_init_finalize() and
-v4l2_subdev_cleanup(), which will allocate and free the active state.
-The functions are named in a generic way so that they can be also used
-for other subdev initialization work.
+Thank you for the patch.
 
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
- drivers/media/v4l2-core/v4l2-subdev.c | 21 ++++++++++
- include/media/v4l2-subdev.h           | 58 +++++++++++++++++++++++++++
- 2 files changed, 79 insertions(+)
+On Sat, Feb 05, 2022 at 07:54:26PM +0100, Paul Kocialkowski wrote:
+> Some Allwinner platforms come with an Image Signal Processor, which
+> supports various features in order to enhance and transform data
+> received by image sensors into good-looking pictures. In most cases,
+> the data is raw bayer, which gets internally converted to RGB and
+> finally YUV, which is what the hardware produces.
+> 
+> This driver supports ISPs that are similar to the A31 ISP, which was
+> the first standalone ISP found in Allwinner platforms. Simpler ISP
+> blocks were found in the A10 and A20, where they are tied to a CSI
+> controller. Newer generations of Allwinner SoCs (starting with the
+> H6, H616, etc) come with a new camera subsystem and revised ISP.
+> Even though these previous and next-generation ISPs are somewhat
+> similar to the A31 ISP, they have enough significant differences to
+> be out of the scope of this driver.
+> 
+> While the ISP supports many features, including 3A and many
+> enhancement blocks, this implementation is limited to the following:
+> - V3s (V3/S3) platform support;
+> - Bayer media bus formats as input;
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index fe49c86a9b02..09648adc97fe 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -915,6 +915,27 @@ void __v4l2_subdev_state_free(struct v4l2_subdev_state *state)
- }
- EXPORT_SYMBOL_GPL(__v4l2_subdev_state_free);
- 
-+int v4l2_subdev_init_finalize(struct v4l2_subdev *sd)
-+{
-+	struct v4l2_subdev_state *state;
-+
-+	state = __v4l2_subdev_state_alloc(sd);
-+	if (IS_ERR(state))
-+		return PTR_ERR(state);
-+
-+	sd->active_state = state;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_subdev_init_finalize);
-+
-+void v4l2_subdev_cleanup(struct v4l2_subdev *sd)
-+{
-+	__v4l2_subdev_state_free(sd->active_state);
-+	sd->active_state = NULL;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_subdev_cleanup);
-+
- #endif /* CONFIG_MEDIA_CONTROLLER */
- 
- void v4l2_subdev_init(struct v4l2_subdev *sd, const struct v4l2_subdev_ops *ops)
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index e52bf508c75b..f481fafe8e4b 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -645,6 +645,9 @@ struct v4l2_subdev_ir_ops {
-  * This structure only needs to be passed to the pad op if the 'which' field
-  * of the main argument is set to %V4L2_SUBDEV_FORMAT_TRY. For
-  * %V4L2_SUBDEV_FORMAT_ACTIVE it is safe to pass %NULL.
-+ *
-+ * Note: This struct is also used in active state, and the try_ prefix is
-+ * historical and to be removed.
-  */
- struct v4l2_subdev_pad_config {
- 	struct v4l2_mbus_framefmt try_fmt;
-@@ -898,6 +901,9 @@ struct v4l2_subdev_platform_data {
-  * @subdev_notifier: A sub-device notifier implicitly registered for the sub-
-  *		     device using v4l2_async_register_subdev_sensor().
-  * @pdata: common part of subdevice platform data
-+ * @active_state: Active state for the subdev (NULL for subdevs tracking the
-+ *		  state internally). Initialized by calling
-+ *		  v4l2_subdev_init_finalize().
-  *
-  * Each instance of a subdev driver should create this struct, either
-  * stand-alone or embedded in a larger struct.
-@@ -929,6 +935,19 @@ struct v4l2_subdev {
- 	struct v4l2_async_notifier *notifier;
- 	struct v4l2_async_notifier *subdev_notifier;
- 	struct v4l2_subdev_platform_data *pdata;
-+
-+	/*
-+	 * The fields below are private, and should only be accessed via
-+	 * appropriate functions.
-+	 */
-+
-+	/*
-+	 * TODO: active_state should most likely be changed from a pointer to an
-+	 * embedded field. For the time being it's kept as a pointer to more
-+	 * easily catch uses of active_state in the cases where the driver
-+	 * doesn't support it.
-+	 */
-+	struct v4l2_subdev_state *active_state;
- };
- 
- 
-@@ -1150,6 +1169,45 @@ struct v4l2_subdev_state *__v4l2_subdev_state_alloc(struct v4l2_subdev *sd);
-  */
- void __v4l2_subdev_state_free(struct v4l2_subdev_state *state);
- 
-+/**
-+ * v4l2_subdev_init_finalize() - Finalizes the initialization of the subdevice
-+ * @sd: The subdev
-+ *
-+ * This function finalizes the initialization of the subdev, including
-+ * allocation of the active state for the subdev.
-+ *
-+ * This function must be called by the subdev drivers that use the centralized
-+ * active state, after the subdev struct has been initialized and
-+ * media_entity_pads_init() has been called, but before registering the
-+ * subdev.
-+ *
-+ * The user must call v4l2_subdev_cleanup() when the subdev is being removed.
-+ */
-+int v4l2_subdev_init_finalize(struct v4l2_subdev *sd);
-+
-+/**
-+ * v4l2_subdev_cleanup() - Releases the resources allocated by the subdevice
-+ * @sd: The subdevice
-+ *
-+ * This function will release the resources allocated in
-+ * v4l2_subdev_init_finalize.
-+ */
-+void v4l2_subdev_cleanup(struct v4l2_subdev *sd);
-+
-+/**
-+ * v4l2_subdev_get_active_state() - Returns the active subdev state for
-+ *				    subdevice
-+ * @sd: The subdevice
-+ *
-+ * Returns the active state for the subdevice, or NULL if the subdev does not
-+ * support active state.
-+ */
-+static inline struct v4l2_subdev_state *
-+v4l2_subdev_get_active_state(struct v4l2_subdev *sd)
-+{
-+	return sd->active_state;
-+}
-+
- #endif /* CONFIG_MEDIA_CONTROLLER */
- 
- /**
+Greyscale formats would also be nice to have, if the hardware can
+support that (it mostly just requires the ability to disable the CFA
+interpolation).
+
+> - Semi-planar YUV (NV12/NV21) as output;
+
+Packed YUV would also be useful if the hardware supports it.
+
+> - Debayering with per-component gain and offset configuration;
+> - 2D noise filtering with configurable coefficients.
+> 
+> Since many features are missing from the associated uAPI, the driver
+> is aimed to integrate staging until all features are properly
+> described.
+> 
+> On the technical side, it uses the v4l2 and media controller APIs,
+> with a video node for capture, a processor subdev and a video node
+> for parameters submission. A specific uAPI structure and associated
+> v4l2 meta format are used to configure parameters of the supported
+> modules.
+> 
+> One particular thing about the hardware is that configuration for
+> module registers needs to be stored in a DMA buffer and gets copied
+> to actual registers by the hardware at the next vsync, when instructed
+> by a flag. This is handled by the "state" mechanism in the driver.
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> ---
+>  drivers/staging/media/sunxi/Kconfig           |   1 +
+>  drivers/staging/media/sunxi/Makefile          |   1 +
+>  drivers/staging/media/sunxi/sun6i-isp/Kconfig |  13 +
+>  .../staging/media/sunxi/sun6i-isp/Makefile    |   4 +
+>  .../staging/media/sunxi/sun6i-isp/sun6i_isp.c | 572 +++++++++++++
+>  .../staging/media/sunxi/sun6i-isp/sun6i_isp.h |  86 ++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_capture.c | 751 ++++++++++++++++++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_capture.h |  78 ++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_params.c  | 573 +++++++++++++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_params.h  |  52 ++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_proc.c    | 599 ++++++++++++++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_proc.h    |  61 ++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_reg.h     | 275 +++++++
+>  .../sunxi/sun6i-isp/uapi/sun6i-isp-config.h   |  43 +
+
+Could you add a TODO file to list the issues that need to be fixed for
+the driver to move out of staging ? I'll already propose one entry:
+
+- Add support in libcamera
+
+This isn't required to merge the driver in staging as long as ABI
+compatibility doesn't need to be preserved until the driver is moved out
+of staging.
+
+>  14 files changed, 3109 insertions(+)
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Kconfig
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Makefile
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.h
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.h
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg.h
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h
+
+[snip]
+
 -- 
-2.25.1
+Regards,
 
+Laurent Pinchart
