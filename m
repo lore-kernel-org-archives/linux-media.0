@@ -2,177 +2,119 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B6D4C433FE
-	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 10:01:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C37AC433EF
+	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 10:05:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236114AbiBGKAs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Feb 2022 05:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S241270AbiBGKAu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Feb 2022 05:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236505AbiBGJoX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 04:44:23 -0500
-X-Greylist: delayed 3633 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 01:44:21 PST
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8400AC043181;
-        Mon,  7 Feb 2022 01:44:21 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7CCA8240008;
-        Mon,  7 Feb 2022 09:44:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644227059;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6KUt7aT0vf3HkBvqg1m3IH1dZxNe1djrpK9xW+fnoQw=;
-        b=NkrfXNXYCHbTieByp9pVKjdSsJHaXqLnlqhNJGbny2eQ/2CsZrUdW2mSW8BFideJw1mHR7
-        15E1pOBLcS9Zp/1a1+f6oN2t/XT5OKikI5lpiYSLG2Zsg02H2FT2KS4iKkG/crYs0wRf/d
-        LdAbBUGvjGFfl0ceKgyWRSvFGkoenC8W/DHCeWzBHaqNAWaq5hcmZziIcYMn2MBYgGQERM
-        SJJqkl47m6fRQi+eSFynQYJiS+deVZKhB4CRpVfmFn9Iveedvri6/XWxuSJSUDSrowXNWy
-        N2qKe3FTk9/WTFe/Qpb4KssN0vY9p4sxkx+Snv5XDpdBc1wcZwbKDvlk4nw8Nw==
-Date:   Mon, 7 Feb 2022 10:44:16 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
-Cc:     Samuel Holland <samuel@sholland.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-staging@lists.linux.dev, Yong Deng <yong.deng@magewell.com>,
+        with ESMTP id S1351034AbiBGJzm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 04:55:42 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1C6C043181;
+        Mon,  7 Feb 2022 01:55:40 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 3A1B65801B4;
+        Mon,  7 Feb 2022 04:55:40 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 07 Feb 2022 04:55:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=LzpW5U29/mV3TnArXep7XidAoi+6P2KaOjL2Uu
+        SGyY8=; b=MwrJLKGMyPYfjGSbDCS1Bf2SMrC4nOsXhJrjqKdZd8qTYTpfxFpND3
+        /gsSGltSjOBoQkC5J+m/YTzVMLI1mmXh+5+Q7mtXzUvgmm7t9V52tqKFcEbkw4O7
+        Q3N7WqUigvXrK/4VjQgdBAvxpcNzTRvBxF2csTyNz68ZthjZ/XEQTPwSXPvXJIQJ
+        vP3qaDy5m0exlpNtsVHI/m6tSUU6yHnYrggo5LX7AAc+Q+FmmNCKwuEWt2KBhEUs
+        9IZiCOxQp1WUR4fMwgFjBTLDbiUmezRa5+S/J/pC1Vh9PKGrplN9PmtuZtUOHz3u
+        LkzM/UkUdr40WIWgRTwBGIDlyoNBmcrg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=LzpW5U29/mV3TnArX
+        ep7XidAoi+6P2KaOjL2UuSGyY8=; b=Y1H9v6AU1pfVmn3nNPk08l9+B0J+9pnKa
+        ZdiHbNsx/uiyxDrhDBw7CzGOtP9+Kb5rwIZviATjfFSqLYnFsw4M1p0KNG0kF3cA
+        nIr35V2XkfxDylGVAmNHwoMXfREpbtbhsj5jJwdTOVj0nUj1p/vQ1RhvkJ8vtsRk
+        glIk5rqme0zB7Zo05AGElNuMItJyD3AWIXQ+IEDb9YqXayoD3ofbrY36N8q3Uxt0
+        afK9Mmb3Pies1SrH2FzMX9hmZ6hguz1aNUpRkh0hlO6ap0HcoRSIdT3Z6K1EODwm
+        74lLGaCBl3U1Os+F1fic0CaLmu0zQ+g9wQW3W0dDGQ4Gq8XxG2TOA==
+X-ME-Sender: <xms:muwAYnnfH21w3ZcYr9vUpgzcYUGx-F97VwZGwYnhXbtwy5sjkbjmlQ>
+    <xme:muwAYq342lI5EVIWLeSOgymB5EkMPpM83WSbTo2S1Ddf1QJ8YI4_vTvy-qqLcqMe5
+    25lNsFX3peeqlY8BSc>
+X-ME-Received: <xmr:muwAYtqngz_qQbtbcklfBTqPSDbjELfpHcmEOdPhIp7zo5lxGBSTdL6SPfFktGE0VAJqm1TRsBCVotVZouaprw9NlmTI9CDbtEgJupw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheehgddtjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:muwAYvm_t2Eh25_r1lKUHHTlvfu7vKe8Hy4YNn4zFvateXTN_9PEgg>
+    <xmx:muwAYl03htUu29oGMPledVUjxdmcSi0sIAWKVMU18XH9LVClhf96fw>
+    <xmx:muwAYuu8hbBa_2DGNEEwR7-AmlflacezEtyRO2ZJtIF__L1_t4yamQ>
+    <xmx:nOwAYsue7NANvZAY5nXD7ySAL8rq_35RGFbNNtBo5k9smbwHLxm1mg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 7 Feb 2022 04:55:38 -0500 (EST)
+Date:   Mon, 7 Feb 2022 10:55:35 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Helen Koike <helen.koike@collabora.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 02/66] dt-bindings: interconnect: sunxi: Add V3s mbus
- compatible
-Message-ID: <YgDp8HzmcS8Nkn0q@aptenodytes>
+Subject: Re: [PATCH v2 23/66] media: sun6i-csi: Tidy up v4l2 code
+Message-ID: <20220207095535.bvkenjwnrawbh66j@houat>
 References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <5386b1f5-9e75-4ce3-6641-bd7667c85d42@sholland.org>
- <YgDbv8aQEOOjwTb0@aptenodytes>
- <8021451.T7Z3S40VBb@jernej-laptop>
+ <20220205185429.2278860-24-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="10LvNQVJYUIIwFrj"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="z2k626xkldr63pmc"
 Content-Disposition: inline
-In-Reply-To: <8021451.T7Z3S40VBb@jernej-laptop>
+In-Reply-To: <20220205185429.2278860-24-paul.kocialkowski@bootlin.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
---10LvNQVJYUIIwFrj
-Content-Type: text/plain; charset=utf-8
+--z2k626xkldr63pmc
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jernej,
-
-On Mon 07 Feb 22, 09:50, Jernej =C5=A0krabec wrote:
-> Hi Paul,
+On Sat, Feb 05, 2022 at 07:53:46PM +0100, Paul Kocialkowski wrote:
+> Various cosmetic improvements to the v4l2 registration code, with
+> renames, lowerings, etc. The cleanup function is moved down after
+> setup. No functional change intended.
 >=20
-> Dne ponedeljek, 07. februar 2022 ob 09:43:43 CET je Paul Kocialkowski=20
-> napisal(a):
-> > Hi,
-> >=20
-> > On Sat 05 Feb 22, 14:14, Samuel Holland wrote:
-> > > On 2/5/22 12:53 PM, Paul Kocialkowski wrote:
-> > > > Since the V3s uses the internal mbus, document its compatible.
-> > > >=20
-> > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > > ---
-> > > >=20
-> > > >  .../devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml  |=
- 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >=20
-> > > > diff --git
-> > > > a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-m=
-bus.
-> > > > yaml
-> > > > b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-m=
-bus.
-> > > > yaml index 29c9961ee2d8..b67bf9261a6a 100644
-> > > > ---
-> > > > a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-m=
-bus.
-> > > > yaml +++
-> > > > b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-m=
-bus.
-> > > > yaml> >=20
-> > > > @@ -31,6 +31,7 @@ properties:
-> > > >        - allwinner,sun5i-a13-mbus
-> > > >        - allwinner,sun8i-h3-mbus
-> > > >        - allwinner,sun8i-r40-mbus
-> > > >=20
-> > > > +      - allwinner,sun8i-v3s-mbus
-> > >=20
-> > > Please enable the expanded binding added in commit 245578ba9f03
-> > > ("dt-bindings: arm: sunxi: Expand MBUS binding")[1] by adding the new
-> > > compatible to the "if" block lower in the file. That way we can add V=
-3S
-> > > devfreq support in the future without changing that binding.
-> >=20
-> > I had missed that new driver but surely I will expand the updated bindi=
-ng.
-> >=20
-> > By the way do you have an explanation about the cell index given to the
-> > interconnects (after &mbus)?
->=20
-> This is mbus channel. You can find appropriate one checking DRAM driver i=
-n U-
-> Boot, where mbus is configured.
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-Thanks, that's exactly what I was looking for! Looks like in my case
-MBUS_PORT_CSI will be used both for CSI and ISP.
+Reviewed-by: Maxime Ripard <maxime@cerno.tech>
 
-For the record it's also defined in the BSP kernel at:
-include/linux/sunxi_mbus.h
+Maxime
 
-Thanks,
-
-Paul
-
-> Best regards,
-> Jernej
->=20
-> >=20
-> > Paul
-> >=20
-> > > Regards,
-> > > Samuel
-> > >=20
-> > > [1]: https://git.kernel.org/torvalds/c/245578ba9f03
-> > >=20
-> > > >        - allwinner,sun50i-a64-mbus
-> > > >   =20
-> > > >    reg:
->=20
->=20
->=20
->=20
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---10LvNQVJYUIIwFrj
+--z2k626xkldr63pmc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIA6fAACgkQ3cLmz3+f
-v9Fywwf/eKwq4XMLDo180gX6Pm1kgA2v/uxUB0R0xsoXaELb6IluwiuPO0jVvNCN
-rYT26DH13eSTfZtHD9UlCMb7J1PO4lGT+FeVURUWx7tnX8m5r2H0H66VqyAdlPUT
-mOunobehDH81Sl2Pj7FDVa1jyA8Bg/CZwnCxKi7cwLyg4EvFxQCYG3AxKb30UZya
-WcQcmj84SGHps/X1XdbS1vnllGv9e9mE9FvaVdi+WZ4iUzcQOwCXpMsYiWoc0YdV
-LhUCUeGeAqr9STaTz7ZDCPBMUjNtnONtTiDcyDIMcAIWshytEl2S2sKkpy4o8c8V
-caHW8IBvVlyHHv9YjOnNRf5ysP3T7g==
-=vjaa
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgDslwAKCRDj7w1vZxhR
+xYUzAP0ej+2jY/iJRXJJW8CJHTu9z9F4r55daJfJr9TYHTjmzAD/T7cUtfZlL39G
+0syT9Uej1bcktNVjzCz1cIxmQn9AFAo=
+=3IsS
 -----END PGP SIGNATURE-----
 
---10LvNQVJYUIIwFrj--
+--z2k626xkldr63pmc--
