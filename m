@@ -2,226 +2,124 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9AD3C4321E
-	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 12:48:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04D1AC433EF
+	for <linux-media@archiver.kernel.org>; Mon,  7 Feb 2022 12:50:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381459AbiBGMsN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Feb 2022 07:48:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
+        id S1383478AbiBGMsR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Feb 2022 07:48:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442370AbiBGMU4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 07:20:56 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AE3C02B5C7;
-        Mon,  7 Feb 2022 04:08:23 -0800 (PST)
+        with ESMTP id S1390527AbiBGLy5 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 06:54:57 -0500
+X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 03:51:47 PST
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB7EC0401C5
+        for <linux-media@vger.kernel.org>; Mon,  7 Feb 2022 03:51:46 -0800 (PST)
+X-KPN-MessageId: 1b58e454-880c-11ec-a7c6-005056992ed3
+Received: from smtp.kpnmail.nl (unknown [10.31.155.8])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 1b58e454-880c-11ec-a7c6-005056992ed3;
+        Mon, 07 Feb 2022 12:50:12 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1644235704; x=1675771704;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=m/q6pkb+TA7cRlY6xlVOjKQ4P8DeARpuUdX/+csSvX4=;
-  b=VhWW5VlJ+Ij0r7HYtTC7rtGoKQ80lzJSEyGJkhlN9s4/ycNR8STGrIxU
-   7wm/M/2AwBtRT56MJyShkV1MCFn7pF3pSvpNXez/h6WCJa0v1ncHg3PhD
-   dFmkHn9+X3pR0b11b7TghBjo5GaIBUE4jEGRGogQHHzHFjHYWlyo7VC+Q
-   y0wdhQYSXKasobHKSbbu28Yvs5xuN9Zol0lkUq9qQtpy1YiYdDXgq6LFd
-   3eg74SNkk0pnzuxMNv3eTVjbi08RZo7+7OR1XFpP2jDG2mt80Z+TALENA
-   Nt1dn5pc58mbxQXES4PXzoU3zMWMXaxa2naTIsaoyhdgJh0Yys+vNqjJH
-   g==;
-X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
-   d="scan'208";a="21932193"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 07 Feb 2022 13:08:22 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 07 Feb 2022 13:08:22 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 07 Feb 2022 13:08:22 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1644235702; x=1675771702;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=m/q6pkb+TA7cRlY6xlVOjKQ4P8DeARpuUdX/+csSvX4=;
-  b=R0fUFWOdFK8b/66rT4bIyhvoxx1Q9eS3yMCico9uy5oOjZcwpvbe3rJo
-   yudGubxUWLbksbDBdikkQeOl59h9G8PHjwKyoqUyMTVia/RTXNTTDBhZ+
-   k3aKu3m7c3nljibsBMdpQQw/Gp9qE2d+ddYPj9IsXXUmQFIhtPAIwcKn9
-   otPfVvG1BPDeWlwqLtB8V5ORdujtn7bxEqCA912EUi6eoJmogVGRqdF41
-   E2bKKC8DgSrG6nRyUW2uKJbAaowxqPJvxmLKRhiaXGBHh15MazRU6aoTr
-   icrdmshwsanwU4zaVZiQF6/B3Y2h7RVQU+dTFmByH8guu4S32pt0nQhKh
-   A==;
-X-IronPort-AV: E=Sophos;i="5.88,349,1635199200"; 
-   d="scan'208";a="21932192"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 07 Feb 2022 13:08:22 +0100
-Received: from steina-w.localnet (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id DE334280065;
-        Mon,  7 Feb 2022 13:08:21 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: (EXT) Re: [PATCH 3/8] media: imx: Use dedicated format handler for i.MX7/8
-Date:   Mon, 07 Feb 2022 13:08:21 +0100
-Message-ID: <4044945.1IzOArtZ34@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <Yf33YviITGDnolHw@pendragon.ideasonboard.com>
-References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com> <20220204121514.2762676-4-alexander.stein@ew.tq-group.com> <Yf33YviITGDnolHw@pendragon.ideasonboard.com>
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:from:to:subject:mime-version:date:message-id;
+        bh=GZ2AjlFVt2+YvJZOUYRyUEcVpvavTqFHijMlI0g7s7Y=;
+        b=JYYoVDqDIM5cw7EdrD3JwsbWcDrr+GcNfIGho/Usqp4MdJlpvCja7KlXCmKPBIC4ljmGxKsIWN7ot
+         RXhboFU/n9W/7Md8Dd26q2eH+QOi1bSk4srqP5WjgR5qTBMUZxDaUynOXgJxM2gKFDUV1AyS1cNK9h
+         7ZrGkNajpGpcXbPQHCTrYvlCArwASZB+mMJCG6KwTNYfukdlp9fxo/u6myiDbuLO8aOmzEf/yhN0nH
+         nT/PjRusDCjYA3Czv30+bQkL9DKncLfwQB3ZNp1k9v6LoCTZmK3GsEyM27L9dSMW+SGW6ZvOg/nRVw
+         Q4jmF43FP18mymzclr2T9PcFxriMEoQ==
+X-KPN-VerifiedSender: No
+X-CMASSUN: 33|rr1zOIjzRiJDJLhfq4o1Ve5Uggoms8xfVF2BoVa7dOEzgSrucYQy88h2q1z+b5X
+ pQWfHmUBRjD0xHv7NNhFU9A==
+X-Originating-IP: 173.38.220.45
+Received: from [10.47.77.219] (unknown [173.38.220.45])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id 2d05914b-880c-11ec-ab3c-00505699d6e5;
+        Mon, 07 Feb 2022 12:50:42 +0100 (CET)
+Message-ID: <57dde179-ae21-70f0-a3fd-56ca0c880a50@xs4all.nl>
+Date:   Mon, 7 Feb 2022 12:50:41 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [bug report] media: v4l2-ctrls: split up into four source files
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     linux-media@vger.kernel.org
+References: <20220207113424.GA28058@kili>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220207113424.GA28058@kili>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+Hi Dan,
 
-Am Samstag, 5. Februar 2022, 05:04:50 CET schrieb Laurent Pinchart:
-> Hi Alexander and Dorota,
+On 2/7/22 12:34, Dan Carpenter wrote:
+> [ This code is older, but it showed up as a new warning because of
+>   moving the files around - dan ]
 > 
-> Thank you for the patch.
+> Hello Hans Verkuil,
 > 
-> On Fri, Feb 04, 2022 at 01:15:09PM +0100, Alexander Stein wrote:
-> > From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> > 
-> > This splits out a format handler which takes into account
-> > the capabilities of the i.MX7/8 video device,
-> > as opposed to the default handler compatible with both i.MX5/6 and
-> > i.MX7/8.
-> > 
-> > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > ---
-> > Changes in comparison to original commit from Dorota:
-> > * is_imx56 is used instead of enum
-> > 
-> >  drivers/staging/media/imx/imx-media-utils.c | 56 +++++++++++++++++++--
-> >  1 file changed, 52 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/staging/media/imx/imx-media-utils.c
-> > b/drivers/staging/media/imx/imx-media-utils.c index
-> > 0daa6aad45f4..32aaa2e81bea 100644
-> > --- a/drivers/staging/media/imx/imx-media-utils.c
-> > +++ b/drivers/staging/media/imx/imx-media-utils.c
-> > @@ -516,10 +516,9 @@ void imx_media_try_colorimetry(struct
-> > v4l2_mbus_framefmt *tryfmt,> 
-> >  }
-> >  EXPORT_SYMBOL_GPL(imx_media_try_colorimetry);
-> > 
-> > -int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
-> > -				  const struct v4l2_mbus_framefmt 
-*mbus,
-> > -				  const struct imx_media_pixfmt 
-*cc,
-> > -				  bool is_imx56)
-> > +static int imx56_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
-> > +					   const struct 
-v4l2_mbus_framefmt *mbus,
-> > +					   const struct 
-imx_media_pixfmt *cc)
-> > 
-> >  {
-> >  
-> >  	u32 width;
-> >  	u32 stride;
-> > 
-> > @@ -568,6 +567,55 @@ int imx_media_mbus_fmt_to_pix_fmt(struct
-> > v4l2_pix_format *pix,> 
-> >  	return 0;
-> >  
-> >  }
-> > 
-> > +
-> > +static int imx78_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
-> > +					   const struct 
-v4l2_mbus_framefmt *mbus,
-> > +					   const struct 
-imx_media_pixfmt *cc)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (!cc)
-> > +		cc = imx_media_find_mbus_format(mbus->code, 
-PIXFMT_SEL_ANY);
-> > +
-> > +	if (!cc)
-> > +		return -EINVAL;
-> > +	/*
-> > +	 * The hardware can handle line lengths divisible by 4 pixels
-> > +	 * as long as the whole buffer size ends up divisible by 8 bytes.
-> > +	 * If not, use the value of 8 pixels recommended in the datasheet.
-> > +	 */
-> > +	ret = v4l2_fill_pixfmt(pix, cc->fourcc,
-> > +			       round_up(mbus->width, 4), mbus-
->height);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Only 8bits-per-pixel formats may need to get aligned to 8 
-pixels,
-> > +	 * because both 10-bit and 16-bit pixels occupy 2 bytes.
-> > +	 * In those, 4-pixel aligmnent is equal to 8-byte alignment.
-> > +	 */
-> > +	if (pix->sizeimage % 8 != 0)
-> > +		ret = v4l2_fill_pixfmt(pix, cc->fourcc,
-> > +				       round_up(mbus->width, 8), 
-mbus->height);
+> The patch 71c689dc2e73: "media: v4l2-ctrls: split up into four source
+> files" from Apr 27, 2021, leads to the following Smatch static
+> checker warning:
 > 
-> I think you could simplify this by using cc->bpp to figure out the
-> alignment instead of calling v4l2_fill_pixfmt() twice.
-
-Yeah, this should be possible. I can't test it (yet) though, I don't have a 8-
-Bit sensor. Will do in the next version.
-
-> > +	pix->colorspace = mbus->colorspace;
-> > +	pix->xfer_func = mbus->xfer_func;
-> > +	pix->ycbcr_enc = mbus->ycbcr_enc;
-> > +	pix->quantization = mbus->quantization;
-> > +	pix->field = mbus->field;
+> drivers/media/v4l2-core/v4l2-ctrls-api.c:374 v4l2_g_ext_ctrls_common() warn: uncapped user size for kvmalloc() will WARN
+> drivers/media/v4l2-core/v4l2-ctrls-api.c:545 try_set_ext_ctrls_common() warn: uncapped user size for kvmalloc() will WARN
 > 
-> Should v4l2_fill_pixfmt() be updated to handle colorspace and field too
-> instead of doing it manually here ?
+> drivers/media/v4l2-core/v4l2-ctrls-api.c
+>     351 int v4l2_g_ext_ctrls_common(struct v4l2_ctrl_handler *hdl,
+>     352                             struct v4l2_ext_controls *cs,
+>     353                             struct video_device *vdev)
+>     354 {
+>     355         struct v4l2_ctrl_helper helper[4];
+>     356         struct v4l2_ctrl_helper *helpers = helper;
+>     357         int ret;
+>     358         int i, j;
+>     359         bool is_default, is_request;
+>     360 
+>     361         is_default = (cs->which == V4L2_CTRL_WHICH_DEF_VAL);
+>     362         is_request = (cs->which == V4L2_CTRL_WHICH_REQUEST_VAL);
+>     363 
+>     364         cs->error_idx = cs->count;
+>     365         cs->which = V4L2_CTRL_ID2WHICH(cs->which);
+>     366 
+>     367         if (!hdl)
+>     368                 return -EINVAL;
+>     369 
+>     370         if (cs->count == 0)
+>     371                 return class_check(hdl, cs->which);
+>     372 
+>     373         if (cs->count > ARRAY_SIZE(helper)) {
+> --> 374                 helpers = kvmalloc_array(cs->count, sizeof(helper[0]),
+> 
+> These days if "cs->count" is larger than INT_MAX it will trigger a
+> WARN() because basically "people shouldn't be so trusting of user
+> space".  kvmalloc() used to be able to allocate more than INT_MAX but
+> that led to integer overflow problmes and security bugs.
+> 
+> This "cs->count" value comes from the user via the ioctl.  I don't know
+> what a sensible upper bound is though.
 
-I'm not so sure which parts of v4l2_pix_format shall be set into 
-v4l2_fill_pixfmt(). Unfortunately there is no API description in the header, 
-git log doesn't help much either. In the end this should be a separate patch.
+cs->count is capped to 1024 in drivers/media/v4l2-core/v4l2-ioctl.c.
+Search for V4L2_CID_MAX_CTRLS.
 
-Best regards,
-Alexander
+There is no way for smatch to know this of course.
 
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
-> > +				  const struct v4l2_mbus_framefmt 
-*mbus,
-> > +				  const struct imx_media_pixfmt 
-*cc,
-> > +				  bool is_imx56)
-> > +{
-> > +	if (is_imx56)
-> > +		return imx56_media_mbus_fmt_to_pix_fmt(pix, mbus, cc);
-> > +	else
-> > +		return imx78_media_mbus_fmt_to_pix_fmt(pix, mbus, cc);
-> > +}
-> > 
-> >  EXPORT_SYMBOL_GPL(imx_media_mbus_fmt_to_pix_fmt);
-> >  
-> >  void imx_media_free_dma_buf(struct device *dev,
+Regards,
 
+	Hans
 
-
+> 
+>     375                                          GFP_KERNEL);
+>     376                 if (!helpers)
+>     377                         return -ENOMEM;
+>     378         }
+>     379 
+> 
+> regards,
+> dan carpenter
 
