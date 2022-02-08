@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80D1CC433EF
-	for <linux-media@archiver.kernel.org>; Tue,  8 Feb 2022 15:51:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5043EC433F5
+	for <linux-media@archiver.kernel.org>; Tue,  8 Feb 2022 15:51:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382069AbiBHPvB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Feb 2022 10:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        id S1382398AbiBHPvC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Feb 2022 10:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382213AbiBHPut (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Feb 2022 10:50:49 -0500
+        with ESMTP id S1382236AbiBHPuv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Feb 2022 10:50:51 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADF4C061576;
-        Tue,  8 Feb 2022 07:50:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1734C061578;
+        Tue,  8 Feb 2022 07:50:50 -0800 (PST)
 Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:b99c:2ebe:5dcf:6513])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6D35A1207;
-        Tue,  8 Feb 2022 16:50:37 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 49BDA1414;
+        Tue,  8 Feb 2022 16:50:38 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644335437;
-        bh=4ezLOFyVGbD/VCK56WkHPugF99AY0k6rhe0GdMJ72vU=;
+        s=mail; t=1644335438;
+        bh=dr1CC9pJSj6kbXwnvh9HIA2xVOx06GmezXTKRVfGH6k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jCwJdwZkVm6FfKJ0qzwY3q2bohiwJXVYyvbh0BIFmePiaccfCVoqtn3gMITwewzki
-         NK2v1wjdpKJ0ITy5tq384Q9EjoLJRCb6rdAnni3B/6OjyQNaS6+MD5Oo96TFeGz4Bj
-         YIn5AMpovDLVn+OV8k6nM273Neof5X6TzZbjBG60=
+        b=QfgH79yJvgUPQT5hCYD4mJhpuwC9NMPf1NoUbSmq9ZR8EIy/TJ2srNTbrHUVYsNFF
+         ke/m25zG/ROcFbifAK786vWQj/FkhLzaQwuotkvkkFY19+ZbxwmkBpxR9aM3kc8dZY
+         nEzam2ORfPzGfpintv5MB64pj4DjHABMmcsMacFE=
 From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 To:     jeanmichel.hautbois@ideasonboard.com
 Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
@@ -33,9 +33,9 @@ Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
         lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
         robh@kernel.org, tomi.valkeinen@ideasonboard.com,
         bcm-kernel-feedback-list@broadcom.com, stefan.wahren@i2se.com
-Subject: [PATCH v5 07/11] media: imx219: Rename mbus codes array
-Date:   Tue,  8 Feb 2022 16:50:23 +0100
-Message-Id: <20220208155027.891055-8-jeanmichel.hautbois@ideasonboard.com>
+Subject: [PATCH v5 09/11] media: imx219: Introduce the set_routing operation
+Date:   Tue,  8 Feb 2022 16:50:25 +0100
+Message-Id: <20220208155027.891055-10-jeanmichel.hautbois@ideasonboard.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
 References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
@@ -45,83 +45,138 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The imx219 is using the name codes[] for the mbus format which is not
-easy to read and know what it means. Change it to imx219_mbus_formats.
+As we want to use multiplexed streams API, we need to be able to set the
+pad routing. Introduce the set_routing operation.
+
+As this operation is required for a multiplexed able sensor, add the
+V4L2_SUBDEV_FL_MULTIPLEXED flag.
 
 Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/imx219.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/media/i2c/imx219.c | 82 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 79 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index e10af3f74b38..74dba5e61201 100644
+index abcaee15c4a0..35b61fad8e35 100644
 --- a/drivers/media/i2c/imx219.c
 +++ b/drivers/media/i2c/imx219.c
-@@ -429,7 +429,7 @@ static const char * const imx219_supply_name[] = {
-  * - v flip
-  * - h&v flips
-  */
--static const u32 codes[] = {
-+static const u32 imx219_mbus_formats[] = {
- 	MEDIA_BUS_FMT_SRGGB10_1X10,
- 	MEDIA_BUS_FMT_SGRBG10_1X10,
- 	MEDIA_BUS_FMT_SGBRG10_1X10,
-@@ -655,17 +655,17 @@ static u32 imx219_get_format_code(struct imx219 *imx219, u32 code)
+@@ -118,6 +118,10 @@
+ #define IMX219_PIXEL_ARRAY_WIDTH	3280U
+ #define IMX219_PIXEL_ARRAY_HEIGHT	2464U
  
- 	lockdep_assert_held(&imx219->mutex);
- 
--	for (i = 0; i < ARRAY_SIZE(codes); i++)
--		if (codes[i] == code)
-+	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
-+		if (imx219_mbus_formats[i] == code)
- 			break;
- 
--	if (i >= ARRAY_SIZE(codes))
-+	if (i >= ARRAY_SIZE(imx219_mbus_formats))
- 		i = 0;
- 
- 	i = (i & ~3) | (imx219->vflip->val ? 2 : 0) |
- 	    (imx219->hflip->val ? 1 : 0);
- 
--	return codes[i];
-+	return imx219_mbus_formats[i];
++/* Embedded metadata stream structure */
++#define IMX219_EMBEDDED_LINE_WIDTH	16384
++#define IMX219_NUM_EMBEDDED_LINES	1
++
+ struct imx219_reg {
+ 	u16 address;
+ 	u8 val;
+@@ -784,15 +788,85 @@ static void imx219_init_formats(struct v4l2_subdev_state *state)
+ 	format->height = supported_modes[0].height;
+ 	format->field = V4L2_FIELD_NONE;
+ 	format->colorspace = V4L2_COLORSPACE_RAW;
++
++	if (state->routing.routes[1].flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE) {
++		format = v4l2_state_get_stream_format(state, 0, 1);
++		format->code = MEDIA_BUS_FMT_METADATA_8;
++		format->width = IMX219_EMBEDDED_LINE_WIDTH;
++		format->height = 1;
++		format->field = V4L2_FIELD_NONE;
++		format->colorspace = V4L2_COLORSPACE_DEFAULT;
++	}
  }
  
- static void imx219_set_default_format(struct imx219 *imx219)
-@@ -808,11 +808,11 @@ static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
+-static int imx219_init_cfg(struct v4l2_subdev *sd,
+-			   struct v4l2_subdev_state *state)
++static int __imx219_set_routing(struct v4l2_subdev *sd,
++				struct v4l2_subdev_state *state)
  {
- 	struct imx219 *imx219 = to_imx219(sd);
- 
--	if (code->index >= (ARRAY_SIZE(codes) / 4))
-+	if (code->index >= (ARRAY_SIZE(imx219_mbus_formats) / 4))
- 		return -EINVAL;
- 
- 	mutex_lock(&imx219->mutex);
--	code->code = imx219_get_format_code(imx219, codes[code->index * 4]);
-+	code->code = imx219_get_format_code(imx219, imx219_mbus_formats[code->index * 4]);
- 	mutex_unlock(&imx219->mutex);
- 
++	struct v4l2_subdev_route routes[] = {
++		{
++			.source_pad = 0,
++			.source_stream = 0,
++			.flags = V4L2_SUBDEV_ROUTE_FL_IMMUTABLE |
++				 V4L2_SUBDEV_ROUTE_FL_SOURCE |
++				 V4L2_SUBDEV_ROUTE_FL_ACTIVE,
++		},
++		{
++			.source_pad = 0,
++			.source_stream = 1,
++			.flags = V4L2_SUBDEV_ROUTE_FL_SOURCE |
++				 V4L2_SUBDEV_ROUTE_FL_ACTIVE,
++		}
++	};
++
++	struct v4l2_subdev_krouting routing = {
++		.num_routes = ARRAY_SIZE(routes),
++		.routes = routes,
++	};
++
++	int ret;
++
++	ret = v4l2_subdev_set_routing(sd, state, &routing);
++	if (ret)
++		return ret;
++
+ 	imx219_init_formats(state);
++
  	return 0;
-@@ -908,14 +908,14 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+ }
  
- 	mutex_lock(&imx219->mutex);
++static int imx219_set_routing(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *state,
++			      enum v4l2_subdev_format_whence which,
++			      struct v4l2_subdev_krouting *routing)
++{
++	int ret;
++
++	if (routing->num_routes == 0 || routing->num_routes > 2)
++		return -EINVAL;
++
++	v4l2_subdev_lock_state(state);
++
++	ret = __imx219_set_routing(sd, state);
++
++	v4l2_subdev_unlock_state(state);
++
++	return ret;
++}
++
++static int imx219_init_cfg(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *state)
++{
++	int ret;
++
++	v4l2_subdev_lock_state(state);
++
++	ret = __imx219_set_routing(sd, state);
++
++	v4l2_subdev_unlock_state(state);
++
++	return ret;
++}
++
+ static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
+ 				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_mbus_code_enum *code)
+@@ -1251,6 +1325,7 @@ static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
+ 	.get_fmt		= imx219_get_pad_format,
+ 	.set_fmt		= imx219_set_pad_format,
+ 	.get_selection		= imx219_get_selection,
++	.set_routing		= imx219_set_routing,
+ 	.enum_frame_size	= imx219_enum_frame_size,
+ };
  
--	for (i = 0; i < ARRAY_SIZE(codes); i++)
--		if (codes[i] == fmt->format.code)
-+	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
-+		if (imx219_mbus_formats[i] == fmt->format.code)
- 			break;
--	if (i >= ARRAY_SIZE(codes))
-+	if (i >= ARRAY_SIZE(imx219_mbus_formats))
- 		i = 0;
+@@ -1509,7 +1584,8 @@ static int imx219_probe(struct i2c_client *client)
  
- 	/* Bayer order varies with flips */
--	fmt->format.code = imx219_get_format_code(imx219, codes[i]);
-+	fmt->format.code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
+ 	/* Initialize subdev */
+ 	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+-			    V4L2_SUBDEV_FL_HAS_EVENTS;
++			    V4L2_SUBDEV_FL_HAS_EVENTS |
++			    V4L2_SUBDEV_FL_MULTIPLEXED;
+ 	imx219->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
  
- 	mode = v4l2_find_nearest_size(supported_modes,
- 				      ARRAY_SIZE(supported_modes),
+ 	/* Initialize source pad */
 -- 
 2.32.0
 
