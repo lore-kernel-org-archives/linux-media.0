@@ -2,140 +2,111 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7BB2C433EF
-	for <linux-media@archiver.kernel.org>; Tue,  8 Feb 2022 02:46:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93DB7C433F5
+	for <linux-media@archiver.kernel.org>; Tue,  8 Feb 2022 05:32:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345150AbiBHCqM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Feb 2022 21:46:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
+        id S232198AbiBHFcd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Feb 2022 00:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345508AbiBHCqJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 21:46:09 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5035C061355
-        for <linux-media@vger.kernel.org>; Mon,  7 Feb 2022 18:46:08 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D1B06340;
-        Tue,  8 Feb 2022 03:46:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644288367;
-        bh=ELZ0Npkm8vSpqsl8Duud75OpXv8pkATd6UHtbEpnWrI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dY48fCsaxCNu5c9wCKS8PIlC6+wYLhkYMvsR8D8jYB51ZxIEi6QMbs+BwNu4GME+l
-         qXehp6hGkLFyawQR8wYBIkg+8YYTmebYBc5wWNcZrjr9v3tZMZGmYr81h/HBEKrGJU
-         AmGMqX8klkFmSP8HBKEgCIE6G5O29awGi9qEqA70=
-Date:   Tue, 8 Feb 2022 04:46:04 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Pratyush Yadav <p.yadav@ti.com>
-Subject: Re: [PATCH v3 6/7] media: Documentation: add documentation about
- subdev state
-Message-ID: <YgHZbM6pNgbbqsm/@pendragon.ideasonboard.com>
-References: <20220207161107.1166376-1-tomi.valkeinen@ideasonboard.com>
- <20220207161107.1166376-7-tomi.valkeinen@ideasonboard.com>
+        with ESMTP id S231657AbiBHFLm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Feb 2022 00:11:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8436DC0401E9
+        for <linux-media@vger.kernel.org>; Mon,  7 Feb 2022 21:11:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 032C4B817D3
+        for <linux-media@vger.kernel.org>; Tue,  8 Feb 2022 05:11:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CB8EC004E1;
+        Tue,  8 Feb 2022 05:11:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644297097;
+        bh=+T1rammgHreaglsfHL7a4fPoEP7Au5A3mPc76SqwDFs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ME1jyuAxMrC4WOlhe1TLjMh79+kFFGfXuwWmEDxu5fsPolhSnnmafR8/SAVqG4nYc
+         lSb+E3WREpo5Cuxd8WkqshS7B7AFv6BsZet9u4yFcZ3AJr3ddp2H9TRqGh3+TENcOy
+         l4FpTHDBtjavnU/U9ob/VOPh3Ck/+kgPjvSaSnLFaXbp65ek0wZwn4le3yEQdoETsB
+         r3BKl5wwOaF16QscVNM9Flesgo+BQuHpolF8bMGeI4L/XkUNxWVERIkr7VBjWrDd/m
+         Ca4B8wqnW+GqpI/SMcpj1tgBaHMbjQ5NkoWULnEMltTi2Hm2kR4BS7TQP/6mOHuLZQ
+         IFq5sirIxfDcA==
+Date:   Tue, 8 Feb 2022 06:11:29 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: Re: [PATCH 1/1] microchip-csi2dc: Remove VC support for now
+Message-ID: <20220208061129.158ba126@sal.lan>
+In-Reply-To: <20220202153609.240387-1-sakari.ailus@linux.intel.com>
+References: <20220202153609.240387-1-sakari.ailus@linux.intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220207161107.1166376-7-tomi.valkeinen@ideasonboard.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tomi,
+Em Wed,  2 Feb 2022 17:36:09 +0200
+Sakari Ailus <sakari.ailus@linux.intel.com> escreveu:
 
-Thank you for the patch.
+> As part of removing mbus config flags, remove VC flag use in the
+> microchip-csi2dc driver. The support can be reintroduced later on as part
+> of the streams patches.
+>
+> Cc: Eugen Hristev <eugen.hristev@microchip.com>
 
-On Mon, Feb 07, 2022 at 06:11:06PM +0200, Tomi Valkeinen wrote:
-> Add documentation about centrally managed subdev state.
-> 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Hmm... that sounds a regression to me. What effects this will cause at
+the driver?
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Eugen, any comments?
 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > ---
->  .../driver-api/media/v4l2-subdev.rst          | 60 +++++++++++++++++++
->  1 file changed, 60 insertions(+)
+>  .../media/platform/atmel/microchip-csi2dc.c    | 18 ++----------------
+>  1 file changed, 2 insertions(+), 16 deletions(-)
 > 
-> diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
-> index 08ea2673b19e..6b14cc97afa3 100644
-> --- a/Documentation/driver-api/media/v4l2-subdev.rst
-> +++ b/Documentation/driver-api/media/v4l2-subdev.rst
-> @@ -518,6 +518,66 @@ The :c:func:`v4l2_i2c_new_subdev` function will call
->  :c:type:`i2c_board_info` structure using the ``client_type`` and the
->  ``addr`` to fill it.
+> diff --git a/drivers/media/platform/atmel/microchip-csi2dc.c b/drivers/media/platform/atmel/microchip-csi2dc.c
+> index 6bc549c28e05..6a7f5b4b0e3b 100644
+> --- a/drivers/media/platform/atmel/microchip-csi2dc.c
+> +++ b/drivers/media/platform/atmel/microchip-csi2dc.c
+> @@ -348,24 +348,15 @@ static int csi2dc_get_mbus_config(struct csi2dc_device *csi2dc)
+>  	if (ret == -ENOIOCTLCMD) {
+>  		dev_dbg(csi2dc->dev,
+>  			"no remote mbus configuration available\n");
+> -		goto csi2dc_get_mbus_config_defaults;
+> +		return 0;
+>  	}
 >  
-> +Centrally managed subdev active state
-> +-------------------------------------
-> +
-> +Traditionally V4L2 subdev drivers maintained internal state for the active
-> +device configuration. This is often implemented as e.g. an array of struct
-> +v4l2_mbus_framefmt, one entry for each pad, and similarly for crop and compose
-> +rectangles.
-> +
-> +In addition to the active configuration, each subdev file handle has an array of
-> +struct v4l2_subdev_pad_config, managed by the V4L2 core, which contains the try
-> +configuration.
-> +
-> +To simplify the subdev drivers the V4L2 subdev API now optionally supports a
-> +centrally managed active configuration represented by
-> +:c:type:`v4l2_subdev_state`. One instance of state, which contains the active
-> +device configuration, is stored in the sub-device itself as part of
-> +the :c:type:`v4l2_subdev` structure, while the core associates a try state to
-> +each open file handle, to store the try configuration related to that file
-> +handle.
-> +
-> +Sub-device drivers can opt-in and use state to manage their active configuration
-> +by initializing the subdevice state with a call to v4l2_subdev_init_finalize()
-> +before registering the sub-device. They must also call v4l2_subdev_cleanup()
-> +to release all the allocated resources before unregistering the sub-device.
-> +The core automatically allocates and initializes a state for each open file
-> +handle to store the try configurations and frees it when closing the file
-> +handle.
-> +
-> +V4L2 sub-device operations that use both the :ref:`ACTIVE and TRY formats
-> +<v4l2-subdev-format-whence>` receive the correct state to operate on through the
-> +'state' parameter. The sub-device driver can access and modify the configuration
-> + stored in the provided state after having locked the state by calling
-> +:c:func:`v4l2_subdev_lock_state()`. The driver must then call
-> +:c:func:`v4l2_subdev_unlock_state()` to unlock the state when done.
-> +
-> +Operations that do not receive a state parameter implicitly operate on the
-> +subdevice active state, which drivers can exclusively access by
-> +calling :c:func:`v4l2_subdev_lock_active_state()`. The sub-device active state
-> +must equally be released by calling :c:func:`v4l2_subdev_unlock_state()`.
-> +
-> +Drivers must never manually access the state stored in the :c:type:`v4l2_subdev`
-> +or in the file handle without going through the designated helpers.
-> +
-> +While the V4L2 core passes the correct try or active state to the
-> +subdevice operations, some existing device drivers pass a NULL state
-> +when calling operations with :c:func:`v4l2_subdev_call()`. This legacy
-> +construct causes issues with subdevice drivers that let the V4L2 core
-> +manage the active state, as they expect to receive the appropriate state
-> +as a parameter. To help the conversion of subdevice drivers to a managed
-> +active state without having to convert all callers at the same time, the
-> +:c:func:`v4l2_subdev_lock_and_return_state()` helper function can be
-> +used by subdevice drivers to retrieve the active state if a NULL state
-> +is passed to the subdevice operation.
-> +
-> +:c:func:`v4l2_subdev_lock_and_return_state()` should only be used when porting
-> +an existing driver to the new state management when it cannot be guaranteed
-> +that the current callers will pass the state properly. The function prints a
-> +notice when the passed state is NULL to encourage the porting of the callers
-> +to the new state management.
-> +
->  V4L2 sub-device functions and data structures
->  ---------------------------------------------
+>  	if (ret) {
+>  		dev_err(csi2dc->dev,
+>  			"failed to get remote mbus configuration\n");
+> -		goto csi2dc_get_mbus_config_defaults;
+> +		return 0;
+>  	}
 >  
-
--- 
-Regards,
-
-Laurent Pinchart
+> -	if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_0)
+> -		csi2dc->vc = 0;
+> -	else if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_1)
+> -		csi2dc->vc = 1;
+> -	else if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_2)
+> -		csi2dc->vc = 2;
+> -	else if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_3)
+> -		csi2dc->vc = 3;
+> -
+>  	dev_dbg(csi2dc->dev, "subdev sending on channel %d\n", csi2dc->vc);
+>  
+>  	csi2dc->clk_gated = mbus_config.flags &
+> @@ -375,11 +366,6 @@ static int csi2dc_get_mbus_config(struct csi2dc_device *csi2dc)
+>  		csi2dc->clk_gated ? "gated" : "free running");
+>  
+>  	return 0;
+> -
+> -csi2dc_get_mbus_config_defaults:
+> -	csi2dc->vc = 0; /* Virtual ID 0 by default */
+> -
+> -	return 0;
+>  }
+>  
+>  static void csi2dc_vp_update(struct csi2dc_device *csi2dc)
