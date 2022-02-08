@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B37EC4321E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE445C4167E
 	for <linux-media@archiver.kernel.org>; Tue,  8 Feb 2022 15:51:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382292AbiBHPu7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Feb 2022 10:50:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
+        id S1382380AbiBHPvA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Feb 2022 10:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382164AbiBHPup (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Feb 2022 10:50:45 -0500
+        with ESMTP id S1382216AbiBHPut (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Feb 2022 10:50:49 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E432BC06174F;
-        Tue,  8 Feb 2022 07:50:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153A3C061578;
+        Tue,  8 Feb 2022 07:50:49 -0800 (PST)
 Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:b99c:2ebe:5dcf:6513])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0378E11C1;
-        Tue,  8 Feb 2022 16:50:36 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D55671253;
+        Tue,  8 Feb 2022 16:50:37 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644335437;
-        bh=rJEQX4kkWYUdd9ERAXGfu5+E3nfH4kmyCtZUraZgp2w=;
+        s=mail; t=1644335438;
+        bh=8yRqihEg6czLH1dXc4eRhjPQ/AD349oRKIRO+Rej9IM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V6UA2XuLswMyxTxCoRS5/WI4wngYulbrOEIcG+oOljlZ62D+mmFIFsoO+fIbopRG2
-         aqUJUdL32M+fDQYaszeX5S9L98CD9of3K1Lg6LxxqxedB5LFl+tc812d0xGUOH8Q5K
-         oOOjbgfBRiZ1RA4pRi7h59zZRUfjYJC72ohLqzZU=
+        b=d9FowEoCh8RQeA1oYn1SB1hvSsBaocYULzer0KktES90EsBWVWhR0F9okzPuyovvj
+         oYJeGFMKE7eJ7H6qLhClS/7Bes6+XEUjVBBAPMaD+FIUk2rYjk310KnJvUmXMSXzMg
+         BRmRs4YWj358H9O6b5X89EjiDNCOoQm7X81KqqdU=
 From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 To:     jeanmichel.hautbois@ideasonboard.com
 Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
@@ -33,9 +33,9 @@ Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
         lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
         robh@kernel.org, tomi.valkeinen@ideasonboard.com,
         bcm-kernel-feedback-list@broadcom.com, stefan.wahren@i2se.com
-Subject: [PATCH v5 06/11] ARM: dts: bcm2711: Add unicam CSI nodes
-Date:   Tue,  8 Feb 2022 16:50:22 +0100
-Message-Id: <20220208155027.891055-7-jeanmichel.hautbois@ideasonboard.com>
+Subject: [PATCH v5 08/11] media: imx219: Switch from open to init_cfg
+Date:   Tue,  8 Feb 2022 16:50:24 +0100
+Message-Id: <20220208155027.891055-9-jeanmichel.hautbois@ideasonboard.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
 References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
@@ -45,82 +45,117 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add both MIPI CSI-2 nodes in the core bcm2711 tree. Use the 3-cells
-interrupt declaration, corresponding clocks and default as disabled.
+Use the init_cfg pad level operation instead of the internal subdev
+open operation to set default formats on the pads.
+While at it, make the imx219_pad_ops more easier to read.
 
 Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- arch/arm/boot/dts/bcm2711-rpi.dtsi | 15 +++++++++++++++
- arch/arm/boot/dts/bcm2711.dtsi     | 22 ++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
+ drivers/media/i2c/imx219.c | 63 +++++++++++++++-----------------------
+ 1 file changed, 25 insertions(+), 38 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm2711-rpi.dtsi b/arch/arm/boot/dts/bcm2711-rpi.dtsi
-index ca266c5d9f9b..97ee494891af 100644
---- a/arch/arm/boot/dts/bcm2711-rpi.dtsi
-+++ b/arch/arm/boot/dts/bcm2711-rpi.dtsi
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "bcm2835-rpi.dtsi"
+diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+index 74dba5e61201..abcaee15c4a0 100644
+--- a/drivers/media/i2c/imx219.c
++++ b/drivers/media/i2c/imx219.c
+@@ -685,34 +685,6 @@ static void imx219_set_default_format(struct imx219 *imx219)
+ 	fmt->field = V4L2_FIELD_NONE;
+ }
  
-+#include <dt-bindings/power/raspberrypi-power.h>
- #include <dt-bindings/reset/raspberrypi,firmware-reset.h>
- 
- / {
-@@ -18,6 +19,20 @@ aliases {
- 	};
+-static int imx219_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+-{
+-	struct imx219 *imx219 = to_imx219(sd);
+-	struct v4l2_mbus_framefmt *try_fmt =
+-		v4l2_subdev_get_try_format(sd, fh->state, 0);
+-	struct v4l2_rect *try_crop;
+-
+-	mutex_lock(&imx219->mutex);
+-
+-	/* Initialize try_fmt */
+-	try_fmt->width = supported_modes[0].width;
+-	try_fmt->height = supported_modes[0].height;
+-	try_fmt->code = imx219_get_format_code(imx219,
+-					       MEDIA_BUS_FMT_SRGGB10_1X10);
+-	try_fmt->field = V4L2_FIELD_NONE;
+-
+-	/* Initialize try_crop rectangle. */
+-	try_crop = v4l2_subdev_get_try_crop(sd, fh->state, 0);
+-	try_crop->top = IMX219_PIXEL_ARRAY_TOP;
+-	try_crop->left = IMX219_PIXEL_ARRAY_LEFT;
+-	try_crop->width = IMX219_PIXEL_ARRAY_WIDTH;
+-	try_crop->height = IMX219_PIXEL_ARRAY_HEIGHT;
+-
+-	mutex_unlock(&imx219->mutex);
+-
+-	return 0;
+-}
+-
+ static int imx219_set_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct imx219 *imx219 =
+@@ -802,6 +774,25 @@ static const struct v4l2_ctrl_ops imx219_ctrl_ops = {
+ 	.s_ctrl = imx219_set_ctrl,
  };
  
-+&csi0 {
-+	clocks = <&clocks BCM2835_CLOCK_CAM0>,
-+		 <&firmware_clocks 4>;
-+	clock-names = "lp", "vpu";
-+	power-domains = <&power RPI_POWER_DOMAIN_UNICAM0>;
-+};
++static void imx219_init_formats(struct v4l2_subdev_state *state)
++{
++	struct v4l2_mbus_framefmt *format;
 +
-+&csi1 {
-+	clocks = <&clocks BCM2835_CLOCK_CAM1>,
-+		 <&firmware_clocks 4>;
-+	clock-names = "lp", "vpu";
-+	power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
-+};
++	format = v4l2_state_get_stream_format(state, 0, 0);
++	format->code = imx219_mbus_formats[0];
++	format->width = supported_modes[0].width;
++	format->height = supported_modes[0].height;
++	format->field = V4L2_FIELD_NONE;
++	format->colorspace = V4L2_COLORSPACE_RAW;
++}
 +
- &firmware {
- 	firmware_clocks: clocks {
- 		compatible = "raspberrypi,firmware-clocks";
-diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
-index dff18fc9a906..21eb10122e50 100644
---- a/arch/arm/boot/dts/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/bcm2711.dtsi
-@@ -293,6 +293,28 @@ hvs: hvs@7e400000 {
- 			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
- 		};
++static int imx219_init_cfg(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *state)
++{
++	imx219_init_formats(state);
++	return 0;
++}
++
+ static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
+ 				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_mbus_code_enum *code)
+@@ -1255,11 +1246,12 @@ static const struct v4l2_subdev_video_ops imx219_video_ops = {
+ };
  
-+		csi0: csi@7e800000 {
-+			compatible = "brcm,bcm2835-unicam";
-+			reg = <0x7e800000 0x800>,
-+			      <0x7e802000 0x4>;
-+			reg-names = "unicam", "cmi";
-+			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+			port {
-+			};
-+		};
-+
-+		csi1: csi@7e801000 {
-+			compatible = "brcm,bcm2835-unicam";
-+			reg = <0x7e801000 0x800>,
-+			      <0x7e802004 0x4>;
-+			reg-names = "unicam", "cmi";
-+			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+			port {
-+			};
-+		};
-+
- 		pixelvalve3: pixelvalve@7ec12000 {
- 			compatible = "brcm,bcm2711-pixelvalve3";
- 			reg = <0x7ec12000 0x100>;
+ static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
+-	.enum_mbus_code = imx219_enum_mbus_code,
+-	.get_fmt = imx219_get_pad_format,
+-	.set_fmt = imx219_set_pad_format,
+-	.get_selection = imx219_get_selection,
+-	.enum_frame_size = imx219_enum_frame_size,
++	.init_cfg		= imx219_init_cfg,
++	.enum_mbus_code		= imx219_enum_mbus_code,
++	.get_fmt		= imx219_get_pad_format,
++	.set_fmt		= imx219_set_pad_format,
++	.get_selection		= imx219_get_selection,
++	.enum_frame_size	= imx219_enum_frame_size,
+ };
+ 
+ static const struct v4l2_subdev_ops imx219_subdev_ops = {
+@@ -1268,10 +1260,6 @@ static const struct v4l2_subdev_ops imx219_subdev_ops = {
+ 	.pad = &imx219_pad_ops,
+ };
+ 
+-static const struct v4l2_subdev_internal_ops imx219_internal_ops = {
+-	.open = imx219_open,
+-};
+-
+ /* Initialize control handlers */
+ static int imx219_init_controls(struct imx219 *imx219)
+ {
+@@ -1520,7 +1508,6 @@ static int imx219_probe(struct i2c_client *client)
+ 		goto error_power_off;
+ 
+ 	/* Initialize subdev */
+-	imx219->sd.internal_ops = &imx219_internal_ops;
+ 	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+ 			    V4L2_SUBDEV_FL_HAS_EVENTS;
+ 	imx219->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
 -- 
 2.32.0
 
