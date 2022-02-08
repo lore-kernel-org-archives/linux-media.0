@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FE93C43219
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC5E9C4321E
 	for <linux-media@archiver.kernel.org>; Tue,  8 Feb 2022 15:50:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382243AbiBHPuw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Feb 2022 10:50:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
+        id S1381782AbiBHPuz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Feb 2022 10:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382069AbiBHPuj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Feb 2022 10:50:39 -0500
+        with ESMTP id S1382131AbiBHPul (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Feb 2022 10:50:41 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D17C061576;
-        Tue,  8 Feb 2022 07:50:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06E6C06157B;
+        Tue,  8 Feb 2022 07:50:40 -0800 (PST)
 Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:b99c:2ebe:5dcf:6513])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5B7D0A04;
-        Tue,  8 Feb 2022 16:50:34 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3B13DA67;
+        Tue,  8 Feb 2022 16:50:35 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644335434;
-        bh=pdKJZe9Ll8vzJ+2Y2TqaVszZZBG9ZZ/OG8/HUTabWSM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MoT87TtriaiGmotp/2sTZBJ74PM5qgnePSqG26lSu4td+velzIqTAH0Pw//wznN1C
-         fGv+odCsLWEArcPxAJ0ARyUfC81Ut/XHrGSd6XkQzo9hRdS8VBu+t7ypgWSkgvYbMO
-         QRZgoIYkeCer1abUn1FLS58OWB2DvGKpBIK11mcQ=
+        s=mail; t=1644335435;
+        bh=Q51HASflv5trjKC3v8KUbHn1jl34YRRs62TMwWpat+M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QWmqZm63XzNE1rUrqYXR0CTQIaTyR9aSK4ABPe79ZzeBUJYa9Uy62wFHVCjfZOGZ8
+         CPOqO4k9SoOkmCpajFa1FIXEAtwlleqMf7/6/6Jff9zD7jwCdoRmw1K2EtV5xA5lkc
+         ARN2nC5fnHTuZw4dAs1H4NfN681ASjjFf1AafAk4=
 From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 To:     jeanmichel.hautbois@ideasonboard.com
 Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
@@ -33,200 +33,166 @@ Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
         lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
         robh@kernel.org, tomi.valkeinen@ideasonboard.com,
         bcm-kernel-feedback-list@broadcom.com, stefan.wahren@i2se.com
-Subject: [PATCH v5 00/11] Add support for BCM2835 camera interface (unicam)
-Date:   Tue,  8 Feb 2022 16:50:16 +0100
-Message-Id: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
+Subject: [PATCH v5 02/11] media: v4l: Add V4L2-PIX-FMT-Y14P format
+Date:   Tue,  8 Feb 2022 16:50:18 +0100
+Message-Id: <20220208155027.891055-3-jeanmichel.hautbois@ideasonboard.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
+References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello !
+This is a packed grey-scale image format with a depth of 14 bits per
+pixel. Every four consecutive samples are packed into seven bytes. Each
+of the first four bytes contain the eight high order bits of the pixels,
+and the three following bytes contains the six least significants bits
+of each pixel, in the same order.
 
-This patch series adds the BCM2835 CCP2/CSI2 camera interface named
-unicam. This driver is already used in the out-of-tree linux-rpi
-repository [1], and this work aims to support it in mainline.
+As the other formats only needed 5 bytes before, append two bytes in the
+documentation array.
 
-The series is based on top of:
-- Rebased on top of 5.17-rc1 Tomi Valkeinen's multiplexed stream work, on
-  his multistream/work branch [2] which has been submitted as v10 at the
-  time of this writing. The objective is to demonstrate the use of
-  multiplexed streams on a real world widely used example as well as
-  supporting unicam mainline.
-- The "Add 12bit and 14bit luma-only formats" series [3] is partly
-  applied (the Y10P format bug) the new formats are now part of this
-  series.
+Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ .../media/v4l/pixfmt-yuv-luma.rst             | 33 +++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
+ include/uapi/linux/videodev2.h                |  1 +
+ 3 files changed, 35 insertions(+)
 
-The series is made of 11 patches:
-- 1/11 and 2/11 introduce the new formats needed for the unicam driver
-- 3/11 introduces dt-bindings documentation
-- 4/11 adds the driver support in media/platform
-- 5/11 adds the MAINTAINERS entry
-- 6/11 introduces the csi nodes in the bcm2711 file, in a disabled state
-- 7/11 to 11/11 modifies imx219 driver to make it use the multiplexed
-  streams API
-
-All those patches are in my tree [4].
-
-Patch 5/12 comes from the linux-rpi work [1] with substantial
-modifications:
-- Removed the non-mc API which is deprecated, and not needed upstream
-- Moved from one video node with two source pads (image and embedded) to
-  two video nodes
-- Added a subdev between the sensor and the video nodes to properly
-  route the streams
-- Added support for multiplexed streams API
-
-In order to test it, one will need a RPi board and the camv2 (imx219)
-sensor.  An updated v4l-utils is also needed [5] to have support for
-multiplexed streams.
-
-v4l2-compliance passes on both video devices, without streaming testing
-though with one exception: as the colorspace support is removed in v3,
-we now have:
-
-test VIDIOC_G_FMT: OK
-  fail: v4l2-test-formats.cpp(363): colorspace >= 0xff
-  fail: v4l2-test-formats.cpp(465): testColorspace(!node->is_io_mc,
-	pix.pixelformat, pix.colorspace, pix.ycbcr_enc, pix.quantization)
-test VIDIOC_TRY_FMT: FAIL
-  fail: v4l2-test-formats.cpp(363): colorspace >= 0xff
-  fail: v4l2-test-formats.cpp(465): testColorspace(!node->is_io_mc,
-	pix.pixelformat, pix.colorspace, pix.ycbcr_enc, pix.quantization)
-test VIDIOC_S_FMT: FAIL
-
-This series since its v2 does integrate the device tree nodes into the
-upstream BCM2835 or BCM2711 device tree support.
-
-In order to properly configure the media pipeline, it is needed to call
-the usual ioctls, and configure routing in order to send the embedded
-data from the sensor to the "unicam-embedded" device node :
-
-```
-media=0
-media-ctl -d${media} -l "'imx219 2-0010':0->'unicam-subdev':0 [1]"
-media-ctl -d${media} -l "'unicam-subdev':1->'unicam-image':0 [1]"
-media-ctl -d${media} -v -R "'unicam-subdev' [0/0->1/0[1],0/1->2/0[1]]"
-media-ctl -d${media} -V "'imx219 2-0010':0/0 [fmt:SRGGB10_1X10/3280x2464 field:none]"
-v4l2-ctl -d0 --set-fmt-video width=3280,height=2464,pixelformat='pRAA',field=none
-media-ctl -d${media} -v -V "'imx219 2-0010':0/1 [fmt:METADATA_8/16384x1 field:none]"
-media-ctl -d${media} -p
-```
-
-Be sure to configure the routes before setting the format, as s_routing
-resets the default format.
-
-The media-ctl topology is:
-```
-pi@raspberrypi:~ $ media-ctl -d${media} -p
-Media controller API version 5.16.0
-
-Media device information
-------------------------
-driver          unicam
-model           unicam
-serial          
-bus info        platform:fe801000.csi
-hw revision     0x0
-driver version  5.16.0
-
-Device topology
-- entity 1: unicam-subdev (3 pads, 3 links, 2 routes)
-            type V4L2 subdev subtype Unknown flags 0
-            device node name /dev/v4l-subdev0
-	routes:
-		0/0 -> 1/0 [ACTIVE]
-		0/1 -> 2/0 [ACTIVE]
-	pad0: Sink
-		[stream:0 fmt:SRGGB10_1X10/3280x2464 field:none colorspace:raw]
-		[stream:1 fmt:METADATA_8/16384x1 field:none]
-		<- "imx219 2-0010":0 [ENABLED,IMMUTABLE]
-	pad1: Source
-		[stream:0 fmt:SRGGB10_1X10/3280x2464 field:none colorspace:raw]
-		-> "unicam-image":0 [ENABLED,IMMUTABLE]
-	pad2: Source
-		[stream:0 fmt:METADATA_8/16384x1 field:none]
-		-> "unicam-embedded":0 [ENABLED,IMMUTABLE]
-
-- entity 5: imx219 2-0010 (1 pad, 1 link, 2 routes)
-            type V4L2 subdev subtype Sensor flags 0
-            device node name /dev/v4l-subdev1
-	routes:
-		0/0 -> 0/0 [ACTIVE, IMMUTABLE, SOURCE]
-		0/0 -> 0/1 [ACTIVE, SOURCE]
-	pad0: Source
-		[stream:0 fmt:SRGGB10_1X10/3280x2464 field:none colorspace:raw
-		crop.bounds:(8,8)/3280x2464
-		crop:(8,8)/3280x2464]
-		[stream:1 fmt:METADATA_8/16384x1 field:none
-		crop.bounds:(8,8)/3280x2464
-		crop:(8,8)/3280x2464]
-		-> "unicam-subdev":0 [ENABLED,IMMUTABLE]
-
-- entity 9: unicam-image (1 pad, 1 link, 0 route)
-            type Node subtype V4L flags 1
-            device node name /dev/video0
-	pad0: Sink
-		<- "unicam-subdev":1 [ENABLED,IMMUTABLE]
-
-- entity 15: unicam-embedded (1 pad, 1 link, 0 route)
-             type Node subtype V4L flags 0
-             device node name /dev/video1
-	pad0: Sink
-		<- "unicam-subdev":2 [ENABLED,IMMUTABLE]
-
-```
-
-Then a frame can be capture with yavta:
-`yavta --capture=1 /dev/video0 -F/tmp/test-#.bin`
-
-In v3, capture on the metadata node (/dev/video1 in my case) can't be
-started if capture on image node (/dev/video0) is not already started.
-This can be tested using yavta, letting it capture frames indefinitely
-and start another yavta instance on the /dev/video1 node.
-
-[1]: https://github.com/raspberrypi/linux/tree/rpi-5.15.y
-[2]: https://git.kernel.org/pub/scm/linux/kernel/git/tomba/linux.git/log/?h=multistream/work
-[3]: https://patchwork.linuxtv.org/project/linux-media/list/?series=7099
-[4]: https://github.com/jhautbois/linux-rpi/tree/jmh/unicam-multiplexed-streams
-[5]: https://github.com/jhautbois/v4l-utils/tree/jmh/tomi-multiplexed-streams
-
-Jean-Michel Hautbois (11):
-  media: v4l: Add V4L2-PIX-FMT-Y12P format
-  media: v4l: Add V4L2-PIX-FMT-Y14P format
-  dt-bindings: media: Add bindings for bcm2835-unicam
-  media: bcm2835-unicam: Add support for CCP2/CSI2 camera interface
-  media: MAINTAINERS: add bcm2835 unicam driver
-  ARM: dts: bcm2711: Add unicam CSI nodes
-  media: imx219: Rename mbus codes array
-  media: imx219: Switch from open to init_cfg
-  media: imx219: Introduce the set_routing operation
-  media: imx219: use a local v4l2_subdev to simplify reading
-  media: imx219: Add support for the V4L2 subdev active state
-
- .../bindings/media/brcm,bcm2835-unicam.yaml   |  117 +
- .../media/v4l/pixfmt-yuv-luma.rst             |   44 +
- MAINTAINERS                                   |    8 +
- arch/arm/boot/dts/bcm2711-rpi.dtsi            |   15 +
- arch/arm/boot/dts/bcm2711.dtsi                |   22 +
- drivers/media/i2c/imx219.c                    |  324 ++-
- drivers/media/platform/Kconfig                |    1 +
- drivers/media/platform/Makefile               |    2 +
- drivers/media/platform/bcm2835/Kconfig        |   21 +
- drivers/media/platform/bcm2835/Makefile       |    3 +
- .../platform/bcm2835/bcm2835-unicam-regs.h    |  253 ++
- .../media/platform/bcm2835/bcm2835-unicam.c   | 2570 +++++++++++++++++
- drivers/media/v4l2-core/v4l2-ioctl.c          |    2 +
- include/uapi/linux/videodev2.h                |    2 +
- 14 files changed, 3256 insertions(+), 128 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
- create mode 100644 drivers/media/platform/bcm2835/Kconfig
- create mode 100644 drivers/media/platform/bcm2835/Makefile
- create mode 100644 drivers/media/platform/bcm2835/bcm2835-unicam-regs.h
- create mode 100644 drivers/media/platform/bcm2835/bcm2835-unicam.c
-
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
+index d37ce6027095..c64485b03d27 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
+@@ -36,6 +36,8 @@ are often referred to as greyscale formats.
+       - Byte 2
+       - Byte 3
+       - Byte 4
++      - Byte 5
++      - Byte 6
+ 
+     * .. _V4L2-PIX-FMT-GREY:
+ 
+@@ -47,6 +49,8 @@ are often referred to as greyscale formats.
+       - ...
+       - ...
+       - ...
++      - ...
++      - ...
+ 
+     * .. _V4L2-PIX-FMT-Y10:
+ 
+@@ -58,6 +62,8 @@ are often referred to as greyscale formats.
+       - ...
+       - ...
+       - ...
++      - ...
++      - ...
+ 
+     * .. _V4L2-PIX-FMT-Y10BPACK:
+ 
+@@ -69,6 +75,8 @@ are often referred to as greyscale formats.
+       - Y'\ :sub:`1`\ [3:0] Y'\ :sub:`2`\ [9:6]
+       - Y'\ :sub:`2`\ [5:0] Y'\ :sub:`3`\ [9:8]
+       - Y'\ :sub:`3`\ [7:0]
++      - ...
++      - ...
+ 
+     * .. _V4L2-PIX-FMT-Y10P:
+ 
+@@ -80,6 +88,8 @@ are often referred to as greyscale formats.
+       - Y'\ :sub:`2`\ [9:2]
+       - Y'\ :sub:`3`\ [9:2]
+       - Y'\ :sub:`3`\ [1:0] Y'\ :sub:`2`\ [1:0] Y'\ :sub:`1`\ [1:0] Y'\ :sub:`0`\ [1:0]
++      - ...
++      - ...
+ 
+     * .. _V4L2-PIX-FMT-Y12:
+ 
+@@ -91,6 +101,8 @@ are often referred to as greyscale formats.
+       - ...
+       - ...
+       - ...
++      - ...
++      - ...
+ 
+     * .. _V4L2-PIX-FMT-Y12P:
+ 
+@@ -102,6 +114,8 @@ are often referred to as greyscale formats.
+       - Y'\ :sub:`1`\ [3:0] Y'\ :sub:`0`\ [3:0]
+       - ...
+       - ...
++      - ...
++      - ...
+ 
+     * .. _V4L2-PIX-FMT-Y14:
+ 
+@@ -113,6 +127,21 @@ are often referred to as greyscale formats.
+       - ...
+       - ...
+       - ...
++      - ...
++      - ...
++
++    * .. _V4L2-PIX-FMT-Y14P:
++
++      - ``V4L2_PIX_FMT_Y14P``
++      - 'Y14P'
++
++      - Y'\ :sub:`0`\ [13:6]
++      - Y'\ :sub:`1`\ [13:6]
++      - Y'\ :sub:`2`\ [13:6]
++      - Y'\ :sub:`3`\ [13:6]
++      - Y'\ :sub:`1`\ [1:0] Y'\ :sub:`0`\ [5:0]
++      - Y'\ :sub:`2`\ [3:0] Y'\ :sub:`1`\ [5:2]
++      - Y'\ :sub:`3`\ [5:0] Y'\ :sub:`2`\ [5:4]
+ 
+     * .. _V4L2-PIX-FMT-Y16:
+ 
+@@ -124,6 +153,8 @@ are often referred to as greyscale formats.
+       - ...
+       - ...
+       - ...
++      - ...
++      - ...
+ 
+     * .. _V4L2-PIX-FMT-Y16-BE:
+ 
+@@ -135,6 +166,8 @@ are often referred to as greyscale formats.
+       - ...
+       - ...
+       - ...
++      - ...
++      - ...
+ 
+ .. raw:: latex
+ 
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 12862e0803bf..c321cbd9de54 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1267,6 +1267,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_Y10BPACK:	descr = "10-bit Greyscale (Packed)"; break;
+ 	case V4L2_PIX_FMT_Y10P:		descr = "10-bit Greyscale (MIPI Packed)"; break;
+ 	case V4L2_PIX_FMT_Y12P:		descr = "12-bit Greyscale (MIPI Packed)"; break;
++	case V4L2_PIX_FMT_Y14P:		descr = "14-bit Greyscale (MIPI Packed)"; break;
+ 	case V4L2_PIX_FMT_Y8I:		descr = "Interleaved 8-bit Greyscale"; break;
+ 	case V4L2_PIX_FMT_Y12I:		descr = "Interleaved 12-bit Greyscale"; break;
+ 	case V4L2_PIX_FMT_Z16:		descr = "16-bit Depth"; break;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index bef488205fea..18611289217f 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -570,6 +570,7 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_Y10BPACK    v4l2_fourcc('Y', '1', '0', 'B') /* 10  Greyscale bit-packed */
+ #define V4L2_PIX_FMT_Y10P    v4l2_fourcc('Y', '1', '0', 'P') /* 10  Greyscale, MIPI RAW10 packed */
+ #define V4L2_PIX_FMT_Y12P    v4l2_fourcc('Y', '1', '2', 'P') /* 12  Greyscale, MIPI RAW12 packed */
++#define V4L2_PIX_FMT_Y14P    v4l2_fourcc('Y', '1', '4', 'P') /* 14  Greyscale, MIPI RAW14 packed */
+ 
+ /* Palette formats */
+ #define V4L2_PIX_FMT_PAL8    v4l2_fourcc('P', 'A', 'L', '8') /*  8  8-bit palette */
 -- 
 2.32.0
 
