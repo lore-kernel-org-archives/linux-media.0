@@ -2,208 +2,229 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50104C433F5
-	for <linux-media@archiver.kernel.org>; Tue,  8 Feb 2022 02:09:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A953C433EF
+	for <linux-media@archiver.kernel.org>; Tue,  8 Feb 2022 02:18:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236497AbiBHBr6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Feb 2022 20:47:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
+        id S244359AbiBHCSx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Feb 2022 21:18:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239131AbiBHB0g (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 20:26:36 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EC7C061A73;
-        Mon,  7 Feb 2022 17:26:35 -0800 (PST)
+        with ESMTP id S232022AbiBHCSv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 21:18:51 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AC8C061355
+        for <linux-media@vger.kernel.org>; Mon,  7 Feb 2022 18:18:48 -0800 (PST)
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E5874340;
-        Tue,  8 Feb 2022 02:26:33 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B9E69340;
+        Tue,  8 Feb 2022 03:18:46 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644283594;
-        bh=oUkDj8c1UVRf5J2PgXuhfFFpMQ4uUdWBAcW0Wnu7Ja8=;
+        s=mail; t=1644286727;
+        bh=XoLGtPKqJoSsnR488IlsMXGz5pSRWuD1oJnVVopW2WA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k3nAqkYfMKaO3UUdSS67BOsRgslBgibdLkgpA+wioSPAClniwAk5Sf5CZokHZ0igS
-         x/hhLZi9hKJ0reuBuO5EG2ik0ys8+UrCU1GLOo0no8AKinr2S/V9sVAr4dEuZeNZsp
-         GmOGnKnZkOIIMePUjbr93NjngyMuqeDvJb4VniJ8=
-Date:   Tue, 8 Feb 2022 03:26:31 +0200
+        b=EZ2tYYzbCuwZuT4phi3pM14Ey4vX9HeS7mkME1f4mblAQEvRu5K09RmUx52PKTFth
+         QSmSyBsNjS7WwKClRNMcqmanc5S/dBfdxoN0RhIqvBeJmQjXW14YN/ofxjx8ekCIDS
+         zSUVUHMfyJ9uLG8SgRH96B1s7gKXhLj9hpvI7VOQ=
+Date:   Tue, 8 Feb 2022 04:18:44 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: (EXT) Re: [PATCH 1/8] media: imx: Store the type of hardware
- implementation
-Message-ID: <YgHGxzSOfTglmp+r@pendragon.ideasonboard.com>
-References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
- <20220204121514.2762676-2-alexander.stein@ew.tq-group.com>
- <Yf3tPuwbyz5UU6eC@pendragon.ideasonboard.com>
- <3650787.kQq0lBPeGt@steina-w>
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH v3 1/7] media: subdev: rename subdev-state alloc & free
+Message-ID: <YgHTBDTNYNoPckTh@pendragon.ideasonboard.com>
+References: <20220207161107.1166376-1-tomi.valkeinen@ideasonboard.com>
+ <20220207161107.1166376-2-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3650787.kQq0lBPeGt@steina-w>
+In-Reply-To: <20220207161107.1166376-2-tomi.valkeinen@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Alexander,
+Hi Tomi,
 
-On Mon, Feb 07, 2022 at 10:22:25AM +0100, Alexander Stein wrote:
-> Am Samstag, 5. Februar 2022, 04:21:34 CET schrieb Laurent Pinchart:
-> > On Fri, Feb 04, 2022 at 01:15:07PM +0100, Alexander Stein wrote:
-> > > From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> > > 
-> > > The driver covers i.MX5/6, as well as i.MX7/8 hardware.
-> > > Those implementations differ, e.g. in the sizes of buffers they accept.
-> > > 
-> > > Some functionality should be abstracted, and storing type achieves that.
-> > 
-> > I think that longer term (which ideally shouldn't be too far in the
-> > future) we should decouple the i.MX5/6 and i.MX7/8 drivers (this naming
-> > is actually not quite correct, there are i.MX6 SoCs that have a CSI
-> > bridge, not an IPUv3). The platforms are completely different at the
-> > hardware level, they shouldn't share the same code. That would allow us
-> > to evolve the CSI bridge driver independently from the IPUv3 driver, and
-> > move it from staging to drivers/media/.
-> 
-> That sounds reasonable. Although I'm not sure where to start. Split it for 
-> i.MX6 in the first place (CSI bridge vs. IPUv3)? Or start splitting across 
-> i.MX generation? I've yet to have broad knowledge about the internals to be 
-> able to come up with a good decision.
+Thank you for the patch.
 
-There are only two camera interfaces supported in this directory at this
-point, IPUv3 and CSI bridge (the latter implemented in imx7-media-csi).
-There's no need to split across i.MX generations.
+On Mon, Feb 07, 2022 at 06:11:01PM +0200, Tomi Valkeinen wrote:
+> v4l2_subdev_alloc_state() and v4l2_subdev_free_state() are not supposed
+> to be used by the drivers. However, we do have a few drivers that use
+> those at the moment, so we need to expose these functions for the time
+> being.
+> 
+> Prefix the functions with __ to mark the functions as internal.
+> 
+> At the same time, rename them to v4l2_subdev_state_alloc and
+> v4l2_subdev_state_free to match the style used for other functions like
+> video_device_alloc() and media_request_alloc().
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+> ---
+>  drivers/media/platform/rcar-vin/rcar-v4l2.c |  4 ++--
+>  drivers/media/platform/vsp1/vsp1_entity.c   |  4 ++--
+>  drivers/media/v4l2-core/v4l2-subdev.c       | 12 ++++++------
+>  drivers/staging/media/tegra-video/vi.c      |  4 ++--
+>  include/media/v4l2-subdev.h                 | 10 +++++-----
+>  5 files changed, 17 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+> index 2e60b9fce03b..5aae01456c04 100644
+> --- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
+> +++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+> @@ -263,7 +263,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+>  	u32 width, height;
+>  	int ret;
+>  
+> -	sd_state = v4l2_subdev_alloc_state(sd);
+> +	sd_state = __v4l2_subdev_state_alloc(sd);
+>  	if (IS_ERR(sd_state))
+>  		return PTR_ERR(sd_state);
+>  
+> @@ -299,7 +299,7 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
+>  
+>  	rvin_format_align(vin, pix);
+>  done:
+> -	v4l2_subdev_free_state(sd_state);
+> +	__v4l2_subdev_state_free(sd_state);
+>  
+>  	return ret;
+>  }
+> diff --git a/drivers/media/platform/vsp1/vsp1_entity.c b/drivers/media/platform/vsp1/vsp1_entity.c
+> index 823c15facd1b..869cadc1468d 100644
+> --- a/drivers/media/platform/vsp1/vsp1_entity.c
+> +++ b/drivers/media/platform/vsp1/vsp1_entity.c
+> @@ -675,7 +675,7 @@ int vsp1_entity_init(struct vsp1_device *vsp1, struct vsp1_entity *entity,
+>  	 * Allocate the pad configuration to store formats and selection
+>  	 * rectangles.
+>  	 */
+> -	entity->config = v4l2_subdev_alloc_state(&entity->subdev);
+> +	entity->config = __v4l2_subdev_state_alloc(&entity->subdev);
+>  	if (IS_ERR(entity->config)) {
+>  		media_entity_cleanup(&entity->subdev.entity);
+>  		return PTR_ERR(entity->config);
+> @@ -690,6 +690,6 @@ void vsp1_entity_destroy(struct vsp1_entity *entity)
+>  		entity->ops->destroy(entity);
+>  	if (entity->subdev.ctrl_handler)
+>  		v4l2_ctrl_handler_free(entity->subdev.ctrl_handler);
+> -	v4l2_subdev_free_state(entity->config);
+> +	__v4l2_subdev_state_free(entity->config);
+>  	media_entity_cleanup(&entity->subdev.entity);
+>  }
+> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> index 5d27a27cc2f2..fe49c86a9b02 100644
+> --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> @@ -28,7 +28,7 @@ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
+>  {
+>  	struct v4l2_subdev_state *state;
+>  
+> -	state = v4l2_subdev_alloc_state(sd);
+> +	state = __v4l2_subdev_state_alloc(sd);
+>  	if (IS_ERR(state))
+>  		return PTR_ERR(state);
+>  
+> @@ -39,7 +39,7 @@ static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
+>  
+>  static void subdev_fh_free(struct v4l2_subdev_fh *fh)
+>  {
+> -	v4l2_subdev_free_state(fh->state);
+> +	__v4l2_subdev_state_free(fh->state);
+>  	fh->state = NULL;
+>  }
+>  
+> @@ -870,7 +870,7 @@ int v4l2_subdev_link_validate(struct media_link *link)
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate);
+>  
+> -struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd)
+> +struct v4l2_subdev_state *__v4l2_subdev_state_alloc(struct v4l2_subdev *sd)
+>  {
+>  	struct v4l2_subdev_state *state;
+>  	int ret;
+> @@ -903,9 +903,9 @@ struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd)
+>  
+>  	return ERR_PTR(ret);
+>  }
+> -EXPORT_SYMBOL_GPL(v4l2_subdev_alloc_state);
+> +EXPORT_SYMBOL_GPL(__v4l2_subdev_state_alloc);
+>  
+> -void v4l2_subdev_free_state(struct v4l2_subdev_state *state)
+> +void __v4l2_subdev_state_free(struct v4l2_subdev_state *state)
+>  {
+>  	if (!state)
+>  		return;
+> @@ -913,7 +913,7 @@ void v4l2_subdev_free_state(struct v4l2_subdev_state *state)
+>  	kvfree(state->pads);
+>  	kfree(state);
+>  }
+> -EXPORT_SYMBOL_GPL(v4l2_subdev_free_state);
+> +EXPORT_SYMBOL_GPL(__v4l2_subdev_state_free);
+>  
+>  #endif /* CONFIG_MEDIA_CONTROLLER */
+>  
+> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+> index d1f43f465c22..dc16406ff7dc 100644
+> --- a/drivers/staging/media/tegra-video/vi.c
+> +++ b/drivers/staging/media/tegra-video/vi.c
+> @@ -507,7 +507,7 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+>  	if (!subdev)
+>  		return -ENODEV;
+>  
+> -	sd_state = v4l2_subdev_alloc_state(subdev);
+> +	sd_state = __v4l2_subdev_state_alloc(subdev);
+>  	if (IS_ERR(sd_state))
+>  		return PTR_ERR(sd_state);
+>  	/*
+> @@ -558,7 +558,7 @@ static int __tegra_channel_try_format(struct tegra_vi_channel *chan,
+>  	v4l2_fill_pix_format(pix, &fmt.format);
+>  	tegra_channel_fmt_align(chan, pix, fmtinfo->bpp);
+>  
+> -	v4l2_subdev_free_state(sd_state);
+> +	__v4l2_subdev_state_free(sd_state);
+>  
+>  	return 0;
+>  }
+> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> index 95ec18c2f49c..e52bf508c75b 100644
+> --- a/include/media/v4l2-subdev.h
+> +++ b/include/media/v4l2-subdev.h
+> @@ -1135,20 +1135,20 @@ int v4l2_subdev_link_validate_default(struct v4l2_subdev *sd,
+>  int v4l2_subdev_link_validate(struct media_link *link);
+>  
+>  /**
+> - * v4l2_subdev_alloc_state - allocate v4l2_subdev_state
+> + * __v4l2_subdev_state_alloc - allocate v4l2_subdev_state
+>   *
+>   * @sd: pointer to &struct v4l2_subdev for which the state is being allocated.
+>   *
+> - * Must call v4l2_subdev_free_state() when state is no longer needed.
+> + * Must call __v4l2_subdev_state_free() when state is no longer needed.
 
-> > I'm not against merging this if it can help short term, but please also
-> > feel free to start decoupling the drivers, even if it results in some
-> > duplicated code.
-> 
-> Thanks for willing to accept this short term patches. I'm hesitating to 
-> decoupling for now as I haven't fully grasped all the details and small 
-> similarities and differences.
+While at it, you could add a sentence to indicate that the function
+should not be called by drivers. Same for __v4l2_subdev_state_free().
 
-I started giving it a try, but it will take some more work.
-
-> > > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > > ---
-> > > Changes in comparison to original commit from Dorota:
-> > > * Applied the suggestion from Hans at [1].
-> > > 
-> > > [1] https://patchwork.linuxtv.org/project/linux-media/patch/20211104113631.206899-2-dorota.czaplejewicz@puri.sm/
-> > >  drivers/staging/media/imx/imx-ic-prpencvf.c   | 3 ++-
-> > >  drivers/staging/media/imx/imx-media-capture.c | 5 ++++-
-> > >  drivers/staging/media/imx/imx-media-csi.c     | 3 ++-
-> > >  drivers/staging/media/imx/imx-media.h         | 3 ++-
-> > >  drivers/staging/media/imx/imx7-media-csi.c    | 3 ++-
-> > >  5 files changed, 12 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
-> > > index 9b81cfbcd777..caaaac1a515a 100644
-> > > --- a/drivers/staging/media/imx/imx-ic-prpencvf.c
-> > > +++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
-> > > @@ -1266,7 +1266,8 @@ static int prp_registered(struct v4l2_subdev *sd)
-> > > 
-> > >  	priv->vdev = imx_media_capture_device_init(ic_priv->ipu_dev,
-> > >  						   &ic_priv->sd,
-> > > -						   PRPENCVF_SRC_PAD, true);
-> > > +						   PRPENCVF_SRC_PAD, true,
-> > > +						   true);
-> > >  	if (IS_ERR(priv->vdev))
-> > >  		return PTR_ERR(priv->vdev);
-> > > 
-> > > diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-> > > index 93ba09236010..b61bf9f8ddf8 100644
-> > > --- a/drivers/staging/media/imx/imx-media-capture.c
-> > > +++ b/drivers/staging/media/imx/imx-media-capture.c
-> > > @@ -47,6 +47,7 @@ struct capture_priv {
-> > > 
-> > >  	struct v4l2_ctrl_handler ctrl_hdlr;	/* Controls inherited from subdevs */
-> > >  	
-> > >  	bool legacy_api;			/* Use the legacy (pre-MC) API */
-> > > +	bool is_imx56;				/* Hardware is i.MX5/i.MX6 */
-> > 
-> > Can we create an enum type instead, to make the code more explicit ?
-> 
-> I don't mind. So I will pick up the original patches from Dorota at [1] 
-> instead which already had an enum.
-> 
-> [1] https://patchwork.kernel.org/project/linux-arm-kernel/patch/
-> 20211104113631.206899-2-dorota.czaplejewicz@puri.sm/
-> 
-> > >  };
-> > >  
-> > >  #define to_capture_priv(v) container_of(v, struct capture_priv, vdev)
-> > > @@ -957,7 +958,8 @@
-> > > EXPORT_SYMBOL_GPL(imx_media_capture_device_unregister);
-> > >  struct imx_media_video_dev *
-> > >  imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
-> > > -			      int pad, bool legacy_api)
-> > > +			      int pad, bool legacy_api,
-> > > +			      bool is_imx56)
-> > >  {
-> > >  	struct capture_priv *priv;
-> > >  	struct video_device *vfd;
-> > > @@ -972,6 +974,7 @@ imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
-> > >  	priv->src_sd_pad = pad;
-> > >  	priv->dev = dev;
-> > >  	priv->legacy_api = legacy_api;
-> > > +	priv->is_imx56 = is_imx56;
-> > > 
-> > >  	mutex_init(&priv->mutex);
-> > >  	INIT_LIST_HEAD(&priv->ready_q);
-> > > diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
-> > > index bd7f156f2d52..c8f6add00dbb 100644
-> > > --- a/drivers/staging/media/imx/imx-media-csi.c
-> > > +++ b/drivers/staging/media/imx/imx-media-csi.c
-> > > @@ -1803,7 +1803,8 @@ static int csi_registered(struct v4l2_subdev *sd)
-> > >  	}
-> > >  	
-> > >  	priv->vdev = imx_media_capture_device_init(priv->sd.dev, &priv->sd,
-> > > -						   CSI_SRC_PAD_IDMAC, true);
-> > > +						   CSI_SRC_PAD_IDMAC, true,
-> > > +						   true);
-> > >  	if (IS_ERR(priv->vdev)) {
-> > >  		ret = PTR_ERR(priv->vdev);
-> > >  		goto free_fim;
-> > > diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
-> > > index f263fc3adbb9..73e8e6e0d8e8 100644
-> > > --- a/drivers/staging/media/imx/imx-media.h
-> > > +++ b/drivers/staging/media/imx/imx-media.h
-> > > @@ -282,7 +282,8 @@ int imx_media_ic_unregister(struct v4l2_subdev *sd);
-> > >  /* imx-media-capture.c */
-> > >  struct imx_media_video_dev *
-> > >  imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
-> > > -			      int pad, bool legacy_api);
-> > > +			      int pad, bool legacy_api,
-> > > +			      bool is_imx56);
-> > >  void imx_media_capture_device_remove(struct imx_media_video_dev *vdev);
-> > >  int imx_media_capture_device_register(struct imx_media_video_dev *vdev,
-> > >  				      u32 link_flags);
-> > > diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-> > > index 32311fc0e2a4..158d2a736c6d 100644
-> > > --- a/drivers/staging/media/imx/imx7-media-csi.c
-> > > +++ b/drivers/staging/media/imx/imx7-media-csi.c
-> > > @@ -1039,7 +1039,8 @@ static int imx7_csi_registered(struct v4l2_subdev *sd)
-> > >  	}
-> > >  	
-> > >  	csi->vdev = imx_media_capture_device_init(csi->sd.dev, &csi->sd,
-> > > -						  IMX7_CSI_PAD_SRC, false);
-> > > +						  IMX7_CSI_PAD_SRC, false,
-> > > +						  false);
-> > >  	if (IS_ERR(csi->vdev))
-> > >  		return PTR_ERR(csi->vdev);
-> > > 
+>   */
+> -struct v4l2_subdev_state *v4l2_subdev_alloc_state(struct v4l2_subdev *sd);
+> +struct v4l2_subdev_state *__v4l2_subdev_state_alloc(struct v4l2_subdev *sd);
+>  
+>  /**
+> - * v4l2_subdev_free_state - free a v4l2_subdev_state
+> + * __v4l2_subdev_state_free - free a v4l2_subdev_state
+>   *
+>   * @state: v4l2_subdev_state to be freed.
+>   */
+> -void v4l2_subdev_free_state(struct v4l2_subdev_state *state);
+> +void __v4l2_subdev_state_free(struct v4l2_subdev_state *state);
+>  
+>  #endif /* CONFIG_MEDIA_CONTROLLER */
+>  
 
 -- 
 Regards,
