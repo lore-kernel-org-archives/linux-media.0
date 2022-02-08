@@ -2,76 +2,205 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C7E3C4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AF7AC41535
 	for <linux-media@archiver.kernel.org>; Tue,  8 Feb 2022 13:16:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343539AbiBHNPo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Feb 2022 08:15:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S1343773AbiBHNPq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Feb 2022 08:15:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiBHMTn (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Feb 2022 07:19:43 -0500
-X-Greylist: delayed 1208 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 04:19:42 PST
-Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40FAC03FEC0
-        for <linux-media@vger.kernel.org>; Tue,  8 Feb 2022 04:19:42 -0800 (PST)
-Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1nHP9g-009qox-IR; Tue, 08 Feb 2022 11:59:32 +0000
-Received: from ip6-localhost ([::1] helo=localhost.localdomain)
-        by slave0 with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1nHP9c-00AyCh-QE; Tue, 08 Feb 2022 11:59:29 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.18] Various fixes (#80608)
-Date:   Tue,  8 Feb 2022 11:59:28 +0000
-Message-Id: <20220208115928.2614657-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <d8cfded5-dc29-f7b7-c09d-7b6296e6ebae@xs4all.nl>
-References: 
+        with ESMTP id S1357061AbiBHMbN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Feb 2022 07:31:13 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C87C03FEC0
+        for <linux-media@vger.kernel.org>; Tue,  8 Feb 2022 04:31:11 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id p19so2828724ybc.6
+        for <linux-media@vger.kernel.org>; Tue, 08 Feb 2022 04:31:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yfYLtbVg7Jphgpqo5l2mfLMwKt3fmTcNOyyPV835z9U=;
+        b=X73BVSASthoFh71ZUYqhPOBlmWD6VlnN6mtxlLeUi48uyVMU0ZaQsH/cmXLKhp1Jui
+         4usjsDrOE/K++FH8OeqG4WNNAOcG9B+4N4GSjY7QwCYxcbUEhBC2Y/nh2OUlwsgnjeox
+         eUtinaYsaItLRMZrGl5DhrtfLCm02TgJMPJqc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yfYLtbVg7Jphgpqo5l2mfLMwKt3fmTcNOyyPV835z9U=;
+        b=xKADP9kCjwobALlum4nU8u5zsDJht/RbEm8J06XL8FcVYuXecMjtVuVZUwuG/PzMzQ
+         3bhYVR5sqnUmnMq0WySL0Z+XgBpj0QDbrktmZxnxoDY5dSFHgYJKuXy7/nB3B7UbE2VC
+         vex5+32xdvhRdBDL1PhUsmeNyLQD/ei75SnRri66dOFPtsTxMBaXgQ0BHxikmSGxBP5K
+         qsUj136jSxsaPvUHNhSgKG1CZg/tkEowuXwrQPxp0FBXLNtK/V0It8MRKine36FY6L1d
+         ajU6K9niBsbhvLq0p+JjSPZ8EtnjAvAMkEEsdgmXxy/enuMJx06OFTodGI5oSLKhgrmR
+         IXbw==
+X-Gm-Message-State: AOAM530O2nWAQmRUWpNT6Rg6S81kW6d9qpUdGe/SC2NnuVwuGbA1El8/
+        1ycwyngnGoi8jhpssmxSRa8hXlZD1j3J4dZhaoe3sg==
+X-Google-Smtp-Source: ABdhPJyCCYOYwDckY357tk7CH1jqmHDW4BUZPjfdeuj7J3jv7vIaHKcjBTuE6IB72wx2P7IBnypp3hlrdAC/yjDoo7g=
+X-Received: by 2002:a81:1b4e:: with SMTP id b75mr4316368ywb.295.1644323471148;
+ Tue, 08 Feb 2022 04:31:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220208105456.321294-1-wenst@chromium.org>
+In-Reply-To: <20220208105456.321294-1-wenst@chromium.org>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 8 Feb 2022 20:30:59 +0800
+Message-ID: <CAGXv+5HT84sEv9TFV1H=mMEO4oqz4OdwXQGMhwrOf5dtMrjOBQ@mail.gmail.com>
+Subject: Re: [PATCH RFC] media: hantro: Implement support for encoder commands
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+On Tue, Feb 8, 2022 at 6:55 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>
+> The V4L2 stateful encoder uAPI specification requires that drivers
+> support the ENCODER_CMD ioctl to allow draining of buffers. This
+> however was not implemented, and causes issues for some userspace
+> applications.
+>
+> Implement support for the ENCODER_CMD ioctl using v4l2-mem2mem helpers.
+> This is entirely based on existing code found in the vicodec test
+> driver.
+>
+> Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> ---
+>
+> This is based on linux-next-20220207, and was tested on RK3399 with
+> Gstreamer running the JPEG encoder. It was also tested on ChromeOS
+> 5.10 on Kevin with the video encoder used in ChromeOS ARC, which
+> requires this.
+>
+> Everything works OK, but since I'm not very familiar with the mem2mem
+> framework, I might be missing something, causing resource leaks.
+> Hence this patch is labeled RFC.
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/d8cfded5-dc29-f7b7-c09d-7b6296e6ebae@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/181128/
-Build time: 00:19:21
-Link: https://lore.kernel.org/linux-media/d8cfded5-dc29-f7b7-c09d-7b6296e6ebae@xs4all.nl
+And it seems I failed to handle the case where the last capture buffer
+is empty.
 
-gpg: Signature made Tue 08 Feb 2022 11:22:27 AM UTC
-gpg:                using EDDSA key 52ADCAAE8A4F70B99ACD8D726B425DF79B1C1E76
-gpg: Can't check signature: No public key
-
-Summary: got 1/5 patches with issues, being 1 at build time, plus one error when buinding PDF document
-
-Error/warnings:
-
-patches/0001-media-s5p_mfc_dec-set-flags-for-OUTPUT-coded-formats.patch:
-
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-
-    allyesconfig: return code #0:
-	../drivers/media/rc/meson-ir-tx.c:22: warning: expecting prototype for meson(). Prototype was for DEVICE_NAME() instead
-	../drivers/media/i2c/ov08d10.c: ../drivers/media/i2c/ov08d10.c:1276 ov08d10_enum_frame_size() warn: inconsistent returns '&ov08d10->mutex'.
-	  Locked on  : 1268
-	  Unlocked on: 1276
-	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
-	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2874 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
+Will rework and send a new version tomorrow.
 
 
-Error #512 when building PDF docs
+ChenYu
 
+> ---
+>  drivers/staging/media/hantro/hantro_drv.c  | 10 +++++
+>  drivers/staging/media/hantro/hantro_v4l2.c | 44 ++++++++++++++++++++++
+>  2 files changed, 54 insertions(+)
+>
+> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+> index bc9bcb4eaf46..ccd47eee5c43 100644
+> --- a/drivers/staging/media/hantro/hantro_drv.c
+> +++ b/drivers/staging/media/hantro/hantro_drv.c
+> @@ -56,6 +56,10 @@ dma_addr_t hantro_get_ref(struct hantro_ctx *ctx, u64 ts)
+>         return hantro_get_dec_buf_addr(ctx, buf);
+>  }
+>
+> +static const struct v4l2_event hantro_eos_event = {
+> +       .type = V4L2_EVENT_EOS
+> +};
+> +
+>  static void hantro_job_finish_no_pm(struct hantro_dev *vpu,
+>                                     struct hantro_ctx *ctx,
+>                                     enum vb2_buffer_state result)
+> @@ -73,6 +77,12 @@ static void hantro_job_finish_no_pm(struct hantro_dev *vpu,
+>         src->sequence = ctx->sequence_out++;
+>         dst->sequence = ctx->sequence_cap++;
+>
+> +       if (v4l2_m2m_is_last_draining_src_buf(ctx->fh.m2m_ctx, src)) {
+> +               dst->flags |= V4L2_BUF_FLAG_LAST;
+> +               v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
+> +               v4l2_m2m_mark_stopped(ctx->fh.m2m_ctx);
+> +       }
+> +
+>         v4l2_m2m_buf_done_and_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx,
+>                                          result);
+>  }
+> diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
+> index 67148ba346f5..8c6746637236 100644
+> --- a/drivers/staging/media/hantro/hantro_v4l2.c
+> +++ b/drivers/staging/media/hantro/hantro_v4l2.c
+> @@ -628,6 +628,39 @@ static int vidioc_s_selection(struct file *file, void *priv,
+>         return 0;
+>  }
+>
+> +static const struct v4l2_event hantro_eos_event = {
+> +       .type = V4L2_EVENT_EOS
+> +};
+> +
+> +static int vidioc_encoder_cmd(struct file *file, void *priv,
+> +                             struct v4l2_encoder_cmd *ec)
+> +{
+> +       struct hantro_ctx *ctx = fh_to_ctx(priv);
+> +       int ret;
+> +
+> +       ret = v4l2_m2m_ioctl_try_encoder_cmd(file, priv, ec);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       if (!vb2_is_streaming(v4l2_m2m_get_src_vq(ctx->fh.m2m_ctx)) ||
+> +           !vb2_is_streaming(v4l2_m2m_get_dst_vq(ctx->fh.m2m_ctx)))
+> +               return 0;
+> +
+> +       ret = v4l2_m2m_ioctl_encoder_cmd(file, priv, ec);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       if (ec->cmd == V4L2_ENC_CMD_STOP &&
+> +           v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
+> +               v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
+> +
+> +       if (ec->cmd == V4L2_ENC_CMD_START &&
+> +           v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
+> +               vb2_clear_last_buffer_dequeued(&ctx->fh.m2m_ctx->cap_q_ctx.q);
+> +
+> +       return 0;
+> +}
+> +
+>  const struct v4l2_ioctl_ops hantro_ioctl_ops = {
+>         .vidioc_querycap = vidioc_querycap,
+>         .vidioc_enum_framesizes = vidioc_enum_framesizes,
+> @@ -657,6 +690,9 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops = {
+>
+>         .vidioc_g_selection = vidioc_g_selection,
+>         .vidioc_s_selection = vidioc_s_selection,
+> +
+> +       .vidioc_try_encoder_cmd = v4l2_m2m_ioctl_try_encoder_cmd,
+> +       .vidioc_encoder_cmd = vidioc_encoder_cmd,
+>  };
+>
+>  static int
+> @@ -759,6 +795,8 @@ static int hantro_start_streaming(struct vb2_queue *q, unsigned int count)
+>         struct hantro_ctx *ctx = vb2_get_drv_priv(q);
+>         int ret = 0;
+>
+> +       v4l2_m2m_update_start_streaming_state(ctx->fh.m2m_ctx, q);
+> +
+>         if (V4L2_TYPE_IS_OUTPUT(q->type))
+>                 ctx->sequence_out = 0;
+>         else
+> @@ -831,6 +869,12 @@ static void hantro_stop_streaming(struct vb2_queue *q)
+>                 hantro_return_bufs(q, v4l2_m2m_src_buf_remove);
+>         else
+>                 hantro_return_bufs(q, v4l2_m2m_dst_buf_remove);
+> +
+> +       v4l2_m2m_update_stop_streaming_state(ctx->fh.m2m_ctx, q);
+> +
+> +       if (V4L2_TYPE_IS_OUTPUT(q->type) &&
+> +           v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
+> +               v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
+>  }
+>
+>  static void hantro_buf_request_complete(struct vb2_buffer *vb)
+> --
+> 2.35.0.263.gb82422642f-goog
+>
