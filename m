@@ -2,71 +2,116 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70AE1C3526C
-	for <linux-media@archiver.kernel.org>; Tue,  8 Feb 2022 01:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B39AC433F5
+	for <linux-media@archiver.kernel.org>; Tue,  8 Feb 2022 01:22:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbiBHBFF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Feb 2022 20:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
+        id S245032AbiBHBWE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Feb 2022 20:22:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245370AbiBGW6i (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 17:58:38 -0500
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB947C061355;
-        Mon,  7 Feb 2022 14:58:36 -0800 (PST)
-Received: by mail-oo1-f42.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso10147303ooi.1;
-        Mon, 07 Feb 2022 14:58:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OuUO/3mep0ZxwUzB1eZmsPdUautSdpAaoSsbMdDIwvk=;
-        b=xOPVbbBCNG+ykh5+lAZVxrJodpCXfYbUS4jbDtgWzoRT2Av5ykbV6zJDTdVU87WCtn
-         Qayqdt62VQ2MoOlY8hg1LsopW6dwl5MSIl9DLRXzxUVUsxRD0szVLb+oyEU0fa9bVAYf
-         6jf77RoBZ4BKXwnVsXPamJl/DzlGB3EnWInjckw/LDv4wHZWFYrPX5mpv6nijN5PWGkp
-         U7+/F7HRvcVPfwNTQYxZ5MgUb357CAkoN8QAD4Z2dklbzolGFqDzmB7HKqJ9hPamxLeH
-         yCd47AgdoIubOv+7cWfyVWClYnqoqCCkdhPNtura1huD7OyByNGw1o7JA1r/dgjTl0eJ
-         p5lw==
-X-Gm-Message-State: AOAM530V1OrxmcPh//qjqvjaQhkktDi6iUpV6rO7TwqoBQQwn8DjAaXd
-        VeQon68Fc7VnaiSpO3jIHQ==
-X-Google-Smtp-Source: ABdhPJz8tRKVh/KhZv13gwKCCkgM7u0aIme6netKeQV2jceD4HV3eIrTtFsAxLP8HBsa9x/6+GVTSw==
-X-Received: by 2002:a05:6870:e14f:: with SMTP id z15mr405692oaa.115.1644274716319;
-        Mon, 07 Feb 2022 14:58:36 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id r19sm4645810oad.29.2022.02.07.14.58.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 14:58:35 -0800 (PST)
-Received: (nullmailer pid 1085294 invoked by uid 1000);
-        Mon, 07 Feb 2022 22:58:34 -0000
-Date:   Mon, 7 Feb 2022 16:58:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Chris Morgan <macroalpha82@gmail.com>
-Cc:     mripard@kernel.org, Chris Morgan <macromorgan@hotmail.com>,
-        dri-devel@lists.freedesktop.org, sam@ravnborg.org, emma@anholt.net,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, mchehab@kernel.org, daniel@ffwll.ch,
-        thierry.reding@gmail.com, airlied@linux.ie
-Subject: Re: [PATCH 1/6 v2] dt-bindings: vendor-prefixes: Add Geekworm
-Message-ID: <YgGkGvRkAH+HAKTU@robh.at.kernel.org>
-References: <20220124165526.1104-1-macroalpha82@gmail.com>
- <20220124165526.1104-2-macroalpha82@gmail.com>
+        with ESMTP id S243428AbiBHBVy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Feb 2022 20:21:54 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D71E038A59;
+        Mon,  7 Feb 2022 17:15:24 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 02A60340;
+        Tue,  8 Feb 2022 02:14:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644282900;
+        bh=blvBN8apDdKJGfvkuQRdzEoFeeraC+PwppRok6BR2Zk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G43PehzyokojQcX2wngd0xQ2hpShQbkk+sdysXF9nIvq9IeVUZvELzCr6NUwTkdL7
+         Z/mtgc3Vq4BH5ryF70FJonQVUVesvtOdgJ448B616j1cIG0kV/hSospSUs/QHAvpto
+         XBQ2Pvc86H7sQo3oVpVgtTkVBeW2jicD2Hq6axps=
+Date:   Tue, 8 Feb 2022 03:14:57 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: (EXT) Re: [PATCH 4/8] media: imx: Fail conversion if pixel
+ format not supported
+Message-ID: <YgHEEa4WhXmThiX0@pendragon.ideasonboard.com>
+References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
+ <Yf34CXvZQPQPAxma@pendragon.ideasonboard.com>
+ <20220205085151.61088d8e.dorota.czaplejewicz@puri.sm>
+ <1905895.usQuhbGJ8B@steina-w>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220124165526.1104-2-macroalpha82@gmail.com>
+In-Reply-To: <1905895.usQuhbGJ8B@steina-w>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, 24 Jan 2022 10:55:21 -0600, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
-> 
-> Add vendor prefix for Geekworm (https://geekworm.com).
-> 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+Hello,
 
-Acked-by: Rob Herring <robh@kernel.org>
+On Mon, Feb 07, 2022 at 10:52:00AM +0100, Alexander Stein wrote:
+> Am Samstag, 5. Februar 2022, 08:51:51 CET schrieb Dorota Czaplejewicz:
+> > On Sat, 5 Feb 2022 06:07:37 +0200 Laurent Pinchart wrote:
+> > > On Fri, Feb 04, 2022 at 01:15:10PM +0100, Alexander Stein wrote:
+> > > > From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > > > 
+> > > > imx_media_find_mbus_format has NULL as a valid return value,
+> > > > therefore the caller should take it into account.
+> > > > 
+> > > > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > > ---
+> > > > 
+> > > >  drivers/staging/media/imx/imx-media-utils.c | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/staging/media/imx/imx-media-utils.c
+> > > > b/drivers/staging/media/imx/imx-media-utils.c index
+> > > > 32aaa2e81bea..e0a256a08c3b 100644
+> > > > --- a/drivers/staging/media/imx/imx-media-utils.c
+> > > > +++ b/drivers/staging/media/imx/imx-media-utils.c
+> > > > @@ -544,6 +544,9 @@ static int imx56_media_mbus_fmt_to_pix_fmt(struct
+> > > > v4l2_pix_format *pix,> > 
+> > > >  		cc = imx_media_find_mbus_format(code, PIXFMT_SEL_YUV);
+> > > 
+> > > The code passed to the function comes from the previous line:
+> > > 	imx_media_enum_mbus_formats(&code, 0, PIXFMT_SEL_YUV);
+> > > 
+> > > As far as I can tell, this is guaranteed to return a code that will
+> > > result in imx_media_find_mbus_format() returning a non-NULL pointer.
+> > 
+> > While I am not well-versed in the implicit code style of the kernel, I
+> > decided to leave it in because it makes the code more locally legible. With
+> > a check here, even a non-functional one, there's no need to understand the
+> > internals of `imx_media_find_mbus_format` that are only implicit. That
+> > makes the code less surprising when interested only in the outer function.
+> > 
+> > The other advantage of a check is becoming robust against future changes to
+> > `imx_media_find_mbus_format` itself.
+> > 
+> > I don't have a strong preference about keeping or leaving this patch, but if
+> > this check was there in the first place, I wouldn't have spent time trying
+> > to figure out whether there's a bug here.
+> 
+> Laurent, thanks for your feedback.
+> I'm on Dorota's side here. While you are right that the code from 
+>   imx_media_enum_mbus_formats(&code, 0, PIXFMT_SEL_YUV);
+> is guaranteed to return something. I don't lnek this implicit assumption over 
+> 2 function calls. Better be safe than sorry. For that reason code should be 
+> initialized as well. Will create a patch for that.
+
+I'm fine with hardening the code even if the issue can't occur at the
+moment.
+
+-- 
+Regards,
+
+Laurent Pinchart
