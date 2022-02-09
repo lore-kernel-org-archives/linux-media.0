@@ -2,125 +2,120 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E000AC433F5
-	for <linux-media@archiver.kernel.org>; Wed,  9 Feb 2022 09:49:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 661B6C4332F
+	for <linux-media@archiver.kernel.org>; Wed,  9 Feb 2022 10:10:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbiBIJti (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Feb 2022 04:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        id S233681AbiBIKK3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Feb 2022 05:10:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiBIJth (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Feb 2022 04:49:37 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEBFE01A2E8;
-        Wed,  9 Feb 2022 01:49:27 -0800 (PST)
-Received: from [192.168.0.2] (ip5f5aee30.dynamic.kabel-deutschland.de [95.90.238.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D9D6561EA1923;
-        Wed,  9 Feb 2022 10:06:28 +0100 (CET)
-Message-ID: <f790f9aa-fcb7-d163-9c1c-9eb107d4b1bd@molgen.mpg.de>
-Date:   Wed, 9 Feb 2022 10:06:28 +0100
+        with ESMTP id S231567AbiBIKK2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Feb 2022 05:10:28 -0500
+X-Greylist: delayed 628 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 02:08:44 PST
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DC8E103152;
+        Wed,  9 Feb 2022 02:08:43 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id 832362B001FF;
+        Wed,  9 Feb 2022 04:23:36 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 09 Feb 2022 04:23:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=ynnIBDyxddplj0yDy1ftsHwCIVNF26bdpyTej6
+        p+4/g=; b=kvvo+EBSJ3tR004LCR4sJSPmSM9GWoMkJaSz/UTAaZ/WPclvitGGoz
+        jNm1YpYDJVvBTIYxTkMdab3mTaaivqubtsY1/ecdBPtzYmRSkMVb8puAlZMhrmjZ
+        Ipxi8Oq9uCV2ZWwktot+TpGStnzJnPyHJCluj2fz3gnQf4dnAmh036wQANAXxacM
+        IPW4TzyCfixYslCMhVrIYcC5G42HyfoH8lOlXMwEHU4yu+CNwAViEZwaKoaHRyyc
+        7JhpeE3n+Iqc8XS89f7YjbBZO9fdXefvbjUymatB9hdJK24zdYl0I0NIw7okrpkw
+        KRxZ3hUyQ/nAB6m7ibQZ+fHQUSA1hwgw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=ynnIBDyxddplj0yDy
+        1ftsHwCIVNF26bdpyTej6p+4/g=; b=TR3ish91hzSufC8jLjr1Iyo1DhoQ4qzBv
+        5nd81B7nrZwoT00wAY9RTPibr/rydxHczP1laGwhn48fkjN96RY4cUtlqeNfsoPl
+        uhujkGPKV3vh3aLT8/bTQtd+ubv5KnRX0fjaH8S1ljRcNBcdveLbZwK3FNOlTSOB
+        KbyjbG3mOIDL0Z9lfLx8TTgbpdAJwQsSjX9WI0YrwDAsmdK+3WQte8sBdEk5FX8N
+        +uFRXS3e0stV55KI48Hk2TsILvtjDWlDCY8T1UuTbFsTabtGLXVrn4bgO+GQlsKN
+        JB190aDUQoxlDB1GhsEtepoHT4F5sMFZymajfBSDzeKN5bM6VZFxg==
+X-ME-Sender: <xms:F4gDYrxCvLtXo2ifHjHR0DYDEl7ucELatEDpEcIVJtq__aNckdAUJA>
+    <xme:F4gDYjRuY-hjiDVgSDZ_iaLLk4wUph3ANSWgkF6EBGiYt2ZrPYZx4Oo_ZjNDF0VIE
+    ib9tXbWu48MBKLkON4>
+X-ME-Received: <xmr:F4gDYlX8qO7DppudciOhz147Q0nhfaqUpzvTejTsEP8olGFzyIgX24f4Mmp03gB6ilISS6mI7Qi0y_Mdp3EGyupOT9CuysslOoP0Pcw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgddtvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:F4gDYlg65wljSBYqfsTf4Baop9UP5uZvvnV9dQWoeVKrE49Cp9jqJg>
+    <xmx:F4gDYtCrQkuzciz5ye4gjCPhH2a9rOS9vG7stD1BNy6tcsFAv99lkg>
+    <xmx:F4gDYuKjZjYVcjABNgBdvazdhGfQFYZbUA1NaG8kua1os3eHCBz-NQ>
+    <xmx:GIgDYl6pAWJRUjxHsVZ7Zto9bEJUghYLgg1xXcvwtAve-iu-ynj4_IO0zFI>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Feb 2022 04:23:35 -0500 (EST)
+Date:   Wed, 9 Feb 2022 10:23:33 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 29/66] media: sun6i-csi: Move csi buffer definition to
+ main header file
+Message-ID: <20220209092333.76pu7dpimgsz443z@houat>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-30-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2] media: aspeed: Use full swing as JFIF to fix incorrect
- color
-Content-Language: en-US
-To:     Jammy Huang <jammy_huang@aspeedtech.com>
-References: <20220209084225.4456-1-jammy_huang@aspeedtech.com>
-Cc:     eajames@linux.ibm.com, mchehab@kernel.org, joel@jms.id.au,
-        andrew@aj.id.au, linux-media@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220209084225.4456-1-jammy_huang@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zs2otepylosvwibr"
+Content-Disposition: inline
+In-Reply-To: <20220205185429.2278860-30-paul.kocialkowski@bootlin.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dear Jammy,
 
+--zs2otepylosvwibr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Am 09.02.22 um 09:42 schrieb Jammy Huang:
-> Current settings for video capture rgb-2-yuv is BT.601(studio swing),
-> but JFIF uses BT.601(full swing) to deocde. This mismatch will lead
-> to incorrect color. For example, input RGB value, (0, 0, 255), will
-> become (16, 16, 235) after jpg decoded.
-> 
-> Add an enum, aspeed_video_capture_format, to define VR008[7:6]
-> capture format and correct default settings for video capture to fix
-> the problem.
+On Sat, Feb 05, 2022 at 07:53:52PM +0100, Paul Kocialkowski wrote:
+> The buffer structure is a top-level definition, put it in the main header
+> to keep things tidy. No functional change intended.
+>=20
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-Maybe quote the datasheet:
+Reviewed-by: Maxime Ripard <maxime@cerno.tech>
 
-VR008[7:6] will decide the data format for video capture:
-00: CCIR601 studio swing compliant YUV format
-01: CCIR601 full swing compliant YUV format
-10: RGB format
-11: Gray color mode
+Maxime
 
-> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
-> ---
-> v2:
->   - update subject from 'media: aspeed: Fix-incorrect-color' to
->     'media: aspeed: Use full swing as JFIF to fix incorrect'
->   - update commit message
->   - add enum, aspeed_video_capture_format, to define VR008[7:6]
-> ---
->   drivers/media/platform/aspeed-video.c | 14 +++++++++++---
->   1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-> index eb9c17ac0e14..5bcf60b4628b 100644
-> --- a/drivers/media/platform/aspeed-video.c
-> +++ b/drivers/media/platform/aspeed-video.c
-> @@ -86,8 +86,6 @@
->   #define  VE_CTRL_SOURCE			BIT(2)
->   #define  VE_CTRL_INT_DE			BIT(4)
->   #define  VE_CTRL_DIRECT_FETCH		BIT(5)
-> -#define  VE_CTRL_YUV			BIT(6)
-> -#define  VE_CTRL_RGB			BIT(7)
->   #define  VE_CTRL_CAPTURE_FMT		GENMASK(7, 6)
->   #define  VE_CTRL_AUTO_OR_CURSOR		BIT(8)
->   #define  VE_CTRL_CLK_INVERSE		BIT(11)
-> @@ -202,6 +200,15 @@ enum {
->   	VIDEO_CLOCKS_ON,
->   };
->   
-> +// for VE_CTRL_CAPTURE_FMT
-> +enum aspeed_video_capture_format {
-> +	VIDEO_CAP_FMT_YUV_STUDIO = 0,
+--zs2otepylosvwibr
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Maybe also append `_SWING`?
+-----BEGIN PGP SIGNATURE-----
 
-> +	VIDEO_CAP_FMT_YUV_FULL,
-> +	VIDEO_CAP_FMT_RGB,
-> +	VIDEO_CAP_FMT_GRAY,
-> +	VIDEO_CAP_FMT_MAX
-> +};
-> +
->   struct aspeed_video_addr {
->   	unsigned int size;
->   	dma_addr_t dma;
-> @@ -1089,7 +1096,8 @@ static void aspeed_video_init_regs(struct aspeed_video *video)
->   	u32 comp_ctrl = VE_COMP_CTRL_RSVD |
->   		FIELD_PREP(VE_COMP_CTRL_DCT_LUM, video->jpeg_quality) |
->   		FIELD_PREP(VE_COMP_CTRL_DCT_CHR, video->jpeg_quality | 0x10);
-> -	u32 ctrl = VE_CTRL_AUTO_OR_CURSOR;
-> +	u32 ctrl = VE_CTRL_AUTO_OR_CURSOR |
-> +		FIELD_PREP(VE_CTRL_CAPTURE_FMT, VIDEO_CAP_FMT_YUV_FULL);
->   	u32 seq_ctrl = video->jpeg_mode;
->   
->   	if (video->frame_rate)
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgOIFAAKCRDj7w1vZxhR
+xemTAP9H29JYiSyQC8X0RLZBbi6rB8nkBPtKbCCr4GXaSXzuogD/bju3syA/cSSZ
+HfH6KHazoj6sNSOVjjf3VxMWJOwBPgo=
+=mj5l
+-----END PGP SIGNATURE-----
 
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-
-
-Kind regards,
-
-Paul
+--zs2otepylosvwibr--
