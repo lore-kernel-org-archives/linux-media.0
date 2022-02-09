@@ -2,77 +2,88 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FC47C433FE
-	for <linux-media@archiver.kernel.org>; Wed,  9 Feb 2022 02:41:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B0FFC4167B
+	for <linux-media@archiver.kernel.org>; Wed,  9 Feb 2022 03:08:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233716AbiBIClp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Feb 2022 21:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
+        id S231710AbiBIDDm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Feb 2022 22:03:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234845AbiBICcy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Feb 2022 21:32:54 -0500
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE35C0613CC;
-        Tue,  8 Feb 2022 18:32:53 -0800 (PST)
-Received: by mail-oo1-f53.google.com with SMTP id v17-20020a4ac911000000b002eac41bb3f4so879486ooq.10;
-        Tue, 08 Feb 2022 18:32:53 -0800 (PST)
+        with ESMTP id S242740AbiBIDCN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Feb 2022 22:02:13 -0500
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB69C061355;
+        Tue,  8 Feb 2022 19:02:12 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso1052716oop.0;
+        Tue, 08 Feb 2022 19:02:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=yQbx4MHeZRD33kwyi5HCwAlvR2kVY0Ape2Km175nhWU=;
-        b=w/Gyayegz52BbiX8peuYyLmRVf19XjGwI7F7DT6wQF6q9aZrwU5O9jwP2CSeuv9/7l
-         uw/hGd+pOAAUFw9h1QFtVK3n72jmKpYGvzggwAEtDQT2JeYfo9uL3ilRjWXtJC1Pve6s
-         u5dl8CF3xM5XtPouFVMk6/sFUqiIOinBwofalCjHi/Z1Jo+NvSAdhdlZnkTeg/gryxYt
-         RnQwf6f7LXVsgZ9xZop6Jjj3hu3JBrOw3O2LbszB2jV3cKBDdrCGJJNJtuO8w9M1USzQ
-         aMJVNooIIiOM0XD4kAN1mfJDjbcAQJYztxvgxJmP4RKXkipx8MdLNqtmLuxkwp4WzcQw
-         HGcg==
-X-Gm-Message-State: AOAM5322k6vIWsmQxJzGoJD/7WhwhHCwZmovrKDTSdOdM0jO4zIIjkNn
-        se0ceiQd6obMQaxC4Oyh3A==
-X-Google-Smtp-Source: ABdhPJz6E9fI5Swu/Pjd48wUsz/d3NM5d56huRHrQiD373+HYgWfbGvk/+Rkpw0JseVUdopwGTyzMQ==
-X-Received: by 2002:a05:6870:45:: with SMTP id 5mr270401oaz.296.1644373972811;
-        Tue, 08 Feb 2022 18:32:52 -0800 (PST)
+        bh=r9n/VE8ShNQNiwipYWkPFL8cBHsQZxENNYkTj1Nzpt8=;
+        b=oGlZXgdAyEOFTaHmEzufmo7zLD2pBL70ptvYL05ZRVpVn17SVjmvUcsKTvQp6q2WYE
+         RwEfXMoXj4cQGk3WjJHVw7trvatwhsqY9p1EPMEQzLuUQ9e6LBDzW0tH7MpnGYnOps6f
+         51CNlEVfxh15gt/e+wVEK2+vgp+cMqr9USv4aPkSmXs494ZciSZsSuQA42YOD80nhbci
+         wofdqSdKgY3K1AMNlliTEMVaA1bpk7L4dvDJObT8o+sjIDsZtYZgTNZ4u9enA1f0wmoV
+         52Yuh5aNe5o1Zb+wrznnNTotvdz3Voag/KXuWBtfLIGAmYVTlawF9nvASltbu35XDOho
+         hKeg==
+X-Gm-Message-State: AOAM530HSidXmuD79vTKmYNNmthwTZJZJIlOd3joX5m+Qd1gLNMzIyuj
+        4dR3mwaibWDcyAc33UjsVg==
+X-Google-Smtp-Source: ABdhPJzet+Dv7YYDkSGgJ2JnIoD3tapZgHhdllycdoCmXgkx2+9s9J1YxBIMJuyIWUjbzLMqyE9qyQ==
+X-Received: by 2002:a05:6870:91c6:: with SMTP id c6mr103120oaf.147.1644375732021;
+        Tue, 08 Feb 2022 19:02:12 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f20sm6297572ooh.10.2022.02.08.18.32.51
+        by smtp.gmail.com with ESMTPSA id r186sm6264409oie.23.2022.02.08.19.02.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 18:32:51 -0800 (PST)
-Received: (nullmailer pid 3495248 invoked by uid 1000);
-        Wed, 09 Feb 2022 02:32:51 -0000
-Date:   Tue, 8 Feb 2022 20:32:51 -0600
+        Tue, 08 Feb 2022 19:02:11 -0800 (PST)
+Received: (nullmailer pid 3539514 invoked by uid 1000);
+        Wed, 09 Feb 2022 03:02:09 -0000
+Date:   Tue, 8 Feb 2022 21:02:09 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        linux-kernel@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
+To:     Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        George Sun <george.sun@mediatek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        linux-mediatek@lists.infradead.org, Tomasz Figa <tfiga@google.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: Re: [PATCH 1/2] dt-bindings: media: video-interfaces: add support
- for dual edge sampling
-Message-ID: <YgMn01vcMWLo0sLo@robh.at.kernel.org>
-References: <20220114105755.730200-1-michael.riesch@wolfvision.net>
- <20220114105755.730200-2-michael.riesch@wolfvision.net>
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, Irui Wang <irui.wang@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Steve Cho <stevecho@chromium.org>, srv_heupstream@mediatek.com,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Fritz Koenig <frkoenig@chromium.org>
+Subject: Re: [PATCH v1, 2/3] dt-bindings: media: mtk-vcodec: Adds decoder
+ dt-bindings for mt8186
+Message-ID: <YgMusfSSXXLlyxyX@robh.at.kernel.org>
+References: <20220122075606.19373-1-yunfei.dong@mediatek.com>
+ <20220122075606.19373-3-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220114105755.730200-2-michael.riesch@wolfvision.net>
+In-Reply-To: <20220122075606.19373-3-yunfei.dong@mediatek.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, 14 Jan 2022 11:57:54 +0100, Michael Riesch wrote:
-> Some devices support sampling of the parallel data at both edges of the
-> interface pixel clock in order to reduce the pixel clock by two.
-> Use the pclk-sample property to reflect this feature in the device tree.
+On Sat, 22 Jan 2022 15:56:05 +0800, Yunfei Dong wrote:
+> Adds decoder dt-bindings for mt8186.
 > 
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 > ---
->  .../devicetree/bindings/media/video-interfaces.yaml          | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  .../bindings/media/mediatek,vcodec-subdev-decoder.yaml        | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
