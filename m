@@ -2,22 +2,23 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E02DEC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 10 Feb 2022 11:03:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DAFFC433EF
+	for <linux-media@archiver.kernel.org>; Thu, 10 Feb 2022 11:04:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240438AbiBJLCv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Feb 2022 06:02:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38712 "EHLO
+        id S240471AbiBJLEA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Feb 2022 06:04:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240434AbiBJLCu (ORCPT
+        with ESMTP id S240099AbiBJLEA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Feb 2022 06:02:50 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EC1B6B
-        for <linux-media@vger.kernel.org>; Thu, 10 Feb 2022 03:02:48 -0800 (PST)
+        Thu, 10 Feb 2022 06:04:00 -0500
+X-Greylist: delayed 161175 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 03:04:01 PST
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC917100B
+        for <linux-media@vger.kernel.org>; Thu, 10 Feb 2022 03:04:01 -0800 (PST)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0427C2000B;
-        Thu, 10 Feb 2022 11:02:42 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9B6A4200002;
+        Thu, 10 Feb 2022 11:03:56 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     Steve Longerbeam <slongerbeam@gmail.com>
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
@@ -30,8 +31,8 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
 Subject: [PATCH v2 00/23] media: ov5640: Rework the clock tree programming for MIPI
-Date:   Thu, 10 Feb 2022 12:03:07 +0100
-Message-Id: <20220210110330.152352-1-jacopo@jmondi.org>
+Date:   Thu, 10 Feb 2022 12:04:35 +0100
+Message-Id: <20220210110458.152494-1-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
