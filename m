@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72E3EC433EF
-	for <linux-media@archiver.kernel.org>; Fri, 11 Feb 2022 14:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5253CC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 11 Feb 2022 14:28:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350797AbiBKO2J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Feb 2022 09:28:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59944 "EHLO
+        id S1350811AbiBKO2Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Feb 2022 09:28:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350782AbiBKO2H (ORCPT
+        with ESMTP id S1350792AbiBKO2I (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Feb 2022 09:28:07 -0500
+        Fri, 11 Feb 2022 09:28:08 -0500
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6768C7;
-        Fri, 11 Feb 2022 06:28:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1523BCF;
+        Fri, 11 Feb 2022 06:28:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1644589686; x=1676125686;
+  t=1644589687; x=1676125687;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KxUxndkotnH5yr6uUoFqaSWbYhYL9OQrUbXKgdspQi4=;
-  b=FVEh/vrUp3vf6owkslNXqjZDmmAPvLQFuimixj6f2GLjgSxJsPKYSDDk
-   6rosQWYUiQZucGKhq/T8nOoozT6zEcQWrOt2lmSSFXwL6wzPrscZCNWm2
-   XvTE9yiQqO46iHYeVHwQNPOjzSb6/iDiqSk5cTtDEqfZym7MrsDGo7XwL
-   SJOeJZiVDoM7JsgUbYP4Nl1lWV/hzMTbDOHF0WOJFqQC/xE6zqswUKgbq
-   dA7KCT4nDiCja10W383u5urocIXIZwd34eTXFk1x5dObOohbvCGkfo4+W
-   McdC56qcOw8oMaY2zlja/HuYo0DpDoNDq6zATHJhlebdf40yXItxj4kbv
-   Q==;
+  bh=aoiu4X1Os6dkBo5T/cU9kfbetuAKCwJrerGoWnhH00M=;
+  b=MtdgmUYSkedNwOXeCmB3EOhZgZsgUK4TpnoQHYhDMdu89moTljRfBhe3
+   HMrDbwEa8QvcTVJW/m/zyoPycXlIiWlk7NDPFnypgh/aQJ891kEKqCOpV
+   9n3LwE4UqUX5Zqz3ocmkP9Fy2p0zt+DLQXyjQfKKYIcyP5ga/LDqpVHmN
+   h4Mcrpwbc60d4vxlfhIMHLX46eeQB2OKytyJKv6VyLPhn7ac/vfxbcsIy
+   ptEIQNWcNGxowRKhg5biCKmbKEzixofVGKZg1zcwFEiMj2PIB9P7bJMdg
+   zx28k3OazYpRQYHHNj6LOOGOmdR3qgRpbCjTj1FFrzRgzQYzNVaStXTC7
+   g==;
 X-IronPort-AV: E=Sophos;i="5.88,361,1635199200"; 
-   d="scan'208";a="22042281"
+   d="scan'208";a="22042285"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 11 Feb 2022 15:28:01 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -42,23 +42,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1644589681; x=1676125681;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KxUxndkotnH5yr6uUoFqaSWbYhYL9OQrUbXKgdspQi4=;
-  b=D3VpOMgeHtT8ty9hwXauIOf8XjA6fUGMBTywnpsDafmy0cCQ1ro8gA6L
-   xuQjKG1+aa1NJisJUvNb++EW79iVeVWfzSaZK/5939CW+Y1Om5QsA2RDV
-   Bq6VBTlfsWFCaLNuY2pVrBD6YNPnll7B1D5vP+PdEHhUHMQEfcriSH31Q
-   Gt5RWDNKKXqDZj4/Vyc05LiACE3O49zncMCnzguquoY9zXglX9u9NdKzd
-   ky7WkVq0JqbW0jVYtYT4CNNB9nTypp/9MiSpr5wGLvNT+tHVVElFvDJIb
-   ZzQ2KLng05LNZm3kGW9UCZwgfWGXf7fJNafAf+SkCzk196vgcLMY51NNA
-   A==;
+  bh=aoiu4X1Os6dkBo5T/cU9kfbetuAKCwJrerGoWnhH00M=;
+  b=i2yWXg8UJiXLjDb99uLa/91rNPSi+Gm7ZsYtDqqYq/LZgZGo23FYT+R2
+   rcZzirY6zgFXgFIetiOKH7w+E3uZ3Bw3Ap+dDkP++oe7uEhaKXmqgluQz
+   blsmoGk46BFMqunveeolAPfL1vSW4gCL18K/Zpgn1gxXCsItUsLEQlF1K
+   0BhlrLAxej4Z+vkU5dFESKsDhSD0k7jZBAZtL90pEhzV9mhlAb34hdLCW
+   9EtHRSLsTW+8iznKQfaOTg3r8IsEtskX6Hrf9iiQstj0vwDn06JkNe6KQ
+   XdsECeCIHPiBw81G34zD7trBsJ2Iu6GoQS4WxbdWIco1k7ooQLHwDDHg9
+   g==;
 X-IronPort-AV: E=Sophos;i="5.88,361,1635199200"; 
-   d="scan'208";a="22042280"
+   d="scan'208";a="22042284"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 11 Feb 2022 15:28:01 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id D084F280078;
-        Fri, 11 Feb 2022 15:28:00 +0100 (CET)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 646D7280075;
+        Fri, 11 Feb 2022 15:28:01 +0100 (CET)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -75,9 +75,9 @@ To:     Steve Longerbeam <slongerbeam@gmail.com>,
 Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: [PATCH v2 2/9] media: imx: Forward type of hardware implementation
-Date:   Fri, 11 Feb 2022 15:27:45 +0100
-Message-Id: <20220211142752.779952-3-alexander.stein@ew.tq-group.com>
+Subject: [PATCH v2 4/9] media: imx: Fail conversion if pixel format not supported
+Date:   Fri, 11 Feb 2022 15:27:47 +0100
+Message-Id: <20220211142752.779952-5-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220211142752.779952-1-alexander.stein@ew.tq-group.com>
 References: <20220211142752.779952-1-alexander.stein@ew.tq-group.com>
@@ -89,111 +89,29 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
 
-Pass down the hardware type so imx_media_mbus_fmt_to_pix_fmt can do
-the actual switch.
+imx_media_find_mbus_format has NULL as a valid return value,
+therefore the caller should take it into account.
 
 Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
-Changes in v2:
-* Switch back to using enum
-* Added Reviewed-by: Laurent Pinchart
+ drivers/staging/media/imx/imx-media-utils.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
- drivers/staging/media/imx/imx-media-capture.c | 15 +++++++++------
- drivers/staging/media/imx/imx-media-utils.c   |  3 ++-
- drivers/staging/media/imx/imx-media.h         |  3 ++-
- 3 files changed, 13 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-index 65dc95a48ecc..7a6384b3e5e6 100644
---- a/drivers/staging/media/imx/imx-media-capture.c
-+++ b/drivers/staging/media/imx/imx-media-capture.c
-@@ -139,7 +139,8 @@ static int capture_g_fmt_vid_cap(struct file *file, void *fh,
- }
- 
- static const struct imx_media_pixfmt *
--__capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose)
-+__capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose,
-+		  enum imx_media_device_type type)
- {
- 	struct v4l2_mbus_framefmt fmt_src;
- 	const struct imx_media_pixfmt *cc;
-@@ -171,7 +172,7 @@ __capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose)
- 	}
- 
- 	v4l2_fill_mbus_format(&fmt_src, pixfmt, 0);
--	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src, cc);
-+	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src, cc, type);
- 
- 	if (compose) {
- 		compose->width = fmt_src.width;
-@@ -184,7 +185,9 @@ __capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose)
- static int capture_try_fmt_vid_cap(struct file *file, void *fh,
- 				   struct v4l2_format *f)
- {
--	__capture_try_fmt(&f->fmt.pix, NULL);
-+	struct capture_priv *priv = video_drvdata(file);
-+
-+	__capture_try_fmt(&f->fmt.pix, NULL, priv->type);
- 	return 0;
- }
- 
-@@ -199,7 +202,7 @@ static int capture_s_fmt_vid_cap(struct file *file, void *fh,
- 		return -EBUSY;
- 	}
- 
--	cc = __capture_try_fmt(&f->fmt.pix, &priv->vdev.compose);
-+	cc = __capture_try_fmt(&f->fmt.pix, &priv->vdev.compose, priv->type);
- 
- 	priv->vdev.cc = cc;
- 	priv->vdev.fmt = f->fmt.pix;
-@@ -418,7 +421,7 @@ __capture_legacy_try_fmt(struct capture_priv *priv,
- 		}
- 	}
- 
--	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src->format, cc);
-+	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src->format, cc, priv->type);
- 
- 	return cc;
- }
-@@ -889,7 +892,7 @@ static int capture_init_format(struct capture_priv *priv)
- 		fmt_src.format.height = IMX_MEDIA_DEF_PIX_HEIGHT;
- 	}
- 
--	imx_media_mbus_fmt_to_pix_fmt(&vdev->fmt, &fmt_src.format, NULL);
-+	imx_media_mbus_fmt_to_pix_fmt(&vdev->fmt, &fmt_src.format, NULL, priv->type);
- 	vdev->compose.width = fmt_src.format.width;
- 	vdev->compose.height = fmt_src.format.height;
- 
 diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
-index 94bc866ca28c..c42f3da8e3a8 100644
+index 02a4cb124d37..e59aaa77172a 100644
 --- a/drivers/staging/media/imx/imx-media-utils.c
 +++ b/drivers/staging/media/imx/imx-media-utils.c
-@@ -518,7 +518,8 @@ EXPORT_SYMBOL_GPL(imx_media_try_colorimetry);
+@@ -544,6 +544,9 @@ static int imx56_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
+ 		cc = imx_media_find_mbus_format(code, PIXFMT_SEL_YUV);
+ 	}
  
- int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
- 				  const struct v4l2_mbus_framefmt *mbus,
--				  const struct imx_media_pixfmt *cc)
-+				  const struct imx_media_pixfmt *cc,
-+				  enum imx_media_device_type type)
- {
- 	u32 width;
- 	u32 stride;
-diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
-index e4c22b3ccd57..f59feccb26bf 100644
---- a/drivers/staging/media/imx/imx-media.h
-+++ b/drivers/staging/media/imx/imx-media.h
-@@ -203,7 +203,8 @@ void imx_media_try_colorimetry(struct v4l2_mbus_framefmt *tryfmt,
- 			       bool ic_route);
- int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
- 				  const struct v4l2_mbus_framefmt *mbus,
--				  const struct imx_media_pixfmt *cc);
-+				  const struct imx_media_pixfmt *cc,
-+				  enum imx_media_device_type type);
- void imx_media_grp_id_to_sd_name(char *sd_name, int sz,
- 				 u32 grp_id, int ipu_id);
- struct v4l2_subdev *
++	if (!cc)
++		return -EINVAL;
++
+ 	/* Round up width for minimum burst size */
+ 	width = round_up(mbus->width, 8);
+ 
 -- 
 2.25.1
 
