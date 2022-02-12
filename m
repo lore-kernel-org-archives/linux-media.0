@@ -2,102 +2,81 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F0DBC433EF
-	for <linux-media@archiver.kernel.org>; Sat, 12 Feb 2022 16:32:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6829EC433EF
+	for <linux-media@archiver.kernel.org>; Sat, 12 Feb 2022 16:32:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237360AbiBLQcZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 12 Feb 2022 11:32:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44502 "EHLO
+        id S237364AbiBLQc1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 12 Feb 2022 11:32:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235480AbiBLQcZ (ORCPT
+        with ESMTP id S235480AbiBLQc0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 12 Feb 2022 11:32:25 -0500
+        Sat, 12 Feb 2022 11:32:26 -0500
 Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73579197
-        for <linux-media@vger.kernel.org>; Sat, 12 Feb 2022 08:32:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61A71A8
+        for <linux-media@vger.kernel.org>; Sat, 12 Feb 2022 08:32:22 -0800 (PST)
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id C65A9101C8F; Sat, 12 Feb 2022 16:32:19 +0000 (UTC)
+        id B2E27101BFE; Sat, 12 Feb 2022 16:32:19 +0000 (UTC)
 From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org
 Cc:     =?UTF-8?q?Marko=20M=C3=A4kel=C3=A4?= <marko.makela@iki.fi>
-Subject: [PATCH 2/2] media: rtl28xxu: improve IR receiver
-Date:   Sat, 12 Feb 2022 16:32:19 +0000
-Message-Id: <704b3d7e5a7a95cbd5e4dfc25a41454e919aed95.1644683294.git.sean@mess.org>
+Subject: [PATCH 0/2] Fix rtl28xxu nec/rc5 receiver
+Date:   Sat, 12 Feb 2022 16:32:17 +0000
+Message-Id: <cover.1644683294.git.sean@mess.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.1644683294.git.sean@mess.org>
-References: <cover.1644683294.git.sean@mess.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This device presents an IR buffer, which can be read and cleared.
-Clearing the buffer is racey with receiving IR, so wait until the IR
-message is finished before clearing it.
+Since forever rc-core has used the timeout for two separate purposes:
+the raw IR timeout and the key up delay. This problem has now shown
+itself in issues with the rtl28xxu driver, so these two patches split
+the timeout and then fix the rtl28xxu driver, which is now very
+responsive.
 
-This should minimize the chance of the buffer clear happening while
-IR is being received, although we cannot avoid this completely.
+Sean Young (2):
+  media: rc-core: split IR timeout into rawir timeout and keyup delay
+  media: rtl28xxu: improve IR receiver
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 27 +++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+ drivers/hid/hid-picolcd_cir.c               |  3 ++-
+ drivers/media/cec/core/cec-core.c           |  2 +-
+ drivers/media/cec/platform/seco/seco-cec.c  |  2 +-
+ drivers/media/pci/cx88/cx88-input.c         |  3 ++-
+ drivers/media/pci/saa7134/saa7134-input.c   |  3 ++-
+ drivers/media/pci/smipcie/smipcie-ir.c      |  3 ++-
+ drivers/media/rc/ene_ir.c                   | 11 ++++----
+ drivers/media/rc/fintek-cir.c               |  3 ++-
+ drivers/media/rc/gpio-ir-recv.c             |  3 ++-
+ drivers/media/rc/igorplugusb.c              |  5 ++--
+ drivers/media/rc/iguanair.c                 |  2 +-
+ drivers/media/rc/ir-hix5hd2.c               |  3 ++-
+ drivers/media/rc/ir-mce_kbd-decoder.c       |  2 +-
+ drivers/media/rc/ir_toy.c                   |  3 ++-
+ drivers/media/rc/ite-cir.c                  |  3 ++-
+ drivers/media/rc/lirc_dev.c                 |  6 ++---
+ drivers/media/rc/mceusb.c                   |  9 ++++---
+ drivers/media/rc/meson-ir.c                 |  3 ++-
+ drivers/media/rc/mtk-cir.c                  |  3 ++-
+ drivers/media/rc/nuvoton-cir.c              |  3 ++-
+ drivers/media/rc/rc-ir-raw.c                | 10 ++++----
+ drivers/media/rc/rc-loopback.c              |  5 ++--
+ drivers/media/rc/rc-main.c                  |  8 +++---
+ drivers/media/rc/redrat3.c                  |  5 ++--
+ drivers/media/rc/serial_ir.c                |  7 +++---
+ drivers/media/rc/st_rc.c                    |  8 ++++--
+ drivers/media/rc/streamzap.c                |  5 ++--
+ drivers/media/rc/sunxi-cir.c                |  7 +++---
+ drivers/media/rc/ttusbir.c                  |  3 ++-
+ drivers/media/rc/winbond-cir.c              |  3 ++-
+ drivers/media/rc/xbox_remote.c              |  2 +-
+ drivers/media/usb/dvb-usb-v2/dvb_usb.h      |  3 ++-
+ drivers/media/usb/dvb-usb-v2/dvb_usb_core.c |  3 ++-
+ drivers/media/usb/dvb-usb-v2/rtl28xxu.c     | 28 +++++++++++++++++++--
+ include/media/rc-core.h                     | 11 +++++---
+ 35 files changed, 120 insertions(+), 63 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-index 60e5153fcb24c..a83b1107fc7fd 100644
---- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-+++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-@@ -1720,6 +1720,7 @@ static int rtl2832u_rc_query(struct dvb_usb_device *d)
- 		{IR_RX_BUF_CTRL,         0x80, 0xff},
- 		{IR_RX_CTRL,             0x80, 0xff},
- 	};
-+	u32 idle_length;
- 
- 	/* init remote controller */
- 	if (!dev->rc_active) {
-@@ -1770,6 +1771,28 @@ static int rtl2832u_rc_query(struct dvb_usb_device *d)
- 	if (ret)
- 		goto err;
- 
-+	dev_dbg(&d->intf->dev, "IR_RX_BUF=%*ph\n", len, buf);
-+
-+	/* if the receiver is not idle yet, do not process */
-+	idle_length = 0;
-+	if (len > 2) {
-+		if (!(buf[len - 1] & 0x80))
-+			idle_length += buf[len - 1];
-+		if (!(buf[len - 2] & 0x80))
-+			idle_length += buf[len - 2];
-+	}
-+
-+	if (idle_length < 0xbf) {
-+		/*
-+		 * If the IR does not end with a space equal to the idle
-+		 * length, then the IR is not complete yet and more is to
-+		 * arrive shortly. If we process it and flush the buffer now,
-+		 * we end up missing IR.
-+		 */
-+		dev_dbg(&d->intf->dev, "ignoring idle=%x\n", idle_length);
-+		return 0;
-+	}
-+
- 	/* let hw receive new code */
- 	for (i = 0; i < ARRAY_SIZE(refresh_tab); i++) {
- 		ret = rtl28xxu_wr_reg_mask(d, refresh_tab[i].reg,
-@@ -1807,10 +1830,10 @@ static int rtl2832u_get_rc_config(struct dvb_usb_device *d,
- 	rc->allowed_protos = RC_PROTO_BIT_ALL_IR_DECODER;
- 	rc->driver_type = RC_DRIVER_IR_RAW;
- 	rc->query = rtl2832u_rc_query;
--	rc->interval = 200;
-+	rc->interval = 100;
- 	/* we program idle len to 0xc0, set timeout to one less */
- 	rc->rawir_timeout = 0xbf * 51;
--	rc->keyup_delay = MS_TO_US(210);
-+	rc->keyup_delay = MS_TO_US(110);
- 
- 	return 0;
- }
 -- 
 2.34.1
 
