@@ -2,258 +2,136 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BF95C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Feb 2022 21:28:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7472CC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Feb 2022 21:29:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiBNV24 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Feb 2022 16:28:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42830 "EHLO
+        id S231342AbiBNV3c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Feb 2022 16:29:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbiBNV2z (ORCPT
+        with ESMTP id S231450AbiBNV3Z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:28:55 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1067910E55E
-        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 13:28:47 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id 124so22028066ybn.11
-        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 13:28:47 -0800 (PST)
+        Mon, 14 Feb 2022 16:29:25 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BA71480F8
+        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 13:29:10 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id n24so21377986ljj.10
+        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 13:29:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9iLzCF2TaMCSxVJ++G7B9k6oyEfu4Hb24dWcp9NavGo=;
-        b=bvMGtJIya6i3kldlZ68PIkQqYQHrWh9etw576kRgvqubMe8pOdz7mPqNNyEWu0qYpu
-         K2+jd6xSBx5ppv4DQhtAnJ/C1/ar+hoh3j4AET1ped77vG9F4QpStWrR5C/ynxDK3vKN
-         F4ftSIe8zSlM/Ns0STbrln5QJiVtN8Mb1FflduG9ZT54+xcqp70wfp9WWIW2Zk6aDtuu
-         Djv4CpRkBWIv6K7ZeB7+p1MAM8FavXkccQBC2frvBkJ2JfvUDXYUQVZoWaiMCLK08wlH
-         BGwhSfln6q5TY9QJ0CXJOGeU35akaI0qKxsYbaroT2gei4kFJSaQtHAN9gq7j5k3cA9G
-         1Q1g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CkXrAzUFSY/e5T9rKqwMBznq2Sq4ji4dfshU2pB68VY=;
+        b=ikMA6Pao2D4vOKU4mdw3H/jO6uD6kWySYHOyurn/qC3yp4V+W5XRU7Moe7zmqFY2op
+         LoNKUPbagZHGE+SgbdlcDKgLBH6cnqHaiu8ux0gy7Va/Gbi+bmdjV0fbpycEzFeVbib2
+         OxSMqPgXQ2aSKM/Th7Noj2fBNz92q6m/sq7jzExQEkV9WOWkfv7ahByt9YBLm4emRirx
+         8VVHg3cO9dzkwrZ224qNKamxZqFV0ve+P5bNi2FT7dQrSjKi1ta945nVUKr/cWSiHFD2
+         dffnGFmsUUWWB6HLL2hBTcTDCgwyJAne9QXmhrZmCwdlWgEbjDe3+/Du4KAx74KdpnMG
+         CB2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9iLzCF2TaMCSxVJ++G7B9k6oyEfu4Hb24dWcp9NavGo=;
-        b=mPHAZv7cOPCgFB+4Jr7kcxkOODZCCuWDGh67r82hniKa8sCq3law1S4L4JnHDY/+hf
-         vDDZB0EHJfNDuQNT9NSNfOrHmnkgj1yyDdw6REwP7wNkRyHxWkgojETVlJocJQ0wCkbx
-         MUUBBZodnyZNfDjidCBYHxarX2O+BFZh0Hq9y9kSO45Kw8jqfi/JiGIRmTZLYX5/Dbcw
-         7aiw7W9Do5T+lV64sxAtanzzVUJ+17vVa3aTjw1401kE+ah9fugKkRb/KlNoPH7CdLnr
-         nxUchHPrwq00wIYtuRH6qOKf8P+LlXCwUweLDRVn1LT05Sj0D81y8PtxwQABp0SsVRX9
-         51Zg==
-X-Gm-Message-State: AOAM531x5ShR1XxBYaPm9faERo0BPZ9Djk0ZfohrJzdNOQru4upA/5bp
-        LAb7X67IfGRpjwPB2wWJOPFUzBojHZePEBpxIX1Gftxyt+EjAJtx
-X-Google-Smtp-Source: ABdhPJyWwIYYnlk3ZSzKkARKSenDfxGIdF7NYMwdRVcMXb2jVKuNZSwS8LN5JTVoMgWsqXP9by8zlQbqgPKPiLNFFWE=
-X-Received: by 2002:a25:6a55:: with SMTP id f82mr574637ybc.1.1644866971626;
- Mon, 14 Feb 2022 11:29:31 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CkXrAzUFSY/e5T9rKqwMBznq2Sq4ji4dfshU2pB68VY=;
+        b=DRSm8Y3GL44df/4FzDbKdv9kEfp2oy4LjETfWnDLbsS7lgd6uUxeVmPYqHkt5w3zRv
+         d+Qh1M3Piz3hjnceckIi1IkKn8WMBJ+Lbah5FKXT4v+mNVviWtbkwgkEVkKJzfIfzQ/d
+         KthV1fIk339ZGASjpHSKR8DSHrspfsw7fufCsU0TXv2z7oOnbRwVFT42Uy8b3F9YZwxw
+         hcpFUGDd/Nw3ivCEeiOS+mSPjhF40e44C2WDT+3vDGEM47hqg3dsl9dfFKH2Ga61uwmR
+         vL2fZlx0mZ02zT0AyY6pLYB4VSCLHV0kgVDu9g++aP+iMEsft7vPDfUw8y0PxlDX27Sf
+         cnWA==
+X-Gm-Message-State: AOAM5338XH8Y4Tv63lsan2DlTlCHrJbm1nwzjiPnVz7vjvOXqQnKy7EI
+        sMpb1yUIzsbJHUxRXoEtEj2Cd+wlAWmPEA==
+X-Google-Smtp-Source: ABdhPJx8zS75cmKpRFetRZGNVYIjjCd1PRU3OHm8pQBavNjPfZDe4n/6b7rNfBm0iqqtn4IRturZ6Q==
+X-Received: by 2002:a05:651c:168c:: with SMTP id bd12mr47042ljb.63.1644874148685;
+        Mon, 14 Feb 2022 13:29:08 -0800 (PST)
+Received: from localhost (31-178-191-245.dynamic.chello.pl. [31.178.191.245])
+        by smtp.gmail.com with ESMTPSA id m28sm650982ljc.1.2022.02.14.13.29.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 13:29:08 -0800 (PST)
+From:   Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
+To:     linux-media@vger.kernel.org, Linux-rockchip@lists.infradead.org
+Cc:     Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
+Subject: [PATCH v2 1/3] media: hantro: Add support for Hantro G1 on RK356x
+Date:   Mon, 14 Feb 2022 22:29:53 +0100
+Message-Id: <20220214212955.1178947-1-piotr.oniszczuk@gmail.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20220211161831.3493782-1-tjmercier@google.com>
- <20220211161831.3493782-7-tjmercier@google.com> <Ygdfe3XSvN8iFuUc@kroah.com> <CAHRSSEwoJ67Sr_=gtSaP91cbpjJjZdOo57cfAhv3r-ye0da7PA@mail.gmail.com>
-In-Reply-To: <CAHRSSEwoJ67Sr_=gtSaP91cbpjJjZdOo57cfAhv3r-ye0da7PA@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 14 Feb 2022 11:29:20 -0800
-Message-ID: <CAJuCfpHf=Ewm0e9kguY3MEGVHU_cyviVXByi0oQtq7kTtOOD=A@mail.gmail.com>
-Subject: Re: [RFC v2 6/6] android: binder: Add a buffer flag to relinquish
- ownership of fds
-To:     Todd Kjos <tkjos@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 10:33 AM Todd Kjos <tkjos@google.com> wrote:
->
-> On Fri, Feb 11, 2022 at 11:19 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Fri, Feb 11, 2022 at 04:18:29PM +0000, T.J. Mercier wrote:
->
-> Title: "android: binder: Add a buffer flag to relinquish ownership of fds=
-"
->
-> Please drop the "android:" from the title.
->
-> > > This patch introduces a buffer flag BINDER_BUFFER_FLAG_SENDER_NO_NEED
-> > > that a process sending an fd array to another process over binder IPC
-> > > can set to relinquish ownership of the fds being sent for memory
-> > > accounting purposes. If the flag is found to be set during the fd arr=
-ay
-> > > translation and the fd is for a DMA-BUF, the buffer is uncharged from
-> > > the sender's cgroup and charged to the receiving process's cgroup
-> > > instead.
-> > >
-> > > It is up to the sending process to ensure that it closes the fds
-> > > regardless of whether the transfer failed or succeeded.
-> > >
-> > > Most graphics shared memory allocations in Android are done by the
-> > > graphics allocator HAL process. On requests from clients, the HAL pro=
-cess
-> > > allocates memory and sends the fds to the clients over binder IPC.
-> > > The graphics allocator HAL will not retain any references to the
-> > > buffers. When the HAL sets the BINDER_BUFFER_FLAG_SENDER_NO_NEED for =
-fd
-> > > arrays holding DMA-BUF fds, the gpu cgroup controller will be able to
-> > > correctly charge the buffers to the client processes instead of the
-> > > graphics allocator HAL.
-> > >
-> > > From: Hridya Valsaraju <hridya@google.com>
-> > > Signed-off-by: Hridya Valsaraju <hridya@google.com>
-> > > Co-developed-by: T.J. Mercier <tjmercier@google.com>
-> > > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > > ---
-> > > changes in v2
-> > > - Move dma-buf cgroup charge transfer from a dma_buf_op defined by ev=
-ery
-> > > heap to a single dma-buf function for all heaps per Daniel Vetter and
-> > > Christian K=C3=B6nig.
-> > >
-> > >  drivers/android/binder.c            | 26 ++++++++++++++++++++++++++
-> > >  include/uapi/linux/android/binder.h |  1 +
-> > >  2 files changed, 27 insertions(+)
-> > >
-> > > diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> > > index 8351c5638880..f50d88ded188 100644
-> > > --- a/drivers/android/binder.c
-> > > +++ b/drivers/android/binder.c
-> > > @@ -42,6 +42,7 @@
-> > >
-> > >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> > >
-> > > +#include <linux/dma-buf.h>
-> > >  #include <linux/fdtable.h>
-> > >  #include <linux/file.h>
-> > >  #include <linux/freezer.h>
-> > > @@ -2482,8 +2483,10 @@ static int binder_translate_fd_array(struct li=
-st_head *pf_head,
-> > >  {
-> > >       binder_size_t fdi, fd_buf_size;
-> > >       binder_size_t fda_offset;
-> > > +     bool transfer_gpu_charge =3D false;
-> > >       const void __user *sender_ufda_base;
-> > >       struct binder_proc *proc =3D thread->proc;
-> > > +     struct binder_proc *target_proc =3D t->to_proc;
-> > >       int ret;
-> > >
-> > >       fd_buf_size =3D sizeof(u32) * fda->num_fds;
-> > > @@ -2521,8 +2524,15 @@ static int binder_translate_fd_array(struct li=
-st_head *pf_head,
-> > >       if (ret)
-> > >               return ret;
-> > >
-> > > +     if (IS_ENABLED(CONFIG_CGROUP_GPU) &&
-> > > +             parent->flags & BINDER_BUFFER_FLAG_SENDER_NO_NEED)
-> > > +             transfer_gpu_charge =3D true;
-> > > +
-> > >       for (fdi =3D 0; fdi < fda->num_fds; fdi++) {
-> > >               u32 fd;
-> > > +             struct dma_buf *dmabuf;
-> > > +             struct gpucg *gpucg;
-> > > +
-> > >               binder_size_t offset =3D fda_offset + fdi * sizeof(fd);
-> > >               binder_size_t sender_uoffset =3D fdi * sizeof(fd);
-> > >
-> > > @@ -2532,6 +2542,22 @@ static int binder_translate_fd_array(struct li=
-st_head *pf_head,
-> > >                                                 in_reply_to);
-> > >               if (ret)
-> > >                       return ret > 0 ? -EINVAL : ret;
-> > > +
-> > > +             if (!transfer_gpu_charge)
-> > > +                     continue;
-> > > +
-> > > +             dmabuf =3D dma_buf_get(fd);
-> > > +             if (IS_ERR(dmabuf))
-> > > +                     continue;
-> > > +
-> > > +             gpucg =3D gpucg_get(target_proc->tsk);
-> > > +             ret =3D dma_buf_charge_transfer(dmabuf, gpucg);
-> > > +             if (ret) {
-> > > +                     pr_warn("%d:%d Unable to transfer DMA-BUF fd ch=
-arge to %d",
-> > > +                             proc->pid, thread->pid, target_proc->pi=
-d);
-> > > +                     gpucg_put(gpucg);
-> > > +             }
-> > > +             dma_buf_put(dmabuf);
->
-> Since we are creating a new gpu cgroup abstraction, couldn't this
-> "transfer" be done in userspace by the target instead of in the kernel
-> driver? Then this patch would reduce to just a flag on the buffer
-> object.
+From: Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
 
-Are you suggesting to have a userspace accessible cgroup interface for
-transferring buffer charges and the target process to use that
-interface for requesting the buffer to be charged to its cgroup?
-I'm worried about the case when the target process does not request
-the transfer after receiving the buffer with this flag set. The charge
-would stay with the wrong process and accounting will be invalid.
+RK356x has Hantro G1 video decoder capable to decode MPEG2/H.264/VP8
+video formats.
 
-Technically, since the proposed cgroup supports charge transfer from
-the very beginning, the userspace can check if the cgroup is mounted
-and if so then it knows this feature is supported.
+This patch adds support for RK356x family in existing Hantro
+video decoder kernel driver.
 
-> This also solves the issue that Greg brought up about
-> userspace needing to know whether the kernel implements this feature
-> (older kernel running with newer userspace). I think we could just
-> reserve some flags for userspace to use (and since those flags are
-> "reserved" for older kernels, this would enable this feature even for
-> old kernels)
->
-> > >       }
-> > >       return 0;
-> > >  }
-> > > diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux=
-/android/binder.h
-> > > index 3246f2c74696..169fd5069a1a 100644
-> > > --- a/include/uapi/linux/android/binder.h
-> > > +++ b/include/uapi/linux/android/binder.h
-> > > @@ -137,6 +137,7 @@ struct binder_buffer_object {
-> > >
-> > >  enum {
-> > >       BINDER_BUFFER_FLAG_HAS_PARENT =3D 0x01,
-> > > +     BINDER_BUFFER_FLAG_SENDER_NO_NEED =3D 0x02,
-> > >  };
-> > >
-> > >  /* struct binder_fd_array_object - object describing an array of fds=
- in a buffer
-> > > --
-> > > 2.35.1.265.g69c8d7142f-goog
-> > >
-> >
-> > How does userspace know that binder supports this new flag?  And where
-> > is the userspace test for this new feature?  Isn't there a binder test
-> > framework somewhere?
-> >
-> > thanks,
-> >
-> > greg k-h
+Tested on [1] with FFmpeg v4l2_request code taken from [2]
+with MPEG2, H.642 and VP8 samples with results [3].
+
+[1] https://github.com/warpme/minimyth2
+[2] https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/multimedia/ffmpeg/patches/v4l2-request/ffmpeg-001-v4l2-request.patch
+[3] https://github.com/warpme/minimyth2/blob/master/video-test-summary.txt
+
+Signed-off-by: Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
+---
+ drivers/staging/media/hantro/hantro_drv.c      |  1 +
+ drivers/staging/media/hantro/hantro_hw.h       |  1 +
+ drivers/staging/media/hantro/rockchip_vpu_hw.c | 14 ++++++++++++++
+ 3 files changed, 16 insertions(+)
+
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index 6a51f39dde56..ac7d58069eb8 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -613,6 +613,7 @@ static const struct of_device_id of_hantro_match[] = {
+ 	{ .compatible = "rockchip,rk3288-vpu", .data = &rk3288_vpu_variant, },
+ 	{ .compatible = "rockchip,rk3328-vpu", .data = &rk3328_vpu_variant, },
+ 	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
++	{ .compatible = "rockchip,rk3568-vpu", .data = &rk3568_vpu_variant, },
+ #endif
+ #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+ 	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 4a19ae8940b9..89ec6d500938 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -307,6 +307,7 @@ extern const struct hantro_variant rk3066_vpu_variant;
+ extern const struct hantro_variant rk3288_vpu_variant;
+ extern const struct hantro_variant rk3328_vpu_variant;
+ extern const struct hantro_variant rk3399_vpu_variant;
++extern const struct hantro_variant rk3568_vpu_variant;
+ extern const struct hantro_variant sama5d4_vdec_variant;
+ extern const struct hantro_variant sunxi_vpu_variant;
+ 
+diff --git a/drivers/staging/media/hantro/rockchip_vpu_hw.c b/drivers/staging/media/hantro/rockchip_vpu_hw.c
+index c203b606e6e7..5e64cf068ff9 100644
+--- a/drivers/staging/media/hantro/rockchip_vpu_hw.c
++++ b/drivers/staging/media/hantro/rockchip_vpu_hw.c
+@@ -551,6 +551,20 @@ const struct hantro_variant rk3399_vpu_variant = {
+ 	.num_clocks = ARRAY_SIZE(rockchip_vpu_clk_names)
+ };
+ 
++const struct hantro_variant rk3568_vpu_variant = {
++	.dec_offset = 0x400,
++	.dec_fmts = rk3399_vpu_dec_fmts,
++	.num_dec_fmts = ARRAY_SIZE(rk3399_vpu_dec_fmts),
++	.codec = HANTRO_MPEG2_DECODER |
++		 HANTRO_VP8_DECODER | HANTRO_H264_DECODER,
++	.codec_ops = rk3399_vpu_codec_ops,
++	.irqs = rockchip_vdpu2_irqs,
++	.num_irqs = ARRAY_SIZE(rockchip_vdpu2_irqs),
++	.init = rockchip_vpu_hw_init,
++	.clk_names = rockchip_vpu_clk_names,
++	.num_clocks = ARRAY_SIZE(rockchip_vpu_clk_names)
++};
++
+ const struct hantro_variant px30_vpu_variant = {
+ 	.enc_offset = 0x0,
+ 	.enc_fmts = rockchip_vpu_enc_fmts,
+-- 
+2.29.2
+
