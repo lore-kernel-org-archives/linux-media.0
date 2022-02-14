@@ -2,22 +2,22 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 111B2C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Feb 2022 18:43:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A68C1C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Feb 2022 18:43:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiBNSnG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Feb 2022 13:43:06 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56628 "EHLO
+        id S231630AbiBNSn7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Feb 2022 13:43:59 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238772AbiBNSnF (ORCPT
+        with ESMTP id S231134AbiBNSn6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Feb 2022 13:43:05 -0500
+        Mon, 14 Feb 2022 13:43:58 -0500
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8A46AA54
-        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 10:42:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22AF6BDEF
+        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 10:43:42 -0800 (PST)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7E34A1C0008;
-        Mon, 14 Feb 2022 18:42:35 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5E04F1C000C;
+        Mon, 14 Feb 2022 18:42:47 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     slongerbeam@gmail.com, p.zabel@pengutronix.de, shawnguo@kernel.org,
         s.hauer@pengutronix.de, festevam@gmail.com, mchehab@kernel.org,
@@ -29,9 +29,9 @@ Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org,
         Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH 5/8] staging: media: imx: Use DUAL pixel mode if available
-Date:   Mon, 14 Feb 2022 19:43:15 +0100
-Message-Id: <20220214184318.409208-6-jacopo@jmondi.org>
+Subject: [PATCH 8/8] media: imx: imx-mipi-csis: Add RGB/BGR888
+Date:   Mon, 14 Feb 2022 19:43:18 +0100
+Message-Id: <20220214184318.409208-9-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <20220214184318.409208-1-jacopo@jmondi.org>
 References: <20220214184318.409208-1-jacopo@jmondi.org>
@@ -41,60 +41,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pixel sampling mode controls the size of data sampled from the CSI
-Rx queue. The supported sample size depends on the configuration of the
-preceding block in the capture pipeline and is then dependent on the SoC
-version the CSI peripheral is integrated on.
+Add support for the RGB888_1X24 and BGR888_1X24 image formats.
 
-When capturing YUV422 data if dual sample mode is available use it.
-
-This change is particularly relevant for the IMX8MM SoC which uses the
-CSIS CSI-2 receiver which operates in dual pixel mode.
-
-Other SoCs should be unaffected by this change and should continue to
-operate as before.
-
-Signed-off-by: Xavier Roumegue <xavier.roumegue@oss.nxp.com>
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/staging/media/imx/imx7-media-csi.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/media/platform/imx/imx-mipi-csis.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 112096774961..a8bdfb0bb0ee 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -426,6 +426,7 @@ static void imx7_csi_configure(struct imx7_csi *csi)
- {
- 	struct imx_media_video_dev *vdev = csi->vdev;
- 	struct v4l2_pix_format *out_pix = &vdev->fmt;
-+	struct imx_media_dev *imxmd = csi->imxmd;
- 	int width = out_pix->width;
- 	u32 stride = 0;
- 	u32 cr3 = BIT_FRMCNT_RST;
-@@ -436,7 +437,7 @@ static void imx7_csi_configure(struct imx7_csi *csi)
- 	cr18 &= ~(BIT_CSI_HW_ENABLE | BIT_MIPI_DATA_FORMAT_MASK |
- 		  BIT_DATA_FROM_MIPI | BIT_BASEADDR_CHG_ERR_EN |
- 		  BIT_BASEADDR_SWITCH_EN | BIT_BASEADDR_SWITCH_SEL |
--		  BIT_DEINTERLACE_EN);
-+		  BIT_DEINTERLACE_EN | BIT_MIPI_DOUBLE_CMPNT);
- 
- 	if (out_pix->field == V4L2_FIELD_INTERLACED) {
- 		cr18 |= BIT_DEINTERLACE_EN;
-@@ -500,6 +501,13 @@ static void imx7_csi_configure(struct imx7_csi *csi)
- 		case MEDIA_BUS_FMT_YUYV8_2X8:
- 		case MEDIA_BUS_FMT_YUYV8_1X16:
- 			cr18 |= BIT_MIPI_DATA_FORMAT_YUV422_8B;
-+
-+			/* If dual mode is supported use it. */
-+			if (imxmd->info->sample_modes & MODE_DUAL) {
-+				cr18 |= BIT_MIPI_DOUBLE_CMPNT;
-+				cr3 |= BIT_TWO_8BIT_SENSOR;
-+			}
-+
- 			break;
- 		}
- 	}
+diff --git a/drivers/media/platform/imx/imx-mipi-csis.c b/drivers/media/platform/imx/imx-mipi-csis.c
+index 9e0a478dba75..0d5870b3010a 100644
+--- a/drivers/media/platform/imx/imx-mipi-csis.c
++++ b/drivers/media/platform/imx/imx-mipi-csis.c
+@@ -366,6 +366,16 @@ static const struct csis_pix_format mipi_csis_formats[] = {
+ 		.data_type = MIPI_CSI2_DATA_TYPE_RGB565,
+ 		.width = 16,
+ 	},
++	{
++		.code = MEDIA_BUS_FMT_RGB888_1X24,
++		.data_type = MIPI_CSI2_DATA_TYPE_RGB888,
++		.width = 24,
++	},
++	{
++		.code = MEDIA_BUS_FMT_BGR888_1X24,
++		.data_type = MIPI_CSI2_DATA_TYPE_RGB888,
++		.width = 24,
++	},
+ 	/* RAW (Bayer and greyscale) formats. */
+ 	{
+ 		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
 -- 
 2.35.0
 
