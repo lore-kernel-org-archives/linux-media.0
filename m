@@ -2,137 +2,100 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8EAFC433F5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Feb 2022 21:15:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CFCEC433FE
+	for <linux-media@archiver.kernel.org>; Mon, 14 Feb 2022 21:18:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiBNVP5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Feb 2022 16:15:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55860 "EHLO
+        id S230420AbiBNVSc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Feb 2022 16:18:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbiBNVPh (ORCPT
+        with ESMTP id S230442AbiBNVS3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:15:37 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091D111B32B
-        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 13:15:28 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id v186so50135354ybg.1
-        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 13:15:27 -0800 (PST)
+        Mon, 14 Feb 2022 16:18:29 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD53211628B;
+        Mon, 14 Feb 2022 13:18:19 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id p14so15806734ejf.11;
+        Mon, 14 Feb 2022 13:18:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=koOwKzeH7/Gb78FEuOvCok9kPJwObv2S7DVJdDdOgNA=;
-        b=Pb5dbCHSbOY7B3ORjcQJ4tOqYQjm9jFUDuW4A8Uw3ddfl/KioQspJ7vPApWeypuuyQ
-         AbdlnFPPC52dg3yNb0beEJdpRbmFdEDeTuxJF39E+eg6ecEa/6ji0TduWQr0JYt33wqk
-         F00WTtwEQGRE8fkzuYE19P4BzBBNjs+GOqaHl31cAznCEZMsRqDikQkTwDJclPuKCvxV
-         kmxmrEI4FfjSSPAK5el+JyX7Hj1ZqafjYSIjdKPhGDhpAMZDyhpvvBv0wjDJRI2gXsaV
-         ekGOhI3vLetimUVdXqmZTzeAxc7HUExrhEQoRc2Vs4Ips6kQQ/pBnxkN2I0ZLJPdeW+t
-         EH2g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=99BahZfDqfQoln2rf6Bj3xU3QXecprDtHuHMCBkgrcQ=;
+        b=qhf19N3SLoLekl8nSgEbpHiFYk6ResBtkXfsJl63wafe0VQ0y5uwdcbx4dh7Api/cr
+         pq4kpVN3rz8ufkFRa9PQhw12DgU06aBBMlGjIZ82TXZkn5kbidmhueb3xMvAz8cyvLFK
+         23OCsQ5snWWXIQrfygum5Ml7tz1ev7oa/U9muYVV8pA1ru4b2uJnVoNiHqJAUlw6HTVD
+         4YwuEf7WP8XA/Rm/UEIkIOK+MRnmJTKW4dRGuT49tZEp3Adgnjs0GNTOr22NQe/Yb5r4
+         ZRdbMxoYgxE3NBz9Kcl1JoZpZ2VWWqZLEqmaXpiuwLy5eS4Rlf+vH+mqr6eGRoqwxN34
+         hTIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=koOwKzeH7/Gb78FEuOvCok9kPJwObv2S7DVJdDdOgNA=;
-        b=RHW5Mzb81/ZAHVoIWCxOQerTZ2APOXRK9zKqpKJoVFDJ8ZXKP8XCdacA8WMmujV6Gu
-         1Cgl/peuRDmsez8R+ri60I6AQUM4rWVNd2Oyg9QXDSwVc6af7z2Ak4mqWA5BXZF03ibb
-         iBwACzFKPifBmPMS30eW080XO2bPn+xkeJ9SgogLGsKmBfT0u44CaDcjxuCSOK1s93k4
-         4nJBb+PkYmhPOOH2kEt3rqq0TyE2K+tL8otRMkm7xTHwb0lUOXoKNbkDVBzizTgMXdcb
-         Unt1XyMtjGtOgHNLnqEE7qMF6u6ih1q3c6RFaLqPA7g5oSCW6aQ1cPRIs1zCsBdoW1Z5
-         dAvQ==
-X-Gm-Message-State: AOAM530+2DG+EPgs0Ct52X3XMQVJukTl+KVElW+BnInK4lnTYvKaRLVe
-        fBSX4tBTa93eq7CA2yUb7U9IHPso2yYZVk5x5PZFiA==
-X-Google-Smtp-Source: ABdhPJxYpCGSJ97h8+PYs4ql8r4Wi52kEXKqBk5pvfZj6f9b/g73lOi4fZfqGVy147NfKJkJXNKE6/edp4TkHfyblNY=
-X-Received: by 2002:a25:ad18:: with SMTP id y24mr1012325ybi.420.1644873327127;
- Mon, 14 Feb 2022 13:15:27 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=99BahZfDqfQoln2rf6Bj3xU3QXecprDtHuHMCBkgrcQ=;
+        b=8MvPCrp9Qh5VxH2eo86CV29dxKzn8thbL0ONZVBFka85iaKFnH1b0dMWsgzz8zE0mR
+         3k9A4OeUByrY9Y1Wni31rKSwFze+yTqTiR4Erd9Tms0t+aKDE527JJ5NfE4tCGKWZ8Le
+         AUeUxqyr1hntfjfkxJC3zkTqwgPhEmQfNOM8hvmK3cv7EmqASyRdo6uWc7GRvBM1jahg
+         UVDkpTtN0gnqR+GEpCP+cTpEW+akEFA8qb5QWdfqovmSubzEmknQqY1UPgCSX4DqE+QO
+         jENLitKRUII5Rimq2jZ7vgeHYHrSTWqDJyZDd+L7fGKl+J8SuFufKK6ns6B+MLaM3Ui3
+         P+GQ==
+X-Gm-Message-State: AOAM5322brr9yqyWrOx1rmIPNZS5W+a3qnOxarsVgsGYVHpXDNeAIBKw
+        +koQZSToxcZVQ2eHjHiKL3v5Q6LMfyjS/g==
+X-Google-Smtp-Source: ABdhPJwiFYCfncVtqTqjdVCBhQycol1aX209bItLXOycZar8UGc4dq3/BcvtHafFwyhS52svnZjIdA==
+X-Received: by 2002:a17:907:16aa:: with SMTP id hc42mr167762ejc.307.1644865723011;
+        Mon, 14 Feb 2022 11:08:43 -0800 (PST)
+Received: from kista.localdomain (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id m17sm2316338ejn.118.2022.02.14.11.08.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 11:08:42 -0800 (PST)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
+Cc:     mchehab@kernel.org, wens@csie.org, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH] media: cedrus: h264: Fix neighbour info buffer size
+Date:   Mon, 14 Feb 2022 20:08:39 +0100
+Message-Id: <20220214190839.707889-1-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220211161831.3493782-1-tjmercier@google.com>
- <20220211161831.3493782-7-tjmercier@google.com> <Ygdfe3XSvN8iFuUc@kroah.com>
- <CAHRSSEwoJ67Sr_=gtSaP91cbpjJjZdOo57cfAhv3r-ye0da7PA@mail.gmail.com>
- <CAJuCfpHf=Ewm0e9kguY3MEGVHU_cyviVXByi0oQtq7kTtOOD=A@mail.gmail.com>
- <CAHRSSEzsn-EVKXTRfmpbPR9u0wNpdvdZoX64Tm_mB1DQMRSUPQ@mail.gmail.com> <CALAqxLVeLsv9ESCL2EoZQ8-tRgp0V+tmdYbkyakFetf=ewTH+A@mail.gmail.com>
-In-Reply-To: <CALAqxLVeLsv9ESCL2EoZQ8-tRgp0V+tmdYbkyakFetf=ewTH+A@mail.gmail.com>
-From:   Hridya Valsaraju <hridya@google.com>
-Date:   Mon, 14 Feb 2022 13:14:51 -0800
-Message-ID: <CA+wgaPM8AmQ4g6pDSwRABtc7hq11XMw+kH-rRkB8xNGJhM3OKA@mail.gmail.com>
-Subject: Re: [RFC v2 6/6] android: binder: Add a buffer flag to relinquish
- ownership of fds
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Todd Kjos <tkjos@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 12:37 PM John Stultz <john.stultz@linaro.org> wrote:
->
-> On Mon, Feb 14, 2022 at 12:19 PM Todd Kjos <tkjos@google.com> wrote:
-> > On Mon, Feb 14, 2022 at 11:29 AM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > On Mon, Feb 14, 2022 at 10:33 AM Todd Kjos <tkjos@google.com> wrote:
-> > > >
-> > > > Since we are creating a new gpu cgroup abstraction, couldn't this
-> > > > "transfer" be done in userspace by the target instead of in the kernel
-> > > > driver? Then this patch would reduce to just a flag on the buffer
-> > > > object.
-> > >
-> > > Are you suggesting to have a userspace accessible cgroup interface for
-> > > transferring buffer charges and the target process to use that
-> > > interface for requesting the buffer to be charged to its cgroup?
-> >
-> > Well, I'm asking why we need to do these cgroup-ish actions in the
-> > kernel when it seems more natural to do it in userspace.
+According to BSP library source, H264 neighbour info buffer size needs
+to be 32 kiB for H6. This is similar to H265 decoding, which also needs
+double buffer size in comparison to older Cedrus core generations.
 
-This was our plan originally i.e. to create a cgroup interface that
-userspace could use for explicit charge transfer. However, in our
-initial discussions with all interested parties and cgroup maintainers
-we reached a conclusion that an explicit charge transfer UAPI for the
-cgroup controller did not fit in with the current cgroup
-charge/uncharge mechanisms. Like John mentioned, the charge transfer
-during binder IPC was suggested by Daniel during LPC.
+Increase buffer size to cover H6 needs. Since increase is not that big
+in absolute numbers, it doesn't make sense to complicate logic for older
+generations.
 
-Regards,
-Hridya
+Issue was discovered using iommu and cross checked with BSP library
+source.
 
-> >
->
-> In case its useful, some additional context from some of the Linux
-> Plumber's discussions last fall:
->
-> Daniel Stone outlines some concerns with the cgroup userland handling
-> for accounting:
->   https://youtu.be/3OqllZONTiQ?t=3430
->
-> And the binder ownership transfer bit was suggested here by Daniel Vetter:
->   https://youtu.be/3OqllZONTiQ?t=3730
->
-> thanks
-> -john
+Fixes: 6eb9b758e307 ("media: cedrus: Add H264 decoding support")
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+---
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+index b4173a8926d6..d8fb93035470 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+@@ -38,7 +38,7 @@ struct cedrus_h264_sram_ref_pic {
+ 
+ #define CEDRUS_H264_FRAME_NUM		18
+ 
+-#define CEDRUS_NEIGHBOR_INFO_BUF_SIZE	(16 * SZ_1K)
++#define CEDRUS_NEIGHBOR_INFO_BUF_SIZE	(32 * SZ_1K)
+ #define CEDRUS_MIN_PIC_INFO_BUF_SIZE       (130 * SZ_1K)
+ 
+ static void cedrus_h264_write_sram(struct cedrus_dev *dev,
+-- 
+2.35.1
+
