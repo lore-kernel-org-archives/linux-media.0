@@ -2,257 +2,284 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2C33C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Feb 2022 20:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0CBCC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Feb 2022 20:58:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiBNU1J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Feb 2022 15:27:09 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48174 "EHLO
+        id S230097AbiBNU6V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Feb 2022 15:58:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiBNU1I (ORCPT
+        with ESMTP id S229911AbiBNU6K (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:27:08 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE3113F88A
-        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 12:26:32 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 314CFFEF;
-        Mon, 14 Feb 2022 20:20:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644866447;
-        bh=sRzz8zpmSYgZtGxXFX1JA34VsILqA+nvLAW+MgHC/ZI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SxlbHR/l5uXmaq94rv9CzaiQh4vgeTcFvcueuhGfExTZm4h8vYEVZvInQJKHlTFV7
-         0qvjKGgBUZHQt4wcnTiHcaLgTl4+OpIJYQZtY0s4ebBANCHaucvhjsKAGMDCM2qAtQ
-         nEz11Wt2ddIP1JWF15iKm3Ky0Sn1xhX+3NH2m/u0=
-Date:   Mon, 14 Feb 2022 21:20:41 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     slongerbeam@gmail.com, p.zabel@pengutronix.de, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, martin.kepplinger@puri.sm,
-        rmfrfs@gmail.com, xavier.roumegue@oss.nxp.com,
-        alexander.stein@ew.tq-group.com, dorota.czaplejewicz@puri.sm,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 4/8] staging: media: imx: Define per-SoC info
-Message-ID: <YgqriZJsq9faa6gQ@pendragon.ideasonboard.com>
-References: <20220214184318.409208-1-jacopo@jmondi.org>
- <20220214184318.409208-5-jacopo@jmondi.org>
+        Mon, 14 Feb 2022 15:58:10 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07614170D48
+        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 12:57:43 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id o24so26189707wro.3
+        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 12:57:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0OkHBiaZEL4gbI88uAFjC4BevdegDkSw2mEVoE6XUQM=;
+        b=o/c8WGQ7vgEvxtzZSzEGkFFVcPUiHrl0G51Eg5NUiYHpcN3AIktYX1CzP78vLb2HCv
+         LyiqVlMYdkmHuBOpsyo/3V9Cj1FG5i2UtaP2pa4VVE7DPWVR0qrTIeuZJzSShHz31KtV
+         aG2q2Q+V1pIZOhlqrMm86Ieu10aJTAtNG3yAp85NUacZ5B9enUnoF98FgCEJuYwGuOR1
+         t/YcS4wqhUQgpObHz7ewBESmzKaLyvkXbT7E+XnLM/nDVEbqTumoE8kp9c32zg+fZ/Cm
+         kD09NV6hr9tEchdA4EsbPzDQ4YuOHJVTlkhoDxtAqfFcgQJzv29t30e/mp0RRlaVif14
+         p9DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0OkHBiaZEL4gbI88uAFjC4BevdegDkSw2mEVoE6XUQM=;
+        b=Ux5hpMocxoZdzV90VSq7kkdawm2qEaITxnHoN06Bil/i1dqG8ihmG2vLENiaSxaTiV
+         ds/qNmrZiciED6q7w1I7+wPacWsBi+dt5yrIR9e491yKcsc1p9dqUvrYplWMIcOGuOsf
+         ahlyjz0bXlti7n/84E2YuKJXJyqctcVgvCmg/QVNKA55PHEquyWLRxEhk2uQnmc51y/W
+         tyE8f/RteffrX0sTVKdZRPzgGQiCz6/h8ptrnQ7W6/ueFHA/jaGrJ2kiUNsgsO1gPdWf
+         ZDVBCW/XtDriFz82yuRm1jSXfGdXnsGBH6M4ZKHO0RbNDsjOoGmD+lriv0e418L/1cNr
+         oLTw==
+X-Gm-Message-State: AOAM533ad/NkKKmkEOmCmghBQA8e3dTwV05WuZd0qe2T2IWVaI/mcH0U
+        j2dFOM7k1app0PePtp2HMhNwcu2UxFjuNiQiAtbvKb6anKQ=
+X-Google-Smtp-Source: ABdhPJx8lRnGEvo2BKjuadxx0kxXF47MC+omvIOvGqqY/xfT6A0YxtvN/5OElk6DOL9teF9tVH9vVeya6dhvDDCanxQ=
+X-Received: by 2002:a05:6512:139e:: with SMTP id p30mr572513lfa.502.1644869981206;
+ Mon, 14 Feb 2022 12:19:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220214184318.409208-5-jacopo@jmondi.org>
+References: <20220211161831.3493782-1-tjmercier@google.com>
+ <20220211161831.3493782-7-tjmercier@google.com> <Ygdfe3XSvN8iFuUc@kroah.com>
+ <CAHRSSEwoJ67Sr_=gtSaP91cbpjJjZdOo57cfAhv3r-ye0da7PA@mail.gmail.com> <CAJuCfpHf=Ewm0e9kguY3MEGVHU_cyviVXByi0oQtq7kTtOOD=A@mail.gmail.com>
+In-Reply-To: <CAJuCfpHf=Ewm0e9kguY3MEGVHU_cyviVXByi0oQtq7kTtOOD=A@mail.gmail.com>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Mon, 14 Feb 2022 12:19:28 -0800
+Message-ID: <CAHRSSEzsn-EVKXTRfmpbPR9u0wNpdvdZoX64Tm_mB1DQMRSUPQ@mail.gmail.com>
+Subject: Re: [RFC v2 6/6] android: binder: Add a buffer flag to relinquish
+ ownership of fds
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "T.J. Mercier" <tjmercier@google.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        DRI mailing list <dri-devel@lists.freedesktop.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+On Mon, Feb 14, 2022 at 11:29 AM Suren Baghdasaryan <surenb@google.com> wro=
+te:
+>
+> On Mon, Feb 14, 2022 at 10:33 AM Todd Kjos <tkjos@google.com> wrote:
+> >
+> > On Fri, Feb 11, 2022 at 11:19 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Fri, Feb 11, 2022 at 04:18:29PM +0000, T.J. Mercier wrote:
+> >
+> > Title: "android: binder: Add a buffer flag to relinquish ownership of f=
+ds"
+> >
+> > Please drop the "android:" from the title.
+> >
+> > > > This patch introduces a buffer flag BINDER_BUFFER_FLAG_SENDER_NO_NE=
+ED
+> > > > that a process sending an fd array to another process over binder I=
+PC
+> > > > can set to relinquish ownership of the fds being sent for memory
+> > > > accounting purposes. If the flag is found to be set during the fd a=
+rray
+> > > > translation and the fd is for a DMA-BUF, the buffer is uncharged fr=
+om
+> > > > the sender's cgroup and charged to the receiving process's cgroup
+> > > > instead.
+> > > >
+> > > > It is up to the sending process to ensure that it closes the fds
+> > > > regardless of whether the transfer failed or succeeded.
+> > > >
+> > > > Most graphics shared memory allocations in Android are done by the
+> > > > graphics allocator HAL process. On requests from clients, the HAL p=
+rocess
+> > > > allocates memory and sends the fds to the clients over binder IPC.
+> > > > The graphics allocator HAL will not retain any references to the
+> > > > buffers. When the HAL sets the BINDER_BUFFER_FLAG_SENDER_NO_NEED fo=
+r fd
+> > > > arrays holding DMA-BUF fds, the gpu cgroup controller will be able =
+to
+> > > > correctly charge the buffers to the client processes instead of the
+> > > > graphics allocator HAL.
+> > > >
+> > > > From: Hridya Valsaraju <hridya@google.com>
+> > > > Signed-off-by: Hridya Valsaraju <hridya@google.com>
+> > > > Co-developed-by: T.J. Mercier <tjmercier@google.com>
+> > > > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > > > ---
+> > > > changes in v2
+> > > > - Move dma-buf cgroup charge transfer from a dma_buf_op defined by =
+every
+> > > > heap to a single dma-buf function for all heaps per Daniel Vetter a=
+nd
+> > > > Christian K=C3=B6nig.
+> > > >
+> > > >  drivers/android/binder.c            | 26 +++++++++++++++++++++++++=
++
+> > > >  include/uapi/linux/android/binder.h |  1 +
+> > > >  2 files changed, 27 insertions(+)
+> > > >
+> > > > diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> > > > index 8351c5638880..f50d88ded188 100644
+> > > > --- a/drivers/android/binder.c
+> > > > +++ b/drivers/android/binder.c
+> > > > @@ -42,6 +42,7 @@
+> > > >
+> > > >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> > > >
+> > > > +#include <linux/dma-buf.h>
+> > > >  #include <linux/fdtable.h>
+> > > >  #include <linux/file.h>
+> > > >  #include <linux/freezer.h>
+> > > > @@ -2482,8 +2483,10 @@ static int binder_translate_fd_array(struct =
+list_head *pf_head,
+> > > >  {
+> > > >       binder_size_t fdi, fd_buf_size;
+> > > >       binder_size_t fda_offset;
+> > > > +     bool transfer_gpu_charge =3D false;
+> > > >       const void __user *sender_ufda_base;
+> > > >       struct binder_proc *proc =3D thread->proc;
+> > > > +     struct binder_proc *target_proc =3D t->to_proc;
+> > > >       int ret;
+> > > >
+> > > >       fd_buf_size =3D sizeof(u32) * fda->num_fds;
+> > > > @@ -2521,8 +2524,15 @@ static int binder_translate_fd_array(struct =
+list_head *pf_head,
+> > > >       if (ret)
+> > > >               return ret;
+> > > >
+> > > > +     if (IS_ENABLED(CONFIG_CGROUP_GPU) &&
+> > > > +             parent->flags & BINDER_BUFFER_FLAG_SENDER_NO_NEED)
+> > > > +             transfer_gpu_charge =3D true;
+> > > > +
+> > > >       for (fdi =3D 0; fdi < fda->num_fds; fdi++) {
+> > > >               u32 fd;
+> > > > +             struct dma_buf *dmabuf;
+> > > > +             struct gpucg *gpucg;
+> > > > +
+> > > >               binder_size_t offset =3D fda_offset + fdi * sizeof(fd=
+);
+> > > >               binder_size_t sender_uoffset =3D fdi * sizeof(fd);
+> > > >
+> > > > @@ -2532,6 +2542,22 @@ static int binder_translate_fd_array(struct =
+list_head *pf_head,
+> > > >                                                 in_reply_to);
+> > > >               if (ret)
+> > > >                       return ret > 0 ? -EINVAL : ret;
+> > > > +
+> > > > +             if (!transfer_gpu_charge)
+> > > > +                     continue;
+> > > > +
+> > > > +             dmabuf =3D dma_buf_get(fd);
+> > > > +             if (IS_ERR(dmabuf))
+> > > > +                     continue;
+> > > > +
+> > > > +             gpucg =3D gpucg_get(target_proc->tsk);
+> > > > +             ret =3D dma_buf_charge_transfer(dmabuf, gpucg);
+> > > > +             if (ret) {
+> > > > +                     pr_warn("%d:%d Unable to transfer DMA-BUF fd =
+charge to %d",
+> > > > +                             proc->pid, thread->pid, target_proc->=
+pid);
+> > > > +                     gpucg_put(gpucg);
+> > > > +             }
+> > > > +             dma_buf_put(dmabuf);
+> >
+> > Since we are creating a new gpu cgroup abstraction, couldn't this
+> > "transfer" be done in userspace by the target instead of in the kernel
+> > driver? Then this patch would reduce to just a flag on the buffer
+> > object.
+>
+> Are you suggesting to have a userspace accessible cgroup interface for
+> transferring buffer charges and the target process to use that
+> interface for requesting the buffer to be charged to its cgroup?
 
-Thank you for the patch.
+Well, I'm asking why we need to do these cgroup-ish actions in the
+kernel when it seems more natural to do it in userspace.
 
-On Mon, Feb 14, 2022 at 07:43:14PM +0100, Jacopo Mondi wrote:
-> Define the imx-media-info structure which contains CSI configuration
-> parameter that depend on the SoC version the peripheral is integrated
-> in.
-> 
-> Replace the existing 'model' field with the newly defined structure.
-> 
-> Only define the SoC id and the supported pixel sampling modes for the
-> moment.
-> 
-> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> ---
->  drivers/staging/media/imx/imx-media.h      | 44 ++++++++++++++++++++++
->  drivers/staging/media/imx/imx7-media-csi.c | 44 ++++++++++++++--------
->  2 files changed, 73 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
-> index f263fc3adbb9..1b0b660413cb 100644
-> --- a/drivers/staging/media/imx/imx-media.h
-> +++ b/drivers/staging/media/imx/imx-media.h
-> @@ -18,6 +18,16 @@
->  #define IMX_MEDIA_DEF_PIX_WIDTH		640
->  #define IMX_MEDIA_DEF_PIX_HEIGHT	480
->  
-> +/*
-> + * Enumeration of the SoC models the peripheral is integrated in.
-> + */
-> +enum soc_id {
-> +	IMX6UL,
-> +	IMX7,
-> +	IMX8MM,
-> +	IMX8MQ,
+> I'm worried about the case when the target process does not request
+> the transfer after receiving the buffer with this flag set. The charge
+> would stay with the wrong process and accounting will be invalid.
 
-Those names are too generic.
+I suspect this would be implemented in libbinder wherever the fd array
+object is handled, so it wouldn't require changes to every process.
 
-> +};
-> +
->  /*
->   * Enumeration of the IPU internal sub-devices
->   */
-> @@ -141,10 +151,44 @@ struct imx_media_pad_vdev {
->  	struct list_head list;
->  };
->  
-> +/*
-> + * enum sample_mode_id - Define the CSI Rx queue sample size
-> + *
-> + * The pixel sampling mode defines the possible sampling methods from the
-> + * CSI Rx queue to the next processing block of the capture pipeline.
-> + *
-> + * The supported methods depends on the SoC model and on synthesis time
-> + * configurations.
-> + *
-> + * @MODE_SINGLE: Single pixel mode sampling
-> + * @MODE_DUAL: Double pixel mode sampling
-> + * @MODE_QUAD: Quad pixel mode sampling
-> + */
-> +enum sample_mode_id {
-> +	MODE_SINGLE = BIT(0),
-> +	MODE_DUAL = BIT(1),
-> +	MODE_QUAD = BIT(2),
+>
+> Technically, since the proposed cgroup supports charge transfer from
+> the very beginning, the userspace can check if the cgroup is mounted
+> and if so then it knows this feature is supported.
 
-Here too.
+Has some userspace code for this been written? I'd like to be
+convinced that these changes need to be in the binder kernel driver
+instead of in userspace.
 
-> +};
-
-Let's limit this to the imx7-media-csi driver, it's unrelated to the
-i.MX6 IPUv3 and should not be part of common helpers. It doesn't seem
-like any subsequent patch in this series use the sample mode or the
-soc_id in common helpers, so it should hopefully not be a bit issue.
-
-I would also like to see a comment somewhere (in this patch or one of
-the subsequent ones) that explains in more details how the CSIS and CSI
-bridge are connected, and how various bits affect data signal routing
-between the two. I can help if necessary.
-
-> +/*
-> + * Information and configurations dependent on the SoC the peripheral is
-> + * integrated in.
-> + *
-> + * @soc_id: The SoC identifier. See &enum soc_id.
-> + * @sample_modes: Mask of supported pixel modes. See &enum sample_mode_id.
-> + */
-> +struct imx_media_info {
-> +	enum soc_id soc_id;
-> +	u8 sample_modes;
-> +};
-> +
->  struct imx_media_dev {
->  	struct media_device md;
->  	struct v4l2_device  v4l2_dev;
->  
-> +	/* Per-model information. */
-> +	const struct imx_media_info *info;
-> +
->  	/* the pipeline object */
->  	struct media_pipeline pipe;
->  
-> diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-> index 59100e409709..112096774961 100644
-> --- a/drivers/staging/media/imx/imx7-media-csi.c
-> +++ b/drivers/staging/media/imx/imx7-media-csi.c
-> @@ -159,12 +159,6 @@
->  #define CSI_CSICR18			0x48
->  #define CSI_CSICR19			0x4c
->  
-> -enum imx_csi_model {
-> -	IMX7_CSI_IMX7 = 0,
-> -	IMX7_CSI_IMX8MQ,
-> -	IMX7_CSI_IMX8MM,
-> -};
-
-I think you can keep this instead of soc_id.
-
-> -
->  struct imx7_csi {
->  	struct device *dev;
->  	struct v4l2_subdev sd;
-> @@ -200,8 +194,6 @@ struct imx7_csi {
->  	bool is_csi2;
->  
->  	struct completion last_eof_completion;
-> -
-> -	enum imx_csi_model model;
->  };
->  
->  static struct imx7_csi *
-> @@ -562,6 +554,8 @@ static void imx7_csi_baseaddr_switch_on_second_frame(struct imx7_csi *csi)
->  
->  static void imx7_csi_enable(struct imx7_csi *csi)
->  {
-> +	struct imx_media_dev *imxmd = csi->imxmd;
-> +
->  	/* Clear the Rx FIFO and reflash the DMA controller. */
->  	imx7_csi_rx_fifo_clear(csi);
->  	imx7_csi_dma_reflash(csi);
-> @@ -576,7 +570,7 @@ static void imx7_csi_enable(struct imx7_csi *csi)
->  	imx7_csi_dmareq_rff_enable(csi);
->  	imx7_csi_hw_enable(csi);
->  
-> -	if (csi->model == IMX7_CSI_IMX8MQ)
-> +	if (imxmd->info->soc_id == IMX8MQ)
->  		imx7_csi_baseaddr_switch_on_second_frame(csi);
->  }
->  
-> @@ -1181,8 +1175,6 @@ static int imx7_csi_probe(struct platform_device *pdev)
->  	if (IS_ERR(csi->regbase))
->  		return PTR_ERR(csi->regbase);
->  
-> -	csi->model = (enum imx_csi_model)(uintptr_t)of_device_get_match_data(&pdev->dev);
-> -
->  	spin_lock_init(&csi->irqlock);
->  	mutex_init(&csi->lock);
->  
-> @@ -1202,6 +1194,8 @@ static int imx7_csi_probe(struct platform_device *pdev)
->  	}
->  	platform_set_drvdata(pdev, &csi->sd);
->  
-> +	imxmd->info = of_device_get_match_data(dev);
-> +
->  	ret = imx_media_of_add_csi(imxmd, node);
->  	if (ret < 0 && ret != -ENODEV && ret != -EEXIST)
->  		goto cleanup;
-> @@ -1276,11 +1270,31 @@ static int imx7_csi_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> +static const struct imx_media_info imx8mq_info = {
-> +	.soc_id = IMX8MQ,
-> +	.sample_modes = MODE_SINGLE,
-> +};
-> +
-> +static const struct imx_media_info imx8mm_info = {
-> +	.soc_id = IMX8MM,
-> +	.sample_modes = MODE_SINGLE | MODE_DUAL,
-> +};
-> +
-> +static const struct imx_media_info imx7_info = {
-> +	.soc_id = IMX7,
-> +	.sample_modes = MODE_SINGLE,
-> +};
-> +
-> +static const struct imx_media_info imx6ul_info = {
-> +	.soc_id = IMX6UL,
-> +	.sample_modes = MODE_SINGLE,
-> +};
-> +
->  static const struct of_device_id imx7_csi_of_match[] = {
-> -	{ .compatible = "fsl,imx8mq-csi", .data = (void *)IMX7_CSI_IMX8MQ },
-> -	{ .compatible = "fsl,imx8mm-csi", .data = (void *)IMX7_CSI_IMX8MM },
-> -	{ .compatible = "fsl,imx7-csi", .data = (void *)IMX7_CSI_IMX7 },
-> -	{ .compatible = "fsl,imx6ul-csi", .data = (void *)IMX7_CSI_IMX7 },
-> +	{ .compatible = "fsl,imx8mq-csi", .data = &imx8mq_info },
-> +	{ .compatible = "fsl,imx8mm-csi", .data = &imx8mm_info },
-> +	{ .compatible = "fsl,imx7-csi", .data = &imx7_info },
-> +	{ .compatible = "fsl,imx6ul-csi", .data = &imx6ul_info },
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, imx7_csi_of_match);
-
--- 
-Regards,
-
-Laurent Pinchart
+>
+> > This also solves the issue that Greg brought up about
+> > userspace needing to know whether the kernel implements this feature
+> > (older kernel running with newer userspace). I think we could just
+> > reserve some flags for userspace to use (and since those flags are
+> > "reserved" for older kernels, this would enable this feature even for
+> > old kernels)
+> >
+> > > >       }
+> > > >       return 0;
+> > > >  }
+> > > > diff --git a/include/uapi/linux/android/binder.h b/include/uapi/lin=
+ux/android/binder.h
+> > > > index 3246f2c74696..169fd5069a1a 100644
+> > > > --- a/include/uapi/linux/android/binder.h
+> > > > +++ b/include/uapi/linux/android/binder.h
+> > > > @@ -137,6 +137,7 @@ struct binder_buffer_object {
+> > > >
+> > > >  enum {
+> > > >       BINDER_BUFFER_FLAG_HAS_PARENT =3D 0x01,
+> > > > +     BINDER_BUFFER_FLAG_SENDER_NO_NEED =3D 0x02,
+> > > >  };
+> > > >
+> > > >  /* struct binder_fd_array_object - object describing an array of f=
+ds in a buffer
+> > > > --
+> > > > 2.35.1.265.g69c8d7142f-goog
+> > > >
+> > >
+> > > How does userspace know that binder supports this new flag?  And wher=
+e
+> > > is the userspace test for this new feature?  Isn't there a binder tes=
+t
+> > > framework somewhere?
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
