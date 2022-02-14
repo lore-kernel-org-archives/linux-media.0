@@ -2,229 +2,257 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A197C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 14 Feb 2022 20:13:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2C33C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Feb 2022 20:27:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiBNUNd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Feb 2022 15:13:33 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59554 "EHLO
+        id S229634AbiBNU1J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Feb 2022 15:27:09 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiBNUNd (ORCPT
+        with ESMTP id S229379AbiBNU1I (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:13:33 -0500
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC92124C0B;
-        Mon, 14 Feb 2022 12:13:15 -0800 (PST)
-Received: by mail-lj1-f182.google.com with SMTP id w6so3730182ljj.3;
-        Mon, 14 Feb 2022 12:13:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wqUSZ1SFW0NVtpHilGjkTlF5P0e9ASySJ2SjHGW0nSw=;
-        b=YIAQ1zoMH5dWivilhSnkKSw0ctqFeyghOXilT5ojvzNBk2EnLfoQon/bgeqsc8Km3W
-         6jHN8k5Qeo7Fx15/trIUSKneHxu3rvCGNVAeQq65RusjDPnbBoETVPHcwtFvTIrA9oTL
-         W/1oHNmeG3qOagVgIrpPbpoOncfvapoLBbkUkYCbaV0AjaEoQ2WM90rJFgzIDkubPIXN
-         CY0rrLYo/vUGTjnHCd4JqzoYCfeLnKJHI13nGfqtGcEMuhWlSsv4iatlUtvk4K0c1cD0
-         BGzncRcWz/ZswZJ/H44Qfmhwy+7Vzhh9X9USEhblozjd6Z3Z9SQFikB/rS/bIqZX4gPU
-         N0qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wqUSZ1SFW0NVtpHilGjkTlF5P0e9ASySJ2SjHGW0nSw=;
-        b=hrI/up3TLm8gtieHD9m/w5c8W446xrswfsC56Fq/SOwf5Pu4hbyKiyO5E9162gr6r3
-         fZOfV0ocOA7nqXEAs+EW4m1mtPQsKygdqtIh95UiZASRW8F4jipotXgEEC48O26+wTD2
-         3cSzOI7bhlnD5ePWNAQe0XUGKTwKRTPhku+k54AR1ENOEk6RFrkAyAg+PYWu0vWiw8XA
-         yo6WBQujGAwl2BXwBe3g90U2ELLWU0PEY6yXkG2QI8bdeZWs+cfH07ls7IYdWZGU2ul0
-         5mkxklTERniW4mcwqgw7T4mGQRPD3YqoPOR4WlvmV6wGid5ERzmcWi4vrBxVJXITwG3d
-         3g5Q==
-X-Gm-Message-State: AOAM532HiT9PxONK77XODJm1n3oPlkTjHoZMLXeumXlaE/gxEu7JWmMg
-        Hzg9Rq63LSewEfaEqoTCh35kHCP0xMmzfA==
-X-Google-Smtp-Source: ABdhPJwYjRppPFpB8UmNIkcxwOS9n2u16iELvDzGqpJ83lEytB+M9F4emEDKG8XNnA9Ps3JOsWEvHg==
-X-Received: by 2002:a17:907:c15:: with SMTP id ga21mr263554ejc.80.1644866797427;
-        Mon, 14 Feb 2022 11:26:37 -0800 (PST)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id 17sm2683352eja.57.2022.02.14.11.26.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 11:26:36 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        hverkuil-cisco@xs4all.nl, jonas@kwiboo.se, nicolas@ndufresne.ca,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com, Alex Bee <knaerzche@gmail.com>,
-        jc@kynesim.co.uk
-Subject: Re: Re: [RFC] media: uapi: Move HEVC stateless controls out of staging
-Date:   Mon, 14 Feb 2022 20:26:34 +0100
-Message-ID: <2302767.NG923GbCHz@kista>
-In-Reply-To: <903ca214-9576-33aa-8412-7c71c9d8ac09@collabora.com>
-References: <20220201123439.353854-1-benjamin.gaignard@collabora.com> <8038233.T7Z3S40VBb@kista> <903ca214-9576-33aa-8412-7c71c9d8ac09@collabora.com>
+        Mon, 14 Feb 2022 15:27:08 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE3113F88A
+        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 12:26:32 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 314CFFEF;
+        Mon, 14 Feb 2022 20:20:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644866447;
+        bh=sRzz8zpmSYgZtGxXFX1JA34VsILqA+nvLAW+MgHC/ZI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SxlbHR/l5uXmaq94rv9CzaiQh4vgeTcFvcueuhGfExTZm4h8vYEVZvInQJKHlTFV7
+         0qvjKGgBUZHQt4wcnTiHcaLgTl4+OpIJYQZtY0s4ebBANCHaucvhjsKAGMDCM2qAtQ
+         nEz11Wt2ddIP1JWF15iKm3Ky0Sn1xhX+3NH2m/u0=
+Date:   Mon, 14 Feb 2022 21:20:41 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     slongerbeam@gmail.com, p.zabel@pengutronix.de, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl, martin.kepplinger@puri.sm,
+        rmfrfs@gmail.com, xavier.roumegue@oss.nxp.com,
+        alexander.stein@ew.tq-group.com, dorota.czaplejewicz@puri.sm,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 4/8] staging: media: imx: Define per-SoC info
+Message-ID: <YgqriZJsq9faa6gQ@pendragon.ideasonboard.com>
+References: <20220214184318.409208-1-jacopo@jmondi.org>
+ <20220214184318.409208-5-jacopo@jmondi.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220214184318.409208-5-jacopo@jmondi.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dne ponedeljek, 14. februar 2022 ob 18:25:01 CET je Benjamin Gaignard=20
-napisal(a):
->=20
-> Le 13/02/2022 =C3=A0 12:33, Jernej =C5=A0krabec a =C3=A9crit :
-> > Hi Benjamin,
-> >
-> > CC: Alex, John
-> >
-> > Sorry for late response, but I've been very busy last week.
-> >
-> > First of all, thank you for doing this! It's about time that HEVC moves
-> > forward.
-> >
-> > Dne torek, 01. februar 2022 ob 13:34:39 CET je Benjamin Gaignard=20
-napisal(a):
-> >> The HEVC stateless 'uAPI' was staging and marked explicitly in the
-> >> V4L2 specification that it will change and is unstable.
-> >>
-> >> Note that these control IDs were never exported as a public API,
-> >> they were only defined in kernel-local headers (hevc-ctrls.h).
-> >>
-> >> While moving the controls out of staging they are renamed and
-> >> control IDs get new numbers.
-> >> Drivers (Hantro, Cedrus) and Documentation are updated accordaly.
-> > accordaly -> accordingly
-> >
-> >> Additional structures fields has been added for RKVDEC driver usage.
-> > You should do separate patch for that, preceding this one. One patch=20
-should
-> > only do one thing.
->=20
-> I will do that in v2
->=20
-> >
-> > I also suggest that you add additional patch for removing bit_size fiel=
-d in
-> > struct v4l2_ctrl_hevc_slice_params. Similar fields were already removed=
-=20
-from
-> > MPEG2 and H264 structures. Bit size can be deduced from output buffer s=
-ize=20
-and
-> > it doesn't hurt if bit size in Cedrus is set to bigger value than actua=
-l=20
-slice
-> > bit size.
->=20
-> ok
->=20
-> >
-> >> Hantro dedicated control is moving to hantro-media.h
-> >> Since hevc-ctrls.h content has been dispatched in others file, remove =
-it.
-> >>
-> >> fluster tests results on IMX8MQ is 77/147 for HEVC codec.
-> >>
-> >> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> > Note that Cedrus still needs additional information in order to decode=
-=20
-some
-> > HEVC videos. Missing info is num_entry_point_offsets and list of all
-> > entry_point_offset_minus1 (obviously, num_entry_point_offsets in size).
-> >
-> > I suggest that this is represented in a new control, which would use=20
-dynamic
-> > array feature, written by Hans. While Cedrus supports max. 256 entries,=
- it=20
-can
-> > be much bigger in theory, but in reality, it's much smaller (like 4-8
-> > entries).
->=20
-> I haven't seen yet any user for these fields but I will create a new cont=
-rol=20
-like
-> #define V4L2_CID_STATELESS_HEVC_ENTRY_POINT	(V4L2_CID_CODEC_STATELESS_BAS=
-E +=20
-407)
->=20
-> struct v4l2_ctrl_hevc_entry_point_offset {
-> 	__u32	entry_point_offset_minus1;
-> };
+Hi Jacopo,
 
-Yeah, Cedrus is currently the only mainline driver that needs that in order=
- to=20
-fully work. I think John used num_entry_point_offsets in his (out of tree) =
-RPi=20
-HEVC decoding driver too.
+Thank you for the patch.
 
-Wouldn't be easier to just use u32 directly? This is just array of numbers,=
- so=20
-nothing else will be added in that struct...
+On Mon, Feb 14, 2022 at 07:43:14PM +0100, Jacopo Mondi wrote:
+> Define the imx-media-info structure which contains CSI configuration
+> parameter that depend on the SoC version the peripheral is integrated
+> in.
+> 
+> Replace the existing 'model' field with the newly defined structure.
+> 
+> Only define the SoC id and the supported pixel sampling modes for the
+> moment.
+> 
+> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+> ---
+>  drivers/staging/media/imx/imx-media.h      | 44 ++++++++++++++++++++++
+>  drivers/staging/media/imx/imx7-media-csi.c | 44 ++++++++++++++--------
+>  2 files changed, 73 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+> index f263fc3adbb9..1b0b660413cb 100644
+> --- a/drivers/staging/media/imx/imx-media.h
+> +++ b/drivers/staging/media/imx/imx-media.h
+> @@ -18,6 +18,16 @@
+>  #define IMX_MEDIA_DEF_PIX_WIDTH		640
+>  #define IMX_MEDIA_DEF_PIX_HEIGHT	480
+>  
+> +/*
+> + * Enumeration of the SoC models the peripheral is integrated in.
+> + */
+> +enum soc_id {
+> +	IMX6UL,
+> +	IMX7,
+> +	IMX8MM,
+> +	IMX8MQ,
 
-Anyway, once you add this, I'll quickly update driver to take advantage of =
-it.
+Those names are too generic.
 
->=20
-> and add it in the documentation:
-> ``V4L2_CID_STATELESS_HEVC_ENTRY_POINT (struct)``
->      Specifies the i-th entry point offset in bytes and is represented by
->      offset_len_minus1 plus 1 bits.
->      This control is a dynamically sized array. The number of entry point
->      offsets is reported by the ``elems`` field.
->      This bitstream parameter is defined according to :ref:`hevc`.
->      They are described in section 7.4.7.1 "General slice segment header
->      semantics" of the specification.
->=20
-> >
-> > Last but not least, data_bit_offset should be better defined. Currently=
- it
-> > points right after last header bit, just like Cedrus needs it. However,=
-=20
-there
-> > is padding after that, at least 1 bit and 8 bits at most, so slice data=
-=20
-always
-> > starts from byte aligned address. It probably make sense to rework that=
-=20
-field
-> > to be byte offset, not bit, just like in VA-API. Note that RPi HEVC dri=
-ver=20
-also
-> > uses byte aligned address directly. Cedrus would need some kind of=20
-workaround
-> > and only one that works is this one:
-> > https://github.com/bootlin/libva-v4l2-request/blob/master/src/h265.c#L1=
-91-L209
->=20
-> If Cedrus driver is happy with this definition I will keep it like that.
-> When providing offset in bit is more accurate and any driver can align th=
-e=20
-value
-> if needed, the reverse (byte -> bit) isn't possible.
+> +};
+> +
+>  /*
+>   * Enumeration of the IPU internal sub-devices
+>   */
+> @@ -141,10 +151,44 @@ struct imx_media_pad_vdev {
+>  	struct list_head list;
+>  };
+>  
+> +/*
+> + * enum sample_mode_id - Define the CSI Rx queue sample size
+> + *
+> + * The pixel sampling mode defines the possible sampling methods from the
+> + * CSI Rx queue to the next processing block of the capture pipeline.
+> + *
+> + * The supported methods depends on the SoC model and on synthesis time
+> + * configurations.
+> + *
+> + * @MODE_SINGLE: Single pixel mode sampling
+> + * @MODE_DUAL: Double pixel mode sampling
+> + * @MODE_QUAD: Quad pixel mode sampling
+> + */
+> +enum sample_mode_id {
+> +	MODE_SINGLE = BIT(0),
+> +	MODE_DUAL = BIT(1),
+> +	MODE_QUAD = BIT(2),
 
-If I'm not mistaken, HEVC standard actually requires that slice data starts=
- at=20
-byte aligned address, so nothing would be lost for correctness of uAPI.
+Here too.
 
-I already had this discussion with John and IIRC conclusion was to have byt=
-e=20
-aligned value here. John, can you please confirm if my interpretation is=20
-correct?
+> +};
 
-Best regards,
-Jernej
+Let's limit this to the imx7-media-csi driver, it's unrelated to the
+i.MX6 IPUv3 and should not be part of common helpers. It doesn't seem
+like any subsequent patch in this series use the sample mode or the
+soc_id in common helpers, so it should hopefully not be a bit issue.
 
->=20
-> Regards,
-> Benjamin
->=20
-> >
-> > Best regards,
-> > Jernej
-> >
-> >
->=20
+I would also like to see a comment somewhere (in this patch or one of
+the subsequent ones) that explains in more details how the CSIS and CSI
+bridge are connected, and how various bits affect data signal routing
+between the two. I can help if necessary.
 
+> +/*
+> + * Information and configurations dependent on the SoC the peripheral is
+> + * integrated in.
+> + *
+> + * @soc_id: The SoC identifier. See &enum soc_id.
+> + * @sample_modes: Mask of supported pixel modes. See &enum sample_mode_id.
+> + */
+> +struct imx_media_info {
+> +	enum soc_id soc_id;
+> +	u8 sample_modes;
+> +};
+> +
+>  struct imx_media_dev {
+>  	struct media_device md;
+>  	struct v4l2_device  v4l2_dev;
+>  
+> +	/* Per-model information. */
+> +	const struct imx_media_info *info;
+> +
+>  	/* the pipeline object */
+>  	struct media_pipeline pipe;
+>  
+> diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+> index 59100e409709..112096774961 100644
+> --- a/drivers/staging/media/imx/imx7-media-csi.c
+> +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> @@ -159,12 +159,6 @@
+>  #define CSI_CSICR18			0x48
+>  #define CSI_CSICR19			0x4c
+>  
+> -enum imx_csi_model {
+> -	IMX7_CSI_IMX7 = 0,
+> -	IMX7_CSI_IMX8MQ,
+> -	IMX7_CSI_IMX8MM,
+> -};
 
+I think you can keep this instead of soc_id.
+
+> -
+>  struct imx7_csi {
+>  	struct device *dev;
+>  	struct v4l2_subdev sd;
+> @@ -200,8 +194,6 @@ struct imx7_csi {
+>  	bool is_csi2;
+>  
+>  	struct completion last_eof_completion;
+> -
+> -	enum imx_csi_model model;
+>  };
+>  
+>  static struct imx7_csi *
+> @@ -562,6 +554,8 @@ static void imx7_csi_baseaddr_switch_on_second_frame(struct imx7_csi *csi)
+>  
+>  static void imx7_csi_enable(struct imx7_csi *csi)
+>  {
+> +	struct imx_media_dev *imxmd = csi->imxmd;
+> +
+>  	/* Clear the Rx FIFO and reflash the DMA controller. */
+>  	imx7_csi_rx_fifo_clear(csi);
+>  	imx7_csi_dma_reflash(csi);
+> @@ -576,7 +570,7 @@ static void imx7_csi_enable(struct imx7_csi *csi)
+>  	imx7_csi_dmareq_rff_enable(csi);
+>  	imx7_csi_hw_enable(csi);
+>  
+> -	if (csi->model == IMX7_CSI_IMX8MQ)
+> +	if (imxmd->info->soc_id == IMX8MQ)
+>  		imx7_csi_baseaddr_switch_on_second_frame(csi);
+>  }
+>  
+> @@ -1181,8 +1175,6 @@ static int imx7_csi_probe(struct platform_device *pdev)
+>  	if (IS_ERR(csi->regbase))
+>  		return PTR_ERR(csi->regbase);
+>  
+> -	csi->model = (enum imx_csi_model)(uintptr_t)of_device_get_match_data(&pdev->dev);
+> -
+>  	spin_lock_init(&csi->irqlock);
+>  	mutex_init(&csi->lock);
+>  
+> @@ -1202,6 +1194,8 @@ static int imx7_csi_probe(struct platform_device *pdev)
+>  	}
+>  	platform_set_drvdata(pdev, &csi->sd);
+>  
+> +	imxmd->info = of_device_get_match_data(dev);
+> +
+>  	ret = imx_media_of_add_csi(imxmd, node);
+>  	if (ret < 0 && ret != -ENODEV && ret != -EEXIST)
+>  		goto cleanup;
+> @@ -1276,11 +1270,31 @@ static int imx7_csi_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +static const struct imx_media_info imx8mq_info = {
+> +	.soc_id = IMX8MQ,
+> +	.sample_modes = MODE_SINGLE,
+> +};
+> +
+> +static const struct imx_media_info imx8mm_info = {
+> +	.soc_id = IMX8MM,
+> +	.sample_modes = MODE_SINGLE | MODE_DUAL,
+> +};
+> +
+> +static const struct imx_media_info imx7_info = {
+> +	.soc_id = IMX7,
+> +	.sample_modes = MODE_SINGLE,
+> +};
+> +
+> +static const struct imx_media_info imx6ul_info = {
+> +	.soc_id = IMX6UL,
+> +	.sample_modes = MODE_SINGLE,
+> +};
+> +
+>  static const struct of_device_id imx7_csi_of_match[] = {
+> -	{ .compatible = "fsl,imx8mq-csi", .data = (void *)IMX7_CSI_IMX8MQ },
+> -	{ .compatible = "fsl,imx8mm-csi", .data = (void *)IMX7_CSI_IMX8MM },
+> -	{ .compatible = "fsl,imx7-csi", .data = (void *)IMX7_CSI_IMX7 },
+> -	{ .compatible = "fsl,imx6ul-csi", .data = (void *)IMX7_CSI_IMX7 },
+> +	{ .compatible = "fsl,imx8mq-csi", .data = &imx8mq_info },
+> +	{ .compatible = "fsl,imx8mm-csi", .data = &imx8mm_info },
+> +	{ .compatible = "fsl,imx7-csi", .data = &imx7_info },
+> +	{ .compatible = "fsl,imx6ul-csi", .data = &imx6ul_info },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, imx7_csi_of_match);
+
+-- 
+Regards,
+
+Laurent Pinchart
