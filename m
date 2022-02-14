@@ -2,326 +2,184 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8740C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 14 Feb 2022 19:05:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 676EFC433FE
+	for <linux-media@archiver.kernel.org>; Mon, 14 Feb 2022 19:05:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbiBNTEj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Feb 2022 14:04:39 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51342 "EHLO
+        id S230151AbiBNTEk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Feb 2022 14:04:40 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiBNTET (ORCPT
+        with ESMTP id S229812AbiBNTEU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Feb 2022 14:04:19 -0500
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502F38B6F4
-        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 11:04:00 -0800 (PST)
-Received: from relay8-d.mail.gandi.net (unknown [217.70.183.201])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id E9625CEF18
-        for <linux-media@vger.kernel.org>; Mon, 14 Feb 2022 18:56:23 +0000 (UTC)
+        Mon, 14 Feb 2022 14:04:20 -0500
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387D18D6A8;
+        Mon, 14 Feb 2022 11:04:01 -0800 (PST)
+Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 812EACD6B9;
+        Mon, 14 Feb 2022 18:50:10 +0000 (UTC)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 091C81BF204;
-        Mon, 14 Feb 2022 18:55:39 +0000 (UTC)
-Date:   Mon, 14 Feb 2022 19:56:47 +0100
+        by mail.gandi.net (Postfix) with ESMTPSA id BF614E0005;
+        Mon, 14 Feb 2022 18:49:26 +0000 (UTC)
+Date:   Mon, 14 Feb 2022 19:50:35 +0100
 From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Eugen.Hristev@microchip.com
-Cc:     slongerbeam@gmail.com, laurent.pinchart@ideasonboard.com,
-        sakari.ailus@iki.fi, hverkuil-cisco@xs4all.nl,
-        mirela.rabulea@nxp.com, xavier.roumegue@oss.nxp.com,
-        tomi.valkeinen@ideasonboard.com, hugues.fruchet@st.com,
-        prabhakar.mahadev-lad.rj@bp.renesas.com, aford173@gmail.com,
-        festevam@gmail.com, jbrunet@baylibre.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 00/23] media: ov5640: Rework the clock tree
- programming for MIPI
-Message-ID: <20220214185647.tbqv4lbuf3ba4yw7@uno.localdomain>
-References: <20220210110458.152494-1-jacopo@jmondi.org>
- <a5a75d0b-7f40-39d0-a8ec-4e143c5f3b1c@microchip.com>
- <20220211112500.7p3fi2xhwutap6ak@uno.localdomain>
- <23ac37a4-a979-2dbf-32ae-012d4ff45806@microchip.com>
- <20220214143816.wbtpd2klb6wvzt3c@uno.localdomain>
- <8c39e96c-1c1f-a279-a67c-1d113153ec13@microchip.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] media: imx: Store the type of hardware
+ implementation
+Message-ID: <20220214185035.uomrdkzth7adkw5c@uno.localdomain>
+References: <20220211142752.779952-1-alexander.stein@ew.tq-group.com>
+ <20220211142752.779952-2-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8c39e96c-1c1f-a279-a67c-1d113153ec13@microchip.com>
+In-Reply-To: <20220211142752.779952-2-alexander.stein@ew.tq-group.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Eugen
+Hi Alexander, Dorota,
 
-On Mon, Feb 14, 2022 at 03:08:56PM +0000, Eugen.Hristev@microchip.com wrote:
-> On 2/14/22 4:38 PM, Jacopo Mondi wrote:
-> > Hi Eugen,
-> >
-> > On Mon, Feb 14, 2022 at 02:06:02PM +0000, Eugen.Hristev@microchip.com wrote:
-> >> On 2/11/22 1:25 PM, Jacopo Mondi wrote:
-> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >>>
-> >>> Hi Eugen
-> >>>
-> >>>           thanks very much for testing
-> >>>
-> >>> On Fri, Feb 11, 2022 at 10:09:04AM +0000, Eugen.Hristev@microchip.com wrote:
-> >>>> On 2/10/22 1:04 PM, Jacopo Mondi wrote:
-> >>>>
-> >>>> Hello Jacopo,
-> >>>>
-> >>>>> v1:
-> >>>>> https://patchwork.linuxtv.org/project/linux-media/list/?series=7249
-> >>>>>
-> >>>>> A branch for testing based on the most recent media-master is available at
-> >>>>> https://git.sr.ht/~jmondi_/linux #jmondi/media-master/ov5640-v2
-> >>>>>
-> >>>>> If anyone with a DVP setup could verify I have not broken their use case
-> >>>>> I would very much appreciate that :)
-> >>>>
-> >>>> I started testing this on my bench.
-> >>>> So far things look good.
-> >>>>
-> >>>
-> >>> \o/
-> >>>
-> >>>> To be able to test this, I have to revert this patch :
-> >>>> "media: i2c: ov5640: Remain in power down for DVP mode unless streaming"
-> >>>>
-> >>>> Otherwise the sensor will not power up when starting streaming.
-> >>>>
-> >>>>
-> >>>> I have tested several formats, as you worked more on this sensor, could
-> >>>> you tell me, does format YUYV_2x8 work in parallel mode at 1920x1080 or
-> >>>> 1024x768 ?
-> >>>
-> >>> I never tested the sensor driver with a parallel setup I'm afraid.
-> >>> The idea behind this series is that DVP shouldn't be affected and
-> >>> continue working like it did.
-> >>
-> >> Hi Jacopo,
-> >>
-> >> I was hoping that you had more information about the driver than myself.
-> >
-> > Not on DVP mode I'm sorry :(
-> >
-> >> I can tell that the parallel mode is not affected by your series from
-> >> what I've seen so far.
-> >
-> > That's great, thanks for testing.
+On Fri, Feb 11, 2022 at 03:27:44PM +0100, Alexander Stein wrote:
+> From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
 >
+> The driver covers i.MX5/6, as well as i.MX7/8 hardware.
+> Those implementations differ, e.g. in the sizes of buffers they accept.
 >
-> I found one change, before your series, I could attempt to capture BGGR
-> @ 640x480, now it looks to be gone :
+> Some functionality should be abstracted, and storing type achieves that.
 >
-> Before:
+> Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> Changes in v2:
+> * Switch back to using enum
 >
-> # v4l2-ctl -d /dev/v4l-subdev1 --list-subdev-framesizes pad=0,code=0x3001
-> ioctl: VIDIOC_SUBDEV_ENUM_FRAME_SIZE (pad=0)
->          Size Range: 160x120 - 160x120
->          Size Range: 176x144 - 176x144
->          Size Range: 320x240 - 320x240
->          Size Range: 640x480 - 640x480
->          Size Range: 720x480 - 720x480
->          Size Range: 720x576 - 720x576
->          Size Range: 1024x768 - 1024x768
->          Size Range: 1280x720 - 1280x720
->          Size Range: 1920x1080 - 1920x1080
->          Size Range: 2592x1944 - 2592x1944
+>  drivers/staging/media/imx/imx-ic-prpencvf.c   | 3 ++-
+>  drivers/staging/media/imx/imx-media-capture.c | 5 ++++-
+>  drivers/staging/media/imx/imx-media-csi.c     | 3 ++-
+>  drivers/staging/media/imx/imx-media.h         | 8 +++++++-
+>  drivers/staging/media/imx/imx7-media-csi.c    | 3 ++-
+>  5 files changed, 17 insertions(+), 5 deletions(-)
 >
+> diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
+> index 9b81cfbcd777..671bb9a681aa 100644
+> --- a/drivers/staging/media/imx/imx-ic-prpencvf.c
+> +++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
+> @@ -1266,7 +1266,8 @@ static int prp_registered(struct v4l2_subdev *sd)
 >
-> After:
+>  	priv->vdev = imx_media_capture_device_init(ic_priv->ipu_dev,
+>  						   &ic_priv->sd,
+> -						   PRPENCVF_SRC_PAD, true);
+> +						   PRPENCVF_SRC_PAD, true,
+> +						   DEVICE_TYPE_IMX56);
+>  	if (IS_ERR(priv->vdev))
+>  		return PTR_ERR(priv->vdev);
 >
-> # v4l2-ctl -d /dev/v4l-subdev1 --list-subdev-framesizes pad=0,code=0x3001
-> ioctl: VIDIOC_SUBDEV_ENUM_FRAME_SIZE (pad=0)
->          Size Range: 1280x720 - 1280x720
->          Size Range: 1920x1080 - 1920x1080
->          Size Range: 2592x1944 - 2592x1944
+> diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
+> index 93ba09236010..65dc95a48ecc 100644
+> --- a/drivers/staging/media/imx/imx-media-capture.c
+> +++ b/drivers/staging/media/imx/imx-media-capture.c
+> @@ -34,6 +34,7 @@ struct capture_priv {
 >
+>  	struct imx_media_video_dev vdev;	/* Video device */
+>  	struct media_pad vdev_pad;		/* Video device pad */
+> +	enum imx_media_device_type type;	/* Type of hardware implementation */
+>
+>  	struct v4l2_subdev *src_sd;		/* Source subdev */
+>  	int src_sd_pad;				/* Source subdev pad */
+> @@ -957,7 +958,8 @@ EXPORT_SYMBOL_GPL(imx_media_capture_device_unregister);
+>
+>  struct imx_media_video_dev *
+>  imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+> -			      int pad, bool legacy_api)
+> +			      int pad, bool legacy_api,
+> +			      enum imx_media_device_type type)
+>  {
+>  	struct capture_priv *priv;
+>  	struct video_device *vfd;
+> @@ -972,6 +974,7 @@ imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+>  	priv->src_sd_pad = pad;
+>  	priv->dev = dev;
+>  	priv->legacy_api = legacy_api;
+> +	priv->type = type;
+>
+>  	mutex_init(&priv->mutex);
+>  	INIT_LIST_HEAD(&priv->ready_q);
+> diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+> index bd7f156f2d52..d5557bb4913d 100644
+> --- a/drivers/staging/media/imx/imx-media-csi.c
+> +++ b/drivers/staging/media/imx/imx-media-csi.c
+> @@ -1803,7 +1803,8 @@ static int csi_registered(struct v4l2_subdev *sd)
+>  	}
+>
+>  	priv->vdev = imx_media_capture_device_init(priv->sd.dev, &priv->sd,
+> -						   CSI_SRC_PAD_IDMAC, true);
+> +						   CSI_SRC_PAD_IDMAC, true,
+> +						   DEVICE_TYPE_IMX56);
+>  	if (IS_ERR(priv->vdev)) {
+>  		ret = PTR_ERR(priv->vdev);
+>  		goto free_fim;
+> diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+> index f263fc3adbb9..e4c22b3ccd57 100644
+> --- a/drivers/staging/media/imx/imx-media.h
+> +++ b/drivers/staging/media/imx/imx-media.h
+> @@ -96,6 +96,11 @@ enum imx_pixfmt_sel {
+>  	PIXFMT_SEL_ANY = PIXFMT_SEL_YUV | PIXFMT_SEL_RGB | PIXFMT_SEL_BAYER,
+>  };
+>
+> +enum imx_media_device_type {
+> +	DEVICE_TYPE_IMX56,
+> +	DEVICE_TYPE_IMX78,
+> +};
+> +
 
-Right... I'm limiting SRGGB formats to only resolutions > 1280x720
-as..
+Isn't this too coarse as a distinction ?
 
+I tried adding per-soc identifiers here:
+https://lore.kernel.org/linux-media/20220214184318.409208-5-jacopo@jmondi.org/T/#u
+
+Maybe they can help ?
+
+>  struct imx_media_buffer {
+>  	struct vb2_v4l2_buffer vbuf; /* v4l buffer must be first */
+>  	struct list_head  list;
+> @@ -282,7 +287,8 @@ int imx_media_ic_unregister(struct v4l2_subdev *sd);
+>  /* imx-media-capture.c */
+>  struct imx_media_video_dev *
+>  imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
+> -			      int pad, bool legacy_api);
+> +			      int pad, bool legacy_api,
+> +			      enum imx_media_device_type type);
+>  void imx_media_capture_device_remove(struct imx_media_video_dev *vdev);
+>  int imx_media_capture_device_register(struct imx_media_video_dev *vdev,
+>  				      u32 link_flags);
+> diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+> index 32311fc0e2a4..173dd014c2d6 100644
+> --- a/drivers/staging/media/imx/imx7-media-csi.c
+> +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> @@ -1039,7 +1039,8 @@ static int imx7_csi_registered(struct v4l2_subdev *sd)
+>  	}
 >
-> However trying it without your patches, it doesn't work , I don't
-
-... they do not work for me either.
-
-So if they were not working before, maybe it's right not to enumerate
-them ?
-
-> receive frames, and I can't even set 1280x720 at all, I get -EINVAL
-
-Be aware that DVP mode prevents you from setting a format if the
-currently selected framerate is said to be "not supported" for that
-format
-
+>  	csi->vdev = imx_media_capture_device_init(csi->sd.dev, &csi->sd,
+> -						  IMX7_CSI_PAD_SRC, false);
+> +						  IMX7_CSI_PAD_SRC, false,
+> +						  DEVICE_TYPE_IMX78);
+>  	if (IS_ERR(csi->vdev))
+>  		return PTR_ERR(csi->vdev);
 >
-> So I assume you have been reworking the frame sizes.
->
-> With your series, I have tested RGGB at 1280x720 , 1920x1080 .
-> I also tested YUYV at 640x480 and RGB565_LE at 640x480.
->
-> I can't go higher with the YUYV/RGB565, I don't receive frames anymore.
-
-Ah, I wonder if
-07b49ac59fd9 media: ov5640: Fix durations to comply with FPS
-82aebf4b7314 media: ov5640: Rework analog crop rectangles
-
-Might have impacted DVP...
-
-Should I keep separate fields for MIPI mode and leave the totals for
-DVP untouched ?
-
-Thanks again for your very useful testing
-
-
-> I can't go higher with the bayer to 2592x1944 . But this did not work
-> before your patches either.
-> >
-> >>
-> >>>
-> >>>> I managed to get it working fine at 640x480 .
-> >>>>
-> >>>> The sensor looks to report valid framesizes for this mbus code :
-> >>>>
-> >>>> # v4l2-ctl -d /dev/v4l-subdev1 --list-subdev-mbus-codes
-> >>>> \ioctl: VIDIOC_SUBDEV_ENUM_MBUS_CODE (pad=0)
-> >>>>            0x4001: MEDIA_BUS_FMT_JPEG_1X8
-> >>>>            0x2006: MEDIA_BUS_FMT_UYVY8_2X8
-> >>>>            0x200f: MEDIA_BUS_FMT_UYVY8_1X16
-> >>>>            0x2008: MEDIA_BUS_FMT_YUYV8_2X8
-> >>>>            0x2011: MEDIA_BUS_FMT_YUYV8_1X16
-> >>>>            0x1008: MEDIA_BUS_FMT_RGB565_2X8_LE
-> >>>>            0x1007: MEDIA_BUS_FMT_RGB565_2X8_BE
-> >>>>            0x1017: MEDIA_BUS_FMT_RGB565_1X16
-> >>>>            0x100a: MEDIA_BUS_FMT_RGB888_1X24
-> >>>>            0x1013: MEDIA_BUS_FMT_BGR888_1X24
-> >>>>            0x3001: MEDIA_BUS_FMT_SBGGR8_1X8
-> >>>>            0x3013: MEDIA_BUS_FMT_SGBRG8_1X8
-> >>>>            0x3002: MEDIA_BUS_FMT_SGRBG8_1X8
-> >>>>            0x3014: MEDIA_BUS_FMT_SRGGB8_1X8
-> >>>> # v4l2-ctl -d /dev/v4l-subdev1 --list-subdev-framesizes pad=0,code=0x2008
-> >>>> ioctl: VIDIOC_SUBDEV_ENUM_FRAME_SIZE (pad=0)
-> >>>>            Size Range: 160x120 - 160x120
-> >>>>            Size Range: 176x144 - 176x144
-> >>>>            Size Range: 320x240 - 320x240
-> >>>>            Size Range: 640x480 - 640x480
-> >>>>            Size Range: 720x480 - 720x480
-> >>>>            Size Range: 720x576 - 720x576
-> >>>>            Size Range: 1024x768 - 1024x768
-> >>>>            Size Range: 1280x720 - 1280x720
-> >>>>            Size Range: 1920x1080 - 1920x1080
-> >>>>            Size Range: 2592x1944 - 2592x1944
-> >>>> #
-> >>>>
-> >>>> but the ISC does not receive any frames at 1024x768 and 1920x1080.
-> >>>
-> >>> Are 1080p and 1024x768 working without this series applied on your
-> >>> setup ?
-> >>
-> >> I remember they weren't working before either.
-> >>
-> >> I don't know exactly to which patches to add my Tested-by , as I have
-> >> not tested the explicit patch behavior for each patch (e.g. where you
-> >> add HBLANK control, I have not tested that ).
-> >>
-> >
-> > I think it's good enough making sure I have not broke DVP.
-> >
-> > As you can see the driver now behaves in two different ways in DVP and
-> > MIPI mode. The DVP works as it used to, and the framerate is
-> > controlled by s_frame_interval, the frame size is fixed and the PCLK
-> > is computed dyanically to accomodate the required FPS. In MIPI mode the
-> > framerate is controlled by changing the vertical blankings. To each
-> > mode a pixel rate is assigned and userspace changes the frame duration
-> > by changing blankings. The most obvious gain is that the frame rate is
-> > controllable in a continuous interval instead of being limited to a
-> > few fixed values. It is my understanding that all drivers should be
-> > moved to this model and s_frame_intervall should be dropped, but
-> > unfortunately some bridge drivers in mainline still deman that.
-> >
-> > If you are interested, I think the DVP mode should be moved to use the
-> > same mecahnism as MIPI mode. I can't test so I haven't done so in this
-> > series.
-> >
-> > For now I think it's enough to make sure there are no regressions in
-> > DVP mode.
-> >
-> > For the tag, I think it would be appropriate to add it to the
-> > following one:
-> >
-> > 91ae667b0d47 media: ov5640: Limit frame_interval to DVP mode only
-> >
-> >> Is there something particular you would like me to try , except my usual
-> >> image captures ?
-> >
-> > RGB888 is weird on both the platforms I've tested on and I cannot get
-> > colors right. Does your platform support RGB888 ?
->
-> I can't test this one unfortunately. It's a 1X24 . I have only 8 bits
-> connected, so unless you can make this a 3x8 , there isn't anything I
-> can do.
->
-> >
-> > Thanks
-> >    j
-> >
-> >
-> >>
-> >>
-> >> Eugen
-> >>
-> >>>
-> >>> Thanks again for testin!
-> >>>
-> >>>>
-> >>>>
-> >>>> What I can say is that the raw bayer format works at 1920x1080 , frames
-> >>>> are received correctly.
-> >>>>
-> >>>> Thanks,
-> >>>> Eugen
-> >>>>
-> >>>>>
-> >>>>> v1 -> v2:
-> >>>>> - rework the modes definition to process the full pixel array
-> >>>>> - rework get_selection to report the correct BOUND and DEFAULT targets
-> >>>>> - implement init_cfg
-> >>>>> - minor style changes as suggested by Laurent
-> >>>>> - test with 1 data lane
-> >>>>>
-> >>>>> Thanks
-> >>>>>       j
-> >>>>>
-> >>>>> Jacopo Mondi (23):
-> >>>>>      media: ov5640: Add pixel rate to modes
-> >>>>>      media: ov5604: Re-arrange modes definition
-> >>>>>      media: ov5640: Add ov5640_is_csi2() function
-> >>>>>      media: ov5640: Associate bpp with formats
-> >>>>>      media: ov5640: Add LINK_FREQ control
-> >>>>>      media: ov5640: Update pixel_rate and link_freq
-> >>>>>      media: ov5640: Rework CSI-2 clock tree
-> >>>>>      media: ov5640: Rework timings programming
-> >>>>>      media: ov5640: Fix 720x480 in RGB888 mode
-> >>>>>      media: ov5640: Rework analog crop rectangles
-> >>>>>      media: ov5640: Re-sort per-mode register tables
-> >>>>>      media: ov5640: Remove ov5640_mode_init_data
-> >>>>>      media: ov5640: Add HBLANK control
-> >>>>>      media: ov5640: Add VBLANK control
-> >>>>>      media: ov5640: Fix durations to comply with FPS
-> >>>>>      media: ov5640: Implement init_cfg
-> >>>>>      media: ov5640: Implement get_selection
-> >>>>>      media: ov5640: Limit frame_interval to DVP mode only
-> >>>>>      media: ov5640: Register device properties
-> >>>>>      media: ov5640: Add RGB565_1X16 format
-> >>>>>      media: ov5640: Add RGB888/BGR888 formats
-> >>>>>      media: ov5640: Restrict sizes to mbus code
-> >>>>>      media: ov5640: Adjust format to bpp in s_fmt
-> >>>>>
-> >>>>>     drivers/media/i2c/ov5640.c | 1143 ++++++++++++++++++++++++++----------
-> >>>>>     1 file changed, 830 insertions(+), 313 deletions(-)
-> >>>>>
-> >>>>> --
-> >>>>> 2.35.0
-> >>>>>
-> >>>>
-> >>
+> --
+> 2.25.1
 >
