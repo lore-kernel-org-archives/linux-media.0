@@ -2,94 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 344D3C433F5
-	for <linux-media@archiver.kernel.org>; Tue, 15 Feb 2022 10:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C34B2C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 15 Feb 2022 11:00:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235787AbiBOKxp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Feb 2022 05:53:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42632 "EHLO
+        id S236831AbiBOLAx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Feb 2022 06:00:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbiBOKxo (ORCPT
+        with ESMTP id S236851AbiBOLAq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Feb 2022 05:53:44 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC05C6220
-        for <linux-media@vger.kernel.org>; Tue, 15 Feb 2022 02:53:34 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7622A315
-        for <linux-media@vger.kernel.org>; Tue, 15 Feb 2022 11:53:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644922413;
-        bh=+TQJA54ayy0F3inRhdEcnIEL2S9E21X1Ea+l3DCSGhs=;
-        h=Date:From:To:Subject:From;
-        b=qxbOkScwJK9doQ1T2fiNizOpIOexp+oC0Qc6kOMosTTO2cVF9uiarMnURXcDeB/HA
-         cMV6ubtXsIEzOVJRMfehVLjXlSX+bzx3dJJcPRrTPdqDIKisGYajz8xY/IYdYigADx
-         Q1cbN2nEAOuIYYHUFWUNh/WjBu4ohcFvubPk0dCE=
-Date:   Tue, 15 Feb 2022 12:53:26 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL FOR v5.18] Misc V4L2 driver changes
-Message-ID: <YguGJi0Z7cKu/Yuz@pendragon.ideasonboard.com>
+        Tue, 15 Feb 2022 06:00:46 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6145DF9562
+        for <linux-media@vger.kernel.org>; Tue, 15 Feb 2022 03:00:36 -0800 (PST)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id C8F71240011;
+        Tue, 15 Feb 2022 11:00:32 +0000 (UTC)
+Date:   Tue, 15 Feb 2022 12:01:41 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [RFC PATCH 7/8] media: v4l2-mediabus: Drop legacy
+ V4L2_MBUS_CSI2_CHANNEL_* flags
+Message-ID: <20220215110141.se2gyvfb2xvez2vn@uno.localdomain>
+References: <20220103162414.27723-1-laurent.pinchart+renesas@ideasonboard.com>
+ <20220103162414.27723-8-laurent.pinchart+renesas@ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <20220103162414.27723-8-laurent.pinchart+renesas@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+Hi Laurent
 
-The following changes since commit 68a99f6a0ebfe9101ea79ba5af1c407a5ad4f629:
+On Mon, Jan 03, 2022 at 06:24:13PM +0200, Laurent Pinchart wrote:
+> The V4L2_MBUS_CSI2_CHANNEL_* flags are a legacy API. Only
+> V4L2_MBUS_CSI2_CHANNEL_0 is used, set in a single driver, and never
+> read. Drop those flags. Virtual channel information should be conveyed
+> through frame descriptors instead.
 
-  media: lirc: report ir receiver overflow (2022-01-28 19:32:50 +0100)
+I see one more user in the latest media master
+drivers/media/platform/atmel/microchip-csi2dc.c:        if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_0)
 
-are available in the Git repository at:
+With that fixed
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 
-  git://linuxtv.org/pinchartl/media.git tags/v4l2-next-20220215
+Thanks
+  j
 
-for you to fetch changes up to 90b5eb835fef2da635c459b78c5c81525ca26d47:
-
-  media: xilinx: csi2rxss: Use mipi-csi2.h (2022-02-15 12:52:09 +0200)
-
-----------------------------------------------------------------
-Misc V4L2 driver changes
-
-----------------------------------------------------------------
-Alexander Stein (1):
-      staging: media: imx: imx7_mipi_csis: Store colorspace in set_fmt as well
-
-Laurent Pinchart (4):
-      media: Define MIPI CSI-2 data types in a shared header file
-      media: rcar-isp: Use mipi-csi2.h
-      media: rcar-csi2: Use mipi-csi2.h
-      media: xilinx: csi2rxss: Use mipi-csi2.h
-
-Martin Kepplinger (2):
-      dt-binding: media: hynix,hi846: use $defs/port-base port description
-      dt-bindings: media: hynix,hi846: add link-frequencies description
-
-Nikita Yushchenko (1):
-      media: vsp1: mask interrupts before enabling
-
-Paul Pawlowski (1):
-      media: uvcvideo: Add support for Apple T2-attached FaceTime HD Camera
-
-Zhou Qingyang (1):
-      media: ti-vpe: cal: Fix a NULL pointer dereference in cal_ctx_v4l2_init_formats()
-
- .../devicetree/bindings/media/i2c/hynix,hi846.yaml |   6 +-
- drivers/media/platform/rcar-isp.c                  |  32 +++++--
- drivers/media/platform/rcar-vin/rcar-csi2.c        |  57 ++++++++---
- drivers/media/platform/ti-vpe/cal-video.c          |   3 +
- drivers/media/platform/vsp1/vsp1_drv.c             |  37 +++++--
- drivers/media/platform/xilinx/xilinx-csi2rxss.c    | 106 +++++++++------------
- drivers/media/usb/uvc/uvc_driver.c                 |   9 ++
- drivers/staging/media/imx/imx7-mipi-csis.c         |   4 +
- include/media/mipi-csi2.h                          |  45 +++++++++
- 9 files changed, 212 insertions(+), 87 deletions(-)
- create mode 100644 include/media/mipi-csi2.h
-
--- 
-Regards,
-
-Laurent Pinchart
+>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> ---
+>  drivers/media/i2c/adv7180.c   |  1 -
+>  include/media/v4l2-mediabus.h | 10 ----------
+>  2 files changed, 11 deletions(-)
+>
+> diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
+> index 286f5017d9c3..3ff37a550810 100644
+> --- a/drivers/media/i2c/adv7180.c
+> +++ b/drivers/media/i2c/adv7180.c
+> @@ -786,7 +786,6 @@ static int adv7180_get_mbus_config(struct v4l2_subdev *sd,
+>  		cfg->type = V4L2_MBUS_CSI2_DPHY;
+>  		cfg->bus.mipi_csi2.num_data_lanes = 1;
+>  		cfg->bus.mipi_csi2.flags =
+> -				V4L2_MBUS_CSI2_CHANNEL_0 |
+>  				V4L2_MBUS_CSI2_CONTINUOUS_CLOCK;
+>  	} else {
+>  		/*
+> diff --git a/include/media/v4l2-mediabus.h b/include/media/v4l2-mediabus.h
+> index 44195ceeccca..c6626a22b394 100644
+> --- a/include/media/v4l2-mediabus.h
+> +++ b/include/media/v4l2-mediabus.h
+> @@ -67,20 +67,10 @@
+>  #define V4L2_MBUS_DATA_ENABLE_LOW		BIT(15)
+>
+>  /* Serial flags */
+> -/* CSI-2 Virtual Channel identifiers. */
+> -#define V4L2_MBUS_CSI2_CHANNEL_0		BIT(4)
+> -#define V4L2_MBUS_CSI2_CHANNEL_1		BIT(5)
+> -#define V4L2_MBUS_CSI2_CHANNEL_2		BIT(6)
+> -#define V4L2_MBUS_CSI2_CHANNEL_3		BIT(7)
+>  /* Clock non-continuous mode support. */
+>  #define V4L2_MBUS_CSI2_CONTINUOUS_CLOCK		BIT(8)
+>  #define V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK	BIT(9)
+>
+> -#define V4L2_MBUS_CSI2_CHANNELS		(V4L2_MBUS_CSI2_CHANNEL_0 | \
+> -					 V4L2_MBUS_CSI2_CHANNEL_1 | \
+> -					 V4L2_MBUS_CSI2_CHANNEL_2 | \
+> -					 V4L2_MBUS_CSI2_CHANNEL_3)
+> -
+>  #define V4L2_MBUS_CSI2_MAX_DATA_LANES		8
+>
+>  /**
+> --
+> Regards,
+>
+> Laurent Pinchart
+>
