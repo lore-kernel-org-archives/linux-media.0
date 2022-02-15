@@ -2,62 +2,64 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE154C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 15 Feb 2022 18:14:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0C40C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 15 Feb 2022 18:14:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240520AbiBOSO0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Feb 2022 13:14:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60988 "EHLO
+        id S242943AbiBOSO3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Feb 2022 13:14:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235191AbiBOSOW (ORCPT
+        with ESMTP id S242937AbiBOSO1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Feb 2022 13:14:22 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98B111987F;
-        Tue, 15 Feb 2022 10:14:11 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id d10so46023384eje.10;
-        Tue, 15 Feb 2022 10:14:11 -0800 (PST)
+        Tue, 15 Feb 2022 13:14:27 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B76611987F;
+        Tue, 15 Feb 2022 10:14:16 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id lw4so15223809ejb.12;
+        Tue, 15 Feb 2022 10:14:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=apxf8RnDTER51NejxBNcsmrp9/WJHvi6B/qWgwFGF6E=;
-        b=BGpEPkh0qc5saHIOHTAOQ8O/nQJGfQ0h/pR2SwgilnsiHHC9eYbAPnWoQmzaenQAl7
-         hL0DNtqvUMAD1ZxURJlgs2fsFeVm/Dw2iXwbipnA8b5FV3C8sQRCgQxBzPZa9b10xSux
-         MOKMRMJqFgyx/KIlZk0A+QZt3a+28Dcy1xMQS08EkV3Rz8FnXiMu2nYmFA/7Nah59igK
-         0hvFk6Ed6hQEsyJIMn6PZYp7o9vsSD/Gt0phYPYvbeDD+7mh3J+OdxLMPEAD86ct94JN
-         CuDfLItjkmSUUTP/uLt3e5nxzJkS0dwXBgej1CipklkxwIVhLhrS2YPY5Uxt6RxPzZhw
-         zoyA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ve8tBclI5IMrrMI15B03jvD+eu/iK6m1qrk9Pz//fBI=;
+        b=YNGCUR4gBl+cRj8ZDXavs6V5oA2FX/QUEX8ZsmLGhYPTyLe52OsMU8Zi5s3AJ+rw8N
+         8C+z2K90YyucBK+6AuTmQReOR9IJYlQceYoSCxL01T6pps6H9Qkgfl4VIrngB2XIfr/b
+         ORmRCmGZVTMVJrFnEcdK/n946xLx6m3AsP0xBqB3AwH1wSUkpH6H7wudaoserf2YRUvM
+         oG1RyJSkbqqI8W8uuetSlvcDF3wp0pKHPWhE3aFfoOpgLKbUton15LbAnha6Qm/Ua8dd
+         8M8Uc8tRxjf26rQ6QqAYBjYYmy0u/yXaVX5aI/Cb8CnO4o0eaPmKVeUP3t9nygh9b6CO
+         Z4tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=apxf8RnDTER51NejxBNcsmrp9/WJHvi6B/qWgwFGF6E=;
-        b=wjXIB8jpJ/2oyQQIpNxe3lmxACppJbGMwbAZcLt1miRnzZTD5lRXkBavmGws+ym8aE
-         NbevqxQXm+c/wKM3eaBD2jZ9gvHxHqn5MJt4SB5yngDrb2fwjGr2FJdn4jxRHDTUo8Tp
-         LphW9u3STtU39XR/eJ60TJINaizIM5IvalyjCkA/4W+T/FPCY9g/TBaP5W4ImMgaY1Hq
-         yApvsqV8h70sCTNfl/uY3ZhcapA0IvbCTiMTCCFhvg4s9vQ/I6oFdDDVZ0CF1Ng+Qzcs
-         Wutq12U5FyHjCN9Ow9D9fttQhYZB7rDM4LWqCdsuCa9r+TxC4SOXXWqtPHSEBhWJ7h7b
-         P8CQ==
-X-Gm-Message-State: AOAM533XbMt0X1giniYPgpnHvUTrfjazSfwixJfIrKNzd/rwpmDvePow
-        YwyU6M5SnCM8HO3v04VIYpO05FGEMKE=
-X-Google-Smtp-Source: ABdhPJzX/MqNSJfeUZpSZhgxDxuKeQrg52llpIeMg51kDWLMFPOz62Gy4NFUVq5bnRa82KEyEux49w==
-X-Received: by 2002:a17:906:31cc:: with SMTP id f12mr262423ejf.115.1644948850025;
-        Tue, 15 Feb 2022 10:14:10 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ve8tBclI5IMrrMI15B03jvD+eu/iK6m1qrk9Pz//fBI=;
+        b=OkOPlxPulSjlDt2CsvnBzzP/ME/2xUIoai5Cn/+P3dFcecaG8DqElDPn4sJq5oxuaS
+         EivmoSwfSxOd4UHCrpdkTv69US0TgiSBJDNgUHuaYt9bUiFvMwBobfTHHaN5uBQN/Prs
+         IZLbRMUZx9eQJKF5PqU2c/5/u7bOg9rrBUcHzZdrjnzMCoQ/23vjmh6AUL/nxAlCSKuM
+         Dqf3tdR7NzaIgK7UyHOPR7F2kXsk7z/CG9MhOfx69VzOIw7DkbJCJLA8Cwt2c23Ot1AP
+         bFMJx7lg/AKHMDfkarzFfi5A310HUWHO7Hw6TYOPiioACzG4cO/PoUA6B2/D/XQky/0U
+         VWnw==
+X-Gm-Message-State: AOAM531HAQ6XXWatVceCuj1kW6dDSjDID9RW9Gbc1FZ9XvZ/lkG0etFV
+        e3+cHEviP5XI3wk8/XPQaL4=
+X-Google-Smtp-Source: ABdhPJyoSFONuo6Co7zZ8pwQfFELPB8FD8jO4vB0KxDtbmUQ6rnpkUPkWrIXFuT7VIHoJlnCFPQcAg==
+X-Received: by 2002:a17:906:77db:: with SMTP id m27mr233375ejn.763.1644948854980;
+        Tue, 15 Feb 2022 10:14:14 -0800 (PST)
 Received: from X1C7EK5.wind3.hub ([151.40.80.193])
-        by smtp.gmail.com with ESMTPSA id i5sm1950497ejo.188.2022.02.15.10.14.09
+        by smtp.gmail.com with ESMTPSA id i5sm1950497ejo.188.2022.02.15.10.14.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 10:14:09 -0800 (PST)
+        Tue, 15 Feb 2022 10:14:14 -0800 (PST)
 From:   ektor5 <ek5.chimenti@gmail.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Ettore Chimenti <ek5.chimenti@gmail.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linuxfancy@googlegroups.com
-Subject: [PATCH v2 0/2] Add SECO CEC driver for MEC Based boards
-Date:   Tue, 15 Feb 2022 19:13:11 +0100
-Message-Id: <20220215181313.264698-1-ek5.chimenti@gmail.com>
+Subject: [PATCH v2 2/2] media: cec: seco: add newlines in debug messages
+Date:   Tue, 15 Feb 2022 19:13:13 +0100
+Message-Id: <20220215181313.264698-3-ek5.chimenti@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220215181313.264698-1-ek5.chimenti@gmail.com>
+References: <20220215181313.264698-1-ek5.chimenti@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -66,53 +68,236 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Ettore Chimenti <ek5.chimenti@gmail.com>
 
-Hi all,
+Newlines were missing in almost all regular and debug printk.
 
-Changes in v2:
- * Fixed a missing counter increment in the probe function.
+Signed-off-by: Ettore Chimenti <ek5.chimenti@gmail.com>
+---
+ drivers/media/cec/platform/seco/seco-cec.c | 54 +++++++++++-----------
+ 1 file changed, 27 insertions(+), 27 deletions(-)
 
-Here's the patch for the SECO CEC driver for MAC-based Boards. The
-boards have a Microchip MEC microcontroller as a general-purpose
-Embedded Controller, and they communicate through a mailbox interface.
-
-The EC used is more powerful and enables management of several CEC lines
-at once (up to 4). The focus is on Intel-based SBC-D61 board and UDOO
-Vision (SBC-D02) in this version, as the UDOO BOLT firmware
-implementation is still ongoing. Moreover, there is no CEC Notifier
-functionality inside amdgpu yet.
-
-Similarly to the previous implementation, there are several commands
-that can be issued, like WRITE and READ commands for sending and
-receiving CEC messages. The retrieval and send confirmation are
-triggered by a single GPIO interrupt connected directly to the SoC.
-
-After every STATUS command, the MEC returns a data struct with all the
-channels status, and it automatically clears the interrupt state afterwards.
-
-In this implementation, the driver sends also the physical address to
-the EC. This way it is possible to wake up the board upon receiving an
-SET_STREAM_PATH with the matching physical address when the CPU is in S3
-or S5 (depending on BIOS settings). The only time that it seems to be
-already set is in the LA assignment (in the .enable callback it is not
-set yet).
-
-Best Regards,
-	Ettore
-
-Ettore Chimenti (2):
-  media: cec: add SECO MEC-based cec driver
-  media: cec: seco: add newlines in debug messages
-
- MAINTAINERS                                   |   2 +
- drivers/media/cec/platform/Kconfig            |  22 +-
- drivers/media/cec/platform/seco/Makefile      |   3 +-
- drivers/media/cec/platform/seco/seco-cec.c    |  54 +-
- drivers/media/cec/platform/seco/seco-meccec.c | 824 ++++++++++++++++++
- drivers/media/cec/platform/seco/seco-meccec.h | 130 +++
- 6 files changed, 1005 insertions(+), 30 deletions(-)
- create mode 100644 drivers/media/cec/platform/seco/seco-meccec.c
- create mode 100644 drivers/media/cec/platform/seco/seco-meccec.h
-
+diff --git a/drivers/media/cec/platform/seco/seco-cec.c b/drivers/media/cec/platform/seco/seco-cec.c
+index ae138cc253fd..78856a55e637 100644
+--- a/drivers/media/cec/platform/seco/seco-cec.c
++++ b/drivers/media/cec/platform/seco/seco-cec.c
+@@ -129,7 +129,7 @@ static int secocec_adap_enable(struct cec_adapter *adap, bool enable)
+ 		if (status)
+ 			goto err;
+ 
+-		dev_dbg(dev, "Device enabled");
++		dev_dbg(dev, "Device enabled\n");
+ 	} else {
+ 		/* Clear the status register */
+ 		status = smb_rd16(SECOCEC_STATUS_REG_1, &val);
+@@ -141,7 +141,7 @@ static int secocec_adap_enable(struct cec_adapter *adap, bool enable)
+ 				  ~SECOCEC_ENABLE_REG_1_CEC &
+ 				  ~SECOCEC_ENABLE_REG_1_IR);
+ 
+-		dev_dbg(dev, "Device disabled");
++		dev_dbg(dev, "Device disabled\n");
+ 	}
+ 
+ 	return 0;
+@@ -264,12 +264,12 @@ static void secocec_rx_done(struct cec_adapter *adap, u16 status_val)
+ 
+ 	if (status_val & SECOCEC_STATUS_RX_OVERFLOW_MASK) {
+ 		/* NOTE: Untested, it also might not be necessary */
+-		dev_warn(dev, "Received more than 16 bytes. Discarding");
++		dev_warn(dev, "Received more than 16 bytes. Discarding\n");
+ 		flag_overflow = true;
+ 	}
+ 
+ 	if (status_val & SECOCEC_STATUS_RX_ERROR_MASK) {
+-		dev_warn(dev, "Message received with errors. Discarding");
++		dev_warn(dev, "Message received with errors. Discarding\n");
+ 		status = -EIO;
+ 		goto rxerr;
+ 	}
+@@ -390,12 +390,12 @@ static int secocec_ir_probe(void *priv)
+ 	if (status != 0)
+ 		goto err;
+ 
+-	dev_dbg(dev, "IR enabled");
++	dev_dbg(dev, "IR enabled\n");
+ 
+ 	status = devm_rc_register_device(dev, cec->ir);
+ 
+ 	if (status) {
+-		dev_err(dev, "Failed to prepare input device");
++		dev_err(dev, "Failed to prepare input device\n");
+ 		cec->ir = NULL;
+ 		goto err;
+ 	}
+@@ -408,7 +408,7 @@ static int secocec_ir_probe(void *priv)
+ 	smb_wr16(SECOCEC_ENABLE_REG_1,
+ 		 val & ~SECOCEC_ENABLE_REG_1_IR);
+ 
+-	dev_dbg(dev, "IR disabled");
++	dev_dbg(dev, "IR disabled\n");
+ 	return status;
+ }
+ 
+@@ -431,13 +431,13 @@ static int secocec_ir_rx(struct secocec_data *priv)
+ 
+ 	rc_keydown(cec->ir, RC_PROTO_RC5, RC_SCANCODE_RC5(addr, key), toggle);
+ 
+-	dev_dbg(dev, "IR key pressed: 0x%02x addr 0x%02x toggle 0x%02x", key,
++	dev_dbg(dev, "IR key pressed: 0x%02x addr 0x%02x toggle 0x%02x\n", key,
+ 		addr, toggle);
+ 
+ 	return 0;
+ 
+ err:
+-	dev_err(dev, "IR Receive message failed (%d)", status);
++	dev_err(dev, "IR Receive message failed (%d)\n", status);
+ 	return -EIO;
+ }
+ #else
+@@ -497,7 +497,7 @@ static irqreturn_t secocec_irq_handler(int irq, void *priv)
+ 	return IRQ_HANDLED;
+ 
+ err:
+-	dev_err_once(dev, "IRQ: R/W SMBus operation failed (%d)", status);
++	dev_err_once(dev, "IRQ: R/W SMBus operation failed %d\n", status);
+ 
+ 	/*  Reset status register */
+ 	val = SECOCEC_STATUS_REG_1_CEC | SECOCEC_STATUS_REG_1_IR;
+@@ -553,16 +553,16 @@ static int secocec_acpi_probe(struct secocec_data *sdev)
+ 
+ 	gpio = devm_gpiod_get(dev, NULL, GPIOF_IN);
+ 	if (IS_ERR(gpio)) {
+-		dev_err(dev, "Cannot request interrupt gpio");
++		dev_err(dev, "Cannot request interrupt gpio\n");
+ 		return PTR_ERR(gpio);
+ 	}
+ 
+ 	irq = gpiod_to_irq(gpio);
+ 	if (irq < 0) {
+-		dev_err(dev, "Cannot find valid irq");
++		dev_err(dev, "Cannot find valid irq\n");
+ 		return -ENODEV;
+ 	}
+-	dev_dbg(dev, "irq-gpio is bound to IRQ %d", irq);
++	dev_dbg(dev, "irq-gpio is bound to IRQ %d\n", irq);
+ 
+ 	sdev->irq = irq;
+ 
+@@ -590,7 +590,7 @@ static int secocec_probe(struct platform_device *pdev)
+ 
+ 	/* Request SMBus regions */
+ 	if (!request_muxed_region(BRA_SMB_BASE_ADDR, 7, "CEC00001")) {
+-		dev_err(dev, "Request memory region failed");
++		dev_err(dev, "Request memory region failed\n");
+ 		return -ENXIO;
+ 	}
+ 
+@@ -598,14 +598,14 @@ static int secocec_probe(struct platform_device *pdev)
+ 	secocec->dev = dev;
+ 
+ 	if (!has_acpi_companion(dev)) {
+-		dev_dbg(dev, "Cannot find any ACPI companion");
++		dev_dbg(dev, "Cannot find any ACPI companion\n");
+ 		ret = -ENODEV;
+ 		goto err;
+ 	}
+ 
+ 	ret = secocec_acpi_probe(secocec);
+ 	if (ret) {
+-		dev_err(dev, "Cannot assign gpio to IRQ");
++		dev_err(dev, "Cannot assign gpio to IRQ\n");
+ 		ret = -ENODEV;
+ 		goto err;
+ 	}
+@@ -613,11 +613,11 @@ static int secocec_probe(struct platform_device *pdev)
+ 	/* Firmware version check */
+ 	ret = smb_rd16(SECOCEC_VERSION, &val);
+ 	if (ret) {
+-		dev_err(dev, "Cannot check fw version");
++		dev_err(dev, "Cannot check fw version\n");
+ 		goto err;
+ 	}
+ 	if (val < SECOCEC_LATEST_FW) {
+-		dev_err(dev, "CEC Firmware not supported (v.%04x). Use ver > v.%04x",
++		dev_err(dev, "CEC Firmware not supported (v.%04x). Use ver > v.%04x\n",
+ 			val, SECOCEC_LATEST_FW);
+ 		ret = -EINVAL;
+ 		goto err;
+@@ -631,7 +631,7 @@ static int secocec_probe(struct platform_device *pdev)
+ 					dev_name(&pdev->dev), secocec);
+ 
+ 	if (ret) {
+-		dev_err(dev, "Cannot request IRQ %d", secocec->irq);
++		dev_err(dev, "Cannot request IRQ %d\n", secocec->irq);
+ 		ret = -EIO;
+ 		goto err;
+ 	}
+@@ -666,7 +666,7 @@ static int secocec_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, secocec);
+ 
+-	dev_dbg(dev, "Device registered");
++	dev_dbg(dev, "Device registered\n");
+ 
+ 	return ret;
+ 
+@@ -691,14 +691,14 @@ static int secocec_remove(struct platform_device *pdev)
+ 
+ 		smb_wr16(SECOCEC_ENABLE_REG_1, val & ~SECOCEC_ENABLE_REG_1_IR);
+ 
+-		dev_dbg(&pdev->dev, "IR disabled");
++		dev_dbg(&pdev->dev, "IR disabled\n");
+ 	}
+ 	cec_notifier_cec_adap_unregister(secocec->notifier, secocec->cec_adap);
+ 	cec_unregister_adapter(secocec->cec_adap);
+ 
+ 	release_region(BRA_SMB_BASE_ADDR, 7);
+ 
+-	dev_dbg(&pdev->dev, "CEC device removed");
++	dev_dbg(&pdev->dev, "CEC device removed\n");
+ 
+ 	return 0;
+ }
+@@ -709,7 +709,7 @@ static int secocec_suspend(struct device *dev)
+ 	int status;
+ 	u16 val;
+ 
+-	dev_dbg(dev, "Device going to suspend, disabling");
++	dev_dbg(dev, "Device going to suspend, disabling\n");
+ 
+ 	/* Clear the status register */
+ 	status = smb_rd16(SECOCEC_STATUS_REG_1, &val);
+@@ -733,7 +733,7 @@ static int secocec_suspend(struct device *dev)
+ 	return 0;
+ 
+ err:
+-	dev_err(dev, "Suspend failed (err: %d)", status);
++	dev_err(dev, "Suspend failed: %d\n", status);
+ 	return status;
+ }
+ 
+@@ -742,7 +742,7 @@ static int secocec_resume(struct device *dev)
+ 	int status;
+ 	u16 val;
+ 
+-	dev_dbg(dev, "Resuming device from suspend");
++	dev_dbg(dev, "Resuming device from suspend\n");
+ 
+ 	/* Clear the status register */
+ 	status = smb_rd16(SECOCEC_STATUS_REG_1, &val);
+@@ -762,12 +762,12 @@ static int secocec_resume(struct device *dev)
+ 	if (status)
+ 		goto err;
+ 
+-	dev_dbg(dev, "Device resumed from suspend");
++	dev_dbg(dev, "Device resumed from suspend\n");
+ 
+ 	return 0;
+ 
+ err:
+-	dev_err(dev, "Resume failed (err: %d)", status);
++	dev_err(dev, "Resume failed: %d\n", status);
+ 	return status;
+ }
+ 
 -- 
 2.17.1
 
