@@ -2,109 +2,110 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C34B2C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 15 Feb 2022 11:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDE51C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 15 Feb 2022 11:01:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236831AbiBOLAx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Feb 2022 06:00:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37526 "EHLO
+        id S236826AbiBOLBY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Feb 2022 06:01:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236851AbiBOLAq (ORCPT
+        with ESMTP id S232569AbiBOLBX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Feb 2022 06:00:46 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6145DF9562
-        for <linux-media@vger.kernel.org>; Tue, 15 Feb 2022 03:00:36 -0800 (PST)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id C8F71240011;
-        Tue, 15 Feb 2022 11:00:32 +0000 (UTC)
-Date:   Tue, 15 Feb 2022 12:01:41 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [RFC PATCH 7/8] media: v4l2-mediabus: Drop legacy
- V4L2_MBUS_CSI2_CHANNEL_* flags
-Message-ID: <20220215110141.se2gyvfb2xvez2vn@uno.localdomain>
-References: <20220103162414.27723-1-laurent.pinchart+renesas@ideasonboard.com>
- <20220103162414.27723-8-laurent.pinchart+renesas@ideasonboard.com>
+        Tue, 15 Feb 2022 06:01:23 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0637AF9566;
+        Tue, 15 Feb 2022 03:01:14 -0800 (PST)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:6d7b:ae43:289b:7e7c])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 31C8E1F444CE;
+        Tue, 15 Feb 2022 11:01:12 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644922872;
+        bh=gsNBuzdzzks7myB40+JYRtDgIY/SWyjCVVU2wOm0oU8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=X4q/A1JquTkGBwGJh+GJwt0ouraY9iqgypV3DEBEMYfsDUltHT97Ws2nH9Bi/iFCX
+         cQ0dHTJo+H1uAbXmbhsO2H9eqw+rs+FJsarFyo6TS3Q6VUjucae2B2LDMmTge5bouv
+         kO3Tdue04FlGSGP4TV+na5bhCntlEkSr2pATtHHdBtXNgPYjq5NKvdT3JHNMztTzEY
+         ivTJL6dfBCGBMl9OvQW4WgPxd/vw5u5yAxL5YOgxl61qyB155R5taqCW42RqVZwXYY
+         dWkNE+2coTh4EHvIGzIT5HW4erFZMhUP1k4juRVm+ym9048QKDg/aAc2A9P8rwZhxs
+         ep66xzCq+Ph5A==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl,
+        jonas@kwiboo.se, nicolas@ndufresne.ca
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [RFC v2 0/8] Move HEVC stateless controls out of staging
+Date:   Tue, 15 Feb 2022 12:00:55 +0100
+Message-Id: <20220215110103.241297-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220103162414.27723-8-laurent.pinchart+renesas@ideasonboard.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent
+This series aims to make HEVC uapi stable and usable for hardware
+decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
+and 2 out of the tree drivers (rkvdec and RPI).
 
-On Mon, Jan 03, 2022 at 06:24:13PM +0200, Laurent Pinchart wrote:
-> The V4L2_MBUS_CSI2_CHANNEL_* flags are a legacy API. Only
-> V4L2_MBUS_CSI2_CHANNEL_0 is used, set in a single driver, and never
-> read. Drop those flags. Virtual channel information should be conveyed
-> through frame descriptors instead.
+The 3 first patches are from Hans to implement v4l2 dynamic control
+feature which is need by patch 7 for V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET
+definition.
 
-I see one more user in the latest media master
-drivers/media/platform/atmel/microchip-csi2dc.c:        if (mbus_config.flags & V4L2_MBUS_CSI2_CHANNEL_0)
+Patch 4 move the existing uapi to stable, including definitions renaming 
+and CID number change to fit with v4l2 naming.
 
-With that fixed
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Patches 5 and 7 add fields needed for rkvdec and RPI decoders.
 
-Thanks
-  j
+Patches 6 is cleaning up the uapi of useless field.
+Patches 8 change one field description and name to define offset by
+bytes rather than by bits
 
->
-> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> ---
->  drivers/media/i2c/adv7180.c   |  1 -
->  include/media/v4l2-mediabus.h | 10 ----------
->  2 files changed, 11 deletions(-)
->
-> diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
-> index 286f5017d9c3..3ff37a550810 100644
-> --- a/drivers/media/i2c/adv7180.c
-> +++ b/drivers/media/i2c/adv7180.c
-> @@ -786,7 +786,6 @@ static int adv7180_get_mbus_config(struct v4l2_subdev *sd,
->  		cfg->type = V4L2_MBUS_CSI2_DPHY;
->  		cfg->bus.mipi_csi2.num_data_lanes = 1;
->  		cfg->bus.mipi_csi2.flags =
-> -				V4L2_MBUS_CSI2_CHANNEL_0 |
->  				V4L2_MBUS_CSI2_CONTINUOUS_CLOCK;
->  	} else {
->  		/*
-> diff --git a/include/media/v4l2-mediabus.h b/include/media/v4l2-mediabus.h
-> index 44195ceeccca..c6626a22b394 100644
-> --- a/include/media/v4l2-mediabus.h
-> +++ b/include/media/v4l2-mediabus.h
-> @@ -67,20 +67,10 @@
->  #define V4L2_MBUS_DATA_ENABLE_LOW		BIT(15)
->
->  /* Serial flags */
-> -/* CSI-2 Virtual Channel identifiers. */
-> -#define V4L2_MBUS_CSI2_CHANNEL_0		BIT(4)
-> -#define V4L2_MBUS_CSI2_CHANNEL_1		BIT(5)
-> -#define V4L2_MBUS_CSI2_CHANNEL_2		BIT(6)
-> -#define V4L2_MBUS_CSI2_CHANNEL_3		BIT(7)
->  /* Clock non-continuous mode support. */
->  #define V4L2_MBUS_CSI2_CONTINUOUS_CLOCK		BIT(8)
->  #define V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK	BIT(9)
->
-> -#define V4L2_MBUS_CSI2_CHANNELS		(V4L2_MBUS_CSI2_CHANNEL_0 | \
-> -					 V4L2_MBUS_CSI2_CHANNEL_1 | \
-> -					 V4L2_MBUS_CSI2_CHANNEL_2 | \
-> -					 V4L2_MBUS_CSI2_CHANNEL_3)
-> -
->  #define V4L2_MBUS_CSI2_MAX_DATA_LANES		8
->
->  /**
-> --
-> Regards,
->
-> Laurent Pinchart
->
+Benjamin
+
+Benjamin Gaignard (5):
+  media: uapi: Move HEVC stateless controls out of staging
+  media: uapi: Add fields needed for RKVDEC driver
+  media: uapi: Remove bit_size field from v4l2_ctrl_hevc_slice_params
+  media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
+  media: uapi: Change data_bit_offset definition
+
+Hans Verkuil (3):
+  videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+  v4l2-ctrls: add support for dynamically allocated arrays.
+  vivid: add dynamic array test control
+
+ .../userspace-api/media/drivers/hantro.rst    |   5 -
+ .../media/v4l/ext-ctrls-codec.rst             |  58 ++--
+ .../media/v4l/vidioc-queryctrl.rst            |   8 +
+ .../media/test-drivers/vivid/vivid-ctrls.c    |  15 ++
+ drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++++++--
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     | 182 ++++++++++---
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  32 +--
+ drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+ drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+ drivers/staging/media/hantro/hantro_drv.c     |  27 +-
+ drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
+ .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  |  13 +-
+ include/linux/hantro-media.h                  |  17 ++
+ include/media/hevc-ctrls.h                    | 250 ------------------
+ include/media/v4l2-ctrls.h                    |  48 +++-
+ include/uapi/linux/v4l2-controls.h            | 224 ++++++++++++++++
+ include/uapi/linux/videodev2.h                |   8 +
+ 19 files changed, 640 insertions(+), 408 deletions(-)
+ create mode 100644 include/linux/hantro-media.h
+ delete mode 100644 include/media/hevc-ctrls.h
+
+-- 
+2.32.0
+
