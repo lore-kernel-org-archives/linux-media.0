@@ -2,89 +2,172 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC98C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AA59C43219
 	for <linux-media@archiver.kernel.org>; Wed, 16 Feb 2022 21:04:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbiBPVES (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Feb 2022 16:04:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52402 "EHLO
+        id S234352AbiBPVET (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Feb 2022 16:04:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiBPVEI (ORCPT
+        with ESMTP id S234096AbiBPVEI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 16 Feb 2022 16:04:08 -0500
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F4B2B0B09;
-        Wed, 16 Feb 2022 13:03:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3761E2221BC;
+        Wed, 16 Feb 2022 13:03:48 -0800 (PST)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id B8E6B1BF206;
-        Wed, 16 Feb 2022 21:03:42 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8754D1BF204;
+        Wed, 16 Feb 2022 21:03:46 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     niklas.soderlund@ragnatech.se, laurent.pinchart@ideasonboard.com
 Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         tomi.valkeinen@ideasonboard.com, linux-media@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 00/10] media: Multiplexed streams for R-Car CSI-2 and ADV748x
-Date:   Wed, 16 Feb 2022 22:04:37 +0100
-Message-Id: <20220216210447.481006-1-jacopo+renesas@jmondi.org>
+Subject: [PATCH 02/10] media: adv748x: Add support for v4l2_subdev_state
+Date:   Wed, 16 Feb 2022 22:04:39 +0100
+Message-Id: <20220216210447.481006-3-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.35.0
+In-Reply-To: <20220216210447.481006-1-jacopo+renesas@jmondi.org>
+References: <20220216210447.481006-1-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
-   this series build up several other branches:
+Create and initialize the v4l2_subdev_state for the adv748x CSI-2
+subdevice in order to prepare to support routing of the video stream.
 
-- Tomi's tomba/multistream/work-v10
-- Niklas' CHSEL rework:
-  "media: rcar-{csi2,vin}: Move to full Virtual Channel routing per CSI-2 IP"
+Create the subdevice state with v4l2_subdev_init_finalize() and
+implement the init_cfg() operation to guarantee the state is initialized
+correctly with the default routing set.
 
-Both rebased on the most recent media-master.
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+---
+ drivers/media/i2c/adv748x/adv748x-csi2.c | 57 +++++++++++++++++++++++-
+ drivers/media/i2c/adv748x/adv748x.h      |  3 ++
+ 2 files changed, 58 insertions(+), 2 deletions(-)
 
-The series makes adv748x a fully multiplexed device which can direct the video
-stream on different source pad streams which select the virtual channel.
-
-The CSI-2 support was sent already, but this time has been rebased on Niklas'
-chsel rework. The CSI-2 is a multiplexed receiver with a fixed routing table
-as the routing towards VIN is controlled by link enablement.
-
-Finally VIN needs a little adjustment to support multiplexed transmitters.
-
-Need more testing but I've been able to capture each VC on the corresponding VIN
-(vc x -> CSI2:x + 1 -> VINx)
-
-Niklas:
-I have an additional script for vin-tests if interested.
-
-A branch for testing is available at
-https://git.sr.ht/~jmondi_/linux multistream/media-master/tomba-v10/niklas/adv748x
-
-Thanks
-   j
-
-Jacopo Mondi (10):
-  media: adv748x: Add flags to adv748x_subdev_init()
-  media: adv748x: Add support for v4l2_subdev_state
-  media: adv748x: Move format to subdev state
-  media: adv748x: Implement .get_frame_desc()
-  media: adv748x: Implement set_routing
-  media: rcar-csi2: Add support for multiplexed streams
-  media: rcar-csi2: Move format to subdev state
-  media: rcar-csi2: Config by using the remote frame_desc
-  media: rcar-csi2: Implement set_routing
-  media: rcar-vin: Support multiplexed transmitters
-
- drivers/media/i2c/adv748x/adv748x-afe.c     |   2 +-
- drivers/media/i2c/adv748x/adv748x-core.c    |   4 +-
- drivers/media/i2c/adv748x/adv748x-csi2.c    | 292 ++++++++++++++----
- drivers/media/i2c/adv748x/adv748x-hdmi.c    |   2 +-
- drivers/media/i2c/adv748x/adv748x.h         |   6 +-
- drivers/media/platform/rcar-vin/rcar-csi2.c | 312 ++++++++++++++++----
- drivers/media/platform/rcar-vin/rcar-dma.c  |   3 +-
- 7 files changed, 497 insertions(+), 124 deletions(-)
-
---
+diff --git a/drivers/media/i2c/adv748x/adv748x-csi2.c b/drivers/media/i2c/adv748x/adv748x-csi2.c
+index 6cbb47a715ab..9061c34ba561 100644
+--- a/drivers/media/i2c/adv748x/adv748x-csi2.c
++++ b/drivers/media/i2c/adv748x/adv748x-csi2.c
+@@ -139,6 +139,50 @@ static const struct v4l2_subdev_video_ops adv748x_csi2_video_ops = {
+  * But we must support setting the pad formats for format propagation.
+  */
+ 
++static int adv748x_csi2_init_cfg(struct v4l2_subdev *sd,
++				 struct v4l2_subdev_state *state)
++{
++	/* One route for each virtual channel. Route 0 enabled by default. */
++	struct v4l2_subdev_route routes[ADV748X_CSI2_STREAMS] = {
++		{
++			.sink_pad = ADV748X_CSI2_SINK,
++			.sink_stream = 0,
++			.source_pad = ADV748X_CSI2_SOURCE,
++			.source_stream = 0,
++			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
++		},
++		{
++			.sink_pad = ADV748X_CSI2_SINK,
++			.sink_stream = 0,
++			.source_pad = ADV748X_CSI2_SOURCE,
++			.source_stream = 1,
++		},
++		{
++			.sink_pad = ADV748X_CSI2_SINK,
++			.sink_stream = 0,
++			.source_pad = ADV748X_CSI2_SOURCE,
++			.source_stream = 2,
++		},
++		{
++			.sink_pad = ADV748X_CSI2_SINK,
++			.sink_stream = 0,
++			.source_pad = ADV748X_CSI2_SOURCE,
++			.source_stream = 3,
++		},
++	};
++	struct v4l2_subdev_krouting routing;
++	int ret;
++
++	routing.num_routes = ADV748X_CSI2_STREAMS;
++	routing.routes = routes;
++
++	v4l2_subdev_lock_state(state);
++	ret = v4l2_subdev_set_routing(sd, state, &routing);
++	v4l2_subdev_unlock_state(state);
++
++	return ret;
++}
++
+ static struct v4l2_mbus_framefmt *
+ adv748x_csi2_get_pad_format(struct v4l2_subdev *sd,
+ 			    struct v4l2_subdev_state *sd_state,
+@@ -244,6 +288,7 @@ static int adv748x_csi2_get_mbus_config(struct v4l2_subdev *sd, unsigned int pad
+ }
+ 
+ static const struct v4l2_subdev_pad_ops adv748x_csi2_pad_ops = {
++	.init_cfg = adv748x_csi2_init_cfg,
+ 	.get_fmt = adv748x_csi2_get_format,
+ 	.set_fmt = adv748x_csi2_set_format,
+ 	.get_mbus_config = adv748x_csi2_get_mbus_config,
+@@ -313,7 +358,8 @@ int adv748x_csi2_init(struct adv748x_state *state, struct adv748x_csi2 *tx)
+ 		return 0;
+ 
+ 	adv748x_subdev_init(&tx->sd, state, &adv748x_csi2_ops,
+-			    MEDIA_ENT_F_VID_IF_BRIDGE, 0,
++			    MEDIA_ENT_F_VID_IF_BRIDGE,
++			    V4L2_SUBDEV_FL_MULTIPLEXED,
+ 			    is_txa(tx) ? "txa" : "txb");
+ 
+ 	/* Ensure that matching is based upon the endpoint fwnodes */
+@@ -330,10 +376,14 @@ int adv748x_csi2_init(struct adv748x_state *state, struct adv748x_csi2 *tx)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = adv748x_csi2_init_controls(tx);
++	ret = v4l2_subdev_init_finalize(&tx->sd);
+ 	if (ret)
+ 		goto err_free_media;
+ 
++	ret = adv748x_csi2_init_controls(tx);
++	if (ret)
++		goto err_free_state;
++
+ 	ret = v4l2_async_register_subdev(&tx->sd);
+ 	if (ret)
+ 		goto err_free_ctrl;
+@@ -342,6 +392,8 @@ int adv748x_csi2_init(struct adv748x_state *state, struct adv748x_csi2 *tx)
+ 
+ err_free_ctrl:
+ 	v4l2_ctrl_handler_free(&tx->ctrl_hdl);
++err_free_state:
++	v4l2_subdev_cleanup(&tx->sd);
+ err_free_media:
+ 	media_entity_cleanup(&tx->sd.entity);
+ 
+@@ -354,6 +406,7 @@ void adv748x_csi2_cleanup(struct adv748x_csi2 *tx)
+ 		return;
+ 
+ 	v4l2_async_unregister_subdev(&tx->sd);
++	v4l2_subdev_cleanup(&tx->sd);
+ 	media_entity_cleanup(&tx->sd.entity);
+ 	v4l2_ctrl_handler_free(&tx->ctrl_hdl);
+ }
+diff --git a/drivers/media/i2c/adv748x/adv748x.h b/drivers/media/i2c/adv748x/adv748x.h
+index 92c8caee6a42..d651c8390e6f 100644
+--- a/drivers/media/i2c/adv748x/adv748x.h
++++ b/drivers/media/i2c/adv748x/adv748x.h
+@@ -73,6 +73,9 @@ enum adv748x_csi2_pads {
+ /* CSI2 transmitters can have 2 internal connections, HDMI/AFE */
+ #define ADV748X_CSI2_MAX_SUBDEVS 2
+ 
++/* CSI2 number of streams: 1 for each CSI-2 Virtual channel output. */
++#define ADV748X_CSI2_STREAMS	4
++
+ struct adv748x_csi2 {
+ 	struct adv748x_state *state;
+ 	struct v4l2_mbus_framefmt format;
+-- 
 2.35.0
 
