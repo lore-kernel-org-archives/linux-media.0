@@ -2,224 +2,276 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 623EBC433FE
-	for <linux-media@archiver.kernel.org>; Wed, 16 Feb 2022 15:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1693FC433F5
+	for <linux-media@archiver.kernel.org>; Wed, 16 Feb 2022 16:07:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235646AbiBPPpi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Feb 2022 10:45:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60908 "EHLO
+        id S235934AbiBPQHR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Feb 2022 11:07:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234034AbiBPPph (ORCPT
+        with ESMTP id S235942AbiBPQHR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Feb 2022 10:45:37 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163C72A0D6A
-        for <linux-media@vger.kernel.org>; Wed, 16 Feb 2022 07:45:25 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id d27so4157181wrb.5
-        for <linux-media@vger.kernel.org>; Wed, 16 Feb 2022 07:45:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jQbUoLP0DeztGWNveVVhtbMWMqkA1zCTA33/ZznfWeg=;
-        b=FRVLHT/UPnw10Si5rwJUvSu18RcIpLtZYDq6IhLY98qGmp5/UUSkfJGgILLpVgbZZ6
-         g6fzrul2ehYFA3tZ+/s5el04CCbuhF92xILqHW138AgTEmWCSeJdkUYi0H/MOtQ7dcyS
-         bL/W2pArN4TGqh/kcsdmBbFz5o3L9k4hpWI8opJyXoB56kzEYXaTwPywMdESJDI9IVVm
-         q02RqccJpxQD9ky0uvZWHGoN3ZXVxfRWxgmM8YK3ffvaLbieKaynGXkCEmg/LB4IW1D+
-         /KiCtsrCQZSPNjR2aYOmVWItZpIVnww7p48HlUANFgX95raOvJHbAQ/+9fxTVPXVj3mx
-         Naqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jQbUoLP0DeztGWNveVVhtbMWMqkA1zCTA33/ZznfWeg=;
-        b=mE4zeA4InRdlBTFd8D/FddRALcDihMq+cqXXxxwYZTRNGbssWB+Hw3MNnFFB2L88zt
-         zTr3AP7jjVZ86op6slvBcObKcrwwv3Nh2r8F656prvS8NzL1QMIai8MOdVK0Y36ye0DN
-         U94LOTfZna9oKRTUEW61nYrVi+tE6N3XXH6CEPSlhVugAPXMoQoXdPia8sPXLFu9rZSw
-         BvmqK0CXEAdCVxJqKdTkxKum01mm0uZStI8VO415xgco7d354OhyhW+UQNHawW3P0Say
-         FMSANjwZQu9JHhUJvc1CAqyrA6e9Haao/tZeeew02ojPZlgBrQo+lSYdfPDJVZ8tl1xX
-         PBSA==
-X-Gm-Message-State: AOAM532/LDxdIqyPpGGK972ZfbXb4SeC70OessDcmI2MPRBoCT0UTlam
-        qZa7YE9SftkRmAgSJoeioOg=
-X-Google-Smtp-Source: ABdhPJxdG578iy2mpM5fwRuPOR+njxnhXnNYVkX6UbU7yEkTtcgU7XuRn1DG+1Ouo3lCwn5FAVS87A==
-X-Received: by 2002:a5d:54c5:0:b0:1e5:5ca1:2b7f with SMTP id x5-20020a5d54c5000000b001e55ca12b7fmr2733995wrv.193.1645026323635;
-        Wed, 16 Feb 2022 07:45:23 -0800 (PST)
-Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id l26sm18828113wms.24.2022.02.16.07.45.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Feb 2022 07:45:23 -0800 (PST)
-Message-ID: <2382baec-9f57-f004-dccd-7219efe9dc01@gmail.com>
-Date:   Wed, 16 Feb 2022 15:45:22 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 04/10] media: i2c: Provide ov7251_check_hwcfg()
-Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+        Wed, 16 Feb 2022 11:07:17 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921FC2B25F
+        for <linux-media@vger.kernel.org>; Wed, 16 Feb 2022 08:07:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645027624; x=1676563624;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EDIRvZwev9VnsosoDWZYQTgVlGZ2l0XRGdA0wmy1MNU=;
+  b=Tt6jHvmSmNMAC750A9xhGu4WBcvNIsviTkkDGBcY68+0OOUN04Naz34k
+   MsAfHMbe/V9vKtPaLfmCN6suW0zarwhLiQDbIUlNb8P8YzhUuYi0LDlBv
+   9YIGptYKAhlTO5QzwO8ue1GtYYXnEMe70xarymULRJgFSUnJlizSKSfTf
+   1mezIFIg/FZPqLIeX8lm9EJjLhnxKXpAzbU7Zs0MQ6pHHmLlw1XFxIcnj
+   Rks255u27J6JU2Bv0QKy4+0hIczRhgXNCVk9S3z19exvswFN2ZypJwW0B
+   z3kfxnEGfOB7afyQ/8UWj9puBxp3b6yqwzII8AkjGn1NLYPvr4AiSG4vk
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10260"; a="238057605"
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="238057605"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 08:05:06 -0800
+X-IronPort-AV: E=Sophos;i="5.88,374,1635231600"; 
+   d="scan'208";a="681571408"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 08:05:02 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 67DFB201DB;
+        Wed, 16 Feb 2022 18:05:00 +0200 (EET)
+Date:   Wed, 16 Feb 2022 18:05:00 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Daniel Scally <djrscally@gmail.com>
 Cc:     linux-media@vger.kernel.org, yong.zhi@intel.com,
         bingbu.cao@intel.com, tian.shu.qiu@intel.com,
         andriy.shevchenko@linux.intel.com, hverkuil-cisco@xs4all.nl
+Subject: Re: [PATCH 08/10] media: i2c: Add pm_runtime support to ov7251
+Message-ID: <Yg0grHE1MlxF0tFw@paasikivi.fi.intel.com>
 References: <20220215230737.1870630-1-djrscally@gmail.com>
- <20220215230737.1870630-5-djrscally@gmail.com>
- <Yg0Xua9x2Ix+ctUs@paasikivi.fi.intel.com>
-From:   Daniel Scally <djrscally@gmail.com>
-In-Reply-To: <Yg0Xua9x2Ix+ctUs@paasikivi.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <20220215230737.1870630-9-djrscally@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220215230737.1870630-9-djrscally@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari - thanks for the comments
+Hi Daniel,
 
-On 16/02/2022 15:26, Sakari Ailus wrote:
-> Hi Daniel,
->
-> Thanks for the set.
->
-> On Tue, Feb 15, 2022 at 11:07:31PM +0000, Daniel Scally wrote:
->> Move the endpoint checking from .probe() to a dedicated function,
->> and additionally check that the firmware provided link frequencies
->> are a match for those supported by the driver. Finally, return
->> -EPROBE_DEFER if the endpoint is not available, as it could be built
->> by the ipu3-cio2 driver if that probes later.
->>
->> Signed-off-by: Daniel Scally <djrscally@gmail.com>
->> ---
->>  drivers/media/i2c/ov7251.c | 84 ++++++++++++++++++++++++++++++--------
->>  1 file changed, 66 insertions(+), 18 deletions(-)
->>
->> diff --git a/drivers/media/i2c/ov7251.c b/drivers/media/i2c/ov7251.c
->> index d6fe574cb9e0..5c5f7a15a640 100644
->> --- a/drivers/media/i2c/ov7251.c
->> +++ b/drivers/media/i2c/ov7251.c
->> @@ -1255,10 +1255,73 @@ static const struct v4l2_subdev_ops ov7251_subdev_ops = {
->>  	.pad = &ov7251_subdev_pad_ops,
->>  };
->>  
->> +static int ov7251_check_hwcfg(struct ov7251 *ov7251)
->> +{
->> +	struct fwnode_handle *fwnode = dev_fwnode(ov7251->dev);
->> +	struct v4l2_fwnode_endpoint bus_cfg = {
->> +		.bus_type = V4L2_MBUS_CSI2_DPHY,
->> +	};
->> +	struct fwnode_handle *endpoint;
->> +	bool freq_found;
->> +	int i, j;
-> unsigned int ?
+On Tue, Feb 15, 2022 at 11:07:35PM +0000, Daniel Scally wrote:
+> Add pm_runtime support to the ov7251 driver.
+> 
+> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+> ---
+>  drivers/media/i2c/ov7251.c | 78 ++++++++++++++++++++++++++++++--------
+>  1 file changed, 63 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/ov7251.c b/drivers/media/i2c/ov7251.c
+> index f137a1e87537..d620ed6a4e42 100644
+> --- a/drivers/media/i2c/ov7251.c
+> +++ b/drivers/media/i2c/ov7251.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/init.h>
+>  #include <linux/module.h>
+>  #include <linux/mod_devicetable.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+>  #include <linux/types.h>
+> @@ -884,6 +885,24 @@ static void ov7251_set_power_off(struct ov7251 *ov7251)
+>  	ov7251_regulators_disable(ov7251);
+>  }
+>  
+> +static int __maybe_unused ov7251_sensor_suspend(struct device *dev)
+> +{
+> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> +	struct ov7251 *ov7251 = to_ov7251(sd);
+> +
+> +	ov7251_set_power_off(ov7251);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused ov7251_sensor_resume(struct device *dev)
+> +{
+> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> +	struct ov7251 *ov7251 = to_ov7251(sd);
+> +
+> +	return ov7251_set_power_on(ov7251);
 
+Could you change the argument type of ov7251_set_power_o{n,ff}() to struct
+device * so you'd have just one set of these functions?
 
-Ack
+> +}
+> +
+>  static int ov7251_s_power(struct v4l2_subdev *sd, int on)
+>  {
+>  	struct ov7251 *ov7251 = to_ov7251(sd);
+> @@ -985,7 +1004,7 @@ static int ov7251_s_ctrl(struct v4l2_ctrl *ctrl)
+>  
+>  	/* v4l2_ctrl_lock() locks our mutex */
+>  
+> -	if (!ov7251->power_on)
+> +	if (!pm_runtime_get_if_in_use(ov7251->dev))
+>  		return 0;
+>  
+>  	switch (ctrl->id) {
+> @@ -1009,6 +1028,8 @@ static int ov7251_s_ctrl(struct v4l2_ctrl *ctrl)
+>  		break;
+>  	}
+>  
+> +	pm_runtime_put(ov7251->dev);
+> +
+>  	return ret;
+>  }
+>  
+> @@ -1261,10 +1282,15 @@ static int ov7251_s_stream(struct v4l2_subdev *subdev, int enable)
+>  	mutex_lock(&ov7251->lock);
+>  
+>  	if (enable) {
+> +		ret = pm_runtime_get_sync(ov7251->dev);
+> +		if (ret < 0)
+> +			return ret;
+> +
+>  		ret = ov7251_pll_configure(ov7251);
+> -		if (ret)
+> -			return dev_err_probe(ov7251->dev, ret,
+> -					     "error configuring PLLs\n");
+> +		if (ret) {
+> +			dev_err(ov7251->dev, "error configuring PLLs\n");
+> +			goto err_power_down;
+> +		}
+>  
+>  		ret = ov7251_set_register_array(ov7251,
+>  					ov7251->current_mode->data,
+> @@ -1273,23 +1299,29 @@ static int ov7251_s_stream(struct v4l2_subdev *subdev, int enable)
+>  			dev_err(ov7251->dev, "could not set mode %dx%d\n",
+>  				ov7251->current_mode->width,
+>  				ov7251->current_mode->height);
+> -			goto exit;
+> +			goto err_power_down;
+>  		}
+>  		ret = __v4l2_ctrl_handler_setup(&ov7251->ctrls);
+>  		if (ret < 0) {
+>  			dev_err(ov7251->dev, "could not sync v4l2 controls\n");
+> -			goto exit;
+> +			goto err_power_down;
+>  		}
+>  		ret = ov7251_write_reg(ov7251, OV7251_SC_MODE_SELECT,
+>  				       OV7251_SC_MODE_SELECT_STREAMING);
+> +		if (ret)
+> +			goto err_power_down;
+>  	} else {
+>  		ret = ov7251_write_reg(ov7251, OV7251_SC_MODE_SELECT,
+>  				       OV7251_SC_MODE_SELECT_SW_STANDBY);
+> +		pm_runtime_put(ov7251->dev);
+>  	}
+>  
+> -exit:
+>  	mutex_unlock(&ov7251->lock);
+> +	return ret;
+>  
+> +err_power_down:
+> +	pm_runtime_put_noidle(ov7251->dev);
+> +	mutex_unlock(&ov7251->lock);
+>  	return ret;
+>  }
+>  
+> @@ -1604,23 +1636,24 @@ static int ov7251_probe(struct i2c_client *client)
+>  		goto free_ctrl;
+>  	}
+>  
+> -	ret = ov7251_s_power(&ov7251->sd, true);
+> -	if (ret < 0) {
+> -		dev_err(dev, "could not power up OV7251\n");
+> +	ret = ov7251_set_power_on(ov7251);
+> +	if (ret)
+>  		goto free_entity;
+> -	}
+>  
+>  	ret = ov7251_detect_chip(ov7251);
+>  	if (ret)
+>  		goto power_down;
+>  
+> +	pm_runtime_set_active(&client->dev);
+> +	pm_runtime_get_noresume(&client->dev);
+> +	pm_runtime_enable(&client->dev);
+>  
+>  	ret = ov7251_read_reg(ov7251, OV7251_PRE_ISP_00,
+>  			      &ov7251->pre_isp_00);
+>  	if (ret < 0) {
+>  		dev_err(dev, "could not read test pattern value\n");
+>  		ret = -ENODEV;
+> -		goto power_down;
+> +		goto err_pm_runtime;
+>  	}
+>  
+>  	ret = ov7251_read_reg(ov7251, OV7251_TIMING_FORMAT1,
+> @@ -1628,7 +1661,7 @@ static int ov7251_probe(struct i2c_client *client)
+>  	if (ret < 0) {
+>  		dev_err(dev, "could not read vflip value\n");
+>  		ret = -ENODEV;
+> -		goto power_down;
+> +		goto err_pm_runtime;
+>  	}
+>  
+>  	ret = ov7251_read_reg(ov7251, OV7251_TIMING_FORMAT2,
+> @@ -1636,10 +1669,12 @@ static int ov7251_probe(struct i2c_client *client)
+>  	if (ret < 0) {
+>  		dev_err(dev, "could not read hflip value\n");
+>  		ret = -ENODEV;
+> -		goto power_down;
+> +		goto err_pm_runtime;
+>  	}
+>  
+> -	ov7251_s_power(&ov7251->sd, false);
+> +	pm_runtime_set_autosuspend_delay(&client->dev, 1000);
+> +	pm_runtime_use_autosuspend(&client->dev);
+> +	pm_runtime_put_autosuspend(&client->dev);
+>  
+>  	ret = v4l2_async_register_subdev(&ov7251->sd);
+>  	if (ret < 0) {
+> @@ -1651,6 +1686,9 @@ static int ov7251_probe(struct i2c_client *client)
+>  
+>  	return 0;
+>  
+> +err_pm_runtime:
+> +	pm_runtime_disable(ov7251->dev);
+> +	pm_runtime_put_noidle(ov7251->dev);
+>  power_down:
+>  	ov7251_s_power(&ov7251->sd, false);
+>  free_entity:
+> @@ -1672,9 +1710,18 @@ static int ov7251_remove(struct i2c_client *client)
+>  	v4l2_ctrl_handler_free(&ov7251->ctrls);
+>  	mutex_destroy(&ov7251->lock);
+>  
+> +	pm_runtime_disable(ov7251->dev);
+> +	if (!pm_runtime_status_suspended(ov7251->dev))
+> +		ov7251_set_power_off(ov7251);
+> +	pm_runtime_set_suspended(ov7251->dev);
+> +
+>  	return 0;
+>  }
+>  
+> +static const struct dev_pm_ops ov7251_pm_ops = {
+> +	SET_RUNTIME_PM_OPS(ov7251_sensor_suspend, ov7251_sensor_resume, NULL)
+> +};
+> +
+>  static const struct of_device_id ov7251_of_match[] = {
+>  	{ .compatible = "ovti,ov7251" },
+>  	{ /* sentinel */ }
+> @@ -1692,6 +1739,7 @@ static struct i2c_driver ov7251_i2c_driver = {
+>  		.of_match_table = ov7251_of_match,
+>  		.acpi_match_table = ov7251_acpi_match,
+>  		.name  = "ov7251",
+> +		.pm = &ov7251_pm_ops,
+>  	},
+>  	.probe_new  = ov7251_probe,
+>  	.remove = ov7251_remove,
 
->
->> +	int ret;
->> +
->> +	endpoint = fwnode_graph_get_next_endpoint(fwnode, NULL);
->> +	if (!endpoint)
->> +		return -EPROBE_DEFER; /* could be provided by cio2-bridge */
->> +
->> +	ret = v4l2_fwnode_endpoint_alloc_parse(endpoint, &bus_cfg);
->> +	fwnode_handle_put(endpoint);
->> +	if (ret)
->> +		return dev_err_probe(ov7251->dev, ret,
->> +				     "parsing endpoint node failed\n");
->> +
->> +	if (bus_cfg.bus_type != V4L2_MBUS_CSI2_DPHY) {
-> You can drop this check as v4l2_fwnode_endpoint_alloc_parse() only parses
-> D-PHY bus type and returns error otherwise, as you've (correctly) specified
-> D-PHY in bus_cfg.
+-- 
+Kind regards,
 
-
-Ah-ha, ok useful to know thanks.
-
->
->> +		ret = -EINVAL;
->> +		dev_err(ov7251->dev, "invalid bus type (%u), must be (%u)\n",
->> +			bus_cfg.bus_type, V4L2_MBUS_CSI2_DPHY);
->> +		goto out_free_bus_cfg;
->> +	}
->> +
->> +	if (bus_cfg.bus.mipi_csi2.num_data_lanes != 1) {
-> Is this a driver or hardware limitation?
->
-> If it's hardware, you could also ignore it --- there's nothing to
-> configure.
-
-
-Good point, it is a hardware limitation yes.
-
->
->> +		dev_err(ov7251->dev, "only a 1-lane CSI2 config is supported");
->> +		ret = -EINVAL;
->> +		goto out_free_bus_cfg;
->> +	}
->> +
->> +	if (!bus_cfg.nr_of_link_frequencies) {
->> +		dev_err(ov7251->dev, "no link frequencies defined\n");
->> +		ret = -EINVAL;
->> +		goto out_free_bus_cfg;
->> +	}
->> +
->> +	freq_found = false;
-> You could do this in initialisation.
->
->> +	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++) {
-
-Ack
->> +		if (freq_found)
->> +			break;
->> +
->> +		for (j = 0; j < ARRAY_SIZE(link_freq); j++)
->> +			if (bus_cfg.link_frequencies[i] == link_freq[j]) {
->> +				freq_found = true;
->> +				break;
->> +			}
->> +	}
->> +
->> +	if (i == bus_cfg.nr_of_link_frequencies) {
->> +		dev_err(ov7251->dev, "no supported link freq found\n");
->> +		ret = -EINVAL;
->> +		goto out_free_bus_cfg;
->> +	}
->> +
->> +out_free_bus_cfg:
->> +	v4l2_fwnode_endpoint_free(&bus_cfg);
->> +
->> +	return ret;
->> +}
->> +
->>  static int ov7251_probe(struct i2c_client *client)
->>  {
->>  	struct device *dev = &client->dev;
->> -	struct fwnode_handle *endpoint;
->>  	struct ov7251 *ov7251;
->>  	u8 chip_id_high, chip_id_low, chip_rev;
->>  	int ret;
->> @@ -1270,24 +1333,9 @@ static int ov7251_probe(struct i2c_client *client)
->>  	ov7251->i2c_client = client;
->>  	ov7251->dev = dev;
->>  
->> -	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(dev), NULL);
->> -	if (!endpoint) {
->> -		dev_err(dev, "endpoint node not found\n");
->> -		return -EINVAL;
->> -	}
->> -
->> -	ret = v4l2_fwnode_endpoint_parse(endpoint, &ov7251->ep);
->> -	fwnode_handle_put(endpoint);
->> -	if (ret < 0) {
->> -		dev_err(dev, "parsing endpoint node failed\n");
->> +	ret = ov7251_check_hwcfg(ov7251);
->> +	if (ret)
->>  		return ret;
->> -	}
->> -
->> -	if (ov7251->ep.bus_type != V4L2_MBUS_CSI2_DPHY) {
->> -		dev_err(dev, "invalid bus type (%u), must be CSI2 (%u)\n",
->> -			ov7251->ep.bus_type, V4L2_MBUS_CSI2_DPHY);
->> -		return -EINVAL;
->> -	}
->>  
->>  	/* get system clock (xclk) */
->>  	ov7251->xclk = devm_clk_get(dev, "xclk");
+Sakari Ailus
