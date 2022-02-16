@@ -2,165 +2,119 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D32F9C4332F
-	for <linux-media@archiver.kernel.org>; Wed, 16 Feb 2022 21:04:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4BB7C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 16 Feb 2022 21:31:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234076AbiBPVFF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Feb 2022 16:05:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53016 "EHLO
+        id S235517AbiBPVbT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Feb 2022 16:31:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234157AbiBPVEI (ORCPT
+        with ESMTP id S235512AbiBPVbS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Feb 2022 16:04:08 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2A52B0B2E;
-        Wed, 16 Feb 2022 13:03:51 -0800 (PST)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 69F071BF208;
-        Wed, 16 Feb 2022 21:03:49 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     niklas.soderlund@ragnatech.se, laurent.pinchart@ideasonboard.com
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        tomi.valkeinen@ideasonboard.com, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 04/10] media: adv748x: Implement .get_frame_desc()
-Date:   Wed, 16 Feb 2022 22:04:41 +0100
-Message-Id: <20220216210447.481006-5-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20220216210447.481006-1-jacopo+renesas@jmondi.org>
-References: <20220216210447.481006-1-jacopo+renesas@jmondi.org>
+        Wed, 16 Feb 2022 16:31:18 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D341F28198F
+        for <linux-media@vger.kernel.org>; Wed, 16 Feb 2022 13:31:01 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 90A9825B;
+        Wed, 16 Feb 2022 22:30:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1645047059;
+        bh=RxPGZ7k/JHCDnXFoR6ZVXUlNoGJrBmo3Z02C1MKJFHY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P3KjqSU0gb27yi3izDGsCt+kadXOdGWmVz3N4NNxOGdss/trv2b34ShuJSX7X7jIb
+         Z6xr6PMjET4ae8927giNDa/oMuxgHKi2MClWN8OXhLL6UFV0uTCTHVU30lbf9POUxY
+         t5j4f/rz5zxe/BKjM5ky3B8FF3sc9bJrV3sl9O/8=
+Date:   Wed, 16 Feb 2022 23:30:51 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Pratyush Yadav <p.yadav@ti.com>
+Subject: Re: [PATCH v4 6/7] media: subdev: add v4l2_subdev_call_state_active()
+Message-ID: <Yg1tC0dLieuZLbXy@pendragon.ideasonboard.com>
+References: <20220216130049.508664-1-tomi.valkeinen@ideasonboard.com>
+ <20220216130049.508664-7-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220216130049.508664-7-tomi.valkeinen@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Implement the get_frame_desc subdev pad operation.
+Hi Tomi,
 
-Implement the get_frame_desc pad operation to allow retrieving the
-stream configuration of the adv748x csi2 subdevice.
+Thank you for the patch.
 
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
- drivers/media/i2c/adv748x/adv748x-csi2.c | 93 ++++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
+On Wed, Feb 16, 2022 at 03:00:48PM +0200, Tomi Valkeinen wrote:
+> Add v4l2_subdev_call_state_active() macro to help calling subdev ops
+> that take a subdev state as a parameter.
 
-diff --git a/drivers/media/i2c/adv748x/adv748x-csi2.c b/drivers/media/i2c/adv748x/adv748x-csi2.c
-index 549c3cd96006..9824ebe44eb1 100644
---- a/drivers/media/i2c/adv748x/adv748x-csi2.c
-+++ b/drivers/media/i2c/adv748x/adv748x-csi2.c
-@@ -14,6 +14,50 @@
- 
- #include "adv748x.h"
- 
-+/* Describes a format bit depth and CSI-2 defined Data Type. */
-+struct adv748x_csi2_format_info {
-+	u8 dt;
-+	u8 bpp;
-+};
-+
-+static int adv748x_csi2_get_format_info(struct adv748x_csi2 *tx,
-+					u32 mbus_code,
-+					struct adv748x_csi2_format_info *fmt)
-+{
-+	switch (mbus_code) {
-+	case MEDIA_BUS_FMT_YUYV8_1X16:
-+	case MEDIA_BUS_FMT_YUYV8_2X8:
-+		fmt->dt = 0x1e;
-+		fmt->bpp = 16;
-+		break;
-+	case MEDIA_BUS_FMT_YUYV10_2X10:
-+	case MEDIA_BUS_FMT_YUYV10_1X20:
-+		fmt->dt = 0x1f;
-+		fmt->bpp = 20;
-+		break;
-+	case MEDIA_BUS_FMT_RGB565_1X16:
-+	case MEDIA_BUS_FMT_RGB565_2X8_LE:
-+	case MEDIA_BUS_FMT_RGB565_2X8_BE:
-+		fmt->dt = 0x22;
-+		fmt->bpp = 16;
-+		break;
-+	case MEDIA_BUS_FMT_RGB666_1X18:
-+		fmt->dt = 0x23;
-+		fmt->bpp = 18;
-+		break;
-+	case MEDIA_BUS_FMT_RGB888_1X24:
-+		fmt->dt = 0x24;
-+		fmt->bpp = 24;
-+		break;
-+	default:
-+		dev_err(tx->state->dev,
-+			"Unsupported media bus code: %u\n", mbus_code);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- int adv748x_csi2_set_virtual_channel(struct adv748x_csi2 *tx, unsigned int vc)
- {
- 	return tx_write(tx, ADV748X_CSI_VC_REF, vc << ADV748X_CSI_VC_REF_SHIFT);
-@@ -248,11 +292,60 @@ static int adv748x_csi2_get_mbus_config(struct v4l2_subdev *sd, unsigned int pad
- 	return 0;
- }
- 
-+static int adv748x_csi2_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
-+				       struct v4l2_mbus_frame_desc *fd)
-+{
-+	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
-+	struct adv748x_csi2_format_info info = {};
-+	struct v4l2_mbus_frame_desc_entry *entry;
-+	struct v4l2_subdev_route *route;
-+	struct v4l2_subdev_state *state;
-+	struct v4l2_mbus_framefmt *fmt;
-+	int ret;
-+
-+	if (pad != ADV748X_CSI2_SOURCE)
-+		return -EINVAL;
-+
-+	state = v4l2_subdev_lock_active_state(sd);
-+
-+	/* A single route is available. */
-+	route = &state->routing.routes[0];
-+	fmt = v4l2_state_get_stream_format(state, pad, route->source_stream);
-+	if (!fmt) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	ret = adv748x_csi2_get_format_info(tx, fmt->code, &info);
-+	if (ret)
-+		goto out;
-+
-+	memset(fd, 0, sizeof(*fd));
-+
-+	/* A single stream is available. */
-+	fd->num_entries = 1;
-+	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
-+
-+	entry = &fd->entry[0];
-+	entry->stream = 0;
-+	entry->flags = V4L2_MBUS_FRAME_DESC_FL_LEN_MAX;
-+	entry->length = fmt->width * fmt->height * info.bpp / 8;
-+	entry->pixelcode = fmt->code;
-+	entry->bus.csi2.vc = route->source_stream;
-+	entry->bus.csi2.dt = info.dt;
-+
-+out:
-+	v4l2_subdev_unlock_state(state);
-+
-+	return ret;
-+}
-+
- static const struct v4l2_subdev_pad_ops adv748x_csi2_pad_ops = {
- 	.init_cfg = adv748x_csi2_init_cfg,
- 	.get_fmt = v4l2_subdev_get_fmt,
- 	.set_fmt = adv748x_csi2_set_format,
- 	.get_mbus_config = adv748x_csi2_get_mbus_config,
-+	.get_frame_desc = adv748x_csi2_get_frame_desc,
- };
- 
- /* -----------------------------------------------------------------------------
+We should not encourage subdev drivers to call into each other. There
+may be some valid use cases for such a helper at this point, namely in
+the .start_streaming() implementation in a vb2 queue, but even then, I
+think it would be best to rework the pipeline start API to lock the
+states of all subdevs in the pipeline (I've already improved pipeline
+start on top of your streams series, the locking isn't there yet, but I
+could give it a try).
+
+On the other hand, this macro could help identifying drivers that handle
+locking manually, helping reworking them once the pipeline start API
+handles locking too.
+
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+>  include/media/v4l2-subdev.h | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> index 84c02488d53f..0db61203c8d9 100644
+> --- a/include/media/v4l2-subdev.h
+> +++ b/include/media/v4l2-subdev.h
+> @@ -1359,6 +1359,37 @@ extern const struct v4l2_subdev_ops v4l2_subdev_call_wrappers;
+>  		__result;						\
+>  	})
+>  
+> +/**
+> + * v4l2_subdev_call_state_active - call an operation of a v4l2_subdev which
+> + *				   takes state as a parameter, passing the
+> + *				   subdev its active state.
+> + *
+> + * @sd: pointer to the &struct v4l2_subdev
+> + * @o: name of the element at &struct v4l2_subdev_ops that contains @f.
+> + *     Each element there groups a set of callbacks functions.
+> + * @f: callback function to be called.
+> + *     The callback functions are defined in groups, according to
+> + *     each element at &struct v4l2_subdev_ops.
+> + * @args: arguments for @f.
+> + *
+> + * This is similar to v4l2_subdev_call(), except that this version can only be
+> + * used for ops that take a subdev state as a parameter. The macro will get the
+> + * active state and lock it before calling the op, and unlock it after the
+> + * call.
+> + */
+> +#define v4l2_subdev_call_state_active(sd, o, f, args...)		\
+> +	({								\
+> +		int __result;						\
+> +		struct v4l2_subdev_state *state;			\
+> +		state = v4l2_subdev_get_active_state(sd);		\
+> +		if (state)						\
+> +			v4l2_subdev_lock_state(state);			\
+> +		__result = v4l2_subdev_call(sd, o, f, state, ##args);	\
+> +		if (state)						\
+> +			v4l2_subdev_unlock_state(state);		\
+> +		__result;						\
+> +	})
+> +
+>  /**
+>   * v4l2_subdev_has_op - Checks if a subdev defines a certain operation.
+>   *
+
 -- 
-2.35.0
+Regards,
 
+Laurent Pinchart
