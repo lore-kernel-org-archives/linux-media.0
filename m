@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D864C43217
-	for <linux-media@archiver.kernel.org>; Wed, 16 Feb 2022 21:04:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FBD0C43219
+	for <linux-media@archiver.kernel.org>; Wed, 16 Feb 2022 21:04:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234266AbiBPVEi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Feb 2022 16:04:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53330 "EHLO
+        id S234338AbiBPVEj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Feb 2022 16:04:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233940AbiBPVEM (ORCPT
+        with ESMTP id S234189AbiBPVEI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Feb 2022 16:04:12 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931C22AFEA6;
-        Wed, 16 Feb 2022 13:03:59 -0800 (PST)
+        Wed, 16 Feb 2022 16:04:08 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52DF2AFE9D;
+        Wed, 16 Feb 2022 13:03:54 -0800 (PST)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id EB6601BF209;
-        Wed, 16 Feb 2022 21:03:56 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 567B81BF204;
+        Wed, 16 Feb 2022 21:03:52 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     niklas.soderlund@ragnatech.se, laurent.pinchart@ideasonboard.com
 Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         tomi.valkeinen@ideasonboard.com, linux-media@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 09/10] media: rcar-csi2: Implement set_routing
-Date:   Wed, 16 Feb 2022 22:04:46 +0100
-Message-Id: <20220216210447.481006-10-jacopo+renesas@jmondi.org>
+Subject: [PATCH 06/10] media: rcar-csi2: Add support for multiplexed streams
+Date:   Wed, 16 Feb 2022 22:04:43 +0100
+Message-Id: <20220216210447.481006-7-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <20220216210447.481006-1-jacopo+renesas@jmondi.org>
 References: <20220216210447.481006-1-jacopo+renesas@jmondi.org>
@@ -35,106 +35,136 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the set_routing() subdev operation to allow userspace to activate
-routes on the R-Car CSI-2 receiver.
+Create and initialize the v4l2_subdev_state for the R-Car CSI-2 receiver
+in order to prepare to support multiplexed transmitters.
 
-Routing for this device is fixed. Validate that the provided route
-respects it.
+Create the subdevice state with v4l2_subdev_init_finalize() and
+implement the init_cfg() operation to guarantee the state is initialized
+correctly with a set of default routes.
 
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/platform/rcar-vin/rcar-csi2.c | 64 ++++++++++++++++++---
- 1 file changed, 55 insertions(+), 9 deletions(-)
+ drivers/media/platform/rcar-vin/rcar-csi2.c | 74 ++++++++++++++++++++-
+ 1 file changed, 72 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index 793a4d6e5a27..3ceb7bcfe8d1 100644
+index b8c56d248454..e8a79a30cc49 100644
 --- a/drivers/media/platform/rcar-vin/rcar-csi2.c
 +++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -942,6 +942,59 @@ static int rcsi2_set_pad_format(struct v4l2_subdev *sd,
- 	return ret;
+@@ -875,11 +875,73 @@ static int rcsi2_get_pad_format(struct v4l2_subdev *sd,
+ 	return 0;
  }
  
-+static int __rcsi2_set_routing(struct v4l2_subdev *sd,
-+			       struct v4l2_subdev_state *state,
-+			       struct v4l2_subdev_krouting *routing)
++static int rcsi2_init_cfg(struct v4l2_subdev *sd,
++			  struct v4l2_subdev_state *state)
 +{
-+	unsigned int i;
-+	int ret = 0;
++	/*
++	 * Routing is fixed for this device: which stream goes to the next
++	 * processing block (VIN) is controlled by link enablement between the
++	 * CSI-2 and the VIN itself.
++	 *
++	 * In example, to route VC 3 to VIN1, as an example: "csi2:3 -> vin1:0"
++	 *
++	 * The routing table is then fixed as streams transmitted on VC x will
++	 * be directed to csi:0/x and will be transmitted to VINs on media link
++	 * csi2:x->vin:0.
++	 */
++	struct v4l2_subdev_route routes[] = {
++		{
++			.sink_pad = RCAR_CSI2_SINK,
++			.sink_stream = 0,
++			.source_pad = RCAR_CSI2_SOURCE_VC0,
++			.source_stream = 0,
++			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
++		},
++		{
++			.sink_pad = RCAR_CSI2_SINK,
++			.sink_stream = 1,
++			.source_pad = RCAR_CSI2_SOURCE_VC1,
++			.source_stream = 0,
++			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
++		},
++		{
++			.sink_pad = RCAR_CSI2_SINK,
++			.sink_stream = 2,
++			.source_pad = RCAR_CSI2_SOURCE_VC2,
++			.source_stream = 0,
++			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
++		},
++		{
++			.sink_pad = RCAR_CSI2_SINK,
++			.sink_stream = 3,
++			.source_pad = RCAR_CSI2_SOURCE_VC3,
++			.source_stream = 0,
++			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
++		},
++	};
 +
-+	ret = v4l2_subdev_routing_validate_1_to_1(routing);
++	struct v4l2_subdev_krouting routing = {
++		.num_routes = ARRAY_SIZE(routes),
++		.routes = routes,
++	};
++
++	int ret = v4l2_subdev_routing_validate_1_to_1(&routing);
 +	if (ret)
 +		return ret;
 +
 +	v4l2_subdev_lock_state(state);
-+
-+	/*
-+	 * Routing is fixed for this device.
-+	 *
-+	 * Only routes in the form of CSI2:0/x->CSI2:x+1/0 are allowed.
-+	 *
-+	 * We have anyway to implement set_routing to mark the route as active.
-+	 */
-+	for (i = 0; i < routing->num_routes; ++i) {
-+		const struct v4l2_subdev_route *route = &routing->routes[i];
-+		unsigned int vc = route->sink_stream;
-+		unsigned int pad = vc + 1;
-+
-+		if (route->sink_pad != 0) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		if (route->source_pad != pad ||
-+		    route->source_stream != 0) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+	}
-+
-+	ret = v4l2_subdev_set_routing(sd, state, routing);
-+
-+out:
++	ret = v4l2_subdev_set_routing(sd, state, &routing);
 +	v4l2_subdev_unlock_state(state);
 +
 +	return ret;
 +}
 +
-+static int rcsi2_set_routing(struct v4l2_subdev *sd,
-+			     struct v4l2_subdev_state *state,
-+			     enum v4l2_subdev_format_whence which,
-+			     struct v4l2_subdev_krouting *routing)
-+{
-+	return __rcsi2_set_routing(sd, state, routing);
-+}
-+
- static int rcsi2_init_cfg(struct v4l2_subdev *sd,
- 			  struct v4l2_subdev_state *state)
- {
-@@ -992,15 +1045,7 @@ static int rcsi2_init_cfg(struct v4l2_subdev *sd,
- 		.routes = routes,
- 	};
- 
--	int ret = v4l2_subdev_routing_validate_1_to_1(&routing);
--	if (ret)
--		return ret;
--
--	v4l2_subdev_lock_state(state);
--	ret = v4l2_subdev_set_routing(sd, state, &routing);
--	v4l2_subdev_unlock_state(state);
--
--	return ret;
-+	return __rcsi2_set_routing(sd, state, &routing);
- }
- 
  static const struct v4l2_subdev_video_ops rcar_csi2_video_ops = {
-@@ -1011,6 +1056,7 @@ static const struct v4l2_subdev_pad_ops rcar_csi2_pad_ops = {
- 	.init_cfg = rcsi2_init_cfg,
- 	.set_fmt = rcsi2_set_pad_format,
- 	.get_fmt = v4l2_subdev_get_fmt,
-+	.set_routing = rcsi2_set_routing,
+ 	.s_stream = rcsi2_s_stream,
  };
  
- static const struct v4l2_subdev_ops rcar_csi2_subdev_ops = {
+ static const struct v4l2_subdev_pad_ops rcar_csi2_pad_ops = {
++	.init_cfg = rcsi2_init_cfg,
+ 	.set_fmt = rcsi2_set_pad_format,
+ 	.get_fmt = rcsi2_get_pad_format,
+ };
+@@ -1494,7 +1556,8 @@ static int rcsi2_probe(struct platform_device *pdev)
+ 	v4l2_set_subdevdata(&priv->subdev, &pdev->dev);
+ 	snprintf(priv->subdev.name, V4L2_SUBDEV_NAME_SIZE, "%s %s",
+ 		 KBUILD_MODNAME, dev_name(&pdev->dev));
+-	priv->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE;
++	priv->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE |
++			     V4L2_SUBDEV_FL_MULTIPLEXED;
+ 
+ 	priv->subdev.entity.function = MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER;
+ 	priv->subdev.entity.ops = &rcar_csi2_entity_ops;
+@@ -1515,14 +1578,20 @@ static int rcsi2_probe(struct platform_device *pdev)
+ 
+ 	pm_runtime_enable(&pdev->dev);
+ 
++	ret = v4l2_subdev_init_finalize(&priv->subdev);
++	if (ret)
++		goto error_async;
++
+ 	ret = v4l2_async_register_subdev(&priv->subdev);
+ 	if (ret < 0)
+-		goto error_async;
++		goto error_subdev;
+ 
+ 	dev_info(priv->dev, "%d lanes found\n", priv->lanes);
+ 
+ 	return 0;
+ 
++error_subdev:
++	v4l2_subdev_cleanup(&priv->subdev);
+ error_async:
+ 	v4l2_async_nf_unregister(&priv->notifier);
+ 	v4l2_async_nf_cleanup(&priv->notifier);
+@@ -1539,6 +1608,7 @@ static int rcsi2_remove(struct platform_device *pdev)
+ 	v4l2_async_nf_unregister(&priv->notifier);
+ 	v4l2_async_nf_cleanup(&priv->notifier);
+ 	v4l2_async_unregister_subdev(&priv->subdev);
++	v4l2_subdev_cleanup(&priv->subdev);
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 
 -- 
 2.35.0
 
