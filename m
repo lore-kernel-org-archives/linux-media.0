@@ -2,96 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67E9DC433F5
-	for <linux-media@archiver.kernel.org>; Wed, 16 Feb 2022 08:50:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBF65C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 16 Feb 2022 09:02:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbiBPIuR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Feb 2022 03:50:17 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60802 "EHLO
+        id S231809AbiBPJC2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Feb 2022 04:02:28 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiBPIuQ (ORCPT
+        with ESMTP id S230518AbiBPJC2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Feb 2022 03:50:16 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A40A2AA3B2
-        for <linux-media@vger.kernel.org>; Wed, 16 Feb 2022 00:50:04 -0800 (PST)
+        Wed, 16 Feb 2022 04:02:28 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D78586E38;
+        Wed, 16 Feb 2022 01:02:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645001404; x=1676537404;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rrBvVbu61hx4T28nbuzqiGixr90MQOnjrq5iD6VzmK0=;
-  b=jPqezsyYVIGOYBnVKrhNDVAOdqYSNXmmtppyi2J9cRAOAYE09XqxJHXP
-   txhaGfilThunnYa9nI5tonBGlcSzK7W/URLg2DgJxOGLCbGOwW6IbV/fP
-   A6EPol949T9gaS2glyqkEvlSbwByTFytcmf9ADs8K/f/pt1ELED6w9HxD
-   NjmdzZMmnh9iDntECD3Slo8HD2yomPXQzAVAbNckQnuDCiXS7if1dPrdH
-   7rhXzYInsscvMsbJsVvYwI8aUiLJ3jgMFQDeA0wutRlDkvzcmV8T+JhWQ
-   zWDLFw624dCZxwt979XnkhOl84g3bluxsCkKpry3IK4ZXKEhQF45KOKK3
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="230518353"
+  t=1645002136; x=1676538136;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=mwF1U5j+drzsRrwL7zZWjzrwyGUiQkfyhUKOWPFbLPM=;
+  b=KgKF8cKykpQqZ3HjSpxnJFWn/ty/XllRG4ENAYkEKT2w8eHWA6DZ8PpC
+   LOObUtcrKyAqwu9TksdAxF8Jz6XmWt/eLnJNVk2Lu6EyND/EAHpYFuuaT
+   nNm9fYbqpWjn6N79rGhVfl/TlYrVfDGWssjAzSo7ACtn42dKgYXXdsuMP
+   Ugi6rwp42pJiAEVddYmZ7lTrCXzCFBHfIb7emeT0Ld3a4JAftatKxzavH
+   pnYQbWr/HY50heNdAC1zF6k/OhyRGMr3YinCcefkzKRBm8KcaNagZySAj
+   JS9iQt9pnCeLNe3sTmLsp6QzualmJ/5lc8xJLMJ6jyGf8fX+++8urOUnj
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="275137222"
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="230518353"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 00:50:03 -0800
+   d="scan'208";a="275137222"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:02:15 -0800
 X-IronPort-AV: E=Sophos;i="5.88,373,1635231600"; 
-   d="scan'208";a="544810031"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 00:50:02 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 1044120087;
-        Wed, 16 Feb 2022 10:49:57 +0200 (EET)
-Date:   Wed, 16 Feb 2022 10:49:57 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Shawnx Tu <shawnx.tu@intel.com>
-Cc:     linux-media@vger.kernel.org, andy.yeh@intel.com
-Subject: Re: [PATCH v1] media: Add a driver for the og01a1b camera sensor
-Message-ID: <Ygy6tT7eA8mFA0Og@paasikivi.fi.intel.com>
-References: <20220215151345.10679-1-shawnx.tu@intel.com>
+   d="scan'208";a="704216865"
+Received: from rbilei-mobl.ger.corp.intel.com (HELO localhost) ([10.252.13.113])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2022 01:02:10 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        tvrtko.ursulin@linux.intel.com, airlied@linux.ie, daniel@ffwll.ch,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] drm/i915/gt: fix unsigned integer to signed assignment
+In-Reply-To: <20220216083849.91239-1-jiapeng.chong@linux.alibaba.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220216083849.91239-1-jiapeng.chong@linux.alibaba.com>
+Date:   Wed, 16 Feb 2022 11:02:06 +0200
+Message-ID: <87h78z5gmp.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220215151345.10679-1-shawnx.tu@intel.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Shawn,
+On Wed, 16 Feb 2022, Jiapeng Chong <jiapeng.chong@linux.alibaba.com> wrote:
+> Eliminate the follow smatch warning:
+>
+> drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:4640
+> guc_create_virtual() warn: assigning (-2) to unsigned variable
+> 've->base.instance'.
+>
+> drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c:4641
+> guc_create_virtual() warn: assigning (-2) to unsigned variable
+> 've->base.uabi_instance'.
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-On Tue, Feb 15, 2022 at 11:13:45PM +0800, Shawnx Tu wrote:
-> From: Shawn Tu <shawnx.tu@intel.com>
-> 
-> Add a V4L2 sub-device driver for Omnivision og01a1b b&w
-> image sensor. This is a camera sensor using the I2C bus
-> for control and the CSI-2 bus for data.
-> 
-> This driver supports following features:
-> - manual exposure and analog/digital gain control support
-> - vblank/hblank control support
-> - test pattern support
-> - media controller support
-> - runtime PM support
-> - support following resolutions:
->   + 1280x1024 at 120FPS
-> 
-> Signed-off-by: Shawn Tu <shawnx.tu@intel.com>
+The report seems to be valid, but I don't think this is the fix.
 
-Thanks for the patch. I'lve applied it with this diff:
+Where do we even check for invalid instance/uabi_instance in code?
 
-diff --git a/drivers/media/i2c/og01a1b.c b/drivers/media/i2c/og01a1b.c
-index 05538184d95a..87179fc04e00 100644
---- a/drivers/media/i2c/og01a1b.c
-+++ b/drivers/media/i2c/og01a1b.c
-@@ -1071,7 +1071,7 @@ static int og01a1b_probe(struct i2c_client *client)
- 		goto probe_error_v4l2_ctrl_handler_free;
- 	}
- 
--	ret = v4l2_async_register_subdev_sensor_common(&og01a1b->sd);
-+	ret = v4l2_async_register_subdev_sensor(&og01a1b->sd);
- 	if (ret < 0) {
- 		dev_err(&client->dev, "failed to register V4L2 subdev: %d",
- 			ret);
+BR,
+Jani.
+
+
+> ---
+>  drivers/gpu/drm/i915/gt/intel_engine_types.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/gt/intel_engine_types.h b/drivers/gpu/drm/i915/gt/intel_engine_types.h
+> index 36365bdbe1ee..dc7cc06c68e7 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_engine_types.h
+> +++ b/drivers/gpu/drm/i915/gt/intel_engine_types.h
+> @@ -328,10 +328,10 @@ struct intel_engine_cs {
+>  	intel_engine_mask_t logical_mask;
+>  
+>  	u8 class;
+> -	u8 instance;
+> +	s8 instance;
+>  
+>  	u16 uabi_class;
+> -	u16 uabi_instance;
+> +	s16 uabi_instance;
+>  
+>  	u32 uabi_capabilities;
+>  	u32 context_size;
 
 -- 
-Kind regards,
-
-Sakari Ailus
+Jani Nikula, Intel Open Source Graphics Center
