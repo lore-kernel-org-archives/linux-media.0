@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA32EC4167E
-	for <linux-media@archiver.kernel.org>; Wed, 16 Feb 2022 21:04:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A841C4167D
+	for <linux-media@archiver.kernel.org>; Wed, 16 Feb 2022 21:04:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbiBPVEg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Feb 2022 16:04:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52388 "EHLO
+        id S233629AbiBPVEe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Feb 2022 16:04:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233855AbiBPVEJ (ORCPT
+        with ESMTP id S234183AbiBPVEI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Feb 2022 16:04:09 -0500
+        Wed, 16 Feb 2022 16:04:08 -0500
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657872AFE9F;
-        Wed, 16 Feb 2022 13:03:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3992B1005;
+        Wed, 16 Feb 2022 13:03:53 -0800 (PST)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id D37181BF205;
-        Wed, 16 Feb 2022 21:03:53 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id DDEB81BF206;
+        Wed, 16 Feb 2022 21:03:50 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     niklas.soderlund@ragnatech.se, laurent.pinchart@ideasonboard.com
 Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
         tomi.valkeinen@ideasonboard.com, linux-media@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 07/10] media: rcar-csi2: Move format to subdev state
-Date:   Wed, 16 Feb 2022 22:04:44 +0100
-Message-Id: <20220216210447.481006-8-jacopo+renesas@jmondi.org>
+Subject: [PATCH 05/10] media: adv748x: Implement set_routing
+Date:   Wed, 16 Feb 2022 22:04:42 +0100
+Message-Id: <20220216210447.481006-6-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <20220216210447.481006-1-jacopo+renesas@jmondi.org>
 References: <20220216210447.481006-1-jacopo+renesas@jmondi.org>
@@ -35,104 +35,104 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move format handling to the v4l2_subdev state and store it per
-(pad, stream) combination.
-
-Now that the image format is stored in the subdev state, it can be
-accessed through v4l2_subdev_get_fmt() instead of open-coding it.
+Add the set_routing() subdev operation to allow userspace to configure
+the CSI-2 virtual channel.
 
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/platform/rcar-vin/rcar-csi2.c | 58 ++++++++++-----------
- 1 file changed, 29 insertions(+), 29 deletions(-)
+ drivers/media/i2c/adv748x/adv748x-csi2.c | 73 ++++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index e8a79a30cc49..a0642cafd70b 100644
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -834,45 +834,45 @@ static int rcsi2_s_stream(struct v4l2_subdev *sd, int enable)
+diff --git a/drivers/media/i2c/adv748x/adv748x-csi2.c b/drivers/media/i2c/adv748x/adv748x-csi2.c
+index 9824ebe44eb1..bf927898b918 100644
+--- a/drivers/media/i2c/adv748x/adv748x-csi2.c
++++ b/drivers/media/i2c/adv748x/adv748x-csi2.c
+@@ -340,12 +340,85 @@ static int adv748x_csi2_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+ 	return ret;
  }
  
- static int rcsi2_set_pad_format(struct v4l2_subdev *sd,
--				struct v4l2_subdev_state *sd_state,
-+				struct v4l2_subdev_state *state,
- 				struct v4l2_subdev_format *format)
- {
--	struct rcar_csi2 *priv = sd_to_csi2(sd);
--	struct v4l2_mbus_framefmt *framefmt;
-+	struct v4l2_mbus_framefmt *fmt;
-+	int ret = 0;
- 
--	mutex_lock(&priv->lock);
-+	/*
-+	 * Format is propagated from sink streams to source streams, so
-+	 * disallow setting format on the source pads.
-+	 */
-+	if (format->pad > RCAR_CSI2_SINK)
++static int adv748x_csi2_routing_validate(struct adv748x_csi2 *tx,
++					 struct v4l2_subdev_krouting *routing)
++{
++	struct v4l2_subdev_route *route;
++
++	if (routing->num_routes != 1) {
++		dev_err(tx->state->dev, "Unsupported number of routes %u",
++			routing->num_routes);
 +		return -EINVAL;
- 
- 	if (!rcsi2_code_to_fmt(format->format.code))
- 		format->format.code = rcar_csi2_formats[0].code;
- 
--	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
--		priv->mf = format->format;
--	} else {
--		framefmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
--		*framefmt = format->format;
--	}
--
--	mutex_unlock(&priv->lock);
--
--	return 0;
--}
--
--static int rcsi2_get_pad_format(struct v4l2_subdev *sd,
--				struct v4l2_subdev_state *sd_state,
--				struct v4l2_subdev_format *format)
--{
--	struct rcar_csi2 *priv = sd_to_csi2(sd);
++	}
++
++	route = &routing->routes[0];
++
++	if (route->sink_pad != ADV748X_CSI2_SINK ||
++	    route->source_pad != ADV748X_CSI2_SOURCE) {
++		dev_err(tx->state->dev,
++			"Routes should go from the sink to the source pads.\n");
++		return -EINVAL;
++	}
++
++	if (route->source_stream > 4) {
++		dev_err(tx->state->dev, "Unsupported source stream %u\n",
++			route->source_stream);
++		return -EINVAL;
++	}
++
++	if (route->sink_stream != 0) {
++		dev_err(tx->state->dev, "Unsupported sink stream %u\n",
++			route->sink_stream);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int adv748x_csi2_set_vc_with_routing(struct adv748x_csi2 *tx,
++					    struct v4l2_subdev_krouting *routing)
++{
++	struct v4l2_subdev_route *route = &routing->routes[0];
++
++	return adv748x_csi2_set_virtual_channel(tx, route->source_stream);
++}
++
++static int adv748x_csi2_set_routing(struct v4l2_subdev *sd,
++				    struct v4l2_subdev_state *state,
++				    enum v4l2_subdev_format_whence which,
++				    struct v4l2_subdev_krouting *routing)
++{
++	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
++	int ret;
++
 +	v4l2_subdev_lock_state(state);
- 
--	mutex_lock(&priv->lock);
-+	fmt = v4l2_state_get_stream_format(state, format->pad,
-+					   format->stream);
-+	if (!fmt) {
-+		ret = -EINVAL;
++
++	ret = adv748x_csi2_routing_validate(tx, routing);
++	if (ret)
 +		goto out;
-+	}
-+	*fmt = format->format;
- 
--	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
--		format->format = priv->mf;
--	else
--		format->format = *v4l2_subdev_get_try_format(sd, sd_state, 0);
-+	/* Propagate format to the other end of the route. */
-+	fmt = v4l2_subdev_state_get_opposite_stream_format(state, format->pad,
-+							   format->stream);
-+	if (!fmt) {
-+		ret = -EINVAL;
++
++	ret = v4l2_subdev_set_routing(sd, state, routing);
++	if (ret)
 +		goto out;
-+	}
-+	*fmt = format->format;
- 
--	mutex_unlock(&priv->lock);
++
++	if (which == V4L2_SUBDEV_FORMAT_TRY)
++		goto out;
++
++	ret = adv748x_csi2_set_vc_with_routing(tx, routing);
++
 +out:
 +	v4l2_subdev_unlock_state(state);
- 
--	return 0;
++
 +	return ret;
- }
- 
- static int rcsi2_init_cfg(struct v4l2_subdev *sd,
-@@ -943,7 +943,7 @@ static const struct v4l2_subdev_video_ops rcar_csi2_video_ops = {
- static const struct v4l2_subdev_pad_ops rcar_csi2_pad_ops = {
- 	.init_cfg = rcsi2_init_cfg,
- 	.set_fmt = rcsi2_set_pad_format,
--	.get_fmt = rcsi2_get_pad_format,
-+	.get_fmt = v4l2_subdev_get_fmt,
++}
++
+ static const struct v4l2_subdev_pad_ops adv748x_csi2_pad_ops = {
+ 	.init_cfg = adv748x_csi2_init_cfg,
+ 	.get_fmt = v4l2_subdev_get_fmt,
+ 	.set_fmt = adv748x_csi2_set_format,
+ 	.get_mbus_config = adv748x_csi2_get_mbus_config,
+ 	.get_frame_desc = adv748x_csi2_get_frame_desc,
++	.set_routing = adv748x_csi2_set_routing,
  };
  
- static const struct v4l2_subdev_ops rcar_csi2_subdev_ops = {
+ /* -----------------------------------------------------------------------------
 -- 
 2.35.0
 
