@@ -2,62 +2,64 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F37BC433F5
-	for <linux-media@archiver.kernel.org>; Thu, 17 Feb 2022 06:15:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CA86C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 17 Feb 2022 06:15:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbiBQGQH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Feb 2022 01:16:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42752 "EHLO
+        id S235446AbiBQGQI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Feb 2022 01:16:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234702AbiBQGQG (ORCPT
+        with ESMTP id S231594AbiBQGQG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 17 Feb 2022 01:16:06 -0500
+X-Greylist: delayed 465 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 22:15:52 PST
 Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908AB2A2297
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F78E2A2286
         for <linux-media@vger.kernel.org>; Wed, 16 Feb 2022 22:15:52 -0800 (PST)
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 8662458020F;
-        Thu, 17 Feb 2022 01:08:10 -0500 (EST)
+        by mailnew.nyi.internal (Postfix) with ESMTP id B9639580218;
+        Thu, 17 Feb 2022 01:08:16 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 17 Feb 2022 01:08:10 -0500
+  by compute4.internal (MEProxy); Thu, 17 Feb 2022 01:08:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
         cc:cc:date:date:from:from:in-reply-to:in-reply-to:message-id
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; bh=BJL
-        HbFnRLw2/8fPb4wRZexRI7F3nNET21fjY+Ciw9PU=; b=OkIQjopg9XZE0VLss3T
-        qhKsDgntyZvG+JBYDc7/BG+B/2yK+AyIhhvj7UDLW13CM+e/UW2gDDSKlYmlCpqP
-        E2FqfIGE9zNMWIbmZE/4DqXggMrPjZd0OgO+hFzjfqzRdIs4iqU9wtKLYXEVnlyo
-        6qR7xYHkRkORMQePijftwvjrov2AjNFffqtRkj02a7bpiTW9adVtWgymMfoESw/B
-        g12JlUpnYh51DPqwqJj+IWEL0NZDBzfJ01NK66NF6ruOYmcZqxd1WpEDV7vSzVkF
-        lLPV0NbQWjqipJfW4fZmBv17x1h7r9eWI/91qJG2Hjr5ToIR9tC+Do7QWIrUnqy+
-        aAA==
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; bh=DV4
+        eC2HC66+h0oCSZ3Hu32zxW+HIzDTjoZJ6OQ4xoL8=; b=X/QYnE+jcDXh2eJGOH+
+        Lzboy5eV3xI6LjTU8IvothirL1hVd+sQsBFUmvp6R/+XpXkymZFZ/PjTxJq3DxLX
+        ezwApyEEdu36Le+3GKF6V0d59piCM5uFS//7ayql/upmbeB8W9YVVsQxZzpjeUwW
+        8Ii20OyXjSpr9UCExy8J2JNmLdPKxtEY+Hde8hvoLUdG2r0es5odRB0XJZxFCd6N
+        0uQGFrUPNALLXTS61iPDRcakIMtZ9fd5VFmjYX8TjafNRoywQ6Prgqoc1KOGwC/s
+        M9Wx4SJU/VeG8EXkzbZJTDyWensuT5CXf+4Dl3otaCGn05x1XILvkrreiXLQQFgK
+        sNA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:date:date:from:from:in-reply-to
         :in-reply-to:message-id:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=BJLHbFnRLw2/8fPb4wRZexRI7F3nNET21fjY+Ciw9
-        PU=; b=hV5h9o+BOLFYdapE/hvtpiW9OnTyU+YOQ4jesq+2UEo0fD4fXHFXBL81q
-        0A9ClWQzyLLQpAef206LdiBewWWtJLWWOC8US5e6Vr9qaFjhVFjyh/antdijA4Aq
-        gBKxlDAFxbs4UycI6saldD2rZDHTZ0KuwB9hUbKZcKsGbBjbcT6AMMmf5WSkdO03
-        ikMPFVe6srSQCoDrlbLGPw7NgI0ZXV4HPjfHHLRMOoP0BJloAFJiSrPCF84E8Aco
-        g7TSNUiK42mc3gQehUwhxkpq/tmsD9YQ+U9btX5IDnRiBVq6C5Fp+eUGJIm2zNz2
-        IgjImM3mgkwZzUgB1fbkNLj6cdeCA==
-X-ME-Sender: <xms:SeYNYqDw-fWURPYB--K6K3k3boXRyRZ2OMLehz7JTeIU779b9kUU0g>
-    <xme:SeYNYkhQESVkh1yJR1aXLEv03kfCHFj2aIyk7yQDEwGMYUXG8K7mY0EBeUd0V0arn
-    5Dc_mm49HIPFHc1NOU>
-X-ME-Received: <xmr:SeYNYtk2QMCsK00KWo-ajf2WHNkBiysNJB3QJ60Axpu0-8JZ4jMx2mKZQsecHRuKmuIKTQ5CZQ>
+        :x-sasl-enc; s=fm2; bh=DV4eC2HC66+h0oCSZ3Hu32zxW+HIzDTjoZJ6OQ4xo
+        L8=; b=EJIzEYfloidvRmX64mCehS0oS2D4BANOH+ORFuotQpa7qI4EagA8NaT41
+        pL3Wdrs0+BweO9U4fAbNYC1mLWMIIt2KzYQg3ZEDKmhwZMj/Yjr9l/fZmfx3a/32
+        2gTTlJIy6WIGrPM8oRZFYk1BXjdknz6iluPRXw4n07LSdQl/XTXl21i6yqUxiksT
+        X0bwV9tNMGb6XgyQ/pkjvTTUGUy82VRji/a3Q3LH6lwCJinmZwwNQy/0iMZJVB7N
+        EIHYBO3kqoCV57EoB3uhlOBwTp/BULNPYFAcUh/JcdpftWXqJubvVl5G7l6V15G4
+        5l5q8hCZP8H6sEIsAs7xnyFKpBxZA==
+X-ME-Sender: <xms:UOYNYjp-czPrO7L3RaO5nOAcM0_Qu1kp9h_A4uFROe-qkG51wHyW2g>
+    <xme:UOYNYtr2Ap22gTeCAru6kRZgIPID-pnjwgfGVtriTottbUnRLLzdI4ZaoBe6J5DLA
+    KesXMxjsro9VP5J7tA>
+X-ME-Received: <xmr:UOYNYgNPYxhHfIH7HHPQTmKy1aPu-4NcuuGTSxO1UNNy-7IM2QoRH-qKNvsE-LuVbKEamWF12Q>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeejgdeltdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfsedttdertdertd
     dtnecuhfhrohhmpeffrghfnhgrucfjihhrshgthhhfvghlugcuoegurghfnhgrsehfrghs
-    thhmrghilhdrtghomheqnecuggftrfgrthhtvghrnhepheduvdefhfeutdekhedvjeekve
-    ejhedvheelfffftedvledvveeghfehhfffffdtnecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomhepuggrfhhnrgesfhgrshhtmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:SeYNYoy8jY-LV_ho43XEuldWLvBjT3jAtRraphnHqPFQ8t64I7kbvw>
-    <xmx:SeYNYvTTEuzfGEk_Am8Xh924K4bRFu26sjtacMLib8_Gr4c7ciKnFQ>
-    <xmx:SeYNYjYTSOxJBmrWoDERf-BjgfSIroTGaZk-CVZXouf2g8KOAC4_lw>
-    <xmx:SuYNYk8Y-5qAnVccCswq--MM8mvDts3hwFWJahhGRRjx24W-cVSWcQ>
+    thhmrghilhdrtghomheqnecuggftrfgrthhtvghrnhepieffvdfhkeelvdehlefgjeeuud
+    ffffevueduudevgfejheffudekgfekgeetleefnecuffhomhgrihhnpehlkhhmlhdrohhr
+    ghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegurg
+    hfnhgrsehfrghsthhmrghilhdrtghomh
+X-ME-Proxy: <xmx:UOYNYm7C7FBF7q6ItzKdYN7cCjIpXSVUTbUpCCBlSE6VMJqWK77pBw>
+    <xmx:UOYNYi5hKQnGBlK7mSYPfKBKB5t4hsy21epOq8NrIJmjHMWoriyzOw>
+    <xmx:UOYNYuhQPA-ozi4K8IQAKFV4PgabZOXvqJhRLPPREFIFNPHD_-bsng>
+    <xmx:UOYNYrFaj9zswzfr_xd0aPF_0PY3NUttTozmF0g5mhXdzxe2NrYHJQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 17 Feb 2022 01:08:06 -0500 (EST)
+ 17 Feb 2022 01:08:13 -0500 (EST)
 From:   Dafna Hirschfeld <dafna@fastmail.com>
 To:     ezequiel@vanguardiasur.com.ar
 Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
@@ -65,9 +67,9 @@ Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
         senozhatsky@google.com, hch@lst.de, dafna@fastmail.com,
         Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         kernel@collabora.com
-Subject: [PATCH v3 2/4] media: stk1160: If start stream fails, return buffers with VB2_BUF_STATE_QUEUED
-Date:   Thu, 17 Feb 2022 08:07:22 +0200
-Message-Id: <20220217060724.7763-3-dafna@fastmail.com>
+Subject: [PATCH v3 4/4] media: stk1160: use dma_alloc_noncontiguous API
+Date:   Thu, 17 Feb 2022 08:07:24 +0200
+Message-Id: <20220217060724.7763-5-dafna@fastmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220217060724.7763-1-dafna@fastmail.com>
 References: <20220217060724.7763-1-dafna@fastmail.com>
@@ -77,133 +79,314 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 
-If the callback 'start_streaming' fails, then all
-queued buffers in the driver should be returned with
-state 'VB2_BUF_STATE_QUEUED'. Currently, they are
-returned with 'VB2_BUF_STATE_ERROR' which is wrong.
-Fix this. This also fixes the warning:
+Replace the urb buffers allocation to use the noncontiguous API.
 
-[   65.583633] WARNING: CPU: 5 PID: 593 at drivers/media/common/videobuf2/videobuf2-core.c:1612 vb2_start_streaming+0xd4/0x160 [videobuf2_common]
-[   65.585027] Modules linked in: snd_usb_audio snd_hwdep snd_usbmidi_lib snd_rawmidi snd_soc_hdmi_codec dw_hdmi_i2s_audio saa7115 stk1160 videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videobuf2_common videodev mc crct10dif_ce panfrost snd_soc_simple_card snd_soc_audio_graph_card snd_soc_spdif_tx snd_soc_simple_card_utils gpu_sched phy_rockchip_pcie snd_soc_rockchip_i2s rockchipdrm analogix_dp dw_mipi_dsi dw_hdmi cec drm_kms_helper drm rtc_rk808 rockchip_saradc industrialio_triggered_buffer kfifo_buf rockchip_thermal pcie_rockchip_host ip_tables x_tables ipv6
-[   65.589383] CPU: 5 PID: 593 Comm: v4l2src0:src Tainted: G        W         5.16.0-rc4-62408-g32447129cb30-dirty #14
-[   65.590293] Hardware name: Radxa ROCK Pi 4B (DT)
-[   65.590696] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   65.591304] pc : vb2_start_streaming+0xd4/0x160 [videobuf2_common]
-[   65.591850] lr : vb2_start_streaming+0x6c/0x160 [videobuf2_common]
-[   65.592395] sp : ffff800012bc3ad0
-[   65.592685] x29: ffff800012bc3ad0 x28: 0000000000000000 x27: ffff800012bc3cd8
-[   65.593312] x26: 0000000000000000 x25: ffff00000d8a7800 x24: 0000000040045612
-[   65.593938] x23: ffff800011323000 x22: ffff800012bc3cd8 x21: ffff00000908a8b0
-[   65.594562] x20: ffff00000908a8c8 x19: 00000000fffffff4 x18: ffffffffffffffff
-[   65.595188] x17: 000000040044ffff x16: 00400034b5503510 x15: ffff800011323f78
-[   65.595813] x14: ffff000013163886 x13: ffff000013163885 x12: 00000000000002ce
-[   65.596439] x11: 0000000000000028 x10: 0000000000000001 x9 : 0000000000000228
-[   65.597064] x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff726c5e78
-[   65.597690] x5 : ffff800012bc3990 x4 : 0000000000000000 x3 : ffff000009a34880
-[   65.598315] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000007cd99f0
-[   65.598940] Call trace:
-[   65.599155]  vb2_start_streaming+0xd4/0x160 [videobuf2_common]
-[   65.599672]  vb2_core_streamon+0x17c/0x1a8 [videobuf2_common]
-[   65.600179]  vb2_streamon+0x54/0x88 [videobuf2_v4l2]
-[   65.600619]  vb2_ioctl_streamon+0x54/0x60 [videobuf2_v4l2]
-[   65.601103]  v4l_streamon+0x3c/0x50 [videodev]
-[   65.601521]  __video_do_ioctl+0x1a4/0x428 [videodev]
-[   65.601977]  video_usercopy+0x320/0x828 [videodev]
-[   65.602419]  video_ioctl2+0x3c/0x58 [videodev]
-[   65.602830]  v4l2_ioctl+0x60/0x90 [videodev]
-[   65.603227]  __arm64_sys_ioctl+0xa8/0xe0
-[   65.603576]  invoke_syscall+0x54/0x118
-[   65.603911]  el0_svc_common.constprop.3+0x84/0x100
-[   65.604332]  do_el0_svc+0x34/0xa0
-[   65.604625]  el0_svc+0x1c/0x50
-[   65.604897]  el0t_64_sync_handler+0x88/0xb0
-[   65.605264]  el0t_64_sync+0x16c/0x170
-[   65.605587] ---[ end trace 578e0ba07742170d ]---
+This improves performance on ARM platform where DMA coherent allocations
+produce uncached mappings. Note that the noncontiguous API
+requires the driver to handle synchronization.
 
-Fixes: 8ac456495a33d ("[media] stk1160: Stop device and unqueue buffers when start_streaming() fails")
+This commit is similar to this one for the uvc driver:
+
+  https://lkml.org/lkml/2021/3/12/1506
+
+Performance tests on rock-pi4 (Arm64) shows about 15x
+improvements:
+
+== DMA NONCONTIGUOUS ==
+total durations: 20.63678480 sec
+urb processing durations: 0.286864889 sec
+uS/qty: 286864/2508 avg: 114.379 min: 0.583 max: 155.461 (uS)
+FPS: 24.92
+lost: 0 done: 500
+raw decode speed: 11.603 Gbits/s
+bytes 414831228.000
+bytes/urb: 165403
+
+== DMA COHERENT ==
+total durations: 20.73551767 sec
+urb processing durations: 4.541559160 sec
+uS/qty: 4541559/2509 avg: 1810.107 min: 0.583 max: 2113.163 (uS)
+FPS: 24.90
+lost: 0 done: 500
+raw decode speed: 730.738 Mbits/s
+bytes 414785444.000
+bytes/urb: 165319
+
+Performance tests on x86 laptop show no significant
+difference:
+
+== DMA NONCONTIGUOUS ==
+total durations: 20.220590102 sec
+urb processing durations: 0.63021818 sec
+uS/qty: 63021/2512 avg: 25.088 min: 0.138 max: 146.750 (uS)
+FPS: 24.72
+lost: 0 done: 500
+raw decode speed: 52.751 Gbits/s
+bytes 415421032.000
+bytes/urb: 165374
+
+== DMA COHERENT ==
+total durations: 20.220475614 sec
+urb processing durations: 0.64751972 sec
+uS/qty: 64751/2512 avg: 25.777 min: 0.168 max: 132.250 (uS)
+FPS: 24.72
+lost: 0 done: 500
+raw decode speed: 51.927 Gbits/s
+bytes 415422794.000
+bytes/urb: 165375
+
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- drivers/media/usb/stk1160/stk1160-core.c |  2 +-
- drivers/media/usb/stk1160/stk1160-v4l.c  | 10 +++++-----
- drivers/media/usb/stk1160/stk1160.h      |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/media/usb/stk1160/stk1160-v4l.c   |   4 +
+ drivers/media/usb/stk1160/stk1160-video.c | 114 +++++++++++++---------
+ drivers/media/usb/stk1160/stk1160.h       |  10 ++
+ 3 files changed, 84 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/media/usb/stk1160/stk1160-core.c b/drivers/media/usb/stk1160/stk1160-core.c
-index 4e1698f78818..ce717502ea4c 100644
---- a/drivers/media/usb/stk1160/stk1160-core.c
-+++ b/drivers/media/usb/stk1160/stk1160-core.c
-@@ -403,7 +403,7 @@ static void stk1160_disconnect(struct usb_interface *interface)
- 	/* Here is the only place where isoc get released */
- 	stk1160_uninit_isoc(dev);
- 
--	stk1160_clear_queue(dev);
-+	stk1160_clear_queue(dev, VB2_BUF_STATE_ERROR);
- 
- 	video_unregister_device(&dev->vdev);
- 	v4l2_device_disconnect(&dev->v4l2_dev);
 diff --git a/drivers/media/usb/stk1160/stk1160-v4l.c b/drivers/media/usb/stk1160/stk1160-v4l.c
-index 6a4eb616d516..1aa953469402 100644
+index ebf245d44005..a1f785a5ffd8 100644
 --- a/drivers/media/usb/stk1160/stk1160-v4l.c
 +++ b/drivers/media/usb/stk1160/stk1160-v4l.c
-@@ -258,7 +258,7 @@ static int stk1160_start_streaming(struct stk1160 *dev)
- 	stk1160_uninit_isoc(dev);
- out_stop_hw:
- 	usb_set_interface(dev->udev, 0, 0);
--	stk1160_clear_queue(dev);
-+	stk1160_clear_queue(dev, VB2_BUF_STATE_QUEUED);
+@@ -232,6 +232,10 @@ static int stk1160_start_streaming(struct stk1160 *dev)
  
- 	mutex_unlock(&dev->v4l_lock);
- 
-@@ -306,7 +306,7 @@ static int stk1160_stop_streaming(struct stk1160 *dev)
- 
- 	stk1160_stop_hw(dev);
- 
--	stk1160_clear_queue(dev);
-+	stk1160_clear_queue(dev, VB2_BUF_STATE_ERROR);
- 
- 	stk1160_dbg("streaming stopped\n");
- 
-@@ -745,7 +745,7 @@ static const struct video_device v4l_template = {
- /********************************************************************/
- 
- /* Must be called with both v4l_lock and vb_queue_lock hold */
--void stk1160_clear_queue(struct stk1160 *dev)
-+void stk1160_clear_queue(struct stk1160 *dev, enum vb2_buffer_state vb2_state)
+ 	/* submit urbs and enables IRQ */
+ 	for (i = 0; i < dev->isoc_ctl.num_bufs; i++) {
++		struct stk1160_urb *stk_urb = &dev->isoc_ctl.urb_ctl[i];
++
++		dma_sync_sgtable_for_device(stk1160_get_dmadev(dev), stk_urb->sgt,
++					    DMA_FROM_DEVICE);
+ 		rc = usb_submit_urb(dev->isoc_ctl.urb_ctl[i].urb, GFP_KERNEL);
+ 		if (rc) {
+ 			stk1160_err("cannot submit urb[%d] (%d)\n", i, rc);
+diff --git a/drivers/media/usb/stk1160/stk1160-video.c b/drivers/media/usb/stk1160/stk1160-video.c
+index f3c0497a8539..763c539b4a6e 100644
+--- a/drivers/media/usb/stk1160/stk1160-video.c
++++ b/drivers/media/usb/stk1160/stk1160-video.c
+@@ -295,7 +295,9 @@ static void stk1160_process_isoc(struct stk1160 *dev, struct urb *urb)
+ static void stk1160_isoc_irq(struct urb *urb)
  {
- 	struct stk1160_buffer *buf;
- 	unsigned long flags;
-@@ -756,7 +756,7 @@ void stk1160_clear_queue(struct stk1160 *dev)
- 		buf = list_first_entry(&dev->avail_bufs,
- 			struct stk1160_buffer, list);
- 		list_del(&buf->list);
--		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
-+		vb2_buffer_done(&buf->vb.vb2_buf, vb2_state);
- 		stk1160_dbg("buffer [%p/%d] aborted\n",
- 			    buf, buf->vb.vb2_buf.index);
- 	}
-@@ -766,7 +766,7 @@ void stk1160_clear_queue(struct stk1160 *dev)
- 		buf = dev->isoc_ctl.buf;
- 		dev->isoc_ctl.buf = NULL;
+ 	int i, rc;
+-	struct stk1160 *dev = urb->context;
++	struct stk1160_urb *stk_urb = urb->context;
++	struct stk1160 *dev = stk_urb->dev;
++	struct device *dma_dev = stk1160_get_dmadev(dev);
  
--		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
-+		vb2_buffer_done(&buf->vb.vb2_buf, vb2_state);
- 		stk1160_dbg("buffer [%p/%d] aborted\n",
- 			    buf, buf->vb.vb2_buf.index);
+ 	switch (urb->status) {
+ 	case 0:
+@@ -310,6 +312,10 @@ static void stk1160_isoc_irq(struct urb *urb)
+ 		return;
  	}
+ 
++	invalidate_kernel_vmap_range(stk_urb->transfer_buffer,
++				     urb->transfer_buffer_length);
++	dma_sync_sgtable_for_cpu(dma_dev, stk_urb->sgt, DMA_FROM_DEVICE);
++
+ 	stk1160_process_isoc(dev, urb);
+ 
+ 	/* Reset urb buffers */
+@@ -318,6 +324,7 @@ static void stk1160_isoc_irq(struct urb *urb)
+ 		urb->iso_frame_desc[i].actual_length = 0;
+ 	}
+ 
++	dma_sync_sgtable_for_device(dma_dev, stk_urb->sgt, DMA_FROM_DEVICE);
+ 	rc = usb_submit_urb(urb, GFP_ATOMIC);
+ 	if (rc)
+ 		stk1160_err("urb re-submit failed (%d)\n", rc);
+@@ -353,37 +360,34 @@ void stk1160_cancel_isoc(struct stk1160 *dev)
+ 	stk1160_dbg("all urbs killed\n");
+ }
+ 
++static void stk1160_free_urb(struct stk1160 *dev, struct stk1160_urb *stk_urb)
++{
++	struct device *dma_dev = stk1160_get_dmadev(dev);
++
++	dma_vunmap_noncontiguous(dma_dev, stk_urb->transfer_buffer);
++	dma_free_noncontiguous(dma_dev, stk_urb->urb->transfer_buffer_length,
++			       stk_urb->sgt, DMA_FROM_DEVICE);
++	usb_free_urb(stk_urb->urb);
++
++	stk_urb->transfer_buffer = NULL;
++	stk_urb->sgt = NULL;
++	stk_urb->urb = NULL;
++	stk_urb->dev = NULL;
++	stk_urb->dma = 0;
++}
++
+ /*
+  * Releases urb and transfer buffers
+  * Obviusly, associated urb must be killed before releasing it.
+  */
+ void stk1160_free_isoc(struct stk1160 *dev)
+ {
+-	struct urb *urb;
+ 	int i, num_bufs = dev->isoc_ctl.num_bufs;
+ 
+ 	stk1160_dbg("freeing %d urb buffers...\n", num_bufs);
+ 
+-	for (i = 0; i < num_bufs; i++) {
+-
+-		urb = dev->isoc_ctl.urb_ctl[i].urb;
+-		if (urb) {
+-
+-			if (dev->isoc_ctl.urb_ctl[i].transfer_buffer) {
+-#ifndef CONFIG_DMA_NONCOHERENT
+-				usb_free_coherent(dev->udev,
+-					urb->transfer_buffer_length,
+-					dev->isoc_ctl.urb_ctl[i].transfer_buffer,
+-					urb->transfer_dma);
+-#else
+-				kfree(dev->isoc_ctl.urb_ctl[i].transfer_buffer);
+-#endif
+-			}
+-			usb_free_urb(urb);
+-			dev->isoc_ctl.urb_ctl[i].urb = NULL;
+-		}
+-		dev->isoc_ctl.urb_ctl[i].transfer_buffer = NULL;
+-	}
++	for (i = 0; i < num_bufs; i++)
++		stk1160_free_urb(dev, &dev->isoc_ctl.urb_ctl[i]);
+ 
+ 	dev->isoc_ctl.num_bufs = 0;
+ 
+@@ -400,6 +404,41 @@ void stk1160_uninit_isoc(struct stk1160 *dev)
+ 	stk1160_free_isoc(dev);
+ }
+ 
++static int stk1160_fill_urb(struct stk1160 *dev, struct stk1160_urb *stk_urb,
++			    int sb_size, int max_packets)
++{
++	struct device *dma_dev = stk1160_get_dmadev(dev);
++
++	stk_urb->urb = usb_alloc_urb(max_packets, GFP_KERNEL);
++	if (!stk_urb->urb)
++		return -ENOMEM;
++	stk_urb->sgt = dma_alloc_noncontiguous(dma_dev, sb_size,
++					       DMA_FROM_DEVICE, GFP_KERNEL, 0);
++
++	/*
++	 * If the buffer allocation failed, we exit but return 0 since
++	 * we allow the driver working with less buffers
++	 */
++	if (!stk_urb->sgt)
++		goto free_urb;
++
++	stk_urb->transfer_buffer = dma_vmap_noncontiguous(dma_dev, sb_size,
++							  stk_urb->sgt);
++	if (!stk_urb->transfer_buffer)
++		goto free_sgt;
++
++	stk_urb->dma = stk_urb->sgt->sgl->dma_address;
++	stk_urb->dev = dev;
++	return 0;
++free_sgt:
++	dma_free_noncontiguous(dma_dev, sb_size, stk_urb->sgt, DMA_FROM_DEVICE);
++	stk_urb->sgt = NULL;
++free_urb:
++	usb_free_urb(stk_urb->urb);
++	stk_urb->urb = NULL;
++
++	return 0;
++}
+ /*
+  * Allocate URBs
+  */
+@@ -407,6 +446,7 @@ int stk1160_alloc_isoc(struct stk1160 *dev)
+ {
+ 	struct urb *urb;
+ 	int i, j, k, sb_size, max_packets, num_bufs;
++	int ret;
+ 
+ 	/*
+ 	 * It may be necessary to release isoc here,
+@@ -428,23 +468,14 @@ int stk1160_alloc_isoc(struct stk1160 *dev)
+ 	/* allocate urbs and transfer buffers */
+ 	for (i = 0; i < num_bufs; i++) {
+ 
+-		urb = usb_alloc_urb(max_packets, GFP_KERNEL);
+-		if (!urb)
++		ret = stk1160_fill_urb(dev, &dev->isoc_ctl.urb_ctl[i],
++				       sb_size, max_packets);
++		if (ret)
+ 			goto free_i_bufs;
+-		dev->isoc_ctl.urb_ctl[i].urb = urb;
+-
+-#ifndef CONFIG_DMA_NONCOHERENT
+-		dev->isoc_ctl.urb_ctl[i].transfer_buffer =
+-			usb_alloc_coherent(dev->udev, sb_size, GFP_KERNEL,
+-					   &urb->transfer_dma);
+-#else
+-		dev->isoc_ctl.urb_ctl[i].transfer_buffer =
+-			kmalloc(sb_size, GFP_KERNEL);
+-#endif
+-		if (!dev->isoc_ctl.urb_ctl[i].transfer_buffer) {
+-			stk1160_err("cannot alloc %d bytes for tx[%d] buffer\n",
+-				sb_size, i);
+ 
++		urb = dev->isoc_ctl.urb_ctl[i].urb;
++
++		if (!urb) {
+ 			/* Not enough transfer buffers, so just give up */
+ 			if (i < STK1160_MIN_BUFS)
+ 				goto free_i_bufs;
+@@ -460,15 +491,12 @@ int stk1160_alloc_isoc(struct stk1160 *dev)
+ 		urb->transfer_buffer = dev->isoc_ctl.urb_ctl[i].transfer_buffer;
+ 		urb->transfer_buffer_length = sb_size;
+ 		urb->complete = stk1160_isoc_irq;
+-		urb->context = dev;
++		urb->context = &dev->isoc_ctl.urb_ctl[i];
+ 		urb->interval = 1;
+ 		urb->start_frame = 0;
+ 		urb->number_of_packets = max_packets;
+-#ifndef CONFIG_DMA_NONCOHERENT
+ 		urb->transfer_flags = URB_ISO_ASAP | URB_NO_TRANSFER_DMA_MAP;
+-#else
+-		urb->transfer_flags = URB_ISO_ASAP;
+-#endif
++		urb->transfer_dma = dev->isoc_ctl.urb_ctl[i].dma;
+ 
+ 		k = 0;
+ 		for (j = 0; j < max_packets; j++) {
+@@ -492,8 +520,6 @@ int stk1160_alloc_isoc(struct stk1160 *dev)
+ 	 * enough to work fine, so we just free the extra urb,
+ 	 * store the allocated count and keep going, fingers crossed!
+ 	 */
+-	usb_free_urb(dev->isoc_ctl.urb_ctl[i].urb);
+-	dev->isoc_ctl.urb_ctl[i].urb = NULL;
+ 
+ 	stk1160_warn("%d urbs allocated. Trying to continue...\n", i);
+ 
 diff --git a/drivers/media/usb/stk1160/stk1160.h b/drivers/media/usb/stk1160/stk1160.h
-index a31ea1c80f25..a70963ce8753 100644
+index 0c355bb078c1..7b498d14ed7a 100644
 --- a/drivers/media/usb/stk1160/stk1160.h
 +++ b/drivers/media/usb/stk1160/stk1160.h
-@@ -166,7 +166,7 @@ struct regval {
- int stk1160_vb2_setup(struct stk1160 *dev);
- int stk1160_video_register(struct stk1160 *dev);
- void stk1160_video_unregister(struct stk1160 *dev);
--void stk1160_clear_queue(struct stk1160 *dev);
-+void stk1160_clear_queue(struct stk1160 *dev, enum vb2_buffer_state vb2_state);
+@@ -16,6 +16,8 @@
+ #include <media/videobuf2-v4l2.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-ctrls.h>
++#include <linux/usb.h>
++#include <linux/usb/hcd.h>
  
- /* Provided by stk1160-video.c */
- int stk1160_alloc_isoc(struct stk1160 *dev);
+ #define STK1160_VERSION		"0.9.5"
+ #define STK1160_VERSION_NUM	0x000905
+@@ -87,6 +89,9 @@ struct stk1160_buffer {
+ struct stk1160_urb {
+ 	struct urb *urb;
+ 	char *transfer_buffer;
++	struct sg_table *sgt;
++	struct stk1160 *dev;
++	dma_addr_t dma;
+ };
+ 
+ struct stk1160_isoc_ctl {
+@@ -190,3 +195,8 @@ void stk1160_select_input(struct stk1160 *dev);
+ 
+ /* Provided by stk1160-ac97.c */
+ void stk1160_ac97_setup(struct stk1160 *dev);
++
++static inline struct device *stk1160_get_dmadev(struct stk1160 *dev)
++{
++	return bus_to_hcd(dev->udev->bus)->self.sysdev;
++}
 -- 
 2.17.1
 
