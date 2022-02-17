@@ -2,86 +2,172 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22010C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 17 Feb 2022 07:08:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1136BC433EF
+	for <linux-media@archiver.kernel.org>; Thu, 17 Feb 2022 07:58:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235979AbiBQHIl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Feb 2022 02:08:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35102 "EHLO
+        id S236905AbiBQH6a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Feb 2022 02:58:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236022AbiBQHIk (ORCPT
+        with ESMTP id S236863AbiBQH63 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Feb 2022 02:08:40 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11CC298AF4
-        for <linux-media@vger.kernel.org>; Wed, 16 Feb 2022 23:08:26 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E023B25B;
-        Thu, 17 Feb 2022 08:08:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1645081705;
-        bh=ym111bQMWrmQIUil42X3y/xx90T4X21a11qs+v4sPsA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YrWmWW1PTxkjpanlLCg68/ARh9sWuVll1zJ1hQMZDgjbyhDUhifOnEGfkRokJu6Gu
-         oDdOobel1XjJ7XWwLdKFCd7YLJzIvdHORJAtsCDTbeqFDmnCNPgOtl7pzr4h62X8IY
-         VmHVceogjiMghc41LjMzS83NcBMyoOkJ5aTTIxbc=
-Date:   Thu, 17 Feb 2022 09:08:16 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thu, 17 Feb 2022 02:58:29 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492AD22496F;
+        Wed, 16 Feb 2022 23:58:10 -0800 (PST)
+X-UUID: b786158083a14590966032b49f355042-20220217
+X-UUID: b786158083a14590966032b49f355042-20220217
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 854081908; Thu, 17 Feb 2022 15:58:08 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 17 Feb 2022 15:58:06 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 17 Feb 2022 15:58:05 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Pratyush Yadav <p.yadav@ti.com>
-Subject: Re: [PATCH v4 6/7] media: subdev: add v4l2_subdev_call_state_active()
-Message-ID: <Yg30YK3HK52zrF/8@pendragon.ideasonboard.com>
-References: <20220216130049.508664-1-tomi.valkeinen@ideasonboard.com>
- <20220216130049.508664-7-tomi.valkeinen@ideasonboard.com>
- <Yg1tC0dLieuZLbXy@pendragon.ideasonboard.com>
- <544bac78-715f-3db8-04f9-086f6fe49521@ideasonboard.com>
+        "Tzung-Bi Shih" <tzungbi@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v3, 1/7] dt-bindings: media: mtk-vcodec: Adds decoder dt-bindings for lat soc
+Date:   Thu, 17 Feb 2022 15:57:52 +0800
+Message-ID: <20220217075758.11369-2-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220217075758.11369-1-yunfei.dong@mediatek.com>
+References: <20220217075758.11369-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <544bac78-715f-3db8-04f9-086f6fe49521@ideasonboard.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tomi,
+Adds decoder dt-bindings for compatible "mediatek,mtk-vcodec-lat-soc".
 
-On Thu, Feb 17, 2022 at 06:19:15AM +0200, Tomi Valkeinen wrote:
-> On 16/02/2022 23:30, Laurent Pinchart wrote:
-> > On Wed, Feb 16, 2022 at 03:00:48PM +0200, Tomi Valkeinen wrote:
-> >> Add v4l2_subdev_call_state_active() macro to help calling subdev ops
-> >> that take a subdev state as a parameter.
-> > 
-> > We should not encourage subdev drivers to call into each other. There
-> > may be some valid use cases for such a helper at this point, namely in
-> > the .start_streaming() implementation in a vb2 queue, but even then, I
-> > think it would be best to rework the pipeline start API to lock the
-> > states of all subdevs in the pipeline (I've already improved pipeline
-> > start on top of your streams series, the locking isn't there yet, but I
-> > could give it a try).
-> > 
-> > On the other hand, this macro could help identifying drivers that handle
-> > locking manually, helping reworking them once the pipeline start API
-> > handles locking too.
-> 
-> I use this in the cal-video.c to implement the legacy non-MC support. 
-> That is a bit special case, and I could do that with a CAL internal 
-> helper. So I'm fine with dropping this if there won't be other users.
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+---
+ .../media/mediatek,vcodec-subdev-decoder.yaml | 51 +++++++++++++------
+ 1 file changed, 35 insertions(+), 16 deletions(-)
 
-Ah yes, for legacy support we indeed need something. There are likely
-other drivers that will need this then (why did we write legacy code in
-the first place, really ? :-D). We could keep the macro, but we should
-then document it as not being for non-legacy use cases, and not for new
-drivers. It would be even nicer if we could enforce that at runtime.
-
-Actually, thinking more about this, how about moving this macro to a new
-v4l2-subdev-legacy.h header ?
-
+diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+index 6415c9f29130..c263e762a906 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+@@ -17,20 +17,20 @@ description: |
+ 
+   About the Decoder Hardware Block Diagram, please check below:
+ 
+-    +---------------------------------+------------------------------------+
+-    |                                 |                                    |
+-    | input -> lat HW -> lat buffer --|--> lat buffer -> core HW -> output |
+-    |            ||                   |                     ||             |
+-    +------------||-------------------+---------------------||-------------+
+-              lat workqueue           |              core workqueue     <parent>
+-    -------------||-----------------------------------------||------------------
+-                 ||                                         ||          <child>
+-                 \/ <----------------HW index-------------->\/
+-           +------------------------------------------------------+
+-           |                    enable/disable                    |
+-           |           clk     power    irq    iommu              |
+-           |                 (lat/lat soc/core0/core1)            |
+-           +------------------------------------------------------+
++    +------------------------------------------------+-------------------------------------+
++    |                                                |                                     |
++    |  input -> lat soc HW -> lat HW -> lat buffer --|--> lat buffer -> core HW -> output  |
++    |            ||             ||                   |                     ||              |
++    +------------||-------------||-------------------+---------------------||--------------+
++                 ||     lat     ||                   |               core workqueue  <parent>
++    -------------||-------------||-------------------|---------------------||---------------
++                 ||<------------||----------------HW index---------------->||        <child>
++                 \/             \/                                         \/
++               +-------------------------------------------------------------+
++               |                          enable/disable                     |
++               |                 clk     power    irq    iommu               |
++               |                   (lat/lat soc/core0/core1)                 |
++               +-------------------------------------------------------------+
+ 
+   As above, there are parent and child devices, child mean each hardware. The child device
+   controls the information of each hardware independent which include clk/power/irq.
+@@ -45,6 +45,13 @@ description: |
+   For the smi common may not the same for each hardware, can't combine all hardware in one node,
+   or leading to iommu fault when access dram data.
+ 
++  Lat soc is a hardware which is releated with some larb(local arbiter) ports. For mt8195
++  platform, there are some ports like RDMA, UFO in lat soc larb, need to enable its power and
++  clock when lat start to work, don't have interrupt.
++
++  mt8195: lat soc HW + lat HW + core HW
++  mt8192: lat HW + core HW
++
+ properties:
+   compatible:
+     enum:
+@@ -88,7 +95,9 @@ patternProperties:
+ 
+     properties:
+       compatible:
+-        const: mediatek,mtk-vcodec-lat
++        enum:
++          - mediatek,mtk-vcodec-lat
++          - mediatek,mtk-vcodec-lat-soc
+ 
+       reg:
+         maxItems: 1
+@@ -126,7 +135,6 @@ patternProperties:
+     required:
+       - compatible
+       - reg
+-      - interrupts
+       - iommus
+       - clocks
+       - clock-names
+@@ -197,6 +205,17 @@ required:
+   - dma-ranges
+   - ranges
+ 
++if:
++  properties:
++    compatible:
++      contains:
++        enum:
++          - mediatek,mtk-vcodec-lat
++
++then:
++  required:
++    - interrupts
++
+ additionalProperties: false
+ 
+ examples:
 -- 
-Regards,
+2.25.1
 
-Laurent Pinchart
