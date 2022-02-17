@@ -2,120 +2,152 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E93B9C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 17 Feb 2022 06:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5614C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 17 Feb 2022 07:05:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235465AbiBQGQN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Feb 2022 01:16:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42790 "EHLO
+        id S234123AbiBQHFN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Feb 2022 02:05:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235318AbiBQGQM (ORCPT
+        with ESMTP id S229483AbiBQHFM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Feb 2022 01:16:12 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDABE2A2286
-        for <linux-media@vger.kernel.org>; Wed, 16 Feb 2022 22:15:56 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id A512F5C019F;
-        Thu, 17 Feb 2022 01:08:03 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 17 Feb 2022 01:08:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-        cc:cc:date:date:from:from:in-reply-to:message-id:reply-to:sender
-        :subject:subject:to:to; s=fm2; bh=ZB1SmTVXb/DBhdIDoqv1RCdUqDPfDt
-        /MGWSX4mbI5iU=; b=YoZd0mpozn8NZxKqRRFsVWgqaMx1WJZ895sgfrXET2qZYf
-        uHUmpF18U2DkqbC5a4LLrbAq3TLejkP4SMdjF4wbJ8c32QHV2JIUbU87NYboxkXM
-        ONbnG3zAkQYgSY2uIWD7ErE426FEWhfmopY8x9MFSXVFZtnwXjAhnIebA7cF3sZV
-        qDlu0T4HbC3et9qTR4LAsX8PfHPajDCr1+0qjanlHTHQ+5/Ln9c46LivgfueUZAl
-        WAueMTwdYwBwdTKjGcHBo7geUQOzaMQBjK0TJ8/qnw0UtUw6KwJhznoy0BX2W51k
-        MRgCrs8iwY+U9uUKF+XC1aWX8LT5TqKD9ycPS8oA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:date:date:from:from:in-reply-to
-        :message-id:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=ZB1SmT
-        VXb/DBhdIDoqv1RCdUqDPfDt/MGWSX4mbI5iU=; b=Nlyil9avCwCdv0rrOpJvyc
-        XhsdflkGI3IpUK7vT51BptcwstRCwvpI8Ipv5UhNOf3wGGLVTJgNlgVzwyIKuqpr
-        lL+r5Ms3MhkVYhcYrlKvKxgolx5c9ls7GS08piYVjjwhw8Y4kh9MbLLVHdR6GlNx
-        EltcFmqkQGXv5sdgO7UK+yZ2+rRFiS8XG16IuclYv8h3ckfZ8lEBEwhBIOa6fVlY
-        +JlyERC5cWsOPV0iB0X8pE6la3yqcOkBTXlaQu/lbf7EXmrq6QwyAQqxNZ3IeUbt
-        u+c1D6sr0HxoeQ7UAcuypDS8DJvKGGbynYuOn6uCxIrXru1U9OWhCDLiK6Y5OOWQ
-        ==
-X-ME-Sender: <xms:Q-YNYiN2ZpCN4WiY647BtDbIQ9bY20HEbsaqRk5HRN8GaSBCITOURg>
-    <xme:Q-YNYg_b_RN1UszxuMRzZ0PY7YdRiTrLqgPq1YtgjE1Tfjj88jUtsu9qdHoPH1fQ2
-    eTXHske2xUdeO41E_Q>
-X-ME-Received: <xmr:Q-YNYpQXGoEIMdUFVPDsqzo-dQYCeFpxe3nd-zQrKzXJM2-aCu292fUsP72xcm18TL8mNycGfA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeejgdeltdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffosedttdertdertddtne
-    cuhfhrohhmpeffrghfnhgrucfjihhrshgthhhfvghlugcuoegurghfnhgrsehfrghsthhm
-    rghilhdrtghomheqnecuggftrfgrthhtvghrnhephefftddtfeeljeehueeggfefieejfe
-    ejffehffetiedugedvjedvtedvgedvleffnecuffhomhgrihhnpehlkhhmlhdrohhrghen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegurghfnh
-    grsehfrghsthhmrghilhdrtghomh
-X-ME-Proxy: <xmx:Q-YNYitunsKZGx4a2wfGeWgc60uZH1mLyaWorWEy3qDZ0C9Iw7TyDQ>
-    <xmx:Q-YNYqdOV0rx6GYbuGothdanIrO3yskZ8kihWqher20WJMoZ0agA6g>
-    <xmx:Q-YNYm0jseynqDHIwQ9K5gG-c9THvMDqjKQfvgZzb6jev23Z5j3Egw>
-    <xmx:Q-YNYhwNjmLSp5MEo9pSWDv1Mj5CyJsaleIhGBLInL-iLv_9wjWYVw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 17 Feb 2022 01:08:00 -0500 (EST)
-From:   Dafna Hirschfeld <dafna@fastmail.com>
-To:     ezequiel@vanguardiasur.com.ar
-Cc:     linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        hverkuil@xs4all.nl, ribalda@chromium.org, tfiga@chromium.org,
-        senozhatsky@google.com, hch@lst.de, dafna@fastmail.com,
-        kernel@collabora.com
-Subject: [PATCH v3 0/4] stk1160: allocate urb buffs with the DMA noncontiguous API
-Date:   Thu, 17 Feb 2022 08:07:20 +0200
-Message-Id: <20220217060724.7763-1-dafna@fastmail.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 17 Feb 2022 02:05:12 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4A419C3D
+        for <linux-media@vger.kernel.org>; Wed, 16 Feb 2022 23:04:58 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 77E5C25B;
+        Thu, 17 Feb 2022 08:04:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1645081496;
+        bh=r9tpRoCDP+G7SA2huocAEnqPR2m3RJz4hstfhmtKw7g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vPmtZ/XNVwSoH6QrGmS/xwQMFdbUDRRlR+J9g29dlYzfWZR0Kxr03Q+Zpja8J8nSp
+         thwJYKHzuZgn7vjKRSqQ7E4JTEa2Bdg8O6YqVx6FGBAnMj5BrB7JgdIUzgmNQxbGIN
+         JwgR1DDbBilkcPZgdf8Kl1xg3WHTsyhJkELoTWxQ=
+Date:   Thu, 17 Feb 2022 09:04:48 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Pratyush Yadav <p.yadav@ti.com>
+Subject: Re: [PATCH v4 5/7] media: subdev: Add
+ v4l2_subdev_lock_and_return_state()
+Message-ID: <Yg3zkC02kiQkNl3W@pendragon.ideasonboard.com>
+References: <20220216130049.508664-1-tomi.valkeinen@ideasonboard.com>
+ <20220216130049.508664-6-tomi.valkeinen@ideasonboard.com>
+ <Yg1u4zdEGtN7wydB@pendragon.ideasonboard.com>
+ <5732ebe7-ab4d-4407-a8f8-600bdcff651c@ideasonboard.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5732ebe7-ab4d-4407-a8f8-600bdcff651c@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This set replaces urb buffers allocation to use the DMA
-noncontiguous API. Similarly to a commit sent to uvc: [1]
-This improves performance on ARM while not damaging performance
-on other platforms. The cpu performance on ARM
-improves because the new API does not cause the cache disable on ARM
-while the coherent API do.
-Measurements are shown in patch 4/4
+Hi Tomi,
 
-[1] https://lkml.org/lkml/2021/3/12/1506
+On Thu, Feb 17, 2022 at 06:05:18AM +0200, Tomi Valkeinen wrote:
+> On 16/02/2022 23:38, Laurent Pinchart wrote:
+> > On Wed, Feb 16, 2022 at 03:00:47PM +0200, Tomi Valkeinen wrote:
+> >> All suitable subdev ops are now passed either the TRY or the ACTIVE
+> >> state by the v4l2 core. However, other subdev drivers can still call the
+> >> ops passing NULL as the state, implying the active case.
+> >>
+> >> For all current upstream drivers this doesn't matter, as they do not
+> >> expect to get a valid state for ACTIVE case. But future drivers which
+> >> support multiplexed streaming and routing will depend on getting a state
+> >> for both active and try cases.
+> >>
+> >> For new drivers we can mandate that the pipelines where the drivers are
+> >> used need to pass the state properly, or preferably, not call such
+> >> subdev ops at all.
+> >>
+> >> However, if an existing subdev driver is changed to support multiplexed
+> >> streams, the driver has to consider cases where its ops will be called
+> >> with NULL state. The problem can easily be solved by using the
+> >> v4l2_subdev_lock_and_return_state() helper, introduced here.
+> >>
+> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> >> ---
+> >>   include/media/v4l2-subdev.h | 38 +++++++++++++++++++++++++++++++++++++
+> >>   1 file changed, 38 insertions(+)
+> >>
+> >> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> >> index 8d089a2dbd32..84c02488d53f 100644
+> >> --- a/include/media/v4l2-subdev.h
+> >> +++ b/include/media/v4l2-subdev.h
+> >> @@ -1278,6 +1278,44 @@ void v4l2_subdev_lock_state(struct v4l2_subdev_state *state);
+> >>    */
+> >>   void v4l2_subdev_unlock_state(struct v4l2_subdev_state *state);
+> >>   
+> >> +/**
+> >> + * v4l2_subdev_lock_and_return_state() - Gets locked try or active subdev state
+> >> + * @sd: subdevice
+> >> + * @state: subdevice state as passed to the subdev op
+> >> + *
+> >> + * Due to legacy reasons, when subdev drivers call ops in other subdevs they use
+> >> + * NULL as the state parameter, as subdevs always used to have their active
+> >> + * state stored privately.
+> >> + *
+> >> + * However, newer state-aware subdev drivers, which store their active state in
+> >> + * a common place, subdev->active_state, expect to always get a proper state as
+> >> + * a parameter.
+> >> + *
+> >> + * These state-aware drivers can use v4l2_subdev_lock_and_return_state() instead
+> >> + * of v4l2_subdev_lock_state(). v4l2_subdev_lock_and_return_state() solves the
+> >> + * issue by using subdev->active_state in case the passed state is NULL.
+> >> + *
+> >> + * This is a temporary helper function, and should be removed when we can ensure
+> >> + * that all drivers pass proper state when calling other subdevs.
+> >> + */
+> >> +static inline struct v4l2_subdev_state *
+> >> +v4l2_subdev_lock_and_return_state(struct v4l2_subdev *sd,
+> >> +				  struct v4l2_subdev_state *state)
+> >> +{
+> >> +	if (state)
+> >> +		return state;
+> >> +
+> >> +	dev_notice_once(sd->dev,
+> >> +		"The provided state is NULL. Adjusting to the subdev active state.\n"
+> >> +		"Please consider porting your driver to the new state management API.\n");
+> >> +
+> >> +	state = sd->active_state;
+> >> +
+> >> +	v4l2_subdev_lock_state(state);
+> > 
+> > This looks strange, if the state parameter is not NULL then you don't
+> > lock the state, otherwise you do. How is the caller of this function
+> > expected to unlock the state ? I'm tempted to drop this helper and push
+> > harder for porting drivers to the new API.
+> 
+> Indeed, I didn't think it through. Handling this with the new locking 
+> model is a bit more difficult. The driver could do something like this:
+> 
+> static int my_subdev_op(sd, _state)
+> {
+> 	state = _state ? _state : v4l2_subdev_lock_active_state();
+> 
+> 	...
+> 
+> 	if (!_state)
+> 		v4l2_subdev_unlock_state(state);
+> 
+> 	return 0;
+> }
+> 
+> But hiding that behind a helper is not so easy.
+> 
+> Perhaps it is better to drop this, and change the calling subdev drivers 
+> to use the v4l2_subdev_call_state_active() helper.
 
-Patches Summary:
-* patches 1+2 are bug fixes.
-* patch 3 changes the way data is stored. This is a preparation
-to patch 4.
-* patch 4 is the change of API to use the noncontiguougs.
-
-Since changes on v3 are minors, I only tested that the driver works but not tested performance again.
-
-Changes since v2:
-1. improve commit log for patch 4, and "s/stk_free_urb_buffer/stk1160_free_urb/"
-
-Changes since v1:
-1. reduce line length to be not too longer than 80 char
-2. reformulate commit log of patch 4/4 and add measurements results
-3. in patch 4, invalidate the vmap range before the direct mapping range.
-4. test regressions for patches 1-3 (not including patch 4) and improve vars names
-5. patch 2 is a new bug fix I found
-6. patch 1 is extended to fix two cases of not allocating all intended urb buffers.
-
-Dafna Hirschfeld (4):
-  media: stk1160: fix number of buffers in case not all buffers are
-    created
-  media: stk1160: If start stream fails, return buffers with
-    VB2_BUF_STATE_QUEUED
-  media: stk1160: move transfer_buffer and urb to same struct
-    'stk1160_urb'
-  media: stk1160: use dma_alloc_noncontiguous API
-
- drivers/media/usb/stk1160/stk1160-core.c  |   2 +-
- drivers/media/usb/stk1160/stk1160-v4l.c   |  16 ++-
- drivers/media/usb/stk1160/stk1160-video.c | 142 ++++++++++++----------
- drivers/media/usb/stk1160/stk1160.h       |  23 +++-
- 4 files changed, 104 insertions(+), 79 deletions(-)
+I think that would be better, yes.
 
 -- 
-2.17.1
+Regards,
 
+Laurent Pinchart
