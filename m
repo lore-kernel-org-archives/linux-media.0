@@ -2,77 +2,80 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50A5EC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 17 Feb 2022 04:19:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7A63C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 17 Feb 2022 04:50:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233702AbiBQETe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Feb 2022 23:19:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56282 "EHLO
+        id S233926AbiBQEux (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Feb 2022 23:50:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbiBQETd (ORCPT
+        with ESMTP id S229697AbiBQEux (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Feb 2022 23:19:33 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874EE1907C3
-        for <linux-media@vger.kernel.org>; Wed, 16 Feb 2022 20:19:19 -0800 (PST)
-Received: from [192.168.1.111] (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 900D425B;
-        Thu, 17 Feb 2022 05:19:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1645071558;
-        bh=9Q2Ul7TGMjSX+vcrVUxd6PItyslQd0cBIS5m97Zyl04=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=H7QGDv0yz72LHwpwKh0oiT9bk1D+rZQy0wy1QF+CfZVFw+HinpmGh9zdbALh7GiZ/
-         05kXPqkIYK/6V3vVQ1jvULUSdwvOz8lCSdXZkYkDn4JJgWFGkZtwx8A7gcUVifo1jg
-         S4gH3qwAZVm3INP8E39vs2/1MGDmYNKh5fg5vjOw=
-Message-ID: <544bac78-715f-3db8-04f9-086f6fe49521@ideasonboard.com>
-Date:   Thu, 17 Feb 2022 06:19:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 6/7] media: subdev: add v4l2_subdev_call_state_active()
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        niklas.soderlund+renesas@ragnatech.se,
+        Wed, 16 Feb 2022 23:50:53 -0500
+X-Greylist: delayed 613 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 20:50:39 PST
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F1929ADED;
+        Wed, 16 Feb 2022 20:50:38 -0800 (PST)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 21H4dsXQ007777-21H4dsXT007777
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Thu, 17 Feb 2022 12:40:01 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Pratyush Yadav <p.yadav@ti.com>
-References: <20220216130049.508664-1-tomi.valkeinen@ideasonboard.com>
- <20220216130049.508664-7-tomi.valkeinen@ideasonboard.com>
- <Yg1tC0dLieuZLbXy@pendragon.ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Yg1tC0dLieuZLbXy@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     syzkaller <syzkaller@googlegroups.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: hdpvr: call flush_work only if initialized
+Date:   Thu, 17 Feb 2022 12:39:40 +0800
+Message-Id: <20220217043950.749343-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 16/02/2022 23:30, Laurent Pinchart wrote:
-> Hi Tomi,
-> 
-> Thank you for the patch.
-> 
-> On Wed, Feb 16, 2022 at 03:00:48PM +0200, Tomi Valkeinen wrote:
->> Add v4l2_subdev_call_state_active() macro to help calling subdev ops
->> that take a subdev state as a parameter.
-> 
-> We should not encourage subdev drivers to call into each other. There
-> may be some valid use cases for such a helper at this point, namely in
-> the .start_streaming() implementation in a vb2 queue, but even then, I
-> think it would be best to rework the pipeline start API to lock the
-> states of all subdevs in the pipeline (I've already improved pipeline
-> start on top of your streams series, the locking isn't there yet, but I
-> could give it a try).
-> 
-> On the other hand, this macro could help identifying drivers that handle
-> locking manually, helping reworking them once the pipeline start API
-> handles locking too.
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-I use this in the cal-video.c to implement the legacy non-MC support. 
-That is a bit special case, and I could do that with a CAL internal 
-helper. So I'm fine with dropping this if there won't be other users.
+flush_work will throw one WARN if worker->func is NULL. So we should always
+initialize one worker before calling flush_work. When hdpvr_probe does not
+initialize its worker, the hdpvr_disconnect will encounter one WARN. The
+stack trace is in the following:
 
-  Tomi
+ hdpvr_disconnect+0xb8/0xf2 drivers/media/usb/hdpvr/hdpvr-core.c:425
+ usb_unbind_interface+0xbf/0x3a0 drivers/usb/core/driver.c:458
+ __device_release_driver drivers/base/dd.c:1206 [inline]
+ device_release_driver_internal+0x22a/0x230 drivers/base/dd.c:1237
+ bus_remove_device+0x108/0x160 drivers/base/bus.c:529
+ device_del+0x1fe/0x510 drivers/base/core.c:3592
+ usb_disable_device+0xd1/0x1d0 drivers/usb/core/message.c:1419
+ usb_disconnect+0x109/0x330 drivers/usb/core/hub.c:2228
+
+Fix this by adding a sanity check of the worker before flush_work.
+
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+---
+ drivers/media/usb/hdpvr/hdpvr-core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/hdpvr/hdpvr-core.c b/drivers/media/usb/hdpvr/hdpvr-core.c
+index 52e05a69c46e..d102b459d45d 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-core.c
++++ b/drivers/media/usb/hdpvr/hdpvr-core.c
+@@ -422,7 +422,8 @@ static void hdpvr_disconnect(struct usb_interface *interface)
+ 	mutex_unlock(&dev->io_mutex);
+ 	v4l2_device_disconnect(&dev->v4l2_dev);
+ 	msleep(100);
+-	flush_work(&dev->worker);
++	if (dev->worker.func)
++		flush_work(&dev->worker);
+ 	mutex_lock(&dev->io_mutex);
+ 	hdpvr_cancel_queue(dev);
+ 	mutex_unlock(&dev->io_mutex);
+-- 
+2.25.1
+
