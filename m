@@ -2,83 +2,133 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71D94C433EF
-	for <linux-media@archiver.kernel.org>; Thu, 17 Feb 2022 13:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A995CC433FE
+	for <linux-media@archiver.kernel.org>; Thu, 17 Feb 2022 13:57:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241409AbiBQN5F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Feb 2022 08:57:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47996 "EHLO
+        id S241414AbiBQN5n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Feb 2022 08:57:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240755AbiBQN5B (ORCPT
+        with ESMTP id S234297AbiBQN5m (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Feb 2022 08:57:01 -0500
-Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759F265AE
-        for <linux-media@vger.kernel.org>; Thu, 17 Feb 2022 05:56:46 -0800 (PST)
-Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1nKhH2-005Sm0-Ti; Thu, 17 Feb 2022 13:56:44 +0000
-Received: from ip6-localhost ([::1] helo=localhost.localdomain)
-        by slave0 with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1nKhH0-005Ivx-S3; Thu, 17 Feb 2022 13:56:42 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.18] Various fixes/enhancements (#80807)
-Date:   Thu, 17 Feb 2022 13:56:42 +0000
-Message-Id: <20220217135642.1264375-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <4cb9936d-ea10-27f4-371b-69f3b6589689@xs4all.nl>
-References: 
+        Thu, 17 Feb 2022 08:57:42 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D58817C117;
+        Thu, 17 Feb 2022 05:57:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1645106247; x=1676642247;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sN39M8C1hByXCcSuR9JDCKDgWrEOxcLMqTAc2PYXXgA=;
+  b=Qy3u9Q/6R2Ki1uwlG1f5Ru5osbnYC3BFq4F2ICnq8TUtWPmzx9ND7RXB
+   FK11tluoKWBciMaEL/1PA+sb8wOeiXmz2Amu5x808Ao92yAZi7+gFI01I
+   zgRXHwbinjRP1TPfqww9HKLvcwJ73rV5wUfjuBkOkHMOsByUU/mTjIlMJ
+   BMNl1IBjYkktBGKPxX3TJk6DkuwWkNivwLtd9MjMpClN2fwWDuf7PVMM1
+   kU5ap/QOOSWQBHCgs0mfajNHeCnmItFn7LNOTF/mVGEW26SUuSbP4N5j/
+   NRiVlKCwFo9/+TAihOXBslyLEpS/REF5gU26AR18uzIoIO3jqjSkRMOql
+   A==;
+IronPort-SDR: L7eH1QBIn7rh3QBeJlnrFzo1mHsiNU+D4XcYKKhxpijKdw1FXfyxj6p1g+ix4IcKR4kEEfYdkw
+ fL/et5G9qXuNW2dqqPXanXcFLTWbV7qPLWXKKbM0Iv+2dK+OHzEFT3Sd9Xwg2rSM4poMPpIMW6
+ incycCTolxX3D78GuiuVKmubq0XM02Oa+u6h2hpS+7mqCIKQfTfYX7zSJQNNjDGJmcs+jAW60y
+ f6ttkZ4Gx1DQVb8mo9/CWke2lOGYi8A3BBPsf9Jbp2Z/MFWg5NpvF6qev953hBEwiiaWMrDrmm
+ Wxk=
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="153942547"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Feb 2022 06:57:24 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 17 Feb 2022 06:57:24 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 17 Feb 2022 06:57:04 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <linux-media@vger.kernel.org>, <jacopo@jmondi.org>,
+        <hverkuil-cisco@xs4all.nl>, <nicolas.ferre@microchip.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <claudiu.beznea@microchip.com>,
+        "Eugen Hristev" <eugen.hristev@microchip.com>
+Subject: [PATCH v5 00/13] media: atmel: atmel-isc: implement media controller
+Date:   Thu, 17 Feb 2022 15:56:32 +0200
+Message-ID: <20220217135645.1427466-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+This series is the v5 series that attempts to support media controller in the
+atmel ISC and XISC drivers.
+The CSI2DC driver was accepted thus removed from the patch series, together with
+other patches.
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/4cb9936d-ea10-27f4-371b-69f3b6589689@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/183729/
-Build time: 00:28:59
-Link: https://lore.kernel.org/linux-media/4cb9936d-ea10-27f4-371b-69f3b6589689@xs4all.nl
+Important note: this series applies on top of current media_staging tree, as it
+relies on previous patches in the series which were accepted.
 
-gpg: Signature made Thu 17 Feb 2022 01:20:06 PM UTC
-gpg:                using EDDSA key 52ADCAAE8A4F70B99ACD8D726B425DF79B1C1E76
-gpg: Can't check signature: No public key
+Thanks to everyone who reviewed my work !
 
-Summary: got 2/39 patches with issues, being 1 at build time, plus one error when buinding PDF document
+Eugen
 
-Error/warnings:
-
-patches/0001-media-rcar-vin-Refactor-link-notify.patch:
-
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-
-    allyesconfig: return code #0:
-	../drivers/media/rc/meson-ir-tx.c:22: warning: expecting prototype for meson(). Prototype was for DEVICE_NAME() instead
-	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1981 vivid_create_instance() parse error: turning off implications after 60 seconds
-	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
-	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2894 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-
-   checkpatch.pl:
-	$ cat patches/0001-media-rcar-vin-Refactor-link-notify.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:119: CHECK: Lines should not end with a '('
-
-patches/0027-drivers-meson-vdec-add-VP9-support-to-GXM.patch:
-
-   checkpatch.pl:
-	$ cat patches/0027-drivers-meson-vdec-add-VP9-support-to-GXM.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+Changes in v5:
+-> removed patch that removed the 'stop' variable as it was still required
+-> added two new trivial patches
+-> reworked some parts of the scaler and format propagation after discussions with Jacopo
 
 
-Error #512 when building PDF docs
+Changes in v4:
+-> as reviewed by Hans, added new patch to remove the 'stop' variable and reworked
+one patch that was using it
+-> as reviewed by Jacopo, reworked some parts of the media controller implementation
+
+
+Changes in v3:
+- change in bindings, small fixes in csi2dc driver and conversion to mc
+for the isc-base.
+- removed some MAINTAINERS patches and used patterns in MAINTAINERS
+
+Changes in v2:
+- integrated many changes suggested by Jacopo in the review of the v1 series.
+- add a few new patches
+
+
+
+Eugen Hristev (13):
+  media: atmel: atmel-isc-base: use streaming status when queueing
+    buffers
+  media: atmel: atmel-isc-base: replace is_streaming call in
+    s_fmt_vid_cap
+  media: atmel: atmel-isc: remove redundant comments
+  media: atmel: atmel-isc: implement media controller
+  media: atmel: atmel-sama5d2-isc: fix wrong mask in YUYV format check
+  media: atmel: atmel-isc-base: use mutex to lock awb workqueue from
+    streaming
+  media: atmel: atmel-isc: compact the controller formats list
+  media: atmel: atmel-isc: change format propagation to subdev into only
+    verification
+  media: atmel: atmel-sama7g5-isc: remove stray line
+  dt-bindings: media: microchip,xisc: add bus-width of 14
+  ARM: dts: at91: sama7g5: add nodes for video capture
+  ARM: configs: at91: sama7: add xisc and csi2dc
+  ARM: multi_v7_defconfig: add atmel video pipeline modules
+
+ .../bindings/media/microchip,xisc.yaml        |   2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                |  49 ++
+ arch/arm/configs/multi_v7_defconfig           |   3 +
+ arch/arm/configs/sama7_defconfig              |   2 +
+ drivers/media/platform/atmel/Makefile         |   2 +-
+ drivers/media/platform/atmel/atmel-isc-base.c | 531 ++++++++++--------
+ .../media/platform/atmel/atmel-isc-scaler.c   | 266 +++++++++
+ drivers/media/platform/atmel/atmel-isc.h      |  61 +-
+ .../media/platform/atmel/atmel-sama5d2-isc.c  |  87 +--
+ .../media/platform/atmel/atmel-sama7g5-isc.c  |  93 +--
+ 10 files changed, 762 insertions(+), 334 deletions(-)
+ create mode 100644 drivers/media/platform/atmel/atmel-isc-scaler.c
+
+-- 
+2.25.1
 
