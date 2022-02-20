@@ -2,266 +2,151 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF436C3526E
-	for <linux-media@archiver.kernel.org>; Sun, 20 Feb 2022 17:32:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3E1AC433F5
+	for <linux-media@archiver.kernel.org>; Sun, 20 Feb 2022 18:19:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244404AbiBTRcs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 20 Feb 2022 12:32:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46452 "EHLO
+        id S244402AbiBTSUG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 20 Feb 2022 13:20:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244372AbiBTRcl (ORCPT
+        with ESMTP id S240912AbiBTSUF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 20 Feb 2022 12:32:41 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F08CF2;
-        Sun, 20 Feb 2022 09:32:10 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id t14so11458211ljh.8;
-        Sun, 20 Feb 2022 09:32:10 -0800 (PST)
+        Sun, 20 Feb 2022 13:20:05 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84984507D
+        for <linux-media@vger.kernel.org>; Sun, 20 Feb 2022 10:19:43 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id i11so23292932eda.9
+        for <linux-media@vger.kernel.org>; Sun, 20 Feb 2022 10:19:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZHRzTpt0uTYjv6UOxYxxg4YmNjXznV7r810Egh7wHFk=;
-        b=j0wYUju45caLnf7rlT0OnKV0Sweov8K0HyGOXo+ufClRZAq09o+t27Oe15MHbUHbH9
-         TY1p0f1eukLzlFU59DuQwd/C0MKhhL1g/nQ8NDN053ttQAJPVH9V/8ufnN+B6P+pSfpd
-         5nJCfamORlvB+fwu+O4m4VrjVa0vfHuG8s2bFAMeOiO2QLONaAyj1dEcskfqjJ/OejnV
-         lr9zMnKTKGUKRKjqjM1huEiDCaiwAxCFhE+Npm07X9WaCUToDW9+WIXEOguRhyU/Av+N
-         T+ibrq3Qg/lROoqGhuIB16bY90DNxXmLYkm8qvyayXQOjjl2mqb57YtUt8nYGw9jwMEV
-         CSbA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=benWcURYgGK+uAiYHNdB8VXxJ8t300zl1DIDLlznLsQ=;
+        b=Ert31gFzb8VTlobnNs1vwF57jnx93vMlznupDkEG4c13sDwkjbkROJXgtzzDvrSloF
+         Vy0Q8YKYfUlHGWdMc6F1O62EXfZiSKkKbkGItz5MUyiOnj9PP9JJGC4RL7cUtfud1ErA
+         ZUWZUsGHYxdMQGikpuVeP2Xn6YUQwygLwDe9uujAGQM+Y2tubq18Z1jr/fxWP5jvCRCz
+         jEa6nj+F/dMAIE+j3hMNyYySmOnvXihpYIrE0MOWfTlhDrvM3Uu6BRluGBQcjIHC+2sm
+         M/ErUYXTOtfwdUOGcoH9dVNcV4TGkdP7IYeUwqEehl7Re8INQ4c5PEJuAFli28rOt5D8
+         UUAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZHRzTpt0uTYjv6UOxYxxg4YmNjXznV7r810Egh7wHFk=;
-        b=w8dAoR1f54jnBVBU90oL12R9iCtQBAXp3gt0+Kc9Q9EWS84/mNdl6dozPOlZ+0S5X9
-         iZ3Zk2PW9a4WR6g2zxzh/bVKolBkHaRc6kvufWug+YEjow1jfdhop1ggl50ctaFJ7sm1
-         /0fStJAow2g8RHHTteWWvr/hOD9Dk3fkKVotqzCid55eoBcceawk6IEqA7olA5OQiVAp
-         nyGn/6SafmFh7J4wEWwhsUdVcfiOLWdgSttMnRJGzBChPPAQfc1jY+nnF0JrRJJ3UBaY
-         LPku9LvNCjzgCmx+I4Z8hQ8lTR4dy/EtVTVABoFOa5wWeZ1Esyw2Y4FOgNS35Lzi6SA6
-         +J/A==
-X-Gm-Message-State: AOAM532tsVUrYykVpcZN4qOqA/Aohme/ubaUtl0J5jUJFeIUIAZtHdOM
-        uPxQ/Ggjmlz5ztXSkksAPts=
-X-Google-Smtp-Source: ABdhPJw8iIlCbMEAgLB9yCGhbjcYgeDnlPocYNDBrBp+Sa1SWKbJgKl0NDib8lj4dpOlNW/ZuTM5UQ==
-X-Received: by 2002:a2e:bd13:0:b0:246:1ff8:6da1 with SMTP id n19-20020a2ebd13000000b002461ff86da1mr9700590ljq.219.1645378328499;
-        Sun, 20 Feb 2022 09:32:08 -0800 (PST)
-Received: from localhost.localdomain (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.gmail.com with ESMTPSA id f8sm880490ljk.97.2022.02.20.09.32.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 09:32:08 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 6/8] media: staging: tegra-vde: De-stage driver
-Date:   Sun, 20 Feb 2022 20:29:48 +0300
-Message-Id: <20220220172950.3401-7-digetx@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220220172950.3401-1-digetx@gmail.com>
-References: <20220220172950.3401-1-digetx@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=benWcURYgGK+uAiYHNdB8VXxJ8t300zl1DIDLlznLsQ=;
+        b=ZHitcgpcf2H1IYJxu/meSDNzt1ZhRnL/N34fIaushBGcMdyw6cCoe+6teG0qZMPIws
+         3E15EcsjhAw0e7zVxcPS3dnxN0orkKmy+DZAkny0X9dM5VFKvk9pshc/3aw1stnpaCdd
+         8bFf3TW/GZExByU8Bz/qcvBmh+O4o5uliln/9bP6KyAbtYxkT0ZG5bsuIuDCY8j2/reC
+         MpDNgH/KiZbABgf9Avatd8YeMxsuYy1l0jQc9ZC0xVwrgEqbGwEEZrmPJeWlHk1ziZfe
+         JlD/C5WnUrCTbdpnYR8uxcaMTIcNFxSuC4sR1o9pBChsgjfmx3cgbO/kH+bYUOPDn45a
+         xzOg==
+X-Gm-Message-State: AOAM533gy3f0Ui+XuGcwQluTBaIfQ9vll2DjSQE7+/GePZHZBDY8d2Tj
+        nOcRhdrwDVSXWi6OM8CMo7dDwZT0obk7rwsviag=
+X-Google-Smtp-Source: ABdhPJwiJkhS1p3i4WFuARwlpZWTIFoZp10y/I2/1aFGjDT2dQlpg4tPMK+6DGjm0IEFl2mlLHt8yzNy62zCuklNblw=
+X-Received: by 2002:a05:6402:18:b0:410:86cd:9dce with SMTP id
+ d24-20020a056402001800b0041086cd9dcemr17780927edu.70.1645381182179; Sun, 20
+ Feb 2022 10:19:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220218183421.583874-1-jacopo@jmondi.org>
+In-Reply-To: <20220218183421.583874-1-jacopo@jmondi.org>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Sun, 20 Feb 2022 12:19:30 -0600
+Message-ID: <CAHCN7xKXoBB4AiJY=wEhZ-8YT=QW4CANe7bapGpjFGnWKm3xmQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] media: imx: Destage imx7-mipi-csis
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        martin.kepplinger@puri.sm, rmfrfs@gmail.com,
+        xavier.roumegue@oss.nxp.com,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        dorota.czaplejewicz@puri.sm, Sascha Hauer <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The TODO of tegra-vde driver has been completed, driver now supports
-V4L2 stateless video decoding API. Relocate driver to drivers/media.
+On Sun, Feb 20, 2022 at 8:56 AM Jacopo Mondi <jacopo@jmondi.org> wrote:
+>
+> Hello
+>   this series includes patches from two series previously sent:
+> https://lore.kernel.org/linux-media/20220119112024.11339-1-jacopo@jmondi.org/
+> https://lore.kernel.org/linux-media/20220211180216.290133-1-jacopo@jmondi.org/
+> v1:
+> https://lore.kernel.org/linux-media/20220214184318.409208-1-jacopo@jmondi.org/T/#t
+>
+> Which can now be marked as superseded.
+>
+> The first 2 patches performs the de-staging of the imx7-mipi-csis driver and
+> are now reviewed.
+>
+> The rest of the series builds on top of the comment received on:
+> https://lore.kernel.org/linux-media/20220119112024.11339-3-jacopo@jmondi.org/
+>
+> If DUAL pixel mode is used in the CSIS driver, then the CSI block of the IMX8MM
+> SoC needs to be operated in dual mode as well. To do so, use the image format
+> sample size to determine in the CSI bridge if dual or single mode should be
+> used.
+>
+> Laurent could you test on MM to see if it works now ?
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- MAINTAINERS                                     |  2 +-
- drivers/media/platform/Kconfig                  | 17 +++++++++++++++++
- drivers/media/platform/Makefile                 |  2 ++
- .../platform/tegra/vde}/Makefile                |  2 +-
- .../platform/tegra/vde}/dmabuf-cache.c          |  0
- .../platform/tegra/vde}/h264.c                  |  0
- .../platform/tegra/vde}/iommu.c                 |  0
- .../platform/tegra/vde}/trace.h                 |  2 +-
- .../platform/tegra/vde}/v4l2.c                  |  0
- .../platform/tegra/vde}/vde.c                   |  0
- .../platform/tegra/vde}/vde.h                   |  0
- drivers/staging/media/Kconfig                   |  2 --
- drivers/staging/media/Makefile                  |  1 -
- drivers/staging/media/tegra-vde/Kconfig         | 17 -----------------
- drivers/staging/media/tegra-vde/TODO            |  4 ----
- 15 files changed, 22 insertions(+), 27 deletions(-)
- rename drivers/{staging/media/tegra-vde => media/platform/tegra/vde}/Makefile (67%)
- rename drivers/{staging/media/tegra-vde => media/platform/tegra/vde}/dmabuf-cache.c (100%)
- rename drivers/{staging/media/tegra-vde => media/platform/tegra/vde}/h264.c (100%)
- rename drivers/{staging/media/tegra-vde => media/platform/tegra/vde}/iommu.c (100%)
- rename drivers/{staging/media/tegra-vde => media/platform/tegra/vde}/trace.h (97%)
- rename drivers/{staging/media/tegra-vde => media/platform/tegra/vde}/v4l2.c (100%)
- rename drivers/{staging/media/tegra-vde => media/platform/tegra/vde}/vde.c (100%)
- rename drivers/{staging/media/tegra-vde => media/platform/tegra/vde}/vde.h (100%)
- delete mode 100644 drivers/staging/media/tegra-vde/Kconfig
- delete mode 100644 drivers/staging/media/tegra-vde/TODO
+Jacopo,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index aa0f6cbb634e..1f210d2227f1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12071,7 +12071,7 @@ L:	linux-tegra@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt
--F:	drivers/staging/media/tegra-vde/
-+F:	drivers/media/platform/tegra/vde/
- 
- MEDIA DRIVERS FOR RENESAS - CEU
- M:	Jacopo Mondi <jacopo@jmondi.org>
-diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 9fbdba0fd1e7..97a191a3c0a1 100644
---- a/drivers/media/platform/Kconfig
-+++ b/drivers/media/platform/Kconfig
-@@ -630,6 +630,23 @@ config VIDEO_SUN8I_ROTATE
- 	   Support for the Allwinner DE2 rotation unit.
- 	   To compile this driver as a module choose m here.
- 
-+config VIDEO_TEGRA_VDE
-+	tristate "NVIDIA Tegra Video Decoder Engine driver"
-+	depends on ARCH_TEGRA || COMPILE_TEST
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	select DMA_SHARED_BUFFER
-+	select IOMMU_IOVA
-+	select MEDIA_CONTROLLER
-+	select MEDIA_CONTROLLER_REQUEST_API
-+	select SRAM
-+	select VIDEOBUF2_DMA_CONTIG
-+	select VIDEOBUF2_DMA_SG
-+	select V4L2_H264
-+	select V4L2_MEM2MEM_DEV
-+	help
-+	   Support for the NVIDIA Tegra video decoder unit.
-+	   To compile this driver as a module choose m here.
-+
- endif # V4L_MEM2MEM_DRIVERS
- 
- # TI VIDEO PORT Helper Modules
-diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 28eb4aadbf45..4c6fdca75b9f 100644
---- a/drivers/media/platform/Makefile
-+++ b/drivers/media/platform/Makefile
-@@ -89,3 +89,5 @@ obj-$(CONFIG_VIDEO_QCOM_VENUS)		+= qcom/venus/
- obj-y					+= sunxi/
- 
- obj-$(CONFIG_VIDEO_MESON_GE2D)		+= meson/ge2d/
-+
-+obj-$(CONFIG_VIDEO_TEGRA_VDE)		+= tegra/vde/
-diff --git a/drivers/staging/media/tegra-vde/Makefile b/drivers/media/platform/tegra/vde/Makefile
-similarity index 67%
-rename from drivers/staging/media/tegra-vde/Makefile
-rename to drivers/media/platform/tegra/vde/Makefile
-index 1758aa201baa..4e96f3305567 100644
---- a/drivers/staging/media/tegra-vde/Makefile
-+++ b/drivers/media/platform/tegra/vde/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
- tegra-vde-y := vde.o iommu.o dmabuf-cache.o h264.o v4l2.o
--obj-$(CONFIG_TEGRA_VDE)	+= tegra-vde.o
-+obj-$(CONFIG_VIDEO_TEGRA_VDE)	+= tegra-vde.o
-diff --git a/drivers/staging/media/tegra-vde/dmabuf-cache.c b/drivers/media/platform/tegra/vde/dmabuf-cache.c
-similarity index 100%
-rename from drivers/staging/media/tegra-vde/dmabuf-cache.c
-rename to drivers/media/platform/tegra/vde/dmabuf-cache.c
-diff --git a/drivers/staging/media/tegra-vde/h264.c b/drivers/media/platform/tegra/vde/h264.c
-similarity index 100%
-rename from drivers/staging/media/tegra-vde/h264.c
-rename to drivers/media/platform/tegra/vde/h264.c
-diff --git a/drivers/staging/media/tegra-vde/iommu.c b/drivers/media/platform/tegra/vde/iommu.c
-similarity index 100%
-rename from drivers/staging/media/tegra-vde/iommu.c
-rename to drivers/media/platform/tegra/vde/iommu.c
-diff --git a/drivers/staging/media/tegra-vde/trace.h b/drivers/media/platform/tegra/vde/trace.h
-similarity index 97%
-rename from drivers/staging/media/tegra-vde/trace.h
-rename to drivers/media/platform/tegra/vde/trace.h
-index e5714107db58..77358ddfdb8f 100644
---- a/drivers/staging/media/tegra-vde/trace.h
-+++ b/drivers/media/platform/tegra/vde/trace.h
-@@ -90,6 +90,6 @@ TRACE_EVENT(vde_ref_l1,
- 
- /* This part must be outside protection */
- #undef TRACE_INCLUDE_PATH
--#define TRACE_INCLUDE_PATH ../../drivers/staging/media/tegra-vde
-+#define TRACE_INCLUDE_PATH ../../drivers/media/platform/tegra/vde
- #define TRACE_INCLUDE_FILE trace
- #include <trace/define_trace.h>
-diff --git a/drivers/staging/media/tegra-vde/v4l2.c b/drivers/media/platform/tegra/vde/v4l2.c
-similarity index 100%
-rename from drivers/staging/media/tegra-vde/v4l2.c
-rename to drivers/media/platform/tegra/vde/v4l2.c
-diff --git a/drivers/staging/media/tegra-vde/vde.c b/drivers/media/platform/tegra/vde/vde.c
-similarity index 100%
-rename from drivers/staging/media/tegra-vde/vde.c
-rename to drivers/media/platform/tegra/vde/vde.c
-diff --git a/drivers/staging/media/tegra-vde/vde.h b/drivers/media/platform/tegra/vde/vde.h
-similarity index 100%
-rename from drivers/staging/media/tegra-vde/vde.h
-rename to drivers/media/platform/tegra/vde/vde.h
-diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
-index b81cfa74edb7..1fd6a0c6e1d8 100644
---- a/drivers/staging/media/Kconfig
-+++ b/drivers/staging/media/Kconfig
-@@ -36,8 +36,6 @@ source "drivers/staging/media/rkvdec/Kconfig"
- 
- source "drivers/staging/media/sunxi/Kconfig"
- 
--source "drivers/staging/media/tegra-vde/Kconfig"
--
- source "drivers/staging/media/zoran/Kconfig"
- 
- source "drivers/staging/media/tegra-video/Kconfig"
-diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
-index 7e2c86e3695d..91be8370cad0 100644
---- a/drivers/staging/media/Makefile
-+++ b/drivers/staging/media/Makefile
-@@ -6,7 +6,6 @@ obj-$(CONFIG_VIDEO_MESON_VDEC)	+= meson/vdec/
- obj-$(CONFIG_VIDEO_OMAP4)	+= omap4iss/
- obj-$(CONFIG_VIDEO_ROCKCHIP_VDEC)	+= rkvdec/
- obj-$(CONFIG_VIDEO_SUNXI)	+= sunxi/
--obj-$(CONFIG_VIDEO_TEGRA)	+= tegra-video/
- obj-$(CONFIG_TEGRA_VDE)		+= tegra-vde/
- obj-$(CONFIG_VIDEO_HANTRO)	+= hantro/
- obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
-diff --git a/drivers/staging/media/tegra-vde/Kconfig b/drivers/staging/media/tegra-vde/Kconfig
-deleted file mode 100644
-index 07dbc1f44ca8..000000000000
---- a/drivers/staging/media/tegra-vde/Kconfig
-+++ /dev/null
-@@ -1,17 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0
--config TEGRA_VDE
--	tristate "NVIDIA Tegra Video Decoder Engine driver"
--	depends on ARCH_TEGRA || COMPILE_TEST
--	depends on VIDEO_DEV && VIDEO_V4L2
--	select DMA_SHARED_BUFFER
--	select IOMMU_IOVA
--	select MEDIA_CONTROLLER
--	select MEDIA_CONTROLLER_REQUEST_API
--	select SRAM
--	select VIDEOBUF2_DMA_CONTIG
--	select VIDEOBUF2_DMA_SG
--	select V4L2_H264
--	select V4L2_MEM2MEM_DEV
--	help
--	    Say Y here to enable support for the NVIDIA Tegra video decoder
--	    driver.
-diff --git a/drivers/staging/media/tegra-vde/TODO b/drivers/staging/media/tegra-vde/TODO
-deleted file mode 100644
-index 31aaa3e66d80..000000000000
---- a/drivers/staging/media/tegra-vde/TODO
-+++ /dev/null
-@@ -1,4 +0,0 @@
--TODO:
--	- Implement V4L2 API once it gains support for stateless decoders.
--
--Contact: Dmitry Osipenko <digetx@gmail.com>
--- 
-2.34.1
+Do you have a repo I can clone?  If not, I need to know which branch
+to apply to the series. I have an 8MM with an OV5640, and I'm willing
+to test if Laurent can't.
 
+adam
+>
+> On top two small patches I was carrying in my tree to add more formats to the
+> CSIS driver, the last one with the caveat that RGB24 is transmitted on the wire
+> with one format and stored in memory with a different one.
+>
+> Series based on top of the most recent media master branch.
+>
+> Thanks
+>   j
+>
+> v1->v2:
+> - Remove per-SoC handling in CSI bridge and only use image formats
+> - Add TODO note to the staging driver
+> - Fix PIXEL_DUAL mode comments for imx-mipi-csis
+> - Add output format translation to imx-mipi-csis to handle RGB24
+>
+> Jacopo Mondi (7):
+>   media: imx: De-stage imx7-mipi-csis
+>   media: imx: Rename imx7-mipi-csis.c to imx-mipi-csis.c
+>   media: imx: imx7-media-csi: Use dual sampling for YUV 1X16
+>   media: imx: imx-mipi-csis: Set PIXEL_MODE for YUV422
+>   media: imx: imx-mipi-csis: Add RGB565_1X16
+>   media: imx: imx-mipi-csis: Add BGR888
+>   media: imx: imx-mipi-csis: Add output format
+>
+>  Documentation/admin-guide/media/imx7.rst      |  2 +-
+>  ...-mipi-csi2.yaml => nxp,imx-mipi-csi2.yaml} |  2 +-
+>  MAINTAINERS                                   |  4 +-
+>  drivers/media/platform/Kconfig                |  1 +
+>  drivers/media/platform/Makefile               |  1 +
+>  drivers/media/platform/imx/Kconfig            | 24 ++++++++
+>  drivers/media/platform/imx/Makefile           |  1 +
+>  .../platform/imx/imx-mipi-csis.c}             | 59 +++++++++++++++++--
+>  drivers/staging/media/imx/Makefile            |  1 -
+>  drivers/staging/media/imx/TODO                | 26 ++++++++
+>  drivers/staging/media/imx/imx7-media-csi.c    |  8 ++-
+>  11 files changed, 117 insertions(+), 12 deletions(-)
+>  rename Documentation/devicetree/bindings/media/{nxp,imx7-mipi-csi2.yaml => nxp,imx-mipi-csi2.yaml} (98%)
+>  create mode 100644 drivers/media/platform/imx/Kconfig
+>  create mode 100644 drivers/media/platform/imx/Makefile
+>  rename drivers/{staging/media/imx/imx7-mipi-csis.c => media/platform/imx/imx-mipi-csis.c} (95%)
+>
+> --
+> 2.35.0
+>
