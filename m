@@ -2,123 +2,107 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42DCDC4332F
-	for <linux-media@archiver.kernel.org>; Mon, 21 Feb 2022 18:27:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C62F1C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 21 Feb 2022 19:12:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbiBUS1c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Feb 2022 13:27:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45666 "EHLO
+        id S232785AbiBUTMp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Feb 2022 14:12:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232461AbiBUSYf (ORCPT
+        with ESMTP id S232789AbiBUTMn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Feb 2022 13:24:35 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18B765BC
-        for <linux-media@vger.kernel.org>; Mon, 21 Feb 2022 10:16:45 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id hw13so35187134ejc.9
-        for <linux-media@vger.kernel.org>; Mon, 21 Feb 2022 10:16:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
-         :from:to:references:in-reply-to;
-        bh=PL945DvY9OK3LLJ2qww6rNoQ2Lb+Kd9OQXb6m49fWPo=;
-        b=ZvZo5phpoMOcxyj55E+La4MqNbcdUsDwMLpcIj2Dr9k/HIwUbumX6k6upoKQ2iPif0
-         mt88k0TdSEh5skV1R8CWqj+5BUoR0tni0em0/dxM0A70IlqGZ+jk3IVkRxfOLzmd9wXn
-         /cN3ThnZR/g9huG0IH+MSEuKYLFVCuMeacgwHaPVYLIoD/c33ypFLPR6CmMcFLfcmaMK
-         bpW7x/8mauj/qglA1DXy0QXSXTgZ/7xbZkD4EGxLjymkwPv/pOwICSORAiKFxPnUBuEp
-         RqAb18jIfrOz1uJLjltcpzvqlryMBvg5iowPRiR/iF60P0ZXBfVMH0Jb7nYk0WRTm0xJ
-         LB3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:cc:subject:from:to:references:in-reply-to;
-        bh=PL945DvY9OK3LLJ2qww6rNoQ2Lb+Kd9OQXb6m49fWPo=;
-        b=saI8xSRA2AK1pjTJeq6DRiD2YdS9/Iznmp5yvcEwu/MkYMWo+iJMJEm6Uz8vrhc2EQ
-         iEuJN35Z8EezRnL5YZ6+/5rsfWZ24daXghGTgx2BViv3UHnE5m4AisIHdZ/7/URY+35t
-         7gLqpaNd89vJ3ZRC5UYz48FjGjnyPxgHbSuo6n+5oU6IvaDz9w/3/usnDk+ZP0sFgcXb
-         LC08mkvHLY/79RuGjoV4u21AHhSaCNHL5zrZR97DoB+ogvap10QGOLOSMryyrPVCWZ2I
-         BZWW3WXM+9VQnPviUyUO3j0G3vp0PSZB8sYTXjkjWlR8i7FtjUPsGiCXE6zOwBUHq+tq
-         xRtg==
-X-Gm-Message-State: AOAM532RnBkDBrYzjXDwAeyt6MfVgSoi+1SLhZm9D3bKAPk/Kb2yU5lj
-        0K+9GhU+niM7fCnnddl79P28tiJcBPn0Xw==
-X-Google-Smtp-Source: ABdhPJyQMk+rA8NhPx3ND9kOEJgGCF32zDlA3AItnnWWDQTGmSmRXBfWiG1mzt3Fku/0DJvJHraxSw==
-X-Received: by 2002:a17:906:40c9:b0:6ba:6f72:dd3d with SMTP id a9-20020a17090640c900b006ba6f72dd3dmr16780816ejk.373.1645467404254;
-        Mon, 21 Feb 2022 10:16:44 -0800 (PST)
-Received: from localhost (a109-49-33-111.cpe.netcabo.pt. [109.49.33.111])
-        by smtp.gmail.com with ESMTPSA id j18sm5408140ejc.166.2022.02.21.10.16.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 10:16:43 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 21 Feb 2022 18:16:42 +0000
-Message-Id: <CI1XIH3YREIS.3SVJ5KMDSXUR6@arch-thunder>
-Cc:     <kernel@pengutronix.de>, <linux-imx@nxp.com>,
-        <linux-media@vger.kernel.org>, <linux-staging@lists.linux.dev>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v4 0/7] media: imx: Destage imx7-mipi-csis
-From:   "Rui Miguel Silva" <rmfrfs@gmail.com>
-To:     "Jacopo Mondi" <jacopo@jmondi.org>, <aford173@gmail.com>,
-        <slongerbeam@gmail.com>, <p.zabel@pengutronix.de>,
-        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
-        <festevam@gmail.com>, <mchehab@kernel.org>,
-        <hverkuil-cisco@xs4all.nl>, <laurent.pinchart@ideasonboard.com>,
-        <martin.kepplinger@puri.sm>, <xavier.roumegue@oss.nxp.com>,
-        <alexander.stein@ew.tq-group.com>, <dorota.czaplejewicz@puri.sm>
-References: <20220221174727.320320-1-jacopo@jmondi.org>
-In-Reply-To: <20220221174727.320320-1-jacopo@jmondi.org>
+        Mon, 21 Feb 2022 14:12:43 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F5520F64;
+        Mon, 21 Feb 2022 11:12:17 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 5B5E41F43AD4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645470736;
+        bh=XM70mQYqpo0EN+97MbBv5HsRvmA2NIYUG8YtRFFXv4k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=X7LCGF0fO9fzaH2CEgy5WVAZ/EOEJmwblAGFA2pKrkt3LYKmnu2XoJhJ+XEcsMwxg
+         RMneAVMWrW9v42GScqlxPlfkPmhZyuTLO0OLpG1XutV6oxZOsnUAwMW4Uq0i5Zc+sJ
+         i/e6V+XFtAxTTNVymOFtoPOY5W+ay8tzjKuQK27wQOGuFaMmDhed0AJWvcoNxRrqlr
+         zZNIdW2Tfeu9P0381GmYNc4XISi+BftsVqS6jndgAZ0QMjG90JTJb9bVCCZbClXPlZ
+         OS29JItcthUH2NhbLN3I6Xq9XZiEIZ3Ujfs57pzntMKtrgpyah5zhyt/hGd4CTQ9TK
+         B/63bMq6fy6WA==
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kernel@collabora.com, yunfei.dong@mediatek.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] doc: media: Document MM21 tiled format
+Date:   Mon, 21 Feb 2022 14:12:01 -0500
+Message-Id: <20220221191202.805745-1-nicolas.dufresne@collabora.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hey Jacopo,
-On Mon Feb 21, 2022 at 5:47 PM WET, Jacopo Mondi wrote:
+MM21 has been documented through two software implementation [0] in libyuv and
+[2] GStreamer. This format is similar to other tiled format, though it uses
+uneven tile sizes. The luma tiles are 16x32 while the chroma tile have a
+subsampled size of 16x16. This is the uncompressed cousin of V4L2_PIX_FMT_MT21C
+and shares its tiling pattern and alignment.
 
-> Very few variations from the recent v3, just reflowed some text and dropp=
-ed
-> a plural name in 6/7 commit message.
+[0] https://chromium.googlesource.com/libyuv/libyuv/+/b4ddbaf549a1bf5572bf703fd2862d1eb7380c6a
+[1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/c9b127dae3af4b3fe78468e697cb491902425254
 
-Even though you lost all the cover letter and previous changes in this
-v4, this looks good to me, and many thanks for de-staging of this
-driver.
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+---
+ .../userspace-api/media/v4l/pixfmt-reserved.rst   | 15 ++++-----------
+ .../userspace-api/media/v4l/pixfmt-yuv-planar.rst |  6 ++++++
+ 2 files changed, 10 insertions(+), 11 deletions(-)
 
-for the all series:
-Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
-
-Cheers,
-     Rui
-
->
-> Jacopo Mondi (7):
->   media: imx: De-stage imx7-mipi-csis
->   media: imx: Rename imx7-mipi-csis.c to imx-mipi-csis.c
->   media: imx: imx7-media-csi: Use dual sampling for YUV 1X16
->   media: imx: imx-mipi-csis: Set PIXEL_MODE for YUV422
->   media: imx: imx-mipi-csis: Add RGB565_1X16
->   media: imx: imx-mipi-csis: Add BGR888
->   media: imx: imx-mipi-csis: Add output format
->
->  Documentation/admin-guide/media/imx7.rst      |  2 +-
->  ...-mipi-csi2.yaml =3D> nxp,imx-mipi-csi2.yaml} |  2 +-
->  MAINTAINERS                                   |  4 +-
->  drivers/media/platform/Kconfig                |  1 +
->  drivers/media/platform/Makefile               |  1 +
->  drivers/media/platform/imx/Kconfig            | 24 +++++++
->  drivers/media/platform/imx/Makefile           |  1 +
->  .../platform/imx/imx-mipi-csis.c}             | 67 +++++++++++++++++--
->  drivers/staging/media/imx/Makefile            |  1 -
->  drivers/staging/media/imx/TODO                | 25 +++++++
->  drivers/staging/media/imx/imx7-media-csi.c    | 32 +++++++--
->  11 files changed, 147 insertions(+), 13 deletions(-)
->  rename Documentation/devicetree/bindings/media/{nxp,imx7-mipi-csi2.yaml =
-=3D> nxp,imx-mipi-csi2.yaml} (98%)
->  create mode 100644 drivers/media/platform/imx/Kconfig
->  create mode 100644 drivers/media/platform/imx/Makefile
->  rename drivers/{staging/media/imx/imx7-mipi-csis.c =3D> media/platform/i=
-mx/imx-mipi-csis.c} (94%)
->
-> --
-> 2.35.0
-
-
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+index 2f2133b4cd9ce..cabfa34b7db5a 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
+@@ -233,19 +233,12 @@ please make a proposal on the linux-media mailing list.
+ 
+       - ``V4L2_PIX_FMT_MT21C``
+       - 'MT21'
+-      - Compressed two-planar YVU420 format used by Mediatek MT8173.
+-	The compression is lossless.
+-	It is an opaque intermediate format and the MDP hardware must be
++      - Compressed two-planar YVU420 format used by Mediatek MT8173, MT8192,
++        MT8195 and more. The compression is lossless. This format have
++	similitude with ``V4L2_PIX_FMT_MM21`` in term of alignment and tiling.
++	It remains an opaque intermediate format and the MDP hardware must be
+ 	used to convert ``V4L2_PIX_FMT_MT21C`` to ``V4L2_PIX_FMT_NV12M``,
+ 	``V4L2_PIX_FMT_YUV420M`` or ``V4L2_PIX_FMT_YVU420``.
+-    * .. _V4L2-PIX-FMT-MM21:
+-
+-      - ``V4L2_PIX_FMT_MM21``
+-      - 'MM21'
+-      - Non-compressed, tiled two-planar format used by Mediatek MT8183.
+-	This is an opaque intermediate format and the MDP3 hardware can be
+-	used to convert it to other formats.
+-
+ .. raw:: latex
+ 
+     \normalsize
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+index 3a09d93d405b2..570791fbc5c8b 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+@@ -296,6 +296,12 @@ tiles linearly in memory. The line stride and image height must be
+ aligned to a multiple of 32. The layouts of the luma and chroma planes are
+ identical.
+ 
++``V4L2_PIX_FMT_MM21`` store luma pixel in 16x32 tiles, and chroma pixels
++in 16x16 tiles. The line stride must be aligned to a multiple of 16 and the
++image height must be aligned to a multiple of 32. The number of luma and chroma
++tiles are identical, even though the tile size differ. The image is formed of
++two non-contiguous planes.
++
+ .. _nv12mt:
+ 
+ .. kernel-figure:: nv12mt.svg
+-- 
+2.35.1
 
