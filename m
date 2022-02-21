@@ -2,22 +2,22 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37452C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 21 Feb 2022 11:19:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08AFCC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 21 Feb 2022 11:19:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356113AbiBULTn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Feb 2022 06:19:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53554 "EHLO
+        id S1356017AbiBULTr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Feb 2022 06:19:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356114AbiBULTb (ORCPT
+        with ESMTP id S1356123AbiBULTb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 21 Feb 2022 06:19:31 -0500
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36482E18
-        for <linux-media@vger.kernel.org>; Mon, 21 Feb 2022 03:05:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11239F1C
+        for <linux-media@vger.kernel.org>; Mon, 21 Feb 2022 03:05:21 -0800 (PST)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 48B2D4000C;
-        Mon, 21 Feb 2022 11:04:59 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0E2B940005;
+        Mon, 21 Feb 2022 11:05:16 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     aford173@gmail.com, slongerbeam@gmail.com, p.zabel@pengutronix.de,
         shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
@@ -29,59 +29,71 @@ Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org,
         Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v3 0/7] media: imx: Destage imx7-mipi-csis
-Date:   Mon, 21 Feb 2022 12:04:29 +0100
-Message-Id: <20220221110436.45419-1-jacopo@jmondi.org>
+Subject: [PATCH v3 4/7] media: imx: imx-mipi-csis: Set PIXEL_MODE for YUV422
+Date:   Mon, 21 Feb 2022 12:04:33 +0100
+Message-Id: <20220221110436.45419-5-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.35.0
+In-Reply-To: <20220221110436.45419-1-jacopo@jmondi.org>
+References: <20220221110436.45419-1-jacopo@jmondi.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello
-  this series includes patches from two series previously sent:
-https://lore.kernel.org/linux-media/20220119112024.11339-1-jacopo@jmondi.org/
-https://lore.kernel.org/linux-media/20220211180216.290133-1-jacopo@jmondi.org/
-v1:
-https://lore.kernel.org/linux-media/20220214184318.409208-1-jacopo@jmondi.org/T/#t
-v2:
-https://lore.kernel.org/linux-media/20220218183421.583874-1-jacopo@jmondi.org/
+Bits 13 and 12 of the ISP_CONFIGn register configure the PIXEL_MODE
+which specifies the sampling size, in pixel component units, on the
+CSI-2 output data interface when data are transferred to memory.
 
-All patches reviewed but the last one
+The register description in the chip manual specifies that DUAL mode
+should be used for YUV422 data.
 
-A test branch based on the most recent media master is available at
-https://git.sr.ht/~jmondi_/linux jmondi/media-master/csis-dual_v3
+Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+Signed-off-by: Xavier Roumegue <xavier.roumegue@oss.nxp.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/platform/imx/imx-mipi-csis.c | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
-Thanks
-   j
-
-Jacopo Mondi (7):
-  media: imx: De-stage imx7-mipi-csis
-  media: imx: Rename imx7-mipi-csis.c to imx-mipi-csis.c
-  media: imx: imx7-media-csi: Use dual sampling for YUV 1X16
-  media: imx: imx-mipi-csis: Set PIXEL_MODE for YUV422
-  media: imx: imx-mipi-csis: Add RGB565_1X16
-  media: imx: imx-mipi-csis: Add BGR888
-  media: imx: imx-mipi-csis: Add output format
-
- Documentation/admin-guide/media/imx7.rst      |  2 +-
- ...-mipi-csi2.yaml => nxp,imx-mipi-csi2.yaml} |  2 +-
- MAINTAINERS                                   |  4 +-
- drivers/media/platform/Kconfig                |  1 +
- drivers/media/platform/Makefile               |  1 +
- drivers/media/platform/imx/Kconfig            | 24 +++++++
- drivers/media/platform/imx/Makefile           |  1 +
- .../platform/imx/imx-mipi-csis.c}             | 68 +++++++++++++++++--
- drivers/staging/media/imx/Makefile            |  1 -
- drivers/staging/media/imx/TODO                | 25 +++++++
- drivers/staging/media/imx/imx7-media-csi.c    | 37 ++++++++--
- 11 files changed, 153 insertions(+), 13 deletions(-)
- rename Documentation/devicetree/bindings/media/{nxp,imx7-mipi-csi2.yaml => nxp,imx-mipi-csi2.yaml} (98%)
- create mode 100644 drivers/media/platform/imx/Kconfig
- create mode 100644 drivers/media/platform/imx/Makefile
- rename drivers/{staging/media/imx/imx7-mipi-csis.c => media/platform/imx/imx-mipi-csis.c} (94%)
-
---
+diff --git a/drivers/media/platform/imx/imx-mipi-csis.c b/drivers/media/platform/imx/imx-mipi-csis.c
+index 3e7efcf43a5f..9d5034759987 100644
+--- a/drivers/media/platform/imx/imx-mipi-csis.c
++++ b/drivers/media/platform/imx/imx-mipi-csis.c
+@@ -173,6 +173,7 @@
+ #define MIPI_CSIS_ISPCFG_PIXEL_MODE_SINGLE	(0 << 12)
+ #define MIPI_CSIS_ISPCFG_PIXEL_MODE_DUAL	(1 << 12)
+ #define MIPI_CSIS_ISPCFG_PIXEL_MODE_QUAD	(2 << 12)	/* i.MX8M[MNP] only */
++#define MIPI_CSIS_ISPCFG_PIXEL_MASK		(3 << 12)
+ #define MIPI_CSIS_ISPCFG_ALIGN_32BIT		BIT(11)
+ #define MIPI_CSIS_ISPCFG_FMT(fmt)		((fmt) << 2)
+ #define MIPI_CSIS_ISPCFG_FMT_MASK		(0x3f << 2)
+@@ -506,7 +507,25 @@ static void __mipi_csis_set_format(struct csi_state *state)
+ 
+ 	/* Color format */
+ 	val = mipi_csis_read(state, MIPI_CSIS_ISP_CONFIG_CH(0));
+-	val &= ~(MIPI_CSIS_ISPCFG_ALIGN_32BIT | MIPI_CSIS_ISPCFG_FMT_MASK);
++	val &= ~(MIPI_CSIS_ISPCFG_ALIGN_32BIT | MIPI_CSIS_ISPCFG_FMT_MASK
++		| MIPI_CSIS_ISPCFG_PIXEL_MASK);
++
++	/*
++	 * YUV 4:2:2 can be transferred with 8 or 16 bits per clock sample
++	 * (referred to in the documentation as single and dual pixel modes
++	 * respectively, although the 8-bit mode transfers half a pixel per
++	 * clock sample and the 16-bit mode one pixel). While both mode work
++	 * when the CSIS is connected to a receiver that supports either option,
++	 * single pixel mode requires clock rates twice as high. As all SoCs
++	 * that integrate the CSIS can operate in 16-bit bit mode, and some do
++	 * not support 8-bit mode (this is the case of the i.MX8MP), use dual
++	 * pixel mode unconditionally.
++	 *
++	 * TODO: Verify which other formats require DUAL (or QUAD) modes.
++	 */
++	if (state->csis_fmt->data_type == MIPI_CSI2_DATA_TYPE_YUV422_8)
++		val |= MIPI_CSIS_ISPCFG_PIXEL_MODE_DUAL;
++
+ 	val |= MIPI_CSIS_ISPCFG_FMT(state->csis_fmt->data_type);
+ 	mipi_csis_write(state, MIPI_CSIS_ISP_CONFIG_CH(0), val);
+ 
+-- 
 2.35.0
 
