@@ -2,22 +2,22 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F704C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 21 Feb 2022 11:19:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68379C433FE
+	for <linux-media@archiver.kernel.org>; Mon, 21 Feb 2022 11:19:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355844AbiBULT6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Feb 2022 06:19:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48050 "EHLO
+        id S1355947AbiBULUD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Feb 2022 06:20:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356137AbiBULTc (ORCPT
+        with ESMTP id S1356122AbiBULTb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:19:32 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB90BFD0
-        for <linux-media@vger.kernel.org>; Mon, 21 Feb 2022 03:05:31 -0800 (PST)
+        Mon, 21 Feb 2022 06:19:31 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2203E9C
+        for <linux-media@vger.kernel.org>; Mon, 21 Feb 2022 03:05:14 -0800 (PST)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 63C8F40011;
-        Mon, 21 Feb 2022 11:05:27 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 79F3840010;
+        Mon, 21 Feb 2022 11:05:07 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     aford173@gmail.com, slongerbeam@gmail.com, p.zabel@pengutronix.de,
         shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
@@ -29,9 +29,9 @@ Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org,
         Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v3 7/7] media: imx: imx-mipi-csis: Add output format
-Date:   Mon, 21 Feb 2022 12:04:36 +0100
-Message-Id: <20220221110436.45419-8-jacopo@jmondi.org>
+Subject: [PATCH v3 2/7] media: imx: Rename imx7-mipi-csis.c to imx-mipi-csis.c
+Date:   Mon, 21 Feb 2022 12:04:31 +0100
+Message-Id: <20220221110436.45419-3-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <20220221110436.45419-1-jacopo@jmondi.org>
 References: <20220221110436.45419-1-jacopo@jmondi.org>
@@ -41,166 +41,115 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Due to how pixel components are transmitted on the CSI-2 serial bus
-and how they are deserialized by the CSI-2 receiver, the component
-ordering might change and the image formats on the sink and source pads
-of the receiver should reflect it.
+Rename the imx7-mipi-csis.c driver to remove the reference to i.MX7.
 
-For RGB24, in example, the component ordering on the wire as described by
-the CSI-2 specification matches the BGR888 format, while once
-deserialized by the CSIS receiver it matches the RGB888 format.
+The driver is for an IP core found on i.MX7 and i.MX8 SoC, so do not
+specify a SoC version number in the driver name.
 
-Add an additional .output field to struct csis_pix_format to allow
-propagating the correct format to the source pad after a format
-configuration on the sink.
+Remove the references to the i.MX7 SoC in the driver symbols and expand
+the driver's header with more information about the IP core the driver
+controls.
 
-The change is only relevant for RGB24 but paves the way for further
-format translations in future.
+Also rename the associated bindings documentation.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/imx/imx-mipi-csis.c | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ Documentation/admin-guide/media/imx7.rst               |  2 +-
+ ...{nxp,imx7-mipi-csi2.yaml => nxp,imx-mipi-csi2.yaml} |  2 +-
+ MAINTAINERS                                            |  4 ++--
+ drivers/media/platform/imx/Makefile                    |  2 +-
+ .../platform/imx/{imx7-mipi-csis.c => imx-mipi-csis.c} | 10 +++++++---
+ 5 files changed, 12 insertions(+), 8 deletions(-)
+ rename Documentation/devicetree/bindings/media/{nxp,imx7-mipi-csi2.yaml => nxp,imx-mipi-csi2.yaml} (98%)
+ rename drivers/media/platform/imx/{imx7-mipi-csis.c => imx-mipi-csis.c} (99%)
 
-diff --git a/drivers/media/platform/imx/imx-mipi-csis.c b/drivers/media/platform/imx/imx-mipi-csis.c
-index a05ab151bebc..6f975b3702bc 100644
---- a/drivers/media/platform/imx/imx-mipi-csis.c
+diff --git a/Documentation/admin-guide/media/imx7.rst b/Documentation/admin-guide/media/imx7.rst
+index 4785ae8ac978..2fa27718f52a 100644
+--- a/Documentation/admin-guide/media/imx7.rst
++++ b/Documentation/admin-guide/media/imx7.rst
+@@ -33,7 +33,7 @@ reference manual [#f1]_.
+ Entities
+ --------
+ 
+-imx7-mipi-csi2
++imx-mipi-csi2
+ --------------
+ 
+ This is the MIPI CSI-2 receiver entity. It has one sink pad to receive the pixel
+diff --git a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx-mipi-csi2.yaml
+similarity index 98%
+rename from Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+rename to Documentation/devicetree/bindings/media/nxp,imx-mipi-csi2.yaml
+index e2e6e9aa0fe6..36b135bf9f2a 100644
+--- a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
++++ b/Documentation/devicetree/bindings/media/nxp,imx-mipi-csi2.yaml
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: http://devicetree.org/schemas/media/nxp,imx7-mipi-csi2.yaml#
++$id: http://devicetree.org/schemas/media/nxp,imx-mipi-csi2.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: NXP i.MX7 and i.MX8 MIPI CSI-2 receiver
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5bdb8c881b0b..d919ea3ed250 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11889,9 +11889,9 @@ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/admin-guide/media/imx7.rst
++F:	Documentation/devicetree/bindings/media/nxp,imx-mipi-csi2.yaml
+ F:	Documentation/devicetree/bindings/media/nxp,imx7-csi.yaml
+-F:	Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
+-F:	drivers/media/platform/imx/imx7-mipi-csis.c
++F:	drivers/media/platform/imx/imx-mipi-csis.c
+ F:	drivers/staging/media/imx/imx7-media-csi.c
+ 
+ MEDIA DRIVERS FOR HELENE
+diff --git a/drivers/media/platform/imx/Makefile b/drivers/media/platform/imx/Makefile
+index ee272234c8d7..f72bdbe8e6ef 100644
+--- a/drivers/media/platform/imx/Makefile
++++ b/drivers/media/platform/imx/Makefile
+@@ -1 +1 @@
+-obj-$(CONFIG_VIDEO_IMX_MIPI_CSIS) += imx7-mipi-csis.o
++obj-$(CONFIG_VIDEO_IMX_MIPI_CSIS) += imx-mipi-csis.o
+diff --git a/drivers/media/platform/imx/imx7-mipi-csis.c b/drivers/media/platform/imx/imx-mipi-csis.c
+similarity index 99%
+rename from drivers/media/platform/imx/imx7-mipi-csis.c
+rename to drivers/media/platform/imx/imx-mipi-csis.c
+index a22d0e6b3d44..3e7efcf43a5f 100644
+--- a/drivers/media/platform/imx/imx7-mipi-csis.c
 +++ b/drivers/media/platform/imx/imx-mipi-csis.c
-@@ -349,6 +349,7 @@ struct csi_state {
+@@ -1,6 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * Freescale i.MX7 SoC series MIPI-CSI V3.3 receiver driver
++ * Samsung CSIS MIPI CSI-2 receiver driver.
++ *
++ * The Samsung CSIS IP is a MIPI CSI-2 receiver found in various NXP i.MX7 and
++ * i.MX8 SoCs. The i.MX7 features version 3.3 of the IP, while i.MX8 features
++ * version 3.6.3.
+  *
+  * Copyright (C) 2019 Linaro Ltd
+  * Copyright (C) 2015-2016 Freescale Semiconductor, Inc. All Rights Reserved.
+@@ -31,7 +35,7 @@
+ #include <media/v4l2-mc.h>
+ #include <media/v4l2-subdev.h>
  
- struct csis_pix_format {
- 	u32 code;
-+	u32 output;
- 	u32 data_type;
- 	u8 width;
- };
-@@ -357,94 +358,116 @@ static const struct csis_pix_format mipi_csis_formats[] = {
- 	/* YUV formats. */
- 	{
- 		.code = MEDIA_BUS_FMT_UYVY8_1X16,
-+		.output = MEDIA_BUS_FMT_UYVY8_1X16,
- 		.data_type = MIPI_CSI2_DATA_TYPE_YUV422_8,
- 		.width = 16,
- 	},
- 	/* RGB formats. */
- 	{
- 		.code = MEDIA_BUS_FMT_RGB565_1X16,
-+		.output = MEDIA_BUS_FMT_RGB565_1X16,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RGB565,
- 		.width = 16,
- 	}, {
- 		.code = MEDIA_BUS_FMT_BGR888_1X24,
-+		.output = MEDIA_BUS_FMT_RGB888_1X24,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RGB888,
- 		.width = 24,
- 	},
- 	/* RAW (Bayer and greyscale) formats. */
- 	{
- 		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
-+		.output = MEDIA_BUS_FMT_SBGGR8_1X8,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW8,
- 		.width = 8,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
-+		.output = MEDIA_BUS_FMT_SGBRG8_1X8,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW8,
- 		.width = 8,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
-+		.output = MEDIA_BUS_FMT_SGRBG8_1X8,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW8,
- 		.width = 8,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
-+		.output = MEDIA_BUS_FMT_SRGGB8_1X8,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW8,
- 		.width = 8,
- 	}, {
- 		.code = MEDIA_BUS_FMT_Y8_1X8,
-+		.output = MEDIA_BUS_FMT_Y8_1X8,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW8,
- 		.width = 8,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SBGGR10_1X10,
-+		.output = MEDIA_BUS_FMT_SBGGR10_1X10,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW10,
- 		.width = 10,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SGBRG10_1X10,
-+		.output = MEDIA_BUS_FMT_SGBRG10_1X10,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW10,
- 		.width = 10,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SGRBG10_1X10,
-+		.output = MEDIA_BUS_FMT_SGRBG10_1X10,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW10,
- 		.width = 10,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
-+		.output = MEDIA_BUS_FMT_SRGGB10_1X10,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW10,
- 		.width = 10,
- 	}, {
- 		.code = MEDIA_BUS_FMT_Y10_1X10,
-+		.output = MEDIA_BUS_FMT_Y10_1X10,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW10,
- 		.width = 10,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SBGGR12_1X12,
-+		.output = MEDIA_BUS_FMT_SBGGR12_1X12,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW12,
- 		.width = 12,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SGBRG12_1X12,
-+		.output = MEDIA_BUS_FMT_SGBRG12_1X12,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW12,
- 		.width = 12,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SGRBG12_1X12,
-+		.output = MEDIA_BUS_FMT_SGRBG12_1X12,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW12,
- 		.width = 12,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SRGGB12_1X12,
-+		.output = MEDIA_BUS_FMT_SRGGB12_1X12,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW12,
- 		.width = 12,
- 	}, {
- 		.code = MEDIA_BUS_FMT_Y12_1X12,
-+		.output = MEDIA_BUS_FMT_Y12_1X12,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW12,
- 		.width = 12,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SBGGR14_1X14,
-+		.output = MEDIA_BUS_FMT_SBGGR14_1X14,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW14,
- 		.width = 14,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SGBRG14_1X14,
-+		.output = MEDIA_BUS_FMT_SGBRG14_1X14,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW14,
- 		.width = 14,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SGRBG14_1X14,
-+		.output = MEDIA_BUS_FMT_SGRBG14_1X14,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW14,
- 		.width = 14,
- 	}, {
- 		.code = MEDIA_BUS_FMT_SRGGB14_1X14,
-+		.output = MEDIA_BUS_FMT_SRGGB14_1X14,
- 		.data_type = MIPI_CSI2_DATA_TYPE_RAW14,
- 		.width = 14,
- 	}
-@@ -1103,6 +1126,9 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *sd,
- 				   CSIS_PAD_SOURCE);
- 	*fmt = sdformat->format;
+-#define CSIS_DRIVER_NAME			"imx7-mipi-csis"
++#define CSIS_DRIVER_NAME			"imx-mipi-csis"
  
-+	/* The format on the source pad might change due to unpacking. */
-+	fmt->code = csis_fmt->output;
-+
- 	/* Store the CSIS format descriptor for active formats. */
- 	if (sdformat->which == V4L2_SUBDEV_FORMAT_ACTIVE)
- 		state->csis_fmt = csis_fmt;
+ #define CSIS_PAD_SINK				0
+ #define CSIS_PAD_SOURCE				1
+@@ -1515,4 +1519,4 @@ module_platform_driver(mipi_csis_driver);
+ 
+ MODULE_DESCRIPTION("i.MX7 & i.MX8 MIPI CSI-2 receiver driver");
+ MODULE_LICENSE("GPL v2");
+-MODULE_ALIAS("platform:imx7-mipi-csi2");
++MODULE_ALIAS("platform:imx-mipi-csi2");
 -- 
 2.35.0
 
