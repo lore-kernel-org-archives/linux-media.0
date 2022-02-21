@@ -2,22 +2,22 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 502FBC433FE
-	for <linux-media@archiver.kernel.org>; Mon, 21 Feb 2022 17:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B241C43217
+	for <linux-media@archiver.kernel.org>; Mon, 21 Feb 2022 17:55:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiBURzb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Feb 2022 12:55:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34718 "EHLO
+        id S230015AbiBURzd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Feb 2022 12:55:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiBURvu (ORCPT
+        with ESMTP id S229915AbiBURwg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Feb 2022 12:51:50 -0500
+        Mon, 21 Feb 2022 12:52:36 -0500
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E43963A5
-        for <linux-media@vger.kernel.org>; Mon, 21 Feb 2022 09:47:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2483A64C5
+        for <linux-media@vger.kernel.org>; Mon, 21 Feb 2022 09:47:57 -0800 (PST)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5EDE71C000A;
-        Mon, 21 Feb 2022 17:47:43 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3BAB51C0004;
+        Mon, 21 Feb 2022 17:47:52 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     aford173@gmail.com, slongerbeam@gmail.com, p.zabel@pengutronix.de,
         shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
@@ -29,9 +29,9 @@ Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org,
         Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v4 2/7] media: imx: Rename imx7-mipi-csis.c to imx-mipi-csis.c
-Date:   Mon, 21 Feb 2022 18:47:22 +0100
-Message-Id: <20220221174727.320320-3-jacopo@jmondi.org>
+Subject: [PATCH v4 4/7] media: imx: imx-mipi-csis: Set PIXEL_MODE for YUV422
+Date:   Mon, 21 Feb 2022 18:47:24 +0100
+Message-Id: <20220221174727.320320-5-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <20220221174727.320320-1-jacopo@jmondi.org>
 References: <20220221174727.320320-1-jacopo@jmondi.org>
@@ -41,115 +41,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rename the imx7-mipi-csis.c driver to remove the reference to i.MX7.
+Bits 13 and 12 of the ISP_CONFIGn register configure the PIXEL_MODE
+which specifies the sampling size, in pixel component units, on the
+CSI-2 output data interface when data are transferred to memory.
 
-The driver is for an IP core found on i.MX7 and i.MX8 SoC, so do not
-specify a SoC version number in the driver name.
-
-Remove the references to the i.MX7 SoC in the driver symbols and expand
-the driver's header with more information about the IP core the driver
-controls.
-
-Also rename the associated bindings documentation.
+The register description in the chip manual specifies that DUAL mode
+should be used for YUV422 data.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+Signed-off-by: Xavier Roumegue <xavier.roumegue@oss.nxp.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- Documentation/admin-guide/media/imx7.rst               |  2 +-
- ...{nxp,imx7-mipi-csi2.yaml => nxp,imx-mipi-csi2.yaml} |  2 +-
- MAINTAINERS                                            |  4 ++--
- drivers/media/platform/imx/Makefile                    |  2 +-
- .../platform/imx/{imx7-mipi-csis.c => imx-mipi-csis.c} | 10 +++++++---
- 5 files changed, 12 insertions(+), 8 deletions(-)
- rename Documentation/devicetree/bindings/media/{nxp,imx7-mipi-csi2.yaml => nxp,imx-mipi-csi2.yaml} (98%)
- rename drivers/media/platform/imx/{imx7-mipi-csis.c => imx-mipi-csis.c} (99%)
+ drivers/media/platform/imx/imx-mipi-csis.c | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/media/imx7.rst b/Documentation/admin-guide/media/imx7.rst
-index 4785ae8ac978..2fa27718f52a 100644
---- a/Documentation/admin-guide/media/imx7.rst
-+++ b/Documentation/admin-guide/media/imx7.rst
-@@ -33,7 +33,7 @@ reference manual [#f1]_.
- Entities
- --------
- 
--imx7-mipi-csi2
-+imx-mipi-csi2
- --------------
- 
- This is the MIPI CSI-2 receiver entity. It has one sink pad to receive the pixel
-diff --git a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx-mipi-csi2.yaml
-similarity index 98%
-rename from Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
-rename to Documentation/devicetree/bindings/media/nxp,imx-mipi-csi2.yaml
-index e2e6e9aa0fe6..36b135bf9f2a 100644
---- a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
-+++ b/Documentation/devicetree/bindings/media/nxp,imx-mipi-csi2.yaml
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: http://devicetree.org/schemas/media/nxp,imx7-mipi-csi2.yaml#
-+$id: http://devicetree.org/schemas/media/nxp,imx-mipi-csi2.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: NXP i.MX7 and i.MX8 MIPI CSI-2 receiver
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5bdb8c881b0b..d919ea3ed250 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11889,9 +11889,9 @@ L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/admin-guide/media/imx7.rst
-+F:	Documentation/devicetree/bindings/media/nxp,imx-mipi-csi2.yaml
- F:	Documentation/devicetree/bindings/media/nxp,imx7-csi.yaml
--F:	Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
--F:	drivers/media/platform/imx/imx7-mipi-csis.c
-+F:	drivers/media/platform/imx/imx-mipi-csis.c
- F:	drivers/staging/media/imx/imx7-media-csi.c
- 
- MEDIA DRIVERS FOR HELENE
-diff --git a/drivers/media/platform/imx/Makefile b/drivers/media/platform/imx/Makefile
-index ee272234c8d7..f72bdbe8e6ef 100644
---- a/drivers/media/platform/imx/Makefile
-+++ b/drivers/media/platform/imx/Makefile
-@@ -1 +1 @@
--obj-$(CONFIG_VIDEO_IMX_MIPI_CSIS) += imx7-mipi-csis.o
-+obj-$(CONFIG_VIDEO_IMX_MIPI_CSIS) += imx-mipi-csis.o
-diff --git a/drivers/media/platform/imx/imx7-mipi-csis.c b/drivers/media/platform/imx/imx-mipi-csis.c
-similarity index 99%
-rename from drivers/media/platform/imx/imx7-mipi-csis.c
-rename to drivers/media/platform/imx/imx-mipi-csis.c
-index a22d0e6b3d44..3e7efcf43a5f 100644
---- a/drivers/media/platform/imx/imx7-mipi-csis.c
+diff --git a/drivers/media/platform/imx/imx-mipi-csis.c b/drivers/media/platform/imx/imx-mipi-csis.c
+index 3e7efcf43a5f..9d5034759987 100644
+--- a/drivers/media/platform/imx/imx-mipi-csis.c
 +++ b/drivers/media/platform/imx/imx-mipi-csis.c
-@@ -1,6 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Freescale i.MX7 SoC series MIPI-CSI V3.3 receiver driver
-+ * Samsung CSIS MIPI CSI-2 receiver driver.
-+ *
-+ * The Samsung CSIS IP is a MIPI CSI-2 receiver found in various NXP i.MX7 and
-+ * i.MX8 SoCs. The i.MX7 features version 3.3 of the IP, while i.MX8 features
-+ * version 3.6.3.
-  *
-  * Copyright (C) 2019 Linaro Ltd
-  * Copyright (C) 2015-2016 Freescale Semiconductor, Inc. All Rights Reserved.
-@@ -31,7 +35,7 @@
- #include <media/v4l2-mc.h>
- #include <media/v4l2-subdev.h>
+@@ -173,6 +173,7 @@
+ #define MIPI_CSIS_ISPCFG_PIXEL_MODE_SINGLE	(0 << 12)
+ #define MIPI_CSIS_ISPCFG_PIXEL_MODE_DUAL	(1 << 12)
+ #define MIPI_CSIS_ISPCFG_PIXEL_MODE_QUAD	(2 << 12)	/* i.MX8M[MNP] only */
++#define MIPI_CSIS_ISPCFG_PIXEL_MASK		(3 << 12)
+ #define MIPI_CSIS_ISPCFG_ALIGN_32BIT		BIT(11)
+ #define MIPI_CSIS_ISPCFG_FMT(fmt)		((fmt) << 2)
+ #define MIPI_CSIS_ISPCFG_FMT_MASK		(0x3f << 2)
+@@ -506,7 +507,25 @@ static void __mipi_csis_set_format(struct csi_state *state)
  
--#define CSIS_DRIVER_NAME			"imx7-mipi-csis"
-+#define CSIS_DRIVER_NAME			"imx-mipi-csis"
+ 	/* Color format */
+ 	val = mipi_csis_read(state, MIPI_CSIS_ISP_CONFIG_CH(0));
+-	val &= ~(MIPI_CSIS_ISPCFG_ALIGN_32BIT | MIPI_CSIS_ISPCFG_FMT_MASK);
++	val &= ~(MIPI_CSIS_ISPCFG_ALIGN_32BIT | MIPI_CSIS_ISPCFG_FMT_MASK
++		| MIPI_CSIS_ISPCFG_PIXEL_MASK);
++
++	/*
++	 * YUV 4:2:2 can be transferred with 8 or 16 bits per clock sample
++	 * (referred to in the documentation as single and dual pixel modes
++	 * respectively, although the 8-bit mode transfers half a pixel per
++	 * clock sample and the 16-bit mode one pixel). While both mode work
++	 * when the CSIS is connected to a receiver that supports either option,
++	 * single pixel mode requires clock rates twice as high. As all SoCs
++	 * that integrate the CSIS can operate in 16-bit bit mode, and some do
++	 * not support 8-bit mode (this is the case of the i.MX8MP), use dual
++	 * pixel mode unconditionally.
++	 *
++	 * TODO: Verify which other formats require DUAL (or QUAD) modes.
++	 */
++	if (state->csis_fmt->data_type == MIPI_CSI2_DATA_TYPE_YUV422_8)
++		val |= MIPI_CSIS_ISPCFG_PIXEL_MODE_DUAL;
++
+ 	val |= MIPI_CSIS_ISPCFG_FMT(state->csis_fmt->data_type);
+ 	mipi_csis_write(state, MIPI_CSIS_ISP_CONFIG_CH(0), val);
  
- #define CSIS_PAD_SINK				0
- #define CSIS_PAD_SOURCE				1
-@@ -1515,4 +1519,4 @@ module_platform_driver(mipi_csis_driver);
- 
- MODULE_DESCRIPTION("i.MX7 & i.MX8 MIPI CSI-2 receiver driver");
- MODULE_LICENSE("GPL v2");
--MODULE_ALIAS("platform:imx7-mipi-csi2");
-+MODULE_ALIAS("platform:imx-mipi-csi2");
 -- 
 2.35.0
 
