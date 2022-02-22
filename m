@@ -2,82 +2,124 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11469C433F5
-	for <linux-media@archiver.kernel.org>; Tue, 22 Feb 2022 11:45:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B1F7C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 22 Feb 2022 13:23:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbiBVLqQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Feb 2022 06:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
+        id S232283AbiBVNYU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Feb 2022 08:24:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiBVLqP (ORCPT
+        with ESMTP id S231248AbiBVNYT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Feb 2022 06:46:15 -0500
-X-Greylist: delayed 482 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 03:45:48 PST
-Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F7313D924
-        for <linux-media@vger.kernel.org>; Tue, 22 Feb 2022 03:45:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1645530346;
-        bh=0Ms03xWBc+9VrtD4C/QoIp1ZOw2mnrwmYzl37UBKzPc=;
-        h=From:To:Cc:Subject:Date;
-        b=ecmtp7rXHrswT6fao5OavKoWrR8YhXBv5q3cWRB35vNwzxkFtG7lCGvaWf30Vi9Rg
-         pHtSQjPCcy737Bgr9ICaXlMP4YZ9OAL2TLizPHxyGZS+TC4oJ1clxQHdrMUiEFwNGG
-         N/TccFSBezsDgPHfk3IjFr0IIwreEONSf8PF29QM=
-Received: from localhost.localdomain ([43.227.136.188])
-        by newxmesmtplogicsvrszc7.qq.com (NewEsmtp) with SMTP
-        id 791A02AE; Tue, 22 Feb 2022 19:30:17 +0800
-X-QQ-mid: xmsmtpt1645529417tdyhv1w0j
-Message-ID: <tencent_22C6C2E595DEFED1417A98A5736539482809@qq.com>
-X-QQ-XMAILINFO: OE2SNMSfMbmOqWTaLvPkh1gzQ6LQ3QWbRi+ykRMCw6wayFRA56vcRnp4jqOcUy
-         r8eInt09NooaESLAgWeFLhZtuOa05vyguPZzHdzvcIfdhBBvQV5TgYlISohQe50GjzlrrHGVYyPl
-         VzifWo8oknq8HhPnCaic+n2M0XKZmgWiCETP7yRvqMsRZXhhNgrJ1Grt/Bl6JJ2UGafJbdmOiGo9
-         GYK9A8OyivVV6v3zE0AX8E6DrNrMWSldHe0jhivEwEb7GfoLZEeTzhclTgyAK9Tfgafkz/SXf50Y
-         xkTxjT8aFxSXAa1zx0LQa2AfXJLhY5QZdPIcrjSkLbt7akmgQKt8EcZbA4tTk1Gw3aWWIGTYQR1R
-         WCoiIbXNYS6SfQrMcbydCLK2iape5LgtIxvEXDE8gkO55yjaldWjOpOxSr3rtb0PXqap/dcWfcs3
-         0Noi/HcqCU2oyCOZssZMIFcixw4Z+vnlj976xzLmjNDkEjfua5yC3JatB8jw1Zelg2LOTntTd1ls
-         b3ZKe7p197WOfVi0E7yR0RqrkAUujNk4WR1naxyqwL4nPYpeQ22MgMgfeckrm+nLXjzfwAO39OW3
-         ozSRW76iMBVliUgk9V11egDp7S7fzMEJJXn3n1B8tIv51XZW8x4PNYU0+KwTK++mGo3KC7p0VZBL
-         ryTX6EEtByOIpths6V9Pt70rHZxPL2w81FZMLC20QQW4FQ52EadYgrA/3h4fzrTfJ1r4b+wrlUhj
-         fl/HDEkQKaK7ZFcEiZnaFzm4EXkstdU+LZE9wuz7xkL3d8UQ+cMZPqXNTdUJoVQmAeRjCSnZjEXU
-         ILdD39TWlLGiER20h3UZt768wmry3fORvCfaaFM7e8HHYv9aAvN1E0dlz0+cDPlPn8OQ003uEZne
-         Trxd+tjdSMzDRAFA8MmxvU9Koz3rHk/rbfmYB/Sk2q
-From:   xkernel.wang@foxmail.com
-To:     sumit.semwal@linaro.org, christian.koenig@amd.com
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] dma-buf: check the return value of kstrdup()
-Date:   Tue, 22 Feb 2022 19:30:05 +0800
-X-OQ-MSGID: <20220222113005.3812-1-xkernel.wang@foxmail.com>
+        Tue, 22 Feb 2022 08:24:19 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470A76AA50
+        for <linux-media@vger.kernel.org>; Tue, 22 Feb 2022 05:23:54 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id j5so9814631ila.2
+        for <linux-media@vger.kernel.org>; Tue, 22 Feb 2022 05:23:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NG01V4rSNTZT33LEKpbidR/6EgoGpN6Ih9EymIaNT1k=;
+        b=lIr9ibXZOUGTx1oKv9faCqb8e/UrOmAE/6Rtg6KdDiRWNi13dsYmIy5AMXr7dqDG38
+         Ps9Q2BlretU0kOvAeBMDOvTceEnNSRbEyK7QkFAr9LsvOu1Fhtr0GjgJXr7bd5w3nbTW
+         7PrFI24MDPOroJ7gbbpTlX072abxZNDqSjMrgFeGBiPeMDr8QR3MByDeV89RCkJMabW8
+         u+dCZ0o9w9GsAAgj4DyB57W9dfTLEilFX09fgN+VFVJdwxjda7dFX6CnkkyhEgXQAs+s
+         C2rdkFRGa1YTDFvyqTEiOHYuuzsrVncltLhFQe92l3agfYbc9aqhQnGUOYIiQszcDb/k
+         TYbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NG01V4rSNTZT33LEKpbidR/6EgoGpN6Ih9EymIaNT1k=;
+        b=l+JrjEQfHMQ9Mw8WuCJhQz5bBInNDR7SQ7TuKJkHpw6HD4SPF/c7zG28wpCw0iZXPP
+         Uvf/WidTfJiriuH6W6yiKrDzFWAQkPng8mum5n+UD3iC1fFr2I4C09NXlDEJhkINffgu
+         q1V8JNaMUGrttu0dU8AF7AfekqUYk0fCZoB5daVeWaoaWk+SAQd7sgtcd8C4mJUCO9eG
+         TxIJySZBDxOPYneL6nwnERT1lAeYqTV702knqdUvfhaxUa7CDWLqeI01/TMhpWz4asqX
+         34wDnMnUso1ghL2MbMPx/ouOTaJNGXID1TVJ4mQfBht4XEQgoRIhy+3OsIAcuQDZ2xJx
+         E25w==
+X-Gm-Message-State: AOAM530aTcQFK3h/xEpCMYhFMsR0l5zV8HRyzJPsMiOlN6/LNLW9zm3B
+        GubT/UBcKTgWjsUVmIuZI1FOO73S2iORYJdXmYY=
+X-Google-Smtp-Source: ABdhPJxr666BIpbHEMeZhjBfPHSwvr9Ce6Q7TGWqXhbFTlceJBWxwMlsRPbWB0Rf46a01n2iACBd97/z8yxzNFqGaV0=
+X-Received: by 2002:a05:6e02:17c5:b0:2c2:57ea:489b with SMTP id
+ z5-20020a056e0217c500b002c257ea489bmr4966985ilu.91.1645536233640; Tue, 22 Feb
+ 2022 05:23:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220222063202.petjwwcfctzsbhxx@basti-TUXEDO-Book-XA1510> <5d5dee88-9dbf-e4d0-4a91-11ff4ecd82ea@xs4all.nl>
+In-Reply-To: <5d5dee88-9dbf-e4d0-4a91-11ff4ecd82ea@xs4all.nl>
+From:   Helen Mae Koike Fornazier <helen.fornazier@gmail.com>
+Date:   Tue, 22 Feb 2022 10:23:42 -0300
+Message-ID: <CAPW4XYa92xJKaM1E4jdwdC=eJsyQhaJM0Qf_iQQYSO0==6j8ag@mail.gmail.com>
+Subject: Re: Deprecated Maintainer entries?
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Sebastian Fricke <sebastian.fricke@posteo.net>,
+        Shuah Khan <skhan@linuxfoundation.org>, dafna@fastmail.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+Hi Hans,
 
-kstrdup() is a memory allocation function which can return NULL when
-some internaly memory errors happen. It is better to check the return
-value of it to prevent further wrong memory access.
+On Tue, Feb 22, 2022 at 4:46 AM Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>
+> The same is true for VIMC where Helen was maintainer. Shuah, would you
+> be willing to take over VIMC as maintainer? If not, then I can put myself
+> up there as maintainer (but 'odd fixes' only, probably).
+>
+> I added a few collabora people to the CC and also Helen's email, although
+> I don't know if she actively monitors her gmail address.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/dma-buf/selftest.c | 3 +++
- 1 file changed, 3 insertions(+)
+I am. I'm sorry for leaving the community suddenly.
+Please go ahead and drop my name from the MAINTAINERS file, I can give
+my acked-by.
+Please let me know if I can help with anything else.
+Thanks for organizing this.
 
-diff --git a/drivers/dma-buf/selftest.c b/drivers/dma-buf/selftest.c
-index c60b694..2c29e2a 100644
---- a/drivers/dma-buf/selftest.c
-+++ b/drivers/dma-buf/selftest.c
-@@ -50,6 +50,9 @@ static bool apply_subtest_filter(const char *caller, const char *name)
- 	bool result = true;
- 
- 	filter = kstrdup(__st_filter, GFP_KERNEL);
-+	if (!filter)
-+		return false;
-+
- 	for (sep = filter; (tok = strsep(&sep, ","));) {
- 		bool allow = true;
- 		char *sl;
+Regards,
+Helen
+
+>
+> Thanks for pointing this out, Sebastian.
+>
+> Regards,
+>
+>         Hans
+>
+> On 2/22/22 07:32, Sebastian Fricke wrote:
+> > Hey folks,
+> >
+> > I noticed that in:
+> > ```
+> > ROCKCHIP ISP V1 DRIVER
+> > M:    Helen Koike <helen.koike@collabora.com>
+> > M:    Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> > L:    linux-media@vger.kernel.org
+> > L:    linux-rockchip@lists.infradead.org
+> > S:    Maintained
+> > F:    Documentation/admin-guide/media/rkisp1.rst
+> > F:    Documentation/devicetree/bindings/media/rockchip-isp1.yaml
+> > F:    Documentation/userspace-api/media/v4l/pixfmt-meta-rkisp1.rst
+> > F:    drivers/media/platform/rockchip/rkisp1
+> > F:    include/uapi/linux/rkisp1-config.h
+> > ```
+> >
+> > Both maintainers do not work for Collabora anymore, so they probably
+> > will not receive any mail on those mail addresses.
+> >
+> > @Dafna: I do not know which mail address Helen currently uses, are you
+> > aware of any?
+> >
+> > Greetings,
+> > Sebastian
+
+
+
 -- 
+Helen Koike
