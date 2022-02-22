@@ -2,117 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19C99C433F5
-	for <linux-media@archiver.kernel.org>; Tue, 22 Feb 2022 21:58:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C3E7C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 22 Feb 2022 22:25:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235874AbiBVV67 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Feb 2022 16:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S232527AbiBVW0D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Feb 2022 17:26:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbiBVV67 (ORCPT
+        with ESMTP id S230318AbiBVW0C (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Feb 2022 16:58:59 -0500
-X-Greylist: delayed 522 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 13:58:32 PST
-Received: from mail.turbocat.net (turbocat.net [IPv6:2a01:4f8:c17:6c4b::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A422A99ECB
-        for <linux-media@vger.kernel.org>; Tue, 22 Feb 2022 13:58:32 -0800 (PST)
-Received: from [10.36.2.165] (unknown [178.17.145.105])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.turbocat.net (Postfix) with ESMTPSA id C83562601B4
-        for <linux-media@vger.kernel.org>; Tue, 22 Feb 2022 22:49:48 +0100 (CET)
-Message-ID: <77ca512b-d1e6-9ec9-eed7-b229bb3852dd@selasky.org>
-Date:   Tue, 22 Feb 2022 22:49:38 +0100
+        Tue, 22 Feb 2022 17:26:02 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFF0B10B5
+        for <linux-media@vger.kernel.org>; Tue, 22 Feb 2022 14:25:36 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id b11so27606835lfb.12
+        for <linux-media@vger.kernel.org>; Tue, 22 Feb 2022 14:25:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6h177daC0FDm1IZ5TekVeCGwmMWiCoGt1CzY923IPUc=;
+        b=f3zGO/ndbIchBke9ZaJDVAtnFJwKUMNU2enShC2QcO+ddAcxtuN/lHiGdXLvlKYmF9
+         rf9RYls8uXreG5MPXFxYFKlZdJ6FasIvw4gEyGLpfwG69MKK+wAxIMclKQsjgWtselYS
+         eIpssCDK2/fVGRb/CPoMMEUXUTz2l+zoyF/NGlw4/+n0T2timh6nPIk4yJE8nHfJ64Mp
+         c7hkTggc1UIJCyqgaWgQq9SrjZX+RrlNUu1si9ADKzsx9qPjRS+eMa90iyvlG92oyuuO
+         n39UM184Ifl+EMEKpRCJQHlsh7luWEpDNc9ZDHiWDd4dhpgNe2N3t7uix1EsIBqdBimb
+         79Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6h177daC0FDm1IZ5TekVeCGwmMWiCoGt1CzY923IPUc=;
+        b=IuCR9Uvndb7TtyU2ZIQym0Tu7dWMzoKCK1Rdg7JYEX04hEIxV6kMBqS862l4WtuWFL
+         AT1Zssj3Z6K/MNuLqTv/cbk7FLKl2TwbhCMYaotMVMkZX93L9kZfK3eu2SrqLm3arBSg
+         9o+Zd0JYym9/r0yQ4JRYIvQLNH/H5Gn0wMHFAsjAItqvSdBwUcMSay6oxWolKcDAIkt2
+         9Ak+Ofv9GkBV8T2pOskQ6O75BC/kOeORzFDtLLdwcBYJBVJ7J5DBUrD3xq4VFpjI4Mnc
+         TNTyBcvUekfgOtY4Rq/Uuvwyh70nlPiLXJU4lJpwYe4xjDBIUxu/laeBkJsOK5UXw5oo
+         9y/w==
+X-Gm-Message-State: AOAM533RaPAEgi36uFTJdbjK4LRfaiymaLqUWOBkUPmAJvN6SyDmey9X
+        VHKoR9QfMaDa3YgCZECtECXJDg==
+X-Google-Smtp-Source: ABdhPJwZJbUlYze6s+6h0oEhPNkBuAcg7tAV5U7WlY6Km3Ouj5hNPDIaKVISWCMEnqUwWN3zkL546A==
+X-Received: by 2002:a05:6512:2315:b0:439:731f:a11e with SMTP id o21-20020a056512231500b00439731fa11emr18667970lfu.545.1645568734486;
+        Tue, 22 Feb 2022 14:25:34 -0800 (PST)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id m18sm1723568ljg.48.2022.02.22.14.25.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 14:25:34 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Ettore Chimenti <ek5.chimenti@gmail.com>
+Subject: [PATCH v2] media: cec: seco: Drop pointless include
+Date:   Tue, 22 Feb 2022 23:23:31 +0100
+Message-Id: <20220222222331.63495-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-To:     linux-media@vger.kernel.org
-Content-Language: en-US
-From:   Hans Petter Selasky <hps@selasky.org>
-Subject: [Possible regression] TechnoTrend TT-USB2.0 driver appears broken
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+This driver uses GPIO descriptors not the old legacy GPIO
+API so stop including <linux/gpio.h>.
 
-Do the technotrend TT-USB 2.0 devices still work with Linux v5.17 ?
+Fix a bug using a completely unrelated legacy API flag
+GPIOF_IN by switching to the actually desired flag
+GPIOD_IN.
 
-Last known working version was Linux v3.16.
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Ettore Chimenti <ek5.chimenti@gmail.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v1->v2:
+- Also fix the bad line flag.
+---
+ drivers/media/cec/platform/seco/seco-cec.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-ugen0.8: <TechnoTrend TT-USB2.0> at usbus0, cfg=0 md=HOST spd=HIGH 
-(480Mbps) pwr=ON (10mA)
+diff --git a/drivers/media/cec/platform/seco/seco-cec.c b/drivers/media/cec/platform/seco/seco-cec.c
+index ae138cc253fd..4df56096a476 100644
+--- a/drivers/media/cec/platform/seco/seco-cec.c
++++ b/drivers/media/cec/platform/seco/seco-cec.c
+@@ -12,7 +12,6 @@
+ #include <linux/delay.h>
+ #include <linux/dmi.h>
+ #include <linux/gpio/consumer.h>
+-#include <linux/gpio.h>
+ #include <linux/interrupt.h>
+ #include <linux/pci.h>
+ #include <linux/platform_device.h>
+@@ -551,7 +550,7 @@ static int secocec_acpi_probe(struct secocec_data *sdev)
+ 	struct gpio_desc *gpio;
+ 	int irq = 0;
+ 
+-	gpio = devm_gpiod_get(dev, NULL, GPIOF_IN);
++	gpio = devm_gpiod_get(dev, NULL, GPIOD_IN);
+ 	if (IS_ERR(gpio)) {
+ 		dev_err(dev, "Cannot request interrupt gpio");
+ 		return PTR_ERR(gpio);
+-- 
+2.34.1
 
-   bLength = 0x0012
-   bDescriptorType = 0x0001
-   bcdUSB = 0x0200
-   bDeviceClass = 0x0000  <Probed by interface class>
-   bDeviceSubClass = 0x0000
-   bDeviceProtocol = 0x0000
-   bMaxPacketSize0 = 0x0040
-   idVendor = 0x0b48
-   idProduct = 0x3007
-   bcdDevice = 0x0101
-   iManufacturer = 0x0001  <TechnoTrend>
-   iProduct = 0x0002  <TT-USB2.0>
-   iSerialNumber = 0x0000  <no string>
-   bNumConfigurations = 0x0001
-
-
-First I get this error:
-
-webcamd 98640 - - pctv452e: I2C error -5; AA 91  CC 00 01 -> 0x803003000h
-
-Removed "drivers/media/usb/dvb-usb/pctv452e.c"
-
->         /* I2C device didn't respond as expected. */
->         ret = -EREMOTEIO;
->         if (buf[6] < rcv_len) {
->                 goto failed;
->         }
-
-Then w_scan complained:
-
-> w_scan version 20120415 (compiled for DVB API 5.11)
-> using settings for 0.8 west Thor 3/5 & Intelsat 10-02
-> scan type SATELLITE, channellist 53
-> output format vdr-1.7
-> WARNING: could not guess your codepage. Falling back to 'UTF-8'
-> output charset 'UTF-8', use -C <charset> to override
-> -_-_-_-_ Getting frontend capabilities-_-_-_-_ 
-> Using DVB API 5.b
-> frontend 'STB0899 Multistandard' supports
-> INVERSION_AUTO
-> DVB-S
-> DVB-S2
-> FREQ (0.95GHz ... 2.15GHz)
-> SRATE (5.000MSym/s ... 45.000MSym/s)
-> using LNB "UNIVERSAL"
-> -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ 
-> (time: 00:00) 
-> (time: 00:05) 	skipped: (srate 1450000 unsupported by driver)
-> 
-> initial_tune:2265: Setting frontend failed S  f = 11166 kHz V SR =  1450  7/8 0,35  QPSK
-> (time: 00:06) 	skipped: (srate 3100000 unsupported by driver)
-> 
-> initial_tune:2265: Setting frontend failed S  f = 11182 kHz V SR =  3100  7/8 0,35  QPSK
-> (time: 00:08) 	skipped: (srate 2142000 unsupported by driver)
-
-Tried to change:
-
-> static const struct dvb_frontend_ops stb0899_ops = {
->         .delsys = { SYS_DVBS, SYS_DVBS2, SYS_DSS },
->         .info = {
->                 .name                   = "STB0899 Multistandard",
->                 .frequency_min_hz       =  950 * MHz,
->                 .frequency_max_hz       = 2150 * MHz,
->                 .symbol_rate_min        =   500000,
-^^^ this value
->                 .symbol_rate_max        = 45000000,
-
-But no luck.
-
---HPS
