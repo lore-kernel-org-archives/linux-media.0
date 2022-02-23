@@ -2,102 +2,67 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BE65C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 23 Feb 2022 11:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0192AC433EF
+	for <linux-media@archiver.kernel.org>; Wed, 23 Feb 2022 11:56:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240214AbiBWL4E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Feb 2022 06:56:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
+        id S235255AbiBWL4w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Feb 2022 06:56:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233405AbiBWL4D (ORCPT
+        with ESMTP id S237222AbiBWL4v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:56:03 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CFB985A7
-        for <linux-media@vger.kernel.org>; Wed, 23 Feb 2022 03:55:36 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9AB26DD;
-        Wed, 23 Feb 2022 12:55:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1645617334;
-        bh=P9QPOk6+GyOorRzj5cQRojYaJllOvDTxlfIxFQi8C1o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UiGMa4BHS1ppfLQCPQUjlypa5s0u9TLicwH1fPGEWXMC74HLHsEShAVUuGhy/Nwcb
-         vW3Ofrn5KurQstQQlTzSNiqultUcSNSIFiGmRYaqYw71d7Q3A1JFvGQ9caabMnfnwr
-         /oWdVSY7B7nGfgwpbeiejoTxGysjgKFyykfQsqpA=
-Date:   Wed, 23 Feb 2022 13:55:24 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>, sakari.ailus@iki.fi,
-        hverkuil-cisco@xs4all.nl, mirela.rabulea@nxp.com,
-        xavier.roumegue@oss.nxp.com, tomi.valkeinen@ideasonboard.com,
-        hugues.fruchet@st.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
-        aford173@gmail.com, festevam@gmail.com,
-        Eugen.Hristev@microchip.com, jbrunet@baylibre.com,
-        paul.elder@ideasonboard.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 22/27] media: ov5640: Add RGB565_1X16 format
-Message-ID: <YhYgrGZinCsvid7U@pendragon.ideasonboard.com>
-References: <20220223104034.91550-1-jacopo@jmondi.org>
- <20220223104034.91550-23-jacopo@jmondi.org>
+        Wed, 23 Feb 2022 06:56:51 -0500
+Received: from hillosipuli.retiisi.eu (retiisi.eu [95.216.213.190])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86AF99EE4
+        for <linux-media@vger.kernel.org>; Wed, 23 Feb 2022 03:56:23 -0800 (PST)
+Received: from lanttu.localdomain (unknown [IPv6:fd35:1bc8:1a6:d3d5::c1:2])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 1EFF2634C91;
+        Wed, 23 Feb 2022 13:56:21 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH 1/2] v4l: fwnode: Drop redunant -ENODATA check in property reference parsing
+Date:   Wed, 23 Feb 2022 13:54:33 +0200
+Message-Id: <20220223115434.21316-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220223115434.21316-1-sakari.ailus@linux.intel.com>
+References: <20220223115434.21316-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220223104034.91550-23-jacopo@jmondi.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+The check of -ENODATA return value from
+fwnode_property_get_reference_args() was made redundant by commit
+c343bc2ce2c6 ("ACPI: properties: Align return codes of
+__acpi_node_get_property_reference()"). -ENOENT remains to be used to
+signal there are no further entries.
 
-Thank you for the patch.
+Remove the check for -ENODATA.
 
-On Wed, Feb 23, 2022 at 11:40:29AM +0100, Jacopo Mondi wrote:
-> The driver already supports the 2X8_[LE|BE] variants of RGB565
-> formats.
-> 
-> As for CSI-2 the 2X8 variants do not apply, add RGB565_1X16 variant
-> with little-endian ordering of components as required by the CSI-2
-> specifications.
-> 
-> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> ---
->  drivers/media/i2c/ov5640.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-> index c03976b22cbf..b9a488f63687 100644
-> --- a/drivers/media/i2c/ov5640.c
-> +++ b/drivers/media/i2c/ov5640.c
-> @@ -221,6 +221,10 @@ static const struct ov5640_pixfmt {
->  		.code = MEDIA_BUS_FMT_RGB565_2X8_BE,
->  		.colorspace = V4L2_COLORSPACE_SRGB,
->  		.bpp = 16,
-> +	}, {
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/v4l2-core/v4l2-fwnode.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-Let's add
-
-		/* For CSI-2 only */
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> +		.code = MEDIA_BUS_FMT_RGB565_1X16,
-> +		.colorspace = V4L2_COLORSPACE_SRGB,
-> +		.bpp = 16,
->  	}, {
->  		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
->  		.colorspace = V4L2_COLORSPACE_SRGB,
-> @@ -2898,6 +2902,7 @@ static int ov5640_set_framefmt(struct ov5640_dev *sensor,
->  		mux = OV5640_FMT_MUX_YUV422;
->  		break;
->  	case MEDIA_BUS_FMT_RGB565_2X8_LE:
-> +	case MEDIA_BUS_FMT_RGB565_1X16:
->  		/* RGB565 {g[2:0],b[4:0]},{r[4:0],g[5:3]} */
->  		fmt = 0x6F;
->  		mux = OV5640_FMT_MUX_RGB;
-
+diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+index 71dcc9a96535..ae140443847b 100644
+--- a/drivers/media/v4l2-core/v4l2-fwnode.c
++++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+@@ -903,11 +903,7 @@ static int v4l2_fwnode_reference_parse(struct device *dev,
+ 	if (!index)
+ 		return -ENOENT;
+ 
+-	/*
+-	 * Note that right now both -ENODATA and -ENOENT may signal
+-	 * out-of-bounds access. Return the error in cases other than that.
+-	 */
+-	if (ret != -ENOENT && ret != -ENODATA)
++	if (ret != -ENOENT)
+ 		return ret;
+ 
+ 	for (index = 0;
 -- 
-Regards,
+2.30.2
 
-Laurent Pinchart
