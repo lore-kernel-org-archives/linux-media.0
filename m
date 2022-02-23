@@ -2,95 +2,266 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2574CC4332F
-	for <linux-media@archiver.kernel.org>; Wed, 23 Feb 2022 11:56:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2CF2C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 23 Feb 2022 12:01:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240047AbiBWL4w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Feb 2022 06:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S240254AbiBWMCU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Feb 2022 07:02:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240025AbiBWL4v (ORCPT
+        with ESMTP id S240244AbiBWMCU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:56:51 -0500
-Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.eu [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0886699EF3
-        for <linux-media@vger.kernel.org>; Wed, 23 Feb 2022 03:56:24 -0800 (PST)
-Received: from lanttu.localdomain (unknown [IPv6:fd35:1bc8:1a6:d3d5::c1:2])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 330C0634C93;
-        Wed, 23 Feb 2022 13:56:21 +0200 (EET)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH 2/2] v4l: fwnode: Remove now-redundant loop from v4l2_fwnode_parse_reference()
-Date:   Wed, 23 Feb 2022 13:54:34 +0200
-Message-Id: <20220223115434.21316-3-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220223115434.21316-1-sakari.ailus@linux.intel.com>
-References: <20220223115434.21316-1-sakari.ailus@linux.intel.com>
+        Wed, 23 Feb 2022 07:02:20 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4BF985AF
+        for <linux-media@vger.kernel.org>; Wed, 23 Feb 2022 04:01:51 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9F58EDD;
+        Wed, 23 Feb 2022 13:01:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1645617709;
+        bh=qV95vsdzAp9wHkwxZIwFTZRU0PhKZiqVLIMjlopqCoA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B2sMccgnisgguo3Ms6YwVHa1McOJSmlDAnfQTN9nkyPLV1brgvHvSwaDQ6Y3fUZhN
+         pdx0tM2gN61TpI4NoV9Zfg8dIfdaq7ai2yzWzEzpBGdUy6vHgcjAr30HHZNHsxMu1T
+         vgkptD2BMon/RTdwhcO4g3R8ZKSU5SJ8ijRcxx2c=
+Date:   Wed, 23 Feb 2022 14:01:39 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>, sakari.ailus@iki.fi,
+        hverkuil-cisco@xs4all.nl, mirela.rabulea@nxp.com,
+        xavier.roumegue@oss.nxp.com, tomi.valkeinen@ideasonboard.com,
+        hugues.fruchet@st.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
+        aford173@gmail.com, festevam@gmail.com,
+        Eugen.Hristev@microchip.com, jbrunet@baylibre.com,
+        paul.elder@ideasonboard.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v3 13/27] media: ov5640: Remove duplicated mode settings
+Message-ID: <YhYiI/OTQ2wDWWYZ@pendragon.ideasonboard.com>
+References: <20220223104034.91550-1-jacopo@jmondi.org>
+ <20220223104034.91550-14-jacopo@jmondi.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220223104034.91550-14-jacopo@jmondi.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-v4l2_fwnode_parse_reference() relied on counting the number of references
-for async array memory allocation. The array is long gone so remove
-counting the references now.
+Hi Jacopo,
 
-This also changes how the function arrives in different unsuccessful
-return values but the functionality remains unchanged.
+Thank you for the patch.
 
-Also the check for -ENODATA is removed, it was made redundant by commit
-c343bc2ce2c6 ("ACPI: properties: Align return codes of
-__acpi_node_get_property_reference()").
+On Wed, Feb 23, 2022 at 11:40:20AM +0100, Jacopo Mondi wrote:
+> The register tables for all resolutions smaller than 720p are now
+> identical.
+> 
+> Remove the duplicated ones and create a single ov5640_setting_low_res[]
+> register table.
+> 
+> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/v4l2-core/v4l2-fwnode.c | 24 ++++++++----------------
- 1 file changed, 8 insertions(+), 16 deletions(-)
+Neat :-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-index ae140443847b..afceb35e500c 100644
---- a/drivers/media/v4l2-core/v4l2-fwnode.c
-+++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-@@ -894,21 +894,8 @@ static int v4l2_fwnode_reference_parse(struct device *dev,
- 	int ret;
- 
- 	for (index = 0;
--	     !(ret = fwnode_property_get_reference_args(dev_fwnode(dev),
--							prop, NULL, 0,
--							index, &args));
--	     index++)
--		fwnode_handle_put(args.fwnode);
--
--	if (!index)
--		return -ENOENT;
--
--	if (ret != -ENOENT)
--		return ret;
--
--	for (index = 0;
--	     !fwnode_property_get_reference_args(dev_fwnode(dev), prop, NULL,
--						 0, index, &args);
-+	     !(ret = fwnode_property_get_reference_args(dev_fwnode(dev), prop,
-+							NULL, 0, index, &args));
- 	     index++) {
- 		struct v4l2_async_subdev *asd;
- 
-@@ -924,7 +911,12 @@ static int v4l2_fwnode_reference_parse(struct device *dev,
- 		}
- 	}
- 
--	return 0;
-+	/* -ENOENT here means successful parsing */
-+	if (ret != -ENOENT)
-+		return ret;
-+
-+	/* Return -ENOENT if no references were found */
-+	return index ? 0 : -ENOENT;
- }
- 
- /*
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+If there's any volunteer, it would be nice to take this one step further
+and isolate the other changes too.
+
+> ---
+>  drivers/media/i2c/ov5640.c | 120 +++++--------------------------------
+>  1 file changed, 15 insertions(+), 105 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+> index ab17ac79f936..a85e10a8118f 100644
+> --- a/drivers/media/i2c/ov5640.c
+> +++ b/drivers/media/i2c/ov5640.c
+> @@ -482,7 +482,7 @@ static const struct reg_value ov5640_init_setting_30fps_VGA[] = {
+>  	{0x3a1f, 0x14, 0, 0}, {0x3008, 0x02, 0, 0}, {0x3c00, 0x04, 0, 300},
+>  };
+>  
+> -static const struct reg_value ov5640_setting_QQVGA_160_120[] = {
+> +static const struct reg_value ov5640_setting_low_res[] = {
+>  	{0x3c07, 0x08, 0, 0},
+>  	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
+>  	{0x3814, 0x31, 0, 0},
+> @@ -496,96 +496,6 @@ static const struct reg_value ov5640_setting_QQVGA_160_120[] = {
+>  	{0x4407, 0x04, 0, 0}, {0x5001, 0xa3, 0, 0},
+>  };
+>  
+> -static const struct reg_value ov5640_setting_QCIF_176_144[] = {
+> -	{0x3c07, 0x08, 0, 0},
+> -	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
+> -	{0x3814, 0x31, 0, 0},
+> -	{0x3815, 0x31, 0, 0},
+> -	{0x3618, 0x00, 0, 0}, {0x3612, 0x29, 0, 0}, {0x3708, 0x64, 0, 0},
+> -	{0x3709, 0x52, 0, 0}, {0x370c, 0x03, 0, 0}, {0x3a02, 0x03, 0, 0},
+> -	{0x3a03, 0xd8, 0, 0}, {0x3a08, 0x01, 0, 0}, {0x3a09, 0x27, 0, 0},
+> -	{0x3a0a, 0x00, 0, 0}, {0x3a0b, 0xf6, 0, 0}, {0x3a0e, 0x03, 0, 0},
+> -	{0x3a0d, 0x04, 0, 0}, {0x3a14, 0x03, 0, 0}, {0x3a15, 0xd8, 0, 0},
+> -	{0x4001, 0x02, 0, 0}, {0x4004, 0x02, 0, 0},
+> -	{0x4407, 0x04, 0, 0}, {0x460b, 0x35, 0, 0}, {0x460c, 0x22, 0, 0},
+> -	{0x3824, 0x02, 0, 0}, {0x5001, 0xa3, 0, 0},
+> -};
+> -
+> -static const struct reg_value ov5640_setting_QVGA_320_240[] = {
+> -	{0x3c07, 0x08, 0, 0},
+> -	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
+> -	{0x3814, 0x31, 0, 0},
+> -	{0x3815, 0x31, 0, 0},
+> -	{0x3618, 0x00, 0, 0}, {0x3612, 0x29, 0, 0}, {0x3708, 0x64, 0, 0},
+> -	{0x3709, 0x52, 0, 0}, {0x370c, 0x03, 0, 0}, {0x3a02, 0x03, 0, 0},
+> -	{0x3a03, 0xd8, 0, 0}, {0x3a08, 0x01, 0, 0}, {0x3a09, 0x27, 0, 0},
+> -	{0x3a0a, 0x00, 0, 0}, {0x3a0b, 0xf6, 0, 0}, {0x3a0e, 0x03, 0, 0},
+> -	{0x3a0d, 0x04, 0, 0}, {0x3a14, 0x03, 0, 0}, {0x3a15, 0xd8, 0, 0},
+> -	{0x4001, 0x02, 0, 0}, {0x4004, 0x02, 0, 0},
+> -	{0x4407, 0x04, 0, 0}, {0x460b, 0x35, 0, 0}, {0x460c, 0x22, 0, 0},
+> -	{0x3824, 0x02, 0, 0}, {0x5001, 0xa3, 0, 0},
+> -};
+> -
+> -static const struct reg_value ov5640_setting_VGA_640_480[] = {
+> -	{0x3c07, 0x08, 0, 0},
+> -	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
+> -	{0x3814, 0x31, 0, 0},
+> -	{0x3815, 0x31, 0, 0},
+> -	{0x3618, 0x00, 0, 0}, {0x3612, 0x29, 0, 0}, {0x3708, 0x64, 0, 0},
+> -	{0x3709, 0x52, 0, 0}, {0x370c, 0x03, 0, 0}, {0x3a02, 0x03, 0, 0},
+> -	{0x3a03, 0xd8, 0, 0}, {0x3a08, 0x01, 0, 0}, {0x3a09, 0x27, 0, 0},
+> -	{0x3a0a, 0x00, 0, 0}, {0x3a0b, 0xf6, 0, 0}, {0x3a0e, 0x03, 0, 0},
+> -	{0x3a0d, 0x04, 0, 0}, {0x3a14, 0x03, 0, 0}, {0x3a15, 0xd8, 0, 0},
+> -	{0x4001, 0x02, 0, 0}, {0x4004, 0x02, 0, 0},
+> -	{0x4407, 0x04, 0, 0}, {0x460b, 0x35, 0, 0}, {0x460c, 0x22, 0, 0},
+> -	{0x3824, 0x02, 0, 0}, {0x5001, 0xa3, 0, 0},
+> -};
+> -
+> -static const struct reg_value ov5640_setting_NTSC_720_480[] = {
+> -	{0x3c07, 0x08, 0, 0},
+> -	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
+> -	{0x3814, 0x31, 0, 0},
+> -	{0x3815, 0x31, 0, 0},
+> -	{0x3618, 0x00, 0, 0}, {0x3612, 0x29, 0, 0}, {0x3708, 0x64, 0, 0},
+> -	{0x3709, 0x52, 0, 0}, {0x370c, 0x03, 0, 0}, {0x3a02, 0x03, 0, 0},
+> -	{0x3a03, 0xd8, 0, 0}, {0x3a08, 0x01, 0, 0}, {0x3a09, 0x27, 0, 0},
+> -	{0x3a0a, 0x00, 0, 0}, {0x3a0b, 0xf6, 0, 0}, {0x3a0e, 0x03, 0, 0},
+> -	{0x3a0d, 0x04, 0, 0}, {0x3a14, 0x03, 0, 0}, {0x3a15, 0xd8, 0, 0},
+> -	{0x4001, 0x02, 0, 0}, {0x4004, 0x02, 0, 0},
+> -	{0x4407, 0x04, 0, 0}, {0x460b, 0x35, 0, 0}, {0x460c, 0x22, 0, 0},
+> -	{0x3824, 0x02, 0, 0}, {0x5001, 0xa3, 0, 0},
+> -};
+> -
+> -static const struct reg_value ov5640_setting_PAL_720_576[] = {
+> -	{0x3c07, 0x08, 0, 0},
+> -	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
+> -	{0x3814, 0x31, 0, 0},
+> -	{0x3815, 0x31, 0, 0},
+> -	{0x3618, 0x00, 0, 0}, {0x3612, 0x29, 0, 0}, {0x3708, 0x64, 0, 0},
+> -	{0x3709, 0x52, 0, 0}, {0x370c, 0x03, 0, 0}, {0x3a02, 0x03, 0, 0},
+> -	{0x3a03, 0xd8, 0, 0}, {0x3a08, 0x01, 0, 0}, {0x3a09, 0x27, 0, 0},
+> -	{0x3a0a, 0x00, 0, 0}, {0x3a0b, 0xf6, 0, 0}, {0x3a0e, 0x03, 0, 0},
+> -	{0x3a0d, 0x04, 0, 0}, {0x3a14, 0x03, 0, 0}, {0x3a15, 0xd8, 0, 0},
+> -	{0x4001, 0x02, 0, 0}, {0x4004, 0x02, 0, 0},
+> -	{0x4407, 0x04, 0, 0}, {0x460b, 0x35, 0, 0}, {0x460c, 0x22, 0, 0},
+> -	{0x3824, 0x02, 0, 0}, {0x5001, 0xa3, 0, 0},
+> -};
+> -
+> -static const struct reg_value ov5640_setting_XGA_1024_768[] = {
+> -	{0x3c07, 0x08, 0, 0},
+> -	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
+> -	{0x3814, 0x31, 0, 0},
+> -	{0x3815, 0x31, 0, 0},
+> -	{0x3618, 0x00, 0, 0}, {0x3612, 0x29, 0, 0}, {0x3708, 0x64, 0, 0},
+> -	{0x3709, 0x52, 0, 0}, {0x370c, 0x03, 0, 0}, {0x3a02, 0x03, 0, 0},
+> -	{0x3a03, 0xd8, 0, 0}, {0x3a08, 0x01, 0, 0}, {0x3a09, 0x27, 0, 0},
+> -	{0x3a0a, 0x00, 0, 0}, {0x3a0b, 0xf6, 0, 0}, {0x3a0e, 0x03, 0, 0},
+> -	{0x3a0d, 0x04, 0, 0}, {0x3a14, 0x03, 0, 0}, {0x3a15, 0xd8, 0, 0},
+> -	{0x4001, 0x02, 0, 0}, {0x4004, 0x02, 0, 0},
+> -	{0x4407, 0x04, 0, 0}, {0x460b, 0x35, 0, 0}, {0x460c, 0x22, 0, 0},
+> -	{0x3824, 0x02, 0, 0}, {0x5001, 0xa3, 0, 0},
+> -};
+> -
+>  static const struct reg_value ov5640_setting_720P_1280_720[] = {
+>  	{0x3c07, 0x07, 0, 0},
+>  	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
+> @@ -727,8 +637,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
+>  			.htot		= 1896,
+>  			.vblank_def	= 864,
+>  		},
+> -		.reg_data	= ov5640_setting_QQVGA_160_120,
+> -		.reg_data_size	= ARRAY_SIZE(ov5640_setting_QQVGA_160_120),
+> +		.reg_data	= ov5640_setting_low_res,
+> +		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
+>  	}, {
+>  		/* 176x144 */
+>  		.id		= OV5640_MODE_QCIF_176_144,
+> @@ -771,8 +681,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
+>  			.htot		= 1896,
+>  			.vblank_def	= 840,
+>  		},
+> -		.reg_data	= ov5640_setting_QCIF_176_144,
+> -		.reg_data_size	= ARRAY_SIZE(ov5640_setting_QCIF_176_144),
+> +		.reg_data	= ov5640_setting_low_res,
+> +		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
+>  	}, {
+>  		/* 320x240 */
+>  		.id		= OV5640_MODE_QVGA_320_240,
+> @@ -815,8 +725,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
+>  			.htot		= 1896,
+>  			.vblank_def	= 744,
+>  		},
+> -		.reg_data	= ov5640_setting_QVGA_320_240,
+> -		.reg_data_size	= ARRAY_SIZE(ov5640_setting_QVGA_320_240),
+> +		.reg_data	= ov5640_setting_low_res,
+> +		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
+>  	}, {
+>  		/* 640x480 */
+>  		.id		= OV5640_MODE_VGA_640_480,
+> @@ -859,8 +769,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
+>  			.htot		= 1896,
+>  			.vblank_def	= 600,
+>  		},
+> -		.reg_data	= ov5640_setting_VGA_640_480,
+> -		.reg_data_size	= ARRAY_SIZE(ov5640_setting_VGA_640_480),
+> +		.reg_data	= ov5640_setting_low_res,
+> +		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
+>  	}, {
+>  		/* 720x480 */
+>  		.id		= OV5640_MODE_NTSC_720_480,
+> @@ -903,8 +813,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
+>  			.htot		= 1896,
+>  			.vblank_def	= 504,
+>  		},
+> -		.reg_data	= ov5640_setting_NTSC_720_480,
+> -		.reg_data_size	= ARRAY_SIZE(ov5640_setting_NTSC_720_480),
+> +		.reg_data	= ov5640_setting_low_res,
+> +		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
+>  	}, {
+>  		/* 720x576 */
+>  		.id		= OV5640_MODE_PAL_720_576,
+> @@ -947,8 +857,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
+>  			.htot		= 1896,
+>  			.vblank_def	= 408,
+>  		},
+> -		.reg_data	= ov5640_setting_PAL_720_576,
+> -		.reg_data_size	= ARRAY_SIZE(ov5640_setting_PAL_720_576),
+> +		.reg_data	= ov5640_setting_low_res,
+> +		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
+>  	}, {
+>  		/* 1024x768 */
+>  		.id		= OV5640_MODE_XGA_1024_768,
+> @@ -989,8 +899,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
+>  			.htot		= 1896,
+>  			.vblank_def	= 312,
+>  		},
+> -		.reg_data	= ov5640_setting_XGA_1024_768,
+> -		.reg_data_size	= ARRAY_SIZE(ov5640_setting_XGA_1024_768),
+> +		.reg_data	= ov5640_setting_low_res,
+> +		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
+>  	}, {
+>  		/* 1280x720 */
+>  		.id		= OV5640_MODE_720P_1280_720,
+
 -- 
-2.30.2
+Regards,
 
+Laurent Pinchart
