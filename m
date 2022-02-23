@@ -2,30 +2,30 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C67C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 23 Feb 2022 11:54:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BE65C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 23 Feb 2022 11:55:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237142AbiBWLyc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Feb 2022 06:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
+        id S240214AbiBWL4E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Feb 2022 06:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235675AbiBWLyb (ORCPT
+        with ESMTP id S233405AbiBWL4D (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:54:31 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B25C97BB0
-        for <linux-media@vger.kernel.org>; Wed, 23 Feb 2022 03:54:04 -0800 (PST)
+        Wed, 23 Feb 2022 06:56:03 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CFB985A7
+        for <linux-media@vger.kernel.org>; Wed, 23 Feb 2022 03:55:36 -0800 (PST)
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 13141DD;
-        Wed, 23 Feb 2022 12:54:02 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9AB26DD;
+        Wed, 23 Feb 2022 12:55:34 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1645617242;
-        bh=zHHy26saBPxnNtXEdUVsZ/hAXQ5fmmgUAXWMqKnahBY=;
+        s=mail; t=1645617334;
+        bh=P9QPOk6+GyOorRzj5cQRojYaJllOvDTxlfIxFQi8C1o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e+teb3nm91K9pkqgzXr5x74ihNE74pF77e2Alz6WZUanD3bcmCHwRDEbS2aRvIRjT
-         W2o3jeZbi9ZtWitEL+bCNLlXUpln670DdCw5ElUGfhNF3kCurMJLSzVXO1hzE7xYXc
-         9Bf3lX8zXFR+6ODaEYJYdwDeMuzoEv/dF0y5l2Zg=
-Date:   Wed, 23 Feb 2022 13:53:51 +0200
+        b=UiGMa4BHS1ppfLQCPQUjlypa5s0u9TLicwH1fPGEWXMC74HLHsEShAVUuGhy/Nwcb
+         vW3Ofrn5KurQstQQlTzSNiqultUcSNSIFiGmRYaqYw71d7Q3A1JFvGQ9caabMnfnwr
+         /oWdVSY7B7nGfgwpbeiejoTxGysjgKFyykfQsqpA=
+Date:   Wed, 23 Feb 2022 13:55:24 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Jacopo Mondi <jacopo@jmondi.org>
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>, sakari.ailus@iki.fi,
@@ -37,14 +37,14 @@ Cc:     Steve Longerbeam <slongerbeam@gmail.com>, sakari.ailus@iki.fi,
         paul.elder@ideasonboard.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 11/27] media: ov5640: Provide timings accessor
-Message-ID: <YhYgTwKiG5cgJq3g@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v3 22/27] media: ov5640: Add RGB565_1X16 format
+Message-ID: <YhYgrGZinCsvid7U@pendragon.ideasonboard.com>
 References: <20220223104034.91550-1-jacopo@jmondi.org>
- <20220223104034.91550-12-jacopo@jmondi.org>
+ <20220223104034.91550-23-jacopo@jmondi.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220223104034.91550-12-jacopo@jmondi.org>
+In-Reply-To: <20220223104034.91550-23-jacopo@jmondi.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
@@ -53,61 +53,49 @@ Hi Jacopo,
 
 Thank you for the patch.
 
-On Wed, Feb 23, 2022 at 11:40:18AM +0100, Jacopo Mondi wrote:
-> Provide a function to shortcut access to the correct timings definition
-> to avoid repeating the same pattern when accessing the sensor timings.
+On Wed, Feb 23, 2022 at 11:40:29AM +0100, Jacopo Mondi wrote:
+> The driver already supports the 2X8_[LE|BE] variants of RGB565
+> formats.
+> 
+> As for CSI-2 the 2X8 variants do not apply, add RGB565_1X16 variant
+> with little-endian ordering of components as required by the CSI-2
+> specifications.
 > 
 > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 > ---
->  drivers/media/i2c/ov5640.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
+>  drivers/media/i2c/ov5640.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
 > diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-> index 4040ace2fd55..ace956b7cdfc 100644
+> index c03976b22cbf..b9a488f63687 100644
 > --- a/drivers/media/i2c/ov5640.c
 > +++ b/drivers/media/i2c/ov5640.c
-> @@ -1123,6 +1123,16 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
->  	},
->  };
->  
-> +static inline const
-> +struct ov5640_timings *ov5640_timings(const struct ov5640_dev *sensor,
-> +				      const struct ov5640_mode_info *mode)
+> @@ -221,6 +221,10 @@ static const struct ov5640_pixfmt {
+>  		.code = MEDIA_BUS_FMT_RGB565_2X8_BE,
+>  		.colorspace = V4L2_COLORSPACE_SRGB,
+>  		.bpp = 16,
+> +	}, {
 
-The usual line split would be
+Let's add
 
-static inline const struct ov5640_timings *
-ov5640_timings(const struct ov5640_dev *sensor,
-	       const struct ov5640_mode_info *mode)
-
-I'd also drop the inline, the compiler will figure out what is best by
-itself.
+		/* For CSI-2 only */
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-> +{
-> +	if (ov5640_is_csi2(sensor))
-> +		return &mode->csi2_timings;
-> +
-> +	return &mode->dvp_timings;
-> +}
-> +
->  static int ov5640_init_slave_id(struct ov5640_dev *sensor)
->  {
->  	struct i2c_client *client = sensor->i2c_client;
-> @@ -1630,11 +1640,7 @@ static int ov5640_set_timings(struct ov5640_dev *sensor,
->  			return ret;
->  	}
->  
-> -	if (ov5640_is_csi2(sensor))
-> -		timings = &mode->csi2_timings;
-> -	else
-> -		timings = &mode->dvp_timings;
-> -
-> +	timings = ov5640_timings(sensor, mode);
->  	analog_crop = &timings->analog_crop;
->  	crop = &timings->crop;
->  
+> +		.code = MEDIA_BUS_FMT_RGB565_1X16,
+> +		.colorspace = V4L2_COLORSPACE_SRGB,
+> +		.bpp = 16,
+>  	}, {
+>  		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
+>  		.colorspace = V4L2_COLORSPACE_SRGB,
+> @@ -2898,6 +2902,7 @@ static int ov5640_set_framefmt(struct ov5640_dev *sensor,
+>  		mux = OV5640_FMT_MUX_YUV422;
+>  		break;
+>  	case MEDIA_BUS_FMT_RGB565_2X8_LE:
+> +	case MEDIA_BUS_FMT_RGB565_1X16:
+>  		/* RGB565 {g[2:0],b[4:0]},{r[4:0],g[5:3]} */
+>  		fmt = 0x6F;
+>  		mux = OV5640_FMT_MUX_RGB;
 
 -- 
 Regards,
