@@ -2,123 +2,174 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADF06C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 23 Feb 2022 00:48:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCC8EC4332F
+	for <linux-media@archiver.kernel.org>; Wed, 23 Feb 2022 03:40:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236478AbiBWAsf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Feb 2022 19:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
+        id S235872AbiBWDkr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Feb 2022 22:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233065AbiBWAse (ORCPT
+        with ESMTP id S231890AbiBWDkr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Feb 2022 19:48:34 -0500
-X-Greylist: delayed 10695 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 16:48:07 PST
-Received: from mail.turbocat.net (turbocat.net [88.99.82.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3623ED02
-        for <linux-media@vger.kernel.org>; Tue, 22 Feb 2022 16:48:07 -0800 (PST)
-Received: from [10.36.2.165] (unknown [178.17.145.105])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.turbocat.net (Postfix) with ESMTPSA id 658992601B4
-        for <linux-media@vger.kernel.org>; Wed, 23 Feb 2022 01:48:06 +0100 (CET)
-Message-ID: <edcd2482-d2d4-88d8-b2d9-6c1b3c592389@selasky.org>
-Date:   Wed, 23 Feb 2022 01:47:55 +0100
+        Tue, 22 Feb 2022 22:40:47 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D67E3D482;
+        Tue, 22 Feb 2022 19:40:19 -0800 (PST)
+X-UUID: 21571d5b32cd459881c019c719ec535f-20220223
+X-UUID: 21571d5b32cd459881c019c719ec535f-20220223
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1248210650; Wed, 23 Feb 2022 11:40:12 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 23 Feb 2022 11:40:11 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 23 Feb
+ 2022 11:40:10 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 23 Feb 2022 11:40:09 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Tzung-Bi Shih" <tzungbi@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v7, 00/15] media: mtk-vcodec: support for M8192 decoder
+Date:   Wed, 23 Feb 2022 11:39:53 +0800
+Message-ID: <20220223034008.15781-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; FreeBSD amd64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [Possible regression] TechnoTrend TT-USB2.0 driver appears broken
-Content-Language: en-US
-From:   Hans Petter Selasky <hps@selasky.org>
-To:     linux-media@vger.kernel.org
-References: <77ca512b-d1e6-9ec9-eed7-b229bb3852dd@selasky.org>
-In-Reply-To: <77ca512b-d1e6-9ec9-eed7-b229bb3852dd@selasky.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2/22/22 22:49, Hans Petter Selasky wrote:
-> Hi,
-> 
-> Do the technotrend TT-USB 2.0 devices still work with Linux v5.17 ?
-> 
-> Last known working version was Linux v3.16.
-> 
-> ugen0.8: <TechnoTrend TT-USB2.0> at usbus0, cfg=0 md=HOST spd=HIGH 
-> (480Mbps) pwr=ON (10mA)
-> 
->    bLength = 0x0012
->    bDescriptorType = 0x0001
->    bcdUSB = 0x0200
->    bDeviceClass = 0x0000  <Probed by interface class>
->    bDeviceSubClass = 0x0000
->    bDeviceProtocol = 0x0000
->    bMaxPacketSize0 = 0x0040
->    idVendor = 0x0b48
->    idProduct = 0x3007
->    bcdDevice = 0x0101
->    iManufacturer = 0x0001  <TechnoTrend>
->    iProduct = 0x0002  <TT-USB2.0>
->    iSerialNumber = 0x0000  <no string>
->    bNumConfigurations = 0x0001
-> 
-> 
-> First I get this error:
-> 
-> webcamd 98640 - - pctv452e: I2C error -5; AA 91  CC 00 01 -> 0x803003000h
-> 
-> Removed "drivers/media/usb/dvb-usb/pctv452e.c"
-> 
->>         /* I2C device didn't respond as expected. */
->>         ret = -EREMOTEIO;
->>         if (buf[6] < rcv_len) {
->>                 goto failed;
->>         }
-> 
-> Then w_scan complained:
-> 
->> w_scan version 20120415 (compiled for DVB API 5.11)
->> using settings for 0.8 west Thor 3/5 & Intelsat 10-02
->> scan type SATELLITE, channellist 53
->> output format vdr-1.7
->> WARNING: could not guess your codepage. Falling back to 'UTF-8'
->> output charset 'UTF-8', use -C <charset> to override
->> -_-_-_-_ Getting frontend capabilities-_-_-_-_ Using DVB API 5.b
->> frontend 'STB0899 Multistandard' supports
->> INVERSION_AUTO
->> DVB-S
->> DVB-S2
->> FREQ (0.95GHz ... 2.15GHz)
->> SRATE (5.000MSym/s ... 45.000MSym/s)
->> using LNB "UNIVERSAL"
->> -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ (time: 00:00) (time: 
->> 00:05)     skipped: (srate 1450000 unsupported by driver)
->>
->> initial_tune:2265: Setting frontend failed S  f = 11166 kHz V SR =  
->> 1450  7/8 0,35  QPSK
->> (time: 00:06)     skipped: (srate 3100000 unsupported by driver)
->>
->> initial_tune:2265: Setting frontend failed S  f = 11182 kHz V SR =  
->> 3100  7/8 0,35  QPSK
->> (time: 00:08)     skipped: (srate 2142000 unsupported by driver)
-> 
-> Tried to change:
-> 
->> static const struct dvb_frontend_ops stb0899_ops = {
->>         .delsys = { SYS_DVBS, SYS_DVBS2, SYS_DSS },
->>         .info = {
->>                 .name                   = "STB0899 Multistandard",
->>                 .frequency_min_hz       =  950 * MHz,
->>                 .frequency_max_hz       = 2150 * MHz,
->>                 .symbol_rate_min        =   500000,
-> ^^^ this value
->>                 .symbol_rate_max        = 45000000,
-> 
-> But no luck.
+This series adds support for mt8192 h264/vp8/vp9 decoder drivers. Firstly, refactor
+power/clock/interrupt interfaces for mt8192 is lat and core architecture.
 
-Looks like a device firmware update did the trick.
+Secondly, add new functions to get frame buffer size and resolution according
+to decoder capability from scp side. Then add callback function to get/put
+capture buffer in order to enable lat and core decoder in parallel. 
 
---HPS
+Then add to support MT21C compressed mode and fix v4l2-compliance fail.
+
+Next, extract H264 request api driver to let mt8183 and mt8192 use the same
+code, and adds mt8192 frame based h264 driver for stateless decoder.
+
+Lastly, add vp8 and vp9 stateless decoder drivers.
+
+Patches 1 refactor power/clock/interrupt interface.
+Patches 2~4 get frame buffer size and resolution according to decoder capability.
+Patches 5~6 enable lat and core decode in parallel.
+Patch 7~10 add to support MT21C compressed mode and fix v4l2-compliance fail.
+patch 11 record capture queue format type.
+Patch 12~13 extract h264 driver and add mt8192 frame based driver for h264 decoder.
+Patch 14~15 add vp8 and vp9 stateless decoder drivers.
+---
+changes compared with v6:
+- rebase to the latest media stage and fix conficts
+- fix memcpy to memcpy_fromio or memcpy_toio
+- fix h264 crash when test field bitstream
+changes compared with v5:
+- fix vp9 comments for patch 15
+- fix vp8 comments for patch 14.
+- fix comments for patch 12.
+- fix build errors.
+changes compared with v4:
+- fix checkpatch.pl fail.
+- fix kernel-doc fail.
+- rebase to the latest media codec driver.
+changes compared with v3:
+- remove enum mtk_chip for patch 2.
+- add vp8 stateless decoder drivers for patch 14.
+- add vp9 stateless decoder drivers for patch 15.
+changes compared with v2:
+- add new patch 11 to record capture queue format type.
+- separate patch 4 according to tzung-bi's suggestion.
+- re-write commit message for patch 5 according to tzung-bi's suggestion.
+changes compared with v1:
+- rewrite commit message for patch 12.
+- rewrite cover-letter message.
+---
+Yunfei Dong (15):
+  media: mtk-vcodec: Add vdec enable/disable hardware helpers
+  media: mtk-vcodec: Using firmware type to separate different firmware
+    architecture
+  media: mtk-vcodec: get capture queue buffer size from scp
+  media: mtk-vcodec: Read max resolution from dec_capability
+  media: mtk-vcodec: Call v4l2_m2m_set_dst_buffered() set capture buffer
+    buffered
+  media: mtk-vcodec: Refactor get and put capture buffer flow
+  media: mtk-vcodec: Refactor supported vdec formats and framesizes
+  media: mtk-vcodec: Add format to support MT21C
+  media: mtk-vcodec: disable vp8 4K capability
+  media: mtk-vcodec: Fix v4l2-compliance fail
+  media: mtk-vcodec: record capture queue format type
+  media: mtk-vcodec: Extract H264 common code
+  media: mtk-vcodec: support stateless H.264 decoding for mt8192
+  media: mtk-vcodec: support stateless VP8 decoding
+  media: mtk-vcodec: support stateless VP9 decoding
+
+ drivers/media/platform/mtk-vcodec/Makefile    |    4 +
+ .../platform/mtk-vcodec/mtk_vcodec_dec.c      |   47 +-
+ .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |    5 -
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   |  166 +-
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.h   |    6 +-
+ .../mtk-vcodec/mtk_vcodec_dec_stateful.c      |   14 +-
+ .../mtk-vcodec/mtk_vcodec_dec_stateless.c     |  282 ++-
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      |   40 +-
+ .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  |    5 -
+ .../media/platform/mtk-vcodec/mtk_vcodec_fw.c |    6 +
+ .../media/platform/mtk-vcodec/mtk_vcodec_fw.h |    1 +
+ .../mtk-vcodec/vdec/vdec_h264_req_common.c    |  310 +++
+ .../mtk-vcodec/vdec/vdec_h264_req_common.h    |  253 +++
+ .../mtk-vcodec/vdec/vdec_h264_req_if.c        |  440 +---
+ .../mtk-vcodec/vdec/vdec_h264_req_multi_if.c  |  621 ++++++
+ .../mtk-vcodec/vdec/vdec_vp8_req_if.c         |  445 ++++
+ .../mtk-vcodec/vdec/vdec_vp9_req_lat_if.c     | 1971 +++++++++++++++++
+ .../media/platform/mtk-vcodec/vdec_drv_if.c   |   36 +-
+ .../media/platform/mtk-vcodec/vdec_drv_if.h   |    3 +
+ .../media/platform/mtk-vcodec/vdec_ipi_msg.h  |   36 +
+ .../platform/mtk-vcodec/vdec_msg_queue.c      |    2 +
+ .../media/platform/mtk-vcodec/vdec_vpu_if.c   |   53 +-
+ .../media/platform/mtk-vcodec/vdec_vpu_if.h   |   15 +
+ .../media/platform/mtk-vcodec/venc_vpu_if.c   |    2 +-
+ include/linux/remoteproc/mtk_scp.h            |    2 +
+ 25 files changed, 4180 insertions(+), 585 deletions(-)
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_common.c
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_common.h
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_multi_if.c
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_req_if.c
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_req_lat_if.c
+
+-- 
+2.25.1
 
