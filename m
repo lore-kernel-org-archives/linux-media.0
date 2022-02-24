@@ -2,22 +2,22 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65D75C4332F
-	for <linux-media@archiver.kernel.org>; Thu, 24 Feb 2022 09:47:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F0D7C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 24 Feb 2022 09:47:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbiBXJsE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S232873AbiBXJsE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 24 Feb 2022 04:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232996AbiBXJrq (ORCPT
+        with ESMTP id S233016AbiBXJrx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:47:46 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD0D674C4
-        for <linux-media@vger.kernel.org>; Thu, 24 Feb 2022 01:47:16 -0800 (PST)
+        Thu, 24 Feb 2022 04:47:53 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9259628198C
+        for <linux-media@vger.kernel.org>; Thu, 24 Feb 2022 01:47:22 -0800 (PST)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7767E4000A;
-        Thu, 24 Feb 2022 09:47:12 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3DE0C4000F;
+        Thu, 24 Feb 2022 09:47:18 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     Steve Longerbeam <slongerbeam@gmail.com>
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
@@ -30,9 +30,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         paul.elder@ideasonboard.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
-Subject: [PATCH v5 17/27] media: ov5640: Change CSI-2 timings to comply with FPS
-Date:   Thu, 24 Feb 2022 10:43:03 +0100
-Message-Id: <20220224094313.233347-18-jacopo@jmondi.org>
+Subject: [PATCH v5 19/27] media: ov5640: Implement get_selection
+Date:   Thu, 24 Feb 2022 10:43:05 +0100
+Message-Id: <20220224094313.233347-20-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <20220224094313.233347-1-jacopo@jmondi.org>
 References: <20220224094313.233347-1-jacopo@jmondi.org>
@@ -42,118 +42,92 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that the frame duration can be controlled by tuning the VBLANK
-duration in CSI-2 mode, fix all modes definitions to comply with the
-reported FPS.
+Implement the get_selection pad operation for the OV5640 sensor driver.
 
-All modes run at 30 FPS except for full-resolution mode 2592x1944
-which runs at 15FPS.
-
-Tested on a 2 data lanes setup in UYVY and RGB565 modes in CSI-2 mode.
+The supported targets report the sensor's native size, the active pixel
+array size and the analog crop rectangle from which the image is
+produced.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ov5640.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/media/i2c/ov5640.c | 46 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 665a8bcebf09..6f10514e3c11 100644
+index c95c1f90353d..baf368a39e0f 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -596,8 +596,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 160,
- 				.height	= 120,
- 			},
--			.htot		= 1896,
--			.vblank_def	= 864,
-+			.htot		= 1600,
-+			.vblank_def	= 878,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -640,8 +640,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 176,
- 				.height	= 144,
- 			},
--			.htot		= 1896,
--			.vblank_def	= 840,
-+			.htot		= 1600,
-+			.vblank_def	= 854,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -684,8 +684,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 320,
- 				.height	= 240,
- 			},
--			.htot		= 1896,
--			.vblank_def	= 744,
-+			.htot		= 1600,
-+			.vblank_def	= 760,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -728,8 +728,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 640,
- 				.height	= 480,
- 			},
--			.htot		= 1896,
--			.vblank_def	= 600,
-+			.htot		= 1600,
-+			.vblank_def	= 520,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -772,7 +772,7 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.height	= 480,
- 			},
- 			.htot		= 1896,
--			.vblank_def	= 504,
-+			.vblank_def	= 1206,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -815,7 +815,7 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.height	= 576,
- 			},
- 			.htot		= 1896,
--			.vblank_def	= 408,
-+			.vblank_def	= 1110,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -857,7 +857,7 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.height	= 768,
- 			},
- 			.htot		= 1896,
--			.vblank_def	= 312,
-+			.vblank_def	= 918,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -898,8 +898,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 1280,
- 				.height	= 720,
- 			},
--			.htot		= 1892,
--			.vblank_def	= 20,
-+			.htot		= 1600,
-+			.vblank_def	= 560,
- 		},
- 		.reg_data	= ov5640_setting_720P_1280_720,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_720P_1280_720),
-@@ -942,8 +942,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 1920,
- 				.height	= 1080,
- 			},
--			.htot		= 2500,
--			.vblank_def	= 40,
-+			.htot		= 2234,
-+			.vblank_def	= 24,
- 		},
- 		.reg_data	= ov5640_setting_1080P_1920_1080,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_1080P_1920_1080),
+@@ -2835,6 +2835,45 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
+ 	return ret;
+ }
+ 
++static int ov5640_get_selection(struct v4l2_subdev *sd,
++				struct v4l2_subdev_state *sd_state,
++				struct v4l2_subdev_selection *sel)
++{
++	struct ov5640_dev *sensor = to_ov5640_dev(sd);
++	const struct ov5640_mode_info *mode = sensor->current_mode;
++	const struct ov5640_timings *timings;
++
++	switch (sel->target) {
++	case V4L2_SEL_TGT_CROP: {
++		mutex_lock(&sensor->lock);
++		timings = ov5640_timings(sensor, mode);
++		sel->r = timings->analog_crop;
++		mutex_unlock(&sensor->lock);
++
++		return 0;
++	}
++
++	case V4L2_SEL_TGT_NATIVE_SIZE:
++	case V4L2_SEL_TGT_CROP_BOUNDS:
++		sel->r.top = 0;
++		sel->r.left = 0;
++		sel->r.width = OV5640_NATIVE_WIDTH;
++		sel->r.height = OV5640_NATIVE_HEIGHT;
++
++		return 0;
++
++	case V4L2_SEL_TGT_CROP_DEFAULT:
++		sel->r.top = OV5640_PIXEL_ARRAY_TOP;
++		sel->r.left = OV5640_PIXEL_ARRAY_LEFT;
++		sel->r.width = OV5640_PIXEL_ARRAY_WIDTH;
++		sel->r.height = OV5640_PIXEL_ARRAY_HEIGHT;
++
++		return 0;
++	}
++
++	return -EINVAL;
++}
++
+ static int ov5640_set_framefmt(struct ov5640_dev *sensor,
+ 			       struct v4l2_mbus_framefmt *format)
+ {
+@@ -3531,9 +3570,15 @@ static int ov5640_init_cfg(struct v4l2_subdev *sd,
+ {
+ 	struct v4l2_mbus_framefmt *fmt =
+ 				v4l2_subdev_get_try_format(sd, state, 0);
++	struct v4l2_rect *crop = v4l2_subdev_get_try_crop(sd, state, 0);
+ 
+ 	*fmt = ov5640_default_fmt;
+ 
++	crop->left = OV5640_PIXEL_ARRAY_LEFT;
++	crop->top = OV5640_PIXEL_ARRAY_TOP;
++	crop->width = OV5640_PIXEL_ARRAY_WIDTH;
++	crop->height = OV5640_PIXEL_ARRAY_HEIGHT;
++
+ 	return 0;
+ }
+ 
+@@ -3555,6 +3600,7 @@ static const struct v4l2_subdev_pad_ops ov5640_pad_ops = {
+ 	.enum_mbus_code = ov5640_enum_mbus_code,
+ 	.get_fmt = ov5640_get_fmt,
+ 	.set_fmt = ov5640_set_fmt,
++	.get_selection = ov5640_get_selection,
+ 	.enum_frame_size = ov5640_enum_frame_size,
+ 	.enum_frame_interval = ov5640_enum_frame_interval,
+ };
 -- 
 2.35.0
 
