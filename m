@@ -2,22 +2,22 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C67ABC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 24 Feb 2022 09:47:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A024C433FE
+	for <linux-media@archiver.kernel.org>; Thu, 24 Feb 2022 09:47:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232984AbiBXJrp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Feb 2022 04:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
+        id S232174AbiBXJsE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Feb 2022 04:48:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232978AbiBXJrn (ORCPT
+        with ESMTP id S233009AbiBXJrx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:47:43 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE92B27909F
-        for <linux-media@vger.kernel.org>; Thu, 24 Feb 2022 01:47:13 -0800 (PST)
+        Thu, 24 Feb 2022 04:47:53 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729E92804C0
+        for <linux-media@vger.kernel.org>; Thu, 24 Feb 2022 01:47:19 -0800 (PST)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7354640004;
-        Thu, 24 Feb 2022 09:47:09 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 650ED40005;
+        Thu, 24 Feb 2022 09:47:15 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     Steve Longerbeam <slongerbeam@gmail.com>
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
@@ -30,9 +30,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         paul.elder@ideasonboard.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
-Subject: [PATCH v5 16/27] media: ov5640: Add VBLANK control
-Date:   Thu, 24 Feb 2022 10:43:02 +0100
-Message-Id: <20220224094313.233347-17-jacopo@jmondi.org>
+Subject: [PATCH v5 18/27] media: ov5640: Implement init_cfg
+Date:   Thu, 24 Feb 2022 10:43:04 +0100
+Message-Id: <20220224094313.233347-19-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <20220224094313.233347-1-jacopo@jmondi.org>
 References: <20220224094313.233347-1-jacopo@jmondi.org>
@@ -42,141 +42,89 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the VBLANK control which allows to select the duration of the
-frame vertical blankings and allows to control the framerate.
-
-The VBLANK control also modifies the exposure time range, which cannot
-exceed the maximum frame length.
+Implement the init_cfg pad operation to initialize the subdev state
+format to the default one.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ov5640.c | 52 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ drivers/media/i2c/ov5640.c | 35 +++++++++++++++++++++++++----------
+ 1 file changed, 25 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 5419c7236348..665a8bcebf09 100644
+index 6f10514e3c11..c95c1f90353d 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -36,6 +36,10 @@
- #define OV5640_PIXEL_ARRAY_WIDTH	2592
- #define OV5640_PIXEL_ARRAY_HEIGHT	1944
- 
-+/* FIXME: not documented. */
-+#define OV5640_MIN_VBLANK	24
-+#define OV5640_MAX_VTS		1968
+@@ -408,6 +408,18 @@ static inline bool ov5640_is_csi2(const struct ov5640_dev *sensor)
+  * over i2c.
+  */
+ /* YUV422 UYVY VGA@30fps */
 +
- #define OV5640_DEFAULT_SLAVE_ID 0x3c
- 
- #define OV5640_LINK_RATE_MAX		490000000U
-@@ -321,6 +325,7 @@ struct ov5640_ctrls {
- 	struct v4l2_ctrl *pixel_rate;
- 	struct v4l2_ctrl *link_freq;
- 	struct v4l2_ctrl *hblank;
-+	struct v4l2_ctrl *vblank;
- 	struct {
- 		struct v4l2_ctrl *auto_exp;
- 		struct v4l2_ctrl *exposure;
-@@ -2697,6 +2702,7 @@ static int ov5640_update_pixel_rate(struct ov5640_dev *sensor)
- 	struct v4l2_mbus_framefmt *fmt = &sensor->fmt;
- 	enum ov5640_pixel_rate_id pixel_rate_id = mode->pixel_rate;
- 	const struct ov5640_timings *timings;
-+	s32 exposure_val, exposure_max;
- 	unsigned int hblank;
- 	unsigned int i = 0;
- 	u32 pixel_rate;
-@@ -2755,6 +2761,19 @@ static int ov5640_update_pixel_rate(struct ov5640_dev *sensor)
- 	__v4l2_ctrl_modify_range(sensor->ctrls.hblank,
- 				 hblank, hblank, 1, hblank);
- 
-+	__v4l2_ctrl_modify_range(sensor->ctrls.vblank, OV5640_MIN_VBLANK,
-+				 OV5640_MAX_VTS - mode->height, 1,
-+				 timings->vblank_def);
-+	__v4l2_ctrl_s_ctrl(sensor->ctrls.vblank, timings->vblank_def);
++static const struct v4l2_mbus_framefmt ov5640_default_fmt = {
++	.code = MEDIA_BUS_FMT_UYVY8_2X8,
++	.width = 640,
++	.height = 480,
++	.colorspace = V4L2_COLORSPACE_SRGB,
++	.ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(V4L2_COLORSPACE_SRGB),
++	.quantization = V4L2_QUANTIZATION_FULL_RANGE,
++	.xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(V4L2_COLORSPACE_SRGB),
++	.field = V4L2_FIELD_NONE,
++};
 +
-+	exposure_max = timings->crop.height + timings->vblank_def - 4;
-+	exposure_val = clamp_t(s32, sensor->ctrls.exposure->val,
-+			       sensor->ctrls.exposure->minimum,
-+			       exposure_max);
-+	__v4l2_ctrl_modify_range(sensor->ctrls.exposure,
-+				 sensor->ctrls.exposure->minimum,
-+				 exposure_max, 1, exposure_val);
-+
- 	return 0;
+ static const struct reg_value ov5640_init_setting[] = {
+ 	{0x3103, 0x11, 0, 0}, {0x3008, 0x82, 0, 5}, {0x3008, 0x42, 0, 0},
+ 	{0x3103, 0x03, 0, 0}, {0x3630, 0x36, 0, 0},
+@@ -3514,6 +3526,17 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
+ 	return ret;
  }
  
-@@ -3127,6 +3146,15 @@ static int ov5640_set_ctrl_vflip(struct ov5640_dev *sensor, int value)
- 			      (BIT(2) | BIT(1)) : 0);
- }
- 
-+static int ov5640_set_ctrl_vblank(struct ov5640_dev *sensor, int value)
++static int ov5640_init_cfg(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *state)
 +{
-+	const struct ov5640_mode_info *mode = sensor->current_mode;
++	struct v4l2_mbus_framefmt *fmt =
++				v4l2_subdev_get_try_format(sd, state, 0);
 +
-+	/* Update the VTOT timing register value. */
-+	return ov5640_write_reg16(sensor, OV5640_REG_TIMING_VTS,
-+				  mode->height + value);
++	*fmt = ov5640_default_fmt;
++
++	return 0;
 +}
 +
- static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
- {
- 	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
-@@ -3157,10 +3185,25 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
- {
- 	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
- 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
-+	const struct ov5640_mode_info *mode = sensor->current_mode;
-+	const struct ov5640_timings *timings;
-+	unsigned int exp_max;
+ static const struct v4l2_subdev_core_ops ov5640_core_ops = {
+ 	.s_power = ov5640_s_power,
+ 	.log_status = v4l2_ctrl_subdev_log_status,
+@@ -3528,6 +3551,7 @@ static const struct v4l2_subdev_video_ops ov5640_video_ops = {
+ };
+ 
+ static const struct v4l2_subdev_pad_ops ov5640_pad_ops = {
++	.init_cfg = ov5640_init_cfg,
+ 	.enum_mbus_code = ov5640_enum_mbus_code,
+ 	.get_fmt = ov5640_get_fmt,
+ 	.set_fmt = ov5640_set_fmt,
+@@ -3586,7 +3610,6 @@ static int ov5640_probe(struct i2c_client *client)
+ 	struct device *dev = &client->dev;
+ 	struct fwnode_handle *endpoint;
+ 	struct ov5640_dev *sensor;
+-	struct v4l2_mbus_framefmt *fmt;
+ 	u32 rotation;
  	int ret;
  
- 	/* v4l2_ctrl_lock() locks our own mutex */
- 
-+	switch (ctrl->id) {
-+	case V4L2_CID_VBLANK:
-+		/* Update the exposure range to the newly programmed vblank. */
-+		timings = ov5640_timings(sensor, mode);
-+		exp_max = mode->height + ctrl->val - 4;
-+		__v4l2_ctrl_modify_range(sensor->ctrls.exposure,
-+					 sensor->ctrls.exposure->minimum,
-+					 exp_max, sensor->ctrls.exposure->step,
-+					 timings->vblank_def);
-+		break;
-+	}
-+
- 	/*
- 	 * If the device is not powered up by the host driver do
- 	 * not apply any controls to H/W at this time. Instead
-@@ -3200,6 +3243,9 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_VFLIP:
- 		ret = ov5640_set_ctrl_vflip(sensor, ctrl->val);
- 		break;
-+	case V4L2_CID_VBLANK:
-+		ret = ov5640_set_ctrl_vblank(sensor, ctrl->val);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 		break;
-@@ -3220,6 +3266,7 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
- 	struct ov5640_ctrls *ctrls = &sensor->ctrls;
- 	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
- 	const struct ov5640_timings *timings;
-+	unsigned int max_vblank;
- 	unsigned int hblank;
- 	int ret;
- 
-@@ -3245,6 +3292,11 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
- 	ctrls->hblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HBLANK, hblank,
- 					  hblank, 1, hblank);
- 
-+	max_vblank = OV5640_MAX_VTS - mode->height;
-+	ctrls->vblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VBLANK,
-+					  OV5640_MIN_VBLANK, max_vblank,
-+					  1, timings->vblank_def);
-+
- 	/* Auto/manual white balance */
- 	ctrls->auto_wb = v4l2_ctrl_new_std(hdl, ops,
- 					   V4L2_CID_AUTO_WHITE_BALANCE,
+@@ -3600,15 +3623,7 @@ static int ov5640_probe(struct i2c_client *client)
+ 	 * default init sequence initialize sensor to
+ 	 * YUV422 UYVY VGA@30fps
+ 	 */
+-	fmt = &sensor->fmt;
+-	fmt->code = MEDIA_BUS_FMT_UYVY8_2X8;
+-	fmt->colorspace = V4L2_COLORSPACE_SRGB;
+-	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
+-	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+-	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
+-	fmt->width = 640;
+-	fmt->height = 480;
+-	fmt->field = V4L2_FIELD_NONE;
++	sensor->fmt = ov5640_default_fmt;
+ 	sensor->frame_interval.numerator = 1;
+ 	sensor->frame_interval.denominator = ov5640_framerates[OV5640_30_FPS];
+ 	sensor->current_fr = OV5640_30_FPS;
 -- 
 2.35.0
 
