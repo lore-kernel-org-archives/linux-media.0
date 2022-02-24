@@ -2,44 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E256C4332F
-	for <linux-media@archiver.kernel.org>; Thu, 24 Feb 2022 03:11:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29914C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 24 Feb 2022 03:11:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiBXDLt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Feb 2022 22:11:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
+        id S230149AbiBXDMF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Feb 2022 22:12:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiBXDLr (ORCPT
+        with ESMTP id S229731AbiBXDMD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Feb 2022 22:11:47 -0500
-Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30057.outbound.protection.outlook.com [40.107.3.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A342465FD;
-        Wed, 23 Feb 2022 19:11:17 -0800 (PST)
+        Wed, 23 Feb 2022 22:12:03 -0500
+Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30040.outbound.protection.outlook.com [40.107.3.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF50247750;
+        Wed, 23 Feb 2022 19:11:28 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eD7U4rWQ5xS0CiwKJE81rp+sYHwHsi7dgOkUyFKMaHD2ESqdrOIHNrWB1PS/bK0O448j9ZdfsD7NrM/k2Df82qLPSu9qxYOC9x/HcyxNs1GfbmYyopWdpd5sbob/M6+WeMEi8J9eReH3WM9/GvchSJSCgyvxZs343MZM1lFgQgNjjGX+66EdzWfxdVHyW/+t5r2zglhVqu6Ds6rLTW8U39qfUTKx/IW5K7iMo9jidS2cAXoGMHMvZRAC2nL4Fpd+FXyQncYvm9CslFz+jovQlaBsnYoc9omZ2wA8ZOm8B3SEDOaj6HLHO+5G89VtQm1raKiqS6LP+DGhMvvc4UXrFw==
+ b=hLGwFIiUy/Z/jC7WfQZ9f42LofkQGqXpUfCHvdoc5ZkYNPSb6U9+vxwEfVT05K29rmVAr0KBiHyzNVIA110dhXCjzm/J1AxSJwCGKWw+5NjfKr4lebqXFKgntqKpgaWV/cMSv0nAJyP0z7bnyFMzbcV2msaqacYOsy0uNuPf8zMDPALZM05B2e/UPkiCzhmOg4mIeATtYwhZ/82oVFp4hPsZ2tNSH/PGTWWFtvKjjmMibHaTMZgoaqiV9Sij2+6k+iMxSDBu3Xr9JwNNwm4XshV2h0SDC9HqN5fAuoOGp6ATmSr1sL2YW6Ryu4CuUCs6vyFqDcnkmP27UGGfFhoS7Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7BhP6e6IpMKIqOPJwnqxfaEiXFdi60VfsBwxspd+4MU=;
- b=iVpKmYAOrpcQt1D9hk+ze00ixwwqEgC4TRwomvxsIp/qhfqajkoPYw6m+yXCZD5fGbpPdusPy8iRN/ObBFCjJ+E59gz1rrcj95WVHu6fb36Mkf0pNVDkdttqOu/CLJgllMjJ/TVI+LlvE9VhYcrab3XnVPYdROEWa1f6Hm7tTYEeL0Z9XoYp6JoYyFH+XIqmQKjOu7CK8JI0WsnOe89dQ0spAeTldnk6mqjNSXym5UZopS0TxLwHk8bkHPIaxIEm77JedYh8aeEe1nz0SUaZ9EMebvCVkicNkVitPVTWLaLYW+e52Fag/SoJ2HESatqTMlVjfbpBYUCpzkWYtwWQ0Q==
+ bh=h1SuLkphJ2ADvpoa9wmGPCrkObsMthT0ZnrFJolufhY=;
+ b=YkoX3YLLAIeQ0ZMum8bNOuH+GxfIa4n6X97pxxn13sMXpq9wcm8lHRbPbaUxXvB9i394QVhGQmb1rOjBk0r9VlqI4LNvcBduUDI1Pvs0fh43DE+2WAHcQeq03Rz+69oVTKryyXCW/uOjcpN+OepAChziNnp3cXb1FsolRepHvzD+cJ6g33qtG299/aC2n0jAbxuUU2uPBGpjt06qL8CWCjoTMHiGUaYkP+VPOdePYjVRJo7XydBc77xXZnKajZ1Y3/i8J0BlDTULwfTDr23xIBmcGnzhbOcwAqxS7N5JRxeRu2sCz8ZwiY99ahQv/k9rshWgUfTbD0KY33yUEneuWg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7BhP6e6IpMKIqOPJwnqxfaEiXFdi60VfsBwxspd+4MU=;
- b=jaOMy+ibZqAV7fwPDchs1MVfiJa3q8RuzzQ1wfc/oMzoAHEzM7hDe4qFTd11meNcM56NIflRVo6AhyQ8o6N6UGlzob6a2TH9HQoLkwUd2ljPOWGTmy/GFQkq/MvX65RdMSQQCH8cjQ4ltvMN2BG40cY95VECrqT+rTocrODV8iw=
+ bh=h1SuLkphJ2ADvpoa9wmGPCrkObsMthT0ZnrFJolufhY=;
+ b=GAs6APZnTLVhJw95gK9O7lPegry/eXsVS9LjnmrvXNF6fbX63nCGfRUWR99pNGKquoHMuOMUqvIdck7YXzaG5i/It32SXlg7VMrz2iQpOlEbFu3FybBCQEGuHyhU+gq4RgodrFBmaJ32ikUw05PAi6IOnm9GuA9c9fmbhonlECU=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
  by PA4PR04MB8013.eurprd04.prod.outlook.com (2603:10a6:102:c4::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Thu, 24 Feb
- 2022 03:11:14 +0000
+ 2022 03:11:26 +0000
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::c39:69cf:c4ea:967]) by AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::c39:69cf:c4ea:967%5]) with mapi id 15.20.5017.024; Thu, 24 Feb 2022
- 03:11:14 +0000
+ 03:11:26 +0000
 From:   Ming Qian <ming.qian@nxp.com>
 To:     mchehab@kernel.org, shawnguo@kernel.org, robh+dt@kernel.org,
         s.hauer@pengutronix.de
@@ -47,9 +47,9 @@ Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
         festevam@gmail.com, linux-imx@nxp.com, aisheng.dong@nxp.com,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v18 03/15] media: amphion: add amphion vpu device driver
-Date:   Thu, 24 Feb 2022 11:10:01 +0800
-Message-Id: <4608edb3fd4999f63dd615506d7956d9be82f7ea.1645670589.git.ming.qian@nxp.com>
+Subject: [PATCH v18 06/15] media: amphion: add vpu v4l2 m2m support
+Date:   Thu, 24 Feb 2022 11:10:04 +0800
+Message-Id: <8af3c8cb6ab6b02461ad67ce21b8058f5c5caf4d.1645670589.git.ming.qian@nxp.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <cover.1645670589.git.ming.qian@nxp.com>
 References: <cover.1645670589.git.ming.qian@nxp.com>
@@ -59,67 +59,62 @@ X-ClientProxiedBy: SG2P153CA0029.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::16)
  To AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cf99acab-ea0c-4a09-bb04-08d9f74350d3
+X-MS-Office365-Filtering-Correlation-Id: a3662b71-f23e-4540-4937-08d9f7435817
 X-MS-TrafficTypeDiagnostic: PA4PR04MB8013:EE_
-X-Microsoft-Antispam-PRVS: <PA4PR04MB8013E254ACACF3D29705B93AE73D9@PA4PR04MB8013.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <PA4PR04MB8013E01C43BFE85DEDA9D250E73D9@PA4PR04MB8013.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Com5rMcyk2af4kZebMumDeWIIYmGpGEhiy+xsJC2m93j8BTqppcZfrEROBCT30F7JbswmJpb5QEFYUi7abcW7xXZjL14/7fKdVx/dxCBxeKRiRCDaKi8Cx8wmYeIDEuZ/vagA2Aoz05WRqUNVv9THGi++VN/QFqfcZD/CcYzrlzRcpAQcmTTlDhGSjmm5ZNdGKzKNCe1+YqjKLwRx6pHe49q5+0mJ9Kh7DPQVSEDtf+v+C57j790aTRNESODAxXtA4aTKSCZLjn7tgAFfbcUJJ1H4wmBhvRP5UkYkYoB2ShOZTCZSPsvRx6EKqiGqDjOw9j/qjbAuCTbYlqek1avQqwZBtYO5s08eCCB3RK4wXkT17AgPdZ66nnQTG6aQCp9A33T/pQ/YPUIH1t/ml2guzRTgZ2ALWH/puDLJqicsisTakpNkxFf5D2+OksLUAM31iTq/UP3on1Kosbu/3TXqJKbiIFQSYF99Ivt6JqX8MZSGcyvlPPyuKtGJZ/LvE3x4v7iwdUhNIDqpJKnw/3+OI9TghkfJRoIxM5+fxnpwSrq1ifNOzeJ3xK81WSsHc6v3nBi5Ckvc0g8m0KcU1YSYFp/vw2N1ZJfThaCRtf/mtweJ+QEDpG7Tq1enEi+fiJw2BBnxzzfPewWyaG7ibNVW7FKOCN/U6UlG50SJ74ZyDxsinnABDGGMbrzp7gTaROit5tPA6smz/6GpbitAaBeGQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(2616005)(44832011)(6512007)(38100700002)(38350700002)(186003)(26005)(5660300002)(508600001)(6486002)(52116002)(6506007)(86362001)(6666004)(7416002)(66946007)(8936002)(30864003)(2906002)(8676002)(4326008)(83380400001)(66476007)(66556008)(36756003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: NYbF67SbAPmwmsPIEIh1YHwgL7gfUfjexgAp9BhN5yNnUv+ZAatGRGTFNfQ9FwgJ8cRV69Y7fuoOiOnkUeEjMSIDG1hkTj65pzKZ0hJNwSRuv7q68F5SYn8HVtmaqZtm1WDNEQCHLhD1FMh3n0chqRyGW5+7DfEWPOfWv3s7IBG3RQVmHNW7XWYmsnJ6nT9gd8EFwucps+y78DJxaLYIpfNy93cBaCWTVVtd476PQqH4vM79QS+HXEwV/Cny6kkrRPzURUAzg9axiBgK6hVXj9LmYm9QOsf8BZAcTB+dSLQ4qHLrub6B7dDCkEkJBelvO71gFMDgt+2sjYOHWt0dj4mkLDxftREimpG6v7i5eJxbXSEuBoFXQiffqO3HQdtLP61dw6OUYRtZXPWSBwRw1HGTGmoVbJs26Jze5MafR1+xacMCvkSoBWbeCqXnvLEMI7kBbUPhLVliX9J3gnnz8gheGuB1j1wObFfZTrpH0XBqkkZzKKiEkNFQmTYnr3GJkWBuK+ShkzT5fNp7HwLzoYjRw6RK3qKpSpMJKgpnzxA7ZVtpQ84blx48Mw3jZlXmlzC8hKNZrd9+kDA9scxWsrjb6mA9eTfcTbHRW4B/+k1zhpXvFcGGv1YUWZkvSqft/9UexVyDNXzGvge9uY5WaezxsRn+Q3hxrEwp9ukUjA0cVg1KInc0tTdvmeOVb9NxZpTLmTiAc1me35l9jfPdxA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(2616005)(44832011)(6512007)(38100700002)(38350700002)(186003)(26005)(5660300002)(508600001)(6486002)(52116002)(6506007)(86362001)(6666004)(7416002)(66946007)(8936002)(30864003)(2906002)(8676002)(4326008)(83380400001)(66476007)(66556008)(36756003)(579004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZCcPitN5W4B1uIx5pT0Jdjy+GJe+gt324qh9e2GhA9Jt7xFFUx2VkLgp6BCR?=
- =?us-ascii?Q?ixw0/2AEO64wrst7vc8lPqW6b8bLWkmUaxj8HKSfOc9mNAOzsvZtNEDyQoe9?=
- =?us-ascii?Q?XLiMxykdfTdVqAW2zUkcqVp99fcjbKFpxCy5WBigQtHZr8Vc4f3yFuCMTX8Y?=
- =?us-ascii?Q?0C8jo5ea1SkFgobj//mffcfXTBfWPRAH4bEv30T5nbySHOXt68P6CdojcxAH?=
- =?us-ascii?Q?B6TMGk47RbPy/eVxxI1vYrGeVmsyaS2/BCIW66qyqHeuXI5877GKAmRxi2li?=
- =?us-ascii?Q?LbG/6+aa8RjEgi/dvaFgGCeqibe2S6xazmYwioU1YwHnJnAuZI6UDPAA9nJm?=
- =?us-ascii?Q?9sfkbQLy+1hdbzzho1nJVGelD9zSnTm9X/PNaLAkSQ9avKaRRGCevfAFQueK?=
- =?us-ascii?Q?pw2McyFELbvFbTqxy3UbJR1MlaCcyN1HcVhnv/CmXg3Ek3J2EwA7h9rJvcx5?=
- =?us-ascii?Q?Pf+6Y1izLLbLdkqxlNDUa7pcAQjO1aTv58ApYWXghmZwhyOd2Sl2fffpsacr?=
- =?us-ascii?Q?zUPe/44kGUCoZfcz/WU0KBYUC+86XsbJWMQHHThcA6JZk365w5Q/apFjdKjW?=
- =?us-ascii?Q?VZziAztzOGQ+/o1/eq1NdQNY/lVjoKEiJJBUvdU/Pux1fLIxNjXT6nrFFpjn?=
- =?us-ascii?Q?g0aQ8Mf/sLISi6BiLyq0ZQuDOYanry+u9e0KboUg8AuxEBTj9uneiinyGdl4?=
- =?us-ascii?Q?VBjpeglqExlU8svDxU/Rf8CYO/p2tqv9Ou6157dpFhKCmes+rG9OZlzpIiOm?=
- =?us-ascii?Q?ci/sm8115p1JEQ8mAcq3BRNTzPNob4YUY4uCQ00Ofv0+FIebjJ40Xa6wOTjV?=
- =?us-ascii?Q?i3SIU2aOvVevfgGAAGVR/9rSDlKmM5ay+embCoEFr1YL+Osst6QR7IFOnYmt?=
- =?us-ascii?Q?ToWnG9jQCloMVqySUPk/GrZpW27zqbxmBytso62APsua+DnQpf4yb2blpJCJ?=
- =?us-ascii?Q?foFyzXcJkyD1nWM1mISkfH3hJmRHT9OXyuWVFt99RwqN2ma5CdD+QoCdZ9la?=
- =?us-ascii?Q?cc9vbUxpV7m3qUruHCroK5mB5VL7nSPo8vK1qP+trs0SQxEcJ99/BNZdumPG?=
- =?us-ascii?Q?0LTY329sqm4Jc59xY7fP5CnEPyFqa6ugetV5HZITd86ae9KU7Fm6hkLIdVt4?=
- =?us-ascii?Q?PJa7FNcG0chyn/+mXTR2BIiXUOmUIqzPw5l5DxEbAhBWSKzLlmNA2jHAghJ1?=
- =?us-ascii?Q?kHNHWvAZHb+7S2mQpwnCGDET8Ft32wnf+JwGlJeIQr0luYv5ybN96tUXPE0F?=
- =?us-ascii?Q?r1OWqRWslYVenrg4fZfgftd45uPjnQvPBYn2V5RjwEJc9lv61uwOCrq0e7OG?=
- =?us-ascii?Q?EmSkAZrLpN7iNITl67FGx3MvTtcyQSTxXHAQxwwv0KfV6QfptsosRzl2OkK0?=
- =?us-ascii?Q?p8S86xllXgKKfQCzq9sj9SxGYdyYelV0DutVAfzGhKa9QKyl3vkIg5JXAH73?=
- =?us-ascii?Q?R5AQ4zdTuRpFl8x807U+w1k3G33sDhID0DrXvYJlWsruGtYSzKy6zzecE2R/?=
- =?us-ascii?Q?8UCAAFoaqoS67Nv3C7AbmTrl6+tFJZbbOlT8mIPu3KN7nECaMUfR6gwXUFVs?=
- =?us-ascii?Q?nN1GY56WRJxf+wrxs0ydhfg7Zujrojl35fbCb41YfzeFAq587Cvqz9VgLa09?=
- =?us-ascii?Q?vGkVsC5vLAuoP9RjWpxWxZ8=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ogpK41w5PT3zFTKmcil0BBz8d/JtSzjHlT0GNW5toAeKveFRfyd0MiMHLkQh?=
+ =?us-ascii?Q?CfyzbYbpzn90YPLvmW6343k3iHWrX9ltWqD3w7GJOYqYvnR16hL3KR1ElHBS?=
+ =?us-ascii?Q?TQb0texuc+L4RqO03sk5/BHCbdn0QSKGMt/cIXlN6tUH9+nNW4M09py01U/j?=
+ =?us-ascii?Q?rWlwQb9p3dwbYOXDJiUXXNsbuYKJub6oXoIhiP2+i5jE9jCT0/qB+H6rEkT3?=
+ =?us-ascii?Q?1eXuu3PSNLFt6OJ5nKyICWpdVbAtx+OWfGJhi44q83CGiixlkoSoipnOC5oJ?=
+ =?us-ascii?Q?Hx855AqM1B1mh4ib362ZoyuaKO5jaMcggxhQ8KxxFPD6I8/BxUIriyvxyy4V?=
+ =?us-ascii?Q?0KM5PhHyToGMrMAYZToePMw8WQNZowOYn/x22RWq4uy25iKGJ+VAzWUQPBye?=
+ =?us-ascii?Q?UepItdR206+EBEQw9TAVfBvv4jNojusK8WCY1rf+8zhZPgTOJhokOuOEofTW?=
+ =?us-ascii?Q?iZFT7yrDIF474Ifg1sV4HuQ2RWsjj2aPNcPjCBEbcQQ53okWeCyBjhvsUsKZ?=
+ =?us-ascii?Q?1jak0tcnGz6Xs6sK197TN3v99QbWf2xWh67A3cpgneHLhi7z1NKMyqa3IFYW?=
+ =?us-ascii?Q?MJ+Lb1/6q2i8Fz5PcREnVaIENAAZpgY3+CWKl/44tILASpxARywzzV9n+CTO?=
+ =?us-ascii?Q?hDfb9C3WvM9eGsp1R77shuvRj5POkQAPtoQ7cCkFBb+KYGmnsbniOV6yMJHo?=
+ =?us-ascii?Q?WSXzKXj+PnkZI/n2HpqSAOFGzXwHO0o6yj0uGfJ7+MyiXbfybdiwrOlf3CeB?=
+ =?us-ascii?Q?y1/+ciSb7xe4XCFszFjbHDeIsjmfqKP9IFN+O+kNr3TguvpTP7LmUMDzos/w?=
+ =?us-ascii?Q?wr2hmv6sWjB3/7XGyQofqMfELW2flsSf5hHZLHvWuAwu0f8d6Wg6XGzgkmiU?=
+ =?us-ascii?Q?SQowv0bgjJXw+19jomU2IMWqqH9KontEflGGpiAWD6nDaD36X3fVhv183yWA?=
+ =?us-ascii?Q?wKUCPy7O4ZEvMcRlBb1CLOyVkRE18vRr8K6hQ4clLKTxvxqE95h9q/EXhpE1?=
+ =?us-ascii?Q?MRpbSKVv32y+h+C0pZwPglqyrAyUR9pptAGKdtbmp+bOXIF/+3KvuOe0pmv3?=
+ =?us-ascii?Q?WqvKkxgZnFc6vlSTvTau/HPNcGoDqdiRKqGG+j0dE2iCPm7XbN4+6N8hvLPK?=
+ =?us-ascii?Q?9yFDBv76EpEIAV03qYFI/a/FnCc/YS4ZWluo82YWwXPwP6I6p/1485dfjK6s?=
+ =?us-ascii?Q?SDzxlpylEKA7euXlvYBlrUA007MvnYZQwTF5bhfBHVnVW4uVMdTO5mcJppRS?=
+ =?us-ascii?Q?5GWnP9sumiynbz4weyUmAA6jgm9MqOSHyG7eRuSJgHsS7CRDox8LbHYD8OKE?=
+ =?us-ascii?Q?XDZNHbf4ZmQOO6A8REIVJhYT3fpraEixg9OniiJhjIAY1t1GJrnMkx+lAj37?=
+ =?us-ascii?Q?JaAULvj7dq6bXr6vFTRPR7+JV3eOxEmRHDBVIlu1987oNV5PQy7cHvC79oDG?=
+ =?us-ascii?Q?IjsYy5aYViPcNdqNhfeteiU2NN+ZVAvnrlRAeWzP/Y9LEaheTLjj7K3jgTRn?=
+ =?us-ascii?Q?5r3ybs1v3vqzWPHSLm3mBLnFknD8V6ZTCofmKRHLTb77iEJ4T6Hzk6UWsWk/?=
+ =?us-ascii?Q?NWl6Lr4W3OAJlCPVZEeIOjgpCvyCW09okVsDr6O5D405UlutIWYrxcWQPvLO?=
+ =?us-ascii?Q?Ygi9xXSBjsCrKjAlgLdmyzU=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf99acab-ea0c-4a09-bb04-08d9f74350d3
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3662b71-f23e-4540-4937-08d9f7435817
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2022 03:11:14.3527
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2022 03:11:26.4926
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IB/t6bPtUA54QznJ8AGr1/60Dr1vPA2LZhY9fvpgQZHAZvy4MOSjcAElZviaaovy+I2VO3LFZAInRnzcRs9jpw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: nNGgW/0IDGavLN7HiLA7DwnBi3cVFv66kpdK+TiWw3hSLjWVAbGrwQeZyCpXpkHpwHULOuoHYl8ZW5veqMmjmA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB8013
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The amphion vpu codec ip contains encoder and decoder.
-Windsor is the encoder, it supports to encode H.264.
-Malone is the decoder, it features a powerful
-video processing unit able to decode many formats,
-such as H.264, HEVC, and other formats.
-
-This Driver is for this IP that is based on the v4l2 mem2mem framework.
-
-Supported SoCs are: IMX8QXP, IMX8QM
+vpu_v4l2.c implements the v4l2 m2m driver methods.
+vpu_helpers.c implements the common helper functions
+vpu_color.c converts the v4l2 colorspace with
+the VUI parameters that specified by ITU-T | ISO/IEC
 
 Signed-off-by: Ming Qian <ming.qian@nxp.com>
 Signed-off-by: Shijie Qin <shijie.qin@nxp.com>
@@ -127,879 +122,24 @@ Signed-off-by: Zhou Peng <eagle.zhou@nxp.com>
 Reported-by: kernel test robot <lkp@intel.com>
 Tested-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- drivers/media/platform/amphion/Makefile    |  20 ++
- drivers/media/platform/amphion/vpu.h       | 362 +++++++++++++++++++++
- drivers/media/platform/amphion/vpu_defs.h  | 187 +++++++++++
- drivers/media/platform/amphion/vpu_drv.c   | 260 +++++++++++++++
- drivers/media/platform/amphion/vpu_imx8q.c | 271 +++++++++++++++
- drivers/media/platform/amphion/vpu_imx8q.h | 115 +++++++
- 6 files changed, 1215 insertions(+)
- create mode 100644 drivers/media/platform/amphion/Makefile
- create mode 100644 drivers/media/platform/amphion/vpu.h
- create mode 100644 drivers/media/platform/amphion/vpu_defs.h
- create mode 100644 drivers/media/platform/amphion/vpu_drv.c
- create mode 100644 drivers/media/platform/amphion/vpu_imx8q.c
- create mode 100644 drivers/media/platform/amphion/vpu_imx8q.h
+ drivers/media/platform/amphion/vpu_color.c   | 183 +++++
+ drivers/media/platform/amphion/vpu_helpers.c | 413 +++++++++++
+ drivers/media/platform/amphion/vpu_helpers.h |  74 ++
+ drivers/media/platform/amphion/vpu_v4l2.c    | 712 +++++++++++++++++++
+ drivers/media/platform/amphion/vpu_v4l2.h    |  55 ++
+ 5 files changed, 1437 insertions(+)
+ create mode 100644 drivers/media/platform/amphion/vpu_color.c
+ create mode 100644 drivers/media/platform/amphion/vpu_helpers.c
+ create mode 100644 drivers/media/platform/amphion/vpu_helpers.h
+ create mode 100644 drivers/media/platform/amphion/vpu_v4l2.c
+ create mode 100644 drivers/media/platform/amphion/vpu_v4l2.h
 
-diff --git a/drivers/media/platform/amphion/Makefile b/drivers/media/platform/amphion/Makefile
+diff --git a/drivers/media/platform/amphion/vpu_color.c b/drivers/media/platform/amphion/vpu_color.c
 new file mode 100644
-index 000000000000..80717312835f
+index 000000000000..80b9a53fd1c1
 --- /dev/null
-+++ b/drivers/media/platform/amphion/Makefile
-@@ -0,0 +1,20 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Makefile for NXP VPU driver
-+
-+amphion-vpu-objs += vpu_drv.o \
-+			vpu_core.o \
-+			vpu_mbox.o \
-+			vpu_v4l2.o \
-+			vpu_helpers.o \
-+			vpu_cmds.o \
-+			vpu_msgs.o \
-+			vpu_rpc.o \
-+			vpu_imx8q.o \
-+			vpu_windsor.o \
-+			vpu_malone.o \
-+			vpu_color.o \
-+			vdec.o  \
-+			venc.o \
-+			vpu_dbg.o
-+
-+obj-$(CONFIG_VIDEO_AMPHION_VPU) += amphion-vpu.o
-diff --git a/drivers/media/platform/amphion/vpu.h b/drivers/media/platform/amphion/vpu.h
-new file mode 100644
-index 000000000000..e56b96a7e5d3
---- /dev/null
-+++ b/drivers/media/platform/amphion/vpu.h
-@@ -0,0 +1,362 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright 2020-2021 NXP
-+ */
-+
-+#ifndef _AMPHION_VPU_H
-+#define _AMPHION_VPU_H
-+
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-mem2mem.h>
-+#include <linux/mailbox_client.h>
-+#include <linux/mailbox_controller.h>
-+#include <linux/kfifo.h>
-+
-+#define VPU_TIMEOUT		msecs_to_jiffies(1000)
-+#define VPU_INST_NULL_ID	(-1L)
-+#define VPU_MSG_BUFFER_SIZE	(8192)
-+
-+enum imx_plat_type {
-+	IMX8QXP = 0,
-+	IMX8QM  = 1,
-+	IMX8DM,
-+	IMX8DX,
-+	PLAT_TYPE_RESERVED
-+};
-+
-+enum vpu_core_type {
-+	VPU_CORE_TYPE_ENC = 0,
-+	VPU_CORE_TYPE_DEC = 0x10,
-+};
-+
-+struct vpu_dev;
-+struct vpu_resources {
-+	enum imx_plat_type plat_type;
-+	u32 mreg_base;
-+	int (*setup)(struct vpu_dev *vpu);
-+	int (*setup_encoder)(struct vpu_dev *vpu);
-+	int (*setup_decoder)(struct vpu_dev *vpu);
-+	int (*reset)(struct vpu_dev *vpu);
-+};
-+
-+struct vpu_buffer {
-+	void *virt;
-+	dma_addr_t phys;
-+	u32 length;
-+	u32 bytesused;
-+	struct device *dev;
-+};
-+
-+struct vpu_func {
-+	struct video_device *vfd;
-+	struct v4l2_m2m_dev *m2m_dev;
-+	enum vpu_core_type type;
-+	int function;
-+};
-+
-+struct vpu_dev {
-+	void __iomem *base;
-+	struct platform_device *pdev;
-+	struct device *dev;
-+	struct mutex lock; /* protect vpu device */
-+	const struct vpu_resources *res;
-+	struct list_head cores;
-+
-+	struct v4l2_device v4l2_dev;
-+	struct vpu_func encoder;
-+	struct vpu_func decoder;
-+	struct media_device mdev;
-+
-+	struct delayed_work watchdog_work;
-+	void (*get_vpu)(struct vpu_dev *vpu);
-+	void (*put_vpu)(struct vpu_dev *vpu);
-+	void (*get_enc)(struct vpu_dev *vpu);
-+	void (*put_enc)(struct vpu_dev *vpu);
-+	void (*get_dec)(struct vpu_dev *vpu);
-+	void (*put_dec)(struct vpu_dev *vpu);
-+	atomic_t ref_vpu;
-+	atomic_t ref_enc;
-+	atomic_t ref_dec;
-+
-+	struct dentry *debugfs;
-+};
-+
-+struct vpu_format {
-+	u32 pixfmt;
-+	unsigned int num_planes;
-+	u32 type;
-+	u32 flags;
-+	u32 width;
-+	u32 height;
-+	u32 sizeimage[VIDEO_MAX_PLANES];
-+	u32 bytesperline[VIDEO_MAX_PLANES];
-+	u32 field;
-+};
-+
-+struct vpu_core_resources {
-+	enum vpu_core_type type;
-+	const char *fwname;
-+	u32 stride;
-+	u32 max_width;
-+	u32 min_width;
-+	u32 step_width;
-+	u32 max_height;
-+	u32 min_height;
-+	u32 step_height;
-+	u32 rpc_size;
-+	u32 fwlog_size;
-+	u32 act_size;
-+};
-+
-+struct vpu_mbox {
-+	char name[20];
-+	struct mbox_client cl;
-+	struct mbox_chan *ch;
-+	bool block;
-+};
-+
-+enum vpu_core_state {
-+	VPU_CORE_DEINIT = 0,
-+	VPU_CORE_ACTIVE,
-+	VPU_CORE_SNAPSHOT,
-+	VPU_CORE_HANG
-+};
-+
-+struct vpu_core {
-+	void __iomem *base;
-+	struct platform_device *pdev;
-+	struct device *dev;
-+	struct device *parent;
-+	struct device *pd;
-+	struct device_link *pd_link;
-+	struct mutex lock;     /* protect vpu core */
-+	struct mutex cmd_lock; /* Lock vpu command */
-+	struct list_head list;
-+	enum vpu_core_type type;
-+	int id;
-+	const struct vpu_core_resources *res;
-+	unsigned long instance_mask;
-+	u32 supported_instance_count;
-+	unsigned long hang_mask;
-+	u32 request_count;
-+	struct list_head instances;
-+	enum vpu_core_state state;
-+	u32 fw_version;
-+
-+	struct vpu_buffer fw;
-+	struct vpu_buffer rpc;
-+	struct vpu_buffer log;
-+	struct vpu_buffer act;
-+
-+	struct vpu_mbox tx_type;
-+	struct vpu_mbox tx_data;
-+	struct vpu_mbox rx;
-+	unsigned long cmd_seq;
-+
-+	wait_queue_head_t ack_wq;
-+	struct completion cmp;
-+	struct workqueue_struct *workqueue;
-+	struct work_struct msg_work;
-+	struct delayed_work msg_delayed_work;
-+	struct kfifo msg_fifo;
-+	void *msg_buffer;
-+	unsigned int msg_buffer_size;
-+
-+	struct vpu_dev *vpu;
-+	void *iface;
-+
-+	struct dentry *debugfs;
-+	struct dentry *debugfs_fwlog;
-+};
-+
-+enum vpu_codec_state {
-+	VPU_CODEC_STATE_DEINIT = 1,
-+	VPU_CODEC_STATE_CONFIGURED,
-+	VPU_CODEC_STATE_START,
-+	VPU_CODEC_STATE_STARTED,
-+	VPU_CODEC_STATE_ACTIVE,
-+	VPU_CODEC_STATE_SEEK,
-+	VPU_CODEC_STATE_STOP,
-+	VPU_CODEC_STATE_DRAIN,
-+	VPU_CODEC_STATE_DYAMIC_RESOLUTION_CHANGE,
-+};
-+
-+struct vpu_frame_info {
-+	u32 type;
-+	u32 id;
-+	u32 sequence;
-+	u32 luma;
-+	u32 chroma_u;
-+	u32 chroma_v;
-+	u32 data_offset;
-+	u32 flags;
-+	u32 skipped;
-+	s64 timestamp;
-+};
-+
-+struct vpu_inst;
-+struct vpu_inst_ops {
-+	int (*ctrl_init)(struct vpu_inst *inst);
-+	int (*start)(struct vpu_inst *inst, u32 type);
-+	int (*stop)(struct vpu_inst *inst, u32 type);
-+	int (*abort)(struct vpu_inst *inst);
-+	bool (*check_ready)(struct vpu_inst *inst, unsigned int type);
-+	void (*buf_done)(struct vpu_inst *inst, struct vpu_frame_info *frame);
-+	void (*event_notify)(struct vpu_inst *inst, u32 event, void *data);
-+	void (*release)(struct vpu_inst *inst);
-+	void (*cleanup)(struct vpu_inst *inst);
-+	void (*mem_request)(struct vpu_inst *inst,
-+			    u32 enc_frame_size,
-+			    u32 enc_frame_num,
-+			    u32 ref_frame_size,
-+			    u32 ref_frame_num,
-+			    u32 act_frame_size,
-+			    u32 act_frame_num);
-+	void (*input_done)(struct vpu_inst *inst);
-+	void (*stop_done)(struct vpu_inst *inst);
-+	int (*process_output)(struct vpu_inst *inst, struct vb2_buffer *vb);
-+	int (*process_capture)(struct vpu_inst *inst, struct vb2_buffer *vb);
-+	int (*get_one_frame)(struct vpu_inst *inst, void *info);
-+	void (*on_queue_empty)(struct vpu_inst *inst, u32 type);
-+	int (*get_debug_info)(struct vpu_inst *inst, char *str, u32 size, u32 i);
-+	void (*wait_prepare)(struct vpu_inst *inst);
-+	void (*wait_finish)(struct vpu_inst *inst);
-+};
-+
-+struct vpu_inst {
-+	struct list_head list;
-+	struct mutex lock; /* v4l2 and videobuf2 lock */
-+	struct vpu_dev *vpu;
-+	struct vpu_core *core;
-+	struct device *dev;
-+	int id;
-+
-+	struct v4l2_fh fh;
-+	struct v4l2_ctrl_handler ctrl_handler;
-+	atomic_t ref_count;
-+	int (*release)(struct vpu_inst *inst);
-+
-+	enum vpu_codec_state state;
-+	enum vpu_core_type type;
-+
-+	struct workqueue_struct *workqueue;
-+	struct work_struct msg_work;
-+	struct kfifo msg_fifo;
-+	u8 msg_buffer[VPU_MSG_BUFFER_SIZE];
-+
-+	struct vpu_buffer stream_buffer;
-+	bool use_stream_buffer;
-+	struct vpu_buffer act;
-+
-+	struct list_head cmd_q;
-+	void *pending;
-+
-+	struct vpu_inst_ops *ops;
-+	const struct vpu_format *formats;
-+	struct vpu_format out_format;
-+	struct vpu_format cap_format;
-+	u32 min_buffer_cap;
-+	u32 min_buffer_out;
-+
-+	struct v4l2_rect crop;
-+	u32 colorspace;
-+	u8 ycbcr_enc;
-+	u8 quantization;
-+	u8 xfer_func;
-+	u32 sequence;
-+	u32 extra_size;
-+
-+	u32 flows[16];
-+	u32 flow_idx;
-+
-+	pid_t pid;
-+	pid_t tgid;
-+	struct dentry *debugfs;
-+
-+	void *priv;
-+};
-+
-+#define call_vop(inst, op, args...)					\
-+	((inst)->ops->op ? (inst)->ops->op(inst, ##args) : 0)		\
-+
-+#define call_void_vop(inst, op, args...)				\
-+	do {								\
-+		if ((inst)->ops->op)					\
-+			(inst)->ops->op(inst, ##args);				\
-+	} while (0)
-+
-+enum {
-+	VPU_BUF_STATE_IDLE = 0,
-+	VPU_BUF_STATE_INUSE,
-+	VPU_BUF_STATE_DECODED,
-+	VPU_BUF_STATE_READY,
-+	VPU_BUF_STATE_SKIP,
-+	VPU_BUF_STATE_ERROR
-+};
-+
-+struct vpu_vb2_buffer {
-+	struct v4l2_m2m_buffer m2m_buf;
-+	dma_addr_t luma;
-+	dma_addr_t chroma_u;
-+	dma_addr_t chroma_v;
-+	unsigned int state;
-+	u32 tag;
-+};
-+
-+void vpu_writel(struct vpu_dev *vpu, u32 reg, u32 val);
-+u32 vpu_readl(struct vpu_dev *vpu, u32 reg);
-+
-+static inline struct vpu_vb2_buffer *to_vpu_vb2_buffer(struct vb2_v4l2_buffer *vbuf)
-+{
-+	struct v4l2_m2m_buffer *m2m_buf = container_of(vbuf, struct v4l2_m2m_buffer, vb);
-+
-+	return container_of(m2m_buf, struct vpu_vb2_buffer, m2m_buf);
-+}
-+
-+static inline const char *vpu_core_type_desc(enum vpu_core_type type)
-+{
-+	return type == VPU_CORE_TYPE_ENC ? "encoder" : "decoder";
-+}
-+
-+static inline struct vpu_inst *to_inst(struct file *filp)
-+{
-+	return container_of(filp->private_data, struct vpu_inst, fh);
-+}
-+
-+#define ctrl_to_inst(ctrl)	\
-+	container_of((ctrl)->handler, struct vpu_inst, ctrl_handler)
-+
-+const struct v4l2_ioctl_ops *venc_get_ioctl_ops(void);
-+const struct v4l2_file_operations *venc_get_fops(void);
-+const struct v4l2_ioctl_ops *vdec_get_ioctl_ops(void);
-+const struct v4l2_file_operations *vdec_get_fops(void);
-+
-+int vpu_add_func(struct vpu_dev *vpu, struct vpu_func *func);
-+void vpu_remove_func(struct vpu_func *func);
-+
-+struct vpu_inst *vpu_inst_get(struct vpu_inst *inst);
-+void vpu_inst_put(struct vpu_inst *inst);
-+struct vpu_core *vpu_request_core(struct vpu_dev *vpu, enum vpu_core_type type);
-+void vpu_release_core(struct vpu_core *core);
-+int vpu_inst_register(struct vpu_inst *inst);
-+int vpu_inst_unregister(struct vpu_inst *inst);
-+const struct vpu_core_resources *vpu_get_resource(struct vpu_inst *inst);
-+
-+int vpu_inst_create_dbgfs_file(struct vpu_inst *inst);
-+int vpu_inst_remove_dbgfs_file(struct vpu_inst *inst);
-+int vpu_core_create_dbgfs_file(struct vpu_core *core);
-+int vpu_core_remove_dbgfs_file(struct vpu_core *core);
-+void vpu_inst_record_flow(struct vpu_inst *inst, u32 flow);
-+
-+int vpu_core_driver_init(void);
-+void vpu_core_driver_exit(void);
-+
-+extern bool debug;
-+#define vpu_trace(dev, fmt, arg...)					\
-+	do {								\
-+		if (debug)						\
-+			dev_info(dev, "%s: " fmt, __func__, ## arg);	\
-+	} while (0)
-+
-+#endif
-diff --git a/drivers/media/platform/amphion/vpu_defs.h b/drivers/media/platform/amphion/vpu_defs.h
-new file mode 100644
-index 000000000000..282664202dcf
---- /dev/null
-+++ b/drivers/media/platform/amphion/vpu_defs.h
-@@ -0,0 +1,187 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright 2020-2021 NXP
-+ */
-+
-+#ifndef _AMPHION_VPU_DEFS_H
-+#define _AMPHION_VPU_DEFS_H
-+
-+enum MSG_TYPE {
-+	INIT_DONE = 1,
-+	PRC_BUF_OFFSET,
-+	BOOT_ADDRESS,
-+	COMMAND,
-+	EVENT,
-+};
-+
-+enum {
-+	VPU_IRQ_CODE_BOOT_DONE = 0x55,
-+	VPU_IRQ_CODE_SNAPSHOT_DONE = 0xa5,
-+	VPU_IRQ_CODE_SYNC = 0xaa,
-+};
-+
-+enum {
-+	VPU_CMD_ID_NOOP = 0x0,
-+	VPU_CMD_ID_CONFIGURE_CODEC,
-+	VPU_CMD_ID_START,
-+	VPU_CMD_ID_STOP,
-+	VPU_CMD_ID_ABORT,
-+	VPU_CMD_ID_RST_BUF,
-+	VPU_CMD_ID_SNAPSHOT,
-+	VPU_CMD_ID_FIRM_RESET,
-+	VPU_CMD_ID_UPDATE_PARAMETER,
-+	VPU_CMD_ID_FRAME_ENCODE,
-+	VPU_CMD_ID_SKIP,
-+	VPU_CMD_ID_PARSE_NEXT_SEQ,
-+	VPU_CMD_ID_PARSE_NEXT_I,
-+	VPU_CMD_ID_PARSE_NEXT_IP,
-+	VPU_CMD_ID_PARSE_NEXT_ANY,
-+	VPU_CMD_ID_DEC_PIC,
-+	VPU_CMD_ID_FS_ALLOC,
-+	VPU_CMD_ID_FS_RELEASE,
-+	VPU_CMD_ID_TIMESTAMP,
-+	VPU_CMD_ID_DEBUG
-+};
-+
-+enum {
-+	VPU_MSG_ID_NOOP = 0x100,
-+	VPU_MSG_ID_RESET_DONE,
-+	VPU_MSG_ID_START_DONE,
-+	VPU_MSG_ID_STOP_DONE,
-+	VPU_MSG_ID_ABORT_DONE,
-+	VPU_MSG_ID_BUF_RST,
-+	VPU_MSG_ID_MEM_REQUEST,
-+	VPU_MSG_ID_PARAM_UPD_DONE,
-+	VPU_MSG_ID_FRAME_INPUT_DONE,
-+	VPU_MSG_ID_ENC_DONE,
-+	VPU_MSG_ID_DEC_DONE,
-+	VPU_MSG_ID_FRAME_REQ,
-+	VPU_MSG_ID_FRAME_RELEASE,
-+	VPU_MSG_ID_SEQ_HDR_FOUND,
-+	VPU_MSG_ID_RES_CHANGE,
-+	VPU_MSG_ID_PIC_HDR_FOUND,
-+	VPU_MSG_ID_PIC_DECODED,
-+	VPU_MSG_ID_PIC_EOS,
-+	VPU_MSG_ID_FIFO_LOW,
-+	VPU_MSG_ID_FIFO_HIGH,
-+	VPU_MSG_ID_FIFO_EMPTY,
-+	VPU_MSG_ID_FIFO_FULL,
-+	VPU_MSG_ID_BS_ERROR,
-+	VPU_MSG_ID_UNSUPPORTED,
-+	VPU_MSG_ID_TIMESTAMP_INFO,
-+
-+	VPU_MSG_ID_FIRMWARE_XCPT,
-+};
-+
-+enum VPU_ENC_MEMORY_RESOURSE {
-+	MEM_RES_ENC,
-+	MEM_RES_REF,
-+	MEM_RES_ACT
-+};
-+
-+enum VPU_DEC_MEMORY_RESOURCE {
-+	MEM_RES_FRAME,
-+	MEM_RES_MBI,
-+	MEM_RES_DCP
-+};
-+
-+enum VPU_SCODE_TYPE {
-+	SCODE_PADDING_EOS = 1,
-+	SCODE_PADDING_BUFFLUSH = 2,
-+	SCODE_PADDING_ABORT = 3,
-+	SCODE_SEQUENCE = 0x31,
-+	SCODE_PICTURE = 0x32,
-+	SCODE_SLICE = 0x33
-+};
-+
-+struct vpu_pkt_mem_req_data {
-+	u32 enc_frame_size;
-+	u32 enc_frame_num;
-+	u32 ref_frame_size;
-+	u32 ref_frame_num;
-+	u32 act_buf_size;
-+	u32 act_buf_num;
-+};
-+
-+struct vpu_enc_pic_info {
-+	u32 frame_id;
-+	u32 pic_type;
-+	u32 skipped_frame;
-+	u32 error_flag;
-+	u32 psnr;
-+	u32 frame_size;
-+	u32 wptr;
-+	u32 crc;
-+	s64 timestamp;
-+};
-+
-+struct vpu_dec_codec_info {
-+	u32 pixfmt;
-+	u32 num_ref_frms;
-+	u32 num_dpb_frms;
-+	u32 num_dfe_area;
-+	u32 color_primaries;
-+	u32 transfer_chars;
-+	u32 matrix_coeffs;
-+	u32 full_range;
-+	u32 vui_present;
-+	u32 progressive;
-+	u32 width;
-+	u32 height;
-+	u32 decoded_width;
-+	u32 decoded_height;
-+	struct v4l2_fract frame_rate;
-+	u32 dsp_asp_ratio;
-+	u32 level_idc;
-+	u32 bit_depth_luma;
-+	u32 bit_depth_chroma;
-+	u32 chroma_fmt;
-+	u32 mvc_num_views;
-+	u32 offset_x;
-+	u32 offset_y;
-+	u32 tag;
-+	u32 sizeimage[VIDEO_MAX_PLANES];
-+	u32 bytesperline[VIDEO_MAX_PLANES];
-+	u32 mbi_size;
-+	u32 dcp_size;
-+	u32 stride;
-+};
-+
-+struct vpu_dec_pic_info {
-+	u32 id;
-+	u32 luma;
-+	u32 start;
-+	u32 end;
-+	u32 pic_size;
-+	u32 stride;
-+	u32 skipped;
-+	s64 timestamp;
-+	u32 consumed_count;
-+};
-+
-+struct vpu_fs_info {
-+	u32 id;
-+	u32 type;
-+	u32 tag;
-+	u32 luma_addr;
-+	u32 luma_size;
-+	u32 chroma_addr;
-+	u32 chromau_size;
-+	u32 chromav_addr;
-+	u32 chromav_size;
-+	u32 bytesperline;
-+	u32 not_displayed;
-+};
-+
-+struct vpu_ts_info {
-+	s64 timestamp;
-+	u32 size;
-+};
-+
-+#define BITRATE_STEP		(1024)
-+#define BITRATE_MIN		(16 * BITRATE_STEP)
-+#define BITRATE_MAX		(240 * 1024 * BITRATE_STEP)
-+#define BITRATE_DEFAULT		(2 * 1024 * BITRATE_STEP)
-+#define BITRATE_DEFAULT_PEAK	(BITRATE_DEFAULT * 2)
-+
-+#endif
-diff --git a/drivers/media/platform/amphion/vpu_drv.c b/drivers/media/platform/amphion/vpu_drv.c
-new file mode 100644
-index 000000000000..834ec39640e5
---- /dev/null
-+++ b/drivers/media/platform/amphion/vpu_drv.c
-@@ -0,0 +1,260 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2020-2021 NXP
-+ */
-+
-+#include <linux/init.h>
-+#include <linux/interconnect.h>
-+#include <linux/ioctl.h>
-+#include <linux/list.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/dma-map-ops.h>
-+#include <linux/of_device.h>
-+#include <linux/of_address.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/videodev2.h>
-+#include <linux/of_reserved_mem.h>
-+#include <media/v4l2-device.h>
-+#include <media/videobuf2-v4l2.h>
-+#include <media/v4l2-mem2mem.h>
-+#include <media/v4l2-ioctl.h>
-+#include <linux/debugfs.h>
-+#include "vpu.h"
-+#include "vpu_imx8q.h"
-+
-+bool debug;
-+module_param(debug, bool, 0644);
-+
-+void vpu_writel(struct vpu_dev *vpu, u32 reg, u32 val)
-+{
-+	writel(val, vpu->base + reg);
-+}
-+
-+u32 vpu_readl(struct vpu_dev *vpu, u32 reg)
-+{
-+	return readl(vpu->base + reg);
-+}
-+
-+static void vpu_dev_get(struct vpu_dev *vpu)
-+{
-+	if (atomic_inc_return(&vpu->ref_vpu) == 1 && vpu->res->setup)
-+		vpu->res->setup(vpu);
-+}
-+
-+static void vpu_dev_put(struct vpu_dev *vpu)
-+{
-+	atomic_dec(&vpu->ref_vpu);
-+}
-+
-+static void vpu_enc_get(struct vpu_dev *vpu)
-+{
-+	if (atomic_inc_return(&vpu->ref_enc) == 1 && vpu->res->setup_encoder)
-+		vpu->res->setup_encoder(vpu);
-+}
-+
-+static void vpu_enc_put(struct vpu_dev *vpu)
-+{
-+	atomic_dec(&vpu->ref_enc);
-+}
-+
-+static void vpu_dec_get(struct vpu_dev *vpu)
-+{
-+	if (atomic_inc_return(&vpu->ref_dec) == 1 && vpu->res->setup_decoder)
-+		vpu->res->setup_decoder(vpu);
-+}
-+
-+static void vpu_dec_put(struct vpu_dev *vpu)
-+{
-+	atomic_dec(&vpu->ref_dec);
-+}
-+
-+static int vpu_init_media_device(struct vpu_dev *vpu)
-+{
-+	vpu->mdev.dev = vpu->dev;
-+	strscpy(vpu->mdev.model, "amphion-vpu", sizeof(vpu->mdev.model));
-+	strscpy(vpu->mdev.bus_info, "platform: amphion-vpu", sizeof(vpu->mdev.bus_info));
-+	media_device_init(&vpu->mdev);
-+	vpu->v4l2_dev.mdev = &vpu->mdev;
-+
-+	return 0;
-+}
-+
-+static int vpu_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct vpu_dev *vpu;
-+	int ret;
-+
-+	dev_dbg(dev, "probe\n");
-+	vpu = devm_kzalloc(dev, sizeof(*vpu), GFP_KERNEL);
-+	if (!vpu)
-+		return -ENOMEM;
-+
-+	vpu->pdev = pdev;
-+	vpu->dev = dev;
-+	mutex_init(&vpu->lock);
-+	INIT_LIST_HEAD(&vpu->cores);
-+	platform_set_drvdata(pdev, vpu);
-+	atomic_set(&vpu->ref_vpu, 0);
-+	atomic_set(&vpu->ref_enc, 0);
-+	atomic_set(&vpu->ref_dec, 0);
-+	vpu->get_vpu = vpu_dev_get;
-+	vpu->put_vpu = vpu_dev_put;
-+	vpu->get_enc = vpu_enc_get;
-+	vpu->put_enc = vpu_enc_put;
-+	vpu->get_dec = vpu_dec_get;
-+	vpu->put_dec = vpu_dec_put;
-+
-+	vpu->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(vpu->base))
-+		return PTR_ERR(vpu->base);
-+
-+	vpu->res = of_device_get_match_data(dev);
-+	if (!vpu->res)
-+		return -ENODEV;
-+
-+	pm_runtime_enable(dev);
-+	ret = pm_runtime_get_sync(dev);
-+	if (ret)
-+		goto err_runtime_disable;
-+
-+	pm_runtime_put_sync(dev);
-+
-+	ret = v4l2_device_register(dev, &vpu->v4l2_dev);
-+	if (ret)
-+		goto err_vpu_deinit;
-+
-+	vpu_init_media_device(vpu);
-+	vpu->encoder.type = VPU_CORE_TYPE_ENC;
-+	vpu->encoder.function = MEDIA_ENT_F_PROC_VIDEO_ENCODER;
-+	vpu->decoder.type = VPU_CORE_TYPE_DEC;
-+	vpu->decoder.function = MEDIA_ENT_F_PROC_VIDEO_DECODER;
-+	vpu_add_func(vpu, &vpu->decoder);
-+	vpu_add_func(vpu, &vpu->encoder);
-+	ret = media_device_register(&vpu->mdev);
-+	if (ret)
-+		goto err_vpu_media;
-+	vpu->debugfs = debugfs_create_dir("amphion_vpu", NULL);
-+
-+	of_platform_populate(dev->of_node, NULL, NULL, dev);
-+
-+	return 0;
-+
-+err_vpu_media:
-+	vpu_remove_func(&vpu->encoder);
-+	vpu_remove_func(&vpu->decoder);
-+	v4l2_device_unregister(&vpu->v4l2_dev);
-+err_vpu_deinit:
-+err_runtime_disable:
-+	pm_runtime_set_suspended(dev);
-+	pm_runtime_disable(dev);
-+
-+	return ret;
-+}
-+
-+static int vpu_remove(struct platform_device *pdev)
-+{
-+	struct vpu_dev *vpu = platform_get_drvdata(pdev);
-+	struct device *dev = &pdev->dev;
-+
-+	debugfs_remove_recursive(vpu->debugfs);
-+	vpu->debugfs = NULL;
-+
-+	pm_runtime_disable(dev);
-+
-+	media_device_unregister(&vpu->mdev);
-+	vpu_remove_func(&vpu->decoder);
-+	vpu_remove_func(&vpu->encoder);
-+	media_device_cleanup(&vpu->mdev);
-+	v4l2_device_unregister(&vpu->v4l2_dev);
-+	mutex_destroy(&vpu->lock);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused vpu_runtime_resume(struct device *dev)
-+{
-+	return 0;
-+}
-+
-+static int __maybe_unused vpu_runtime_suspend(struct device *dev)
-+{
-+	return 0;
-+}
-+
-+static int __maybe_unused vpu_resume(struct device *dev)
-+{
-+	return 0;
-+}
-+
-+static int __maybe_unused vpu_suspend(struct device *dev)
-+{
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops vpu_pm_ops = {
-+	SET_RUNTIME_PM_OPS(vpu_runtime_suspend, vpu_runtime_resume, NULL)
-+	SET_SYSTEM_SLEEP_PM_OPS(vpu_suspend, vpu_resume)
-+};
-+
-+static struct vpu_resources imx8qxp_res = {
-+	.plat_type = IMX8QXP,
-+	.mreg_base = 0x40000000,
-+	.setup = vpu_imx8q_setup,
-+	.setup_encoder = vpu_imx8q_setup_enc,
-+	.setup_decoder = vpu_imx8q_setup_dec,
-+	.reset = vpu_imx8q_reset
-+};
-+
-+static struct vpu_resources imx8qm_res = {
-+	.plat_type = IMX8QM,
-+	.mreg_base = 0x40000000,
-+	.setup = vpu_imx8q_setup,
-+	.setup_encoder = vpu_imx8q_setup_enc,
-+	.setup_decoder = vpu_imx8q_setup_dec,
-+	.reset = vpu_imx8q_reset
-+};
-+
-+static const struct of_device_id vpu_dt_match[] = {
-+	{ .compatible = "nxp,imx8qxp-vpu", .data = &imx8qxp_res },
-+	{ .compatible = "nxp,imx8qm-vpu", .data = &imx8qm_res },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, vpu_dt_match);
-+
-+static struct platform_driver amphion_vpu_driver = {
-+	.probe = vpu_probe,
-+	.remove = vpu_remove,
-+	.driver = {
-+		.name = "amphion-vpu",
-+		.of_match_table = vpu_dt_match,
-+		.pm = &vpu_pm_ops,
-+	},
-+};
-+
-+static int __init vpu_driver_init(void)
-+{
-+	int ret;
-+
-+	ret = platform_driver_register(&amphion_vpu_driver);
-+	if (ret)
-+		return ret;
-+
-+	return vpu_core_driver_init();
-+}
-+
-+static void __exit vpu_driver_exit(void)
-+{
-+	vpu_core_driver_exit();
-+	platform_driver_unregister(&amphion_vpu_driver);
-+}
-+module_init(vpu_driver_init);
-+module_exit(vpu_driver_exit);
-+
-+MODULE_AUTHOR("Freescale Semiconductor, Inc.");
-+MODULE_DESCRIPTION("Linux VPU driver for Freescale i.MX8Q");
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/media/platform/amphion/vpu_imx8q.c b/drivers/media/platform/amphion/vpu_imx8q.c
-new file mode 100644
-index 000000000000..606cc53125f8
---- /dev/null
-+++ b/drivers/media/platform/amphion/vpu_imx8q.c
-@@ -0,0 +1,271 @@
++++ b/drivers/media/platform/amphion/vpu_color.c
+@@ -0,0 +1,183 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright 2020-2021 NXP
@@ -1014,382 +154,1451 @@ index 000000000000..606cc53125f8
 +#include <linux/slab.h>
 +#include <linux/delay.h>
 +#include <linux/types.h>
++#include <media/v4l2-device.h>
++#include "vpu.h"
++#include "vpu_helpers.h"
++
++static const u8 colorprimaries[] = {
++	0,
++	V4L2_COLORSPACE_REC709,         /*Rec. ITU-R BT.709-6*/
++	0,
++	0,
++	V4L2_COLORSPACE_470_SYSTEM_M,   /*Rec. ITU-R BT.470-6 System M*/
++	V4L2_COLORSPACE_470_SYSTEM_BG,  /*Rec. ITU-R BT.470-6 System B, G*/
++	V4L2_COLORSPACE_SMPTE170M,      /*SMPTE170M*/
++	V4L2_COLORSPACE_SMPTE240M,      /*SMPTE240M*/
++	0,                              /*Generic film*/
++	V4L2_COLORSPACE_BT2020,         /*Rec. ITU-R BT.2020-2*/
++	0,                              /*SMPTE ST 428-1*/
++};
++
++static const u8 colortransfers[] = {
++	0,
++	V4L2_XFER_FUNC_709,             /*Rec. ITU-R BT.709-6*/
++	0,
++	0,
++	0,                              /*Rec. ITU-R BT.470-6 System M*/
++	0,                              /*Rec. ITU-R BT.470-6 System B, G*/
++	V4L2_XFER_FUNC_709,             /*SMPTE170M*/
++	V4L2_XFER_FUNC_SMPTE240M,       /*SMPTE240M*/
++	V4L2_XFER_FUNC_NONE,            /*Linear transfer characteristics*/
++	0,
++	0,
++	0,                              /*IEC 61966-2-4*/
++	0,                              /*Rec. ITU-R BT.1361-0 extended colour gamut*/
++	V4L2_XFER_FUNC_SRGB,            /*IEC 61966-2-1 sRGB or sYCC*/
++	V4L2_XFER_FUNC_709,             /*Rec. ITU-R BT.2020-2 (10 bit system)*/
++	V4L2_XFER_FUNC_709,             /*Rec. ITU-R BT.2020-2 (12 bit system)*/
++	V4L2_XFER_FUNC_SMPTE2084,       /*SMPTE ST 2084*/
++	0,                              /*SMPTE ST 428-1*/
++	0                               /*Rec. ITU-R BT.2100-0 hybrid log-gamma (HLG)*/
++};
++
++static const u8 colormatrixcoefs[] = {
++	0,
++	V4L2_YCBCR_ENC_709,              /*Rec. ITU-R BT.709-6*/
++	0,
++	0,
++	0,                               /*Title 47 Code of Federal Regulations*/
++	V4L2_YCBCR_ENC_601,              /*Rec. ITU-R BT.601-7 625*/
++	V4L2_YCBCR_ENC_601,              /*Rec. ITU-R BT.601-7 525*/
++	V4L2_YCBCR_ENC_SMPTE240M,        /*SMPTE240M*/
++	0,
++	V4L2_YCBCR_ENC_BT2020,           /*Rec. ITU-R BT.2020-2*/
++	V4L2_YCBCR_ENC_BT2020_CONST_LUM  /*Rec. ITU-R BT.2020-2 constant*/
++};
++
++u32 vpu_color_cvrt_primaries_v2i(u32 primaries)
++{
++	return vpu_helper_find_in_array_u8(colorprimaries, ARRAY_SIZE(colorprimaries), primaries);
++}
++
++u32 vpu_color_cvrt_primaries_i2v(u32 primaries)
++{
++	return primaries < ARRAY_SIZE(colorprimaries) ? colorprimaries[primaries] : 0;
++}
++
++u32 vpu_color_cvrt_transfers_v2i(u32 transfers)
++{
++	return vpu_helper_find_in_array_u8(colortransfers, ARRAY_SIZE(colortransfers), transfers);
++}
++
++u32 vpu_color_cvrt_transfers_i2v(u32 transfers)
++{
++	return transfers < ARRAY_SIZE(colortransfers) ? colortransfers[transfers] : 0;
++}
++
++u32 vpu_color_cvrt_matrix_v2i(u32 matrix)
++{
++	return vpu_helper_find_in_array_u8(colormatrixcoefs, ARRAY_SIZE(colormatrixcoefs), matrix);
++}
++
++u32 vpu_color_cvrt_matrix_i2v(u32 matrix)
++{
++	return matrix < ARRAY_SIZE(colormatrixcoefs) ? colormatrixcoefs[matrix] : 0;
++}
++
++u32 vpu_color_cvrt_full_range_v2i(u32 full_range)
++{
++	return (full_range == V4L2_QUANTIZATION_FULL_RANGE);
++}
++
++u32 vpu_color_cvrt_full_range_i2v(u32 full_range)
++{
++	if (full_range)
++		return V4L2_QUANTIZATION_FULL_RANGE;
++
++	return V4L2_QUANTIZATION_LIM_RANGE;
++}
++
++int vpu_color_check_primaries(u32 primaries)
++{
++	return vpu_color_cvrt_primaries_v2i(primaries) ? 0 : -EINVAL;
++}
++
++int vpu_color_check_transfers(u32 transfers)
++{
++	return vpu_color_cvrt_transfers_v2i(transfers) ? 0 : -EINVAL;
++}
++
++int vpu_color_check_matrix(u32 matrix)
++{
++	return vpu_color_cvrt_matrix_v2i(matrix) ? 0 : -EINVAL;
++}
++
++int vpu_color_check_full_range(u32 full_range)
++{
++	int ret = -EINVAL;
++
++	switch (full_range) {
++	case V4L2_QUANTIZATION_FULL_RANGE:
++	case V4L2_QUANTIZATION_LIM_RANGE:
++		ret = 0;
++		break;
++	default:
++		break;
++	}
++
++	return ret;
++}
++
++int vpu_color_get_default(u32 primaries, u32 *ptransfers, u32 *pmatrix, u32 *pfull_range)
++{
++	u32 transfers;
++	u32 matrix;
++	u32 full_range;
++
++	switch (primaries) {
++	case V4L2_COLORSPACE_REC709:
++		transfers = V4L2_XFER_FUNC_709;
++		matrix = V4L2_YCBCR_ENC_709;
++		break;
++	case V4L2_COLORSPACE_470_SYSTEM_M:
++	case V4L2_COLORSPACE_470_SYSTEM_BG:
++	case V4L2_COLORSPACE_SMPTE170M:
++		transfers = V4L2_XFER_FUNC_709;
++		matrix = V4L2_YCBCR_ENC_601;
++		break;
++	case V4L2_COLORSPACE_SMPTE240M:
++		transfers = V4L2_XFER_FUNC_SMPTE240M;
++		matrix = V4L2_YCBCR_ENC_SMPTE240M;
++		break;
++	case V4L2_COLORSPACE_BT2020:
++		transfers = V4L2_XFER_FUNC_709;
++		matrix = V4L2_YCBCR_ENC_BT2020;
++		break;
++	default:
++		transfers = V4L2_XFER_FUNC_DEFAULT;
++		matrix = V4L2_YCBCR_ENC_DEFAULT;
++		break;
++	}
++	full_range = V4L2_QUANTIZATION_LIM_RANGE;
++
++	if (ptransfers)
++		*ptransfers = transfers;
++	if (pmatrix)
++		*pmatrix = matrix;
++	if (pfull_range)
++		*pfull_range = full_range;
++
++	return 0;
++}
+diff --git a/drivers/media/platform/amphion/vpu_helpers.c b/drivers/media/platform/amphion/vpu_helpers.c
+new file mode 100644
+index 000000000000..768abf89e606
+--- /dev/null
++++ b/drivers/media/platform/amphion/vpu_helpers.c
+@@ -0,0 +1,413 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2020-2021 NXP
++ */
++
++#include <linux/init.h>
++#include <linux/interconnect.h>
++#include <linux/ioctl.h>
++#include <linux/list.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
 +#include "vpu.h"
 +#include "vpu_core.h"
-+#include "vpu_imx8q.h"
 +#include "vpu_rpc.h"
++#include "vpu_helpers.h"
 +
-+#define IMX8Q_CSR_CM0Px_ADDR_OFFSET			0x00000000
-+#define IMX8Q_CSR_CM0Px_CPUWAIT				0x00000004
-+
-+#ifdef CONFIG_IMX_SCU
-+#include <linux/firmware/imx/ipc.h>
-+#include <linux/firmware/imx/svc/misc.h>
-+
-+#define VPU_DISABLE_BITS			0x7
-+#define VPU_IMX_DECODER_FUSE_OFFSET		14
-+#define VPU_ENCODER_MASK			0x1
-+#define VPU_DECODER_MASK			0x3UL
-+#define VPU_DECODER_H264_MASK			0x2UL
-+#define VPU_DECODER_HEVC_MASK			0x1UL
-+
-+static u32 imx8q_fuse;
-+
-+struct vpu_sc_msg_misc {
-+	struct imx_sc_rpc_msg hdr;
-+	u32 word;
-+} __packed;
-+#endif
-+
-+int vpu_imx8q_setup_dec(struct vpu_dev *vpu)
++int vpu_helper_find_in_array_u8(const u8 *array, u32 size, u32 x)
 +{
-+	const off_t offset = DEC_MFD_XREG_SLV_BASE + MFD_BLK_CTRL;
++	int i;
 +
-+	vpu_writel(vpu, offset + MFD_BLK_CTRL_MFD_SYS_CLOCK_ENABLE_SET, 0x1f);
-+	vpu_writel(vpu, offset + MFD_BLK_CTRL_MFD_SYS_RESET_SET, 0xffffffff);
++	for (i = 0; i < size; i++) {
++		if (array[i] == x)
++			return i;
++	}
 +
 +	return 0;
 +}
 +
-+int vpu_imx8q_setup_enc(struct vpu_dev *vpu)
++bool vpu_helper_check_type(struct vpu_inst *inst, u32 type)
 +{
-+	return 0;
++	const struct vpu_format *pfmt;
++
++	for (pfmt = inst->formats; pfmt->pixfmt; pfmt++) {
++		if (!vpu_iface_check_format(inst, pfmt->pixfmt))
++			continue;
++		if (pfmt->type == type)
++			return true;
++	}
++
++	return false;
 +}
 +
-+int vpu_imx8q_setup(struct vpu_dev *vpu)
++const struct vpu_format *vpu_helper_find_format(struct vpu_inst *inst, u32 type, u32 pixelfmt)
 +{
-+	const off_t offset = SCB_XREG_SLV_BASE + SCB_SCB_BLK_CTRL;
++	const struct vpu_format *pfmt;
 +
-+	vpu_readl(vpu, offset + 0x108);
++	if (!inst || !inst->formats)
++		return NULL;
 +
-+	vpu_writel(vpu, offset + SCB_BLK_CTRL_SCB_CLK_ENABLE_SET, 0x1);
-+	vpu_writel(vpu, offset + 0x190, 0xffffffff);
-+	vpu_writel(vpu, offset + SCB_BLK_CTRL_XMEM_RESET_SET, 0xffffffff);
-+	vpu_writel(vpu, offset + SCB_BLK_CTRL_SCB_CLK_ENABLE_SET, 0xE);
-+	vpu_writel(vpu, offset + SCB_BLK_CTRL_CACHE_RESET_SET, 0x7);
-+	vpu_writel(vpu, XMEM_CONTROL, 0x102);
++	if (!vpu_iface_check_format(inst, pixelfmt))
++		return NULL;
 +
-+	vpu_readl(vpu, offset + 0x108);
++	for (pfmt = inst->formats; pfmt->pixfmt; pfmt++) {
++		if (pfmt->pixfmt == pixelfmt && (!type || type == pfmt->type))
++			return pfmt;
++	}
 +
-+	return 0;
++	return NULL;
 +}
 +
-+static int vpu_imx8q_reset_enc(struct vpu_dev *vpu)
++const struct vpu_format *vpu_helper_enum_format(struct vpu_inst *inst, u32 type, int index)
 +{
-+	return 0;
++	const struct vpu_format *pfmt;
++	int i = 0;
++
++	if (!inst || !inst->formats)
++		return NULL;
++
++	for (pfmt = inst->formats; pfmt->pixfmt; pfmt++) {
++		if (!vpu_iface_check_format(inst, pfmt->pixfmt))
++			continue;
++
++		if (pfmt->type == type) {
++			if (index == i)
++				return pfmt;
++			i++;
++		}
++	}
++
++	return NULL;
 +}
 +
-+static int vpu_imx8q_reset_dec(struct vpu_dev *vpu)
++u32 vpu_helper_valid_frame_width(struct vpu_inst *inst, u32 width)
 +{
-+	const off_t offset = DEC_MFD_XREG_SLV_BASE + MFD_BLK_CTRL;
++	const struct vpu_core_resources *res;
 +
-+	vpu_writel(vpu, offset + MFD_BLK_CTRL_MFD_SYS_RESET_CLR, 0xffffffff);
++	if (!inst)
++		return width;
 +
-+	return 0;
++	res = vpu_get_resource(inst);
++	if (!res)
++		return width;
++	if (res->max_width)
++		width = clamp(width, res->min_width, res->max_width);
++	if (res->step_width)
++		width = ALIGN(width, res->step_width);
++
++	return width;
 +}
 +
-+int vpu_imx8q_reset(struct vpu_dev *vpu)
++u32 vpu_helper_valid_frame_height(struct vpu_inst *inst, u32 height)
 +{
-+	const off_t offset = SCB_XREG_SLV_BASE + SCB_SCB_BLK_CTRL;
++	const struct vpu_core_resources *res;
 +
-+	vpu_writel(vpu, offset + SCB_BLK_CTRL_CACHE_RESET_CLR, 0x7);
-+	vpu_imx8q_reset_enc(vpu);
-+	vpu_imx8q_reset_dec(vpu);
++	if (!inst)
++		return height;
 +
-+	return 0;
++	res = vpu_get_resource(inst);
++	if (!res)
++		return height;
++	if (res->max_height)
++		height = clamp(height, res->min_height, res->max_height);
++	if (res->step_height)
++		height = ALIGN(height, res->step_height);
++
++	return height;
 +}
 +
-+int vpu_imx8q_set_system_cfg_common(struct vpu_rpc_system_config *config, u32 regs, u32 core_id)
++static u32 get_nv12_plane_size(u32 width, u32 height, int plane_no,
++			       u32 stride, u32 interlaced, u32 *pbl)
 +{
-+	if (!config)
++	u32 bytesperline;
++	u32 size = 0;
++
++	bytesperline = ALIGN(width, stride);
++	if (pbl)
++		bytesperline = max(bytesperline, *pbl);
++	height = ALIGN(height, 2);
++	if (plane_no == 0)
++		size = bytesperline * height;
++	else if (plane_no == 1)
++		size = bytesperline * height >> 1;
++	if (pbl)
++		*pbl = bytesperline;
++
++	return size;
++}
++
++static u32 get_tiled_8l128_plane_size(u32 fmt, u32 width, u32 height, int plane_no,
++				      u32 stride, u32 interlaced, u32 *pbl)
++{
++	u32 ws = 3;
++	u32 hs = 7;
++	u32 bitdepth = 8;
++	u32 bytesperline;
++	u32 size = 0;
++
++	if (interlaced)
++		hs++;
++	if (fmt == V4L2_PIX_FMT_NV12M_10BE_8L128)
++		bitdepth = 10;
++	bytesperline = DIV_ROUND_UP(width * bitdepth, BITS_PER_BYTE);
++	bytesperline = ALIGN(bytesperline, 1 << ws);
++	bytesperline = ALIGN(bytesperline, stride);
++	if (pbl)
++		bytesperline = max(bytesperline, *pbl);
++	height = ALIGN(height, 1 << hs);
++	if (plane_no == 0)
++		size = bytesperline * height;
++	else if (plane_no == 1)
++		size = (bytesperline * ALIGN(height, 1 << (hs + 1))) >> 1;
++	if (pbl)
++		*pbl = bytesperline;
++
++	return size;
++}
++
++static u32 get_default_plane_size(u32 width, u32 height, int plane_no,
++				  u32 stride, u32 interlaced, u32 *pbl)
++{
++	u32 bytesperline;
++	u32 size = 0;
++
++	bytesperline = ALIGN(width, stride);
++	if (pbl)
++		bytesperline = max(bytesperline, *pbl);
++	if (plane_no == 0)
++		size = bytesperline * height;
++	if (pbl)
++		*pbl = bytesperline;
++
++	return size;
++}
++
++u32 vpu_helper_get_plane_size(u32 fmt, u32 w, u32 h, int plane_no,
++			      u32 stride, u32 interlaced, u32 *pbl)
++{
++	switch (fmt) {
++	case V4L2_PIX_FMT_NV12M:
++		return get_nv12_plane_size(w, h, plane_no, stride, interlaced, pbl);
++	case V4L2_PIX_FMT_NV12M_8L128:
++	case V4L2_PIX_FMT_NV12M_10BE_8L128:
++		return get_tiled_8l128_plane_size(fmt, w, h, plane_no, stride, interlaced, pbl);
++	default:
++		return get_default_plane_size(w, h, plane_no, stride, interlaced, pbl);
++	}
++}
++
++u32 vpu_helper_copy_from_stream_buffer(struct vpu_buffer *stream_buffer,
++				       u32 *rptr, u32 size, void *dst)
++{
++	u32 offset;
++	u32 start;
++	u32 end;
++	void *virt;
++
++	if (!stream_buffer || !rptr || !dst)
 +		return -EINVAL;
 +
-+	switch (core_id) {
-+	case 0:
-+		config->malone_base_addr[0] = regs + DEC_MFD_XREG_SLV_BASE;
-+		config->num_malones = 1;
-+		config->num_windsors = 0;
++	if (!size)
++		return 0;
++
++	offset = *rptr;
++	start = stream_buffer->phys;
++	end = start + stream_buffer->length;
++	virt = stream_buffer->virt;
++
++	if (offset < start || offset > end)
++		return -EINVAL;
++
++	if (offset + size <= end) {
++		memcpy(dst, virt + (offset - start), size);
++	} else {
++		memcpy(dst, virt + (offset - start), end - offset);
++		memcpy(dst + end - offset, virt, size + offset - end);
++	}
++
++	*rptr = vpu_helper_step_walk(stream_buffer, offset, size);
++	return size;
++}
++
++u32 vpu_helper_copy_to_stream_buffer(struct vpu_buffer *stream_buffer,
++				     u32 *wptr, u32 size, void *src)
++{
++	u32 offset;
++	u32 start;
++	u32 end;
++	void *virt;
++
++	if (!stream_buffer || !wptr || !src)
++		return -EINVAL;
++
++	if (!size)
++		return 0;
++
++	offset = *wptr;
++	start = stream_buffer->phys;
++	end = start + stream_buffer->length;
++	virt = stream_buffer->virt;
++	if (offset < start || offset > end)
++		return -EINVAL;
++
++	if (offset + size <= end) {
++		memcpy(virt + (offset - start), src, size);
++	} else {
++		memcpy(virt + (offset - start), src, end - offset);
++		memcpy(virt, src + end - offset, size + offset - end);
++	}
++
++	*wptr = vpu_helper_step_walk(stream_buffer, offset, size);
++
++	return size;
++}
++
++u32 vpu_helper_memset_stream_buffer(struct vpu_buffer *stream_buffer,
++				    u32 *wptr, u8 val, u32 size)
++{
++	u32 offset;
++	u32 start;
++	u32 end;
++	void *virt;
++
++	if (!stream_buffer || !wptr)
++		return -EINVAL;
++
++	if (!size)
++		return 0;
++
++	offset = *wptr;
++	start = stream_buffer->phys;
++	end = start + stream_buffer->length;
++	virt = stream_buffer->virt;
++	if (offset < start || offset > end)
++		return -EINVAL;
++
++	if (offset + size <= end) {
++		memset(virt + (offset - start), val, size);
++	} else {
++		memset(virt + (offset - start), val, end - offset);
++		memset(virt, val, size + offset - end);
++	}
++
++	offset += size;
++	if (offset >= end)
++		offset -= stream_buffer->length;
++
++	*wptr = offset;
++
++	return size;
++}
++
++u32 vpu_helper_get_free_space(struct vpu_inst *inst)
++{
++	struct vpu_rpc_buffer_desc desc;
++
++	if (vpu_iface_get_stream_buffer_desc(inst, &desc))
++		return 0;
++
++	if (desc.rptr > desc.wptr)
++		return desc.rptr - desc.wptr;
++	else if (desc.rptr < desc.wptr)
++		return (desc.end - desc.start + desc.rptr - desc.wptr);
++	else
++		return desc.end - desc.start;
++}
++
++u32 vpu_helper_get_used_space(struct vpu_inst *inst)
++{
++	struct vpu_rpc_buffer_desc desc;
++
++	if (vpu_iface_get_stream_buffer_desc(inst, &desc))
++		return 0;
++
++	if (desc.wptr > desc.rptr)
++		return desc.wptr - desc.rptr;
++	else if (desc.wptr < desc.rptr)
++		return (desc.end - desc.start + desc.wptr - desc.rptr);
++	else
++		return 0;
++}
++
++int vpu_helper_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct vpu_inst *inst = ctrl_to_inst(ctrl);
++
++	switch (ctrl->id) {
++	case V4L2_CID_MIN_BUFFERS_FOR_CAPTURE:
++		ctrl->val = inst->min_buffer_cap;
 +		break;
-+	case 1:
-+		config->windsor_base_addr[0] = regs + ENC_MFD_XREG_SLV_0_BASE;
-+		config->num_windsors = 1;
-+		config->num_malones = 0;
-+		break;
-+	case 2:
-+		config->windsor_base_addr[0] = regs + ENC_MFD_XREG_SLV_1_BASE;
-+		config->num_windsors = 1;
-+		config->num_malones = 0;
++	case V4L2_CID_MIN_BUFFERS_FOR_OUTPUT:
++		ctrl->val = inst->min_buffer_out;
 +		break;
 +	default:
 +		return -EINVAL;
 +	}
-+	if (config->num_windsors) {
-+		config->windsor_irq_pin[0x0][0x0] = WINDSOR_PAL_IRQ_PIN_L;
-+		config->windsor_irq_pin[0x0][0x1] = WINDSOR_PAL_IRQ_PIN_H;
-+	}
-+
-+	config->malone_base_addr[0x1] = 0x0;
-+	config->hif_offset[0x0] = MFD_HIF;
-+	config->hif_offset[0x1] = 0x0;
-+
-+	config->dpv_base_addr = 0x0;
-+	config->dpv_irq_pin = 0x0;
-+	config->pixif_base_addr = regs + DEC_MFD_XREG_SLV_BASE + MFD_PIX_IF;
-+	config->cache_base_addr[0] = regs + MC_CACHE_0_BASE;
-+	config->cache_base_addr[1] = regs + MC_CACHE_1_BASE;
 +
 +	return 0;
 +}
 +
-+int vpu_imx8q_boot_core(struct vpu_core *core)
++int vpu_helper_find_startcode(struct vpu_buffer *stream_buffer,
++			      u32 pixelformat, u32 offset, u32 bytesused)
 +{
-+	csr_writel(core, IMX8Q_CSR_CM0Px_ADDR_OFFSET, core->fw.phys);
-+	csr_writel(core, IMX8Q_CSR_CM0Px_CPUWAIT, 0);
-+	return 0;
-+}
-+
-+int vpu_imx8q_get_power_state(struct vpu_core *core)
-+{
-+	if (csr_readl(core, IMX8Q_CSR_CM0Px_CPUWAIT) == 1)
-+		return 0;
-+	return 1;
-+}
-+
-+int vpu_imx8q_on_firmware_loaded(struct vpu_core *core)
-+{
-+	u8 *p;
-+
-+	p = core->fw.virt;
-+	p[16] = core->vpu->res->plat_type;
-+	p[17] = core->id;
-+	p[18] = 1;
-+
-+	return 0;
-+}
-+
-+u32 vpu_imx8q_check_memory_region(dma_addr_t base, dma_addr_t addr, u32 size)
-+{
-+	const struct vpu_rpc_region_t imx8q_regions[] = {
-+		{0x00000000, 0x08000000, VPU_CORE_MEMORY_CACHED},
-+		{0x08000000, 0x10000000, VPU_CORE_MEMORY_UNCACHED},
-+		{0x10000000, 0x20000000, VPU_CORE_MEMORY_CACHED},
-+		{0x20000000, 0x40000000, VPU_CORE_MEMORY_UNCACHED}
-+	};
++	u32 start_code;
++	int start_code_size;
++	u32 val = 0;
 +	int i;
++	int ret = -EINVAL;
 +
-+	if (addr < base)
-+		return VPU_CORE_MEMORY_INVALID;
++	if (!stream_buffer || !stream_buffer->virt)
++		return -EINVAL;
 +
-+	addr -= base;
-+	for (i = 0; i < ARRAY_SIZE(imx8q_regions); i++) {
-+		const struct vpu_rpc_region_t *region = &imx8q_regions[i];
-+
-+		if (addr >= region->start && addr + size < region->end)
-+			return region->type;
-+	}
-+
-+	return VPU_CORE_MEMORY_INVALID;
-+}
-+
-+#ifdef CONFIG_IMX_SCU
-+static u32 vpu_imx8q_get_fuse(void)
-+{
-+	static u32 fuse_got;
-+	struct imx_sc_ipc *ipc;
-+	struct vpu_sc_msg_misc msg;
-+	struct imx_sc_rpc_msg *hdr = &msg.hdr;
-+	int ret;
-+
-+	if (fuse_got)
-+		return imx8q_fuse;
-+
-+	ret = imx_scu_get_handle(&ipc);
-+	if (ret) {
-+		pr_err("error: get sct handle fail: %d\n", ret);
++	switch (pixelformat) {
++	case V4L2_PIX_FMT_H264:
++		start_code_size = 4;
++		start_code = 0x00000001;
++		break;
++	default:
 +		return 0;
 +	}
 +
-+	hdr->ver = IMX_SC_RPC_VERSION;
-+	hdr->svc = IMX_SC_RPC_SVC_MISC;
-+	hdr->func = IMX_SC_MISC_FUNC_OTP_FUSE_READ;
-+	hdr->size = 2;
-+
-+	msg.word = VPU_DISABLE_BITS;
-+
-+	ret = imx_scu_call_rpc(ipc, &msg, true);
-+	if (ret)
-+		return 0;
-+
-+	imx8q_fuse = msg.word;
-+	fuse_got = 1;
-+	return imx8q_fuse;
-+}
-+
-+bool vpu_imx8q_check_codec(enum vpu_core_type type)
-+{
-+	u32 fuse = vpu_imx8q_get_fuse();
-+
-+	if (type == VPU_CORE_TYPE_ENC) {
-+		if (fuse & VPU_ENCODER_MASK)
-+			return false;
-+	} else if (type == VPU_CORE_TYPE_DEC) {
-+		fuse >>= VPU_IMX_DECODER_FUSE_OFFSET;
-+		fuse &= VPU_DECODER_MASK;
-+
-+		if (fuse == VPU_DECODER_MASK)
-+			return false;
-+	}
-+	return true;
-+}
-+
-+bool vpu_imx8q_check_fmt(enum vpu_core_type type, u32 pixelfmt)
-+{
-+	u32 fuse = vpu_imx8q_get_fuse();
-+
-+	if (type == VPU_CORE_TYPE_DEC) {
-+		fuse >>= VPU_IMX_DECODER_FUSE_OFFSET;
-+		fuse &= VPU_DECODER_MASK;
-+
-+		if (fuse == VPU_DECODER_HEVC_MASK && pixelfmt == V4L2_PIX_FMT_HEVC)
-+			return false;
-+		if (fuse == VPU_DECODER_H264_MASK && pixelfmt == V4L2_PIX_FMT_H264)
-+			return false;
-+		if (fuse == VPU_DECODER_MASK)
-+			return false;
++	for (i = 0; i < bytesused; i++) {
++		val = (val << 8) | vpu_helper_read_byte(stream_buffer, offset + i);
++		if (i < start_code_size - 1)
++			continue;
++		if (val == start_code) {
++			ret = i + 1 - start_code_size;
++			break;
++		}
 +	}
 +
-+	return true;
-+}
-+#else
-+bool vpu_imx8q_check_codec(enum vpu_core_type type)
-+{
-+	return true;
++	return ret;
 +}
 +
-+bool vpu_imx8q_check_fmt(enum vpu_core_type type, u32 pixelfmt)
++int vpu_find_dst_by_src(struct vpu_pair *pairs, u32 cnt, u32 src)
 +{
-+	return true;
++	u32 i;
++
++	if (!pairs || !cnt)
++		return -EINVAL;
++
++	for (i = 0; i < cnt; i++) {
++		if (pairs[i].src == src)
++			return pairs[i].dst;
++	}
++
++	return -EINVAL;
 +}
-+#endif
-diff --git a/drivers/media/platform/amphion/vpu_imx8q.h b/drivers/media/platform/amphion/vpu_imx8q.h
++
++int vpu_find_src_by_dst(struct vpu_pair *pairs, u32 cnt, u32 dst)
++{
++	u32 i;
++
++	if (!pairs || !cnt)
++		return -EINVAL;
++
++	for (i = 0; i < cnt; i++) {
++		if (pairs[i].dst == dst)
++			return pairs[i].src;
++	}
++
++	return -EINVAL;
++}
+diff --git a/drivers/media/platform/amphion/vpu_helpers.h b/drivers/media/platform/amphion/vpu_helpers.h
 new file mode 100644
-index 000000000000..d63a2747e29c
+index 000000000000..3676cc83e85b
 --- /dev/null
-+++ b/drivers/media/platform/amphion/vpu_imx8q.h
-@@ -0,0 +1,115 @@
++++ b/drivers/media/platform/amphion/vpu_helpers.h
+@@ -0,0 +1,74 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright 2020-2021 NXP
 + */
 +
-+#ifndef _AMPHION_VPU_IMX8Q_H
-+#define _AMPHION_VPU_IMX8Q_H
++#ifndef _AMPHION_VPU_HELPERS_H
++#define _AMPHION_VPU_HELPERS_H
 +
-+#define SCB_XREG_SLV_BASE                               0x00000000
-+#define SCB_SCB_BLK_CTRL                                0x00070000
-+#define SCB_BLK_CTRL_XMEM_RESET_SET                     0x00000090
-+#define SCB_BLK_CTRL_CACHE_RESET_SET                    0x000000A0
-+#define SCB_BLK_CTRL_CACHE_RESET_CLR                    0x000000A4
-+#define SCB_BLK_CTRL_SCB_CLK_ENABLE_SET                 0x00000100
-+
-+#define XMEM_CONTROL                                    0x00041000
-+
-+#define	MC_CACHE_0_BASE					0x00060000
-+#define	MC_CACHE_1_BASE					0x00068000
-+
-+#define DEC_MFD_XREG_SLV_BASE                           0x00180000
-+#define ENC_MFD_XREG_SLV_0_BASE				0x00800000
-+#define ENC_MFD_XREG_SLV_1_BASE				0x00A00000
-+
-+#define MFD_HIF                                         0x0001C000
-+#define MFD_HIF_MSD_REG_INTERRUPT_STATUS                0x00000018
-+#define MFD_SIF                                         0x0001D000
-+#define MFD_SIF_CTRL_STATUS                             0x000000F0
-+#define MFD_SIF_INTR_STATUS                             0x000000F4
-+#define MFD_MCX                                         0x00020800
-+#define MFD_MCX_OFF                                     0x00000020
-+#define MFD_PIX_IF					0x00020000
-+
-+#define MFD_BLK_CTRL                                    0x00030000
-+#define MFD_BLK_CTRL_MFD_SYS_RESET_SET                  0x00000000
-+#define MFD_BLK_CTRL_MFD_SYS_RESET_CLR                  0x00000004
-+#define MFD_BLK_CTRL_MFD_SYS_CLOCK_ENABLE_SET           0x00000100
-+#define MFD_BLK_CTRL_MFD_SYS_CLOCK_ENABLE_CLR           0x00000104
-+
-+#define VID_API_NUM_STREAMS				8
-+#define VID_API_MAX_BUF_PER_STR				3
-+#define VID_API_MAX_NUM_MVC_VIEWS			4
-+#define MEDIAIP_MAX_NUM_MALONES				2
-+#define MEDIAIP_MAX_NUM_MALONE_IRQ_PINS			2
-+#define MEDIAIP_MAX_NUM_WINDSORS			1
-+#define MEDIAIP_MAX_NUM_WINDSOR_IRQ_PINS		2
-+#define MEDIAIP_MAX_NUM_CMD_IRQ_PINS			2
-+#define MEDIAIP_MAX_NUM_MSG_IRQ_PINS			1
-+#define MEDIAIP_MAX_NUM_TIMER_IRQ_PINS			4
-+#define MEDIAIP_MAX_NUM_TIMER_IRQ_SLOTS			4
-+
-+#define WINDSOR_PAL_IRQ_PIN_L				0x4
-+#define WINDSOR_PAL_IRQ_PIN_H				0x5
-+
-+struct vpu_rpc_system_config {
-+	u32 cfg_cookie;
-+
-+	u32 num_malones;
-+	u32 malone_base_addr[MEDIAIP_MAX_NUM_MALONES];
-+	u32 hif_offset[MEDIAIP_MAX_NUM_MALONES];
-+	u32 malone_irq_pin[MEDIAIP_MAX_NUM_MALONES][MEDIAIP_MAX_NUM_MALONE_IRQ_PINS];
-+	u32 malone_irq_target[MEDIAIP_MAX_NUM_MALONES][MEDIAIP_MAX_NUM_MALONE_IRQ_PINS];
-+
-+	u32 num_windsors;
-+	u32 windsor_base_addr[MEDIAIP_MAX_NUM_WINDSORS];
-+	u32 windsor_irq_pin[MEDIAIP_MAX_NUM_WINDSORS][MEDIAIP_MAX_NUM_WINDSOR_IRQ_PINS];
-+	u32 windsor_irq_target[MEDIAIP_MAX_NUM_WINDSORS][MEDIAIP_MAX_NUM_WINDSOR_IRQ_PINS];
-+
-+	u32 cmd_irq_pin[MEDIAIP_MAX_NUM_CMD_IRQ_PINS];
-+	u32 cmd_irq_target[MEDIAIP_MAX_NUM_CMD_IRQ_PINS];
-+
-+	u32 msg_irq_pin[MEDIAIP_MAX_NUM_MSG_IRQ_PINS];
-+	u32 msg_irq_target[MEDIAIP_MAX_NUM_MSG_IRQ_PINS];
-+
-+	u32 sys_clk_freq;
-+	u32 num_timers;
-+	u32 timer_base_addr;
-+	u32 timer_irq_pin[MEDIAIP_MAX_NUM_TIMER_IRQ_PINS];
-+	u32 timer_irq_target[MEDIAIP_MAX_NUM_TIMER_IRQ_PINS];
-+	u32 timer_slots[MEDIAIP_MAX_NUM_TIMER_IRQ_SLOTS];
-+
-+	u32 gic_base_addr;
-+	u32 uart_base_addr;
-+
-+	u32 dpv_base_addr;
-+	u32 dpv_irq_pin;
-+	u32 dpv_irq_target;
-+
-+	u32 pixif_base_addr;
-+
-+	u32 pal_trace_level;
-+	u32 pal_trace_destination;
-+
-+	u32 pal_trace_level1;
-+	u32 pal_trace_destination1;
-+
-+	u32 heap_base;
-+	u32 heap_size;
-+
-+	u32 cache_base_addr[2];
++struct vpu_pair {
++	u32 src;
++	u32 dst;
 +};
 +
-+int vpu_imx8q_setup_dec(struct vpu_dev *vpu);
-+int vpu_imx8q_setup_enc(struct vpu_dev *vpu);
-+int vpu_imx8q_setup(struct vpu_dev *vpu);
-+int vpu_imx8q_reset(struct vpu_dev *vpu);
-+int vpu_imx8q_set_system_cfg_common(struct vpu_rpc_system_config *config, u32 regs, u32 core_id);
-+int vpu_imx8q_boot_core(struct vpu_core *core);
-+int vpu_imx8q_get_power_state(struct vpu_core *core);
-+int vpu_imx8q_on_firmware_loaded(struct vpu_core *core);
-+u32 vpu_imx8q_check_memory_region(dma_addr_t base, dma_addr_t addr, u32 size);
-+bool vpu_imx8q_check_codec(enum vpu_core_type type);
-+bool vpu_imx8q_check_fmt(enum vpu_core_type type, u32 pixelfmt);
++#define MAKE_TIMESTAMP(s, ns)		(((s32)(s) * NSEC_PER_SEC) + (ns))
++#define VPU_INVALID_TIMESTAMP		MAKE_TIMESTAMP(-1, 0)
++
++int vpu_helper_find_in_array_u8(const u8 *array, u32 size, u32 x);
++bool vpu_helper_check_type(struct vpu_inst *inst, u32 type);
++const struct vpu_format *vpu_helper_find_format(struct vpu_inst *inst, u32 type, u32 pixelfmt);
++const struct vpu_format *vpu_helper_enum_format(struct vpu_inst *inst, u32 type, int index);
++u32 vpu_helper_valid_frame_width(struct vpu_inst *inst, u32 width);
++u32 vpu_helper_valid_frame_height(struct vpu_inst *inst, u32 height);
++u32 vpu_helper_get_plane_size(u32 fmt, u32 width, u32 height, int plane_no,
++			      u32 stride, u32 interlaced, u32 *pbl);
++u32 vpu_helper_copy_from_stream_buffer(struct vpu_buffer *stream_buffer,
++				       u32 *rptr, u32 size, void *dst);
++u32 vpu_helper_copy_to_stream_buffer(struct vpu_buffer *stream_buffer,
++				     u32 *wptr, u32 size, void *src);
++u32 vpu_helper_memset_stream_buffer(struct vpu_buffer *stream_buffer,
++				    u32 *wptr, u8 val, u32 size);
++u32 vpu_helper_get_free_space(struct vpu_inst *inst);
++u32 vpu_helper_get_used_space(struct vpu_inst *inst);
++int vpu_helper_g_volatile_ctrl(struct v4l2_ctrl *ctrl);
++void vpu_helper_get_kmp_next(const u8 *pattern, int *next, int size);
++int vpu_helper_kmp_search(u8 *s, int s_len, const u8 *p, int p_len, int *next);
++int vpu_helper_kmp_search_in_stream_buffer(struct vpu_buffer *stream_buffer,
++					   u32 offset, int bytesused,
++					   const u8 *p, int p_len, int *next);
++int vpu_helper_find_startcode(struct vpu_buffer *stream_buffer,
++			      u32 pixelformat, u32 offset, u32 bytesused);
++
++static inline u32 vpu_helper_step_walk(struct vpu_buffer *stream_buffer, u32 pos, u32 step)
++{
++	pos += step;
++	if (pos > stream_buffer->phys + stream_buffer->length)
++		pos -= stream_buffer->length;
++
++	return pos;
++}
++
++static inline u8 vpu_helper_read_byte(struct vpu_buffer *stream_buffer, u32 pos)
++{
++	u8 *pdata = (u8 *)stream_buffer->virt;
++
++	return pdata[pos % stream_buffer->length];
++}
++
++int vpu_color_check_primaries(u32 primaries);
++int vpu_color_check_transfers(u32 transfers);
++int vpu_color_check_matrix(u32 matrix);
++int vpu_color_check_full_range(u32 full_range);
++u32 vpu_color_cvrt_primaries_v2i(u32 primaries);
++u32 vpu_color_cvrt_primaries_i2v(u32 primaries);
++u32 vpu_color_cvrt_transfers_v2i(u32 transfers);
++u32 vpu_color_cvrt_transfers_i2v(u32 transfers);
++u32 vpu_color_cvrt_matrix_v2i(u32 matrix);
++u32 vpu_color_cvrt_matrix_i2v(u32 matrix);
++u32 vpu_color_cvrt_full_range_v2i(u32 full_range);
++u32 vpu_color_cvrt_full_range_i2v(u32 full_range);
++int vpu_color_get_default(u32 primaries, u32 *ptransfers, u32 *pmatrix, u32 *pfull_range);
++
++int vpu_find_dst_by_src(struct vpu_pair *pairs, u32 cnt, u32 src);
++int vpu_find_src_by_dst(struct vpu_pair *pairs, u32 cnt, u32 dst);
++#endif
+diff --git a/drivers/media/platform/amphion/vpu_v4l2.c b/drivers/media/platform/amphion/vpu_v4l2.c
+new file mode 100644
+index 000000000000..cc3674dafda0
+--- /dev/null
++++ b/drivers/media/platform/amphion/vpu_v4l2.c
+@@ -0,0 +1,712 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2020-2021 NXP
++ */
++
++#include <linux/init.h>
++#include <linux/interconnect.h>
++#include <linux/ioctl.h>
++#include <linux/list.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/pm_runtime.h>
++#include <linux/videodev2.h>
++#include <media/v4l2-device.h>
++#include <media/v4l2-event.h>
++#include <media/v4l2-mem2mem.h>
++#include <media/v4l2-ioctl.h>
++#include <media/videobuf2-v4l2.h>
++#include <media/videobuf2-dma-contig.h>
++#include <media/videobuf2-vmalloc.h>
++#include "vpu.h"
++#include "vpu_core.h"
++#include "vpu_v4l2.h"
++#include "vpu_msgs.h"
++#include "vpu_helpers.h"
++
++void vpu_inst_lock(struct vpu_inst *inst)
++{
++	mutex_lock(&inst->lock);
++}
++
++void vpu_inst_unlock(struct vpu_inst *inst)
++{
++	mutex_unlock(&inst->lock);
++}
++
++dma_addr_t vpu_get_vb_phy_addr(struct vb2_buffer *vb, u32 plane_no)
++{
++	if (plane_no >= vb->num_planes)
++		return 0;
++	return vb2_dma_contig_plane_dma_addr(vb, plane_no) +
++			vb->planes[plane_no].data_offset;
++}
++
++unsigned int vpu_get_vb_length(struct vb2_buffer *vb, u32 plane_no)
++{
++	if (plane_no >= vb->num_planes)
++		return 0;
++	return vb2_plane_size(vb, plane_no) - vb->planes[plane_no].data_offset;
++}
++
++void vpu_set_buffer_state(struct vb2_v4l2_buffer *vbuf, unsigned int state)
++{
++	struct vpu_vb2_buffer *vpu_buf = to_vpu_vb2_buffer(vbuf);
++
++	vpu_buf->state = state;
++}
++
++unsigned int vpu_get_buffer_state(struct vb2_v4l2_buffer *vbuf)
++{
++	struct vpu_vb2_buffer *vpu_buf = to_vpu_vb2_buffer(vbuf);
++
++	return vpu_buf->state;
++}
++
++void vpu_v4l2_set_error(struct vpu_inst *inst)
++{
++	struct vb2_queue *src_q;
++	struct vb2_queue *dst_q;
++
++	vpu_inst_lock(inst);
++	dev_err(inst->dev, "some error occurs in codec\n");
++	if (inst->fh.m2m_ctx) {
++		src_q = v4l2_m2m_get_src_vq(inst->fh.m2m_ctx);
++		dst_q = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
++		if (src_q)
++			src_q->error = 1;
++		if (dst_q)
++			dst_q->error = 1;
++	}
++	vpu_inst_unlock(inst);
++}
++
++int vpu_notify_eos(struct vpu_inst *inst)
++{
++	static const struct v4l2_event ev = {
++		.id = 0,
++		.type = V4L2_EVENT_EOS
++	};
++
++	vpu_trace(inst->dev, "[%d]\n", inst->id);
++	v4l2_event_queue_fh(&inst->fh, &ev);
++
++	return 0;
++}
++
++int vpu_notify_source_change(struct vpu_inst *inst)
++{
++	static const struct v4l2_event ev = {
++		.id = 0,
++		.type = V4L2_EVENT_SOURCE_CHANGE,
++		.u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION
++	};
++
++	vpu_trace(inst->dev, "[%d]\n", inst->id);
++	v4l2_event_queue_fh(&inst->fh, &ev);
++	return 0;
++}
++
++int vpu_set_last_buffer_dequeued(struct vpu_inst *inst)
++{
++	struct vb2_queue *q;
++
++	if (!inst || !inst->fh.m2m_ctx)
++		return -EINVAL;
++
++	q = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
++	if (!list_empty(&q->done_list))
++		return -EINVAL;
++
++	if (q->last_buffer_dequeued)
++		return 0;
++	vpu_trace(inst->dev, "last buffer dequeued\n");
++	q->last_buffer_dequeued = true;
++	wake_up(&q->done_wq);
++	vpu_notify_eos(inst);
++	return 0;
++}
++
++const struct vpu_format *vpu_try_fmt_common(struct vpu_inst *inst, struct v4l2_format *f)
++{
++	struct v4l2_pix_format_mplane *pixmp = &f->fmt.pix_mp;
++	u32 type = f->type;
++	u32 stride = 1;
++	u32 bytesperline;
++	u32 sizeimage;
++	const struct vpu_format *fmt;
++	const struct vpu_core_resources *res;
++	int i;
++
++	fmt = vpu_helper_find_format(inst, type, pixmp->pixelformat);
++	if (!fmt) {
++		fmt = vpu_helper_enum_format(inst, type, 0);
++		if (!fmt)
++			return NULL;
++		pixmp->pixelformat = fmt->pixfmt;
++	}
++
++	res = vpu_get_resource(inst);
++	if (res)
++		stride = res->stride;
++	if (pixmp->width)
++		pixmp->width = vpu_helper_valid_frame_width(inst, pixmp->width);
++	if (pixmp->height)
++		pixmp->height = vpu_helper_valid_frame_height(inst, pixmp->height);
++	pixmp->flags = fmt->flags;
++	pixmp->num_planes = fmt->num_planes;
++	if (pixmp->field == V4L2_FIELD_ANY)
++		pixmp->field = V4L2_FIELD_NONE;
++	for (i = 0; i < pixmp->num_planes; i++) {
++		bytesperline = max_t(s32, pixmp->plane_fmt[i].bytesperline, 0);
++		sizeimage = vpu_helper_get_plane_size(pixmp->pixelformat,
++						      pixmp->width,
++						      pixmp->height,
++						      i,
++						      stride,
++						      pixmp->field > V4L2_FIELD_NONE ? 1 : 0,
++						      &bytesperline);
++		sizeimage = max_t(s32, pixmp->plane_fmt[i].sizeimage, sizeimage);
++		pixmp->plane_fmt[i].bytesperline = bytesperline;
++		pixmp->plane_fmt[i].sizeimage = sizeimage;
++	}
++
++	return fmt;
++}
++
++static bool vpu_check_ready(struct vpu_inst *inst, u32 type)
++{
++	if (!inst)
++		return false;
++	if (inst->state == VPU_CODEC_STATE_DEINIT || inst->id < 0)
++		return false;
++	if (!inst->ops->check_ready)
++		return true;
++	return call_vop(inst, check_ready, type);
++}
++
++int vpu_process_output_buffer(struct vpu_inst *inst)
++{
++	struct v4l2_m2m_buffer *buf = NULL;
++	struct vb2_v4l2_buffer *vbuf = NULL;
++
++	if (!inst || !inst->fh.m2m_ctx)
++		return -EINVAL;
++
++	if (!vpu_check_ready(inst, inst->out_format.type))
++		return -EINVAL;
++
++	v4l2_m2m_for_each_src_buf(inst->fh.m2m_ctx, buf) {
++		vbuf = &buf->vb;
++		if (vpu_get_buffer_state(vbuf) == VPU_BUF_STATE_IDLE)
++			break;
++		vbuf = NULL;
++	}
++
++	if (!vbuf)
++		return -EINVAL;
++
++	dev_dbg(inst->dev, "[%d]frame id = %d / %d\n",
++		inst->id, vbuf->sequence, inst->sequence);
++	return call_vop(inst, process_output, &vbuf->vb2_buf);
++}
++
++int vpu_process_capture_buffer(struct vpu_inst *inst)
++{
++	struct v4l2_m2m_buffer *buf = NULL;
++	struct vb2_v4l2_buffer *vbuf = NULL;
++
++	if (!inst || !inst->fh.m2m_ctx)
++		return -EINVAL;
++
++	if (!vpu_check_ready(inst, inst->cap_format.type))
++		return -EINVAL;
++
++	v4l2_m2m_for_each_dst_buf(inst->fh.m2m_ctx, buf) {
++		vbuf = &buf->vb;
++		if (vpu_get_buffer_state(vbuf) == VPU_BUF_STATE_IDLE)
++			break;
++		vbuf = NULL;
++	}
++	if (!vbuf)
++		return -EINVAL;
++
++	return call_vop(inst, process_capture, &vbuf->vb2_buf);
++}
++
++struct vb2_v4l2_buffer *vpu_find_buf_by_sequence(struct vpu_inst *inst, u32 type, u32 sequence)
++{
++	struct v4l2_m2m_buffer *buf = NULL;
++	struct vb2_v4l2_buffer *vbuf = NULL;
++
++	if (!inst || !inst->fh.m2m_ctx)
++		return NULL;
++
++	if (V4L2_TYPE_IS_OUTPUT(type)) {
++		v4l2_m2m_for_each_src_buf(inst->fh.m2m_ctx, buf) {
++			vbuf = &buf->vb;
++			if (vbuf->sequence == sequence)
++				break;
++			vbuf = NULL;
++		}
++	} else {
++		v4l2_m2m_for_each_dst_buf(inst->fh.m2m_ctx, buf) {
++			vbuf = &buf->vb;
++			if (vbuf->sequence == sequence)
++				break;
++			vbuf = NULL;
++		}
++	}
++
++	return vbuf;
++}
++
++struct vb2_v4l2_buffer *vpu_find_buf_by_idx(struct vpu_inst *inst, u32 type, u32 idx)
++{
++	struct v4l2_m2m_buffer *buf = NULL;
++	struct vb2_v4l2_buffer *vbuf = NULL;
++
++	if (!inst || !inst->fh.m2m_ctx)
++		return NULL;
++
++	if (V4L2_TYPE_IS_OUTPUT(type)) {
++		v4l2_m2m_for_each_src_buf(inst->fh.m2m_ctx, buf) {
++			vbuf = &buf->vb;
++			if (vbuf->vb2_buf.index == idx)
++				break;
++			vbuf = NULL;
++		}
++	} else {
++		v4l2_m2m_for_each_dst_buf(inst->fh.m2m_ctx, buf) {
++			vbuf = &buf->vb;
++			if (vbuf->vb2_buf.index == idx)
++				break;
++			vbuf = NULL;
++		}
++	}
++
++	return vbuf;
++}
++
++int vpu_get_num_buffers(struct vpu_inst *inst, u32 type)
++{
++	struct vb2_queue *q;
++
++	if (!inst || !inst->fh.m2m_ctx)
++		return -EINVAL;
++
++	if (V4L2_TYPE_IS_OUTPUT(type))
++		q = v4l2_m2m_get_src_vq(inst->fh.m2m_ctx);
++	else
++		q = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
++
++	return q->num_buffers;
++}
++
++static void vpu_m2m_device_run(void *priv)
++{
++}
++
++static void vpu_m2m_job_abort(void *priv)
++{
++	struct vpu_inst *inst = priv;
++	struct v4l2_m2m_ctx *m2m_ctx = inst->fh.m2m_ctx;
++
++	v4l2_m2m_job_finish(m2m_ctx->m2m_dev, m2m_ctx);
++}
++
++static const struct v4l2_m2m_ops vpu_m2m_ops = {
++	.device_run = vpu_m2m_device_run,
++	.job_abort = vpu_m2m_job_abort
++};
++
++static int vpu_vb2_queue_setup(struct vb2_queue *vq,
++			       unsigned int *buf_count,
++			       unsigned int *plane_count,
++			       unsigned int psize[],
++			       struct device *allocators[])
++{
++	struct vpu_inst *inst = vb2_get_drv_priv(vq);
++	struct vpu_format *cur_fmt;
++	int i;
++
++	cur_fmt = vpu_get_format(inst, vq->type);
++
++	if (*plane_count) {
++		if (*plane_count != cur_fmt->num_planes)
++			return -EINVAL;
++		for (i = 0; i < cur_fmt->num_planes; i++) {
++			if (psize[i] < cur_fmt->sizeimage[i])
++				return -EINVAL;
++		}
++		return 0;
++	}
++
++	*plane_count = cur_fmt->num_planes;
++	for (i = 0; i < cur_fmt->num_planes; i++)
++		psize[i] = cur_fmt->sizeimage[i];
++
++	return 0;
++}
++
++static int vpu_vb2_buf_init(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++
++	vpu_set_buffer_state(vbuf, VPU_BUF_STATE_IDLE);
++	return 0;
++}
++
++static int vpu_vb2_buf_out_validate(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++
++	vbuf->field = V4L2_FIELD_NONE;
++
++	return 0;
++}
++
++static int vpu_vb2_buf_prepare(struct vb2_buffer *vb)
++{
++	struct vpu_inst *inst = vb2_get_drv_priv(vb->vb2_queue);
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct vpu_format *cur_fmt;
++	u32 i;
++
++	cur_fmt = vpu_get_format(inst, vb->type);
++	for (i = 0; i < cur_fmt->num_planes; i++) {
++		if (vpu_get_vb_length(vb, i) < cur_fmt->sizeimage[i]) {
++			dev_dbg(inst->dev, "[%d] %s buf[%d] is invalid\n",
++				inst->id, vpu_type_name(vb->type), vb->index);
++			vpu_set_buffer_state(vbuf, VPU_BUF_STATE_ERROR);
++		}
++	}
++
++	return 0;
++}
++
++static void vpu_vb2_buf_finish(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct vpu_inst *inst = vb2_get_drv_priv(vb->vb2_queue);
++	struct vb2_queue *q = vb->vb2_queue;
++
++	if (vbuf->flags & V4L2_BUF_FLAG_LAST)
++		vpu_notify_eos(inst);
++
++	if (list_empty(&q->done_list))
++		call_void_vop(inst, on_queue_empty, q->type);
++}
++
++void vpu_vb2_buffers_return(struct vpu_inst *inst, unsigned int type, enum vb2_buffer_state state)
++{
++	struct vb2_v4l2_buffer *buf;
++
++	if (V4L2_TYPE_IS_OUTPUT(type)) {
++		while ((buf = v4l2_m2m_src_buf_remove(inst->fh.m2m_ctx)))
++			v4l2_m2m_buf_done(buf, state);
++	} else {
++		while ((buf = v4l2_m2m_dst_buf_remove(inst->fh.m2m_ctx)))
++			v4l2_m2m_buf_done(buf, state);
++	}
++}
++
++static int vpu_vb2_start_streaming(struct vb2_queue *q, unsigned int count)
++{
++	struct vpu_inst *inst = vb2_get_drv_priv(q);
++	struct vpu_format *fmt = vpu_get_format(inst, q->type);
++	int ret;
++
++	vpu_inst_unlock(inst);
++	ret = vpu_inst_register(inst);
++	vpu_inst_lock(inst);
++	if (ret) {
++		vpu_vb2_buffers_return(inst, q->type, VB2_BUF_STATE_QUEUED);
++		return ret;
++	}
++
++	vpu_trace(inst->dev, "[%d] %s %c%c%c%c %dx%d %u(%u) %u(%u) %u(%u) %d\n",
++		  inst->id, vpu_type_name(q->type),
++		  fmt->pixfmt,
++		  fmt->pixfmt >> 8,
++		  fmt->pixfmt >> 16,
++		  fmt->pixfmt >> 24,
++		  fmt->width, fmt->height,
++		  fmt->sizeimage[0], fmt->bytesperline[0],
++		  fmt->sizeimage[1], fmt->bytesperline[1],
++		  fmt->sizeimage[2], fmt->bytesperline[2],
++		  q->num_buffers);
++	call_void_vop(inst, start, q->type);
++	vb2_clear_last_buffer_dequeued(q);
++
++	return 0;
++}
++
++static void vpu_vb2_stop_streaming(struct vb2_queue *q)
++{
++	struct vpu_inst *inst = vb2_get_drv_priv(q);
++
++	vpu_trace(inst->dev, "[%d] %s\n", inst->id, vpu_type_name(q->type));
++
++	call_void_vop(inst, stop, q->type);
++	vpu_vb2_buffers_return(inst, q->type, VB2_BUF_STATE_ERROR);
++	if (V4L2_TYPE_IS_OUTPUT(q->type))
++		inst->sequence = 0;
++}
++
++static void vpu_vb2_buf_queue(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct vpu_inst *inst = vb2_get_drv_priv(vb->vb2_queue);
++
++	if (V4L2_TYPE_IS_OUTPUT(vb->type)) {
++		vbuf->sequence = inst->sequence++;
++		if ((s64)vb->timestamp < 0)
++			vb->timestamp = VPU_INVALID_TIMESTAMP;
++	}
++
++	v4l2_m2m_buf_queue(inst->fh.m2m_ctx, vbuf);
++	vpu_process_output_buffer(inst);
++	vpu_process_capture_buffer(inst);
++}
++
++static const struct vb2_ops vpu_vb2_ops = {
++	.queue_setup        = vpu_vb2_queue_setup,
++	.buf_init           = vpu_vb2_buf_init,
++	.buf_out_validate   = vpu_vb2_buf_out_validate,
++	.buf_prepare        = vpu_vb2_buf_prepare,
++	.buf_finish         = vpu_vb2_buf_finish,
++	.start_streaming    = vpu_vb2_start_streaming,
++	.stop_streaming     = vpu_vb2_stop_streaming,
++	.buf_queue          = vpu_vb2_buf_queue,
++	.wait_prepare       = vb2_ops_wait_prepare,
++	.wait_finish        = vb2_ops_wait_finish,
++};
++
++static int vpu_m2m_queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
++{
++	struct vpu_inst *inst = priv;
++	int ret;
++
++	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
++	inst->out_format.type = src_vq->type;
++	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
++	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
++	src_vq->ops = &vpu_vb2_ops;
++	src_vq->mem_ops = &vb2_dma_contig_memops;
++	if (inst->type == VPU_CORE_TYPE_DEC && inst->use_stream_buffer)
++		src_vq->mem_ops = &vb2_vmalloc_memops;
++	src_vq->drv_priv = inst;
++	src_vq->buf_struct_size = sizeof(struct vpu_vb2_buffer);
++	src_vq->min_buffers_needed = 1;
++	src_vq->dev = inst->vpu->dev;
++	src_vq->lock = &inst->lock;
++	ret = vb2_queue_init(src_vq);
++	if (ret)
++		return ret;
++
++	dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
++	inst->cap_format.type = dst_vq->type;
++	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
++	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
++	dst_vq->ops = &vpu_vb2_ops;
++	dst_vq->mem_ops = &vb2_dma_contig_memops;
++	if (inst->type == VPU_CORE_TYPE_ENC && inst->use_stream_buffer)
++		dst_vq->mem_ops = &vb2_vmalloc_memops;
++	dst_vq->drv_priv = inst;
++	dst_vq->buf_struct_size = sizeof(struct vpu_vb2_buffer);
++	dst_vq->min_buffers_needed = 1;
++	dst_vq->dev = inst->vpu->dev;
++	dst_vq->lock = &inst->lock;
++	ret = vb2_queue_init(dst_vq);
++	if (ret) {
++		vb2_queue_release(src_vq);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int vpu_v4l2_release(struct vpu_inst *inst)
++{
++	vpu_trace(inst->vpu->dev, "%p\n", inst);
++
++	vpu_release_core(inst->core);
++	put_device(inst->dev);
++
++	if (inst->workqueue) {
++		cancel_work_sync(&inst->msg_work);
++		destroy_workqueue(inst->workqueue);
++		inst->workqueue = NULL;
++	}
++
++	v4l2_ctrl_handler_free(&inst->ctrl_handler);
++	mutex_destroy(&inst->lock);
++	v4l2_fh_del(&inst->fh);
++	v4l2_fh_exit(&inst->fh);
++
++	call_void_vop(inst, cleanup);
++
++	return 0;
++}
++
++int vpu_v4l2_open(struct file *file, struct vpu_inst *inst)
++{
++	struct vpu_dev *vpu = video_drvdata(file);
++	struct vpu_func *func;
++	int ret = 0;
++
++	if (!inst || !inst->ops)
++		return -EINVAL;
++
++	if (inst->type == VPU_CORE_TYPE_ENC)
++		func = &vpu->encoder;
++	else
++		func = &vpu->decoder;
++
++	atomic_set(&inst->ref_count, 0);
++	vpu_inst_get(inst);
++	inst->vpu = vpu;
++	inst->core = vpu_request_core(vpu, inst->type);
++	if (inst->core)
++		inst->dev = get_device(inst->core->dev);
++	mutex_init(&inst->lock);
++	INIT_LIST_HEAD(&inst->cmd_q);
++	inst->id = VPU_INST_NULL_ID;
++	inst->release = vpu_v4l2_release;
++	inst->pid = current->pid;
++	inst->tgid = current->tgid;
++	inst->min_buffer_cap = 2;
++	inst->min_buffer_out = 2;
++	v4l2_fh_init(&inst->fh, func->vfd);
++	v4l2_fh_add(&inst->fh);
++
++	ret = call_vop(inst, ctrl_init);
++	if (ret)
++		goto error;
++
++	inst->fh.m2m_ctx = v4l2_m2m_ctx_init(func->m2m_dev, inst, vpu_m2m_queue_init);
++	if (IS_ERR(inst->fh.m2m_ctx)) {
++		dev_err(vpu->dev, "v4l2_m2m_ctx_init fail\n");
++		ret = PTR_ERR(inst->fh.m2m_ctx);
++		goto error;
++	}
++
++	inst->fh.ctrl_handler = &inst->ctrl_handler;
++	file->private_data = &inst->fh;
++	inst->state = VPU_CODEC_STATE_DEINIT;
++	inst->workqueue = alloc_workqueue("vpu_inst", WQ_UNBOUND | WQ_MEM_RECLAIM, 1);
++	if (inst->workqueue) {
++		INIT_WORK(&inst->msg_work, vpu_inst_run_work);
++		ret = kfifo_init(&inst->msg_fifo,
++				 inst->msg_buffer,
++				 rounddown_pow_of_two(sizeof(inst->msg_buffer)));
++		if (ret) {
++			destroy_workqueue(inst->workqueue);
++			inst->workqueue = NULL;
++		}
++	}
++	vpu_trace(vpu->dev, "tgid = %d, pid = %d, type = %s, inst = %p\n",
++		  inst->tgid, inst->pid, vpu_core_type_desc(inst->type), inst);
++
++	return 0;
++error:
++	vpu_inst_put(inst);
++	return ret;
++}
++
++int vpu_v4l2_close(struct file *file)
++{
++	struct vpu_dev *vpu = video_drvdata(file);
++	struct vpu_inst *inst = to_inst(file);
++
++	vpu_trace(vpu->dev, "tgid = %d, pid = %d, inst = %p\n", inst->tgid, inst->pid, inst);
++
++	vpu_inst_lock(inst);
++	if (inst->fh.m2m_ctx) {
++		v4l2_m2m_ctx_release(inst->fh.m2m_ctx);
++		inst->fh.m2m_ctx = NULL;
++	}
++	vpu_inst_unlock(inst);
++
++	call_void_vop(inst, release);
++	vpu_inst_unregister(inst);
++	vpu_inst_put(inst);
++
++	return 0;
++}
++
++int vpu_add_func(struct vpu_dev *vpu, struct vpu_func *func)
++{
++	struct video_device *vfd;
++	int ret;
++
++	if (!vpu || !func)
++		return -EINVAL;
++
++	if (func->vfd)
++		return 0;
++
++	func->m2m_dev = v4l2_m2m_init(&vpu_m2m_ops);
++	if (IS_ERR(func->m2m_dev)) {
++		dev_err(vpu->dev, "v4l2_m2m_init fail\n");
++		func->vfd = NULL;
++		return PTR_ERR(func->m2m_dev);
++	}
++
++	vfd = video_device_alloc();
++	if (!vfd) {
++		v4l2_m2m_release(func->m2m_dev);
++		dev_err(vpu->dev, "alloc vpu decoder video device fail\n");
++		return -ENOMEM;
++	}
++	vfd->release = video_device_release;
++	vfd->vfl_dir = VFL_DIR_M2M;
++	vfd->v4l2_dev = &vpu->v4l2_dev;
++	vfd->device_caps = V4L2_CAP_VIDEO_M2M_MPLANE | V4L2_CAP_STREAMING;
++	if (func->type == VPU_CORE_TYPE_ENC) {
++		strscpy(vfd->name, "amphion-vpu-encoder", sizeof(vfd->name));
++		vfd->fops = venc_get_fops();
++		vfd->ioctl_ops = venc_get_ioctl_ops();
++	} else {
++		strscpy(vfd->name, "amphion-vpu-decoder", sizeof(vfd->name));
++		vfd->fops = vdec_get_fops();
++		vfd->ioctl_ops = vdec_get_ioctl_ops();
++	}
++
++	ret = video_register_device(vfd, VFL_TYPE_VIDEO, -1);
++	if (ret) {
++		video_device_release(vfd);
++		v4l2_m2m_release(func->m2m_dev);
++		return ret;
++	}
++	video_set_drvdata(vfd, vpu);
++	func->vfd = vfd;
++
++	ret = v4l2_m2m_register_media_controller(func->m2m_dev, func->vfd, func->function);
++	if (ret) {
++		v4l2_m2m_release(func->m2m_dev);
++		func->m2m_dev = NULL;
++		video_unregister_device(func->vfd);
++		func->vfd = NULL;
++		return ret;
++	}
++
++	return 0;
++}
++
++void vpu_remove_func(struct vpu_func *func)
++{
++	if (!func)
++		return;
++
++	if (func->m2m_dev) {
++		v4l2_m2m_unregister_media_controller(func->m2m_dev);
++		v4l2_m2m_release(func->m2m_dev);
++		func->m2m_dev = NULL;
++	}
++	if (func->vfd) {
++		video_unregister_device(func->vfd);
++		func->vfd = NULL;
++	}
++}
+diff --git a/drivers/media/platform/amphion/vpu_v4l2.h b/drivers/media/platform/amphion/vpu_v4l2.h
+new file mode 100644
+index 000000000000..90fa7ea67495
+--- /dev/null
++++ b/drivers/media/platform/amphion/vpu_v4l2.h
+@@ -0,0 +1,55 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright 2020-2021 NXP
++ */
++
++#ifndef _AMPHION_VPU_V4L2_H
++#define _AMPHION_VPU_V4L2_H
++
++#include <linux/videodev2.h>
++
++void vpu_inst_lock(struct vpu_inst *inst);
++void vpu_inst_unlock(struct vpu_inst *inst);
++void vpu_set_buffer_state(struct vb2_v4l2_buffer *vbuf, unsigned int state);
++unsigned int vpu_get_buffer_state(struct vb2_v4l2_buffer *vbuf);
++
++int vpu_v4l2_open(struct file *file, struct vpu_inst *inst);
++int vpu_v4l2_close(struct file *file);
++
++const struct vpu_format *vpu_try_fmt_common(struct vpu_inst *inst, struct v4l2_format *f);
++int vpu_process_output_buffer(struct vpu_inst *inst);
++int vpu_process_capture_buffer(struct vpu_inst *inst);
++struct vb2_v4l2_buffer *vpu_find_buf_by_sequence(struct vpu_inst *inst, u32 type, u32 sequence);
++struct vb2_v4l2_buffer *vpu_find_buf_by_idx(struct vpu_inst *inst, u32 type, u32 idx);
++void vpu_v4l2_set_error(struct vpu_inst *inst);
++int vpu_notify_eos(struct vpu_inst *inst);
++int vpu_notify_source_change(struct vpu_inst *inst);
++int vpu_set_last_buffer_dequeued(struct vpu_inst *inst);
++void vpu_vb2_buffers_return(struct vpu_inst *inst, unsigned int type, enum vb2_buffer_state state);
++int vpu_get_num_buffers(struct vpu_inst *inst, u32 type);
++
++dma_addr_t vpu_get_vb_phy_addr(struct vb2_buffer *vb, u32 plane_no);
++unsigned int vpu_get_vb_length(struct vb2_buffer *vb, u32 plane_no);
++static inline struct vpu_format *vpu_get_format(struct vpu_inst *inst, u32 type)
++{
++	if (V4L2_TYPE_IS_OUTPUT(type))
++		return &inst->out_format;
++	else
++		return &inst->cap_format;
++}
++
++static inline char *vpu_type_name(u32 type)
++{
++	return V4L2_TYPE_IS_OUTPUT(type) ? "output" : "capture";
++}
++
++static inline int vpu_vb_is_codecconfig(struct vb2_v4l2_buffer *vbuf)
++{
++#ifdef V4L2_BUF_FLAG_CODECCONFIG
++	return (vbuf->flags & V4L2_BUF_FLAG_CODECCONFIG) ? 1 : 0;
++#else
++	return 0;
++#endif
++}
 +
 +#endif
 -- 
