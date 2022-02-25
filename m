@@ -2,91 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B5EBC433EF
-	for <linux-media@archiver.kernel.org>; Fri, 25 Feb 2022 16:30:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD8C4C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 25 Feb 2022 16:46:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242996AbiBYQbD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Feb 2022 11:31:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
+        id S243120AbiBYQqq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Feb 2022 11:46:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235397AbiBYQbC (ORCPT
+        with ESMTP id S237044AbiBYQqp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:31:02 -0500
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141131D86D4;
-        Fri, 25 Feb 2022 08:30:30 -0800 (PST)
-Received: by mail-oo1-f52.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so6880199ooi.2;
-        Fri, 25 Feb 2022 08:30:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1wkrFjytm/bfyZ688DRYD5WIyjqQECAVw3q7pHsvHsw=;
-        b=MllEvRIEOPpQjMAQkTCnf0JgePCze6KRNgyFbRr394q0l3s0UEP2pSg2E9jlfSg2m4
-         B+wOcO31J+JXtBpoNYgJH8ggZtfhdkzxAl/IeLGHkjCTXfHxB1z8GaUKxQnAtnqXs7RT
-         HIyHJlqyYcCNwvtswUGQLcdCYXk/LvsKhNzwykJPkLKV9rlgDkatG+BohTKZYqc5r/dd
-         vfCnOzW+kdpK4oFLPJeWD4Fll+2a9j/iZbIGEBInohIXF9cacoLsD3vB11MiMM2aTCP4
-         HO5EvSEa7eJL7Rna0QS4h1SXMnWXooyLXpTbaGSQWmS2G6ROlxZGtuJtUwBGxCjyDa9T
-         9ukw==
-X-Gm-Message-State: AOAM532RrZAYV10YSJNrpYoYknp5NhSzxoUvG/QBDHLf1fbaA9BecS62
-        UJSklaPvypQCSmupTymNvw==
-X-Google-Smtp-Source: ABdhPJxHnQhONryFwpvuU3O9cL+TRRiq/RY06mE2+ZgOVfuaaBUkDTiEOsd6KQFZQO00sR87pj5RBQ==
-X-Received: by 2002:a05:6870:a552:b0:b5:6c53:b96b with SMTP id p18-20020a056870a55200b000b56c53b96bmr1705102oal.124.1645806629409;
-        Fri, 25 Feb 2022 08:30:29 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l20-20020a056820031400b0031cf5913126sm1241648ooe.36.2022.02.25.08.30.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 08:30:28 -0800 (PST)
-Received: (nullmailer pid 1045540 invoked by uid 1000);
-        Fri, 25 Feb 2022 16:30:26 -0000
-Date:   Fri, 25 Feb 2022 10:30:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Fritz Koenig <frkoenig@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-media@vger.kernel.org,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Irui Wang <irui.wang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        srv_heupstream@mediatek.com, George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        linux-mediatek@lists.infradead.org, Tomasz Figa <tfiga@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v3, 1/7] dt-bindings: media: mtk-vcodec: Adds decoder
- dt-bindings for lat soc
-Message-ID: <YhkEIr/Jlky+5CZY@robh.at.kernel.org>
-References: <20220217075758.11369-1-yunfei.dong@mediatek.com>
- <20220217075758.11369-2-yunfei.dong@mediatek.com>
+        Fri, 25 Feb 2022 11:46:45 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E5E22D646;
+        Fri, 25 Feb 2022 08:46:12 -0800 (PST)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:947c:7c9e:f96:1bc])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 44C3D1F44AE3;
+        Fri, 25 Feb 2022 16:46:10 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645807570;
+        bh=j2A4NMSFKaArnsLVO73dDEOpv7p5lUGniQuI/KRT0iU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WZfkCE2JxgqgEejBkeBO+geDEpH9JsecEffac4b7tu11YHIjr880EdNQCu8vkft5y
+         Y8cGbXaAFg9J2J9PFLes+CEEaFvcmT36Qpx7OvcVlbgkVwwzplOqBJbrLkk4unbEhD
+         RrJpupcsjMPWAriMumeieAPbAhbBcXHO1uwF//kcTll9FeW03t74yj5jk2LwXpA/WG
+         ugmGe+pm4ULLWSHNmPZsiVw7zxPvX0FVGi81GcBmpOKOkvc12uT1bWaBUoj6M1ayMU
+         egTRDjkjP7rMKMZCLfgZA83JGGrgBgYgzKXi8BDy92ZEBOIts3r80dcnoaUewelb7k
+         BO/z4tK4IqIhg==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, jonas@kwiboo.se, nicolas@ndufresne.ca
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH v3 01/14] videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+Date:   Fri, 25 Feb 2022 17:45:47 +0100
+Message-Id: <20220225164600.1044663-2-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220225164600.1044663-1-benjamin.gaignard@collabora.com>
+References: <20220225164600.1044663-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217075758.11369-2-yunfei.dong@mediatek.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 17 Feb 2022 15:57:52 +0800, Yunfei Dong wrote:
-> Adds decoder dt-bindings for compatible "mediatek,mtk-vcodec-lat-soc".
-> 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->  .../media/mediatek,vcodec-subdev-decoder.yaml | 51 +++++++++++++------
->  1 file changed, 35 insertions(+), 16 deletions(-)
-> 
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Add a new flag that indicates that this control is a dynamically sized
+array. Also document this flag.
+
+Currently dynamically sized arrays are limited to one dimensional arrays,
+but that might change in the future if there is a need for it.
+
+The initial use-case of dynamic arrays are stateless codecs. A frame
+can be divided in many slices, so you want to provide an array containing
+slice information for each slice. Typically the number of slices is small,
+but the standard allow for hundreds or thousands of slices. Dynamic arrays
+are a good solution since sizing the array for the worst case would waste
+substantial amounts of memory.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ .../userspace-api/media/v4l/vidioc-queryctrl.rst          | 8 ++++++++
+ include/uapi/linux/videodev2.h                            | 1 +
+ 2 files changed, 9 insertions(+)
+
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
+index 88f630252d98..a20dfa2a933b 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
+@@ -625,6 +625,14 @@ See also the examples in :ref:`control`.
+ 	``V4L2_CTRL_FLAG_GRABBED`` flag when buffers are allocated or
+ 	streaming is in progress since most drivers do not support changing
+ 	the format in that case.
++    * - ``V4L2_CTRL_FLAG_DYNAMIC_ARRAY``
++      - 0x0800
++      - This control is a dynamically sized 1-dimensional array. It
++        behaves the same as a regular array, except that the number
++	of elements as reported by the ``elems`` field is between 1 and
++	``dims[0]``. So setting the control with a differently sized
++	array will change the ``elems`` field when the control is
++	queried afterwards.
+ 
+ Return Value
+ ============
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index df8b9c486ba1..e27c8eae78c9 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -1884,6 +1884,7 @@ struct v4l2_querymenu {
+ #define V4L2_CTRL_FLAG_HAS_PAYLOAD	0x0100
+ #define V4L2_CTRL_FLAG_EXECUTE_ON_WRITE	0x0200
+ #define V4L2_CTRL_FLAG_MODIFY_LAYOUT	0x0400
++#define V4L2_CTRL_FLAG_DYNAMIC_ARRAY	0x0800
+ 
+ /*  Query flags, to be ORed with the control ID */
+ #define V4L2_CTRL_FLAG_NEXT_CTRL	0x80000000
+-- 
+2.32.0
+
