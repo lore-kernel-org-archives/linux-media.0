@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FE79C4332F
-	for <linux-media@archiver.kernel.org>; Fri, 25 Feb 2022 16:46:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30792C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 25 Feb 2022 16:46:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243233AbiBYQqx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 25 Feb 2022 11:46:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
+        id S243238AbiBYQqy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 25 Feb 2022 11:46:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243197AbiBYQqs (ORCPT
+        with ESMTP id S243206AbiBYQqt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 25 Feb 2022 11:46:48 -0500
+        Fri, 25 Feb 2022 11:46:49 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E7D22D648;
-        Fri, 25 Feb 2022 08:46:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A171F982E;
+        Fri, 25 Feb 2022 08:46:17 -0800 (PST)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:947c:7c9e:f96:1bc])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 2E3C51F4637E;
-        Fri, 25 Feb 2022 16:46:14 +0000 (GMT)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 7E6F81F463E1;
+        Fri, 25 Feb 2022 16:46:15 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645807574;
-        bh=1efQRsTSb/TbonDTR62JGVtaxw0xtZBRD5WqCbjWseg=;
+        s=mail; t=1645807576;
+        bh=s4LmX4lV9cGDpzbmh+8AzzNood/xD9OcevN7sjmMGFo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pj1k7u0abLDHj8d5XPrhXdVJGprxQF3eaExfkjtkF4ClxevhwXqrc+mLtoxwmzYf4
-         zamxrXOkP9z/HyKotEYxmia0WuOWKfNfVqvlNPMKeXW9g6ioDhracecmA727kRnlH1
-         MM67xCc3YOGGeSmojkQ+yWBCcDtCA2owPsCQuBkEmE6o3rwdy6W7cR4CnK3w8WW4I8
-         SefYpK6Kc3KeadSCrYFN+UV533GdzoA4ka11aS0W0p1Af6IjRNg+FoKEVzPOFWXog3
-         INApZ+E4vURPS5STj+zz35sy0HX5mmnM3jq9PIurXLOtgQhQeyzM5sQRYnCNQ7hvkW
-         AKz/73eHHxLTw==
+        b=oOG8iW7gQ2n/h1zlmwaadRxuFwPwPwcpXkOZ238s2/zw7sBzkiVOhpJ6C1kJYIvdR
+         jAgCUbBx6DXxTvbL8WkIVonuB4qac3xW12Yorc7cYeyHsEysdZXse612TUVj1AYm7O
+         jqHslqLD0f8KmBUS4jq3HG/3qCAEG3/+4+qwVvSMCxAf+ZSiaRNKJ9uS1RdHWIzV+a
+         9IzAgju3fqqOhkyQ+vFfLKhDfxG10CPQOpx/xdhCitN3LU+H3tlY+R2ChCFg33ho6Z
+         UnF+8kuZ2BBfBR87+WQu/VjxFwdvIAuAj7MV8H8ocFtgbOdv9vTsTZHb2lNqt+tLM7
+         7gNLaKJVF2+UA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
         p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
@@ -41,9 +41,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v3 07/14] media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a dynamic array
-Date:   Fri, 25 Feb 2022 17:45:53 +0100
-Message-Id: <20220225164600.1044663-8-benjamin.gaignard@collabora.com>
+Subject: [PATCH v3 09/14] media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET control
+Date:   Fri, 25 Feb 2022 17:45:55 +0100
+Message-Id: <20220225164600.1044663-10-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220225164600.1044663-1-benjamin.gaignard@collabora.com>
 References: <20220225164600.1044663-1-benjamin.gaignard@collabora.com>
@@ -53,44 +53,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make explicit that V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control is
-a dynamic array control type.
-Some drivers may be able to receive multiple slices in one control
-to improve decoding performance.
+The number of 'entry point offset' could be very variable.
+Rather than use a large static array define a v4l2 dynamic array
+of integer control.
+The number of entry point offsets is reported by the elems field.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 2 ++
- include/media/hevc-ctrls.h                                | 3 +++
- 2 files changed, 5 insertions(+)
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst          | 9 +++++++++
+ include/media/hevc-ctrls.h                               | 1 +
+ 2 files changed, 10 insertions(+)
 
 diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 18625d18ddf3..44a268a948c0 100644
+index 44a268a948c0..71f7dc1c1ccd 100644
 --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
 +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -2964,6 +2964,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     These bitstream parameters are defined according to :ref:`hevc`.
-     They are described in section 7.4.7 "General slice segment header
-     semantics" of the specification.
-+    This control is a dynamically sized 1-dimensional array,
-+    V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
+@@ -3128,6 +3128,15 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
  
- .. c:type:: v4l2_ctrl_hevc_slice_params
+     \normalsize
  
++``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
++    Specifies the i-th entry point offset in bytes and is represented by
++    offset_len_minus1 plus 1 bits.
++    This control is a dynamically sized array. The number of entry point
++    offsets is reported by the ``elems`` field.
++    This bitstream parameter is defined according to :ref:`hevc`.
++    They are described in section 7.4.7.1 "General slice segment header
++    semantics" of the specification.
++
+ ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
+     Specifies the HEVC scaling matrix parameters used for the scaling process
+     for transform coefficients.
 diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 1c86566cd7cb..057b5032453b 100644
+index 3016c1abb1d0..3f8a67924df3 100644
 --- a/include/media/hevc-ctrls.h
 +++ b/include/media/hevc-ctrls.h
-@@ -300,6 +300,9 @@ struct v4l2_hevc_pred_weight_table {
- /**
-  * v4l2_ctrl_hevc_slice_params - HEVC slice parameters
-  *
-+ * This control is a dynamically sized 1-dimensional array,
-+ * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
-+ *
-  * @bit_size: size (in bits) of the current slice data
-  * @data_bit_offset: offset (in bits) to the video data in the current slice data
-  * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+@@ -20,6 +20,7 @@
+ #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	(V4L2_CID_CODEC_BASE + 1012)
+ #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE + 1015)
+ #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
++#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET (V4L2_CID_CODEC_BASE + 1017)
+ 
+ /* enum v4l2_ctrl_type type values */
+ #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
 -- 
 2.32.0
 
