@@ -2,190 +2,150 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A600DC433FE
-	for <linux-media@archiver.kernel.org>; Thu, 24 Feb 2022 18:54:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97073C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 25 Feb 2022 00:08:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232508AbiBXSzZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Feb 2022 13:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
+        id S232641AbiBYAIu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Feb 2022 19:08:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiBXSzY (ORCPT
+        with ESMTP id S231324AbiBYAIt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Feb 2022 13:55:24 -0500
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB35524CCE3
-        for <linux-media@vger.kernel.org>; Thu, 24 Feb 2022 10:54:53 -0800 (PST)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id F3B36200006;
-        Thu, 24 Feb 2022 18:54:48 +0000 (UTC)
-Date:   Thu, 24 Feb 2022 19:54:47 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        martin.kepplinger@puri.sm, rmfrfs@gmail.com,
-        xavier.roumegue@oss.nxp.com,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        dorota.czaplejewicz@puri.sm, Sascha Hauer <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 1/7] media: imx: De-stage imx7-mipi-csis
-Message-ID: <20220224185447.yr2452dbxegkjoqq@uno.localdomain>
-References: <20220218183421.583874-1-jacopo@jmondi.org>
- <20220218183421.583874-2-jacopo@jmondi.org>
- <CAHCN7xLmcjKpW_UX2qHEx+s8bqik7OfXmQDgnq0JjKzjaqxNdQ@mail.gmail.com>
+        Thu, 24 Feb 2022 19:08:49 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A69145AE1
+        for <linux-media@vger.kernel.org>; Thu, 24 Feb 2022 16:08:17 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id c192so756760wma.4
+        for <linux-media@vger.kernel.org>; Thu, 24 Feb 2022 16:08:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=tqBf7h+Gwzv+ebh5s+Kc+a57roM9u8c7DiABvHCuLsw=;
+        b=b+3gfVogSzaoGlO+GSuW6EekrbTME9tPFEFOZeo3g1CUgUSIPJGBER9WE/wPZ0frL+
+         FfKd5/9HAEmg7W69txCpHLLXNcU0QJsn0Q2GghOhcQ/MdUsXWrDZYOVYqDzOxryF0pGd
+         HoTCfKDrsnxSsUzZA91wcIHuGYxVGXz3wOWS7eqjU76HQEFJAOSUBUSO9As81HYuZZZl
+         KD+jnCP3CXjSc/BH1DEzjQMOP3a7/mq6T/Mc+SAhpnoRtNdTq447HWzDgi9y1cfZzuUz
+         P5RYVh/RlsPnEJd87pJzwxatnb92hVUPHrMx4P8CEN0EgVW/hAh/ddnFkIihee7Q7U6N
+         R+ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=tqBf7h+Gwzv+ebh5s+Kc+a57roM9u8c7DiABvHCuLsw=;
+        b=kFI5g9iGOYHjKPPb4bC35w4lhdm63xv+BJ+gICa3zrNobo18zxkSUguexmcEvZDS9L
+         17tiJvPbRbEj6a1VdyFQLi5DpXBlL92dRQErJEtCVHoqDLcdqQxtE1/otT+ilvOvWu6e
+         oAZiE3F3YIggEY3xzAodavytTfNVVw67mxin5H+4EDxCmm0lPbnfSDheWUWOKW2aPHEL
+         sv6AT93WRfwSk5kqdeQtZMCAQQ9O3o5ec/TvAyH0QpGBQlBnRkBCiAQuSHbe1PXjmbFz
+         pmkK9ac7dhTzLhA/AgvUzaIsZWY2GHjJiYNUknNx7wLya4t9PHqzCt964tVnGD7bwUdI
+         uH/w==
+X-Gm-Message-State: AOAM530/CWUs8buFInb5bsDPMbxqhD6YqZEi33wDdKZKBuod5ue4rUs8
+        mudHKswSe8g2H/BgXDXmGx52SxhFgav+0g==
+X-Google-Smtp-Source: ABdhPJxLgx+hft65LbspGNy8ZeAYAuT+AAjLaJSh+ZjR7PaBP++n2eFgp/QXLEwm3cR2S3EOr49mbQ==
+X-Received: by 2002:a05:600c:601a:b0:380:d09a:ca7 with SMTP id az26-20020a05600c601a00b00380d09a0ca7mr385987wmb.128.1645747695803;
+        Thu, 24 Feb 2022 16:08:15 -0800 (PST)
+Received: from localhost.localdomain (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
+        by smtp.gmail.com with ESMTPSA id a3-20020adfe5c3000000b001e68a5e1c20sm742668wrn.4.2022.02.24.16.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 16:08:15 -0800 (PST)
+From:   Daniel Scally <djrscally@gmail.com>
+To:     linux-media@vger.kernel.org
+Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com,
+        andriy.shevchenko@linux.intel.com, hverkuil-cisco@xs4all.nl,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Subject: [PATCH v2 01/11] media: uapi: Add IPU3 packed Y10 format
+Date:   Fri, 25 Feb 2022 00:07:43 +0000
+Message-Id: <20220225000753.511996-2-djrscally@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220225000753.511996-1-djrscally@gmail.com>
+References: <20220225000753.511996-1-djrscally@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHCN7xLmcjKpW_UX2qHEx+s8bqik7OfXmQDgnq0JjKzjaqxNdQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Adam,
+Some platforms with an Intel IPU3 have an IR sensor producing 10 bit
+greyscale format data that is transmitted over a CSI-2 bus to a CIO2
+device - this packs the data into 32 bytes per 25 pixels. Add an entry
+to the uAPI header defining that format.
 
-On Thu, Feb 24, 2022 at 10:49:13AM -0600, Adam Ford wrote:
-> On Mon, Feb 21, 2022 at 3:16 AM Jacopo Mondi <jacopo@jmondi.org> wrote:
-> >
-> > The imx7-mipi-csis driver is in a good state and can be destaged.
-> >
-> > Move the imx7-mipi-csis.c driver to the newly created
-> > drivers/media/platform/imx directory and plumb the related
-> > options in Kconfig and in Makefile.
-> >
-> > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > ---
-> >  MAINTAINERS                                   |  2 +-
-> >  drivers/media/platform/Kconfig                |  1 +
-> >  drivers/media/platform/Makefile               |  1 +
-> >  drivers/media/platform/imx/Kconfig            | 24 +++++++++++++++++++
-> >  drivers/media/platform/imx/Makefile           |  1 +
-> >  .../platform}/imx/imx7-mipi-csis.c            |  0
-> >  drivers/staging/media/imx/Makefile            |  1 -
-> >  7 files changed, 28 insertions(+), 2 deletions(-)
-> >  create mode 100644 drivers/media/platform/imx/Kconfig
-> >  create mode 100644 drivers/media/platform/imx/Makefile
-> >  rename drivers/{staging/media => media/platform}/imx/imx7-mipi-csis.c (100%)
-> >
->
-> Jacopo,
->
-> Will there be a subsequent patch to modify the arch64 defconfig to
-> enable these modules by default?  With these changes, neither the CSI
-> nor CSIS appear to be enabled as modules any more, and I thought they
-> used to be enabled as modules by default.
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Signed-off-by: Daniel Scally <djrscally@gmail.com>
+---
+Changes in v2:
 
-I don't see the VIDEO_IMX7_CSI selected in v5.17-rc5 arch/arm64/configs/defconfig
-What am I missing ? :)
+	- Switched away from using the fourcc in the explanatory note for
+	pixfmt-yuv-luma.rst (Nicolas)
 
-I'm not aware of what are the policies to add a new symbol to the
-arch64 defconfig, but if appropriate I would be happy to send a patch
-to enable it.
+ .../userspace-api/media/v4l/pixfmt-yuv-luma.rst    | 14 +++++++++++++-
+ drivers/media/v4l2-core/v4l2-ioctl.c               |  1 +
+ include/uapi/linux/videodev2.h                     |  3 ++-
+ 3 files changed, 16 insertions(+), 2 deletions(-)
 
-Thanks
-  j
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
+index 91942c4f0967..945a0058506b 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
+@@ -48,6 +48,17 @@ are often referred to as greyscale formats.
+       - ...
+       - ...
+ 
++    * .. _V4L2-PIX-FMT-IPU3-Y10:
++
++      - ``V4L2_PIX_FMT_IPU3_Y10``
++      - 'ip3y'
++
++      - Y'\ :sub:`0`\ [7:0]
++      - Y'\ :sub:`1`\ [5:0] Y'\ :sub:`0`\ [9:8]
++      - Y'\ :sub:`2`\ [3:0] Y'\ :sub:`1`\ [9:6]
++      - Y'\ :sub:`3`\ [1:0] Y'\ :sub:`2`\ [9:4]
++      - Y'\ :sub:`3`\ [9:2]
++
+     * .. _V4L2-PIX-FMT-Y10:
+ 
+       - ``V4L2_PIX_FMT_Y10``
+@@ -133,4 +144,5 @@ are often referred to as greyscale formats.
+ 
+     For the Y16 and Y16_BE formats, the actual sampling precision may be lower
+     than 16 bits. For example, 10 bits per pixel uses values in the range 0 to
+-    1023.
++    1023. For the IPU3_Y10 format 25 pixels are packed into 32 bytes, which
++    leaves the 6 most significant bits of the last byte padded with 0.
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 31d0109ce5a8..db46925003de 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1263,6 +1263,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_Y16_BE:	descr = "16-bit Greyscale BE"; break;
+ 	case V4L2_PIX_FMT_Y10BPACK:	descr = "10-bit Greyscale (Packed)"; break;
+ 	case V4L2_PIX_FMT_Y10P:		descr = "10-bit Greyscale (MIPI Packed)"; break;
++	case V4L2_PIX_FMT_IPU3_Y10:	descr = "10-bit greyscale (IPU3 Packed)"; break;
+ 	case V4L2_PIX_FMT_Y8I:		descr = "Interleaved 8-bit Greyscale"; break;
+ 	case V4L2_PIX_FMT_Y12I:		descr = "Interleaved 12-bit Greyscale"; break;
+ 	case V4L2_PIX_FMT_Z16:		descr = "16-bit Depth"; break;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index f118fe7a9f58..d49bde41785b 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -569,6 +569,7 @@ struct v4l2_pix_format {
+ /* Grey bit-packed formats */
+ #define V4L2_PIX_FMT_Y10BPACK    v4l2_fourcc('Y', '1', '0', 'B') /* 10  Greyscale bit-packed */
+ #define V4L2_PIX_FMT_Y10P    v4l2_fourcc('Y', '1', '0', 'P') /* 10  Greyscale, MIPI RAW10 packed */
++#define V4L2_PIX_FMT_IPU3_Y10		v4l2_fourcc('i', 'p', '3', 'y') /* IPU3 packed 10-bit greyscale */
+ 
+ /* Palette formats */
+ #define V4L2_PIX_FMT_PAL8    v4l2_fourcc('P', 'A', 'L', '8') /*  8  8-bit palette */
+@@ -744,7 +745,7 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_CNF4     v4l2_fourcc('C', 'N', 'F', '4') /* Intel 4-bit packed depth confidence information */
+ #define V4L2_PIX_FMT_HI240    v4l2_fourcc('H', 'I', '2', '4') /* BTTV 8-bit dithered RGB */
+ 
+-/* 10bit raw bayer packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
++/* 10bit raw packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
+ #define V4L2_PIX_FMT_IPU3_SBGGR10	v4l2_fourcc('i', 'p', '3', 'b') /* IPU3 packed 10-bit BGGR bayer */
+ #define V4L2_PIX_FMT_IPU3_SGBRG10	v4l2_fourcc('i', 'p', '3', 'g') /* IPU3 packed 10-bit GBRG bayer */
+ #define V4L2_PIX_FMT_IPU3_SGRBG10	v4l2_fourcc('i', 'p', '3', 'G') /* IPU3 packed 10-bit GRBG bayer */
+-- 
+2.25.1
 
-
->
-> adam
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 83d27b57016f..5bdb8c881b0b 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -11891,8 +11891,8 @@ T:      git git://linuxtv.org/media_tree.git
-> >  F:     Documentation/admin-guide/media/imx7.rst
-> >  F:     Documentation/devicetree/bindings/media/nxp,imx7-csi.yaml
-> >  F:     Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
-> > +F:     drivers/media/platform/imx/imx7-mipi-csis.c
-> >  F:     drivers/staging/media/imx/imx7-media-csi.c
-> > -F:     drivers/staging/media/imx/imx7-mipi-csis.c
-> >
-> >  MEDIA DRIVERS FOR HELENE
-> >  M:     Abylay Ospan <aospan@netup.ru>
-> > diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-> > index 9fbdba0fd1e7..d9eeccffea69 100644
-> > --- a/drivers/media/platform/Kconfig
-> > +++ b/drivers/media/platform/Kconfig
-> > @@ -171,6 +171,7 @@ source "drivers/media/platform/xilinx/Kconfig"
-> >  source "drivers/media/platform/rcar-vin/Kconfig"
-> >  source "drivers/media/platform/atmel/Kconfig"
-> >  source "drivers/media/platform/sunxi/Kconfig"
-> > +source "drivers/media/platform/imx/Kconfig"
-> >
-> >  config VIDEO_TI_CAL
-> >         tristate "TI CAL (Camera Adaptation Layer) driver"
-> > diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-> > index 28eb4aadbf45..a9466c854610 100644
-> > --- a/drivers/media/platform/Makefile
-> > +++ b/drivers/media/platform/Makefile
-> > @@ -20,6 +20,7 @@ obj-y += ti-vpe/
-> >  obj-$(CONFIG_VIDEO_MX2_EMMAPRP)                += mx2_emmaprp.o
-> >  obj-$(CONFIG_VIDEO_CODA)               += coda/
-> >
-> > +obj-$(CONFIG_VIDEO_IMX)                        += imx/
-> >  obj-$(CONFIG_VIDEO_IMX_PXP)            += imx-pxp.o
-> >  obj-$(CONFIG_VIDEO_IMX8_JPEG)          += imx-jpeg/
-> >
-> > diff --git a/drivers/media/platform/imx/Kconfig b/drivers/media/platform/imx/Kconfig
-> > new file mode 100644
-> > index 000000000000..683863572c20
-> > --- /dev/null
-> > +++ b/drivers/media/platform/imx/Kconfig
-> > @@ -0,0 +1,24 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +
-> > +menuconfig VIDEO_IMX
-> > +       bool "V4L2 capture drivers for NXP i.MX devices"
-> > +       depends on ARCH_MXC || COMPILE_TEST
-> > +       depends on VIDEO_DEV && VIDEO_V4L2
-> > +       help
-> > +         Say yes here to enable support for capture drivers on i.MX SoCs.
-> > +         Support for the single SoC features are selectable in the sub-menu
-> > +         options.
-> > +
-> > +if VIDEO_IMX
-> > +
-> > +config VIDEO_IMX_MIPI_CSIS
-> > +       tristate "MIPI CSI-2 CSIS receiver found on i.MX7 and i.MX8 models"
-> > +       select MEDIA_CONTROLLER
-> > +       select V4L2_FWNODE
-> > +       select VIDEO_V4L2_SUBDEV_API
-> > +       default n
-> > +       help
-> > +         Video4Linux2 sub-device driver for the MIPI CSI-2 CSIS receiver
-> > +         v3.3/v3.6.3 found on some i.MX7 and i.MX8 SoCs.
-> > +
-> > +endif # VIDEO_IMX
-> > diff --git a/drivers/media/platform/imx/Makefile b/drivers/media/platform/imx/Makefile
-> > new file mode 100644
-> > index 000000000000..ee272234c8d7
-> > --- /dev/null
-> > +++ b/drivers/media/platform/imx/Makefile
-> > @@ -0,0 +1 @@
-> > +obj-$(CONFIG_VIDEO_IMX_MIPI_CSIS) += imx7-mipi-csis.o
-> > diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/media/platform/imx/imx7-mipi-csis.c
-> > similarity index 100%
-> > rename from drivers/staging/media/imx/imx7-mipi-csis.c
-> > rename to drivers/media/platform/imx/imx7-mipi-csis.c
-> > diff --git a/drivers/staging/media/imx/Makefile b/drivers/staging/media/imx/Makefile
-> > index 19c2fc54d424..d82be898145b 100644
-> > --- a/drivers/staging/media/imx/Makefile
-> > +++ b/drivers/staging/media/imx/Makefile
-> > @@ -15,5 +15,4 @@ obj-$(CONFIG_VIDEO_IMX_CSI) += imx6-media-csi.o
-> >  obj-$(CONFIG_VIDEO_IMX_CSI) += imx6-mipi-csi2.o
-> >
-> >  obj-$(CONFIG_VIDEO_IMX7_CSI) += imx7-media-csi.o
-> > -obj-$(CONFIG_VIDEO_IMX7_CSI) += imx7-mipi-csis.o
-> >  obj-$(CONFIG_VIDEO_IMX7_CSI) += imx8mq-mipi-csi2.o
-> > --
-> > 2.35.0
-> >
