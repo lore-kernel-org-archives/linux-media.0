@@ -2,60 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE6A8C43217
-	for <linux-media@archiver.kernel.org>; Fri, 25 Feb 2022 00:08:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81613C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 25 Feb 2022 00:08:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233831AbiBYAIx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S234368AbiBYAIx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 24 Feb 2022 19:08:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiBYAIu (ORCPT
+        with ESMTP id S233916AbiBYAIv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Feb 2022 19:08:50 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EA4145E3E
-        for <linux-media@vger.kernel.org>; Thu, 24 Feb 2022 16:08:18 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id d3so2065399wrf.1
-        for <linux-media@vger.kernel.org>; Thu, 24 Feb 2022 16:08:18 -0800 (PST)
+        Thu, 24 Feb 2022 19:08:51 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35FB14A214
+        for <linux-media@vger.kernel.org>; Thu, 24 Feb 2022 16:08:20 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id s13so2030141wrb.6
+        for <linux-media@vger.kernel.org>; Thu, 24 Feb 2022 16:08:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9Ggtdfs6xUCAEq1TnXtNlY6irAHHG7sOgSjdYFohxjU=;
-        b=LFi1WglF2fSgMQGPVRwsXCoHK6v63I8U8/Yycf6ZefWgc/KuvKuOhLBRnZ/T57P3nW
-         em4F+JS2zele004n1x1BzXizpNPbshdfWyDeaiBg8IsPjlDv9qTkCESUDovfukDOrTZ6
-         z/F660U9KtDjp0KZBKQfOF8gUUMz0X6/1n2SDOrbdHG4BUiVCVNK2GlpGeXq9xIokiIB
-         KDGz9dxnwr5kJw67tolfEmrfEJT/JjfoiqKrqHLOJ9Jfkf3XH/EASMNRCAQN7S+Q5VSV
-         HCpeW5js0nRfRB65qxxdghzc2OKdR0xSq7Bs6oXa1XNw59aM+/f3d6Si87NSUzJSLs3o
-         yY8w==
+        bh=IjwCnixQ6naZ1BlTQDcmulbhoLUgbDdxxRG+E3CFEx8=;
+        b=bOJLH83/Wk7Z+S6IDaiK+V2ZShBbVyZbtzEz6onlwUZdpsuUAwXklc+oG//2HsjdQ3
+         6gkU92uRICRtgN8y/XilfvNg5FAf5QevAZ5xB8cZKJzGca+88zZnJvP3Q4IsMqzSvoGl
+         zU1tGI+A8RaFJ9JEG2EaewUlhAWJbWSkO9aN5X88tt4LzbhO8WkOgCbxMzpKnJfGlc26
+         vyG2ui+3g0oEcY9NqMZ6IeAg1U7jHz9IHBlgM8IbALU+KhLNtmb9yO7sEyVqKgRxQpGP
+         I6xgMbfUIIjK8njkLGzBdkM+90s2tAAmNZMN8eSJZ9ZgpSZ0iYNwukK4lU4cGf3c+8lr
+         8MRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9Ggtdfs6xUCAEq1TnXtNlY6irAHHG7sOgSjdYFohxjU=;
-        b=cqthZ4LNmVULVKLuPdTm1vu00Q3z2CA2fx7d7kyeTKFmQ7p36AFl5AxVHaByRtOXIK
-         8KRLzfzoBr05I8IbpkRkSPmpK2VVVqgLU39aH7inGCb9gUBLLaaMJu+NFMte2Deo+Yu8
-         3PoahNQVrHE1mfegakh43Ahhc5WbNADBY0sGddE8Y/fGSGMb/K2Ah1n9EsviK81TyzrC
-         28nJZBMJzgYP0e04sHraF0SjeoORCPa1Jw+DOp2HCty3o5kfh8y18n3+GiTSvs7BAXOP
-         EL5zkF6P24Ag/yz+PWww9DhfwpriRf4+T6u0770pMc0rTvBf/ReLxuxAunqHcva3i8Zr
-         sJcg==
-X-Gm-Message-State: AOAM533CLnxIh4R3McrCpwJsEp2J0HgUz7rl/5yUXkStNOetIaZ0gpH+
-        lSMTHMNPf5wjoDtJkPWeIXHER+yGuAuwQw==
-X-Google-Smtp-Source: ABdhPJx89AvKA3uncBqDeSNDYygU0jDA4JN0ucjA649nx81qmkzdjfUXpx6z7n0zAlUzx02y+bCI3w==
-X-Received: by 2002:adf:d1c3:0:b0:1ea:911c:bf84 with SMTP id b3-20020adfd1c3000000b001ea911cbf84mr4173815wrd.355.1645747697573;
-        Thu, 24 Feb 2022 16:08:17 -0800 (PST)
+        bh=IjwCnixQ6naZ1BlTQDcmulbhoLUgbDdxxRG+E3CFEx8=;
+        b=AdFJTnWqUvMCNtye5+ozNE5lRPa4YSiDAN3dDUH2ckfXCJERqdoe2MDiXkX58QQQ1X
+         lYil1k+zDOVqAZROsFg1TNLeR4BjZ+EssLaIR1f6WKXH+WjA1CcFT6fgTL2HU3LLuMMN
+         ESgxuoqn6l7LJ1sDPIq1GGLryc68g17tqxIPVIfoEi1t8QBabeLaHBOQ5AkfKfoIDClc
+         Nq1CchGmmr1fOjuwniqUmyG0JMb2298P8jPkUMWumG8CW8N4bllWu0xdhMtClSlnZkKA
+         SUFAujIoa721aB74pdhmSqvNiTT1ZReu11s/pJE+lF6e+af7EudSwiev5y3VnAmOWsbM
+         mE5w==
+X-Gm-Message-State: AOAM532ln+Fq8hL7mgLGNkNJFfYLtK6cdKNMtSyULtzeK6puTPXzCEi6
+        3K8YTuMqmgiUW2mQPFwhErVRG9JT9BAZTQ==
+X-Google-Smtp-Source: ABdhPJzEAhb3veonNhAGtOZFQuxztNd9N3tiJrYb2AmilXZsqYaSYF+FPQlJlLypxs3HlnqzKJWbog==
+X-Received: by 2002:a05:6000:1868:b0:1ea:9118:52da with SMTP id d8-20020a056000186800b001ea911852damr4212802wri.381.1645747699251;
+        Thu, 24 Feb 2022 16:08:19 -0800 (PST)
 Received: from localhost.localdomain (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id a3-20020adfe5c3000000b001e68a5e1c20sm742668wrn.4.2022.02.24.16.08.16
+        by smtp.gmail.com with ESMTPSA id a3-20020adfe5c3000000b001e68a5e1c20sm742668wrn.4.2022.02.24.16.08.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 16:08:17 -0800 (PST)
+        Thu, 24 Feb 2022 16:08:18 -0800 (PST)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
         bingbu.cao@intel.com, tian.shu.qiu@intel.com,
         andriy.shevchenko@linux.intel.com, hverkuil-cisco@xs4all.nl
-Subject: [PATCH v2 03/11] media: i2c: Add acpi support to ov7251
-Date:   Fri, 25 Feb 2022 00:07:45 +0000
-Message-Id: <20220225000753.511996-4-djrscally@gmail.com>
+Subject: [PATCH v2 05/11] media: i2c: Remove per-mode frequencies from ov7251
+Date:   Fri, 25 Feb 2022 00:07:47 +0000
+Message-Id: <20220225000753.511996-6-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220225000753.511996-1-djrscally@gmail.com>
 References: <20220225000753.511996-1-djrscally@gmail.com>
@@ -65,46 +65,133 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for enumeration through ACPI to the ov7251 driver
+Each of the defined modes in the ov7251 driver uses the same link
+frequency and pixel rate; just drop those members of the modes and
+set the controls to read only during initialisation. Add a new
+table defining the supported pixel rates to substitue for the values
+hardcoded in the modes.
 
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v2:
 
-	- None
+	- New patch
 
- drivers/media/i2c/ov7251.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/media/i2c/ov7251.c | 43 +++++++++++++-------------------------
+ 1 file changed, 14 insertions(+), 29 deletions(-)
 
 diff --git a/drivers/media/i2c/ov7251.c b/drivers/media/i2c/ov7251.c
-index ebb299f207e5..d6fe574cb9e0 100644
+index 613b2c80a2a8..90bf6a868741 100644
 --- a/drivers/media/i2c/ov7251.c
 +++ b/drivers/media/i2c/ov7251.c
-@@ -14,6 +14,7 @@
- #include <linux/i2c.h>
- #include <linux/init.h>
- #include <linux/module.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/types.h>
-@@ -1490,9 +1491,16 @@ static const struct of_device_id ov7251_of_match[] = {
+@@ -526,7 +526,11 @@ static const struct reg_value ov7251_setting_vga_90fps[] = {
  };
- MODULE_DEVICE_TABLE(of, ov7251_of_match);
  
-+static const struct acpi_device_id ov7251_acpi_match[] = {
-+	{ "INT347E" },
-+	{ }
+ static const s64 link_freq[] = {
+-	240000000,
++	[OV7251_LINK_FREQ_240_MHZ] = 240000000,
 +};
-+MODULE_DEVICE_TABLE(acpi, ov7251_acpi_match);
 +
- static struct i2c_driver ov7251_i2c_driver = {
- 	.driver = {
- 		.of_match_table = ov7251_of_match,
-+		.acpi_match_table = ov7251_acpi_match,
- 		.name  = "ov7251",
- 	},
- 	.probe_new  = ov7251_probe,
++static const s64 pixel_rates[] = {
++	[OV7251_LINK_FREQ_240_MHZ] = 48000000,
+ };
+ 
+ static const struct ov7251_mode_info ov7251_mode_info_data[] = {
+@@ -535,8 +539,6 @@ static const struct ov7251_mode_info ov7251_mode_info_data[] = {
+ 		.height = 480,
+ 		.data = ov7251_setting_vga_30fps,
+ 		.data_size = ARRAY_SIZE(ov7251_setting_vga_30fps),
+-		.pixel_clock = 48000000,
+-		.link_freq = 0, /* an index in link_freq[] */
+ 		.exposure_max = 1704,
+ 		.exposure_def = 504,
+ 		.timeperframe = {
+@@ -549,8 +551,6 @@ static const struct ov7251_mode_info ov7251_mode_info_data[] = {
+ 		.height = 480,
+ 		.data = ov7251_setting_vga_60fps,
+ 		.data_size = ARRAY_SIZE(ov7251_setting_vga_60fps),
+-		.pixel_clock = 48000000,
+-		.link_freq = 0, /* an index in link_freq[] */
+ 		.exposure_max = 840,
+ 		.exposure_def = 504,
+ 		.timeperframe = {
+@@ -563,8 +563,6 @@ static const struct ov7251_mode_info ov7251_mode_info_data[] = {
+ 		.height = 480,
+ 		.data = ov7251_setting_vga_90fps,
+ 		.data_size = ARRAY_SIZE(ov7251_setting_vga_90fps),
+-		.pixel_clock = 48000000,
+-		.link_freq = 0, /* an index in link_freq[] */
+ 		.exposure_max = 552,
+ 		.exposure_def = 504,
+ 		.timeperframe = {
+@@ -1059,16 +1057,6 @@ static int ov7251_set_format(struct v4l2_subdev *sd,
+ 	__crop->height = new_mode->height;
+ 
+ 	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+-		ret = __v4l2_ctrl_s_ctrl_int64(ov7251->pixel_clock,
+-					       new_mode->pixel_clock);
+-		if (ret < 0)
+-			goto exit;
+-
+-		ret = __v4l2_ctrl_s_ctrl(ov7251->link_freq,
+-					 new_mode->link_freq);
+-		if (ret < 0)
+-			goto exit;
+-
+ 		ret = __v4l2_ctrl_modify_range(ov7251->exposure,
+ 					       1, new_mode->exposure_max,
+ 					       1, new_mode->exposure_def);
+@@ -1199,16 +1187,6 @@ static int ov7251_set_frame_interval(struct v4l2_subdev *subdev,
+ 	new_mode = ov7251_find_mode_by_ival(ov7251, &fi->interval);
+ 
+ 	if (new_mode != ov7251->current_mode) {
+-		ret = __v4l2_ctrl_s_ctrl_int64(ov7251->pixel_clock,
+-					       new_mode->pixel_clock);
+-		if (ret < 0)
+-			goto exit;
+-
+-		ret = __v4l2_ctrl_s_ctrl(ov7251->link_freq,
+-					 new_mode->link_freq);
+-		if (ret < 0)
+-			goto exit;
+-
+ 		ret = __v4l2_ctrl_modify_range(ov7251->exposure,
+ 					       1, new_mode->exposure_max,
+ 					       1, new_mode->exposure_def);
+@@ -1318,6 +1296,7 @@ static int ov7251_probe(struct i2c_client *client)
+ 	struct device *dev = &client->dev;
+ 	struct ov7251 *ov7251;
+ 	u8 chip_id_high, chip_id_low, chip_rev;
++	s64 pixel_rate;
+ 	int ret;
+ 
+ 	ov7251 = devm_kzalloc(dev, sizeof(struct ov7251), GFP_KERNEL);
+@@ -1399,17 +1378,23 @@ static int ov7251_probe(struct i2c_client *client)
+ 				     V4L2_CID_TEST_PATTERN,
+ 				     ARRAY_SIZE(ov7251_test_pattern_menu) - 1,
+ 				     0, 0, ov7251_test_pattern_menu);
++
++	pixel_rate = pixel_rates[ov7251->link_freq_idx];
+ 	ov7251->pixel_clock = v4l2_ctrl_new_std(&ov7251->ctrls,
+ 						&ov7251_ctrl_ops,
+ 						V4L2_CID_PIXEL_RATE,
+-						1, INT_MAX, 1, 1);
++						pixel_rate, INT_MAX,
++						pixel_rate, pixel_rate);
+ 	ov7251->link_freq = v4l2_ctrl_new_int_menu(&ov7251->ctrls,
+ 						   &ov7251_ctrl_ops,
+ 						   V4L2_CID_LINK_FREQ,
+ 						   ARRAY_SIZE(link_freq) - 1,
+-						   0, link_freq);
++						   ov7251->link_freq_idx,
++						   link_freq);
+ 	if (ov7251->link_freq)
+ 		ov7251->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++	if (ov7251->pixel_clock)
++		ov7251->pixel_clock->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
+ 	ov7251->sd.ctrl_handler = &ov7251->ctrls;
+ 
 -- 
 2.25.1
 
