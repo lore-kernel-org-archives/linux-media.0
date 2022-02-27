@@ -2,52 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EE7FC4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 800E9C43219
 	for <linux-media@archiver.kernel.org>; Sun, 27 Feb 2022 14:50:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbiB0OvK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 27 Feb 2022 09:51:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
+        id S229929AbiB0OvO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 27 Feb 2022 09:51:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiB0OvJ (ORCPT
+        with ESMTP id S231416AbiB0OvL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 27 Feb 2022 09:51:09 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFE75D5E9;
-        Sun, 27 Feb 2022 06:50:32 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id f8so1925265edf.10;
-        Sun, 27 Feb 2022 06:50:32 -0800 (PST)
+        Sun, 27 Feb 2022 09:51:11 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359295D5E9;
+        Sun, 27 Feb 2022 06:50:35 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id hw13so20017343ejc.9;
+        Sun, 27 Feb 2022 06:50:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fGi7V8f/8PCG3FpLnmowzHOV4cFkD8Gq/ByZ6la1IPg=;
-        b=hzPWe+jX/7+e9H8NqkS/+4rfUfunau4bHR/8ykqfml8K0ruAFohKPfLS+fwopvLj85
-         89MBU3SIKprZGEMAv6O8Hr1cnUSMn4DK3/iSXFRwU50ZaQDnvxHk/TaEZ69uYk326rLN
-         6tP6sTj2B80ssDDltzpJyVYnM/gtzCSLIiRDNlLrRTVAD4HtJYANiP4ZqAs9IxrffFUK
-         Byhh8YX9H9CbUXoNTbGwM5bX0JyfX4pSNFSmItJonpRM8Fpb79O8KkkJv0VAqkeUtiL4
-         zGldlts3dFqOCSuDpeA6H8t9TC5YJdg40yiSQ8ogR4Imkf3B1u554POVWa9Fmm7EzC4B
-         dmGg==
+        bh=s8aw+CVJhbPdtKJ/NAqmQwDMpbWRqHJhFsfgMUPvA3s=;
+        b=ZBLgtAq/fKqU6MUfgFta33PAUJZCPtqDXaxgjx//ZMHxknKd49GqYoSCksucKePkDr
+         mfK0U/GB9BFvAXkttisbzMW0HcftXUglKgRGms55jgQXt39QwaTQRwjTyeh7BsvM1miq
+         q/fSUttom0AQfj2XntgWtSF74LeWeVpkSG5ARpPt670rOhFKNyixOnMrr75DGdE3/Fbh
+         PdBMRxkJFmWx/NU/jdZi2nG4RBpVVN9z1vD00qhl2b1TNIw5xo8yEuJfb/NbUx2hiV4X
+         dmiwaYZM7RDY9mhhEembjTyF2yOc9lYDhM4XrhX9Qh0KbPn6hD5X1it9GfRw814b6ctU
+         E0Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fGi7V8f/8PCG3FpLnmowzHOV4cFkD8Gq/ByZ6la1IPg=;
-        b=jRW7LpOnpyZ0ZxmpLIyWqpNP+urLS/vO0lynQ+rtztp1nrlVZA38KrME56wj7D/8ew
-         bjwyxMunWWtr8WUf+fqNQHoW60BdXu8/e6WEAgB8IA8kd4FH0/XoQ/c/j/WcWLB+Hstb
-         uhLLMrW4EQv3Krf5mGools4lYLxETyhHwNNrnfOxFr0rZsrtbQKTWd1QdeFlRuj35ced
-         HIxgq8GtVTQ5uT5ZjxnO3B7avmxJANNG2uqKbJwlQl2ABbQw4vyyg8RLSr8ZHaCXNiZK
-         heTAovb+rbFO419V2TEgiLi6ZXwxblHyT77Q3Ru1R3sX/RCDpOW/cs2WYmkopo5WPsid
-         0DHg==
-X-Gm-Message-State: AOAM531thZAY2V98lsWFGF2yRE3SqigBbySQ48biuTt3wZbifP8oFeYb
-        lfrKvnqR4YTI1MJWu4JgmIE=
-X-Google-Smtp-Source: ABdhPJyr6HTKorqbTa0EK/G4pBDfhQMVAgAD+XKw3QGDBOcDvTWfJd57g+f/QPZy6xOyUFjJd48viw==
-X-Received: by 2002:a05:6402:4415:b0:410:d28b:1e14 with SMTP id y21-20020a056402441500b00410d28b1e14mr15428586eda.211.1645973431450;
-        Sun, 27 Feb 2022 06:50:31 -0800 (PST)
+        bh=s8aw+CVJhbPdtKJ/NAqmQwDMpbWRqHJhFsfgMUPvA3s=;
+        b=4ahAjPby8s/dVwycLTj5HVKlLWQ6wdca/k0MrffnYAtXHP49X4HPf/Fs2elY9RrE5B
+         /xQWmbUOgUD0ZR7wjjhwL7Qo9F51G3jthH3CCE+6o0/Lqf9t/wUdD0L+ZyieJhg0Xb06
+         TfE/Owo5Cm1VbErTKSkgOBo+CP3RuXP58u8yRfTRqjrxm/nAFNTjiwl7TXjHCYK4rWFU
+         +nUawM3H2/OxSTLOHRSjKK751Wr0AhDa+t7RsLY3JfSCdb35j/wYKczp1+wLxq2+s0+W
+         5iUagLSQcu+KH6j8+25nk/iNHAN07MRiRfmmMDXq0xzvA3gVQ8Pt/OfZaZT8WJfZDhH9
+         Wl3g==
+X-Gm-Message-State: AOAM533zvJpjan99c629WUvAHkkuWZoatI56qdrVLxWou0iJ1UvUv3iG
+        rR/8faU850jDy3/jSZnbVssUwsQ/5msCqg==
+X-Google-Smtp-Source: ABdhPJwJj07ONhhuMWXyHUXJvedtR6OfuCrdqZCSxd+tPU4hIGiprZ+jf5YCICbZwsJDHDbZaU8NcA==
+X-Received: by 2002:a17:906:30d1:b0:6cf:c116:c9d3 with SMTP id b17-20020a17090630d100b006cfc116c9d3mr11689773ejb.245.1645973433800;
+        Sun, 27 Feb 2022 06:50:33 -0800 (PST)
 Received: from kista.localdomain (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id a1-20020a1709063e8100b006ce06ed8aa7sm3501887ejj.142.2022.02.27.06.50.30
+        by smtp.gmail.com with ESMTPSA id a1-20020a1709063e8100b006ce06ed8aa7sm3501887ejj.142.2022.02.27.06.50.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 06:50:31 -0800 (PST)
+        Sun, 27 Feb 2022 06:50:33 -0800 (PST)
 From:   Jernej Skrabec <jernej.skrabec@gmail.com>
 To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
 Cc:     mchehab@kernel.org, nicolas@ndufresne.ca, hverkuil-cisco@xs4all.nl,
@@ -56,9 +56,9 @@ Cc:     mchehab@kernel.org, nicolas@ndufresne.ca, hverkuil-cisco@xs4all.nl,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [RFC PATCH 2/8] media: Add P010 format
-Date:   Sun, 27 Feb 2022 15:49:20 +0100
-Message-Id: <20220227144926.3006585-3-jernej.skrabec@gmail.com>
+Subject: [RFC PATCH 4/8] media: hantro: postproc: Fix buffer size calculation
+Date:   Sun, 27 Feb 2022 15:49:22 +0100
+Message-Id: <20220227144926.3006585-5-jernej.skrabec@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
 References: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
@@ -68,52 +68,92 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add P010 format, which is commonly used for 10-bit videos.
+When allocating aux buffers for postprocessing, it's assumed that base
+buffer size is the same as that of output. Coincidentally, that's true
+most of the time, but not always. 10-bit source also needs aux buffer
+size which is appropriate for 10-bit native format, even if the output
+format is 8-bit. Similarly, mv sizes and other extra buffer size also
+depends on source width/height, not destination.
 
 Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- drivers/media/v4l2-core/v4l2-common.c | 2 ++
- drivers/media/v4l2-core/v4l2-ioctl.c  | 1 +
- include/uapi/linux/videodev2.h        | 1 +
- 3 files changed, 4 insertions(+)
+ .../staging/media/hantro/hantro_postproc.c    | 24 +++++++++++++------
+ drivers/staging/media/hantro/hantro_v4l2.c    |  2 +-
+ drivers/staging/media/hantro/hantro_v4l2.h    |  2 ++
+ 3 files changed, 20 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 1db0020e08c0..4ede36546e9c 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -275,6 +275,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
- 		{ .format = V4L2_PIX_FMT_YUV422P, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_GREY,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+diff --git a/drivers/staging/media/hantro/hantro_postproc.c b/drivers/staging/media/hantro/hantro_postproc.c
+index 248abe5423f0..1a76628d5754 100644
+--- a/drivers/staging/media/hantro/hantro_postproc.c
++++ b/drivers/staging/media/hantro/hantro_postproc.c
+@@ -12,6 +12,7 @@
+ #include "hantro_hw.h"
+ #include "hantro_g1_regs.h"
+ #include "hantro_g2_regs.h"
++#include "hantro_v4l2.h"
  
-+		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+ #define HANTRO_PP_REG_WRITE(vpu, reg_name, val) \
+ { \
+@@ -137,18 +138,27 @@ int hantro_postproc_alloc(struct hantro_ctx *ctx)
+ 	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
+ 	struct vb2_queue *cap_queue = &m2m_ctx->cap_q_ctx.q;
+ 	unsigned int num_buffers = cap_queue->num_buffers;
++	struct v4l2_pix_format_mplane pix_mp;
++	const struct hantro_fmt *fmt;
+ 	unsigned int i, buf_size;
+ 
+-	buf_size = ctx->dst_fmt.plane_fmt[0].sizeimage;
++	/* this should always pick native format */
++	fmt = hantro_get_default_fmt(ctx, false);
++	if (!fmt)
++		return -EINVAL;
++	v4l2_fill_pixfmt_mp(&pix_mp, fmt->fourcc, ctx->src_fmt.width,
++			    ctx->src_fmt.height);
 +
- 		/* Tiled YUV formats */
- 		{ .format = V4L2_PIX_FMT_NV12_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
- 		{ .format = V4L2_PIX_FMT_P010_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 048f326c57b9..a8d999e23e5b 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1295,6 +1295,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_PIX_FMT_M420:		descr = "YUV 4:2:0 (M420)"; break;
- 	case V4L2_PIX_FMT_NV12:		descr = "Y/CbCr 4:2:0"; break;
- 	case V4L2_PIX_FMT_NV21:		descr = "Y/CrCb 4:2:0"; break;
-+	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/CbCr 4:2:0"; break;
- 	case V4L2_PIX_FMT_NV16:		descr = "Y/CbCr 4:2:2"; break;
- 	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
- 	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 772dbadd1a24..211bc11a48cb 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -597,6 +597,7 @@ struct v4l2_pix_format {
- /* two planes -- one Y, one Cr + Cb interleaved  */
- #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/CbCr 4:2:0  */
- #define V4L2_PIX_FMT_NV21    v4l2_fourcc('N', 'V', '2', '1') /* 12  Y/CrCb 4:2:0  */
-+#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 24  Y/CbCr 4:2:0 10-bit */
- #define V4L2_PIX_FMT_NV16    v4l2_fourcc('N', 'V', '1', '6') /* 16  Y/CbCr 4:2:2  */
- #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
- #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
++	buf_size = pix_mp.plane_fmt[0].sizeimage;
+ 	if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_H264_SLICE)
+-		buf_size += hantro_h264_mv_size(ctx->dst_fmt.width,
+-						ctx->dst_fmt.height);
++		buf_size += hantro_h264_mv_size(pix_mp.width,
++						pix_mp.height);
+ 	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_VP9_FRAME)
+-		buf_size += hantro_vp9_mv_size(ctx->dst_fmt.width,
+-					       ctx->dst_fmt.height);
++		buf_size += hantro_vp9_mv_size(pix_mp.width,
++					       pix_mp.height);
+ 	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_HEVC_SLICE)
+-		buf_size += hantro_hevc_mv_size(ctx->dst_fmt.width,
+-						ctx->dst_fmt.height);
++		buf_size += hantro_hevc_mv_size(pix_mp.width,
++						pix_mp.height);
+ 
+ 	for (i = 0; i < num_buffers; ++i) {
+ 		struct hantro_aux_buf *priv = &ctx->postproc.dec_q[i];
+diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
+index 1214fa2f64ae..69d2a108e1e6 100644
+--- a/drivers/staging/media/hantro/hantro_v4l2.c
++++ b/drivers/staging/media/hantro/hantro_v4l2.c
+@@ -118,7 +118,7 @@ hantro_find_format(const struct hantro_ctx *ctx, u32 fourcc)
+ 	return NULL;
+ }
+ 
+-static const struct hantro_fmt *
++const struct hantro_fmt *
+ hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream)
+ {
+ 	const struct hantro_fmt *formats;
+diff --git a/drivers/staging/media/hantro/hantro_v4l2.h b/drivers/staging/media/hantro/hantro_v4l2.h
+index f4a5905ed518..cc9a645be886 100644
+--- a/drivers/staging/media/hantro/hantro_v4l2.h
++++ b/drivers/staging/media/hantro/hantro_v4l2.h
+@@ -23,5 +23,7 @@ extern const struct vb2_ops hantro_queue_ops;
+ 
+ void hantro_reset_fmts(struct hantro_ctx *ctx);
+ int hantro_get_formath_depth(u32 fourcc);
++const struct hantro_fmt *
++hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream);
+ 
+ #endif /* HANTRO_V4L2_H_ */
 -- 
 2.35.1
 
