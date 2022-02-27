@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6392EC433EF
-	for <linux-media@archiver.kernel.org>; Sun, 27 Feb 2022 16:01:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12AAAC433F5
+	for <linux-media@archiver.kernel.org>; Sun, 27 Feb 2022 16:01:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbiB0QCW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 27 Feb 2022 11:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
+        id S231585AbiB0QCY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 27 Feb 2022 11:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231579AbiB0QCV (ORCPT
+        with ESMTP id S231579AbiB0QCX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 27 Feb 2022 11:02:21 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FE85D5DF
-        for <linux-media@vger.kernel.org>; Sun, 27 Feb 2022 08:01:44 -0800 (PST)
+        Sun, 27 Feb 2022 11:02:23 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB3E4B867
+        for <linux-media@vger.kernel.org>; Sun, 27 Feb 2022 08:01:47 -0800 (PST)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id ED12721D0;
-        Sun, 27 Feb 2022 17:01:36 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4AFFD21D2;
+        Sun, 27 Feb 2022 17:01:38 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1645977697;
-        bh=+I21XNPnxfBFcrpJBAdDAPtZrSNDC7LAAxQbMXt9Tcc=;
+        s=mail; t=1645977698;
+        bh=WIn4OVXTNCwsPUlXTs+ykXOowHlrW3DE9/9LNQ2DmiE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p8O1HvJWpZ7SyKjNeh/0S7d/jZtaciIo4d+bF5/FRvdSQSNkRh3eMCGBJfI/kc0qC
-         QxZH4O79jWActKlVi2T80r50IrwW4LTRfjfPOkWGI3jMWTQKXAqS6mAgK0eju1GKXa
-         BnvkKiMAi0lHKptOpeXtMsJoBCcft7b5ds7cvMLc=
+        b=ukiH2tNRCkQtKL2OXw2U9O4ZBM/1PqOIZtlSf65w/JjRaFXx6XWjbZ6SgePplYrnh
+         ssyMkjnWsY4xFZws8ZMhteYDHAHvpBumnpGPs5HMNgPgXW00qJiPRpB7b03inSewKF
+         /NESE00K6fiayWGUAspLua17oHXLXPqLiv8AsTPk=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Dafna Hirschfeld <dafna@fastmail.com>,
@@ -32,9 +32,9 @@ Cc:     Dafna Hirschfeld <dafna@fastmail.com>,
         Paul Elder <paul.elder@ideasonboard.com>,
         Tomasz Figa <tfiga@google.com>,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH 09/16] media: rkisp1: regs: Rename CCL, ICCL and IRCL registers with VI_ prefix
-Date:   Sun, 27 Feb 2022 18:01:09 +0200
-Message-Id: <20220227160116.18556-10-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 11/16] media: rkisp1: Move debugfs code to a separate file
+Date:   Sun, 27 Feb 2022 18:01:11 +0200
+Message-Id: <20220227160116.18556-12-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220227160116.18556-1-laurent.pinchart@ideasonboard.com>
 References: <20220227160116.18556-1-laurent.pinchart@ideasonboard.com>
@@ -44,165 +44,175 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The documentation names the CCL, ICCL and IRCL registers with a VI_
-prefix, like the VI_ID and VI_DPCL registers. Fix the macro names
-accordingly.
+To avoid cluttering the main rkisp1-dev.c driver file, move debugfs code
+to a separate source file. This prepares for extensions to the debugfs
+infrastructure.
+
+While at it, add a missing forward declaration for struct dentry in
+rkisp1-common.h to avoid depending on indirect includes.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../platform/rockchip/rkisp1/rkisp1-isp.c     | 19 +++---
- .../platform/rockchip/rkisp1/rkisp1-params.c  |  8 +--
- .../platform/rockchip/rkisp1/rkisp1-regs.h    | 60 +++++++++----------
- 3 files changed, 44 insertions(+), 43 deletions(-)
+ .../media/platform/rockchip/rkisp1/Makefile   |  1 +
+ .../platform/rockchip/rkisp1/rkisp1-common.h  |  5 ++
+ .../platform/rockchip/rkisp1/rkisp1-debug.c   | 50 +++++++++++++++++++
+ .../platform/rockchip/rkisp1/rkisp1-dev.c     | 33 +-----------
+ 4 files changed, 57 insertions(+), 32 deletions(-)
+ create mode 100644 drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-index f84e53b60ee1..e8abb57fb728 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-@@ -523,20 +523,21 @@ static void rkisp1_isp_stop(struct rkisp1_device *rkisp1)
- 	readx_poll_timeout(readl, rkisp1->base_addr + RKISP1_CIF_ISP_RIS,
- 			   val, val & RKISP1_CIF_ISP_OFF, 20, 100);
- 	rkisp1_write(rkisp1,
--		     RKISP1_CIF_IRCL_MIPI_SW_RST | RKISP1_CIF_IRCL_ISP_SW_RST,
--		     RKISP1_CIF_IRCL);
--	rkisp1_write(rkisp1, 0x0, RKISP1_CIF_IRCL);
-+		     RKISP1_CIF_VI_IRCL_MIPI_SW_RST |
-+		     RKISP1_CIF_VI_IRCL_ISP_SW_RST,
-+		     RKISP1_CIF_VI_IRCL);
-+	rkisp1_write(rkisp1, 0x0, RKISP1_CIF_VI_IRCL);
+diff --git a/drivers/media/platform/rockchip/rkisp1/Makefile b/drivers/media/platform/rockchip/rkisp1/Makefile
+index ab32a77db8f7..1a39bdcc608e 100644
+--- a/drivers/media/platform/rockchip/rkisp1/Makefile
++++ b/drivers/media/platform/rockchip/rkisp1/Makefile
+@@ -3,6 +3,7 @@
+ obj-$(CONFIG_VIDEO_ROCKCHIP_ISP1) += rockchip-isp1.o
+ rockchip-isp1-objs += 	rkisp1-capture.o \
+ 			rkisp1-common.o \
++			rkisp1-debug.o \
+ 			rkisp1-dev.o \
+ 			rkisp1-isp.o \
+ 			rkisp1-resizer.o \
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+index 64ad7452eb6b..b860eac9a981 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+@@ -23,6 +23,8 @@
+ 
+ #include "rkisp1-regs.h"
+ 
++struct dentry;
++
+ /*
+  * flags on the 'direction' field in struct 'rkisp1_isp_mbus_info' that indicate
+  * on which pad the media bus format is supported
+@@ -516,4 +518,7 @@ void rkisp1_stats_unregister(struct rkisp1_device *rkisp1);
+ int rkisp1_params_register(struct rkisp1_device *rkisp1);
+ void rkisp1_params_unregister(struct rkisp1_device *rkisp1);
+ 
++void rkisp1_debug_init(struct rkisp1_device *rkisp1);
++void rkisp1_debug_cleanup(struct rkisp1_device *rkisp1);
++
+ #endif /* _RKISP1_COMMON_H */
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c
+new file mode 100644
+index 000000000000..64b33774cbdf
+--- /dev/null
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Rockchip ISP1 Driver - Base driver
++ *
++ * Copyright (C) 2019 Collabora, Ltd.
++ *
++ * Based on Rockchip ISP1 driver by Rockchip Electronics Co., Ltd.
++ * Copyright (C) 2017 Rockchip Electronics Co., Ltd.
++ */
++
++#include <linux/debugfs.h>
++#include <linux/device.h>
++
++#include "rkisp1-common.h"
++
++void rkisp1_debug_init(struct rkisp1_device *rkisp1)
++{
++	struct rkisp1_debug *debug = &rkisp1->debug;
++
++	debug->debugfs_dir = debugfs_create_dir(dev_name(rkisp1->dev), NULL);
++
++	debugfs_create_ulong("data_loss", 0444, debug->debugfs_dir,
++			     &debug->data_loss);
++	debugfs_create_ulong("outform_size_err", 0444,  debug->debugfs_dir,
++			     &debug->outform_size_error);
++	debugfs_create_ulong("img_stabilization_size_error", 0444,
++			     debug->debugfs_dir,
++			     &debug->img_stabilization_size_error);
++	debugfs_create_ulong("inform_size_error", 0444,  debug->debugfs_dir,
++			     &debug->inform_size_error);
++	debugfs_create_ulong("irq_delay", 0444,  debug->debugfs_dir,
++			     &debug->irq_delay);
++	debugfs_create_ulong("mipi_error", 0444, debug->debugfs_dir,
++			     &debug->mipi_error);
++	debugfs_create_ulong("stats_error", 0444, debug->debugfs_dir,
++			     &debug->stats_error);
++	debugfs_create_ulong("mp_stop_timeout", 0444, debug->debugfs_dir,
++			     &debug->stop_timeout[RKISP1_MAINPATH]);
++	debugfs_create_ulong("sp_stop_timeout", 0444, debug->debugfs_dir,
++			     &debug->stop_timeout[RKISP1_SELFPATH]);
++	debugfs_create_ulong("mp_frame_drop", 0444, debug->debugfs_dir,
++			     &debug->frame_drop[RKISP1_MAINPATH]);
++	debugfs_create_ulong("sp_frame_drop", 0444, debug->debugfs_dir,
++			     &debug->frame_drop[RKISP1_SELFPATH]);
++}
++
++void rkisp1_debug_cleanup(struct rkisp1_device *rkisp1)
++{
++	debugfs_remove_recursive(rkisp1->debug.debugfs_dir);
++}
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+index f8b2573aa9da..c7ad1986e67b 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+@@ -9,7 +9,6 @@
+  */
+ 
+ #include <linux/clk.h>
+-#include <linux/debugfs.h>
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+@@ -460,36 +459,6 @@ static const struct of_device_id rkisp1_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, rkisp1_of_match);
+ 
+-static void rkisp1_debug_init(struct rkisp1_device *rkisp1)
+-{
+-	struct rkisp1_debug *debug = &rkisp1->debug;
+-
+-	debug->debugfs_dir = debugfs_create_dir(dev_name(rkisp1->dev), NULL);
+-	debugfs_create_ulong("data_loss", 0444, debug->debugfs_dir,
+-			     &debug->data_loss);
+-	debugfs_create_ulong("outform_size_err", 0444,  debug->debugfs_dir,
+-			     &debug->outform_size_error);
+-	debugfs_create_ulong("img_stabilization_size_error", 0444,
+-			     debug->debugfs_dir,
+-			     &debug->img_stabilization_size_error);
+-	debugfs_create_ulong("inform_size_error", 0444,  debug->debugfs_dir,
+-			     &debug->inform_size_error);
+-	debugfs_create_ulong("irq_delay", 0444,  debug->debugfs_dir,
+-			     &debug->irq_delay);
+-	debugfs_create_ulong("mipi_error", 0444, debug->debugfs_dir,
+-			     &debug->mipi_error);
+-	debugfs_create_ulong("stats_error", 0444, debug->debugfs_dir,
+-			     &debug->stats_error);
+-	debugfs_create_ulong("mp_stop_timeout", 0444, debug->debugfs_dir,
+-			     &debug->stop_timeout[RKISP1_MAINPATH]);
+-	debugfs_create_ulong("sp_stop_timeout", 0444, debug->debugfs_dir,
+-			     &debug->stop_timeout[RKISP1_SELFPATH]);
+-	debugfs_create_ulong("mp_frame_drop", 0444, debug->debugfs_dir,
+-			     &debug->frame_drop[RKISP1_MAINPATH]);
+-	debugfs_create_ulong("sp_frame_drop", 0444, debug->debugfs_dir,
+-			     &debug->frame_drop[RKISP1_SELFPATH]);
+-}
+-
+ static int rkisp1_probe(struct platform_device *pdev)
+ {
+ 	const struct rkisp1_match_data *match_data;
+@@ -586,13 +555,13 @@ static int rkisp1_remove(struct platform_device *pdev)
+ 	v4l2_async_nf_cleanup(&rkisp1->notifier);
+ 
+ 	rkisp1_entities_unregister(rkisp1);
++	rkisp1_debug_cleanup(rkisp1);
+ 
+ 	media_device_unregister(&rkisp1->media_dev);
+ 	v4l2_device_unregister(&rkisp1->v4l2_dev);
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 
+-	debugfs_remove_recursive(rkisp1->debug.debugfs_dir);
+ 	return 0;
  }
  
- static void rkisp1_config_clk(struct rkisp1_device *rkisp1)
- {
--	u32 val = RKISP1_CIF_ICCL_ISP_CLK | RKISP1_CIF_ICCL_CP_CLK |
--		  RKISP1_CIF_ICCL_MRSZ_CLK | RKISP1_CIF_ICCL_SRSZ_CLK |
--		  RKISP1_CIF_ICCL_JPEG_CLK | RKISP1_CIF_ICCL_MI_CLK |
--		  RKISP1_CIF_ICCL_IE_CLK | RKISP1_CIF_ICCL_MIPI_CLK |
--		  RKISP1_CIF_ICCL_DCROP_CLK;
-+	u32 val = RKISP1_CIF_VI_ICCL_ISP_CLK | RKISP1_CIF_VI_ICCL_CP_CLK |
-+		  RKISP1_CIF_VI_ICCL_MRSZ_CLK | RKISP1_CIF_VI_ICCL_SRSZ_CLK |
-+		  RKISP1_CIF_VI_ICCL_JPEG_CLK | RKISP1_CIF_VI_ICCL_MI_CLK |
-+		  RKISP1_CIF_VI_ICCL_IE_CLK | RKISP1_CIF_VI_ICCL_MIPI_CLK |
-+		  RKISP1_CIF_VI_ICCL_DCROP_CLK;
- 
--	rkisp1_write(rkisp1, val, RKISP1_CIF_ICCL);
-+	rkisp1_write(rkisp1, val, RKISP1_CIF_VI_ICCL);
- 
- 	/* ensure sp and mp can run at the same time in V12 */
- 	if (rkisp1->media_dev.hw_revision == RKISP1_V12) {
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-index d41823c861ca..7a172d47d475 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-@@ -1058,8 +1058,8 @@ static void rkisp1_ie_config(struct rkisp1_params *params,
- static void rkisp1_ie_enable(struct rkisp1_params *params, bool en)
- {
- 	if (en) {
--		rkisp1_param_set_bits(params, RKISP1_CIF_ICCL,
--				      RKISP1_CIF_ICCL_IE_CLK);
-+		rkisp1_param_set_bits(params, RKISP1_CIF_VI_ICCL,
-+				      RKISP1_CIF_VI_ICCL_IE_CLK);
- 		rkisp1_write(params->rkisp1, RKISP1_CIF_IMG_EFF_CTRL_ENABLE,
- 			     RKISP1_CIF_IMG_EFF_CTRL);
- 		rkisp1_param_set_bits(params, RKISP1_CIF_IMG_EFF_CTRL,
-@@ -1067,8 +1067,8 @@ static void rkisp1_ie_enable(struct rkisp1_params *params, bool en)
- 	} else {
- 		rkisp1_param_clear_bits(params, RKISP1_CIF_IMG_EFF_CTRL,
- 					RKISP1_CIF_IMG_EFF_CTRL_ENABLE);
--		rkisp1_param_clear_bits(params, RKISP1_CIF_ICCL,
--					RKISP1_CIF_ICCL_IE_CLK);
-+		rkisp1_param_clear_bits(params, RKISP1_CIF_VI_ICCL,
-+					RKISP1_CIF_VI_ICCL_IE_CLK);
- 	}
- }
- 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
-index 9e786de23480..4e2b73227e61 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
-@@ -210,7 +210,7 @@
- #define RKISP1_CIF_MI_XTD_FMT_CTRL_SP_CB_CR_SWAP	BIT(1)
- #define RKISP1_CIF_MI_XTD_FMT_CTRL_DMA_CB_CR_SWAP	BIT(2)
- 
--/* CCL */
-+/* VI_CCL */
- #define RKISP1_CIF_CCL_CIF_CLK_DIS			BIT(2)
- /* VI_ISP_CLK_CTRL */
- #define RKISP1_CIF_CLK_CTRL_ISP_RAW			BIT(0)
-@@ -241,32 +241,32 @@
- #define RKISP1_CIF_CLK_CTRL_RSZS			BIT(25)
- #define RKISP1_CIF_CLK_CTRL_MIPI			BIT(26)
- #define RKISP1_CIF_CLK_CTRL_MARVINMI			BIT(27)
--/* ICCL */
--#define RKISP1_CIF_ICCL_ISP_CLK				BIT(0)
--#define RKISP1_CIF_ICCL_CP_CLK				BIT(1)
--#define RKISP1_CIF_ICCL_RES_2				BIT(2)
--#define RKISP1_CIF_ICCL_MRSZ_CLK			BIT(3)
--#define RKISP1_CIF_ICCL_SRSZ_CLK			BIT(4)
--#define RKISP1_CIF_ICCL_JPEG_CLK			BIT(5)
--#define RKISP1_CIF_ICCL_MI_CLK				BIT(6)
--#define RKISP1_CIF_ICCL_RES_7				BIT(7)
--#define RKISP1_CIF_ICCL_IE_CLK				BIT(8)
--#define RKISP1_CIF_ICCL_SIMP_CLK			BIT(9)
--#define RKISP1_CIF_ICCL_SMIA_CLK			BIT(10)
--#define RKISP1_CIF_ICCL_MIPI_CLK			BIT(11)
--#define RKISP1_CIF_ICCL_DCROP_CLK			BIT(12)
--/* IRCL */
--#define RKISP1_CIF_IRCL_ISP_SW_RST			BIT(0)
--#define RKISP1_CIF_IRCL_CP_SW_RST			BIT(1)
--#define RKISP1_CIF_IRCL_YCS_SW_RST			BIT(2)
--#define RKISP1_CIF_IRCL_MRSZ_SW_RST			BIT(3)
--#define RKISP1_CIF_IRCL_SRSZ_SW_RST			BIT(4)
--#define RKISP1_CIF_IRCL_JPEG_SW_RST			BIT(5)
--#define RKISP1_CIF_IRCL_MI_SW_RST			BIT(6)
--#define RKISP1_CIF_IRCL_CIF_SW_RST			BIT(7)
--#define RKISP1_CIF_IRCL_IE_SW_RST			BIT(8)
--#define RKISP1_CIF_IRCL_SI_SW_RST			BIT(9)
--#define RKISP1_CIF_IRCL_MIPI_SW_RST			BIT(11)
-+/* VI_ICCL */
-+#define RKISP1_CIF_VI_ICCL_ISP_CLK			BIT(0)
-+#define RKISP1_CIF_VI_ICCL_CP_CLK			BIT(1)
-+#define RKISP1_CIF_VI_ICCL_RES_2			BIT(2)
-+#define RKISP1_CIF_VI_ICCL_MRSZ_CLK			BIT(3)
-+#define RKISP1_CIF_VI_ICCL_SRSZ_CLK			BIT(4)
-+#define RKISP1_CIF_VI_ICCL_JPEG_CLK			BIT(5)
-+#define RKISP1_CIF_VI_ICCL_MI_CLK			BIT(6)
-+#define RKISP1_CIF_VI_ICCL_RES_7			BIT(7)
-+#define RKISP1_CIF_VI_ICCL_IE_CLK			BIT(8)
-+#define RKISP1_CIF_VI_ICCL_SIMP_CLK			BIT(9)
-+#define RKISP1_CIF_VI_ICCL_SMIA_CLK			BIT(10)
-+#define RKISP1_CIF_VI_ICCL_MIPI_CLK			BIT(11)
-+#define RKISP1_CIF_VI_ICCL_DCROP_CLK			BIT(12)
-+/* VI_IRCL */
-+#define RKISP1_CIF_VI_IRCL_ISP_SW_RST			BIT(0)
-+#define RKISP1_CIF_VI_IRCL_CP_SW_RST			BIT(1)
-+#define RKISP1_CIF_VI_IRCL_YCS_SW_RST			BIT(2)
-+#define RKISP1_CIF_VI_IRCL_MRSZ_SW_RST			BIT(3)
-+#define RKISP1_CIF_VI_IRCL_SRSZ_SW_RST			BIT(4)
-+#define RKISP1_CIF_VI_IRCL_JPEG_SW_RST			BIT(5)
-+#define RKISP1_CIF_VI_IRCL_MI_SW_RST			BIT(6)
-+#define RKISP1_CIF_VI_IRCL_CIF_SW_RST			BIT(7)
-+#define RKISP1_CIF_VI_IRCL_IE_SW_RST			BIT(8)
-+#define RKISP1_CIF_VI_IRCL_SI_SW_RST			BIT(9)
-+#define RKISP1_CIF_VI_IRCL_MIPI_SW_RST			BIT(11)
- 
- /* C_PROC_CTR */
- #define RKISP1_CIF_C_PROC_CTR_ENABLE			BIT(0)
-@@ -687,11 +687,11 @@
- /*                            CIF Registers                            */
- /* =================================================================== */
- #define RKISP1_CIF_CTRL_BASE			0x00000000
--#define RKISP1_CIF_CCL				(RKISP1_CIF_CTRL_BASE + 0x00000000)
-+#define RKISP1_CIF_VI_CCL			(RKISP1_CIF_CTRL_BASE + 0x00000000)
- #define RKISP1_CIF_VI_ID			(RKISP1_CIF_CTRL_BASE + 0x00000008)
- #define RKISP1_CIF_VI_ISP_CLK_CTRL_V12		(RKISP1_CIF_CTRL_BASE + 0x0000000C)
--#define RKISP1_CIF_ICCL				(RKISP1_CIF_CTRL_BASE + 0x00000010)
--#define RKISP1_CIF_IRCL				(RKISP1_CIF_CTRL_BASE + 0x00000014)
-+#define RKISP1_CIF_VI_ICCL			(RKISP1_CIF_CTRL_BASE + 0x00000010)
-+#define RKISP1_CIF_VI_IRCL			(RKISP1_CIF_CTRL_BASE + 0x00000014)
- #define RKISP1_CIF_VI_DPCL			(RKISP1_CIF_CTRL_BASE + 0x00000018)
- 
- #define RKISP1_CIF_IMG_EFF_BASE			0x00000200
 -- 
 Regards,
 
