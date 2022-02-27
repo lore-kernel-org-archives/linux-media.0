@@ -2,108 +2,110 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F41C4C4332F
-	for <linux-media@archiver.kernel.org>; Sun, 27 Feb 2022 14:50:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68248C433EF
+	for <linux-media@archiver.kernel.org>; Sun, 27 Feb 2022 16:01:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbiB0OvR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 27 Feb 2022 09:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
+        id S230028AbiB0QCL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 27 Feb 2022 11:02:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbiB0OvP (ORCPT
+        with ESMTP id S229853AbiB0QCL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 27 Feb 2022 09:51:15 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7825D5F8;
-        Sun, 27 Feb 2022 06:50:39 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id p15so20054639ejc.7;
-        Sun, 27 Feb 2022 06:50:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=se5fdTdf84xDWqTWcks3tih8Dd3br+tSQjNncikkPL8=;
-        b=WsxMOlMSwbUo4F4tfM2v66cny1ddxMCxjW/WYiH2LPsXUP0Dgw0BB4U5alKPAeg5G+
-         E0/6lKV+dL/upl6B084xKPuUNJ5OKq2P50p0DTossOk75HFDqMr8p69TYGbva8QvM3tI
-         /ELppltgd1GoRKhJfYnK5didNSdoRgcEJ++Y+wZ62VL0lxEqfWdRoioXUfoCZ3NHhD4G
-         Fg3U9k/MUustCZxsQDuEHO2KiD9gKEQdEfL95eW6XonSLkgDMl45BZCN2IoID6Yyd9Pz
-         XS4DhLDsiolky6cyni5hk1amiOStXP0EEDh5AKOkTs8V3iQpU4ZAEO/i1kPX33L7hqBh
-         p8IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=se5fdTdf84xDWqTWcks3tih8Dd3br+tSQjNncikkPL8=;
-        b=hMiP3j4Q6BiP6cTVaDyfk60Q8q8e8x5Ex4gXudIocxemQw32OizrwNGrA+zLHIobZS
-         +yFOhkgG776SupiMj+eGOXV/oEN/daR1NfCKBZmIuinOKeOXt9D212p1pHm1Y58pPMwK
-         BHS38QCI7Y3BayrrKCn+oZ1IMcwp2GqgWj1I81SYWgEb6O0wfUNbUeJMeBO6PJ1Jm9ua
-         zQPwkwbs+PlR30r73gqnNE45UtMdANEftPDmlA7AU16KNsJKdKhCeHT0y3wOAkDbw6ac
-         L7u/S7Depdbh3WqncPrUvrmexApC00t2JV0hWjtlJuhmu60NjB+Dc893ebvmdW5G0V7g
-         Yv/Q==
-X-Gm-Message-State: AOAM533CqvUfNH6OmRMeo8/zjx32xuFpe6S7+e6OYDsnRf3s17BQGD0S
-        YqvKQk0nJ21EyMDlkkzqhVo=
-X-Google-Smtp-Source: ABdhPJz2uGFr5qrfNl7dYD/dRIIHoDCaicFBQ09kr3aVt9005jUPJ6GCnQpGx27zrb9Kmn6OzpytMA==
-X-Received: by 2002:a17:906:2991:b0:6cf:6b24:e92f with SMTP id x17-20020a170906299100b006cf6b24e92fmr12153116eje.748.1645973437696;
-        Sun, 27 Feb 2022 06:50:37 -0800 (PST)
-Received: from kista.localdomain (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id a1-20020a1709063e8100b006ce06ed8aa7sm3501887ejj.142.2022.02.27.06.50.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 06:50:37 -0800 (PST)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
-Cc:     mchehab@kernel.org, nicolas@ndufresne.ca, hverkuil-cisco@xs4all.nl,
-        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [RFC PATCH 7/8] media: hantro: sunxi: Enable 10-bit decoding
-Date:   Sun, 27 Feb 2022 15:49:25 +0100
-Message-Id: <20220227144926.3006585-8-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
-References: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
+        Sun, 27 Feb 2022 11:02:11 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C8749F21
+        for <linux-media@vger.kernel.org>; Sun, 27 Feb 2022 08:01:33 -0800 (PST)
+Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C63DC47C;
+        Sun, 27 Feb 2022 17:01:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1645977691;
+        bh=v4T9IOGPNq/bMSxFyn2Excl8+QKXlLWewW+LbrftO1g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OfnqGGn5K6CkIejOykcFaYVO4crFA2xEwfPtf1ypu+/UPzd2J1zk+vRbZ41QfgBTm
+         yTshE3br1VdkBxng51yaAUVJM3heW+vfXF1d/eD5weO4UZirf+22o7YS13ldTDJZVT
+         nyheIaOlXZh8i+AgtqyD6hTS5Omxc+E4hoU7vWI8=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Dafna Hirschfeld <dafna@fastmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Tomasz Figa <tfiga@google.com>,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH 00/16] media: rkisp1: Misc bug fixes and cleanups
+Date:   Sun, 27 Feb 2022 18:01:00 +0200
+Message-Id: <20220227160116.18556-1-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that infrastructure for 10-bit decoding exists, enable it for
-Allwinner H6.
+Hello,
 
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
----
- drivers/staging/media/hantro/sunxi_vpu_hw.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+This series fixes multiple issues and performs further cleanups for the
+rkisp1 driver.
 
-diff --git a/drivers/staging/media/hantro/sunxi_vpu_hw.c b/drivers/staging/media/hantro/sunxi_vpu_hw.c
-index c0edd5856a0c..8d8a8937d6aa 100644
---- a/drivers/staging/media/hantro/sunxi_vpu_hw.c
-+++ b/drivers/staging/media/hantro/sunxi_vpu_hw.c
-@@ -15,12 +15,23 @@ static const struct hantro_fmt sunxi_vpu_postproc_fmts[] = {
- 		.codec_mode = HANTRO_MODE_NONE,
- 		.postprocessed = true,
- 	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_P010,
-+		.codec_mode = HANTRO_MODE_NONE,
-+		.postprocessed = true,
-+	},
- };
- 
- static const struct hantro_fmt sunxi_vpu_dec_fmts[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_NV12_4L4,
- 		.codec_mode = HANTRO_MODE_NONE,
-+		.match_depth = true,
-+	},
-+	{
-+		.fourcc = V4L2_PIX_FMT_P010_4L4,
-+		.codec_mode = HANTRO_MODE_NONE,
-+		.match_depth = true,
- 	},
- 	{
- 		.fourcc = V4L2_PIX_FMT_VP9_FRAME,
+Patches 01/16 to 07/16 fix issues in the error paths at probe time that
+lead to kernel crashes in case of errors. The .remove() path is also
+improved as a result.
+
+Patches 08/16 and 09/16 then clean up register definitions, and patch
+10/16 simplifies access to the resizer registers.
+
+Patches 11/16 to 15/16 move on to improving debugfs support, with code
+first moved to a separate file (11/16) that can be conditionally
+compiled (12/16), support for collecting statistics on the input
+interface (13/16, very useful to check if the ISP actually receives
+data) and for dumping core and ISP registers (14/16). Patch 15/16
+completes that rework by moving the resizer register dumps support to
+debugfs too.
+
+Finally, patch 16/16 simplifies the V4L2 querycap implementation on
+video nodes.
+
+More fixes and improvements should follow, so I'd like to merge sooner
+than latter if possible, to avoid having to rebase large series.
+
+Laurent Pinchart (15):
+  media: rkisp1: capture: Initialize entity before video device
+  media: rkisp1: capture: Fix and simplify (un)registration
+  media: rkisp1: isp: Fix and simplify (un)registration
+  media: rkisp1: resizer: Fix and simplify (un)registration
+  media: rkisp1: params: Fix and simplify (un)registration
+  media: rkisp1: stats: Simplify (un)registration
+  media: rkisp1: Simplify rkisp1_entities_register() error path
+  media: rkisp1: regs: Don't use BIT() macro for multi-bit register
+    fields
+  media: rkisp1: regs: Rename CCL, ICCL and IRCL registers with VI_
+    prefix
+  media: rkisp1: resizer: Simplify register access
+  media: rkisp1: Move debugfs code to a separate file
+  media: rkisp1: Compile debugfs support conditionally
+  media: rkisp1: debug: Collect input status by sampling ISP_FLAGS_SHD
+  media: rkisp1: debug: Add debugfs files to dump core and ISP registers
+  media: rkisp1: debug: Move resizer register dump to debugfs
+
+Paul Elder (1):
+  media: rkisp1: capture: Bypass the main device for handling querycap
+
+ .../media/platform/rockchip/rkisp1/Makefile   |  18 +-
+ .../platform/rockchip/rkisp1/rkisp1-capture.c |  52 ++---
+ .../platform/rockchip/rkisp1/rkisp1-common.h  |  16 ++
+ .../platform/rockchip/rkisp1/rkisp1-debug.c   | 209 ++++++++++++++++++
+ .../platform/rockchip/rkisp1/rkisp1-dev.c     |  73 ++----
+ .../platform/rockchip/rkisp1/rkisp1-isp.c     |  39 ++--
+ .../platform/rockchip/rkisp1/rkisp1-params.c  |  23 +-
+ .../platform/rockchip/rkisp1/rkisp1-regs.h    | 188 ++++++++--------
+ .../platform/rockchip/rkisp1/rkisp1-resizer.c | 192 ++++------------
+ .../platform/rockchip/rkisp1/rkisp1-stats.c   |  11 +-
+ 10 files changed, 464 insertions(+), 357 deletions(-)
+ create mode 100644 drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c
+
 -- 
-2.35.1
+Regards,
+
+Laurent Pinchart
 
