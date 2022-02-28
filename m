@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CD7DC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 28 Feb 2022 14:09:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CFD0C433FE
+	for <linux-media@archiver.kernel.org>; Mon, 28 Feb 2022 14:09:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237036AbiB1OJp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Feb 2022 09:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
+        id S237075AbiB1OJz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Feb 2022 09:09:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236999AbiB1OJf (ORCPT
+        with ESMTP id S236977AbiB1OJg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Feb 2022 09:09:35 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE1B52B15;
-        Mon, 28 Feb 2022 06:08:55 -0800 (PST)
+        Mon, 28 Feb 2022 09:09:36 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55FE7E0B3;
+        Mon, 28 Feb 2022 06:08:56 -0800 (PST)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:82d4:230a:70ff:cde0])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id ABC361F43AC3;
-        Mon, 28 Feb 2022 14:08:53 +0000 (GMT)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 24A711F43A62;
+        Mon, 28 Feb 2022 14:08:55 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646057334;
-        bh=ceS6C0ZGhLwdD015ii2O/C39WaT/6a5c47nKvfP3i6g=;
+        s=mail; t=1646057335;
+        bh=HXQpbWWUDKlh55zh2JhcgQ4jNsekk9Ju05Ue5OAfA6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HSXkS8TuGGFLrmZXrJm7lMcq7bHwaG/MfCIl1eOPt7o4ysHRFm3PcTZDEUnZUkCl7
-         NJ8P0riEgDCTXwOIuLsCob0AvoqvmMSYb/KOmcx+KtTZJJUJsMVdjB3zyYgKKzxZCB
-         GFMlkmgvY77iiRHlDOZ3Fcy7QU9ZayJHfBMY9EPRcKQH2pSvpeCG1gGhg7imwbPoav
-         Ti9Y400TxRQTAhmVv8fze0Rb/eAv0h+0nPBLuRhAhc4l+Mn86QJEvGoOe6T56kD3OW
-         GYuQdsAMSxokWVF5PqABE/Eoio1moSGNfwmKZ+hwZxGXm+qFW6aNqMpYVQLLV7eGZu
-         UDHQNGsg6wMgg==
+        b=Ljj3YTRa/qB3afRDVsLZXw4BD3KhO4HODVPX9W/dw2P/nfBG4lB5xduqLFZJD5AYo
+         Pay4WT8JVgwq9N9nD/BWWAtyk05jJrEVfvm/JexAVglbVisu8skpJF7aQBfUvN5AJl
+         ArSJwQ/sO97lrCiSD+IhOw/XBM2SpOlyxiOvVAgcFmeK8vZdzM2czx3H7f0+9hToGu
+         rJgDMUpo8tpAtGb8wGCCM7h14mbOy3YyhAO7kWENMhlYjslSd9q61BZVHDYzYjJ4fy
+         rJd2DJDdoumhIbbkoOPIiUX98fD/Y3G5Ifhx5eKMit3iwXaUeu1E9UmF5BgnzM9A5J
+         sVRd50LFubDnw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
         p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
@@ -41,9 +41,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com, knaerzche@gmail.com, jc@kynesim.co.uk,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v4 12/15] media: uapi: Create a dedicated header for Hantro control
-Date:   Mon, 28 Feb 2022 15:08:35 +0100
-Message-Id: <20220228140838.622021-13-benjamin.gaignard@collabora.com>
+Subject: [PATCH v4 14/15] media: uapi: Change data_bit_offset definition
+Date:   Mon, 28 Feb 2022 15:08:37 +0100
+Message-Id: <20220228140838.622021-15-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220228140838.622021-1-benjamin.gaignard@collabora.com>
 References: <20220228140838.622021-1-benjamin.gaignard@collabora.com>
@@ -53,111 +53,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hantro hardware needs a dedicated v4l2 control to perform HEVC
-decoding. Move it to a dedicated header file to prepare HEVC
-uAPI un-staging.
+'F.7.3.6.1 General slice segment header syntax' section of HEVC
+specification describes that a slice header always end byte aligned,
+therefore we only need to provide the data offset in byte.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
-version 4:
-- Fix hantro-media SPDX license
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 4 ++--
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c          | 2 +-
+ include/media/hevc-ctrls.h                                | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
- .../userspace-api/media/drivers/hantro.rst    |  5 -----
- drivers/staging/media/hantro/hantro_drv.c     |  1 +
- include/media/hevc-ctrls.h                    | 13 -------------
- include/uapi/linux/hantro-media.h             | 19 +++++++++++++++++++
- include/uapi/linux/v4l2-controls.h            |  5 +++++
- 5 files changed, 25 insertions(+), 18 deletions(-)
- create mode 100644 include/uapi/linux/hantro-media.h
-
-diff --git a/Documentation/userspace-api/media/drivers/hantro.rst b/Documentation/userspace-api/media/drivers/hantro.rst
-index cd9754b4e005..78dcd2a44a03 100644
---- a/Documentation/userspace-api/media/drivers/hantro.rst
-+++ b/Documentation/userspace-api/media/drivers/hantro.rst
-@@ -12,8 +12,3 @@ The Hantro video decoder driver implements the following driver-specific control
-     to before syntax element "slice_temporal_mvp_enabled_flag".
-     If IDR, the skipped bits are just "pic_output_flag"
-     (separate_colour_plane_flag is not supported).
--
--.. note::
--
--        This control is not yet part of the public kernel API and
--        it is expected to change.
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index 6f58c259d8fc..783a92a38c8e 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -11,6 +11,7 @@
-  */
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index 1aa2a7399e76..c8602c1e706e 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -2986,8 +2986,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+       - ``bit_size``
+       - Size (in bits) of the current slice data.
+     * - __u32
+-      - ``data_bit_offset``
+-      - Offset (in bits) to the video data in the current slice data.
++      - ``data_byte_offset``
++      - Offset (in bytes) to the video data in the current slice data.
+     * - __u32
+       - ``num_entry_point_offsets``
+       - Specifies the number of entry point offset syntax elements in the slice header.
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+index 8ab2d9c6f048..3e43b7cc2f57 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+@@ -405,7 +405,7 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+ 	/* Initialize bitstream access. */
+ 	cedrus_write(dev, VE_DEC_H265_TRIGGER, VE_DEC_H265_TRIGGER_INIT_SWDEC);
  
- #include <linux/clk.h>
-+#include <linux/hantro-media.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
+-	cedrus_h265_skip_bits(dev, slice_params->data_bit_offset);
++	cedrus_h265_skip_bits(dev, slice_params->data_byte_offset / 8);
+ 
+ 	/* Bitstream parameters. */
+ 
 diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 235a3aaebc2b..c4c88a2073ce 100644
+index c50205083573..51bdf38ea0c3 100644
 --- a/include/media/hevc-ctrls.h
 +++ b/include/media/hevc-ctrls.h
-@@ -445,17 +445,4 @@ struct v4l2_ctrl_hevc_scaling_matrix {
- 	__u8	scaling_list_dc_coef_32x32[2];
- };
- 
--/*  MPEG-class control IDs specific to the Hantro driver as defined by V4L2 */
--#define V4L2_CID_CODEC_HANTRO_BASE				(V4L2_CTRL_CLASS_CODEC | 0x1200)
--/*
-- * V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP -
-- * the number of data (in bits) to skip in the
-- * slice segment header.
-- * If non-IDR, the bits to be skipped go from syntax element "pic_output_flag"
-- * to before syntax element "slice_temporal_mvp_enabled_flag".
-- * If IDR, the skipped bits are just "pic_output_flag"
-- * (separate_colour_plane_flag is not supported).
-- */
--#define V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP	(V4L2_CID_CODEC_HANTRO_BASE + 0)
--
- #endif
-diff --git a/include/uapi/linux/hantro-media.h b/include/uapi/linux/hantro-media.h
-new file mode 100644
-index 000000000000..d0d48fd7de9c
---- /dev/null
-+++ b/include/uapi/linux/hantro-media.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+
-+#ifndef __UAPI_HANTRO_MEDIA_H__
-+#define __UAPI_HANTRO_MEDIA_H__
-+
-+#include <linux/v4l2-controls.h>
-+
-+/*
-+ * V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP -
-+ * the number of data (in bits) to skip in the
-+ * slice segment header.
-+ * If non-IDR, the bits to be skipped go from syntax element "pic_output_flag"
-+ * to before syntax element "slice_temporal_mvp_enabled_flag".
-+ * If IDR, the skipped bits are just "pic_output_flag"
-+ * (separate_colour_plane_flag is not supported).
-+ */
-+#define V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP	(V4L2_CID_USER_HANTRO_BASE + 0)
-+
-+#endif /* __UAPI_HANTRO_MEDIA_H__ */
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index c8e0f84d204d..d56a1c7fb91d 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -218,6 +218,11 @@ enum v4l2_colorfx {
-  * We reserve 16 controls for this driver.
+@@ -296,7 +296,7 @@ struct v4l2_hevc_pred_weight_table {
+  * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
+  *
+  * @bit_size: size (in bits) of the current slice data
+- * @data_bit_offset: offset (in bits) to the video data in the current slice data
++ * @data_byte_offset: offset (in bytes) to the video data in the current slice data
+  * @num_entry_point_offsets: specifies the number of entry point offset syntax
+  *			     elements in the slice header.
+  * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+@@ -340,7 +340,7 @@ struct v4l2_hevc_pred_weight_table {
   */
- #define V4L2_CID_USER_ALLEGRO_BASE		(V4L2_CID_USER_BASE + 0x1170)
-+/*
-+ * The base for Hantro driver controls.
-+ * We reserve 128 controls for this driver.
-+ */
-+#define V4L2_CID_USER_HANTRO_BASE		(V4L2_CID_USER_BASE + 0x1180)
- 
- /* MPEG-class control IDs */
- /* The MPEG controls are applicable to all codec controls
+ struct v4l2_ctrl_hevc_slice_params {
+ 	__u32	bit_size;
+-	__u32	data_bit_offset;
++	__u32	data_byte_offset;
+ 	__u32	num_entry_point_offsets;
+ 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
+ 	__u8	nal_unit_type;
 -- 
 2.32.0
 
