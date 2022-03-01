@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F01C3C4332F
-	for <linux-media@archiver.kernel.org>; Tue,  1 Mar 2022 16:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50FD7C433EF
+	for <linux-media@archiver.kernel.org>; Tue,  1 Mar 2022 16:12:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236020AbiCAQNU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Mar 2022 11:13:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
+        id S236027AbiCAQNY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Mar 2022 11:13:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236016AbiCAQNT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Mar 2022 11:13:19 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3813BA77
-        for <linux-media@vger.kernel.org>; Tue,  1 Mar 2022 08:12:38 -0800 (PST)
+        with ESMTP id S236023AbiCAQNX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Mar 2022 11:13:23 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D73C3BA72
+        for <linux-media@vger.kernel.org>; Tue,  1 Mar 2022 08:12:40 -0800 (PST)
 Received: from deskari.lan (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 22F54E41;
-        Tue,  1 Mar 2022 17:12:28 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DE5811C6D;
+        Tue,  1 Mar 2022 17:12:29 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646151148;
-        bh=kLfk0Okfe8AI8hlzneKLtASMzLkuj4vXdGIokEh7JIc=;
+        s=mail; t=1646151150;
+        bh=QaZnVYtP44p5RMPO+s/0RGCjJXXS80cKFLpVtiBSbDE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mu9K0YqKHlX6/RgfNuM7JlBAa9ATVE5dfWIuIZz//4RLluL0tPa58JfaiK6SwJWmJ
-         Fy4cpo9aVBVtb+Q6VIOy7wkCG7OUk2e2gKQyvKTBW8Ku2PLodjyjMNQQ23yPf3r17+
-         DWrf5BYyiw5HfgLoWwhDS3GbJx1NRSpEvMVqF628=
+        b=p5sxdxNVoeyxUfBZTTJPmPURVa25KDF2tQUjuHYiO4kNmoRdUi1XAIO5vx3AEoJ1e
+         m+luKxvI+TXwkImDwxyR+uggQWZnYLqXrYGD8U9xv5KdMc7fkGwyg0QKoZGyxAzsYA
+         SNH1m0v8nTmGjJzeLPEi2UproXXbV64yx9sCLyvU=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -32,76 +32,51 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Pratyush Yadav <p.yadav@ti.com>
-Cc:     Michal Simek <michal.simek@xilinx.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v11 09/36] media: entity: Add media_entity_has_route() function
-Date:   Tue,  1 Mar 2022 18:11:29 +0200
-Message-Id: <20220301161156.1119557-10-tomi.valkeinen@ideasonboard.com>
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v11 11/36] media: entity: Skip link validation for pads to which there is no route
+Date:   Tue,  1 Mar 2022 18:11:31 +0200
+Message-Id: <20220301161156.1119557-12-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220301161156.1119557-1-tomi.valkeinen@ideasonboard.com>
 References: <20220301161156.1119557-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-This is a wrapper around the media entity has_route operation.
+Links are validated along the pipeline which is about to start streaming.
+Not all the pads in entities that are traversed along that pipeline are
+part of the pipeline, however. Skip the link validation for such pads.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/mc/mc-entity.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ drivers/media/mc/mc-entity.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index 0a5a9feb26b8..1ae9252b1b39 100644
+index 323e44d16f7b..6a4e1bbfd961 100644
 --- a/drivers/media/mc/mc-entity.c
 +++ b/drivers/media/mc/mc-entity.c
-@@ -211,6 +211,38 @@ EXPORT_SYMBOL_GPL(media_entity_pads_init);
-  * Graph traversal
-  */
+@@ -484,6 +484,11 @@ __must_check int __media_pipeline_start(struct media_pad *pad,
+ 				link->sink->entity == entity ?
+ 				link->sink : link->source;
  
-+/**
-+ * media_entity_has_route - Check if two entity pads are connected internally
-+ *
-+ * @entity: The entity
-+ * @pad0: The first pad index
-+ * @pad1: The second pad index
-+ *
-+ * This function can be used to check whether two pads of an entity are
-+ * connected internally in the entity.
-+ *
-+ * The caller must hold entity->graph_obj.mdev->mutex.
-+ *
-+ * Return: true if the pads are connected internally and false otherwise.
-+ */
-+static bool media_entity_has_route(struct media_entity *entity,
-+				   unsigned int pad0, unsigned int pad1)
-+{
-+	if (pad0 >= entity->num_pads || pad1 >= entity->num_pads)
-+		return false;
++			/* Ignore pads to which there is no route. */
++			if (!media_entity_has_route(entity, pad->index,
++						    other_pad->index))
++				continue;
 +
-+	if (pad0 == pad1)
-+		return true;
-+
-+	if (!entity->ops || !entity->ops->has_route)
-+		return true;
-+
-+	if (entity->pads[pad1].index < entity->pads[pad0].index)
-+		swap(pad0, pad1);
-+
-+	return entity->ops->has_route(entity, pad0, pad1);
-+}
-+
- static struct media_pad *
- media_pad_other(struct media_pad *pad, struct media_link *link)
- {
+ 			/* Mark that a pad is connected by a link. */
+ 			bitmap_clear(has_no_links, other_pad->index, 1);
+ 
 -- 
 2.25.1
 
