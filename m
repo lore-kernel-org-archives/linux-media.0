@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EAA8C433EF
-	for <linux-media@archiver.kernel.org>; Tue,  1 Mar 2022 16:13:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 434BCC433F5
+	for <linux-media@archiver.kernel.org>; Tue,  1 Mar 2022 16:13:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236055AbiCAQNo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S236064AbiCAQNo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 1 Mar 2022 11:13:44 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236060AbiCAQNm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Mar 2022 11:13:42 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D0030F40
-        for <linux-media@vger.kernel.org>; Tue,  1 Mar 2022 08:13:00 -0800 (PST)
+        with ESMTP id S236068AbiCAQNl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Mar 2022 11:13:41 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BDD3FDAC
+        for <linux-media@vger.kernel.org>; Tue,  1 Mar 2022 08:12:57 -0800 (PST)
 Received: from deskari.lan (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3F4B9E41;
-        Tue,  1 Mar 2022 17:12:43 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 897DA37C2;
+        Tue,  1 Mar 2022 17:12:41 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646151163;
-        bh=K+pyvG60lfET2rpADlniVzUQM3XKrDJk8C0fb98QIIY=;
+        s=mail; t=1646151162;
+        bh=2C+nqEkL2tsuuLtt3ezG+u9Z0OP8vRBnwan7QC0SyE8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wj90kLa2LfcYcI8FkvseCIgQ18eVkbwKy7OTn3cqP/fPtDYvHcFth2WtkNcmjTntD
-         IT65e5W3QlcuxYr5mtYgloMK0WBpA2Nav9VNNl+esWjto+L1Q4pG+iGnoT7tc5hHLn
-         0+nldNv4AAvvX2Y3fqsmte4MONkCq62GxNVO3Neo=
+        b=c6cNBj1eF7BdSEiulon5igatnqqlIRBtVFc+GlmivjhFpz5VYpzfd7G9TrRI565fB
+         AZIuuswD0ZtKiyYoAUXbk+s2RJgDeMikegXrGYacPOhDY+JVuDi9LXoWUBOQmnPH/R
+         Fd9Hsx7DLPDxj81wfvF6yFp9WzMMC7NlKf1spnEg=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -33,9 +33,9 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Pratyush Yadav <p.yadav@ti.com>
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v11 27/36] media: subdev: use streams in v4l2_subdev_link_validate()
-Date:   Tue,  1 Mar 2022 18:11:47 +0200
-Message-Id: <20220301161156.1119557-28-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v11 25/36] media: Documentation: add multiplexed streams documentation
+Date:   Tue,  1 Mar 2022 18:11:45 +0200
+Message-Id: <20220301161156.1119557-26-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220301161156.1119557-1-tomi.valkeinen@ideasonboard.com>
 References: <20220301161156.1119557-1-tomi.valkeinen@ideasonboard.com>
@@ -45,303 +45,206 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Update v4l2_subdev_link_validate() to use routing and streams for
-validation.
-
-Instead of just looking at the format on the pad on both ends of the
-link, the routing tables are used to collect all the streams going from
-the source to the sink over the link, and the streams' formats on both
-ends of the link are verified.
+Add documentation related to multiplexed streams.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 245 ++++++++++++++++++++++++--
- 1 file changed, 227 insertions(+), 18 deletions(-)
+ .../driver-api/media/v4l2-subdev.rst          |   8 +
+ .../userspace-api/media/v4l/dev-subdev.rst    | 165 ++++++++++++++++++
+ 2 files changed, 173 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 339d7b15e26c..091b854e00d0 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -16,6 +16,7 @@
- #include <linux/videodev2.h>
- #include <linux/export.h>
- #include <linux/version.h>
-+#include <linux/sort.h>
+diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
+index 115211cef4d1..80654f1bcac9 100644
+--- a/Documentation/driver-api/media/v4l2-subdev.rst
++++ b/Documentation/driver-api/media/v4l2-subdev.rst
+@@ -593,6 +593,14 @@ before calling v4l2_subdev_init_finalize():
  
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
-@@ -1035,6 +1036,7 @@ EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate_default);
+ This shares the driver's private mutex between the controls and the states.
  
- static int
- v4l2_subdev_link_validate_get_format(struct media_pad *pad,
-+				     u32 stream,
- 				     struct v4l2_subdev_format *fmt)
- {
- 	if (is_media_entity_v4l2_subdev(pad->entity)) {
-@@ -1046,6 +1048,7 @@ v4l2_subdev_link_validate_get_format(struct media_pad *pad,
++Streams, multiplexed media pads and internal routing
++----------------------------------------------------
++
++A subdevice driver can implement support for multiplexed streams by setting
++the V4L2_SUBDEV_FL_MULTIPLEXED subdev flag and implementing support for
++centrally managed subdev active state, routing and stream based
++configuration.
++
+ V4L2 sub-device functions and data structures
+ ---------------------------------------------
  
- 		fmt->which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 		fmt->pad = pad->index;
-+		fmt->stream = stream;
- 		return v4l2_subdev_call(sd, pad, get_fmt, state, fmt);
- 	}
+diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+index a67c2749089a..fd042afeddd6 100644
+--- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
++++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+@@ -503,3 +503,168 @@ source pads.
+     :maxdepth: 1
  
-@@ -1056,31 +1059,237 @@ v4l2_subdev_link_validate_get_format(struct media_pad *pad,
- 	return -EINVAL;
- }
- 
--int v4l2_subdev_link_validate(struct media_link *link)
-+static int cmp_u32(const void *a, const void *b)
- {
--	struct v4l2_subdev *sink;
--	struct v4l2_subdev_format sink_fmt, source_fmt;
--	int rval;
-+	u32 a32 = *(u32 *)a;
-+	u32 b32 = *(u32 *)b;
- 
--	rval = v4l2_subdev_link_validate_get_format(
--		link->source, &source_fmt);
--	if (rval < 0)
--		return 0;
-+	return a32 > b32 ? 1 : (a32 < b32 ? -1 : 0);
-+}
+     subdev-formats
 +
-+static int v4l2_link_validate_get_streams(struct media_link *link,
-+					  bool is_source, u32 *out_num_streams,
-+					  const u32 **out_streams,
-+					  bool *allocated)
-+{
-+	static const u32 default_streams[] = { 0 };
-+	struct v4l2_subdev_krouting *routing;
-+	struct v4l2_subdev *subdev;
-+	u32 num_streams;
-+	u32 *streams;
-+	unsigned int i;
-+	struct v4l2_subdev_state *state;
++Streams, multiplexed media pads and internal routing
++----------------------------------------------------
 +
-+	if (is_source)
-+		subdev = media_entity_to_v4l2_subdev(link->source->entity);
-+	else
-+		subdev = media_entity_to_v4l2_subdev(link->sink->entity);
- 
--	rval = v4l2_subdev_link_validate_get_format(
--		link->sink, &sink_fmt);
--	if (rval < 0)
-+	if (!(subdev->flags & V4L2_SUBDEV_FL_MULTIPLEXED)) {
-+		*out_num_streams = 1;
-+		*out_streams = default_streams;
-+		*allocated = false;
- 		return 0;
-+	}
- 
--	sink = media_entity_to_v4l2_subdev(link->sink->entity);
-+	state = v4l2_subdev_get_locked_active_state(subdev);
- 
--	rval = v4l2_subdev_call(sink, pad, link_validate, link,
--				&source_fmt, &sink_fmt);
--	if (rval != -ENOIOCTLCMD)
--		return rval;
-+	routing = &state->routing;
++Commonly V4L2 subdevices support only separate video streams, that is, each
++link in the media graph and each pad in a subdevice pass through a single
++video stream. Thus each pad contains a format configuration for that single
++stream. In some cases a subdev can do stream processing and split a stream
++into two or compose two streams into one, but the inputs and outputs for the
++subdev are still a single stream per pad.
 +
-+	streams = kmalloc_array(routing->num_routes, sizeof(u32), GFP_KERNEL);
-+	if (!streams)
-+		return -ENOMEM;
++Some hardware, e.g. MIPI CSI-2, support multiplexed streams, that is, a single
++bus carries multiple streams. Thus a camera could output two streams, a pixel
++stream and a metadata stream, and a bridge subdev could route the streams
++from multiple input pads into a single output pad.
 +
-+	num_streams = 0;
++Subdevice drivers that support multiplexed streams are compatible with
++non-multiplexed subdev drivers, but, of course, require a routing configuration
++where the link between those two types of drivers contains only a single
++stream.
 +
-+	for (i = 0; i < routing->num_routes; ++i) {
-+		struct v4l2_subdev_route *route = &routing->routes[i];
-+		int j;
-+		u32 route_pad;
-+		u32 route_stream;
-+		u32 link_pad;
++Understanding streams
++^^^^^^^^^^^^^^^^^^^^^
 +
-+		if (is_source) {
-+			route_pad = route->source_pad;
-+			route_stream = route->source_stream;
-+			link_pad = link->source->index;
-+		} else {
-+			route_pad = route->sink_pad;
-+			route_stream = route->sink_stream;
-+			link_pad = link->sink->index;
-+		}
++A stream is a stream of content (e.g. pixel data or metadata) flowing through
++the media pipeline from a source (e.g. a sensor) towards the final sink(e.g. a
++receiver and demultiplexer in a SoC). Each media link carries all the streams
++from one end of the link to the other, and subdevices have routing tables which
++describe how the incoming streams from sink pads are routed to the source
++pads.
 +
-+		if (!(route->flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
-+			continue;
++A stream ID (often just "stream") is a media link-local identifier for a
++stream. In other words, a configuration for a particular stream ID must exist
++on both sides of a media link, but another stream ID can be used for the same
++stream at the other side of the subdevice.
 +
-+		if (route_pad != link_pad)
-+			continue;
++A stream at a specific point in the media pipeline is identified with the
++subdev and a (pad, stream) pair. For subdevices that do not support
++multiplexed streams the 'stream' is always 0.
 +
-+		/* look for duplicates... */
-+		for (j = 0; j < num_streams; ++j) {
-+			if (streams[j] == route_stream)
-+				break;
-+		}
++Configuring streams
++^^^^^^^^^^^^^^^^^^^
 +
-+		/* ...and drop the stream if we already have it */
-+		if (j != num_streams)
-+			continue;
++The configuration of the streams is done individually for each subdevice and
++the validity of the streams between subdevices is validated when the pipeline
++is started.
 +
-+		streams[num_streams++] = route_stream;
-+	}
++There are three steps in configuring the streams:
 +
-+	sort(streams, num_streams, sizeof(u32), &cmp_u32, NULL);
- 
--	return v4l2_subdev_link_validate_default(
--		sink, link, &source_fmt, &sink_fmt);
-+	*out_num_streams = num_streams;
-+	*out_streams = streams;
-+	*allocated = true;
++1) Set up links. Connect the pads between subdevices using the :ref:`Media
++Controller API <media_controller>`
 +
-+	return 0;
-+}
++2) Routing. The routing table for the subdevice must be set with
++:ref:`VIDIOC_SUBDEV_S_ROUTING <VIDIOC_SUBDEV_G_ROUTING>` ioctl. Note that
++setting the routing table will reset all the stream configurations.
 +
-+static int v4l2_subdev_link_validate_locked(struct media_link *link)
-+{
-+	struct v4l2_subdev *sink_subdev =
-+		media_entity_to_v4l2_subdev(link->sink->entity);
-+	struct device *dev = sink_subdev->entity.graph_obj.mdev->dev;
-+	u32 num_source_streams;
-+	const u32 *source_streams;
-+	bool source_allocated;
-+	u32 num_sink_streams;
-+	const u32 *sink_streams;
-+	bool sink_allocated;
-+	unsigned int sink_idx;
-+	unsigned int source_idx;
-+	int ret;
++3) Configure streams. Each route endpoint must be configured
++with :ref:`VIDIOC_SUBDEV_S_FMT <VIDIOC_SUBDEV_G_FMT>`.
 +
-+	dev_dbg(dev, "validating link \"%s\":%u -> \"%s\":%u\n",
-+		link->source->entity->name, link->source->index,
-+		link->sink->entity->name, link->sink->index);
++Multiplexed streams setup example
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +
-+	ret = v4l2_link_validate_get_streams(link, true, &num_source_streams,
-+					     &source_streams,
-+					     &source_allocated);
-+	if (ret)
-+		return ret;
++A simple example of a multiplexed stream setup might be as follows:
 +
-+	ret = v4l2_link_validate_get_streams(link, false, &num_sink_streams,
-+					     &sink_streams, &sink_allocated);
-+	if (ret)
-+		goto free_source;
++- Two identical sensors (Sensor A and Sensor B). Each sensor has a single
++  source pad (pad 0), and outputs two streams, pixel data and metadata.
 +
-+	/*
-+	 * It is ok to have more source streams than sink streams as extra
-+	 * source streams can just be ignored (i.e. they go nowhere), but extra
-+	 * sink streams is an error.
-+	 */
-+	if (num_source_streams < num_sink_streams) {
-+		dev_err(dev,
-+			"Not enough source streams: %d < %d\n",
-+			num_source_streams, num_sink_streams);
-+		ret = -EINVAL;
-+		goto out;
-+	}
++- Multiplexer bridge (Bridge). The bridge has two sink pads, connected to the
++  sensors (pads 0, 1), and one source pad (pad 2), which outputs all 4
++  streams.
 +
-+	/* Validate source and sink stream formats */
++- Receiver in the SoC (Receiver). The receiver has a single sink pad (pad 0),
++  connected to the bridge, and four source pads (pads 1-4), going to the DMA
++  engine. The receiver demultiplexes the incoming streams to the four source
++  pads.
 +
-+	source_idx = 0;
++- Four DMA Engines in the SoC (DMA Engine). Each DMA engine is connected to a
++  single source pad in the receiver.
 +
-+	for (sink_idx = 0; sink_idx < num_sink_streams; ++sink_idx) {
-+		struct v4l2_subdev_format sink_fmt, source_fmt;
-+		u32 stream;
++The sensors, the bridge and the receiver are modeled as V4L2 subdevices,
++exposed to userspace via /dev/v4l-subdevX device nodes. The DMA engines are
++modeled as V4L2 devices, exposed to userspace via /dev/videoX nodes.
 +
-+		stream = sink_streams[sink_idx];
++To configure this pipeline, the userspace must take the following steps:
 +
-+		for (; source_idx < num_source_streams; ++source_idx) {
-+			if (source_streams[source_idx] == stream)
-+				break;
-+		}
++1) Set up media links between entities: connect the sensors to the bridge,
++bridge to the receiver, and the receiver to the DMA engines. This step does
++not differ from normal non-multiplexed media controller setup.
 +
-+		if (source_idx == num_source_streams) {
-+			dev_err(dev, "No source stream for sink stream %u\n",
-+				stream);
-+			ret = -EINVAL;
-+			goto out;
-+		}
++2) Configure routing.
 +
-+		dev_dbg(dev, "validating stream \"%s\":%u:%u -> \"%s\":%u:%u\n",
-+			link->source->entity->name, link->source->index, stream,
-+			link->sink->entity->name, link->sink->index, stream);
++.. flat-table:: Sensor routing table (identical on both sensors)
++    :header-rows:  1
 +
-+		ret = v4l2_subdev_link_validate_get_format(link->source, stream,
-+							   &source_fmt);
-+		if (ret < 0) {
-+			dev_dbg(dev, "Failed to get format for \"%s\":%u:%u (but that's ok)\n",
-+				link->source->entity->name, link->source->index,
-+				stream);
-+			ret = 0;
-+			continue;
-+		}
++    * - Sink Pad/Stream
++      - Source Pad/Stream
++      - Routing Flags
++      - Comments
++    * - 0/0 (unused)
++      - 0/0
++      - V4L2_SUBDEV_ROUTE_FL_ACTIVE | V4L2_SUBDEV_ROUTE_FL_SOURCE
++      - Pixel data stream. Source route, i.e. the sink fields are unused.
++    * - 0/0 (unused)
++      - 0/1
++      - V4L2_SUBDEV_ROUTE_FL_ACTIVE | V4L2_SUBDEV_ROUTE_FL_SOURCE
++      - Metadata stream. Source route, i.e. the sink fields are unused.
 +
-+		ret = v4l2_subdev_link_validate_get_format(link->sink, stream,
-+							   &sink_fmt);
-+		if (ret < 0) {
-+			dev_dbg(dev, "Failed to get format for \"%s\":%u:%u (but that's ok)\n",
-+				link->sink->entity->name, link->sink->index,
-+				stream);
-+			ret = 0;
-+			continue;
-+		}
++.. flat-table:: Bridge routing table
++    :header-rows:  1
 +
-+		/* TODO: add stream number to link_validate() */
-+		ret = v4l2_subdev_call(sink_subdev, pad, link_validate, link,
-+				       &source_fmt, &sink_fmt);
-+		if (!ret)
-+			continue;
++    * - Sink Pad/Stream
++      - Source Pad/Stream
++      - Routing Flags
++      - Comments
++    * - 0/0
++      - 2/0
++      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
++      - Pixel data stream from Sensor A
++    * - 0/1
++      - 2/1
++      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
++      - Metadata stream from Sensor A
++    * - 1/0
++      - 2/2
++      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
++      - Pixel data stream from Sensor B
++    * - 1/1
++      - 2/3
++      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
++      - Metadata stream from Sensor B
 +
-+		if (ret != -ENOIOCTLCMD)
-+			goto out;
++.. flat-table:: Receiver routing table
++    :header-rows:  1
 +
-+		ret = v4l2_subdev_link_validate_default(sink_subdev, link,
-+							&source_fmt, &sink_fmt);
++    * - Sink Pad/Stream
++      - Source Pad/Stream
++      - Routing Flags
++      - Comments
++    * - 0/0
++      - 1/0
++      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
++      - Pixel data stream from Sensor A
++    * - 0/1
++      - 2/0
++      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
++      - Metadata stream from Sensor A
++    * - 0/2
++      - 3/0
++      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
++      - Pixel data stream from Sensor B
++    * - 0/3
++      - 4/0
++      - V4L2_SUBDEV_ROUTE_FL_ACTIVE
++      - Metadata stream from Sensor B
 +
-+		if (ret)
-+			goto out;
-+	}
++3) Configure streams
 +
-+out:
-+	if (sink_allocated)
-+		kfree(sink_streams);
++After configuring the routing table, the next step is configuring the streams.
++This step is similar to configuring the pads in a non-multiplexed streams
++setup, with the difference that we need to configure each (pad, stream) pair
++(i.e. route endpoint) instead of just a pad.
 +
-+free_source:
-+	if (source_allocated)
-+		kfree(source_streams);
-+
-+	return ret;
-+}
-+
-+int v4l2_subdev_link_validate(struct media_link *link)
-+{
-+	struct v4l2_subdev *source_sd, *sink_sd;
-+	struct v4l2_subdev_state *source_state, *sink_state;
-+	int ret;
-+
-+	sink_sd = media_entity_to_v4l2_subdev(link->sink->entity);
-+	source_sd = media_entity_to_v4l2_subdev(link->source->entity);
-+
-+	sink_state = v4l2_subdev_get_active_state(sink_sd);
-+	source_state = v4l2_subdev_get_active_state(source_sd);
-+
-+	if (sink_state)
-+		v4l2_subdev_lock_state(sink_state);
-+
-+	if (source_state)
-+		v4l2_subdev_lock_state(source_state);
-+
-+	ret = v4l2_subdev_link_validate_locked(link);
-+
-+	if (sink_state)
-+		v4l2_subdev_unlock_state(sink_state);
-+
-+	if (source_state)
-+		v4l2_subdev_unlock_state(source_state);
-+
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate);
- 
++A common way to accomplish this is to start from the sensors and propagate the
++configurations along the stream towards the receiver, using VIDIOC_SUBDEV_S_FMT
++to configure each stream endpoint in each subdev.
 -- 
 2.25.1
 
