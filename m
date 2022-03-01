@@ -2,89 +2,187 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05C13C4332F
-	for <linux-media@archiver.kernel.org>; Tue,  1 Mar 2022 08:33:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7A42C433FE
+	for <linux-media@archiver.kernel.org>; Tue,  1 Mar 2022 08:38:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbiCAIeg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Mar 2022 03:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        id S232783AbiCAIiu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Mar 2022 03:38:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbiCAIee (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Mar 2022 03:34:34 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1174831212;
-        Tue,  1 Mar 2022 00:33:53 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id e10so1620153wro.13;
-        Tue, 01 Mar 2022 00:33:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FrB0xiqh0R3+CodGDBFzoTSka3oB+8cQkeH+HR2pscY=;
-        b=ZItHWuNisDbCn4VCnfN3PKVkjPdVF+MoXs5DozzoMvhf0aBhvosMiy0km1eXBhToT1
-         /gqZUncEzz3+2DTwVKa0q/mmyxYDKZe6vXnFF3nsKB3kiCVqr+rosbRkcwwYFHh3M3ZO
-         HX/Z4f94DWdBgpEK2BmHXDdDTXZtOgMKyaoY12Wss61GWovvyVUOZ8si/c13Fw37Exrm
-         nTxnJ6Z8+a0eDuu6M9aoBhw8xwlFhVco65Rr3XzWuIS8ScASDU9FRtNMmbwH/e6+zFK5
-         poNZRAsJfWPm046gB+BIDgJ939FLnBgl5lQ7R5A2qJMxs4IITyMfMHKYukPlWKC2yVSO
-         bkRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FrB0xiqh0R3+CodGDBFzoTSka3oB+8cQkeH+HR2pscY=;
-        b=J9JEwu7Mu2j8d+jRA1zguSBphH+i/ncHjaa2MLJV0XpDWwWFLDI/ZM8ZnLdN/lwXCq
-         JlYT8rZpiICeWaL53q+9/YbFK9KDRmAOC0cMpvfe4HeKv6mD5nRkawhyy96eSt/9YbRc
-         jnh9qbs7VbXILRTt8FC5NxtDt3eltz0xzsDtKd9nP4u/bhY3vwQLc2zf9Hix4ZKMaIHL
-         iA5f9qqJxxABeM8ny3zSW7b3v1jX7MDTmVs8IrIlFiguddI6Hu9NjjOiDVXpC3ZA8Hgt
-         BX/9/1IumHEksA/3G3OlWEtICIRJwfGDlsOb4KakOP7s9zfZd2EfkLKwHYjkVAcR2RH4
-         TlUQ==
-X-Gm-Message-State: AOAM53081xjaxNc4O0b+WQiVolLzg0LdZ9xxk4eT7YXU2diN1i1WLYeC
-        jcDoUvPm8yttNAYQ+TrdRlRLsF3xP6ApwQ==
-X-Google-Smtp-Source: ABdhPJwbWC+RcE86K4AHZ/JXpplW/TP2HIkLpzmuGhlduFpPsZSLMAwwvijlKgZkmiRctKd58ozcKQ==
-X-Received: by 2002:adf:9141:0:b0:1e3:1379:4cc6 with SMTP id j59-20020adf9141000000b001e313794cc6mr19398453wrj.249.1646123631557;
-        Tue, 01 Mar 2022 00:33:51 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id i15-20020a05600c354f00b00381753c67a8sm1919606wmq.26.2022.03.01.00.33.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 00:33:51 -0800 (PST)
-Message-ID: <d229ad74-b530-af2b-2e01-a60e525186d4@gmail.com>
-Date:   Tue, 1 Mar 2022 08:30:10 +0100
+        with ESMTP id S232461AbiCAIis (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Mar 2022 03:38:48 -0500
+Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94D73F304;
+        Tue,  1 Mar 2022 00:38:05 -0800 (PST)
+Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
+        by ni.piap.pl (Postfix) with ESMTPSA id 7D040C3F3EED;
+        Tue,  1 Mar 2022 09:38:04 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 7D040C3F3EED
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
+        t=1646123884; bh=eYKOkpEc/RKiHKA/7tuV+7Y94exN1jvqIyB0ysJtkiE=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=XppmdrmgdLYvx3+dnQuYy7EHWzTmRg/eWvghrtr/iQcItAWlqlY3CMrcdRvvmbTFL
+         EkcaDrFivIRyKu+6dVA1uQvQmIwzbnIBXa9KEMKKFQfoz5Mmi7ggD45vWLaweK2LBC
+         GABYkvpIAWmM1N/4LEWGsaLO7H7LbxnuyZ2cao9c=
+From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Jacopo Mondi <jacopo@jmondi.org>, Joe Perches <joe@perches.com>
+Subject: [PATCH v8 1/2] On Semi AR0521 sensor driver
+References: <m3pmn66pie.fsf@t19.piap.pl>
+Sender: khalasa@piap.pl
+Date:   Tue, 01 Mar 2022 09:38:04 +0100
+In-Reply-To: <m3pmn66pie.fsf@t19.piap.pl> ("Krzysztof =?utf-8?Q?Ha=C5=82as?=
+ =?utf-8?Q?a=22's?= message of
+        "Tue, 01 Mar 2022 09:33:29 +0100")
+Message-ID: <m3lexu6par.fsf@t19.piap.pl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [v6 3/3] arm64: dts: mt8183: add jpeg enc node for mt8183
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-media@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        yong.wu@mediatek.com
-References: <20211206130425.184420-1-hsinyi@chromium.org>
- <20211206130425.184420-3-hsinyi@chromium.org>
- <aa54361f-6a8f-a616-640a-b9a098d82cba@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <aa54361f-6a8f-a616-640a-b9a098d82cba@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-KLMS-Rule-ID: 3
+X-KLMS-Message-Action: skipped
+X-KLMS-AntiSpam-Status: not scanned, whitelist
+X-KLMS-AntiPhishing: not scanned, whitelist
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, whitelist
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+This file documents DT bindings for the AR0521 camera sensor driver.
 
+Signed-off-by: Krzysztof Ha=C5=82asa <khalasa@piap.pl>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-On 17/02/2022 10:41, AngeloGioacchino Del Regno wrote:
-> Il 06/12/21 14:04, Hsin-Yi Wang ha scritto:
->> From: Maoguang Meng <maoguang.meng@mediatek.com>
->>
->> Add jpeg encoder device tree node.
->>
->> Signed-off-by: Maoguang Meng <maoguang.meng@mediatek.com>
->> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> 
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> 
+diff --git a/Documentation/devicetree/bindings/media/i2c/onnn,ar0521.yaml b=
+/Documentation/devicetree/bindings/media/i2c/onnn,ar0521.yaml
+new file mode 100644
+index 0000000000000..b617cc5c6a9f4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/onnn,ar0521.yaml
+@@ -0,0 +1,112 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/onnn,ar0521.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ON Semiconductor AR0521 MIPI CSI-2 sensor
++
++maintainers:
++  - Krzysztof Ha=C5=82asa <khalasa@piap.pl>
++
++description: |-
++  The AR0521 is a raw CMOS image sensor with MIPI CSI-2 and
++  I2C-compatible control interface.
++
++properties:
++  compatible:
++    const: onnn,ar0521
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: extclk
++
++  vaa-supply:
++    description:
++      Definition of the regulator used as analog (2.7 V) voltage supply.
++
++  vdd-supply:
++    description:
++      Definition of the regulator used as digital core (1.2 V) voltage sup=
+ply.
++
++  vdd_io-supply:
++    description:
++      Definition of the regulator used as digital I/O (1.8 V) voltage supp=
+ly.
++
++  reset-gpios:
++    description: reset GPIO, usually active low
++    maxItems: 1
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    unevaluatedProperties: false
++    description: |
++      Video output port.
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          bus-type:
++            const: 4
++          data-lanes:
++            anyOf:
++              - items:
++                  - const: 1
++              - items:
++                  - const: 1
++                  - const: 2
++              - items:
++                  - const: 1
++                  - const: 2
++                  - const: 3
++                  - const: 4
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - vaa-supply
++  - vdd-supply
++  - vdd_io-supply
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/imx6qdl-clock.h>
++
++    i2c {
++            #address-cells =3D <1>;
++            #size-cells =3D <0>;
++
++            ar0521: camera-sensor@36 {
++                    compatible =3D "onnn,ar0521";
++                    reg =3D <0x36>;
++                    pinctrl-names =3D "default";
++                    pinctrl-0 =3D <&pinctrl_mipi_camera>;
++                    clocks =3D <&clks IMX6QDL_CLK_CKO>;
++                    clock-names =3D "extclk";
++                    reset-gpios =3D <&gpio1 7 GPIO_ACTIVE_LOW>;
++                    vaa-supply =3D <&reg_2p7v>;
++                    vdd-supply =3D <&reg_1p2v>;
++                    vdd_io-supply =3D <&reg_1p8v>;
++
++                    port {
++                           mipi_camera_to_mipi_csi2: endpoint {
++                                    remote-endpoint =3D <&mipi_csi2_in>;
++                                    data-lanes =3D <1 2 3 4>;
++                            };
++                    };
++            };
++    };
 
-Applied, thanks!
+--=20
+Krzysztof "Chris" Ha=C5=82asa
+
+Sie=C4=87 Badawcza =C5=81ukasiewicz
+Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
+Al. Jerozolimskie 202, 02-486 Warszawa
