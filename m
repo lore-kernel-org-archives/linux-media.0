@@ -2,33 +2,33 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E722C4167D
-	for <linux-media@archiver.kernel.org>; Wed,  2 Mar 2022 21:11:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D030BC433F5
+	for <linux-media@archiver.kernel.org>; Wed,  2 Mar 2022 21:11:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245078AbiCBVL6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Mar 2022 16:11:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
+        id S245085AbiCBVMB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Mar 2022 16:12:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245057AbiCBVL4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Mar 2022 16:11:56 -0500
+        with ESMTP id S245082AbiCBVL7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Mar 2022 16:11:59 -0500
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CD0B2E02;
-        Wed,  2 Mar 2022 13:11:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F069B2E02;
+        Wed,  2 Mar 2022 13:11:14 -0800 (PST)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3E6E21C0002;
-        Wed,  2 Mar 2022 21:11:09 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id EF1961C0009;
+        Wed,  2 Mar 2022 21:11:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646255470;
+        t=1646255473;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9E9ElsT8ujr2+MBXOLESCuF1hdN+tBFsEX48iQO/NGk=;
-        b=mmRTwo1Sn9gFJDUUx+33czdTbJJrjCVYCYaBnSEzKpb7dx6ELqfRzIH0RPXPaPzwj+TbXs
-        SiQtkw3LTwaW6pFruyRQSkIqFXDH85/0Oh3hCDwi8pCdu13BtZntpLCqmExamkwvvPKu/d
-        VigJRIUBTPj3UgACMjXh6Qm9AYvCxmxvp1hrhOjBfkf3z3RnzTEEh/F6PAS5RTW14U2hJ9
-        PF3deDxdv8X+KGEx5mBixw8L0DQT7l4wIFEijms2+gWnY9aMlEaRAaONMTYDMT8kO/GBeP
-        W6xwPMXybgOeg3VmDKUA9EZBlhWL42TF8UnBr9avwQDcaovcDh8weq2RtIXybw==
+        bh=LUbNmgb63x3cIGTdu5P3uOsUdM3KE6j4EYbbzrT4oek=;
+        b=HNkImmM0F9jHusXvAg9Ba0BoeYJOmyXuqZ2GzWGs2vcwLlAH9Pj2feUrwTLHdHICqSVm6q
+        xkDtly0t6oYeUT2qfEiq0YQdqKkAIQLYCtgWlrQuDsJVj3Ut9vkfBVvrIjhtKzxkBGn/2b
+        H0nlI5Fz+YsQ53/vYTZoxGBCo+HUSvJxXq5LTbNbcQh3wlBIlNLxUhYCjyH47kw+PBh3GC
+        L59YJJ+sOMmjjIN4URJNbh4+N7JPt1yHw5Rc1HbdYeok+9hJ+S/h/tGHEG4wPqJtzFLjWS
+        sRTX28A2GXMPYIlN361r2ggD7StVnBu2wgydUJgZY9NAs31hL98c2QmOrf/Bmw==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH v3 3/8] clk: sunxi-ng: v3s: Export MBUS and DRAM clocks to the public header
-Date:   Wed,  2 Mar 2022 22:10:55 +0100
-Message-Id: <20220302211100.65264-4-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v3 5/8] ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support
+Date:   Wed,  2 Mar 2022 22:10:57 +0100
+Message-Id: <20220302211100.65264-6-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
 References: <20220302211100.65264-1-paul.kocialkowski@bootlin.com>
@@ -55,56 +55,110 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to declare a mbus node for the v3s, expose its associated
-clocks to the public header.
+MIPI CSI-2 is supported on the V3s with an A31-based MIPI CSI-2 bridge
+controller. The controller uses a separate D-PHY, which is the same
+that is otherwise used for MIPI DSI, but used in Rx mode.
+
+On the V3s, the CSI0 controller is dedicated to MIPI CSI-2 as it does
+not have access to any parallel interface pins.
+
+Add all the necessary nodes (CSI0, MIPI CSI-2 bridge and D-PHY) to
+support the MIPI CSI-2 interface.
+
+Note that a fwnode graph link is created between CSI0 and MIPI CSI-2
+even when no sensor is connected. This will result in a probe failure
+for the controller as long as no sensor is connected but this is fine
+since no other interface is available.
+
+The interconnects property is used to inherit the proper DMA offset.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- drivers/clk/sunxi-ng/ccu-sun8i-v3s.h      | 4 ----
- include/dt-bindings/clock/sun8i-v3s-ccu.h | 4 ++--
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 71 ++++++++++++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.h b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.h
-index 108eeeedcbf7..8ed4eff86ca1 100644
---- a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.h
-+++ b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.h
-@@ -39,14 +39,10 @@
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index a966b6a9acf5..a9405e011f3e 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -619,6 +619,77 @@ gic: interrupt-controller@1c81000 {
+ 			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+ 		};
  
- /* The first bunch of module clocks are exported */
- 
--#define CLK_DRAM		58
--
- /* All the DRAM gates are exported */
- 
- /* Some more module clocks are exported */
- 
--#define CLK_MBUS		72
--
- /* And the GPU module clock is exported */
- 
- #define CLK_PLL_DDR1		74
-diff --git a/include/dt-bindings/clock/sun8i-v3s-ccu.h b/include/dt-bindings/clock/sun8i-v3s-ccu.h
-index 014ac6123d17..4231f23bc53b 100644
---- a/include/dt-bindings/clock/sun8i-v3s-ccu.h
-+++ b/include/dt-bindings/clock/sun8i-v3s-ccu.h
-@@ -87,7 +87,7 @@
- #define CLK_SPI0		55
- #define CLK_USB_PHY0		56
- #define CLK_USB_OHCI0		57
--
-+#define CLK_DRAM		58
- #define CLK_DRAM_VE		59
- #define CLK_DRAM_CSI		60
- #define CLK_DRAM_EHCI		61
-@@ -101,7 +101,7 @@
- #define CLK_VE			69
- #define CLK_AC_DIG		70
- #define CLK_AVS			71
--
-+#define CLK_MBUS		72
- #define CLK_MIPI_CSI		73
- 
- /* Clocks not available on V3s */
++		csi0: camera@1cb0000 {
++			compatible = "allwinner,sun8i-v3s-csi";
++			reg = <0x01cb0000 0x1000>;
++			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_CSI>,
++				 <&ccu CLK_CSI1_SCLK>,
++				 <&ccu CLK_DRAM_CSI>;
++			clock-names = "bus", "mod", "ram";
++			resets = <&ccu RST_BUS_CSI>;
++			interconnects = <&mbus 5>;
++			interconnect-names = "dma-mem";
++			status = "disabled";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@1 {
++					reg = <1>;
++
++					csi0_in_mipi_csi2: endpoint {
++						remote-endpoint = <&mipi_csi2_out_csi0>;
++					};
++				};
++			};
++		};
++
++		mipi_csi2: csi@1cb1000 {
++			compatible = "allwinner,sun8i-v3s-mipi-csi2",
++				     "allwinner,sun6i-a31-mipi-csi2";
++			reg = <0x01cb1000 0x1000>;
++			interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&ccu CLK_BUS_CSI>,
++				 <&ccu CLK_CSI1_SCLK>;
++			clock-names = "bus", "mod";
++			resets = <&ccu RST_BUS_CSI>;
++			status = "disabled";
++
++			phys = <&dphy>;
++			phy-names = "dphy";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				mipi_csi2_in: port@0 {
++					reg = <0>;
++				};
++
++				mipi_csi2_out: port@1 {
++					reg = <1>;
++
++					mipi_csi2_out_csi0: endpoint {
++						remote-endpoint = <&csi0_in_mipi_csi2>;
++					};
++				};
++			};
++		};
++
++		dphy: d-phy@1cb2000 {
++			compatible = "allwinner,sun6i-a31-mipi-dphy";
++			reg = <0x01cb2000 0x1000>;
++			clocks = <&ccu CLK_BUS_CSI>,
++				 <&ccu CLK_MIPI_CSI>;
++			clock-names = "bus", "mod";
++			resets = <&ccu RST_BUS_CSI>;
++			allwinner,direction = "rx";
++			status = "disabled";
++			#phy-cells = <0>;
++		};
++
+ 		csi1: camera@1cb4000 {
+ 			compatible = "allwinner,sun8i-v3s-csi";
+ 			reg = <0x01cb4000 0x3000>;
 -- 
 2.35.1
 
