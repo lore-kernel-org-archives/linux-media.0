@@ -2,260 +2,183 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5537FC433EF
-	for <linux-media@archiver.kernel.org>; Wed,  2 Mar 2022 17:15:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22A48C433F5
+	for <linux-media@archiver.kernel.org>; Wed,  2 Mar 2022 19:16:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243692AbiCBRPw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Mar 2022 12:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
+        id S244759AbiCBTQz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Mar 2022 14:16:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237817AbiCBRPu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Mar 2022 12:15:50 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19AA58E45;
-        Wed,  2 Mar 2022 09:15:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646241306; x=1677777306;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=quZJORXDoBJnmtXWeY1UEG0LMErZNbKWG4uR8GxuM8A=;
-  b=EgFtrQTE2RuXhvw9sRIr3IT+pA0Ncb8f9tiCc0SC60P5NxN5IIJ1lIbG
-   qRXhfI2wJDlspyrIGC0iL/9/1vb/Lqq8nOVou0CScelNSeM2zFz5ZYwQd
-   vRCxbYiuOYMHLgn2p868GOLIzIRhmd1d7Ftp+C+uIAO1rF5yphwxH1nTK
-   BZo8QGgTZGobcAwOhtAkimiecLreyGJPEymFRGwK29ytkPQQTUw1YAXwn
-   7s74MTXIjfdUqEKiu1QGwymv12Ru01fVqM/H0rIJHbiNJzFQB0n0mysA7
-   4izUGN7Nj88HSoNqykEmQlZt68TbXwAcpy2jJWkt8gcliob3VHMqMtNgg
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="339886271"
-X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="339886271"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 09:15:05 -0800
-X-IronPort-AV: E=Sophos;i="5.90,149,1643702400"; 
-   d="scan'208";a="551343768"
-Received: from jbuller-mobl1.ger.corp.intel.com (HELO [10.213.194.231]) ([10.213.194.231])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 09:14:53 -0800
-Message-ID: <ed52ce3c-0f4a-a1e8-4176-543657d6228d@linux.intel.com>
-Date:   Wed, 2 Mar 2022 17:14:50 +0000
+        with ESMTP id S244976AbiCBTQy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Mar 2022 14:16:54 -0500
+X-Greylist: delayed 201 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Mar 2022 11:16:10 PST
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F058527C2
+        for <linux-media@vger.kernel.org>; Wed,  2 Mar 2022 11:16:10 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 54DF03200564;
+        Wed,  2 Mar 2022 14:16:09 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 02 Mar 2022 14:16:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=7JH0ctkqxqSaagxX5bMNGlv2Xkd3uaCNCqeXmG
+        zg93g=; b=fNVomhADktS4IfVYxMgpknvXfjU9sIOiAXTujq13pVssEl0MhMqe9I
+        24PKiGmA30USgvknCQP37T+50ilUvJisJ+gOpzhJXxnHN5x24GNA4G16FxGpJgsq
+        RcVZzk41h2VD3+49iWt6/n4CzSkHan514kP9lyXpAcPmPzCYG7dr8MKYThT55uS9
+        xRL9mu4HNLOOsRXHWo2VBAA5ECc48xZUq3Ng7AgT09kT3ZRcTmraAHC+0Ee5oYie
+        9t7VPWdqf1qrt0Hl1LUhR8fzjbNPs2NqU/OJV+x9koHefByIGfcksrNb+Y4lUwQR
+        Y6aJiQfaPjjfXwJJ+ZAbimWzlaKXCJXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=7JH0ctkqxqSaagxX5
+        bMNGlv2Xkd3uaCNCqeXmGzg93g=; b=S9vjpAGuSpJzkgq/R/B4xvIVm5uKJswXL
+        QUCHdvyAUcZ0niLSK7z5Yhv3c4B2lGXhOkGOWMDWFxghYRUZBEiaGaKSXqRoFvos
+        0ufmPhbc9HJe+YQQHQfrq0Xop51XussWsiWfJKY2i6qqk7q5MTTFdiTi2WLzTaCu
+        fGeBV5nrYZWeXptL9IdBF4wRLeSyz8lJMiDyE8cEVz0cHd+zqQehl8zFpSwKJa/G
+        WkzZITxlySq+aXNMrv90FzNQAvsnLk1wVnFW5A803PJLleryVhxzNxKgYah4b5+3
+        3IOLiIjHTw1NIAmP0BMjX8QLhb6B71ojN+/bnRt30Me86xCKLWSmw==
+X-ME-Sender: <xms:eMIfYtVVz3QfWFt2zbh-N5MgmLjognrnxOuvnujjhX6QfUFiRnI3VA>
+    <xme:eMIfYtkFtyH7tMERlsWNmbrypMPg4qFWIqK2d9nFOiv69egC_Db3pjOM1pJCFRbmf
+    LTfuPEZp8N3NgP78rs>
+X-ME-Received: <xmr:eMIfYpbLmlP4jWNH7ONDUztlhsJOOXuvOTIQG3euttM0IwtceTmawXL-ilRehAgQZoLZkbrAsSdl4KB-jGF7Hntz>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtgedguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepffgrfhhn
+    rgcujfhirhhstghhfhgvlhguuceouggrfhhnrgesfhgrshhtmhgrihhlrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeffledvudejgfeitedvleevteduueekkedtjedvgedvgfduleet
+    ffeujedvveekieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegurghfnhgrsehfrghsthhmrghilhdrtghomh
+X-ME-Proxy: <xmx:eMIfYgXf_LKJQNeagbc41-v-E4RbR-fI1t-7yzvmeb0kcb5Qzco-PA>
+    <xmx:eMIfYnk36ZCWYI1ZAQgTQCzE0_nozyNV0JMci0MdGyRVBem6WQo38Q>
+    <xmx:eMIfYtfwlc201DIuqiuDFztjG0AQ44uQdDHf6BAhKlDQDxFl7MpKag>
+    <xmx:eMIfYgBH3faQm65RAtdE9eodIIhfAsnA5vVSApS-zdKGoruXe3ntoQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 2 Mar 2022 14:16:06 -0500 (EST)
+Date:   Wed, 2 Mar 2022 21:16:01 +0200
+From:   Dafna Hirschfeld <dafna@fastmail.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Tomasz Figa <tfiga@google.com>,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 07/16] media: rkisp1: Simplify rkisp1_entities_register()
+ error path
+Message-ID: <20220302191601.gqnwk2wr3ffuqcor@guri>
+References: <20220227160116.18556-1-laurent.pinchart@ideasonboard.com>
+ <20220227160116.18556-8-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [Intel-gfx] [PATCH 6/6] treewide: remove check of list iterator
- against head past the loop body
-Content-Language: en-US
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel@lists.freedesktop.org,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx@lists.freedesktop.org, samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-cifs@vger.kernel.org, kvm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-media@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net, linux-tegra@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-sgx@vger.kernel.org,
-        linux-block@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        tipc-discussion@lists.sourceforge.net,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org, Mike Rapoport <rppt@kernel.org>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-7-jakobkoschel@gmail.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20220228110822.491923-7-jakobkoschel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220227160116.18556-8-laurent.pinchart@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On 27.02.2022 18:01, Laurent Pinchart wrote:
+> Now that all the unregistration functions are safe to call on
+> non-registered entities, the error path in rkisp1_entities_register()
+> can be simplified. Factor out the unregistration to a separate function
+> to share code with rkisp1_remove().
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-On 28/02/2022 11:08, Jakob Koschel wrote:
-> When list_for_each_entry() completes the iteration over the whole list
-> without breaking the loop, the iterator value will be a bogus pointer
-> computed based on the head element.
-> 
-> While it is safe to use the pointer to determine if it was computed
-> based on the head element, either with list_entry_is_head() or
-> &pos->member == head, using the iterator variable after the loop should
-> be avoided.
-> 
-> In preparation to limiting the scope of a list iterator to the list
-> traversal loop, use a dedicated pointer to point to the found element.
-> 
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
 
-[snip until i915 parts]
-
->   drivers/gpu/drm/i915/gem/i915_gem_context.c   | 14 +++---
->   .../gpu/drm/i915/gem/i915_gem_execbuffer.c    | 15 ++++---
->   drivers/gpu/drm/i915/gt/intel_ring.c          | 15 ++++---
-
-[snip]
-
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> index 00327b750fbb..80c79028901a 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> @@ -107,25 +107,27 @@ static void lut_close(struct i915_gem_context *ctx)
->   	radix_tree_for_each_slot(slot, &ctx->handles_vma, &iter, 0) {
->   		struct i915_vma *vma = rcu_dereference_raw(*slot);
->   		struct drm_i915_gem_object *obj = vma->obj;
-> -		struct i915_lut_handle *lut;
-> +		struct i915_lut_handle *lut = NULL;
-> +		struct i915_lut_handle *tmp;
+> ---
+>  .../platform/rockchip/rkisp1/rkisp1-dev.c     | 40 +++++++++----------
+>  1 file changed, 19 insertions(+), 21 deletions(-)
 > 
->   		if (!kref_get_unless_zero(&obj->base.refcount))
->   			continue;
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> index 3f5cfa7eb937..f8b2573aa9da 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> @@ -346,48 +346,50 @@ static const struct dev_pm_ops rkisp1_pm_ops = {
+>   * Core
+>   */
+>  
+> +static void rkisp1_entities_unregister(struct rkisp1_device *rkisp1)
+> +{
+> +	rkisp1_params_unregister(rkisp1);
+> +	rkisp1_stats_unregister(rkisp1);
+> +	rkisp1_capture_devs_unregister(rkisp1);
+> +	rkisp1_resizer_devs_unregister(rkisp1);
+> +	rkisp1_isp_unregister(rkisp1);
+> +}
+> +
+>  static int rkisp1_entities_register(struct rkisp1_device *rkisp1)
+>  {
+>  	int ret;
+>  
+>  	ret = rkisp1_isp_register(rkisp1);
+>  	if (ret)
+> -		return ret;
+> +		goto error;
+>  
+>  	ret = rkisp1_resizer_devs_register(rkisp1);
+>  	if (ret)
+> -		goto err_unreg_isp_subdev;
+> +		goto error;
+>  
+>  	ret = rkisp1_capture_devs_register(rkisp1);
+>  	if (ret)
+> -		goto err_unreg_resizer_devs;
+> +		goto error;
+>  
+>  	ret = rkisp1_stats_register(rkisp1);
+>  	if (ret)
+> -		goto err_unreg_capture_devs;
+> +		goto error;
+>  
+>  	ret = rkisp1_params_register(rkisp1);
+>  	if (ret)
+> -		goto err_unreg_stats;
+> +		goto error;
+>  
+>  	ret = rkisp1_subdev_notifier(rkisp1);
+>  	if (ret) {
+>  		dev_err(rkisp1->dev,
+>  			"Failed to register subdev notifier(%d)\n", ret);
+> -		goto err_unreg_params;
+> +		goto error;
+>  	}
+>  
+>  	return 0;
+> -err_unreg_params:
+> -	rkisp1_params_unregister(rkisp1);
+> -err_unreg_stats:
+> -	rkisp1_stats_unregister(rkisp1);
+> -err_unreg_capture_devs:
+> -	rkisp1_capture_devs_unregister(rkisp1);
+> -err_unreg_resizer_devs:
+> -	rkisp1_resizer_devs_unregister(rkisp1);
+> -err_unreg_isp_subdev:
+> -	rkisp1_isp_unregister(rkisp1);
+> +
+> +error:
+> +	rkisp1_entities_unregister(rkisp1);
+>  	return ret;
+>  }
+>  
+> @@ -583,11 +585,7 @@ static int rkisp1_remove(struct platform_device *pdev)
+>  	v4l2_async_nf_unregister(&rkisp1->notifier);
+>  	v4l2_async_nf_cleanup(&rkisp1->notifier);
+>  
+> -	rkisp1_params_unregister(rkisp1);
+> -	rkisp1_stats_unregister(rkisp1);
+> -	rkisp1_capture_devs_unregister(rkisp1);
+> -	rkisp1_resizer_devs_unregister(rkisp1);
+> -	rkisp1_isp_unregister(rkisp1);
+> +	rkisp1_entities_unregister(rkisp1);
+>  
+>  	media_device_unregister(&rkisp1->media_dev);
+>  	v4l2_device_unregister(&rkisp1->v4l2_dev);
+> -- 
+> Regards,
 > 
->   		spin_lock(&obj->lut_lock);
-> -		list_for_each_entry(lut, &obj->lut_list, obj_link) {
-> -			if (lut->ctx != ctx)
-> +		list_for_each_entry(tmp, &obj->lut_list, obj_link) {
-> +			if (tmp->ctx != ctx)
->   				continue;
+> Laurent Pinchart
 > 
-> -			if (lut->handle != iter.index)
-> +			if (tmp->handle != iter.index)
->   				continue;
-> 
-> -			list_del(&lut->obj_link);
-> +			list_del(&tmp->obj_link);
-> +			lut = tmp;
->   			break;
->   		}
->   		spin_unlock(&obj->lut_lock);
-> 
-> -		if (&lut->obj_link != &obj->lut_list) {
-> +		if (lut) {
->   			i915_lut_handle_free(lut);
->   			radix_tree_iter_delete(&ctx->handles_vma, &iter, slot);
-
-Looks okay although personally I would have left lut as is for a smaller 
-diff and introduced a new local like 'found' or 'unlinked'.
-
->   			i915_vma_close(vma);
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-> index 1736efa43339..fda9e3685ad2 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-> @@ -2444,7 +2444,8 @@ static struct i915_request *eb_throttle(struct i915_execbuffer *eb, struct intel
->   {
->   	struct intel_ring *ring = ce->ring;
->   	struct intel_timeline *tl = ce->timeline;
-> -	struct i915_request *rq;
-> +	struct i915_request *rq = NULL;
-> +	struct i915_request *tmp;
-> 
->   	/*
->   	 * Completely unscientific finger-in-the-air estimates for suitable
-> @@ -2460,15 +2461,17 @@ static struct i915_request *eb_throttle(struct i915_execbuffer *eb, struct intel
->   	 * claiming our resources, but not so long that the ring completely
->   	 * drains before we can submit our next request.
->   	 */
-> -	list_for_each_entry(rq, &tl->requests, link) {
-> -		if (rq->ring != ring)
-> +	list_for_each_entry(tmp, &tl->requests, link) {
-> +		if (tmp->ring != ring)
->   			continue;
-> 
-> -		if (__intel_ring_space(rq->postfix,
-> -				       ring->emit, ring->size) > ring->size / 2)
-> +		if (__intel_ring_space(tmp->postfix,
-> +				       ring->emit, ring->size) > ring->size / 2) {
-> +			rq = tmp;
->   			break;
-> +		}
->   	}
-> -	if (&rq->link == &tl->requests)
-> +	if (!rq)
->   		return NULL; /* weird, we will check again later for real */
-
-Alternatively, instead of break could simply do "return 
-i915_request_get(rq);" and replace the end of the function after the 
-loop with "return NULL;". A bit smaller diff, or at least less "spread 
-out" over the function, so might be easier to backport stuff touching 
-this area in the future. But looks correct as is.
-
-> 
->   	return i915_request_get(rq);
-> diff --git a/drivers/gpu/drm/i915/gt/intel_ring.c b/drivers/gpu/drm/i915/gt/intel_ring.c
-> index 2fdd52b62092..4881c4e0c407 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_ring.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_ring.c
-> @@ -191,24 +191,27 @@ wait_for_space(struct intel_ring *ring,
->   	       struct intel_timeline *tl,
->   	       unsigned int bytes)
->   {
-> -	struct i915_request *target;
-> +	struct i915_request *target = NULL;
-> +	struct i915_request *tmp;
->   	long timeout;
-> 
->   	if (intel_ring_update_space(ring) >= bytes)
->   		return 0;
-> 
->   	GEM_BUG_ON(list_empty(&tl->requests));
-> -	list_for_each_entry(target, &tl->requests, link) {
-> -		if (target->ring != ring)
-> +	list_for_each_entry(tmp, &tl->requests, link) {
-> +		if (tmp->ring != ring)
->   			continue;
-> 
->   		/* Would completion of this request free enough space? */
-> -		if (bytes <= __intel_ring_space(target->postfix,
-> -						ring->emit, ring->size))
-> +		if (bytes <= __intel_ring_space(tmp->postfix,
-> +						ring->emit, ring->size)) {
-> +			target = tmp;
->   			break;
-> +		}
->   	}
-> 
-> -	if (GEM_WARN_ON(&target->link == &tl->requests))
-> +	if (GEM_WARN_ON(!target))
->   		return -ENOSPC;
-> 
->   	timeout = i915_request_wait(target,
-
-Looks okay as well. Less clear here if there is a clean solution to make 
-the diff smaller so no suggestions. I mean do I dare mention "goto 
-found;" from inside the loop, where the break is, instead of the 
-variable renames.. risky.. :) (And ofc "return -ENOSPC" immediately 
-after the loop.)
-
-As a summary changes looks okay, up to you if you want to try to make 
-the diffs smaller or not. It doesn't matter hugely really, all I have is 
-a vague and uncertain "maybe it makes backporting of something, someday 
-easier". So for i915 it is good either way.
-
-Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com> # i915 bits only
-
-Regards,
-
-Tvrtko
