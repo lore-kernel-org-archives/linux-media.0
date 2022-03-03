@@ -2,59 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C638AC43219
-	for <linux-media@archiver.kernel.org>; Thu,  3 Mar 2022 15:06:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7D49C433EF
+	for <linux-media@archiver.kernel.org>; Thu,  3 Mar 2022 15:06:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234286AbiCCPHb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Mar 2022 10:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48450 "EHLO
+        id S234303AbiCCPHd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Mar 2022 10:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbiCCPH3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Mar 2022 10:07:29 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00182190B42
-        for <linux-media@vger.kernel.org>; Thu,  3 Mar 2022 07:06:43 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id d3so8327394wrf.1
-        for <linux-media@vger.kernel.org>; Thu, 03 Mar 2022 07:06:43 -0800 (PST)
+        with ESMTP id S234293AbiCCPHb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Mar 2022 10:07:31 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E931903FB
+        for <linux-media@vger.kernel.org>; Thu,  3 Mar 2022 07:06:45 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id i8so8291721wrr.8
+        for <linux-media@vger.kernel.org>; Thu, 03 Mar 2022 07:06:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rQ54PimOa9JA0PjxA9klTjXL5mIT6EoCvMFNlDkpoz0=;
-        b=EiqkcueE7gsmrKt7OzyIXsnSf9qqkyvZ000cMatAKsHOlcK04TysYrt9+L1DDm2K9J
-         uAQNKatyln8o345a/9vZuweQKIJNRuqH/oz4N53/kWYYHPusgRueY8/SoD71zdB5fTG3
-         554Zkt9aPuAle+EdY64Bv4Z3GgzZtbJYgpv19c5pdGdRajdZeMBOwUGgAhYtQkqJMcsc
-         0Cxrvias7rdf1c+l67rynX7TisjLnMerFwK9Z/0MlJ9H0pPdC7qkT/mWdxK8Jt61D7lR
-         r7GcDzPSrPUZHyw6K+ga1CbI6+4GEpzNTObdAUXRK2zNgTz2Auum6rcsNPOXKFCCddoE
-         D8VQ==
+        bh=ZDbc5Zu6HoRaLo+/k8LqLkoHIjXtL1mJtM5q0u7i6VE=;
+        b=BxAxXeY1f1ADhiPhtuRlC/hwavrnHQcrnvdwNpsdzXhkg+L8/B2T6XnUehvOZMugPm
+         CMULrUjdeAa0EIqUjxYyWRZLb5BOIrFtGmDCQTyZ3ctMxaq4yX+hq12kMIznq6KRGAei
+         aPXq3G3a3pvGqbGyFzMe/6MrlkDY0eHrSOf3qlXnut8RBNnOX8Z0WLoXsqPcYTJmsmGc
+         BSYFDmdoIMh6GYhEn7OB3r4KXjxKDPF2Sx9ay9SpgPjcQvc6rUkAz8mZT5OE++Kan6Ir
+         OZEJ1dRgqNA8bK4XCtxKzrZggCAcKup65pfHwffjQ8y0jDrFKkxkzw7wRB+lcqEqP5B0
+         GuxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rQ54PimOa9JA0PjxA9klTjXL5mIT6EoCvMFNlDkpoz0=;
-        b=GdYCzmKdKX4f7bcqr7Y802IowM988xO9+gSZbKBF6tardOuf5ue+lMlC4Ex5409SdE
-         XOFxIVtbCWKbJtmNOfBfhTLKUy2L0OltY4W9o1+U4yId0xQVSDCYH7RAwwDdps3ylVhn
-         pUgoP1pAwzK90BYxDVHpa2i1jdnIRksuOrEUzp/EIY4i6dQLjDlUr6cRLROQTyUKUPMB
-         8Joa3VRXTq+VjuxunZdSeRsXUz9cZe8jQBbxsyvSAEp9en57/7FvZuodCPvn04RzQ+3n
-         Og7/igao60FNUHZDb4XR7m9uQm8dj4e+w5BUBFzlCRU7+hx0bflGLA4OUbGEqvLwLi63
-         2OtA==
-X-Gm-Message-State: AOAM533ytU7i6ZhGfaNC7+ZFeJX0bE9xfr37Q58VLx5m6l7dxLbr0SCq
-        bt4oIDEQIQqMM4ZTbm337lxKXYHckyshLkp6
-X-Google-Smtp-Source: ABdhPJybx3yj8om8NebDZZaiHVbt388RYGiyXHwMMRg8WhzQotdbNH4Zh12X3DiwH1zR0c6TbZ42lw==
-X-Received: by 2002:a5d:4a45:0:b0:1f0:5e70:1088 with SMTP id v5-20020a5d4a45000000b001f05e701088mr2024924wrs.258.1646320002269;
-        Thu, 03 Mar 2022 07:06:42 -0800 (PST)
+        bh=ZDbc5Zu6HoRaLo+/k8LqLkoHIjXtL1mJtM5q0u7i6VE=;
+        b=8NWGGxOs4gpOwqltMZdiASUbawJ0cMbk9DaOJzbaApPQ1RO3H3oeJZX1OUrPWDdS4x
+         YkO+i0bImUZPTN2QPu8VIB8fK3o7a3/KcTgnAlDedpuzXtQAe/WAElVpKyx3eKqcG3Hw
+         0eOa5Ex0YhATDndWaM55hvjzciO7vkv5OeYN9qis8VFDunycGnP28/QoSjqpuI6qCQLe
+         aWEsXDWiax93Vf6Tj4365FHN0Ngy+kNJVrc+P9MAIgielbuPU0xlO1bnECaPAYxr37Lj
+         wMoWDvP55QeFjGQsjfb9Etzr9sEZG8W7Bm6g83SB4NLQrqc8Qsq5hVE8yBjKZoS5PGAI
+         X1nw==
+X-Gm-Message-State: AOAM532udlDv3WadnJKt15NLgDLqe/KUR6UTyraNw3jqN10Sg84KAYaY
+        UA+Rk5uF+QyMssWwWsrH0lxx1J9EaqxCBwEI
+X-Google-Smtp-Source: ABdhPJxBRKLqO16sjNcuPajVoBu0TZBU8lW7PmHbVGZM2P61uskvrbftLaDOs0G6+4sPQzZHYsi0Xw==
+X-Received: by 2002:adf:df0a:0:b0:1f0:2140:1b41 with SMTP id y10-20020adfdf0a000000b001f021401b41mr8357683wrl.94.1646320004260;
+        Thu, 03 Mar 2022 07:06:44 -0800 (PST)
 Received: from localhost.localdomain (hst-221-14.medicom.bg. [84.238.221.14])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05600c511000b0038141b4a4edsm10757072wms.38.2022.03.03.07.06.41
+        by smtp.gmail.com with ESMTPSA id o16-20020a05600c511000b0038141b4a4edsm10757072wms.38.2022.03.03.07.06.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 07:06:41 -0800 (PST)
+        Thu, 03 Mar 2022 07:06:43 -0800 (PST)
 From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
 To:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-api@vger.kernel.org
 Cc:     hverkuil-cisco@xs4all.nl, Nicolas Dufresne <nicolas@ndufresne.ca>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v4 1/6] v4l: Add Qualcomm custom compressed pixel formats
-Date:   Thu,  3 Mar 2022 17:06:31 +0200
-Message-Id: <20220303150636.577063-2-stanimir.varbanov@linaro.org>
+Subject: [PATCH v4 3/6] venus: Add a handling of QC08C compressed format
+Date:   Thu,  3 Mar 2022 17:06:33 +0200
+Message-Id: <20220303150636.577063-4-stanimir.varbanov@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220303150636.577063-1-stanimir.varbanov@linaro.org>
 References: <20220303150636.577063-1-stanimir.varbanov@linaro.org>
@@ -64,73 +64,78 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add custom Qualcomm raw compressed pixel formats. They are
-used in Qualcomm SoCs to optimize the interconnect bandwidth.
+This adds QC08C compressed pixel format in the Venus driver, and
+make it possible to discover from v4l2 clients.
 
 Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../media/v4l/pixfmt-reserved.rst             | 19 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ioctl.c          |  2 ++
- include/uapi/linux/videodev2.h                |  2 ++
- 3 files changed, 23 insertions(+)
+ drivers/media/platform/qcom/venus/helpers.c |  2 ++
+ drivers/media/platform/qcom/venus/vdec.c    | 18 +++++++++++++++---
+ 2 files changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-index 2f2133b4cd9c..929bd0dc0ba3 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-@@ -245,6 +245,25 @@ please make a proposal on the linux-media mailing list.
-       - Non-compressed, tiled two-planar format used by Mediatek MT8183.
- 	This is an opaque intermediate format and the MDP3 hardware can be
- 	used to convert it to other formats.
-+    * .. _V4L2-PIX-FMT-QC08C:
+diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+index 52b198a194b3..7144747398b6 100644
+--- a/drivers/media/platform/qcom/venus/helpers.c
++++ b/drivers/media/platform/qcom/venus/helpers.c
+@@ -592,6 +592,8 @@ static u32 to_hfi_raw_fmt(u32 v4l2_fmt)
+ 		return HFI_COLOR_FORMAT_NV12;
+ 	case V4L2_PIX_FMT_NV21:
+ 		return HFI_COLOR_FORMAT_NV21;
++	case V4L2_PIX_FMT_QC08C:
++		return HFI_COLOR_FORMAT_NV12_UBWC;
+ 	default:
+ 		break;
+ 	}
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index 91da3f509724..eb02e45a512b 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -31,6 +31,10 @@
+  */
+ static const struct venus_format vdec_formats[] = {
+ 	{
++		.pixfmt = V4L2_PIX_FMT_QC08C,
++		.num_planes = 1,
++		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++	}, {
+ 		.pixfmt = V4L2_PIX_FMT_NV12,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+@@ -106,6 +110,10 @@ find_format(struct venus_inst *inst, u32 pixfmt, u32 type)
+ 	    !venus_helper_check_codec(inst, fmt[i].pixfmt))
+ 		return NULL;
+ 
++	if (V4L2_TYPE_IS_CAPTURE(type) &&
++	    !venus_helper_check_format(inst, fmt[i].pixfmt))
++		return NULL;
 +
-+      - ``V4L2_PIX_FMT_QC08C``
-+      - 'QC08C'
-+      - Compressed Macro-tile 8-Bit YUV420 format used by Qualcomm platforms.
-+        It is an opaque intermediate format. The used compression is lossless
-+        and it is used by various multimedia hardware blocks like GPU, display
-+        controllers, ISP and video accelerators.
-+        It contains four planes for progressive video and eight planes for
-+        interlaced video.
-+    * .. _V4L2-PIX-FMT-QC10C:
+ 	return &fmt[i];
+ }
+ 
+@@ -124,8 +132,12 @@ find_format_by_index(struct venus_inst *inst, unsigned int index, u32 type)
+ 
+ 		if (fmt[i].type != type)
+ 			continue;
+-		valid = type != V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE ||
+-			venus_helper_check_codec(inst, fmt[i].pixfmt);
 +
-+      - ``V4L2_PIX_FMT_QC10C``
-+      - 'QC10C'
-+      - Compressed Macro-tile 10-Bit YUV420 format used by Qualcomm platforms.
-+        It is an opaque intermediate format. The used compression is lossless
-+        and it is used by various multimedia hardware blocks like GPU, display
-+        controllers, ISP and video accelerators.
-+        It contains four planes for progressive video.
- 
- .. raw:: latex
- 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 642cb90f457c..b20ef7989ab8 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1439,6 +1439,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 		case V4L2_PIX_FMT_SE401:	descr = "GSPCA SE401"; break;
- 		case V4L2_PIX_FMT_S5C_UYVY_JPG:	descr = "S5C73MX interleaved UYVY/JPEG"; break;
- 		case V4L2_PIX_FMT_MT21C:	descr = "Mediatek Compressed Format"; break;
-+		case V4L2_PIX_FMT_QC08C:	descr = "QCOM Compressed 8-bit Format"; break;
-+		case V4L2_PIX_FMT_QC10C:	descr = "QCOM Compressed 10-bit Format"; break;
- 		default:
- 			if (fmt->description[0])
- 				return;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index df8b9c486ba1..e710903185bd 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -744,6 +744,8 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_INZI     v4l2_fourcc('I', 'N', 'Z', 'I') /* Intel Planar Greyscale 10-bit and Depth 16-bit */
- #define V4L2_PIX_FMT_CNF4     v4l2_fourcc('C', 'N', 'F', '4') /* Intel 4-bit packed depth confidence information */
- #define V4L2_PIX_FMT_HI240    v4l2_fourcc('H', 'I', '2', '4') /* BTTV 8-bit dithered RGB */
-+#define V4L2_PIX_FMT_QC08C    v4l2_fourcc('Q', '0', '8', 'C') /* Qualcomm 8-bit compressed */
-+#define V4L2_PIX_FMT_QC10C    v4l2_fourcc('Q', '1', '0', 'C') /* Qualcomm 10-bit compressed */
- 
- /* 10bit raw bayer packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
- #define V4L2_PIX_FMT_IPU3_SBGGR10	v4l2_fourcc('i', 'p', '3', 'b') /* IPU3 packed 10-bit BGGR bayer */
++		if (V4L2_TYPE_IS_OUTPUT(type))
++			valid = venus_helper_check_codec(inst, fmt[i].pixfmt);
++		else if (V4L2_TYPE_IS_CAPTURE(type))
++			valid = venus_helper_check_format(inst, fmt[i].pixfmt);
++
+ 		if (k == index && valid)
+ 			break;
+ 		if (valid)
+@@ -1525,7 +1537,7 @@ static const struct hfi_inst_ops vdec_hfi_ops = {
+ static void vdec_inst_init(struct venus_inst *inst)
+ {
+ 	inst->hfi_codec = HFI_VIDEO_CODEC_H264;
+-	inst->fmt_out = &vdec_formats[6];
++	inst->fmt_out = &vdec_formats[7];
+ 	inst->fmt_cap = &vdec_formats[0];
+ 	inst->width = frame_width_min(inst);
+ 	inst->height = ALIGN(frame_height_min(inst), 32);
 -- 
 2.25.1
 
