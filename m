@@ -2,317 +2,267 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B50C4C433FE
-	for <linux-media@archiver.kernel.org>; Fri,  4 Mar 2022 12:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2959C433F5
+	for <linux-media@archiver.kernel.org>; Fri,  4 Mar 2022 12:59:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbiCDMvR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Mar 2022 07:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
+        id S235209AbiCDNAP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Mar 2022 08:00:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234115AbiCDMvO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Mar 2022 07:51:14 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52611B4039
-        for <linux-media@vger.kernel.org>; Fri,  4 Mar 2022 04:50:25 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id dr20so17256585ejc.6
-        for <linux-media@vger.kernel.org>; Fri, 04 Mar 2022 04:50:24 -0800 (PST)
+        with ESMTP id S231825AbiCDNAO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Mar 2022 08:00:14 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD2417CC5C;
+        Fri,  4 Mar 2022 04:59:26 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id r13so17356468ejd.5;
+        Fri, 04 Mar 2022 04:59:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cfVrQaTuSRlspnqFAOyIP+LzK9x+KLsv1yujUpM5yK4=;
-        b=XzbUhhZwoGMeAuarUiQlVNg7qtcsd95BHUen2GDfFfPoiAGCOoS/+rYVB8kSBpb+Td
-         +1hp/MJXX4IAKRxPSxSMcjapfHmyl015DBq7Q2QiamD9SAs/BRa+iY0zwUWFP3VhL0xq
-         lXrbpA8bOLvqLYRfyLc7b/jxoKh+d9fKQQ+UYbSSYbcdDNhFYThgXI1Vhpyf5/vPyCFY
-         w3iG2AwSKE+P051KpvZJiHkaJqEONnCQN4edzIjU+Xr/4Ixab8bs3yXdbOhuj+Vx4b+M
-         5pElJ3T/DVbJHisDLuCF5iujfVR/5j8pybMLrM/gSthaphqWwk4+5aGr8VvIuL82nyvx
-         sfuA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ln4FCzFPSro+Ut4SgBBNjvILZ4e+LysX8Gy/fmSPh5g=;
+        b=P+Ohi+IdH1WH7ELc1GY8Dqz3xuAIwLJFPIogyC/GDStdmMkEcFMOWUl3yGCIrWZ34w
+         DJVISgjifRusB8R56aA7KAgi7u7t/Sg/6nLMlDDPmsL09r8TMtawC8eb2qZ+ddqRu8Eg
+         XhNINQWf3mCr0wbiFRLiQQBpcAlDeQUBlAR1AUFIkGQSKz8TVQrjNc+BFyKBTtAS82Kx
+         Iw0gBeeHaknqA/eXD9Sx8oTmWW0tMKFbiqglhyOIvoRx1FledNnO07r8z0MJbHsRBUTD
+         oH37WGe29ACtCA59dzHW9NSndYxEvgQ8NNKFKMDGbSERPDCrKN0e46vaM0m2Qg9KMSdn
+         CH3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cfVrQaTuSRlspnqFAOyIP+LzK9x+KLsv1yujUpM5yK4=;
-        b=uQRAjTAa9QATJu92kx8dJsZm2WgIKbrr2MvXGPsTA8bpbfVHemslMnAArqxyGXmOh/
-         oDjxgpdQOrOF183sQ6k2EjpmbCMDOIDsBVduHDzAP9C3Lm7/e4dH10IXGbNYA+G9XieU
-         ocQMDBB1Ng6/qIQq5la/NlgG1Xf9gOYWLT5HCSMDt/FrUoVgyM6PAP3NLQc7R64AxhgW
-         mNENXNiCNM9Inauk54ufiJYpkq1rwBUeLfpqQAIUolXHDgO3lrn1X3qeEC0mP8UL5y54
-         ysmmaTKKyC+m7qx8bQ6zgHlqshPbEl6Q1TXvkaCiZZP9LAtx7tMQdgTelzVkglEaxVtM
-         PU1g==
-X-Gm-Message-State: AOAM530CYuN1wtBVGsrvTKMf60w7Lsg0chYlMGL5qW7vkp5xWhb4x+/M
-        fVBro3HQo1tB6hd855IolW9UtCXOZPQXuWSzCQA=
-X-Google-Smtp-Source: ABdhPJxVH78yoL6OoghqiXAxPgz4zkBKXpbbaYML+qe2spY4AYFgSnbDBdpkaFDRFC0taF7ZKt6s5A==
-X-Received: by 2002:a17:906:a148:b0:6cd:50c7:8d4d with SMTP id bu8-20020a170906a14800b006cd50c78d4dmr30680350ejb.641.1646398223148;
-        Fri, 04 Mar 2022 04:50:23 -0800 (PST)
-Received: from shashanks-buildpc.. ([2a02:8109:b540:9438:542e:fe2:e980:5b1])
-        by smtp.gmail.com with ESMTPSA id e5-20020a170906374500b006d5825520a7sm1736359ejc.71.2022.03.04.04.50.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Mar 2022 04:50:22 -0800 (PST)
-From:   Shashank Sharma <contactshashanksharma@gmail.com>
-To:     linux-media@vger.kernel.org
-Cc:     hverkuil-cisco@xs4all.nl,
-        Shashank Sharma <shashank.sharma@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Shashank Sharma <contactshashanksharma@gmail.com>
-Subject: [PATCH 2/3] edid-decode: Introduce libedid-decode APIs
-Date:   Fri,  4 Mar 2022 13:50:00 +0100
-Message-Id: <20220304125001.1732057-2-contactshashanksharma@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220304125001.1732057-1-contactshashanksharma@gmail.com>
-References: <20220304125001.1732057-1-contactshashanksharma@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ln4FCzFPSro+Ut4SgBBNjvILZ4e+LysX8Gy/fmSPh5g=;
+        b=8MXlxPPULvCDyqIapQtGEOKJshc6kZh7kU93Zm/Ys5RKE+nSNrUKQM174RKoIGKVhS
+         A2nrCDIfQ0cQUNk/Kqkmvkgc9M2/Tm+leZRI6nPMAH7WRIAnjhf9TJOjFdt7SEAMnuC9
+         HSvJ8IKofhoLizS9OCvuli5ZksVpWWY30yDUSzXHLRPNaxPgPFYDWIjBPMjzWk+m0erv
+         oNvimBateCKmlhNc42htuZ5molIOqdjawiTfElj0+DBuMqKipA8Ph7URygKY15C7y13T
+         2rin5hB54udyZXdpZg1UQHSlhU5leRgZyoxUXKMmGm1buO2R3Brclj9kN70/Bys6OeHD
+         /Bmw==
+X-Gm-Message-State: AOAM532el8dph99ZbWhH40b4M8dmFeNpDdsR/2sn9tEttRQxAlASqzeN
+        7bLrYlXrbKwwVt+7k4kA2m1X89dP5pGOAgKIa7s=
+X-Google-Smtp-Source: ABdhPJy5ATyl9FikK6JTQ2LV3A6ScWCl741hg3bhCI4Kftprbltxss7tD4scm6SywmqRJeO57KOSgF/1m8GMnBhA3jc=
+X-Received: by 2002:a17:907:7704:b0:6cf:48ac:b4a8 with SMTP id
+ kw4-20020a170907770400b006cf48acb4a8mr30127074ejc.305.1646398764922; Fri, 04
+ Mar 2022 04:59:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220225164600.1044663-1-benjamin.gaignard@collabora.com>
+ <CAHCN7x+AUy4JsqfdyZFqg4ScR1OgoLvqF91za0AZ278NSBJj4A@mail.gmail.com>
+ <b832271d-cecd-a373-48ff-ba5ce736e47d@collabora.com> <CAHCN7xJ3K2bLEc8dcTM+x-E0brDW-t4yrUdkUe0jCfuzH8v9pA@mail.gmail.com>
+ <678c1f01-c6cd-d1be-bd0b-277a808b006a@collabora.com>
+In-Reply-To: <678c1f01-c6cd-d1be-bd0b-277a808b006a@collabora.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Fri, 4 Mar 2022 06:59:14 -0600
+Message-ID: <CAHCN7xL-+1cXbcOpRU8BRXoyAkecERqT-O8vM_069er8WWWEaw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/14] Move HEVC stateless controls out of staging
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com,
+        Chen-Yu Tsai <wens@csie.org>,
+        "jernej.skrabec" <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linux-media <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev, kernel <kernel@collabora.com>,
+        knaerzche@gmail.com, jc@kynesim.co.uk
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Shashank Sharma <shashank.sharma@amd.com>
+On Thu, Mar 3, 2022 at 4:13 AM Benjamin Gaignard
+<benjamin.gaignard@collabora.com> wrote:
+>
+>
+> Le 03/03/2022 =C3=A0 02:23, Adam Ford a =C3=A9crit :
+> > On Mon, Feb 28, 2022 at 4:13 AM Benjamin Gaignard
+> > <benjamin.gaignard@collabora.com> wrote:
+> >>
+> >> Le 26/02/2022 =C3=A0 23:25, Adam Ford a =C3=A9crit :
+> >>> On Fri, Feb 25, 2022 at 4:41 PM Benjamin Gaignard
+> >>> <benjamin.gaignard@collabora.com> wrote:
+> >>>> This series aims to make HEVC uapi stable and usable for hardware
+> >>>> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro=
+)
+> >>>> and 2 out of the tree drivers (rkvdec and RPI).
+> >>>>
+> >>>> After the remarks done on version 2, I have completely reworked to p=
+atches
+> >>>> split so changelogs are meaningless. I have also drop "RFC" from the
+> >>>> titles.
+> >>>>
+> >>>> In this v3 I do all the changes (new controls, documentation, etc..)
+> >>>> in the staging directory before moving the HEVC uAPI to stable
+> >>>> steps by steps (unlike the big one patch in v2).
+> >>>>
+> >>>> At the end fluster tests results on IMX8MQ is 77/147 for HEVC codec.
+> >> I have push a branch here:
+> >> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/=
+HEVC_UAPI_V4
+> >>
+> >> it is the incoming version 4 of this series + patches to enable G2 on =
+my IMX8MQ
+> > Benjamin,
+> >
+> > I checked this repo out, and built it along with pulling the latest
+> > versions of G-streamer and fluster.
+> > When I check for v4l2 compatibility, I get the following:
+> >
+> >      GStreamer-H.264-V4L2-Gst1.0: GStreamer H.264 V4L2 decoder for
+> > GStreamer 1.0... =E2=9D=8C
+> >      GStreamer-H.264-V4L2SL-Gst1.0: GStreamer H.264 V4L2SL decoder for
+> > GStreamer 1.0... =E2=9C=94=EF=B8=8F
+> >      GStreamer-AV1-V4L2SL-Gst1.0: GStreamer AV1 V4L2SL decoder for
+> > GStreamer 1.0... =E2=9D=8C
+> >      GStreamer-H.265-V4L2-Gst1.0: GStreamer H.265 V4L2 decoder for
+> > GStreamer 1.0... =E2=9D=8C
+> >      GStreamer-H.265-V4L2SL-Gst1.0: GStreamer H.265 V4L2SL decoder for
+> > GStreamer 1.0... =E2=9D=8C
+> >      GStreamer-VP8-V4L2-Gst1.0: GStreamer VP8 V4L2 decoder for GStreame=
+r 1.0... =E2=9D=8C
+> >      GStreamer-VP8-V4L2SL-Gst1.0: GStreamer VP8 V4L2SL decoder for
+> > GStreamer 1.0... =E2=9C=94=EF=B8=8F
+> >      GStreamer-VP9-V4L2SL-Gst1.0: GStreamer VP9 V4L2SL decoder for
+> > GStreamer 1.0... =E2=9C=94=EF=B8=8F
+> >
+> > I see H,264, VP8 and VP9, but I would have also expected
+> > GStreamer-H.265-V4L2SL-Gst1.0 to return with a check box.
+> >
+> > When I checked to see if both decoders were being enumerated, I found t=
+hey were.
+> > [gst-main] root@localhost:~/gstreamer/fluster# dmesg |grep -i hantro
+> > [   16.044243] hantro_vpu: module is from the staging directory, the
+> > quality is unknown, you have been warned.
+> > [   16.044243] hantro_vpu: module is from the staging directory, the
+> > quality is unknown, you have been warned.
+> > [   16.095661] hantro-vpu 38300000.video-codec: registered
+> > nxp,imx8mq-vpu-g1-dec as /dev/video0
+> > [   16.096782] hantro-vpu 38310000.video-codec: registered
+> > nxp,imx8mq-vpu-g2-dec as /dev/video1
+> >
+> > Did I do something wrong, or did I miss something?
+>
+> Hi Adam,
+>
+> I guess it could be a misalignment between v4l2 kernel headers
+> and GStreamer v4l2 headers.
+> I have push a new version of the GST merge request which is aligned with
+> HEVC uAPI v4 proposal.
+>
+> When you inspect v4l2codecs gst plugin (gst-inspect-1.0 v4l2codecs) do
+> you see v4l2slh265dec plugin ?
+> I have fluster happy with it:
+> ./fluster.py list -c
 
-This patch adds a shared library wrapper for edid-decode
-tool. With this library acting as an interface, other Linux
-processes would also be able to analyze their EDIDs using the
-core logic of edid-decode tools.
+I pulled the latest from g-streamer's git repo again, and re-built.
+gst-instpect does not appear to show the h265 codec anymore.
 
-This would be particularly useful for applications like a Compositor
-who wants to extract the information from an EDID, but doesn't
-want to add tons of code to do that.
+# gst-inspect-1.0 |grep v4l2codecs
+v4l2codecs:  v4l2slh264dec: V4L2 Stateless H.264 Video Decoder
+v4l2codecs:  v4l2slmpeg2dec: V4L2 Stateless Mpeg2 Video Decoder
+v4l2codecs:  v4l2slvp8alphadecodebin: VP8 Alpha Decoder
+v4l2codecs:  v4l2slvp8dec: V4L2 Stateless VP8 Video Decoder
+v4l2codecs:  v4l2slvp9alphadecodebin: VP9 Alpha Decoder
+v4l2codecs:  v4l2slvp9dec: V4L2 Stateless VP9 Video Decoder
 
-The initial version of the library APIs are basic and fundamental to
-understand the response of the community. The long term plan is to
-introduce more capable APIs which can:
-- extract color correction and colorspace capabilities of the display
-  from their respective CTA-861 blocks.
-- extract advance information like static and dynamic HDR capabilities,
-  YCBCR 4:2:0 support, color depth and bpc, max pixel clocks for
-  HDMI 2.0, 2.1 etc.
+Is there a specific branch of g-streamer I should be using that can
+handle the newer API?
 
-This infomration will help a display manager or compositor to take
-several decisions related to display states and modeset.
-
-Cc: Pekka Paalanen <ppaalanen@gmail.com>
-Cc: Jani Nikula <jani.nikula@intel.com>
-Signed-off-by: Shashank Sharma <contactshashanksharma@gmail.com>
+adam
+>
+>
+> H265
+>      ...
+>      GStreamer-H.265-V4L2-Gst1.0: GStreamer H.265 V4L2 decoder for GStrea=
+mer 1.0... =E2=9D=8C
+>      GStreamer-H.265-V4L2SL-Gst1.0: GStreamer H.265 V4L2SL decoder for GS=
+treamer 1.0... =E2=9C=94=EF=B8=8F
+>      GStreamer-H.265-VA-Gst1.0: GStreamer H.265 VA decoder for GStreamer =
+1.0... =E2=9D=8C
+>      GStreamer-H.265-VAAPI-Gst1.0: GStreamer H.265 VAAPI decoder for GStr=
+eamer 1.0... =E2=9D=8C
+>      JCT-VT-H.265: JCT-VT H.265/HEVC reference decoder... =E2=9D=8C
+>
+> I hope that will help you,
+>
+> Regards,
+> Benjamin
+>
+> >
+> > adam
+> >
+> >> Regards,
+> >> Benjamin
+> >>
+> >>> Benjamin,
+> >>>
+> >>> I have an imx8mm and imx8mq that I can test. Do you happen to have a
+> >>> repo that I can clone to test this?  The imx8m stuff is spread around
+> >>> between the media tree and the imx tree since it hasn't been fully
+> >>> merged yet.
+> >>>
+> >>> thanks,
+> >>>
+> >>> adam
+> >>>
+> >>>> Benjamin
+> >>>>
+> >>>> Benjamin Gaignard (11):
+> >>>>     media: uapi: HEVC: Add missing fields in HEVC controls
+> >>>>     media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
+> >>>>       prefix
+> >>>>     media: uapi: HEVC: Add document uAPI structure
+> >>>>     media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS a=
+s a
+> >>>>       dynamic array
+> >>>>     media: uapi: Move parsed HEVC pixel format out of staging
+> >>>>     media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET cont=
+rol
+> >>>>     media: uapi: Move the HEVC stateless control type out of staging
+> >>>>     media: controls: Log HEVC stateless control in .std_log
+> >>>>     media: uapi: Create a dedicated header for Hantro control
+> >>>>     media: uapi: HEVC: fix padding in v4l2 control structures
+> >>>>     media: uapi: move HEVC stateless controls out of staging
+> >>>>
+> >>>> Hans Verkuil (3):
+> >>>>     videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+> >>>>     v4l2-ctrls: add support for dynamically allocated arrays.
+> >>>>     vivid: add dynamic array test control
+> >>>>
+> >>>>    .../userspace-api/media/drivers/hantro.rst    |   5 -
+> >>>>    .../media/v4l/ext-ctrls-codec-stateless.rst   | 831 +++++++++++++=
++++++
+> >>>>    .../media/v4l/ext-ctrls-codec.rst             | 780 -------------=
 ---
- libedid-decode-api.cpp | 174 +++++++++++++++++++++++++++++++++++++++++
- libedid-decode-api.h   |  27 +++++++
- 2 files changed, 201 insertions(+)
- create mode 100644 libedid-decode-api.cpp
- create mode 100644 libedid-decode-api.h
-
-diff --git a/libedid-decode-api.cpp b/libedid-decode-api.cpp
-new file mode 100644
-index 0000000..ce06ba6
---- /dev/null
-+++ b/libedid-decode-api.cpp
-@@ -0,0 +1,174 @@
-+// SPDX-License-Identifier: MIT
-+/*
-+ * Author: Shashank Sharma <contactshashanksharma@gmail.com>
-+ */
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <fcntl.h>
-+#include "libedid-decode-api.h"
-+
-+extern struct edid_state *extract_edid_state(int fd, FILE *error);
-+
-+/*
-+ * This is the init function for the API, a user must call
-+ * this function with the EDID file node, to extract the edid
-+ * into a state, and then call the rest of the APIs with that state
-+ * to extract information about EDID.
-+ */
-+struct edid_state *libedid_parse_edid(const char *edid_path)
-+{
-+    int edid_fd, ret;
-+    struct edid_state *estate;
-+
-+    if (!edid_path) {
-+        printf("No EDID path provided\n");
-+        return NULL;
-+    }
-+
-+    /* Expecting path to a connector's EDID file like /sys/class/drm/..../edid */
-+    edid_fd = open(edid_path, O_RDONLY);
-+    if (edid_fd < 0) {
-+        printf("Failed to open fd at path %s\n", edid_path);
-+        return NULL;
-+    }
-+
-+    /* Extract the infomrmation from edid node and prepare it's state */
-+    estate = extract_edid_state(edid_fd, stderr);
-+    if (!estate) {
-+        printf("Failed to extract EDID\n");
-+        return NULL;
-+    }
-+    printf("EDID extracted\n");
-+
-+    /* Now parse edid blocks */
-+    ret = estate->parse_edid();
-+    if (ret < 0) {
-+        printf("Error parsing edid, err=%d \n", ret);
-+        estate = NULL;
-+    }
-+
-+    close(edid_fd);
-+    return estate;
-+}
-+
-+int libedid_num_blks(struct edid_state *estate)
-+{
-+    if (estate)
-+        return estate->num_blocks;
-+
-+    printf("EDID state not initialized\n");
-+    return -1;
-+}
-+
-+int libedid_has_cta_blks(struct edid_state *estate)
-+{
-+    if (estate)
-+        return estate->has_cta;
-+
-+    printf("EDID state not initialized\n");
-+    return -1;
-+}
-+
-+unsigned int libedid_get_max_hfreq_hz(struct edid_state *estate)
-+{
-+    if (estate)
-+        return estate->max_hor_freq_hz;
-+
-+    printf("EDID state not initialized\n");
-+    return 0;
-+}
-+
-+unsigned int libedid_get_max_vfreq_hz(struct edid_state *estate)
-+{
-+    if (estate)
-+        return estate->max_vert_freq_hz;
-+
-+    printf("EDID state not initialized\n");
-+    return 0;
-+}
-+
-+unsigned int libedid_get_max_pclk_khz(struct edid_state *estate)
-+{
-+    if (estate)
-+        return estate->max_pixclk_khz;
-+
-+    printf("EDID state not initialized\n");
-+    return 0;
-+}
-+
-+int libedid_get_edid_version_minor(struct edid_state *estate)
-+{
-+    if (estate)
-+        return estate->base.edid_minor;
-+
-+    printf("EDID state not initialized\n");
-+    return -1;
-+}
-+
-+int libedid_get_edid_get_num_dtd(struct edid_state *estate)
-+{
-+    if (estate)
-+        return estate->base.dtd_cnt;
-+
-+    printf("EDID state not initialized\n");
-+    return -1;
-+}
-+
-+int libedid_if_preferred_mode_native(struct edid_state *estate)
-+{
-+    if (estate)
-+        return estate->base.preferred_is_also_native;
-+
-+    printf("EDID state not initialized\n");
-+    return -1;
-+}
-+
-+int libedid_get_max_display_w_h_mm(struct edid_state *estate, int *wmm, int *hmm)
-+{
-+    if (estate && hmm && wmm) {
-+        *hmm = estate->base.max_display_height_mm;
-+        *wmm = estate->base.max_display_width_mm;
-+        return 0;
-+    }
-+
-+    printf("EDID state not initialized\n");
-+    return -1;
-+}
-+
-+int libedid_ctablk_has_hdmi(struct edid_state *estate)
-+{
-+    if (estate)
-+        return estate->cta.has_hdmi;
-+
-+    printf("EDID state not initialized\n");
-+    return -1;
-+}
-+
-+int libedid_ctablk_has_vcdb(struct edid_state *estate)
-+{
-+    if (estate)
-+        return estate->cta.has_vcdb;
-+
-+    printf("EDID state not initialized\n");
-+    return -1;
-+}
-+
-+int libedid_ctablk_has_hfvsdb(struct edid_state *estate)
-+{
-+    if (estate)
-+        return estate->cta.have_hf_vsdb;
-+
-+    printf("EDID state not initialized\n");
-+    return -1;
-+}
-+
-+unsigned int libedid_ctablk_supported_hdmi_vics(struct edid_state *estate)
-+{
-+    if (estate)
-+        return estate->cta.supported_hdmi_vic_codes;
-+
-+    printf("EDID state not initialized\n");
-+    return -1;
-+}
-\ No newline at end of file
-diff --git a/libedid-decode-api.h b/libedid-decode-api.h
-new file mode 100644
-index 0000000..742b4a4
---- /dev/null
-+++ b/libedid-decode-api.h
-@@ -0,0 +1,27 @@
-+/* SPDX-License-Identifier: MIT
-+ *
-+ * Author: Shashank Sharma <contactshashanksharma@gmail.com>
-+ */
-+
-+#ifndef __LIBEDID_DECODE_API_H_
-+#define __LIBEDID_DECODE_API_H_
-+
-+#include "edid-decode.h"
-+
-+struct edid_state *libedid_parse_edid(const char *edid_path);
-+int libedid_num_blks(struct edid_state *estate);
-+int libedid_has_cta_blks(struct edid_state *estate);
-+int libedid_get_edid_version_minor(struct edid_state *estate);
-+int libedid_get_edid_get_num_dtd(struct edid_state *estate);
-+int libedid_if_preferred_mode_native(struct edid_state *estate);
-+int libedid_get_max_display_w_h_mm(struct edid_state *estate, int *wmm, int *hmm);
-+int libedid_ctablk_has_hdmi(struct edid_state *estate);
-+int libedid_ctablk_has_vcdb(struct edid_state *estate);
-+int libedid_ctablk_has_hfvsdb(struct edid_state *estate);
-+
-+unsigned int libedid_get_max_pclk_khz(struct edid_state *estate);
-+unsigned int libedid_get_max_hfreq_hz(struct edid_state *estate);
-+unsigned int libedid_get_max_vfreq_hz(struct edid_state *estate);
-+unsigned int libedid_ctablk_supported_hdmi_vics(struct edid_state *estate);
-+
-+#endif
--- 
-2.32.0
-
+> >>>>    .../media/v4l/pixfmt-compressed.rst           |   7 +-
+> >>>>    .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
+> >>>>    .../media/v4l/vidioc-queryctrl.rst            |   8 +
+> >>>>    .../media/videodev2.h.rst.exceptions          |   5 +
+> >>>>    .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
+> >>>>    drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++-
+> >>>>    drivers/media/v4l2-core/v4l2-ctrls-core.c     | 198 ++++-
+> >>>>    drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  32 +-
+> >>>>    drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+> >>>>    drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+> >>>>    drivers/staging/media/hantro/hantro_drv.c     |  27 +-
+> >>>>    drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
+> >>>>    drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
+> >>>>    .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+> >>>>    include/media/hevc-ctrls.h                    | 250 ------
+> >>>>    include/media/v4l2-ctrls.h                    |  48 +-
+> >>>>    include/uapi/linux/hantro-media.h             |  19 +
+> >>>>    include/uapi/linux/v4l2-controls.h            | 436 +++++++++
+> >>>>    include/uapi/linux/videodev2.h                |  13 +
+> >>>>    22 files changed, 1686 insertions(+), 1169 deletions(-)
+> >>>>    delete mode 100644 include/media/hevc-ctrls.h
+> >>>>    create mode 100644 include/uapi/linux/hantro-media.h
+> >>>>
+> >>>> --
+> >>>> 2.32.0
+> >>>>
