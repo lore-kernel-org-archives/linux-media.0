@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64019C433EF
-	for <linux-media@archiver.kernel.org>; Fri,  4 Mar 2022 17:20:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4F05C4332F
+	for <linux-media@archiver.kernel.org>; Fri,  4 Mar 2022 17:20:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234738AbiCDRVa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Mar 2022 12:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
+        id S241045AbiCDRVc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Mar 2022 12:21:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241160AbiCDRVT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Mar 2022 12:21:19 -0500
+        with ESMTP id S238271AbiCDRV1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Mar 2022 12:21:27 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5B11C74EA
-        for <linux-media@vger.kernel.org>; Fri,  4 Mar 2022 09:20:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A46C1CF0A8
+        for <linux-media@vger.kernel.org>; Fri,  4 Mar 2022 09:20:35 -0800 (PST)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0D12E215F;
-        Fri,  4 Mar 2022 18:19:48 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3AB5321B9;
+        Fri,  4 Mar 2022 18:19:51 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646414389;
-        bh=Kt6drvWCc1GVi+QyE/OkqjSaKCAFoCOPpx7dF4+yiLE=;
+        s=mail; t=1646414391;
+        bh=NhVNyN/Hqu9OJYLxGrtpiTI30hGwggbAJZF6AFwFqHk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=clPuGwaIkR/yDYHz4sS6PM4ttxoDm+MqU9I4P6UGKRQhzsdDeSa6nLB7p8R4+dMcb
-         0OtLy1+NuNpTN6XxD4KPpVU+nFEgYfYx5M6OGngvJqndG9ITMD2o1NpzYVqqszFinC
-         AUstHd165zaZcSfl94Gd0/Pnt+3aN2PQzgkjEX48=
+        b=EGi+A7k8FBlzgSU/GyiQYLk1ssjkiYZFfERIlw1Gp2gWf+jRTXHtbpDd1Vx6bxe9n
+         WIHzqzXRMbLnqcsAqYP7/cuHfFRtP2sl13UbqVo53ouc4eibYa1/YncJ7jbrw8hAY2
+         vmjx27eCeeyzBb/vLo35rOOZRBL11x83eb2gU9RE=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Dafna Hirschfeld <dafna@fastmail.com>,
@@ -31,9 +31,9 @@ Cc:     Dafna Hirschfeld <dafna@fastmail.com>,
         Paul Elder <paul.elder@ideasonboard.com>,
         Tomasz Figa <tfiga@google.com>,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 12/17] media: rkisp1: Move debugfs code to a separate file
-Date:   Fri,  4 Mar 2022 19:19:20 +0200
-Message-Id: <20220304171925.1592-13-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v2 15/17] media: rkisp1: debug: Add debugfs files to dump core and ISP registers
+Date:   Fri,  4 Mar 2022 19:19:23 +0200
+Message-Id: <20220304171925.1592-16-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220304171925.1592-1-laurent.pinchart@ideasonboard.com>
 References: <20220304171925.1592-1-laurent.pinchart@ideasonboard.com>
@@ -43,175 +43,104 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To avoid cluttering the main rkisp1-dev.c driver file, move debugfs code
-to a separate source file. This prepares for extensions to the debugfs
-infrastructure.
-
-While at it, add a missing forward declaration for struct dentry in
-rkisp1-common.h to avoid depending on indirect includes.
+It's useful to dumb the value of registers for debugging purpose. Add
+two debugfs files to dump key core and ISP registers.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../media/platform/rockchip/rkisp1/Makefile   |  1 +
- .../platform/rockchip/rkisp1/rkisp1-common.h  |  5 ++
- .../platform/rockchip/rkisp1/rkisp1-debug.c   | 50 +++++++++++++++++++
- .../platform/rockchip/rkisp1/rkisp1-dev.c     | 33 +-----------
- 4 files changed, 57 insertions(+), 32 deletions(-)
- create mode 100644 drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c
+ .../platform/rockchip/rkisp1/rkisp1-debug.c   | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/Makefile b/drivers/media/platform/rockchip/rkisp1/Makefile
-index ab32a77db8f7..1a39bdcc608e 100644
---- a/drivers/media/platform/rockchip/rkisp1/Makefile
-+++ b/drivers/media/platform/rockchip/rkisp1/Makefile
-@@ -3,6 +3,7 @@
- obj-$(CONFIG_VIDEO_ROCKCHIP_ISP1) += rockchip-isp1.o
- rockchip-isp1-objs += 	rkisp1-capture.o \
- 			rkisp1-common.o \
-+			rkisp1-debug.o \
- 			rkisp1-dev.o \
- 			rkisp1-isp.o \
- 			rkisp1-resizer.o \
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-index 3b36ab05ac34..07a92ed8bdc8 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-@@ -23,6 +23,8 @@
- 
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c
+index 8be4ac134cc9..c7872d8dc3df 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c
+@@ -16,6 +16,63 @@
+ #include "rkisp1-common.h"
  #include "rkisp1-regs.h"
  
-+struct dentry;
++struct rkisp1_debug_register {
++	u32 offset;
++	const char * const name;
++};
 +
- /*
-  * flags on the 'direction' field in struct 'rkisp1_isp_mbus_info' that indicate
-  * on which pad the media bus format is supported
-@@ -516,4 +518,7 @@ void rkisp1_stats_unregister(struct rkisp1_device *rkisp1);
- int rkisp1_params_register(struct rkisp1_device *rkisp1);
- void rkisp1_params_unregister(struct rkisp1_device *rkisp1);
- 
-+void rkisp1_debug_init(struct rkisp1_device *rkisp1);
-+void rkisp1_debug_cleanup(struct rkisp1_device *rkisp1);
++#define RKISP1_DEBUG_REG(name)	{ RKISP1_CIF_##name, #name }
 +
- #endif /* _RKISP1_COMMON_H */
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c
-new file mode 100644
-index 000000000000..64b33774cbdf
---- /dev/null
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-debug.c
-@@ -0,0 +1,50 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Rockchip ISP1 Driver - Base driver
-+ *
-+ * Copyright (C) 2019 Collabora, Ltd.
-+ *
-+ * Based on Rockchip ISP1 driver by Rockchip Electronics Co., Ltd.
-+ * Copyright (C) 2017 Rockchip Electronics Co., Ltd.
-+ */
-+
-+#include <linux/debugfs.h>
-+#include <linux/device.h>
-+
-+#include "rkisp1-common.h"
-+
-+void rkisp1_debug_init(struct rkisp1_device *rkisp1)
++static int rkisp1_debug_dump_regs(struct seq_file *m,
++				  const struct rkisp1_debug_register *regs)
 +{
-+	struct rkisp1_debug *debug = &rkisp1->debug;
++	struct rkisp1_device *rkisp1 = m->private;
++	u32 val;
 +
-+	debug->debugfs_dir = debugfs_create_dir(dev_name(rkisp1->dev), NULL);
++	for ( ; regs->name; ++regs) {
++		val = rkisp1_read(rkisp1, regs->offset);
++		seq_printf(m, "%14s: 0x%08x\n", regs->name, val);
++	}
 +
-+	debugfs_create_ulong("data_loss", 0444, debug->debugfs_dir,
-+			     &debug->data_loss);
-+	debugfs_create_ulong("outform_size_err", 0444,  debug->debugfs_dir,
-+			     &debug->outform_size_error);
-+	debugfs_create_ulong("img_stabilization_size_error", 0444,
-+			     debug->debugfs_dir,
-+			     &debug->img_stabilization_size_error);
-+	debugfs_create_ulong("inform_size_error", 0444,  debug->debugfs_dir,
-+			     &debug->inform_size_error);
-+	debugfs_create_ulong("irq_delay", 0444,  debug->debugfs_dir,
-+			     &debug->irq_delay);
-+	debugfs_create_ulong("mipi_error", 0444, debug->debugfs_dir,
-+			     &debug->mipi_error);
-+	debugfs_create_ulong("stats_error", 0444, debug->debugfs_dir,
-+			     &debug->stats_error);
-+	debugfs_create_ulong("mp_stop_timeout", 0444, debug->debugfs_dir,
-+			     &debug->stop_timeout[RKISP1_MAINPATH]);
-+	debugfs_create_ulong("sp_stop_timeout", 0444, debug->debugfs_dir,
-+			     &debug->stop_timeout[RKISP1_SELFPATH]);
-+	debugfs_create_ulong("mp_frame_drop", 0444, debug->debugfs_dir,
-+			     &debug->frame_drop[RKISP1_MAINPATH]);
-+	debugfs_create_ulong("sp_frame_drop", 0444, debug->debugfs_dir,
-+			     &debug->frame_drop[RKISP1_SELFPATH]);
++	return 0;
 +}
 +
-+void rkisp1_debug_cleanup(struct rkisp1_device *rkisp1)
++static int rkisp1_debug_dump_core_regs_show(struct seq_file *m, void *p)
 +{
-+	debugfs_remove_recursive(rkisp1->debug.debugfs_dir);
++	static const struct rkisp1_debug_register registers[] = {
++		RKISP1_DEBUG_REG(VI_CCL),
++		RKISP1_DEBUG_REG(VI_ICCL),
++		RKISP1_DEBUG_REG(VI_IRCL),
++		RKISP1_DEBUG_REG(VI_DPCL),
++		RKISP1_DEBUG_REG(MI_CTRL),
++		RKISP1_DEBUG_REG(MI_BYTE_CNT),
++		RKISP1_DEBUG_REG(MI_CTRL_SHD),
++		RKISP1_DEBUG_REG(MI_RIS),
++		RKISP1_DEBUG_REG(MI_STATUS),
++		RKISP1_DEBUG_REG(MI_DMA_CTRL),
++		RKISP1_DEBUG_REG(MI_DMA_STATUS),
++		{ /* Sentinel */ },
++	};
++
++	return rkisp1_debug_dump_regs(m, registers);
 +}
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-index f8b2573aa9da..c7ad1986e67b 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-@@ -9,7 +9,6 @@
-  */
++DEFINE_SHOW_ATTRIBUTE(rkisp1_debug_dump_core_regs);
++
++static int rkisp1_debug_dump_isp_regs_show(struct seq_file *m, void *p)
++{
++	static const struct rkisp1_debug_register registers[] = {
++		RKISP1_DEBUG_REG(ISP_CTRL),
++		RKISP1_DEBUG_REG(ISP_ACQ_PROP),
++		RKISP1_DEBUG_REG(ISP_FLAGS_SHD),
++		RKISP1_DEBUG_REG(ISP_RIS),
++		RKISP1_DEBUG_REG(ISP_ERR),
++		{ /* Sentinel */ },
++	};
++
++	return rkisp1_debug_dump_regs(m, registers);
++}
++DEFINE_SHOW_ATTRIBUTE(rkisp1_debug_dump_isp_regs);
++
+ #define RKISP1_DEBUG_DATA_COUNT_BINS	32
+ #define RKISP1_DEBUG_DATA_COUNT_STEP	(4096 / RKISP1_DEBUG_DATA_COUNT_BINS)
  
- #include <linux/clk.h>
--#include <linux/debugfs.h>
- #include <linux/interrupt.h>
- #include <linux/module.h>
- #include <linux/of.h>
-@@ -460,36 +459,6 @@ static const struct of_device_id rkisp1_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, rkisp1_of_match);
- 
--static void rkisp1_debug_init(struct rkisp1_device *rkisp1)
--{
--	struct rkisp1_debug *debug = &rkisp1->debug;
--
--	debug->debugfs_dir = debugfs_create_dir(dev_name(rkisp1->dev), NULL);
--	debugfs_create_ulong("data_loss", 0444, debug->debugfs_dir,
--			     &debug->data_loss);
--	debugfs_create_ulong("outform_size_err", 0444,  debug->debugfs_dir,
--			     &debug->outform_size_error);
--	debugfs_create_ulong("img_stabilization_size_error", 0444,
--			     debug->debugfs_dir,
--			     &debug->img_stabilization_size_error);
--	debugfs_create_ulong("inform_size_error", 0444,  debug->debugfs_dir,
--			     &debug->inform_size_error);
--	debugfs_create_ulong("irq_delay", 0444,  debug->debugfs_dir,
--			     &debug->irq_delay);
--	debugfs_create_ulong("mipi_error", 0444, debug->debugfs_dir,
--			     &debug->mipi_error);
--	debugfs_create_ulong("stats_error", 0444, debug->debugfs_dir,
--			     &debug->stats_error);
--	debugfs_create_ulong("mp_stop_timeout", 0444, debug->debugfs_dir,
--			     &debug->stop_timeout[RKISP1_MAINPATH]);
--	debugfs_create_ulong("sp_stop_timeout", 0444, debug->debugfs_dir,
--			     &debug->stop_timeout[RKISP1_SELFPATH]);
--	debugfs_create_ulong("mp_frame_drop", 0444, debug->debugfs_dir,
--			     &debug->frame_drop[RKISP1_MAINPATH]);
--	debugfs_create_ulong("sp_frame_drop", 0444, debug->debugfs_dir,
--			     &debug->frame_drop[RKISP1_SELFPATH]);
--}
--
- static int rkisp1_probe(struct platform_device *pdev)
+@@ -60,6 +117,7 @@ DEFINE_SHOW_ATTRIBUTE(rkisp1_debug_input_status);
+ void rkisp1_debug_init(struct rkisp1_device *rkisp1)
  {
- 	const struct rkisp1_match_data *match_data;
-@@ -586,13 +555,13 @@ static int rkisp1_remove(struct platform_device *pdev)
- 	v4l2_async_nf_cleanup(&rkisp1->notifier);
+ 	struct rkisp1_debug *debug = &rkisp1->debug;
++	struct dentry *regs_dir;
  
- 	rkisp1_entities_unregister(rkisp1);
-+	rkisp1_debug_cleanup(rkisp1);
+ 	debug->debugfs_dir = debugfs_create_dir(dev_name(rkisp1->dev), NULL);
  
- 	media_device_unregister(&rkisp1->media_dev);
- 	v4l2_device_unregister(&rkisp1->v4l2_dev);
- 
- 	pm_runtime_disable(&pdev->dev);
- 
--	debugfs_remove_recursive(rkisp1->debug.debugfs_dir);
- 	return 0;
+@@ -88,6 +146,13 @@ void rkisp1_debug_init(struct rkisp1_device *rkisp1)
+ 			     &debug->frame_drop[RKISP1_SELFPATH]);
+ 	debugfs_create_file("input_status", 0444, debug->debugfs_dir, rkisp1,
+ 			    &rkisp1_debug_input_status_fops);
++
++	regs_dir = debugfs_create_dir("regs", debug->debugfs_dir);
++
++	debugfs_create_file("core", 0444, regs_dir, rkisp1,
++			    &rkisp1_debug_dump_core_regs_fops);
++	debugfs_create_file("isp", 0444, regs_dir, rkisp1,
++			    &rkisp1_debug_dump_isp_regs_fops);
  }
  
+ void rkisp1_debug_cleanup(struct rkisp1_device *rkisp1)
 -- 
 Regards,
 
