@@ -2,56 +2,54 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01148C433EF
-	for <linux-media@archiver.kernel.org>; Fri,  4 Mar 2022 20:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEB6DC4332F
+	for <linux-media@archiver.kernel.org>; Fri,  4 Mar 2022 20:29:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiCDU3q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Mar 2022 15:29:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
+        id S229562AbiCDU3s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Mar 2022 15:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiCDU3p (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Mar 2022 15:29:45 -0500
+        with ESMTP id S229568AbiCDU3r (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Mar 2022 15:29:47 -0500
 Received: from EUR03-DB5-obe.outbound.protection.outlook.com (mail-eopbgr40049.outbound.protection.outlook.com [40.107.4.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FB263EE;
-        Fri,  4 Mar 2022 12:28:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E1F156784;
+        Fri,  4 Mar 2022 12:28:57 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ebPC6n7k8/zYPyBSQTzQtwdiXNYtf/9r8eWnQs2f/pieT0A1PF7CF35+ZIgaNwPbAIR/2gZ1K2LZlNjW2/vjk10GXNKkcPs/DYeiS6LwIa4VT4UAMQkFqda8gbSeQva/prqr6ajtgRafbuP5p3HvKf4rP0qsOatAQoorneORuLqibDr1r6sfTflzFTSevXjwWPry1GuWoQrkxZsikILgFTSHWDxPwvzc6wbqxoj9tl6hMsuS6Q4fnszYcaIidic9vm4P11bwqdFO27iRDi2xlA0l7KjTcJLxQqGETJkG/ymY2FJ04mOeWkxjX7qlc/hsoF5rLJRVlGxu0icBKoASog==
+ b=c6DmUonSYItxQwEXTp5V4YKUR5FAQaLwly/1PRrvfa2SSesUMvRR3d/D6vWvZjaHPKjmeiKHL9H9A9pZpWoFxqLqkWRq+TfSXDcjNN/qUA7N+wH6y0wl9UabmS47BeH1zfYjqOu7Jwjg7esfvT56DrfGHW7A/U7/6bsOolO+38Pq0k/h31Tbk9ayM+wd934nO/OwTBUhiGz/Hjg1pKjDDzyBF5+KtCT35TskX2A7eycb1LbaCmNp+IpbgaOiiVDJY3MoZ27bVopynCvzmoyMNj029JeO+6waaNlaJYD3T322l7LBfweYwm8WSOc+1ut/IRMvhzXC4UCPd98HgWtIYg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sNw1xjGegQd3JjluAnaGIa0GtodzYP9gI9D4m85CUj8=;
- b=Jxx/ANh7CSrpZrCSGhc1ejQqTGb4vJlfMVZxumMMtOue8hTgJUMfl6hnaCK0YVnSz0kQ2jOy9U6k1AoTMYARumFGpWUK03V58tnlNSQwZWTMqtsrFGXloNX1rMFZydKfijWowCmA6SfSE5bTxa5WRQxbqBWusEISQOTc96tAfGe1u8SzJO71kx6qkMqSZfN/9JaUe1i+QVxWtJFRDJsUFq6fjYICWhnvjxZ6lkdeQjOoUTSI70pLcV+JGcsvBs5u5GfazCXN0/AZ22tR6G41j503r+6NSSZTF0eFgvNwRa+XkIidxWA0DNZwYNfTzFS8gSXFwEpDmQMk4M2c+dswAQ==
+ bh=Eu9pkLHuiQce33dDydXrqbwqzDrSrNPO1jANosQo3iQ=;
+ b=iURW4sWC7F8BavDNIAZBC34A9v9izQEUj1UR71/kT1OZpC2xvfHpJ032RDU8gmI8rItLtWAIOmdxkgGzVE48I/xGvUSN+nGz9ri/rzfNldbjwVargwBBUdAFgMtqsdyIjvgeMxoNVR83Dh80gzKStUHP/Gn1e3vkgNMjiC7TGIukbar+8GfT39muByI2qvGSLmDormkO5W1Ufmutsp7H/XEX9xW9a1YJqdeFjSN0Rs7QrM+qeigjck6y4cQwpo9XjXTGGlcE5uXx0fihjb8fAA2uhrCzpAfauV0tOcNn/LXUGE28t1kybtPXdwG0/kFH5DEngSjL/tMD3dhVJ1h9gQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sNw1xjGegQd3JjluAnaGIa0GtodzYP9gI9D4m85CUj8=;
- b=ZEC+Jow3QdyVbALglUQeImTQ8h3/t40N8mmGFZKuSxI33Ytndjdy8L3ZQSfQ+K3KNshLmfeE4+P/ZQGVRRhEfqkTAME6pAxMFcZ6HDDNTC08dkdJJp7l4WMRJChqAl0bPATk2sWpeA5pmI0DSU+2gvmroko6q7PW+3CZq31MO+U=
+ bh=Eu9pkLHuiQce33dDydXrqbwqzDrSrNPO1jANosQo3iQ=;
+ b=HL8Yq6tuv1uYk1CF9AKgt2SsfdvEgipQmP225tvZEdtd9dPqz/mKpYIlkMXuW1d0ikNjdSCe1h2nb6pou4E79zPk/LIW9j9YGmAVAoKOFTFOSbO+inepNAp92ZHsnxltbMBVvT/iNw9+wojT15Hf+TsvCORLxxjwZNGks7+U/JE=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from PAXPR04MB8703.eurprd04.prod.outlook.com (2603:10a6:102:21e::22)
  by HE1PR0402MB3498.eurprd04.prod.outlook.com (2603:10a6:7:81::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Fri, 4 Mar
- 2022 20:28:49 +0000
+ 2022 20:28:47 +0000
 Received: from PAXPR04MB8703.eurprd04.prod.outlook.com
  ([fe80::a037:bc8:44b:5965]) by PAXPR04MB8703.eurprd04.prod.outlook.com
  ([fe80::a037:bc8:44b:5965%3]) with mapi id 15.20.5038.016; Fri, 4 Mar 2022
- 20:28:49 +0000
+ 20:28:47 +0000
 From:   Xavier Roumegue <xavier.roumegue@oss.nxp.com>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         stanimir.varbanov@linaro.org, laurent.pinchart@ideasonboard.com,
         tomi.valkeinen@ideasonboard.com, robh+dt@kernel.org
 Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 3/3] media: MAINTAINERS: add entry for i.MX8MP DW100 v4l2 mem2mem driver
-Date:   Fri,  4 Mar 2022 21:28:13 +0100
-Message-Id: <20220304202813.2560202-4-xavier.roumegue@oss.nxp.com>
+Subject: [PATCH 0/3] i.MX8MP DW100 dewarper driver
+Date:   Fri,  4 Mar 2022 21:28:10 +0100
+Message-Id: <20220304202813.2560202-1-xavier.roumegue@oss.nxp.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220304202813.2560202-1-xavier.roumegue@oss.nxp.com>
-References: <20220304202813.2560202-1-xavier.roumegue@oss.nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: PR0P264CA0245.FRAP264.PROD.OUTLOOK.COM (2603:10a6:100::17)
@@ -59,83 +57,237 @@ X-ClientProxiedBy: PR0P264CA0245.FRAP264.PROD.OUTLOOK.COM (2603:10a6:100::17)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 52d74914-0c55-4e11-2acf-08d9fe1d96df
+X-MS-Office365-Filtering-Correlation-Id: 677de40f-a95b-4de4-80f4-08d9fe1d95e2
 X-MS-TrafficTypeDiagnostic: HE1PR0402MB3498:EE_
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <HE1PR0402MB3498984F9FB14437D509F388BA059@HE1PR0402MB3498.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <HE1PR0402MB34981DEB9DC98359F0E1CFA4BA059@HE1PR0402MB3498.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E1r4mp1SRp6+jnwyoZ7pUP3HdLdoNySy8nEqDlDe6FAU6IG+306VaE9Wz7Wd4l1tnbfEEyKmbqhIsfTmsoM/62JhXFbPty3qwFtBDtTjBKhGy9LjmJq1lthFxVNXMLVUoOKL/FBg/J+C0I3SWqw9cmLvSJy0SPsBgy8suHSZOTDQYVpdBndLSGmplPkV7qoDASriafBUDin/Z6gQGI5pd5iDz6mn2cZdcUGUVe6KmSrHk2Y0Cv7Pcv/9xi5ZIQtbQ7jW1MRksXD6AAdWB/KBGwBsZmhgJtXofocAoyL8LQl9VNmWgJ8tnJ44tmOe5BLT6BuBRwv4MeYXouvBQ7yIagMUhPJDyUAgmXrgumeik0QIy9W+jx0t80xCxsyN3KfcGWTplMFWQ3cI2dIcXw4opB0E1m0O40UiV/UZys1hoihcUHzi9UJueOVSTtIBwu1vkeVdbR7jVBk3WjaMspxPMF0PrCpVolyV64pz9OyO6wnEzNkOHHFLdbjz2h8FOULTjsb1TTHpnSYQGt2eag//REMoEUkh6eSu+IXLiccz9QHezgFkki+mSwkhTCY+BoHpIOYVyda7xg8D9cgLmUHQmcxN5Mke02BN5r4cbCsl88DJkn1jvvoJxzp7qhQ7C2aMeSvRZlC5yVck8mtyFMtp0A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8703.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(186003)(6486002)(4744005)(1076003)(8936002)(38100700002)(86362001)(5660300002)(44832011)(498600001)(66476007)(66556008)(66946007)(6506007)(6666004)(6512007)(52116002)(2906002)(8676002)(4326008);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: H4N8qcC4FpCruJrJYEqkk32uLrZLcortLEg/CVia/FP7UOFh1LPZghlbjC/qR0LVvSmY2du8vhcGpG4tl6owr9gXKSqR2exeXDo/94GeE7Si20WM9PrGsx067ZqSIX60T4+gbLoe/sC401TtAVDsLIpQuOv5F8E33Fp3t2yn7aJYhpe70p5paTXNJM5qd4VFMgygqa6tt2dLc0z+LIx+R60Dcskp8aX0iVOaazPSRyd9RtXbM6hB87v3sL8xiGjJHlfflTG9MH4QpBsMjPffUpYLAU1pfAkII2ZRdadgMJ2YBSWy5Tso8BbJAOs4DMpnj1saFCgVCPaaox7EA2YjB5wf9qMZny1MDm4t40wsMxdOJM+8CiOkLsMzjpeYDXWe4Q4zSbiMailPrbTBzdiVqA09k7Xp2as9+9Yam0xPB2p0Va6qvKl8diEWy3+yU4aI6kaVAs3bI9iiuoNc/j+eeiRx4F3Q5KNZvrfoodLGFaaNC3kwXOKu6JE5+ZtyqZYhSBi4iZuW39r2oQEduXAtmn7umViPM+yzn1V5iC8M7GTkAhPXRnLMYgcxkKrE8igrA/imgfT5pd1T/EFJr1o8UFVWvVREB6aiQ+mnzVPJ9bPSqSyPIcxAh8KaO6+Cz4Ewl+GitUEBQXunfKGL8b1iaLiQ3lWuuPN0howDsKC1ELpsAUIIpe7NsYi059Xshv6K/ELhsNdMYe5D4aXf9v7OFAgf6bpJiqMrvYQmFVcXFMw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8703.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(186003)(966005)(6486002)(1076003)(8936002)(38100700002)(86362001)(5660300002)(44832011)(498600001)(66476007)(66556008)(66946007)(83380400001)(6506007)(6666004)(6512007)(52116002)(2906002)(8676002)(4326008);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?M8fZd6RsTJE+cimvq+ZDneV3VjvxqbxO/xAQzAcZcc8O9dahRzOP7vtbQYNd?=
- =?us-ascii?Q?ElONI3tX5vrBenxPf943IjXftcqZs9ZsFt5dnmqNwvJPQzzylnC2FUo1yfXb?=
- =?us-ascii?Q?mjJEgLlt7tPjVKNAAtOlpDEp4dQkX8EYgaMD0HC/0goZOiE/K0Mk6RdxZ1G0?=
- =?us-ascii?Q?L2R5wZZKr4K03nsDhTMxdzKRyntJewJOewIIEh6JnLV5VFv32teGHVlHI+Kc?=
- =?us-ascii?Q?ZRH9bN5D8H2Nu/bVNtXekR+6n4b1jAwAOSg2YLxBjnFmkKyoeNMUMltizBZq?=
- =?us-ascii?Q?f92o4Nx0z7boOaf2QtaIFBiNnS2xKnt0FO6P0951XXmOpZxJ3KPFH9zyN98q?=
- =?us-ascii?Q?xGgQZZ7OFtIrWlXX32cPmrVAJfQWHHgj/deYIrOL7m53S0xgTY5GgLorsYLW?=
- =?us-ascii?Q?ShwceeyZuv1qib6EdjEPjyLDYNEt5rNdgLjOrXVSkjB2+EJpLImvKlS2JWfN?=
- =?us-ascii?Q?SEI/07z89UO1umtFpm4m40T2HjERdkPl+89j66QZw8B7AYSXAkw96IQQSYd9?=
- =?us-ascii?Q?Ermgxrx7jzQaS1XQoWZzfxS9m/RpMZw+60M1DbGPADVbfETLJJbXWK3N6BKn?=
- =?us-ascii?Q?py0JdBQv/CRbKL86LAjs7R8TO9qke0vGkL1tdUFZ6+Ionci/Ym8L9A0tjB0V?=
- =?us-ascii?Q?yJDjnY1GrwD2j7bFc/5jiKE5Tl81laWj8EYhXLwGCrdV20SGt9JlvLJdduaw?=
- =?us-ascii?Q?NmVUFUfXzqFOMGt7LlnHnTmglb4QsceBIOcHyXEGxbTacciCVBC2/+C4YMSJ?=
- =?us-ascii?Q?weWrt87gDRG2SW9FcvTgYNUeouHXoP5GTpcjEnt9LcD2LClOez8EFR4PNdbG?=
- =?us-ascii?Q?dvJ7wBElBbdwQM/NNARBvbeVUuG94TwzJ0xm+k56wrOJpj0SjU012Q3txF63?=
- =?us-ascii?Q?GxCfwGrGnwOXnrZ8nkORH3K73SFF43ZNkeAViW6BWZ619PbJiQQNgExMVO0I?=
- =?us-ascii?Q?ARvBVZVYE+Q6fJVsHickKWPx95SF77os63KsjBBNK1ztAkDBWopyQaBD3K2s?=
- =?us-ascii?Q?f+2fxd1zxYLMxUqA6KrRpSohoDph2qigVre5Gb1f33mXC71WeRgg+a4VGB37?=
- =?us-ascii?Q?bJgNbKE3Fd+bjK0C0m0H8133gCUCpfMQYxVOEiOrawMnJL/bX9yUmCmgRP4a?=
- =?us-ascii?Q?wVXPQFKx0nIDr3ORgCym76JhLwcQb8v02kJJuGGL9yL0FSBZRy+KZp84RWe5?=
- =?us-ascii?Q?igIF9Of/qN0nRyi05K4ufLJ0qqm+m1Dz96sDBIrGtKbEqc/pd1kcMqfZ9lJO?=
- =?us-ascii?Q?xSM7RvrlXujFLjhwUWXlsn2w+GINgvdIYyH1lNocu3Bb/JXwku3b+mjF521h?=
- =?us-ascii?Q?5DU7F3u+JzHbDcr9haz/9eWiXrzEltg9e6vwVKBmnQ+Z4aoL37bdrqz3f+Pr?=
- =?us-ascii?Q?laYSEdhwG0UTgCnZ9edPUFJQ4sjTkwcpZ0Bg9njzgVGvw7fBmZLyQILw0kPG?=
- =?us-ascii?Q?6ADLJCmiUJVRXtR7t3QNndydS9IaFV54r5XJFAHJYYtCpBeFQWxwWZAxBWbq?=
- =?us-ascii?Q?EGpzrCuIKEg0QIQSL9BmMPUYuF+pO+bcgLrfHlfASUBXY5WaL0o4rtZjnY1C?=
- =?us-ascii?Q?IhGUBIovc7KZNPOKrWhif5+9K50rZlzsGW5QPOqT9rmpG6UOWAOBuru/0zbY?=
- =?us-ascii?Q?OBqRGfmwGh0hgPhmBEDcnNzur/cRtYISNhUOp8/DRb36A9P6tebyHwpQT0El?=
- =?us-ascii?Q?p2j78qo1UdW2ISL2lu5gD+u8iPw=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HHOrW1grtXOX/+NvwnueZIyK3fjTMRCrcsQjjUouywgzxnXGQ27ieg4lPv3Q?=
+ =?us-ascii?Q?tV0BN4f1pZOiYe4gFmkgw9SwJelG3iYJQta6OuhtRFn574sFeM8OSnzdwHGx?=
+ =?us-ascii?Q?JTLx9Hdk43SRFR17VFYEobOtU/gEuqDVyFTX+Hpdcq5uPxK94w8zA/1fooSQ?=
+ =?us-ascii?Q?RrQ1hmL4gWanH7hjzN4Wyp6bG60WZwK8gypyb7lyKChzZtLtWVIGisCqWj9z?=
+ =?us-ascii?Q?rvI2BjFf15oSGHn+xarEKe+jyDGJaIA8UhonKI0XOQjAMtIzkLDI3qPH6ly+?=
+ =?us-ascii?Q?0nLYjpg3srdxZOTXfZ3GyZYr2Ey9rnJBWa8C7k9jOwdJHEzrhUTQEzXtuqiG?=
+ =?us-ascii?Q?5ucCxUqjwXwnm/23/6Vq4UU7q8IVrBlWBy4JF5hISH0PRT3VsED59RtxcmVt?=
+ =?us-ascii?Q?6uDSjj8beUZUBe4Y7cUtjM1jsDP9qAaOCOu1t+q+UYLfRP11LSj1xke26V8N?=
+ =?us-ascii?Q?myfDJNBXtGezqp/SQTvYXsjhmI58FlyX3DAoq8TwteJtWX1GFZNBRRngqX0u?=
+ =?us-ascii?Q?H/1oPgQn0vHTT0nfZfle9pyQWO6Q2dqC0Z6aVgK/WekQZ1D5CANNka/BmtF+?=
+ =?us-ascii?Q?WznOBBFahoCBAeet61O5aoc3niDAs0p2UlPN0VlMuh8Ibe3Wo2mEdPqHpKp/?=
+ =?us-ascii?Q?FwHU1tr6LUt08GpWC+kmpOafVz3xx/9HJGkUCOjybZfM39ab3lzsmm+tUErA?=
+ =?us-ascii?Q?XVVhzGoaRrW0Rnz4yk8rp7sE3FRSMsN+M1zcn0lrwgvHVA+/maDWK0uKHprE?=
+ =?us-ascii?Q?Alf+U+HzIubZTDlG6ASz+oZoCANhO9nN41tPL4tNamwVNstKTejkO+KlaQMP?=
+ =?us-ascii?Q?BN8MaF+Bleth88Y6OuhvuiZM9f2rys2ylMa5VC+CltXbeWPbQ1c/xiuSq/Nk?=
+ =?us-ascii?Q?2xD0J7VUMWsqmFX1hS31tvb0HPrKDo4V16MJvudPcInAn/hNiwN5W4qkouXn?=
+ =?us-ascii?Q?1GjIXCj41c6gY+R9Gkw/rzCzBkwcK7xrTt5nx9mlb2e9cWgAnFgUEGa7E9GI?=
+ =?us-ascii?Q?L1eIE5UQnZ5oI6+F3sSCisskh2n+2rlMQZvKugG//MYnC2aMyuRuCd2U7zyw?=
+ =?us-ascii?Q?DjaTqel/ScOn/kwcjqoVxSOzqStSOPOT5T30zHsVh4Qcu+9QlGsTDGtwYJDi?=
+ =?us-ascii?Q?wR7CGto9Mvk9yUwL/Px40N8NkSR3FDW0Tia4xFm9jj0dLtjIatl+lSeaiHHf?=
+ =?us-ascii?Q?fN3n5is2xxE/yeShrCkKDD1xERp4fEFJLAUsvBkLcazJgHiGDqiIZcEY26QW?=
+ =?us-ascii?Q?YoUQ3sWecnuBohdHtqiQCJcw1DIuSKyjlTN51kCT95+iESnBeSAqN8wBfkC8?=
+ =?us-ascii?Q?jngm9C2Zyv5Z/4lBEHba+cnfyoTVXUvsYS6MNkXjlLCxeR1tkGzQ5W8j9u81?=
+ =?us-ascii?Q?BuqWETWV6aSuFuouxOUIEASq+OY8U8Ek2d1+B52tI9eJt3fWbcrasqiN1JPq?=
+ =?us-ascii?Q?nhsfGGmI91pvIDwwDqRjZGsHvRet2CQph5wyHw2JOl4jaiX65xYsm+IaBnlu?=
+ =?us-ascii?Q?Bhn6n5jSwWWbfGqPS8iurCZliUHqPMyI1vgOH90RFPtXvItImp+1KcD54FDv?=
+ =?us-ascii?Q?TbMqFbll6HI9FzhkuvnUztCByj81Zq3V2H/M+mOPVn9ijz+iI2XYfMzLyCGV?=
+ =?us-ascii?Q?z914xFVt6GMYhMN47ZnJrN+rI0vvBy5zqCm51wE4aX/QY9RfKDtZfxBSzXkM?=
+ =?us-ascii?Q?qOBgKxXBdVBn57opvQHCZRGLzvk=3D?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52d74914-0c55-4e11-2acf-08d9fe1d96df
+X-MS-Exchange-CrossTenant-Network-Message-Id: 677de40f-a95b-4de4-80f4-08d9fe1d95e2
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8703.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 20:28:48.9756
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 20:28:47.3197
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DufzD3MlGmcxSqFlMbx1Pr12WD1HlifAFkQ0N45Ede+EtziazHR8G73yVt1P+6wJ4r1wDAQec3vjpbVSt3O8Lg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: pVctWpmgP+hhGv/egiMhciTBiIpXrBNr6dtkF14eo0B0TuR+U3x7Ly0Nidjl9te3vfKTDDNFEb41s71OwfedQQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0402MB3498
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Signed-off-by: Xavier Roumegue <xavier.roumegue@oss.nxp.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+This patchset depends on the series "imx8mp: Add media block control"[1] and
+"i.MX8MP GPC and blk-ctrl"[2] which provide the power driver infrastructure.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 70cd8a1c9495..f0ecca116786 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14120,6 +14120,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/media/nxp,imx8-jpeg.yaml
- F:	drivers/media/platform/imx-jpeg
- 
-+NXP i.MX 8MP DW100 V4L2 DRIVER
-+M:	Xavier Roumegue <xavier.roumegue@oss.nxp.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/media/nxp,dw100.yaml
-+F:	drivers/media/platform/dw100
-+
- NZXT-KRAKEN2 HARDWARE MONITORING DRIVER
- M:	Jonas Malaco <jonas@protocubo.io>
- L:	linux-hwmon@vger.kernel.org
--- 
+The Vivante DW100 Dewarp Engine, found on i.MX8MP SoC, provides high-performance
+dewarp processing for the correction of the distortion that is introduced in
+images produced by fisheye and wide angle lenses. The engine can be used for
+accelerating scaling, cropping and pixel format conversion operations
+independently of the dewarping feature.
+
+[1] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=618788
+[2] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=618869
+
+Xavier Roumegue (3):
+  media: dt-bindings: media: Add i.MX8MP DW100 binding
+  media: dw100: Add i.MX8MP dw100 dewarper driver
+  media: MAINTAINERS: add entry for i.MX8MP DW100 v4l2 mem2mem driver
+
+ .../devicetree/bindings/media/nxp,dw100.yaml  |   74 +
+ MAINTAINERS                                   |    7 +
+ drivers/media/platform/Kconfig                |   12 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/dw100/Makefile         |    2 +
+ drivers/media/platform/dw100/dw100.c          | 1792 +++++++++++++++++
+ drivers/media/platform/dw100/dw100_regs.h     |  118 ++
+ 7 files changed, 2006 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,dw100.yaml
+ create mode 100644 drivers/media/platform/dw100/Makefile
+ create mode 100644 drivers/media/platform/dw100/dw100.c
+ create mode 100644 drivers/media/platform/dw100/dw100_regs.h
+
+============
+Compliance
+============
+# v4l2-compliance -d 0
+v4l2-compliance 1.23.0, 64 bits, 64-bit time_t
+
+Compliance test for dw100 device /dev/video0:
+
+Driver Info:
+    Driver name      : dw100
+    Card type        : DW100 dewarper
+    Bus info         : platform:dw100
+    Driver version   : 5.17.0
+    Capabilities     : 0x84208000
+        Video Memory-to-Memory
+        Streaming
+        Extended Pix Format
+        Device Capabilities
+    Device Caps      : 0x04208000
+        Video Memory-to-Memory
+        Streaming
+        Extended Pix Format
+Media Driver Info:
+    Driver name      : dw100
+    Model            : dw100
+    Serial           :
+    Bus info         : platform:dw100
+    Media version    : 5.17.0
+    Hardware revision: 0x00000000 (0)
+    Driver version   : 5.17.0
+Interface Info:
+    ID               : 0x0300000c
+    Type             : V4L Video
+Entity Info:
+    ID               : 0x00000001 (1)
+    Name             : dw100-source
+    Function         : V4L2 I/O
+    Pad 0x01000002   : 0: Source
+      Link 0x02000008: to remote pad 0x1000004 of entity 'dw100-proc' (Video Scaler): Data, Enabled, Immutable
+
+Required ioctls:
+    test MC information (see 'Media Driver Info' above): OK
+    test VIDIOC_QUERYCAP: OK
+    test invalid ioctls: OK
+
+Allow for multiple opens:
+    test second /dev/video0 open: OK
+    test VIDIOC_QUERYCAP: OK
+    test VIDIOC_G/S_PRIORITY: OK
+    test for unlimited opens: OK
+
+Debug ioctls:
+    test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+    test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+    test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+    test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+    test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+    test VIDIOC_ENUMAUDIO: OK (Not Supported)
+    test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+    test VIDIOC_G/S_AUDIO: OK (Not Supported)
+    Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+    test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+    test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+    test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+    test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+    test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+    Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+    test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+    test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+    test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+    test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+    test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+    test VIDIOC_QUERYCTRL: OK
+    test VIDIOC_G/S_CTRL: OK
+    test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+    test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+    test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+    Standard Controls: 1 Private Controls: 1
+    Standard Compound Controls: 0 Private Compound Controls: 1
+
+Format ioctls:
+    test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+    test VIDIOC_G/S_PARM: OK (Not Supported)
+    test VIDIOC_G_FBUF: OK (Not Supported)
+    test VIDIOC_G_FMT: OK
+    test VIDIOC_TRY_FMT: OK
+    test VIDIOC_S_FMT: OK
+    test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+    test Cropping: OK
+    test Composing: OK
+    test Scaling: OK
+
+Codec ioctls:
+    test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+    test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+    test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls:
+    test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+    test VIDIOC_EXPBUF: OK
+    test Requests: OK (Not Supported)
+
+Total for dw100 device /dev/video0: 46, Succeeded: 46, Failed: 0, Warnings: 0
+
+==============
+Media controller
+==============
+# media-ctl -d 0 -p
+Media controller API version 5.17.0
+
+Media device information
+------------------------
+driver          dw100
+model           dw100
+serial
+bus info        platform:dw100
+hw revision     0x0
+driver version  5.17.0
+
+Device topology
+- entity 1: dw100-source (1 pad, 1 link, 0 route)
+            type Node subtype V4L flags 0
+            device node name /dev/video0
+    pad0: Source
+        -> "dw100-proc":0 [ENABLED,IMMUTABLE]
+
+- entity 3: dw100-proc (2 pads, 2 links, 0 route)
+            type Node subtype Unknown flags 0
+    pad0: Sink
+        <- "dw100-source":0 [ENABLED,IMMUTABLE]
+    pad1: Source
+        -> "dw100-sink":0 [ENABLED,IMMUTABLE]
+
+- entity 6: dw100-sink (1 pad, 1 link, 0 route)
+            type Node subtype V4L flags 0
+            device node name /dev/video0
+    pad0: Sink
+        <- "dw100-proc":1 [ENABLED,IMMUTABLE]
+
+--
 2.35.1
 
