@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26E92C433EF
-	for <linux-media@archiver.kernel.org>; Mon,  7 Mar 2022 12:06:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0333FC433EF
+	for <linux-media@archiver.kernel.org>; Mon,  7 Mar 2022 12:06:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241395AbiCGMHS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Mar 2022 07:07:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42784 "EHLO
+        id S241886AbiCGMHd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Mar 2022 07:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241194AbiCGMHQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Mar 2022 07:07:16 -0500
+        with ESMTP id S241885AbiCGMHa (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Mar 2022 07:07:30 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EB174862;
-        Mon,  7 Mar 2022 04:06:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EBA7486C;
+        Mon,  7 Mar 2022 04:06:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646654769; x=1678190769;
+  t=1646654787; x=1678190787;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hQ88M2thWVMv951o9xrRQLwqeDq6XC6dMQcAlluRG0w=;
-  b=qkwNvXNfjNjzVoQ0Uaz4uAOZ1JLNsGVF8dQCpUKcjgXNpejCFj1idI8V
-   WPSYbbGo7iA9tF8Yz5dAbTsILtGFSo7es4qJC5xmW8ygfJgj2eYgIkC/E
-   kpom/1YPz/2focWTMo6/N031MhGqcfscCFOgVQpeH3TkvMKXAKHkaTL2D
-   b+bqUKXH/AhF3rH/lZoLhP/pcngLdMkh52PDOa7+/ysXV6s7L2peKCpHx
-   OjBEWnEhZlqayCM+hKIIQEJTP9IqskocrVTmLlOLk4NAr/9/Bu2zXkCs/
-   Qw2onq70Xij/qPZHf6bzjTDkVlXPbpU8xmjD2AFusmLTItbC3+HXRoNj0
-   g==;
+  bh=LPz0O/j6T/R5IOZ/0HdGMFHbVlsAXUy78/qaH+crieA=;
+  b=WVgrS9+BQBnX/DQYOeCYtSzYJ6aZwsCqZUo3ZMMpn8FRYLVHpBK3uMOM
+   n97E45RLpTx7QrTNQoNMzmeuzQscj5pd5zAeph96bdiRnroiI1q0FaZi1
+   i/lW2XhnwJPOpB4iR8mmtZp0RNW9RubjwfE+U4RVIWG70WXKZt3AvY5ti
+   hOgaHP5fGAFPTJVgqSeiDK4WMVhbryPRo4bjyyGK+ejGNStkeURawZH73
+   GH+KP2YtU9kYXgoeL/ztQaecVvn+cihusqHlsMsQu9w5UXigQ7uB5knJ3
+   9EWuA4P/14RFsPNdh/r6KhPBgaAPHO288UxhZYYNQ9nwOxHiuTqtOpaNK
+   A==;
 X-IronPort-AV: E=Sophos;i="5.90,162,1643698800"; 
-   d="scan'208";a="155486032"
+   d="scan'208";a="155486071"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2022 05:06:09 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2022 05:06:27 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 7 Mar 2022 05:06:08 -0700
+ 15.1.2375.17; Mon, 7 Mar 2022 05:06:26 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 7 Mar 2022 05:06:01 -0700
+ 15.1.2375.17 via Frontend Transport; Mon, 7 Mar 2022 05:06:19 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <linux-media@vger.kernel.org>, <jacopo@jmondi.org>
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -45,9 +45,9 @@ CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <claudiu.beznea@microchip.com>, <hverkuil-cisco@xs4all.nl>,
         <nicolas.ferre@microchip.com>,
         Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH v7 09/13] media: atmel: atmel-sama7g5-isc: remove stray line
-Date:   Mon, 7 Mar 2022 14:04:19 +0200
-Message-ID: <20220307120423.2427631-10-eugen.hristev@microchip.com>
+Subject: [PATCH v7 11/13] ARM: dts: at91: sama7g5: add nodes for video capture
+Date:   Mon, 7 Mar 2022 14:04:21 +0200
+Message-ID: <20220307120423.2427631-12-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220307120423.2427631-1-eugen.hristev@microchip.com>
 References: <20220307120423.2427631-1-eugen.hristev@microchip.com>
@@ -58,26 +58,76 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove stray line from formats struct.
+Add node for the XISC (eXtended Image Sensor Controller) and CSI2DC
+(csi2 demux controller).
+These nodes represent the top level of the video capture hardware pipeline
+and are directly connected in hardware.
 
 Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/platform/atmel/atmel-sama7g5-isc.c | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm/boot/dts/sama7g5.dtsi | 49 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/drivers/media/platform/atmel/atmel-sama7g5-isc.c b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
-index a0d60cfdba7b..638af8da2694 100644
---- a/drivers/media/platform/atmel/atmel-sama7g5-isc.c
-+++ b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
-@@ -225,7 +225,6 @@ static struct isc_format sama7g5_formats_list[] = {
- 		.mbus_code	= MEDIA_BUS_FMT_Y10_1X10,
- 		.pfe_cfg0_bps	= ISC_PFG_CFG0_BPS_TEN,
- 	},
--
- };
+diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
+index eddcfbf4d223..de43f854ce47 100644
+--- a/arch/arm/boot/dts/sama7g5.dtsi
++++ b/arch/arm/boot/dts/sama7g5.dtsi
+@@ -266,6 +266,55 @@ sdmmc2: mmc@e120c000 {
+ 			status = "disabled";
+ 		};
  
- static void isc_sama7g5_config_csc(struct isc_device *isc)
++		csi2dc: csi2dc@e1404000 {
++			compatible = "microchip,sama7g5-csi2dc";
++			reg = <0xe1404000 0x500>;
++			clocks = <&pmc PMC_TYPE_PERIPHERAL 34>, <&xisc>;
++			clock-names = "pclk", "scck";
++			assigned-clocks = <&xisc>;
++			assigned-clock-rates = <266000000>;
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				port@0 {
++					reg = <0>;
++					csi2dc_in: endpoint {
++					};
++				};
++
++				port@1 {
++					reg = <1>;
++					csi2dc_out: endpoint {
++						bus-width = <14>;
++						hsync-active = <1>;
++						vsync-active = <1>;
++						remote-endpoint = <&xisc_in>;
++					};
++				};
++			};
++		};
++
++		xisc: xisc@e1408000 {
++			compatible = "microchip,sama7g5-isc";
++			reg = <0xe1408000 0x2000>;
++			interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&pmc PMC_TYPE_PERIPHERAL 56>;
++			clock-names = "hclock";
++			#clock-cells = <0>;
++			clock-output-names = "isc-mck";
++
++			port {
++				xisc_in: endpoint {
++					bus-type = <5>; /* Parallel */
++					bus-width = <14>;
++					hsync-active = <1>;
++					vsync-active = <1>;
++					remote-endpoint = <&csi2dc_out>;
++				};
++			};
++		};
++
+ 		pwm: pwm@e1604000 {
+ 			compatible = "microchip,sama7g5-pwm", "atmel,sama5d2-pwm";
+ 			reg = <0xe1604000 0x4000>;
 -- 
 2.25.1
 
