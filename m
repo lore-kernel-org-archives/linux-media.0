@@ -2,56 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E792C43217
-	for <linux-media@archiver.kernel.org>; Tue,  8 Mar 2022 08:39:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5726AC433EF
+	for <linux-media@archiver.kernel.org>; Tue,  8 Mar 2022 08:42:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239885AbiCHIkK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Mar 2022 03:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
+        id S1345029AbiCHIna (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Mar 2022 03:43:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345025AbiCHIkJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Mar 2022 03:40:09 -0500
-X-Greylist: delayed 588 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 00:39:13 PST
-Received: from mail.twelvesign.pl (mail.twelvesign.pl [89.221.214.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05C43190F
-        for <linux-media@vger.kernel.org>; Tue,  8 Mar 2022 00:39:13 -0800 (PST)
-Received: by mail.twelvesign.pl (Postfix, from userid 1002)
-        id 01E413577C; Tue,  8 Mar 2022 09:29:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=twelvesign.pl;
-        s=mail; t=1646728164;
-        bh=rqcEvVJQSOmVvt10Vd77A7h4EQ3zL1XaGAodpexDxk8=;
-        h=Date:From:To:Subject:From;
-        b=AsExjLZiUrsBVNLb28/3DBlWyNExH+HoVMNymxt1pnMGCeP6NtVjo3rakjmJubfXy
-         eJfKmEIGCCT6RlnTfGNulkPIGagd9YX+s5G6sIZAfIh2Mc5Buwt0e6cTOyqY6rTlFt
-         DL2ghX31Ex2Cl1cxJMte7KDJuiDiVpFzI1vg7NgggT7WxxsDG+ZLqffwQb8sAO+r9x
-         9EwFpsH41dZuHIe2nRH7VkCSlhm0DtBTCKDofg6HM011AbFkAXuXk+BroUOBDvbczk
-         VEwSMP8O0eRWnQ6rLaExvqg8qwl2PKcV23o405p2Ejtn6Ndj+O3213ubjGnn1fzQVz
-         ASrbBee9vOpFA==
-Received: by mail.twelvesign.pl for <linux-media@vger.kernel.org>; Tue,  8 Mar 2022 08:29:05 GMT
-Message-ID: <20220308083000-0.1.w.1v0c.0.wgardp2pcu@twelvesign.pl>
-Date:   Tue,  8 Mar 2022 08:29:05 GMT
-From:   "Damian Kraska" <damian.kraska@twelvesign.pl>
-To:     <linux-media@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.twelvesign.pl
+        with ESMTP id S1345002AbiCHIn3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Mar 2022 03:43:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A5B6301
+        for <linux-media@vger.kernel.org>; Tue,  8 Mar 2022 00:42:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87522B81678
+        for <linux-media@vger.kernel.org>; Tue,  8 Mar 2022 08:42:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8C10C340EC;
+        Tue,  8 Mar 2022 08:42:30 +0000 (UTC)
+Message-ID: <ab8dc7f1-683c-618c-5b03-2615d06808ae@xs4all.nl>
+Date:   Tue, 8 Mar 2022 09:42:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: en-US
+To:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH] m5mols/m5mols.h: document new reset field
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dzie=C5=84 dobry,
+The new reset field in struct m5mols_info was not documented,
+add this.
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+This fixes a kerneldoc warning:
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+drivers/media/i2c/m5mols/m5mols.h:244: warning: Function parameter or member 'reset' not described in 'm5mols_info'
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
-
-
-Pozdrawiam,
-Damian Kraska
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: aaaf357fa61c (media: m5mols: Convert to use GPIO descriptors)
+---
+diff --git a/drivers/media/i2c/m5mols/m5mols.h b/drivers/media/i2c/m5mols/m5mols.h
+index b56eb0a8ee97..d8545d2280af 100644
+--- a/drivers/media/i2c/m5mols/m5mols.h
++++ b/drivers/media/i2c/m5mols/m5mols.h
+@@ -182,6 +182,7 @@ struct m5mols_version {
+  * @stabilization: image stabilization control
+  * @jpeg_quality: JPEG compression quality control
+  * @set_power: optional power callback to the board code
++ * @reset: GPIO driving the reset pin of M-5MOLS
+  * @lock: mutex protecting the structure fields below
+  * @ffmt: current fmt according to resolution type
+  * @res_type: current resolution type
