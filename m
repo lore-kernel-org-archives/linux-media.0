@@ -2,98 +2,85 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F38E0C433FE
-	for <linux-media@archiver.kernel.org>; Tue,  8 Mar 2022 10:05:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20642C433EF
+	for <linux-media@archiver.kernel.org>; Tue,  8 Mar 2022 10:26:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244409AbiCHKGB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Mar 2022 05:06:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S1345713AbiCHK10 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Mar 2022 05:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237481AbiCHKGB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Mar 2022 05:06:01 -0500
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F4E3FD9D
-        for <linux-media@vger.kernel.org>; Tue,  8 Mar 2022 02:05:02 -0800 (PST)
-X-KPN-MessageId: 35607a54-9ec7-11ec-a506-00505699b430
-Received: from smtp.kpnmail.nl (unknown [10.31.155.6])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id 35607a54-9ec7-11ec-a506-00505699b430;
-        Tue, 08 Mar 2022 11:04:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:from:to:subject:mime-version:date:message-id;
-        bh=1wJ+0H1ytXAp5iNnkF3IFNhQyeE5rGXO+z/GcyyfiqQ=;
-        b=UKFbWFLnkqDeMOp/DDeyCcDAMV05W8jyXNOioxy8Rz42FsvbReMPaU0DAIGCI8s81OIBbsbGdlSJH
-         le7yLHwu+O33oHh+oqW1CwcEAzdYnn43xhQx4Hms8WiBhWEDP85JCFUMzX2Xo7vVWgwFSswVgFxUu7
-         5Y9hDNuzKTUDaQhbe6gwmaD87onxlbciiZG0GK5+llEYylXjrp6YcnVKR7/Ujnl8t2fF7bJ/4mUGCv
-         2I1xKg+q3f0/2ghbXFP/xnDt/ViecEKI1P+KiZTDISiIPoI7UmoGRc1xI6Qf1fNyHzOzwHnpfL4e42
-         poVb1hGFhIyNNUMdUvPkM5Mawq01xDQ==
-X-KPN-VerifiedSender: No
-X-CMASSUN: 33|1vuL5+urtskp1bT5j/DNQyJwiBCAhPsphfnal+BK+YQKsFW8QYKFAqdUdqvgERq
- QNbR7yBlRx+06szfyGHOSQw==
-X-Originating-IP: 173.38.220.60
-Received: from [10.47.77.219] (unknown [173.38.220.60])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id 36c0954f-9ec7-11ec-bc0d-00505699772e;
-        Tue, 08 Mar 2022 11:05:00 +0100 (CET)
-Message-ID: <c38a229a-92b5-07c1-7f65-bb944ae6e555@xs4all.nl>
-Date:   Tue, 8 Mar 2022 11:04:59 +0100
+        with ESMTP id S234017AbiCHK1Z (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Mar 2022 05:27:25 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB1A403DD;
+        Tue,  8 Mar 2022 02:26:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646735188; x=1678271188;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8ZXez3FiH4XTUGihrwHP9hVOqrlcK4/ZLZFGF2nClaI=;
+  b=Ov65txSQHUlUlSairMP+PE2omhQ5tvxPuq9LvZEuQL8sNwrPvKqStIPO
+   8VgP+5rQ4E8+hppMT9A/KzQHvC+Aci+HvoVP+jCzsOxTkr+6ZOScxc26p
+   jRW2V7V+R416ldsrjAZAkEhCfMgDu/+6mqUN0PKo/jBFVibBtdkbh8nqx
+   e2Vj1gwwpBUUzwzeLYdBiCPoKUVcLLa/yEjSmyhuL2Ap6yrKntZUffyo6
+   Vmex/DIsCjS4tPABmILRcjmz9CfZUnGaDV+slHue+8cMChyn5uLuEYmk/
+   yn1hW0NACdq8DOd7vXIPHGtPLYHbrjL/ymd5Ow4s27uoRYdRyWSDd+0MX
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="234604070"
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="234604070"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 02:26:28 -0800
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="643610528"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 02:26:26 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nRX2E-00DINI-K5;
+        Tue, 08 Mar 2022 12:25:42 +0200
+Date:   Tue, 8 Mar 2022 12:25:42 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH v1 1/1] media: c8sectpfe: Clean up handling of
+ *_buffer_aligned
+Message-ID: <YicvJpTtICUFAvoe@smile.fi.intel.com>
+References: <20220209182521.55632-1-andriy.shevchenko@linux.intel.com>
+ <Yh+SjmGgSZGGaW/I@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] media: fix Documentation label name
-Content-Language: en-US
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        aisheng.dong@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220308095530.14099-1-ming.qian@nxp.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20220308095530.14099-1-ming.qian@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yh+SjmGgSZGGaW/I@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-I've posted a patch for this already that also fixes an issue for the MM21 pix format:
++Hans (see below).
 
-https://patchwork.linuxtv.org/project/linux-media/patch/c0a9a647-5e27-52bd-65a0-b9663014887a@xs4all.nl/
-
-So I'll mark this as obsoleted in patchwork.
-
-Thank you for doing this, though.
-
-Regards,
-
-	Hans
-
-On 3/8/22 10:55, Ming Qian wrote:
-> the label name should use dash, not underline
+On Wed, Mar 02, 2022 at 05:51:42PM +0200, Andy Shevchenko wrote:
+> On Wed, Feb 09, 2022 at 08:25:21PM +0200, Andy Shevchenko wrote:
+> > There are a few cases where code is harder than needed to read.
+> > Improve those by:
+> > - dropping unnecessary castings (see note below)
+> > - use PTR_ALING() to be more explicit on what's going on there
+> > - use proper definitions instead of hard coded values
+> > 
+> > Note, dropping castings will allow to perform an additional check
+> > that type is not changed from void * to something else, e.g. u64,
+> > which may very well break the bitmap APIs.
 > 
-> change _V4L2_PIX_FMT_NV12M_8L128 to _V4L2-PIX-FMT-NV12M-8L128
-> change _V4L2_PIX_FMT_NV12M_10BE_8L128 to _V4L2-PIX-FMT-NV12M-10BE-8L128
-> 
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> ---
->  Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> index 8b2ff1d29639..bd1a962a80a7 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> @@ -257,8 +257,8 @@ of the luma plane.
->  .. _V4L2-PIX-FMT-NV12-4L4:
->  .. _V4L2-PIX-FMT-NV12-16L16:
->  .. _V4L2-PIX-FMT-NV12-32L32:
-> -.. _V4L2_PIX_FMT_NV12M_8L128:
-> -.. _V4L2_PIX_FMT_NV12M_10BE_8L128:
-> +.. _V4L2-PIX-FMT-NV12M-8L128:
-> +.. _V4L2-PIX-FMT-NV12M-10BE-8L128:
->  
->  Tiled NV12
->  ----------
+> Any comments on it?
+> Can it be applied?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
