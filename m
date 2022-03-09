@@ -2,93 +2,127 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6A09C4332F
-	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 10:22:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2523FC433FE
+	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 10:22:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbiCIKXf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Mar 2022 05:23:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
+        id S229981AbiCIKXh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Mar 2022 05:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiCIKXd (ORCPT
+        with ESMTP id S229962AbiCIKXd (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 05:23:33 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0DB5583
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 02:22:27 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id qt6so3812082ejb.11
-        for <linux-media@vger.kernel.org>; Wed, 09 Mar 2022 02:22:27 -0800 (PST)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9684AD9A
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 02:22:28 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id qt6so3812177ejb.11
+        for <linux-media@vger.kernel.org>; Wed, 09 Mar 2022 02:22:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=konsulko.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2odQ8BcT/g6/viXEFNUwFkg3kRO03GusUQree4/idl4=;
-        b=gB1D5iAHstQ4FMKJ2Z+OdC9l9VGqi3TNU5WVlVv7sKQiNF7WpP17gkR3SmIQGhNB+w
-         GwkkXj77UIzJlez82vVFsMrYJx/k+Mrpn1iq34D8MHg6h7ChNsyCPMPpyzt+0ewkTgcd
-         gqRtFv46x7tXCBpEQEOLGqY4pAtW3E/i9kpMg=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=srlbObwmq+JdjeVbdOZ+bM1ch969LAtjZiiX7VIPUAw=;
+        b=iR9KukxttGqJbJrh6Gl+jQplJWvym6DzUIUr1ns2ie18/qeO+gBNQ1pOKz6Dnm2SDZ
+         rYe6NQQKNonasqg4CpCDytvMsKH0YrQNUC5GKpea8s0qFYqlNHrT0/azenrwlSBY29DP
+         uqUtvlwzURmgmXQDPphFOAM/mPQQ8AjBzl9IQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2odQ8BcT/g6/viXEFNUwFkg3kRO03GusUQree4/idl4=;
-        b=d5XJNc/GqBrKMdutqjS1wEEK90xTCHWjiiu5FYsH46XWnfg242w3F3Hgukfu9hSNT4
-         EEc7SsAixGuok/KtzzVBCwaMaA0RhTnTZQJolun7J6AaKc8hK+djbHppshkyqzj+/bLn
-         TzbdsO1xsxlzHIx3SU+/hGuXamf1gPmPAE7s5fCcYxIXVX8gSt+RVVb8wuFCHhB9VLHY
-         b2Yj/oQ+L1vfWl39wtuTMTvYXW0AJKZ4Hb1xpRZ1Yn8rCRooVxTk3laiS9uZNB8ct0gx
-         ovCXrCxQ1ExIPQ4nxm8kl8NTgucW2/ysaWTV+VHyky2w1x7Quy6ukvCLozaAK27LlFnv
-         nLpw==
-X-Gm-Message-State: AOAM5318K9opEDO7fY94R5jyZqNByzMMKWsvDm0jCuEHSnS9WuvZqTaj
-        ehNPTDUNM46ESh1+b7eDMonPPmKFPh3VPw==
-X-Google-Smtp-Source: ABdhPJzBaINjSnu8B/ToCFyoFs9YNPJVA6iciWRJZrKtEPPTUfNw5yM+5A3knsvtfaMxjamnUP8JRA==
-X-Received: by 2002:a17:906:3a55:b0:6ce:c2ee:3e10 with SMTP id a21-20020a1709063a5500b006cec2ee3e10mr16118362ejf.210.1646821345411;
-        Wed, 09 Mar 2022 02:22:25 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=srlbObwmq+JdjeVbdOZ+bM1ch969LAtjZiiX7VIPUAw=;
+        b=09+rV6UfBZPoMsMq6W70FRw/keL8BU7bHuyaBtZtP/dpylR1MviCowqxl/uQMEWunC
+         tuOD3UrsRBRpzzYN1Yop4cHJDS8kswBFeG5Y5NzKy8Ghs5fcI6zI6UXgqhnzLzN/Q4p3
+         5UD31nE7zvrED6K9cGU+Ost4p9XJyyupnDYAUZuTa+tQIV9GRDvMjUW4nupGGAqVsCDh
+         KUHxXyMJLFLx8foG7GuoqJO/i4fNHEV6PSoXFEKn3tNBd/1sUbkfXi4PNicZhB/b1k1d
+         ggiQ0qJ6+mQ2bfVE2SherAEXHaAYwW2/rvMqJKrQgXecGiHWFKNWTK+TarNzyeC/DRBy
+         EYyA==
+X-Gm-Message-State: AOAM531sqcZHAkJIUk5H+jenLJSacasSVnrB2uQJF5xloGbjeFSbkri+
+        tHD0zdPOq8sLbK4lck710bEwd7vGRKBTdg==
+X-Google-Smtp-Source: ABdhPJzipe3g2eIEfSQNc8ZfiqQR8wpfG8QhkBIwhpaC4ybq2N+r40qOVRCy7bwcoZffW0Wb0zQTJQ==
+X-Received: by 2002:a17:906:5597:b0:6ce:f3cc:14e8 with SMTP id y23-20020a170906559700b006cef3cc14e8mr17033143ejp.426.1646821346837;
+        Wed, 09 Mar 2022 02:22:26 -0800 (PST)
 Received: from tone.k.g (lan.nucleusys.com. [92.247.61.126])
-        by smtp.gmail.com with ESMTPSA id ce12-20020a170906b24c00b006da824011eesm547229ejb.166.2022.03.09.02.22.24
+        by smtp.gmail.com with ESMTPSA id ce12-20020a170906b24c00b006da824011eesm547229ejb.166.2022.03.09.02.22.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 02:22:25 -0800 (PST)
+        Wed, 09 Mar 2022 02:22:26 -0800 (PST)
 From:   Petko Manolov <petko.manolov@konsulko.com>
 To:     linux-media@vger.kernel.org
 Cc:     sakari.ailus@iki.fi, devicetree@vger.kernel.org,
         Petko Manolov <petko.manolov@konsulko.com>
-Subject: [PATCH v5 0/2] media: ovm6211: Adds support for OVM6211
-Date:   Wed,  9 Mar 2022 12:22:13 +0200
-Message-Id: <20220309102215.891001-1-petko.manolov@konsulko.com>
+Subject: [PATCH v5 2/2] dt-bindings: media: add ovti,ovm6211 bindings
+Date:   Wed,  9 Mar 2022 12:22:15 +0200
+Message-Id: <20220309102215.891001-3-petko.manolov@konsulko.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220309102215.891001-1-petko.manolov@konsulko.com>
+References: <20220309102215.891001-1-petko.manolov@konsulko.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-v5: Moar cleanupm, adds the ovm6211 bindings.
+Omnivision OVM6211 MIPI CSI-2 sensor bindings.
 
-v4: More unused header files removed, use media_entity_cleanup() where necessary
-and some other minor cleanups.
-
-v3: As usual, not everything is perfect, hence v3.  The patch set is now merged
-into one big patch, redundant code was removed and the end result tested on the
-board.  DT bindings are coming some time later.
-
-v2: Removes an unused function (ovm6211_set_pix_clk) and this patch series is
-now based on media/master; Didn't receive any comments about the RFC version,
-thus i assume everything is perfect... :P
-
-This patch adds ovm6211 driver into the staging directory.  It also creates
-media/i2c entry, where ovm6211.c lives for now, to mimic the generic media
-source tree.
-
-Petko Manolov (2):
-  media: ovm6211: Adds support for OVM6211
-  media: add ovti,ovm6211 bindings
-
- .../devicetree/bindings/media/i2c/ovm6211.txt |   49 +
- drivers/media/i2c/Kconfig                     |   10 +
- drivers/media/i2c/Makefile                    |    1 +
- drivers/media/i2c/ovm6211.c                   | 1018 +++++++++++++++++
- 4 files changed, 1078 insertions(+)
+Signed-off-by: Petko Manolov <petko.manolov@konsulko.com>
+---
+ .../devicetree/bindings/media/i2c/ovm6211.txt | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovm6211.txt
- create mode 100644 drivers/media/i2c/ovm6211.c
 
-
-base-commit: 2b891d3980f6c255459d0e1c29ce2152ec7cf678
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovm6211.txt b/Documentation/devicetree/bindings/media/i2c/ovm6211.txt
+new file mode 100644
+index 000000000000..6883c34106be
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ovm6211.txt
+@@ -0,0 +1,49 @@
++* Omnivision OVM6211 MIPI CSI-2 sensor
++
++The OVM6211 has an image array capable of operating at up to 120 frames per
++second in 400x400 resolution. All required image processing functions including
++exposure control are programmable through the SCCB interface.
++
++
++Required Properties:
++- compatible: shall be "ovti,ovm6211"
++- clocks: reference to the xvclk input clock
++- clock-names: shall be "xvclk"
++- avdd-supply: Analog voltage supply, 2.9 volts
++- dovdd-supply: Digital I/O voltage supply, 1.8 volts
++- dvdd-supply: Digital core voltage supply, 1.8 volts
++- reset-gpios: Low active reset gpio
++- enable-gpios: High active chip enable gpio
++
++The device node shall contain one 'port' child node with an
++'endpoint' subnode for its digital output video port,
++in accordance with the video interface bindings defined in
++Documentation/devicetree/bindings/media/video-interfaces.txt.
++The endpoint optional property 'data-lanes' shall be "<1>".
++
++
++Example:
++
++	&i2c1 {
++		...
++        
++		camera@60 {
++			compatible = "ovti,ovm6211";
++			reg = <0x60>;
++			clocks = <&clk_cam>;
++			clock-names = "xvclk";
++			dovdd-supply = <&v1v8>;
++			avdd-supply = <&vdda>;
++			reset-gpios = <&gpiof 14 GPIO_ACTIVE_LOW>;
++			enable-gpios = <&gpiof 15 GPIO_ACTIVE_HIGH>;
++
++			status = "okay";
++
++			port {
++				ovm6211_0: endpoint {
++					data-lanes = <1>;
++					clock-lanes = <0>;
++					pclk-max-frequency = <72000000>;
++			};
++		};
++	};
 -- 
 2.30.2
 
