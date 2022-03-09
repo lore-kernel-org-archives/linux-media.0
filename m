@@ -2,56 +2,54 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EEEAC4332F
-	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 17:04:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C2EAC433FE
+	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 17:04:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236765AbiCIRFW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Mar 2022 12:05:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
+        id S237255AbiCIRFZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Mar 2022 12:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238980AbiCIRER (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 12:04:17 -0500
+        with ESMTP id S238700AbiCIRD5 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 12:03:57 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64F919F442
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 08:53:03 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id p69-20020a257448000000b006295d07115bso2117143ybc.14
-        for <linux-media@vger.kernel.org>; Wed, 09 Mar 2022 08:53:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF9A1AAA6B
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 08:52:30 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id h8-20020a25e208000000b00628c0565607so2182583ybe.0
+        for <linux-media@vger.kernel.org>; Wed, 09 Mar 2022 08:52:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=ArtryYFgH5mlYpraW6Z9pzBKDmlE5B7N8QDWxuF8nCw=;
-        b=ET2G8YAxigglCgwH9ORXjYEpMOwkLAxVMGluElrrT20Iij1J38dmr6UP8EdlHvk4DN
-         azfkhu/4N5mTJEJm6TVVmQy58D9W8S5IKUZrU96emS4lJxesAiyxiaL+UhI4peXvb1ET
-         2NfRSubT3bKB7llEizgDSk5WlvkFPBL2wIZ+UrsonprCR0wGscERyJLQ5lFI6A7C+Mqr
-         bBt/5MUBkAllxZeIaBAydEb4kU5tR1u3dOU4OHuIMqo5beiURrjjfEoxT78k7cZx6CKK
-         JslptEply/Lv5cfDpBB3GPPAcjhXmY9D9nxBJ4PiqVjPoV/QbfVEvtvJmrpZObB+eaR2
-         BMJg==
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=b9rEV04bDQiBKY+clzVAAUwX0PEEzTz5v0uyyD6Ky9s=;
+        b=XPzsQHeRUNiY59+5nJm7mrBdRIxBkcExNssQMplqKGecYVGAuoWNOzfsQ/CRHGT3Eb
+         L8N78lNgsuxsZppqNYdkHimSfJaRLuWqSnEH8yK3GxU8bsscjb4ePNbipVnp6tCT8IVF
+         UaUIxl8y648Eqm5tHOyCh2213Fk/nnv9V9GWAOVVkJeRQIHfCE/FgeEvesm4pyz9OWp/
+         jT/gMhsLrbq/1Tv7Gt/fcrwf/RPUzCl8lb+iIaUhtm6WEF9fuNYOWUF4Z36cCRwe+NRS
+         IxH3+7RqukqcHYT+xGqH3TFqjhzJCVwErPB8Qpl0MdPoc7qtVg+T57NWV82loz0fFGAg
+         92Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=ArtryYFgH5mlYpraW6Z9pzBKDmlE5B7N8QDWxuF8nCw=;
-        b=w+OuMcwGJL1Tl4BWVLubE0oetBJBmt0odDrSdb6BMnKDRgMzjpl50pO1b0u2fvdItj
-         WtTLw6BrfkFx2zzGZEUg2gOpVRO4aK5PW2B65Ig6SPi+hFHWCBKUOIv6Ht3ELB29fnA/
-         ++Qj2jVYLi6NoOL5uTq/oY/YS44qG3pRhP/2Gk8rkgGJZnxe1B3x6EtOm6rfOCWXPTED
-         +ogasjSAexpYmDqqhHwXgfhpl9jOac0CBHawz6AYdXYL+VC9ciKFTPY8YUW6dUFtPlFq
-         msO5BoYot0jyj1BOphc/OYxcj+SlfLp6Jub1P+sDRwGKfTrY6HWYXcpcRN9ZMcc443Lr
-         0eKQ==
-X-Gm-Message-State: AOAM532FHbTs1cgRK5nAP+Gf7Y2hdylD9Av+m+nhRle9pujHk0/EGpWi
-        sHIzJHO4wF9IlxtSqJoFLtQMqbVf4VSg7Yo=
-X-Google-Smtp-Source: ABdhPJwhCCM8fnCv/YYjH2ItlE07Kq6zIIhQQNOdvRKBR0On1xzyi6be0Wrkn7kWsIBobS2Z6B4GB8mh7xehQH8=
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=b9rEV04bDQiBKY+clzVAAUwX0PEEzTz5v0uyyD6Ky9s=;
+        b=vz+ng88IxB0QL5S34JF2oB1PPzeeB859LP0sFRe5fDLwEGmxporv7s+k6xP8Az6n5D
+         DtpQo3TWTnxy9hZCIXP2/dyAv11eUmb0CBQiidrpAhVqqGljNuPBG9qzDwFlKN/xCq+o
+         KQFObitkcNelo5hwhbTUEeitzP0kSyxUIrVe4UKkfAmocIFVTb7wbUcLGARpxOUWSdbE
+         fAvZiCJcFJORQazfULCgBDtHNcussYw083qlscfKxajak4uzeaTSo5788ppZNorNgaqz
+         y+EIvR3NvbCWDpPk9A52ElyGrwu3JnphHIRTtpfmD8LPgz+fP9vPPilToiBEkZar1XDM
+         Haqg==
+X-Gm-Message-State: AOAM532y76Vu8ZdcQsm+iau0Qe88J6mAz/7U6r756NdWvz03TQU9BlX5
+        YsPS9Ww/Sureo0ykkI8cfNztaItMsbEpeiU=
+X-Google-Smtp-Source: ABdhPJwRyTuMCrRO/Vp1TWAVYo92UjVf5vBh6X32/4NRRO9jJMcVfdRLSkjJkXNfpEsU2vu7P7SPJtB45/CUe/4=
 X-Received: from tj2.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:187])
- (user=tjmercier job=sendgmr) by 2002:a25:3403:0:b0:628:a2e4:ae8a with SMTP id
- b3-20020a253403000000b00628a2e4ae8amr504446yba.219.1646844771702; Wed, 09 Mar
- 2022 08:52:51 -0800 (PST)
-Date:   Wed,  9 Mar 2022 16:52:16 +0000
-In-Reply-To: <20220309165222.2843651-1-tjmercier@google.com>
-Message-Id: <20220309165222.2843651-7-tjmercier@google.com>
+ (user=tjmercier job=sendgmr) by 2002:a25:3494:0:b0:628:7de8:fe8c with SMTP id
+ b142-20020a253494000000b006287de8fe8cmr566332yba.68.1646844747351; Wed, 09
+ Mar 2022 08:52:27 -0800 (PST)
+Date:   Wed,  9 Mar 2022 16:52:10 +0000
+Message-Id: <20220309165222.2843651-1-tjmercier@google.com>
 Mime-Version: 1.0
-References: <20220309165222.2843651-1-tjmercier@google.com>
 X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [RFC v3 6/8] binder: Add a buffer flag to relinquish ownership of fds
+Subject: [RFC v3 0/8] Proposal for a GPU cgroup controller
 From:   "T.J. Mercier" <tjmercier@google.com>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -89,150 +87,104 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hridya Valsaraju <hridya@google.com>
+This patch series revisits the proposal for a GPU cgroup controller to
+track and limit memory allocations by various device/allocator
+subsystems. The patch series also contains a simple prototype to
+illustrate how Android intends to implement DMA-BUF allocator
+attribution using the GPU cgroup controller. The prototype does not
+include resource limit enforcements.
 
-This patch introduces a buffer flag BINDER_BUFFER_FLAG_SENDER_NO_NEED
-that a process sending an fd array to another process over binder IPC
-can set to relinquish ownership of the fds being sent for memory
-accounting purposes. If the flag is found to be set during the fd array
-translation and the fd is for a DMA-BUF, the buffer is uncharged from
-the sender's cgroup and charged to the receiving process's cgroup
-instead.
+Changelog:
+v3:
+Remove Upstreaming Plan from gpu-cgroup.rst per John Stultz
 
-It is up to the sending process to ensure that it closes the fds
-regardless of whether the transfer failed or succeeded.
+Use more common dual author commit message format per John Stultz
 
-Most graphics shared memory allocations in Android are done by the
-graphics allocator HAL process. On requests from clients, the HAL process
-allocates memory and sends the fds to the clients over binder IPC.
-The graphics allocator HAL will not retain any references to the
-buffers. When the HAL sets the BINDER_BUFFER_FLAG_SENDER_NO_NEED for fd
-arrays holding DMA-BUF fds, the gpu cgroup controller will be able to
-correctly charge the buffers to the client processes instead of the
-graphics allocator HAL.
+Remove android from binder changes title per Todd Kjos
 
-Since this is a new feature exposed to userspace, the kernel and userspace
-must be compatible for the accounting to work for transfers. In all cases
-the allocation and transport of DMA buffers via binder will succeed, but
-only when both the kernel supports, and userspace depends on this feature
-will the transfer accounting work. The possible scenarios are detailed
-below:
-
-1. new kernel + old userspace
-The kernel supports the feature but userspace does not use it. The old
-userspace won't mount the new cgroup controller, accounting is not
-performed, charge is not transferred.
-
-2. old kernel + new userspace
-The new cgroup controller is not supported by the kernel, accounting is
-not performed, charge is not transferred.
-
-3. old kernel + old userspace
-Same as #2
-
-4. new kernel + new userspace
-Cgroup is mounted, feature is supported and used.
-
-Signed-off-by: Hridya Valsaraju <hridya@google.com>
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
-
----
-v3 changes
-Remove android from title per Todd Kjos.
-
-Use more common dual author commit message format per John Stultz.
+Add a kselftest for this new behavior per Greg Kroah-Hartman
 
 Include details on behavior for all combinations of kernel/userspace
 versions in changelog (thanks Suren Baghdasaryan) per Greg Kroah-Hartman.
 
-v2 changes
+Fix pid and uid types in binder UAPI header
+
+v2:
+See the previous revision of this change submitted by Hridya Valsaraju
+at: https://lore.kernel.org/all/20220115010622.3185921-1-hridya@google.com/
+
 Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
 heap to a single dma-buf function for all heaps per Daniel Vetter and
-Christian K=C3=B6nig.
----
- drivers/android/binder.c            | 26 ++++++++++++++++++++++++++
- include/uapi/linux/android/binder.h |  1 +
- 2 files changed, 27 insertions(+)
+Christian K=C3=B6nig. Pointers to struct gpucg and struct gpucg_device
+tracking the current associations were added to the dma_buf struct to
+achieve this.
 
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index 8351c5638880..f50d88ded188 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -42,6 +42,7 @@
-=20
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-=20
-+#include <linux/dma-buf.h>
- #include <linux/fdtable.h>
- #include <linux/file.h>
- #include <linux/freezer.h>
-@@ -2482,8 +2483,10 @@ static int binder_translate_fd_array(struct list_hea=
-d *pf_head,
- {
- 	binder_size_t fdi, fd_buf_size;
- 	binder_size_t fda_offset;
-+	bool transfer_gpu_charge =3D false;
- 	const void __user *sender_ufda_base;
- 	struct binder_proc *proc =3D thread->proc;
-+	struct binder_proc *target_proc =3D t->to_proc;
- 	int ret;
-=20
- 	fd_buf_size =3D sizeof(u32) * fda->num_fds;
-@@ -2521,8 +2524,15 @@ static int binder_translate_fd_array(struct list_hea=
-d *pf_head,
- 	if (ret)
- 		return ret;
-=20
-+	if (IS_ENABLED(CONFIG_CGROUP_GPU) &&
-+		parent->flags & BINDER_BUFFER_FLAG_SENDER_NO_NEED)
-+		transfer_gpu_charge =3D true;
-+
- 	for (fdi =3D 0; fdi < fda->num_fds; fdi++) {
- 		u32 fd;
-+		struct dma_buf *dmabuf;
-+		struct gpucg *gpucg;
-+
- 		binder_size_t offset =3D fda_offset + fdi * sizeof(fd);
- 		binder_size_t sender_uoffset =3D fdi * sizeof(fd);
-=20
-@@ -2532,6 +2542,22 @@ static int binder_translate_fd_array(struct list_hea=
-d *pf_head,
- 						  in_reply_to);
- 		if (ret)
- 			return ret > 0 ? -EINVAL : ret;
-+
-+		if (!transfer_gpu_charge)
-+			continue;
-+
-+		dmabuf =3D dma_buf_get(fd);
-+		if (IS_ERR(dmabuf))
-+			continue;
-+
-+		gpucg =3D gpucg_get(target_proc->tsk);
-+		ret =3D dma_buf_charge_transfer(dmabuf, gpucg);
-+		if (ret) {
-+			pr_warn("%d:%d Unable to transfer DMA-BUF fd charge to %d",
-+				proc->pid, thread->pid, target_proc->pid);
-+			gpucg_put(gpucg);
-+		}
-+		dma_buf_put(dmabuf);
- 	}
- 	return 0;
- }
-diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/andro=
-id/binder.h
-index 3246f2c74696..169fd5069a1a 100644
---- a/include/uapi/linux/android/binder.h
-+++ b/include/uapi/linux/android/binder.h
-@@ -137,6 +137,7 @@ struct binder_buffer_object {
-=20
- enum {
- 	BINDER_BUFFER_FLAG_HAS_PARENT =3D 0x01,
-+	BINDER_BUFFER_FLAG_SENDER_NO_NEED =3D 0x02,
- };
-=20
- /* struct binder_fd_array_object - object describing an array of fds in a =
-buffer
+Fix incorrect Kconfig help section indentation per Randy Dunlap.
+
+History of the GPU cgroup controller
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+The GPU/DRM cgroup controller came into being when a consensus[1]
+was reached that the resources it tracked were unsuitable to be integrated
+into memcg. Originally, the proposed controller was specific to the DRM
+subsystem and was intended to track GEM buffers and GPU-specific
+resources[2]. In order to help establish a unified memory accounting model
+for all GPU and all related subsystems, Daniel Vetter put forth a
+suggestion to move it out of the DRM subsystem so that it can be used by
+other DMA-BUF exporters as well[3]. This RFC proposes an interface that
+does the same.
+
+[1]: https://patchwork.kernel.org/project/dri-devel/cover/20190501140438.95=
+06-1-brian.welty@intel.com/#22624705
+[2]: https://lore.kernel.org/amd-gfx/20210126214626.16260-1-brian.welty@int=
+el.com/
+[3]: https://lore.kernel.org/amd-gfx/YCVOl8%2F87bqRSQei@phenom.ffwll.local/
+
+Hridya Valsaraju (5):
+  gpu: rfc: Proposal for a GPU cgroup controller
+  cgroup: gpu: Add a cgroup controller for allocator attribution of GPU
+    memory
+  dmabuf: heaps: export system_heap buffers with GPU cgroup charging
+  dmabuf: Add gpu cgroup charge transfer function
+  binder: Add a buffer flag to relinquish ownership of fds
+
+T.J. Mercier (3):
+  dmabuf: Use the GPU cgroup charge/uncharge APIs
+  binder: use __kernel_pid_t and __kernel_uid_t for userspace
+  selftests: Add binder cgroup gpu memory transfer test
+
+ Documentation/gpu/rfc/gpu-cgroup.rst          | 183 +++++++
+ Documentation/gpu/rfc/index.rst               |   4 +
+ drivers/android/binder.c                      |  26 +
+ drivers/dma-buf/dma-buf.c                     | 100 ++++
+ drivers/dma-buf/dma-heap.c                    |  27 +
+ drivers/dma-buf/heaps/system_heap.c           |   3 +
+ include/linux/cgroup_gpu.h                    | 127 +++++
+ include/linux/cgroup_subsys.h                 |   4 +
+ include/linux/dma-buf.h                       |  22 +-
+ include/linux/dma-heap.h                      |  11 +
+ include/uapi/linux/android/binder.h           |   5 +-
+ init/Kconfig                                  |   7 +
+ kernel/cgroup/Makefile                        |   1 +
+ kernel/cgroup/gpu.c                           | 304 +++++++++++
+ .../selftests/drivers/android/binder/Makefile |   8 +
+ .../drivers/android/binder/binder_util.c      | 254 +++++++++
+ .../drivers/android/binder/binder_util.h      |  32 ++
+ .../selftests/drivers/android/binder/config   |   4 +
+ .../binder/test_dmabuf_cgroup_transfer.c      | 480 ++++++++++++++++++
+ 19 files changed, 1598 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/gpu/rfc/gpu-cgroup.rst
+ create mode 100644 include/linux/cgroup_gpu.h
+ create mode 100644 kernel/cgroup/gpu.c
+ create mode 100644 tools/testing/selftests/drivers/android/binder/Makefile
+ create mode 100644 tools/testing/selftests/drivers/android/binder/binder_u=
+til.c
+ create mode 100644 tools/testing/selftests/drivers/android/binder/binder_u=
+til.h
+ create mode 100644 tools/testing/selftests/drivers/android/binder/config
+ create mode 100644 tools/testing/selftests/drivers/android/binder/test_dma=
+buf_cgroup_transfer.c
+
 --=20
 2.35.1.616.g0bdcbb4464-goog
 
