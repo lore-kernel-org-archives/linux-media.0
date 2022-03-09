@@ -2,56 +2,56 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03BBEC433EF
-	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 17:04:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13BF7C4167B
+	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 17:04:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236291AbiCIRFd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Mar 2022 12:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
+        id S237432AbiCIRFg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Mar 2022 12:05:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238963AbiCIREQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 12:04:16 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8E819E714
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 08:53:03 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2dbda4f6331so19175737b3.11
-        for <linux-media@vger.kernel.org>; Wed, 09 Mar 2022 08:53:03 -0800 (PST)
+        with ESMTP id S238986AbiCIRES (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 12:04:18 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC20A1A06CD
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 08:53:04 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dc1ce31261so19316407b3.6
+        for <linux-media@vger.kernel.org>; Wed, 09 Mar 2022 08:53:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=V8vMjTnKNpMlnc7JqoQhhcwCYCICGfVTjA11ueJBqJY=;
-        b=HPhBJpTBiJVYDhNj0DZQIrh2V35TDbkma5Iio+WXF/hcMekPxUMRND2g0CCX8In7eA
-         LEUpnnJ+An6CQt91VMdWJ16FK8gQvFAyqTsa5rlG5AWdns4o+hy7+0OojxnhgPcTuenF
-         BMnLv3wL46KC+ysjzZ76R5d/tGOpuWkWCWCPvMAfXwR0a5KK3XjpjLwL9pQFigkgD89h
-         UfwDU4EeBZ+AuUjNHIDB5TQ3ZOrtGFi86NY5EeNgywb7PE5VH443fnkWqKIiup1Y0udy
-         R7MVYYHFJitKmNj3Z9u+ZFiGhMd6bk7xZU88I9EiTT+qF25ldxx/Q3auo1GI4V9pSZKP
-         UyXw==
+         :cc;
+        bh=a5Dt/ckgrAR/j0DHD5MablupC6tRY3n4B+kc2OBEq1E=;
+        b=lf6qdnlnShM+NyA+sRumM9hivTRIGcCncGZbgQNzurEcC0PelK7f0Thi+M3ueh/60u
+         crlhMuUH1ipr0mpuDqyE8aJ84VySIaff1FD+fE9773Bt+fv449Jm3nP3wPIlVA+Qfzav
+         0k2WlYeS8LRPkeGvJS/ckcrKMSgPM5JtRDzCNqenqST8iJomE7l5mxPW2JqytjG7tKEz
+         E11F13r1PzT40iKei9VjsWcsCTlAVdI2efPX0/uTfWtH4OCy9bcb/rt71jwCVzpmmrbw
+         9TYlUoBsQKAMkXQRru4/JO9WydZpoUuui7gHXDFAFHPvAuocMffpVfEKhnWZZaGcVMZ7
+         KGKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=V8vMjTnKNpMlnc7JqoQhhcwCYCICGfVTjA11ueJBqJY=;
-        b=t9Z6kI9cLOBQ98c2MAfSuQSrqB/Mg0z8qmpGBbLNhJ+ulVyD8xsXLnvOeuyDKNC11C
-         NpIgFLVipxpOf0aDvoCvGdX7AhsdNUV4sJzQHTAYfXRI74AX22a+2jaBTbKfqsNQZi86
-         gAtKQ5JkmYjRvNh7xendjgMZXbcbl+skqrSjFv3uWJ6H6uYB8bXTCMQJ5LD2dIyMJ/jg
-         CKq3Zt0JIpGiOmLr3Tv4OifSz4gQn9lvRJIdVtNE+0XlEJIdmsRD4tt+yaK3EeLX9P6A
-         ggo56nfHaRpnQwmkt4uuajT4Yja1if+vAurWnf9KeKq7jzRQsi+U9Q6k8BSl79MKwk3E
-         bWoQ==
-X-Gm-Message-State: AOAM532lcqk0+QMM0BUQ7QTHij4dssRilRGE6p4aaXYBMLwYYNkmS7+Y
-        BhUEOlsi/3nHgBQG7EEaTrAq3aUCwQ+Avfw=
-X-Google-Smtp-Source: ABdhPJz9YUAclnREKPfkUSw/YVlrcGlYfdaexMLMRAzjJT1CtoYDbmyjdA8pza54fHB/e3zequa24JlX1KWu3NI=
+         :references:subject:from:to:cc;
+        bh=a5Dt/ckgrAR/j0DHD5MablupC6tRY3n4B+kc2OBEq1E=;
+        b=SqeZzfc+8ntXzL2kM7dXUdjekLhZu/YRWewJOkrMPWxHze+MozXXfblCvwKPKcypyC
+         DGT/CRxMoPZd1ZcbxbC0Kk15jKeyr8zyANV8eUqa7KmMpLiSkPj9F69XEKursHCZ3Inw
+         JI27sbtj/pn2l/0uM/oR8FcpIIgLxKPTajYahWb3Tz1YTZe1L9h8iLVomzpYvbKiXUaa
+         lAsrrQoHR05IU5fc09sw4npARoNcncwDp8tIhygzkclyfHx8blvdSogVVh7GEMnSdpr0
+         CMnpn7Xqaa1zGZO9q7Ej9UqE9phtC64FIXoaJsHQrWRMU2hvDOTgIijrlBMW/aWRXWTQ
+         Ip1g==
+X-Gm-Message-State: AOAM530qXuZShMZKAnx7Pmdcr20vwbuhOFUd6xTT9Tp6YvGq3zQBO4pS
+        X59yr1RY3esH7ipYO0zYvaVfSS38utg9Qa8=
+X-Google-Smtp-Source: ABdhPJzdLHhn1AB/XDC8KoTs36Zqp19ShJhHV1TSxCbFMU/1hAK+2Cj1Svo6KldgaODaBXyTBc9IHyUlIGkN9Zk=
 X-Received: from tj2.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:187])
- (user=tjmercier job=sendgmr) by 2002:a81:38c6:0:b0:2d7:ee4f:797b with SMTP id
- f189-20020a8138c6000000b002d7ee4f797bmr650786ywa.14.1646844768454; Wed, 09
- Mar 2022 08:52:48 -0800 (PST)
-Date:   Wed,  9 Mar 2022 16:52:15 +0000
+ (user=tjmercier job=sendgmr) by 2002:a5b:9c2:0:b0:611:ad59:be04 with SMTP id
+ y2-20020a5b09c2000000b00611ad59be04mr510975ybq.405.1646844775149; Wed, 09 Mar
+ 2022 08:52:55 -0800 (PST)
+Date:   Wed,  9 Mar 2022 16:52:17 +0000
 In-Reply-To: <20220309165222.2843651-1-tjmercier@google.com>
-Message-Id: <20220309165222.2843651-6-tjmercier@google.com>
+Message-Id: <20220309165222.2843651-8-tjmercier@google.com>
 Mime-Version: 1.0
 References: <20220309165222.2843651-1-tjmercier@google.com>
 X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [RFC v3 5/8] dmabuf: Add gpu cgroup charge transfer function
+Subject: [RFC v3 7/8] binder: use __kernel_pid_t and __kernel_uid_t for userspace
 From:   "T.J. Mercier" <tjmercier@google.com>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -84,109 +84,34 @@ Cc:     kaleshsingh@google.com, Kenny.Ho@amd.com,
         linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
         linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hridya Valsaraju <hridya@google.com>
+The kernel interface should use types that the kernel defines instead of
+pid_t and uid_t, whose definiton is owned by libc. This fixes the header
+so that it can be included without first including sys/types.h.
 
-The dma_buf_charge_transfer function provides a way for processes to
-transfer charge of a buffer to a different process. This is essential
-for the cases where a central allocator process does allocations for
-various subsystems, hands over the fd to the client who requested the
-memory and drops all references to the allocated memory.
-
-Signed-off-by: Hridya Valsaraju <hridya@google.com>
 Signed-off-by: T.J. Mercier <tjmercier@google.com>
-
 ---
-v3 changes
-Use more common dual author commit message format per John Stultz.
+ include/uapi/linux/android/binder.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v2 changes
-Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
-heap to a single dma-buf function for all heaps per Daniel Vetter and
-Christian K=C3=B6nig.
----
- drivers/dma-buf/dma-buf.c | 48 +++++++++++++++++++++++++++++++++++++++
- include/linux/dma-buf.h   |  2 ++
- 2 files changed, 50 insertions(+)
-
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 83d0d1b91547..55e1b982f840 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -1374,6 +1374,54 @@ void dma_buf_vunmap(struct dma_buf *dmabuf, struct d=
-ma_buf_map *map)
- }
- EXPORT_SYMBOL_NS_GPL(dma_buf_vunmap, DMA_BUF);
-=20
-+/**
-+ * dma_buf_charge_transfer - Change the GPU cgroup to which the provided d=
-ma_buf
-+ * is charged.
-+ * @dmabuf:	[in]	buffer whose charge will be migrated to a different GPU
-+ *			cgroup
-+ * @gpucg:	[in]	the destination GPU cgroup for dmabuf's charge
-+ *
-+ * Only tasks that belong to the same cgroup the buffer is currently charg=
-ed to
-+ * may call this function, otherwise it will return -EPERM.
-+ *
-+ * Returns 0 on success, or a negative errno code otherwise.
-+ */
-+int dma_buf_charge_transfer(struct dma_buf *dmabuf, struct gpucg *gpucg)
-+{
-+#ifdef CONFIG_CGROUP_GPU
-+	struct gpucg *current_gpucg;
-+	int ret =3D 0;
-+
-+	/*
-+	 * Verify that the cgroup of the process requesting the transfer is the
-+	 * same as the one the buffer is currently charged to.
-+	 */
-+	current_gpucg =3D gpucg_get(current);
-+	mutex_lock(&dmabuf->lock);
-+	if (current_gpucg !=3D dmabuf->gpucg) {
-+		ret =3D -EPERM;
-+		goto err;
-+	}
-+
-+	ret =3D gpucg_try_charge(gpucg, dmabuf->gpucg_dev, dmabuf->size);
-+	if (ret)
-+		goto err;
-+
-+	dmabuf->gpucg =3D gpucg;
-+
-+	/* uncharge the buffer from the cgroup it's currently charged to. */
-+	gpucg_uncharge(current_gpucg, dmabuf->gpucg_dev, dmabuf->size);
-+
-+err:
-+	mutex_unlock(&dmabuf->lock);
-+	gpucg_put(current_gpucg);
-+	return ret;
-+#else
-+	return 0;
-+#endif /* CONFIG_CGROUP_GPU */
-+}
-+EXPORT_SYMBOL_NS_GPL(dma_buf_charge_transfer, DMA_BUF);
-+
- #ifdef CONFIG_DEBUG_FS
- static int dma_buf_debug_show(struct seq_file *s, void *unused)
- {
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index 742f29c3daaf..85c940c08867 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -646,4 +646,6 @@ int dma_buf_mmap(struct dma_buf *, struct vm_area_struc=
-t *,
- 		 unsigned long);
- int dma_buf_vmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
- void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
-+
-+int dma_buf_charge_transfer(struct dma_buf *dmabuf, struct gpucg *gpucg);
- #endif /* __DMA_BUF_H__ */
---=20
+diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
+index 169fd5069a1a..aa28454dbca3 100644
+--- a/include/uapi/linux/android/binder.h
++++ b/include/uapi/linux/android/binder.h
+@@ -289,8 +289,8 @@ struct binder_transaction_data {
+ 
+ 	/* General information about the transaction. */
+ 	__u32	        flags;
+-	pid_t		sender_pid;
+-	uid_t		sender_euid;
++	__kernel_pid_t	sender_pid;
++	__kernel_uid_t	sender_euid;
+ 	binder_size_t	data_size;	/* number of bytes of data */
+ 	binder_size_t	offsets_size;	/* number of bytes of offsets */
+ 
+-- 
 2.35.1.616.g0bdcbb4464-goog
 
