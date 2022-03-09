@@ -2,31 +2,31 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 704B7C433EF
-	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 15:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC742C433FE
+	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 15:57:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234077AbiCIP6g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Mar 2022 10:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
+        id S234082AbiCIP6h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Mar 2022 10:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234078AbiCIP6e (ORCPT
+        with ESMTP id S234081AbiCIP6e (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 10:58:34 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F604C431
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 07:57:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6763CA47
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 07:57:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F40561450
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 15:57:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C816C340E8;
-        Wed,  9 Mar 2022 15:57:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 779FC61650
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 15:57:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FFDEC340F3;
+        Wed,  9 Mar 2022 15:57:33 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 3/6] cec: correctly pass on reply results
-Date:   Wed,  9 Mar 2022 16:57:23 +0100
-Message-Id: <20220309155726.1258388-4-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 5/6] cec: add xfer_timeout_ms field
+Date:   Wed,  9 Mar 2022 16:57:25 +0100
+Message-Id: <20220309155726.1258388-6-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220309155726.1258388-1-hverkuil-cisco@xs4all.nl>
 References: <20220309155726.1258388-1-hverkuil-cisco@xs4all.nl>
@@ -36,148 +36,117 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The results of non-blocking transmits were not correctly communicated
-to userspace.
+Allow drivers to change the transmit timeout value, i.e. after how
+long should a transmit be considered 'lost', i.e. the corresponding
+cec_transmit_done_ts was never called.
 
-Specifically:
-
-1) if a non-blocking transmit was canceled, then rx_status wasn't set to 0
-   as it should.
-2) if the non-blocking transmit succeeded, but the corresponding reply
-   never arrived (aborted or timed out), then tx_status wasn't set to 0
-   as it should, and rx_status was hardcoded to ABORTED instead of the
-   actual reason, such as TIMEOUT. In addition, adap->ops->received() was
-   never called, so drivers that want to do message processing themselves
-   would not be informed of the failed reply.
+Some CEC devices have their own timeout, and so this timeout value must be
+longer than that hardware timeout value. If it is shorter then the
+framework would consider the transmit lost, even though it is effectively
+still in progress at the hardware level.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/cec/core/cec-adap.c | 46 +++++++++++++++++++------------
- 1 file changed, 29 insertions(+), 17 deletions(-)
+ drivers/media/cec/core/cec-adap.c | 17 +++--------------
+ drivers/media/cec/core/cec-core.c | 14 ++++++++++++++
+ include/media/cec.h               |  3 +++
+ 3 files changed, 20 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
-index b096bf709f10..a8735697e84d 100644
+index a8735697e84d..77bfbd075420 100644
 --- a/drivers/media/cec/core/cec-adap.c
 +++ b/drivers/media/cec/core/cec-adap.c
-@@ -366,38 +366,48 @@ static void cec_data_completed(struct cec_data *data)
- /*
-  * A pending CEC transmit needs to be cancelled, either because the CEC
-  * adapter is disabled or the transmit takes an impossibly long time to
-- * finish.
-+ * finish, or the reply timed out.
-  *
-  * This function is called with adap->lock held.
-  */
--static void cec_data_cancel(struct cec_data *data, u8 tx_status)
-+static void cec_data_cancel(struct cec_data *data, u8 tx_status, u8 rx_status)
- {
-+	struct cec_adapter *adap = data->adap;
+@@ -27,18 +27,6 @@ static void cec_fill_msg_report_features(struct cec_adapter *adap,
+ 					 struct cec_msg *msg,
+ 					 unsigned int la_idx);
+ 
+-/*
+- * 400 ms is the time it takes for one 16 byte message to be
+- * transferred and 5 is the maximum number of retries. Add
+- * another 100 ms as a margin. So if the transmit doesn't
+- * finish before that time something is really wrong and we
+- * have to time out.
+- *
+- * This is a sign that something it really wrong and a warning
+- * will be issued.
+- */
+-#define CEC_XFER_TIMEOUT_MS (5 * 400 + 100)
+-
+ #define call_op(adap, op, arg...) \
+ 	(adap->ops->op ? adap->ops->op(adap, ## arg) : 0)
+ 
+@@ -492,7 +480,7 @@ int cec_thread_func(void *_adap)
+ 				kthread_should_stop() ||
+ 				(!adap->transmit_in_progress &&
+ 				 !list_empty(&adap->transmit_queue)),
+-				msecs_to_jiffies(CEC_XFER_TIMEOUT_MS));
++				msecs_to_jiffies(adap->xfer_timeout_ms));
+ 			timeout = err == 0;
+ 		} else {
+ 			/* Otherwise we just wait for something to happen. */
+@@ -518,7 +506,8 @@ int cec_thread_func(void *_adap)
+ 			 * adapter driver, or the CEC bus is in some weird
+ 			 * state. On rare occasions it can happen if there is
+ 			 * so much traffic on the bus that the adapter was
+-			 * unable to transmit for CEC_XFER_TIMEOUT_MS (2.1s).
++			 * unable to transmit for xfer_timeout_ms (2.1s by
++			 * default).
+ 			 */
+ 			if (adap->transmitting) {
+ 				pr_warn("cec-%s: message %*ph timed out\n", adap->name,
+diff --git a/drivers/media/cec/core/cec-core.c b/drivers/media/cec/core/cec-core.c
+index a3ab6a43fb14..d99aec468d24 100644
+--- a/drivers/media/cec/core/cec-core.c
++++ b/drivers/media/cec/core/cec-core.c
+@@ -20,6 +20,18 @@
+ #define CEC_NUM_DEVICES	256
+ #define CEC_NAME	"cec"
+ 
++/*
++ * 400 ms is the time it takes for one 16 byte message to be
++ * transferred and 5 is the maximum number of retries. Add
++ * another 100 ms as a margin. So if the transmit doesn't
++ * finish before that time something is really wrong and we
++ * have to time out.
++ *
++ * This is a sign that something it really wrong and a warning
++ * will be issued.
++ */
++#define CEC_XFER_TIMEOUT_MS (5 * 400 + 100)
 +
- 	/*
- 	 * It's either the current transmit, or it is a pending
- 	 * transmit. Take the appropriate action to clear it.
- 	 */
--	if (data->adap->transmitting == data) {
--		data->adap->transmitting = NULL;
-+	if (adap->transmitting == data) {
-+		adap->transmitting = NULL;
- 	} else {
- 		list_del_init(&data->list);
- 		if (!(data->msg.tx_status & CEC_TX_STATUS_OK))
--			if (!WARN_ON(!data->adap->transmit_queue_sz))
--				data->adap->transmit_queue_sz--;
-+			if (!WARN_ON(!adap->transmit_queue_sz))
-+				adap->transmit_queue_sz--;
- 	}
+ int cec_debug;
+ module_param_named(debug, cec_debug, int, 0644);
+ MODULE_PARM_DESC(debug, "debug level (0-2)");
+@@ -331,6 +343,8 @@ int cec_register_adapter(struct cec_adapter *adap,
  
- 	if (data->msg.tx_status & CEC_TX_STATUS_OK) {
- 		data->msg.rx_ts = ktime_get_ns();
--		data->msg.rx_status = CEC_RX_STATUS_ABORTED;
-+		data->msg.rx_status = rx_status;
-+		if (!data->blocking)
-+			data->msg.tx_status = 0;
- 	} else {
- 		data->msg.tx_ts = ktime_get_ns();
- 		data->msg.tx_status |= tx_status |
- 				       CEC_TX_STATUS_MAX_RETRIES;
- 		data->msg.tx_error_cnt++;
- 		data->attempts = 0;
-+		if (!data->blocking)
-+			data->msg.rx_status = 0;
- 	}
+ 	adap->owner = parent->driver->owner;
+ 	adap->devnode.dev.parent = parent;
++	if (!adap->xfer_timeout_ms)
++		adap->xfer_timeout_ms = CEC_XFER_TIMEOUT_MS;
  
- 	/* Queue transmitted message for monitoring purposes */
--	cec_queue_msg_monitor(data->adap, &data->msg, 1);
-+	cec_queue_msg_monitor(adap, &data->msg, 1);
-+
-+	if (!data->blocking && data->msg.sequence && adap->ops->received)
-+		/* Allow drivers to process the message first */
-+		adap->ops->received(adap, &data->msg);
+ #ifdef CONFIG_MEDIA_CEC_RC
+ 	if (adap->capabilities & CEC_CAP_RC) {
+diff --git a/include/media/cec.h b/include/media/cec.h
+index a2a9a5eebae8..7cf1e9caeb47 100644
+--- a/include/media/cec.h
++++ b/include/media/cec.h
+@@ -168,6 +168,8 @@ struct cec_adap_ops {
+  *			invalidated while the transmit is ongoing. In that
+  *			case the transmit will finish, but will not retransmit
+  *			and be marked as ABORTED.
++ * @xfer_timeout_ms:	the transfer timeout in ms.
++ *			If 0, then timeout after 2.1 ms.
+  * @kthread_config:	kthread used to configure a CEC adapter
+  * @config_completion:	used to signal completion of the config kthread
+  * @kthread:		main CEC processing thread
+@@ -223,6 +225,7 @@ struct cec_adapter {
+ 	struct cec_data *transmitting;
+ 	bool transmit_in_progress;
+ 	bool transmit_in_progress_aborted;
++	unsigned int xfer_timeout_ms;
  
- 	cec_data_completed(data);
- }
-@@ -418,7 +428,7 @@ static void cec_flush(struct cec_adapter *adap)
- 	while (!list_empty(&adap->transmit_queue)) {
- 		data = list_first_entry(&adap->transmit_queue,
- 					struct cec_data, list);
--		cec_data_cancel(data, CEC_TX_STATUS_ABORTED);
-+		cec_data_cancel(data, CEC_TX_STATUS_ABORTED, 0);
- 	}
- 	if (adap->transmitting)
- 		adap->transmit_in_progress_aborted = true;
-@@ -426,7 +436,7 @@ static void cec_flush(struct cec_adapter *adap)
- 	/* Cancel the pending timeout work. */
- 	list_for_each_entry_safe(data, n, &adap->wait_queue, list) {
- 		if (cancel_delayed_work(&data->work))
--			cec_data_cancel(data, CEC_TX_STATUS_OK);
-+			cec_data_cancel(data, CEC_TX_STATUS_OK, CEC_RX_STATUS_ABORTED);
- 		/*
- 		 * If cancel_delayed_work returned false, then
- 		 * the cec_wait_timeout function is running,
-@@ -516,7 +526,7 @@ int cec_thread_func(void *_adap)
- 					adap->transmitting->msg.msg);
- 				/* Just give up on this. */
- 				cec_data_cancel(adap->transmitting,
--						CEC_TX_STATUS_TIMEOUT);
-+						CEC_TX_STATUS_TIMEOUT, 0);
- 			} else {
- 				pr_warn("cec-%s: transmit timed out\n", adap->name);
- 			}
-@@ -576,7 +586,7 @@ int cec_thread_func(void *_adap)
- 		/* Tell the adapter to transmit, cancel on error */
- 		if (adap->ops->adap_transmit(adap, data->attempts,
- 					     signal_free_time, &data->msg))
--			cec_data_cancel(data, CEC_TX_STATUS_ABORTED);
-+			cec_data_cancel(data, CEC_TX_STATUS_ABORTED, 0);
- 		else
- 			adap->transmit_in_progress = true;
- 
-@@ -738,9 +748,7 @@ static void cec_wait_timeout(struct work_struct *work)
- 
- 	/* Mark the message as timed out */
- 	list_del_init(&data->list);
--	data->msg.rx_ts = ktime_get_ns();
--	data->msg.rx_status = CEC_RX_STATUS_TIMEOUT;
--	cec_data_completed(data);
-+	cec_data_cancel(data, CEC_TX_STATUS_OK, CEC_RX_STATUS_TIMEOUT);
- unlock:
- 	mutex_unlock(&adap->lock);
- }
-@@ -926,8 +934,12 @@ int cec_transmit_msg_fh(struct cec_adapter *adap, struct cec_msg *msg,
- 	mutex_lock(&adap->lock);
- 
- 	/* Cancel the transmit if it was interrupted */
--	if (!data->completed)
--		cec_data_cancel(data, CEC_TX_STATUS_ABORTED);
-+	if (!data->completed) {
-+		if (data->msg.tx_status & CEC_TX_STATUS_OK)
-+			cec_data_cancel(data, CEC_TX_STATUS_OK, CEC_RX_STATUS_ABORTED);
-+		else
-+			cec_data_cancel(data, CEC_TX_STATUS_ABORTED, 0);
-+	}
- 
- 	/* The transmit completed (possibly with an error) */
- 	*msg = data->msg;
+ 	struct task_struct *kthread_config;
+ 	struct completion config_completion;
 -- 
 2.34.1
 
