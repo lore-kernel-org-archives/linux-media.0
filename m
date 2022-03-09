@@ -2,56 +2,56 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13BF7C4167B
-	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 17:04:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CAF9C4167E
+	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 17:04:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237432AbiCIRFg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Mar 2022 12:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
+        id S237463AbiCIRFh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Mar 2022 12:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238986AbiCIRES (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 12:04:18 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC20A1A06CD
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 08:53:04 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dc1ce31261so19316407b3.6
-        for <linux-media@vger.kernel.org>; Wed, 09 Mar 2022 08:53:04 -0800 (PST)
+        with ESMTP id S238927AbiCIREM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 12:04:12 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BCD1B60BC
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 08:52:58 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d726bd83a2so18907007b3.20
+        for <linux-media@vger.kernel.org>; Wed, 09 Mar 2022 08:52:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=a5Dt/ckgrAR/j0DHD5MablupC6tRY3n4B+kc2OBEq1E=;
-        b=lf6qdnlnShM+NyA+sRumM9hivTRIGcCncGZbgQNzurEcC0PelK7f0Thi+M3ueh/60u
-         crlhMuUH1ipr0mpuDqyE8aJ84VySIaff1FD+fE9773Bt+fv449Jm3nP3wPIlVA+Qfzav
-         0k2WlYeS8LRPkeGvJS/ckcrKMSgPM5JtRDzCNqenqST8iJomE7l5mxPW2JqytjG7tKEz
-         E11F13r1PzT40iKei9VjsWcsCTlAVdI2efPX0/uTfWtH4OCy9bcb/rt71jwCVzpmmrbw
-         9TYlUoBsQKAMkXQRru4/JO9WydZpoUuui7gHXDFAFHPvAuocMffpVfEKhnWZZaGcVMZ7
-         KGKw==
+         :cc:content-transfer-encoding;
+        bh=iI4tUDTwn0xfO1TZ7KSGGMNGPVBXGkFL9ZZA2HGZghg=;
+        b=X9nwYEkE+WqweWRkaCswHljXOOyceq5HLfdQ2h5VCa5BOpSfIMw+CfpAA66J3vFCf2
+         DnzE9UQtPeSlxG8o9pCfRDINTOEaiKErWwiNx6nfsrU8fAK+ceVUAS2JHMQD+AbI1jw8
+         DKHKfrO6gE3o4AH5kcy/Xl/EwVhaZ69JUDtMIle7+RpS6ZagXNItEvUcdhXBvlHBpDzH
+         l3fyRMp2q68ITY/BLJ3Wo+w0+hl26SwqRm77pi7ScO/UoZYTYj89rffHavcoKPlf9R6l
+         UekpqNxes8w71bhq9KSVr3VQ8aymhFsdmRvHHLK69SFOrSb8FaW4zH7Z8JHbBxJrrLrt
+         fypw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=a5Dt/ckgrAR/j0DHD5MablupC6tRY3n4B+kc2OBEq1E=;
-        b=SqeZzfc+8ntXzL2kM7dXUdjekLhZu/YRWewJOkrMPWxHze+MozXXfblCvwKPKcypyC
-         DGT/CRxMoPZd1ZcbxbC0Kk15jKeyr8zyANV8eUqa7KmMpLiSkPj9F69XEKursHCZ3Inw
-         JI27sbtj/pn2l/0uM/oR8FcpIIgLxKPTajYahWb3Tz1YTZe1L9h8iLVomzpYvbKiXUaa
-         lAsrrQoHR05IU5fc09sw4npARoNcncwDp8tIhygzkclyfHx8blvdSogVVh7GEMnSdpr0
-         CMnpn7Xqaa1zGZO9q7Ej9UqE9phtC64FIXoaJsHQrWRMU2hvDOTgIijrlBMW/aWRXWTQ
-         Ip1g==
-X-Gm-Message-State: AOAM530qXuZShMZKAnx7Pmdcr20vwbuhOFUd6xTT9Tp6YvGq3zQBO4pS
-        X59yr1RY3esH7ipYO0zYvaVfSS38utg9Qa8=
-X-Google-Smtp-Source: ABdhPJzdLHhn1AB/XDC8KoTs36Zqp19ShJhHV1TSxCbFMU/1hAK+2Cj1Svo6KldgaODaBXyTBc9IHyUlIGkN9Zk=
+         :references:subject:from:to:cc:content-transfer-encoding;
+        bh=iI4tUDTwn0xfO1TZ7KSGGMNGPVBXGkFL9ZZA2HGZghg=;
+        b=QG53k6Fz0HmEcNE4hum8cjohagjQQPDeqK6bMq/Stw6ANSiIJbY2PaaXO9jZyJgO49
+         Or3FMhhtWyKSnje4TDGIBSOJxEDVXbvrJQcenFnlP36LVhPxHnXG6lEnwu4xP0Wi/u2w
+         1igb2X79t6ALSwSHXYHbCJUKD6tzoIi3xeY4O6OVyIBGqD6jf/39Ef3JoxgeLmY2uR4k
+         6nd/EQa6aVG+3QFEZUUVNLRkpwaM5ss1esYEmYdxlbJvsOxukCC/SAPFNV7LN8WoMZtl
+         J0qZ7CpmFlkFVZy8/zJiClK9BV4gTAKu9sVa8VxNbalIsNakYzjZ1Bm4rvGJr30GeJv5
+         xPtw==
+X-Gm-Message-State: AOAM531piXiTyzo5yuyUC4OJRrKtBouhIkPREXCY673wi5EcvBy1cJLw
+        Gc2ZkBSPF9T8XDb8PruBYRmRIn9gEHgLvOs=
+X-Google-Smtp-Source: ABdhPJyiYlANBNw1jaz9icxi5eZzNkYkUx7cFRm94KikzOWhS/qWZXLh4JI4RlXwg336vFv+RrJsOxkplJS3X04=
 X-Received: from tj2.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:187])
- (user=tjmercier job=sendgmr) by 2002:a5b:9c2:0:b0:611:ad59:be04 with SMTP id
- y2-20020a5b09c2000000b00611ad59be04mr510975ybq.405.1646844775149; Wed, 09 Mar
- 2022 08:52:55 -0800 (PST)
-Date:   Wed,  9 Mar 2022 16:52:17 +0000
+ (user=tjmercier job=sendgmr) by 2002:a81:397:0:b0:2db:645b:c8e5 with SMTP id
+ 145-20020a810397000000b002db645bc8e5mr567278ywd.421.1646844761009; Wed, 09
+ Mar 2022 08:52:41 -0800 (PST)
+Date:   Wed,  9 Mar 2022 16:52:13 +0000
 In-Reply-To: <20220309165222.2843651-1-tjmercier@google.com>
-Message-Id: <20220309165222.2843651-8-tjmercier@google.com>
+Message-Id: <20220309165222.2843651-4-tjmercier@google.com>
 Mime-Version: 1.0
 References: <20220309165222.2843651-1-tjmercier@google.com>
 X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [RFC v3 7/8] binder: use __kernel_pid_t and __kernel_uid_t for userspace
+Subject: [RFC v3 3/8] dmabuf: Use the GPU cgroup charge/uncharge APIs
 From:   "T.J. Mercier" <tjmercier@google.com>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -84,34 +84,194 @@ Cc:     kaleshsingh@google.com, Kenny.Ho@amd.com,
         linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
         linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The kernel interface should use types that the kernel defines instead of
-pid_t and uid_t, whose definiton is owned by libc. This fixes the header
-so that it can be included without first including sys/types.h.
+This patch uses the GPU cgroup charge/uncharge APIs to charge buffers
+allocated by any DMA-BUF exporter that exports a buffer with a GPU cgroup
+device association.
 
+By doing so, it becomes possible to track who allocated/exported a
+DMA-BUF even after the allocating process drops all references to a
+buffer.
+
+Originally-by: Hridya Valsaraju <hridya@google.com>
 Signed-off-by: T.J. Mercier <tjmercier@google.com>
----
- include/uapi/linux/android/binder.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
-index 169fd5069a1a..aa28454dbca3 100644
---- a/include/uapi/linux/android/binder.h
-+++ b/include/uapi/linux/android/binder.h
-@@ -289,8 +289,8 @@ struct binder_transaction_data {
- 
- 	/* General information about the transaction. */
- 	__u32	        flags;
--	pid_t		sender_pid;
--	uid_t		sender_euid;
-+	__kernel_pid_t	sender_pid;
-+	__kernel_uid_t	sender_euid;
- 	binder_size_t	data_size;	/* number of bytes of data */
- 	binder_size_t	offsets_size;	/* number of bytes of offsets */
- 
--- 
+---
+v3 changes
+Use more common dual author commit message format per John Stultz.
+
+v2 changes
+Move dma-buf cgroup charging/uncharging from a dma_buf_op defined by
+every heap to a single dma-buf function for all heaps per Daniel Vetter and
+Christian K=C3=B6nig.
+---
+ drivers/dma-buf/dma-buf.c | 52 +++++++++++++++++++++++++++++++++++++++
+ include/linux/dma-buf.h   | 20 +++++++++++++--
+ 2 files changed, 70 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index 602b12d7470d..83d0d1b91547 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -56,6 +56,50 @@ static char *dmabuffs_dname(struct dentry *dentry, char =
+*buffer, int buflen)
+ 			     dentry->d_name.name, ret > 0 ? name : "");
+ }
+=20
++#ifdef CONFIG_CGROUP_GPU
++static inline struct gpucg_device *
++exp_info_gpucg_dev(const struct dma_buf_export_info *exp_info)
++{
++	return exp_info->gpucg_dev;
++}
++
++static bool dmabuf_try_charge(struct dma_buf *dmabuf,
++			      struct gpucg_device *gpucg_dev)
++{
++	dmabuf->gpucg =3D gpucg_get(current);
++	dmabuf->gpucg_dev =3D gpucg_dev;
++	if (gpucg_try_charge(dmabuf->gpucg, dmabuf->gpucg_dev, dmabuf->size)) {
++		gpucg_put(dmabuf->gpucg);
++		dmabuf->gpucg =3D NULL;
++		dmabuf->gpucg_dev =3D NULL;
++		return false;
++	}
++	return true;
++}
++
++static void dmabuf_uncharge(struct dma_buf *dmabuf)
++{
++	if (dmabuf->gpucg && dmabuf->gpucg_dev) {
++		gpucg_uncharge(dmabuf->gpucg, dmabuf->gpucg_dev, dmabuf->size);
++		gpucg_put(dmabuf->gpucg);
++	}
++}
++#else /* CONFIG_CGROUP_GPU */
++static inline struct gpucg_device *exp_info_gpucg_dev(
++const struct dma_buf_export_info *exp_info)
++{
++	return NULL;
++}
++
++static inline bool dmabuf_try_charge(struct dma_buf *dmabuf,
++				     struct gpucg_device *gpucg_dev))
++{
++	return false;
++}
++
++static inline void dmabuf_uncharge(struct dma_buf *dmabuf) {}
++#endif /* CONFIG_CGROUP_GPU */
++
+ static void dma_buf_release(struct dentry *dentry)
+ {
+ 	struct dma_buf *dmabuf;
+@@ -79,6 +123,8 @@ static void dma_buf_release(struct dentry *dentry)
+ 	if (dmabuf->resv =3D=3D (struct dma_resv *)&dmabuf[1])
+ 		dma_resv_fini(dmabuf->resv);
+=20
++	dmabuf_uncharge(dmabuf);
++
+ 	WARN_ON(!list_empty(&dmabuf->attachments));
+ 	module_put(dmabuf->owner);
+ 	kfree(dmabuf->name);
+@@ -484,6 +530,7 @@ struct dma_buf *dma_buf_export(const struct dma_buf_exp=
+ort_info *exp_info)
+ {
+ 	struct dma_buf *dmabuf;
+ 	struct dma_resv *resv =3D exp_info->resv;
++	struct gpucg_device *gpucg_dev =3D exp_info_gpucg_dev(exp_info);
+ 	struct file *file;
+ 	size_t alloc_size =3D sizeof(struct dma_buf);
+ 	int ret;
+@@ -534,6 +581,9 @@ struct dma_buf *dma_buf_export(const struct dma_buf_exp=
+ort_info *exp_info)
+ 	}
+ 	dmabuf->resv =3D resv;
+=20
++	if (gpucg_dev && !dmabuf_try_charge(dmabuf, gpucg_dev))
++		goto err_charge;
++
+ 	file =3D dma_buf_getfile(dmabuf, exp_info->flags);
+ 	if (IS_ERR(file)) {
+ 		ret =3D PTR_ERR(file);
+@@ -565,6 +615,8 @@ struct dma_buf *dma_buf_export(const struct dma_buf_exp=
+ort_info *exp_info)
+ 	file->f_path.dentry->d_fsdata =3D NULL;
+ 	fput(file);
+ err_dmabuf:
++	dmabuf_uncharge(dmabuf);
++err_charge:
+ 	kfree(dmabuf);
+ err_module:
+ 	module_put(exp_info->owner);
+diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+index 7ab50076e7a6..742f29c3daaf 100644
+--- a/include/linux/dma-buf.h
++++ b/include/linux/dma-buf.h
+@@ -13,6 +13,7 @@
+ #ifndef __DMA_BUF_H__
+ #define __DMA_BUF_H__
+=20
++#include <linux/cgroup_gpu.h>
+ #include <linux/dma-buf-map.h>
+ #include <linux/file.h>
+ #include <linux/err.h>
+@@ -303,7 +304,7 @@ struct dma_buf {
+ 	/**
+ 	 * @size:
+ 	 *
+-	 * Size of the buffer; invariant over the lifetime of the buffer.
++	 * Size of the buffer in bytes; invariant over the lifetime of the buffer=
+.
+ 	 */
+ 	size_t size;
+=20
+@@ -453,6 +454,17 @@ struct dma_buf {
+ 		struct dma_buf *dmabuf;
+ 	} *sysfs_entry;
+ #endif
++
++#ifdef CONFIG_CGROUP_GPU
++	/** @gpucg: Pointer to the cgroup this buffer currently belongs to. */
++	struct gpucg *gpucg;
++
++	/** @gpucg_dev:
++	 *
++	 * Pointer to the cgroup GPU device whence this buffer originates.
++	 */
++	struct gpucg_device *gpucg_dev;
++#endif
+ };
+=20
+ /**
+@@ -529,9 +541,10 @@ struct dma_buf_attachment {
+  * @exp_name:	name of the exporter - useful for debugging.
+  * @owner:	pointer to exporter module - used for refcounting kernel module
+  * @ops:	Attach allocator-defined dma buf ops to the new buffer
+- * @size:	Size of the buffer - invariant over the lifetime of the buffer
++ * @size:	Size of the buffer in bytes - invariant over the lifetime of the=
+ buffer
+  * @flags:	mode flags for the file
+  * @resv:	reservation-object, NULL to allocate default one
++ * @gpucg_dev:	pointer to the gpu cgroup device this buffer belongs to
+  * @priv:	Attach private data of allocator to this buffer
+  *
+  * This structure holds the information required to export the buffer. Use=
+d
+@@ -544,6 +557,9 @@ struct dma_buf_export_info {
+ 	size_t size;
+ 	int flags;
+ 	struct dma_resv *resv;
++#ifdef CONFIG_CGROUP_GPU
++	struct gpucg_device *gpucg_dev;
++#endif
+ 	void *priv;
+ };
+=20
+--=20
 2.35.1.616.g0bdcbb4464-goog
 
