@@ -2,115 +2,66 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F36BC433F5
-	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 17:10:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25E7BC433F5
+	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 17:14:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236789AbiCIRLB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Mar 2022 12:11:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
+        id S237079AbiCIRPu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Mar 2022 12:15:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237035AbiCIRKo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 12:10:44 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D5ABBE1A;
-        Wed,  9 Mar 2022 09:02:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646845367; x=1678381367;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OkzOLsVy4bRJDx790ntahgYsXuWH4OdPbeR3N+MAs4w=;
-  b=fNzBSjolukK7hTgIQpar7fJde2+1hgaW+Eq9cgM+URzYcTzzO20qL332
-   cjnLjJwbnbSRHMWxIo4ltXApZPFTuba1tqe/xagVGYcPmiK7CZLJIhmKm
-   uFfViolQ09MQME5mRPdp9NYLNffNS7bcvqFq0gVqo7LdaHTnrL1rV6NQF
-   jsMZjV2OIJNkVXrS7a8YOlwkdKRTPXyiGQ8Pfw77V8IeJrbwFGg3v8+tp
-   5zGJjTaFBZZzIHM51UpNEpVmQa9GNvGMPBI33oQR4gyYjtH6GII8ZvZk9
-   A6SsTIr5j1fKzokTd59ewMyHDm5CozeVTE1+0YplR3SSZsn1I0h8XZE+v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="254761940"
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="254761940"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 08:50:42 -0800
-X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
-   d="scan'208";a="644096964"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 08:50:39 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 711152051A;
-        Wed,  9 Mar 2022 18:50:37 +0200 (EET)
-Date:   Wed, 9 Mar 2022 18:50:37 +0200
+        with ESMTP id S238961AbiCIRPS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 12:15:18 -0500
+Received: from hillosipuli.retiisi.eu (retiisi.eu [95.216.213.190])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2DB2656F
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 09:12:07 -0800 (PST)
+Received: from lanttu.localdomain (unknown [IPv6:fd35:1bc8:1a6:d3d5::c1:2])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id DFBC0634C90;
+        Wed,  9 Mar 2022 19:12:04 +0200 (EET)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Kate Hsuan <hpa@redhat.com>
-Cc:     Bingbu Cao <bingbu.cao@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, hdegoede@redhat.com
-Subject: Re: [PATCH v2] staging: media: ipu3: Fix AF x_start position when
- rightmost stripe is used
-Message-ID: <Yija3YQ55gvCtKdR@paasikivi.fi.intel.com>
-References: <20220309063456.102895-1-hpa@redhat.com>
+To:     linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH 1/1] media: Documentation: mc: Add media_device_{init,cleanup}
+Date:   Wed,  9 Mar 2022 19:10:06 +0200
+Message-Id: <20220309171006.12327-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220309063456.102895-1-hpa@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Kate,
+Document that drivers must first initialise a media device before
+registering it, and clean up once the media device is unregistered.
 
-Thanks for the update.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ Documentation/driver-api/media/mc-core.rst | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-On Wed, Mar 09, 2022 at 02:34:56PM +0800, Kate Hsuan wrote:
-> For the AF configuration, if the rightmost stripe is used, the AF scene
-> will be at the incorrect location of the sensor.
-> 
-> The AF coordinate may be set to the right part of the sensor. This
-> configuration would lead to x_start being greater than the
-> down_scaled_stripes offset and the leftmost stripe would be disabled
-> and only the rightmost stripe is used to control the AF coordinate. If
-> the x_start doesn't perform any adjustments, the AF coordinate will be
-> at the wrong place of the sensor since down_scaled_stripes offset
-> would be the new zero of the coordinate system.
-> 
-> In this patch, if only the rightmost stripe is used, x_start should
-> minus down_scaled_stripes offset to maintain its correctness of AF
-> scene coordinate.
-> 
-> Changes in v2:
-> 1. Remove the setting of the first stripe.
-> 
-> Signed-off-by: Kate Hsuan <hpa@redhat.com>
-> ---
->  drivers/staging/media/ipu3/ipu3-css-params.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/staging/media/ipu3/ipu3-css-params.c b/drivers/staging/media/ipu3/ipu3-css-params.c
-> index d9e3c3785075..5a8c07f34756 100644
-> --- a/drivers/staging/media/ipu3/ipu3-css-params.c
-> +++ b/drivers/staging/media/ipu3/ipu3-css-params.c
-> @@ -2556,6 +2556,10 @@ int imgu_css_cfg_acc(struct imgu_css *css, unsigned int pipe,
->  		/* Enable only for rightmost stripe, disable left */
->  		acc->af.stripes[0].grid_cfg.y_start &=
->  			~IPU3_UAPI_GRID_Y_START_EN;
-> +		acc->af.stripes[1].grid_cfg.x_start -=
-> +			acc->stripe.down_scaled_stripes[1].offset;
-> +		acc->af.stripes[1].grid_cfg.x_end -=
-> +			acc->stripe.down_scaled_stripes[1].offset;
-
-Could you calculate these the same way as in the case both stripes are
-enabled? Some bits in x_start is masked and then x_end is calculated from
-width.
-
->  	} else if (acc->af.config.grid_cfg.x_end <=
->  		   acc->stripe.bds_out_stripes[0].width - min_overlap) {
->  		/* Enable only for leftmost stripe, disable right */
-
+diff --git a/Documentation/driver-api/media/mc-core.rst b/Documentation/driver-api/media/mc-core.rst
+index 57b5bbba944e..02481a2513b9 100644
+--- a/Documentation/driver-api/media/mc-core.rst
++++ b/Documentation/driver-api/media/mc-core.rst
+@@ -42,9 +42,16 @@ Allocation of the structure is handled by the media device driver, usually by
+ embedding the :c:type:`media_device` instance in a larger driver-specific
+ structure.
+ 
+-Drivers register media device instances by calling
+-:c:func:`__media_device_register()` via the macro ``media_device_register()``
+-and unregistered by calling :c:func:`media_device_unregister()`.
++Drivers initialise media device instances by calling
++:c:func:`media_device_init()`. After initialising a media device instance, it is
++registered by calling :c:func:`__media_device_register()` via the macro
++``media_device_register()`` and unregistered by calling
++:c:func:`media_device_unregister()`. An initialised media device must be
++eventually cleaned up by calling :c:func:`media_device_cleanup()`.
++
++Note that it is not allowed to unregister a media device instance that was not
++previously registered, or clean up a media device instance that was not
++previously initialised.
+ 
+ Entities
+ ^^^^^^^^
 -- 
-Regards,
+2.30.2
 
-Sakari Ailus
