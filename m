@@ -2,70 +2,135 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 651C5C433F5
-	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 15:44:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0761DC433EF
+	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 15:45:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233787AbiCIPpL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Mar 2022 10:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
+        id S233934AbiCIPql (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Mar 2022 10:46:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbiCIPpJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 10:45:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E100B46
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 07:44:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9C05B8216D
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 15:44:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E78EBC340E8;
-        Wed,  9 Mar 2022 15:44:01 +0000 (UTC)
-Message-ID: <6f09ba9c-c6fd-2c46-46c2-7250022bd81c@xs4all.nl>
-Date:   Wed, 9 Mar 2022 16:43:59 +0100
+        with ESMTP id S232134AbiCIPqk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 10:46:40 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4BB1107C8
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 07:45:41 -0800 (PST)
+Received: from [IPV6:2a01:e0a:169:7140:3734:287e:1a7f:9772] (unknown [IPv6:2a01:e0a:169:7140:3734:287e:1a7f:9772])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4AFD2A50;
+        Wed,  9 Mar 2022 16:45:40 +0100 (CET)
+Message-ID: <d22add5e-8c39-e5b9-453d-4a4ff809d098@gmail.com>
+Date:   Wed, 9 Mar 2022 16:45:37 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [bug report] media: amphion: add vpu core driver
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 4/5] media: entity: Add support for ancillary links
 Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     ming.qian@nxp.com, linux-media@vger.kernel.org
-References: <20220309104337.GA29869@kili>
- <c662ab37-6e47-59f1-0bbc-4003b905f70a@xs4all.nl>
- <20220309152033.GY3315@kadam>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220309152033.GY3315@kadam>
-Content-Type: text/plain; charset=UTF-8
+To:     Daniel Scally <djrscally@gmail.com>, linux-media@vger.kernel.org,
+        libcamera-devel@lists.libcamera.org
+Cc:     sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
+        hanlinchen@chromium.org, tfiga@chromium.org, hdegoede@redhat.com,
+        kieran.bingham@ideasonboard.com, hpa@redhat.com
+References: <20220302220304.1327896-1-djrscally@gmail.com>
+ <20220302220304.1327896-5-djrscally@gmail.com>
+From:   Jean-Michel Hautbois <jeanmichel.hautbois@gmail.com>
+In-Reply-To: <20220302220304.1327896-5-djrscally@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi !
 
+Thanks for the patch !
 
-On 3/9/22 16:20, Dan Carpenter wrote:
-> On Wed, Mar 09, 2022 at 02:33:20PM +0100, Hans Verkuil wrote:
->> Hi Dan,
->>
->> On 3/9/22 11:43, Dan Carpenter wrote:
->>> Hello Ming Qian,
->>>
->>> The patch 9f599f351e86: "media: amphion: add vpu core driver" from
->>> Feb 24, 2022, leads to the following Smatch static checker warning:
->>>
->>> 	drivers/media/platform/amphion/vpu_core.c:654 vpu_core_probe()
->>> 	warn: pm_runtime_get_sync() also returns 1 on success
->>
->> Odd, I didn't get this warning when I ran smatch.
+On 02/03/2022 23:03, Daniel Scally wrote:
+> Add functions to create ancillary links, so that they don't need to
+> be manually created by users.
 > 
-> Sorry, I will push this Smatch check tomorrow.  It's simple and has few
-> false positives.
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Daniel Scally <djrscally@gmail.com>
 
-Ah! I suddenly feel a lot less guilty for having missed this issue in the
-amphion driver :-)
+Reviewed-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 
-Looking forward to this new check!
+> ---
+> 
+> Changes since v2:
+> 
+> 	- Fixed some typos and comment phrasing (Laurent)
+> 	- Changed the position of the new function to go after media_entity_call()
+> 	(Laurent)
+> 
+> Changes since v1:
+> 
+> 	- Hardcoded MEDIA_LINK_FL_IMMUTABLE and MEDIA_LINK_FL_ENABLED (Laurent)
+> 
+> Changes since the rfc:
+> 
+> 	- (Laurent) Set gobj0 and gobj1 directly instead of the other union
+> 	members
+> 	- (Laurent) Added MEDIA_LNK_FL_IMMUTABLE to the kerneldoc for the new
+> 	create function
+> 
+>   drivers/media/mc/mc-entity.c | 22 ++++++++++++++++++++++
+>   include/media/media-entity.h | 19 +++++++++++++++++++
+>   2 files changed, 41 insertions(+)
+> 
+> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+> index 1a7d0a4fb9e8..d7e2f78a83cc 100644
+> --- a/drivers/media/mc/mc-entity.c
+> +++ b/drivers/media/mc/mc-entity.c
+> @@ -1032,3 +1032,25 @@ void media_remove_intf_links(struct media_interface *intf)
+>   	mutex_unlock(&mdev->graph_mutex);
+>   }
+>   EXPORT_SYMBOL_GPL(media_remove_intf_links);
+> +
+> +struct media_link *media_create_ancillary_link(struct media_entity *primary,
+> +					       struct media_entity *ancillary)
+> +{
+> +	struct media_link *link;
+> +
+> +	link = media_add_link(&primary->links);
+> +	if (!link)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	link->gobj0 = &primary->graph_obj;
+> +	link->gobj1 = &ancillary->graph_obj;
+> +	link->flags = MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED |
+> +		      MEDIA_LNK_FL_ANCILLARY_LINK;
+> +
+> +	/* Initialize graph object embedded in the new link */
+> +	media_gobj_create(primary->graph_obj.mdev, MEDIA_GRAPH_LINK,
+> +			  &link->graph_obj);
+> +
+> +	return link;
+> +}
+> +EXPORT_SYMBOL_GPL(media_create_ancillary_link);
+> diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+> index fea489f03d57..2a58defc4886 100644
+> --- a/include/media/media-entity.h
+> +++ b/include/media/media-entity.h
+> @@ -1108,4 +1108,23 @@ void media_remove_intf_links(struct media_interface *intf);
+>   	(((entity)->ops && (entity)->ops->operation) ?			\
+>   	 (entity)->ops->operation((entity) , ##args) : -ENOIOCTLCMD)
+>   
+> +/**
+> + * media_create_ancillary_link() - create an ancillary link between two
+> + *				   instances of &media_entity
+> + *
+> + * @primary:	pointer to the primary &media_entity
+> + * @ancillary:	pointer to the ancillary &media_entity
+> + *
+> + * Create an ancillary link between two entities, indicating that they
+> + * represent two connected pieces of hardware that form a single logical unit.
+> + * A typical example is a camera lens controller being linked to the sensor that
+> + * it is supporting.
+> + *
+> + * The function sets both MEDIA_LNK_FL_ENABLED and MEDIA_LNK_FL_IMMUTABLE for
+> + * the new link.
+> + */
+> +struct media_link *
+> +media_create_ancillary_link(struct media_entity *primary,
+> +			    struct media_entity *ancillary);
+> +
+>   #endif
 
-Regards,
-
-	Hans
