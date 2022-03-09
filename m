@@ -2,84 +2,139 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FFD3C433FE
-	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 16:43:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7EBBC433EF
+	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 16:44:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbiCIQoi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Mar 2022 11:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        id S235210AbiCIQpw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Mar 2022 11:45:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237467AbiCIQkO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 11:40:14 -0500
-Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.eu [IPv6:2a01:4f9:c010:4572::81:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880F714A6CC
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 08:33:13 -0800 (PST)
-Received: from lanttu.localdomain (unknown [IPv6:fd35:1bc8:1a6:d3d5::c1:2])
-        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 58178634C92;
-        Wed,  9 Mar 2022 18:33:11 +0200 (EET)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
-Subject: [PATCH v3 2/5] mc: media_device_init() initialises a media_device, not media_entity
-Date:   Wed,  9 Mar 2022 18:31:09 +0200
-Message-Id: <20220309163112.11708-3-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220309163112.11708-1-sakari.ailus@linux.intel.com>
-References: <20220309163112.11708-1-sakari.ailus@linux.intel.com>
+        with ESMTP id S235297AbiCIQnt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 11:43:49 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE0626C8;
+        Wed,  9 Mar 2022 08:38:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646843892; x=1678379892;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HQ/1ekkK2Glo5J9Tadu/4CMzDFw9pCNql8ud3BmoP9Y=;
+  b=IOOPX+ILQ0aiBP1DchYlU8v3mhVGWlnfY5rn//rLI0CZy2wNJu0sD45D
+   9wCFy+NujVkQbvfElaG8jw7m5g9p4KhrnLLcomQIj78HoNqw+wRYnsufh
+   1XxhKWsHXk/CKINAz21CLHu2GFeQ18X+E2PHmgQSUJi4R2S1cqBHLLvCd
+   sh9gsNuTgP6+yg+NP+iYJWDEHfe9NR3fPzR1p9MXj/6uUGAtMGzlMhxq4
+   tBd9lloK7L6SI1oJGQdsZ5FVh9G03NXi9bG4luDG/MExxtdtyZvy+HNaz
+   zr+y6god+2P5h11tbJ7DfRcM5u8Q/DpS0uYCZT9awCSJzaezLLCUG1yQN
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,167,1643698800"; 
+   d="scan'208";a="151431904"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Mar 2022 09:38:12 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 9 Mar 2022 09:38:11 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 9 Mar 2022 09:38:05 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <linux-media@vger.kernel.org>, <jacopo@jmondi.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <claudiu.beznea@microchip.com>, <robh+dt@kernel.org>,
+        <nicolas.ferre@microchip.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [PATCH v8 00/13] media: atmel: atmel-isc: implement media controller
+Date:   Wed, 9 Mar 2022 18:37:45 +0200
+Message-ID: <20220309163758.2672727-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The documentation for media_device_init() had several references to
-(struct) media_entity where it should have referred to struct media_device
-instead. Fix this.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- include/media/media-device.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+This series is the v8 series that attempts to support media controller in the
+atmel ISC and XISC drivers.
+The CSI2DC driver was accepted thus removed from the patch series, together with
+other patches.
 
-diff --git a/include/media/media-device.h b/include/media/media-device.h
-index 7d5b212792a5..bc015d2cf541 100644
---- a/include/media/media-device.h
-+++ b/include/media/media-device.h
-@@ -249,28 +249,28 @@ void media_device_cleanup(struct media_device *mdev);
-  * The caller is responsible for initializing the &media_device structure
-  * before registration. The following fields of &media_device must be set:
-  *
-- *  - &media_entity.dev must point to the parent device (usually a &pci_dev,
-+ *  - &media_device.dev must point to the parent device (usually a &pci_dev,
-  *    &usb_interface or &platform_device instance).
-  *
-- *  - &media_entity.model must be filled with the device model name as a
-+ *  - &media_device.model must be filled with the device model name as a
-  *    NUL-terminated UTF-8 string. The device/model revision must not be
-  *    stored in this field.
-  *
-  * The following fields are optional:
-  *
-- *  - &media_entity.serial is a unique serial number stored as a
-+ *  - &media_device.serial is a unique serial number stored as a
-  *    NUL-terminated ASCII string. The field is big enough to store a GUID
-  *    in text form. If the hardware doesn't provide a unique serial number
-  *    this field must be left empty.
-  *
-- *  - &media_entity.bus_info represents the location of the device in the
-+ *  - &media_device.bus_info represents the location of the device in the
-  *    system as a NUL-terminated ASCII string. For PCI/PCIe devices
-- *    &media_entity.bus_info must be set to "PCI:" (or "PCIe:") followed by
-+ *    &media_device.bus_info must be set to "PCI:" (or "PCIe:") followed by
-  *    the value of pci_name(). For USB devices,the usb_make_path() function
-  *    must be used. This field is used by applications to distinguish between
-  *    otherwise identical devices that don't provide a serial number.
-  *
-- *  - &media_entity.hw_revision is the hardware device revision in a
-+ *  - &media_device.hw_revision is the hardware device revision in a
-  *    driver-specific format. When possible the revision should be formatted
-  *    with the KERNEL_VERSION() macro.
-  *
+Important note: this series applies on top of current media_staging tree, as it
+relies on previous patches in the series which were accepted.
+
+Thanks to everyone who reviewed my work !
+
+Eugen
+
+Changes in v8:
+-> scaler: modified crop bounds to have the exact source size
+
+Changes in v7:
+-> scaler: modified crop bounds to have maximum isc size
+-> format propagation: did small changes as per Jacopo review
+
+
+Changes in v6:
+-> worked a bit on scaler, added try crop and other changes as per Jacopo review
+-> worked on isc-base enum_fmt , reworked as per Jacopo review
+
+Changes in v5:
+-> removed patch that removed the 'stop' variable as it was still required
+-> added two new trivial patches
+-> reworked some parts of the scaler and format propagation after discussions with Jacopo
+
+
+Changes in v4:
+-> as reviewed by Hans, added new patch to remove the 'stop' variable and reworked
+one patch that was using it
+-> as reviewed by Jacopo, reworked some parts of the media controller implementation
+
+
+Changes in v3:
+- change in bindings, small fixes in csi2dc driver and conversion to mc
+for the isc-base.
+- removed some MAINTAINERS patches and used patterns in MAINTAINERS
+
+Changes in v2:
+- integrated many changes suggested by Jacopo in the review of the v1 series.
+- add a few new patches
+
+
+Eugen Hristev (13):
+  media: atmel: atmel-isc-base: use streaming status when queueing
+    buffers
+  media: atmel: atmel-isc-base: replace is_streaming call in
+    s_fmt_vid_cap
+  media: atmel: atmel-isc: remove redundant comments
+  media: atmel: atmel-isc: implement media controller
+  media: atmel: atmel-sama5d2-isc: fix wrong mask in YUYV format check
+  media: atmel: atmel-isc-base: use mutex to lock awb workqueue from
+    streaming
+  media: atmel: atmel-isc: compact the controller formats list
+  media: atmel: atmel-isc: change format propagation to subdev into only
+    verification
+  media: atmel: atmel-sama7g5-isc: remove stray line
+  dt-bindings: media: microchip,xisc: add bus-width of 14
+  ARM: dts: at91: sama7g5: add nodes for video capture
+  ARM: configs: at91: sama7: add xisc and csi2dc
+  ARM: multi_v7_defconfig: add atmel video pipeline modules
+
+ .../bindings/media/microchip,xisc.yaml        |   2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                |  49 ++
+ arch/arm/configs/multi_v7_defconfig           |   3 +
+ arch/arm/configs/sama7_defconfig              |   2 +
+ drivers/media/platform/atmel/Makefile         |   2 +-
+ drivers/media/platform/atmel/atmel-isc-base.c | 518 ++++++++++--------
+ .../media/platform/atmel/atmel-isc-scaler.c   | 267 +++++++++
+ drivers/media/platform/atmel/atmel-isc.h      |  58 +-
+ .../media/platform/atmel/atmel-sama5d2-isc.c  |  87 +--
+ .../media/platform/atmel/atmel-sama7g5-isc.c  |  93 ++--
+ 10 files changed, 754 insertions(+), 327 deletions(-)
+ create mode 100644 drivers/media/platform/atmel/atmel-isc-scaler.c
+
 -- 
-2.30.2
+2.25.1
 
