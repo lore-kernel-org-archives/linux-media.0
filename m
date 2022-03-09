@@ -2,87 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30799C433F5
-	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 16:36:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEF88C433F5
+	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 16:43:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbiCIQhF convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Mar 2022 11:37:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S235415AbiCIQoM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Mar 2022 11:44:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbiCIQey (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 11:34:54 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9703FA1BFA
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 08:29:53 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nRzCB-000641-6H; Wed, 09 Mar 2022 17:29:51 +0100
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nRzCB-003iSZ-5n; Wed, 09 Mar 2022 17:29:50 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nRzC9-000BuZ-BC; Wed, 09 Mar 2022 17:29:49 +0100
-Message-ID: <25171f0f4e2712fdcae7b2fc2e7792f8f744db6c.camel@pengutronix.de>
-Subject: Re: [PATCH v2 2/2] media: coda: Add more H264 levels for CODA960
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Fabio Estevam <festevam@gmail.com>, hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, nicolas.dufresne@collabora.com,
-        ezequiel@collabora.com, kernel@iktek.de, stable@vger.kernel.org,
-        Fabio Estevam <festevam@denx.de>
-Date:   Wed, 09 Mar 2022 17:29:49 +0100
-In-Reply-To: <d75bbdb1fd01f0c1ff89efe1369860cfccc52f5f.camel@pengutronix.de>
-References: <20220309143322.1755281-1-festevam@gmail.com>
-         <20220309143322.1755281-2-festevam@gmail.com>
-         <d75bbdb1fd01f0c1ff89efe1369860cfccc52f5f.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        with ESMTP id S237456AbiCIQkO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 11:40:14 -0500
+Received: from hillosipuli.retiisi.eu (hillosipuli.retiisi.eu [IPv6:2a01:4f9:c010:4572::81:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2227914A231
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 08:33:13 -0800 (PST)
+Received: from lanttu.localdomain (unknown [IPv6:fd35:1bc8:1a6:d3d5::c1:2])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 5E0A5634C93;
+        Wed,  9 Mar 2022 18:33:11 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, hverkuil@xs4all.nl
+Subject: [PATCH v3 3/5] mc: Provide a helper for setting bus_info field
+Date:   Wed,  9 Mar 2022 18:31:10 +0200
+Message-Id: <20220309163112.11708-4-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220309163112.11708-1-sakari.ailus@linux.intel.com>
+References: <20220309163112.11708-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Fabio, Nicolas,
+The bus_info or a similar field exists in a lot of structs, yet drivers
+tend to set the value of that field by themselves in a determinable way.
+Thus provide a helper for doing this. To be used in subsequent patches.
 
-On Mi, 2022-03-09 at 17:20 +0100, Philipp Zabel wrote:
-[...]
-> I still think this is wrong [1], the vendor only advertises support
-> for level 4.0. At least level 5.0 must be dropped, as we don't
-> support the frame size requirement.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ include/media/media-device.h | 30 +++++++++++++++++++++++++++---
+ 1 file changed, 27 insertions(+), 3 deletions(-)
 
-Looking at my notes, I've never seen the encoder produce streams with
-levels 1.1, 1.2, 1.3, 2.1, 2.2, or 4.1. Has anybody else?
-Level 4.2 streams can be produced though, just not at realtime speeds.
+diff --git a/include/media/media-device.h b/include/media/media-device.h
+index bc015d2cf541..2122d15bde4e 100644
+--- a/include/media/media-device.h
++++ b/include/media/media-device.h
+@@ -13,12 +13,13 @@
+ 
+ #include <linux/list.h>
+ #include <linux/mutex.h>
++#include <linux/pci.h>
++#include <linux/platform_device.h>
+ 
+ #include <media/media-devnode.h>
+ #include <media/media-entity.h>
+ 
+ struct ida;
+-struct device;
+ struct media_device;
+ 
+ /**
+@@ -181,8 +182,7 @@ struct media_device {
+ 	atomic_t request_id;
+ };
+ 
+-/* We don't need to include pci.h or usb.h here */
+-struct pci_dev;
++/* We don't need to include usb.h here */
+ struct usb_device;
+ 
+ #ifdef CONFIG_MEDIA_CONTROLLER
+@@ -502,4 +502,28 @@ static inline void __media_device_usb_init(struct media_device *mdev,
+ #define media_device_usb_init(mdev, udev, name) \
+ 	__media_device_usb_init(mdev, udev, name, KBUILD_MODNAME)
+ 
++
++/**
++ * media_set_bus_info() - Set bus_info field
++ *
++ * @bus_info:		Variable where to write the bus info (char array)
++ * @bus_info_size:	Length of the bus_info
++ * @dev:		Related struct device
++ *
++ * Sets bus information based on &dev. This is currently done for PCI and
++ * platform devices. dev is required to be non-NULL for this to happen.
++ *
++ * This function is not meant to be called from drivers.
++ */
++static inline void
++media_set_bus_info(char *bus_info, size_t bus_info_size, struct device *dev)
++{
++	if (!dev)
++		strscpy(bus_info, "no bus info", bus_info_size);
++	else if (dev_is_platform(dev))
++		snprintf(bus_info, bus_info_size, "platform:%s", dev_name(dev));
++	else if (dev_is_pci(dev))
++		snprintf(bus_info, bus_info_size, "PCI:%s", dev_name(dev));
++}
++
+ #endif
+-- 
+2.30.2
 
-Also, this encoder control change has no effect unless max is changed
-as well. I think it should look as follows:
-
- 	if (ctx->dev->devtype->product == CODA_960) {
- 		v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
- 			V4L2_CID_MPEG_VIDEO_H264_LEVEL,
--			V4L2_MPEG_VIDEO_H264_LEVEL_4_0,
--			~((1 << V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
-+			V4L2_MPEG_VIDEO_H264_LEVEL_4_2,
-+			~((1 << V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
-+			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
- 			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
- 			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
- 			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
--			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_4_0)),
-+			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_4_0) |
-+			  (1 << V4L2_MPEG_VIDEO_H264_LEVEL_4_2)),
- 			V4L2_MPEG_VIDEO_H264_LEVEL_4_0);
- 	}
- 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
-
-regards
-Philipp
