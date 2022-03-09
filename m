@@ -2,31 +2,31 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC742C433FE
-	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 15:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3200C433F5
+	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 15:57:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234082AbiCIP6h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Mar 2022 10:58:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
+        id S234081AbiCIP6i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Mar 2022 10:58:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234081AbiCIP6e (ORCPT
+        with ESMTP id S234079AbiCIP6e (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 10:58:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6763CA47
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 07:57:34 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA56847AE7
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 07:57:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 779FC61650
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 15:57:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FFDEC340F3;
-        Wed,  9 Mar 2022 15:57:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63BBBB8221C
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 15:57:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68807C340EF;
+        Wed,  9 Mar 2022 15:57:29 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 5/6] cec: add xfer_timeout_ms field
-Date:   Wed,  9 Mar 2022 16:57:25 +0100
-Message-Id: <20220309155726.1258388-6-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 1/6] cec: call enable_adap on s_log_addrs
+Date:   Wed,  9 Mar 2022 16:57:21 +0100
+Message-Id: <20220309155726.1258388-2-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220309155726.1258388-1-hverkuil-cisco@xs4all.nl>
 References: <20220309155726.1258388-1-hverkuil-cisco@xs4all.nl>
@@ -36,117 +36,160 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allow drivers to change the transmit timeout value, i.e. after how
-long should a transmit be considered 'lost', i.e. the corresponding
-cec_transmit_done_ts was never called.
+Don't enable/disable the adapter if the first fh is opened or the
+last fh is closed, instead do this when the adapter is configured
+or unconfigured.
 
-Some CEC devices have their own timeout, and so this timeout value must be
-longer than that hardware timeout value. If it is shorter then the
-framework would consider the transmit lost, even though it is effectively
-still in progress at the hardware level.
+However, if needs_hpd is true, then do this when the physical
+address is set or cleared: in that case the adapter typically is
+powered by the HPD, so it really is disabled when the HPD is low.
+This case (needs_hpd is true) was already handled in this way, so
+this wasn't changed.
+
+The problem with the old behavior was that if the HPD goes low when
+no fh is open, and a transmit was in progress, then the adapter would
+be disabled, typically stopping the transmit immediately which
+leaves a partial message on the bus, which isn't nice and can confuse
+some adapters.
+
+It makes much more sense to disable it only when the adapter is
+unconfigured, since then you really won't be using it anymore.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/cec/core/cec-adap.c | 17 +++--------------
- drivers/media/cec/core/cec-core.c | 14 ++++++++++++++
- include/media/cec.h               |  3 +++
- 3 files changed, 20 insertions(+), 14 deletions(-)
+ drivers/media/cec/core/cec-adap.c | 38 ++++++++++++++++++++++++-------
+ drivers/media/cec/core/cec-api.c  | 18 +--------------
+ 2 files changed, 31 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
-index a8735697e84d..77bfbd075420 100644
+index 2e12331c12a9..65eae7f3f49b 100644
 --- a/drivers/media/cec/core/cec-adap.c
 +++ b/drivers/media/cec/core/cec-adap.c
-@@ -27,18 +27,6 @@ static void cec_fill_msg_report_features(struct cec_adapter *adap,
- 					 struct cec_msg *msg,
- 					 unsigned int la_idx);
+@@ -1580,24 +1580,24 @@ void __cec_s_phys_addr(struct cec_adapter *adap, u16 phys_addr, bool block)
+ 		/* Disabling monitor all mode should always succeed */
+ 		if (adap->monitor_all_cnt)
+ 			WARN_ON(call_op(adap, adap_monitor_all_enable, false));
+-		/* serialize adap_enable */
+-		mutex_lock(&adap->devnode.lock);
+-		if (adap->needs_hpd || list_empty(&adap->devnode.fhs)) {
++		if (adap->needs_hpd) {
++			/* serialize adap_enable */
++			mutex_lock(&adap->devnode.lock);
+ 			WARN_ON(adap->ops->adap_enable(adap, false));
+ 			adap->transmit_in_progress = false;
+ 			wake_up_interruptible(&adap->kthread_waitq);
++			mutex_unlock(&adap->devnode.lock);
+ 		}
+-		mutex_unlock(&adap->devnode.lock);
+ 		if (phys_addr == CEC_PHYS_ADDR_INVALID)
+ 			return;
+ 	}
  
--/*
-- * 400 ms is the time it takes for one 16 byte message to be
-- * transferred and 5 is the maximum number of retries. Add
-- * another 100 ms as a margin. So if the transmit doesn't
-- * finish before that time something is really wrong and we
-- * have to time out.
-- *
-- * This is a sign that something it really wrong and a warning
-- * will be issued.
-- */
--#define CEC_XFER_TIMEOUT_MS (5 * 400 + 100)
--
- #define call_op(adap, op, arg...) \
- 	(adap->ops->op ? adap->ops->op(adap, ## arg) : 0)
+ 	/* serialize adap_enable */
+ 	mutex_lock(&adap->devnode.lock);
+-	adap->last_initiator = 0xff;
+-	adap->transmit_in_progress = false;
  
-@@ -492,7 +480,7 @@ int cec_thread_func(void *_adap)
- 				kthread_should_stop() ||
- 				(!adap->transmit_in_progress &&
- 				 !list_empty(&adap->transmit_queue)),
--				msecs_to_jiffies(CEC_XFER_TIMEOUT_MS));
-+				msecs_to_jiffies(adap->xfer_timeout_ms));
- 			timeout = err == 0;
- 		} else {
- 			/* Otherwise we just wait for something to happen. */
-@@ -518,7 +506,8 @@ int cec_thread_func(void *_adap)
- 			 * adapter driver, or the CEC bus is in some weird
- 			 * state. On rare occasions it can happen if there is
- 			 * so much traffic on the bus that the adapter was
--			 * unable to transmit for CEC_XFER_TIMEOUT_MS (2.1s).
-+			 * unable to transmit for xfer_timeout_ms (2.1s by
-+			 * default).
- 			 */
- 			if (adap->transmitting) {
- 				pr_warn("cec-%s: message %*ph timed out\n", adap->name,
-diff --git a/drivers/media/cec/core/cec-core.c b/drivers/media/cec/core/cec-core.c
-index a3ab6a43fb14..d99aec468d24 100644
---- a/drivers/media/cec/core/cec-core.c
-+++ b/drivers/media/cec/core/cec-core.c
-@@ -20,6 +20,18 @@
- #define CEC_NUM_DEVICES	256
- #define CEC_NAME	"cec"
+-	if (adap->needs_hpd || list_empty(&adap->devnode.fhs)) {
++	if (adap->needs_hpd) {
++		adap->last_initiator = 0xff;
++		adap->transmit_in_progress = false;
+ 		if (adap->ops->adap_enable(adap, true)) {
+ 			mutex_unlock(&adap->devnode.lock);
+ 			return;
+@@ -1606,8 +1606,10 @@ void __cec_s_phys_addr(struct cec_adapter *adap, u16 phys_addr, bool block)
  
-+/*
-+ * 400 ms is the time it takes for one 16 byte message to be
-+ * transferred and 5 is the maximum number of retries. Add
-+ * another 100 ms as a margin. So if the transmit doesn't
-+ * finish before that time something is really wrong and we
-+ * have to time out.
-+ *
-+ * This is a sign that something it really wrong and a warning
-+ * will be issued.
-+ */
-+#define CEC_XFER_TIMEOUT_MS (5 * 400 + 100)
+ 	if (adap->monitor_all_cnt &&
+ 	    call_op(adap, adap_monitor_all_enable, true)) {
+-		if (adap->needs_hpd || list_empty(&adap->devnode.fhs))
++		if (adap->needs_hpd) {
+ 			WARN_ON(adap->ops->adap_enable(adap, false));
++			adap->transmit_in_progress = false;
++		}
+ 		mutex_unlock(&adap->devnode.lock);
+ 		return;
+ 	}
+@@ -1683,6 +1685,13 @@ int __cec_s_log_addrs(struct cec_adapter *adap,
+ 		adap->log_addrs.osd_name[0] = '\0';
+ 		adap->log_addrs.vendor_id = CEC_VENDOR_ID_NONE;
+ 		adap->log_addrs.cec_version = CEC_OP_CEC_VERSION_2_0;
++		if (!adap->needs_hpd) {
++			/* serialize adap_enable */
++			mutex_lock(&adap->devnode.lock);
++			WARN_ON(adap->ops->adap_enable(adap, false));
++			adap->transmit_in_progress = false;
++			mutex_unlock(&adap->devnode.lock);
++		}
+ 		return 0;
+ 	}
+ 
+@@ -1816,6 +1825,19 @@ int __cec_s_log_addrs(struct cec_adapter *adap,
+ 		       sizeof(log_addrs->features[i]));
+ 	}
+ 
++	if (!adap->needs_hpd) {
++		int ret;
 +
- int cec_debug;
- module_param_named(debug, cec_debug, int, 0644);
- MODULE_PARM_DESC(debug, "debug level (0-2)");
-@@ -331,6 +343,8 @@ int cec_register_adapter(struct cec_adapter *adap,
++		/* serialize adap_enable */
++		mutex_lock(&adap->devnode.lock);
++		adap->last_initiator = 0xff;
++		adap->transmit_in_progress = false;
++		ret = adap->ops->adap_enable(adap, true);
++		mutex_unlock(&adap->devnode.lock);
++
++		if (ret)
++			return ret;
++	}
+ 	log_addrs->log_addr_mask = adap->log_addrs.log_addr_mask;
+ 	adap->log_addrs = *log_addrs;
+ 	if (adap->phys_addr != CEC_PHYS_ADDR_INVALID)
+diff --git a/drivers/media/cec/core/cec-api.c b/drivers/media/cec/core/cec-api.c
+index d72ad48c9898..0284db12842b 100644
+--- a/drivers/media/cec/core/cec-api.c
++++ b/drivers/media/cec/core/cec-api.c
+@@ -586,18 +586,6 @@ static int cec_open(struct inode *inode, struct file *filp)
+ 		return err;
+ 	}
  
- 	adap->owner = parent->driver->owner;
- 	adap->devnode.dev.parent = parent;
-+	if (!adap->xfer_timeout_ms)
-+		adap->xfer_timeout_ms = CEC_XFER_TIMEOUT_MS;
+-	/* serialize adap_enable */
+-	mutex_lock(&devnode->lock);
+-	if (list_empty(&devnode->fhs) &&
+-	    !adap->needs_hpd &&
+-	    adap->phys_addr == CEC_PHYS_ADDR_INVALID) {
+-		err = adap->ops->adap_enable(adap, true);
+-		if (err) {
+-			mutex_unlock(&devnode->lock);
+-			kfree(fh);
+-			return err;
+-		}
+-	}
+ 	filp->private_data = fh;
  
- #ifdef CONFIG_MEDIA_CEC_RC
- 	if (adap->capabilities & CEC_CAP_RC) {
-diff --git a/include/media/cec.h b/include/media/cec.h
-index a2a9a5eebae8..7cf1e9caeb47 100644
---- a/include/media/cec.h
-+++ b/include/media/cec.h
-@@ -168,6 +168,8 @@ struct cec_adap_ops {
-  *			invalidated while the transmit is ongoing. In that
-  *			case the transmit will finish, but will not retransmit
-  *			and be marked as ABORTED.
-+ * @xfer_timeout_ms:	the transfer timeout in ms.
-+ *			If 0, then timeout after 2.1 ms.
-  * @kthread_config:	kthread used to configure a CEC adapter
-  * @config_completion:	used to signal completion of the config kthread
-  * @kthread:		main CEC processing thread
-@@ -223,6 +225,7 @@ struct cec_adapter {
- 	struct cec_data *transmitting;
- 	bool transmit_in_progress;
- 	bool transmit_in_progress_aborted;
-+	unsigned int xfer_timeout_ms;
+ 	/* Queue up initial state events */
+@@ -625,6 +613,7 @@ static int cec_open(struct inode *inode, struct file *filp)
+ 	}
+ #endif
  
- 	struct task_struct *kthread_config;
- 	struct completion config_completion;
++	mutex_lock(&devnode->lock);
+ 	mutex_lock(&devnode->lock_fhs);
+ 	list_add(&fh->list, &devnode->fhs);
+ 	mutex_unlock(&devnode->lock_fhs);
+@@ -656,15 +645,10 @@ static int cec_release(struct inode *inode, struct file *filp)
+ 		cec_monitor_all_cnt_dec(adap);
+ 	mutex_unlock(&adap->lock);
+ 
+-	/* serialize adap_enable */
+ 	mutex_lock(&devnode->lock);
+ 	mutex_lock(&devnode->lock_fhs);
+ 	list_del(&fh->list);
+ 	mutex_unlock(&devnode->lock_fhs);
+-	if (cec_is_registered(adap) && list_empty(&devnode->fhs) &&
+-	    !adap->needs_hpd && adap->phys_addr == CEC_PHYS_ADDR_INVALID) {
+-		WARN_ON(adap->ops->adap_enable(adap, false));
+-	}
+ 	mutex_unlock(&devnode->lock);
+ 
+ 	/* Unhook pending transmits from this filehandle. */
 -- 
 2.34.1
 
