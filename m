@@ -2,31 +2,31 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3200C433F5
-	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 15:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D4D2C433EF
+	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 15:57:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234081AbiCIP6i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Mar 2022 10:58:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
+        id S234091AbiCIP6j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Mar 2022 10:58:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234079AbiCIP6e (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 10:58:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA56847AE7
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 07:57:32 -0800 (PST)
+        with ESMTP id S234088AbiCIP6h (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 10:58:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960674926A
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 07:57:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63BBBB8221C
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 15:57:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68807C340EF;
-        Wed,  9 Mar 2022 15:57:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 326D5B80F6F
+        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 15:57:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A4D6C340E8;
+        Wed,  9 Mar 2022 15:57:34 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 1/6] cec: call enable_adap on s_log_addrs
-Date:   Wed,  9 Mar 2022 16:57:21 +0100
-Message-Id: <20220309155726.1258388-2-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 6/6] cec: add optional adap_configured callback
+Date:   Wed,  9 Mar 2022 16:57:26 +0100
+Message-Id: <20220309155726.1258388-7-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220309155726.1258388-1-hverkuil-cisco@xs4all.nl>
 References: <20220309155726.1258388-1-hverkuil-cisco@xs4all.nl>
@@ -36,160 +36,89 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Don't enable/disable the adapter if the first fh is opened or the
-last fh is closed, instead do this when the adapter is configured
-or unconfigured.
-
-However, if needs_hpd is true, then do this when the physical
-address is set or cleared: in that case the adapter typically is
-powered by the HPD, so it really is disabled when the HPD is low.
-This case (needs_hpd is true) was already handled in this way, so
-this wasn't changed.
-
-The problem with the old behavior was that if the HPD goes low when
-no fh is open, and a transmit was in progress, then the adapter would
-be disabled, typically stopping the transmit immediately which
-leaves a partial message on the bus, which isn't nice and can confuse
-some adapters.
-
-It makes much more sense to disable it only when the adapter is
-unconfigured, since then you really won't be using it anymore.
+This new optional callback is called when the adapter is fully configured
+or fully unconfigured. Some drivers may have to take action when this
+happens.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/cec/core/cec-adap.c | 38 ++++++++++++++++++++++++-------
- drivers/media/cec/core/cec-api.c  | 18 +--------------
- 2 files changed, 31 insertions(+), 25 deletions(-)
+ Documentation/driver-api/media/cec-core.rst | 13 ++++++++++++-
+ drivers/media/cec/core/cec-adap.c           |  4 ++++
+ include/media/cec.h                         |  1 +
+ 3 files changed, 17 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/driver-api/media/cec-core.rst b/Documentation/driver-api/media/cec-core.rst
+index c6194ee81c41..ae0d20798edc 100644
+--- a/Documentation/driver-api/media/cec-core.rst
++++ b/Documentation/driver-api/media/cec-core.rst
+@@ -109,6 +109,7 @@ your driver:
+ 		int (*adap_monitor_all_enable)(struct cec_adapter *adap, bool enable);
+ 		int (*adap_monitor_pin_enable)(struct cec_adapter *adap, bool enable);
+ 		int (*adap_log_addr)(struct cec_adapter *adap, u8 logical_addr);
++		void (*adap_configured)(struct cec_adapter *adap, bool configured);
+ 		int (*adap_transmit)(struct cec_adapter *adap, u8 attempts,
+ 				      u32 signal_free_time, struct cec_msg *msg);
+ 		void (*adap_status)(struct cec_adapter *adap, struct seq_file *file);
+@@ -117,7 +118,7 @@ your driver:
+ 		/* Error injection callbacks */
+ 		...
+ 
+-		/* High-level callbacks */
++		/* High-level callback */
+ 		...
+ 	};
+ 
+@@ -178,6 +179,16 @@ can receive directed messages to that address.
+ Note that adap_log_addr must return 0 if logical_addr is CEC_LOG_ADDR_INVALID.
+ 
+ 
++Called when the adapter is fully configured or unconfigured::
++
++	void (*adap_configured)(struct cec_adapter *adap, bool configured);
++
++If configured == true, then the adapter is fully configured, i.e. all logical
++addresses have been successfully claimed. If configured == false, then the
++adapter is unconfigured. If the driver has to take specific actions after
++(un)configuration, then that can be done through this optional callback.
++
++
+ To transmit a new message::
+ 
+ 	int (*adap_transmit)(struct cec_adapter *adap, u8 attempts,
 diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
-index 2e12331c12a9..65eae7f3f49b 100644
+index 77bfbd075420..bd8def575ab5 100644
 --- a/drivers/media/cec/core/cec-adap.c
 +++ b/drivers/media/cec/core/cec-adap.c
-@@ -1580,24 +1580,24 @@ void __cec_s_phys_addr(struct cec_adapter *adap, u16 phys_addr, bool block)
- 		/* Disabling monitor all mode should always succeed */
- 		if (adap->monitor_all_cnt)
- 			WARN_ON(call_op(adap, adap_monitor_all_enable, false));
--		/* serialize adap_enable */
--		mutex_lock(&adap->devnode.lock);
--		if (adap->needs_hpd || list_empty(&adap->devnode.fhs)) {
-+		if (adap->needs_hpd) {
-+			/* serialize adap_enable */
-+			mutex_lock(&adap->devnode.lock);
- 			WARN_ON(adap->ops->adap_enable(adap, false));
- 			adap->transmit_in_progress = false;
- 			wake_up_interruptible(&adap->kthread_waitq);
-+			mutex_unlock(&adap->devnode.lock);
- 		}
--		mutex_unlock(&adap->devnode.lock);
- 		if (phys_addr == CEC_PHYS_ADDR_INVALID)
- 			return;
- 	}
+@@ -1346,6 +1346,8 @@ static void cec_adap_unconfigure(struct cec_adapter *adap)
+ 	cec_flush(adap);
+ 	wake_up_interruptible(&adap->kthread_waitq);
+ 	cec_post_state_event(adap);
++	if (adap->ops->adap_configured)
++		adap->ops->adap_configured(adap, false);
+ }
  
- 	/* serialize adap_enable */
- 	mutex_lock(&adap->devnode.lock);
--	adap->last_initiator = 0xff;
--	adap->transmit_in_progress = false;
- 
--	if (adap->needs_hpd || list_empty(&adap->devnode.fhs)) {
-+	if (adap->needs_hpd) {
-+		adap->last_initiator = 0xff;
-+		adap->transmit_in_progress = false;
- 		if (adap->ops->adap_enable(adap, true)) {
- 			mutex_unlock(&adap->devnode.lock);
- 			return;
-@@ -1606,8 +1606,10 @@ void __cec_s_phys_addr(struct cec_adapter *adap, u16 phys_addr, bool block)
- 
- 	if (adap->monitor_all_cnt &&
- 	    call_op(adap, adap_monitor_all_enable, true)) {
--		if (adap->needs_hpd || list_empty(&adap->devnode.fhs))
-+		if (adap->needs_hpd) {
- 			WARN_ON(adap->ops->adap_enable(adap, false));
-+			adap->transmit_in_progress = false;
-+		}
- 		mutex_unlock(&adap->devnode.lock);
- 		return;
- 	}
-@@ -1683,6 +1685,13 @@ int __cec_s_log_addrs(struct cec_adapter *adap,
- 		adap->log_addrs.osd_name[0] = '\0';
- 		adap->log_addrs.vendor_id = CEC_VENDOR_ID_NONE;
- 		adap->log_addrs.cec_version = CEC_OP_CEC_VERSION_2_0;
-+		if (!adap->needs_hpd) {
-+			/* serialize adap_enable */
-+			mutex_lock(&adap->devnode.lock);
-+			WARN_ON(adap->ops->adap_enable(adap, false));
-+			adap->transmit_in_progress = false;
-+			mutex_unlock(&adap->devnode.lock);
-+		}
- 		return 0;
- 	}
- 
-@@ -1816,6 +1825,19 @@ int __cec_s_log_addrs(struct cec_adapter *adap,
- 		       sizeof(log_addrs->features[i]));
- 	}
- 
-+	if (!adap->needs_hpd) {
-+		int ret;
-+
-+		/* serialize adap_enable */
-+		mutex_lock(&adap->devnode.lock);
-+		adap->last_initiator = 0xff;
-+		adap->transmit_in_progress = false;
-+		ret = adap->ops->adap_enable(adap, true);
-+		mutex_unlock(&adap->devnode.lock);
-+
-+		if (ret)
-+			return ret;
-+	}
- 	log_addrs->log_addr_mask = adap->log_addrs.log_addr_mask;
- 	adap->log_addrs = *log_addrs;
- 	if (adap->phys_addr != CEC_PHYS_ADDR_INVALID)
-diff --git a/drivers/media/cec/core/cec-api.c b/drivers/media/cec/core/cec-api.c
-index d72ad48c9898..0284db12842b 100644
---- a/drivers/media/cec/core/cec-api.c
-+++ b/drivers/media/cec/core/cec-api.c
-@@ -586,18 +586,6 @@ static int cec_open(struct inode *inode, struct file *filp)
- 		return err;
- 	}
- 
--	/* serialize adap_enable */
--	mutex_lock(&devnode->lock);
--	if (list_empty(&devnode->fhs) &&
--	    !adap->needs_hpd &&
--	    adap->phys_addr == CEC_PHYS_ADDR_INVALID) {
--		err = adap->ops->adap_enable(adap, true);
--		if (err) {
--			mutex_unlock(&devnode->lock);
--			kfree(fh);
--			return err;
--		}
--	}
- 	filp->private_data = fh;
- 
- 	/* Queue up initial state events */
-@@ -625,6 +613,7 @@ static int cec_open(struct inode *inode, struct file *filp)
- 	}
- #endif
- 
-+	mutex_lock(&devnode->lock);
- 	mutex_lock(&devnode->lock_fhs);
- 	list_add(&fh->list, &devnode->fhs);
- 	mutex_unlock(&devnode->lock_fhs);
-@@ -656,15 +645,10 @@ static int cec_release(struct inode *inode, struct file *filp)
- 		cec_monitor_all_cnt_dec(adap);
+ /*
+@@ -1527,6 +1529,8 @@ static int cec_config_thread_func(void *arg)
+ 	adap->kthread_config = NULL;
+ 	complete(&adap->config_completion);
  	mutex_unlock(&adap->lock);
++	if (adap->ops->adap_configured)
++		adap->ops->adap_configured(adap, true);
+ 	return 0;
  
--	/* serialize adap_enable */
- 	mutex_lock(&devnode->lock);
- 	mutex_lock(&devnode->lock_fhs);
- 	list_del(&fh->list);
- 	mutex_unlock(&devnode->lock_fhs);
--	if (cec_is_registered(adap) && list_empty(&devnode->fhs) &&
--	    !adap->needs_hpd && adap->phys_addr == CEC_PHYS_ADDR_INVALID) {
--		WARN_ON(adap->ops->adap_enable(adap, false));
--	}
- 	mutex_unlock(&devnode->lock);
- 
- 	/* Unhook pending transmits from this filehandle. */
+ unconfigure:
+diff --git a/include/media/cec.h b/include/media/cec.h
+index 7cf1e9caeb47..40f9920eb219 100644
+--- a/include/media/cec.h
++++ b/include/media/cec.h
+@@ -118,6 +118,7 @@ struct cec_adap_ops {
+ 	int (*adap_monitor_all_enable)(struct cec_adapter *adap, bool enable);
+ 	int (*adap_monitor_pin_enable)(struct cec_adapter *adap, bool enable);
+ 	int (*adap_log_addr)(struct cec_adapter *adap, u8 logical_addr);
++	void (*adap_configured)(struct cec_adapter *adap, bool configured);
+ 	int (*adap_transmit)(struct cec_adapter *adap, u8 attempts,
+ 			     u32 signal_free_time, struct cec_msg *msg);
+ 	void (*adap_status)(struct cec_adapter *adap, struct seq_file *file);
 -- 
 2.34.1
 
