@@ -2,116 +2,113 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D969C433F5
-	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 17:09:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F36BC433F5
+	for <linux-media@archiver.kernel.org>; Wed,  9 Mar 2022 17:10:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236695AbiCIRKp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Mar 2022 12:10:45 -0500
+        id S236789AbiCIRLB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Mar 2022 12:11:01 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237046AbiCIRKg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 12:10:36 -0500
-Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7616C18FADA
-        for <linux-media@vger.kernel.org>; Wed,  9 Mar 2022 09:01:56 -0800 (PST)
-Received: from hillosipuli.retiisi.eu (dkvn5pty0gzs3nltj987t-3.rev.dnainternet.fi [IPv6:2001:14ba:4457:9640:1e2d:1f75:a607:ef37])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 489DC20071;
-        Wed,  9 Mar 2022 19:01:54 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1646845314;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vPXcqobrp4q97DzaNBGyomZKrfQ1zWz2Uuz9SZUojho=;
-        b=y0ZAoj8CJrza1GSdt2M9vDd7+lpZugpl9/P1+VhhGrJvDxsvBykzHFExW38O8yiS6q2roN
-        ORZ2ms7NqfgEmyVYIo5zEq/eTBQuuRLgNaxIva1VJK4aPNP0Uw7qrcsrDIedKcHsEbgCmr
-        ITaLgjFLsu4AhrEiC4d1F2zMoRwoJYA=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id C34D3634C90;
-        Wed,  9 Mar 2022 19:01:53 +0200 (EET)
-Date:   Wed, 9 Mar 2022 19:01:53 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: ov5640: Use runtime PM
-Message-ID: <YijdgX+t12JZrusb@valkosipuli.retiisi.eu>
-References: <20220309113232.1182362-1-paul.elder@ideasonboard.com>
- <20220309134757.43uoopt5qbgonuup@uno.localdomain>
- <Yii4jxm8MLxlC0Lb@aptenodytes>
+        with ESMTP id S237035AbiCIRKo (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Mar 2022 12:10:44 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D5ABBE1A;
+        Wed,  9 Mar 2022 09:02:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646845367; x=1678381367;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OkzOLsVy4bRJDx790ntahgYsXuWH4OdPbeR3N+MAs4w=;
+  b=fNzBSjolukK7hTgIQpar7fJde2+1hgaW+Eq9cgM+URzYcTzzO20qL332
+   cjnLjJwbnbSRHMWxIo4ltXApZPFTuba1tqe/xagVGYcPmiK7CZLJIhmKm
+   uFfViolQ09MQME5mRPdp9NYLNffNS7bcvqFq0gVqo7LdaHTnrL1rV6NQF
+   jsMZjV2OIJNkVXrS7a8YOlwkdKRTPXyiGQ8Pfw77V8IeJrbwFGg3v8+tp
+   5zGJjTaFBZZzIHM51UpNEpVmQa9GNvGMPBI33oQR4gyYjtH6GII8ZvZk9
+   A6SsTIr5j1fKzokTd59ewMyHDm5CozeVTE1+0YplR3SSZsn1I0h8XZE+v
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="254761940"
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="254761940"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 08:50:42 -0800
+X-IronPort-AV: E=Sophos;i="5.90,167,1643702400"; 
+   d="scan'208";a="644096964"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 08:50:39 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 711152051A;
+        Wed,  9 Mar 2022 18:50:37 +0200 (EET)
+Date:   Wed, 9 Mar 2022 18:50:37 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Kate Hsuan <hpa@redhat.com>
+Cc:     Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, hdegoede@redhat.com
+Subject: Re: [PATCH v2] staging: media: ipu3: Fix AF x_start position when
+ rightmost stripe is used
+Message-ID: <Yija3YQ55gvCtKdR@paasikivi.fi.intel.com>
+References: <20220309063456.102895-1-hpa@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yii4jxm8MLxlC0Lb@aptenodytes>
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1646845314; a=rsa-sha256; cv=none;
-        b=x5RjM3Zre1sU27xbc2DZ5MVB4MRjsDBtTopI8Cwq9N/4obt8EnBNpRrIOR5JyExK8VltKH
-        HKyMOOTo2bWKgprXFrlxfWDva+Dp5riqtHsXSi6Ok9npi/CFHrW0fBhQiPMb0Ieoi4X+Sb
-        +XLWqsLXVqlBHn7vz2wYEZm9TzgT2vc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1646845314;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vPXcqobrp4q97DzaNBGyomZKrfQ1zWz2Uuz9SZUojho=;
-        b=K5KETnb2GB8LI7UedB+lb5otqp2G5SRaqPbDiYtWBcA7o3+pGRCqOnwVoXs69E2fShHXwg
-        AqqMYunZrve3A6bNy9y0QA210IPfV/WR2gwNRvlOFflNLCr7cL94TIgzv0MfoSFRPbBQB+
-        NNACrfy3ggGVV3wqh8FYOUF+gHXLcQc=
+In-Reply-To: <20220309063456.102895-1-hpa@redhat.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Pauls, Jacopo,
+Hi Kate,
 
-On Wed, Mar 09, 2022 at 03:24:15PM +0100, Paul Kocialkowski wrote:
-> Hi Jacopo,
-> 
-> On Wed 09 Mar 22, 14:47, Jacopo Mondi wrote:
-> > Hi Paul,
-> > 
-> > On Wed, Mar 09, 2022 at 08:32:32PM +0900, Paul Elder wrote:
-> > > Switch to using runtime PM for power management.
-> > 
-> > What happens if CONFIG_PM is not selected ? Two of the existing
-> > sensor drivers in mainline depends on PM but not the ov5640, and I'm
-> > not sure we should depend on PM to be able to compile the module.
-> 
-> I think the direction for the media subsystem is to use runtime pm
-> everywhere possible, which is not opional (like traditional PM) so
-> I really thinks it makes sense to have the sensor driver depend on it.
+Thanks for the update.
 
-Without runtime PM, the sensor is always powered on. There's no reason why
-the driver shouldn't work without it. Few will want to use such
-configuration though.
-
-I don't see a problem with depending on CONFIG_PM though.
-
+On Wed, Mar 09, 2022 at 02:34:56PM +0800, Kate Hsuan wrote:
+> For the AF configuration, if the rightmost stripe is used, the AF scene
+> will be at the incorrect location of the sensor.
 > 
-> The alternative would probably be to keep the s_power implementation
-> when !CONFIG_PM which is certinaly not something we want.
+> The AF coordinate may be set to the right part of the sensor. This
+> configuration would lead to x_start being greater than the
+> down_scaled_stripes offset and the leftmost stripe would be disabled
+> and only the rightmost stripe is used to control the AF coordinate. If
+> the x_start doesn't perform any adjustments, the AF coordinate will be
+> at the wrong place of the sensor since down_scaled_stripes offset
+> would be the new zero of the coordinate system.
 > 
-> > Also I see very few #ifdef CONFIG_PM in drivers/media/i2c so either
-> > the CONFIG_PM dependency is not an issue or most sensor drivers don't
-> > care.
+> In this patch, if only the rightmost stripe is used, x_start should
+> minus down_scaled_stripes offset to maintain its correctness of AF
+> scene coordinate.
 > 
-> This seems like an overlook, I think drivers that rely on runtime pm
-> do need to depend on PM in Kconfig.
+> Changes in v2:
+> 1. Remove the setting of the first stripe.
+> 
+> Signed-off-by: Kate Hsuan <hpa@redhat.com>
+> ---
+>  drivers/staging/media/ipu3/ipu3-css-params.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/staging/media/ipu3/ipu3-css-params.c b/drivers/staging/media/ipu3/ipu3-css-params.c
+> index d9e3c3785075..5a8c07f34756 100644
+> --- a/drivers/staging/media/ipu3/ipu3-css-params.c
+> +++ b/drivers/staging/media/ipu3/ipu3-css-params.c
+> @@ -2556,6 +2556,10 @@ int imgu_css_cfg_acc(struct imgu_css *css, unsigned int pipe,
+>  		/* Enable only for rightmost stripe, disable left */
+>  		acc->af.stripes[0].grid_cfg.y_start &=
+>  			~IPU3_UAPI_GRID_Y_START_EN;
+> +		acc->af.stripes[1].grid_cfg.x_start -=
+> +			acc->stripe.down_scaled_stripes[1].offset;
+> +		acc->af.stripes[1].grid_cfg.x_end -=
+> +			acc->stripe.down_scaled_stripes[1].offset;
 
-Runtime PM has nop functions that are used instead if it's disabled in
-kernel configuration. #ifdef's shouldn't be used.
+Could you calculate these the same way as in the case both stripes are
+enabled? Some bits in x_start is masked and then x_end is calculated from
+width.
+
+>  	} else if (acc->af.config.grid_cfg.x_end <=
+>  		   acc->stripe.bds_out_stripes[0].width - min_overlap) {
+>  		/* Enable only for leftmost stripe, disable right */
 
 -- 
 Regards,
