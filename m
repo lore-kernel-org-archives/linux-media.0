@@ -2,54 +2,53 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A07C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 10 Mar 2022 09:53:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2107EC43217
+	for <linux-media@archiver.kernel.org>; Thu, 10 Mar 2022 09:53:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241005AbiCJJyB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Mar 2022 04:54:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        id S241084AbiCJJyR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Mar 2022 04:54:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241003AbiCJJxx (ORCPT
+        with ESMTP id S241031AbiCJJyE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Mar 2022 04:53:53 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075DDE9C;
-        Thu, 10 Mar 2022 01:52:50 -0800 (PST)
+        Thu, 10 Mar 2022 04:54:04 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8314197BBE;
+        Thu, 10 Mar 2022 01:52:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646905971; x=1678441971;
+  t=1646905980; x=1678441980;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=inbCfOApjHcZj6rPnStLuoDA+QTiQF8O+NIL6iLwJf0=;
-  b=qmJJ6uQq0kKauMzpcWUCC6/zR479/yu4//+sB765AgOB6hQn/BSCJBzl
-   OUmWBziMn8409Kj7a3nH5uPYxQjDqxbInAEkgPbsP0gQPSDCQGdMq2fUs
-   1HMX+dcb6+eJR6p0u4+2vTiLs/IT9ve7G+59MMVHJBAClbPVhHAexiunw
-   27oCijoJiCLnCJbI/wy2qMksT+aLojRM2vDDYWj7kqrnShmLOp//hK7Kn
-   0KoDgBlhVJDLIvzQ1QLT5NrKSkN5/V8VvmsWB6RQGcbmVVwjundo5J/Sq
-   RpClC4MEamMiCsvPbC3hBohgAVWKHNZ9mOls9cRcrPdD8B5WYJqZvjIQI
-   g==;
+  bh=hQ88M2thWVMv951o9xrRQLwqeDq6XC6dMQcAlluRG0w=;
+  b=xcXGUsW/73AN8zZ7DfTy7EDdqSIx/bAgKYeDkS46PmxravGub54bg7Hc
+   QVs7RjQAna8yxWQ7cTl012QkRclgcFGv0MjWpuw0kSAbrTLeXfZZfN2Gp
+   DmiVohWxvrNsD1GaQC7G54DXyYUNeU04fmTXg9sb1IZSr/H/XxFq8+0wa
+   BEaipf7/aIU8VhGTsFd/6SDv/cafAazA2TMjv7n6Lpc3r7aMDgz+5Q+kw
+   RedvIT24dCmHfYkwj+aBcr5WmqGy+0Pis/8eie2l0qQ53IzI/vNJqnrgO
+   t4YxHR/UZ2YcmNz869RJEaypxhf9Dv+D6QEAdR5CNn8eJr4tg4EolZIo7
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.90,170,1643698800"; 
-   d="scan'208";a="148746148"
+   d="scan'208";a="155948566"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2022 02:52:50 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Mar 2022 02:52:57 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 10 Mar 2022 02:52:49 -0700
+ 15.1.2375.17; Thu, 10 Mar 2022 02:52:56 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 10 Mar 2022 02:52:43 -0700
+ 15.1.2375.17 via Frontend Transport; Thu, 10 Mar 2022 02:52:54 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <linux-media@vger.kernel.org>, <jacopo@jmondi.org>
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <claudiu.beznea@microchip.com>, <robh+dt@kernel.org>,
         <nicolas.ferre@microchip.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-Subject: [PATCH v9 07/13] media: atmel: atmel-isc: compact the controller formats list
-Date:   Thu, 10 Mar 2022 11:51:56 +0200
-Message-ID: <20220310095202.2701399-8-eugen.hristev@microchip.com>
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [PATCH v9 09/13] media: atmel: atmel-sama7g5-isc: remove stray line
+Date:   Thu, 10 Mar 2022 11:51:58 +0200
+Message-ID: <20220310095202.2701399-10-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220310095202.2701399-1-eugen.hristev@microchip.com>
 References: <20220310095202.2701399-1-eugen.hristev@microchip.com>
@@ -60,184 +59,26 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Compact the list array to be more readable.
-No other changes, only cosmetic.
+Remove stray line from formats struct.
 
 Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- .../media/platform/atmel/atmel-sama5d2-isc.c  | 51 ++++++----------
- .../media/platform/atmel/atmel-sama7g5-isc.c  | 60 +++++++------------
- 2 files changed, 37 insertions(+), 74 deletions(-)
+ drivers/media/platform/atmel/atmel-sama7g5-isc.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-index 025c3e8a7e95..d96ee3373889 100644
---- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-+++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-@@ -60,56 +60,39 @@
- static const struct isc_format sama5d2_controller_formats[] = {
- 	{
- 		.fourcc		= V4L2_PIX_FMT_ARGB444,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_ARGB555,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_RGB565,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_ABGR32,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_XBGR32,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_YUV420,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_YUYV,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_YUV422P,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_GREY,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_Y10,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SBGGR8,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SGBRG8,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SGRBG8,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SRGGB8,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SBGGR10,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SGBRG10,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SGRBG10,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SRGGB10,
- 	},
- };
 diff --git a/drivers/media/platform/atmel/atmel-sama7g5-isc.c b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
-index 9dc75eed0098..e07ae188c15f 100644
+index a0d60cfdba7b..638af8da2694 100644
 --- a/drivers/media/platform/atmel/atmel-sama7g5-isc.c
 +++ b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
-@@ -63,65 +63,45 @@
- static const struct isc_format sama7g5_controller_formats[] = {
- 	{
- 		.fourcc		= V4L2_PIX_FMT_ARGB444,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_ARGB555,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_RGB565,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_ABGR32,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_XBGR32,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_YUV420,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_UYVY,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_VYUY,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_YUYV,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_YUV422P,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_GREY,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_Y10,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_Y16,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SBGGR8,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SGBRG8,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SGRBG8,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SRGGB8,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SBGGR10,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SGBRG10,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SGRBG10,
--	},
--	{
-+	}, {
- 		.fourcc		= V4L2_PIX_FMT_SRGGB10,
+@@ -225,7 +225,6 @@ static struct isc_format sama7g5_formats_list[] = {
+ 		.mbus_code	= MEDIA_BUS_FMT_Y10_1X10,
+ 		.pfe_cfg0_bps	= ISC_PFG_CFG0_BPS_TEN,
  	},
+-
  };
+ 
+ static void isc_sama7g5_config_csc(struct isc_device *isc)
 -- 
 2.25.1
 
