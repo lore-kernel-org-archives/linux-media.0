@@ -2,211 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 287AFC38A2B
-	for <linux-media@archiver.kernel.org>; Thu, 10 Mar 2022 14:33:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B85EC433EF
+	for <linux-media@archiver.kernel.org>; Thu, 10 Mar 2022 14:54:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240776AbiCJOeo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Mar 2022 09:34:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
+        id S245169AbiCJOzP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Mar 2022 09:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344043AbiCJObi (ORCPT
+        with ESMTP id S1347931AbiCJOvc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Mar 2022 09:31:38 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73A5EBBAE
-        for <linux-media@vger.kernel.org>; Thu, 10 Mar 2022 06:29:28 -0800 (PST)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 79FED3F32D
-        for <linux-media@vger.kernel.org>; Thu, 10 Mar 2022 14:29:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646922566;
-        bh=hwp6Ky+UBrJRSHg4i+lJTamBUoAq8Hop7/mY//2Mbe4=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=hRwicyvT5HiX87qz1Y/DQdi37MLOzYQL538Fu5lBLW/9J9Snc4p8IitO2eZGLHT4B
-         yb6JiM/idn5beIKQMv6q7vFU+I1m3Qu86osXElfSxneetrnPuf/QJkUdGrYPQNYBHj
-         cpqQy0xdK68bhJxqO/fTV8NumgAfi4yRscLdJvpNaja+Lqje85Fyq4FAjSwW2ZKDpq
-         O0uR4lXIDP190/YRw6IrDQrsLsK5kkknVXbe0fkz1k/8sg7x2CJTiRKOZ7MEtUX2EG
-         l6K11v35u/94ypCjEsak8PLdl2AVcTkV8YN2rT7x4eubVPEXcRQ5DCimzu5h/OxXRt
-         ZB8VgnQxSzCNg==
-Received: by mail-ej1-f71.google.com with SMTP id x2-20020a1709065ac200b006d9b316257fso3208390ejs.12
-        for <linux-media@vger.kernel.org>; Thu, 10 Mar 2022 06:29:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hwp6Ky+UBrJRSHg4i+lJTamBUoAq8Hop7/mY//2Mbe4=;
-        b=ndRIV+90CCmxnnyNeWpKJDICpFPcRI1nhgQD4UtII7HmV+NObdo7gKyGlDSr7Sp/QY
-         TPdPRQNBjjvvVsTfERYzUg9qZo1XvV7MC1z5n246HKvobxl54T9rUCEwZnFNpjZw9fXx
-         oX8YxheurV6/7HY0qKpN8ptLX2pAokgqfNhD8Z5oahxhOn6HkjDZtRcXZ/YyhhPlny+A
-         yPjiLMleprd7NIRM5z/DMXUI7mZoJDYfEauXUlHpFDs6xU1bV3CQjWSNJfG4HpidT3zf
-         lDMSpsezdhL90nHEE1v8Pt2tQ4a4PQ4CiTEZ5qzGrCI511mJAuQCSMOM9lUIWxaZGhJa
-         8g/A==
-X-Gm-Message-State: AOAM532TV3SIKjotj6T9mM0xqhkKGMBnhy+ez38WLbz2Vgpri4l/jUiT
-        toO2c6Nke/nr8wbrscJ4BjajY1oeA7JH8zIMk/Qb80MzkRNghKxik9Xf0A0k5vQPXq8r4p4R51S
-        hSn3Mw6YEgry79NF/hzLBdye6mLvJSRC01kxGJPLR
-X-Received: by 2002:a17:906:7245:b0:6cf:d3c6:8c63 with SMTP id n5-20020a170906724500b006cfd3c68c63mr4260039ejk.677.1646922566026;
-        Thu, 10 Mar 2022 06:29:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw7Ev2mnxBZlEpVqVQMpzsj789u82+ktkRTOCKPlAE6anRMFsefp2hW8KFgtmBRXCA/ThaKOw==
-X-Received: by 2002:a17:906:7245:b0:6cf:d3c6:8c63 with SMTP id n5-20020a170906724500b006cfd3c68c63mr4260010ejk.677.1646922565787;
-        Thu, 10 Mar 2022 06:29:25 -0800 (PST)
-Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id z8-20020a170906270800b006bbd3efa6b8sm1862913ejc.80.2022.03.10.06.29.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 06:29:25 -0800 (PST)
-Message-ID: <d7e2a189-2773-b37a-7449-0b5138e45ded@canonical.com>
-Date:   Thu, 10 Mar 2022 15:29:24 +0100
+        Thu, 10 Mar 2022 09:51:32 -0500
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE8D222;
+        Thu, 10 Mar 2022 06:49:54 -0800 (PST)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 7AB0C10001C; Thu, 10 Mar 2022 14:49:50 +0000 (UTC)
+Date:   Thu, 10 Mar 2022 14:49:50 +0000
+From:   Sean Young <sean@mess.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     linux-media@vger.kernel.org, smatch@vger.kernel.org
+Subject: Re: [PATCH] media: lirc: suppress false positive smatch warning
+Message-ID: <YioQDufZYul4jl14@gofer.mess.org>
+References: <20220310132350.78729-1-sean@mess.org>
+ <20220310144230.GI3315@kadam>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/6] media: dt-bindings: i2c: Document ov5670
-Content-Language: en-US
-To:     Jacopo Mondi <jacopo@jmondi.org>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>
-Cc:     jeanmichel.hautbois@ideasonboard.com,
-        laurent.pinchart@ideasonboard.com, paul.kocialkowski@bootlin.com,
-        sakari.ailus@iki.fi, paul.elder@ideasonboard.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "open list:OMNIVISION OV5670 SENSOR DRIVER" 
-        <linux-media@vger.kernel.org>, robh@kernel.org,
-        devicetree@vger.kernel.org
-References: <20220310130829.96001-1-jacopo@jmondi.org>
- <20220310130829.96001-2-jacopo@jmondi.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220310130829.96001-2-jacopo@jmondi.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310144230.GI3315@kadam>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 10/03/2022 14:08, Jacopo Mondi wrote:
-> Provide the bindings documentation for Omnivision OV5670 image sensor.
+On Thu, Mar 10, 2022 at 05:42:30PM +0300, Dan Carpenter wrote:
+> On Thu, Mar 10, 2022 at 01:23:50PM +0000, Sean Young wrote:
+> > The latest smatch says:
+> > 
+> > drivers/media/rc/lirc_dev.c:632 lirc_read_mode2() error: uninitialized symbol 'copied'.
+> > drivers/media/rc/lirc_dev.c:671 lirc_read_scancode() error: uninitialized symbol 'copied'.
+> > 
+> > This is a false positive since in all reaching code paths, copied will
+> > be set. Work around this by providing a zero initializer for copied.
+> > 
+> > Cc: Dan Carpenter <dan.carpenter@oracle.com>
+> > Cc: smatch@vger.kernel.org
+> > Signed-off-by: Sean Young <sean@mess.org>
 > 
-> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> ---
->  .../devicetree/bindings/media/i2c/ov5670.yaml | 93 +++++++++++++++++++
+> I'm sorry for this.  I can't reproduce this on my system.  I just did a
+> push for something unrelated and I don't know what the previous HEAD
+> was...
 
-Add the file to maintainers entry.
+You're right, with the latest HEAD the warning goes away. Great, let's drop
+this patch then.
 
->  1 file changed, 93 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ov5670.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ov5670.yaml b/Documentation/devicetree/bindings/media/i2c/ov5670.yaml
-> new file mode 100644
-> index 000000000000..dc4a3297bf6f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/i2c/ov5670.yaml
-
-Missing vendor prefix in file name.
-
-> @@ -0,0 +1,93 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/i2c/ov5670.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Omnivision OV5670 5 Megapixels raw image sensor
-> +
-> +maintainers:
-> +  - Jacopo Mondi <jacopo@jmondi.org>
-
-Please add also driver maintainer.
-
-> +
-> +description: |-
-> +  The OV5670 is a 5 Megapixels raw image sensor which provides images in 10-bits
-> +  RAW BGGR Bayer format on a 2 data lanes MIPI CSI-2 serial interface and is
-> +  controlled through an I2C compatible control bus.
-> +
-> +properties:
-> +  compatible:
-> +    const: ovti,ov5670
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clock-frequency:
-> +    description: Frequency of the xclk clock.
-
-Is the xclk external clock coming to the sensor? If yes, there should be
-a "clocks" property.
-
-> +
-> +  pwdn-gpios:
-> +    description: Reference to the GPIO connected to the PWDNB pin. Active low.
-
-maxItems
-
-> +
-> +  reset-gpios:
-> +    description:
-> +      Reference to the GPIO connected to the XSHUTDOWN pin. Active low.
-
-maxItems
-
-> +
-> +  avdd-supply:
-> +    description: Analog circuit power. Typically 2.8V.
-> +
-> +  dvdd-supply:
-> +    description: Digital circuit power. Typically 1.2V.
-> +
-> +  dovdd-supply:
-> +    description: Digital I/O circuit power. Typically 2.8V or 1.8V.
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/$defs/port-base
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      endpoint:
-> +        $ref: /schemas/media/video-interfaces.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          data-lanes:
-> +            description: The sensor supports 1 or 2 data lanes operations.
-> +            minItems: 1
-> +            maxItems: 2
-> +            items:
-> +              maximum: 2
-
-Is '0' also allowed? If not then maybe 'enum: [ 1, 2 ]'
-
-no clock-lanes?
-
-> +
-> +          clock-noncontinuous: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clock-frequency
-> +  - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c0 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        ov5670: sensor@36 {
-> +            compatible = "ovti,ov5670";
-> +            reg = <0x36>;
-> +
-> +            clock-frequency=<19200000>;
-
-Missing spaces around '='.
+Thanks for a great tool
 
 
-
-Best regards,
-Krzysztof
+Sean
