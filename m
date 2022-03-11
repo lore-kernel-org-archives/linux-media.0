@@ -2,55 +2,55 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 518BCC433EF
-	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:10:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8C88C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:10:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349255AbiCKOLI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Mar 2022 09:11:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
+        id S1349235AbiCKOLH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Mar 2022 09:11:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349136AbiCKOLE (ORCPT
+        with ESMTP id S1349119AbiCKOKv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:11:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502411B2AE1;
-        Fri, 11 Mar 2022 06:09:48 -0800 (PST)
+        Fri, 11 Mar 2022 09:10:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7952B1AA050;
+        Fri, 11 Mar 2022 06:09:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63BCC61EFF;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B854B82A73;
         Fri, 11 Mar 2022 14:09:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93F68C340FB;
-        Fri, 11 Mar 2022 14:09:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D073C340FF;
+        Fri, 11 Mar 2022 14:09:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647007778;
-        bh=V92qRYmU07w6Uv3N4IgYj79pKA/XFgvGaHGHf6J/lik=;
+        s=k20201202; t=1647007777;
+        bh=zmjNlJhuJFaRKaa6ele8wIQsyiwuEBuYitOkpE9ulBs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ED4nKBeHoFLZf8E3uUomp3OGBVLywxiF/DOhiuhx5phCKCePsDcfGHkvDjh0j6xjg
-         gS4ILazNWnoZy+aLHEjn6pY/du7g5EMP+53Pg6hlY1K7w15ylDv/1A4MJvqT2QGzmG
-         m99tYBr3fzOIGZ5lgULf/5H06+okUNhASvVmNq5O9rweRoTZ68ofays/zHSFP2npQN
-         thDSogeBRLqCUSYf+6SOO5qaGK2AmucTyNyxO/tRtYzsM5ZMqgI6w7HHq52+wIJR+i
-         DQyNCywjbmMeL3sueef7WQNQrDdSPP3PsG8pNLA32V5VPHoAp3OQsjhjDSxJjqRJeJ
-         QAfNXbbZ7FJmw==
+        b=tTzKBaorwQsL1LqgCl7swLECbFcz509pkVbw8yrMXuJqVF6/xni9EoljrxzLGP9Ax
+         7P0NKdhCFjL4EbpnxX44MdKT5ovS9lkXRnM9RRadfx3j/XGQH0wgpQWoLqbxaBDuOl
+         lSzeuS/cRW7Pm1zCw4p2nzS0pEMudlF5auL9bI/rSaFP9WUbpFaUu/TbHzxxGKedYF
+         yHhucTaO0tGuccH9v59TyeKF0SUzRDk4XlXPvocqIqwQ3VLcxYJR8atgU+n2VPG9wJ
+         Ot5Ngnwf27wbYGjt+KFPW+QOToZG10RTbUzuZURl30hpzN9bOFb/epLhyrhORrSjXq
+         wI7yE5ljTj9TQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nSfxY-000lIf-Ca; Fri, 11 Mar 2022 15:09:36 +0100
+        id 1nSfxX-000lHV-AI; Fri, 11 Mar 2022 15:09:35 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Ming Qian <ming.qian@nxp.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2 36/38] media: platform: s5p-jpeg: move config to its own file
-Date:   Fri, 11 Mar 2022 15:07:49 +0100
-Message-Id: <b6258d7a7522dc421837403c0904850575cc3d2e.1647006877.git.mchehab@kernel.org>
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 18/38] media: platform: mtk-vcodec: move config to its own file
+Date:   Fri, 11 Mar 2022 15:07:31 +0100
+Message-Id: <483c81e6d5127bd44e140dec4526b9c2d3107d6d.1647006877.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647006877.git.mchehab@kernel.org>
 References: <cover.1647006877.git.mchehab@kernel.org>
@@ -62,7 +62,7 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 In order to better organize the platform/Kconfig, place
-s5p-jpeg-specific config stuff on a separate Kconfig file.
+mtk-vcodec-specific config stuff on a separate Kconfig file.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -71,60 +71,108 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.1647006877.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig          | 13 +------------
- drivers/media/platform/s5p-jpeg/Kconfig | 12 ++++++++++++
- 2 files changed, 13 insertions(+), 12 deletions(-)
- create mode 100644 drivers/media/platform/s5p-jpeg/Kconfig
+ drivers/media/platform/Kconfig            | 37 +----------------------
+ drivers/media/platform/mtk-vcodec/Kconfig | 36 ++++++++++++++++++++++
+ 2 files changed, 37 insertions(+), 36 deletions(-)
+ create mode 100644 drivers/media/platform/mtk-vcodec/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 447fe5681307..913b48994e15 100644
+index 00d77779ab0d..4553e7fc193c 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -69,6 +69,7 @@ source "drivers/media/platform/rockchip/rkisp1/Kconfig"
- source "drivers/media/platform/rockchip/rga/Kconfig"
- source "drivers/media/platform/s3c-camif/Kconfig"
- source "drivers/media/platform/s5p-g2d/Kconfig"
-+source "drivers/media/platform/s5p-jpeg/Kconfig"
- source "drivers/media/platform/sti/hva/Kconfig"
- source "drivers/media/platform/stm32/Kconfig"
- source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
-@@ -111,18 +112,6 @@ config VIDEO_MEM2MEM_DEINTERLACE
- 	help
- 	    Generic deinterlacing V4L2 driver.
+@@ -57,6 +57,7 @@ source "drivers/media/platform/exynos-gsc/Kconfig"
+ source "drivers/media/platform/meson/ge2d/Kconfig"
+ source "drivers/media/platform/mtk-jpeg/Kconfig"
+ source "drivers/media/platform/mtk-mdp/Kconfig"
++source "drivers/media/platform/mtk-vcodec/Kconfig"
+ source "drivers/media/platform/omap/Kconfig"
  
--
--config VIDEO_SAMSUNG_S5P_JPEG
--	tristate "Samsung S5P/Exynos3250/Exynos4 JPEG codec driver"
+ source "drivers/media/platform/aspeed/Kconfig"
+@@ -208,42 +209,6 @@ config VIDEO_MEDIATEK_VPU
+ 	    To compile this driver as a module, choose M here: the
+ 	    module will be called mtk-vpu.
+ 
+-config VIDEO_MEDIATEK_VCODEC
+-	tristate "Mediatek Video Codec driver"
 -	depends on V4L_MEM2MEM_DRIVERS
+-	depends on MTK_IOMMU || COMPILE_TEST
 -	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+-	depends on ARCH_MEDIATEK || COMPILE_TEST
+-	depends on VIDEO_MEDIATEK_VPU || MTK_SCP
+-	# The two following lines ensure we have the same state ("m" or "y") as
+-	# our dependencies, to avoid missing symbols during link.
+-	depends on VIDEO_MEDIATEK_VPU || !VIDEO_MEDIATEK_VPU
+-	depends on MTK_SCP || !MTK_SCP
+-	depends on MTK_SMI || (COMPILE_TEST && MTK_SMI=n)
 -	select VIDEOBUF2_DMA_CONTIG
 -	select V4L2_MEM2MEM_DEV
+-	select VIDEO_MEDIATEK_VCODEC_VPU if VIDEO_MEDIATEK_VPU
+-	select VIDEO_MEDIATEK_VCODEC_SCP if MTK_SCP
+-	select V4L2_H264
+-	select MEDIA_CONTROLLER
+-	select MEDIA_CONTROLLER_REQUEST_API
 -	help
--	  This is a v4l2 driver for Samsung S5P, EXYNOS3250
--	  and EXYNOS4 JPEG codec
+-	  Mediatek video codec driver provides HW capability to
+-	  encode and decode in a range of video formats on MT8173
+-	  and MT8183.
 -
- source "drivers/media/platform/s5p-mfc/Kconfig"
- 
- source "drivers/media/platform/sti/bdisp/Kconfig"
-diff --git a/drivers/media/platform/s5p-jpeg/Kconfig b/drivers/media/platform/s5p-jpeg/Kconfig
+-	  Note that support for MT8173 requires VIDEO_MEDIATEK_VPU to
+-	  also be selected. Support for MT8183 depends on MTK_SCP.
+-
+-	  To compile this driver as modules, choose M here: the
+-	  modules will be called mtk-vcodec-dec and mtk-vcodec-enc.
+-
+-config VIDEO_MEDIATEK_VCODEC_VPU
+-	bool
+-
+-config VIDEO_MEDIATEK_VCODEC_SCP
+-	bool
+-
+ config VIDEO_MEM2MEM_DEINTERLACE
+ 	tristate "Deinterlace support"
+ 	depends on V4L_MEM2MEM_DRIVERS
+diff --git a/drivers/media/platform/mtk-vcodec/Kconfig b/drivers/media/platform/mtk-vcodec/Kconfig
 new file mode 100644
-index 000000000000..e522860d2b15
+index 000000000000..635801a19d55
 --- /dev/null
-+++ b/drivers/media/platform/s5p-jpeg/Kconfig
-@@ -0,0 +1,12 @@
++++ b/drivers/media/platform/mtk-vcodec/Kconfig
+@@ -0,0 +1,36 @@
 +# SPDX-License-Identifier: GPL-2.0-only
++config VIDEO_MEDIATEK_VCODEC_SCP
++	bool
 +
-+config VIDEO_SAMSUNG_S5P_JPEG
-+	tristate "Samsung S5P/Exynos3250/Exynos4 JPEG codec driver"
++config VIDEO_MEDIATEK_VCODEC_VPU
++	bool
++
++config VIDEO_MEDIATEK_VCODEC
++	tristate "Mediatek Video Codec driver"
 +	depends on V4L_MEM2MEM_DRIVERS
++	depends on MTK_IOMMU || COMPILE_TEST
 +	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
++	depends on ARCH_MEDIATEK || COMPILE_TEST
++	depends on VIDEO_MEDIATEK_VPU || MTK_SCP
++	# The two following lines ensure we have the same state ("m" or "y") as
++	# our dependencies, to avoid missing symbols during link.
++	depends on VIDEO_MEDIATEK_VPU || !VIDEO_MEDIATEK_VPU
++	depends on MTK_SCP || !MTK_SCP
++	depends on MTK_SMI || (COMPILE_TEST && MTK_SMI=n)
 +	select VIDEOBUF2_DMA_CONTIG
 +	select V4L2_MEM2MEM_DEV
++	select VIDEO_MEDIATEK_VCODEC_VPU if VIDEO_MEDIATEK_VPU
++	select VIDEO_MEDIATEK_VCODEC_SCP if MTK_SCP
++	select V4L2_H264
++	select MEDIA_CONTROLLER
++	select MEDIA_CONTROLLER_REQUEST_API
 +	help
-+	  This is a v4l2 driver for Samsung S5P, EXYNOS3250
-+	  and EXYNOS4 JPEG codec
++	  Mediatek video codec driver provides HW capability to
++	  encode and decode in a range of video formats on MT8173
++	  and MT8183.
++
++	  Note that support for MT8173 requires VIDEO_MEDIATEK_VPU to
++	  also be selected. Support for MT8183 depends on MTK_SCP.
++
++	  To compile this driver as modules, choose M here: the
++	  modules will be called mtk-vcodec-dec and mtk-vcodec-enc.
 -- 
 2.35.1
 
