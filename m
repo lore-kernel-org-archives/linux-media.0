@@ -2,52 +2,55 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 758D0C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:10:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 782D8C433EF
+	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:10:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349204AbiCKOLE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Mar 2022 09:11:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
+        id S1349070AbiCKOLF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Mar 2022 09:11:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346634AbiCKOKu (ORCPT
+        with ESMTP id S1347966AbiCKOKu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 11 Mar 2022 09:10:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4E61B30BA;
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9991AD946;
         Fri, 11 Mar 2022 06:09:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BA45B82C12;
-        Fri, 11 Mar 2022 14:09:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E2EC340F7;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 349F9B82C15;
+        Fri, 11 Mar 2022 14:09:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 734EEC36AE2;
         Fri, 11 Mar 2022 14:09:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647007777;
-        bh=j9eGJCcfsarmK0MtIzGvUZa5EyQ13+LJFk2XSMS4oNM=;
+        bh=H/WtLlPvqonunkqsJM9/To1ZriYUO8O8KNV0Z6F0ADg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IamM82Ey9r6PTPmR+oEaEQM849h/Q/jvMfiRPP8aNhUKQiWtBv9lBRv6JmoWsfrrk
-         xYJANVqx/ZRohq/FYHGSqn5arbZSMLuXsxyr1HTEDNfRg4yzDNNSoqOjebeLBVslcl
-         EOh75GGBbJKLWsWTYE38TG4I7gTrxLVFS0CVtJ1kYak9/SgVacWWbGt4HvPogWqmNa
-         HNz/mf+m625Qwm26RUC5cAEJTQTRBriDpugtNlBn/rmPiOimb/9XgNYUpUn9zWAQvn
-         vkbw8S7DbLNrGWTq8e46z1UmZRx7CwPOWrfqmvH8d93nnWOpGoolq4i0rnZCzn1un5
-         fVeVdD5xf8GRA==
+        b=jiJgivGaCJyn7+92eS2UzaOSvTwQ2BChVPIVdlL+/Yh75QCZmG4ZvbVMCIJuMqti/
+         A7SWYgHmdhECA42jAUKYgBRPkTdb5K7igCd7IuiQ8LbKPQlYzrjR0Tm6W3pBGHgdGD
+         +iPrGvLnAsE/CsDmpmVnSBZFNToRN4UyV/1V+M4rhfx+tGb+HjyJFD8ilfX6ifq1yq
+         Bns1HPvBblBRVfWcEGXn1Caeh1FpdQ4fusSa8cEtxKrYjCcOY/HeV+RngYuKCtae47
+         PhTAHOlgIeWXSo5gQWYQhUWR4XBCwc34bf4FtCcEe1Wp+tp4SRAZlaty/3/unhxjaz
+         UirqmHG+W7ujQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nSfxX-000lHB-05; Fri, 11 Mar 2022 15:09:35 +0100
+        id 1nSfxX-000lHN-6W; Fri, 11 Mar 2022 15:09:35 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
+        Bin Liu <bin.liu@mediatek.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Ming Qian <ming.qian@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v2 13/38] media: platform: coda: move config to its own file
-Date:   Fri, 11 Mar 2022 15:07:26 +0100
-Message-Id: <8471590ec0809292a61396dd7d2af1f3ac8a3174.1647006877.git.mchehab@kernel.org>
+        Rick Chang <rick.chang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 16/38] media: platform: mtk-jpeg: move config to its own file
+Date:   Fri, 11 Mar 2022 15:07:29 +0100
+Message-Id: <b3e46789ac2e7cce2fcfef96749191f640a44fc2.1647006877.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647006877.git.mchehab@kernel.org>
 References: <cover.1647006877.git.mchehab@kernel.org>
@@ -59,7 +62,7 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 In order to better organize the platform/Kconfig, place
-coda-specific config stuff on a separate Kconfig file.
+mtk-jpeg-specific config stuff on a separate Kconfig file.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -68,70 +71,68 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.1647006877.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig      | 18 +-----------------
- drivers/media/platform/coda/Kconfig | 17 +++++++++++++++++
- 2 files changed, 18 insertions(+), 17 deletions(-)
- create mode 100644 drivers/media/platform/coda/Kconfig
+ drivers/media/platform/Kconfig          | 17 +----------------
+ drivers/media/platform/mtk-jpeg/Kconfig | 16 ++++++++++++++++
+ 2 files changed, 17 insertions(+), 16 deletions(-)
+ create mode 100644 drivers/media/platform/mtk-jpeg/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 25cfda75e625..f6bc8457a1c2 100644
+index da1fa4642bca..41162dcfafcc 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -50,6 +50,7 @@ source "drivers/media/platform/via/Kconfig"
- source "drivers/media/platform/amphion/Kconfig"
- source "drivers/media/platform/cadence/Kconfig"
+@@ -55,6 +55,7 @@ source "drivers/media/platform/davinci/Kconfig"
  
-+source "drivers/media/platform/coda/Kconfig"
- source "drivers/media/platform/davinci/Kconfig"
- 
+ source "drivers/media/platform/exynos-gsc/Kconfig"
+ source "drivers/media/platform/meson/ge2d/Kconfig"
++source "drivers/media/platform/mtk-jpeg/Kconfig"
  source "drivers/media/platform/omap/Kconfig"
-@@ -187,23 +188,6 @@ config VIDEO_TI_CAL_MC
  
- # Mem2mem drivers
+ source "drivers/media/platform/aspeed/Kconfig"
+@@ -192,22 +193,6 @@ config VIDEO_TI_CAL_MC
  
--config VIDEO_CODA
--	tristate "Chips&Media Coda multi-standard codec IP"
--	depends on V4L_MEM2MEM_DRIVERS
--	depends on VIDEO_DEV && VIDEO_V4L2 && OF && (ARCH_MXC || COMPILE_TEST)
--	select SRAM
--	select VIDEOBUF2_DMA_CONTIG
--	select VIDEOBUF2_VMALLOC
--	select V4L2_JPEG_HELPER
--	select V4L2_MEM2MEM_DEV
--	select GENERIC_ALLOCATOR
--	help
--	   Coda is a range of video codec IPs that supports
--	   H.264, MPEG-4, and other video formats.
--
--config VIDEO_IMX_VDOA
--	def_tristate VIDEO_CODA if SOC_IMX6Q || COMPILE_TEST
--
  source "drivers/media/platform/imx-jpeg/Kconfig"
  
- config VIDEO_MEDIATEK_JPEG
-diff --git a/drivers/media/platform/coda/Kconfig b/drivers/media/platform/coda/Kconfig
+-config VIDEO_MEDIATEK_JPEG
+-	tristate "Mediatek JPEG Codec driver"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on MTK_IOMMU_V1 || MTK_IOMMU || COMPILE_TEST
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	depends on ARCH_MEDIATEK || COMPILE_TEST
+-	depends on MTK_SMI || (COMPILE_TEST && MTK_SMI=n)
+-	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_MEM2MEM_DEV
+-	help
+-	  Mediatek jpeg codec driver provides HW capability to decode
+-	  JPEG format
+-
+-	  To compile this driver as a module, choose M here: the
+-	  module will be called mtk-jpeg
+-
+ config VIDEO_MEDIATEK_VPU
+ 	tristate "Mediatek Video Processor Unit"
+ 	depends on V4L_MEM2MEM_DRIVERS
+diff --git a/drivers/media/platform/mtk-jpeg/Kconfig b/drivers/media/platform/mtk-jpeg/Kconfig
 new file mode 100644
-index 000000000000..ae495fd7b25a
+index 000000000000..72ed920b011a
 --- /dev/null
-+++ b/drivers/media/platform/coda/Kconfig
-@@ -0,0 +1,17 @@
++++ b/drivers/media/platform/mtk-jpeg/Kconfig
+@@ -0,0 +1,16 @@
 +# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_CODA
-+	tristate "Chips&Media Coda multi-standard codec IP"
++config VIDEO_MEDIATEK_JPEG
++	tristate "Mediatek JPEG Codec driver"
 +	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV && VIDEO_V4L2 && OF && (ARCH_MXC || COMPILE_TEST)
-+	select SRAM
++	depends on MTK_IOMMU_V1 || MTK_IOMMU || COMPILE_TEST
++	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on ARCH_MEDIATEK || COMPILE_TEST
++	depends on MTK_SMI || (COMPILE_TEST && MTK_SMI=n)
 +	select VIDEOBUF2_DMA_CONTIG
-+	select VIDEOBUF2_VMALLOC
-+	select V4L2_JPEG_HELPER
 +	select V4L2_MEM2MEM_DEV
-+	select GENERIC_ALLOCATOR
 +	help
-+	   Coda is a range of video codec IPs that supports
-+	   H.264, MPEG-4, and other video formats.
++	  Mediatek jpeg codec driver provides HW capability to decode
++	  JPEG format
 +
-+config VIDEO_IMX_VDOA
-+	def_tristate VIDEO_CODA if SOC_IMX6Q || COMPILE_TEST
++	  To compile this driver as a module, choose M here: the
++	  module will be called mtk-jpeg
 -- 
 2.35.1
 
