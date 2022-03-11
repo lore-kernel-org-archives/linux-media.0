@@ -2,57 +2,53 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39AD1C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:10:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 694B2C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:10:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349169AbiCKOL0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Mar 2022 09:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        id S1347966AbiCKOL1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Mar 2022 09:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349216AbiCKOLE (ORCPT
+        with ESMTP id S1349213AbiCKOLE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 11 Mar 2022 09:11:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3A91B3A47;
-        Fri, 11 Mar 2022 06:09:49 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495031B1DF7;
+        Fri, 11 Mar 2022 06:09:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 497A5B82C16;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D73061EF8;
         Fri, 11 Mar 2022 14:09:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D0AEC34100;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9118C3410A;
         Fri, 11 Mar 2022 14:09:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647007777;
-        bh=f6rVcnC4NQzIhGu0zc2CZYVuVZxuemnCqfneah5wGCc=;
+        bh=Fe0ryIwx0a4/s0R6N6D3aXkyaHLa/qrZCaWjXq0v/fI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nAHgHdUE4MR2wobRq8B5mp9TSRW+4vNhxY6xwptFcuOFkRehjjecSMPJK4v3ON11n
-         9uiHAvqB+uvlFZJoXAaLVq/ujksbijaGKfKqj+13zYKyYoqSOklGkfRGSuja4sOvSw
-         isyE1FSBOPIL0mclpUMQ/rPnkiQLDDBLFwU2Qks/AHIasZFMUEdx+C1qlOIyxQP001
-         mMbSaoE/imG8Dk0eVNsHnpXqq567+YFe91zirCCfkStc5Sa6w3Xt9hSL7PyUQ1NBps
-         sUubhTVV0VHDCG4wtR3fytJMAoBvG3TmVKjvkuQOxLJ4GklW77UV/w9Z5q5K6bCYhL
-         iJVZ2SNLMfO9g==
+        b=F4M/MsJU070+d1a3NYrSFfWh9TDWst3x88yR7D4hVy401WREaJh8bkmT9EC2gVziq
+         WUmEcp3vkHC00IxFquUmgVGdr545N/8zZUDOuo+3F9v/HPbeG7m921jmZ+FC3zrYMK
+         dJb2wHBWSC8xmh8wslu4SBvpjFSYV4/lUvXgY36FdPL8qn56VKvYbv9NRHfvEHKodT
+         KxBZ/TrAIpcCejuWZBsW0Fay5b4yLbIplYnPT32UBujUIEEvjbQ3pqvxP3FTee+kyt
+         Ph7KyDz6mcuZjxtumFdovAeaNqw4+pkX1I7J1KKxUXw/7pbXubwx+3SxXAiFRBDwh3
+         OXhylFlvlC4mw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nSfxX-000lHZ-CZ; Fri, 11 Mar 2022 15:09:35 +0100
+        id 1nSfxX-000lHx-O5; Fri, 11 Mar 2022 15:09:35 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Houlong Wei <houlong.wei@mediatek.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
         Ming Qian <ming.qian@nxp.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH v2 19/38] media: platform: mtk-vpu: move config to its own file
-Date:   Fri, 11 Mar 2022 15:07:32 +0100
-Message-Id: <6064dc98df604cbc70a6d58df471a74e78c03338.1647006877.git.mchehab@kernel.org>
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 25/38] media: platform: s5p-g2d: move config to its own file
+Date:   Fri, 11 Mar 2022 15:07:38 +0100
+Message-Id: <c801234d44c13878854d1348b2297826b78d178e.1647006877.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647006877.git.mchehab@kernel.org>
 References: <cover.1647006877.git.mchehab@kernel.org>
@@ -64,7 +60,7 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 In order to better organize the platform/Kconfig, place
-mtk-vpu-specific config stuff on a separate Kconfig file.
+s5p-g2d-specific config stuff on a separate Kconfig file.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -73,65 +69,57 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.1647006877.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig         | 15 +--------------
- drivers/media/platform/mtk-vpu/Kconfig | 15 +++++++++++++++
- 2 files changed, 16 insertions(+), 14 deletions(-)
- create mode 100644 drivers/media/platform/mtk-vpu/Kconfig
+ drivers/media/platform/Kconfig         | 11 +----------
+ drivers/media/platform/s5p-g2d/Kconfig | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 10 deletions(-)
+ create mode 100644 drivers/media/platform/s5p-g2d/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 4553e7fc193c..1c6358d6fa89 100644
+index 633fbc408b8c..95f66255b635 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -58,6 +58,7 @@ source "drivers/media/platform/meson/ge2d/Kconfig"
- source "drivers/media/platform/mtk-jpeg/Kconfig"
- source "drivers/media/platform/mtk-mdp/Kconfig"
- source "drivers/media/platform/mtk-vcodec/Kconfig"
-+source "drivers/media/platform/mtk-vpu/Kconfig"
- source "drivers/media/platform/omap/Kconfig"
- 
+@@ -67,6 +67,7 @@ source "drivers/media/platform/qcom/venus/Kconfig"
  source "drivers/media/platform/aspeed/Kconfig"
-@@ -195,20 +196,6 @@ config VIDEO_TI_CAL_MC
+ source "drivers/media/platform/rockchip/rga/Kconfig"
+ source "drivers/media/platform/s3c-camif/Kconfig"
++source "drivers/media/platform/s5p-g2d/Kconfig"
  
- source "drivers/media/platform/imx-jpeg/Kconfig"
+ config VIDEO_MUX
+ 	tristate "Video Multiplexer"
+@@ -164,16 +165,6 @@ config VIDEO_MEM2MEM_DEINTERLACE
+ 	help
+ 	    Generic deinterlacing V4L2 driver.
  
--config VIDEO_MEDIATEK_VPU
--	tristate "Mediatek Video Processor Unit"
+-config VIDEO_SAMSUNG_S5P_G2D
+-	tristate "Samsung S5P and EXYNOS4 G2D 2d graphics accelerator driver"
 -	depends on V4L_MEM2MEM_DRIVERS
 -	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_MEDIATEK || COMPILE_TEST
+-	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+-	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_MEM2MEM_DEV
 -	help
--	    This driver provides downloading VPU firmware and
--	    communicating with VPU. This driver for hw video
--	    codec embedded in Mediatek's MT8173 SOCs. It is able
--	    to handle video decoding/encoding in a range of formats.
--
--	    To compile this driver as a module, choose M here: the
--	    module will be called mtk-vpu.
--
- config VIDEO_MEM2MEM_DEINTERLACE
- 	tristate "Deinterlace support"
- 	depends on V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/mtk-vpu/Kconfig b/drivers/media/platform/mtk-vpu/Kconfig
+-	  This is a v4l2 driver for Samsung S5P and EXYNOS4 G2D
+-	  2d graphics accelerator.
+ 
+ config VIDEO_SAMSUNG_S5P_JPEG
+ 	tristate "Samsung S5P/Exynos3250/Exynos4 JPEG codec driver"
+diff --git a/drivers/media/platform/s5p-g2d/Kconfig b/drivers/media/platform/s5p-g2d/Kconfig
 new file mode 100644
-index 000000000000..df679ea79ed0
+index 000000000000..9bc9d90a666a
 --- /dev/null
-+++ b/drivers/media/platform/mtk-vpu/Kconfig
-@@ -0,0 +1,15 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config VIDEO_MEDIATEK_VPU
-+	tristate "Mediatek Video Processor Unit"
++++ b/drivers/media/platform/s5p-g2d/Kconfig
+@@ -0,0 +1,11 @@
++config VIDEO_SAMSUNG_S5P_G2D
++	tristate "Samsung S5P and EXYNOS4 G2D 2d graphics accelerator driver"
 +	depends on V4L_MEM2MEM_DRIVERS
 +	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_MEDIATEK || COMPILE_TEST
++	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_MEM2MEM_DEV
 +	help
-+	    This driver provides downloading VPU firmware and
-+	    communicating with VPU. This driver for hw video
-+	    codec embedded in Mediatek's MT8173 SOCs. It is able
-+	    to handle video decoding/encoding in a range of formats.
++	  This is a v4l2 driver for Samsung S5P and EXYNOS4 G2D
++	  2d graphics accelerator.
 +
-+	    To compile this driver as a module, choose M here: the
-+	    module will be called mtk-vpu.
 -- 
 2.35.1
 
