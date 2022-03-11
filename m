@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6902C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4C57C433EF
 	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:36:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349539AbiCKOh4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Mar 2022 09:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59940 "EHLO
+        id S1349551AbiCKOh5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Mar 2022 09:37:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349621AbiCKOhs (ORCPT
+        with ESMTP id S1349668AbiCKOhw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:37:48 -0500
+        Fri, 11 Mar 2022 09:37:52 -0500
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EA31C9B54;
-        Fri, 11 Mar 2022 06:36:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1721C9B78;
+        Fri, 11 Mar 2022 06:36:43 -0800 (PST)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id F0B1124001D;
-        Fri, 11 Mar 2022 14:36:37 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 833BB240004;
+        Fri, 11 Mar 2022 14:36:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647009399;
+        t=1647009401;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vQABIwvDaCpqofKb9CpGithLajgEcAHeDnwzVHUYXaI=;
-        b=FtLnherDaK/iMTfQbwEMef3cpQCslRn8UBFisXokonoOjVwKlk9f197i47VMoIowKS+bW6
-        u2EMK52AWPjUEOur84N545NHUspiuDQh7Wz1U9urClaKe8mwXmeI7xaQ0qUksgRE4pJOYM
-        axo6zlZn0M4Lhl+WTMpFJ12t/iS1+H6m9/Y+vAO2OWCQ2kiZu7RjzBnFXSM4+SV2NzNP2f
-        q3k0YhTSSwdfiDyR/a5dtVIaTkvg0yuEpw1YqabyKraSkGWtNiFYaPQguKajmB8rqays8k
-        ouzQ1+4r0H1JfZjTQTNpAhVHFn4WBRygsLfqIYnvbZV5/tYnISkEyz5OTa2DFw==
+        bh=ZBGbdEWIKa8ylcY99ku5Po7hP1W07zt3jqCnObrq3TM=;
+        b=eXLXFiBe3lmGuUHJ3aLBzd1ScB+kIZECxr6iG0kJRldFdqh0Zjh5wErgBNcdO0Ah6hcR5H
+        cXS7t9m8pZFLA8r5+FyQJvFFvcD/1jyLBUaLxXURzysb8KW24CYfEddmA7hjeS3lTjJuBA
+        QQyUa1h2GdOFTM9SFqQYwfdbAbK5fsksZM7u51htAy47fBjUj38AGHhHaOs9UKiLqJ6fUC
+        OEJ14nsIglhpPNUL7STRlJnEudm1ju5gH8hAY8mybWRUVmRDOz50K3qQlP+ecUb2lvXM4Y
+        fTodw6m3zGv/+5mt9q5ovhnX/6Pvy1oRX6qNvDN3w4B+Q3Kvn0Eb+7aruEE4ZQ==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -42,9 +42,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 33/46] media: sun6i-csi: Introduce format match structure, list and helper
-Date:   Fri, 11 Mar 2022 15:35:19 +0100
-Message-Id: <20220311143532.265091-34-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v3 35/46] media: sun6i-csi: Get bridge subdev directly in capture stream ops
+Date:   Fri, 11 Mar 2022 15:35:21 +0100
+Message-Id: <20220311143532.265091-36-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220311143532.265091-1-paul.kocialkowski@bootlin.com>
 References: <20220311143532.265091-1-paul.kocialkowski@bootlin.com>
@@ -54,161 +54,80 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Introduce a list of mbus/pixel format combinations that need an exact
-match between the two sides. This is the case when using raw input
-configuration. The list will be used to replace the
-sun6i_csi_is_format_supported combinatory helper.
+The remote subdev connected to the capture video device is always
+our bridge, so get the bridge subdev directly instead of using a
+dedicated helper (which is removed by this commit).
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 117 ++++++++++++++++++
- .../sunxi/sun6i-csi/sun6i_csi_capture.h       |   5 +
- 2 files changed, 122 insertions(+)
+ .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 30 ++-----------------
+ 1 file changed, 3 insertions(+), 27 deletions(-)
 
 diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-index 1a5797454beb..91f2295cbdc6 100644
+index be1a4fe8fe5f..2f9bf75e4e39 100644
 --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
 +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-@@ -227,6 +227,123 @@ struct sun6i_csi_capture_format *sun6i_csi_capture_format_find(u32 pixelformat)
- 	return NULL;
+@@ -42,22 +42,6 @@ void sun6i_csi_capture_format(struct sun6i_csi_device *csi_dev,
+ 		*field = csi_dev->capture.format.fmt.pix.field;
  }
  
-+/* RAW formats need an exact match between pixel and mbus formats. */
-+static const
-+struct sun6i_csi_capture_format_match sun6i_csi_capture_format_matches[] = {
-+	/* YUV420 */
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_YUYV,
-+		.mbus_code	= MEDIA_BUS_FMT_YUYV8_2X8,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_YUYV,
-+		.mbus_code	= MEDIA_BUS_FMT_YUYV8_1X16,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_YVYU,
-+		.mbus_code	= MEDIA_BUS_FMT_YVYU8_2X8,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_YVYU,
-+		.mbus_code	= MEDIA_BUS_FMT_YVYU8_1X16,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_UYVY,
-+		.mbus_code	= MEDIA_BUS_FMT_UYVY8_2X8,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_UYVY,
-+		.mbus_code	= MEDIA_BUS_FMT_UYVY8_1X16,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_VYUY,
-+		.mbus_code	= MEDIA_BUS_FMT_VYUY8_2X8,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_VYUY,
-+		.mbus_code	= MEDIA_BUS_FMT_VYUY8_1X16,
-+	},
-+	/* RGB */
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_RGB565,
-+		.mbus_code	= MEDIA_BUS_FMT_RGB565_2X8_LE,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_RGB565X,
-+		.mbus_code	= MEDIA_BUS_FMT_RGB565_2X8_BE,
-+	},
-+	/* Bayer */
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_SBGGR8,
-+		.mbus_code	= MEDIA_BUS_FMT_SBGGR8_1X8,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_SGBRG8,
-+		.mbus_code	= MEDIA_BUS_FMT_SGBRG8_1X8,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_SGRBG8,
-+		.mbus_code	= MEDIA_BUS_FMT_SGRBG8_1X8,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_SRGGB8,
-+		.mbus_code	= MEDIA_BUS_FMT_SRGGB8_1X8,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_SBGGR10,
-+		.mbus_code	= MEDIA_BUS_FMT_SBGGR10_1X10,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_SGBRG10,
-+		.mbus_code	= MEDIA_BUS_FMT_SGBRG10_1X10,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_SGRBG10,
-+		.mbus_code	= MEDIA_BUS_FMT_SGRBG10_1X10,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_SRGGB10,
-+		.mbus_code	= MEDIA_BUS_FMT_SRGGB10_1X10,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_SBGGR12,
-+		.mbus_code	= MEDIA_BUS_FMT_SBGGR12_1X12,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_SGBRG12,
-+		.mbus_code	= MEDIA_BUS_FMT_SGBRG12_1X12,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_SGRBG12,
-+		.mbus_code	= MEDIA_BUS_FMT_SGRBG12_1X12,
-+	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_SRGGB12,
-+		.mbus_code	= MEDIA_BUS_FMT_SRGGB12_1X12,
-+	},
-+	/* Compressed */
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_JPEG,
-+		.mbus_code	= MEDIA_BUS_FMT_JPEG_1X8,
-+	},
-+};
-+
-+static bool sun6i_csi_capture_format_match(u32 pixelformat, u32 mbus_code)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(sun6i_csi_capture_format_matches); i++) {
-+		const struct sun6i_csi_capture_format_match *match =
-+			&sun6i_csi_capture_format_matches[i];
-+
-+		if (match->pixelformat == pixelformat &&
-+		    match->mbus_code == mbus_code)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- /* Capture */
+-static struct v4l2_subdev *
+-sun6i_csi_capture_remote_subdev(struct sun6i_csi_capture *capture, u32 *pad)
+-{
+-	struct media_pad *remote;
+-
+-	remote = media_entity_remote_pad(&capture->pad);
+-
+-	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
+-		return NULL;
+-
+-	if (pad)
+-		*pad = remote->index;
+-
+-	return media_entity_to_v4l2_subdev(remote->entity);
+-}
+-
+ /* Format */
  
- static void sun6i_csi_capture_irq_enable(struct sun6i_csi_device *csi_dev)
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-index 4b1ff19edc2f..2605b16f091c 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-@@ -27,6 +27,11 @@ struct sun6i_csi_capture_format {
- 	u32	hsize_len_factor;
- };
+ static const struct sun6i_csi_capture_format sun6i_csi_capture_formats[] = {
+@@ -822,8 +806,8 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
+ 	struct sun6i_csi_capture *capture = &csi_dev->capture;
+ 	struct sun6i_csi_capture_state *state = &capture->state;
+ 	struct video_device *video_dev = &capture->video_dev;
++	struct v4l2_subdev *subdev = &csi_dev->bridge.subdev;
+ 	struct device *dev = csi_dev->dev;
+-	struct v4l2_subdev *subdev;
+ 	int ret;
  
-+struct sun6i_csi_capture_format_match {
-+	u32	pixelformat;
-+	u32	mbus_code;
-+};
-+
- #undef current
- struct sun6i_csi_capture_state {
- 	struct list_head		queue;
+ 	state->sequence = 0;
+@@ -832,12 +816,6 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
+ 	if (ret < 0)
+ 		goto error_state;
+ 
+-	subdev = sun6i_csi_capture_remote_subdev(capture, NULL);
+-	if (!subdev) {
+-		ret = -EINVAL;
+-		goto error_media_pipeline;
+-	}
+-
+ 	/* PM */
+ 
+ 	ret = pm_runtime_resume_and_get(dev);
+@@ -886,12 +864,10 @@ static void sun6i_csi_capture_stop_streaming(struct vb2_queue *queue)
+ {
+ 	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(queue);
+ 	struct sun6i_csi_capture *capture = &csi_dev->capture;
++	struct v4l2_subdev *subdev = &csi_dev->bridge.subdev;
+ 	struct device *dev = csi_dev->dev;
+-	struct v4l2_subdev *subdev;
+ 
+-	subdev = sun6i_csi_capture_remote_subdev(capture, NULL);
+-	if (subdev)
+-		v4l2_subdev_call(subdev, video, s_stream, 0);
++	v4l2_subdev_call(subdev, video, s_stream, 0);
+ 
+ 	sun6i_csi_capture_disable(csi_dev);
+ 	sun6i_csi_capture_irq_disable(csi_dev);
 -- 
 2.35.1
 
