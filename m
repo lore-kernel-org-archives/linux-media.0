@@ -2,53 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF746C433FE
-	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E157FC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:10:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349190AbiCKOK7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Mar 2022 09:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
+        id S1349192AbiCKOLD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Mar 2022 09:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345071AbiCKOKu (ORCPT
+        with ESMTP id S1345552AbiCKOKu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 11 Mar 2022 09:10:50 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A7D1AD959;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA991B308C;
         Fri, 11 Mar 2022 06:09:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DA8AB82C11;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A4DFB82C0E;
         Fri, 11 Mar 2022 14:09:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41A1EC340F6;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2543AC340E9;
         Fri, 11 Mar 2022 14:09:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647007777;
-        bh=FL9FKo4Uznvd0fAyl/aiH2dqH8qRgA1i5+PVSuu//wM=;
+        bh=l43uig7u4QoUgCLbuOaSYDR1BPlB3/eU5ML5shDws0E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bEWadyJ52T3M3FClMlWfU/bjSpqWcU6ZNpJ+6bKWdr8p4QdTcD3eCkYw+0eV6gDdR
-         gVbNixe3UsYulv3cFShoPkWu9VFhNFVatr/u056+QlzGmvTArH7cSZH3EYnu0dQ519
-         5Z2FFf66k1KcIvWwFLfn4wfpiFZTJCjjgR6cUbOXdDav7BIuMm1D2pnywMM5T7ggCy
-         jX3hMNpyi2jjNGwvsJ1okjjSC+y0JLKNmStsDRV8ZH3wY5zJ5dCTQq4K2gUiETnWqa
-         /bgEMfk5BUbFw8KS84X7YhvHDP3RDzvEFgeDKqk4oIgnDiFgLSpaXA6O7zHW+mfCDg
-         y8GuzLq1W8p5A==
+        b=Om6ucL+EIP9TOAfIH36ogRtY+727Z2w2hWmbkn0/54KXOOYned2s25FLrOnhNbb2R
+         niOvUzrZjnJcWGCAHIYhZlq0Vwz2DDUI7Vm775mTdETH+O12GU3CcyyJ/5VGCKgbmC
+         o8HdtllhWHr3hYkIvkk38TOlHLo6e0ki7/Z5InSaKrWRqwI+/pPjliBHbs1KIl1YIM
+         wy2y9IHWLKkbgaPyNjPQlE3VeFU9AoAoVwhoRdUzrDxsDFLYL/0KFcfLkO+66j3ivr
+         a3+pt04ZFTZqPWyzvoOoBzSdaaNfQX75YPZJaybIugsC/+Xl4OwBZRl6vHu7Xw7QK7
+         yDJT37k3kPpDw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nSfxX-000lHF-28; Fri, 11 Mar 2022 15:09:35 +0100
+        id 1nSfxW-000lH7-V7; Fri, 11 Mar 2022 15:09:34 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
         Dmitry Osipenko <digetx@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 14/38] media: platform: exynos-gsc: move config to its own file
-Date:   Fri, 11 Mar 2022 15:07:27 +0100
-Message-Id: <68f4028c20cec15964c4fa99cc7d1b96bb7e5aa7.1647006877.git.mchehab@kernel.org>
+        Ming Qian <ming.qian@nxp.com>, Shijie Qin <shijie.qin@nxp.com>,
+        Zhou Peng <eagle.zhou@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 12/38] media: platform: amphion: move config to its own file
+Date:   Fri, 11 Mar 2022 15:07:25 +0100
+Message-Id: <3aa6e54b5f1e3c4ca8eb5a7c2284513f9b555bf5.1647006877.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647006877.git.mchehab@kernel.org>
 References: <cover.1647006877.git.mchehab@kernel.org>
@@ -60,7 +59,7 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 In order to better organize the platform/Kconfig, place
-exynos-gsc-specific config stuff on a separate Kconfig file.
+amphion-specific config stuff on a separate Kconfig file.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -69,56 +68,76 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.1647006877.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig            | 11 +----------
- drivers/media/platform/exynos-gsc/Kconfig | 10 ++++++++++
- 2 files changed, 11 insertions(+), 10 deletions(-)
- create mode 100644 drivers/media/platform/exynos-gsc/Kconfig
+ drivers/media/platform/Kconfig         | 21 +--------------------
+ drivers/media/platform/amphion/Kconfig | 20 ++++++++++++++++++++
+ 2 files changed, 21 insertions(+), 20 deletions(-)
+ create mode 100644 drivers/media/platform/amphion/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index f6bc8457a1c2..103f3771fd29 100644
+index e795a0862841..25cfda75e625 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -53,6 +53,7 @@ source "drivers/media/platform/cadence/Kconfig"
- source "drivers/media/platform/coda/Kconfig"
+@@ -47,6 +47,7 @@ source "drivers/media/platform/marvell-ccic/Kconfig"
+ 
+ source "drivers/media/platform/via/Kconfig"
+ 
++source "drivers/media/platform/amphion/Kconfig"
+ source "drivers/media/platform/cadence/Kconfig"
+ 
  source "drivers/media/platform/davinci/Kconfig"
+@@ -535,26 +536,6 @@ config VIDEO_TEGRA_VDE
+ 	   Support for the NVIDIA Tegra video decoder unit.
+ 	   To compile this driver as a module choose m here.
  
-+source "drivers/media/platform/exynos-gsc/Kconfig"
- source "drivers/media/platform/omap/Kconfig"
- 
- source "drivers/media/platform/aspeed/Kconfig"
-@@ -328,16 +329,6 @@ config VIDEO_SAMSUNG_S5P_MFC
- 	help
- 	    MFC 5.1 and 6.x driver for V4L2
- 
--config VIDEO_SAMSUNG_EXYNOS_GSC
--	tristate "Samsung Exynos G-Scaler driver"
+-config VIDEO_AMPHION_VPU
+-	tristate "Amphion VPU (Video Processing Unit) Codec IP"
 -	depends on V4L_MEM2MEM_DRIVERS
--	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_EXYNOS || COMPILE_TEST
--	select VIDEOBUF2_DMA_CONTIG
+-	depends on ARCH_MXC || COMPILE_TEST
+-	depends on MEDIA_SUPPORT
+-	depends on VIDEO_DEV
+-	depends on VIDEO_V4L2
+-	select MEDIA_CONTROLLER
 -	select V4L2_MEM2MEM_DEV
+-	select VIDEOBUF2_DMA_CONTIG
+-	select VIDEOBUF2_VMALLOC
 -	help
--	  This is a v4l2 driver for Samsung EXYNOS5 SoC G-Scaler.
+-	  Amphion VPU Codec IP contains two parts: Windsor and Malone.
+-	  Windsor is encoder that supports H.264, and Malone is decoder
+-	  that supports H.264, HEVC, and other video formats.
+-	  This is a V4L2 driver for NXP MXC 8Q video accelerator hardware.
+-	  It accelerates encoding and decoding operations on
+-	  various NXP SoCs.
+-	  To compile this driver as a module choose m here.
 -
- config VIDEO_STI_BDISP
- 	tristate "STMicroelectronics BDISP 2D blitter driver"
- 	depends on V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/exynos-gsc/Kconfig b/drivers/media/platform/exynos-gsc/Kconfig
+ # TI VIDEO PORT Helper Modules
+ # These will be selected by VPE and VIP
+ config VIDEO_TI_VPDMA
+diff --git a/drivers/media/platform/amphion/Kconfig b/drivers/media/platform/amphion/Kconfig
 new file mode 100644
-index 000000000000..f9bdffe915b4
+index 000000000000..13899649f766
 --- /dev/null
-+++ b/drivers/media/platform/exynos-gsc/Kconfig
-@@ -0,0 +1,10 @@
++++ b/drivers/media/platform/amphion/Kconfig
+@@ -0,0 +1,20 @@
 +# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_SAMSUNG_EXYNOS_GSC
-+	tristate "Samsung Exynos G-Scaler driver"
++config VIDEO_AMPHION_VPU
++	tristate "Amphion VPU (Video Processing Unit) Codec IP"
 +	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_EXYNOS || COMPILE_TEST
-+	select VIDEOBUF2_DMA_CONTIG
++	depends on ARCH_MXC || COMPILE_TEST
++	depends on MEDIA_SUPPORT
++	depends on VIDEO_DEV
++	depends on VIDEO_V4L2
++	select MEDIA_CONTROLLER
 +	select V4L2_MEM2MEM_DEV
++	select VIDEOBUF2_DMA_CONTIG
++	select VIDEOBUF2_VMALLOC
 +	help
-+	  This is a v4l2 driver for Samsung EXYNOS5 SoC G-Scaler.
++	  Amphion VPU Codec IP contains two parts: Windsor and Malone.
++	  Windsor is encoder that supports H.264, and Malone is decoder
++	  that supports H.264, HEVC, and other video formats.
++	  This is a V4L2 driver for NXP MXC 8Q video accelerator hardware.
++	  It accelerates encoding and decoding operations on
++	  various NXP SoCs.
++	  To compile this driver as a module choose m here.
 -- 
 2.35.1
 
