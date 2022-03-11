@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 777CCC433F5
-	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:37:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8402C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:37:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349695AbiCKOi6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Mar 2022 09:38:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
+        id S1349599AbiCKOi7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Mar 2022 09:38:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349697AbiCKOiR (ORCPT
+        with ESMTP id S1349662AbiCKOiQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:38:17 -0500
+        Fri, 11 Mar 2022 09:38:16 -0500
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0611CA5C2;
-        Fri, 11 Mar 2022 06:37:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359F51C9B54;
+        Fri, 11 Mar 2022 06:36:59 -0800 (PST)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id F22AD24000C;
-        Fri, 11 Mar 2022 14:36:59 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id E1903240007;
+        Fri, 11 Mar 2022 14:36:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647009421;
+        t=1647009417;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IGe1fBLDVUFuRicfbGDrdMG7UD+cffaBQQk4odYtgqs=;
-        b=UVKwKS07KcPK7PuqRebeYyaVf0xx5W8ON7Kk77bviCSdfC67Fj1zx5Zy5QPJfKjO0mAuBt
-        5rYaaoEyQ/u+WeMIzlnBUItZeDWnfpSjGfKXKubIxTUEw2NeXPR+7zIFbESIcbY7bLWX8M
-        ydOv9UbCYH7vb8Xr5MsslVb5rqT724C4PfuYK3K/BzwYcnw5a/6M3SHfbdSm/dYs1ptWR+
-        dKsRq0GsnqlrjaTcU1Bi4P0txcMri1jyqW5vRYP3ZdBDhemIoKz/+KCLqqSUVjql9oi3Qb
-        UzfBMWVPvqVrjrJSUHGTksvbpfHwxfMqQKbosJ2KOVxwfKc1mEbObND9bKuOvQ==
+        bh=zDmhoLPQge3kG9Ojz9okiMcdcrF7ESNnFjv2vshc9E8=;
+        b=CkMzxPXpS0SWFrfc4VdTua2320ouiDSqKn/9yyYp6rGxR7K0hB/pMeRX7rdXv1BAevuoos
+        oWRRaT9ddbaafbH5auuO1jplMG+OmZBdVTkd82bR0hyM0+VbLJUKAxK8kOBuOfvseEmQOf
+        W2LJwZ5Wchg2hId7VjvL2w1UQZYQ1n1H61ZAs3dsLLwio2GZWX6tk7grSc0vpptjUgR3LA
+        21pW3BexthWMrW3JlgGSBfvhbdXzCU0k76JF07QJgnFpOADVmRfR2+rs1k+FvbwtPPVcSu
+        kKfGt6upmoe/AIC4PQeLN6szH33+4MqVuTzUWtjvzB3IjwphJb3DOhr8J6LYNQ==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -42,9 +42,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 46/46] MAINTAINERS: Add myself as sun6i-csi maintainer and rename/move entry
-Date:   Fri, 11 Mar 2022 15:35:32 +0100
-Message-Id: <20220311143532.265091-47-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v3 44/46] media: sun6i-csi: Detect the availability of the ISP
+Date:   Fri, 11 Mar 2022 15:35:30 +0100
+Message-Id: <20220311143532.265091-45-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220311143532.265091-1-paul.kocialkowski@bootlin.com>
 References: <20220311143532.265091-1-paul.kocialkowski@bootlin.com>
@@ -54,53 +54,87 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Given the substantial rework of the driver that I carried out and the
-knowledge acquired about the hardware along the way, make myself a
-maintainer of the sun6i-csi driver.
-
-Also rename and move the entry while at it since the driver is not
-specific to the V3s.
+Add a helper to detect whether the ISP is available and connected
+and store the indication in a driver-wide variable.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- MAINTAINERS | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 33 +++++++++++++++++++
+ .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  3 ++
+ 2 files changed, 36 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ed1758d194a5..164e1b57337f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -752,6 +752,15 @@ T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
- F:	drivers/media/platform/sunxi/sun4i-csi/
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+index 794ac53dcd30..f17be8e091a9 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+@@ -25,6 +25,35 @@
+ #include "sun6i_csi_capture.h"
+ #include "sun6i_csi_reg.h"
  
-+ALLWINNER A31 CSI DRIVER
-+M:	Yong Deng <yong.deng@magewell.com>
-+M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
-+F:	drivers/media/platform/sunxi/sun6i-csi/
++/* ISP */
 +
- ALLWINNER A31 MIPI CSI-2 BRIDGE DRIVER
- M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
- L:	linux-media@vger.kernel.org
-@@ -5115,14 +5124,6 @@ M:	Jaya Kumar <jayakumar.alsa@gmail.com>
- S:	Maintained
- F:	sound/pci/cs5535audio/
++static bool sun6i_csi_isp_detect(struct sun6i_csi_device *csi_dev)
++{
++	struct device *dev = csi_dev->dev;
++	struct fwnode_handle *handle = NULL;
++
++	/* ISP is not available if disabled in kernel config. */
++	if (!IS_ENABLED(CONFIG_VIDEO_SUN6I_ISP))
++		return 0;
++
++	/*
++	 * ISP is not available if not connected via fwnode graph.
++	 * This weill also check that the remote parent node is available.
++	 */
++	handle = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
++						 SUN6I_CSI_PORT_ISP, 0,
++						 FWNODE_GRAPH_ENDPOINT_NEXT);
++	if (!handle)
++		return 0;
++
++	fwnode_handle_put(handle);
++
++	dev_info(dev, "ISP link is available\n");
++	csi_dev->isp_available = true;
++
++	return 0;
++}
++
+ /* Media */
  
--CSI DRIVERS FOR ALLWINNER V3s
--M:	Yong Deng <yong.deng@magewell.com>
--L:	linux-media@vger.kernel.org
--S:	Maintained
--T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
--F:	drivers/media/platform/sunxi/sun6i-csi/
--
- CW1200 WLAN driver
- M:	Solomon Peachy <pizza@shaftnet.org>
- S:	Maintained
+ static const struct media_device_ops sun6i_csi_media_ops = {
+@@ -323,6 +352,10 @@ static int sun6i_csi_probe(struct platform_device *platform_dev)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = sun6i_csi_isp_detect(csi_dev);
++	if (ret)
++		goto error_resources;
++
+ 	ret = sun6i_csi_v4l2_setup(csi_dev);
+ 	if (ret)
+ 		goto error_resources;
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+index e3c1150d99f5..ee5b04f75311 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+@@ -22,6 +22,7 @@
+ enum sun6i_csi_port {
+ 	SUN6I_CSI_PORT_PARALLEL		= 0,
+ 	SUN6I_CSI_PORT_MIPI_CSI2	= 1,
++	SUN6I_CSI_PORT_ISP		= 2,
+ };
+ 
+ struct sun6i_csi_buffer {
+@@ -47,6 +48,8 @@ struct sun6i_csi_device {
+ 	struct clk			*clk_mod;
+ 	struct clk			*clk_ram;
+ 	struct reset_control		*reset;
++
++	bool				isp_available;
+ };
+ 
+ struct sun6i_csi_variant {
 -- 
 2.35.1
 
