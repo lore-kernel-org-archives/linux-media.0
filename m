@@ -2,55 +2,76 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A76DC433F5
-	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:08:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06E7FC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:08:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349129AbiCKOJS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Mar 2022 09:09:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        id S1349133AbiCKOJU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Mar 2022 09:09:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349066AbiCKOJG (ORCPT
+        with ESMTP id S1349082AbiCKOJH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:09:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4EB960A81;
-        Fri, 11 Mar 2022 06:07:59 -0800 (PST)
+        Fri, 11 Mar 2022 09:09:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90CB99689;
+        Fri, 11 Mar 2022 06:08:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30306B82C15;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C8EFB82C19;
         Fri, 11 Mar 2022 14:07:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03324C36AE2;
-        Fri, 11 Mar 2022 14:07:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BD08C340F6;
+        Fri, 11 Mar 2022 14:07:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647007676;
-        bh=TDVfs3xtXeHTNTBofq+Sc6rDRvUt94A2YcmX99wBb6M=;
+        bh=bwPUfixnMMMLYKoF0FKok+c6RIHDE6nwFXAt3rddH7w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ch8TovVgsLvdYeSagd2Ta38YYl0bdAMTvCVXSXIvPCaOcrcGqnOl0GVGRTpaVY4eR
-         eG15FvPJWlqEMzzhom+sWQ8lVGWqfPrTa7VCg9yL1qA9YGXHVqFckpR8ihZXIjbPDc
-         1HPZXeVPI3PdgLuBXmhcoFpBenk3PC2RGGkPZLLx4a6TWnHNiCcJx8TEjsoLBCRGwH
-         Mnbfam+3I8GNlrcRJpNGIVzOjDdnihZOwm/yHkzmVQV2FuT1+v2KiVs7viHyu832GL
-         lqmPtD8H2hvdeOHRbM5hoJes5VFX8CmNOfBI8+QVtyXfgugR/NgpNPPyFPy/OP9MYW
-         G7kOrphugU7QA==
+        b=DU+MyyrFD4ayVjVmbSiJkRlemrIuLZA10qztcyZyi14ghl88ZrtjVWanakIbPunIT
+         jlT3BPICECYwNhp63EJ37qoxPspfpuCegTz0T8B1t/Scj6ESgmx5VeO/2XT8eUg1St
+         8ijRHdV4qtsLwIV24tF/5tc8Sh2FicFq12d/sZTWQtXZX80z0YPHnT7zagxk3GG+/n
+         6dx3624yOlMCrXguDAsfwrmmnU0FSCl7Na8C5SM2ktBeFqz8laB8b4znhN/EYGZW3p
+         BX7Trmmly3HvnNwbrwhheG+bT6EOyEEJzajoOwrBlXg6uxWVWPGW2ZDhd6xWMed4yp
+         fN3T/Nft84j4Q==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nSfvt-000lAh-KK; Fri, 11 Mar 2022 15:07:53 +0100
+        id 1nSfvt-000lAr-PL; Fri, 11 Mar 2022 15:07:53 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alexander Voronov <avv.0@ya.ru>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Fabio Estevam <festevam@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mans Rullgard <mans@mansr.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sean Young <sean@mess.org>, Tomasz Figa <tfiga@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v2 03/38] media: Makefiles: sort entries where it fits
-Date:   Fri, 11 Mar 2022 15:07:16 +0100
-Message-Id: <a65c7574e544301c95b76950d96773f1477e840d.1647006877.git.mchehab@kernel.org>
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH v2 05/38] media: platform: move platform menu dependencies to drivers
+Date:   Fri, 11 Mar 2022 15:07:18 +0100
+Message-Id: <93e1ed4c56850384185d684d2f035995e646f431.1647006877.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647006877.git.mchehab@kernel.org>
 References: <cover.1647006877.git.mchehab@kernel.org>
@@ -61,7 +82,20 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Alphabetically sort entries at the Makefiles.
+Right now, platform dependencies are organized by the type of
+the platform driver. Yet, things tend to become very messy with
+time. The better seems to organize the drivers per manufacturer,
+as other Kernel subsystems are doing.
+
+As a preparation for such purpose, get rid of menuconfigs,
+moving the per-menu dependencies to be at the driver-specifig
+config entires.
+
+This shoud give flexibility to reorganize the platform drivers
+per manufacturer and re-sort them.
+
+This patch removes all "if..endif" options from the platform
+Kconfig, converting them into depends on.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -69,785 +103,786 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.1647006877.git.mchehab@kernel.org/
 
- drivers/media/common/Makefile           |   4 +-
- drivers/media/common/videobuf2/Makefile |   6 +-
- drivers/media/dvb-frontends/Makefile    | 192 ++++++++++++------------
- drivers/media/pci/Makefile              |  18 ++-
- drivers/media/radio/Makefile            |  42 +++---
- drivers/media/rc/Makefile               |  45 +++---
- drivers/media/rc/keymaps/Makefile       |  33 ++--
- drivers/media/spi/Makefile              |   5 +-
- drivers/media/test-drivers/Makefile     |   9 +-
- drivers/media/tuners/Makefile           |  66 ++++----
- drivers/media/usb/Makefile              |  17 ++-
- drivers/media/v4l2-core/Makefile        |  29 ++--
- 12 files changed, 241 insertions(+), 225 deletions(-)
+ drivers/media/platform/Kconfig                | 127 ++++++++++++------
+ drivers/media/platform/am437x/Kconfig         |   1 +
+ drivers/media/platform/atmel/Kconfig          |   4 +
+ drivers/media/platform/cadence/Kconfig        |   1 +
+ drivers/media/platform/davinci/Kconfig        |   6 +
+ drivers/media/platform/exynos4-is/Kconfig     |   1 +
+ drivers/media/platform/imx-jpeg/Kconfig       |   1 +
+ drivers/media/platform/imx/Kconfig            |   1 +
+ drivers/media/platform/marvell-ccic/Kconfig   |   2 +
+ drivers/media/platform/omap/Kconfig           |   1 +
+ drivers/media/platform/rcar-vin/Kconfig       |   2 +
+ drivers/media/platform/sti/c8sectpfe/Kconfig  |   1 +
+ .../media/platform/sunxi/sun4i-csi/Kconfig    |   1 +
+ .../media/platform/sunxi/sun6i-csi/Kconfig    |   1 +
+ drivers/media/platform/xilinx/Kconfig         |   1 +
+ 15 files changed, 107 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/media/common/Makefile b/drivers/media/common/Makefile
-index 55b5a1900124..2e3cc25c5695 100644
---- a/drivers/media/common/Makefile
-+++ b/drivers/media/common/Makefile
-@@ -1,6 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-y += b2c2/ saa7146/ siano/ v4l2-tpg/ videobuf2/
-+
-+# Please keep it alphabetically sorted
- obj-$(CONFIG_VIDEO_CX2341X) += cx2341x.o
--obj-$(CONFIG_VIDEO_TVEEPROM) += tveeprom.o
- obj-$(CONFIG_CYPRESS_FIRMWARE) += cypress_firmware.o
- obj-$(CONFIG_TTPCI_EEPROM) += ttpci-eeprom.o
-+obj-$(CONFIG_VIDEO_TVEEPROM) += tveeprom.o
-diff --git a/drivers/media/common/videobuf2/Makefile b/drivers/media/common/videobuf2/Makefile
-index 54306f8d096c..7036e5d56e04 100644
---- a/drivers/media/common/videobuf2/Makefile
-+++ b/drivers/media/common/videobuf2/Makefile
-@@ -7,9 +7,9 @@ ifeq ($(CONFIG_TRACEPOINTS),y)
- endif
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index 4843fabb8bb2..1cb73f09d0b5 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -3,17 +3,46 @@
+ # Platform drivers
+ #	Most drivers here are currently for webcam support
  
- obj-$(CONFIG_VIDEOBUF2_CORE) += videobuf2-common.o
--obj-$(CONFIG_VIDEOBUF2_V4L2) += videobuf2-v4l2.o
--obj-$(CONFIG_VIDEOBUF2_MEMOPS) += videobuf2-memops.o
--obj-$(CONFIG_VIDEOBUF2_VMALLOC) += videobuf2-vmalloc.o
- obj-$(CONFIG_VIDEOBUF2_DMA_CONTIG) += videobuf2-dma-contig.o
- obj-$(CONFIG_VIDEOBUF2_DMA_SG) += videobuf2-dma-sg.o
- obj-$(CONFIG_VIDEOBUF2_DVB) += videobuf2-dvb.o
-+obj-$(CONFIG_VIDEOBUF2_MEMOPS) += videobuf2-memops.o
-+obj-$(CONFIG_VIDEOBUF2_V4L2) += videobuf2-v4l2.o
-+obj-$(CONFIG_VIDEOBUF2_VMALLOC) += videobuf2-vmalloc.o
-diff --git a/drivers/media/dvb-frontends/Makefile b/drivers/media/dvb-frontends/Makefile
-index d32e4c0be576..2cb52330fba3 100644
---- a/drivers/media/dvb-frontends/Makefile
-+++ b/drivers/media/dvb-frontends/Makefile
-@@ -10,126 +10,128 @@ ifdef CONFIG_DVB_RTL2832_SDR
- 	ccflags-y += -I$(srctree)/drivers/media/usb/dvb-usb-v2
- endif
- 
--stb0899-objs := stb0899_drv.o stb0899_algo.o
--stv0900-objs := stv0900_core.o stv0900_sw.o
--drxd-objs := drxd_firm.o drxd_hard.o
- cxd2820r-objs := cxd2820r_core.o cxd2820r_c.o cxd2820r_t.o cxd2820r_t2.o
-+drxd-objs := drxd_firm.o drxd_hard.o
- drxk-objs := drxk_hard.o
-+stb0899-objs := stb0899_drv.o stb0899_algo.o
-+stv0900-objs := stv0900_core.o stv0900_sw.o
- 
--obj-$(CONFIG_DVB_PLL) += dvb-pll.o
--obj-$(CONFIG_DVB_STV0299) += stv0299.o
--obj-$(CONFIG_DVB_STB0899) += stb0899.o
--obj-$(CONFIG_DVB_STB6100) += stb6100.o
-+# Please keep it alphabetically sorted
+-menuconfig V4L_PLATFORM_DRIVERS
++menuconfig MEDIA_PLATFORM_DRIVERS
++	bool "Media platform devices"
++	help
++	  Say Y here to enable support for platform-specific media drivers.
 +
-+obj-$(CONFIG_DVB_A8293) += a8293.o
-+obj-$(CONFIG_DVB_AF9013) += af9013.o
-+obj-$(CONFIG_DVB_AF9033) += af9033.o
-+obj-$(CONFIG_DVB_AS102_FE) += as102_fe.o
-+obj-$(CONFIG_DVB_ASCOT2E) += ascot2e.o
-+obj-$(CONFIG_DVB_ATBM8830) += atbm8830.o
-+obj-$(CONFIG_DVB_AU8522) += au8522_common.o
-+obj-$(CONFIG_DVB_AU8522_DTV) += au8522_dig.o
-+obj-$(CONFIG_DVB_AU8522_V4L) += au8522_decoder.o
-+obj-$(CONFIG_DVB_BCM3510) += bcm3510.o
- obj-$(CONFIG_DVB_CX22700) += cx22700.o
--obj-$(CONFIG_DVB_S5H1432) += s5h1432.o
-+obj-$(CONFIG_DVB_CX22702) += cx22702.o
- obj-$(CONFIG_DVB_CX24110) += cx24110.o
--obj-$(CONFIG_DVB_TDA8083) += tda8083.o
--obj-$(CONFIG_DVB_L64781) += l64781.o
-+obj-$(CONFIG_DVB_CX24116) += cx24116.o
-+obj-$(CONFIG_DVB_CX24117) += cx24117.o
-+obj-$(CONFIG_DVB_CX24120) += cx24120.o
-+obj-$(CONFIG_DVB_CX24123) += cx24123.o
-+obj-$(CONFIG_DVB_CXD2099) += cxd2099.o
-+obj-$(CONFIG_DVB_CXD2820R) += cxd2820r.o
-+obj-$(CONFIG_DVB_CXD2841ER) += cxd2841er.o
-+obj-$(CONFIG_DVB_CXD2880) += cxd2880/
- obj-$(CONFIG_DVB_DIB3000MB) += dib3000mb.o
- obj-$(CONFIG_DVB_DIB3000MC) += dib3000mc.o dibx000_common.o
- obj-$(CONFIG_DVB_DIB7000M) += dib7000m.o dibx000_common.o
- obj-$(CONFIG_DVB_DIB7000P) += dib7000p.o dibx000_common.o
- obj-$(CONFIG_DVB_DIB8000) += dib8000.o dibx000_common.o
- obj-$(CONFIG_DVB_DIB9000) += dib9000.o dibx000_common.o
--obj-$(CONFIG_DVB_MT312) += mt312.o
--obj-$(CONFIG_DVB_VES1820) += ves1820.o
--obj-$(CONFIG_DVB_VES1X93) += ves1x93.o
--obj-$(CONFIG_DVB_TDA1004X) += tda1004x.o
--obj-$(CONFIG_DVB_SP887X) += sp887x.o
--obj-$(CONFIG_DVB_NXT6000) += nxt6000.o
--obj-$(CONFIG_DVB_MT352) += mt352.o
--obj-$(CONFIG_DVB_ZL10036) += zl10036.o
--obj-$(CONFIG_DVB_ZL10039) += zl10039.o
--obj-$(CONFIG_DVB_ZL10353) += zl10353.o
--obj-$(CONFIG_DVB_CX22702) += cx22702.o
-+obj-$(CONFIG_DVB_DRX39XYJ) += drx39xyj/
- obj-$(CONFIG_DVB_DRXD) += drxd.o
--obj-$(CONFIG_DVB_TDA10021) += tda10021.o
--obj-$(CONFIG_DVB_TDA10023) += tda10023.o
--obj-$(CONFIG_DVB_STV0297) += stv0297.o
--obj-$(CONFIG_DVB_NXT200X) += nxt200x.o
--obj-$(CONFIG_DVB_OR51211) += or51211.o
--obj-$(CONFIG_DVB_OR51132) += or51132.o
--obj-$(CONFIG_DVB_BCM3510) += bcm3510.o
--obj-$(CONFIG_DVB_S5H1420) += s5h1420.o
--obj-$(CONFIG_DVB_LGDT330X) += lgdt330x.o
-+obj-$(CONFIG_DVB_DRXK) += drxk.o
-+obj-$(CONFIG_DVB_DS3000) += ds3000.o
-+obj-$(CONFIG_DVB_DUMMY_FE) += dvb_dummy_fe.o
-+obj-$(CONFIG_DVB_EC100) += ec100.o
-+obj-$(CONFIG_DVB_GP8PSK_FE) += gp8psk-fe.o
-+obj-$(CONFIG_DVB_HELENE) += helene.o
-+obj-$(CONFIG_DVB_HORUS3A) += horus3a.o
-+obj-$(CONFIG_DVB_ISL6405) += isl6405.o
-+obj-$(CONFIG_DVB_ISL6421) += isl6421.o
-+obj-$(CONFIG_DVB_ISL6423) += isl6423.o
-+obj-$(CONFIG_DVB_IX2505V) += ix2505v.o
-+obj-$(CONFIG_DVB_L64781) += l64781.o
-+obj-$(CONFIG_DVB_LG2160) += lg2160.o
- obj-$(CONFIG_DVB_LGDT3305) += lgdt3305.o
- obj-$(CONFIG_DVB_LGDT3306A) += lgdt3306a.o
--obj-$(CONFIG_DVB_MXL692) += mxl692.o
--obj-$(CONFIG_DVB_LG2160) += lg2160.o
--obj-$(CONFIG_DVB_CX24123) += cx24123.o
-+obj-$(CONFIG_DVB_LGDT330X) += lgdt330x.o
-+obj-$(CONFIG_DVB_LGS8GL5) += lgs8gl5.o
-+obj-$(CONFIG_DVB_LGS8GXX) += lgs8gxx.o
- obj-$(CONFIG_DVB_LNBH25) += lnbh25.o
- obj-$(CONFIG_DVB_LNBH29) += lnbh29.o
- obj-$(CONFIG_DVB_LNBP21) += lnbp21.o
- obj-$(CONFIG_DVB_LNBP22) += lnbp22.o
--obj-$(CONFIG_DVB_ISL6405) += isl6405.o
--obj-$(CONFIG_DVB_ISL6421) += isl6421.o
--obj-$(CONFIG_DVB_TDA10086) += tda10086.o
--obj-$(CONFIG_DVB_TDA826X) += tda826x.o
--obj-$(CONFIG_DVB_TDA8261) += tda8261.o
--obj-$(CONFIG_DVB_TUNER_DIB0070) += dib0070.o
--obj-$(CONFIG_DVB_TUNER_DIB0090) += dib0090.o
--obj-$(CONFIG_DVB_TUA6100) += tua6100.o
-+obj-$(CONFIG_DVB_M88DS3103) += m88ds3103.o
-+obj-$(CONFIG_DVB_M88RS2000) += m88rs2000.o
-+obj-$(CONFIG_DVB_MB86A16) += mb86a16.o
-+obj-$(CONFIG_DVB_MB86A20S) += mb86a20s.o
-+obj-$(CONFIG_DVB_MN88443X) += mn88443x.o
-+obj-$(CONFIG_DVB_MN88472) += mn88472.o
-+obj-$(CONFIG_DVB_MN88473) += mn88473.o
-+obj-$(CONFIG_DVB_MT312) += mt312.o
-+obj-$(CONFIG_DVB_MT352) += mt352.o
-+obj-$(CONFIG_DVB_MXL5XX) += mxl5xx.o
-+obj-$(CONFIG_DVB_MXL692) += mxl692.o
-+obj-$(CONFIG_DVB_NXT200X) += nxt200x.o
-+obj-$(CONFIG_DVB_NXT6000) += nxt6000.o
-+obj-$(CONFIG_DVB_OR51132) += or51132.o
-+obj-$(CONFIG_DVB_OR51211) += or51211.o
-+obj-$(CONFIG_DVB_PLL) += dvb-pll.o
-+obj-$(CONFIG_DVB_RTL2830) += rtl2830.o
-+obj-$(CONFIG_DVB_RTL2832) += rtl2832.o
-+obj-$(CONFIG_DVB_RTL2832_SDR) += rtl2832_sdr.o
- obj-$(CONFIG_DVB_S5H1409) += s5h1409.o
--obj-$(CONFIG_DVB_TUNER_ITD1000) += itd1000.o
--obj-$(CONFIG_DVB_AU8522) += au8522_common.o
--obj-$(CONFIG_DVB_AU8522_DTV) += au8522_dig.o
--obj-$(CONFIG_DVB_AU8522_V4L) += au8522_decoder.o
--obj-$(CONFIG_DVB_TDA10048) += tda10048.o
--obj-$(CONFIG_DVB_TUNER_CX24113) += cx24113.o
- obj-$(CONFIG_DVB_S5H1411) += s5h1411.o
--obj-$(CONFIG_DVB_LGS8GL5) += lgs8gl5.o
--obj-$(CONFIG_DVB_TDA665x) += tda665x.o
--obj-$(CONFIG_DVB_LGS8GXX) += lgs8gxx.o
--obj-$(CONFIG_DVB_ATBM8830) += atbm8830.o
--obj-$(CONFIG_DVB_DUMMY_FE) += dvb_dummy_fe.o
--obj-$(CONFIG_DVB_AF9013) += af9013.o
--obj-$(CONFIG_DVB_CX24116) += cx24116.o
--obj-$(CONFIG_DVB_CX24117) += cx24117.o
--obj-$(CONFIG_DVB_CX24120) += cx24120.o
--obj-$(CONFIG_DVB_SI21XX) += si21xx.o
-+obj-$(CONFIG_DVB_S5H1420) += s5h1420.o
-+obj-$(CONFIG_DVB_S5H1432) += s5h1432.o
-+obj-$(CONFIG_DVB_S921) += s921.o
-+obj-$(CONFIG_DVB_SI2165) += si2165.o
- obj-$(CONFIG_DVB_SI2168) += si2168.o
--obj-$(CONFIG_DVB_STV0288) += stv0288.o
-+obj-$(CONFIG_DVB_SI21XX) += si21xx.o
-+obj-$(CONFIG_DVB_SP2) += sp2.o
-+obj-$(CONFIG_DVB_SP887X) += sp887x.o
-+obj-$(CONFIG_DVB_STB0899) += stb0899.o
- obj-$(CONFIG_DVB_STB6000) += stb6000.o
--obj-$(CONFIG_DVB_S921) += s921.o
--obj-$(CONFIG_DVB_STV6110) += stv6110.o
-+obj-$(CONFIG_DVB_STB6100) += stb6100.o
-+obj-$(CONFIG_DVB_STV0288) += stv0288.o
-+obj-$(CONFIG_DVB_STV0297) += stv0297.o
-+obj-$(CONFIG_DVB_STV0299) += stv0299.o
-+obj-$(CONFIG_DVB_STV0367) += stv0367.o
- obj-$(CONFIG_DVB_STV0900) += stv0900.o
- obj-$(CONFIG_DVB_STV090x) += stv090x.o
--obj-$(CONFIG_DVB_STV6110x) += stv6110x.o
--obj-$(CONFIG_DVB_M88DS3103) += m88ds3103.o
--obj-$(CONFIG_DVB_MN88472) += mn88472.o
--obj-$(CONFIG_DVB_MN88473) += mn88473.o
--obj-$(CONFIG_DVB_ISL6423) += isl6423.o
--obj-$(CONFIG_DVB_EC100) += ec100.o
--obj-$(CONFIG_DVB_DS3000) += ds3000.o
--obj-$(CONFIG_DVB_TS2020) += ts2020.o
--obj-$(CONFIG_DVB_MB86A16) += mb86a16.o
--obj-$(CONFIG_DVB_DRX39XYJ) += drx39xyj/
--obj-$(CONFIG_DVB_MB86A20S) += mb86a20s.o
--obj-$(CONFIG_DVB_IX2505V) += ix2505v.o
--obj-$(CONFIG_DVB_STV0367) += stv0367.o
--obj-$(CONFIG_DVB_CXD2820R) += cxd2820r.o
--obj-$(CONFIG_DVB_CXD2841ER) += cxd2841er.o
--obj-$(CONFIG_DVB_DRXK) += drxk.o
--obj-$(CONFIG_DVB_TDA18271C2DD) += tda18271c2dd.o
- obj-$(CONFIG_DVB_STV0910) += stv0910.o
-+obj-$(CONFIG_DVB_STV6110) += stv6110.o
-+obj-$(CONFIG_DVB_STV6110x) += stv6110x.o
- obj-$(CONFIG_DVB_STV6111) += stv6111.o
--obj-$(CONFIG_DVB_MXL5XX) += mxl5xx.o
--obj-$(CONFIG_DVB_SI2165) += si2165.o
--obj-$(CONFIG_DVB_A8293) += a8293.o
--obj-$(CONFIG_DVB_SP2) += sp2.o
--obj-$(CONFIG_DVB_TDA10071) += tda10071.o
--obj-$(CONFIG_DVB_RTL2830) += rtl2830.o
--obj-$(CONFIG_DVB_RTL2832) += rtl2832.o
--obj-$(CONFIG_DVB_RTL2832_SDR) += rtl2832_sdr.o
--obj-$(CONFIG_DVB_M88RS2000) += m88rs2000.o
--obj-$(CONFIG_DVB_AF9033) += af9033.o
--obj-$(CONFIG_DVB_AS102_FE) += as102_fe.o
--obj-$(CONFIG_DVB_GP8PSK_FE) += gp8psk-fe.o
- obj-$(CONFIG_DVB_TC90522) += tc90522.o
--obj-$(CONFIG_DVB_MN88443X) += mn88443x.o
--obj-$(CONFIG_DVB_HORUS3A) += horus3a.o
--obj-$(CONFIG_DVB_ASCOT2E) += ascot2e.o
--obj-$(CONFIG_DVB_HELENE) += helene.o
-+obj-$(CONFIG_DVB_TDA10021) += tda10021.o
-+obj-$(CONFIG_DVB_TDA10023) += tda10023.o
-+obj-$(CONFIG_DVB_TDA10048) += tda10048.o
-+obj-$(CONFIG_DVB_TDA1004X) += tda1004x.o
-+obj-$(CONFIG_DVB_TDA10071) += tda10071.o
-+obj-$(CONFIG_DVB_TDA10086) += tda10086.o
-+obj-$(CONFIG_DVB_TDA18271C2DD) += tda18271c2dd.o
-+obj-$(CONFIG_DVB_TDA665x) += tda665x.o
-+obj-$(CONFIG_DVB_TDA8083) += tda8083.o
-+obj-$(CONFIG_DVB_TDA8261) += tda8261.o
-+obj-$(CONFIG_DVB_TDA826X) += tda826x.o
-+obj-$(CONFIG_DVB_TS2020) += ts2020.o
-+obj-$(CONFIG_DVB_TUA6100) += tua6100.o
-+obj-$(CONFIG_DVB_TUNER_CX24113) += cx24113.o
-+obj-$(CONFIG_DVB_TUNER_DIB0070) += dib0070.o
-+obj-$(CONFIG_DVB_TUNER_DIB0090) += dib0090.o
-+obj-$(CONFIG_DVB_TUNER_ITD1000) += itd1000.o
-+obj-$(CONFIG_DVB_VES1820) += ves1820.o
-+obj-$(CONFIG_DVB_VES1X93) += ves1x93.o
- obj-$(CONFIG_DVB_ZD1301_DEMOD) += zd1301_demod.o
--obj-$(CONFIG_DVB_CXD2099) += cxd2099.o
--obj-$(CONFIG_DVB_CXD2880) += cxd2880/
-+obj-$(CONFIG_DVB_ZL10036) += zl10036.o
-+obj-$(CONFIG_DVB_ZL10039) += zl10039.o
-+obj-$(CONFIG_DVB_ZL10353) += zl10353.o
-diff --git a/drivers/media/pci/Makefile b/drivers/media/pci/Makefile
-index 984fa247096d..b234a5d78777 100644
---- a/drivers/media/pci/Makefile
-+++ b/drivers/media/pci/Makefile
-@@ -17,19 +17,21 @@ obj-y        +=	ttpci/		\
- 		netup_unidvb/	\
- 		intel/
++if MEDIA_PLATFORM_DRIVERS
++
++config V4L_PLATFORM_DRIVERS
+ 	bool "V4L platform devices"
+ 	help
+ 	  Say Y here to enable support for platform-specific V4L drivers.
  
--obj-$(CONFIG_VIDEO_IVTV) += ivtv/
-+obj-$(CONFIG_STA2X11_VIP) += sta2x11/
+-if V4L_PLATFORM_DRIVERS
++config SDR_PLATFORM_DRIVERS
++	bool "SDR platform devices"
++	depends on MEDIA_SDR_SUPPORT
++	help
++	  Say Y here to enable support for platform-specific SDR Drivers.
 +
-+# Please keep it alphabetically sorted
-+obj-$(CONFIG_VIDEO_BT848) += bt8xx/
-+obj-$(CONFIG_VIDEO_COBALT) += cobalt/
- obj-$(CONFIG_VIDEO_CX18) += cx18/
- obj-$(CONFIG_VIDEO_CX23885) += cx23885/
- obj-$(CONFIG_VIDEO_CX25821) += cx25821/
- obj-$(CONFIG_VIDEO_CX88) += cx88/
--obj-$(CONFIG_VIDEO_BT848) += bt8xx/
--obj-$(CONFIG_VIDEO_SAA7134) += saa7134/
--obj-$(CONFIG_VIDEO_SAA7164) += saa7164/
--obj-$(CONFIG_VIDEO_TW68) += tw68/
--obj-$(CONFIG_VIDEO_TW686X) += tw686x/
- obj-$(CONFIG_VIDEO_DT3155) += dt3155/
-+obj-$(CONFIG_VIDEO_IVTV) += ivtv/
- obj-$(CONFIG_VIDEO_MEYE) += meye/
--obj-$(CONFIG_STA2X11_VIP) += sta2x11/
-+obj-$(CONFIG_VIDEO_SAA7134) += saa7134/
-+obj-$(CONFIG_VIDEO_SAA7164) += saa7164/
- obj-$(CONFIG_VIDEO_SOLO6X10) += solo6x10/
--obj-$(CONFIG_VIDEO_COBALT) += cobalt/
- obj-$(CONFIG_VIDEO_TW5864) += tw5864/
-+obj-$(CONFIG_VIDEO_TW686X) += tw686x/
-+obj-$(CONFIG_VIDEO_TW68) += tw68/
-diff --git a/drivers/media/radio/Makefile b/drivers/media/radio/Makefile
-index 53c7ae135460..615070803429 100644
---- a/drivers/media/radio/Makefile
-+++ b/drivers/media/radio/Makefile
-@@ -3,36 +3,38 @@
- # Makefile for the kernel character device drivers.
- #
++config DVB_PLATFORM_DRIVERS
++	bool "DVB platform devices"
++	depends on MEDIA_DIGITAL_TV_SUPPORT
++	help
++	  Say Y here to enable support for platform-specific Digital TV drivers.
++
++config V4L_MEM2MEM_DRIVERS
++	bool "Memory-to-memory multimedia devices"
++	depends on VIDEO_V4L2
++	help
++	  Say Y here to enable selecting drivers for V4L devices that
++	  use system memory for both source and destination buffers, as opposed
++	  to capture and output drivers, which use memory buffers for just
++	  one of those.
++
++# V4L platform drivers
  
--obj-$(CONFIG_RADIO_ISA) += radio-isa.o
-+shark2-objs := radio-shark2.o radio-tea5777.o
-+
-+# Please keep it alphabetically sorted
- obj-$(CONFIG_RADIO_AZTECH) += radio-aztech.o
-+obj-$(CONFIG_RADIO_CADET) += radio-cadet.o
-+obj-$(CONFIG_RADIO_GEMTEK) += radio-gemtek.o
-+obj-$(CONFIG_RADIO_ISA) += radio-isa.o
-+obj-$(CONFIG_RADIO_MAXIRADIO) += radio-maxiradio.o
-+obj-$(CONFIG_RADIO_MIROPCM20) += radio-miropcm20.o
- obj-$(CONFIG_RADIO_RTRACK2) += radio-rtrack2.o
-+obj-$(CONFIG_RADIO_RTRACK) += radio-aimslab.o
-+obj-$(CONFIG_RADIO_SAA7706H) += saa7706h.o
- obj-$(CONFIG_RADIO_SF16FMI) += radio-sf16fmi.o
- obj-$(CONFIG_RADIO_SF16FMR2) += radio-sf16fmr2.o
--obj-$(CONFIG_RADIO_CADET) += radio-cadet.o
--obj-$(CONFIG_RADIO_TYPHOON) += radio-typhoon.o
--obj-$(CONFIG_RADIO_TERRATEC) += radio-terratec.o
--obj-$(CONFIG_RADIO_MAXIRADIO) += radio-maxiradio.o
--obj-$(CONFIG_RADIO_SHARK) += radio-shark.o
- obj-$(CONFIG_RADIO_SHARK2) += shark2.o
--obj-$(CONFIG_RADIO_RTRACK) += radio-aimslab.o
--obj-$(CONFIG_RADIO_ZOLTRIX) += radio-zoltrix.o
--obj-$(CONFIG_RADIO_GEMTEK) += radio-gemtek.o
--obj-$(CONFIG_RADIO_TRUST) += radio-trust.o
--obj-$(CONFIG_RADIO_SI476X) += radio-si476x.o
--obj-$(CONFIG_RADIO_MIROPCM20) += radio-miropcm20.o
--obj-$(CONFIG_USB_DSBR) += dsbr100.o
-+obj-$(CONFIG_RADIO_SHARK) += radio-shark.o
- obj-$(CONFIG_RADIO_SI470X) += si470x/
- obj-$(CONFIG_RADIO_SI4713) += si4713/
--obj-$(CONFIG_USB_MR800) += radio-mr800.o
--obj-$(CONFIG_USB_KEENE) += radio-keene.o
--obj-$(CONFIG_USB_MA901) += radio-ma901.o
-+obj-$(CONFIG_RADIO_SI476X) += radio-si476x.o
-+obj-$(CONFIG_RADIO_TEA575X) += tea575x.o
- obj-$(CONFIG_RADIO_TEA5764) += radio-tea5764.o
--obj-$(CONFIG_RADIO_SAA7706H) += saa7706h.o
- obj-$(CONFIG_RADIO_TEF6862) += tef6862.o
-+obj-$(CONFIG_RADIO_TERRATEC) += radio-terratec.o
- obj-$(CONFIG_RADIO_TIMBERDALE) += radio-timb.o
-+obj-$(CONFIG_RADIO_TRUST) += radio-trust.o
-+obj-$(CONFIG_RADIO_TYPHOON) += radio-typhoon.o
- obj-$(CONFIG_RADIO_WL1273) += radio-wl1273.o
- obj-$(CONFIG_RADIO_WL128X) += wl128x/
--obj-$(CONFIG_RADIO_TEA575X) += tea575x.o
-+obj-$(CONFIG_RADIO_ZOLTRIX) += radio-zoltrix.o
-+
-+obj-$(CONFIG_USB_DSBR) += dsbr100.o
-+obj-$(CONFIG_USB_KEENE) += radio-keene.o
-+obj-$(CONFIG_USB_MA901) += radio-ma901.o
-+obj-$(CONFIG_USB_MR800) += radio-mr800.o
- obj-$(CONFIG_USB_RAREMONO) += radio-raremono.o
+ source "drivers/media/platform/marvell-ccic/Kconfig"
+ 
+ config VIDEO_VIA_CAMERA
+ 	tristate "VIAFB camera controller support"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on FB_VIA && VIDEO_V4L2
+ 	select VIDEOBUF2_DMA_SG
+ 	select VIDEO_OV7670
+@@ -22,9 +51,6 @@ config VIDEO_VIA_CAMERA
+ 	   Chrome9 chipsets.  Currently only tested on OLPC xo-1.5 systems
+ 	   with ov7670 sensors.
+ 
+-#
+-# Platform multimedia device configuration
+-#
+ source "drivers/media/platform/cadence/Kconfig"
+ 
+ source "drivers/media/platform/davinci/Kconfig"
+@@ -33,6 +59,7 @@ source "drivers/media/platform/omap/Kconfig"
+ 
+ config VIDEO_ASPEED
+ 	tristate "Aspeed AST2400 and AST2500 Video Engine driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2
+ 	select VIDEOBUF2_DMA_CONTIG
+ 	help
+@@ -42,6 +69,7 @@ config VIDEO_ASPEED
+ 
+ config VIDEO_SH_VOU
+ 	tristate "SuperH VOU video output driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_DEV && I2C
+ 	depends on ARCH_SHMOBILE || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -50,6 +78,7 @@ config VIDEO_SH_VOU
+ 
+ config VIDEO_VIU
+ 	tristate "Freescale VIU Video Driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && (PPC_MPC512x || COMPILE_TEST) && I2C
+ 	select VIDEOBUF_DMA_CONTIG
+ 	default y
+@@ -62,6 +91,7 @@ config VIDEO_VIU
+ 
+ config VIDEO_MUX
+ 	tristate "Video Multiplexer"
++	depends on V4L_PLATFORM_DRIVERS
+ 	select MULTIPLEXER
+ 	depends on VIDEO_V4L2 && OF
+ 	select MEDIA_CONTROLLER
+@@ -73,6 +103,7 @@ config VIDEO_MUX
+ 
+ config VIDEO_OMAP3
+ 	tristate "OMAP 3 Camera support"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && I2C
+ 	depends on (ARCH_OMAP3 && OMAP_IOMMU) || COMPILE_TEST
+ 	depends on COMMON_CLK && OF
+@@ -87,12 +118,14 @@ config VIDEO_OMAP3
+ 
+ config VIDEO_OMAP3_DEBUG
+ 	bool "OMAP 3 Camera debug messages"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_OMAP3
+ 	help
+ 	  Enable debug messages on OMAP 3 camera controller driver.
+ 
+ config VIDEO_PXA27x
+ 	tristate "PXA27x Quick Capture Interface driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on PXA27x || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_SG
+@@ -103,6 +136,7 @@ config VIDEO_PXA27x
+ 
+ config VIDEO_QCOM_CAMSS
+ 	tristate "Qualcomm V4L2 Camera Subsystem driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2
+ 	depends on (ARCH_QCOM && IOMMU_DMA) || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+@@ -112,6 +146,7 @@ config VIDEO_QCOM_CAMSS
+ 
+ config VIDEO_S3C_CAMIF
+ 	tristate "Samsung S3C24XX/S3C64XX SoC Camera Interface driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && I2C && PM
+ 	depends on ARCH_S3C64XX || PLAT_S3C24XX || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+@@ -126,6 +161,7 @@ config VIDEO_S3C_CAMIF
+ 
+ config VIDEO_STM32_DCMI
+ 	tristate "STM32 Digital Camera Memory Interface (DCMI) support"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && OF
+ 	depends on ARCH_STM32 || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -140,6 +176,7 @@ config VIDEO_STM32_DCMI
+ 
+ config VIDEO_RENESAS_CEU
+ 	tristate "Renesas Capture Engine Unit (CEU) driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_SHMOBILE || ARCH_R7S72100 || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -149,6 +186,7 @@ config VIDEO_RENESAS_CEU
+ 
+ config VIDEO_ROCKCHIP_ISP1
+ 	tristate "Rockchip Image Signal Processing v1 Unit driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && OF
+ 	depends on ARCH_ROCKCHIP || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+@@ -175,6 +213,7 @@ source "drivers/media/platform/imx/Kconfig"
+ 
+ config VIDEO_TI_CAL
+ 	tristate "TI CAL (Camera Adaptation Layer) driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	select MEDIA_CONTROLLER
+ 	select VIDEO_V4L2_SUBDEV_API
+@@ -187,10 +226,9 @@ config VIDEO_TI_CAL
+ 	  In TI Technical Reference Manual this module is referred as
+ 	  Camera Interface Subsystem (CAMSS).
+ 
+-if VIDEO_TI_CAL
 -
--shark2-objs := radio-shark2.o radio-tea5777.o
-diff --git a/drivers/media/rc/Makefile b/drivers/media/rc/Makefile
-index 378d62d21e06..be8657391f74 100644
---- a/drivers/media/rc/Makefile
-+++ b/drivers/media/rc/Makefile
-@@ -2,51 +2,54 @@
+ config VIDEO_TI_CAL_MC
+ 	bool "Media Controller centric mode by default"
++	depends on VIDEO_TI_CAL
+ 	default n
+ 	help
+ 	  Enables Media Controller centric mode by default.
+@@ -199,10 +237,9 @@ config VIDEO_TI_CAL_MC
+ 	  default. Note that this behavior can be overridden via
+ 	  module parameter 'mc_api'.
  
- obj-y += keymaps/
+-endif # VIDEO_TI_CAL
+-
+ config VIDEO_RCAR_ISP
+ 	tristate "R-Car Image Signal Processor (ISP)"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && OF
+ 	depends on ARCH_RENESAS || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+@@ -217,21 +254,11 @@ config VIDEO_RCAR_ISP
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called rcar-isp.
  
--obj-$(CONFIG_RC_CORE) += rc-core.o
- rc-core-y := rc-main.o rc-ir-raw.o
- rc-core-$(CONFIG_LIRC) += lirc_dev.o
- rc-core-$(CONFIG_MEDIA_CEC_RC) += keymaps/rc-cec.o
- rc-core-$(CONFIG_BPF_LIRC_MODE2) += bpf-lirc.o
-+
-+obj-$(CONFIG_RC_CORE) += rc-core.o
-+
-+# IR decoders - please keep it alphabetically sorted
-+obj-$(CONFIG_IR_IMON_DECODER) += ir-imon-decoder.o
-+obj-$(CONFIG_IR_JVC_DECODER) += ir-jvc-decoder.o
-+obj-$(CONFIG_IR_MCE_KBD_DECODER) += ir-mce_kbd-decoder.o
- obj-$(CONFIG_IR_NEC_DECODER) += ir-nec-decoder.o
- obj-$(CONFIG_IR_RC5_DECODER) += ir-rc5-decoder.o
- obj-$(CONFIG_IR_RC6_DECODER) += ir-rc6-decoder.o
--obj-$(CONFIG_IR_JVC_DECODER) += ir-jvc-decoder.o
--obj-$(CONFIG_IR_SONY_DECODER) += ir-sony-decoder.o
-+obj-$(CONFIG_IR_RCMM_DECODER) += ir-rcmm-decoder.o
- obj-$(CONFIG_IR_SANYO_DECODER) += ir-sanyo-decoder.o
- obj-$(CONFIG_IR_SHARP_DECODER) += ir-sharp-decoder.o
--obj-$(CONFIG_IR_MCE_KBD_DECODER) += ir-mce_kbd-decoder.o
-+obj-$(CONFIG_IR_SONY_DECODER) += ir-sony-decoder.o
- obj-$(CONFIG_IR_XMP_DECODER) += ir-xmp-decoder.o
--obj-$(CONFIG_IR_IMON_DECODER) += ir-imon-decoder.o
--obj-$(CONFIG_IR_RCMM_DECODER) += ir-rcmm-decoder.o
+-endif # V4L_PLATFORM_DRIVERS
+-
+-menuconfig V4L_MEM2MEM_DRIVERS
+-	bool "Memory-to-memory multimedia devices"
+-	depends on VIDEO_V4L2
+-	help
+-	  Say Y here to enable selecting drivers for V4L devices that
+-	  use system memory for both source and destination buffers, as opposed
+-	  to capture and output drivers, which use memory buffers for just
+-	  one of those.
+-
+-if V4L_MEM2MEM_DRIVERS
++# Mem2mem drivers
  
--# stand-alone IR receivers/transmitters
--obj-$(CONFIG_RC_ATI_REMOTE) += ati_remote.o
-+# stand-alone IR receivers/transmitters  - please keep it alphabetically sorted
-+obj-$(CONFIG_IR_ENE) += ene_ir.o
-+obj-$(CONFIG_IR_FINTEK) += fintek-cir.o
-+obj-$(CONFIG_IR_GPIO_CIR) += gpio-ir-recv.o
-+obj-$(CONFIG_IR_GPIO_TX) += gpio-ir-tx.o
- obj-$(CONFIG_IR_HIX5HD2) += ir-hix5hd2.o
-+obj-$(CONFIG_IR_IGORPLUGUSB) += igorplugusb.o
-+obj-$(CONFIG_IR_IGUANA) += iguanair.o
-+obj-$(CONFIG_IR_IMG) += img-ir/
- obj-$(CONFIG_IR_IMON) += imon.o
- obj-$(CONFIG_IR_IMON_RAW) += imon_raw.o
- obj-$(CONFIG_IR_ITE_CIR) += ite-cir.o
- obj-$(CONFIG_IR_MCEUSB) += mceusb.o
--obj-$(CONFIG_IR_FINTEK) += fintek-cir.o
- obj-$(CONFIG_IR_MESON) += meson-ir.o
- obj-$(CONFIG_IR_MESON_TX) += meson-ir-tx.o
-+obj-$(CONFIG_IR_MTK) += mtk-cir.o
- obj-$(CONFIG_IR_NUVOTON) += nuvoton-cir.o
--obj-$(CONFIG_IR_ENE) += ene_ir.o
-+obj-$(CONFIG_IR_PWM_TX) += pwm-ir-tx.o
- obj-$(CONFIG_IR_REDRAT3) += redrat3.o
- obj-$(CONFIG_IR_RX51) += ir-rx51.o
-+obj-$(CONFIG_IR_SERIAL) += serial_ir.o
- obj-$(CONFIG_IR_SPI) += ir-spi.o
- obj-$(CONFIG_IR_STREAMZAP) += streamzap.o
-+obj-$(CONFIG_IR_SUNXI) += sunxi-cir.o
-+obj-$(CONFIG_IR_TOY) += ir_toy.o
-+obj-$(CONFIG_IR_TTUSBIR) += ttusbir.o
- obj-$(CONFIG_IR_WINBOND_CIR) += winbond-cir.o
-+obj-$(CONFIG_RC_ATI_REMOTE) += ati_remote.o
- obj-$(CONFIG_RC_LOOPBACK) += rc-loopback.o
--obj-$(CONFIG_IR_GPIO_CIR) += gpio-ir-recv.o
--obj-$(CONFIG_IR_GPIO_TX) += gpio-ir-tx.o
--obj-$(CONFIG_IR_PWM_TX) += pwm-ir-tx.o
--obj-$(CONFIG_IR_IGORPLUGUSB) += igorplugusb.o
--obj-$(CONFIG_IR_IGUANA) += iguanair.o
--obj-$(CONFIG_IR_TTUSBIR) += ttusbir.o
- obj-$(CONFIG_RC_ST) += st_rc.o
--obj-$(CONFIG_IR_SUNXI) += sunxi-cir.o
--obj-$(CONFIG_IR_IMG) += img-ir/
--obj-$(CONFIG_IR_SERIAL) += serial_ir.o
--obj-$(CONFIG_IR_MTK) += mtk-cir.o
- obj-$(CONFIG_RC_XBOX_DVD) += xbox_remote.o
--obj-$(CONFIG_IR_TOY) += ir_toy.o
-diff --git a/drivers/media/rc/keymaps/Makefile b/drivers/media/rc/keymaps/Makefile
-index 5fe5c9e1a46d..a7e34ed39424 100644
---- a/drivers/media/rc/keymaps/Makefile
-+++ b/drivers/media/rc/keymaps/Makefile
-@@ -1,5 +1,8 @@
+ config VIDEO_ALLEGRO_DVT
+ 	tristate "Allegro DVT Video IP Core"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_ZYNQMP || COMPILE_TEST
+ 	select V4L2_MEM2MEM_DEV
+@@ -247,6 +274,7 @@ config VIDEO_ALLEGRO_DVT
+ 
+ config VIDEO_CODA
+ 	tristate "Chips&Media Coda multi-standard codec IP"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2 && OF && (ARCH_MXC || COMPILE_TEST)
+ 	select SRAM
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -263,6 +291,7 @@ config VIDEO_IMX_VDOA
+ 
+ config VIDEO_IMX_PXP
+ 	tristate "i.MX Pixel Pipeline (PXP)"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2 && (ARCH_MXC || COMPILE_TEST)
+ 	select VIDEOBUF2_DMA_CONTIG
+ 	select V4L2_MEM2MEM_DEV
+@@ -274,6 +303,7 @@ source "drivers/media/platform/imx-jpeg/Kconfig"
+ 
+ config VIDEO_MEDIATEK_JPEG
+ 	tristate "Mediatek JPEG Codec driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on MTK_IOMMU_V1 || MTK_IOMMU || COMPILE_TEST
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_MEDIATEK || COMPILE_TEST
+@@ -289,6 +319,7 @@ config VIDEO_MEDIATEK_JPEG
+ 
+ config VIDEO_MEDIATEK_VPU
+ 	tristate "Mediatek Video Processor Unit"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_MEDIATEK || COMPILE_TEST
+ 	help
+@@ -302,6 +333,7 @@ config VIDEO_MEDIATEK_VPU
+ 
+ config VIDEO_MEDIATEK_MDP
+ 	tristate "Mediatek MDP driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on MTK_IOMMU || COMPILE_TEST
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_MEDIATEK || COMPILE_TEST
+@@ -318,6 +350,7 @@ config VIDEO_MEDIATEK_MDP
+ 
+ config VIDEO_MEDIATEK_VCODEC
+ 	tristate "Mediatek Video Codec driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on MTK_IOMMU || COMPILE_TEST
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_MEDIATEK || COMPILE_TEST
+@@ -353,6 +386,7 @@ config VIDEO_MEDIATEK_VCODEC_SCP
+ 
+ config VIDEO_MEM2MEM_DEINTERLACE
+ 	tristate "Deinterlace support"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on HAS_DMA
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -362,6 +396,7 @@ config VIDEO_MEM2MEM_DEINTERLACE
+ 
+ config VIDEO_MESON_GE2D
+ 	tristate "Amlogic 2D Graphic Acceleration Unit"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_MESON || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -375,6 +410,7 @@ config VIDEO_MESON_GE2D
+ 
+ config VIDEO_SAMSUNG_S5P_G2D
+ 	tristate "Samsung S5P and EXYNOS4 G2D 2d graphics accelerator driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -385,6 +421,7 @@ config VIDEO_SAMSUNG_S5P_G2D
+ 
+ config VIDEO_SAMSUNG_S5P_JPEG
+ 	tristate "Samsung S5P/Exynos3250/Exynos4 JPEG codec driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -395,6 +432,7 @@ config VIDEO_SAMSUNG_S5P_JPEG
+ 
+ config VIDEO_SAMSUNG_S5P_MFC
+ 	tristate "Samsung S5P MFC Video Codec"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -403,6 +441,7 @@ config VIDEO_SAMSUNG_S5P_MFC
+ 
+ config VIDEO_MX2_EMMAPRP
+ 	tristate "MX2 eMMa-PrP support"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on SOC_IMX27 || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -414,6 +453,7 @@ config VIDEO_MX2_EMMAPRP
+ 
+ config VIDEO_SAMSUNG_EXYNOS_GSC
+ 	tristate "Samsung Exynos G-Scaler driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_EXYNOS || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -423,6 +463,7 @@ config VIDEO_SAMSUNG_EXYNOS_GSC
+ 
+ config VIDEO_STI_BDISP
+ 	tristate "STMicroelectronics BDISP 2D blitter driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_STI || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -432,6 +473,7 @@ config VIDEO_STI_BDISP
+ 
+ config VIDEO_STI_HVA
+ 	tristate "STMicroelectronics HVA multi-format video encoder V4L2 driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_STI || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -446,6 +488,7 @@ config VIDEO_STI_HVA
+ 
+ config VIDEO_STI_HVA_DEBUGFS
+ 	bool "Export STMicroelectronics HVA internals in debugfs"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_STI_HVA
+ 	depends on DEBUG_FS
+ 	help
+@@ -457,6 +500,7 @@ config VIDEO_STI_HVA_DEBUGFS
+ 
+ config VIDEO_STI_DELTA
+ 	tristate "STMicroelectronics DELTA multi-format video decoder V4L2 driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_STI || COMPILE_TEST
+ 	help
+@@ -471,11 +515,10 @@ config VIDEO_STI_DELTA
+ 		Please notice that the driver will only be built if
+ 		at least one of the DELTA decoder below is selected.
+ 
+-if VIDEO_STI_DELTA
+-
+ config VIDEO_STI_DELTA_MJPEG
+ 	bool "STMicroelectronics DELTA MJPEG support"
+ 	default y
++	depends on VIDEO_STI_DELTA
+ 	help
+ 		Enables DELTA MJPEG hardware support.
+ 
+@@ -491,10 +534,9 @@ config VIDEO_STI_DELTA_DRIVER
+ 	select V4L2_MEM2MEM_DEV
+ 	select RPMSG
+ 
+-endif # VIDEO_STI_DELTA
+-
+ config VIDEO_STM32_DMA2D
+ 	tristate "STM32 Chrom-Art Accelerator (DMA2D)"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_STM32 || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -507,6 +549,7 @@ config VIDEO_STM32_DMA2D
+ 
+ config VIDEO_RENESAS_FDP1
+ 	tristate "Renesas Fine Display Processor"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_RENESAS || COMPILE_TEST
+ 	depends on (!ARM64 && !VIDEO_RENESAS_FCP) || VIDEO_RENESAS_FCP
+@@ -521,6 +564,7 @@ config VIDEO_RENESAS_FDP1
+ 
+ config VIDEO_RENESAS_JPU
+ 	tristate "Renesas JPEG Processing Unit"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_RENESAS || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -533,6 +577,7 @@ config VIDEO_RENESAS_JPU
+ 
+ config VIDEO_RENESAS_FCP
+ 	tristate "Renesas Frame Compression Processor"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on ARCH_RENESAS || COMPILE_TEST
+ 	depends on OF
+ 	help
+@@ -546,6 +591,7 @@ config VIDEO_RENESAS_FCP
+ 
+ config VIDEO_RENESAS_VSP1
+ 	tristate "Renesas VSP1 Video Processing Engine"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_V4L2
+ 	depends on ARCH_RENESAS || COMPILE_TEST
+ 	depends on (!ARM64 && !VIDEO_RENESAS_FCP) || VIDEO_RENESAS_FCP
+@@ -561,6 +607,7 @@ config VIDEO_RENESAS_VSP1
+ 
+ config VIDEO_ROCKCHIP_RGA
+ 	tristate "Rockchip Raster 2d Graphic Acceleration Unit"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_ROCKCHIP || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_SG
+@@ -575,6 +622,7 @@ config VIDEO_ROCKCHIP_RGA
+ 
+ config VIDEO_TI_VPE
+ 	tristate "TI VPE (Video Processing Engine) driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on SOC_DRA7XX || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -588,12 +636,14 @@ config VIDEO_TI_VPE
+ 
+ config VIDEO_TI_VPE_DEBUG
+ 	bool "VPE debug messages"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_TI_VPE
+ 	help
+ 	  Enable debug messages on VPE driver.
+ 
+ config VIDEO_QCOM_VENUS
+ 	tristate "Qualcomm Venus V4L2 encoder/decoder driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2 && QCOM_SMEM
+ 	depends on (ARCH_QCOM && IOMMU_DMA) || COMPILE_TEST
+ 	select QCOM_MDT_LOADER if ARCH_QCOM
+@@ -608,6 +658,7 @@ config VIDEO_QCOM_VENUS
+ 
+ config VIDEO_SUN8I_DEINTERLACE
+ 	tristate "Allwinner Deinterlace driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_SUNXI || COMPILE_TEST
+ 	depends on COMMON_CLK && OF
+@@ -621,6 +672,7 @@ config VIDEO_SUN8I_DEINTERLACE
+ 
+ config VIDEO_SUN8I_ROTATE
+ 	tristate "Allwinner DE2 rotation driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	depends on ARCH_SUNXI || COMPILE_TEST
+ 	depends on COMMON_CLK && OF
+@@ -633,6 +685,7 @@ config VIDEO_SUN8I_ROTATE
+ 
+ config VIDEO_TEGRA_VDE
+ 	tristate "NVIDIA Tegra Video Decoder Engine driver"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on ARCH_TEGRA || COMPILE_TEST
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	select DMA_SHARED_BUFFER
+@@ -650,6 +703,7 @@ config VIDEO_TEGRA_VDE
+ 
+ config VIDEO_AMPHION_VPU
+ 	tristate "Amphion VPU (Video Processing Unit) Codec IP"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on ARCH_MXC || COMPILE_TEST
+ 	depends on MEDIA_SUPPORT
+ 	depends on VIDEO_DEV
+@@ -667,8 +721,6 @@ config VIDEO_AMPHION_VPU
+ 	  various NXP SoCs.
+ 	  To compile this driver as a module choose m here.
+ 
+-endif # V4L_MEM2MEM_DRIVERS
+-
+ # TI VIDEO PORT Helper Modules
+ # These will be selected by VPE and VIP
+ config VIDEO_TI_VPDMA
+@@ -680,26 +732,13 @@ config VIDEO_TI_SC
+ config VIDEO_TI_CSC
+ 	tristate
+ 
+-menuconfig DVB_PLATFORM_DRIVERS
+-	bool "DVB platform devices"
+-	depends on MEDIA_DIGITAL_TV_SUPPORT
+-	help
+-	  Say Y here to enable support for platform-specific Digital TV drivers.
+-
+-if DVB_PLATFORM_DRIVERS
++# DVB platform drivers
+ source "drivers/media/platform/sti/c8sectpfe/Kconfig"
+-endif #DVB_PLATFORM_DRIVERS
+-
+-menuconfig SDR_PLATFORM_DRIVERS
+-	bool "SDR platform devices"
+-	depends on MEDIA_SDR_SUPPORT
+-	help
+-	  Say Y here to enable support for platform-specific SDR Drivers.
+-
+-if SDR_PLATFORM_DRIVERS
+ 
++# SDR platform drivers
+ config VIDEO_RCAR_DRIF
+ 	tristate "Renesas Digital Radio Interface (DRIF)"
++	depends on SDR_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2
+ 	depends on ARCH_RENESAS || COMPILE_TEST
+ 	select VIDEOBUF2_VMALLOC
+@@ -713,4 +752,4 @@ config VIDEO_RCAR_DRIF
+ 	  To compile this driver as a module, choose M here; the module
+ 	  will be called rcar_drif.
+ 
+-endif # SDR_PLATFORM_DRIVERS
++endif #MEDIA_PLATFORM_DRIVERS
+diff --git a/drivers/media/platform/am437x/Kconfig b/drivers/media/platform/am437x/Kconfig
+index 9ef898f512de..619cefca7590 100644
+--- a/drivers/media/platform/am437x/Kconfig
++++ b/drivers/media/platform/am437x/Kconfig
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config VIDEO_AM437X_VPFE
+ 	tristate "TI AM437x VPFE video capture driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2
+ 	depends on SOC_AM43XX || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+diff --git a/drivers/media/platform/atmel/Kconfig b/drivers/media/platform/atmel/Kconfig
+index f83bee373d82..5122290729ae 100644
+--- a/drivers/media/platform/atmel/Kconfig
++++ b/drivers/media/platform/atmel/Kconfig
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config VIDEO_ATMEL_ISC
+ 	tristate "ATMEL Image Sensor Controller (ISC) support"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && COMMON_CLK
+ 	depends on ARCH_AT91 || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+@@ -15,6 +16,7 @@ config VIDEO_ATMEL_ISC
+ 
+ config VIDEO_ATMEL_XISC
+ 	tristate "ATMEL eXtended Image Sensor Controller (XISC) support"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && COMMON_CLK && VIDEO_V4L2_SUBDEV_API
+ 	depends on ARCH_AT91 || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -33,6 +35,7 @@ config VIDEO_ATMEL_ISC_BASE
+ 
+ config VIDEO_ATMEL_ISI
+ 	tristate "ATMEL Image Sensor Interface (ISI) support"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && OF
+ 	depends on ARCH_AT91 || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+@@ -43,6 +46,7 @@ config VIDEO_ATMEL_ISI
+ 
+ config VIDEO_MICROCHIP_CSI2DC
+ 	tristate "Microchip CSI2 Demux Controller"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && COMMON_CLK && OF
+ 	depends on ARCH_AT91 || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+diff --git a/drivers/media/platform/cadence/Kconfig b/drivers/media/platform/cadence/Kconfig
+index 80cf601323ce..79a7e9fb2575 100644
+--- a/drivers/media/platform/cadence/Kconfig
++++ b/drivers/media/platform/cadence/Kconfig
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config VIDEO_CADENCE
+ 	bool "Cadence Video Devices"
++	depends on V4L_PLATFORM_DRIVERS
+ 	help
+ 	  If you have a media device designed by Cadence, say Y.
+ 
+diff --git a/drivers/media/platform/davinci/Kconfig b/drivers/media/platform/davinci/Kconfig
+index 9d2a9eeb3499..7e5f92b0082a 100644
+--- a/drivers/media/platform/davinci/Kconfig
++++ b/drivers/media/platform/davinci/Kconfig
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config VIDEO_DAVINCI_VPIF_DISPLAY
+ 	tristate "TI DaVinci VPIF V4L2-Display driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2
+ 	depends on ARCH_DAVINCI || COMPILE_TEST
+ 	depends on I2C
+@@ -17,6 +18,7 @@ config VIDEO_DAVINCI_VPIF_DISPLAY
+ 
+ config VIDEO_DAVINCI_VPIF_CAPTURE
+ 	tristate "TI DaVinci VPIF video capture driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2
+ 	depends on ARCH_DAVINCI || COMPILE_TEST
+ 	depends on I2C
+@@ -32,6 +34,7 @@ config VIDEO_DAVINCI_VPIF_CAPTURE
+ 
+ config VIDEO_DM6446_CCDC
+ 	tristate "TI DM6446 CCDC video capture driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2
+ 	depends on ARCH_DAVINCI || COMPILE_TEST
+ 	depends on I2C
+@@ -48,6 +51,7 @@ config VIDEO_DM6446_CCDC
+ 
+ config VIDEO_DM355_CCDC
+ 	tristate "TI DM355 CCDC video capture driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2
+ 	depends on ARCH_DAVINCI || COMPILE_TEST
+ 	depends on I2C
+@@ -64,6 +68,7 @@ config VIDEO_DM355_CCDC
+ 
+ config VIDEO_DM365_ISIF
+ 	tristate "TI DM365 ISIF video capture driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2
+ 	depends on ARCH_DAVINCI || COMPILE_TEST
+ 	depends on I2C
+@@ -78,6 +83,7 @@ config VIDEO_DM365_ISIF
+ 
+ config VIDEO_DAVINCI_VPBE_DISPLAY
+ 	tristate "TI DaVinci VPBE V4L2-Display driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2
+ 	depends on ARCH_DAVINCI || COMPILE_TEST
+ 	depends on I2C
+diff --git a/drivers/media/platform/exynos4-is/Kconfig b/drivers/media/platform/exynos4-is/Kconfig
+index 136d3b2a0fbb..868bb86c7699 100644
+--- a/drivers/media/platform/exynos4-is/Kconfig
++++ b/drivers/media/platform/exynos4-is/Kconfig
+@@ -2,6 +2,7 @@
+ 
+ config VIDEO_SAMSUNG_EXYNOS4_IS
+ 	tristate "Samsung S5P/EXYNOS4 SoC series Camera Subsystem driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && OF && COMMON_CLK
+ 	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+diff --git a/drivers/media/platform/imx-jpeg/Kconfig b/drivers/media/platform/imx-jpeg/Kconfig
+index 2fdd648cda80..cbf6101a8b1d 100644
+--- a/drivers/media/platform/imx-jpeg/Kconfig
++++ b/drivers/media/platform/imx-jpeg/Kconfig
+@@ -1,6 +1,7 @@
  # SPDX-License-Identifier: GPL-2.0
--obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
-+
-+# Please keep keymaps alphabetically sorted
-+obj-$(CONFIG_RC_MAP) += \
-+			rc-adstech-dvb-t-pci.o \
- 			rc-alink-dtu-m.o \
- 			rc-anysee.o \
- 			rc-apac-viewcomp.o \
-@@ -9,17 +12,17 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
- 			rc-ati-tv-wonder-hd-600.o \
- 			rc-ati-x10.o \
- 			rc-avermedia-a16d.o \
--			rc-avermedia.o \
- 			rc-avermedia-cardbus.o \
- 			rc-avermedia-dvbt.o \
- 			rc-avermedia-m135a.o \
- 			rc-avermedia-m733a-rm-k6.o \
-+			rc-avermedia.o \
- 			rc-avermedia-rm-ks.o \
- 			rc-avertv-303.o \
- 			rc-azurewave-ad-tu700.o \
- 			rc-beelink-gs1.o \
--			rc-behold.o \
- 			rc-behold-columbus.o \
-+			rc-behold.o \
- 			rc-budget-ci-old.o \
- 			rc-cinergy-1400.o \
- 			rc-cinergy.o \
-@@ -39,8 +42,8 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
- 			rc-dvico-portable.o \
- 			rc-em-terratec.o \
- 			rc-encore-enltv2.o \
--			rc-encore-enltv.o \
- 			rc-encore-enltv-fm53.o \
-+			rc-encore-enltv.o \
- 			rc-evga-indtube.o \
- 			rc-eztv.o \
- 			rc-flydvb.o \
-@@ -50,6 +53,7 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
- 			rc-geekbox.o \
- 			rc-genius-tvgo-a11mce.o \
- 			rc-gotview7135.o \
-+			rc-hauppauge.o \
- 			rc-hisi-poplar.o \
- 			rc-hisi-tv-demo.o \
- 			rc-imon-mce.o \
-@@ -67,14 +71,14 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
- 			rc-leadtek-y04g0051.o \
- 			rc-lme2510.o \
- 			rc-manli.o \
--			rc-mecool-kii-pro.o \
- 			rc-mecool-kiii-pro.o \
--			rc-medion-x10.o \
-+			rc-mecool-kii-pro.o \
- 			rc-medion-x10-digitainer.o \
-+			rc-medion-x10.o \
- 			rc-medion-x10-or2x.o \
- 			rc-minix-neo.o \
--			rc-msi-digivox-ii.o \
- 			rc-msi-digivox-iii.o \
-+			rc-msi-digivox-ii.o \
- 			rc-msi-tvanywhere.o \
- 			rc-msi-tvanywhere-plus.o \
- 			rc-nebula.o \
-@@ -87,20 +91,20 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
- 			rc-pinnacle-color.o \
- 			rc-pinnacle-grey.o \
- 			rc-pinnacle-pctv-hd.o \
--			rc-pixelview.o \
--			rc-pixelview-mk12.o \
- 			rc-pixelview-002t.o \
-+			rc-pixelview-mk12.o \
- 			rc-pixelview-new.o \
-+			rc-pixelview.o \
- 			rc-powercolor-real-angel.o \
- 			rc-proteus-2309.o \
- 			rc-purpletv.o \
- 			rc-pv951.o \
--			rc-hauppauge.o \
- 			rc-rc6-mce.o \
- 			rc-real-audio-220-32-keys.o \
- 			rc-reddo.o \
- 			rc-snapstream-firefly.o \
- 			rc-streamzap.o \
-+			rc-su3000.o \
- 			rc-tanix-tx3mini.o \
- 			rc-tanix-tx5max.o \
- 			rc-tbs-nec.o \
-@@ -109,16 +113,16 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
- 			rc-terratec-cinergy-c-pci.o \
- 			rc-terratec-cinergy-s2-hd.o \
- 			rc-terratec-cinergy-xs.o \
--			rc-terratec-slim.o \
- 			rc-terratec-slim-2.o \
-+			rc-terratec-slim.o \
- 			rc-tevii-nec.o \
- 			rc-tivo.o \
--			rc-total-media-in-hand.o \
- 			rc-total-media-in-hand-02.o \
-+			rc-total-media-in-hand.o \
- 			rc-trekstor.o \
- 			rc-tt-1500.o \
--			rc-twinhan-dtv-cab-ci.o \
- 			rc-twinhan1027.o \
-+			rc-twinhan-dtv-cab-ci.o \
- 			rc-vega-s9x.o \
- 			rc-videomate-m1f.o \
- 			rc-videomate-s350.o \
-@@ -128,8 +132,7 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
- 			rc-wetek-play2.o \
- 			rc-winfast.o \
- 			rc-winfast-usbii-deluxe.o \
--			rc-su3000.o \
-+			rc-x96max.o \
- 			rc-xbox-360.o \
- 			rc-xbox-dvd.o \
--			rc-x96max.o \
- 			rc-zx-irdec.o
-diff --git a/drivers/media/spi/Makefile b/drivers/media/spi/Makefile
-index 9f45787d680d..3c7c67cd048e 100644
---- a/drivers/media/spi/Makefile
-+++ b/drivers/media/spi/Makefile
-@@ -1,5 +1,6 @@
+ config VIDEO_IMX8_JPEG
+ 	tristate "IMX8 JPEG Encoder/Decoder"
++	depends on V4L_MEM2MEM_DRIVERS
+ 	depends on ARCH_MXC || COMPILE_TEST
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	select VIDEOBUF2_DMA_CONTIG
+diff --git a/drivers/media/platform/imx/Kconfig b/drivers/media/platform/imx/Kconfig
+index 683863572c20..7cd0617c9b1b 100644
+--- a/drivers/media/platform/imx/Kconfig
++++ b/drivers/media/platform/imx/Kconfig
+@@ -2,6 +2,7 @@
+ 
+ menuconfig VIDEO_IMX
+ 	bool "V4L2 capture drivers for NXP i.MX devices"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on ARCH_MXC || COMPILE_TEST
+ 	depends on VIDEO_DEV && VIDEO_V4L2
+ 	help
+diff --git a/drivers/media/platform/marvell-ccic/Kconfig b/drivers/media/platform/marvell-ccic/Kconfig
+index 3e3f86264762..bfe655b2cedd 100644
+--- a/drivers/media/platform/marvell-ccic/Kconfig
++++ b/drivers/media/platform/marvell-ccic/Kconfig
+@@ -1,6 +1,7 @@
  # SPDX-License-Identifier: GPL-2.0-only
--obj-$(CONFIG_VIDEO_GS1662) += gs1662.o
--obj-$(CONFIG_CXD2880_SPI_DRV) += cxd2880-spi.o
+ config VIDEO_CAFE_CCIC
+ 	tristate "Marvell 88ALP01 (Cafe) CMOS Camera Controller support"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on PCI && I2C && VIDEO_V4L2
+ 	depends on COMMON_CLK
+ 	select VIDEO_OV7670
+@@ -14,6 +15,7 @@ config VIDEO_CAFE_CCIC
  
- ccflags-y += -I $(srctree)/drivers/media/dvb-frontends/cxd2880
-+
-+obj-$(CONFIG_CXD2880_SPI_DRV) += cxd2880-spi.o
-+obj-$(CONFIG_VIDEO_GS1662) += gs1662.o
-diff --git a/drivers/media/test-drivers/Makefile b/drivers/media/test-drivers/Makefile
-index 1e64e05c1f22..b0951a57dcc0 100644
---- a/drivers/media/test-drivers/Makefile
-+++ b/drivers/media/test-drivers/Makefile
-@@ -3,8 +3,11 @@
- # Makefile for the test drivers.
- #
+ config VIDEO_MMP_CAMERA
+ 	tristate "Marvell Armada 610 integrated camera controller support"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on I2C && VIDEO_V4L2
+ 	depends on ARCH_MMP || COMPILE_TEST
+ 	depends on COMMON_CLK
+diff --git a/drivers/media/platform/omap/Kconfig b/drivers/media/platform/omap/Kconfig
+index de16de46c0f4..789d5e5686c7 100644
+--- a/drivers/media/platform/omap/Kconfig
++++ b/drivers/media/platform/omap/Kconfig
+@@ -6,6 +6,7 @@ config VIDEO_OMAP2_VOUT_VRFB
  
-+# Please keep it alphabetically sorted
-+
-+obj-$(CONFIG_DVB_VIDTV) += vidtv/
-+
-+obj-$(CONFIG_VIDEO_VICODEC) += vicodec/
-+obj-$(CONFIG_VIDEO_VIM2M) += vim2m.o
- obj-$(CONFIG_VIDEO_VIMC) += vimc/
- obj-$(CONFIG_VIDEO_VIVID) += vivid/
--obj-$(CONFIG_VIDEO_VIM2M) += vim2m.o
--obj-$(CONFIG_VIDEO_VICODEC) += vicodec/
--obj-$(CONFIG_DVB_VIDTV) += vidtv/
-diff --git a/drivers/media/tuners/Makefile b/drivers/media/tuners/Makefile
-index abcad519a4f9..3657e89acdd1 100644
---- a/drivers/media/tuners/Makefile
-+++ b/drivers/media/tuners/Makefile
-@@ -3,46 +3,46 @@
- # Makefile for common V4L/DVB tuners
- #
+ config VIDEO_OMAP2_VOUT
+ 	tristate "OMAP2/OMAP3 V4L2-Display driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on MMU
+ 	depends on FB_OMAP2 || (COMPILE_TEST && FB_OMAP2=n)
+ 	depends on ARCH_OMAP2 || ARCH_OMAP3 || COMPILE_TEST
+diff --git a/drivers/media/platform/rcar-vin/Kconfig b/drivers/media/platform/rcar-vin/Kconfig
+index 030312d862e7..34b7ea6f1246 100644
+--- a/drivers/media/platform/rcar-vin/Kconfig
++++ b/drivers/media/platform/rcar-vin/Kconfig
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ config VIDEO_RCAR_CSI2
+ 	tristate "R-Car MIPI CSI-2 Receiver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && OF
+ 	depends on ARCH_RENESAS || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+@@ -16,6 +17,7 @@ config VIDEO_RCAR_CSI2
  
-+ccflags-y += -I$(srctree)/drivers/media/dvb-frontends
- tda18271-objs := tda18271-maps.o tda18271-common.o tda18271-fe.o
+ config VIDEO_RCAR_VIN
+ 	tristate "R-Car Video Input (VIN) Driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && OF
+ 	depends on ARCH_RENESAS || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+diff --git a/drivers/media/platform/sti/c8sectpfe/Kconfig b/drivers/media/platform/sti/c8sectpfe/Kconfig
+index 369509e03071..702b910509c9 100644
+--- a/drivers/media/platform/sti/c8sectpfe/Kconfig
++++ b/drivers/media/platform/sti/c8sectpfe/Kconfig
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config DVB_C8SECTPFE
+ 	tristate "STMicroelectronics C8SECTPFE DVB support"
++	depends on DVB_PLATFORM_DRIVERS
+ 	depends on PINCTRL && DVB_CORE && I2C
+ 	depends on ARCH_STI || ARCH_MULTIPLATFORM || COMPILE_TEST
+ 	select FW_LOADER
+diff --git a/drivers/media/platform/sunxi/sun4i-csi/Kconfig b/drivers/media/platform/sunxi/sun4i-csi/Kconfig
+index 903c6152f6e8..43ad2dd7da5d 100644
+--- a/drivers/media/platform/sunxi/sun4i-csi/Kconfig
++++ b/drivers/media/platform/sunxi/sun4i-csi/Kconfig
+@@ -2,6 +2,7 @@
  
--obj-$(CONFIG_MEDIA_TUNER_XC2028) += xc2028.o
--obj-$(CONFIG_MEDIA_TUNER_SIMPLE) += tuner-simple.o
--# tuner-types will be merged into tuner-simple, in the future
--obj-$(CONFIG_MEDIA_TUNER_SIMPLE) += tuner-types.o
--obj-$(CONFIG_MEDIA_TUNER_MT20XX) += mt20xx.o
--obj-$(CONFIG_MEDIA_TUNER_TDA8290) += tda8290.o
--obj-$(CONFIG_MEDIA_TUNER_TEA5767) += tea5767.o
--obj-$(CONFIG_MEDIA_TUNER_TEA5761) += tea5761.o
--obj-$(CONFIG_MEDIA_TUNER_TDA9887) += tda9887.o
--obj-$(CONFIG_MEDIA_TUNER_TDA827X) += tda827x.o
--obj-$(CONFIG_MEDIA_TUNER_TDA18271) += tda18271.o
--obj-$(CONFIG_MEDIA_TUNER_XC5000) += xc5000.o
--obj-$(CONFIG_MEDIA_TUNER_XC4000) += xc4000.o
--obj-$(CONFIG_MEDIA_TUNER_MSI001) += msi001.o
--obj-$(CONFIG_MEDIA_TUNER_MT2060) += mt2060.o
--obj-$(CONFIG_MEDIA_TUNER_MT2063) += mt2063.o
--obj-$(CONFIG_MEDIA_TUNER_MT2266) += mt2266.o
--obj-$(CONFIG_MEDIA_TUNER_QT1010) += qt1010.o
--obj-$(CONFIG_MEDIA_TUNER_MT2131) += mt2131.o
--obj-$(CONFIG_MEDIA_TUNER_MXL5005S) += mxl5005s.o
--obj-$(CONFIG_MEDIA_TUNER_MXL5007T) += mxl5007t.o
--obj-$(CONFIG_MEDIA_TUNER_MC44S803) += mc44s803.o
--obj-$(CONFIG_MEDIA_TUNER_MAX2165) += max2165.o
--obj-$(CONFIG_MEDIA_TUNER_TDA18218) += tda18218.o
--obj-$(CONFIG_MEDIA_TUNER_TDA18212) += tda18212.o
-+# Please keep it alphabetically sorted
-+
- obj-$(CONFIG_MEDIA_TUNER_E4000) += e4000.o
--obj-$(CONFIG_MEDIA_TUNER_FC2580) += fc2580.o
--obj-$(CONFIG_MEDIA_TUNER_TUA9001) += tua9001.o
--obj-$(CONFIG_MEDIA_TUNER_SI2157) += si2157.o
- obj-$(CONFIG_MEDIA_TUNER_FC0011) += fc0011.o
- obj-$(CONFIG_MEDIA_TUNER_FC0012) += fc0012.o
- obj-$(CONFIG_MEDIA_TUNER_FC0013) += fc0013.o
-+obj-$(CONFIG_MEDIA_TUNER_FC2580) += fc2580.o
- obj-$(CONFIG_MEDIA_TUNER_IT913X) += it913x.o
--obj-$(CONFIG_MEDIA_TUNER_R820T) += r820t.o
-+obj-$(CONFIG_MEDIA_TUNER_M88RS6000T) += m88rs6000t.o
-+obj-$(CONFIG_MEDIA_TUNER_MAX2165) += max2165.o
-+obj-$(CONFIG_MEDIA_TUNER_MC44S803) += mc44s803.o
-+obj-$(CONFIG_MEDIA_TUNER_MSI001) += msi001.o
-+obj-$(CONFIG_MEDIA_TUNER_MT2060) += mt2060.o
-+obj-$(CONFIG_MEDIA_TUNER_MT2063) += mt2063.o
-+obj-$(CONFIG_MEDIA_TUNER_MT20XX) += mt20xx.o
-+obj-$(CONFIG_MEDIA_TUNER_MT2131) += mt2131.o
-+obj-$(CONFIG_MEDIA_TUNER_MT2266) += mt2266.o
- obj-$(CONFIG_MEDIA_TUNER_MXL301RF) += mxl301rf.o
--obj-$(CONFIG_MEDIA_TUNER_QM1D1C0042) += qm1d1c0042.o
-+obj-$(CONFIG_MEDIA_TUNER_MXL5005S) += mxl5005s.o
-+obj-$(CONFIG_MEDIA_TUNER_MXL5007T) += mxl5007t.o
- obj-$(CONFIG_MEDIA_TUNER_QM1D1B0004) += qm1d1b0004.o
--obj-$(CONFIG_MEDIA_TUNER_M88RS6000T) += m88rs6000t.o
-+obj-$(CONFIG_MEDIA_TUNER_QM1D1C0042) += qm1d1c0042.o
-+obj-$(CONFIG_MEDIA_TUNER_QT1010) += qt1010.o
-+obj-$(CONFIG_MEDIA_TUNER_R820T) += r820t.o
-+obj-$(CONFIG_MEDIA_TUNER_SI2157) += si2157.o
-+obj-$(CONFIG_MEDIA_TUNER_SIMPLE) += tuner-simple.o
-+obj-$(CONFIG_MEDIA_TUNER_SIMPLE) += tuner-types.o
-+obj-$(CONFIG_MEDIA_TUNER_TDA18212) += tda18212.o
-+obj-$(CONFIG_MEDIA_TUNER_TDA18218) += tda18218.o
- obj-$(CONFIG_MEDIA_TUNER_TDA18250) += tda18250.o
--
--ccflags-y += -I$(srctree)/drivers/media/dvb-frontends
-+obj-$(CONFIG_MEDIA_TUNER_TDA18271) += tda18271.o
-+obj-$(CONFIG_MEDIA_TUNER_TDA827X) += tda827x.o
-+obj-$(CONFIG_MEDIA_TUNER_TDA8290) += tda8290.o
-+obj-$(CONFIG_MEDIA_TUNER_TDA9887) += tda9887.o
-+obj-$(CONFIG_MEDIA_TUNER_TEA5761) += tea5761.o
-+obj-$(CONFIG_MEDIA_TUNER_TEA5767) += tea5767.o
-+obj-$(CONFIG_MEDIA_TUNER_TUA9001) += tua9001.o
-+obj-$(CONFIG_MEDIA_TUNER_XC2028) += xc2028.o
-+obj-$(CONFIG_MEDIA_TUNER_XC4000) += xc4000.o
-+obj-$(CONFIG_MEDIA_TUNER_XC5000) += xc5000.o
-diff --git a/drivers/media/usb/Makefile b/drivers/media/usb/Makefile
-index 65521f4921e3..f3daa71e8396 100644
---- a/drivers/media/usb/Makefile
-+++ b/drivers/media/usb/Makefile
-@@ -7,20 +7,21 @@
- obj-y += ttusb-dec/ ttusb-budget/ dvb-usb/ dvb-usb-v2/ siano/ b2c2/
- obj-y += zr364xx/ stkwebcam/ s2255/
+ config VIDEO_SUN4I_CSI
+ 	tristate "Allwinner A10 CMOS Sensor Interface Support"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && COMMON_CLK  && HAS_DMA
+ 	depends on ARCH_SUNXI || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/Kconfig b/drivers/media/platform/sunxi/sun6i-csi/Kconfig
+index 586e3fb3a80d..6d9cf1963c41 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/Kconfig
++++ b/drivers/media/platform/sunxi/sun6i-csi/Kconfig
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config VIDEO_SUN6I_CSI
+ 	tristate "Allwinner V3s Camera Sensor Interface driver"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2 && COMMON_CLK  && HAS_DMA
+ 	depends on ARCH_SUNXI || COMPILE_TEST
+ 	select MEDIA_CONTROLLER
+diff --git a/drivers/media/platform/xilinx/Kconfig b/drivers/media/platform/xilinx/Kconfig
+index 44587dccacf1..a9531d5efd50 100644
+--- a/drivers/media/platform/xilinx/Kconfig
++++ b/drivers/media/platform/xilinx/Kconfig
+@@ -2,6 +2,7 @@
  
--obj-$(CONFIG_USB_VIDEO_CLASS) += uvc/
--obj-$(CONFIG_USB_GSPCA) += gspca/
--obj-$(CONFIG_USB_PWC) += pwc/
-+# Please keep it alphabetically sorted
-+obj-$(CONFIG_DVB_AS102) += as102/
- obj-$(CONFIG_USB_AIRSPY) += airspy/
-+obj-$(CONFIG_USB_GSPCA) += gspca/
- obj-$(CONFIG_USB_HACKRF) += hackrf/
- obj-$(CONFIG_USB_MSI2500) += msi2500/
--obj-$(CONFIG_VIDEO_CPIA2) += cpia2/
-+obj-$(CONFIG_USB_PWC) += pwc/
-+obj-$(CONFIG_USB_VIDEO_CLASS) += uvc/
- obj-$(CONFIG_VIDEO_AU0828) += au0828/
-+obj-$(CONFIG_VIDEO_CPIA2) += cpia2/
-+obj-$(CONFIG_VIDEO_CX231XX) += cx231xx/
-+obj-$(CONFIG_VIDEO_EM28XX) += em28xx/
-+obj-$(CONFIG_VIDEO_GO7007) += go7007/
- obj-$(CONFIG_VIDEO_HDPVR) += hdpvr/
- obj-$(CONFIG_VIDEO_PVRUSB2) += pvrusb2/
- obj-$(CONFIG_VIDEO_STK1160) += stk1160/
--obj-$(CONFIG_VIDEO_CX231XX) += cx231xx/
- obj-$(CONFIG_VIDEO_TM6000) += tm6000/
--obj-$(CONFIG_VIDEO_EM28XX) += em28xx/
- obj-$(CONFIG_VIDEO_USBTV) += usbtv/
--obj-$(CONFIG_VIDEO_GO7007) += go7007/
--obj-$(CONFIG_DVB_AS102) += as102/
-diff --git a/drivers/media/v4l2-core/Makefile b/drivers/media/v4l2-core/Makefile
-index 83fac5c746f5..b7440f0a6710 100644
---- a/drivers/media/v4l2-core/Makefile
-+++ b/drivers/media/v4l2-core/Makefile
-@@ -3,37 +3,34 @@
- # Makefile for the V4L2 core
- #
- 
-+ccflags-y += -I$(srctree)/drivers/media/dvb-frontends
-+ccflags-y += -I$(srctree)/drivers/media/tuners
-+
- tuner-objs	:=	tuner-core.o
- 
- videodev-objs	:=	v4l2-dev.o v4l2-ioctl.o v4l2-device.o v4l2-fh.o \
- 			v4l2-event.o v4l2-subdev.o v4l2-common.o \
- 			v4l2-ctrls-core.o v4l2-ctrls-api.o \
- 			v4l2-ctrls-request.o v4l2-ctrls-defs.o
-+
- videodev-$(CONFIG_COMPAT) += v4l2-compat-ioctl32.o
--videodev-$(CONFIG_TRACEPOINTS) += v4l2-trace.o
- videodev-$(CONFIG_MEDIA_CONTROLLER) += v4l2-mc.o
- videodev-$(CONFIG_SPI) += v4l2-spi.o
-+videodev-$(CONFIG_TRACEPOINTS) += v4l2-trace.o
- videodev-$(CONFIG_VIDEO_V4L2_I2C) += v4l2-i2c.o
- 
--obj-$(CONFIG_VIDEO_V4L2) += videodev.o
--obj-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
- obj-$(CONFIG_V4L2_ASYNC) += v4l2-async.o
--obj-$(CONFIG_VIDEO_V4L2) += v4l2-dv-timings.o
--
--obj-$(CONFIG_VIDEO_TUNER) += tuner.o
--
--obj-$(CONFIG_V4L2_MEM2MEM_DEV) += v4l2-mem2mem.o
--obj-$(CONFIG_V4L2_H264) += v4l2-h264.o
--obj-$(CONFIG_V4L2_VP9) += v4l2-vp9.o
--
- obj-$(CONFIG_V4L2_FLASH_LED_CLASS) += v4l2-flash-led-class.o
--
-+obj-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
-+obj-$(CONFIG_V4L2_H264) += v4l2-h264.o
- obj-$(CONFIG_V4L2_JPEG_HELPER) += v4l2-jpeg.o
-+obj-$(CONFIG_V4L2_MEM2MEM_DEV) += v4l2-mem2mem.o
-+obj-$(CONFIG_V4L2_VP9) += v4l2-vp9.o
- 
--obj-$(CONFIG_VIDEOBUF_GEN) += videobuf-core.o
--obj-$(CONFIG_VIDEOBUF_DMA_SG) += videobuf-dma-sg.o
- obj-$(CONFIG_VIDEOBUF_DMA_CONTIG) += videobuf-dma-contig.o
-+obj-$(CONFIG_VIDEOBUF_DMA_SG) += videobuf-dma-sg.o
-+obj-$(CONFIG_VIDEOBUF_GEN) += videobuf-core.o
- obj-$(CONFIG_VIDEOBUF_VMALLOC) += videobuf-vmalloc.o
- 
--ccflags-y += -I$(srctree)/drivers/media/dvb-frontends
--ccflags-y += -I$(srctree)/drivers/media/tuners
-+obj-$(CONFIG_VIDEO_TUNER) += tuner.o
-+obj-$(CONFIG_VIDEO_V4L2) += v4l2-dv-timings.o videodev.o
+ config VIDEO_XILINX
+ 	tristate "Xilinx Video IP (EXPERIMENTAL)"
++	depends on V4L_PLATFORM_DRIVERS
+ 	depends on VIDEO_V4L2  && OF && HAS_DMA
+ 	select MEDIA_CONTROLLER
+ 	select VIDEO_V4L2_SUBDEV_API
 -- 
 2.35.1
 
