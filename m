@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8402C433FE
-	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:37:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C429DC433FE
+	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:38:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349599AbiCKOi7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Mar 2022 09:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
+        id S1345892AbiCKOjr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Mar 2022 09:39:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349662AbiCKOiQ (ORCPT
+        with ESMTP id S1349574AbiCKOhj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Mar 2022 09:38:16 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359F51C9B54;
-        Fri, 11 Mar 2022 06:36:59 -0800 (PST)
+        Fri, 11 Mar 2022 09:37:39 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A801C9455;
+        Fri, 11 Mar 2022 06:36:30 -0800 (PST)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E1903240007;
-        Fri, 11 Mar 2022 14:36:55 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 50B90240004;
+        Fri, 11 Mar 2022 14:36:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647009417;
+        t=1647009389;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zDmhoLPQge3kG9Ojz9okiMcdcrF7ESNnFjv2vshc9E8=;
-        b=CkMzxPXpS0SWFrfc4VdTua2320ouiDSqKn/9yyYp6rGxR7K0hB/pMeRX7rdXv1BAevuoos
-        oWRRaT9ddbaafbH5auuO1jplMG+OmZBdVTkd82bR0hyM0+VbLJUKAxK8kOBuOfvseEmQOf
-        W2LJwZ5Wchg2hId7VjvL2w1UQZYQ1n1H61ZAs3dsLLwio2GZWX6tk7grSc0vpptjUgR3LA
-        21pW3BexthWMrW3JlgGSBfvhbdXzCU0k76JF07QJgnFpOADVmRfR2+rs1k+FvbwtPPVcSu
-        kKfGt6upmoe/AIC4PQeLN6szH33+4MqVuTzUWtjvzB3IjwphJb3DOhr8J6LYNQ==
+        bh=iggvo2rKOQxtmuPw2qJyHa5S/fk0RafXxscwtfDj1dg=;
+        b=l9t27ymgioqxk7VMuWg/PvC3tPc7/UErsoxRubSz31jmRdbEC0qRkTI0l+7Yonz1Ba8MUz
+        VVKgEiwiGzKKZzK96DGmG9o/JFR2xhwQcjFYA677mnScynZ9MlRl77npkKBGQta/uouBpT
+        eRNdAxPFeeMv2LSX5GV2LPAcRfZCtJT+UwVcJ7BV95fecJ2JJS2x/XtRVoydAW81Zg7UyL
+        p/Rx39pi2Vwga2MUx4zewJD8Bas7j1ttgYhiiE3mPJI1JcNm/6BEorzAq3uAeFsv6pKWE2
+        9sxevk6fr/NG64ZB2LF+jzsalYlpbdWdZmxV40yRJYCfuMmkD1vaaVh+Qxm0ig==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -42,9 +42,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 44/46] media: sun6i-csi: Detect the availability of the ISP
-Date:   Fri, 11 Mar 2022 15:35:30 +0100
-Message-Id: <20220311143532.265091-45-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v3 26/46] media: sun6i-csi: Remove custom format helper and rework configure
+Date:   Fri, 11 Mar 2022 15:35:12 +0100
+Message-Id: <20220311143532.265091-27-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220311143532.265091-1-paul.kocialkowski@bootlin.com>
 References: <20220311143532.265091-1-paul.kocialkowski@bootlin.com>
@@ -54,87 +54,181 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a helper to detect whether the ISP is available and connected
-and store the indication in a driver-wide variable.
+Remove the custom sun6i_csi_get_bpp helper in favor of common v4l2
+infrastructure and rework the related window configuration code.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 33 +++++++++++++++++++
- .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  3 ++
- 2 files changed, 36 insertions(+)
+ .../platform/sunxi/sun6i-csi/sun6i_csi.h      | 49 -------------
+ .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 70 +++++++++----------
+ 2 files changed, 35 insertions(+), 84 deletions(-)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index 794ac53dcd30..f17be8e091a9 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -25,6 +25,35 @@
- #include "sun6i_csi_capture.h"
- #include "sun6i_csi_reg.h"
- 
-+/* ISP */
-+
-+static bool sun6i_csi_isp_detect(struct sun6i_csi_device *csi_dev)
-+{
-+	struct device *dev = csi_dev->dev;
-+	struct fwnode_handle *handle = NULL;
-+
-+	/* ISP is not available if disabled in kernel config. */
-+	if (!IS_ENABLED(CONFIG_VIDEO_SUN6I_ISP))
-+		return 0;
-+
-+	/*
-+	 * ISP is not available if not connected via fwnode graph.
-+	 * This weill also check that the remote parent node is available.
-+	 */
-+	handle = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
-+						 SUN6I_CSI_PORT_ISP, 0,
-+						 FWNODE_GRAPH_ENDPOINT_NEXT);
-+	if (!handle)
-+		return 0;
-+
-+	fwnode_handle_put(handle);
-+
-+	dev_info(dev, "ISP link is available\n");
-+	csi_dev->isp_available = true;
-+
-+	return 0;
-+}
-+
- /* Media */
- 
- static const struct media_device_ops sun6i_csi_media_ops = {
-@@ -323,6 +352,10 @@ static int sun6i_csi_probe(struct platform_device *platform_dev)
- 	if (ret)
- 		return ret;
- 
-+	ret = sun6i_csi_isp_detect(csi_dev);
-+	if (ret)
-+		goto error_resources;
-+
- 	ret = sun6i_csi_v4l2_setup(csi_dev);
- 	if (ret)
- 		goto error_resources;
 diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-index e3c1150d99f5..ee5b04f75311 100644
+index 8a9586e02f73..21932aae3636 100644
 --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
 +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-@@ -22,6 +22,7 @@
- enum sun6i_csi_port {
- 	SUN6I_CSI_PORT_PARALLEL		= 0,
- 	SUN6I_CSI_PORT_MIPI_CSI2	= 1,
-+	SUN6I_CSI_PORT_ISP		= 2,
- };
+@@ -61,53 +61,4 @@ struct sun6i_csi_variant {
+ bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
+ 				   u32 pixformat, u32 mbus_code);
  
- struct sun6i_csi_buffer {
-@@ -47,6 +48,8 @@ struct sun6i_csi_device {
- 	struct clk			*clk_mod;
- 	struct clk			*clk_ram;
- 	struct reset_control		*reset;
+-/* get bpp form v4l2 pixformat */
+-static inline int sun6i_csi_get_bpp(unsigned int pixformat)
+-{
+-	switch (pixformat) {
+-	case V4L2_PIX_FMT_SBGGR8:
+-	case V4L2_PIX_FMT_SGBRG8:
+-	case V4L2_PIX_FMT_SGRBG8:
+-	case V4L2_PIX_FMT_SRGGB8:
+-	case V4L2_PIX_FMT_JPEG:
+-		return 8;
+-	case V4L2_PIX_FMT_SBGGR10:
+-	case V4L2_PIX_FMT_SGBRG10:
+-	case V4L2_PIX_FMT_SGRBG10:
+-	case V4L2_PIX_FMT_SRGGB10:
+-		return 10;
+-	case V4L2_PIX_FMT_SBGGR12:
+-	case V4L2_PIX_FMT_SGBRG12:
+-	case V4L2_PIX_FMT_SGRBG12:
+-	case V4L2_PIX_FMT_SRGGB12:
+-	case V4L2_PIX_FMT_NV12_16L16:
+-	case V4L2_PIX_FMT_NV12:
+-	case V4L2_PIX_FMT_NV21:
+-	case V4L2_PIX_FMT_YUV420:
+-	case V4L2_PIX_FMT_YVU420:
+-		return 12;
+-	case V4L2_PIX_FMT_YUYV:
+-	case V4L2_PIX_FMT_YVYU:
+-	case V4L2_PIX_FMT_UYVY:
+-	case V4L2_PIX_FMT_VYUY:
+-	case V4L2_PIX_FMT_NV16:
+-	case V4L2_PIX_FMT_NV61:
+-	case V4L2_PIX_FMT_YUV422P:
+-	case V4L2_PIX_FMT_RGB565:
+-	case V4L2_PIX_FMT_RGB565X:
+-		return 16;
+-	case V4L2_PIX_FMT_RGB24:
+-	case V4L2_PIX_FMT_BGR24:
+-		return 24;
+-	case V4L2_PIX_FMT_RGB32:
+-	case V4L2_PIX_FMT_BGR32:
+-		return 32;
+-	default:
+-		WARN(1, "Unsupported pixformat: 0x%x\n", pixformat);
+-		break;
+-	}
+-
+-	return 0;
+-}
+-
+ #endif /* __SUN6I_CSI_H__ */
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
+index 9c8b33c7e59c..f977b89dcea2 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
+@@ -483,68 +483,68 @@ static void sun6i_csi_capture_configure_format(struct sun6i_csi_device *csi_dev)
+ 
+ static void sun6i_csi_capture_configure_window(struct sun6i_csi_device *csi_dev)
+ {
++	struct regmap *regmap = csi_dev->regmap;
++	const struct v4l2_format_info *info;
++	u32 hsize_len, vsize_len;
++	u32 luma_line, chroma_line = 0;
+ 	u32 pixelformat, field;
+ 	u32 width, height;
+-	u32 bytesperline_y;
+-	u32 bytesperline_c;
+-	u32 hor_len;
+ 
+ 	sun6i_csi_capture_dimensions(csi_dev, &width, &height);
+ 	sun6i_csi_capture_format(csi_dev, &pixelformat, &field);
+ 
+-	hor_len = width;
++	hsize_len = width;
++	vsize_len = height;
+ 
+ 	switch (pixelformat) {
+ 	case V4L2_PIX_FMT_YUYV:
+ 	case V4L2_PIX_FMT_YVYU:
+ 	case V4L2_PIX_FMT_UYVY:
+ 	case V4L2_PIX_FMT_VYUY:
+-		dev_dbg(csi_dev->dev,
+-			"Horizontal length should be 2 times of width for packed YUV formats!\n");
+-		hor_len = width * 2;
++		/*
++		 * Horizontal length should be 2 times of width for packed
++		 * YUV formats.
++		 */
++		hsize_len *= 2;
+ 		break;
+ 	default:
+ 		break;
+ 	}
+ 
+-	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_HSIZE_REG,
+-		     SUN6I_CSI_CH_HSIZE_LEN(hor_len) |
++	regmap_write(regmap, SUN6I_CSI_CH_HSIZE_REG,
++		     SUN6I_CSI_CH_HSIZE_LEN(hsize_len) |
+ 		     SUN6I_CSI_CH_HSIZE_START(0));
+-	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_VSIZE_REG,
+-		     SUN6I_CSI_CH_VSIZE_LEN(height) |
 +
-+	bool				isp_available;
- };
++	regmap_write(regmap, SUN6I_CSI_CH_VSIZE_REG,
++		     SUN6I_CSI_CH_VSIZE_LEN(vsize_len) |
+ 		     SUN6I_CSI_CH_VSIZE_START(0));
  
- struct sun6i_csi_variant {
+ 	switch (pixelformat) {
+-	case V4L2_PIX_FMT_NV12_16L16:
+-	case V4L2_PIX_FMT_NV12:
+-	case V4L2_PIX_FMT_NV21:
+-	case V4L2_PIX_FMT_NV16:
+-	case V4L2_PIX_FMT_NV61:
+-		bytesperline_y = width;
+-		bytesperline_c = width;
++	case V4L2_PIX_FMT_RGB565X:
++		luma_line = width * 2;
+ 		break;
+-	case V4L2_PIX_FMT_YUV420:
+-	case V4L2_PIX_FMT_YVU420:
+-		bytesperline_y = width;
+-		bytesperline_c = width / 2;
++	case V4L2_PIX_FMT_NV12_16L16:
++		luma_line = width;
++		chroma_line = width;
+ 		break;
+-	case V4L2_PIX_FMT_YUV422P:
+-		bytesperline_y = width;
+-		bytesperline_c = width / 2;
++	case V4L2_PIX_FMT_JPEG:
++		luma_line = width;
+ 		break;
+-	default: /* raw */
+-		dev_dbg(csi_dev->dev,
+-			"Calculating pixelformat(0x%x)'s bytesperline as a packed format\n",
+-			pixelformat);
+-		bytesperline_y = (sun6i_csi_get_bpp(pixelformat) *
+-				  width) / 8;
+-		bytesperline_c = 0;
++	default:
++		info = v4l2_format_info(pixelformat);
++		if (WARN_ON(!info))
++			return;
++
++		luma_line = width * info->bpp[0];
++
++		if (info->comp_planes > 1)
++			chroma_line = width * info->bpp[1] / info->hdiv;
+ 		break;
+ 	}
+ 
+-	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_BUF_LEN_REG,
+-		     SUN6I_CSI_CH_BUF_LEN_CHROMA_LINE(bytesperline_c) |
+-		     SUN6I_CSI_CH_BUF_LEN_LUMA_LINE(bytesperline_y));
++	regmap_write(regmap, SUN6I_CSI_CH_BUF_LEN_REG,
++		     SUN6I_CSI_CH_BUF_LEN_CHROMA_LINE(chroma_line) |
++		     SUN6I_CSI_CH_BUF_LEN_LUMA_LINE(luma_line));
+ }
+ 
+ static void sun6i_csi_capture_configure(struct sun6i_csi_device *csi_dev)
 -- 
 2.35.1
 
