@@ -2,52 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82DA4C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:10:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB062C4332F
+	for <linux-media@archiver.kernel.org>; Fri, 11 Mar 2022 14:10:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349270AbiCKOLX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Mar 2022 09:11:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
+        id S1346634AbiCKOLY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Mar 2022 09:11:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349180AbiCKOLE (ORCPT
+        with ESMTP id S239350AbiCKOLE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 11 Mar 2022 09:11:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A061B3A46;
-        Fri, 11 Mar 2022 06:09:49 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948211B308A;
+        Fri, 11 Mar 2022 06:09:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0348AB82C1D;
-        Fri, 11 Mar 2022 14:09:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2A50C3410C;
-        Fri, 11 Mar 2022 14:09:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C16861F02;
+        Fri, 11 Mar 2022 14:09:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCC84C340ED;
+        Fri, 11 Mar 2022 14:09:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647007777;
-        bh=KRdIAukiAE1iXMgaV/B8l6PgxS1zL00K+hAyWeU9PDQ=;
+        s=k20201202; t=1647007778;
+        bh=0CL2/qApCnzCj9IzxwD5iw737g8Sy9uOx0U4nGkwXFE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AtzAtaaAIA4c8JwpMwp9aZ5TX+e5hr4ojaIQ3lO2ESbTdmVKsbQtVPF3o4nJu2brm
-         aCNhe7EYPj/ZJDNaptqP1YY5BbQ8ta82O/2jNa1LtajFkE28j3rqJiKsAAQEFk0mwW
-         HsGMS+LZzsofBKpd6k7MxdVMs3Yzi5Aabzbc0MGwvKVDABz7lhnq8o2ScbPXw0Ru//
-         zySTb3AK2GDxje6+5ZQe8aGn6/5rUGvHvYuO30e+jbzIj3wrkjdOSwbcqJCeTHk6d2
-         e4nphns25ybX15CEKBDHRPVXALlQFfbEExJeegm5dr4DwtVHvFZLp5tLt4uxwHzg33
-         Oy5KrTLgNQsmA==
+        b=GBnlhlJcJ/HAEEPNLdvbr6Rd+QWZVzIQfNqRtTIL6wxdFpwVwgfpXlzDqY5S7KB4k
+         V7Dy+rml9Z8Hur5GsBNJNsgmFjVsXHMV0OjuA85QRKjxLvUoikx7xMRKt/S+4y9JZ9
+         ycwr/DJu0+NeuasA7VuImticuba8w9jyuYDtxWlk5gcdqoSDXMazXGN57RSnUbVZZ8
+         2hl3zVmNAEn62cQvCuaDHMn8e1lthShzTzUVy03lrITpeRuR9SzbrqGGqnVGv9gpY7
+         VcV+W8PaktyLtQDVWPUwsxfDndvzUjQdjmskIrDvr+LVT6bQHy6VzfCr1zYaD5/Pmr
+         a/9C5DBAjqnig==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nSfxX-000lI1-Pc; Fri, 11 Mar 2022 15:09:35 +0100
+        id 1nSfxY-000lIn-Ga; Fri, 11 Mar 2022 15:09:36 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
         Dmitry Osipenko <digetx@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jean-Christophe Trotin <jean-christophe.trotin@foss.st.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2 26/38] media: platform: hva: move config to its own file
-Date:   Fri, 11 Mar 2022 15:07:39 +0100
-Message-Id: <62c52f06b5dc6eb6402cb3db2da8f02ee1bc179d.1647006877.git.mchehab@kernel.org>
+        Maxime Ripard <mripard@kernel.org>,
+        Ming Qian <ming.qian@nxp.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH v2 38/38] drivers: media: platform: move some manufacturer entries
+Date:   Fri, 11 Mar 2022 15:07:51 +0100
+Message-Id: <b1803d005b2f671d238fc8579882a493c173d1ef.1647006877.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647006877.git.mchehab@kernel.org>
 References: <cover.1647006877.git.mchehab@kernel.org>
@@ -58,99 +66,96 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to better organize the platform/Kconfig, place
-hva-specific config stuff on a separate Kconfig file.
+As there are 4 manufacturer's directories with multiple sources
+(qcom, rockchip, sti and sunxi), move the sources from
+platform/Kconfig to their specific Konfig files.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.1647006877.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig         | 28 +-------------------------
- drivers/media/platform/sti/hva/Kconfig | 26 ++++++++++++++++++++++++
- 2 files changed, 27 insertions(+), 27 deletions(-)
- create mode 100644 drivers/media/platform/sti/hva/Kconfig
+ drivers/media/platform/Kconfig          | 13 +++----------
+ drivers/media/platform/qcom/Kconfig     |  3 +++
+ drivers/media/platform/rockchip/Kconfig |  3 +++
+ drivers/media/platform/sti/Kconfig      |  5 +++++
+ drivers/media/platform/sunxi/Kconfig    |  2 ++
+ 5 files changed, 16 insertions(+), 10 deletions(-)
+ create mode 100644 drivers/media/platform/qcom/Kconfig
+ create mode 100644 drivers/media/platform/rockchip/Kconfig
+ create mode 100644 drivers/media/platform/sti/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 95f66255b635..7e2b120a2057 100644
+index 527e9f08008b..a3ad25c6a56c 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -68,6 +68,7 @@ source "drivers/media/platform/aspeed/Kconfig"
- source "drivers/media/platform/rockchip/rga/Kconfig"
+@@ -85,23 +85,16 @@ source "drivers/media/platform/mtk-vpu/Kconfig"
+ source "drivers/media/platform/nxp/Kconfig"
+ source "drivers/media/platform/omap3isp/Kconfig"
+ source "drivers/media/platform/omap/Kconfig"
+-source "drivers/media/platform/qcom/camss/Kconfig"
+-source "drivers/media/platform/qcom/venus/Kconfig"
++source "drivers/media/platform/qcom/Kconfig"
+ source "drivers/media/platform/renesas/Kconfig"
+-source "drivers/media/platform/rockchip/rga/Kconfig"
+-source "drivers/media/platform/rockchip/rkisp1/Kconfig"
++source "drivers/media/platform/rockchip/Kconfig"
  source "drivers/media/platform/s3c-camif/Kconfig"
  source "drivers/media/platform/s5p-g2d/Kconfig"
-+source "drivers/media/platform/sti/hva/Kconfig"
- 
- config VIDEO_MUX
- 	tristate "Video Multiplexer"
-@@ -196,33 +197,6 @@ config VIDEO_STI_BDISP
- 	help
- 	  This v4l2 mem2mem driver is a 2D blitter for STMicroelectronics SoC.
- 
--config VIDEO_STI_HVA
--	tristate "STMicroelectronics HVA multi-format video encoder V4L2 driver"
--	depends on V4L_MEM2MEM_DRIVERS
--	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_STI || COMPILE_TEST
--	select VIDEOBUF2_DMA_CONTIG
--	select V4L2_MEM2MEM_DEV
--	help
--	  This V4L2 driver enables HVA (Hardware Video Accelerator) multi-format
--	  video encoder of STMicroelectronics SoC, allowing hardware encoding of
--	  raw uncompressed formats in various compressed video bitstreams format.
--
--	  To compile this driver as a module, choose M here:
--	  the module will be called st-hva.
--
--config VIDEO_STI_HVA_DEBUGFS
--	bool "Export STMicroelectronics HVA internals in debugfs"
--	depends on V4L_MEM2MEM_DRIVERS
--	depends on VIDEO_STI_HVA
--	depends on DEBUG_FS
--	help
--	  Select this to see information about the internal state and the last
--	  operation of STMicroelectronics HVA multi-format video encoder in
--	  debugfs.
--
--	  Choose N unless you know you need this.
--
- config VIDEO_STI_DELTA
- 	tristate "STMicroelectronics DELTA multi-format video decoder V4L2 driver"
- 	depends on V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/sti/hva/Kconfig b/drivers/media/platform/sti/hva/Kconfig
+ source "drivers/media/platform/s5p-jpeg/Kconfig"
+ source "drivers/media/platform/s5p-mfc/Kconfig"
+-source "drivers/media/platform/sti/bdisp/Kconfig"
+-source "drivers/media/platform/sti/c8sectpfe/Kconfig"
+-source "drivers/media/platform/sti/delta/Kconfig"
+-source "drivers/media/platform/sti/hva/Kconfig"
++source "drivers/media/platform/sti/Kconfig"
+ source "drivers/media/platform/stm32/Kconfig"
+ source "drivers/media/platform/sunxi/Kconfig"
+-source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
+-source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
+ source "drivers/media/platform/tegra/vde/Kconfig"
+ source "drivers/media/platform/ti-vpe/Kconfig"
+ source "drivers/media/platform/via/Kconfig"
+diff --git a/drivers/media/platform/qcom/Kconfig b/drivers/media/platform/qcom/Kconfig
 new file mode 100644
-index 000000000000..a092a9b146f1
+index 000000000000..aa2428f641d3
 --- /dev/null
-+++ b/drivers/media/platform/sti/hva/Kconfig
-@@ -0,0 +1,26 @@
++++ b/drivers/media/platform/qcom/Kconfig
+@@ -0,0 +1,3 @@
 +# SPDX-License-Identifier: GPL-2.0
-+config VIDEO_STI_HVA
-+	tristate "STMicroelectronics HVA multi-format video encoder V4L2 driver"
-+	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_STI || COMPILE_TEST
-+	select VIDEOBUF2_DMA_CONTIG
-+	select V4L2_MEM2MEM_DEV
-+	help
-+	  This V4L2 driver enables HVA (Hardware Video Accelerator) multi-format
-+	  video encoder of STMicroelectronics SoC, allowing hardware encoding of
-+	  raw uncompressed formats in various compressed video bitstreams format.
-+
-+	  To compile this driver as a module, choose M here:
-+	  the module will be called st-hva.
-+
-+config VIDEO_STI_HVA_DEBUGFS
-+	bool "Export STMicroelectronics HVA internals in debugfs"
-+	depends on VIDEO_STI_HVA
-+	depends on DEBUG_FS
-+	help
-+	  Select this to see information about the internal state and the last
-+	  operation of STMicroelectronics HVA multi-format video encoder in
-+	  debugfs.
-+
-+	  Choose N unless you know you need this.
++source "drivers/media/platform/qcom/camss/Kconfig"
++source "drivers/media/platform/qcom/venus/Kconfig"
+diff --git a/drivers/media/platform/rockchip/Kconfig b/drivers/media/platform/rockchip/Kconfig
+new file mode 100644
+index 000000000000..c7ba06388780
+--- /dev/null
++++ b/drivers/media/platform/rockchip/Kconfig
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++source "drivers/media/platform/rockchip/rga/Kconfig"
++source "drivers/media/platform/rockchip/rkisp1/Kconfig"
+diff --git a/drivers/media/platform/sti/Kconfig b/drivers/media/platform/sti/Kconfig
+new file mode 100644
+index 000000000000..9fb5e78a92cf
+--- /dev/null
++++ b/drivers/media/platform/sti/Kconfig
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0-only
++source "drivers/media/platform/sti/bdisp/Kconfig"
++source "drivers/media/platform/sti/c8sectpfe/Kconfig"
++source "drivers/media/platform/sti/delta/Kconfig"
++source "drivers/media/platform/sti/hva/Kconfig"
+diff --git a/drivers/media/platform/sunxi/Kconfig b/drivers/media/platform/sunxi/Kconfig
+index 7151cc249afa..a10032215b08 100644
+--- a/drivers/media/platform/sunxi/Kconfig
++++ b/drivers/media/platform/sunxi/Kconfig
+@@ -2,3 +2,5 @@
+ 
+ source "drivers/media/platform/sunxi/sun4i-csi/Kconfig"
+ source "drivers/media/platform/sunxi/sun6i-csi/Kconfig"
++source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
++source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
 -- 
 2.35.1
 
