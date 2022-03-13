@@ -2,69 +2,66 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 208E0C433EF
-	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 10:53:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05984C4332F
+	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 10:53:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234313AbiCMKyP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Mar 2022 06:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47030 "EHLO
+        id S234432AbiCMKyS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Mar 2022 06:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbiCMKyI (ORCPT
+        with ESMTP id S234259AbiCMKyI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 13 Mar 2022 06:54:08 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664D73F882;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663523E5F9;
         Sun, 13 Mar 2022 03:52:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB1C2B80CA8;
-        Sun, 13 Mar 2022 10:52:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23BF7C340F4;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B030B80CA9;
+        Sun, 13 Mar 2022 10:52:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FC21C340FD;
         Sun, 13 Mar 2022 10:52:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647168729;
-        bh=uFEvkPWpSddUhfYe1RpIZuE2XRFVlkHyCaieWvn26LI=;
+        bh=VWp9rNO5VHb/uQlqyJjbKMngzlNKF6477cOMkAGw5n0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=psAx6IpvS3YT/dVe05PUlxLbjTQuWFjqroHNw/mOHL8FP9hTVEcdpUeNIPMA4RBhd
-         qjhFEk2Yn/itSZk90OKmIwmvxdxvvpSGVxuRQQow4VhCbjGEPc4zhtW2VZ72VCKdqX
-         ugFyS2PWw9qLk/CZ6MGH3zv0Hyxwf9Lxk9qq5UESTQeMxJOUgssa6xHTmAKOGl+wpe
-         WxohI33oM/tX17gMg4JToTDgZPW4YWkXPqsueZnUsYv5sxCXkVN1e8iWijmo/f/4Tn
-         0w1UqxWkCdnXC7Ne5hgjQ82nD6rBRmGeAQ9Yc4g9LPAXhCdtSQnsw8WPHiVEKZzLwo
-         V9RTWC6cdg38Q==
+        b=nLWn4BafK98HHe4zRU/FzGDR73fzyLeIJlCphwr00zvP4MPjBUa75TVkRC4Cwb9+y
+         l1ZUIWgZR1cDrKKSAkOqz6Ar3lWWQwF3AdGM+DBTVdAu92xBovniezvxSxYZGa1BNJ
+         saYsQ8XjmWUFa9G5b4U2DznXqhpjCAtOv98jWsuMnF1C0c+2oYX7WrbU3Jn4EnMw+/
+         qrUBzl2tfEitgp/KA0wMo7cKmB7IAPFTK7Wx4V90uvEjxxy00rPr4UIAHo4OKYBa+H
+         TigXgzoInJdX1ESk+F+XI8ss+Lpcy+MXT9ABjsQda9Ql4h16x47czbMw+LFryriJ9q
+         M1vsehf/a2yXw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTLpW-001I1I-Ni; Sun, 13 Mar 2022 11:52:06 +0100
+        id 1nTLpW-001I1Y-Tw; Sun, 13 Mar 2022 11:52:06 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Cai Huoqing <caihuoqing@baidu.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
-        Fabio Estevam <festevam@gmail.com>,
+        Evan Green <evgreen@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Houlong Wei <houlong.wei@mediatek.com>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Martin Weber <martin.weber@br-automation.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Ming Qian <ming.qian@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Xu Wang <vulab@iscas.ac.cn>, Yong Wu <yong.wu@mediatek.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 01/24] media: platform: rename coda/ to chips-media/
-Date:   Sun, 13 Mar 2022 11:51:42 +0100
-Message-Id: <1b1da16fb226e619e5b7c533eb8f1153f76eb189.1647167750.git.mchehab@kernel.org>
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH 05/24] media: platform: rename mtk-mdp/ to mediatek/mtk-mdp/
+Date:   Sun, 13 Mar 2022 11:51:46 +0100
+Message-Id: <834b10510c01800e171e34c06a9d82c8e072fbc9.1647167750.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647167750.git.mchehab@kernel.org>
 References: <cover.1647167750.git.mchehab@kernel.org>
@@ -76,7 +73,7 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 As the end goal is to have platform drivers split by vendor,
-rename coda/ to chips-media/.
+rename mtk-mdp/ to mediatek/mtk-mdp/.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -84,163 +81,128 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/24] at: https://lore.kernel.org/all/cover.1647167750.git.mchehab@kernel.org/
 
- MAINTAINERS                                                | 2 +-
- drivers/media/platform/Kconfig                             | 2 +-
- drivers/media/platform/Makefile                            | 4 ++--
- drivers/media/platform/{coda => chips-media}/Kconfig       | 0
- drivers/media/platform/{coda => chips-media}/Makefile      | 0
- drivers/media/platform/{coda => chips-media}/coda-bit.c    | 0
- drivers/media/platform/{coda => chips-media}/coda-common.c | 0
- drivers/media/platform/{coda => chips-media}/coda-gdi.c    | 0
- drivers/media/platform/{coda => chips-media}/coda-h264.c   | 0
- drivers/media/platform/{coda => chips-media}/coda-jpeg.c   | 0
- drivers/media/platform/{coda => chips-media}/coda-mpeg2.c  | 0
- drivers/media/platform/{coda => chips-media}/coda-mpeg4.c  | 0
- drivers/media/platform/{coda => chips-media}/coda.h        | 0
- drivers/media/platform/{coda => chips-media}/coda_regs.h   | 2 +-
- drivers/media/platform/{coda => chips-media}/imx-vdoa.c    | 0
- drivers/media/platform/{coda => chips-media}/imx-vdoa.h    | 0
- drivers/media/platform/{coda => chips-media}/trace.h       | 2 +-
- 17 files changed, 6 insertions(+), 6 deletions(-)
- rename drivers/media/platform/{coda => chips-media}/Kconfig (100%)
- rename drivers/media/platform/{coda => chips-media}/Makefile (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-bit.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-common.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-gdi.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-h264.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-jpeg.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-mpeg2.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-mpeg4.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda.h (100%)
- rename drivers/media/platform/{coda => chips-media}/coda_regs.h (99%)
- rename drivers/media/platform/{coda => chips-media}/imx-vdoa.c (100%)
- rename drivers/media/platform/{coda => chips-media}/imx-vdoa.h (100%)
- rename drivers/media/platform/{coda => chips-media}/trace.h (98%)
+ MAINTAINERS                                                  | 2 +-
+ drivers/media/platform/Kconfig                               | 2 +-
+ drivers/media/platform/Makefile                              | 2 +-
+ drivers/media/platform/{ => mediatek}/mtk-mdp/Kconfig        | 0
+ drivers/media/platform/{ => mediatek}/mtk-mdp/Makefile       | 0
+ drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_comp.c | 0
+ drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_comp.h | 0
+ drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_core.c | 0
+ drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_core.h | 0
+ drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_ipi.h  | 0
+ drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_m2m.c  | 0
+ drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_m2m.h  | 0
+ drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_regs.c | 0
+ drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_regs.h | 0
+ drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_vpu.c  | 0
+ drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_vpu.h  | 0
+ 16 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/Kconfig (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/Makefile (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_comp.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_comp.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_core.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_core.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_ipi.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_m2m.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_m2m.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_regs.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_regs.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_vpu.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-mdp/mtk_mdp_vpu.h (100%)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 848640546398..84bc106acc57 100644
+index fa0a3de3865f..2203d98bbcf1 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -4771,7 +4771,7 @@ M:	Philipp Zabel <p.zabel@pengutronix.de>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/media/coda.yaml
--F:	drivers/media/platform/coda/
-+F:	drivers/media/platform/chips-media/
+@@ -12138,7 +12138,7 @@ M:	Houlong Wei <houlong.wei@mediatek.com>
+ M:	Andrew-CT Chen <andrew-ct.chen@mediatek.com>
+ S:	Supported
+ F:	Documentation/devicetree/bindings/media/mediatek-mdp.txt
+-F:	drivers/media/platform/mtk-mdp/
++F:	drivers/media/platform/mediatek/mtk-mdp/
+ F:	drivers/media/platform/mtk-vpu/
  
- CODE OF CONDUCT
- M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ MEDIATEK MEDIA DRIVER
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index f15ab9739823..615736ac117c 100644
+index fdb4e1a8aa81..a45fd3fe103e 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -71,7 +71,7 @@ source "drivers/media/platform/amphion/Kconfig"
- source "drivers/media/platform/aspeed/Kconfig"
- source "drivers/media/platform/atmel/Kconfig"
- source "drivers/media/platform/cadence/Kconfig"
--source "drivers/media/platform/coda/Kconfig"
-+source "drivers/media/platform/chips-media/Kconfig"
- source "drivers/media/platform/davinci/Kconfig"
- source "drivers/media/platform/exynos-gsc/Kconfig"
- source "drivers/media/platform/exynos4-is/Kconfig"
+@@ -79,7 +79,7 @@ source "drivers/media/platform/exynos4-is/Kconfig"
+ source "drivers/media/platform/intel/Kconfig"
+ source "drivers/media/platform/marvell/Kconfig"
+ source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
+-source "drivers/media/platform/mtk-mdp/Kconfig"
++source "drivers/media/platform/mediatek/mtk-mdp/Kconfig"
+ source "drivers/media/platform/mtk-vcodec/Kconfig"
+ source "drivers/media/platform/mtk-vpu/Kconfig"
+ source "drivers/media/platform/nxp/Kconfig"
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 20b07ae3ebf1..8d6e15fad0b1 100644
+index c792f6216918..6f5d09cd8f9b 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -6,12 +6,12 @@
- # Place here, alphabetically sorted by directory
- # (e. g. LC_ALL=C sort Makefile)
- obj-y += allegro-dvt/
--obj-y += aspeed/
- obj-y += am437x/
- obj-y += amphion/
-+obj-y += aspeed/
- obj-y += atmel/
- obj-y += cadence/
--obj-y += coda/
-+obj-y += chips-media/
- obj-y += davinci/
- obj-y += exynos-gsc/
- obj-y += exynos4-is/
-diff --git a/drivers/media/platform/coda/Kconfig b/drivers/media/platform/chips-media/Kconfig
+@@ -19,7 +19,7 @@ obj-y += exynos4-is/
+ obj-y += intel/
+ obj-y += marvell/
+ obj-y += mediatek/mtk-jpeg/
+-obj-y += mtk-mdp/
++obj-y += mediatek/mtk-mdp/
+ obj-y += mtk-vcodec/
+ obj-y += mtk-vpu/
+ obj-y += nxp/
+diff --git a/drivers/media/platform/mtk-mdp/Kconfig b/drivers/media/platform/mediatek/mtk-mdp/Kconfig
 similarity index 100%
-rename from drivers/media/platform/coda/Kconfig
-rename to drivers/media/platform/chips-media/Kconfig
-diff --git a/drivers/media/platform/coda/Makefile b/drivers/media/platform/chips-media/Makefile
+rename from drivers/media/platform/mtk-mdp/Kconfig
+rename to drivers/media/platform/mediatek/mtk-mdp/Kconfig
+diff --git a/drivers/media/platform/mtk-mdp/Makefile b/drivers/media/platform/mediatek/mtk-mdp/Makefile
 similarity index 100%
-rename from drivers/media/platform/coda/Makefile
-rename to drivers/media/platform/chips-media/Makefile
-diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/chips-media/coda-bit.c
+rename from drivers/media/platform/mtk-mdp/Makefile
+rename to drivers/media/platform/mediatek/mtk-mdp/Makefile
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_comp.c b/drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_comp.c
 similarity index 100%
-rename from drivers/media/platform/coda/coda-bit.c
-rename to drivers/media/platform/chips-media/coda-bit.c
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
+rename from drivers/media/platform/mtk-mdp/mtk_mdp_comp.c
+rename to drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_comp.c
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_comp.h b/drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_comp.h
 similarity index 100%
-rename from drivers/media/platform/coda/coda-common.c
-rename to drivers/media/platform/chips-media/coda-common.c
-diff --git a/drivers/media/platform/coda/coda-gdi.c b/drivers/media/platform/chips-media/coda-gdi.c
+rename from drivers/media/platform/mtk-mdp/mtk_mdp_comp.h
+rename to drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_comp.h
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c b/drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_core.c
 similarity index 100%
-rename from drivers/media/platform/coda/coda-gdi.c
-rename to drivers/media/platform/chips-media/coda-gdi.c
-diff --git a/drivers/media/platform/coda/coda-h264.c b/drivers/media/platform/chips-media/coda-h264.c
+rename from drivers/media/platform/mtk-mdp/mtk_mdp_core.c
+rename to drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_core.c
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_core.h b/drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_core.h
 similarity index 100%
-rename from drivers/media/platform/coda/coda-h264.c
-rename to drivers/media/platform/chips-media/coda-h264.c
-diff --git a/drivers/media/platform/coda/coda-jpeg.c b/drivers/media/platform/chips-media/coda-jpeg.c
+rename from drivers/media/platform/mtk-mdp/mtk_mdp_core.h
+rename to drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_core.h
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_ipi.h b/drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_ipi.h
 similarity index 100%
-rename from drivers/media/platform/coda/coda-jpeg.c
-rename to drivers/media/platform/chips-media/coda-jpeg.c
-diff --git a/drivers/media/platform/coda/coda-mpeg2.c b/drivers/media/platform/chips-media/coda-mpeg2.c
+rename from drivers/media/platform/mtk-mdp/mtk_mdp_ipi.h
+rename to drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_ipi.h
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_m2m.c
 similarity index 100%
-rename from drivers/media/platform/coda/coda-mpeg2.c
-rename to drivers/media/platform/chips-media/coda-mpeg2.c
-diff --git a/drivers/media/platform/coda/coda-mpeg4.c b/drivers/media/platform/chips-media/coda-mpeg4.c
+rename from drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
+rename to drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_m2m.c
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.h b/drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_m2m.h
 similarity index 100%
-rename from drivers/media/platform/coda/coda-mpeg4.c
-rename to drivers/media/platform/chips-media/coda-mpeg4.c
-diff --git a/drivers/media/platform/coda/coda.h b/drivers/media/platform/chips-media/coda.h
+rename from drivers/media/platform/mtk-mdp/mtk_mdp_m2m.h
+rename to drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_m2m.h
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_regs.c b/drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_regs.c
 similarity index 100%
-rename from drivers/media/platform/coda/coda.h
-rename to drivers/media/platform/chips-media/coda.h
-diff --git a/drivers/media/platform/coda/coda_regs.h b/drivers/media/platform/chips-media/coda_regs.h
-similarity index 99%
-rename from drivers/media/platform/coda/coda_regs.h
-rename to drivers/media/platform/chips-media/coda_regs.h
-index da5bb3212528..db81a904cf3f 100644
---- a/drivers/media/platform/coda/coda_regs.h
-+++ b/drivers/media/platform/chips-media/coda_regs.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
- /*
-- * linux/drivers/media/platform/coda/coda_regs.h
-+ * linux/drivers/media/platform/chips-media/coda_regs.h
-  *
-  * Copyright (C) 2012 Vista Silicon SL
-  *    Javier Martin <javier.martin@vista-silicon.com>
-diff --git a/drivers/media/platform/coda/imx-vdoa.c b/drivers/media/platform/chips-media/imx-vdoa.c
+rename from drivers/media/platform/mtk-mdp/mtk_mdp_regs.c
+rename to drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_regs.c
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_regs.h b/drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_regs.h
 similarity index 100%
-rename from drivers/media/platform/coda/imx-vdoa.c
-rename to drivers/media/platform/chips-media/imx-vdoa.c
-diff --git a/drivers/media/platform/coda/imx-vdoa.h b/drivers/media/platform/chips-media/imx-vdoa.h
+rename from drivers/media/platform/mtk-mdp/mtk_mdp_regs.h
+rename to drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_regs.h
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_vpu.c b/drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_vpu.c
 similarity index 100%
-rename from drivers/media/platform/coda/imx-vdoa.h
-rename to drivers/media/platform/chips-media/imx-vdoa.h
-diff --git a/drivers/media/platform/coda/trace.h b/drivers/media/platform/chips-media/trace.h
-similarity index 98%
-rename from drivers/media/platform/coda/trace.h
-rename to drivers/media/platform/chips-media/trace.h
-index c0791c847f7c..19f98e6dafb9 100644
---- a/drivers/media/platform/coda/trace.h
-+++ b/drivers/media/platform/chips-media/trace.h
-@@ -167,7 +167,7 @@ DEFINE_EVENT(coda_buf_class, coda_jpeg_done,
- #endif /* __CODA_TRACE_H__ */
- 
- #undef TRACE_INCLUDE_PATH
--#define TRACE_INCLUDE_PATH ../../drivers/media/platform/coda
-+#define TRACE_INCLUDE_PATH ../../drivers/media/platform/chips-media
- #undef TRACE_INCLUDE_FILE
- #define TRACE_INCLUDE_FILE trace
- 
+rename from drivers/media/platform/mtk-mdp/mtk_mdp_vpu.c
+rename to drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_vpu.c
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_vpu.h b/drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_vpu.h
+similarity index 100%
+rename from drivers/media/platform/mtk-mdp/mtk_mdp_vpu.h
+rename to drivers/media/platform/mediatek/mtk-mdp/mtk_mdp_vpu.h
 -- 
 2.35.1
 
