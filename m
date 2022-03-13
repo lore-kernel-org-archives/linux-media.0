@@ -2,56 +2,73 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F980C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A42DFC433FE
 	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 07:22:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbiCMHXD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Mar 2022 03:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
+        id S233740AbiCMHXE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Mar 2022 03:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233603AbiCMHXC (ORCPT
+        with ESMTP id S233612AbiCMHXC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 13 Mar 2022 03:23:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5340819455C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582A219455D;
         Sat, 12 Mar 2022 23:21:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C595060F40;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D186F60F3D;
         Sun, 13 Mar 2022 07:21:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D2CC340EE;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C93EC340F8;
         Sun, 13 Mar 2022 07:21:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647156113;
-        bh=boLnYKcgVG0b0OPWgXEPeKtQvgRhEGPtckCU2nvi8ow=;
+        bh=WNBQZe/n8/rIzk6woMVItRggP9Ox4SfzRhT4ZEEO9Pw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G8dA/YLpzVDitPTXO1Qy8YtA26lByAlZ2dhp+gD41QpPYNYAgamFFimG+zkUaSmms
-         yqzrfmwa1x6BCoDmeo7FpJJ8qUwl8ZCqHQ2dnZ7/oqxVSMhmbOy/zoJH0dGZStorXe
-         8plkv02wsRxJQYvstAjER6105Sa2LpX8ZK5IUcDRVNbZB1oUXVB0qDEyJPi4SK8q5I
-         LVqCH+hSTljxAk9tVyvWzPQZ0btndyckJ88faKS+Fxeo0iZUcIjxkMZVin1IQX74al
-         KpoUBYSt/H2ZPCGUuZRDLEWccrsOiNwgDlDAFhp7AScJS/7O0ZOFZjaY0wuTgf/Ak1
-         I++CduPr55IhA==
+        b=bAK7j1Iitai7ogG5uB8gl633Am77QnIxMU0tZlNc8vlkWDTkQ9BwWDnBg7EAK18DS
+         co6mJNZJJGxDY3B5GXNGyrxPkaEnUA8EDoQy31jAgzGyI7xwvc+LmgD8uFUyC+xN7P
+         oFkjkf912fQBWQT72Zw0ebpBzTKFMrUjFjFIcYQrRi1FScBa2ea1yFlOcP1VuscyQg
+         yhoEy63gu7HaNxzm9DmtsHl2iWnJgCxeM75EeEi8D40Eow1tEdOgmhHhEztBGY6fH6
+         bECchRivk699jZBHFMVxgrwTF67Lrx2booK/B4HmD/eSd4TNZMJPCIyA3EZATESw2P
+         gE3UPleaFnFIg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTIY3-0012vb-29; Sun, 13 Mar 2022 08:21:51 +0100
+        id 1nTIY3-0012vw-AA; Sun, 13 Mar 2022 08:21:51 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Paul J. Murphy" <paul.j.murphy@intel.com>,
-        Arec Kao <arec.kao@intel.com>,
-        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Martin Kepplinger <martink@posteo.de>,
-        Martina Krasteva <martinax.krasteva@intel.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net
-Subject: [PATCH v3 02/39] media: Makefiles: remove extra spaces
-Date:   Sun, 13 Mar 2022 08:21:11 +0100
-Message-Id: <271e4323d9e93340fe37c15288056bae9e5bb1a0.1647155572.git.mchehab@kernel.org>
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v3 07/39] media: platform: place NXP drivers on a separate dir
+Date:   Sun, 13 Mar 2022 08:21:16 +0100
+Message-Id: <92c5183da4244c8a95252c0fb947b227e2eba3b7.1647155572.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647155572.git.mchehab@kernel.org>
 References: <cover.1647155572.git.mchehab@kernel.org>
@@ -62,361 +79,346 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It is hard to keep all those options aligned as newer config
-changes get added, and we really don't want to have patches adding
-new options also touching already existing entries.
+In order to cleanup the main platform media directory, move NXP
+drivers to their own directory.
 
-So, drop the extra spaces.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v3 00/39] at: https://lore.kernel.org/all/cover.1647155572.git.mchehab@kernel.org/
 
- drivers/media/Makefile              |  4 +-
- drivers/media/cec/platform/Makefile | 16 ++---
- drivers/media/firewire/Makefile     |  2 +-
- drivers/media/i2c/Makefile          | 92 ++++++++++++++---------------
- drivers/media/test-drivers/Makefile | 10 ++--
- drivers/media/usb/Makefile          | 14 ++---
- drivers/media/usb/gspca/Makefile    | 88 +++++++++++++--------------
- 7 files changed, 113 insertions(+), 113 deletions(-)
+ MAINTAINERS                                   |  2 +-
+ drivers/media/platform/Kconfig                | 40 +----------
+ drivers/media/platform/Makefile               |  6 +-
+ drivers/media/platform/imx/Kconfig            | 25 -------
+ drivers/media/platform/imx/Makefile           |  1 -
+ drivers/media/platform/nxp/Kconfig            | 66 +++++++++++++++++++
+ drivers/media/platform/nxp/Makefile           |  8 +++
+ drivers/media/platform/{ => nxp}/fsl-viu.c    |  0
+ .../media/platform/{ => nxp}/imx-jpeg/Kconfig |  0
+ .../platform/{ => nxp}/imx-jpeg/Makefile      |  0
+ .../platform/{ => nxp}/imx-jpeg/mxc-jpeg-hw.c |  0
+ .../platform/{ => nxp}/imx-jpeg/mxc-jpeg-hw.h |  0
+ .../platform/{ => nxp}/imx-jpeg/mxc-jpeg.c    |  0
+ .../platform/{ => nxp}/imx-jpeg/mxc-jpeg.h    |  0
+ .../platform/{imx => nxp}/imx-mipi-csis.c     |  0
+ drivers/media/platform/{ => nxp}/imx-pxp.c    |  0
+ drivers/media/platform/{ => nxp}/imx-pxp.h    |  0
+ .../media/platform/{ => nxp}/mx2_emmaprp.c    |  0
+ 18 files changed, 78 insertions(+), 70 deletions(-)
+ delete mode 100644 drivers/media/platform/imx/Kconfig
+ delete mode 100644 drivers/media/platform/imx/Makefile
+ create mode 100644 drivers/media/platform/nxp/Kconfig
+ create mode 100644 drivers/media/platform/nxp/Makefile
+ rename drivers/media/platform/{ => nxp}/fsl-viu.c (100%)
+ rename drivers/media/platform/{ => nxp}/imx-jpeg/Kconfig (100%)
+ rename drivers/media/platform/{ => nxp}/imx-jpeg/Makefile (100%)
+ rename drivers/media/platform/{ => nxp}/imx-jpeg/mxc-jpeg-hw.c (100%)
+ rename drivers/media/platform/{ => nxp}/imx-jpeg/mxc-jpeg-hw.h (100%)
+ rename drivers/media/platform/{ => nxp}/imx-jpeg/mxc-jpeg.c (100%)
+ rename drivers/media/platform/{ => nxp}/imx-jpeg/mxc-jpeg.h (100%)
+ rename drivers/media/platform/{imx => nxp}/imx-mipi-csis.c (100%)
+ rename drivers/media/platform/{ => nxp}/imx-pxp.c (100%)
+ rename drivers/media/platform/{ => nxp}/imx-pxp.h (100%)
+ rename drivers/media/platform/{ => nxp}/mx2_emmaprp.c (100%)
 
-diff --git a/drivers/media/Makefile b/drivers/media/Makefile
-index d18357bf1346..20fac24e4f0f 100644
---- a/drivers/media/Makefile
-+++ b/drivers/media/Makefile
-@@ -8,7 +8,7 @@
- # when compiled as builtin drivers
- #
- obj-y += i2c/ tuners/
--obj-$(CONFIG_DVB_CORE)  += dvb-frontends/
-+obj-$(CONFIG_DVB_CORE) += dvb-frontends/
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1b6f48a660de..780ef2ef3362 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11841,7 +11841,7 @@ M:	Philipp Zabel <p.zabel@pengutronix.de>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
+-F:	drivers/media/platform/imx-pxp.[ch]
++F:	drivers/media/platform/nxp/imx-pxp.[ch]
  
- #
- # Now, let's link-in the media controller core
-@@ -18,7 +18,7 @@ ifeq ($(CONFIG_MEDIA_CONTROLLER),y)
- endif
+ MEDIA DRIVERS FOR ASCOT2E
+ M:	Sergey Kozlov <serjk@netup.ru>
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index 10f453ff2717..711b6ab9370b 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -29,6 +29,8 @@ config V4L_MEM2MEM_DRIVERS
+ 	  to capture and output drivers, which use memory buffers for just
+ 	  one of those.
  
- obj-$(CONFIG_VIDEO_DEV) += v4l2-core/
--obj-$(CONFIG_DVB_CORE)  += dvb-core/
-+obj-$(CONFIG_DVB_CORE) += dvb-core/
++source "drivers/media/platform/nxp/Kconfig"
++
+ # V4L platform drivers
  
- # There are both core and drivers at RC subtree - merge before drivers
- obj-y += rc/
-diff --git a/drivers/media/cec/platform/Makefile b/drivers/media/cec/platform/Makefile
-index ea6f8ee8161c..26d2bc778394 100644
---- a/drivers/media/cec/platform/Makefile
-+++ b/drivers/media/cec/platform/Makefile
-@@ -4,12 +4,12 @@
- #
+ source "drivers/media/platform/marvell-ccic/Kconfig"
+@@ -61,19 +63,6 @@ config VIDEO_SH_VOU
+ 	help
+ 	  Support for the Video Output Unit (VOU) on SuperH SoCs.
  
- # Please keep it in alphabetic order
--obj-$(CONFIG_CEC_CROS_EC)	+= cros-ec/
--obj-$(CONFIG_CEC_GPIO)		+= cec-gpio/
--obj-$(CONFIG_CEC_MESON_AO)	+= meson/
--obj-$(CONFIG_CEC_SAMSUNG_S5P)	+= s5p/
--obj-$(CONFIG_CEC_SECO)		+= seco/
--obj-$(CONFIG_CEC_STI)		+= sti/
--obj-$(CONFIG_CEC_STM32)		+= stm32/
--obj-$(CONFIG_CEC_TEGRA)		+= tegra/
-+obj-$(CONFIG_CEC_CROS_EC) += cros-ec/
-+obj-$(CONFIG_CEC_GPIO) += cec-gpio/
-+obj-$(CONFIG_CEC_MESON_AO) += meson/
-+obj-$(CONFIG_CEC_SAMSUNG_S5P) += s5p/
-+obj-$(CONFIG_CEC_SECO) += seco/
-+obj-$(CONFIG_CEC_STI) += sti/
-+obj-$(CONFIG_CEC_STM32) += stm32/
-+obj-$(CONFIG_CEC_TEGRA) += tegra/
+-config VIDEO_VIU
+-	tristate "Freescale VIU Video Driver"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_V4L2 && (PPC_MPC512x || COMPILE_TEST) && I2C
+-	select VIDEOBUF_DMA_CONTIG
+-	default y
+-	help
+-	  Support for Freescale VIU video driver. This device captures
+-	  video data, or overlays video on DIU frame buffer.
+-
+-	  Say Y here if you want to enable VIU device on MPC5121e Rev2+.
+-	  In doubt, say N.
+-
+ config VIDEO_MUX
+ 	tristate "Video Multiplexer"
+ 	depends on V4L_PLATFORM_DRIVERS
+@@ -193,7 +182,6 @@ source "drivers/media/platform/xilinx/Kconfig"
+ source "drivers/media/platform/rcar-vin/Kconfig"
+ source "drivers/media/platform/atmel/Kconfig"
+ source "drivers/media/platform/sunxi/Kconfig"
+-source "drivers/media/platform/imx/Kconfig"
  
-diff --git a/drivers/media/firewire/Makefile b/drivers/media/firewire/Makefile
-index 3670c85af6f5..d5551e6389bf 100644
---- a/drivers/media/firewire/Makefile
-+++ b/drivers/media/firewire/Makefile
-@@ -2,4 +2,4 @@
- obj-$(CONFIG_DVB_FIREDTV) += firedtv.o
+ config VIDEO_TI_CAL
+ 	tristate "TI CAL (Camera Adaptation Layer) driver"
+@@ -273,18 +261,6 @@ config VIDEO_CODA
+ config VIDEO_IMX_VDOA
+ 	def_tristate VIDEO_CODA if SOC_IMX6Q || COMPILE_TEST
  
- firedtv-y += firedtv-avc.o firedtv-ci.o firedtv-dvb.o firedtv-fe.o firedtv-fw.o
--firedtv-$(CONFIG_DVB_FIREDTV_INPUT)    += firedtv-rc.o
-+firedtv-$(CONFIG_DVB_FIREDTV_INPUT) += firedtv-rc.o
-diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index 7f8c1df60330..557c8c9dfafe 100644
---- a/drivers/media/i2c/Makefile
-+++ b/drivers/media/i2c/Makefile
-@@ -2,10 +2,10 @@
- msp3400-objs	:=	msp3400-driver.o msp3400-kthreads.o
- obj-$(CONFIG_VIDEO_MSP3400) += msp3400.o
+-config VIDEO_IMX_PXP
+-	tristate "i.MX Pixel Pipeline (PXP)"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV && VIDEO_V4L2 && (ARCH_MXC || COMPILE_TEST)
+-	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_MEM2MEM_DEV
+-	help
+-	  The i.MX Pixel Pipeline is a memory-to-memory engine for scaling,
+-	  color space conversion, and rotation.
+-
+-source "drivers/media/platform/imx-jpeg/Kconfig"
+-
+ config VIDEO_MEDIATEK_JPEG
+ 	tristate "Mediatek JPEG Codec driver"
+ 	depends on V4L_MEM2MEM_DRIVERS
+@@ -423,18 +399,6 @@ config VIDEO_SAMSUNG_S5P_MFC
+ 	help
+ 	    MFC 5.1 and 6.x driver for V4L2
  
--obj-$(CONFIG_VIDEO_CCS)		+= ccs/
--obj-$(CONFIG_VIDEO_ET8EK8)	+= et8ek8/
-+obj-$(CONFIG_VIDEO_CCS) += ccs/
-+obj-$(CONFIG_VIDEO_ET8EK8) += et8ek8/
- obj-$(CONFIG_VIDEO_CX25840) += cx25840/
--obj-$(CONFIG_VIDEO_M5MOLS)	+= m5mols/
-+obj-$(CONFIG_VIDEO_M5MOLS) += m5mols/
- 
- obj-$(CONFIG_VIDEO_APTINA_PLL) += aptina-pll.o
- obj-$(CONFIG_VIDEO_TVAUDIO) += tvaudio.o
-@@ -21,11 +21,11 @@ obj-$(CONFIG_VIDEO_SAA717X) += saa717x.o
- obj-$(CONFIG_VIDEO_SAA7127) += saa7127.o
- obj-$(CONFIG_VIDEO_SAA7185) += saa7185.o
- obj-$(CONFIG_VIDEO_SAA6752HS) += saa6752hs.o
--obj-$(CONFIG_VIDEO_AD5820)  += ad5820.o
--obj-$(CONFIG_VIDEO_AK7375)  += ak7375.o
--obj-$(CONFIG_VIDEO_DW9714)  += dw9714.o
--obj-$(CONFIG_VIDEO_DW9768)  += dw9768.o
--obj-$(CONFIG_VIDEO_DW9807_VCM)  += dw9807-vcm.o
-+obj-$(CONFIG_VIDEO_AD5820) += ad5820.o
-+obj-$(CONFIG_VIDEO_AK7375) += ak7375.o
-+obj-$(CONFIG_VIDEO_DW9714) += dw9714.o
-+obj-$(CONFIG_VIDEO_DW9768) += dw9768.o
-+obj-$(CONFIG_VIDEO_DW9807_VCM) += dw9807-vcm.o
- obj-$(CONFIG_VIDEO_ADV7170) += adv7170.o
- obj-$(CONFIG_VIDEO_ADV7175) += adv7175.o
- obj-$(CONFIG_VIDEO_ADV7180) += adv7180.o
-@@ -38,7 +38,7 @@ obj-$(CONFIG_VIDEO_ADV7842) += adv7842.o
- obj-$(CONFIG_VIDEO_AD9389B) += ad9389b.o
- obj-$(CONFIG_VIDEO_ADV7511) += adv7511-v4l2.o
- obj-$(CONFIG_VIDEO_VPX3220) += vpx3220.o
--obj-$(CONFIG_VIDEO_VS6624)  += vs6624.o
-+obj-$(CONFIG_VIDEO_VS6624) += vs6624.o
- obj-$(CONFIG_VIDEO_BT819) += bt819.o
- obj-$(CONFIG_VIDEO_BT856) += bt856.o
- obj-$(CONFIG_VIDEO_BT866) += bt866.o
-@@ -102,42 +102,42 @@ obj-$(CONFIG_VIDEO_MT9T112) += mt9t112.o
- obj-$(CONFIG_VIDEO_MT9V011) += mt9v011.o
- obj-$(CONFIG_VIDEO_MT9V032) += mt9v032.o
- obj-$(CONFIG_VIDEO_MT9V111) += mt9v111.o
--obj-$(CONFIG_VIDEO_SR030PC30)	+= sr030pc30.o
--obj-$(CONFIG_VIDEO_NOON010PC30)	+= noon010pc30.o
--obj-$(CONFIG_VIDEO_RJ54N1)	+= rj54n1cb0c.o
--obj-$(CONFIG_VIDEO_S5K6AA)	+= s5k6aa.o
--obj-$(CONFIG_VIDEO_S5K6A3)	+= s5k6a3.o
--obj-$(CONFIG_VIDEO_S5K4ECGX)	+= s5k4ecgx.o
--obj-$(CONFIG_VIDEO_S5K5BAF)	+= s5k5baf.o
--obj-$(CONFIG_VIDEO_S5C73M3)	+= s5c73m3/
--obj-$(CONFIG_VIDEO_ADP1653)	+= adp1653.o
--obj-$(CONFIG_VIDEO_LM3560)	+= lm3560.o
--obj-$(CONFIG_VIDEO_LM3646)	+= lm3646.o
--obj-$(CONFIG_VIDEO_CCS_PLL)	+= ccs-pll.o
--obj-$(CONFIG_VIDEO_AK881X)		+= ak881x.o
--obj-$(CONFIG_VIDEO_IR_I2C)  += ir-kbd-i2c.o
--obj-$(CONFIG_VIDEO_I2C)		+= video-i2c.o
--obj-$(CONFIG_VIDEO_ML86V7667)	+= ml86v7667.o
--obj-$(CONFIG_VIDEO_OV2659)	+= ov2659.o
--obj-$(CONFIG_VIDEO_TC358743)	+= tc358743.o
--obj-$(CONFIG_VIDEO_HI556)	+= hi556.o
--obj-$(CONFIG_VIDEO_HI846)	+= hi846.o
--obj-$(CONFIG_VIDEO_HI847)	+= hi847.o
--obj-$(CONFIG_VIDEO_IMX208)	+= imx208.o
--obj-$(CONFIG_VIDEO_IMX214)	+= imx214.o
--obj-$(CONFIG_VIDEO_IMX219)	+= imx219.o
--obj-$(CONFIG_VIDEO_IMX258)	+= imx258.o
--obj-$(CONFIG_VIDEO_IMX274)	+= imx274.o
--obj-$(CONFIG_VIDEO_IMX290)	+= imx290.o
--obj-$(CONFIG_VIDEO_IMX319)	+= imx319.o
--obj-$(CONFIG_VIDEO_IMX334)	+= imx334.o
--obj-$(CONFIG_VIDEO_IMX335)	+= imx335.o
--obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
--obj-$(CONFIG_VIDEO_IMX412)	+= imx412.o
--obj-$(CONFIG_VIDEO_ISL7998X)	+= isl7998x.o
--obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
--obj-$(CONFIG_VIDEO_MAX9271_LIB)	+= max9271.o
--obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20.o
--obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21.o
-+obj-$(CONFIG_VIDEO_SR030PC30) += sr030pc30.o
-+obj-$(CONFIG_VIDEO_NOON010PC30) += noon010pc30.o
-+obj-$(CONFIG_VIDEO_RJ54N1) += rj54n1cb0c.o
-+obj-$(CONFIG_VIDEO_S5K6AA) += s5k6aa.o
-+obj-$(CONFIG_VIDEO_S5K6A3) += s5k6a3.o
-+obj-$(CONFIG_VIDEO_S5K4ECGX) += s5k4ecgx.o
-+obj-$(CONFIG_VIDEO_S5K5BAF) += s5k5baf.o
-+obj-$(CONFIG_VIDEO_S5C73M3) += s5c73m3/
-+obj-$(CONFIG_VIDEO_ADP1653) += adp1653.o
-+obj-$(CONFIG_VIDEO_LM3560) += lm3560.o
-+obj-$(CONFIG_VIDEO_LM3646) += lm3646.o
-+obj-$(CONFIG_VIDEO_CCS_PLL) += ccs-pll.o
-+obj-$(CONFIG_VIDEO_AK881X) += ak881x.o
-+obj-$(CONFIG_VIDEO_IR_I2C) += ir-kbd-i2c.o
-+obj-$(CONFIG_VIDEO_I2C) += video-i2c.o
-+obj-$(CONFIG_VIDEO_ML86V7667) += ml86v7667.o
-+obj-$(CONFIG_VIDEO_OV2659) += ov2659.o
-+obj-$(CONFIG_VIDEO_TC358743) += tc358743.o
-+obj-$(CONFIG_VIDEO_HI556) += hi556.o
-+obj-$(CONFIG_VIDEO_HI846) += hi846.o
-+obj-$(CONFIG_VIDEO_HI847) += hi847.o
-+obj-$(CONFIG_VIDEO_IMX208) += imx208.o
-+obj-$(CONFIG_VIDEO_IMX214) += imx214.o
-+obj-$(CONFIG_VIDEO_IMX219) += imx219.o
-+obj-$(CONFIG_VIDEO_IMX258) += imx258.o
-+obj-$(CONFIG_VIDEO_IMX274) += imx274.o
-+obj-$(CONFIG_VIDEO_IMX290) += imx290.o
-+obj-$(CONFIG_VIDEO_IMX319) += imx319.o
-+obj-$(CONFIG_VIDEO_IMX334) += imx334.o
-+obj-$(CONFIG_VIDEO_IMX335) += imx335.o
-+obj-$(CONFIG_VIDEO_IMX355) += imx355.o
-+obj-$(CONFIG_VIDEO_IMX412) += imx412.o
-+obj-$(CONFIG_VIDEO_ISL7998X) += isl7998x.o
-+obj-$(CONFIG_VIDEO_MAX9286) += max9286.o
-+obj-$(CONFIG_VIDEO_MAX9271_LIB) += max9271.o
-+obj-$(CONFIG_VIDEO_RDACM20) += rdacm20.o
-+obj-$(CONFIG_VIDEO_RDACM21) += rdacm21.o
- obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
- obj-$(CONFIG_SDR_MAX2175) += max2175.o
-diff --git a/drivers/media/test-drivers/Makefile b/drivers/media/test-drivers/Makefile
-index 9f0e4ebb2efe..1e64e05c1f22 100644
---- a/drivers/media/test-drivers/Makefile
-+++ b/drivers/media/test-drivers/Makefile
-@@ -3,8 +3,8 @@
- # Makefile for the test drivers.
- #
- 
--obj-$(CONFIG_VIDEO_VIMC)		+= vimc/
--obj-$(CONFIG_VIDEO_VIVID)		+= vivid/
--obj-$(CONFIG_VIDEO_VIM2M)		+= vim2m.o
--obj-$(CONFIG_VIDEO_VICODEC)		+= vicodec/
--obj-$(CONFIG_DVB_VIDTV)			+= vidtv/
-+obj-$(CONFIG_VIDEO_VIMC) += vimc/
-+obj-$(CONFIG_VIDEO_VIVID) += vivid/
-+obj-$(CONFIG_VIDEO_VIM2M) += vim2m.o
-+obj-$(CONFIG_VIDEO_VICODEC) += vicodec/
-+obj-$(CONFIG_DVB_VIDTV) += vidtv/
-diff --git a/drivers/media/usb/Makefile b/drivers/media/usb/Makefile
-index 3eaff3149ef4..65521f4921e3 100644
---- a/drivers/media/usb/Makefile
-+++ b/drivers/media/usb/Makefile
-@@ -7,15 +7,15 @@
- obj-y += ttusb-dec/ ttusb-budget/ dvb-usb/ dvb-usb-v2/ siano/ b2c2/
- obj-y += zr364xx/ stkwebcam/ s2255/
- 
--obj-$(CONFIG_USB_VIDEO_CLASS)	+= uvc/
--obj-$(CONFIG_USB_GSPCA)         += gspca/
--obj-$(CONFIG_USB_PWC)           += pwc/
--obj-$(CONFIG_USB_AIRSPY)        += airspy/
--obj-$(CONFIG_USB_HACKRF)        += hackrf/
--obj-$(CONFIG_USB_MSI2500)       += msi2500/
-+obj-$(CONFIG_USB_VIDEO_CLASS) += uvc/
-+obj-$(CONFIG_USB_GSPCA) += gspca/
-+obj-$(CONFIG_USB_PWC) += pwc/
-+obj-$(CONFIG_USB_AIRSPY) += airspy/
-+obj-$(CONFIG_USB_HACKRF) += hackrf/
-+obj-$(CONFIG_USB_MSI2500) += msi2500/
- obj-$(CONFIG_VIDEO_CPIA2) += cpia2/
- obj-$(CONFIG_VIDEO_AU0828) += au0828/
--obj-$(CONFIG_VIDEO_HDPVR)	+= hdpvr/
-+obj-$(CONFIG_VIDEO_HDPVR) += hdpvr/
- obj-$(CONFIG_VIDEO_PVRUSB2) += pvrusb2/
- obj-$(CONFIG_VIDEO_STK1160) += stk1160/
- obj-$(CONFIG_VIDEO_CX231XX) += cx231xx/
-diff --git a/drivers/media/usb/gspca/Makefile b/drivers/media/usb/gspca/Makefile
-index 3e3ecbffdf9f..a35c45006130 100644
---- a/drivers/media/usb/gspca/Makefile
-+++ b/drivers/media/usb/gspca/Makefile
-@@ -1,51 +1,51 @@
- # SPDX-License-Identifier: GPL-2.0
--obj-$(CONFIG_USB_GSPCA)          += gspca_main.o
--obj-$(CONFIG_USB_GSPCA_BENQ)     += gspca_benq.o
--obj-$(CONFIG_USB_GSPCA_CONEX)    += gspca_conex.o
--obj-$(CONFIG_USB_GSPCA_CPIA1)    += gspca_cpia1.o
--obj-$(CONFIG_USB_GSPCA_DTCS033)  += gspca_dtcs033.o
--obj-$(CONFIG_USB_GSPCA_ETOMS)    += gspca_etoms.o
--obj-$(CONFIG_USB_GSPCA_FINEPIX)  += gspca_finepix.o
--obj-$(CONFIG_USB_GSPCA_JEILINJ)  += gspca_jeilinj.o
-+obj-$(CONFIG_USB_GSPCA) += gspca_main.o
-+obj-$(CONFIG_USB_GSPCA_BENQ) += gspca_benq.o
-+obj-$(CONFIG_USB_GSPCA_CONEX) += gspca_conex.o
-+obj-$(CONFIG_USB_GSPCA_CPIA1) += gspca_cpia1.o
-+obj-$(CONFIG_USB_GSPCA_DTCS033) += gspca_dtcs033.o
-+obj-$(CONFIG_USB_GSPCA_ETOMS) += gspca_etoms.o
-+obj-$(CONFIG_USB_GSPCA_FINEPIX) += gspca_finepix.o
-+obj-$(CONFIG_USB_GSPCA_JEILINJ) += gspca_jeilinj.o
- obj-$(CONFIG_USB_GSPCA_JL2005BCD) += gspca_jl2005bcd.o
--obj-$(CONFIG_USB_GSPCA_KINECT)   += gspca_kinect.o
--obj-$(CONFIG_USB_GSPCA_KONICA)   += gspca_konica.o
--obj-$(CONFIG_USB_GSPCA_MARS)     += gspca_mars.o
-+obj-$(CONFIG_USB_GSPCA_KINECT) += gspca_kinect.o
-+obj-$(CONFIG_USB_GSPCA_KONICA) += gspca_konica.o
-+obj-$(CONFIG_USB_GSPCA_MARS) += gspca_mars.o
- obj-$(CONFIG_USB_GSPCA_MR97310A) += gspca_mr97310a.o
--obj-$(CONFIG_USB_GSPCA_NW80X)    += gspca_nw80x.o
--obj-$(CONFIG_USB_GSPCA_OV519)    += gspca_ov519.o
--obj-$(CONFIG_USB_GSPCA_OV534)    += gspca_ov534.o
--obj-$(CONFIG_USB_GSPCA_OV534_9)  += gspca_ov534_9.o
--obj-$(CONFIG_USB_GSPCA_PAC207)   += gspca_pac207.o
--obj-$(CONFIG_USB_GSPCA_PAC7302)  += gspca_pac7302.o
--obj-$(CONFIG_USB_GSPCA_PAC7311)  += gspca_pac7311.o
--obj-$(CONFIG_USB_GSPCA_SE401)    += gspca_se401.o
-+obj-$(CONFIG_USB_GSPCA_NW80X) += gspca_nw80x.o
-+obj-$(CONFIG_USB_GSPCA_OV519) += gspca_ov519.o
-+obj-$(CONFIG_USB_GSPCA_OV534) += gspca_ov534.o
-+obj-$(CONFIG_USB_GSPCA_OV534_9) += gspca_ov534_9.o
-+obj-$(CONFIG_USB_GSPCA_PAC207) += gspca_pac207.o
-+obj-$(CONFIG_USB_GSPCA_PAC7302) += gspca_pac7302.o
-+obj-$(CONFIG_USB_GSPCA_PAC7311) += gspca_pac7311.o
-+obj-$(CONFIG_USB_GSPCA_SE401) += gspca_se401.o
- obj-$(CONFIG_USB_GSPCA_SN9C2028) += gspca_sn9c2028.o
--obj-$(CONFIG_USB_GSPCA_SN9C20X)  += gspca_sn9c20x.o
--obj-$(CONFIG_USB_GSPCA_SONIXB)   += gspca_sonixb.o
--obj-$(CONFIG_USB_GSPCA_SONIXJ)   += gspca_sonixj.o
--obj-$(CONFIG_USB_GSPCA_SPCA500)  += gspca_spca500.o
--obj-$(CONFIG_USB_GSPCA_SPCA501)  += gspca_spca501.o
--obj-$(CONFIG_USB_GSPCA_SPCA505)  += gspca_spca505.o
--obj-$(CONFIG_USB_GSPCA_SPCA506)  += gspca_spca506.o
--obj-$(CONFIG_USB_GSPCA_SPCA508)  += gspca_spca508.o
--obj-$(CONFIG_USB_GSPCA_SPCA561)  += gspca_spca561.o
-+obj-$(CONFIG_USB_GSPCA_SN9C20X) += gspca_sn9c20x.o
-+obj-$(CONFIG_USB_GSPCA_SONIXB) += gspca_sonixb.o
-+obj-$(CONFIG_USB_GSPCA_SONIXJ) += gspca_sonixj.o
-+obj-$(CONFIG_USB_GSPCA_SPCA500) += gspca_spca500.o
-+obj-$(CONFIG_USB_GSPCA_SPCA501) += gspca_spca501.o
-+obj-$(CONFIG_USB_GSPCA_SPCA505) += gspca_spca505.o
-+obj-$(CONFIG_USB_GSPCA_SPCA506) += gspca_spca506.o
-+obj-$(CONFIG_USB_GSPCA_SPCA508) += gspca_spca508.o
-+obj-$(CONFIG_USB_GSPCA_SPCA561) += gspca_spca561.o
- obj-$(CONFIG_USB_GSPCA_SPCA1528) += gspca_spca1528.o
--obj-$(CONFIG_USB_GSPCA_SQ905)    += gspca_sq905.o
--obj-$(CONFIG_USB_GSPCA_SQ905C)   += gspca_sq905c.o
--obj-$(CONFIG_USB_GSPCA_SQ930X)   += gspca_sq930x.o
--obj-$(CONFIG_USB_GSPCA_SUNPLUS)  += gspca_sunplus.o
--obj-$(CONFIG_USB_GSPCA_STK014)   += gspca_stk014.o
--obj-$(CONFIG_USB_GSPCA_STK1135)  += gspca_stk1135.o
--obj-$(CONFIG_USB_GSPCA_STV0680)  += gspca_stv0680.o
--obj-$(CONFIG_USB_GSPCA_T613)     += gspca_t613.o
--obj-$(CONFIG_USB_GSPCA_TOPRO)    += gspca_topro.o
--obj-$(CONFIG_USB_GSPCA_TOUPTEK)  += gspca_touptek.o
--obj-$(CONFIG_USB_GSPCA_TV8532)   += gspca_tv8532.o
--obj-$(CONFIG_USB_GSPCA_VC032X)   += gspca_vc032x.o
--obj-$(CONFIG_USB_GSPCA_VICAM)    += gspca_vicam.o
-+obj-$(CONFIG_USB_GSPCA_SQ905) += gspca_sq905.o
-+obj-$(CONFIG_USB_GSPCA_SQ905C) += gspca_sq905c.o
-+obj-$(CONFIG_USB_GSPCA_SQ930X) += gspca_sq930x.o
-+obj-$(CONFIG_USB_GSPCA_SUNPLUS) += gspca_sunplus.o
-+obj-$(CONFIG_USB_GSPCA_STK014) += gspca_stk014.o
-+obj-$(CONFIG_USB_GSPCA_STK1135) += gspca_stk1135.o
-+obj-$(CONFIG_USB_GSPCA_STV0680) += gspca_stv0680.o
-+obj-$(CONFIG_USB_GSPCA_T613) += gspca_t613.o
-+obj-$(CONFIG_USB_GSPCA_TOPRO) += gspca_topro.o
-+obj-$(CONFIG_USB_GSPCA_TOUPTEK) += gspca_touptek.o
-+obj-$(CONFIG_USB_GSPCA_TV8532) += gspca_tv8532.o
-+obj-$(CONFIG_USB_GSPCA_VC032X) += gspca_vc032x.o
-+obj-$(CONFIG_USB_GSPCA_VICAM) += gspca_vicam.o
- obj-$(CONFIG_USB_GSPCA_XIRLINK_CIT) += gspca_xirlink_cit.o
--obj-$(CONFIG_USB_GSPCA_ZC3XX)    += gspca_zc3xx.o
-+obj-$(CONFIG_USB_GSPCA_ZC3XX) += gspca_zc3xx.o
- 
- gspca_main-objs     := gspca.o autogain_functions.o
- gspca_benq-objs     := benq.o
-@@ -95,6 +95,6 @@ gspca_vicam-objs    := vicam.o
- gspca_xirlink_cit-objs := xirlink_cit.o
- gspca_zc3xx-objs    := zc3xx.o
- 
--obj-$(CONFIG_USB_M5602)   += m5602/
-+obj-$(CONFIG_USB_M5602) += m5602/
- obj-$(CONFIG_USB_STV06XX) += stv06xx/
--obj-$(CONFIG_USB_GL860)   += gl860/
-+obj-$(CONFIG_USB_GL860) += gl860/
+-config VIDEO_MX2_EMMAPRP
+-	tristate "MX2 eMMa-PrP support"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	depends on SOC_IMX27 || COMPILE_TEST
+-	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_MEM2MEM_DEV
+-	help
+-	    MX2X chips have a PrP that can be used to process buffers from
+-	    memory to memory. Operations include resizing and format
+-	    conversion.
+-
+ config VIDEO_SAMSUNG_EXYNOS_GSC
+ 	tristate "Samsung Exynos G-Scaler driver"
+ 	depends on V4L_MEM2MEM_DRIVERS
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 18ec3d208483..4458690c1965 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -15,14 +15,13 @@ obj-y += coda/
+ obj-y += davinci/
+ obj-y += exynos-gsc/
+ obj-y += exynos4-is/
+-obj-y += imx/
+-obj-y += imx-jpeg/
+ obj-y += marvell-ccic/
+ obj-y += meson/ge2d/
+ obj-y += mtk-jpeg/
+ obj-y += mtk-mdp/
+ obj-y += mtk-vcodec/
+ obj-y += mtk-vpu/
++obj-y += nxp/
+ obj-y += omap/
+ obj-y += omap3isp/
+ obj-y += qcom/camss/
+@@ -48,10 +47,8 @@ obj-y += xilinx/
+ # Please place here only ancillary drivers that aren't SoC-specific
+ # Please keep it alphabetically sorted by Kconfig name
+ # (e. g. LC_ALL=C sort Makefile)
+-obj-$(CONFIG_VIDEO_IMX_PXP)		+= imx-pxp.o
+ obj-$(CONFIG_VIDEO_MEM2MEM_DEINTERLACE)	+= m2m-deinterlace.o
+ obj-$(CONFIG_VIDEO_MUX)			+= video-mux.o
+-obj-$(CONFIG_VIDEO_MX2_EMMAPRP)		+= mx2_emmaprp.o
+ obj-$(CONFIG_VIDEO_PXA27x)		+= pxa_camera.o
+ obj-$(CONFIG_VIDEO_RCAR_DRIF)		+= rcar_drif.o
+ obj-$(CONFIG_VIDEO_RCAR_ISP)		+= rcar-isp.o
+@@ -61,4 +58,3 @@ obj-$(CONFIG_VIDEO_RENESAS_FDP1)	+= rcar_fdp1.o
+ obj-$(CONFIG_VIDEO_RENESAS_JPU)		+= rcar_jpu.o
+ obj-$(CONFIG_VIDEO_SH_VOU)		+= sh_vou.o
+ obj-$(CONFIG_VIDEO_VIA_CAMERA)		+= via-camera.o
+-obj-$(CONFIG_VIDEO_VIU)			+= fsl-viu.o
+diff --git a/drivers/media/platform/imx/Kconfig b/drivers/media/platform/imx/Kconfig
+deleted file mode 100644
+index 7cd0617c9b1b..000000000000
+--- a/drivers/media/platform/imx/Kconfig
++++ /dev/null
+@@ -1,25 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-
+-menuconfig VIDEO_IMX
+-	bool "V4L2 capture drivers for NXP i.MX devices"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on ARCH_MXC || COMPILE_TEST
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	help
+-	  Say yes here to enable support for capture drivers on i.MX SoCs.
+-	  Support for the single SoC features are selectable in the sub-menu
+-	  options.
+-
+-if VIDEO_IMX
+-
+-config VIDEO_IMX_MIPI_CSIS
+-	tristate "MIPI CSI-2 CSIS receiver found on i.MX7 and i.MX8 models"
+-	select MEDIA_CONTROLLER
+-	select V4L2_FWNODE
+-	select VIDEO_V4L2_SUBDEV_API
+-	default n
+-	help
+-	  Video4Linux2 sub-device driver for the MIPI CSI-2 CSIS receiver
+-	  v3.3/v3.6.3 found on some i.MX7 and i.MX8 SoCs.
+-
+-endif # VIDEO_IMX
+diff --git a/drivers/media/platform/imx/Makefile b/drivers/media/platform/imx/Makefile
+deleted file mode 100644
+index f72bdbe8e6ef..000000000000
+--- a/drivers/media/platform/imx/Makefile
++++ /dev/null
+@@ -1 +0,0 @@
+-obj-$(CONFIG_VIDEO_IMX_MIPI_CSIS) += imx-mipi-csis.o
+diff --git a/drivers/media/platform/nxp/Kconfig b/drivers/media/platform/nxp/Kconfig
+new file mode 100644
+index 000000000000..df52d32ebe50
+--- /dev/null
++++ b/drivers/media/platform/nxp/Kconfig
+@@ -0,0 +1,66 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++# V4L drivers
++
++menuconfig VIDEO_IMX
++	bool "V4L2 capture drivers for NXP i.MX devices"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on ARCH_MXC || COMPILE_TEST
++	depends on VIDEO_DEV && VIDEO_V4L2
++	help
++	  Say yes here to enable support for capture drivers on i.MX SoCs.
++	  Support for the single SoC features are selectable in the sub-menu
++	  options.
++
++if VIDEO_IMX
++
++config VIDEO_IMX_MIPI_CSIS
++	tristate "MIPI CSI-2 CSIS receiver found on i.MX7 and i.MX8 models"
++	select MEDIA_CONTROLLER
++	select V4L2_FWNODE
++	select VIDEO_V4L2_SUBDEV_API
++	default n
++	help
++	  Video4Linux2 sub-device driver for the MIPI CSI-2 CSIS receiver
++	  v3.3/v3.6.3 found on some i.MX7 and i.MX8 SoCs.
++
++endif # VIDEO_IMX
++
++config VIDEO_VIU
++	tristate "Freescale/NXP VIU Video Driver"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_V4L2 && (PPC_MPC512x || COMPILE_TEST) && I2C
++	select VIDEOBUF_DMA_CONTIG
++	default y
++	help
++	  Support for Freescale VIU video driver. This device captures
++	  video data, or overlays video on DIU frame buffer.
++
++	  Say Y here if you want to enable VIU device on MPC5121e Rev2+.
++	  In doubt, say N.
++
++# mem2mem drivers
++
++config VIDEO_IMX_PXP
++	tristate "i.MX Pixel Pipeline (PXP)"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV && VIDEO_V4L2 && (ARCH_MXC || COMPILE_TEST)
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_MEM2MEM_DEV
++	help
++	  The i.MX Pixel Pipeline is a memory-to-memory engine for scaling,
++	  color space conversion, and rotation.
++
++config VIDEO_MX2_EMMAPRP
++	tristate "Freescale/NXP MX2 eMMa-PrP support"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on SOC_IMX27 || COMPILE_TEST
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_MEM2MEM_DEV
++	help
++	    MX2X chips have a PrP that can be used to process buffers from
++	    memory to memory. Operations include resizing and format
++	    conversion.
++
++source "drivers/media/platform/nxp/imx-jpeg/Kconfig"
+diff --git a/drivers/media/platform/nxp/Makefile b/drivers/media/platform/nxp/Makefile
+new file mode 100644
+index 000000000000..a217cf7f109d
+--- /dev/null
++++ b/drivers/media/platform/nxp/Makefile
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0
++
++obj-y += imx-jpeg/
++
++obj-$(CONFIG_VIDEO_IMX_MIPI_CSIS) += imx-mipi-csis.o
++obj-$(CONFIG_VIDEO_IMX_PXP) += imx-pxp.o
++obj-$(CONFIG_VIDEO_MX2_EMMAPRP) += mx2_emmaprp.o
++obj-$(CONFIG_VIDEO_VIU) += fsl-viu.o
+diff --git a/drivers/media/platform/fsl-viu.c b/drivers/media/platform/nxp/fsl-viu.c
+similarity index 100%
+rename from drivers/media/platform/fsl-viu.c
+rename to drivers/media/platform/nxp/fsl-viu.c
+diff --git a/drivers/media/platform/imx-jpeg/Kconfig b/drivers/media/platform/nxp/imx-jpeg/Kconfig
+similarity index 100%
+rename from drivers/media/platform/imx-jpeg/Kconfig
+rename to drivers/media/platform/nxp/imx-jpeg/Kconfig
+diff --git a/drivers/media/platform/imx-jpeg/Makefile b/drivers/media/platform/nxp/imx-jpeg/Makefile
+similarity index 100%
+rename from drivers/media/platform/imx-jpeg/Makefile
+rename to drivers/media/platform/nxp/imx-jpeg/Makefile
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg-hw.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
+similarity index 100%
+rename from drivers/media/platform/imx-jpeg/mxc-jpeg-hw.c
+rename to drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg-hw.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+similarity index 100%
+rename from drivers/media/platform/imx-jpeg/mxc-jpeg-hw.h
+rename to drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+similarity index 100%
+rename from drivers/media/platform/imx-jpeg/mxc-jpeg.c
+rename to drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
+similarity index 100%
+rename from drivers/media/platform/imx-jpeg/mxc-jpeg.h
+rename to drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
+diff --git a/drivers/media/platform/imx/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
+similarity index 100%
+rename from drivers/media/platform/imx/imx-mipi-csis.c
+rename to drivers/media/platform/nxp/imx-mipi-csis.c
+diff --git a/drivers/media/platform/imx-pxp.c b/drivers/media/platform/nxp/imx-pxp.c
+similarity index 100%
+rename from drivers/media/platform/imx-pxp.c
+rename to drivers/media/platform/nxp/imx-pxp.c
+diff --git a/drivers/media/platform/imx-pxp.h b/drivers/media/platform/nxp/imx-pxp.h
+similarity index 100%
+rename from drivers/media/platform/imx-pxp.h
+rename to drivers/media/platform/nxp/imx-pxp.h
+diff --git a/drivers/media/platform/mx2_emmaprp.c b/drivers/media/platform/nxp/mx2_emmaprp.c
+similarity index 100%
+rename from drivers/media/platform/mx2_emmaprp.c
+rename to drivers/media/platform/nxp/mx2_emmaprp.c
 -- 
 2.35.1
 
