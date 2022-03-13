@@ -2,57 +2,58 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB2FEC4332F
-	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 07:22:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 616E7C43219
+	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 07:22:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233796AbiCMHXL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Mar 2022 03:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
+        id S233802AbiCMHXM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Mar 2022 03:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233683AbiCMHXD (ORCPT
+        with ESMTP id S233738AbiCMHXE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 13 Mar 2022 03:23:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2F1194555;
-        Sat, 12 Mar 2022 23:21:55 -0800 (PST)
+        Sun, 13 Mar 2022 03:23:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E3E194564;
+        Sat, 12 Mar 2022 23:21:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49CC160F53;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 218D7B80B98;
         Sun, 13 Mar 2022 07:21:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D6A5C34115;
-        Sun, 13 Mar 2022 07:21:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7140C340FD;
+        Sun, 13 Mar 2022 07:21:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647156114;
-        bh=2VP/D+842etQuFMo6fMzz45pTfZVm/2IyG71qbDWSJ0=;
+        s=k20201202; t=1647156113;
+        bh=pcqNQNTnTjSkyZImZs6a2FSRQpiRmaFi0GEFdHFK6Ew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M76jZPgwzXhef8pwkclkACbP/Wvyu1kAAzbVFua/NjZnrFrO8wd5cTokH8nJcJxPH
-         ve2E1/Ab+ibCY5qTXGXFcV7G+god1fMCyWRbQZQDG2UE6TfT5vmxXMU4reFCaT/Gdn
-         E7JItrx40w/l7cLJVCKO3halHFBbNdIJiCGlRzA+4Y+JO1QvW6cD9MseUpu3n5mDM2
-         nYcX9LrZS6gNdpBVTH7A7ZC8tDH693hMbsPpkP38+NrKHA1DDh7eIv54gpIzr0gO0p
-         cB6TKViqIezGaY5u6IdexMDiTC3KrTtQGNyiZyVoXhoXL4kSbbhSfK6T0OJsCZ1SeN
-         W6CxBFsTkEC9g==
+        b=NsKR/E4YGKWRm4Jn0Up0fPu62Z0e+bpPLU2mnC4rfG3plhPR/ox7Dntl1YjGOJCrF
+         QWl0zjVtJkaA1Kr2ozmehc8AnxDbnIl8fC+112V+6z9pyjojbhN208ZHCq4KgBE8Xp
+         OANuS8zmQiPoTrTJHo5O5JDwnzskO43byTGVgPNwqHAzyjpiEzrtHqdgSpzTs/V+C8
+         3Rbol9i0ELL+LvWE9hY1ndHjRGRKUSg3/mzOXCA+zu3CXlFG58+MbpN0oCCzm7G7IR
+         2gfpuBDZ+Yq5AtW1eE6ZnfnN9MfP1OzI06VmBxeSYNeUe6rx117rwGsn67qvr4zqqu
+         hbLGEFS/mGOEg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTIY3-0012wa-O2; Sun, 13 Mar 2022 08:21:51 +0100
+        id 1nTIY3-0012w4-Cn; Sun, 13 Mar 2022 08:21:51 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
         Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Houlong Wei <houlong.wei@mediatek.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
         Ming Qian <ming.qian@nxp.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 17/39] media: platform: mtk-mdp: move config to its own file
-Date:   Sun, 13 Mar 2022 08:21:26 +0100
-Message-Id: <33f2b85ee1f2d431334d1cbb666e9ca27c47a3b3.1647155572.git.mchehab@kernel.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        lijian <lijian@yulong.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v3 09/39] media: platform: place Via drivers on a separate dir
+Date:   Sun, 13 Mar 2022 08:21:18 +0100
+Message-Id: <9bfdc1f71893da1d57dd13ad30358d1e99e15a0a.1647155572.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647155572.git.mchehab@kernel.org>
 References: <cover.1647155572.git.mchehab@kernel.org>
@@ -63,8 +64,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to better organize the platform/Kconfig, place
-mtk-mdp-specific config stuff on a separate Kconfig file.
+In order to cleanup the main platform media directory, move Via
+driver to its own directory.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -72,70 +73,90 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v3 00/39] at: https://lore.kernel.org/all/cover.1647155572.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig         | 18 +-----------------
- drivers/media/platform/mtk-mdp/Kconfig | 17 +++++++++++++++++
- 2 files changed, 18 insertions(+), 17 deletions(-)
- create mode 100644 drivers/media/platform/mtk-mdp/Kconfig
+ drivers/media/platform/Kconfig                | 11 +----------
+ drivers/media/platform/Makefile               |  2 +-
+ drivers/media/platform/via/Kconfig            | 11 +++++++++++
+ drivers/media/platform/via/Makefile           |  2 ++
+ drivers/media/platform/{ => via}/via-camera.c |  0
+ drivers/media/platform/{ => via}/via-camera.h |  0
+ 6 files changed, 15 insertions(+), 11 deletions(-)
+ create mode 100644 drivers/media/platform/via/Kconfig
+ create mode 100644 drivers/media/platform/via/Makefile
+ rename drivers/media/platform/{ => via}/via-camera.c (100%)
+ rename drivers/media/platform/{ => via}/via-camera.h (100%)
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index f517aa951460..3b3d7af47ca1 100644
+index 0cfbc0c2aa7a..83a496327325 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -49,6 +49,7 @@ source "drivers/media/platform/davinci/Kconfig"
- source "drivers/media/platform/exynos-gsc/Kconfig"
- source "drivers/media/platform/meson/ge2d/Kconfig"
- source "drivers/media/platform/mtk-jpeg/Kconfig"
-+source "drivers/media/platform/mtk-mdp/Kconfig"
- source "drivers/media/platform/omap/Kconfig"
+@@ -35,16 +35,7 @@ source "drivers/media/platform/nxp/Kconfig"
  
- source "drivers/media/platform/aspeed/Kconfig"
-@@ -196,23 +197,6 @@ config VIDEO_MEDIATEK_VPU
- 	    To compile this driver as a module, choose M here: the
- 	    module will be called mtk-vpu.
+ source "drivers/media/platform/marvell-ccic/Kconfig"
  
--config VIDEO_MEDIATEK_MDP
--	tristate "Mediatek MDP driver"
--	depends on V4L_MEM2MEM_DRIVERS
--	depends on MTK_IOMMU || COMPILE_TEST
--	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_MEDIATEK || COMPILE_TEST
--	depends on MTK_SMI || (COMPILE_TEST && MTK_SMI=n)
--	select VIDEOBUF2_DMA_CONTIG
--	select V4L2_MEM2MEM_DEV
--	select VIDEO_MEDIATEK_VPU
+-config VIDEO_VIA_CAMERA
+-	tristate "VIAFB camera controller support"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on FB_VIA && VIDEO_V4L2
+-	select VIDEOBUF2_DMA_SG
+-	select VIDEO_OV7670
 -	help
--	    It is a v4l2 driver and present in Mediatek MT8173 SoCs.
--	    The driver supports for scaling and color space conversion.
--
--	    To compile this driver as a module, choose M here: the
--	    module will be called mtk-mdp.
--
- config VIDEO_MEDIATEK_VCODEC
- 	tristate "Mediatek Video Codec driver"
- 	depends on V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/mtk-mdp/Kconfig b/drivers/media/platform/mtk-mdp/Kconfig
+-	   Driver support for the integrated camera controller in VIA
+-	   Chrome9 chipsets.  Currently only tested on OLPC xo-1.5 systems
+-	   with ov7670 sensors.
++source "drivers/media/platform/via/Kconfig"
+ 
+ source "drivers/media/platform/cadence/Kconfig"
+ 
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 78ac0fa4dd57..4742b18fd8d8 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -42,6 +42,7 @@ obj-y += stm32/
+ obj-y += sunxi/
+ obj-y += tegra/vde/
+ obj-y += ti-vpe/
++obj-y += via/
+ obj-y += vsp1/
+ obj-y += xilinx/
+ 
+@@ -57,4 +58,3 @@ obj-$(CONFIG_VIDEO_RENESAS_FCP)		+= rcar-fcp.o
+ obj-$(CONFIG_VIDEO_RENESAS_FDP1)	+= rcar_fdp1.o
+ obj-$(CONFIG_VIDEO_RENESAS_JPU)		+= rcar_jpu.o
+ obj-$(CONFIG_VIDEO_SH_VOU)		+= sh_vou.o
+-obj-$(CONFIG_VIDEO_VIA_CAMERA)		+= via-camera.o
+diff --git a/drivers/media/platform/via/Kconfig b/drivers/media/platform/via/Kconfig
 new file mode 100644
-index 000000000000..0cc743165a1a
+index 000000000000..1dcf789dce96
 --- /dev/null
-+++ b/drivers/media/platform/mtk-mdp/Kconfig
-@@ -0,0 +1,17 @@
++++ b/drivers/media/platform/via/Kconfig
+@@ -0,0 +1,11 @@
 +# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_MEDIATEK_MDP
-+	tristate "Mediatek MDP driver"
-+	depends on V4L_MEM2MEM_DRIVERS
-+	depends on MTK_IOMMU || COMPILE_TEST
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_MEDIATEK || COMPILE_TEST
-+	depends on MTK_SMI || (COMPILE_TEST && MTK_SMI=n)
-+	select VIDEOBUF2_DMA_CONTIG
-+	select V4L2_MEM2MEM_DEV
-+	select VIDEO_MEDIATEK_VPU
++config VIDEO_VIA_CAMERA
++	tristate "VIAFB camera controller support"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on FB_VIA && VIDEO_V4L2
++	select VIDEOBUF2_DMA_SG
++	select VIDEO_OV7670
 +	help
-+	    It is a v4l2 driver and present in Mediatek MT8173 SoCs.
-+	    The driver supports for scaling and color space conversion.
-+
-+	    To compile this driver as a module, choose M here: the
-+	    module will be called mtk-mdp.
++	   Driver support for the integrated camera controller in VIA
++	   Chrome9 chipsets.  Currently only tested on OLPC xo-1.5 systems
++	   with ov7670 sensors.
+diff --git a/drivers/media/platform/via/Makefile b/drivers/media/platform/via/Makefile
+new file mode 100644
+index 000000000000..a5c04c825840
+--- /dev/null
++++ b/drivers/media/platform/via/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_VIDEO_VIA_CAMERA) += via-camera.o
+diff --git a/drivers/media/platform/via-camera.c b/drivers/media/platform/via/via-camera.c
+similarity index 100%
+rename from drivers/media/platform/via-camera.c
+rename to drivers/media/platform/via/via-camera.c
+diff --git a/drivers/media/platform/via-camera.h b/drivers/media/platform/via/via-camera.h
+similarity index 100%
+rename from drivers/media/platform/via-camera.h
+rename to drivers/media/platform/via/via-camera.h
 -- 
 2.35.1
 
