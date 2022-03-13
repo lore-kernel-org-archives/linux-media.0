@@ -2,61 +2,66 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B9C8C43217
-	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 10:53:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28C36C4332F
+	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 10:53:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234370AbiCMKyG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Mar 2022 06:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        id S234406AbiCMKyN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Mar 2022 06:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234395AbiCMKxl (ORCPT
+        with ESMTP id S234373AbiCMKyH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 13 Mar 2022 06:53:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4CA12D925;
-        Sun, 13 Mar 2022 03:52:18 -0700 (PDT)
+        Sun, 13 Mar 2022 06:54:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FA412BF73;
+        Sun, 13 Mar 2022 03:52:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57CDA6100F;
-        Sun, 13 Mar 2022 10:52:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80889C34105;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E81CD6100E;
+        Sun, 13 Mar 2022 10:52:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C4E8C340F6;
         Sun, 13 Mar 2022 10:52:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647168729;
-        bh=H6riGIBHtNh9i24lR1ghBv7IWPMVqrM/Sm5wev2DUhM=;
+        bh=kuQsLLv+qQVtZ3MO89AZs58u9elVJ+hwK+IWxbSMv/U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WVtAdKkqtZ5ZA+NofFZGNPilI5nhFHIelynGP6u9aLDHjlnnZI8mhfuvhe8RcyeFC
-         KcB7E119SVcPvrk4Zja01XLAEa5gesea29Ew1WRq/Wey6Ca4f3uQEv/dY+CHYsROzs
-         BwVCM1dEzzCv3Z3PQKmIS+PHtVup2fnL5YjStCNasCHMbChQ5SB8Ox7hHgU8nLCjlV
-         CRl0rM8ylwr/PXDaBNJ4EiSrZBeTrMFi/KUuRGIKu2j6V+6sh1j1w+198r8MX3pH6K
-         Pzd+Gp7tRLWlPF6UiFJE3MOKeIhR73JubY+rz/5hGv80/844Nk2PPYb+GwapuffzUf
-         6tZVVEXk0Ky/Q==
+        b=KV6SZze7o4rV4F4Txlqkh3maE5DLk7jQJN7FJOmjtaGAk8FhYXkZNHNKUL5WCkl/t
+         S0KRtY2ksH1k7Uib3pufKaleJHxFra7nP2+0fRB/Db7JsGF3pCyQBsLJ8FPtGCmyjC
+         axV5C7Ft/3SN5UaW2OE3GfXZf5BCQ57mYiuf+VK1EEtTYBdwK9AVdaRBb87YvUBOD5
+         wV2MN99soEITO8oFiw3p/omOK4BXMkWE3+QCBLIBrDv0Tw7JrXrRmpKE1qzq7Gdmh/
+         BwpzVIbCbPFh6NcNCpBqNmGd30No2d+Xtcqx/MThmwVpChW4YOTumEMHSLYv3Opp0d
+         JzXBHdQxa3zAA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTLpX-001I20-94; Sun, 13 Mar 2022 11:52:07 +0100
+        id 1nTLpW-001I1U-SL; Sun, 13 Mar 2022 11:52:06 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bin Liu <bin.liu@mediatek.com>,
         Cai Huoqing <caihuoqing@baidu.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
+        Evan Green <evgreen@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Ming Qian <ming.qian@nxp.com>,
+        Rick Chang <rick.chang@mediatek.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Xu Wang <vulab@iscas.ac.cn>, Yong Wu <yong.wu@mediatek.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 12/24] media: platform: rename exynos-gsc/ to samsung/exynos-gsc/
-Date:   Sun, 13 Mar 2022 11:51:53 +0100
-Message-Id: <d070ff68a414fb51eb6dc1b3c77d275912f1c5d1.1647167750.git.mchehab@kernel.org>
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH 04/24] media: platform: rename mtk-jpeg/ to mediatek/mtk-jpeg/
+Date:   Sun, 13 Mar 2022 11:51:45 +0100
+Message-Id: <3c8f6cd0c95b7be3ddcea487028ebef8ae92ad68.1647167750.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647167750.git.mchehab@kernel.org>
 References: <cover.1647167750.git.mchehab@kernel.org>
@@ -68,7 +73,7 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 As the end goal is to have platform drivers split by vendor,
-rename exynos-gsc/ to samsung/exynos-gsc/.
+rename mtk-jpeg/ to mediatek/mtk-jpeg/.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -76,92 +81,116 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/24] at: https://lore.kernel.org/all/cover.1647167750.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig                             | 2 +-
- drivers/media/platform/Makefile                            | 2 +-
- drivers/media/platform/{ => samsung}/exynos-gsc/Kconfig    | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/Makefile   | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.c | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.h | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-m2m.c  | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.c | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.h | 0
- 9 files changed, 2 insertions(+), 2 deletions(-)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/Kconfig (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/Makefile (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.c (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.h (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-m2m.c (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.c (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.h (100%)
+ MAINTAINERS                                                     | 2 +-
+ drivers/media/platform/Kconfig                                  | 2 +-
+ drivers/media/platform/Makefile                                 | 2 +-
+ drivers/media/platform/{ => mediatek}/mtk-jpeg/Kconfig          | 0
+ drivers/media/platform/{ => mediatek}/mtk-jpeg/Makefile         | 0
+ drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_core.c  | 0
+ drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_core.h  | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_hw.c    | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_hw.h    | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_parse.c | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_parse.h | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_reg.h   | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_enc_hw.c    | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_enc_hw.h    | 0
+ 14 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/Kconfig (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/Makefile (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_core.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_core.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_hw.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_hw.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_parse.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_parse.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_reg.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_enc_hw.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_enc_hw.h (100%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 09b0e60da4e9..fa0a3de3865f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12130,7 +12130,7 @@ M:	Rick Chang <rick.chang@mediatek.com>
+ M:	Bin Liu <bin.liu@mediatek.com>
+ S:	Supported
+ F:	Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
+-F:	drivers/media/platform/mtk-jpeg/
++F:	drivers/media/platform/mediatek/mtk-jpeg/
+ 
+ MEDIATEK MDP DRIVER
+ M:	Minghsiu Tsai <minghsiu.tsai@mediatek.com>
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 1bbada840723..81888d348149 100644
+index d8436923aebe..fdb4e1a8aa81 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -74,7 +74,6 @@ source "drivers/media/platform/atmel/Kconfig"
- source "drivers/media/platform/cadence/Kconfig"
- source "drivers/media/platform/chips-media/Kconfig"
- source "drivers/media/platform/davinci/Kconfig"
--source "drivers/media/platform/exynos-gsc/Kconfig"
+@@ -78,7 +78,7 @@ source "drivers/media/platform/exynos-gsc/Kconfig"
+ source "drivers/media/platform/exynos4-is/Kconfig"
  source "drivers/media/platform/intel/Kconfig"
  source "drivers/media/platform/marvell/Kconfig"
- source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
-@@ -93,6 +92,7 @@ source "drivers/media/platform/s3c-camif/Kconfig"
- source "drivers/media/platform/s5p-g2d/Kconfig"
- source "drivers/media/platform/s5p-jpeg/Kconfig"
- source "drivers/media/platform/s5p-mfc/Kconfig"
-+source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
- source "drivers/media/platform/samsung/exynos4-is/Kconfig"
- source "drivers/media/platform/sti/Kconfig"
- source "drivers/media/platform/stm32/Kconfig"
+-source "drivers/media/platform/mtk-jpeg/Kconfig"
++source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
+ source "drivers/media/platform/mtk-mdp/Kconfig"
+ source "drivers/media/platform/mtk-vcodec/Kconfig"
+ source "drivers/media/platform/mtk-vpu/Kconfig"
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 613ca6a3efa7..848cbd6147ae 100644
+index 48531f93d92f..c792f6216918 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -14,7 +14,6 @@ obj-y += atmel/
- obj-y += cadence/
- obj-y += chips-media/
- obj-y += davinci/
--obj-y += exynos-gsc/
+@@ -18,7 +18,7 @@ obj-y += exynos-gsc/
+ obj-y += exynos4-is/
  obj-y += intel/
  obj-y += marvell/
- obj-y += mediatek/mtk-jpeg/
-@@ -35,6 +34,7 @@ obj-y += s3c-camif/
- obj-y += s5p-g2d/
- obj-y += s5p-jpeg/
- obj-y += s5p-mfc/
-+obj-y += samsung/exynos-gsc/
- obj-y += samsung/exynos4-is/
- obj-y += sti/bdisp/
- obj-y += sti/c8sectpfe/
-diff --git a/drivers/media/platform/exynos-gsc/Kconfig b/drivers/media/platform/samsung/exynos-gsc/Kconfig
+-obj-y += mtk-jpeg/
++obj-y += mediatek/mtk-jpeg/
+ obj-y += mtk-mdp/
+ obj-y += mtk-vcodec/
+ obj-y += mtk-vpu/
+diff --git a/drivers/media/platform/mtk-jpeg/Kconfig b/drivers/media/platform/mediatek/mtk-jpeg/Kconfig
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/Kconfig
-rename to drivers/media/platform/samsung/exynos-gsc/Kconfig
-diff --git a/drivers/media/platform/exynos-gsc/Makefile b/drivers/media/platform/samsung/exynos-gsc/Makefile
+rename from drivers/media/platform/mtk-jpeg/Kconfig
+rename to drivers/media/platform/mediatek/mtk-jpeg/Kconfig
+diff --git a/drivers/media/platform/mtk-jpeg/Makefile b/drivers/media/platform/mediatek/mtk-jpeg/Makefile
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/Makefile
-rename to drivers/media/platform/samsung/exynos-gsc/Makefile
-diff --git a/drivers/media/platform/exynos-gsc/gsc-core.c b/drivers/media/platform/samsung/exynos-gsc/gsc-core.c
+rename from drivers/media/platform/mtk-jpeg/Makefile
+rename to drivers/media/platform/mediatek/mtk-jpeg/Makefile
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_core.c
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-core.c
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-core.c
-diff --git a/drivers/media/platform/exynos-gsc/gsc-core.h b/drivers/media/platform/samsung/exynos-gsc/gsc-core.h
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_core.c
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_core.h
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-core.h
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-core.h
-diff --git a/drivers/media/platform/exynos-gsc/gsc-m2m.c b/drivers/media/platform/samsung/exynos-gsc/gsc-m2m.c
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_core.h
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_hw.c
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-m2m.c
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-m2m.c
-diff --git a/drivers/media/platform/exynos-gsc/gsc-regs.c b/drivers/media/platform/samsung/exynos-gsc/gsc-regs.c
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_hw.c
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.h b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_hw.h
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-regs.c
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-regs.c
-diff --git a/drivers/media/platform/exynos-gsc/gsc-regs.h b/drivers/media/platform/samsung/exynos-gsc/gsc-regs.h
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.h
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_hw.h
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.c b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_parse.c
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-regs.h
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-regs.h
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.c
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_parse.c
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.h b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_parse.h
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.h
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_parse.h
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_reg.h b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_reg.h
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_reg.h
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_reg.h
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_enc_hw.c
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_enc_hw.c
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.h b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_enc_hw.h
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.h
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_enc_hw.h
 -- 
 2.35.1
 
