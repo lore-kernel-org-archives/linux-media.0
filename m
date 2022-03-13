@@ -2,53 +2,56 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF5DDC433FE
-	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 07:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBD9FC433F5
+	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 07:22:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbiCMHXo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Mar 2022 03:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
+        id S233936AbiCMHXr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Mar 2022 03:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233789AbiCMHXK (ORCPT
+        with ESMTP id S233779AbiCMHXK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Sun, 13 Mar 2022 03:23:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDEC1945D4;
-        Sat, 12 Mar 2022 23:21:59 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF03919457E;
+        Sat, 12 Mar 2022 23:21:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F304CB80BFA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB2E460F6E;
         Sun, 13 Mar 2022 07:21:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAFEAC341D7;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32CFDC3411A;
         Sun, 13 Mar 2022 07:21:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647156114;
-        bh=+YGcmMZwK1ZBRVHE+lynl+rMtW0LIl0vNNkDOwX/BAw=;
+        bh=KA+6RqKKL2tHInP+Yl4ffLWSNGYgen7X1gnannt2kJE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BBvMFv1lYNqEPjfyhjcQJCNKfDfpVZ1X+NgVIDz4uTL0brEdGRqaACKiSDrps0wSe
-         YwVdW2WEA0uTLHjSsqYPcOBZ6MsrAXd7+eJlRGx3z3KIXF+ajAO+aaE1ajkfPv4yUU
-         sOWG2GByWZy1weUwvCZIeCKS79KnHE36bw1JpKEeAISqf7Qeu6FgbHWiBaCKfgTbL6
-         3Sm/Ez/VeHR5WPLc6shyXxT86xcBePZAWNPhFIFV+SjrolstDcyns1LLcGH/GVhHIK
-         PGswfXdHsM29jalre/MH8RZ23RCPbQFUUoqziIhYk+AJgDSHx0PYSFtO2YAJztyuAp
-         XaN3KtaWuPSWg==
+        b=Sbtm6lguq70itw+2+zO3LQcf9ciHKmLp7SjM0Wi5TaoQ9kRyk7T/3jS39eBE/823y
+         w7cQl1Sq3EZRKUPyrfzO4iwZVtu1gqZ3R6S60fr36BhGT5sfATa3SH3ePlBov6+BRC
+         RSpsM1axYumc601KR37nw9CdTSzpvsAJ07oCJy4Oil6rxMMgUK1ofFg4B2jCq9t+3f
+         hl4p7oQJA93d6gHan3ipEpK6aIvFVffQgtqwm1eLJZ/8EJo69NGNy1XIMD1ETsSXNe
+         0adv4KEnkfR6lAe3BRTinOzb/VMSR7h5ldB0N1ky6ftUZGxwC3ud/vyMyNjvTHog8m
+         0PdcNyYW6XWRA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTIY4-0012xg-FE; Sun, 13 Mar 2022 08:21:52 +0100
+        id 1nTIY4-0012wy-14; Sun, 13 Mar 2022 08:21:52 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
         Dmitry Osipenko <digetx@gmail.com>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jacob Chen <jacob-chen@iotwrt.com>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v3 34/39] media: platform: bdisp: move config to its own file
-Date:   Sun, 13 Mar 2022 08:21:43 +0100
-Message-Id: <57addcb1816e4178fccab122908aa5f43351af9e.1647155572.git.mchehab@kernel.org>
+        Ming Qian <ming.qian@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH v3 23/39] media: platform: rga: move config to its own file
+Date:   Sun, 13 Mar 2022 08:21:32 +0100
+Message-Id: <9ad75561524a2a99999405e0d689bd162e6fbb3d.1647155572.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647155572.git.mchehab@kernel.org>
 References: <cover.1647155572.git.mchehab@kernel.org>
@@ -60,7 +63,7 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 In order to better organize the platform/Kconfig, place
-bdisp-specific config stuff on a separate Kconfig file.
+rga-specific config stuff on a separate Kconfig file.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -68,48 +71,65 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v3 00/39] at: https://lore.kernel.org/all/cover.1647155572.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig           | 10 +---------
- drivers/media/platform/sti/bdisp/Kconfig | 10 ++++++++++
- 2 files changed, 11 insertions(+), 9 deletions(-)
- create mode 100644 drivers/media/platform/sti/bdisp/Kconfig
+ drivers/media/platform/Kconfig              | 16 +---------------
+ drivers/media/platform/rockchip/rga/Kconfig | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+), 15 deletions(-)
+ create mode 100644 drivers/media/platform/rockchip/rga/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index ba4c10896537..2069eee801af 100644
+index 5a8495338fd4..314e25dd7ca1 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -122,15 +122,7 @@ config VIDEO_SAMSUNG_S5P_MFC
- 	help
- 	    MFC 5.1 and 6.x driver for V4L2
+@@ -58,6 +58,7 @@ source "drivers/media/platform/qcom/camss/Kconfig"
+ source "drivers/media/platform/qcom/venus/Kconfig"
  
--config VIDEO_STI_BDISP
--	tristate "STMicroelectronics BDISP 2D blitter driver"
+ source "drivers/media/platform/aspeed/Kconfig"
++source "drivers/media/platform/rockchip/rga/Kconfig"
+ 
+ config VIDEO_MUX
+ 	tristate "Video Multiplexer"
+@@ -284,21 +285,6 @@ config VIDEO_STM32_DMA2D
+ 	  The STM32 DMA2D is a memory-to-memory engine for pixel conversion
+ 	  and specialized DMA dedicated to image manipulation.
+ 
+-config VIDEO_ROCKCHIP_RGA
+-	tristate "Rockchip Raster 2d Graphic Acceleration Unit"
 -	depends on V4L_MEM2MEM_DRIVERS
 -	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_STI || COMPILE_TEST
--	select VIDEOBUF2_DMA_CONTIG
+-	depends on ARCH_ROCKCHIP || COMPILE_TEST
+-	select VIDEOBUF2_DMA_SG
 -	select V4L2_MEM2MEM_DEV
 -	help
--	  This v4l2 mem2mem driver is a 2D blitter for STMicroelectronics SoC.
-+source "drivers/media/platform/sti/bdisp/Kconfig"
- 
- source "drivers/media/platform/sti/delta/Kconfig"
- 
-diff --git a/drivers/media/platform/sti/bdisp/Kconfig b/drivers/media/platform/sti/bdisp/Kconfig
+-	  This is a v4l2 driver for Rockchip SOC RGA 2d graphics accelerator.
+-	  Rockchip RGA is a separate 2D raster graphic acceleration unit.
+-	  It accelerates 2D graphics operations, such as point/line drawing,
+-	  image scaling, rotation, BitBLT, alpha blending and image blur/sharpness.
+-
+-	  To compile this driver as a module choose m here.
+-
+ config VIDEO_TI_VPE
+ 	tristate "TI VPE (Video Processing Engine) driver"
+ 	depends on V4L_MEM2MEM_DRIVERS
+diff --git a/drivers/media/platform/rockchip/rga/Kconfig b/drivers/media/platform/rockchip/rga/Kconfig
 new file mode 100644
-index 000000000000..e583fb924f52
+index 000000000000..0106cc8a93a7
 --- /dev/null
-+++ b/drivers/media/platform/sti/bdisp/Kconfig
-@@ -0,0 +1,10 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_STI_BDISP
-+	tristate "STMicroelectronics BDISP 2D blitter driver"
++++ b/drivers/media/platform/rockchip/rga/Kconfig
+@@ -0,0 +1,14 @@
++config VIDEO_ROCKCHIP_RGA
++	tristate "Rockchip Raster 2d Graphic Acceleration Unit"
 +	depends on V4L_MEM2MEM_DRIVERS
 +	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_STI || COMPILE_TEST
-+	select VIDEOBUF2_DMA_CONTIG
++	depends on ARCH_ROCKCHIP || COMPILE_TEST
++	select VIDEOBUF2_DMA_SG
 +	select V4L2_MEM2MEM_DEV
 +	help
-+	  This v4l2 mem2mem driver is a 2D blitter for STMicroelectronics SoC.
++	  This is a v4l2 driver for Rockchip SOC RGA 2d graphics accelerator.
++	  Rockchip RGA is a separate 2D raster graphic acceleration unit.
++	  It accelerates 2D graphics operations, such as point/line drawing,
++	  image scaling, rotation, BitBLT, alpha blending and image blur/sharpness.
++
++	  To compile this driver as a module choose m here.
 -- 
 2.35.1
 
