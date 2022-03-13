@@ -2,84 +2,160 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6178FC433EF
-	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 09:27:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 660B5C4332F
+	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 10:52:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234135AbiCMJ2Y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Mar 2022 05:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
+        id S234229AbiCMKxt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Mar 2022 06:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbiCMJ2X (ORCPT
+        with ESMTP id S234466AbiCMKxk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 13 Mar 2022 05:28:23 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0A7FA22D;
-        Sun, 13 Mar 2022 01:27:16 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6DA62492;
-        Sun, 13 Mar 2022 10:27:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1647163634;
-        bh=5fzYKPeKVvCjG/8w4Q5PwtknY0GBcf3hhFb+xSV4Duo=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=pqxofatWVI8GVPkQ0HFaYe4BvJ0C/aENfgfajKDN1vDh3Yo92r/8D6W8OeduuRIrv
-         gDc99C1vX1orqCtnI1z44XT5J7QQVe9A1aBCF61RdvV5R0qUg99F0WetZU2frbp9Br
-         4+MLCsPgv7AMnDfXoF/7uADBpvkx3Gfa7sCmkxDA=
-Content-Type: text/plain; charset="utf-8"
+        Sun, 13 Mar 2022 06:53:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF73412D23A;
+        Sun, 13 Mar 2022 03:52:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B456F60FDC;
+        Sun, 13 Mar 2022 10:52:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E126C340E8;
+        Sun, 13 Mar 2022 10:52:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647168729;
+        bh=CQ9LgKO1frbxjKVYlT5MfqhQYAIpf8icl+IVeeyHnfc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nss3uD+HzQzPCqQb9GU9AABubzjAR+XiWJftRvl12hnVtsSSwyOjqiYwtt6sdrj5H
+         EMQ3EGWTcvAibxIQubkTAwPStIKzUFNxUnuRQH9kxPiIY7UE4SDp/RckjdeFzoXduW
+         Odx7dCg6FvROt+fn2DcS+noZL0AklBqzrn+LXUShcr2IekY5oAyQw1VJt1eWiYLZbJ
+         gDyD19YSULU2ZNfZ66yVxUkNYNmzx2ll45aJ8W3K/NhJsNGMkjQgGyqXjsRE87EYWn
+         ZE8Y8qKgKYpb951l7IHFqar61eT0bQeCcCnAfnU1uQsaoqilnEnU7tYFxumzrqIhIo
+         iU3tuUKsOIHzg==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nTLpW-001I1L-PA; Sun, 13 Mar 2022 11:52:06 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Evgeny Novikov <novikov@ispras.ru>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Herman <yanshuaijun@yulong.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Ming Qian <ming.qian@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 02/24] media: platform: rename marvell-ccic/ to marvell/
+Date:   Sun, 13 Mar 2022 11:51:43 +0100
+Message-Id: <8e17438e4290f4e43addd4742d350748d4939f73.1647167750.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1647167750.git.mchehab@kernel.org>
+References: <cover.1647167750.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <Yi0IH48oA8ztvX8K@latitude>
-References: <20220312203323.626657-1-j.neuschaefer@gmx.net> <Yi0F6mUm7iCRGvCt@pendragon.ideasonboard.com> <Yi0IH48oA8ztvX8K@latitude>
-Subject: Re: [PATCH] docs: media: uvcvideo: Update mailing list address
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Jonathan =?utf-8?q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-media@vger.kernel.org, linux-uvc-devel@lists.sourceforge.net,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-To:     Jonathan =?utf-8?q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Date:   Sun, 13 Mar 2022 09:27:12 +0000
-Message-ID: <164716363247.3407360.2736836911812651199@Monstersaurus>
-User-Agent: alot/0.10
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Quoting Jonathan Neusch=C3=A4fer (2022-03-12 20:52:47)
-> On Sat, Mar 12, 2022 at 10:43:22PM +0200, Laurent Pinchart wrote:
-> > Hi Jonathan,
-> >=20
-> > Thank you for the patch.
-> >=20
-> > On Sat, Mar 12, 2022 at 09:33:22PM +0100, Jonathan Neusch=C3=A4fer wrot=
-e:
-> > > The mailing list address for UVC development has changed a while ago,
-> > > but it was only updated in MAINTAINERS, not in the documentation.
-> > > Update it there, too.
-> >=20
-> > Thanks for bringing this to my attention, I didn't know we were still
-> > referencing that old list.
-> >=20
-> > How about moving to the linux-media@vger.kernel.org mailing list instead
-> > ? I don't see many reasons to treat this driver with a special mailing
-> > list anymore.
->=20
-> Fine by me, but I'll wait for the opinion of others who more regularly
-> contribute to the media subsystem.
+As the end goal is to have platform drivers split by vendor,
+rename marvell-ccic/ to marvell/.
 
-Being subscribed to the linux-uvc-devel list, and seeing that it's a
-black hole where people post, and unfortunately get very little to no
-response I certainly concur that it needs to be changed.
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
-I don't think we can guarantee a better response with linux-media, but
-at least it's the right place, where the driver is actually maintained.
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH 00/24] at: https://lore.kernel.org/all/cover.1647167750.git.mchehab@kernel.org/
 
-So I also believe it should be moved to linux-media.
+ MAINTAINERS                                                    | 2 +-
+ drivers/media/platform/Kconfig                                 | 2 +-
+ drivers/media/platform/Makefile                                | 2 +-
+ drivers/media/platform/{marvell-ccic => marvell}/Kconfig       | 0
+ drivers/media/platform/{marvell-ccic => marvell}/Makefile      | 0
+ drivers/media/platform/{marvell-ccic => marvell}/cafe-driver.c | 0
+ drivers/media/platform/{marvell-ccic => marvell}/mcam-core.c   | 0
+ drivers/media/platform/{marvell-ccic => marvell}/mcam-core.h   | 0
+ drivers/media/platform/{marvell-ccic => marvell}/mmp-driver.c  | 0
+ 9 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{marvell-ccic => marvell}/Kconfig (100%)
+ rename drivers/media/platform/{marvell-ccic => marvell}/Makefile (100%)
+ rename drivers/media/platform/{marvell-ccic => marvell}/cafe-driver.c (100%)
+ rename drivers/media/platform/{marvell-ccic => marvell}/mcam-core.c (100%)
+ rename drivers/media/platform/{marvell-ccic => marvell}/mcam-core.h (100%)
+ rename drivers/media/platform/{marvell-ccic => marvell}/mmp-driver.c (100%)
 
---
-Kieran
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 84bc106acc57..b83cf0eb99ce 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4248,7 +4248,7 @@ L:	linux-media@vger.kernel.org
+ S:	Orphan
+ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/admin-guide/media/cafe_ccic*
+-F:	drivers/media/platform/marvell-ccic/
++F:	drivers/media/platform/marvell/
+ 
+ CAIF NETWORK LAYER
+ L:	netdev@vger.kernel.org
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index 615736ac117c..5e7cb24038fe 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -76,7 +76,7 @@ source "drivers/media/platform/davinci/Kconfig"
+ source "drivers/media/platform/exynos-gsc/Kconfig"
+ source "drivers/media/platform/exynos4-is/Kconfig"
+ source "drivers/media/platform/intel/Kconfig"
+-source "drivers/media/platform/marvell-ccic/Kconfig"
++source "drivers/media/platform/marvell/Kconfig"
+ source "drivers/media/platform/meson/ge2d/Kconfig"
+ source "drivers/media/platform/mtk-jpeg/Kconfig"
+ source "drivers/media/platform/mtk-mdp/Kconfig"
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 8d6e15fad0b1..8b2deba4b62c 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -16,7 +16,7 @@ obj-y += davinci/
+ obj-y += exynos-gsc/
+ obj-y += exynos4-is/
+ obj-y += intel/
+-obj-y += marvell-ccic/
++obj-y += marvell/
+ obj-y += meson/ge2d/
+ obj-y += mtk-jpeg/
+ obj-y += mtk-mdp/
+diff --git a/drivers/media/platform/marvell-ccic/Kconfig b/drivers/media/platform/marvell/Kconfig
+similarity index 100%
+rename from drivers/media/platform/marvell-ccic/Kconfig
+rename to drivers/media/platform/marvell/Kconfig
+diff --git a/drivers/media/platform/marvell-ccic/Makefile b/drivers/media/platform/marvell/Makefile
+similarity index 100%
+rename from drivers/media/platform/marvell-ccic/Makefile
+rename to drivers/media/platform/marvell/Makefile
+diff --git a/drivers/media/platform/marvell-ccic/cafe-driver.c b/drivers/media/platform/marvell/cafe-driver.c
+similarity index 100%
+rename from drivers/media/platform/marvell-ccic/cafe-driver.c
+rename to drivers/media/platform/marvell/cafe-driver.c
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell/mcam-core.c
+similarity index 100%
+rename from drivers/media/platform/marvell-ccic/mcam-core.c
+rename to drivers/media/platform/marvell/mcam-core.c
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.h b/drivers/media/platform/marvell/mcam-core.h
+similarity index 100%
+rename from drivers/media/platform/marvell-ccic/mcam-core.h
+rename to drivers/media/platform/marvell/mcam-core.h
+diff --git a/drivers/media/platform/marvell-ccic/mmp-driver.c b/drivers/media/platform/marvell/mmp-driver.c
+similarity index 100%
+rename from drivers/media/platform/marvell-ccic/mmp-driver.c
+rename to drivers/media/platform/marvell/mmp-driver.c
+-- 
+2.35.1
 
-
->=20
->=20
-> Jonathan
