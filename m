@@ -2,108 +2,154 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31FC6C433EF
-	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 16:41:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B5F5C4332F
+	for <linux-media@archiver.kernel.org>; Sun, 13 Mar 2022 19:08:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233595AbiCMQm0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 13 Mar 2022 12:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S235506AbiCMTJi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 13 Mar 2022 15:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232058AbiCMQmZ (ORCPT
+        with ESMTP id S235495AbiCMTJe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 13 Mar 2022 12:42:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7681415A17
-        for <linux-media@vger.kernel.org>; Sun, 13 Mar 2022 09:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647189675;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=bqoVTiTsGXXHBBRYe8M9hzomUWdwc4CvqTvtEGolwng=;
-        b=Lx9Z0SLRwS/w7zAHj59wmtZFpcxoKT8E6yAtjErySoJXQe6ixq2WWx91G0Bna3WE4Wc0Y3
-        KzHaXeyIglaiJYGQbnugrZQ5Wk9eK+B1QixA9yU6sFCfiDCQkJtZj4RUy8GVPoo98r4kpU
-        0Q2iG53qZnTCUIk9lGvPSIy9KU0TVlg=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-581-jQuGhdGbMaSaiOpYM-Rreg-1; Sun, 13 Mar 2022 12:41:14 -0400
-X-MC-Unique: jQuGhdGbMaSaiOpYM-Rreg-1
-Received: by mail-oo1-f71.google.com with SMTP id o136-20020a4a2c8e000000b00321224df797so11182520ooo.20
-        for <linux-media@vger.kernel.org>; Sun, 13 Mar 2022 09:41:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bqoVTiTsGXXHBBRYe8M9hzomUWdwc4CvqTvtEGolwng=;
-        b=7m5Yt92vfjAfkAojZ45e9GlgyJUnY7+mJkAY8L5ri95ZJVJtfu6u3xp9TBuAomagEF
-         yjhZpBR/3KQOTIMIgyhp24s58llcLX9rJCcCP3KmujWqH29iiRVLNQKo/c92OvFMNP/4
-         Fc3mLf4rWnVDX68Jkrz98pmj21Z8luK/oIQzYAjsIDC5x94gvP+2gAp2UaACBRR1QqSW
-         uEGIiZgjhqLfgVLBDsQaGM+AVzN+qQlLFGBPbcdEC5nBMW/XMHBFbQcNADGKO53pfUuZ
-         x1+07TJCKZxsc2l9BmM90TyuKQlMVSTy2EP5ylgyfGQqvYzBTiZdADi76y6N0/tXTfzz
-         edAQ==
-X-Gm-Message-State: AOAM531wrhRBqnb69D8gg88iMtmsMYfpHc9LHujweTyZrwR1V8pfB0Nj
-        IYhH/LCvUXmvbbJvSQGJRhCAE+2R/h2i1tIbT9dPBCKGTYMnE3I4Ewwmz/TpjjFtL+hztgjy3IN
-        PWYMUONi0r6p76vY0Szbr5LE=
-X-Received: by 2002:a4a:8c0a:0:b0:2dd:e256:88c8 with SMTP id u10-20020a4a8c0a000000b002dde25688c8mr8551828ooj.9.1647189673426;
-        Sun, 13 Mar 2022 09:41:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwCOOpV5kTWBACRUlg4bObdEcMfOX5390WS3Kv1BpjVdmUqwie4T3pC2DQr7CUxkbwB6+ko/Q==
-X-Received: by 2002:a4a:8c0a:0:b0:2dd:e256:88c8 with SMTP id u10-20020a4a8c0a000000b002dde25688c8mr8551818ooj.9.1647189673249;
-        Sun, 13 Mar 2022 09:41:13 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id q62-20020a4a3341000000b00320f8a179d0sm6160816ooq.30.2022.03.13.09.41.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Mar 2022 09:41:12 -0700 (PDT)
-From:   trix@redhat.com
-To:     jacopo@jmondi.org, mchehab@kernel.org, hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] media: i2c: cleanup comments
-Date:   Sun, 13 Mar 2022 09:04:57 -0700
-Message-Id: <20220313160457.1513543-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Sun, 13 Mar 2022 15:09:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CA224BED;
+        Sun, 13 Mar 2022 12:08:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBF4EB80C6D;
+        Sun, 13 Mar 2022 19:08:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8AA7C340E8;
+        Sun, 13 Mar 2022 19:07:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647198481;
+        bh=S85F7ZrTXTrFfys0rJRseAMPLnZqh6VsxjYx3rCW0qE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dmNaUYlaZzqRi5HFPSpsaDKlblQ3p5MVwueWdtZ27nwr8sXgDKGi2zeY/AjXhia3r
+         t3niMVPVw7ZMGjht2uPQpdIjDG4Xhh9RGBhkGpYYOvaUeyV1uyl7/Ooe5SRkYIpGeX
+         nPRzgYBl7I9TulXE9lJimj0/y8WedW4Wi+roZ8v+CzAwespYPgVioTi8rInofHYnIy
+         491oP//dd5FdrR2OaOwIhThTPNfNsfaRZeZ3HQhK2GC9Kcx+ke0YN8MaSRvnFceHGK
+         pt91NFQbpkfyZg/QEihqmYtQ09K3FaejAvhCvgIlhJQH+gCJk9QSEoxFWap65S3vAZ
+         MpeygeZQ1qMyA==
+Date:   Sun, 13 Mar 2022 20:07:55 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] media: Kconfig: cleanup VIDEO_DEV dependencies
+Message-ID: <20220313200755.0873537c@coco.lan>
+In-Reply-To: <Yi3ciCTbHrxYUatX@pendragon.ideasonboard.com>
+References: <42ae3d28d4d822f3e14db76b99f2f4c41688ae3e.1647155467.git.mchehab@kernel.org>
+        <Yi3ciCTbHrxYUatX@pendragon.ideasonboard.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Em Sun, 13 Mar 2022 13:59:04 +0200
+Laurent Pinchart <laurent.pinchart@ideasonboard.com> escreveu:
 
-For spdx, remove leading space
+> Hi Mauro,
+> 
+> Thank you for the patch.
+> 
+> Trimming the CC list to keep a few mailing lists only.
+> 
+> On Sun, Mar 13, 2022 at 08:12:05AM +0100, Mauro Carvalho Chehab wrote:
+> > media Kconfig has two entries associated to V4L API:
+> > VIDEO_DEV and VIDEO_V4L2.
+> > 
+> > On Kernel 2.6.x, there were two V4L APIs, each one with its own flag.
+> > VIDEO_DEV were meant to:
+> > 	1) enable Video4Linux and make its Kconfig options to appear;
+> > 	2) it makes the Kernel build the V4L core.
+> > 
+> > while VIDEO_V4L2 where used to distinguish between drivers that
+> > implement the newer API and drivers that implemented the former one.
+> > 
+> > With time, such meaning changed, specially after the removal of
+> > all V4L version 1 drivers.
+> > 
+> > At the current implementation, VIDEO_DEV only does (1): it enables
+> > the media options related to V4L, that now has:
+> > 
+> > 	menu "Video4Linux options"
+> > 		visible if VIDEO_DEV
+> > 
+> > 	source "drivers/media/v4l2-core/Kconfig"
+> > 	endmenu
+> > 
+> > but it doesn't affect anymore the V4L core drivers.
+> > 
+> > The rationale is that the V4L2 core has a "soft" dependency
+> > at the I2C bus, and now requires to select a number of other
+> > Kconfig options:
+> > 
+> > 	config VIDEO_V4L2
+> > 		tristate
+> > 		depends on (I2C || I2C=n) && VIDEO_DEV
+> > 		select RATIONAL
+> > 		select VIDEOBUF2_V4L2 if VIDEOBUF2_CORE
+> > 		default (I2C || I2C=n) && VIDEO_DEV
+> > 
+> > In the past, merging them would be tricky, but it seems that it is now
+> > possible to merge those symbols, in order to simplify V4L dependencies.
+> > 
+> > Let's keep VIDEO_DEV, as this one is used on some make *defconfig
+> > configurations.  
+> 
+> I would have gone for VIDEO_V4L2, but if it makes configuration changes
+> easier to handle, VIDEO_DEV is fine with me too.
 
-Replacements
-parametrize to parameterize
+That was actually my first option ;-) VIDEO_V4L2 (or VIDEO_V4L) is a much
+better name. From my side, I'm fine either way.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- include/media/i2c/mt9t112.h | 2 +-
- include/media/i2c/wm8775.h  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+As a plus, using VIDEO_V4L2 would produce a much smaller patch that won't be
+rejected by some ML servers, but maybe it would require distros and people 
+who have their own .config files stored somewhere to re-configure their
+Kernels.
 
-diff --git a/include/media/i2c/mt9t112.h b/include/media/i2c/mt9t112.h
-index e678b6ae8e2f5..825b4a169da81 100644
---- a/include/media/i2c/mt9t112.h
-+++ b/include/media/i2c/mt9t112.h
-@@ -1,4 +1,4 @@
--/*  SPDX-License-Identifier: GPL-2.0 */
-+/* SPDX-License-Identifier: GPL-2.0 */
- /* mt9t112 Camera
-  *
-  * Copyright (C) 2009 Renesas Solutions Corp.
-diff --git a/include/media/i2c/wm8775.h b/include/media/i2c/wm8775.h
-index 83675817639e3..6ccdeb3817ab0 100644
---- a/include/media/i2c/wm8775.h
-+++ b/include/media/i2c/wm8775.h
-@@ -23,7 +23,7 @@
- 
- struct wm8775_platform_data {
- 	/*
--	 * FIXME: Instead, we should parametrize the params
-+	 * FIXME: Instead, we should parameterize the params
- 	 * that need different settings between ivtv, pvrusb2, and Nova-S
- 	 */
- 	bool is_nova_s;
--- 
-2.26.3
+> [snip]
+> 
+> > diff --git a/drivers/media/pci/tw5864/Kconfig b/drivers/media/pci/tw5864/Kconfig
+> > index d376d4ed65b9..0a0f3191f238 100644
+> > --- a/drivers/media/pci/tw5864/Kconfig
+> > +++ b/drivers/media/pci/tw5864/Kconfig
+> > @@ -1,7 +1,7 @@
+> >  # SPDX-License-Identifier: GPL-2.0-only
+> >  config VIDEO_TW5864
+> >  	tristate "Techwell TW5864 video/audio grabber and encoder"
+> > -	depends on VIDEO_DEV && PCI && VIDEO_V4L2
+> > +	depends on VIDEO_DEV && PCI && VIDEO_DEV  
+> 
+> You can drop the second VIDEO_DEV.
+> 
+> >  	select VIDEOBUF2_DMA_CONTIG
+> >  	help
+> >  	  Support for boards based on Techwell TW5864 chip which provides
+> > diff --git a/drivers/media/pci/tw68/Kconfig b/drivers/media/pci/tw68/Kconfig
+> > index af0cb60337bb..ef29be7db493 100644
+> > --- a/drivers/media/pci/tw68/Kconfig
+> > +++ b/drivers/media/pci/tw68/Kconfig
+> > @@ -1,7 +1,7 @@
+> >  # SPDX-License-Identifier: GPL-2.0-only
+> >  config VIDEO_TW68
+> >  	tristate "Techwell tw68x Video For Linux"
+> > -	depends on VIDEO_DEV && PCI && VIDEO_V4L2
+> > +	depends on VIDEO_DEV && PCI && VIDEO_DEV  
+> 
+> Here too.
+> 
+> Apart from that, the patch looks good to me.
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
+Thanks!
+
+Mauro
