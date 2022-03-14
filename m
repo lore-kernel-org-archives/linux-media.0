@@ -2,70 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DA9BC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B514C43219
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236845AbiCNH6b (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
+        id S233117AbiCNH6d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237014AbiCNH5v (ORCPT
+        with ESMTP id S237013AbiCNH5v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB2941992;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8904198E;
         Mon, 14 Mar 2022 00:56:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C088611F4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 083EC611F2;
         Mon, 14 Mar 2022 07:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B48CC341E0;
-        Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0047AC36B1C;
+        Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647244563;
-        bh=jpf8+CIVlqR8P2WBdHaMDbksXFiChRDZHqcPhOPZxpg=;
+        bh=kz16Bjwyo2MGvf2z65WGS2e7jnNzK1KkOZzgkEcfYtc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k3gOK9FYDSyQTro+KDltlDja6OlqkxpOjkMgAdaFOK+OphpYfcSEUfsaUMj+pKf/2
-         UDxcfOfWwerG+1YpwVypDQ1pPxBCauqub+I0/CZ05EXFfqJq3ALrN/aBfsPg63uQPl
-         qKQIRKt5dKlzo/tJdKtheIB4SVijvGWkPXL6pXT6TEIfSg8bcplsyimevdBTvMCSrD
-         AL5HNRqybv3LxyDq2uKBvxCHK43gYmGyfSEGFY8jIKw+Qd6HfbmAqepUFuicnw7JHN
-         H2zXm/U66XUY8m6gayq7iCR5nrwmSierMsmQGptUS7QqlPqk4s/yvGGkxONlTwPJHx
-         7UqZIXhPMMHtw==
+        b=UWQP01sv7hw8e/BS2dE17tg+zvvqHFCXhToq1E6Z71iNu6mzbNt/Cp1xkCuXy2XJj
+         9FpSxR/HDY7FnB7NP2fPcFmyZkzinbFIPknHc03Y4/I+r0JgJZB6tW5l3RwfMB+/0a
+         bXczIrXfmreRelTUHroVcXhgk5RwJunK5QkzAtUNKwJStaU8dgTfipTy8uSuma3Dmz
+         S4lipJmjOaSdEvgyvvYxQUsIH+/q1lHO60wsvexB6Lj4YOza4u7ZLg8niXqEocgwkc
+         UdYHp++lP0EOffWY3zrOkSglI4crFIFV6qQ5B/V+l+bwC4899hFUZ7VGnUQz9qKlHq
+         6lLfoHxL4Z6Ew==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYf-001kYF-15; Mon, 14 Mar 2022 08:56:01 +0100
+        id 1nTfYe-001kXz-RG; Mon, 14 Mar 2022 08:56:00 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Eddie James <eajames@linux.ibm.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Dmitry Osipenko <digetx@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Hyun Kwon <hyun.kwon@xilinx.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
+        Kees Cook <keescook@chromium.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Robert Foss <robert.foss@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, openbmc@lists.ozlabs.org
-Subject: [PATCH 63/64] media: platform/*/Kconfig: make manufacturer menus more uniform
-Date:   Mon, 14 Mar 2022 08:55:55 +0100
-Message-Id: <39f2340fa38093ace4cfe1bec3209157d3f6e4cf.1647242579.git.mchehab@kernel.org>
+        Ming Qian <ming.qian@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 59/64] media: platform: rename omap3isp/ to ti/omap3isp/
+Date:   Mon, 14 Mar 2022 08:55:51 +0100
+Message-Id: <5fe739c3d01c12be25bd28cdb45875ce323b927e.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -76,9 +66,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Do some adjustments at the per-vendor Kconfig, adding a comment at
-the beginning in order to identify the manufacturer, and adjust
-a few entries to make them look more uniform.
+As the end goal is to have platform drivers split by vendor,
+rename omap3isp/ to ti/omap3isp/.
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -87,326 +76,292 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/allegro-dvt/Kconfig |  3 +++
- drivers/media/platform/amlogic/Kconfig     |  3 +++
- drivers/media/platform/aspeed/Kconfig      |  3 +++
- drivers/media/platform/atmel/Kconfig       |  3 +++
- drivers/media/platform/cadence/Kconfig     | 13 +------------
- drivers/media/platform/chips-media/Kconfig |  3 +++
- drivers/media/platform/intel/Kconfig       |  3 +++
- drivers/media/platform/marvell/Kconfig     |  3 +++
- drivers/media/platform/mediatek/Kconfig    |  3 +++
- drivers/media/platform/nvidia/Kconfig      |  3 +++
- drivers/media/platform/nxp/Kconfig         | 22 +++++-----------------
- drivers/media/platform/qcom/Kconfig        |  2 ++
- drivers/media/platform/renesas/Kconfig     |  2 ++
- drivers/media/platform/rockchip/Kconfig    |  3 +++
- drivers/media/platform/samsung/Kconfig     |  3 +++
- drivers/media/platform/sti/Kconfig         |  3 +++
- drivers/media/platform/ti/Kconfig          |  3 +++
- drivers/media/platform/via/Kconfig         |  3 +++
- drivers/media/platform/xilinx/Kconfig      |  7 +++----
- 19 files changed, 55 insertions(+), 33 deletions(-)
+ Documentation/admin-guide/media/omap3isp.rst                  | 2 +-
+ Documentation/admin-guide/media/omap4_camera.rst              | 2 +-
+ Documentation/driver-api/media/v4l2-event.rst                 | 2 +-
+ MAINTAINERS                                                   | 2 +-
+ drivers/media/platform/Kconfig                                | 2 +-
+ drivers/media/platform/Makefile                               | 2 +-
+ drivers/media/platform/{ => ti}/omap3isp/Kconfig              | 0
+ drivers/media/platform/{ => ti}/omap3isp/Makefile             | 0
+ drivers/media/platform/{ => ti}/omap3isp/cfa_coef_table.h     | 0
+ drivers/media/platform/{ => ti}/omap3isp/gamma_table.h        | 0
+ drivers/media/platform/{ => ti}/omap3isp/isp.c                | 0
+ drivers/media/platform/{ => ti}/omap3isp/isp.h                | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispccdc.c            | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispccdc.h            | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispccp2.c            | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispccp2.h            | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispcsi2.c            | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispcsi2.h            | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispcsiphy.c          | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispcsiphy.h          | 0
+ drivers/media/platform/{ => ti}/omap3isp/isph3a.h             | 0
+ drivers/media/platform/{ => ti}/omap3isp/isph3a_aewb.c        | 0
+ drivers/media/platform/{ => ti}/omap3isp/isph3a_af.c          | 0
+ drivers/media/platform/{ => ti}/omap3isp/isphist.c            | 0
+ drivers/media/platform/{ => ti}/omap3isp/isphist.h            | 0
+ drivers/media/platform/{ => ti}/omap3isp/isppreview.c         | 0
+ drivers/media/platform/{ => ti}/omap3isp/isppreview.h         | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispreg.h             | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispresizer.c         | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispresizer.h         | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispstat.c            | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispstat.h            | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispvideo.c           | 0
+ drivers/media/platform/{ => ti}/omap3isp/ispvideo.h           | 0
+ drivers/media/platform/{ => ti}/omap3isp/luma_enhance_table.h | 0
+ drivers/media/platform/{ => ti}/omap3isp/noise_filter_table.h | 0
+ drivers/media/platform/{ => ti}/omap3isp/omap3isp.h           | 0
+ 37 files changed, 6 insertions(+), 6 deletions(-)
+ rename drivers/media/platform/{ => ti}/omap3isp/Kconfig (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/Makefile (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/cfa_coef_table.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/gamma_table.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/isp.c (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/isp.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispccdc.c (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispccdc.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispccp2.c (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispccp2.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispcsi2.c (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispcsi2.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispcsiphy.c (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispcsiphy.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/isph3a.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/isph3a_aewb.c (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/isph3a_af.c (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/isphist.c (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/isphist.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/isppreview.c (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/isppreview.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispreg.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispresizer.c (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispresizer.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispstat.c (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispstat.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispvideo.c (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/ispvideo.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/luma_enhance_table.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/noise_filter_table.h (100%)
+ rename drivers/media/platform/{ => ti}/omap3isp/omap3isp.h (100%)
 
-diff --git a/drivers/media/platform/allegro-dvt/Kconfig b/drivers/media/platform/allegro-dvt/Kconfig
-index dd528e9d0958..674d234be5de 100644
---- a/drivers/media/platform/allegro-dvt/Kconfig
-+++ b/drivers/media/platform/allegro-dvt/Kconfig
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "Allegro DVT drivers"
-+
- config VIDEO_ALLEGRO_DVT
- 	tristate "Allegro DVT Video IP Core"
- 	depends on V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/amlogic/Kconfig b/drivers/media/platform/amlogic/Kconfig
-index c67e00df6202..c1376ec1fe23 100644
---- a/drivers/media/platform/amlogic/Kconfig
-+++ b/drivers/media/platform/amlogic/Kconfig
-@@ -1,2 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "Amlogic drivers"
-+
- source "drivers/media/platform/amlogic/meson-ge2d/Kconfig"
-diff --git a/drivers/media/platform/aspeed/Kconfig b/drivers/media/platform/aspeed/Kconfig
-index 5025e892844c..153e3e5381d5 100644
---- a/drivers/media/platform/aspeed/Kconfig
-+++ b/drivers/media/platform/aspeed/Kconfig
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "Aspeed drivers"
-+
- config VIDEO_ASPEED
- 	tristate "Aspeed AST2400 and AST2500 Video Engine driver"
- 	depends on V4L_PLATFORM_DRIVERS
-diff --git a/drivers/media/platform/atmel/Kconfig b/drivers/media/platform/atmel/Kconfig
-index 5122290729ae..cef12629f4ef 100644
---- a/drivers/media/platform/atmel/Kconfig
-+++ b/drivers/media/platform/atmel/Kconfig
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "Atmel drivers"
-+
- config VIDEO_ATMEL_ISC
- 	tristate "ATMEL Image Sensor Controller (ISC) support"
- 	depends on V4L_PLATFORM_DRIVERS
-diff --git a/drivers/media/platform/cadence/Kconfig b/drivers/media/platform/cadence/Kconfig
-index 79a7e9fb2575..3ae6f4e51eec 100644
---- a/drivers/media/platform/cadence/Kconfig
-+++ b/drivers/media/platform/cadence/Kconfig
-@@ -1,15 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
--config VIDEO_CADENCE
--	bool "Cadence Video Devices"
--	depends on V4L_PLATFORM_DRIVERS
--	help
--	  If you have a media device designed by Cadence, say Y.
+diff --git a/Documentation/admin-guide/media/omap3isp.rst b/Documentation/admin-guide/media/omap3isp.rst
+index bc447bbec7ce..f32e7375a1a2 100644
+--- a/Documentation/admin-guide/media/omap3isp.rst
++++ b/Documentation/admin-guide/media/omap3isp.rst
+@@ -17,7 +17,7 @@ Introduction
+ ------------
  
--	  Note that this option doesn't include new drivers in the kernel:
--	  saying N will just cause Kconfig to skip all the questions about
--	  Cadence media devices.
--
--if VIDEO_CADENCE
-+comment "Cadence drivers"
+ This file documents the Texas Instruments OMAP 3 Image Signal Processor (ISP)
+-driver located under drivers/media/platform/omap3isp. The original driver was
++driver located under drivers/media/platform/ti/omap3isp. The original driver was
+ written by Texas Instruments but since that it has been rewritten (twice) at
+ Nokia.
  
- config VIDEO_CADENCE_CSI2RX
- 	tristate "Cadence MIPI-CSI2 RX Controller"
-@@ -34,5 +25,3 @@ config VIDEO_CADENCE_CSI2TX
+diff --git a/Documentation/admin-guide/media/omap4_camera.rst b/Documentation/admin-guide/media/omap4_camera.rst
+index 24db4222d36d..2ada9b1e6897 100644
+--- a/Documentation/admin-guide/media/omap4_camera.rst
++++ b/Documentation/admin-guide/media/omap4_camera.rst
+@@ -25,7 +25,7 @@ As of Revision AB, the ISS is described in detail in section 8.
+ This driver is supporting **only** the CSI2-A/B interfaces for now.
  
- 	  To compile this driver as a module, choose M here: the module will be
- 	  called cdns-csi2tx.
--
--endif
-diff --git a/drivers/media/platform/chips-media/Kconfig b/drivers/media/platform/chips-media/Kconfig
-index ae495fd7b25a..adf466a05699 100644
---- a/drivers/media/platform/chips-media/Kconfig
-+++ b/drivers/media/platform/chips-media/Kconfig
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "Chips&Media drivers"
-+
- config VIDEO_CODA
- 	tristate "Chips&Media Coda multi-standard codec IP"
- 	depends on V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/intel/Kconfig b/drivers/media/platform/intel/Kconfig
-index aeda421f7248..8a730d9bcf52 100644
---- a/drivers/media/platform/intel/Kconfig
-+++ b/drivers/media/platform/intel/Kconfig
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "Intel drivers"
-+
- config VIDEO_PXA27x
- 	tristate "PXA27x Quick Capture Interface driver"
- 	depends on V4L_PLATFORM_DRIVERS
-diff --git a/drivers/media/platform/marvell/Kconfig b/drivers/media/platform/marvell/Kconfig
-index bfe655b2cedd..626e0673f12c 100644
---- a/drivers/media/platform/marvell/Kconfig
-+++ b/drivers/media/platform/marvell/Kconfig
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "Marvell drivers"
-+
- config VIDEO_CAFE_CCIC
- 	tristate "Marvell 88ALP01 (Cafe) CMOS Camera Controller support"
- 	depends on V4L_PLATFORM_DRIVERS
-diff --git a/drivers/media/platform/mediatek/Kconfig b/drivers/media/platform/mediatek/Kconfig
-index 6d74839df3d6..aa79626088ec 100644
---- a/drivers/media/platform/mediatek/Kconfig
-+++ b/drivers/media/platform/mediatek/Kconfig
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "Mediatek drivers"
-+
- source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
- source "drivers/media/platform/mediatek/mtk-mdp/Kconfig"
- source "drivers/media/platform/mediatek/mtk-vcodec/Kconfig"
-diff --git a/drivers/media/platform/nvidia/Kconfig b/drivers/media/platform/nvidia/Kconfig
-index 1162e272b5f9..597402090680 100644
---- a/drivers/media/platform/nvidia/Kconfig
-+++ b/drivers/media/platform/nvidia/Kconfig
-@@ -1,2 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "NVidia drivers"
-+
- source "drivers/media/platform/nvidia/tegra-vde/Kconfig"
-diff --git a/drivers/media/platform/nxp/Kconfig b/drivers/media/platform/nxp/Kconfig
-index e82bfcd97ac7..3478b1b45c6c 100644
---- a/drivers/media/platform/nxp/Kconfig
-+++ b/drivers/media/platform/nxp/Kconfig
-@@ -2,20 +2,10 @@
+ It makes use of the Media Controller framework [#f2]_, and inherited most of the
+-code from OMAP3 ISP driver (found under drivers/media/platform/omap3isp/\*),
++code from OMAP3 ISP driver (found under drivers/media/platform/ti/omap3isp/\*),
+ except that it doesn't need an IOMMU now for ISS buffers memory mapping.
  
- # V4L drivers
+ Supports usage of MMAP buffers only (for now).
+diff --git a/Documentation/driver-api/media/v4l2-event.rst b/Documentation/driver-api/media/v4l2-event.rst
+index 5b8254eba7da..52d4fbc5d819 100644
+--- a/Documentation/driver-api/media/v4l2-event.rst
++++ b/Documentation/driver-api/media/v4l2-event.rst
+@@ -167,7 +167,7 @@ The first event type in the class is reserved for future use, so the first
+ available event type is 'class base + 1'.
  
--menuconfig VIDEO_IMX
--	bool "V4L2 capture drivers for NXP i.MX devices"
--	depends on V4L_PLATFORM_DRIVERS
--	depends on ARCH_MXC || COMPILE_TEST
--	depends on VIDEO_DEV && VIDEO_V4L2
--	help
--	  Say yes here to enable support for capture drivers on i.MX SoCs.
--	  Support for the single SoC features are selectable in the sub-menu
--	  options.
--
--if VIDEO_IMX
-+comment "NXP drivers"
+ An example on how the V4L2 events may be used can be found in the OMAP
+-3 ISP driver (``drivers/media/platform/omap3isp``).
++3 ISP driver (``drivers/media/platform/ti/omap3isp``).
  
- config VIDEO_IMX_MIPI_CSIS
--	tristate "MIPI CSI-2 CSIS receiver found on i.MX7 and i.MX8 models"
-+	tristate "NXP MIPI CSI-2 CSIS receiver found on i.MX7 and i.MX8 models"
- 	select MEDIA_CONTROLLER
- 	select V4L2_FWNODE
- 	select VIDEO_V4L2_SUBDEV_API
-@@ -24,10 +14,8 @@ config VIDEO_IMX_MIPI_CSIS
- 	  Video4Linux2 sub-device driver for the MIPI CSI-2 CSIS receiver
- 	  v3.3/v3.6.3 found on some i.MX7 and i.MX8 SoCs.
+ A subdev can directly send an event to the :c:type:`v4l2_device` notify
+ function with ``V4L2_DEVICE_NOTIFY_EVENT``. This allows the bridge to map
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 801391246c87..2a85c98a77e4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14094,7 +14094,7 @@ M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/ti,omap3isp.txt
+-F:	drivers/media/platform/omap3isp/
++F:	drivers/media/platform/ti/omap3isp/
+ F:	drivers/staging/media/omap4iss/
  
--endif # VIDEO_IMX
--
- config VIDEO_VIU
--	tristate "Freescale/NXP VIU Video Driver"
-+	tristate "NXP VIU Video Driver"
- 	depends on V4L_PLATFORM_DRIVERS
- 	depends on VIDEO_V4L2 && (PPC_MPC512x || COMPILE_TEST) && I2C
- 	select VIDEOBUF_DMA_CONTIG
-@@ -42,7 +30,7 @@ config VIDEO_VIU
- # mem2mem drivers
- 
- config VIDEO_IMX_PXP
--	tristate "i.MX Pixel Pipeline (PXP)"
-+	tristate "NXP i.MX Pixel Pipeline (PXP)"
- 	depends on V4L_MEM2MEM_DRIVERS
- 	depends on VIDEO_DEV && VIDEO_V4L2 && (ARCH_MXC || COMPILE_TEST)
- 	select VIDEOBUF2_DMA_CONTIG
-@@ -52,7 +40,7 @@ config VIDEO_IMX_PXP
- 	  color space conversion, and rotation.
- 
- config VIDEO_MX2_EMMAPRP
--	tristate "Freescale/NXP MX2 eMMa-PrP support"
-+	tristate "NXP MX2 eMMa-PrP support"
- 	depends on V4L_MEM2MEM_DRIVERS
- 	depends on VIDEO_DEV && VIDEO_V4L2
- 	depends on SOC_IMX27 || COMPILE_TEST
-diff --git a/drivers/media/platform/qcom/Kconfig b/drivers/media/platform/qcom/Kconfig
-index 9f6c91cc95ca..4a89587e932d 100644
---- a/drivers/media/platform/qcom/Kconfig
-+++ b/drivers/media/platform/qcom/Kconfig
-@@ -1,4 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
-+comment "Qualcomm drivers"
-+
- source "drivers/media/platform/qcom/camss/Kconfig"
- source "drivers/media/platform/qcom/venus/Kconfig"
-diff --git a/drivers/media/platform/renesas/Kconfig b/drivers/media/platform/renesas/Kconfig
-index 3f35f1b5106d..2e3a66ea95bd 100644
---- a/drivers/media/platform/renesas/Kconfig
-+++ b/drivers/media/platform/renesas/Kconfig
-@@ -1,5 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
-+comment "Renesas drivers"
-+
- # V4L drivers
- 
- config VIDEO_RCAR_ISP
-diff --git a/drivers/media/platform/rockchip/Kconfig b/drivers/media/platform/rockchip/Kconfig
-index 2f97c0e0268a..4351e3258d14 100644
---- a/drivers/media/platform/rockchip/Kconfig
-+++ b/drivers/media/platform/rockchip/Kconfig
-@@ -1,3 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "Rockchip drivers"
-+
- source "drivers/media/platform/rockchip/rga/Kconfig"
- source "drivers/media/platform/rockchip/rkisp1/Kconfig"
-diff --git a/drivers/media/platform/samsung/Kconfig b/drivers/media/platform/samsung/Kconfig
-index 94f30c1bca9b..c187cefbec5a 100644
---- a/drivers/media/platform/samsung/Kconfig
-+++ b/drivers/media/platform/samsung/Kconfig
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "Samsung drivers"
-+
- source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
- source "drivers/media/platform/samsung/exynos4-is/Kconfig"
- source "drivers/media/platform/samsung/s3c-camif/Kconfig"
-diff --git a/drivers/media/platform/sti/Kconfig b/drivers/media/platform/sti/Kconfig
-index d5423743d905..a352087dba27 100644
---- a/drivers/media/platform/sti/Kconfig
-+++ b/drivers/media/platform/sti/Kconfig
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "STMicroelectronics drivers"
-+
- source "drivers/media/platform/sti/bdisp/Kconfig"
- source "drivers/media/platform/sti/c8sectpfe/Kconfig"
- source "drivers/media/platform/sti/delta/Kconfig"
-diff --git a/drivers/media/platform/ti/Kconfig b/drivers/media/platform/ti/Kconfig
-index f422c68f4a99..d286027ff1c1 100644
---- a/drivers/media/platform/ti/Kconfig
-+++ b/drivers/media/platform/ti/Kconfig
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "Texas Instruments drivers"
-+
+ OMAP MMC SUPPORT
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index bedc8f2522e2..22d462f43a21 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -82,7 +82,6 @@ source "drivers/media/platform/nvidia/tegra-vde/Kconfig"
+ source "drivers/media/platform/nxp/Kconfig"
+ source "drivers/media/platform/nxp/amphion/Kconfig"
+ source "drivers/media/platform/omap/Kconfig"
+-source "drivers/media/platform/omap3isp/Kconfig"
+ source "drivers/media/platform/qcom/Kconfig"
+ source "drivers/media/platform/renesas/Kconfig"
+ source "drivers/media/platform/rockchip/Kconfig"
+@@ -97,6 +96,7 @@ source "drivers/media/platform/sti/stm32/Kconfig"
+ source "drivers/media/platform/ti-vpe/Kconfig"
  source "drivers/media/platform/ti/am437x/Kconfig"
  source "drivers/media/platform/ti/davinci/Kconfig"
- source "drivers/media/platform/ti/omap/Kconfig"
-diff --git a/drivers/media/platform/via/Kconfig b/drivers/media/platform/via/Kconfig
-index 1dcf789dce96..f4f4293cf25c 100644
---- a/drivers/media/platform/via/Kconfig
-+++ b/drivers/media/platform/via/Kconfig
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "VIA drivers"
-+
- config VIDEO_VIA_CAMERA
- 	tristate "VIAFB camera controller support"
- 	depends on V4L_PLATFORM_DRIVERS
-diff --git a/drivers/media/platform/xilinx/Kconfig b/drivers/media/platform/xilinx/Kconfig
-index a9531d5efd50..47f1eeb5d669 100644
---- a/drivers/media/platform/xilinx/Kconfig
-+++ b/drivers/media/platform/xilinx/Kconfig
-@@ -1,5 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
++source "drivers/media/platform/ti/omap3isp/Kconfig"
+ source "drivers/media/platform/via/Kconfig"
+ source "drivers/media/platform/xilinx/Kconfig"
  
-+comment "Xilinx drivers"
-+
- config VIDEO_XILINX
- 	tristate "Xilinx Video IP (EXPERIMENTAL)"
- 	depends on V4L_PLATFORM_DRIVERS
-@@ -11,9 +13,8 @@ config VIDEO_XILINX
- 	help
- 	  Driver for Xilinx Video IP Pipelines
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 4e063935f061..ef6c00b2ed64 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -22,7 +22,6 @@ obj-y += nvidia/tegra-vde/
+ obj-y += nxp/
+ obj-y += nxp/amphion/
+ obj-y += omap/
+-obj-y += omap3isp/
+ obj-y += qcom/camss/
+ obj-y += qcom/venus/
+ obj-y += renesas/
+@@ -42,6 +41,7 @@ obj-y += sti/stm32/
+ obj-y += ti-vpe/
+ obj-y += ti/am437x/
+ obj-y += ti/davinci/
++obj-y += ti/omap3isp/
+ obj-y += via/
+ obj-y += xilinx/
  
--if VIDEO_XILINX
--
- config VIDEO_XILINX_CSI2RXSS
-+	depends on VIDEO_XILINX
- 	tristate "Xilinx CSI-2 Rx Subsystem"
- 	help
- 	  Driver for Xilinx MIPI CSI-2 Rx Subsystem. This is a V4L sub-device
-@@ -32,5 +33,3 @@ config VIDEO_XILINX_VTC
- 	depends on VIDEO_XILINX
- 	help
- 	   Driver for the Xilinx Video Timing Controller
--
--endif #VIDEO_XILINX
+diff --git a/drivers/media/platform/omap3isp/Kconfig b/drivers/media/platform/ti/omap3isp/Kconfig
+similarity index 100%
+rename from drivers/media/platform/omap3isp/Kconfig
+rename to drivers/media/platform/ti/omap3isp/Kconfig
+diff --git a/drivers/media/platform/omap3isp/Makefile b/drivers/media/platform/ti/omap3isp/Makefile
+similarity index 100%
+rename from drivers/media/platform/omap3isp/Makefile
+rename to drivers/media/platform/ti/omap3isp/Makefile
+diff --git a/drivers/media/platform/omap3isp/cfa_coef_table.h b/drivers/media/platform/ti/omap3isp/cfa_coef_table.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/cfa_coef_table.h
+rename to drivers/media/platform/ti/omap3isp/cfa_coef_table.h
+diff --git a/drivers/media/platform/omap3isp/gamma_table.h b/drivers/media/platform/ti/omap3isp/gamma_table.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/gamma_table.h
+rename to drivers/media/platform/ti/omap3isp/gamma_table.h
+diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+similarity index 100%
+rename from drivers/media/platform/omap3isp/isp.c
+rename to drivers/media/platform/ti/omap3isp/isp.c
+diff --git a/drivers/media/platform/omap3isp/isp.h b/drivers/media/platform/ti/omap3isp/isp.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/isp.h
+rename to drivers/media/platform/ti/omap3isp/isp.h
+diff --git a/drivers/media/platform/omap3isp/ispccdc.c b/drivers/media/platform/ti/omap3isp/ispccdc.c
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispccdc.c
+rename to drivers/media/platform/ti/omap3isp/ispccdc.c
+diff --git a/drivers/media/platform/omap3isp/ispccdc.h b/drivers/media/platform/ti/omap3isp/ispccdc.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispccdc.h
+rename to drivers/media/platform/ti/omap3isp/ispccdc.h
+diff --git a/drivers/media/platform/omap3isp/ispccp2.c b/drivers/media/platform/ti/omap3isp/ispccp2.c
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispccp2.c
+rename to drivers/media/platform/ti/omap3isp/ispccp2.c
+diff --git a/drivers/media/platform/omap3isp/ispccp2.h b/drivers/media/platform/ti/omap3isp/ispccp2.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispccp2.h
+rename to drivers/media/platform/ti/omap3isp/ispccp2.h
+diff --git a/drivers/media/platform/omap3isp/ispcsi2.c b/drivers/media/platform/ti/omap3isp/ispcsi2.c
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispcsi2.c
+rename to drivers/media/platform/ti/omap3isp/ispcsi2.c
+diff --git a/drivers/media/platform/omap3isp/ispcsi2.h b/drivers/media/platform/ti/omap3isp/ispcsi2.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispcsi2.h
+rename to drivers/media/platform/ti/omap3isp/ispcsi2.h
+diff --git a/drivers/media/platform/omap3isp/ispcsiphy.c b/drivers/media/platform/ti/omap3isp/ispcsiphy.c
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispcsiphy.c
+rename to drivers/media/platform/ti/omap3isp/ispcsiphy.c
+diff --git a/drivers/media/platform/omap3isp/ispcsiphy.h b/drivers/media/platform/ti/omap3isp/ispcsiphy.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispcsiphy.h
+rename to drivers/media/platform/ti/omap3isp/ispcsiphy.h
+diff --git a/drivers/media/platform/omap3isp/isph3a.h b/drivers/media/platform/ti/omap3isp/isph3a.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/isph3a.h
+rename to drivers/media/platform/ti/omap3isp/isph3a.h
+diff --git a/drivers/media/platform/omap3isp/isph3a_aewb.c b/drivers/media/platform/ti/omap3isp/isph3a_aewb.c
+similarity index 100%
+rename from drivers/media/platform/omap3isp/isph3a_aewb.c
+rename to drivers/media/platform/ti/omap3isp/isph3a_aewb.c
+diff --git a/drivers/media/platform/omap3isp/isph3a_af.c b/drivers/media/platform/ti/omap3isp/isph3a_af.c
+similarity index 100%
+rename from drivers/media/platform/omap3isp/isph3a_af.c
+rename to drivers/media/platform/ti/omap3isp/isph3a_af.c
+diff --git a/drivers/media/platform/omap3isp/isphist.c b/drivers/media/platform/ti/omap3isp/isphist.c
+similarity index 100%
+rename from drivers/media/platform/omap3isp/isphist.c
+rename to drivers/media/platform/ti/omap3isp/isphist.c
+diff --git a/drivers/media/platform/omap3isp/isphist.h b/drivers/media/platform/ti/omap3isp/isphist.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/isphist.h
+rename to drivers/media/platform/ti/omap3isp/isphist.h
+diff --git a/drivers/media/platform/omap3isp/isppreview.c b/drivers/media/platform/ti/omap3isp/isppreview.c
+similarity index 100%
+rename from drivers/media/platform/omap3isp/isppreview.c
+rename to drivers/media/platform/ti/omap3isp/isppreview.c
+diff --git a/drivers/media/platform/omap3isp/isppreview.h b/drivers/media/platform/ti/omap3isp/isppreview.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/isppreview.h
+rename to drivers/media/platform/ti/omap3isp/isppreview.h
+diff --git a/drivers/media/platform/omap3isp/ispreg.h b/drivers/media/platform/ti/omap3isp/ispreg.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispreg.h
+rename to drivers/media/platform/ti/omap3isp/ispreg.h
+diff --git a/drivers/media/platform/omap3isp/ispresizer.c b/drivers/media/platform/ti/omap3isp/ispresizer.c
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispresizer.c
+rename to drivers/media/platform/ti/omap3isp/ispresizer.c
+diff --git a/drivers/media/platform/omap3isp/ispresizer.h b/drivers/media/platform/ti/omap3isp/ispresizer.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispresizer.h
+rename to drivers/media/platform/ti/omap3isp/ispresizer.h
+diff --git a/drivers/media/platform/omap3isp/ispstat.c b/drivers/media/platform/ti/omap3isp/ispstat.c
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispstat.c
+rename to drivers/media/platform/ti/omap3isp/ispstat.c
+diff --git a/drivers/media/platform/omap3isp/ispstat.h b/drivers/media/platform/ti/omap3isp/ispstat.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispstat.h
+rename to drivers/media/platform/ti/omap3isp/ispstat.h
+diff --git a/drivers/media/platform/omap3isp/ispvideo.c b/drivers/media/platform/ti/omap3isp/ispvideo.c
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispvideo.c
+rename to drivers/media/platform/ti/omap3isp/ispvideo.c
+diff --git a/drivers/media/platform/omap3isp/ispvideo.h b/drivers/media/platform/ti/omap3isp/ispvideo.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/ispvideo.h
+rename to drivers/media/platform/ti/omap3isp/ispvideo.h
+diff --git a/drivers/media/platform/omap3isp/luma_enhance_table.h b/drivers/media/platform/ti/omap3isp/luma_enhance_table.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/luma_enhance_table.h
+rename to drivers/media/platform/ti/omap3isp/luma_enhance_table.h
+diff --git a/drivers/media/platform/omap3isp/noise_filter_table.h b/drivers/media/platform/ti/omap3isp/noise_filter_table.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/noise_filter_table.h
+rename to drivers/media/platform/ti/omap3isp/noise_filter_table.h
+diff --git a/drivers/media/platform/omap3isp/omap3isp.h b/drivers/media/platform/ti/omap3isp/omap3isp.h
+similarity index 100%
+rename from drivers/media/platform/omap3isp/omap3isp.h
+rename to drivers/media/platform/ti/omap3isp/omap3isp.h
 -- 
 2.35.1
 
