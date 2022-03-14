@@ -2,62 +2,46 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB8ECC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 16:36:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D231C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 16:36:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243436AbiCNQhd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 12:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        id S243458AbiCNQhg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 12:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243206AbiCNQgc (ORCPT
+        with ESMTP id S243269AbiCNQgm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Mar 2022 12:36:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A207812A94;
-        Mon, 14 Mar 2022 09:35:16 -0700 (PDT)
+        Mon, 14 Mar 2022 12:36:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2ADB31216;
+        Mon, 14 Mar 2022 09:35:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5660D61470;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0DAB61494;
         Mon, 14 Mar 2022 16:35:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 285C1C36AE9;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5606C36AF8;
         Mon, 14 Mar 2022 16:35:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647275709;
-        bh=ODM/IkOmYAwq/vkJYjmzsxKa6YSUrDrJltVkrB28qH8=;
+        bh=HLc4jvOCekbQHiN+36Yh/cdxMFHz8dNm6MrTTyNtl88=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DAGc/dOuX0o3nwAyOg4joq04zCz5oNnsegYUQA2GWN7TFE3jvfC7MQ7jMgq5g/in7
-         Tfs8i/oO9jDqNr2Z3/oFh1tNmfls9xRcztfKW27G5kyUyduHSFu7Vl23iKK3mUzt/l
-         SoqxGHWSWgmiw9cMSq+c+FCAdU/K2O8ojOBjZfLe7/oS3u3iHRmuWhjrcpUWFhKv+b
-         su7DBAez8msFdkz1igNA7AooIj8ouCJZ/ATGDnjoLGu9gdMljJU2D+09IB2uy6/prF
-         fiWR3eBfC3/KoRu88qZDXf9vhsvBX+nQQ3svkcvAzE+ay6ZIRcm67bDhaHa6FiQQ1I
-         LxRGOJ5tuI5aw==
+        b=YtWNVztgazkG9qqSI/dl2jT2uljqsuARQiK6gx+apcps6CrcUyb0hvNTS8CSQ5Tdu
+         MLlH/rY6Hc9Lx5EJTNWFf+u2Oqu5IP/wVeYQHX4a0VacINZdcNrr/HZENZyayn9gfi
+         Y6l5lB/N8vXD5EptAWFADOgOorasTviPsyDq86IZGRMQDNQoHgfBlc2ZdFbTRiaTh5
+         PgQvO4z4qjmDNdo9wpyFuwd+VgG6glZH1nE+MTamt8x9FrK+cFZcCJyHlNuG5ogtnm
+         OY9ZhceLa5cBTdp+CXDu3SDyCRD0ep53D7rOu38Gk1qbJWDefGUv2Cjm/OFZsrLO73
+         GsG5GXtFXpebQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTnf0-001wzQ-VX; Mon, 14 Mar 2022 17:35:06 +0100
+        id 1nTnf1-001x3s-LF; Mon, 14 Mar 2022 17:35:07 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 51/67] media: platform: rename s3c-camif/ to samsung/s3c-camif/
-Date:   Mon, 14 Mar 2022 17:34:46 +0100
-Message-Id: <41b562b77ab3d3210c6cf41104971fd19de7f3ff.1647274407.git.mchehab@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v2 62/67] media: platform: ti/Kconfig: move VPE/CAL entries to it
+Date:   Mon, 14 Mar 2022 17:34:57 +0100
+Message-Id: <19dfb55be38c6937ffec07dc4e7cd4cf212c6bb9.1647274407.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647274406.git.mchehab@kernel.org>
 References: <cover.1647274406.git.mchehab@kernel.org>
@@ -68,8 +52,9 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As the end goal is to have platform drivers split by vendor,
-rename s3c-camif/ to samsung/s3c-camif/.
+In order to follow the changes made by the previous patch,
+which moved platform/ti-vpe to platform/ti, move the Kconfig
+entries to the same place.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -77,102 +62,43 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/67] at: https://lore.kernel.org/all/cover.1647274406.git.mchehab@kernel.org/
 
- MAINTAINERS                                                    | 2 +-
- drivers/media/platform/Kconfig                                 | 2 +-
- drivers/media/platform/Makefile                                | 2 +-
- drivers/media/platform/{ => samsung}/s3c-camif/Kconfig         | 0
- drivers/media/platform/{ => samsung}/s3c-camif/Makefile        | 0
- drivers/media/platform/{ => samsung}/s3c-camif/camif-capture.c | 0
- drivers/media/platform/{ => samsung}/s3c-camif/camif-core.c    | 0
- drivers/media/platform/{ => samsung}/s3c-camif/camif-core.h    | 0
- drivers/media/platform/{ => samsung}/s3c-camif/camif-regs.c    | 0
- drivers/media/platform/{ => samsung}/s3c-camif/camif-regs.h    | 0
- 10 files changed, 3 insertions(+), 3 deletions(-)
- rename drivers/media/platform/{ => samsung}/s3c-camif/Kconfig (100%)
- rename drivers/media/platform/{ => samsung}/s3c-camif/Makefile (100%)
- rename drivers/media/platform/{ => samsung}/s3c-camif/camif-capture.c (100%)
- rename drivers/media/platform/{ => samsung}/s3c-camif/camif-core.c (100%)
- rename drivers/media/platform/{ => samsung}/s3c-camif/camif-core.h (100%)
- rename drivers/media/platform/{ => samsung}/s3c-camif/camif-regs.c (100%)
- rename drivers/media/platform/{ => samsung}/s3c-camif/camif-regs.h (100%)
+ drivers/media/platform/{ti-vpe => ti}/Kconfig | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+ rename drivers/media/platform/{ti-vpe => ti}/Kconfig (94%)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 13dd4693b898..80f2a0eea3f7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17063,7 +17063,7 @@ M:	Sylwester Nawrocki <sylvester.nawrocki@gmail.com>
- L:	linux-media@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
--F:	drivers/media/platform/s3c-camif/
-+F:	drivers/media/platform/samsung/s3c-camif/
- F:	include/media/drv-intf/s3c_camif.h
+diff --git a/drivers/media/platform/ti-vpe/Kconfig b/drivers/media/platform/ti/Kconfig
+similarity index 94%
+rename from drivers/media/platform/ti-vpe/Kconfig
+rename to drivers/media/platform/ti/Kconfig
+index a9ee0189f2f2..82e285c2de64 100644
+--- a/drivers/media/platform/ti-vpe/Kconfig
++++ b/drivers/media/platform/ti/Kconfig
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
  
- SAMSUNG S3FWRN5 NFC DRIVER
-diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 0a05ef7304c0..aed4394ddd05 100644
---- a/drivers/media/platform/Kconfig
-+++ b/drivers/media/platform/Kconfig
-@@ -88,12 +88,12 @@ source "drivers/media/platform/omap3isp/Kconfig"
- source "drivers/media/platform/qcom/Kconfig"
- source "drivers/media/platform/renesas/Kconfig"
- source "drivers/media/platform/rockchip/Kconfig"
--source "drivers/media/platform/s3c-camif/Kconfig"
- source "drivers/media/platform/s5p-g2d/Kconfig"
- source "drivers/media/platform/s5p-jpeg/Kconfig"
- source "drivers/media/platform/s5p-mfc/Kconfig"
- source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
- source "drivers/media/platform/samsung/exynos4-is/Kconfig"
-+source "drivers/media/platform/samsung/s3c-camif/Kconfig"
- source "drivers/media/platform/sti/Kconfig"
- source "drivers/media/platform/stm32/Kconfig"
- source "drivers/media/platform/ti-vpe/Kconfig"
-diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 996ec99be08f..cb5e6d1df248 100644
---- a/drivers/media/platform/Makefile
-+++ b/drivers/media/platform/Makefile
-@@ -30,12 +30,12 @@ obj-y += qcom/venus/
- obj-y += renesas/
- obj-y += rockchip/rga/
- obj-y += rockchip/rkisp1/
--obj-y += s3c-camif/
- obj-y += s5p-g2d/
- obj-y += s5p-jpeg/
- obj-y += s5p-mfc/
- obj-y += samsung/exynos-gsc/
- obj-y += samsung/exynos4-is/
-+obj-y += samsung/s3c-camif/
- obj-y += sti/bdisp/
- obj-y += sti/c8sectpfe/
- obj-y += sti/delta/
-diff --git a/drivers/media/platform/s3c-camif/Kconfig b/drivers/media/platform/samsung/s3c-camif/Kconfig
-similarity index 100%
-rename from drivers/media/platform/s3c-camif/Kconfig
-rename to drivers/media/platform/samsung/s3c-camif/Kconfig
-diff --git a/drivers/media/platform/s3c-camif/Makefile b/drivers/media/platform/samsung/s3c-camif/Makefile
-similarity index 100%
-rename from drivers/media/platform/s3c-camif/Makefile
-rename to drivers/media/platform/samsung/s3c-camif/Makefile
-diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/samsung/s3c-camif/camif-capture.c
-similarity index 100%
-rename from drivers/media/platform/s3c-camif/camif-capture.c
-rename to drivers/media/platform/samsung/s3c-camif/camif-capture.c
-diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/samsung/s3c-camif/camif-core.c
-similarity index 100%
-rename from drivers/media/platform/s3c-camif/camif-core.c
-rename to drivers/media/platform/samsung/s3c-camif/camif-core.c
-diff --git a/drivers/media/platform/s3c-camif/camif-core.h b/drivers/media/platform/samsung/s3c-camif/camif-core.h
-similarity index 100%
-rename from drivers/media/platform/s3c-camif/camif-core.h
-rename to drivers/media/platform/samsung/s3c-camif/camif-core.h
-diff --git a/drivers/media/platform/s3c-camif/camif-regs.c b/drivers/media/platform/samsung/s3c-camif/camif-regs.c
-similarity index 100%
-rename from drivers/media/platform/s3c-camif/camif-regs.c
-rename to drivers/media/platform/samsung/s3c-camif/camif-regs.c
-diff --git a/drivers/media/platform/s3c-camif/camif-regs.h b/drivers/media/platform/samsung/s3c-camif/camif-regs.h
-similarity index 100%
-rename from drivers/media/platform/s3c-camif/camif-regs.h
-rename to drivers/media/platform/samsung/s3c-camif/camif-regs.h
++comment "Texas Instruments drivers"
++
+ # TI VIDEO PORT Helper Modules
+ # These will be selected by VPE and VIP
+ config VIDEO_TI_VPDMA
+@@ -15,7 +17,7 @@ config VIDEO_TI_CSC
+ 
+ config VIDEO_TI_CAL
+ 	tristate "TI CAL (Camera Adaptation Layer) driver"
+-	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on VIDEO_DEV
+ 	depends on V4L_PLATFORM_DRIVERS
+ 	select MEDIA_CONTROLLER
+ 	select VIDEO_V4L2_SUBDEV_API
+@@ -44,7 +46,7 @@ config VIDEO_TI_CAL_MC
+ config VIDEO_TI_VPE
+ 	tristate "TI VPE (Video Processing Engine) driver"
+ 	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on VIDEO_DEV
+ 	depends on SOC_DRA7XX || COMPILE_TEST
+ 	select VIDEOBUF2_DMA_CONTIG
+ 	select V4L2_MEM2MEM_DEV
 -- 
 2.35.1
 
