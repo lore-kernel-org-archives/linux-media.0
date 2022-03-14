@@ -2,120 +2,159 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8A5BC4332F
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:53:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C07BC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:56:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236807AbiCNHyn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S236768AbiCNH5R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236591AbiCNHym (ORCPT
+        with ESMTP id S234643AbiCNH5P (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Mar 2022 03:54:42 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0752932EDD;
-        Mon, 14 Mar 2022 00:53:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647244413; x=1678780413;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=vm5DiUTCEYkRlWg/Yqxo3brxvgvVfzsEds8Oz6/FlS0=;
-  b=Yqz/FP6blyrpJzyKdE8R5lOb6hLnDKcA4f8fjmm940HiDuX6gBwypSNP
-   Yd7S71lfnwjcplorlyUtAlzswAR9pv3BKR4bRRcfbfyBUjPvpAgHn0TsW
-   8v5j2+0MbS5q1AaoOaOhzGGaGFV/aUUnAPkfxUjJOgcwypcuVFMl1z/Kx
-   A=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 14 Mar 2022 00:53:33 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Mar 2022 00:53:31 -0700
-X-QCInternal: smtphost
-Received: from hu-dikshita-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.110.13])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 14 Mar 2022 13:23:22 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-        id 80A004679; Mon, 14 Mar 2022 13:23:21 +0530 (+0530)
-From:   quic_dikshita@quicinc.com
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hverkuil-cisco@xs4all.nl
-Cc:     linux-arm-msm@vger.kernel.org, ezequiel@collabora.com,
-        stanimir.varbanov@linaro.org, quic_vgarodia@quicinc.com,
-        quic_majja@quicinc.com, quic_jdas@quicinc.com,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: [PATCH v2 2/2] venus: venc: Add support for intra-refresh mode
-Date:   Mon, 14 Mar 2022 13:23:04 +0530
-Message-Id: <1647244384-19918-3-git-send-email-quic_dikshita@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1647244384-19918-1-git-send-email-quic_dikshita@quicinc.com>
-References: <1647244384-19918-1-git-send-email-quic_dikshita@quicinc.com>
+        Mon, 14 Mar 2022 03:57:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083383981D;
+        Mon, 14 Mar 2022 00:56:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 811B06117C;
+        Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE90C340FB;
+        Mon, 14 Mar 2022 07:56:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647244560;
+        bh=ac25/WJhoyDyFTbiMSLWiuHNdyYFaxWUkp4ZUnCYYMI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=V93fkfLeV11ew1Qspa8IwKVmnMxlXYxMy2XWvD5o0BBmGh0SGmaqRUKPMLw0c/d2n
+         drccz+OGA3GFDnqLBISmvEkx0rQhQtA1IVILOrXnqcXt/fwAMz9Ksthss2txPtMqvU
+         itml5gCI8kGPAe4qG2e6y1Gau9o778V/9c0KQrya4ywWVaAlqetiqoxa4bhy8/PPAV
+         IfbTBaEfyorwF2vGJnqIFLq/5B1Wvj+N5PqI9ndI1ED6AFmtemhSgRDgWNEDm5Lxfx
+         awwJno+XaVP3PhxmXhHjr0kHIFgtxMKnr03CQNnD9gFcN7UZhsBD2WCIzqJnPCe2kM
+         I7/HR4fEsK5XQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nTfYc-001kUl-NM; Mon, 14 Mar 2022 08:55:58 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        lijian <lijian@yulong.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 09/64] media: platform: place Via drivers on a separate dir
+Date:   Mon, 14 Mar 2022 08:55:01 +0100
+Message-Id: <11a35df1e9132ccba324ed9da204b4c018c19001.1647242579.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
+References: <cover.1647242578.git.mchehab@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+In order to cleanup the main platform media directory, move Via
+driver to its own directory.
 
-Add support for intra-refresh type v4l2 control.
-
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
- drivers/media/platform/qcom/venus/core.h       | 1 +
- drivers/media/platform/qcom/venus/venc.c       | 3 ++-
- drivers/media/platform/qcom/venus/venc_ctrls.c | 8 ++++++++
- 3 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 7c3bac0..814ec3c 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -260,6 +260,7 @@ struct venc_controls {
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
+
+ drivers/media/platform/Kconfig                | 11 +----------
+ drivers/media/platform/Makefile               |  2 +-
+ drivers/media/platform/via/Kconfig            | 11 +++++++++++
+ drivers/media/platform/via/Makefile           |  2 ++
+ drivers/media/platform/{ => via}/via-camera.c |  0
+ drivers/media/platform/{ => via}/via-camera.h |  0
+ 6 files changed, 15 insertions(+), 11 deletions(-)
+ create mode 100644 drivers/media/platform/via/Kconfig
+ create mode 100644 drivers/media/platform/via/Makefile
+ rename drivers/media/platform/{ => via}/via-camera.c (100%)
+ rename drivers/media/platform/{ => via}/via-camera.h (100%)
+
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index 0cfbc0c2aa7a..83a496327325 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -35,16 +35,7 @@ source "drivers/media/platform/nxp/Kconfig"
  
- 	u32 header_mode;
- 	bool aud_enable;
-+	u32 intra_refresh_mode;
- 	u32 intra_refresh_period;
+ source "drivers/media/platform/marvell-ccic/Kconfig"
  
- 	struct {
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index 84bafc3..e8b8135 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -893,8 +893,9 @@ static int venc_set_properties(struct venus_inst *inst)
- 				mbs++;
- 			mbs /= ctr->intra_refresh_period;
+-config VIDEO_VIA_CAMERA
+-	tristate "VIAFB camera controller support"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on FB_VIA && VIDEO_V4L2
+-	select VIDEOBUF2_DMA_SG
+-	select VIDEO_OV7670
+-	help
+-	   Driver support for the integrated camera controller in VIA
+-	   Chrome9 chipsets.  Currently only tested on OLPC xo-1.5 systems
+-	   with ov7670 sensors.
++source "drivers/media/platform/via/Kconfig"
  
--			intra_refresh.mode = HFI_INTRA_REFRESH_RANDOM;
- 			intra_refresh.cir_mbs = mbs;
-+			if (ctr->intra_refresh_mode == V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_RANDOM)
-+				intra_refresh.mode = HFI_INTRA_REFRESH_RANDOM;
- 		}
+ source "drivers/media/platform/cadence/Kconfig"
  
- 		ptype = HFI_PROPERTY_PARAM_VENC_INTRA_REFRESH;
-diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
-index 1ada42d..c54b46f 100644
---- a/drivers/media/platform/qcom/venus/venc_ctrls.c
-+++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
-@@ -316,6 +316,9 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY:
- 		ctr->mastering = *ctrl->p_new.p_hdr10_mastering;
- 		break;
-+	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:
-+		ctr->intra_refresh_mode = ctrl->val;
-+		break;
- 	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:
- 		ctr->intra_refresh_period = ctrl->val;
- 		break;
-@@ -582,6 +585,11 @@ int venc_ctrl_init(struct venus_inst *inst)
- 				   V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY,
- 				   v4l2_ctrl_ptr_create(NULL));
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 78ac0fa4dd57..4742b18fd8d8 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -42,6 +42,7 @@ obj-y += stm32/
+ obj-y += sunxi/
+ obj-y += tegra/vde/
+ obj-y += ti-vpe/
++obj-y += via/
+ obj-y += vsp1/
+ obj-y += xilinx/
  
-+	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
-+			       V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE,
-+			       V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_RANDOM,
-+			       0, V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_RANDOM);
-+
- 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
- 			  V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD, 0,
- 			  ((4096 * 2304) >> 8), 1, 0);
+@@ -57,4 +58,3 @@ obj-$(CONFIG_VIDEO_RENESAS_FCP)		+= rcar-fcp.o
+ obj-$(CONFIG_VIDEO_RENESAS_FDP1)	+= rcar_fdp1.o
+ obj-$(CONFIG_VIDEO_RENESAS_JPU)		+= rcar_jpu.o
+ obj-$(CONFIG_VIDEO_SH_VOU)		+= sh_vou.o
+-obj-$(CONFIG_VIDEO_VIA_CAMERA)		+= via-camera.o
+diff --git a/drivers/media/platform/via/Kconfig b/drivers/media/platform/via/Kconfig
+new file mode 100644
+index 000000000000..1dcf789dce96
+--- /dev/null
++++ b/drivers/media/platform/via/Kconfig
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0-only
++config VIDEO_VIA_CAMERA
++	tristate "VIAFB camera controller support"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on FB_VIA && VIDEO_V4L2
++	select VIDEOBUF2_DMA_SG
++	select VIDEO_OV7670
++	help
++	   Driver support for the integrated camera controller in VIA
++	   Chrome9 chipsets.  Currently only tested on OLPC xo-1.5 systems
++	   with ov7670 sensors.
+diff --git a/drivers/media/platform/via/Makefile b/drivers/media/platform/via/Makefile
+new file mode 100644
+index 000000000000..80f747f3fffc
+--- /dev/null
++++ b/drivers/media/platform/via/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_VIDEO_VIA_CAMERA) += via-camera.o
+diff --git a/drivers/media/platform/via-camera.c b/drivers/media/platform/via/via-camera.c
+similarity index 100%
+rename from drivers/media/platform/via-camera.c
+rename to drivers/media/platform/via/via-camera.c
+diff --git a/drivers/media/platform/via-camera.h b/drivers/media/platform/via/via-camera.h
+similarity index 100%
+rename from drivers/media/platform/via-camera.h
+rename to drivers/media/platform/via/via-camera.h
 -- 
-2.7.4
+2.35.1
 
