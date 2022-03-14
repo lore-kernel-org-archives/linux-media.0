@@ -2,56 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5FA1C43217
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:56:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8565FC4167E
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:56:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237100AbiCNH55 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        id S237114AbiCNH6B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236922AbiCNH5f (ORCPT
+        with ESMTP id S236969AbiCNH5t (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Mar 2022 03:57:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D39F4133B;
-        Mon, 14 Mar 2022 00:56:11 -0700 (PDT)
+        Mon, 14 Mar 2022 03:57:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6A641613;
+        Mon, 14 Mar 2022 00:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD9C5B80D49;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91D36611C2;
         Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72F04C3411D;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2BCEC341D6;
         Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647244561;
-        bh=hLXlZDsANXrQDNOF5BHnehyTUuhg/sL1AnjnfHoobO0=;
+        bh=6vh0NW6pE/2yG8lmami/Y4MhdJpgdS+SQOdsp7VPBLE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hKbkseoZgTmkhbIJDaWcYf0/bwJI1XXMSGfndwA3bQXcYcpzWuC0nsMjDHaHK1iC6
-         i0SVyJ2/OporjtuQHSTVbhlKzICmv7Y5sCZCuoyA2MaK+iwqCT7kGX2SPU+l/XrWrw
-         Kz1y7icf0LDivII0qPHbz9EzR7mBOZmAy/K8XP0YgHASQTilHtNPtRqxTMoF+SwXFa
-         zSE/jZbUny9/UwfPX38j4hyv62istqngymjyOtSyq2vY6MEuAgl1MQbYmTerLEAbu1
-         jfP17lEEnXa9CbTHbFdmnRIjJeVxIKP7oQNMlR6Qz95MoWXqwmHaI9XbQ+KVe23k6r
-         O9+zwZK0o7iFA==
+        b=bR6mhUN/1sdixB4g8PBmSz93GIE2zz8DNt362WNv2pGGNfHosVbyjtIVG65C7pej7
+         5gZay5vLuOq5IJykWfNw9rKns2ef0HsX+m5VGbRlC52W4a+Xmz7l5V3qIOdCZ8hviG
+         JXnhMjMbTDpCKHTCI4hdI8SRymT7Asn6G3Bt0BjgGR2D0WEXhefzehOgL2FTydgnDL
+         79Lh+/+S827bz4dq4CII03IZe5lGGTybKz/2ZB1xFTVM4/14Ky+ejx0Jomp95zYP02
+         nsX0UWeVukTse8rQLp0ihXRNU8YaPhL1dmN+ZOOG1eGtt9zdS+/t3u9gILbAmkLXlY
+         NlMIC2R6uyLPw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYd-001kVb-7u; Mon, 14 Mar 2022 08:55:59 +0100
+        id 1nTfYd-001kWB-Iq; Mon, 14 Mar 2022 08:55:59 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Dmitry Osipenko <digetx@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Qian <ming.qian@nxp.com>, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH 22/64] media: platform: venus: move config to its own file
-Date:   Mon, 14 Mar 2022 08:55:14 +0100
-Message-Id: <54e5d62d97b01544d78619605eebe533993bb2fb.1647242579.git.mchehab@kernel.org>
+Subject: [PATCH 31/64] media: platform: ti-vpe: move config to its own file
+Date:   Mon, 14 Mar 2022 08:55:23 +0100
+Message-Id: <12666f5d61d1232d17721f97d4cbe84a33bb4534.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -63,73 +59,172 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 In order to better organize the platform/Kconfig, place
-venus-specific config stuff on a separate Kconfig file.
+ti-vpe-specific config stuff on a separate Kconfig file.
 
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig            | 16 +---------------
- drivers/media/platform/qcom/venus/Kconfig | 14 ++++++++++++++
- 2 files changed, 15 insertions(+), 15 deletions(-)
- create mode 100644 drivers/media/platform/qcom/venus/Kconfig
+ drivers/media/platform/Kconfig        | 60 +-------------------------
+ drivers/media/platform/ti-vpe/Kconfig | 62 +++++++++++++++++++++++++++
+ 2 files changed, 63 insertions(+), 59 deletions(-)
+ create mode 100644 drivers/media/platform/ti-vpe/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index b5a1cb0d62c2..5a8495338fd4 100644
+index b0acbf3ccb69..228881ae0d22 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -55,6 +55,7 @@ source "drivers/media/platform/mtk-vpu/Kconfig"
- source "drivers/media/platform/omap3isp/Kconfig"
- source "drivers/media/platform/omap/Kconfig"
- source "drivers/media/platform/qcom/camss/Kconfig"
-+source "drivers/media/platform/qcom/venus/Kconfig"
+@@ -66,6 +66,7 @@ source "drivers/media/platform/stm32/Kconfig"
+ source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
+ source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
+ source "drivers/media/platform/tegra/vde/Kconfig"
++source "drivers/media/platform/ti-vpe/Kconfig"
  
- source "drivers/media/platform/aspeed/Kconfig"
+ config VIDEO_MUX
+ 	tristate "Video Multiplexer"
+@@ -106,33 +107,6 @@ source "drivers/media/platform/xilinx/Kconfig"
+ source "drivers/media/platform/atmel/Kconfig"
+ source "drivers/media/platform/sunxi/Kconfig"
  
-@@ -319,21 +320,6 @@ config VIDEO_TI_VPE_DEBUG
- 	help
- 	  Enable debug messages on VPE driver.
+-config VIDEO_TI_CAL
+-	tristate "TI CAL (Camera Adaptation Layer) driver"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	select MEDIA_CONTROLLER
+-	select VIDEO_V4L2_SUBDEV_API
+-	depends on SOC_DRA7XX || ARCH_K3 || COMPILE_TEST
+-	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_FWNODE
+-	help
+-	  Support for the TI CAL (Camera Adaptation Layer) block
+-	  found on DRA72X SoC.
+-	  In TI Technical Reference Manual this module is referred as
+-	  Camera Interface Subsystem (CAMSS).
+-
+-config VIDEO_TI_CAL_MC
+-	bool "Media Controller centric mode by default"
+-	depends on VIDEO_TI_CAL
+-	default n
+-	help
+-	  Enables Media Controller centric mode by default.
+-
+-	  If set, CAL driver will start in Media Controller mode by
+-	  default. Note that this behavior can be overridden via
+-	  module parameter 'mc_api'.
+-
+-
+ # Mem2mem drivers
  
--config VIDEO_QCOM_VENUS
--	tristate "Qualcomm Venus V4L2 encoder/decoder driver"
+ config VIDEO_MEM2MEM_DEINTERLACE
+@@ -212,37 +186,5 @@ config VIDEO_STI_DELTA_DRIVER
+ 	select V4L2_MEM2MEM_DEV
+ 	select RPMSG
+ 
+-config VIDEO_TI_VPE
+-	tristate "TI VPE (Video Processing Engine) driver"
 -	depends on V4L_MEM2MEM_DRIVERS
--	depends on VIDEO_DEV && VIDEO_V4L2 && QCOM_SMEM
--	depends on (ARCH_QCOM && IOMMU_DMA) || COMPILE_TEST
--	select QCOM_MDT_LOADER if ARCH_QCOM
--	select QCOM_SCM
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	depends on SOC_DRA7XX || COMPILE_TEST
 -	select VIDEOBUF2_DMA_CONTIG
 -	select V4L2_MEM2MEM_DEV
+-	select VIDEO_TI_VPDMA
+-	select VIDEO_TI_SC
+-	select VIDEO_TI_CSC
 -	help
--	  This is a V4L2 driver for Qualcomm Venus video accelerator
--	  hardware. It accelerates encoding and decoding operations
--	  on various Qualcomm SoCs.
--	  To compile this driver as a module choose m here.
+-	  Support for the TI VPE(Video Processing Engine) block
+-	  found on DRA7XX SoC.
 -
- config VIDEO_SUN8I_DEINTERLACE
- 	tristate "Allwinner Deinterlace driver"
- 	depends on V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/qcom/venus/Kconfig b/drivers/media/platform/qcom/venus/Kconfig
+-config VIDEO_TI_VPE_DEBUG
+-	bool "VPE debug messages"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_TI_VPE
+-	help
+-	  Enable debug messages on VPE driver.
+-
+-# TI VIDEO PORT Helper Modules
+-# These will be selected by VPE and VIP
+-config VIDEO_TI_VPDMA
+-	tristate
+-
+-config VIDEO_TI_SC
+-	tristate
+-
+-config VIDEO_TI_CSC
+-	tristate
+-
+ # DVB platform drivers
+ source "drivers/media/platform/sti/c8sectpfe/Kconfig"
+diff --git a/drivers/media/platform/ti-vpe/Kconfig b/drivers/media/platform/ti-vpe/Kconfig
 new file mode 100644
-index 000000000000..de0fe3f7be5f
+index 000000000000..a9ee0189f2f2
 --- /dev/null
-+++ b/drivers/media/platform/qcom/venus/Kconfig
-@@ -0,0 +1,14 @@
-+config VIDEO_QCOM_VENUS
-+	tristate "Qualcomm Venus V4L2 encoder/decoder driver"
++++ b/drivers/media/platform/ti-vpe/Kconfig
+@@ -0,0 +1,62 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++# TI VIDEO PORT Helper Modules
++# These will be selected by VPE and VIP
++config VIDEO_TI_VPDMA
++	tristate
++
++config VIDEO_TI_SC
++	tristate
++
++config VIDEO_TI_CSC
++	tristate
++
++# V4L drivers
++
++config VIDEO_TI_CAL
++	tristate "TI CAL (Camera Adaptation Layer) driver"
++	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on V4L_PLATFORM_DRIVERS
++	select MEDIA_CONTROLLER
++	select VIDEO_V4L2_SUBDEV_API
++	depends on SOC_DRA7XX || ARCH_K3 || COMPILE_TEST
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_FWNODE
++	help
++	  Support for the TI CAL (Camera Adaptation Layer) block
++	  found on DRA72X SoC.
++	  In TI Technical Reference Manual this module is referred as
++	  Camera Interface Subsystem (CAMSS).
++
++config VIDEO_TI_CAL_MC
++	bool "Media Controller centric mode by default"
++	depends on VIDEO_TI_CAL
++	default n
++	help
++	  Enables Media Controller centric mode by default.
++
++	  If set, CAL driver will start in Media Controller mode by
++	  default. Note that this behavior can be overridden via
++	  module parameter 'mc_api'.
++
++# Mem2mem drivers
++
++config VIDEO_TI_VPE
++	tristate "TI VPE (Video Processing Engine) driver"
 +	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV && VIDEO_V4L2 && QCOM_SMEM
-+	depends on (ARCH_QCOM && IOMMU_DMA) || COMPILE_TEST
-+	select QCOM_MDT_LOADER if ARCH_QCOM
-+	select QCOM_SCM
++	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on SOC_DRA7XX || COMPILE_TEST
 +	select VIDEOBUF2_DMA_CONTIG
 +	select V4L2_MEM2MEM_DEV
++	select VIDEO_TI_VPDMA
++	select VIDEO_TI_SC
++	select VIDEO_TI_CSC
 +	help
-+	  This is a V4L2 driver for Qualcomm Venus video accelerator
-+	  hardware. It accelerates encoding and decoding operations
-+	  on various Qualcomm SoCs.
-+	  To compile this driver as a module choose m here.
++	  Support for the TI VPE(Video Processing Engine) block
++	  found on DRA7XX SoC.
++
++config VIDEO_TI_VPE_DEBUG
++	bool "VPE debug messages"
++	depends on VIDEO_TI_VPE
++	help
++	  Enable debug messages on VPE driver.
 -- 
 2.35.1
 
