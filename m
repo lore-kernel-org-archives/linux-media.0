@@ -2,69 +2,65 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B909DC433F5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CA1FC433FE
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237205AbiCNH6w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
+        id S237219AbiCNH6z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236967AbiCNH5t (ORCPT
+        with ESMTP id S236928AbiCNH5f (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Mar 2022 03:57:49 -0400
+        Mon, 14 Mar 2022 03:57:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F3841619;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2296341608;
         Mon, 14 Mar 2022 00:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83F83611BB;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D5F7611C0;
         Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED7EC36B00;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D3F4C36B0A;
         Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647244562;
-        bh=teN4+d8Dt5QQVBAVj2zCMTgU5Dq6lD+OYJHqSQvyjyw=;
+        bh=frM2TrgnfHXXWxzvLlBjDHJ6SZXKkAW32KrVCq9TUeg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ij5IsZP29TerHcu6LJhiOn8tmhg/1j54rLnoc3nPsmKOn76ex8gBKBBB3+62n1CMt
-         aTBdljmHwKUBoibwLITki+225jmzvGhkHOc+wEptvLA6KVzahWFihQ74Wcv/Th25wt
-         4CSXCjnh3777ZSzuDG/4B607YSQAaAjA45vOg1CFODoFkq+92ybvLeoOXBBTM6oYat
-         CeSGxL6dp+sGfoCsGTSw91EUyqZkOK827SlvUXhr/sVL3iBaS9kYHevJdDVZKM3FmE
-         lKqJKYV5bNz2kkVZ0yDk4ab4LJ2nRgtsyqoJsO9LEgnc1zyndvLcCbhfKCgHQyUBCv
-         jeNa6ZHCSt85Q==
+        b=lYplchdHkgp1dzoIMq6v5/pU/0JEfGkpMoc7Ci3sHQRRW4492Cjj+U7QzOCowIPz9
+         982e6MnMwdtaOpVKIuBMg8dOwk92NUGtjJxzGkv/kZCxi0dhSXAIy7TQH1Qbjfcft1
+         yJN11ww/PfxUXKSorLWUO1+Rdiax1Rg1txwntuODonaMRXqBthLP5UtHHDIAFmnN/Z
+         /6DPxlTE5J4ARvkn915mAkRhLRiSVsbpWieIZ385Itaieds6tdsdgKVK9uwwmaav19
+         bTYIoZHUzE1/LbeMmKbL6/FUjDdIu1nsawBpPkwofhnIzK5XTy4xECVOVVT0bJ6eua
+         T0R34Ir6ZhP4A==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYd-001kWl-UE; Mon, 14 Mar 2022 08:55:59 +0100
+        id 1nTfYe-001kX9-7N; Mon, 14 Mar 2022 08:56:00 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Cai Huoqing <caihuoqing@baidu.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Ding Senjie <dingsenjie@yulong.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
-        Fabio Estevam <festevam@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Houlong Wei <houlong.wei@mediatek.com>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Martin Weber <martin.weber@br-automation.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Ming Qian <ming.qian@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 40/64] media: platform: rename coda/ to chips-media/
-Date:   Mon, 14 Mar 2022 08:55:32 +0100
-Message-Id: <fdd97c1b2c76f48170387fa4bafef5bada1f59c7.1647242579.git.mchehab@kernel.org>
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH 46/64] media: platform: rename mtk-vpu/ to mediatek/mtk-vpu/
+Date:   Mon, 14 Mar 2022 08:55:38 +0100
+Message-Id: <019918d9c896ddb1f3968d0fcd825c0ef1464899.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -76,7 +72,7 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 As the end goal is to have platform drivers split by vendor,
-rename coda/ to chips-media/.
+rename mtk-vpu/ to mediatek/mtk-vpu/.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -84,163 +80,94 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- MAINTAINERS                                                | 2 +-
- drivers/media/platform/Kconfig                             | 2 +-
- drivers/media/platform/Makefile                            | 4 ++--
- drivers/media/platform/{coda => chips-media}/Kconfig       | 0
- drivers/media/platform/{coda => chips-media}/Makefile      | 0
- drivers/media/platform/{coda => chips-media}/coda-bit.c    | 0
- drivers/media/platform/{coda => chips-media}/coda-common.c | 0
- drivers/media/platform/{coda => chips-media}/coda-gdi.c    | 0
- drivers/media/platform/{coda => chips-media}/coda-h264.c   | 0
- drivers/media/platform/{coda => chips-media}/coda-jpeg.c   | 0
- drivers/media/platform/{coda => chips-media}/coda-mpeg2.c  | 0
- drivers/media/platform/{coda => chips-media}/coda-mpeg4.c  | 0
- drivers/media/platform/{coda => chips-media}/coda.h        | 0
- drivers/media/platform/{coda => chips-media}/coda_regs.h   | 2 +-
- drivers/media/platform/{coda => chips-media}/imx-vdoa.c    | 0
- drivers/media/platform/{coda => chips-media}/imx-vdoa.h    | 0
- drivers/media/platform/{coda => chips-media}/trace.h       | 2 +-
- 17 files changed, 6 insertions(+), 6 deletions(-)
- rename drivers/media/platform/{coda => chips-media}/Kconfig (100%)
- rename drivers/media/platform/{coda => chips-media}/Makefile (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-bit.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-common.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-gdi.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-h264.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-jpeg.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-mpeg2.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda-mpeg4.c (100%)
- rename drivers/media/platform/{coda => chips-media}/coda.h (100%)
- rename drivers/media/platform/{coda => chips-media}/coda_regs.h (99%)
- rename drivers/media/platform/{coda => chips-media}/imx-vdoa.c (100%)
- rename drivers/media/platform/{coda => chips-media}/imx-vdoa.h (100%)
- rename drivers/media/platform/{coda => chips-media}/trace.h (98%)
+ MAINTAINERS                                             | 4 ++--
+ drivers/media/platform/Kconfig                          | 2 +-
+ drivers/media/platform/Makefile                         | 2 +-
+ drivers/media/platform/mediatek/mtk-mdp/Makefile        | 2 +-
+ drivers/media/platform/{ => mediatek}/mtk-vpu/Kconfig   | 0
+ drivers/media/platform/{ => mediatek}/mtk-vpu/Makefile  | 0
+ drivers/media/platform/{ => mediatek}/mtk-vpu/mtk_vpu.c | 0
+ drivers/media/platform/{ => mediatek}/mtk-vpu/mtk_vpu.h | 0
+ 8 files changed, 5 insertions(+), 5 deletions(-)
+ rename drivers/media/platform/{ => mediatek}/mtk-vpu/Kconfig (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-vpu/Makefile (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-vpu/mtk_vpu.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-vpu/mtk_vpu.h (100%)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 848640546398..84bc106acc57 100644
+index bfe014870a77..58e0d42b1278 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -4771,7 +4771,7 @@ M:	Philipp Zabel <p.zabel@pengutronix.de>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/media/coda.yaml
--F:	drivers/media/platform/coda/
-+F:	drivers/media/platform/chips-media/
+@@ -12139,7 +12139,7 @@ M:	Andrew-CT Chen <andrew-ct.chen@mediatek.com>
+ S:	Supported
+ F:	Documentation/devicetree/bindings/media/mediatek-mdp.txt
+ F:	drivers/media/platform/mediatek/mtk-mdp/
+-F:	drivers/media/platform/mtk-vpu/
++F:	drivers/media/platform/mediatek/mtk-vpu/
  
- CODE OF CONDUCT
- M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ MEDIATEK MEDIA DRIVER
+ M:	Tiffany Lin <tiffany.lin@mediatek.com>
+@@ -12148,7 +12148,7 @@ S:	Supported
+ F:	Documentation/devicetree/bindings/media/mediatek-vcodec.txt
+ F:	Documentation/devicetree/bindings/media/mediatek-vpu.txt
+ F:	drivers/media/platform/mediatek/mtk-vcodec/
+-F:	drivers/media/platform/mtk-vpu/
++F:	drivers/media/platform/mediatek/mtk-vpu/
+ 
+ MEDIATEK MMC/SD/SDIO DRIVER
+ M:	Chaotian Jing <chaotian.jing@mediatek.com>
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 721f27ef0130..24a43cef18de 100644
+index 10055af0c7f8..a9ad0c3bd0cc 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -71,7 +71,7 @@ source "drivers/media/platform/amphion/Kconfig"
- source "drivers/media/platform/aspeed/Kconfig"
- source "drivers/media/platform/atmel/Kconfig"
- source "drivers/media/platform/cadence/Kconfig"
--source "drivers/media/platform/coda/Kconfig"
-+source "drivers/media/platform/chips-media/Kconfig"
- source "drivers/media/platform/davinci/Kconfig"
- source "drivers/media/platform/exynos-gsc/Kconfig"
- source "drivers/media/platform/exynos4-is/Kconfig"
+@@ -81,7 +81,7 @@ source "drivers/media/platform/marvell/Kconfig"
+ source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
+ source "drivers/media/platform/mediatek/mtk-mdp/Kconfig"
+ source "drivers/media/platform/mediatek/mtk-vcodec/Kconfig"
+-source "drivers/media/platform/mtk-vpu/Kconfig"
++source "drivers/media/platform/mediatek/mtk-vpu/Kconfig"
+ source "drivers/media/platform/nxp/Kconfig"
+ source "drivers/media/platform/omap/Kconfig"
+ source "drivers/media/platform/omap3isp/Kconfig"
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 20b07ae3ebf1..8d6e15fad0b1 100644
+index 637a3a7ac036..954ad8f2cde1 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -6,12 +6,12 @@
- # Place here, alphabetically sorted by directory
- # (e. g. LC_ALL=C sort Makefile)
- obj-y += allegro-dvt/
--obj-y += aspeed/
- obj-y += am437x/
- obj-y += amphion/
-+obj-y += aspeed/
- obj-y += atmel/
- obj-y += cadence/
--obj-y += coda/
-+obj-y += chips-media/
- obj-y += davinci/
- obj-y += exynos-gsc/
- obj-y += exynos4-is/
-diff --git a/drivers/media/platform/coda/Kconfig b/drivers/media/platform/chips-media/Kconfig
-similarity index 100%
-rename from drivers/media/platform/coda/Kconfig
-rename to drivers/media/platform/chips-media/Kconfig
-diff --git a/drivers/media/platform/coda/Makefile b/drivers/media/platform/chips-media/Makefile
-similarity index 100%
-rename from drivers/media/platform/coda/Makefile
-rename to drivers/media/platform/chips-media/Makefile
-diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/chips-media/coda-bit.c
-similarity index 100%
-rename from drivers/media/platform/coda/coda-bit.c
-rename to drivers/media/platform/chips-media/coda-bit.c
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
-similarity index 100%
-rename from drivers/media/platform/coda/coda-common.c
-rename to drivers/media/platform/chips-media/coda-common.c
-diff --git a/drivers/media/platform/coda/coda-gdi.c b/drivers/media/platform/chips-media/coda-gdi.c
-similarity index 100%
-rename from drivers/media/platform/coda/coda-gdi.c
-rename to drivers/media/platform/chips-media/coda-gdi.c
-diff --git a/drivers/media/platform/coda/coda-h264.c b/drivers/media/platform/chips-media/coda-h264.c
-similarity index 100%
-rename from drivers/media/platform/coda/coda-h264.c
-rename to drivers/media/platform/chips-media/coda-h264.c
-diff --git a/drivers/media/platform/coda/coda-jpeg.c b/drivers/media/platform/chips-media/coda-jpeg.c
-similarity index 100%
-rename from drivers/media/platform/coda/coda-jpeg.c
-rename to drivers/media/platform/chips-media/coda-jpeg.c
-diff --git a/drivers/media/platform/coda/coda-mpeg2.c b/drivers/media/platform/chips-media/coda-mpeg2.c
-similarity index 100%
-rename from drivers/media/platform/coda/coda-mpeg2.c
-rename to drivers/media/platform/chips-media/coda-mpeg2.c
-diff --git a/drivers/media/platform/coda/coda-mpeg4.c b/drivers/media/platform/chips-media/coda-mpeg4.c
-similarity index 100%
-rename from drivers/media/platform/coda/coda-mpeg4.c
-rename to drivers/media/platform/chips-media/coda-mpeg4.c
-diff --git a/drivers/media/platform/coda/coda.h b/drivers/media/platform/chips-media/coda.h
-similarity index 100%
-rename from drivers/media/platform/coda/coda.h
-rename to drivers/media/platform/chips-media/coda.h
-diff --git a/drivers/media/platform/coda/coda_regs.h b/drivers/media/platform/chips-media/coda_regs.h
-similarity index 99%
-rename from drivers/media/platform/coda/coda_regs.h
-rename to drivers/media/platform/chips-media/coda_regs.h
-index da5bb3212528..db81a904cf3f 100644
---- a/drivers/media/platform/coda/coda_regs.h
-+++ b/drivers/media/platform/chips-media/coda_regs.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
- /*
-- * linux/drivers/media/platform/coda/coda_regs.h
-+ * linux/drivers/media/platform/chips-media/coda_regs.h
-  *
-  * Copyright (C) 2012 Vista Silicon SL
-  *    Javier Martin <javier.martin@vista-silicon.com>
-diff --git a/drivers/media/platform/coda/imx-vdoa.c b/drivers/media/platform/chips-media/imx-vdoa.c
-similarity index 100%
-rename from drivers/media/platform/coda/imx-vdoa.c
-rename to drivers/media/platform/chips-media/imx-vdoa.c
-diff --git a/drivers/media/platform/coda/imx-vdoa.h b/drivers/media/platform/chips-media/imx-vdoa.h
-similarity index 100%
-rename from drivers/media/platform/coda/imx-vdoa.h
-rename to drivers/media/platform/chips-media/imx-vdoa.h
-diff --git a/drivers/media/platform/coda/trace.h b/drivers/media/platform/chips-media/trace.h
-similarity index 98%
-rename from drivers/media/platform/coda/trace.h
-rename to drivers/media/platform/chips-media/trace.h
-index c0791c847f7c..19f98e6dafb9 100644
---- a/drivers/media/platform/coda/trace.h
-+++ b/drivers/media/platform/chips-media/trace.h
-@@ -167,7 +167,7 @@ DEFINE_EVENT(coda_buf_class, coda_jpeg_done,
- #endif /* __CODA_TRACE_H__ */
+@@ -21,7 +21,7 @@ obj-y += marvell/
+ obj-y += mediatek/mtk-jpeg/
+ obj-y += mediatek/mtk-mdp/
+ obj-y += mediatek/mtk-vcodec/
+-obj-y += mtk-vpu/
++obj-y += mediatek/mtk-vpu/
+ obj-y += nxp/
+ obj-y += omap/
+ obj-y += omap3isp/
+diff --git a/drivers/media/platform/mediatek/mtk-mdp/Makefile b/drivers/media/platform/mediatek/mtk-mdp/Makefile
+index 5982d65c9971..eab6f984aeea 100644
+--- a/drivers/media/platform/mediatek/mtk-mdp/Makefile
++++ b/drivers/media/platform/mediatek/mtk-mdp/Makefile
+@@ -7,4 +7,4 @@ mtk-mdp-y += mtk_mdp_vpu.o
  
- #undef TRACE_INCLUDE_PATH
--#define TRACE_INCLUDE_PATH ../../drivers/media/platform/coda
-+#define TRACE_INCLUDE_PATH ../../drivers/media/platform/chips-media
- #undef TRACE_INCLUDE_FILE
- #define TRACE_INCLUDE_FILE trace
+ obj-$(CONFIG_VIDEO_MEDIATEK_MDP) += mtk-mdp.o
  
+-ccflags-y += -I$(srctree)/drivers/media/platform/mtk-vpu
++ccflags-y += -I$(srctree)/drivers/media/platform/mediatek/mtk-vpu
+diff --git a/drivers/media/platform/mtk-vpu/Kconfig b/drivers/media/platform/mediatek/mtk-vpu/Kconfig
+similarity index 100%
+rename from drivers/media/platform/mtk-vpu/Kconfig
+rename to drivers/media/platform/mediatek/mtk-vpu/Kconfig
+diff --git a/drivers/media/platform/mtk-vpu/Makefile b/drivers/media/platform/mediatek/mtk-vpu/Makefile
+similarity index 100%
+rename from drivers/media/platform/mtk-vpu/Makefile
+rename to drivers/media/platform/mediatek/mtk-vpu/Makefile
+diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.c b/drivers/media/platform/mediatek/mtk-vpu/mtk_vpu.c
+similarity index 100%
+rename from drivers/media/platform/mtk-vpu/mtk_vpu.c
+rename to drivers/media/platform/mediatek/mtk-vpu/mtk_vpu.c
+diff --git a/drivers/media/platform/mtk-vpu/mtk_vpu.h b/drivers/media/platform/mediatek/mtk-vpu/mtk_vpu.h
+similarity index 100%
+rename from drivers/media/platform/mtk-vpu/mtk_vpu.h
+rename to drivers/media/platform/mediatek/mtk-vpu/mtk_vpu.h
 -- 
 2.35.1
 
