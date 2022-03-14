@@ -2,73 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6AAAC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23373C4332F
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237173AbiCNH6h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
+        id S237166AbiCNH6j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235763AbiCNH5u (ORCPT
+        with ESMTP id S236999AbiCNH5u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2B04162D;
-        Mon, 14 Mar 2022 00:56:15 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9E54163D;
+        Mon, 14 Mar 2022 00:56:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C161C611DC;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCAC5611EC;
         Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C606CC36B14;
-        Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DEFFC341DD;
+        Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647244563;
-        bh=GjqwKpHS8hMTGTpYhpZJCdxNXJ56txdSA8jqmhpXO+s=;
+        bh=Dy6Y0LA+hIbdmBEPISD4+Cga8r2Tyh+1mER04UW5/l8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tNdIaBAjDf+RMZCwntx+lYD5yAJemi4tLws3hPtEBkngbm9OcAS2n4LTjY6PhYYD2
-         5HX6r8OIkW1NO3R9/u/n2EFJTuPMBuUFOvKlYOm4aw1oVVSOfpO6DsWhzRmVrq7lxr
-         t26hwtcu+ZGnz8vQBxtZi/lsQbbh8tGfAkBbGLGBG1+L6kwPFrBEoEu91IgFxM+i1u
-         YscOBLklL0AVthLogOpz1B5wfaycFe9SxJbPLqwlnZ22bnJY6YHQ7qDsZ/WuQi2l5Z
-         v0zbDvwkDSwvOmqOq7A4upQc3yzEmW0wpSI8pHdIfh1TGD7mSWauYbVvGql27N+J80
-         mAV1knGhUB/8Q==
+        b=mBaIF5YZDw6Tb8yakdfRDe6KnMBeHnX2xKCiq5uxiDBIn4tuCHZosKNgsxbfIXeGa
+         I98HoeP55ZcXzCTdqF0g5MCSN0Rvy7TMOsbuHMhoKX+oJ7D++qofz7IxdX7OTtDkhJ
+         O45c4DnwjvnyOQbhgDh/K6uRQFMCvqd/xV690e9nwwfZnzfk9iSAfvsFsoyP1MUM4v
+         1qK1puvFlBtTcRj3T6qBjXjPHlBxquvk08Bwv1cPHoA0QkZ/UgwubOWl2w288K6hRn
+         cIMVMO7kpcNJXy5LoVkEf06tIeF81pid5f9OalC4/gArNa/zUAt8hdqni1RhlN+t5t
+         9dyNstwGx/m1A==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYe-001kXf-Ja; Mon, 14 Mar 2022 08:56:00 +0100
+        id 1nTfYe-001kY7-UG; Mon, 14 Mar 2022 08:56:00 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Colin Ian King <colin.king@intel.com>,
+        Benoit Parrot <bparrot@ti.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
-        Fabio Estevam <festevam@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Ming Qian <ming.qian@nxp.com>, Pratyush Yadav <p.yadav@ti.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 54/64] media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
-Date:   Mon, 14 Mar 2022 08:55:46 +0100
-Message-Id: <df23e423aa8de2c64e3104944d90e787197a7305.1647242579.git.mchehab@kernel.org>
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Zhou Qingyang <zhou1615@umn.edu>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 61/64] media: platform: rename ti-vpe/ to ti/vpe/
+Date:   Mon, 14 Mar 2022 08:55:53 +0100
+Message-Id: <fecdb3d1e4fffbb5c3e0003a7d403ef9669ca026.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -80,222 +66,169 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 As the end goal is to have platform drivers split by vendor,
-rename s5p-jpeg/ to samsung/s5p-jpeg/.
+rename ti-vpe/ to ti/vpe/.
 
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- MAINTAINERS                                                     | 2 +-
- drivers/media/platform/Kconfig                                  | 2 +-
- drivers/media/platform/Makefile                                 | 2 +-
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c                  | 2 +-
- drivers/media/platform/renesas/rcar_jpu.c                       | 2 +-
- drivers/media/platform/{ => samsung}/s5p-jpeg/Kconfig           | 0
- drivers/media/platform/{ => samsung}/s5p-jpeg/Makefile          | 0
- drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-core.c       | 2 +-
- drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-core.h       | 2 +-
- .../media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos3250.c  | 0
- .../media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos3250.h  | 2 +-
- drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos4.c | 0
- drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos4.h | 0
- drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-s5p.c     | 2 +-
- drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-s5p.h     | 2 +-
- drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-regs.h       | 2 +-
- 16 files changed, 11 insertions(+), 11 deletions(-)
- rename drivers/media/platform/{ => samsung}/s5p-jpeg/Kconfig (100%)
- rename drivers/media/platform/{ => samsung}/s5p-jpeg/Makefile (100%)
- rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-core.c (99%)
- rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-core.h (99%)
- rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos3250.c (100%)
- rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos3250.h (97%)
- rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos4.c (100%)
- rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos4.h (100%)
- rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-s5p.c (99%)
- rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-s5p.h (97%)
- rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-regs.h (99%)
+ MAINTAINERS                                              | 2 +-
+ drivers/media/platform/Kconfig                           | 2 +-
+ drivers/media/platform/Makefile                          | 2 +-
+ drivers/media/platform/{ti-vpe => ti/vpe}/Kconfig        | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/Makefile       | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/cal-camerarx.c | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/cal-video.c    | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/cal.c          | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/cal.h          | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/cal_regs.h     | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/csc.c          | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/csc.h          | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/sc.c           | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/sc.h           | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/sc_coeff.h     | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.c        | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.h        | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpdma_priv.h   | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpe.c          | 0
+ drivers/media/platform/{ti-vpe => ti/vpe}/vpe_regs.h     | 0
+ 20 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/Kconfig (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/Makefile (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/cal-camerarx.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/cal-video.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/cal.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/cal.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/cal_regs.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/csc.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/csc.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/sc.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/sc.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/sc_coeff.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpdma_priv.h (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpe.c (100%)
+ rename drivers/media/platform/{ti-vpe => ti/vpe}/vpe_regs.h (100%)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 4c4be0d7ec14..dfd490369d48 100644
+index 2a85c98a77e4..031cb2cbecba 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2633,7 +2633,7 @@ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- L:	linux-media@vger.kernel.org
- S:	Maintained
--F:	drivers/media/platform/s5p-jpeg/
-+F:	drivers/media/platform/samsung/s5p-jpeg/
+@@ -19407,7 +19407,7 @@ W:	http://linuxtv.org/
+ Q:	http://patchwork.linuxtv.org/project/linux-media/list/
+ F:	Documentation/devicetree/bindings/media/ti,cal.yaml
+ F:	Documentation/devicetree/bindings/media/ti,vpe.yaml
+-F:	drivers/media/platform/ti-vpe/
++F:	drivers/media/platform/ti/vpe/
  
- ARM/SAMSUNG S5P SERIES Multi Format Codec (MFC) SUPPORT
- M:	Marek Szyprowski <m.szyprowski@samsung.com>
+ TI WILINK WIRELESS DRIVERS
+ L:	linux-wireless@vger.kernel.org
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index aef7c35b2215..1b71ce772586 100644
+index 57094394d30b..05b720ac0961 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -88,12 +88,12 @@ source "drivers/media/platform/omap3isp/Kconfig"
- source "drivers/media/platform/qcom/Kconfig"
- source "drivers/media/platform/renesas/Kconfig"
- source "drivers/media/platform/rockchip/Kconfig"
--source "drivers/media/platform/s5p-jpeg/Kconfig"
- source "drivers/media/platform/s5p-mfc/Kconfig"
- source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
- source "drivers/media/platform/samsung/exynos4-is/Kconfig"
- source "drivers/media/platform/samsung/s3c-camif/Kconfig"
- source "drivers/media/platform/samsung/s5p-g2d/Kconfig"
-+source "drivers/media/platform/samsung/s5p-jpeg/Kconfig"
+@@ -92,11 +92,11 @@ source "drivers/media/platform/samsung/s5p-jpeg/Kconfig"
+ source "drivers/media/platform/samsung/s5p-mfc/Kconfig"
  source "drivers/media/platform/sti/Kconfig"
- source "drivers/media/platform/stm32/Kconfig"
- source "drivers/media/platform/ti-vpe/Kconfig"
+ source "drivers/media/platform/sti/stm32/Kconfig"
+-source "drivers/media/platform/ti-vpe/Kconfig"
+ source "drivers/media/platform/ti/am437x/Kconfig"
+ source "drivers/media/platform/ti/davinci/Kconfig"
+ source "drivers/media/platform/ti/omap/Kconfig"
+ source "drivers/media/platform/ti/omap3isp/Kconfig"
++source "drivers/media/platform/ti/vpe/Kconfig"
+ source "drivers/media/platform/via/Kconfig"
+ source "drivers/media/platform/xilinx/Kconfig"
+ 
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index a5a068e18492..94bdd5d94bb2 100644
+index a9740f6021d2..1e62a4009b6c 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -30,12 +30,12 @@ obj-y += qcom/venus/
- obj-y += renesas/
- obj-y += rockchip/rga/
- obj-y += rockchip/rkisp1/
--obj-y += s5p-jpeg/
- obj-y += s5p-mfc/
- obj-y += samsung/exynos-gsc/
- obj-y += samsung/exynos4-is/
- obj-y += samsung/s3c-camif/
- obj-y += samsung/s5p-g2d/
-+obj-y += samsung/s5p-jpeg/
- obj-y += sti/bdisp/
- obj-y += sti/c8sectpfe/
+@@ -37,11 +37,11 @@ obj-y += sti/c8sectpfe/
  obj-y += sti/delta/
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index 3b892c5792b4..d1ec1f4b506b 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -35,7 +35,7 @@
-  * it, enable dynamic debug for this module and:
-  * echo 1 > /sys/module/mxc_jpeg_encdec/parameters/jpeg_tracing
-  *
-- * This is inspired by the drivers/media/platform/s5p-jpeg driver
-+ * This is inspired by the drivers/media/platform/samsung/s5p-jpeg driver
-  *
-  * Copyright 2018-2019 NXP
-  */
-diff --git a/drivers/media/platform/renesas/rcar_jpu.c b/drivers/media/platform/renesas/rcar_jpu.c
-index 56bb464629ed..293beba131e2 100644
---- a/drivers/media/platform/renesas/rcar_jpu.c
-+++ b/drivers/media/platform/renesas/rcar_jpu.c
-@@ -4,7 +4,7 @@
-  * Copyright (C) 2014-2015 Cogent Embedded, Inc.  <source@cogentembedded.com>
-  * Copyright (C) 2014-2015 Renesas Electronics Corporation
-  *
-- * This is based on the drivers/media/platform/s5p-jpeg driver by
-+ * This is based on the drivers/media/platform/samsung/s5p-jpeg driver by
-  * Andrzej Pietrasiewicz and Jacek Anaszewski.
-  * Some portions of code inspired by VSP1 driver by Laurent Pinchart.
-  *
-diff --git a/drivers/media/platform/s5p-jpeg/Kconfig b/drivers/media/platform/samsung/s5p-jpeg/Kconfig
+ obj-y += sti/hva/
+ obj-y += sti/stm32/
+-obj-y += ti-vpe/
+ obj-y += ti/am437x/
+ obj-y += ti/davinci/
+ obj-y += ti/omap/
+ obj-y += ti/omap3isp/
++obj-y += ti/vpe/
+ obj-y += via/
+ obj-y += xilinx/
+ 
+diff --git a/drivers/media/platform/ti-vpe/Kconfig b/drivers/media/platform/ti/vpe/Kconfig
 similarity index 100%
-rename from drivers/media/platform/s5p-jpeg/Kconfig
-rename to drivers/media/platform/samsung/s5p-jpeg/Kconfig
-diff --git a/drivers/media/platform/s5p-jpeg/Makefile b/drivers/media/platform/samsung/s5p-jpeg/Makefile
+rename from drivers/media/platform/ti-vpe/Kconfig
+rename to drivers/media/platform/ti/vpe/Kconfig
+diff --git a/drivers/media/platform/ti-vpe/Makefile b/drivers/media/platform/ti/vpe/Makefile
 similarity index 100%
-rename from drivers/media/platform/s5p-jpeg/Makefile
-rename to drivers/media/platform/samsung/s5p-jpeg/Makefile
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-similarity index 99%
-rename from drivers/media/platform/s5p-jpeg/jpeg-core.c
-rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-index a8d9159d5ed8..5479bc8d474d 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
-+++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0-only
--/* linux/drivers/media/platform/s5p-jpeg/jpeg-core.c
-+/* linux/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-  *
-  * Copyright (c) 2011-2014 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.h b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.h
-similarity index 99%
-rename from drivers/media/platform/s5p-jpeg/jpeg-core.h
-rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-core.h
-index 4a5fb1b15455..5570c79f122f 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-core.h
-+++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.h
-@@ -1,5 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
--/* linux/drivers/media/platform/s5p-jpeg/jpeg-core.h
-+/* linux/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.h
-  *
-  * Copyright (c) 2011 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-hw-exynos3250.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos3250.c
+rename from drivers/media/platform/ti-vpe/Makefile
+rename to drivers/media/platform/ti/vpe/Makefile
+diff --git a/drivers/media/platform/ti-vpe/cal-camerarx.c b/drivers/media/platform/ti/vpe/cal-camerarx.c
 similarity index 100%
-rename from drivers/media/platform/s5p-jpeg/jpeg-hw-exynos3250.c
-rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos3250.c
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-hw-exynos3250.h b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos3250.h
-similarity index 97%
-rename from drivers/media/platform/s5p-jpeg/jpeg-hw-exynos3250.h
-rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos3250.h
-index 68160befce39..15af928fad76 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-hw-exynos3250.h
-+++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos3250.h
-@@ -1,5 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
--/* linux/drivers/media/platform/s5p-jpeg/jpeg-hw-exynos3250.h
-+/* linux/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos3250.h
-  *
-  * Copyright (c) 2014 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-hw-exynos4.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos4.c
+rename from drivers/media/platform/ti-vpe/cal-camerarx.c
+rename to drivers/media/platform/ti/vpe/cal-camerarx.c
+diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti/vpe/cal-video.c
 similarity index 100%
-rename from drivers/media/platform/s5p-jpeg/jpeg-hw-exynos4.c
-rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos4.c
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-hw-exynos4.h b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos4.h
+rename from drivers/media/platform/ti-vpe/cal-video.c
+rename to drivers/media/platform/ti/vpe/cal-video.c
+diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti/vpe/cal.c
 similarity index 100%
-rename from drivers/media/platform/s5p-jpeg/jpeg-hw-exynos4.h
-rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos4.h
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-hw-s5p.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.c
-similarity index 99%
-rename from drivers/media/platform/s5p-jpeg/jpeg-hw-s5p.c
-rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.c
-index 491e9248286c..01b47b3df1e7 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-hw-s5p.c
-+++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0-only
--/* linux/drivers/media/platform/s5p-jpeg/jpeg-hw.h
-+/* linux/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw.h
-  *
-  * Copyright (c) 2011 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-hw-s5p.h b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.h
-similarity index 97%
-rename from drivers/media/platform/s5p-jpeg/jpeg-hw-s5p.h
-rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.h
-index 98ddf7097562..f068d52c66b7 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-hw-s5p.h
-+++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.h
-@@ -1,5 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
--/* linux/drivers/media/platform/s5p-jpeg/jpeg-hw.h
-+/* linux/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw.h
-  *
-  * Copyright (c) 2011 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com
-diff --git a/drivers/media/platform/s5p-jpeg/jpeg-regs.h b/drivers/media/platform/samsung/s5p-jpeg/jpeg-regs.h
-similarity index 99%
-rename from drivers/media/platform/s5p-jpeg/jpeg-regs.h
-rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-regs.h
-index 86f376b50581..c2298b680022 100644
---- a/drivers/media/platform/s5p-jpeg/jpeg-regs.h
-+++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-regs.h
-@@ -1,5 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
--/* linux/drivers/media/platform/s5p-jpeg/jpeg-regs.h
-+/* linux/drivers/media/platform/samsung/s5p-jpeg/jpeg-regs.h
-  *
-  * Register definition file for Samsung JPEG codec driver
-  *
+rename from drivers/media/platform/ti-vpe/cal.c
+rename to drivers/media/platform/ti/vpe/cal.c
+diff --git a/drivers/media/platform/ti-vpe/cal.h b/drivers/media/platform/ti/vpe/cal.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/cal.h
+rename to drivers/media/platform/ti/vpe/cal.h
+diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti/vpe/cal_regs.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/cal_regs.h
+rename to drivers/media/platform/ti/vpe/cal_regs.h
+diff --git a/drivers/media/platform/ti-vpe/csc.c b/drivers/media/platform/ti/vpe/csc.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/csc.c
+rename to drivers/media/platform/ti/vpe/csc.c
+diff --git a/drivers/media/platform/ti-vpe/csc.h b/drivers/media/platform/ti/vpe/csc.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/csc.h
+rename to drivers/media/platform/ti/vpe/csc.h
+diff --git a/drivers/media/platform/ti-vpe/sc.c b/drivers/media/platform/ti/vpe/sc.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/sc.c
+rename to drivers/media/platform/ti/vpe/sc.c
+diff --git a/drivers/media/platform/ti-vpe/sc.h b/drivers/media/platform/ti/vpe/sc.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/sc.h
+rename to drivers/media/platform/ti/vpe/sc.h
+diff --git a/drivers/media/platform/ti-vpe/sc_coeff.h b/drivers/media/platform/ti/vpe/sc_coeff.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/sc_coeff.h
+rename to drivers/media/platform/ti/vpe/sc_coeff.h
+diff --git a/drivers/media/platform/ti-vpe/vpdma.c b/drivers/media/platform/ti/vpe/vpdma.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpdma.c
+rename to drivers/media/platform/ti/vpe/vpdma.c
+diff --git a/drivers/media/platform/ti-vpe/vpdma.h b/drivers/media/platform/ti/vpe/vpdma.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpdma.h
+rename to drivers/media/platform/ti/vpe/vpdma.h
+diff --git a/drivers/media/platform/ti-vpe/vpdma_priv.h b/drivers/media/platform/ti/vpe/vpdma_priv.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpdma_priv.h
+rename to drivers/media/platform/ti/vpe/vpdma_priv.h
+diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti/vpe/vpe.c
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpe.c
+rename to drivers/media/platform/ti/vpe/vpe.c
+diff --git a/drivers/media/platform/ti-vpe/vpe_regs.h b/drivers/media/platform/ti/vpe/vpe_regs.h
+similarity index 100%
+rename from drivers/media/platform/ti-vpe/vpe_regs.h
+rename to drivers/media/platform/ti/vpe/vpe_regs.h
 -- 
 2.35.1
 
