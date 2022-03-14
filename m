@@ -2,53 +2,66 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D90DC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4868FC433FE
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbiCNH6N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
+        id S236349AbiCNH6Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236979AbiCNH5u (ORCPT
+        with ESMTP id S236978AbiCNH5u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:50 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4484161C;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EF14161F;
         Mon, 14 Mar 2022 00:56:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 97638CE10C7;
-        Mon, 14 Mar 2022 07:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5AA3C36AF2;
-        Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D164611C5;
+        Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EFF5C36B06;
+        Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647244561;
-        bh=GjHqxp3GQXnTY+LF57yjz0Dc5yCk2r/Y7YgbsCzIOVI=;
+        s=k20201202; t=1647244562;
+        bh=S1VM+oW7wRch+UqYMXOGytVT7MR4fILO5/kTGL/OkT4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UFkgTr+hKzD2fELucd0rNPJkhWq1wQ5R4DPNosvdefJrocjgt9rVCdFpamKoTeNc2
-         8AJwON3et3wVVjnIjUGwP30hZW01lev8WPCw2f+89Zai3Rk38LiKLzuo1q9oD3+lUh
-         JUs51fCLOPm5UkPjA0w6swtkZ9RUlB5/S7r21341bKuaKZTIuWHuxD5ef29nSGT8kV
-         CznPb7ljflnHmfbnDmbFhZOhO9g93pH9YnhF7e1+8DcZSAH6Pz7Wq4+YY1vjy7W2P8
-         S+dcg7WHCeEQa8Qyd652GqEAcPAKQa192/rY2TDyU70BiLF+Ny6sRfQqu236NhDM/d
-         Dy4XyqAs8/iUQ==
+        b=gULm8d4rxnTObBSGKxu44j/nPccwYXumWmDybuhcsBhvy8zB21W+bLRDm8RE9sTRK
+         VJ5XBAzSm0OoyNNoqkdYT6UIGOFNJo/AmPIaHhtvM/BzRsuTWKpI2yuPVPkLLNtvom
+         QxwP1jfAqKMbTsvqfhLXwEq6GlqHBFeDVV+nlBoM+4Q4K60uVEigLNzbiHr6HCjcOA
+         Hzl0M13SNZJ10FWzrLT1ABzad+tC51GVlNvX8xU3rsX41ZvAgk2DEm4tJCdiwUrtCF
+         o9ErVvoqBrfcsBAeFEX7lg7RLn9PXJvbi8iWJcHknNzpVoA5XSFEMWcaFcpVRO/+gp
+         XXzE4Ixlhwvmw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYd-001kWJ-LQ; Mon, 14 Mar 2022 08:55:59 +0100
+        id 1nTfYe-001kWx-2L; Mon, 14 Mar 2022 08:56:00 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
         Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 33/64] media: platform: delta: move config to its own file
-Date:   Mon, 14 Mar 2022 08:55:25 +0100
-Message-Id: <0d641f338b949db839cc82d7ccf04d01825f648b.1647242579.git.mchehab@kernel.org>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Rick Chang <rick.chang@mediatek.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Xu Wang <vulab@iscas.ac.cn>, Yong Wu <yong.wu@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH 43/64] media: platform: rename mtk-jpeg/ to mediatek/mtk-jpeg/
+Date:   Mon, 14 Mar 2022 08:55:35 +0100
+Message-Id: <6b4d80f28b481bdf9385faeb3bf46f10bc1242cb.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -59,8 +72,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to better organize the platform/Kconfig, place
-delta-specific config stuff on a separate Kconfig file.
+As the end goal is to have platform drivers split by vendor,
+rename mtk-jpeg/ to mediatek/mtk-jpeg/.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -68,100 +81,116 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig           | 36 +-----------------------
- drivers/media/platform/sti/delta/Kconfig | 36 ++++++++++++++++++++++++
- 2 files changed, 37 insertions(+), 35 deletions(-)
- create mode 100644 drivers/media/platform/sti/delta/Kconfig
+ MAINTAINERS                                                     | 2 +-
+ drivers/media/platform/Kconfig                                  | 2 +-
+ drivers/media/platform/Makefile                                 | 2 +-
+ drivers/media/platform/{ => mediatek}/mtk-jpeg/Kconfig          | 0
+ drivers/media/platform/{ => mediatek}/mtk-jpeg/Makefile         | 0
+ drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_core.c  | 0
+ drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_core.h  | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_hw.c    | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_hw.h    | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_parse.c | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_parse.h | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_reg.h   | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_enc_hw.c    | 0
+ .../media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_enc_hw.h    | 0
+ 14 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/Kconfig (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/Makefile (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_core.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_core.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_hw.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_hw.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_parse.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_parse.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_dec_reg.h (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_enc_hw.c (100%)
+ rename drivers/media/platform/{ => mediatek}/mtk-jpeg/mtk_jpeg_enc_hw.h (100%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 09b0e60da4e9..fa0a3de3865f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12130,7 +12130,7 @@ M:	Rick Chang <rick.chang@mediatek.com>
+ M:	Bin Liu <bin.liu@mediatek.com>
+ S:	Supported
+ F:	Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.txt
+-F:	drivers/media/platform/mtk-jpeg/
++F:	drivers/media/platform/mediatek/mtk-jpeg/
+ 
+ MEDIATEK MDP DRIVER
+ M:	Minghsiu Tsai <minghsiu.tsai@mediatek.com>
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 29afef26cbe4..ba4c10896537 100644
+index b4faee0a1b63..f1746529e763 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -132,41 +132,7 @@ config VIDEO_STI_BDISP
- 	help
- 	  This v4l2 mem2mem driver is a 2D blitter for STMicroelectronics SoC.
- 
--config VIDEO_STI_DELTA
--	tristate "STMicroelectronics DELTA multi-format video decoder V4L2 driver"
--	depends on V4L_MEM2MEM_DRIVERS
--	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_STI || COMPILE_TEST
--	help
--		This V4L2 driver enables DELTA multi-format video decoder
--		of STMicroelectronics STiH4xx SoC series allowing hardware
--		decoding of various compressed video bitstream format in
--		raw uncompressed format.
--
--		Use this option to see the decoders available for such
--		hardware.
--
--		Please notice that the driver will only be built if
--		at least one of the DELTA decoder below is selected.
--
--config VIDEO_STI_DELTA_MJPEG
--	bool "STMicroelectronics DELTA MJPEG support"
--	default y
--	depends on VIDEO_STI_DELTA
--	help
--		Enables DELTA MJPEG hardware support.
--
--		To compile this driver as a module, choose M here:
--		the module will be called st-delta.
--
--config VIDEO_STI_DELTA_DRIVER
--	tristate
--	depends on VIDEO_STI_DELTA
--	depends on VIDEO_STI_DELTA_MJPEG
--	default VIDEO_STI_DELTA_MJPEG
--	select VIDEOBUF2_DMA_CONTIG
--	select V4L2_MEM2MEM_DEV
--	select RPMSG
-+source "drivers/media/platform/sti/delta/Kconfig"
- 
- # DVB platform drivers
- source "drivers/media/platform/sti/c8sectpfe/Kconfig"
-diff --git a/drivers/media/platform/sti/delta/Kconfig b/drivers/media/platform/sti/delta/Kconfig
-new file mode 100644
-index 000000000000..0bbc7edce208
---- /dev/null
-+++ b/drivers/media/platform/sti/delta/Kconfig
-@@ -0,0 +1,36 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_STI_DELTA
-+	tristate "STMicroelectronics DELTA multi-format video decoder V4L2 driver"
-+	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_STI || COMPILE_TEST
-+	help
-+		This V4L2 driver enables DELTA multi-format video decoder
-+		of STMicroelectronics STiH4xx SoC series allowing hardware
-+		decoding of various compressed video bitstream format in
-+		raw uncompressed format.
-+
-+		Use this option to see the decoders available for such
-+		hardware.
-+
-+		Please notice that the driver will only be built if
-+		at least one of the DELTA decoder below is selected.
-+
-+config VIDEO_STI_DELTA_MJPEG
-+	bool "STMicroelectronics DELTA MJPEG support"
-+	default y
-+	depends on VIDEO_STI_DELTA
-+	help
-+		Enables DELTA MJPEG hardware support.
-+
-+		To compile this driver as a module, choose M here:
-+		the module will be called st-delta.
-+
-+config VIDEO_STI_DELTA_DRIVER
-+	tristate
-+	depends on VIDEO_STI_DELTA
-+	depends on VIDEO_STI_DELTA_MJPEG
-+	default VIDEO_STI_DELTA_MJPEG
-+	select VIDEOBUF2_DMA_CONTIG
-+	select V4L2_MEM2MEM_DEV
-+	select RPMSG
+@@ -78,7 +78,7 @@ source "drivers/media/platform/exynos-gsc/Kconfig"
+ source "drivers/media/platform/exynos4-is/Kconfig"
+ source "drivers/media/platform/intel/Kconfig"
+ source "drivers/media/platform/marvell/Kconfig"
+-source "drivers/media/platform/mtk-jpeg/Kconfig"
++source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
+ source "drivers/media/platform/mtk-mdp/Kconfig"
+ source "drivers/media/platform/mtk-vcodec/Kconfig"
+ source "drivers/media/platform/mtk-vpu/Kconfig"
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 48531f93d92f..c792f6216918 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -18,7 +18,7 @@ obj-y += exynos-gsc/
+ obj-y += exynos4-is/
+ obj-y += intel/
+ obj-y += marvell/
+-obj-y += mtk-jpeg/
++obj-y += mediatek/mtk-jpeg/
+ obj-y += mtk-mdp/
+ obj-y += mtk-vcodec/
+ obj-y += mtk-vpu/
+diff --git a/drivers/media/platform/mtk-jpeg/Kconfig b/drivers/media/platform/mediatek/mtk-jpeg/Kconfig
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/Kconfig
+rename to drivers/media/platform/mediatek/mtk-jpeg/Kconfig
+diff --git a/drivers/media/platform/mtk-jpeg/Makefile b/drivers/media/platform/mediatek/mtk-jpeg/Makefile
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/Makefile
+rename to drivers/media/platform/mediatek/mtk-jpeg/Makefile
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_core.c
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_core.c
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_core.h
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_core.h
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_hw.c
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_hw.c
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.h b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_hw.h
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.h
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_hw.h
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.c b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_parse.c
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.c
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_parse.c
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.h b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_parse.h
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.h
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_parse.h
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_reg.h b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_reg.h
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_reg.h
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_dec_reg.h
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_enc_hw.c
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_enc_hw.c
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.h b/drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_enc_hw.h
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.h
+rename to drivers/media/platform/mediatek/mtk-jpeg/mtk_jpeg_enc_hw.h
 -- 
 2.35.1
 
