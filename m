@@ -2,53 +2,63 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73EA9C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F462C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237061AbiCNH6o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
+        id S237051AbiCNH6q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236984AbiCNH5u (ORCPT
+        with ESMTP id S236975AbiCNH5t (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Mar 2022 03:57:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978A241623;
-        Mon, 14 Mar 2022 00:56:14 -0700 (PDT)
+        Mon, 14 Mar 2022 03:57:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C8941616;
+        Mon, 14 Mar 2022 00:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA20D611D7;
+        by sin.source.kernel.org (Postfix) with ESMTPS id DAE74CE10B5;
         Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F128DC36AF8;
-        Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 897AFC36B10;
+        Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647244562;
-        bh=ihpWxowWNluCH+qN13bY4MbBuqxa2b+FIdpighF1kSs=;
+        bh=33ldIk/ewmr/NLPVYHWMIqcESTNcBpKoTPzPwzIe0n0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lUCTpRoLWZ2RDdkp2HCVBuxgKYwJXyJROKTKwJ9FyutHBoy7un9t0lm2a7Zc7K05d
-         UuS9EQxMiMWdAbuXEW9fZmedJLhKb/VfhbgrSX2Tu+jCMA1RWdGFlyzPVsiD/8r9Uc
-         e3HYr8ve4u23JI7am1SBtxloFe6CBmUbVBm9cAvO1inp53xYVvhOkeX6cAeGtirbCW
-         mM1F0b6esfubJOSXyll0YApM8My+8mZMel1s2ZRQEixQLSacnTCTKsY7J0HFjaxgEC
-         2ZBk1K8kamktcL4+8pGfbyRSHzxiLkekNYgIAtpMZ5u8emU6hkdgQI1gvBo7W0385z
-         8yxnsR/r8HXaA==
+        b=XA9YRlHdAwQnPWO3cemaUAjYKpm6af7Q57P7N4xFVl/yBhBODn0m/GuG5p6F3LPSV
+         kLchSoeNMmHRk+XUzUIl5jer+UmfdohY3AyAEwd3zMD4wX+diplO4TepBICnuzAGSj
+         cMzXVv0ArKMGZZui+QwygCM0A8BitMnrarWO+aULibP+s0AcoDV3+UZ5PNWR0fg6G4
+         v7H9TIh+ECc7qZiVJlKuATN3nx8ZQEOynDlKU/Ruy4Dc6rjboh+aV6xRG+KsllKu8D
+         tXuDySoq21tXuhsYp5ZBUJe2RB+7TCywyfJoKU8okR7LjEsYnY0FLvRJ7dcPxLwzqk
+         Qkg/FAw2/48Dw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYd-001kWV-Ox; Mon, 14 Mar 2022 08:55:59 +0100
+        id 1nTfYe-001kXL-CA; Mon, 14 Mar 2022 08:56:00 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
         Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Fabio Estevam <festevam@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>, linux-kernel@vger.kernel.org,
+        Ming Qian <ming.qian@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Shijie Qin <shijie.qin@nxp.com>,
+        Zhou Peng <eagle.zhou@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH 36/64] media: platform: s5p-jpeg: move config to its own file
-Date:   Mon, 14 Mar 2022 08:55:28 +0100
-Message-Id: <f16cf45c03e975b349dc91c741a5831f9502b21d.1647242579.git.mchehab@kernel.org>
+Subject: [PATCH 49/64] media: platform: rename amphion/ to nxp/amphion/
+Date:   Mon, 14 Mar 2022 08:55:41 +0100
+Message-Id: <bb359b4709ceb1112813965237d153cd366cae2d.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -59,70 +69,253 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to better organize the platform/Kconfig, place
-s5p-jpeg-specific config stuff on a separate Kconfig file.
+As the end goal is to have platform drivers split by vendor,
+rename amphion/ to nxp/amphion/.
 
-Acked-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig          | 13 +------------
- drivers/media/platform/s5p-jpeg/Kconfig | 12 ++++++++++++
- 2 files changed, 13 insertions(+), 12 deletions(-)
- create mode 100644 drivers/media/platform/s5p-jpeg/Kconfig
+ MAINTAINERS                                            | 2 +-
+ drivers/media/platform/Kconfig                         | 2 +-
+ drivers/media/platform/Makefile                        | 2 +-
+ drivers/media/platform/{ => nxp}/amphion/Kconfig       | 0
+ drivers/media/platform/{ => nxp}/amphion/Makefile      | 0
+ drivers/media/platform/{ => nxp}/amphion/vdec.c        | 0
+ drivers/media/platform/{ => nxp}/amphion/venc.c        | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu.h         | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_cmds.c    | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_cmds.h    | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_codec.h   | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_color.c   | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_core.c    | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_core.h    | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_dbg.c     | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_defs.h    | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_drv.c     | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_helpers.c | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_helpers.h | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_imx8q.c   | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_imx8q.h   | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_malone.c  | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_malone.h  | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_mbox.c    | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_mbox.h    | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_msgs.c    | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_msgs.h    | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_rpc.c     | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_rpc.h     | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_v4l2.c    | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_v4l2.h    | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_windsor.c | 0
+ drivers/media/platform/{ => nxp}/amphion/vpu_windsor.h | 0
+ 33 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{ => nxp}/amphion/Kconfig (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/Makefile (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vdec.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/venc.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu.h (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_cmds.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_cmds.h (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_codec.h (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_color.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_core.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_core.h (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_dbg.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_defs.h (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_drv.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_helpers.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_helpers.h (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_imx8q.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_imx8q.h (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_malone.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_malone.h (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_mbox.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_mbox.h (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_msgs.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_msgs.h (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_rpc.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_rpc.h (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_v4l2.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_v4l2.h (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_windsor.c (100%)
+ rename drivers/media/platform/{ => nxp}/amphion/vpu_windsor.h (100%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c9333d46047e..74901acf8f06 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1037,7 +1037,7 @@ M:	Zhou Peng <eagle.zhou@nxp.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/amphion,vpu.yaml
+-F:	drivers/media/platform/amphion/
++F:	drivers/media/platform/nxp/amphion/
+ 
+ AMS AS73211 DRIVER
+ M:	Christian Eggers <ceggers@arri.de>
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index fd6b18ac0c7c..d5aedc6b5ca3 100644
+index 13d8f3e59116..7b88ef15f8c8 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -62,6 +62,7 @@ source "drivers/media/platform/rockchip/rga/Kconfig"
- source "drivers/media/platform/rockchip/rkisp1/Kconfig"
- source "drivers/media/platform/s3c-camif/Kconfig"
- source "drivers/media/platform/s5p-g2d/Kconfig"
-+source "drivers/media/platform/s5p-jpeg/Kconfig"
- source "drivers/media/platform/sti/hva/Kconfig"
- source "drivers/media/platform/stm32/Kconfig"
- source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
-@@ -101,18 +102,6 @@ config VIDEO_MEM2MEM_DEINTERLACE
- 	help
- 	    Generic deinterlacing V4L2 driver.
- 
--
--config VIDEO_SAMSUNG_S5P_JPEG
--	tristate "Samsung S5P/Exynos3250/Exynos4 JPEG codec driver"
--	depends on V4L_MEM2MEM_DRIVERS
--	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
--	select VIDEOBUF2_DMA_CONTIG
--	select V4L2_MEM2MEM_DEV
--	help
--	  This is a v4l2 driver for Samsung S5P, EXYNOS3250
--	  and EXYNOS4 JPEG codec
--
- source "drivers/media/platform/s5p-mfc/Kconfig"
- 
- source "drivers/media/platform/sti/bdisp/Kconfig"
-diff --git a/drivers/media/platform/s5p-jpeg/Kconfig b/drivers/media/platform/s5p-jpeg/Kconfig
-new file mode 100644
-index 000000000000..e522860d2b15
---- /dev/null
-+++ b/drivers/media/platform/s5p-jpeg/Kconfig
-@@ -0,0 +1,12 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config VIDEO_SAMSUNG_S5P_JPEG
-+	tristate "Samsung S5P/Exynos3250/Exynos4 JPEG codec driver"
-+	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
-+	select VIDEOBUF2_DMA_CONTIG
-+	select V4L2_MEM2MEM_DEV
-+	help
-+	  This is a v4l2 driver for Samsung S5P, EXYNOS3250
-+	  and EXYNOS4 JPEG codec
+@@ -69,7 +69,6 @@ source "drivers/media/platform/allegro-dvt/Kconfig"
+ source "drivers/media/platform/allwinner/Kconfig"
+ source "drivers/media/platform/am437x/Kconfig"
+ source "drivers/media/platform/amlogic/meson-ge2d/Kconfig"
+-source "drivers/media/platform/amphion/Kconfig"
+ source "drivers/media/platform/aspeed/Kconfig"
+ source "drivers/media/platform/atmel/Kconfig"
+ source "drivers/media/platform/cadence/Kconfig"
+@@ -85,6 +84,7 @@ source "drivers/media/platform/mediatek/mtk-vcodec/Kconfig"
+ source "drivers/media/platform/mediatek/mtk-vpu/Kconfig"
+ source "drivers/media/platform/nvidia/tegra-vde/Kconfig"
+ source "drivers/media/platform/nxp/Kconfig"
++source "drivers/media/platform/nxp/amphion/Kconfig"
+ source "drivers/media/platform/omap/Kconfig"
+ source "drivers/media/platform/omap3isp/Kconfig"
+ source "drivers/media/platform/qcom/Kconfig"
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index ce9909534218..7a28b60dbbe6 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -9,7 +9,6 @@ obj-y += allegro-dvt/
+ obj-y += allwinner/
+ obj-y += am437x/
+ obj-y += amlogic/meson-ge2d/
+-obj-y += amphion/
+ obj-y += aspeed/
+ obj-y += atmel/
+ obj-y += cadence/
+@@ -25,6 +24,7 @@ obj-y += mediatek/mtk-vcodec/
+ obj-y += mediatek/mtk-vpu/
+ obj-y += nvidia/tegra-vde/
+ obj-y += nxp/
++obj-y += nxp/amphion/
+ obj-y += omap/
+ obj-y += omap3isp/
+ obj-y += qcom/camss/
+diff --git a/drivers/media/platform/amphion/Kconfig b/drivers/media/platform/nxp/amphion/Kconfig
+similarity index 100%
+rename from drivers/media/platform/amphion/Kconfig
+rename to drivers/media/platform/nxp/amphion/Kconfig
+diff --git a/drivers/media/platform/amphion/Makefile b/drivers/media/platform/nxp/amphion/Makefile
+similarity index 100%
+rename from drivers/media/platform/amphion/Makefile
+rename to drivers/media/platform/nxp/amphion/Makefile
+diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/nxp/amphion/vdec.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vdec.c
+rename to drivers/media/platform/nxp/amphion/vdec.c
+diff --git a/drivers/media/platform/amphion/venc.c b/drivers/media/platform/nxp/amphion/venc.c
+similarity index 100%
+rename from drivers/media/platform/amphion/venc.c
+rename to drivers/media/platform/nxp/amphion/venc.c
+diff --git a/drivers/media/platform/amphion/vpu.h b/drivers/media/platform/nxp/amphion/vpu.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu.h
+rename to drivers/media/platform/nxp/amphion/vpu.h
+diff --git a/drivers/media/platform/amphion/vpu_cmds.c b/drivers/media/platform/nxp/amphion/vpu_cmds.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_cmds.c
+rename to drivers/media/platform/nxp/amphion/vpu_cmds.c
+diff --git a/drivers/media/platform/amphion/vpu_cmds.h b/drivers/media/platform/nxp/amphion/vpu_cmds.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_cmds.h
+rename to drivers/media/platform/nxp/amphion/vpu_cmds.h
+diff --git a/drivers/media/platform/amphion/vpu_codec.h b/drivers/media/platform/nxp/amphion/vpu_codec.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_codec.h
+rename to drivers/media/platform/nxp/amphion/vpu_codec.h
+diff --git a/drivers/media/platform/amphion/vpu_color.c b/drivers/media/platform/nxp/amphion/vpu_color.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_color.c
+rename to drivers/media/platform/nxp/amphion/vpu_color.c
+diff --git a/drivers/media/platform/amphion/vpu_core.c b/drivers/media/platform/nxp/amphion/vpu_core.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_core.c
+rename to drivers/media/platform/nxp/amphion/vpu_core.c
+diff --git a/drivers/media/platform/amphion/vpu_core.h b/drivers/media/platform/nxp/amphion/vpu_core.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_core.h
+rename to drivers/media/platform/nxp/amphion/vpu_core.h
+diff --git a/drivers/media/platform/amphion/vpu_dbg.c b/drivers/media/platform/nxp/amphion/vpu_dbg.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_dbg.c
+rename to drivers/media/platform/nxp/amphion/vpu_dbg.c
+diff --git a/drivers/media/platform/amphion/vpu_defs.h b/drivers/media/platform/nxp/amphion/vpu_defs.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_defs.h
+rename to drivers/media/platform/nxp/amphion/vpu_defs.h
+diff --git a/drivers/media/platform/amphion/vpu_drv.c b/drivers/media/platform/nxp/amphion/vpu_drv.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_drv.c
+rename to drivers/media/platform/nxp/amphion/vpu_drv.c
+diff --git a/drivers/media/platform/amphion/vpu_helpers.c b/drivers/media/platform/nxp/amphion/vpu_helpers.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_helpers.c
+rename to drivers/media/platform/nxp/amphion/vpu_helpers.c
+diff --git a/drivers/media/platform/amphion/vpu_helpers.h b/drivers/media/platform/nxp/amphion/vpu_helpers.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_helpers.h
+rename to drivers/media/platform/nxp/amphion/vpu_helpers.h
+diff --git a/drivers/media/platform/amphion/vpu_imx8q.c b/drivers/media/platform/nxp/amphion/vpu_imx8q.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_imx8q.c
+rename to drivers/media/platform/nxp/amphion/vpu_imx8q.c
+diff --git a/drivers/media/platform/amphion/vpu_imx8q.h b/drivers/media/platform/nxp/amphion/vpu_imx8q.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_imx8q.h
+rename to drivers/media/platform/nxp/amphion/vpu_imx8q.h
+diff --git a/drivers/media/platform/amphion/vpu_malone.c b/drivers/media/platform/nxp/amphion/vpu_malone.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_malone.c
+rename to drivers/media/platform/nxp/amphion/vpu_malone.c
+diff --git a/drivers/media/platform/amphion/vpu_malone.h b/drivers/media/platform/nxp/amphion/vpu_malone.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_malone.h
+rename to drivers/media/platform/nxp/amphion/vpu_malone.h
+diff --git a/drivers/media/platform/amphion/vpu_mbox.c b/drivers/media/platform/nxp/amphion/vpu_mbox.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_mbox.c
+rename to drivers/media/platform/nxp/amphion/vpu_mbox.c
+diff --git a/drivers/media/platform/amphion/vpu_mbox.h b/drivers/media/platform/nxp/amphion/vpu_mbox.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_mbox.h
+rename to drivers/media/platform/nxp/amphion/vpu_mbox.h
+diff --git a/drivers/media/platform/amphion/vpu_msgs.c b/drivers/media/platform/nxp/amphion/vpu_msgs.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_msgs.c
+rename to drivers/media/platform/nxp/amphion/vpu_msgs.c
+diff --git a/drivers/media/platform/amphion/vpu_msgs.h b/drivers/media/platform/nxp/amphion/vpu_msgs.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_msgs.h
+rename to drivers/media/platform/nxp/amphion/vpu_msgs.h
+diff --git a/drivers/media/platform/amphion/vpu_rpc.c b/drivers/media/platform/nxp/amphion/vpu_rpc.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_rpc.c
+rename to drivers/media/platform/nxp/amphion/vpu_rpc.c
+diff --git a/drivers/media/platform/amphion/vpu_rpc.h b/drivers/media/platform/nxp/amphion/vpu_rpc.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_rpc.h
+rename to drivers/media/platform/nxp/amphion/vpu_rpc.h
+diff --git a/drivers/media/platform/amphion/vpu_v4l2.c b/drivers/media/platform/nxp/amphion/vpu_v4l2.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_v4l2.c
+rename to drivers/media/platform/nxp/amphion/vpu_v4l2.c
+diff --git a/drivers/media/platform/amphion/vpu_v4l2.h b/drivers/media/platform/nxp/amphion/vpu_v4l2.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_v4l2.h
+rename to drivers/media/platform/nxp/amphion/vpu_v4l2.h
+diff --git a/drivers/media/platform/amphion/vpu_windsor.c b/drivers/media/platform/nxp/amphion/vpu_windsor.c
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_windsor.c
+rename to drivers/media/platform/nxp/amphion/vpu_windsor.c
+diff --git a/drivers/media/platform/amphion/vpu_windsor.h b/drivers/media/platform/nxp/amphion/vpu_windsor.h
+similarity index 100%
+rename from drivers/media/platform/amphion/vpu_windsor.h
+rename to drivers/media/platform/nxp/amphion/vpu_windsor.h
 -- 
 2.35.1
 
