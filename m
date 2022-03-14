@@ -2,67 +2,62 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2717C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D9C4C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237238AbiCNH6Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
+        id S232571AbiCNH62 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237000AbiCNH5u (ORCPT
+        with ESMTP id S237001AbiCNH5u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7F04163C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD754163E;
         Mon, 14 Mar 2022 00:56:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9C4F611E6;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDC94611E4;
         Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3DA4C340E9;
-        Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C32EC341E6;
+        Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647244563;
-        bh=nLTDTeNlFXpw5hEG8uuXhFEc/E6nBrIinVD/qyo708Q=;
+        bh=f0gLLvVNLq+QdnIAJ7MjXom3256f3cZ5lDOYgZlUuog=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L4whbSB7DmR+SmJss10nY3sjhSipO/sT9UCvzUDJ1PCLQe9X0680UA3DjT4TCqZWo
-         z0/dp65T2nwMYfTX5Q4fShNErvtn2fG/MThW3FHlHPZQng2dAh18TWUHGd1XDSRhHF
-         2hZwIzzZ0qn59EYmqXSo+QFriFszq4EJi8HquGFFswtqFukecFbA4P62/C9tGQlGWu
-         jjteDrLDY8YKMPLl6OhJjAd5W39ixD2YpmlIIC/Ogty3dlg6RsVRMHO3hCDzieLmq8
-         QRC3avOBXWqRB/Y9Lx57WkRTYqBwcJie4i939vDpOfz6+uDAmjE8FpE4vMFuZLa4ku
-         PaZAbYnAzPR7g==
+        b=fXDIn4JYtgKVAK0wu3HY06PJovgNXt65MRLLxOe+9MkNtugC/XM5bKAkcalzlGt4n
+         x2W1dgUkVFw1wIuqiR8+bKy+xkIIvEXRpsUMcz5dTB/fAkQSWl/SjylVBHYnPZFfao
+         gadeuuddQ1YofZCpg/ZPZcktApgHGYJSXC7zKhTmWUXMPeAFVq7QPI7qLmrMLqYSBl
+         VThh2ijcUpevKWjMPoQM1etAN87jqnEkFw51Ye0OqYva30qkSnz7ADYDw40CPyuNO9
+         nYC6CirQEzo9jscV3HEihZgUxKTqAIrJLkknBf2qmRD6dTbCZ3xJvP9bEWSphzwNCK
+         JfyvJyQ5NS28A==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYe-001kXj-L8; Mon, 14 Mar 2022 08:56:00 +0100
+        id 1nTfYe-001kXX-Go; Mon, 14 Mar 2022 08:56:00 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
         Cai Huoqing <caihuoqing@baidu.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Dmitry Osipenko <digetx@gmail.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Herman <yanshuaijun@yulong.com>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Maxime Jourdan <mjourdan@baylibre.com>,
         Ming Qian <ming.qian@nxp.com>,
-        Nadezda Lutovinova <lutovinova@ispras.ru>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tuo Li <islituo@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 55/64] media: platform: rename s5p-mfc/ to samsung/s5p-mfc/
-Date:   Mon, 14 Mar 2022 08:55:47 +0100
-Message-Id: <14a15a85b47af0b8998b32e47cf879eb38142bae.1647242579.git.mchehab@kernel.org>
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 52/64] media: platform: rename s3c-camif/ to samsung/s3c-camif/
+Date:   Mon, 14 Mar 2022 08:55:44 +0100
+Message-Id: <3f964b49f49400603f871b73e25762e63142b732.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -74,7 +69,7 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 As the end goal is to have platform drivers split by vendor,
-rename s5p-mfc/ to samsung/s5p-mfc/.
+rename s3c-camif/ to samsung/s3c-camif/.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -82,467 +77,102 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- MAINTAINERS                                                   | 2 +-
- drivers/media/platform/Kconfig                                | 2 +-
- drivers/media/platform/Makefile                               | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/Kconfig          | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/Makefile         | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/regs-mfc-v10.h   | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/regs-mfc-v6.h    | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/regs-mfc-v7.h    | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/regs-mfc-v8.h    | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/regs-mfc.h       | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc.c        | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_cmd.c    | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_cmd.h    | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_cmd_v5.c | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_cmd_v5.h | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_cmd_v6.c | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_cmd_v6.h | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_common.h | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_ctrl.c   | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_ctrl.h   | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_debug.h  | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_dec.c    | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_dec.h    | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_enc.c    | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_enc.h    | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_intr.c   | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_intr.h   | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_iommu.h  | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_opr.c    | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_opr.h    | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_opr_v5.c | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_opr_v5.h | 0
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_opr_v6.c | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_opr_v6.h | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_pm.c     | 2 +-
- drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_pm.h     | 2 +-
- 36 files changed, 22 insertions(+), 22 deletions(-)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/Kconfig (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/Makefile (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/regs-mfc-v10.h (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/regs-mfc-v6.h (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/regs-mfc-v7.h (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/regs-mfc-v8.h (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/regs-mfc.h (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc.c (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_cmd.c (89%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_cmd.h (92%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_cmd_v5.c (98%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_cmd_v5.h (82%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_cmd_v6.c (98%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_cmd_v6.h (82%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_common.h (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_ctrl.c (99%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_ctrl.h (92%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_debug.h (95%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_dec.c (99%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_dec.h (90%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_enc.c (99%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_enc.h (90%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_intr.c (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_intr.h (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_iommu.h (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_opr.c (98%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_opr.h (99%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_opr_v5.c (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_opr_v5.h (100%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_opr_v6.c (99%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_opr_v6.h (96%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_pm.c (97%)
- rename drivers/media/platform/{ => samsung}/s5p-mfc/s5p_mfc_pm.h (87%)
+ MAINTAINERS                                                    | 2 +-
+ drivers/media/platform/Kconfig                                 | 2 +-
+ drivers/media/platform/Makefile                                | 2 +-
+ drivers/media/platform/{ => samsung}/s3c-camif/Kconfig         | 0
+ drivers/media/platform/{ => samsung}/s3c-camif/Makefile        | 0
+ drivers/media/platform/{ => samsung}/s3c-camif/camif-capture.c | 0
+ drivers/media/platform/{ => samsung}/s3c-camif/camif-core.c    | 0
+ drivers/media/platform/{ => samsung}/s3c-camif/camif-core.h    | 0
+ drivers/media/platform/{ => samsung}/s3c-camif/camif-regs.c    | 0
+ drivers/media/platform/{ => samsung}/s3c-camif/camif-regs.h    | 0
+ 10 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/Kconfig (100%)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/Makefile (100%)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/camif-capture.c (100%)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/camif-core.c (100%)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/camif-core.h (100%)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/camif-regs.c (100%)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/camif-regs.h (100%)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index dfd490369d48..7711a5ea125e 100644
+index b1418853d56f..8ce4894699cc 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2641,7 +2641,7 @@ M:	Andrzej Hajda <andrzej.hajda@intel.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+@@ -17063,7 +17063,7 @@ M:	Sylwester Nawrocki <sylvester.nawrocki@gmail.com>
  L:	linux-media@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
  S:	Maintained
--F:	drivers/media/platform/s5p-mfc/
-+F:	drivers/media/platform/samsung/s5p-mfc/
+-F:	drivers/media/platform/s3c-camif/
++F:	drivers/media/platform/samsung/s3c-camif/
+ F:	include/media/drv-intf/s3c_camif.h
  
- ARM/SHMOBILE ARM ARCHITECTURE
- M:	Geert Uytterhoeven <geert+renesas@glider.be>
+ SAMSUNG S3FWRN5 NFC DRIVER
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 1b71ce772586..c61b785727a8 100644
+index dca53f6a1b33..b371c0b258d1 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
 @@ -88,12 +88,12 @@ source "drivers/media/platform/omap3isp/Kconfig"
  source "drivers/media/platform/qcom/Kconfig"
  source "drivers/media/platform/renesas/Kconfig"
  source "drivers/media/platform/rockchip/Kconfig"
--source "drivers/media/platform/s5p-mfc/Kconfig"
+-source "drivers/media/platform/s3c-camif/Kconfig"
+ source "drivers/media/platform/s5p-g2d/Kconfig"
+ source "drivers/media/platform/s5p-jpeg/Kconfig"
+ source "drivers/media/platform/s5p-mfc/Kconfig"
  source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
  source "drivers/media/platform/samsung/exynos4-is/Kconfig"
- source "drivers/media/platform/samsung/s3c-camif/Kconfig"
- source "drivers/media/platform/samsung/s5p-g2d/Kconfig"
- source "drivers/media/platform/samsung/s5p-jpeg/Kconfig"
-+source "drivers/media/platform/samsung/s5p-mfc/Kconfig"
++source "drivers/media/platform/samsung/s3c-camif/Kconfig"
  source "drivers/media/platform/sti/Kconfig"
  source "drivers/media/platform/stm32/Kconfig"
  source "drivers/media/platform/ti-vpe/Kconfig"
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 94bdd5d94bb2..6a766acfbe37 100644
+index 848cbd6147ae..c3dfe40b2def 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
 @@ -30,12 +30,12 @@ obj-y += qcom/venus/
  obj-y += renesas/
  obj-y += rockchip/rga/
  obj-y += rockchip/rkisp1/
--obj-y += s5p-mfc/
+-obj-y += s3c-camif/
+ obj-y += s5p-g2d/
+ obj-y += s5p-jpeg/
+ obj-y += s5p-mfc/
  obj-y += samsung/exynos-gsc/
  obj-y += samsung/exynos4-is/
- obj-y += samsung/s3c-camif/
- obj-y += samsung/s5p-g2d/
- obj-y += samsung/s5p-jpeg/
-+obj-y += samsung/s5p-mfc/
++obj-y += samsung/s3c-camif/
  obj-y += sti/bdisp/
  obj-y += sti/c8sectpfe/
  obj-y += sti/delta/
-diff --git a/drivers/media/platform/s5p-mfc/Kconfig b/drivers/media/platform/samsung/s5p-mfc/Kconfig
+diff --git a/drivers/media/platform/s3c-camif/Kconfig b/drivers/media/platform/samsung/s3c-camif/Kconfig
 similarity index 100%
-rename from drivers/media/platform/s5p-mfc/Kconfig
-rename to drivers/media/platform/samsung/s5p-mfc/Kconfig
-diff --git a/drivers/media/platform/s5p-mfc/Makefile b/drivers/media/platform/samsung/s5p-mfc/Makefile
+rename from drivers/media/platform/s3c-camif/Kconfig
+rename to drivers/media/platform/samsung/s3c-camif/Kconfig
+diff --git a/drivers/media/platform/s3c-camif/Makefile b/drivers/media/platform/samsung/s3c-camif/Makefile
 similarity index 100%
-rename from drivers/media/platform/s5p-mfc/Makefile
-rename to drivers/media/platform/samsung/s5p-mfc/Makefile
-diff --git a/drivers/media/platform/s5p-mfc/regs-mfc-v10.h b/drivers/media/platform/samsung/s5p-mfc/regs-mfc-v10.h
+rename from drivers/media/platform/s3c-camif/Makefile
+rename to drivers/media/platform/samsung/s3c-camif/Makefile
+diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/samsung/s3c-camif/camif-capture.c
 similarity index 100%
-rename from drivers/media/platform/s5p-mfc/regs-mfc-v10.h
-rename to drivers/media/platform/samsung/s5p-mfc/regs-mfc-v10.h
-diff --git a/drivers/media/platform/s5p-mfc/regs-mfc-v6.h b/drivers/media/platform/samsung/s5p-mfc/regs-mfc-v6.h
+rename from drivers/media/platform/s3c-camif/camif-capture.c
+rename to drivers/media/platform/samsung/s3c-camif/camif-capture.c
+diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/samsung/s3c-camif/camif-core.c
 similarity index 100%
-rename from drivers/media/platform/s5p-mfc/regs-mfc-v6.h
-rename to drivers/media/platform/samsung/s5p-mfc/regs-mfc-v6.h
-diff --git a/drivers/media/platform/s5p-mfc/regs-mfc-v7.h b/drivers/media/platform/samsung/s5p-mfc/regs-mfc-v7.h
+rename from drivers/media/platform/s3c-camif/camif-core.c
+rename to drivers/media/platform/samsung/s3c-camif/camif-core.c
+diff --git a/drivers/media/platform/s3c-camif/camif-core.h b/drivers/media/platform/samsung/s3c-camif/camif-core.h
 similarity index 100%
-rename from drivers/media/platform/s5p-mfc/regs-mfc-v7.h
-rename to drivers/media/platform/samsung/s5p-mfc/regs-mfc-v7.h
-diff --git a/drivers/media/platform/s5p-mfc/regs-mfc-v8.h b/drivers/media/platform/samsung/s5p-mfc/regs-mfc-v8.h
+rename from drivers/media/platform/s3c-camif/camif-core.h
+rename to drivers/media/platform/samsung/s3c-camif/camif-core.h
+diff --git a/drivers/media/platform/s3c-camif/camif-regs.c b/drivers/media/platform/samsung/s3c-camif/camif-regs.c
 similarity index 100%
-rename from drivers/media/platform/s5p-mfc/regs-mfc-v8.h
-rename to drivers/media/platform/samsung/s5p-mfc/regs-mfc-v8.h
-diff --git a/drivers/media/platform/s5p-mfc/regs-mfc.h b/drivers/media/platform/samsung/s5p-mfc/regs-mfc.h
+rename from drivers/media/platform/s3c-camif/camif-regs.c
+rename to drivers/media/platform/samsung/s3c-camif/camif-regs.c
+diff --git a/drivers/media/platform/s3c-camif/camif-regs.h b/drivers/media/platform/samsung/s3c-camif/camif-regs.h
 similarity index 100%
-rename from drivers/media/platform/s5p-mfc/regs-mfc.h
-rename to drivers/media/platform/samsung/s5p-mfc/regs-mfc.h
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-similarity index 100%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc.c
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_cmd.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd.c
-similarity index 89%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_cmd.c
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd.c
-index 0e88c28f4ad3..774c573dc075 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_cmd.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_cmd.c
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd.c
-  *
-  * Copyright (C) 2012 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_cmd.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd.h
-similarity index 92%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_cmd.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd.h
-index ed4e32a12552..945d12fdceb7 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_cmd.h
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_cmd.h
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd.h
-  *
-  * Copyright (C) 2012 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v5.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v5.c
-similarity index 98%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v5.c
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v5.c
-index 1ea4eda9c8e0..327e54e70611 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v5.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v5.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v5.c
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v5.c
-  *
-  * Copyright (C) 2011 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v5.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v5.h
-similarity index 82%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v5.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v5.h
-index 917854bffe9f..6eafa514aebc 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v5.h
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v5.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v5.h
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v5.h
-  *
-  * Copyright (C) 2011 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v6.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
-similarity index 98%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v6.c
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
-index 1f42130cc865..f8588e52dfc8 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v6.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v6.c
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c
-  *
-  * Copyright (c) 2012 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v6.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.h
-similarity index 82%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v6.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.h
-index c19884ea2bfc..9dc44460cc38 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v6.h
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_cmd_v6.h
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.h
-  *
-  * Copyright (C) 2011 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_common.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_common.h
-similarity index 100%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_common.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_common.h
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_ctrl.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.c
-similarity index 99%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_ctrl.c
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.c
-index da138c314963..72d70984e99a 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_ctrl.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_ctrl.c
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.c
-  *
-  * Copyright (c) 2010 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_ctrl.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.h
-similarity index 92%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_ctrl.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.h
-index 7f32ef8a6b61..653ba5f3d048 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_ctrl.h
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_ctrl.h
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.h
-  *
-  * Copyright (c) 2010 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_debug.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_debug.h
-similarity index 95%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_debug.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_debug.h
-index 752bbe4fe48e..bba5dad6dbff 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_debug.h
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_debug.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * drivers/media/platform/s5p-mfc/s5p_mfc_debug.h
-+ * drivers/media/platform/samsung/s5p-mfc/s5p_mfc_debug.h
-  *
-  * Header file for Samsung MFC (Multi Function Codec - FIMV) driver
-  * This file contains debug macros
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.c
-similarity index 99%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_dec.c
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.c
-index c0798811755c..4b89df8bfd18 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.c
-  *
-  * Copyright (C) 2011 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_dec.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.h
-similarity index 90%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_dec.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.h
-index 0e9a0e3bbbe7..0c52ab46cff7 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_dec.h
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_dec.h
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.h
-  *
-  * Copyright (C) 2011 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-similarity index 99%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-index 1fad99edb091..a8877d805b29 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-  *
-  * Copyright (c) 2010-2011 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_enc.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.h
-similarity index 90%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_enc.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.h
-index cacd1ca43e19..3f1b1a037a4f 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_enc.h
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_enc.h
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.h
-  *
-  * Copyright (C) 2011 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_intr.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_intr.c
-similarity index 100%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_intr.c
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_intr.c
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_intr.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_intr.h
-similarity index 100%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_intr.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_intr.h
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_iommu.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_iommu.h
-similarity index 100%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_iommu.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_iommu.h
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_opr.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr.c
-similarity index 98%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_opr.c
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr.c
-index bb65671eea91..673962301173 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_opr.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * drivers/media/platform/s5p-mfc/s5p_mfc_opr.c
-+ * drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr.c
-  *
-  * Samsung MFC (Multi Function Codec - FIMV) driver
-  * This file contains hw related functions.
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_opr.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr.h
-similarity index 99%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_opr.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr.h
-index 1c5d2d4c0543..b9831275f3ab 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_opr.h
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * drivers/media/platform/s5p-mfc/s5p_mfc_opr.h
-+ * drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr.h
-  *
-  * Header file for Samsung MFC (Multi Function Codec - FIMV) driver
-  * Contains declarations of hw related functions.
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v5.c
-similarity index 100%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v5.c
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v5.h
-similarity index 100%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v5.h
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
-similarity index 99%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.c
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
-index a1453053e31a..8227004f6746 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.c
-+ * drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
-  *
-  * Samsung MFC (Multi Function Codec - FIMV) driver
-  * This file contains hw related functions.
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h
-similarity index 96%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h
-index 8ca514bf5e37..e4dd03c5454c 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.h
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.h
-+ * drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h
-  *
-  * Header file for Samsung MFC (Multi Function Codec - FIMV) driver
-  * Contains declarations of hw related functions.
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_pm.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_pm.c
-similarity index 97%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_pm.c
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_pm.c
-index 88b7d33c9197..72a901e99450 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_pm.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_pm.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_pm.c
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_pm.c
-  *
-  * Copyright (c) 2010 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_pm.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_pm.h
-similarity index 87%
-rename from drivers/media/platform/s5p-mfc/s5p_mfc_pm.h
-rename to drivers/media/platform/samsung/s5p-mfc/s5p_mfc_pm.h
-index 3d26443189a2..4159d2364e87 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_pm.h
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_pm.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
- /*
-- * linux/drivers/media/platform/s5p-mfc/s5p_mfc_pm.h
-+ * linux/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_pm.h
-  *
-  * Copyright (C) 2011 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com/
+rename from drivers/media/platform/s3c-camif/camif-regs.h
+rename to drivers/media/platform/samsung/s3c-camif/camif-regs.h
 -- 
 2.35.1
 
