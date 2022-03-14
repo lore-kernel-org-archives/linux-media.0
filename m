@@ -2,55 +2,61 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1999C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:56:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A962C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:56:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237079AbiCNH5w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
+        id S237084AbiCNH5x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236910AbiCNH5f (ORCPT
+        with ESMTP id S236923AbiCNH5f (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C8241325;
-        Mon, 14 Mar 2022 00:56:10 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1678F4132D;
+        Mon, 14 Mar 2022 00:56:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26105611A3;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0CBB6B80D52;
+        Mon, 14 Mar 2022 07:56:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB02C341E4;
         Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEDD2C341D2;
-        Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647244561;
-        bh=WBtHf6ExXzuB6KSU1sK3PjMZJI9ghSITOXYKqgFchJo=;
+        s=k20201202; t=1647244563;
+        bh=NUWZ3FrsjEU1KQK0UFRKOIlNOBV2tg90c49kOIeAcx0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uR8n+DJaI7Ac7JMYksMnZvkElC+NvOdhmGQTehFoRNSayyfBg7nIe/7S7rob80dkE
-         0PkJ+vtpd4dWrHItpKUVj/QrFFeIKrrP2H0gq8OiUbzuiGjzUzSua5m3gG7/Wvvjgl
-         o0rgJJfEs/1hSswyMXT0jJUlBO9papXlwY0q+34wivxVdgfDurmInUhEqML4NtIQSX
-         7kT3Psqpzq7FfD3NMU/xcgewWrCHDF194PvcBaChmSZMttgnsCquY7W7E7fhb4+aRS
-         8F+8AWPvRxzhkqDzDVS2huTo2J0YVbqrYIwO5PGM3S3zbtYtptVhMWo5S0DEE5Tifh
-         4EyuYKzSMtAgA==
+        b=SRS/v5RdHkMQIvcur+1IsoQ3k3FsVxkNsIf1SOB5+gztEp2R5k1qPVBI9AvUTnYm1
+         asVTnNL+D1aeKa8L6g+uEXv3FHO8mKNW0b8ro+U6J89dc4FKuxYbH4VyNCi+58p+yL
+         uCKVmo9Wzt+ALMFP7APKHPnG1JjY302EkpxYsuA2s9XThz+Un7CFFg1Mdl69Hy6ysx
+         XgxQud5dkBkaHnv7oAndCYyY+PR5saXZj+I2Q4pz5p2NptxAayA7VZk6xZ4ga/bhId
+         4LtIA1UHZwixLEaQQ9NVrCu+DIRcufgA/ruossIPGSLP7ci52w7YkHUOomaHvBDkys
+         mg/WEU8BrFyVQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYd-001kW3-GP; Mon, 14 Mar 2022 08:55:59 +0100
+        id 1nTfYe-001kXT-FS; Mon, 14 Mar 2022 08:56:00 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Chen-Yu Tsai <wens@csie.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
         Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
         Ming Qian <ming.qian@nxp.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH 29/64] media: platform: sun8i-rotate: move config to its own file
-Date:   Mon, 14 Mar 2022 08:55:21 +0100
-Message-Id: <9cb1837b50eeacf4eb816dc19ad3b2ad5c2d93b4.1647242579.git.mchehab@kernel.org>
+        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 51/64] media: platform: rename exynos-gsc/ to samsung/exynos-gsc/
+Date:   Mon, 14 Mar 2022 08:55:43 +0100
+Message-Id: <079d0d718c65424edd82e5b094211f1433094c93.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -61,73 +67,101 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to better organize the platform/Kconfig, place
-sun8i-rotate-specific config stuff on a separate Kconfig file.
+As the end goal is to have platform drivers split by vendor,
+rename exynos-gsc/ to samsung/exynos-gsc/.
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig                    | 14 +-------------
- drivers/media/platform/sunxi/sun8i-rotate/Kconfig | 14 ++++++++++++++
- 2 files changed, 15 insertions(+), 13 deletions(-)
- create mode 100644 drivers/media/platform/sunxi/sun8i-rotate/Kconfig
+ drivers/media/platform/Kconfig                             | 2 +-
+ drivers/media/platform/Makefile                            | 2 +-
+ drivers/media/platform/{ => samsung}/exynos-gsc/Kconfig    | 0
+ drivers/media/platform/{ => samsung}/exynos-gsc/Makefile   | 0
+ drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.c | 0
+ drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.h | 0
+ drivers/media/platform/{ => samsung}/exynos-gsc/gsc-m2m.c  | 0
+ drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.c | 0
+ drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.h | 0
+ 9 files changed, 2 insertions(+), 2 deletions(-)
+ rename drivers/media/platform/{ => samsung}/exynos-gsc/Kconfig (100%)
+ rename drivers/media/platform/{ => samsung}/exynos-gsc/Makefile (100%)
+ rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-m2m.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.h (100%)
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 61f8a8fae109..224ebe4f5348 100644
+index 6d2221a9c6ee..dca53f6a1b33 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -64,6 +64,7 @@ source "drivers/media/platform/s5p-g2d/Kconfig"
- source "drivers/media/platform/sti/hva/Kconfig"
+@@ -74,7 +74,6 @@ source "drivers/media/platform/atmel/Kconfig"
+ source "drivers/media/platform/cadence/Kconfig"
+ source "drivers/media/platform/chips-media/Kconfig"
+ source "drivers/media/platform/davinci/Kconfig"
+-source "drivers/media/platform/exynos-gsc/Kconfig"
+ source "drivers/media/platform/intel/Kconfig"
+ source "drivers/media/platform/marvell/Kconfig"
+ source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
+@@ -93,6 +92,7 @@ source "drivers/media/platform/s3c-camif/Kconfig"
+ source "drivers/media/platform/s5p-g2d/Kconfig"
+ source "drivers/media/platform/s5p-jpeg/Kconfig"
+ source "drivers/media/platform/s5p-mfc/Kconfig"
++source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
+ source "drivers/media/platform/samsung/exynos4-is/Kconfig"
+ source "drivers/media/platform/sti/Kconfig"
  source "drivers/media/platform/stm32/Kconfig"
- source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
-+source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
- 
- config VIDEO_MUX
- 	tristate "Video Multiplexer"
-@@ -231,19 +232,6 @@ config VIDEO_TI_VPE_DEBUG
- 	help
- 	  Enable debug messages on VPE driver.
- 
--config VIDEO_SUN8I_ROTATE
--	tristate "Allwinner DE2 rotation driver"
--	depends on V4L_MEM2MEM_DRIVERS
--	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_SUNXI || COMPILE_TEST
--	depends on COMMON_CLK && OF
--	depends on PM
--	select VIDEOBUF2_DMA_CONTIG
--	select V4L2_MEM2MEM_DEV
--	help
--	   Support for the Allwinner DE2 rotation unit.
--	   To compile this driver as a module choose m here.
--
- config VIDEO_TEGRA_VDE
- 	tristate "NVIDIA Tegra Video Decoder Engine driver"
- 	depends on V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/sunxi/sun8i-rotate/Kconfig b/drivers/media/platform/sunxi/sun8i-rotate/Kconfig
-new file mode 100644
-index 000000000000..64a8ea76e917
---- /dev/null
-+++ b/drivers/media/platform/sunxi/sun8i-rotate/Kconfig
-@@ -0,0 +1,14 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config VIDEO_SUN8I_ROTATE
-+	tristate "Allwinner DE2 rotation driver"
-+	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_SUNXI || COMPILE_TEST
-+	depends on COMMON_CLK && OF
-+	depends on PM
-+	select VIDEOBUF2_DMA_CONTIG
-+	select V4L2_MEM2MEM_DEV
-+	help
-+	   Support for the Allwinner DE2 rotation unit.
-+	   To compile this driver as a module choose m here.
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 613ca6a3efa7..848cbd6147ae 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -14,7 +14,6 @@ obj-y += atmel/
+ obj-y += cadence/
+ obj-y += chips-media/
+ obj-y += davinci/
+-obj-y += exynos-gsc/
+ obj-y += intel/
+ obj-y += marvell/
+ obj-y += mediatek/mtk-jpeg/
+@@ -35,6 +34,7 @@ obj-y += s3c-camif/
+ obj-y += s5p-g2d/
+ obj-y += s5p-jpeg/
+ obj-y += s5p-mfc/
++obj-y += samsung/exynos-gsc/
+ obj-y += samsung/exynos4-is/
+ obj-y += sti/bdisp/
+ obj-y += sti/c8sectpfe/
+diff --git a/drivers/media/platform/exynos-gsc/Kconfig b/drivers/media/platform/samsung/exynos-gsc/Kconfig
+similarity index 100%
+rename from drivers/media/platform/exynos-gsc/Kconfig
+rename to drivers/media/platform/samsung/exynos-gsc/Kconfig
+diff --git a/drivers/media/platform/exynos-gsc/Makefile b/drivers/media/platform/samsung/exynos-gsc/Makefile
+similarity index 100%
+rename from drivers/media/platform/exynos-gsc/Makefile
+rename to drivers/media/platform/samsung/exynos-gsc/Makefile
+diff --git a/drivers/media/platform/exynos-gsc/gsc-core.c b/drivers/media/platform/samsung/exynos-gsc/gsc-core.c
+similarity index 100%
+rename from drivers/media/platform/exynos-gsc/gsc-core.c
+rename to drivers/media/platform/samsung/exynos-gsc/gsc-core.c
+diff --git a/drivers/media/platform/exynos-gsc/gsc-core.h b/drivers/media/platform/samsung/exynos-gsc/gsc-core.h
+similarity index 100%
+rename from drivers/media/platform/exynos-gsc/gsc-core.h
+rename to drivers/media/platform/samsung/exynos-gsc/gsc-core.h
+diff --git a/drivers/media/platform/exynos-gsc/gsc-m2m.c b/drivers/media/platform/samsung/exynos-gsc/gsc-m2m.c
+similarity index 100%
+rename from drivers/media/platform/exynos-gsc/gsc-m2m.c
+rename to drivers/media/platform/samsung/exynos-gsc/gsc-m2m.c
+diff --git a/drivers/media/platform/exynos-gsc/gsc-regs.c b/drivers/media/platform/samsung/exynos-gsc/gsc-regs.c
+similarity index 100%
+rename from drivers/media/platform/exynos-gsc/gsc-regs.c
+rename to drivers/media/platform/samsung/exynos-gsc/gsc-regs.c
+diff --git a/drivers/media/platform/exynos-gsc/gsc-regs.h b/drivers/media/platform/samsung/exynos-gsc/gsc-regs.h
+similarity index 100%
+rename from drivers/media/platform/exynos-gsc/gsc-regs.h
+rename to drivers/media/platform/samsung/exynos-gsc/gsc-regs.h
 -- 
 2.35.1
 
