@@ -2,61 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0D88C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 16:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59FFEC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 16:36:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243412AbiCNQhP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 12:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
+        id S243420AbiCNQhQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 12:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243180AbiCNQgc (ORCPT
+        with ESMTP id S243186AbiCNQgc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 12:36:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EAC17076;
-        Mon, 14 Mar 2022 09:35:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E48417AA5;
+        Mon, 14 Mar 2022 09:35:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAB126144F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D00EC6144A;
         Mon, 14 Mar 2022 16:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E367C341D6;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E792C340FD;
         Mon, 14 Mar 2022 16:35:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647275708;
-        bh=eDQeajChn3UjFQC4O8YehTdZf6q+u3kEO5eQanQRww4=;
+        bh=jBJeALofxyF7wDmEF7BT7aEaZSzFiE4VafpaBW/hK5U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RqlfCf6NMggWEZSiU5L9KzsIk4RTWhhtwDsoZeqQ04UWuapYNUChp2MM/0pJuOMMx
-         KvtBG+9gK9tYCL3LSGPGgQzvS0htR4MGmQ/OgH/kX6m2L3/S1E+dsIQb5JIpK2LeOi
-         qR0uJPMFSf8lsSGh/APlkHooklsS7Sp7U0SSjK70uxoIuENumYtIMdDwF7RcQyFy5O
-         Te1p8n6mlPxxRIdFJdTQA7N1p7b69zJzAS2fJODRlZ5iGi2YnABAh+bGkJNsGB6hsw
-         Ds55IiHOgoIcJ+tut2pJiz5bDJDNzAuqewB9I6nUIzEHTjCX/o5geEgATL1KOQB8Nh
-         D22bbf/wDu8aw==
+        b=Tpan4HDTu+FzF27Yr6A6pLtjq9SKmyR7RHqk55Z2XI6jIEotpouHfBntWZTggG4J5
+         423FvtnPVnQ0wTeQTd2BRfAlqWxeKC4MO78x6/ddo/xrOaoa+zZB/er166yP3eXrkv
+         Cm9tv1F9MtQJsgw1JZoMeT+M6PezB9EdbGlN39HrD2MNunK3mwI4PaGq7z/QA3Hpy8
+         nF+G5nwL7xfnpFkbqm6A30ckQ06pG+DV4jLC/nMKTolbSD9Zusycx0VMJD2yLiFhEs
+         em9KiUpUPCT1K1ANtORY/AHHH61gaoL2eYVpepV6gSLRwZxpCmA2bedVBqPwzRsiKA
+         4MZofaIOoBZeA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTnf0-001wym-Dv; Mon, 14 Mar 2022 17:35:06 +0100
+        id 1nTnf0-001wye-9D; Mon, 14 Mar 2022 17:35:06 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
         Dmitry Osipenko <digetx@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Evgeny Novikov <novikov@ispras.ru>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Herman <yanshuaijun@yulong.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Ming Qian <ming.qian@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v2 41/67] media: platform: rename marvell-ccic/ to marvell/
-Date:   Mon, 14 Mar 2022 17:34:36 +0100
-Message-Id: <ee2d2808bcba51d1879bff04c6d97e69453d8729.1647274407.git.mchehab@kernel.org>
+        Ming Qian <ming.qian@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 39/67] media: platform: Kconfig: place platform drivers on a submenu
+Date:   Mon, 14 Mar 2022 17:34:34 +0100
+Message-Id: <546823232933cf51ea91eb61f33352d809162ba0.1647274406.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647274406.git.mchehab@kernel.org>
 References: <cover.1647274406.git.mchehab@kernel.org>
@@ -67,95 +58,95 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As the end goal is to have platform drivers split by vendor,
-rename marvell-ccic/ to marvell/.
+Just like media bus drivers, place platform drivers on a
+submenu, in order to better organize user-selection:
 
+    Media drivers  --->
+	    *** media drivers ***
+	[*] Media USB Adapters  --->
+	[*] Media PCI Adapters  --->
+	-*- Radio Adapters  --->
+	[*] Media platform devices  --->
+	    *** MMC/SDIO DVB adapters ***
+	< > Siano SMS1xxx based MDTV via SDIO interface
+	[*] V4L test drivers  --->
+	[*] DVB test drivers  --->
+	    *** FireWire (IEEE 1394) Adapters ***
+	<*> FireDTV and FloppyDTV
+	    *** common driver options ***
+	[ ] Enable Remote Controller support for Siano devices
+	[ ] Enable debugfs for smsdvb
+
+As this submenu depends on MEDIA_PLATFORM_DRIVERS and defaults to "y",
+there's no need to change already-existing .config entries, nor touch
+the several make *_defconfig.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/67] at: https://lore.kernel.org/all/cover.1647274406.git.mchehab@kernel.org/
 
- MAINTAINERS                                                    | 2 +-
- drivers/media/platform/Kconfig                                 | 2 +-
- drivers/media/platform/Makefile                                | 2 +-
- drivers/media/platform/{marvell-ccic => marvell}/Kconfig       | 0
- drivers/media/platform/{marvell-ccic => marvell}/Makefile      | 0
- drivers/media/platform/{marvell-ccic => marvell}/cafe-driver.c | 0
- drivers/media/platform/{marvell-ccic => marvell}/mcam-core.c   | 0
- drivers/media/platform/{marvell-ccic => marvell}/mcam-core.h   | 0
- drivers/media/platform/{marvell-ccic => marvell}/mmp-driver.c  | 0
- 9 files changed, 3 insertions(+), 3 deletions(-)
- rename drivers/media/platform/{marvell-ccic => marvell}/Kconfig (100%)
- rename drivers/media/platform/{marvell-ccic => marvell}/Makefile (100%)
- rename drivers/media/platform/{marvell-ccic => marvell}/cafe-driver.c (100%)
- rename drivers/media/platform/{marvell-ccic => marvell}/mcam-core.c (100%)
- rename drivers/media/platform/{marvell-ccic => marvell}/mcam-core.h (100%)
- rename drivers/media/platform/{marvell-ccic => marvell}/mmp-driver.c (100%)
+ drivers/media/Kconfig          |  8 +++++---
+ drivers/media/platform/Kconfig | 10 ++++++++++
+ 2 files changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 84bc106acc57..b83cf0eb99ce 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4248,7 +4248,7 @@ L:	linux-media@vger.kernel.org
- S:	Orphan
- T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/admin-guide/media/cafe_ccic*
--F:	drivers/media/platform/marvell-ccic/
-+F:	drivers/media/platform/marvell/
+diff --git a/drivers/media/Kconfig b/drivers/media/Kconfig
+index f3f24c63536b..1a75058df374 100644
+--- a/drivers/media/Kconfig
++++ b/drivers/media/Kconfig
+@@ -216,13 +216,12 @@ menu "Media drivers"
+ comment "Drivers filtered as selected at 'Filter media drivers'"
+ 	depends on MEDIA_SUPPORT_FILTER
  
- CAIF NETWORK LAYER
- L:	netdev@vger.kernel.org
++comment "Media drivers"
++
+ source "drivers/media/usb/Kconfig"
+ source "drivers/media/pci/Kconfig"
+ source "drivers/media/radio/Kconfig"
+ 
+-# Common driver options
+-source "drivers/media/common/Kconfig"
+-
+ if MEDIA_PLATFORM_SUPPORT
+ source "drivers/media/platform/Kconfig"
+ source "drivers/media/mmc/Kconfig"
+@@ -234,6 +233,9 @@ endif
+ 
+ source "drivers/media/firewire/Kconfig"
+ 
++# Common driver options
++source "drivers/media/common/Kconfig"
++
+ endmenu
+ 
+ #
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 24a43cef18de..0a4260627a00 100644
+index e3316fa37a8f..721f27ef0130 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -76,7 +76,7 @@ source "drivers/media/platform/davinci/Kconfig"
- source "drivers/media/platform/exynos-gsc/Kconfig"
- source "drivers/media/platform/exynos4-is/Kconfig"
- source "drivers/media/platform/intel/Kconfig"
--source "drivers/media/platform/marvell-ccic/Kconfig"
-+source "drivers/media/platform/marvell/Kconfig"
- source "drivers/media/platform/meson/ge2d/Kconfig"
- source "drivers/media/platform/mtk-jpeg/Kconfig"
- source "drivers/media/platform/mtk-mdp/Kconfig"
-diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 8d6e15fad0b1..8b2deba4b62c 100644
---- a/drivers/media/platform/Makefile
-+++ b/drivers/media/platform/Makefile
-@@ -16,7 +16,7 @@ obj-y += davinci/
- obj-y += exynos-gsc/
- obj-y += exynos4-is/
- obj-y += intel/
--obj-y += marvell-ccic/
-+obj-y += marvell/
- obj-y += meson/ge2d/
- obj-y += mtk-jpeg/
- obj-y += mtk-mdp/
-diff --git a/drivers/media/platform/marvell-ccic/Kconfig b/drivers/media/platform/marvell/Kconfig
-similarity index 100%
-rename from drivers/media/platform/marvell-ccic/Kconfig
-rename to drivers/media/platform/marvell/Kconfig
-diff --git a/drivers/media/platform/marvell-ccic/Makefile b/drivers/media/platform/marvell/Makefile
-similarity index 100%
-rename from drivers/media/platform/marvell-ccic/Makefile
-rename to drivers/media/platform/marvell/Makefile
-diff --git a/drivers/media/platform/marvell-ccic/cafe-driver.c b/drivers/media/platform/marvell/cafe-driver.c
-similarity index 100%
-rename from drivers/media/platform/marvell-ccic/cafe-driver.c
-rename to drivers/media/platform/marvell/cafe-driver.c
-diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell/mcam-core.c
-similarity index 100%
-rename from drivers/media/platform/marvell-ccic/mcam-core.c
-rename to drivers/media/platform/marvell/mcam-core.c
-diff --git a/drivers/media/platform/marvell-ccic/mcam-core.h b/drivers/media/platform/marvell/mcam-core.h
-similarity index 100%
-rename from drivers/media/platform/marvell-ccic/mcam-core.h
-rename to drivers/media/platform/marvell/mcam-core.h
-diff --git a/drivers/media/platform/marvell-ccic/mmp-driver.c b/drivers/media/platform/marvell/mmp-driver.c
-similarity index 100%
-rename from drivers/media/platform/marvell-ccic/mmp-driver.c
-rename to drivers/media/platform/marvell/mmp-driver.c
+@@ -3,6 +3,14 @@
+ # Platform drivers
+ #	Most drivers here are currently for webcam support
+ 
++menuconfig MEDIA_PLATFORM_DRIVERS
++	bool "Media platform devices"
++	default "y"
++	help
++	  Say Y here to enable support for platform-specific media drivers.
++
++if MEDIA_PLATFORM_DRIVERS
++
+ config V4L_PLATFORM_DRIVERS
+ 	bool "V4L platform devices"
+ 	help
+@@ -91,3 +99,5 @@ source "drivers/media/platform/tegra/vde/Kconfig"
+ source "drivers/media/platform/ti-vpe/Kconfig"
+ source "drivers/media/platform/via/Kconfig"
+ source "drivers/media/platform/xilinx/Kconfig"
++
++endif # MEDIA_PLATFORM_DRIVERS
 -- 
 2.35.1
 
