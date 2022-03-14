@@ -2,60 +2,64 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9931CC433F5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10A06C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237158AbiCNH6U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
+        id S237162AbiCNH6V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236986AbiCNH5u (ORCPT
+        with ESMTP id S236997AbiCNH5u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08D74162A;
-        Mon, 14 Mar 2022 00:56:14 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C22D41635;
+        Mon, 14 Mar 2022 00:56:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C93C8611DF;
-        Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D02C36B1F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08C88611D8;
+        Mon, 14 Mar 2022 07:56:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA90C341E9;
         Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647244563;
-        bh=sa8b7brGOGN9yHxRgRniVHVGaYs4Y9V4omrOIDbvqzw=;
+        bh=CIyk8zpMRzPK9nsaSTMJyaLpucZ2VlGYmTmnjaHqays=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mMMm05Uwn+ESXtf+QhzFDjS6tqeOFAH0CRl9ymtqjHOouZ4zu0MMtuFOumIuf4oSV
-         CmGIePgdKqyYCWEs9lhcAWIZsQpeZY7Mo4k2xX1Yc0C7y3ZRH6H1a6I9U2Ay0WUqKN
-         NWExi23DWoAfBks3MwuMS7aH57r+RnQaubvrA7NqIKuL2Qa6J7RNdCDBXFUdnteGIm
-         lbS77HW6ab9EWHUfhkP84qFmFb0etXdNHIuVKFQJ9jaVEHC/LRQTyxCPcCwNmCLKmS
-         qBIGVNYDOsbGWylQI4WSTjquXJhpduBx8T74+aQt5alJxAt1Xu5l5+TBnC96ndfpkP
-         rneZDUl0Gkq1w==
+        b=saDUPraGjQ/LiKuqLqNK6+mZe6RZsFE0xol3ng/m+MnEIrzd74XyAqG1d0y8piH1u
+         UidUws7Tau7Hd7OempdpmE0skFNG+pS2Y8Tdaz1V9XcFONG+8BWmKhpW7zh98wPZo0
+         ACjQvjzhgo9A8SFNyHrlwCGURiD1OXRprii2FZimA9E6gJzMFBHo4yWPzhXnoYV/r4
+         RnTCnCeZkIZIJ6OcyTfV6MscD4jOrOnT9+vOIjgds53oxs771nV+HkWn2mmcOnhhkS
+         AwRGxh8eqI87jugbsBAXlz30PVCb6QA42ibkwVcqNaqADcwh29PXKIsUN0lDgRJ1+/
+         FodCwYh7P5mDQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYe-001kY3-Sn; Mon, 14 Mar 2022 08:56:00 +0100
+        id 1nTfYe-001kXb-I4; Mon, 14 Mar 2022 08:56:00 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Arnd Bergmann <arnd@arndb.de>,
+        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Ming Qian <ming.qian@nxp.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 60/64] media: platform: rename omap/ to ti/omap/
-Date:   Mon, 14 Mar 2022 08:55:52 +0100
-Message-Id: <ca424b45f0ffb1b1f7f2cd8b1bd1ccb6b808f5e0.1647242579.git.mchehab@kernel.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 53/64] media: platform: rename s5p-g2d/ to samsung/s5p-g2d/
+Date:   Mon, 14 Mar 2022 08:55:45 +0100
+Message-Id: <9fde68f5ac51ae5ea9ae740876d6090945c8efe6.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
@@ -63,107 +67,104 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 As the end goal is to have platform drivers split by vendor,
-rename omap/ to ti/omap/.
+rename s5p-g2d/ to samsung/s5p-g2d/.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig                        | 2 +-
- drivers/media/platform/Makefile                       | 2 +-
- drivers/media/platform/{ => ti}/omap/Kconfig          | 0
- drivers/media/platform/{ => ti}/omap/Makefile         | 0
- drivers/media/platform/{ => ti}/omap/omap_vout.c      | 0
- drivers/media/platform/{ => ti}/omap/omap_vout_vrfb.c | 0
- drivers/media/platform/{ => ti}/omap/omap_vout_vrfb.h | 0
- drivers/media/platform/{ => ti}/omap/omap_voutdef.h   | 0
- drivers/media/platform/{ => ti}/omap/omap_voutlib.c   | 0
- drivers/media/platform/{ => ti}/omap/omap_voutlib.h   | 0
- 10 files changed, 2 insertions(+), 2 deletions(-)
- rename drivers/media/platform/{ => ti}/omap/Kconfig (100%)
- rename drivers/media/platform/{ => ti}/omap/Makefile (100%)
- rename drivers/media/platform/{ => ti}/omap/omap_vout.c (100%)
- rename drivers/media/platform/{ => ti}/omap/omap_vout_vrfb.c (100%)
- rename drivers/media/platform/{ => ti}/omap/omap_vout_vrfb.h (100%)
- rename drivers/media/platform/{ => ti}/omap/omap_voutdef.h (100%)
- rename drivers/media/platform/{ => ti}/omap/omap_voutlib.c (100%)
- rename drivers/media/platform/{ => ti}/omap/omap_voutlib.h (100%)
+ MAINTAINERS                                             | 2 +-
+ drivers/media/platform/Kconfig                          | 2 +-
+ drivers/media/platform/Makefile                         | 2 +-
+ drivers/media/platform/{ => samsung}/s5p-g2d/Kconfig    | 0
+ drivers/media/platform/{ => samsung}/s5p-g2d/Makefile   | 0
+ drivers/media/platform/{ => samsung}/s5p-g2d/g2d-hw.c   | 0
+ drivers/media/platform/{ => samsung}/s5p-g2d/g2d-regs.h | 0
+ drivers/media/platform/{ => samsung}/s5p-g2d/g2d.c      | 0
+ drivers/media/platform/{ => samsung}/s5p-g2d/g2d.h      | 0
+ 9 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{ => samsung}/s5p-g2d/Kconfig (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-g2d/Makefile (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-g2d/g2d-hw.c (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-g2d/g2d-regs.h (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-g2d/g2d.c (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-g2d/g2d.h (100%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8ce4894699cc..4c4be0d7ec14 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2616,7 +2616,7 @@ M:	Łukasz Stelmach <l.stelmach@samsung.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+-F:	drivers/media/platform/s5p-g2d/
++F:	drivers/media/platform/samsung/s5p-g2d/
+ 
+ ARM/SAMSUNG S5P SERIES HDMI CEC SUBSYSTEM SUPPORT
+ M:	Marek Szyprowski <m.szyprowski@samsung.com>
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 22d462f43a21..57094394d30b 100644
+index b371c0b258d1..aef7c35b2215 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -81,7 +81,6 @@ source "drivers/media/platform/mediatek/mtk-vpu/Kconfig"
- source "drivers/media/platform/nvidia/tegra-vde/Kconfig"
- source "drivers/media/platform/nxp/Kconfig"
- source "drivers/media/platform/nxp/amphion/Kconfig"
--source "drivers/media/platform/omap/Kconfig"
+@@ -88,12 +88,12 @@ source "drivers/media/platform/omap3isp/Kconfig"
  source "drivers/media/platform/qcom/Kconfig"
  source "drivers/media/platform/renesas/Kconfig"
  source "drivers/media/platform/rockchip/Kconfig"
-@@ -96,6 +95,7 @@ source "drivers/media/platform/sti/stm32/Kconfig"
+-source "drivers/media/platform/s5p-g2d/Kconfig"
+ source "drivers/media/platform/s5p-jpeg/Kconfig"
+ source "drivers/media/platform/s5p-mfc/Kconfig"
+ source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
+ source "drivers/media/platform/samsung/exynos4-is/Kconfig"
+ source "drivers/media/platform/samsung/s3c-camif/Kconfig"
++source "drivers/media/platform/samsung/s5p-g2d/Kconfig"
+ source "drivers/media/platform/sti/Kconfig"
+ source "drivers/media/platform/stm32/Kconfig"
  source "drivers/media/platform/ti-vpe/Kconfig"
- source "drivers/media/platform/ti/am437x/Kconfig"
- source "drivers/media/platform/ti/davinci/Kconfig"
-+source "drivers/media/platform/ti/omap/Kconfig"
- source "drivers/media/platform/ti/omap3isp/Kconfig"
- source "drivers/media/platform/via/Kconfig"
- source "drivers/media/platform/xilinx/Kconfig"
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index ef6c00b2ed64..a9740f6021d2 100644
+index c3dfe40b2def..a5a068e18492 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -21,7 +21,6 @@ obj-y += mediatek/mtk-vpu/
- obj-y += nvidia/tegra-vde/
- obj-y += nxp/
- obj-y += nxp/amphion/
--obj-y += omap/
- obj-y += qcom/camss/
- obj-y += qcom/venus/
+@@ -30,12 +30,12 @@ obj-y += qcom/venus/
  obj-y += renesas/
-@@ -41,6 +40,7 @@ obj-y += sti/stm32/
- obj-y += ti-vpe/
- obj-y += ti/am437x/
- obj-y += ti/davinci/
-+obj-y += ti/omap/
- obj-y += ti/omap3isp/
- obj-y += via/
- obj-y += xilinx/
-diff --git a/drivers/media/platform/omap/Kconfig b/drivers/media/platform/ti/omap/Kconfig
+ obj-y += rockchip/rga/
+ obj-y += rockchip/rkisp1/
+-obj-y += s5p-g2d/
+ obj-y += s5p-jpeg/
+ obj-y += s5p-mfc/
+ obj-y += samsung/exynos-gsc/
+ obj-y += samsung/exynos4-is/
+ obj-y += samsung/s3c-camif/
++obj-y += samsung/s5p-g2d/
+ obj-y += sti/bdisp/
+ obj-y += sti/c8sectpfe/
+ obj-y += sti/delta/
+diff --git a/drivers/media/platform/s5p-g2d/Kconfig b/drivers/media/platform/samsung/s5p-g2d/Kconfig
 similarity index 100%
-rename from drivers/media/platform/omap/Kconfig
-rename to drivers/media/platform/ti/omap/Kconfig
-diff --git a/drivers/media/platform/omap/Makefile b/drivers/media/platform/ti/omap/Makefile
+rename from drivers/media/platform/s5p-g2d/Kconfig
+rename to drivers/media/platform/samsung/s5p-g2d/Kconfig
+diff --git a/drivers/media/platform/s5p-g2d/Makefile b/drivers/media/platform/samsung/s5p-g2d/Makefile
 similarity index 100%
-rename from drivers/media/platform/omap/Makefile
-rename to drivers/media/platform/ti/omap/Makefile
-diff --git a/drivers/media/platform/omap/omap_vout.c b/drivers/media/platform/ti/omap/omap_vout.c
+rename from drivers/media/platform/s5p-g2d/Makefile
+rename to drivers/media/platform/samsung/s5p-g2d/Makefile
+diff --git a/drivers/media/platform/s5p-g2d/g2d-hw.c b/drivers/media/platform/samsung/s5p-g2d/g2d-hw.c
 similarity index 100%
-rename from drivers/media/platform/omap/omap_vout.c
-rename to drivers/media/platform/ti/omap/omap_vout.c
-diff --git a/drivers/media/platform/omap/omap_vout_vrfb.c b/drivers/media/platform/ti/omap/omap_vout_vrfb.c
+rename from drivers/media/platform/s5p-g2d/g2d-hw.c
+rename to drivers/media/platform/samsung/s5p-g2d/g2d-hw.c
+diff --git a/drivers/media/platform/s5p-g2d/g2d-regs.h b/drivers/media/platform/samsung/s5p-g2d/g2d-regs.h
 similarity index 100%
-rename from drivers/media/platform/omap/omap_vout_vrfb.c
-rename to drivers/media/platform/ti/omap/omap_vout_vrfb.c
-diff --git a/drivers/media/platform/omap/omap_vout_vrfb.h b/drivers/media/platform/ti/omap/omap_vout_vrfb.h
+rename from drivers/media/platform/s5p-g2d/g2d-regs.h
+rename to drivers/media/platform/samsung/s5p-g2d/g2d-regs.h
+diff --git a/drivers/media/platform/s5p-g2d/g2d.c b/drivers/media/platform/samsung/s5p-g2d/g2d.c
 similarity index 100%
-rename from drivers/media/platform/omap/omap_vout_vrfb.h
-rename to drivers/media/platform/ti/omap/omap_vout_vrfb.h
-diff --git a/drivers/media/platform/omap/omap_voutdef.h b/drivers/media/platform/ti/omap/omap_voutdef.h
+rename from drivers/media/platform/s5p-g2d/g2d.c
+rename to drivers/media/platform/samsung/s5p-g2d/g2d.c
+diff --git a/drivers/media/platform/s5p-g2d/g2d.h b/drivers/media/platform/samsung/s5p-g2d/g2d.h
 similarity index 100%
-rename from drivers/media/platform/omap/omap_voutdef.h
-rename to drivers/media/platform/ti/omap/omap_voutdef.h
-diff --git a/drivers/media/platform/omap/omap_voutlib.c b/drivers/media/platform/ti/omap/omap_voutlib.c
-similarity index 100%
-rename from drivers/media/platform/omap/omap_voutlib.c
-rename to drivers/media/platform/ti/omap/omap_voutlib.c
-diff --git a/drivers/media/platform/omap/omap_voutlib.h b/drivers/media/platform/ti/omap/omap_voutlib.h
-similarity index 100%
-rename from drivers/media/platform/omap/omap_voutlib.h
-rename to drivers/media/platform/ti/omap/omap_voutlib.h
+rename from drivers/media/platform/s5p-g2d/g2d.h
+rename to drivers/media/platform/samsung/s5p-g2d/g2d.h
 -- 
 2.35.1
 
