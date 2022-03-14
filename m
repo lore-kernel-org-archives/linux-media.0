@@ -2,58 +2,64 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F5C9C4332F
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:56:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3943C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:56:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236904AbiCNH5e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
+        id S236912AbiCNH5f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236849AbiCNH5U (ORCPT
+        with ESMTP id S236846AbiCNH5U (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB40A41330;
-        Mon, 14 Mar 2022 00:56:05 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC9C41327;
+        Mon, 14 Mar 2022 00:56:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C9DBECE10B6;
-        Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE12C3410D;
-        Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D185ECE10A2;
+        Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C52B2C340F6;
+        Mon, 14 Mar 2022 07:56:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647244561;
-        bh=va4oX5/2sFF9WAAK9adCGYXmIrWh6lSqgh0IjodMHVM=;
+        s=k20201202; t=1647244560;
+        bh=Cjpduq8olBZOgE+bYd/xOtdGUWEVLm0mAF9YidPcc4I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zym8d73zrsxScbav7mX26TpdTtdwu9pdvr1LJBhuzQhRra0ehxLUUSVFLMM0Ix/y2
-         pfakP2fJw329ia6WLE/dHkwBiKbEAdNm22uqKMGXFn83GUZWtZlKcPaHS/aWrFOtmG
-         Xm+lq1q+zK1xY8tINq4kt96LAsKSQMxeB5pRBZpx8kjuxccFpTZbINVNfnjoYL6gwp
-         WIUy+NTppSewBziMs0tU5JqsJz24N9Tg5xmrTQRNKKJ239dxo3uXM2DSp4jzm4bf6I
-         kGroWvzP21W9hca4XREgYp6BF4YQo+OJf6y4ed81TaP+8kGyfBuSMCRwM9V1VSRUc8
-         +6+WrHCjthXnA==
+        b=bMe7ehKmKI7iAZ3JBOvmU90PvcAQOYZewF1R8qBm88XkVIV+u0wtazak35hnhoycR
+         KFJd6FXUjelIJoCScrRv9v07mFDrbjcYB71NFBNAGupZX2Yw4GTFOnbgAlJnexguzm
+         XMq7hsVzI6kcBawGNTn4B4U1gzUhOm9k9e7hRAY+O5YcQXmKv2afSrnuDpIXLGqWd5
+         YHewaS/BRrEGXiiDZThkvYODp1WKQ81gxVub0PAcRokwGAuar2SFYcc9LKF7YkaIiR
+         XpdoqSC1z5/BTKMBqpW/QwbKlAg1slOl6ixDNnk1W2/EQuSKAJxpve2dDb7IjNyoTc
+         TeQTEvlmS3G+g==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYc-001kV9-Vi; Mon, 14 Mar 2022 08:55:58 +0100
+        id 1nTfYc-001kUZ-JA; Mon, 14 Mar 2022 08:55:58 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
+        Andrew Jeffery <andrew@aj.id.au>,
         Dmitry Osipenko <digetx@gmail.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jammy Huang <jammy_huang@aspeedtech.com>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
+        Joel Stanley <joel@jms.id.au>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Ming Qian <ming.qian@nxp.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 15/64] media: platform: ge2d: move config to its own file
-Date:   Mon, 14 Mar 2022 08:55:07 +0100
-Message-Id: <fe12b0fc0692a8d31b7461d57ca8874eeeb7e45a.1647242579.git.mchehab@kernel.org>
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Zev Weiss <zev@bewilderbeest.net>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: [PATCH 06/64] media: platform: place Aspeed driver on a separate dir
+Date:   Mon, 14 Mar 2022 08:54:58 +0100
+Message-Id: <6b24deadd7706454612c14e6fde45af062633261.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -64,8 +70,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to better organize the platform/Kconfig, place
-ge2d-specific config stuff on a separate Kconfig file.
+In order to cleanup the main platform media directory, move Aspeed
+driver to its own directory.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -73,64 +79,99 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig            | 15 +--------------
- drivers/media/platform/meson/ge2d/Kconfig | 14 ++++++++++++++
- 2 files changed, 15 insertions(+), 14 deletions(-)
- create mode 100644 drivers/media/platform/meson/ge2d/Kconfig
+ MAINTAINERS                                        |  2 +-
+ drivers/media/platform/Kconfig                     | 10 +---------
+ drivers/media/platform/Makefile                    |  2 +-
+ drivers/media/platform/aspeed/Kconfig              | 10 ++++++++++
+ drivers/media/platform/aspeed/Makefile             |  2 ++
+ drivers/media/platform/{ => aspeed}/aspeed-video.c |  0
+ 6 files changed, 15 insertions(+), 11 deletions(-)
+ create mode 100644 drivers/media/platform/aspeed/Kconfig
+ create mode 100644 drivers/media/platform/aspeed/Makefile
+ rename drivers/media/platform/{ => aspeed}/aspeed-video.c (100%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1a9fb0615925..1b6f48a660de 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3026,7 +3026,7 @@ L:	linux-media@vger.kernel.org
+ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/aspeed-video.txt
+-F:	drivers/media/platform/aspeed-video.c
++F:	drivers/media/platform/aspeed/
+ 
+ ASUS NOTEBOOKS AND EEEPC ACPI/WMI EXTRAS DRIVERS
+ M:	Corentin Chary <corentin.chary@gmail.com>
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 57ca2426a83b..d3b7bef19237 100644
+index 1446a99159c5..10f453ff2717 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -47,6 +47,7 @@ source "drivers/media/platform/coda/Kconfig"
- source "drivers/media/platform/davinci/Kconfig"
+@@ -50,15 +50,7 @@ source "drivers/media/platform/davinci/Kconfig"
  
- source "drivers/media/platform/exynos-gsc/Kconfig"
-+source "drivers/media/platform/meson/ge2d/Kconfig"
  source "drivers/media/platform/omap/Kconfig"
  
- source "drivers/media/platform/aspeed/Kconfig"
-@@ -273,20 +274,6 @@ config VIDEO_MEM2MEM_DEINTERLACE
- 	help
- 	    Generic deinterlacing V4L2 driver.
- 
--config VIDEO_MESON_GE2D
--	tristate "Amlogic 2D Graphic Acceleration Unit"
--	depends on V4L_MEM2MEM_DRIVERS
--	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_MESON || COMPILE_TEST
+-config VIDEO_ASPEED
+-	tristate "Aspeed AST2400 and AST2500 Video Engine driver"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_V4L2
 -	select VIDEOBUF2_DMA_CONTIG
--	select V4L2_MEM2MEM_DEV
 -	help
--	  This is a v4l2 driver for Amlogic GE2D 2D graphics accelerator.
--	  GE2D is a standalone 2D graphic acceleration unit, with color converter,
--	  image scaling, BitBLT & alpha blending operations.
--
--	  To compile this driver as a module choose m here.
--
- config VIDEO_SAMSUNG_S5P_G2D
- 	tristate "Samsung S5P and EXYNOS4 G2D 2d graphics accelerator driver"
- 	depends on V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/meson/ge2d/Kconfig b/drivers/media/platform/meson/ge2d/Kconfig
+-	  Support for the Aspeed Video Engine (VE) embedded in the Aspeed
+-	  AST2400 and AST2500 SOCs. The VE can capture and compress video data
+-	  from digital or analog sources.
++source "drivers/media/platform/aspeed/Kconfig"
+ 
+ config VIDEO_SH_VOU
+ 	tristate "SuperH VOU video output driver"
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index e319044c57e9..18ec3d208483 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -6,6 +6,7 @@
+ # Place here, alphabetically sorted by directory
+ # (e. g. LC_ALL=C sort Makefile)
+ obj-y += allegro-dvt/
++obj-y += aspeed/
+ obj-y += am437x/
+ obj-y += amphion/
+ obj-y += atmel/
+@@ -47,7 +48,6 @@ obj-y += xilinx/
+ # Please place here only ancillary drivers that aren't SoC-specific
+ # Please keep it alphabetically sorted by Kconfig name
+ # (e. g. LC_ALL=C sort Makefile)
+-obj-$(CONFIG_VIDEO_ASPEED)		+= aspeed-video.o
+ obj-$(CONFIG_VIDEO_IMX_PXP)		+= imx-pxp.o
+ obj-$(CONFIG_VIDEO_MEM2MEM_DEINTERLACE)	+= m2m-deinterlace.o
+ obj-$(CONFIG_VIDEO_MUX)			+= video-mux.o
+diff --git a/drivers/media/platform/aspeed/Kconfig b/drivers/media/platform/aspeed/Kconfig
 new file mode 100644
-index 000000000000..8c3f3b1b6b05
+index 000000000000..5025e892844c
 --- /dev/null
-+++ b/drivers/media/platform/meson/ge2d/Kconfig
-@@ -0,0 +1,14 @@
-+config VIDEO_MESON_GE2D
-+	tristate "Amlogic 2D Graphic Acceleration Unit"
-+	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_MESON || COMPILE_TEST
++++ b/drivers/media/platform/aspeed/Kconfig
+@@ -0,0 +1,10 @@
++# SPDX-License-Identifier: GPL-2.0-only
++config VIDEO_ASPEED
++	tristate "Aspeed AST2400 and AST2500 Video Engine driver"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_V4L2
 +	select VIDEOBUF2_DMA_CONTIG
-+	select V4L2_MEM2MEM_DEV
 +	help
-+	  This is a v4l2 driver for Amlogic GE2D 2D graphics accelerator.
-+	  GE2D is a standalone 2D graphic acceleration unit, with color converter,
-+	  image scaling, BitBLT & alpha blending operations.
-+
-+	  To compile this driver as a module choose m here.
-+
++	  Support for the Aspeed Video Engine (VE) embedded in the Aspeed
++	  AST2400 and AST2500 SOCs. The VE can capture and compress video data
++	  from digital or analog sources.
+diff --git a/drivers/media/platform/aspeed/Makefile b/drivers/media/platform/aspeed/Makefile
+new file mode 100644
+index 000000000000..1979af63dadd
+--- /dev/null
++++ b/drivers/media/platform/aspeed/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_VIDEO_ASPEED) += aspeed-video.o
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
+similarity index 100%
+rename from drivers/media/platform/aspeed-video.c
+rename to drivers/media/platform/aspeed/aspeed-video.c
 -- 
 2.35.1
 
