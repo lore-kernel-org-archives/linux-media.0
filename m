@@ -2,39 +2,39 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D06E4C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 16:35:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B1E6C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 16:35:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243240AbiCNQgg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 12:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
+        id S239516AbiCNQgi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 12:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240157AbiCNQgV (ORCPT
+        with ESMTP id S243070AbiCNQgX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Mar 2022 12:36:21 -0400
+        Mon, 14 Mar 2022 12:36:23 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6A813CC7;
-        Mon, 14 Mar 2022 09:35:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB3913D6F;
+        Mon, 14 Mar 2022 09:35:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B302B80E8F;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 673BAB80E98;
         Mon, 14 Mar 2022 16:35:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E235C36B03;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8427AC36B0A;
         Mon, 14 Mar 2022 16:35:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647275707;
-        bh=oR/Nqcf8uV2nNNdkbYKq+1DFuBdrsIdZT4cOwhjy4dk=;
+        bh=iDIYMYLBu8UYTkgIRAQpH16UCpol6Z3qjg5eliDPbcQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ptmuRLEs3wsSnLiRNvUZ1PXi3FQm4MWbMq/SMJOg++sKPzZJtjXP9Yildc5p5Cm6l
-         Rvn+/K5dhAo6z1+i4oYQMl9cq2UDtSQ/oy+YPibFO7/7fLu1QbKQyqLFSS1aeSfcHu
-         GQvU8I4LWlGAJaAsOW8qfUiTYjkVzeDRRrtLvq8fiwg8oUyCNtzXlC0oZQZeG61AAN
-         +ecOPn/1RbBOdztRLf+ZcGE353/WrM4URrKFKrWPecCGceDPPHWBIFnAXgwZr/IhEX
-         +Zby3Ygp17AhancB3vWZLzlt8Xjk5l9xlL45NoZ4twLZE/Dx2bDWkpUDcG07zeJpJk
-         QrGD/KOVLxz+g==
+        b=jaU5Ik8R007evwOF9oyRMuv99psF9OcW6VWD+ncVv1AzSfhUd/AEoaCBTY2U6FeN5
+         sHPVOm7jYkhdUK8ggDULiFG4eh1FM1x/8y9A1wXv0clnPjjNJbv+994rNe5lHxu6Y6
+         inIWjD2gLfsE2Cj66Df7/WQ1+w+i6GY1fSTZ87QGxcoE/Dya3ECQ4YRBSbjgn5lKSG
+         rkJdsMxNF2SVMB2oSO4V05lXhkR9OVI03alcl0oki2XVDbe6EzWXdjB2mtUqEc6Xbx
+         iiDgnKS/Vyzh7KAtOvyPTrYC2WTJ/9+FqmIb7c2OL0eGJqozrSfixtp93DnsEUPQsZ
+         JpIoW5GDmSwnQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTnez-001wx9-3O; Mon, 14 Mar 2022 17:35:05 +0100
+        id 1nTnez-001wxP-8C; Mon, 14 Mar 2022 17:35:05 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
@@ -43,13 +43,11 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH v2 16/67] media: platform: mtk-jpeg: move config to its own file
-Date:   Mon, 14 Mar 2022 17:34:11 +0100
-Message-Id: <d46abc044bbbab877446adb362d28794a67493ac.1647274406.git.mchehab@kernel.org>
+        Ming Qian <ming.qian@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 20/67] media: platform: omap3isp: move config to its own file
+Date:   Mon, 14 Mar 2022 17:34:15 +0100
+Message-Id: <f0717e1c41ef53f2f43d72ddccdb97dd681922c4.1647274406.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647274406.git.mchehab@kernel.org>
 References: <cover.1647274406.git.mchehab@kernel.org>
@@ -61,76 +59,87 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 In order to better organize the platform/Kconfig, place
-mtk-jpeg-specific config stuff on a separate Kconfig file.
+omap3isp-specific config stuff on a separate Kconfig file.
 
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/67] at: https://lore.kernel.org/all/cover.1647274406.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig          | 17 +----------------
- drivers/media/platform/mtk-jpeg/Kconfig | 16 ++++++++++++++++
- 2 files changed, 17 insertions(+), 16 deletions(-)
- create mode 100644 drivers/media/platform/mtk-jpeg/Kconfig
+ drivers/media/platform/Kconfig          | 22 +---------------------
+ drivers/media/platform/omap3isp/Kconfig | 21 +++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 21 deletions(-)
+ create mode 100644 drivers/media/platform/omap3isp/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index d3b7bef19237..f517aa951460 100644
+index 39bf4c57e044..1dac7a5b53eb 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -48,6 +48,7 @@ source "drivers/media/platform/davinci/Kconfig"
- 
- source "drivers/media/platform/exynos-gsc/Kconfig"
- source "drivers/media/platform/meson/ge2d/Kconfig"
-+source "drivers/media/platform/mtk-jpeg/Kconfig"
+@@ -52,6 +52,7 @@ source "drivers/media/platform/mtk-jpeg/Kconfig"
+ source "drivers/media/platform/mtk-mdp/Kconfig"
+ source "drivers/media/platform/mtk-vcodec/Kconfig"
+ source "drivers/media/platform/mtk-vpu/Kconfig"
++source "drivers/media/platform/omap3isp/Kconfig"
  source "drivers/media/platform/omap/Kconfig"
  
  source "drivers/media/platform/aspeed/Kconfig"
-@@ -181,22 +182,6 @@ config VIDEO_TI_CAL_MC
+@@ -68,27 +69,6 @@ config VIDEO_MUX
+ 	help
+ 	  This driver provides support for N:1 video bus multiplexers.
  
- # Mem2mem drivers
- 
--config VIDEO_MEDIATEK_JPEG
--	tristate "Mediatek JPEG Codec driver"
--	depends on V4L_MEM2MEM_DRIVERS
--	depends on MTK_IOMMU_V1 || MTK_IOMMU || COMPILE_TEST
--	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_MEDIATEK || COMPILE_TEST
--	depends on MTK_SMI || (COMPILE_TEST && MTK_SMI=n)
+-config VIDEO_OMAP3
+-	tristate "OMAP 3 Camera support"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_V4L2 && I2C
+-	depends on (ARCH_OMAP3 && OMAP_IOMMU) || COMPILE_TEST
+-	depends on COMMON_CLK && OF
+-	select ARM_DMA_USE_IOMMU if OMAP_IOMMU
+-	select MEDIA_CONTROLLER
+-	select VIDEO_V4L2_SUBDEV_API
 -	select VIDEOBUF2_DMA_CONTIG
--	select V4L2_MEM2MEM_DEV
+-	select MFD_SYSCON
+-	select V4L2_FWNODE
 -	help
--	  Mediatek jpeg codec driver provides HW capability to decode
--	  JPEG format
+-	  Driver for an OMAP 3 camera controller.
 -
--	  To compile this driver as a module, choose M here: the
--	  module will be called mtk-jpeg
+-config VIDEO_OMAP3_DEBUG
+-	bool "OMAP 3 Camera debug messages"
+-	depends on VIDEO_OMAP3
+-	help
+-	  Enable debug messages on OMAP 3 camera controller driver.
 -
- config VIDEO_MEDIATEK_VPU
- 	tristate "Mediatek Video Processor Unit"
- 	depends on V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/mtk-jpeg/Kconfig b/drivers/media/platform/mtk-jpeg/Kconfig
+ source "drivers/media/platform/intel/Kconfig"
+ 
+ config VIDEO_QCOM_CAMSS
+diff --git a/drivers/media/platform/omap3isp/Kconfig b/drivers/media/platform/omap3isp/Kconfig
 new file mode 100644
-index 000000000000..72ed920b011a
+index 000000000000..85f0cf063153
 --- /dev/null
-+++ b/drivers/media/platform/mtk-jpeg/Kconfig
-@@ -0,0 +1,16 @@
++++ b/drivers/media/platform/omap3isp/Kconfig
+@@ -0,0 +1,21 @@
 +# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_MEDIATEK_JPEG
-+	tristate "Mediatek JPEG Codec driver"
-+	depends on V4L_MEM2MEM_DRIVERS
-+	depends on MTK_IOMMU_V1 || MTK_IOMMU || COMPILE_TEST
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_MEDIATEK || COMPILE_TEST
-+	depends on MTK_SMI || (COMPILE_TEST && MTK_SMI=n)
++config VIDEO_OMAP3
++	tristate "OMAP 3 Camera support"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_V4L2 && I2C
++	depends on (ARCH_OMAP3 && OMAP_IOMMU) || COMPILE_TEST
++	depends on COMMON_CLK && OF
++	select ARM_DMA_USE_IOMMU if OMAP_IOMMU
++	select MEDIA_CONTROLLER
++	select VIDEO_V4L2_SUBDEV_API
 +	select VIDEOBUF2_DMA_CONTIG
-+	select V4L2_MEM2MEM_DEV
++	select MFD_SYSCON
++	select V4L2_FWNODE
 +	help
-+	  Mediatek jpeg codec driver provides HW capability to decode
-+	  JPEG format
++	  Driver for an OMAP 3 camera controller.
 +
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called mtk-jpeg
++config VIDEO_OMAP3_DEBUG
++	bool "OMAP 3 Camera debug messages"
++	depends on VIDEO_OMAP3
++	help
++	  Enable debug messages on OMAP 3 camera controller driver.
 -- 
 2.35.1
 
