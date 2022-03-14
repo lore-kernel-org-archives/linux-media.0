@@ -2,39 +2,39 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3BC3C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CE73C4332F
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237249AbiCNH7B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
+        id S237190AbiCNH7E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236926AbiCNH5f (ORCPT
+        with ESMTP id S236921AbiCNH5f (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA0641604;
-        Mon, 14 Mar 2022 00:56:12 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D37E4133D;
+        Mon, 14 Mar 2022 00:56:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 553A9611A8;
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED820B80D50;
         Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C064C36AFA;
-        Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AAEAC36AE9;
+        Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647244562;
-        bh=BbKdmuU1ofr4mquHLU6rC7A9KAvlLBCjyf5gjk78wJE=;
+        s=k20201202; t=1647244561;
+        bh=GnE8f84XYDrMP2zLhIQhx16WAZQLX/XeXHJvY3cO3vc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UIkM5LqNyj5gBl8q7S6V7bDdl96mkVuIR8bCE61lCLSzdIn1mqrCEvBwK1DHE5fFe
-         6TDhfV2iQUNpUJLMgem6IfMBxxm0UNm+R1t4rqFuncwrvHcqOg7TJ7FL4zgDA6Hfhx
-         011XhnYYihfIWUj98VdI1LdeqLGT47oqGeLR5TXDntk5O29Nq/xwW3IhGpiamLL3Hv
-         1ctZ9rZwxyUkdkRqN1ngF1jqNPz0NnFn5UEauh/yeA1VAZ3A1GSQyX/kaf/aP+HjWo
-         sGmRX6RFrh0pSsvy30Nro1t+jHrvwEAFyzPi1H3dSYmveS5T7BpEKRZqZt6qOOtIBB
-         TU9kk3T/ynshw==
+        b=EOf62xOIC/sw0a0bFUaGgH+uyhGsGDYaaiE29qTxH6FtTc+L9KVLN0XuzbOIzuawj
+         54LgcPWfRTLkZyLxs9hscx5mSV0fr/hN/ut3le8fQQaFzzfEjR9R1RR4mFXOgHrVjh
+         FKEgB1GYHpdn9kK04WLRTeNeUbHKyUOcZxnjWogiXT/6YVzH1abpo0PmGV6wQDWl1N
+         1Pe9KS5bO8BNzSBhN8Z6tJGJJ4Cqs8DPq0VQrXggnM+F5xS/kD5Ut8N16E6nhHGulO
+         AFdySk+n5h9c3mdcgxMkJlaSAbYDCLsA8pjtOM2R+7vpYkAhBe4GatPJRoVDrN7s3Z
+         y4jXdreS9ADlw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYd-001kWZ-Q7; Mon, 14 Mar 2022 08:55:59 +0100
+        id 1nTfYd-001kVn-Ba; Mon, 14 Mar 2022 08:55:59 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
@@ -45,9 +45,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Ming Qian <ming.qian@nxp.com>, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH 37/64] media: platform: Kconfig: sort entries
-Date:   Mon, 14 Mar 2022 08:55:29 +0100
-Message-Id: <12030c432f1f49f5e742520b81783ad92bb482a2.1647242579.git.mchehab@kernel.org>
+Subject: [PATCH 25/64] media: platform: s5p-g2d: move config to its own file
+Date:   Mon, 14 Mar 2022 08:55:17 +0100
+Message-Id: <0e154ddbe90870c0a0a5f62f18fa6109023cb260.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -58,151 +58,66 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that each non-generic driver has their own directory,
-sort the entries.
+In order to better organize the platform/Kconfig, place
+s5p-g2d-specific config stuff on a separate Kconfig file.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig | 98 +++++++++++++++-------------------
- 1 file changed, 43 insertions(+), 55 deletions(-)
+ drivers/media/platform/Kconfig         | 11 +----------
+ drivers/media/platform/s5p-g2d/Kconfig | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 10 deletions(-)
+ create mode 100644 drivers/media/platform/s5p-g2d/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index d5aedc6b5ca3..b7c60969c974 100644
+index 9fe01afd4145..0b88c36e8a83 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -29,84 +29,72 @@ config V4L_MEM2MEM_DRIVERS
- 	  to capture and output drivers, which use memory buffers for just
- 	  one of those.
- 
-+# Ancillary drivers
-+
-+config VIDEO_MEM2MEM_DEINTERLACE
-+	tristate "Deinterlace support"
-+	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on HAS_DMA
-+	select VIDEOBUF2_DMA_CONTIG
-+	select V4L2_MEM2MEM_DEV
-+	help
-+	    Generic deinterlacing V4L2 driver.
-+
-+config VIDEO_MUX
-+	tristate "Video Multiplexer"
-+	depends on V4L_PLATFORM_DRIVERS
-+	select MULTIPLEXER
-+	depends on VIDEO_V4L2 && OF
-+	select MEDIA_CONTROLLER
-+	select VIDEO_V4L2_SUBDEV_API
-+	select REGMAP
-+	select V4L2_FWNODE
-+	help
-+	  This driver provides support for N:1 video bus multiplexers.
-+
-+# Platform drivers - Please keep it alphabetically sorted
-+
-+# TODO: create per-manufacturer directories
-+
- source "drivers/media/platform/allegro-dvt/Kconfig"
--source "drivers/media/platform/nxp/Kconfig"
--
--source "drivers/media/platform/renesas/Kconfig"
--
--# V4L platform drivers
--
--source "drivers/media/platform/marvell-ccic/Kconfig"
--
--source "drivers/media/platform/via/Kconfig"
--
-+source "drivers/media/platform/am437x/Kconfig"
- source "drivers/media/platform/amphion/Kconfig"
-+source "drivers/media/platform/aspeed/Kconfig"
-+source "drivers/media/platform/atmel/Kconfig"
- source "drivers/media/platform/cadence/Kconfig"
--
- source "drivers/media/platform/coda/Kconfig"
- source "drivers/media/platform/davinci/Kconfig"
--
- source "drivers/media/platform/exynos-gsc/Kconfig"
-+source "drivers/media/platform/exynos4-is/Kconfig"
-+source "drivers/media/platform/intel/Kconfig"
-+source "drivers/media/platform/marvell-ccic/Kconfig"
- source "drivers/media/platform/meson/ge2d/Kconfig"
- source "drivers/media/platform/mtk-jpeg/Kconfig"
- source "drivers/media/platform/mtk-mdp/Kconfig"
- source "drivers/media/platform/mtk-vcodec/Kconfig"
- source "drivers/media/platform/mtk-vpu/Kconfig"
--source "drivers/media/platform/omap3isp/Kconfig"
-+source "drivers/media/platform/nxp/Kconfig"
- source "drivers/media/platform/omap/Kconfig"
-+source "drivers/media/platform/omap3isp/Kconfig"
- source "drivers/media/platform/qcom/camss/Kconfig"
- source "drivers/media/platform/qcom/venus/Kconfig"
--
--source "drivers/media/platform/aspeed/Kconfig"
-+source "drivers/media/platform/renesas/Kconfig"
+@@ -60,6 +60,7 @@ source "drivers/media/platform/qcom/venus/Kconfig"
+ source "drivers/media/platform/aspeed/Kconfig"
  source "drivers/media/platform/rockchip/rga/Kconfig"
- source "drivers/media/platform/rockchip/rkisp1/Kconfig"
  source "drivers/media/platform/s3c-camif/Kconfig"
- source "drivers/media/platform/s5p-g2d/Kconfig"
- source "drivers/media/platform/s5p-jpeg/Kconfig"
-+source "drivers/media/platform/s5p-mfc/Kconfig"
-+source "drivers/media/platform/sti/bdisp/Kconfig"
-+source "drivers/media/platform/sti/c8sectpfe/Kconfig"
-+source "drivers/media/platform/sti/delta/Kconfig"
- source "drivers/media/platform/sti/hva/Kconfig"
- source "drivers/media/platform/stm32/Kconfig"
-+source "drivers/media/platform/sunxi/Kconfig"
- source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
- source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
- source "drivers/media/platform/tegra/vde/Kconfig"
- source "drivers/media/platform/ti-vpe/Kconfig"
--
--config VIDEO_MUX
--	tristate "Video Multiplexer"
--	depends on V4L_PLATFORM_DRIVERS
--	select MULTIPLEXER
--	depends on VIDEO_V4L2 && OF
--	select MEDIA_CONTROLLER
--	select VIDEO_V4L2_SUBDEV_API
--	select REGMAP
--	select V4L2_FWNODE
--	help
--	  This driver provides support for N:1 video bus multiplexers.
--
--source "drivers/media/platform/intel/Kconfig"
--
--source "drivers/media/platform/exynos4-is/Kconfig"
--source "drivers/media/platform/am437x/Kconfig"
-+source "drivers/media/platform/via/Kconfig"
- source "drivers/media/platform/xilinx/Kconfig"
--source "drivers/media/platform/atmel/Kconfig"
--source "drivers/media/platform/sunxi/Kconfig"
--
--# Mem2mem drivers
--
--config VIDEO_MEM2MEM_DEINTERLACE
--	tristate "Deinterlace support"
++source "drivers/media/platform/s5p-g2d/Kconfig"
+ 
+ config VIDEO_MUX
+ 	tristate "Video Multiplexer"
+@@ -154,16 +155,6 @@ config VIDEO_MEM2MEM_DEINTERLACE
+ 	help
+ 	    Generic deinterlacing V4L2 driver.
+ 
+-config VIDEO_SAMSUNG_S5P_G2D
+-	tristate "Samsung S5P and EXYNOS4 G2D 2d graphics accelerator driver"
 -	depends on V4L_MEM2MEM_DRIVERS
 -	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on HAS_DMA
+-	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
 -	select VIDEOBUF2_DMA_CONTIG
 -	select V4L2_MEM2MEM_DEV
 -	help
--	    Generic deinterlacing V4L2 driver.
--
--source "drivers/media/platform/s5p-mfc/Kconfig"
--
--source "drivers/media/platform/sti/bdisp/Kconfig"
--
--source "drivers/media/platform/sti/delta/Kconfig"
--
--# DVB platform drivers
--source "drivers/media/platform/sti/c8sectpfe/Kconfig"
+-	  This is a v4l2 driver for Samsung S5P and EXYNOS4 G2D
+-	  2d graphics accelerator.
+ 
+ config VIDEO_SAMSUNG_S5P_JPEG
+ 	tristate "Samsung S5P/Exynos3250/Exynos4 JPEG codec driver"
+diff --git a/drivers/media/platform/s5p-g2d/Kconfig b/drivers/media/platform/s5p-g2d/Kconfig
+new file mode 100644
+index 000000000000..9bc9d90a666a
+--- /dev/null
++++ b/drivers/media/platform/s5p-g2d/Kconfig
+@@ -0,0 +1,11 @@
++config VIDEO_SAMSUNG_S5P_G2D
++	tristate "Samsung S5P and EXYNOS4 G2D 2d graphics accelerator driver"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_MEM2MEM_DEV
++	help
++	  This is a v4l2 driver for Samsung S5P and EXYNOS4 G2D
++	  2d graphics accelerator.
++
 -- 
 2.35.1
 
