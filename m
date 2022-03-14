@@ -2,60 +2,67 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B514C43219
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EBD0C4332F
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbiCNH6d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
+        id S237152AbiCNH6e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237013AbiCNH5v (ORCPT
+        with ESMTP id S237017AbiCNH5v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8904198E;
-        Mon, 14 Mar 2022 00:56:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0600841997;
+        Mon, 14 Mar 2022 00:56:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 083EC611F2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 185B2611FD;
         Mon, 14 Mar 2022 07:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0047AC36B1C;
-        Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F43FC341E3;
+        Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647244563;
-        bh=kz16Bjwyo2MGvf2z65WGS2e7jnNzK1KkOZzgkEcfYtc=;
+        bh=Mm+qCsHSu8Dp1CpN98CSeM8jWa7KHMho9OOVupv4bwY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UWQP01sv7hw8e/BS2dE17tg+zvvqHFCXhToq1E6Z71iNu6mzbNt/Cp1xkCuXy2XJj
-         9FpSxR/HDY7FnB7NP2fPcFmyZkzinbFIPknHc03Y4/I+r0JgJZB6tW5l3RwfMB+/0a
-         bXczIrXfmreRelTUHroVcXhgk5RwJunK5QkzAtUNKwJStaU8dgTfipTy8uSuma3Dmz
-         S4lipJmjOaSdEvgyvvYxQUsIH+/q1lHO60wsvexB6Lj4YOza4u7ZLg8niXqEocgwkc
-         UdYHp++lP0EOffWY3zrOkSglI4crFIFV6qQ5B/V+l+bwC4899hFUZ7VGnUQz9qKlHq
-         6lLfoHxL4Z6Ew==
+        b=ihX3qxY/RaPxjoslofATvI6eE2r8Wxji3JRZkmFDJU+NHOPHNURtgsiJOKPM+lbDy
+         inwXKJyzSBz3UTMNdyL41+11FyCkN6Jo8z/4NtsDq7xLqoUWgHY4HIoEYGZwRY5+Yc
+         rHkFMfRd2pvLhZx093PnvylkhfVApYIAL6tr103Ej49mJCAE2E8GwJUGzpc8y0ZL4H
+         pA1BCyNBZgauFIpVQqC+sLau8+J86CZ6cN7KBXcBC4fjcqmIlCgbbqMHHCIsJJUZ+R
+         lmkUZ4qYtwGBHrT5UGlPnNX2FAUMwxc8E+MgU6+IvKjsc20og1gGrntYmb6phd16VT
+         yXUtnVM1FkndQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYe-001kXz-RG; Mon, 14 Mar 2022 08:56:00 +0100
+        id 1nTfYe-001kXP-Dm; Mon, 14 Mar 2022 08:56:00 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
+        Cai Huoqing <caihuoqing@baidu.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Lv Yunlong <lyl2019@mail.ustc.edu.cn>,
         Ming Qian <ming.qian@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 59/64] media: platform: rename omap3isp/ to ti/omap3isp/
-Date:   Mon, 14 Mar 2022 08:55:51 +0100
-Message-Id: <5fe739c3d01c12be25bd28cdb45875ce323b927e.1647242579.git.mchehab@kernel.org>
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 50/64] media: platform: rename exynos4-is/ to samsung/exynos4-is/
+Date:   Mon, 14 Mar 2022 08:55:42 +0100
+Message-Id: <ddc78c2e90b9ae2ae23e2eb98f38a0b707318c21.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -67,301 +74,331 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 As the end goal is to have platform drivers split by vendor,
-rename omap3isp/ to ti/omap3isp/.
+rename exynos4-is/ to samsung/exynos4-is/.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- Documentation/admin-guide/media/omap3isp.rst                  | 2 +-
- Documentation/admin-guide/media/omap4_camera.rst              | 2 +-
- Documentation/driver-api/media/v4l2-event.rst                 | 2 +-
- MAINTAINERS                                                   | 2 +-
- drivers/media/platform/Kconfig                                | 2 +-
- drivers/media/platform/Makefile                               | 2 +-
- drivers/media/platform/{ => ti}/omap3isp/Kconfig              | 0
- drivers/media/platform/{ => ti}/omap3isp/Makefile             | 0
- drivers/media/platform/{ => ti}/omap3isp/cfa_coef_table.h     | 0
- drivers/media/platform/{ => ti}/omap3isp/gamma_table.h        | 0
- drivers/media/platform/{ => ti}/omap3isp/isp.c                | 0
- drivers/media/platform/{ => ti}/omap3isp/isp.h                | 0
- drivers/media/platform/{ => ti}/omap3isp/ispccdc.c            | 0
- drivers/media/platform/{ => ti}/omap3isp/ispccdc.h            | 0
- drivers/media/platform/{ => ti}/omap3isp/ispccp2.c            | 0
- drivers/media/platform/{ => ti}/omap3isp/ispccp2.h            | 0
- drivers/media/platform/{ => ti}/omap3isp/ispcsi2.c            | 0
- drivers/media/platform/{ => ti}/omap3isp/ispcsi2.h            | 0
- drivers/media/platform/{ => ti}/omap3isp/ispcsiphy.c          | 0
- drivers/media/platform/{ => ti}/omap3isp/ispcsiphy.h          | 0
- drivers/media/platform/{ => ti}/omap3isp/isph3a.h             | 0
- drivers/media/platform/{ => ti}/omap3isp/isph3a_aewb.c        | 0
- drivers/media/platform/{ => ti}/omap3isp/isph3a_af.c          | 0
- drivers/media/platform/{ => ti}/omap3isp/isphist.c            | 0
- drivers/media/platform/{ => ti}/omap3isp/isphist.h            | 0
- drivers/media/platform/{ => ti}/omap3isp/isppreview.c         | 0
- drivers/media/platform/{ => ti}/omap3isp/isppreview.h         | 0
- drivers/media/platform/{ => ti}/omap3isp/ispreg.h             | 0
- drivers/media/platform/{ => ti}/omap3isp/ispresizer.c         | 0
- drivers/media/platform/{ => ti}/omap3isp/ispresizer.h         | 0
- drivers/media/platform/{ => ti}/omap3isp/ispstat.c            | 0
- drivers/media/platform/{ => ti}/omap3isp/ispstat.h            | 0
- drivers/media/platform/{ => ti}/omap3isp/ispvideo.c           | 0
- drivers/media/platform/{ => ti}/omap3isp/ispvideo.h           | 0
- drivers/media/platform/{ => ti}/omap3isp/luma_enhance_table.h | 0
- drivers/media/platform/{ => ti}/omap3isp/noise_filter_table.h | 0
- drivers/media/platform/{ => ti}/omap3isp/omap3isp.h           | 0
- 37 files changed, 6 insertions(+), 6 deletions(-)
- rename drivers/media/platform/{ => ti}/omap3isp/Kconfig (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/Makefile (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/cfa_coef_table.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/gamma_table.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/isp.c (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/isp.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispccdc.c (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispccdc.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispccp2.c (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispccp2.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispcsi2.c (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispcsi2.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispcsiphy.c (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispcsiphy.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/isph3a.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/isph3a_aewb.c (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/isph3a_af.c (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/isphist.c (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/isphist.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/isppreview.c (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/isppreview.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispreg.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispresizer.c (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispresizer.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispstat.c (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispstat.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispvideo.c (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/ispvideo.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/luma_enhance_table.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/noise_filter_table.h (100%)
- rename drivers/media/platform/{ => ti}/omap3isp/omap3isp.h (100%)
+ Documentation/admin-guide/media/fimc.rst           |  2 +-
+ .../driver-api/media/drivers/fimc-devel.rst        | 14 +++++++-------
+ MAINTAINERS                                        |  2 +-
+ drivers/media/platform/Kconfig                     |  2 +-
+ drivers/media/platform/Makefile                    |  2 +-
+ .../platform/{ => samsung}/exynos4-is/Kconfig      |  0
+ .../platform/{ => samsung}/exynos4-is/Makefile     |  0
+ .../platform/{ => samsung}/exynos4-is/common.c     |  0
+ .../platform/{ => samsung}/exynos4-is/common.h     |  0
+ .../{ => samsung}/exynos4-is/fimc-capture.c        |  0
+ .../platform/{ => samsung}/exynos4-is/fimc-core.c  |  0
+ .../platform/{ => samsung}/exynos4-is/fimc-core.h  |  0
+ .../{ => samsung}/exynos4-is/fimc-is-command.h     |  0
+ .../{ => samsung}/exynos4-is/fimc-is-errno.c       |  0
+ .../{ => samsung}/exynos4-is/fimc-is-errno.h       |  0
+ .../{ => samsung}/exynos4-is/fimc-is-i2c.c         |  0
+ .../{ => samsung}/exynos4-is/fimc-is-i2c.h         |  0
+ .../{ => samsung}/exynos4-is/fimc-is-param.c       |  0
+ .../{ => samsung}/exynos4-is/fimc-is-param.h       |  0
+ .../{ => samsung}/exynos4-is/fimc-is-regs.c        |  0
+ .../{ => samsung}/exynos4-is/fimc-is-regs.h        |  0
+ .../{ => samsung}/exynos4-is/fimc-is-sensor.c      |  0
+ .../{ => samsung}/exynos4-is/fimc-is-sensor.h      |  0
+ .../platform/{ => samsung}/exynos4-is/fimc-is.c    |  0
+ .../platform/{ => samsung}/exynos4-is/fimc-is.h    |  0
+ .../{ => samsung}/exynos4-is/fimc-isp-video.c      |  0
+ .../{ => samsung}/exynos4-is/fimc-isp-video.h      |  0
+ .../platform/{ => samsung}/exynos4-is/fimc-isp.c   |  0
+ .../platform/{ => samsung}/exynos4-is/fimc-isp.h   |  0
+ .../{ => samsung}/exynos4-is/fimc-lite-reg.c       |  0
+ .../{ => samsung}/exynos4-is/fimc-lite-reg.h       |  0
+ .../platform/{ => samsung}/exynos4-is/fimc-lite.c  |  0
+ .../platform/{ => samsung}/exynos4-is/fimc-lite.h  |  0
+ .../platform/{ => samsung}/exynos4-is/fimc-m2m.c   |  0
+ .../platform/{ => samsung}/exynos4-is/fimc-reg.c   |  0
+ .../platform/{ => samsung}/exynos4-is/fimc-reg.h   |  0
+ .../platform/{ => samsung}/exynos4-is/media-dev.c  |  0
+ .../platform/{ => samsung}/exynos4-is/media-dev.h  |  0
+ .../platform/{ => samsung}/exynos4-is/mipi-csis.c  |  0
+ .../platform/{ => samsung}/exynos4-is/mipi-csis.h  |  0
+ 40 files changed, 11 insertions(+), 11 deletions(-)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/Kconfig (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/Makefile (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/common.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/common.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-capture.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-core.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-core.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is-command.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is-errno.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is-errno.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is-i2c.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is-i2c.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is-param.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is-param.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is-regs.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is-regs.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is-sensor.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is-sensor.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-is.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-isp-video.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-isp-video.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-isp.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-isp.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-lite-reg.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-lite-reg.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-lite.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-lite.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-m2m.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-reg.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/fimc-reg.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/media-dev.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/media-dev.h (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/mipi-csis.c (100%)
+ rename drivers/media/platform/{ => samsung}/exynos4-is/mipi-csis.h (100%)
 
-diff --git a/Documentation/admin-guide/media/omap3isp.rst b/Documentation/admin-guide/media/omap3isp.rst
-index bc447bbec7ce..f32e7375a1a2 100644
---- a/Documentation/admin-guide/media/omap3isp.rst
-+++ b/Documentation/admin-guide/media/omap3isp.rst
-@@ -17,7 +17,7 @@ Introduction
- ------------
+diff --git a/Documentation/admin-guide/media/fimc.rst b/Documentation/admin-guide/media/fimc.rst
+index 56b149d9a527..267ef52fe387 100644
+--- a/Documentation/admin-guide/media/fimc.rst
++++ b/Documentation/admin-guide/media/fimc.rst
+@@ -14,7 +14,7 @@ data from LCD controller (FIMD) through the SoC internal writeback data
+ path.  There are multiple FIMC instances in the SoCs (up to 4), having
+ slightly different capabilities, like pixel alignment constraints, rotator
+ availability, LCD writeback support, etc. The driver is located at
+-drivers/media/platform/exynos4-is directory.
++drivers/media/platform/samsung/exynos4-is directory.
  
- This file documents the Texas Instruments OMAP 3 Image Signal Processor (ISP)
--driver located under drivers/media/platform/omap3isp. The original driver was
-+driver located under drivers/media/platform/ti/omap3isp. The original driver was
- written by Texas Instruments but since that it has been rewritten (twice) at
- Nokia.
+ Supported SoCs
+ --------------
+diff --git a/Documentation/driver-api/media/drivers/fimc-devel.rst b/Documentation/driver-api/media/drivers/fimc-devel.rst
+index 956e3a9901f8..4c6b7c8be19f 100644
+--- a/Documentation/driver-api/media/drivers/fimc-devel.rst
++++ b/Documentation/driver-api/media/drivers/fimc-devel.rst
+@@ -12,22 +12,22 @@ Files partitioning
  
-diff --git a/Documentation/admin-guide/media/omap4_camera.rst b/Documentation/admin-guide/media/omap4_camera.rst
-index 24db4222d36d..2ada9b1e6897 100644
---- a/Documentation/admin-guide/media/omap4_camera.rst
-+++ b/Documentation/admin-guide/media/omap4_camera.rst
-@@ -25,7 +25,7 @@ As of Revision AB, the ISS is described in detail in section 8.
- This driver is supporting **only** the CSI2-A/B interfaces for now.
+ - media device driver
  
- It makes use of the Media Controller framework [#f2]_, and inherited most of the
--code from OMAP3 ISP driver (found under drivers/media/platform/omap3isp/\*),
-+code from OMAP3 ISP driver (found under drivers/media/platform/ti/omap3isp/\*),
- except that it doesn't need an IOMMU now for ISS buffers memory mapping.
+-  drivers/media/platform/exynos4-is/media-dev.[ch]
++  drivers/media/platform/samsung/exynos4-is/media-dev.[ch]
  
- Supports usage of MMAP buffers only (for now).
-diff --git a/Documentation/driver-api/media/v4l2-event.rst b/Documentation/driver-api/media/v4l2-event.rst
-index 5b8254eba7da..52d4fbc5d819 100644
---- a/Documentation/driver-api/media/v4l2-event.rst
-+++ b/Documentation/driver-api/media/v4l2-event.rst
-@@ -167,7 +167,7 @@ The first event type in the class is reserved for future use, so the first
- available event type is 'class base + 1'.
+ - camera capture video device driver
  
- An example on how the V4L2 events may be used can be found in the OMAP
--3 ISP driver (``drivers/media/platform/omap3isp``).
-+3 ISP driver (``drivers/media/platform/ti/omap3isp``).
+-  drivers/media/platform/exynos4-is/fimc-capture.c
++  drivers/media/platform/samsung/exynos4-is/fimc-capture.c
  
- A subdev can directly send an event to the :c:type:`v4l2_device` notify
- function with ``V4L2_DEVICE_NOTIFY_EVENT``. This allows the bridge to map
+ - MIPI-CSI2 receiver subdev
+ 
+-  drivers/media/platform/exynos4-is/mipi-csis.[ch]
++  drivers/media/platform/samsung/exynos4-is/mipi-csis.[ch]
+ 
+ - video post-processor (mem-to-mem)
+ 
+-  drivers/media/platform/exynos4-is/fimc-core.c
++  drivers/media/platform/samsung/exynos4-is/fimc-core.c
+ 
+ - common files
+ 
+-  drivers/media/platform/exynos4-is/fimc-core.h
+-  drivers/media/platform/exynos4-is/fimc-reg.h
+-  drivers/media/platform/exynos4-is/regs-fimc.h
++  drivers/media/platform/samsung/exynos4-is/fimc-core.h
++  drivers/media/platform/samsung/exynos4-is/fimc-reg.h
++  drivers/media/platform/samsung/exynos4-is/regs-fimc.h
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 801391246c87..2a85c98a77e4 100644
+index 74901acf8f06..b1418853d56f 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -14094,7 +14094,7 @@ M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+@@ -17103,7 +17103,7 @@ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
  L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/media/ti,omap3isp.txt
--F:	drivers/media/platform/omap3isp/
-+F:	drivers/media/platform/ti/omap3isp/
- F:	drivers/staging/media/omap4iss/
+ S:	Supported
+ Q:	https://patchwork.linuxtv.org/project/linux-media/list/
+-F:	drivers/media/platform/exynos4-is/
++F:	drivers/media/platform/samsung/exynos4-is/
  
- OMAP MMC SUPPORT
+ SAMSUNG SOC CLOCK DRIVERS
+ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index bedc8f2522e2..22d462f43a21 100644
+index 7b88ef15f8c8..6d2221a9c6ee 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -82,7 +82,6 @@ source "drivers/media/platform/nvidia/tegra-vde/Kconfig"
- source "drivers/media/platform/nxp/Kconfig"
- source "drivers/media/platform/nxp/amphion/Kconfig"
- source "drivers/media/platform/omap/Kconfig"
--source "drivers/media/platform/omap3isp/Kconfig"
- source "drivers/media/platform/qcom/Kconfig"
- source "drivers/media/platform/renesas/Kconfig"
- source "drivers/media/platform/rockchip/Kconfig"
-@@ -97,6 +96,7 @@ source "drivers/media/platform/sti/stm32/Kconfig"
+@@ -75,7 +75,6 @@ source "drivers/media/platform/cadence/Kconfig"
+ source "drivers/media/platform/chips-media/Kconfig"
+ source "drivers/media/platform/davinci/Kconfig"
+ source "drivers/media/platform/exynos-gsc/Kconfig"
+-source "drivers/media/platform/exynos4-is/Kconfig"
+ source "drivers/media/platform/intel/Kconfig"
+ source "drivers/media/platform/marvell/Kconfig"
+ source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
+@@ -94,6 +93,7 @@ source "drivers/media/platform/s3c-camif/Kconfig"
+ source "drivers/media/platform/s5p-g2d/Kconfig"
+ source "drivers/media/platform/s5p-jpeg/Kconfig"
+ source "drivers/media/platform/s5p-mfc/Kconfig"
++source "drivers/media/platform/samsung/exynos4-is/Kconfig"
+ source "drivers/media/platform/sti/Kconfig"
+ source "drivers/media/platform/stm32/Kconfig"
  source "drivers/media/platform/ti-vpe/Kconfig"
- source "drivers/media/platform/ti/am437x/Kconfig"
- source "drivers/media/platform/ti/davinci/Kconfig"
-+source "drivers/media/platform/ti/omap3isp/Kconfig"
- source "drivers/media/platform/via/Kconfig"
- source "drivers/media/platform/xilinx/Kconfig"
- 
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 4e063935f061..ef6c00b2ed64 100644
+index 7a28b60dbbe6..613ca6a3efa7 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -22,7 +22,6 @@ obj-y += nvidia/tegra-vde/
- obj-y += nxp/
- obj-y += nxp/amphion/
- obj-y += omap/
--obj-y += omap3isp/
- obj-y += qcom/camss/
- obj-y += qcom/venus/
- obj-y += renesas/
-@@ -42,6 +41,7 @@ obj-y += sti/stm32/
- obj-y += ti-vpe/
- obj-y += ti/am437x/
- obj-y += ti/davinci/
-+obj-y += ti/omap3isp/
- obj-y += via/
- obj-y += xilinx/
- 
-diff --git a/drivers/media/platform/omap3isp/Kconfig b/drivers/media/platform/ti/omap3isp/Kconfig
+@@ -15,7 +15,6 @@ obj-y += cadence/
+ obj-y += chips-media/
+ obj-y += davinci/
+ obj-y += exynos-gsc/
+-obj-y += exynos4-is/
+ obj-y += intel/
+ obj-y += marvell/
+ obj-y += mediatek/mtk-jpeg/
+@@ -36,6 +35,7 @@ obj-y += s3c-camif/
+ obj-y += s5p-g2d/
+ obj-y += s5p-jpeg/
+ obj-y += s5p-mfc/
++obj-y += samsung/exynos4-is/
+ obj-y += sti/bdisp/
+ obj-y += sti/c8sectpfe/
+ obj-y += sti/delta/
+diff --git a/drivers/media/platform/exynos4-is/Kconfig b/drivers/media/platform/samsung/exynos4-is/Kconfig
 similarity index 100%
-rename from drivers/media/platform/omap3isp/Kconfig
-rename to drivers/media/platform/ti/omap3isp/Kconfig
-diff --git a/drivers/media/platform/omap3isp/Makefile b/drivers/media/platform/ti/omap3isp/Makefile
+rename from drivers/media/platform/exynos4-is/Kconfig
+rename to drivers/media/platform/samsung/exynos4-is/Kconfig
+diff --git a/drivers/media/platform/exynos4-is/Makefile b/drivers/media/platform/samsung/exynos4-is/Makefile
 similarity index 100%
-rename from drivers/media/platform/omap3isp/Makefile
-rename to drivers/media/platform/ti/omap3isp/Makefile
-diff --git a/drivers/media/platform/omap3isp/cfa_coef_table.h b/drivers/media/platform/ti/omap3isp/cfa_coef_table.h
+rename from drivers/media/platform/exynos4-is/Makefile
+rename to drivers/media/platform/samsung/exynos4-is/Makefile
+diff --git a/drivers/media/platform/exynos4-is/common.c b/drivers/media/platform/samsung/exynos4-is/common.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/cfa_coef_table.h
-rename to drivers/media/platform/ti/omap3isp/cfa_coef_table.h
-diff --git a/drivers/media/platform/omap3isp/gamma_table.h b/drivers/media/platform/ti/omap3isp/gamma_table.h
+rename from drivers/media/platform/exynos4-is/common.c
+rename to drivers/media/platform/samsung/exynos4-is/common.c
+diff --git a/drivers/media/platform/exynos4-is/common.h b/drivers/media/platform/samsung/exynos4-is/common.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/gamma_table.h
-rename to drivers/media/platform/ti/omap3isp/gamma_table.h
-diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+rename from drivers/media/platform/exynos4-is/common.h
+rename to drivers/media/platform/samsung/exynos4-is/common.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-capture.c b/drivers/media/platform/samsung/exynos4-is/fimc-capture.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/isp.c
-rename to drivers/media/platform/ti/omap3isp/isp.c
-diff --git a/drivers/media/platform/omap3isp/isp.h b/drivers/media/platform/ti/omap3isp/isp.h
+rename from drivers/media/platform/exynos4-is/fimc-capture.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-capture.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-core.c b/drivers/media/platform/samsung/exynos4-is/fimc-core.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/isp.h
-rename to drivers/media/platform/ti/omap3isp/isp.h
-diff --git a/drivers/media/platform/omap3isp/ispccdc.c b/drivers/media/platform/ti/omap3isp/ispccdc.c
+rename from drivers/media/platform/exynos4-is/fimc-core.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-core.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-core.h b/drivers/media/platform/samsung/exynos4-is/fimc-core.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispccdc.c
-rename to drivers/media/platform/ti/omap3isp/ispccdc.c
-diff --git a/drivers/media/platform/omap3isp/ispccdc.h b/drivers/media/platform/ti/omap3isp/ispccdc.h
+rename from drivers/media/platform/exynos4-is/fimc-core.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-core.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-is-command.h b/drivers/media/platform/samsung/exynos4-is/fimc-is-command.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispccdc.h
-rename to drivers/media/platform/ti/omap3isp/ispccdc.h
-diff --git a/drivers/media/platform/omap3isp/ispccp2.c b/drivers/media/platform/ti/omap3isp/ispccp2.c
+rename from drivers/media/platform/exynos4-is/fimc-is-command.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is-command.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-is-errno.c b/drivers/media/platform/samsung/exynos4-is/fimc-is-errno.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispccp2.c
-rename to drivers/media/platform/ti/omap3isp/ispccp2.c
-diff --git a/drivers/media/platform/omap3isp/ispccp2.h b/drivers/media/platform/ti/omap3isp/ispccp2.h
+rename from drivers/media/platform/exynos4-is/fimc-is-errno.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is-errno.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-is-errno.h b/drivers/media/platform/samsung/exynos4-is/fimc-is-errno.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispccp2.h
-rename to drivers/media/platform/ti/omap3isp/ispccp2.h
-diff --git a/drivers/media/platform/omap3isp/ispcsi2.c b/drivers/media/platform/ti/omap3isp/ispcsi2.c
+rename from drivers/media/platform/exynos4-is/fimc-is-errno.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is-errno.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-is-i2c.c b/drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispcsi2.c
-rename to drivers/media/platform/ti/omap3isp/ispcsi2.c
-diff --git a/drivers/media/platform/omap3isp/ispcsi2.h b/drivers/media/platform/ti/omap3isp/ispcsi2.h
+rename from drivers/media/platform/exynos4-is/fimc-is-i2c.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-is-i2c.h b/drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispcsi2.h
-rename to drivers/media/platform/ti/omap3isp/ispcsi2.h
-diff --git a/drivers/media/platform/omap3isp/ispcsiphy.c b/drivers/media/platform/ti/omap3isp/ispcsiphy.c
+rename from drivers/media/platform/exynos4-is/fimc-is-i2c.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-is-param.c b/drivers/media/platform/samsung/exynos4-is/fimc-is-param.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispcsiphy.c
-rename to drivers/media/platform/ti/omap3isp/ispcsiphy.c
-diff --git a/drivers/media/platform/omap3isp/ispcsiphy.h b/drivers/media/platform/ti/omap3isp/ispcsiphy.h
+rename from drivers/media/platform/exynos4-is/fimc-is-param.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is-param.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-is-param.h b/drivers/media/platform/samsung/exynos4-is/fimc-is-param.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispcsiphy.h
-rename to drivers/media/platform/ti/omap3isp/ispcsiphy.h
-diff --git a/drivers/media/platform/omap3isp/isph3a.h b/drivers/media/platform/ti/omap3isp/isph3a.h
+rename from drivers/media/platform/exynos4-is/fimc-is-param.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is-param.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-is-regs.c b/drivers/media/platform/samsung/exynos4-is/fimc-is-regs.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/isph3a.h
-rename to drivers/media/platform/ti/omap3isp/isph3a.h
-diff --git a/drivers/media/platform/omap3isp/isph3a_aewb.c b/drivers/media/platform/ti/omap3isp/isph3a_aewb.c
+rename from drivers/media/platform/exynos4-is/fimc-is-regs.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is-regs.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-is-regs.h b/drivers/media/platform/samsung/exynos4-is/fimc-is-regs.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/isph3a_aewb.c
-rename to drivers/media/platform/ti/omap3isp/isph3a_aewb.c
-diff --git a/drivers/media/platform/omap3isp/isph3a_af.c b/drivers/media/platform/ti/omap3isp/isph3a_af.c
+rename from drivers/media/platform/exynos4-is/fimc-is-regs.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is-regs.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-is-sensor.c b/drivers/media/platform/samsung/exynos4-is/fimc-is-sensor.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/isph3a_af.c
-rename to drivers/media/platform/ti/omap3isp/isph3a_af.c
-diff --git a/drivers/media/platform/omap3isp/isphist.c b/drivers/media/platform/ti/omap3isp/isphist.c
+rename from drivers/media/platform/exynos4-is/fimc-is-sensor.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is-sensor.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-is-sensor.h b/drivers/media/platform/samsung/exynos4-is/fimc-is-sensor.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/isphist.c
-rename to drivers/media/platform/ti/omap3isp/isphist.c
-diff --git a/drivers/media/platform/omap3isp/isphist.h b/drivers/media/platform/ti/omap3isp/isphist.h
+rename from drivers/media/platform/exynos4-is/fimc-is-sensor.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is-sensor.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/samsung/exynos4-is/fimc-is.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/isphist.h
-rename to drivers/media/platform/ti/omap3isp/isphist.h
-diff --git a/drivers/media/platform/omap3isp/isppreview.c b/drivers/media/platform/ti/omap3isp/isppreview.c
+rename from drivers/media/platform/exynos4-is/fimc-is.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-is.h b/drivers/media/platform/samsung/exynos4-is/fimc-is.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/isppreview.c
-rename to drivers/media/platform/ti/omap3isp/isppreview.c
-diff --git a/drivers/media/platform/omap3isp/isppreview.h b/drivers/media/platform/ti/omap3isp/isppreview.h
+rename from drivers/media/platform/exynos4-is/fimc-is.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-is.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-isp-video.c b/drivers/media/platform/samsung/exynos4-is/fimc-isp-video.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/isppreview.h
-rename to drivers/media/platform/ti/omap3isp/isppreview.h
-diff --git a/drivers/media/platform/omap3isp/ispreg.h b/drivers/media/platform/ti/omap3isp/ispreg.h
+rename from drivers/media/platform/exynos4-is/fimc-isp-video.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-isp-video.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-isp-video.h b/drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispreg.h
-rename to drivers/media/platform/ti/omap3isp/ispreg.h
-diff --git a/drivers/media/platform/omap3isp/ispresizer.c b/drivers/media/platform/ti/omap3isp/ispresizer.c
+rename from drivers/media/platform/exynos4-is/fimc-isp-video.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-isp.c b/drivers/media/platform/samsung/exynos4-is/fimc-isp.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispresizer.c
-rename to drivers/media/platform/ti/omap3isp/ispresizer.c
-diff --git a/drivers/media/platform/omap3isp/ispresizer.h b/drivers/media/platform/ti/omap3isp/ispresizer.h
+rename from drivers/media/platform/exynos4-is/fimc-isp.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-isp.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-isp.h b/drivers/media/platform/samsung/exynos4-is/fimc-isp.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispresizer.h
-rename to drivers/media/platform/ti/omap3isp/ispresizer.h
-diff --git a/drivers/media/platform/omap3isp/ispstat.c b/drivers/media/platform/ti/omap3isp/ispstat.c
+rename from drivers/media/platform/exynos4-is/fimc-isp.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-isp.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-lite-reg.c b/drivers/media/platform/samsung/exynos4-is/fimc-lite-reg.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispstat.c
-rename to drivers/media/platform/ti/omap3isp/ispstat.c
-diff --git a/drivers/media/platform/omap3isp/ispstat.h b/drivers/media/platform/ti/omap3isp/ispstat.h
+rename from drivers/media/platform/exynos4-is/fimc-lite-reg.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-lite-reg.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-lite-reg.h b/drivers/media/platform/samsung/exynos4-is/fimc-lite-reg.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispstat.h
-rename to drivers/media/platform/ti/omap3isp/ispstat.h
-diff --git a/drivers/media/platform/omap3isp/ispvideo.c b/drivers/media/platform/ti/omap3isp/ispvideo.c
+rename from drivers/media/platform/exynos4-is/fimc-lite-reg.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-lite-reg.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-lite.c b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispvideo.c
-rename to drivers/media/platform/ti/omap3isp/ispvideo.c
-diff --git a/drivers/media/platform/omap3isp/ispvideo.h b/drivers/media/platform/ti/omap3isp/ispvideo.h
+rename from drivers/media/platform/exynos4-is/fimc-lite.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-lite.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-lite.h b/drivers/media/platform/samsung/exynos4-is/fimc-lite.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/ispvideo.h
-rename to drivers/media/platform/ti/omap3isp/ispvideo.h
-diff --git a/drivers/media/platform/omap3isp/luma_enhance_table.h b/drivers/media/platform/ti/omap3isp/luma_enhance_table.h
+rename from drivers/media/platform/exynos4-is/fimc-lite.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-lite.h
+diff --git a/drivers/media/platform/exynos4-is/fimc-m2m.c b/drivers/media/platform/samsung/exynos4-is/fimc-m2m.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/luma_enhance_table.h
-rename to drivers/media/platform/ti/omap3isp/luma_enhance_table.h
-diff --git a/drivers/media/platform/omap3isp/noise_filter_table.h b/drivers/media/platform/ti/omap3isp/noise_filter_table.h
+rename from drivers/media/platform/exynos4-is/fimc-m2m.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-m2m.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-reg.c b/drivers/media/platform/samsung/exynos4-is/fimc-reg.c
 similarity index 100%
-rename from drivers/media/platform/omap3isp/noise_filter_table.h
-rename to drivers/media/platform/ti/omap3isp/noise_filter_table.h
-diff --git a/drivers/media/platform/omap3isp/omap3isp.h b/drivers/media/platform/ti/omap3isp/omap3isp.h
+rename from drivers/media/platform/exynos4-is/fimc-reg.c
+rename to drivers/media/platform/samsung/exynos4-is/fimc-reg.c
+diff --git a/drivers/media/platform/exynos4-is/fimc-reg.h b/drivers/media/platform/samsung/exynos4-is/fimc-reg.h
 similarity index 100%
-rename from drivers/media/platform/omap3isp/omap3isp.h
-rename to drivers/media/platform/ti/omap3isp/omap3isp.h
+rename from drivers/media/platform/exynos4-is/fimc-reg.h
+rename to drivers/media/platform/samsung/exynos4-is/fimc-reg.h
+diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/samsung/exynos4-is/media-dev.c
+similarity index 100%
+rename from drivers/media/platform/exynos4-is/media-dev.c
+rename to drivers/media/platform/samsung/exynos4-is/media-dev.c
+diff --git a/drivers/media/platform/exynos4-is/media-dev.h b/drivers/media/platform/samsung/exynos4-is/media-dev.h
+similarity index 100%
+rename from drivers/media/platform/exynos4-is/media-dev.h
+rename to drivers/media/platform/samsung/exynos4-is/media-dev.h
+diff --git a/drivers/media/platform/exynos4-is/mipi-csis.c b/drivers/media/platform/samsung/exynos4-is/mipi-csis.c
+similarity index 100%
+rename from drivers/media/platform/exynos4-is/mipi-csis.c
+rename to drivers/media/platform/samsung/exynos4-is/mipi-csis.c
+diff --git a/drivers/media/platform/exynos4-is/mipi-csis.h b/drivers/media/platform/samsung/exynos4-is/mipi-csis.h
+similarity index 100%
+rename from drivers/media/platform/exynos4-is/mipi-csis.h
+rename to drivers/media/platform/samsung/exynos4-is/mipi-csis.h
 -- 
 2.35.1
 
