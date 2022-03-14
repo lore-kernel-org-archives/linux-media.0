@@ -2,104 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20A80C43219
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 12:47:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73458C3526E
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 12:47:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234635AbiCNMs6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 08:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        id S235065AbiCNMs7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 08:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238520AbiCNMr5 (ORCPT
+        with ESMTP id S241680AbiCNMsG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:47:57 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCBD387A8;
-        Mon, 14 Mar 2022 05:41:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=41PUcU9tzULCiIgb8Uibh/5DuRgn44vcqHlit9be1ys=;
-  b=da5ZDADTYjfUb4CkZvv1ifI5i+2sUHWvJw+dkr6l96rFI9+3qCoi3gnv
-   q0ycGdD5ccrm59796HzJuglqTi/Zn7sM07eq2eqJ7FQY8P7GtUxL24J6z
-   5W/zcd3/E6fo/TuVnTzoYm6lik0f+KcMTza69NkDCls6kpW1/h8PdxP5f
-   k=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
-   d="scan'208";a="25997332"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:53:59 +0100
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     linux-can@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-spi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, platform-driver-x86@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-leds@vger.kernel.org, Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-clk@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-rdma@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        linux-power@fi.rohmeurope.com, Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH 00/30] fix typos in comments
-Date:   Mon, 14 Mar 2022 12:53:24 +0100
-Message-Id: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
+        Mon, 14 Mar 2022 08:48:06 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C6D4706D;
+        Mon, 14 Mar 2022 05:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647261739; x=1678797739;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DC52A8XT2nJNONBY8QeSoFRd6YSUmB7HOBYGYbrkXuY=;
+  b=Xw9vHAtD5xnCPWmueG89XBua+BDD7CGbxAn8a7uZFzbGrEmEPisX9G64
+   KMIw0aLOtpQooepRej+zJCiWk0nn1oHFL2jI/BY6luHoTBh4DEdv/buoW
+   7U03zN73YNiSrj6RY1XmcMb0myflyMH400/1wlWciHe90ofsUUNp4IVOc
+   S11vv4aswdp8FWzyNRXggy/eey2vkz1/ZjGPWaDIRdD3LSKdDgK6D6eer
+   CimobbRSEkq466B037f2JrsduYCCT4YXbsP/m1zwRHgwcnxdJyZwfSy5C
+   tlQam63pxapJz5xBnGDvJFLfVCcmKzM3dsKdzzkodlYCJWJ/RcEHmkH7C
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="319238692"
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="319238692"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 05:42:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="515409853"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 14 Mar 2022 05:42:16 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTk1g-0009s1-4E; Mon, 14 Mar 2022 12:42:16 +0000
+Date:   Mon, 14 Mar 2022 20:41:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [hverkuil-media-tree:for-v5.18a 392/413]
+ drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:6: warning: no
+ previous prototype for 'fimc_isp_video_device_unregister'
+Message-ID: <202203142043.O6OWGlXl-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Various spelling mistakes in comments.
-Detected with the help of Coccinelle.
+tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.18a
+head:   dedb332353901b49b6979a45a73884653ee3681f
+commit: cb873210f6b31aabe659cf363cff37f2ade59a07 [392/413] media: platform: rename exynos4-is/ to samsung/exynos4-is/
+config: sparc64-randconfig-m031-20220314 (https://download.01.org/0day-ci/archive/20220314/202203142043.O6OWGlXl-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree for-v5.18a
+        git checkout cb873210f6b31aabe659cf363cff37f2ade59a07
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/media/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/samsung/exynos4-is/fimc-isp.c:25:
+>> drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:6: warning: no previous prototype for 'fimc_isp_video_device_unregister' [-Wmissing-prototypes]
+      35 | void fimc_isp_video_device_unregister(struct fimc_isp *isp,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/fimc_isp_video_device_unregister +35 drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h
+
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  34  
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20 @35  void fimc_isp_video_device_unregister(struct fimc_isp *isp,
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  36  				enum v4l2_buf_type type)
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  37  {
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  38  }
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  39  #endif /* !CONFIG_VIDEO_EXYNOS4_ISP_DMA_CAPTURE */
+34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  40  
+
+:::::: The code at line 35 was first introduced by commit
+:::::: 34947b8aebe3f2d4eceb65fceafa92bf8dc97d96 [media] exynos4-is: Add the FIMC-IS ISP capture DMA driver
+
+:::::: TO: Sylwester Nawrocki <s.nawrocki@samsung.com>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
 
 ---
-
- drivers/base/devres.c                               |    4 ++--
- drivers/clk/qcom/gcc-sm6125.c                       |    2 +-
- drivers/clk/ti/clkctrl.c                            |    2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c              |    4 ++--
- drivers/gpu/drm/amd/display/dc/bios/command_table.c |    6 +++---
- drivers/gpu/drm/amd/pm/amdgpu_pm.c                  |    2 +-
- drivers/gpu/drm/bridge/analogix/analogix_dp_core.c  |    4 ++--
- drivers/gpu/drm/sti/sti_gdp.c                       |    2 +-
- drivers/infiniband/hw/qib/qib_iba7220.c             |    4 ++--
- drivers/leds/leds-pca963x.c                         |    2 +-
- drivers/media/i2c/ov5695.c                          |    2 +-
- drivers/mfd/rohm-bd9576.c                           |    2 +-
- drivers/mtd/ubi/block.c                             |    2 +-
- drivers/net/can/usb/ucan.c                          |    4 ++--
- drivers/net/ethernet/packetengines/yellowfin.c      |    2 +-
- drivers/net/wireless/ath/ath6kl/htc_mbox.c          |    2 +-
- drivers/net/wireless/cisco/airo.c                   |    2 +-
- drivers/net/wireless/mediatek/mt76/mt7915/init.c    |    2 +-
- drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c |    6 +++---
- drivers/platform/x86/uv_sysfs.c                     |    2 +-
- drivers/s390/crypto/pkey_api.c                      |    2 +-
- drivers/scsi/aic7xxx/aicasm/aicasm.c                |    2 +-
- drivers/scsi/elx/libefc_sli/sli4.c                  |    2 +-
- drivers/scsi/lpfc/lpfc_mbox.c                       |    2 +-
- drivers/scsi/qla2xxx/qla_gs.c                       |    2 +-
- drivers/spi/spi-sun4i.c                             |    2 +-
- drivers/staging/rtl8723bs/core/rtw_mlme.c           |    2 +-
- drivers/usb/gadget/udc/snps_udc_core.c              |    2 +-
- fs/kernfs/file.c                                    |    2 +-
- kernel/events/core.c                                |    2 +-
- 30 files changed, 39 insertions(+), 39 deletions(-)
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
