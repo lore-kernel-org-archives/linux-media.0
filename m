@@ -2,129 +2,104 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5CA6C4332F
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 12:20:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20A80C43219
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 12:47:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241142AbiCNMVw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 08:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
+        id S234635AbiCNMs6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 08:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242304AbiCNMS4 (ORCPT
+        with ESMTP id S238520AbiCNMr5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:18:56 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690464754D;
-        Mon, 14 Mar 2022 05:13:59 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1CE3130B;
-        Mon, 14 Mar 2022 13:13:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1647260036;
-        bh=CCBbr7YW6AtHXNdUGRWrM8dwrLI+DcEe4pseQUM4RHY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RXYeAcOdrMmmaGhWIbNyyLP5lf08OVC6hdRP4viaoEz2/yVqxuzIqgMgFry9LZhjc
-         AYivOazAv5K10ulztR+upt/4qxSvtLw2XYEA8Jqovmm7kHvcJYsqLKzNjseMjl7BMa
-         s21gEzBTRUE5lpROWveHbHI8k+sG8eXrepFTjPJo=
-Date:   Mon, 14 Mar 2022 14:13:38 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v5 1/3] media: dt-bindings: media: renesas,vsp1: Document
- RZ/{G2L,V2L} VSPD bindings
-Message-ID: <Yi8xcuxSff0UFRaf@pendragon.ideasonboard.com>
-References: <20220312084205.31462-1-biju.das.jz@bp.renesas.com>
- <20220312084205.31462-2-biju.das.jz@bp.renesas.com>
- <Yi39fGVE0f9LgN/1@pendragon.ideasonboard.com>
- <OS0PR01MB592293BC9493DC1DAD1DA0C0860F9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdVYYMJvbnR3r-KGtU=3hiKjsiaXH4xyUzhv7vY5Y6MB6A@mail.gmail.com>
+        Mon, 14 Mar 2022 08:47:57 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCBD387A8;
+        Mon, 14 Mar 2022 05:41:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=41PUcU9tzULCiIgb8Uibh/5DuRgn44vcqHlit9be1ys=;
+  b=da5ZDADTYjfUb4CkZvv1ifI5i+2sUHWvJw+dkr6l96rFI9+3qCoi3gnv
+   q0ycGdD5ccrm59796HzJuglqTi/Zn7sM07eq2eqJ7FQY8P7GtUxL24J6z
+   5W/zcd3/E6fo/TuVnTzoYm6lik0f+KcMTza69NkDCls6kpW1/h8PdxP5f
+   k=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997332"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:53:59 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     linux-can@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-spi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, platform-driver-x86@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-leds@vger.kernel.org, Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-clk@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-rdma@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        linux-power@fi.rohmeurope.com, Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 00/30] fix typos in comments
+Date:   Mon, 14 Mar 2022 12:53:24 +0100
+Message-Id: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdVYYMJvbnR3r-KGtU=3hiKjsiaXH4xyUzhv7vY5Y6MB6A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Geert,
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-On Mon, Mar 14, 2022 at 10:01:14AM +0100, Geert Uytterhoeven wrote:
-> On Mon, Mar 14, 2022 at 9:44 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > On Sat, Mar 12, 2022 at 08:42:03AM +0000, Biju Das wrote:
-> > > > Document VSPD found in RZ/G2L and RZ/V2L family SoC's. VSPD block is
-> > > > similar to VSP2-D found on R-Car SoC's, but it does not have a version
-> > > > register and it has 3 clocks compared to 1 clock on vsp1 and vsp2.
-> > > >
-> > > > This patch introduces a new compatible 'renesas,rzg2l-vsp2' to handle
-> > > > these differences.
-> > > >
-> > > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> 
-> > > > index 990e9c1dbc43..2696a4582251 100644
-> > > > --- a/Documentation/devicetree/bindings/media/renesas,vsp1.yaml
-> > > > +++ b/Documentation/devicetree/bindings/media/renesas,vsp1.yaml
-> 
-> > > > +        clock-names:
-> > > > +          items:
-> > > > +            - const: du.0
-> > >
-> > > Similarly, I'm not sure this is a good name from the point of view of the
-> > > VSP.
-> >
-> > OK, will use the name 'aclk', which is Main clock for this module which is
-> > shared with LCDC. 'du.0' is not valid any more here as we are using different
-> > CRTC implementation for RZ/G2LC.
-> >
-> > > > +            - const: pclk
-> > > > +            - const: vclk
-> > >
-> > > I couldn't find those names in the documentation, where do they come from
-> >
-> > HW manual (page 312) mentions about LCDC_CLK_A, LCDC_CLK_P & LCDC_CLK_D.
-> >
-> > Detailed description is mentioned in Clock list document. Please see below.
-> >
-> >         LCDC_CLK_A      M0φ     PLL3    200     200             LCDC  Main clock
-> >         LCDC_CLK_P      ZTφ     PLL3    100     100             LCDC Register Access Clock
-> >         LCDC_CLK_D      M3φ     SEL_PLL5_4      148.5~5.803     LCDC Video Clock
-> >
-> > > ? Could you maybe share a DT integration example ?
-> >
-> > Please see below,
-> 
-> >
-> > +               du: display@0x10890000 {
-> > +                       compatible = "renesas,du-r9a07g044l";
-> > +                       reg = <0 0x10890000 0 0x10000>;
-> > +                       interrupts = <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH>;
-> > +                       clocks = <&cpg CPG_MOD R9A07G044_LCDC_CLK_A>,
-> > +                                <&cpg CPG_MOD R9A07G044_LCDC_CLK_P>,
-> > +                                <&cpg CPG_MOD R9A07G044_LCDC_CLK_D>;
-> > +                       clock-names = "du.0", "pclk", "vclk";
-> > +                       power-domains = <&cpg>;
-> > +                       resets = <&cpg R9A07G044_LCDC_RESET_N>;
-> > +                       reset-names = "du.0";
-> > +                       renesas,vsps = <&vspd0 0>;
-> 
-> Given the DU driver is no longer shared, perhaps all occurrencies of "du"
-> should be replaced by "lcdc"?
+---
 
-The LCDC is the combination of the FCPVD, the VSPD and the DU. The first
-two are similar to the eponymous IP cores used on R-Car Gen3, while the
-DU is a different beast, despite sharing the same name.
-
--- 
-Regards,
-
-Laurent Pinchart
+ drivers/base/devres.c                               |    4 ++--
+ drivers/clk/qcom/gcc-sm6125.c                       |    2 +-
+ drivers/clk/ti/clkctrl.c                            |    2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c              |    4 ++--
+ drivers/gpu/drm/amd/display/dc/bios/command_table.c |    6 +++---
+ drivers/gpu/drm/amd/pm/amdgpu_pm.c                  |    2 +-
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c  |    4 ++--
+ drivers/gpu/drm/sti/sti_gdp.c                       |    2 +-
+ drivers/infiniband/hw/qib/qib_iba7220.c             |    4 ++--
+ drivers/leds/leds-pca963x.c                         |    2 +-
+ drivers/media/i2c/ov5695.c                          |    2 +-
+ drivers/mfd/rohm-bd9576.c                           |    2 +-
+ drivers/mtd/ubi/block.c                             |    2 +-
+ drivers/net/can/usb/ucan.c                          |    4 ++--
+ drivers/net/ethernet/packetengines/yellowfin.c      |    2 +-
+ drivers/net/wireless/ath/ath6kl/htc_mbox.c          |    2 +-
+ drivers/net/wireless/cisco/airo.c                   |    2 +-
+ drivers/net/wireless/mediatek/mt76/mt7915/init.c    |    2 +-
+ drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c |    6 +++---
+ drivers/platform/x86/uv_sysfs.c                     |    2 +-
+ drivers/s390/crypto/pkey_api.c                      |    2 +-
+ drivers/scsi/aic7xxx/aicasm/aicasm.c                |    2 +-
+ drivers/scsi/elx/libefc_sli/sli4.c                  |    2 +-
+ drivers/scsi/lpfc/lpfc_mbox.c                       |    2 +-
+ drivers/scsi/qla2xxx/qla_gs.c                       |    2 +-
+ drivers/spi/spi-sun4i.c                             |    2 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme.c           |    2 +-
+ drivers/usb/gadget/udc/snps_udc_core.c              |    2 +-
+ fs/kernfs/file.c                                    |    2 +-
+ kernel/events/core.c                                |    2 +-
+ 30 files changed, 39 insertions(+), 39 deletions(-)
