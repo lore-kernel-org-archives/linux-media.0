@@ -2,62 +2,69 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DFDDC433F5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B909DC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235648AbiCNH6s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
+        id S237205AbiCNH6w (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236974AbiCNH5t (ORCPT
+        with ESMTP id S236967AbiCNH5t (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A01741620;
-        Mon, 14 Mar 2022 00:56:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F3841619;
+        Mon, 14 Mar 2022 00:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A32DB611D4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83F83611BB;
         Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87023C36B0F;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED7EC36B00;
         Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647244562;
-        bh=vLaZ7WUJiCwzgR82FCr02z2lYi4J1bMd7ENNfIorXWw=;
+        bh=teN4+d8Dt5QQVBAVj2zCMTgU5Dq6lD+OYJHqSQvyjyw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FRY8b5nwJ8xV7PvUFHaJkYX4KzHrhTDeJ6TMvniHxeQ9RjK2/Qo+EkdA2BL6bxSMT
-         ropADukJxl5rBWqILMB7glfBgbzZ/vwxOX4pOgCGn8ZwMXqXXhtZyKKjwjJ5FUrq/n
-         EEy/JWXvRxFcoxKFflM850Fl8AZSG2XL0tGO75JgQactwsMSXszL7BZvxyGhhxe4rw
-         pCGpKHrNI4KXOtiy1woTddqn72svs55TSL2W87NiEliPwIhe6P6KbZtitrHTk4lX2i
-         1r8kgz7XF13xzyNjcRX8dvBfw3aCXU2Tdl1flc5vj8yPPao2vTYStQzAXe7gjP9Oby
-         EVoTt2+2cZkhw==
+        b=ij5IsZP29TerHcu6LJhiOn8tmhg/1j54rLnoc3nPsmKOn76ex8gBKBBB3+62n1CMt
+         aTBdljmHwKUBoibwLITki+225jmzvGhkHOc+wEptvLA6KVzahWFihQ74Wcv/Th25wt
+         4CSXCjnh3777ZSzuDG/4B607YSQAaAjA45vOg1CFODoFkq+92ybvLeoOXBBTM6oYat
+         CeSGxL6dp+sGfoCsGTSw91EUyqZkOK827SlvUXhr/sVL3iBaS9kYHevJdDVZKM3FmE
+         lKqJKYV5bNz2kkVZ0yDk4ab4LJ2nRgtsyqoJsO9LEgnc1zyndvLcCbhfKCgHQyUBCv
+         jeNa6ZHCSt85Q==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYe-001kXH-Ae; Mon, 14 Mar 2022 08:56:00 +0100
+        id 1nTfYd-001kWl-UE; Mon, 14 Mar 2022 08:55:59 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
+        Cai Huoqing <caihuoqing@baidu.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Estevam <festevam@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Martin Weber <martin.weber@br-automation.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
         Ming Qian <ming.qian@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH 48/64] media: platform: rename tegra/vde/ to nvidia/tegra-vde/
-Date:   Mon, 14 Mar 2022 08:55:40 +0100
-Message-Id: <db579b68df785fc33c9a7641142b0472286e8ece.1647242579.git.mchehab@kernel.org>
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 40/64] media: platform: rename coda/ to chips-media/
+Date:   Mon, 14 Mar 2022 08:55:32 +0100
+Message-Id: <fdd97c1b2c76f48170387fa4bafef5bada1f59c7.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -69,7 +76,7 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 As the end goal is to have platform drivers split by vendor,
-rename tegra/vde/ to nvidia/tegra-vde/.
+rename coda/ to chips-media/.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -77,129 +84,163 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- MAINTAINERS                                                     | 2 +-
- drivers/media/platform/Kconfig                                  | 2 +-
- drivers/media/platform/Makefile                                 | 2 +-
- drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/Kconfig  | 0
- drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/Makefile | 0
- .../platform/{tegra/vde => nvidia/tegra-vde}/dmabuf-cache.c     | 0
- drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/h264.c   | 0
- drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/iommu.c  | 0
- drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/trace.h  | 2 +-
- drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/v4l2.c   | 0
- drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/vde.c    | 0
- drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/vde.h    | 0
- 12 files changed, 4 insertions(+), 4 deletions(-)
- rename drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/Kconfig (100%)
- rename drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/Makefile (100%)
- rename drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/dmabuf-cache.c (100%)
- rename drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/h264.c (100%)
- rename drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/iommu.c (100%)
- rename drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/trace.h (97%)
- rename drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/v4l2.c (100%)
- rename drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/vde.c (100%)
- rename drivers/media/platform/{tegra/vde => nvidia/tegra-vde}/vde.h (100%)
+ MAINTAINERS                                                | 2 +-
+ drivers/media/platform/Kconfig                             | 2 +-
+ drivers/media/platform/Makefile                            | 4 ++--
+ drivers/media/platform/{coda => chips-media}/Kconfig       | 0
+ drivers/media/platform/{coda => chips-media}/Makefile      | 0
+ drivers/media/platform/{coda => chips-media}/coda-bit.c    | 0
+ drivers/media/platform/{coda => chips-media}/coda-common.c | 0
+ drivers/media/platform/{coda => chips-media}/coda-gdi.c    | 0
+ drivers/media/platform/{coda => chips-media}/coda-h264.c   | 0
+ drivers/media/platform/{coda => chips-media}/coda-jpeg.c   | 0
+ drivers/media/platform/{coda => chips-media}/coda-mpeg2.c  | 0
+ drivers/media/platform/{coda => chips-media}/coda-mpeg4.c  | 0
+ drivers/media/platform/{coda => chips-media}/coda.h        | 0
+ drivers/media/platform/{coda => chips-media}/coda_regs.h   | 2 +-
+ drivers/media/platform/{coda => chips-media}/imx-vdoa.c    | 0
+ drivers/media/platform/{coda => chips-media}/imx-vdoa.h    | 0
+ drivers/media/platform/{coda => chips-media}/trace.h       | 2 +-
+ 17 files changed, 6 insertions(+), 6 deletions(-)
+ rename drivers/media/platform/{coda => chips-media}/Kconfig (100%)
+ rename drivers/media/platform/{coda => chips-media}/Makefile (100%)
+ rename drivers/media/platform/{coda => chips-media}/coda-bit.c (100%)
+ rename drivers/media/platform/{coda => chips-media}/coda-common.c (100%)
+ rename drivers/media/platform/{coda => chips-media}/coda-gdi.c (100%)
+ rename drivers/media/platform/{coda => chips-media}/coda-h264.c (100%)
+ rename drivers/media/platform/{coda => chips-media}/coda-jpeg.c (100%)
+ rename drivers/media/platform/{coda => chips-media}/coda-mpeg2.c (100%)
+ rename drivers/media/platform/{coda => chips-media}/coda-mpeg4.c (100%)
+ rename drivers/media/platform/{coda => chips-media}/coda.h (100%)
+ rename drivers/media/platform/{coda => chips-media}/coda_regs.h (99%)
+ rename drivers/media/platform/{coda => chips-media}/imx-vdoa.c (100%)
+ rename drivers/media/platform/{coda => chips-media}/imx-vdoa.h (100%)
+ rename drivers/media/platform/{coda => chips-media}/trace.h (98%)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index f29195850c16..c9333d46047e 100644
+index 848640546398..84bc106acc57 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -11964,7 +11964,7 @@ L:	linux-tegra@vger.kernel.org
+@@ -4771,7 +4771,7 @@ M:	Philipp Zabel <p.zabel@pengutronix.de>
+ L:	linux-media@vger.kernel.org
  S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt
--F:	drivers/media/platform/tegra/vde/
-+F:	drivers/media/platform/nvidia/tegra-vde/
+ F:	Documentation/devicetree/bindings/media/coda.yaml
+-F:	drivers/media/platform/coda/
++F:	drivers/media/platform/chips-media/
  
- MEDIA DRIVERS FOR RENESAS - CEU
- M:	Jacopo Mondi <jacopo@jmondi.org>
+ CODE OF CONDUCT
+ M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 61240f8226bb..13d8f3e59116 100644
+index 721f27ef0130..24a43cef18de 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -83,6 +83,7 @@ source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
- source "drivers/media/platform/mediatek/mtk-mdp/Kconfig"
- source "drivers/media/platform/mediatek/mtk-vcodec/Kconfig"
- source "drivers/media/platform/mediatek/mtk-vpu/Kconfig"
-+source "drivers/media/platform/nvidia/tegra-vde/Kconfig"
- source "drivers/media/platform/nxp/Kconfig"
- source "drivers/media/platform/omap/Kconfig"
- source "drivers/media/platform/omap3isp/Kconfig"
-@@ -95,7 +96,6 @@ source "drivers/media/platform/s5p-jpeg/Kconfig"
- source "drivers/media/platform/s5p-mfc/Kconfig"
- source "drivers/media/platform/sti/Kconfig"
- source "drivers/media/platform/stm32/Kconfig"
--source "drivers/media/platform/tegra/vde/Kconfig"
- source "drivers/media/platform/ti-vpe/Kconfig"
- source "drivers/media/platform/via/Kconfig"
- source "drivers/media/platform/xilinx/Kconfig"
+@@ -71,7 +71,7 @@ source "drivers/media/platform/amphion/Kconfig"
+ source "drivers/media/platform/aspeed/Kconfig"
+ source "drivers/media/platform/atmel/Kconfig"
+ source "drivers/media/platform/cadence/Kconfig"
+-source "drivers/media/platform/coda/Kconfig"
++source "drivers/media/platform/chips-media/Kconfig"
+ source "drivers/media/platform/davinci/Kconfig"
+ source "drivers/media/platform/exynos-gsc/Kconfig"
+ source "drivers/media/platform/exynos4-is/Kconfig"
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 88519e902919..ce9909534218 100644
+index 20b07ae3ebf1..8d6e15fad0b1 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -23,6 +23,7 @@ obj-y += mediatek/mtk-jpeg/
- obj-y += mediatek/mtk-mdp/
- obj-y += mediatek/mtk-vcodec/
- obj-y += mediatek/mtk-vpu/
-+obj-y += nvidia/tegra-vde/
- obj-y += nxp/
- obj-y += omap/
- obj-y += omap3isp/
-@@ -40,7 +41,6 @@ obj-y += sti/c8sectpfe/
- obj-y += sti/delta/
- obj-y += sti/hva/
- obj-y += stm32/
--obj-y += tegra/vde/
- obj-y += ti-vpe/
- obj-y += via/
- obj-y += xilinx/
-diff --git a/drivers/media/platform/tegra/vde/Kconfig b/drivers/media/platform/nvidia/tegra-vde/Kconfig
+@@ -6,12 +6,12 @@
+ # Place here, alphabetically sorted by directory
+ # (e. g. LC_ALL=C sort Makefile)
+ obj-y += allegro-dvt/
+-obj-y += aspeed/
+ obj-y += am437x/
+ obj-y += amphion/
++obj-y += aspeed/
+ obj-y += atmel/
+ obj-y += cadence/
+-obj-y += coda/
++obj-y += chips-media/
+ obj-y += davinci/
+ obj-y += exynos-gsc/
+ obj-y += exynos4-is/
+diff --git a/drivers/media/platform/coda/Kconfig b/drivers/media/platform/chips-media/Kconfig
 similarity index 100%
-rename from drivers/media/platform/tegra/vde/Kconfig
-rename to drivers/media/platform/nvidia/tegra-vde/Kconfig
-diff --git a/drivers/media/platform/tegra/vde/Makefile b/drivers/media/platform/nvidia/tegra-vde/Makefile
+rename from drivers/media/platform/coda/Kconfig
+rename to drivers/media/platform/chips-media/Kconfig
+diff --git a/drivers/media/platform/coda/Makefile b/drivers/media/platform/chips-media/Makefile
 similarity index 100%
-rename from drivers/media/platform/tegra/vde/Makefile
-rename to drivers/media/platform/nvidia/tegra-vde/Makefile
-diff --git a/drivers/media/platform/tegra/vde/dmabuf-cache.c b/drivers/media/platform/nvidia/tegra-vde/dmabuf-cache.c
+rename from drivers/media/platform/coda/Makefile
+rename to drivers/media/platform/chips-media/Makefile
+diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/chips-media/coda-bit.c
 similarity index 100%
-rename from drivers/media/platform/tegra/vde/dmabuf-cache.c
-rename to drivers/media/platform/nvidia/tegra-vde/dmabuf-cache.c
-diff --git a/drivers/media/platform/tegra/vde/h264.c b/drivers/media/platform/nvidia/tegra-vde/h264.c
+rename from drivers/media/platform/coda/coda-bit.c
+rename to drivers/media/platform/chips-media/coda-bit.c
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
 similarity index 100%
-rename from drivers/media/platform/tegra/vde/h264.c
-rename to drivers/media/platform/nvidia/tegra-vde/h264.c
-diff --git a/drivers/media/platform/tegra/vde/iommu.c b/drivers/media/platform/nvidia/tegra-vde/iommu.c
+rename from drivers/media/platform/coda/coda-common.c
+rename to drivers/media/platform/chips-media/coda-common.c
+diff --git a/drivers/media/platform/coda/coda-gdi.c b/drivers/media/platform/chips-media/coda-gdi.c
 similarity index 100%
-rename from drivers/media/platform/tegra/vde/iommu.c
-rename to drivers/media/platform/nvidia/tegra-vde/iommu.c
-diff --git a/drivers/media/platform/tegra/vde/trace.h b/drivers/media/platform/nvidia/tegra-vde/trace.h
-similarity index 97%
-rename from drivers/media/platform/tegra/vde/trace.h
-rename to drivers/media/platform/nvidia/tegra-vde/trace.h
-index 77358ddfdb8f..7853ab095ca4 100644
---- a/drivers/media/platform/tegra/vde/trace.h
-+++ b/drivers/media/platform/nvidia/tegra-vde/trace.h
-@@ -90,6 +90,6 @@ TRACE_EVENT(vde_ref_l1,
+rename from drivers/media/platform/coda/coda-gdi.c
+rename to drivers/media/platform/chips-media/coda-gdi.c
+diff --git a/drivers/media/platform/coda/coda-h264.c b/drivers/media/platform/chips-media/coda-h264.c
+similarity index 100%
+rename from drivers/media/platform/coda/coda-h264.c
+rename to drivers/media/platform/chips-media/coda-h264.c
+diff --git a/drivers/media/platform/coda/coda-jpeg.c b/drivers/media/platform/chips-media/coda-jpeg.c
+similarity index 100%
+rename from drivers/media/platform/coda/coda-jpeg.c
+rename to drivers/media/platform/chips-media/coda-jpeg.c
+diff --git a/drivers/media/platform/coda/coda-mpeg2.c b/drivers/media/platform/chips-media/coda-mpeg2.c
+similarity index 100%
+rename from drivers/media/platform/coda/coda-mpeg2.c
+rename to drivers/media/platform/chips-media/coda-mpeg2.c
+diff --git a/drivers/media/platform/coda/coda-mpeg4.c b/drivers/media/platform/chips-media/coda-mpeg4.c
+similarity index 100%
+rename from drivers/media/platform/coda/coda-mpeg4.c
+rename to drivers/media/platform/chips-media/coda-mpeg4.c
+diff --git a/drivers/media/platform/coda/coda.h b/drivers/media/platform/chips-media/coda.h
+similarity index 100%
+rename from drivers/media/platform/coda/coda.h
+rename to drivers/media/platform/chips-media/coda.h
+diff --git a/drivers/media/platform/coda/coda_regs.h b/drivers/media/platform/chips-media/coda_regs.h
+similarity index 99%
+rename from drivers/media/platform/coda/coda_regs.h
+rename to drivers/media/platform/chips-media/coda_regs.h
+index da5bb3212528..db81a904cf3f 100644
+--- a/drivers/media/platform/coda/coda_regs.h
++++ b/drivers/media/platform/chips-media/coda_regs.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0-or-later */
+ /*
+- * linux/drivers/media/platform/coda/coda_regs.h
++ * linux/drivers/media/platform/chips-media/coda_regs.h
+  *
+  * Copyright (C) 2012 Vista Silicon SL
+  *    Javier Martin <javier.martin@vista-silicon.com>
+diff --git a/drivers/media/platform/coda/imx-vdoa.c b/drivers/media/platform/chips-media/imx-vdoa.c
+similarity index 100%
+rename from drivers/media/platform/coda/imx-vdoa.c
+rename to drivers/media/platform/chips-media/imx-vdoa.c
+diff --git a/drivers/media/platform/coda/imx-vdoa.h b/drivers/media/platform/chips-media/imx-vdoa.h
+similarity index 100%
+rename from drivers/media/platform/coda/imx-vdoa.h
+rename to drivers/media/platform/chips-media/imx-vdoa.h
+diff --git a/drivers/media/platform/coda/trace.h b/drivers/media/platform/chips-media/trace.h
+similarity index 98%
+rename from drivers/media/platform/coda/trace.h
+rename to drivers/media/platform/chips-media/trace.h
+index c0791c847f7c..19f98e6dafb9 100644
+--- a/drivers/media/platform/coda/trace.h
++++ b/drivers/media/platform/chips-media/trace.h
+@@ -167,7 +167,7 @@ DEFINE_EVENT(coda_buf_class, coda_jpeg_done,
+ #endif /* __CODA_TRACE_H__ */
  
- /* This part must be outside protection */
  #undef TRACE_INCLUDE_PATH
--#define TRACE_INCLUDE_PATH ../../drivers/media/platform/tegra/vde
-+#define TRACE_INCLUDE_PATH ../../drivers/media/platform/nvidia/tegra-vde
+-#define TRACE_INCLUDE_PATH ../../drivers/media/platform/coda
++#define TRACE_INCLUDE_PATH ../../drivers/media/platform/chips-media
+ #undef TRACE_INCLUDE_FILE
  #define TRACE_INCLUDE_FILE trace
- #include <trace/define_trace.h>
-diff --git a/drivers/media/platform/tegra/vde/v4l2.c b/drivers/media/platform/nvidia/tegra-vde/v4l2.c
-similarity index 100%
-rename from drivers/media/platform/tegra/vde/v4l2.c
-rename to drivers/media/platform/nvidia/tegra-vde/v4l2.c
-diff --git a/drivers/media/platform/tegra/vde/vde.c b/drivers/media/platform/nvidia/tegra-vde/vde.c
-similarity index 100%
-rename from drivers/media/platform/tegra/vde/vde.c
-rename to drivers/media/platform/nvidia/tegra-vde/vde.c
-diff --git a/drivers/media/platform/tegra/vde/vde.h b/drivers/media/platform/nvidia/tegra-vde/vde.h
-similarity index 100%
-rename from drivers/media/platform/tegra/vde/vde.h
-rename to drivers/media/platform/nvidia/tegra-vde/vde.h
+ 
 -- 
 2.35.1
 
