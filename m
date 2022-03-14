@@ -2,61 +2,53 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A962C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:56:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C68B9C43219
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:56:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237084AbiCNH5x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
+        id S237016AbiCNH55 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236923AbiCNH5f (ORCPT
+        with ESMTP id S236961AbiCNH5t (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Mar 2022 03:57:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1678F4132D;
-        Mon, 14 Mar 2022 00:56:12 -0700 (PDT)
+        Mon, 14 Mar 2022 03:57:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3776F4160B;
+        Mon, 14 Mar 2022 00:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CBB6B80D52;
-        Mon, 14 Mar 2022 07:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB02C341E4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F15761156;
         Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5A69C341D9;
+        Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647244563;
-        bh=NUWZ3FrsjEU1KQK0UFRKOIlNOBV2tg90c49kOIeAcx0=;
+        s=k20201202; t=1647244561;
+        bh=L5kIq+7jZMFkKxSnqDG1cjfz6jM7ZGNI7WnQn0j9M+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SRS/v5RdHkMQIvcur+1IsoQ3k3FsVxkNsIf1SOB5+gztEp2R5k1qPVBI9AvUTnYm1
-         asVTnNL+D1aeKa8L6g+uEXv3FHO8mKNW0b8ro+U6J89dc4FKuxYbH4VyNCi+58p+yL
-         uCKVmo9Wzt+ALMFP7APKHPnG1JjY302EkpxYsuA2s9XThz+Un7CFFg1Mdl69Hy6ysx
-         XgxQud5dkBkaHnv7oAndCYyY+PR5saXZj+I2Q4pz5p2NptxAayA7VZk6xZ4ga/bhId
-         4LtIA1UHZwixLEaQQ9NVrCu+DIRcufgA/ruossIPGSLP7ci52w7YkHUOomaHvBDkys
-         mg/WEU8BrFyVQ==
+        b=LdlcVDviFYtHuBzi5DChQPGj2SN7YPTZwdRhPajtwnw6Ko9te++t6cAdh3CSNf/82
+         kWhFE5G9Brrl6WjBhkgjHah1lK/g77hJSnLlP4sEl0Wgza3XjWvr8kPngqGjHZlFNf
+         xLZ6Yz/bOE+MAc8hgGnxm+6dvUVIkjyM1F79RK5JismsJtucumJ2IU34GYSZ5+3jnY
+         +nAAE9Tcgm4PM1XCG0jrIAzRYNuLgrkwzXRulwXRxY7+qVRQxSHxA0MsUy8GSYVPH7
+         Tcv9/UkRN3Sj2Gud5Qslgcut2n+2ViKJltDHODsgvh1Vzr/UpyybdiXstPrildjvAP
+         ZlG1hOMfRQUVQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYe-001kXT-FS; Mon, 14 Mar 2022 08:56:00 +0100
+        id 1nTfYd-001kWN-Mb; Mon, 14 Mar 2022 08:55:59 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Cai Huoqing <caihuoqing@baidu.com>,
         Dmitry Osipenko <digetx@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 51/64] media: platform: rename exynos-gsc/ to samsung/exynos-gsc/
-Date:   Mon, 14 Mar 2022 08:55:43 +0100
-Message-Id: <079d0d718c65424edd82e5b094211f1433094c93.1647242579.git.mchehab@kernel.org>
+        Ming Qian <ming.qian@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 34/64] media: platform: bdisp: move config to its own file
+Date:   Mon, 14 Mar 2022 08:55:26 +0100
+Message-Id: <c5552d91ae85bac34a39304995e4518f5b027cb3.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -67,8 +59,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As the end goal is to have platform drivers split by vendor,
-rename exynos-gsc/ to samsung/exynos-gsc/.
+In order to better organize the platform/Kconfig, place
+bdisp-specific config stuff on a separate Kconfig file.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -76,92 +68,48 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig                             | 2 +-
- drivers/media/platform/Makefile                            | 2 +-
- drivers/media/platform/{ => samsung}/exynos-gsc/Kconfig    | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/Makefile   | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.c | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.h | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-m2m.c  | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.c | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.h | 0
- 9 files changed, 2 insertions(+), 2 deletions(-)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/Kconfig (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/Makefile (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.c (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.h (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-m2m.c (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.c (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.h (100%)
+ drivers/media/platform/Kconfig           | 10 +---------
+ drivers/media/platform/sti/bdisp/Kconfig | 10 ++++++++++
+ 2 files changed, 11 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/media/platform/sti/bdisp/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 6d2221a9c6ee..dca53f6a1b33 100644
+index ba4c10896537..2069eee801af 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -74,7 +74,6 @@ source "drivers/media/platform/atmel/Kconfig"
- source "drivers/media/platform/cadence/Kconfig"
- source "drivers/media/platform/chips-media/Kconfig"
- source "drivers/media/platform/davinci/Kconfig"
--source "drivers/media/platform/exynos-gsc/Kconfig"
- source "drivers/media/platform/intel/Kconfig"
- source "drivers/media/platform/marvell/Kconfig"
- source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
-@@ -93,6 +92,7 @@ source "drivers/media/platform/s3c-camif/Kconfig"
- source "drivers/media/platform/s5p-g2d/Kconfig"
- source "drivers/media/platform/s5p-jpeg/Kconfig"
- source "drivers/media/platform/s5p-mfc/Kconfig"
-+source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
- source "drivers/media/platform/samsung/exynos4-is/Kconfig"
- source "drivers/media/platform/sti/Kconfig"
- source "drivers/media/platform/stm32/Kconfig"
-diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 613ca6a3efa7..848cbd6147ae 100644
---- a/drivers/media/platform/Makefile
-+++ b/drivers/media/platform/Makefile
-@@ -14,7 +14,6 @@ obj-y += atmel/
- obj-y += cadence/
- obj-y += chips-media/
- obj-y += davinci/
--obj-y += exynos-gsc/
- obj-y += intel/
- obj-y += marvell/
- obj-y += mediatek/mtk-jpeg/
-@@ -35,6 +34,7 @@ obj-y += s3c-camif/
- obj-y += s5p-g2d/
- obj-y += s5p-jpeg/
- obj-y += s5p-mfc/
-+obj-y += samsung/exynos-gsc/
- obj-y += samsung/exynos4-is/
- obj-y += sti/bdisp/
- obj-y += sti/c8sectpfe/
-diff --git a/drivers/media/platform/exynos-gsc/Kconfig b/drivers/media/platform/samsung/exynos-gsc/Kconfig
-similarity index 100%
-rename from drivers/media/platform/exynos-gsc/Kconfig
-rename to drivers/media/platform/samsung/exynos-gsc/Kconfig
-diff --git a/drivers/media/platform/exynos-gsc/Makefile b/drivers/media/platform/samsung/exynos-gsc/Makefile
-similarity index 100%
-rename from drivers/media/platform/exynos-gsc/Makefile
-rename to drivers/media/platform/samsung/exynos-gsc/Makefile
-diff --git a/drivers/media/platform/exynos-gsc/gsc-core.c b/drivers/media/platform/samsung/exynos-gsc/gsc-core.c
-similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-core.c
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-core.c
-diff --git a/drivers/media/platform/exynos-gsc/gsc-core.h b/drivers/media/platform/samsung/exynos-gsc/gsc-core.h
-similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-core.h
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-core.h
-diff --git a/drivers/media/platform/exynos-gsc/gsc-m2m.c b/drivers/media/platform/samsung/exynos-gsc/gsc-m2m.c
-similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-m2m.c
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-m2m.c
-diff --git a/drivers/media/platform/exynos-gsc/gsc-regs.c b/drivers/media/platform/samsung/exynos-gsc/gsc-regs.c
-similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-regs.c
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-regs.c
-diff --git a/drivers/media/platform/exynos-gsc/gsc-regs.h b/drivers/media/platform/samsung/exynos-gsc/gsc-regs.h
-similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-regs.h
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-regs.h
+@@ -122,15 +122,7 @@ config VIDEO_SAMSUNG_S5P_MFC
+ 	help
+ 	    MFC 5.1 and 6.x driver for V4L2
+ 
+-config VIDEO_STI_BDISP
+-	tristate "STMicroelectronics BDISP 2D blitter driver"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	depends on ARCH_STI || COMPILE_TEST
+-	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_MEM2MEM_DEV
+-	help
+-	  This v4l2 mem2mem driver is a 2D blitter for STMicroelectronics SoC.
++source "drivers/media/platform/sti/bdisp/Kconfig"
+ 
+ source "drivers/media/platform/sti/delta/Kconfig"
+ 
+diff --git a/drivers/media/platform/sti/bdisp/Kconfig b/drivers/media/platform/sti/bdisp/Kconfig
+new file mode 100644
+index 000000000000..e583fb924f52
+--- /dev/null
++++ b/drivers/media/platform/sti/bdisp/Kconfig
+@@ -0,0 +1,10 @@
++# SPDX-License-Identifier: GPL-2.0-only
++config VIDEO_STI_BDISP
++	tristate "STMicroelectronics BDISP 2D blitter driver"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on ARCH_STI || COMPILE_TEST
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_MEM2MEM_DEV
++	help
++	  This v4l2 mem2mem driver is a 2D blitter for STMicroelectronics SoC.
 -- 
 2.35.1
 
