@@ -2,266 +2,175 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB554C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 16:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F2E2C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 16:35:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243002AbiCNQ26 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 12:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S239124AbiCNQgU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 12:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233850AbiCNQ25 (ORCPT
+        with ESMTP id S235820AbiCNQgS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Mar 2022 12:28:57 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CDECF4
-        for <linux-media@vger.kernel.org>; Mon, 14 Mar 2022 09:27:46 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id E6EDA240009;
-        Mon, 14 Mar 2022 16:27:42 +0000 (UTC)
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>,
-        krzysztof.kozlowski@canonical.com,
-        jeanmichel.hautbois@ideasonboard.com,
-        laurent.pinchart@ideasonboard.com, paul.kocialkowski@bootlin.com,
-        sakari.ailus@iki.fi, paul.elder@ideasonboard.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org (open list:OMNIVISION OV5670 SENSOR DRIVER)
-Subject: [PATCH v2 8/8] media: i2c: ov5670: Add .get_selection() support
-Date:   Mon, 14 Mar 2022 17:27:14 +0100
-Message-Id: <20220314162714.153970-9-jacopo@jmondi.org>
+        Mon, 14 Mar 2022 12:36:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1594311C24;
+        Mon, 14 Mar 2022 09:35:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 656096138B;
+        Mon, 14 Mar 2022 16:35:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6711C340F7;
+        Mon, 14 Mar 2022 16:35:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647275706;
+        bh=pGdMVo81L21nG9yhzpJ4FAUxkhj+Km9odTkR6fwp/F4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=C7VEwuHpUixh3uASPaVRn5XFgd9qBRGXm2InpJIZ6XfvvsjPjR+9ZrW6HcrrFjoOg
+         MV3gZsgIY1iiIDA5KNGwjl/6OtPcVtZhV8n7KMSgpImb3Q1nJJzEUhO2fOg+T5Qw59
+         MggUQx1UmhRUcfSbtBKHnphRcKDJrItHbd3D11ntzxNW7DL8rfrI1Te4rP3GJF9CqU
+         T44iUq2ojBID43uO+t+LXsmiRdh/N4r4LjuFgVNPFiAcBZ2owDvLKMlxheRYSTkrI+
+         V30v3Gr9KM8I+COGWzXZrhVgIqnP7IRQEmQOyzaSKC9uBk9czJLczK4gZW3o4Krtwo
+         hhFow68/jywhw==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nTney-001wwU-Gb; Mon, 14 Mar 2022 17:35:04 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jammy Huang <jammy_huang@aspeedtech.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Zev Weiss <zev@bewilderbeest.net>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: [PATCH v2 06/67] media: platform: place Aspeed driver on a separate dir
+Date:   Mon, 14 Mar 2022 17:34:01 +0100
+Message-Id: <69c5ee8aae03bb9f9a8a825175a1cd0644eaf20c.1647274406.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314162714.153970-1-jacopo@jmondi.org>
-References: <20220314162714.153970-1-jacopo@jmondi.org>
+In-Reply-To: <cover.1647274406.git.mchehab@kernel.org>
+References: <cover.1647274406.git.mchehab@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+In order to cleanup the main platform media directory, move Aspeed
+driver to its own directory.
 
-Add support for the .get_selection() pad operation to the ov5670 sensor
-driver.
-
-Report the native sensor size (pixel array), the crop bounds (readable
-pixel array area) and the current and default analog crop rectangles.
-
-Currently all driver's mode use an analog crop rectangle of size
-[12, 4, 2600, 1952]. Instead of hardcoding the value in the operation
-implementation, ad an .analog_crop field to the sensor's mode
-definitions, to make sure that if any mode gets added, its crop
-rectangle will be defined as well.
-
-While at it re-sort the mode's field definition order to match the
-declaration order and initialize the crop rectangle in init_cfg().
-
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
- drivers/media/i2c/ov5670.c | 89 +++++++++++++++++++++++++++++++++++---
- 1 file changed, 83 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
-index 9aa82774f8a6..67897dabb712 100644
---- a/drivers/media/i2c/ov5670.c
-+++ b/drivers/media/i2c/ov5670.c
-@@ -71,6 +71,10 @@
- #define OV5670_REG_VALUE_16BIT		2
- #define OV5670_REG_VALUE_24BIT		3
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH v2 00/67] at: https://lore.kernel.org/all/cover.1647274406.git.mchehab@kernel.org/
+
+ MAINTAINERS                                        |  2 +-
+ drivers/media/platform/Kconfig                     | 10 +---------
+ drivers/media/platform/Makefile                    |  2 +-
+ drivers/media/platform/aspeed/Kconfig              | 10 ++++++++++
+ drivers/media/platform/aspeed/Makefile             |  2 ++
+ drivers/media/platform/{ => aspeed}/aspeed-video.c |  0
+ 6 files changed, 15 insertions(+), 11 deletions(-)
+ create mode 100644 drivers/media/platform/aspeed/Kconfig
+ create mode 100644 drivers/media/platform/aspeed/Makefile
+ rename drivers/media/platform/{ => aspeed}/aspeed-video.c (100%)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1a9fb0615925..1b6f48a660de 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3026,7 +3026,7 @@ L:	linux-media@vger.kernel.org
+ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/aspeed-video.txt
+-F:	drivers/media/platform/aspeed-video.c
++F:	drivers/media/platform/aspeed/
  
-+/* Pixel Array */
-+#define OV5670_NATIVE_WIDTH		2624
-+#define OV5670_NATIVE_HEIGHT		1980
-+
- /* Initial number of frames to skip to avoid possible garbage */
- #define OV5670_NUM_OF_SKIP_FRAMES	2
+ ASUS NOTEBOOKS AND EEEPC ACPI/WMI EXTRAS DRIVERS
+ M:	Corentin Chary <corentin.chary@gmail.com>
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index 1446a99159c5..10f453ff2717 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -50,15 +50,7 @@ source "drivers/media/platform/davinci/Kconfig"
  
-@@ -113,10 +117,25 @@ struct ov5670_mode {
- 	/* Link frequency needed for this resolution */
- 	u32 link_freq_index;
+ source "drivers/media/platform/omap/Kconfig"
  
-+	/* Analog crop rectangle */
-+	const struct v4l2_rect analog_crop;
-+
- 	/* Sensor register settings for this resolution */
- 	const struct ov5670_reg_list reg_list;
- };
+-config VIDEO_ASPEED
+-	tristate "Aspeed AST2400 and AST2500 Video Engine driver"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_V4L2
+-	select VIDEOBUF2_DMA_CONTIG
+-	help
+-	  Support for the Aspeed Video Engine (VE) embedded in the Aspeed
+-	  AST2400 and AST2500 SOCs. The VE can capture and compress video data
+-	  from digital or analog sources.
++source "drivers/media/platform/aspeed/Kconfig"
  
-+/*
-+ * All the modes supported by the driver are obtained by subsampling the
-+ * full pixel array. The below values are reflected in registers from
-+ * 03800-0x3807 in the modes register-value tables.
-+ */
-+static const struct v4l2_rect ov5670_analog_crop = {
-+	.left	= 12,
-+	.top	= 4,
-+	.width	= 2600,
-+	.height	= 1952,
-+};
-+
- static const struct ov5670_reg mipi_data_rate_840mbps[] = {
- 	{0x0300, 0x04},
- 	{0x0301, 0x00},
-@@ -1764,66 +1783,73 @@ static const struct ov5670_mode supported_modes[] = {
- 		.height = 1944,
- 		.vts_def = OV5670_VTS_30FPS,
- 		.vts_min = OV5670_VTS_30FPS,
-+		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
-+		.analog_crop = ov5670_analog_crop,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_2592x1944_regs),
- 			.regs = mode_2592x1944_regs,
- 		},
--		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
- 	},
- 	{
- 		.width = 1296,
- 		.height = 972,
- 		.vts_def = OV5670_VTS_30FPS,
- 		.vts_min = 996,
-+		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
-+		.analog_crop = ov5670_analog_crop,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_1296x972_regs),
- 			.regs = mode_1296x972_regs,
- 		},
--		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
- 	},
- 	{
- 		.width = 648,
- 		.height = 486,
- 		.vts_def = OV5670_VTS_30FPS,
- 		.vts_min = 516,
-+		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
-+		.analog_crop = ov5670_analog_crop,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_648x486_regs),
- 			.regs = mode_648x486_regs,
- 		},
--		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
- 	},
- 	{
- 		.width = 2560,
- 		.height = 1440,
- 		.vts_def = OV5670_VTS_30FPS,
- 		.vts_min = OV5670_VTS_30FPS,
-+		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
-+		.analog_crop = ov5670_analog_crop,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_2560x1440_regs),
- 			.regs = mode_2560x1440_regs,
- 		},
--		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
- 	},
- 	{
- 		.width = 1280,
- 		.height = 720,
- 		.vts_def = OV5670_VTS_30FPS,
- 		.vts_min = 1020,
-+
-+		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
-+		.analog_crop = ov5670_analog_crop,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_1280x720_regs),
- 			.regs = mode_1280x720_regs,
- 		},
--		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
- 	},
- 	{
- 		.width = 640,
- 		.height = 360,
- 		.vts_def = OV5670_VTS_30FPS,
- 		.vts_min = 510,
-+		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
-+		.analog_crop = ov5670_analog_crop,
- 		.reg_list = {
- 			.num_of_regs = ARRAY_SIZE(mode_640x360_regs),
- 			.regs = mode_640x360_regs,
- 		},
--		.link_freq_index = OV5670_LINK_FREQ_422MHZ_INDEX,
- 	}
- };
- 
-@@ -2163,6 +2189,7 @@ static int ov5670_init_cfg(struct v4l2_subdev *sd,
- 	struct v4l2_mbus_framefmt *fmt =
- 				v4l2_subdev_get_try_format(sd, state, 0);
- 	const struct ov5670_mode *default_mode = &supported_modes[0];
-+	struct v4l2_rect *crop = v4l2_subdev_get_try_crop(sd, state, 0);
- 
- 	fmt->width = default_mode->width;
- 	fmt->height = default_mode->height;
-@@ -2173,6 +2200,8 @@ static int ov5670_init_cfg(struct v4l2_subdev *sd,
- 	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
- 	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(V4L2_COLORSPACE_SRGB);
- 
-+	*crop = default_mode->analog_crop;
-+
- 	return 0;
- }
- 
-@@ -2492,6 +2521,52 @@ static const struct v4l2_subdev_core_ops ov5670_core_ops = {
- 	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
- };
- 
-+static const struct v4l2_rect *
-+__ov5670_get_pad_crop(struct ov5670 *sensor, struct v4l2_subdev_state *state,
-+		      unsigned int pad, enum v4l2_subdev_format_whence which)
-+{
-+	const struct ov5670_mode *mode = sensor->cur_mode;
-+
-+	switch (which) {
-+	case V4L2_SUBDEV_FORMAT_TRY:
-+		return v4l2_subdev_get_try_crop(&sensor->sd, state, pad);
-+	case V4L2_SUBDEV_FORMAT_ACTIVE:
-+		return &mode->analog_crop;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int ov5670_get_selection(struct v4l2_subdev *subdev,
-+				struct v4l2_subdev_state *state,
-+				struct v4l2_subdev_selection *sel)
-+{
-+	struct ov5670 *sensor = to_ov5670(subdev);
-+
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP:
-+		mutex_lock(&sensor->mutex);
-+		sel->r = *__ov5670_get_pad_crop(sensor, state, sel->pad,
-+						sel->which);
-+		mutex_unlock(&sensor->mutex);
-+		break;
-+	case V4L2_SEL_TGT_NATIVE_SIZE:
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = OV5670_NATIVE_WIDTH;
-+		sel->r.height = OV5670_NATIVE_HEIGHT;
-+		break;
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+		sel->r = ov5670_analog_crop;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct v4l2_subdev_video_ops ov5670_video_ops = {
- 	.s_stream = ov5670_set_stream,
- };
-@@ -2502,6 +2577,8 @@ static const struct v4l2_subdev_pad_ops ov5670_pad_ops = {
- 	.get_fmt = ov5670_get_pad_format,
- 	.set_fmt = ov5670_set_pad_format,
- 	.enum_frame_size = ov5670_enum_frame_size,
-+	.get_selection = ov5670_get_selection,
-+	.set_selection = ov5670_get_selection,
- };
- 
- static const struct v4l2_subdev_sensor_ops ov5670_sensor_ops = {
+ config VIDEO_SH_VOU
+ 	tristate "SuperH VOU video output driver"
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index e319044c57e9..18ec3d208483 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -6,6 +6,7 @@
+ # Place here, alphabetically sorted by directory
+ # (e. g. LC_ALL=C sort Makefile)
+ obj-y += allegro-dvt/
++obj-y += aspeed/
+ obj-y += am437x/
+ obj-y += amphion/
+ obj-y += atmel/
+@@ -47,7 +48,6 @@ obj-y += xilinx/
+ # Please place here only ancillary drivers that aren't SoC-specific
+ # Please keep it alphabetically sorted by Kconfig name
+ # (e. g. LC_ALL=C sort Makefile)
+-obj-$(CONFIG_VIDEO_ASPEED)		+= aspeed-video.o
+ obj-$(CONFIG_VIDEO_IMX_PXP)		+= imx-pxp.o
+ obj-$(CONFIG_VIDEO_MEM2MEM_DEINTERLACE)	+= m2m-deinterlace.o
+ obj-$(CONFIG_VIDEO_MUX)			+= video-mux.o
+diff --git a/drivers/media/platform/aspeed/Kconfig b/drivers/media/platform/aspeed/Kconfig
+new file mode 100644
+index 000000000000..5025e892844c
+--- /dev/null
++++ b/drivers/media/platform/aspeed/Kconfig
+@@ -0,0 +1,10 @@
++# SPDX-License-Identifier: GPL-2.0-only
++config VIDEO_ASPEED
++	tristate "Aspeed AST2400 and AST2500 Video Engine driver"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_V4L2
++	select VIDEOBUF2_DMA_CONTIG
++	help
++	  Support for the Aspeed Video Engine (VE) embedded in the Aspeed
++	  AST2400 and AST2500 SOCs. The VE can capture and compress video data
++	  from digital or analog sources.
+diff --git a/drivers/media/platform/aspeed/Makefile b/drivers/media/platform/aspeed/Makefile
+new file mode 100644
+index 000000000000..1979af63dadd
+--- /dev/null
++++ b/drivers/media/platform/aspeed/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_VIDEO_ASPEED) += aspeed-video.o
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
+similarity index 100%
+rename from drivers/media/platform/aspeed-video.c
+rename to drivers/media/platform/aspeed/aspeed-video.c
 -- 
 2.35.1
 
