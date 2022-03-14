@@ -2,68 +2,73 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7766FC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67D62C4332F
 	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 16:38:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243533AbiCNQh4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 12:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        id S243525AbiCNQhz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 12:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243272AbiCNQgm (ORCPT
+        with ESMTP id S239619AbiCNQgm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 12:36:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3EE1DA4A;
-        Mon, 14 Mar 2022 09:35:20 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889182E686;
+        Mon, 14 Mar 2022 09:35:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50B7D614A7;
-        Mon, 14 Mar 2022 16:35:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F099DC36AF3;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1A5361480;
+        Mon, 14 Mar 2022 16:35:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49363C340F6;
         Mon, 14 Mar 2022 16:35:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647275710;
-        bh=6J1DzTdLkt+wtXSOn8LeDPwVonbZUY5PijYr2Jghub0=;
+        s=k20201202; t=1647275709;
+        bh=cT/vXjenoBPKI/Hl1lNbu660CQn8eXNAAX/gaT9yC74=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BFhfASKbQ5Adc/Ua36MwdM8AQZphIR6W+Klt0QtRYncnRVPrahg+uIVqSqJEo0h8r
-         5WjnQ+TO2B/G/kp+F11CdfsRGR0pr0jx/5nuSOzRBhNpJAlld/vslHa1k19KX/PlOb
-         lZcE1/UO4c5xAa0xFzIF9KaM8yAyqk+f3d/Zn1ipDT+qgkZ0GRMn+GWQDrXdZDpu/9
-         c2108w2hJIXtl0tTl95H3zXASEF8cF+SGpc25+ZFFRRQSbiI9PGDLJHgM/PiRNVdpX
-         8YZ+dti1GEgCFhVcIcEf1zw0SgK88ZPzCZ4Z+ssG1yVdjiQTxm4pehLzVzTFuNcI9d
-         +TtaZegWIh9Tw==
+        b=rHi9+mkgDAuaWVinfOr+4m5XVpkyvxoH705k6fsi66/AkAKSo+ZsfTR+xQ+zLQO8K
+         74VEfdi7VZR+FWa30hd5JX/cI+uuvWdxkDFQIq+qHy8kiuhLfYZj4IPjbBADk09K2Q
+         m20sucw27q/KCk2a8eWrG3DKHQVPReRgoh7mtruMY0xz4gAs9eTzhl+z5ykWYmkmCq
+         bzhVn+/fRz1vH8m7B4ocP6awJLywC/5i4PjGNDir+xrzt8wDk8dBv9txIqBPdm9p7q
+         9ZsA7GMwtFaE8M/tpWkkqY4m5MfsNhL5SM/UUjxKjbHgUdTMfU8yMnLSpp+U2z0HNH
+         ATZem0Z18WA9g==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTnf1-001x4O-Mk; Mon, 14 Mar 2022 17:35:07 +0100
+        id 1nTnf1-001wzY-2L; Mon, 14 Mar 2022 17:35:07 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Colin Ian King <colin.king@intel.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
+        Fabio Estevam <festevam@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Heiko Stuebner <heiko@sntech.de>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ming Qian <ming.qian@nxp.com>, Pratyush Yadav <p.yadav@ti.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Shijie Qin <shijie.qin@nxp.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Zhou Peng <eagle.zhou@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v2 63/67] media: platform: Create vendor/{Makefile,Kconfig} files
-Date:   Mon, 14 Mar 2022 17:34:58 +0100
-Message-Id: <619701b36108067a84c606d7a2016cf8c3ec33b9.1647274407.git.mchehab@kernel.org>
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH v2 53/67] media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
+Date:   Mon, 14 Mar 2022 17:34:48 +0100
+Message-Id: <4242d32300816e24c5990245b2950a5f058d61ab.1647274407.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647274406.git.mchehab@kernel.org>
 References: <cover.1647274406.git.mchehab@kernel.org>
@@ -74,9 +79,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of placing multiple per-vendor entries at the
-platform/{Makefile,Kconfig}, create them at the per-vendor
-directories.
+As the end goal is to have platform drivers split by vendor,
+rename s5p-jpeg/ to samsung/s5p-jpeg/.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -84,300 +88,214 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/67] at: https://lore.kernel.org/all/cover.1647274406.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig           | 28 +++++-------------------
- drivers/media/platform/Makefile          | 28 ++++++------------------
- drivers/media/platform/amlogic/Kconfig   |  2 ++
- drivers/media/platform/amlogic/Makefile  |  2 ++
- drivers/media/platform/amphion/Kconfig   |  3 +++
- drivers/media/platform/mediatek/Kconfig  |  5 +++++
- drivers/media/platform/mediatek/Makefile |  5 +++++
- drivers/media/platform/nvidia/Kconfig    |  2 ++
- drivers/media/platform/qcom/Makefile     |  3 +++
- drivers/media/platform/rockchip/Makefile |  3 +++
- drivers/media/platform/samsung/Kconfig   |  7 ++++++
- drivers/media/platform/samsung/Makefile  |  7 ++++++
- drivers/media/platform/stm/Kconfig       |  4 ++++
- drivers/media/platform/stm/Makefile      |  7 ++++++
- drivers/media/platform/stm/sti/Makefile  |  6 +++++
- drivers/media/platform/ti/Kconfig        |  5 +++++
- drivers/media/platform/ti/Makefile       |  6 ++++-
- 17 files changed, 79 insertions(+), 44 deletions(-)
- create mode 100644 drivers/media/platform/amlogic/Kconfig
- create mode 100644 drivers/media/platform/amlogic/Makefile
- create mode 100644 drivers/media/platform/mediatek/Kconfig
- create mode 100644 drivers/media/platform/mediatek/Makefile
- create mode 100644 drivers/media/platform/nvidia/Kconfig
- create mode 100644 drivers/media/platform/qcom/Makefile
- create mode 100644 drivers/media/platform/rockchip/Makefile
- create mode 100644 drivers/media/platform/samsung/Kconfig
- create mode 100644 drivers/media/platform/samsung/Makefile
- create mode 100644 drivers/media/platform/stm/Kconfig
- create mode 100644 drivers/media/platform/stm/Makefile
- create mode 100644 drivers/media/platform/stm/sti/Makefile
+ MAINTAINERS                                                     | 2 +-
+ drivers/media/platform/Kconfig                                  | 2 +-
+ drivers/media/platform/Makefile                                 | 2 +-
+ drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c                  | 2 +-
+ drivers/media/platform/renesas/rcar_jpu.c                       | 2 +-
+ drivers/media/platform/{ => samsung}/s5p-jpeg/Kconfig           | 0
+ drivers/media/platform/{ => samsung}/s5p-jpeg/Makefile          | 0
+ drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-core.c       | 2 +-
+ drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-core.h       | 2 +-
+ .../media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos3250.c  | 0
+ .../media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos3250.h  | 2 +-
+ drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos4.c | 0
+ drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos4.h | 0
+ drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-s5p.c     | 2 +-
+ drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-s5p.h     | 2 +-
+ drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-regs.h       | 2 +-
+ 16 files changed, 11 insertions(+), 11 deletions(-)
+ rename drivers/media/platform/{ => samsung}/s5p-jpeg/Kconfig (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-jpeg/Makefile (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-core.c (99%)
+ rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-core.h (99%)
+ rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos3250.c (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos3250.h (97%)
+ rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos4.c (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-exynos4.h (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-s5p.c (99%)
+ rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-hw-s5p.h (97%)
+ rename drivers/media/platform/{ => samsung}/s5p-jpeg/jpeg-regs.h (99%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4b03db9ee31e..e01013c68fc1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2633,7 +2633,7 @@ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+-F:	drivers/media/platform/s5p-jpeg/
++F:	drivers/media/platform/samsung/s5p-jpeg/
+ 
+ ARM/SAMSUNG S5P SERIES Multi Format Codec (MFC) SUPPORT
+ M:	Marek Szyprowski <m.szyprowski@samsung.com>
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 43a654e87613..3a5211d8e59a 100644
+index 8dd178e1a359..df67690c8f3a 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -62,12 +62,9 @@ config VIDEO_MUX
- 	  This driver provides support for N:1 video bus multiplexers.
- 
- # Platform drivers - Please keep it alphabetically sorted
--
--# TODO: create per-manufacturer directories
--
- source "drivers/media/platform/allegro-dvt/Kconfig"
- source "drivers/media/platform/allwinner/Kconfig"
--source "drivers/media/platform/amlogic/meson-ge2d/Kconfig"
-+source "drivers/media/platform/amlogic/Kconfig"
- source "drivers/media/platform/amphion/Kconfig"
- source "drivers/media/platform/aspeed/Kconfig"
- source "drivers/media/platform/atmel/Kconfig"
-@@ -75,28 +72,15 @@ source "drivers/media/platform/cadence/Kconfig"
- source "drivers/media/platform/chips-media/Kconfig"
- source "drivers/media/platform/intel/Kconfig"
- source "drivers/media/platform/marvell/Kconfig"
--source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
--source "drivers/media/platform/mediatek/mtk-mdp/Kconfig"
--source "drivers/media/platform/mediatek/mtk-vcodec/Kconfig"
--source "drivers/media/platform/mediatek/mtk-vpu/Kconfig"
--source "drivers/media/platform/nvidia/tegra-vde/Kconfig"
-+source "drivers/media/platform/mediatek/Kconfig"
-+source "drivers/media/platform/nvidia/Kconfig"
- source "drivers/media/platform/nxp/Kconfig"
+@@ -88,12 +88,12 @@ source "drivers/media/platform/omap3isp/Kconfig"
  source "drivers/media/platform/qcom/Kconfig"
  source "drivers/media/platform/renesas/Kconfig"
  source "drivers/media/platform/rockchip/Kconfig"
--source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
--source "drivers/media/platform/samsung/exynos4-is/Kconfig"
--source "drivers/media/platform/samsung/s3c-camif/Kconfig"
--source "drivers/media/platform/samsung/s5p-g2d/Kconfig"
--source "drivers/media/platform/samsung/s5p-jpeg/Kconfig"
--source "drivers/media/platform/samsung/s5p-mfc/Kconfig"
--source "drivers/media/platform/stm/sti/Kconfig"
--source "drivers/media/platform/stm/stm32/Kconfig"
--source "drivers/media/platform/ti-vpe/Kconfig"
--source "drivers/media/platform/ti/am437x/Kconfig"
--source "drivers/media/platform/ti/davinci/Kconfig"
--source "drivers/media/platform/ti/omap/Kconfig"
--source "drivers/media/platform/ti/omap3isp/Kconfig"
-+source "drivers/media/platform/samsung/Kconfig"
-+source "drivers/media/platform/stm/Kconfig"
-+source "drivers/media/platform/ti/Kconfig"
- source "drivers/media/platform/via/Kconfig"
- source "drivers/media/platform/xilinx/Kconfig"
- 
+-source "drivers/media/platform/s5p-jpeg/Kconfig"
+ source "drivers/media/platform/s5p-mfc/Kconfig"
+ source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
+ source "drivers/media/platform/samsung/exynos4-is/Kconfig"
+ source "drivers/media/platform/samsung/s3c-camif/Kconfig"
+ source "drivers/media/platform/samsung/s5p-g2d/Kconfig"
++source "drivers/media/platform/samsung/s5p-jpeg/Kconfig"
+ source "drivers/media/platform/sti/Kconfig"
+ source "drivers/media/platform/stm32/Kconfig"
+ source "drivers/media/platform/ti-vpe/Kconfig"
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 2c5713ddac09..e5060cb891de 100644
+index aa822365d8d0..9c6c272797cd 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -7,7 +7,7 @@
- # (e. g. LC_ALL=C sort Makefile)
- obj-y += allegro-dvt/
- obj-y += allwinner/
--obj-y += amlogic/meson-ge2d/
-+obj-y += amlogic/
- obj-y += amphion/
- obj-y += aspeed/
- obj-y += atmel/
-@@ -15,28 +15,14 @@ obj-y += cadence/
- obj-y += chips-media/
- obj-y += intel/
- obj-y += marvell/
--obj-y += mediatek/mtk-jpeg/
--obj-y += mediatek/mtk-mdp/
--obj-y += mediatek/mtk-vcodec/
--obj-y += mediatek/mtk-vpu/
--obj-y += nvidia/tegra-vde/
-+obj-y += mediatek/
-+obj-y += nvidia/
- obj-y += nxp/
--obj-y += qcom/camss/
--obj-y += qcom/venus/
-+obj-y += qcom/
+@@ -30,12 +30,12 @@ obj-y += qcom/venus/
  obj-y += renesas/
--obj-y += rockchip/rga/
--obj-y += rockchip/rkisp1/
--obj-y += samsung/exynos-gsc/
--obj-y += samsung/exynos4-is/
--obj-y += samsung/s3c-camif/
--obj-y += samsung/s5p-g2d/
--obj-y += samsung/s5p-jpeg/
--obj-y += samsung/s5p-mfc/
--obj-y += stm/sti/bdisp/
--obj-y += stm/sti/c8sectpfe/
--obj-y += stm/sti/delta/
--obj-y += stm/sti/hva/
--obj-y += stm/stm32/
-+obj-y += rockchip/
-+obj-y += samsung/
-+obj-y += stm/
- obj-y += ti/
- obj-y += via/
- obj-y += xilinx/
-diff --git a/drivers/media/platform/amlogic/Kconfig b/drivers/media/platform/amlogic/Kconfig
-new file mode 100644
-index 000000000000..c67e00df6202
---- /dev/null
-+++ b/drivers/media/platform/amlogic/Kconfig
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+source "drivers/media/platform/amlogic/meson-ge2d/Kconfig"
-diff --git a/drivers/media/platform/amlogic/Makefile b/drivers/media/platform/amlogic/Makefile
-new file mode 100644
-index 000000000000..d3cdb8fa4ddb
---- /dev/null
-+++ b/drivers/media/platform/amlogic/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-y += meson-ge2d/
-diff --git a/drivers/media/platform/amphion/Kconfig b/drivers/media/platform/amphion/Kconfig
-index 13899649f766..e0e8098965bd 100644
---- a/drivers/media/platform/amphion/Kconfig
-+++ b/drivers/media/platform/amphion/Kconfig
-@@ -1,4 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+comment "Amphion drivers"
-+
- config VIDEO_AMPHION_VPU
- 	tristate "Amphion VPU (Video Processing Unit) Codec IP"
- 	depends on V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/mediatek/Kconfig b/drivers/media/platform/mediatek/Kconfig
-new file mode 100644
-index 000000000000..6d74839df3d6
---- /dev/null
-+++ b/drivers/media/platform/mediatek/Kconfig
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
-+source "drivers/media/platform/mediatek/mtk-mdp/Kconfig"
-+source "drivers/media/platform/mediatek/mtk-vcodec/Kconfig"
-+source "drivers/media/platform/mediatek/mtk-vpu/Kconfig"
-diff --git a/drivers/media/platform/mediatek/Makefile b/drivers/media/platform/mediatek/Makefile
-new file mode 100644
-index 000000000000..403d5ecd2b10
---- /dev/null
-+++ b/drivers/media/platform/mediatek/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-y += mtk-jpeg/
-+obj-y += mtk-mdp/
-+obj-y += mtk-vcodec/
-+obj-y += mtk-vpu/
-diff --git a/drivers/media/platform/nvidia/Kconfig b/drivers/media/platform/nvidia/Kconfig
-new file mode 100644
-index 000000000000..1162e272b5f9
---- /dev/null
-+++ b/drivers/media/platform/nvidia/Kconfig
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+source "drivers/media/platform/nvidia/tegra-vde/Kconfig"
-diff --git a/drivers/media/platform/qcom/Makefile b/drivers/media/platform/qcom/Makefile
-new file mode 100644
-index 000000000000..4f055c396e04
---- /dev/null
-+++ b/drivers/media/platform/qcom/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-y += camss/
-+obj-y += venus/
-diff --git a/drivers/media/platform/rockchip/Makefile b/drivers/media/platform/rockchip/Makefile
-new file mode 100644
-index 000000000000..4f782b876ac9
---- /dev/null
-+++ b/drivers/media/platform/rockchip/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-y += rga/
-+obj-y += rkisp1/
-diff --git a/drivers/media/platform/samsung/Kconfig b/drivers/media/platform/samsung/Kconfig
-new file mode 100644
-index 000000000000..94f30c1bca9b
---- /dev/null
-+++ b/drivers/media/platform/samsung/Kconfig
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
-+source "drivers/media/platform/samsung/exynos4-is/Kconfig"
-+source "drivers/media/platform/samsung/s3c-camif/Kconfig"
-+source "drivers/media/platform/samsung/s5p-g2d/Kconfig"
-+source "drivers/media/platform/samsung/s5p-jpeg/Kconfig"
-+source "drivers/media/platform/samsung/s5p-mfc/Kconfig"
-diff --git a/drivers/media/platform/samsung/Makefile b/drivers/media/platform/samsung/Makefile
-new file mode 100644
-index 000000000000..21fea3330e4b
---- /dev/null
-+++ b/drivers/media/platform/samsung/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-y += exynos-gsc/
-+obj-y += exynos4-is/
-+obj-y += s3c-camif/
-+obj-y += s5p-g2d/
-+obj-y += s5p-jpeg/
-+obj-y += s5p-mfc/
-diff --git a/drivers/media/platform/stm/Kconfig b/drivers/media/platform/stm/Kconfig
-new file mode 100644
-index 000000000000..27942626a630
---- /dev/null
-+++ b/drivers/media/platform/stm/Kconfig
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+source "drivers/media/platform/stm/sti/Kconfig"
-+source "drivers/media/platform/stm/stm32/Kconfig"
-diff --git a/drivers/media/platform/stm/Makefile b/drivers/media/platform/stm/Makefile
-new file mode 100644
-index 000000000000..a1f75b2a8225
---- /dev/null
-+++ b/drivers/media/platform/stm/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+obj-y += sti/bdisp/
-+obj-y += sti/c8sectpfe/
-+obj-y += sti/delta/
-+obj-y += sti/hva/
-+obj-y += stm32/
-diff --git a/drivers/media/platform/stm/sti/Makefile b/drivers/media/platform/stm/sti/Makefile
-new file mode 100644
-index 000000000000..f9ce8169b040
---- /dev/null
-+++ b/drivers/media/platform/stm/sti/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-y += bdisp/
-+obj-y += c8sectpfe/
-+obj-y += delta/
-+obj-y += hva/
-+obj-y += stm32/
-diff --git a/drivers/media/platform/ti/Kconfig b/drivers/media/platform/ti/Kconfig
-index 82e285c2de64..e1ab56c3be1f 100644
---- a/drivers/media/platform/ti/Kconfig
-+++ b/drivers/media/platform/ti/Kconfig
-@@ -62,3 +62,8 @@ config VIDEO_TI_VPE_DEBUG
- 	depends on VIDEO_TI_VPE
- 	help
- 	  Enable debug messages on VPE driver.
-+
-+source "drivers/media/platform/ti/am437x/Kconfig"
-+source "drivers/media/platform/ti/davinci/Kconfig"
-+source "drivers/media/platform/ti/omap/Kconfig"
-+source "drivers/media/platform/ti/omap3isp/Kconfig"
-diff --git a/drivers/media/platform/ti/Makefile b/drivers/media/platform/ti/Makefile
-index bbc737ccbbea..98c5fe5c40d6 100644
---- a/drivers/media/platform/ti/Makefile
-+++ b/drivers/media/platform/ti/Makefile
-@@ -1,3 +1,7 @@
--# SPDX-License-Identifier: GPL-2.0
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-y += am437x/
- obj-y += cal/
- obj-y += vpe/
-+obj-y += davinci/
-+obj-y += omap/
-+obj-y += omap3isp/
+ obj-y += rockchip/rga/
+ obj-y += rockchip/rkisp1/
+-obj-y += s5p-jpeg/
+ obj-y += s5p-mfc/
+ obj-y += samsung/exynos-gsc/
+ obj-y += samsung/exynos4-is/
+ obj-y += samsung/s3c-camif/
+ obj-y += samsung/s5p-g2d/
++obj-y += samsung/s5p-jpeg/
+ obj-y += sti/bdisp/
+ obj-y += sti/c8sectpfe/
+ obj-y += sti/delta/
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+index 3b892c5792b4..d1ec1f4b506b 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+@@ -35,7 +35,7 @@
+  * it, enable dynamic debug for this module and:
+  * echo 1 > /sys/module/mxc_jpeg_encdec/parameters/jpeg_tracing
+  *
+- * This is inspired by the drivers/media/platform/s5p-jpeg driver
++ * This is inspired by the drivers/media/platform/samsung/s5p-jpeg driver
+  *
+  * Copyright 2018-2019 NXP
+  */
+diff --git a/drivers/media/platform/renesas/rcar_jpu.c b/drivers/media/platform/renesas/rcar_jpu.c
+index 56bb464629ed..293beba131e2 100644
+--- a/drivers/media/platform/renesas/rcar_jpu.c
++++ b/drivers/media/platform/renesas/rcar_jpu.c
+@@ -4,7 +4,7 @@
+  * Copyright (C) 2014-2015 Cogent Embedded, Inc.  <source@cogentembedded.com>
+  * Copyright (C) 2014-2015 Renesas Electronics Corporation
+  *
+- * This is based on the drivers/media/platform/s5p-jpeg driver by
++ * This is based on the drivers/media/platform/samsung/s5p-jpeg driver by
+  * Andrzej Pietrasiewicz and Jacek Anaszewski.
+  * Some portions of code inspired by VSP1 driver by Laurent Pinchart.
+  *
+diff --git a/drivers/media/platform/s5p-jpeg/Kconfig b/drivers/media/platform/samsung/s5p-jpeg/Kconfig
+similarity index 100%
+rename from drivers/media/platform/s5p-jpeg/Kconfig
+rename to drivers/media/platform/samsung/s5p-jpeg/Kconfig
+diff --git a/drivers/media/platform/s5p-jpeg/Makefile b/drivers/media/platform/samsung/s5p-jpeg/Makefile
+similarity index 100%
+rename from drivers/media/platform/s5p-jpeg/Makefile
+rename to drivers/media/platform/samsung/s5p-jpeg/Makefile
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+similarity index 99%
+rename from drivers/media/platform/s5p-jpeg/jpeg-core.c
+rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+index a8d9159d5ed8..5479bc8d474d 100644
+--- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
++++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+-/* linux/drivers/media/platform/s5p-jpeg/jpeg-core.c
++/* linux/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+  *
+  * Copyright (c) 2011-2014 Samsung Electronics Co., Ltd.
+  *		http://www.samsung.com
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.h b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.h
+similarity index 99%
+rename from drivers/media/platform/s5p-jpeg/jpeg-core.h
+rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-core.h
+index 4a5fb1b15455..5570c79f122f 100644
+--- a/drivers/media/platform/s5p-jpeg/jpeg-core.h
++++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.h
+@@ -1,5 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0-only */
+-/* linux/drivers/media/platform/s5p-jpeg/jpeg-core.h
++/* linux/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.h
+  *
+  * Copyright (c) 2011 Samsung Electronics Co., Ltd.
+  *		http://www.samsung.com
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-hw-exynos3250.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos3250.c
+similarity index 100%
+rename from drivers/media/platform/s5p-jpeg/jpeg-hw-exynos3250.c
+rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos3250.c
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-hw-exynos3250.h b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos3250.h
+similarity index 97%
+rename from drivers/media/platform/s5p-jpeg/jpeg-hw-exynos3250.h
+rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos3250.h
+index 68160befce39..15af928fad76 100644
+--- a/drivers/media/platform/s5p-jpeg/jpeg-hw-exynos3250.h
++++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos3250.h
+@@ -1,5 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0-only */
+-/* linux/drivers/media/platform/s5p-jpeg/jpeg-hw-exynos3250.h
++/* linux/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos3250.h
+  *
+  * Copyright (c) 2014 Samsung Electronics Co., Ltd.
+  *		http://www.samsung.com
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-hw-exynos4.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos4.c
+similarity index 100%
+rename from drivers/media/platform/s5p-jpeg/jpeg-hw-exynos4.c
+rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos4.c
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-hw-exynos4.h b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos4.h
+similarity index 100%
+rename from drivers/media/platform/s5p-jpeg/jpeg-hw-exynos4.h
+rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-exynos4.h
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-hw-s5p.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.c
+similarity index 99%
+rename from drivers/media/platform/s5p-jpeg/jpeg-hw-s5p.c
+rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.c
+index 491e9248286c..01b47b3df1e7 100644
+--- a/drivers/media/platform/s5p-jpeg/jpeg-hw-s5p.c
++++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+-/* linux/drivers/media/platform/s5p-jpeg/jpeg-hw.h
++/* linux/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw.h
+  *
+  * Copyright (c) 2011 Samsung Electronics Co., Ltd.
+  *		http://www.samsung.com
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-hw-s5p.h b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.h
+similarity index 97%
+rename from drivers/media/platform/s5p-jpeg/jpeg-hw-s5p.h
+rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.h
+index 98ddf7097562..f068d52c66b7 100644
+--- a/drivers/media/platform/s5p-jpeg/jpeg-hw-s5p.h
++++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.h
+@@ -1,5 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0-only */
+-/* linux/drivers/media/platform/s5p-jpeg/jpeg-hw.h
++/* linux/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw.h
+  *
+  * Copyright (c) 2011 Samsung Electronics Co., Ltd.
+  *		http://www.samsung.com
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-regs.h b/drivers/media/platform/samsung/s5p-jpeg/jpeg-regs.h
+similarity index 99%
+rename from drivers/media/platform/s5p-jpeg/jpeg-regs.h
+rename to drivers/media/platform/samsung/s5p-jpeg/jpeg-regs.h
+index 86f376b50581..c2298b680022 100644
+--- a/drivers/media/platform/s5p-jpeg/jpeg-regs.h
++++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-regs.h
+@@ -1,5 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0-only */
+-/* linux/drivers/media/platform/s5p-jpeg/jpeg-regs.h
++/* linux/drivers/media/platform/samsung/s5p-jpeg/jpeg-regs.h
+  *
+  * Register definition file for Samsung JPEG codec driver
+  *
 -- 
 2.35.1
 
