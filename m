@@ -2,55 +2,62 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF317C4321E
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B456C433FE
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:57:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237019AbiCNH6F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S237027AbiCNH6I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236976AbiCNH5t (ORCPT
+        with ESMTP id S236968AbiCNH5t (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2698A4161E;
-        Mon, 14 Mar 2022 00:56:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7326D4160E;
+        Mon, 14 Mar 2022 00:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9919D611BD;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64F7C611B1;
         Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D57C36AEF;
-        Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A75FC36AFF;
+        Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647244561;
-        bh=51hp8/N8isUS3r9ozBiX9C2POg/EzKiP2L+ggV/SoW8=;
+        s=k20201202; t=1647244562;
+        bh=7b/Ws9MK7sXL3stprXaovdGcs4nNqKe/2s/vcOJPNqU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a/HV8Rq4eZDn/XlHOjEehVz01LxWiQWY1sn83jdo3mSSDrhX3CYDwRBARGrRRU2sg
-         5p0F06HYZuPSmpVigR79Ec/HmQYMxBlD5zzXTLQejNqOduTQC5ydVx2wkivfyKe6ky
-         FaJ53guMR7tN6RHh9bDQJDDYzyjdEJBiCc9+uJ19HsYpjvSyJC7tvLMvifa418ElED
-         Jv0IQy+dusW1rZWi57HB/GvcvKH3eXVNQWw3ivzA4gy0I66Bc+dsZ0+RpMh+6kNLWI
-         tH9CA9T7vTiYAlfwEnAVzBX+sP1J0e/etWz4vT/xYapXXMY0bC72nW3QACJoTyZLah
-         jg4IP9+oADBLQ==
+        b=oBfO6pNPjlZzAlUqVeGSPU1EHxUiQuPk6hRfh9WbcuZVbkqftbHWNAwyz1DhLP/Se
+         ADL3HZ4dP7Wwt3bOrkFy2b19E0mbPt/r35EY6Rlr9XQ4P8lFDLAiKI6fFFYkQJOzz7
+         Wpf6Ixj+7ZzxjWHaqT384Jv3jVjjt+aGttVYenXj6Om7iWMpiWWZfTS1nXdPj88pKi
+         yl/yChvlRen0zs7Mi9zdlssb1ZYAVHwXPa47Ukt+O6TpzW2vCWo/J5HQn/vJ22wQKs
+         9N3GoffMxs7iQA51VDEBxvY/ezmPeoEQvQVeC8GJQ71BC6C8X8q15gKgcVXHep/SRN
+         UJMZjZ6oSV58g==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYd-001kWF-K7; Mon, 14 Mar 2022 08:55:59 +0100
+        id 1nTfYd-001kWp-Vg; Mon, 14 Mar 2022 08:55:59 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Dafna Hirschfeld <dafna@fastmail.com>,
         Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Evgeny Novikov <novikov@ispras.ru>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Heiko Stuebner <heiko@sntech.de>,
+        Herman <yanshuaijun@yulong.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Leon Romanovsky <leon@kernel.org>,
         Ming Qian <ming.qian@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org
-Subject: [PATCH 32/64] media: platform: rkisp1: move config to its own file
-Date:   Mon, 14 Mar 2022 08:55:24 +0100
-Message-Id: <9fd563626f13054b7c410af78f65f161376e488a.1647242579.git.mchehab@kernel.org>
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 41/64] media: platform: rename marvell-ccic/ to marvell/
+Date:   Mon, 14 Mar 2022 08:55:33 +0100
+Message-Id: <90594c911b0c2de9bffe7664f9bb8b96e5ea1aef.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -61,84 +68,95 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to better organize the platform/Kconfig, place
-rkisp1-specific config stuff on a separate Kconfig file.
+As the end goal is to have platform drivers split by vendor,
+rename marvell-ccic/ to marvell/.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig                | 20 +------------------
- .../media/platform/rockchip/rkisp1/Kconfig    | 19 ++++++++++++++++++
- 2 files changed, 20 insertions(+), 19 deletions(-)
- create mode 100644 drivers/media/platform/rockchip/rkisp1/Kconfig
+ MAINTAINERS                                                    | 2 +-
+ drivers/media/platform/Kconfig                                 | 2 +-
+ drivers/media/platform/Makefile                                | 2 +-
+ drivers/media/platform/{marvell-ccic => marvell}/Kconfig       | 0
+ drivers/media/platform/{marvell-ccic => marvell}/Makefile      | 0
+ drivers/media/platform/{marvell-ccic => marvell}/cafe-driver.c | 0
+ drivers/media/platform/{marvell-ccic => marvell}/mcam-core.c   | 0
+ drivers/media/platform/{marvell-ccic => marvell}/mcam-core.h   | 0
+ drivers/media/platform/{marvell-ccic => marvell}/mmp-driver.c  | 0
+ 9 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{marvell-ccic => marvell}/Kconfig (100%)
+ rename drivers/media/platform/{marvell-ccic => marvell}/Makefile (100%)
+ rename drivers/media/platform/{marvell-ccic => marvell}/cafe-driver.c (100%)
+ rename drivers/media/platform/{marvell-ccic => marvell}/mcam-core.c (100%)
+ rename drivers/media/platform/{marvell-ccic => marvell}/mcam-core.h (100%)
+ rename drivers/media/platform/{marvell-ccic => marvell}/mmp-driver.c (100%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 84bc106acc57..b83cf0eb99ce 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4248,7 +4248,7 @@ L:	linux-media@vger.kernel.org
+ S:	Orphan
+ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/admin-guide/media/cafe_ccic*
+-F:	drivers/media/platform/marvell-ccic/
++F:	drivers/media/platform/marvell/
+ 
+ CAIF NETWORK LAYER
+ L:	netdev@vger.kernel.org
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 228881ae0d22..29afef26cbe4 100644
+index 24a43cef18de..0a4260627a00 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -59,6 +59,7 @@ source "drivers/media/platform/qcom/venus/Kconfig"
- 
- source "drivers/media/platform/aspeed/Kconfig"
- source "drivers/media/platform/rockchip/rga/Kconfig"
-+source "drivers/media/platform/rockchip/rkisp1/Kconfig"
- source "drivers/media/platform/s3c-camif/Kconfig"
- source "drivers/media/platform/s5p-g2d/Kconfig"
- source "drivers/media/platform/sti/hva/Kconfig"
-@@ -82,25 +83,6 @@ config VIDEO_MUX
- 
- source "drivers/media/platform/intel/Kconfig"
- 
--config VIDEO_ROCKCHIP_ISP1
--	tristate "Rockchip Image Signal Processing v1 Unit driver"
--	depends on V4L_PLATFORM_DRIVERS
--	depends on VIDEO_V4L2 && OF
--	depends on ARCH_ROCKCHIP || COMPILE_TEST
--	select MEDIA_CONTROLLER
--	select VIDEO_V4L2_SUBDEV_API
--	select VIDEOBUF2_DMA_CONTIG
--	select VIDEOBUF2_VMALLOC
--	select V4L2_FWNODE
--	select GENERIC_PHY_MIPI_DPHY
--	default n
--	help
--	  Enable this to support the Image Signal Processing (ISP) module
--	  present in RK3399 SoCs.
--
--	  To compile this driver as a module, choose M here: the module
--	  will be called rockchip-isp1.
--
+@@ -76,7 +76,7 @@ source "drivers/media/platform/davinci/Kconfig"
+ source "drivers/media/platform/exynos-gsc/Kconfig"
  source "drivers/media/platform/exynos4-is/Kconfig"
- source "drivers/media/platform/am437x/Kconfig"
- source "drivers/media/platform/xilinx/Kconfig"
-diff --git a/drivers/media/platform/rockchip/rkisp1/Kconfig b/drivers/media/platform/rockchip/rkisp1/Kconfig
-new file mode 100644
-index 000000000000..c2e464317929
---- /dev/null
-+++ b/drivers/media/platform/rockchip/rkisp1/Kconfig
-@@ -0,0 +1,19 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_ROCKCHIP_ISP1
-+	tristate "Rockchip Image Signal Processing v1 Unit driver"
-+	depends on V4L_PLATFORM_DRIVERS
-+	depends on VIDEO_V4L2 && OF
-+	depends on ARCH_ROCKCHIP || COMPILE_TEST
-+	select MEDIA_CONTROLLER
-+	select VIDEO_V4L2_SUBDEV_API
-+	select VIDEOBUF2_DMA_CONTIG
-+	select VIDEOBUF2_VMALLOC
-+	select V4L2_FWNODE
-+	select GENERIC_PHY_MIPI_DPHY
-+	default n
-+	help
-+	  Enable this to support the Image Signal Processing (ISP) module
-+	  present in RK3399 SoCs.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called rockchip-isp1.
+ source "drivers/media/platform/intel/Kconfig"
+-source "drivers/media/platform/marvell-ccic/Kconfig"
++source "drivers/media/platform/marvell/Kconfig"
+ source "drivers/media/platform/meson/ge2d/Kconfig"
+ source "drivers/media/platform/mtk-jpeg/Kconfig"
+ source "drivers/media/platform/mtk-mdp/Kconfig"
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 8d6e15fad0b1..8b2deba4b62c 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -16,7 +16,7 @@ obj-y += davinci/
+ obj-y += exynos-gsc/
+ obj-y += exynos4-is/
+ obj-y += intel/
+-obj-y += marvell-ccic/
++obj-y += marvell/
+ obj-y += meson/ge2d/
+ obj-y += mtk-jpeg/
+ obj-y += mtk-mdp/
+diff --git a/drivers/media/platform/marvell-ccic/Kconfig b/drivers/media/platform/marvell/Kconfig
+similarity index 100%
+rename from drivers/media/platform/marvell-ccic/Kconfig
+rename to drivers/media/platform/marvell/Kconfig
+diff --git a/drivers/media/platform/marvell-ccic/Makefile b/drivers/media/platform/marvell/Makefile
+similarity index 100%
+rename from drivers/media/platform/marvell-ccic/Makefile
+rename to drivers/media/platform/marvell/Makefile
+diff --git a/drivers/media/platform/marvell-ccic/cafe-driver.c b/drivers/media/platform/marvell/cafe-driver.c
+similarity index 100%
+rename from drivers/media/platform/marvell-ccic/cafe-driver.c
+rename to drivers/media/platform/marvell/cafe-driver.c
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell/mcam-core.c
+similarity index 100%
+rename from drivers/media/platform/marvell-ccic/mcam-core.c
+rename to drivers/media/platform/marvell/mcam-core.c
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.h b/drivers/media/platform/marvell/mcam-core.h
+similarity index 100%
+rename from drivers/media/platform/marvell-ccic/mcam-core.h
+rename to drivers/media/platform/marvell/mcam-core.h
+diff --git a/drivers/media/platform/marvell-ccic/mmp-driver.c b/drivers/media/platform/marvell/mmp-driver.c
+similarity index 100%
+rename from drivers/media/platform/marvell-ccic/mmp-driver.c
+rename to drivers/media/platform/marvell/mmp-driver.c
 -- 
 2.35.1
 
