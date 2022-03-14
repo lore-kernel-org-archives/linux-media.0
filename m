@@ -2,61 +2,54 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99048C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:56:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A81F7C43217
+	for <linux-media@archiver.kernel.org>; Mon, 14 Mar 2022 07:56:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237116AbiCNH6C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Mar 2022 03:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
+        id S237119AbiCNH6E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Mar 2022 03:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236966AbiCNH5t (ORCPT
+        with ESMTP id S236972AbiCNH5t (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DAA4160C;
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D141841617;
         Mon, 14 Mar 2022 00:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D618611AF;
-        Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19E7BC36AFD;
-        Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2613DCE10BC;
+        Mon, 14 Mar 2022 07:56:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58969C34119;
+        Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647244562;
-        bh=q3oaScT2EmtXSaRkzmR6NjuVY1KCMcgFf9MDlddpwi0=;
+        s=k20201202; t=1647244561;
+        bh=DjiCdyYvB4UUNtqgLi3zsTof0sw84gOhwYX3QCkID5E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kgUxgcyA0L4EzWgUW+0GZdu7zjJndYSGtySAhri+wyitNI2zSCTSi66GQp68sx/Ro
-         aOb/LslsPI3rZuirNjLOiUk38BdfqGfXLJfh59A1+YiuBFRV1QXajbvRG0XgyFs+t4
-         q2Bv+kA9wXW4xAxzLcF+G99yGTiHMUW+/1jl3G8FtikcXXnBl4kzRIgKeekVcB8FgW
-         2ZMShfRfFxh3IbM9/e6NLiKjW+OK4H5rhC4e0bLZkAPEk4bs/Yao6fMlN1xAXBkgTs
-         fW+6UaPALpkCxlwCFrpPdImt+cCEVp88s6NIL+VlfcVH7V6DzCXPyBDR92IZrbaZAX
-         8x4rzJKgfJnKw==
+        b=fbl2QjB6x4k9dSCUTexsF8ojPBdkwnUmJF1UOKJi1JYjY3fswGScDc/NbOQtuB50Z
+         lwzI1XHXVStHV+F4VUNKtBDypA4YeaSq27lKgxm/VKTdjQxxQynHNzk/UKHoE19wzW
+         Rv5n+YvgzlTdKK6Y2KTHWaDiiM+ngC7wcul1p3J9MK0A5qi9HPbo89qI5y+ma0asoP
+         DIcVC6NLJScB08lVbQrRV55zb8YWVhilIhsS1qVDTaL8iJMsFz4tZ+FbmxSn4jCBva
+         iIz3QapyICklQBzcoiZDPxJYXcHiDduQkvbOuWYgAaVgDPjZcProdnoF5t/NRqbu7q
+         xH9TnxUhZbooA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYd-001kWd-RZ; Mon, 14 Mar 2022 08:55:59 +0100
+        id 1nTfYd-001kVP-4L; Mon, 14 Mar 2022 08:55:59 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
         Dmitry Osipenko <digetx@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Heiko Stuebner <heiko@sntech.de>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Ming Qian <ming.qian@nxp.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH 38/64] media: platform: move some manufacturer entries
-Date:   Mon, 14 Mar 2022 08:55:30 +0100
-Message-Id: <0ba67acab6a8757cb0d2588881d5a0907b0bb178.1647242579.git.mchehab@kernel.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH 19/64] media: platform: mtk-vpu: move config to its own file
+Date:   Mon, 14 Mar 2022 08:55:11 +0100
+Message-Id: <39b3a411ab46bc7fcd5333bad7c5ccd5042bf16e.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -67,100 +60,74 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As there are 4 manufacturer's directories with multiple sources
-(qcom, rockchip, sti and sunxi), move the sources from
-platform/Kconfig to their specific Konfig files.
+In order to better organize the platform/Kconfig, place
+mtk-vpu-specific config stuff on a separate Kconfig file.
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig          | 13 +++----------
- drivers/media/platform/qcom/Kconfig     |  4 ++++
- drivers/media/platform/rockchip/Kconfig |  3 +++
- drivers/media/platform/sti/Kconfig      |  5 +++++
- drivers/media/platform/sunxi/Kconfig    |  2 ++
- 5 files changed, 17 insertions(+), 10 deletions(-)
- create mode 100644 drivers/media/platform/qcom/Kconfig
- create mode 100644 drivers/media/platform/rockchip/Kconfig
- create mode 100644 drivers/media/platform/sti/Kconfig
+ drivers/media/platform/Kconfig         | 15 +--------------
+ drivers/media/platform/mtk-vpu/Kconfig | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+), 14 deletions(-)
+ create mode 100644 drivers/media/platform/mtk-vpu/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index b7c60969c974..e3316fa37a8f 100644
+index ab7c85613625..39bf4c57e044 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -77,23 +77,16 @@ source "drivers/media/platform/mtk-vpu/Kconfig"
- source "drivers/media/platform/nxp/Kconfig"
+@@ -51,6 +51,7 @@ source "drivers/media/platform/meson/ge2d/Kconfig"
+ source "drivers/media/platform/mtk-jpeg/Kconfig"
+ source "drivers/media/platform/mtk-mdp/Kconfig"
+ source "drivers/media/platform/mtk-vcodec/Kconfig"
++source "drivers/media/platform/mtk-vpu/Kconfig"
  source "drivers/media/platform/omap/Kconfig"
- source "drivers/media/platform/omap3isp/Kconfig"
--source "drivers/media/platform/qcom/camss/Kconfig"
--source "drivers/media/platform/qcom/venus/Kconfig"
-+source "drivers/media/platform/qcom/Kconfig"
- source "drivers/media/platform/renesas/Kconfig"
--source "drivers/media/platform/rockchip/rga/Kconfig"
--source "drivers/media/platform/rockchip/rkisp1/Kconfig"
-+source "drivers/media/platform/rockchip/Kconfig"
- source "drivers/media/platform/s3c-camif/Kconfig"
- source "drivers/media/platform/s5p-g2d/Kconfig"
- source "drivers/media/platform/s5p-jpeg/Kconfig"
- source "drivers/media/platform/s5p-mfc/Kconfig"
--source "drivers/media/platform/sti/bdisp/Kconfig"
--source "drivers/media/platform/sti/c8sectpfe/Kconfig"
--source "drivers/media/platform/sti/delta/Kconfig"
--source "drivers/media/platform/sti/hva/Kconfig"
-+source "drivers/media/platform/sti/Kconfig"
- source "drivers/media/platform/stm32/Kconfig"
- source "drivers/media/platform/sunxi/Kconfig"
--source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
--source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
- source "drivers/media/platform/tegra/vde/Kconfig"
- source "drivers/media/platform/ti-vpe/Kconfig"
- source "drivers/media/platform/via/Kconfig"
-diff --git a/drivers/media/platform/qcom/Kconfig b/drivers/media/platform/qcom/Kconfig
+ 
+ source "drivers/media/platform/aspeed/Kconfig"
+@@ -184,20 +185,6 @@ config VIDEO_TI_CAL_MC
+ 
+ # Mem2mem drivers
+ 
+-config VIDEO_MEDIATEK_VPU
+-	tristate "Mediatek Video Processor Unit"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	depends on ARCH_MEDIATEK || COMPILE_TEST
+-	help
+-	    This driver provides downloading VPU firmware and
+-	    communicating with VPU. This driver for hw video
+-	    codec embedded in Mediatek's MT8173 SOCs. It is able
+-	    to handle video decoding/encoding in a range of formats.
+-
+-	    To compile this driver as a module, choose M here: the
+-	    module will be called mtk-vpu.
+-
+ config VIDEO_MEM2MEM_DEINTERLACE
+ 	tristate "Deinterlace support"
+ 	depends on V4L_MEM2MEM_DRIVERS
+diff --git a/drivers/media/platform/mtk-vpu/Kconfig b/drivers/media/platform/mtk-vpu/Kconfig
 new file mode 100644
-index 000000000000..9f6c91cc95ca
+index 000000000000..df679ea79ed0
 --- /dev/null
-+++ b/drivers/media/platform/qcom/Kconfig
-@@ -0,0 +1,4 @@
++++ b/drivers/media/platform/mtk-vpu/Kconfig
+@@ -0,0 +1,15 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +
-+source "drivers/media/platform/qcom/camss/Kconfig"
-+source "drivers/media/platform/qcom/venus/Kconfig"
-diff --git a/drivers/media/platform/rockchip/Kconfig b/drivers/media/platform/rockchip/Kconfig
-new file mode 100644
-index 000000000000..2f97c0e0268a
---- /dev/null
-+++ b/drivers/media/platform/rockchip/Kconfig
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+source "drivers/media/platform/rockchip/rga/Kconfig"
-+source "drivers/media/platform/rockchip/rkisp1/Kconfig"
-diff --git a/drivers/media/platform/sti/Kconfig b/drivers/media/platform/sti/Kconfig
-new file mode 100644
-index 000000000000..9fb5e78a92cf
---- /dev/null
-+++ b/drivers/media/platform/sti/Kconfig
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+source "drivers/media/platform/sti/bdisp/Kconfig"
-+source "drivers/media/platform/sti/c8sectpfe/Kconfig"
-+source "drivers/media/platform/sti/delta/Kconfig"
-+source "drivers/media/platform/sti/hva/Kconfig"
-diff --git a/drivers/media/platform/sunxi/Kconfig b/drivers/media/platform/sunxi/Kconfig
-index 7151cc249afa..a10032215b08 100644
---- a/drivers/media/platform/sunxi/Kconfig
-+++ b/drivers/media/platform/sunxi/Kconfig
-@@ -2,3 +2,5 @@
- 
- source "drivers/media/platform/sunxi/sun4i-csi/Kconfig"
- source "drivers/media/platform/sunxi/sun6i-csi/Kconfig"
-+source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
-+source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
++config VIDEO_MEDIATEK_VPU
++	tristate "Mediatek Video Processor Unit"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on ARCH_MEDIATEK || COMPILE_TEST
++	help
++	    This driver provides downloading VPU firmware and
++	    communicating with VPU. This driver for hw video
++	    codec embedded in Mediatek's MT8173 SOCs. It is able
++	    to handle video decoding/encoding in a range of formats.
++
++	    To compile this driver as a module, choose M here: the
++	    module will be called mtk-vpu.
 -- 
 2.35.1
 
