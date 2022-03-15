@@ -2,207 +2,138 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C39A2C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 15 Mar 2022 22:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D4D7C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 15 Mar 2022 23:57:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349585AbiCOWqR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 15 Mar 2022 18:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
+        id S1352677AbiCOX6n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 15 Mar 2022 19:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242472AbiCOWqQ (ORCPT
+        with ESMTP id S1344372AbiCOX6m (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 15 Mar 2022 18:46:16 -0400
-X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Mar 2022 15:45:03 PDT
-Received: from exchange.dreamry.org (unknown [209.141.61.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258AC13E09
-        for <linux-media@vger.kernel.org>; Tue, 15 Mar 2022 15:45:03 -0700 (PDT)
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; d=dreamry.org; s=exchange; c=simple/simple;
-        t=1647383392; h=from:subject:to:date:message-id;
-        bh=Z8O/KRORfr7mgqLijq/FYp4eMkLVJ0Es72yd5cIiFdo=;
-        b=V+NMpmg8ILIqfpwaKQuJImvKpk9Lm0CivQP7xhJ8erE+g1Bey3yWf+VnM5IIqNG/4UwEM4KQKQB
-        DVcbZsUEyW42X/uAv/HjIDSVw4ETc/tRSF2BdYhhQJHJXr5JGDXXvPOD+26FC+u6d7a11yGUDaM+b
-        D75kMyoHiz7oxXKZNoU/qWzS5u0dFXXdCgV6wdoyb3ivbSo0OJXgzUlX61wAOlQ/l5yjfXCfYEPJE
-        B17oHldoK10iUKqohE+OPxdOzx5vWfuxBM52+MeK+RBSIyozhKau6LMhRWiUtBvtF2SnM4aHHoicZ
-        tVBTyKvkkfG1Od3mJ9GodMkmKK9Q+CFnLcBA==
-Received: from Exchange.dreamry.org (10.0.40.11) by Exchange.dreamry.org
- (10.0.40.11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 15 Mar
- 2022 15:29:51 -0700
-Received: from Beryllium.dreamry.org (10.0.5.100) by Exchange.dreamry.org
- (10.0.40.11) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Tue, 15 Mar 2022 15:29:51 -0700
-From:   Wencey Wang <wenceywang@dreamry.org>
-To:     <linux-media@vger.kernel.org>
-CC:     Wencey Wang <wenceywang@dreamry.org>
-Subject: [PATCH] edid-decode: Fix Visual Studio builds. Use static crt while release compiles.
-Date:   Wed, 16 Mar 2022 06:27:01 +0800
-Message-ID: <20220315222700.2038-1-wenceywang@dreamry.org>
-X-Mailer: git-send-email 2.33.0.windows.2
-In-Reply-To: <wenceywang@dreamry.org>
-References: <wenceywang@dreamry.org>
+        Tue, 15 Mar 2022 19:58:42 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54426DEA7
+        for <linux-media@vger.kernel.org>; Tue, 15 Mar 2022 16:57:30 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1C187A67;
+        Wed, 16 Mar 2022 00:57:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1647388648;
+        bh=0H7ZHZHlOnyteW5l9VvECWwbV+cCuaRhVPfrerh95Q0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GCTDXOZDjYWt/nz5c+8TejhQCqekW0OIPSP+sJRmVIcX6MyALNJyDjALr3iobsAU5
+         vP1Bpg/QL9Ao8+xPZX4rFYBuaRJivOSKygCFI7y6Kq6CbOa8ybPeVPmfCVsvixRYr1
+         L4XOk3rgtp2vi7+IEGK/Mn4ndypUQkbY1Eg0sJP4=
+Date:   Wed, 16 Mar 2022 01:57:10 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     linux-media@vger.kernel.org, libcamera-devel@lists.libcamera.org,
+        sakari.ailus@linux.intel.com, hanlinchen@chromium.org,
+        tfiga@chromium.org, hdegoede@redhat.com,
+        kieran.bingham@ideasonboard.com, hpa@redhat.com
+Subject: Re: [PATCH v3 5/5] media: v4l2-async: Create links during
+ v4l2_async_match_notify()
+Message-ID: <YjEn1tMZ4O8vup5e@pendragon.ideasonboard.com>
+References: <20220302220304.1327896-1-djrscally@gmail.com>
+ <20220302220304.1327896-6-djrscally@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220302220304.1327896-6-djrscally@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix Visual Studio build with project file edited and getsubopt from musl.
-Uses static crt while release build to get rid of msvcrt.dll
+Hi Dan,
 
-Signed-off-by: Wencey Wang <wenceywang@dreamry.org>
----
- vs/edid-decode.vcxproj         |  9 +++++--
- vs/edid-decode.vcxproj.filters | 12 +++++++++
- vs/getopt.h                    |  3 +++
- vs/getsubopt.c                 | 46 ++++++++++++++++++++++++++++++++++
- 4 files changed, 68 insertions(+), 2 deletions(-)
- create mode 100644 vs/getsubopt.c
+Thank you for the patch.
 
-diff --git a/vs/edid-decode.vcxproj b/vs/edid-decode.vcxproj
-index c9213ab..7b840ac 100644
---- a/vs/edid-decode.vcxproj
-+++ b/vs/edid-decode.vcxproj
-@@ -21,13 +21,13 @@
-   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-     <ConfigurationType>Application</ConfigurationType>
-     <UseDebugLibraries>true</UseDebugLibraries>
--    <PlatformToolset>v142</PlatformToolset>
-+    <PlatformToolset>v143</PlatformToolset>
-     <CharacterSet>Unicode</CharacterSet>
-   </PropertyGroup>
-   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-     <ConfigurationType>Application</ConfigurationType>
-     <UseDebugLibraries>false</UseDebugLibraries>
--    <PlatformToolset>v142</PlatformToolset>
-+    <PlatformToolset>v143</PlatformToolset>
-     <WholeProgramOptimization>true</WholeProgramOptimization>
-     <CharacterSet>Unicode</CharacterSet>
-   </PropertyGroup>
-@@ -85,6 +85,7 @@
-       <ConformanceMode>true</ConformanceMode>
-       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-       <DisableSpecificWarnings>4244; 4018; 4267; 4996; 26451; 6385; 6001</DisableSpecificWarnings>
-+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-     </ClCompile>
-     <Link>
-       <SubSystem>Console</SubSystem>
-@@ -94,6 +95,8 @@
-     </Link>
-   </ItemDefinitionGroup>
-   <ItemGroup>
-+    <ClCompile Include="..\calc-gtf-cvt.cpp" />
-+    <ClCompile Include="..\calc-ovt.cpp" />
-     <ClCompile Include="getopt.c" />
-     <ClCompile Include="..\edid-decode.cpp" />
-     <ClCompile Include="..\parse-base-block.cpp" />
-@@ -102,8 +105,10 @@
-     <ClCompile Include="..\parse-displayid-block.cpp" />
-     <ClCompile Include="..\parse-ls-ext-block.cpp" />
-     <ClCompile Include="..\parse-vtb-ext-block.cpp" />
-+    <ClCompile Include="getsubopt.c" />
-   </ItemGroup>
-   <ItemGroup>
-+    <ClInclude Include="..\oui.h" />
-     <ClInclude Include="getopt.h" />
-     <ClInclude Include="unistd.h" />
-     <ClInclude Include="..\edid-decode.h" />
-diff --git a/vs/edid-decode.vcxproj.filters b/vs/edid-decode.vcxproj.filters
-index 68e8b7d..b98ab04 100644
---- a/vs/edid-decode.vcxproj.filters
-+++ b/vs/edid-decode.vcxproj.filters
-@@ -34,6 +34,15 @@
-     <ClCompile Include="..\edid-decode.cpp">
-       <Filter>edid-decode</Filter>
-     </ClCompile>
-+    <ClCompile Include="getsubopt.c">
-+      <Filter>windows-unix</Filter>
-+    </ClCompile>
-+    <ClCompile Include="..\calc-gtf-cvt.cpp">
-+      <Filter>edid-decode</Filter>
-+    </ClCompile>
-+    <ClCompile Include="..\calc-ovt.cpp">
-+      <Filter>edid-decode</Filter>
-+    </ClCompile>
-   </ItemGroup>
-   <ItemGroup>
-     <ClInclude Include="..\edid-decode.h">
-@@ -45,5 +54,8 @@
-     <ClInclude Include="unistd.h">
-       <Filter>windows-unix</Filter>
-     </ClInclude>
-+    <ClInclude Include="..\oui.h">
-+      <Filter>edid-decode</Filter>
-+    </ClInclude>
-   </ItemGroup>
- </Project>
-\ No newline at end of file
-diff --git a/vs/getopt.h b/vs/getopt.h
-index e34761d..a13c720 100644
---- a/vs/getopt.h
-+++ b/vs/getopt.h
-@@ -90,6 +90,9 @@ enum    		/* permitted values for its `has_arg' field...	*/
- 
- extern int getopt_long( int, char * const [], const char *, const struct option *, int * );
- extern int getopt_long_only( int, char * const [], const char *, const struct option *, int * );
-+
-+extern int getsubopt(char** opt, char* const* keys, char** val);
-+
- /*
-  * Previous MinGW implementation had...
-  */
-diff --git a/vs/getsubopt.c b/vs/getsubopt.c
-new file mode 100644
-index 0000000..6aedffa
---- /dev/null
-+++ b/vs/getsubopt.c
-@@ -0,0 +1,46 @@
-+/**
-+ * Copyright © 2005-2020 Rich Felker, et al.
-+ * 
-+ * Permission is hereby granted, free of charge, to any person obtaining
-+ * a copy of this software and associated documentation files (the
-+ * "Software"), to deal in the Software without restriction, including
-+ * without limitation the rights to use, copy, modify, merge, publish,
-+ * distribute, sublicense, and/or sell copies of the Software, and to
-+ * permit persons to whom the Software is furnished to do so, subject to
-+ * the following conditions:
-+ * 
-+ * The above copyright notice and this permission notice shall be
-+ * included in all copies or substantial portions of the Software.
-+ * 
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-+ */
-+
-+#include <stdlib.h>
-+#include <string.h>
-+
-+int getsubopt(char** opt, char* const* keys, char** val)
-+{
-+	char* s = *opt;
-+	int i;
-+
-+	*val = NULL;
-+	*opt = strchr(s, ',');
-+	if (*opt) *(*opt)++ = 0;
-+	else *opt = s + strlen(s);
-+
-+	for (i = 0; keys[i]; i++) {
-+		size_t l = strlen(keys[i]);
-+		if (strncmp(keys[i], s, l)) continue;
-+		if (s[l] == '=')
-+			*val = s + l + 1;
-+		else if (s[l]) continue;
-+		return i;
-+	}
-+	return -1;
-+}
+On Wed, Mar 02, 2022 at 10:03:04PM +0000, Daniel Scally wrote:
+> Upon an async fwnode match, there's some typical behaviour that the
+> notifier and matching subdev will want to do. For example, a notifier
+> representing a sensor matching to an async subdev representing its
+> VCM will want to create an ancillary link to expose that relationship
+> to userspace.
+> 
+> To avoid lots of code in individual drivers, try to build these links
+> within v4l2 core.
+> 
+> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+> 
+> Changes since v2:
+> 
+> 	- Stopped checking the notifier entity's function when creating the new
+> 	links, and just create them whenever the subdev entity's function is either
+> 	a lens controller or a flash. (Sakari)
+> 
+> Changes since v1:
+> 
+> 	- Added #ifdef guards for CONFIG_MEDIA_CONTROLLER
+> 	- Some spelling and nomenclature cleanup (Laurent)
+> 
+> Changes since the rfc:
+> 
+> 	- None
+> 
+>  drivers/media/v4l2-core/v4l2-async.c | 31 ++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+> index 0404267f1ae4..436bd6900fd8 100644
+> --- a/drivers/media/v4l2-core/v4l2-async.c
+> +++ b/drivers/media/v4l2-core/v4l2-async.c
+> @@ -275,6 +275,24 @@ v4l2_async_nf_try_complete(struct v4l2_async_notifier *notifier)
+>  static int
+>  v4l2_async_nf_try_all_subdevs(struct v4l2_async_notifier *notifier);
+>  
+> +static int v4l2_async_create_ancillary_links(struct v4l2_async_notifier *n,
+> +					     struct v4l2_subdev *sd)
+> +{
+> +	struct media_link *link = NULL;
+> +
+> +#if IS_ENABLED(CONFIG_MEDIA_CONTROLLER)
+> +
+> +	if (sd->entity.function != MEDIA_ENT_F_LENS &&
+> +	    sd->entity.function != MEDIA_ENT_F_FLASH)
+> +		return 0;
+> +
+> +	link = media_create_ancillary_link(&n->sd->entity, &sd->entity);
+> +
+> +#endif
+> +
+> +	return IS_ERR(link) ? PTR_ERR(link) : 0;
+> +}
+> +
+>  static int v4l2_async_match_notify(struct v4l2_async_notifier *notifier,
+>  				   struct v4l2_device *v4l2_dev,
+>  				   struct v4l2_subdev *sd,
+> @@ -293,6 +311,19 @@ static int v4l2_async_match_notify(struct v4l2_async_notifier *notifier,
+>  		return ret;
+>  	}
+>  
+> +	/*
+> +	 * Depending of the function of the entities involved, we may want to
+> +	 * create links between them (for example between a sensor and its lens
+> +	 * or between a sensor's source pad and the connected device's sink
+> +	 * pad).
+> +	 */
+> +	ret = v4l2_async_create_ancillary_links(notifier, sd);
+> +	if (ret) {
+> +		v4l2_async_nf_call_unbind(notifier, sd, asd);
+> +		v4l2_device_unregister_subdev(sd);
+> +		return ret;
+> +	}
+> +
+>  	/* Remove from the waiting list */
+>  	list_del(&asd->list);
+>  	sd->asd = asd;
+
 -- 
-2.33.0.windows.2
+Regards,
 
+Laurent Pinchart
