@@ -2,98 +2,131 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA5F7C433EF
-	for <linux-media@archiver.kernel.org>; Thu, 17 Mar 2022 14:39:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58B7CC433F5
+	for <linux-media@archiver.kernel.org>; Thu, 17 Mar 2022 14:47:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235242AbiCQOlJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Mar 2022 10:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
+        id S235178AbiCQOs6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Mar 2022 10:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235232AbiCQOlI (ORCPT
+        with ESMTP id S229482AbiCQOs4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Mar 2022 10:41:08 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8245612E15A;
-        Thu, 17 Mar 2022 07:39:50 -0700 (PDT)
-X-UUID: b80ffed8ef3a41a1b4bd7e63f5f1c4fd-20220317
-X-UUID: b80ffed8ef3a41a1b4bd7e63f5f1c4fd-20220317
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1354995263; Thu, 17 Mar 2022 22:39:43 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 17 Mar 2022 22:39:28 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 17 Mar 2022 22:39:28 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
-        <moudy.ho@mediatek.com>, <jason-jh.lin@mediatek.com>,
-        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
-        <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v14 3/6] dt-bindings: soc: mediatek: move out common module from display folder
-Date:   Thu, 17 Mar 2022 22:39:23 +0800
-Message-ID: <20220317143926.15835-4-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220317143926.15835-1-moudy.ho@mediatek.com>
-References: <20220317143926.15835-1-moudy.ho@mediatek.com>
+        Thu, 17 Mar 2022 10:48:56 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867892013F8;
+        Thu, 17 Mar 2022 07:47:39 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id h15so7697081wrc.6;
+        Thu, 17 Mar 2022 07:47:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iAY6mibbxuK/0wWYDuqywXzaMd/5FzXh9vcIhJweRKY=;
+        b=SJBt57bnGy6HdTYOTZBTGdtMyB/8XA9RnrVj74KIFig/GnWzV7XpERQS1SHmX/fGkT
+         tscdW8wbobBuMLGWv+OUUZZdB1GGnJcIq30C7ljrlfnJWIjFn2EbUfetzzjArQGMhVjW
+         QUylAYAX27+pCNkXZItJmoE8/u87Fs+POSqLHaBAffZUPNRJ5Ua8RNggcwjDtXqNUrAt
+         p1W3UEFTX1wB1gRtyJDECJ9+7rJxDca/2wGklOCK8/NIWbu50opk5KwI5Vg1SSAHu6s+
+         EhC2WbBVS/n1gHFZhq8YOrTrLJ43LB5att9rsRZNQet3j133wbbtM6Ac51EwnO6ux1y1
+         cfmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iAY6mibbxuK/0wWYDuqywXzaMd/5FzXh9vcIhJweRKY=;
+        b=Pxgy63Eqf2poyz+U36okyZwTRUuRGike6tVCBu7ZbE/4sNolBxH82zyO+iNFke4LdS
+         vXJb4MWirU6C3QGKyMN9DcdeiW516klJClwxoSsnFyevMn+uSj3M+D361uch88P1SdEA
+         645rlaqz85CGr0XHc4F1/CUoKpd/uy0M7A9DLoMwyY8jcnHqEbT4i2RrRLlELS88M4N9
+         GFEcV3mKypVkJYJ/+XlaJ+a+OC8jVFFwt9R75qORgUBOsmVd6V/nZGjWV3670ydE1qy9
+         5+a2mcUg6+Z6OKSTc5j1GG1RffgHuW4gUxxtE+0moWL7zQPIe4uG8BrXdJE0hlZ5p4JZ
+         Fsxg==
+X-Gm-Message-State: AOAM532GXd37VDWR3v2w71bkgSPg1N1TxB1md78DwcSTpGjdt+sUHSjE
+        coJoIMj7nYlHwKHqBrar50Q0IHRD5rY=
+X-Google-Smtp-Source: ABdhPJx/2+gFste4yVyJ6+zjQpmPqk5zxgPGnsAv4etjAm3ffaBI/rYPNqu5+Zuxa90g3U9S7GtgYQ==
+X-Received: by 2002:a05:6000:156a:b0:1f1:f168:69ac with SMTP id 10-20020a056000156a00b001f1f16869acmr4568180wrz.184.1647528458014;
+        Thu, 17 Mar 2022 07:47:38 -0700 (PDT)
+Received: from localhost.localdomain ([141.72.243.13])
+        by smtp.gmail.com with ESMTPSA id f12-20020a5d64cc000000b00203d01e1075sm4612768wri.50.2022.03.17.07.47.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 07:47:37 -0700 (PDT)
+From:   Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+Subject: [PATCH] media: ov7640: Use ARRAY_SIZE instead of manual checking
+Date:   Thu, 17 Mar 2022 15:47:14 +0100
+Message-Id: <20220317144714.47442-1-mosescb.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to share the same hardware information with MDP3,
-change the MUTEX dt-binding to the path "soc/mediatek".
+Currently, the driver ends the reg-val list with a 0xFF as a check to stop
+the loop. Instead an array of reg-vals can be used to avoid this check,
+by using the ARRAY_SIZE(arr) macro to obtain the length of the array and
+iterate over it.
 
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
 ---
- .../bindings/{display => soc}/mediatek/mediatek,mutex.yaml      | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
- rename Documentation/devicetree/bindings/{display => soc}/mediatek/mediatek,mutex.yaml (97%)
+ drivers/media/i2c/ov7640.c | 33 +++++++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.yaml b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
-similarity index 97%
-rename from Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.yaml
-rename to Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
-index 6eca525eced0..f825af49f820 100644
---- a/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.yaml
-+++ b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: http://devicetree.org/schemas/display/mediatek/mediatek,mutex.yaml#
-+$id: http://devicetree.org/schemas/soc/mediatek/mediatek,mutex.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/media/i2c/ov7640.c b/drivers/media/i2c/ov7640.c
+index 010803d58ce8..977cd2d8ad33 100644
+--- a/drivers/media/i2c/ov7640.c
++++ b/drivers/media/i2c/ov7640.c
+@@ -13,23 +13,28 @@
+ MODULE_DESCRIPTION("OmniVision ov7640 sensor driver");
+ MODULE_LICENSE("GPL v2");
  
- title: Mediatek mutex
+-static const u8 initial_registers[] = {
+-	0x12, 0x80,
+-	0x12, 0x54,
+-	0x14, 0x24,
+-	0x15, 0x01,
+-	0x28, 0x20,
+-	0x75, 0x82,
+-	0xFF, 0xFF, /* Terminator (reg 0xFF is unused) */
++struct reg_val {
++	u8 reg;
++	u8 val;
+ };
+ 
+-static int write_regs(struct i2c_client *client, const u8 *regs)
+-{
+-	int i;
++static const struct reg_val regval_init[] = {
++	{0x12, 0x80},
++	{0x12, 0x54},
++	{0x14, 0x24},
++	{0x15, 0x01},
++	{0x28, 0x20},
++	{0x75, 0x82},
++};
+ 
+-	for (i = 0; regs[i] != 0xFF; i += 2)
+-		if (i2c_smbus_write_byte_data(client, regs[i], regs[i + 1]) < 0)
++static int write_regs(struct i2c_client *client,
++		const struct reg_val *rv, int len)
++{
++	while (--len >= 0) {
++		if (i2c_smbus_write_byte_data(client, rv->reg, rv->val) < 0)
+ 			return -1;
++		rv++;
++	}
+ 	return 0;
+ }
+ 
+@@ -56,7 +61,7 @@ static int ov7640_probe(struct i2c_client *client,
+ 	v4l_info(client, "chip found @ 0x%02x (%s)\n",
+ 			client->addr << 1, client->adapter->name);
+ 
+-	if (write_regs(client, initial_registers) < 0) {
++	if (write_regs(client, regval_init, ARRAY_SIZE(regval_init)) < 0) {
+ 		v4l_err(client, "error initializing OV7640\n");
+ 		return -ENODEV;
+ 	}
 -- 
-2.18.0
+2.30.2
 
