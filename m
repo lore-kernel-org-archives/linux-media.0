@@ -2,34 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70A50C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 17 Mar 2022 08:23:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BC1FC4332F
+	for <linux-media@archiver.kernel.org>; Thu, 17 Mar 2022 08:24:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbiCQIZN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Mar 2022 04:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        id S231226AbiCQIZO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Mar 2022 04:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiCQIY6 (ORCPT
+        with ESMTP id S230173AbiCQIYz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Mar 2022 04:24:58 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E416E16C08C;
-        Thu, 17 Mar 2022 01:23:34 -0700 (PDT)
-X-UUID: e2bb798dfc5f4ce8a231752df283b01f-20220317
-X-UUID: e2bb798dfc5f4ce8a231752df283b01f-20220317
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        Thu, 17 Mar 2022 04:24:55 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698A416A6BB;
+        Thu, 17 Mar 2022 01:23:24 -0700 (PDT)
+X-UUID: c41d20993ecf4b85836556dd65525dd9-20220317
+X-UUID: c41d20993ecf4b85836556dd65525dd9-20220317
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
         (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1950854792; Thu, 17 Mar 2022 16:23:26 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 17 Mar 2022 16:23:22 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 17 Mar
- 2022 16:23:21 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1137129936; Thu, 17 Mar 2022 16:23:17 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 17 Mar 2022 16:23:16 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 17 Mar 2022 16:23:20 +0800
+ Transport; Thu, 17 Mar 2022 16:23:14 +0800
 From:   Irui Wang <irui.wang@mediatek.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Tzung-Bi Shih <tzungbi@chromium.org>,
@@ -54,9 +52,9 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v3, 08/10] media: mtk-vcodec: Add more extra processing for venc_multi_core mode
-Date:   Thu, 17 Mar 2022 16:22:28 +0800
-Message-ID: <20220317082230.23622-9-irui.wang@mediatek.com>
+Subject: [PATCH v3, 06/10] media: mtk-vcodec: Add venc power on/off interface
+Date:   Thu, 17 Mar 2022 16:22:26 +0800
+Message-ID: <20220317082230.23622-7-irui.wang@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220317082230.23622-1-irui.wang@mediatek.com>
 References: <20220317082230.23622-1-irui.wang@mediatek.com>
@@ -68,365 +66,221 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-venc_multi_core mode encoding need more venc working buffers, it
-will break the compatibility if we just add venc_vsi in AP-Kernel
-but not in firmware, so add more struct definition for it.
+venc_multi_core mode power on/off all venc available power, pm_runtime_xx
+helper is not appropriate called directly, add new power on/off
+interface for it.
 
 Signed-off-by: Irui Wang <irui.wang@mediatek.com>
 ---
- .../platform/mtk-vcodec/mtk_vcodec_util.c     |  19 ++
- .../platform/mtk-vcodec/mtk_vcodec_util.h     |   4 +
- .../platform/mtk-vcodec/venc/venc_h264_if.c   | 174 +++++++++++++++---
- 3 files changed, 172 insertions(+), 25 deletions(-)
+ .../platform/mtk-vcodec/mtk_vcodec_enc.c      | 20 +----
+ .../platform/mtk-vcodec/mtk_vcodec_enc_drv.c  |  7 ++
+ .../platform/mtk-vcodec/mtk_vcodec_enc_pm.c   | 83 +++++++++++++++++++
+ .../platform/mtk-vcodec/mtk_vcodec_enc_pm.h   |  5 ++
+ 4 files changed, 98 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.c
-index ace78c4b5b9e..059f665afa96 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.c
-@@ -11,6 +11,7 @@
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+index 0d1b065048a9..b0bc71f00930 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+@@ -12,6 +12,7 @@
  
- #include "mtk_vcodec_dec_hw.h"
  #include "mtk_vcodec_drv.h"
+ #include "mtk_vcodec_enc.h"
++#include "mtk_vcodec_enc_pm.h"
+ #include "mtk_vcodec_intr.h"
+ #include "mtk_vcodec_util.h"
+ #include "venc_drv_if.h"
+@@ -849,7 +850,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
+ {
+ 	struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(q);
+ 	struct venc_enc_param param;
+-	int ret, pm_ret;
++	int ret;
+ 	int i;
+ 
+ 	/* Once state turn into MTK_STATE_ABORT, we need stop_streaming
+@@ -857,7 +858,7 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	  */
+ 	if ((ctx->state == MTK_STATE_ABORT) || (ctx->state == MTK_STATE_FREE)) {
+ 		ret = -EIO;
+-		goto err_start_stream;
++		goto err_set_param;
+ 	}
+ 
+ 	/* Do the initialization when both start_streaming have been called */
+@@ -869,12 +870,6 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
+ 			return 0;
+ 	}
+ 
+-	ret = pm_runtime_resume_and_get(&ctx->dev->plat_dev->dev);
+-	if (ret < 0) {
+-		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
+-		goto err_start_stream;
+-	}
+-
+ 	mtk_venc_set_param(ctx, &param);
+ 	ret = venc_if_set_param(ctx, VENC_SET_PARAM_ENC, &param);
+ 	if (ret) {
+@@ -901,11 +896,6 @@ static int vb2ops_venc_start_streaming(struct vb2_queue *q, unsigned int count)
+ 	return 0;
+ 
+ err_set_param:
+-	pm_ret = pm_runtime_put(&ctx->dev->plat_dev->dev);
+-	if (pm_ret < 0)
+-		mtk_v4l2_err("pm_runtime_put fail %d", pm_ret);
+-
+-err_start_stream:
+ 	for (i = 0; i < q->num_buffers; ++i) {
+ 		struct vb2_buffer *buf = vb2_get_buffer(q, i);
+ 
+@@ -988,10 +978,6 @@ static void vb2ops_venc_stop_streaming(struct vb2_queue *q)
+ 	if (ret)
+ 		mtk_v4l2_err("venc_if_deinit failed=%d", ret);
+ 
+-	ret = pm_runtime_put(&ctx->dev->plat_dev->dev);
+-	if (ret < 0)
+-		mtk_v4l2_err("pm_runtime_put fail %d", ret);
+-
+ 	ctx->state = MTK_STATE_FREE;
+ }
+ 
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
+index 1b1c17b03ef5..d2937e62df29 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
+@@ -173,6 +173,12 @@ static int fops_vcodec_open(struct file *file)
+ 		mtk_v4l2_debug(0, "encoder capability %x", dev->enc_capability);
+ 	}
+ 
++	ret = mtk_vcodec_enc_pw_on(dev);
++	if (ret < 0) {
++		mtk_v4l2_err("encoder power on failed %d", ret);
++		goto err_load_fw;
++	}
++
+ 	mtk_v4l2_debug(2, "Create instance [%d]@%p m2m_ctx=%p ",
+ 			ctx->id, ctx, ctx->m2m_ctx);
+ 
+@@ -207,6 +213,7 @@ static int fops_vcodec_release(struct file *file)
+ 
+ 	v4l2_m2m_ctx_release(ctx->m2m_ctx);
+ 	mtk_vcodec_enc_release(ctx);
++	mtk_vcodec_enc_pw_off(dev);
+ 	v4l2_fh_del(&ctx->fh);
+ 	v4l2_fh_exit(&ctx->fh);
+ 	v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
+index 1e814fc3172f..22b2eb867998 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
+@@ -9,6 +9,7 @@
+ #include <linux/of_platform.h>
+ #include <linux/pm_runtime.h>
+ 
 +#include "mtk_vcodec_enc_core.h"
+ #include "mtk_vcodec_enc_pm.h"
  #include "mtk_vcodec_util.h"
  
- void __iomem *mtk_vcodec_get_reg_addr(struct mtk_vcodec_ctx *data,
-@@ -26,6 +27,24 @@ void __iomem *mtk_vcodec_get_reg_addr(struct mtk_vcodec_ctx *data,
+@@ -87,3 +88,85 @@ void mtk_vcodec_enc_clock_off(struct mtk_vcodec_pm *pm)
+ 		clk_disable_unprepare(enc_clk->clk_info[i].vcodec_clk);
  }
- EXPORT_SYMBOL(mtk_vcodec_get_reg_addr);
- 
-+void __iomem *mtk_venc_get_core_reg_addr(struct mtk_vcodec_ctx *ctx,
-+					 unsigned int core_id)
+ EXPORT_SYMBOL_GPL(mtk_vcodec_enc_clock_off);
++
++int mtk_venc_core_pw_on(struct mtk_vcodec_dev *dev)
 +{
++	int i, ret;
 +	struct mtk_venc_core_dev *core;
 +
-+	if (core_id >= MTK_VENC_CORE_MAX) {
-+		mtk_v4l2_err("Invalid core_id = %d", core_id);
-+		return NULL;
++	/* power on all available venc cores */
++	for (i = 0; i < MTK_VENC_CORE_MAX; i++) {
++		core = (struct mtk_venc_core_dev *)dev->enc_core_dev[i];
++		if (!core)
++			return 0;
++
++		ret = pm_runtime_resume_and_get(&core->plat_dev->dev);
++		if (ret < 0) {
++			mtk_v4l2_err("power on core[%d] fail %d", i, ret);
++			goto pw_on_fail;
++		}
 +	}
++	return 0;
 +
-+	core = (struct mtk_venc_core_dev *)ctx->dev->enc_core_dev[core_id];
-+	if (!core)
-+		return NULL;
-+
-+	return core->reg_base;
++pw_on_fail:
++	for (i -= 1; i >= 0; i--) {
++		core = (struct mtk_venc_core_dev *)dev->enc_core_dev[i];
++		pm_runtime_put_sync(&core->plat_dev->dev);
++	}
++	return ret;
 +}
-+EXPORT_SYMBOL(mtk_venc_get_core_reg_addr);
 +
- int mtk_vcodec_mem_alloc(struct mtk_vcodec_ctx *data,
- 			struct mtk_vcodec_mem *mem)
- {
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.h
-index 71956627a0e2..de9e18688842 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_util.h
-@@ -50,6 +50,10 @@ struct mtk_vcodec_dev;
- 
- void __iomem *mtk_vcodec_get_reg_addr(struct mtk_vcodec_ctx *data,
- 				unsigned int reg_idx);
-+
-+void __iomem *mtk_venc_get_core_reg_addr(struct mtk_vcodec_ctx *data,
-+					 unsigned int core_id);
-+
- int mtk_vcodec_mem_alloc(struct mtk_vcodec_ctx *data,
- 				struct mtk_vcodec_mem *mem);
- void mtk_vcodec_mem_free(struct mtk_vcodec_ctx *data,
-diff --git a/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c b/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
-index 4d9b8798dffe..aee31cb836c6 100644
---- a/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
-+++ b/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
-@@ -50,6 +50,24 @@ enum venc_h264_vpu_work_buf {
- 	VENC_H264_VPU_WORK_BUF_MAX,
- };
- 
-+/*
-+ * enum venc_multi_core_work_buf - h264 multi core encoder buffer index
-+ */
-+enum venc_multi_core_work_buf {
-+	VENC_MULTI_CORE_WORK_BUF_RC_INFO_CORE0,
-+	VENC_MULTI_CORE_WORK_BUF_RC_CODE,
-+	VENC_MULTI_CORE_WORK_BUF_REC_LUMA,
-+	VENC_MULTI_CORE_WORK_BUF_REC_CHROMA,
-+	VENC_MULTI_CORE_WORK_BUF_REF_LUMA,
-+	VENC_MULTI_CORE_WORK_BUF_REF_CHROMA,
-+	VENC_MULTI_CORE_WORK_BUF_MV_INFO_1,
-+	VENC_MULTI_CORE_WORK_BUF_MV_INFO_2,
-+	VENC_MULTI_CORE_WORK_BUF_SKIP_FRAME,
-+	VENC_MULTI_CORE_WORK_BUF_RC_INFO_CORE1,
-+	VENC_MULTI_CORE_WORK_BUF_FR_RC_INFO,
-+	VENC_MULTI_CORE_WORK_BUF_MAX,
-+};
-+
- /*
-  * enum venc_h264_bs_mode - for bs_mode argument in h264_enc_vpu_encode
-  */
-@@ -94,6 +112,24 @@ struct venc_h264_vpu_config {
- 	u32 wfd;
- };
- 
-+struct venc_multi_core_config {
-+	u32 input_fourcc;
-+	u32 bitrate;
-+	u32 pic_w;
-+	u32 pic_h;
-+	u32 buf_w;
-+	u32 buf_h;
-+	u32 gop_size;
-+	u32 intra_period;
-+	u32 framerate;
-+	u32 profile;
-+	u32 level;
-+	u32 wfd;
-+	u32 max_qp;
-+	u32 min_qp;
-+	u32 reserved[8];
-+};
-+
- /*
-  * struct venc_h264_vpu_buf - Structure for buffer information
-  *                            AP-W/R : AP is writer/reader on this item
-@@ -127,6 +163,11 @@ struct venc_h264_vsi {
- 	struct venc_h264_vpu_buf work_bufs[VENC_H264_VPU_WORK_BUF_MAX];
- };
- 
-+struct venc_multi_core_vsi {
-+	struct venc_multi_core_config config;
-+	struct venc_h264_vpu_buf work_bufs[VENC_MULTI_CORE_WORK_BUF_MAX];
-+};
-+
- /*
-  * struct venc_h264_inst - h264 encoder AP driver instance
-  * @hw_base: h264 encoder hardware register base
-@@ -143,8 +184,8 @@ struct venc_h264_vsi {
-  * @ctx: context for v4l2 layer integration
-  */
- struct venc_h264_inst {
--	void __iomem *hw_base;
--	struct mtk_vcodec_mem work_bufs[VENC_H264_VPU_WORK_BUF_MAX];
-+	void __iomem *hw_base[MTK_VENC_CORE_MAX];
-+	struct mtk_vcodec_mem work_bufs[VENC_MULTI_CORE_WORK_BUF_MAX];
- 	struct mtk_vcodec_mem pps_buf;
- 	bool work_buf_allocated;
- 	unsigned int frm_cnt;
-@@ -152,12 +193,13 @@ struct venc_h264_inst {
- 	unsigned int prepend_hdr;
- 	struct venc_vpu_inst vpu_inst;
- 	struct venc_h264_vsi *vsi;
-+	struct venc_multi_core_vsi *core_vsi;
- 	struct mtk_vcodec_ctx *ctx;
- };
- 
- static inline u32 h264_read_reg(struct venc_h264_inst *inst, u32 addr)
- {
--	return readl(inst->hw_base + addr);
-+	return readl(inst->hw_base[MTK_VENC_CORE0] + addr);
- }
- 
- static unsigned int h264_get_profile(struct venc_h264_inst *inst,
-@@ -228,13 +270,20 @@ static unsigned int h264_get_level(struct venc_h264_inst *inst,
- static void h264_enc_free_work_buf(struct venc_h264_inst *inst)
- {
- 	int i;
-+	struct mtk_vcodec_ctx *ctx = inst->ctx;
-+	int max_work_buf;
- 
- 	mtk_vcodec_debug_enter(inst);
- 
-+	if (ctx->dev->venc_multi_core)
-+		max_work_buf = VENC_MULTI_CORE_WORK_BUF_MAX;
-+	else
-+		max_work_buf = VENC_H264_VPU_WORK_BUF_MAX;
-+
- 	/* Except the SKIP_FRAME buffers,
- 	 * other buffers need to be freed by AP.
- 	 */
--	for (i = 0; i < VENC_H264_VPU_WORK_BUF_MAX; i++) {
-+	for (i = 0; i < max_work_buf; i++) {
- 		if (i != VENC_H264_VPU_WORK_BUF_SKIP_FRAME)
- 			mtk_vcodec_mem_free(inst->ctx, &inst->work_bufs[i]);
- 	}
-@@ -248,11 +297,21 @@ static int h264_enc_alloc_work_buf(struct venc_h264_inst *inst)
- {
- 	int i;
- 	int ret = 0;
--	struct venc_h264_vpu_buf *wb = inst->vsi->work_bufs;
-+	struct mtk_vcodec_ctx *ctx = inst->ctx;
-+	struct venc_h264_vpu_buf *wb;
-+	int max_work_buf;
- 
- 	mtk_vcodec_debug_enter(inst);
- 
--	for (i = 0; i < VENC_H264_VPU_WORK_BUF_MAX; i++) {
-+	if (ctx->dev->venc_multi_core) {
-+		wb = inst->core_vsi->work_bufs;
-+		max_work_buf = VENC_MULTI_CORE_WORK_BUF_MAX;
-+	} else {
-+		wb = inst->vsi->work_bufs;
-+		max_work_buf = VENC_H264_VPU_WORK_BUF_MAX;
-+	}
-+
-+	for (i = 0; i < max_work_buf; i++) {
- 		/*
- 		 * This 'wb' structure is set by VPU side and shared to AP for
- 		 * buffer allocation and IO virtual addr mapping. For most of
-@@ -358,6 +417,26 @@ static int h264_frame_type(struct venc_h264_inst *inst)
- 		return VENC_H264_P_FRM;  /* Note: B frames are not supported */
- 	}
- }
-+
-+static int h264_core_frame_type(struct venc_h264_inst *inst)
++int mtk_venc_core_pw_off(struct mtk_vcodec_dev *dev)
 +{
-+	struct venc_multi_core_vsi *vsi = inst->core_vsi;
++	int i, ret;
++	struct mtk_venc_core_dev *core;
 +
-+	if ((vsi->config.gop_size != 0 &&
-+	     (inst->frm_cnt % vsi->config.gop_size) == 0) ||
-+	    (inst->frm_cnt == 0 && vsi->config.gop_size == 0)) {
-+		/* IDR frame */
-+		return VENC_H264_IDR_FRM;
-+	} else if ((vsi->config.intra_period != 0 &&
-+		    (inst->frm_cnt % vsi->config.intra_period) == 0) ||
-+		   (inst->frm_cnt == 0 && vsi->config.intra_period == 0)) {
-+		/* I frame */
-+		return VENC_H264_I_FRM;
-+	} else {
-+		return VENC_H264_P_FRM;  /* Note: B frames are not supported */
++	/* power off all available venc cores */
++	for (i = 0; i < MTK_VENC_CORE_MAX; i++) {
++		core = (struct mtk_venc_core_dev *)dev->enc_core_dev[i];
++		if (!core)
++			return 0;
++
++		ret = pm_runtime_put_sync(&core->plat_dev->dev);
++		if (ret < 0)
++			mtk_v4l2_err("power off core[%d] fail %d", i, ret);
 +	}
++	return ret;
 +}
 +
- static int h264_encode_sps(struct venc_h264_inst *inst,
- 			   struct mtk_vcodec_mem *bs_buf,
- 			   unsigned int *bs_size)
-@@ -440,12 +519,17 @@ static int h264_encode_frame(struct venc_h264_inst *inst,
- 	int ret = 0;
- 	unsigned int irq_status;
- 	struct venc_frame_info frame_info;
-+	struct mtk_vcodec_ctx *ctx = inst->ctx;
- 
- 	mtk_vcodec_debug_enter(inst);
- 	mtk_vcodec_debug(inst, "frm_cnt = %d\n ", inst->frm_cnt);
- 	frame_info.frm_count = inst->frm_cnt;
- 	frame_info.skip_frm_count = inst->skip_frm_cnt;
--	frame_info.frm_type = h264_frame_type(inst);
-+	if (ctx->dev->venc_multi_core)
-+		frame_info.frm_type = h264_core_frame_type(inst);
-+	else
-+		frame_info.frm_type = h264_frame_type(inst);
++int mtk_vcodec_enc_pw_on(struct mtk_vcodec_dev *dev)
++{
++	int ret;
 +
- 	mtk_vcodec_debug(inst, "frm_count = %d,skip_frm_count =%d,frm_type=%d.\n",
- 			 frame_info.frm_count, frame_info.skip_frm_count,
- 			 frame_info.frm_type);
-@@ -501,7 +585,7 @@ static void h264_encode_filler(struct venc_h264_inst *inst, void *buf,
- static int h264_enc_init(struct mtk_vcodec_ctx *ctx)
- {
- 	const bool is_ext = MTK_ENC_CTX_IS_EXT(ctx);
--	int ret = 0;
-+	int ret, i = 0;
- 	struct venc_h264_inst *inst;
- 
- 	inst = kzalloc(sizeof(*inst), GFP_KERNEL);
-@@ -511,13 +595,22 @@ static int h264_enc_init(struct mtk_vcodec_ctx *ctx)
- 	inst->ctx = ctx;
- 	inst->vpu_inst.ctx = ctx;
- 	inst->vpu_inst.id = is_ext ? SCP_IPI_VENC_H264 : IPI_VENC_H264;
--	inst->hw_base = mtk_vcodec_get_reg_addr(inst->ctx, VENC_SYS);
- 
- 	mtk_vcodec_debug_enter(inst);
- 
- 	ret = vpu_enc_init(&inst->vpu_inst);
- 
--	inst->vsi = (struct venc_h264_vsi *)inst->vpu_inst.vsi;
-+	if (ctx->dev->venc_multi_core) {
-+		inst->core_vsi =
-+			(struct venc_multi_core_vsi *)inst->vpu_inst.vsi;
-+		for (i = 0; i < MTK_VENC_CORE_MAX; i++)
-+			inst->hw_base[i] =
-+				mtk_venc_get_core_reg_addr(inst->ctx, i);
++	if (dev->venc_multi_core) {
++		ret = mtk_venc_core_pw_on(dev);
++		if (ret < 0) {
++			mtk_v4l2_err("venc core power on fail: %d", ret);
++			return ret;
++		}
++	} else {
++		ret = pm_runtime_resume_and_get(&dev->plat_dev->dev);
++		if (ret < 0) {
++			mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
++			return ret;
++		}
++	}
++	return 0;
++}
++
++int mtk_vcodec_enc_pw_off(struct mtk_vcodec_dev *dev)
++{
++	int ret;
++
++	if (dev->venc_multi_core) {
++		ret = mtk_venc_core_pw_off(dev);
++		if (ret < 0)
++			mtk_v4l2_err("venc core power off fail: %d", ret);
 +
 +	} else {
-+		inst->vsi = (struct venc_h264_vsi *)inst->vpu_inst.vsi;
-+		inst->hw_base[0] = mtk_vcodec_get_reg_addr(inst->ctx, VENC_SYS);
++		ret = pm_runtime_put_sync(&dev->plat_dev->dev);
++		if (ret < 0)
++			mtk_v4l2_err("pm_runtime_put_sync fail %d", ret);
 +	}
- 
- 	mtk_vcodec_debug_leave(inst);
- 
-@@ -624,31 +717,62 @@ static int h264_enc_encode(void *handle,
- 	return ret;
- }
- 
-+static void h264_enc_set_configs(struct venc_h264_inst *inst,
-+				 struct venc_enc_param *enc_prm)
-+{
-+	inst->vsi->config.input_fourcc = enc_prm->input_yuv_fmt;
-+	inst->vsi->config.bitrate = enc_prm->bitrate;
-+	inst->vsi->config.pic_w = enc_prm->width;
-+	inst->vsi->config.pic_h = enc_prm->height;
-+	inst->vsi->config.buf_w = enc_prm->buf_width;
-+	inst->vsi->config.buf_h = enc_prm->buf_height;
-+	inst->vsi->config.gop_size = enc_prm->gop_size;
-+	inst->vsi->config.framerate = enc_prm->frm_rate;
-+	inst->vsi->config.intra_period = enc_prm->intra_period;
-+	inst->vsi->config.profile =
-+		h264_get_profile(inst, enc_prm->h264_profile);
-+	inst->vsi->config.level =
-+		h264_get_level(inst, enc_prm->h264_level);
-+	inst->vsi->config.wfd = 0;
++	return ret;
 +}
-+
-+static void h264_enc_set_core_configs(struct venc_h264_inst *inst,
-+				      struct venc_enc_param *enc_prm)
-+{
-+	inst->core_vsi->config.input_fourcc = enc_prm->input_yuv_fmt;
-+	inst->core_vsi->config.bitrate = enc_prm->bitrate;
-+	inst->core_vsi->config.pic_w = enc_prm->width;
-+	inst->core_vsi->config.pic_h = enc_prm->height;
-+	inst->core_vsi->config.buf_w = enc_prm->buf_width;
-+	inst->core_vsi->config.buf_h = enc_prm->buf_height;
-+	inst->core_vsi->config.gop_size = enc_prm->gop_size;
-+	inst->core_vsi->config.framerate = enc_prm->frm_rate;
-+	inst->core_vsi->config.intra_period = enc_prm->intra_period;
-+	inst->core_vsi->config.profile =
-+		h264_get_profile(inst, enc_prm->h264_profile);
-+	inst->core_vsi->config.level =
-+		h264_get_level(inst, enc_prm->h264_level);
-+	inst->core_vsi->config.wfd = 0;
-+}
-+
- static int h264_enc_set_param(void *handle,
- 			      enum venc_set_param_type type,
- 			      struct venc_enc_param *enc_prm)
- {
- 	int ret = 0;
- 	struct venc_h264_inst *inst = (struct venc_h264_inst *)handle;
-+	struct mtk_vcodec_ctx *ctx = inst->ctx;
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h
+index 97a394c68f4e..99b6b6e29e35 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h
+@@ -14,4 +14,9 @@ int mtk_vcodec_init_enc_clk(struct platform_device *pdev,
+ void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm);
+ void mtk_vcodec_enc_clock_off(struct mtk_vcodec_pm *pm);
  
--	mtk_vcodec_debug(inst, "->type=%d", type);
-+	mtk_vcodec_debug(inst, "->type=%d, multi_core=%d",
-+			 type, ctx->dev->venc_multi_core);
- 
- 	switch (type) {
- 	case VENC_SET_PARAM_ENC:
--		inst->vsi->config.input_fourcc = enc_prm->input_yuv_fmt;
--		inst->vsi->config.bitrate = enc_prm->bitrate;
--		inst->vsi->config.pic_w = enc_prm->width;
--		inst->vsi->config.pic_h = enc_prm->height;
--		inst->vsi->config.buf_w = enc_prm->buf_width;
--		inst->vsi->config.buf_h = enc_prm->buf_height;
--		inst->vsi->config.gop_size = enc_prm->gop_size;
--		inst->vsi->config.framerate = enc_prm->frm_rate;
--		inst->vsi->config.intra_period = enc_prm->intra_period;
--		inst->vsi->config.profile =
--			h264_get_profile(inst, enc_prm->h264_profile);
--		inst->vsi->config.level =
--			h264_get_level(inst, enc_prm->h264_level);
--		inst->vsi->config.wfd = 0;
-+		if (ctx->dev->venc_multi_core)
-+			h264_enc_set_core_configs(inst, enc_prm);
-+		else
-+			h264_enc_set_configs(inst, enc_prm);
++int mtk_venc_core_pw_on(struct mtk_vcodec_dev *dev);
++int mtk_venc_core_pw_off(struct mtk_vcodec_dev *dev);
++int mtk_vcodec_enc_pw_on(struct mtk_vcodec_dev *dev);
++int mtk_vcodec_enc_pw_off(struct mtk_vcodec_dev *dev);
 +
- 		ret = vpu_enc_set_param(&inst->vpu_inst, type, enc_prm);
- 		if (ret)
- 			break;
+ #endif /* _MTK_VCODEC_ENC_PM_H_ */
 -- 
 2.18.0
 
