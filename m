@@ -2,101 +2,141 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A728EC433FE
-	for <linux-media@archiver.kernel.org>; Thu, 17 Mar 2022 12:54:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0CABC43217
+	for <linux-media@archiver.kernel.org>; Thu, 17 Mar 2022 12:54:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234186AbiCQMzr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Mar 2022 08:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
+        id S234293AbiCQMzx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Mar 2022 08:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234188AbiCQMzR (ORCPT
+        with ESMTP id S234208AbiCQMzV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:55:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A9391ADD
-        for <linux-media@vger.kernel.org>; Thu, 17 Mar 2022 05:53:51 -0700 (PDT)
+        Thu, 17 Mar 2022 08:55:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A869A27F9
+        for <linux-media@vger.kernel.org>; Thu, 17 Mar 2022 05:53:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4B91B81E8F
-        for <linux-media@vger.kernel.org>; Thu, 17 Mar 2022 12:53:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF96C340ED
-        for <linux-media@vger.kernel.org>; Thu, 17 Mar 2022 12:53:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCF78B81EA7
+        for <linux-media@vger.kernel.org>; Thu, 17 Mar 2022 12:53:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F17C36AF2;
+        Thu, 17 Mar 2022 12:53:49 +0000 (UTC)
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Subject: [PATCHv3 0/7] cec: various fixes and enhancements
-Date:   Thu, 17 Mar 2022 13:53:39 +0100
-Message-Id: <20220317125346.145105-1-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv3 2/7] cec: abort if the current transmit was canceled
+Date:   Thu, 17 Mar 2022 13:53:41 +0100
+Message-Id: <20220317125346.145105-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220317125346.145105-1-hverkuil-cisco@xs4all.nl>
+References: <20220317125346.145105-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The first two patches fix issues relating to a CEC adapter
-being disabled while a transmit is still in progress at the
-hardware level. Unless the hardware is really disabled (i.e.
-loses power) the transmit should just continue in order to
-keep the hardware and framework state in sync, and to avoid
-half-written messages on the bus.
+If a transmit-in-progress was canceled, then, once the transmit
+is done, mark it as aborted and refrain from retrying the transmit.
 
-The third patch fixes a mismatch between the API documentation
-and the actual code w.r.t. reporting the results of a non-blocking
-transmit.
+To signal this situation the new transmit_in_progress_aborted field is
+set to true.
 
-The fourth patch adds helpers to make it easier for both drivers
-and userspace to detect if the received message contains the
-result of a non-blocking transmit.
+The old implementation would just set adap->transmitting to NULL and
+set adap->transmit_in_progress to false, but on the hardware level
+the transmit was still ongoing. However, the framework would think
+the transmit was aborted, and if a new transmit was issued, then
+it could overwrite the HW buffer containing the old transmit with the
+new transmit, leading to garbled data on the CEC bus.
 
-The fifth patch makes the framework more robust, preventing ops
-from being called when the device is already unregistered.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/cec/core/cec-adap.c | 11 ++++++++---
+ include/media/cec.h               |  6 ++++++
+ 2 files changed, 14 insertions(+), 3 deletions(-)
 
-The last two patches add new features that are needed for an
-out-of-tree CEC driver:
-
-https://git.linuxtv.org/hverkuil/media_tree.git/log/?h=extron
-
-This is still work in progress, so these patches will probably
-be included in the submission of that driver.
-
-Regards,
-
-	Hans
-
-Changes since v2:
-
-- added "cec: use call_op and check for !unregistered"
-
-Changes since v1:
-
-- replace bool by int in the public cec.h header for the new
-  helper functions
-- rework "cec: call enable_adap on s_log_addrs": it did not take
-  monitoring into account (while monitoring the CEC adapter has
-  to be enabled, even when unconfigured) and the needs_hpd case
-  wasn't handled quite right either.
-
-Hans Verkuil (7):
-  cec: call enable_adap on s_log_addrs
-  cec: abort if the current transmit was canceled
-  cec: correctly pass on reply results
-  cec.h: add cec_msg_recv_is_rx/tx_result helpers
-  cec: use call_op and check for !unregistered
-  cec: add xfer_timeout_ms field
-  cec: add optional adap_configured callback
-
- Documentation/driver-api/media/cec-core.rst |  13 +-
- drivers/media/cec/core/cec-adap.c           | 279 +++++++++++++-------
- drivers/media/cec/core/cec-api.c            |  24 +-
- drivers/media/cec/core/cec-core.c           |  18 +-
- drivers/media/cec/core/cec-pin-priv.h       |  11 +
- drivers/media/cec/core/cec-pin.c            |  23 +-
- drivers/media/cec/core/cec-priv.h           |  10 +
- include/media/cec.h                         |  12 +
- include/uapi/linux/cec.h                    |  20 ++
- 9 files changed, 275 insertions(+), 135 deletions(-)
-
+diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
+index 1a095308f3ab..96968d18d7ac 100644
+--- a/drivers/media/cec/core/cec-adap.c
++++ b/drivers/media/cec/core/cec-adap.c
+@@ -421,7 +421,7 @@ static void cec_flush(struct cec_adapter *adap)
+ 		cec_data_cancel(data, CEC_TX_STATUS_ABORTED);
+ 	}
+ 	if (adap->transmitting)
+-		cec_data_cancel(adap->transmitting, CEC_TX_STATUS_ABORTED);
++		adap->transmit_in_progress_aborted = true;
+ 
+ 	/* Cancel the pending timeout work. */
+ 	list_for_each_entry_safe(data, n, &adap->wait_queue, list) {
+@@ -572,6 +572,7 @@ int cec_thread_func(void *_adap)
+ 		if (data->attempts == 0)
+ 			data->attempts = attempts;
+ 
++		adap->transmit_in_progress_aborted = false;
+ 		/* Tell the adapter to transmit, cancel on error */
+ 		if (adap->ops->adap_transmit(adap, data->attempts,
+ 					     signal_free_time, &data->msg))
+@@ -599,6 +600,8 @@ void cec_transmit_done_ts(struct cec_adapter *adap, u8 status,
+ 	struct cec_msg *msg;
+ 	unsigned int attempts_made = arb_lost_cnt + nack_cnt +
+ 				     low_drive_cnt + error_cnt;
++	bool done = status & (CEC_TX_STATUS_MAX_RETRIES | CEC_TX_STATUS_OK);
++	bool aborted = adap->transmit_in_progress_aborted;
+ 
+ 	dprintk(2, "%s: status 0x%02x\n", __func__, status);
+ 	if (attempts_made < 1)
+@@ -619,6 +622,7 @@ void cec_transmit_done_ts(struct cec_adapter *adap, u8 status,
+ 		goto wake_thread;
+ 	}
+ 	adap->transmit_in_progress = false;
++	adap->transmit_in_progress_aborted = false;
+ 
+ 	msg = &data->msg;
+ 
+@@ -639,8 +643,7 @@ void cec_transmit_done_ts(struct cec_adapter *adap, u8 status,
+ 	 * the hardware didn't signal that it retried itself (by setting
+ 	 * CEC_TX_STATUS_MAX_RETRIES), then we will retry ourselves.
+ 	 */
+-	if (data->attempts > attempts_made &&
+-	    !(status & (CEC_TX_STATUS_MAX_RETRIES | CEC_TX_STATUS_OK))) {
++	if (!aborted && data->attempts > attempts_made && !done) {
+ 		/* Retry this message */
+ 		data->attempts -= attempts_made;
+ 		if (msg->timeout)
+@@ -655,6 +658,8 @@ void cec_transmit_done_ts(struct cec_adapter *adap, u8 status,
+ 		goto wake_thread;
+ 	}
+ 
++	if (aborted && !done)
++		status |= CEC_TX_STATUS_ABORTED;
+ 	data->attempts = 0;
+ 
+ 	/* Always set CEC_TX_STATUS_MAX_RETRIES on error */
+diff --git a/include/media/cec.h b/include/media/cec.h
+index 97c5f5bfcbd0..31d704f36707 100644
+--- a/include/media/cec.h
++++ b/include/media/cec.h
+@@ -163,6 +163,11 @@ struct cec_adap_ops {
+  * @wait_queue:		queue of transmits waiting for a reply
+  * @transmitting:	CEC messages currently being transmitted
+  * @transmit_in_progress: true if a transmit is in progress
++ * @transmit_in_progress_aborted: true if a transmit is in progress is to be
++ *			aborted. This happens if the logical address is
++ *			invalidated while the transmit is ongoing. In that
++ *			case the transmit will finish, but will not retransmit
++ *			and be marked as ABORTED.
+  * @kthread_config:	kthread used to configure a CEC adapter
+  * @config_completion:	used to signal completion of the config kthread
+  * @kthread:		main CEC processing thread
+@@ -218,6 +223,7 @@ struct cec_adapter {
+ 	struct list_head wait_queue;
+ 	struct cec_data *transmitting;
+ 	bool transmit_in_progress;
++	bool transmit_in_progress_aborted;
+ 
+ 	struct task_struct *kthread_config;
+ 	struct completion config_completion;
 -- 
 2.34.1
 
