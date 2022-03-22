@@ -2,45 +2,85 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30FE6C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 22 Mar 2022 10:51:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81E96C433FE
+	for <linux-media@archiver.kernel.org>; Tue, 22 Mar 2022 11:30:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbiCVKxE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Mar 2022 06:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
+        id S234198AbiCVLbp convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Mar 2022 07:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbiCVKwx (ORCPT
+        with ESMTP id S234187AbiCVLbo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Mar 2022 06:52:53 -0400
-Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24628166A
-        for <linux-media@vger.kernel.org>; Tue, 22 Mar 2022 03:51:26 -0700 (PDT)
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        Tue, 22 Mar 2022 07:31:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EF87EB2B
+        for <linux-media@vger.kernel.org>; Tue, 22 Mar 2022 04:30:17 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1nWc6n-000rue-C3; Tue, 22 Mar 2022 10:51:25 +0000
-Received: from localhost ([127.0.0.1] helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1nWc6m-00D9pJ-0v; Tue, 22 Mar 2022 10:51:23 +0000
-Date:   Tue, 22 Mar 2022 10:51:23 +0000 (UTC)
-From:   Jenkins Builder Robot <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org
-Message-ID: <468920936.4.1647946283473@builder.linuxtv.org>
-In-Reply-To: <965521056.3.1647940837503@builder.linuxtv.org>
-References: <965521056.3.1647940837503@builder.linuxtv.org>
-Subject: Jenkins build is back to normal : media-build #3841
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nWci3-0001Jw-Ap; Tue, 22 Mar 2022 12:29:55 +0100
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nWcht-002HV8-1s; Tue, 22 Mar 2022 12:29:47 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nWchu-0004ia-Vk; Tue, 22 Mar 2022 12:29:46 +0100
+Message-ID: <664b287eaeb0e738620cd46f01ad024f72bb01e0.camel@pengutronix.de>
+Subject: Re: [PATCH 40/64] media: platform: rename coda/ to chips-media/
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Martin Weber <martin.weber@br-automation.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Date:   Tue, 22 Mar 2022 12:29:46 +0100
+In-Reply-To: <fdd97c1b2c76f48170387fa4bafef5bada1f59c7.1647242579.git.mchehab@kernel.org>
+References: <cover.1647242578.git.mchehab@kernel.org>
+         <fdd97c1b2c76f48170387fa4bafef5bada1f59c7.1647242579.git.mchehab@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
-X-Jenkins-Job: media-build
-X-Jenkins-Result: SUCCESS
-Auto-submitted: auto-generated
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-See <https://builder.linuxtv.org/job/media-build/3841/display/redirect?page=changes>
+On Mo, 2022-03-14 at 08:55 +0100, Mauro Carvalho Chehab wrote:
+> As the end goal is to have platform drivers split by vendor,
+> rename coda/ to chips-media/.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
+This may be a silly nitpick: given that the company website is
+chipsnmedia.com, would it be more appropriate to call this directory
+chipsnmedia instead of chips-media?
+
+regards
+Philipp
