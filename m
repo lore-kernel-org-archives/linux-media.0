@@ -2,78 +2,100 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 209A2C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 24 Mar 2022 14:09:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BAD1C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 24 Mar 2022 17:17:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350744AbiCXOLB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Mar 2022 10:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S1352195AbiCXRTG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Mar 2022 13:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350739AbiCXOK4 (ORCPT
+        with ESMTP id S1347522AbiCXRTE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Mar 2022 10:10:56 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39C490FED;
-        Thu, 24 Mar 2022 07:09:24 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3586D1844;
-        Thu, 24 Mar 2022 15:09:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1648130963;
-        bh=GbGmvF7eeaO9TAnwm/DxoHYrq1TEVs4ck08bW82PFio=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gOqJTdFrVufNVI251wxoxbTNjSaZxGjVAsKHqdcf8+eyU3Cew/Udy6HQknT78Dq2X
-         jd8Edq4ve93+1l2dc8oADG+gOQiG1FFytD7FE4MAAyNn2ftN4tc0paMf3G9dZC3Tga
-         OckRiwyetcjDF6iKRPAV/JHevoBEgBRWmC5qKJps=
-Date:   Thu, 24 Mar 2022 16:09:21 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: uvc_v4l2: fix possible memory leak in
- uvc_ioctl_ctrl_map
-Message-ID: <Yjx7kSoHA64J1VHc@pendragon.ideasonboard.com>
-References: <20220324081718.41091-1-hbh25y@gmail.com>
+        Thu, 24 Mar 2022 13:19:04 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B352BB1891
+        for <linux-media@vger.kernel.org>; Thu, 24 Mar 2022 10:17:32 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id h1so6426463edj.1
+        for <linux-media@vger.kernel.org>; Thu, 24 Mar 2022 10:17:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x4vfCnzIPjyv57wSD3+oAjA+7hchoEnWIl5SY06Hv1o=;
+        b=TFrPGx7n7uuJ9Ro2Mt6d3S5dk7HGfrXrptj+qZiNhrwZBrvEmM6e3wX2NxV4uJhyEU
+         VwHUWpNMYACv8cJYGsCR4818P/h2PLLFw9iUCR7FUjyFDwWoxff9gPTC7AaQaJjeCQRn
+         Zfzn+NGVqBluAy3ip8I6dCYjajGtxWh5nXZnQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x4vfCnzIPjyv57wSD3+oAjA+7hchoEnWIl5SY06Hv1o=;
+        b=bdBxxE3pgSggLUcpkNFCqgixg8nSg0Qub1+K6jnir82w3cRA+hm2+XjWeM6p56fUGJ
+         5WusdCPWNQoOmaf9SgkdOXR6s6aRT4S56DqDOd799B3mcHDMy2kKQiJjzo1+M839waj7
+         5tALdEt4TA+fdfm+UVJN55vozmHHPo5OtNTGW4Jv/rvxUqtUYPqWjQQsEre0xm+TmNyi
+         ymDEODgUN56JgXfVsW0kF0Hsq77o5q3JmqBAB5m8lUfdlN5cMBESeOuoXYUBTk/ABVE3
+         AvPwtup5kAZtlTV6AAYA38mOasNAhpUDrY2YdHlz/jwQf6+Tg5DDDoSSKFabJqAaH2eg
+         SwXw==
+X-Gm-Message-State: AOAM530V6A9fFOtOwiUzf3QP/WdNRhK/q4Bh0Mm+oY/hHCUngI53pENK
+        aWmY3Sn9jB18hU2sr0uc9ZCeWrFzqosRsA==
+X-Google-Smtp-Source: ABdhPJzoHXe77ijNln6kF1dJWlO/919F2qG4mZJg0EPPiNXu72ckG4MnSu6RmIuRpSF1MJBsNjck9w==
+X-Received: by 2002:aa7:da90:0:b0:418:d7d3:3ceb with SMTP id q16-20020aa7da90000000b00418d7d33cebmr7853242eds.129.1648142251197;
+        Thu, 24 Mar 2022 10:17:31 -0700 (PDT)
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
+        by smtp.gmail.com with ESMTPSA id f5-20020a17090624c500b006cee6661b6esm1380923ejb.10.2022.03.24.10.17.29
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 10:17:30 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id dr20so10525959ejc.6
+        for <linux-media@vger.kernel.org>; Thu, 24 Mar 2022 10:17:29 -0700 (PDT)
+X-Received: by 2002:a17:906:58d2:b0:6da:b635:fbf3 with SMTP id
+ e18-20020a17090658d200b006dab635fbf3mr6658187ejs.40.1648142249489; Thu, 24
+ Mar 2022 10:17:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20220324081718.41091-1-hbh25y@gmail.com>
 In-Reply-To: <20220324081718.41091-1-hbh25y@gmail.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 24 Mar 2022 18:17:18 +0100
+X-Gmail-Original-Message-ID: <CANiDSCvqQqOZ=uigeSz7ihe-y5XDLCRYD9+ZRULDE21td5rvEQ@mail.gmail.com>
+Message-ID: <CANiDSCvqQqOZ=uigeSz7ihe-y5XDLCRYD9+ZRULDE21td5rvEQ@mail.gmail.com>
+Subject: Re: [PATCH] media: uvc_v4l2: fix possible memory leak in uvc_ioctl_ctrl_map
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hangyu,
+Isnt it a dupe of:
+https://patchwork.linuxtv.org/project/linux-media/patch/20211008120914.69175-1-ribalda@chromium.org/
+?
 
-Thank you for the patch.
-
-On Thu, Mar 24, 2022 at 04:17:18PM +0800, Hangyu Hua wrote:
+On Thu, 24 Mar 2022 at 18:13, Hangyu Hua <hbh25y@gmail.com> wrote:
+>
 > map->name needs to be freed when uvc_ioctl_ctrl_map fails.
-> 
+>
 > Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
 > ---
 >  drivers/media/usb/uvc/uvc_v4l2.c | 1 +
 >  1 file changed, 1 insertion(+)
-> 
+>
 > diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
 > index 711556d13d03..e46a2f3b06cb 100644
 > --- a/drivers/media/usb/uvc/uvc_v4l2.c
 > +++ b/drivers/media/usb/uvc/uvc_v4l2.c
 > @@ -93,6 +93,7 @@ static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
->  
->  	kfree(map->menu_info);
+>
+>         kfree(map->menu_info);
 >  free_map:
-> +	kfree(map->name);
+> +       kfree(map->name);
+>         kfree(map);
+>
+>         return ret;
+> --
+> 2.25.1
+>
 
-The memory is actually freed in uvc_ctrl_cleanup_mappings() in the
-non-error case. I think we could improve this by avoiding the kmemdup()
-in this function, and duplicating the name in __uvc_ctrl_add_mapping()
-instead. What do you think ?
-
->  	kfree(map);
->  
->  	return ret;
 
 -- 
-Regards,
-
-Laurent Pinchart
+Ricardo Ribalda
