@@ -2,152 +2,122 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8F69C433EF
-	for <linux-media@archiver.kernel.org>; Sat, 26 Mar 2022 19:25:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EC4FC4332F
+	for <linux-media@archiver.kernel.org>; Sat, 26 Mar 2022 19:44:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234705AbiCZT0n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 26 Mar 2022 15:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        id S234836AbiCZTqc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 26 Mar 2022 15:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbiCZT0n (ORCPT
+        with ESMTP id S234815AbiCZTqa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 26 Mar 2022 15:26:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1A5815B063
-        for <linux-media@vger.kernel.org>; Sat, 26 Mar 2022 12:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648322699;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ykDXlOPk2TFsdn08fWycm9GIyujKbG9G/UkGWmpaTzI=;
-        b=Xt43SD9KF2LDdjwItAtOn784ezA4hYi/twLdTJAAMc/gAdYG8lveFHuZwbcZGdoF4kkLjG
-        u4Sp8B3w/PFlmQn6Yd95JYqXXe/VqO5C3rqcVBQabFn9Zn0d0R+ipZ6q6t7XE/F4GORkVW
-        nklNsPv2hnJc7gSMsPTgorJtB4tw45E=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-256-N1bwjo0aNaK_u_koXm0NlQ-1; Sat, 26 Mar 2022 15:24:58 -0400
-X-MC-Unique: N1bwjo0aNaK_u_koXm0NlQ-1
-Received: by mail-qv1-f70.google.com with SMTP id fw9-20020a056214238900b0043522aa5b81so8324107qvb.21
-        for <linux-media@vger.kernel.org>; Sat, 26 Mar 2022 12:24:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ykDXlOPk2TFsdn08fWycm9GIyujKbG9G/UkGWmpaTzI=;
-        b=m3oObnEdb6+iK8YC/TmjNR/EKKtsz79bo3wg/6viptdRyrhjM1DKFJb3UiMU9N2EiD
-         PCQ8APne9y6Oo3hrpOvT/anTcLq71mpG+lwFi3mFtgS9zG+K7qoAA4wNCGcivYYDQerm
-         Bt0wRDnbeBq4HYClzK3NwPjcqlJlDIG5xY1FeK9s3tu/7zDdgGpafpNZ6nbb4t5Sd/Oj
-         Ac45Mo4vC9IpmOmWJnsWd3VJxzJE7KAACzCzn9759pNbwmeVqUaRu5014Pkmg/HDxWGA
-         Soqd/QraOUmuGxxfQLvSJGt71UEDktHb/nX27yX/sAmM35aQS2qYOmCSiIEi9Jd3AOXq
-         KezQ==
-X-Gm-Message-State: AOAM53238V2CwNCXXkUso6GK3Ei315LQwSDxQrHBAzlFuQTrGU6SmvdX
-        KRlGilf/Ez4qzs0tI26pmauilu7PByYfLz/NdVPpoK4ua1P6l7G8AljtehrrNHzHEY1PkQmULsA
-        R7kwwJmCPmt9ub1aObyEH3DE=
-X-Received: by 2002:a05:620a:1539:b0:67d:45f2:f5bd with SMTP id n25-20020a05620a153900b0067d45f2f5bdmr11127664qkk.313.1648322697791;
-        Sat, 26 Mar 2022 12:24:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz5Bbhbe4fNmCCiw0bHclSMqD4b5ogUJimIEaOAuMXEpuJ39XeDHBrgaI1Pk8q6ZmT7kZe2ug==
-X-Received: by 2002:a05:620a:1539:b0:67d:45f2:f5bd with SMTP id n25-20020a05620a153900b0067d45f2f5bdmr11127653qkk.313.1648322697470;
-        Sat, 26 Mar 2022 12:24:57 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id b17-20020a05622a021100b002e1f86db385sm8064691qtx.68.2022.03.26.12.24.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 12:24:56 -0700 (PDT)
-From:   trix@redhat.com
-To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        gregkh@linuxfoundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, hverkuil-cisco@xs4all.nl, vrzh@vrzh.net,
-        tomi.valkeinen@ideasonboard.com
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] media: staging: atomisp: rework reading the id and revision values
-Date:   Sat, 26 Mar 2022 12:18:53 -0700
-Message-Id: <20220326191853.2914552-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Sat, 26 Mar 2022 15:46:30 -0400
+Received: from relay3.hostedemail.com (relay3.hostedemail.com [64.99.140.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B8D1D7DA4;
+        Sat, 26 Mar 2022 12:44:53 -0700 (PDT)
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay01.hostedemail.com (Postfix) with ESMTP id 76E4C60408;
+        Sat, 26 Mar 2022 19:44:51 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 4C2E220023;
+        Sat, 26 Mar 2022 19:44:26 +0000 (UTC)
+Message-ID: <0441a5ec999492a8b03df0e6f649b19483006cbc.camel@perches.com>
+Subject: Re: [PATCH 02/22] s3c: Replace comments with C99 initializers
+From:   Joe Perches <joe@perches.com>
+To:     Benjamin =?ISO-8859-1?Q?St=FCrz?= <benni@stuerz.xyz>,
+        andrew@lunn.ch
+Cc:     sebastian.hesselbarth@gmail.com, gregory.clement@bootlin.com,
+        linux@armlinux.org.uk, linux@simtec.co.uk, krzk@kernel.org,
+        alim.akhtar@samsung.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        robert.moore@intel.com, rafael.j.wysocki@intel.com,
+        lenb@kernel.org, 3chas3@gmail.com, laforge@gnumonks.org,
+        arnd@arndb.de, gregkh@linuxfoundation.org, mchehab@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        mike.marciniszyn@cornelisnetworks.com,
+        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        pali@kernel.org, dmitry.torokhov@gmail.com, isdn@linux-pingi.de,
+        benh@kernel.crashing.org, fbarrat@linux.ibm.com, ajd@linux.ibm.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        nico@fluxnic.net, loic.poulain@linaro.org, kvalo@kernel.org,
+        pkshih@realtek.com, bhelgaas@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-input@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-media@vger.kernel.org,
+        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Date:   Sat, 26 Mar 2022 12:44:26 -0700
+In-Reply-To: <20220326165909.506926-2-benni@stuerz.xyz>
+References: <20220326165909.506926-1-benni@stuerz.xyz>
+         <20220326165909.506926-2-benni@stuerz.xyz>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Stat-Signature: jsxopsrhtxuohu8717ojjus8n6gpgk4w
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 4C2E220023
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+VHn75rxbHh4YHseFz2reFKFdl2HpQTKg=
+X-HE-Tag: 1648323866-369401
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On Sat, 2022-03-26 at 17:58 +0100, Benjamin Stürz wrote:
+> This replaces comments with C99's designated
+> initializers because the kernel supports them now.
+[]
+> diff --git a/arch/arm/mach-s3c/bast-irq.c b/arch/arm/mach-s3c/bast-irq.c
+[]
+> @@ -29,22 +29,22 @@
+>   * the irq is not implemented
+>  */
+>  static const unsigned char bast_pc104_irqmasks[] = {
+> -	0,   /* 0 */
+> -	0,   /* 1 */
+> -	0,   /* 2 */
+> -	1,   /* 3 */
+> -	0,   /* 4 */
+> -	2,   /* 5 */
+> -	0,   /* 6 */
+> -	4,   /* 7 */
+> -	0,   /* 8 */
+> -	0,   /* 9 */
+> -	8,   /* 10 */
+> -	0,   /* 11 */
+> -	0,   /* 12 */
+> -	0,   /* 13 */
+> -	0,   /* 14 */
+> -	0,   /* 15 */
+> +	[0]  = 0,
+> +	[1]  = 0,
+> +	[2]  = 0,
+> +	[3]  = 1,
+> +	[4]  = 0,
+> +	[5]  = 2,
+> +	[6]  = 0,
+> +	[7]  = 4,
+> +	[8]  = 0,
+> +	[9]  = 0,
+> +	[10] = 8,
+> +	[11] = 0,
+> +	[12] = 0,
+> +	[13] = 0,
+> +	[14] = 0,
+> +	[15] = 0,
+>  };
 
-Clang static analysis reports this representative issue
-atomisp-ov2722.c:920:3: warning: 3rd function call
-  argument is an uninitialized value
-  dev_err(&client->dev, "sensor_id_high = 0x%x\n", high);
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I don't find this better than the initial array.
 
-high and low are only set when ov2722_read_reg() is successful.
-Reporting the high value when there is an error is not
-meaningful.  The later read for low is not checked.  high
-and low are or-ed together and checked against a non zero
-value.
+>  
+>  static const unsigned char bast_pc104_irqs[] = { 3, 5, 7, 10 };
 
-Remove the unneeded error reporting for high.  Initialize
-high and low to 0 and use the id check to determine if
-the reads were successful
+For the same reason this array is just an array
+without the specified indexing.
 
-The later read for revision is not checked.  If it
-fails the old high value will be used and the revision
-will be misreported.
-
-Since the revision is only reported and not checked or
-stored it is not necessary to return if the read with
-successful.  This makes the ret variable unnecessary
-so remove it.
-
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- .../media/atomisp/i2c/atomisp-ov2722.c        | 20 ++++++++-----------
- 1 file changed, 8 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-index da98094d7094a..d5d099ac1b707 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-@@ -906,22 +906,17 @@ static int ov2722_get_fmt(struct v4l2_subdev *sd,
- static int ov2722_detect(struct i2c_client *client)
- {
- 	struct i2c_adapter *adapter = client->adapter;
--	u16 high, low;
--	int ret;
-+	u16 high = 0, low = 0;
- 	u16 id;
- 	u8 revision;
- 
- 	if (!i2c_check_functionality(adapter, I2C_FUNC_I2C))
- 		return -ENODEV;
- 
--	ret = ov2722_read_reg(client, OV2722_8BIT,
--			      OV2722_SC_CMMN_CHIP_ID_H, &high);
--	if (ret) {
--		dev_err(&client->dev, "sensor_id_high = 0x%x\n", high);
--		return -ENODEV;
--	}
--	ret = ov2722_read_reg(client, OV2722_8BIT,
--			      OV2722_SC_CMMN_CHIP_ID_L, &low);
-+	ov2722_read_reg(client, OV2722_8BIT,
-+			OV2722_SC_CMMN_CHIP_ID_H, &high);
-+	ov2722_read_reg(client, OV2722_8BIT,
-+			OV2722_SC_CMMN_CHIP_ID_L, &low);
- 	id = (high << 8) | low;
- 
- 	if ((id != OV2722_ID) && (id != OV2720_ID)) {
-@@ -929,8 +924,9 @@ static int ov2722_detect(struct i2c_client *client)
- 		return -ENODEV;
- 	}
- 
--	ret = ov2722_read_reg(client, OV2722_8BIT,
--			      OV2722_SC_CMMN_SUB_ID, &high);
-+	high = 0;
-+	ov2722_read_reg(client, OV2722_8BIT,
-+			OV2722_SC_CMMN_SUB_ID, &high);
- 	revision = (u8)high & 0x0f;
- 
- 	dev_dbg(&client->dev, "sensor_revision = 0x%x\n", revision);
--- 
-2.26.3
 
