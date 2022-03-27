@@ -2,125 +2,125 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6C2CC433F5
-	for <linux-media@archiver.kernel.org>; Sun, 27 Mar 2022 20:00:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D0EEC433EF
+	for <linux-media@archiver.kernel.org>; Sun, 27 Mar 2022 22:18:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236578AbiC0UCN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 27 Mar 2022 16:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S236895AbiC0WUT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 27 Mar 2022 18:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiC0UCM (ORCPT
+        with ESMTP id S232336AbiC0WUS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 27 Mar 2022 16:02:12 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB9F12087;
-        Sun, 27 Mar 2022 13:00:32 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id r13so24704489ejd.5;
-        Sun, 27 Mar 2022 13:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=78iW5XK4+ASAwJVsAvI1krxN1Cn3kULaSzDMrQW3lbE=;
-        b=W7sg25bHaszzvWVJN0gyX6n6UFKurK5uWS8e6vL3YRtpn8QA30BzDbsf0Fo0KnzuVo
-         f5lgeCM1g7VjeI4+YsTMtUtXLU8OULMmeB5PSBFxtOhNQxOmFPwV58KHSise/8GMyt0R
-         UkRxgQ3CLiyEWm9B5wmzgYC64NBf7VmqUh+uCDsTRhKm1dBL3PhDD7kvx2KxY5v+Ou9s
-         LtCbA+PaAxJA8Aqhhp0q2Rfl3QnpipqfZJ/WNelj96BMMf018qhLZN8AMLxNqJh1Ixg8
-         Af8ZbFHjT7fOZzcs+O1sgyvPQnq9W6Aze+RWRCdQHnD8mS6FSfbjKHib+pU03gWIfqf1
-         ov8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=78iW5XK4+ASAwJVsAvI1krxN1Cn3kULaSzDMrQW3lbE=;
-        b=ZmonW1tyc16bGmt4eGqB/bGDMcjSVrcxHhhvxkq1J2QuvGtadUCuauS2i64BFdbHdh
-         fald6rcruUT0imX2uwJiXvXlKTP8dYRdWeRpHrHRwoOaLy/vXw0XnQRgl+UuKN4iGhUQ
-         wMoMCVYNZokjU2MmEzQ3EFpHSOu5iLZhuXo1XYVH1W/YWB3EsczCMyrT1G9s4luM2sr3
-         dIWUWOl0PGl/bwp825Gil0EH+SXT6FClgZbCeK9NuChTwFaD1jhHmq8SSwa2UOIUvJs4
-         P6C+9+sp47+LpcVKv6x7AAhKT5PgWIIm0c5PXW199mhsksvS50i6feCxjKDtEbueZlzY
-         /qPw==
-X-Gm-Message-State: AOAM5321I1VjcLNmqJUahq/dlTke0c8clt5HM/mKGd9J3P0KvOqalsQC
-        uvWTE6XKEfErJkyt5UtA372kjwV/uL0gsFfvKVo=
-X-Google-Smtp-Source: ABdhPJwdyxkAQAdfH1wRFs+W0MNyk4bgRb4Rgv1M9DLQvwm3YbnfTG06hhOU+eKDq7Hs4uOIofL7RgDFq+x0npk+U+Y=
-X-Received: by 2002:a17:907:628e:b0:6d9:c6fa:6168 with SMTP id
- nd14-20020a170907628e00b006d9c6fa6168mr23537601ejc.132.1648411230602; Sun, 27
- Mar 2022 13:00:30 -0700 (PDT)
+        Sun, 27 Mar 2022 18:20:18 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76A0E0CC
+        for <linux-media@vger.kernel.org>; Sun, 27 Mar 2022 15:18:38 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2E8132F7;
+        Mon, 28 Mar 2022 00:18:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1648419516;
+        bh=iyYx8xuvB+IFQHIOlMbGBXD6/T6nblEEr/kpP5lIR2g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wiECim0I2z6LScPupQXlbu81sFVqMrBTEKD6PqsjH6sl0wOS+4LieEgE+l0DAiHbC
+         9KZ3ov9MQx9DRrftGkhRGXQRtmf6q4I+Hqtrgct4+3ZdYgRhuRyateR3AYoYtQpNoD
+         0h0fnyILyAzyHBrnXWaEdAH7uDZ5brraMQKo7Rtk=
+Date:   Mon, 28 Mar 2022 01:18:34 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, Colin King <colin.i.king@gmail.com>,
+        tfiga@chromium.org
+Subject: Re: [PATCH v4] media: uvcvideo: Fix memory leak if
+ uvc_ctrl_add_mapping fails
+Message-ID: <YkDiumT/5oHnZLaQ@pendragon.ideasonboard.com>
+References: <20220324224232.385888-1-ribalda@chromium.org>
 MIME-Version: 1.0
-References: <20220326165909.506926-1-benni@stuerz.xyz> <20220326165909.506926-5-benni@stuerz.xyz>
-In-Reply-To: <20220326165909.506926-5-benni@stuerz.xyz>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 27 Mar 2022 22:59:54 +0300
-Message-ID: <CAHp75VeTXMAueQc_c0Ryj5+a8PrJ7gk-arugiNnxtAm03x7XTg@mail.gmail.com>
-Subject: Re: [PATCH 05/22] acpica: Replace comments with C99 initializers
-To:     =?UTF-8?Q?Benjamin_St=C3=BCrz?= <benni@stuerz.xyz>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        linux@simtec.co.uk, Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Robert Moore <robert.moore@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>, 3chas3@gmail.com,
-        Harald Welte <laforge@gnumonks.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        mike.marciniszyn@cornelisnetworks.com,
-        dennis.dalessandro@cornelisnetworks.com,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        linux-atm-general@lists.sourceforge.net,
-        netdev <netdev@vger.kernel.org>, linux-edac@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:HFI1 DRIVER" <linux-rdma@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
-        <linuxppc-dev@lists.ozlabs.org>, linux-media@vger.kernel.org,
-        wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220324224232.385888-1-ribalda@chromium.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Mar 26, 2022 at 7:39 PM Benjamin St=C3=BCrz <benni@stuerz.xyz> wrot=
-e:
->
-> This replaces comments with C99's designated
-> initializers because the kernel supports them now.
+Hi Ricardo,
 
-Does it follow the conventions which are accepted in the ACPI CA project?
+Thank you for the patch.
 
---=20
-With Best Regards,
-Andy Shevchenko
+On Thu, Mar 24, 2022 at 11:42:32PM +0100, Ricardo Ribalda wrote:
+> Move all the life cycle of the name to add_mapping. This simplifies
+> the error handling inside uvc_ioctl_ctrl_map and solves a memory leak
+> when kemmdup fails.
+> 
+> Fixes: 07adedb5c606 ("media: uvcvideo: Use control names from framework")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+> 
+> Laurent:
+> Please note that I have added xmap->name[0] == '\0' check!
+
+Could you mention it in the commit message then ?
+
+>  drivers/media/usb/uvc/uvc_ctrl.c | 10 ++++++++++
+>  drivers/media/usb/uvc/uvc_v4l2.c |  8 ++++----
+>  2 files changed, 14 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index b4f6edf968bc..8b3bd516cb2f 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -2188,11 +2188,21 @@ static int __uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
+>  	if (map == NULL)
+>  		return -ENOMEM;
+>  
+> +	/* For UVCIOC_CTRL_MAP custom controls */
+
+s/controls/controls./
+
+My R-B still applies.
+
+> +	if (mapping->name) {
+> +		map->name = kstrdup(mapping->name, GFP_KERNEL);
+> +		if (!map->name) {
+> +			kfree(map);
+> +			return -ENOMEM;
+> +		}
+> +	}
+> +
+>  	INIT_LIST_HEAD(&map->ev_subs);
+>  
+>  	size = sizeof(*mapping->menu_info) * mapping->menu_count;
+>  	map->menu_info = kmemdup(mapping->menu_info, size, GFP_KERNEL);
+>  	if (map->menu_info == NULL) {
+> +		kfree(map->name);
+>  		kfree(map);
+>  		return -ENOMEM;
+>  	}
+> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+> index 711556d13d03..ac829fb44b77 100644
+> --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+> @@ -42,12 +42,12 @@ static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
+>  	map->id = xmap->id;
+>  	/* Non standard control id. */
+>  	if (v4l2_ctrl_get_name(map->id) == NULL) {
+> -		map->name = kmemdup(xmap->name, sizeof(xmap->name),
+> -				    GFP_KERNEL);
+> -		if (!map->name) {
+> -			ret = -ENOMEM;
+> +		if (xmap->name[0] == '\0') {
+> +			ret = -EINVAL;
+>  			goto free_map;
+>  		}
+> +		xmap->name[sizeof(xmap->name) - 1] = '\0';
+> +		map->name = xmap->name;
+>  	}
+>  	memcpy(map->entity, xmap->entity, sizeof(map->entity));
+>  	map->selector = xmap->selector;
+
+-- 
+Regards,
+
+Laurent Pinchart
