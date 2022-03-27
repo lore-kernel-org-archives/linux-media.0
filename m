@@ -2,78 +2,342 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3BFCC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 28 Mar 2022 16:32:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11DB1C433EF
+	for <linux-media@archiver.kernel.org>; Sun, 27 Mar 2022 13:33:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233943AbiC1QeN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Mar 2022 12:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
+        id S235265AbiC0Nev (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 27 Mar 2022 09:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242237AbiC1QeL (ORCPT
+        with ESMTP id S229513AbiC0Net (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Mar 2022 12:34:11 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270486212F
-        for <linux-media@vger.kernel.org>; Mon, 28 Mar 2022 09:32:28 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9276F100008;
-        Mon, 28 Mar 2022 16:32:26 +0000 (UTC)
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        sakari.ailus@iki.fi, tomi.valkeinen@ideasonboard.com
-Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org
-Subject: [PATCH] media: i2c: ov5645: Fix media bus format
-Date:   Mon, 28 Mar 2022 18:32:20 +0200
-Message-Id: <20220328163220.250203-1-jacopo@jmondi.org>
-X-Mailer: git-send-email 2.35.1
+        Sun, 27 Mar 2022 09:34:49 -0400
+Received: from stuerz.xyz (unknown [45.77.206.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3EF235;
+        Sun, 27 Mar 2022 06:33:09 -0700 (PDT)
+Received: by stuerz.xyz (Postfix, from userid 114)
+        id 43A35FBBC4; Sun, 27 Mar 2022 13:33:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=stuerz.xyz; s=mail;
+        t=1648387988; bh=GZ4Tx4yH8N7XSi50tqppPJxzHbxJizBOLMLjcm52De4=;
+        h=Date:Subject:To:References:Cc:From:In-Reply-To:From;
+        b=FxDZ7rm4F1fdI4FeqWnTjIt3iD9KH0zzN2Ifymt+IKiV4gqbUSSFeupTOebfL2JJl
+         56/48pd3DSebqEVY1dcuWyLfbsuNq2bHIX7GWPfSJqI+cRZvwtCE/A09XGscEmVGlQ
+         3vgccoOGnMoYYGst2rt49raLEu8rkcOA8Y9gqvL8MToWs6VVmBbxhbievQSvR9hvAR
+         xoScGPyM/RbSw6OQBnisiBb+c8mmOyUQtZQSe7ohUnISJWbgB2SxcDH9z6nYRrTqNM
+         GMHI7AJt/lJuDiQuWAS53yXf4MjyaFfWTxsKs27LBmNjsLdZ+fdaUP9kHOEG9fGW93
+         la2RgE91NX4MQ==
+Received: from [IPV6:2a02:8109:a100:1a48:ff0:ef2f:d4da:17d8] (unknown [IPv6:2a02:8109:a100:1a48:ff0:ef2f:d4da:17d8])
+        by stuerz.xyz (Postfix) with ESMTPSA id CE929FBBB5;
+        Sun, 27 Mar 2022 13:33:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=stuerz.xyz; s=mail;
+        t=1648387986; bh=GZ4Tx4yH8N7XSi50tqppPJxzHbxJizBOLMLjcm52De4=;
+        h=Date:Subject:To:References:Cc:From:In-Reply-To:From;
+        b=CQvZL5wCLS8L2iyQc1jInZVu9DVnGSuqhKiuUjvKrxN80IKKHLfcg/acNSL9oxoUE
+         ZTyifKPNow678YldvvrgkYPuY89flt865sTDsO2ViagNiwDlc3ARcA6Q4JF0+ulvjd
+         3YS8zqWj4+Okna/M2U4UJo6rIOkYL0DqJ7/PcfTBPH8kKgUlvmFv8iWbriUve98WA8
+         lmGlVTCcwCUdzzlhSqx/ZEDwdbrMHQaDMbvDpZ4uYYt5o/aobjwK9NwHc6KohguVpi
+         vnals2IPBfLq+R/InfjziyjbjLXRglJyldhntjXLumUJGo6ZEeox4rYIiCcXxIfCH9
+         sNhFHTmYd2jSQ==
+Message-ID: <511162f4-aa03-8526-3ea6-0f9d2edeae10@stuerz.xyz>
+Date:   Sun, 27 Mar 2022 15:33:04 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: [PATCH 16/22 v2] dvb-usb: Replace comments with C99 initializers
+Content-Language: en-US
+To:     =?UTF-8?Q?Benjamin_St=c3=bcrz?= <benni@stuerz.xyz>
+References: <20220326165909.506926-1-benni@stuerz.xyz>
+ <20220326165909.506926-16-benni@stuerz.xyz>
+Cc:     "linux-kernel@vger.kernel.org linux-media@vger.kernel.org mchehab"@kernel.org
+From:   =?UTF-8?Q?Benjamin_St=c3=bcrz?= <benni@stuerz.xyz>
+In-Reply-To: <20220326165909.506926-16-benni@stuerz.xyz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The ov5645 driver reports as its unique supported format
-MEDIA_BUS_FMT_UYVY8_2X8, which is not correct as the sensor
-uses the MIPI CSI-2 serial bus.
+Changes since v1:
+ * Reformatted both tables
+ * Respecting 80-column line limit
 
-Fix that by using MEDIA_BUS_FMT_UYVY8_1X16 instead.
-
-Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+Signed-off-by: Benjamin Stürz <benni@stuerz.xyz>
 ---
- drivers/media/i2c/ov5645.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/usb/dvb-usb/dibusb-mb.c | 148 ++++++++++++++++++--------
+ drivers/media/usb/dvb-usb/dibusb-mc.c |  67 +++++++++---
+ 2 files changed, 154 insertions(+), 61 deletions(-)
 
-diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
-index 368fa21e675e..5720e74e843b 100644
---- a/drivers/media/i2c/ov5645.c
-+++ b/drivers/media/i2c/ov5645.c
-@@ -843,7 +843,7 @@ static int ov5645_enum_mbus_code(struct v4l2_subdev *sd,
- 	if (code->index > 0)
- 		return -EINVAL;
+diff --git a/drivers/media/usb/dvb-usb/dibusb-mb.c
+b/drivers/media/usb/dvb-usb/dibusb-mb.c
+index e9dc27f73970..ffc27318f823 100644
+--- a/drivers/media/usb/dvb-usb/dibusb-mb.c
++++ b/drivers/media/usb/dvb-usb/dibusb-mb.c
+@@ -122,54 +122,114 @@ static int dibusb_probe(struct usb_interface *intf,
 
--	code->code = MEDIA_BUS_FMT_UYVY8_2X8;
-+	code->code = MEDIA_BUS_FMT_UYVY8_1X16;
+ /* do not change the order of the ID table */
+ static struct usb_device_id dibusb_dib3000mb_table [] = {
+-/* 00 */	{ USB_DEVICE(USB_VID_WIDEVIEW,	
+USB_PID_AVERMEDIA_DVBT_USB_COLD) },
+-/* 01 */	{ USB_DEVICE(USB_VID_WIDEVIEW,	
+USB_PID_AVERMEDIA_DVBT_USB_WARM) },
+-/* 02 */	{ USB_DEVICE(USB_VID_COMPRO,		USB_PID_COMPRO_DVBU2000_COLD) },
+-/* 03 */	{ USB_DEVICE(USB_VID_COMPRO,		USB_PID_COMPRO_DVBU2000_WARM) },
+-/* 04 */	{ USB_DEVICE(USB_VID_COMPRO_UNK,
+USB_PID_COMPRO_DVBU2000_UNK_COLD) },
+-/* 05 */	{ USB_DEVICE(USB_VID_DIBCOM,		USB_PID_DIBCOM_MOD3000_COLD) },
+-/* 06 */	{ USB_DEVICE(USB_VID_DIBCOM,		USB_PID_DIBCOM_MOD3000_WARM) },
+-/* 07 */	{ USB_DEVICE(USB_VID_EMPIA,		USB_PID_KWORLD_VSTREAM_COLD) },
+-/* 08 */	{ USB_DEVICE(USB_VID_EMPIA,		USB_PID_KWORLD_VSTREAM_WARM) },
+-/* 09 */	{ USB_DEVICE(USB_VID_GRANDTEC,		USB_PID_GRANDTEC_DVBT_USB_COLD) },
+-/* 10 */	{ USB_DEVICE(USB_VID_GRANDTEC,		USB_PID_GRANDTEC_DVBT_USB_WARM) },
+-/* 11 */	{ USB_DEVICE(USB_VID_GRANDTEC,		USB_PID_DIBCOM_MOD3000_COLD) },
+-/* 12 */	{ USB_DEVICE(USB_VID_GRANDTEC,		USB_PID_DIBCOM_MOD3000_WARM) },
+-/* 13 */	{ USB_DEVICE(USB_VID_HYPER_PALTEK,
+USB_PID_UNK_HYPER_PALTEK_COLD) },
+-/* 14 */	{ USB_DEVICE(USB_VID_HYPER_PALTEK,
+USB_PID_UNK_HYPER_PALTEK_WARM) },
+-/* 15 */	{ USB_DEVICE(USB_VID_VISIONPLUS,	USB_PID_TWINHAN_VP7041_COLD) },
+-/* 16 */	{ USB_DEVICE(USB_VID_VISIONPLUS,	USB_PID_TWINHAN_VP7041_WARM) },
+-/* 17 */	{ USB_DEVICE(USB_VID_TWINHAN,		USB_PID_TWINHAN_VP7041_COLD) },
+-/* 18 */	{ USB_DEVICE(USB_VID_TWINHAN,		USB_PID_TWINHAN_VP7041_WARM) },
+-/* 19 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
+USB_PID_ULTIMA_TVBOX_COLD) },
+-/* 20 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
+USB_PID_ULTIMA_TVBOX_WARM) },
+-/* 21 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
+USB_PID_ULTIMA_TVBOX_AN2235_COLD) },
+-/* 22 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
+USB_PID_ULTIMA_TVBOX_AN2235_WARM) },
+-/* 23 */	{ USB_DEVICE(USB_VID_ADSTECH,		USB_PID_ADSTECH_USB2_COLD) },
+-
+-/* device ID with default DIBUSB2_0-firmware and with the hacked
+firmware */
+-/* 24 */	{ USB_DEVICE(USB_VID_ADSTECH,		USB_PID_ADSTECH_USB2_WARM) },
+-/* 25 */	{ USB_DEVICE(USB_VID_KYE,		USB_PID_KYE_DVB_T_COLD) },
+-/* 26 */	{ USB_DEVICE(USB_VID_KYE,		USB_PID_KYE_DVB_T_WARM) },
+-
+-/* 27 */	{ USB_DEVICE(USB_VID_KWORLD,		USB_PID_KWORLD_VSTREAM_COLD) },
+-
+-/* 28 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
+USB_PID_ULTIMA_TVBOX_USB2_COLD) },
+-/* 29 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
+USB_PID_ULTIMA_TVBOX_USB2_WARM) },
+-
+-/*
+- * XXX: As Artec just 'forgot' to program the EEPROM on some Artec T1
+devices
+- *      we don't catch these faulty IDs (namely 'Cypress FX1 USB
+controller') that
+- *      have been left on the device. If you don't have such a device
+but an Artec
+- *      device that's supposed to work with this driver but is not
+detected by it,
+- *      free to enable CONFIG_DVB_USB_DIBUSB_MB_FAULTY via your kernel
+config.
+- */
++	[0]  = { USB_DEVICE(USB_VID_WIDEVIEW,
++			    USB_PID_AVERMEDIA_DVBT_USB_COLD)
++	},
++	[1]  = { USB_DEVICE(USB_VID_WIDEVIEW,
++			    USB_PID_AVERMEDIA_DVBT_USB_WARM)
++	},
++	[2]  = { USB_DEVICE(USB_VID_COMPRO,
++			    USB_PID_COMPRO_DVBU2000_COLD)
++	},
++	[3]  = { USB_DEVICE(USB_VID_COMPRO,
++			    USB_PID_COMPRO_DVBU2000_WARM)
++	},
++	[4]  = { USB_DEVICE(USB_VID_COMPRO_UNK,
++			    USB_PID_COMPRO_DVBU2000_UNK_COLD)
++	},
++	[5]  = { USB_DEVICE(USB_VID_DIBCOM,
++			    USB_PID_DIBCOM_MOD3000_COLD)
++	},
++	[6]  = { USB_DEVICE(USB_VID_DIBCOM,
++			    USB_PID_DIBCOM_MOD3000_WARM)
++	},
++	[7]  = { USB_DEVICE(USB_VID_EMPIA,
++			    USB_PID_KWORLD_VSTREAM_COLD)
++	},
++	[8]  = { USB_DEVICE(USB_VID_EMPIA,
++			    USB_PID_KWORLD_VSTREAM_WARM)
++	},
++	[9]  = { USB_DEVICE(USB_VID_GRANDTEC,
++			    USB_PID_GRANDTEC_DVBT_USB_COLD)
++	},
++	[10] = { USB_DEVICE(USB_VID_GRANDTEC,
++			    USB_PID_GRANDTEC_DVBT_USB_WARM)
++	},
++	[11] = { USB_DEVICE(USB_VID_GRANDTEC,
++			    USB_PID_DIBCOM_MOD3000_COLD)
++	},
++	[12] = { USB_DEVICE(USB_VID_GRANDTEC,
++			    USB_PID_DIBCOM_MOD3000_WARM)
++	},
++	[13] = { USB_DEVICE(USB_VID_HYPER_PALTEK,
++			    USB_PID_UNK_HYPER_PALTEK_COLD)
++	},
++	[14] = { USB_DEVICE(USB_VID_HYPER_PALTEK,
++			    USB_PID_UNK_HYPER_PALTEK_WARM)
++	},
++	[15] = { USB_DEVICE(USB_VID_VISIONPLUS,
++			    USB_PID_TWINHAN_VP7041_COLD)
++	},
++	[16] = { USB_DEVICE(USB_VID_VISIONPLUS,
++			    USB_PID_TWINHAN_VP7041_WARM)
++	},
++	[17] = { USB_DEVICE(USB_VID_TWINHAN,
++			    USB_PID_TWINHAN_VP7041_COLD)
++	},
++	[18] = { USB_DEVICE(USB_VID_TWINHAN,
++			    USB_PID_TWINHAN_VP7041_WARM)
++	},
++	[19] = { USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
++			    USB_PID_ULTIMA_TVBOX_COLD)
++	},
++	[20] = { USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
++			    USB_PID_ULTIMA_TVBOX_WARM)
++	},
++	[21] = { USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
++			    USB_PID_ULTIMA_TVBOX_AN2235_COLD)
++	},
++	[22] = { USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
++			    USB_PID_ULTIMA_TVBOX_AN2235_WARM)
++	},
++	[23] = { USB_DEVICE(USB_VID_ADSTECH,
++			    USB_PID_ADSTECH_USB2_COLD)
++	},
++
++	/* device ID with default DIBUSB2_0-firmware and with the hacked
+firmware */
++	[24] = { USB_DEVICE(USB_VID_ADSTECH,
++			    USB_PID_ADSTECH_USB2_WARM)
++	},
++	[25] = { USB_DEVICE(USB_VID_KYE,
++			    USB_PID_KYE_DVB_T_COLD)
++	},
++	[26] = { USB_DEVICE(USB_VID_KYE,
++			    USB_PID_KYE_DVB_T_WARM)
++	},
++	[27] = { USB_DEVICE(USB_VID_KWORLD,
++			    USB_PID_KWORLD_VSTREAM_COLD)
++	},
++	[28] = { USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
++			    USB_PID_ULTIMA_TVBOX_USB2_COLD)
++	},
++	[29] = { USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
++			    USB_PID_ULTIMA_TVBOX_USB2_WARM)
++	},
++
++	/*
++	 * XXX: As Artec just 'forgot' to program the EEPROM on some Artec T1
+devices
++	 *      we don't catch these faulty IDs (namely 'Cypress FX1 USB
+controller') that
++	 *      have been left on the device. If you don't have such a device
+but an Artec
++	 *      device that's supposed to work with this driver but is not
+detected by it,
++	 *      free to enable CONFIG_DVB_USB_DIBUSB_MB_FAULTY via your kernel
+config.
++	 */
 
- 	return 0;
- }
-@@ -852,7 +852,7 @@ static int ov5645_enum_frame_size(struct v4l2_subdev *subdev,
- 				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
--	if (fse->code != MEDIA_BUS_FMT_UYVY8_2X8)
-+	if (fse->code != MEDIA_BUS_FMT_UYVY8_1X16)
- 		return -EINVAL;
+ #ifdef CONFIG_DVB_USB_DIBUSB_MB_FAULTY
+-/* 30 */	{ USB_DEVICE(USB_VID_ANCHOR,		USB_PID_ULTIMA_TVBOX_ANCHOR_COLD) },
++	[30] = { USB_DEVICE(USB_VID_ANCHOR,
++			    USB_PID_ULTIMA_TVBOX_ANCHOR_COLD)
++	},
+ #endif
 
- 	if (fse->index >= ARRAY_SIZE(ov5645_mode_info_data))
-@@ -948,7 +948,7 @@ static int ov5645_set_format(struct v4l2_subdev *sd,
- 					   format->which);
- 	__format->width = __crop->width;
- 	__format->height = __crop->height;
--	__format->code = MEDIA_BUS_FMT_UYVY8_2X8;
-+	__format->code = MEDIA_BUS_FMT_UYVY8_1X16;
- 	__format->field = V4L2_FIELD_NONE;
- 	__format->colorspace = V4L2_COLORSPACE_SRGB;
+-			{ }		/* Terminating entry */
++	{ }		/* Terminating entry */
+ };
+ MODULE_DEVICE_TABLE (usb, dibusb_dib3000mb_table);
 
---
+diff --git a/drivers/media/usb/dvb-usb/dibusb-mc.c
+b/drivers/media/usb/dvb-usb/dibusb-mc.c
+index e2689977c8c8..57805013f3ac 100644
+--- a/drivers/media/usb/dvb-usb/dibusb-mc.c
++++ b/drivers/media/usb/dvb-usb/dibusb-mc.c
+@@ -25,23 +25,56 @@ static int dibusb_mc_probe(struct usb_interface *intf,
+
+ /* do not change the order of the ID table */
+ static struct usb_device_id dibusb_dib3000mc_table [] = {
+-/* 00 */	{ USB_DEVICE(USB_VID_DIBCOM,		USB_PID_DIBCOM_MOD3001_COLD) },
+-/* 01 */	{ USB_DEVICE(USB_VID_DIBCOM,		USB_PID_DIBCOM_MOD3001_WARM) },
+-/* 02 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
+USB_PID_ULTIMA_TVBOX_USB2_COLD) },
+-/* 03 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
+USB_PID_ULTIMA_TVBOX_USB2_WARM) }, // ( ? )
+-/* 04 */	{ USB_DEVICE(USB_VID_LITEON,		USB_PID_LITEON_DVB_T_COLD) },
+-/* 05 */	{ USB_DEVICE(USB_VID_LITEON,		USB_PID_LITEON_DVB_T_WARM) },
+-/* 06 */	{ USB_DEVICE(USB_VID_EMPIA,		USB_PID_DIGIVOX_MINI_SL_COLD) },
+-/* 07 */	{ USB_DEVICE(USB_VID_EMPIA,		USB_PID_DIGIVOX_MINI_SL_WARM) },
+-/* 08 */	{ USB_DEVICE(USB_VID_GRANDTEC,
+USB_PID_GRANDTEC_DVBT_USB2_COLD) },
+-/* 09 */	{ USB_DEVICE(USB_VID_GRANDTEC,
+USB_PID_GRANDTEC_DVBT_USB2_WARM) },
+-/* 10 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,	USB_PID_ARTEC_T14_COLD) },
+-/* 11 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,	USB_PID_ARTEC_T14_WARM) },
+-/* 12 */	{ USB_DEVICE(USB_VID_LEADTEK,		USB_PID_WINFAST_DTV_DONGLE_COLD) },
+-/* 13 */	{ USB_DEVICE(USB_VID_LEADTEK,		USB_PID_WINFAST_DTV_DONGLE_WARM) },
+-/* 14 */	{ USB_DEVICE(USB_VID_HUMAX_COEX,
+USB_PID_DVB_T_USB_STICK_HIGH_SPEED_COLD) },
+-/* 15 */	{ USB_DEVICE(USB_VID_HUMAX_COEX,
+USB_PID_DVB_T_USB_STICK_HIGH_SPEED_WARM) },
+-			{ }		/* Terminating entry */
++	[0]  = { USB_DEVICE(USB_VID_DIBCOM,
++			    USB_PID_DIBCOM_MOD3001_COLD)
++	},
++	[1]  = { USB_DEVICE(USB_VID_DIBCOM,
++			    USB_PID_DIBCOM_MOD3001_WARM)
++	},
++	[2]  = { USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
++			    USB_PID_ULTIMA_TVBOX_USB2_COLD)
++	},
++	[3]  = { USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
++			    // ( ? )
++			    USB_PID_ULTIMA_TVBOX_USB2_WARM)
++	},
++	[4]  = { USB_DEVICE(USB_VID_LITEON,
++			    USB_PID_LITEON_DVB_T_COLD)
++	},
++	[5]  = { USB_DEVICE(USB_VID_LITEON,
++			    USB_PID_LITEON_DVB_T_WARM)
++	},
++	[6]  = { USB_DEVICE(USB_VID_EMPIA,
++			    USB_PID_DIGIVOX_MINI_SL_COLD)
++	},
++	[7]  = { USB_DEVICE(USB_VID_EMPIA,
++			    USB_PID_DIGIVOX_MINI_SL_WARM)
++	},
++	[8]  = { USB_DEVICE(USB_VID_GRANDTEC,
++			    USB_PID_GRANDTEC_DVBT_USB2_COLD)
++	},
++	[9]  = { USB_DEVICE(USB_VID_GRANDTEC,
++			    USB_PID_GRANDTEC_DVBT_USB2_WARM)
++	},
++	[10] = { USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
++			    USB_PID_ARTEC_T14_COLD)
++	},
++	[11] = { USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,
++			    USB_PID_ARTEC_T14_WARM)
++	},
++	[12] = { USB_DEVICE(USB_VID_LEADTEK,
++			    USB_PID_WINFAST_DTV_DONGLE_COLD)
++	},
++	[13] = { USB_DEVICE(USB_VID_LEADTEK,
++			    USB_PID_WINFAST_DTV_DONGLE_WARM)
++	},
++	[14] = { USB_DEVICE(USB_VID_HUMAX_COEX,
++			    USB_PID_DVB_T_USB_STICK_HIGH_SPEED_COLD)
++	},
++	[15] = { USB_DEVICE(USB_VID_HUMAX_COEX,
++			    USB_PID_DVB_T_USB_STICK_HIGH_SPEED_WARM)
++	},
++	{ }		/* Terminating entry */
+ };
+ MODULE_DEVICE_TABLE (usb, dibusb_dib3000mc_table);
+
+-- 
 2.35.1
-
