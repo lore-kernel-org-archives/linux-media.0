@@ -2,43 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BBD3C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 28 Mar 2022 20:01:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95852C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 28 Mar 2022 20:01:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344326AbiC1UCj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Mar 2022 16:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
+        id S1344289AbiC1UCm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Mar 2022 16:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344255AbiC1UCV (ORCPT
+        with ESMTP id S1344340AbiC1UCZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:02:21 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A61A5C34B;
-        Mon, 28 Mar 2022 13:00:24 -0700 (PDT)
+        Mon, 28 Mar 2022 16:02:25 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFF75D1AC;
+        Mon, 28 Mar 2022 13:00:28 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 2C2AF1F438C4
+        with ESMTPSA id 173C11F438BD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648497623;
-        bh=Og2wNbsGzxzouALoYhFoXVFpDemGtbhl+ssP9/EEn08=;
+        s=mail; t=1648497627;
+        bh=5bMWt8FIlhATFg8dWZpSwD375jbwZ9dZXKe/ctzMbWc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NQ8pTF5N12gMnd+ao3DJztqsVvAZXfgkH3/36NVWu1VlrUL2QKRyzP3+n9F2SRvvS
-         NWT28qm9AbEx2JhJiRHOkaWU30WY6mQMHXQcsHyhvo5Gb+fsk/y0jvWSTiUAfpSfN+
-         TdPxbOuq+77LsI05gd/INB5I/KjbFuPUxc6ilHPFqAamcBKY3f2/jtD/7NugF274lq
-         9OsmTwu0HedVjbtwOvEc8AC+fW1uxBJI8lhMSG3+OX/pGiGOSSpV5FhKgxjbAVYsdL
-         QADmAXLcOOhvpbEdRQ1FslUWrbZbUp1dqJtS5p8D6bg94ppj/xTy5qI50Vux3c6zx1
-         dOW2ZBNutLEXg==
+        b=HgE8I+mDkxkQ2X9yVMvzFDQ4jmEqoeYUkBg3IBrZElVU6jyB8GKIFEdYDfaA5E7Nt
+         VsYfXmZ7jIXrWHsBn57QQHjFOKAl1GAF5icpLR08XgBFPqgxXS9XG7uySm7sNh7bcK
+         d3/7xeYZ3V/t6VinCbny8rAAZYBZ9TTaMEYUW1E+KTFs0+cQKnaPCTHEGvD3G40bBk
+         gTiAW3vZmHVzewLprpcQJTIwAXwFY+kphUECS2Ci6zv+k0HIzAHe2YAxl/LnRClop9
+         PEIrQU7bIWEKMK3Cq2pri/rmqXODlitsSCd2gAiS3y54w45iHyx+n+ae/sLMeutUl5
+         BYlnDrYQVnITw==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
+Cc:     kernel@collabora.com, Alex Bee <knaerzche@gmail.com>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 22/24] media: hantro: h264: Make dpb entry management more robust
-Date:   Mon, 28 Mar 2022 15:59:34 -0400
-Message-Id: <20220328195936.82552-23-nicolas.dufresne@collabora.com>
+Subject: [PATCH v1 24/24] media: rkvdec-h264: Don't hardcode SPS/PPS parameters
+Date:   Mon, 28 Mar 2022 15:59:36 -0400
+Message-Id: <20220328195936.82552-25-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
 References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
@@ -48,58 +47,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jonas Karlman <jonas@kwiboo.se>
+From: Alex Bee <knaerzche@gmail.com>
 
-The driver maintains stable slot location for reference pictures. This
-change makes the code more robust by using the reference_ts as key and
-by marking all entries invalid right from the start.
+Some SPS/PPS parameters are currently hardcoded in the driver
+even though so do exist in the uapi which is stable by now.
 
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Use them instead of hardcoding them.
+
+Conformance tests have shown there is no difference, but it might
+increase decoder performance.
+
+Signed-off-by: Alex Bee <knaerzche@gmail.com>
 ---
- drivers/staging/media/hantro/hantro_h264.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec-h264.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
-index 228629fb3cdf..7377fc26f780 100644
---- a/drivers/staging/media/hantro/hantro_h264.c
-+++ b/drivers/staging/media/hantro/hantro_h264.c
-@@ -258,8 +258,7 @@ static void prepare_table(struct hantro_ctx *ctx)
- static bool dpb_entry_match(const struct v4l2_h264_dpb_entry *a,
- 			    const struct v4l2_h264_dpb_entry *b)
- {
--	return a->top_field_order_cnt == b->top_field_order_cnt &&
--	       a->bottom_field_order_cnt == b->bottom_field_order_cnt;
-+	return a->reference_ts == b->reference_ts;
- }
+diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+index 891c48bf6a51..91f65d78e453 100644
+--- a/drivers/staging/media/rkvdec/rkvdec-h264.c
++++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+@@ -655,13 +655,14 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
  
- static void update_dpb(struct hantro_ctx *ctx)
-@@ -273,13 +272,13 @@ static void update_dpb(struct hantro_ctx *ctx)
+ #define WRITE_PPS(value, field) set_ps_field(hw_ps->info, field, value)
+ 	/* write sps */
+-	WRITE_PPS(0xf, SEQ_PARAMETER_SET_ID);
+-	WRITE_PPS(0xff, PROFILE_IDC);
+-	WRITE_PPS(1, CONSTRAINT_SET3_FLAG);
++	WRITE_PPS(sps->seq_parameter_set_id, SEQ_PARAMETER_SET_ID);
++	WRITE_PPS(sps->profile_idc, PROFILE_IDC);
++	WRITE_PPS((sps->constraint_set_flags & 1 << 3) ? 1 : 0, CONSTRAINT_SET3_FLAG);
+ 	WRITE_PPS(sps->chroma_format_idc, CHROMA_FORMAT_IDC);
+ 	WRITE_PPS(sps->bit_depth_luma_minus8, BIT_DEPTH_LUMA);
+ 	WRITE_PPS(sps->bit_depth_chroma_minus8, BIT_DEPTH_CHROMA);
+-	WRITE_PPS(0, QPPRIME_Y_ZERO_TRANSFORM_BYPASS_FLAG);
++	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_QPPRIME_Y_ZERO_TRANSFORM_BYPASS),
++		  QPPRIME_Y_ZERO_TRANSFORM_BYPASS_FLAG);
+ 	WRITE_PPS(sps->log2_max_frame_num_minus4, LOG2_MAX_FRAME_NUM_MINUS4);
+ 	WRITE_PPS(sps->max_num_ref_frames, MAX_NUM_REF_FRAMES);
+ 	WRITE_PPS(sps->pic_order_cnt_type, PIC_ORDER_CNT_TYPE);
+@@ -679,8 +680,8 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+ 		  DIRECT_8X8_INFERENCE_FLAG);
  
- 	/* Disable all entries by default. */
- 	for (i = 0; i < ARRAY_SIZE(ctx->h264_dec.dpb); i++)
--		ctx->h264_dec.dpb[i].flags &= ~V4L2_H264_DPB_ENTRY_FLAG_ACTIVE;
-+		ctx->h264_dec.dpb[i].flags = 0;
- 
- 	/* Try to match new DPB entries with existing ones by their POCs. */
- 	for (i = 0; i < ARRAY_SIZE(dec_param->dpb); i++) {
- 		const struct v4l2_h264_dpb_entry *ndpb = &dec_param->dpb[i];
- 
--		if (!(ndpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
-+		if (!(ndpb->flags & V4L2_H264_DPB_ENTRY_FLAG_VALID))
- 			continue;
- 
- 		/*
-@@ -290,8 +289,7 @@ static void update_dpb(struct hantro_ctx *ctx)
- 			struct v4l2_h264_dpb_entry *cdpb;
- 
- 			cdpb = &ctx->h264_dec.dpb[j];
--			if (cdpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE ||
--			    !dpb_entry_match(cdpb, ndpb))
-+			if (!dpb_entry_match(cdpb, ndpb))
- 				continue;
- 
- 			*cdpb = *ndpb;
+ 	/* write pps */
+-	WRITE_PPS(0xff, PIC_PARAMETER_SET_ID);
+-	WRITE_PPS(0x1f, PPS_SEQ_PARAMETER_SET_ID);
++	WRITE_PPS(pps->pic_parameter_set_id, PIC_PARAMETER_SET_ID);
++	WRITE_PPS(pps->seq_parameter_set_id, PPS_SEQ_PARAMETER_SET_ID);
+ 	WRITE_PPS(!!(pps->flags & V4L2_H264_PPS_FLAG_ENTROPY_CODING_MODE),
+ 		  ENTROPY_CODING_MODE_FLAG);
+ 	WRITE_PPS(!!(pps->flags & V4L2_H264_PPS_FLAG_BOTTOM_FIELD_PIC_ORDER_IN_FRAME_PRESENT),
 -- 
 2.34.1
 
