@@ -2,57 +2,57 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B773C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 28 Mar 2022 04:01:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D8EAC433FE
+	for <linux-media@archiver.kernel.org>; Mon, 28 Mar 2022 04:01:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238006AbiC1ECj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Mar 2022 00:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
+        id S237922AbiC1ECu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Mar 2022 00:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237940AbiC1ECH (ORCPT
+        with ESMTP id S237896AbiC1ECH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 28 Mar 2022 00:02:07 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088CD45AE5
-        for <linux-media@vger.kernel.org>; Sun, 27 Mar 2022 21:00:12 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id b16-20020a253410000000b00633b9e71eecso9945790yba.14
-        for <linux-media@vger.kernel.org>; Sun, 27 Mar 2022 21:00:12 -0700 (PDT)
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FAC45786
+        for <linux-media@vger.kernel.org>; Sun, 27 Mar 2022 21:00:06 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id h83-20020a25d056000000b0063380d246ceso10039459ybg.3
+        for <linux-media@vger.kernel.org>; Sun, 27 Mar 2022 21:00:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc:content-transfer-encoding;
-        bh=gHJvarCfp4ST6T1lM9CDothUo5XPZ3G7QA7kcqYT4UM=;
-        b=rk7Aw20EbcDIa69NL5ydL8E8TGDtoB37mocxbMh5cM0dpkp5zMFrZrXTdSQO8bain0
-         qEqEz+noYjXXMXqMhPh3vXla3wNJb2iDucR4F40tEw2zYNiP+fkOInbx+h1Uww4YxJUg
-         jE7gK7iBAfvfre7Xwu9cw8ZKPDj0yoDCy2XJpnC1y/kQ0LtiRxdcYKYVlqxQeBv1Qz5s
-         l9kcMdp84H8INqnApIC1mSNJyZ9QgS4y2eDXIZuTriD0Tou4ermKhfdxVEUpcRXAUg0q
-         d6US+J1fYIJRIRD4iiaWtvVnQgMkNGh66HLN6QFNyNmkEjr8K7J/+IW0uWfHmLsX8rMO
-         /QCQ==
+        bh=swBHLDpMJlrENAUcNI4p95XFMSTGbJ8O3Tkem0fLvJU=;
+        b=oGTdKGCygtZYyY07tOAoRz5brM3z/11wHqQFfV9mV9rMC95YVrWjxdM1oH17EeKd9B
+         sByNIynrE388mR0y43nywkqC34DIeOWfgKVA5O3hEzW4JmCwZnUNYDylGb1gqtbrftTF
+         g8jBg5qa7X2rT2zyxTmddvwhuVxd5L9UddzZecSVdtPfdirn8wxoG6kLG3hSBeXG89m6
+         Lje6g2SKeC2vE4qLXT61Xj7PEozYJG8HH0CtLDPPhsGnkLhDhbUApKRxOOplFRmrta4M
+         fBt/snAG2E4gPBrqDmBpy+Cth+6pBc8VF8/wH4T0LMHtFjTaWFewprjrYCCBchUaw1xM
+         v4TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc:content-transfer-encoding;
-        bh=gHJvarCfp4ST6T1lM9CDothUo5XPZ3G7QA7kcqYT4UM=;
-        b=Wo+LqIyIpYaoflRRXg6TeHw4RE2DKOpC0QsYGpmtOJ2SJSiF3+N7zhZMayGTF9cpn0
-         B7n8uUpt7TdEdGzbkFYzo+PmLYa2dzC88iZ1JrJwMLBLEsYJF4497bqI2WFzRf/tADJE
-         kFM2//lEc8FrKXs8/O4kGxWumbseYUPqU7UiAy6xrBOsasuEeuzt6vwpguMUXysEz8yx
-         4F0p+PuGLUS//ee8SyTgwppaisPKGEu8/7X1wm41i+VOSZetxoDoH9wGEUMvNWi5PCKB
-         VbNdaVgWLqvszVahxP++wP8ncldopFLeikEUCARqJ1w3XxxyT68GB5GEx+fsKq7ULkNK
-         AK1w==
-X-Gm-Message-State: AOAM530kcL8DYbHK3DE/eP4R9rKvNNqfF4TAgdtaWbUzl0IyxizB+U6J
-        V2PvVa0IsDJ4mB9qIL5oWXmfuMcYFpLizVY=
-X-Google-Smtp-Source: ABdhPJz+EpQpQ5sgGGlfLlv7TaYkgUMInl07aYgCXBfnJIUTEvZlVfooINmL6H3ETtCw093EcBxaIowsGvRw1ME=
+        bh=swBHLDpMJlrENAUcNI4p95XFMSTGbJ8O3Tkem0fLvJU=;
+        b=O3VwPN9/9SYMYulnjlMZIqBTJJJWfL/MXKvJ0YQGmsTjEdVrgCL9FPz5nJ1KLm/Xil
+         0Mq4ie5mH7qX40Qee7QYql3Vs/Z7NOIdpcOx0YF9cNOH2WUrs2AlEWLRotxJnebb64/W
+         dSdeDUI/8MLC/AbBdUHX2tEDj5gglcsqgY7pOSm54pTP+H2TKvsy9naKl73HM6gpSX4W
+         gdVEm0orcztOv1T5qBv7h0EARHyhFqoSe59tYGXtVuJtcBfGAVoW9jd597U+dEftUJW9
+         IqLr9eRcmAv2pi5LtC/Yz2nQqjhHC4XKrrf6TzOVsDwsU8F1Bvyy+vd7avb9R05Fd6lO
+         tHNQ==
+X-Gm-Message-State: AOAM530sNRIMqJBjU9rtNP7bXTnH8XXpopsJNRFLrHWdg/z0qoz2GquR
+        PN4SlV9d/laF1fSBBz9WQ0YeDVP6O+QwCKg=
+X-Google-Smtp-Source: ABdhPJwnqgWOYi8gA1e2h+a9hU2mT4oa3J/inlE1/8EHv9A1hYM2B/y7BXnnZpn5v3bzYFB0oT1SjC39tw71k5Q=
 X-Received: from tj2.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:187])
- (user=tjmercier job=sendgmr) by 2002:a25:4dd7:0:b0:621:a740:3988 with SMTP id
- a206-20020a254dd7000000b00621a7403988mr20517183ybb.58.1648440011816; Sun, 27
- Mar 2022 21:00:11 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 03:59:44 +0000
+ (user=tjmercier job=sendgmr) by 2002:a0d:cc4f:0:b0:2e5:e8fa:6754 with SMTP id
+ o76-20020a0dcc4f000000b002e5e8fa6754mr23233214ywd.295.1648440005966; Sun, 27
+ Mar 2022 21:00:05 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 03:59:42 +0000
 In-Reply-To: <20220328035951.1817417-1-tjmercier@google.com>
-Message-Id: <20220328035951.1817417-6-tjmercier@google.com>
+Message-Id: <20220328035951.1817417-4-tjmercier@google.com>
 Mime-Version: 1.0
 References: <20220328035951.1817417-1-tjmercier@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [RFC v4 5/8] dmabuf: Add gpu cgroup charge transfer function
+Subject: [RFC v4 3/8] dmabuf: Use the GPU cgroup charge/uncharge APIs
 From:   "T.J. Mercier" <tjmercier@google.com>
 To:     tjmercier@google.com, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
@@ -89,226 +89,198 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hridya Valsaraju <hridya@google.com>
+This patch uses the GPU cgroup charge/uncharge APIs to charge buffers
+allocated by any DMA-BUF exporter that exports a buffer with a GPU cgroup
+device association.
 
-The dma_buf_charge_transfer function provides a way for processes to
-transfer charge of a buffer to a different process. This is essential
-for the cases where a central allocator process does allocations for
-various subsystems, hands over the fd to the client who requested the
-memory and drops all references to the allocated memory.
+By doing so, it becomes possible to track who allocated/exported a
+DMA-BUF even after the allocating process drops all references to a
+buffer.
 
-Signed-off-by: Hridya Valsaraju <hridya@google.com>
+Originally-by: Hridya Valsaraju <hridya@google.com>
 Signed-off-by: T.J. Mercier <tjmercier@google.com>
 
 ---
 v4 changes
-Adjust ordering of charge/uncharge during transfer to avoid potentially
-hitting cgroup limit per Michal Koutn=C3=BD.
+Fix uninitialized return code error for dmabuf_try_charge error case.
 
 v3 changes
 Use more common dual author commit message format per John Stultz.
 
 v2 changes
-Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
-heap to a single dma-buf function for all heaps per Daniel Vetter and
+Move dma-buf cgroup charging/uncharging from a dma_buf_op defined by
+every heap to a single dma-buf function for all heaps per Daniel Vetter and
 Christian K=C3=B6nig.
 ---
- drivers/dma-buf/dma-buf.c  | 49 +++++++++++++++++++++++++++++++
- include/linux/cgroup_gpu.h | 12 ++++++++
- include/linux/dma-buf.h    |  2 ++
- kernel/cgroup/gpu.c        | 59 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 122 insertions(+)
+ drivers/dma-buf/dma-buf.c | 58 +++++++++++++++++++++++++++++++++++++++
+ include/linux/dma-buf.h   | 20 ++++++++++++--
+ 2 files changed, 76 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 1ee5c60d3d6d..7748c3453b91 100644
+index 602b12d7470d..1ee5c60d3d6d 100644
 --- a/drivers/dma-buf/dma-buf.c
 +++ b/drivers/dma-buf/dma-buf.c
-@@ -1380,6 +1380,55 @@ void dma_buf_vunmap(struct dma_buf *dmabuf, struct d=
-ma_buf_map *map)
+@@ -56,6 +56,53 @@ static char *dmabuffs_dname(struct dentry *dentry, char =
+*buffer, int buflen)
+ 			     dentry->d_name.name, ret > 0 ? name : "");
  }
- EXPORT_SYMBOL_NS_GPL(dma_buf_vunmap, DMA_BUF);
 =20
-+/**
-+ * dma_buf_transfer_charge - Change the GPU cgroup to which the provided d=
-ma_buf is charged.
-+ * @dmabuf:	[in]	buffer whose charge will be migrated to a different GPU c=
-group
-+ * @gpucg:	[in]	the destination GPU cgroup for dmabuf's charge
-+ *
-+ * Only tasks that belong to the same cgroup the buffer is currently charg=
-ed to
-+ * may call this function, otherwise it will return -EPERM.
-+ *
-+ * Returns 0 on success, or a negative errno code otherwise.
-+ */
-+int dma_buf_transfer_charge(struct dma_buf *dmabuf, struct gpucg *gpucg)
-+{
 +#ifdef CONFIG_CGROUP_GPU
-+	struct gpucg *current_gpucg;
++static inline struct gpucg_device *
++exp_info_gpucg_dev(const struct dma_buf_export_info *exp_info)
++{
++	return exp_info->gpucg_dev;
++}
++
++static int dmabuf_try_charge(struct dma_buf *dmabuf,
++			     struct gpucg_device *gpucg_dev)
++{
 +	int ret;
 +
-+	/* If the source and destination cgroups are the same, don't do anything.=
- */
-+	current_gpucg =3D gpucg_get(current);
-+	if (current_gpucg =3D=3D gpucg) {
-+		ret =3D 0;
-+		goto skip_transfer;
-+	}
++	dmabuf->gpucg =3D gpucg_get(current);
++	dmabuf->gpucg_dev =3D gpucg_dev;
 +
-+	/*
-+	 * Verify that the cgroup of the process requesting the transfer is the
-+	 * same as the one the buffer is currently charged to.
-+	 */
-+	current_gpucg =3D gpucg_get(current);
-+	mutex_lock(&dmabuf->lock);
-+	if (current_gpucg !=3D dmabuf->gpucg) {
-+		ret =3D -EPERM;
-+		goto err;
++	ret =3D gpucg_try_charge(dmabuf->gpucg, dmabuf->gpucg_dev, dmabuf->size);
++	if (ret) {
++		gpucg_put(dmabuf->gpucg);
++		dmabuf->gpucg =3D NULL;
++		dmabuf->gpucg_dev =3D NULL;
 +	}
-+
-+	ret =3D gpucg_transfer_charge(current_gpucg, gpucg, dmabuf->gpucg_dev, dm=
-abuf->size);
-+	if (ret)
-+		goto err;
-+	dmabuf->gpucg =3D gpucg;
-+err:
-+	mutex_unlock(&dmabuf->lock);
-+skip_transfer:
-+	gpucg_put(current_gpucg);
 +	return ret;
-+#else
-+	return 0;
-+#endif /* CONFIG_CGROUP_GPU */
 +}
-+EXPORT_SYMBOL_NS_GPL(dma_buf_transfer_charge, DMA_BUF);
 +
- #ifdef CONFIG_DEBUG_FS
- static int dma_buf_debug_show(struct seq_file *s, void *unused)
- {
-diff --git a/include/linux/cgroup_gpu.h b/include/linux/cgroup_gpu.h
-index c90069719022..e30f15d5e9be 100644
---- a/include/linux/cgroup_gpu.h
-+++ b/include/linux/cgroup_gpu.h
-@@ -87,6 +87,10 @@ static inline struct gpucg *gpucg_parent(struct gpucg *c=
-g)
-=20
- int gpucg_try_charge(struct gpucg *gpucg, struct gpucg_device *device, u64=
- usage);
- void gpucg_uncharge(struct gpucg *gpucg, struct gpucg_device *device, u64 =
-usage);
-+int gpucg_transfer_charge(struct gpucg *source,
-+			  struct gpucg *dest,
-+			  struct gpucg_device *device,
-+			  u64 usage);
- void gpucg_register_device(struct gpucg_device *gpucg_dev, const char *nam=
-e);
- #else /* CONFIG_CGROUP_GPU */
-=20
-@@ -121,6 +125,14 @@ static inline void gpucg_uncharge(struct gpucg *gpucg,
- 				  struct gpucg_device *device,
- 				  u64 usage) {}
-=20
-+static inline int gpucg_transfer_charge(struct gpucg *source,
-+					struct gpucg *dest,
-+					struct gpucg_device *device,
-+					u64 usage)
++static void dmabuf_uncharge(struct dma_buf *dmabuf)
++{
++	if (dmabuf->gpucg && dmabuf->gpucg_dev) {
++		gpucg_uncharge(dmabuf->gpucg, dmabuf->gpucg_dev, dmabuf->size);
++		gpucg_put(dmabuf->gpucg);
++	}
++}
++#else /* CONFIG_CGROUP_GPU */
++static inline struct gpucg_device *exp_info_gpucg_dev(
++const struct dma_buf_export_info *exp_info)
++{
++	return NULL;
++}
++
++static inline int dmabuf_try_charge(struct dma_buf *dmabuf,
++				     struct gpucg_device *gpucg_dev))
 +{
 +	return 0;
 +}
 +
- static inline void gpucg_register_device(struct gpucg_device *gpucg_dev,
- 					 const char *name) {}
- #endif /* CONFIG_CGROUP_GPU */
++static inline void dmabuf_uncharge(struct dma_buf *dmabuf) {}
++#endif /* CONFIG_CGROUP_GPU */
++
+ static void dma_buf_release(struct dentry *dentry)
+ {
+ 	struct dma_buf *dmabuf;
+@@ -79,6 +126,8 @@ static void dma_buf_release(struct dentry *dentry)
+ 	if (dmabuf->resv =3D=3D (struct dma_resv *)&dmabuf[1])
+ 		dma_resv_fini(dmabuf->resv);
+=20
++	dmabuf_uncharge(dmabuf);
++
+ 	WARN_ON(!list_empty(&dmabuf->attachments));
+ 	module_put(dmabuf->owner);
+ 	kfree(dmabuf->name);
+@@ -484,6 +533,7 @@ struct dma_buf *dma_buf_export(const struct dma_buf_exp=
+ort_info *exp_info)
+ {
+ 	struct dma_buf *dmabuf;
+ 	struct dma_resv *resv =3D exp_info->resv;
++	struct gpucg_device *gpucg_dev =3D exp_info_gpucg_dev(exp_info);
+ 	struct file *file;
+ 	size_t alloc_size =3D sizeof(struct dma_buf);
+ 	int ret;
+@@ -534,6 +584,12 @@ struct dma_buf *dma_buf_export(const struct dma_buf_ex=
+port_info *exp_info)
+ 	}
+ 	dmabuf->resv =3D resv;
+=20
++	if (gpucg_dev) {
++		ret =3D dmabuf_try_charge(dmabuf, gpucg_dev);
++		if (ret)
++			goto err_charge;
++	}
++
+ 	file =3D dma_buf_getfile(dmabuf, exp_info->flags);
+ 	if (IS_ERR(file)) {
+ 		ret =3D PTR_ERR(file);
+@@ -565,6 +621,8 @@ struct dma_buf *dma_buf_export(const struct dma_buf_exp=
+ort_info *exp_info)
+ 	file->f_path.dentry->d_fsdata =3D NULL;
+ 	fput(file);
+ err_dmabuf:
++	dmabuf_uncharge(dmabuf);
++err_charge:
+ 	kfree(dmabuf);
+ err_module:
+ 	module_put(exp_info->owner);
 diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index 742f29c3daaf..646827156213 100644
+index 7ab50076e7a6..742f29c3daaf 100644
 --- a/include/linux/dma-buf.h
 +++ b/include/linux/dma-buf.h
-@@ -646,4 +646,6 @@ int dma_buf_mmap(struct dma_buf *, struct vm_area_struc=
-t *,
- 		 unsigned long);
- int dma_buf_vmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
- void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
-+
-+int dma_buf_transfer_charge(struct dma_buf *dmabuf, struct gpucg *gpucg);
- #endif /* __DMA_BUF_H__ */
-diff --git a/kernel/cgroup/gpu.c b/kernel/cgroup/gpu.c
-index ac4c470914b5..40531323d6da 100644
---- a/kernel/cgroup/gpu.c
-+++ b/kernel/cgroup/gpu.c
-@@ -247,6 +247,65 @@ void gpucg_uncharge(struct gpucg *gpucg, struct gpucg_=
-device *device, u64 usage)
- 	css_put_many(&gpucg->css, nr_pages);
- }
+@@ -13,6 +13,7 @@
+ #ifndef __DMA_BUF_H__
+ #define __DMA_BUF_H__
 =20
-+/**
-+ * gpucg_transfer_charge - Transfer a GPU charge from one cgroup to anothe=
-r.
-+ * @source:	[in]	The GPU cgroup the charge will be transferred from.
-+ * @dest:	[in]	The GPU cgroup the charge will be transferred to.
-+ * @device:	[in]	The GPU cgroup device corresponding to the charge.
-+ * @usage:	[in]	The size of the memory in bytes.
-+ *
-+ * Returns 0 on success, or a negative errno code otherwise.
-+ */
-+int gpucg_transfer_charge(struct gpucg *source,
-+			  struct gpucg *dest,
-+			  struct gpucg_device *device,
-+			  u64 usage)
-+{
-+	struct page_counter *counter;
-+	u64 nr_pages;
-+	struct gpucg_resource_pool *rp_source, *rp_dest;
-+	int ret =3D 0;
++#include <linux/cgroup_gpu.h>
+ #include <linux/dma-buf-map.h>
+ #include <linux/file.h>
+ #include <linux/err.h>
+@@ -303,7 +304,7 @@ struct dma_buf {
+ 	/**
+ 	 * @size:
+ 	 *
+-	 * Size of the buffer; invariant over the lifetime of the buffer.
++	 * Size of the buffer in bytes; invariant over the lifetime of the buffer=
+.
+ 	 */
+ 	size_t size;
+=20
+@@ -453,6 +454,17 @@ struct dma_buf {
+ 		struct dma_buf *dmabuf;
+ 	} *sysfs_entry;
+ #endif
 +
-+	nr_pages =3D PAGE_ALIGN(usage) >> PAGE_SHIFT;
++#ifdef CONFIG_CGROUP_GPU
++	/** @gpucg: Pointer to the cgroup this buffer currently belongs to. */
++	struct gpucg *gpucg;
 +
-+	mutex_lock(&gpucg_mutex);
-+	rp_source =3D find_cg_rpool_locked(source, device);
-+	if (unlikely(!rp_source)) {
-+		ret =3D -ENOENT;
-+		goto exit_early;
-+	}
-+
-+	rp_dest =3D get_cg_rpool_locked(dest, device);
-+	if (IS_ERR(rp_dest)) {
-+		ret =3D PTR_ERR(rp_dest);
-+		goto exit_early;
-+	}
-+
-+	/*
-+	 * First uncharge from the pool it's currently charged to. This ordering =
-avoids double
-+	 * charging while the transfer is in progress, which could cause us to hi=
-t a limit.
-+	 * If the try_charge fails for this transfer, we need to be able to rever=
-se this uncharge,
-+	 * so we continue to hold the gpucg_mutex here.
++	/** @gpucg_dev:
++	 *
++	 * Pointer to the cgroup GPU device whence this buffer originates.
 +	 */
-+	page_counter_uncharge(&rp_source->total, nr_pages);
-+	css_put_many(&source->css, nr_pages);
-+
-+	/* Now attempt the new charge */
-+	if (page_counter_try_charge(&rp_dest->total, nr_pages, &counter)) {
-+		css_get_many(&dest->css, nr_pages);
-+	} else {
-+		/*
-+		 * The new charge failed, so reverse the uncharge from above. This shoul=
-d always
-+		 * succeed since charges on source are blocked by gpucg_mutex.
-+		 */
-+		WARN_ON(!page_counter_try_charge(&rp_source->total, nr_pages, &counter))=
-;
-+		css_get_many(&source->css, nr_pages);
-+	}
-+exit_early:
-+	mutex_unlock(&gpucg_mutex);
-+	return ret;
-+}
-+
++	struct gpucg_device *gpucg_dev;
++#endif
+ };
+=20
  /**
-  * gpucg_register_device - Registers a device for memory accounting using =
-the
-  * GPU cgroup controller.
+@@ -529,9 +541,10 @@ struct dma_buf_attachment {
+  * @exp_name:	name of the exporter - useful for debugging.
+  * @owner:	pointer to exporter module - used for refcounting kernel module
+  * @ops:	Attach allocator-defined dma buf ops to the new buffer
+- * @size:	Size of the buffer - invariant over the lifetime of the buffer
++ * @size:	Size of the buffer in bytes - invariant over the lifetime of the=
+ buffer
+  * @flags:	mode flags for the file
+  * @resv:	reservation-object, NULL to allocate default one
++ * @gpucg_dev:	pointer to the gpu cgroup device this buffer belongs to
+  * @priv:	Attach private data of allocator to this buffer
+  *
+  * This structure holds the information required to export the buffer. Use=
+d
+@@ -544,6 +557,9 @@ struct dma_buf_export_info {
+ 	size_t size;
+ 	int flags;
+ 	struct dma_resv *resv;
++#ifdef CONFIG_CGROUP_GPU
++	struct gpucg_device *gpucg_dev;
++#endif
+ 	void *priv;
+ };
+=20
 --=20
 2.35.1.1021.g381101b075-goog
 
