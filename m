@@ -2,49 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ED47C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 28 Mar 2022 20:45:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF986C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 28 Mar 2022 20:45:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345518AbiC1Uqo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Mar 2022 16:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
+        id S1343633AbiC1Uql (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Mar 2022 16:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345855AbiC1Un3 (ORCPT
+        with ESMTP id S1345858AbiC1Un3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 28 Mar 2022 16:43:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1DF66ADB;
-        Mon, 28 Mar 2022 13:41:48 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB40674C4;
+        Mon, 28 Mar 2022 13:41:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E56E4B81223;
-        Mon, 28 Mar 2022 20:41:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56BD5C34112;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 50EF2CE1711;
+        Mon, 28 Mar 2022 20:41:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8540FC341D2;
         Mon, 28 Mar 2022 20:41:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1648500103;
-        bh=igf1YSCCBjkuVabykAkqPLeWrSFcFzZevr9yX0NS45c=;
+        bh=uwmpfqv83q2eqh1S6tt2/ceI6eyicR5uJYET2zce/iQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lk01mu3g9AAyWFT1QH3Bwy9bYT9/mLtTIeYWEflJc8FMdys2FP8ipBHBT6avsSvW9
-         0Cl0LDOWmJ3xfOQpvAKjTX1WxkVN+2iaYi6sDZopawJmq9k1fYThVHVbLDzAaeM9UG
-         Uded8KMrWKUoNKR4fyQ22q2Q6b70uURXNU5vIoBOzlrzkGINaVwbAuboxEJyQkMytZ
-         EKZ4J9bMUQKfmb2bccnmyM5MNw9yrU9O1GcaPZOFGEjTWnw8Vtw5+kEE8SH4XO7TUy
-         1WOGuHTDf0UEBOHN2h3swOE4BRFiWT2P2r7pssHHi6axkAIF45kGKLz9fS9s7wDuJm
-         HcR+1NndqF6TQ==
+        b=fRKxiC7aMX6hhhGsN98h8nIV3qGz9ZETcaj2ogXjiPE2YjuHTKXUCigM1pORDVv2Y
+         AyXOEFoVCSQcwnRzwsH0pQO25eQUdBewimINBhlf4rsw56gkI2bfzgye3k9ppl+d65
+         kQur0Q7Of5Q+1CtYBaV0zNvyiAPkSLE7MLP6ubSGPFCO9MoVKxV43ydP9Mknw/YLgZ
+         ZJt6Zdusnyk/F3wRQK/4BbPLNf9k2YzjfA5x9hE+WrIJB01FzSp+9ivQEm2C+ndb4C
+         M+yUvRYhwEUqy5kL2s7NOL+vw4tYMW1u0O2LsXNkpGaCMaXKCYHtTYwkPZYlkWS6Nq
+         ZYtvxQyvTKC8Q==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nYwBJ-000ldI-32; Mon, 28 Mar 2022 22:41:41 +0200
+        id 1nYwBJ-000ldQ-6u; Mon, 28 Mar 2022 22:41:41 +0200
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 23/26] media: dvb-usb: vp7045: use an enum for the device number
-Date:   Mon, 28 Mar 2022 22:41:35 +0200
-Message-Id: <0241bf842bf592dfa01b0ef4916afda396194f98.1648499509.git.mchehab@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        =?UTF-8?q?Benjamin=20St=C3=BCrz?= <benni@stuerz.xyz>
+Subject: [PATCH 25/26] media: dvb-usb: dibusb-mc: use an enum for the device number
+Date:   Mon, 28 Mar 2022 22:41:37 +0200
+Message-Id: <f1d4fa4960b709152ae693800c830e19a4bc1f48.1648499509.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1648499509.git.mchehab@kernel.org>
 References: <cover.1648499509.git.mchehab@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
@@ -57,101 +59,215 @@ leading to errors as boards get added or removed.
 
 Fix it by using an enum.
 
+Suggested-by: Benjamin Stürz <benni@stuerz.xyz>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/26] at: https://lore.kernel.org/all/cover.1648499509.git.mchehab@kernel.org/
 
- drivers/media/usb/dvb-usb/vp7045.c | 28 ++++++++++++++++++----------
- include/media/dvb-usb-ids.h        |  8 ++++----
- 2 files changed, 22 insertions(+), 14 deletions(-)
+ drivers/media/usb/dvb-usb/dibusb-mc.c | 88 ++++++++++++++++-----------
+ include/media/dvb-usb-ids.h           | 16 ++---
+ 2 files changed, 62 insertions(+), 42 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb/vp7045.c b/drivers/media/usb/dvb-usb/vp7045.c
-index 23e3a90af1f4..1dc2b18d44d8 100644
---- a/drivers/media/usb/dvb-usb/vp7045.c
-+++ b/drivers/media/usb/dvb-usb/vp7045.c
-@@ -172,13 +172,21 @@ static int vp7045_usb_probe(struct usb_interface *intf,
- 				   THIS_MODULE, NULL, adapter_nr);
+diff --git a/drivers/media/usb/dvb-usb/dibusb-mc.c b/drivers/media/usb/dvb-usb/dibusb-mc.c
+index e2689977c8c8..00cb016f6266 100644
+--- a/drivers/media/usb/dvb-usb/dibusb-mc.c
++++ b/drivers/media/usb/dvb-usb/dibusb-mc.c
+@@ -24,25 +24,45 @@ static int dibusb_mc_probe(struct usb_interface *intf,
  }
  
--static struct usb_device_id vp7045_usb_table [] = {
--	    { USB_DEVICE(USB_VID_VISIONPLUS, USB_PID_TWINHAN_VP7045_COLD) },
--	    { USB_DEVICE(USB_VID_VISIONPLUS, USB_PID_TWINHAN_VP7045_WARM) },
--	    { USB_DEVICE(USB_VID_VISIONPLUS, USB_PID_DNTV_TINYUSB2_COLD) },
--	    { USB_DEVICE(USB_VID_VISIONPLUS, USB_PID_DNTV_TINYUSB2_WARM) },
--	    { 0 },
+ /* do not change the order of the ID table */
+-static struct usb_device_id dibusb_dib3000mc_table [] = {
+-/* 00 */	{ USB_DEVICE(USB_VID_DIBCOM,		USB_PID_DIBCOM_MOD3001_COLD) },
+-/* 01 */	{ USB_DEVICE(USB_VID_DIBCOM,		USB_PID_DIBCOM_MOD3001_WARM) },
+-/* 02 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,	USB_PID_ULTIMA_TVBOX_USB2_COLD) },
+-/* 03 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,	USB_PID_ULTIMA_TVBOX_USB2_WARM) }, // ( ? )
+-/* 04 */	{ USB_DEVICE(USB_VID_LITEON,		USB_PID_LITEON_DVB_T_COLD) },
+-/* 05 */	{ USB_DEVICE(USB_VID_LITEON,		USB_PID_LITEON_DVB_T_WARM) },
+-/* 06 */	{ USB_DEVICE(USB_VID_EMPIA,		USB_PID_DIGIVOX_MINI_SL_COLD) },
+-/* 07 */	{ USB_DEVICE(USB_VID_EMPIA,		USB_PID_DIGIVOX_MINI_SL_WARM) },
+-/* 08 */	{ USB_DEVICE(USB_VID_GRANDTEC,          USB_PID_GRANDTEC_DVBT_USB2_COLD) },
+-/* 09 */	{ USB_DEVICE(USB_VID_GRANDTEC,          USB_PID_GRANDTEC_DVBT_USB2_WARM) },
+-/* 10 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,	USB_PID_ARTEC_T14_COLD) },
+-/* 11 */	{ USB_DEVICE(USB_VID_ULTIMA_ELECTRONIC,	USB_PID_ARTEC_T14_WARM) },
+-/* 12 */	{ USB_DEVICE(USB_VID_LEADTEK,		USB_PID_WINFAST_DTV_DONGLE_COLD) },
+-/* 13 */	{ USB_DEVICE(USB_VID_LEADTEK,		USB_PID_WINFAST_DTV_DONGLE_WARM) },
+-/* 14 */	{ USB_DEVICE(USB_VID_HUMAX_COEX,	USB_PID_DVB_T_USB_STICK_HIGH_SPEED_COLD) },
+-/* 15 */	{ USB_DEVICE(USB_VID_HUMAX_COEX,	USB_PID_DVB_T_USB_STICK_HIGH_SPEED_WARM) },
+-			{ }		/* Terminating entry */
 +enum {
-+	VISIONPLUS_VP7045_COLD,
-+	VISIONPLUS_VP7045_WARM,
-+	VISIONPLUS_TINYUSB2_COLD,
-+	VISIONPLUS_TINYUSB2_WARM,
++	DIBCOM_MOD3001_COLD,
++	DIBCOM_MOD3001_WARM,
++	ULTIMA_TVBOX_USB2_COLD,
++	ULTIMA_TVBOX_USB2_WARM,
++	LITEON_DVB_T_COLD,
++	LITEON_DVB_T_WARM,
++	EMPIA_DIGIVOX_MINI_SL_COLD,
++	EMPIA_DIGIVOX_MINI_SL_WARM,
++	GRANDTEC_DVBT_USB2_COLD,
++	GRANDTEC_DVBT_USB2_WARM,
++	ULTIMA_ARTEC_T14_COLD,
++	ULTIMA_ARTEC_T14_WARM,
++	LEADTEK_WINFAST_DTV_DONGLE_COLD,
++	LEADTEK_WINFAST_DTV_DONGLE_WARM,
++	HUMAX_DVB_T_STICK_HIGH_SPEED_COLD,
++	HUMAX_DVB_T_STICK_HIGH_SPEED_WARM,
  };
 +
-+static struct usb_device_id vp7045_usb_table[] = {
-+	DVB_USB_DEV(VISIONPLUS, VISIONPLUS_VP7045_COLD),
-+	DVB_USB_DEV(VISIONPLUS, VISIONPLUS_VP7045_WARM),
-+	DVB_USB_DEV(VISIONPLUS, VISIONPLUS_TINYUSB2_COLD),
-+	DVB_USB_DEV(VISIONPLUS, VISIONPLUS_TINYUSB2_WARM),
++static struct usb_device_id dibusb_dib3000mc_table[] = {
++	DVB_USB_DEV(DIBCOM, DIBCOM_MOD3001_COLD),
++	DVB_USB_DEV(DIBCOM, DIBCOM_MOD3001_WARM),
++	DVB_USB_DEV(ULTIMA_ELECTRONIC, ULTIMA_TVBOX_USB2_COLD),
++	DVB_USB_DEV(ULTIMA_ELECTRONIC, ULTIMA_TVBOX_USB2_WARM),
++	DVB_USB_DEV(LITEON, LITEON_DVB_T_COLD),
++	DVB_USB_DEV(LITEON, LITEON_DVB_T_WARM),
++	DVB_USB_DEV(EMPIA, EMPIA_DIGIVOX_MINI_SL_COLD),
++	DVB_USB_DEV(EMPIA, EMPIA_DIGIVOX_MINI_SL_WARM),
++	DVB_USB_DEV(GRANDTEC, GRANDTEC_DVBT_USB2_COLD),
++	DVB_USB_DEV(GRANDTEC, GRANDTEC_DVBT_USB2_WARM),
++	DVB_USB_DEV(ULTIMA_ELECTRONIC, ULTIMA_ARTEC_T14_COLD),
++	DVB_USB_DEV(ULTIMA_ELECTRONIC, ULTIMA_ARTEC_T14_WARM),
++	DVB_USB_DEV(LEADTEK, LEADTEK_WINFAST_DTV_DONGLE_COLD),
++	DVB_USB_DEV(LEADTEK, LEADTEK_WINFAST_DTV_DONGLE_WARM),
++	DVB_USB_DEV(HUMAX_COEX, HUMAX_DVB_T_STICK_HIGH_SPEED_COLD),
++	DVB_USB_DEV(HUMAX_COEX, HUMAX_DVB_T_STICK_HIGH_SPEED_WARM),
 +	{ }
 +};
 +
- MODULE_DEVICE_TABLE(usb, vp7045_usb_table);
+ MODULE_DEVICE_TABLE (usb, dibusb_dib3000mc_table);
  
- static struct dvb_usb_device_properties vp7045_properties = {
-@@ -221,12 +229,12 @@ static struct dvb_usb_device_properties vp7045_properties = {
- 	.num_device_descs = 2,
+ static struct dvb_usb_device_properties dibusb_mc_properties = {
+@@ -95,37 +115,37 @@ static struct dvb_usb_device_properties dibusb_mc_properties = {
+ 	.num_device_descs = 8,
  	.devices = {
- 		{ .name = "Twinhan USB2.0 DVB-T receiver (TwinhanDTV Alpha/MagicBox II)",
--		  .cold_ids = { &vp7045_usb_table[0], NULL },
--		  .warm_ids = { &vp7045_usb_table[1], NULL },
-+		  .cold_ids = { &vp7045_usb_table[VISIONPLUS_VP7045_COLD], NULL },
-+		  .warm_ids = { &vp7045_usb_table[VISIONPLUS_VP7045_WARM], NULL },
+ 		{   "DiBcom USB2.0 DVB-T reference design (MOD3000P)",
+-			{ &dibusb_dib3000mc_table[0], NULL },
+-			{ &dibusb_dib3000mc_table[1], NULL },
++			{ &dibusb_dib3000mc_table[DIBCOM_MOD3001_COLD], NULL },
++			{ &dibusb_dib3000mc_table[DIBCOM_MOD3001_WARM], NULL },
  		},
- 		{ .name = "DigitalNow TinyUSB 2 DVB-t Receiver",
--		  .cold_ids = { &vp7045_usb_table[2], NULL },
--		  .warm_ids = { &vp7045_usb_table[3], NULL },
-+		  .cold_ids = { &vp7045_usb_table[VISIONPLUS_TINYUSB2_COLD], NULL },
-+		  .warm_ids = { &vp7045_usb_table[VISIONPLUS_TINYUSB2_WARM], NULL },
+ 		{   "Artec T1 USB2.0 TVBOX (please check the warm ID)",
+-			{ &dibusb_dib3000mc_table[2], NULL },
+-			{ &dibusb_dib3000mc_table[3], NULL },
++			{ &dibusb_dib3000mc_table[ULTIMA_TVBOX_USB2_COLD], NULL },
++			{ &dibusb_dib3000mc_table[ULTIMA_TVBOX_USB2_WARM], NULL },
+ 		},
+ 		{   "LITE-ON USB2.0 DVB-T Tuner",
+ 		    /* Also rebranded as Intuix S800, Toshiba */
+-			{ &dibusb_dib3000mc_table[4], NULL },
+-			{ &dibusb_dib3000mc_table[5], NULL },
++			{ &dibusb_dib3000mc_table[LITEON_DVB_T_COLD], NULL },
++			{ &dibusb_dib3000mc_table[LITEON_DVB_T_WARM], NULL },
+ 		},
+ 		{   "MSI Digivox Mini SL",
+-			{ &dibusb_dib3000mc_table[6], NULL },
+-			{ &dibusb_dib3000mc_table[7], NULL },
++			{ &dibusb_dib3000mc_table[EMPIA_DIGIVOX_MINI_SL_COLD], NULL },
++			{ &dibusb_dib3000mc_table[EMPIA_DIGIVOX_MINI_SL_WARM], NULL },
+ 		},
+ 		{   "GRAND - USB2.0 DVB-T adapter",
+-			{ &dibusb_dib3000mc_table[8], NULL },
+-			{ &dibusb_dib3000mc_table[9], NULL },
++			{ &dibusb_dib3000mc_table[GRANDTEC_DVBT_USB2_COLD], NULL },
++			{ &dibusb_dib3000mc_table[GRANDTEC_DVBT_USB2_WARM], NULL },
+ 		},
+ 		{   "Artec T14 - USB2.0 DVB-T",
+-			{ &dibusb_dib3000mc_table[10], NULL },
+-			{ &dibusb_dib3000mc_table[11], NULL },
++			{ &dibusb_dib3000mc_table[ULTIMA_ARTEC_T14_COLD], NULL },
++			{ &dibusb_dib3000mc_table[ULTIMA_ARTEC_T14_WARM], NULL },
+ 		},
+ 		{   "Leadtek - USB2.0 Winfast DTV dongle",
+-			{ &dibusb_dib3000mc_table[12], NULL },
+-			{ &dibusb_dib3000mc_table[13], NULL },
++			{ &dibusb_dib3000mc_table[LEADTEK_WINFAST_DTV_DONGLE_COLD], NULL },
++			{ &dibusb_dib3000mc_table[LEADTEK_WINFAST_DTV_DONGLE_WARM], NULL },
+ 		},
+ 		{   "Humax/Coex DVB-T USB Stick 2.0 High Speed",
+-			{ &dibusb_dib3000mc_table[14], NULL },
+-			{ &dibusb_dib3000mc_table[15], NULL },
++			{ &dibusb_dib3000mc_table[HUMAX_DVB_T_STICK_HIGH_SPEED_COLD], NULL },
++			{ &dibusb_dib3000mc_table[HUMAX_DVB_T_STICK_HIGH_SPEED_WARM], NULL },
  		},
  		{ NULL },
  	}
 diff --git a/include/media/dvb-usb-ids.h b/include/media/dvb-usb-ids.h
-index e022e38b6f95..9f53b3ce3e58 100644
+index e4796464b0d7..4dba939760ed 100644
 --- a/include/media/dvb-usb-ids.h
 +++ b/include/media/dvb-usb-ids.h
-@@ -199,8 +199,6 @@
+@@ -111,8 +111,6 @@
+ #define USB_PID_ANUBIS_MSI_DIGI_VOX_MINI_II		0x1513
+ #define USB_PID_ANYSEE					0x861f
+ #define USB_PID_ARTEC_T14BR				0x810f
+-#define USB_PID_ARTEC_T14_COLD				0x810b
+-#define USB_PID_ARTEC_T14_WARM				0x810c
+ #define USB_PID_ASUS_U3000				0x171f
+ #define USB_PID_ASUS_U3000H				0x1736
+ #define USB_PID_ASUS_U3100				0x173f
+@@ -195,12 +193,8 @@
+ #define USB_PID_DIBCOM_TFE8096P 			0x1f9C
+ #define USB_PID_DIGITALNOW_BLUEBIRD_DUAL_1_COLD 	0xdb54
  #define USB_PID_DIGITALNOW_BLUEBIRD_DUAL_1_WARM 	0xdb55
- #define USB_PID_DIGIVOX_MINI_SL_COLD			0xe360
- #define USB_PID_DIGIVOX_MINI_SL_WARM			0xe361
--#define USB_PID_DNTV_TINYUSB2_COLD			0x3223
--#define USB_PID_DNTV_TINYUSB2_WARM			0x3224
+-#define USB_PID_DIGIVOX_MINI_SL_COLD			0xe360
+-#define USB_PID_DIGIVOX_MINI_SL_WARM			0xe361
  #define USB_PID_DPOSH_M9206_COLD			0x9206
  #define USB_PID_DPOSH_M9206_WARM			0xa090
- #define USB_PID_DVB_T_USB_STICK_HIGH_SPEED_COLD 	0x5000
-@@ -413,8 +411,6 @@
+-#define USB_PID_DVB_T_USB_STICK_HIGH_SPEED_COLD 	0x5000
+-#define USB_PID_DVB_T_USB_STICK_HIGH_SPEED_WARM 	0x5001
+ #define USB_PID_DVICO_BLUEBIRD_DUAL_1_COLD		0xdb50
+ #define USB_PID_DVICO_BLUEBIRD_DUAL_1_WARM		0xdb51
+ #define USB_PID_DVICO_BLUEBIRD_DUAL_2_COLD		0xdb58
+@@ -228,6 +222,8 @@
+ #define USB_PID_ELGATO_EYETV_SAT			0x002a
+ #define USB_PID_ELGATO_EYETV_SAT_V2			0x0025
+ #define USB_PID_ELGATO_EYETV_SAT_V3			0x0036
++#define USB_PID_EMPIA_DIGIVOX_MINI_SL_COLD		0xe360
++#define USB_PID_EMPIA_DIGIVOX_MINI_SL_WARM		0xe361
+ #define USB_PID_EMPIA_VSTREAM_COLD			0x17de
+ #define USB_PID_EMPIA_VSTREAM_WARM			0x17df
+ #define USB_PID_EVOLVEO_XTRATV_STICK			0xa115
+@@ -270,6 +266,8 @@
+ #define USB_PID_HAUPPAUGE_TIGER_ATSC_B210		0xb210
+ #define USB_PID_HAUPPAUGE_WINTV_NOVA_T_USB2_COLD	0x9300
+ #define USB_PID_HAUPPAUGE_WINTV_NOVA_T_USB2_WARM	0x9301
++#define USB_PID_HUMAX_DVB_T_STICK_HIGH_SPEED_COLD	0x5000
++#define USB_PID_HUMAX_DVB_T_STICK_HIGH_SPEED_WARM	0x5001
+ #define USB_PID_INTEL_CE9500				0x9500
+ #define USB_PID_ITETECH_IT9135				0x9135
+ #define USB_PID_ITETECH_IT9135_9005			0x9005
+@@ -289,6 +287,8 @@
+ #define USB_PID_KWORLD_VSTREAM_COLD			0x17de
+ #define USB_PID_KYE_DVB_T_COLD				0x701e
+ #define USB_PID_KYE_DVB_T_WARM				0x701f
++#define USB_PID_LEADTEK_WINFAST_DTV_DONGLE_COLD 	0x6025
++#define USB_PID_LEADTEK_WINFAST_DTV_DONGLE_WARM 	0x6026
+ #define USB_PID_LITEON_DVB_T_COLD			0xf000
+ #define USB_PID_LITEON_DVB_T_WARM			0xf001
+ #define USB_PID_MEDION_MD95700				0x0932
+@@ -412,6 +412,8 @@
  #define USB_PID_TWINHAN_VP7021_WARM			0x3208
  #define USB_PID_TWINHAN_VP7041_COLD			0x3201
  #define USB_PID_TWINHAN_VP7041_WARM			0x3202
--#define USB_PID_TWINHAN_VP7045_COLD			0x3205
--#define USB_PID_TWINHAN_VP7045_WARM			0x3206
++#define USB_PID_ULTIMA_ARTEC_T14_COLD			0x810b
++#define USB_PID_ULTIMA_ARTEC_T14_WARM			0x810c
  #define USB_PID_ULTIMA_TVBOX_AN2235_COLD		0x8107
  #define USB_PID_ULTIMA_TVBOX_AN2235_WARM		0x8108
  #define USB_PID_ULTIMA_TVBOX_ANCHOR_COLD		0x2235
-@@ -428,9 +424,13 @@
- #define USB_PID_UNK_HYPER_PALTEK_COLD			0x005e
- #define USB_PID_UNK_HYPER_PALTEK_WARM			0x005f
- #define USB_PID_VISIONPLUS_PINNACLE_PCTV310E		0x3211
-+#define USB_PID_VISIONPLUS_TINYUSB2_COLD		0x3223
-+#define USB_PID_VISIONPLUS_TINYUSB2_WARM		0x3224
- #define USB_PID_VISIONPLUS_VP7020_COLD			0x3203
- #define USB_PID_VISIONPLUS_VP7020_WARM			0x3204
- #define USB_PID_VISIONPLUS_VP7021_COLD			0x3207
-+#define USB_PID_VISIONPLUS_VP7045_COLD			0x3205
-+#define USB_PID_VISIONPLUS_VP7045_WARM			0x3206
- #define USB_PID_WIDEVIEW_DTT200U_COLD			0x0201
- #define USB_PID_WIDEVIEW_DTT200U_WARM			0x0301
- #define USB_PID_WIDEVIEW_WT220U_COLD			0x0222
+@@ -447,13 +449,11 @@
+ #define USB_PID_WIDEVIEW_WT220U_ZL0353_WARM		0x022b
+ #define USB_PID_WINFAST_DTV2000DS			0x6a04
+ #define USB_PID_WINFAST_DTV2000DS_PLUS			0x6f12
+-#define USB_PID_WINFAST_DTV_DONGLE_COLD 		0x6025
+ #define USB_PID_WINFAST_DTV_DONGLE_GOLD 		0x6029
+ #define USB_PID_WINFAST_DTV_DONGLE_H			0x60f6
+ #define USB_PID_WINFAST_DTV_DONGLE_MINID		0x6f0f
+ #define USB_PID_WINFAST_DTV_DONGLE_STK7700P		0x6f00
+ #define USB_PID_WINFAST_DTV_DONGLE_STK7700P_2		0x6f01
+-#define USB_PID_WINFAST_DTV_DONGLE_WARM 		0x6026
+ #define USB_PID_WINTV_SOLOHD				0x0264
+ #define USB_PID_WINTV_SOLOHD_2				0x8268
+ #define USB_PID_XBOX_ONE_TUNER				0x02d5
 -- 
 2.35.1
 
