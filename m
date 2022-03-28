@@ -2,39 +2,39 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEABEC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 28 Mar 2022 19:59:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A9E3C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 28 Mar 2022 20:00:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235927AbiC1UBh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Mar 2022 16:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
+        id S1344191AbiC1UBo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Mar 2022 16:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344003AbiC1UBf (ORCPT
+        with ESMTP id S1344093AbiC1UBi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:01:35 -0400
+        Mon, 28 Mar 2022 16:01:38 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24163969A;
-        Mon, 28 Mar 2022 12:59:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4711939BA0;
+        Mon, 28 Mar 2022 12:59:57 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id D7E931F43853
+        with ESMTPSA id 837671F43850
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648497593;
-        bh=koeYZVYa1e9V9VAWFVOsniYBHyi6nWtDcIkC0przTEE=;
+        s=mail; t=1648497596;
+        bh=d2iOirXh/xNpYRw3u+9Ch8gJt9EKy5UNHmbX/3uP0rM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n4LqLgpBupA7Vw6AD5z/wVRO3g7+he2wEA288iD6Ho4mfTQVWnM+FTZpAmFZPZDaH
-         oj4IlQXm7SvqKU/H10sqMz9poEwuzZUeiG8gEE5WzvHIvwCs7WZRCcgSfye+qzqCfR
-         EoHcip48VZ/+lhfc0OdQ+tsFwhTfX/RxMezGwkbxBdD6s2MPplK0ASSQ54/PjzgfCw
-         avIr1tSLDsp4s9vUcNp4o92zyvncm2ExFJAxNiqgzqwdLtEvnEJO9t1et5oL61egqu
-         r9mDlWWDSqwT3dXjH0VK0+X7DkXmvrAh6x4UzBbdnW5aC27R57F6deeFO515CWc3xf
-         Kh5Hc7D/2cwPQ==
+        b=GiCybdep6uR+UxOBoW/R7m3rKtcVLxeWXr53R8PMdDrGyaSGT2JsVNw5vzzbTqmbx
+         cjxT3gwE5ErWxroUdy8C3ActoeLGDS/UVG27g3kXgnnNmOc6bIkLDXc1S8g6AvNWCk
+         nNX2PorvE/1TAd6QmqSNUsROMIH8L0CUKRUdoxc4uURp7CBJwEMGSOhZeBKVdnVVWC
+         EbUsaVgBH9Ow9wKWLdYt4ihHPkfh+n962FapAEVxaHnxaRS/LFXLYPbcFSYW6ijOxZ
+         SE13vVQtsu02WyQRqMm28kKOdwR6FqqI+BFeGRr0FLDmml/jhQ15Xx5heuZY0+MrM1
+         lHkhdobb72xYA==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     kernel@collabora.com, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 03/24] media: h264: Avoid wrapping long_term_frame_idx
-Date:   Mon, 28 Mar 2022 15:59:15 -0400
-Message-Id: <20220328195936.82552-4-nicolas.dufresne@collabora.com>
+Subject: [PATCH v1 05/24] media: h264: Store all fields into the unordered list
+Date:   Mon, 28 Mar 2022 15:59:17 -0400
+Message-Id: <20220328195936.82552-6-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
 References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
@@ -44,31 +44,152 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For long term reference, frame_num is set to long_term_frame_idx which
-does not require wrapping. This if fixed by observation, no directly
-related issue have been found yet.
+When the current picture is a field, store each field into the
+unordered_list. Doing this required preserving the top and bottom field
+poc.
 
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-h264.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/v4l2-core/v4l2-h264.c | 65 +++++++++++++++++++++--------
+ include/media/v4l2-h264.h           |  6 ++-
+ 2 files changed, 51 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
-index 8d750ee69e74..aebed1cbe05a 100644
+index 4c6bfb057bda..d5698c981973 100644
 --- a/drivers/media/v4l2-core/v4l2-h264.c
 +++ b/drivers/media/v4l2-core/v4l2-h264.c
-@@ -57,8 +57,10 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+@@ -47,8 +47,6 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+ 	}
+ 
+ 	for (i = 0; i < V4L2_H264_NUM_DPB_ENTRIES; i++) {
+-		u32 pic_order_count;
+-
+ 		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+ 			continue;
+ 
+@@ -59,8 +57,6 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+ 		/*
+ 		 * Handle frame_num wraparound as described in section
  		 * '8.2.4.1 Decoding process for picture numbers' of the spec.
- 		 * TODO: This logic will have to be adjusted when we start
- 		 * supporting interlaced content.
-+		 * For long term reference, frame_num is set to
-+		 * long_term_frame_idx which requires no wrapping.
+-		 * TODO: This logic will have to be adjusted when we start
+-		 * supporting interlaced content.
+ 		 * For long term reference, frame_num is set to
+ 		 * long_term_frame_idx which requires no wrapping.
  		 */
--		if (dpb[i].frame_num > cur_frame_num)
-+		if (!b->refs[i].longterm && dpb[i].frame_num > cur_frame_num)
- 			b->refs[i].frame_num = (int)dpb[i].frame_num -
- 					       max_frame_num;
+@@ -70,17 +66,33 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
  		else
+ 			b->refs[i].frame_num = dpb[i].frame_num;
+ 
+-		if (dpb[i].fields == V4L2_H264_FRAME_REF)
+-			pic_order_count = min(dpb[i].top_field_order_cnt,
+-					      dpb[i].bottom_field_order_cnt);
+-		else if (dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF)
+-			pic_order_count = dpb[i].bottom_field_order_cnt;
+-		else
+-			pic_order_count = dpb[i].top_field_order_cnt;
++		b->refs[i].top_field_order_cnt = dpb[i].top_field_order_cnt;
++		b->refs[i].bottom_field_order_cnt = dpb[i].bottom_field_order_cnt;
++
++		if (b->cur_pic_fields == V4L2_H264_FRAME_REF) {
++			u8 fields = V4L2_H264_FRAME_REF;
++
++			b->unordered_reflist[b->num_valid].index = i;
++			b->unordered_reflist[b->num_valid].fields = fields;
++			b->num_valid++;
++			continue;
++		}
++
++		if (dpb[i].fields & V4L2_H264_TOP_FIELD_REF) {
++			u8 fields = V4L2_H264_TOP_FIELD_REF;
++
++			b->unordered_reflist[b->num_valid].index = i;
++			b->unordered_reflist[b->num_valid].fields = fields;
++			b->num_valid++;
++		}
+ 
+-		b->refs[i].pic_order_count = pic_order_count;
+-		b->unordered_reflist[b->num_valid].index = i;
+-		b->num_valid++;
++		if (dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF) {
++			u8 fields = V4L2_H264_BOTTOM_FIELD_REF;
++
++			b->unordered_reflist[b->num_valid].index = i;
++			b->unordered_reflist[b->num_valid].fields = fields;
++			b->num_valid++;
++		}
+ 	}
+ 
+ 	for (i = b->num_valid; i < ARRAY_SIZE(b->unordered_reflist); i++)
+@@ -88,6 +100,23 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_h264_init_reflist_builder);
+ 
++static s32 v4l2_h264_get_poc(const struct v4l2_h264_reflist_builder *b,
++			     const struct v4l2_h264_reference *ref)
++{
++	switch (ref->fields) {
++	case V4L2_H264_FRAME_REF:
++		return min(b->refs[ref->index].top_field_order_cnt,
++				b->refs[ref->index].bottom_field_order_cnt);
++	case V4L2_H264_TOP_FIELD_REF:
++		return b->refs[ref->index].top_field_order_cnt;
++	case V4L2_H264_BOTTOM_FIELD_REF:
++		return b->refs[ref->index].bottom_field_order_cnt;
++	}
++
++	/* not reached */
++	return 0;
++}
++
+ static int v4l2_h264_p_ref_list_cmp(const void *ptra, const void *ptrb,
+ 				    const void *data)
+ {
+@@ -150,8 +179,8 @@ static int v4l2_h264_b0_ref_list_cmp(const void *ptra, const void *ptrb,
+ 		       builder->refs[idxb].pic_num ?
+ 		       -1 : 1;
+ 
+-	poca = builder->refs[idxa].pic_order_count;
+-	pocb = builder->refs[idxb].pic_order_count;
++	poca = v4l2_h264_get_poc(builder, ptra);
++	pocb = v4l2_h264_get_poc(builder, ptrb);
+ 
+ 	/*
+ 	 * Short term pics with POC < cur POC first in POC descending order
+@@ -195,8 +224,8 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
+ 		       builder->refs[idxb].pic_num ?
+ 		       -1 : 1;
+ 
+-	poca = builder->refs[idxa].pic_order_count;
+-	pocb = builder->refs[idxb].pic_order_count;
++	poca = v4l2_h264_get_poc(builder, ptra);
++	pocb = v4l2_h264_get_poc(builder, ptrb);
+ 
+ 	/*
+ 	 * Short term pics with POC > cur POC first in POC ascending order
+diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
+index e165a54c68fa..4cef717b3f18 100644
+--- a/include/media/v4l2-h264.h
++++ b/include/media/v4l2-h264.h
+@@ -15,7 +15,8 @@
+ /**
+  * struct v4l2_h264_reflist_builder - Reference list builder object
+  *
+- * @refs.pic_order_count: reference picture order count
++ * @refs.top_field_order_cnt: top field order count
++ * @refs.bottom_field_order_cnt: bottom field order count
+  * @refs.frame_num: reference frame number
+  * @refs.pic_num: reference picture number
+  * @refs.longterm: set to true for a long term reference
+@@ -32,7 +33,8 @@
+  */
+ struct v4l2_h264_reflist_builder {
+ 	struct {
+-		s32 pic_order_count;
++		s32 top_field_order_cnt;
++		s32 bottom_field_order_cnt;
+ 		int frame_num;
+ 		u32 pic_num;
+ 		u16 longterm : 1;
 -- 
 2.34.1
 
