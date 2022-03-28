@@ -2,43 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E25DC433FE
-	for <linux-media@archiver.kernel.org>; Mon, 28 Mar 2022 20:00:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6845DC433EF
+	for <linux-media@archiver.kernel.org>; Mon, 28 Mar 2022 20:00:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344234AbiC1UC3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Mar 2022 16:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
+        id S1344355AbiC1UCa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 28 Mar 2022 16:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343979AbiC1UCT (ORCPT
+        with ESMTP id S1344216AbiC1UCC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Mar 2022 16:02:19 -0400
+        Mon, 28 Mar 2022 16:02:02 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C24259A77;
-        Mon, 28 Mar 2022 13:00:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381A33C713;
+        Mon, 28 Mar 2022 13:00:12 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 394D21F438A2
+        with ESMTPSA id 062B51F43877
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648497616;
-        bh=PqdQnTESUHQAXRfjK8M+MyHsl8WocJ3A7cMRoX/7vwc=;
+        s=mail; t=1648497611;
+        bh=Lmej6mvr+yQMSxRRbj/l26Dv68B/G/B0rXWK3YrsMjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IFTmVD0qqy2AA0++iIq5Y4/vmDXOq4qBb9aPdbD0Rv36lYHxr+O/H+EN9aTHBQk66
-         EOhqW1TUr8j+S5Meu+XfMG6ROIgibKAf/fxXGzfbYIDutmlnlBwHclIR0e9vt+7J7c
-         H8cjgxv1muMhwijlvLK+/Rtl+Rx3yRJrlzu4Ej6ySdXodtRoJleMzt3sSt1KsfZybn
-         rm1/2BJmizUymlb3kbaQLIgcD90zpqGjnl6wgO2LQlZF05kbUqdPoDslAgNkcBvLTc
-         SvFAo7+mmkTjWHRTFSKh3xqzokOJ1KH0qoBEo53dd8M8n/o0w25MlVU43rrRL+74Ug
-         FjPikprYubBQw==
+        b=NV+GhHpYnjMTzN1hs6yJQSwtbapQ3u3ipCkqaruCnWaRBKOX6wpA+9sdVbOnVVA7W
+         XbykfN1mo93fX2n4O1yO0dGBLJG75otXwHXqq+oJklmAippFbWtHQh5QiaESJKStC6
+         NRakJe2iit1+dSJUvmOe1nuYUV2BzFF9WDQ32TJtpojG0Zi+reYJjLL6k2wirrtxfY
+         ZN2Fmcmr+htAVoXAy+x6k+fscpoSJFZAIWnocQWnBw9fDX/97Bf4nI1S1UUa8JSs8B
+         5wBi3ZLfwJV6UgwnRChOoTtH8xIYLW/8j6kjEhYAVUeo67bClTHK10JcPbsigf5w5F
+         RBWgqWq9CTqlQ==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 18/24] media: rkvdec: h264: Fix bit depth wrap in pps packet
-Date:   Mon, 28 Mar 2022 15:59:30 -0400
-Message-Id: <20220328195936.82552-19-nicolas.dufresne@collabora.com>
+Cc:     kernel@collabora.com, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 15/24] media: rkvdec: Enable capture buffer holding for H264
+Date:   Mon, 28 Mar 2022 15:59:27 -0400
+Message-Id: <20220328195936.82552-16-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
 References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
@@ -48,35 +47,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jonas Karlman <jonas@kwiboo.se>
+In order to support interlaced video decoding, the driver must
+allow holding the capture buffer so that the second field can
+be decoded into it.
 
-The luma and chroma bit depth fields in the pps packet is 3 bits wide.
-8 is wrongly added to the bit depth value written to these 3-bit fields.
-Because only the 3 LSB is written the hardware is configured correctly.
-
-Correct this by not adding 8 to the luma and chroma bit depth value.
-
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- drivers/staging/media/rkvdec/rkvdec-h264.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 4 ++++
+ drivers/staging/media/rkvdec/rkvdec.h | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index 847b8957dad3..ec52b195bbd7 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -662,8 +662,8 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
- 	WRITE_PPS(0xff, PROFILE_IDC);
- 	WRITE_PPS(1, CONSTRAINT_SET3_FLAG);
- 	WRITE_PPS(sps->chroma_format_idc, CHROMA_FORMAT_IDC);
--	WRITE_PPS(sps->bit_depth_luma_minus8 + 8, BIT_DEPTH_LUMA);
--	WRITE_PPS(sps->bit_depth_chroma_minus8 + 8, BIT_DEPTH_CHROMA);
-+	WRITE_PPS(sps->bit_depth_luma_minus8, BIT_DEPTH_LUMA);
-+	WRITE_PPS(sps->bit_depth_chroma_minus8, BIT_DEPTH_CHROMA);
- 	WRITE_PPS(0, QPPRIME_Y_ZERO_TRANSFORM_BYPASS_FLAG);
- 	WRITE_PPS(sps->log2_max_frame_num_minus4, LOG2_MAX_FRAME_NUM_MINUS4);
- 	WRITE_PPS(sps->max_num_ref_frames, MAX_NUM_REF_FRAMES);
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index 2df8cf4883e2..05824f1997f7 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -138,6 +138,7 @@ static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
+ 		.ops = &rkvdec_h264_fmt_ops,
+ 		.num_decoded_fmts = ARRAY_SIZE(rkvdec_h264_vp9_decoded_fmts),
+ 		.decoded_fmts = rkvdec_h264_vp9_decoded_fmts,
++		.subsystem_flags = VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF,
+ 	},
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_VP9_FRAME,
+@@ -394,6 +395,9 @@ static int rkvdec_s_output_fmt(struct file *file, void *priv,
+ 	cap_fmt->fmt.pix_mp.ycbcr_enc = f->fmt.pix_mp.ycbcr_enc;
+ 	cap_fmt->fmt.pix_mp.quantization = f->fmt.pix_mp.quantization;
+ 
++	/* Enable format specific queue feature */
++	vq->subsystem_flags |= desc->subsystem_flags;
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
+index 2f4ea1786b93..e37f1a015fa0 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.h
++++ b/drivers/staging/media/rkvdec/rkvdec.h
+@@ -81,6 +81,7 @@ struct rkvdec_coded_fmt_desc {
+ 	const struct rkvdec_coded_fmt_ops *ops;
+ 	unsigned int num_decoded_fmts;
+ 	const u32 *decoded_fmts;
++	u32 subsystem_flags;
+ };
+ 
+ struct rkvdec_dev {
 -- 
 2.34.1
 
