@@ -2,128 +2,128 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E83EC433EF
-	for <linux-media@archiver.kernel.org>; Tue, 29 Mar 2022 07:22:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5E41C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 29 Mar 2022 07:33:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbiC2HYG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 29 Mar 2022 03:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
+        id S233473AbiC2HfK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Mar 2022 03:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbiC2HYF (ORCPT
+        with ESMTP id S233472AbiC2HfJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 29 Mar 2022 03:24:05 -0400
+        Tue, 29 Mar 2022 03:35:09 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93A0242230;
-        Tue, 29 Mar 2022 00:22:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5633E64D3;
+        Tue, 29 Mar 2022 00:33:24 -0700 (PDT)
 Received: from localhost (unknown [IPv6:2a02:3030:a:f397:f6bc:b726:2678:839f])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 617721F434C3;
-        Tue, 29 Mar 2022 08:22:19 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D434B1F434C3;
+        Tue, 29 Mar 2022 08:33:22 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648538539;
-        bh=/W5ETW3ilMG908aam2DSTA6zgd0fm+3tYbWwdkTwWRk=;
+        s=mail; t=1648539203;
+        bh=6168akkeItinnefCNizxCX6qty+XlEyo8LTc/EhMHyA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nLF8BzyzhkdV7qtb7zyz8uOMfyvj6z1nQML/smXC3jCjwbbqt+AnC8ggo18xor1Ip
-         aXFdV8uGzjQeh4Vy1AWCISf6kN2kITw+l83JbdQSL82l6ZOufzfaRzE+GXZTje0lZU
-         oeLppJONQll4PG7lXm0LSfJlzn9Rj2aLKI9LVjPGCS5P21mSxWzg4nc3uJsFI8s7Oo
-         OB6gi6bBXctow5FnNG2reIa9HKcgdclI0ad3Ol4JyFoNlGCZGjpEeTm7BcbYJZ2boW
-         UtGtB9hHTXU4hn/sjWwwt97x4MBIGxmydRqk0exrPYyvLi4Q5JSh+5J0hmv0RWYUDu
-         B/ju1nHdWNA1A==
-Date:   Tue, 29 Mar 2022 09:22:16 +0200
+        b=TfICraTN9dPWVshI9ejFuM3OX2hFoRD5nKosTH5g67vwjeXewf8wTD/SF5u6n7PrN
+         EnMshmHt8DYMnG89m0nwlWnmkcwRGUkrvqsP+n2t9g01xI37wA+XLebyOxR0ZMia6F
+         vP+/wYs8obUoAX4lgY0vJ0W7weHyn6x9KQXStKF2JVswKPJxDhtkTocV1ZBDoysAUg
+         kcIX6skZLT/4VG9kV1o0tywt6I9JGrroedxusx6cq27IYJ70KDj3WYyy5rXMLfbYpE
+         kM/RczV2Nq51Vpsnp6jx+hXJ1FDIiczEzEaUoPfNe58xxLiWmnOjqR1I+OvEstUk0Z
+         G8K+1WzbNLfVw==
+Date:   Tue, 29 Mar 2022 09:33:19 +0200
 From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+To:     James_Lin <Ping-lei.Lin@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@collabora.com, Alex Bee <knaerzche@gmail.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 24/24] media: rkvdec-h264: Don't hardcode SPS/PPS
- parameters
-Message-ID: <20220329072216.gqzcp6lowpfrweb7@basti-XPS-13-9310>
-References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
- <20220328195936.82552-25-nicolas.dufresne@collabora.com>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ming Qian <ming.qian@nxp.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Sherlock.Chang@mediatek.com,
+        TM.Wu@mediatek.com
+Subject: Re: [PATCH] Signed-off-by: James_Lin <Ping-lei.Lin@mediatek.com>
+Message-ID: <20220329073319.7da77tpgt523zksg@basti-XPS-13-9310>
+References: <20220329071407.17703-1-Ping-lei.Lin@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220328195936.82552-25-nicolas.dufresne@collabora.com>
+In-Reply-To: <20220329071407.17703-1-Ping-lei.Lin@mediatek.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hey Nicolas,
+Hey James,
 
-The patch series doesn't seem to apply on the latest media tree master
-branch. Looking at your tree I can see that you have commit: ba2c670a
-"media: nxp: Restrict VIDEO_IMX_MIPI_CSIS to ARCH_MXC or COMPILE_TEST
-Laurent Pinchart authored 1 week ago "
+Looks like something went wrong during the creation of the patch.
 
-But the current head of the media tree is: 71e6d0608e4d
-"media: platform: Remove unnecessary print function dev_err()
-Yang Li authored 13 days ago"
-
-On 28.03.2022 15:59, Nicolas Dufresne wrote:
->From: Alex Bee <knaerzche@gmail.com>
->
->Some SPS/PPS parameters are currently hardcoded in the driver
->even though so do exist in the uapi which is stable by now.
-
-s/even though so/even though they/
->
->Use them instead of hardcoding them.
->
->Conformance tests have shown there is no difference, but it might
->increase decoder performance.
-
-I think it would be great if we could add some performance metrics to
-the commit description to have a metric that following patches could
-compare themselves with.
+The patch needs a commit subject line, a description what it does and
+the SOB has to beneath that description.
 
 Greetings,
 Sebastian
 
->
->Signed-off-by: Alex Bee <knaerzche@gmail.com>
->---
-> drivers/staging/media/rkvdec/rkvdec-h264.c | 13 +++++++------
-> 1 file changed, 7 insertions(+), 6 deletions(-)
->
->diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
->index 891c48bf6a51..91f65d78e453 100644
->--- a/drivers/staging/media/rkvdec/rkvdec-h264.c
->+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
->@@ -655,13 +655,14 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
->
-> #define WRITE_PPS(value, field) set_ps_field(hw_ps->info, field, value)
-> 	/* write sps */
->-	WRITE_PPS(0xf, SEQ_PARAMETER_SET_ID);
->-	WRITE_PPS(0xff, PROFILE_IDC);
->-	WRITE_PPS(1, CONSTRAINT_SET3_FLAG);
->+	WRITE_PPS(sps->seq_parameter_set_id, SEQ_PARAMETER_SET_ID);
->+	WRITE_PPS(sps->profile_idc, PROFILE_IDC);
->+	WRITE_PPS((sps->constraint_set_flags & 1 << 3) ? 1 : 0, CONSTRAINT_SET3_FLAG);
-> 	WRITE_PPS(sps->chroma_format_idc, CHROMA_FORMAT_IDC);
-> 	WRITE_PPS(sps->bit_depth_luma_minus8, BIT_DEPTH_LUMA);
-> 	WRITE_PPS(sps->bit_depth_chroma_minus8, BIT_DEPTH_CHROMA);
->-	WRITE_PPS(0, QPPRIME_Y_ZERO_TRANSFORM_BYPASS_FLAG);
->+	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_QPPRIME_Y_ZERO_TRANSFORM_BYPASS),
->+		  QPPRIME_Y_ZERO_TRANSFORM_BYPASS_FLAG);
-> 	WRITE_PPS(sps->log2_max_frame_num_minus4, LOG2_MAX_FRAME_NUM_MINUS4);
-> 	WRITE_PPS(sps->max_num_ref_frames, MAX_NUM_REF_FRAMES);
-> 	WRITE_PPS(sps->pic_order_cnt_type, PIC_ORDER_CNT_TYPE);
->@@ -679,8 +680,8 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
-> 		  DIRECT_8X8_INFERENCE_FLAG);
->
-> 	/* write pps */
->-	WRITE_PPS(0xff, PIC_PARAMETER_SET_ID);
->-	WRITE_PPS(0x1f, PPS_SEQ_PARAMETER_SET_ID);
->+	WRITE_PPS(pps->pic_parameter_set_id, PIC_PARAMETER_SET_ID);
->+	WRITE_PPS(pps->seq_parameter_set_id, PPS_SEQ_PARAMETER_SET_ID);
-> 	WRITE_PPS(!!(pps->flags & V4L2_H264_PPS_FLAG_ENTROPY_CODING_MODE),
-> 		  ENTROPY_CODING_MODE_FLAG);
-> 	WRITE_PPS(!!(pps->flags & V4L2_H264_PPS_FLAG_BOTTOM_FIELD_PIC_ORDER_IN_FRAME_PRESENT),
+On 29.03.2022 15:14, James_Lin wrote:
+>diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+>index dda0f0aa78b8..ebb807c33e57 100644
+>--- a/drivers/media/usb/uvc/uvc_driver.c
+>+++ b/drivers/media/usb/uvc/uvc_driver.c
+>@@ -154,6 +154,11 @@ static struct uvc_format_desc uvc_fmts[] = {
+> 		.guid		= UVC_GUID_FORMAT_H264,
+> 		.fcc		= V4L2_PIX_FMT_H264,
+> 	},
+>+	{
+>+		.name		= "H.265",
+>+		.guid		= UVC_GUID_FORMAT_H265,
+>+		.fcc		= V4L2_PIX_FMT_H265,
+>+	},
+> 	{
+> 		.name		= "Greyscale 8 L/R (Y8I)",
+> 		.guid		= UVC_GUID_FORMAT_Y8I,
+>diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+>index 143230b3275b..41f4d8c33f2a 100644
+>--- a/drivers/media/usb/uvc/uvcvideo.h
+>+++ b/drivers/media/usb/uvc/uvcvideo.h
+>@@ -139,6 +139,9 @@
+> #define UVC_GUID_FORMAT_H264 \
+> 	{ 'H',  '2',  '6',  '4', 0x00, 0x00, 0x10, 0x00, \
+> 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+>+#define UVC_GUID_FORMAT_H265 \
+>+	{ 'H',  '2',  '6',  '5', 0x00, 0x00, 0x10, 0x00, \
+>+	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+> #define UVC_GUID_FORMAT_Y8I \
+> 	{ 'Y',  '8',  'I',  ' ', 0x00, 0x00, 0x10, 0x00, \
+> 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+>diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+>index 96e307fe3aab..aeaeb29307a4 100644
+>--- a/drivers/media/v4l2-core/v4l2-ioctl.c
+>+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+>@@ -1402,6 +1402,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+> 		case V4L2_PIX_FMT_JPEG:		descr = "JFIF JPEG"; break;
+> 		case V4L2_PIX_FMT_DV:		descr = "1394"; break;
+> 		case V4L2_PIX_FMT_MPEG:		descr = "MPEG-1/2/4"; break;
+>+		case V4L2_PIX_FMT_H265:		descr = "H.265"; break;
+> 		case V4L2_PIX_FMT_H264:		descr = "H.264"; break;
+> 		case V4L2_PIX_FMT_H264_NO_SC:	descr = "H.264 (No Start Codes)"; break;
+> 		case V4L2_PIX_FMT_H264_MVC:	descr = "H.264 MVC"; break;
+>diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+>index 3768a0a80830..636e4236bfb8 100644
+>--- a/include/uapi/linux/videodev2.h
+>+++ b/include/uapi/linux/videodev2.h
+>@@ -691,6 +691,7 @@ struct v4l2_pix_format {
+> #define V4L2_PIX_FMT_JPEG     v4l2_fourcc('J', 'P', 'E', 'G') /* JFIF JPEG     */
+> #define V4L2_PIX_FMT_DV       v4l2_fourcc('d', 'v', 's', 'd') /* 1394          */
+> #define V4L2_PIX_FMT_MPEG     v4l2_fourcc('M', 'P', 'E', 'G') /* MPEG-1/2/4 Multiplexed */
+>+#define V4L2_PIX_FMT_H265     v4l2_fourcc('H', '2', '6', '5') /* H265 with start codes */
+> #define V4L2_PIX_FMT_H264     v4l2_fourcc('H', '2', '6', '4') /* H264 with start codes */
+> #define V4L2_PIX_FMT_H264_NO_SC v4l2_fourcc('A', 'V', 'C', '1') /* H264 without start codes */
+> #define V4L2_PIX_FMT_H264_MVC v4l2_fourcc('M', '2', '6', '4') /* H264 MVC */
 >-- 
->2.34.1
+>2.18.0
 >
