@@ -2,45 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7055C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05D23C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:50:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344121AbiC3Lv7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 07:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        id S1344128AbiC3LwG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 07:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344106AbiC3Lvm (ORCPT
+        with ESMTP id S1344118AbiC3Lvp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:51:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4AE2706F5;
-        Wed, 30 Mar 2022 04:48:03 -0700 (PDT)
+        Wed, 30 Mar 2022 07:51:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF3925F67E;
+        Wed, 30 Mar 2022 04:48:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE16DB81ACC;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44166B81C39;
+        Wed, 30 Mar 2022 11:48:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05156C340EE;
         Wed, 30 Mar 2022 11:48:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92F17C340EE;
-        Wed, 30 Mar 2022 11:48:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648640881;
-        bh=qyc5E1VsAiEkog/l7n77XDh8NAl9OUtNeFvCzuC5lPg=;
+        s=k20201202; t=1648640883;
+        bh=GsAv312AdYmmt1e+wMqZIwMIBSqRjZ1+lgs4z1QfSXo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WCSHWQnw1k3pNblFWAjgbzubF64tr5DQV3+oHrR1Gy+9cf+LiIh2n4o9lWuh3SL/+
-         XVoPiHoCLS/x9VOcVLsnAOmCWbI21w3T3SqJYOoQdafDDNcvrKu5Q2NdZ8+s4hTT9I
-         x6Xq1z+cpEcJ9rJFzcFQa531qlJPcLd8fQauC5Qm8bOYwhod149hOKX9GYviqs1lI2
-         3nj47XCXCpOIlo08j6yEsH6vA2JLCqo1zGM0KOtt1hMwPEGIOzSvSmRGqIK6YgQ1q9
-         dgb95Ac0GltEG1NbTTPXfKK/RKTUt/ERXVG1BepHoL8McJef3vlvyUCTppIPtEUtUE
-         1Rh5NOMcOfj5g==
+        b=fmQndK/RLafW0VO7ELezeWfhKPCBxmGwzWHyd+U+ctoGJ7rn12G/LMFrkM7FV2UuZ
+         vlIr21K0fNVBdwNxHGCyt92UuhkbME8+BWhbBkxwTTS6hbbRtl0lDuQCeYpzcpoeuM
+         AfOv3rNn0TdKK9Di3zWcB2XHOoUWvv+p/WRnalxGfcm8XxChqogyHAHDg5+R7/G8px
+         jrYmDhnRvKAdXP8Vb3Tl9WdvzowJcWwkKeeukaySzEW29uMpQvzLRKYHZ2616Yya1k
+         9M9PsWtTOL6GCXGTkTGe4L7vRXadEjgkTVsUUWI7Tlkpzq7id+fDxIPjQUfFwBfg2f
+         0ywde4tt/FK7w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 48/66] media: i2c: ov5648: Fix lockdep error
-Date:   Wed, 30 Mar 2022 07:46:27 -0400
-Message-Id: <20220330114646.1669334-48-sashal@kernel.org>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 50/66] media: hdpvr: initialize dev->worker at hdpvr_register_videodev
+Date:   Wed, 30 Mar 2022 07:46:29 -0400
+Message-Id: <20220330114646.1669334-50-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220330114646.1669334-1-sashal@kernel.org>
 References: <20220330114646.1669334-1-sashal@kernel.org>
@@ -52,51 +54,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit d4cb5d3c4cee28aa89b02bc33d930a6cf75e7f79 ]
+[ Upstream commit 07922937e9a580825f9965c46fd15e23ba5754b6 ]
 
-ov5648_state_init() calls ov5648_state_mipi_configure() which uses
-__v4l2_ctrl_s_ctrl[_int64](). This means that sensor->mutex (which
-is also sensor->ctrls.handler.lock) must be locked before calling
-ov5648_state_init().
+hdpvr_register_videodev is responsible to initialize a worker in
+hdpvr_device. However, the worker is only initialized at
+hdpvr_start_streaming other than hdpvr_register_videodev.
+When hdpvr_probe does not initialize its worker, the hdpvr_disconnect
+will encounter one WARN in flush_work.The stack trace is as follows:
 
-ov5648_state_mipi_configure() is also used in other places where
-the lock is already held so it cannot be changed itself.
+ hdpvr_disconnect+0xb8/0xf2 drivers/media/usb/hdpvr/hdpvr-core.c:425
+ usb_unbind_interface+0xbf/0x3a0 drivers/usb/core/driver.c:458
+ __device_release_driver drivers/base/dd.c:1206 [inline]
+ device_release_driver_internal+0x22a/0x230 drivers/base/dd.c:1237
+ bus_remove_device+0x108/0x160 drivers/base/bus.c:529
+ device_del+0x1fe/0x510 drivers/base/core.c:3592
+ usb_disable_device+0xd1/0x1d0 drivers/usb/core/message.c:1419
+ usb_disconnect+0x109/0x330 drivers/usb/core/hub.c:2228
 
-Note this is based on an identical (tested) fix for the ov8865 driver,
-this has only been compile-tested.
+Fix this by moving the initialization of dev->worker to the starting of
+hdpvr_register_videodev
 
-Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov5648.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/media/usb/hdpvr/hdpvr-video.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
-index 947d437ed0ef..01e22c535267 100644
---- a/drivers/media/i2c/ov5648.c
-+++ b/drivers/media/i2c/ov5648.c
-@@ -1778,8 +1778,14 @@ static int ov5648_state_configure(struct ov5648_sensor *sensor,
+diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
+index 563128d11731..60e57e0f1927 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-video.c
++++ b/drivers/media/usb/hdpvr/hdpvr-video.c
+@@ -308,7 +308,6 @@ static int hdpvr_start_streaming(struct hdpvr_device *dev)
  
- static int ov5648_state_init(struct ov5648_sensor *sensor)
- {
--	return ov5648_state_configure(sensor, &ov5648_modes[0],
--				      ov5648_mbus_codes[0]);
-+	int ret;
-+
-+	mutex_lock(&sensor->mutex);
-+	ret = ov5648_state_configure(sensor, &ov5648_modes[0],
-+				     ov5648_mbus_codes[0]);
-+	mutex_unlock(&sensor->mutex);
-+
-+	return ret;
- }
+ 	dev->status = STATUS_STREAMING;
  
- /* Sensor Base */
+-	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
+ 	schedule_work(&dev->worker);
+ 
+ 	v4l2_dbg(MSG_BUFFER, hdpvr_debug, &dev->v4l2_dev,
+@@ -1165,6 +1164,9 @@ int hdpvr_register_videodev(struct hdpvr_device *dev, struct device *parent,
+ 	bool ac3 = dev->flags & HDPVR_FLAG_AC3_CAP;
+ 	int res;
+ 
++	// initialize dev->worker
++	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
++
+ 	dev->cur_std = V4L2_STD_525_60;
+ 	dev->width = 720;
+ 	dev->height = 480;
 -- 
 2.34.1
 
