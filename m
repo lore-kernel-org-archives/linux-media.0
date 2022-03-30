@@ -2,48 +2,50 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02C2AC433FE
-	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:57:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FC93C388F3
+	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:57:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344884AbiC3L4j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 07:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
+        id S241796AbiC3L7A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 07:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344581AbiC3LxS (ORCPT
+        with ESMTP id S1344812AbiC3L4e (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:53:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AEE264F4F;
-        Wed, 30 Mar 2022 04:49:14 -0700 (PDT)
+        Wed, 30 Mar 2022 07:56:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5B310FA;
+        Wed, 30 Mar 2022 04:54:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9407E61671;
-        Wed, 30 Mar 2022 11:49:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26DB7C34111;
-        Wed, 30 Mar 2022 11:49:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC64D615E7;
+        Wed, 30 Mar 2022 11:54:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2913EC3410F;
+        Wed, 30 Mar 2022 11:54:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648640948;
-        bh=8XMINSXaSbfKJrYh9dECjJqF0AVdv8TqKHJzrJ7r5kw=;
+        s=k20201202; t=1648641273;
+        bh=1sHfJvFN+OjUE01N3UAP6EyW1BqdX/gvRrGAxGZaGcE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RCNw4SYaQc2yZZyl4SDVgGr2nixOL8PWpOqf4oaHB3kboi8bmRbLkWEjocoMuRoop
-         UoXdvpo1Fetq064nVXBsQyPqk1zLHqXFWmqVX8OoaON/r+1JJnoGXM9cxvU9ii68aL
-         DywaICIBh9MmqUJ1Wn3SAjqaSilNHDLIU+Viss+eKy6lTCEYxDKCC9GU4KYSWPifqS
-         9Qk3Dgtgm8PFBeGv2G8YFPVAzYURLAtvzV0ORMihjkb3ra8htyBsGdKbt54O71ev+9
-         zYtafGE6PbM5iwPEh5gMufUdiqVMfZ/oaja7+iaGXwzI3I6p5UbBgOq5fm8AWyoBfm
-         gCJY5N5V4ZLZw==
+        b=LfTC8Qa3v/V6WNs6HQDKqcTTEyBbcpjjmvVbHbE6LmCyyLrPeiKMfOz6R++iWVEMn
+         lQf9kuNP4AFx7CLdYBqFNq0p2ZbYxYvNhxkaoE+JRr3x78oYDqFECjBk/0dJ+wIVIa
+         MvVn83hax2z0P0cOhtvVqsSpQhQPzuwS/u8QF+8sFzSZrRHdA72rTTOsbiIRHo74rY
+         gNHb8qQi2pQtxld9NfWzyp0J9O77eEhm7ez0GeK6unQCymJBP2r9RMUuv61asXR00n
+         JsqaufgnrcrjrAaRZmpcPuJS8Kc6bXq6id9BslUlICSqsGJcU9d90Reu8UQ0Dq9PVd
+         LQOYdzfYaRZww==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tsuchiya Yuto <kitakar@gmail.com>,
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
-Subject: [PATCH AUTOSEL 5.16 22/59] media: atomisp: fix dummy_ptr check to avoid duplicate active_bo
-Date:   Wed, 30 Mar 2022 07:47:54 -0400
-Message-Id: <20220330114831.1670235-22-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 15/17] media: hdpvr: initialize dev->worker at hdpvr_register_videodev
+Date:   Wed, 30 Mar 2022 07:54:04 -0400
+Message-Id: <20220330115407.1673214-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
-References: <20220330114831.1670235-1-sashal@kernel.org>
+In-Reply-To: <20220330115407.1673214-1-sashal@kernel.org>
+References: <20220330115407.1673214-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,114 +54,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Tsuchiya Yuto <kitakar@gmail.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit 127efdbc51fe6064336c0452ce9c910b3e107cf0 ]
+[ Upstream commit 07922937e9a580825f9965c46fd15e23ba5754b6 ]
 
-The dummy_ptr check in hmm_init() [1] results in the following
-"hmm_init Failed to create sysfs" error exactly once every
-two times on atomisp reload by rmmod/insmod (although atomisp module
-loads and works fine regardless of this error):
+hdpvr_register_videodev is responsible to initialize a worker in
+hdpvr_device. However, the worker is only initialized at
+hdpvr_start_streaming other than hdpvr_register_videodev.
+When hdpvr_probe does not initialize its worker, the hdpvr_disconnect
+will encounter one WARN in flush_work.The stack trace is as follows:
 
-	[  140.230662] sysfs: cannot create duplicate filename '/devices/pci0000:00/0000:00:03.0/active_bo'
-	[  140.230668] CPU: 1 PID: 2502 Comm: insmod Tainted: G         C OE     5.15.0-rc4-1-surface-mainline #1 b8acf6eb64994414b2e20bad312a7a2c45f748f9
-	[  140.230675] Hardware name: OEMB OEMB/OEMB, BIOS 1.51116.238 03/09/2015
-	[  140.230678] Call Trace:
-	[  140.230687]  dump_stack_lvl+0x46/0x5a
-	[  140.230702]  sysfs_warn_dup.cold+0x17/0x24
-	[  140.230710]  sysfs_add_file_mode_ns+0x160/0x170
-	[  140.230717]  internal_create_group+0x126/0x390
-	[  140.230723]  hmm_init+0x5c/0x70 [atomisp 7a6a680bf400629363d2a6f58fd10e7299678b99]
-	[  140.230811]  atomisp_pci_probe.cold+0x1136/0x148e [atomisp 7a6a680bf400629363d2a6f58fd10e7299678b99]
-	[  140.230875]  local_pci_probe+0x45/0x80
-	[  140.230882]  ? pci_match_device+0xd7/0x130
-	[  140.230887]  pci_device_probe+0xfa/0x1b0
-	[  140.230892]  really_probe+0x1f5/0x3f0
-	[  140.230899]  __driver_probe_device+0xfe/0x180
-	[  140.230903]  driver_probe_device+0x1e/0x90
-	[  140.230908]  __driver_attach+0xc0/0x1c0
-	[  140.230912]  ? __device_attach_driver+0xe0/0xe0
-	[  140.230915]  ? __device_attach_driver+0xe0/0xe0
-	[  140.230919]  bus_for_each_dev+0x89/0xd0
-	[  140.230924]  bus_add_driver+0x12b/0x1e0
-	[  140.230929]  driver_register+0x8f/0xe0
-	[  140.230933]  ? 0xffffffffc153f000
-	[  140.230937]  do_one_initcall+0x57/0x220
-	[  140.230945]  do_init_module+0x5c/0x260
-	[  140.230952]  load_module+0x24bd/0x26a0
-	[  140.230962]  ? __do_sys_finit_module+0xae/0x110
-	[  140.230966]  __do_sys_finit_module+0xae/0x110
-	[  140.230972]  do_syscall_64+0x5c/0x80
-	[  140.230979]  ? syscall_exit_to_user_mode+0x23/0x40
-	[  140.230983]  ? do_syscall_64+0x69/0x80
-	[  140.230988]  ? exc_page_fault+0x72/0x170
-	[  140.230991]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-	[  140.230997] RIP: 0033:0x7f7fd5d8718d
-	[  140.231003] Code: b4 0c 00 0f 05 eb a9 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b3 6c 0c 00 f7 d8 64 89 01 48
-	[  140.231006] RSP: 002b:00007ffefc25f0e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
-	[  140.231012] RAX: ffffffffffffffda RBX: 000055ac3edcd7f0 RCX: 00007f7fd5d8718d
-	[  140.231015] RDX: 0000000000000000 RSI: 000055ac3d723270 RDI: 0000000000000003
-	[  140.231017] RBP: 0000000000000000 R08: 0000000000000000 R09: 00007f7fd5e52380
-	[  140.231019] R10: 0000000000000003 R11: 0000000000000246 R12: 000055ac3d723270
-	[  140.231021] R13: 0000000000000000 R14: 000055ac3edd06e0 R15: 0000000000000000
-	[  140.231038] atomisp-isp2 0000:00:03.0: hmm_init Failed to create sysfs
+ hdpvr_disconnect+0xb8/0xf2 drivers/media/usb/hdpvr/hdpvr-core.c:425
+ usb_unbind_interface+0xbf/0x3a0 drivers/usb/core/driver.c:458
+ __device_release_driver drivers/base/dd.c:1206 [inline]
+ device_release_driver_internal+0x22a/0x230 drivers/base/dd.c:1237
+ bus_remove_device+0x108/0x160 drivers/base/bus.c:529
+ device_del+0x1fe/0x510 drivers/base/core.c:3592
+ usb_disable_device+0xd1/0x1d0 drivers/usb/core/message.c:1419
+ usb_disconnect+0x109/0x330 drivers/usb/core/hub.c:2228
 
-The problem is that dummy_ptr == 0 is a valid value. So, change the logic
-which checks if dummy_ptr was allocated.
+Fix this by moving the initialization of dev->worker to the starting of
+hdpvr_register_videodev
 
-At this point, atomisp now gives WARN_ON() in hmm_free() [2] on atomisp
-reload by rmmod/insmod. Again, the check is wrong there.
-
-So, change both checks for mmgr_EXCEPTION, which is the error value when
-HMM allocation fails, and initialize dummy_ptr with such value.
-
-[1] added on commit
-    d9ab83953fa7 ("media: atomisp: don't cause a warn if probe failed")
-[2] added on commit
-    b83cc378dfc4 ("atomisp: clean up the hmm init/cleanup indirections")
-
-Link: https://lore.kernel.org/linux-media/20211017162337.44860-3-kitakar@gmail.com
-
-Signed-off-by: Tsuchiya Yuto <kitakar@gmail.com>
-Co-developed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/hmm/hmm.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/usb/hdpvr/hdpvr-video.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
-index 6a5ee4607089..c1cda16f2dc0 100644
---- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
-+++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
-@@ -39,7 +39,7 @@
- struct hmm_bo_device bo_device;
- struct hmm_pool	dynamic_pool;
- struct hmm_pool	reserved_pool;
--static ia_css_ptr dummy_ptr;
-+static ia_css_ptr dummy_ptr = mmgr_EXCEPTION;
- static bool hmm_initialized;
- struct _hmm_mem_stat hmm_mem_stat;
+diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
+index 474c11e1d495..cfd8c09f9ded 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-video.c
++++ b/drivers/media/usb/hdpvr/hdpvr-video.c
+@@ -312,7 +312,6 @@ static int hdpvr_start_streaming(struct hdpvr_device *dev)
  
-@@ -209,7 +209,7 @@ int hmm_init(void)
+ 	dev->status = STATUS_STREAMING;
  
- void hmm_cleanup(void)
- {
--	if (!dummy_ptr)
-+	if (dummy_ptr == mmgr_EXCEPTION)
- 		return;
- 	sysfs_remove_group(&atomisp_dev->kobj, atomisp_attribute_group);
+-	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
+ 	schedule_work(&dev->worker);
  
-@@ -288,7 +288,8 @@ void hmm_free(ia_css_ptr virt)
+ 	v4l2_dbg(MSG_BUFFER, hdpvr_debug, &dev->v4l2_dev,
+@@ -1156,6 +1155,9 @@ int hdpvr_register_videodev(struct hdpvr_device *dev, struct device *parent,
+ 	bool ac3 = dev->flags & HDPVR_FLAG_AC3_CAP;
+ 	int res;
  
- 	dev_dbg(atomisp_dev, "%s: free 0x%08x\n", __func__, virt);
- 
--	WARN_ON(!virt);
-+	if (WARN_ON(virt == mmgr_EXCEPTION))
-+		return;
- 
- 	bo = hmm_bo_device_search_start(&bo_device, (unsigned int)virt);
- 
++	// initialize dev->worker
++	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
++
+ 	dev->cur_std = V4L2_STD_525_60;
+ 	dev->width = 720;
+ 	dev->height = 480;
 -- 
 2.34.1
 
