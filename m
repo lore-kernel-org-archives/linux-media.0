@@ -2,49 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39F1BC433FE
-	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:54:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BA10C35294
+	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:54:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344576AbiC3L4T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 07:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
+        id S1344546AbiC3L4R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 07:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344385AbiC3LxF (ORCPT
+        with ESMTP id S1345499AbiC3Lyg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:53:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC69261980;
-        Wed, 30 Mar 2022 04:48:48 -0700 (PDT)
+        Wed, 30 Mar 2022 07:54:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5A5285680;
+        Wed, 30 Mar 2022 04:51:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1239B81C28;
-        Wed, 30 Mar 2022 11:48:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D51E6C36AE2;
-        Wed, 30 Mar 2022 11:48:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BB8961671;
+        Wed, 30 Mar 2022 11:51:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B681C340F2;
+        Wed, 30 Mar 2022 11:51:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648640926;
-        bh=ADEi5SU0fkm1OasEUzfXS5XLxdWFJrLpnS+LEgj9ZRA=;
+        s=k20201202; t=1648641071;
+        bh=Y66+Jl3ZAG1Akrs5hWPgXgzuzMYmTlNbhpqvnCTJ//0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TRqqvh47KSe9ZurI5qCNfWK8cOnhuLasFuNj+0hJcovf2xvCltj1I5f9ycsnbnJ0C
-         RDjTT7hpz81icI3wKIhYLzIBbY/FyRr7W+wCLJUX8RKSfjrn0Czq6aog08KN8PZ2Cc
-         s3ZywOpZUpW47KssGSWTkIRxo5/nNmLEedEnnHQF70KSwSaGag3V27kbL5zBmwgSoP
-         F4LURRSYlKcapDS+qIG9RbJgNbWAG/a0kxJ6DkzWKZU2YI0l3Vrmg2K9xweER7kKK/
-         jNC7Q/HB6cpyc2Q7YMeQLqZaJxwJ+nvPDChQi3vwQ22/dw6vWBNH7tyqttniiJZqGP
-         GmBdAan9UPyIw==
+        b=iLsaibRP2HMBCf6krhf7k2oGyqATh2WnflW8WwKLqDGn2lpd3DLZ7b2GUSb3MiJ/V
+         wBnhG+ruQfUD5/kDtk3eXuXIPrxxejvhAm3ebkvNND9DZEqdupfe8HeTKvMfHN9i3r
+         +KLZaKE6rmge3/U1+7AKVSpINU/HqPXD+CKJ2ZIDiOPPSo1qN0yjkETpZ2cQLjtV06
+         vFYrzuRWO2AMum1df3gvUNGn5cntN2RNOU3Z/MLtoAgMizPUwgEoyBG/12oHJexJMf
+         KI5BZSITdJtv+aRKVnPv0fWVuF/UFrpJnuMEumr5RAVZoqd6WFgrZqLBsoWnJZTgPw
+         T1HpwNiiYAq+w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mirela Rabulea <mirela.rabulea@oss.nxp.com>,
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        =?UTF-8?q?Maximilian=20B=C3=B6hm?= <maximilian.boehm@elbmurf.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 09/59] media: imx-jpeg: Prevent decoding NV12M jpegs into single-planar buffers
-Date:   Wed, 30 Mar 2022 07:47:41 -0400
-Message-Id: <20220330114831.1670235-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 43/50] media: Revert "media: em28xx: add missing em28xx_close_extension"
+Date:   Wed, 30 Mar 2022 07:49:57 -0400
+Message-Id: <20220330115005.1671090-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
-References: <20220330114831.1670235-1-sashal@kernel.org>
+In-Reply-To: <20220330115005.1671090-1-sashal@kernel.org>
+References: <20220330115005.1671090-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -52,40 +54,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mirela Rabulea <mirela.rabulea@oss.nxp.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit 417591a766b3c040c346044541ff949c0b2bb7b2 ]
+[ Upstream commit fde18c3bac3f964d8333ae53b304d8fee430502b ]
 
-If the application queues an NV12M jpeg as output buffer, but then
-queues a single planar capture buffer, the kernel will crash with
-"Unable to handle kernel NULL pointer dereference" in mxc_jpeg_addrs,
-prevent this by finishing the job with error.
+This reverts commit 2c98b8a3458df03abdc6945bbef67ef91d181938.
 
-Signed-off-by: Mirela Rabulea <mirela.rabulea@oss.nxp.com>
+Reverted patch causes problems with Hauppauge WinTV dualHD as Maximilian
+reported [1]. Since quick solution didn't come up let's just revert it
+to make this device work with upstream kernels.
+
+Link: https://lore.kernel.org/all/6a72a37b-e972-187d-0322-16336e12bdc5@elbmurf.de/ [1]
+
+Reported-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
+Tested-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/imx-jpeg/mxc-jpeg.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/media/usb/em28xx/em28xx-cards.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-index 4ca96cf9def7..b249c1bbfac8 100644
---- a/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-@@ -947,6 +947,12 @@ static void mxc_jpeg_device_run(void *priv)
- 	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, true);
+diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
+index ebc430b05f21..44166becc850 100644
+--- a/drivers/media/usb/em28xx/em28xx-cards.c
++++ b/drivers/media/usb/em28xx/em28xx-cards.c
+@@ -4145,11 +4145,8 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
  
- 	jpeg_src_buf = vb2_to_mxc_buf(&src_buf->vb2_buf);
-+	if (q_data_cap->fmt->colplanes != dst_buf->vb2_buf.num_planes) {
-+		dev_err(dev, "Capture format %s has %d planes, but capture buffer has %d planes\n",
-+			q_data_cap->fmt->name, q_data_cap->fmt->colplanes,
-+			dst_buf->vb2_buf.num_planes);
-+		jpeg_src_buf->jpeg_parse_error = true;
-+	}
- 	if (jpeg_src_buf->jpeg_parse_error) {
- 		jpeg->slot_data[ctx->slot].used = false;
- 		v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+ 	em28xx_close_extension(dev);
+ 
+-	if (dev->dev_next) {
+-		em28xx_close_extension(dev->dev_next);
++	if (dev->dev_next)
+ 		em28xx_release_resources(dev->dev_next);
+-	}
+-
+ 	em28xx_release_resources(dev);
+ 
+ 	if (dev->dev_next) {
 -- 
 2.34.1
 
