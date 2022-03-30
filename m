@@ -2,51 +2,50 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C5C4C38162
-	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:54:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1309DC35273
+	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:54:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242386AbiC3L4h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 07:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
+        id S1344806AbiC3L4e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 07:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344865AbiC3Lxn (ORCPT
+        with ESMTP id S1345637AbiC3Lyv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:53:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8C627BC27;
-        Wed, 30 Mar 2022 04:49:50 -0700 (PDT)
+        Wed, 30 Mar 2022 07:54:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD31261330;
+        Wed, 30 Mar 2022 04:51:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 19493CE1D04;
-        Wed, 30 Mar 2022 11:49:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2B4EC34112;
-        Wed, 30 Mar 2022 11:49:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85913B81ACC;
+        Wed, 30 Mar 2022 11:51:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1EDC34111;
+        Wed, 30 Mar 2022 11:51:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648640986;
-        bh=ggnRzu8aJoUeHTT+3KPleG8rjSsvXE/6Q+QS76nVfVQ=;
+        s=k20201202; t=1648641089;
+        bh=VoM7pobsttxs0xCLnXmRxztC0DJUlTzGWgj+uuoU6/k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vQN6+uECvq8/RQhnfD19xQElYVELRYP/e7i4tcOaayKthi7VJR8xm6vQ7nXNJV3F8
-         YN9/B2FB1lz5C+AeJEMIFUamMgu1i1HEngXYQjpyAqJiR6qx6O9PZlVFghLqQ8jP6/
-         qbWxoMr+7vyB/pIxJSVp6aHTPG5DzYHWsbkiBCKx5RV+MVZnnT8/n8+APbiHZg7+SW
-         Riii+LwVri7+HGvdoz68qEqw42Jwn9sVMO4NJufjj0FCCuck96gVScUsF+85gZPtV1
-         eJQm8jwxJbuUAqJyuOP3PUdH81aw4cX4aLuKoSQvPZcr2pi/feGBIl+iHSgq5m0HIO
-         k7xkpga5oqOCw==
+        b=bF6h8hZw46Zbua0HS7gSXEoB2aHT9kp13ETeE/yLESuslrr/lkHYBHGikWLKCGtnP
+         2BDAuhPuvI5m9YpUcy1lJ5Mc8bHq/om7LadVD4s27zaYlK1pxPBFVKLt5UUqEaX3VI
+         FmfvID5dLizj5WTyzbhXW3MW5PPeng4Zm1rPaA9qQKhd3H0XWRz66IHwdLDAO3Pavd
+         tlMJeq+JE89E2IHlR9Nw08+PkreWJMHQUqn5x8fSHnP2veLV3kXdAt8yK2suyF20HR
+         8ZjdFXiyZC5eqJ/Tq5VQz/X+m2qOwOITKe446c0vS1xXCqapWSFIyWc4QVkgiGNmhH
+         CZVmLiFiLowBA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        =?UTF-8?q?Maximilian=20B=C3=B6hm?= <maximilian.boehm@elbmurf.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Corentin Labbe <clabbe@baylibre.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 48/59] media: Revert "media: em28xx: add missing em28xx_close_extension"
-Date:   Wed, 30 Mar 2022 07:48:20 -0400
-Message-Id: <20220330114831.1670235-48-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
+Subject: [PATCH AUTOSEL 5.10 03/37] media: staging: media: zoran: fix various V4L2 compliance errors
+Date:   Wed, 30 Mar 2022 07:50:48 -0400
+Message-Id: <20220330115122.1671763-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
-References: <20220330114831.1670235-1-sashal@kernel.org>
+In-Reply-To: <20220330115122.1671763-1-sashal@kernel.org>
+References: <20220330115122.1671763-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -54,45 +53,100 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit fde18c3bac3f964d8333ae53b304d8fee430502b ]
+[ Upstream commit 914941827aad5ecddf9bf3a6dee67fbec1af1fff ]
 
-This reverts commit 2c98b8a3458df03abdc6945bbef67ef91d181938.
+This fixes several issues found with 'v4l2-compliance -s':
 
-Reverted patch causes problems with Hauppauge WinTV dualHD as Maximilian
-reported [1]. Since quick solution didn't come up let's just revert it
-to make this device work with upstream kernels.
+1) read()/write() is supported, but not reported in the capabilities
+2) S_STD(G_STD()) failed: setting the same standard should just return 0.
+3) G_PARM failed to set readbuffers.
+4) different field values in the format vs. what v4l2_buffer reported.
+5) zero the sequence number when starting streaming.
+6) drop VB_USERPTR: makes no sense with dma_contig streaming.
 
-Link: https://lore.kernel.org/all/6a72a37b-e972-187d-0322-16336e12bdc5@elbmurf.de/ [1]
-
-Reported-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
-Tested-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/em28xx/em28xx-cards.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/staging/media/zoran/zoran_card.c   |  2 +-
+ drivers/staging/media/zoran/zoran_driver.c | 13 ++++++++++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
-index b451ce3cb169..4a46ef50baf9 100644
---- a/drivers/media/usb/em28xx/em28xx-cards.c
-+++ b/drivers/media/usb/em28xx/em28xx-cards.c
-@@ -4150,11 +4150,8 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
+diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
+index e4df72cd4d28..fb7a5f87d3bc 100644
+--- a/drivers/staging/media/zoran/zoran_card.c
++++ b/drivers/staging/media/zoran/zoran_card.c
+@@ -810,7 +810,7 @@ static int zoran_init_video_device(struct zoran *zr, struct video_device *video_
+ 	*video_dev = zoran_template;
+ 	video_dev->v4l2_dev = &zr->v4l2_dev;
+ 	video_dev->lock = &zr->lock;
+-	video_dev->device_caps = V4L2_CAP_STREAMING | dir;
++	video_dev->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_READWRITE | dir;
  
- 	em28xx_close_extension(dev);
+ 	strscpy(video_dev->name, ZR_DEVNAME(zr), sizeof(video_dev->name));
+ 	/*
+diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
+index 7f22596cc630..ea04f6c732b2 100644
+--- a/drivers/staging/media/zoran/zoran_driver.c
++++ b/drivers/staging/media/zoran/zoran_driver.c
+@@ -255,8 +255,6 @@ static int zoran_querycap(struct file *file, void *__fh, struct v4l2_capability
+ 	strscpy(cap->card, ZR_DEVNAME(zr), sizeof(cap->card));
+ 	strscpy(cap->driver, "zoran", sizeof(cap->driver));
+ 	snprintf(cap->bus_info, sizeof(cap->bus_info), "PCI:%s", pci_name(zr->pci_dev));
+-	cap->device_caps = zr->video_dev->device_caps;
+-	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
+ 	return 0;
+ }
  
--	if (dev->dev_next) {
--		em28xx_close_extension(dev->dev_next);
-+	if (dev->dev_next)
- 		em28xx_release_resources(dev->dev_next);
--	}
--
- 	em28xx_release_resources(dev);
+@@ -582,6 +580,9 @@ static int zoran_s_std(struct file *file, void *__fh, v4l2_std_id std)
+ 	struct zoran *zr = video_drvdata(file);
+ 	int res = 0;
  
- 	if (dev->dev_next) {
++	if (zr->norm == std)
++		return 0;
++
+ 	if (zr->running != ZORAN_MAP_MODE_NONE)
+ 		return -EBUSY;
+ 
+@@ -737,6 +738,7 @@ static int zoran_g_parm(struct file *file, void *priv, struct v4l2_streamparm *p
+ 	if (parm->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+ 		return -EINVAL;
+ 
++	parm->parm.capture.readbuffers = 9;
+ 	return 0;
+ }
+ 
+@@ -867,6 +869,10 @@ int zr_set_buf(struct zoran *zr)
+ 		vbuf = &buf->vbuf;
+ 
+ 		buf->vbuf.field = V4L2_FIELD_INTERLACED;
++		if (BUZ_MAX_HEIGHT < (zr->v4l_settings.height * 2))
++			buf->vbuf.field = V4L2_FIELD_INTERLACED;
++		else
++			buf->vbuf.field = V4L2_FIELD_TOP;
+ 		vb2_set_plane_payload(&buf->vbuf.vb2_buf, 0, zr->buffer_size);
+ 		vb2_buffer_done(&buf->vbuf.vb2_buf, VB2_BUF_STATE_DONE);
+ 		zr->inuse[0] = NULL;
+@@ -926,6 +932,7 @@ static int zr_vb2_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 		zr->stat_com[j] = cpu_to_le32(1);
+ 		zr->inuse[j] = NULL;
+ 	}
++	zr->vbseq = 0;
+ 
+ 	if (zr->map_mode != ZORAN_MAP_MODE_RAW) {
+ 		pci_info(zr->pci_dev, "START JPG\n");
+@@ -1016,7 +1023,7 @@ int zoran_queue_init(struct zoran *zr, struct vb2_queue *vq, int dir)
+ 	vq->dev = &zr->pci_dev->dev;
+ 	vq->type = dir;
+ 
+-	vq->io_modes = VB2_USERPTR | VB2_DMABUF | VB2_MMAP | VB2_READ | VB2_WRITE;
++	vq->io_modes = VB2_DMABUF | VB2_MMAP | VB2_READ | VB2_WRITE;
+ 	vq->drv_priv = zr;
+ 	vq->buf_struct_size = sizeof(struct zr_buffer);
+ 	vq->ops = &zr_video_qops;
 -- 
 2.34.1
 
