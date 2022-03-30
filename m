@@ -2,49 +2,50 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95269C4167B
-	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:55:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A702C4332F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:55:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345065AbiC3L5F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 07:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
+        id S1345073AbiC3L5I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 07:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344347AbiC3Lw6 (ORCPT
+        with ESMTP id S1344446AbiC3Lz6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:52:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E38261308;
-        Wed, 30 Mar 2022 04:48:44 -0700 (PDT)
+        Wed, 30 Mar 2022 07:55:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1027710FA;
+        Wed, 30 Mar 2022 04:54:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C225D615B7;
-        Wed, 30 Mar 2022 11:48:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F8F2C340F3;
-        Wed, 30 Mar 2022 11:48:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5862DB81C23;
+        Wed, 30 Mar 2022 11:54:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 239E4C340F3;
+        Wed, 30 Mar 2022 11:54:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648640916;
-        bh=1mzmburc3X+szuNAEo1tXUhYMeph1aGhucbEOTahC2s=;
+        s=k20201202; t=1648641243;
+        bh=gSOR0VhRFEQOIqboEnoDscB2wnkYJYjrcn2qd10imhI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MCaFdqWqHpx55IIGCibFaXQKVxehUIrT95PWcEwp180Q9Rvkzf4ZLHzRBDywLc3tg
-         UoZrNx7r8WrSG35Ww28wyDMs/+/2MbHVKdlJORe8R6NUicZI13NjcHvgpVFuN83nNC
-         gd3q1vQOnIjq1NKit86O1IfORQZIKt9xq0RWWsrgKDXvtpnq3Sn3228I+IiD62kBR1
-         UUZ7FL5hd0nZBlOBkxMu5TaHuAGV8vg2+5AoFGOeL6fy8quSHRs9QYjLmuasBgWRow
-         V7Gchq3I6A3XwCueWEv5xohF7A2XOv3AqsZD23a6Yw2MYnzYpSQp7d13N/H+gTORNm
-         wAgJL3+1XAJ8g==
+        b=m/UKLgkkeFfWcztLEasGRF2rLZCrwZ2OUrawxCp5ek1zJokHK14e3u8qnFGfREZlm
+         +shGwjW7AmGCn7OiAEE2TV0yIDpHch6iVQi0Ny/wxpRMt7OsVFXeJKs8kSpQpgSd9Q
+         ScGFnn7SI7DH3GE9xTThBiarGcytBK/aZyIIY7e6hywHk0J7C+VSwKiphJcLQTo5xr
+         axYjEr1Beola1os6QJSX3hSP12V5KU//G8PRg8i6EPzc6mr2jYhRhNU0gjjjvScoIN
+         hW8g2mWC9lRh0sP2v/dKHSGMhbj/wqyyVHKstlhC7LNslF7qK7t/U7n9px+pTEoPrl
+         pvjK/w9WoBJBw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Corentin Labbe <clabbe@baylibre.com>,
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzkaller <syzkaller@googlegroups.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
-Subject: [PATCH AUTOSEL 5.16 02/59] media: staging: media: zoran: calculate the right buffer number for zoran_reap_stat_com
-Date:   Wed, 30 Mar 2022 07:47:34 -0400
-Message-Id: <20220330114831.1670235-2-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 17/20] media: hdpvr: initialize dev->worker at hdpvr_register_videodev
+Date:   Wed, 30 Mar 2022 07:53:33 -0400
+Message-Id: <20220330115336.1672930-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
-References: <20220330114831.1670235-1-sashal@kernel.org>
+In-Reply-To: <20220330115336.1672930-1-sashal@kernel.org>
+References: <20220330115336.1672930-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,48 +54,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit e3b86f4e558cea9eed71d894df2f19b10d60a207 ]
+[ Upstream commit 07922937e9a580825f9965c46fd15e23ba5754b6 ]
 
-On the case tmp_dcim=1, the index of buffer is miscalculated.
-This generate a NULL pointer dereference later.
+hdpvr_register_videodev is responsible to initialize a worker in
+hdpvr_device. However, the worker is only initialized at
+hdpvr_start_streaming other than hdpvr_register_videodev.
+When hdpvr_probe does not initialize its worker, the hdpvr_disconnect
+will encounter one WARN in flush_work.The stack trace is as follows:
 
-So let's fix the calcul and add a check to prevent this to reappear.
+ hdpvr_disconnect+0xb8/0xf2 drivers/media/usb/hdpvr/hdpvr-core.c:425
+ usb_unbind_interface+0xbf/0x3a0 drivers/usb/core/driver.c:458
+ __device_release_driver drivers/base/dd.c:1206 [inline]
+ device_release_driver_internal+0x22a/0x230 drivers/base/dd.c:1237
+ bus_remove_device+0x108/0x160 drivers/base/bus.c:529
+ device_del+0x1fe/0x510 drivers/base/core.c:3592
+ usb_disable_device+0xd1/0x1d0 drivers/usb/core/message.c:1419
+ usb_disconnect+0x109/0x330 drivers/usb/core/hub.c:2228
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Fix this by moving the initialization of dev->worker to the starting of
+hdpvr_register_videodev
+
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/zoran/zoran_device.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/media/usb/hdpvr/hdpvr-video.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
-index 5b12a730a229..fb1f0465ca87 100644
---- a/drivers/staging/media/zoran/zoran_device.c
-+++ b/drivers/staging/media/zoran/zoran_device.c
-@@ -814,7 +814,7 @@ static void zoran_reap_stat_com(struct zoran *zr)
- 		if (zr->jpg_settings.tmp_dcm == 1)
- 			i = (zr->jpg_dma_tail - zr->jpg_err_shift) & BUZ_MASK_STAT_COM;
- 		else
--			i = ((zr->jpg_dma_tail - zr->jpg_err_shift) & 1) * 2 + 1;
-+			i = ((zr->jpg_dma_tail - zr->jpg_err_shift) & 1) * 2;
+diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
+index 991f820a4530..1cecb37e16d2 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-video.c
++++ b/drivers/media/usb/hdpvr/hdpvr-video.c
+@@ -312,7 +312,6 @@ static int hdpvr_start_streaming(struct hdpvr_device *dev)
  
- 		stat_com = le32_to_cpu(zr->stat_com[i]);
- 		if ((stat_com & 1) == 0) {
-@@ -826,6 +826,11 @@ static void zoran_reap_stat_com(struct zoran *zr)
- 		size = (stat_com & GENMASK(22, 1)) >> 1;
+ 	dev->status = STATUS_STREAMING;
  
- 		buf = zr->inuse[i];
-+		if (!buf) {
-+			spin_unlock_irqrestore(&zr->queued_bufs_lock, flags);
-+			pci_err(zr->pci_dev, "No buffer at slot %d\n", i);
-+			return;
-+		}
- 		buf->vbuf.vb2_buf.timestamp = ktime_get_ns();
+-	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
+ 	schedule_work(&dev->worker);
  
- 		if (zr->codec_mode == BUZ_MODE_MOTION_COMPRESS) {
+ 	v4l2_dbg(MSG_BUFFER, hdpvr_debug, &dev->v4l2_dev,
+@@ -1175,6 +1174,9 @@ int hdpvr_register_videodev(struct hdpvr_device *dev, struct device *parent,
+ 	bool ac3 = dev->flags & HDPVR_FLAG_AC3_CAP;
+ 	int res;
+ 
++	// initialize dev->worker
++	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
++
+ 	dev->cur_std = V4L2_STD_525_60;
+ 	dev->width = 720;
+ 	dev->height = 480;
 -- 
 2.34.1
 
