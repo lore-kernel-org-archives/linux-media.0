@@ -2,51 +2,50 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65FAAC433EF
-	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:54:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7426DC433F5
+	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:54:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344477AbiC3L4I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 07:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
+        id S1344502AbiC3L4M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 07:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345902AbiC3LzK (ORCPT
+        with ESMTP id S1344228AbiC3Lwo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:55:10 -0400
+        Wed, 30 Mar 2022 07:52:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12C5268C35;
-        Wed, 30 Mar 2022 04:52:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A8725E33A;
+        Wed, 30 Mar 2022 04:48:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C96A616DA;
-        Wed, 30 Mar 2022 11:52:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B975EC3410F;
-        Wed, 30 Mar 2022 11:52:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7A1561624;
+        Wed, 30 Mar 2022 11:48:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4944AC340F2;
+        Wed, 30 Mar 2022 11:48:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648641135;
-        bh=2e8UaSA6yhCnTNqYsrjVkO5iYsGT9p1vQZKNypZxMYg=;
+        s=k20201202; t=1648640919;
+        bh=5UMlgXP9Kt7zNY8E5AlJDpLF7i4vLGx8OtzMkKu8RiA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lICopD79L3tvmNkgCsUasDsPahY8zef05ICWl7bvwm+/nU4bC9Tjy2WVkgq4v30mI
-         KIiW7J66R3JWGqnP/NYFgh5KTDUHcOqdkVkpcFpAnBhvBKSe/994+7DTUfSx/C7VZw
-         pE2USJB1VN3giCbwhplnGr0TE26RMTPIT84utf0JcTCESZi9qYa3ofGJNo2DJ4hu7d
-         Vo8STxxTfMIr0Slwrj3aaZFI8yqGlpcmh/MPJSUEPQATR7fj2KiFOr4KfveqWQTHk4
-         VQLAeqXQnGp9SavTyzUhPiFuoEe+0wWBc59An8oqAzuA9YfoBe8GGLuU0CKg6GmS1c
-         13ADI4QLQ25vA==
+        b=PikCB93XPTCCr0re3EL9qHWPejEbZ21oILcVneJnZRm+41O/uwxbLx4KFR6lx/BNj
+         jn/1KYFAN3HHm7vgfG+HyzCFL+gj9K8XEmdw5LqURIXMZ3MVpPbowMXs4vjTu3q9yy
+         8yrB1J5souGFF1HJQJQ3Ndxv9pPRuPJ5iVpTUIeX10hA72FsQKp0F00SD3CaiDto0O
+         c+D2ymR0bBNEHQN9QjbaaH/Hc9TfALpc8IRM5rRcNiwxQwe6bHPOhV1dJS7fztIBWr
+         ZjYW817bWu8ZK7cvgY44FL3xIh3Y+xjxuWoTzVuQeu0IE73BpHWjm3gEWM4d6Ikr2w
+         rPJ3CebkEFxpw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        =?UTF-8?q?Maximilian=20B=C3=B6hm?= <maximilian.boehm@elbmurf.de>,
+Cc:     Eugen Hristev <eugen.hristev@microchip.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 31/37] media: Revert "media: em28xx: add missing em28xx_close_extension"
-Date:   Wed, 30 Mar 2022 07:51:16 -0400
-Message-Id: <20220330115122.1671763-31-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.16 04/59] media: atmel: atmel-isc-base: report frame sizes as full supported range
+Date:   Wed, 30 Mar 2022 07:47:36 -0400
+Message-Id: <20220330114831.1670235-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220330115122.1671763-1-sashal@kernel.org>
-References: <20220330115122.1671763-1-sashal@kernel.org>
+In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
+References: <20220330114831.1670235-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -54,45 +53,71 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Eugen Hristev <eugen.hristev@microchip.com>
 
-[ Upstream commit fde18c3bac3f964d8333ae53b304d8fee430502b ]
+[ Upstream commit 72802a86e11c34e819fbfb38f58c5aef668f833d ]
 
-This reverts commit 2c98b8a3458df03abdc6945bbef67ef91d181938.
+The ISC supports a full broad range of frame sizes.
+Until now, the subdevice was queried for possible frame sizes and these
+were reported to the user space.
+However, the ISC should not care about which frame sizes the subdev
+supports, as long as this frame size is supported.
+Thus, report a continuous range from smallest frame size up to the max
+resolution.
 
-Reverted patch causes problems with Hauppauge WinTV dualHD as Maximilian
-reported [1]. Since quick solution didn't come up let's just revert it
-to make this device work with upstream kernels.
-
-Link: https://lore.kernel.org/all/6a72a37b-e972-187d-0322-16336e12bdc5@elbmurf.de/ [1]
-
-Reported-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
-Tested-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/em28xx/em28xx-cards.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/media/platform/atmel/atmel-isc-base.c | 22 +++++++++----------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
-index 87e375562dbb..e9a9eb35ddac 100644
---- a/drivers/media/usb/em28xx/em28xx-cards.c
-+++ b/drivers/media/usb/em28xx/em28xx-cards.c
-@@ -4095,11 +4095,8 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
+diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+index 660cd0ab6749..24807782c9e5 100644
+--- a/drivers/media/platform/atmel/atmel-isc-base.c
++++ b/drivers/media/platform/atmel/atmel-isc-base.c
+@@ -1369,14 +1369,12 @@ static int isc_enum_framesizes(struct file *file, void *fh,
+ 			       struct v4l2_frmsizeenum *fsize)
+ {
+ 	struct isc_device *isc = video_drvdata(file);
+-	struct v4l2_subdev_frame_size_enum fse = {
+-		.code = isc->config.sd_format->mbus_code,
+-		.index = fsize->index,
+-		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+-	};
+ 	int ret = -EINVAL;
+ 	int i;
  
- 	em28xx_close_extension(dev);
++	if (fsize->index)
++		return -EINVAL;
++
+ 	for (i = 0; i < isc->num_user_formats; i++)
+ 		if (isc->user_formats[i]->fourcc == fsize->pixel_format)
+ 			ret = 0;
+@@ -1388,14 +1386,14 @@ static int isc_enum_framesizes(struct file *file, void *fh,
+ 	if (ret)
+ 		return ret;
  
--	if (dev->dev_next) {
--		em28xx_close_extension(dev->dev_next);
-+	if (dev->dev_next)
- 		em28xx_release_resources(dev->dev_next);
--	}
--
- 	em28xx_release_resources(dev);
+-	ret = v4l2_subdev_call(isc->current_subdev->sd, pad, enum_frame_size,
+-			       NULL, &fse);
+-	if (ret)
+-		return ret;
++	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
  
- 	if (dev->dev_next) {
+-	fsize->type = V4L2_FRMSIZE_TYPE_DISCRETE;
+-	fsize->discrete.width = fse.max_width;
+-	fsize->discrete.height = fse.max_height;
++	fsize->stepwise.min_width = 16;
++	fsize->stepwise.max_width = isc->max_width;
++	fsize->stepwise.min_height = 16;
++	fsize->stepwise.max_height = isc->max_height;
++	fsize->stepwise.step_width = 1;
++	fsize->stepwise.step_height = 1;
+ 
+ 	return 0;
+ }
 -- 
 2.34.1
 
