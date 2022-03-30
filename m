@@ -2,48 +2,49 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD7F0C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:55:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95269C4167B
+	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:55:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345056AbiC3L5B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 07:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
+        id S1345065AbiC3L5F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 07:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345051AbiC3Lxz (ORCPT
+        with ESMTP id S1344347AbiC3Lw6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:53:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D32E27E868;
-        Wed, 30 Mar 2022 04:50:20 -0700 (PDT)
+        Wed, 30 Mar 2022 07:52:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E38261308;
+        Wed, 30 Mar 2022 04:48:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01A49B81BBA;
-        Wed, 30 Mar 2022 11:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6E89C36AE2;
-        Wed, 30 Mar 2022 11:50:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C225D615B7;
+        Wed, 30 Mar 2022 11:48:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F8F2C340F3;
+        Wed, 30 Mar 2022 11:48:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648641018;
-        bh=vJB3hI7pFHLZ4ItKPzu559ozRQX/5iq+YVkCRMlueys=;
+        s=k20201202; t=1648640916;
+        bh=1mzmburc3X+szuNAEo1tXUhYMeph1aGhucbEOTahC2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EqL1exLACd760aXccth7GNFZA3YHeRnOlChbWg9EY/qoLigNJutqZvx2pp3sEarWK
-         t+E4bqxkyT8Nf7q50s0V39goB2JDpPhAAQ5lNoOkG6cHVHhJEKYGHEobfRhnLK4eHm
-         AIOSD3zTx7+fwwrftu6JBnUPa2OSUdP3NI0zVmVm2ad3Xs5cX0eGcK5ExZpMzjZDNS
-         NkRX51k29gVvjcgkGtfiL8X/hGzJWP2W4hs3Xxc+KPNDSSbF1pbSp++UGL19Dzqcrc
-         EKILHNVKYKofz2JZIMCjlk3h2i9cD8GFyeOKtCf77ojz5Ma4ne8MbS/1hECcMcGE3G
-         2jflMEDlj1ZUQ==
+        b=MCaFdqWqHpx55IIGCibFaXQKVxehUIrT95PWcEwp180Q9Rvkzf4ZLHzRBDywLc3tg
+         UoZrNx7r8WrSG35Ww28wyDMs/+/2MbHVKdlJORe8R6NUicZI13NjcHvgpVFuN83nNC
+         gd3q1vQOnIjq1NKit86O1IfORQZIKt9xq0RWWsrgKDXvtpnq3Sn3228I+IiD62kBR1
+         UUZ7FL5hd0nZBlOBkxMu5TaHuAGV8vg2+5AoFGOeL6fy8quSHRs9QYjLmuasBgWRow
+         V7Gchq3I6A3XwCueWEv5xohF7A2XOv3AqsZD23a6Yw2MYnzYpSQp7d13N/H+gTORNm
+         wAgJL3+1XAJ8g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mirela Rabulea <mirela.rabulea@oss.nxp.com>,
+Cc:     Corentin Labbe <clabbe@baylibre.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 08/50] media: imx-jpeg: Prevent decoding NV12M jpegs into single-planar buffers
-Date:   Wed, 30 Mar 2022 07:49:22 -0400
-Message-Id: <20220330115005.1671090-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
+Subject: [PATCH AUTOSEL 5.16 02/59] media: staging: media: zoran: calculate the right buffer number for zoran_reap_stat_com
+Date:   Wed, 30 Mar 2022 07:47:34 -0400
+Message-Id: <20220330114831.1670235-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220330115005.1671090-1-sashal@kernel.org>
-References: <20220330115005.1671090-1-sashal@kernel.org>
+In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
+References: <20220330114831.1670235-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,40 +53,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mirela Rabulea <mirela.rabulea@oss.nxp.com>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit 417591a766b3c040c346044541ff949c0b2bb7b2 ]
+[ Upstream commit e3b86f4e558cea9eed71d894df2f19b10d60a207 ]
 
-If the application queues an NV12M jpeg as output buffer, but then
-queues a single planar capture buffer, the kernel will crash with
-"Unable to handle kernel NULL pointer dereference" in mxc_jpeg_addrs,
-prevent this by finishing the job with error.
+On the case tmp_dcim=1, the index of buffer is miscalculated.
+This generate a NULL pointer dereference later.
 
-Signed-off-by: Mirela Rabulea <mirela.rabulea@oss.nxp.com>
+So let's fix the calcul and add a check to prevent this to reappear.
+
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/imx-jpeg/mxc-jpeg.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/staging/media/zoran/zoran_device.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-index fc905ea78b17..637d73f5f4a2 100644
---- a/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-@@ -925,6 +925,12 @@ static void mxc_jpeg_device_run(void *priv)
- 	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, true);
+diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
+index 5b12a730a229..fb1f0465ca87 100644
+--- a/drivers/staging/media/zoran/zoran_device.c
++++ b/drivers/staging/media/zoran/zoran_device.c
+@@ -814,7 +814,7 @@ static void zoran_reap_stat_com(struct zoran *zr)
+ 		if (zr->jpg_settings.tmp_dcm == 1)
+ 			i = (zr->jpg_dma_tail - zr->jpg_err_shift) & BUZ_MASK_STAT_COM;
+ 		else
+-			i = ((zr->jpg_dma_tail - zr->jpg_err_shift) & 1) * 2 + 1;
++			i = ((zr->jpg_dma_tail - zr->jpg_err_shift) & 1) * 2;
  
- 	jpeg_src_buf = vb2_to_mxc_buf(&src_buf->vb2_buf);
-+	if (q_data_cap->fmt->colplanes != dst_buf->vb2_buf.num_planes) {
-+		dev_err(dev, "Capture format %s has %d planes, but capture buffer has %d planes\n",
-+			q_data_cap->fmt->name, q_data_cap->fmt->colplanes,
-+			dst_buf->vb2_buf.num_planes);
-+		jpeg_src_buf->jpeg_parse_error = true;
-+	}
- 	if (jpeg_src_buf->jpeg_parse_error) {
- 		jpeg->slot_data[ctx->slot].used = false;
- 		v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+ 		stat_com = le32_to_cpu(zr->stat_com[i]);
+ 		if ((stat_com & 1) == 0) {
+@@ -826,6 +826,11 @@ static void zoran_reap_stat_com(struct zoran *zr)
+ 		size = (stat_com & GENMASK(22, 1)) >> 1;
+ 
+ 		buf = zr->inuse[i];
++		if (!buf) {
++			spin_unlock_irqrestore(&zr->queued_bufs_lock, flags);
++			pci_err(zr->pci_dev, "No buffer at slot %d\n", i);
++			return;
++		}
+ 		buf->vbuf.vb2_buf.timestamp = ktime_get_ns();
+ 
+ 		if (zr->codec_mode == BUZ_MODE_MOTION_COMPRESS) {
 -- 
 2.34.1
 
