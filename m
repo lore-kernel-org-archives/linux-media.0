@@ -2,90 +2,80 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9CB4C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 07:43:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53BB2C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 07:48:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243932AbiC3HpA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 03:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
+        id S243762AbiC3Ht6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 03:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243946AbiC3Hom (ORCPT
+        with ESMTP id S241281AbiC3Htz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:44:42 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E0A4EA19
-        for <linux-media@vger.kernel.org>; Wed, 30 Mar 2022 00:42:29 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id bq8so25785230ejb.10
-        for <linux-media@vger.kernel.org>; Wed, 30 Mar 2022 00:42:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/nvEY4o23ZAd6h7Bqvn06Y87JESTCsqHFnOMDqkQTcY=;
-        b=NvMIiROYJ2bGGcDv/6sMKVJgsaDK4ZAg2xpeKg1rILLMDMuy+MHK93+cKc2gu2q3Vc
-         VWq0DXywrIFzyj9tf/RFFRpNMvSlOtvUo+5/ZRpZr/28Bvaz2FCB+HhmLiiEs+FrsoUH
-         e3e6VFwu2axP+aT0GSqK93X7SvYcABhMUY5/eLvX/fLeQtXtoQqzd68YrQt5/DUXk2WE
-         GDV7nAkyjyLuNu+G4RYv11a/TSUgrGQSZQL7PR/+OXnHvaypD04LtK19M3LALR9WBPFh
-         /fXs5CSY9M8CqiKCvgTJLos69u5K+4F+yM561jukONwYBbC0YKH2n0NK7LHZp1YWpmBO
-         ESeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/nvEY4o23ZAd6h7Bqvn06Y87JESTCsqHFnOMDqkQTcY=;
-        b=0/N3hQsqBQdpDF68Dzqm2+SALB0EkwI/fwWWFLKOEn4EwpZbO+KtMtX6GthiHlMNEq
-         uJRINPX/63Xu7sPYjgLfCxAL+IFxwYFhQQSvY5QGcYL4eyuleCM0Nlpc5+CQ96vk4ZVB
-         wEA8Hm/rG1LgaBZ49krTBk8jv9fPX0qKSyWy+eCemtk6I3zC1cJiApHLUwcaYxuNni1i
-         pC7OBOEkLFWiKfP76Aw0FYqgRvveZooCr8d/Hk4C5wFpOTK688Dnh0cn9RTf2Krv0bMY
-         o0ZDMPuPwHh5X57GeuT8XKVjNAZD6MUJjbw0F3scyfT4SQDLHI/Rp3guvQCZ7n/pTYBC
-         O5Yw==
-X-Gm-Message-State: AOAM5314ercSuEHtJwecvPcb2SSc6472bfIMcsDjureUC1hf2K6e1SeK
-        FMHDw9FJm6jUMNuJeLrIweUniw==
-X-Google-Smtp-Source: ABdhPJx3GywgVGFWIcAlvTSSgfyyaeFaHXDoy/jgiD9q5cvU7vNfT/5hLcpWToyDKR0imyn42qnkXQ==
-X-Received: by 2002:a17:906:3918:b0:6e0:5bbd:bf33 with SMTP id f24-20020a170906391800b006e05bbdbf33mr37918017eje.764.1648626147710;
-        Wed, 30 Mar 2022 00:42:27 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id d24-20020a1709067a1800b006e021f4c1c3sm7911223ejo.166.2022.03.30.00.42.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 00:42:27 -0700 (PDT)
-Message-ID: <d9d01623-d90c-fa3c-3759-56b7a80e3a40@linaro.org>
-Date:   Wed, 30 Mar 2022 09:42:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 2/2] dw9807-vcm: Add "dongwoon,dw9807" compatible
- string
-Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, robh@kernel.org
+        Wed, 30 Mar 2022 03:49:55 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B362BBD;
+        Wed, 30 Mar 2022 00:48:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648626489; x=1680162489;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZIirvbpAZGNjlWxo9inQGprpHFqDnNYQaZfbjKFpXZM=;
+  b=SDDXsrnKzQVVFmWOWTMqiyDKDlCtEEOZmzrSAjyR5I6hTISUZBKd7lY0
+   xgo5LmpDtSkeq7V4gS5yDF3LhQB2n6b0wGbpXxfx2SokK9RbJwHTKThQ7
+   /C+z60KixNRs6ngYd3dX+LOwsb/inWSxdCtSxt3ChRmj8AtrW+2uUaVSo
+   eRAoHFcsdAIrUmxArbVdOdp8RJJwCefSdx1iYBMCuZVfdxD0rNtOJyItQ
+   thKvP5OY+zwdsyj9VCQsp341gwdlxCKIIs7SlmpoakQQHWgHQHh78A9VV
+   2FsW9n1pJ9xPEhVOVXpYpWTySBCzgPAJoXWIyTI5MvdiKJxg2KYwIkKEF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="320175568"
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="320175568"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 00:48:09 -0700
+X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
+   d="scan'208";a="519559958"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 00:48:07 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 6986820365;
+        Wed, 30 Mar 2022 10:48:05 +0300 (EEST)
+Date:   Wed, 30 Mar 2022 10:48:05 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        robh@kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: Convert Dongwoon dw9807-vcm bindings
+ to json-schema
+Message-ID: <YkQLNeQ3oKIJfWar@paasikivi.fi.intel.com>
 References: <20220330073341.588550-1-sakari.ailus@linux.intel.com>
- <20220330073341.588550-3-sakari.ailus@linux.intel.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220330073341.588550-3-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ <20220330073341.588550-2-sakari.ailus@linux.intel.com>
+ <a79e9ec2-d522-cd08-3947-60a29a702547@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a79e9ec2-d522-cd08-3947-60a29a702547@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 30/03/2022 09:33, Sakari Ailus wrote:
-> There is firmware out there that uses "dongwoon,dw9807" compatible string
-> that never made it to upstream as-is. Add it to the driver to make it load
-> on such systems.
+On Wed, Mar 30, 2022 at 09:42:03AM +0200, Krzysztof Kozlowski wrote:
+> On 30/03/2022 09:33, Sakari Ailus wrote:
+> > Convert the old text based dw9807-vcm chip DT bindings to json-schema.
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> >  .../media/i2c/dongwoon,dw9807-vcm.txt         |  9 ----
+> >  .../media/i2c/dongwoon,dw9807-vcm.yaml        | 41 +++++++++++++++++++
+> >  2 files changed, 41 insertions(+), 9 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/media/i2c/dongwoon,dw9807-vcm.txt
+> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/dongwoon,dw9807-vcm.yaml
+> > 
 > 
-> The chip also has an EEPROM part which is AT24 compatible (for reading
-> purposes) on a separate I²C address. Adding possible support for this in
-> the future is not affected by this change.
 > 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  drivers/media/i2c/dw9807-vcm.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks!
 
-Best regards,
-Krzysztof
+-- 
+Sakari Ailus
