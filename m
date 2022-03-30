@@ -2,50 +2,48 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74B87C46467
-	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:54:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10145C4321E
+	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:54:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344314AbiC3Lzt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 07:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
+        id S1344375AbiC3Lzw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 07:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345937AbiC3LzO (ORCPT
+        with ESMTP id S1345029AbiC3Lxx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:55:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFBE5F88;
-        Wed, 30 Mar 2022 04:53:00 -0700 (PDT)
+        Wed, 30 Mar 2022 07:53:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6911C25F67E;
+        Wed, 30 Mar 2022 04:50:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCE6DB81C24;
-        Wed, 30 Mar 2022 11:52:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92477C36AE2;
-        Wed, 30 Mar 2022 11:52:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DA31B81C3A;
+        Wed, 30 Mar 2022 11:50:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE8FC340F3;
+        Wed, 30 Mar 2022 11:50:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648641177;
-        bh=XAQV1CrcJedav+QuupEKT9ZmY5ttZesEv0weh8dfhjM=;
+        s=k20201202; t=1648641002;
+        bh=dOC/qeva2LJb0df2IyTGuQKNhvG4/vpycOtEmcS+tso=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XzHlh2HZ6PZsutitvUc9zOHUz34Q0e4aKSoYFacujwWPChhKosrwsT3/xwdVi/bHn
-         1aiwVqIpP5nN3xwUTkQZLPxX5RnuSKpMb7Y+YE5ItQJOQ8a7NjqYhSwy67s5IrA6Rt
-         HYOVEKNTpgzv0CiLcJQvZcRRph043siiVE3EjRwNrYc7F3SeHTPD+8mSn07zWZDTot
-         /GJi3lQvCeG7oaafOXLDOGksEIkRcvnOWFEWlzkomf3Yl4ZSErK1XrSgeoi9sQdAnr
-         EF8ByOKbCrts7X2xw9VRpBjpvttf0wPnekjHf0cfUs+OsaQHBI9PtmQmQW+I1nl6pS
-         kLpRDtam9x6XQ==
+        b=EnkErwXpH40IHyW4DHo+2aiqfWtazMriJvF18/HufMxctjgskMJi5WPIuCXJvBs/Q
+         VE/OSp7KzKAs6MnDPO//Dr7o+VNNk+8EsbG2pYe7SWTk1pMaMAM+UbC6sciY3I1dRS
+         ZB0r6o6tV9/zzvjJJX4H4fJQCs9bPE2GoSNHfUpG4PDW6Ol+BHyP4ildxdDgMKD0hQ
+         xhSVuGHxe/SJ7Fe7C9mUDiZW295fDnHC4495sPS0zRBBkLlCp6ReibDMjjN6EoE0Nq
+         hvEU7AIaIiWRVUgpxmIHpzgkI73jun6aJ7pEW1C5RTSqbxBWQDGwyYKqshBJ378JYz
+         Ix/wEOHC2O09g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, hverkuil@xs4all.nl,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 21/25] media: hdpvr: initialize dev->worker at hdpvr_register_videodev
-Date:   Wed, 30 Mar 2022 07:52:21 -0400
-Message-Id: <20220330115225.1672278-21-sashal@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
+Subject: [PATCH AUTOSEL 5.16 58/59] media: atomisp: fix bad usage at error handling logic
+Date:   Wed, 30 Mar 2022 07:48:30 -0400
+Message-Id: <20220330114831.1670235-58-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220330115225.1672278-1-sashal@kernel.org>
-References: <20220330115225.1672278-1-sashal@kernel.org>
+In-Reply-To: <20220330114831.1670235-1-sashal@kernel.org>
+References: <20220330114831.1670235-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -54,59 +52,93 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-[ Upstream commit 07922937e9a580825f9965c46fd15e23ba5754b6 ]
+[ Upstream commit fc0b582c858ed73f94c8f3375c203ea46f1f7402 ]
 
-hdpvr_register_videodev is responsible to initialize a worker in
-hdpvr_device. However, the worker is only initialized at
-hdpvr_start_streaming other than hdpvr_register_videodev.
-When hdpvr_probe does not initialize its worker, the hdpvr_disconnect
-will encounter one WARN in flush_work.The stack trace is as follows:
+As warned by sparse:
+	atomisp: drivers/staging/media/atomisp/pci/atomisp_acc.c:508 atomisp_acc_load_extensions() warn: iterator used outside loop: 'acc_fw'
 
- hdpvr_disconnect+0xb8/0xf2 drivers/media/usb/hdpvr/hdpvr-core.c:425
- usb_unbind_interface+0xbf/0x3a0 drivers/usb/core/driver.c:458
- __device_release_driver drivers/base/dd.c:1206 [inline]
- device_release_driver_internal+0x22a/0x230 drivers/base/dd.c:1237
- bus_remove_device+0x108/0x160 drivers/base/bus.c:529
- device_del+0x1fe/0x510 drivers/base/core.c:3592
- usb_disable_device+0xd1/0x1d0 drivers/usb/core/message.c:1419
- usb_disconnect+0x109/0x330 drivers/usb/core/hub.c:2228
+The acc_fw interactor is used outside the loop, at the error handling
+logic. On most cases, this is actually safe there, but, if
+atomisp_css_set_acc_parameters() has an error, an attempt to use it
+will pick an invalid value for acc_fw.
 
-Fix this by moving the initialization of dev->worker to the starting of
-hdpvr_register_videodev
-
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: Hans Verkuil <hverkuil@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/hdpvr/hdpvr-video.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../staging/media/atomisp/pci/atomisp_acc.c   | 28 +++++++++++++------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
-index bad71d863d39..7849f1fbbcc4 100644
---- a/drivers/media/usb/hdpvr/hdpvr-video.c
-+++ b/drivers/media/usb/hdpvr/hdpvr-video.c
-@@ -308,7 +308,6 @@ static int hdpvr_start_streaming(struct hdpvr_device *dev)
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_acc.c b/drivers/staging/media/atomisp/pci/atomisp_acc.c
+index 9a1751895ab0..28cb271663c4 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_acc.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_acc.c
+@@ -439,6 +439,18 @@ int atomisp_acc_s_mapped_arg(struct atomisp_sub_device *asd,
+ 	return 0;
+ }
  
- 	dev->status = STATUS_STREAMING;
- 
--	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
- 	schedule_work(&dev->worker);
- 
- 	v4l2_dbg(MSG_BUFFER, hdpvr_debug, &dev->v4l2_dev,
-@@ -1165,6 +1164,9 @@ int hdpvr_register_videodev(struct hdpvr_device *dev, struct device *parent,
- 	bool ac3 = dev->flags & HDPVR_FLAG_AC3_CAP;
- 	int res;
- 
-+	// initialize dev->worker
-+	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
++static void atomisp_acc_unload_some_extensions(struct atomisp_sub_device *asd,
++					      int i,
++					      struct atomisp_acc_fw *acc_fw)
++{
++	while (--i >= 0) {
++		if (acc_fw->flags & acc_flag_to_pipe[i].flag) {
++			atomisp_css_unload_acc_extension(asd, acc_fw->fw,
++							 acc_flag_to_pipe[i].pipe_id);
++		}
++	}
++}
 +
- 	dev->cur_std = V4L2_STD_525_60;
- 	dev->width = 720;
- 	dev->height = 480;
+ /*
+  * Appends the loaded acceleration binary extensions to the
+  * current ISP mode. Must be called just before sh_css_start().
+@@ -479,16 +491,20 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
+ 								     acc_fw->fw,
+ 								     acc_flag_to_pipe[i].pipe_id,
+ 								     acc_fw->type);
+-				if (ret)
++				if (ret) {
++					atomisp_acc_unload_some_extensions(asd, i, acc_fw);
+ 					goto error;
++				}
+ 
+ 				ext_loaded = true;
+ 			}
+ 		}
+ 
+ 		ret = atomisp_css_set_acc_parameters(acc_fw);
+-		if (ret < 0)
++		if (ret < 0) {
++			atomisp_acc_unload_some_extensions(asd, i, acc_fw);
+ 			goto error;
++		}
+ 	}
+ 
+ 	if (!ext_loaded)
+@@ -497,6 +513,7 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
+ 	ret = atomisp_css_update_stream(asd);
+ 	if (ret) {
+ 		dev_err(isp->dev, "%s: update stream failed.\n", __func__);
++		atomisp_acc_unload_extensions(asd);
+ 		goto error;
+ 	}
+ 
+@@ -504,13 +521,6 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
+ 	return 0;
+ 
+ error:
+-	while (--i >= 0) {
+-		if (acc_fw->flags & acc_flag_to_pipe[i].flag) {
+-			atomisp_css_unload_acc_extension(asd, acc_fw->fw,
+-							 acc_flag_to_pipe[i].pipe_id);
+-		}
+-	}
+-
+ 	list_for_each_entry_continue_reverse(acc_fw, &asd->acc.fw, list) {
+ 		if (acc_fw->type != ATOMISP_ACC_FW_LOAD_TYPE_OUTPUT &&
+ 		    acc_fw->type != ATOMISP_ACC_FW_LOAD_TYPE_VIEWFINDER)
 -- 
 2.34.1
 
