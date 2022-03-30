@@ -2,46 +2,46 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 423A1C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:57:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3946C433FE
+	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:58:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344432AbiC3L7J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 07:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S1344351AbiC3Lzu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 07:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344437AbiC3Lz5 (ORCPT
+        with ESMTP id S1345348AbiC3LyY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:55:57 -0400
+        Wed, 30 Mar 2022 07:54:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893CD2F02F;
-        Wed, 30 Mar 2022 04:53:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12793278552;
+        Wed, 30 Mar 2022 04:50:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A51E761704;
-        Wed, 30 Mar 2022 11:53:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85E6DC36AE7;
-        Wed, 30 Mar 2022 11:53:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D583D6137A;
+        Wed, 30 Mar 2022 11:50:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A553FC340EE;
+        Wed, 30 Mar 2022 11:50:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648641237;
-        bh=3oTTFOn4x8U2QCSUJl8IaTqxzpbx4bG6EGPFTDb8hoA=;
+        s=k20201202; t=1648641058;
+        bh=BS9+xBaILP2NTve/YGTy5aoxWamiPKm3xneZ2z7LGuc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qPuVXKrA+hgt9eYdzEKz4Ybyo1/j4ZqX6V03vCkAqBmqtBuN2K5g9hbRaSmz5i1DN
-         Zy+wOciTqUG8NeYQAE1E8urYIOrM2XHeLb9AgXXrytver5r2kWQFtvqLLj8EDEL8wp
-         wEoP5D4JYibeGFSFRk824C5Mg0HPUJumuPYgZmvb+DuZHS9xcNK2WcLXIQBk2OmRL1
-         bK848TCr6UFLMDYZpEiu3d+15tFfb3HyavWq7fiwX216fD1tfm35C/oqG+tAPOk/9Y
-         8GKQffnNkVjokmUXML0kYSRGHMEdJhCrpX8lpbMuFzOYQIpCzkc4SC7A9gUkpHeqAY
-         35sDtKJ9d+0ag==
+        b=HRgNF35cGOVYGYbzkEVXMz7hZiM4Sbk5s8JWVEl9tAxokX+nBPWukvA12Y9rIOv7H
+         ex1YAWh7xdbO5JYfTjNu8v73GfL/rEp0JI6xNYMynOGsYtBhr+w7O61oJ8NyiO9Bl4
+         1Q/eXLfo6jwGcUKx8wgs+NhU4mG6d1sSen61NhOVkX0ncEhA5HIx5Ht3igXgPDUS8f
+         EydjQYJVtvF3D0PBGLRxQDJFH4aRF3LiHUkraNpc7jysVbXWwmRR0tS2VguiGd1/Sl
+         qHij7vaGJAK+yyT2Qq2hB+dphf3SISLbGsvOhqierVcW+dBUZRvQjhZf3/ZQhLQB3F
+         v+jD6WFPtGprg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Daniel=20Gonz=C3=A1lez=20Cabanelas?= <dgcbueu@gmail.com>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 13/20] media: cx88-mpeg: clear interrupt status register before streaming video
-Date:   Wed, 30 Mar 2022 07:53:29 -0400
-Message-Id: <20220330115336.1672930-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 35/50] media: cx88-mpeg: clear interrupt status register before streaming video
+Date:   Wed, 30 Mar 2022 07:49:49 -0400
+Message-Id: <20220330115005.1671090-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220330115336.1672930-1-sashal@kernel.org>
-References: <20220330115336.1672930-1-sashal@kernel.org>
+In-Reply-To: <20220330115005.1671090-1-sashal@kernel.org>
+References: <20220330115005.1671090-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -73,10 +73,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/media/pci/cx88/cx88-mpeg.c b/drivers/media/pci/cx88/cx88-mpeg.c
-index 52ff00ebd4bd..281eca525340 100644
+index 680e1e3fe89b..2c1d5137ac47 100644
 --- a/drivers/media/pci/cx88/cx88-mpeg.c
 +++ b/drivers/media/pci/cx88/cx88-mpeg.c
-@@ -171,6 +171,9 @@ int cx8802_start_dma(struct cx8802_dev    *dev,
+@@ -162,6 +162,9 @@ int cx8802_start_dma(struct cx8802_dev    *dev,
  	cx_write(MO_TS_GPCNTRL, GP_COUNT_CONTROL_RESET);
  	q->count = 0;
  
