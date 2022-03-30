@@ -2,49 +2,48 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9166C3527B
-	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:54:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB6B6C35273
+	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:55:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344861AbiC3L4i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 07:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60570 "EHLO
+        id S1344918AbiC3L4p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 07:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345618AbiC3Lyv (ORCPT
+        with ESMTP id S1345448AbiC3Lyb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:54:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E149261312;
-        Wed, 30 Mar 2022 04:51:29 -0700 (PDT)
+        Wed, 30 Mar 2022 07:54:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BF0282B3B;
+        Wed, 30 Mar 2022 04:51:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF9A0B81C37;
-        Wed, 30 Mar 2022 11:51:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E6CEC36AE2;
-        Wed, 30 Mar 2022 11:51:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4697615E7;
+        Wed, 30 Mar 2022 11:51:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 714BBC36AE7;
+        Wed, 30 Mar 2022 11:51:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648641087;
-        bh=Qwld639rWFNiSh85PW5Z3KUZfu7NCz4cuIK0UIEMmms=;
+        s=k20201202; t=1648641070;
+        bh=qyc5E1VsAiEkog/l7n77XDh8NAl9OUtNeFvCzuC5lPg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rBSlbTX1t6cigFNjSl6PQ1m++znknmYldOpVxVg0Xu8EQTR5hMhWK/nr+rZaTfgtQ
-         BkS3uFwKgSfibMfTCDs6kjDBCaY7iSk4H4N4B5rX5LZ8YdSUFuwy2xQpyZHJL7HAeZ
-         2GUko0LQVdAT7xz3nPMrodtX1Z6mtKQo2LAPnn2vZcCoTvP/w28hkxlEr6JcocJJky
-         JAT1h3PhRqNbxg1DZGlUDRC9PGNYg7ebpHnbvxLCGBuWs1ahq/0+I1LW6VtCUUdkir
-         Tay2P91WR06ClQjmNegCFhPXHsI3W4kiltWonObLOBVY4mwnjNQLuiBVSOaoDfy7XC
-         RVDJS78b5ESnw==
+        b=GNKDUcqZykqzDsFkjq8Y5OBE6NL8Xg9NfcnXgNttArqXJJxfW5Nsmr/B0CYt8cINk
+         HqI4Tso8cwimq+7xlKzaqSzno8i3lcRYdl8aW6Hzaar9DCzwdAn600eA/JZdutSWoM
+         gaqqAhDYPATrrJctfvC7hGAiPKhEbQOhlG+uHAsibsErw8w5zx0Ko5izLj31gq3qPV
+         mSLDueBX5BtYpG5VxVW9/+vrrX6oC1KAQPAeH/JA1KRW7yEWb2d/4iNSs/UAqDhV2e
+         sUdSwkNP9zs5R8giYM02pweHOp43c/DrpDhhUAXY1qRnv+1YFfLeP+eFXqwzrvFwwW
+         L5jYfAPgC9xCQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Corentin Labbe <clabbe@baylibre.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
-Subject: [PATCH AUTOSEL 5.10 02/37] media: staging: media: zoran: calculate the right buffer number for zoran_reap_stat_com
-Date:   Wed, 30 Mar 2022 07:50:47 -0400
-Message-Id: <20220330115122.1671763-2-sashal@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 42/50] media: i2c: ov5648: Fix lockdep error
+Date:   Wed, 30 Mar 2022 07:49:56 -0400
+Message-Id: <20220330115005.1671090-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220330115122.1671763-1-sashal@kernel.org>
-References: <20220330115122.1671763-1-sashal@kernel.org>
+In-Reply-To: <20220330115005.1671090-1-sashal@kernel.org>
+References: <20220330115005.1671090-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,48 +52,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit e3b86f4e558cea9eed71d894df2f19b10d60a207 ]
+[ Upstream commit d4cb5d3c4cee28aa89b02bc33d930a6cf75e7f79 ]
 
-On the case tmp_dcim=1, the index of buffer is miscalculated.
-This generate a NULL pointer dereference later.
+ov5648_state_init() calls ov5648_state_mipi_configure() which uses
+__v4l2_ctrl_s_ctrl[_int64](). This means that sensor->mutex (which
+is also sensor->ctrls.handler.lock) must be locked before calling
+ov5648_state_init().
 
-So let's fix the calcul and add a check to prevent this to reappear.
+ov5648_state_mipi_configure() is also used in other places where
+the lock is already held so it cannot be changed itself.
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Note this is based on an identical (tested) fix for the ov8865 driver,
+this has only been compile-tested.
+
+Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/zoran/zoran_device.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/media/i2c/ov5648.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
-index e569a1341d01..913f5a3c5bfc 100644
---- a/drivers/staging/media/zoran/zoran_device.c
-+++ b/drivers/staging/media/zoran/zoran_device.c
-@@ -879,7 +879,7 @@ static void zoran_reap_stat_com(struct zoran *zr)
- 		if (zr->jpg_settings.tmp_dcm == 1)
- 			i = (zr->jpg_dma_tail - zr->jpg_err_shift) & BUZ_MASK_STAT_COM;
- 		else
--			i = ((zr->jpg_dma_tail - zr->jpg_err_shift) & 1) * 2 + 1;
-+			i = ((zr->jpg_dma_tail - zr->jpg_err_shift) & 1) * 2;
+diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
+index 947d437ed0ef..01e22c535267 100644
+--- a/drivers/media/i2c/ov5648.c
++++ b/drivers/media/i2c/ov5648.c
+@@ -1778,8 +1778,14 @@ static int ov5648_state_configure(struct ov5648_sensor *sensor,
  
- 		stat_com = le32_to_cpu(zr->stat_com[i]);
- 		if ((stat_com & 1) == 0) {
-@@ -891,6 +891,11 @@ static void zoran_reap_stat_com(struct zoran *zr)
- 		size = (stat_com & GENMASK(22, 1)) >> 1;
+ static int ov5648_state_init(struct ov5648_sensor *sensor)
+ {
+-	return ov5648_state_configure(sensor, &ov5648_modes[0],
+-				      ov5648_mbus_codes[0]);
++	int ret;
++
++	mutex_lock(&sensor->mutex);
++	ret = ov5648_state_configure(sensor, &ov5648_modes[0],
++				     ov5648_mbus_codes[0]);
++	mutex_unlock(&sensor->mutex);
++
++	return ret;
+ }
  
- 		buf = zr->inuse[i];
-+		if (!buf) {
-+			spin_unlock_irqrestore(&zr->queued_bufs_lock, flags);
-+			pci_err(zr->pci_dev, "No buffer at slot %d\n", i);
-+			return;
-+		}
- 		buf->vbuf.vb2_buf.timestamp = ktime_get_ns();
- 
- 		if (zr->codec_mode == BUZ_MODE_MOTION_COMPRESS) {
+ /* Sensor Base */
 -- 
 2.34.1
 
