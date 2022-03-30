@@ -2,89 +2,119 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 649A8C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 07:43:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD40CC433F5
+	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 07:43:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243867AbiC3Hoo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 03:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
+        id S242616AbiC3Ho6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 03:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243932AbiC3Hnw (ORCPT
+        with ESMTP id S243959AbiC3Ho5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 03:43:52 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE0D52B07
-        for <linux-media@vger.kernel.org>; Wed, 30 Mar 2022 00:42:06 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id lr4so31298988ejb.11
-        for <linux-media@vger.kernel.org>; Wed, 30 Mar 2022 00:42:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CAYinFU48pRYzH9ypQ83dA4qoMQIqXMxR9XiHLU1ytE=;
-        b=Yxl53MkHQTDvxeth2Pj3so7IZxw6NfvkbzQAs7uD6BuTynOacGF86d/KwlId5wkDuw
-         oaAI4wUkjpUO+oxJwbwIMGzndDe3Asrhrn7iWpT5Kmpd8YwJqKANq38tv5rGKoyk8dW+
-         aywHgBQza72kAMy32n9tPiwLAPly3/zevxSEVnlrVUOHlfueKR6rNikwh39XXP5qiD6r
-         sbRN3fG9sOAwq5zxv3S7aLEU5/KlQQO0PzGxxJ1tDOC3mg8P5xlB5sLfbP0p6OI25Qeg
-         wdW36drIC+2c6ew2c9ElOaaRHo3Q0tZCit52qlhF75ijQsA1i51Sv/H2E9exJzd0xwG1
-         BXtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CAYinFU48pRYzH9ypQ83dA4qoMQIqXMxR9XiHLU1ytE=;
-        b=faaLvhMP+OfFw0cPE3ymbJmzR1MtZ14md8N61rIdFZ1aCwkXslgQ5uwT5qznuB70Kj
-         R2d1cPJBNACW+fWd3bNpykG1miQL561QEfM9W8FKVAj7oFsdQPjf1JYDLjanxsMDJOb+
-         Wk4ahdc4ywSBXp0whzu3WFQ6S2yKtvg6Azdryg8y/b/BsCutyKqmgAPeMwPewj5nlcMQ
-         03cuLK7rZQ4GnJByv6/HUGwdWsINo0hRd0nQ0QEaiDqQuFdhuIbJ52XE5VSCJphUeeuM
-         tI+Kq+5nsm8BwcDdqxyblOg8o+2FOJ56qImTpZWrJjzqwSDJGXOny/CrHjf4U1EWP3HM
-         JkRg==
-X-Gm-Message-State: AOAM531IKOPEaHn6FVfBPIjaJwMsfV4bLe3CCHKFOyZTEjFTvA2CUaey
-        SqcI8p+aIUgdjD75aCKhMTku0OIWBAdF5ouS
-X-Google-Smtp-Source: ABdhPJyOPRhQxvUhK4fvpnSNakz63gvVXneotEDoygnpiKAsbjmeSUZhHtrQTYAFMBHAv1KsiA9lGQ==
-X-Received: by 2002:a17:906:53c3:b0:6cf:742d:84de with SMTP id p3-20020a17090653c300b006cf742d84demr37677933ejo.576.1648626124935;
-        Wed, 30 Mar 2022 00:42:04 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id w14-20020a170906d20e00b006cee22553f7sm8002911ejz.213.2022.03.30.00.42.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 00:42:04 -0700 (PDT)
-Message-ID: <a79e9ec2-d522-cd08-3947-60a29a702547@linaro.org>
-Date:   Wed, 30 Mar 2022 09:42:03 +0200
+        Wed, 30 Mar 2022 03:44:57 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B5B4B1DF;
+        Wed, 30 Mar 2022 00:42:56 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a02:3030:d:7e3f:91e1:4be5:4001:fd80])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9D4621F44389;
+        Wed, 30 Mar 2022 08:42:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1648626174;
+        bh=pIoevYhcg4lXfHAB+gBSklOntW3daq2OPWaaIDxIW6U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Iq4UZjhSaV+ZYTcSkGHAm9xbaJifda92sZT/0xu0mlaErqEDx8q3PQxXGnLazpxux
+         cYxJ0F5vFVwS0NTOWzswdqbTz5Xcg0uUJTgsI1CLRwaXKZ567UbHDi9cVdgKM375nf
+         0LkAlezqhGvsdXF+y6a6XwurlLaHoBzC+bADyP00qoc4ba6ZNP4O9S0ctMldo/tEeS
+         TDodJrL12LoM5I1OFg4jb3a/mVQ5a9MbM4EBID2itedr3abZRzrpiaVDkeGqGUD3dO
+         Z9xhsyqcA0f+fvtn+L2xGODoKGBsgMpFJFhWgnDvM76lUM06dyCOEtxJw4BS4sGmvO
+         Pz4S9HYRbGMpw==
+Date:   Wed, 30 Mar 2022 09:42:50 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@collabora.com, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 21/24] media: hantro: Stop using H.264 parameter
+ pic_num
+Message-ID: <20220330074250.jqyljbr53fgeci6q@basti-XPS-13-9310>
+References: <20220328195936.82552-1-nicolas.dufresne@collabora.com>
+ <20220328195936.82552-22-nicolas.dufresne@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: Convert Dongwoon dw9807-vcm bindings
- to json-schema
-Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, robh@kernel.org
-References: <20220330073341.588550-1-sakari.ailus@linux.intel.com>
- <20220330073341.588550-2-sakari.ailus@linux.intel.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220330073341.588550-2-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220328195936.82552-22-nicolas.dufresne@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 30/03/2022 09:33, Sakari Ailus wrote:
-> Convert the old text based dw9807-vcm chip DT bindings to json-schema.
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  .../media/i2c/dongwoon,dw9807-vcm.txt         |  9 ----
->  .../media/i2c/dongwoon,dw9807-vcm.yaml        | 41 +++++++++++++++++++
->  2 files changed, 41 insertions(+), 9 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/media/i2c/dongwoon,dw9807-vcm.txt
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/dongwoon,dw9807-vcm.yaml
-> 
+Hey Nicolas,
 
+The term pic_num is now only present in the following files:
+```
+❯ rg 'pic_num'
+staging/media/rkvdec/rkvdec-h264.c
+766:	 * Assign an invalid pic_num if DPB entry at that position is inactive.
+768:	 * reference picture with pic_num 0, triggering output picture
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+media/platform/amphion/vpu_windsor.c
+485:	u32 pic_num;
 
+media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
+97:	unsigned short pic_num;
+346:		dst_entry->pic_num = src_entry->pic_num;
 
-Best regards,
-Krzysztof
+media/v4l2-core/v4l2-h264.c
+143:	 * but with frame_num (wrapped). As for frame the pic_num and frame_num
+306:		/* this is pic_num for frame and frame_num (wrapped) for field,
+307:		 * but for frame pic_num is equal to frame_num (wrapped).
+```
+
+In v4l2-h264 and rkvdec-h264 it is only present as comment and the term
+is not part of the specification.
+In vpu_windsor it is actually never used.
+And for the mediatek driver the same might apply.
+It might be worth it to get rid of that term all together while you are
+at it.
+
+On 28.03.2022 15:59, Nicolas Dufresne wrote:
+>The hardware expects FrameNumWrap or long_term_frame_idx. Picture
+>numbers are per field, and are mostly used during the memory
+>management process, which is done in userland. This fixes two
+>ITU conformance tests:
+>
+>  - MR6_BT_B
+>  - MR8_BT_B
+>
+>Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+
+Greetings,
+Sebastian
+>---
+> drivers/staging/media/hantro/hantro_h264.c | 2 --
+> 1 file changed, 2 deletions(-)
+>
+>diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
+>index 0b4d2491be3b..228629fb3cdf 100644
+>--- a/drivers/staging/media/hantro/hantro_h264.c
+>+++ b/drivers/staging/media/hantro/hantro_h264.c
+>@@ -354,8 +354,6 @@ u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_idx)
+>
+> 	if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+> 		return 0;
+>-	if (dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
+>-		return dpb->pic_num;
+> 	return dpb->frame_num;
+> }
+>
+>-- 
+>2.34.1
+>
