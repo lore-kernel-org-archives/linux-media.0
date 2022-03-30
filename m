@@ -2,48 +2,50 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4855AC4167E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D627C35274
 	for <linux-media@archiver.kernel.org>; Wed, 30 Mar 2022 11:54:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344645AbiC3L4X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Mar 2022 07:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
+        id S243155AbiC3L4V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Mar 2022 07:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345958AbiC3LzQ (ORCPT
+        with ESMTP id S1344975AbiC3Lxu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:55:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85C02B27F;
-        Wed, 30 Mar 2022 04:53:27 -0700 (PDT)
+        Wed, 30 Mar 2022 07:53:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64444275470;
+        Wed, 30 Mar 2022 04:50:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6D33B81C28;
-        Wed, 30 Mar 2022 11:53:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD29AC36AE2;
-        Wed, 30 Mar 2022 11:53:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46B6D615E2;
+        Wed, 30 Mar 2022 11:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B87FDC36AFA;
+        Wed, 30 Mar 2022 11:50:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648641205;
-        bh=3oTTFOn4x8U2QCSUJl8IaTqxzpbx4bG6EGPFTDb8hoA=;
+        s=k20201202; t=1648641009;
+        bh=1mzmburc3X+szuNAEo1tXUhYMeph1aGhucbEOTahC2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OsX1FiHFBHOcUyq0gUDeA/HaIUBrJk+U+WK45ECcHQyT7LKONJGGLZHGnzNjCKjf6
-         UdRnEA9X3plmxucA679KfrUyTHcGvpbct0WzUWW5AihEzF63BZfiO1cSMdNul1J9A7
-         3u7mvS/nRq3e5eznaqJ82WbmZlx5gCu7XzwcrqibHe3fUMAJypetWT3MB4SEbxEhCg
-         0whF0fvXo/j9vRKnHDhlXMFqi8Oo3/q4+uzix1L9JbAJg0SAjIqJhmuM1Z9iN9RFmD
-         Apll2cEJL0U8cpN/KJIGUNME1ubEsoKrZDosOhOdQYVCwG05FqMkckriZUPX9oJMna
-         kxqjBgnJq/LjA==
+        b=K6nW+4kiD2R06IJnVsA7Ajrsn3U2ZFYK8wzrrcLbU9naEYyPE/5gdO9TdBa1wHgSs
+         iy8Djky9FYOGEqpEhf2X7XeHFY+c40HbnIo5nAhM53KJTG+Sk/N636qhfsSvT+W8/E
+         wwd34Dl2PzRrGi6+GNU7xW4an/ptxy5tkRkddRdXLNLG7pXgDu45XsggObx0gBgofs
+         XaIrAdu8IFp7iKAb+x8ux711bNmggdf35eyUH/xQqejjjBqpbnryII3DfN3xfCJjqA
+         SRpVM3GahvKdqyRb1SoSwqYAtlvyDxU2Mvst3vfglVeJMA8FyA7/8JzWSDKJGarDkP
+         ekBkCbx6G5qdA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Daniel=20Gonz=C3=A1lez=20Cabanelas?= <dgcbueu@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 14/22] media: cx88-mpeg: clear interrupt status register before streaming video
-Date:   Wed, 30 Mar 2022 07:52:55 -0400
-Message-Id: <20220330115303.1672616-14-sashal@kernel.org>
+Cc:     Corentin Labbe <clabbe@baylibre.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
+Subject: [PATCH AUTOSEL 5.15 02/50] media: staging: media: zoran: calculate the right buffer number for zoran_reap_stat_com
+Date:   Wed, 30 Mar 2022 07:49:16 -0400
+Message-Id: <20220330115005.1671090-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220330115303.1672616-1-sashal@kernel.org>
-References: <20220330115303.1672616-1-sashal@kernel.org>
+In-Reply-To: <20220330115005.1671090-1-sashal@kernel.org>
+References: <20220330115005.1671090-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -51,41 +53,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Daniel González Cabanelas <dgcbueu@gmail.com>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit 56cb61f70e547e1b0cdfe6ff5a1f1ce6242e6d96 ]
+[ Upstream commit e3b86f4e558cea9eed71d894df2f19b10d60a207 ]
 
-Some cx88 video cards may have transport stream status interrupts set
-to 1 from cold start, causing errors like this:
+On the case tmp_dcim=1, the index of buffer is miscalculated.
+This generate a NULL pointer dereference later.
 
-  cx88xx: cx88_print_irqbits: core:irq mpeg  [0x100000] ts_err?*
-  cx8802: cx8802_mpeg_irq: mpeg:general errors: 0x00100000
+So let's fix the calcul and add a check to prevent this to reappear.
 
-According to CX2388x datasheet, the interrupt status register should be
-cleared before enabling IRQs to stream video.
-
-Fix it by clearing the Transport Stream Interrupt Status register.
-
-Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx88/cx88-mpeg.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/staging/media/zoran/zoran_device.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/cx88/cx88-mpeg.c b/drivers/media/pci/cx88/cx88-mpeg.c
-index 52ff00ebd4bd..281eca525340 100644
---- a/drivers/media/pci/cx88/cx88-mpeg.c
-+++ b/drivers/media/pci/cx88/cx88-mpeg.c
-@@ -171,6 +171,9 @@ int cx8802_start_dma(struct cx8802_dev    *dev,
- 	cx_write(MO_TS_GPCNTRL, GP_COUNT_CONTROL_RESET);
- 	q->count = 0;
+diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
+index 5b12a730a229..fb1f0465ca87 100644
+--- a/drivers/staging/media/zoran/zoran_device.c
++++ b/drivers/staging/media/zoran/zoran_device.c
+@@ -814,7 +814,7 @@ static void zoran_reap_stat_com(struct zoran *zr)
+ 		if (zr->jpg_settings.tmp_dcm == 1)
+ 			i = (zr->jpg_dma_tail - zr->jpg_err_shift) & BUZ_MASK_STAT_COM;
+ 		else
+-			i = ((zr->jpg_dma_tail - zr->jpg_err_shift) & 1) * 2 + 1;
++			i = ((zr->jpg_dma_tail - zr->jpg_err_shift) & 1) * 2;
  
-+	/* clear interrupt status register */
-+	cx_write(MO_TS_INTSTAT,  0x1f1111);
-+
- 	/* enable irqs */
- 	dprintk(1, "setting the interrupt mask\n");
- 	cx_set(MO_PCI_INTMSK, core->pci_irqmask | PCI_INT_TSINT);
+ 		stat_com = le32_to_cpu(zr->stat_com[i]);
+ 		if ((stat_com & 1) == 0) {
+@@ -826,6 +826,11 @@ static void zoran_reap_stat_com(struct zoran *zr)
+ 		size = (stat_com & GENMASK(22, 1)) >> 1;
+ 
+ 		buf = zr->inuse[i];
++		if (!buf) {
++			spin_unlock_irqrestore(&zr->queued_bufs_lock, flags);
++			pci_err(zr->pci_dev, "No buffer at slot %d\n", i);
++			return;
++		}
+ 		buf->vbuf.vb2_buf.timestamp = ktime_get_ns();
+ 
+ 		if (zr->codec_mode == BUZ_MODE_MOTION_COMPRESS) {
 -- 
 2.34.1
 
