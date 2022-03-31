@@ -2,40 +2,43 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9824C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 31 Mar 2022 19:38:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 324EAC433EF
+	for <linux-media@archiver.kernel.org>; Thu, 31 Mar 2022 19:38:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240990AbiCaTj5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 31 Mar 2022 15:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
+        id S240916AbiCaTkC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 31 Mar 2022 15:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240897AbiCaTjw (ORCPT
+        with ESMTP id S240910AbiCaTjx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 31 Mar 2022 15:39:52 -0400
+        Thu, 31 Mar 2022 15:39:53 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F3223D770;
-        Thu, 31 Mar 2022 12:37:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E4C239324;
+        Thu, 31 Mar 2022 12:37:55 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id A6A121F47253
+        with ESMTPSA id A363D1F47259
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648755471;
-        bh=SqPD7oTR+3FuYunP0khMcdvMcGz4bOvgAm9j9vzmvSk=;
+        s=mail; t=1648755474;
+        bh=3kRlflMZKylSksBlTGyBHGjQWwONuPlHkkyiaE6iWjY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iv777jy1D9CAI9gb1UAFfxR2k7QirrCUKilgDl8VU9WTv+FByMkFfG5Ua4MFWhsU5
-         YIcdCPJVM1KT7RTtBvuPriBFyRWCt4ldLG7HF/rCh/Opjtuz/5iFKnfoU+Ug1aBTps
-         3IQXnC0bPymS3XjP0Z9kkPLaVrLcWASjASJ19lZwTyJjs62ZLlJbJr1UZ+0HeUHJ33
-         QcBUZf3My8+xWSH0UCh1z2dAfrehA1KnPAVK20mYreggE5bl8QTW722Ph9n0SM+VeS
-         ayvPRtQvJNqe7QGbh0TUS+2uWMKjA46XMmBCP8KrWvhmZpozHjRQ/EB9VRBXrg1UYb
-         LoFeblkB9CqVg==
+        b=mBFH7UXO/BWTgn0mge7OZnNiQGKEOEaL6P/pQiX4Ig4krhPmp8vindah+nakwuOEm
+         g+w5iw0mm/dh9cG9ldqAZkBPPHwfVAHf7eghaXlkbDB6P9WzjNNvhoYlIYATxTyi//
+         yhDiFcfMo4iNJQxxm2trUN8PC3/l1iP/Xhw2Duv345c9/sMRSg2T34tFM0w7CgIEeF
+         guIual9HLdo8qKc2EEpkdNbPxMhPeGJk6GPHvXfvEzkfI7+jhlVQ9fh2XOEh+wj11x
+         W2OX0h/f8jGe+PUhf2bK2h490khW4JkfIbzcWNqsNXNdNRRiZw1EnafTLN76t5F6sv
+         JFZMjSWr1QZwg==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     kernel@collabora.com,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 11/23] media: v4l2: Reorder field reflist
-Date:   Thu, 31 Mar 2022 15:37:13 -0400
-Message-Id: <20220331193726.289559-12-nicolas.dufresne@collabora.com>
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 13/23] media: rkvdec: h264: Fix dpb_valid implementation
+Date:   Thu, 31 Mar 2022 15:37:15 -0400
+Message-Id: <20220331193726.289559-14-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220331193726.289559-1-nicolas.dufresne@collabora.com>
 References: <20220331193726.289559-1-nicolas.dufresne@collabora.com>
@@ -45,86 +48,99 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As per spec, the field reflist requires interleaving top and bottom
-field in a specific way that does not fit inside the sort operation.
-The process consist of alternating references parity, starting with
-a reference of the same parity as the current picture. This
-processs is done twice, once for short term references and a second
-time for the long term references.
+The ref builder only provided references that are marked as valid in the
+dpb. Thus the current implementation of dpb_valid would always set the
+flag to 1. This is not representing missing frames (this is called
+'non-existing' pictures in the spec). In some context, these non-existing
+pictures still need to occupy a slot in the reference list according to
+the spec.
 
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-h264.c | 42 +++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ drivers/staging/media/rkvdec/rkvdec-h264.c | 33 ++++++++++++++++------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
-index 7e1eba03099a..d2d1f3bed7e8 100644
---- a/drivers/media/v4l2-core/v4l2-h264.c
-+++ b/drivers/media/v4l2-core/v4l2-h264.c
-@@ -244,6 +244,40 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
- 	return poca < pocb ? -1 : 1;
+diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+index dff89732ddd0..bcde37d72244 100644
+--- a/drivers/staging/media/rkvdec/rkvdec-h264.c
++++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+@@ -112,6 +112,7 @@ struct rkvdec_h264_run {
+ 	const struct v4l2_ctrl_h264_sps *sps;
+ 	const struct v4l2_ctrl_h264_pps *pps;
+ 	const struct v4l2_ctrl_h264_scaling_matrix *scaling_matrix;
++	int ref_buf_idx[V4L2_H264_NUM_DPB_ENTRIES];
+ };
+ 
+ struct rkvdec_h264_ctx {
+@@ -725,6 +726,26 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+ 	}
  }
  
-+/*
-+ * The references need to be reordered so that references are alternating
-+ * between top and bottom field references starting with the current picture
-+ * parity. This has to be * done for short term and long term references
-+ * separately.
-+ */
-+static void reorder_field_reflist(const struct v4l2_h264_reflist_builder *b,
-+				  struct v4l2_h264_reference *reflist)
++static void lookup_ref_buf_idx(struct rkvdec_ctx *ctx,
++			       struct rkvdec_h264_run *run)
 +{
-+	struct v4l2_h264_reference tmplist[V4L2_H264_REF_LIST_LEN];
-+	u8 lt, i = 0, j = 0, k = 0;
++	const struct v4l2_ctrl_h264_decode_params *dec_params = run->decode_params;
++	u32 i;
 +
-+	memcpy(tmplist, reflist, sizeof(tmplist[0]) * b->num_valid);
++	for (i = 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
++		struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
++		const struct v4l2_h264_dpb_entry *dpb = run->decode_params->dpb;
++		struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
++		int buf_idx = -1;
 +
-+	for (lt = 0; lt <= 1; lt++) {
-+		do {
-+			for (; i < b->num_valid && b->refs[tmplist[i].index].longterm == lt; i++) {
-+				if (tmplist[i].fields == b->cur_pic_fields) {
-+					reflist[k++] = tmplist[i++];
-+					break;
-+				}
-+			}
++		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
++			buf_idx = vb2_find_timestamp(cap_q,
++						     dpb[i].reference_ts, 0);
 +
-+			for (; j < b->num_valid && b->refs[tmplist[j].index].longterm == lt; j++) {
-+				if (tmplist[j].fields != b->cur_pic_fields) {
-+					reflist[k++] = tmplist[j++];
-+					break;
-+				}
-+			}
-+		} while ((i < b->num_valid && b->refs[tmplist[i].index].longterm == lt) ||
-+			 (j < b->num_valid && b->refs[tmplist[j].index].longterm == lt));
++		run->ref_buf_idx[i] = buf_idx;
 +	}
 +}
 +
- static char ref_type_to_char (u8 ref_type)
+ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+ 			    struct rkvdec_h264_run *run)
  {
- 	switch (ref_type) {
-@@ -346,6 +380,9 @@ v4l2_h264_build_p_ref_list(const struct v4l2_h264_reflist_builder *builder,
- 	sort_r(reflist, builder->num_valid, sizeof(*reflist),
- 	       v4l2_h264_p_ref_list_cmp, NULL, builder);
+@@ -762,7 +783,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
  
-+	if (builder->cur_pic_fields != V4L2_H264_FRAME_REF)
-+		reorder_field_reflist(builder, reflist);
-+
- 	print_ref_list_p(builder, reflist);
- }
- EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
-@@ -379,6 +416,11 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
- 	sort_r(b1_reflist, builder->num_valid, sizeof(*b1_reflist),
- 	       v4l2_h264_b1_ref_list_cmp, NULL, builder);
+ 	for (j = 0; j < RKVDEC_NUM_REFLIST; j++) {
+ 		for (i = 0; i < h264_ctx->reflists.num_valid; i++) {
+-			u8 dpb_valid = 0;
++			bool dpb_valid = run->ref_buf_idx[i] >= 0;
+ 			u8 idx = 0;
  
-+	if (builder->cur_pic_fields != V4L2_H264_FRAME_REF) {
-+		reorder_field_reflist(builder, b0_reflist);
-+		reorder_field_reflist(builder, b1_reflist);
-+	}
-+
- 	if (builder->num_valid > 1 &&
- 	    !memcmp(b1_reflist, b0_reflist, builder->num_valid))
- 		swap(b1_reflist[0], b1_reflist[1]);
+ 			switch (j) {
+@@ -779,8 +800,6 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+ 
+ 			if (idx >= ARRAY_SIZE(dec_params->dpb))
+ 				continue;
+-			dpb_valid = !!(dpb[idx].flags &
+-				       V4L2_H264_DPB_ENTRY_FLAG_ACTIVE);
+ 
+ 			set_ps_field(hw_rps, DPB_INFO(i, j),
+ 				     idx | dpb_valid << 4);
+@@ -859,13 +878,8 @@ get_ref_buf(struct rkvdec_ctx *ctx, struct rkvdec_h264_run *run,
+ 	    unsigned int dpb_idx)
+ {
+ 	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
+-	const struct v4l2_h264_dpb_entry *dpb = run->decode_params->dpb;
+ 	struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
+-	int buf_idx = -1;
+-
+-	if (dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
+-		buf_idx = vb2_find_timestamp(cap_q,
+-					     dpb[dpb_idx].reference_ts, 0);
++	int buf_idx = run->ref_buf_idx[dpb_idx];
+ 
+ 	/*
+ 	 * If a DPB entry is unused or invalid, address of current destination
+@@ -1102,6 +1116,7 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+ 
+ 	assemble_hw_scaling_list(ctx, &run);
+ 	assemble_hw_pps(ctx, &run);
++	lookup_ref_buf_idx(ctx, &run);
+ 	assemble_hw_rps(ctx, &run);
+ 	config_registers(ctx, &run);
+ 
 -- 
 2.34.1
 
