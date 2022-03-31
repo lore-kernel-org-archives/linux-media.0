@@ -2,103 +2,160 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCEC5C433EF
-	for <linux-media@archiver.kernel.org>; Thu, 31 Mar 2022 04:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0F09C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 31 Mar 2022 04:52:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiCaEPQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 31 Mar 2022 00:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
+        id S229472AbiCaEyV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 31 Mar 2022 00:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiCaEOz (ORCPT
+        with ESMTP id S229499AbiCaEyT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:14:55 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6141249244;
-        Wed, 30 Mar 2022 20:46:31 -0700 (PDT)
-X-UUID: 327ad06104a2478d94b90fc6038c0e2d-20220331
-X-UUID: 327ad06104a2478d94b90fc6038c0e2d-20220331
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1646053287; Thu, 31 Mar 2022 10:48:48 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 31 Mar 2022 10:48:45 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 31 Mar 2022 10:48:44 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v8, 11/17] media: mediatek: vcodec: Fix v4l2-compliance fail
-Date:   Thu, 31 Mar 2022 10:47:55 +0800
-Message-ID: <20220331024801.29229-12-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220331024801.29229-1-yunfei.dong@mediatek.com>
-References: <20220331024801.29229-1-yunfei.dong@mediatek.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+        Thu, 31 Mar 2022 00:54:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B20DBB
+        for <linux-media@vger.kernel.org>; Wed, 30 Mar 2022 21:52:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 719DD614C5
+        for <linux-media@vger.kernel.org>; Thu, 31 Mar 2022 04:52:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86891C340ED
+        for <linux-media@vger.kernel.org>; Thu, 31 Mar 2022 04:52:31 +0000 (UTC)
+Date:   Thu, 31 Mar 2022 06:52:29 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+Message-Id: <20220331045231.86891C340ED@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Need to use default pic info when get pic info fail.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: Steve Cho <stevecho@chromium.org>
----
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Results of the daily build of media_tree:
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-index dab6acb3158c..0d9007339faf 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-@@ -485,11 +485,14 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
- 		ctx->picinfo.pic_w = pix_mp->width;
- 		ctx->picinfo.pic_h = pix_mp->height;
- 
-+		/*
-+		 * If get pic info fail, need to use the default pic info params, or
-+		 * v4l2-compliance will fail
-+		 */
- 		ret = vdec_if_get_param(ctx, GET_PARAM_PIC_INFO, &ctx->picinfo);
- 		if (ret) {
- 			mtk_v4l2_err("[%d]Error!! Get GET_PARAM_PICTURE_INFO Fail",
- 				     ctx->id);
--			return -EINVAL;
- 		}
- 
- 		ctx->last_decoded_picinfo = ctx->picinfo;
--- 
-2.18.0
+date:			Thu Mar 31 05:00:12 CEST 2022
+media-tree git hash:	ba2c670ae84bad705ec023bfa7a48f7f8eab5e16
+media_build git hash:	47e6d5a60b5da94db0118fa795dd0fcba646a0c7
+v4l-utils git hash:	52b4b9f26e1f4ee606a4885c117c088d681887fe
+edid-decode git hash:	85e8c9c70167030c1367493e0c2f15a903acf21f
+gcc version:		i686-linux-gcc (GCC) 11.2.0
+sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
+sparse version:		v0.6.4-dirty
+smatch repo:            git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-7843-g5397282c-dirty
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 4b73e0f50a123901c96ab376be40a340da0b4439
+host hardware:		x86_64
+host os:		5.16.0-1-amd64
 
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-arm-multi: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-4.4.283-i686: OK
+linux-4.4.283-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.308-i686: OK
+linux-4.9.308-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.273-i686: OK
+linux-4.14.273-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.236-i686: OK
+linux-4.19.236-x86_64: OK
+linux-4.20.17-i686: OK
+linux-4.20.17-x86_64: OK
+linux-5.0.21-i686: OK
+linux-5.0.21-x86_64: OK
+linux-5.1.21-i686: OK
+linux-5.1.21-x86_64: OK
+linux-5.2.21-i686: OK
+linux-5.2.21-x86_64: OK
+linux-5.3.18-i686: OK
+linux-5.3.18-x86_64: OK
+linux-5.4.144-i686: OK
+linux-5.4.144-x86_64: OK
+linux-5.5.19-i686: OK
+linux-5.5.19-x86_64: OK
+linux-5.6.19-i686: OK
+linux-5.6.19-x86_64: OK
+linux-5.7.19-i686: OK
+linux-5.7.19-x86_64: OK
+linux-5.8.18-i686: OK
+linux-5.8.18-x86_64: OK
+linux-5.9.16-i686: OK
+linux-5.9.16-x86_64: OK
+linux-5.10.62-i686: OK
+linux-5.10.62-x86_64: OK
+linux-5.11.22-i686: OK
+linux-5.11.22-x86_64: OK
+linux-5.12.19-i686: OK
+linux-5.12.19-x86_64: OK
+linux-5.13.14-i686: OK
+linux-5.13.14-x86_64: OK
+linux-5.14.1-i686: OK
+linux-5.14.1-x86_64: OK
+linux-5.15.1-i686: OK
+linux-5.15.1-x86_64: OK
+linux-5.16.1-i686: OK
+linux-5.16.1-x86_64: OK
+linux-5.17.1-i686: OK
+linux-5.17.1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 0
+virtme-32: OK: Final Summary: 3100, Succeeded: 3100, Failed: 0, Warnings: 0
+sparse: OK
+smatch: WARNINGS
+kerneldoc: OK
+
+Detailed results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Thursday.log
+
+Detailed regression test results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media.log
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-dmesg.log
+
+Full logs are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Thursday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+https://hverkuil.home.xs4all.nl/spec/index.html
