@@ -2,36 +2,37 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 009CBC4332F
-	for <linux-media@archiver.kernel.org>; Thu, 31 Mar 2022 04:08:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B84A1C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 31 Mar 2022 04:12:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiCaEKg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 31 Mar 2022 00:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
+        id S230201AbiCaEOg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 31 Mar 2022 00:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiCaEKQ (ORCPT
+        with ESMTP id S230228AbiCaEOW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 31 Mar 2022 00:10:16 -0400
+        Thu, 31 Mar 2022 00:14:22 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9921480DC;
-        Wed, 30 Mar 2022 20:43:49 -0700 (PDT)
-X-UUID: f24d7e7d1dca462ebf738e23181e66f2-20220331
-X-UUID: f24d7e7d1dca462ebf738e23181e66f2-20220331
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610AC27AD64;
+        Wed, 30 Mar 2022 20:46:22 -0700 (PDT)
+X-UUID: 0be1dc210c80407199f822f61748f7fb-20220331
+X-UUID: 0be1dc210c80407199f822f61748f7fb-20220331
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 559236251; Thu, 31 Mar 2022 10:48:57 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1762808605; Thu, 31 Mar 2022 10:48:39 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 31 Mar 2022 10:48:55 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 31 Mar 2022 10:48:37 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 31 Mar 2022 10:48:53 +0800
+ Transport; Thu, 31 Mar 2022 10:48:34 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
@@ -56,9 +57,9 @@ CC:     George Sun <george.sun@mediatek.com>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v8, 17/17] media: mediatek: vcodec: prevent kernel crash when rmmod mtk-vcodec-dec.ko
-Date:   Thu, 31 Mar 2022 10:48:01 +0800
-Message-ID: <20220331024801.29229-18-yunfei.dong@mediatek.com>
+Subject: [PATCH v8, 06/17] media: mediatek: vcodec: Refactor get and put capture buffer flow
+Date:   Thu, 31 Mar 2022 10:47:50 +0800
+Message-ID: <20220331024801.29229-7-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220331024801.29229-1-yunfei.dong@mediatek.com>
 References: <20220331024801.29229-1-yunfei.dong@mediatek.com>
@@ -70,62 +71,267 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If the driver support subdev mode, the parameter "dev->pm.dev" will be
-NULL in mtk_vcodec_dec_remove. Kernel will crash when try to rmmod
-mtk-vcodec-dec.ko.
-
-[ 4380.702726] pc : do_raw_spin_trylock+0x4/0x80
-[ 4380.707075] lr : _raw_spin_lock_irq+0x90/0x14c
-[ 4380.711509] sp : ffff80000819bc10
-[ 4380.714811] x29: ffff80000819bc10 x28: ffff3600c03e4000 x27: 0000000000000000
-[ 4380.721934] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-[ 4380.729057] x23: ffff3600c0f34930 x22: ffffd5e923549000 x21: 0000000000000220
-[ 4380.736179] x20: 0000000000000208 x19: ffffd5e9213e8ebc x18: 0000000000000020
-[ 4380.743298] x17: 0000002000000000 x16: ffffd5e9213e8e90 x15: 696c346f65646976
-[ 4380.750420] x14: 0000000000000000 x13: 0000000000000001 x12: 0000000000000040
-[ 4380.757542] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-[ 4380.764664] x8 : 0000000000000000 x7 : ffff3600c7273ae8 x6 : ffffd5e9213e8ebc
-[ 4380.771786] x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-[ 4380.778908] x2 : 0000000000000000 x1 : ffff3600c03e4000 x0 : 0000000000000208
-[ 4380.786031] Call trace:
-[ 4380.788465]  do_raw_spin_trylock+0x4/0x80
-[ 4380.792462]  __pm_runtime_disable+0x2c/0x1b0
-[ 4380.796723]  mtk_vcodec_dec_remove+0x5c/0xa0 [mtk_vcodec_dec]
-[ 4380.802466]  platform_remove+0x2c/0x60
-[ 4380.806204]  __device_release_driver+0x194/0x250
-[ 4380.810810]  driver_detach+0xc8/0x15c
-[ 4380.814462]  bus_remove_driver+0x5c/0xb0
-[ 4380.818375]  driver_unregister+0x34/0x64
-[ 4380.822288]  platform_driver_unregister+0x18/0x24
-[ 4380.826979]  mtk_vcodec_dec_driver_exit+0x1c/0x888 [mtk_vcodec_dec]
-[ 4380.833240]  __arm64_sys_delete_module+0x190/0x224
-[ 4380.838020]  invoke_syscall+0x48/0x114
-[ 4380.841760]  el0_svc_common.constprop.0+0x60/0x11c
-[ 4380.846540]  do_el0_svc+0x28/0x90
-[ 4380.849844]  el0_svc+0x4c/0x100
-[ 4380.852975]  el0t_64_sync_handler+0xec/0xf0
-[ 4380.857148]  el0t_64_sync+0x190/0x194
-[ 4380.860801] Code: 94431515 17ffffca d503201f d503245f (b9400004)
+For lat and core decode in parallel, need to get capture buffer
+when core start to decode and put capture buffer to display
+list when core decode done.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+changed compare with v7:
+In order to adjust GStreamer, need to separate src buffer done with
+v4l2_ctrl_request_complete.
+---
+ .../vcodec/mtk_vcodec_dec_stateless.c         | 88 +++++++++++++------
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  6 +-
+ .../mediatek/vcodec/vdec/vdec_h264_req_if.c   | 11 ++-
+ .../platform/mediatek/vcodec/vdec_msg_queue.h |  2 +
+ 4 files changed, 80 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-index a84df6596aaa..5da4572c5b14 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-@@ -482,7 +482,8 @@ static int mtk_vcodec_dec_remove(struct platform_device *pdev)
- 		video_unregister_device(dev->vfd_dec);
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+index 4df7b158ec5e..727a128de18b 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+@@ -108,20 +108,50 @@ static const struct mtk_codec_framesizes mtk_vdec_framesizes[] = {
  
- 	v4l2_device_unregister(&dev->v4l2_dev);
--	pm_runtime_disable(dev->pm.dev);
-+	if (!dev->vdec_pdata->is_subdev_supported)
-+		pm_runtime_disable(dev->pm.dev);
- 	mtk_vcodec_fw_release(dev->fw_handler);
- 	return 0;
+ #define NUM_SUPPORTED_FRAMESIZE ARRAY_SIZE(mtk_vdec_framesizes)
+ 
+-static struct vdec_fb *vdec_get_cap_buffer(struct mtk_vcodec_ctx *ctx,
+-					   struct vb2_v4l2_buffer *vb2_v4l2)
++static void mtk_vdec_stateless_cap_to_disp(struct mtk_vcodec_ctx *ctx, int error,
++					   struct media_request *src_buf_req)
+ {
+-	struct mtk_video_dec_buf *framebuf =
+-		container_of(vb2_v4l2, struct mtk_video_dec_buf, m2m_buf.vb);
+-	struct vdec_fb *pfb = &framebuf->frame_buffer;
+-	struct vb2_buffer *dst_buf = &vb2_v4l2->vb2_buf;
++	struct vb2_v4l2_buffer *vb2_dst;
++	enum vb2_buffer_state state;
+ 
+-	pfb->base_y.va = NULL;
++	if (error)
++		state = VB2_BUF_STATE_ERROR;
++	else
++		state = VB2_BUF_STATE_DONE;
++
++	vb2_dst = v4l2_m2m_dst_buf_remove(ctx->m2m_ctx);
++	v4l2_m2m_buf_done(vb2_dst, state);
++
++	mtk_v4l2_debug(2, "free frame buffer id:%d to done list",
++		       vb2_dst->vb2_buf.index);
++
++	if (src_buf_req)
++		v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
++}
++
++static struct vdec_fb *vdec_get_cap_buffer(struct mtk_vcodec_ctx *ctx)
++{
++	struct mtk_video_dec_buf *framebuf;
++	struct vb2_v4l2_buffer *vb2_v4l2;
++	struct vb2_buffer *dst_buf;
++	struct vdec_fb *pfb;
++
++	vb2_v4l2 = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
++	if (!vb2_v4l2) {
++		mtk_v4l2_debug(1, "[%d] dst_buf empty!!", ctx->id);
++		return NULL;
++	}
++
++	dst_buf = &vb2_v4l2->vb2_buf;
++	framebuf = container_of(vb2_v4l2, struct mtk_video_dec_buf, m2m_buf.vb);
++
++	pfb = &framebuf->frame_buffer;
++	pfb->base_y.va = vb2_plane_vaddr(dst_buf, 0);
+ 	pfb->base_y.dma_addr = vb2_dma_contig_plane_dma_addr(dst_buf, 0);
+ 	pfb->base_y.size = ctx->q_data[MTK_Q_DATA_DST].sizeimage[0];
+ 
+ 	if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 2) {
+-		pfb->base_c.va = NULL;
++		pfb->base_c.va = vb2_plane_vaddr(dst_buf, 1);
+ 		pfb->base_c.dma_addr =
+ 			vb2_dma_contig_plane_dma_addr(dst_buf, 1);
+ 		pfb->base_c.size = ctx->q_data[MTK_Q_DATA_DST].sizeimage[1];
+@@ -145,12 +175,12 @@ static void mtk_vdec_worker(struct work_struct *work)
+ 	struct mtk_vcodec_ctx *ctx =
+ 		container_of(work, struct mtk_vcodec_ctx, decode_work);
+ 	struct mtk_vcodec_dev *dev = ctx->dev;
+-	struct vb2_v4l2_buffer *vb2_v4l2_src, *vb2_v4l2_dst;
++	struct vb2_v4l2_buffer *vb2_v4l2_src;
+ 	struct vb2_buffer *vb2_src;
+ 	struct mtk_vcodec_mem *bs_src;
+ 	struct mtk_video_dec_buf *dec_buf_src;
+ 	struct media_request *src_buf_req;
+-	struct vdec_fb *dst_buf;
++	enum vb2_buffer_state state;
+ 	bool res_chg = false;
+ 	int ret;
+ 
+@@ -161,13 +191,6 @@ static void mtk_vdec_worker(struct work_struct *work)
+ 		return;
+ 	}
+ 
+-	vb2_v4l2_dst = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
+-	if (!vb2_v4l2_dst) {
+-		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
+-		mtk_v4l2_debug(1, "[%d] no available destination buffer", ctx->id);
+-		return;
+-	}
+-
+ 	vb2_src = &vb2_v4l2_src->vb2_buf;
+ 	dec_buf_src = container_of(vb2_v4l2_src, struct mtk_video_dec_buf,
+ 				   m2m_buf.vb);
+@@ -176,9 +199,15 @@ static void mtk_vdec_worker(struct work_struct *work)
+ 	mtk_v4l2_debug(3, "[%d] (%d) id=%d, vb=%p", ctx->id,
+ 		       vb2_src->vb2_queue->type, vb2_src->index, vb2_src);
+ 
+-	bs_src->va = NULL;
++	bs_src->va = vb2_plane_vaddr(vb2_src, 0);
+ 	bs_src->dma_addr = vb2_dma_contig_plane_dma_addr(vb2_src, 0);
+ 	bs_src->size = (size_t)vb2_src->planes[0].bytesused;
++	if (!bs_src->va) {
++		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
++		mtk_v4l2_err("[%d] id=%d source buffer is NULL", ctx->id,
++			     vb2_src->index);
++		return;
++	}
+ 
+ 	mtk_v4l2_debug(3, "[%d] Bitstream VA=%p DMA=%pad Size=%zx vb=%p",
+ 		       ctx->id, bs_src->va, &bs_src->dma_addr, bs_src->size, vb2_src);
+@@ -189,9 +218,7 @@ static void mtk_vdec_worker(struct work_struct *work)
+ 	else
+ 		mtk_v4l2_err("vb2 buffer media request is NULL");
+ 
+-	dst_buf = vdec_get_cap_buffer(ctx, vb2_v4l2_dst);
+-	v4l2_m2m_buf_copy_metadata(vb2_v4l2_src, vb2_v4l2_dst, true);
+-	ret = vdec_if_decode(ctx, bs_src, dst_buf, &res_chg);
++	ret = vdec_if_decode(ctx, bs_src, NULL, &res_chg);
+ 	if (ret) {
+ 		mtk_v4l2_err(" <===[%d], src_buf[%d] sz=0x%zx pts=%llu vdec_if_decode() ret=%d res_chg=%d===>",
+ 			     ctx->id, vb2_src->index, bs_src->size,
+@@ -203,10 +230,17 @@ static void mtk_vdec_worker(struct work_struct *work)
+ 		}
+ 	}
+ 
+-	v4l2_m2m_buf_done_and_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx,
+-					 ret ? VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE);
+-
+-	v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
++	state = ret ? VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE;
++	if (!IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch) ||
++	    ctx->current_codec == V4L2_PIX_FMT_VP8_FRAME) {
++		v4l2_m2m_buf_done_and_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx, state);
++		if (src_buf_req)
++			v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
++	} else {
++		v4l2_m2m_src_buf_remove(ctx->m2m_ctx);
++		v4l2_m2m_buf_done(vb2_v4l2_src, state);
++		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
++	}
  }
+ 
+ static void vb2ops_vdec_stateless_buf_queue(struct vb2_buffer *vb)
+@@ -336,6 +370,8 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
+ 	.uses_stateless_api = true,
+ 	.worker = mtk_vdec_worker,
+ 	.flush_decoder = mtk_vdec_flush_decoder,
++	.cap_to_disp = mtk_vdec_stateless_cap_to_disp,
++	.get_cap_buffer = vdec_get_cap_buffer,
+ 	.is_subdev_supported = false,
+ 	.hw_arch = MTK_VDEC_PURE_SINGLE_CORE,
+ };
+@@ -354,6 +390,8 @@ const struct mtk_vcodec_dec_pdata mtk_lat_sig_core_pdata = {
+ 	.uses_stateless_api = true,
+ 	.worker = mtk_vdec_worker,
+ 	.flush_decoder = mtk_vdec_flush_decoder,
++	.cap_to_disp = mtk_vdec_stateless_cap_to_disp,
++	.get_cap_buffer = vdec_get_cap_buffer,
+ 	.is_subdev_supported = true,
+ 	.hw_arch = MTK_VDEC_LAT_SINGLE_CORE,
+ };
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+index 6d27e4d41ede..c06463142182 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+@@ -350,7 +350,8 @@ enum mtk_vdec_hw_arch {
+  * @ctrls_setup: init vcodec dec ctrls
+  * @worker: worker to start a decode job
+  * @flush_decoder: function that flushes the decoder
+- *
++ * @get_cap_buffer: get capture buffer from capture queue
++ * @cap_to_disp: put capture buffer to disp list for lat and core arch
+  * @vdec_vb2_ops: struct vb2_ops
+  *
+  * @vdec_formats: supported video decoder formats
+@@ -372,6 +373,9 @@ struct mtk_vcodec_dec_pdata {
+ 	int (*ctrls_setup)(struct mtk_vcodec_ctx *ctx);
+ 	void (*worker)(struct work_struct *work);
+ 	int (*flush_decoder)(struct mtk_vcodec_ctx *ctx);
++	struct vdec_fb *(*get_cap_buffer)(struct mtk_vcodec_ctx *ctx);
++	void (*cap_to_disp)(struct mtk_vcodec_ctx *ctx, int error,
++			    struct media_request *src_buf_req);
+ 
+ 	struct vb2_ops *vdec_vb2_ops;
+ 
+diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
+index 43542de11e9c..27119aa31dd9 100644
+--- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
++++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
+@@ -670,12 +670,15 @@ static void vdec_h264_slice_deinit(void *h_vdec)
+ }
+ 
+ static int vdec_h264_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+-				  struct vdec_fb *fb, bool *res_chg)
++				  struct vdec_fb *unused, bool *res_chg)
+ {
+ 	struct vdec_h264_slice_inst *inst = h_vdec;
+ 	const struct v4l2_ctrl_h264_decode_params *dec_params =
+ 		get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_DECODE_PARAMS);
+ 	struct vdec_vpu_inst *vpu = &inst->vpu;
++	struct mtk_video_dec_buf *src_buf_info;
++	struct mtk_video_dec_buf *dst_buf_info;
++	struct vdec_fb *fb;
+ 	u32 data[2];
+ 	u64 y_fb_dma;
+ 	u64 c_fb_dma;
+@@ -685,6 +688,10 @@ static int vdec_h264_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 	if (!bs)
+ 		return vpu_dec_reset(vpu);
+ 
++	fb = inst->ctx->dev->vdec_pdata->get_cap_buffer(inst->ctx);
++	src_buf_info = container_of(bs, struct mtk_video_dec_buf, bs_buffer);
++	dst_buf_info = container_of(fb, struct mtk_video_dec_buf, frame_buffer);
++
+ 	y_fb_dma = fb ? (u64)fb->base_y.dma_addr : 0;
+ 	c_fb_dma = fb ? (u64)fb->base_c.dma_addr : 0;
+ 
+@@ -696,6 +703,8 @@ static int vdec_h264_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 	inst->vsi_ctx.dec.c_fb_dma = c_fb_dma;
+ 	inst->vsi_ctx.dec.vdec_fb_va = (u64)(uintptr_t)fb;
+ 
++	v4l2_m2m_buf_copy_metadata(&src_buf_info->m2m_buf.vb,
++				   &dst_buf_info->m2m_buf.vb, true);
+ 	get_vdec_decode_parameters(inst);
+ 	data[0] = bs->size;
+ 	/*
+diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
+index b6ba66d3e026..c43d427f5f54 100644
+--- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
++++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
+@@ -43,6 +43,7 @@ struct vdec_msg_queue_ctx {
+  * @wdma_err_addr: wdma error address used for lat hardware
+  * @slice_bc_addr: slice bc address used for lat hardware
+  * @ts_info: need to set timestamp from output to capture
++ * @src_buf_req: output buffer media request object
+  *
+  * @private_data: shared information used to lat and core hardware
+  * @ctx: mtk vcodec context information
+@@ -54,6 +55,7 @@ struct vdec_lat_buf {
+ 	struct mtk_vcodec_mem wdma_err_addr;
+ 	struct mtk_vcodec_mem slice_bc_addr;
+ 	struct vb2_v4l2_buffer ts_info;
++	struct media_request *src_buf_req;
+ 
+ 	void *private_data;
+ 	struct mtk_vcodec_ctx *ctx;
 -- 
 2.18.0
 
