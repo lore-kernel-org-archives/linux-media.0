@@ -2,35 +2,35 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 605A6C433FE
-	for <linux-media@archiver.kernel.org>; Fri,  1 Apr 2022 15:14:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CFF8C43217
+	for <linux-media@archiver.kernel.org>; Fri,  1 Apr 2022 15:14:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348602AbiDAPPp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 1 Apr 2022 11:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S1348795AbiDAPP6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 1 Apr 2022 11:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349289AbiDAOvd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Apr 2022 10:51:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE612B4A5B;
-        Fri,  1 Apr 2022 07:42:24 -0700 (PDT)
+        with ESMTP id S1350127AbiDAO7E (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Apr 2022 10:59:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398A9184B4F;
+        Fri,  1 Apr 2022 07:46:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C168BB824D5;
-        Fri,  1 Apr 2022 14:42:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879A1C2BBE4;
-        Fri,  1 Apr 2022 14:42:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB0B560AC0;
+        Fri,  1 Apr 2022 14:46:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A8DC3410F;
+        Fri,  1 Apr 2022 14:46:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648824142;
-        bh=Or5Rp8UJEUhpq/Xbmlxww9VvoFfOSM1I4I49HSOWxqQ=;
+        s=k20201202; t=1648824384;
+        bh=FdC1Qi/w1GcVPIE3V0IbzsA9PxSqblnKMj//IRcgbGA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=repogBi7rgH2A7uS9h+a6waMvqOGbpNvTrq4Khxkwv9XXhCTdHktwX+HckiWMiBCN
-         LSt+3WgozYH7W1SamdHROE3Q8njZteBBYItsjZMfOpsa9IKP7ydBa46gMiYxbnuFWv
-         Ms/hyqJmxjr2cQDmK29PpQD3ree9Fn32TAG3Cr3csyVrsIa4MoJBmRZoeV0CcBa1ZO
-         g/XE2wTodRGr8zpQPppTLIDTPSNCTokEQ1mEY9+nc1Nviug1lCl7SyGXdP7PG+5nk1
-         4AcvWfzkqWTKQ8e5UNIvRkqcQ6aBbbc0m+5I7m8DaBNgzAMthXXRIgnLC29oTL30bq
-         6F1AmoXaZ5jnQ==
+        b=LuHGdYN21AXqakC0bwvy6l/qBRr4Kgzm4qw+5JU4S4KXzzwJk+agyLvQCiiYgssIK
+         9IJOTZVYx5O9jwbcTaqzUkDGzoov6bz4cN8IRvtZSCEWvyu6farLXFPNs3428Ee5pU
+         ytfSgSAW0RXCRQW0XWdIyJoP6XjcFCHx9nd+xuJNdpum4VbpwtJm4f55IeYnfNpDnN
+         8i/ETbuas+aNHVRpsCaCLwgJSTmiM7OJuoowMQywmmdBckwDe3kcT8/lBFSWpUMOPH
+         tioeDONo1wybylr7fpsVxdvXBWOFqpp3ZD8Xb4RJu/I2YXTuHou5m/hL9oczv622Rm
+         xqSHkb7pw+Dug==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Xin Xiong <xiongx18@fudan.edu.cn>,
@@ -43,12 +43,12 @@ Cc:     Xin Xiong <xiongx18@fudan.edu.cn>,
         Lang.Yu@amd.com, amd-gfx@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         linaro-mm-sig@lists.linaro.org
-Subject: [PATCH AUTOSEL 5.10 04/65] drm/amd/amdgpu/amdgpu_cs: fix refcount leak of a dma_fence obj
-Date:   Fri,  1 Apr 2022 10:41:05 -0400
-Message-Id: <20220401144206.1953700-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 03/29] drm/amd/amdgpu/amdgpu_cs: fix refcount leak of a dma_fence obj
+Date:   Fri,  1 Apr 2022 10:45:46 -0400
+Message-Id: <20220401144612.1955177-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220401144206.1953700-1-sashal@kernel.org>
-References: <20220401144206.1953700-1-sashal@kernel.org>
+In-Reply-To: <20220401144612.1955177-1-sashal@kernel.org>
+References: <20220401144612.1955177-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -82,10 +82,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-index 12598a4b5c78..867fcee6b0d3 100644
+index 81001d879322..023309296bfc 100644
 --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
 +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-@@ -1484,6 +1484,7 @@ int amdgpu_cs_fence_to_handle_ioctl(struct drm_device *dev, void *data,
+@@ -1469,6 +1469,7 @@ int amdgpu_cs_fence_to_handle_ioctl(struct drm_device *dev, void *data,
  		return 0;
  
  	default:
