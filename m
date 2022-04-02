@@ -2,266 +2,117 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 799A3C433EF
-	for <linux-media@archiver.kernel.org>; Sat,  2 Apr 2022 17:00:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5ECDEC433F5
+	for <linux-media@archiver.kernel.org>; Sat,  2 Apr 2022 20:47:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358596AbiDBRCG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 2 Apr 2022 13:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
+        id S1352341AbiDBUs7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 2 Apr 2022 16:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358592AbiDBRCF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 2 Apr 2022 13:02:05 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C7023BFC;
-        Sat,  2 Apr 2022 10:00:12 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id bh17so11849892ejb.8;
-        Sat, 02 Apr 2022 10:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1d95uWgxWqAEeS4NzrjhRN8csVGHge7TtaFw1w6jEY8=;
-        b=ZzzTEiNcOz6o5GUT7vuX//kk+RW6606LKchRehEWCNxLZu+MW1SOPdKnY47EFDbHJ/
-         Y0UlF4fy1WyfQPTgq0QEJSzWKdwdUlWvyR6fONIfjL3BvkFPaOyJ5Cky1+WeQoxn35Ce
-         S8qZ1hEU89JiLruTWnolT+yTDiuAwsPTEA1DbkuVAewBMQhLR5y0nJlpqr0ZEe1YsfQ2
-         no7ZDwTU7mx6/WXxm8T/7VJeuZAU63Eh40402PNgrOXLs1ezZAMR2wnVg39lO/xseyrv
-         x1AgAeEB4Ti7eyw9nd8cn5M4Yk5BcwMY5eoHCxh6g+rPfR54H6gOcI6JmEHaAeb/+t+6
-         /q2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1d95uWgxWqAEeS4NzrjhRN8csVGHge7TtaFw1w6jEY8=;
-        b=0A1QWUEhRrXUboeC12yGAlL0A4lyc6Ia6eolA4VbW+vnmnLKhyDbMD5gIi/2FGBZhP
-         EhqDIBUTN8KmXuewPfWOgMhQYDuzgccx/E1n4C01Dz39TCojU+srZuPkbpu4XEUmuU57
-         cULPPFqC+Jc7Bp+tEEvfg/i62sD1azMiIP1wIUw0ZjCLc5547kLhqmwJPBJ3vr3TRMSU
-         h/+QdqAB9dEsSkHl65v21ZDXLfv8tpPEWz1/R0NtpGLZAFqutF/m448jvH9mVnvUeDmj
-         Fw909fYWDzdA3roFFwEDv9L8PVeAicDnm3UUftNuOh1KHBSVJtVWd0kIMcZEwZdSEEdo
-         ac7A==
-X-Gm-Message-State: AOAM532UqfvcNY7/PySIQlo7E6+yQ5fi2Agna4b7tgyMO+jpZbdtwLvG
-        9XuYBAXwb4Hh7yli1gBvRgT64LDauQV5IsYWdWg=
-X-Google-Smtp-Source: ABdhPJwdHs58RuuBXxWvaveuDf18gJaMH2ifHAlVaxf1JGpRCsshkezcQMGFLtDGyYlhogs/yaHWYcwviWboY1uhUuA=
-X-Received: by 2002:a17:907:62a9:b0:6da:7953:4df0 with SMTP id
- nd41-20020a17090762a900b006da79534df0mr4337079ejc.316.1648918811224; Sat, 02
- Apr 2022 10:00:11 -0700 (PDT)
+        with ESMTP id S236254AbiDBUs6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 2 Apr 2022 16:48:58 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB83A8C7C2;
+        Sat,  2 Apr 2022 13:47:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648932426; x=1680468426;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=g37OhN95hQDsEq5tM7Z8xgfEwHCJ4ewxpSG/HutWnaE=;
+  b=gz5n1+BHtwmKZa62cVUT3gbEFw23Kc7RtZcQGnqBJzWXlj+PMMznqD05
+   mhGd9/7YFAypC5pdoe+BQr4Cjc23tID+2/rrTGng3Al18PSQ3MG+PBawI
+   T3BKJgA8Qwgo8Va1BUU0WnQR+tNUOqWvtOg6U2SyiRCP7SI4Hlz3U/oE/
+   7ZMK309nCXXlYPw9/pJi4Q8m47d6qCrz/RawRPfzGpxegIuORiL31P6NJ
+   bR7Qi71YrZ3GROmk5QDzpkcGbTkmnwcoDfGsQPd9/KltBCCmFmIP1ORBA
+   70ppyYXsR15cy7Z3TRTaWpjU9hgs5yfBCmeBsqVrg5ng0CcACz696JE1h
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="240924370"
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="240924370"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 13:47:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
+   d="scan'208";a="548206722"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 02 Apr 2022 13:47:04 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nakeF-0000PD-NW;
+        Sat, 02 Apr 2022 20:47:03 +0000
+Date:   Sun, 3 Apr 2022 04:46:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: drivers/media/platform/renesas/rcar_jpu.c:77:9: warning: 'RST' macro
+ redefined
+Message-ID: <202204030453.ISJ7wI3L-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220228140838.622021-1-benjamin.gaignard@collabora.com>
- <eefa63b3-2a4d-4470-9a4e-517087ebcfaf@collabora.com> <CAHCN7xL2uZTMy30FGfDkDK4Lym6wvfr_MTv7QwtchrkTXMQiuw@mail.gmail.com>
- <79a9c925-d930-ad23-dc53-9ebc16d1328a@collabora.com> <3f778844-f655-74a7-0a00-05caa84eca35@collabora.com>
- <CAHCN7xLy2381AFLWhLxk5YuRV7C=OwLX=XPXONX8sbkg-SqMjA@mail.gmail.com>
-In-Reply-To: <CAHCN7xLy2381AFLWhLxk5YuRV7C=OwLX=XPXONX8sbkg-SqMjA@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sat, 2 Apr 2022 11:59:59 -0500
-Message-ID: <CAHCN7xJWQa-uXb0-+CSvAr1JhFmQYt80Q=uGvaY8uyptNcfbgw@mail.gmail.com>
-Subject: Re: [PATCH v4 00/15] Move HEVC stateless controls out of staging
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com,
-        Chen-Yu Tsai <wens@csie.org>,
-        "jernej.skrabec" <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev, kernel <kernel@collabora.com>,
-        knaerzche@gmail.com, jc@kynesim.co.uk
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Apr 2, 2022 at 11:22 AM Adam Ford <aford173@gmail.com> wrote:
->
-> On Fri, Apr 1, 2022 at 8:18 AM Benjamin Gaignard
-> <benjamin.gaignard@collabora.com> wrote:
-> >
-> >
-> > Le 31/03/2022 =C3=A0 08:53, Benjamin Gaignard a =C3=A9crit :
-> > >
-> > > Le 30/03/2022 =C3=A0 20:52, Adam Ford a =C3=A9crit :
-> > >> On Wed, Mar 30, 2022 at 2:53 AM Benjamin Gaignard
-> > >> <benjamin.gaignard@collabora.com> wrote:
-> > >>>
-> > >>> Le 28/02/2022 =C3=A0 15:08, Benjamin Gaignard a =C3=A9crit :
-> > >>>> This series aims to make HEVC uapi stable and usable for hardware
-> > >>>> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hant=
-ro)
-> > >>>> and 2 out of the tree drivers (rkvdec and RPI).
-> > >>>>
-> > >>>> After the remarks done on version 2, I have completely reworked to
-> > >>>> patches
-> > >>>> split so changelogs are meaningless. I have also drop "RFC" from t=
-he
-> > >>>> titles.
-> > >>>>
-> > >>>> Version 4:
-> > >>>> - Add num_entry_point_offsets field in  struct
-> > >>>> v4l2_ctrl_hevc_slice_params
-> > >>>> - Fix V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS name
-> > >>>> - Initialize control V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
-> > >>>> - Fix space/tab issue in kernel-doc
-> > >>>> - Add patch to change data_bit_offset definition
-> > >>>> - Fix hantro-media SPDX license
-> > >>>> - put controls under stateless section in v4l2-ctrls-defs.c
-> > >>>>
-> > >>>> At the end fluster tests results on IMX8MQ is 77/147 for HEVC code=
-c.
-> > >>> Dear reviewers,
-> > >>>
-> > >>> This series is waiting for your feedback,
-> > >> I tried several times with the suggested repos for both the kernel a=
-nd
-> > >> g-streamer without success getting Fluster to pass any tests on the
-> > >> imx8mq.  I can try again but I likely won't get to it until this
-> > >> weekend.  If I can get it working, I'll test both the 8mq and 8mm.
-> > >
-> > > Thanks a lot for that.
-> > >
-> > > Benjamin
-> >
-> > Adam,
-> >
-> > You may need to check if h265parse and v4l2slh265dec are available on y=
-our board.
->
-> I ran gst-inspect to see what showed up with 265 in the name.
->
-> # gst-inspect-1.0 |grep 265
-> libav:  avdec_h265: libav HEVC (High Efficiency Video Coding) decoder
-> rtp:  rtph265depay: RTP H265 depayloader
-> rtp:  rtph265pay: RTP H265 payloader
-> typefindfunctions: video/x-h265: h265, x265, 265
-> v4l2codecs:  v4l2slh265dec: V4L2 Stateless H.265 Video Decoder
-> videoparsersbad:  h265parse: H.265 parser
->
-> It appears I have both h265parse and v4l2slh265dec.
->
-> >
-> > fluster check if v4l2slh265dec is working fine with this command line:
-> >
-> > gst-launch-1.0 appsrc num-buffers=3D0 ! h265parse ! v4l2slh265dec ! fak=
-esink
-> >
-> > so if one of them is missing it won't work.
->
-> gst-launch-1.0 appsrc num-buffers=3D0 ! h265parse ! v4l2slh265dec ! fakes=
-ink
-> Setting pipeline to PAUSED ...
-> 0:00:00.098389938   526 0xaaaaf9d86ac0 ERROR     v4l2codecs-decoder
-> gstv4l2decoder.c:725:gst_v4l2_decoder_get_controls:<v4l2decoder2>
-> VIDIOC_G_EXT_CTRLS failed: Invalid argument
-> ERROR: from element
-> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Driver did not
-> report framing and start code method.
-> Additional debug info:
-> ../subprojects/gst-plugins-bad/sys/v4l2codecs/gstv4l2codech265dec.c(155):
-> gst_v4l2_codec_h265_dec_open ():
-> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
-> gst_v4l2_decoder_get_controls() failed: Invalid argument
-> ERROR: pipeline doesn't want to preroll.
-> ERROR: from element
-> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Could not
-> initialize supporting library.
-> Additional debug info:
-> ../subprojects/gst-plugins-base/gst-libs/gst/video/gstvideodecoder.c(2909=
-):
-> gst_video_decoder_change_state ():
-> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
-> Failed to open decoder
-> ERROR: pipeline doesn't want to preroll.
-> Failed to set pipeline to PAUSED.
-> Setting pipeline to NULL ...
-> Freeing pipeline ...
->
-> Does this mean I have a wrong version of the kernel and/or incomplete pat=
-ches?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6f34f8c3d6178527d4c02aa3a53c370cc70cb91e
+commit: ee4a77a32b39064fdab0aa2b36bbd35ebf57e077 media: platform: place Renesas drivers on a separate dir
+date:   3 weeks ago
+config: mips-randconfig-r001-20220403 (https://download.01.org/0day-ci/archive/20220403/202204030453.ISJ7wI3L-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ee4a77a32b39064fdab0aa2b36bbd35ebf57e077
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ee4a77a32b39064fdab0aa2b36bbd35ebf57e077
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/
 
-I double checked the branches.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Kernel:
-https://gitlab.collabora.com/benjamin.gaignard/for-upstream.git
-branch:  origin/HEVC_UAPI_V4
+All warnings (new ones prefixed by >>):
 
-Gstreamer:
-https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer.git
-branch:  origin/benjamin.gaignard1/gstreamer-HEVC_aligned_with_kernel_5.15
+>> drivers/media/platform/renesas/rcar_jpu.c:77:9: warning: 'RST' macro redefined [-Wmacro-redefined]
+   #define RST     0xd0
+           ^
+   arch/mips/include/asm/mach-rc32434/rb.h:13:9: note: previous definition is here
+   #define RST             (1 << 15)
+           ^
+   1 warning generated.
 
 
-I am still not able to run h.265/HEVC tests.
+vim +/RST +77 drivers/media/platform/renesas/rcar_jpu.c
 
-adam
->
-> adam
-> >
-> > Regards,
-> > Benjamin
-> >
-> > >
-> > >>
-> > >> adam
-> > >>> Thanks,
-> > >>> Benjamin
-> > >>>
-> > >>>> Benjamin
-> > >>>>
-> > >>>>
-> > >>>> Benjamin Gaignard (12):
-> > >>>>     media: uapi: HEVC: Add missing fields in HEVC controls
-> > >>>>     media: uapi: HEVC: Rename HEVC stateless controls with STATELE=
-SS
-> > >>>>       prefix
-> > >>>>     media: uapi: HEVC: Add document uAPI structure
-> > >>>>     media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS
-> > >>>> as a
-> > >>>>       dynamic array
-> > >>>>     media: uapi: Move parsed HEVC pixel format out of staging
-> > >>>>     media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
-> > >>>> control
-> > >>>>     media: uapi: Move the HEVC stateless control type out of stagi=
-ng
-> > >>>>     media: controls: Log HEVC stateless control in .std_log
-> > >>>>     media: uapi: Create a dedicated header for Hantro control
-> > >>>>     media: uapi: HEVC: fix padding in v4l2 control structures
-> > >>>>     media: uapi: Change data_bit_offset definition
-> > >>>>     media: uapi: move HEVC stateless controls out of staging
-> > >>>>
-> > >>>> Hans Verkuil (3):
-> > >>>>     videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
-> > >>>>     v4l2-ctrls: add support for dynamically allocated arrays.
-> > >>>>     vivid: add dynamic array test control
-> > >>>>
-> > >>>>    .../userspace-api/media/drivers/hantro.rst    |   5 -
-> > >>>>    .../media/v4l/ext-ctrls-codec-stateless.rst   | 833
-> > >>>> ++++++++++++++++++
-> > >>>>    .../media/v4l/ext-ctrls-codec.rst             | 780
-> > >>>> ----------------
-> > >>>>    .../media/v4l/pixfmt-compressed.rst           |   7 +-
-> > >>>>    .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
-> > >>>>    .../media/v4l/vidioc-queryctrl.rst            |   8 +
-> > >>>>    .../media/videodev2.h.rst.exceptions          |   5 +
-> > >>>>    .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
-> > >>>>    drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++-
-> > >>>>    drivers/media/v4l2-core/v4l2-ctrls-core.c     | 198 ++++-
-> > >>>>    drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  37 +-
-> > >>>>    drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
-> > >>>>    drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
-> > >>>>    drivers/staging/media/hantro/hantro_drv.c     |  27 +-
-> > >>>>    drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
-> > >>>>    drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
-> > >>>>    .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
-> > >>>>    .../staging/media/sunxi/cedrus/cedrus_h265.c  |   2 +-
-> > >>>>    include/media/hevc-ctrls.h                    | 250 ------
-> > >>>>    include/media/v4l2-ctrls.h                    |  48 +-
-> > >>>>    include/uapi/linux/hantro-media.h             |  19 +
-> > >>>>    include/uapi/linux/v4l2-controls.h            | 439 +++++++++
-> > >>>>    include/uapi/linux/videodev2.h                |  13 +
-> > >>>>    23 files changed, 1697 insertions(+), 1170 deletions(-)
-> > >>>>    delete mode 100644 include/media/hevc-ctrls.h
-> > >>>>    create mode 100644 include/uapi/linux/hantro-media.h
-> > >>>>
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  73  
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  74  /* JPEG markers */
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  75  #define TEM	0x01
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  76  #define SOF0	0xc0
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22 @77  #define RST	0xd0
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  78  #define SOI	0xd8
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  79  #define EOI	0xd9
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  80  #define DHP	0xde
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  81  #define DHT	0xc4
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  82  #define COM	0xfe
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  83  #define DQT	0xdb
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  84  #define DRI	0xdd
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  85  #define APP0	0xe0
+2c42cdbaec56a9 drivers/media/platform/rcar_jpu.c Mikhail Ulyanov 2015-07-22  86  
+
+:::::: The code at line 77 was first introduced by commit
+:::::: 2c42cdbaec56a9565a2717b450506150c9c55103 [media] V4L2: platform: Add Renesas R-Car JPEG codec driver
+
+:::::: TO: Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
