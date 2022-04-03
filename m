@@ -2,109 +2,175 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55418C433F5
-	for <linux-media@archiver.kernel.org>; Sat,  2 Apr 2022 22:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33763C433EF
+	for <linux-media@archiver.kernel.org>; Sun,  3 Apr 2022 15:05:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiDBWcE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 2 Apr 2022 18:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
+        id S1359122AbiDCPHg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 3 Apr 2022 11:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiDBWcD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 2 Apr 2022 18:32:03 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBBF102;
-        Sat,  2 Apr 2022 15:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648938609; x=1680474609;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wSti71aWkOb2v8VteWSnKapOKuwvs3NnbTj6GfMJf68=;
-  b=YVz85yYx9AWQ5wORbJGjVm5F9/ig+zFVdPSRAJFct/M7vYn+AAU6WFE+
-   vd2zamMOsoP2HMdxuatnrO785CgyIIzGWGTZq8ou6Wj1eLqkNCYCHT4SQ
-   nQJWqMX2k6t6kDeBhUE3HalpjFcN6qNdewDhzPD3x/wlS6XqYRT35wi2D
-   aFNfv8Oh3AYXMM+HneqTSUMvb+pN1GZz/rlXXr9a2PJd8f/WWyLez+za+
-   o9AXGf97PfCyCQ97KnvkGYpEQ81SJTa5yqtoP1XNn4iX7AzcBklRITs5m
-   09e0dl8GeFlSXgkxHYI5EqiHjA84/OZ5Du1dZvzVW670M0My+Q5h8fyGv
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="259169271"
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="259169271"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2022 15:30:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="721256778"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 02 Apr 2022 15:30:07 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1namFy-0000U3-F0;
-        Sat, 02 Apr 2022 22:30:06 +0000
-Date:   Sun, 3 Apr 2022 06:29:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c:15:9:
- warning: 'RST' macro redefined
-Message-ID: <202204030631.cIrcwimr-lkp@intel.com>
+        with ESMTP id S234584AbiDCPHf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 3 Apr 2022 11:07:35 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2078.outbound.protection.outlook.com [40.107.100.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935033669B;
+        Sun,  3 Apr 2022 08:05:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AIBZwDzka8AZr3m/7chkV3JZYblsfTHzTnexFgWeJDOGRMmjKZCaLMociYcix6IlPiff0a4XLmPwVaHue13uoyiZbXVd6wE8tU85Gyf9HHOu0/PRAVXJdnvrxAxmDmO5aCE+rQet0iLgVdLcFmm5sERNgF7Yk3NJFZBJ4jbM7bgGi38bzH5VYkEv8Ix/nL3uEOOLG1iAR6Ba7NbG6S9mzFqJO2nhwdp4BYRZC5AIffSLr2TBIRe2iJip4Niu3RsOnCegBsYDAIC8zTZsR0xjfCMDdXKRsrNJpOqhQGdCMlHTGyMByJTglQpxBevzL8GaWVXFmAxzg4l/IxwAiecuFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7/VMvSeij9hYWiiADNTHr19YYUqZEdL5d052zq9hS0Q=;
+ b=B8pGCy0rnZAy/BuWDZKkcnXAqcb5ayDIShwMjyoJG2lJtBvtxjzQkVfcmCDqMl2kxbhkI0Fy43aEiX1Pv2gWBtqjZJ708VJ2sNaXCBNg2aS07L4HGxcBEmsw8o6EBrSsn8narH6NhhfgHFvclznTuWE+1Uw+CIo5zz4ICMaJg3JvHStgYCzYpmQxoD7SsQo09YW162sWjDAX0e4WZ7n5nh+NKNFFg8i4fZ+ijhE3YOz7/DhIseXcKN4FHl0MC8ykJ26qGGTUWaqnxnfX2xpsU3tCcK2wLiYkjwyoTGkmHkJPABGk9nEjwCLKAmRWU5iSQSeP3AamgdUTY/zf95RMOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7/VMvSeij9hYWiiADNTHr19YYUqZEdL5d052zq9hS0Q=;
+ b=OWVzaUWEDSBk2umTXt56UsBRGEFY2a1gbs6iNrHuaZj8MbGPqDK1UgGlSLaDYmK6xBEXGgk646bcpwcYdlhX57s6d/fVDd3pJtzSXE0hJ8v/Q6pZTxv5vbtHCeo3a62VuyZU2Ao8dgkrLxe2GvNKge+Z1oYdIONp7/lD3tePrpE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM5PR12MB1340.namprd12.prod.outlook.com (2603:10b6:3:76::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Sun, 3 Apr
+ 2022 15:05:39 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185%6]) with mapi id 15.20.5123.031; Sun, 3 Apr 2022
+ 15:05:36 +0000
+Message-ID: <4ca00dee-86b2-56b0-423a-76ef28260385@amd.com>
+Date:   Sun, 3 Apr 2022 17:05:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH next v2] dma-buf/sync-file: do not allow zero size
+ allocation
+Content-Language: en-US
+To:     Pavel Skripkin <paskripkin@gmail.com>, sumit.semwal@linaro.org,
+        gustavo@padovan.org, daniel.vetter@ffwll.ch
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <2d1f9ba9-ea2a-e41c-eae6-0ba348cdf202@gmail.com>
+ <20220401213114.11956-1-paskripkin@gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220401213114.11956-1-paskripkin@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR0301CA0011.eurprd03.prod.outlook.com
+ (2603:10a6:20b:468::32) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 197eb604-0bb2-4712-50d7-08da158367c7
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1340:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB134088964BD6B6253F6267DD83E29@DM5PR12MB1340.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gN3sQo+AOO+lTEoLmIdvH/QZj+wHT0F3lLfWrJBOB5pyGE83V/SaRK5A68xY7KQFFNsVSNsVgRSg87f8rWl3kV4CYzehWb0dbeB/iR5D62EJS0eo8Ku4dfTKA4+wdOkOemMUtbtrbn+Gy55PJjlULLm0z+Os/kFoDmJDOgtJuZ+0Z5vqGrYWRCPUbhEyOJg/9GUZ/1UYle2Pjcj+U0XyCHO65ZzpFE+gGCY+C7skfath/nk22b60hAo7mQ5cGZVt13ZGjwSWaOnnGeY42YESQk5IstrJHErWUGubvYyiUB4nyQc0eGWZltGtdgF1uXxqxsB93FbBkwr90f6q90gqTbWVlwD1HoNYq1KGc/1+BZSZoe74hgtn6h7MbQMHlTc12GiYZiFW7sYD2eiN4pxLBZraAe7xip8qvkMSvE9+4bEO0II+IityMdepsE2YOzgZJHU9HUS8Vhrw5S2gw5biMz6pPo/K9vAVCQpBqqwsPUzpGDl3xSVgw2/Uz5unMWd0Jn49b6M8QKUvcJZzO7exCfTH0YVJ2aNYU16JtlFyp5ey563espP8Vfq9ETTqT0iONjxc40p66Y6l8gXuW9I9HooHNmw+tvVg964VqX8jPgRSywIefur5fVyNEYdxi+CSm9IetFYof/zTlwx3aOaF6DPKk5RHdkCsAM1+N3kN5dnhSHyoX9qXAkRg/JAq0UyJABkQ7G9uZLNd+p42hgA+AZ+d7LQQ+3Ngr0u2T2bpby8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(6506007)(6666004)(31696002)(8936002)(6512007)(2906002)(38100700002)(508600001)(86362001)(316002)(83380400001)(31686004)(186003)(66946007)(4326008)(8676002)(6486002)(36756003)(66476007)(66556008)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L1Bzcm1RQ0luTmYrcU5mNDNhbnZkRXRlRmdDS044NWNIVnRWVGNnRzJhcHJq?=
+ =?utf-8?B?UDhBaUFVZDhicXI4ak5HVDRIMk9wd3NpUStqTlppblJKTVBlL1Qya1RDTmtq?=
+ =?utf-8?B?TmVaaitJOHFZNlZXN1RZUUlkVnZXc1BwcHlLR1dmVlhCY0RzbHgzRnQwNXVS?=
+ =?utf-8?B?aXNmdjRrakZQRndzYVFvbEFGRGdDYnVxRmdVWXBuUytEZkxvbDlTMmsrWVpq?=
+ =?utf-8?B?ZWN3K0FpZE1CSEplNGpHK2V4QVBvSHg4QzRHTjFxWGRpMXpMNFNqUXFUbzRj?=
+ =?utf-8?B?M1RnamlmMWdhK0FtMk0zd3dCUndNVkFOQlFrRXVUOGJrcUlrbDFJN29YTkFR?=
+ =?utf-8?B?Q0dzUy9NMzVLT091RXg5RjNxd0IyTWgyMU1ucjdDazdXSEFVTU85dndMdm1i?=
+ =?utf-8?B?bGkxTW9xa3VNRHRJN2hNTWdzZDA4TGtJQm5nSW94VzdmNytLS3BzMWhFdVlu?=
+ =?utf-8?B?NkVQOGZhOTNvbFNmcU5IdTVxK1FhTTByL0NBYzJBZkQveDREZUpIY3hackMw?=
+ =?utf-8?B?ZGRMV0tZOWNibFpoUG55Z1Z0TVUzM1JBYm45aEw4WWNod1pSc1B3REpXRHpC?=
+ =?utf-8?B?NTBrU1NzUjlkWjQ0Unc2RDFoTUNsY1M5bWswTFgxdDdTdENSMzZGelJ2MUEv?=
+ =?utf-8?B?QjhNclI3c2tMaldrY3NNU3NwbmNlZ1A5QVMwYWhJSEJlY0lNbmtmTXg3bndy?=
+ =?utf-8?B?cU92M0VwcFVrVklqV3ZGcHlwZFdSOWx1cDI4R1ZZWFlubW5BWkNTTTFxdUtr?=
+ =?utf-8?B?S3ozSHBLb0JwNEJOZEMvMmxVRHc3SER4enpwSzdVTEFHRURoUGtvVFJHeEps?=
+ =?utf-8?B?djZUajdJU3ZZOUdtN2p1STZzUHdHZENrY0dwTWlqYm1tcEpjVjlhTUpRYXNu?=
+ =?utf-8?B?UUpXSVdSWHVtRHkraE5GY3VsdmhGMkZIZVF3SHJ2NTBBUG1IT2JmRWwzTVox?=
+ =?utf-8?B?SC9uT2hJakd1c2JpeEI3dzZBQ0QvVFNSekxCSWNhMDA0WTZjaHdBb0w5STNv?=
+ =?utf-8?B?QytqdVEwYjZ5NHdaUHZSRjgrZWQrdU4xV093YVVJZjRhOW1SakVqcUtsRFhD?=
+ =?utf-8?B?QXdjVU1nRlc4NFNkRExaY2lRVTJvaW5wY0llWU9ZTGVoU1g5ZEV4YVN0Uk5V?=
+ =?utf-8?B?Rk42UTg4TEtKM0hVeUNzUFpBYmZMUC9BdlVtMVVxazFOQzhsZnBGdHdXa3pm?=
+ =?utf-8?B?cmpyd01XcXpIeTNhSGxROXZnMkFxQVozOGF1bFEzQTNFczFNWGhQQ1pxQjAw?=
+ =?utf-8?B?dEFzSGdxWURQR0VHOVJ0eHhtVXh0dlF4L1AvY1k2RWN4YmpuRURXYndNNldl?=
+ =?utf-8?B?RUliNXNCRUk0VHJLQ1BHcDZoYmFlSVdRMks2RGNXaFVpRTFLSnFkNjA1bmlz?=
+ =?utf-8?B?Qk4xNkxYWDQvSHpDRk9ubE9zSWw4T3p5dG9yZEl5aDlwMVdMM3N5REk4TnQw?=
+ =?utf-8?B?RU8wVnAvU3NSTUVCU3VxNjhOL0dCZ2JJTFc3REltK1hqbkdRanFDLy9OVXdh?=
+ =?utf-8?B?VTl3Q2k2Rm0reEpiVzM3T0ZFSmYzMzJGK1ZvU0FrajFPU0QxVDZ3TWdzdXF4?=
+ =?utf-8?B?UGw5M0ZIUllpOHFrbkhWTWRvVStSZCtqaWFONThEOTNxeVlaQUpEb2NRMDl4?=
+ =?utf-8?B?bjJRYlNwMk02N3JPOUJYK1VlbElTVG5ZRGtvaWUyWVFDSVN1NmVYN0cyKzBY?=
+ =?utf-8?B?TXFkUjRWazJnMmZod2pML2VhbFJFekc1WnNnUUNzZG4wNThSL0ZGUllnZUpT?=
+ =?utf-8?B?dFVncXozUEZ1MERoZGxJVis1b0Z2aWZ5WkVzQ1h6YzRwbDR4QTZNVkMxRWl1?=
+ =?utf-8?B?dXVWMXRBVXJLWS9XN1RnaE50NUM4QlVHQjFyQXl4YkRSZlZLVGtLdWhVa3Ax?=
+ =?utf-8?B?R2N5QXlXVHIzYmg5UWpDRnEvMUlLbnJJb3hHN3M1cHduZWEvYUZJL2FxN3gv?=
+ =?utf-8?B?dnBUVVZsV0hBNFJ2MVcrTXdBaEh3djNPYitucTRKdW5NdE9yV25MUW5pWjNM?=
+ =?utf-8?B?aWNSSVVwVWo2TFp0V2JGQU84YkdwV2JobzFDLzdScVgvSGJRVmRsSWZtMjBZ?=
+ =?utf-8?B?YkxZS1hCMUE2VXpxRGFNSmp0T0NwVE81UitIeSt2b1U3QnJXM0ZLcGEzS0JB?=
+ =?utf-8?B?MUJOZVBFdm83ajNSWEtaMGZDWlhJS0dndDJhZEpkc0JLUHdPbXZHQTF1Z1Zk?=
+ =?utf-8?B?NEk4L2VOMkpicHU3Sms2US81NmVJWmpXWDBYN0pTdXJCNHpWcVUvV3phMjNO?=
+ =?utf-8?B?SVpQVkVMSGtKVHpBN2V3blViNDhZWm13WnpVSENFeVV2dGhqMnpMbWdwT3RY?=
+ =?utf-8?B?VHVhaEEvRWVaNklTb2lGOHc3eTdUTGRQWWo2Z3p0bEFzZDRsNzJWNjN1Qkd2?=
+ =?utf-8?Q?FqSFabkKn1uDfffonHVn99RT3Y7M2yyCTVw2jSOLkxbiG?=
+X-MS-Exchange-AntiSpam-MessageData-1: kgXcSlhZPHI0LQ==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 197eb604-0bb2-4712-50d7-08da158367c7
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2022 15:05:35.6267
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3QkQKY2nyWvG2OI03JCKRAKTsaSopBUWkUPA0F3wFEEW8nXoJ2+7g4Q3W5hwmr8B
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1340
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   be2d3ecedd9911fbfd7e55cc9ceac5f8b79ae4cf
-commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
-date:   2 weeks ago
-config: mips-randconfig-r001-20220403 (https://download.01.org/0day-ci/archive/20220403/202204030631.cIrcwimr-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/mediatek/jpeg/
+Am 01.04.22 um 23:31 schrieb Pavel Skripkin:
+> num_fences is user-controlled value and it can be equal to 0. Code
+> should not pass 0 to kcalloc(), since it will cause kcalloc() to return
+> ZERO_PTR. ZERO_PTR will pass `!fences` check and kernel will panic
+> because of dereferencing ZERO_PTR in add_fence()
+>
+> Fix it by validating num_fences and bail out early if it is equal to 0
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Well there are multiple issues with this patch. First of all as I wrote 
+before it shouldn't be possible that num_fences is zero.
 
-All warnings (new ones prefixed by >>):
+We could still just add this as a precaution, but then bailing out is 
+the wrong thing to do here. Instead we should then make sure to allocate 
+at least one slot for a fence in the array.
 
->> drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c:15:9: warning: 'RST' macro redefined [-Wmacro-redefined]
-   #define RST     0xd0
-           ^
-   arch/mips/include/asm/mach-rc32434/rb.h:13:9: note: previous definition is here
-   #define RST             (1 << 15)
-           ^
-   1 warning generated.
+But I think the cleanest would just be to not add a fence into the array 
+in the first place when num_fences is zero.
 
+Regards,
+Christian.
 
-vim +/RST +15 drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_parse.c
+>
+> Fixes: 519f490db07e ("dma-buf/sync-file: fix warning about fence containers")
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
+>
+> Changes since v1:
+> 	- Dropped already merged part
+> 	- Removed syzkaller's tag
+>
+> ---
+>   drivers/dma-buf/sync_file.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
+> index b8dea4ec123b..024f22193e0c 100644
+> --- a/drivers/dma-buf/sync_file.c
+> +++ b/drivers/dma-buf/sync_file.c
+> @@ -212,7 +212,7 @@ static struct sync_file *sync_file_merge(const char *name, struct sync_file *a,
+>   	dma_fence_unwrap_for_each(b_fence, &b_iter, b->fence)
+>   		++num_fences;
+>   
+> -	if (num_fences > INT_MAX)
+> +	if (num_fences > INT_MAX || !num_fences)
+>   		goto err_free_sync_file;
+>   
+>   	fences = kcalloc(num_fences, sizeof(*fences), GFP_KERNEL);
 
-b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  12  
-b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  13  #define TEM	0x01
-b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  14  #define SOF0	0xc0
-b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14 @15  #define RST	0xd0
-b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  16  #define SOI	0xd8
-b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  17  #define EOI	0xd9
-b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c Rick Chang 2016-12-14  18  
-
-:::::: The code at line 15 was first introduced by commit
-:::::: b2f0d2724ba477d326e9d654d4db1c93e98f8b93 [media] vcodec: mediatek: Add Mediatek JPEG Decoder Driver
-
-:::::: TO: Rick Chang <rick.chang@mediatek.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
