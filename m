@@ -2,72 +2,66 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 347BCC433F5
-	for <linux-media@archiver.kernel.org>; Mon,  4 Apr 2022 21:18:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6636C49EA5
+	for <linux-media@archiver.kernel.org>; Mon,  4 Apr 2022 21:23:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378992AbiDDVSd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Apr 2022 17:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
+        id S1379031AbiDDVSf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Apr 2022 17:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379693AbiDDRwQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Apr 2022 13:52:16 -0400
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC4D27142;
-        Mon,  4 Apr 2022 10:50:20 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id h3-20020a4ae8c3000000b00324b9ae6ff2so1871797ooe.10;
-        Mon, 04 Apr 2022 10:50:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=00wJuMFju4M2Mlh4UvXveyZxAyuzzgzHODF3ZJjSU0M=;
-        b=VBGLGRvuDSI+VaFWq6KK7Qh5rzCUulijWFtzGQcGtbXMnabJefproWPcqOskBKRFJ4
-         G6BSuujiraHt+LILqMEBVfJQ1EydCGGHAV3l7mtmBL/otpQMTbkwknW/6KrSSQeqgLhk
-         maGTsdxoEDmL1TmjqJjcaSwaVwcZvY3kqt9BWmxa/mNoaw0jjdNz9plW4wMHL/VkcusT
-         5V13zQKgf9ycQoqwsVbT5Ykk1xUypiXpz+v4rj56zDAyVMTau79rYLLeFgEsxt065/4e
-         4MRanuWNEHjSnMAk9JIKgEETwQxXbR9UO7J/qudEm1tCmV5mTOmaX0nHrFDEY6HnLLGB
-         5D5A==
-X-Gm-Message-State: AOAM532YGK4cFiSQJqEJYt/E9J0bVKwWEKDq6dKZbAHPjMr9ljtFA53h
-        h6LkZ2kKYp7lfoTQye56j6B8jdZ80A==
-X-Google-Smtp-Source: ABdhPJzZgD4gLpmDxNxhb+yy7bA8P4mluzAI2ZE7CKPXMCutUZS5iH9XYSp9kYhIVljdV2j16Pja6A==
-X-Received: by 2002:a4a:c449:0:b0:320:f8ac:8f88 with SMTP id h9-20020a4ac449000000b00320f8ac8f88mr281201ooq.94.1649094619516;
-        Mon, 04 Apr 2022 10:50:19 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r81-20020acaf354000000b002ecf46e8016sm4407510oih.51.2022.04.04.10.50.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 10:50:18 -0700 (PDT)
-Received: (nullmailer pid 1612125 invoked by uid 1000);
-        Mon, 04 Apr 2022 17:50:18 -0000
-Date:   Mon, 4 Apr 2022 12:50:18 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     devicetree@vger.kernel.org, qwen@analogixsemi.com,
-        Rob Herring <robh+dt@kernel.org>, robert.foss@linaro.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, bliang@analogixsemi.com
-Subject: Re: [PATCH 2/4] dt-bindings: media: video-interfaces: Add new
- bus-type
-Message-ID: <Yksv2voEepz6WPpO@robh.at.kernel.org>
-References: <20220328120956.1848795-1-xji@analogixsemi.com>
- <20220328120956.1848795-2-xji@analogixsemi.com>
+        with ESMTP id S1379160AbiDDQhw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Apr 2022 12:37:52 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A19BE094
+        for <linux-media@vger.kernel.org>; Mon,  4 Apr 2022 09:35:56 -0700 (PDT)
+Received: from dude03.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::39])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nbPgI-0004CX-KQ; Mon, 04 Apr 2022 18:35:54 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
+Subject: [PATCH 7/7] media: coda: enable capture S_PARM for stateful encoder
+Date:   Mon,  4 Apr 2022 18:35:33 +0200
+Message-Id: <20220404163533.707508-7-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220404163533.707508-1-p.zabel@pengutronix.de>
+References: <20220404163533.707508-1-p.zabel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220328120956.1848795-2-xji@analogixsemi.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, 28 Mar 2022 20:09:53 +0800, Xin Ji wrote:
-> No properly bus-type for DPI video bus, add bus-type 7 for it.
-> 
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> ---
->  Documentation/devicetree/bindings/media/video-interfaces.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Allow to call S_PARM with type == V4L2_BUF_TYPE_VIDEO_OUTPUT,
+to fix the following v4l2-compliance test failure:
 
-Acked-by: Rob Herring <robh@kernel.org>
+		fail: v4l2-test-formats.cpp(1413): got error 22 when setting parms for buftype 1
+	test VIDIOC_G/S_PARM: FAIL
+
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+ drivers/media/platform/chips-media/coda-common.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
+index 33fcd8c7d72b..cd9ff2fa4147 100644
+--- a/drivers/media/platform/chips-media/coda-common.c
++++ b/drivers/media/platform/chips-media/coda-common.c
+@@ -1421,9 +1421,6 @@ static int coda_s_parm(struct file *file, void *fh, struct v4l2_streamparm *a)
+ 	struct coda_ctx *ctx = fh_to_ctx(fh);
+ 	struct v4l2_fract *tpf;
+ 
+-	if (a->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
+-		return -EINVAL;
+-
+ 	a->parm.output.capability = V4L2_CAP_TIMEPERFRAME;
+ 	tpf = &a->parm.output.timeperframe;
+ 	coda_approximate_timeperframe(tpf);
+-- 
+2.30.2
+
