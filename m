@@ -2,139 +2,229 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 181A5C433FE
-	for <linux-media@archiver.kernel.org>; Mon,  4 Apr 2022 21:16:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65C73C4167D
+	for <linux-media@archiver.kernel.org>; Mon,  4 Apr 2022 21:16:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378949AbiDDVSb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Apr 2022 17:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
+        id S1378980AbiDDVSc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Apr 2022 17:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379149AbiDDQhq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Apr 2022 12:37:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5212C192B5
-        for <linux-media@vger.kernel.org>; Mon,  4 Apr 2022 09:35:50 -0700 (PDT)
-Received: from dude03.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::39])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbPgC-0004CX-Ly; Mon, 04 Apr 2022 18:35:48 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     linux-media@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
-Subject: [PATCH 2/7] media: coda: disable encoder cmd ioctl on decoder and vice versa
-Date:   Mon,  4 Apr 2022 18:35:28 +0200
-Message-Id: <20220404163533.707508-2-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220404163533.707508-1-p.zabel@pengutronix.de>
-References: <20220404163533.707508-1-p.zabel@pengutronix.de>
+        with ESMTP id S1380395AbiDDT7v (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Apr 2022 15:59:51 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E762FE71
+        for <linux-media@vger.kernel.org>; Mon,  4 Apr 2022 12:57:54 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-df02f7e2c9so11987904fac.10
+        for <linux-media@vger.kernel.org>; Mon, 04 Apr 2022 12:57:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TkOj47m3NIAXN7Y2Vl/oLURlRLC9Yzh32pg7qVKr6tc=;
+        b=Dziv3JNSINXqZhhCZm8NMbWDDVHGFTwq8qQY5I4K6du6wGYur35Cz3jlsRBVF5OKij
+         G+NA6yDpn+BOkVmRhu7tPykJfFgJXJuYbQD2ka84fDH9vMox2xsyJUPjkU0k/edzoNj5
+         /bymzVl9m11MjdnzDLhnYrgzE1orMHGsxQD9rsMHQ8pA33vL6+jbW1Fc2qXbYDMYiH+p
+         q7UTFxzB/OCks/Ns2/T+8CDd6c2sLlxj/CB4mNXp5RoDPd8GvkR8qZzE3it+/QxBYHf2
+         e8XAgkVSSoCvSINTxQKasKDi5Tqsj8N3jZJLW+GSYwX2cc0yS1yaXEu4t6G0dj6Sp4mq
+         MffA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TkOj47m3NIAXN7Y2Vl/oLURlRLC9Yzh32pg7qVKr6tc=;
+        b=I8cTU09A5ZD7py58PIGwrKXoi4Q9qpFGP03rur3UsS3Hu5y/TrO+orsf7UNe2gjExz
+         UDJ8cTJFAQWN6pUBiAu4r6b5phDCPIDrZRJ1tnivLrAeRthDSRg424XvOj36cw2/fy47
+         kK8d/EktWnHs21n3wlBJGJjYjkBZ+iChDOBoUWfB1wyF9RVCOKlioD7VG3ctG0doQm+5
+         McJC4cinC0m2MPMKAYxcr+mcJKcRLf2pMYW0DLFHDmSkxvk6TXxIBJTarJoH5idnPXki
+         9xhfLctfHmC42OL2I5gnOQquU8YSvUtNAfNabfCk3bqn6+Gi7V9+h9lggE1MhBpKb8es
+         8vxQ==
+X-Gm-Message-State: AOAM532G9l/lVFAVIqAvKlvYDe5oM2NxAJo6h5oBSxA99CbpZGCcAz2j
+        S+/vDB2O0anFCM3wo6nqMHBFWwZngNKVRw==
+X-Google-Smtp-Source: ABdhPJyhJM5jTJxZsMABqBAJUE8+OMMH0JTJjH8W90MwXAYKcWFCIe+mg3D+WCWqVPr6xUC5HldkKw==
+X-Received: by 2002:a05:6871:92:b0:d9:abe2:936e with SMTP id u18-20020a056871009200b000d9abe2936emr449661oaa.83.1649102272437;
+        Mon, 04 Apr 2022 12:57:52 -0700 (PDT)
+Received: from eze-laptop ([190.194.87.200])
+        by smtp.gmail.com with ESMTPSA id s10-20020a4a3b0a000000b0032486bc11d0sm4430044oos.39.2022.04.04.12.57.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 12:57:51 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 16:57:46 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jernej.skrabec@gmail.com, p.zabel@pengutronix.de,
+        nicolas@ndufresne.ca, kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Subject: Re: [PATCH] media: Add P010 video format
+Message-ID: <YktNur601fjyCt9i@eze-laptop>
+References: <20220404090116.353034-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220404090116.353034-1-benjamin.gaignard@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use v4l2_disable_ioctl() to disable the VIDIOC_TRY_ENCODER_CMD and
-VIDIOC_ENCODER_CMD ioctls on decoder video devices and the
-VIDIOC_TRY_DECODER_CMD and VIDIOC_DECODER_CMD ioctls on encoder
-video devices.
+On Mon, Apr 04, 2022 at 11:01:16AM +0200, Benjamin Gaignard wrote:
+> P010 is a YUV format with 10-bits per pixel with interleaved UV.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-This allows to drop the coda_try_encoder/decoder_cmd() functions
-and to use v4l2_m2m_ioctl_try_encoder/decoder_cmd() directly.
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
----
- .../media/platform/chips-media/coda-common.c  | 38 ++++++-------------
- 1 file changed, 12 insertions(+), 26 deletions(-)
-
-diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
-index 6d2989504b33..dc75133b0ead 100644
---- a/drivers/media/platform/chips-media/coda-common.c
-+++ b/drivers/media/platform/chips-media/coda-common.c
-@@ -1091,17 +1091,6 @@ static int coda_s_selection(struct file *file, void *fh,
- 	}
- }
- 
--static int coda_try_encoder_cmd(struct file *file, void *fh,
--				struct v4l2_encoder_cmd *ec)
--{
--	struct coda_ctx *ctx = fh_to_ctx(fh);
--
--	if (ctx->inst_type != CODA_INST_ENCODER)
--		return -ENOTTY;
--
--	return v4l2_m2m_ioctl_try_encoder_cmd(file, fh, ec);
--}
--
- static void coda_wake_up_capture_queue(struct coda_ctx *ctx)
- {
- 	struct vb2_queue *dst_vq;
-@@ -1120,7 +1109,7 @@ static int coda_encoder_cmd(struct file *file, void *fh,
- 	struct vb2_v4l2_buffer *buf;
- 	int ret;
- 
--	ret = coda_try_encoder_cmd(file, fh, ec);
-+	ret = v4l2_m2m_ioctl_try_encoder_cmd(file, fh, ec);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -1149,17 +1138,6 @@ static int coda_encoder_cmd(struct file *file, void *fh,
- 	return 0;
- }
- 
--static int coda_try_decoder_cmd(struct file *file, void *fh,
--				struct v4l2_decoder_cmd *dc)
--{
--	struct coda_ctx *ctx = fh_to_ctx(fh);
--
--	if (ctx->inst_type != CODA_INST_DECODER)
--		return -ENOTTY;
--
--	return v4l2_m2m_ioctl_try_decoder_cmd(file, fh, dc);
--}
--
- static bool coda_mark_last_meta(struct coda_ctx *ctx)
- {
- 	struct coda_buffer_meta *meta;
-@@ -1216,7 +1194,7 @@ static int coda_decoder_cmd(struct file *file, void *fh,
- 	bool wakeup;
- 	int ret;
- 
--	ret = coda_try_decoder_cmd(file, fh, dc);
-+	ret = v4l2_m2m_ioctl_try_decoder_cmd(file, fh, dc);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -1498,9 +1476,9 @@ static const struct v4l2_ioctl_ops coda_ioctl_ops = {
- 	.vidioc_g_selection	= coda_g_selection,
- 	.vidioc_s_selection	= coda_s_selection,
- 
--	.vidioc_try_encoder_cmd	= coda_try_encoder_cmd,
-+	.vidioc_try_encoder_cmd	= v4l2_m2m_ioctl_try_encoder_cmd,
- 	.vidioc_encoder_cmd	= coda_encoder_cmd,
--	.vidioc_try_decoder_cmd	= coda_try_decoder_cmd,
-+	.vidioc_try_decoder_cmd	= v4l2_m2m_ioctl_try_decoder_cmd,
- 	.vidioc_decoder_cmd	= coda_decoder_cmd,
- 
- 	.vidioc_g_parm		= coda_g_parm,
-@@ -2904,6 +2882,14 @@ static int coda_register_device(struct coda_dev *dev, int i)
- 	v4l2_disable_ioctl(vfd, VIDIOC_G_CROP);
- 	v4l2_disable_ioctl(vfd, VIDIOC_S_CROP);
- 
-+	if (dev->devtype->vdevs[i]->type == CODA_INST_ENCODER) {
-+		v4l2_disable_ioctl(vfd, VIDIOC_DECODER_CMD);
-+		v4l2_disable_ioctl(vfd, VIDIOC_TRY_DECODER_CMD);
-+	} else {
-+		v4l2_disable_ioctl(vfd, VIDIOC_ENCODER_CMD);
-+		v4l2_disable_ioctl(vfd, VIDIOC_TRY_ENCODER_CMD);
-+	}
-+
- 	ret = video_register_device(vfd, VFL_TYPE_VIDEO, 0);
- 	if (!ret)
- 		v4l2_info(&dev->v4l2_dev, "%s registered as %s\n",
--- 
-2.30.2
-
+> ---
+> Note that P010 is already known in GStreamer, only the mapping with
+> v4l2 pixel format is missing.
+> 
+> This patch has been acked in this series but never merged:
+> https://patchwork.kernel.org/project/linux-rockchip/patch/20210618131526.566762-5-benjamin.gaignard@collabora.com/
+> After rebased it on v5.18-rc1, resend in standalone mode.
+> 
+>  .../media/v4l/pixfmt-yuv-planar.rst           | 76 +++++++++++++++++++
+>  drivers/media/v4l2-core/v4l2-common.c         |  1 +
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
+>  include/uapi/linux/videodev2.h                |  1 +
+>  4 files changed, 79 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> index 8dff5906639b..6d65c8ac44f0 100644
+> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> @@ -102,6 +102,13 @@ All components are stored with the same number of bits per component.
+>        - 64x32 tiles
+>  
+>          Horizontal Z order
+> +    * - V4L2_PIX_FMT_P010
+> +      - 'P010'
+> +      - 16
+> +      - 4:2:0
+> +      - Cb, Cr
+> +      - No
+> +      - Linear
+>      * - V4L2_PIX_FMT_NV12MT_16X16
+>        - 'VM12'
+>        - 8
+> @@ -171,6 +178,7 @@ horizontally.
+>  .. _V4L2-PIX-FMT-NV21:
+>  .. _V4L2-PIX-FMT-NV12M:
+>  .. _V4L2-PIX-FMT-NV21M:
+> +.. _V4L2-PIX-FMT-P010:
+>  
+>  NV12, NV21, NV12M and NV21M
+>  ---------------------------
+> @@ -519,6 +527,74 @@ number of lines as the luma plane.
+>        - Cb\ :sub:`33`
+>        - Cr\ :sub:`33`
+>  
+> +.. _V4L2_PIX_FMT_P010:
+> +
+> +P010
+> +----
+> +
+> +The number of bytes in one luminance row must be divisible by 16,
+> +which means there will be padded 0 in the right edge when necessary.
+> +
+> +.. raw:: latex
+> +
+> +    \begingroup
+> +    \small
+> +    \setlength{\tabcolsep}{2pt}
+> +
+> +.. tabularcolumns:: |p{2.6cm}|p{0.70cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
+> +
+> +.. flat-table:: P010 16 Bits per component
+> +    :header-rows:  2
+> +    :stub-columns: 0
+> +
+> +    * - Identifier
+> +      - Code
+> +      - :cspan:`7` Byte 0 in memory
+> +
+> +      - :cspan:`7` Byte 1
+> +    * -
+> +      -
+> +      - 7
+> +      - 6
+> +      - 5
+> +      - 4
+> +      - 3
+> +      - 2
+> +      - 1
+> +      - 0
+> +
+> +      - 7
+> +      - 6
+> +      - 5
+> +      - 4
+> +      - 3
+> +      - 2
+> +      - 1
+> +      - 0
+> +    * - ``V4L2_PIX_FMT_P010``
+> +      - 'P010'
+> +
+> +      - Y\ :sub:`9`
+> +      - Y\ :sub:`8`
+> +      - Y\ :sub:`7`
+> +      - Y\ :sub:`6`
+> +      - Y\ :sub:`5`
+> +      - Y\ :sub:`4`
+> +      - Y\ :sub:`3`
+> +      - Y\ :sub:`2`
+> +
+> +      - Y\ :sub:`1`
+> +      - Y\ :sub:`0`
+> +      - 0
+> +      - 0
+> +      - 0
+> +      - 0
+> +      - 0
+> +      - 0
+> +
+> +.. raw:: latex
+> +
+> +    \endgroup
+>  
+>  Fully Planar YUV Formats
+>  ========================
+> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+> index df34b2a283bc..1e38ad8906a2 100644
+> --- a/drivers/media/v4l2-core/v4l2-common.c
+> +++ b/drivers/media/v4l2-core/v4l2-common.c
+> @@ -266,6 +266,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+>  		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+>  		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>  		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> +		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+>  
+>  		{ .format = V4L2_PIX_FMT_YUV410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+>  		{ .format = V4L2_PIX_FMT_YVU410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index 96e307fe3aab..e14d7e1a038e 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -1301,6 +1301,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>  	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
+>  	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
+>  	case V4L2_PIX_FMT_NV42:		descr = "Y/CrCb 4:4:4"; break;
+> +	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/CrCb 4:2:0"; break;
+>  	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/CbCr 4:2:0 (4x4 Linear)"; break;
+>  	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/CbCr 4:2:0 (16x16 Linear)"; break;
+>  	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/CbCr 4:2:0 (32x32 Linear)"; break;
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 4c09969e7112..2e451c454db3 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -601,6 +601,7 @@ struct v4l2_pix_format {
+>  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
+>  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
+>  #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
+> +#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 15  Y/CbCr 4:2:0 10-bit per pixel*/
+>  
+>  /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
+>  #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/CbCr 4:2:0  */
+> -- 
+> 2.32.0
+> 
