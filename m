@@ -2,113 +2,139 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B920C4707A
-	for <linux-media@archiver.kernel.org>; Mon,  4 Apr 2022 21:16:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 181A5C433FE
+	for <linux-media@archiver.kernel.org>; Mon,  4 Apr 2022 21:16:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378966AbiDDVSb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1378949AbiDDVSb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 4 Apr 2022 17:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379594AbiDDRn6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Apr 2022 13:43:58 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A183131DE7;
-        Mon,  4 Apr 2022 10:41:59 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id c23so8798407plo.0;
-        Mon, 04 Apr 2022 10:41:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cN+cryxrTnBG0VJoafZ3s+TyTmI2BuJ8Y3SjnOF9NwE=;
-        b=q3aN/qFotQnWnl+DjEG8MO6ne2oneqFucG+YMqB8k3tZY4ziHRZjt9uG5kk2ucPSyJ
-         B3t4mekt0LtHaY6B2DxdS9ITSE1r5EeeAd/rhW1xKoa1wo3vU4K2S8P61apUpP5h4bNm
-         Ie0A7GhmrIV13SapWYC+pBHHxcMfzG1xl5pi5A5mA6QQacPLxq32GEg+r615aQjVj0cM
-         ScAvsigcU1WuLyjMICOCbYf7dvvMMcfNL5CZ9k+EEuJADXpZ4eKJcbWnBjSBr+bT6AiL
-         7lCs1XU5CcdliX4j+yjAr9C7RGzTsxJzZ3oMolqcxQoEMANHXQ/CG9u/lINvdUreaUZ7
-         6UmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=cN+cryxrTnBG0VJoafZ3s+TyTmI2BuJ8Y3SjnOF9NwE=;
-        b=QdVh3ys8cFAljnWrNfGGglggY5h1xoDIxaOprUekNAFGSNWkd6hSUvVM2lSzQcTXzo
-         ahncuo08SmmAfa2LteG7sS5i+51QOknbxQXhCAryc9aGkQ9WPNR1l4zXIeZpxc/0nafY
-         cknp3egJa1ftVFGL088yX84jzZhfoZY4BzeKFHV4HsR0ujkejp8QEKHPQJzPA8AFzm6c
-         69Gkt36moJekCV3JI9dwtqHkNZBAUyJwe99fE9YZlFZMeb0SozM/X1qr6EsV/9UOVBe6
-         cTOKzRl0VVIjrfyIkjqtVNbuhWRRUaAA8jyH4xw+vB10ApqreQGm/n3OdPOHGAbzKXL0
-         LeSQ==
-X-Gm-Message-State: AOAM532bwbgJBJ9f3YDXP6a6SnOuMp9cnaUq1TZQfZljuozQOEtMXLhT
-        8LfFnn8KvNEN0iVtD3fStpU=
-X-Google-Smtp-Source: ABdhPJzKUk4qJcY2Yl04uIk073pVWVy0TAgu29TjkZGtqRzd2GqD3mnxPAiabi9k3biaI+nz18T1DA==
-X-Received: by 2002:a17:903:110c:b0:14d:8859:5c8 with SMTP id n12-20020a170903110c00b0014d885905c8mr1112876plh.156.1649094118990;
-        Mon, 04 Apr 2022 10:41:58 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:baee])
-        by smtp.gmail.com with ESMTPSA id v17-20020a63b951000000b0038644f62aeesm10984699pgo.68.2022.04.04.10.41.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 10:41:58 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 4 Apr 2022 07:41:56 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC v4 2/8] cgroup: gpu: Add a cgroup controller for allocator
- attribution of GPU memory
-Message-ID: <Ykst5K/cI+DUVc94@slm.duckdns.org>
-References: <20220328035951.1817417-1-tjmercier@google.com>
- <20220328035951.1817417-3-tjmercier@google.com>
- <YkM6/57mVxoNfSvm@slm.duckdns.org>
- <CABdmKX2Gxg35k7QiL2Vn4zWhmQ4UnM-Z8cnOXR0fwBWyJnZ+Ng@mail.gmail.com>
+        with ESMTP id S1379149AbiDDQhq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Apr 2022 12:37:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5212C192B5
+        for <linux-media@vger.kernel.org>; Mon,  4 Apr 2022 09:35:50 -0700 (PDT)
+Received: from dude03.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::39])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nbPgC-0004CX-Ly; Mon, 04 Apr 2022 18:35:48 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
+Subject: [PATCH 2/7] media: coda: disable encoder cmd ioctl on decoder and vice versa
+Date:   Mon,  4 Apr 2022 18:35:28 +0200
+Message-Id: <20220404163533.707508-2-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220404163533.707508-1-p.zabel@pengutronix.de>
+References: <20220404163533.707508-1-p.zabel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABdmKX2Gxg35k7QiL2Vn4zWhmQ4UnM-Z8cnOXR0fwBWyJnZ+Ng@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Use v4l2_disable_ioctl() to disable the VIDIOC_TRY_ENCODER_CMD and
+VIDIOC_ENCODER_CMD ioctls on decoder video devices and the
+VIDIOC_TRY_DECODER_CMD and VIDIOC_DECODER_CMD ioctls on encoder
+video devices.
 
-On Wed, Mar 30, 2022 at 01:56:09PM -0700, T.J. Mercier wrote:
-> The use case we have for accounting the total (separate from the
-> individual devices) is to include the value as part of bugreports, for
-> understanding the system-wide amount of dmabuf allocations. I'm not
-> aware of an existing need to limit the total. Admittedly this is just
-> the sum over the devices, but we currently maintain out of tree code
-> to do this sort of thing today. [1]
+This allows to drop the coda_try_encoder/decoder_cmd() functions
+and to use v4l2_m2m_ioctl_try_encoder/decoder_cmd() directly.
 
-So, drop this part?
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+ .../media/platform/chips-media/coda-common.c  | 38 ++++++-------------
+ 1 file changed, 12 insertions(+), 26 deletions(-)
 
-Thanks.
-
+diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
+index 6d2989504b33..dc75133b0ead 100644
+--- a/drivers/media/platform/chips-media/coda-common.c
++++ b/drivers/media/platform/chips-media/coda-common.c
+@@ -1091,17 +1091,6 @@ static int coda_s_selection(struct file *file, void *fh,
+ 	}
+ }
+ 
+-static int coda_try_encoder_cmd(struct file *file, void *fh,
+-				struct v4l2_encoder_cmd *ec)
+-{
+-	struct coda_ctx *ctx = fh_to_ctx(fh);
+-
+-	if (ctx->inst_type != CODA_INST_ENCODER)
+-		return -ENOTTY;
+-
+-	return v4l2_m2m_ioctl_try_encoder_cmd(file, fh, ec);
+-}
+-
+ static void coda_wake_up_capture_queue(struct coda_ctx *ctx)
+ {
+ 	struct vb2_queue *dst_vq;
+@@ -1120,7 +1109,7 @@ static int coda_encoder_cmd(struct file *file, void *fh,
+ 	struct vb2_v4l2_buffer *buf;
+ 	int ret;
+ 
+-	ret = coda_try_encoder_cmd(file, fh, ec);
++	ret = v4l2_m2m_ioctl_try_encoder_cmd(file, fh, ec);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1149,17 +1138,6 @@ static int coda_encoder_cmd(struct file *file, void *fh,
+ 	return 0;
+ }
+ 
+-static int coda_try_decoder_cmd(struct file *file, void *fh,
+-				struct v4l2_decoder_cmd *dc)
+-{
+-	struct coda_ctx *ctx = fh_to_ctx(fh);
+-
+-	if (ctx->inst_type != CODA_INST_DECODER)
+-		return -ENOTTY;
+-
+-	return v4l2_m2m_ioctl_try_decoder_cmd(file, fh, dc);
+-}
+-
+ static bool coda_mark_last_meta(struct coda_ctx *ctx)
+ {
+ 	struct coda_buffer_meta *meta;
+@@ -1216,7 +1194,7 @@ static int coda_decoder_cmd(struct file *file, void *fh,
+ 	bool wakeup;
+ 	int ret;
+ 
+-	ret = coda_try_decoder_cmd(file, fh, dc);
++	ret = v4l2_m2m_ioctl_try_decoder_cmd(file, fh, dc);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1498,9 +1476,9 @@ static const struct v4l2_ioctl_ops coda_ioctl_ops = {
+ 	.vidioc_g_selection	= coda_g_selection,
+ 	.vidioc_s_selection	= coda_s_selection,
+ 
+-	.vidioc_try_encoder_cmd	= coda_try_encoder_cmd,
++	.vidioc_try_encoder_cmd	= v4l2_m2m_ioctl_try_encoder_cmd,
+ 	.vidioc_encoder_cmd	= coda_encoder_cmd,
+-	.vidioc_try_decoder_cmd	= coda_try_decoder_cmd,
++	.vidioc_try_decoder_cmd	= v4l2_m2m_ioctl_try_decoder_cmd,
+ 	.vidioc_decoder_cmd	= coda_decoder_cmd,
+ 
+ 	.vidioc_g_parm		= coda_g_parm,
+@@ -2904,6 +2882,14 @@ static int coda_register_device(struct coda_dev *dev, int i)
+ 	v4l2_disable_ioctl(vfd, VIDIOC_G_CROP);
+ 	v4l2_disable_ioctl(vfd, VIDIOC_S_CROP);
+ 
++	if (dev->devtype->vdevs[i]->type == CODA_INST_ENCODER) {
++		v4l2_disable_ioctl(vfd, VIDIOC_DECODER_CMD);
++		v4l2_disable_ioctl(vfd, VIDIOC_TRY_DECODER_CMD);
++	} else {
++		v4l2_disable_ioctl(vfd, VIDIOC_ENCODER_CMD);
++		v4l2_disable_ioctl(vfd, VIDIOC_TRY_ENCODER_CMD);
++	}
++
+ 	ret = video_register_device(vfd, VFL_TYPE_VIDEO, 0);
+ 	if (!ret)
+ 		v4l2_info(&dev->v4l2_dev, "%s registered as %s\n",
 -- 
-tejun
+2.30.2
+
