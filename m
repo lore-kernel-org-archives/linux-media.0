@@ -2,118 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FD69C433F5
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 22:56:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67D6FC433EF
+	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:02:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351925AbiDEWuW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
+        id S1442709AbiDEWuo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573280AbiDESml (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 14:42:41 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD8820BE2;
-        Tue,  5 Apr 2022 11:40:42 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id k23so25103945ejd.3;
-        Tue, 05 Apr 2022 11:40:42 -0700 (PDT)
+        with ESMTP id S1446785AbiDEPpI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:45:08 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822D953A42
+        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 07:19:04 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id b17so10091569qvf.12
+        for <linux-media@vger.kernel.org>; Tue, 05 Apr 2022 07:19:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vbMPbp7aUefqeHa6gEgmXUlWTRHZ3oMWVTDKwmVUOh8=;
-        b=KJEMIj4e7Nkf5NRQSkeGOdWSQ/71GPeTAtj19TfSQfaw192KiobZULMM0yawIDtQ+1
-         kRjZ1hHKMIFz5w9uzoszb/2UfxMFLVuhv1pcx3l2FbrdwFg0o9IdUwBssH6gMmasF+sC
-         tAYmb4Zc+PawW5CU655i1OQPBPDNcC4ClfHWIMZ2+DO3B8slsGym7/pz3iqIyZLr1GZ5
-         MLbeRvJiT+5mT7bKd/c/7BGNhUV9FRT6Rbo4IITF2Ehl994/2iaeC7VBC13O0Owz00Gp
-         EuxD4peu6TSeWZYYpDmgXNCmVOuyQzE+ikHq9qi/Eo1WQKNiWby277cISSVlNRAYEi5t
-         uS3w==
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=IYw6PvhS470ji2ZJWGOV8lAMJMGjw7GPIcjbBWZJGMc=;
+        b=LY4abgrEU9/LYixYTQAGvypN4V3Gh1UWJpHqh4/vZdQvf1RILMXOzXjWH5i/qkvOZ3
+         U25A1xPffy2nDp+RhTpBEgCkqStoIy6Ez0rDmGvjUZVXsoQ/ImdX07y0/to9uPjOigip
+         weZpM+cPQlT5pDU45zjaQX8fkEporpqZrg2skz+Ex3T+eVl0jb0PT7f1Fsbql9I1zY8L
+         F9+Qtvbm7jYOrlFJDx7iFwTrwcjDCeMAGo9IKekyq8tAQusaRDG3loT1IuJBS1KY8ip7
+         gtJqeesRN36WKmlJumrnHBjQ+EtAcr06jacFKwljigZnuFaedez389t3nEjeRoRPqOf5
+         jm9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vbMPbp7aUefqeHa6gEgmXUlWTRHZ3oMWVTDKwmVUOh8=;
-        b=uZesIecNDcIzvRGNc4Ut8tOwqMxFct/6xP//ptwnYFa9EEGNauwgslks77sTiOJ2S0
-         OLngnbl8ZNnsKMcJ1cAyGmCLGGkiThM0paJLWlfAcKTmsubhfFuvzWcON0ANGO4R5m8x
-         lgrFuPPD//BeWY4RaEoS1Dbj2AeI0J2Ocv1Tcw9K34VG+CaxVJpNQl7MNV2Px749cZJ+
-         +vBfmknG+LxviOrurta+GpJbCuAieX95zTnasK32TXt53FzqpTyw0MdSFubmPil/wPkG
-         AiSrLE6QPfYbPlEfRkr6q1N0mkHC+gsD4eOchf9JA3tQ6DaSFcZA8qX9LsUtwlYhnKbO
-         RrvA==
-X-Gm-Message-State: AOAM530XDR3afXN9stxLruiZg5NTvNzsVNVtlEpiHeO5n4nPdRRKUwGO
-        uH1zvvcUzJ6ZlW2+yu+X4j0=
-X-Google-Smtp-Source: ABdhPJyyOku7BguihhRDVr/2uQVz3QRhlNTGjiETo2Ny1XHm1wtZufdXrCu7Vy7i491eGogKd7Bkqg==
-X-Received: by 2002:a17:907:6e14:b0:6e7:f589:b7b4 with SMTP id sd20-20020a1709076e1400b006e7f589b7b4mr4991013ejc.222.1649184040612;
-        Tue, 05 Apr 2022 11:40:40 -0700 (PDT)
-Received: from jernej-laptop.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id dm11-20020a170907948b00b006cf488e72e3sm5795532ejc.25.2022.04.05.11.40.39
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=IYw6PvhS470ji2ZJWGOV8lAMJMGjw7GPIcjbBWZJGMc=;
+        b=e6V92lVAb9TfOJvBcC+mR2nP3+MEwe+vN+NlvUOUy/M8t0xG0T9b3Y5T41Pf2cUWFa
+         pBRwdYtYHNzoPPoVF8GKoYIwHqd6mCISmvdUw0WcLyQFBBuKjRArgFPRCKWBiixc20Nu
+         48Jrgfd1h3Bra+93aU1ozQAEBLqWN422nHXd7WRadff9C/wWeYIzoBB6PoFHAOlvH4Qi
+         yH6SKy8Qen/EU33patJ1ntwJXM5dNPCIybhn3U7ZvC9gLImpzxFSIfi0Ercg1AGiijPj
+         02L40TazDZLrIn7GpYidFFwn0XI/TeXKzcchYaetBAypNjalKtTVwi+y3d6EJ6dIbrho
+         h/2w==
+X-Gm-Message-State: AOAM530XQ+UrP++aUHlYtPzmjMaPOMpxzR4dZGwTtYGkib309p8YcqLy
+        4cJwUWFX2iSE+1DaeWX9HDxhEgn18tqgkl04
+X-Google-Smtp-Source: ABdhPJzJhYmVy5MKHf+DUH/QkVjIn+bq7fAhulzjWjgpPaWaGP3Tw9A1Upac9cCAUPpYiqCbp68xyA==
+X-Received: by 2002:a05:6214:260d:b0:441:51c4:e311 with SMTP id gu13-20020a056214260d00b0044151c4e311mr2858321qvb.111.1649168343359;
+        Tue, 05 Apr 2022 07:19:03 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id j8-20020a05622a038800b002e236535929sm10975883qtx.32.2022.04.05.07.19.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 11:40:40 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, nicolas@ndufresne.ca, hverkuil-cisco@xs4all.nl,
-        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [RFC PATCH 0/8] media: hantro: Add 10-bit support
-Date:   Tue, 05 Apr 2022 20:40:38 +0200
-Message-ID: <4386971.LvFx2qVVIh@jernej-laptop>
-In-Reply-To: <b6987a9a-56af-f63f-b60a-37df141d6e89@collabora.com>
-References: <20220227144926.3006585-1-jernej.skrabec@gmail.com> <b6987a9a-56af-f63f-b60a-37df141d6e89@collabora.com>
-MIME-Version: 1.0
+        Tue, 05 Apr 2022 07:19:02 -0700 (PDT)
+Message-ID: <6e080d0e687f1721f20c5985a12e96a71dda1bc3.camel@ndufresne.ca>
+Subject: Re: [PATCH 6/7] media: coda: enable capture G_PARM for stateful
+ encoder
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
+Date:   Tue, 05 Apr 2022 10:19:01 -0400
+In-Reply-To: <20220404163533.707508-6-p.zabel@pengutronix.de>
+References: <20220404163533.707508-1-p.zabel@pengutronix.de>
+         <20220404163533.707508-6-p.zabel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Benjamin!
-
-Dne torek, 05. april 2022 ob 18:07:41 CEST je Benjamin Gaignard napisal(a):
-> Le 27/02/2022 =E0 15:49, Jernej Skrabec a =E9crit :
-> > First two patches add 10-bit formats to UAPI, third extends filtering
-> > mechanism, fourth fixes incorrect assumption, fifth moves register
-> > configuration code to proper place, sixth and seventh enable 10-bit
-> > VP9 decoding on Allwinner H6 and last increases core frequency on
-> > Allwinner H6.
-> >=20
-> > I'm sending this as RFC to get some comments:
-> > 1. format definitions - are fourcc's ok? are comments/descriptions ok?
-> > 2. is extended filtering mechanism ok?
-> >=20
-> > I would also like if these patches are tested on some more HW.
-> > Additionally, can someone test tiled P010?
-> >=20
-> > Please take a look.
+Le lundi 04 avril 2022 =C3=A0 18:35 +0200, Philipp Zabel a =C3=A9crit=C2=A0=
+:
+> Allow to call G_PARM with type =3D=3D V4L2_BUF_TYPE_VIDEO_CAPTURE,
+> to fix the following v4l2-compliance test failure:
 >=20
-> Hi Jernej,
+> 		fail: v4l2-test-formats.cpp(1344): ret && node->has_frmintervals
+> 	test VIDIOC_G/S_PARM: FAIL
+
+So basically the rate written in the bitstream (if any) will be the same as=
+ the
+target real-time rate, which matches my reading of the new spec as what def=
+ault
+behaviour we should have.
+
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+
 >=20
-> I have create a branch to test this series with VP9 and HEVC:
-> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/10bit_=
-imx
-> 8m Feel free to pick what I may need in it.
+> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+> ---
+>  drivers/media/platform/chips-media/coda-common.c | 3 ---
+>  1 file changed, 3 deletions(-)
 >=20
-> That doesn't improve fluster scores, I think more dev are still needed in
-> GST before getting something fully functional.
-> Anyway I able to select P010 pixel format if the input is a 10bit bitstre=
-am.
-
-What kind of improvements do you expect? Actually, this series is designed =
-to=20
-change nothing for platforms, where 10-bit format is not added into the lis=
-t=20
-of supported formats. I think reasons are quite obvious. First, not every=20
-device may support 10-bit output. Second, as you might already figured it o=
-ut,=20
-registers in this series are set only for legacy cores. I have no idea, wha=
-t=20
-needs to be done for newer ones, since I don't have them. Anyway, I tested=
-=20
-this with fluster and only one additional test passes, because it is the on=
-ly=20
-one for 10-bit YUV420.
-
-Best regards,
-Jernej
-
+> diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/m=
+edia/platform/chips-media/coda-common.c
+> index c068c16d1eb4..33fcd8c7d72b 100644
+> --- a/drivers/media/platform/chips-media/coda-common.c
+> +++ b/drivers/media/platform/chips-media/coda-common.c
+> @@ -1341,9 +1341,6 @@ static int coda_g_parm(struct file *file, void *fh,=
+ struct v4l2_streamparm *a)
+>  	struct coda_ctx *ctx =3D fh_to_ctx(fh);
+>  	struct v4l2_fract *tpf;
+> =20
+> -	if (a->type !=3D V4L2_BUF_TYPE_VIDEO_OUTPUT)
+> -		return -EINVAL;
+> -
+>  	a->parm.output.capability =3D V4L2_CAP_TIMEPERFRAME;
+>  	tpf =3D &a->parm.output.timeperframe;
+>  	tpf->denominator =3D ctx->params.framerate & CODA_FRATE_RES_MASK;
 
