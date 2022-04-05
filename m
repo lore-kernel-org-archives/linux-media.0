@@ -2,59 +2,72 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D0E3C35276
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:02:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2E3EC433EF
+	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:02:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1454777AbiDEWwR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
+        id S1456663AbiDEWwW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442049AbiDEPgz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:36:55 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54C1A8EC2
-        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 06:50:43 -0700 (PDT)
-Received: from dude03.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::39])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbjZx-0002jS-La; Tue, 05 Apr 2022 15:50:41 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     linux-media@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
-Subject: [PATCH] media: coda: assert bitstream mutex is locked in coda_fill_bitstream
-Date:   Tue,  5 Apr 2022 15:50:35 +0200
-Message-Id: <20220405135035.3428144-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S237138AbiDEVRT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 17:17:19 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0D470F5A;
+        Tue,  5 Apr 2022 13:44:45 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id D73C21F4480B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649191483;
+        bh=CR0Uld+xP65yR8nRZHFwyooNDEbFE3R+SnqsqiS63yI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=R1zrHd5GzMeP0J2r7wzyt2CkELpIBsCmOdeHajueB6w5uHTNNWbd4xrBwSg190YC+
+         qY9zVQtj18o/NTCY0jLPY85TF3yzf+XJO0Elce1b+V1heD0cWT4ysV67/1xCV8TU+2
+         5rTXQRQdJ4AtPATChiiDib8i2siED0BdVw4mVnKHzVdlF001F7tVA0twPF3TzhVMfX
+         hkyvfIM3+cp1smEMdMkdVj5LR7+sVunPEGagcRiTLsB/E7je3yWVONTlMyGV1oSzlf
+         GM/XRLeNlsAeZlHDlOyf91V1mmnhgBrzISaxJyW3Tx+XjXdbkk7DSE759UZxiwIs0f
+         zhMWWNLlKKXNQ==
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v3 02/24] media: v4l2-mem2mem: Trace on implicit un-hold
+Date:   Tue,  5 Apr 2022 16:44:03 -0400
+Message-Id: <20220405204426.259074-3-nicolas.dufresne@collabora.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-coda_fill_bitstream() must be called under the bitstream mutex.
+If the timestamp of the src buffer differs from the timestamp of a held
+dst buffer, the held buffer is implicitly removed and marked as done.
+Add a trace to help debugging if someone hits that case.
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- drivers/media/platform/chips-media/coda-bit.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/chips-media/coda-bit.c b/drivers/media/platform/chips-media/coda-bit.c
-index 705a179ea8f0..3aad8999a3b3 100644
---- a/drivers/media/platform/chips-media/coda-bit.c
-+++ b/drivers/media/platform/chips-media/coda-bit.c
-@@ -326,6 +326,8 @@ void coda_fill_bitstream(struct coda_ctx *ctx, struct list_head *buffer_list)
- 	struct coda_buffer_meta *meta;
- 	u32 start;
- 
-+	lockdep_assert_held(&ctx->bitstream_mutex);
-+
- 	if (ctx->bit_stream_param & CODA_BIT_STREAM_END_FLAG)
- 		return;
- 
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index 675e22895ebe..d1d29d6ab024 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -336,6 +336,7 @@ static void __v4l2_m2m_try_queue(struct v4l2_m2m_dev *m2m_dev,
+ 	if (src && dst && dst->is_held &&
+ 	    dst->vb2_buf.copied_timestamp &&
+ 	    dst->vb2_buf.timestamp != src->vb2_buf.timestamp) {
++		dprintk("Timestamp mismatch, returning held capture buffer\n");
+ 		dst->is_held = false;
+ 		v4l2_m2m_dst_buf_remove(m2m_ctx);
+ 		v4l2_m2m_buf_done(dst, VB2_BUF_STATE_DONE);
 -- 
-2.30.2
+2.34.1
 
