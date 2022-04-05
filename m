@@ -2,108 +2,118 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E26BC43219
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FD69C433F5
 	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 22:56:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353698AbiDEWub (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S1351925AbiDEWuW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573084AbiDERza (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 13:55:30 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2466DE09C
-        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 10:53:30 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id c15so18099312ljr.9
-        for <linux-media@vger.kernel.org>; Tue, 05 Apr 2022 10:53:30 -0700 (PDT)
+        with ESMTP id S1573280AbiDESml (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 14:42:41 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD8820BE2;
+        Tue,  5 Apr 2022 11:40:42 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id k23so25103945ejd.3;
+        Tue, 05 Apr 2022 11:40:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MYJtsikWi9hIB8NHNY8S76MVB/wVdm4tXnry+6+yiEo=;
-        b=ijwBLjjh6lk3Bb+x9kE21mGPVSMbJnI+Yi/zPHj8mem2U9fEgN+edh+EmjEqa+XZcD
-         n/lfaXf0Tweh9j3vMEvYaRq5AnA39APG5yQv6NKxIshzQR69mp6t6YhwSPfx9qs+WETe
-         qzbk+Vb7I8DycQ3I99Ja5mziLFXJ/cQUDqh9BmEFPMUrEBXvhlToOea+VAhw6cZbQC74
-         NLoIe5lNwslTIQJXZenzM6298KtFhaCaJ7H2Dofx9iOBYLBqokApBi/5kHOVzBOSha+8
-         N0ViNXCPr1zN2Xi1NpaNTckkmR0R5uQew58xTxPUq6A6fCfWeEH1Zr8aSDV8F7XJ0RBt
-         zqUw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=vbMPbp7aUefqeHa6gEgmXUlWTRHZ3oMWVTDKwmVUOh8=;
+        b=KJEMIj4e7Nkf5NRQSkeGOdWSQ/71GPeTAtj19TfSQfaw192KiobZULMM0yawIDtQ+1
+         kRjZ1hHKMIFz5w9uzoszb/2UfxMFLVuhv1pcx3l2FbrdwFg0o9IdUwBssH6gMmasF+sC
+         tAYmb4Zc+PawW5CU655i1OQPBPDNcC4ClfHWIMZ2+DO3B8slsGym7/pz3iqIyZLr1GZ5
+         MLbeRvJiT+5mT7bKd/c/7BGNhUV9FRT6Rbo4IITF2Ehl994/2iaeC7VBC13O0Owz00Gp
+         EuxD4peu6TSeWZYYpDmgXNCmVOuyQzE+ikHq9qi/Eo1WQKNiWby277cISSVlNRAYEi5t
+         uS3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MYJtsikWi9hIB8NHNY8S76MVB/wVdm4tXnry+6+yiEo=;
-        b=cBjkTqjhvhlOVVMbq5OeGsXFuYJbpzbl36oQu/3uG5GCHEZI/fJ1CvXnCfIsWSwUzP
-         RSvp9tWrfiw1n0nL+43LeqKr1goUkZdGzJZWBD9FqK8ss+8JD6yB0VQAsPbtv1Wun2R0
-         rSR/aTA7EDl1TQ6ZxV/JdkVH4TsoNyrvwSkSOibzyWTy608jJ2lmvo6QBmJBLA9UXxrz
-         3fH1ygVMzAXk5IIPVyKaaBVMGU5NE71c914kVp3kGBffxa4itlhLFfWM5T3hpVy7VP66
-         AdQNxTRdfSBjKlKbKlw/nnDm2dHIDothL2u34jIvJ+dcAEdGb9pNCt4wbuKSdiSFOXBD
-         aBAQ==
-X-Gm-Message-State: AOAM53129HPRVaQZYwL42vstf60+xJ4AJlcUZqCNJ7cI/KRASDfxpcmm
-        u162WhEUgTJqZ1v26DRHgAYEJDlB3m1aL6+U/9woSV4yn2qVrg==
-X-Google-Smtp-Source: ABdhPJxkfZhW0np+6HFZguzcslyOvUzoSGSv9BMWk5pjhEH5IyVC6Lb8xm3p/2a9i36EyTCg1IFq70K2lSb/IBVbZTs=
-X-Received: by 2002:a2e:9ec4:0:b0:24b:115c:aedb with SMTP id
- h4-20020a2e9ec4000000b0024b115caedbmr2807694ljk.235.1649181208750; Tue, 05
- Apr 2022 10:53:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=vbMPbp7aUefqeHa6gEgmXUlWTRHZ3oMWVTDKwmVUOh8=;
+        b=uZesIecNDcIzvRGNc4Ut8tOwqMxFct/6xP//ptwnYFa9EEGNauwgslks77sTiOJ2S0
+         OLngnbl8ZNnsKMcJ1cAyGmCLGGkiThM0paJLWlfAcKTmsubhfFuvzWcON0ANGO4R5m8x
+         lgrFuPPD//BeWY4RaEoS1Dbj2AeI0J2Ocv1Tcw9K34VG+CaxVJpNQl7MNV2Px749cZJ+
+         +vBfmknG+LxviOrurta+GpJbCuAieX95zTnasK32TXt53FzqpTyw0MdSFubmPil/wPkG
+         AiSrLE6QPfYbPlEfRkr6q1N0mkHC+gsD4eOchf9JA3tQ6DaSFcZA8qX9LsUtwlYhnKbO
+         RrvA==
+X-Gm-Message-State: AOAM530XDR3afXN9stxLruiZg5NTvNzsVNVtlEpiHeO5n4nPdRRKUwGO
+        uH1zvvcUzJ6ZlW2+yu+X4j0=
+X-Google-Smtp-Source: ABdhPJyyOku7BguihhRDVr/2uQVz3QRhlNTGjiETo2Ny1XHm1wtZufdXrCu7Vy7i491eGogKd7Bkqg==
+X-Received: by 2002:a17:907:6e14:b0:6e7:f589:b7b4 with SMTP id sd20-20020a1709076e1400b006e7f589b7b4mr4991013ejc.222.1649184040612;
+        Tue, 05 Apr 2022 11:40:40 -0700 (PDT)
+Received: from jernej-laptop.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id dm11-20020a170907948b00b006cf488e72e3sm5795532ejc.25.2022.04.05.11.40.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 11:40:40 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, nicolas@ndufresne.ca, hverkuil-cisco@xs4all.nl,
+        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [RFC PATCH 0/8] media: hantro: Add 10-bit support
+Date:   Tue, 05 Apr 2022 20:40:38 +0200
+Message-ID: <4386971.LvFx2qVVIh@jernej-laptop>
+In-Reply-To: <b6987a9a-56af-f63f-b60a-37df141d6e89@collabora.com>
+References: <20220227144926.3006585-1-jernej.skrabec@gmail.com> <b6987a9a-56af-f63f-b60a-37df141d6e89@collabora.com>
 MIME-Version: 1.0
-References: <20220319143456.2159540-1-trix@redhat.com>
-In-Reply-To: <20220319143456.2159540-1-trix@redhat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 5 Apr 2022 10:53:17 -0700
-Message-ID: <CAKwvOdkEnDBFUtio2+UVeV1J3QUwAJOc-YgcubDEUXHWMF5gbw@mail.gmail.com>
-Subject: Re: [PATCH] media: platform: return early if the iface is not handled
-To:     trix@redhat.com
-Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
-        nathan@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 7:35 AM <trix@redhat.com> wrote:
->
-> From: Tom Rix <trix@redhat.com>
->
-> Clang static analysis reports this issue
-> ispcsiphy.c:63:14: warning: The left operand of '<<'
->   is a garbage value
->         reg |= mode << shift;
->                ~~~~ ^
-> The iface switch-statement default case falls through
-> to ISP_INTERFACE_CCP2B_PHY1.  Which is later checked
-> to set the mode.  Since the default case is left out
-> of this check mode is never set.  Instead of falling
-> through and assuming a ISP_INTERFACE_CCP2B_PHY1
-> iface, return.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hi Benjamin!
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Dne torek, 05. april 2022 ob 18:07:41 CEST je Benjamin Gaignard napisal(a):
+> Le 27/02/2022 =E0 15:49, Jernej Skrabec a =E9crit :
+> > First two patches add 10-bit formats to UAPI, third extends filtering
+> > mechanism, fourth fixes incorrect assumption, fifth moves register
+> > configuration code to proper place, sixth and seventh enable 10-bit
+> > VP9 decoding on Allwinner H6 and last increases core frequency on
+> > Allwinner H6.
+> >=20
+> > I'm sending this as RFC to get some comments:
+> > 1. format definitions - are fourcc's ok? are comments/descriptions ok?
+> > 2. is extended filtering mechanism ok?
+> >=20
+> > I would also like if these patches are tested on some more HW.
+> > Additionally, can someone test tiled P010?
+> >=20
+> > Please take a look.
+>=20
+> Hi Jernej,
+>=20
+> I have create a branch to test this series with VP9 and HEVC:
+> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/10bit_=
+imx
+> 8m Feel free to pick what I may need in it.
+>=20
+> That doesn't improve fluster scores, I think more dev are still needed in
+> GST before getting something fully functional.
+> Anyway I able to select P010 pixel format if the input is a 10bit bitstre=
+am.
 
-> ---
->  drivers/media/platform/ti/omap3isp/ispcsiphy.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/media/platform/ti/omap3isp/ispcsiphy.c b/drivers/media/platform/ti/omap3isp/ispcsiphy.c
-> index 6dc7359c5131d..1bde76c0adbee 100644
-> --- a/drivers/media/platform/ti/omap3isp/ispcsiphy.c
-> +++ b/drivers/media/platform/ti/omap3isp/ispcsiphy.c
-> @@ -31,7 +31,8 @@ static void csiphy_routing_cfg_3630(struct isp_csiphy *phy,
->
->         switch (iface) {
->         default:
-> -       /* Should not happen in practice, but let's keep the compiler happy. */
-> +               /* Should not happen in practice, but let's keep the compiler happy. */
-> +               return;
->         case ISP_INTERFACE_CCP2B_PHY1:
->                 reg &= ~OMAP3630_CONTROL_CAMERA_PHY_CTRL_CSI1_RX_SEL_PHY2;
->                 shift = OMAP3630_CONTROL_CAMERA_PHY_CTRL_CAMMODE_PHY1_SHIFT;
-> --
-> 2.26.3
->
+What kind of improvements do you expect? Actually, this series is designed =
+to=20
+change nothing for platforms, where 10-bit format is not added into the lis=
+t=20
+of supported formats. I think reasons are quite obvious. First, not every=20
+device may support 10-bit output. Second, as you might already figured it o=
+ut,=20
+registers in this series are set only for legacy cores. I have no idea, wha=
+t=20
+needs to be done for newer ones, since I don't have them. Anyway, I tested=
+=20
+this with fluster and only one additional test passes, because it is the on=
+ly=20
+one for 10-bit YUV420.
+
+Best regards,
+Jernej
 
 
--- 
-Thanks,
-~Nick Desaulniers
