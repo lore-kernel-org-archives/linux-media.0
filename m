@@ -2,45 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D5FFC35276
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:12:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E119C433F5
+	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:12:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573969AbiDEWxz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
+        id S1573977AbiDEWx5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444153AbiDEWVA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:21:00 -0400
+        with ESMTP id S1444238AbiDEWVB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:21:01 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF0189327;
-        Tue,  5 Apr 2022 13:45:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1505199692;
+        Tue,  5 Apr 2022 13:45:17 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 6DE231F4483B
+        with ESMTPSA id D871B1F448CB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649191500;
-        bh=8oDcE7AuYklwa6l0DYob/jQnR/CVHnofWCWQW3y5gNM=;
+        s=mail; t=1649191516;
+        bh=MTyE9QSy2RUy2J+DqczMQkzQ2U7CksfjNGFIrOd9SV8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DeZjdI7imYZZvg+kDC9pPL5dARx83mv65wa5gmDuf9DQMxc84BSLeXsvjKegBDTEG
-         QxDtbC7egcV8QQKplljF4VoJ48UeaFvL6qeYM2UwGF4RtA9iybZkC1BvpSBDZdinR8
-         XxhklC8SPZdW0mJ8roUeqszepUv4NLbJAoyUtWfjfFP2x2WiV/DvXCmF5x8lkF+Mqi
-         JGQtSRra6PkqVtB3wI/QaJsCcRCziJg+Z+MWX6gMs7O5Of5xgTwg6MakmbmtSRFRNv
-         GqK7eR6CPoHbDtM8mPIih6JGxLihDTd0T+yEh5l0yphROBYovOiL0BUYmP696QUvoo
-         MgKhyNr2bBJww==
+        b=MTXu3z2Sz1/ihUk9LZChVIPAu71KKvYLI63WUFsq4V+t+dI6Wag5rJC/4VfrlWEAt
+         SHCFbLtM0ElNJ6q/LTy8Fka4/R7QxDjtFb5b2ys/ylpAgiNd09Dthhs3i6RlAzF2+8
+         KkrLLA3Vc5wQaRElF9X6hTJ3mZagl5aRNxB+Pse30ELEthfHEuCEyA6Vtb81yvHYcB
+         KDLbKeGdvxSwFIel+bibpclOtNwo47xv/L+eLMFcyCiaBxeUMKoYJUzLRZdnZQg2l2
+         QE35nAKfteTRgyw5P75CyRJkYNcCG2otWffSBriRi2X6QkJrsNNUQDZnl8v22Q8s6z
+         aQ2K4uCfvjT+A==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH v3 12/24] media: rkvdec: Stop overclocking the decoder
-Date:   Tue,  5 Apr 2022 16:44:13 -0400
-Message-Id: <20220405204426.259074-13-nicolas.dufresne@collabora.com>
+Subject: [PATCH v3 20/24] media: rkvdec: Enable capture buffer holding for H264
+Date:   Tue,  5 Apr 2022 16:44:21 -0400
+Message-Id: <20220405204426.259074-21-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
 References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
@@ -50,45 +47,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-While this overclock hack seems to work on some implementations
-(some ChromeBooks, RockPi4) it also causes instability on other
-implementations (notably LibreComputer Renegade, but there were more
-reports in the LibreELEC project, where this has been removed). While
-performance is indeed affected (tested with GStreamer), 4K playback
-still works as long as you don't operate in lock step and keep at
-least 1 frame ahead of time in the decode queue.
+In order to support interlaced video decoding, the driver must
+allow holding the capture buffer so that the second field can
+be decoded into it.
 
-After discussion with ChromeOS members, it would seem that their
-implementation indeed used to synchronously decode each frames, so
-this hack was simply compensating for their code being less
-efficient. In my opinion, this hack should not have been included
-upstream.
-
-Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- drivers/staging/media/rkvdec/rkvdec.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 4 ++++
+ drivers/staging/media/rkvdec/rkvdec.h | 1 +
+ 2 files changed, 5 insertions(+)
 
 diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index c0cf3488f970..2df8cf4883e2 100644
+index 2bc4b1a40989..7bab7586918c 100644
 --- a/drivers/staging/media/rkvdec/rkvdec.c
 +++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -1027,12 +1027,6 @@ static int rkvdec_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
+@@ -127,6 +127,7 @@ static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
+ 		.ops = &rkvdec_h264_fmt_ops,
+ 		.num_decoded_fmts = ARRAY_SIZE(rkvdec_h264_vp9_decoded_fmts),
+ 		.decoded_fmts = rkvdec_h264_vp9_decoded_fmts,
++		.subsystem_flags = VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF,
+ 	},
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_VP9_FRAME,
+@@ -385,6 +386,9 @@ static int rkvdec_s_output_fmt(struct file *file, void *priv,
+ 	cap_fmt->fmt.pix_mp.ycbcr_enc = f->fmt.pix_mp.ycbcr_enc;
+ 	cap_fmt->fmt.pix_mp.quantization = f->fmt.pix_mp.quantization;
  
--	/*
--	 * Bump ACLK to max. possible freq. (500 MHz) to improve performance
--	 * When 4k video playback.
--	 */
--	clk_set_rate(rkvdec->clocks[0].clk, 500 * 1000 * 1000);
--
- 	rkvdec->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(rkvdec->regs))
- 		return PTR_ERR(rkvdec->regs);
++	/* Enable format specific queue features */
++	vq->subsystem_flags |= desc->subsystem_flags;
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
+index 9df0fba799a4..633335ebb9c4 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.h
++++ b/drivers/staging/media/rkvdec/rkvdec.h
+@@ -82,6 +82,7 @@ struct rkvdec_coded_fmt_desc {
+ 	const struct rkvdec_coded_fmt_ops *ops;
+ 	unsigned int num_decoded_fmts;
+ 	const u32 *decoded_fmts;
++	u32 subsystem_flags;
+ };
+ 
+ struct rkvdec_dev {
 -- 
 2.34.1
 
