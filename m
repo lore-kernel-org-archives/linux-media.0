@@ -2,251 +2,165 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84119C4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCE21C46467
 	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573741AbiDEWw6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S1573749AbiDEWxC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444289AbiDEWVC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:21:02 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9149FD4C95;
-        Tue,  5 Apr 2022 13:45:22 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 4D03D1F448CB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649191521;
-        bh=QXCqhwGgS71Plij0LYpMswWc72NGt82a9mKy6xwpDRk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q/Lm+UaoXCdYtHJ5zWUFnhkCtte0GBWhC443cG3uArOmisV5PW0Wu2yBrqAyRJmua
-         TYgNR1o1k9Fvlo+Uv9kSp6ZJoezYQsXSpGd7xaMNMRZPh+bZNic1PqiT3DjQUpRVBC
-         82+cbevzAXO0CYsohlws1r+W0LVMzvI46dlByE7adLA1JaJuOz5FgX3WtLQ9glWx/Z
-         f+6UT6G3/xsOdtlYv/JvN0Rco7TN5Ry7Qa0F/DdOdI054sglrsVKis8dI3jxMIsHBl
-         LBadVPJouK21SdtlJCHp/tBlLeViiG+c5e5XpCtMks7+8RsX6bbolw6OIjvN1ln5C6
-         F7ahd0h1YMxtw==
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        Jonas Karlman <jonas@kwiboo.se>, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
-Subject: [PATCH v3 23/24] media: hantro: Add H.264 field decoding support
-Date:   Tue,  5 Apr 2022 16:44:24 -0400
-Message-Id: <20220405204426.259074-24-nicolas.dufresne@collabora.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
-References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+        with ESMTP id S1448568AbiDEPs0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:48:26 -0400
+Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799353EF0B
+        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 07:30:25 -0700 (PDT)
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1nbkCL-004fUo-36; Tue, 05 Apr 2022 14:30:21 +0000
+Received: from localhost ([127.0.0.1] helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1nbkCI-006iSt-Ui; Tue, 05 Apr 2022 14:30:18 +0000
+Date:   Tue, 5 Apr 2022 14:30:18 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        mchehab@linuxtv.org
+Message-ID: <1214765103.0.1649169018341@builder.linuxtv.org>
+In-Reply-To: <1276497222.0.1649107102997@builder.linuxtv.org>
+References: <1276497222.0.1649107102997@builder.linuxtv.org>
+Subject: Build failed in Jenkins: media_stage_clang #443
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: media_stage_clang
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This adds the required code to support field decoding. While most of
-the code is derived from Rockchip and VSI reference code, the
-reduction of the reference list to 16 entries was found by
-trial and errors. The list consists of all the references with the
-opposite field parity.
+See <https://builder.linuxtv.org/job/media_stage_clang/443/display/redirect?page=changes>
 
-The strategy is to deduplicate the reference picture that points
-to the same storage (same index). The choice of opposite parity has
-been made to keep the other field of the current field pair in the
-list. This method may not be robust if a field was lost.
+Changes:
 
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
----
- drivers/staging/media/hantro/hantro_h264.c | 107 ++++++++++++++++++---
- drivers/staging/media/hantro/hantro_hw.h   |   1 +
- 2 files changed, 94 insertions(+), 14 deletions(-)
+[Mauro Carvalho Chehab] media: platform: imx-mipi-csis: Add dependency on VIDEO_DEV
 
-diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
-index 7377fc26f780..f6fc939aa726 100644
---- a/drivers/staging/media/hantro/hantro_h264.c
-+++ b/drivers/staging/media/hantro/hantro_h264.c
-@@ -22,6 +22,11 @@
- #define POC_BUFFER_SIZE			34
- #define SCALING_LIST_SIZE		(6 * 16 + 2 * 64)
- 
-+/* For valid and long term reference marking, index are reversed, so bit 31
-+ * indicates the status of the picture 0.
-+ */
-+#define REF_BIT(i)			BIT(32 - 1 - (i))
-+
- /* Data structure describing auxiliary buffer format. */
- struct hantro_h264_dec_priv_tbl {
- 	u32 cabac_table[CABAC_INIT_BUFFER_SIZE];
-@@ -227,6 +232,7 @@ static void prepare_table(struct hantro_ctx *ctx)
- {
- 	const struct hantro_h264_dec_ctrls *ctrls = &ctx->h264_dec.ctrls;
- 	const struct v4l2_ctrl_h264_decode_params *dec_param = ctrls->decode;
-+	const struct v4l2_ctrl_h264_sps *sps = ctrls->sps;
- 	struct hantro_h264_dec_priv_tbl *tbl = ctx->h264_dec.priv.cpu;
- 	const struct v4l2_h264_dpb_entry *dpb = ctx->h264_dec.dpb;
- 	u32 dpb_longterm = 0;
-@@ -237,20 +243,45 @@ static void prepare_table(struct hantro_ctx *ctx)
- 		tbl->poc[i * 2] = dpb[i].top_field_order_cnt;
- 		tbl->poc[i * 2 + 1] = dpb[i].bottom_field_order_cnt;
- 
-+		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_VALID))
-+			continue;
-+
- 		/*
- 		 * Set up bit maps of valid and long term DPBs.
--		 * NOTE: The bits are reversed, i.e. MSb is DPB 0.
-+		 * NOTE: The bits are reversed, i.e. MSb is DPB 0. For frame
-+		 * decoding, bit 31 to 15 are used, while for field decoding,
-+		 * all bits are used, with bit 31 being a top field, 30 a bottom
-+		 * field and so on.
- 		 */
--		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
--			dpb_valid |= BIT(HANTRO_H264_DPB_SIZE - 1 - i);
--		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
--			dpb_longterm |= BIT(HANTRO_H264_DPB_SIZE - 1 - i);
-+		if (dec_param->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC) {
-+			if (dpb[i].fields & V4L2_H264_TOP_FIELD_REF)
-+				dpb_valid |= REF_BIT(i * 2);
-+
-+			if (dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF)
-+				dpb_valid |= REF_BIT(i * 2 + 1);
-+
-+			if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM) {
-+				dpb_longterm |= REF_BIT(i * 2);
-+				dpb_longterm |= REF_BIT(i * 2 + 1);
-+			}
-+		} else {
-+			dpb_valid |= REF_BIT(i);
-+
-+			if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
-+				dpb_longterm |= REF_BIT(i);
-+		}
-+	}
-+	ctx->h264_dec.dpb_valid = dpb_valid;
-+	ctx->h264_dec.dpb_longterm = dpb_longterm;
-+
-+	if ((dec_param->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC) ||
-+	    !(sps->flags & V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD)) {
-+		tbl->poc[32] = ctx->h264_dec.cur_poc;
-+		tbl->poc[33] = 0;
-+	} else {
-+		tbl->poc[32] = dec_param->top_field_order_cnt;
-+		tbl->poc[33] = dec_param->bottom_field_order_cnt;
- 	}
--	ctx->h264_dec.dpb_valid = dpb_valid << 16;
--	ctx->h264_dec.dpb_longterm = dpb_longterm << 16;
--
--	tbl->poc[32] = dec_param->top_field_order_cnt;
--	tbl->poc[33] = dec_param->bottom_field_order_cnt;
- 
- 	assemble_scaling_list(ctx);
- }
-@@ -326,6 +357,8 @@ dma_addr_t hantro_h264_get_ref_buf(struct hantro_ctx *ctx,
- {
- 	struct v4l2_h264_dpb_entry *dpb = ctx->h264_dec.dpb;
- 	dma_addr_t dma_addr = 0;
-+	s32 cur_poc = ctx->h264_dec.cur_poc;
-+	u32 flags;
- 
- 	if (dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
- 		dma_addr = hantro_get_ref(ctx, dpb[dpb_idx].reference_ts);
-@@ -343,7 +376,12 @@ dma_addr_t hantro_h264_get_ref_buf(struct hantro_ctx *ctx,
- 		dma_addr = hantro_get_dec_buf_addr(ctx, buf);
- 	}
- 
--	return dma_addr;
-+	flags = dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_FIELD ? 0x2 : 0;
-+	flags |= abs(dpb[dpb_idx].top_field_order_cnt - cur_poc) <
-+		 abs(dpb[dpb_idx].bottom_field_order_cnt - cur_poc) ?
-+		 0x1 : 0;
-+
-+	return dma_addr | flags;
- }
- 
- u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_idx)
-@@ -355,6 +393,34 @@ u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_idx)
- 	return dpb->frame_num;
- }
- 
-+static void deduplicate_reflist(struct v4l2_h264_reflist_builder *b,
-+				struct v4l2_h264_reference *reflist)
-+{
-+	int write_idx = 0;
-+	int i;
-+
-+	if (b->cur_pic_fields == V4L2_H264_FRAME_REF) {
-+		write_idx = b->num_valid;
-+		goto done;
-+	}
-+
-+	for (i = 0; i < b->num_valid; i++) {
-+		if (!(b->cur_pic_fields == reflist[i].fields)) {
-+			reflist[write_idx++] = reflist[i];
-+			continue;
-+		}
-+	}
-+
-+done:
-+	/* Should not happen unless we have a bug in the reflist builder. */
-+	if (WARN_ON(write_idx > 16))
-+		write_idx = 16;
-+
-+	/* Clear the remaining, some streams fails otherwise */
-+	for (; write_idx < 16; write_idx++)
-+		reflist[write_idx].index = 15;
-+}
-+
- int hantro_h264_dec_prepare_run(struct hantro_ctx *ctx)
- {
- 	struct hantro_h264_dec_hw_ctx *h264_ctx = &ctx->h264_dec;
-@@ -386,15 +452,28 @@ int hantro_h264_dec_prepare_run(struct hantro_ctx *ctx)
- 	/* Update the DPB with new refs. */
- 	update_dpb(ctx);
- 
--	/* Prepare data in memory. */
--	prepare_table(ctx);
--
- 	/* Build the P/B{0,1} ref lists. */
- 	v4l2_h264_init_reflist_builder(&reflist_builder, ctrls->decode,
- 				       ctrls->sps, ctx->h264_dec.dpb);
-+	h264_ctx->cur_poc = reflist_builder.cur_pic_order_count;
-+
-+	/* Prepare data in memory. */
-+	prepare_table(ctx);
-+
- 	v4l2_h264_build_p_ref_list(&reflist_builder, h264_ctx->reflists.p);
- 	v4l2_h264_build_b_ref_lists(&reflist_builder, h264_ctx->reflists.b0,
- 				    h264_ctx->reflists.b1);
-+
-+	/* Reduce ref lists to at most 16 entries, Hantro hardware will deduce
-+	 * the actual picture lists in field through the dpb_valid,
-+	 * dpb_longterm bitmap along with the current frame parity.
-+	 */
-+	if (reflist_builder.cur_pic_fields != V4L2_H264_FRAME_REF) {
-+		deduplicate_reflist(&reflist_builder, h264_ctx->reflists.p);
-+		deduplicate_reflist(&reflist_builder, h264_ctx->reflists.b0);
-+		deduplicate_reflist(&reflist_builder, h264_ctx->reflists.b1);
-+	}
-+
- 	return 0;
- }
- 
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 292aaaabaf24..fd869369fb97 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -91,6 +91,7 @@ struct hantro_h264_dec_hw_ctx {
- 	struct hantro_h264_dec_ctrls ctrls;
- 	u32 dpb_longterm;
- 	u32 dpb_valid;
-+	s32 cur_poc;
- };
- 
- /**
--- 
-2.34.1
 
+------------------------------------------
+Started by an SCM change
+Running as SYSTEM
+Building remotely on slave2 in workspace <https://builder.linuxtv.org/job/media_stage_clang/ws/>
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir <https://builder.linuxtv.org/job/media_stage_clang/ws/.git> # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url git://linuxtv.org/media_stage.git # timeout=10
+Fetching upstream changes from git://linuxtv.org/media_stage.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.30.2'
+ > git fetch --tags --force --progress -- git://linuxtv.org/media_stage.git +refs/heads/*:refs/remotes/origin/* # timeout=30
+Seen branch in repository origin/master
+Seen 1 remote branch
+ > git show-ref --tags -d # timeout=10
+Checking out Revision 535f49a9e1f99d0bacb5d492a9dd193c3affbfc0 (origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 535f49a9e1f99d0bacb5d492a9dd193c3affbfc0 # timeout=10
+Commit message: "media: platform: imx-mipi-csis: Add dependency on VIDEO_DEV"
+ > git rev-list --no-walk 2afc1933fbc688f4ffbbdfc85126ac9b68c7e0b6 # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse 535f49a9e1f99d0bacb5d492a9dd193c3affbfc0^{commit} # timeout=10
+The recommended git tool is: NONE
+No credentials specified
+[GitCheckoutListener] Recording commits of 'git git://linuxtv.org/media_stage.git'
+[GitCheckoutListener] Found previous build 'media_stage_clang #442' that contains recorded Git commits
+[GitCheckoutListener] -> Starting recording of new commits since '2afc193'
+[GitCheckoutListener] -> Using head commit '535f49a' as starting point
+[GitCheckoutListener] -> Git commit decorator could not be created for SCM 'hudson.plugins.git.GitSCM@5c43b660'
+[GitCheckoutListener] -> Recorded one new commit
+[media_stage_clang] $ /bin/sh -xe /tmp/jenkins6551069634320450419.sh
++ export CCACHE_DIR=/var/lib/jenkins/.ccache
++ export PATH=/usr/lib/ccache:/usr/lib/ccache:/var/lib/jenkins/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/games
++ make W=1 CC=clang-12 HOSTCC=clang-12 allyesconfig
+#
+# configuration written to .config
+#
++ ./scripts/config -d MODULE_SIG -d KEYS -d IMA -d CONFIG_DEBUG_INFO -d SYSTEM_TRUSTED_KEYRING -d MODVERSIONS -d CHECK_SIGNATURE
++ make W=1 CC=clang-12 HOSTCC=clang-12 init
+  SYNC    include/config/auto.conf.cmd
+  DESCEND objtool
+  CALL    scripts/atomic/check-atomics.sh
+  CALL    scripts/checksyscalls.sh
+  CHK     include/generated/compile.h
+  CC      init/do_mounts.o
+In file included from init/do_mounts.c:22:
+In file included from ./include/linux/nfs_fs.h:31:
+In file included from ./include/linux/sunrpc/auth.h:13:
+In file included from ./include/linux/sunrpc/sched.h:19:
+./include/linux/sunrpc/xdr.h:734:10: error: result of comparison of constant 4611686018427387903 with expression of type '__u32' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+        if (len > SIZE_MAX / sizeof(*p))
+            ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+make[1]: *** [scripts/Makefile.build:288: init/do_mounts.o] Error 1
+make: *** [Makefile:1834: init] Error 2
+Build step 'Execute shell' marked build as failure
+Not sending mail to unregistered user torvalds@linux-foundation.org
+Not sending mail to unregistered user corbet@lwn.net
+Not sending mail to unregistered user willy@infradead.org
+Not sending mail to unregistered user bleung@chromium.org
+Not sending mail to unregistered user mst@redhat.com
+Not sending mail to unregistered user tiwai@suse.de
+Not sending mail to unregistered user alexandre.belloni@bootlin.com
+Not sending mail to unregistered user linkinjeon@kernel.org
+Not sending mail to unregistered user pabeni@redhat.com
+Not sending mail to unregistered user kuba@kernel.org
+Not sending mail to unregistered user lee.jones@linaro.org
+Not sending mail to unregistered user hch@lst.de
+Not sending mail to unregistered user agruenba@redhat.com
+Not sending mail to unregistered user tsbogend@alpha.franken.de
+Not sending mail to unregistered user pablo@netfilter.org
+Not sending mail to unregistered user bhelgaas@google.com
+Not sending mail to unregistered user keescook@chromium.org
+Not sending mail to unregistered user palmer@rivosinc.com
+Not sending mail to unregistered user airlied@redhat.com
+Not sending mail to unregistered user boris.ostrovsky@oracle.com
+Not sending mail to unregistered user herbert@gondor.apana.org.au
+Not sending mail to unregistered user rmk+kernel@armlinux.org.uk
+Not sending mail to unregistered user robh@kernel.org
+Not sending mail to unregistered user mcgrof@kernel.org
+Not sending mail to unregistered user dmitry.torokhov@gmail.com
+Not sending mail to unregistered user dan.j.williams@intel.com
+Not sending mail to unregistered user mkl@pengutronix.de
+Not sending mail to unregistered user bp@suse.de
+Not sending mail to unregistered user masahiroy@kernel.org
+Not sending mail to unregistered user snitzer@redhat.com
+Not sending mail to unregistered user pbonzini@redhat.com
+Not sending mail to unregistered user Jason@zx2c4.com
+Not sending mail to unregistered user axboe@kernel.dk
+Not sending mail to unregistered user jani.nikula@intel.com
+Not sending mail to unregistered user wim@linux-watchdog.org
+Not sending mail to unregistered user ast@kernel.org
+Not sending mail to unregistered user broonie@kernel.org
+Not sending mail to unregistered user fw@strlen.de
+Not sending mail to unregistered user trond.myklebust@hammerspace.com
+Not sending mail to unregistered user daniel.thompson@linaro.org
+Not sending mail to unregistered user mingo@kernel.org
+Not sending mail to unregistered user tglx@linutronix.de
+Not sending mail to unregistered user arnd@arndb.de
+Not sending mail to unregistered user rafael.j.wysocki@intel.com
+Not sending mail to unregistered user stfrench@microsoft.com
+Not sending mail to unregistered user bcain@codeaurora.org
+Not sending mail to unregistered user acme@redhat.com
+Not sending mail to unregistered user djwong@kernel.org
+Not sending mail to unregistered user linus.walleij@linaro.org
+Not sending mail to unregistered user gor@linux.ibm.com
+Not sending mail to unregistered user deller@gmx.de
+Not sending mail to unregistered user brgl@bgdev.pl
+Not sending mail to unregistered user ebiederm@xmission.com
+Not sending mail to unregistered user rostedt@goodmis.org
+Not sending mail to unregistered user pmladek@suse.com
+Not sending mail to unregistered user sboyd@kernel.org
+Not sending mail to unregistered user davem@davemloft.net
