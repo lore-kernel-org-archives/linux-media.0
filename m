@@ -2,519 +2,287 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D80F4C433EF
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8929C433FE
+	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457598AbiDEWw2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52572 "EHLO
+        id S1573214AbiDEWwf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444112AbiDEWU7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:20:59 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F178374843;
-        Tue,  5 Apr 2022 13:44:50 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 0C8071F4480B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649191489;
-        bh=/4x2dOVmlW5X3SMWtdjUn/oKHye1Q/xNZ6Y9N4e0NSw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xmm0t+cgocv3IS/j0VcDnBLz+QifOxbtn4lixay51yEGNHxYIfdj3MKHye/T4jYBX
-         UD1ogaW4x/oD5yU7KN6ABNUO7ZCPTYYuLGWxpB7SI9+42PqqbQ+uYiT9Yq09sURyh+
-         OglDRu+3MbToFilinIBoKNyJdN01qi0CZB11xyz12mOGXq7C9+Xce/lCPErvSP8eOD
-         8ltLV0b6ARXus8vGhk0ZTMSrAQsfSamyei1rKoZTI8LP96tPnsz8Ez9OU7bFlesNH7
-         EILkJdHMNHJsYNik1kaNFohvu2xAg8ukkDMd5vE4IWIaHjljm+XHmGLX/VfKEP/TaG
-         0cDlqQmf+diXQ==
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 05/24] media: h264: Use v4l2_h264_reference for reflist
-Date:   Tue,  5 Apr 2022 16:44:06 -0400
-Message-Id: <20220405204426.259074-6-nicolas.dufresne@collabora.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
-References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+        with ESMTP id S1573282AbiDESn0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 14:43:26 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59F93BBC3;
+        Tue,  5 Apr 2022 11:41:25 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id d7so4069315edn.11;
+        Tue, 05 Apr 2022 11:41:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=m8+gZUwdiEE5qvl2VnmW6rVS2LU3YP93jBijbUtmgIU=;
+        b=XYbsuW/9J3w3AJ5TIXJONDZppci86m75YL2FDgn0BaMCRRL3EXnp4ebuaOd1zQIy0u
+         XLnuET7H+rFD/Ge1BZsJmxmLwTUc/fEkgd9s71790cxoRZRMM9rqpIbga772wTCLoc2W
+         QlfVKF9CjwpkoJ7CvrAUQdS1nyxawahdgwr1MOw4b6QC7D83s62JBwP+7IdTAjZ1KyD9
+         I4zOGbI8xhi7aHYcAeKU3T7PRfBICAw0yN2UUOMNk5Cvdd17gHRT/NAa82rOWg+AUVh9
+         GxoGY0GayTi7hetZuDPDQcxFwi45JPJUAMgSiHDW2ERr9LYChHTYTzbDFGEwF2u9iZBF
+         s0PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=m8+gZUwdiEE5qvl2VnmW6rVS2LU3YP93jBijbUtmgIU=;
+        b=EcgLgX6h07i94/D+ScLsPNApcx6hMb132mn/9xPl4jIs7DLv6Nt3j7dRqZm7aYN5cc
+         ha8NDrxuPh0MDzRcCfIQQFS1rjaPthUCaeJX4UWRIZpB61Yfy94QgEvS3pPvB0d1B7p3
+         IhZ5FOmUU/GwUM32MBirPQluHHFVIqmgT9EDl5YElA7zoBdbCCzvwjs+ajtdalfQvOMq
+         Vw4jAI3zyjHtqtFm5k53yQf6iI4DT+PWoa+PSFAbmQJ8Y1gsysZ9PtMTUoAxmAqx45bU
+         dv9i+bfOJpsmc7Vr/SW3GVqP3jFvhLR+rwLIVxn/RnoAnwQw4yCLQBDUeQPQhJH/QXEY
+         8Y4w==
+X-Gm-Message-State: AOAM5320RdEZsJU/hcTvPspTKYPpOeweTtRuQNe/GP5JAEmNuEFWLLS5
+        oPgCU3mqjX01xB2Fkdte4ow=
+X-Google-Smtp-Source: ABdhPJz/BDSth3cyv5w1yUkWvK/7raS2HQuG5NyF9YhgGRBDVIEl5pHryGirWcHzIO89O4eDdGT19g==
+X-Received: by 2002:a05:6402:b3a:b0:41c:dcf9:ca65 with SMTP id bo26-20020a0564020b3a00b0041cdcf9ca65mr4980860edb.208.1649184084319;
+        Tue, 05 Apr 2022 11:41:24 -0700 (PDT)
+Received: from jernej-laptop.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id o21-20020a170906289500b006d144662b24sm5730375ejd.152.2022.04.05.11.41.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 11:41:24 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, nicolas@ndufresne.ca, hverkuil-cisco@xs4all.nl,
+        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [RFC PATCH 3/8] media: hantro: Support format filtering by depth
+Date:   Tue, 05 Apr 2022 20:41:22 +0200
+Message-ID: <4699374.GXAFRqVoOG@jernej-laptop>
+In-Reply-To: <7972feba-221c-9960-68d0-ee15ad2a4f1a@collabora.com>
+References: <20220227144926.3006585-1-jernej.skrabec@gmail.com> <20220227144926.3006585-4-jernej.skrabec@gmail.com> <7972feba-221c-9960-68d0-ee15ad2a4f1a@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In preparation for adding field decoding support, convert the byte arrays
-for reflist into array of struct v4l2_h264_reference. That struct will
-allow us to mark which field of the reference picture is being referenced.
+Dne torek, 05. april 2022 ob 18:09:03 CEST je Benjamin Gaignard napisal(a):
+> Le 27/02/2022 =E0 15:49, Jernej Skrabec a =E9crit :
+> > In preparation for supporting 10-bit formats, add mechanism which will
+> > filter formats based on pixel depth.
+> >=20
+> > Hantro G2 supports only one decoding format natively and that is based
+> > on bit depth of current video frame. Additionally, it makes no sense to
+> > upconvert bitness, so filter those out too.
+> >=20
+> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > ---
+> >=20
+> >   drivers/staging/media/hantro/hantro.h      |  4 ++
+> >   drivers/staging/media/hantro/hantro_v4l2.c | 48 ++++++++++++++++++++--
+> >   drivers/staging/media/hantro/hantro_v4l2.h |  1 +
+> >   3 files changed, 50 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/drivers/staging/media/hantro/hantro.h
+> > b/drivers/staging/media/hantro/hantro.h index 06d0f3597694..c6525ee8d89a
+> > 100644
+> > --- a/drivers/staging/media/hantro/hantro.h
+> > +++ b/drivers/staging/media/hantro/hantro.h
+> > @@ -227,6 +227,7 @@ struct hantro_dev {
+> >=20
+> >    *
+> >    * @ctrl_handler:	Control handler used to register controls.
+> >    * @jpeg_quality:	User-specified JPEG compression quality.
+> >=20
+> > + * @bit_depth:		Bit depth of current frame
+> >=20
+> >    *
+> >    * @codec_ops:		Set of operations related to codec mode.
+> >    * @postproc:		Post-processing context.
+> >=20
+> > @@ -252,6 +253,7 @@ struct hantro_ctx {
+> >=20
+> >   	struct v4l2_ctrl_handler ctrl_handler;
+> >   	int jpeg_quality;
+> >=20
+> > +	int bit_depth;
+> >=20
+> >   	const struct hantro_codec_ops *codec_ops;
+> >   	struct hantro_postproc_ctx postproc;
+> >=20
+> > @@ -278,6 +280,7 @@ struct hantro_ctx {
+> >=20
+> >    * @enc_fmt:	Format identifier for encoder registers.
+> >    * @frmsize:	Supported range of frame sizes (only for bitstream
+> >    formats).
+> >    * @postprocessed: Indicates if this format needs the post-processor.
+> >=20
+> > + * @match_depth: Indicates if format bit depth must match video bit de=
+pth
+> >=20
+> >    */
+> >  =20
+> >   struct hantro_fmt {
+> >  =20
+> >   	char *name;
+> >=20
+> > @@ -288,6 +291,7 @@ struct hantro_fmt {
+> >=20
+> >   	enum hantro_enc_fmt enc_fmt;
+> >   	struct v4l2_frmsize_stepwise frmsize;
+> >   	bool postprocessed;
+> >=20
+> > +	bool match_depth;
+> >=20
+> >   };
+> >  =20
+> >   struct hantro_reg {
+> >=20
+> > diff --git a/drivers/staging/media/hantro/hantro_v4l2.c
+> > b/drivers/staging/media/hantro/hantro_v4l2.c index
+> > e595905b3bd7..1214fa2f64ae 100644
+> > --- a/drivers/staging/media/hantro/hantro_v4l2.c
+> > +++ b/drivers/staging/media/hantro/hantro_v4l2.c
+> > @@ -64,6 +64,42 @@ hantro_get_postproc_formats(const struct hantro_ctx
+> > *ctx,>=20
+> >   	return ctx->dev->variant->postproc_fmts;
+> >  =20
+> >   }
+> >=20
+> > +int hantro_get_formath_depth(u32 fourcc)
+>=20
+> Just a typo here:
+>=20
+> s/hantro_get_formath_depth -> hantro_get_format_depth
 
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
----
- .../mediatek/vcodec/vdec/vdec_h264_req_if.c   | 17 +++-
- drivers/media/v4l2-core/v4l2-h264.c           | 33 ++++---
- .../staging/media/hantro/hantro_g1_h264_dec.c | 38 +++----
- drivers/staging/media/hantro/hantro_hw.h      |  6 +-
- .../media/hantro/rockchip_vpu2_hw_h264_dec.c  | 98 +++++++++----------
- drivers/staging/media/rkvdec/rkvdec-h264.c    | 12 +--
- include/media/v4l2-h264.h                     | 19 ++--
- 7 files changed, 116 insertions(+), 107 deletions(-)
+Good catch! I'll fix it in new series.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
-index 43542de11e9c..72c599e05a47 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
-@@ -442,9 +442,16 @@ static void update_dpb(const struct v4l2_ctrl_h264_decode_params *dec_param,
- /*
-  * The firmware expects unused reflist entries to have the value 0x20.
-  */
--static void fixup_ref_list(u8 *ref_list, size_t num_valid)
-+static void get_ref_list(u8 *ref_list, struct v4l2_h264_reflist_builder *b)
- {
--	memset(&ref_list[num_valid], 0x20, 32 - num_valid);
-+	u32 i;
-+
-+	/* FIXME mark the reference parity */
-+	for (i = 0; i < b->num_valid; i++)
-+		ref_list[i] = b->index;
-+
-+	for (; i < 32; i++)
-+		ref_list[i] = 0x20;
- }
- 
- static void get_vdec_decode_parameters(struct vdec_h264_slice_inst *inst)
-@@ -478,9 +485,9 @@ static void get_vdec_decode_parameters(struct vdec_h264_slice_inst *inst)
- 	v4l2_h264_build_p_ref_list(&reflist_builder, p0_reflist);
- 	v4l2_h264_build_b_ref_lists(&reflist_builder, b0_reflist, b1_reflist);
- 	/* Adapt the built lists to the firmware's expectations */
--	fixup_ref_list(p0_reflist, reflist_builder.num_valid);
--	fixup_ref_list(b0_reflist, reflist_builder.num_valid);
--	fixup_ref_list(b1_reflist, reflist_builder.num_valid);
-+	get_ref_list(p0_reflist, reflist_builder);
-+	get_ref_list(b0_reflist, reflist_builder);
-+	get_ref_list(b1_reflist, reflist_builder);
- 
- 	memcpy(&inst->vsi_ctx.h264_slice_params, slice_param,
- 	       sizeof(inst->vsi_ctx.h264_slice_params));
-diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
-index ac47519a9fbe..afbfcf78efe4 100644
---- a/drivers/media/v4l2-core/v4l2-h264.c
-+++ b/drivers/media/v4l2-core/v4l2-h264.c
-@@ -75,12 +75,12 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
- 			pic_order_count = dpb[i].top_field_order_cnt;
- 
- 		b->refs[i].pic_order_count = pic_order_count;
--		b->unordered_reflist[b->num_valid] = i;
-+		b->unordered_reflist[b->num_valid].index = i;
- 		b->num_valid++;
- 	}
- 
- 	for (i = b->num_valid; i < ARRAY_SIZE(b->unordered_reflist); i++)
--		b->unordered_reflist[i] = i;
-+		b->unordered_reflist[i].index = i;
- }
- EXPORT_SYMBOL_GPL(v4l2_h264_init_reflist_builder);
- 
-@@ -90,8 +90,8 @@ static int v4l2_h264_p_ref_list_cmp(const void *ptra, const void *ptrb,
- 	const struct v4l2_h264_reflist_builder *builder = data;
- 	u8 idxa, idxb;
- 
--	idxa = *((u8 *)ptra);
--	idxb = *((u8 *)ptrb);
-+	idxa = ((struct v4l2_h264_reference *)ptra)->index;
-+	idxb = ((struct v4l2_h264_reference *)ptrb)->index;
- 
- 	if (WARN_ON(idxa >= V4L2_H264_NUM_DPB_ENTRIES ||
- 		    idxb >= V4L2_H264_NUM_DPB_ENTRIES))
-@@ -125,8 +125,8 @@ static int v4l2_h264_b0_ref_list_cmp(const void *ptra, const void *ptrb,
- 	s32 poca, pocb;
- 	u8 idxa, idxb;
- 
--	idxa = *((u8 *)ptra);
--	idxb = *((u8 *)ptrb);
-+	idxa = ((struct v4l2_h264_reference *)ptra)->index;
-+	idxb = ((struct v4l2_h264_reference *)ptrb)->index;
- 
- 	if (WARN_ON(idxa >= V4L2_H264_NUM_DPB_ENTRIES ||
- 		    idxb >= V4L2_H264_NUM_DPB_ENTRIES))
-@@ -170,8 +170,8 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
- 	s32 poca, pocb;
- 	u8 idxa, idxb;
- 
--	idxa = *((u8 *)ptra);
--	idxb = *((u8 *)ptrb);
-+	idxa = ((struct v4l2_h264_reference *)ptra)->index;
-+	idxb = ((struct v4l2_h264_reference *)ptrb)->index;
- 
- 	if (WARN_ON(idxa >= V4L2_H264_NUM_DPB_ENTRIES ||
- 		    idxb >= V4L2_H264_NUM_DPB_ENTRIES))
-@@ -212,8 +212,8 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
-  * v4l2_h264_build_p_ref_list() - Build the P reference list
-  *
-  * @builder: reference list builder context
-- * @reflist: 16-bytes array used to store the P reference list. Each entry
-- *	     is an index in the DPB
-+ * @reflist: 16 sized array used to store the P reference list. Each entry
-+ *	     is a v4l2_h264_reference structure
-  *
-  * This functions builds the P reference lists. This procedure is describe in
-  * section '8.2.4 Decoding process for reference picture lists construction'
-@@ -222,7 +222,7 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
-  */
- void
- v4l2_h264_build_p_ref_list(const struct v4l2_h264_reflist_builder *builder,
--			   u8 *reflist)
-+			   struct v4l2_h264_reference *reflist)
- {
- 	memcpy(reflist, builder->unordered_reflist,
- 	       sizeof(builder->unordered_reflist[0]) * builder->num_valid);
-@@ -235,10 +235,10 @@ EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
-  * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
-  *
-  * @builder: reference list builder context
-- * @b0_reflist: 16-bytes array used to store the B0 reference list. Each entry
-- *		is an index in the DPB
-- * @b1_reflist: 16-bytes array used to store the B1 reference list. Each entry
-- *		is an index in the DPB
-+ * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
-+ *		is a v4l2_h264_reference structure
-+ * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
-+ *		is a v4l2_h264_reference structure
-  *
-  * This functions builds the B0/B1 reference lists. This procedure is described
-  * in section '8.2.4 Decoding process for reference picture lists construction'
-@@ -247,7 +247,8 @@ EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
-  */
- void
- v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
--			    u8 *b0_reflist, u8 *b1_reflist)
-+			    struct v4l2_h264_reference *b0_reflist,
-+			    struct v4l2_h264_reference *b1_reflist)
- {
- 	memcpy(b0_reflist, builder->unordered_reflist,
- 	       sizeof(builder->unordered_reflist[0]) * builder->num_valid);
-diff --git a/drivers/staging/media/hantro/hantro_g1_h264_dec.c b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-index f49dbfb8a843..9de7f05eff2a 100644
---- a/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-@@ -126,7 +126,7 @@ static void set_params(struct hantro_ctx *ctx, struct vb2_v4l2_buffer *src_buf)
- 
- static void set_ref(struct hantro_ctx *ctx)
- {
--	const u8 *b0_reflist, *b1_reflist, *p_reflist;
-+	const struct v4l2_h264_reference *b0_reflist, *b1_reflist, *p_reflist;
- 	struct hantro_dev *vpu = ctx->dev;
- 	int reg_num;
- 	u32 reg;
-@@ -157,12 +157,12 @@ static void set_ref(struct hantro_ctx *ctx)
- 	 */
- 	reg_num = 0;
- 	for (i = 0; i < 15; i += 3) {
--		reg = G1_REG_BD_REF_PIC_BINIT_RLIST_F0(b0_reflist[i]) |
--		      G1_REG_BD_REF_PIC_BINIT_RLIST_F1(b0_reflist[i + 1]) |
--		      G1_REG_BD_REF_PIC_BINIT_RLIST_F2(b0_reflist[i + 2]) |
--		      G1_REG_BD_REF_PIC_BINIT_RLIST_B0(b1_reflist[i]) |
--		      G1_REG_BD_REF_PIC_BINIT_RLIST_B1(b1_reflist[i + 1]) |
--		      G1_REG_BD_REF_PIC_BINIT_RLIST_B2(b1_reflist[i + 2]);
-+		reg = G1_REG_BD_REF_PIC_BINIT_RLIST_F0(b0_reflist[i].index) |
-+		      G1_REG_BD_REF_PIC_BINIT_RLIST_F1(b0_reflist[i + 1].index) |
-+		      G1_REG_BD_REF_PIC_BINIT_RLIST_F2(b0_reflist[i + 2].index) |
-+		      G1_REG_BD_REF_PIC_BINIT_RLIST_B0(b1_reflist[i].index) |
-+		      G1_REG_BD_REF_PIC_BINIT_RLIST_B1(b1_reflist[i + 1].index) |
-+		      G1_REG_BD_REF_PIC_BINIT_RLIST_B2(b1_reflist[i + 2].index);
- 		vdpu_write_relaxed(vpu, reg, G1_REG_BD_REF_PIC(reg_num++));
- 	}
- 
-@@ -171,12 +171,12 @@ static void set_ref(struct hantro_ctx *ctx)
- 	 * of forward and backward reference picture lists and first 4 entries
- 	 * of P forward picture list.
- 	 */
--	reg = G1_REG_BD_P_REF_PIC_BINIT_RLIST_F15(b0_reflist[15]) |
--	      G1_REG_BD_P_REF_PIC_BINIT_RLIST_B15(b1_reflist[15]) |
--	      G1_REG_BD_P_REF_PIC_PINIT_RLIST_F0(p_reflist[0]) |
--	      G1_REG_BD_P_REF_PIC_PINIT_RLIST_F1(p_reflist[1]) |
--	      G1_REG_BD_P_REF_PIC_PINIT_RLIST_F2(p_reflist[2]) |
--	      G1_REG_BD_P_REF_PIC_PINIT_RLIST_F3(p_reflist[3]);
-+	reg = G1_REG_BD_P_REF_PIC_BINIT_RLIST_F15(b0_reflist[15].index) |
-+	      G1_REG_BD_P_REF_PIC_BINIT_RLIST_B15(b1_reflist[15].index) |
-+	      G1_REG_BD_P_REF_PIC_PINIT_RLIST_F0(p_reflist[0].index) |
-+	      G1_REG_BD_P_REF_PIC_PINIT_RLIST_F1(p_reflist[1].index) |
-+	      G1_REG_BD_P_REF_PIC_PINIT_RLIST_F2(p_reflist[2].index) |
-+	      G1_REG_BD_P_REF_PIC_PINIT_RLIST_F3(p_reflist[3].index);
- 	vdpu_write_relaxed(vpu, reg, G1_REG_BD_P_REF_PIC);
- 
- 	/*
-@@ -185,12 +185,12 @@ static void set_ref(struct hantro_ctx *ctx)
- 	 */
- 	reg_num = 0;
- 	for (i = 4; i < HANTRO_H264_DPB_SIZE; i += 6) {
--		reg = G1_REG_FWD_PIC_PINIT_RLIST_F0(p_reflist[i]) |
--		      G1_REG_FWD_PIC_PINIT_RLIST_F1(p_reflist[i + 1]) |
--		      G1_REG_FWD_PIC_PINIT_RLIST_F2(p_reflist[i + 2]) |
--		      G1_REG_FWD_PIC_PINIT_RLIST_F3(p_reflist[i + 3]) |
--		      G1_REG_FWD_PIC_PINIT_RLIST_F4(p_reflist[i + 4]) |
--		      G1_REG_FWD_PIC_PINIT_RLIST_F5(p_reflist[i + 5]);
-+		reg = G1_REG_FWD_PIC_PINIT_RLIST_F0(p_reflist[i].index) |
-+		      G1_REG_FWD_PIC_PINIT_RLIST_F1(p_reflist[i + 1].index) |
-+		      G1_REG_FWD_PIC_PINIT_RLIST_F2(p_reflist[i + 2].index) |
-+		      G1_REG_FWD_PIC_PINIT_RLIST_F3(p_reflist[i + 3].index) |
-+		      G1_REG_FWD_PIC_PINIT_RLIST_F4(p_reflist[i + 4].index) |
-+		      G1_REG_FWD_PIC_PINIT_RLIST_F5(p_reflist[i + 5].index);
- 		vdpu_write_relaxed(vpu, reg, G1_REG_FWD_PIC(reg_num++));
- 	}
- 
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index ed018e293ba0..2bc6b8f088f5 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -69,9 +69,9 @@ struct hantro_h264_dec_ctrls {
-  * @b1:		B1 reflist
-  */
- struct hantro_h264_dec_reflists {
--	u8 p[HANTRO_H264_DPB_SIZE];
--	u8 b0[HANTRO_H264_DPB_SIZE];
--	u8 b1[HANTRO_H264_DPB_SIZE];
-+	struct v4l2_h264_reference p[HANTRO_H264_DPB_SIZE];
-+	struct v4l2_h264_reference b0[HANTRO_H264_DPB_SIZE];
-+	struct v4l2_h264_reference b1[HANTRO_H264_DPB_SIZE];
- };
- 
- /**
-diff --git a/drivers/staging/media/hantro/rockchip_vpu2_hw_h264_dec.c b/drivers/staging/media/hantro/rockchip_vpu2_hw_h264_dec.c
-index 64a6330475eb..46c1a83bcc4e 100644
---- a/drivers/staging/media/hantro/rockchip_vpu2_hw_h264_dec.c
-+++ b/drivers/staging/media/hantro/rockchip_vpu2_hw_h264_dec.c
-@@ -298,7 +298,7 @@ static void set_params(struct hantro_ctx *ctx, struct vb2_v4l2_buffer *src_buf)
- 
- static void set_ref(struct hantro_ctx *ctx)
- {
--	const u8 *b0_reflist, *b1_reflist, *p_reflist;
-+	const struct v4l2_h264_reference *b0_reflist, *b1_reflist, *p_reflist;
- 	struct hantro_dev *vpu = ctx->dev;
- 	u32 reg;
- 	int i;
-@@ -307,20 +307,20 @@ static void set_ref(struct hantro_ctx *ctx)
- 	b1_reflist = ctx->h264_dec.reflists.b1;
- 	p_reflist = ctx->h264_dec.reflists.p;
- 
--	reg = VDPU_REG_PINIT_RLIST_F9(p_reflist[9]) |
--	      VDPU_REG_PINIT_RLIST_F8(p_reflist[8]) |
--	      VDPU_REG_PINIT_RLIST_F7(p_reflist[7]) |
--	      VDPU_REG_PINIT_RLIST_F6(p_reflist[6]) |
--	      VDPU_REG_PINIT_RLIST_F5(p_reflist[5]) |
--	      VDPU_REG_PINIT_RLIST_F4(p_reflist[4]);
-+	reg = VDPU_REG_PINIT_RLIST_F9(p_reflist[9].index) |
-+	      VDPU_REG_PINIT_RLIST_F8(p_reflist[8].index) |
-+	      VDPU_REG_PINIT_RLIST_F7(p_reflist[7].index) |
-+	      VDPU_REG_PINIT_RLIST_F6(p_reflist[6].index) |
-+	      VDPU_REG_PINIT_RLIST_F5(p_reflist[5].index) |
-+	      VDPU_REG_PINIT_RLIST_F4(p_reflist[4].index);
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(74));
- 
--	reg = VDPU_REG_PINIT_RLIST_F15(p_reflist[15]) |
--	      VDPU_REG_PINIT_RLIST_F14(p_reflist[14]) |
--	      VDPU_REG_PINIT_RLIST_F13(p_reflist[13]) |
--	      VDPU_REG_PINIT_RLIST_F12(p_reflist[12]) |
--	      VDPU_REG_PINIT_RLIST_F11(p_reflist[11]) |
--	      VDPU_REG_PINIT_RLIST_F10(p_reflist[10]);
-+	reg = VDPU_REG_PINIT_RLIST_F15(p_reflist[15].index) |
-+	      VDPU_REG_PINIT_RLIST_F14(p_reflist[14].index) |
-+	      VDPU_REG_PINIT_RLIST_F13(p_reflist[13].index) |
-+	      VDPU_REG_PINIT_RLIST_F12(p_reflist[12].index) |
-+	      VDPU_REG_PINIT_RLIST_F11(p_reflist[11].index) |
-+	      VDPU_REG_PINIT_RLIST_F10(p_reflist[10].index);
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(75));
- 
- 	reg = VDPU_REG_REFER1_NBR(hantro_h264_get_ref_nbr(ctx, 1)) |
-@@ -355,54 +355,54 @@ static void set_ref(struct hantro_ctx *ctx)
- 	      VDPU_REG_REFER14_NBR(hantro_h264_get_ref_nbr(ctx, 14));
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(83));
- 
--	reg = VDPU_REG_BINIT_RLIST_F5(b0_reflist[5]) |
--	      VDPU_REG_BINIT_RLIST_F4(b0_reflist[4]) |
--	      VDPU_REG_BINIT_RLIST_F3(b0_reflist[3]) |
--	      VDPU_REG_BINIT_RLIST_F2(b0_reflist[2]) |
--	      VDPU_REG_BINIT_RLIST_F1(b0_reflist[1]) |
--	      VDPU_REG_BINIT_RLIST_F0(b0_reflist[0]);
-+	reg = VDPU_REG_BINIT_RLIST_F5(b0_reflist[5].index) |
-+	      VDPU_REG_BINIT_RLIST_F4(b0_reflist[4].index) |
-+	      VDPU_REG_BINIT_RLIST_F3(b0_reflist[3].index) |
-+	      VDPU_REG_BINIT_RLIST_F2(b0_reflist[2].index) |
-+	      VDPU_REG_BINIT_RLIST_F1(b0_reflist[1].index) |
-+	      VDPU_REG_BINIT_RLIST_F0(b0_reflist[0].index);
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(100));
- 
--	reg = VDPU_REG_BINIT_RLIST_F11(b0_reflist[11]) |
--	      VDPU_REG_BINIT_RLIST_F10(b0_reflist[10]) |
--	      VDPU_REG_BINIT_RLIST_F9(b0_reflist[9]) |
--	      VDPU_REG_BINIT_RLIST_F8(b0_reflist[8]) |
--	      VDPU_REG_BINIT_RLIST_F7(b0_reflist[7]) |
--	      VDPU_REG_BINIT_RLIST_F6(b0_reflist[6]);
-+	reg = VDPU_REG_BINIT_RLIST_F11(b0_reflist[11].index) |
-+	      VDPU_REG_BINIT_RLIST_F10(b0_reflist[10].index) |
-+	      VDPU_REG_BINIT_RLIST_F9(b0_reflist[9].index) |
-+	      VDPU_REG_BINIT_RLIST_F8(b0_reflist[8].index) |
-+	      VDPU_REG_BINIT_RLIST_F7(b0_reflist[7].index) |
-+	      VDPU_REG_BINIT_RLIST_F6(b0_reflist[6].index);
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(101));
- 
--	reg = VDPU_REG_BINIT_RLIST_F15(b0_reflist[15]) |
--	      VDPU_REG_BINIT_RLIST_F14(b0_reflist[14]) |
--	      VDPU_REG_BINIT_RLIST_F13(b0_reflist[13]) |
--	      VDPU_REG_BINIT_RLIST_F12(b0_reflist[12]);
-+	reg = VDPU_REG_BINIT_RLIST_F15(b0_reflist[15].index) |
-+	      VDPU_REG_BINIT_RLIST_F14(b0_reflist[14].index) |
-+	      VDPU_REG_BINIT_RLIST_F13(b0_reflist[13].index) |
-+	      VDPU_REG_BINIT_RLIST_F12(b0_reflist[12].index);
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(102));
- 
--	reg = VDPU_REG_BINIT_RLIST_B5(b1_reflist[5]) |
--	      VDPU_REG_BINIT_RLIST_B4(b1_reflist[4]) |
--	      VDPU_REG_BINIT_RLIST_B3(b1_reflist[3]) |
--	      VDPU_REG_BINIT_RLIST_B2(b1_reflist[2]) |
--	      VDPU_REG_BINIT_RLIST_B1(b1_reflist[1]) |
--	      VDPU_REG_BINIT_RLIST_B0(b1_reflist[0]);
-+	reg = VDPU_REG_BINIT_RLIST_B5(b1_reflist[5].index) |
-+	      VDPU_REG_BINIT_RLIST_B4(b1_reflist[4].index) |
-+	      VDPU_REG_BINIT_RLIST_B3(b1_reflist[3].index) |
-+	      VDPU_REG_BINIT_RLIST_B2(b1_reflist[2].index) |
-+	      VDPU_REG_BINIT_RLIST_B1(b1_reflist[1].index) |
-+	      VDPU_REG_BINIT_RLIST_B0(b1_reflist[0].index);
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(103));
- 
--	reg = VDPU_REG_BINIT_RLIST_B11(b1_reflist[11]) |
--	      VDPU_REG_BINIT_RLIST_B10(b1_reflist[10]) |
--	      VDPU_REG_BINIT_RLIST_B9(b1_reflist[9]) |
--	      VDPU_REG_BINIT_RLIST_B8(b1_reflist[8]) |
--	      VDPU_REG_BINIT_RLIST_B7(b1_reflist[7]) |
--	      VDPU_REG_BINIT_RLIST_B6(b1_reflist[6]);
-+	reg = VDPU_REG_BINIT_RLIST_B11(b1_reflist[11].index) |
-+	      VDPU_REG_BINIT_RLIST_B10(b1_reflist[10].index) |
-+	      VDPU_REG_BINIT_RLIST_B9(b1_reflist[9].index) |
-+	      VDPU_REG_BINIT_RLIST_B8(b1_reflist[8].index) |
-+	      VDPU_REG_BINIT_RLIST_B7(b1_reflist[7].index) |
-+	      VDPU_REG_BINIT_RLIST_B6(b1_reflist[6].index);
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(104));
- 
--	reg = VDPU_REG_BINIT_RLIST_B15(b1_reflist[15]) |
--	      VDPU_REG_BINIT_RLIST_B14(b1_reflist[14]) |
--	      VDPU_REG_BINIT_RLIST_B13(b1_reflist[13]) |
--	      VDPU_REG_BINIT_RLIST_B12(b1_reflist[12]);
-+	reg = VDPU_REG_BINIT_RLIST_B15(b1_reflist[15].index) |
-+	      VDPU_REG_BINIT_RLIST_B14(b1_reflist[14].index) |
-+	      VDPU_REG_BINIT_RLIST_B13(b1_reflist[13].index) |
-+	      VDPU_REG_BINIT_RLIST_B12(b1_reflist[12].index);
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(105));
- 
--	reg = VDPU_REG_PINIT_RLIST_F3(p_reflist[3]) |
--	      VDPU_REG_PINIT_RLIST_F2(p_reflist[2]) |
--	      VDPU_REG_PINIT_RLIST_F1(p_reflist[1]) |
--	      VDPU_REG_PINIT_RLIST_F0(p_reflist[0]);
-+	reg = VDPU_REG_PINIT_RLIST_F3(p_reflist[3].index) |
-+	      VDPU_REG_PINIT_RLIST_F2(p_reflist[2].index) |
-+	      VDPU_REG_PINIT_RLIST_F1(p_reflist[1].index) |
-+	      VDPU_REG_PINIT_RLIST_F0(p_reflist[0].index);
- 	vdpu_write_relaxed(vpu, reg, VDPU_SWREG(106));
- 
- 	reg = VDPU_REG_REFER_LTERM_E(ctx->h264_dec.dpb_longterm);
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index 951e19231da2..3c7f3d87fab4 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -100,9 +100,9 @@ struct rkvdec_h264_priv_tbl {
- #define RKVDEC_H264_DPB_SIZE 16
- 
- struct rkvdec_h264_reflists {
--	u8 p[RKVDEC_H264_DPB_SIZE];
--	u8 b0[RKVDEC_H264_DPB_SIZE];
--	u8 b1[RKVDEC_H264_DPB_SIZE];
-+	struct v4l2_h264_reference p[RKVDEC_H264_DPB_SIZE];
-+	struct v4l2_h264_reference b0[RKVDEC_H264_DPB_SIZE];
-+	struct v4l2_h264_reference b1[RKVDEC_H264_DPB_SIZE];
- 	u8 num_valid;
- };
- 
-@@ -767,13 +767,13 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
- 
- 			switch (j) {
- 			case 0:
--				idx = h264_ctx->reflists.p[i];
-+				idx = h264_ctx->reflists.p[i].index;
- 				break;
- 			case 1:
--				idx = h264_ctx->reflists.b0[i];
-+				idx = h264_ctx->reflists.b0[i].index;
- 				break;
- 			case 2:
--				idx = h264_ctx->reflists.b1[i];
-+				idx = h264_ctx->reflists.b1[i].index;
- 				break;
- 			}
- 
-diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
-index 4b1c71c935e0..ef9a894e3c32 100644
---- a/include/media/v4l2-h264.h
-+++ b/include/media/v4l2-h264.h
-@@ -37,7 +37,7 @@ struct v4l2_h264_reflist_builder {
- 		u16 longterm : 1;
- 	} refs[V4L2_H264_NUM_DPB_ENTRIES];
- 	s32 cur_pic_order_count;
--	u8 unordered_reflist[V4L2_H264_NUM_DPB_ENTRIES];
-+	struct v4l2_h264_reference unordered_reflist[V4L2_H264_NUM_DPB_ENTRIES];
- 	u8 num_valid;
- };
- 
-@@ -51,10 +51,10 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
-  * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
-  *
-  * @builder: reference list builder context
-- * @b0_reflist: 16-bytes array used to store the B0 reference list. Each entry
-- *		is an index in the DPB
-- * @b1_reflist: 16-bytes array used to store the B1 reference list. Each entry
-- *		is an index in the DPB
-+ * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
-+ *		is a v4l2_h264_reference structure
-+ * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
-+ *		is a v4l2_h264_reference structure
-  *
-  * This functions builds the B0/B1 reference lists. This procedure is described
-  * in section '8.2.4 Decoding process for reference picture lists construction'
-@@ -63,14 +63,15 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
-  */
- void
- v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
--			    u8 *b0_reflist, u8 *b1_reflist);
-+			    struct v4l2_h264_reference *b0_reflist,
-+			    struct v4l2_h264_reference *b1_reflist);
- 
- /**
-  * v4l2_h264_build_p_ref_list() - Build the P reference list
-  *
-  * @builder: reference list builder context
-- * @reflist: 16-bytes array used to store the P reference list. Each entry
-- *	     is an index in the DPB
-+ * @reflist: 16 sized array used to store the P reference list. Each entry
-+ *	     is a v4l2_h264_reference structure
-  *
-  * This functions builds the P reference lists. This procedure is describe in
-  * section '8.2.4 Decoding process for reference picture lists construction'
-@@ -79,6 +80,6 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
-  */
- void
- v4l2_h264_build_p_ref_list(const struct v4l2_h264_reflist_builder *builder,
--			   u8 *reflist);
-+			   struct v4l2_h264_reference *reflist);
- 
- #endif /* _MEDIA_V4L2_H264_H */
--- 
-2.34.1
+Best regards,
+Jernej
+
+>=20
+> regards
+> Benjamin
+>=20
+> > +{
+> > +	switch (fourcc) {
+> > +	case V4L2_PIX_FMT_P010:
+> > +	case V4L2_PIX_FMT_P010_4L4:
+> > +		return 10;
+> > +	default:
+> > +		return 8;
+> > +	}
+> > +}
+> > +
+> > +static bool
+> > +hantro_check_depth_match(const struct hantro_ctx *ctx,
+> > +			 const struct hantro_fmt *fmt)
+> > +{
+> > +	int fmt_depth, ctx_depth =3D 8;
+> > +
+> > +	if (!fmt->match_depth && !fmt->postprocessed)
+> > +		return true;
+> > +
+> > +	/* 0 means default depth, which is 8 */
+> > +	if (ctx->bit_depth)
+> > +		ctx_depth =3D ctx->bit_depth;
+> > +
+> > +	fmt_depth =3D hantro_get_formath_depth(fmt->fourcc);
+> > +
+> > +	/*
+> > +	 * Allow only downconversion for postproc formats for now.
+> > +	 * It may be possible to relax that on some HW.
+> > +	 */
+> > +	if (!fmt->match_depth)
+> > +		return fmt_depth <=3D ctx_depth;
+> > +
+> > +	return fmt_depth =3D=3D ctx_depth;
+> > +}
+> > +
+> >=20
+> >   static const struct hantro_fmt *
+> >   hantro_find_format(const struct hantro_ctx *ctx, u32 fourcc)
+> >   {
+> >=20
+> > @@ -91,7 +127,8 @@ hantro_get_default_fmt(const struct hantro_ctx *ctx,
+> > bool bitstream)>=20
+> >   	formats =3D hantro_get_formats(ctx, &num_fmts);
+> >   	for (i =3D 0; i < num_fmts; i++) {
+> >   =09
+> >   		if (bitstream =3D=3D (formats[i].codec_mode !=3D
+> >=20
+> > -				  HANTRO_MODE_NONE))
+> > +				  HANTRO_MODE_NONE) &&
+> > +		    hantro_check_depth_match(ctx, &formats[i]))
+> >=20
+> >   			return &formats[i];
+> >   =09
+> >   	}
+> >   	return NULL;
+> >=20
+> > @@ -163,11 +200,13 @@ static int vidioc_enum_fmt(struct file *file, void
+> > *priv,>=20
+> >   	formats =3D hantro_get_formats(ctx, &num_fmts);
+> >   	for (i =3D 0; i < num_fmts; i++) {
+> >   =09
+> >   		bool mode_none =3D formats[i].codec_mode =3D=3D=20
+HANTRO_MODE_NONE;
+> >=20
+> > +		fmt =3D &formats[i];
+> >=20
+> >   		if (skip_mode_none =3D=3D mode_none)
+> >   	=09
+> >   			continue;
+> >=20
+> > +		if (!hantro_check_depth_match(ctx, fmt))
+> > +			continue;
+> >=20
+> >   		if (j =3D=3D f->index) {
+> >=20
+> > -			fmt =3D &formats[i];
+> >=20
+> >   			f->pixelformat =3D fmt->fourcc;
+> >   			return 0;
+> >   	=09
+> >   		}
+> >=20
+> > @@ -183,8 +222,11 @@ static int vidioc_enum_fmt(struct file *file, void
+> > *priv,>=20
+> >   		return -EINVAL;
+> >   =09
+> >   	formats =3D hantro_get_postproc_formats(ctx, &num_fmts);
+> >   	for (i =3D 0; i < num_fmts; i++) {
+> >=20
+> > +		fmt =3D &formats[i];
+> > +
+> > +		if (!hantro_check_depth_match(ctx, fmt))
+> > +			continue;
+> >=20
+> >   		if (j =3D=3D f->index) {
+> >=20
+> > -			fmt =3D &formats[i];
+> >=20
+> >   			f->pixelformat =3D fmt->fourcc;
+> >   			return 0;
+> >   	=09
+> >   		}
+> >=20
+> > diff --git a/drivers/staging/media/hantro/hantro_v4l2.h
+> > b/drivers/staging/media/hantro/hantro_v4l2.h index
+> > 18bc682c8556..f4a5905ed518 100644
+> > --- a/drivers/staging/media/hantro/hantro_v4l2.h
+> > +++ b/drivers/staging/media/hantro/hantro_v4l2.h
+> > @@ -22,5 +22,6 @@ extern const struct v4l2_ioctl_ops hantro_ioctl_ops;
+> >=20
+> >   extern const struct vb2_ops hantro_queue_ops;
+> >  =20
+> >   void hantro_reset_fmts(struct hantro_ctx *ctx);
+> >=20
+> > +int hantro_get_formath_depth(u32 fourcc);
+> >=20
+> >   #endif /* HANTRO_V4L2_H_ */
+
+
+
 
