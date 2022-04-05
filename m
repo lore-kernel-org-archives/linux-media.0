@@ -2,41 +2,39 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48282C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57983C43217
 	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:02:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452958AbiDEWv5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        id S1452299AbiDEWvw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444214AbiDEWVB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:21:01 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58689BAD4;
-        Tue,  5 Apr 2022 13:45:07 -0700 (PDT)
+        with ESMTP id S1444148AbiDEWVA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:21:00 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13AA75215;
+        Tue,  5 Apr 2022 13:44:59 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id C469B1F44840
+        with ESMTPSA id 19F1B1F44826
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649191506;
-        bh=sDJRbDHtwMEd4Z1AC3fnth9aVik8zbzUMGexAc+afw0=;
+        s=mail; t=1649191498;
+        bh=SqPD7oTR+3FuYunP0khMcdvMcGz4bOvgAm9j9vzmvSk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DPvz1ZbvaFugvYyOfrcTyPIuHXXuFXkDY7tNFLOh6LnAEsLHeMoMJkDDqTI3gi17U
-         EHrVNOHmlXL+3kshMEXe/cWztY9kf6lIUtLvjFdi8afLlam5jFnF3hBss3bE4iGXqB
-         Cpn5V0Sf8udrgkU6uvEfixu5gljp5r7VZ7Cn1TddHlQx3YqPyXwOFbm/YmEJsbpjzy
-         wr7pFKSl1KVPuxX8xu4HHk6D73iThiRqBBXwsolwF31hrYJEWzDdkad2yAPkCOhEW2
-         Ea67FGWiWHf5BKs4tOlVeU9xcl1xEhb+vjkJVs3GhcZK7uZjpYjVwJFRZ5btbgXQXR
-         UEZ+WS8AgXYyw==
+        b=e98qXzKjRZFuL/1d64MdD/TSfoAuS+Rtbo1M33dWwT8qxn1uhQ7PvPAwsAZrsYtnV
+         QQhRUOSl1PTbGUwxM+dGBF6iVLVERKpfP4wx66wBrzf1aS39TbPzHtztbeY6k7mMUu
+         Az2rMIaHgmJuhS4AxGnabihK857+cIB8+6yErqIxbyd8syfyFWTTezxqEwEzvtwxGy
+         zuO//SrfBlNw8DW8ttI7xS+A7TWnzY3Sww+oqSSYBDUopTOFivBwlIkseGHK0nvlTf
+         n6M5KFFBALD5wfkLqqlr5HL9+ta52NxEfdqRfSuJnku56+nW3l4YXiSiYGW9Xozl2o
+         BufRJcuQ0V0dA==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH v3 15/24] media: rkvdec: Move H264 SPS validation in rkvdec-h264
-Date:   Tue,  5 Apr 2022 16:44:16 -0400
-Message-Id: <20220405204426.259074-16-nicolas.dufresne@collabora.com>
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v3 11/24] media: v4l2: Reorder field reflist
+Date:   Tue,  5 Apr 2022 16:44:12 -0400
+Message-Id: <20220405204426.259074-12-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
 References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
@@ -46,100 +44,86 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-No function change, this moves H264 specific validation into the H264
-specific code. This is in preparation of improving this validation and
-reusing at streamone.
+As per spec, the field reflist requires interleaving top and bottom
+field in a specific way that does not fit inside the sort operation.
+The process consist of alternating references parity, starting with
+a reference of the same parity as the current picture. This
+processs is done twice, once for short term references and a second
+time for the long term references.
 
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 ---
- drivers/staging/media/rkvdec/rkvdec-h264.c | 23 ++++++++++++++++++++++
- drivers/staging/media/rkvdec/rkvdec.c      | 23 ++++++----------------
- drivers/staging/media/rkvdec/rkvdec.h      |  1 +
- 3 files changed, 30 insertions(+), 17 deletions(-)
+ drivers/media/v4l2-core/v4l2-h264.c | 42 +++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index 8d44a884a52e..0dcbcb1bac80 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -1137,9 +1137,32 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
- 	return 0;
+diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
+index 7e1eba03099a..d2d1f3bed7e8 100644
+--- a/drivers/media/v4l2-core/v4l2-h264.c
++++ b/drivers/media/v4l2-core/v4l2-h264.c
+@@ -244,6 +244,40 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
+ 	return poca < pocb ? -1 : 1;
  }
  
-+static int rkvdec_h264_try_ctrl(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
++/*
++ * The references need to be reordered so that references are alternating
++ * between top and bottom field references starting with the current picture
++ * parity. This has to be * done for short term and long term references
++ * separately.
++ */
++static void reorder_field_reflist(const struct v4l2_h264_reflist_builder *b,
++				  struct v4l2_h264_reference *reflist)
 +{
-+	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
-+		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
-+		/*
-+		 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
-+		 * but it's currently broken in the driver.
-+		 * Reject them for now, until it's fixed.
-+		 */
-+		if (sps->chroma_format_idc > 1)
-+			/* Only 4:0:0 and 4:2:0 are supported */
-+			return -EINVAL;
-+		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
-+			/* Luma and chroma bit depth mismatch */
-+			return -EINVAL;
-+		if (sps->bit_depth_luma_minus8 != 0)
-+			/* Only 8-bit is supported */
-+			return -EINVAL;
++	struct v4l2_h264_reference tmplist[V4L2_H264_REF_LIST_LEN];
++	u8 lt, i = 0, j = 0, k = 0;
++
++	memcpy(tmplist, reflist, sizeof(tmplist[0]) * b->num_valid);
++
++	for (lt = 0; lt <= 1; lt++) {
++		do {
++			for (; i < b->num_valid && b->refs[tmplist[i].index].longterm == lt; i++) {
++				if (tmplist[i].fields == b->cur_pic_fields) {
++					reflist[k++] = tmplist[i++];
++					break;
++				}
++			}
++
++			for (; j < b->num_valid && b->refs[tmplist[j].index].longterm == lt; j++) {
++				if (tmplist[j].fields != b->cur_pic_fields) {
++					reflist[k++] = tmplist[j++];
++					break;
++				}
++			}
++		} while ((i < b->num_valid && b->refs[tmplist[i].index].longterm == lt) ||
++			 (j < b->num_valid && b->refs[tmplist[j].index].longterm == lt));
 +	}
-+	return 0;
 +}
 +
- const struct rkvdec_coded_fmt_ops rkvdec_h264_fmt_ops = {
- 	.adjust_fmt = rkvdec_h264_adjust_fmt,
- 	.start = rkvdec_h264_start,
- 	.stop = rkvdec_h264_stop,
- 	.run = rkvdec_h264_run,
-+	.try_ctrl = rkvdec_h264_try_ctrl,
- };
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index 2df8cf4883e2..e3d44d5b35f3 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -29,23 +29,12 @@
- 
- static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
+ static char ref_type_to_char (u8 ref_type)
  {
--	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
--		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
--		/*
--		 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
--		 * but it's currently broken in the driver.
--		 * Reject them for now, until it's fixed.
--		 */
--		if (sps->chroma_format_idc > 1)
--			/* Only 4:0:0 and 4:2:0 are supported */
--			return -EINVAL;
--		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
--			/* Luma and chroma bit depth mismatch */
--			return -EINVAL;
--		if (sps->bit_depth_luma_minus8 != 0)
--			/* Only 8-bit is supported */
--			return -EINVAL;
--	}
-+	struct rkvdec_ctx *ctx = container_of(ctrl->handler, struct rkvdec_ctx, ctrl_hdl);
-+	const struct rkvdec_coded_fmt_desc *desc = ctx->coded_fmt_desc;
+ 	switch (ref_type) {
+@@ -346,6 +380,9 @@ v4l2_h264_build_p_ref_list(const struct v4l2_h264_reflist_builder *builder,
+ 	sort_r(reflist, builder->num_valid, sizeof(*reflist),
+ 	       v4l2_h264_p_ref_list_cmp, NULL, builder);
+ 
++	if (builder->cur_pic_fields != V4L2_H264_FRAME_REF)
++		reorder_field_reflist(builder, reflist);
 +
-+	if (desc->ops->try_ctrl)
-+		return desc->ops->try_ctrl(ctx, ctrl);
-+
- 	return 0;
+ 	print_ref_list_p(builder, reflist);
  }
+ EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
+@@ -379,6 +416,11 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
+ 	sort_r(b1_reflist, builder->num_valid, sizeof(*b1_reflist),
+ 	       v4l2_h264_b1_ref_list_cmp, NULL, builder);
  
-diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
-index 2f4ea1786b93..9df0fba799a4 100644
---- a/drivers/staging/media/rkvdec/rkvdec.h
-+++ b/drivers/staging/media/rkvdec/rkvdec.h
-@@ -72,6 +72,7 @@ struct rkvdec_coded_fmt_ops {
- 	void (*done)(struct rkvdec_ctx *ctx, struct vb2_v4l2_buffer *src_buf,
- 		     struct vb2_v4l2_buffer *dst_buf,
- 		     enum vb2_buffer_state result);
-+	int (*try_ctrl)(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl);
- };
- 
- struct rkvdec_coded_fmt_desc {
++	if (builder->cur_pic_fields != V4L2_H264_FRAME_REF) {
++		reorder_field_reflist(builder, b0_reflist);
++		reorder_field_reflist(builder, b1_reflist);
++	}
++
+ 	if (builder->num_valid > 1 &&
+ 	    !memcmp(b1_reflist, b0_reflist, builder->num_valid))
+ 		swap(b1_reflist[0], b1_reflist[1]);
 -- 
 2.34.1
 
