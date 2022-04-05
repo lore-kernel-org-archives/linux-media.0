@@ -2,63 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43416C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F034C4167B
 	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573833AbiDEWx1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
+        id S1573843AbiDEWxa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457523AbiDEQDU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 12:03:20 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBDB3B4
-        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 09:00:05 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id t2so11765755qtw.9
-        for <linux-media@vger.kernel.org>; Tue, 05 Apr 2022 09:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=FG0tvdnxIVqeRhoUiTGCMEpSEQ0H8e8w3d2SXzn4rws=;
-        b=a1wYsbOy9fVRrE48NenmQbhMFXlwq//PRR7LH0GkOLrwdPvh1Ok458zk41NMXYmQbs
-         vd9fAODO3ObWWhNV4fUywmboY6dBymmmhI7GlPTmvXbDi61wvLX6ma7kJO4nqWDNduv1
-         JlW0F4jY4/imTSA/mJDsF0Dx2TuhxoEgLOpzC0bUZ7vd24+QHcUkv43OMl4iMsEC6koc
-         nVTrTmHF31dJd5Kg832Gfqf6d1GwKYMY/koI9cKFMaju2BV7Vii6+mcYnlN5ebenJHaW
-         Xi0k95+Ak1dMVaMr9reSRPaq5+m3eukeC2CnyuCOVIVTMrdHC6aGyUsgInZF6Tg/5NVc
-         Zfbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=FG0tvdnxIVqeRhoUiTGCMEpSEQ0H8e8w3d2SXzn4rws=;
-        b=LVx870bvm9oovJtwhs9XZc6ymvDt+WIsuMymghuV87rOx8Wjzckk4QrzwCztBVsbbD
-         AqNvtDhRlY+60hR+m1+zIOIVeQ1HInMt+XwbRyeyNz75lcNxkFaX+PjxxUIpY1tgz075
-         r4gKNpSphbLBJfFstTP4YGp6dNUJ0Z+prVpgSA2m3qT68sLNQMNCXud/ZfhoBcn94D5D
-         VgSK6OcplIOaQxPoUfpxgMtOsbHE7s7/dmzglPVvILOwZtjgVRnDuznhakWR3WFFHth7
-         KCXM40Ci33BL8/ykxtEW93imXpeS1M0/iUfgjJmAqrv7FZjpCybaZcpUP/wEcRIwiMd1
-         jeJw==
-X-Gm-Message-State: AOAM532ceH7FaAXf0m7zn9oW5zpbcQAE+AFWcIwZPCw0nQR1oZrut7fM
-        ROTpv7GzB77+Ln0TgcQDFyiWvw==
-X-Google-Smtp-Source: ABdhPJwRBgg4q9WIgPbeVCSlHtqm2vEJN/aI+LJtMxvvnwehBYkSZSpif4H0hCUUfwXUCzh0tVfWuQ==
-X-Received: by 2002:ac8:7dd5:0:b0:2e1:ea4a:a743 with SMTP id c21-20020ac87dd5000000b002e1ea4aa743mr3610756qte.30.1649174403836;
-        Tue, 05 Apr 2022 09:00:03 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id j21-20020ac85f95000000b002e1cde99863sm11144758qta.83.2022.04.05.09.00.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 09:00:03 -0700 (PDT)
-Message-ID: <f9a650be2d0d669f77da97efedd55779a1829d3a.camel@ndufresne.ca>
-Subject: Re: [PATCH 7/7] media: coda: enable capture S_PARM for stateful
- encoder
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
-Date:   Tue, 05 Apr 2022 12:00:02 -0400
-In-Reply-To: <d9398b1b6bd96cfff80e91bca930281f77bd749b.camel@pengutronix.de>
-References: <20220404163533.707508-1-p.zabel@pengutronix.de>
-         <20220404163533.707508-7-p.zabel@pengutronix.de>
-         <bda20ff01f8aa7898416810743dac300f997e9c0.camel@ndufresne.ca>
-         <d9398b1b6bd96cfff80e91bca930281f77bd749b.camel@pengutronix.de>
+        with ESMTP id S1455135AbiDEP7k (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:59:40 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDA3108741;
+        Tue,  5 Apr 2022 08:11:09 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 14BC11F450DD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649171468;
+        bh=D+PPyG+d8bSZBQUHvuUVVhH3F9DHPinWPY0RxBOGLSk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=fXHyX2PGLz0ROYpReWRUYVsjVnAwYs4vGBfotmSL/S9PIaEyt6ZIvhSApwIsBmKNq
+         u5HY49fCocaxlJF+2UNGHXJdHdioG6Tbxdnd7Z/E0SAMQODKgYIzrLsMRI+gghk96s
+         5OLzd5Yt6pPZzXW+U8m1u+3hbk6iUTt9PWDaKT195nwD9pJE1GAafVEzuW6OuiCrY6
+         d+GKTUpMH3nsIEeGyC2tKIGM8RRuy5Dfm1JgzFP+S7vM7Kjj2slaYaFvlu4NZlXHmd
+         Fjlf7E0rFIbcgVx+gQQji44T+NHsmwh6QRGBJXBGuqzo0Q7MQvYKvdexH6nzhfa7wL
+         N6TFMwTeJ9ArQ==
+Message-ID: <92001085580ac1005596b34f79f1dadcc4b3f3c9.camel@collabora.com>
+Subject: Re: [PATCH v2 13/23] media: rkvdec: h264: Fix dpb_valid
+ implementation
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@collabora.com,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Date:   Tue, 05 Apr 2022 11:10:57 -0400
+In-Reply-To: <YkgwmwTMa83RysKB@eze-laptop>
+References: <20220331193726.289559-1-nicolas.dufresne@collabora.com>
+         <20220331193726.289559-14-nicolas.dufresne@collabora.com>
+         <YkgwmwTMa83RysKB@eze-laptop>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
@@ -67,87 +51,138 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le mardi 05 avril 2022 =C3=A0 17:03 +0200, Philipp Zabel a =C3=A9crit=C2=A0=
-:
-> Hi Nicolas,
->=20
-> thank you for the review. You bring up a good point here, I think this
-> part of the spec is not very easy to understand.
->=20
-> On Di, 2022-04-05 at 10:22 -0400, Nicolas Dufresne wrote:
-> > Le lundi 04 avril 2022 =C3=A0 18:35 +0200, Philipp Zabel a =C3=A9crit=
-=C2=A0:
-> > > Allow to call S_PARM with type =3D=3D V4L2_BUF_TYPE_VIDEO_OUTPUT,
-> > > to fix the following v4l2-compliance test failure:
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0fail: v4l2-test-formats.cpp(1413): got error 22
-> > > when setting parms for buftype 1
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_G/S_PARM:=
- FAIL
+Le samedi 02 avril 2022 =C3=A0 08:16 -0300, Ezequiel Garcia a =C3=A9crit=C2=
+=A0:
+> On Thu, Mar 31, 2022 at 03:37:15PM -0400, Nicolas Dufresne wrote:
+> > The ref builder only provided references that are marked as valid in th=
+e
+> > dpb. Thus the current implementation of dpb_valid would always set the
+> > flag to 1. This is not representing missing frames (this is called
+> > 'non-existing' pictures in the spec). In some context, these non-existi=
+ng
+> > pictures still need to occupy a slot in the reference list according to
+> > the spec.
 > >=20
-> > That one may be missing something though. As you don't implement perfor=
-mance
-> > target, you need to override the value somehow with the value you wrote=
- into the
-> > bitstream no ? Otherwise we just ignore what userland sets silently ?
 >=20
-> You are right that we don't implement any performance targets.
-> But the spec also says [1]:
->=20
->   Changing the OUTPUT frame interval also sets the framerate that the
->   encoder uses to encode the video. So setting the frame interval to
->   1/24 (or 24 frames per second) will produce a coded video stream that
->   can be played back at that speed. The frame interval for the OUTPUT
->   queue is just a hint, the application may provide raw frames at a
->   different rate. It can be used by the driver to help schedule
->   multiple encoders running in parallel.
->=20
->   In the next step the CAPTURE frame interval can optionally be changed
->   to a different value. This is useful for off-line encoding were the
->   coded frame interval can be different from the rate at which raw
->   frames are supplied.
->=20
-> And
->=20
->   Changing the CAPTURE frame interval sets the framerate for the coded
->   video. It does not set the rate at which buffers arrive on the
->   CAPTURE queue, that depends on how fast the encoder is and how fast
->   raw frames are queued on the OUTPUT queue.
->=20
-> [1] https://docs.kernel.org/userspace-api/media/v4l/dev-encoder.html?high=
-light=3Dstateful%20encoder
->=20
-> So far I'm only implementing the OUTPUT->CAPTURE rate passthrough part
-> to make v4l2-compliance happy.
->=20
-> Since the "frame interval for the OUTPUT queue is just a hint" and the
-> spec only says that "the encoder may adjust it to match hardware
-> requirements", I felt free to just ignore the raw frame interval part
-> for now.
-> My understanding is that the driver may limit this value to the
-> achievable real time encoding speed (if it even knows).
->=20
-> One thing I'm not doing according to spec right now is that calling
-> S_PARM on CAPTURE will also change the OUTPUT interval, as the driver
-> just stores them in the same variable.
-> Also the driver does not set the V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL
-> to signal it supports S_PARM on CAPTURE.
-> My understanding is that the CAPTURE frame interval is the value that
-> should be written to the bitstream and that should be used for the
-> bitrate control algorithm.
+> Good catch! OOC, did you find this because it was failing a test vector?
 
-This is another very good point, if a driver does not set
-V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL, why can't it return ENOTTY for
-S_PARAM(CAPTURE) ? Is the test even correct?
+The effect is complex, so I could not correlate to specific tests. Also, wh=
+at I
+wanted to fix isn't covered by the ITU conformance, its mostly resiliance
+requirement. But this should remove some of the IOMMU fault on broken strea=
+ms
+and make it less likely to use references that don't exists or aren't set w=
+hat
+we expect. After this change, the driver was getting more stable, and resul=
+ts
+was also more reproducible (specially in parallel decode case, which I use =
+to
+speed up testing).
+
 >=20
-> > I might not have got exactly how this case is supposed to be handled.
-> > Looking for feedback on what is proper behaviour for drivers that do
-> > not implement performance targets (resource reservation).
+> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 >=20
-> Same here. I'd love to learn whether my understanding of the spec is
-> correct or not.
+> Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
+> Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+
+Thanks for the review.
+
 >=20
-> regards
-> Philipp
+> Thanks,
+> Ezequiel
+>=20
+> > ---
+> >  drivers/staging/media/rkvdec/rkvdec-h264.c | 33 ++++++++++++++++------
+> >  1 file changed, 24 insertions(+), 9 deletions(-)
+> >=20
+> > diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/stagi=
+ng/media/rkvdec/rkvdec-h264.c
+> > index dff89732ddd0..bcde37d72244 100644
+> > --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
+> > +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> > @@ -112,6 +112,7 @@ struct rkvdec_h264_run {
+> >  	const struct v4l2_ctrl_h264_sps *sps;
+> >  	const struct v4l2_ctrl_h264_pps *pps;
+> >  	const struct v4l2_ctrl_h264_scaling_matrix *scaling_matrix;
+> > +	int ref_buf_idx[V4L2_H264_NUM_DPB_ENTRIES];
+> >  };
+> > =20
+> >  struct rkvdec_h264_ctx {
+> > @@ -725,6 +726,26 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx=
+,
+> >  	}
+> >  }
+> > =20
+> > +static void lookup_ref_buf_idx(struct rkvdec_ctx *ctx,
+> > +			       struct rkvdec_h264_run *run)
+> > +{
+> > +	const struct v4l2_ctrl_h264_decode_params *dec_params =3D run->decode=
+_params;
+> > +	u32 i;
+> > +
+> > +	for (i =3D 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
+> > +		struct v4l2_m2m_ctx *m2m_ctx =3D ctx->fh.m2m_ctx;
+> > +		const struct v4l2_h264_dpb_entry *dpb =3D run->decode_params->dpb;
+> > +		struct vb2_queue *cap_q =3D &m2m_ctx->cap_q_ctx.q;
+> > +		int buf_idx =3D -1;
+> > +
+> > +		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
+> > +			buf_idx =3D vb2_find_timestamp(cap_q,
+> > +						     dpb[i].reference_ts, 0);
+> > +
+> > +		run->ref_buf_idx[i] =3D buf_idx;
+> > +	}
+> > +}
+> > +
+> >  static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+> >  			    struct rkvdec_h264_run *run)
+> >  {
+> > @@ -762,7 +783,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+> > =20
+> >  	for (j =3D 0; j < RKVDEC_NUM_REFLIST; j++) {
+> >  		for (i =3D 0; i < h264_ctx->reflists.num_valid; i++) {
+> > -			u8 dpb_valid =3D 0;
+> > +			bool dpb_valid =3D run->ref_buf_idx[i] >=3D 0;
+> >  			u8 idx =3D 0;
+> > =20
+> >  			switch (j) {
+> > @@ -779,8 +800,6 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+> > =20
+> >  			if (idx >=3D ARRAY_SIZE(dec_params->dpb))
+> >  				continue;
+> > -			dpb_valid =3D !!(dpb[idx].flags &
+> > -				       V4L2_H264_DPB_ENTRY_FLAG_ACTIVE);
+> > =20
+> >  			set_ps_field(hw_rps, DPB_INFO(i, j),
+> >  				     idx | dpb_valid << 4);
+> > @@ -859,13 +878,8 @@ get_ref_buf(struct rkvdec_ctx *ctx, struct rkvdec_=
+h264_run *run,
+> >  	    unsigned int dpb_idx)
+> >  {
+> >  	struct v4l2_m2m_ctx *m2m_ctx =3D ctx->fh.m2m_ctx;
+> > -	const struct v4l2_h264_dpb_entry *dpb =3D run->decode_params->dpb;
+> >  	struct vb2_queue *cap_q =3D &m2m_ctx->cap_q_ctx.q;
+> > -	int buf_idx =3D -1;
+> > -
+> > -	if (dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
+> > -		buf_idx =3D vb2_find_timestamp(cap_q,
+> > -					     dpb[dpb_idx].reference_ts, 0);
+> > +	int buf_idx =3D run->ref_buf_idx[dpb_idx];
+> > =20
+> >  	/*
+> >  	 * If a DPB entry is unused or invalid, address of current destinatio=
+n
+> > @@ -1102,6 +1116,7 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx=
+)
+> > =20
+> >  	assemble_hw_scaling_list(ctx, &run);
+> >  	assemble_hw_pps(ctx, &run);
+> > +	lookup_ref_buf_idx(ctx, &run);
+> >  	assemble_hw_rps(ctx, &run);
+> >  	config_registers(ctx, &run);
+> > =20
+> > --=20
+> > 2.34.1
+> >=20
 
