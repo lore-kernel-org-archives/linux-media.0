@@ -2,119 +2,123 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF63EC433EF
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4645CC4321E
+	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573700AbiDEWws (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        id S1573729AbiDEWwy convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443841AbiDEPkW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:40:22 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DDF10E549;
-        Tue,  5 Apr 2022 07:00:39 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id t21so13460182oie.11;
-        Tue, 05 Apr 2022 07:00:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HFMQgSR3Z2986CsvnsaxYCQAxCwwsfFViVfXTurYbuM=;
-        b=c1d6GMnUCpuBiRYFYUMeSmkzMXbgvzFsmhNTEx5ALxlYDIIgEnDIC3KEYkk6w/FhpB
-         TqVO5CZYMwkItnXKm6jAm5gJKI+LlTivA+RxswnPYXL/iqNzg6845SVJ73UQ688A8jcs
-         oSrVMzCdB4Nn2/yrnVEoi3VY8cA3XL6SuQ81cLQRPYsQJBBqBjdVW+w5MGnrlaR75kCV
-         1IdwIAJxCk/DkKh/Hhse2iBWJmL6f3VX2hw2m1so0+gyIuPgNsdSsoGKWgwDithk/bCU
-         yQPKhif0qham54k/tTgXOhPtbKbz9MSqGWkUqmBHfi3GkMM3kMBPSPEPoURcYK/qg7Lv
-         +dDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HFMQgSR3Z2986CsvnsaxYCQAxCwwsfFViVfXTurYbuM=;
-        b=iGEAU/bcSb8f4htHiqicAPlAF4GziMejaZpi9/QWfId/jnv+Dt0IqvQgcIg6rjxN45
-         LvoF2tvRbnKEw2/Rm71gkq2R0sXn5TvtuZt/HxKR7zgUpT+60Ww5FEoE+MAmnASOIYGH
-         p/vv24o/X5BYLH6Xp56IlJzwhTwlq/b3yvwcn3gTWdCSkVKvhOnfYPgpVlenD1DFwGck
-         KOlJ+rCmchHmg3ZPQQZNMHqMS6WSxfA3hw0+AWoCJA7zJKWbYsX+oZfvG0fyRhYD227K
-         lAZ3RniQkcFxD75F9MHAu+zrOm0q6GbofoyaIxoFPlv1LmlJDvy3caem2f5O9LKGlPgG
-         Vq5g==
-X-Gm-Message-State: AOAM532ZmYoX1NwpPYMDmR3DTrRsyMCz+mgUwURqfm28C9dTLqA3Gtmr
-        n8XuJg0Y8SfCCKiiJKA3wlc=
-X-Google-Smtp-Source: ABdhPJyx+UrnCCCC/dq6VupZvYiQblLTfNZtdfBOgNWTKrCgoNVnGNSrcKZIjfn8KOCE1dlioTnWEw==
-X-Received: by 2002:a05:6808:c:b0:2ef:8913:354 with SMTP id u12-20020a056808000c00b002ef89130354mr1429138oic.201.1649167238532;
-        Tue, 05 Apr 2022 07:00:38 -0700 (PDT)
-Received: from localhost.localdomain ([2804:14c:485:4b69:99d5:2af:ddde:2ce0])
-        by smtp.gmail.com with ESMTPSA id c3-20020a056808138300b002f76b9a9ef6sm5537029oiw.10.2022.04.05.07.00.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 07:00:37 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     hverkuil-cisco@xs4all.nl
-Cc:     nicolas.dufresne@collabora.com, kernel@iktek.de,
-        p.zabel@pengutronix.de, linux-media@vger.kernel.org,
-        stable@vger.kernel.org, Ezequiel Garcia <ezequiel@collabora.com>,
-        Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v4 1/2] media: coda: Fix reported H264 profile
-Date:   Tue,  5 Apr 2022 10:59:56 -0300
-Message-Id: <20220405135957.3580343-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1454268AbiDEP6I (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:58:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB806CD33F
+        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 08:03:41 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nbkia-0006aU-2h; Tue, 05 Apr 2022 17:03:40 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nbkia-001FRi-P9; Tue, 05 Apr 2022 17:03:39 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nbkiY-0007UZ-MN; Tue, 05 Apr 2022 17:03:38 +0200
+Message-ID: <d9398b1b6bd96cfff80e91bca930281f77bd749b.camel@pengutronix.de>
+Subject: Re: [PATCH 7/7] media: coda: enable capture S_PARM for stateful
+ encoder
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
+Date:   Tue, 05 Apr 2022 17:03:38 +0200
+In-Reply-To: <bda20ff01f8aa7898416810743dac300f997e9c0.camel@ndufresne.ca>
+References: <20220404163533.707508-1-p.zabel@pengutronix.de>
+         <20220404163533.707508-7-p.zabel@pengutronix.de>
+         <bda20ff01f8aa7898416810743dac300f997e9c0.camel@ndufresne.ca>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Hi Nicolas,
 
-The CODA960 manual states that ASO/FMO features of baseline are not
-supported, so for this reason this driver should only report
-constrained baseline support.
+thank you for the review. You bring up a good point here, I think this
+part of the spec is not very easy to understand.
 
-This fixes negotiation issue with constrained baseline content
-on GStreamer 1.17.1.
+On Di, 2022-04-05 at 10:22 -0400, Nicolas Dufresne wrote:
+> Le lundi 04 avril 2022 à 18:35 +0200, Philipp Zabel a écrit :
+> > Allow to call S_PARM with type == V4L2_BUF_TYPE_VIDEO_OUTPUT,
+> > to fix the following v4l2-compliance test failure:
+> > 
+> >                 fail: v4l2-test-formats.cpp(1413): got error 22
+> > when setting parms for buftype 1
+> >         test VIDIOC_G/S_PARM: FAIL
+> 
+> That one may be missing something though. As you don't implement performance
+> target, you need to override the value somehow with the value you wrote into the
+> bitstream no ? Otherwise we just ignore what userland sets silently ?
 
-ASO/FMO features are unsupported for the encoder and untested for the
-decoder because there is currently no userspace support. Neither GStreamer
-parsers nor FFMPEG parsers support ASO/FMO.
+You are right that we don't implement any performance targets.
+But the spec also says [1]:
 
-Cc: stable@vger.kernel.org
-Fixes: 42a68012e67c2 ("media: coda: add read-only h.264 decoder profile/level controls")
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Tested-by: Pascal Speck <kernel@iktek.de>
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
----
-Changes since v3:
-- Rebased against linux-next and took the coda->chips-media rename
-in consideration.
+  Changing the OUTPUT frame interval also sets the framerate that the
+  encoder uses to encode the video. So setting the frame interval to
+  1/24 (or 24 frames per second) will produce a coded video stream that
+  can be played back at that speed. The frame interval for the OUTPUT
+  queue is just a hint, the application may provide raw frames at a
+  different rate. It can be used by the driver to help schedule
+  multiple encoders running in parallel.
 
- drivers/media/platform/chips-media/coda-common.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+  In the next step the CAPTURE frame interval can optionally be changed
+  to a different value. This is useful for off-line encoding were the
+  coded frame interval can be different from the rate at which raw
+  frames are supplied.
 
-diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
-index a57822b05070..53b2dd1b268c 100644
---- a/drivers/media/platform/chips-media/coda-common.c
-+++ b/drivers/media/platform/chips-media/coda-common.c
-@@ -2344,8 +2344,8 @@ static void coda_encode_ctrls(struct coda_ctx *ctx)
- 		V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET, -12, 12, 1, 0);
- 	v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
- 		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
--		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE, 0x0,
--		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE);
-+		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE, 0x0,
-+		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE);
- 	if (ctx->dev->devtype->product == CODA_HX4 ||
- 	    ctx->dev->devtype->product == CODA_7541) {
- 		v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
-@@ -2426,7 +2426,7 @@ static void coda_decode_ctrls(struct coda_ctx *ctx)
- 	ctx->h264_profile_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
- 		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_H264_PROFILE,
- 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
--		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
-+		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
- 		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
- 		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
- 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
--- 
-2.25.1
+And
 
+  Changing the CAPTURE frame interval sets the framerate for the coded
+  video. It does not set the rate at which buffers arrive on the
+  CAPTURE queue, that depends on how fast the encoder is and how fast
+  raw frames are queued on the OUTPUT queue.
+
+[1] https://docs.kernel.org/userspace-api/media/v4l/dev-encoder.html?highlight=stateful%20encoder
+
+So far I'm only implementing the OUTPUT->CAPTURE rate passthrough part
+to make v4l2-compliance happy.
+
+Since the "frame interval for the OUTPUT queue is just a hint" and the
+spec only says that "the encoder may adjust it to match hardware
+requirements", I felt free to just ignore the raw frame interval part
+for now.
+My understanding is that the driver may limit this value to the
+achievable real time encoding speed (if it even knows).
+
+One thing I'm not doing according to spec right now is that calling
+S_PARM on CAPTURE will also change the OUTPUT interval, as the driver
+just stores them in the same variable.
+Also the driver does not set the V4L2_FMT_FLAG_ENC_CAP_FRAME_INTERVAL
+to signal it supports S_PARM on CAPTURE.
+My understanding is that the CAPTURE frame interval is the value that
+should be written to the bitstream and that should be used for the
+bitrate control algorithm.
+
+> I might not have got exactly how this case is supposed to be handled.
+> Looking for feedback on what is proper behaviour for drivers that do
+> not implement performance targets (resource reservation).
+
+Same here. I'd love to learn whether my understanding of the spec is
+correct or not.
+
+regards
+Philipp
