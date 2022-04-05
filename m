@@ -2,90 +2,132 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DE1BC43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 318AFC4332F
 	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:12:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573933AbiDEWxt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
+        id S1573909AbiDEWxr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573147AbiDESCB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 14:02:01 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC68EBB9D;
-        Tue,  5 Apr 2022 11:00:01 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id w4so20488284wrg.12;
-        Tue, 05 Apr 2022 11:00:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ps9sabn/FLiol/hOAkHVK8/MzrVBlohNvXit/I8IEYc=;
-        b=R44RXszOTrCfg9a6xQntX7eXLlcenLZQ79iHWwZfWh9PijVC/UjlQitBO/Yt/Wq/W5
-         dTA4dRF74W0DLZK0MUpa6PxqZxtBFxQmoUyDUjy0e4JVi5WXu/xU+Y1Hzb7op13pN/t1
-         Vco1rVX5eqUYMewLGvFa+zlth4/k7DCJ+ThdQOvI7x0KHIQ5FaPPk/UWHJC1orymLQX4
-         7XSCpRaubPqT0f6R2D/NEp8qzZ0wueIQDW44oLsn/B677uMWwY0PSYg/po63Ac2Z5RkA
-         BLP8vayDRRtqY/sys3mO8EU3v1ruGqddsM+LoJibpZoG4yzJujdjCt1+X2uICb0xzSeQ
-         swXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ps9sabn/FLiol/hOAkHVK8/MzrVBlohNvXit/I8IEYc=;
-        b=1OAgLFHfQ6LCXk2se/Fx8MowrtwgUHu+r+8eR2bLNVxhV+7Px0ZkBgV4mI2BgYS1fv
-         fvSgyS/DOxllkVRBNVLsdP8WXXUr7ft9TAP7cdjtXgTrGaVvlm4w/uqFe7T5gMniWA6t
-         E/YQpMxKW6zc6ZS2IKk+hWJkh/QgdhSTPjKPPTJPDp1mTXnB36ozXtTf98+b3qPqM/n2
-         Aw79UVnTh5pd1SIJLktRXcHTwMNfb4QjC/9r/Hf4w7N/KZ76Z9cBc/CRXO9gCi+Uihb2
-         GNJclavOv2Hnq9pQkZTyqYdhiIxVlObnD+54t+giQqode3fLTzlRcIsB5UM2RqpzXN4E
-         uKUg==
-X-Gm-Message-State: AOAM5309NQ0h/oYmjB2wHLcF0dNCP5wx751JG6Go4dd0zCEnSYTzlfUw
-        6dD+nUQeQhhOU1Z4hraB/PQ=
-X-Google-Smtp-Source: ABdhPJzPk+TK/I+NTaHUbvTpHCArFr87ss2K8cjZe77v1loJE5zgGUwLw+jFL7OH+UyTRqfqB5ZSBw==
-X-Received: by 2002:a5d:5608:0:b0:206:11c2:b65d with SMTP id l8-20020a5d5608000000b0020611c2b65dmr3663036wrv.215.1649181600255;
-        Tue, 05 Apr 2022 11:00:00 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id k9-20020adfb349000000b00206101fc58fsm6898756wrd.110.2022.04.05.10.59.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 10:59:59 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: platform: samsung: remove redundant assignment to variable m
-Date:   Tue,  5 Apr 2022 18:59:59 +0100
-Message-Id: <20220405175959.223443-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S1443306AbiDEPjV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:39:21 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE2F149271
+        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 06:55:29 -0700 (PDT)
+Received: from dude03.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::39])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nbjeZ-0003Xh-GC; Tue, 05 Apr 2022 15:55:27 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
+Subject: [PATCH] media: coda: consolidate job_finish calls on decoder prepare_run failure
+Date:   Tue,  5 Apr 2022 15:55:17 +0200
+Message-Id: <20220405135517.3436381-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The variable m is being assigned a value that is never read, it
-is being re-assigned in both paths of the following if-statement.
-The assignment is redundant and can be removed.
+If the decoder prepare_run callback returns an error, the hardware
+is never started and v4l2_m2m_job_finish() is called immediately,
+currently in every error path.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Remove the duplicated job_finish calls from the error paths and reuse
+the v4l2_m2m_job_finish() at the end of coda_pic_run_work instead.
+
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/media/platform/chips-media/coda-bit.c    | 2 --
+ drivers/media/platform/chips-media/coda-common.c | 9 +++------
+ drivers/media/platform/chips-media/coda-jpeg.c   | 6 +-----
+ 3 files changed, 4 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.c
-index 01b47b3df1e7..33e6e85dfd78 100644
---- a/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.c
-+++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-hw-s5p.c
-@@ -52,7 +52,6 @@ void s5p_jpeg_proc_mode(void __iomem *regs, unsigned long mode)
- {
- 	unsigned long reg, m;
+diff --git a/drivers/media/platform/chips-media/coda-bit.c b/drivers/media/platform/chips-media/coda-bit.c
+index 3aad8999a3b3..a082d075b5ee 100644
+--- a/drivers/media/platform/chips-media/coda-bit.c
++++ b/drivers/media/platform/chips-media/coda-bit.c
+@@ -2179,7 +2179,6 @@ static int coda_prepare_decode(struct coda_ctx *ctx)
+ 	    (!(ctx->bit_stream_param & CODA_BIT_STREAM_END_FLAG))) {
+ 		coda_dbg(1, ctx, "bitstream payload: %d, skipping\n",
+ 			 coda_get_bitstream_payload(ctx));
+-		v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
+ 		return -EAGAIN;
+ 	}
  
--	m = S5P_PROC_MODE_DECOMPR;
- 	if (mode == S5P_JPEG_ENCODE)
- 		m = S5P_PROC_MODE_COMPR;
- 	else
+@@ -2189,7 +2188,6 @@ static int coda_prepare_decode(struct coda_ctx *ctx)
+ 
+ 		if (ret < 0) {
+ 			v4l2_err(&dev->v4l2_dev, "failed to start decoding\n");
+-			v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
+ 			return -EAGAIN;
+ 		} else {
+ 			ctx->initialized = 1;
+diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
+index cd9ff2fa4147..0d1d92efbfdf 100644
+--- a/drivers/media/platform/chips-media/coda-common.c
++++ b/drivers/media/platform/chips-media/coda-common.c
+@@ -1513,12 +1513,8 @@ static void coda_pic_run_work(struct work_struct *work)
+ 	mutex_lock(&dev->coda_mutex);
+ 
+ 	ret = ctx->ops->prepare_run(ctx);
+-	if (ret < 0 && ctx->inst_type == CODA_INST_DECODER) {
+-		mutex_unlock(&dev->coda_mutex);
+-		mutex_unlock(&ctx->buffer_mutex);
+-		/* job_finish scheduled by prepare_decode */
+-		return;
+-	}
++	if (ret < 0 && ctx->inst_type == CODA_INST_DECODER)
++		goto out;
+ 
+ 	if (!wait_for_completion_timeout(&ctx->completion,
+ 					 msecs_to_jiffies(1000))) {
+@@ -1540,6 +1536,7 @@ static void coda_pic_run_work(struct work_struct *work)
+ 	    ctx->ops->seq_end_work)
+ 		queue_work(dev->workqueue, &ctx->seq_end_work);
+ 
++out:
+ 	mutex_unlock(&dev->coda_mutex);
+ 	mutex_unlock(&ctx->buffer_mutex);
+ 
+diff --git a/drivers/media/platform/chips-media/coda-jpeg.c b/drivers/media/platform/chips-media/coda-jpeg.c
+index a72f4655e5ad..21d14f9bd7e5 100644
+--- a/drivers/media/platform/chips-media/coda-jpeg.c
++++ b/drivers/media/platform/chips-media/coda-jpeg.c
+@@ -1340,10 +1340,8 @@ static int coda9_jpeg_prepare_decode(struct coda_ctx *ctx)
+ 				      vb2_plane_size(&src_buf->vb2_buf, 0));
+ 
+ 	chroma_format = coda9_jpeg_chroma_format(q_data_dst->fourcc);
+-	if (chroma_format < 0) {
+-		v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
++	if (chroma_format < 0)
+ 		return chroma_format;
+-	}
+ 
+ 	ret = coda_jpeg_decode_header(ctx, &src_buf->vb2_buf);
+ 	if (ret < 0) {
+@@ -1355,7 +1353,6 @@ static int coda9_jpeg_prepare_decode(struct coda_ctx *ctx)
+ 		v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
+ 		v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_DONE);
+ 
+-		v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
+ 		return ret;
+ 	}
+ 
+@@ -1396,7 +1393,6 @@ static int coda9_jpeg_prepare_decode(struct coda_ctx *ctx)
+ 		if (ret < 0) {
+ 			v4l2_err(&dev->v4l2_dev,
+ 				 "failed to set up Huffman tables: %d\n", ret);
+-			v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
+ 			return ret;
+ 		}
+ 	}
 -- 
-2.35.1
+2.30.2
 
