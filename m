@@ -2,84 +2,195 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99976C433F5
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 13:51:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 291CDC43219
+	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 22:55:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233968AbiDENxm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 09:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        id S233821AbiDEWlG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381268AbiDELnj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 07:43:39 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BA6114FC3;
-        Tue,  5 Apr 2022 04:09:06 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 65CC922247;
-        Tue,  5 Apr 2022 13:09:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649156944;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HhCRNMxeN/GjO55RvomQG0xoJmMvvbdrMDnAktj+ZOw=;
-        b=cNqMfgmXtFPvgEEwbWq+VnwdvMuscRpK20137u0iJSnBDLVHoJFUu5w4qyLSMk8UBd8eum
-        0HMbGVUDIyLdMdlDNStBDi+KY7vBSzta24pjZddLL/yJGIlyoEPC3VL3TgfKTOY12IUtu8
-        hkJrB7ZhYGB9P1u1D5xx4Y+a7XRIo5o=
+        with ESMTP id S1444132AbiDEWU7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:20:59 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213026A03C;
+        Tue,  5 Apr 2022 13:44:55 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 04D3E1F44826
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649191494;
+        bh=es6kMBJ8LPORvT6E2TfIJklYinEGihlPlvjF8xMQCJ0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Fji2MIvtdtmn2lc2HpUJY+1lCaexUJujcSYKPoyr7zSnm65ZupZIfW2hxxmoj+9Dh
+         TnvIRX8QcTz3xOMPX03LI07CNJxsxeY38exxYvTo1msYhb/j8VjQJ/6ox8D6vySoil
+         HkxbIcGlYHkcm5nNzxo3Z5hAIb/rETBc5PoVvBLVUt4Uki7mX9FZKDb9D1qGXNbO7q
+         KxcQXRwDUgx1o4SpZht9Jx5BuuicbMeFVo2czrTHYTWDR5GQWbPkkvDYz7XFWifG1H
+         AUeHXfGTFpre0+/+Q4XZJxHfaDMk011GRzE2Y+TAxuZKIwlltKyJM80ER8LGeJCjrs
+         9bSrEF1RuUung==
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v3 08/24] media: h264: Store all fields into the unordered list
+Date:   Tue,  5 Apr 2022 16:44:09 -0400
+Message-Id: <20220405204426.259074-9-nicolas.dufresne@collabora.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
 Content-Transfer-Encoding: 8bit
-Date:   Tue, 05 Apr 2022 13:09:04 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Codrin.Ciubotariu@microchip.com
-Cc:     Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        Claudiu.Beznea@microchip.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, stable@vger.kernel.org
-Subject: Re: [PATCH] i2c: at91: use dma safe buffers
-In-Reply-To: <360914ee-594c-86bc-2436-aa863a67953a@microchip.com>
-References: <20220303161724.3324948-1-michael@walle.cc>
- <46e1be55-9377-75b7-634d-9eadbebc98d7@microchip.com>
- <bc32f1107786ebcbfb4952e1a6142304@walle.cc>
- <360914ee-594c-86bc-2436-aa863a67953a@microchip.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <27f124c9adaf8a4fbdfb7a38456c4a2e@walle.cc>
-X-Sender: michael@walle.cc
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 2022-04-05 12:02, schrieb Codrin.Ciubotariu@microchip.com:
-> On 05.04.2022 12:38, Michael Walle wrote:
->> Am 2022-04-05 11:23, schrieb Codrin.Ciubotariu@microchip.com:
->>>> +       if (dev->use_dma) {
->>>> +               dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
->>> 
->>> If you want, you could just dev->buf = i2c_get_dma_safe...
->> 
->> But where is the error handling in that case? dev->buf will
->> be NULL, which is eventually passed to dma_map_single().
->> 
->> Also, I need the dma_buf for the i2c_put_dma_safe_msg_buf()
->> call anyway, because dev->buf will be modified during
->> processing.
-> 
-> You still:
-> 	if (!dev->buf) {
-> 		ret = -ENOMEM;
-> 		goto out;
-> 	}
-> 
-> So, at91_do_twi_transfer()/dma_map_single() will not be called.
+When the current picture is a field, store each field into the
+unordered_list and preserve both top and bottom picture order
+count.
 
-Ahh, I misunderstood you. Yes, but as I said, I need the dma_buf
-temporary variable anyway, because dev->buf is modified, eg. see
-at91_twi_read_data_dma_callback().
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+---
+ drivers/media/v4l2-core/v4l2-h264.c | 65 +++++++++++++++++++++--------
+ include/media/v4l2-h264.h           |  6 ++-
+ 2 files changed, 51 insertions(+), 20 deletions(-)
 
--michael
+diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
+index 58f18bb0afb6..38d8dbda0045 100644
+--- a/drivers/media/v4l2-core/v4l2-h264.c
++++ b/drivers/media/v4l2-core/v4l2-h264.c
+@@ -47,8 +47,6 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+ 	}
+ 
+ 	for (i = 0; i < V4L2_H264_NUM_DPB_ENTRIES; i++) {
+-		u32 pic_order_count;
+-
+ 		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+ 			continue;
+ 
+@@ -59,8 +57,6 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+ 		/*
+ 		 * Handle frame_num wraparound as described in section
+ 		 * '8.2.4.1 Decoding process for picture numbers' of the spec.
+-		 * TODO: This logic will have to be adjusted when we start
+-		 * supporting interlaced content.
+ 		 * For long term references, frame_num is set to
+ 		 * long_term_frame_idx which requires no wrapping.
+ 		 */
+@@ -70,17 +66,33 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+ 		else
+ 			b->refs[i].frame_num = dpb[i].frame_num;
+ 
+-		if (dpb[i].fields == V4L2_H264_FRAME_REF)
+-			pic_order_count = min(dpb[i].top_field_order_cnt,
+-					      dpb[i].bottom_field_order_cnt);
+-		else if (dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF)
+-			pic_order_count = dpb[i].bottom_field_order_cnt;
+-		else
+-			pic_order_count = dpb[i].top_field_order_cnt;
++		b->refs[i].top_field_order_cnt = dpb[i].top_field_order_cnt;
++		b->refs[i].bottom_field_order_cnt = dpb[i].bottom_field_order_cnt;
++
++		if (b->cur_pic_fields == V4L2_H264_FRAME_REF) {
++			u8 fields = V4L2_H264_FRAME_REF;
++
++			b->unordered_reflist[b->num_valid].index = i;
++			b->unordered_reflist[b->num_valid].fields = fields;
++			b->num_valid++;
++			continue;
++		}
++
++		if (dpb[i].fields & V4L2_H264_TOP_FIELD_REF) {
++			u8 fields = V4L2_H264_TOP_FIELD_REF;
++
++			b->unordered_reflist[b->num_valid].index = i;
++			b->unordered_reflist[b->num_valid].fields = fields;
++			b->num_valid++;
++		}
+ 
+-		b->refs[i].pic_order_count = pic_order_count;
+-		b->unordered_reflist[b->num_valid].index = i;
+-		b->num_valid++;
++		if (dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF) {
++			u8 fields = V4L2_H264_BOTTOM_FIELD_REF;
++
++			b->unordered_reflist[b->num_valid].index = i;
++			b->unordered_reflist[b->num_valid].fields = fields;
++			b->num_valid++;
++		}
+ 	}
+ 
+ 	for (i = b->num_valid; i < ARRAY_SIZE(b->unordered_reflist); i++)
+@@ -88,6 +100,23 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_h264_init_reflist_builder);
+ 
++static s32 v4l2_h264_get_poc(const struct v4l2_h264_reflist_builder *b,
++			     const struct v4l2_h264_reference *ref)
++{
++	switch (ref->fields) {
++	case V4L2_H264_FRAME_REF:
++		return min(b->refs[ref->index].top_field_order_cnt,
++				b->refs[ref->index].bottom_field_order_cnt);
++	case V4L2_H264_TOP_FIELD_REF:
++		return b->refs[ref->index].top_field_order_cnt;
++	case V4L2_H264_BOTTOM_FIELD_REF:
++		return b->refs[ref->index].bottom_field_order_cnt;
++	}
++
++	/* not reached */
++	return 0;
++}
++
+ static int v4l2_h264_p_ref_list_cmp(const void *ptra, const void *ptrb,
+ 				    const void *data)
+ {
+@@ -150,8 +179,8 @@ static int v4l2_h264_b0_ref_list_cmp(const void *ptra, const void *ptrb,
+ 		       builder->refs[idxb].pic_num ?
+ 		       -1 : 1;
+ 
+-	poca = builder->refs[idxa].pic_order_count;
+-	pocb = builder->refs[idxb].pic_order_count;
++	poca = v4l2_h264_get_poc(builder, ptra);
++	pocb = v4l2_h264_get_poc(builder, ptrb);
+ 
+ 	/*
+ 	 * Short term pics with POC < cur POC first in POC descending order
+@@ -195,8 +224,8 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
+ 		       builder->refs[idxb].pic_num ?
+ 		       -1 : 1;
+ 
+-	poca = builder->refs[idxa].pic_order_count;
+-	pocb = builder->refs[idxb].pic_order_count;
++	poca = v4l2_h264_get_poc(builder, ptra);
++	pocb = v4l2_h264_get_poc(builder, ptrb);
+ 
+ 	/*
+ 	 * Short term pics with POC > cur POC first in POC ascending order
+diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
+index e165a54c68fa..4cef717b3f18 100644
+--- a/include/media/v4l2-h264.h
++++ b/include/media/v4l2-h264.h
+@@ -15,7 +15,8 @@
+ /**
+  * struct v4l2_h264_reflist_builder - Reference list builder object
+  *
+- * @refs.pic_order_count: reference picture order count
++ * @refs.top_field_order_cnt: top field order count
++ * @refs.bottom_field_order_cnt: bottom field order count
+  * @refs.frame_num: reference frame number
+  * @refs.pic_num: reference picture number
+  * @refs.longterm: set to true for a long term reference
+@@ -32,7 +33,8 @@
+  */
+ struct v4l2_h264_reflist_builder {
+ 	struct {
+-		s32 pic_order_count;
++		s32 top_field_order_cnt;
++		s32 bottom_field_order_cnt;
+ 		int frame_num;
+ 		u32 pic_num;
+ 		u16 longterm : 1;
+-- 
+2.34.1
+
