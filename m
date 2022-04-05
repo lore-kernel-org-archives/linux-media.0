@@ -2,181 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CC13C4167D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FBF7C4707A
 	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:02:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446640AbiDEWvB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S1448761AbiDEWvR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444221AbiDEWVB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:21:01 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66C89AE71;
-        Tue,  5 Apr 2022 13:45:09 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 6DA311F44871
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649191508;
-        bh=RVect5wnawuQWmXyzNYDAw2lNjPQxUXn0VLgDqyjlvI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D8r5g4fh0PKqWeTQYhm6WDFxxPXXEEVPlOcQ3DSJm7pvN3JL9i8oTw/NPWXj/nRd5
-         YWO3Th47EwJzElmgsYOoGCqsFtqThHlpOFd1WdLps3lDxmzh1bkHmjC1xj/x9YSOZO
-         GHlznuMdW1ROVg6uiLiRtqV4OU7Bz17k6ds2qCT+sNzXb+GGQ4nQoA03WI34P4kC2Y
-         i7f/MX0Fv/lLMLVsJGlB3l1ZNkKRoh1QkYycKaG9xi4Fp4eJ0ea6wOkCSGZQSlHbPm
-         macYKvHBpv02ArdI6dVl8ypu5YdYEDFCspot1KKJwHjEDo7zZzyhA+N11f/WtLxKC/
-         x/7ogl1um56rg==
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        Jonas Karlman <jonas@kwiboo.se>, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
-Subject: [PATCH v3 16/24] media: rkvdec: h264: Validate and use pic width and height in mbs
-Date:   Tue,  5 Apr 2022 16:44:17 -0400
-Message-Id: <20220405204426.259074-17-nicolas.dufresne@collabora.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
-References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+        with ESMTP id S1446330AbiDEPo3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:44:29 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F3290CF1
+        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 07:14:15 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id s11so11202716qtc.3
+        for <linux-media@vger.kernel.org>; Tue, 05 Apr 2022 07:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=qwcqA8mY0KxEQmZmip5hKmkn8YnMp99yWlNPD7XLEbA=;
+        b=vxU5B3VnnU316tDuhbMaieIBKDlM3l5ZtZitOb8mUUK6l+Ch5p5ZQ4HVvp/YOhfqiL
+         iG4fqJk3KpC0/ED+KfeIPhF8Oza/9X0vweQmHA5BlbV1bum+iMT+4bY9HJyPS+gqsB+E
+         7/IHfXkw+Eqj8eJ4m9Z5KSCdeX+rVGgZmnM2PpLRNulnfgChki2sGZ+lmHmsH4K+J4Ta
+         XYaq5ydCpmaYDP5krarcfOcAlOTAuekAAHdF/b35Hp3V/s4/jmHKEqcAIr3pyR501rPR
+         ShVP5QGQJiBeBSKOMo7Ta0aPRO4WWllHy6ZyDMtfpch7o32ROKDo1jhkM8ZkY33lEsDF
+         OScQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=qwcqA8mY0KxEQmZmip5hKmkn8YnMp99yWlNPD7XLEbA=;
+        b=cSmvGKTHL1lEiXmVchq8Lva1ndGOEdOwQ3RT91FQUqlaQpVidOSIEAe+2wjJ4F7Qnc
+         brpbiOuoJ/HtmeuNcmdR0KaN66OTU7nFF13Ih796XXa2t4tG8dAlNCexLJlDgFc5GSng
+         4vWhCAwsyoYzC2BoWg+UScgL63lMY4yYdp5rh37KJhv+n4Pbdl1hM5Ti6Qu5StFz6Mpv
+         NwXC7QGcrmdCUn912weUDkq0LZlNOnmro3alq+Xtn6w75BOM2fzekUMD3gNtYayFzfB7
+         7FFKJgHIRTrMMnQAg0EbKDOiMfgkbfODuCt9vKjtzHa4CEne95VNOW48zuNlWec7k7dT
+         dCPQ==
+X-Gm-Message-State: AOAM533R1egbVwXcTt1hCpxXLpS554Xes8h1PFLEFz0dkqwQOUG17I6+
+        yu9wleiDURyRjruwuoWIu0QsIg==
+X-Google-Smtp-Source: ABdhPJyQaWtIcc1vmujXIRt+6FBp+DpJze5+VDsg92aUPGan/7CqoJ1VeKQCD+uEKfdpoAXgCULbVA==
+X-Received: by 2002:a05:622a:1051:b0:2e1:eb06:ecc2 with SMTP id f17-20020a05622a105100b002e1eb06ecc2mr3145351qte.171.1649168047789;
+        Tue, 05 Apr 2022 07:14:07 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id h6-20020ac85e06000000b002e1e8a98abbsm10903086qtx.41.2022.04.05.07.14.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 07:14:07 -0700 (PDT)
+Message-ID: <a54f89b4cb896a45bdf60ed78024fed88b9c1211.camel@ndufresne.ca>
+Subject: Re: [PATCH 4/7] media: coda: disable stateful encoder ioctls for
+ jpeg encoder
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
+Date:   Tue, 05 Apr 2022 10:14:06 -0400
+In-Reply-To: <20220404163533.707508-4-p.zabel@pengutronix.de>
+References: <20220404163533.707508-1-p.zabel@pengutronix.de>
+         <20220404163533.707508-4-p.zabel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jonas Karlman <jonas@kwiboo.se>
+Le lundi 04 avril 2022 =C3=A0 18:35 +0200, Philipp Zabel a =C3=A9crit=C2=A0=
+:
+> Use v4l2_disable_ioctl() to disable the stateful encoder ioctls
+> VIDIOC_ENUM_FRAMEINTERVALS, VIDIOC_G_PARM, and VIDIOC_S_PARM for
+> the jpeg encoder device, to fix this v4l2-compliance test failure:
+>=20
+> 		fail: v4l2-test-formats.cpp(68): node->is_m2m && !(node->codec_mask & S=
+TATEFUL_ENCODER)
+> 	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: FAIL
+> 		fail: v4l2-test-formats.cpp(1363): node->is_m2m && !is_stateful_enc
+> 	test VIDIOC_G/S_PARM: FAIL
+>=20
+> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-The width and height in macroblocks is currently configured based on OUTPUT
-buffer resolution, this works for frame pictures but can cause issues for
-field pictures.
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-When frame_mbs_only_flag is 0 the height in mbs should be height of
-the field instead of height of frame.
-
-Validate pic_width_in_mbs_minus1 and pic_height_in_map_units_minus1
-against OUTPUT buffer resolution and use these values to configure HW.
-The validation is happening in both try_ctrt() and start() since it is
-otherwise possible to trick the driver during initialization by changing
-the OUTPUT format after having set a valid control.
-
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
----
- drivers/staging/media/rkvdec/rkvdec-h264.c | 78 ++++++++++++++++------
- 1 file changed, 59 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index 0dcbcb1bac80..f081b476340f 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -672,8 +672,16 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
- 		  LOG2_MAX_PIC_ORDER_CNT_LSB_MINUS4);
- 	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_DELTA_PIC_ORDER_ALWAYS_ZERO),
- 		  DELTA_PIC_ORDER_ALWAYS_ZERO_FLAG);
--	WRITE_PPS(DIV_ROUND_UP(ctx->coded_fmt.fmt.pix_mp.width, 16), PIC_WIDTH_IN_MBS);
--	WRITE_PPS(DIV_ROUND_UP(ctx->coded_fmt.fmt.pix_mp.height, 16), PIC_HEIGHT_IN_MBS);
-+
-+	/* Use the SPS values since they are already in macroblocks
-+	 * dimensions, height can be field height (halved) if
-+	 * V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY is not set and also it allows
-+	 * decoding smaller images into larger allocation which can be used
-+	 * to implementing SVC spatial layer support.
-+	 */
-+	WRITE_PPS(sps->pic_width_in_mbs_minus1 + 1, PIC_WIDTH_IN_MBS);
-+	WRITE_PPS(sps->pic_height_in_map_units_minus1 + 1, PIC_HEIGHT_IN_MBS);
-+
- 	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY),
- 		  FRAME_MBS_ONLY_FLAG);
- 	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD),
-@@ -1035,13 +1043,59 @@ static int rkvdec_h264_adjust_fmt(struct rkvdec_ctx *ctx,
- 	return 0;
- }
- 
-+static int rkvdec_h264_validate_sps(struct rkvdec_ctx *ctx,
-+				    const struct v4l2_ctrl_h264_sps *sps)
-+{
-+	unsigned int width, height;
-+	/*
-+	 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
-+	 * but it's currently broken in the driver.
-+	 * Reject them for now, until it's fixed.
-+	 */
-+	if (sps->chroma_format_idc > 1)
-+		/* Only 4:0:0 and 4:2:0 are supported */
-+		return -EINVAL;
-+	if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
-+		/* Luma and chroma bit depth mismatch */
-+		return -EINVAL;
-+	if (sps->bit_depth_luma_minus8 != 0)
-+		/* Only 8-bit is supported */
-+		return -EINVAL;
-+
-+	width = (sps->pic_width_in_mbs_minus1 + 1) * 16;
-+	height = (sps->pic_height_in_map_units_minus1 + 1) * 16;
-+
-+	/* when frame_mbs_only_flag is not set, this is field height,
-+	 * which is half the final height (see (7-18) in the
-+	 * specification)
-+	 */
-+	if (!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY))
-+		height *= 2;
-+
-+	if (width > ctx->coded_fmt.fmt.pix_mp.width ||
-+	    height > ctx->coded_fmt.fmt.pix_mp.height)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
- static int rkvdec_h264_start(struct rkvdec_ctx *ctx)
- {
- 	struct rkvdec_dev *rkvdec = ctx->dev;
- 	struct rkvdec_h264_priv_tbl *priv_tbl;
- 	struct rkvdec_h264_ctx *h264_ctx;
-+	struct v4l2_ctrl *ctrl;
- 	int ret;
- 
-+	ctrl = v4l2_ctrl_find(&ctx->ctrl_hdl,
-+			      V4L2_CID_STATELESS_H264_SPS);
-+	if (!ctrl)
-+		return -EINVAL;
-+
-+	ret = rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps);
-+	if (ret)
-+		return ret;
-+
- 	h264_ctx = kzalloc(sizeof(*h264_ctx), GFP_KERNEL);
- 	if (!h264_ctx)
- 		return -ENOMEM;
-@@ -1139,23 +1193,9 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
- 
- static int rkvdec_h264_try_ctrl(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
- {
--	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
--		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
--		/*
--		 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
--		 * but it's currently broken in the driver.
--		 * Reject them for now, until it's fixed.
--		 */
--		if (sps->chroma_format_idc > 1)
--			/* Only 4:0:0 and 4:2:0 are supported */
--			return -EINVAL;
--		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
--			/* Luma and chroma bit depth mismatch */
--			return -EINVAL;
--		if (sps->bit_depth_luma_minus8 != 0)
--			/* Only 8-bit is supported */
--			return -EINVAL;
--	}
-+	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS)
-+		return rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps);
-+
- 	return 0;
- }
- 
--- 
-2.34.1
+> ---
+>  drivers/media/platform/chips-media/coda-common.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/m=
+edia/platform/chips-media/coda-common.c
+> index c60473b18b6b..4a7346ed771e 100644
+> --- a/drivers/media/platform/chips-media/coda-common.c
+> +++ b/drivers/media/platform/chips-media/coda-common.c
+> @@ -2882,6 +2882,11 @@ static int coda_register_device(struct coda_dev *d=
+ev, int i)
+>  	if (dev->devtype->vdevs[i]->type =3D=3D CODA_INST_ENCODER) {
+>  		v4l2_disable_ioctl(vfd, VIDIOC_DECODER_CMD);
+>  		v4l2_disable_ioctl(vfd, VIDIOC_TRY_DECODER_CMD);
+> +		if (dev->devtype->vdevs[i]->dst_formats[0] =3D=3D V4L2_PIX_FMT_JPEG) {
+> +			v4l2_disable_ioctl(vfd, VIDIOC_ENUM_FRAMEINTERVALS);
+> +			v4l2_disable_ioctl(vfd, VIDIOC_G_PARM);
+> +			v4l2_disable_ioctl(vfd, VIDIOC_S_PARM);
+> +		}
+>  	} else {
+>  		v4l2_disable_ioctl(vfd, VIDIOC_ENCODER_CMD);
+>  		v4l2_disable_ioctl(vfd, VIDIOC_TRY_ENCODER_CMD);
 
