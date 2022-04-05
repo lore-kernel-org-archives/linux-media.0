@@ -2,85 +2,81 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F16E7C43219
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C29D1C4332F
 	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573798AbiDEWxN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
+        id S1573787AbiDEWxL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444225AbiDEWVB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:21:01 -0400
+        with ESMTP id S1391010AbiDEPdi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:33:38 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C998B8E1BB;
-        Tue,  5 Apr 2022 13:45:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55844B1F6;
+        Tue,  5 Apr 2022 06:39:58 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 47B301F448A1
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 0F47F1F4343B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649191510;
-        bh=t6w6zh2urP7UBHlWH5GWukchWArbLK9mbtqizbdraAY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TkK+aVQN462OFzg3kXJMyyDzO9T5YZP4amtnyD+IC682s9lJt9HfFWJIqL5686Ljz
-         /JF9E3x+CLnwgJ8byoIc1gLKjhAYVf5LLJvnskfXyFbE0nNpttYv4gxOg1s9CsRTNs
-         AwdTGwxXdcxGIx/YlfnIu7+3Za8p8RI0he0Yu3Pa62uJ73r6KAHWnd+2NyYoKq+xfR
-         vULVmlkefvGmBpcWiLzWObKsI1+YnxZxTF0muf+/GqNSWumbYdHjzwdySXF38cSXGe
-         eWSRYf7IRpZi0MWDeZfFszhSmt7gZWD2MD7j0ZuG/oZyTGQAwwt26oDn+Fis6PS2GV
-         ylea4nyVQ09Pw==
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH v3 17/24] media: rkvdec: h264: Fix reference frame_num wrap for second field
-Date:   Tue,  5 Apr 2022 16:44:18 -0400
-Message-Id: <20220405204426.259074-18-nicolas.dufresne@collabora.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
-References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+        s=mail; t=1649165997;
+        bh=gQ3Pg9KvJsy1nFjnsiFdGRFbG2pjxVLA/rIpxmBYnwQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bCaiTvvM0EjvxPHg+Cq7O5T0+4hFiZUiI5RpINvgXIufUIWOgU+JCWbOLVPG4UdzK
+         vl5GkV8ZyYkDoDat6rI53qT2r39VItbOp2S9bVyr7ze61LtNTD6ql1dbDHp1eYSytk
+         Bk98QgZiyNDZ2omvmhhIYaq1PgqlZXI/SYHQLr+G0kHbhrMu80gamnya1o9f3R8YpT
+         Im9GzEyXmk5wA7PHXkesFA9m76uC3vjsu0FW1KIAX5HqrSml/R12UNuqDrjvuk4jJk
+         pe+LYZhlL84lF3r5Ouk4u2IJlRSzVwgTA9q/KiaooZQyL7co0i1bW8x9BNoHG8rtlc
+         kCeCgITqZw9eg==
+Message-ID: <0762b013-6c13-ef57-5796-902c9899ee95@collabora.com>
+Date:   Tue, 5 Apr 2022 15:39:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] media: mediatek: vcodec: Fix v4l2 compliance decoder
+ cmd test fail
+Content-Language: en-US
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220401081302.9475-1-yunfei.dong@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220401081302.9475-1-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jonas Karlman <jonas@kwiboo.se>
+Il 01/04/22 10:13, Yunfei Dong ha scritto:
+> Will return -EINVAL using standard framework api when test stateless
+> decoder with cmd VIDIOC_(TRY)DECODER_CMD.
+> 
+> Using another return value to adjust v4l2 compliance test for user
+> driver(GStreamer/Chrome) won't use decoder cmd.
+> 
+> Fixes: 8cdc3794b2e3 ("media: mtk-vcodec: vdec: support stateless API")
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 
-When decoding the second field in a complementary field pair the second
-field is sharing the same frame_num with the first field.
-
-Currently the frame_num for the first field is wrapped when it matches the
-field being decoded, this cause issues to decode the second field in a
-complementary field pair.
-
-Fix this by using inclusive comparison, less than or equal.
-
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
----
- drivers/staging/media/rkvdec/rkvdec-h264.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index f081b476340f..60eaf06b6e25 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -781,7 +781,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
- 			continue;
- 
- 		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM ||
--		    dpb[i].frame_num < dec_params->frame_num) {
-+		    dpb[i].frame_num <= dec_params->frame_num) {
- 			p[i] = dpb[i].frame_num;
- 			continue;
- 		}
--- 
-2.34.1
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
