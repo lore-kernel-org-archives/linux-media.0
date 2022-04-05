@@ -2,106 +2,119 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14348C4321E
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF63EC433EF
+	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573682AbiDEWwm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
+        id S1573700AbiDEWws (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444286AbiDEWVC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:21:02 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B182D64E3;
-        Tue,  5 Apr 2022 13:45:24 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 1784D1F448E3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649191523;
-        bh=OT93d1YFbCsPl7b/q8Q9Ng7KBwuAX7su/L0Pt2JnS6E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nNvEk9FSqJ+Zr8rUxgKxyJSmv6mX4qQyAS+tDBzhdTzBvK71pbtUjfCi32itjn3dB
-         bt32fyf4cP3I7CJmuyPKvK0UJvZFE0r4V0b9yrhHXajgEfKLUNFdiBUXnGGRmzKqjc
-         2Ye9J38BecODqViFHR05ROYN/bKVTU3K/+Mn9I3/cVLGPmTvB2C/hsWGWiyPWM3aQX
-         Jst3N1NJctC3fkzp2h9zFGrHiDf432EHwN8wiv2lIORH/CW6rvAn7dt3WjTUmMfECD
-         4oD08X/MZoh3NhOUyTUw3kZAH1GTL74v5hAq8cDJYwQDW3wF5FXWKiHyOwkZyIUXEe
-         /w5Rxy1mhcmyQ==
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH v3 24/24] media: hantro: Enable HOLD_CAPTURE_BUF for H.264
-Date:   Tue,  5 Apr 2022 16:44:25 -0400
-Message-Id: <20220405204426.259074-25-nicolas.dufresne@collabora.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
-References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+        with ESMTP id S1443841AbiDEPkW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:40:22 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DDF10E549;
+        Tue,  5 Apr 2022 07:00:39 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id t21so13460182oie.11;
+        Tue, 05 Apr 2022 07:00:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HFMQgSR3Z2986CsvnsaxYCQAxCwwsfFViVfXTurYbuM=;
+        b=c1d6GMnUCpuBiRYFYUMeSmkzMXbgvzFsmhNTEx5ALxlYDIIgEnDIC3KEYkk6w/FhpB
+         TqVO5CZYMwkItnXKm6jAm5gJKI+LlTivA+RxswnPYXL/iqNzg6845SVJ73UQ688A8jcs
+         oSrVMzCdB4Nn2/yrnVEoi3VY8cA3XL6SuQ81cLQRPYsQJBBqBjdVW+w5MGnrlaR75kCV
+         1IdwIAJxCk/DkKh/Hhse2iBWJmL6f3VX2hw2m1so0+gyIuPgNsdSsoGKWgwDithk/bCU
+         yQPKhif0qham54k/tTgXOhPtbKbz9MSqGWkUqmBHfi3GkMM3kMBPSPEPoURcYK/qg7Lv
+         +dDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HFMQgSR3Z2986CsvnsaxYCQAxCwwsfFViVfXTurYbuM=;
+        b=iGEAU/bcSb8f4htHiqicAPlAF4GziMejaZpi9/QWfId/jnv+Dt0IqvQgcIg6rjxN45
+         LvoF2tvRbnKEw2/Rm71gkq2R0sXn5TvtuZt/HxKR7zgUpT+60Ww5FEoE+MAmnASOIYGH
+         p/vv24o/X5BYLH6Xp56IlJzwhTwlq/b3yvwcn3gTWdCSkVKvhOnfYPgpVlenD1DFwGck
+         KOlJ+rCmchHmg3ZPQQZNMHqMS6WSxfA3hw0+AWoCJA7zJKWbYsX+oZfvG0fyRhYD227K
+         lAZ3RniQkcFxD75F9MHAu+zrOm0q6GbofoyaIxoFPlv1LmlJDvy3caem2f5O9LKGlPgG
+         Vq5g==
+X-Gm-Message-State: AOAM532ZmYoX1NwpPYMDmR3DTrRsyMCz+mgUwURqfm28C9dTLqA3Gtmr
+        n8XuJg0Y8SfCCKiiJKA3wlc=
+X-Google-Smtp-Source: ABdhPJyx+UrnCCCC/dq6VupZvYiQblLTfNZtdfBOgNWTKrCgoNVnGNSrcKZIjfn8KOCE1dlioTnWEw==
+X-Received: by 2002:a05:6808:c:b0:2ef:8913:354 with SMTP id u12-20020a056808000c00b002ef89130354mr1429138oic.201.1649167238532;
+        Tue, 05 Apr 2022 07:00:38 -0700 (PDT)
+Received: from localhost.localdomain ([2804:14c:485:4b69:99d5:2af:ddde:2ce0])
+        by smtp.gmail.com with ESMTPSA id c3-20020a056808138300b002f76b9a9ef6sm5537029oiw.10.2022.04.05.07.00.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 07:00:37 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     hverkuil-cisco@xs4all.nl
+Cc:     nicolas.dufresne@collabora.com, kernel@iktek.de,
+        p.zabel@pengutronix.de, linux-media@vger.kernel.org,
+        stable@vger.kernel.org, Ezequiel Garcia <ezequiel@collabora.com>,
+        Fabio Estevam <festevam@denx.de>
+Subject: [PATCH v4 1/2] media: coda: Fix reported H264 profile
+Date:   Tue,  5 Apr 2022 10:59:56 -0300
+Message-Id: <20220405135957.3580343-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is needed to optimize field decoding. Each field will be
-decoded into the same capture buffer. To be able to queue multiple
-buffers, we need to be able to ask the driver to hold the capture
-buffer.
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
+The CODA960 manual states that ASO/FMO features of baseline are not
+supported, so for this reason this driver should only report
+constrained baseline support.
+
+This fixes negotiation issue with constrained baseline content
+on GStreamer 1.17.1.
+
+ASO/FMO features are unsupported for the encoder and untested for the
+decoder because there is currently no userspace support. Neither GStreamer
+parsers nor FFMPEG parsers support ASO/FMO.
+
+Cc: stable@vger.kernel.org
+Fixes: 42a68012e67c2 ("media: coda: add read-only h.264 decoder profile/level controls")
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Tested-by: Pascal Speck <kernel@iktek.de>
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/staging/media/hantro/hantro_v4l2.c | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+Changes since v3:
+- Rebased against linux-next and took the coda->chips-media rename
+in consideration.
 
-diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-index 67148ba346f5..50d636678ff3 100644
---- a/drivers/staging/media/hantro/hantro_v4l2.c
-+++ b/drivers/staging/media/hantro/hantro_v4l2.c
-@@ -409,6 +409,30 @@ hantro_update_requires_request(struct hantro_ctx *ctx, u32 fourcc)
- 	}
- }
- 
-+static void
-+hantro_update_requires_hold_capture_buf(struct hantro_ctx *ctx, u32 fourcc)
-+{
-+	struct vb2_queue *vq;
-+
-+	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
-+			     V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
-+
-+	switch (fourcc) {
-+	case V4L2_PIX_FMT_JPEG:
-+	case V4L2_PIX_FMT_MPEG2_SLICE:
-+	case V4L2_PIX_FMT_VP8_FRAME:
-+	case V4L2_PIX_FMT_HEVC_SLICE:
-+	case V4L2_PIX_FMT_VP9_FRAME:
-+		vq->subsystem_flags &= ~(VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF);
-+		break;
-+	case V4L2_PIX_FMT_H264_SLICE:
-+		vq->subsystem_flags |= VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF;
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
- static int hantro_set_fmt_out(struct hantro_ctx *ctx,
- 			      struct v4l2_pix_format_mplane *pix_mp)
- {
-@@ -472,6 +496,7 @@ static int hantro_set_fmt_out(struct hantro_ctx *ctx,
- 	ctx->dst_fmt.quantization = pix_mp->quantization;
- 
- 	hantro_update_requires_request(ctx, pix_mp->pixelformat);
-+	hantro_update_requires_hold_capture_buf(ctx, pix_mp->pixelformat);
- 
- 	vpu_debug(0, "OUTPUT codec mode: %d\n", ctx->vpu_src_fmt->codec_mode);
- 	vpu_debug(0, "fmt - w: %d, h: %d\n",
+ drivers/media/platform/chips-media/coda-common.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
+index a57822b05070..53b2dd1b268c 100644
+--- a/drivers/media/platform/chips-media/coda-common.c
++++ b/drivers/media/platform/chips-media/coda-common.c
+@@ -2344,8 +2344,8 @@ static void coda_encode_ctrls(struct coda_ctx *ctx)
+ 		V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET, -12, 12, 1, 0);
+ 	v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+ 		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+-		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE, 0x0,
+-		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE);
++		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE, 0x0,
++		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE);
+ 	if (ctx->dev->devtype->product == CODA_HX4 ||
+ 	    ctx->dev->devtype->product == CODA_7541) {
+ 		v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
+@@ -2426,7 +2426,7 @@ static void coda_decode_ctrls(struct coda_ctx *ctx)
+ 	ctx->h264_profile_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
+ 		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+ 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
+-		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
++		~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
+ 		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
+ 		  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
+ 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
 -- 
-2.34.1
+2.25.1
 
