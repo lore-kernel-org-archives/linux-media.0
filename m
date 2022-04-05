@@ -2,224 +2,100 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A71DCC4332F
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F7E3C433EF
+	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573804AbiDEWxR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
+        id S1573823AbiDEWxZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457236AbiDEQC6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 12:02:58 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4343513D0A
-        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 08:34:43 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id d7so3461627edn.11
-        for <linux-media@vger.kernel.org>; Tue, 05 Apr 2022 08:34:43 -0700 (PDT)
+        with ESMTP id S1444549AbiDEPlj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:41:39 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ED2F94D1
+        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 07:05:50 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id j21so11196930qta.0
+        for <linux-media@vger.kernel.org>; Tue, 05 Apr 2022 07:05:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=a1xJ6jFPkFxQuvHAGPReiLsquMYU3s3ZKHuSgQSN2JI=;
-        b=yCS5jpe9VjM9C+zh8VBKOmizln04kAtaeouTe7pAMtjRZrAsxmkgvcwGiMGfaxwyS4
-         kw1rejBx6SrcJNllN4RSW73Vtr8GHYX+dZXOznMHs64ypDbqAvv83cGXTzTyhIDMSPR4
-         06XGaPkjtIXljr7u7xRJUxDhwZWo7Rb8V62qaT7radA5uDvQILA//MWgaU8xJIIrWB4l
-         lnYVVbnbiA/cbGcskrhmlDGUre5mfuSWPrlt/p9x6XUKP6vSE6VHRMMBhXddXdMyrq6u
-         sbDpCh7Y+eCVlvhQn8y6w/C2epmbcOfA8cT6Nb2yzLtxWWW72tLEWGUtA5gfVNhGGniy
-         WjeQ==
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=+cpcJenwRzUg0nDdeKywta6BLntPgSYmI6GpCNc7oP8=;
+        b=f6GA7JbX0+R11t6JxzSrUPO13d8raNSU9UOwbsVJG09ReVL7TriLkd2bsJq3YHw2m3
+         OtQeeqgs4CSvVgOc+6H8EvxAkBHKPsF3oVbak7toTFYz0PZZa0cyRbZflwzJ93tRefKt
+         LSKp8vAswC7pmHSZu674RgB/g2IYy8XXXysEXmkUzVratqGJXyHumnNwIY+V8P7xTLkc
+         8ax8Ar9I3eQBGPVI4xtgK57tFWmJ7YZ654TnoMxPfPeBsAgqiTQpIPIT/VCEGKH8+Fcg
+         DlOfT8cevMihP8+RSLKn2D3PeoVNTl+XimQlAwwtXURGr9Mx1O235Jd7LqQIhBpXE13X
+         oqmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=a1xJ6jFPkFxQuvHAGPReiLsquMYU3s3ZKHuSgQSN2JI=;
-        b=A8eoqCBWFFl6JpZenN2Fz4FxsHi+zm++M2H7i/0drIfvn7/Pn2lVHv8Ovl52EgIuc9
-         DlAzjqz/CmNA8Dz6nFvKnyueEmxslrXZXZ13NLgxSh4OGN0uQmtbu9f28Nmj6G8nUOhL
-         OerULboUZ1ol2FOxSRMo6bweg4CHoUAAgyro9/rrt5ByS14QYriIgpbQkAC6wpJOuhjC
-         jPzTwcb9fH+ov7GgmWCA0GB2RzmVFX6CIEISTFvYt2ksIR5A2k7JMrywIu1Yvs7tAH3C
-         5P/6Ma3SXQLnOYhAOVyOjD8mfzVLu/7mBkCv0R+N5yWzrXPQLh9+CaWYaE+0OFXWBjtx
-         94DQ==
-X-Gm-Message-State: AOAM531zgvbdlE436y4cK/vKrZ94mT1vdLB/ciM3pkpTFH/nBFTdj0AF
-        ZXbGk3lKvZX72ChJUArXM68I5eXcekhCdlNIdHkCTA==
-X-Google-Smtp-Source: ABdhPJzw4YwchmSZLuoyl5Jwvu1T8kRfHZDvBRGJl2eE8vJuOb0LnTTOzWkxc9myV9hSldolnwOUHnDWJByG+ntYhWQ=
-X-Received: by 2002:aa7:c789:0:b0:413:605d:8d17 with SMTP id
- n9-20020aa7c789000000b00413605d8d17mr4224378eds.100.1649172881727; Tue, 05
- Apr 2022 08:34:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220331193726.289559-1-nicolas.dufresne@collabora.com>
- <20220331193726.289559-14-nicolas.dufresne@collabora.com> <YkgwmwTMa83RysKB@eze-laptop>
- <92001085580ac1005596b34f79f1dadcc4b3f3c9.camel@collabora.com>
-In-Reply-To: <92001085580ac1005596b34f79f1dadcc4b3f3c9.camel@collabora.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Tue, 5 Apr 2022 12:34:30 -0300
-Message-ID: <CAAEAJfA_+ZAcjHUN7Ydi0b=XB0=kFMaaPQC=h_44CNHq9rBsmQ@mail.gmail.com>
-Subject: Re: [PATCH v2 13/23] media: rkvdec: h264: Fix dpb_valid implementation
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=+cpcJenwRzUg0nDdeKywta6BLntPgSYmI6GpCNc7oP8=;
+        b=UPJjFn228dutI1grhZEd1k73AjQCs0cW+ZPeQNgNn7MEUkpUvzEH+i+dc7eErm96/K
+         N+KDKVjM8e+prfDIHdIlfEzyMh6tAcYU4ip//QduNtrG7M5olSLSxe/UinQgA2336gdc
+         2IHCI7ks5WqZXiFUuWG1zmRSb38Kn0nDhRKcWD8cf9cvXanmrucJP1Do1CqcOIPVJ6TP
+         zY12jm2iIv1+AIppKBLV8HxFryO3yFQxYQ3DUnfion3XauDuQAJYB+LNqEictXcJJv6N
+         l0vZPLAnA18CUDP4VucfWVu9rc157flsFjP8W5W1uMhO8eVhHAXCcip6eaMuQEpJkCVR
+         3nqw==
+X-Gm-Message-State: AOAM532eTZLaXEi8M/P7vqqV+KkIjPPp5kb78CsG4exfyaUoqvWx67KQ
+        jkRqNWFEgAh43WNT5kCvItHXig==
+X-Google-Smtp-Source: ABdhPJzyujbP/oy1fiY0w3L4j8s+GjdCRlLzsYslDERm3/ps9npp2rRxHNTrbzSnGnS44UGRuoRx6w==
+X-Received: by 2002:a05:622a:348:b0:2e1:d42f:d3be with SMTP id r8-20020a05622a034800b002e1d42fd3bemr3105184qtw.26.1649167549321;
+        Tue, 05 Apr 2022 07:05:49 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id v3-20020a05622a014300b002e1dcd4cfa9sm11114181qtw.64.2022.04.05.07.05.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 07:05:48 -0700 (PDT)
+Message-ID: <f87c9c6c58e06cb63f2cbce1913aab81ca60d7a4.camel@ndufresne.ca>
+Subject: Re: [PATCH 1/7] media: coda: set output buffer bytesused to appease
+ v4l2-compliance
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
+Date:   Tue, 05 Apr 2022 10:05:47 -0400
+In-Reply-To: <20220404163533.707508-1-p.zabel@pengutronix.de>
+References: <20220404163533.707508-1-p.zabel@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 12:11 PM Nicolas Dufresne
-<nicolas.dufresne@collabora.com> wrote:
->
-> Le samedi 02 avril 2022 =C3=A0 08:16 -0300, Ezequiel Garcia a =C3=A9crit =
+Le lundi 04 avril 2022 =C3=A0 18:35 +0200, Philipp Zabel a =C3=A9crit=C2=A0=
 :
-> > On Thu, Mar 31, 2022 at 03:37:15PM -0400, Nicolas Dufresne wrote:
-> > > The ref builder only provided references that are marked as valid in =
-the
-> > > dpb. Thus the current implementation of dpb_valid would always set th=
-e
-> > > flag to 1. This is not representing missing frames (this is called
-> > > 'non-existing' pictures in the spec). In some context, these non-exis=
-ting
-> > > pictures still need to occupy a slot in the reference list according =
-to
-> > > the spec.
-> > >
-> >
-> > Good catch! OOC, did you find this because it was failing a test vector=
-?
->
-> The effect is complex, so I could not correlate to specific tests. Also, =
-what I
-> wanted to fix isn't covered by the ITU conformance, its mostly resiliance
-> requirement. But this should remove some of the IOMMU fault on broken str=
-eams
-> and make it less likely to use references that don't exists or aren't set=
- what
-> we expect. After this change, the driver was getting more stable, and res=
-ults
-> was also more reproducible (specially in parallel decode case, which I us=
-e to
-> speed up testing).
->
+> The V4L2 specification states:
+>=20
+>  "If the application sets this to 0 for an output stream, then bytesused
+>   will be set to the size of the buffer (see the length field of this
+>   struct) by the driver."
+>=20
+> Since we set allow_zero_bytesused, we have to handle this ourselves.
+>=20
+> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-Thanks for the details. This sounds like something that could
-be added to the commit description itself.
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-> >
-> > > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> > > Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-> >
-> > Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
-> > Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
->
-> Thanks for the review.
->
+> ---
+>  drivers/media/platform/chips-media/coda-bit.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/drivers/media/platform/chips-media/coda-bit.c b/drivers/medi=
+a/platform/chips-media/coda-bit.c
+> index c484c008ab02..705a179ea8f0 100644
+> --- a/drivers/media/platform/chips-media/coda-bit.c
+> +++ b/drivers/media/platform/chips-media/coda-bit.c
+> @@ -381,6 +381,9 @@ void coda_fill_bitstream(struct coda_ctx *ctx, struct=
+ list_head *buffer_list)
+>  		/* Dump empty buffers */
+>  		if (!vb2_get_plane_payload(&src_buf->vb2_buf, 0)) {
+>  			src_buf =3D v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+> +			vb2_set_plane_payload(&src_buf->vb2_buf, 0,
+> +					      vb2_plane_size(&src_buf->vb2_buf,
+> +							     0));
+>  			v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
+>  			continue;
+>  		}
 
-No problem :)
-
-> >
-> > Thanks,
-> > Ezequiel
-> >
-> > > ---
-> > >  drivers/staging/media/rkvdec/rkvdec-h264.c | 33 ++++++++++++++++----=
---
-> > >  1 file changed, 24 insertions(+), 9 deletions(-)
-> > >
-> > > diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/sta=
-ging/media/rkvdec/rkvdec-h264.c
-> > > index dff89732ddd0..bcde37d72244 100644
-> > > --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-> > > +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-> > > @@ -112,6 +112,7 @@ struct rkvdec_h264_run {
-> > >     const struct v4l2_ctrl_h264_sps *sps;
-> > >     const struct v4l2_ctrl_h264_pps *pps;
-> > >     const struct v4l2_ctrl_h264_scaling_matrix *scaling_matrix;
-> > > +   int ref_buf_idx[V4L2_H264_NUM_DPB_ENTRIES];
-> > >  };
-> > >
-> > >  struct rkvdec_h264_ctx {
-> > > @@ -725,6 +726,26 @@ static void assemble_hw_pps(struct rkvdec_ctx *c=
-tx,
-> > >     }
-> > >  }
-> > >
-> > > +static void lookup_ref_buf_idx(struct rkvdec_ctx *ctx,
-> > > +                          struct rkvdec_h264_run *run)
-> > > +{
-> > > +   const struct v4l2_ctrl_h264_decode_params *dec_params =3D run->de=
-code_params;
-> > > +   u32 i;
-> > > +
-> > > +   for (i =3D 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
-> > > +           struct v4l2_m2m_ctx *m2m_ctx =3D ctx->fh.m2m_ctx;
-> > > +           const struct v4l2_h264_dpb_entry *dpb =3D run->decode_par=
-ams->dpb;
-> > > +           struct vb2_queue *cap_q =3D &m2m_ctx->cap_q_ctx.q;
-> > > +           int buf_idx =3D -1;
-> > > +
-> > > +           if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
-> > > +                   buf_idx =3D vb2_find_timestamp(cap_q,
-> > > +                                                dpb[i].reference_ts,=
- 0);
-> > > +
-> > > +           run->ref_buf_idx[i] =3D buf_idx;
-> > > +   }
-> > > +}
-> > > +
-> > >  static void assemble_hw_rps(struct rkvdec_ctx *ctx,
-> > >                         struct rkvdec_h264_run *run)
-> > >  {
-> > > @@ -762,7 +783,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ct=
-x,
-> > >
-> > >     for (j =3D 0; j < RKVDEC_NUM_REFLIST; j++) {
-> > >             for (i =3D 0; i < h264_ctx->reflists.num_valid; i++) {
-> > > -                   u8 dpb_valid =3D 0;
-> > > +                   bool dpb_valid =3D run->ref_buf_idx[i] >=3D 0;
-> > >                     u8 idx =3D 0;
-> > >
-> > >                     switch (j) {
-> > > @@ -779,8 +800,6 @@ static void assemble_hw_rps(struct rkvdec_ctx *ct=
-x,
-> > >
-> > >                     if (idx >=3D ARRAY_SIZE(dec_params->dpb))
-> > >                             continue;
-> > > -                   dpb_valid =3D !!(dpb[idx].flags &
-> > > -                                  V4L2_H264_DPB_ENTRY_FLAG_ACTIVE);
-> > >
-> > >                     set_ps_field(hw_rps, DPB_INFO(i, j),
-> > >                                  idx | dpb_valid << 4);
-> > > @@ -859,13 +878,8 @@ get_ref_buf(struct rkvdec_ctx *ctx, struct rkvde=
-c_h264_run *run,
-> > >         unsigned int dpb_idx)
-> > >  {
-> > >     struct v4l2_m2m_ctx *m2m_ctx =3D ctx->fh.m2m_ctx;
-> > > -   const struct v4l2_h264_dpb_entry *dpb =3D run->decode_params->dpb=
-;
-> > >     struct vb2_queue *cap_q =3D &m2m_ctx->cap_q_ctx.q;
-> > > -   int buf_idx =3D -1;
-> > > -
-> > > -   if (dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
-> > > -           buf_idx =3D vb2_find_timestamp(cap_q,
-> > > -                                        dpb[dpb_idx].reference_ts, 0=
-);
-> > > +   int buf_idx =3D run->ref_buf_idx[dpb_idx];
-> > >
-> > >     /*
-> > >      * If a DPB entry is unused or invalid, address of current destin=
-ation
-> > > @@ -1102,6 +1116,7 @@ static int rkvdec_h264_run(struct rkvdec_ctx *c=
-tx)
-> > >
-> > >     assemble_hw_scaling_list(ctx, &run);
-> > >     assemble_hw_pps(ctx, &run);
-> > > +   lookup_ref_buf_idx(ctx, &run);
-> > >     assemble_hw_rps(ctx, &run);
-> > >     config_registers(ctx, &run);
-> > >
-> > > --
-> > > 2.34.1
-> > >
->
