@@ -2,179 +2,112 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD82CC4332F
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 22:56:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88FCBC4332F
+	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 22:56:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345289AbiDEWuG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
+        id S1349136AbiDEWuM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444954AbiDEPmR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:42:17 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8E218F200
-        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 07:07:10 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id z19so11167610qtw.2
-        for <linux-media@vger.kernel.org>; Tue, 05 Apr 2022 07:07:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=oRDYeKU+64jhj0gYuFs9GBbEHACDr9Xl+2tp4JX786c=;
-        b=W9rP/aLkunDOzzKaSRjXrC8OzKmlaIWuxplqvIHmONUUXgy8lHDvoO9hFTjH+cJfpA
-         xfcmumC/3i8VcBsu4mziMA4CiME0S39MdNmPX4+Ie8GnZaZj/HlYQMDMdYK7CjN6i/cZ
-         vNnJwClvRnjMSRL9RKILpoatYPVTHJKAvV2eIZf2Aw5E2mP1lY98SeSXqqtCE4ACqNG7
-         pfFDR2yt+PMeZtglifwRvITX0Jx9nMtFTRKbZaIkLsIWrIQovtof/6BlVVYnZBBxRTdX
-         +YKSYbY5alAP7Hu1F2ONJTOHxXAtkWf7U3Cqih6swS7Bdvf0zwkDnnxJ3uzGC4I72ljI
-         i3qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=oRDYeKU+64jhj0gYuFs9GBbEHACDr9Xl+2tp4JX786c=;
-        b=C2FCc6cVHUG1DQOYqwXLT02bzPyOlyj673yzu/EmGc52ZMS5VXyvR5XYG4dH5weyS1
-         92ZfHgSZzc/LNCBrwFfP/k25RL5BL/P5aLSbhE1JGQTL15FjvKBOE7d1qcnDn/cAj2j0
-         R+hHeep32ETjMT1fxNaP7y7vCgLzG9fRcg3s+jcJNz5sG7WODEpySVVzugkB+hydA1+x
-         3PJAt/Okqw6NUoAUDYYb5tcSQ26oiR3Jkz+ZUkUDgMjToZt9XXnHFJeccEBrIJKgJYht
-         xuVG8q052vAhPTHTPcLdouNphzv9BrkDJNH79JTmBCiJ+FRFjZPJUfEkHrtavoo1nqdq
-         cI2w==
-X-Gm-Message-State: AOAM533EiNqRk58z787rF11vfLSCN0TPwqcuQNhvV8QHRXNnh5OaewaM
-        FCLF173VAxMvO6ieJuNR7m6v1Q==
-X-Google-Smtp-Source: ABdhPJyWN6nae6e9QyMmZG/cRXESXjuHE/W0ll5ploazXKv/E2zNJbIp9htXpgmPFkrN1txZildBnw==
-X-Received: by 2002:a05:620a:4512:b0:67d:19c0:badb with SMTP id t18-20020a05620a451200b0067d19c0badbmr2357615qkp.34.1649167629571;
-        Tue, 05 Apr 2022 07:07:09 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id w10-20020a05620a424a00b00680c0c0312dsm8202298qko.30.2022.04.05.07.07.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 07:07:09 -0700 (PDT)
-Message-ID: <4f17ea686b1919c15d5c4a2c63d22f180a0813fb.camel@ndufresne.ca>
-Subject: Re: [PATCH 2/7] media: coda: disable encoder cmd ioctl on decoder
- and vice versa
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
-Date:   Tue, 05 Apr 2022 10:07:08 -0400
-In-Reply-To: <20220404163533.707508-2-p.zabel@pengutronix.de>
-References: <20220404163533.707508-1-p.zabel@pengutronix.de>
-         <20220404163533.707508-2-p.zabel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        with ESMTP id S1457546AbiDEQJq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 12:09:46 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A85A25CD;
+        Tue,  5 Apr 2022 09:07:46 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:cf29:3f0:be4d:7211] (unknown [IPv6:2a01:e0a:120:3210:cf29:3f0:be4d:7211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 511F61F43BDC;
+        Tue,  5 Apr 2022 17:07:44 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649174864;
+        bh=Y7AMfmbF+pTW6heGBBOtMSPe72VwTuirLOp6bmUM2l8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YdiGwf54xZ2SQaL3Kg7d0z6H9yFy3jkfu5wqfmvXDG3Yoo43FV4nvSf8M7bozm3vQ
+         VVZW2A3dSj2jG45xLSvt3K2OZwoa/XmIf31XNDejfWFZ4JEAtRNyxWjl7M38ydvyLK
+         B/ELY4LHhInWRfNGtOqjHaytIuFg5ccxSSMzxTDcelnc1USAD0Ay5gysapFchtZ19D
+         tGy4YnI0AxLEchVvhSDflRaVbn8ISxd+soOSaX/Bu+cTN4ObX5nvsybHapgxlzoCdJ
+         vr+c8fj31gKs28+vpiZDH/FzwrxgFzYoJ41xyTDKpuPMLsqRupBjcVQjMZTf6IQroH
+         vvGU7AI/NHllA==
+Message-ID: <b6987a9a-56af-f63f-b60a-37df141d6e89@collabora.com>
+Date:   Tue, 5 Apr 2022 18:07:41 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH 0/8] media: hantro: Add 10-bit support
+Content-Language: en-US
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
+Cc:     mchehab@kernel.org, nicolas@ndufresne.ca, hverkuil-cisco@xs4all.nl,
+        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le lundi 04 avril 2022 =C3=A0 18:35 +0200, Philipp Zabel a =C3=A9crit=C2=A0=
-:
-> Use v4l2_disable_ioctl() to disable the VIDIOC_TRY_ENCODER_CMD and
-> VIDIOC_ENCODER_CMD ioctls on decoder video devices and the
-> VIDIOC_TRY_DECODER_CMD and VIDIOC_DECODER_CMD ioctls on encoder
-> video devices.
->=20
-> This allows to drop the coda_try_encoder/decoder_cmd() functions
-> and to use v4l2_m2m_ioctl_try_encoder/decoder_cmd() directly.
->=20
-> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-Nice cleanup.
+Le 27/02/2022 à 15:49, Jernej Skrabec a écrit :
+> First two patches add 10-bit formats to UAPI, third extends filtering
+> mechanism, fourth fixes incorrect assumption, fifth moves register
+> configuration code to proper place, sixth and seventh enable 10-bit
+> VP9 decoding on Allwinner H6 and last increases core frequency on
+> Allwinner H6.
+>
+> I'm sending this as RFC to get some comments:
+> 1. format definitions - are fourcc's ok? are comments/descriptions ok?
+> 2. is extended filtering mechanism ok?
+>
+> I would also like if these patches are tested on some more HW.
+> Additionally, can someone test tiled P010?
+>
+> Please take a look.
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Hi Jernej,
 
-> ---
->  .../media/platform/chips-media/coda-common.c  | 38 ++++++-------------
->  1 file changed, 12 insertions(+), 26 deletions(-)
->=20
-> diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/m=
-edia/platform/chips-media/coda-common.c
-> index 6d2989504b33..dc75133b0ead 100644
-> --- a/drivers/media/platform/chips-media/coda-common.c
-> +++ b/drivers/media/platform/chips-media/coda-common.c
-> @@ -1091,17 +1091,6 @@ static int coda_s_selection(struct file *file, voi=
-d *fh,
->  	}
->  }
-> =20
-> -static int coda_try_encoder_cmd(struct file *file, void *fh,
-> -				struct v4l2_encoder_cmd *ec)
-> -{
-> -	struct coda_ctx *ctx =3D fh_to_ctx(fh);
-> -
-> -	if (ctx->inst_type !=3D CODA_INST_ENCODER)
-> -		return -ENOTTY;
-> -
-> -	return v4l2_m2m_ioctl_try_encoder_cmd(file, fh, ec);
-> -}
-> -
->  static void coda_wake_up_capture_queue(struct coda_ctx *ctx)
->  {
->  	struct vb2_queue *dst_vq;
-> @@ -1120,7 +1109,7 @@ static int coda_encoder_cmd(struct file *file, void=
- *fh,
->  	struct vb2_v4l2_buffer *buf;
->  	int ret;
-> =20
-> -	ret =3D coda_try_encoder_cmd(file, fh, ec);
-> +	ret =3D v4l2_m2m_ioctl_try_encoder_cmd(file, fh, ec);
->  	if (ret < 0)
->  		return ret;
-> =20
-> @@ -1149,17 +1138,6 @@ static int coda_encoder_cmd(struct file *file, voi=
-d *fh,
->  	return 0;
->  }
-> =20
-> -static int coda_try_decoder_cmd(struct file *file, void *fh,
-> -				struct v4l2_decoder_cmd *dc)
-> -{
-> -	struct coda_ctx *ctx =3D fh_to_ctx(fh);
-> -
-> -	if (ctx->inst_type !=3D CODA_INST_DECODER)
-> -		return -ENOTTY;
-> -
-> -	return v4l2_m2m_ioctl_try_decoder_cmd(file, fh, dc);
-> -}
-> -
->  static bool coda_mark_last_meta(struct coda_ctx *ctx)
->  {
->  	struct coda_buffer_meta *meta;
-> @@ -1216,7 +1194,7 @@ static int coda_decoder_cmd(struct file *file, void=
- *fh,
->  	bool wakeup;
->  	int ret;
-> =20
-> -	ret =3D coda_try_decoder_cmd(file, fh, dc);
-> +	ret =3D v4l2_m2m_ioctl_try_decoder_cmd(file, fh, dc);
->  	if (ret < 0)
->  		return ret;
-> =20
-> @@ -1498,9 +1476,9 @@ static const struct v4l2_ioctl_ops coda_ioctl_ops =
-=3D {
->  	.vidioc_g_selection	=3D coda_g_selection,
->  	.vidioc_s_selection	=3D coda_s_selection,
-> =20
-> -	.vidioc_try_encoder_cmd	=3D coda_try_encoder_cmd,
-> +	.vidioc_try_encoder_cmd	=3D v4l2_m2m_ioctl_try_encoder_cmd,
->  	.vidioc_encoder_cmd	=3D coda_encoder_cmd,
-> -	.vidioc_try_decoder_cmd	=3D coda_try_decoder_cmd,
-> +	.vidioc_try_decoder_cmd	=3D v4l2_m2m_ioctl_try_decoder_cmd,
->  	.vidioc_decoder_cmd	=3D coda_decoder_cmd,
-> =20
->  	.vidioc_g_parm		=3D coda_g_parm,
-> @@ -2904,6 +2882,14 @@ static int coda_register_device(struct coda_dev *d=
-ev, int i)
->  	v4l2_disable_ioctl(vfd, VIDIOC_G_CROP);
->  	v4l2_disable_ioctl(vfd, VIDIOC_S_CROP);
-> =20
-> +	if (dev->devtype->vdevs[i]->type =3D=3D CODA_INST_ENCODER) {
-> +		v4l2_disable_ioctl(vfd, VIDIOC_DECODER_CMD);
-> +		v4l2_disable_ioctl(vfd, VIDIOC_TRY_DECODER_CMD);
-> +	} else {
-> +		v4l2_disable_ioctl(vfd, VIDIOC_ENCODER_CMD);
-> +		v4l2_disable_ioctl(vfd, VIDIOC_TRY_ENCODER_CMD);
-> +	}
-> +
->  	ret =3D video_register_device(vfd, VFL_TYPE_VIDEO, 0);
->  	if (!ret)
->  		v4l2_info(&dev->v4l2_dev, "%s registered as %s\n",
+I have create a branch to test this series with VP9 and HEVC:
+https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/10bit_imx8m
+Feel free to pick what I may need in it.
 
+That doesn't improve fluster scores, I think more dev are still needed in GST
+before getting something fully functional.
+Anyway I able to select P010 pixel format if the input is a 10bit bitstream.
+
+Regards,
+Benjamin
+
+>
+> Best regards,
+> Jernej
+>
+> Ezequiel Garcia (1):
+>    media: Add P010 tiled format
+>
+> Jernej Skrabec (7):
+>    media: Add P010 format
+>    media: hantro: Support format filtering by depth
+>    media: hantro: postproc: Fix buffer size calculation
+>    media: hantro: postproc: Fix legacy regs configuration
+>    media: hantro: Store VP9 bit depth in context
+>    media: hantro: sunxi: Enable 10-bit decoding
+>    media: hantro: sunxi: Increase frequency
+>
+>   drivers/media/v4l2-core/v4l2-common.c         |  3 ++
+>   drivers/media/v4l2-core/v4l2-ioctl.c          |  2 +
+>   drivers/staging/media/hantro/hantro.h         |  4 ++
+>   drivers/staging/media/hantro/hantro_drv.c     | 23 +++++++++
+>   .../staging/media/hantro/hantro_g2_vp9_dec.c  |  8 ---
+>   .../staging/media/hantro/hantro_postproc.c    | 34 ++++++++++---
+>   drivers/staging/media/hantro/hantro_v4l2.c    | 50 +++++++++++++++++--
+>   drivers/staging/media/hantro/hantro_v4l2.h    |  3 ++
+>   drivers/staging/media/hantro/sunxi_vpu_hw.c   | 13 ++++-
+>   include/uapi/linux/videodev2.h                |  2 +
+>   10 files changed, 122 insertions(+), 20 deletions(-)
+>
