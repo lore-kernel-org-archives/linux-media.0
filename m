@@ -2,211 +2,180 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D39DEC4332F
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61BB0C4167E
+	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573864AbiDEWxf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S1573881AbiDEWxh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457587AbiDEQLI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 12:11:08 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACA2E0C4;
-        Tue,  5 Apr 2022 09:09:08 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:cf29:3f0:be4d:7211] (unknown [IPv6:2a01:e0a:120:3210:cf29:3f0:be4d:7211])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 2DFB51F43F0D;
-        Tue,  5 Apr 2022 17:09:06 +0100 (BST)
+        with ESMTP id S1457450AbiDEQDP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 12:03:15 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809B129C85;
+        Tue,  5 Apr 2022 08:45:07 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 6D8A91F45363
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649174946;
-        bh=eeySzn5IBf+PbYNi+kPSgsYzcuDGcdY6haFj9xgGbTc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bquGS9tF62KHpCx6KOlVue0u3BUHutbpdUkIswCR9dFWpqBqt9KTIZhdbkOkIg6S0
-         5n2xd1750ecQX63Vs8TOqs39NgYYpYhtRV1t6PM4HIs72OOS+5VQxoFH+nMl/jbwmM
-         MoMH95usmnc6FzA9zfnGsEhCZRd2dgBhftcFXzdzHxiElFBGm7MmpAFJrpct6Bj7ry
-         EUCsInrPWwVbscgnQHQbTPVSxraI7RLgCevVwI6GjR3tRDPDX639GJsAt8wId1HaOc
-         014r4nTSexAxfPlT6inGkQbKlLgmE1NOk4DqvEuLjCqTDgUGGP8Cy9z12GsYnUzX/k
-         ERkD9KOJMHJgQ==
-Message-ID: <7972feba-221c-9960-68d0-ee15ad2a4f1a@collabora.com>
-Date:   Tue, 5 Apr 2022 18:09:03 +0200
+        s=mail; t=1649173505;
+        bh=JztdWyn4zziH9ZCDywtAj0401GGJ+F6Gh6lAOrlJVn0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=F/JTFnrOUX5ld+nCQAlSFBiWbidM6sjYzQfKABxhezmsugaSjKXbZTYa3mJI2NO7Z
+         prUuuq4CLDhuxZMRAt/1DdlXXdMbQzQoD8UBDr2nmOinv8OiXT6pA7wwewyZnawB+I
+         bdseOHQ1aS6Frr4iZN9RIgvG9SZFSGGh3vqJQEMuKS+Sad21/PBn5eOh+G8l1nQGHB
+         Kni9YQ1tC8iiDpl2EO1zIXNNQEQ5u400SXnZpSX9bFi2gpKBS+ObKFjvY+8X3aXN92
+         zvYQmwOEfYwpsDEjXJJrRfiYGQXodXKolpKhN0USNA5NvvFePqzP/dCVwLRSUKrBH2
+         E5NIhLqCk1BJw==
+Message-ID: <67742466181fef8ca42d8f5ad2815a46367f5fa7.camel@collabora.com>
+Subject: Re: [PATCH v2 15/23] media: rkvdec: h264: Validate and use pic
+ width and height in mbs
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@collabora.com, Jonas Karlman <jonas@kwiboo.se>,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Date:   Tue, 05 Apr 2022 11:44:54 -0400
+In-Reply-To: <Ykg0Qw24PuGCnbLT@eze-laptop>
+References: <20220331193726.289559-1-nicolas.dufresne@collabora.com>
+         <20220331193726.289559-16-nicolas.dufresne@collabora.com>
+         <Ykg0Qw24PuGCnbLT@eze-laptop>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH 3/8] media: hantro: Support format filtering by depth
-Content-Language: en-US
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
-Cc:     mchehab@kernel.org, nicolas@ndufresne.ca, hverkuil-cisco@xs4all.nl,
-        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
- <20220227144926.3006585-4-jernej.skrabec@gmail.com>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <20220227144926.3006585-4-jernej.skrabec@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Le samedi 02 avril 2022 =C3=A0 08:32 -0300, Ezequiel Garcia a =C3=A9crit=C2=
+=A0:
+> Hi Nicolas,
+>=20
+> On Thu, Mar 31, 2022 at 03:37:17PM -0400, Nicolas Dufresne wrote:
+> > From: Jonas Karlman <jonas@kwiboo.se>
+> >=20
+> > The width and height in macroblocks is currently configured based on OU=
+TPUT
+> > buffer resolution, this works for frame pictures but can cause issues f=
+or
+> > field pictures.
+> >=20
+> > When frame_mbs_only_flag is 0 the height in mbs should be height of
+> > the field instead of height of frame.
+> >=20
+> > Validate pic_width_in_mbs_minus1 and pic_height_in_map_units_minus1
+> > against OUTPUT buffer resolution and use these values to configure HW.
+> >=20
+> > Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> > ---
+> >  drivers/staging/media/rkvdec/rkvdec-h264.c |  4 ++--
+> >  drivers/staging/media/rkvdec/rkvdec.c      | 10 ++++++++++
+> >  2 files changed, 12 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/stagi=
+ng/media/rkvdec/rkvdec-h264.c
+> > index 8d44a884a52e..a42cf19bcc6d 100644
+> > --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
+> > +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> > @@ -672,8 +672,8 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+> >  		  LOG2_MAX_PIC_ORDER_CNT_LSB_MINUS4);
+> >  	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_DELTA_PIC_ORDER_ALWAYS_Z=
+ERO),
+> >  		  DELTA_PIC_ORDER_ALWAYS_ZERO_FLAG);
+> > -	WRITE_PPS(DIV_ROUND_UP(ctx->coded_fmt.fmt.pix_mp.width, 16), PIC_WIDT=
+H_IN_MBS);
+> > -	WRITE_PPS(DIV_ROUND_UP(ctx->coded_fmt.fmt.pix_mp.height, 16), PIC_HEI=
+GHT_IN_MBS);
+>=20
+> Please add a comment so we don't forget why we use the bitstream
+> fields here.
 
-Le 27/02/2022 à 15:49, Jernej Skrabec a écrit :
-> In preparation for supporting 10-bit formats, add mechanism which will
-> filter formats based on pixel depth.
->
-> Hantro G2 supports only one decoding format natively and that is based
-> on bit depth of current video frame. Additionally, it makes no sense to
-> upconvert bitness, so filter those out too.
->
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
->   drivers/staging/media/hantro/hantro.h      |  4 ++
->   drivers/staging/media/hantro/hantro_v4l2.c | 48 ++++++++++++++++++++--
->   drivers/staging/media/hantro/hantro_v4l2.h |  1 +
->   3 files changed, 50 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-> index 06d0f3597694..c6525ee8d89a 100644
-> --- a/drivers/staging/media/hantro/hantro.h
-> +++ b/drivers/staging/media/hantro/hantro.h
-> @@ -227,6 +227,7 @@ struct hantro_dev {
->    *
->    * @ctrl_handler:	Control handler used to register controls.
->    * @jpeg_quality:	User-specified JPEG compression quality.
-> + * @bit_depth:		Bit depth of current frame
->    *
->    * @codec_ops:		Set of operations related to codec mode.
->    * @postproc:		Post-processing context.
-> @@ -252,6 +253,7 @@ struct hantro_ctx {
->   
->   	struct v4l2_ctrl_handler ctrl_handler;
->   	int jpeg_quality;
-> +	int bit_depth;
->   
->   	const struct hantro_codec_ops *codec_ops;
->   	struct hantro_postproc_ctx postproc;
-> @@ -278,6 +280,7 @@ struct hantro_ctx {
->    * @enc_fmt:	Format identifier for encoder registers.
->    * @frmsize:	Supported range of frame sizes (only for bitstream formats).
->    * @postprocessed: Indicates if this format needs the post-processor.
-> + * @match_depth: Indicates if format bit depth must match video bit depth
->    */
->   struct hantro_fmt {
->   	char *name;
-> @@ -288,6 +291,7 @@ struct hantro_fmt {
->   	enum hantro_enc_fmt enc_fmt;
->   	struct v4l2_frmsize_stepwise frmsize;
->   	bool postprocessed;
-> +	bool match_depth;
->   };
->   
->   struct hantro_reg {
-> diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-> index e595905b3bd7..1214fa2f64ae 100644
-> --- a/drivers/staging/media/hantro/hantro_v4l2.c
-> +++ b/drivers/staging/media/hantro/hantro_v4l2.c
-> @@ -64,6 +64,42 @@ hantro_get_postproc_formats(const struct hantro_ctx *ctx,
->   	return ctx->dev->variant->postproc_fmts;
->   }
->   
-> +int hantro_get_formath_depth(u32 fourcc)
+And perhaps I should clarify that only the height will vary. It remains nic=
+e if
+we can decode smaller images into larger image/format, that will be needed =
+to
+handle the sub-layers in SVC (these are not to be displayed, so we don't ca=
+re
+much about the output stride and all). So that is also an improvement.
 
-Just a typo here:
+>=20
+> > +	WRITE_PPS(sps->pic_width_in_mbs_minus1 + 1, PIC_WIDTH_IN_MBS);
+> > +	WRITE_PPS(sps->pic_height_in_map_units_minus1 + 1, PIC_HEIGHT_IN_MBS)=
+;
+> >  	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY),
+> >  		  FRAME_MBS_ONLY_FLAG);
+> >  	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD)=
+,
+> > diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/me=
+dia/rkvdec/rkvdec.c
+> > index 2df8cf4883e2..1b805710e195 100644
+> > --- a/drivers/staging/media/rkvdec/rkvdec.c
+> > +++ b/drivers/staging/media/rkvdec/rkvdec.c
+> > @@ -29,8 +29,11 @@
+> > =20
+> >  static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
+> >  {
+> > +	struct rkvdec_ctx *ctx =3D container_of(ctrl->handler, struct rkvdec_=
+ctx, ctrl_hdl);
+> > +
+> >  	if (ctrl->id =3D=3D V4L2_CID_STATELESS_H264_SPS) {
+> >  		const struct v4l2_ctrl_h264_sps *sps =3D ctrl->p_new.p_h264_sps;
+> > +		unsigned int width, height;
+> >  		/*
+> >  		 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
+> >  		 * but it's currently broken in the driver.
+> > @@ -45,6 +48,13 @@ static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
+> >  		if (sps->bit_depth_luma_minus8 !=3D 0)
+> >  			/* Only 8-bit is supported */
+> >  			return -EINVAL;
+> > +
+> > +		width =3D (sps->pic_width_in_mbs_minus1 + 1) * 16;
+> > +		height =3D (sps->pic_height_in_map_units_minus1 + 1) * 16;
+> > +
+>=20
+> Let's please add a comment here, clarifying it's legal to check
+> the coded format (OUTPUT queue format) at .try_ctrl time,
+> because the stateless decoder specification [1] mandates
+> S_FMT on the OUTPUT queue, before passing the SPS/PPS controls.
 
-s/hantro_get_formath_depth -> hantro_get_format_depth
+Indeed, though I come to see some flaw in the validation. First, the height
+formula shall be base on formula 7-18 from the spec:
 
-regards
-Benjamin
+  FrameHeightInMbs =3D ( 2 =E2=88=92 frame_mbs_only_flag ) * PicHeightInMap=
+Units
 
-> +{
-> +	switch (fourcc) {
-> +	case V4L2_PIX_FMT_P010:
-> +	case V4L2_PIX_FMT_P010_4L4:
-> +		return 10;
-> +	default:
-> +		return 8;
-> +	}
-> +}
-> +
-> +static bool
-> +hantro_check_depth_match(const struct hantro_ctx *ctx,
-> +			 const struct hantro_fmt *fmt)
-> +{
-> +	int fmt_depth, ctx_depth = 8;
-> +
-> +	if (!fmt->match_depth && !fmt->postprocessed)
-> +		return true;
-> +
-> +	/* 0 means default depth, which is 8 */
-> +	if (ctx->bit_depth)
-> +		ctx_depth = ctx->bit_depth;
-> +
-> +	fmt_depth = hantro_get_formath_depth(fmt->fourcc);
-> +
-> +	/*
-> +	 * Allow only downconversion for postproc formats for now.
-> +	 * It may be possible to relax that on some HW.
-> +	 */
-> +	if (!fmt->match_depth)
-> +		return fmt_depth <= ctx_depth;
-> +
-> +	return fmt_depth == ctx_depth;
-> +}
-> +
->   static const struct hantro_fmt *
->   hantro_find_format(const struct hantro_ctx *ctx, u32 fourcc)
->   {
-> @@ -91,7 +127,8 @@ hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream)
->   	formats = hantro_get_formats(ctx, &num_fmts);
->   	for (i = 0; i < num_fmts; i++) {
->   		if (bitstream == (formats[i].codec_mode !=
-> -				  HANTRO_MODE_NONE))
-> +				  HANTRO_MODE_NONE) &&
-> +		    hantro_check_depth_match(ctx, &formats[i]))
->   			return &formats[i];
->   	}
->   	return NULL;
-> @@ -163,11 +200,13 @@ static int vidioc_enum_fmt(struct file *file, void *priv,
->   	formats = hantro_get_formats(ctx, &num_fmts);
->   	for (i = 0; i < num_fmts; i++) {
->   		bool mode_none = formats[i].codec_mode == HANTRO_MODE_NONE;
-> +		fmt = &formats[i];
->   
->   		if (skip_mode_none == mode_none)
->   			continue;
-> +		if (!hantro_check_depth_match(ctx, fmt))
-> +			continue;
->   		if (j == f->index) {
-> -			fmt = &formats[i];
->   			f->pixelformat = fmt->fourcc;
->   			return 0;
->   		}
-> @@ -183,8 +222,11 @@ static int vidioc_enum_fmt(struct file *file, void *priv,
->   		return -EINVAL;
->   	formats = hantro_get_postproc_formats(ctx, &num_fmts);
->   	for (i = 0; i < num_fmts; i++) {
-> +		fmt = &formats[i];
-> +
-> +		if (!hantro_check_depth_match(ctx, fmt))
-> +			continue;
->   		if (j == f->index) {
-> -			fmt = &formats[i];
->   			f->pixelformat = fmt->fourcc;
->   			return 0;
->   		}
-> diff --git a/drivers/staging/media/hantro/hantro_v4l2.h b/drivers/staging/media/hantro/hantro_v4l2.h
-> index 18bc682c8556..f4a5905ed518 100644
-> --- a/drivers/staging/media/hantro/hantro_v4l2.h
-> +++ b/drivers/staging/media/hantro/hantro_v4l2.h
-> @@ -22,5 +22,6 @@ extern const struct v4l2_ioctl_ops hantro_ioctl_ops;
->   extern const struct vb2_ops hantro_queue_ops;
->   
->   void hantro_reset_fmts(struct hantro_ctx *ctx);
-> +int hantro_get_formath_depth(u32 fourcc);
->   
->   #endif /* HANTRO_V4L2_H_ */
+So would be
+
++		height =3D (sps->pic_height_in_map_units_minus1 + 1) * 16;
++		if (sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY)
++			height *=3D 2;
+
+As this driver do interleaved interlaced buffer, not alternate. Finally, we
+should validate this again at STREAMON, since userland may have simply omit=
+ted
+to set the SPS at all. I'll try to improve this and drop the review tag to
+ensure this get fully reviewed again.
+
+>=20
+> [1] https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dev-st=
+ateless-decoder.html
+>=20
+> > +		if (width > ctx->coded_fmt.fmt.pix_mp.width ||
+> > +		    height > ctx->coded_fmt.fmt.pix_mp.height)
+>=20
+> Can you add a debug message or error message?
+> These silent errors tend to get super hard to track.
+>=20
+> With these changes:
+>=20
+> Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+>=20
+> Thanks,
+> Ezequiel
+
