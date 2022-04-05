@@ -2,45 +2,43 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F313C4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6573EC43217
 	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573781AbiDEWxK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
+        id S1573773AbiDEWxI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444178AbiDEWVA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:21:00 -0400
+        with ESMTP id S1444119AbiDEWU7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:20:59 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148BB8D693;
-        Tue,  5 Apr 2022 13:45:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107F974DF3;
+        Tue,  5 Apr 2022 13:44:53 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 7D5031F44840
+        with ESMTPSA id B0DB01F44811
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649191502;
-        bh=qqGKTdK+BoJvGXzu5rDFgeoUxEBT3Njqv5q7sTj6RAI=;
+        s=mail; t=1649191491;
+        bh=vuftnHCEWwJdNLAqyrxNwOkREV8boF39Sd5EZvT7GwM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nTBbsEIN+ODGAbyDvj4hk9G4suUl/XG2DaUFATQ6ssrFhqtSjFBWvcK+lJeQsEWXz
-         uovYAnTDm+UVwBIBYJnHOCoD1UxniLw3i8PdiluH0S+NcL1VlDueL5SdFY1xCs1OXL
-         ecWsv+tlLJl11xCmzpZ4Pq0IR2Qp9+8T+osmj8X2FypbyuXa8KLhYhyK9U/If4YpdO
-         9/2k5nQ1o2lPG3bGYXc6itCe2YUV60P85qnAPEl+Qa+DrKrCdg5ox+k68MEVE6+qFh
-         dyVbbxtSOti4xekLHuwv1uWC6CMeDVexz84vAtV6/UTlzH5VJrgtDKqhT6Np1dNUUF
-         l/yl6hvvmi/8g==
+        b=Oph2TQqdeOHtBGxUitduvPvOdm4kEaS4JrYa+6iVs1dwf1kqV5QiMPHbB/hMMH8ZU
+         PCT0MWiySSYbypHk1L0driXE6wusYJa/D99tsnS90oAgQYsJqKpcA1CXdQL3XJTx/w
+         aQ4A8NzuVG88MnN0WzF3uB4tkp+03FXSjOOyYHK8JmXFl7G/EZbWvm9p5wb2JS//Xp
+         Dzrob0ewp4S+Rhig2heeHVJ1Q7EpSWZFEqHfbVqNNW8nRSKSabdu6HJQKDUJdjWr/M
+         67vKP6lZyqbMWAMirB9zkf3G5JltoVGCVje+B7xyEZ1MJ2C84v070xO19DMmiOb/4g
+         rccH9hzwLe2Vw==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Boris Brezillon <boris.brezillon@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-staging@lists.linux.dev
-Subject: [PATCH v3 13/24] media: rkvdec: h264: Fix dpb_valid implementation
-Date:   Tue,  5 Apr 2022 16:44:14 -0400
-Message-Id: <20220405204426.259074-14-nicolas.dufresne@collabora.com>
+Subject: [PATCH v3 06/24] media: h264: Increase reference lists size to 32
+Date:   Tue,  5 Apr 2022 16:44:07 -0400
+Message-Id: <20220405204426.259074-7-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
 References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
@@ -50,101 +48,112 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The ref builder only provided references that are marked as valid in the
-dpb. Thus the current implementation of dpb_valid would always set the
-flag to 1. This is not representing missing frames (this is called
-'non-existing' pictures in the spec). In some context, these non-existing
-pictures still need to occupy a slot in the reference list according to
-the spec.
+This is to accommodate support for field decoding, which splits the top
+and the bottom references into the reference list.
 
-Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- drivers/staging/media/rkvdec/rkvdec-h264.c | 33 ++++++++++++++++------
- 1 file changed, 24 insertions(+), 9 deletions(-)
+ drivers/media/v4l2-core/v4l2-h264.c        | 6 +++---
+ drivers/staging/media/hantro/hantro_hw.h   | 6 +++---
+ drivers/staging/media/rkvdec/rkvdec-h264.c | 6 +++---
+ include/media/v4l2-h264.h                  | 8 ++++----
+ 4 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index dff89732ddd0..bcde37d72244 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -112,6 +112,7 @@ struct rkvdec_h264_run {
- 	const struct v4l2_ctrl_h264_sps *sps;
- 	const struct v4l2_ctrl_h264_pps *pps;
- 	const struct v4l2_ctrl_h264_scaling_matrix *scaling_matrix;
-+	int ref_buf_idx[V4L2_H264_NUM_DPB_ENTRIES];
+diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
+index afbfcf78efe4..4b46b36526c0 100644
+--- a/drivers/media/v4l2-core/v4l2-h264.c
++++ b/drivers/media/v4l2-core/v4l2-h264.c
+@@ -212,7 +212,7 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
+  * v4l2_h264_build_p_ref_list() - Build the P reference list
+  *
+  * @builder: reference list builder context
+- * @reflist: 16 sized array used to store the P reference list. Each entry
++ * @reflist: 32 sized array used to store the P reference list. Each entry
+  *	     is a v4l2_h264_reference structure
+  *
+  * This functions builds the P reference lists. This procedure is describe in
+@@ -235,9 +235,9 @@ EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
+  * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
+  *
+  * @builder: reference list builder context
+- * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
++ * @b0_reflist: 32 sized array used to store the B0 reference list. Each entry
+  *		is a v4l2_h264_reference structure
+- * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
++ * @b1_reflist: 32 sized array used to store the B1 reference list. Each entry
+  *		is a v4l2_h264_reference structure
+  *
+  * This functions builds the B0/B1 reference lists. This procedure is described
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 2bc6b8f088f5..292aaaabaf24 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -69,9 +69,9 @@ struct hantro_h264_dec_ctrls {
+  * @b1:		B1 reflist
+  */
+ struct hantro_h264_dec_reflists {
+-	struct v4l2_h264_reference p[HANTRO_H264_DPB_SIZE];
+-	struct v4l2_h264_reference b0[HANTRO_H264_DPB_SIZE];
+-	struct v4l2_h264_reference b1[HANTRO_H264_DPB_SIZE];
++	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
++	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
++	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
  };
  
- struct rkvdec_h264_ctx {
-@@ -725,6 +726,26 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
- 	}
- }
+ /**
+diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+index 3c7f3d87fab4..dff89732ddd0 100644
+--- a/drivers/staging/media/rkvdec/rkvdec-h264.c
++++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+@@ -100,9 +100,9 @@ struct rkvdec_h264_priv_tbl {
+ #define RKVDEC_H264_DPB_SIZE 16
  
-+static void lookup_ref_buf_idx(struct rkvdec_ctx *ctx,
-+			       struct rkvdec_h264_run *run)
-+{
-+	const struct v4l2_ctrl_h264_decode_params *dec_params = run->decode_params;
-+	u32 i;
-+
-+	for (i = 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
-+		struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
-+		const struct v4l2_h264_dpb_entry *dpb = run->decode_params->dpb;
-+		struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
-+		int buf_idx = -1;
-+
-+		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
-+			buf_idx = vb2_find_timestamp(cap_q,
-+						     dpb[i].reference_ts, 0);
-+
-+		run->ref_buf_idx[i] = buf_idx;
-+	}
-+}
-+
- static void assemble_hw_rps(struct rkvdec_ctx *ctx,
- 			    struct rkvdec_h264_run *run)
- {
-@@ -762,7 +783,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+ struct rkvdec_h264_reflists {
+-	struct v4l2_h264_reference p[RKVDEC_H264_DPB_SIZE];
+-	struct v4l2_h264_reference b0[RKVDEC_H264_DPB_SIZE];
+-	struct v4l2_h264_reference b1[RKVDEC_H264_DPB_SIZE];
++	struct v4l2_h264_reference p[V4L2_H264_REF_LIST_LEN];
++	struct v4l2_h264_reference b0[V4L2_H264_REF_LIST_LEN];
++	struct v4l2_h264_reference b1[V4L2_H264_REF_LIST_LEN];
+ 	u8 num_valid;
+ };
  
- 	for (j = 0; j < RKVDEC_NUM_REFLIST; j++) {
- 		for (i = 0; i < h264_ctx->reflists.num_valid; i++) {
--			u8 dpb_valid = 0;
-+			bool dpb_valid = run->ref_buf_idx[i] >= 0;
- 			u8 idx = 0;
+diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
+index ef9a894e3c32..e282fb16ac58 100644
+--- a/include/media/v4l2-h264.h
++++ b/include/media/v4l2-h264.h
+@@ -37,7 +37,7 @@ struct v4l2_h264_reflist_builder {
+ 		u16 longterm : 1;
+ 	} refs[V4L2_H264_NUM_DPB_ENTRIES];
+ 	s32 cur_pic_order_count;
+-	struct v4l2_h264_reference unordered_reflist[V4L2_H264_NUM_DPB_ENTRIES];
++	struct v4l2_h264_reference unordered_reflist[V4L2_H264_REF_LIST_LEN];
+ 	u8 num_valid;
+ };
  
- 			switch (j) {
-@@ -779,8 +800,6 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
- 
- 			if (idx >= ARRAY_SIZE(dec_params->dpb))
- 				continue;
--			dpb_valid = !!(dpb[idx].flags &
--				       V4L2_H264_DPB_ENTRY_FLAG_ACTIVE);
- 
- 			set_ps_field(hw_rps, DPB_INFO(i, j),
- 				     idx | dpb_valid << 4);
-@@ -859,13 +878,8 @@ get_ref_buf(struct rkvdec_ctx *ctx, struct rkvdec_h264_run *run,
- 	    unsigned int dpb_idx)
- {
- 	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
--	const struct v4l2_h264_dpb_entry *dpb = run->decode_params->dpb;
- 	struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
--	int buf_idx = -1;
--
--	if (dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
--		buf_idx = vb2_find_timestamp(cap_q,
--					     dpb[dpb_idx].reference_ts, 0);
-+	int buf_idx = run->ref_buf_idx[dpb_idx];
- 
- 	/*
- 	 * If a DPB entry is unused or invalid, address of current destination
-@@ -1102,6 +1116,7 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
- 
- 	assemble_hw_scaling_list(ctx, &run);
- 	assemble_hw_pps(ctx, &run);
-+	lookup_ref_buf_idx(ctx, &run);
- 	assemble_hw_rps(ctx, &run);
- 	config_registers(ctx, &run);
- 
+@@ -51,9 +51,9 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
+  * v4l2_h264_build_b_ref_lists() - Build the B0/B1 reference lists
+  *
+  * @builder: reference list builder context
+- * @b0_reflist: 16 sized array used to store the B0 reference list. Each entry
++ * @b0_reflist: 32 sized array used to store the B0 reference list. Each entry
+  *		is a v4l2_h264_reference structure
+- * @b1_reflist: 16 sized array used to store the B1 reference list. Each entry
++ * @b1_reflist: 32 sized array used to store the B1 reference list. Each entry
+  *		is a v4l2_h264_reference structure
+  *
+  * This functions builds the B0/B1 reference lists. This procedure is described
+@@ -70,7 +70,7 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
+  * v4l2_h264_build_p_ref_list() - Build the P reference list
+  *
+  * @builder: reference list builder context
+- * @reflist: 16 sized array used to store the P reference list. Each entry
++ * @reflist: 32 sized array used to store the P reference list. Each entry
+  *	     is a v4l2_h264_reference structure
+  *
+  * This functions builds the P reference lists. This procedure is describe in
 -- 
 2.34.1
 
