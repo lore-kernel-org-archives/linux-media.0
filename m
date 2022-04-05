@@ -2,159 +2,149 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ECC8C433F5
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F313C4167B
+	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:11:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573759AbiDEWxG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
+        id S1573781AbiDEWxK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573064AbiDERvK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 13:51:10 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C246FD9EBB
-        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 10:49:11 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id d10so11021598edj.0
-        for <linux-media@vger.kernel.org>; Tue, 05 Apr 2022 10:49:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RXCW1evSnb4oJ88sHTAFEYTq0HTuOW2ocRpwnA3InQ4=;
-        b=DFediYf4lKdcEGd6wHnf3P2A1rH9d97LcubT3QP6yRNY6vUA82uDkOevPceh0sN/Wl
-         AzNDVgFuK6V76WaqpSYAiG2hRF9Re4Ov3xlC/Ms7hpW9uCTQ7y898MEv8Ijbqhc6SxXo
-         QvfpY4jywVuV6j8Ii/P3vkQXreEU44Hlqin6E5RTxZAap0ziUpyUXuD83coag22gB7nJ
-         kP94eXAsBC1cr7hK8pVNGZaStSW21SliZd84A/wTh+8QK9KZdm23HHaRa8zC2IVlp4fq
-         sk905jrtMt/I2FOoTaeCu/ArrkOR8UVb6SsiWhRhquLKZ90pI6vt79FBY7MRBMWLMUZ2
-         L8SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RXCW1evSnb4oJ88sHTAFEYTq0HTuOW2ocRpwnA3InQ4=;
-        b=6R5ZDYzIh/9VdxoPdBMdTzLJSVdHTfzEkBpkwdXCWWjPWyGtUCjMM3Ullc98uFdu7E
-         i1EVRiIQyzLJleoPZtTfRaAZqywE4i5/AqI3Z66hnQWfaAcCmU17rMrRDAfj5kgWjBZq
-         mWz28nuljOJTUZjbRTRXm1Nb+8cz6OIGcuAURWDjQBp/iHVHzu/7EXqhW9MccJxMlz2Q
-         qQW6f45EnFbju/duj/MkSmLshaShQ1CSLCYHsJQvOSu4A1mGwC0t4JI9McEKbS/+yL9d
-         rOFFrVQPA+c5SdmTM4txuLXc12Qhkr65Y8O6Xus2fsBjg9moLW52qV30v/9GuSlswVEI
-         wg6g==
-X-Gm-Message-State: AOAM531PKFTOG6whm7KpomV97Gz0A2v7iugEB/DFEDHRA/9oQjdf03OJ
-        qPcwUgBnfgnR583kfzZvBM3mAXMKzQJJYVmGrZGZCQ==
-X-Google-Smtp-Source: ABdhPJy3kLISS/qYYRzMDmjCuhPu7OU3AJeQfL+t2mEx7NkNwMYgXC85KD1rOoe+vR5iNyCwy95ZqCXnaDcme/ng0CI=
-X-Received: by 2002:aa7:d98f:0:b0:41c:bf0f:4c45 with SMTP id
- u15-20020aa7d98f000000b0041cbf0f4c45mr4818393eds.379.1649180950052; Tue, 05
- Apr 2022 10:49:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220328035951.1817417-1-tjmercier@google.com>
- <20220328035951.1817417-6-tjmercier@google.com> <20220329152142.GA15794@blackbody.suse.cz>
- <CABdmKX2874NdYCBzpKLnqWhZQDkC2wKz4ZL_aFNqrec6iAutpQ@mail.gmail.com> <20220405121245.GA30368@blackbody.suse.cz>
-In-Reply-To: <20220405121245.GA30368@blackbody.suse.cz>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Tue, 5 Apr 2022 10:48:58 -0700
-Message-ID: <CABdmKX0aF5zXozbb7npcEq3PgaeDE=gaGLf+jYY4oRKW9N+46g@mail.gmail.com>
-Subject: Re: [RFC v4 5/8] dmabuf: Add gpu cgroup charge transfer function
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
+        with ESMTP id S1444178AbiDEWVA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:21:00 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148BB8D693;
+        Tue,  5 Apr 2022 13:45:04 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 7D5031F44840
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649191502;
+        bh=qqGKTdK+BoJvGXzu5rDFgeoUxEBT3Njqv5q7sTj6RAI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nTBbsEIN+ODGAbyDvj4hk9G4suUl/XG2DaUFATQ6ssrFhqtSjFBWvcK+lJeQsEWXz
+         uovYAnTDm+UVwBIBYJnHOCoD1UxniLw3i8PdiluH0S+NcL1VlDueL5SdFY1xCs1OXL
+         ecWsv+tlLJl11xCmzpZ4Pq0IR2Qp9+8T+osmj8X2FypbyuXa8KLhYhyK9U/If4YpdO
+         9/2k5nQ1o2lPG3bGYXc6itCe2YUV60P85qnAPEl+Qa+DrKrCdg5ox+k68MEVE6+qFh
+         dyVbbxtSOti4xekLHuwv1uWC6CMeDVexz84vAtV6/UTlzH5VJrgtDKqhT6Np1dNUUF
+         l/yl6hvvmi/8g==
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH v3 13/24] media: rkvdec: h264: Fix dpb_valid implementation
+Date:   Tue,  5 Apr 2022 16:44:14 -0400
+Message-Id: <20220405204426.259074-14-nicolas.dufresne@collabora.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 5:12 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote:
->
-> On Fri, Apr 01, 2022 at 11:41:36AM -0700, "T.J. Mercier" <tjmercier@googl=
-e.com> wrote:
-> > This link doesn't work for me, but I think you're referring to the
-> > discussion about your "RAM_backed_buffers" comment from March 23rd.
->
-> (Oops, it's a non-public message. But yes, you guessed it right ;-))
->
-> > Anyway the test I did goes like this: enable memcg and gpu cgoups
-> > tracking and run a process that allocates 100MiB of dmabufs. Observe
-> > memcg and gpu accounting values before and after the allocation.
->
-> Thanks for this measurement/dem/demoo.
->
-> > Before
-> > # cat memory.current gpu.memory.current
-> > 14909440
-> > system 0
-> >
-> > <Test program does the allocation of 100MiB of dmabufs>
-> >
-> > After
-> > # cat memory.current gpu.memory.current
-> > 48025600
-> > system 104857600
-> >
-> > So the memcg value increases by about 30 MiB while the gpu values
-> > increases by 100 MiB.
->
-> > This is with kmem enabled, and the /proc/maps
-> > file for this process indicates that the majority of that 30 MiB is
-> > kernel memory.
->
-> > I think this result shows that neither the kernel nor process memory
-> > overlap with the gpu cgroup tracking of these allocations.
->
-> It depends how the semantics of the 'system' entry is defined, no?
-> As I grasped from other thread, the 'total' is going to be removed, so
-> 'system' represents exclusively device memory?
->
-That's right. The system charges (soon to be renamed "system-heap")
-result only from an allocator (in this case the system heap) deciding
-to call gpucg_try_charge for the buffer which is entirely device
-memory.
->
-> > So despite the fact that these buffers are in main memory, they are
-> > allocated in a way that does not result in memcg attribution. (It
-> > looks to me like __GFP_ACCOUNT is not set for these.)
->
-> (I thought you knew what dmabufs your program used :-p)
->
-I'm coming up to speed on a lot of new-to-me code here. :)
-Just for completeness, these buffers were allocated with
-libdmabufheap's AllocSystem.
+The ref builder only provided references that are marked as valid in the
+dpb. Thus the current implementation of dpb_valid would always set the
+flag to 1. This is not representing missing frames (this is called
+'non-existing' pictures in the spec). In some context, these non-existing
+pictures still need to occupy a slot in the reference list according to
+the spec.
 
-> So, the goal is to do the tracking and migrations only via the gpu cg
-> layer, regardless how memcg charges it (or not).
->
-> (I have no opinion on that, I'm just summing it so that we're on the
-> same page.)
->
-Yes, this reflects my intention and current state of the code in this serie=
-s.
+Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+ drivers/staging/media/rkvdec/rkvdec-h264.c | 33 ++++++++++++++++------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
 
-> Michal
+diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+index dff89732ddd0..bcde37d72244 100644
+--- a/drivers/staging/media/rkvdec/rkvdec-h264.c
++++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+@@ -112,6 +112,7 @@ struct rkvdec_h264_run {
+ 	const struct v4l2_ctrl_h264_sps *sps;
+ 	const struct v4l2_ctrl_h264_pps *pps;
+ 	const struct v4l2_ctrl_h264_scaling_matrix *scaling_matrix;
++	int ref_buf_idx[V4L2_H264_NUM_DPB_ENTRIES];
+ };
+ 
+ struct rkvdec_h264_ctx {
+@@ -725,6 +726,26 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+ 	}
+ }
+ 
++static void lookup_ref_buf_idx(struct rkvdec_ctx *ctx,
++			       struct rkvdec_h264_run *run)
++{
++	const struct v4l2_ctrl_h264_decode_params *dec_params = run->decode_params;
++	u32 i;
++
++	for (i = 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
++		struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
++		const struct v4l2_h264_dpb_entry *dpb = run->decode_params->dpb;
++		struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
++		int buf_idx = -1;
++
++		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
++			buf_idx = vb2_find_timestamp(cap_q,
++						     dpb[i].reference_ts, 0);
++
++		run->ref_buf_idx[i] = buf_idx;
++	}
++}
++
+ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+ 			    struct rkvdec_h264_run *run)
+ {
+@@ -762,7 +783,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+ 
+ 	for (j = 0; j < RKVDEC_NUM_REFLIST; j++) {
+ 		for (i = 0; i < h264_ctx->reflists.num_valid; i++) {
+-			u8 dpb_valid = 0;
++			bool dpb_valid = run->ref_buf_idx[i] >= 0;
+ 			u8 idx = 0;
+ 
+ 			switch (j) {
+@@ -779,8 +800,6 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+ 
+ 			if (idx >= ARRAY_SIZE(dec_params->dpb))
+ 				continue;
+-			dpb_valid = !!(dpb[idx].flags &
+-				       V4L2_H264_DPB_ENTRY_FLAG_ACTIVE);
+ 
+ 			set_ps_field(hw_rps, DPB_INFO(i, j),
+ 				     idx | dpb_valid << 4);
+@@ -859,13 +878,8 @@ get_ref_buf(struct rkvdec_ctx *ctx, struct rkvdec_h264_run *run,
+ 	    unsigned int dpb_idx)
+ {
+ 	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
+-	const struct v4l2_h264_dpb_entry *dpb = run->decode_params->dpb;
+ 	struct vb2_queue *cap_q = &m2m_ctx->cap_q_ctx.q;
+-	int buf_idx = -1;
+-
+-	if (dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
+-		buf_idx = vb2_find_timestamp(cap_q,
+-					     dpb[dpb_idx].reference_ts, 0);
++	int buf_idx = run->ref_buf_idx[dpb_idx];
+ 
+ 	/*
+ 	 * If a DPB entry is unused or invalid, address of current destination
+@@ -1102,6 +1116,7 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+ 
+ 	assemble_hw_scaling_list(ctx, &run);
+ 	assemble_hw_pps(ctx, &run);
++	lookup_ref_buf_idx(ctx, &run);
+ 	assemble_hw_rps(ctx, &run);
+ 	config_registers(ctx, &run);
+ 
+-- 
+2.34.1
 
-Thanks,
-T.J.
