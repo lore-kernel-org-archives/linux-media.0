@@ -2,78 +2,171 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 199ACC3527D
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65B50C4332F
+	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:02:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449961AbiDEWva (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
+        id S1450707AbiDEWvh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443790AbiDEPkS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:40:18 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9872E81673
-        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 06:59:39 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 31E675D;
-        Tue,  5 Apr 2022 15:59:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1649167178;
-        bh=l6QBS7/8jM1BDEY9waat8n2aV1Pc3uDSWuEJOBFUKDc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YW+hEJS7ukP2v7rU57TdLO6sDpxG7f8rPRk8wIt8F+1dUg7V+l57fKHCV/RrylkVp
-         JOQsINtyOFrJEX3QiJN//fk4n6TI9VV2RVVymotAcAUu5EvgpclJ+ACBlfTe7jUROP
-         ZlkjEE0IyFb8B9hgyhEDKWVeMERClaoMT2rmjbFE=
-Date:   Tue, 5 Apr 2022 16:59:35 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "Massimo B." <massimo.b@gmx.net>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: Quanta Computer Inc. Astro HD Cam, not initializing
-Message-ID: <YkxLR4Xqsxzu0hh2@pendragon.ideasonboard.com>
-References: <1e3fff6f44830e910261bfb7629247cd89bf615a.camel@gmx.net>
- <YkGMSaAyUVNWMOsq@pendragon.ideasonboard.com>
- <771493a1110cacd87c42e66eea84c962be789532.camel@gmx.net>
+        with ESMTP id S1444129AbiDEWU7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:20:59 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4147939D;
+        Tue,  5 Apr 2022 13:44:57 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 544301F4480B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649191496;
+        bh=CCCLzz5lUZJ9ab0CExOOh36ojMkZJq6/0fFDYiktq9Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PZo8vioRXq+507FDC7+qoDF69PTHFSESG1LRMByh7iTC0JZbFDrHzmifO6d0QZcvz
+         twR7kRg0k+BppKEmOsfJlPsVpNCaayMsnosgrFzL3+52mdyJtSWQMKgf9cupl8L49g
+         zS2dQ0e1fEJUle+3sje5Y4Cs4o8871jyzwiVoSIQnxhgpjcf19WBHEx3nexBofSAdn
+         uQmSIgcFUbQ6fRgdqytJ7elIOW/WDRL+4Z8Zxxc53WHsf718mh7a+PNlMABQFXlm1b
+         4XK99yE9XicRmcJLlJ/kxqWeLtxTtGEOwM/cpYIjE4JTEVNwIuhB+xxUmhC524npyY
+         yjInyaei62pnA==
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH v3 09/24] media: v4l2: Trace calculated p/b0/b1 initial reflist
+Date:   Tue,  5 Apr 2022 16:44:10 -0400
+Message-Id: <20220405204426.259074-10-nicolas.dufresne@collabora.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <771493a1110cacd87c42e66eea84c962be789532.camel@gmx.net>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 12:40:21PM +0200, Massimo B. wrote:
-> On Mon, 2022-03-28 at 13:34 +0300, Laurent Pinchart wrote:
-> 
-> > Could you send the output of `lsusb -v -d 0408:2090` (if possible
-> > running as root) ?
+Add debug print statements to print the content of P & B reference
+lists, to verify that the ordering of the generated reference lists is
+correct. This is especially important for the field decoding mode,
+where sorting is more complex.
 
-[snip]
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Tested-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+---
+ drivers/media/v4l2-core/v4l2-h264.c | 86 +++++++++++++++++++++++++++++
+ 1 file changed, 86 insertions(+)
+
+diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
+index 38d8dbda0045..bcf9b7774560 100644
+--- a/drivers/media/v4l2-core/v4l2-h264.c
++++ b/drivers/media/v4l2-core/v4l2-h264.c
+@@ -241,6 +241,87 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
+ 	return poca < pocb ? -1 : 1;
+ }
  
-> > The audio interface causes issues, it seems it crashed the webcam
-> > firmware. Could you try blacklisting the snd-usb-audio module and see if
-> > video then works ?
-> 
-> Yes, that makes the video part work again.
-
-So this confirms it's a USB audio issue. It may be possible to work
-around it in the snd-usb-audio driver, but that's beyond my area of
-expertise. You may want to contact the alsa-devel mailing list.
-
-> However it is not sufficient anymore to just disable the audio via udev rule:
-> 
-> ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="0408", ATTRS{idProduct}=="2090", ATTR{bInterfaceClass}=="01", ATTR{authorized}="0"
-> 
-> Some while ago this was working to have the video part usable.
-
-I'd be surprised if it wasn't possible to achieve a similar result with
-a recent version of udev, but the way to do so may have changed. I
-haven't tried it personally, so maybe contacting the udev developers for
-support could help ?
-
-> Blacklisting snd_usb_audio works, but I need that module to have at least
-> another usb microphone doing the audio part.
-
++static char ref_type_to_char (u8 ref_type)
++{
++	switch (ref_type) {
++	case V4L2_H264_FRAME_REF:
++		return 'f';
++	case V4L2_H264_TOP_FIELD_REF:
++		return 't';
++	case V4L2_H264_BOTTOM_FIELD_REF:
++		return 'b';
++	}
++
++	return '?';
++}
++
++static const char *format_ref_list_p(const struct v4l2_h264_reflist_builder *builder,
++				     struct v4l2_h264_reference *reflist,
++				     char *out_str, const int len)
++{
++	int n = 0, i;
++
++	n += snprintf(out_str + n, len - n, "|");
++
++	for (i = 0; i < builder->num_valid; i++) {
++		/* this is pic_num for frame and frame_num (wrapped) for field,
++		 * but for frame pic_num is equal to frame_num (wrapped).
++		 */
++		int frame_num = builder->refs[reflist[i].index].frame_num;
++		bool longterm = builder->refs[reflist[i].index].longterm;
++
++		n += scnprintf(out_str + n, len - n, "%i%c%c|",
++			       frame_num, longterm ? 'l' : 's',
++			       ref_type_to_char (reflist[i].fields));
++	}
++
++	return out_str;
++}
++
++static void print_ref_list_p(const struct v4l2_h264_reflist_builder *builder,
++			     struct v4l2_h264_reference *reflist)
++{
++	char buf[1024];
++
++	pr_debug("ref_pic_list_p (cur_poc %u%c) %s\n",
++		 builder->cur_pic_order_count,
++		 ref_type_to_char(builder->cur_pic_fields),
++		 format_ref_list_p(builder, reflist, buf, sizeof(buf)));
++}
++
++static const char *format_ref_list_b(const struct v4l2_h264_reflist_builder *builder,
++				     struct v4l2_h264_reference *reflist,
++				     char *out_str, const int len)
++{
++	int n = 0, i;
++
++	n += snprintf(out_str + n, len - n, "|");
++
++	for (i = 0; i < builder->num_valid; i++) {
++		int frame_num = builder->refs[reflist[i].index].frame_num;
++		u32 poc = v4l2_h264_get_poc(builder, reflist + i);
++		bool longterm = builder->refs[reflist[i].index].longterm;
++
++		n += scnprintf(out_str + n, len - n, "%i%c%c|",
++			       longterm ? frame_num : poc,
++			       longterm ? 'l' : 's',
++			       ref_type_to_char(reflist[i].fields));
++	}
++
++	return out_str;
++}
++
++static void print_ref_list_b(const struct v4l2_h264_reflist_builder *builder,
++			     struct v4l2_h264_reference *reflist, u8 list_num)
++{
++	char buf[1024];
++
++	pr_debug("ref_pic_list_b%u (cur_poc %u%c) %s",
++		 list_num, builder->cur_pic_order_count,
++		 ref_type_to_char (builder->cur_pic_fields),
++		 format_ref_list_b(builder, reflist, buf, sizeof(buf)));
++}
++
+ /**
+  * v4l2_h264_build_p_ref_list() - Build the P reference list
+  *
+@@ -261,6 +342,8 @@ v4l2_h264_build_p_ref_list(const struct v4l2_h264_reflist_builder *builder,
+ 	       sizeof(builder->unordered_reflist[0]) * builder->num_valid);
+ 	sort_r(reflist, builder->num_valid, sizeof(*reflist),
+ 	       v4l2_h264_p_ref_list_cmp, NULL, builder);
++
++	print_ref_list_p(builder, reflist);
+ }
+ EXPORT_SYMBOL_GPL(v4l2_h264_build_p_ref_list);
+ 
+@@ -296,6 +379,9 @@ v4l2_h264_build_b_ref_lists(const struct v4l2_h264_reflist_builder *builder,
+ 	if (builder->num_valid > 1 &&
+ 	    !memcmp(b1_reflist, b0_reflist, builder->num_valid))
+ 		swap(b1_reflist[0], b1_reflist[1]);
++
++	print_ref_list_b(builder, b0_reflist, 0);
++	print_ref_list_b(builder, b1_reflist, 1);
+ }
+ EXPORT_SYMBOL_GPL(v4l2_h264_build_b_ref_lists);
+ 
 -- 
-Regards,
+2.34.1
 
-Laurent Pinchart
