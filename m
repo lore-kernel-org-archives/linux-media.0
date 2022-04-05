@@ -2,132 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 318AFC4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4741C4167D
 	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:12:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573909AbiDEWxr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
+        id S1573949AbiDEWxu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Apr 2022 18:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443306AbiDEPjV (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 11:39:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE2F149271
-        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 06:55:29 -0700 (PDT)
-Received: from dude03.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::39])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbjeZ-0003Xh-GC; Tue, 05 Apr 2022 15:55:27 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     linux-media@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
-Subject: [PATCH] media: coda: consolidate job_finish calls on decoder prepare_run failure
-Date:   Tue,  5 Apr 2022 15:55:17 +0200
-Message-Id: <20220405135517.3436381-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S1444275AbiDEWVC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 18:21:02 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A138BD4CA1;
+        Tue,  5 Apr 2022 13:45:20 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 564691F448BD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649191519;
+        bh=XEgENTYjCMT2Anghn2qsNUIMLssrmzXSWUAtGOk2EIY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=K00DBOR7Hvo/9zOUg7lYZRuUhYH5gu6hpMp8+CwehK8Ew1thRyoPeXAzuCfW48OG6
+         ERjNW2T+FmscAkYBw4+LBX0ucFvMjMrALKymQ+f7r+zk/D+OzGNZSv8rEr1LZ1+PVS
+         nXnhCh/EpGCqxJFtGFDm7J26poJEv2y0YMfFzr8NYw7McU3FOqMJzAl+rXkpYzgBjg
+         xkVrnWorKFnYYHovlQlgUosTLSYopg3Nk/CQUFqQF2V0/PAMww4HO9rvzBdFnjyLUt
+         E3yfI0Y53pG3khoL8RIpZULurg+lLoYACu1ExDNT4rllT7Y0tSS+gYUlVbXq9lzWr9
+         io3mWn9lF1Krg==
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        Jonas Karlman <jonas@kwiboo.se>, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
+Subject: [PATCH v3 22/24] media: hantro: h264: Make dpb entry management more robust
+Date:   Tue,  5 Apr 2022 16:44:23 -0400
+Message-Id: <20220405204426.259074-23-nicolas.dufresne@collabora.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If the decoder prepare_run callback returns an error, the hardware
-is never started and v4l2_m2m_job_finish() is called immediately,
-currently in every error path.
+From: Jonas Karlman <jonas@kwiboo.se>
 
-Remove the duplicated job_finish calls from the error paths and reuse
-the v4l2_m2m_job_finish() at the end of coda_pic_run_work instead.
+The driver maintains stable slot locations for reference pictures. This
+change makes the code more robust by using the reference_ts as key and
+by marking all entries invalid right from the start.
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- drivers/media/platform/chips-media/coda-bit.c    | 2 --
- drivers/media/platform/chips-media/coda-common.c | 9 +++------
- drivers/media/platform/chips-media/coda-jpeg.c   | 6 +-----
- 3 files changed, 4 insertions(+), 13 deletions(-)
+ drivers/staging/media/hantro/hantro_h264.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/chips-media/coda-bit.c b/drivers/media/platform/chips-media/coda-bit.c
-index 3aad8999a3b3..a082d075b5ee 100644
---- a/drivers/media/platform/chips-media/coda-bit.c
-+++ b/drivers/media/platform/chips-media/coda-bit.c
-@@ -2179,7 +2179,6 @@ static int coda_prepare_decode(struct coda_ctx *ctx)
- 	    (!(ctx->bit_stream_param & CODA_BIT_STREAM_END_FLAG))) {
- 		coda_dbg(1, ctx, "bitstream payload: %d, skipping\n",
- 			 coda_get_bitstream_payload(ctx));
--		v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
- 		return -EAGAIN;
- 	}
+diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
+index 228629fb3cdf..7377fc26f780 100644
+--- a/drivers/staging/media/hantro/hantro_h264.c
++++ b/drivers/staging/media/hantro/hantro_h264.c
+@@ -258,8 +258,7 @@ static void prepare_table(struct hantro_ctx *ctx)
+ static bool dpb_entry_match(const struct v4l2_h264_dpb_entry *a,
+ 			    const struct v4l2_h264_dpb_entry *b)
+ {
+-	return a->top_field_order_cnt == b->top_field_order_cnt &&
+-	       a->bottom_field_order_cnt == b->bottom_field_order_cnt;
++	return a->reference_ts == b->reference_ts;
+ }
  
-@@ -2189,7 +2188,6 @@ static int coda_prepare_decode(struct coda_ctx *ctx)
+ static void update_dpb(struct hantro_ctx *ctx)
+@@ -273,13 +272,13 @@ static void update_dpb(struct hantro_ctx *ctx)
  
- 		if (ret < 0) {
- 			v4l2_err(&dev->v4l2_dev, "failed to start decoding\n");
--			v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
- 			return -EAGAIN;
- 		} else {
- 			ctx->initialized = 1;
-diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
-index cd9ff2fa4147..0d1d92efbfdf 100644
---- a/drivers/media/platform/chips-media/coda-common.c
-+++ b/drivers/media/platform/chips-media/coda-common.c
-@@ -1513,12 +1513,8 @@ static void coda_pic_run_work(struct work_struct *work)
- 	mutex_lock(&dev->coda_mutex);
+ 	/* Disable all entries by default. */
+ 	for (i = 0; i < ARRAY_SIZE(ctx->h264_dec.dpb); i++)
+-		ctx->h264_dec.dpb[i].flags &= ~V4L2_H264_DPB_ENTRY_FLAG_ACTIVE;
++		ctx->h264_dec.dpb[i].flags = 0;
  
- 	ret = ctx->ops->prepare_run(ctx);
--	if (ret < 0 && ctx->inst_type == CODA_INST_DECODER) {
--		mutex_unlock(&dev->coda_mutex);
--		mutex_unlock(&ctx->buffer_mutex);
--		/* job_finish scheduled by prepare_decode */
--		return;
--	}
-+	if (ret < 0 && ctx->inst_type == CODA_INST_DECODER)
-+		goto out;
+ 	/* Try to match new DPB entries with existing ones by their POCs. */
+ 	for (i = 0; i < ARRAY_SIZE(dec_param->dpb); i++) {
+ 		const struct v4l2_h264_dpb_entry *ndpb = &dec_param->dpb[i];
  
- 	if (!wait_for_completion_timeout(&ctx->completion,
- 					 msecs_to_jiffies(1000))) {
-@@ -1540,6 +1536,7 @@ static void coda_pic_run_work(struct work_struct *work)
- 	    ctx->ops->seq_end_work)
- 		queue_work(dev->workqueue, &ctx->seq_end_work);
+-		if (!(ndpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
++		if (!(ndpb->flags & V4L2_H264_DPB_ENTRY_FLAG_VALID))
+ 			continue;
  
-+out:
- 	mutex_unlock(&dev->coda_mutex);
- 	mutex_unlock(&ctx->buffer_mutex);
+ 		/*
+@@ -290,8 +289,7 @@ static void update_dpb(struct hantro_ctx *ctx)
+ 			struct v4l2_h264_dpb_entry *cdpb;
  
-diff --git a/drivers/media/platform/chips-media/coda-jpeg.c b/drivers/media/platform/chips-media/coda-jpeg.c
-index a72f4655e5ad..21d14f9bd7e5 100644
---- a/drivers/media/platform/chips-media/coda-jpeg.c
-+++ b/drivers/media/platform/chips-media/coda-jpeg.c
-@@ -1340,10 +1340,8 @@ static int coda9_jpeg_prepare_decode(struct coda_ctx *ctx)
- 				      vb2_plane_size(&src_buf->vb2_buf, 0));
+ 			cdpb = &ctx->h264_dec.dpb[j];
+-			if (cdpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE ||
+-			    !dpb_entry_match(cdpb, ndpb))
++			if (!dpb_entry_match(cdpb, ndpb))
+ 				continue;
  
- 	chroma_format = coda9_jpeg_chroma_format(q_data_dst->fourcc);
--	if (chroma_format < 0) {
--		v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
-+	if (chroma_format < 0)
- 		return chroma_format;
--	}
- 
- 	ret = coda_jpeg_decode_header(ctx, &src_buf->vb2_buf);
- 	if (ret < 0) {
-@@ -1355,7 +1353,6 @@ static int coda9_jpeg_prepare_decode(struct coda_ctx *ctx)
- 		v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
- 		v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_DONE);
- 
--		v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
- 		return ret;
- 	}
- 
-@@ -1396,7 +1393,6 @@ static int coda9_jpeg_prepare_decode(struct coda_ctx *ctx)
- 		if (ret < 0) {
- 			v4l2_err(&dev->v4l2_dev,
- 				 "failed to set up Huffman tables: %d\n", ret);
--			v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
- 			return ret;
- 		}
- 	}
+ 			*cdpb = *ndpb;
 -- 
-2.30.2
+2.34.1
 
