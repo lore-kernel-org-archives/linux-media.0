@@ -2,104 +2,100 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B9EAC433FE
-	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 14:13:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A0A1C433EF
+	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 14:34:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234583AbiDFOPE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Apr 2022 10:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S232625AbiDFOg1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Apr 2022 10:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234582AbiDFOOv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 10:14:51 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E730E5FB7;
-        Tue,  5 Apr 2022 18:21:04 -0700 (PDT)
-X-UUID: ccf0173b3f3744f3bd37e8cb6f1ad1a9-20220406
-X-UUID: ccf0173b3f3744f3bd37e8cb6f1ad1a9-20220406
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 206969711; Wed, 06 Apr 2022 09:20:54 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 6 Apr 2022 09:20:53 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 6 Apr
- 2022 09:20:52 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 6 Apr 2022 09:20:49 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH] media: mediatek: vcodec: Fix v4l2 compliance decoder cmd test fail
-Date:   Wed, 6 Apr 2022 09:20:48 +0800
-Message-ID: <20220406012048.5970-1-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S235216AbiDFOgQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 10:36:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D73F3BE60B
+        for <linux-media@vger.kernel.org>; Wed,  6 Apr 2022 04:00:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF7FFB81E4F
+        for <linux-media@vger.kernel.org>; Wed,  6 Apr 2022 11:00:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61E04C385A1
+        for <linux-media@vger.kernel.org>; Wed,  6 Apr 2022 11:00:41 +0000 (UTC)
+Message-ID: <3f54b8d2-9c26-1775-0cc9-688a677776eb@xs4all.nl>
+Date:   Wed, 6 Apr 2022 13:00:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: en-US
+To:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.19] cec: various fixes and enhancements
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Will return -EINVAL using standard framework api when test stateless
-decoder with cmd VIDIOC_(TRY)DECODER_CMD.
+The first two patches fix issues relating to a CEC adapter
+being disabled while a transmit is still in progress at the
+hardware level. Unless the hardware is really disabled (i.e.
+loses power) the transmit should just continue in order to
+keep the hardware and framework state in sync, and to avoid
+half-written messages on the bus.
 
-Using another return value to adjust v4l2 compliance test for user
-driver(GStreamer/Chrome) won't use decoder cmd.
+The third patch fixes a mismatch between the API documentation
+and the actual code w.r.t. reporting the results of a non-blocking
+transmit.
 
-Fixes: 8cdc3794b2e3 ("media: mtk-vcodec: vdec: support stateless API")
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
-changes compared with v2:
-- add reviewed-by tag
-changes compared with v1:
-- add Fixes: tag
----
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+The fourth patch adds helpers to make it easier for both drivers
+and userspace to detect if the received message contains the
+result of a non-blocking transmit.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-index 3859e4c651c6..69b0e797d342 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-@@ -51,8 +51,7 @@ static int vidioc_try_decoder_cmd(struct file *file, void *priv,
- 
- 	/* Use M2M stateless helper if relevant */
- 	if (ctx->dev->vdec_pdata->uses_stateless_api)
--		return v4l2_m2m_ioctl_stateless_try_decoder_cmd(file, priv,
--								cmd);
-+		return -ENOTTY;
- 	else
- 		return v4l2_m2m_ioctl_try_decoder_cmd(file, priv, cmd);
- }
--- 
-2.18.0
+The fifth patch makes the framework more robust, preventing ops
+from being called when the device is already unregistered.
 
+The sixth patch allows drivers to override the transmit timeout
+value. And the last patch adds a new callback so drivers can take
+actual when an adapter is fully configured (i.e. all logical addresses
+are claimed) or unconfigured.
+
+Regards,
+
+	Hans
+
+
+The following changes since commit 535f49a9e1f99d0bacb5d492a9dd193c3affbfc0:
+
+  media: platform: imx-mipi-csis: Add dependency on VIDEO_DEV (2022-04-05 16:12:30 +0200)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.19b
+
+for you to fetch changes up to 7ebdf1f2e7b92536eb3ea7595a051057eec9ef1b:
+
+  cec: add optional adap_configured callback (2022-04-06 10:31:05 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Hans Verkuil (7):
+      cec: call enable_adap on s_log_addrs
+      cec: abort if the current transmit was canceled
+      cec: correctly pass on reply results
+      cec.h: add cec_msg_recv_is_rx/tx_result helpers
+      cec: use call_op and check for !unregistered
+      cec: add xfer_timeout_ms field
+      cec: add optional adap_configured callback
+
+ Documentation/driver-api/media/cec-core.rst |  13 +++-
+ drivers/media/cec/core/cec-adap.c           | 282 +++++++++++++++++++++++++++++++++++++++++++------------------------
+ drivers/media/cec/core/cec-api.c            |  24 ++----
+ drivers/media/cec/core/cec-core.c           |  18 ++++-
+ drivers/media/cec/core/cec-pin-priv.h       |  11 +++
+ drivers/media/cec/core/cec-pin.c            |  23 +++---
+ drivers/media/cec/core/cec-priv.h           |  10 +++
+ include/media/cec.h                         |  12 +++
+ include/uapi/linux/cec.h                    |  20 +++++
+ 9 files changed, 278 insertions(+), 135 deletions(-)
