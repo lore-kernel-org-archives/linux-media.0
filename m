@@ -2,93 +2,163 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1723DC433F5
-	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 16:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ACFDC433F5
+	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 16:44:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238063AbiDFQqE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Apr 2022 12:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
+        id S238129AbiDFQqZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Apr 2022 12:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238128AbiDFQp5 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 12:45:57 -0400
-Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2261921CC40
-        for <linux-media@vger.kernel.org>; Wed,  6 Apr 2022 08:01:43 -0700 (PDT)
-Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1nc7AE-0064t9-71; Wed, 06 Apr 2022 15:01:42 +0000
-Received: from ip6-localhost ([::1] helo=localhost.localdomain)
-        by slave0 with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1nc7AB-008RmX-Nq; Wed, 06 Apr 2022 15:01:39 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.19] cec: various fixes and enhancements (#82257)
-Date:   Wed,  6 Apr 2022 15:01:39 +0000
-Message-Id: <20220406150139.2013371-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <3f54b8d2-9c26-1775-0cc9-688a677776eb@xs4all.nl>
-References: 
+        with ESMTP id S238190AbiDFQp6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 12:45:58 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2042.outbound.protection.outlook.com [40.107.236.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E85289B4;
+        Wed,  6 Apr 2022 08:00:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h6+eWbQlzyFNzRY5N41o1R0BmtnuuhYxVHHvzEfY/mhn6l2rtCvxYY1jXlZcqs7DyFIiOFgWjpnIW34nMn5Rqqy9PIjT/l0DaYBhAsTwPnnuhEDasjjdNOG2LrKwlPJcZVQg2e/4G5OsFY1xHHssIAUA1yIJPB203W8S6WEoiecLzRKMMUDhLV+NEiJyqzrSoNTdo4v8/OnZTIEGKLGd1TzqKvmXMjzjoqGvDuMopjOPykaqaGQ2IvpLRrNb11HTO6lDMQ1Y01iTNeobw/vQXwIJ4uSaBP1gjPadY8U9rwUFNlllM8UQt0AM9igDuM1YxzJ+u5+Rr0ZUoSf+bkurYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lYfyHWl8msvTgBq384XAajfUDILCRKxZhNRLLPIYmsc=;
+ b=BbmVg4icF8qKoOkGDA4N3bnIV69ZPBCotQ1INxdaIxgHAHu5i/qyBbdC4/KQgy35F/SbiF3CTwqs5mJc7cH1DPXELUgEUm172yuhohgEPREEz6fbZC8jICRFOiQZ5+2u4oldOPfVizE3lXZcmHxqU8s7UQc4UlZV1Xzy2zg09ul9mS9CWvWSP4PJtkz6zTUbyEiRD0jd0saMGrRyFTv1SPKPU461/EStw1r1c6av3NwsCIqPhsW4FhfppzpGTTC5pOvOVHig139PGygfyKofzgSQJ8HtvlRZA96UVKq6XSZ2NtpAV4kkEDFK8wrRujWMVCxe2k8tcYwIZAfLcE6IfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lYfyHWl8msvTgBq384XAajfUDILCRKxZhNRLLPIYmsc=;
+ b=V63dq/czM9zvMgT7HAQMVl08gi6ueeL3GilBmOk2Il5gNRb4or+rcB7SDdtvov4I9zkrchH5/6RJHFNZpaaEhngtc3D0ecPI6C4rLb9YYs8j4ge9AT46tnMqulll1nw4BVhu/lea7T6xqH8a2jDj8YFzXc1eIJObnLm4wSUnwcItp0SVWDnY30WFSkkKz49GFtvrIQraOwassNKdpztEWs1FPuTP0MtnO0Z3oB/cJfpegI88HRNyfgC/mhj1XMFLN+ICjzcYMYraO2O3NT4QNqT8Rp950uUQv6VYvfRuSN5H0e+B2XV2cFCQ/pDVWN4Kl3F35S31zYEXemD72Dks2w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ DM5PR1201MB0268.namprd12.prod.outlook.com (2603:10b6:4:54::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5123.31; Wed, 6 Apr 2022 15:00:29 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::10ef:dc56:bb21:76f6]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::10ef:dc56:bb21:76f6%4]) with mapi id 15.20.5123.031; Wed, 6 Apr 2022
+ 15:00:29 +0000
+Message-ID: <3bda8b92-6209-1292-88e1-75b8e055c3fa@nvidia.com>
+Date:   Wed, 6 Apr 2022 16:00:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 7/8] ARM: tegra_defconfig: Update CONFIG_TEGRA_VDE
+ option
+Content-Language: en-US
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220220204623.30107-1-digetx@gmail.com>
+ <20220220204623.30107-8-digetx@gmail.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20220220204623.30107-8-digetx@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0082.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:190::15) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0dee59e8-ab20-4292-c3d6-08da17de30c6
+X-MS-TrafficTypeDiagnostic: DM5PR1201MB0268:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR1201MB0268D1D9C9EDD0A17313FA5CD9E79@DM5PR1201MB0268.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uGgjL8yquNqdIlEO0PXTen7OF1h7gdwis4VY+SWKP92f8OVcmIeXsG+A+UhLthfwUMzCNYHBj6DURE6tHUdDJMa7OWJkKpLovY+/WETKcG/ETh1pabpeorGoM+swlUpAvQ0TTsCLP17yaBM/NJog6lIJ6PeR1xjQXfmFdSZWzXK28hiaw4YDchsRdMtJFEQsPUVDGre8KkNhAnEjba/udMGuHSILF1Y9LRu32yiap0SAB1fKd/fgM5h6ytnXIlWsHahADRZjH9iZIb6yz9ZmEmQVxqjWAEVYipjQ4WZWwgiZU0XNT3quNuxxtcicpDJkUGI7XaAPGK5G7cLDvBPTw23irUZ9UK+r3e1eHlWwV3YIfBkDFf38ob66q8GbZFqyiuUU6Lj4tgLwupYDFr/eg2MrETqiIkjew5xeNWnu0ju9fHlJedYUyslJ4JCifOcXpqgoK88Tw4TAsune9iouuuR29hz9exIEbz6oPRnnwiHgrSt3/wZU608pU/4fyif8fxyqEXatEL4vBcOxNrq79efh+pWpZ5z7svflvxUCX91dHVTdximraEkLRsXLZlNt9afVXO8JHMmUUqNvmCV89Q6zxLXcOZc5i5rTv9651bnf4YD+yf+blZSufV1Lxp7XrV0+bs3x6exh+aam88G2GffCRpG5yn1IJOCMhi4NekOUaMj9l2VViwB5VsYb/F/T60Y+bPalDEAjHRyhufE6PQ+33R7cW+/+eLoT/wW70NYHUjRyZIkZSajkCV44z97e
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(31686004)(86362001)(316002)(6512007)(186003)(36756003)(26005)(31696002)(83380400001)(110136005)(6486002)(5660300002)(2616005)(8676002)(53546011)(4326008)(7416002)(4744005)(508600001)(66476007)(15650500001)(2906002)(66946007)(38100700002)(6506007)(66556008)(6666004)(55236004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V3QwQ3BSOWRDSDFjTFJrbEJnKzB4RlI0ZFNwL1QrNlNvSG90M2ZnWWhwOUtE?=
+ =?utf-8?B?emJaRnFKUm44NXFtaTNWMkRvSmVSVWJpZ21NR0JTRFZIOVBpdzJCTDQySlRi?=
+ =?utf-8?B?QzVMdWZVbUpqa1ozOVg1VGs1VUIzSVIrcVJ3ZHMrMytsRmVyOVY1NlpuWE5L?=
+ =?utf-8?B?YUgyaGRmaWF1VkFBSTNiZFR2QXpjUWoyZ0I5dGpjbWhwVzB4UW9jT2dCeFRV?=
+ =?utf-8?B?Wm9sVEN5NGpSWWxqWUtjT1hJNVFZWXhMeG5DcmJOY3NKcFhhcmFrcGVkeTAy?=
+ =?utf-8?B?YWUyUGl4ZmxaWjdCUXVCVmpsSGs1b1pGZlFwR2REOGVHajRsbThwSytXYTQ1?=
+ =?utf-8?B?ZTFTdFV5QVc3bkFEMDFzSzh0MTBRQllCUGJ2aVNsMFhORWkxV0w0V0NYUFpJ?=
+ =?utf-8?B?bXhQTjYyaEg5dUNWbEl6emJOenlFZkJ1YTR3N2g1WmJRRzBFMDFyUGFjNTI0?=
+ =?utf-8?B?WVJEOGIrVi9OWnFzejJWUUloS1BJQUMvdnpoQTVqR0VkOEZJcHdRdk1SZ3Vm?=
+ =?utf-8?B?cjVmMXRFOW1YT2YyQnRhcng1MlFuZGljMzFzQ2lNQU1jd0hWSlNRR09jRzVJ?=
+ =?utf-8?B?STM5czJiUFdaejRqVXRlUFdabEc3Y0tOcmJTbUgvcmNqTUNYK2RBQWk1Vy95?=
+ =?utf-8?B?SEVKa3I5RkJoZUlValNsL0xESklXbkJGcGE5NXNGTXBhbitySk91RTFYUFVi?=
+ =?utf-8?B?ZHVSaHZDSS9taWhITTZsZ2pIcXlnM1NqTExPQWMzdHk3S2tkVmNHSDBaNDdD?=
+ =?utf-8?B?cCtheTNQNUpNWms5Nlp0VXRJV0hMdDBQclRxYk5ZM2FYNXpGaGlKQmZ1dWFT?=
+ =?utf-8?B?N3FjUDR5OVpJWlRXZW1kei9Bb0tRSE5oUFpDV2lFVUptRkVDZmxCQTBhc1JU?=
+ =?utf-8?B?cDFPSi9heFYwV2hpN2dtYlRpZjVUaHM3WWZXMlovc0RBbWZnUVhkNkZXMFo1?=
+ =?utf-8?B?YzEvTWZFOE5nV0RnQ3pRVENCVWpQazNPZjBSbVMyTlNKRHZmL09rWVl4RE9o?=
+ =?utf-8?B?czBCdnZ4L3IxZjVIc1B3TDJVcEw1QnpIZ2JNYStLQjB3ZmJJbUVQd3dpUFZx?=
+ =?utf-8?B?MUk3cEZJYXR3Z29LdVRyVHdNTnAyME14VVVmdkwxYm81RkM1UVBxS0duSWp2?=
+ =?utf-8?B?azJPN243ME85Y1FPRnNWWUU4dThWakRYOFpJSDE1ays0L2doTjNtb3FnWEpM?=
+ =?utf-8?B?eC9PRW0vaGJQVFN1RUxtTGx5czZLOFlTSWYyMVhRTnd0TmdXYUJKSEpza1FX?=
+ =?utf-8?B?YjJ0QzZCS0RmV3BDdUQvTFdSdWVjeE1iK3pVWk9NYit6VXg0aXFhbnJodFk1?=
+ =?utf-8?B?MDMzeWpwYnhxdUdBOHkzTGFrUFlqQmFDbHRnWHpheFFpNk9zSUdlbDdYMkx6?=
+ =?utf-8?B?cmtDZzZnenVqK2prWmJlN1VWaGFINDZvK2Jha1lPMW9xSGpkdFA3K2w1RERG?=
+ =?utf-8?B?UGwwUVc4SUhmeUUzelhSWnEwNGR3aUUrVmlOWjQxeEhOa0VEU1hnNXZsQ2FN?=
+ =?utf-8?B?T2V6dFkyQkhVd25DSld2MDBPYmkrUE41NDdTeUdjUFY3bS8xZFIyVTNGcUZl?=
+ =?utf-8?B?alF1Wko5L1dtalRWNGRudVl3RlhCY09VK1lBbCtnK0w4eGFZSGlobC84VlNk?=
+ =?utf-8?B?Ri84dHNoYjI5YlVoMklsby9zWTBibE81NDBCaHJtMDNvRFpwd2NCMXhkVU1D?=
+ =?utf-8?B?UmpvcEpZeXo5M2JxYmFCOUE1TjJjWHk4dXlvVG4wZnVEam9XaU1nYjhveVNO?=
+ =?utf-8?B?L3IramxWVkltbkRRU21aWmljT1dNeTR4bnVXMXU1TGNtcU55MnFDWHN0bGdh?=
+ =?utf-8?B?MFBIQ3ZYN1VyM0o3T2JpeFNRTnlaYmtWUE1vNEVXUXZnU3BUM2hFVDNJNkoz?=
+ =?utf-8?B?aHdyN0QybzBrU1VteFZOa0ltMXJycXRYUDZuK0Rxd1I5WmtRYVlmc2MwWTVl?=
+ =?utf-8?B?UXVvVjliaEpPM3dtUUJlVERyVzZKcXcwZ2ZtcmJNRmQvOUJETlE5cCtRQUtw?=
+ =?utf-8?B?U0hLeEhGdkZaSnV5WWZTVnR3U3FvNTZobFVaOTgvek9nWUZzNlpSdXlib3Ux?=
+ =?utf-8?B?RCtTaEpHVUtxcFM5bHJ3VTF4K2srL3YrTVVUNVNxZ3pOWVZyNmN4bXNEcXFr?=
+ =?utf-8?B?TlN0ZGRUNXpZdkRUMUNVWFZsdG9nNDc3TXdQb3FEM1J2UVBsZjBvS2tjMUN3?=
+ =?utf-8?B?cEExeHV5dU52TmpYczV5Vk1UNDBsMUw2MzNvZFg5ZkpIMCtCVWQ2QXU1bzAy?=
+ =?utf-8?B?WVR0THowbFF4QzlXUkl3dkd4aUtNc1l0NmZBUTZ1NGJGekNKZE5kazcxVEFR?=
+ =?utf-8?B?ak9yZDkwangrdkkzWWJJWVoxVDF1Z09NTTlVWDFreW05M1FLaG1pRkdNblRL?=
+ =?utf-8?Q?IGmBnAAi/TVuNFk0=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0dee59e8-ab20-4292-c3d6-08da17de30c6
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 15:00:29.7201
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7P6CxxywlHKYi0Td4IaStYuxpTfXEEY2xZtPWqx+QETgHFdwlzcJQK66R4ZEeC5BXADpSgI+VNqnX1W5mJiXxg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0268
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/3f54b8d2-9c26-1775-0cc9-688a677776eb@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/197361/
-Build time: 00:24:12
-Link: https://lore.kernel.org/linux-media/3f54b8d2-9c26-1775-0cc9-688a677776eb@xs4all.nl
-
-gpg: Signature made Wed 06 Apr 2022 10:52:37 AM UTC
-gpg:                using EDDSA key 52ADCAAE8A4F70B99ACD8D726B425DF79B1C1E76
-gpg: Can't check signature: No public key
-
-Summary: got 2/7 patches with issues, being 1 at build time, plus one error when buinding PDF document
-
-Error/warnings:
-
-patches/0001-cec-call-enable_adap-on-s_log_addrs.patch:
-
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-
-    allyesconfig: return code #0:
-	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1983 vivid_create_instance() parse error: turning off implications after 60 seconds
-	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
-	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2625 dvb_register() parse error: turning off implications after 60 seconds
-	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:658 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 654)
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2900 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-
-patches/0005-cec-use-call_op-and-check-for-unregistered.patch:
-
-   checkpatch.pl:
-	$ cat patches/0005-cec-use-call_op-and-check-for-unregistered.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:173: CHECK: Macro argument reuse 'pin' - possible side-effects?
-	-:173: CHECK: Macro argument 'pin' may be better as '(pin)' to avoid precedence issues
-	-:173: CHECK: Macro argument reuse 'op' - possible side-effects?
-	-:173: CHECK: Macro argument 'op' may be better as '(op)' to avoid precedence issues
-	-:177: CHECK: Macro argument reuse 'pin' - possible side-effects?
-	-:177: CHECK: Macro argument 'pin' may be better as '(pin)' to avoid precedence issues
-	-:177: CHECK: Macro argument reuse 'op' - possible side-effects?
-	-:177: CHECK: Macro argument 'op' may be better as '(op)' to avoid precedence issues
-	-:290: CHECK: Macro argument reuse 'adap' - possible side-effects?
-	-:290: CHECK: Macro argument 'adap' may be better as '(adap)' to avoid precedence issues
-	-:290: CHECK: Macro argument reuse 'op' - possible side-effects?
-	-:290: CHECK: Macro argument 'op' may be better as '(op)' to avoid precedence issues
-	-:294: CHECK: Macro argument reuse 'adap' - possible side-effects?
-	-:294: CHECK: Macro argument 'adap' may be better as '(adap)' to avoid precedence issues
-	-:294: CHECK: Macro argument reuse 'op' - possible side-effects?
-	-:294: CHECK: Macro argument 'op' may be better as '(op)' to avoid precedence issues
+On 20/02/2022 20:46, Dmitry Osipenko wrote:
+> The CONFIG_TEGRA_VDE has been deprecated and replaced with the new V4L
+> options after de-staging of the tegra-vde driver. Update the config entry.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>   arch/arm/configs/tegra_defconfig | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
+> index e7385c10a30b..0a39033a5c6f 100644
+> --- a/arch/arm/configs/tegra_defconfig
+> +++ b/arch/arm/configs/tegra_defconfig
+> @@ -298,7 +298,8 @@ CONFIG_SERIO_NVEC_PS2=y
+>   CONFIG_NVEC_POWER=y
+>   CONFIG_NVEC_PAZ00=y
+>   CONFIG_STAGING_MEDIA=y
+> -CONFIG_TEGRA_VDE=y
+> +CONFIG_V4L_MEM2MEM_DRIVERS=y
+> +CONFIG_VIDEO_TEGRA_VDE=y
+>   CONFIG_CHROME_PLATFORMS=y
+>   CONFIG_CROS_EC=y
+>   CONFIG_CROS_EC_I2C=m
 
 
-Error #512 when building PDF docs
+Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
 
+Jon
+
+-- 
+nvpublic
