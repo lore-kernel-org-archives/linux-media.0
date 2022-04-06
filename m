@@ -2,29 +2,31 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4BCAC433EF
-	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 12:49:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4021C433EF
+	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 12:49:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbiDFMu5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Apr 2022 08:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
+        id S229671AbiDFMvF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Apr 2022 08:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbiDFMuo (ORCPT
+        with ESMTP id S231610AbiDFMuo (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 08:50:44 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B61B32
-        for <linux-media@vger.kernel.org>; Wed,  6 Apr 2022 01:54:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D869D06B
+        for <linux-media@vger.kernel.org>; Wed,  6 Apr 2022 01:54:09 -0700 (PDT)
 Received: from dude03.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::39])
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1nc1QV-0000IQ-1Z; Wed, 06 Apr 2022 10:54:07 +0200
+        id 1nc1QV-0000IQ-I1; Wed, 06 Apr 2022 10:54:07 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@pengutronix.de
-Subject: [PATCH 1/3] media: coda: jpeg: set buffer error flag when header parsing fails
-Date:   Wed,  6 Apr 2022 10:53:51 +0200
-Message-Id: <20220406085353.2369313-1-p.zabel@pengutronix.de>
+Subject: [PATCH 3/3] media: coda: jpeg: start streaming without valid header
+Date:   Wed,  6 Apr 2022 10:53:53 +0200
+Message-Id: <20220406085353.2369313-3-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220406085353.2369313-1-p.zabel@pengutronix.de>
+References: <20220406085353.2369313-1-p.zabel@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
@@ -35,27 +37,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If decoding fails because  the output buffer does not contain a
-valid header, set the error flag on the returned capture buffer.
+Stop bailing out on JPEG header parsing errors during streamon.
+This allows userspace to provide valid output buffers later and
+fixes a v4l2-compliance streaming test failure:
+
+		fail: v4l2-test-buffers.cpp(1429): node->streamon(q.g_type())
+	test MMAP (no poll): FAIL
 
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/platform/chips-media/coda-jpeg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/chips-media/coda-common.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/chips-media/coda-jpeg.c b/drivers/media/platform/chips-media/coda-jpeg.c
-index a72f4655e5ad..9e3e05434b96 100644
---- a/drivers/media/platform/chips-media/coda-jpeg.c
-+++ b/drivers/media/platform/chips-media/coda-jpeg.c
-@@ -1353,7 +1353,7 @@ static int coda9_jpeg_prepare_decode(struct coda_ctx *ctx)
- 		src_buf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
- 		dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
- 		v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
--		v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_DONE);
-+		v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_ERROR);
+diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
+index 9000377e592f..63adbbdc1638 100644
+--- a/drivers/media/platform/chips-media/coda-common.c
++++ b/drivers/media/platform/chips-media/coda-common.c
+@@ -2011,9 +2011,13 @@ static int coda_start_streaming(struct vb2_queue *q, unsigned int count)
+ 		 */
+ 		if (q_data_src->fourcc == V4L2_PIX_FMT_JPEG) {
+ 			buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
+-			ret = coda_jpeg_decode_header(ctx, &buf->vb2_buf);
+-			if (ret < 0)
+-				goto err;
++			coda_jpeg_decode_header(ctx, &buf->vb2_buf);
++			/*
++			 * We have to start streaming even if the first buffer
++			 * does not contain a valid JPEG image. The error will
++			 * be caught during device run and will be signalled
++			 * via the capture buffer error flag.
++			 */
  
- 		v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
- 		return ret;
+ 			q_data_dst = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
+ 			q_data_dst->width = round_up(q_data_src->width, 16);
 -- 
 2.30.2
 
