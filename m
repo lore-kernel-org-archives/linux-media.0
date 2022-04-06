@@ -2,96 +2,135 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47F27C433EF
-	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 16:09:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BC0EC433F5
+	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 16:18:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237487AbiDFQLl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Apr 2022 12:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S237367AbiDFQU5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Apr 2022 12:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237550AbiDFQLX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 12:11:23 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9EF2296FC;
-        Wed,  6 Apr 2022 06:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649252385; x=1680788385;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=MR0QuVLovLHwAZvrr6TMq2mU0Gw8cRhORK9LWq219do=;
-  b=l4Z8fbU86lYSLeBjF9lLaRWuIb5MQn2A3ewHyTWona6QoyCXlYT5mTO+
-   sXEsAZwxocNTi8sLQnGQl86fALA3/FF/oYJuiIwKQest+DsAPdcHS4gkg
-   38lHqJPVkh9qmHRbI/vrB3GcHi3Kj3TsOn2UPFVAA+CLOCWRn4293bXMC
-   IqfLbAw+q/pU7zxDcShehwjk5yXORIsEDKOskSXVsiRcHDftJPnATRudq
-   CmvArXXR14yo+ZhWq1oycMjoihxQ5YW63CALSpkKf6sVan6aE5Y/oiJ7+
-   hsW0hRaq5LRTc0qGGz+11oOOuUYnwGWUpwDG1JoGuOQ4XcMC1su5MTYa4
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="286014249"
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="286014249"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 06:39:14 -0700
-X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
-   d="scan'208";a="722516790"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 06:39:11 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nc5qv-000EhC-0U;
-        Wed, 06 Apr 2022 16:37:41 +0300
-Date:   Wed, 6 Apr 2022 16:37:40 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: Re: [PATCH v1 1/1] media: c8sectpfe: Clean up handling of
- *_buffer_aligned
-Message-ID: <Yk2XpEaRiVylkXEt@smile.fi.intel.com>
-References: <20220209182521.55632-1-andriy.shevchenko@linux.intel.com>
- <Yh+SjmGgSZGGaW/I@smile.fi.intel.com>
- <YicvJpTtICUFAvoe@smile.fi.intel.com>
- <20220308171005.GA365233@gnbcxd0016.gnb.st.com>
+        with ESMTP id S237330AbiDFQUI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 12:20:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04E1456E23
+        for <linux-media@vger.kernel.org>; Wed,  6 Apr 2022 06:44:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60C28616EC
+        for <linux-media@vger.kernel.org>; Wed,  6 Apr 2022 13:44:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33C6AC385A3;
+        Wed,  6 Apr 2022 13:44:36 +0000 (UTC)
+Message-ID: <056d6a4a-8d56-b799-d984-70bd3a2ec8d8@xs4all.nl>
+Date:   Wed, 6 Apr 2022 15:44:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308171005.GA365233@gnbcxd0016.gnb.st.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v6 6/8] media: subdev: add locking wrappers to subdev op
+ wrappers
+Content-Language: en-US
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>
+References: <20220324080030.216716-1-tomi.valkeinen@ideasonboard.com>
+ <20220324080030.216716-7-tomi.valkeinen@ideasonboard.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220324080030.216716-7-tomi.valkeinen@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 06:10:05PM +0100, Alain Volmat wrote:
-> Hi Andy,
+
+
+On 24/03/2022 09:00, Tomi Valkeinen wrote:
+> It is common that media drivers call subdev ops in source subdevs, and
+> pass NULL as the state. This was the way to indicate that the callee
+> should use the callee's private active state.
 > 
-> sorry for the delay.
+> E.g.:
 > 
-> Reviewed-by: Alain Volmat <alain.volmat@foss.st.com>
+> v4l2_subdev_call(priv->source_sd, pad, get_fmt, NULL, &sd_fmt);
+> 
+> Now that we have a real subdev active state in the v4l2_subdev struct,
+> we want the caller to pass a proper state (when available). And
+> furthermore, the state should be locked.
+> 
+> This would mean changing all the callers, which is the long term goal.
+> 
+> To fix this issue in the short term, let's add an extra wrapper layer to
+> all v4l2_subdev_call_pad_wrappers which deal with states. These wrappers
+> handle the state == NULL case by using the locked active state instead
+> (when available).
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 
-Thanks!
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Can it be applied now?
+Regards,
 
-> On Tue, Mar 08, 2022 at 12:25:42PM +0200, Andy Shevchenko wrote:
-> > On Wed, Mar 02, 2022 at 05:51:42PM +0200, Andy Shevchenko wrote:
-> > > On Wed, Feb 09, 2022 at 08:25:21PM +0200, Andy Shevchenko wrote:
-> > > > There are a few cases where code is harder than needed to read.
-> > > > Improve those by:
-> > > > - dropping unnecessary castings (see note below)
-> > > > - use PTR_ALING() to be more explicit on what's going on there
-> > > > - use proper definitions instead of hard coded values
-> > > > 
-> > > > Note, dropping castings will allow to perform an additional check
-> > > > that type is not changed from void * to something else, e.g. u64,
-> > > > which may very well break the bitmap APIs.
-> > > 
-> > > Any comments on it?
+	Hans
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> ---
+>  drivers/media/v4l2-core/v4l2-subdev.c | 42 ++++++++++++++++++++++-----
+>  1 file changed, 35 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> index 824424f0a741..d8d1c9ef4dc4 100644
+> --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> @@ -319,14 +319,42 @@ static int call_get_mbus_config(struct v4l2_subdev *sd, unsigned int pad,
+>  	       sd->ops->pad->get_mbus_config(sd, pad, config);
+>  }
+>  
+> +/*
+> + * Create state-management wrapper for pad ops dealing with subdev state. The
+> + * wrapper handles the case where the caller does not provide the called
+> + * subdev's state. This should be removed when all the callers are fixed.
+> + */
+> +#define DEFINE_STATE_WRAPPER(f, arg_type)                                  \
+> +	static int call_##f##_state(struct v4l2_subdev *sd,                \
+> +				    struct v4l2_subdev_state *_state,      \
+> +				    arg_type *format)                      \
+> +	{                                                                  \
+> +		struct v4l2_subdev_state *state = _state;                  \
+> +		int ret;                                                   \
+> +		if (!_state)                                               \
+> +			state = v4l2_subdev_lock_and_get_active_state(sd); \
+> +		ret = call_##f(sd, state, format);                         \
+> +		if (!_state && state)                                      \
+> +			v4l2_subdev_unlock_state(state);                   \
+> +		return ret;                                                \
+> +	}
+> +
+> +DEFINE_STATE_WRAPPER(get_fmt, struct v4l2_subdev_format);
+> +DEFINE_STATE_WRAPPER(set_fmt, struct v4l2_subdev_format);
+> +DEFINE_STATE_WRAPPER(enum_mbus_code, struct v4l2_subdev_mbus_code_enum);
+> +DEFINE_STATE_WRAPPER(enum_frame_size, struct v4l2_subdev_frame_size_enum);
+> +DEFINE_STATE_WRAPPER(enum_frame_interval, struct v4l2_subdev_frame_interval_enum);
+> +DEFINE_STATE_WRAPPER(get_selection, struct v4l2_subdev_selection);
+> +DEFINE_STATE_WRAPPER(set_selection, struct v4l2_subdev_selection);
+> +
+>  static const struct v4l2_subdev_pad_ops v4l2_subdev_call_pad_wrappers = {
+> -	.get_fmt		= call_get_fmt,
+> -	.set_fmt		= call_set_fmt,
+> -	.enum_mbus_code		= call_enum_mbus_code,
+> -	.enum_frame_size	= call_enum_frame_size,
+> -	.enum_frame_interval	= call_enum_frame_interval,
+> -	.get_selection		= call_get_selection,
+> -	.set_selection		= call_set_selection,
+> +	.get_fmt		= call_get_fmt_state,
+> +	.set_fmt		= call_set_fmt_state,
+> +	.enum_mbus_code		= call_enum_mbus_code_state,
+> +	.enum_frame_size	= call_enum_frame_size_state,
+> +	.enum_frame_interval	= call_enum_frame_interval_state,
+> +	.get_selection		= call_get_selection_state,
+> +	.set_selection		= call_set_selection_state,
+>  	.get_edid		= call_get_edid,
+>  	.set_edid		= call_set_edid,
+>  	.dv_timings_cap		= call_dv_timings_cap,
