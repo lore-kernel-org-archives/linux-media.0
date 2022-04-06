@@ -2,280 +2,170 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DD71C35280
-	for <linux-media@archiver.kernel.org>; Tue,  5 Apr 2022 23:12:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 159F8C433F5
+	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 06:55:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574018AbiDEWyF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Apr 2022 18:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
+        id S233043AbiDFG5E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Apr 2022 02:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457696AbiDEQgR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 5 Apr 2022 12:36:17 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82746689BB
-        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 09:34:18 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id i4so12001597qti.7
-        for <linux-media@vger.kernel.org>; Tue, 05 Apr 2022 09:34:18 -0700 (PDT)
+        with ESMTP id S1350468AbiDFGOK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 02:14:10 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506501DAF94
+        for <linux-media@vger.kernel.org>; Tue,  5 Apr 2022 22:17:55 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id e189so1333207oia.8
+        for <linux-media@vger.kernel.org>; Tue, 05 Apr 2022 22:17:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=I/7fitWwUYRa/nqxsZSRCzVOnNeUu3PD11UtZsLnRJ8=;
-        b=eXZM6SKAlG+lAu6DXMz0sNq8+3x6aYl++T7wY9L9wjz1bsH5phqCK2DQ4KhyhsdbTR
-         xoOG6pNZxAAjGVj2wo6ipFZB0UDbtux/XY5aS40SzMsbtNyGKFy4Wf+RnWANBa45OBkj
-         M411he/1j6Q99+Zg8Bo6kKTVHrGLysaisisuWhVLff4EtpzxPjSj7C1hSP9lQylHyXyT
-         DtSrwhn4uFKCOjB76Lf3K40r+zykMnDW4OhUp/f5f6Y30y5uGnr8W3JNmYCapfttjzWV
-         msg7Df5Apq1xQ74Ut0MACShwSxzHqO1Eh3v6bmvNLtpzE8NCIXdnR7tpwrHCX5rCtoY0
-         4guA==
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EaYNgx8KbJOaAquzTTA9wZHzyzdVTdSankAvb1CZzyQ=;
+        b=x5n6cdCJEE/VCj3mLhng1qEaAEHHuW6CnLjYyMKJ8C5R5ZP0Q7JKSOAngNXZvEssT6
+         qYwF0nXkMrFHlG642wUJQ96R8zpKlbaA/iAu1W8vgASVZWN7754Y3hfqO2OLH7MlHlKO
+         ME6PI4A7vIvIay1Q1f8uJsQT4BK9tIPX8xmd/ugQJKSMeeEZPAKla6chmuZzSlbn/t7P
+         mGKdo/EHI/X1JEU3CvMq6WouABaUMJBGUExshvChDadmSyo+WH+DcM5YIqYJa+roV5UP
+         F0HGy42FpfZK4jAnq9YXXQQ5XGQc9/lIKTTMJwH4O9fdpI4TOuVX59WoOrmEpLxIWeL0
+         B4Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=I/7fitWwUYRa/nqxsZSRCzVOnNeUu3PD11UtZsLnRJ8=;
-        b=YdjC98BAs1POazXoYXXaBYPt3Ryk2weA5PFmEhJRHKNDQ3Z0aVM/wgK2+DQE4GSFHx
-         /z6e6ylGLU+vqY3K2kki8lkyq1773bo+tSkQ0+jW7nCgwEzF0WBoSKljDto/SqRJZpqI
-         Z6Hurw3A2w7FAfXj0n4xSI56WwqeEwPqPinuQ2W55xlEpiB0mqOayLGE6u5AaC0QAgrL
-         wm7kdyfH0zJD9mTqFluT6ZFFRgXjz+fO7fCGU7Zsjdy3SqBU4VK5XzQIVO7z3PtFmBLE
-         jxEIOXLn9xmJEgP10zBiGn/aE7lAYwMRKehvG8R73tmBkCgV7IG++E8SYG0mp4+C/BF4
-         FWkg==
-X-Gm-Message-State: AOAM533VE/TUOi+wHfz9sODPK2CDDP23DOamHmNc7riRF6kbPsCZvl3E
-        LVO/AQjJao2O9Y8nVbaO0lTQEA==
-X-Google-Smtp-Source: ABdhPJxAZNT5a4c4cN4qPiLdupD1Ba4oT6l2c+SQFCUCdQYqO3W6EIwMWe+bc2JiS3wplzw5gW1qhw==
-X-Received: by 2002:a05:620a:4256:b0:67e:87a1:ffdd with SMTP id w22-20020a05620a425600b0067e87a1ffddmr2715567qko.647.1649176457567;
-        Tue, 05 Apr 2022 09:34:17 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id w1-20020ac857c1000000b002e1e899badesm10552149qta.72.2022.04.05.09.34.16
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EaYNgx8KbJOaAquzTTA9wZHzyzdVTdSankAvb1CZzyQ=;
+        b=0F96ErLErRQR9587A3JjXTfmOKMK0QvF6NDTpms5GrQd7jqYQbd3If/sabDueUNKCJ
+         3VTTTzdFAMjlUrjzfBHaCXL7qbS8KH9hJIqG/Wd2RGzuZFGM9eDJOcAP2HJwO/IjMLJw
+         R8Hul0SBQ5cwrxCefLtZ3568MwxGg25UqREcLpQBiQRM2/wCCQ3GJbuRnMcFWdnQttC/
+         E57dyv5+hXj5HA/l9U/+WcW7SvhZkKnqMuRnl7UIG9gnwqmwhQq9tQCDFH4j3AvI7acT
+         9ZiL9uE+aSEyI3lhQ4dHI2ALZFtLvTs8IOBMsTF5k0gftvmkoxbSfDlxlSYoAAVQ5jZC
+         FAtA==
+X-Gm-Message-State: AOAM531XTk7TxyMZ4OxRxhQUjdMCk1PYboQlk1dlUdlyKCJsgHmMtIpn
+        uPpWClZZOHql78zsgSnIgea0gQ==
+X-Google-Smtp-Source: ABdhPJznshMWCCRKhfXQIHf+0aM9ZllfI4xIqhhI3AR7UIbt17C0rKLn8MOFpYfzpZrwKU3Nu8zULQ==
+X-Received: by 2002:aca:f286:0:b0:2da:58ba:c578 with SMTP id q128-20020acaf286000000b002da58bac578mr2846902oih.127.1649222274622;
+        Tue, 05 Apr 2022 22:17:54 -0700 (PDT)
+Received: from eze-laptop ([2803:9800:98c2:8470:9f4:8e2a:88e5:ec01])
+        by smtp.gmail.com with ESMTPSA id gk6-20020a0568703c0600b000de4880b357sm6038605oab.50.2022.04.05.22.17.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 09:34:17 -0700 (PDT)
-Message-ID: <9c2279c2be98162ef5e986546ef3f680570a2cfe.camel@ndufresne.ca>
-Subject: Re: [PATCH] media: Add P010 video format
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jernej.skrabec@gmail.com, p.zabel@pengutronix.de,
-        kernel@collabora.com
-Date:   Tue, 05 Apr 2022 12:34:16 -0400
-In-Reply-To: <YktNur601fjyCt9i@eze-laptop>
-References: <20220404090116.353034-1-benjamin.gaignard@collabora.com>
-         <YktNur601fjyCt9i@eze-laptop>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        Tue, 05 Apr 2022 22:17:53 -0700 (PDT)
+Date:   Wed, 6 Apr 2022 02:17:48 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH v3 15/24] media: rkvdec: Move H264 SPS validation in
+ rkvdec-h264
+Message-ID: <Yk0ifIfQmk9n5vyu@eze-laptop>
+References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+ <20220405204426.259074-16-nicolas.dufresne@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220405204426.259074-16-nicolas.dufresne@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le lundi 04 avril 2022 =C3=A0 16:57 -0300, Ezequiel Garcia a =C3=A9crit=C2=
-=A0:
-> On Mon, Apr 04, 2022 at 11:01:16AM +0200, Benjamin Gaignard wrote:
-> > P010 is a YUV format with 10-bits per pixel with interleaved UV.
-> >=20
-> > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> > Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->=20
-> Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
->=20
-> > ---
-> > Note that P010 is already known in GStreamer, only the mapping with
-> > v4l2 pixel format is missing.
-> >=20
-> > This patch has been acked in this series but never merged:
-> > https://patchwork.kernel.org/project/linux-rockchip/patch/2021061813152=
-6.566762-5-benjamin.gaignard@collabora.com/
-> > After rebased it on v5.18-rc1, resend in standalone mode.
-> >=20
-> >  .../media/v4l/pixfmt-yuv-planar.rst           | 76 +++++++++++++++++++
-> >  drivers/media/v4l2-core/v4l2-common.c         |  1 +
-> >  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
-> >  include/uapi/linux/videodev2.h                |  1 +
-> >  4 files changed, 79 insertions(+)
-> >=20
-> > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rs=
-t b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > index 8dff5906639b..6d65c8ac44f0 100644
-> > --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > @@ -102,6 +102,13 @@ All components are stored with the same number of =
-bits per component.
-> >        - 64x32 tiles
-> > =20
-> >          Horizontal Z order
-> > +    * - V4L2_PIX_FMT_P010
-> > +      - 'P010'
-> > +      - 16
-> > +      - 4:2:0
-> > +      - Cb, Cr
-> > +      - No
-> > +      - Linear
-> >      * - V4L2_PIX_FMT_NV12MT_16X16
-> >        - 'VM12'
-> >        - 8
-> > @@ -171,6 +178,7 @@ horizontally.
-> >  .. _V4L2-PIX-FMT-NV21:
-> >  .. _V4L2-PIX-FMT-NV12M:
-> >  .. _V4L2-PIX-FMT-NV21M:
-> > +.. _V4L2-PIX-FMT-P010:
-> > =20
-> >  NV12, NV21, NV12M and NV21M
-> >  ---------------------------
-> > @@ -519,6 +527,74 @@ number of lines as the luma plane.
-> >        - Cb\ :sub:`33`
-> >        - Cr\ :sub:`33`
-> > =20
-> > +.. _V4L2_PIX_FMT_P010:
-> > +
-> > +P010
-> > +----
-> > +
-> > +The number of bytes in one luminance row must be divisible by 16,
-> > +which means there will be padded 0 in the right edge when necessary.
+On Tue, Apr 05, 2022 at 04:44:16PM -0400, Nicolas Dufresne wrote:
+> No function change, this moves H264 specific validation into the H264
+> specific code. This is in preparation of improving this validation and
+> reusing at streamone.
+> 
+> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-So far in GStreamer we have met two form of P010. One has the short stored =
-in
-little endian, and the other in big endian. Its probably visible in the tab=
-le
-here (sorry can't read tables from text), but it could be nice to put that =
-in
-words if not part of the format name.
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-
-Microfost seems to only define "little endian" variation.
-
-https://docs.microsoft.com/en-us/windows/win32/medfound/10-bit-and-16-bit-y=
-uv-video-formats
-
-> > +
-> > +.. raw:: latex
-> > +
-> > +    \begingroup
-> > +    \small
-> > +    \setlength{\tabcolsep}{2pt}
-> > +
-> > +.. tabularcolumns:: |p{2.6cm}|p{0.70cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|=
-p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.2=
-2cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
-> > +
-> > +.. flat-table:: P010 16 Bits per component
-> > +    :header-rows:  2
-> > +    :stub-columns: 0
-> > +
-> > +    * - Identifier
-> > +      - Code
-> > +      - :cspan:`7` Byte 0 in memory
-> > +
-> > +      - :cspan:`7` Byte 1
-> > +    * -
-> > +      -
-> > +      - 7
-> > +      - 6
-> > +      - 5
-> > +      - 4
-> > +      - 3
-> > +      - 2
-> > +      - 1
-> > +      - 0
-> > +
-> > +      - 7
-> > +      - 6
-> > +      - 5
-> > +      - 4
-> > +      - 3
-> > +      - 2
-> > +      - 1
-> > +      - 0
-> > +    * - ``V4L2_PIX_FMT_P010``
-> > +      - 'P010'
-> > +
-> > +      - Y\ :sub:`9`
-> > +      - Y\ :sub:`8`
-> > +      - Y\ :sub:`7`
-> > +      - Y\ :sub:`6`
-> > +      - Y\ :sub:`5`
-> > +      - Y\ :sub:`4`
-> > +      - Y\ :sub:`3`
-> > +      - Y\ :sub:`2`
-> > +
-> > +      - Y\ :sub:`1`
-> > +      - Y\ :sub:`0`
-> > +      - 0
-> > +      - 0
-> > +      - 0
-> > +      - 0
-> > +      - 0
-> > +      - 0
-> > +
-> > +.. raw:: latex
-> > +
-> > +    \endgroup
-> > =20
-> >  Fully Planar YUV Formats
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2=
--core/v4l2-common.c
-> > index df34b2a283bc..1e38ad8906a2 100644
-> > --- a/drivers/media/v4l2-core/v4l2-common.c
-> > +++ b/drivers/media/v4l2-core/v4l2-common.c
-> > @@ -266,6 +266,7 @@ const struct v4l2_format_info *v4l2_format_info(u32=
- format)
-> >  		{ .format =3D V4L2_PIX_FMT_NV61,    .pixel_enc =3D V4L2_PIXEL_ENC_YU=
-V, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0, 0 }, .hdiv =
-=3D 2, .vdiv =3D 1 },
-> >  		{ .format =3D V4L2_PIX_FMT_NV24,    .pixel_enc =3D V4L2_PIXEL_ENC_YU=
-V, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0, 0 }, .hdiv =
-=3D 1, .vdiv =3D 1 },
-> >  		{ .format =3D V4L2_PIX_FMT_NV42,    .pixel_enc =3D V4L2_PIXEL_ENC_YU=
-V, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0, 0 }, .hdiv =
-=3D 1, .vdiv =3D 1 },
-> > +		{ .format =3D V4L2_PIX_FMT_P010,    .pixel_enc =3D V4L2_PIXEL_ENC_YU=
-V, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 2, 2, 0, 0 }, .hdiv =
-=3D 2, .vdiv =3D 1 },
-> > =20
-> >  		{ .format =3D V4L2_PIX_FMT_YUV410,  .pixel_enc =3D V4L2_PIXEL_ENC_YU=
-V, .mem_planes =3D 1, .comp_planes =3D 3, .bpp =3D { 1, 1, 1, 0 }, .hdiv =
-=3D 4, .vdiv =3D 4 },
-> >  		{ .format =3D V4L2_PIX_FMT_YVU410,  .pixel_enc =3D V4L2_PIXEL_ENC_YU=
-V, .mem_planes =3D 1, .comp_planes =3D 3, .bpp =3D { 1, 1, 1, 0 }, .hdiv =
-=3D 4, .vdiv =3D 4 },
-> > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-=
-core/v4l2-ioctl.c
-> > index 96e307fe3aab..e14d7e1a038e 100644
-> > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > @@ -1301,6 +1301,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc =
-*fmt)
-> >  	case V4L2_PIX_FMT_NV61:		descr =3D "Y/CrCb 4:2:2"; break;
-> >  	case V4L2_PIX_FMT_NV24:		descr =3D "Y/CbCr 4:4:4"; break;
-> >  	case V4L2_PIX_FMT_NV42:		descr =3D "Y/CrCb 4:4:4"; break;
-> > +	case V4L2_PIX_FMT_P010:		descr =3D "10-bit Y/CrCb 4:2:0"; break;
-> >  	case V4L2_PIX_FMT_NV12_4L4:	descr =3D "Y/CbCr 4:2:0 (4x4 Linear)"; br=
-eak;
-> >  	case V4L2_PIX_FMT_NV12_16L16:	descr =3D "Y/CbCr 4:2:0 (16x16 Linear)"=
-; break;
-> >  	case V4L2_PIX_FMT_NV12_32L32:   descr =3D "Y/CbCr 4:2:0 (32x32 Linear=
-)"; break;
-> > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videod=
-ev2.h
-> > index 4c09969e7112..2e451c454db3 100644
-> > --- a/include/uapi/linux/videodev2.h
-> > +++ b/include/uapi/linux/videodev2.h
-> > @@ -601,6 +601,7 @@ struct v4l2_pix_format {
-> >  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/=
-CrCb 4:2:2  */
-> >  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/=
-CbCr 4:4:4  */
-> >  #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/=
-CrCb 4:4:4  */
-> > +#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 15  Y/=
-CbCr 4:2:0 10-bit per pixel*/
-> > =20
-> >  /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
-> >  #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/=
-CbCr 4:2:0  */
-> > --=20
-> > 2.32.0
-> >=20
-
+> ---
+>  drivers/staging/media/rkvdec/rkvdec-h264.c | 23 ++++++++++++++++++++++
+>  drivers/staging/media/rkvdec/rkvdec.c      | 23 ++++++----------------
+>  drivers/staging/media/rkvdec/rkvdec.h      |  1 +
+>  3 files changed, 30 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> index 8d44a884a52e..0dcbcb1bac80 100644
+> --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
+> +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+> @@ -1137,9 +1137,32 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
+>  	return 0;
+>  }
+>  
+> +static int rkvdec_h264_try_ctrl(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
+> +{
+> +	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
+> +		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
+> +		/*
+> +		 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
+> +		 * but it's currently broken in the driver.
+> +		 * Reject them for now, until it's fixed.
+> +		 */
+> +		if (sps->chroma_format_idc > 1)
+> +			/* Only 4:0:0 and 4:2:0 are supported */
+> +			return -EINVAL;
+> +		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
+> +			/* Luma and chroma bit depth mismatch */
+> +			return -EINVAL;
+> +		if (sps->bit_depth_luma_minus8 != 0)
+> +			/* Only 8-bit is supported */
+> +			return -EINVAL;
+> +	}
+> +	return 0;
+> +}
+> +
+>  const struct rkvdec_coded_fmt_ops rkvdec_h264_fmt_ops = {
+>  	.adjust_fmt = rkvdec_h264_adjust_fmt,
+>  	.start = rkvdec_h264_start,
+>  	.stop = rkvdec_h264_stop,
+>  	.run = rkvdec_h264_run,
+> +	.try_ctrl = rkvdec_h264_try_ctrl,
+>  };
+> diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+> index 2df8cf4883e2..e3d44d5b35f3 100644
+> --- a/drivers/staging/media/rkvdec/rkvdec.c
+> +++ b/drivers/staging/media/rkvdec/rkvdec.c
+> @@ -29,23 +29,12 @@
+>  
+>  static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
+>  {
+> -	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
+> -		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
+> -		/*
+> -		 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
+> -		 * but it's currently broken in the driver.
+> -		 * Reject them for now, until it's fixed.
+> -		 */
+> -		if (sps->chroma_format_idc > 1)
+> -			/* Only 4:0:0 and 4:2:0 are supported */
+> -			return -EINVAL;
+> -		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
+> -			/* Luma and chroma bit depth mismatch */
+> -			return -EINVAL;
+> -		if (sps->bit_depth_luma_minus8 != 0)
+> -			/* Only 8-bit is supported */
+> -			return -EINVAL;
+> -	}
+> +	struct rkvdec_ctx *ctx = container_of(ctrl->handler, struct rkvdec_ctx, ctrl_hdl);
+> +	const struct rkvdec_coded_fmt_desc *desc = ctx->coded_fmt_desc;
+> +
+> +	if (desc->ops->try_ctrl)
+> +		return desc->ops->try_ctrl(ctx, ctrl);
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
+> index 2f4ea1786b93..9df0fba799a4 100644
+> --- a/drivers/staging/media/rkvdec/rkvdec.h
+> +++ b/drivers/staging/media/rkvdec/rkvdec.h
+> @@ -72,6 +72,7 @@ struct rkvdec_coded_fmt_ops {
+>  	void (*done)(struct rkvdec_ctx *ctx, struct vb2_v4l2_buffer *src_buf,
+>  		     struct vb2_v4l2_buffer *dst_buf,
+>  		     enum vb2_buffer_state result);
+> +	int (*try_ctrl)(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl);
+>  };
+>  
+>  struct rkvdec_coded_fmt_desc {
+> -- 
+> 2.34.1
+> 
