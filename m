@@ -2,408 +2,184 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4E3DC433EF
-	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 15:31:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97D97C433F5
+	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 15:33:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbiDFPdU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Apr 2022 11:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S236227AbiDFPfs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Apr 2022 11:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235821AbiDFPdM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 11:33:12 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050544BBB85;
-        Wed,  6 Apr 2022 05:41:23 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:ff63:de1f:2a77:5241] (unknown [IPv6:2a01:e0a:120:3210:ff63:de1f:2a77:5241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id C1D291F45595;
-        Wed,  6 Apr 2022 13:40:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649248859;
-        bh=juTIYH9Al5t/rKSzyFuZP8TUprn707yPkNgjF5GXa8s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HqxajCWbb5OdryJwbl1Ee5ck7vrJ8zLk/jotKFigpo7VMVLUyzAxdhXgfwKVzDOVJ
-         KnfNHj+KhPaGMDeHMVww0ZN9xgjXxEzJWnvGj9qE4/ECR0RkWOlELq71VcFXpULOSV
-         DqmHLyBFDvaq7ZvVaRJLtTaJFJH4eDT16kLG1ICg4M1gbi7cIiqvi9q1qmO4GbQ/vd
-         MGPQGWCcKVVD+ojzlxp4YZhbbL8ZUz+xCep/T1uZ0RylopT7QXhZS/HjBLot/ZiO5G
-         attjb//Mj+SmKlHdFEBrFvbhNA6l8fDw1o46/RlRrQ5n0tQWG0NTrVpk7Pm2MXLdGx
-         +xoc5AsRgMlig==
-Message-ID: <8d23c99a-4ad0-e65a-0134-12f5d119e8bb@collabora.com>
-Date:   Wed, 6 Apr 2022 14:40:55 +0200
+        with ESMTP id S236358AbiDFPfB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 11:35:01 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCDD6B3DA0;
+        Wed,  6 Apr 2022 05:46:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649249212; x=1680785212;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qjd3E9oaefZi4G89Xe8n5LQfk2srs+ghT6tlVcucH4o=;
+  b=WymFQaD644GYplQwM1E7c3h3cBxAUkH0aWeVJVrJbkH5Es72if4cSPFe
+   dRDiCeKADex0+almkKP8Gy5JDUuqxCw05DzP7KoxewieTqjKsBV/A6Q2M
+   9t7xvA430p1dl+tF5agZ/gGJG499D/245fUe6ZunzwojaKQ+Z2e//cDY9
+   uF3h65q8dpS+UxxnuVYli1+kq2KSTFa0e2H99CmHeNxCx/F7ZAGCCt6tP
+   vqSRxGRARXkS6RZqutnBh13j4WU2HOop1QOW/HgBRKMufkwYt8DFY2r7z
+   5itliIytqwMPzxy/u5uiVIAr/AC9zVVdQ+fGheKmVNz27pQUi6KQvto3J
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="261203661"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="261203661"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 05:04:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="608867666"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Apr 2022 05:04:00 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nc4OG-0004O5-Al;
+        Wed, 06 Apr 2022 12:04:00 +0000
+Date:   Wed, 6 Apr 2022 20:03:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34:
+ warning: unused variable 'samsung_jpeg_match'
+Message-ID: <202204061912.zNf42JUP-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 00/15] Move HEVC stateless controls out of staging
-Content-Language: en-US
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com,
-        Chen-Yu Tsai <wens@csie.org>,
-        "jernej.skrabec" <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev, kernel <kernel@collabora.com>,
-        knaerzche@gmail.com, jc@kynesim.co.uk
-References: <20220228140838.622021-1-benjamin.gaignard@collabora.com>
- <eefa63b3-2a4d-4470-9a4e-517087ebcfaf@collabora.com>
- <CAHCN7xL2uZTMy30FGfDkDK4Lym6wvfr_MTv7QwtchrkTXMQiuw@mail.gmail.com>
- <79a9c925-d930-ad23-dc53-9ebc16d1328a@collabora.com>
- <3f778844-f655-74a7-0a00-05caa84eca35@collabora.com>
- <CAHCN7xLy2381AFLWhLxk5YuRV7C=OwLX=XPXONX8sbkg-SqMjA@mail.gmail.com>
- <CAHCN7xJWQa-uXb0-+CSvAr1JhFmQYt80Q=uGvaY8uyptNcfbgw@mail.gmail.com>
- <163202bd-ea51-e80a-1481-568fae25b045@collabora.com>
- <CAHCN7x+AwNauiyaVL=NGARkmxWOL9uLS5-AO4TjkvLGNQ=3r+Q@mail.gmail.com>
- <bb462ee8-7bf9-5574-7cc2-098cc66e5ef0@collabora.com>
- <CAHCN7x+DTjeP7zQJYPyqzdz=hXWjz6Br0v1sWh4n1J3TJPb+9g@mail.gmail.com>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <CAHCN7x+DTjeP7zQJYPyqzdz=hXWjz6Br0v1sWh4n1J3TJPb+9g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Mauro,
 
-Le 06/04/2022 à 14:28, Adam Ford a écrit :
-> On Wed, Apr 6, 2022 at 1:56 AM Benjamin Gaignard
-> <benjamin.gaignard@collabora.com> wrote:
->>
->> Le 05/04/2022 à 23:27, Adam Ford a écrit :
->>> On Mon, Apr 4, 2022 at 10:56 AM Benjamin Gaignard
->>> <benjamin.gaignard@collabora.com> wrote:
->>>> Le 02/04/2022 à 18:59, Adam Ford a écrit :
->>>>> On Sat, Apr 2, 2022 at 11:22 AM Adam Ford <aford173@gmail.com> wrote:
->>>>>> On Fri, Apr 1, 2022 at 8:18 AM Benjamin Gaignard
->>>>>> <benjamin.gaignard@collabora.com> wrote:
->>>>>>> Le 31/03/2022 à 08:53, Benjamin Gaignard a écrit :
->>>>>>>> Le 30/03/2022 à 20:52, Adam Ford a écrit :
->>>>>>>>> On Wed, Mar 30, 2022 at 2:53 AM Benjamin Gaignard
->>>>>>>>> <benjamin.gaignard@collabora.com> wrote:
->>>>>>>>>> Le 28/02/2022 à 15:08, Benjamin Gaignard a écrit :
->>>>>>>>>>> This series aims to make HEVC uapi stable and usable for hardware
->>>>>>>>>>> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
->>>>>>>>>>> and 2 out of the tree drivers (rkvdec and RPI).
->>>>>>>>>>>
->>>>>>>>>>> After the remarks done on version 2, I have completely reworked to
->>>>>>>>>>> patches
->>>>>>>>>>> split so changelogs are meaningless. I have also drop "RFC" from the
->>>>>>>>>>> titles.
->>>>>>>>>>>
->>>>>>>>>>> Version 4:
->>>>>>>>>>> - Add num_entry_point_offsets field in  struct
->>>>>>>>>>> v4l2_ctrl_hevc_slice_params
->>>>>>>>>>> - Fix V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS name
->>>>>>>>>>> - Initialize control V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
->>>>>>>>>>> - Fix space/tab issue in kernel-doc
->>>>>>>>>>> - Add patch to change data_bit_offset definition
->>>>>>>>>>> - Fix hantro-media SPDX license
->>>>>>>>>>> - put controls under stateless section in v4l2-ctrls-defs.c
->>>>>>>>>>>
->>>>>>>>>>> At the end fluster tests results on IMX8MQ is 77/147 for HEVC codec.
->>>>>>>>>> Dear reviewers,
->>>>>>>>>>
->>>>>>>>>> This series is waiting for your feedback,
->>>>>>>>> I tried several times with the suggested repos for both the kernel and
->>>>>>>>> g-streamer without success getting Fluster to pass any tests on the
->>>>>>>>> imx8mq.  I can try again but I likely won't get to it until this
->>>>>>>>> weekend.  If I can get it working, I'll test both the 8mq and 8mm.
->>>>>>>> Thanks a lot for that.
->>>>>>>>
->>>>>>>> Benjamin
->>>>>>> Adam,
->>>>>>>
->>>>>>> You may need to check if h265parse and v4l2slh265dec are available on your board.
->>>>>> I ran gst-inspect to see what showed up with 265 in the name.
->>>>>>
->>>>>> # gst-inspect-1.0 |grep 265
->>>>>> libav:  avdec_h265: libav HEVC (High Efficiency Video Coding) decoder
->>>>>> rtp:  rtph265depay: RTP H265 depayloader
->>>>>> rtp:  rtph265pay: RTP H265 payloader
->>>>>> typefindfunctions: video/x-h265: h265, x265, 265
->>>>>> v4l2codecs:  v4l2slh265dec: V4L2 Stateless H.265 Video Decoder
->>>>>> videoparsersbad:  h265parse: H.265 parser
->>>>>>
->>>>>> It appears I have both h265parse and v4l2slh265dec.
->>>>>>
->>>>>>> fluster check if v4l2slh265dec is working fine with this command line:
->>>>>>>
->>>>>>> gst-launch-1.0 appsrc num-buffers=0 ! h265parse ! v4l2slh265dec ! fakesink
->>>>>>>
->>>>>>> so if one of them is missing it won't work.
->>>>>> gst-launch-1.0 appsrc num-buffers=0 ! h265parse ! v4l2slh265dec ! fakesink
->>>>>> Setting pipeline to PAUSED ...
->>>>>> 0:00:00.098389938   526 0xaaaaf9d86ac0 ERROR     v4l2codecs-decoder
->>>>>> gstv4l2decoder.c:725:gst_v4l2_decoder_get_controls:<v4l2decoder2>
->>>>>> VIDIOC_G_EXT_CTRLS failed: Invalid argument
->>>>>> ERROR: from element
->>>>>> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Driver did not
->>>>>> report framing and start code method.
->>>>>> Additional debug info:
->>>>>> ../subprojects/gst-plugins-bad/sys/v4l2codecs/gstv4l2codech265dec.c(155):
->>>>>> gst_v4l2_codec_h265_dec_open ():
->>>>>> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
->>>>>> gst_v4l2_decoder_get_controls() failed: Invalid argument
->>>>>> ERROR: pipeline doesn't want to preroll.
->>>>>> ERROR: from element
->>>>>> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Could not
->>>>>> initialize supporting library.
->>>>>> Additional debug info:
->>>>>> ../subprojects/gst-plugins-base/gst-libs/gst/video/gstvideodecoder.c(2909):
->>>>>> gst_video_decoder_change_state ():
->>>>>> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
->>>>>> Failed to open decoder
->>>>>> ERROR: pipeline doesn't want to preroll.
->>>>>> Failed to set pipeline to PAUSED.
->>>>>> Setting pipeline to NULL ...
->>>>>> Freeing pipeline ...
->>>>>>
->>>>>> Does this mean I have a wrong version of the kernel and/or incomplete patches?
->>>>> I double checked the branches.
->>>>>
->>>>> Kernel:
->>>>> https://gitlab.collabora.com/benjamin.gaignard/for-upstream.git
->>>>> branch:  origin/HEVC_UAPI_V4
->>>>>
->>>>> Gstreamer:
->>>>> https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer.git
->>>>> branch:  origin/benjamin.gaignard1/gstreamer-HEVC_aligned_with_kernel_5.15
->>>>>
->>>>>
->>>>> I am still not able to run h.265/HEVC tests.
->>>> Hello Adam,
->>>>
->>>> I have updated the following branches with the versions I have used today:
->>>>
->>>> Kernel:
->>>> https://gitlab.collabora.com/benjamin.gaignard/for-upstream.git
->>>> branch: origin/HEVC_UAPI_V5 only one change in documentation vs version 4 but rebased in v5.18-rc1
->>>>
->>>> Gstreamer:
->>>> https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer.git
->>>> branch:  origin/benjamin.gaignard1/gstreamer-HEVC_aligned_with_kernel_5.15 updated on the latest GST main branch
->>>>
->>>> I hope this will work fine this time.
->>> I wish I had better news for you:
->>>
->>> dmesg shows the hantro driver is being loaded:
->>>
->>> [   38.612243] hantro-vpu 38300000.video-codec: registered
->>> nxp,imx8mq-vpu-g1-dec as /dev/video0
->>> [   38.612618] hantro-vpu 38310000.video-codec: registered
->>> nxp,imx8mq-vpu-g2-dec as /dev/video1
->>>
->>> # gst-inspect-1.0 |grep 265
->>> libav:  avdec_h265: libav HEVC (High Efficiency Video Coding) decoder
->>> rtp:  rtph265depay: RTP H265 depayloader
->>> rtp:  rtph265pay: RTP H265 payloader
->>> typefindfunctions: video/x-h265: h265, x265, 265
->>> v4l2codecs:  v4l2slh265dec: V4L2 Stateless H.265 Video Decoder
->>> videoparsersbad:  h265parse: H.265 parser
->>>
->>> Fluster reports:
->>> GStreamer-H.265-V4L2SL-Gst1.0: GStreamer H.265 V4L2SL decoder for
->>> GStreamer 1.0... ❌
->> Still the same error about non supported control ?
-> # gst-lagst-launch-1.0 appsrc num-buffers=0 ! h265parse !
-> v4l2slh265dec ! fakesink
-> Setting pipeline to PAUSED ...
-> 0:00:01.704385508   420 0xaaaaec0a76c0 ERROR     v4l2codecs-decoder
-> gstv4l2decoder.c:725:gst_v4l2_decoder_get_controls:<v4l2decoder2>
-> VIDIOC_G_EXT_CTRLS failed: Invalid argument
-> ERROR: from element
-> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Driver did not
-> report framing and start code method.
-> Additional debug info:
-> ../subprojects/gst-plugins-bad/sys/v4l2codecs/gstv4l2codech265dec.c(155):
-> gst_v4l2_codec_h265_dec_open ():
-> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
-> gst_v4l2_decoder_get_controls() failed: Invalid argument
-> ERROR: pipeline doesn't want to preroll.
-> ERROR: from element
-> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Could not
-> initialize supporting library.
-> Additional debug info:
-> ../subprojects/gst-plugins-base/gst-libs/gst/video/gstvideodecoder.c(2909):
-> gst_video_decoder_change_state ():
-> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
-> Failed to open decoder
-> ERROR: pipeline doesn't want to preroll.
-> Failed to set pipeline to PAUSED.
-> Setting pipeline to NULL ...
-> Freeing pipeline ...
+First bad commit (maybe != root cause):
 
-What is the result of v4l2-ctl ?
-Here I have:
-v4l2-ctl --all -d 1
-Driver Info:
-	Driver name      : hantro-vpu
-	Card type        : nxp,imx8mq-vpu-g2-dec
-	Bus info         : platform: hantro-vpu
-	Driver version   : 5.18.0
-	Capabilities     : 0x84204000
-		Video Memory-to-Memory Multiplanar
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x04204000
-		Video Memory-to-Memory Multiplanar
-		Streaming
-		Extended Pix Format
-Media Driver Info:
-	Driver name      : hantro-vpu
-	Model            : hantro-vpu
-	Serial           :
-	Bus info         : platform: hantro-vpu
-	Media version    : 5.18.0
-	Hardware revision: 0x00000000 (0)
-	Driver version   : 5.18.0
-Interface Info:
-	ID               : 0x0300000c
-	Type             : V4L Video
-Entity Info:
-	ID               : 0x00000001 (1)
-	Name             : nxp,imx8mq-vpu-g2-dec-source
-	Function         : V4L2 I/O
-	Pad 0x01000002   : 0: Source
-	  Link 0x02000008: to remote pad 0x1000004 of entity 'nxp,imx8mq-vpu-g2-dec-proc': Data, Enabled, Immutable
-Priority: 2
-Format Video Capture Multiplanar:
-	Width/Height      : 48/48
-	Pixel Format      : 'VT12' (Y/CbCr 4:2:0 (4x4 Linear))
-	Field             : None
-	Number of planes  : 1
-	Flags             :
-	Colorspace        : JPEG
-	Transfer Function : Default
-	YCbCr/HSV Encoding: Default
-	Quantization      : Default
-	Plane 0           :
-	   Bytes per Line : 48
-	   Size Image     : 3600
-Format Video Output Multiplanar:
-	Width/Height      : 48/48
-	Pixel Format      : 'S265' (HEVC Parsed Slice Data)
-	Field             : None
-	Number of planes  : 1
-	Flags             :
-	Colorspace        : JPEG
-	Transfer Function : Default
-	YCbCr/HSV Encoding: Default
-	Quantization      : Default
-	Plane 0           :
-	   Bytes per Line : 0
-	   Size Image     : 4608
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
+commit: f4104b7851a8d8b9a70899dcbecdb393eb16cd8a media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
+date:   3 weeks ago
+config: s390-randconfig-r004-20220406 (https://download.01.org/0day-ci/archive/20220406/202204061912.zNf42JUP-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/
 
-User Controls
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-hantro_hevc_slice_header_skip_b 0x00981a80 (int)    : min=0 max=256 step=1 default=0 value=0
+All warnings (new ones prefixed by >>):
 
-Codec Controls
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
+   static const struct of_device_id samsung_jpeg_match[] = {
+                                    ^
+   13 warnings generated.
 
-                    hevc_profile 0x00990b67 (menu)   : min=0 max=2 default=0 value=0
-				0: Main
-				1: Main Still Picture
-				2: Main 10
-                      hevc_level 0x00990b68 (menu)   : min=0 max=8 default=0 value=0
-				0: 1
-				1: 2
-				2: 2.1
-				3: 3
-				4: 3.1
-				5: 4
-				6: 4.1
-				7: 5
-				8: 5.1
 
-Stateless Codec Controls
+vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
 
-     vp9_frame_decode_parameters 0x00a40a2c (unknown): type=261 flags=has-payload
-       vp9_probabilities_updates 0x00a40a2d (unknown): type=260 flags=has-payload
-     hevc_sequence_parameter_set 0x00a40a90 (unknown): type=270 flags=has-payload
-      hevc_picture_parameter_set 0x00a40a91 (unknown): type=271 flags=has-payload
-             hevc_scaling_matrix 0x00a40a93 (unknown): type=273 flags=has-payload
-          hevc_decode_parameters 0x00a40a94 (unknown): type=274 flags=has-payload
-                hevc_decode_mode 0x00a40a95 (menu)   : min=1 max=1 default=1 value=1
-				1: Frame-Based
-                 hevc_start_code 0x00a40a96 (menu)   : min=1 max=1 default=1 value=1
-				1: Annex B Start Code
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
 
->
->> Benjamin
->>
->>> adam
->>>> Benjamin
->>>>
->>>>> adam
->>>>>> adam
->>>>>>> Regards,
->>>>>>> Benjamin
->>>>>>>
->>>>>>>>> adam
->>>>>>>>>> Thanks,
->>>>>>>>>> Benjamin
->>>>>>>>>>
->>>>>>>>>>> Benjamin
->>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>> Benjamin Gaignard (12):
->>>>>>>>>>>        media: uapi: HEVC: Add missing fields in HEVC controls
->>>>>>>>>>>        media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
->>>>>>>>>>>          prefix
->>>>>>>>>>>        media: uapi: HEVC: Add document uAPI structure
->>>>>>>>>>>        media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS
->>>>>>>>>>> as a
->>>>>>>>>>>          dynamic array
->>>>>>>>>>>        media: uapi: Move parsed HEVC pixel format out of staging
->>>>>>>>>>>        media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
->>>>>>>>>>> control
->>>>>>>>>>>        media: uapi: Move the HEVC stateless control type out of staging
->>>>>>>>>>>        media: controls: Log HEVC stateless control in .std_log
->>>>>>>>>>>        media: uapi: Create a dedicated header for Hantro control
->>>>>>>>>>>        media: uapi: HEVC: fix padding in v4l2 control structures
->>>>>>>>>>>        media: uapi: Change data_bit_offset definition
->>>>>>>>>>>        media: uapi: move HEVC stateless controls out of staging
->>>>>>>>>>>
->>>>>>>>>>> Hans Verkuil (3):
->>>>>>>>>>>        videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
->>>>>>>>>>>        v4l2-ctrls: add support for dynamically allocated arrays.
->>>>>>>>>>>        vivid: add dynamic array test control
->>>>>>>>>>>
->>>>>>>>>>>       .../userspace-api/media/drivers/hantro.rst    |   5 -
->>>>>>>>>>>       .../media/v4l/ext-ctrls-codec-stateless.rst   | 833
->>>>>>>>>>> ++++++++++++++++++
->>>>>>>>>>>       .../media/v4l/ext-ctrls-codec.rst             | 780
->>>>>>>>>>> ----------------
->>>>>>>>>>>       .../media/v4l/pixfmt-compressed.rst           |   7 +-
->>>>>>>>>>>       .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
->>>>>>>>>>>       .../media/v4l/vidioc-queryctrl.rst            |   8 +
->>>>>>>>>>>       .../media/videodev2.h.rst.exceptions          |   5 +
->>>>>>>>>>>       .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
->>>>>>>>>>>       drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++-
->>>>>>>>>>>       drivers/media/v4l2-core/v4l2-ctrls-core.c     | 198 ++++-
->>>>>>>>>>>       drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  37 +-
->>>>>>>>>>>       drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
->>>>>>>>>>>       drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
->>>>>>>>>>>       drivers/staging/media/hantro/hantro_drv.c     |  27 +-
->>>>>>>>>>>       drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
->>>>>>>>>>>       drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
->>>>>>>>>>>       .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
->>>>>>>>>>>       .../staging/media/sunxi/cedrus/cedrus_h265.c  |   2 +-
->>>>>>>>>>>       include/media/hevc-ctrls.h                    | 250 ------
->>>>>>>>>>>       include/media/v4l2-ctrls.h                    |  48 +-
->>>>>>>>>>>       include/uapi/linux/hantro-media.h             |  19 +
->>>>>>>>>>>       include/uapi/linux/v4l2-controls.h            | 439 +++++++++
->>>>>>>>>>>       include/uapi/linux/videodev2.h                |  13 +
->>>>>>>>>>>       23 files changed, 1697 insertions(+), 1170 deletions(-)
->>>>>>>>>>>       delete mode 100644 include/media/hevc-ctrls.h
->>>>>>>>>>>       create mode 100644 include/uapi/linux/hantro-media.h
->>>>>>>>>>>
+:::::: The code at line 3126 was first introduced by commit
+:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
+
+:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
