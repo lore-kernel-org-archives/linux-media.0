@@ -2,100 +2,348 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A0A1C433EF
-	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 14:34:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24633C433FE
+	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 15:27:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbiDFOg1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Apr 2022 10:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
+        id S236132AbiDFP3f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Apr 2022 11:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235216AbiDFOgQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 10:36:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D73F3BE60B
-        for <linux-media@vger.kernel.org>; Wed,  6 Apr 2022 04:00:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF7FFB81E4F
-        for <linux-media@vger.kernel.org>; Wed,  6 Apr 2022 11:00:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61E04C385A1
-        for <linux-media@vger.kernel.org>; Wed,  6 Apr 2022 11:00:41 +0000 (UTC)
-Message-ID: <3f54b8d2-9c26-1775-0cc9-688a677776eb@xs4all.nl>
-Date:   Wed, 6 Apr 2022 13:00:39 +0200
+        with ESMTP id S236131AbiDFP3P (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 11:29:15 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043F0561211;
+        Wed,  6 Apr 2022 05:29:05 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id q26so2407330edc.7;
+        Wed, 06 Apr 2022 05:29:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=6PmyYFhtPjFVTd16qXwOxtke+LItJSb1q/vFkxE5NlY=;
+        b=cbOGwazT1XQieUqK0bdMqB19kjqhOiD2MxvoqQWqh4n1QZxLU8tPNe8yIHXOjAeZgE
+         tGjloGg4slazB0TfvRp071QmfK0HGOFBU8qporeV37Q5Uq7WOegEwVr0CXEBFoBPrA1z
+         8O8i99M3DD6rxiczUChpc52UUUg5lLnaAB4bav9Vr3Jy9p4QXbf0ApsJ+iU329YeZf5N
+         6PALqtfRpf8cAn39J8/9MzuvBMnEwlAU8Z7GU1iUFKsW7LPhqzbqNZSSHAbR5VrjEzHW
+         onrZ+FMIr+0OZZNfUcwb1Eqr0uUsdJ7zFV5savBNiMUUFi1OEIdXQgbWWDZhuP1bO+gC
+         n7tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6PmyYFhtPjFVTd16qXwOxtke+LItJSb1q/vFkxE5NlY=;
+        b=dj1Balb00hRBz0jyM3cnVfiQGCOfFlfKTUFd+oNcUoX7tKoAOKa7WQMjHYxBrkXRdf
+         Gr7NQTsgzkXU5SDNEWbcMmF1pr3vUgm1gXqjy223yTeWcwQckam1O+tGQYQxrUID33Kz
+         K+oxbkWazQ9QG1H/8o8eUEHeivkV6HaTXKKJbypzQaObIf7jM2w88oNCrK7ceDNJaTMT
+         UxXNe0dvjlef/JvKiEmoQWFHSlA5MoFnJfjWGVHMJQnd98bC6nM1HiexfFnfqdkQSZ3t
+         52O8QxihTLno3TqNYeru2uQaMAyrhFpxG6BsCSYmoSRl44jXB0BqBubHASkHAziXv6EQ
+         r3gQ==
+X-Gm-Message-State: AOAM530rB65ODrSe+6MvWF27xepG7gtOKGGzFGfOelfklXUC1rd4FGJv
+        RKbBCMNb/ARCnwZ+psh8jxs79odyD7MMvXvEytAXcoistueRUw==
+X-Google-Smtp-Source: ABdhPJwwKxuotM3lupdwNT5FFaXJPTiTGpE5ES/LwFFN8Oxj3/WvUn4pKYJBCkbL7kvYACSHQz0sWsH77LCVnnK+rzo=
+X-Received: by 2002:a05:6402:2142:b0:413:6531:bd9e with SMTP id
+ bq2-20020a056402214200b004136531bd9emr8476195edb.5.1649248143700; Wed, 06 Apr
+ 2022 05:29:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Content-Language: en-US
-To:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.19] cec: various fixes and enhancements
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220228140838.622021-1-benjamin.gaignard@collabora.com>
+ <eefa63b3-2a4d-4470-9a4e-517087ebcfaf@collabora.com> <CAHCN7xL2uZTMy30FGfDkDK4Lym6wvfr_MTv7QwtchrkTXMQiuw@mail.gmail.com>
+ <79a9c925-d930-ad23-dc53-9ebc16d1328a@collabora.com> <3f778844-f655-74a7-0a00-05caa84eca35@collabora.com>
+ <CAHCN7xLy2381AFLWhLxk5YuRV7C=OwLX=XPXONX8sbkg-SqMjA@mail.gmail.com>
+ <CAHCN7xJWQa-uXb0-+CSvAr1JhFmQYt80Q=uGvaY8uyptNcfbgw@mail.gmail.com>
+ <163202bd-ea51-e80a-1481-568fae25b045@collabora.com> <CAHCN7x+AwNauiyaVL=NGARkmxWOL9uLS5-AO4TjkvLGNQ=3r+Q@mail.gmail.com>
+ <bb462ee8-7bf9-5574-7cc2-098cc66e5ef0@collabora.com>
+In-Reply-To: <bb462ee8-7bf9-5574-7cc2-098cc66e5ef0@collabora.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Wed, 6 Apr 2022 07:28:52 -0500
+Message-ID: <CAHCN7x+DTjeP7zQJYPyqzdz=hXWjz6Br0v1sWh4n1J3TJPb+9g@mail.gmail.com>
+Subject: Re: [PATCH v4 00/15] Move HEVC stateless controls out of staging
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com,
+        Chen-Yu Tsai <wens@csie.org>,
+        "jernej.skrabec" <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linux-media <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev, kernel <kernel@collabora.com>,
+        knaerzche@gmail.com, jc@kynesim.co.uk
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The first two patches fix issues relating to a CEC adapter
-being disabled while a transmit is still in progress at the
-hardware level. Unless the hardware is really disabled (i.e.
-loses power) the transmit should just continue in order to
-keep the hardware and framework state in sync, and to avoid
-half-written messages on the bus.
+On Wed, Apr 6, 2022 at 1:56 AM Benjamin Gaignard
+<benjamin.gaignard@collabora.com> wrote:
+>
+>
+> Le 05/04/2022 =C3=A0 23:27, Adam Ford a =C3=A9crit :
+> > On Mon, Apr 4, 2022 at 10:56 AM Benjamin Gaignard
+> > <benjamin.gaignard@collabora.com> wrote:
+> >>
+> >> Le 02/04/2022 =C3=A0 18:59, Adam Ford a =C3=A9crit :
+> >>> On Sat, Apr 2, 2022 at 11:22 AM Adam Ford <aford173@gmail.com> wrote:
+> >>>> On Fri, Apr 1, 2022 at 8:18 AM Benjamin Gaignard
+> >>>> <benjamin.gaignard@collabora.com> wrote:
+> >>>>> Le 31/03/2022 =C3=A0 08:53, Benjamin Gaignard a =C3=A9crit :
+> >>>>>> Le 30/03/2022 =C3=A0 20:52, Adam Ford a =C3=A9crit :
+> >>>>>>> On Wed, Mar 30, 2022 at 2:53 AM Benjamin Gaignard
+> >>>>>>> <benjamin.gaignard@collabora.com> wrote:
+> >>>>>>>> Le 28/02/2022 =C3=A0 15:08, Benjamin Gaignard a =C3=A9crit :
+> >>>>>>>>> This series aims to make HEVC uapi stable and usable for hardwa=
+re
+> >>>>>>>>> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and H=
+antro)
+> >>>>>>>>> and 2 out of the tree drivers (rkvdec and RPI).
+> >>>>>>>>>
+> >>>>>>>>> After the remarks done on version 2, I have completely reworked=
+ to
+> >>>>>>>>> patches
+> >>>>>>>>> split so changelogs are meaningless. I have also drop "RFC" fro=
+m the
+> >>>>>>>>> titles.
+> >>>>>>>>>
+> >>>>>>>>> Version 4:
+> >>>>>>>>> - Add num_entry_point_offsets field in  struct
+> >>>>>>>>> v4l2_ctrl_hevc_slice_params
+> >>>>>>>>> - Fix V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS name
+> >>>>>>>>> - Initialize control V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSET=
+S
+> >>>>>>>>> - Fix space/tab issue in kernel-doc
+> >>>>>>>>> - Add patch to change data_bit_offset definition
+> >>>>>>>>> - Fix hantro-media SPDX license
+> >>>>>>>>> - put controls under stateless section in v4l2-ctrls-defs.c
+> >>>>>>>>>
+> >>>>>>>>> At the end fluster tests results on IMX8MQ is 77/147 for HEVC c=
+odec.
+> >>>>>>>> Dear reviewers,
+> >>>>>>>>
+> >>>>>>>> This series is waiting for your feedback,
+> >>>>>>> I tried several times with the suggested repos for both the kerne=
+l and
+> >>>>>>> g-streamer without success getting Fluster to pass any tests on t=
+he
+> >>>>>>> imx8mq.  I can try again but I likely won't get to it until this
+> >>>>>>> weekend.  If I can get it working, I'll test both the 8mq and 8mm=
+.
+> >>>>>> Thanks a lot for that.
+> >>>>>>
+> >>>>>> Benjamin
+> >>>>> Adam,
+> >>>>>
+> >>>>> You may need to check if h265parse and v4l2slh265dec are available =
+on your board.
+> >>>> I ran gst-inspect to see what showed up with 265 in the name.
+> >>>>
+> >>>> # gst-inspect-1.0 |grep 265
+> >>>> libav:  avdec_h265: libav HEVC (High Efficiency Video Coding) decode=
+r
+> >>>> rtp:  rtph265depay: RTP H265 depayloader
+> >>>> rtp:  rtph265pay: RTP H265 payloader
+> >>>> typefindfunctions: video/x-h265: h265, x265, 265
+> >>>> v4l2codecs:  v4l2slh265dec: V4L2 Stateless H.265 Video Decoder
+> >>>> videoparsersbad:  h265parse: H.265 parser
+> >>>>
+> >>>> It appears I have both h265parse and v4l2slh265dec.
+> >>>>
+> >>>>> fluster check if v4l2slh265dec is working fine with this command li=
+ne:
+> >>>>>
+> >>>>> gst-launch-1.0 appsrc num-buffers=3D0 ! h265parse ! v4l2slh265dec !=
+ fakesink
+> >>>>>
+> >>>>> so if one of them is missing it won't work.
+> >>>> gst-launch-1.0 appsrc num-buffers=3D0 ! h265parse ! v4l2slh265dec ! =
+fakesink
+> >>>> Setting pipeline to PAUSED ...
+> >>>> 0:00:00.098389938   526 0xaaaaf9d86ac0 ERROR     v4l2codecs-decoder
+> >>>> gstv4l2decoder.c:725:gst_v4l2_decoder_get_controls:<v4l2decoder2>
+> >>>> VIDIOC_G_EXT_CTRLS failed: Invalid argument
+> >>>> ERROR: from element
+> >>>> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Driver did not
+> >>>> report framing and start code method.
+> >>>> Additional debug info:
+> >>>> ../subprojects/gst-plugins-bad/sys/v4l2codecs/gstv4l2codech265dec.c(=
+155):
+> >>>> gst_v4l2_codec_h265_dec_open ():
+> >>>> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
+> >>>> gst_v4l2_decoder_get_controls() failed: Invalid argument
+> >>>> ERROR: pipeline doesn't want to preroll.
+> >>>> ERROR: from element
+> >>>> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Could not
+> >>>> initialize supporting library.
+> >>>> Additional debug info:
+> >>>> ../subprojects/gst-plugins-base/gst-libs/gst/video/gstvideodecoder.c=
+(2909):
+> >>>> gst_video_decoder_change_state ():
+> >>>> /GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
+> >>>> Failed to open decoder
+> >>>> ERROR: pipeline doesn't want to preroll.
+> >>>> Failed to set pipeline to PAUSED.
+> >>>> Setting pipeline to NULL ...
+> >>>> Freeing pipeline ...
+> >>>>
+> >>>> Does this mean I have a wrong version of the kernel and/or incomplet=
+e patches?
+> >>> I double checked the branches.
+> >>>
+> >>> Kernel:
+> >>> https://gitlab.collabora.com/benjamin.gaignard/for-upstream.git
+> >>> branch:  origin/HEVC_UAPI_V4
+> >>>
+> >>> Gstreamer:
+> >>> https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer.git
+> >>> branch:  origin/benjamin.gaignard1/gstreamer-HEVC_aligned_with_kernel=
+_5.15
+> >>>
+> >>>
+> >>> I am still not able to run h.265/HEVC tests.
+> >> Hello Adam,
+> >>
+> >> I have updated the following branches with the versions I have used to=
+day:
+> >>
+> >> Kernel:
+> >> https://gitlab.collabora.com/benjamin.gaignard/for-upstream.git
+> >> branch: origin/HEVC_UAPI_V5 only one change in documentation vs versio=
+n 4 but rebased in v5.18-rc1
+> >>
+> >> Gstreamer:
+> >> https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer.git
+> >> branch:  origin/benjamin.gaignard1/gstreamer-HEVC_aligned_with_kernel_=
+5.15 updated on the latest GST main branch
+> >>
+> >> I hope this will work fine this time.
+> > I wish I had better news for you:
+> >
+> > dmesg shows the hantro driver is being loaded:
+> >
+> > [   38.612243] hantro-vpu 38300000.video-codec: registered
+> > nxp,imx8mq-vpu-g1-dec as /dev/video0
+> > [   38.612618] hantro-vpu 38310000.video-codec: registered
+> > nxp,imx8mq-vpu-g2-dec as /dev/video1
+> >
+> > # gst-inspect-1.0 |grep 265
+> > libav:  avdec_h265: libav HEVC (High Efficiency Video Coding) decoder
+> > rtp:  rtph265depay: RTP H265 depayloader
+> > rtp:  rtph265pay: RTP H265 payloader
+> > typefindfunctions: video/x-h265: h265, x265, 265
+> > v4l2codecs:  v4l2slh265dec: V4L2 Stateless H.265 Video Decoder
+> > videoparsersbad:  h265parse: H.265 parser
+> >
+> > Fluster reports:
+> > GStreamer-H.265-V4L2SL-Gst1.0: GStreamer H.265 V4L2SL decoder for
+> > GStreamer 1.0... =E2=9D=8C
+>
+> Still the same error about non supported control ?
 
-The third patch fixes a mismatch between the API documentation
-and the actual code w.r.t. reporting the results of a non-blocking
-transmit.
+# gst-lagst-launch-1.0 appsrc num-buffers=3D0 ! h265parse !
+v4l2slh265dec ! fakesink
+Setting pipeline to PAUSED ...
+0:00:01.704385508   420 0xaaaaec0a76c0 ERROR     v4l2codecs-decoder
+gstv4l2decoder.c:725:gst_v4l2_decoder_get_controls:<v4l2decoder2>
+VIDIOC_G_EXT_CTRLS failed: Invalid argument
+ERROR: from element
+/GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Driver did not
+report framing and start code method.
+Additional debug info:
+../subprojects/gst-plugins-bad/sys/v4l2codecs/gstv4l2codech265dec.c(155):
+gst_v4l2_codec_h265_dec_open ():
+/GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
+gst_v4l2_decoder_get_controls() failed: Invalid argument
+ERROR: pipeline doesn't want to preroll.
+ERROR: from element
+/GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0: Could not
+initialize supporting library.
+Additional debug info:
+../subprojects/gst-plugins-base/gst-libs/gst/video/gstvideodecoder.c(2909):
+gst_video_decoder_change_state ():
+/GstPipeline:pipeline0/v4l2slh265dec:v4l2slh265dec0:
+Failed to open decoder
+ERROR: pipeline doesn't want to preroll.
+Failed to set pipeline to PAUSED.
+Setting pipeline to NULL ...
+Freeing pipeline ...
 
-The fourth patch adds helpers to make it easier for both drivers
-and userspace to detect if the received message contains the
-result of a non-blocking transmit.
 
-The fifth patch makes the framework more robust, preventing ops
-from being called when the device is already unregistered.
-
-The sixth patch allows drivers to override the transmit timeout
-value. And the last patch adds a new callback so drivers can take
-actual when an adapter is fully configured (i.e. all logical addresses
-are claimed) or unconfigured.
-
-Regards,
-
-	Hans
-
-
-The following changes since commit 535f49a9e1f99d0bacb5d492a9dd193c3affbfc0:
-
-  media: platform: imx-mipi-csis: Add dependency on VIDEO_DEV (2022-04-05 16:12:30 +0200)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.19b
-
-for you to fetch changes up to 7ebdf1f2e7b92536eb3ea7595a051057eec9ef1b:
-
-  cec: add optional adap_configured callback (2022-04-06 10:31:05 +0200)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Hans Verkuil (7):
-      cec: call enable_adap on s_log_addrs
-      cec: abort if the current transmit was canceled
-      cec: correctly pass on reply results
-      cec.h: add cec_msg_recv_is_rx/tx_result helpers
-      cec: use call_op and check for !unregistered
-      cec: add xfer_timeout_ms field
-      cec: add optional adap_configured callback
-
- Documentation/driver-api/media/cec-core.rst |  13 +++-
- drivers/media/cec/core/cec-adap.c           | 282 +++++++++++++++++++++++++++++++++++++++++++------------------------
- drivers/media/cec/core/cec-api.c            |  24 ++----
- drivers/media/cec/core/cec-core.c           |  18 ++++-
- drivers/media/cec/core/cec-pin-priv.h       |  11 +++
- drivers/media/cec/core/cec-pin.c            |  23 +++---
- drivers/media/cec/core/cec-priv.h           |  10 +++
- include/media/cec.h                         |  12 +++
- include/uapi/linux/cec.h                    |  20 +++++
- 9 files changed, 278 insertions(+), 135 deletions(-)
+>
+> Benjamin
+>
+> > adam
+> >> Benjamin
+> >>
+> >>> adam
+> >>>> adam
+> >>>>> Regards,
+> >>>>> Benjamin
+> >>>>>
+> >>>>>>> adam
+> >>>>>>>> Thanks,
+> >>>>>>>> Benjamin
+> >>>>>>>>
+> >>>>>>>>> Benjamin
+> >>>>>>>>>
+> >>>>>>>>>
+> >>>>>>>>> Benjamin Gaignard (12):
+> >>>>>>>>>       media: uapi: HEVC: Add missing fields in HEVC controls
+> >>>>>>>>>       media: uapi: HEVC: Rename HEVC stateless controls with ST=
+ATELESS
+> >>>>>>>>>         prefix
+> >>>>>>>>>       media: uapi: HEVC: Add document uAPI structure
+> >>>>>>>>>       media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_P=
+ARAMS
+> >>>>>>>>> as a
+> >>>>>>>>>         dynamic array
+> >>>>>>>>>       media: uapi: Move parsed HEVC pixel format out of staging
+> >>>>>>>>>       media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFS=
+ETS
+> >>>>>>>>> control
+> >>>>>>>>>       media: uapi: Move the HEVC stateless control type out of =
+staging
+> >>>>>>>>>       media: controls: Log HEVC stateless control in .std_log
+> >>>>>>>>>       media: uapi: Create a dedicated header for Hantro control
+> >>>>>>>>>       media: uapi: HEVC: fix padding in v4l2 control structures
+> >>>>>>>>>       media: uapi: Change data_bit_offset definition
+> >>>>>>>>>       media: uapi: move HEVC stateless controls out of staging
+> >>>>>>>>>
+> >>>>>>>>> Hans Verkuil (3):
+> >>>>>>>>>       videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+> >>>>>>>>>       v4l2-ctrls: add support for dynamically allocated arrays.
+> >>>>>>>>>       vivid: add dynamic array test control
+> >>>>>>>>>
+> >>>>>>>>>      .../userspace-api/media/drivers/hantro.rst    |   5 -
+> >>>>>>>>>      .../media/v4l/ext-ctrls-codec-stateless.rst   | 833
+> >>>>>>>>> ++++++++++++++++++
+> >>>>>>>>>      .../media/v4l/ext-ctrls-codec.rst             | 780
+> >>>>>>>>> ----------------
+> >>>>>>>>>      .../media/v4l/pixfmt-compressed.rst           |   7 +-
+> >>>>>>>>>      .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
+> >>>>>>>>>      .../media/v4l/vidioc-queryctrl.rst            |   8 +
+> >>>>>>>>>      .../media/videodev2.h.rst.exceptions          |   5 +
+> >>>>>>>>>      .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
+> >>>>>>>>>      drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 ++-
+> >>>>>>>>>      drivers/media/v4l2-core/v4l2-ctrls-core.c     | 198 ++++-
+> >>>>>>>>>      drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  37 +-
+> >>>>>>>>>      drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+> >>>>>>>>>      drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+> >>>>>>>>>      drivers/staging/media/hantro/hantro_drv.c     |  27 +-
+> >>>>>>>>>      drivers/staging/media/hantro/hantro_hevc.c    |   8 +-
+> >>>>>>>>>      drivers/staging/media/sunxi/cedrus/cedrus.c   |  24 +-
+> >>>>>>>>>      .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+> >>>>>>>>>      .../staging/media/sunxi/cedrus/cedrus_h265.c  |   2 +-
+> >>>>>>>>>      include/media/hevc-ctrls.h                    | 250 ------
+> >>>>>>>>>      include/media/v4l2-ctrls.h                    |  48 +-
+> >>>>>>>>>      include/uapi/linux/hantro-media.h             |  19 +
+> >>>>>>>>>      include/uapi/linux/v4l2-controls.h            | 439 ++++++=
++++
+> >>>>>>>>>      include/uapi/linux/videodev2.h                |  13 +
+> >>>>>>>>>      23 files changed, 1697 insertions(+), 1170 deletions(-)
+> >>>>>>>>>      delete mode 100644 include/media/hevc-ctrls.h
+> >>>>>>>>>      create mode 100644 include/uapi/linux/hantro-media.h
+> >>>>>>>>>
