@@ -2,106 +2,206 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D712C433EF
-	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 16:49:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A6D6C433EF
+	for <linux-media@archiver.kernel.org>; Wed,  6 Apr 2022 19:42:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238151AbiDFQvH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Apr 2022 12:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S229954AbiDFTo3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Apr 2022 15:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238207AbiDFQur (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 12:50:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1940832E945
-        for <linux-media@vger.kernel.org>; Wed,  6 Apr 2022 07:59:05 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nc77e-0001Ut-Ts; Wed, 06 Apr 2022 16:59:02 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nc77f-001R0l-Cl; Wed, 06 Apr 2022 16:59:01 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nc77d-000A86-3L; Wed, 06 Apr 2022 16:59:01 +0200
-Message-ID: <219003f3341412cc6241d8c6e73309a74836678d.camel@pengutronix.de>
-Subject: Re: [PATCH v4 2/2] media: coda: Add more H264 levels for CODA960
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Fabio Estevam <festevam@gmail.com>, hverkuil-cisco@xs4all.nl
-Cc:     nicolas.dufresne@collabora.com, kernel@iktek.de,
-        linux-media@vger.kernel.org, stable@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Fabio Estevam <festevam@denx.de>
-Date:   Wed, 06 Apr 2022 16:59:01 +0200
-In-Reply-To: <20220405135957.3580343-2-festevam@gmail.com>
-References: <20220405135957.3580343-1-festevam@gmail.com>
-         <20220405135957.3580343-2-festevam@gmail.com>
+        with ESMTP id S231992AbiDFTng (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Apr 2022 15:43:36 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93DE156086;
+        Wed,  6 Apr 2022 10:58:23 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 187121F45822
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649267902;
+        bh=L6qng+F82oavfDa6788iqCCq/nZ4DDudHD6oBSS4ZsU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ToMdnMOajCHGEsuTDq2o7irGVZ/vonCu8rKAo9Cl7YKcX5zG+YLzs283SlHbCODto
+         SvsFtpNgtXUn9yXXpOuo7RLiBBfG5Z9IaGauAV63nQI0UzJksGgEO+RofqjEpkD+1r
+         G85f67ACEFpyYBQcM49XTiyzQjF0z7PjiLw2fdR+sG/+TVsQ5JelVAJ2wqNkVZy6sO
+         pb8nAU9BAz+GDjm8lewRSn+hphoBWSsGtGP/202jzhha496yxJ999aNnnAgN4r9fvh
+         dMhRNLu1nptPL2TD4eYI8nVPAYT5zkyCwzuIkTn1dv6Sq2hWKVyn1WwIp8a2AEZBL5
+         orNXEQmAXctuA==
+Message-ID: <71c796610c3c9e1c8a117045c3764e40681a680a.camel@collabora.com>
+Subject: Re: [PATCH v3 00/24] H.264 Field Decoding Support for Frame-based
+ Decoders
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-media <linux-media@vger.kernel.org>
+Date:   Wed, 06 Apr 2022 13:58:11 -0400
+In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
+References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.38.3-1 
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SGkgRmFiaW8sCgpPbiBEaSwgMjAyMi0wNC0wNSBhdCAxMDo1OSAtMDMwMCwgRmFiaW8gRXN0ZXZh
-bSB3cm90ZToKPiBGcm9tOiBOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1ZnJlc25lQGNvbGxh
-Ym9yYS5jb20+Cj4gCj4gVGhpcyBhZGQgSDI2NCBsZXZlbCA0LjEsIDQuMiBhbmQgNS4wIHRvIHRo
-ZSBsaXN0IG9mIHN1cHBvcnRlZAo+IGZvcm1hdHMuCj4gV2hpbGUgdGhlIGhhcmR3YXJlIGRvZXMg
-bm90IGZ1bGx5IHN1cHBvcnQgdGhlc2UgbGV2ZWxzLCBpdCBkbyBzdXBwb3J0Cj4gbW9zdCBvZiB0
-aGVtLiBUaGUgY29uc3RyYWludHMgb24gZnJhbWUgc2l6ZSBhbmQgcGl4ZWwgZm9ybWF0cyBhbHJl
-YWR5Cj4gY292ZXIgdGhlIGxpbWl0YXRpb24uCj4gCj4gVGhpcyBmaXhlcyBuZWdvdGlhdGlvbiBv
-ZiBsZXZlbCBvbiBHU3RyZWFtZXIgMS4xNy4xLgo+IAo+IENjOiBzdGFibGVAdmdlci5rZXJuZWwu
-b3JnCj4gRml4ZXM6IDQyYTY4MDEyZTY3YzIgKCJtZWRpYTogY29kYTogYWRkIHJlYWQtb25seSBo
-LjI2NCBkZWNvZGVyCj4gcHJvZmlsZS9sZXZlbCBjb250cm9scyIpCj4gU2lnbmVkLW9mZi1ieTog
-Tmljb2xhcyBEdWZyZXNuZSA8bmljb2xhcy5kdWZyZXNuZUBjb2xsYWJvcmEuY29tPgo+IFNpZ25l
-ZC1vZmYtYnk6IEV6ZXF1aWVsIEdhcmNpYSA8ZXplcXVpZWxAY29sbGFib3JhLmNvbT4KPiBUZXN0
-ZWQtYnk6IFBhc2NhbCBTcGVjayA8a2VybmVsQGlrdGVrLmRlPgo+IFNpZ25lZC1vZmYtYnk6IEZh
-YmlvIEVzdGV2YW0gPGZlc3RldmFtQGRlbnguZGU+Cj4gUmV2aWV3ZWQtYnk6IFBoaWxpcHAgWmFi
-ZWwgPHAuemFiZWxAcGVuZ3V0cm9uaXguZGU+Cj4gLS0tCj4gQ2hhbmdlcyBzaW5jZSB2MzoKPiAt
-IFJlYmFzZWQgYWdhaW5zdCBsaW51eC1uZXh0IGFuZCB0b29rIHRoZSBjb2RhLT5jaGlwcy1tZWRp
-YSByZW5hbWUKPiBpbiBjb25zaWRlcmF0aW9uLgo+IC0gQWRkZWQgUGhpbGlwcCdzIFJldmlld2Vk
-LWJ5IHRhZy4KCkkgdGhpbmsgeW91IHJlYmFzZWQgdGhlIHdyb25nIHZlcnNpb24gb2YgdGhpcyBw
-YXRjaC4KCj4gwqBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL2NoaXBzLW1lZGlhL2NvZGEtY29tbW9u
-LmMgfCA3ICsrKysrLS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDIgZGVs
-ZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vY2hpcHMt
-bWVkaWEvY29kYS1jb21tb24uYwo+IGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9jaGlwcy1tZWRp
-YS9jb2RhLWNvbW1vbi5jCj4gaW5kZXggNTNiMmRkMWIyNjhjLi5mMTIzNGFkMjRmNjUgMTAwNjQ0
-Cj4gLS0tIGEvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9jaGlwcy1tZWRpYS9jb2RhLWNvbW1vbi5j
-Cj4gKysrIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9jaGlwcy1tZWRpYS9jb2RhLWNvbW1vbi5j
-Cj4gQEAgLTIzNjQsNyArMjM2NCwxMCBAQCBzdGF0aWMgdm9pZCBjb2RhX2VuY29kZV9jdHJscyhz
-dHJ1Y3QgY29kYV9jdHgKPiAqY3R4KQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgICgxIDw8IFY0TDJfTVBFR19WSURFT19IMjY0X0xFVkVMXzNfMCkg
-fAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICgx
-IDw8IFY0TDJfTVBFR19WSURFT19IMjY0X0xFVkVMXzNfMSkgfAo+IMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICgxIDw8IFY0TDJfTVBFR19WSURFT19I
-MjY0X0xFVkVMXzNfMikgfAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgKDEgPDwgVjRMMl9NUEVHX1ZJREVPX0gyNjRfTEVWRUxfNF8wKSksCj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAoMSA8PCBWNEwy
-X01QRUdfVklERU9fSDI2NF9MRVZFTF80XzApIHwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICgxIDw8IFY0TDJfTVBFR19WSURFT19IMjY0X0xFVkVM
-XzRfMSkgfAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgKDEgPDwgVjRMMl9NUEVHX1ZJREVPX0gyNjRfTEVWRUxfNF8yKSB8Cj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAoMSA8PCBWNEwyX01QRUdfVklE
-RU9fSDI2NF9MRVZFTF81XzApKSwKCkkgYXNrZWQgdG8gcmVtb3ZlIHRoZSA1LjAgbGV2ZWwgYW5k
-IHRvIGluY3JlYXNlIHRoZSBtYXggbGV2ZWwgdG8gNC4yLAp5b3UgYWxyZWFkeSBmaXhlZCB0aGlz
-IGluIHYzLgoKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBWNEwyX01QRUdfVklERU9fSDI2NF9MRVZFTF80XzApOwo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4g
-wqDCoMKgwqDCoMKgwqDCoHY0bDJfY3RybF9uZXdfc3RkKCZjdHgtPmN0cmxzLCAmY29kYV9jdHJs
-X29wcywKPiBAQCAtMjQzNyw3ICsyNDQwLDcgQEAgc3RhdGljIHZvaWQgY29kYV9kZWNvZGVfY3Ry
-bHMoc3RydWN0IGNvZGFfY3R4Cj4gKmN0eCkKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGN0eC0+
-ZGV2LT5kZXZ0eXBlLT5wcm9kdWN0ID09IENPREFfNzU0MSkKPiDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoG1heCA9IFY0TDJfTVBFR19WSURFT19IMjY0X0xFVkVMXzRfMDsKPiDCoMKg
-wqDCoMKgwqDCoMKgZWxzZSBpZiAoY3R4LT5kZXYtPmRldnR5cGUtPnByb2R1Y3QgPT0gQ09EQV85
-NjApCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG1heCA9IFY0TDJfTVBFR19WSURF
-T19IMjY0X0xFVkVMXzRfMTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbWF4ID0g
-VjRMMl9NUEVHX1ZJREVPX0gyNjRfTEVWRUxfNV8wOwoKU2FtZSBhcyBhYm92ZSwgdGhlcmUgaXMg
-bm8gd2F5IHRvIHN1cHBvcnQgbGV2ZWwgNS4wIGZyYW1lIHNpemUKcmVxdWlyZW1lbnRzLgoKcmVn
-YXJkcwpQaGlsaXBwCg==
+Hello everyone,
+
+its not clear if that cover made it this time, though it will now. Adding a
+comment below ...
+
+Le mardi 05 avril 2022 =C3=A0 16:44 -0400, Nicolas Dufresne a =C3=A9crit=C2=
+=A0:
+> Until now, only Cedrus (a slice base decoder) supported interlaced
+> decoding.  In order to support field decoding in our frame-based decoder,
+> the v4l2-h264 library needed adaptation to produce the appropriate
+> reference lists.
+>=20
+> This patch extends the v4l2-h264 library to produce the larger references
+> list needed to represent fields separately. Hantro, MTK-VCODEC and RKVDEC
+> drivers have been adapted to accommodate the larger lists. Though, only
+> Hantro and RKVDEC actually have HW support for field decoding. So only
+> these two have been updated to make use of the larger lists. All this wor=
+k
+> has been done using the H.264 specification, LibreELEC downstream kernel
+> patches, Rockchip MPP reference software and Hantro reference software.
+>=20
+> For reviewers, the following is the map of all commit. Patches that could
+> be merge independently of this serie are marked as independent. Note that
+> the test results do depend on the generic fixes.
+>=20
+> 01    : Documentation fix (independent)
+> 02-03 : Improving some generic traces (independent)
+> 04    : Minor v4l2-h264 fix (independent)
+> 05-11 : v4l2-h264 field decoding support
+> 12-16 : rkvdec h.264 generic fixes (independent)
+> 17-20 : rkvdec h.264 field decoding support
+> 21-24 : hantro h.264 field decoding support
+>=20
+> All this work have been tested using GStreamer mainline implementation
+> but also with FFMPEG LibreELEC fork using the testing tool fluster
+> running through the ITU-T H.264 (2016-02) AVCv2 set of bitstream. Before
+> this patch, the scores were:
+>=20
+> Hantro:
+>   FFMPEG:   88/135
+>   GSteamer: 90/135
+> RKVDEC:
+>   FFMPEG:   73/135
+>   GSteamer: 77/135
+>=20
+> And after these changes:
+>=20
+> Hantro:
+>   FFMPEG:   118/135
+>   GSteamer: 129/135
+
+I have also tested on IMX8MQ now, same results. This exercise the
+hantro_g1_h264.c code.
+
+> RKVDEC:
+>   FFMPEG:   118/135
+>   GSteamer: 129/135
+>=20
+> Note that a bug in FFMPEG / LibreELEC fork was noticed and fixed with the
+> following change:
+>=20
+> diff --git a/libavcodec/v4l2_request_h264.c b/libavcodec/v4l2_request_h26=
+4.c
+> index 88da8f0a2d..394bae0550 100644
+> --- a/libavcodec/v4l2_request_h264.c
+> +++ b/libavcodec/v4l2_request_h264.c
+> @@ -66,7 +66,7 @@ static void fill_dpb_entry(struct v4l2_h264_dpb_entry *=
+entry, const H264Picture
+>  {
+>      entry->reference_ts =3D ff_v4l2_request_get_capture_timestamp(pic->f=
+);
+>      entry->pic_num =3D pic->pic_id;
+> -    entry->frame_num =3D pic->frame_num;
+> +    entry->frame_num =3D pic->long_ref ? pic->pic_id : pic->frame_num;
+>      entry->fields =3D pic->reference & V4L2_H264_FRAME_REF;
+>      entry->flags =3D V4L2_H264_DPB_ENTRY_FLAG_VALID;
+>      if (entry->fields)
+>=20
+> Some useful links:
+>=20
+> Detailed Hantro Results:     https://gitlab.freedesktop.org/-/snippets/51=
+89
+> Detailed RKVDEC Results:     https://gitlab.freedesktop.org/-/snippets/52=
+53
+> ITU-T H.264 (2016-02) AVCv2: https://www.itu.int/net/itu-t/sigdb/spevideo=
+/VideoForm-s.aspx?val=3D102002641
+> Fluster:                     https://github.com/fluendo/fluster
+> GStreamer:                   https://gitlab.freedesktop.org/gstreamer/gst=
+reamer/
+> FFMPEG Fork:                 https://github.com/jernejsk/FFmpeg/tree/v4l2=
+-request-hwaccel-4.4
+> Rockchip MPP:                https://github.com/rockchip-linux/mpp
+>=20
+> Changes in v3:
+> - Improved debug message on timestamp miss-match
+> - Moved H264 SPS validation into rkvdec-h264
+> - Added more comments around H264 SPS validation
+> - Also validate at streamon (rkvdec start())
+> - Applied more Review-by and Fixes tag
+> - Fixed Signed-off-by chain in Jonas patch
+>=20
+> Changes in v2:
+> - Applied most of Sebastian's suggestion in comments and commit messages.
+> - Use a bool for dpb_valid and dpb_bottom in rkvdec
+> - Dropped one wrong typo fix (media: v4l2-mem2mem: Fix typo in trace mess=
+age)
+> - Dropped Alex fix (media: rkvdec-h264: Don't hardcode SPS/PPS parameters
+>   + I will carry this one later, it seems cosmetic
+>=20
+> Jonas Karlman (5):
+>   media: rkvdec: h264: Fix bit depth wrap in pps packet
+>   media: rkvdec: h264: Validate and use pic width and height in mbs
+>   media: rkvdec: h264: Fix reference frame_num wrap for second field
+>   media: rkvdec: Ensure decoded resolution fit coded resolution
+>   media: hantro: h264: Make dpb entry management more robust
+>=20
+> Nicolas Dufresne (18):
+>   media: doc: Document dual use of H.264 pic_num/frame_num
+>   media: v4l2-mem2mem: Trace on implicit un-hold
+>   media: h264: Avoid wrapping long_term_frame_idx
+>   media: h264: Use v4l2_h264_reference for reflist
+>   media: h264: Increase reference lists size to 32
+>   media: h264: Store current picture fields
+>   media: h264: Store all fields into the unordered list
+>   media: v4l2: Trace calculated p/b0/b1 initial reflist
+>   media: h264: Sort p/b reflist using frame_num
+>   media: v4l2: Reorder field reflist
+>   media: rkvdec: Stop overclocking the decoder
+>   media: rkvdec: h264: Fix dpb_valid implementation
+>   media: rkvdec: Move H264 SPS validation in rkvdec-h264
+>   media: rkvdec-h264: Add field decoding support
+>   media: rkvdec: Enable capture buffer holding for H264
+>   media: hantro: Stop using H.264 parameter pic_num
+>   media: hantro: Add H.264 field decoding support
+>   media: hantro: Enable HOLD_CAPTURE_BUF for H.264
+>=20
+> Sebastian Fricke (1):
+>   media: videobuf2-v4l2: Warn on holding buffers without support
+>=20
+>  .../media/v4l/ext-ctrls-codec-stateless.rst   |  10 +-
+>  .../media/common/videobuf2/videobuf2-v4l2.c   |   7 +-
+>  .../mediatek/vcodec/vdec/vdec_h264_req_if.c   |  17 +-
+>  drivers/media/v4l2-core/v4l2-h264.c           | 261 ++++++++++++++----
+>  drivers/media/v4l2-core/v4l2-mem2mem.c        |   1 +
+>  .../staging/media/hantro/hantro_g1_h264_dec.c |  38 +--
+>  drivers/staging/media/hantro/hantro_h264.c    | 119 ++++++--
+>  drivers/staging/media/hantro/hantro_hw.h      |   7 +-
+>  drivers/staging/media/hantro/hantro_v4l2.c    |  25 ++
+>  .../media/hantro/rockchip_vpu2_hw_h264_dec.c  |  98 +++----
+>  drivers/staging/media/rkvdec/rkvdec-h264.c    | 154 ++++++++---
+>  drivers/staging/media/rkvdec/rkvdec.c         |  35 +--
+>  drivers/staging/media/rkvdec/rkvdec.h         |   2 +
+>  include/media/v4l2-h264.h                     |  31 ++-
+>  14 files changed, 580 insertions(+), 225 deletions(-)
+>=20
+> --=20
+> 2.34.1
+>=20
+>=20
 
