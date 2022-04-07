@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F80DC433F5
-	for <linux-media@archiver.kernel.org>; Thu,  7 Apr 2022 15:30:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CA7FC43217
+	for <linux-media@archiver.kernel.org>; Thu,  7 Apr 2022 15:30:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344817AbiDGPcA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Apr 2022 11:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
+        id S241617AbiDGPb7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Apr 2022 11:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344802AbiDGPb4 (ORCPT
+        with ESMTP id S1344800AbiDGPb4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 7 Apr 2022 11:31:56 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94655BD0;
-        Thu,  7 Apr 2022 08:29:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9F8D70;
+        Thu,  7 Apr 2022 08:29:55 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4da4:8da5:b6b4:93c])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id B660A1F467B9;
-        Thu,  7 Apr 2022 16:29:54 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id E43761F467B3;
+        Thu,  7 Apr 2022 16:29:50 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649345395;
-        bh=L66tcVRRIZpNzfDD6Qt4u9/IPaHTBDbgBboGmjYb+3s=;
+        s=mail; t=1649345391;
+        bh=cggodh8ZKRQM2uMDDiBLIiWUcdySLF5JRn52xfOpCyY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b9woSzybglR+ZZ/RAa8I3wqSUagtGSuIeTZkwAwpkaX8ZyKGkg2WTPEkAnny8R8vg
-         NKA/S/mfU3NIk+cbRx8T/KnRgOzqt55zubhUcXf6EFP38Txz8q/23VUedLeNimdU1u
-         ktbMOXQK9qRoYBJ2lNn4FTz0Mqmbi2VV6X9Rz/Wd0WvF0AInJM/aPrPvpYtYBz/Y2c
-         HbJoqKJ1zsRl2EISxOka64YtJnJOynVUVw739Mac/TfKk4MDifE3JAhyvt14HvRxis
-         bpfrJyrGe18H5AhZaq6pmi0T/fDdY0WdyqFiP0/h4JRTwD6LxnvCKirRmrJAOZJuX/
-         vBlk1wYji03kg==
+        b=k8HVnSXlzSK9VtnOHPf9EZCCIjAONGI2kh+mSlMGZVcC1Y+MNh61f6VftC+lvm3pW
+         Y2r4VB73CkVpAu40CcxCxHRq/bmZ56SjZpWGE2ZcKQ96HObELRDz5htXHb41mg3KYW
+         ipooM/avnsB8Ufdr/iYfHxo6fT7Q/tbv23DAksbj2Dyh6sY1Oix9GNeJcaTkEDiDP5
+         xPTD1fIVPUrt0YWKC6hiw3bMIlqad6gdPZA/+yAhHLKMe5qM4z9RChpwx+YaKFqVYD
+         kp5CE3WBNXkOe6KrXDfDoVEtbDQ+drbIIZPAVLkn+EbFvAuxkrrOPsCM5mR0y2D/kx
+         Ztre7wyz8iKtw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -42,9 +42,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         sebastian.fricke@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v5 10/17] media: uapi: Move parsed HEVC pixel format out of staging
-Date:   Thu,  7 Apr 2022 17:29:33 +0200
-Message-Id: <20220407152940.738159-11-benjamin.gaignard@collabora.com>
+Subject: [PATCH v5 04/17] media: uapi: HEVC: Add missing fields in HEVC controls
+Date:   Thu,  7 Apr 2022 17:29:27 +0200
+Message-Id: <20220407152940.738159-5-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
 References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
@@ -54,57 +54,91 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move HEVC pixel format since we are ready to stabilize the uAPI
+Complete the HEVC controls with missing fields from H.265 specifications.
+Even if these fields aren't used by the current mainlined drivers
+they will be need for (at least) rkvdec driver.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- Documentation/userspace-api/media/v4l/pixfmt-compressed.rst | 5 -----
- include/media/hevc-ctrls.h                                  | 3 ---
- include/uapi/linux/videodev2.h                              | 1 +
- 3 files changed, 1 insertion(+), 8 deletions(-)
+ .../media/v4l/ext-ctrls-codec.rst             | 19 +++++++++++++++++++
+ include/media/hevc-ctrls.h                    |  6 +++++-
+ 2 files changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-index 967fc803ef94..c352d91a73d8 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-@@ -215,11 +215,6 @@ Compressed Formats
- 	See the :ref:`associated Codec Control IDs <v4l2-mpeg-hevc>`.
- 	Buffers associated with this pixel format must contain the appropriate
- 	number of macroblocks to decode a full corresponding frame.
--
--	.. note::
--
--	   This format is not yet part of the public kernel API and it
--	   is expected to change.
-     * .. _V4L2-PIX-FMT-FWHT:
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index 4cd7c541fc30..dbb08603217b 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -2661,6 +2661,16 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     :stub-columns: 0
+     :widths:       1 1 2
  
-       - ``V4L2_PIX_FMT_FWHT``
++    * - __u8
++      - ``video_parameter_set_id``
++      - Specifies the value of the vps_video_parameter_set_id of the active VPS
++        as descibed in section "7.4.3.2.1 General sequence parameter set RBSP semantics"
++        of H.265 specifications.
++    * - __u8
++      - ``seq_parameter_set_id``
++      - Provides an identifier for the SPS for reference by other syntax elements
++        as descibed in section "7.4.3.2.1 General sequence parameter set RBSP semantics"
++        of H.265 specifications.
+     * - __u16
+       - ``pic_width_in_luma_samples``
+       -
+@@ -2800,6 +2810,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     :stub-columns: 0
+     :widths:       1 1 2
+ 
++    * - __u8
++      - ``pic_parameter_set_id``
++      - Identifies the PPS for reference by other syntax elements.
+     * - __u8
+       - ``num_extra_slice_header_bits``
+       -
+@@ -3026,6 +3039,12 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - __u8
+       - ``ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+       - The list of L1 reference elements as indices in the DPB.
++    * - __u16
++      - ``short_term_ref_pic_set_size``
++      - Specifies the size of short-term reference pictures set included in the SPS.
++    * - __u16
++      - ``long_term_ref_pic_set_size``
++      - Specifies the size of long-term reference pictures set include in the SPS.
+     * - __u8
+       - ``padding``
+       - Applications and drivers must set this to zero.
 diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 28049e1a8a07..00abbf930235 100644
+index 01ccda48d8c5..a329e086a89a 100644
 --- a/include/media/hevc-ctrls.h
 +++ b/include/media/hevc-ctrls.h
-@@ -13,9 +13,6 @@
+@@ -58,6 +58,8 @@ enum v4l2_mpeg_video_hevc_start_code {
+ /* The controls are not stable at the moment and will likely be reworked. */
+ struct v4l2_ctrl_hevc_sps {
+ 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Sequence parameter set */
++	__u8	video_parameter_set_id;
++	__u8	seq_parameter_set_id;
+ 	__u16	pic_width_in_luma_samples;
+ 	__u16	pic_height_in_luma_samples;
+ 	__u8	bit_depth_luma_minus8;
+@@ -108,6 +110,7 @@ struct v4l2_ctrl_hevc_sps {
  
- #include <linux/videodev2.h>
- 
--/* The pixel format isn't stable at the moment and will likely be renamed. */
--#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
+ struct v4l2_ctrl_hevc_pps {
+ 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
++	__u8	pic_parameter_set_id;
+ 	__u8	num_extra_slice_header_bits;
+ 	__u8	num_ref_idx_l0_default_active_minus1;
+ 	__u8	num_ref_idx_l1_default_active_minus1;
+@@ -199,7 +202,8 @@ struct v4l2_ctrl_hevc_slice_params {
+ 	__u32	slice_segment_addr;
+ 	__u8	ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+ 	__u8	ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
 -
- #define V4L2_CID_STATELESS_HEVC_SPS		(V4L2_CID_CODEC_BASE + 1008)
- #define V4L2_CID_STATELESS_HEVC_PPS		(V4L2_CID_CODEC_BASE + 1009)
- #define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS	(V4L2_CID_CODEC_BASE + 1010)
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 8df13defde75..2888fef3cff7 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -710,6 +710,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_FWHT     v4l2_fourcc('F', 'W', 'H', 'T') /* Fast Walsh Hadamard Transform (vicodec) */
- #define V4L2_PIX_FMT_FWHT_STATELESS     v4l2_fourcc('S', 'F', 'W', 'H') /* Stateless FWHT (vicodec) */
- #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
-+#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
++	__u16	short_term_ref_pic_set_size;
++	__u16	long_term_ref_pic_set_size;
+ 	__u8	padding;
  
- /*  Vendor-specific formats   */
- #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 YUV */
+ 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
 -- 
 2.32.0
 
