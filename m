@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 399C0C433EF
-	for <linux-media@archiver.kernel.org>; Thu,  7 Apr 2022 15:29:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E53AC4332F
+	for <linux-media@archiver.kernel.org>; Thu,  7 Apr 2022 15:30:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344791AbiDGPb5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Apr 2022 11:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
+        id S1344805AbiDGPb6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Apr 2022 11:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiDGPby (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Apr 2022 11:31:54 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF48EBA0;
-        Thu,  7 Apr 2022 08:29:50 -0700 (PDT)
+        with ESMTP id S1344799AbiDGPb4 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Apr 2022 11:31:56 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80831D6D;
+        Thu,  7 Apr 2022 08:29:55 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4da4:8da5:b6b4:93c])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 03AFC1F467AE;
-        Thu,  7 Apr 2022 16:29:48 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D55DF1F467B6;
+        Thu,  7 Apr 2022 16:29:52 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649345389;
-        bh=v880e5rS1CCOL1ij+MU7+0c7xNfbGqGEb26NXufy+74=;
+        s=mail; t=1649345393;
+        bh=a2Uju64yuLz/FG3F9H5xkBA4VAF8rTIHnlWQrussMFw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=otjKWiflZiSwRNHaVvtkGPaUmwTjPWpOvxw8ijuLX+Z92YAMj8k8rJVfbJ6R5gkFV
-         W8qI+ur7rqC3jOpZphlXFiJkwKqiUQ2PfqHxw3EfhuegBYGDrUrkLPSilqRyz90gcz
-         b3rJCTh+ZfIQpwMZ2KRqG8a3AyzL9Sx7FjyQqxMwoPWiHJVkp6ZccE4DDTkm1ByXxC
-         VpK2PM9jLc0fHJEkLaQYW5awvAwm5SawTQJ3C8VXbY6i5k4ZWRdpm8pEdDwyBXMoTz
-         pfx2W9pSt9ibUiF1mG/Iy6M8F3fjYaPhrZOfb/jO1B5wFOWTkl/A14G38nw2dMSlvO
-         jzIAOiS43svEA==
+        b=C/YC5cQBKMmfgxt+ebKpxs9mC10dqOp/OiTGWynMQZiwGnevRZmICGyQRYyCKX+rM
+         LUSpXUSAJMZFJYXHokiXq2aMuA6aqUBYHVYufV0SINyHAZPSJ6l2sT2WL/VtNLU7Fd
+         YJUUTkZhZqquIJWHUmLsLXbIPi6Tq5WlJQhfqLyqJOPZUHUa5JKv4ypjIX2/e26SvL
+         1ICsydRSSBMUILbE1H3eHs+pUDwA4H6uH5eGz7Je8M2ya6NFi7ri6Nv43wrk/koPTS
+         K7i9k0WATxNyaX21cWyBvGt/Sc56cfzMqZfzkEzJZAeBivGe2nLa6qFTVz4D6w+Dcc
+         uIk9GL39nq9zw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -41,10 +41,10 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         sebastian.fricke@collabora.com,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH v5 01/17] videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
-Date:   Thu,  7 Apr 2022 17:29:24 +0200
-Message-Id: <20220407152940.738159-2-benjamin.gaignard@collabora.com>
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v5 07/17] media: uapi: HEVC: Add SEI pic struct flags
+Date:   Thu,  7 Apr 2022 17:29:30 +0200
+Message-Id: <20220407152940.738159-8-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
 References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
@@ -54,58 +54,113 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+The possible values for field_pic field in v4l2_hevc_dpb_entry
+structure are defined table D.2 in HEVC specification section D.3.3.
+Add flags and documentation for each of them.
 
-Add a new flag that indicates that this control is a dynamically sized
-array. Also document this flag.
-
-Currently dynamically sized arrays are limited to one dimensional arrays,
-but that might change in the future if there is a need for it.
-
-The initial use-case of dynamic arrays are stateless codecs. A frame
-can be divided in many slices, so you want to provide an array containing
-slice information for each slice. Typically the number of slices is small,
-but the standard allow for hundreds or thousands of slices. Dynamic arrays
-are a good solution since sizing the array for the worst case would waste
-substantial amounts of memory.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- .../userspace-api/media/v4l/vidioc-queryctrl.rst          | 8 ++++++++
- include/uapi/linux/videodev2.h                            | 1 +
- 2 files changed, 9 insertions(+)
+ .../media/v4l/ext-ctrls-codec.rst             | 54 +++++++++++++++++++
+ include/media/hevc-ctrls.h                    | 14 +++++
+ 2 files changed, 68 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-index 88f630252d98..a20dfa2a933b 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-@@ -625,6 +625,14 @@ See also the examples in :ref:`control`.
- 	``V4L2_CTRL_FLAG_GRABBED`` flag when buffers are allocated or
- 	streaming is in progress since most drivers do not support changing
- 	the format in that case.
-+    * - ``V4L2_CTRL_FLAG_DYNAMIC_ARRAY``
-+      - 0x0800
-+      - This control is a dynamically sized 1-dimensional array. It
-+        behaves the same as a regular array, except that the number
-+	of elements as reported by the ``elems`` field is between 1 and
-+	``dims[0]``. So setting the control with a differently sized
-+	array will change the ``elems`` field when the control is
-+	queried afterwards.
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index c679b17b4426..b44ea85c6f0e 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -3193,6 +3193,7 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - __u8
+       - ``field_pic``
+       - Whether the reference is a field picture or a frame.
++        See :ref:`HEVC dpb field pic Flags <hevc_dpb_field_pic_flags>`
+     * - __u16
+       - ``pic_order_cnt[2]``
+       - The picture order count of the reference. Only the first element of the
+@@ -3206,6 +3207,59 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
  
- Return Value
- ============
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 3768a0a80830..8df13defde75 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1886,6 +1886,7 @@ struct v4l2_querymenu {
- #define V4L2_CTRL_FLAG_HAS_PAYLOAD	0x0100
- #define V4L2_CTRL_FLAG_EXECUTE_ON_WRITE	0x0200
- #define V4L2_CTRL_FLAG_MODIFY_LAYOUT	0x0400
-+#define V4L2_CTRL_FLAG_DYNAMIC_ARRAY	0x0800
+     \normalsize
  
- /*  Query flags, to be ORed with the control ID */
- #define V4L2_CTRL_FLAG_NEXT_CTRL	0x80000000
++.. _hevc_dpb_field_pic_flags:
++
++``HEVC dpb field pic Flags``
++
++.. raw:: latex
++
++    \scriptsize
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths:       1 1 2
++
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_FRAME``
++      - 0
++      - (progressive) Frame
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_FIELD``
++      - 1
++      - Top field
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_FIELD``
++      - 2
++      - Bottom field
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_BOTTOM``
++      - 3
++      - Top field, bottom field, in that order
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_TOP``
++      - 4
++      - Bottom field, top field, in that order
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_BOTTOM_TOP``
++      - 5
++      - Top field, bottom field, top field repeated, in that order
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_TOP_BOTTOM``
++      - 6
++      - Bottom field, top field, bottom field repeated, in that order
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_FRAME_DOUBLING``
++      - 7
++      - Frame doubling
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_FRAME_TRIPLING``
++      - 8
++      - Frame tripling
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_PAIRED_PREVIOUS_BOTTOM``
++      - 9
++      - Top field paired with previous bottom field in output order
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_PAIRED_PREVIOUS_TOP``
++      - 10
++      - Bottom field paired with previous top field in output order
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_TOP_PAIRED_NEXT_BOTTOM``
++      - 11
++      - Top field paired with next bottom field in output order
++    * - ``V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_PAIRED_NEXT_TOP``
++      - 12
++      - Bottom field paired with next top field in output order
++
+ .. c:type:: v4l2_hevc_pred_weight_table
+ 
+ .. raw:: latex
+diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+index 2812778b41f4..e76a23e22a35 100644
+--- a/include/media/hevc-ctrls.h
++++ b/include/media/hevc-ctrls.h
+@@ -132,6 +132,20 @@ struct v4l2_ctrl_hevc_pps {
+ 
+ #define V4L2_HEVC_DPB_ENTRY_LONG_TERM_REFERENCE	0x01
+ 
++#define V4L2_HEVC_SEI_PIC_STRUCT_FRAME				0
++#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_FIELD			1
++#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_FIELD			2
++#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_BOTTOM			3
++#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_TOP			4
++#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_BOTTOM_TOP			5
++#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_TOP_BOTTOM		6
++#define V4L2_HEVC_SEI_PIC_STRUCT_FRAME_DOUBLING			7
++#define V4L2_HEVC_SEI_PIC_STRUCT_FRAME_TRIPLING			8
++#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_PAIRED_PREVIOUS_BOTTOM	9
++#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_PAIRED_PREVIOUS_TOP	10
++#define V4L2_HEVC_SEI_PIC_STRUCT_TOP_PAIRED_NEXT_BOTTOM		11
++#define V4L2_HEVC_SEI_PIC_STRUCT_BOTTOM_PAIRED_NEXT_TOP		12
++
+ #define V4L2_HEVC_DPB_ENTRIES_NUM_MAX		16
+ 
+ struct v4l2_hevc_dpb_entry {
 -- 
 2.32.0
 
