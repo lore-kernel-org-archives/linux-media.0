@@ -2,70 +2,68 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61142C433FE
-	for <linux-media@archiver.kernel.org>; Thu,  7 Apr 2022 16:26:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0760C4332F
+	for <linux-media@archiver.kernel.org>; Thu,  7 Apr 2022 16:26:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242846AbiDGQ2E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Apr 2022 12:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
+        id S235597AbiDGQ2F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Apr 2022 12:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345716AbiDGQ1i (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Apr 2022 12:27:38 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4286FBC9C
-        for <linux-media@vger.kernel.org>; Thu,  7 Apr 2022 09:25:35 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 237Aq1xH009487;
-        Thu, 7 Apr 2022 18:25:14 +0200
+        with ESMTP id S1345825AbiDGQ2A (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Apr 2022 12:28:00 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B601BC9C
+        for <linux-media@vger.kernel.org>; Thu,  7 Apr 2022 09:25:56 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 237AqGOv030800;
+        Thu, 7 Apr 2022 18:25:35 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
  references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=selector1;
- bh=EqA1ZkZypaGTCyOoj7xJYX2seaZdyRfdJjoAxkt4YU0=;
- b=3TdZVs9fBdmNoaag064xqq8ks1CeXMVCuCtJU7Kz9QHuvGzjqh+3cy0wphDjetR6pbX7
- YrORFAdcfn8zoGzfkxCz3PAGbSfbQMqZTZed0YM/WEB+fW714ovTo7PSXDHv4oRn7Tls
- MQZf3PwQahk6Nn/jfy9y6dc6Elnq6W3ioUHt7Mjf/dJLblbupJQ37fZz6e0PnH3smUZT
- 5Bh9/VmwjcQuNYhDy2ECxxamWwXCcC1805CaguenHy1FJ01PMPH4zrBaFc9F5EiVrBag
- KZgFIvSo8VZOYpdouiYZUx0YCx43M7w8s2Q7uXgD7JDm8amQt4EAkbToZ3VyY1Xqwa1R Xg== 
+ bh=LcPst2A1idiyljSEAjrHVtwI1Cbe4isvDa5Ib2ZTX4o=;
+ b=no1xasfyIMpTO/G+KTEEHXCLHLjml2WQAzaoZGN2cM+M1hZEtTDd56rrudHz5zTzXjS3
+ 5K2yYPYeIcLsIFzL4Q3bYic/PlVqmrIL07jbiWIzEIlKHgCH5+e5ShxT7TLml087IiqU
+ Gm8Rzgy9e0qMpuJ/zFk1JPGhaYGJ4FUUwpbkwc0NZhr92nTZLZvudfYp5zwRcE6FnFaL
+ NFHhqv7lzKSzQZKoz/xqaoob4bCerBiRc9bGdJ/pMfFYeVJorIo8M1z4k3iQ2CfhYHTC
+ tErsHIXm7hooXcP8WaCj2vzuY/7IaVz2Hy6YQWCclVvKQFYItg48jAlKLsBdDK4B9n64 gg== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f8x4rnex6-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f6du16act-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Apr 2022 18:25:14 +0200
+        Thu, 07 Apr 2022 18:25:35 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 49E5310002A;
-        Thu,  7 Apr 2022 18:25:14 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CAD4510002A;
+        Thu,  7 Apr 2022 18:25:34 +0200 (CEST)
 Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 438CC221778;
-        Thu,  7 Apr 2022 18:25:14 +0200 (CEST)
-Received: from [10.201.23.19] (10.75.127.44) by SFHDAG2NODE2.st.com
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C2511222226;
+        Thu,  7 Apr 2022 18:25:34 +0200 (CEST)
+Received: from [10.201.23.19] (10.75.127.47) by SFHDAG2NODE2.st.com
  (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 7 Apr
- 2022 18:25:12 +0200
-Subject: Re: [PATCH v5 00/27] media: ov5640: Rework the clock tree programming
- for MIPI
+ 2022 18:25:33 +0200
+Subject: Re: [PATCH v5 16/27] media: ov5640: Add VBLANK control
 To:     Jacopo Mondi <jacopo@jmondi.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-CC:     Steve Longerbeam <slongerbeam@gmail.com>,
-        <laurent.pinchart@ideasonboard.com>, <sakari.ailus@iki.fi>,
+        Steve Longerbeam <slongerbeam@gmail.com>
+CC:     <laurent.pinchart@ideasonboard.com>, <sakari.ailus@iki.fi>,
         <hverkuil-cisco@xs4all.nl>, <mirela.rabulea@nxp.com>,
-        <xavier.roumegue@oss.nxp.com>, <hugues.fruchet@st.com>,
-        <prabhakar.mahadev-lad.rj@bp.renesas.com>, <aford173@gmail.com>,
-        <festevam@gmail.com>, <Eugen.Hristev@microchip.com>,
-        <jbrunet@baylibre.com>, <paul.elder@ideasonboard.com>,
+        <xavier.roumegue@oss.nxp.com>, <tomi.valkeinen@ideasonboard.com>,
+        <hugues.fruchet@st.com>, <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        <aford173@gmail.com>, <festevam@gmail.com>,
+        <Eugen.Hristev@microchip.com>, <jbrunet@baylibre.com>,
+        <paul.elder@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         <linux-media@vger.kernel.org>
 References: <20220224094313.233347-1-jacopo@jmondi.org>
- <7c082420-63f4-0520-21a2-7e10a1e2c321@ideasonboard.com>
- <20220323095019.edql22tjb3ea5npx@uno.localdomain>
+ <20220224094313.233347-17-jacopo@jmondi.org>
 From:   Hugues FRUCHET - FOSS <hugues.fruchet@foss.st.com>
-Message-ID: <a9972878-dda3-15fb-90fc-ae6686e35818@foss.st.com>
-Date:   Thu, 7 Apr 2022 18:25:11 +0200
+Message-ID: <3b2e09d0-8524-3b3e-0ace-47fdbd36bec7@foss.st.com>
+Date:   Thu, 7 Apr 2022 18:25:32 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20220323095019.edql22tjb3ea5npx@uno.localdomain>
+In-Reply-To: <20220224094313.233347-17-jacopo@jmondi.org>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
+X-Originating-IP: [10.75.127.47]
 X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
  (10.75.127.5)
 X-Proofpoint-Virus-Version: vendor=baseguard
@@ -77,103 +75,219 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi Jacopo,
 
-On 3/23/22 10:50 AM, Jacopo Mondi wrote:
-> Hi Tomi thanks for testing
-> 
-> On Wed, Mar 23, 2022 at 10:51:04AM +0200, Tomi Valkeinen wrote:
->> Hi Jacopo,
->>
->> On 24/02/2022 11:42, Jacopo Mondi wrote:
->>> v1:
->>> https://patchwork.linuxtv.org/project/linux-media/list/?series=7249
->>> v2:
->>> https://patchwork.linuxtv.org/project/linux-media/list/?series=7311
->>> v3:
->>> https://patchwork.linuxtv.org/project/linux-media/list/?series=7385
->>> v4:
->>> https://patchwork.linuxtv.org/project/linux-media/list/?series=7389
->>>
->>> A branch for testing based on the most recent media-master is available at
->>> https://git.sr.ht/~jmondi_/linux #jmondi/media-master/ov5640-v5
->>
->> I tested these with DRA76 EVM & CAL, using CAL's legacy non-MC mode. It
->> doesn't work. I think there are two problems:
->>
->> - CAL uses mbus codes like MEDIA_BUS_FMT_UYVY8_2X8 for CSI-2, not 1X16.
->> OV5640 used to support 2X8, but now it doesn't.
->>
->> - OV5640 sets the default code to MEDIA_BUS_FMT_UYVY8_2X8, even for CSI-2
->> where it doesn't support MEDIA_BUS_FMT_UYVY8_2X8.
-> 
-> This might be worth an additional patch that decides what default
-> format to use based on the bus type.
-> 
->>
->> I'd like to just change CAL and drop the 2X8 support and instead use 1X16,
->> but then any sensor that uses 2X8 would work. So I guess I need to change
->> the code to support both.
->>
->> Anyway, both of those issues might also surface on other platforms, as
->> ov5640 behavior has changed.
->>
+Patch proposed below to support framerate change both with frame 
+interval setting and vblank control.
 
-I am facing the same "2X8" compatibility problem on ST platforms:
-- st-mipid02 CSI-2 to parallel bridge [1] must be enhanced to support 
-1X16 formats
-- dcmi controller [2] must also be enhanced to support 1X16 and extra 
-code to support 1X16 input to 2X8 output (as we only have as input the 
-V4L2 format, not the mediabus one)
-=> with current code, support with OV5640 is broken.
+On 2/24/22 10:43 AM, Jacopo Mondi wrote:
+> Add the VBLANK control which allows to select the duration of the
+> frame vertical blankings and allows to control the framerate.
+> 
+> The VBLANK control also modifies the exposure time range, which cannot
+> exceed the maximum frame length.
+> 
+> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> ---
+>   drivers/media/i2c/ov5640.c | 52 ++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 52 insertions(+)
+> 
+> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+> index 5419c7236348..665a8bcebf09 100644
+> --- a/drivers/media/i2c/ov5640.c
+> +++ b/drivers/media/i2c/ov5640.c
+> @@ -36,6 +36,10 @@
+>   #define OV5640_PIXEL_ARRAY_WIDTH	2592
+>   #define OV5640_PIXEL_ARRAY_HEIGHT	1944
+>   
+> +/* FIXME: not documented. */
+> +#define OV5640_MIN_VBLANK	24
+> +#define OV5640_MAX_VTS		1968
 
-I feel that your proposal to let OV5640 accept 2X8 then silently switch 
-to 1X16 can do the job without breaking dcmi/bridge support but need 
-further testing to confirm.
+Not enough to support 1024x768@15fps (vblank=2607):
++#define OV5640_MAX_VTS		3375 /* 1024x768@15fps, vblank=2607 */
 
-Appart from that I don't really understand the logic behind naming 
-"1X16" for CSI-2 serial formats, if "2X8" means 2 bytes to send one 
-pixel, I would expect that "1X16" means 1 word to send one pixel (16bits 
-wide bus), so how to differentiate 16 bits // code from CSI-2 code ?
 
-For the time being I have reverted this commit in order to test the 
-other topics of this patchset.
+> +
+>   #define OV5640_DEFAULT_SLAVE_ID 0x3c
+>   
+>   #define OV5640_LINK_RATE_MAX		490000000U
+> @@ -321,6 +325,7 @@ struct ov5640_ctrls {
+>   	struct v4l2_ctrl *pixel_rate;
+>   	struct v4l2_ctrl *link_freq;
+>   	struct v4l2_ctrl *hblank;
+> +	struct v4l2_ctrl *vblank;
+>   	struct {
+>   		struct v4l2_ctrl *auto_exp;
+>   		struct v4l2_ctrl *exposure;
+> @@ -2697,6 +2702,7 @@ static int ov5640_update_pixel_rate(struct ov5640_dev *sensor)
+>   	struct v4l2_mbus_framefmt *fmt = &sensor->fmt;
+>   	enum ov5640_pixel_rate_id pixel_rate_id = mode->pixel_rate;
+>   	const struct ov5640_timings *timings;
+> +	s32 exposure_val, exposure_max;
+>   	unsigned int hblank;
+>   	unsigned int i = 0;
+>   	u32 pixel_rate;
+> @@ -2755,6 +2761,19 @@ static int ov5640_update_pixel_rate(struct ov5640_dev *sensor)
+>   	__v4l2_ctrl_modify_range(sensor->ctrls.hblank,
+>   				 hblank, hblank, 1, hblank);
+>   
+> +	__v4l2_ctrl_modify_range(sensor->ctrls.vblank, OV5640_MIN_VBLANK,
+> +				 OV5640_MAX_VTS - mode->height, 1,
+> +				 timings->vblank_def);
+> +	__v4l2_ctrl_s_ctrl(sensor->ctrls.vblank, timings->vblank_def);
+> +
+> +	exposure_max = timings->crop.height + timings->vblank_def - 4;
+> +	exposure_val = clamp_t(s32, sensor->ctrls.exposure->val,
+> +			       sensor->ctrls.exposure->minimum,
+> +			       exposure_max);
+> +	__v4l2_ctrl_modify_range(sensor->ctrls.exposure,
+> +				 sensor->ctrls.exposure->minimum,
+> +				 exposure_max, 1, exposure_val);
+> +
 
-[1] drivers/media/i2c/st-mipid02.c
-[2] drivers/media/platform/stm32/stm32-dcmi.c
++	vblank = timings->vblank_def;
++
++	if (sensor->current_fr != timings->def_fps) {
++		/* Compute the blanking according to the required framerate */
++
++		int fie_num = sensor->frame_interval.numerator;
++		int fie_denom = sensor->frame_interval.denominator;
++
++		vblank = ((fie_num * pixel_rate / fie_denom) / timings->htot) -
++			 mode->height;
++	}
++
+  	__v4l2_ctrl_modify_range(sensor->ctrls.vblank, OV5640_MIN_VBLANK,
+  				 OV5640_MAX_VTS - mode->height, 1,
+-				 timings->vblank_def);
+-	__v4l2_ctrl_s_ctrl(sensor->ctrls.vblank, timings->vblank_def);
++				 vblank);
++	__v4l2_ctrl_s_ctrl(sensor->ctrls.vblank, vblank);
 
-> 
-> I'm afraid sooner or later this should have happened ?
-> 
-> I think CSI-2 receivers should be updated, but I share your concerns
-> about breaking other platforms.
-> 
-> On one side we shouldn't be breaking userspace and this change might
-> break some assumptions in users' pipeline configuration scripts and
-> could prevent drivers that used to work together from being
-> compatible at all.
-> 
-> On the other side we would never be able to change anything at all if
-> such a change is expected to happen atomically on all platforms and
-> sensors.
-> 
-> As the change is so trivial I guess it's fair to expect users of
-> bridge drivers not compatible with 1X16 to fix them, but I cannot tell
-> if it's an acceptable policy or not.
-> 
-> As Sakari suggested we could also move all CSI-2 transmitters to use 1X16
-> and have receivers adjust as soon as someone detects a breakage.
-> 
-> I can revert the change that restricts the enumerated format to the
-> currently in use bus type[1] if desired, but I would prefer receivers
-> to adjust when needed. Is this acceptable ?
-> 
-> Thanks
->    j
-> 
-> [1] "media: ov5640: Split DVP and CSI-2 formats
-> 
->>   Tomi
-> 
+-	exposure_max = timings->crop.height + timings->vblank_def - 4;
++	exposure_max = timings->crop.height + vblank - 4;
+  	exposure_val = clamp_t(s32, sensor->ctrls.exposure->val,
+  			       sensor->ctrls.exposure->minimum,
+  			       exposure_max);
+
+
+
+@@ -3606,8 +3636,7 @@ static int ov5640_s_frame_interval(struct 
+v4l2_subdev *sd,
+  		sensor->current_mode = mode;
+  		sensor->pending_mode_change = true;
+
+-		__v4l2_ctrl_s_ctrl_int64(sensor->ctrls.pixel_rate,
+-					 ov5640_calc_pixel_rate(sensor));
++		ov5640_update_pixel_rate(sensor);
+  	}
+  out:
+  	mutex_unlock(&sensor->lock);
+
+
+Added def_fps (default framerate) in order to known when using 
+vblank_def and when computing it from frame interval:
+
+
+@@ -383,6 +383,8 @@ struct ov5640_timings {
+  	u32 vblank_def;
+  	/* DVP only; ignored in MIPI mode. */
+  	u32 max_fps;
++	/* CSI-2 only; default fps for default blanking */
++	u32 def_fps;
+  };
+
+@@ -719,6 +722,7 @@ static const struct ov5640_mode_info 
+ov5640_mode_data[OV5640_NUM_MODES] = {
+  			},
+  			.htot		= 1600,
+  			.vblank_def	= 878,
++			.def_fps	= OV5640_30_FPS
+[...]
+@@ -1108,6 +1120,7 @@ static const struct ov5640_mode_info 
+ov5640_mode_data[OV5640_NUM_MODES] = {
+  			},
+  			.htot		= 2844,
+  			.vblank_def	= 24,
++			.def_fps	= OV5640_15_FPS
+  		},
+
+
+>   	return 0;
+>   }
+>   
+> @@ -3127,6 +3146,15 @@ static int ov5640_set_ctrl_vflip(struct ov5640_dev *sensor, int value)
+>   			      (BIT(2) | BIT(1)) : 0);
+>   }
+>   
+> +static int ov5640_set_ctrl_vblank(struct ov5640_dev *sensor, int value)
+> +{
+> +	const struct ov5640_mode_info *mode = sensor->current_mode;
+> +
+> +	/* Update the VTOT timing register value. */
+> +	return ov5640_write_reg16(sensor, OV5640_REG_TIMING_VTS,
+> +				  mode->height + value);
+> +}
+> +
+>   static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+>   {
+>   	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
+> @@ -3157,10 +3185,25 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
+>   {
+>   	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
+>   	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+> +	const struct ov5640_mode_info *mode = sensor->current_mode;
+> +	const struct ov5640_timings *timings;
+> +	unsigned int exp_max;
+>   	int ret;
+>   
+>   	/* v4l2_ctrl_lock() locks our own mutex */
+>   
+> +	switch (ctrl->id) {
+> +	case V4L2_CID_VBLANK:
+> +		/* Update the exposure range to the newly programmed vblank. */
+> +		timings = ov5640_timings(sensor, mode);
+> +		exp_max = mode->height + ctrl->val - 4;
+> +		__v4l2_ctrl_modify_range(sensor->ctrls.exposure,
+> +					 sensor->ctrls.exposure->minimum,
+> +					 exp_max, sensor->ctrls.exposure->step,
+> +					 timings->vblank_def);
+> +		break;
+> +	}
+> +
+>   	/*
+>   	 * If the device is not powered up by the host driver do
+>   	 * not apply any controls to H/W at this time. Instead
+> @@ -3200,6 +3243,9 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
+>   	case V4L2_CID_VFLIP:
+>   		ret = ov5640_set_ctrl_vflip(sensor, ctrl->val);
+>   		break;
+> +	case V4L2_CID_VBLANK:
+> +		ret = ov5640_set_ctrl_vblank(sensor, ctrl->val);
+> +		break;
+>   	default:
+>   		ret = -EINVAL;
+>   		break;
+> @@ -3220,6 +3266,7 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+>   	struct ov5640_ctrls *ctrls = &sensor->ctrls;
+>   	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
+>   	const struct ov5640_timings *timings;
+> +	unsigned int max_vblank;
+>   	unsigned int hblank;
+>   	int ret;
+>   
+> @@ -3245,6 +3292,11 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+>   	ctrls->hblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HBLANK, hblank,
+>   					  hblank, 1, hblank);
+>   
+> +	max_vblank = OV5640_MAX_VTS - mode->height;
+> +	ctrls->vblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VBLANK,
+> +					  OV5640_MIN_VBLANK, max_vblank,
+> +					  1, timings->vblank_def);
+> +
+>   	/* Auto/manual white balance */
+>   	ctrls->auto_wb = v4l2_ctrl_new_std(hdl, ops,
+>   					   V4L2_CID_AUTO_WHITE_BALANCE,
 > 
 
-Best regards,
 Hugues.
