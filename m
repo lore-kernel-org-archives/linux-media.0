@@ -2,33 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5586C4167B
-	for <linux-media@archiver.kernel.org>; Fri,  8 Apr 2022 12:03:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 029C5C43217
+	for <linux-media@archiver.kernel.org>; Fri,  8 Apr 2022 12:03:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235388AbiDHMFH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Apr 2022 08:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S235411AbiDHMFJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Apr 2022 08:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235368AbiDHMFA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Apr 2022 08:05:00 -0400
+        with ESMTP id S235383AbiDHMFD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Apr 2022 08:05:03 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFD095A20;
-        Fri,  8 Apr 2022 05:02:55 -0700 (PDT)
-X-UUID: 80088f7b259c42dca6f6fa28c5f19a64-20220408
-X-UUID: 80088f7b259c42dca6f6fa28c5f19a64-20220408
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F8C9AE47;
+        Fri,  8 Apr 2022 05:02:57 -0700 (PDT)
+X-UUID: 6d92a941786547079917dca204777f8e-20220408
+X-UUID: 6d92a941786547079917dca204777f8e-20220408
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1227933366; Fri, 08 Apr 2022 20:02:49 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 8 Apr 2022 20:02:48 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 8 Apr
- 2022 20:02:47 +0800
+        with ESMTP id 449730846; Fri, 08 Apr 2022 20:02:52 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 8 Apr 2022 20:02:51 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 8 Apr
+ 2022 20:02:50 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Apr 2022 20:02:46 +0800
+ Transport; Fri, 8 Apr 2022 20:02:49 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -56,9 +57,9 @@ CC:     George Sun <george.sun@mediatek.com>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v9, 03/17] media: mediatek: vcodec: get capture queue buffer size from scp
-Date:   Fri, 8 Apr 2022 20:02:26 +0800
-Message-ID: <20220408120240.29571-4-yunfei.dong@mediatek.com>
+Subject: [PATCH v9, 05/17] media: mediatek: vcodec: set each plane bytesused in buf prepare
+Date:   Fri, 8 Apr 2022 20:02:28 +0800
+Message-ID: <20220408120240.29571-6-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220408120240.29571-1-yunfei.dong@mediatek.com>
 References: <20220408120240.29571-1-yunfei.dong@mediatek.com>
@@ -70,192 +71,82 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Different capture buffer format has different buffer size, need to get
-real buffer size according to buffer type from scp.
+call vb2_set_plane_payload to set each plane bytesused in buf prepare,
+need not to set independently for stateless and statefull architectures.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- .../platform/mediatek/vcodec/vdec_ipi_msg.h   | 36 ++++++++++++++
- .../platform/mediatek/vcodec/vdec_vpu_if.c    | 49 +++++++++++++++++++
- .../platform/mediatek/vcodec/vdec_vpu_if.h    | 13 +++++
- 3 files changed, 98 insertions(+)
+ .../platform/mediatek/vcodec/mtk_vcodec_dec.c |  2 ++
+ .../mediatek/vcodec/mtk_vcodec_dec_stateful.c |  5 -----
+ .../vcodec/mtk_vcodec_dec_stateless.c         | 19 -------------------
+ 3 files changed, 2 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_ipi_msg.h b/drivers/media/platform/mediatek/vcodec/vdec_ipi_msg.h
-index bf54d6d9a857..47070be2a991 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_ipi_msg.h
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_ipi_msg.h
-@@ -20,6 +20,7 @@ enum vdec_ipi_msgid {
- 	AP_IPIMSG_DEC_RESET = 0xA004,
- 	AP_IPIMSG_DEC_CORE = 0xA005,
- 	AP_IPIMSG_DEC_CORE_END = 0xA006,
-+	AP_IPIMSG_DEC_GET_PARAM = 0xA007,
- 
- 	VPU_IPIMSG_DEC_INIT_ACK = 0xB000,
- 	VPU_IPIMSG_DEC_START_ACK = 0xB001,
-@@ -28,6 +29,7 @@ enum vdec_ipi_msgid {
- 	VPU_IPIMSG_DEC_RESET_ACK = 0xB004,
- 	VPU_IPIMSG_DEC_CORE_ACK = 0xB005,
- 	VPU_IPIMSG_DEC_CORE_END_ACK = 0xB006,
-+	VPU_IPIMSG_DEC_GET_PARAM_ACK = 0xB007,
- };
- 
- /**
-@@ -114,4 +116,38 @@ struct vdec_vpu_ipi_init_ack {
- 	uint32_t inst_id;
- };
- 
-+/**
-+ * struct vdec_ap_ipi_get_param - for AP_IPIMSG_DEC_GET_PARAM
-+ * @msg_id	: AP_IPIMSG_DEC_GET_PARAM
-+ * @inst_id     : instance ID. Used if the ABI version >= 2.
-+ * @data	: picture information
-+ * @param_type	: get param type
-+ * @codec_type	: Codec fourcc
-+ */
-+struct vdec_ap_ipi_get_param {
-+	u32 msg_id;
-+	u32 inst_id;
-+	u32 data[4];
-+	u32 param_type;
-+	u32 codec_type;
-+};
-+
-+/**
-+ * struct vdec_vpu_ipi_get_param_ack - for VPU_IPIMSG_DEC_GET_PARAM_ACK
-+ * @msg_id	: VPU_IPIMSG_DEC_GET_PARAM_ACK
-+ * @status	: VPU execution result
-+ * @ap_inst_addr	: AP vcodec_vpu_inst instance address
-+ * @data     : picture information from SCP.
-+ * @param_type	: get param type
-+ * @reserved : reserved param
-+ */
-+struct vdec_vpu_ipi_get_param_ack {
-+	u32 msg_id;
-+	s32 status;
-+	u64 ap_inst_addr;
-+	u32 data[4];
-+	u32 param_type;
-+	u32 reserved;
-+};
-+
- #endif
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-index 7210061c772f..35f4d5583084 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-@@ -6,6 +6,7 @@
- 
- #include "mtk_vcodec_drv.h"
- #include "mtk_vcodec_util.h"
-+#include "vdec_drv_if.h"
- #include "vdec_ipi_msg.h"
- #include "vdec_vpu_if.h"
- #include "mtk_vcodec_fw.h"
-@@ -54,6 +55,26 @@ static void handle_init_ack_msg(const struct vdec_vpu_ipi_init_ack *msg)
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+index e42d5c17d90e..c1c3f439d7d1 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+@@ -741,6 +741,8 @@ int vb2ops_vdec_buf_prepare(struct vb2_buffer *vb)
+ 				i, vb2_plane_size(vb, i),
+ 				q_data->sizeimage[i]);
+ 		}
++		if (!V4L2_TYPE_IS_OUTPUT(vb->type))
++			vb2_set_plane_payload(vb, i, q_data->sizeimage[i]);
  	}
- }
  
-+static void handle_get_param_msg_ack(const struct vdec_vpu_ipi_get_param_ack *msg)
-+{
-+	struct vdec_vpu_inst *vpu = (struct vdec_vpu_inst *)
-+					(unsigned long)msg->ap_inst_addr;
-+
-+	mtk_vcodec_debug(vpu, "+ ap_inst_addr = 0x%llx", msg->ap_inst_addr);
-+
-+	/* param_type is enum vdec_get_param_type */
-+	switch (msg->param_type) {
-+	case GET_PARAM_PIC_INFO:
-+		vpu->fb_sz[0] = msg->data[0];
-+		vpu->fb_sz[1] = msg->data[1];
-+		break;
-+	default:
-+		mtk_vcodec_err(vpu, "invalid get param type=%d", msg->param_type);
-+		vpu->failure = 1;
-+		break;
-+	}
-+}
-+
- /*
-  * vpu_dec_ipi_handler - Handler for VPU ipi message.
-  *
-@@ -89,6 +110,9 @@ static void vpu_dec_ipi_handler(void *data, unsigned int len, void *priv)
- 		case VPU_IPIMSG_DEC_CORE_END_ACK:
- 			break;
+ 	return 0;
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
+index 7966c132be8f..e7fd39180123 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
+@@ -90,11 +90,6 @@ static struct vb2_buffer *get_display_buffer(struct mtk_vcodec_ctx *ctx)
+ 	vb = &dstbuf->m2m_buf.vb;
+ 	mutex_lock(&ctx->lock);
+ 	if (dstbuf->used) {
+-		vb2_set_plane_payload(&vb->vb2_buf, 0, ctx->picinfo.fb_sz[0]);
+-		if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 2)
+-			vb2_set_plane_payload(&vb->vb2_buf, 1,
+-					      ctx->picinfo.fb_sz[1]);
+-
+ 		mtk_v4l2_debug(2, "[%d]status=%x queue id=%d to done_list %d",
+ 			       ctx->id, disp_frame_buffer->status,
+ 			       vb->vb2_buf.index, dstbuf->queued_in_vb2);
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+index 5aebf88f997b..4df7b158ec5e 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+@@ -108,23 +108,6 @@ static const struct mtk_codec_framesizes mtk_vdec_framesizes[] = {
  
-+		case VPU_IPIMSG_DEC_GET_PARAM_ACK:
-+			handle_get_param_msg_ack(data);
-+			break;
- 		default:
- 			mtk_vcodec_err(vpu, "invalid msg=%X", msg->msg_id);
- 			break;
-@@ -217,6 +241,31 @@ int vpu_dec_start(struct vdec_vpu_inst *vpu, uint32_t *data, unsigned int len)
- 	return err;
- }
+ #define NUM_SUPPORTED_FRAMESIZE ARRAY_SIZE(mtk_vdec_framesizes)
  
-+int vpu_dec_get_param(struct vdec_vpu_inst *vpu, uint32_t *data,
-+		      unsigned int len, unsigned int param_type)
-+{
-+	struct vdec_ap_ipi_get_param msg;
-+	int err;
-+
-+	mtk_vcodec_debug_enter(vpu);
-+
-+	if (len > ARRAY_SIZE(msg.data)) {
-+		mtk_vcodec_err(vpu, "invalid len = %d\n", len);
-+		return -EINVAL;
-+	}
-+
-+	memset(&msg, 0, sizeof(msg));
-+	msg.msg_id = AP_IPIMSG_DEC_GET_PARAM;
-+	msg.inst_id = vpu->inst_id;
-+	memcpy(msg.data, data, sizeof(unsigned int) * len);
-+	msg.param_type = param_type;
-+	msg.codec_type = vpu->codec_type;
-+
-+	err = vcodec_vpu_send_msg(vpu, (void *)&msg, sizeof(msg));
-+	mtk_vcodec_debug(vpu, "- ret=%d", err);
-+	return err;
-+}
-+
- int vpu_dec_core(struct vdec_vpu_inst *vpu)
+-static void mtk_vdec_stateless_set_dst_payload(struct mtk_vcodec_ctx *ctx,
+-					       struct vdec_fb *fb)
+-{
+-	struct mtk_video_dec_buf *vdec_frame_buf =
+-		container_of(fb, struct mtk_video_dec_buf, frame_buffer);
+-	struct vb2_v4l2_buffer *vb = &vdec_frame_buf->m2m_buf.vb;
+-	unsigned int cap_y_size = ctx->q_data[MTK_Q_DATA_DST].sizeimage[0];
+-
+-	vb2_set_plane_payload(&vb->vb2_buf, 0, cap_y_size);
+-	if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 2) {
+-		unsigned int cap_c_size =
+-			ctx->q_data[MTK_Q_DATA_DST].sizeimage[1];
+-
+-		vb2_set_plane_payload(&vb->vb2_buf, 1, cap_c_size);
+-	}
+-}
+-
+ static struct vdec_fb *vdec_get_cap_buffer(struct mtk_vcodec_ctx *ctx,
+ 					   struct vb2_v4l2_buffer *vb2_v4l2)
  {
- 	return vcodec_send_ap_ipi(vpu, AP_IPIMSG_DEC_CORE);
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.h b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.h
-index 4cb3c7f5a3ad..fe6815d31e50 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.h
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.h
-@@ -28,6 +28,7 @@ struct mtk_vcodec_ctx;
-  * @wq          : wait queue to wait VPU message ack
-  * @handler     : ipi handler for each decoder
-  * @codec_type     : use codec type to separate different codecs
-+ * @fb_sz  : frame buffer size of each plane
-  */
- struct vdec_vpu_inst {
- 	int id;
-@@ -42,6 +43,7 @@ struct vdec_vpu_inst {
- 	wait_queue_head_t wq;
- 	mtk_vcodec_ipi_handler handler;
- 	unsigned int codec_type;
-+	unsigned int fb_sz[2];
- };
+@@ -220,8 +203,6 @@ static void mtk_vdec_worker(struct work_struct *work)
+ 		}
+ 	}
  
- /**
-@@ -104,4 +106,15 @@ int vpu_dec_core(struct vdec_vpu_inst *vpu);
-  */
- int vpu_dec_core_end(struct vdec_vpu_inst *vpu);
+-	mtk_vdec_stateless_set_dst_payload(ctx, dst_buf);
+-
+ 	v4l2_m2m_buf_done_and_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx,
+ 					 ret ? VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE);
  
-+/**
-+ * vpu_dec_get_param - get param from scp
-+ *
-+ * @vpu : instance for vdec_vpu_inst
-+ * @data: meta data to pass bitstream info to VPU decoder
-+ * @len : meta data length
-+ * @param_type : get param type
-+ */
-+int vpu_dec_get_param(struct vdec_vpu_inst *vpu, uint32_t *data,
-+		      unsigned int len, unsigned int param_type);
-+
- #endif
 -- 
 2.18.0
 
