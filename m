@@ -2,94 +2,93 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82035C433EF
-	for <linux-media@archiver.kernel.org>; Sun, 10 Apr 2022 15:10:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFC94C433EF
+	for <linux-media@archiver.kernel.org>; Sun, 10 Apr 2022 16:31:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240110AbiDJPNC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 10 Apr 2022 11:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
+        id S240640AbiDJQd0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 10 Apr 2022 12:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232707AbiDJPNA (ORCPT
+        with ESMTP id S230002AbiDJQdY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 10 Apr 2022 11:13:00 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD29513E2A;
-        Sun, 10 Apr 2022 08:10:49 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 62E4D482;
-        Sun, 10 Apr 2022 17:10:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1649603447;
-        bh=EKSMvEVT58fRaDQ4LBXr1wUTIvlA9+5BdMvHsDAnBD0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XZas+GC+obmTLs0yI6Py/zm7x3J4R2OibbPyVjU5b74Vwk+KxvPMxC5r0lfBa9DKc
-         bk4RuynoHGr7s2E22Rj8pfYG/nkdsqbw7P9hZDBIA8NNfnY9434Ppyyp1S063YJBck
-         ee9SnAZ6izOotUJtPCb8VSYFiwHIdaYlHaBaJzTk=
-Date:   Sun, 10 Apr 2022 18:10:45 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Ian Jamison <ian.dev@arkver.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Ian Arkver <ian.arkver.dev@gmail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: media-entity.h: Fix documentation for
- media_create_intf_link
-Message-ID: <YlLzdbHTaQu01HKJ@pendragon.ideasonboard.com>
-References: <21f190a8bb9ddaa43949b4455983bd66b4e11798.1649440397.git.ian.dev@arkver.com>
- <164953234079.22830.17385702287665697579@Monstersaurus>
+        Sun, 10 Apr 2022 12:33:24 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BFBDEF8
+        for <linux-media@vger.kernel.org>; Sun, 10 Apr 2022 09:31:13 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso8604285wmz.4
+        for <linux-media@vger.kernel.org>; Sun, 10 Apr 2022 09:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oRahmWkESNspnprRdi4zU0kqKsk2Ar/ZrtGWOZbMoac=;
+        b=O0Cq/xCHlvuGte16bvlnNTBfS+IPlRcxfkXD00oomTbeoxz19tz3u0Q2j/8M4ewUpM
+         anp287Vditqjv4pdJrn+lnNj0og1rPbIkUGsIZYmxN3yuN79c1u1LmGBzIqBPx8GxpbP
+         vv2dzL/j++TZEOQSxzZlkhkyWkM+EIG4t/9+BRAYo3zN71KEJqsTZFhhkldzApS7PRiw
+         K7wO7z3GeduBy3kJYKxppojw1dbV+WoFhIU9nKrWM94pGPLXKQL9Ug5C3XJHe2WunD9M
+         58PVxCgzlHcPRgzaVtbX53gj4GMX3/O1nNLaH1ydNZ0sUukqEwvQeOTtu8K1zBaju+ZR
+         AdGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oRahmWkESNspnprRdi4zU0kqKsk2Ar/ZrtGWOZbMoac=;
+        b=4raDwbc+z+eHJfaXJ68PF03K4fXBiH7IY+aDD6J43qqAliXE5TqGgAygVUzW3QLfOG
+         scarPBDg/9SG0nfFNipfMKc/u3BNYnaVUBF/hVlD7hwnHM3Tc4GVXOUF2ntP88BrfeLA
+         KtPBYluq9ifzixLO6sS0JgZFxur3YTLiAJmgI4u6ZRIHaCyGPn/TQOFmpPb7lP//sVVa
+         ShHRC4pjnc0uPMdesfJts1/ijHDJVErxY11EV3ErqoNsPSUxNkiledP422DeFFoPbc3e
+         EyiUmJh7bN2UuUW1U0fUEWv7F2A8U/v1oEMCQ6YQeDoBtxfTegfYMfsbtO++mUq2O5ew
+         1Adg==
+X-Gm-Message-State: AOAM532q2Q3gIFs+rpKYzMQZgRebwzoFfho8dNdHycWI2ViUqXSwNhFD
+        04104x5GYFhf11GIyjnhr7BgCg==
+X-Google-Smtp-Source: ABdhPJwlEgeITjW0rcpkbXLkZnZHGPxCygh6on71nvWM9u2iEyMERedVRHnaUyMgJLk9qOez8uVaPw==
+X-Received: by 2002:a1c:202:0:b0:38e:ab4b:ce72 with SMTP id 2-20020a1c0202000000b0038eab4bce72mr9521418wmc.152.1649608272422;
+        Sun, 10 Apr 2022 09:31:12 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id l6-20020a1c2506000000b0038e6fe8e8d8sm20616139wml.5.2022.04.10.09.31.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 09:31:11 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
+        mchehab@kernel.org, linux-media@vger.kernel.org
+Cc:     robert.foss@linaro.org, hfink@snap.com, jgrahsl@snap.com,
+        dmitry.baryshkov@linaro.org, vladimir.zapolskiy@linaro.org,
+        bryan.odonoghue@linaro.org
+Subject: [PATCH 0/2] media: i2c: imx412: Add regulator control to imx412
+Date:   Sun, 10 Apr 2022 17:31:07 +0100
+Message-Id: <20220410163109.3501513-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <164953234079.22830.17385702287665697579@Monstersaurus>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 08:25:40PM +0100, Kieran Bingham wrote:
-> Quoting Ian Jamison (2022-04-08 18:53:45)
-> > The documentation comment was inserted between the return type
-> > and the function name. Reunite the lines.
-> > 
-> > Signed-off-by: Ian Jamison <ian.dev@arkver.com>
-> > Fixes: db7ee32aa185 ("[media] media-device.h: Improve documentation and update it")
-> > ---
-> >  include/media/media-entity.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-> > index 742918962d46..9bc9a55df71e 100644
-> > --- a/include/media/media-entity.h
-> > +++ b/include/media/media-entity.h
-> > @@ -1030,7 +1030,6 @@ __must_check media_devnode_create(struct media_device *mdev,
-> >   * removed.
-> >   */
-> >  void media_devnode_remove(struct media_intf_devnode *devnode);
-> > -struct media_link *
-> 
-> Eeep. I guess that was some sort of merge conflict resolution that
-> didn't quite get it right sometime.
-> 
-> But definitely a good fix.
-> 
-> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+The imx412 has three regulators which depending on platform may need to be
+individually enabled.
 
-Indeed.
+- dovdd
+- avdd
+- dvdd
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Existing code for an Intel platform doesn't appear to need to enable these
+rails directly. On my reference hardware, a Qualcomm Thundercomm RB5 some
+of these rails do need to be enabled individually.
 
-> >  /**
-> >   * media_create_intf_link() - creates a link between an entity and an interface
-> > @@ -1061,6 +1060,7 @@ struct media_link *
-> >   *    the interface and media_device_register_entity() should be called for the
-> >   *    interface that will be part of the link.
-> >   */
-> > +struct media_link *
-> >  __must_check media_create_intf_link(struct media_entity *entity,
-> >                                     struct media_interface *intf,
-> >                                     u32 flags);
+Add in the above named rails as optional in the YAML in the first patch
+along with code to switch them on in the second patch.
+
+Existing imx412 users should get dummy regulators populated which the
+regulator_bulk_enable()/regulator_bulk_disable() code can safely ignore.
+
+Bryan O'Donoghue (2):
+  media: dt-bindings: imx412: Add regulator descriptions
+  media: i2c: imx412: Add bulk regulator support
+
+ .../bindings/media/i2c/sony,imx412.yaml       | 12 ++++++
+ drivers/media/i2c/imx412.c                    | 38 +++++++++++++++++++
+ 2 files changed, 50 insertions(+)
 
 -- 
-Regards,
+2.35.1
 
-Laurent Pinchart
