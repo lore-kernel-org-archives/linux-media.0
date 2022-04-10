@@ -2,61 +2,83 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 664D8C433F5
-	for <linux-media@archiver.kernel.org>; Sun, 10 Apr 2022 01:12:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C4EFC433FE
+	for <linux-media@archiver.kernel.org>; Sun, 10 Apr 2022 01:59:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233855AbiDJBOK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 9 Apr 2022 21:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
+        id S229744AbiDJCBY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 9 Apr 2022 22:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233888AbiDJBOJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Apr 2022 21:14:09 -0400
-X-Greylist: delayed 646 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 09 Apr 2022 18:12:00 PDT
-Received: from guaco.floridaarsonseminar.com (guaco.floridaarsonseminar.com [85.202.169.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C052DF2
-        for <linux-media@vger.kernel.org>; Sat,  9 Apr 2022 18:11:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=floridaarsonseminar.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=rae.leo@floridaarsonseminar.com;
- bh=MnUf62F7Cn+TYukvIUFpyVBy5Yk=;
- b=MehDFVhqDBLRtZEvCgefqlrslPvBUnNqU///mhgPrUHjJJ89xzMI1sEaO9zBmvhfKdZGAzFFG1kc
-   nH1YQSdLfMAZuiKujajCF3PNUpWh+wAUjl23dQcMIx5B4wyTjB8oVZZRyX0pj0Ofd8UyiTxVC7cU
-   MuLvmjkm64hGr/xQR8g1hhKgZmSOxbUH+s1r3LNFcj52G+jVcDvHn2VQ6o4euWl7u1En9IGNGlg6
-   1LHgYj+sz7sS7dPQ5FzfZM9wX2cAR1jMwsZzPSb/EhDBucdBXsXkw4GwhR4VLLJvAgtN/H4Xbnqs
-   23G42zTTLi2uN2Vr82ZyE8YrsmGrfCU4t3kMlw==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=floridaarsonseminar.com;
- b=o7WlMKK3pVkpc8JKoz4APrwJcVoV8QUuShRTcWxduxJplMO6KzlhnR0p0HYlwpCiUukm0ruFBvLK
-   QdkQHv3wQbwlKtkwl29Ph7LIeRbUvBHvVMk8fw8LRj4JRk+obYYhH2BfZZM/+Q8h4+tTwauz40Z8
-   UYBkisChIFlIKhkwxY4r7xoQKoPPY4RPiZlqfycJve3FPgE8dhUQXtI0RAdIJ2YS8a+GRZky4kZg
-   0PmK0mz6/lQEfs4NwhoFoE/BA34nTG7MFjklek8AW+8fKrpXMM6EhgrkzyBRcTg/eM/xuYW2cRNr
-   XHZ5AXnEYdztWr1vf02mS6eT/estBl8V/JvqvA==;
-Reply-To: ayvamustafa22@gmail.com
-From:   rae.leo@floridaarsonseminar.com
-To:     linux-media@vger.kernel.org
-Subject: Hello
-Date:   10 Apr 2022 02:31:17 +0200
-Message-ID: <20220410023117.6215AAAEEE65AA9F@floridaarsonseminar.com>
+        with ESMTP id S229526AbiDJCBW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 9 Apr 2022 22:01:22 -0400
+Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5311813CE3
+        for <linux-media@vger.kernel.org>; Sat,  9 Apr 2022 18:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=d59jm
+        OjmRtt7VuM0OGSqqejfN4hTR0dUO+7luSMrMI4=; b=HIehj6DNqZe9bsKqMTqwN
+        i+x5hR534xUEZGkErjbwRESlid8xn1M3Zz8EbV11ZzCr2VICmPa4BgvwNfOX3fIy
+        Tcwqq+ikR2H8J1Mz7d1Wd6ABRFgO3Eod2yzGNgjhgZnD3x+ARjjr9LBm7mgvXQss
+        3N2pCyWIQnynu8/dWmzwsE=
+Received: from localhost.localdomain.localdomain (unknown [122.234.236.113])
+        by smtp12 (Coremail) with SMTP id EMCowADX_AjgOVJiq55qAg--.16304S2;
+        Sun, 10 Apr 2022 09:58:57 +0800 (CST)
+From:   chinayanlei2002@163.com
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, Yan Lei <yan_lei@dahuatech.com>
+Subject: [PATCH] media: v4l2: fix uninitialized value tuner_status(CWE-457)
+Date:   Sun, 10 Apr 2022 09:58:54 +0800
+Message-Id: <20220410015854.2826-1-chinayanlei2002@163.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EMCowADX_AjgOVJiq55qAg--.16304S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Kr13ZF4xtw18Ww18Gw47XFb_yoW8GrW3p3
+        sxXrWayr1UGr40ya1DAF15Wa4rJ34rXFW2yF93Jw1rGF1ruFsIyF1UAF18ZrWxCFWUJF42
+        kFW0yF98Aan0yw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UBuWJUUUUU=
+X-Originating-IP: [122.234.236.113]
+X-CM-SenderInfo: xfkl0tx1dqzvblsqiji6rwjhhfrp/1tbiOwHeLGC5iv5UTQAAs8
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-sauda=C3=A7=C3=B5es ,
+From: Yan Lei <yan_lei@dahuatech.com>
 
-Estou procurando um parente do meu falecido cliente Sr. Robert,=20
-que perdeu a vida devido =C3=A0 doen=C3=A7a do Coronav=C3=ADrus, que ele=20=
+-------------------------------------------------
+Declaring variable "tuner_status" without initializer.
+Using uninitialized value "tuner_status" when calling "*fe_tuner_ops->get_status". 
+(The function pointer resolves to "cx24113_get_status".)
 
-contraiu durante sua viagem de neg=C3=B3cios na China. Eu sou seu=20
-advogado pessoal e estou procurando seus parentes mais pr=C3=B3ximos,=20
-entrei em contato com voc=C3=AA para trabalhar comigo na garantia da=20
-transfer=C3=AAncia de um fundo fiduci=C3=A1rio, quatro milh=C3=B5es,=20
-quatrocentos e vinte mil d=C3=B3lares, legado por meu falecido=20
-cliente.
 
-Entre em contato comigo imediatamente para obter mais=20
-informa=C3=A7=C3=B5es.
+Signed-off-by: Yan Lei <yan_lei@dahuatech.com>
 
-esperando
-Mustaf=C3=A1 Aivaz
+---
+ drivers/media/v4l2-core/tuner-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/v4l2-core/tuner-core.c b/drivers/media/v4l2-core/tuner-core.c
+index ad9224a18853..2d47c10de062 100644
+--- a/drivers/media/v4l2-core/tuner-core.c
++++ b/drivers/media/v4l2-core/tuner-core.c
+@@ -1118,7 +1118,7 @@ static void tuner_status(struct dvb_frontend *fe)
+ 	if (t->mode != V4L2_TUNER_RADIO)
+ 		return;
+ 	if (fe_tuner_ops->get_status) {
+-		u32 tuner_status;
++		u32 tuner_status = 0;
+ 
+ 		fe_tuner_ops->get_status(&t->fe, &tuner_status);
+ 		if (tuner_status & TUNER_STATUS_LOCKED)
+@@ -1258,7 +1258,7 @@ static int tuner_g_tuner(struct v4l2_subdev *sd, struct v4l2_tuner *vt)
+ 	if (vt->type == t->mode) {
+ 		vt->rxsubchans = V4L2_TUNER_SUB_MONO | V4L2_TUNER_SUB_STEREO;
+ 		if (fe_tuner_ops->get_status) {
+-			u32 tuner_status;
++			u32 tuner_status = 0;
+ 
+ 			fe_tuner_ops->get_status(&t->fe, &tuner_status);
+ 			vt->rxsubchans =
+-- 
+2.33.0
+
