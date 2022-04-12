@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53525C43217
-	for <linux-media@archiver.kernel.org>; Tue, 12 Apr 2022 10:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD7D6C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 12 Apr 2022 10:46:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346287AbiDLKrs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Apr 2022 06:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
+        id S1347441AbiDLKr4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Apr 2022 06:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356954AbiDLKpq (ORCPT
+        with ESMTP id S1356987AbiDLKps (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:45:46 -0400
+        Tue, 12 Apr 2022 06:45:48 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C42A5C854
-        for <linux-media@vger.kernel.org>; Tue, 12 Apr 2022 02:43:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46E961A33
+        for <linux-media@vger.kernel.org>; Tue, 12 Apr 2022 02:43:31 -0700 (PDT)
 Received: from deskari.lan (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id ECC8C59D;
-        Tue, 12 Apr 2022 11:43:19 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2963FD2D;
+        Tue, 12 Apr 2022 11:43:26 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1649756600;
-        bh=8/hMOYSDOUiBStvv5ckoI7AROItkWeotddm3pjO+4cM=;
+        s=mail; t=1649756606;
+        bh=x2tg7MnuMqPmfxqLudJzhlPnkEqHYBWNLKjCsUNgcHM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nQWDEb0r/PHsNzLnhEoPOFDqW1ONCU4lEYwM3D9wxF7geNk7xph1Jm1np3tBT4dtO
-         15i7pVs+CfXVd8DXv9muDJkJ4KggxVnwulLoF85Q4zrAEEwQvwWo1Mq7be8rw2nig2
-         NMBRLvbA7YhtrJ+tLOmHEc4zkzSBVgPtJXv865Q4=
+        b=iXsT3TWBNFqGWzKMBwGK+gmv+yC9TgSvgubkZB8I608mP+CHIinKvCBx1Ccn3FP5q
+         1WJSZJ7c4QSlbj7E+6Pbro6NkpGCc3Q2tiVC5BHh1fWzirxWb9mSImIM3XvyZHgyOL
+         Phz2D524ORrWxO3/dVzPPnRuObw9pTg3khQzp1lY=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -34,9 +34,9 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Pratyush Yadav <p.yadav@ti.com>, satish.nagireddy@getcruise.com
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v8 02/10] media: v4l2-subdev: drop extra #ifdef
-Date:   Tue, 12 Apr 2022 12:42:41 +0300
-Message-Id: <20220412094249.695754-3-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v8 09/10] media: subdev: add v4l2_subdev_get_fmt() helper function
+Date:   Tue, 12 Apr 2022 12:42:48 +0300
+Message-Id: <20220412094249.695754-10-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220412094249.695754-1-tomi.valkeinen@ideasonboard.com>
 References: <20220412094249.695754-1-tomi.valkeinen@ideasonboard.com>
@@ -46,35 +46,83 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-subdev_open() is inside #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API, which
-depends on CONFIG_MEDIA_CONTROLLER, so there's no need for an extra
+Add v4l2_subdev_get_fmt() helper function which implements
+v4l2_subdev_pad_ops.get_fmt using active state. Subdev drivers that
+support active state and do not need to do anything special in their
+get_fmt op can use this helper directly for v4l2_subdev_pad_ops.get_fmt.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/v4l2-core/v4l2-subdev.c | 22 ++++++++++++++++++++++
+ include/media/v4l2-subdev.h           | 21 +++++++++++++++++++++
+ 2 files changed, 43 insertions(+)
 
 diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 30eb50407db5..2f24ef75872b 100644
+index afe916366dfe..3da200bb23dd 100644
 --- a/drivers/media/v4l2-core/v4l2-subdev.c
 +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -63,7 +63,7 @@ static int subdev_open(struct file *file)
- 	v4l2_fh_init(&subdev_fh->vfh, vdev);
- 	v4l2_fh_add(&subdev_fh->vfh);
- 	file->private_data = &subdev_fh->vfh;
--#if defined(CONFIG_MEDIA_CONTROLLER)
+@@ -1041,6 +1041,28 @@ void v4l2_subdev_cleanup(struct v4l2_subdev *sd)
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_cleanup);
+ 
++#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
 +
- 	if (sd->v4l2_dev->mdev && sd->entity.graph_obj.mdev->dev) {
- 		struct module *owner;
++int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
++			struct v4l2_subdev_format *format)
++{
++	struct v4l2_mbus_framefmt *fmt;
++
++	if (format->pad >= sd->entity.num_pads)
++		return -EINVAL;
++
++	fmt = v4l2_subdev_get_pad_format(sd, state, format->pad);
++	if (!fmt)
++		return -EINVAL;
++
++	format->format = *fmt;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(v4l2_subdev_get_fmt);
++
++#endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
++
+ #endif /* CONFIG_MEDIA_CONTROLLER */
  
-@@ -74,7 +74,6 @@ static int subdev_open(struct file *file)
- 		}
- 		subdev_fh->owner = owner;
- 	}
--#endif
+ void v4l2_subdev_init(struct v4l2_subdev *sd, const struct v4l2_subdev_ops *ops)
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index f967c27e41c3..33a7201edb61 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -1303,6 +1303,27 @@ v4l2_subdev_lock_and_get_active_state(struct v4l2_subdev *sd)
+ 	return sd->active_state;
+ }
  
- 	if (sd->internal_ops && sd->internal_ops->open) {
- 		ret = sd->internal_ops->open(sd, subdev_fh);
++#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
++
++/**
++ * v4l2_subdev_get_fmt() - Fill format based on state
++ * @sd: subdevice
++ * @state: subdevice state
++ * @format: pointer to &struct v4l2_subdev_format
++ *
++ * Fill @format->format field based on the information in the @format struct.
++ *
++ * This function can be used by the subdev drivers which support active state to
++ * implement v4l2_subdev_pad_ops.get_fmt if the subdev driver does not need to
++ * do anything special in their get_fmt op.
++ *
++ * Returns 0 on success, error value otherwise.
++ */
++int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
++			struct v4l2_subdev_format *format);
++
++#endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
++
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+ 
+ /**
 -- 
 2.25.1
 
