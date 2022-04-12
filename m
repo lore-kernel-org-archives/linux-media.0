@@ -2,163 +2,191 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60C8FC433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E650BC4332F
 	for <linux-media@archiver.kernel.org>; Tue, 12 Apr 2022 10:46:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348572AbiDLKr6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Apr 2022 06:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
+        id S1352276AbiDLKsF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Apr 2022 06:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344861AbiDLKml (ORCPT
+        with ESMTP id S1356964AbiDLKpr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:42:41 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2326E563
-        for <linux-media@vger.kernel.org>; Tue, 12 Apr 2022 02:39:30 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id x20so6420654qvl.10
-        for <linux-media@vger.kernel.org>; Tue, 12 Apr 2022 02:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XrJ3fGHmmKH/q2eqgRhhAaGa8VQ4jTSpPcTO9r4dGh0=;
-        b=i6keCj9soSXGpVanwl3tq0iaw9S7F8fAbAhWnJ6IOeE7TZ/7KTiSx7JjjJVQIuBSxu
-         C7XweREupAh+57E8GVCn89LhJR8bjbkojYAcU26ccank3Y+dmkrmEGJAC3f56KaIIj7E
-         xTjoIz8+5NV7HrqpxLuuBSSwvXoR0QoxJvcPI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XrJ3fGHmmKH/q2eqgRhhAaGa8VQ4jTSpPcTO9r4dGh0=;
-        b=FPxBsQXRxhFd4+nfVWwT+eXU+MXc6D6vpbpf2FQU14IuFab7mvYbFgGIsRx9udL6O4
-         EP0XlHCB11Yxq+R3PzmXktvaAj7QdFQsDAWZigcgF2Ca6sB9dnLsry5GQd+NtAZemc1X
-         ZV0jmztGzHaH2kIQA5H5HPMnW4MlXOGEaBSnu14QksXDzCHLkDYonefqogl56DArCfQ4
-         EXzDSqBGmhEuuFQo5JtUX3JTLWHPyR3shSW5xin2W0FzjMWIXX8HSsshoDRkkTBkJAqK
-         meudDhsey1hLvou8IsMKGzxbPXb3FMQOHXnKO4e2Xdt6I1X0krGD1hZtrMl6NFnRIuSL
-         ATsA==
-X-Gm-Message-State: AOAM531o4Rsq+AeWnrx4tu6v34kf0oEI7bxZwhmmNesanGSpaBDkTDhk
-        TTKKreyqiOBBvE78/NVR8I6ysqDOxlcg55GC
-X-Google-Smtp-Source: ABdhPJyXZqAcbZj/sSwh1WzdI+X4zWK5fvbocaxTZJZkS38DLGUo16CqAQyTJ0/QSSd1fM52qOPcJg==
-X-Received: by 2002:a05:6214:3e3:b0:444:3f84:d230 with SMTP id cf3-20020a05621403e300b004443f84d230mr2943421qvb.4.1649756369576;
-        Tue, 12 Apr 2022 02:39:29 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id h5-20020ac85845000000b002edfd4b0503sm5499963qth.88.2022.04.12.02.39.27
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 02:39:27 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2ebebe631ccso110211397b3.4
-        for <linux-media@vger.kernel.org>; Tue, 12 Apr 2022 02:39:27 -0700 (PDT)
-X-Received: by 2002:a0d:e384:0:b0:2eb:2bc7:a80d with SMTP id
- m126-20020a0de384000000b002eb2bc7a80dmr29872319ywe.41.1649756367120; Tue, 12
- Apr 2022 02:39:27 -0700 (PDT)
+        Tue, 12 Apr 2022 06:45:47 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A43A5F4EF
+        for <linux-media@vger.kernel.org>; Tue, 12 Apr 2022 02:43:26 -0700 (PDT)
+Received: from deskari.lan (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C6871741;
+        Tue, 12 Apr 2022 11:43:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1649756602;
+        bh=ycZ+9EvrhKxvhcLD7FGGkgrdRszuXNJkAc77xz5cgWQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vCSOiN42dOfDfol42BhfmM9qrq1fN7lrT4qrcPhjMTyObXOW/l/eljrerphCEW6B8
+         0aXzbBHpU8GnuqnmvSytbskNrG9tExcMRV+FD2oO8IBTfXNPJCSmp64Y2DCTB1ijKf
+         1ajR/25Df9qYAZCkJEScoRkkjcE1sLRJwnPy3C7M=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Pratyush Yadav <p.yadav@ti.com>, satish.nagireddy@getcruise.com
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v8 04/10] media: subdev: add active state to struct v4l2_subdev
+Date:   Tue, 12 Apr 2022 12:42:43 +0300
+Message-Id: <20220412094249.695754-5-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220412094249.695754-1-tomi.valkeinen@ideasonboard.com>
+References: <20220412094249.695754-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-References: <1634278119-32158-1-git-send-email-bingbu.cao@intel.com>
- <CAAFQd5Aykfdj-HPzsQOyQpbGBRhtTsoRm78XgpuGkFUx1joTMA@mail.gmail.com>
- <DM8PR11MB565395F554C6D1C4978EBC2A998E9@DM8PR11MB5653.namprd11.prod.outlook.com>
- <CAAFQd5B9hZNn4UuB8h0RLUwSxwTFGC219LFe8jGE1jDd+EfosA@mail.gmail.com>
-In-Reply-To: <CAAFQd5B9hZNn4UuB8h0RLUwSxwTFGC219LFe8jGE1jDd+EfosA@mail.gmail.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Tue, 12 Apr 2022 18:39:14 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5B_LTXa=ECg0wRzGLqGJaiz3HrY_C9BJgByj4QFTJzu-Q@mail.gmail.com>
-Message-ID: <CAAFQd5B_LTXa=ECg0wRzGLqGJaiz3HrY_C9BJgByj4QFTJzu-Q@mail.gmail.com>
-Subject: Re: [PATCH] media: dw9768: activate runtime PM and turn off device
-To:     "Cao, Bingbu" <bingbu.cao@intel.com>
-Cc:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
-        "bingbu.cao@linux.intel.com" <bingbu.cao@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Nov 16, 2021 at 1:57 PM Tomasz Figa <tfiga@chromium.org> wrote:
->
-> On Fri, Nov 5, 2021 at 9:52 PM Cao, Bingbu <bingbu.cao@intel.com> wrote:
-> >
-> > > -----Original Message-----
-> > > From: Tomasz Figa <tfiga@chromium.org>
-> > > Sent: Friday, November 5, 2021 2:55 PM
-> > > To: Cao, Bingbu <bingbu.cao@intel.com>
-> > > Cc: linux-media@vger.kernel.org; sakari.ailus@linux.intel.com;
-> > > dongchun.zhu@mediatek.com; Qiu, Tian Shu <tian.shu.qiu@intel.com>;
-> > > bingbu.cao@linux.intel.com
-> > > Subject: Re: [PATCH] media: dw9768: activate runtime PM and turn off
-> > > device
-> > >
-> > > On Fri, Oct 15, 2021 at 3:12 PM Bingbu Cao <bingbu.cao@intel.com> wrote:
-> > > >
-> > > > When dw9768 working with ACPI systems, the dw9768 was turned by
-> > > > i2c-core during probe, driver need activate the PM runtime and ask
-> > > > runtime PM to turn off the device.
-> > > >
-> > > > Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-> > > > ---
-> > > >  drivers/media/i2c/dw9768.c | 6 ++++++
-> > > >  1 file changed, 6 insertions(+)
-> > > >
-> > > > diff --git a/drivers/media/i2c/dw9768.c b/drivers/media/i2c/dw9768.c
-> > > > index c086580efac7..65c6acf3ced9 100644
-> > > > --- a/drivers/media/i2c/dw9768.c
-> > > > +++ b/drivers/media/i2c/dw9768.c
-> > > > @@ -469,6 +469,11 @@ static int dw9768_probe(struct i2c_client
-> > > > *client)
-> > > >
-> > > >         dw9768->sd.entity.function = MEDIA_ENT_F_LENS;
-> > > >
-> > > > +       /*
-> > > > +        * Device is already turned on by i2c-core with ACPI domain PM.
-> > > > +        * Attempt to turn off the device to satisfy the privacy LED
-> > > concerns.
-> > > > +        */
-> > > > +       pm_runtime_set_active(dev);
-> > >
-> > > This driver is used by non-ACPI systems as well. This change will make
-> > > the PM core not call the runtime_resume() callback provided by the
-> > > driver and the power would never be turned on on such systems.
-> > >
-> >
-> > > Wasn't the intention of Sakari's ACPI patches to allow bypassing the
-> > > ACPI domain power on at boot up and eliminate the need for this change?
-> >
-> > Tomasz, thanks for your review.
-> >
-> > The comment here is invalid, it should not be strongly related to the privacy
-> > LED concern. Anyway, the device should be turned off on ACPI and non-ACPI
-> > systems even without Sakari's changes.
-> >
-> > I am wondering how the driver work with PM core on non-ACPI system.
-> >
->
-> On non-ACPI systems it's the driver which handles the power sequencing
-> of the chip so the regulators wouldn't be implicitly enabled by the
-> subsystem before (unless they're shared with some other device and the
-> corresponding driver enabled them).
+Add a new 'active_state' field to struct v4l2_subdev to which we can
+store the active state of a subdev. This will place the subdev
+configuration into a known place, allowing us to use the state directly
+from the v4l2 framework, thus simplifying the drivers.
 
-It looks like this patch made into Linus' tree and broke the driver on
-ARM devices. Could we please revert it?
+Also add functions v4l2_subdev_init_finalize() and
+v4l2_subdev_cleanup(), which will allocate and free the active state.
+The functions are named in a generic way so that they can be also used
+for other subdev initialization work.
 
-Best regards,
-Tomasz
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/v4l2-core/v4l2-subdev.c | 21 ++++++++++
+ include/media/v4l2-subdev.h           | 58 +++++++++++++++++++++++++++
+ 2 files changed, 79 insertions(+)
 
->
-> > >
-> > > Best regards,
-> > > Tomasz
-> > >
-> > > >
-> > > >         pm_runtime_enable(dev);
-> > > >         if (!pm_runtime_enabled(dev)) {
-> > > >                 ret = dw9768_runtime_resume(dev); @@ -483,6 +488,7 @@
-> > > > static int dw9768_probe(struct i2c_client *client)
-> > > >                 dev_err(dev, "failed to register V4L2 subdev: %d",
-> > > ret);
-> > > >                 goto err_power_off;
-> > > >         }
-> > > > +       pm_runtime_idle(dev);
-> > > >
-> > > >         return 0;
-> > > >
-> > > > --
-> > > > 2.7.4
-> > > >
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index a1494999352b..5ac447b3038c 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -906,6 +906,27 @@ void __v4l2_subdev_state_free(struct v4l2_subdev_state *state)
+ }
+ EXPORT_SYMBOL_GPL(__v4l2_subdev_state_free);
+ 
++int v4l2_subdev_init_finalize(struct v4l2_subdev *sd)
++{
++	struct v4l2_subdev_state *state;
++
++	state = __v4l2_subdev_state_alloc(sd);
++	if (IS_ERR(state))
++		return PTR_ERR(state);
++
++	sd->active_state = state;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(v4l2_subdev_init_finalize);
++
++void v4l2_subdev_cleanup(struct v4l2_subdev *sd)
++{
++	__v4l2_subdev_state_free(sd->active_state);
++	sd->active_state = NULL;
++}
++EXPORT_SYMBOL_GPL(v4l2_subdev_cleanup);
++
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+ 
+ void v4l2_subdev_init(struct v4l2_subdev *sd, const struct v4l2_subdev_ops *ops)
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index ac3bcc54ea07..d0d0e4caf893 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -645,6 +645,9 @@ struct v4l2_subdev_ir_ops {
+  * This structure only needs to be passed to the pad op if the 'which' field
+  * of the main argument is set to %V4L2_SUBDEV_FORMAT_TRY. For
+  * %V4L2_SUBDEV_FORMAT_ACTIVE it is safe to pass %NULL.
++ *
++ * Note: This struct is also used in active state, and the 'try' prefix is
++ * historical and to be removed.
+  */
+ struct v4l2_subdev_pad_config {
+ 	struct v4l2_mbus_framefmt try_fmt;
+@@ -885,6 +888,9 @@ struct v4l2_subdev_platform_data {
+  * @subdev_notifier: A sub-device notifier implicitly registered for the sub-
+  *		     device using v4l2_async_register_subdev_sensor().
+  * @pdata: common part of subdevice platform data
++ * @active_state: Active state for the subdev (NULL for subdevs tracking the
++ *		  state internally). Initialized by calling
++ *		  v4l2_subdev_init_finalize().
+  *
+  * Each instance of a subdev driver should create this struct, either
+  * stand-alone or embedded in a larger struct.
+@@ -916,6 +922,19 @@ struct v4l2_subdev {
+ 	struct v4l2_async_notifier *notifier;
+ 	struct v4l2_async_notifier *subdev_notifier;
+ 	struct v4l2_subdev_platform_data *pdata;
++
++	/*
++	 * The fields below are private, and should only be accessed via
++	 * appropriate functions.
++	 */
++
++	/*
++	 * TODO: active_state should most likely be changed from a pointer to an
++	 * embedded field. For the time being it's kept as a pointer to more
++	 * easily catch uses of active_state in the cases where the driver
++	 * doesn't support it.
++	 */
++	struct v4l2_subdev_state *active_state;
+ };
+ 
+ 
+@@ -1141,6 +1160,45 @@ struct v4l2_subdev_state *__v4l2_subdev_state_alloc(struct v4l2_subdev *sd);
+  */
+ void __v4l2_subdev_state_free(struct v4l2_subdev_state *state);
+ 
++/**
++ * v4l2_subdev_init_finalize() - Finalizes the initialization of the subdevice
++ * @sd: The subdev
++ *
++ * This function finalizes the initialization of the subdev, including
++ * allocation of the active state for the subdev.
++ *
++ * This function must be called by the subdev drivers that use the centralized
++ * active state, after the subdev struct has been initialized and
++ * media_entity_pads_init() has been called, but before registering the
++ * subdev.
++ *
++ * The user must call v4l2_subdev_cleanup() when the subdev is being removed.
++ */
++int v4l2_subdev_init_finalize(struct v4l2_subdev *sd);
++
++/**
++ * v4l2_subdev_cleanup() - Releases the resources allocated by the subdevice
++ * @sd: The subdevice
++ *
++ * This function will release the resources allocated in
++ * v4l2_subdev_init_finalize.
++ */
++void v4l2_subdev_cleanup(struct v4l2_subdev *sd);
++
++/**
++ * v4l2_subdev_get_active_state() - Returns the active subdev state for
++ *				    subdevice
++ * @sd: The subdevice
++ *
++ * Returns the active state for the subdevice, or NULL if the subdev does not
++ * support active state.
++ */
++static inline struct v4l2_subdev_state *
++v4l2_subdev_get_active_state(struct v4l2_subdev *sd)
++{
++	return sd->active_state;
++}
++
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+ 
+ /**
+-- 
+2.25.1
+
