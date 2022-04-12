@@ -2,44 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EF11C433FE
-	for <linux-media@archiver.kernel.org>; Tue, 12 Apr 2022 13:23:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 172ABC433EF
+	for <linux-media@archiver.kernel.org>; Tue, 12 Apr 2022 13:23:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245652AbiDLNZb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Apr 2022 09:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
+        id S1356164AbiDLNZe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Apr 2022 09:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355956AbiDLNYu (ORCPT
+        with ESMTP id S1356037AbiDLNY5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:24:50 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351F82C13F;
-        Tue, 12 Apr 2022 06:15:24 -0700 (PDT)
+        Tue, 12 Apr 2022 09:24:57 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF4D3C4A9;
+        Tue, 12 Apr 2022 06:15:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649769324; x=1681305324;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=KRwOq5mfpCz05TtDePHTpU6eHexJLhKjTnWDKxqmvWA=;
-  b=ZwvfVpmNoS7N+M4yr7xa2S9Hcr1Hthq4qztogW2lTR3fMhL1+RxPXs5b
-   6rlWfPIAZxc83IRoZnXyAG3EDrV8s0Eh48R+/krN2LAX/K4N0v9rJBz8J
-   Jl4lcFK7hrupbFFioflVdTImNZKq3qgCXiqHWyEkxNVe9HvXRPXFHItoH
-   w=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 12 Apr 2022 06:15:24 -0700
+  t=1649769334; x=1681305334;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=Q7iWkEWIdBwMq/H4dYnh9ITsKreitgfNDb9VSXaQlow=;
+  b=jtZRV8iHyNOlgV62DiohSsfe5aNnLJCCqSwgXJbBSeMmSCXPecB2g24e
+   LfYIQ8JC47RFkDkOXtjn3bSGGal/av59Zu3EQImKnT5zEX1Qois7E5TWt
+   Do0WBIMBJAADkpZn/hjz+ucJjKM02DScr5PTS5Gdi85O7QdP76MoawcgF
+   8=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 Apr 2022 06:15:34 -0700
 X-QCInternal: smtphost
 Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:15:23 -0700
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:15:33 -0700
 Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Apr 2022 06:15:22 -0700
+ 15.2.986.22; Tue, 12 Apr 2022 06:15:31 -0700
 From:   Vikash Garodia <quic_vgarodia@quicinc.com>
 To:     <linux-media@vger.kernel.org>, <stanimir.varbanov@linaro.org>
 CC:     <linux-kernel@vger.kernel.org>, <quic_vgarodia@quicinc.com>
-Subject: [PATCH v2 0/2] Venus fixes 
-Date:   Tue, 12 Apr 2022 18:45:09 +0530
-Message-ID: <1649769311-22622-1-git-send-email-quic_vgarodia@quicinc.com>
+Subject: [PATCH v2 2/2] media: venus: vdec: ensure venus is powered on during stream off
+Date:   Tue, 12 Apr 2022 18:45:11 +0530
+Message-ID: <1649769311-22622-3-git-send-email-quic_vgarodia@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1649769311-22622-1-git-send-email-quic_vgarodia@quicinc.com>
+References: <1649769311-22622-1-git-send-email-quic_vgarodia@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -49,17 +52,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Changes in this version since v1 includes:
-* addressed comments from Stanimir.
+Video decoder driver auto-suspends the hardware if there is no
+exchange of command or response for certain amount of time.
+In auto suspended state, it becomes mandatory to power on the
+hardware before requesting it to process a command. The fix
+ensures the hardware is powered on during stop streaming.
 
-Vikash Garodia (2):
-  media: venus: do not queue internal buffers from previous sequence
-  media: venus: vdec: ensure venus is powered on during stream off
+Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
+ drivers/media/platform/qcom/venus/vdec.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- drivers/media/platform/qcom/venus/helpers.c | 34 +++++++++++++++++++++--------
- drivers/media/platform/qcom/venus/vdec.c    |  2 ++
- 2 files changed, 27 insertions(+), 9 deletions(-)
-
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index 91da3f5..4ac1132 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -1200,6 +1200,8 @@ static void vdec_stop_streaming(struct vb2_queue *q)
+ 	struct venus_inst *inst = vb2_get_drv_priv(q);
+ 	int ret = -EINVAL;
+ 
++	vdec_pm_get_put(inst);
++
+ 	mutex_lock(&inst->lock);
+ 
+ 	if (q->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
 -- 
 The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
 a Linux Foundation Collaborative Project
