@@ -2,170 +2,57 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7D04C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 13 Apr 2022 08:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF536C433FE
+	for <linux-media@archiver.kernel.org>; Wed, 13 Apr 2022 09:42:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbiDMIoE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Apr 2022 04:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
+        id S233931AbiDMJog (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Apr 2022 05:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbiDMIoA (ORCPT
+        with ESMTP id S234605AbiDMJoe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:44:00 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED69E4A3CC;
-        Wed, 13 Apr 2022 01:41:39 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 11E7A1F44B82
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649839298;
-        bh=VsMFErl3fUbkDNBlhEDMtj7UhHKnA4rACzxxHNzfR78=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cQZJI2NNJoEH98QbZdpA+szsNPyPCK+1jHsBugIIHcC62oajQU3IIw9NZt6a7e/+f
-         ePLipA+Q3P3XFtCacGvu8z/oWU2SDiE2VTBp7MAtyaVduZgcumYwCs4MB2MK1/solf
-         VrTvBIm3b8Nu3Go2kLV82hgUVmp4I2ag5xnb5iPJO38D/TgHCzZSGwXYeVic75Rjtk
-         pSXyW/0ktVhsjJpHpyCz6T0I6bD11mw6VqeA2cxcY4gnMDPNl0Jj30jNxgoFUDccuU
-         +WRlMMeY8axwd8TYRH+aPXYDuK12r6E/rUaF6jOF8aqfiByz3n7c4ZBw83Ft48AchM
-         1djzws6N1zZoA==
-Message-ID: <858afddd-c008-8a6c-c3c1-e1883e710c5e@collabora.com>
-Date:   Wed, 13 Apr 2022 10:41:34 +0200
+        Wed, 13 Apr 2022 05:44:34 -0400
+Received: from mail.growthmindset24.pl (mail.growthmindset24.pl [212.237.36.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DD0554AA
+        for <linux-media@vger.kernel.org>; Wed, 13 Apr 2022 02:42:10 -0700 (PDT)
+Received: by mail.growthmindset24.pl (Postfix, from userid 1001)
+        id E985587BFA; Tue, 12 Apr 2022 08:56:04 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=growthmindset24.pl;
+        s=mail; t=1649750164;
+        bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
+        h=Date:From:To:Subject:From;
+        b=hi7Rne7DmcGXzIiafIMqO2qAM7V1IE2NITvT+r4kXGOkm7eo5x0ZEuWwZnisfAyZx
+         NkIBruWYBXo/RfjUnEvMvyZlcHBa8/sNjAA0AyjdWoQ+8AQ5Fu6eZd+Rk3rUefG9bR
+         t2vmcuYM0aNIc3nj3QCvIKn/vBopkLdtYALaLXXqGPXteCxSR4Wib+6j98L685beQO
+         ayrZAvdAMnn3ZTPcW9L9NX37TBR7olKWGcI16n70zj21znSwe0OIrrmihgYFoyo6iO
+         vlHOs5yn/RTUoarModqtmVhSWy9IzRfrz4RPb7/20NnoWm82iyZAVj6jALs51e07fh
+         gMdmDn+rz8REA==
+Received: by mail.growthmindset24.pl for <linux-media@vger.kernel.org>; Tue, 12 Apr 2022 07:56:00 GMT
+Message-ID: <20220412073001-0.1.2w.d7se.0.ppoakpelsa@growthmindset24.pl>
+Date:   Tue, 12 Apr 2022 07:56:00 GMT
+From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
+        <przemyslaw.wroblewski@growthmindset24.pl>
+To:     <linux-media@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.growthmindset24.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v14 6/6] soc: mediatek: mutex: add functions that operate
- registers by CMDQ
-Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
-        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        allen-kh.cheng@mediatek.com, xiandong.wang@mediatek.com,
-        randy.wu@mediatek.com, jason-jh.lin@mediatek.com,
-        roy-cw.yeh@mediatek.com, river.cheng@mediatek.com,
-        srv_heupstream@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220411072403.24016-1-moudy.ho@mediatek.com>
- <20220411072403.24016-7-moudy.ho@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220411072403.24016-7-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Il 11/04/22 09:24, Moudy Ho ha scritto:
-> Due to HW limitations, MDP3 is necessary to enable MUTEX in each frame
-> for SOF triggering and cooperate with CMDQ control to reduce the amount
-> of interrupts generated(also, reduce frame latency).
-> 
-> In response to the above situation, a new interface
-> "mtk_mutex_enable_by_cmdq" has been added to achieve the purpose.
-> 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> ---
->   drivers/soc/mediatek/mtk-mutex.c       | 42 +++++++++++++++++++++++++-
->   include/linux/soc/mediatek/mtk-mutex.h |  2 ++
->   2 files changed, 43 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-> index fc9ba2749946..1811beaf399d 100644
-> --- a/drivers/soc/mediatek/mtk-mutex.c
-> +++ b/drivers/soc/mediatek/mtk-mutex.c
-> @@ -7,10 +7,12 @@
->   #include <linux/iopoll.h>
->   #include <linux/module.h>
->   #include <linux/of_device.h>
-> +#include <linux/of_address.h>
->   #include <linux/platform_device.h>
->   #include <linux/regmap.h>
->   #include <linux/soc/mediatek/mtk-mmsys.h>
->   #include <linux/soc/mediatek/mtk-mutex.h>
-> +#include <linux/soc/mediatek/mtk-cmdq.h>
->   
->   #define MT2701_MUTEX0_MOD0			0x2c
->   #define MT2701_MUTEX0_SOF0			0x30
-> @@ -176,6 +178,9 @@ struct mtk_mutex_ctx {
->   	void __iomem			*regs;
->   	struct mtk_mutex		mutex[10];
->   	const struct mtk_mutex_data	*data;
-> +	phys_addr_t			addr;
-> +	struct cmdq_client_reg		cmdq_reg;
-> +	bool				has_gce_client_reg;
->   };
->   
->   static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-> @@ -618,6 +623,28 @@ void mtk_mutex_enable(struct mtk_mutex *mutex)
->   }
->   EXPORT_SYMBOL_GPL(mtk_mutex_enable);
->   
-> +void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex, void *pkt)
-> +{
-> +#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-> +	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-> +						 mutex[mutex->id]);
-> +	struct cmdq_pkt *cmdq_pkt = (struct cmdq_pkt *)pkt;
-> +
-> +	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-> +
-> +	if (!mtx->has_gce_client_reg) {
-> +		dev_dbg(mtx->dev, "mediatek,gce-client-reg hasn't been set in dts");
-> +		return;
+Dzie=C5=84 dobry,
 
-Is this really supposed to happen?
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Reiterating: when the gce-client-reg is not set, this function should either never
-be called from the principle, or it should actually fail.
-If a driver relies on mtk_mutex_enable_by_cmdq() and does *not* fall back to
-register write from cpu, then no change will occur at all, leading to a random
-breakage with no apparent reason.
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
-This means that - for safety - this function should return -EINVAL when it gets
-called while no gce client reg is declared.
-Of course, this would also mean that the dev_dbg() should be a dev_err(), and
-that efforts should be done to avoid triggering this error by adding fallbacks
-in the drivers that will call this.
-
-Another option would be to keep this function void, keep the print a dev_dbg(),
-but automatically fallback to mtk_mutex_enable(), so that here:
-
-if (!mtx->has_gce_client_reg) {
-	dev_dbg(mtx->dev,
-		"No GCE client register found: falling back to cpu write.\n");
-	mtk_mutex_enable(mutex);
-	return;
-}
-
-...you're free to choose whichever of the two options, but this has to be fixed
-to remove this fragility.
-
-> +	}
-> +
-> +	cmdq_pkt_write(cmdq_pkt, mtx->cmdq_reg.subsys,
-> +		       mtx->addr + DISP_REG_MUTEX_EN(mutex->id), 1);
-> +#else
-> +	dev_err(mtx->dev, "Not support for enable MUTEX by CMDQ");
-
-...obviously, if mtk_cmdq not reachable, instead of simply letting drivers break,
-you should, also here, fall back to the less performant and very suboptimal (for
-the specific case of mdp3 and some others) mtk_mutex_enable().
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
 
-Thanks,
-Angelo
+Pozdrawiam,
+Przemys=C5=82aw Wr=C3=B3blewski
