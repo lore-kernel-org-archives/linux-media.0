@@ -2,133 +2,65 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BD69C433FE
-	for <linux-media@archiver.kernel.org>; Tue, 12 Apr 2022 09:54:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CBD3C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 12 Apr 2022 09:54:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbiDLJ4f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Apr 2022 05:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S241819AbiDLJ4p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Apr 2022 05:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356581AbiDLHi7 (ORCPT
+        with ESMTP id S1376701AbiDLHoU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:38:59 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C9551E5D;
-        Tue, 12 Apr 2022 00:09:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649747389; x=1681283389;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=N4ulgrYlIfenBw7Hm6+VMNDmIviNdtjf6yJOdqnjax0=;
-  b=pwKd5NL3CjRgKRD1FGYF8TrJqmOxKscs4VQVKtU0LsvOUUMjQzqUBE+X
-   NC5pdNOj6j26l+mhTXajMW8tKkc6yZQ2J64lPC8dZcEhcp7gxMcGYAqDO
-   3slKCbOk0kVYmezTT0amYsPu4QoEGODffSnTfG6oNM7HzivvLms/RhvJ6
-   Y=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 12 Apr 2022 00:09:48 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 00:09:48 -0700
-Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 12 Apr 2022 00:09:46 -0700
-From:   Vikash Garodia <quic_vgarodia@quicinc.com>
-To:     <linux-media@vger.kernel.org>, <stanimir.varbanov@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <quic_vgarodia@quicinc.com>
-Subject: [PATCH 1/2] media: venus: do not queue internal buffers from previous sequence
-Date:   Tue, 12 Apr 2022 12:39:15 +0530
-Message-ID: <1649747356-3207-2-git-send-email-quic_vgarodia@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649747356-3207-1-git-send-email-quic_vgarodia@quicinc.com>
-References: <1649747356-3207-1-git-send-email-quic_vgarodia@quicinc.com>
+        Tue, 12 Apr 2022 03:44:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BA015A25
+        for <linux-media@vger.kernel.org>; Tue, 12 Apr 2022 00:29:09 -0700 (PDT)
+Received: from dude03.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::39])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1neAxW-0006Y4-Q1; Tue, 12 Apr 2022 09:29:06 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH v2] media: video-mux: Use dev_err_probe()
+Date:   Tue, 12 Apr 2022 09:29:05 +0200
+Message-Id: <20220412072905.1927550-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-During reconfig (DRC) event from firmware, it is not guaranteed that
-all the DPB(internal) buffers would be released by the firmware. Some
-buffers might be released gradually while processing frames from the
-new sequence. These buffers now stay idle in the dpblist.
-In subsequent call to queue the DPBs to firmware, these idle buffers
-should not be queued. The fix identifies those buffers and free them.
----
- drivers/media/platform/qcom/venus/helpers.c | 37 ++++++++++++++++++++++-------
- 1 file changed, 28 insertions(+), 9 deletions(-)
+Simplify the mux error path a bit by using dev_err_probe().
 
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index 0bca95d..0602f03 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -90,12 +90,31 @@ bool venus_helper_check_codec(struct venus_inst *inst, u32 v4l2_pixfmt)
- }
- EXPORT_SYMBOL_GPL(venus_helper_check_codec);
- 
-+static int venus_helper_free_dpb_buf(struct venus_inst *inst, struct intbuf *buf)
-+{
-+	ida_free(&inst->dpb_ids, buf->dpb_out_tag);
-+
-+	list_del_init(&buf->list);
-+	dma_free_attrs(inst->core->dev, buf->size, buf->va, buf->da,
-+		       buf->attrs);
-+	kfree(buf);
-+
-+	return 0;
-+}
-+
- int venus_helper_queue_dpb_bufs(struct venus_inst *inst)
- {
--	struct intbuf *buf;
-+	struct intbuf *buf, *next;
-+	unsigned int dpb_size = 0;
- 	int ret = 0;
- 
--	list_for_each_entry(buf, &inst->dpbbufs, list) {
-+	if (inst->dpb_buftype == HFI_BUFFER_OUTPUT)
-+		dpb_size = inst->output_buf_size;
-+	else if (inst->dpb_buftype == HFI_BUFFER_OUTPUT2)
-+		dpb_size = inst->output2_buf_size;
-+
-+
-+	list_for_each_entry_safe(buf, next, &inst->dpbbufs, list) {
- 		struct hfi_frame_data fdata;
- 
- 		memset(&fdata, 0, sizeof(fdata));
-@@ -106,6 +125,12 @@ int venus_helper_queue_dpb_bufs(struct venus_inst *inst)
- 		if (buf->owned_by == FIRMWARE)
- 			continue;
- 
-+		/* free buffer from previous sequence which was released later */
-+		if (dpb_size > buf->size) {
-+			venus_helper_free_dpb_buf(inst, buf);
-+			continue;
-+		}
-+
- 		fdata.clnt_data = buf->dpb_out_tag;
- 
- 		ret = hfi_session_process_buf(inst, &fdata);
-@@ -127,13 +152,7 @@ int venus_helper_free_dpb_bufs(struct venus_inst *inst)
- 	list_for_each_entry_safe(buf, n, &inst->dpbbufs, list) {
- 		if (buf->owned_by == FIRMWARE)
- 			continue;
--
--		ida_free(&inst->dpb_ids, buf->dpb_out_tag);
--
--		list_del_init(&buf->list);
--		dma_free_attrs(inst->core->dev, buf->size, buf->va, buf->da,
--			       buf->attrs);
--		kfree(buf);
-+		venus_helper_free_dpb_buf(inst, buf);
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+v2: fix unassigned error return value
+---
+ drivers/media/platform/video-mux.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/media/platform/video-mux.c b/drivers/media/platform/video-mux.c
+index fda8fc0e4814..b31e5913a4cd 100644
+--- a/drivers/media/platform/video-mux.c
++++ b/drivers/media/platform/video-mux.c
+@@ -442,9 +442,7 @@ static int video_mux_probe(struct platform_device *pdev)
+ 	vmux->mux = devm_mux_control_get(dev, NULL);
+ 	if (IS_ERR(vmux->mux)) {
+ 		ret = PTR_ERR(vmux->mux);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(dev, "Failed to get mux: %d\n", ret);
+-		return ret;
++		return dev_err_probe(dev, ret, "Failed to get mux\n");
  	}
  
- 	if (list_empty(&inst->dpbbufs))
+ 	mutex_init(&vmux->lock);
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.30.2
 
