@@ -2,157 +2,165 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA6C9C4321E
-	for <linux-media@archiver.kernel.org>; Tue, 12 Apr 2022 12:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A40DC433FE
+	for <linux-media@archiver.kernel.org>; Tue, 12 Apr 2022 12:03:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiDLMGD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Apr 2022 08:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        id S1350261AbiDLMGG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Apr 2022 08:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352907AbiDLMDo (ORCPT
+        with ESMTP id S1354012AbiDLMET (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:03:44 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2046.outbound.protection.outlook.com [40.107.20.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7D78233E;
-        Tue, 12 Apr 2022 04:01:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oEIfaEo7tElhUNqmkjbP0RCUl6n8m050yfOjSLA9Rf6InBZKqmexHy3Rrx43XKeB47Dfl3t7Ix+deEMuMqRtc21RCyaRnOt8V1kQ4lJCh4Sd30Mc9wDGABCwDQTsnkFJ0gBx8pCxn8SewEpL48pIGychNZ6YddR4oz/23Zxde0lFQEKa+p40kPt1F2o17L/2rP8NXiCJi9MiQpujBN1y46LGQXSZ1jy88UQ9KUQuOID93/+JcKw9QqFNvLUqcrcKsDAcgJYMNdwo7OqsRayURasjFhAcBT9UFcQENyHjugsM+pcVcNxpefkXKHqj3FxSAUgphxx5RwLNJEnMjwGPAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PEGhE/6c6sFDgeIBXBYv40opXDiWE+w8lKXMJ/GT62o=;
- b=VLvp3THR7TnVwlIgASoGI6lO6TCKnvxlJQWRCEKZ/cWAI3aizJK4g1TpMUqrap7Sy2CcL+q4kMwLEI8FJvy/WeBtZ0IDuikCgfNzKoLtsM3HFzBS2oGMTG5EhgSveZnWXkDQGdmO/Y+IHH+YUmDra1FXtsQegANbTxpMExU6yvWyhytRchL19Z4Avkw844sPsuOs3zW4fZMxGYgbxc3OhLG2YicnBw9QWIKA6DOg70wfu6hcIRIOf/lZmFZdu2yZovf0xu70sdga4KOrgMp9WC2QsgUWxspjMIbBk/mfgSKKXbp3Dd4+jEM49MjgJF2Aa4eMPIUs4PKMqb7SuIngww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PEGhE/6c6sFDgeIBXBYv40opXDiWE+w8lKXMJ/GT62o=;
- b=dGZwocpmhw/fyAfa59HY2DEqtqLxt9SaZcrX9zO79UjY4MnDQM6oM4iSw74OV3qd/XhGEkDLBfHoDbBbzqY6V6NA4wtMlFQQzx5cR7d/TvzdOHSEF/YxzKhPP0o+TMat80Q47TPWg16v3BzQxC+xcSDs6oqqr37E9M+7nreOvS4=
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by VI1PR04MB6126.eurprd04.prod.outlook.com (2603:10a6:803:102::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.30; Tue, 12 Apr
- 2022 11:01:05 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::d8b5:5914:5189:ffa5]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::d8b5:5914:5189:ffa5%6]) with mapi id 15.20.5144.029; Tue, 12 Apr 2022
- 11:01:04 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     Fabio Estevam <festevam@gmail.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [EXT] Re: [PATCH] media: amphion: fix decoder's interlaced filed
-Thread-Topic: [EXT] Re: [PATCH] media: amphion: fix decoder's interlaced filed
-Thread-Index: AQHYTltfEl8/zbT+PUWsVWgt5yUYtKzsGu0AgAABcCA=
-Date:   Tue, 12 Apr 2022 11:01:04 +0000
-Message-ID: <AM6PR04MB63413CBBD923BF8F985E9CADE7ED9@AM6PR04MB6341.eurprd04.prod.outlook.com>
-References: <20220412105156.17091-1-ming.qian@nxp.com>
- <CAOMZO5DWPaSCmc9RivqmCQHu2QaiBs5Kirxjm7WezpnUSKwUag@mail.gmail.com>
-In-Reply-To: <CAOMZO5DWPaSCmc9RivqmCQHu2QaiBs5Kirxjm7WezpnUSKwUag@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c21576bf-dc42-4af5-91eb-08da1c73bd52
-x-ms-traffictypediagnostic: VI1PR04MB6126:EE_
-x-microsoft-antispam-prvs: <VI1PR04MB6126D1B9499F8316624254B8E7ED9@VI1PR04MB6126.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: m8qqFoVF1EDH2sz/Sl7NLswA0QADkLwuxs7cWPJl05W4J+fXLFlSkmeAvDJkevI0uDhBuf0ymgOpNuDIKeYKxpR55hB64FtztZkNOQboBYD//2Fm6ae9bnkWxVUSjB0sypWkJ5PxWHNCu/R1tg0DL7nCXW0CFuEt50JkTQXwJgTC6jQcAxEhVskNSqOpRq88f0Zm5jATzk6uysrcfctwepTQJhE0DnynALNhIuw/eSbXALvMxR+gMRZyfNp9857F1SgKvq0CQzFdiw84lLa84KZNhlfkRzwygLDwZZ6bDk0k/KNRrLZP0zY55RHXKSQvDVCAXA8+kA1z3EQHuJ/TRcYMFM15Tve9lLejuXcrQNDNH9w/vRrCZ+zAS22wWglbl1zkkfhA7bTm/DhRdXuzHwrluBeIk3a+h8WEIzQuUUS+ps5vP5HpwP2cysov8PNTuhPldG9q7sZCYXOj4mCTXRZ4Urovrmg5BOjAyruSYvC5ICWyKmv/Dxjos7tnu4+DhQgmZKP56iEFi8158/GO5lsYR+bWszhAXT67aTLbVba+i3sS6Lz9Ap6lQwq8+5FvxwgYbdyRk9+hsk+P3tlNxiTOH0wuHRGEWtzmMoABxQycTTWcn30vBzreiGlU48jeUNUary68p6ECgVXBBqniVIYIP5bO3Heykv09rLiBqsgP2Er/UOeF8lVipOQvecI0yTxrAxdzTXOJQK+XAeeqWg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(83380400001)(44832011)(6916009)(316002)(2906002)(186003)(7416002)(508600001)(26005)(38100700002)(6506007)(64756008)(7696005)(9686003)(4744005)(76116006)(8676002)(5660300002)(86362001)(66556008)(52536014)(66946007)(66446008)(4326008)(66476007)(71200400001)(55016003)(122000001)(38070700005)(33656002)(53546011)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WS9JT1oxMFFzKzZ4d200Z29ZNVNHYTRFYzhQSXVmMngyMEhzcEltK1ZxRFJi?=
- =?utf-8?B?UTJMdGt5T2tPdFVnWUdnSkY4cXlnWTk1ZEhaa3p6VDkzTnd1d1ZhQnRETnkw?=
- =?utf-8?B?QnVVVlovRjlrUUFQNE4rSFVXcEdPeHF4TXpNRXhHUzFnVkJ6c1FTWVlNNTJR?=
- =?utf-8?B?bzZKQU1WMEUzU1poaXQrZGlEOVViOE9naGcrVEI1ckhvTGdsYmxqb1ZYcW1O?=
- =?utf-8?B?OG1jTDBtYTQ2Qmx6N0hHUFdWSVA2dERkOTAyVlgrQi9udjZhOEZhMDhnQjgr?=
- =?utf-8?B?ZWZZU29ublVKNlNTTWUxbmc5eGM5TnBEUGpHdEdGaU5wQnZMbUFEK0htbWpE?=
- =?utf-8?B?bmh2dkU3QXdCQUxWNzB6QzkwUElYZCsyZjg4aEtoc0swL0RQd21TS1UxS0JQ?=
- =?utf-8?B?ZDZabTQ5NFBQWHMxYVhSalRUMTlMaXIybm44RnVwZ2lkVHpZbDNQdHVneUlW?=
- =?utf-8?B?Uk5mbjhxdlVxY3NJZCtPVmQvN0hnZHBBU2hFak8zbHM1cWI1TnlVakluT0Vs?=
- =?utf-8?B?ektpenBhNWxWZllZZGRITWI1Y1RubHR3TDJEMlRHNlYzQy9SSVRYSmYwVEdC?=
- =?utf-8?B?TVNJOGx0aHZJeFkyc0l4TjBXNkN6RjR0clo2R1lGVEZ6UGNTZURIRkxRTGhG?=
- =?utf-8?B?bDRFcjV4ejUzaUQ2N1MvaU9GUXEvV0wzYU96QTJiTmRRcmtxV0doNE9mSGZI?=
- =?utf-8?B?cTNqN2JldUkrQmpnTmp5dDlzVk55U0ZaelduSzFhL09vUTU1bVBoZlpzM253?=
- =?utf-8?B?TEwwamxXN2JJNGkvUzRWQmNvTGEzMWZBdHoyMWljTjlSVVdoeDdzbWhCajM4?=
- =?utf-8?B?SlFWaHpBOExkV1FRejVrbjJyRnc5UWtWOC9QZUlMM1cvWG0rQ2dFQVJibjBW?=
- =?utf-8?B?R3U2cjFkK3htV3FET1JFRXphV09PTkl2cFhRRTRjUWVZMGxMakxQY3FlcEg3?=
- =?utf-8?B?ZVI4RW1iZDg0NmxJbTFERk5RTmRXd3hGckJ3VlIrQnBxZlA3NnZidkJ4bjl5?=
- =?utf-8?B?aU9tWDgrM2JWY1N4TlBLU1FsYURDNzdtRWJGS3VGOTF6RzlBTFBiZmo1dmZu?=
- =?utf-8?B?dnNJdmM1UjAxTngxWXUwMHJ2dERyeXVjUTZsU014UDFqVXBqREEwWHR1NDRz?=
- =?utf-8?B?dlhSeWJ3cjRCclRIYngxdW8vNWFWTWp6TDdUZTNSeFQxTndNMFVWbjFOTEor?=
- =?utf-8?B?SGZ1UUZiZkZydHpNcndXVkhUZGhOOExoZ3VZYmRCYzh3NjVBc2dSTHZvR0Vl?=
- =?utf-8?B?NUNiR1VXVWRkTlVkSEJ4V0t3dU9kRE9oM3BiV0Jvamk0c21EdG5WdkZNdUZj?=
- =?utf-8?B?OHRWU003V2RyWGx1UWJGb0RNdG56YmNqUmRrNGxjYncrNXo4bmd2Y3ZPOEFZ?=
- =?utf-8?B?YUNqQzk2cjlCdjhMRXI3S0dDWlhFSzhSdTZ1MDJneE9yUHVzWVBwRDg3ZGRy?=
- =?utf-8?B?QTNNRVlmSUZTLzBKKzJYZ25STnpZdGF1MHRTNmF5eHVwV3pnUVhMc1hDVlo3?=
- =?utf-8?B?dmpNeG1neTlSMW01YkYvRzh0em43a3N6dWxBTjFsUFRQaHFpSlVTRmJVckcx?=
- =?utf-8?B?ZEgwNERtMzB6Nkx2TEpxSy9mQTNmUk9iVWRVbGxxaU1KaEl6UXBsRkdtdHp2?=
- =?utf-8?B?VitENWpQVDlsWjc1OFV0Yy9vc3J5eDVoL0VJSG9LM0FVY25Qd1I0MnNsUm5k?=
- =?utf-8?B?ZFdQYmpYejE4UTJtaWVhTFpzQXE1TXBPSGx5emRtUytGOWJWQUE1OUZQZW8z?=
- =?utf-8?B?ZmFnZHUvQlZObEtaTzZaMnlDN09PRGR6YXdZU2k1VW9LeWFwZnl3ZlR5YTZZ?=
- =?utf-8?B?czFRUGlqNC9aRnRnczgxamIwYmpHUFgvQkhQbkNuNzYrR1F6N28rVytBby9p?=
- =?utf-8?B?eU1UUWtmbGZaaHFJb3pqbGgzVEhIUWw5R1FPcFN2ZTBzN3F2dHpZL3Bta1FY?=
- =?utf-8?B?SmxBTVNNNWxlaEwydnRyMXJtUHIyeEFCU3h0NUxQUzdIWm5lWFl2dmJJRFNn?=
- =?utf-8?B?OW00Nm9WKzJoaDAxSlZRT2J6OWZqLyt4TWdMVHBBSk9KUktRazVPSGE3NTJ1?=
- =?utf-8?B?Y0ZEM0lEMG51Mzltb2ZERzJtbjIvdi9nVnZpSEdqSGhqZ3ljODNORzVDZHRP?=
- =?utf-8?B?aGxzY0dMRE10N0FpMSt2UkdqSDZaRU1PSkpZc2JoRGpMWXJFeWlKOHJMOWlF?=
- =?utf-8?B?SlVqS2V3QXhyK2VqVHZ4d051R0FzNkZTUjBhZFF0eVNPczRIcmlGQUVJR3Bi?=
- =?utf-8?B?WE1BMTd4SHo3SEhpLzdEalh1Rk55amFWTFpVanBnL0F0TzRialJoWTlGQUpE?=
- =?utf-8?B?UTdSMlVNRy94WmlZNzZ0RVZxcGx1ZXZkUXVFaWlOekVhdzZRcWNpdz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 12 Apr 2022 08:04:19 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402793E5E4
+        for <linux-media@vger.kernel.org>; Tue, 12 Apr 2022 04:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649761569; x=1681297569;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=21BeDH4ycPfkIoVWkm+nqXIS4BuevH+M/AZYj89qgnI=;
+  b=iYoTNYfhIU9gzQ3ezI9u2ZtPomSfXsZBrrA5ScWJ3+iLeHske8AUTp8o
+   vU/nzT5kQNI2P9UD5vkSe89wDoVM/87uAH7Odz5Fef5L0gtVeIocGa2ox
+   HtnJdE8zQ/rhReshyQWMd2kXPBAG8EbpG5jclrRp2/dw1L+d5mF5a2ckA
+   Jl7YLk2HfnbFqdEdvaVehiZxRGNU9G1JH9Rt4sv/OMu1KbRbefU/z16La
+   ZZpjKwSQSFSh2eVd/u4SaFNi0/QRs8PZ/OFecFwDm1jp6OFlgVPBcwTEG
+   hla1GkvGRB8YRRAxYCEatHsfAnKEAEeUmOcx1fhLUM8xtHjAIYASTSsW6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="244231514"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="244231514"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 04:05:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="655061958"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.232.188]) ([10.238.232.188])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Apr 2022 04:05:31 -0700
+Subject: Re: [PATCH] media: dw9768: activate runtime PM and turn off device
+To:     Tomasz Figa <tfiga@chromium.org>,
+        "Cao, Bingbu" <bingbu.cao@intel.com>
+Cc:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>
+References: <1634278119-32158-1-git-send-email-bingbu.cao@intel.com>
+ <CAAFQd5Aykfdj-HPzsQOyQpbGBRhtTsoRm78XgpuGkFUx1joTMA@mail.gmail.com>
+ <DM8PR11MB565395F554C6D1C4978EBC2A998E9@DM8PR11MB5653.namprd11.prod.outlook.com>
+ <CAAFQd5B9hZNn4UuB8h0RLUwSxwTFGC219LFe8jGE1jDd+EfosA@mail.gmail.com>
+ <CAAFQd5B_LTXa=ECg0wRzGLqGJaiz3HrY_C9BJgByj4QFTJzu-Q@mail.gmail.com>
+From:   Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <64cf6ebd-03d4-3cc2-5eed-bc723eb3214a@linux.intel.com>
+Date:   Tue, 12 Apr 2022 19:05:21 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c21576bf-dc42-4af5-91eb-08da1c73bd52
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2022 11:01:04.8374
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ntNP9DIX0lL7zPcDb59wdz22XXqLDqh/XahXwSwpRACbuy+xA47HziYvzdlJ8mqhn8wnXNnYgQuIDLT6bEzbKA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6126
+In-Reply-To: <CAAFQd5B_LTXa=ECg0wRzGLqGJaiz3HrY_C9BJgByj4QFTJzu-Q@mail.gmail.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SGkgRmFiaW8sDQoNCiAgICBUaGFuayB5b3UgZm9yIHlvdXIgcmVtaW5kZXINCg0KPiAtLS0tLU9y
-aWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBGYWJpbyBFc3RldmFtIFttYWlsdG86ZmVzdGV2
-YW1AZ21haWwuY29tXQ0KPiBTZW50OiBUdWVzZGF5LCBBcHJpbCAxMiwgMjAyMiA2OjU1IFBNDQo+
-IFRvOiBNaW5nIFFpYW4gPG1pbmcucWlhbkBueHAuY29tPg0KPiBDYzogTWF1cm8gQ2FydmFsaG8g
-Q2hlaGFiIDxtY2hlaGFiQGtlcm5lbC5vcmc+OyBTaGF3biBHdW8NCj4gPHNoYXduZ3VvQGtlcm5l
-bC5vcmc+OyBIYW5zIFZlcmt1aWwgPGh2ZXJrdWlsLWNpc2NvQHhzNGFsbC5ubD47IFJvYiBIZXJy
-aW5nDQo+IDxyb2JoK2R0QGtlcm5lbC5vcmc+OyBTYXNjaGEgSGF1ZXIgPHMuaGF1ZXJAcGVuZ3V0
-cm9uaXguZGU+OyBTYXNjaGENCj4gSGF1ZXIgPGtlcm5lbEBwZW5ndXRyb25peC5kZT47IGRsLWxp
-bnV4LWlteCA8bGludXgtaW14QG54cC5jb20+OyBBaXNoZW5nDQo+IERvbmcgPGFpc2hlbmcuZG9u
-Z0BueHAuY29tPjsgbGludXgtbWVkaWEgPGxpbnV4LW1lZGlhQHZnZXIua2VybmVsLm9yZz47DQo+
-IGxpbnV4LWtlcm5lbCA8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz47IG1vZGVyYXRlZCBs
-aXN0OkFSTS9GUkVFU0NBTEUNCj4gSU1YIC8gTVhDIEFSTSBBUkNISVRFQ1RVUkUgPGxpbnV4LWFy
-bS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZz4NCj4gU3ViamVjdDogW0VYVF0gUmU6IFtQQVRD
-SF0gbWVkaWE6IGFtcGhpb246IGZpeCBkZWNvZGVyJ3MgaW50ZXJsYWNlZCBmaWxlZA0KPiANCj4g
-Q2F1dGlvbjogRVhUIEVtYWlsDQo+IA0KPiBIaSBNaW5nLA0KPiANCj4gSW4gU3ViamVjdDogcy9m
-aWxlZC9maWVsZA0KPiANCj4gT24gVHVlLCBBcHIgMTIsIDIwMjIgYXQgNzo1MiBBTSBNaW5nIFFp
-YW4gPG1pbmcucWlhbkBueHAuY29tPiB3cm90ZToNCj4gPg0KPiA+IEZvciBpbnRlcmxhY2VkIGZy
-YW1lLCB0aGUgYW1waGlvbiB2cHUgd2lsbCBzdG9yZSB0aGUgdHdvIGZpbGVkcw0KPiA+IHNlcXVl
-bnRpYWwgaW50byBvbmUgYnVmZmVyLCB0b3AtYm90dG9tIG9yZGVyDQo+IA0KPiBzL2ZpbGVkcy9m
-aWVsZHMNCj4gDQo+ID4gc28gdGhlIGZpbGVkIHNob3VsZCBiZSBzZXQgdG8gVjRMMl9GSUVMRF9T
-RVFfVEIuDQo+IA0KPiBzL2ZpbGVkL2ZpZWxkDQo+IA0KPiA+IGZpeCB0aGUgcHJldmlvdXMgYnVn
-IHRoYXQgc2V0dGluZyBpdCB0byBWNEwyX0ZJRUxEX1NFUV9CVCB3cm9uZ2x5Lg0KPiANCj4gcy9z
-ZXR0aW5nL3NldA0KPiANCj4gRG8geW91IG5lZWQgdG8gcGFzcyBhIEZpeGVzIHRhZyB0b28/DQo=
+
+
+On 4/12/22 5:39 PM, Tomasz Figa wrote:
+> On Tue, Nov 16, 2021 at 1:57 PM Tomasz Figa <tfiga@chromium.org> wrote:
+>>
+>> On Fri, Nov 5, 2021 at 9:52 PM Cao, Bingbu <bingbu.cao@intel.com> wrote:
+>>>
+>>>> -----Original Message-----
+>>>> From: Tomasz Figa <tfiga@chromium.org>
+>>>> Sent: Friday, November 5, 2021 2:55 PM
+>>>> To: Cao, Bingbu <bingbu.cao@intel.com>
+>>>> Cc: linux-media@vger.kernel.org; sakari.ailus@linux.intel.com;
+>>>> dongchun.zhu@mediatek.com; Qiu, Tian Shu <tian.shu.qiu@intel.com>;
+>>>> bingbu.cao@linux.intel.com
+>>>> Subject: Re: [PATCH] media: dw9768: activate runtime PM and turn off
+>>>> device
+>>>>
+>>>> On Fri, Oct 15, 2021 at 3:12 PM Bingbu Cao <bingbu.cao@intel.com> wrote:
+>>>>>
+>>>>> When dw9768 working with ACPI systems, the dw9768 was turned by
+>>>>> i2c-core during probe, driver need activate the PM runtime and ask
+>>>>> runtime PM to turn off the device.
+>>>>>
+>>>>> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+>>>>> ---
+>>>>>  drivers/media/i2c/dw9768.c | 6 ++++++
+>>>>>  1 file changed, 6 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/media/i2c/dw9768.c b/drivers/media/i2c/dw9768.c
+>>>>> index c086580efac7..65c6acf3ced9 100644
+>>>>> --- a/drivers/media/i2c/dw9768.c
+>>>>> +++ b/drivers/media/i2c/dw9768.c
+>>>>> @@ -469,6 +469,11 @@ static int dw9768_probe(struct i2c_client
+>>>>> *client)
+>>>>>
+>>>>>         dw9768->sd.entity.function = MEDIA_ENT_F_LENS;
+>>>>>
+>>>>> +       /*
+>>>>> +        * Device is already turned on by i2c-core with ACPI domain PM.
+>>>>> +        * Attempt to turn off the device to satisfy the privacy LED
+>>>> concerns.
+>>>>> +        */
+>>>>> +       pm_runtime_set_active(dev);
+>>>>
+>>>> This driver is used by non-ACPI systems as well. This change will make
+>>>> the PM core not call the runtime_resume() callback provided by the
+>>>> driver and the power would never be turned on on such systems.
+>>>>
+>>>
+>>>> Wasn't the intention of Sakari's ACPI patches to allow bypassing the
+>>>> ACPI domain power on at boot up and eliminate the need for this change?
+>>>
+>>> Tomasz, thanks for your review.
+>>>
+>>> The comment here is invalid, it should not be strongly related to the privacy
+>>> LED concern. Anyway, the device should be turned off on ACPI and non-ACPI
+>>> systems even without Sakari's changes.
+>>>
+>>> I am wondering how the driver work with PM core on non-ACPI system.
+>>>
+>>
+>> On non-ACPI systems it's the driver which handles the power sequencing
+>> of the chip so the regulators wouldn't be implicitly enabled by the
+>> subsystem before (unless they're shared with some other device and the
+>> corresponding driver enabled them).
+> 
+> It looks like this patch made into Linus' tree and broke the driver on
+> ARM devices. Could we please revert it?
+
+If revert the patch, the device will not work on ACPI system, is there some
+other solution? Have no details about the failure on ARM device.
+
+> 
+> Best regards,
+> Tomasz
+> 
+>>
+>>>>
+>>>> Best regards,
+>>>> Tomasz
+>>>>
+>>>>>
+>>>>>         pm_runtime_enable(dev);
+>>>>>         if (!pm_runtime_enabled(dev)) {
+>>>>>                 ret = dw9768_runtime_resume(dev); @@ -483,6 +488,7 @@
+>>>>> static int dw9768_probe(struct i2c_client *client)
+>>>>>                 dev_err(dev, "failed to register V4L2 subdev: %d",
+>>>> ret);
+>>>>>                 goto err_power_off;
+>>>>>         }
+>>>>> +       pm_runtime_idle(dev);
+>>>>>
+>>>>>         return 0;
+>>>>>
+>>>>> --
+>>>>> 2.7.4
+>>>>>
+
+-- 
+Best regards,
+Bingbu Cao
