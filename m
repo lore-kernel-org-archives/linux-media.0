@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DD79C433F5
-	for <linux-media@archiver.kernel.org>; Tue, 12 Apr 2022 10:54:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81C4CC433EF
+	for <linux-media@archiver.kernel.org>; Tue, 12 Apr 2022 10:54:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242922AbiDLKwb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Apr 2022 06:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
+        id S1377151AbiDLK4a (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Apr 2022 06:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357010AbiDLKpt (ORCPT
+        with ESMTP id S1356973AbiDLKpr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:45:49 -0400
+        Tue, 12 Apr 2022 06:45:47 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F33F62100
-        for <linux-media@vger.kernel.org>; Tue, 12 Apr 2022 02:43:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D05414001
+        for <linux-media@vger.kernel.org>; Tue, 12 Apr 2022 02:43:28 -0700 (PDT)
 Received: from deskari.lan (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 098E7D6E;
-        Tue, 12 Apr 2022 11:43:26 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 86D17BC1;
+        Tue, 12 Apr 2022 11:43:23 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1649756607;
-        bh=qg+wfCBvON+YzZspt4WVAWUBVPk3scWuwfLfXClVOn8=;
+        s=mail; t=1649756604;
+        bh=eM6+MXH7uj+01fhfvxgU1HnnGeUWmf8So4IZuC+CbqQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J2JJ9EhyNttRB+4FLmA0oReCcw0KK+2IpDt4ETRcZ9ZE81a1svMWZH8qOQs2KnRCz
-         etpeP2d+/ffjKpGxGA6p+YuFdb8HTcrp8EzpDKlCrvexHVlEng4r1EVR6I/aU9GcEH
-         19JTL2CLpTutKYdJy7ePOF0ijgzfYPU/2f8i1y/o=
+        b=LWXollKOIEhjieWJ/KQLyg8t74l/uDA+fmj6ZpWpei3t8nvdDTfzn4arO1PYqFXGw
+         u8gMYdiOkBarLE8OVaTIRAFHttR6aCUk8j8YKz8NEo/bFJAKs6/g++UQj1s04KVbpz
+         AODDpsJxjVVEcCubz8FaQ48Am0LmBoSrjoeZIugk=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -34,9 +34,9 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Pratyush Yadav <p.yadav@ti.com>, satish.nagireddy@getcruise.com
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v8 10/10] media: Documentation: add documentation about subdev state
-Date:   Tue, 12 Apr 2022 12:42:49 +0300
-Message-Id: <20220412094249.695754-11-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v8 06/10] media: subdev: pass also the active state to subdevs from ioctls
+Date:   Tue, 12 Apr 2022 12:42:45 +0300
+Message-Id: <20220412094249.695754-7-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220412094249.695754-1-tomi.valkeinen@ideasonboard.com>
 References: <20220412094249.695754-1-tomi.valkeinen@ideasonboard.com>
@@ -46,96 +46,204 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add documentation about centrally managed subdev state.
+At the moment when a subdev op is called, the TRY subdev state
+(subdev_fh->state) is passed as a parameter even for the ACTIVE case, or
+alternatively a NULL can be passed for ACTIVE case. This used to make
+sense, as the ACTIVE state was handled internally by the subdev drivers.
+
+We now have a state for the ACTIVE case in a standard place, and can
+pass that also to the drivers. This patch changes the subdev ioctls to
+either pass the TRY or ACTIVE state to the subdev.
+
+Unfortunately many drivers call ops from other subdevs, and implicitly
+pass NULL as the state, so this is just a partial solution. A coccinelle
+spatch could perhaps be created which fixes the drivers' subdev calls.
+
+For all current upstream drivers this doesn't matter, as they do not
+expect to get a valid state for ACTIVE case. But future drivers which
+support multiplexed streaming and routing will depend on getting a state
+for both active and try cases.
+
+For new drivers we can mandate that the pipelines where the drivers are
+used need to pass the state properly, or preferably, not call such
+subdev ops at all.
+
+However, if an existing subdev driver is changed to support multiplexed
+streams, the driver has to consider cases where its ops will be called
+with NULL state. The problem can easily be solved by using the
+v4l2_subdev_lock_and_get_active_state() helper, introduced in a follow
+up patch.
+
+Another follow up patch adds wrappers for pad ops dealing with subdev
+state, which automate the use of
+v4l2_subdev_lock_and_get_active_state() for cases where the state is
+NULL.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../driver-api/media/v4l2-subdev.rst          | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ drivers/media/v4l2-core/v4l2-subdev.c | 64 ++++++++++++++++++++++-----
+ 1 file changed, 54 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
-index 08ea2673b19e..cf3b52bdbfb9 100644
---- a/Documentation/driver-api/media/v4l2-subdev.rst
-+++ b/Documentation/driver-api/media/v4l2-subdev.rst
-@@ -518,6 +518,75 @@ The :c:func:`v4l2_i2c_new_subdev` function will call
- :c:type:`i2c_board_info` structure using the ``client_type`` and the
- ``addr`` to fill it.
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 5ac447b3038c..8f09b1175ef9 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -344,6 +344,44 @@ const struct v4l2_subdev_ops v4l2_subdev_call_wrappers = {
+ EXPORT_SYMBOL(v4l2_subdev_call_wrappers);
  
-+Centrally managed subdev active state
-+-------------------------------------
+ #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
 +
-+Traditionally V4L2 subdev drivers maintained internal state for the active
-+device configuration. This is often implemented as e.g. an array of struct
-+v4l2_mbus_framefmt, one entry for each pad, and similarly for crop and compose
-+rectangles.
++static struct v4l2_subdev_state *
++subdev_ioctl_get_state(struct v4l2_subdev *sd, struct v4l2_subdev_fh *subdev_fh,
++		       unsigned int cmd, void *arg)
++{
++	u32 which;
 +
-+In addition to the active configuration, each subdev file handle has an array of
-+struct v4l2_subdev_pad_config, managed by the V4L2 core, which contains the try
-+configuration.
++	switch (cmd) {
++	default:
++		return NULL;
++	case VIDIOC_SUBDEV_G_FMT:
++	case VIDIOC_SUBDEV_S_FMT:
++		which = ((struct v4l2_subdev_format *)arg)->which;
++		break;
++	case VIDIOC_SUBDEV_G_CROP:
++	case VIDIOC_SUBDEV_S_CROP:
++		which = ((struct v4l2_subdev_crop *)arg)->which;
++		break;
++	case VIDIOC_SUBDEV_ENUM_MBUS_CODE:
++		which = ((struct v4l2_subdev_mbus_code_enum *)arg)->which;
++		break;
++	case VIDIOC_SUBDEV_ENUM_FRAME_SIZE:
++		which = ((struct v4l2_subdev_frame_size_enum *)arg)->which;
++		break;
++	case VIDIOC_SUBDEV_ENUM_FRAME_INTERVAL:
++		which = ((struct v4l2_subdev_frame_interval_enum *)arg)->which;
++		break;
++	case VIDIOC_SUBDEV_G_SELECTION:
++	case VIDIOC_SUBDEV_S_SELECTION:
++		which = ((struct v4l2_subdev_selection *)arg)->which;
++		break;
++	}
 +
-+To simplify the subdev drivers the V4L2 subdev API now optionally supports a
-+centrally managed active configuration represented by
-+:c:type:`v4l2_subdev_state`. One instance of state, which contains the active
-+device configuration, is stored in the sub-device itself as part of
-+the :c:type:`v4l2_subdev` structure, while the core associates a try state to
-+each open file handle, to store the try configuration related to that file
-+handle.
++	return which == V4L2_SUBDEV_FORMAT_TRY ?
++			     subdev_fh->state :
++			     v4l2_subdev_get_active_state(sd);
++}
 +
-+Sub-device drivers can opt-in and use state to manage their active configuration
-+by initializing the subdevice state with a call to v4l2_subdev_init_finalize()
-+before registering the sub-device. They must also call v4l2_subdev_cleanup()
-+to release all the allocated resources before unregistering the sub-device.
-+The core automatically allocates and initializes a state for each open file
-+handle to store the try configurations and frees it when closing the file
-+handle.
-+
-+V4L2 sub-device operations that use both the :ref:`ACTIVE and TRY formats
-+<v4l2-subdev-format-whence>` receive the correct state to operate on through
-+the 'state' parameter. The state must be locked and unlocked by the
-+caller by calling :c:func:`v4l2_subdev_lock_state()` and
-+:c:func:`v4l2_subdev_unlock_state()`. The caller can do so by calling the subdev
-+operation through the :c:func:`v4l2_subdev_call_state_active()` macro.
-+
-+Operations that do not receive a state parameter implicitly operate on the
-+subdevice active state, which drivers can exclusively access by
-+calling :c:func:`v4l2_subdev_lock_and_get_active_state()`. The sub-device active
-+state must equally be released by calling :c:func:`v4l2_subdev_unlock_state()`.
-+
-+Drivers must never manually access the state stored in the :c:type:`v4l2_subdev`
-+or in the file handle without going through the designated helpers.
-+
-+While the V4L2 core passes the correct try or active state to the subdevice
-+operations, many existing device drivers pass a NULL state when calling
-+operations with :c:func:`v4l2_subdev_call()`. This legacy construct causes
-+issues with subdevice drivers that let the V4L2 core manage the active state,
-+as they expect to receive the appropriate state as a parameter. To help the
-+conversion of subdevice drivers to a managed active state without having to
-+convert all callers at the same time, an additional wrapper layer has been
-+added to v4l2_subdev_call(), which handles the NULL case by geting and locking
-+the callee's active state with :c:func:`v4l2_subdev_lock_and_get_active_state()`,
-+and unlocking the state after the call.
-+
-+The whole subdev state is in reality split into three parts: the
-+v4l2_subdev_state, subdev controls and subdev driver's internal state. In the
-+future these parts should be combined into a single state. For the time being
-+we need a way to handle the locking for these parts. This can be accomplished
-+by sharing a lock. The v4l2_ctrl_handler already supports this via its 'lock'
-+pointer and the same model is used with states. The driver can do the following
-+before calling v4l2_subdev_init_finalize():
-+
-+.. code-block:: c
-+
-+	sd->ctrl_handler->lock = &priv->mutex;
-+	sd->state_lock = &priv->mutex;
-+
-+This shares the driver's private mutex between the controls and the states.
-+
- V4L2 sub-device functions and data structures
- ---------------------------------------------
+ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ {
+ 	struct video_device *vdev = video_devdata(file);
+@@ -351,8 +389,11 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ 	struct v4l2_fh *vfh = file->private_data;
+ 	struct v4l2_subdev_fh *subdev_fh = to_v4l2_subdev_fh(vfh);
+ 	bool ro_subdev = test_bit(V4L2_FL_SUBDEV_RO_DEVNODE, &vdev->flags);
++	struct v4l2_subdev_state *state;
+ 	int rval;
  
++	state = subdev_ioctl_get_state(sd, subdev_fh, cmd, arg);
++
+ 	switch (cmd) {
+ 	case VIDIOC_SUBDEV_QUERYCAP: {
+ 		struct v4l2_subdev_capability *cap = arg;
+@@ -475,7 +516,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ 
+ 		memset(format->reserved, 0, sizeof(format->reserved));
+ 		memset(format->format.reserved, 0, sizeof(format->format.reserved));
+-		return v4l2_subdev_call(sd, pad, get_fmt, subdev_fh->state, format);
++		return v4l2_subdev_call(sd, pad, get_fmt, state, format);
+ 	}
+ 
+ 	case VIDIOC_SUBDEV_S_FMT: {
+@@ -486,7 +527,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ 
+ 		memset(format->reserved, 0, sizeof(format->reserved));
+ 		memset(format->format.reserved, 0, sizeof(format->format.reserved));
+-		return v4l2_subdev_call(sd, pad, set_fmt, subdev_fh->state, format);
++		return v4l2_subdev_call(sd, pad, set_fmt, state, format);
+ 	}
+ 
+ 	case VIDIOC_SUBDEV_G_CROP: {
+@@ -500,7 +541,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ 		sel.target = V4L2_SEL_TGT_CROP;
+ 
+ 		rval = v4l2_subdev_call(
+-			sd, pad, get_selection, subdev_fh->state, &sel);
++			sd, pad, get_selection, state, &sel);
+ 
+ 		crop->rect = sel.r;
+ 
+@@ -522,7 +563,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ 		sel.r = crop->rect;
+ 
+ 		rval = v4l2_subdev_call(
+-			sd, pad, set_selection, subdev_fh->state, &sel);
++			sd, pad, set_selection, state, &sel);
+ 
+ 		crop->rect = sel.r;
+ 
+@@ -533,7 +574,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ 		struct v4l2_subdev_mbus_code_enum *code = arg;
+ 
+ 		memset(code->reserved, 0, sizeof(code->reserved));
+-		return v4l2_subdev_call(sd, pad, enum_mbus_code, subdev_fh->state,
++		return v4l2_subdev_call(sd, pad, enum_mbus_code, state,
+ 					code);
+ 	}
+ 
+@@ -541,7 +582,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ 		struct v4l2_subdev_frame_size_enum *fse = arg;
+ 
+ 		memset(fse->reserved, 0, sizeof(fse->reserved));
+-		return v4l2_subdev_call(sd, pad, enum_frame_size, subdev_fh->state,
++		return v4l2_subdev_call(sd, pad, enum_frame_size, state,
+ 					fse);
+ 	}
+ 
+@@ -566,7 +607,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ 		struct v4l2_subdev_frame_interval_enum *fie = arg;
+ 
+ 		memset(fie->reserved, 0, sizeof(fie->reserved));
+-		return v4l2_subdev_call(sd, pad, enum_frame_interval, subdev_fh->state,
++		return v4l2_subdev_call(sd, pad, enum_frame_interval, state,
+ 					fie);
+ 	}
+ 
+@@ -575,7 +616,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ 
+ 		memset(sel->reserved, 0, sizeof(sel->reserved));
+ 		return v4l2_subdev_call(
+-			sd, pad, get_selection, subdev_fh->state, sel);
++			sd, pad, get_selection, state, sel);
+ 	}
+ 
+ 	case VIDIOC_SUBDEV_S_SELECTION: {
+@@ -586,7 +627,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg)
+ 
+ 		memset(sel->reserved, 0, sizeof(sel->reserved));
+ 		return v4l2_subdev_call(
+-			sd, pad, set_selection, subdev_fh->state, sel);
++			sd, pad, set_selection, state, sel);
+ 	}
+ 
+ 	case VIDIOC_G_EDID: {
+@@ -820,10 +861,13 @@ v4l2_subdev_link_validate_get_format(struct media_pad *pad,
+ 	if (is_media_entity_v4l2_subdev(pad->entity)) {
+ 		struct v4l2_subdev *sd =
+ 			media_entity_to_v4l2_subdev(pad->entity);
++		struct v4l2_subdev_state *state;
++
++		state = v4l2_subdev_get_active_state(sd);
+ 
+ 		fmt->which = V4L2_SUBDEV_FORMAT_ACTIVE;
+ 		fmt->pad = pad->index;
+-		return v4l2_subdev_call(sd, pad, get_fmt, NULL, fmt);
++		return v4l2_subdev_call(sd, pad, get_fmt, state, fmt);
+ 	}
+ 
+ 	WARN(pad->entity->function != MEDIA_ENT_F_IO_V4L,
 -- 
 2.25.1
 
