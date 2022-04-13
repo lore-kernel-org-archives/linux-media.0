@@ -2,179 +2,205 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A157BC433FE
-	for <linux-media@archiver.kernel.org>; Wed, 13 Apr 2022 07:57:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C83A5C433FE
+	for <linux-media@archiver.kernel.org>; Wed, 13 Apr 2022 08:27:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233629AbiDMIAI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 13 Apr 2022 04:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52572 "EHLO
+        id S231335AbiDMI3o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 13 Apr 2022 04:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233622AbiDMIAG (ORCPT
+        with ESMTP id S229958AbiDMI3n (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:00:06 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D3F4D9C8;
-        Wed, 13 Apr 2022 00:57:44 -0700 (PDT)
+        Wed, 13 Apr 2022 04:29:43 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84859344DE;
+        Wed, 13 Apr 2022 01:27:22 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id D10231F44E9A
+        with ESMTPSA id A44341F44F0E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649836663;
-        bh=mzWuX58y4C68CcEn/a3a+EywObIenobNezPNhsxckgU=;
+        s=mail; t=1649838441;
+        bh=1AfnyPhY9aZhl5MD9PjUjLmG1rmk6J0oAYjA4S+AzeE=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kmXqsesSLvWFXzGLTRqiWYSvGN5LlWNAB2FD23E8+ZrbGAW+o2zP1LzJNsSBPxhjg
-         nZD50ua/mXxtL5FVp3MUxGXDKntSSHgUHVzv+8hZN9VsiSkBuW+aLxP3HcN7+qrpsp
-         ZA4/7d8gH9NrJ4NCZsIMElGupIRW+KNTFSxc6sD4dSLglT75G1iWWAb/WDPiw/unGt
-         Ptq5TZN3NIP95ftv0KTiPn+ZlxAYI1yBuNReJsIH39gIkOEQzmacvZq8/RGRGIZWUs
-         YQ4tBIFxaakTc1bVA8nSmLlZFdlos8RfWTvoDvMg4WYfAXtZe7G1FEb2t+VnQa5OsO
-         XD08QtZM8nlfg==
-Message-ID: <1d9a6259-b1f6-5c4f-7e91-0529b77b6a44@collabora.com>
-Date:   Wed, 13 Apr 2022 09:57:39 +0200
+        b=F3QNXS64YUZpcdCUUIACB3y05+PSICtvWt5z3iXD+vnZ61arDN1ZoTHsaPMJf7WhC
+         Enlp0rde9tmn/BTIf3m6Wz10iWUZyGW9Kd+ncw8o0cNS/azixzp7kxg7/2E0TWkQJ5
+         3sJV7qO5bRbPXqG1G3Z378kJqCWk1wjoIpuFo4GeKFRMPtEL6/Ue+0PgaH2AHgc2u0
+         8MQcpAFB+xpYYm/yNZwyII6HxIFXtRoXpvqNTOCukooSqxlrHKbBUw4D6oRYkHtqwt
+         7vSVAIORhb2r0LjG0zPU0pfgOvf877M7pY4OIjY6Cuj/awBPtySiKEEQEEllU2B9EO
+         N+I4LehjFqd/w==
+Message-ID: <0193f6b6-0019-3080-2615-02225eb4bf3b@collabora.com>
+Date:   Wed, 13 Apr 2022 10:27:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v8, 00/15] media: mtk-vcodec: support for M8192 decoder
+Subject: Re: [PATCH v14 1/6] soc: mediatek: mutex: add common interface to
+ accommodate multiple modules operationg MUTEX
 Content-Language: en-US
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+To:     Moudy Ho <moudy.ho@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-mediatek@lists.infradead.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        allen-kh.cheng@mediatek.com, xiandong.wang@mediatek.com,
+        randy.wu@mediatek.com, jason-jh.lin@mediatek.com,
+        roy-cw.yeh@mediatek.com, river.cheng@mediatek.com,
+        srv_heupstream@mediatek.com,
         Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220331024801.29229-1-yunfei.dong@mediatek.com>
- <fbfe4572296a133492310f13e3f41db56218fc17.camel@ndufresne.ca>
- <0f385e6e2d0687c3e6de12a576d1617af9504cee.camel@mediatek.com>
- <c5dc9f759054418082849233639f727e39329550.camel@ndufresne.ca>
- <cdcaf769ee162658e3bbb0c30bb8c4cbb168c6d6.camel@mediatek.com>
+References: <20220411072403.24016-1-moudy.ho@mediatek.com>
+ <20220411072403.24016-2-moudy.ho@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <cdcaf769ee162658e3bbb0c30bb8c4cbb168c6d6.camel@mediatek.com>
+In-Reply-To: <20220411072403.24016-2-moudy.ho@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Il 13/04/22 09:03, allen-kh.cheng ha scritto:
-> Hi Nicolas,
+Il 11/04/22 09:23, Moudy Ho ha scritto:
+> In order to allow multiple modules to operate MUTEX hardware through
+> a common interfrace, a flexible index "mtk_mutex_table_index" needs to
+> be added to replace original component ID so that like DDP and MDP
+> can add their own MUTEX table settings independently.
 > 
-> On Tue, 2022-04-12 at 10:48 -0400, Nicolas Dufresne wrote:
->> Le lundi 11 avril 2022 à 11:41 +0800, yunfei.dong@mediatek.com a
->> écrit :
->>> Hi Nicolas,
->>>
->>> On Thu, 2022-03-31 at 16:48 -0400, Nicolas Dufresne wrote:
->>>> Hi Yunfei,
->>>>
->>>> thanks for the update, I should be testing this really soon.
->>>>
->>>> Le jeudi 31 mars 2022 à 10:47 +0800, Yunfei Dong a écrit :
->>>>> This series adds support for mt8192 h264/vp8/vp9 decoder
->>>>> drivers.
->>>>> Firstly, refactor
->>>>> power/clock/interrupt interfaces for mt8192 is lat and core
->>>>> architecture.
->>>>
->>>> Similarly to MT8173 and MT8183, a shared* firmware is needed for
->>>> this
->>>> CODEC to
->>>> work (scp.img). I looked into linux-firmware[1] it has not been
->>>> added
->>>> for mt8192
->>>> yet. As your patches are getting close to be ready, it would be
->>>> important to
->>>> look into this so the patchset does not get blocked due to that.
->>>>
->>>> best regards,
->>>> Nicolas
->>>>
->>>> [1]
->>>>
-> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/mediatek__;!!CTRNKA9wMg0ARbw!zy4N6JDroSXtumXXa7MuxAgYAPAink8uyW-978vpWct8S3vOjBqXirFE8uTEHopHCovbSl0FNP9LPgWCEBrZfMIcvQ$
->>>>   
->>>> * Shared at least between MDP3 and MTK VCODEC from my knowledge
->>>>
->>>
->>> Thanks for your remind.
->>>
->>> I have already sent mt8192 scp.img to github.
->>>
->>>
-> https://urldefense.com/v3/__https://github.com/yunfeidongmediatek/linux_fw_scp_8192/commit/3ac2fc85bc7dfcebdb92b5b5808b0268cdfb772d__;!!CTRNKA9wMg0ARbw!zy4N6JDroSXtumXXa7MuxAgYAPAink8uyW-978vpWct8S3vOjBqXirFE8uTEHopHCovbSl0FNP9LPgWCEBpf9F_nWA$
->>>   
->>>
->>> Waiting for to be merged.
->>
->> On boards I have, the firmware is loaded from /lib/firmware/scp.img,
->> but with
->> this submission it will be in lib/firmware/mediatek/mt8192/scp.img .
->> I haven't
->> found anything around:
->>
->>   drivers/remoteproc/mtk_scp.c:812:       char *fw_name = "scp.img";
->>
->> That would use the platform path. This seems like a problem to me,
->> the
->> upstreaming of the firmware isn't being aligned with the were the
->> firmware is
->> picked by the upstream driver. Correct me if I got this wrong, but
->> I'd really
->> like to clarify this.
->>
->> Nicolas
->>
+> In addition, 4 generic interface "mtk_mutex_set_mod", "mtk_mutex_set_sof",
+> "mtk_mutex_clear_mod" and "mtk_mutex_clear_sof" have been added, which is
+> expected to replace the "mtk_mutex_add_comp" and "mtk_mutex_remove_comp"
+> pair originally dedicated to DDP in the future.
 > 
-> I am not sure why it's accepted the fw path of scp is
-> /lib/firmware/scp.img in mt8173/8183 but we upload scp.ing in
-> /lib/firmware/mediatek/mt8173(mt8183)/scp.img to
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> Change-Id: I6a2ab74fccf36248165ce4a6b268d82a1177afc9
+> ---
+>   drivers/soc/mediatek/mtk-mutex.c       | 89 ++++++++++++++++++++++++++
+>   include/linux/soc/mediatek/mtk-mutex.h | 21 ++++++
+>   2 files changed, 110 insertions(+)
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/mediatek
-> 
-> Currently, the scp driver will load firmware in /lib/firmware/scp.img.
-> that means there is only one firmware for a specific platform.
-> I think we can send a PATCH to make firmware name of scp being more
-> flexible.
-> 
-> Maybe get firmware name from dts. e.g.,
-> &scp {
-> 	status = "okay";
-> 	firmware-name = "mediatek/mt81xx/scp.img";
-> };
-> 
-> Do you think it feasible?
-> If you have any concerns, please let us know.
-> 
-> Thanks,
-> Allen
-> 
+> diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+> index aaf8fc1abb43..48a04dce50d5 100644
+> --- a/drivers/soc/mediatek/mtk-mutex.c
+> +++ b/drivers/soc/mediatek/mtk-mutex.c
+> @@ -156,6 +156,8 @@ struct mtk_mutex_data {
+>   	const unsigned int *mutex_sof;
+>   	const unsigned int mutex_mod_reg;
+>   	const unsigned int mutex_sof_reg;
+> +	const unsigned int *mutex_table_mod;
+> +	const unsigned int *mutex_table_sof;
+>   	const bool no_clk;
+>   };
+>   
+> @@ -445,6 +447,54 @@ void mtk_mutex_add_comp(struct mtk_mutex *mutex,
+>   }
+>   EXPORT_SYMBOL_GPL(mtk_mutex_add_comp);
+>   
 
-Hello Allen,
+Hello Moudy,
 
-what you proposed is exactly what has been done for other platforms because of
-both per-device firmware differences (different signatures) and per-SoC (different
-firmware entirely), found on TI K3, iMX DSP, Qualcomm MSS/DSP remoteproc and
-others.
+Some critical things, and one cleanup.
 
-Of course this is an accepted way to resolve this situation: please go on!
+First of all, the commit title is very long, and it also contains a typo.
+I would go for something like
+"soc: mediatek: mutex: Add common interface for modules setting".
 
-Cheers,
+Also, please remove your internal "Change-Id" tag, this is meaningless on
+upstream, hence not applicable here.
+
+Now for the cleanup: I have an idea to make this a bit shorter (and please
+feel free to change function names with something more appropriate, if needed):
+
+static int mtk_mutex_write_mod(struct mtk_mutex *mutex,
+				enum mtk_mutex_table_index idx,
+				bool clear)
+{
+
+
+> +{
+> +	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
+> +						 mutex[mutex->id]);
+> +	unsigned int reg;
+> +	unsigned int offset;
+> +
+> +	WARN_ON(&mtx->mutex[mutex->id] != mutex);
+> +
+> +	if (idx < MUTEX_TABLE_IDX_MDP_RDMA0 ||
+> +	    idx >= MUTEX_TABLE_IDX_MAX) {
+> +		dev_err(mtx->dev, "Not supported MOD table index : %d", idx);
+> +		return;
+
+		return -EINVAL;
+
+> +	}
+> +
+> +	offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg,
+> +				    mutex->id);
+> +
+> +	reg = readl_relaxed(mtx->regs + offset);
+
+if (clear)
+	reg &= ~BIT(mtx->data->mutex_table_mod[idx])
+else
+	reg |= BIT(mtx->data->mutex_table_mod[idx])
+
+> +	reg |= 1 << mtx->data->mutex_table_mod[idx];
+> +	writel_relaxed(reg, mtx->regs + offset);
+> +}
+
+int mtk_mutex_set_mod(struct mtk_mutex *mutex,
+		      enum mtk_mutex_table_index idx)
+{
+	return mtk_mutex_write_mod(mutex, idx, false);
+}
+
+int mtk_mutex_clear_mod(struct mtk_mutex *mutex,
+			enum mtk_mutex_table_index idx)
+{
+	return mtk_mutex_clear_mod(mutex, idx, true);
+}
+
+> +EXPORT_SYMBOL_GPL(mtk_mutex_set_mod);
+> +
+> +void mtk_mutex_set_sof(struct mtk_mutex *mutex,
+> +		       enum mtk_mutex_table_index idx)
+> +{
+> +	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
+> +						 mutex[mutex->id]);
+> +	unsigned int sof_id;
+> +
+> +	WARN_ON(&mtx->mutex[mutex->id] != mutex);
+> +
+> +	if (idx < MUTEX_TABLE_IDX_MDP_RDMA0 ||
+> +	    idx >= MUTEX_TABLE_IDX_MAX) {
+> +		dev_err(mtx->dev, "Not supported SOF table index : %d", idx);
+> +		return;
+> +	}
+> +
+> +	sof_id = mtx->data->mutex_table_sof[idx];
+
+... same changes here, except we'd have something like
+
+if (clear)
+	val = MUTEX_SOF_SINGLE_MODE;
+else
+	val = mtx->data->mutex_sof[sof_id];
+
+	writel_relaxed(val, ...etc)
+
+but feel free to give me valid reasons to not use this approach.
+
+In any case, the code looks ok to me.
+
+
+Regards,
 Angelo
-
