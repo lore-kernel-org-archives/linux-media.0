@@ -2,71 +2,109 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38C07C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 13 Apr 2022 01:24:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49392C433FE
+	for <linux-media@archiver.kernel.org>; Wed, 13 Apr 2022 02:37:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbiDMB1M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Apr 2022 21:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
+        id S231753AbiDMCjy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Apr 2022 22:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbiDMB1L (ORCPT
+        with ESMTP id S229813AbiDMCjx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Apr 2022 21:27:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392962DD67;
-        Tue, 12 Apr 2022 18:24:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB857618D6;
-        Wed, 13 Apr 2022 01:24:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3749DC385A1;
-        Wed, 13 Apr 2022 01:24:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649813091;
-        bh=WhlDFinBh4vmtooro06L+WOsfE9MytUf3BRTPx/YISc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=uNztEsZTcUVuzSlUNai7Vi9d9dfVLMG5muMIhL+F+6Qe1mGlDwUa1WRbH6sBDzUHX
-         p4WtveHdsRnl9GPcpG0fOf8Ddga60vrel3ZwKUz1KbtJz0fAQPYmPnE+1R91aXmYaO
-         x+7F5AE1Ty6axiVpIT5KzSDyMNYF0W92Mqlp4QQh/iTj65HjG6W4nr0HfBuLKLA56i
-         HS5i4fIaicPQRc/cVz755+b5bC1FRlRyRCdlk1sKtqPhDM7xHVY0UTQxwPQdV0wGrn
-         o1ODgnAJvSjtyBswyUE3qDbyqaHENWB14AYItSb/UDAbq/c1NLnY5OZFiwidMfZVlL
-         ryoXW5IOVRlGQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1B1DEE6D402;
-        Wed, 13 Apr 2022 01:24:51 +0000 (UTC)
-Subject: Re: [GIT PULL for v5.18-rc2] media fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220411233714.448cdc01@coco.lan>
-References: <20220411233714.448cdc01@coco.lan>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220411233714.448cdc01@coco.lan>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.18-2
-X-PR-Tracked-Commit-Id: 3ae87d2f25c0e998da2721ce332e2b80d3d53c39
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7083b89ef3e9a6ec362585026f81cb165c51b78a
-Message-Id: <164981309110.9925.24954998548446455.pr-tracker-bot@kernel.org>
-Date:   Wed, 13 Apr 2022 01:24:51 +0000
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Tue, 12 Apr 2022 22:39:53 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AA85FCB;
+        Tue, 12 Apr 2022 19:37:33 -0700 (PDT)
+X-UUID: b1cc66f9661c4a38b6abc7ea4038c5bd-20220413
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:045e66ee-4df1-4318-b48f-f754670b460f,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:75
+X-CID-INFO: VERSION:1.1.4,REQID:045e66ee-4df1-4318-b48f-f754670b460f,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:75
+X-CID-META: VersionHash:faefae9,CLOUDID:b4b7f5a8-d103-4e36-82b9-b0e86991b3df,C
+        OID:460889320a0c,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
+        le:nil,QS:0,BEC:nil
+X-UUID: b1cc66f9661c4a38b6abc7ea4038c5bd-20220413
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 772270675; Wed, 13 Apr 2022 10:37:26 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 13 Apr 2022 10:37:24 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 13 Apr 2022 10:37:21 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2, 0/3] add h264 decoder driver for mt8186
+Date:   Wed, 13 Apr 2022 10:37:17 +0800
+Message-ID: <20220413023720.29297-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pull request you sent on Mon, 11 Apr 2022 23:37:14 +0200:
+Firstly, add mt8186 compatible and private data, then add document for
+compatible "mediatek,mt8186-vcodec-dec". For mt8186 is single core
+architecture, need to add new interface for h264 hardware decoder.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.18-2
+Patche 1 add mt8186 compatible and private data.
+Patche 2 add mt8186 compatible document.
+Patche 3 add h264 single core driver.
+---
+This patch depends on "support for MT8192 decoder"[1]
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7083b89ef3e9a6ec362585026f81cb165c51b78a
+[1]  https://patchwork.kernel.org/project/linux-mediatek/cover/20220408120240.29571-1-yunfei.dong@mediatek.com/
+---
+changed with v1:
+- rebase driver to the latest media_stage.
+---
+Yunfei Dong (3):
+  dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings for
+    mt8186
+  media: mediatek: vcodec: Support MT8186
+  media: mediatek: vcodec: add h264 decoder driver for mt8186
 
-Thank you!
+ .../media/mediatek,vcodec-subdev-decoder.yaml |   4 +-
+ .../platform/mediatek/vcodec/mtk_vcodec_dec.h |   1 +
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   4 +
+ .../vcodec/mtk_vcodec_dec_stateless.c         |  19 ++
+ .../vcodec/vdec/vdec_h264_req_multi_if.c      | 177 +++++++++++++++++-
+ 5 files changed, 203 insertions(+), 2 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.18.0
+
