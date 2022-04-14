@@ -2,112 +2,121 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C765FC433F5
-	for <linux-media@archiver.kernel.org>; Thu, 14 Apr 2022 15:08:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51F6FC433EF
+	for <linux-media@archiver.kernel.org>; Thu, 14 Apr 2022 15:08:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243479AbiDNPKW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Apr 2022 11:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
+        id S243409AbiDNPKa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Apr 2022 11:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350857AbiDNO26 (ORCPT
+        with ESMTP id S1353053AbiDNOfC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:28:58 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2F2D3727;
-        Thu, 14 Apr 2022 07:16:19 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 24DD41B00120;
-        Thu, 14 Apr 2022 17:16:17 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1649945777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pvulFv7jAgH4apEjrCvylHe5kRcBA3as2o6GU9uqPn4=;
-        b=a2f9PdJHszxEb3VuwK3r4xY1QNcLx4NsfqPLfTofNbX2OLqO/PEYfegU1AmzS66gSfr/uw
-        BTxhbDq/NnlO12WikoYy2aCY46eeAPtMAtT+YGoysucdkDzKMiNQLzL7o4auL3ZQnwz3kv
-        ZGgFKgUxY2QDs7sUphwDE+k8zA1H/1WnL6xYkMZkEjiDrp8qdsd1Y+hXrYmSC4xAmM+5nU
-        z4i0kVFr6SmJfNMHMh8vYiW05aM9IMhwo3SDN/LcXWFisUX4KKcJ4QmsNIdrdCi0lL7RAo
-        Boa35DkenTX9hAg7T14UPQ6Yp7H2BeGlTC14riGabM3DkMYXXANLCDcnC9cRNQ==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id A5599634C91;
-        Thu, 14 Apr 2022 17:16:16 +0300 (EEST)
-Date:   Thu, 14 Apr 2022 17:16:16 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, robert.foss@linaro.org, hfink@snap.com,
-        jgrahsl@snap.com, dmitry.baryshkov@linaro.org,
-        vladimir.zapolskiy@linaro.org
-Subject: Re: [PATCH v3 2/2] media: i2c: imx412: Add bulk regulator support
-Message-ID: <YlgssKI+WVeRTda6@valkosipuli.retiisi.eu>
-References: <20220414124505.1329295-1-bryan.odonoghue@linaro.org>
- <20220414124505.1329295-3-bryan.odonoghue@linaro.org>
- <Ylga7FVsbK6znD/+@valkosipuli.retiisi.eu>
- <39cae749-67ef-13d7-2648-01c6e9603887@linaro.org>
- <Ylgn8u5Au0EqUkLj@valkosipuli.retiisi.eu>
- <831e3857-9ee7-c760-ef2e-3b235b57b907@linaro.org>
+        Thu, 14 Apr 2022 10:35:02 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61536CF4A7;
+        Thu, 14 Apr 2022 07:26:13 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.90,259,1643641200"; 
+   d="scan'208";a="116894216"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 14 Apr 2022 23:26:12 +0900
+Received: from localhost.localdomain (unknown [10.226.92.190])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5BE2D42B069E;
+        Thu, 14 Apr 2022 23:26:08 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v7 0/3] Add support for RZ/G2L VSPD
+Date:   Thu, 14 Apr 2022 15:26:02 +0100
+Message-Id: <20220414142605.26235-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <831e3857-9ee7-c760-ef2e-3b235b57b907@linaro.org>
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1649945777; a=rsa-sha256;
-        cv=none;
-        b=QCKPxYhwMDFvENaQq1z+w/MSTvf461HGlsdiPQEorRW9EVC6RN3n8pXCFFq86aXMVl69+P
-        CMlvVfUjnC1TCW2u2hq4anJpzc3bDG9KvoEi4wrad8gW/V+AZYbJUPIrBlCYWxJGrAqfdy
-        2xZ3sqV47tousYJotMq0fvl66FdxOc4NQooTeu9BiH42VTUykgtR/jgF6S0cHFc0VX1rA3
-        EUFFuKVw5vpiP5xwcFO6AXbhM3pNJz9P9MaOPtVdmmDdlfx6KYm5d1S5KrOKXEwFoG0KNI
-        KAL2UEHMvu8kN6x6A7JZR8YUk+R9oBzMCFB0XUFoXc6LW1Ma3eGAxaPiE/L7hg==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1649945777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pvulFv7jAgH4apEjrCvylHe5kRcBA3as2o6GU9uqPn4=;
-        b=aLc/vPeElKL6lL5HeCEPGzKKI6PEi4/FFxqGtB1tTlUjWfpvxzZ4E2BKxBu9x5jRtm6N9b
-        qDxTQ/tDfNzX+b/bXPhPcBfh+z8bfvYbj5G6QXuUlFhtx2O6uoGplKDzM3yt0kQRng10iP
-        2S/32mWZTMI30SG4gHOEwEpdBdK34YWusjzU5GIQTpHUsDWoE+HCOwuO4CYhUjNatf1jca
-        8zkWUu1Xx+I2jSSj3KSo9UVC+SwbARCgipTHwAKJo2+ax2BBn8N6v/SnPAL1UL1e3AGFta
-        El6iRsA5i4ysI1oBfCaD4DtgxJb38yHSYMBVfZEPFiWhZmyHoWcWvrLZfmbiBA==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 03:04:10PM +0100, Bryan O'Donoghue wrote:
-> On 14/04/2022 14:56, Sakari Ailus wrote:
-> > On Thu, Apr 14, 2022 at 02:44:00PM +0100, Bryan O'Donoghue wrote:
-> > > On 14/04/2022 14:00, Sakari Ailus wrote:
-> > > > >    	ret = clk_prepare_enable(imx412->inclk);
-> > > > >    	if (ret) {
-> > > > > +		regulator_bulk_disable(imx412->num_supplies,
-> > > > > +				       imx412->supplies);
-> > > > As the function already has an error handling section using labels, this
-> > > > should go there as well.
-> > > > 
-> > > Are you asking to move regulator_bulk_disable() to error_reset ?
-> > 
-> > No. You'll need another label.
-> > 
-> 
-> Hmm.
-> 
-> I think another label is not required, have a look at V4.
+The RZ/G2L VSPD provides a single VSPD instance. It has the following
+sub modules MAU, CTU, RPF, DPR, LUT, BRS, WPF and LIF.
 
-Ah, yes, indeed. There's just a single location where this will be needed.
+The VSPD block on RZ/G2L does not have a version register, so added a
+new compatible string "renesas,rzg2l-vsp2" with a data pointer containing
+the info structure. Also the reset line is shared with the DU module.
 
-On another note, gpiod_set_value_cansleep() seems to enable reset in
-resume and disable it in suspend. I.e. the polarity is wrong.
+v6->v7:
+ * Added Rb tag from Kieran for patch#3
+ * Added a quirk to handle LIF0 buffer attribute related
+   changes for V3M and G2L.
+ * Removed the macro for VSP HW version
+v5->v6:
+ * Rebased to media_staging and updated commit header
+ * Removed LCDC reference clock description from bindings
+ * Changed the clock name from du.0->aclk from bindings
+ * Added Rb tag from Laurent for reset patch
+ * Added forward declaration for struct reset_control
+ * Updated vsp1_device_get() with changes suggested by Laurent
+ * Updated error message for reset_control_get form ctrl->control.
+ * Removed the extra tab from rzg2l_vsp2_device_info
+ * Changed the function vsp1_lookup->vsp1_lookup_info and
+   all info match related code moved here.
+ * Add VI6_IP_VERSION_VSP and VI6_IP_VERSION_VSP_SW macros to
+   distinguish HW & SW IP_VSP_Version.
+ * Used 0x80 for RZG2L VSPD model and SoC identification
+ * Updated Switch() for LIF0 buffer attribute handling.
+v4->v5:
+ * Fixed typo VI6_IP_VERSION_MODEL_MASK->VI6_IP_VERSION_MASK
+ * To be consistent with other SoC's, introduced VI6_IP_VERSION_SOC_G2L
+   for SoC identification for RZ/G2L SoC's.
+v3->v4:
+ * Restored error check for pm_runtime_resume_and_get and calls
+   assert() in case of failure.
+ * Added Rb tag from Geert
+ * Add switch() for LIF0 buffer attribute handling for RZ/G2L and V3M SoC's
+v2->v3:
+ * Added Rb tags from Krzysztof and Philipp
+ * If reset_control_deassert() failed, return ret directly.
+ * Fixed version comparison in vsp1_lookup()
+v1->v2:
+ * Used reference counted reset handle to perform deassert/assert
+ * Changed the compatible from vsp2-rzg2l->rzg2l-vsp2
+ * Added standalone device info for rzg2l-vsp2.
+ * Added vsp1_lookup helper function.
+ * Updated comments for LIF0 buffer attribute register
+ * Used last ID for rzg2l-vsp2.
+RFC->v1:
+ * Added reset support as separate patch
+ * Moved rstc just after the bus_master field in struct vsp1_device
+ * Used data pointer containing info structure to retrieve version information
+ * Updated commit description
+ * Changed compatible from vsp2-r9a07g044->vsp2-rzg2l
+ * Defined the clocks
+ * Clock max Items is based on SoC Compatible string
+
+RFC:
+ * https://patchwork.kernel.org/project/linux-renesas-soc/patch/20220112174612.10773-21-biju.das.jz@bp.renesas.com/
+ * https://patchwork.kernel.org/project/linux-renesas-soc/patch/20220112174612.10773-20-biju.das.jz@bp.renesas.com/
+
+Biju Das (3):
+  media: dt-bindings: media: renesas,vsp1: Document RZ/{G2L,V2L} VSPD
+    bindings
+  media: renesas: vsp1: Add support to deassert/assert reset line
+  media: renesas: vsp1: Add support for RZ/G2L VSPD
+
+ .../bindings/media/renesas,vsp1.yaml          | 52 +++++++++---
+ drivers/media/platform/renesas/vsp1/vsp1.h    |  5 ++
+ .../media/platform/renesas/vsp1/vsp1_drv.c    | 83 +++++++++++++++----
+ .../media/platform/renesas/vsp1/vsp1_lif.c    | 13 +--
+ .../media/platform/renesas/vsp1/vsp1_lif.h    |  1 +
+ .../media/platform/renesas/vsp1/vsp1_regs.h   |  7 ++
+ 6 files changed, 126 insertions(+), 35 deletions(-)
 
 -- 
-Sakari Ailus
+2.25.1
+
