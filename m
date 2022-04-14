@@ -2,121 +2,96 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51F6FC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 14 Apr 2022 15:08:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7801DC433FE
+	for <linux-media@archiver.kernel.org>; Thu, 14 Apr 2022 15:08:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243409AbiDNPKa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Apr 2022 11:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S1343812AbiDNPKe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Apr 2022 11:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353053AbiDNOfC (ORCPT
+        with ESMTP id S1353742AbiDNOzA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:35:02 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61536CF4A7;
-        Thu, 14 Apr 2022 07:26:13 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.90,259,1643641200"; 
-   d="scan'208";a="116894216"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 14 Apr 2022 23:26:12 +0900
-Received: from localhost.localdomain (unknown [10.226.92.190])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5BE2D42B069E;
-        Thu, 14 Apr 2022 23:26:08 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v7 0/3] Add support for RZ/G2L VSPD
-Date:   Thu, 14 Apr 2022 15:26:02 +0100
-Message-Id: <20220414142605.26235-1-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 14 Apr 2022 10:55:00 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A90DAFEA;
+        Thu, 14 Apr 2022 07:42:46 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (153.162-64-87.adsl-dyn.isp.belgacom.be [87.64.162.153])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7EC3E59D;
+        Thu, 14 Apr 2022 16:42:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1649947364;
+        bh=2HTJtgZFHz7qhqQGcwPHayxgTCCdTNEwjpY0dhNY0pI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rM1/iM5zfbUfnobr4zSL+h+LIC5dzgitSmYmASipbWuwb7XOsmQxNq7dIRjPfckZI
+         ArZA6EHBM/4bVbY3UtKoEEARxuwytrfgwY1dUur+mO0cAkOGULszzzYTAEyYPqhFLP
+         uWam46M1ga5Hs4jFlzmANJjv50RoW54Cv9NchA5k=
+Date:   Thu, 14 Apr 2022 17:42:43 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Pratyush Yadav <p.yadav@ti.com>
+Subject: Re: [PATCH 2/6] media: cadence: cdns-csi2tx: Use mipi-csi2.h
+Message-ID: <Ylgy45ND2r+L41f0@pendragon.ideasonboard.com>
+References: <20220123160857.24161-1-laurent.pinchart+renesas@ideasonboard.com>
+ <20220123160857.24161-3-laurent.pinchart+renesas@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220123160857.24161-3-laurent.pinchart+renesas@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The RZ/G2L VSPD provides a single VSPD instance. It has the following
-sub modules MAU, CTU, RPF, DPR, LUT, BRS, WPF and LIF.
+Hello,
 
-The VSPD block on RZ/G2L does not have a version register, so added a
-new compatible string "renesas,rzg2l-vsp2" with a data pointer containing
-the info structure. Also the reset line is shared with the DU module.
+Ping on this patch in case someone wants to review it. I'll send a pull
+request shortly for the part of this series that hasn't been merged yet,
+and this is the last one missing a reviewed-by tag.
 
-v6->v7:
- * Added Rb tag from Kieran for patch#3
- * Added a quirk to handle LIF0 buffer attribute related
-   changes for V3M and G2L.
- * Removed the macro for VSP HW version
-v5->v6:
- * Rebased to media_staging and updated commit header
- * Removed LCDC reference clock description from bindings
- * Changed the clock name from du.0->aclk from bindings
- * Added Rb tag from Laurent for reset patch
- * Added forward declaration for struct reset_control
- * Updated vsp1_device_get() with changes suggested by Laurent
- * Updated error message for reset_control_get form ctrl->control.
- * Removed the extra tab from rzg2l_vsp2_device_info
- * Changed the function vsp1_lookup->vsp1_lookup_info and
-   all info match related code moved here.
- * Add VI6_IP_VERSION_VSP and VI6_IP_VERSION_VSP_SW macros to
-   distinguish HW & SW IP_VSP_Version.
- * Used 0x80 for RZG2L VSPD model and SoC identification
- * Updated Switch() for LIF0 buffer attribute handling.
-v4->v5:
- * Fixed typo VI6_IP_VERSION_MODEL_MASK->VI6_IP_VERSION_MASK
- * To be consistent with other SoC's, introduced VI6_IP_VERSION_SOC_G2L
-   for SoC identification for RZ/G2L SoC's.
-v3->v4:
- * Restored error check for pm_runtime_resume_and_get and calls
-   assert() in case of failure.
- * Added Rb tag from Geert
- * Add switch() for LIF0 buffer attribute handling for RZ/G2L and V3M SoC's
-v2->v3:
- * Added Rb tags from Krzysztof and Philipp
- * If reset_control_deassert() failed, return ret directly.
- * Fixed version comparison in vsp1_lookup()
-v1->v2:
- * Used reference counted reset handle to perform deassert/assert
- * Changed the compatible from vsp2-rzg2l->rzg2l-vsp2
- * Added standalone device info for rzg2l-vsp2.
- * Added vsp1_lookup helper function.
- * Updated comments for LIF0 buffer attribute register
- * Used last ID for rzg2l-vsp2.
-RFC->v1:
- * Added reset support as separate patch
- * Moved rstc just after the bus_master field in struct vsp1_device
- * Used data pointer containing info structure to retrieve version information
- * Updated commit description
- * Changed compatible from vsp2-r9a07g044->vsp2-rzg2l
- * Defined the clocks
- * Clock max Items is based on SoC Compatible string
-
-RFC:
- * https://patchwork.kernel.org/project/linux-renesas-soc/patch/20220112174612.10773-21-biju.das.jz@bp.renesas.com/
- * https://patchwork.kernel.org/project/linux-renesas-soc/patch/20220112174612.10773-20-biju.das.jz@bp.renesas.com/
-
-Biju Das (3):
-  media: dt-bindings: media: renesas,vsp1: Document RZ/{G2L,V2L} VSPD
-    bindings
-  media: renesas: vsp1: Add support to deassert/assert reset line
-  media: renesas: vsp1: Add support for RZ/G2L VSPD
-
- .../bindings/media/renesas,vsp1.yaml          | 52 +++++++++---
- drivers/media/platform/renesas/vsp1/vsp1.h    |  5 ++
- .../media/platform/renesas/vsp1/vsp1_drv.c    | 83 +++++++++++++++----
- .../media/platform/renesas/vsp1/vsp1_lif.c    | 13 +--
- .../media/platform/renesas/vsp1/vsp1_lif.h    |  1 +
- .../media/platform/renesas/vsp1/vsp1_regs.h   |  7 ++
- 6 files changed, 126 insertions(+), 35 deletions(-)
+On Sun, Jan 23, 2022 at 06:08:53PM +0200, Laurent Pinchart wrote:
+> Replace the hardcoded MIPI CSI-2 data types with macros from
+> mipi-csi2.h.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> ---
+>  drivers/media/platform/cadence/cdns-csi2tx.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/cadence/cdns-csi2tx.c b/drivers/media/platform/cadence/cdns-csi2tx.c
+> index 8f8c36056354..58e405b69f67 100644
+> --- a/drivers/media/platform/cadence/cdns-csi2tx.c
+> +++ b/drivers/media/platform/cadence/cdns-csi2tx.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+>  
+> +#include <media/mipi-csi2.h>
+>  #include <media/v4l2-ctrls.h>
+>  #include <media/v4l2-device.h>
+>  #include <media/v4l2-fwnode.h>
+> @@ -121,12 +122,12 @@ static const struct csi2tx_fmt csi2tx_formats[] = {
+>  	{
+>  		.mbus	= MEDIA_BUS_FMT_UYVY8_1X16,
+>  		.bpp	= 2,
+> -		.dt	= 0x1e,
+> +		.dt	= MIPI_CSI2_DT_YUV422_8B,
+>  	},
+>  	{
+>  		.mbus	= MEDIA_BUS_FMT_RGB888_1X24,
+>  		.bpp	= 3,
+> -		.dt	= 0x24,
+> +		.dt	= MIPI_CSI2_DT_RGB888,
+>  	},
+>  };
+>  
 
 -- 
-2.25.1
+Regards,
 
+Laurent Pinchart
