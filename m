@@ -2,152 +2,300 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7F5DC433FE
-	for <linux-media@archiver.kernel.org>; Thu, 14 Apr 2022 15:07:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55575C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 14 Apr 2022 15:07:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242349AbiDNPJw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Apr 2022 11:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
+        id S231651AbiDNPKI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Apr 2022 11:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351308AbiDNOav (ORCPT
+        with ESMTP id S1353073AbiDNOfC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:30:51 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFBB91376;
-        Thu, 14 Apr 2022 07:20:18 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (153.162-64-87.adsl-dyn.isp.belgacom.be [87.64.162.153])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 99ED6494;
-        Thu, 14 Apr 2022 16:20:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1649946015;
-        bh=xxUyYOR4Zi1vV+LnaRqNcvhcTxxAI9TQX/+/nk5J+Z4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HB0a3jXmrsFIkuhC/OenB2eDh4dyJH1UTrcY0U6VRuEYsNV01lfoBap4wiwL9wP9P
-         dx/KZ951GOGnewI2useVM5KphPdljiQTmWRURSjqbUHjL9h2M4AyTgshwwOV0TRcHb
-         nVHXC5F41T5GsL7IFzRgl0PNlJWNjzFRv56JNPH4=
-Date:   Thu, 14 Apr 2022 17:20:14 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michael Rodin <mrodin@de.adit-jv.com>
-Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        LUU HOAI <hoai.luu.ub@renesas.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: Re: [PATCH] media: v4l: vsp1: Fix offset calculation for plane
- cropping
-Message-ID: <YlgtnlL8Loehk2cA@pendragon.ideasonboard.com>
-References: <20220228120058.9755-1-laurent.pinchart+renesas@ideasonboard.com>
- <20220302110012.GB11173@vmlxhi-121.adit-jv.com>
+        Thu, 14 Apr 2022 10:35:02 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7DCFDA6EC;
+        Thu, 14 Apr 2022 07:26:24 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.90,259,1643641200"; 
+   d="scan'208";a="116894229"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 14 Apr 2022 23:26:24 +0900
+Received: from localhost.localdomain (unknown [10.226.92.190])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 31E7842B069C;
+        Thu, 14 Apr 2022 23:26:20 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v7 3/3] media: renesas: vsp1: Add support for RZ/G2L VSPD
+Date:   Thu, 14 Apr 2022 15:26:05 +0100
+Message-Id: <20220414142605.26235-4-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220414142605.26235-1-biju.das.jz@bp.renesas.com>
+References: <20220414142605.26235-1-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220302110012.GB11173@vmlxhi-121.adit-jv.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Michael,
+The RZ/G2L VSPD provides a single VSPD instance. It has the following
+sub modules MAU, CTU, RPF, DPR, LUT, BRS, WPF and LIF.
 
-Your previous mail slipped through the cracks, sorry about that.
+The VSPD block on RZ/G2L does not have a version register, so added a
+new compatible string "renesas,rzg2l-vsp2" with a data pointer containing
+the info structure. Also the reset line is shared with the DU module.
 
-On Wed, Mar 02, 2022 at 12:00:12PM +0100, Michael Rodin wrote:
-> Hi Laurent,
-> 
-> thank you for your work!
-> 
-> On Mon, Feb 28, 2022 at 02:00:58PM +0200, Laurent Pinchart wrote:
-> > From: Michael Rodin <mrodin@de.adit-jv.com>
-> > 
-> > The vertical subsampling factor is currently not considered in the
-> > offset calculation for plane cropping done in rpf_configure_partition.
-> > This causes a distortion (shift of the color plane) when formats with
-> > the vsub factor larger than 1 are used (e.g. NV12, see
-> > vsp1_video_formats in vsp1_pipe.c). This commit considers vsub factor
-> > for all planes except plane 0 (luminance).
-> > 
-> > Fixes: e5ad37b64de9 ("[media] v4l: vsp1: Add cropping support")
-> > Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
-> > Signed-off-by: LUU HOAI <hoai.luu.ub@renesas.com>
-> > 
-> > Drop generalization of the offset calculation to reduce the binary size.
-> 
-> Dropping generalization which I have done in my initial patch [1] is ok as
-> long as this will not cause any troubles. I am not aware of any case where
-> bytesperline and bpp could be different between the chroma planes, so
-> probably it's fine.
-> 
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> > ---
-> >  drivers/media/platform/vsp1/vsp1_rpf.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/vsp1/vsp1_rpf.c b/drivers/media/platform/vsp1/vsp1_rpf.c
-> > index 85587c1b6a37..75083cb234fe 100644
-> > --- a/drivers/media/platform/vsp1/vsp1_rpf.c
-> > +++ b/drivers/media/platform/vsp1/vsp1_rpf.c
-> > @@ -291,11 +291,11 @@ static void rpf_configure_partition(struct vsp1_entity *entity,
-> >  		     + crop.left * fmtinfo->bpp[0] / 8;
-> >  
-> >  	if (format->num_planes > 1) {
-> > +		unsigned int bpl = format->plane_fmt[1].bytesperline;
-> >  		unsigned int offset;
-> >  
-> > -		offset = crop.top * format->plane_fmt[1].bytesperline
-> > -		       + crop.left / fmtinfo->hsub
-> > -		       * fmtinfo->bpp[1] / 8;
-> > +		offset = crop.top / fmtinfo->vsub * bpl
-> > +		       + crop.left / fmtinfo->hsub * fmtinfo->bpp[1] / 8;
-> 
-> Probably it makes sense to do the division after all multiplications are
-> done in order to avoid rounding errors? Consider the case when left = 3,
-> hsub = 2, bpp = 32. Then we would get for the second part of the offset:
->   3 / 2 * 32 / 8 = 1 * 32 / 8 = 4
-> and if we do division as the last operation:
->   (3 * 32) / (8 * 2) = 96 / 16 = 6
+Apart from this, added a quirk to handle LIF0 buffer attribute to fix
+the artifacts on the output for both R-Car V3M and RZ/G2L alike SoC's.
 
-This was actually done on purpose :-) If the horizontal subsampling
-factor is equal to 2, for instance for the NV12 chroma plane, the
-horizontal offset must effectively be a multiple of 2. Otherwise you'll
-swap the Cr and Cb components.
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+---
+v6->v7:
+ * Added Rb tag from Kieran
+ * Added a quirk to handle LIF0 buffer attribute related
+   changes for V3M and G2L.
+ * Removed the macro for VSP HW version
+v5->v6:
+ * Rebased to media_staging and updated commit header
+ * Removed the extra tab from rzg2l_vsp2_device_info
+ * Changed the function vsp1_lookup->vsp1_lookup_info and
+   all info match related code moved here.
+ * Add VI6_IP_VERSION_VSP and VI6_IP_VERSION_VSP_SW macros to
+   distinguish HW & SW IP_VSP_Version.
+ * Used 0x80 for RZG2L VSPD model and SoC identification
+ * Updated Switch() for LIF0 buffer attribute handling.
+v4->v5:
+ * Fixed typo VI6_IP_VERSION_MODEL_MASK->VI6_IP_VERSION_MASK
+ * To be consistent with other SoC's, introduced VI6_IP_VERSION_SOC_G2L
+   for RZ/G2L SoC's.
+v3->v4:
+ * Added Rb tag from Geert
+ * Add switch() for LIF0 buffer attribute handling for RZ/G2L and V3M
+v2->v3:
+ * Fixed version comparison in vsp1_lookup()
+v1->v2:
+ * Changed the compatible from vsp2-rzg2l->rzg2l-vsp2
+ * Added standalone device info for rzg2l-vsp2.
+ * Added vsp1_lookup helper function.
+ * Updated comments for LIF0 buffer attribute register
+ * Used last ID for rzg2l-vsp2.
+RFC->v1:
+ * Used data pointer containing info structure to retrieve version information
+RFC:
+ * https://patchwork.kernel.org/project/linux-renesas-soc/patch/20220112174612.10773-21-biju.das.jz@bp.renesas.com/
+---
+ drivers/media/platform/renesas/vsp1/vsp1.h    |  3 +
+ .../media/platform/renesas/vsp1/vsp1_drv.c    | 64 ++++++++++++++-----
+ .../media/platform/renesas/vsp1/vsp1_lif.c    | 13 ++--
+ .../media/platform/renesas/vsp1/vsp1_lif.h    |  1 +
+ .../media/platform/renesas/vsp1/vsp1_regs.h   |  7 ++
+ 5 files changed, 67 insertions(+), 21 deletions(-)
 
-Taking your above example with a NV12 format (left=3, hsub=2, but
-bpp=16), with the rounding in this patch,
-
-	offset = crop.top / fmtinfo->vsub * bpl
-	       + crop.left / fmtinfo->hsub * fmtinfo->bpp[1] / 8;
-	       = [vertical offset]
-	       + 3 / 2 * 16 / 8;
-	       = [vertical offset]
-	       + 2;
-
-Byte: 0  1  2  3  4  5
-      Cr Cb Cr Cb Cr Cb ...
-            ^
-            offset
-
-With your rounding proposal,
-
-	offset = crop.top / fmtinfo->vsub * bpl
-	       + (crop.left * fmtinfo->bpp[1]) / (fmtinfo->hsub * 8);
-	       = [vertical offset]
-	       + (3 * 16) / (2 * 8);
-	       = [vertical offset]
-	       + 3;
-
-Byte: 0  1  2  3  4  5
-      Cr Cb Cr Cb Cr Cb ...
-               ^
-               offset
-
-> The first part of the offset can probably also cause the same rounding
-> issue.
-> 
-> >  		mem.addr[1] += offset;
-> >  		mem.addr[2] += offset;
-> >  	}
-> > 
-> 
-> [1] https://lore.kernel.org/all/1637679566-76975-1-git-send-email-mrodin@de.adit-jv.com/T/
-
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1.h b/drivers/media/platform/renesas/vsp1/vsp1.h
+index baf898d577ec..de3685cc89f3 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1.h
++++ b/drivers/media/platform/renesas/vsp1/vsp1.h
+@@ -56,6 +56,8 @@ struct vsp1_uif;
+ #define VSP1_HAS_BRS		BIT(9)
+ #define VSP1_HAS_EXT_DL		BIT(10)
+ 
++#define LIF_BUF_ATTR_QUIRK	BIT(0)
++
+ struct vsp1_device_info {
+ 	u32 version;
+ 	const char *model;
+@@ -76,6 +78,7 @@ struct vsp1_device {
+ 	struct device *dev;
+ 	const struct vsp1_device_info *info;
+ 	u32 version;
++	u32 quirks;
+ 
+ 	void __iomem *mmio;
+ 	struct rcar_fcp_device *fcp;
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drv.c b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
+index 159b68fa0829..206fe18c3c09 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_drv.c
++++ b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
+@@ -812,11 +812,57 @@ static const struct vsp1_device_info vsp1_device_infos[] = {
+ 	},
+ };
+ 
++static const struct vsp1_device_info rzg2l_vsp2_device_info = {
++	.version = VI6_IP_VERSION_MODEL_VSPD_RZG2L,
++	.model = "VSP2-D",
++	.gen = 3,
++	.features = VSP1_HAS_BRS | VSP1_HAS_WPF_VFLIP | VSP1_HAS_EXT_DL,
++	.lif_count = 1,
++	.rpf_count = 2,
++	.wpf_count = 1,
++};
++
++static const struct vsp1_device_info *vsp1_lookup_info(struct vsp1_device *vsp1)
++{
++	const struct vsp1_device_info *info;
++	unsigned int i;
++
++	/*
++	 * Try the info stored in match data first for devices that don't have
++	 * a version register.
++	 */
++	info = of_device_get_match_data(vsp1->dev);
++	if (info) {
++		vsp1->quirks = LIF_BUF_ATTR_QUIRK;
++		vsp1->version = VI6_IP_VERSION_VSP_SW | info->version |
++				VI6_IP_VERSION_SOC_RZG2L;
++
++		return info;
++	}
++
++	vsp1->version = vsp1_read(vsp1, VI6_IP_VERSION);
++
++	for (i = 0; i < ARRAY_SIZE(vsp1_device_infos); ++i) {
++		info = &vsp1_device_infos[i];
++
++		if ((vsp1->version & VI6_IP_VERSION_MODEL_MASK) == info->version) {
++			if ((vsp1->version & VI6_IP_VERSION_MASK) ==
++			    (VI6_IP_VERSION_MODEL_VSPD_V3 | VI6_IP_VERSION_SOC_V3M))
++				vsp1->quirks = LIF_BUF_ATTR_QUIRK;
++
++			return info;
++		}
++	}
++
++	dev_err(vsp1->dev, "unsupported IP version 0x%08x\n", vsp1->version);
++
++	return NULL;
++}
++
+ static int vsp1_probe(struct platform_device *pdev)
+ {
+ 	struct vsp1_device *vsp1;
+ 	struct device_node *fcp_node;
+-	unsigned int i;
+ 	int ret;
+ 	int irq;
+ 
+@@ -872,26 +918,13 @@ static int vsp1_probe(struct platform_device *pdev)
+ 	if (ret < 0)
+ 		goto done;
+ 
+-	vsp1->version = vsp1_read(vsp1, VI6_IP_VERSION);
+-
+-	for (i = 0; i < ARRAY_SIZE(vsp1_device_infos); ++i) {
+-		if ((vsp1->version & VI6_IP_VERSION_MODEL_MASK) ==
+-		    vsp1_device_infos[i].version) {
+-			vsp1->info = &vsp1_device_infos[i];
+-			break;
+-		}
+-	}
+-
++	vsp1->info = vsp1_lookup_info(vsp1);
+ 	if (!vsp1->info) {
+-		dev_err(&pdev->dev, "unsupported IP version 0x%08x\n",
+-			vsp1->version);
+ 		vsp1_device_put(vsp1);
+ 		ret = -ENXIO;
+ 		goto done;
+ 	}
+ 
+-	dev_dbg(&pdev->dev, "IP version 0x%08x\n", vsp1->version);
+-
+ 	/*
+ 	 * Previous use of the hardware (e.g. by the bootloader) could leave
+ 	 * some interrupts enabled and pending.
+@@ -941,6 +974,7 @@ static int vsp1_remove(struct platform_device *pdev)
+ static const struct of_device_id vsp1_of_match[] = {
+ 	{ .compatible = "renesas,vsp1" },
+ 	{ .compatible = "renesas,vsp2" },
++	{ .compatible = "renesas,rzg2l-vsp2", .data = &rzg2l_vsp2_device_info },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, vsp1_of_match);
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_lif.c b/drivers/media/platform/renesas/vsp1/vsp1_lif.c
+index 6a6857ac9327..e041871185d2 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_lif.c
++++ b/drivers/media/platform/renesas/vsp1/vsp1_lif.c
+@@ -107,6 +107,7 @@ static void lif_configure_stream(struct vsp1_entity *entity,
+ 
+ 	case VI6_IP_VERSION_MODEL_VSPDL_GEN3:
+ 	case VI6_IP_VERSION_MODEL_VSPD_V3:
++	case VI6_IP_VERSION_MODEL_VSPD_RZG2L:
+ 		hbth = 0;
+ 		obth = 1500;
+ 		lbth = 0;
+@@ -130,13 +131,12 @@ static void lif_configure_stream(struct vsp1_entity *entity,
+ 			VI6_LIF_CTRL_REQSEL | VI6_LIF_CTRL_LIF_EN);
+ 
+ 	/*
+-	 * On R-Car V3M the LIF0 buffer attribute register has to be set to a
+-	 * non-default value to guarantee proper operation (otherwise artifacts
+-	 * may appear on the output). The value required by the manual is not
+-	 * explained but is likely a buffer size or threshold.
++	 * On R-Car V3M and RZ/G2L the LIF0 buffer attribute register has to be
++	 * set to a non-default value to guarantee proper operation (otherwise
++	 * artifacts may appear on the output). The value required by the
++	 * manual is not explained but is likely a buffer size or threshold.
+ 	 */
+-	if ((entity->vsp1->version & VI6_IP_VERSION_MASK) ==
+-	    (VI6_IP_VERSION_MODEL_VSPD_V3 | VI6_IP_VERSION_SOC_V3M))
++	if (lif->quirks)
+ 		vsp1_lif_write(lif, dlb, VI6_LIF_LBA,
+ 			       VI6_LIF_LBA_LBA0 |
+ 			       (1536 << VI6_LIF_LBA_LBA1_SHIFT));
+@@ -162,6 +162,7 @@ struct vsp1_lif *vsp1_lif_create(struct vsp1_device *vsp1, unsigned int index)
+ 	lif->entity.ops = &lif_entity_ops;
+ 	lif->entity.type = VSP1_ENTITY_LIF;
+ 	lif->entity.index = index;
++	lif->quirks = vsp1->quirks & LIF_BUF_ATTR_QUIRK;
+ 
+ 	/*
+ 	 * The LIF is never exposed to userspace, but media entity registration
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_lif.h b/drivers/media/platform/renesas/vsp1/vsp1_lif.h
+index 71a4eda9c2b2..f073784e429b 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_lif.h
++++ b/drivers/media/platform/renesas/vsp1/vsp1_lif.h
+@@ -21,6 +21,7 @@ struct vsp1_device;
+ 
+ struct vsp1_lif {
+ 	struct vsp1_entity entity;
++	u32 quirks;
+ };
+ 
+ static inline struct vsp1_lif *to_lif(struct v4l2_subdev *subdev)
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_regs.h b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
+index fae7286eb01e..41bea15597c9 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_regs.h
++++ b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
+@@ -767,6 +767,8 @@
+ #define VI6_IP_VERSION_MODEL_VSPDL_GEN3	(0x19 << 8)
+ #define VI6_IP_VERSION_MODEL_VSPBS_GEN3	(0x1a << 8)
+ #define VI6_IP_VERSION_MODEL_VSPD_V3U	(0x1c << 8)
++/* RZ/G2L SoC's have no version register, So use 0x80 as the model version */
++#define VI6_IP_VERSION_MODEL_VSPD_RZG2L	(0x80 << 8)
+ 
+ #define VI6_IP_VERSION_SOC_MASK		(0xff << 0)
+ #define VI6_IP_VERSION_SOC_H2		(0x01 << 0)
+@@ -780,6 +782,11 @@
+ #define VI6_IP_VERSION_SOC_M3N		(0x04 << 0)
+ #define VI6_IP_VERSION_SOC_E3		(0x04 << 0)
+ #define VI6_IP_VERSION_SOC_V3U		(0x05 << 0)
++/* RZ/G2L SoC's have no version register, So use 0x80 for SoC Identification */
++#define VI6_IP_VERSION_SOC_RZG2L	(0x80 << 0)
++
++#define VI6_IP_VERSION_VSP_MASK		(0xffff << 16)
++#define VI6_IP_VERSION_VSP_SW		(0xfffe << 16) /* SW VSP version */
+ 
+ /* -----------------------------------------------------------------------------
+  * RPF CLUT Registers
 -- 
-Regards,
+2.25.1
 
-Laurent Pinchart
