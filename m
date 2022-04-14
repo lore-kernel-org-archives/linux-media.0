@@ -2,300 +2,112 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55575C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 14 Apr 2022 15:07:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C765FC433F5
+	for <linux-media@archiver.kernel.org>; Thu, 14 Apr 2022 15:08:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbiDNPKI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Apr 2022 11:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
+        id S243479AbiDNPKW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Apr 2022 11:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353073AbiDNOfC (ORCPT
+        with ESMTP id S1350857AbiDNO26 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:35:02 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7DCFDA6EC;
-        Thu, 14 Apr 2022 07:26:24 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.90,259,1643641200"; 
-   d="scan'208";a="116894229"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 14 Apr 2022 23:26:24 +0900
-Received: from localhost.localdomain (unknown [10.226.92.190])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 31E7842B069C;
-        Thu, 14 Apr 2022 23:26:20 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v7 3/3] media: renesas: vsp1: Add support for RZ/G2L VSPD
-Date:   Thu, 14 Apr 2022 15:26:05 +0100
-Message-Id: <20220414142605.26235-4-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220414142605.26235-1-biju.das.jz@bp.renesas.com>
-References: <20220414142605.26235-1-biju.das.jz@bp.renesas.com>
+        Thu, 14 Apr 2022 10:28:58 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2F2D3727;
+        Thu, 14 Apr 2022 07:16:19 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 24DD41B00120;
+        Thu, 14 Apr 2022 17:16:17 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1649945777;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pvulFv7jAgH4apEjrCvylHe5kRcBA3as2o6GU9uqPn4=;
+        b=a2f9PdJHszxEb3VuwK3r4xY1QNcLx4NsfqPLfTofNbX2OLqO/PEYfegU1AmzS66gSfr/uw
+        BTxhbDq/NnlO12WikoYy2aCY46eeAPtMAtT+YGoysucdkDzKMiNQLzL7o4auL3ZQnwz3kv
+        ZGgFKgUxY2QDs7sUphwDE+k8zA1H/1WnL6xYkMZkEjiDrp8qdsd1Y+hXrYmSC4xAmM+5nU
+        z4i0kVFr6SmJfNMHMh8vYiW05aM9IMhwo3SDN/LcXWFisUX4KKcJ4QmsNIdrdCi0lL7RAo
+        Boa35DkenTX9hAg7T14UPQ6Yp7H2BeGlTC14riGabM3DkMYXXANLCDcnC9cRNQ==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id A5599634C91;
+        Thu, 14 Apr 2022 17:16:16 +0300 (EEST)
+Date:   Thu, 14 Apr 2022 17:16:16 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, robert.foss@linaro.org, hfink@snap.com,
+        jgrahsl@snap.com, dmitry.baryshkov@linaro.org,
+        vladimir.zapolskiy@linaro.org
+Subject: Re: [PATCH v3 2/2] media: i2c: imx412: Add bulk regulator support
+Message-ID: <YlgssKI+WVeRTda6@valkosipuli.retiisi.eu>
+References: <20220414124505.1329295-1-bryan.odonoghue@linaro.org>
+ <20220414124505.1329295-3-bryan.odonoghue@linaro.org>
+ <Ylga7FVsbK6znD/+@valkosipuli.retiisi.eu>
+ <39cae749-67ef-13d7-2648-01c6e9603887@linaro.org>
+ <Ylgn8u5Au0EqUkLj@valkosipuli.retiisi.eu>
+ <831e3857-9ee7-c760-ef2e-3b235b57b907@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <831e3857-9ee7-c760-ef2e-3b235b57b907@linaro.org>
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1649945777; a=rsa-sha256;
+        cv=none;
+        b=QCKPxYhwMDFvENaQq1z+w/MSTvf461HGlsdiPQEorRW9EVC6RN3n8pXCFFq86aXMVl69+P
+        CMlvVfUjnC1TCW2u2hq4anJpzc3bDG9KvoEi4wrad8gW/V+AZYbJUPIrBlCYWxJGrAqfdy
+        2xZ3sqV47tousYJotMq0fvl66FdxOc4NQooTeu9BiH42VTUykgtR/jgF6S0cHFc0VX1rA3
+        EUFFuKVw5vpiP5xwcFO6AXbhM3pNJz9P9MaOPtVdmmDdlfx6KYm5d1S5KrOKXEwFoG0KNI
+        KAL2UEHMvu8kN6x6A7JZR8YUk+R9oBzMCFB0XUFoXc6LW1Ma3eGAxaPiE/L7hg==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1649945777;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pvulFv7jAgH4apEjrCvylHe5kRcBA3as2o6GU9uqPn4=;
+        b=aLc/vPeElKL6lL5HeCEPGzKKI6PEi4/FFxqGtB1tTlUjWfpvxzZ4E2BKxBu9x5jRtm6N9b
+        qDxTQ/tDfNzX+b/bXPhPcBfh+z8bfvYbj5G6QXuUlFhtx2O6uoGplKDzM3yt0kQRng10iP
+        2S/32mWZTMI30SG4gHOEwEpdBdK34YWusjzU5GIQTpHUsDWoE+HCOwuO4CYhUjNatf1jca
+        8zkWUu1Xx+I2jSSj3KSo9UVC+SwbARCgipTHwAKJo2+ax2BBn8N6v/SnPAL1UL1e3AGFta
+        El6iRsA5i4ysI1oBfCaD4DtgxJb38yHSYMBVfZEPFiWhZmyHoWcWvrLZfmbiBA==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The RZ/G2L VSPD provides a single VSPD instance. It has the following
-sub modules MAU, CTU, RPF, DPR, LUT, BRS, WPF and LIF.
+On Thu, Apr 14, 2022 at 03:04:10PM +0100, Bryan O'Donoghue wrote:
+> On 14/04/2022 14:56, Sakari Ailus wrote:
+> > On Thu, Apr 14, 2022 at 02:44:00PM +0100, Bryan O'Donoghue wrote:
+> > > On 14/04/2022 14:00, Sakari Ailus wrote:
+> > > > >    	ret = clk_prepare_enable(imx412->inclk);
+> > > > >    	if (ret) {
+> > > > > +		regulator_bulk_disable(imx412->num_supplies,
+> > > > > +				       imx412->supplies);
+> > > > As the function already has an error handling section using labels, this
+> > > > should go there as well.
+> > > > 
+> > > Are you asking to move regulator_bulk_disable() to error_reset ?
+> > 
+> > No. You'll need another label.
+> > 
+> 
+> Hmm.
+> 
+> I think another label is not required, have a look at V4.
 
-The VSPD block on RZ/G2L does not have a version register, so added a
-new compatible string "renesas,rzg2l-vsp2" with a data pointer containing
-the info structure. Also the reset line is shared with the DU module.
+Ah, yes, indeed. There's just a single location where this will be needed.
 
-Apart from this, added a quirk to handle LIF0 buffer attribute to fix
-the artifacts on the output for both R-Car V3M and RZ/G2L alike SoC's.
+On another note, gpiod_set_value_cansleep() seems to enable reset in
+resume and disable it in suspend. I.e. the polarity is wrong.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
----
-v6->v7:
- * Added Rb tag from Kieran
- * Added a quirk to handle LIF0 buffer attribute related
-   changes for V3M and G2L.
- * Removed the macro for VSP HW version
-v5->v6:
- * Rebased to media_staging and updated commit header
- * Removed the extra tab from rzg2l_vsp2_device_info
- * Changed the function vsp1_lookup->vsp1_lookup_info and
-   all info match related code moved here.
- * Add VI6_IP_VERSION_VSP and VI6_IP_VERSION_VSP_SW macros to
-   distinguish HW & SW IP_VSP_Version.
- * Used 0x80 for RZG2L VSPD model and SoC identification
- * Updated Switch() for LIF0 buffer attribute handling.
-v4->v5:
- * Fixed typo VI6_IP_VERSION_MODEL_MASK->VI6_IP_VERSION_MASK
- * To be consistent with other SoC's, introduced VI6_IP_VERSION_SOC_G2L
-   for RZ/G2L SoC's.
-v3->v4:
- * Added Rb tag from Geert
- * Add switch() for LIF0 buffer attribute handling for RZ/G2L and V3M
-v2->v3:
- * Fixed version comparison in vsp1_lookup()
-v1->v2:
- * Changed the compatible from vsp2-rzg2l->rzg2l-vsp2
- * Added standalone device info for rzg2l-vsp2.
- * Added vsp1_lookup helper function.
- * Updated comments for LIF0 buffer attribute register
- * Used last ID for rzg2l-vsp2.
-RFC->v1:
- * Used data pointer containing info structure to retrieve version information
-RFC:
- * https://patchwork.kernel.org/project/linux-renesas-soc/patch/20220112174612.10773-21-biju.das.jz@bp.renesas.com/
----
- drivers/media/platform/renesas/vsp1/vsp1.h    |  3 +
- .../media/platform/renesas/vsp1/vsp1_drv.c    | 64 ++++++++++++++-----
- .../media/platform/renesas/vsp1/vsp1_lif.c    | 13 ++--
- .../media/platform/renesas/vsp1/vsp1_lif.h    |  1 +
- .../media/platform/renesas/vsp1/vsp1_regs.h   |  7 ++
- 5 files changed, 67 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1.h b/drivers/media/platform/renesas/vsp1/vsp1.h
-index baf898d577ec..de3685cc89f3 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1.h
-+++ b/drivers/media/platform/renesas/vsp1/vsp1.h
-@@ -56,6 +56,8 @@ struct vsp1_uif;
- #define VSP1_HAS_BRS		BIT(9)
- #define VSP1_HAS_EXT_DL		BIT(10)
- 
-+#define LIF_BUF_ATTR_QUIRK	BIT(0)
-+
- struct vsp1_device_info {
- 	u32 version;
- 	const char *model;
-@@ -76,6 +78,7 @@ struct vsp1_device {
- 	struct device *dev;
- 	const struct vsp1_device_info *info;
- 	u32 version;
-+	u32 quirks;
- 
- 	void __iomem *mmio;
- 	struct rcar_fcp_device *fcp;
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drv.c b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
-index 159b68fa0829..206fe18c3c09 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_drv.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
-@@ -812,11 +812,57 @@ static const struct vsp1_device_info vsp1_device_infos[] = {
- 	},
- };
- 
-+static const struct vsp1_device_info rzg2l_vsp2_device_info = {
-+	.version = VI6_IP_VERSION_MODEL_VSPD_RZG2L,
-+	.model = "VSP2-D",
-+	.gen = 3,
-+	.features = VSP1_HAS_BRS | VSP1_HAS_WPF_VFLIP | VSP1_HAS_EXT_DL,
-+	.lif_count = 1,
-+	.rpf_count = 2,
-+	.wpf_count = 1,
-+};
-+
-+static const struct vsp1_device_info *vsp1_lookup_info(struct vsp1_device *vsp1)
-+{
-+	const struct vsp1_device_info *info;
-+	unsigned int i;
-+
-+	/*
-+	 * Try the info stored in match data first for devices that don't have
-+	 * a version register.
-+	 */
-+	info = of_device_get_match_data(vsp1->dev);
-+	if (info) {
-+		vsp1->quirks = LIF_BUF_ATTR_QUIRK;
-+		vsp1->version = VI6_IP_VERSION_VSP_SW | info->version |
-+				VI6_IP_VERSION_SOC_RZG2L;
-+
-+		return info;
-+	}
-+
-+	vsp1->version = vsp1_read(vsp1, VI6_IP_VERSION);
-+
-+	for (i = 0; i < ARRAY_SIZE(vsp1_device_infos); ++i) {
-+		info = &vsp1_device_infos[i];
-+
-+		if ((vsp1->version & VI6_IP_VERSION_MODEL_MASK) == info->version) {
-+			if ((vsp1->version & VI6_IP_VERSION_MASK) ==
-+			    (VI6_IP_VERSION_MODEL_VSPD_V3 | VI6_IP_VERSION_SOC_V3M))
-+				vsp1->quirks = LIF_BUF_ATTR_QUIRK;
-+
-+			return info;
-+		}
-+	}
-+
-+	dev_err(vsp1->dev, "unsupported IP version 0x%08x\n", vsp1->version);
-+
-+	return NULL;
-+}
-+
- static int vsp1_probe(struct platform_device *pdev)
- {
- 	struct vsp1_device *vsp1;
- 	struct device_node *fcp_node;
--	unsigned int i;
- 	int ret;
- 	int irq;
- 
-@@ -872,26 +918,13 @@ static int vsp1_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto done;
- 
--	vsp1->version = vsp1_read(vsp1, VI6_IP_VERSION);
--
--	for (i = 0; i < ARRAY_SIZE(vsp1_device_infos); ++i) {
--		if ((vsp1->version & VI6_IP_VERSION_MODEL_MASK) ==
--		    vsp1_device_infos[i].version) {
--			vsp1->info = &vsp1_device_infos[i];
--			break;
--		}
--	}
--
-+	vsp1->info = vsp1_lookup_info(vsp1);
- 	if (!vsp1->info) {
--		dev_err(&pdev->dev, "unsupported IP version 0x%08x\n",
--			vsp1->version);
- 		vsp1_device_put(vsp1);
- 		ret = -ENXIO;
- 		goto done;
- 	}
- 
--	dev_dbg(&pdev->dev, "IP version 0x%08x\n", vsp1->version);
--
- 	/*
- 	 * Previous use of the hardware (e.g. by the bootloader) could leave
- 	 * some interrupts enabled and pending.
-@@ -941,6 +974,7 @@ static int vsp1_remove(struct platform_device *pdev)
- static const struct of_device_id vsp1_of_match[] = {
- 	{ .compatible = "renesas,vsp1" },
- 	{ .compatible = "renesas,vsp2" },
-+	{ .compatible = "renesas,rzg2l-vsp2", .data = &rzg2l_vsp2_device_info },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, vsp1_of_match);
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_lif.c b/drivers/media/platform/renesas/vsp1/vsp1_lif.c
-index 6a6857ac9327..e041871185d2 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_lif.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_lif.c
-@@ -107,6 +107,7 @@ static void lif_configure_stream(struct vsp1_entity *entity,
- 
- 	case VI6_IP_VERSION_MODEL_VSPDL_GEN3:
- 	case VI6_IP_VERSION_MODEL_VSPD_V3:
-+	case VI6_IP_VERSION_MODEL_VSPD_RZG2L:
- 		hbth = 0;
- 		obth = 1500;
- 		lbth = 0;
-@@ -130,13 +131,12 @@ static void lif_configure_stream(struct vsp1_entity *entity,
- 			VI6_LIF_CTRL_REQSEL | VI6_LIF_CTRL_LIF_EN);
- 
- 	/*
--	 * On R-Car V3M the LIF0 buffer attribute register has to be set to a
--	 * non-default value to guarantee proper operation (otherwise artifacts
--	 * may appear on the output). The value required by the manual is not
--	 * explained but is likely a buffer size or threshold.
-+	 * On R-Car V3M and RZ/G2L the LIF0 buffer attribute register has to be
-+	 * set to a non-default value to guarantee proper operation (otherwise
-+	 * artifacts may appear on the output). The value required by the
-+	 * manual is not explained but is likely a buffer size or threshold.
- 	 */
--	if ((entity->vsp1->version & VI6_IP_VERSION_MASK) ==
--	    (VI6_IP_VERSION_MODEL_VSPD_V3 | VI6_IP_VERSION_SOC_V3M))
-+	if (lif->quirks)
- 		vsp1_lif_write(lif, dlb, VI6_LIF_LBA,
- 			       VI6_LIF_LBA_LBA0 |
- 			       (1536 << VI6_LIF_LBA_LBA1_SHIFT));
-@@ -162,6 +162,7 @@ struct vsp1_lif *vsp1_lif_create(struct vsp1_device *vsp1, unsigned int index)
- 	lif->entity.ops = &lif_entity_ops;
- 	lif->entity.type = VSP1_ENTITY_LIF;
- 	lif->entity.index = index;
-+	lif->quirks = vsp1->quirks & LIF_BUF_ATTR_QUIRK;
- 
- 	/*
- 	 * The LIF is never exposed to userspace, but media entity registration
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_lif.h b/drivers/media/platform/renesas/vsp1/vsp1_lif.h
-index 71a4eda9c2b2..f073784e429b 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_lif.h
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_lif.h
-@@ -21,6 +21,7 @@ struct vsp1_device;
- 
- struct vsp1_lif {
- 	struct vsp1_entity entity;
-+	u32 quirks;
- };
- 
- static inline struct vsp1_lif *to_lif(struct v4l2_subdev *subdev)
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_regs.h b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
-index fae7286eb01e..41bea15597c9 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_regs.h
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
-@@ -767,6 +767,8 @@
- #define VI6_IP_VERSION_MODEL_VSPDL_GEN3	(0x19 << 8)
- #define VI6_IP_VERSION_MODEL_VSPBS_GEN3	(0x1a << 8)
- #define VI6_IP_VERSION_MODEL_VSPD_V3U	(0x1c << 8)
-+/* RZ/G2L SoC's have no version register, So use 0x80 as the model version */
-+#define VI6_IP_VERSION_MODEL_VSPD_RZG2L	(0x80 << 8)
- 
- #define VI6_IP_VERSION_SOC_MASK		(0xff << 0)
- #define VI6_IP_VERSION_SOC_H2		(0x01 << 0)
-@@ -780,6 +782,11 @@
- #define VI6_IP_VERSION_SOC_M3N		(0x04 << 0)
- #define VI6_IP_VERSION_SOC_E3		(0x04 << 0)
- #define VI6_IP_VERSION_SOC_V3U		(0x05 << 0)
-+/* RZ/G2L SoC's have no version register, So use 0x80 for SoC Identification */
-+#define VI6_IP_VERSION_SOC_RZG2L	(0x80 << 0)
-+
-+#define VI6_IP_VERSION_VSP_MASK		(0xffff << 16)
-+#define VI6_IP_VERSION_VSP_SW		(0xfffe << 16) /* SW VSP version */
- 
- /* -----------------------------------------------------------------------------
-  * RPF CLUT Registers
 -- 
-2.25.1
-
+Sakari Ailus
