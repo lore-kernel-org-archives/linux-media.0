@@ -2,193 +2,106 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2D21C433EF
-	for <linux-media@archiver.kernel.org>; Thu, 14 Apr 2022 13:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A579C4332F
+	for <linux-media@archiver.kernel.org>; Thu, 14 Apr 2022 14:22:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237154AbiDNNDH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 14 Apr 2022 09:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S1343960AbiDNOZH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 14 Apr 2022 10:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243733AbiDNNC5 (ORCPT
+        with ESMTP id S1349428AbiDNOUI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:02:57 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA69B554B4
-        for <linux-media@vger.kernel.org>; Thu, 14 Apr 2022 06:00:32 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkvn5pty0gzs3nltj987t-3.rev.dnainternet.fi [IPv6:2001:14ba:4457:9640:1e2d:1f75:a607:ef37])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 5B412203F3;
-        Thu, 14 Apr 2022 16:00:29 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1649941229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kFwz5Msio1cTMEEDJvRcVry3FCU+gyhC2xRJtFNKA4Y=;
-        b=mu6FJwnwVKvW18DChQXaYK1PG8zI10uhR0UeCf7xksk0POOvi1kY5CDDeO36u3zw++rehX
-        qOi3KbUlNBQXDVQRp9EWR7G8eErtCDbrpXh4S8M7m8gV//KRwQU7QMR2oNkOijriAfZ9+m
-        hpIJttgmK1Imqhukpho/2dSkkiPlRqk=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id C9621634C91;
-        Thu, 14 Apr 2022 16:00:28 +0300 (EEST)
-Date:   Thu, 14 Apr 2022 16:00:28 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, robert.foss@linaro.org, hfink@snap.com,
-        jgrahsl@snap.com, dmitry.baryshkov@linaro.org,
-        vladimir.zapolskiy@linaro.org
-Subject: Re: [PATCH v3 2/2] media: i2c: imx412: Add bulk regulator support
-Message-ID: <Ylga7FVsbK6znD/+@valkosipuli.retiisi.eu>
-References: <20220414124505.1329295-1-bryan.odonoghue@linaro.org>
- <20220414124505.1329295-3-bryan.odonoghue@linaro.org>
+        Thu, 14 Apr 2022 10:20:08 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79660A27D4
+        for <linux-media@vger.kernel.org>; Thu, 14 Apr 2022 07:11:13 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id m14so7101525wrb.6
+        for <linux-media@vger.kernel.org>; Thu, 14 Apr 2022 07:11:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=k3gcIDeCZ4FNN7UJi4DooXXT3wAgGZnORf6hg3bDQ7g=;
+        b=pyYP5jTZGe1iIdHDva19cy+FXngavEB3nCuwJeLMONWVdDmXn0E8RKrg+0rOq0u3tW
+         d0JxgTsu84DPkeNL91wMOiRqMerMqGQqqJqb52XEIxh7FQ0PhWL5UZwNnNnVUWZ3V4EA
+         1JsqvSS5rGl+OBMZulolrTIV1s+Dj98XZpaKtntpE3dFyRfv7QHIUPs+ZOy+fYhRuXFC
+         QYoA+42MaRKLVc/Ou/CVFzuwLCWyGleWt/t4ubPVFMYYdB2kWYC9PaEYDiqSQkSiXHX0
+         xnm1IBIjDzR10x03a7FraNHA+10hzWX+h5BuC6scYa+iLx/PoraVGtC2EvuT2KMcFNBM
+         XWVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=k3gcIDeCZ4FNN7UJi4DooXXT3wAgGZnORf6hg3bDQ7g=;
+        b=TZJP+Xc4Ik/WKOVG4aF5rNYVTK0ryZPhKfo8xJ8qASdoFgCfSDKCPzod3/n2zWRCj2
+         DS95hyNhV2ZST90WIrJd3tqp5YyHqo5bbjzJDTAXySEL/0eIIDKY4xw/WNJf2wS2zR7M
+         ZnQqg0hz4yiUn3hte3ygf+kvvHJ0LfOtFTdiTNz1XyE56cWgEanta17KYtC8noZgu3fW
+         1wb/Tc6WPhBj+Pd5ZcRkzjAeRqNLe0HX+XGmxFrG3V6PcknMhMu6+Isbk00q1z0N9o9v
+         5iVzjy71JpJrvT3R75nwrFgqoqsASJZlGUwJ4VsbWpYgDPfDzsw2EozzHJBwavkl6yAy
+         bOyA==
+X-Gm-Message-State: AOAM532i/YG9ASObnZ4C+LKh/o+XG0KBDf+QLLmgZs+O/Y2K2QigNM5V
+        kibFDmRf2F8xKFauxo8wES5ymA==
+X-Google-Smtp-Source: ABdhPJzd87u4VitFe0hrj8sBPdroXixiqIUTNvmbFlySF6f6F5CRIzf/Iv3BIk/sb2XQY5K0qxBF3A==
+X-Received: by 2002:adf:f98e:0:b0:207:9eed:60d8 with SMTP id f14-20020adff98e000000b002079eed60d8mr2304802wrr.566.1649945471907;
+        Thu, 14 Apr 2022 07:11:11 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id 61-20020adf8043000000b00205e1d92a41sm1934551wrk.74.2022.04.14.07.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 07:11:11 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     sakari.ailus@iki.fi, paul.j.murphy@intel.com,
+        daniele.alessandrelli@intel.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     robert.foss@linaro.org, hfink@snap.com, jgrahsl@snap.com,
+        dmitry.baryshkov@linaro.org, vladimir.zapolskiy@linaro.org,
+        bryan.odonoghue@linaro.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 1/3] media: dt-bindings: imx412: Add regulator descriptions
+Date:   Thu, 14 Apr 2022 15:11:06 +0100
+Message-Id: <20220414141108.1365476-2-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220414141108.1365476-1-bryan.odonoghue@linaro.org>
+References: <20220414141108.1365476-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414124505.1329295-3-bryan.odonoghue@linaro.org>
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1649941229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kFwz5Msio1cTMEEDJvRcVry3FCU+gyhC2xRJtFNKA4Y=;
-        b=rU8S5VqeBosql2BMlpLAW1KE35ZdSg2+aXnphL9ODcHcQXT/0KiV9QIAoWv6RLjBPf+4T0
-        e2gEh32ijQCIg0tBxBjwyycppleo3bFAvBULOIzSdUJ918zmURmkq3FS1hOAdScbcLRSVB
-        HMYzQjq82jEW7ys6ZP0G1pHzhUl+oNQ=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1649941229; a=rsa-sha256; cv=none;
-        b=ddqmKll5gbtfmdQ5zZ+t5ySsagFhY/Ze33BgdWUhkVhJCPJRwPqL3PRRjZlMHGEcoR8zZ2
-        /se1aUoYeGV7TVhMA7eyMDD8ma3O6yQ4SBhbMVv3XQKmywLTKVhSqQOb1ZcDfxctCLk/RP
-        k0Cc0pTFITXgaTGVOsYWThYqHvRdgnA=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Brian,
+The imx412 like many I2C camera sensors has three voltage rails which
+depending on platform may be necessary to switch power onto directly.
 
-Thanks for the update. A few minor matters below...
+Add in as optional rails so as not to break anything for existing users.
 
-On Thu, Apr 14, 2022 at 01:45:05PM +0100, Bryan O'Donoghue wrote:
-> Depending on the platform we may need to enable and disable three separate
-> regulators for the imx412.
-> 
-> - DOVDD
-> Digital I/O power
-> 
-> - AVDD
-> Analog power
-> 
-> - DVDD
-> Digital core power
-> 
-> The addition of these regulators shouldn't affect existing users using
-> fixed-on/firmware-controlled regulators.
-> 
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  drivers/media/i2c/imx412.c | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/drivers/media/i2c/imx412.c b/drivers/media/i2c/imx412.c
-> index be3f6ea55559..27170e641b53 100644
-> --- a/drivers/media/i2c/imx412.c
-> +++ b/drivers/media/i2c/imx412.c
-> @@ -11,6 +11,7 @@
->  #include <linux/i2c.h>
->  #include <linux/module.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/regulator/consumer.h>
->  
->  #include <media/v4l2-ctrls.h>
->  #include <media/v4l2-fwnode.h>
-> @@ -101,6 +102,12 @@ struct imx412_mode {
->  	struct imx412_reg_list reg_list;
->  };
->  
-> +static const char * const imx412_supply_names[] = {
-> +	"dovdd",	/* Digital I/O power */
-> +	"avdd",		/* Analog power */
-> +	"dvdd",		/* Digital core power */
-> +};
-> +
->  /**
->   * struct imx412 - imx412 sensor device structure
->   * @dev: Pointer to generic device
-> @@ -128,6 +135,8 @@ struct imx412 {
->  	struct media_pad pad;
->  	struct gpio_desc *reset_gpio;
->  	struct clk *inclk;
-> +	struct regulator_bulk_data supplies[ARRAY_SIZE(imx412_supply_names)];
-> +	unsigned int num_supplies;
->  	struct v4l2_ctrl_handler ctrl_handler;
->  	struct v4l2_ctrl *link_freq_ctrl;
->  	struct v4l2_ctrl *pclk_ctrl;
-> @@ -946,6 +955,16 @@ static int imx412_parse_hw_config(struct imx412 *imx412)
->  		return -EINVAL;
->  	}
->  
-> +	/* Get optional DT defined regulators */
-> +	imx412->num_supplies = ARRAY_SIZE(imx412_supply_names);
-> +	for (i = 0; i < imx412->num_supplies; i++)
-> +		imx412->supplies[i].supply = imx412_supply_names[i];
-> +
-> +	ret = devm_regulator_bulk_get(imx412->dev, imx412->num_supplies,
-> +				      imx412->supplies);
-> +	if (ret)
-> +		return ret;
-> +
->  	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
->  	if (!ep)
->  		return -ENXIO;
-> @@ -1011,10 +1030,19 @@ static int imx412_power_on(struct device *dev)
->  	struct imx412 *imx412 = to_imx412(sd);
->  	int ret;
->  
-> +	ret = regulator_bulk_enable(imx412->num_supplies,
-> +				    imx412->supplies);
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+---
+ .../devicetree/bindings/media/i2c/sony,imx412.yaml       | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Fits on the same line.
-
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to enable regulators\n");
-> +		return ret;
-> +	}
-> +
->  	gpiod_set_value_cansleep(imx412->reset_gpio, 1);
->  
->  	ret = clk_prepare_enable(imx412->inclk);
->  	if (ret) {
-> +		regulator_bulk_disable(imx412->num_supplies,
-> +				       imx412->supplies);
-
-As the function already has an error handling section using labels, this
-should go there as well.
-
->  		dev_err(imx412->dev, "fail to enable inclk");
->  		goto error_reset;
->  	}
-> @@ -1044,6 +1072,9 @@ static int imx412_power_off(struct device *dev)
->  
->  	clk_disable_unprepare(imx412->inclk);
->  
-> +	regulator_bulk_disable(imx412->num_supplies,
-> +			       imx412->supplies);
-
-Fits on the same line.
-
-> +
->  	return 0;
->  }
->  
-
+diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx412.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx412.yaml
+index afcf70947f7e..26d1807d0bb6 100644
+--- a/Documentation/devicetree/bindings/media/i2c/sony,imx412.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/sony,imx412.yaml
+@@ -32,6 +32,15 @@ properties:
+     description: Clock frequency 6MHz, 12MHz, 18MHz, 24MHz or 27MHz
+     maxItems: 1
+ 
++  dovdd-supply:
++    description: Interface power supply.
++
++  avdd-supply:
++    description: Analog power supply.
++
++  dvdd-supply:
++    description: Digital power supply.
++
+   reset-gpios:
+     description: Reference to the GPIO connected to the XCLR pin, if any.
+     maxItems: 1
 -- 
-Sakari Ailus
+2.35.1
+
