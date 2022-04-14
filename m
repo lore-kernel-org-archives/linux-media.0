@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58E53C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 14 Apr 2022 05:41:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85775C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 14 Apr 2022 05:41:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239921AbiDNFnd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S239902AbiDNFnd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 14 Apr 2022 01:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239890AbiDNFnb (ORCPT
+        with ESMTP id S234013AbiDNFnb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 14 Apr 2022 01:43:31 -0400
-Received: from mo-csw.securemx.jp (mo-csw1115.securemx.jp [210.130.202.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC3948310;
-        Wed, 13 Apr 2022 22:41:03 -0700 (PDT)
-Received: by mo-csw.securemx.jp (mx-mo-csw1115) id 23E5emAS022045; Thu, 14 Apr 2022 14:40:48 +0900
-X-Iguazu-Qid: 2wHHts48jTQbsbwmY6
-X-Iguazu-QSIG: v=2; s=0; t=1649914848; q=2wHHts48jTQbsbwmY6; m=rm8ElIe+pSTp9jG927rL8YHUpbV988ynWFvhY0Q/nQs=
+Received: from mo-csw.securemx.jp (mo-csw1114.securemx.jp [210.130.202.156])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C038D47AFB;
+        Wed, 13 Apr 2022 22:41:02 -0700 (PDT)
+Received: by mo-csw.securemx.jp (mx-mo-csw1114) id 23E5emNT015282; Thu, 14 Apr 2022 14:40:48 +0900
+X-Iguazu-Qid: 2wHHhfqWL5KeVRlEMY
+X-Iguazu-QSIG: v=2; s=0; t=1649914848; q=2wHHhfqWL5KeVRlEMY; m=d+roGTjhXS6A12VqIs02fQR4/ox5mbaCWRbNlfT/obU=
 Received: from imx12-a.toshiba.co.jp (imx12-a.toshiba.co.jp [61.202.160.135])
-        by relay.securemx.jp (mx-mr1110) id 23E5el4c027580
+        by relay.securemx.jp (mx-mr1113) id 23E5el6w023239
         (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
         Thu, 14 Apr 2022 14:40:48 +0900
-X-SA-MID: 2385300
+X-SA-MID: 2385302
 From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, yuji2.ishikawa@toshiba.co.jp
-Subject: [PATCH v2 1/5] dt-bindings: media: platform: visconti: Add Toshiba Visconti Video Input Interface bindings
-Date:   Thu, 14 Apr 2022 14:35:24 +0900
+Subject: [PATCH v2 5/5] MAINTAINERS: Add entries for Toshiba Visconti Video Input Interface
+Date:   Thu, 14 Apr 2022 14:35:28 +0900
 X-TSB-HOP2: ON
-Message-Id: <20220414053528.31460-2-yuji2.ishikawa@toshiba.co.jp>
+Message-Id: <20220414053528.31460-6-yuji2.ishikawa@toshiba.co.jp>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220414053528.31460-1-yuji2.ishikawa@toshiba.co.jp>
 References: <20220414053528.31460-1-yuji2.ishikawa@toshiba.co.jp>
@@ -39,125 +39,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds the Device Tree binding documentation that allows to describe
-the Video Input Interface found in Toshiba Visconti SoCs.
-
 Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
 Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 ---
- .../bindings/media/toshiba,visconti-viif.yaml | 103 ++++++++++++++++++
- 1 file changed, 103 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml b/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
-new file mode 100644
-index 000000000..848ea5019
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
-@@ -0,0 +1,103 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/toshiba,visconti-viif.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Toshiba Visconti5 SoC Video Input Interface Device Tree Bindings
-+
-+maintainers:
-+  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-+
-+description: |
-+  Toshiba Visconti5 SoC Video Input Interface (VIIF) receives MIPI CSI2 video stream,
-+  processes the stream with embedded image signal processor (L1ISP, L2ISP), then stores pictures to main memory.
-+
-+properties:
-+  compatible:
-+    const: toshiba,visconti-viif
-+
-+  reg:
-+    items:
-+      - description: registers for capture control
-+      - description: registers for CSI2 receiver control
-+
-+  interrupts:
-+    items:
-+      - description: Sync Interrupt
-+      - description: Status (Error) Interrupt
-+      - description: CSI2 Receiver Interrupt
-+      - description: L1ISP Interrupt
-+
-+  index:
-+    enum: [0, 1]
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+    unevaluatedProperties: false
-+    description: Input port node, single endpoint describing the CSI-2 transmitter.
-+
-+    properties:
-+      endpoint:
-+        $ref: video-interfaces.yaml#
-+        unevaluatedProperties: false
-+
-+        properties:
-+          data-lanes:
-+            description: VIIF supports 2 or 4 data lines
-+            items:
-+              minItems: 1
-+              maxItems: 4
-+              items:
-+                - const: 1
-+                - const: 2
-+                - const: 3
-+                - const: 4
-+          clock-lanes:
-+            description: VIIF supports 1 clock line
-+            const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        viif0: viif@1c000000 {
-+            compatible = "toshiba,visconti-viif";
-+            reg = <0 0x1c000000 0 0x6000>,
-+                  <0 0x1c008000 0 0x400>;
-+            interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
-+            index = <0>;
-+            status = "disabled";
-+
-+            port {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                csi_in0: endpoint {
-+                    remote-endpoint = <&imx219_out0>;
-+                    bus-type = <4>;
-+                    data-lanes = <1 2>;
-+                    clock-lanes = <0>;
-+                    clock-noncontinuous;
-+                    link-frequencies = /bits/ 64 <456000000>;
-+                };
-+            };
-+        };
-+    };
-+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index dd36acc87..62d547008 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2792,12 +2792,14 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Supported
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/iwamatsu/linux-visconti.git
+ F:	Documentation/devicetree/bindings/arm/toshiba.yaml
++F:	Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+ F:	Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
+ F:	Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
+ F:	Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/toshiba,visconti-pinctrl.yaml
+ F:	Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
+ F:	arch/arm64/boot/dts/toshiba/
++F:	drivers/media/platform/visconti/
+ F:	drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
+ F:	drivers/gpio/gpio-visconti.c
+ F:	drivers/pci/controller/dwc/pcie-visconti.c
 -- 
 2.17.1
 
