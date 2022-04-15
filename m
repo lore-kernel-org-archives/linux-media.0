@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8512C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 15 Apr 2022 15:30:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BF7CC433FE
+	for <linux-media@archiver.kernel.org>; Fri, 15 Apr 2022 15:30:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243482AbiDOPdA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Apr 2022 11:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
+        id S1345915AbiDOPdB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Apr 2022 11:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355263AbiDOPbc (ORCPT
+        with ESMTP id S1355249AbiDOPcA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:31:32 -0400
+        Fri, 15 Apr 2022 11:32:00 -0400
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30C4D64D4;
-        Fri, 15 Apr 2022 08:28:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB8CD4C95;
+        Fri, 15 Apr 2022 08:28:54 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4682BE0015;
-        Fri, 15 Apr 2022 15:28:45 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4D1D6E000D;
+        Fri, 15 Apr 2022 15:28:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650036526;
+        t=1650036533;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2fzMXFp7GnA/U7fJH8F1ljdEdR1zvqkYmKc5yUNRwl4=;
-        b=fpB1K5LTTcVbPKdCHve3eIu0vkvgvWZeB3hOjMqWe1HHGUmBeR0XYc0f7MVKk+lzTEMRve
-        h/VGQeA2SltQJhx5Zfi87uBAbP3PqidNBNXc6ZUPns4U8ghf4tR1ET/ivGsfXBtdzSuoue
-        zhqunrOLpRS+4/3IeEDl1o5FXRVjo2IMMVfrJZb7W+0Rm4axQSnN2xc+iq9AVspBIBZSJ/
-        BWZvB9RkuVqxTE341RWCVfEnTgtpRrZm9B9lya3CckThejGzFodtsP+YBTxDwyx/ZpPDiz
-        T7TZwxEfQ7x9Cty88rgnMDJ98qDvFNRcMXh7TWhY9pU0XieKI00fjO6o8kuJTQ==
+        bh=0g5DnJUWqU1xX4MhkrFEBaH1SIZkGsyug+EenENAgCc=;
+        b=lPTwGQXyhFzplwv1yFQFmKwYVEYlLpRRxC91P6EkGo82ljZR1626jaQur2Gub3zyUacud4
+        ww0tPJQmozvy08uDklKAGPRVkG48P6R+K2Sah0hqdTgp1/fNtVPdbegwmE9VDb3vPCCgBS
+        g/MJbDeyPEkV5NWai9kR8qf0hWbiOzXjS7QUqjjDf1w0zDtPQOXL1ehzSFCyJH2EZQkrcn
+        OWENWLj6Me44Bto1ShaRypvsG7++VM5m6muufgJQTPbj/b6sZfkrX73j6UrOK1752IjC76
+        Cv5U87mSKSpo2/Gw7Zcb7k78oT6T8KGoz3dexsRa1SXJ5SXY4UJxTAq8xaPO5w==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -42,9 +42,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 23/45] media: sun6i-csi: Move power management to runtime pm in capture
-Date:   Fri, 15 Apr 2022 17:27:49 +0200
-Message-Id: <20220415152811.636419-24-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v4 29/45] media: sun6i-csi: Tidy capture configure code
+Date:   Fri, 15 Apr 2022 17:27:55 +0200
+Message-Id: <20220415152811.636419-30-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220415152811.636419-1-paul.kocialkowski@bootlin.com>
 References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com>
@@ -54,201 +54,197 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Let's just enable the module when we start using it (at stream on)
-and benefit from runtime pm instead of enabling it at first open.
-
-Also reorder the call to v4l2_pipeline_pm_get.
+Some misc code cleanups and preparation for upcoming changes.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 24 -----------
- .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  7 ----
- .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 41 ++++++++++---------
- 3 files changed, 22 insertions(+), 50 deletions(-)
+ .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 105 ++++++++----------
+ 1 file changed, 46 insertions(+), 59 deletions(-)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index 29892e8c2b9d..7801f5abe47e 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -148,30 +148,6 @@ bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
- 	return false;
- }
- 
--int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable)
--{
--	struct device *dev = csi_dev->dev;
--	struct regmap *regmap = csi_dev->regmap;
--	int ret;
--
--	if (!enable) {
--		regmap_update_bits(regmap, SUN6I_CSI_EN_REG,
--				   SUN6I_CSI_EN_CSI_EN, 0);
--		pm_runtime_put(dev);
--
--		return 0;
--	}
--
--	ret = pm_runtime_resume_and_get(dev);
--	if (ret < 0)
--		return ret;
--
--	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN,
--			   SUN6I_CSI_EN_CSI_EN);
--
--	return 0;
--}
--
- static enum csi_input_fmt get_csi_input_format(struct sun6i_csi_device *csi_dev,
- 					       u32 mbus_code, u32 pixformat)
- {
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-index 155527961280..3a4f2b45d267 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-@@ -77,13 +77,6 @@ struct sun6i_csi_variant {
- bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
- 				   u32 pixformat, u32 mbus_code);
- 
--/**
-- * sun6i_csi_set_power() - power on/off the csi
-- * @csi:	pointer to the csi
-- * @enable:	on/off
-- */
--int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable);
--
- /**
-  * sun6i_csi_update_config() - update the csi register settings
-  * @csi:	pointer to the csi
 diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-index 72fcc60d2695..3e5c4f7df48d 100644
+index e2070353f93f..9488c7c26f13 100644
 --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
 +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/of.h>
-+#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- 
- #include <media/v4l2-device.h>
-@@ -141,6 +142,9 @@ static void sun6i_csi_capture_enable(struct sun6i_csi_device *csi_dev)
- {
- 	struct regmap *regmap = csi_dev->regmap;
- 
-+	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN,
-+			   SUN6I_CSI_EN_CSI_EN);
-+
- 	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, SUN6I_CSI_CAP_VCAP_ON,
- 			   SUN6I_CSI_CAP_VCAP_ON);
- }
-@@ -150,6 +154,7 @@ static void sun6i_csi_capture_disable(struct sun6i_csi_device *csi_dev)
- 	struct regmap *regmap = csi_dev->regmap;
- 
- 	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, SUN6I_CSI_CAP_VCAP_ON, 0);
-+	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN, 0);
- }
- 
+@@ -353,133 +353,120 @@ static enum csi_input_seq get_csi_input_seq(struct sun6i_csi_device *csi_dev,
  static void
-@@ -382,6 +387,7 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
- 	struct sun6i_csi_capture_state *state = &capture->state;
- 	struct video_device *video_dev = &capture->video_dev;
+ sun6i_csi_capture_configure_interface(struct sun6i_csi_device *csi_dev)
+ {
 +	struct device *dev = csi_dev->dev;
- 	struct v4l2_subdev *subdev;
- 	int ret;
++	struct regmap *regmap = csi_dev->regmap;
+ 	struct v4l2_fwnode_endpoint *endpoint =
+ 		&csi_dev->bridge.source_parallel.endpoint;
++	unsigned char bus_width = endpoint->bus.parallel.bus_width;
++	unsigned int flags = endpoint->bus.parallel.flags;
+ 	u32 pixelformat, field;
+-	unsigned char bus_width;
+-	u32 flags;
+-	u32 cfg = 0;
+-	bool input_interlaced = false;
++	u32 value = SUN6I_CSI_IF_CFG_IF_CSI;
  
-@@ -402,6 +408,12 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- 		goto error_media_pipeline;
+ 	sun6i_csi_capture_format(csi_dev, &pixelformat, &field);
+ 
+ 	if (field == V4L2_FIELD_INTERLACED ||
+ 	    field == V4L2_FIELD_INTERLACED_TB ||
+ 	    field == V4L2_FIELD_INTERLACED_BT)
+-		input_interlaced = true;
+-
+-	bus_width = endpoint->bus.parallel.bus_width;
+-
+-	if (input_interlaced)
+-		cfg |= SUN6I_CSI_IF_CFG_SRC_TYPE_INTERLACED |
+-		       SUN6I_CSI_IF_CFG_FIELD_DT_PCLK_SHIFT(1) |
+-		       SUN6I_CSI_IF_CFG_FIELD_DT_FIELD_VSYNC;
++		value |= SUN6I_CSI_IF_CFG_SRC_TYPE_INTERLACED |
++			 SUN6I_CSI_IF_CFG_FIELD_DT_PCLK_SHIFT(1) |
++			 SUN6I_CSI_IF_CFG_FIELD_DT_FIELD_VSYNC;
+ 	else
+-		cfg |= SUN6I_CSI_IF_CFG_SRC_TYPE_PROGRESSIVE;
++		value |= SUN6I_CSI_IF_CFG_SRC_TYPE_PROGRESSIVE;
+ 
+ 	switch (endpoint->bus_type) {
+ 	case V4L2_MBUS_PARALLEL:
+-		cfg |= SUN6I_CSI_IF_CFG_IF_CSI;
+-
+-		flags = endpoint->bus.parallel.flags;
+-
+ 		if (bus_width == 16)
+-			cfg |= SUN6I_CSI_IF_CFG_IF_CSI_YUV_COMBINED;
++			value |= SUN6I_CSI_IF_CFG_IF_CSI_YUV_COMBINED;
+ 		else
+-			cfg |= SUN6I_CSI_IF_CFG_IF_CSI_YUV_RAW;
++			value |= SUN6I_CSI_IF_CFG_IF_CSI_YUV_RAW;
+ 
+ 		if (flags & V4L2_MBUS_FIELD_EVEN_LOW)
+-			cfg |= SUN6I_CSI_IF_CFG_FIELD_NEGATIVE;
++			value |= SUN6I_CSI_IF_CFG_FIELD_NEGATIVE;
+ 		else
+-			cfg |= SUN6I_CSI_IF_CFG_FIELD_POSITIVE;
++			value |= SUN6I_CSI_IF_CFG_FIELD_POSITIVE;
+ 
+ 		if (flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
+-			cfg |= SUN6I_CSI_IF_CFG_VREF_POL_NEGATIVE;
++			value |= SUN6I_CSI_IF_CFG_VREF_POL_NEGATIVE;
+ 		else
+-			cfg |= SUN6I_CSI_IF_CFG_VREF_POL_POSITIVE;
++			value |= SUN6I_CSI_IF_CFG_VREF_POL_POSITIVE;
+ 
+ 		if (flags & V4L2_MBUS_HSYNC_ACTIVE_LOW)
+-			cfg |= SUN6I_CSI_IF_CFG_HREF_POL_NEGATIVE;
++			value |= SUN6I_CSI_IF_CFG_HREF_POL_NEGATIVE;
+ 		else
+-			cfg |= SUN6I_CSI_IF_CFG_HREF_POL_POSITIVE;
++			value |= SUN6I_CSI_IF_CFG_HREF_POL_POSITIVE;
+ 
+ 		if (flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
+-			cfg |= SUN6I_CSI_IF_CFG_CLK_POL_RISING;
++			value |= SUN6I_CSI_IF_CFG_CLK_POL_RISING;
+ 		else
+-			cfg |= SUN6I_CSI_IF_CFG_CLK_POL_FALLING;
++			value |= SUN6I_CSI_IF_CFG_CLK_POL_FALLING;
+ 		break;
+ 	case V4L2_MBUS_BT656:
+-		cfg |= SUN6I_CSI_IF_CFG_IF_CSI;
+-
+-		flags = endpoint->bus.parallel.flags;
+-
+ 		if (bus_width == 16)
+-			cfg |= SUN6I_CSI_IF_CFG_IF_CSI_BT1120;
++			value |= SUN6I_CSI_IF_CFG_IF_CSI_BT1120;
+ 		else
+-			cfg |= SUN6I_CSI_IF_CFG_IF_CSI_BT656;
++			value |= SUN6I_CSI_IF_CFG_IF_CSI_BT656;
+ 
+ 		if (flags & V4L2_MBUS_FIELD_EVEN_LOW)
+-			cfg |= SUN6I_CSI_IF_CFG_FIELD_NEGATIVE;
++			value |= SUN6I_CSI_IF_CFG_FIELD_NEGATIVE;
+ 		else
+-			cfg |= SUN6I_CSI_IF_CFG_FIELD_POSITIVE;
++			value |= SUN6I_CSI_IF_CFG_FIELD_POSITIVE;
+ 
+ 		if (flags & V4L2_MBUS_PCLK_SAMPLE_FALLING)
+-			cfg |= SUN6I_CSI_IF_CFG_CLK_POL_RISING;
++			value |= SUN6I_CSI_IF_CFG_CLK_POL_RISING;
+ 		else
+-			cfg |= SUN6I_CSI_IF_CFG_CLK_POL_FALLING;
++			value |= SUN6I_CSI_IF_CFG_CLK_POL_FALLING;
+ 		break;
+ 	default:
+-		dev_warn(csi_dev->dev, "Unsupported bus type: %d\n",
+-			 endpoint->bus_type);
++		dev_warn(dev, "unsupported bus type: %d\n", endpoint->bus_type);
+ 		break;
  	}
  
-+	/* PM */
-+
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
-+		goto error_media_pipeline;
-+
- 	/* Clear */
+ 	switch (bus_width) {
+ 	case 8:
+-		cfg |= SUN6I_CSI_IF_CFG_DATA_WIDTH_8;
++	/* 16-bit YUV formats use a doubled width in 8-bit mode. */
++	case 16:
++		value |= SUN6I_CSI_IF_CFG_DATA_WIDTH_8;
+ 		break;
+ 	case 10:
+-		cfg |= SUN6I_CSI_IF_CFG_DATA_WIDTH_10;
++		value |= SUN6I_CSI_IF_CFG_DATA_WIDTH_10;
+ 		break;
+ 	case 12:
+-		cfg |= SUN6I_CSI_IF_CFG_DATA_WIDTH_12;
+-		break;
+-	case 16: /* No need to configure DATA_WIDTH for 16bit */
++		value |= SUN6I_CSI_IF_CFG_DATA_WIDTH_12;
+ 		break;
+ 	default:
+-		dev_warn(csi_dev->dev, "Unsupported bus width: %u\n", bus_width);
++		dev_warn(dev, "unsupported bus width: %u\n", bus_width);
+ 		break;
+ 	}
  
- 	sun6i_csi_capture_irq_clear(csi_dev);
-@@ -429,6 +441,8 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- 	sun6i_csi_capture_disable(csi_dev);
- 	sun6i_csi_capture_irq_disable(csi_dev);
+-	regmap_write(csi_dev->regmap, SUN6I_CSI_IF_CFG_REG, cfg);
++	regmap_write(regmap, SUN6I_CSI_IF_CFG_REG, value);
+ }
  
-+	pm_runtime_put(dev);
-+
- error_media_pipeline:
- 	media_pipeline_stop(&video_dev->entity);
- 
-@@ -442,6 +456,7 @@ static void sun6i_csi_capture_stop_streaming(struct vb2_queue *queue)
+ static void sun6i_csi_capture_configure_format(struct sun6i_csi_device *csi_dev)
  {
- 	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(queue);
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
-+	struct device *dev = csi_dev->dev;
- 	struct v4l2_subdev *subdev;
++	struct regmap *regmap = csi_dev->regmap;
+ 	u32 mbus_code, pixelformat, field;
+-	u32 cfg = 0;
+-	u32 val;
++	u8 input_format, input_yuv_seq, output_format;
++	u32 value = 0;
  
- 	subdev = sun6i_csi_capture_remote_subdev(capture, NULL);
-@@ -451,6 +466,8 @@ static void sun6i_csi_capture_stop_streaming(struct vb2_queue *queue)
- 	sun6i_csi_capture_disable(csi_dev);
- 	sun6i_csi_capture_irq_disable(csi_dev);
+ 	sun6i_csi_capture_format(csi_dev, &pixelformat, &field);
+ 	sun6i_csi_bridge_format(csi_dev, &mbus_code, NULL);
  
-+	pm_runtime_put(dev);
-+
- 	media_pipeline_stop(&capture->video_dev.entity);
- 
- 	sun6i_csi_capture_state_cleanup(csi_dev, true);
-@@ -639,27 +656,20 @@ static int sun6i_csi_capture_open(struct file *file)
- 	if (mutex_lock_interruptible(&capture->lock))
- 		return -ERESTARTSYS;
- 
--	ret = v4l2_fh_open(file);
-+	ret = v4l2_pipeline_pm_get(&capture->video_dev.entity);
- 	if (ret < 0)
- 		goto error_lock;
- 
--	ret = v4l2_pipeline_pm_get(&capture->video_dev.entity);
-+	ret = v4l2_fh_open(file);
- 	if (ret < 0)
--		goto error_v4l2_fh;
+-	val = get_csi_input_format(csi_dev, mbus_code, pixelformat);
+-	cfg |= SUN6I_CSI_CH_CFG_INPUT_FMT(val);
 -
--	/* Power on at first open. */
--	if (v4l2_fh_is_singular_file(file)) {
--		ret = sun6i_csi_set_power(csi_dev, true);
--		if (ret < 0)
--			goto error_v4l2_fh;
--	}
-+		goto error_pipeline;
+-	val = get_csi_output_format(csi_dev, pixelformat, field);
+-	cfg |= SUN6I_CSI_CH_CFG_OUTPUT_FMT(val);
++	input_format = get_csi_input_format(csi_dev, mbus_code, pixelformat);
++	input_yuv_seq = get_csi_input_seq(csi_dev, mbus_code, pixelformat);
++	output_format = get_csi_output_format(csi_dev, pixelformat, field);
  
- 	mutex_unlock(&capture->lock);
+-	val = get_csi_input_seq(csi_dev, mbus_code, pixelformat);
+-	cfg |= SUN6I_CSI_CH_CFG_INPUT_YUV_SEQ(val);
++	value |= SUN6I_CSI_CH_CFG_OUTPUT_FMT(output_format);
++	value |= SUN6I_CSI_CH_CFG_INPUT_FMT(input_format);
++	value |= SUN6I_CSI_CH_CFG_INPUT_YUV_SEQ(input_yuv_seq);
  
- 	return 0;
+ 	if (field == V4L2_FIELD_TOP)
+-		cfg |= SUN6I_CSI_CH_CFG_FIELD_SEL_FIELD0;
++		value |= SUN6I_CSI_CH_CFG_FIELD_SEL_FIELD0;
+ 	else if (field == V4L2_FIELD_BOTTOM)
+-		cfg |= SUN6I_CSI_CH_CFG_FIELD_SEL_FIELD1;
++		value |= SUN6I_CSI_CH_CFG_FIELD_SEL_FIELD1;
+ 	else
+-		cfg |= SUN6I_CSI_CH_CFG_FIELD_SEL_EITHER;
++		value |= SUN6I_CSI_CH_CFG_FIELD_SEL_EITHER;
  
--error_v4l2_fh:
--	v4l2_fh_release(file);
-+error_pipeline:
-+	v4l2_pipeline_pm_put(&capture->video_dev.entity);
+-	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_CFG_REG, cfg);
++	regmap_write(regmap, SUN6I_CSI_CH_CFG_REG, value);
+ }
  
- error_lock:
- 	mutex_unlock(&capture->lock);
-@@ -671,19 +681,12 @@ static int sun6i_csi_capture_close(struct file *file)
- {
- 	struct sun6i_csi_device *csi_dev = video_drvdata(file);
- 	struct sun6i_csi_capture *capture = &csi_dev->capture;
--	bool last_close;
- 
- 	mutex_lock(&capture->lock);
- 
--	last_close = v4l2_fh_is_singular_file(file);
--
- 	_vb2_fop_release(file, NULL);
- 	v4l2_pipeline_pm_put(&capture->video_dev.entity);
- 
--	/* Power off at last close. */
--	if (last_close)
--		sun6i_csi_set_power(csi_dev, false);
--
- 	mutex_unlock(&capture->lock);
- 
- 	return 0;
+ static void sun6i_csi_capture_configure_window(struct sun6i_csi_device *csi_dev)
 -- 
 2.35.2
 
