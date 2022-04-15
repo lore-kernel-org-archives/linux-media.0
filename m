@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3136C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 15 Apr 2022 15:28:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F06DC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 15 Apr 2022 15:28:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355145AbiDOPbE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Apr 2022 11:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
+        id S242542AbiDOPbZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Apr 2022 11:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355113AbiDOPa7 (ORCPT
+        with ESMTP id S1355159AbiDOPbL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:30:59 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DBED3AE6;
-        Fri, 15 Apr 2022 08:28:29 -0700 (PDT)
+        Fri, 15 Apr 2022 11:31:11 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5EDD4C9A;
+        Fri, 15 Apr 2022 08:28:33 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 99F72E000E;
-        Fri, 15 Apr 2022 15:28:27 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 513F0E0016;
+        Fri, 15 Apr 2022 15:28:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650036508;
+        t=1650036512;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=f/85jkQeR3l9hsK0wjMhb2D1WQGSqgYe7ss33bUuh2s=;
-        b=mTdPrHglxnlDHLB6mog4vf8HMADAKhlyEmVtHOd6fGbqHkipzX1SPejqs9o/i7Pu631yiu
-        6vDdQj8xTV/n3YT24uVRFixwVh/9Nwjy17yAlafrMLK34q6Vspc01XyrovDgGZX7IJdyfc
-        vNGcAFAEpt/vyfRx9o1+5ZWvaIqLkJn0IhtT2b5H4hbwH/8vbumUi3oWbf6YvYDnbpd3y0
-        3KUZnIB/qcHRNUrpoZ0JaLFgfmoHI2Kk+toUv9YYSSr4XaO9mdkyQ4HiEHuGUhEBr6ccbi
-        UgsNuC8YsHKRDWbLjnrI9tUNR76Cay3Vojo3smaCgb7wxyjuPddUrr0r5PCVIg==
+        bh=p/G3Lv5aXmpaUoYeX8MRq+c6XCpBmVOvXeLJxUHHzd0=;
+        b=Z3YIxE+Elv/LhefhNAdaJTccscQKVVtnBYvmQ4D5CKJUqFRnmuZqBn+A1wCUW22mlHJk/L
+        SLq4FtjJdGO7oWtTlxjd7Fiw18nUo2VM6t9jrA3yQoUCBoZrsn1UU5gacCpBJsyk49IJFp
+        fjLC+b/F9m8dyCHK7vCP5X315ZuXV1WM0zmIPtg8GZgR82LxVvIl7cDv2CynEg53UaK+Ns
+        d+7r86QO76QV+PjqIgPBSqqjBb50dd+ZD+uINYJM8dLggHNOfEZsjRXc3o4cz3zlj6Flom
+        +TKFDQ1mB5EBT407CVS4mrMzQ0PYjWrjicfqNGsylKvR+Y1aKkC1WaGyI8oQ1g==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -41,11 +41,10 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Samuel Holland <samuel@sholland.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v4 08/45] media: sun6i-csi: Tidy up v4l2 code
-Date:   Fri, 15 Apr 2022 17:27:34 +0200
-Message-Id: <20220415152811.636419-9-paul.kocialkowski@bootlin.com>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v4 11/45] media: sun6i-csi: Register the media device after creation
+Date:   Fri, 15 Apr 2022 17:27:37 +0200
+Message-Id: <20220415152811.636419-12-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220415152811.636419-1-paul.kocialkowski@bootlin.com>
 References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com>
@@ -55,200 +54,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Various cosmetic improvements to the v4l2 registration code, with
-renames, lowerings, etc. The cleanup function is moved down after
-setup. No functional change intended.
+There is no particular need to register the media device in the
+subdev notify complete callback.
+
+Register it in the v4l2 code instead where it's more in-context.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Reviewed-by: Maxime Ripard <maxime@cerno.tech>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 118 ++++++++++--------
- 1 file changed, 68 insertions(+), 50 deletions(-)
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index dcc9e7a125e2..902a69cc27fe 100644
+index 198275e09865..e59ee3e3f372 100644
 --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
 +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -27,6 +27,8 @@
- #include "sun6i_csi.h"
- #include "sun6i_csi_reg.h"
- 
-+/* Helpers */
-+
- /* TODO add 10&12 bit YUV, RGB support */
- bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
- 				   u32 pixformat, u32 mbus_code)
-@@ -572,9 +574,8 @@ void sun6i_csi_set_stream(struct sun6i_csi_device *csi_dev, bool enable)
- 			   CSI_CAP_CH0_VCAP_ON);
- }
- 
--/* -----------------------------------------------------------------------------
-- * Media Controller and V4L2
-- */
-+/* V4L2 */
-+
- static int sun6i_csi_link_entity(struct sun6i_csi_device *csi_dev,
- 				 struct media_entity *entity,
- 				 struct fwnode_handle *fwnode)
-@@ -666,86 +667,103 @@ static int sun6i_csi_fwnode_parse(struct device *dev,
- 	}
- }
- 
--static void sun6i_csi_v4l2_cleanup(struct sun6i_csi_device *csi_dev)
-+static int sun6i_csi_v4l2_setup(struct sun6i_csi_device *csi_dev)
- {
- 	struct sun6i_csi_v4l2 *v4l2 = &csi_dev->v4l2;
-+	struct media_device *media_dev = &v4l2->media_dev;
-+	struct v4l2_device *v4l2_dev = &v4l2->v4l2_dev;
-+	struct v4l2_async_notifier *notifier = &v4l2->notifier;
-+	struct device *dev = csi_dev->dev;
-+	int ret;
- 
--	media_device_unregister(&v4l2->media_dev);
--	v4l2_async_nf_unregister(&v4l2->notifier);
--	v4l2_async_nf_cleanup(&v4l2->notifier);
--	sun6i_video_cleanup(&csi_dev->video);
--	v4l2_device_unregister(&v4l2->v4l2_dev);
--	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
--	media_device_cleanup(&v4l2->media_dev);
--}
-+	/* Media Device */
- 
--static int sun6i_csi_v4l2_init(struct sun6i_csi_device *csi_dev)
--{
--	struct sun6i_csi_v4l2 *v4l2 = &csi_dev->v4l2;
--	int ret;
-+	strscpy(media_dev->model, SUN6I_CSI_DESCRIPTION,
-+		sizeof(media_dev->model));
-+	snprintf(media_dev->bus_info, sizeof(media_dev->bus_info),
-+		 "platform:%s", dev_name(dev));
-+	media_dev->hw_revision = 0;
-+	media_dev->dev = dev;
- 
--	v4l2->media_dev.dev = csi_dev->dev;
--	strscpy(v4l2->media_dev.model, SUN6I_CSI_DESCRIPTION,
--		sizeof(v4l2->media_dev.model));
--	v4l2->media_dev.hw_revision = 0;
--	snprintf(v4l2->media_dev.bus_info,
--		 sizeof(v4l2->media_dev.bus_info), "platform:%s",
--		 dev_name(csi_dev->dev));
-+	media_device_init(media_dev);
- 
--	media_device_init(&v4l2->media_dev);
--	v4l2_async_nf_init(&v4l2->notifier);
-+	/* V4L2 Control Handler */
- 
- 	ret = v4l2_ctrl_handler_init(&v4l2->ctrl_handler, 0);
- 	if (ret) {
--		dev_err(csi_dev->dev, "V4L2 controls handler init failed (%d)\n",
--			ret);
--		goto clean_media;
-+		dev_err(dev, "failed to init v4l2 control handler: %d\n", ret);
-+		goto error_media;
- 	}
- 
--	v4l2->v4l2_dev.mdev = &v4l2->media_dev;
--	v4l2->v4l2_dev.ctrl_handler = &v4l2->ctrl_handler;
--	ret = v4l2_device_register(csi_dev->dev, &v4l2->v4l2_dev);
-+	/* V4L2 Device */
-+
-+	v4l2_dev->mdev = media_dev;
-+	v4l2_dev->ctrl_handler = &v4l2->ctrl_handler;
-+
-+	ret = v4l2_device_register(dev, v4l2_dev);
- 	if (ret) {
--		dev_err(csi_dev->dev, "V4L2 device registration failed (%d)\n",
--			ret);
--		goto free_ctrl;
-+		dev_err(dev, "failed to register v4l2 device: %d\n", ret);
-+		goto error_v4l2_ctrl;
- 	}
- 
-+	/* Video */
-+
- 	ret = sun6i_video_init(&csi_dev->video, csi_dev, SUN6I_CSI_NAME);
- 	if (ret)
--		goto unreg_v4l2;
-+		goto error_v4l2_device;
- 
--	ret = v4l2_async_nf_parse_fwnode_endpoints(csi_dev->dev,
--						   &v4l2->notifier,
-+	/* V4L2 Async */
-+
-+	v4l2_async_nf_init(notifier);
-+	notifier->ops = &sun6i_csi_async_ops;
-+
-+	ret = v4l2_async_nf_parse_fwnode_endpoints(dev, notifier,
- 						   sizeof(struct
- 							  v4l2_async_subdev),
- 						   sun6i_csi_fwnode_parse);
- 	if (ret)
--		goto clean_video;
--
--	v4l2->notifier.ops = &sun6i_csi_async_ops;
-+		goto error_video;
- 
--	ret = v4l2_async_nf_register(&v4l2->v4l2_dev, &v4l2->notifier);
-+	ret = v4l2_async_nf_register(v4l2_dev, notifier);
- 	if (ret) {
--		dev_err(csi_dev->dev, "notifier registration failed\n");
--		goto clean_video;
-+		dev_err(dev, "failed to register v4l2 async notifier: %d\n",
-+			ret);
-+		goto error_v4l2_async_notifier;
- 	}
- 
- 	return 0;
- 
--clean_video:
-+error_v4l2_async_notifier:
-+	v4l2_async_nf_cleanup(notifier);
-+
-+error_video:
- 	sun6i_video_cleanup(&csi_dev->video);
--unreg_v4l2:
-+
-+error_v4l2_device:
- 	v4l2_device_unregister(&v4l2->v4l2_dev);
--free_ctrl:
-+
-+error_v4l2_ctrl:
- 	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
--clean_media:
--	v4l2_async_nf_cleanup(&v4l2->notifier);
--	media_device_cleanup(&v4l2->media_dev);
-+
-+error_media:
-+	media_device_cleanup(media_dev);
- 
- 	return ret;
- }
- 
-+static void sun6i_csi_v4l2_cleanup(struct sun6i_csi_device *csi_dev)
-+{
-+	struct sun6i_csi_v4l2 *v4l2 = &csi_dev->v4l2;
-+
-+	media_device_unregister(&v4l2->media_dev);
-+	v4l2_async_nf_unregister(&v4l2->notifier);
-+	v4l2_async_nf_cleanup(&v4l2->notifier);
-+	sun6i_video_cleanup(&csi_dev->video);
-+	v4l2_device_unregister(&v4l2->v4l2_dev);
-+	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
-+	media_device_cleanup(&v4l2->media_dev);
-+}
-+
- /* Platform */
- 
- static irqreturn_t sun6i_csi_interrupt(int irq, void *private)
-@@ -942,7 +960,7 @@ static int sun6i_csi_probe(struct platform_device *platform_dev)
- 	if (ret)
+@@ -638,7 +638,7 @@ static int sun6i_subdev_notify_complete(struct v4l2_async_notifier *notifier)
+ 	if (ret < 0)
  		return ret;
  
--	ret = sun6i_csi_v4l2_init(csi_dev);
-+	ret = sun6i_csi_v4l2_setup(csi_dev);
- 	if (ret)
- 		goto error_resources;
+-	return media_device_register(&v4l2->media_dev);
++	return 0;
+ }
  
+ static const struct v4l2_async_notifier_operations sun6i_csi_async_ops = {
+@@ -687,6 +687,12 @@ static int sun6i_csi_v4l2_setup(struct sun6i_csi_device *csi_dev)
+ 
+ 	media_device_init(media_dev);
+ 
++	ret = media_device_register(media_dev);
++	if (ret) {
++		dev_err(dev, "failed to register media device: %d\n", ret);
++		goto error_media;
++	}
++
+ 	/* V4L2 Control Handler */
+ 
+ 	ret = v4l2_ctrl_handler_init(&v4l2->ctrl_handler, 0);
+@@ -746,6 +752,7 @@ static int sun6i_csi_v4l2_setup(struct sun6i_csi_device *csi_dev)
+ 	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
+ 
+ error_media:
++	media_device_unregister(media_dev);
+ 	media_device_cleanup(media_dev);
+ 
+ 	return ret;
 -- 
 2.35.2
 
