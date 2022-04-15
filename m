@@ -2,3310 +2,2222 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73B89C433FE
-	for <linux-media@archiver.kernel.org>; Fri, 15 Apr 2022 15:38:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF966C433EF
+	for <linux-media@archiver.kernel.org>; Fri, 15 Apr 2022 15:40:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355525AbiDOPk0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Apr 2022 11:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
+        id S243365AbiDOPnF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Apr 2022 11:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355314AbiDOPkI (ORCPT
+        with ESMTP id S1355763AbiDOPmt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:40:08 -0400
-X-Greylist: delayed 928 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Apr 2022 08:37:22 PDT
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B0C3F8BF;
-        Fri, 15 Apr 2022 08:37:21 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 30936240004;
-        Fri, 15 Apr 2022 15:37:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650037040;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xY8wDopYbq8ixCdh00acVWGXO9Fs9g+/H1Q/h2YhG1A=;
-        b=P0DyBzWmwElE1lWFDWLyNmeld28+PvHaK2oaXFTKN4rGaukYZ8PINCLZzJzivvD19sLgsr
-        4W28MPn5ffucTGs8nTAaXYt7DgzSSpgVahtGzQUA6V45/QeAbQJALNqLxw8hacJN5OAjxt
-        AKSdCwLay4eduaB2OGWj1KCf4Wpq090+MQ9Vu5hkwEdnYGSR+GNuOK3NcbbWZbw/NPA1hL
-        4V0NuwD7aHFihiPUc38+3Gk0QoILk2He6yQXmvBBf/CR/fhZb99zOUG4o+OG5AKK6+cLP9
-        bqm+4RWVoZye9kZL6uIrEFJtq0HNKs5RAtOGqwXryYwQs3Ue4fkaB0hOoXgF0w==
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 3/4] staging: media: Add support for the Allwinner A31 ISP
-Date:   Fri, 15 Apr 2022 17:37:07 +0200
-Message-Id: <20220415153708.637804-4-paul.kocialkowski@bootlin.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220415153708.637804-1-paul.kocialkowski@bootlin.com>
-References: <20220415153708.637804-1-paul.kocialkowski@bootlin.com>
+        Fri, 15 Apr 2022 11:42:49 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23859154F
+        for <linux-media@vger.kernel.org>; Fri, 15 Apr 2022 08:40:15 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-8-2-nat.elisa-mobile.fi [85.76.8.2])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 884875D;
+        Fri, 15 Apr 2022 17:40:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1650037213;
+        bh=SDUaicKocCjAr45mk46zVqkXc5Kxh/1/l/dwILH9gCw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ps3ZcDPFUiGxAeDuUVW4TMRAK5Xkb3SKRsImJ/gGDiqcCjucuhwkCQDx+xQ50Nyhk
+         20iAv8Pd4wVTYMim4JmHa+M8miklerO3o+1IVJ16KA72/dVNWICNXdaC4RLBPw9q1P
+         OBKsi9fCmDFjCaCXjd1axnklKsynAzt1AleK/lZU=
+Date:   Fri, 15 Apr 2022 18:39:36 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+Cc:     linux-media@vger.kernel.org, alain.volmat@foss.st.com,
+        hugues.fruchet@foss.st.com, sylvain.petinot@foss.st.com,
+        dave.stevenson@raspberrypi.com, sakari.ailus@linux.intel.com,
+        kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v2 5/5] media: i2c: Add driver for ST VGXY61 camera sensor
+Message-ID: <YlmRuM/aJkzpWwCL@pendragon.ideasonboard.com>
+References: <20220415111845.27130-1-benjamin.mugnier@foss.st.com>
+ <20220415111845.27130-6-benjamin.mugnier@foss.st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220415111845.27130-6-benjamin.mugnier@foss.st.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some Allwinner platforms come with an Image Signal Processor, which
-supports various features in order to enhance and transform data
-received by image sensors into good-looking pictures. In most cases,
-the data is raw bayer, which gets internally converted to RGB and
-finally YUV, which is what the hardware produces.
+Hi Benjamin,
 
-This driver supports ISPs that are similar to the A31 ISP, which was
-the first standalone ISP found in Allwinner platforms. Simpler ISP
-blocks were found in the A10 and A20, where they are tied to a CSI
-controller. Newer generations of Allwinner SoCs (starting with the
-H6, H616, etc) come with a new camera subsystem and revised ISP.
-Even though these previous and next-generation ISPs are somewhat
-similar to the A31 ISP, they have enough significant differences to
-be out of the scope of this driver.
+Thank you for the patch.
 
-While the ISP supports many features, including 3A and many
-enhancement blocks, this implementation is limited to the following:
-- V3s (V3/S3) platform support;
-- Bayer media bus formats as input;
-- Semi-planar YUV (NV12/NV21) as output;
-- Debayering with per-component gain and offset configuration;
-- 2D noise filtering with configurable coefficients.
+This is a partial review as I'm short on time now.
 
-Since many features are missing from the associated uAPI, the driver
-is aimed to integrate staging until all features are properly
-described.
+On Fri, Apr 15, 2022 at 01:18:45PM +0200, Benjamin Mugnier wrote:
+> The VGXY61 has a quad lanes CSI-2 output port running at 800mbps per
+> lane, and supports RAW8, RAW10, RAW12, RAW14 and RAW16 formats.
+> The driver handles both sensor types:
+> - VG5661 and VG6661: 1.6 Mpx (1464 x 1104) 75fps.
+> - VG5761 and VG6761: 2.3 Mpx (1944 x 1204) 60 fps.
+> The driver supports:
+> - HDR linearize mode, HDR substraction mode, and no HDR
+> - GPIOs LEDs strobing
+> - Digital binning and analog subsampling
+> - Horizontal and vertical flip
+> - Manual exposure
+> - Analog and digital gains
+> - Test patterns
+> 
+> Signed-off-by: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+> ---
+>  drivers/media/i2c/Kconfig     |   10 +
+>  drivers/media/i2c/Makefile    |    1 +
+>  drivers/media/i2c/st-vgxy61.c | 1997 +++++++++++++++++++++++++++++++++
+>  3 files changed, 2008 insertions(+)
+>  create mode 100644 drivers/media/i2c/st-vgxy61.c
+> 
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index fae2baabb773..734f3e1130b0 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -763,6 +763,16 @@ config VIDEO_VS6624
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called vs6624.
+>  
+> +config VIDEO_ST_VGXY61
 
-On the technical side, it uses the v4l2 and media controller APIs,
-with a video node for capture, a processor subdev and a video node
-for parameters submission. A specific uAPI structure and associated
-v4l2 meta format are used to configure parameters of the supported
-modules.
+Alphabetical order please.
 
-One particular thing about the hardware is that configuration for
-module registers needs to be stored in a DMA buffer and gets copied
-to actual registers by the hardware at the next vsync, when instructed
-by a flag. This is handled by the "state" mechanism in the driver.
+> +	tristate "ST VGXY61 sensor support"
+> +	depends on OF && GPIOLIB && VIDEO_DEV && I2C
+> +	select MEDIA_CONTROLLER
+> +	select VIDEO_V4L2_SUBDEV_API
+> +	select V4L2_FWNODE
+> +	help
+> +	  This is a Video4Linux2 sensor driver for the ST VGXY61
+> +	  camera sensor.
+> +
+>  source "drivers/media/i2c/ccs/Kconfig"
+>  source "drivers/media/i2c/et8ek8/Kconfig"
+>  source "drivers/media/i2c/m5mols/Kconfig"
+> diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
+> index 3e1696963e7f..7f2362228484 100644
+> --- a/drivers/media/i2c/Makefile
+> +++ b/drivers/media/i2c/Makefile
+> @@ -116,6 +116,7 @@ obj-$(CONFIG_VIDEO_SAA7185) += saa7185.o
+>  obj-$(CONFIG_VIDEO_SONY_BTF_MPX) += sony-btf-mpx.o
+>  obj-$(CONFIG_VIDEO_SR030PC30) += sr030pc30.o
+>  obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
+> +obj-$(CONFIG_VIDEO_ST_VGXY61) += st-vgxy61.o
+>  obj-$(CONFIG_VIDEO_TC358743) += tc358743.o
+>  obj-$(CONFIG_VIDEO_TDA1997X) += tda1997x.o
+>  obj-$(CONFIG_VIDEO_TDA7432) += tda7432.o
+> diff --git a/drivers/media/i2c/st-vgxy61.c b/drivers/media/i2c/st-vgxy61.c
+> new file mode 100644
+> index 000000000000..1219d278e648
+> --- /dev/null
+> +++ b/drivers/media/i2c/st-vgxy61.c
+> @@ -0,0 +1,1997 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for VGXY61 global shutter sensor family driver
+> + *
+> + * Copyright (C) 2022 STMicroelectronics SA
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/pm_runtime.h>
 
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
----
- drivers/staging/media/sunxi/Kconfig           |   1 +
- drivers/staging/media/sunxi/Makefile          |   1 +
- drivers/staging/media/sunxi/sun6i-isp/Kconfig |  15 +
- .../staging/media/sunxi/sun6i-isp/Makefile    |   4 +
- .../staging/media/sunxi/sun6i-isp/TODO.txt    |   6 +
- .../staging/media/sunxi/sun6i-isp/sun6i_isp.c | 556 +++++++++++++
- .../staging/media/sunxi/sun6i-isp/sun6i_isp.h |  85 ++
- .../media/sunxi/sun6i-isp/sun6i_isp_capture.c | 749 ++++++++++++++++++
- .../media/sunxi/sun6i-isp/sun6i_isp_capture.h |  78 ++
- .../media/sunxi/sun6i-isp/sun6i_isp_params.c  | 573 ++++++++++++++
- .../media/sunxi/sun6i-isp/sun6i_isp_params.h  |  52 ++
- .../media/sunxi/sun6i-isp/sun6i_isp_proc.c    | 578 ++++++++++++++
- .../media/sunxi/sun6i-isp/sun6i_isp_proc.h    |  66 ++
- .../media/sunxi/sun6i-isp/sun6i_isp_reg.h     | 275 +++++++
- .../sunxi/sun6i-isp/uapi/sun6i-isp-config.h   |  43 +
- 15 files changed, 3082 insertions(+)
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Kconfig
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Makefile
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/TODO.txt
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.h
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.h
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg.h
- create mode 100644 drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h
+Alphabetical order in headers too please.
 
-diff --git a/drivers/staging/media/sunxi/Kconfig b/drivers/staging/media/sunxi/Kconfig
-index 4549a135741f..62a486aba88b 100644
---- a/drivers/staging/media/sunxi/Kconfig
-+++ b/drivers/staging/media/sunxi/Kconfig
-@@ -12,5 +12,6 @@ config VIDEO_SUNXI
- if VIDEO_SUNXI
- 
- source "drivers/staging/media/sunxi/cedrus/Kconfig"
-+source "drivers/staging/media/sunxi/sun6i-isp/Kconfig"
- 
- endif
-diff --git a/drivers/staging/media/sunxi/Makefile b/drivers/staging/media/sunxi/Makefile
-index b87140b0e15f..3d20b2f0e644 100644
---- a/drivers/staging/media/sunxi/Makefile
-+++ b/drivers/staging/media/sunxi/Makefile
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_VIDEO_SUNXI_CEDRUS)	+= cedrus/
-+obj-$(CONFIG_VIDEO_SUN6I_ISP)		+= sun6i-isp/
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/Kconfig b/drivers/staging/media/sunxi/sun6i-isp/Kconfig
-new file mode 100644
-index 000000000000..68dcae9cd7d7
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/Kconfig
-@@ -0,0 +1,15 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_SUN6I_ISP
-+	tristate "Allwinner A31 Image Signal Processor (ISP) Driver"
-+	depends on V4L_PLATFORM_DRIVERS && VIDEO_DEV
-+	depends on ARCH_SUNXI || COMPILE_TEST
-+	depends on PM && COMMON_CLK && HAS_DMA
-+	select MEDIA_CONTROLLER
-+	select VIDEO_V4L2_SUBDEV_API
-+	select VIDEOBUF2_DMA_CONTIG
-+	select VIDEOBUF2_VMALLOC
-+	select V4L2_FWNODE
-+	select REGMAP_MMIO
-+	help
-+	   Support for the Allwinner A31 Image Signal Processor (ISP), also
-+	   found on other platforms such as the A80, A83T or V3/V3s.
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/Makefile b/drivers/staging/media/sunxi/sun6i-isp/Makefile
-new file mode 100644
-index 000000000000..da1034785144
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+sun6i-isp-y += sun6i_isp.o sun6i_isp_proc.o sun6i_isp_capture.o sun6i_isp_params.o
-+
-+obj-$(CONFIG_VIDEO_SUN6I_ISP) += sun6i-isp.o
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/TODO.txt b/drivers/staging/media/sunxi/sun6i-isp/TODO.txt
-new file mode 100644
-index 000000000000..1e3236edc1ab
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/TODO.txt
-@@ -0,0 +1,6 @@
-+Unstaging requirements:
-+- Add uAPI support and documentation for the configuration of all the hardware
-+  modules and description of the statistics data structures;
-+- Add support for statistics reporting;
-+- Add userspace support in libcamera which demonstrates the ability to receive
-+  statistics and adapt hardware modules configuration accordingly;
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
-new file mode 100644
-index 000000000000..118eee625eba
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
-@@ -0,0 +1,556 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/err.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/regmap.h>
-+#include <linux/reset.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-mc.h>
-+
-+#include "sun6i_isp.h"
-+#include "sun6i_isp_capture.h"
-+#include "sun6i_isp_params.h"
-+#include "sun6i_isp_proc.h"
-+#include "sun6i_isp_reg.h"
-+
-+/* Helpers */
-+
-+u32 sun6i_isp_load_read(struct sun6i_isp_device *isp_dev, u32 offset)
-+{
-+	u32 *data = (u32 *)(isp_dev->tables.load.data + offset);
-+
-+	return *data;
-+}
-+
-+void sun6i_isp_load_write(struct sun6i_isp_device *isp_dev, u32 offset,
-+			  u32 value)
-+{
-+	u32 *data = (u32 *)(isp_dev->tables.load.data + offset);
-+
-+	*data = value;
-+}
-+
-+/* State */
-+
-+/*
-+ * The ISP works with a load buffer, which gets copied to the actual registers
-+ * by the hardware before processing a frame when a specific flag is set.
-+ * This is represented by tracking the ISP state in the different parts of
-+ * the code with explicit sync points:
-+ * - state update: to update the load buffer for the next frame if necessary;
-+ * - state complete: to indicate that the state update was applied.
-+ */
-+
-+static void sun6i_isp_state_ready(struct sun6i_isp_device *isp_dev)
-+{
-+	struct regmap *regmap = isp_dev->regmap;
-+	u32 value;
-+
-+	regmap_read(regmap, SUN6I_ISP_FE_CTRL_REG, &value);
-+	value |= SUN6I_ISP_FE_CTRL_PARA_READY;
-+	regmap_write(regmap, SUN6I_ISP_FE_CTRL_REG, value);
-+}
-+
-+static void sun6i_isp_state_complete(struct sun6i_isp_device *isp_dev)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&isp_dev->state_lock, flags);
-+
-+	sun6i_isp_capture_state_complete(isp_dev);
-+	sun6i_isp_params_state_complete(isp_dev);
-+
-+	spin_unlock_irqrestore(&isp_dev->state_lock, flags);
-+}
-+
-+void sun6i_isp_state_update(struct sun6i_isp_device *isp_dev, bool ready_hold)
-+{
-+	bool update = false;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&isp_dev->state_lock, flags);
-+
-+	sun6i_isp_capture_state_update(isp_dev, &update);
-+	sun6i_isp_params_state_update(isp_dev, &update);
-+
-+	if (update && !ready_hold)
-+		sun6i_isp_state_ready(isp_dev);
-+
-+	spin_unlock_irqrestore(&isp_dev->state_lock, flags);
-+}
-+
-+/* Tables */
-+
-+static int sun6i_isp_table_setup(struct sun6i_isp_device *isp_dev,
-+				 struct sun6i_isp_table *table)
-+{
-+	table->data = dma_alloc_coherent(isp_dev->dev, table->size,
-+					 &table->address, GFP_KERNEL);
-+	if (!table->data)
-+		return -ENOMEM;
-+
-+	return 0;
-+}
-+
-+static void sun6i_isp_table_cleanup(struct sun6i_isp_device *isp_dev,
-+				    struct sun6i_isp_table *table)
-+{
-+	dma_free_coherent(isp_dev->dev, table->size, table->data,
-+			  table->address);
-+}
-+
-+void sun6i_isp_tables_configure(struct sun6i_isp_device *isp_dev)
-+{
-+	struct regmap *regmap = isp_dev->regmap;
-+
-+	regmap_write(regmap, SUN6I_ISP_REG_LOAD_ADDR_REG,
-+		     SUN6I_ISP_ADDR_VALUE(isp_dev->tables.load.address));
-+
-+	regmap_write(regmap, SUN6I_ISP_REG_SAVE_ADDR_REG,
-+		     SUN6I_ISP_ADDR_VALUE(isp_dev->tables.save.address));
-+
-+	regmap_write(regmap, SUN6I_ISP_LUT_TABLE_ADDR_REG,
-+		     SUN6I_ISP_ADDR_VALUE(isp_dev->tables.lut.address));
-+
-+	regmap_write(regmap, SUN6I_ISP_DRC_TABLE_ADDR_REG,
-+		     SUN6I_ISP_ADDR_VALUE(isp_dev->tables.drc.address));
-+
-+	regmap_write(regmap, SUN6I_ISP_STATS_ADDR_REG,
-+		     SUN6I_ISP_ADDR_VALUE(isp_dev->tables.stats.address));
-+}
-+
-+static int sun6i_isp_tables_setup(struct sun6i_isp_device *isp_dev)
-+{
-+	struct sun6i_isp_tables *tables = &isp_dev->tables;
-+	int ret;
-+
-+	/* Sizes are hardcoded for now but actually depend on the platform. */
-+
-+	tables->load.size = 0x1000;
-+	ret = sun6i_isp_table_setup(isp_dev, &tables->load);
-+	if (ret)
-+		return ret;
-+
-+	tables->save.size = 0x1000;
-+	ret = sun6i_isp_table_setup(isp_dev, &tables->save);
-+	if (ret)
-+		return ret;
-+
-+	tables->lut.size = 0xe00;
-+	ret = sun6i_isp_table_setup(isp_dev, &tables->lut);
-+	if (ret)
-+		return ret;
-+
-+	tables->drc.size = 0x600;
-+	ret = sun6i_isp_table_setup(isp_dev, &tables->drc);
-+	if (ret)
-+		return ret;
-+
-+	tables->stats.size = 0x2100;
-+	ret = sun6i_isp_table_setup(isp_dev, &tables->stats);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static void sun6i_isp_tables_cleanup(struct sun6i_isp_device *isp_dev)
-+{
-+	struct sun6i_isp_tables *tables = &isp_dev->tables;
-+
-+	sun6i_isp_table_cleanup(isp_dev, &tables->stats);
-+	sun6i_isp_table_cleanup(isp_dev, &tables->drc);
-+	sun6i_isp_table_cleanup(isp_dev, &tables->lut);
-+	sun6i_isp_table_cleanup(isp_dev, &tables->save);
-+	sun6i_isp_table_cleanup(isp_dev, &tables->load);
-+}
-+
-+/* Media */
-+
-+static const struct media_device_ops sun6i_isp_media_ops = {
-+	.link_notify = v4l2_pipeline_link_notify,
-+};
-+
-+/* V4L2 */
-+
-+static int sun6i_isp_v4l2_setup(struct sun6i_isp_device *isp_dev)
-+{
-+	struct sun6i_isp_v4l2 *v4l2 = &isp_dev->v4l2;
-+	struct v4l2_device *v4l2_dev = &v4l2->v4l2_dev;
-+	struct media_device *media_dev = &v4l2->media_dev;
-+	struct device *dev = isp_dev->dev;
-+	int ret;
-+
-+	/* Media Device */
-+
-+	strscpy(media_dev->model, SUN6I_ISP_DESCRIPTION,
-+		sizeof(media_dev->model));
-+	snprintf(media_dev->bus_info, sizeof(media_dev->bus_info),
-+		 "platform:%s", dev_name(dev));
-+	media_dev->ops = &sun6i_isp_media_ops;
-+	media_dev->hw_revision = 0;
-+	media_dev->dev = dev;
-+
-+	media_device_init(media_dev);
-+
-+	ret = media_device_register(media_dev);
-+	if (ret) {
-+		dev_err(dev, "failed to register media device\n");
-+		return ret;
-+	}
-+
-+	/* V4L2 Control Handler */
-+
-+	ret = v4l2_ctrl_handler_init(&v4l2->ctrl_handler, 0);
-+	if (ret) {
-+		dev_err(dev, "failed to init v4l2 control handler\n");
-+		goto error_media;
-+	}
-+
-+	/* V4L2 Device */
-+
-+	v4l2_dev->mdev = media_dev;
-+	v4l2_dev->ctrl_handler = &v4l2->ctrl_handler;
-+
-+	ret = v4l2_device_register(dev, v4l2_dev);
-+	if (ret) {
-+		dev_err(dev, "failed to register v4l2 device\n");
-+		goto error_v4l2_ctrl;
-+	}
-+
-+	return 0;
-+
-+error_v4l2_ctrl:
-+	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
-+
-+error_media:
-+	media_device_unregister(media_dev);
-+	media_device_cleanup(media_dev);
-+
-+	return ret;
-+}
-+
-+static void sun6i_isp_v4l2_cleanup(struct sun6i_isp_device *isp_dev)
-+{
-+	struct sun6i_isp_v4l2 *v4l2 = &isp_dev->v4l2;
-+
-+	media_device_unregister(&v4l2->media_dev);
-+	v4l2_device_unregister(&v4l2->v4l2_dev);
-+	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
-+	media_device_cleanup(&v4l2->media_dev);
-+}
-+
-+/* Platform */
-+
-+static irqreturn_t sun6i_isp_interrupt(int irq, void *private)
-+{
-+	struct sun6i_isp_device *isp_dev = private;
-+	struct regmap *regmap = isp_dev->regmap;
-+	u32 status = 0, enable = 0;
-+
-+	regmap_read(regmap, SUN6I_ISP_FE_INT_STA_REG, &status);
-+	regmap_read(regmap, SUN6I_ISP_FE_INT_EN_REG, &enable);
-+
-+	if (!status)
-+		return IRQ_NONE;
-+	else if (!(status & enable))
-+		goto complete;
-+
-+	/*
-+	 * The ISP working cycle starts with a params-load, which makes the
-+	 * state from the load buffer active. Then it starts processing the
-+	 * frame and gives a finish interrupt. Soon after that, the next state
-+	 * coming from the load buffer will be applied for the next frame,
-+	 * giving a params-load as well.
-+	 *
-+	 * Because both frame finish and params-load are received almost
-+	 * at the same time (one ISR call), handle them in chronology order.
-+	 */
-+
-+	if (status & SUN6I_ISP_FE_INT_STA_FINISH)
-+		sun6i_isp_capture_finish(isp_dev);
-+
-+	if (status & SUN6I_ISP_FE_INT_STA_PARA_LOAD) {
-+		sun6i_isp_state_complete(isp_dev);
-+		sun6i_isp_state_update(isp_dev, false);
-+	}
-+
-+complete:
-+	regmap_write(regmap, SUN6I_ISP_FE_INT_STA_REG, status);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int sun6i_isp_suspend(struct device *dev)
-+{
-+	struct sun6i_isp_device *isp_dev = dev_get_drvdata(dev);
-+
-+	reset_control_assert(isp_dev->reset);
-+	clk_disable_unprepare(isp_dev->clock_ram);
-+	clk_disable_unprepare(isp_dev->clock_mod);
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_resume(struct device *dev)
-+{
-+	struct sun6i_isp_device *isp_dev = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = reset_control_deassert(isp_dev->reset);
-+	if (ret) {
-+		dev_err(dev, "failed to deassert reset\n");
-+		return ret;
-+	}
-+
-+	ret = clk_prepare_enable(isp_dev->clock_mod);
-+	if (ret) {
-+		dev_err(dev, "failed to enable module clock\n");
-+		goto error_reset;
-+	}
-+
-+	ret = clk_prepare_enable(isp_dev->clock_ram);
-+	if (ret) {
-+		dev_err(dev, "failed to enable ram clock\n");
-+		goto error_clock_mod;
-+	}
-+
-+	return 0;
-+
-+error_clock_mod:
-+	clk_disable_unprepare(isp_dev->clock_mod);
-+
-+error_reset:
-+	reset_control_assert(isp_dev->reset);
-+
-+	return ret;
-+}
-+
-+static const struct dev_pm_ops sun6i_isp_pm_ops = {
-+	.runtime_suspend	= sun6i_isp_suspend,
-+	.runtime_resume		= sun6i_isp_resume,
-+};
-+
-+static const struct regmap_config sun6i_isp_regmap_config = {
-+	.reg_bits       = 32,
-+	.reg_stride     = 4,
-+	.val_bits       = 32,
-+	.max_register	= 0x400,
-+};
-+
-+static int sun6i_isp_resources_setup(struct sun6i_isp_device *isp_dev,
-+				     struct platform_device *platform_dev)
-+{
-+	struct device *dev = isp_dev->dev;
-+	void __iomem *io_base;
-+	int irq;
-+	int ret;
-+
-+	/* Registers */
-+
-+	io_base = devm_platform_ioremap_resource(platform_dev, 0);
-+	if (IS_ERR(io_base))
-+		return PTR_ERR(io_base);
-+
-+	isp_dev->regmap = devm_regmap_init_mmio_clk(dev, "bus", io_base,
-+						    &sun6i_isp_regmap_config);
-+	if (IS_ERR(isp_dev->regmap)) {
-+		dev_err(dev, "failed to init register map\n");
-+		return PTR_ERR(isp_dev->regmap);
-+	}
-+
-+	/* Clocks */
-+
-+	isp_dev->clock_mod = devm_clk_get(dev, "mod");
-+	if (IS_ERR(isp_dev->clock_mod)) {
-+		dev_err(dev, "failed to acquire module clock\n");
-+		return PTR_ERR(isp_dev->clock_mod);
-+	}
-+
-+	isp_dev->clock_ram = devm_clk_get(dev, "ram");
-+	if (IS_ERR(isp_dev->clock_ram)) {
-+		dev_err(dev, "failed to acquire ram clock\n");
-+		return PTR_ERR(isp_dev->clock_ram);
-+	}
-+
-+	ret = clk_set_rate_exclusive(isp_dev->clock_mod, 297000000);
-+	if (ret) {
-+		dev_err(dev, "failed to set mod clock rate\n");
-+		return ret;
-+	}
-+
-+	/* Reset */
-+
-+	isp_dev->reset = devm_reset_control_get_shared(dev, NULL);
-+	if (IS_ERR(isp_dev->reset)) {
-+		dev_err(dev, "failed to acquire reset\n");
-+		ret = PTR_ERR(isp_dev->reset);
-+		goto error_clock_rate_exclusive;
-+	}
-+
-+	/* Interrupt */
-+
-+	irq = platform_get_irq(platform_dev, 0);
-+	if (irq < 0) {
-+		dev_err(dev, "failed to get interrupt\n");
-+		ret = -ENXIO;
-+		goto error_clock_rate_exclusive;
-+	}
-+
-+	ret = devm_request_irq(dev, irq, sun6i_isp_interrupt, IRQF_SHARED,
-+			       SUN6I_ISP_NAME, isp_dev);
-+	if (ret) {
-+		dev_err(dev, "failed to request interrupt\n");
-+		goto error_clock_rate_exclusive;
-+	}
-+
-+	/* Runtime PM */
-+
-+	pm_runtime_enable(dev);
-+
-+	return 0;
-+
-+error_clock_rate_exclusive:
-+	clk_rate_exclusive_put(isp_dev->clock_mod);
-+
-+	return ret;
-+}
-+
-+static void sun6i_isp_resources_cleanup(struct sun6i_isp_device *isp_dev)
-+{
-+	struct device *dev = isp_dev->dev;
-+
-+	pm_runtime_disable(dev);
-+	clk_rate_exclusive_put(isp_dev->clock_mod);
-+}
-+
-+static int sun6i_isp_probe(struct platform_device *platform_dev)
-+{
-+	struct sun6i_isp_device *isp_dev;
-+	struct device *dev = &platform_dev->dev;
-+	int ret;
-+
-+	isp_dev = devm_kzalloc(dev, sizeof(*isp_dev), GFP_KERNEL);
-+	if (!isp_dev)
-+		return -ENOMEM;
-+
-+	isp_dev->dev = dev;
-+	platform_set_drvdata(platform_dev, isp_dev);
-+
-+	spin_lock_init(&isp_dev->state_lock);
-+
-+	ret = sun6i_isp_resources_setup(isp_dev, platform_dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = sun6i_isp_tables_setup(isp_dev);
-+	if (ret) {
-+		dev_err(dev, "failed to setup tables\n");
-+		goto error_resources;
-+	}
-+
-+	ret = sun6i_isp_v4l2_setup(isp_dev);
-+	if (ret) {
-+		dev_err(dev, "failed to setup v4l2\n");
-+		goto error_tables;
-+	}
-+
-+	ret = sun6i_isp_proc_setup(isp_dev);
-+	if (ret) {
-+		dev_err(dev, "failed to setup proc\n");
-+		goto error_v4l2;
-+	}
-+
-+	ret = sun6i_isp_capture_setup(isp_dev);
-+	if (ret) {
-+		dev_err(dev, "failed to setup capture\n");
-+		goto error_proc;
-+	}
-+
-+	ret = sun6i_isp_params_setup(isp_dev);
-+	if (ret) {
-+		dev_err(dev, "failed to setup params\n");
-+		goto error_capture;
-+	}
-+
-+	return 0;
-+
-+error_capture:
-+	sun6i_isp_capture_cleanup(isp_dev);
-+
-+error_proc:
-+	sun6i_isp_proc_cleanup(isp_dev);
-+
-+error_v4l2:
-+	sun6i_isp_v4l2_cleanup(isp_dev);
-+
-+error_tables:
-+	sun6i_isp_tables_cleanup(isp_dev);
-+
-+error_resources:
-+	sun6i_isp_resources_cleanup(isp_dev);
-+
-+	return ret;
-+}
-+
-+static int sun6i_isp_remove(struct platform_device *platform_dev)
-+{
-+	struct sun6i_isp_device *isp_dev = platform_get_drvdata(platform_dev);
-+
-+	sun6i_isp_params_cleanup(isp_dev);
-+	sun6i_isp_capture_cleanup(isp_dev);
-+	sun6i_isp_proc_cleanup(isp_dev);
-+	sun6i_isp_v4l2_cleanup(isp_dev);
-+	sun6i_isp_tables_cleanup(isp_dev);
-+	sun6i_isp_resources_cleanup(isp_dev);
-+
-+	return 0;
-+}
-+
-+/*
-+ * History of sun6i-isp:
-+ * - sun4i-a10-isp: initial ISP tied to the CSI0 controller,
-+ *   apparently unused in software implementations;
-+ * - sun6i-a31-isp: separate ISP loosely based on sun4i-a10-isp,
-+ *   adding extra modules and features;
-+ * - sun9i-a80-isp: based on sun6i-a31-isp with some register offset changes
-+ *   and new modules like saturation and cnr;
-+ * - sun8i-a23-isp/sun8i-h3-isp: based on sun9i-a80-isp with most modules
-+ *   related to raw removed;
-+ * - sun8i-a83t-isp: based on sun9i-a80-isp with some register offset changes
-+ * - sun8i-v3s-isp: based on sun8i-a83t-isp with a new disc module;
-+ */
-+
-+static const struct of_device_id sun6i_isp_of_match[] = {
-+	{ .compatible	= "allwinner,sun8i-v3s-isp" },
-+	{},
-+};
-+
-+MODULE_DEVICE_TABLE(of, sun6i_isp_of_match);
-+
-+static struct platform_driver sun6i_isp_platform_driver = {
-+	.probe	= sun6i_isp_probe,
-+	.remove	= sun6i_isp_remove,
-+	.driver	= {
-+		.name		= SUN6I_ISP_NAME,
-+		.of_match_table	= of_match_ptr(sun6i_isp_of_match),
-+		.pm		= &sun6i_isp_pm_ops,
-+	},
-+};
-+
-+module_platform_driver(sun6i_isp_platform_driver);
-+
-+MODULE_DESCRIPTION("Allwinner A31 Image Signal Processor driver");
-+MODULE_AUTHOR("Paul Kocialkowski <paul.kocialkowski@bootlin.com>");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h
-new file mode 100644
-index 000000000000..60017606babe
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h
-@@ -0,0 +1,85 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+ */
-+
-+#ifndef _SUN6I_ISP_H_
-+#define _SUN6I_ISP_H_
-+
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-device.h>
-+#include <media/videobuf2-v4l2.h>
-+
-+#include "sun6i_isp_capture.h"
-+#include "sun6i_isp_params.h"
-+#include "sun6i_isp_proc.h"
-+
-+#define SUN6I_ISP_NAME			"sun6i-isp"
-+#define SUN6I_ISP_DESCRIPTION		"Allwinner A31 ISP Device"
-+
-+enum sun6i_isp_port {
-+	SUN6I_ISP_PORT_CSI0	= 0,
-+	SUN6I_ISP_PORT_CSI1	= 1,
-+};
-+
-+struct sun6i_isp_buffer {
-+	struct vb2_v4l2_buffer	v4l2_buffer;
-+	struct list_head	list;
-+};
-+
-+struct sun6i_isp_v4l2 {
-+	struct v4l2_device		v4l2_dev;
-+	struct v4l2_ctrl_handler	ctrl_handler;
-+	struct media_device		media_dev;
-+};
-+
-+struct sun6i_isp_table {
-+	void		*data;
-+	dma_addr_t	address;
-+	unsigned int	size;
-+};
-+
-+struct sun6i_isp_tables {
-+	struct sun6i_isp_table	load;
-+	struct sun6i_isp_table	save;
-+
-+	struct sun6i_isp_table	lut;
-+	struct sun6i_isp_table	drc;
-+	struct sun6i_isp_table	stats;
-+};
-+
-+struct sun6i_isp_device {
-+	struct device			*dev;
-+
-+	struct sun6i_isp_tables		tables;
-+
-+	struct sun6i_isp_v4l2		v4l2;
-+	struct sun6i_isp_proc		proc;
-+	struct sun6i_isp_capture	capture;
-+	struct sun6i_isp_params		params;
-+
-+	struct regmap			*regmap;
-+	struct clk			*clock_mod;
-+	struct clk			*clock_ram;
-+	struct reset_control		*reset;
-+
-+	spinlock_t			state_lock; /* State helpers lock. */
-+};
-+
-+/* Helpers */
-+
-+u32 sun6i_isp_load_read(struct sun6i_isp_device *isp_dev, u32 offset);
-+void sun6i_isp_load_write(struct sun6i_isp_device *isp_dev, u32 offset,
-+			  u32 value);
-+u32 sun6i_isp_address_value(dma_addr_t address);
-+
-+/* State */
-+
-+void sun6i_isp_state_update(struct sun6i_isp_device *isp_dev, bool ready_hold);
-+
-+/* Tables */
-+
-+void sun6i_isp_tables_configure(struct sun6i_isp_device *isp_dev);
-+
-+#endif
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
-new file mode 100644
-index 000000000000..5cd069891461
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
-@@ -0,0 +1,749 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+ */
-+
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-event.h>
-+#include <media/v4l2-ioctl.h>
-+#include <media/v4l2-mc.h>
-+#include <media/videobuf2-dma-contig.h>
-+#include <media/videobuf2-v4l2.h>
-+
-+#include "sun6i_isp.h"
-+#include "sun6i_isp_capture.h"
-+#include "sun6i_isp_proc.h"
-+#include "sun6i_isp_reg.h"
-+
-+/* Helpers */
-+
-+void sun6i_isp_capture_dimensions(struct sun6i_isp_device *isp_dev,
-+				  unsigned int *width, unsigned int *height)
-+{
-+	if (width)
-+		*width = isp_dev->capture.format.fmt.pix.width;
-+	if (height)
-+		*height = isp_dev->capture.format.fmt.pix.height;
-+}
-+
-+void sun6i_isp_capture_format(struct sun6i_isp_device *isp_dev,
-+			      u32 *pixelformat)
-+{
-+	if (pixelformat)
-+		*pixelformat = isp_dev->capture.format.fmt.pix.pixelformat;
-+}
-+
-+/* Format */
-+
-+static const struct sun6i_isp_capture_format sun6i_isp_capture_formats[] = {
-+	{
-+		.pixelformat		= V4L2_PIX_FMT_NV12,
-+		.output_format		= SUN6I_ISP_OUTPUT_FMT_YUV420SP,
-+	},
-+	{
-+		.pixelformat		= V4L2_PIX_FMT_NV21,
-+		.output_format		= SUN6I_ISP_OUTPUT_FMT_YVU420SP,
-+	},
-+};
-+
-+const struct sun6i_isp_capture_format *
-+sun6i_isp_capture_format_find(u32 pixelformat)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(sun6i_isp_capture_formats); i++)
-+		if (sun6i_isp_capture_formats[i].pixelformat == pixelformat)
-+			return &sun6i_isp_capture_formats[i];
-+
-+	return NULL;
-+}
-+
-+/* Capture */
-+
-+static void
-+sun6i_isp_capture_buffer_configure(struct sun6i_isp_device *isp_dev,
-+				   struct sun6i_isp_buffer *isp_buffer)
-+{
-+	const struct v4l2_format_info *info;
-+	struct vb2_buffer *vb2_buffer;
-+	unsigned int width, height;
-+	unsigned int width_aligned;
-+	dma_addr_t address;
-+	u32 pixelformat;
-+
-+	vb2_buffer = &isp_buffer->v4l2_buffer.vb2_buf;
-+	address = vb2_dma_contig_plane_dma_addr(vb2_buffer, 0);
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MCH_Y_ADDR0_REG,
-+			     SUN6I_ISP_ADDR_VALUE(address));
-+
-+	sun6i_isp_capture_dimensions(isp_dev, &width, &height);
-+	sun6i_isp_capture_format(isp_dev, &pixelformat);
-+
-+	info = v4l2_format_info(pixelformat);
-+	if (WARN_ON(!info))
-+		return;
-+
-+	/* Stride needs to be aligned to 4. */
-+	width_aligned = ALIGN(width, 2);
-+
-+	if (info->comp_planes > 1) {
-+		address += info->bpp[0] * width_aligned * height;
-+
-+		sun6i_isp_load_write(isp_dev, SUN6I_ISP_MCH_U_ADDR0_REG,
-+				     SUN6I_ISP_ADDR_VALUE(address));
-+	}
-+
-+	if (info->comp_planes > 2) {
-+		address += info->bpp[1] *
-+			   DIV_ROUND_UP(width_aligned, info->hdiv) *
-+			   DIV_ROUND_UP(height, info->vdiv);
-+
-+		sun6i_isp_load_write(isp_dev, SUN6I_ISP_MCH_V_ADDR0_REG,
-+				     SUN6I_ISP_ADDR_VALUE(address));
-+	}
-+}
-+
-+void sun6i_isp_capture_configure(struct sun6i_isp_device *isp_dev)
-+{
-+	unsigned int width, height;
-+	unsigned int stride_luma, stride_chroma = 0;
-+	unsigned int stride_luma_div4, stride_chroma_div4;
-+	const struct sun6i_isp_capture_format *format;
-+	const struct v4l2_format_info *info;
-+	u32 pixelformat;
-+
-+	sun6i_isp_capture_dimensions(isp_dev, &width, &height);
-+	sun6i_isp_capture_format(isp_dev, &pixelformat);
-+
-+	format = sun6i_isp_capture_format_find(pixelformat);
-+	if (WARN_ON(!format))
-+		return;
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MCH_SIZE_CFG_REG,
-+			     SUN6I_ISP_MCH_SIZE_CFG_WIDTH(width) |
-+			     SUN6I_ISP_MCH_SIZE_CFG_HEIGHT(height));
-+
-+	info = v4l2_format_info(pixelformat);
-+	if (WARN_ON(!info))
-+		return;
-+
-+	stride_luma = width * info->bpp[0];
-+	stride_luma_div4 = DIV_ROUND_UP(stride_luma, 4);
-+
-+	if (info->comp_planes > 1) {
-+		stride_chroma = width * info->bpp[1] / info->hdiv;
-+		stride_chroma_div4 = DIV_ROUND_UP(stride_chroma, 4);
-+	}
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MCH_CFG_REG,
-+			     SUN6I_ISP_MCH_CFG_EN |
-+			     SUN6I_ISP_MCH_CFG_OUTPUT_FMT(format->output_format) |
-+			     SUN6I_ISP_MCH_CFG_STRIDE_Y_DIV4(stride_luma_div4) |
-+			     SUN6I_ISP_MCH_CFG_STRIDE_UV_DIV4(stride_chroma_div4));
-+}
-+
-+/* State */
-+
-+static void sun6i_isp_capture_state_cleanup(struct sun6i_isp_device *isp_dev,
-+					    bool error)
-+{
-+	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
-+	struct sun6i_isp_buffer **isp_buffer_states[] = {
-+		&state->pending, &state->current, &state->complete,
-+	};
-+	struct sun6i_isp_buffer *isp_buffer;
-+	struct vb2_buffer *vb2_buffer;
-+	unsigned long flags;
-+	unsigned int i;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+
-+	for (i = 0; i < ARRAY_SIZE(isp_buffer_states); i++) {
-+		isp_buffer = *isp_buffer_states[i];
-+		if (!isp_buffer)
-+			continue;
-+
-+		vb2_buffer = &isp_buffer->v4l2_buffer.vb2_buf;
-+		vb2_buffer_done(vb2_buffer, error ? VB2_BUF_STATE_ERROR :
-+				VB2_BUF_STATE_QUEUED);
-+
-+		*isp_buffer_states[i] = NULL;
-+	}
-+
-+	list_for_each_entry(isp_buffer, &state->queue, list) {
-+		vb2_buffer = &isp_buffer->v4l2_buffer.vb2_buf;
-+		vb2_buffer_done(vb2_buffer, error ? VB2_BUF_STATE_ERROR :
-+				VB2_BUF_STATE_QUEUED);
-+	}
-+
-+	INIT_LIST_HEAD(&state->queue);
-+
-+	spin_unlock_irqrestore(&state->lock, flags);
-+}
-+
-+void sun6i_isp_capture_state_update(struct sun6i_isp_device *isp_dev,
-+				    bool *update)
-+{
-+	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
-+	struct sun6i_isp_buffer *isp_buffer;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+
-+	if (list_empty(&state->queue))
-+		goto complete;
-+
-+	if (state->pending)
-+		goto complete;
-+
-+	isp_buffer = list_first_entry(&state->queue, struct sun6i_isp_buffer,
-+				      list);
-+
-+	sun6i_isp_capture_buffer_configure(isp_dev, isp_buffer);
-+
-+	list_del(&isp_buffer->list);
-+
-+	state->pending = isp_buffer;
-+
-+	if (update)
-+		*update = true;
-+
-+complete:
-+	spin_unlock_irqrestore(&state->lock, flags);
-+}
-+
-+void sun6i_isp_capture_state_complete(struct sun6i_isp_device *isp_dev)
-+{
-+	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+
-+	if (!state->pending)
-+		goto complete;
-+
-+	state->complete = state->current;
-+	state->current = state->pending;
-+	state->pending = NULL;
-+
-+	if (state->complete) {
-+		struct sun6i_isp_buffer *isp_buffer = state->complete;
-+		struct vb2_buffer *vb2_buffer =
-+			&isp_buffer->v4l2_buffer.vb2_buf;
-+
-+		vb2_buffer->timestamp = ktime_get_ns();
-+		isp_buffer->v4l2_buffer.sequence = state->sequence;
-+
-+		vb2_buffer_done(vb2_buffer, VB2_BUF_STATE_DONE);
-+
-+		state->complete = NULL;
-+	}
-+
-+complete:
-+	spin_unlock_irqrestore(&state->lock, flags);
-+}
-+
-+void sun6i_isp_capture_finish(struct sun6i_isp_device *isp_dev)
-+{
-+	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+	state->sequence++;
-+	spin_unlock_irqrestore(&state->lock, flags);
-+}
-+
-+/* Queue */
-+
-+static int sun6i_isp_capture_queue_setup(struct vb2_queue *queue,
-+					 unsigned int *buffers_count,
-+					 unsigned int *planes_count,
-+					 unsigned int sizes[],
-+					 struct device *alloc_devs[])
-+{
-+	struct sun6i_isp_device *isp_dev = vb2_get_drv_priv(queue);
-+	unsigned int size = isp_dev->capture.format.fmt.pix.sizeimage;
-+
-+	if (*planes_count)
-+		return sizes[0] < size ? -EINVAL : 0;
-+
-+	*planes_count = 1;
-+	sizes[0] = size;
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_capture_buffer_prepare(struct vb2_buffer *vb2_buffer)
-+{
-+	struct sun6i_isp_device *isp_dev =
-+		vb2_get_drv_priv(vb2_buffer->vb2_queue);
-+	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
-+	unsigned int size = isp_dev->capture.format.fmt.pix.sizeimage;
-+
-+	if (vb2_plane_size(vb2_buffer, 0) < size) {
-+		v4l2_err(v4l2_dev, "buffer too small (%lu < %u)\n",
-+			 vb2_plane_size(vb2_buffer, 0), size);
-+		return -EINVAL;
-+	}
-+
-+	vb2_set_plane_payload(vb2_buffer, 0, size);
-+
-+	return 0;
-+}
-+
-+static void sun6i_isp_capture_buffer_queue(struct vb2_buffer *vb2_buffer)
-+{
-+	struct sun6i_isp_device *isp_dev =
-+		vb2_get_drv_priv(vb2_buffer->vb2_queue);
-+	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
-+	struct vb2_v4l2_buffer *v4l2_buffer = to_vb2_v4l2_buffer(vb2_buffer);
-+	struct sun6i_isp_buffer *isp_buffer =
-+		container_of(v4l2_buffer, struct sun6i_isp_buffer, v4l2_buffer);
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+	list_add_tail(&isp_buffer->list, &state->queue);
-+	spin_unlock_irqrestore(&state->lock, flags);
-+
-+	/* Update the state to schedule our buffer as soon as possible. */
-+	if (state->streaming)
-+		sun6i_isp_state_update(isp_dev, false);
-+}
-+
-+static int sun6i_isp_capture_start_streaming(struct vb2_queue *queue,
-+					     unsigned int count)
-+{
-+	struct sun6i_isp_device *isp_dev = vb2_get_drv_priv(queue);
-+	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
-+	struct video_device *video_dev = &isp_dev->capture.video_dev;
-+	struct v4l2_subdev *subdev = &isp_dev->proc.subdev;
-+	int ret;
-+
-+	state->sequence = 0;
-+
-+	ret = media_pipeline_start(&video_dev->entity, &video_dev->pipe);
-+	if (ret < 0)
-+		goto error_state;
-+
-+	state->streaming = true;
-+
-+	ret = v4l2_subdev_call(subdev, video, s_stream, 1);
-+	if (ret && ret != -ENOIOCTLCMD)
-+		goto error_streaming;
-+
-+	return 0;
-+
-+error_streaming:
-+	state->streaming = false;
-+
-+	media_pipeline_stop(&video_dev->entity);
-+
-+error_state:
-+	sun6i_isp_capture_state_cleanup(isp_dev, false);
-+
-+	return ret;
-+}
-+
-+static void sun6i_isp_capture_stop_streaming(struct vb2_queue *queue)
-+{
-+	struct sun6i_isp_device *isp_dev = vb2_get_drv_priv(queue);
-+	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
-+	struct video_device *video_dev = &isp_dev->capture.video_dev;
-+	struct v4l2_subdev *subdev = &isp_dev->proc.subdev;
-+
-+	v4l2_subdev_call(subdev, video, s_stream, 0);
-+
-+	state->streaming = false;
-+
-+	media_pipeline_stop(&video_dev->entity);
-+
-+	sun6i_isp_capture_state_cleanup(isp_dev, true);
-+}
-+
-+static const struct vb2_ops sun6i_isp_capture_queue_ops = {
-+	.queue_setup		= sun6i_isp_capture_queue_setup,
-+	.buf_prepare		= sun6i_isp_capture_buffer_prepare,
-+	.buf_queue		= sun6i_isp_capture_buffer_queue,
-+	.start_streaming	= sun6i_isp_capture_start_streaming,
-+	.stop_streaming		= sun6i_isp_capture_stop_streaming,
-+	.wait_prepare		= vb2_ops_wait_prepare,
-+	.wait_finish		= vb2_ops_wait_finish,
-+};
-+
-+/* Video Device */
-+
-+static void sun6i_isp_capture_format_prepare(struct v4l2_format *format)
-+{
-+	struct v4l2_pix_format *pix_format = &format->fmt.pix;
-+	const struct v4l2_format_info *info;
-+	unsigned int width, height;
-+	unsigned int width_aligned;
-+	unsigned int i;
-+
-+	v4l_bound_align_image(&pix_format->width, SUN6I_ISP_CAPTURE_WIDTH_MIN,
-+			      SUN6I_ISP_CAPTURE_WIDTH_MAX, 1,
-+			      &pix_format->height, SUN6I_ISP_CAPTURE_HEIGHT_MIN,
-+			      SUN6I_ISP_CAPTURE_HEIGHT_MAX, 1, 0);
-+
-+	if (!sun6i_isp_capture_format_find(pix_format->pixelformat))
-+		pix_format->pixelformat =
-+			sun6i_isp_capture_formats[0].pixelformat;
-+
-+	info = v4l2_format_info(pix_format->pixelformat);
-+	if (WARN_ON(!info))
-+		return;
-+
-+	width = pix_format->width;
-+	height = pix_format->height;
-+
-+	/* Stride needs to be aligned to 4. */
-+	width_aligned = ALIGN(width, 2);
-+
-+	pix_format->bytesperline = width_aligned * info->bpp[0];
-+	pix_format->sizeimage = 0;
-+
-+	for (i = 0; i < info->comp_planes; i++) {
-+		unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
-+		unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
-+
-+		pix_format->sizeimage += info->bpp[i] *
-+					 DIV_ROUND_UP(width_aligned, hdiv) *
-+					 DIV_ROUND_UP(height, vdiv);
-+	}
-+
-+	pix_format->field = V4L2_FIELD_NONE;
-+
-+	pix_format->colorspace = V4L2_COLORSPACE_RAW;
-+	pix_format->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-+	pix_format->quantization = V4L2_QUANTIZATION_DEFAULT;
-+	pix_format->xfer_func = V4L2_XFER_FUNC_DEFAULT;
-+}
-+
-+static int sun6i_isp_capture_querycap(struct file *file, void *private,
-+				      struct v4l2_capability *capability)
-+{
-+	struct sun6i_isp_device *isp_dev = video_drvdata(file);
-+	struct video_device *video_dev = &isp_dev->capture.video_dev;
-+
-+	strscpy(capability->driver, SUN6I_ISP_NAME, sizeof(capability->driver));
-+	strscpy(capability->card, video_dev->name, sizeof(capability->card));
-+	snprintf(capability->bus_info, sizeof(capability->bus_info),
-+		 "platform:%s", dev_name(isp_dev->dev));
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_capture_enum_fmt(struct file *file, void *private,
-+				      struct v4l2_fmtdesc *fmtdesc)
-+{
-+	u32 index = fmtdesc->index;
-+
-+	if (index >= ARRAY_SIZE(sun6i_isp_capture_formats))
-+		return -EINVAL;
-+
-+	fmtdesc->pixelformat = sun6i_isp_capture_formats[index].pixelformat;
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_capture_g_fmt(struct file *file, void *private,
-+				   struct v4l2_format *format)
-+{
-+	struct sun6i_isp_device *isp_dev = video_drvdata(file);
-+
-+	*format = isp_dev->capture.format;
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_capture_s_fmt(struct file *file, void *private,
-+				   struct v4l2_format *format)
-+{
-+	struct sun6i_isp_device *isp_dev = video_drvdata(file);
-+
-+	if (vb2_is_busy(&isp_dev->capture.queue))
-+		return -EBUSY;
-+
-+	sun6i_isp_capture_format_prepare(format);
-+
-+	isp_dev->capture.format = *format;
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_capture_try_fmt(struct file *file, void *private,
-+				     struct v4l2_format *format)
-+{
-+	sun6i_isp_capture_format_prepare(format);
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_capture_enum_input(struct file *file, void *private,
-+					struct v4l2_input *input)
-+{
-+	if (input->index != 0)
-+		return -EINVAL;
-+
-+	input->type = V4L2_INPUT_TYPE_CAMERA;
-+	strscpy(input->name, "Camera", sizeof(input->name));
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_capture_g_input(struct file *file, void *private,
-+				     unsigned int *index)
-+{
-+	*index = 0;
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_capture_s_input(struct file *file, void *private,
-+				     unsigned int index)
-+{
-+	if (index != 0)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_ioctl_ops sun6i_isp_capture_ioctl_ops = {
-+	.vidioc_querycap		= sun6i_isp_capture_querycap,
-+
-+	.vidioc_enum_fmt_vid_cap	= sun6i_isp_capture_enum_fmt,
-+	.vidioc_g_fmt_vid_cap		= sun6i_isp_capture_g_fmt,
-+	.vidioc_s_fmt_vid_cap		= sun6i_isp_capture_s_fmt,
-+	.vidioc_try_fmt_vid_cap		= sun6i_isp_capture_try_fmt,
-+
-+	.vidioc_enum_input		= sun6i_isp_capture_enum_input,
-+	.vidioc_g_input			= sun6i_isp_capture_g_input,
-+	.vidioc_s_input			= sun6i_isp_capture_s_input,
-+
-+	.vidioc_create_bufs		= vb2_ioctl_create_bufs,
-+	.vidioc_prepare_buf		= vb2_ioctl_prepare_buf,
-+	.vidioc_reqbufs			= vb2_ioctl_reqbufs,
-+	.vidioc_querybuf		= vb2_ioctl_querybuf,
-+	.vidioc_expbuf			= vb2_ioctl_expbuf,
-+	.vidioc_qbuf			= vb2_ioctl_qbuf,
-+	.vidioc_dqbuf			= vb2_ioctl_dqbuf,
-+	.vidioc_streamon		= vb2_ioctl_streamon,
-+	.vidioc_streamoff		= vb2_ioctl_streamoff,
-+
-+	.vidioc_log_status		= v4l2_ctrl_log_status,
-+	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
-+	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
-+};
-+
-+static int sun6i_isp_capture_open(struct file *file)
-+{
-+	struct sun6i_isp_device *isp_dev = video_drvdata(file);
-+	struct video_device *video_dev = &isp_dev->capture.video_dev;
-+	struct mutex *lock = &isp_dev->capture.lock;
-+	int ret;
-+
-+	if (mutex_lock_interruptible(lock))
-+		return -ERESTARTSYS;
-+
-+	ret = v4l2_pipeline_pm_get(&video_dev->entity);
-+	if (ret)
-+		goto error_mutex;
-+
-+	ret = v4l2_fh_open(file);
-+	if (ret)
-+		goto error_pipeline;
-+
-+	mutex_unlock(lock);
-+
-+	return 0;
-+
-+error_pipeline:
-+	v4l2_pipeline_pm_put(&video_dev->entity);
-+
-+error_mutex:
-+	mutex_unlock(lock);
-+
-+	return ret;
-+}
-+
-+static int sun6i_isp_capture_release(struct file *file)
-+{
-+	struct sun6i_isp_device *isp_dev = video_drvdata(file);
-+	struct video_device *video_dev = &isp_dev->capture.video_dev;
-+	struct mutex *lock = &isp_dev->capture.lock;
-+
-+	mutex_lock(lock);
-+
-+	_vb2_fop_release(file, NULL);
-+	v4l2_pipeline_pm_put(&video_dev->entity);
-+
-+	mutex_unlock(lock);
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_file_operations sun6i_isp_capture_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= sun6i_isp_capture_open,
-+	.release	= sun6i_isp_capture_release,
-+	.unlocked_ioctl	= video_ioctl2,
-+	.poll		= vb2_fop_poll,
-+	.mmap		= vb2_fop_mmap,
-+};
-+
-+/* Media Entity */
-+
-+static int sun6i_isp_capture_link_validate(struct media_link *link)
-+{
-+	struct video_device *video_dev =
-+		media_entity_to_video_device(link->sink->entity);
-+	struct sun6i_isp_device *isp_dev = video_get_drvdata(video_dev);
-+	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
-+	unsigned int capture_width, capture_height;
-+	unsigned int proc_width, proc_height;
-+
-+	sun6i_isp_capture_dimensions(isp_dev, &capture_width, &capture_height);
-+	sun6i_isp_proc_dimensions(isp_dev, &proc_width, &proc_height);
-+
-+	/* No cropping/scaling is supported (yet). */
-+	if (capture_width != proc_width || capture_height != proc_height) {
-+		v4l2_err(v4l2_dev,
-+			 "invalid input/output dimensions: %ux%u/%ux%u\n",
-+			 proc_width, proc_height, capture_width,
-+			 capture_height);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct media_entity_operations sun6i_isp_capture_entity_ops = {
-+	.link_validate	= sun6i_isp_capture_link_validate,
-+};
-+
-+/* Capture */
-+
-+int sun6i_isp_capture_setup(struct sun6i_isp_device *isp_dev)
-+{
-+	struct sun6i_isp_capture *capture = &isp_dev->capture;
-+	struct sun6i_isp_capture_state *state = &capture->state;
-+	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
-+	struct v4l2_subdev *proc_subdev = &isp_dev->proc.subdev;
-+	struct video_device *video_dev = &capture->video_dev;
-+	struct vb2_queue *queue = &capture->queue;
-+	struct media_pad *pad = &capture->pad;
-+	struct v4l2_format *format = &capture->format;
-+	struct v4l2_pix_format *pix_format = &format->fmt.pix;
-+	int ret;
-+
-+	/* State */
-+
-+	INIT_LIST_HEAD(&state->queue);
-+	spin_lock_init(&state->lock);
-+
-+	/* Media Entity */
-+
-+	video_dev->entity.ops = &sun6i_isp_capture_entity_ops;
-+
-+	/* Media Pads */
-+
-+	pad->flags = MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_MUST_CONNECT;
-+
-+	ret = media_entity_pads_init(&video_dev->entity, 1, pad);
-+	if (ret)
-+		goto error_mutex;
-+
-+	/* Queue */
-+
-+	mutex_init(&capture->lock);
-+
-+	queue->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-+	queue->io_modes = VB2_MMAP | VB2_DMABUF;
-+	queue->buf_struct_size = sizeof(struct sun6i_isp_buffer);
-+	queue->ops = &sun6i_isp_capture_queue_ops;
-+	queue->mem_ops = &vb2_dma_contig_memops;
-+	queue->min_buffers_needed = 2;
-+	queue->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-+	queue->lock = &capture->lock;
-+	queue->dev = isp_dev->dev;
-+	queue->drv_priv = isp_dev;
-+
-+	ret = vb2_queue_init(queue);
-+	if (ret) {
-+		v4l2_err(v4l2_dev, "failed to initialize vb2 queue: %d\n", ret);
-+		goto error_media_entity;
-+	}
-+
-+	/* V4L2 Format */
-+
-+	format->type = queue->type;
-+	pix_format->pixelformat = sun6i_isp_capture_formats[0].pixelformat;
-+	pix_format->width = 1280;
-+	pix_format->height = 720;
-+
-+	sun6i_isp_capture_format_prepare(format);
-+
-+	/* Video Device */
-+
-+	strscpy(video_dev->name, SUN6I_ISP_CAPTURE_NAME,
-+		sizeof(video_dev->name));
-+	video_dev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-+	video_dev->vfl_dir = VFL_DIR_RX;
-+	video_dev->release = video_device_release_empty;
-+	video_dev->fops = &sun6i_isp_capture_fops;
-+	video_dev->ioctl_ops = &sun6i_isp_capture_ioctl_ops;
-+	video_dev->v4l2_dev = v4l2_dev;
-+	video_dev->queue = queue;
-+	video_dev->lock = &capture->lock;
-+
-+	video_set_drvdata(video_dev, isp_dev);
-+
-+	ret = video_register_device(video_dev, VFL_TYPE_VIDEO, -1);
-+	if (ret) {
-+		v4l2_err(v4l2_dev, "failed to register video device: %d\n",
-+			 ret);
-+		goto error_media_entity;
-+	}
-+
-+	v4l2_info(v4l2_dev, "device %s registered as %s\n", video_dev->name,
-+		  video_device_node_name(video_dev));
-+
-+	/* Media Pad Link */
-+
-+	ret = media_create_pad_link(&proc_subdev->entity,
-+				    SUN6I_ISP_PROC_PAD_SOURCE,
-+				    &video_dev->entity, 0,
-+				    MEDIA_LNK_FL_ENABLED |
-+				    MEDIA_LNK_FL_IMMUTABLE);
-+	if (ret < 0) {
-+		v4l2_err(v4l2_dev, "failed to create %s:%u -> %s:%u link\n",
-+			 proc_subdev->entity.name, SUN6I_ISP_PROC_PAD_SOURCE,
-+			 video_dev->entity.name, 0);
-+		goto error_video_device;
-+	}
-+
-+	return 0;
-+
-+error_video_device:
-+	vb2_video_unregister_device(video_dev);
-+
-+error_media_entity:
-+	media_entity_cleanup(&video_dev->entity);
-+
-+error_mutex:
-+	mutex_destroy(&capture->lock);
-+
-+	return ret;
-+}
-+
-+void sun6i_isp_capture_cleanup(struct sun6i_isp_device *isp_dev)
-+{
-+	struct sun6i_isp_capture *capture = &isp_dev->capture;
-+	struct video_device *video_dev = &capture->video_dev;
-+
-+	vb2_video_unregister_device(video_dev);
-+	media_entity_cleanup(&video_dev->entity);
-+	mutex_destroy(&capture->lock);
-+}
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.h b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.h
-new file mode 100644
-index 000000000000..0e3e4fa7a0f4
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.h
-@@ -0,0 +1,78 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+ */
-+
-+#ifndef _SUN6I_ISP_CAPTURE_H_
-+#define _SUN6I_ISP_CAPTURE_H_
-+
-+#include <media/v4l2-device.h>
-+
-+#define SUN6I_ISP_CAPTURE_NAME		"sun6i-isp-capture"
-+
-+#define SUN6I_ISP_CAPTURE_WIDTH_MIN	16
-+#define SUN6I_ISP_CAPTURE_WIDTH_MAX	3264
-+#define SUN6I_ISP_CAPTURE_HEIGHT_MIN	16
-+#define SUN6I_ISP_CAPTURE_HEIGHT_MAX	2448
-+
-+struct sun6i_isp_device;
-+
-+struct sun6i_isp_capture_format {
-+	u32	pixelformat;
-+	u8	output_format;
-+};
-+
-+#undef current
-+struct sun6i_isp_capture_state {
-+	struct list_head		queue;
-+	spinlock_t			lock; /* Queue and buffers lock. */
-+
-+	struct sun6i_isp_buffer		*pending;
-+	struct sun6i_isp_buffer		*current;
-+	struct sun6i_isp_buffer		*complete;
-+
-+	unsigned int			sequence;
-+	bool				streaming;
-+};
-+
-+struct sun6i_isp_capture {
-+	struct sun6i_isp_capture_state	state;
-+
-+	struct video_device		video_dev;
-+	struct vb2_queue		queue;
-+	struct mutex			lock; /* Queue lock. */
-+	struct media_pad		pad;
-+
-+	struct v4l2_format		format;
-+};
-+
-+/* Helpers */
-+
-+void sun6i_isp_capture_dimensions(struct sun6i_isp_device *isp_dev,
-+				  unsigned int *width, unsigned int *height);
-+void sun6i_isp_capture_format(struct sun6i_isp_device *isp_dev,
-+			      u32 *pixelformat);
-+
-+/* Format */
-+
-+const struct sun6i_isp_capture_format *
-+sun6i_isp_capture_format_find(u32 pixelformat);
-+
-+/* Capture */
-+
-+void sun6i_isp_capture_configure(struct sun6i_isp_device *isp_dev);
-+
-+/* State */
-+
-+void sun6i_isp_capture_state_update(struct sun6i_isp_device *isp_dev,
-+				    bool *update);
-+void sun6i_isp_capture_state_complete(struct sun6i_isp_device *isp_dev);
-+void sun6i_isp_capture_finish(struct sun6i_isp_device *isp_dev);
-+
-+/* Capture */
-+
-+int sun6i_isp_capture_setup(struct sun6i_isp_device *isp_dev);
-+void sun6i_isp_capture_cleanup(struct sun6i_isp_device *isp_dev);
-+
-+#endif
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
-new file mode 100644
-index 000000000000..8f6ee73b3bdc
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
-@@ -0,0 +1,573 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+ */
-+
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-event.h>
-+#include <media/v4l2-ioctl.h>
-+#include <media/v4l2-mc.h>
-+#include <media/videobuf2-vmalloc.h>
-+#include <media/videobuf2-v4l2.h>
-+
-+#include "sun6i_isp.h"
-+#include "sun6i_isp_params.h"
-+#include "sun6i_isp_reg.h"
-+#include "uapi/sun6i-isp-config.h"
-+
-+/* Params */
-+
-+static const struct sun6i_isp_params_config sun6i_isp_params_config_default = {
-+	.modules_used = SUN6I_ISP_MODULE_BAYER,
-+
-+	.bayer = {
-+		.offset_r	= 32,
-+		.offset_gr	= 32,
-+		.offset_gb	= 32,
-+		.offset_b	= 32,
-+
-+		.gain_r		= 256,
-+		.gain_gr	= 256,
-+		.gain_gb	= 256,
-+		.gain_b		= 256,
-+
-+	},
-+
-+	.bdnf = {
-+		.in_dis_min		= 8,
-+		.in_dis_max		= 16,
-+
-+		.coefficients_g		= { 15, 4, 1 },
-+		.coefficients_rb	= { 15, 4 },
-+	},
-+};
-+
-+static void sun6i_isp_params_configure_ob(struct sun6i_isp_device *isp_dev)
-+{
-+	unsigned int width, height;
-+
-+	sun6i_isp_proc_dimensions(isp_dev, &width, &height);
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_OB_SIZE_REG,
-+			     SUN6I_ISP_OB_SIZE_WIDTH(width) |
-+			     SUN6I_ISP_OB_SIZE_HEIGHT(height));
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_OB_VALID_REG,
-+			     SUN6I_ISP_OB_VALID_WIDTH(width) |
-+			     SUN6I_ISP_OB_VALID_HEIGHT(height));
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_OB_SRC0_VALID_START_REG,
-+			     SUN6I_ISP_OB_SRC0_VALID_START_HORZ(0) |
-+			     SUN6I_ISP_OB_SRC0_VALID_START_VERT(0));
-+}
-+
-+static void sun6i_isp_params_configure_ae(struct sun6i_isp_device *isp_dev)
-+{
-+	/* These are default values that need to be set to get an output. */
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_AE_CFG_REG,
-+			     SUN6I_ISP_AE_CFG_LOW_BRI_TH(0xff) |
-+			     SUN6I_ISP_AE_CFG_HORZ_NUM(8) |
-+			     SUN6I_ISP_AE_CFG_HIGH_BRI_TH(0xf00) |
-+			     SUN6I_ISP_AE_CFG_VERT_NUM(8));
-+}
-+
-+static void
-+sun6i_isp_params_configure_bayer(struct sun6i_isp_device *isp_dev,
-+				 const struct sun6i_isp_params_config *config)
-+{
-+	const struct sun6i_isp_params_config_bayer *bayer = &config->bayer;
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BAYER_OFFSET0_REG,
-+			     SUN6I_ISP_BAYER_OFFSET0_R(bayer->offset_r) |
-+			     SUN6I_ISP_BAYER_OFFSET0_GR(bayer->offset_gr));
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BAYER_OFFSET1_REG,
-+			     SUN6I_ISP_BAYER_OFFSET1_GB(bayer->offset_gb) |
-+			     SUN6I_ISP_BAYER_OFFSET1_B(bayer->offset_b));
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BAYER_GAIN0_REG,
-+			     SUN6I_ISP_BAYER_GAIN0_R(bayer->gain_r) |
-+			     SUN6I_ISP_BAYER_GAIN0_GR(bayer->gain_gr));
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BAYER_GAIN1_REG,
-+			     SUN6I_ISP_BAYER_GAIN1_GB(bayer->gain_gb) |
-+			     SUN6I_ISP_BAYER_GAIN1_B(bayer->gain_b));
-+}
-+
-+static void sun6i_isp_params_configure_wb(struct sun6i_isp_device *isp_dev)
-+{
-+	/* These are default values that need to be set to get an output. */
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_WB_GAIN0_REG,
-+			     SUN6I_ISP_WB_GAIN0_R(256) |
-+			     SUN6I_ISP_WB_GAIN0_GR(256));
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_WB_GAIN1_REG,
-+			     SUN6I_ISP_WB_GAIN1_GB(256) |
-+			     SUN6I_ISP_WB_GAIN1_B(256));
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_WB_CFG_REG,
-+			     SUN6I_ISP_WB_CFG_CLIP(0xfff));
-+}
-+
-+static void sun6i_isp_params_configure_base(struct sun6i_isp_device *isp_dev)
-+{
-+	sun6i_isp_params_configure_ae(isp_dev);
-+	sun6i_isp_params_configure_ob(isp_dev);
-+	sun6i_isp_params_configure_wb(isp_dev);
-+}
-+
-+static void
-+sun6i_isp_params_configure_bdnf(struct sun6i_isp_device *isp_dev,
-+				const struct sun6i_isp_params_config *config)
-+{
-+	const struct sun6i_isp_params_config_bdnf *bdnf = &config->bdnf;
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BDNF_CFG_REG,
-+			     SUN6I_ISP_BDNF_CFG_IN_DIS_MIN(bdnf->in_dis_min) |
-+			     SUN6I_ISP_BDNF_CFG_IN_DIS_MAX(bdnf->in_dis_max));
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BDNF_COEF_RB_REG,
-+			     SUN6I_ISP_BDNF_COEF_RB(0, bdnf->coefficients_rb[0]) |
-+			     SUN6I_ISP_BDNF_COEF_RB(1, bdnf->coefficients_rb[1]) |
-+			     SUN6I_ISP_BDNF_COEF_RB(2, bdnf->coefficients_rb[2]) |
-+			     SUN6I_ISP_BDNF_COEF_RB(3, bdnf->coefficients_rb[3]) |
-+			     SUN6I_ISP_BDNF_COEF_RB(4, bdnf->coefficients_rb[4]));
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BDNF_COEF_G_REG,
-+			     SUN6I_ISP_BDNF_COEF_G(0, bdnf->coefficients_g[0]) |
-+			     SUN6I_ISP_BDNF_COEF_G(1, bdnf->coefficients_g[1]) |
-+			     SUN6I_ISP_BDNF_COEF_G(2, bdnf->coefficients_g[2]) |
-+			     SUN6I_ISP_BDNF_COEF_G(3, bdnf->coefficients_g[3]) |
-+			     SUN6I_ISP_BDNF_COEF_G(4, bdnf->coefficients_g[4]) |
-+			     SUN6I_ISP_BDNF_COEF_G(5, bdnf->coefficients_g[5]) |
-+			     SUN6I_ISP_BDNF_COEF_G(6, bdnf->coefficients_g[6]));
-+}
-+
-+static void
-+sun6i_isp_params_configure_modules(struct sun6i_isp_device *isp_dev,
-+				   const struct sun6i_isp_params_config *config)
-+{
-+	u32 value;
-+
-+	if (config->modules_used & SUN6I_ISP_MODULE_BDNF)
-+		sun6i_isp_params_configure_bdnf(isp_dev, config);
-+
-+	if (config->modules_used & SUN6I_ISP_MODULE_BAYER)
-+		sun6i_isp_params_configure_bayer(isp_dev, config);
-+
-+	value = sun6i_isp_load_read(isp_dev, SUN6I_ISP_MODULE_EN_REG);
-+	/* Clear all modules but keep input configuration. */
-+	value &= SUN6I_ISP_MODULE_EN_SRC0 | SUN6I_ISP_MODULE_EN_SRC1;
-+
-+	if (config->modules_used & SUN6I_ISP_MODULE_BDNF)
-+		value |= SUN6I_ISP_MODULE_EN_BDNF;
-+
-+	/* Bayer stage is always enabled. */
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MODULE_EN_REG, value);
-+}
-+
-+void sun6i_isp_params_configure(struct sun6i_isp_device *isp_dev)
-+{
-+	struct sun6i_isp_params_state *state = &isp_dev->params.state;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+
-+	sun6i_isp_params_configure_base(isp_dev);
-+
-+	/* Default config is only applied at the very first stream start. */
-+	if (state->configured)
-+		goto complete;
-+
-+	 sun6i_isp_params_configure_modules(isp_dev,
-+					    &sun6i_isp_params_config_default);
-+
-+	state->configured = true;
-+
-+complete:
-+	spin_unlock_irqrestore(&state->lock, flags);
-+}
-+
-+/* State */
-+
-+static void sun6i_isp_params_state_cleanup(struct sun6i_isp_device *isp_dev,
-+					   bool error)
-+{
-+	struct sun6i_isp_params_state *state = &isp_dev->params.state;
-+	struct sun6i_isp_buffer *isp_buffer;
-+	struct vb2_buffer *vb2_buffer;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+
-+	if (state->pending) {
-+		vb2_buffer = &state->pending->v4l2_buffer.vb2_buf;
-+		vb2_buffer_done(vb2_buffer, error ? VB2_BUF_STATE_ERROR :
-+				VB2_BUF_STATE_QUEUED);
-+	}
-+
-+	list_for_each_entry(isp_buffer, &state->queue, list) {
-+		vb2_buffer = &isp_buffer->v4l2_buffer.vb2_buf;
-+		vb2_buffer_done(vb2_buffer, error ? VB2_BUF_STATE_ERROR :
-+				VB2_BUF_STATE_QUEUED);
-+	}
-+
-+	INIT_LIST_HEAD(&state->queue);
-+
-+	spin_unlock_irqrestore(&state->lock, flags);
-+}
-+
-+void sun6i_isp_params_state_update(struct sun6i_isp_device *isp_dev,
-+				   bool *update)
-+{
-+	struct sun6i_isp_params_state *state = &isp_dev->params.state;
-+	struct sun6i_isp_buffer *isp_buffer;
-+	struct vb2_buffer *vb2_buffer;
-+	const struct sun6i_isp_params_config *config;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+
-+	if (list_empty(&state->queue))
-+		goto complete;
-+
-+	if (state->pending)
-+		goto complete;
-+
-+	isp_buffer = list_first_entry(&state->queue, struct sun6i_isp_buffer,
-+				      list);
-+
-+	vb2_buffer = &isp_buffer->v4l2_buffer.vb2_buf;
-+	config = vb2_plane_vaddr(vb2_buffer, 0);
-+
-+	sun6i_isp_params_configure_modules(isp_dev, config);
-+
-+	list_del(&isp_buffer->list);
-+
-+	state->pending = isp_buffer;
-+
-+	if (update)
-+		*update = true;
-+
-+complete:
-+	spin_unlock_irqrestore(&state->lock, flags);
-+}
-+
-+void sun6i_isp_params_state_complete(struct sun6i_isp_device *isp_dev)
-+{
-+	struct sun6i_isp_params_state *state = &isp_dev->params.state;
-+	struct sun6i_isp_buffer *isp_buffer;
-+	struct vb2_buffer *vb2_buffer;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+
-+	if (!state->pending)
-+		goto complete;
-+
-+	isp_buffer = state->pending;
-+	vb2_buffer = &isp_buffer->v4l2_buffer.vb2_buf;
-+
-+	vb2_buffer->timestamp = ktime_get_ns();
-+
-+	/* Parameters will be applied starting from the next frame. */
-+	isp_buffer->v4l2_buffer.sequence = isp_dev->capture.state.sequence + 1;
-+
-+	vb2_buffer_done(vb2_buffer, VB2_BUF_STATE_DONE);
-+
-+	state->pending = NULL;
-+
-+complete:
-+	spin_unlock_irqrestore(&state->lock, flags);
-+}
-+
-+/* Queue */
-+
-+static int sun6i_isp_params_queue_setup(struct vb2_queue *queue,
-+					unsigned int *buffers_count,
-+					unsigned int *planes_count,
-+					unsigned int sizes[],
-+					struct device *alloc_devs[])
-+{
-+	struct sun6i_isp_device *isp_dev = vb2_get_drv_priv(queue);
-+	unsigned int size = isp_dev->params.format.fmt.meta.buffersize;
-+
-+	if (*planes_count)
-+		return sizes[0] < size ? -EINVAL : 0;
-+
-+	*planes_count = 1;
-+	sizes[0] = size;
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_params_buffer_prepare(struct vb2_buffer *vb2_buffer)
-+{
-+	struct sun6i_isp_device *isp_dev =
-+		vb2_get_drv_priv(vb2_buffer->vb2_queue);
-+	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
-+	unsigned int size = isp_dev->params.format.fmt.meta.buffersize;
-+
-+	if (vb2_plane_size(vb2_buffer, 0) < size) {
-+		v4l2_err(v4l2_dev, "buffer too small (%lu < %u)\n",
-+			 vb2_plane_size(vb2_buffer, 0), size);
-+		return -EINVAL;
-+	}
-+
-+	vb2_set_plane_payload(vb2_buffer, 0, size);
-+
-+	return 0;
-+}
-+
-+static void sun6i_isp_params_buffer_queue(struct vb2_buffer *vb2_buffer)
-+{
-+	struct sun6i_isp_device *isp_dev =
-+		vb2_get_drv_priv(vb2_buffer->vb2_queue);
-+	struct sun6i_isp_params_state *state = &isp_dev->params.state;
-+	struct vb2_v4l2_buffer *v4l2_buffer = to_vb2_v4l2_buffer(vb2_buffer);
-+	struct sun6i_isp_buffer *isp_buffer =
-+		container_of(v4l2_buffer, struct sun6i_isp_buffer, v4l2_buffer);
-+	bool capture_streaming = isp_dev->capture.state.streaming;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&state->lock, flags);
-+	list_add_tail(&isp_buffer->list, &state->queue);
-+	spin_unlock_irqrestore(&state->lock, flags);
-+
-+	if (state->streaming && capture_streaming)
-+		sun6i_isp_state_update(isp_dev, false);
-+}
-+
-+static int sun6i_isp_params_start_streaming(struct vb2_queue *queue,
-+					    unsigned int count)
-+{
-+	struct sun6i_isp_device *isp_dev = vb2_get_drv_priv(queue);
-+	struct sun6i_isp_params_state *state = &isp_dev->params.state;
-+	bool capture_streaming = isp_dev->capture.state.streaming;
-+
-+	state->streaming = true;
-+
-+	/*
-+	 * Update the state as soon as possible if capture is streaming,
-+	 * otherwise it will be applied when capture starts streaming.
-+	 */
-+
-+	if (capture_streaming)
-+		sun6i_isp_state_update(isp_dev, false);
-+
-+	return 0;
-+}
-+
-+static void sun6i_isp_params_stop_streaming(struct vb2_queue *queue)
-+{
-+	struct sun6i_isp_device *isp_dev = vb2_get_drv_priv(queue);
-+	struct sun6i_isp_params_state *state = &isp_dev->params.state;
-+
-+	state->streaming = false;
-+	sun6i_isp_params_state_cleanup(isp_dev, true);
-+}
-+
-+static const struct vb2_ops sun6i_isp_params_queue_ops = {
-+	.queue_setup		= sun6i_isp_params_queue_setup,
-+	.buf_prepare		= sun6i_isp_params_buffer_prepare,
-+	.buf_queue		= sun6i_isp_params_buffer_queue,
-+	.start_streaming	= sun6i_isp_params_start_streaming,
-+	.stop_streaming		= sun6i_isp_params_stop_streaming,
-+	.wait_prepare		= vb2_ops_wait_prepare,
-+	.wait_finish		= vb2_ops_wait_finish,
-+};
-+
-+/* Video Device */
-+
-+static int sun6i_isp_params_querycap(struct file *file, void *private,
-+				     struct v4l2_capability *capability)
-+{
-+	struct sun6i_isp_device *isp_dev = video_drvdata(file);
-+	struct video_device *video_dev = &isp_dev->params.video_dev;
-+
-+	strscpy(capability->driver, SUN6I_ISP_NAME, sizeof(capability->driver));
-+	strscpy(capability->card, video_dev->name, sizeof(capability->card));
-+	snprintf(capability->bus_info, sizeof(capability->bus_info),
-+		 "platform:%s", dev_name(isp_dev->dev));
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_params_enum_fmt(struct file *file, void *private,
-+				     struct v4l2_fmtdesc *fmtdesc)
-+{
-+	struct sun6i_isp_device *isp_dev = video_drvdata(file);
-+	struct v4l2_meta_format *params_format =
-+		&isp_dev->params.format.fmt.meta;
-+
-+	if (fmtdesc->index > 0)
-+		return -EINVAL;
-+
-+	fmtdesc->pixelformat = params_format->dataformat;
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_params_g_fmt(struct file *file, void *private,
-+				  struct v4l2_format *format)
-+{
-+	struct sun6i_isp_device *isp_dev = video_drvdata(file);
-+
-+	*format = isp_dev->params.format;
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_ioctl_ops sun6i_isp_params_ioctl_ops = {
-+	.vidioc_querycap		= sun6i_isp_params_querycap,
-+
-+	.vidioc_enum_fmt_meta_out	= sun6i_isp_params_enum_fmt,
-+	.vidioc_g_fmt_meta_out		= sun6i_isp_params_g_fmt,
-+	.vidioc_s_fmt_meta_out		= sun6i_isp_params_g_fmt,
-+	.vidioc_try_fmt_meta_out	= sun6i_isp_params_g_fmt,
-+
-+	.vidioc_create_bufs		= vb2_ioctl_create_bufs,
-+	.vidioc_prepare_buf		= vb2_ioctl_prepare_buf,
-+	.vidioc_reqbufs			= vb2_ioctl_reqbufs,
-+	.vidioc_querybuf		= vb2_ioctl_querybuf,
-+	.vidioc_expbuf			= vb2_ioctl_expbuf,
-+	.vidioc_qbuf			= vb2_ioctl_qbuf,
-+	.vidioc_dqbuf			= vb2_ioctl_dqbuf,
-+	.vidioc_streamon		= vb2_ioctl_streamon,
-+	.vidioc_streamoff		= vb2_ioctl_streamoff,
-+
-+	.vidioc_log_status		= v4l2_ctrl_log_status,
-+	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
-+	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
-+};
-+
-+static const struct v4l2_file_operations sun6i_isp_params_fops = {
-+	.owner		= THIS_MODULE,
-+	.unlocked_ioctl	= video_ioctl2,
-+	.open		= v4l2_fh_open,
-+	.release	= vb2_fop_release,
-+	.mmap		= vb2_fop_mmap,
-+	.poll		= vb2_fop_poll,
-+};
-+
-+/* Params */
-+
-+int sun6i_isp_params_setup(struct sun6i_isp_device *isp_dev)
-+{
-+	struct sun6i_isp_params *params = &isp_dev->params;
-+	struct sun6i_isp_params_state *state = &params->state;
-+	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
-+	struct v4l2_subdev *proc_subdev = &isp_dev->proc.subdev;
-+	struct video_device *video_dev = &params->video_dev;
-+	struct vb2_queue *queue = &isp_dev->params.queue;
-+	struct media_pad *pad = &isp_dev->params.pad;
-+	struct v4l2_format *format = &isp_dev->params.format;
-+	struct v4l2_meta_format *params_format = &format->fmt.meta;
-+	int ret;
-+
-+	/* State */
-+
-+	INIT_LIST_HEAD(&state->queue);
-+	spin_lock_init(&state->lock);
-+
-+	/* Media Pads */
-+
-+	pad->flags = MEDIA_PAD_FL_SOURCE | MEDIA_PAD_FL_MUST_CONNECT;
-+
-+	ret = media_entity_pads_init(&video_dev->entity, 1, pad);
-+	if (ret)
-+		goto error_mutex;
-+
-+	/* Queue */
-+
-+	mutex_init(&params->lock);
-+
-+	queue->type = V4L2_BUF_TYPE_META_OUTPUT;
-+	queue->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
-+	queue->buf_struct_size = sizeof(struct sun6i_isp_buffer);
-+	queue->ops = &sun6i_isp_params_queue_ops;
-+	queue->mem_ops = &vb2_vmalloc_memops;
-+	queue->min_buffers_needed = 1;
-+	queue->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-+	queue->lock = &params->lock;
-+	queue->dev = isp_dev->dev;
-+	queue->drv_priv = isp_dev;
-+
-+	ret = vb2_queue_init(queue);
-+	if (ret) {
-+		v4l2_err(v4l2_dev, "failed to initialize vb2 queue: %d\n", ret);
-+		goto error_media_entity;
-+	}
-+
-+	/* V4L2 Format */
-+
-+	format->type = queue->type;
-+	params_format->dataformat = V4L2_META_FMT_SUN6I_ISP_PARAMS;
-+	params_format->buffersize = sizeof(struct sun6i_isp_params_config);
-+
-+	/* Video Device */
-+
-+	strscpy(video_dev->name, SUN6I_ISP_PARAMS_NAME,
-+		sizeof(video_dev->name));
-+	video_dev->device_caps = V4L2_CAP_META_OUTPUT | V4L2_CAP_STREAMING;
-+	video_dev->vfl_dir = VFL_DIR_TX;
-+	video_dev->release = video_device_release_empty;
-+	video_dev->fops = &sun6i_isp_params_fops;
-+	video_dev->ioctl_ops = &sun6i_isp_params_ioctl_ops;
-+	video_dev->v4l2_dev = v4l2_dev;
-+	video_dev->queue = queue;
-+	video_dev->lock = &params->lock;
-+
-+	video_set_drvdata(video_dev, isp_dev);
-+
-+	ret = video_register_device(video_dev, VFL_TYPE_VIDEO, -1);
-+	if (ret) {
-+		v4l2_err(v4l2_dev, "failed to register video device: %d\n",
-+			 ret);
-+		goto error_media_entity;
-+	}
-+
-+	v4l2_info(v4l2_dev, "device %s registered as %s\n", video_dev->name,
-+		  video_device_node_name(video_dev));
-+
-+	/* Media Pad Link */
-+
-+	ret = media_create_pad_link(&video_dev->entity, 0,
-+				    &proc_subdev->entity,
-+				    SUN6I_ISP_PROC_PAD_SINK_PARAMS,
-+				    MEDIA_LNK_FL_ENABLED |
-+				    MEDIA_LNK_FL_IMMUTABLE);
-+	if (ret < 0) {
-+		v4l2_err(v4l2_dev, "failed to create %s:%u -> %s:%u link\n",
-+			 video_dev->entity.name, 0, proc_subdev->entity.name,
-+			 SUN6I_ISP_PROC_PAD_SINK_PARAMS);
-+		goto error_video_device;
-+	}
-+
-+	return 0;
-+
-+error_video_device:
-+	vb2_video_unregister_device(video_dev);
-+
-+error_media_entity:
-+	media_entity_cleanup(&video_dev->entity);
-+
-+error_mutex:
-+	mutex_destroy(&params->lock);
-+
-+	return ret;
-+}
-+
-+void sun6i_isp_params_cleanup(struct sun6i_isp_device *isp_dev)
-+{
-+	struct sun6i_isp_params *params = &isp_dev->params;
-+	struct video_device *video_dev = &params->video_dev;
-+
-+	vb2_video_unregister_device(video_dev);
-+	media_entity_cleanup(&video_dev->entity);
-+	mutex_destroy(&params->lock);
-+}
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.h b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.h
-new file mode 100644
-index 000000000000..50f10f879c42
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.h
-@@ -0,0 +1,52 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+ */
-+
-+#ifndef _SUN6I_ISP_PARAMS_H_
-+#define _SUN6I_ISP_PARAMS_H_
-+
-+#include <media/v4l2-device.h>
-+
-+#define SUN6I_ISP_PARAMS_NAME		"sun6i-isp-params"
-+
-+struct sun6i_isp_device;
-+
-+struct sun6i_isp_params_state {
-+	struct list_head		queue; /* Queue and buffers lock. */
-+	spinlock_t			lock;
-+
-+	struct sun6i_isp_buffer		*pending;
-+
-+	bool				configured;
-+	bool				streaming;
-+};
-+
-+struct sun6i_isp_params {
-+	struct sun6i_isp_params_state	state;
-+
-+	struct video_device		video_dev;
-+	struct vb2_queue		queue;
-+	struct mutex			lock; /* Queue lock. */
-+	struct media_pad		pad;
-+
-+	struct v4l2_format		format;
-+};
-+
-+/* Params */
-+
-+void sun6i_isp_params_configure(struct sun6i_isp_device *isp_dev);
-+
-+/* State */
-+
-+void sun6i_isp_params_state_update(struct sun6i_isp_device *isp_dev,
-+				   bool *update);
-+void sun6i_isp_params_state_complete(struct sun6i_isp_device *isp_dev);
-+
-+/* Params */
-+
-+int sun6i_isp_params_setup(struct sun6i_isp_device *isp_dev);
-+void sun6i_isp_params_cleanup(struct sun6i_isp_device *isp_dev);
-+
-+#endif
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c
-new file mode 100644
-index 000000000000..edaf5ee8b61c
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c
-@@ -0,0 +1,578 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+ */
-+
-+#include <linux/pm_runtime.h>
-+#include <linux/regmap.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-fwnode.h>
-+
-+#include "sun6i_isp.h"
-+#include "sun6i_isp_capture.h"
-+#include "sun6i_isp_params.h"
-+#include "sun6i_isp_proc.h"
-+#include "sun6i_isp_reg.h"
-+
-+/* Helpers */
-+
-+void sun6i_isp_proc_dimensions(struct sun6i_isp_device *isp_dev,
-+			       unsigned int *width, unsigned int *height)
-+{
-+	if (width)
-+		*width = isp_dev->proc.mbus_format.width;
-+	if (height)
-+		*height = isp_dev->proc.mbus_format.height;
-+}
-+
-+/* Format */
-+
-+static const struct sun6i_isp_proc_format sun6i_isp_proc_formats[] = {
-+	{
-+		.mbus_code	= MEDIA_BUS_FMT_SBGGR8_1X8,
-+		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_BGGR,
-+	},
-+	{
-+		.mbus_code	= MEDIA_BUS_FMT_SGBRG8_1X8,
-+		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_GBRG,
-+	},
-+	{
-+		.mbus_code	= MEDIA_BUS_FMT_SGRBG8_1X8,
-+		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_GRBG,
-+	},
-+	{
-+		.mbus_code	= MEDIA_BUS_FMT_SRGGB8_1X8,
-+		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_RGGB,
-+	},
-+
-+	{
-+		.mbus_code	= MEDIA_BUS_FMT_SBGGR10_1X10,
-+		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_BGGR,
-+	},
-+	{
-+		.mbus_code	= MEDIA_BUS_FMT_SGBRG10_1X10,
-+		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_GBRG,
-+	},
-+	{
-+		.mbus_code	= MEDIA_BUS_FMT_SGRBG10_1X10,
-+		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_GRBG,
-+	},
-+	{
-+		.mbus_code	= MEDIA_BUS_FMT_SRGGB10_1X10,
-+		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_RGGB,
-+	},
-+};
-+
-+const struct sun6i_isp_proc_format *sun6i_isp_proc_format_find(u32 mbus_code)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(sun6i_isp_proc_formats); i++)
-+		if (sun6i_isp_proc_formats[i].mbus_code == mbus_code)
-+			return &sun6i_isp_proc_formats[i];
-+
-+	return NULL;
-+}
-+
-+/* Processor */
-+
-+static void sun6i_isp_proc_irq_enable(struct sun6i_isp_device *isp_dev)
-+{
-+	struct regmap *regmap = isp_dev->regmap;
-+
-+	regmap_write(regmap, SUN6I_ISP_FE_INT_EN_REG,
-+		     SUN6I_ISP_FE_INT_EN_FINISH |
-+		     SUN6I_ISP_FE_INT_EN_START |
-+		     SUN6I_ISP_FE_INT_EN_PARA_SAVE |
-+		     SUN6I_ISP_FE_INT_EN_PARA_LOAD |
-+		     SUN6I_ISP_FE_INT_EN_SRC0_FIFO |
-+		     SUN6I_ISP_FE_INT_EN_ROT_FINISH);
-+}
-+
-+static void sun6i_isp_proc_irq_disable(struct sun6i_isp_device *isp_dev)
-+{
-+	struct regmap *regmap = isp_dev->regmap;
-+
-+	regmap_write(regmap, SUN6I_ISP_FE_INT_EN_REG, 0);
-+}
-+
-+static void sun6i_isp_proc_irq_clear(struct sun6i_isp_device *isp_dev)
-+{
-+	struct regmap *regmap = isp_dev->regmap;
-+
-+	regmap_write(regmap, SUN6I_ISP_FE_INT_EN_REG, 0);
-+	regmap_write(regmap, SUN6I_ISP_FE_INT_STA_REG,
-+		     SUN6I_ISP_FE_INT_STA_CLEAR);
-+}
-+
-+static void sun6i_isp_proc_enable(struct sun6i_isp_device *isp_dev,
-+				  struct sun6i_isp_proc_source *source)
-+{
-+	struct sun6i_isp_proc *proc = &isp_dev->proc;
-+	struct regmap *regmap = isp_dev->regmap;
-+	u8 mode;
-+
-+	/* Frontend */
-+
-+	if (source == &proc->source_csi0)
-+		mode = SUN6I_ISP_SRC_MODE_CSI(0);
-+	else
-+		mode = SUN6I_ISP_SRC_MODE_CSI(1);
-+
-+	regmap_write(regmap, SUN6I_ISP_FE_CFG_REG,
-+		     SUN6I_ISP_FE_CFG_EN | SUN6I_ISP_FE_CFG_SRC0_MODE(mode));
-+
-+	regmap_write(regmap, SUN6I_ISP_FE_CTRL_REG,
-+		     SUN6I_ISP_FE_CTRL_VCAP_EN | SUN6I_ISP_FE_CTRL_PARA_READY);
-+}
-+
-+static void sun6i_isp_proc_disable(struct sun6i_isp_device *isp_dev)
-+{
-+	struct regmap *regmap = isp_dev->regmap;
-+
-+	/* Frontend */
-+
-+	regmap_write(regmap, SUN6I_ISP_FE_CTRL_REG, 0);
-+	regmap_write(regmap, SUN6I_ISP_FE_CFG_REG, 0);
-+}
-+
-+static void sun6i_isp_proc_configure(struct sun6i_isp_device *isp_dev)
-+{
-+	struct v4l2_mbus_framefmt *mbus_format = &isp_dev->proc.mbus_format;
-+	const struct sun6i_isp_proc_format *format;
-+	u32 value;
-+
-+	/* Module */
-+
-+	value = sun6i_isp_load_read(isp_dev, SUN6I_ISP_MODULE_EN_REG);
-+	value |= SUN6I_ISP_MODULE_EN_SRC0;
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MODULE_EN_REG, value);
-+
-+	/* Input */
-+
-+	format = sun6i_isp_proc_format_find(mbus_format->code);
-+	if (WARN_ON(!format))
-+		return;
-+
-+	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MODE_REG,
-+			     SUN6I_ISP_MODE_INPUT_FMT(format->input_format) |
-+			     SUN6I_ISP_MODE_INPUT_YUV_SEQ(format->input_yuv_seq) |
-+			     SUN6I_ISP_MODE_SHARP(1) |
-+			     SUN6I_ISP_MODE_HIST(2));
-+}
-+
-+/* V4L2 Subdev */
-+
-+static int sun6i_isp_proc_s_stream(struct v4l2_subdev *subdev, int on)
-+{
-+	struct sun6i_isp_device *isp_dev = v4l2_get_subdevdata(subdev);
-+	struct sun6i_isp_proc *proc = &isp_dev->proc;
-+	struct media_entity *proc_entity = &proc->subdev.entity;
-+	struct device *dev = isp_dev->dev;
-+	struct sun6i_isp_proc_source *source;
-+	struct v4l2_subdev *source_subdev;
-+	struct media_link *link;
-+	/* Initialize to 0 to use both in disable label (ret != 0) and off. */
-+	int ret = 0;
-+
-+	/* Source */
-+
-+	link = media_entity_get_single_enabled_link(proc_entity,
-+						    SUN6I_ISP_PROC_PAD_SINK_CSI);
-+	if (IS_ERR(link)) {
-+		dev_err(dev,
-+			"zero or more than a single source connected to the bridge\n");
-+		return PTR_ERR(link);
-+	}
-+
-+	source_subdev = media_entity_to_v4l2_subdev(link->source->entity);
-+
-+	if (source_subdev == proc->source_csi0.subdev)
-+		source = &proc->source_csi0;
-+	else
-+		source = &proc->source_csi1;
-+
-+	if (!on) {
-+		sun6i_isp_proc_irq_disable(isp_dev);
-+		v4l2_subdev_call(source_subdev, video, s_stream, 0);
-+		goto disable;
-+	}
-+
-+	/* PM */
-+
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Clear */
-+
-+	sun6i_isp_proc_irq_clear(isp_dev);
-+
-+	/* Configure */
-+
-+	sun6i_isp_tables_configure(isp_dev);
-+	sun6i_isp_params_configure(isp_dev);
-+	sun6i_isp_proc_configure(isp_dev);
-+	sun6i_isp_capture_configure(isp_dev);
-+
-+	/* State Update */
-+
-+	sun6i_isp_state_update(isp_dev, true);
-+
-+	/* Enable */
-+
-+	sun6i_isp_proc_irq_enable(isp_dev);
-+	sun6i_isp_proc_enable(isp_dev, source);
-+
-+	ret = v4l2_subdev_call(source_subdev, video, s_stream, 1);
-+	if (ret && ret != -ENOIOCTLCMD) {
-+		sun6i_isp_proc_irq_disable(isp_dev);
-+		goto disable;
-+	}
-+
-+	return 0;
-+
-+disable:
-+	sun6i_isp_proc_disable(isp_dev);
-+
-+	pm_runtime_put(dev);
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_subdev_video_ops sun6i_isp_proc_video_ops = {
-+	.s_stream	= sun6i_isp_proc_s_stream,
-+};
-+
-+static void
-+sun6i_isp_proc_mbus_format_prepare(struct v4l2_mbus_framefmt *mbus_format)
-+{
-+	if (!sun6i_isp_proc_format_find(mbus_format->code))
-+		mbus_format->code = sun6i_isp_proc_formats[0].mbus_code;
-+
-+	mbus_format->field = V4L2_FIELD_NONE;
-+	mbus_format->colorspace = V4L2_COLORSPACE_RAW;
-+	mbus_format->quantization = V4L2_QUANTIZATION_DEFAULT;
-+	mbus_format->xfer_func = V4L2_XFER_FUNC_DEFAULT;
-+}
-+
-+static int sun6i_isp_proc_init_cfg(struct v4l2_subdev *subdev,
-+				   struct v4l2_subdev_state *state)
-+{
-+	struct sun6i_isp_device *isp_dev = v4l2_get_subdevdata(subdev);
-+	unsigned int pad = SUN6I_ISP_PROC_PAD_SINK_CSI;
-+	struct v4l2_mbus_framefmt *mbus_format =
-+		v4l2_subdev_get_try_format(subdev, state, pad);
-+	struct mutex *lock = &isp_dev->proc.lock;
-+
-+	mutex_lock(lock);
-+
-+	mbus_format->code = sun6i_isp_proc_formats[0].mbus_code;
-+	mbus_format->width = 1280;
-+	mbus_format->height = 720;
-+
-+	sun6i_isp_proc_mbus_format_prepare(mbus_format);
-+
-+	mutex_unlock(lock);
-+
-+	return 0;
-+}
-+
-+static int
-+sun6i_isp_proc_enum_mbus_code(struct v4l2_subdev *subdev,
-+			      struct v4l2_subdev_state *state,
-+			      struct v4l2_subdev_mbus_code_enum *code_enum)
-+{
-+	if (code_enum->index >= ARRAY_SIZE(sun6i_isp_proc_formats))
-+		return -EINVAL;
-+
-+	code_enum->code = sun6i_isp_proc_formats[code_enum->index].mbus_code;
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_proc_get_fmt(struct v4l2_subdev *subdev,
-+				  struct v4l2_subdev_state *state,
-+				  struct v4l2_subdev_format *format)
-+{
-+	struct sun6i_isp_device *isp_dev = v4l2_get_subdevdata(subdev);
-+	struct v4l2_mbus_framefmt *mbus_format = &format->format;
-+	struct mutex *lock = &isp_dev->proc.lock;
-+
-+	mutex_lock(lock);
-+
-+	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
-+		*mbus_format = *v4l2_subdev_get_try_format(subdev, state,
-+							   format->pad);
-+	else
-+		*mbus_format = isp_dev->proc.mbus_format;
-+
-+	mutex_unlock(lock);
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_proc_set_fmt(struct v4l2_subdev *subdev,
-+				  struct v4l2_subdev_state *state,
-+				  struct v4l2_subdev_format *format)
-+{
-+	struct sun6i_isp_device *isp_dev = v4l2_get_subdevdata(subdev);
-+	struct v4l2_mbus_framefmt *mbus_format = &format->format;
-+	struct mutex *lock = &isp_dev->proc.lock;
-+
-+	mutex_lock(lock);
-+
-+	sun6i_isp_proc_mbus_format_prepare(mbus_format);
-+
-+	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
-+		*v4l2_subdev_get_try_format(subdev, state, format->pad) =
-+			*mbus_format;
-+	else
-+		isp_dev->proc.mbus_format = *mbus_format;
-+
-+	mutex_unlock(lock);
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_subdev_pad_ops sun6i_isp_proc_pad_ops = {
-+	.init_cfg	= sun6i_isp_proc_init_cfg,
-+	.enum_mbus_code	= sun6i_isp_proc_enum_mbus_code,
-+	.get_fmt	= sun6i_isp_proc_get_fmt,
-+	.set_fmt	= sun6i_isp_proc_set_fmt,
-+};
-+
-+const struct v4l2_subdev_ops sun6i_isp_proc_subdev_ops = {
-+	.video	= &sun6i_isp_proc_video_ops,
-+	.pad	= &sun6i_isp_proc_pad_ops,
-+};
-+
-+/* Media Entity */
-+
-+static const struct media_entity_operations sun6i_isp_proc_entity_ops = {
-+	.link_validate	= v4l2_subdev_link_validate,
-+};
-+
-+/* V4L2 Async */
-+
-+static int sun6i_isp_proc_link(struct sun6i_isp_device *isp_dev,
-+			       int sink_pad_index,
-+			       struct v4l2_subdev *remote_subdev, bool enabled)
-+{
-+	struct device *dev = isp_dev->dev;
-+	struct v4l2_subdev *subdev = &isp_dev->proc.subdev;
-+	struct media_entity *sink_entity = &subdev->entity;
-+	struct media_entity *source_entity = &remote_subdev->entity;
-+	int source_pad_index;
-+	int ret;
-+
-+	/* Get the first remote source pad. */
-+	ret = media_entity_get_fwnode_pad(source_entity, remote_subdev->fwnode,
-+					  MEDIA_PAD_FL_SOURCE);
-+	if (ret < 0) {
-+		dev_err(dev, "missing source pad in external entity %s\n",
-+			source_entity->name);
-+		return -EINVAL;
-+	}
-+
-+	source_pad_index = ret;
-+
-+	dev_dbg(dev, "creating %s:%u -> %s:%u link\n", source_entity->name,
-+		source_pad_index, sink_entity->name, sink_pad_index);
-+
-+	ret = media_create_pad_link(source_entity, source_pad_index,
-+				    sink_entity, sink_pad_index,
-+				    enabled ? MEDIA_LNK_FL_ENABLED : 0);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to create %s:%u -> %s:%u link\n",
-+			source_entity->name, source_pad_index,
-+			sink_entity->name, sink_pad_index);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int sun6i_isp_proc_notifier_bound(struct v4l2_async_notifier *notifier,
-+					 struct v4l2_subdev *remote_subdev,
-+					 struct v4l2_async_subdev *async_subdev)
-+{
-+	struct sun6i_isp_device *isp_dev =
-+		container_of(notifier, struct sun6i_isp_device, proc.notifier);
-+	struct sun6i_isp_proc_async_subdev *proc_async_subdev =
-+		container_of(async_subdev, struct sun6i_isp_proc_async_subdev,
-+			     async_subdev);
-+	struct sun6i_isp_proc *proc = &isp_dev->proc;
-+	struct sun6i_isp_proc_source *source = proc_async_subdev->source;
-+	bool enabled;
-+
-+	switch (source->endpoint.base.port) {
-+	case SUN6I_ISP_PORT_CSI0:
-+		source = &proc->source_csi0;
-+		enabled = true;
-+		break;
-+	case SUN6I_ISP_PORT_CSI1:
-+		source = &proc->source_csi1;
-+		enabled = !proc->source_csi0.expected;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	source->subdev = remote_subdev;
-+
-+	return sun6i_isp_proc_link(isp_dev, SUN6I_ISP_PROC_PAD_SINK_CSI,
-+				   remote_subdev, enabled);
-+}
-+
-+static int
-+sun6i_isp_proc_notifier_complete(struct v4l2_async_notifier *notifier)
-+{
-+	struct sun6i_isp_device *isp_dev =
-+		container_of(notifier, struct sun6i_isp_device, proc.notifier);
-+	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
-+	int ret;
-+
-+	ret = v4l2_device_register_subdev_nodes(v4l2_dev);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_async_notifier_operations
-+sun6i_isp_proc_notifier_ops = {
-+	.bound		= sun6i_isp_proc_notifier_bound,
-+	.complete	= sun6i_isp_proc_notifier_complete,
-+};
-+
-+/* Processor */
-+
-+static int sun6i_isp_proc_source_setup(struct sun6i_isp_device *isp_dev,
-+				       struct sun6i_isp_proc_source *source,
-+				       u32 port)
-+{
-+	struct device *dev = isp_dev->dev;
-+	struct v4l2_async_notifier *notifier = &isp_dev->proc.notifier;
-+	struct v4l2_fwnode_endpoint *endpoint = &source->endpoint;
-+	struct sun6i_isp_proc_async_subdev *proc_async_subdev;
-+	struct fwnode_handle *handle = NULL;
-+	int ret;
-+
-+	handle = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev), port, 0, 0);
-+	if (!handle)
-+		return -ENODEV;
-+
-+	ret = v4l2_fwnode_endpoint_parse(handle, endpoint);
-+	if (ret)
-+		goto complete;
-+
-+	proc_async_subdev =
-+		v4l2_async_nf_add_fwnode_remote(notifier, handle,
-+						struct
-+						sun6i_isp_proc_async_subdev);
-+	if (IS_ERR(proc_async_subdev)) {
-+		ret = PTR_ERR(proc_async_subdev);
-+		goto complete;
-+	}
-+
-+	proc_async_subdev->source = source;
-+
-+	source->expected = true;
-+
-+complete:
-+	fwnode_handle_put(handle);
-+
-+	return ret;
-+}
-+
-+int sun6i_isp_proc_setup(struct sun6i_isp_device *isp_dev)
-+{
-+	struct device *dev = isp_dev->dev;
-+	struct sun6i_isp_proc *proc = &isp_dev->proc;
-+	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
-+	struct v4l2_async_notifier *notifier = &proc->notifier;
-+	struct v4l2_subdev *subdev = &proc->subdev;
-+	struct media_pad *pads = proc->pads;
-+	int ret;
-+
-+	mutex_init(&proc->lock);
-+
-+	/* V4L2 Subdev */
-+
-+	v4l2_subdev_init(subdev, &sun6i_isp_proc_subdev_ops);
-+	strscpy(subdev->name, SUN6I_ISP_PROC_NAME, sizeof(subdev->name));
-+	subdev->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	subdev->owner = THIS_MODULE;
-+	subdev->dev = dev;
-+
-+	v4l2_set_subdevdata(subdev, isp_dev);
-+
-+	/* Media Entity */
-+
-+	subdev->entity.function = MEDIA_ENT_F_PROC_VIDEO_ISP;
-+	subdev->entity.ops = &sun6i_isp_proc_entity_ops;
-+
-+	/* Media Pads */
-+
-+	pads[SUN6I_ISP_PROC_PAD_SINK_CSI].flags = MEDIA_PAD_FL_SINK |
-+						  MEDIA_PAD_FL_MUST_CONNECT;
-+	pads[SUN6I_ISP_PROC_PAD_SINK_PARAMS].flags = MEDIA_PAD_FL_SINK |
-+						     MEDIA_PAD_FL_MUST_CONNECT;
-+	pads[SUN6I_ISP_PROC_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
-+
-+	ret = media_entity_pads_init(&subdev->entity, SUN6I_ISP_PROC_PAD_COUNT,
-+				     pads);
-+	if (ret)
-+		return ret;
-+
-+	/* V4L2 Subdev */
-+
-+	ret = v4l2_device_register_subdev(v4l2_dev, subdev);
-+	if (ret < 0) {
-+		v4l2_err(v4l2_dev, "failed to register v4l2 subdev: %d\n", ret);
-+		goto error_media_entity;
-+	}
-+
-+	/* V4L2 Async */
-+
-+	v4l2_async_nf_init(notifier);
-+	notifier->ops = &sun6i_isp_proc_notifier_ops;
-+
-+	sun6i_isp_proc_source_setup(isp_dev, &proc->source_csi0,
-+				    SUN6I_ISP_PORT_CSI0);
-+	sun6i_isp_proc_source_setup(isp_dev, &proc->source_csi1,
-+				    SUN6I_ISP_PORT_CSI1);
-+
-+	ret = v4l2_async_nf_register(v4l2_dev, notifier);
-+	if (ret) {
-+		v4l2_err(v4l2_dev,
-+			 "failed to register v4l2 async notifier: %d\n", ret);
-+		goto error_v4l2_async_notifier;
-+	}
-+
-+	return 0;
-+
-+error_v4l2_async_notifier:
-+	v4l2_async_nf_cleanup(notifier);
-+
-+	v4l2_device_unregister_subdev(subdev);
-+
-+error_media_entity:
-+	media_entity_cleanup(&subdev->entity);
-+
-+	return ret;
-+}
-+
-+void sun6i_isp_proc_cleanup(struct sun6i_isp_device *isp_dev)
-+{
-+	struct v4l2_async_notifier *notifier = &isp_dev->proc.notifier;
-+	struct v4l2_subdev *subdev = &isp_dev->proc.subdev;
-+
-+	v4l2_async_nf_unregister(notifier);
-+	v4l2_async_nf_cleanup(notifier);
-+
-+	v4l2_device_unregister_subdev(subdev);
-+	media_entity_cleanup(&subdev->entity);
-+}
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h
-new file mode 100644
-index 000000000000..c5c274e21ad5
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h
-@@ -0,0 +1,66 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+ */
-+
-+#ifndef _SUN6I_ISP_PROC_H_
-+#define _SUN6I_ISP_PROC_H_
-+
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-fwnode.h>
-+
-+#define SUN6I_ISP_PROC_NAME		"sun6i-isp-proc"
-+
-+enum sun6i_isp_proc_pad {
-+	SUN6I_ISP_PROC_PAD_SINK_CSI	= 0,
-+	SUN6I_ISP_PROC_PAD_SINK_PARAMS	= 1,
-+	SUN6I_ISP_PROC_PAD_SOURCE	= 2,
-+	SUN6I_ISP_PROC_PAD_COUNT	= 3,
-+};
-+
-+struct sun6i_isp_device;
-+
-+struct sun6i_isp_proc_format {
-+	u32	mbus_code;
-+	u8	input_format;
-+	u8	input_yuv_seq;
-+};
-+
-+struct sun6i_isp_proc_source {
-+	struct v4l2_subdev		*subdev;
-+	struct v4l2_fwnode_endpoint	endpoint;
-+	bool				expected;
-+};
-+
-+struct sun6i_isp_proc_async_subdev {
-+	struct v4l2_async_subdev	async_subdev;
-+	struct sun6i_isp_proc_source	*source;
-+};
-+
-+struct sun6i_isp_proc {
-+	struct v4l2_subdev		subdev;
-+	struct media_pad		pads[3];
-+	struct v4l2_async_notifier	notifier;
-+	struct v4l2_mbus_framefmt	mbus_format;
-+	struct mutex			lock; /* Mbus format lock. */
-+
-+	struct sun6i_isp_proc_source	source_csi0;
-+	struct sun6i_isp_proc_source	source_csi1;
-+};
-+
-+/* Helpers */
-+
-+void sun6i_isp_proc_dimensions(struct sun6i_isp_device *isp_dev,
-+			       unsigned int *width, unsigned int *height);
-+
-+/* Format */
-+
-+const struct sun6i_isp_proc_format *sun6i_isp_proc_format_find(u32 mbus_code);
-+
-+/* Proc */
-+
-+int sun6i_isp_proc_setup(struct sun6i_isp_device *isp_dev);
-+void sun6i_isp_proc_cleanup(struct sun6i_isp_device *isp_dev);
-+
-+#endif
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg.h b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg.h
-new file mode 100644
-index 000000000000..83b9cdab2134
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg.h
-@@ -0,0 +1,275 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright 2021-2022 Bootlin
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+ */
-+
-+#ifndef _SUN6I_ISP_REG_H_
-+#define _SUN6I_ISP_REG_H_
-+
-+#include <linux/kernel.h>
-+
-+#define SUN6I_ISP_ADDR_VALUE(a)			((a) >> 2)
-+
-+/* Frontend */
-+
-+#define SUN6I_ISP_SRC_MODE_DRAM			0
-+#define SUN6I_ISP_SRC_MODE_CSI(n)		(1 + (n))
-+
-+#define SUN6I_ISP_FE_CFG_REG			0x0
-+#define SUN6I_ISP_FE_CFG_EN			BIT(0)
-+#define SUN6I_ISP_FE_CFG_SRC0_MODE(v)		(((v) << 8) & GENMASK(9, 8))
-+#define SUN6I_ISP_FE_CFG_SRC1_MODE(v)		(((v) << 16) & GENMASK(17, 16))
-+
-+#define SUN6I_ISP_FE_CTRL_REG			0x4
-+#define SUN6I_ISP_FE_CTRL_SCAP_EN		BIT(0)
-+#define SUN6I_ISP_FE_CTRL_VCAP_EN		BIT(1)
-+#define SUN6I_ISP_FE_CTRL_PARA_READY		BIT(2)
-+#define SUN6I_ISP_FE_CTRL_LUT_UPDATE		BIT(3)
-+#define SUN6I_ISP_FE_CTRL_LENS_UPDATE		BIT(4)
-+#define SUN6I_ISP_FE_CTRL_GAMMA_UPDATE		BIT(5)
-+#define SUN6I_ISP_FE_CTRL_DRC_UPDATE		BIT(6)
-+#define SUN6I_ISP_FE_CTRL_DISC_UPDATE		BIT(7)
-+#define SUN6I_ISP_FE_CTRL_OUTPUT_SPEED_CTRL(v)	(((v) << 16) & GENMASK(17, 16))
-+#define SUN6I_ISP_FE_CTRL_VCAP_READ_START	BIT(31)
-+
-+#define SUN6I_ISP_FE_INT_EN_REG			0x8
-+#define SUN6I_ISP_FE_INT_EN_FINISH		BIT(0)
-+#define SUN6I_ISP_FE_INT_EN_START		BIT(1)
-+#define SUN6I_ISP_FE_INT_EN_PARA_SAVE		BIT(2)
-+#define SUN6I_ISP_FE_INT_EN_PARA_LOAD		BIT(3)
-+#define SUN6I_ISP_FE_INT_EN_SRC0_FIFO		BIT(4)
-+#define SUN6I_ISP_FE_INT_EN_SRC1_FIFO		BIT(5)
-+#define SUN6I_ISP_FE_INT_EN_ROT_FINISH		BIT(6)
-+#define SUN6I_ISP_FE_INT_EN_LINE_NUM_START	BIT(7)
-+
-+#define SUN6I_ISP_FE_INT_STA_REG		0xc
-+#define SUN6I_ISP_FE_INT_STA_CLEAR		0xff
-+#define SUN6I_ISP_FE_INT_STA_FINISH		BIT(0)
-+#define SUN6I_ISP_FE_INT_STA_START		BIT(1)
-+#define SUN6I_ISP_FE_INT_STA_PARA_SAVE		BIT(2)
-+#define SUN6I_ISP_FE_INT_STA_PARA_LOAD		BIT(3)
-+#define SUN6I_ISP_FE_INT_STA_SRC0_FIFO		BIT(4)
-+#define SUN6I_ISP_FE_INT_STA_SRC1_FIFO		BIT(5)
-+#define SUN6I_ISP_FE_INT_STA_ROT_FINISH		BIT(6)
-+#define SUN6I_ISP_FE_INT_STA_LINE_NUM_START	BIT(7)
-+
-+/* Only since sun9i-a80-isp. */
-+#define SUN6I_ISP_FE_INT_LINE_NUM_REG		0x18
-+#define SUN6I_ISP_FE_ROT_OF_CFG_REG		0x1c
-+
-+/* Buffers/tables */
-+
-+#define SUN6I_ISP_REG_LOAD_ADDR_REG		0x20
-+#define SUN6I_ISP_REG_SAVE_ADDR_REG		0x24
-+
-+#define SUN6I_ISP_LUT_TABLE_ADDR_REG		0x28
-+#define SUN6I_ISP_DRC_TABLE_ADDR_REG		0x2c
-+#define SUN6I_ISP_STATS_ADDR_REG		0x30
-+
-+/* SRAM */
-+
-+#define SUN6I_ISP_SRAM_RW_OFFSET_REG		0x38
-+#define SUN6I_ISP_SRAM_RW_DATA_REG		0x3c
-+
-+/* Global */
-+
-+#define SUN6I_ISP_MODULE_EN_REG			0x40
-+#define SUN6I_ISP_MODULE_EN_AE			BIT(0)
-+#define SUN6I_ISP_MODULE_EN_OBC			BIT(1)
-+#define SUN6I_ISP_MODULE_EN_DPC_LUT		BIT(2)
-+#define SUN6I_ISP_MODULE_EN_DPC_OTF		BIT(3)
-+#define SUN6I_ISP_MODULE_EN_BDNF		BIT(4)
-+#define SUN6I_ISP_MODULE_EN_AWB			BIT(6)
-+#define SUN6I_ISP_MODULE_EN_WB			BIT(7)
-+#define SUN6I_ISP_MODULE_EN_LSC			BIT(8)
-+#define SUN6I_ISP_MODULE_EN_BGC			BIT(9)
-+#define SUN6I_ISP_MODULE_EN_SAP			BIT(10)
-+#define SUN6I_ISP_MODULE_EN_AF			BIT(11)
-+#define SUN6I_ISP_MODULE_EN_RGB2RGB		BIT(12)
-+#define SUN6I_ISP_MODULE_EN_RGB_DRC		BIT(13)
-+#define SUN6I_ISP_MODULE_EN_TDNF		BIT(15)
-+#define SUN6I_ISP_MODULE_EN_AFS			BIT(16)
-+#define SUN6I_ISP_MODULE_EN_HIST		BIT(17)
-+#define SUN6I_ISP_MODULE_EN_YUV_GAIN_OFFSET	BIT(18)
-+#define SUN6I_ISP_MODULE_EN_YUV_DRC		BIT(19)
-+#define SUN6I_ISP_MODULE_EN_TG			BIT(20)
-+#define SUN6I_ISP_MODULE_EN_ROT			BIT(21)
-+#define SUN6I_ISP_MODULE_EN_CONTRAST		BIT(22)
-+#define SUN6I_ISP_MODULE_EN_SATU		BIT(24)
-+#define SUN6I_ISP_MODULE_EN_SRC1		BIT(30)
-+#define SUN6I_ISP_MODULE_EN_SRC0		BIT(31)
-+
-+#define SUN6I_ISP_MODE_REG			0x44
-+#define SUN6I_ISP_MODE_INPUT_FMT(v)		((v) & GENMASK(2, 0))
-+#define SUN6I_ISP_MODE_INPUT_YUV_SEQ(v)		(((v) << 3) & GENMASK(4, 3))
-+#define SUN6I_ISP_MODE_OTF_DPC(v)		(((v) << 16) & BIT(16))
-+#define SUN6I_ISP_MODE_SHARP(v)			(((v) << 17) & BIT(17))
-+#define SUN6I_ISP_MODE_HIST(v)			(((v) << 20) & GENMASK(21, 20))
-+
-+#define SUN6I_ISP_INPUT_FMT_YUV420		0
-+#define SUN6I_ISP_INPUT_FMT_YUV422		1
-+#define SUN6I_ISP_INPUT_FMT_RAW_BGGR		4
-+#define SUN6I_ISP_INPUT_FMT_RAW_RGGB		5
-+#define SUN6I_ISP_INPUT_FMT_RAW_GBRG		6
-+#define SUN6I_ISP_INPUT_FMT_RAW_GRBG		7
-+
-+#define SUN6I_ISP_INPUT_YUV_SEQ_YUYV		0
-+#define SUN6I_ISP_INPUT_YUV_SEQ_YVYU		1
-+#define SUN6I_ISP_INPUT_YUV_SEQ_UYVY		2
-+#define SUN6I_ISP_INPUT_YUV_SEQ_VYUY		3
-+
-+#define SUN6I_ISP_IN_CFG_REG			0x48
-+#define SUN6I_ISP_IN_CFG_STRIDE_DIV16(v)	((v) & GENMASK(10, 0))
-+
-+#define SUN6I_ISP_IN_LUMA_RGB_ADDR0_REG		0x4c
-+#define SUN6I_ISP_IN_CHROMA_ADDR0_REG		0x50
-+#define SUN6I_ISP_IN_LUMA_RGB_ADDR1_REG		0x54
-+#define SUN6I_ISP_IN_CHROMA_ADDR1_REG		0x58
-+
-+/* AE */
-+
-+#define SUN6I_ISP_AE_CFG_REG			0x60
-+#define SUN6I_ISP_AE_CFG_LOW_BRI_TH(v)		((v) & GENMASK(11, 0))
-+#define SUN6I_ISP_AE_CFG_HORZ_NUM(v)		(((v) << 12) & GENMASK(15, 12))
-+#define SUN6I_ISP_AE_CFG_HIGH_BRI_TH(v)		(((v) << 16) & GENMASK(27, 16))
-+#define SUN6I_ISP_AE_CFG_VERT_NUM(v)		(((v) << 28) & GENMASK(31, 28))
-+
-+#define SUN6I_ISP_AE_SIZE_REG			0x64
-+#define SUN6I_ISP_AE_SIZE_WIDTH(v)		((v) & GENMASK(10, 0))
-+#define SUN6I_ISP_AE_SIZE_HEIGHT(v)		(((v) << 16) & GENMASK(26, 16))
-+
-+#define SUN6I_ISP_AE_POS_REG			0x68
-+#define SUN6I_ISP_AE_POS_HORZ_START(v)		((v) & GENMASK(10, 0))
-+#define SUN6I_ISP_AE_POS_VERT_START(v)		(((v) << 16) & GENMASK(26, 16))
-+
-+/* OB */
-+
-+#define SUN6I_ISP_OB_SIZE_REG			0x78
-+#define SUN6I_ISP_OB_SIZE_WIDTH(v)		((v) & GENMASK(13, 0))
-+#define SUN6I_ISP_OB_SIZE_HEIGHT(v)		(((v) << 16) & GENMASK(29, 16))
-+
-+#define SUN6I_ISP_OB_VALID_REG			0x7c
-+#define SUN6I_ISP_OB_VALID_WIDTH(v)		((v) & GENMASK(12, 0))
-+#define SUN6I_ISP_OB_VALID_HEIGHT(v)		(((v) << 16) & GENMASK(28, 16))
-+
-+#define SUN6I_ISP_OB_SRC0_VALID_START_REG	0x80
-+#define SUN6I_ISP_OB_SRC0_VALID_START_HORZ(v)	((v) & GENMASK(11, 0))
-+#define SUN6I_ISP_OB_SRC0_VALID_START_VERT(v)	(((v) << 16) & GENMASK(27, 16))
-+
-+#define SUN6I_ISP_OB_SRC1_VALID_START_REG	0x84
-+#define SUN6I_ISP_OB_SRC1_VALID_START_HORZ(v)	((v) & GENMASK(11, 0))
-+#define SUN6I_ISP_OB_SRC1_VALID_START_VERT(v)	(((v) << 16) & GENMASK(27, 16))
-+
-+#define SUN6I_ISP_OB_SPRITE_REG			0x88
-+#define SUN6I_ISP_OB_SPRITE_WIDTH(v)		((v) & GENMASK(12, 0))
-+#define SUN6I_ISP_OB_SPRITE_HEIGHT(v)		(((v) << 16) & GENMASK(28, 16))
-+
-+#define SUN6I_ISP_OB_SPRITE_START_REG		0x8c
-+#define SUN6I_ISP_OB_SPRITE_START_HORZ(v)	((v) & GENMASK(11, 0))
-+#define SUN6I_ISP_OB_SPRITE_START_VERT(v)	(((v) << 16) & GENMASK(27, 16))
-+
-+#define SUN6I_ISP_OB_CFG_REG			0x90
-+#define SUN6I_ISP_OB_HORZ_POS_REG		0x94
-+#define SUN6I_ISP_OB_VERT_PARA_REG		0x98
-+#define SUN6I_ISP_OB_OFFSET_FIXED_REG		0x9c
-+
-+/* BDNF */
-+
-+#define SUN6I_ISP_BDNF_CFG_REG			0xcc
-+#define SUN6I_ISP_BDNF_CFG_IN_DIS_MIN(v)	((v) & GENMASK(7, 0))
-+#define SUN6I_ISP_BDNF_CFG_IN_DIS_MAX(v)	(((v) << 16) & GENMASK(23, 16))
-+
-+#define SUN6I_ISP_BDNF_COEF_RB_REG		0xd0
-+#define SUN6I_ISP_BDNF_COEF_RB(i, v)		(((v) << (4 * (i))) & \
-+						 GENMASK(4 * (i) + 3, 4 * (i)))
-+
-+#define SUN6I_ISP_BDNF_COEF_G_REG		0xd4
-+#define SUN6I_ISP_BDNF_COEF_G(i, v)		(((v) << (4 * (i))) & \
-+						 GENMASK(4 * (i) + 3, 4 * (i)))
-+
-+/* Bayer */
-+
-+#define SUN6I_ISP_BAYER_OFFSET0_REG		0xe0
-+#define SUN6I_ISP_BAYER_OFFSET0_R(v)		((v) & GENMASK(12, 0))
-+#define SUN6I_ISP_BAYER_OFFSET0_GR(v)		(((v) << 16) & GENMASK(28, 16))
-+
-+#define SUN6I_ISP_BAYER_OFFSET1_REG		0xe4
-+#define SUN6I_ISP_BAYER_OFFSET1_GB(v)		((v) & GENMASK(12, 0))
-+#define SUN6I_ISP_BAYER_OFFSET1_B(v)		(((v) << 16) & GENMASK(28, 16))
-+
-+#define SUN6I_ISP_BAYER_GAIN0_REG		0xe8
-+#define SUN6I_ISP_BAYER_GAIN0_R(v)		((v) & GENMASK(11, 0))
-+#define SUN6I_ISP_BAYER_GAIN0_GR(v)		(((v) << 16) & GENMASK(27, 16))
-+
-+#define SUN6I_ISP_BAYER_GAIN1_REG		0xec
-+#define SUN6I_ISP_BAYER_GAIN1_GB(v)		((v) & GENMASK(11, 0))
-+#define SUN6I_ISP_BAYER_GAIN1_B(v)		(((v) << 16) & GENMASK(27, 16))
-+
-+/* WB */
-+
-+#define SUN6I_ISP_WB_GAIN0_REG			0x140
-+#define SUN6I_ISP_WB_GAIN0_R(v)			((v) & GENMASK(11, 0))
-+#define SUN6I_ISP_WB_GAIN0_GR(v)		(((v) << 16) & GENMASK(27, 16))
-+
-+#define SUN6I_ISP_WB_GAIN1_REG			0x144
-+#define SUN6I_ISP_WB_GAIN1_GB(v)		((v) & GENMASK(11, 0))
-+#define SUN6I_ISP_WB_GAIN1_B(v)			(((v) << 16) & GENMASK(27, 16))
-+
-+#define SUN6I_ISP_WB_CFG_REG			0x148
-+#define SUN6I_ISP_WB_CFG_CLIP(v)		((v) & GENMASK(11, 0))
-+
-+/* Global */
-+
-+#define SUN6I_ISP_MCH_SIZE_CFG_REG		0x1e0
-+#define SUN6I_ISP_MCH_SIZE_CFG_WIDTH(v)		((v) & GENMASK(12, 0))
-+#define SUN6I_ISP_MCH_SIZE_CFG_HEIGHT(v)	(((v) << 16) & GENMASK(28, 16))
-+
-+#define SUN6I_ISP_MCH_SCALE_CFG_REG		0x1e4
-+#define SUN6I_ISP_MCH_SCALE_CFG_X_RATIO(v)	((v) & GENMASK(11, 0))
-+#define SUN6I_ISP_MCH_SCALE_CFG_Y_RATIO(v)	(((v) << 16) & GENMASK(27, 16))
-+#define SUN6I_ISP_MCH_SCALE_CFG_WEIGHT_SHIFT(v)	(((v) << 28) & GENMASK(31, 28))
-+
-+#define SUN6I_ISP_SCH_SIZE_CFG_REG		0x1e8
-+#define SUN6I_ISP_SCH_SIZE_CFG_WIDTH(v)		((v) & GENMASK(12, 0))
-+#define SUN6I_ISP_SCH_SIZE_CFG_HEIGHT(v)	(((v) << 16) & GENMASK(28, 16))
-+
-+#define SUN6I_ISP_SCH_SCALE_CFG_REG		0x1ec
-+#define SUN6I_ISP_SCH_SCALE_CFG_X_RATIO(v)	((v) & GENMASK(11, 0))
-+#define SUN6I_ISP_SCH_SCALE_CFG_Y_RATIO(v)	(((v) << 16) & GENMASK(27, 16))
-+#define SUN6I_ISP_SCH_SCALE_CFG_WEIGHT_SHIFT(v)	(((v) << 28) & GENMASK(31, 28))
-+
-+#define SUN6I_ISP_MCH_CFG_REG			0x1f0
-+#define SUN6I_ISP_MCH_CFG_EN			BIT(0)
-+#define SUN6I_ISP_MCH_CFG_SCALE_EN		BIT(1)
-+#define SUN6I_ISP_MCH_CFG_OUTPUT_FMT(v)		(((v) << 2) & GENMASK(4, 2))
-+#define SUN6I_ISP_MCH_CFG_MIRROR_EN		BIT(5)
-+#define SUN6I_ISP_MCH_CFG_FLIP_EN		BIT(6)
-+#define SUN6I_ISP_MCH_CFG_STRIDE_Y_DIV4(v)	(((v) << 8) & GENMASK(18, 8))
-+#define SUN6I_ISP_MCH_CFG_STRIDE_UV_DIV4(v)	(((v) << 20) & GENMASK(30, 20))
-+
-+#define SUN6I_ISP_OUTPUT_FMT_YUV420SP		0
-+#define SUN6I_ISP_OUTPUT_FMT_YUV422SP		1
-+#define SUN6I_ISP_OUTPUT_FMT_YVU420SP		2
-+#define SUN6I_ISP_OUTPUT_FMT_YVU422SP		3
-+#define SUN6I_ISP_OUTPUT_FMT_YUV420P		4
-+#define SUN6I_ISP_OUTPUT_FMT_YUV422P		5
-+#define SUN6I_ISP_OUTPUT_FMT_YVU420P		6
-+#define SUN6I_ISP_OUTPUT_FMT_YVU422P		7
-+
-+#define SUN6I_ISP_SCH_CFG_REG			0x1f4
-+
-+#define SUN6I_ISP_MCH_Y_ADDR0_REG		0x1f8
-+#define SUN6I_ISP_MCH_U_ADDR0_REG		0x1fc
-+#define SUN6I_ISP_MCH_V_ADDR0_REG		0x200
-+#define SUN6I_ISP_MCH_Y_ADDR1_REG		0x204
-+#define SUN6I_ISP_MCH_U_ADDR1_REG		0x208
-+#define SUN6I_ISP_MCH_V_ADDR1_REG		0x20c
-+#define SUN6I_ISP_SCH_Y_ADDR0_REG		0x210
-+#define SUN6I_ISP_SCH_U_ADDR0_REG		0x214
-+#define SUN6I_ISP_SCH_V_ADDR0_REG		0x218
-+#define SUN6I_ISP_SCH_Y_ADDR1_REG		0x21c
-+#define SUN6I_ISP_SCH_U_ADDR1_REG		0x220
-+#define SUN6I_ISP_SCH_V_ADDR1_REG		0x224
-+
-+#endif
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h b/drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h
-new file mode 100644
-index 000000000000..fd2a0820aa98
---- /dev/null
-+++ b/drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h
-@@ -0,0 +1,43 @@
-+/* SPDX-License-Identifier: ((GPL-2.0+ WITH Linux-syscall-note) OR MIT) */
-+/*
-+ * Allwinner A31 ISP Configuration
-+ */
-+
-+#ifndef _UAPI_SUN6I_ISP_CONFIG_H
-+#define _UAPI_SUN6I_ISP_CONFIG_H
-+
-+#include <linux/types.h>
-+
-+#define V4L2_META_FMT_SUN6I_ISP_PARAMS v4l2_fourcc('S', '6', 'I', 'P') /* Allwinner A31 ISP Parameters */
-+
-+#define SUN6I_ISP_MODULE_BAYER			(1U << 0)
-+#define SUN6I_ISP_MODULE_BDNF			(1U << 1)
-+
-+struct sun6i_isp_params_config_bayer {
-+	__u16	offset_r;
-+	__u16	offset_gr;
-+	__u16	offset_gb;
-+	__u16	offset_b;
-+
-+	__u16	gain_r;
-+	__u16	gain_gr;
-+	__u16	gain_gb;
-+	__u16	gain_b;
-+};
-+
-+struct sun6i_isp_params_config_bdnf {
-+	__u8	in_dis_min; // 8
-+	__u8	in_dis_max; // 10
-+
-+	__u8	coefficients_g[7];
-+	__u8	coefficients_rb[5];
-+};
-+
-+struct sun6i_isp_params_config {
-+	__u32					modules_used;
-+
-+	struct sun6i_isp_params_config_bayer	bayer;
-+	struct sun6i_isp_params_config_bdnf	bdnf;
-+};
-+
-+#endif /* _UAPI_SUN6I_ISP_CONFIG_H */
+> +#include <linux/units.h>
+> +#include <linux/iopoll.h>
+> +#include <media/mipi-csi2.h>
+> +#include <media/v4l2-async.h>
+> +#include <media/v4l2-ctrls.h>
+> +#include <media/v4l2-device.h>
+> +#include <media/v4l2-fwnode.h>
+> +#include <media/v4l2-subdev.h>
+> +
+> +#define US_PER_MS					1000
+
+I don't think this deserves a macro, but if you want to keep it, you
+should avoid generic names that may cause namespace clashes.
+
+> +
+> +#define DEVICE_MODEL_ID_REG				0x0000
+
+Please prefix macros with a driver-specific prefix. Many of them have a
+too generic name.
+
+> +#define VG5661_MODEL_ID					0x5661
+> +#define VG5761_MODEL_ID					0x5761
+> +#define VGX661_WIDTH					1464
+> +#define VGX661_HEIGHT					1104
+> +#define VGX761_WIDTH					1944
+> +#define VGX761_HEIGHT					1204
+> +#define VGX661_DEFAULT_MODE				1
+> +#define VGX761_DEFAULT_MODE				1
+> +#define VGX661_SHORT_ROT_TERM				93
+> +#define VGX761_SHORT_ROT_TERM				90
+> +#define VGXY61_EXPOS_ROT_TERM				66
+> +#define VGXY61_WRITE_MULTIPLE_CHUNK_MAX			16
+> +#define VGXY61_NB_GPIOS					4
+> +#define VGXY61_NB_POLARITIES				5
+> +#define VGXY61_MIN_FRAME_LENGTH				1288
+> +#define VGXY61_MIN_EXPOSURE				10
+> +#define VGXY61_HDR_LINEAR_RATIO				10
+> +#define VGXY61_TIMEOUT_MS				500
+> +#define VGXY61_FRAME_LENGTH_DEF				1313
+> +#define DEVICE_REVISION					0x0002
+> +#define DEVICE_FWPATCH_REVISION				0x0014
+> +#define DEVICE_FWPATCH_START_ADDR			0x2000
+> +#define DEVICE_SYSTEM_FSM				0x0020
+> +#define SW_STBY						0x03
+> +#define STREAMING					0x04
+> +#define DEVICE_NVM					0x0023
+> +#define NVM_OK						0x04
+> +#define DEVICE_THSENS1_TEMPERATURE			0x0044
+> +#define DEVICE_STBY					0x0201
+> +#define STBY_NO_REQ					0
+> +#define STBY_REQ_TMP_READ				BIT(2)
+> +#define DEVICE_STREAMING				0x0202
+> +#define REQ_NO_REQUEST					0
+> +#define REQ_STOP_STREAMING				BIT(0)
+> +#define REQ_START_STREAMING				BIT(1)
+> +#define DEVICE_EXT_CLOCK				0x0220
+> +#define DEVICE_CLK_PLL_PREDIV				0x0224
+> +#define DEVICE_CLK_SYS_PLL_MULT				0x0225
+> +#define DEVICE_GPIO_0_CTRL				0x0236
+> +#define DEVICE_GPIO_1_CTRL				0x0237
+> +#define DEVICE_GPIO_2_CTRL				0x0238
+> +#define DEVICE_GPIO_3_CTRL				0x0239
+> +#define DEVICE_SIGNALS_POLARITY_CTRL			0x023b
+> +#define DEVICE_LINE_LENGTH				0x0300
+> +#define DEVICE_ORIENTATION				0x0302
+> +#define DEVICE_VT_CTRL					0x0304
+> +#define DEVICE_FORMAT_CTRL				0x0305
+> +#define DEVICE_OIF_CTRL					0x0306
+> +#define DEVICE_OIF_ROI0_CTRL				0x030a
+> +#define DEVICE_ROI0_START_H				0x0400
+> +#define DEVICE_ROI0_START_V				0x0402
+> +#define DEVICE_ROI0_END_H				0x0404
+> +#define DEVICE_ROI0_END_V				0x0406
+> +#define DEVICE_PATGEN_CTRL				0x0440
+> +#define DEVICE_FRAME_CONTENT_CTRL			0x0478
+> +#define DEVICE_COARSE_EXPOSURE_LONG			0x0500
+> +#define DEVICE_COARSE_EXPOSURE_SHORT			0x0504
+> +#define DEVICE_ANALOG_GAIN				0x0508
+> +#define DEVICE_DIGITAL_GAIN_LONG			0x050a
+> +#define DEVICE_DIGITAL_GAIN_SHORT			0x0512
+> +#define DEVICE_FRAME_LENGTH				0x051a
+> +#define DEVICE_SIGNALS_CTRL				0x0522
+> +#define DEVICE_READOUT_CTRL				0x0530
+> +#define DEVICE_HDR_CTRL					0x0532
+> +#define DEVICE_PATGEN_LONG_DATA_GR			0x092c
+> +#define DEVICE_PATGEN_LONG_DATA_R			0x092e
+> +#define DEVICE_PATGEN_LONG_DATA_B			0x0930
+> +#define DEVICE_PATGEN_LONG_DATA_GB			0x0932
+> +#define DEVICE_PATGEN_SHORT_DATA_GR			0x0950
+> +#define DEVICE_PATGEN_SHORT_DATA_R			0x0952
+> +#define DEVICE_PATGEN_SHORT_DATA_B			0x0954
+> +#define DEVICE_PATGEN_SHORT_DATA_GB			0x0956
+> +#define DEVICE_BYPASS_CTRL				0x0a60
+> +
+> +#define V4L2_CID_HDR					(V4L2_CID_USER_STVGXY61_BASE + 0)
+
+This macro should have a device-specific name, should be moved to a
+public header, and the control should be documented. I would split the
+control documentation and macro definition to a separate patch.
+
+> +
+> +#define DEVICE_FWPATCH_REVISION_MAJOR			2
+> +#define DEVICE_FWPATCH_REVISION_MINOR			0
+> +#define DEVICE_FWPATCH_REVISION_MICRO			5
+> +
+> +static const u8 patch_array[] = {
+> +	0xbf, 0x00, 0x05, 0x20, 0x06, 0x01, 0xe0, 0xe0, 0x04, 0x80, 0xe6, 0x45,
+> +	0xed, 0x6f, 0xfe, 0xff, 0x14, 0x80, 0x1f, 0x84, 0x10, 0x42, 0x05, 0x7c,
+> +	0x01, 0xc4, 0x1e, 0x80, 0xb6, 0x42, 0x00, 0xe0, 0x1e, 0x82, 0x1e, 0xc0,
+> +	0x93, 0xdd, 0xc3, 0xc1, 0x0c, 0x04, 0x00, 0xfa, 0x86, 0x0d, 0x70, 0xe1,
+> +	0x04, 0x98, 0x15, 0x00, 0x28, 0xe0, 0x14, 0x02, 0x08, 0xfc, 0x15, 0x40,
+> +	0x28, 0xe0, 0x98, 0x58, 0xe0, 0xef, 0x04, 0x98, 0x0e, 0x04, 0x00, 0xf0,
+> +	0x15, 0x00, 0x28, 0xe0, 0x19, 0xc8, 0x15, 0x40, 0x28, 0xe0, 0xc6, 0x41,
+> +	0xfc, 0xe0, 0x14, 0x80, 0x1f, 0x84, 0x14, 0x02, 0xa0, 0xfc, 0x1e, 0x80,
+> +	0x14, 0x80, 0x14, 0x02, 0x80, 0xfb, 0x14, 0x02, 0xe0, 0xfc, 0x1e, 0x80,
+> +	0x14, 0xc0, 0x1f, 0x84, 0x14, 0x02, 0xa4, 0xfc, 0x1e, 0xc0, 0x14, 0xc0,
+> +	0x14, 0x02, 0x80, 0xfb, 0x14, 0x02, 0xe4, 0xfc, 0x1e, 0xc0, 0x0c, 0x0c,
+> +	0x00, 0xf2, 0x93, 0xdd, 0x86, 0x00, 0xf8, 0xe0, 0x04, 0x80, 0xc6, 0x03,
+> +	0x70, 0xe1, 0x0e, 0x84, 0x93, 0xdd, 0xc3, 0xc1, 0x0c, 0x04, 0x00, 0xfa,
+> +	0x6b, 0x80, 0x06, 0x40, 0x6c, 0xe1, 0x04, 0x80, 0x09, 0x00, 0xe0, 0xe0,
+> +	0x0b, 0xa1, 0x95, 0x84, 0x05, 0x0c, 0x1c, 0xe0, 0x86, 0x02, 0xf9, 0x60,
+> +	0xe0, 0xcf, 0x78, 0x6e, 0x80, 0xef, 0x25, 0x0c, 0x18, 0xe0, 0x05, 0x4c,
+> +	0x1c, 0xe0, 0x86, 0x02, 0xf9, 0x60, 0xe0, 0xcf, 0x0b, 0x84, 0xd8, 0x6d,
+> +	0x80, 0xef, 0x05, 0x4c, 0x18, 0xe0, 0x04, 0xd8, 0x0b, 0xa5, 0x95, 0x84,
+> +	0x05, 0x0c, 0x2c, 0xe0, 0x06, 0x02, 0x01, 0x60, 0xe0, 0xce, 0x18, 0x6d,
+> +	0x80, 0xef, 0x25, 0x0c, 0x30, 0xe0, 0x05, 0x4c, 0x2c, 0xe0, 0x06, 0x02,
+> +	0x01, 0x60, 0xe0, 0xce, 0x0b, 0x84, 0x78, 0x6c, 0x80, 0xef, 0x05, 0x4c,
+> +	0x30, 0xe0, 0x0c, 0x0c, 0x00, 0xf2, 0x93, 0xdd, 0x46, 0x01, 0x70, 0xe1,
+> +	0x08, 0x80, 0x0b, 0xa1, 0x08, 0x5c, 0x00, 0xda, 0x06, 0x01, 0x68, 0xe1,
+> +	0x04, 0x80, 0x4a, 0x40, 0x84, 0xe0, 0x08, 0x5c, 0x00, 0x9a, 0x06, 0x01,
+> +	0xe0, 0xe0, 0x04, 0x80, 0x15, 0x00, 0x60, 0xe0, 0x19, 0xc4, 0x15, 0x40,
+> +	0x60, 0xe0, 0x15, 0x00, 0x78, 0xe0, 0x19, 0xc4, 0x15, 0x40, 0x78, 0xe0,
+> +	0x93, 0xdd, 0xc3, 0xc1, 0x46, 0x01, 0x70, 0xe1, 0x08, 0x80, 0x0b, 0xa1,
+> +	0x08, 0x5c, 0x00, 0xda, 0x06, 0x01, 0x68, 0xe1, 0x04, 0x80, 0x4a, 0x40,
+> +	0x84, 0xe0, 0x08, 0x5c, 0x00, 0x9a, 0x06, 0x01, 0xe0, 0xe0, 0x14, 0x80,
+> +	0x25, 0x02, 0x54, 0xe0, 0x29, 0xc4, 0x25, 0x42, 0x54, 0xe0, 0x24, 0x80,
+> +	0x35, 0x04, 0x6c, 0xe0, 0x39, 0xc4, 0x35, 0x44, 0x6c, 0xe0, 0x25, 0x02,
+> +	0x64, 0xe0, 0x29, 0xc4, 0x25, 0x42, 0x64, 0xe0, 0x04, 0x80, 0x15, 0x00,
+> +	0x7c, 0xe0, 0x19, 0xc4, 0x15, 0x40, 0x7c, 0xe0, 0x93, 0xdd, 0xc3, 0xc1,
+> +	0x4c, 0x04, 0x7c, 0xfa, 0x86, 0x40, 0x98, 0xe0, 0x14, 0x80, 0x1b, 0xa1,
+> +	0x06, 0x00, 0x00, 0xc0, 0x08, 0x42, 0x38, 0xdc, 0x08, 0x64, 0xa0, 0xef,
+> +	0x86, 0x42, 0x3c, 0xe0, 0x68, 0x49, 0x80, 0xef, 0x6b, 0x80, 0x78, 0x53,
+> +	0xc8, 0xef, 0xc6, 0x54, 0x6c, 0xe1, 0x7b, 0x80, 0xb5, 0x14, 0x0c, 0xf8,
+> +	0x05, 0x14, 0x14, 0xf8, 0x1a, 0xac, 0x8a, 0x80, 0x0b, 0x90, 0x38, 0x55,
+> +	0x80, 0xef, 0x1a, 0xae, 0x17, 0xc2, 0x03, 0x82, 0x88, 0x65, 0x80, 0xef,
+> +	0x1b, 0x80, 0x0b, 0x8e, 0x68, 0x65, 0x80, 0xef, 0x9b, 0x80, 0x0b, 0x8c,
+> +	0x08, 0x65, 0x80, 0xef, 0x6b, 0x80, 0x0b, 0x92, 0x1b, 0x8c, 0x98, 0x64,
+> +	0x80, 0xef, 0x1a, 0xec, 0x9b, 0x80, 0x0b, 0x90, 0x95, 0x54, 0x10, 0xe0,
+> +	0xa8, 0x53, 0x80, 0xef, 0x1a, 0xee, 0x17, 0xc2, 0x03, 0x82, 0xf8, 0x63,
+> +	0x80, 0xef, 0x1b, 0x80, 0x0b, 0x8e, 0xd8, 0x63, 0x80, 0xef, 0x1b, 0x8c,
+> +	0x68, 0x63, 0x80, 0xef, 0x6b, 0x80, 0x0b, 0x92, 0x65, 0x54, 0x14, 0xe0,
+> +	0x08, 0x65, 0x84, 0xef, 0x68, 0x63, 0x80, 0xef, 0x7b, 0x80, 0x0b, 0x8c,
+> +	0xa8, 0x64, 0x84, 0xef, 0x08, 0x63, 0x80, 0xef, 0x14, 0xe8, 0x46, 0x44,
+> +	0x94, 0xe1, 0x24, 0x88, 0x4a, 0x4e, 0x04, 0xe0, 0x14, 0xea, 0x1a, 0x04,
+> +	0x08, 0xe0, 0x0a, 0x40, 0x84, 0xed, 0x0c, 0x04, 0x00, 0xe2, 0x4a, 0x40,
+> +	0x04, 0xe0, 0x19, 0x16, 0xc0, 0xe0, 0x0a, 0x40, 0x84, 0xed, 0x21, 0x54,
+> +	0x60, 0xe0, 0x0c, 0x04, 0x00, 0xe2, 0x1b, 0xa5, 0x0e, 0xea, 0x01, 0x89,
+> +	0x21, 0x54, 0x64, 0xe0, 0x7e, 0xe8, 0x65, 0x82, 0x1b, 0xa7, 0x26, 0x00,
+> +	0x00, 0x80, 0xa5, 0x82, 0x1b, 0xa9, 0x65, 0x82, 0x1b, 0xa3, 0x01, 0x85,
+> +	0x16, 0x00, 0x00, 0xc0, 0x01, 0x54, 0x04, 0xf8, 0x06, 0xaa, 0x01, 0x83,
+> +	0x06, 0xa8, 0x65, 0x81, 0x06, 0xa8, 0x01, 0x54, 0x04, 0xf8, 0x01, 0x83,
+> +	0x06, 0xaa, 0x09, 0x14, 0x18, 0xf8, 0x0b, 0xa1, 0x05, 0x84, 0xc6, 0x42,
+> +	0xd4, 0xe0, 0x14, 0x84, 0x01, 0x83, 0x01, 0x54, 0x60, 0xe0, 0x01, 0x54,
+> +	0x64, 0xe0, 0x0b, 0x02, 0x90, 0xe0, 0x10, 0x02, 0x90, 0xe5, 0x01, 0x54,
+> +	0x88, 0xe0, 0xb5, 0x81, 0xc6, 0x40, 0xd4, 0xe0, 0x14, 0x80, 0x0b, 0x02,
+> +	0xe0, 0xe4, 0x10, 0x02, 0x31, 0x66, 0x02, 0xc0, 0x01, 0x54, 0x88, 0xe0,
+> +	0x1a, 0x84, 0x29, 0x14, 0x10, 0xe0, 0x1c, 0xaa, 0x2b, 0xa1, 0xf5, 0x82,
+> +	0x25, 0x14, 0x10, 0xf8, 0x2b, 0x04, 0xa8, 0xe0, 0x20, 0x44, 0x0d, 0x70,
+> +	0x03, 0xc0, 0x2b, 0xa1, 0x04, 0x00, 0x80, 0x9a, 0x02, 0x40, 0x84, 0x90,
+> +	0x03, 0x54, 0x04, 0x80, 0x4c, 0x0c, 0x7c, 0xf2, 0x93, 0xdd, 0x00, 0x00,
+> +	0x02, 0xa9, 0x00, 0x00, 0x64, 0x4a, 0x40, 0x00, 0x08, 0x2d, 0x58, 0xe0,
+> +	0xa8, 0x98, 0x40, 0x00, 0x28, 0x07, 0x34, 0xe0, 0x05, 0xb9, 0x00, 0x00,
+> +	0x28, 0x00, 0x41, 0x05, 0x88, 0x00, 0x41, 0x3c, 0x98, 0x00, 0x41, 0x52,
+> +	0x04, 0x01, 0x41, 0x79, 0x3c, 0x01, 0x41, 0x6a, 0x3d, 0xfe, 0x00, 0x00,
+> +};
+> +
+> +static const char * const vgxy61_test_pattern_menu[] = {
+> +	"Disabled",
+> +	"Solid",
+> +	"Colorbar",
+> +	"Gradbar",
+> +	"Hgrey",
+> +	"Vgrey",
+> +	"Dgrey",
+> +	"PN28",
+> +};
+> +
+> +static const char * const vgxy61_hdr_modes[] = {
+> +	"HDR linearize",
+> +	"HDR substraction",
+> +	"no HDR",
+> +};
+> +
+> +/* Regulator supplies */
+> +static const char * const vgxy61_supply_name[] = {
+> +	"VCORE",
+> +	"VDDIO",
+> +	"VANA",
+> +};
+> +
+> +static const s64 link_freq[] = {
+> +	/*
+> +	 * MIPI output freq is 804Mhz / 2, as it uses both rising edge and falling edges to send
+> +	 * data
+> +	 */
+> +	402000000ULL
+
+The link frequencies should come from DT.
+
+> +};
+> +
+> +#define VGXY61_NUM_SUPPLIES		ARRAY_SIZE(vgxy61_supply_name)
+> +
+> +enum bin_mode {
+
+Same comment here, all enums and structures should use a driver-specific
+prefix.
+
+> +	BIN_MODE_NORMAL,
+> +	BIN_MODE_DIGITAL_X2,
+> +	BIN_MODE_DIGITAL_X4,
+> +};
+> +
+> +enum hdr {
+> +	HDR_LINEAR,
+> +	HDR_SUB,
+> +	NO_HDR,
+> +};
+> +
+> +enum strobe_modes {
+> +	STROBE_DISABLED,
+> +	STROBE_LONG,
+> +	STROBE_ENABLED,
+> +};
+> +
+> +struct vgxy61_mode_info {
+> +	u32 width;
+> +	u32 height;
+> +	enum bin_mode bin_mode;
+> +	struct v4l2_rect crop;
+> +};
+> +
+> +static const u32 vgxy61_supported_codes[] = {
+> +	MEDIA_BUS_FMT_Y8_1X8,
+> +	MEDIA_BUS_FMT_Y10_1X10,
+> +	MEDIA_BUS_FMT_Y12_1X12,
+> +	MEDIA_BUS_FMT_Y14_1X14,
+> +	MEDIA_BUS_FMT_Y16_1X16
+> +};
+> +
+> +static const struct vgxy61_mode_info vgx661_mode_data[] = {
+> +	{
+> +		.width = VGX661_WIDTH,
+> +		.height = VGX661_HEIGHT,
+> +		.bin_mode = BIN_MODE_NORMAL,
+> +		.crop = {
+> +			.left = 0,
+> +			.top = 0,
+> +			.width = VGX661_WIDTH,
+> +			.height = VGX661_HEIGHT,
+> +		},
+
+It's very nice to see no hardcoded register values in the modes tables
+:-) As the register values are computed by the driver, would it make
+sense to go one step further and drop the modes completely ? Analog crop
+and binning could then be selected freely from userspace.
+
+> +	},
+> +	{
+> +		.width = 1280,
+> +		.height = 720,
+> +		.bin_mode = BIN_MODE_NORMAL,
+> +		.crop = {
+> +			.left = 92,
+> +			.top = 192,
+> +			.width = 1280,
+> +			.height = 720,
+> +		},
+> +	},
+> +	{
+> +		.width = 640,
+> +		.height = 480,
+> +		.bin_mode = BIN_MODE_DIGITAL_X2,
+> +		.crop = {
+> +			.left = 92,
+> +			.top = 72,
+> +			.width = 1280,
+> +			.height = 960,
+> +		},
+> +	},
+> +	{
+> +		.width = 320,
+> +		.height = 240,
+> +		.bin_mode = BIN_MODE_DIGITAL_X4,
+
+Can the bin mode computed by dividing the crop width by the output width
+instead of being stored here ?
+
+> +		.crop = {
+> +			.left = 92,
+> +			.top = 72,
+> +			.width = 1280,
+> +			.height = 960,
+> +		},
+> +	},
+> +};
+> +
+> +static const struct vgxy61_mode_info vgx761_mode_data[] = {
+> +	{
+> +		.width = VGX761_WIDTH,
+> +		.height = VGX761_HEIGHT,
+> +		.bin_mode = BIN_MODE_NORMAL,
+> +		.crop = {
+> +			.left = 0,
+> +			.top = 0,
+> +			.width = VGX761_WIDTH,
+> +			.height = VGX761_HEIGHT,
+> +		},
+> +	},
+> +	{
+> +		.width = 1920,
+> +		.height = 1080,
+> +		.bin_mode = BIN_MODE_NORMAL,
+> +		.crop = {
+> +			.left = 12,
+> +			.top = 62,
+> +			.width = 1920,
+> +			.height = 1080,
+> +		},
+> +	},
+> +	{
+> +		.width = 1280,
+> +		.height = 720,
+> +		.bin_mode = BIN_MODE_NORMAL,
+> +		.crop = {
+> +			.left = 332,
+> +			.top = 242,
+> +			.width = 1280,
+> +			.height = 720,
+> +		},
+> +	},
+> +	{
+> +		.width = 640,
+> +		.height = 480,
+> +		.bin_mode = BIN_MODE_DIGITAL_X2,
+> +		.crop = {
+> +			.left = 332,
+> +			.top = 122,
+> +			.width = 1280,
+> +			.height = 960,
+> +		},
+> +	},
+> +	{
+> +		.width = 320,
+> +		.height = 240,
+> +		.bin_mode = BIN_MODE_DIGITAL_X4,
+> +		.crop = {
+> +			.left = 332,
+> +			.top = 122,
+> +			.width = 1280,
+> +			.height = 960,
+> +		},
+> +	},
+> +};
+> +
+> +struct vgxy61_dev {
+> +	struct i2c_client *i2c_client;
+> +	struct v4l2_subdev sd;
+> +	struct media_pad pad;
+> +	struct regulator_bulk_data supplies[VGXY61_NUM_SUPPLIES];
+> +	struct gpio_desc *reset_gpio;
+> +	struct clk *xclk;
+> +	u32 clk_freq;
+> +	int id;
+> +	int sensor_width;
+> +	int sensor_height;
+> +	u16 oif_ctrl;
+> +	int nb_of_lane;
+> +	int data_rate_in_mbps;
+> +	int pclk;
+> +	u16 line_length;
+> +	int rot_term;
+> +	bool gpios_polarity;
+> +	bool slave_mode;
+> +	/* Lock to protect all members below */
+> +	struct mutex lock;
+> +	struct v4l2_ctrl_handler ctrl_handler;
+> +	struct v4l2_ctrl *pixel_rate_ctrl;
+> +	struct v4l2_ctrl *expo_ctrl;
+> +	struct v4l2_ctrl *vblank_ctrl;
+> +	struct v4l2_ctrl *vflip_ctrl;
+> +	struct v4l2_ctrl *hflip_ctrl;
+> +	bool streaming;
+> +	struct v4l2_mbus_framefmt fmt;
+> +	const struct vgxy61_mode_info *sensor_modes;
+> +	int sensor_modes_nb;
+> +	const struct vgxy61_mode_info *current_mode;
+> +	struct v4l2_fract frame_interval;
+
+This is not used. Please check all other fields too.
+
+> +	bool hflip;
+> +	bool vflip;
+> +	enum hdr hdr;
+> +	int expo_long;
+> +	int expo_short;
+> +	int expo_max;
+> +	int expo_min;
+> +	int vblank;
+> +	int vblank_min;
+> +	u16 frame_length;
+> +};
+> +
+> +static u8 get_bpp_by_code(__u32 code)
+> +{
+> +	switch (code) {
+> +	case MEDIA_BUS_FMT_Y8_1X8:
+> +		return 8;
+> +	case MEDIA_BUS_FMT_Y10_1X10:
+> +		return 10;
+> +	case MEDIA_BUS_FMT_Y12_1X12:
+> +		return 12;
+> +	case MEDIA_BUS_FMT_Y14_1X14:
+> +		return 14;
+> +	case MEDIA_BUS_FMT_Y16_1X16:
+> +		return 16;
+> +	default:
+> +		/* Should never happen */
+> +		WARN(1, "Unsupported code %d. default to 8 bpp", code);
+> +		return 8;
+> +	}
+> +}
+> +
+> +static u8 get_data_type_by_code(__u32 code)
+> +{
+> +	switch (code) {
+> +	case MEDIA_BUS_FMT_Y8_1X8:
+> +		return MIPI_CSI2_DT_RAW8;
+> +	case MEDIA_BUS_FMT_Y10_1X10:
+> +		return MIPI_CSI2_DT_RAW10;
+> +	case MEDIA_BUS_FMT_Y12_1X12:
+> +		return MIPI_CSI2_DT_RAW12;
+> +	case MEDIA_BUS_FMT_Y14_1X14:
+> +		return MIPI_CSI2_DT_RAW14;
+> +	case MEDIA_BUS_FMT_Y16_1X16:
+> +		return MIPI_CSI2_DT_RAW16;
+> +	default:
+> +		/* Should never happen */
+> +		WARN(1, "Unsupported code %d. default to MIPI_CSI2_DT_RAW8 data type", code);
+> +		return MIPI_CSI2_DT_RAW8;
+> +	}
+> +}
+
+I'd put all this data in a format description structure, and store that
+in the vgxy61_supported_codes array.
+
+> +
+> +static void compute_pll_parameters_by_freq(u32 freq, unsigned int *prediv, unsigned int *mult)
+> +{
+> +	const unsigned int predivs[] = {1, 2, 4};
+> +	int i;
+> +
+> +	/*
+> +	 * Freq range is [6Mhz-27Mhz] already checked.
+> +	 * Output of divider should be in [6Mhz-12Mhz[.
+> +	 */
+> +	for (i = 0; i < ARRAY_SIZE(predivs); i++) {
+> +		*prediv = predivs[i];
+> +		if (freq / *prediv < 12 * HZ_PER_MHZ)
+> +			break;
+> +	}
+> +	WARN_ON(i == ARRAY_SIZE(predivs));
+> +
+> +	/*
+> +	 * Target freq is 804Mhz. Don't change this as it will impact image quality.
+> +	 */
+> +	*mult = ((804 * HZ_PER_MHZ) * (*prediv) + freq / 2) / freq;
+> +}
+> +
+> +static s32 get_pixel_rate(struct vgxy61_dev *sensor)
+> +{
+> +	return div64_u64((u64)sensor->data_rate_in_mbps * sensor->nb_of_lane,
+> +			 get_bpp_by_code(sensor->fmt.code));
+> +}
+> +
+> +static inline struct vgxy61_dev *to_vgxy61_dev(struct v4l2_subdev *sd)
+> +{
+> +	return container_of(sd, struct vgxy61_dev, sd);
+> +}
+> +
+> +static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
+> +{
+> +	return &container_of(ctrl->handler, struct vgxy61_dev, ctrl_handler)->sd;
+> +}
+> +
+> +static int get_chunk_size(struct vgxy61_dev *sensor)
+> +{
+> +	struct i2c_adapter *adapter = sensor->i2c_client->adapter;
+> +	int max_write_len = VGXY61_WRITE_MULTIPLE_CHUNK_MAX;
+> +
+> +	if (adapter->quirks && adapter->quirks->max_write_len)
+> +		max_write_len = adapter->quirks->max_write_len - 2;
+> +
+> +	max_write_len = min(max_write_len, VGXY61_WRITE_MULTIPLE_CHUNK_MAX);
+> +
+> +	return max(max_write_len, 1);
+> +}
+> +
+> +static int vgxy61_read_multiple(struct vgxy61_dev *sensor, u16 reg, u8 *val, int len)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	struct i2c_msg msg[2];
+> +	u8 buf[2];
+> +	int ret;
+> +
+> +	buf[0] = reg >> 8;
+> +	buf[1] = reg & 0xff;
+> +
+> +	msg[0].addr = client->addr;
+> +	msg[0].flags = client->flags;
+> +	msg[0].buf = buf;
+> +	msg[0].len = sizeof(buf);
+> +
+> +	msg[1].addr = client->addr;
+> +	msg[1].flags = client->flags | I2C_M_RD;
+> +	msg[1].buf = val;
+> +	msg[1].len = len;
+> +
+> +	ret = i2c_transfer(client->adapter, msg, 2);
+> +	if (ret < 0) {
+> +		dev_dbg(&client->dev, "%s: %x i2c_transfer, reg: %x => %d\n", __func__,
+> +			client->addr, reg, ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static inline int vgxy61_read_reg(struct vgxy61_dev *sensor, u16 reg, u8 *val)
+> +{
+> +	return vgxy61_read_multiple(sensor, reg, val, sizeof(*val));
+> +}
+> +
+> +static inline int vgxy61_read_reg16(struct vgxy61_dev *sensor, u16 reg, u16 *val)
+> +{
+> +	return vgxy61_read_multiple(sensor, reg, (u8 *)val, sizeof(*val));
+> +}
+> +
+> +static int vgxy61_write_multiple(struct vgxy61_dev *sensor, u16 reg, const u8 *data, int len)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	struct i2c_msg msg;
+> +	u8 buf[VGXY61_WRITE_MULTIPLE_CHUNK_MAX + 2];
+> +	int i;
+> +	int ret;
+> +
+> +	if (len > VGXY61_WRITE_MULTIPLE_CHUNK_MAX)
+> +		return -EINVAL;
+> +	buf[0] = reg >> 8;
+> +	buf[1] = reg & 0xff;
+> +	for (i = 0; i < len; i++)
+> +		buf[i + 2] = data[i];
+> +
+> +	msg.addr = client->addr;
+> +	msg.flags = client->flags;
+> +	msg.buf = buf;
+> +	msg.len = len + 2;
+> +
+> +	ret = i2c_transfer(client->adapter, &msg, 1);
+> +	if (ret < 0) {
+> +		dev_dbg(&client->dev, "%s: i2c_transfer, reg: %x => %d\n", __func__, reg, ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_write_array(struct vgxy61_dev *sensor, u16 reg, int nb, const u8 *array)
+> +{
+> +	const int chunk_size = get_chunk_size(sensor);
+> +	int ret;
+> +	int sz;
+> +
+> +	while (nb) {
+> +		sz = min(nb, chunk_size);
+> +		ret = vgxy61_write_multiple(sensor, reg, array, sz);
+> +		if (ret < 0)
+> +			return ret;
+> +		nb -= sz;
+> +		reg += sz;
+> +		array += sz;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static inline int vgxy61_write_reg(struct vgxy61_dev *sensor, u16 reg, u8 val)
+> +{
+> +	return vgxy61_write_multiple(sensor, reg, &val, sizeof(val));
+> +}
+> +
+> +static inline int vgxy61_write_reg16(struct vgxy61_dev *sensor, u16 reg, u16 val)
+> +{
+> +	return vgxy61_write_multiple(sensor, reg, (u8 *)&val, sizeof(val));
+> +}
+> +
+> +static inline int vgxy61_write_reg32(struct vgxy61_dev *sensor, u16 reg, u32 val)
+> +{
+> +	return vgxy61_write_multiple(sensor, reg, (u8 *)&val, sizeof(val));
+> +}
+
+You could possibly simplify handling of registers of different sizes by
+encoding the size in the register address macros. See
+https://gitlab.com/ideasonboard/nxp/linux/-/blob/pinchartl/v5.18/sensors/imx/drivers/media/i2c/imx296.c
+for an example.
+
+> +
+> +static int vgxy61_poll_reg(struct vgxy61_dev *sensor, u16 reg, u8 poll_val, int timeout_ms)
+> +{
+> +	const int loop_delay_ms = 10;
+> +	u8 val;
+> +	int ret, timeout;
+> +
+> +	timeout = read_poll_timeout(vgxy61_read_reg, ret, ((ret != 0) || (val == poll_val)),
+> +				    loop_delay_ms * US_PER_MS, timeout_ms * US_PER_MS, false,
+> +				    sensor, reg, &val);
+> +	if (timeout)
+> +		return timeout;
+> +
+> +	return ret;
+> +}
+> +
+> +static int vgxy61_wait_state(struct vgxy61_dev *sensor, int state, int timeout_ms)
+> +{
+> +	return vgxy61_poll_reg(sensor, DEVICE_SYSTEM_FSM, state, timeout_ms);
+> +}
+> +
+> +static int vgxy61_check_bw(struct vgxy61_dev *sensor)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	/* Correction factor for time required between 2 lines */
+> +	const int mipi_margin = 1056;
+> +	int binning_scale = sensor->current_mode->crop.height / sensor->current_mode->height;
+> +	int bpp = get_bpp_by_code(sensor->fmt.code);
+> +	int max_bit_per_line;
+> +	int bit_per_line;
+> +	u64 line_rate;
+> +
+> +	line_rate = sensor->nb_of_lane * (u64)sensor->data_rate_in_mbps * sensor->line_length;
+> +	max_bit_per_line = div64_u64(line_rate, sensor->pclk) - mipi_margin;
+> +	bit_per_line = (bpp * sensor->current_mode->width) / binning_scale;
+> +
+> +	dev_dbg(&client->dev, "max_bit_per_line = %d\n", max_bit_per_line);
+> +	dev_dbg(&client->dev, "required bit_per_line = %d\n", bit_per_line);
+> +
+> +	return bit_per_line > max_bit_per_line ? -EINVAL : 0;
+> +}
+> +
+> +static int apply_exposure(struct vgxy61_dev *sensor)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	int ret;
+> +
+> +	 /* We first set expo to zero to avoid forbidden parameters couple */
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_COARSE_EXPOSURE_SHORT, 0);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_COARSE_EXPOSURE_LONG, sensor->expo_long);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_COARSE_EXPOSURE_SHORT, sensor->expo_short);
+> +	if (ret)
+> +		return ret;
+
+Is there a risk those writes may be applied to different frames ?
+
+> +
+> +	dev_dbg(&client->dev, "%s applied expo %d (short: %d)\n", __func__,
+> +		sensor->expo_long, sensor->expo_short);
+> +
+> +	return 0;
+> +}
+> +
+> +static int set_frame_rate(struct vgxy61_dev *sensor)
+
+The function sets the frame length, not the frame rate.
+
+> +{
+> +	return vgxy61_write_reg16(sensor, DEVICE_FRAME_LENGTH, sensor->frame_length);
+> +}
+> +
+> +static int vgxy61_get_regulators(struct vgxy61_dev *sensor)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < VGXY61_NUM_SUPPLIES; i++)
+> +		sensor->supplies[i].supply = vgxy61_supply_name[i];
+> +
+> +	return devm_regulator_bulk_get(&sensor->i2c_client->dev, VGXY61_NUM_SUPPLIES,
+> +				       sensor->supplies);
+> +}
+> +
+> +static int vgxy61_apply_reset(struct vgxy61_dev *sensor)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +
+> +	dev_dbg(&client->dev, "%s applied reset\n", __func__);
+> +	gpiod_set_value_cansleep(sensor->reset_gpio, 0);
+> +	usleep_range(5000, 10000);
+> +	gpiod_set_value_cansleep(sensor->reset_gpio, 1);
+> +	usleep_range(5000, 10000);
+> +	gpiod_set_value_cansleep(sensor->reset_gpio, 0);
+> +	usleep_range(40000, 100000);
+> +	return vgxy61_wait_state(sensor, SW_STBY, VGXY61_TIMEOUT_MS);
+> +}
+> +
+> +static int vgxy61_try_fmt_internal(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *fmt,
+> +				   const struct vgxy61_mode_info **new_mode)
+> +{
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +	const struct vgxy61_mode_info *mode = sensor->sensor_modes;
+> +	unsigned int index;
+> +
+> +	/* Select code */
+> +	for (index = 0; index < ARRAY_SIZE(vgxy61_supported_codes); index++) {
+> +		if (vgxy61_supported_codes[index] == fmt->code)
+> +			break;
+> +	}
+> +	if (index == ARRAY_SIZE(vgxy61_supported_codes))
+> +		index = 0;
+> +
+> +	/* Select size */
+> +	mode = v4l2_find_nearest_size(sensor->sensor_modes, sensor->sensor_modes_nb,
+> +				      width, height, fmt->width, fmt->height);
+> +	if (new_mode)
+> +		*new_mode = mode;
+> +
+> +	fmt->code = vgxy61_supported_codes[index];
+> +	fmt->width = mode->width;
+> +	fmt->height = mode->height;
+> +	fmt->colorspace = V4L2_COLORSPACE_RAW;
+> +	fmt->field = V4L2_FIELD_NONE;
+> +	fmt->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
+> +	fmt->quantization = V4L2_QUANTIZATION_DEFAULT;
+> +	fmt->xfer_func = V4L2_XFER_FUNC_DEFAULT;
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_get_selection(struct v4l2_subdev *sd,
+> +				struct v4l2_subdev_state *sd_state,
+> +				struct v4l2_subdev_selection *sel)
+> +{
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +
+> +	switch (sel->target) {
+> +	case V4L2_SEL_TGT_CROP:
+> +		sel->r = sensor->current_mode->crop;
+> +		return 0;
+> +	case V4L2_SEL_TGT_NATIVE_SIZE:
+> +	case V4L2_SEL_TGT_CROP_DEFAULT:
+> +	case V4L2_SEL_TGT_CROP_BOUNDS:
+> +		sel->r.top = 0;
+> +		sel->r.left = 0;
+> +		sel->r.width = sensor->sensor_width;
+> +		sel->r.height = sensor->sensor_height;
+> +		return 0;
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static int vgxy61_stream_enable(struct vgxy61_dev *sensor)
+> +{
+> +	struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
+> +	const struct v4l2_rect *crop = &sensor->current_mode->crop;
+> +	int ret;
+> +
+> +	ret = vgxy61_check_bw(sensor);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = pm_runtime_get_sync(&client->dev);
+> +	if (ret < 0) {
+> +		pm_runtime_put_noidle(&client->dev);
+> +		return ret;
+> +	}
+> +
+> +	/* Configure sensor */
+> +	ret = vgxy61_write_reg(sensor, DEVICE_FORMAT_CTRL, get_bpp_by_code(sensor->fmt.code));
+> +	if (ret)
+> +		goto err_rpm_put;
+> +	ret = vgxy61_write_reg(sensor, DEVICE_OIF_ROI0_CTRL,
+> +			       get_data_type_by_code(sensor->fmt.code));
+> +	if (ret)
+> +		goto err_rpm_put;
+> +
+> +	ret = vgxy61_write_reg(sensor, DEVICE_READOUT_CTRL, sensor->current_mode->bin_mode);
+> +	if (ret)
+> +		goto err_rpm_put;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_ROI0_START_H, crop->left);
+> +	if (ret)
+> +		goto err_rpm_put;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_ROI0_END_H, crop->left + crop->width - 1);
+> +	if (ret)
+> +		goto err_rpm_put;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_ROI0_START_V, crop->top);
+> +	if (ret)
+> +		goto err_rpm_put;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_ROI0_END_V, crop->top + crop->height - 1);
+> +	if (ret)
+> +		goto err_rpm_put;
+> +
+> +	ret = set_frame_rate(sensor);
+> +	if (ret)
+> +		goto err_rpm_put;
+> +
+> +	ret = apply_exposure(sensor);
+> +	if (ret)
+> +		goto err_rpm_put;
+> +
+> +	/* Start streaming */
+> +	ret = vgxy61_write_reg(sensor, DEVICE_STREAMING, REQ_START_STREAMING);
+> +	if (ret)
+> +		goto err_rpm_put;
+> +
+> +	ret = vgxy61_poll_reg(sensor, DEVICE_STREAMING, REQ_NO_REQUEST, VGXY61_TIMEOUT_MS);
+> +	if (ret)
+> +		goto err_rpm_put;
+> +
+> +	ret = vgxy61_wait_state(sensor, STREAMING, VGXY61_TIMEOUT_MS);
+> +	if (ret)
+> +		goto err_rpm_put;
+> +
+> +	/* vflip and hflip cannot change during streaming */
+> +	__v4l2_ctrl_grab(sensor->vflip_ctrl, true);
+> +	__v4l2_ctrl_grab(sensor->hflip_ctrl, true);
+> +
+> +	return 0;
+> +
+> +err_rpm_put:
+> +	pm_runtime_put(&client->dev);
+> +	return ret;
+> +}
+> +
+> +static int vgxy61_stream_disable(struct vgxy61_dev *sensor)
+> +{
+> +	struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
+> +	int ret;
+> +
+> +	ret = vgxy61_write_reg(sensor, DEVICE_STREAMING, REQ_STOP_STREAMING);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = vgxy61_poll_reg(sensor, DEVICE_STREAMING, REQ_NO_REQUEST, 2000);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = vgxy61_wait_state(sensor, SW_STBY, VGXY61_TIMEOUT_MS);
+> +	if (ret)
+> +		return ret;
+> +
+> +	__v4l2_ctrl_grab(sensor->vflip_ctrl, true);
+> +	__v4l2_ctrl_grab(sensor->hflip_ctrl, true);
+> +
+> +	pm_runtime_put(&client->dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_s_stream(struct v4l2_subdev *sd, int enable)
+> +{
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	int ret = 0;
+> +
+> +	mutex_lock(&sensor->lock);
+> +	dev_dbg(&client->dev, "%s : requested %d / current = %d\n", __func__, enable,
+> +		sensor->streaming);
+> +	if (sensor->streaming == enable)
+> +		goto out;
+
+This should never happen. If you want to be on the safe side and keep
+the check, I'd turn it into a WARN_ON().
+
+> +
+> +	ret = enable ? vgxy61_stream_enable(sensor) : vgxy61_stream_disable(sensor);
+> +	if (!ret)
+> +		sensor->streaming = enable;
+> +
+> +out:
+> +	dev_dbg(&client->dev, "%s current now = %d / %d\n", __func__, sensor->streaming, ret);
+> +	mutex_unlock(&sensor->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int vgxy61_enum_mbus_code(struct v4l2_subdev *sd,
+> +				 struct v4l2_subdev_state *sd_state,
+> +				 struct v4l2_subdev_mbus_code_enum *code)
+> +{
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +	struct i2c_client *client = sensor->i2c_client;
+> +
+> +	dev_dbg(&client->dev, "%s probe index %d\n", __func__, code->index);
+> +	if (code->index >= ARRAY_SIZE(vgxy61_supported_codes))
+> +		return -EINVAL;
+> +
+> +	code->code = vgxy61_supported_codes[code->index];
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_get_fmt(struct v4l2_subdev *sd,
+> +			  struct v4l2_subdev_state *sd_state,
+> +			  struct v4l2_subdev_format *format)
+> +{
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	struct v4l2_mbus_framefmt *fmt;
+> +
+> +	dev_dbg(&client->dev, "%s probe %d\n", __func__, format->pad);
+> +	dev_dbg(&client->dev, "%s %dx%d\n", __func__, format->format.width, format->format.height);
+> +
+> +	mutex_lock(&sensor->lock);
+> +
+> +	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
+> +		fmt = v4l2_subdev_get_try_format(&sensor->sd, sd_state, format->pad);
+> +	else
+> +		fmt = &sensor->fmt;
+> +
+> +	format->format = *fmt;
+> +
+> +	mutex_unlock(&sensor->lock);q
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_get_vblank_min(struct vgxy61_dev *sensor, enum hdr hdr)
+> +{
+> +	int min_vblank =  VGXY61_MIN_FRAME_LENGTH - sensor->current_mode->crop.height;
+> +	/* Ensure the first tule of thumb can't be negative */
+> +	int min_vblank_hdr =  VGXY61_MIN_EXPOSURE + sensor->rot_term + 1;
+> +
+> +	if (hdr != NO_HDR)
+> +		return max(min_vblank, min_vblank_hdr);
+> +	return min_vblank;
+> +}
+> +
+> +static int vgxy61_enum_frame_size(struct v4l2_subdev *sd, struct v4l2_subdev_state *sd_state,
+> +				  struct v4l2_subdev_frame_size_enum *fse)
+> +{
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +	struct i2c_client *client = sensor->i2c_client;
+> +
+> +	dev_dbg(&client->dev, "%s for index %d\n", __func__, fse->index);
+> +	if (fse->index >= sensor->sensor_modes_nb)
+> +		return -EINVAL;
+> +
+> +	fse->min_width = sensor->sensor_modes[fse->index].width;
+> +	fse->max_width = fse->min_width;
+> +	fse->min_height = sensor->sensor_modes[fse->index].height;
+> +	fse->max_height = fse->min_height;
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_update_analog_gain(struct vgxy61_dev *sensor, u32 target)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	int ret;
+> +
+> +	/* Apply gain */
+> +	ret = vgxy61_write_reg(sensor, DEVICE_ANALOG_GAIN, target);
+> +	if (ret)
+> +		return ret;
+> +
+> +	dev_dbg(&client->dev, "Set analog gain: 0x%04x\n", target);
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_update_digital_gain(struct vgxy61_dev *sensor, u32 target)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	int ret;
+> +
+> +	/*
+> +	 * For a monochrome version, configuring DIGITAL_GAIN_LONG_CH0 and
+> +	 * DIGITAL_GAIN_SHORT_CH0 is enough to configure the gain of all
+> +	 * four sub pixels.
+> +	 */
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_DIGITAL_GAIN_LONG, target);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_DIGITAL_GAIN_SHORT, target);
+> +	if (ret)
+> +		return ret;
+> +
+> +	dev_dbg(&client->dev, "Set digital gain: 0x%04x\n", target);
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_update_patgen(struct vgxy61_dev *sensor, u32 index)
+> +{
+> +	u32 pattern = index <= 3 ? index : index + 12;
+> +	u32 reg;
+> +
+> +	reg = (pattern << 18) | (pattern << 4);
+> +	if (index)
+> +		reg |= (1 << 16) | 1;
+
+Macros would be nice instead of magic numbers. Same where applicable
+below.
+
+> +	return vgxy61_write_reg32(sensor, DEVICE_PATGEN_CTRL, reg);
+> +}
+> +
+> +static int vgxy61_update_gpiox_strobe_mode(struct vgxy61_dev *sensor, enum strobe_modes mode,
+> +					   int idx)
+> +{
+> +	const u8 index2val[] = {0x0, 0x1, 0x3};
+
+Make this static const.
+
+> +	u16 reg;
+> +	int ret;
+> +
+> +	ret = vgxy61_read_reg16(sensor, DEVICE_SIGNALS_CTRL, &reg);
+> +	if (ret)
+> +		return ret;
+> +	reg &= ~(0xf << (idx * 4));
+> +	reg |= index2val[mode] << (idx * 4);
+> +
+> +	return vgxy61_write_reg16(sensor, DEVICE_SIGNALS_CTRL, reg);
+> +}
+> +
+> +static int vgxy61_update_gpios_strobe_mode(struct vgxy61_dev *sensor, enum hdr hdr)
+> +{
+> +	enum strobe_modes strobe_mode;
+> +	int i, ret;
+> +
+> +	switch (hdr) {
+> +	case HDR_LINEAR:
+> +		strobe_mode = STROBE_ENABLED;
+> +		break;
+> +	case HDR_SUB:
+> +	case NO_HDR:
+> +		strobe_mode = STROBE_LONG;
+> +		break;
+> +	default:
+> +		/* Should never happen */
+> +		WARN_ON(true);
+> +		break;
+> +	}
+> +
+> +	for (i = 0; i < VGXY61_NB_GPIOS; i++) {
+> +		ret = vgxy61_update_gpiox_strobe_mode(sensor, strobe_mode, i);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_update_gpios_strobe_polarity(struct vgxy61_dev *sensor, int polarity)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	int ret;
+> +
+> +	if (sensor->streaming)
+> +		return -EBUSY;
+> +
+> +	dev_dbg(&client->dev, "setting gpios polarity: %d\n", polarity);
+> +
+> +	ret = vgxy61_write_reg(sensor, DEVICE_GPIO_0_CTRL, polarity << 1);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg(sensor, DEVICE_GPIO_1_CTRL, polarity << 1);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg(sensor, DEVICE_GPIO_2_CTRL, polarity << 1);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg(sensor, DEVICE_GPIO_3_CTRL, polarity << 1);
+> +	if (ret)
+> +		return ret;
+> +	return vgxy61_write_reg(sensor, DEVICE_SIGNALS_POLARITY_CTRL, polarity);
+> +}
+> +
+> +static int vgxy61_get_expo_long_max(struct vgxy61_dev *sensor, int short_expo_ratio)
+> +{
+> +	int first_rot_max_expo, second_rot_max_expo, third_rot_max_expo;
+> +
+> +	/* Apply sensor rule of thumbs */
+> +	/* Avoid bad pixel line at the botom of the image */
+> +	first_rot_max_expo =
+> +		((sensor->frame_length - sensor->current_mode->crop.height - sensor->rot_term) *
+> +		short_expo_ratio) - 1;
+> +
+> +	/* Avoid sensor crash */
+
+How so ?
+
+> +	second_rot_max_expo =
+> +		(((sensor->frame_length - VGXY61_EXPOS_ROT_TERM) * short_expo_ratio) /
+> +		(short_expo_ratio + 1)) - 1;
+> +
+> +	/* Avoid sensor crash */
+> +	third_rot_max_expo = (sensor->frame_length / 71) * short_expo_ratio;
+> +
+> +	/* Take the minimum from all rules */
+> +	return min(min(first_rot_max_expo, second_rot_max_expo), third_rot_max_expo);
+> +}
+> +
+> +static int vgxy61_update_exposure(struct vgxy61_dev *sensor, int new_expo_long, enum hdr hdr)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	int new_expo_short = 0;
+> +	int expo_short_max = 0;
+> +	int expo_long_min = VGXY61_MIN_EXPOSURE;
+> +	int expo_long_max;
+> +
+> +	/* Compute short exposure according to hdr mode and long exposure */
+> +	switch (hdr) {
+> +	case HDR_LINEAR:
+> +		/* Take ratio into account for minimal exposures in HDR_LINEAR */
+> +		expo_long_min = VGXY61_MIN_EXPOSURE * VGXY61_HDR_LINEAR_RATIO;
+> +		new_expo_long = max(expo_long_min, new_expo_long);
+> +
+> +		expo_long_max = vgxy61_get_expo_long_max(sensor, VGXY61_HDR_LINEAR_RATIO);
+> +		expo_short_max =
+> +			(expo_long_max + (VGXY61_HDR_LINEAR_RATIO / 2)) / VGXY61_HDR_LINEAR_RATIO;
+> +		new_expo_short =
+> +			(new_expo_long + (VGXY61_HDR_LINEAR_RATIO / 2)) / VGXY61_HDR_LINEAR_RATIO;
+> +		break;
+> +	case HDR_SUB:
+> +		new_expo_long = max(expo_long_min, new_expo_long);
+> +
+> +		expo_long_max = vgxy61_get_expo_long_max(sensor, 1);
+> +		/* Short and long are the same in HDR_SUB */
+> +		expo_short_max = expo_long_max;
+> +		new_expo_short = new_expo_long;
+> +		break;
+> +	case NO_HDR:
+> +		new_expo_long = max(expo_long_min, new_expo_long);
+> +
+> +		/*
+> +		 * As short expo is 0 here, only the second rule of thumb applies, see
+> +		 * vgxy61_get_expo_long_max for more
+> +		 */
+> +		expo_long_max = sensor->frame_length - VGXY61_EXPOS_ROT_TERM;
+> +		break;
+> +	default:
+> +		/* Should never happen */
+> +		WARN_ON(true);
+> +		break;
+> +	}
+> +
+> +	/* If this happens, something is wrong with formulas */
+> +	WARN_ON(expo_long_min > expo_long_max);
+> +
+> +	if (new_expo_long > expo_long_max) {
+> +		dev_warn(&client->dev, "Exposure %d too high, clamping to %d\n",
+> +			 new_expo_long, expo_long_max);
+> +		new_expo_long = expo_long_max;
+> +		new_expo_short = expo_short_max;
+> +	}
+> +
+> +	dev_dbg(&client->dev, "frame_length %d, new_expo_long %d, new_expo_short %d\n",
+> +		sensor->frame_length, new_expo_long, new_expo_short);
+> +	dev_dbg(&client->dev, "expo_long_min %d, expo_long_max %d\n",
+> +		expo_long_min, expo_long_max);
+> +
+> +	/* Apply exposure */
+> +	sensor->expo_long = new_expo_long;
+> +	sensor->expo_short = new_expo_short;
+> +	sensor->expo_max = expo_long_max;
+> +	sensor->expo_min = expo_long_min;
+> +
+> +	if (sensor->streaming)
+> +		return apply_exposure(sensor);
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_update_vblank(struct vgxy61_dev *sensor, int vblank, int hdr)
+> +{
+> +	int ret;
+> +
+> +	sensor->vblank_min = vgxy61_get_vblank_min(sensor, hdr);
+> +	sensor->vblank = max(sensor->vblank_min, vblank);
+> +	sensor->frame_length = sensor->current_mode->crop.height + sensor->vblank;
+> +
+> +	/* Update exposure according to vblank */
+> +	ret = vgxy61_update_exposure(sensor, sensor->expo_long, hdr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (sensor->streaming)
+> +		return set_frame_rate(sensor);
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_update_hdr(struct vgxy61_dev *sensor, u32 index)
+> +{
+> +	const u8 index2val[] = {0x1, 0x4, 0xa};
+> +	int ret;
+> +
+> +	/*
+> +	 * vblank and short exposure change according to HDR mode, do it first as it can
+> +	 * violate sensors 'rule of thumbs' and therefore will require to change the long exposure
+> +	 */
+> +	ret = vgxy61_update_vblank(sensor, sensor->vblank, index);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Update strobe mode according to HDR */
+> +	ret = vgxy61_update_gpios_strobe_mode(sensor, index);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = vgxy61_write_reg(sensor, DEVICE_HDR_CTRL, index2val[index]);
+> +	if (ret)
+> +		return ret;
+> +	sensor->hdr = index;
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_set_fmt(struct v4l2_subdev *sd,
+> +			  struct v4l2_subdev_state *sd_state,
+> +			  struct v4l2_subdev_format *format)
+> +{
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	const struct vgxy61_mode_info *new_mode;
+> +	struct v4l2_mbus_framefmt *fmt;
+> +	int ret;
+> +
+> +	dev_dbg(&client->dev, "%s probe %d\n", __func__, format->pad);
+> +	dev_dbg(&client->dev, "%s %dx%d\n", __func__, format->format.width, format->format.height);
+> +
+> +	mutex_lock(&sensor->lock);
+> +
+> +	if (sensor->streaming) {
+> +		ret = -EBUSY;
+> +		goto out;
+> +	}
+> +
+> +	/* Find best format */
+> +	ret = vgxy61_try_fmt_internal(sd, &format->format, &new_mode);
+> +	if (ret)
+> +		goto out;
+> +
+> +	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
+> +		fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
+> +		*fmt = format->format;
+> +	} else if (sensor->current_mode != new_mode || sensor->fmt.code != format->format.code) {
+> +		fmt = &sensor->fmt;
+> +		*fmt = format->format;
+> +
+> +		sensor->current_mode = new_mode;
+> +
+> +		/* Reset vblank and framelength to default */
+> +		ret = vgxy61_update_vblank(sensor,
+> +					   VGXY61_FRAME_LENGTH_DEF -
+> +					   sensor->current_mode->crop.height,
+> +					   sensor->hdr);
+> +
+> +		/* Update controls to reflect new mode */
+> +		__v4l2_ctrl_s_ctrl_int64(sensor->pixel_rate_ctrl, get_pixel_rate(sensor));
+> +		__v4l2_ctrl_modify_range(sensor->vblank_ctrl, sensor->vblank_min,
+> +					 0xffff - sensor->current_mode->crop.height, 1,
+> +					 sensor->vblank);
+> +		__v4l2_ctrl_s_ctrl(sensor->vblank_ctrl, sensor->vblank);
+> +		__v4l2_ctrl_modify_range(sensor->expo_ctrl, sensor->expo_min,
+> +					 sensor->expo_max, 1,
+> +					 sensor->expo_long);
+> +	}
+> +
+> +out:
+> +	mutex_unlock(&sensor->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int vgxy61_get_temp_stream_enabled(struct vgxy61_dev *sensor, int *temp)
+> +{
+> +	int ret;
+> +	u16 temperature;
+> +
+> +	ret = vgxy61_read_reg16(sensor, DEVICE_THSENS1_TEMPERATURE, &temperature);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Temperature is expressed in Kelvin in Q10.2 fixed point format*/
+> +	temperature = (temperature & 0x0fff) >> 2;
+> +	temperature = kelvin_to_celsius(temperature);
+> +
+> +	*temp = temperature;
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_get_temp_stream_disabled(struct vgxy61_dev *sensor, int *temp)
+> +{
+> +	int ret;
+> +
+> +	/* Device needs to be in standby mode if streaming is off */
+> +	ret = vgxy61_write_reg(sensor, DEVICE_STBY, STBY_REQ_TMP_READ);
+
+Can't runtime PM be disabled here ?
+
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_poll_reg(sensor, DEVICE_STBY, STBY_NO_REQ, VGXY61_TIMEOUT_MS);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return vgxy61_get_temp_stream_enabled(sensor, temp);
+> +}
+> +
+> +static int vgxy61_get_temp(struct vgxy61_dev *sensor, int *temp)
+> +{
+> +	*temp = 0;
+> +	if (sensor->streaming)
+> +		return vgxy61_get_temp_stream_enabled(sensor, temp);
+> +	else
+> +		return vgxy61_get_temp_stream_disabled(sensor, temp);
+> +}
+> +
+> +static int vgxy61_s_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +	int ret;
+> +
+> +	switch (ctrl->id) {
+> +	case V4L2_CID_EXPOSURE:
+> +		ret = vgxy61_update_exposure(sensor, ctrl->val, sensor->hdr);
+> +		ctrl->val = sensor->expo_long;
+> +		break;
+> +	case V4L2_CID_ANALOGUE_GAIN:
+> +		ret = vgxy61_update_analog_gain(sensor, ctrl->val);
+> +		break;
+> +	case V4L2_CID_DIGITAL_GAIN:
+> +		ret = vgxy61_update_digital_gain(sensor, ctrl->val);
+> +		break;
+> +	case V4L2_CID_VFLIP:
+> +	case V4L2_CID_HFLIP:
+> +		if (sensor->streaming) {
+> +			ret = -EBUSY;
+> +			break;
+> +		}
+> +		if (ctrl->id == V4L2_CID_VFLIP)
+> +			sensor->vflip = ctrl->val;
+> +		if (ctrl->id == V4L2_CID_HFLIP)
+> +			sensor->hflip = ctrl->val;
+> +		ret = vgxy61_write_reg(sensor, DEVICE_ORIENTATION,
+> +				       sensor->hflip | (sensor->vflip << 1));
+> +		break;
+> +	case V4L2_CID_TEST_PATTERN:
+> +		ret = vgxy61_update_patgen(sensor, ctrl->val);
+> +		break;
+> +	case V4L2_CID_HDR:
+> +		ret = vgxy61_update_hdr(sensor, ctrl->val);
+> +		/* Update vblank and exposure controls to match new hdr */
+> +		__v4l2_ctrl_modify_range(sensor->vblank_ctrl, sensor->vblank_min,
+> +					 0xffff - sensor->current_mode->crop.height, 1,
+> +					 sensor->vblank);
+> +		__v4l2_ctrl_modify_range(sensor->expo_ctrl, sensor->expo_min,
+> +					 sensor->expo_max, 1, sensor->expo_long);
+> +		break;
+> +	case V4L2_CID_VBLANK:
+> +		ret = vgxy61_update_vblank(sensor, ctrl->val, sensor->hdr);
+> +		/* Update exposure control to match new vblank */
+> +		__v4l2_ctrl_modify_range(sensor->expo_ctrl, sensor->expo_min,
+> +					 sensor->expo_max, 1, sensor->expo_long);
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int vgxy61_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +	int ret;
+> +
+> +	switch (ctrl->id) {
+> +	case V4L2_CID_TEMPERATURE:
+> +		ret = vgxy61_get_temp(sensor, &ctrl->val);
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct v4l2_ctrl_ops vgxy61_ctrl_ops = {
+> +	.g_volatile_ctrl = vgxy61_g_volatile_ctrl,
+> +	.s_ctrl = vgxy61_s_ctrl,
+> +};
+> +
+> +static const struct v4l2_ctrl_config vgxy61_hdr_ctrl = {
+> +	.ops		= &vgxy61_ctrl_ops,
+> +	.id		= V4L2_CID_HDR,
+> +	.name		= "HDR mode",
+> +	.type		= V4L2_CTRL_TYPE_MENU,
+> +	.min		= 0,
+> +	.max		= ARRAY_SIZE(vgxy61_hdr_modes) - 1,
+> +	.def		= NO_HDR,
+> +	.qmenu		= vgxy61_hdr_modes,
+> +};
+> +
+> +static int vgxy61_init_controls(struct vgxy61_dev *sensor)
+> +{
+> +	const struct v4l2_ctrl_ops *ops = &vgxy61_ctrl_ops;
+> +	struct v4l2_ctrl_handler *hdl = &sensor->ctrl_handler;
+> +	struct v4l2_ctrl *ctrl;
+> +	int ret;
+> +
+> +	v4l2_ctrl_handler_init(hdl, 16);
+> +	mutex_init(&sensor->lock);
+
+This should be initialized in probe(), it doesn't belong here.
+
+> +	/* We can use our own mutex for the ctrl lock */
+> +	hdl->lock = &sensor->lock;
+> +	/* Standard controls */
+> +	v4l2_ctrl_new_std(hdl, ops, V4L2_CID_ANALOGUE_GAIN, 0, 0x1c, 1, 0x0);
+> +	v4l2_ctrl_new_std(hdl, ops, V4L2_CID_DIGITAL_GAIN, 0, 0xfff, 1, 256);
+> +	v4l2_ctrl_new_std(hdl, ops, V4L2_CID_TEMPERATURE, -128, 128, 1, 0);
+> +	v4l2_ctrl_new_std_menu_items(hdl, ops, V4L2_CID_TEST_PATTERN,
+> +				     ARRAY_SIZE(vgxy61_test_pattern_menu) - 1, 0, 0,
+> +				     vgxy61_test_pattern_menu);
+> +	v4l2_ctrl_new_custom(hdl, &vgxy61_hdr_ctrl, NULL);
+> +	ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HBLANK, 0, sensor->line_length, 1,
+> +				 sensor->line_length - sensor->current_mode->width);
+> +	ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> +	/* Custom controls */
+> +	ctrl = v4l2_ctrl_new_int_menu(hdl, ops, V4L2_CID_LINK_FREQ, ARRAY_SIZE(link_freq) - 1, 0,
+> +				      link_freq);
+> +	ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> +	/* Keep a pointer to these controls as we need to update them when setting the format */
+> +	sensor->pixel_rate_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_PIXEL_RATE, 1, INT_MAX, 1,
+> +						    get_pixel_rate(sensor));
+> +	sensor->pixel_rate_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> +	sensor->expo_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE, sensor->expo_min,
+> +					      sensor->expo_max, 1, sensor->expo_long);
+> +	sensor->vblank_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VBLANK, sensor->vblank_min,
+> +						0xffff - sensor->current_mode->crop.height, 1,
+> +						sensor->vblank);
+> +	sensor->vflip_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VFLIP, 0, 1, 1, sensor->vflip);
+> +	sensor->hflip_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HFLIP, 0, 1, 1, sensor->hflip);
+> +
+> +	if (hdl->error) {
+> +		ret = hdl->error;
+> +		goto free_ctrls;
+> +	}
+> +
+> +	sensor->sd.ctrl_handler = hdl;
+> +	return 0;
+> +
+> +free_ctrls:
+> +	v4l2_ctrl_handler_free(hdl);
+> +	mutex_destroy(&sensor->lock);
+> +	return ret;
+> +}
+> +
+> +static const struct v4l2_subdev_core_ops vgxy61_core_ops = {
+> +};
+
+You can drop this.
+
+> +
+> +static const struct v4l2_subdev_video_ops vgxy61_video_ops = {
+> +	.s_stream = vgxy61_s_stream,
+> +};
+> +
+> +static const struct v4l2_subdev_pad_ops vgxy61_pad_ops = {
+> +	.enum_mbus_code = vgxy61_enum_mbus_code,
+> +	.get_fmt = vgxy61_get_fmt,
+> +	.set_fmt = vgxy61_set_fmt,
+> +	.get_selection = vgxy61_get_selection,
+> +	.enum_frame_size = vgxy61_enum_frame_size,
+> +};
+> +
+> +static const struct v4l2_subdev_ops vgxy61_subdev_ops = {
+> +	.core = &vgxy61_core_ops,
+> +	.video = &vgxy61_video_ops,
+> +	.pad = &vgxy61_pad_ops,
+> +};
+> +
+> +static const struct media_entity_operations vgxy61_subdev_entity_ops = {
+> +	.link_validate = v4l2_subdev_link_validate,
+> +};
+> +
+> +/* Set phy polarities */
+> +static int vgxy61_tx_from_ep(struct vgxy61_dev *sensor, struct fwnode_handle *endpoint)
+> +{
+> +	struct v4l2_fwnode_endpoint ep = { .bus_type = V4L2_MBUS_CSI2_DPHY };
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	u32 log2phy[VGXY61_NB_POLARITIES] = {~0, ~0, ~0, ~0, ~0};
+> +	u32 phy2log[VGXY61_NB_POLARITIES] = {~0, ~0, ~0, ~0, ~0};
+> +	int polarities[VGXY61_NB_POLARITIES] = {0, 0, 0, 0, 0};
+> +	int l_nb;
+> +	int p, l;
+> +	int ret;
+> +	int i;
+> +
+> +	ret = v4l2_fwnode_endpoint_alloc_parse(endpoint, &ep);
+> +	if (ret)
+> +		goto error_alloc;
+> +
+> +	l_nb = ep.bus.mipi_csi2.num_data_lanes;
+> +	if (l_nb != 1 && l_nb != 2 && l_nb != 4) {
+> +		dev_err(&client->dev, "invalid data lane number %d\n", l_nb);
+> +		goto error_ep;
+> +	}
+> +
+> +	/* Build log2phy, phy2log and polarities from ep info */
+> +	log2phy[0] = ep.bus.mipi_csi2.clock_lane;
+> +	phy2log[log2phy[0]] = 0;
+> +	for (l = 1; l < l_nb + 1; l++) {
+> +		log2phy[l] = ep.bus.mipi_csi2.data_lanes[l - 1];
+> +		phy2log[log2phy[l]] = l;
+> +	}
+> +	/*
+> +	 * Then fill remaining slots for every physical slot to have something valid for hardware
+> +	 * stuff.
+> +	 */
+> +	for (p = 0; p < VGXY61_NB_POLARITIES; p++) {
+> +		if (phy2log[p] != ~0)
+> +			continue;
+> +		phy2log[p] = l;
+> +		log2phy[l] = p;
+> +		l++;
+> +	}
+> +	for (l = 0; l < l_nb + 1; l++)
+> +		polarities[l] = ep.bus.mipi_csi2.lane_polarities[l];
+> +
+> +	if (log2phy[0] != 0) {
+> +		dev_err(&client->dev, "clk lane must be map to physical lane 0\n");
+> +		goto error_ep;
+> +	}
+> +	sensor->oif_ctrl = (polarities[4] << 15) + ((phy2log[4] - 1) << 13) +
+> +			   (polarities[3] << 12) + ((phy2log[3] - 1) << 10) +
+> +			   (polarities[2] <<  9) + ((phy2log[2] - 1) <<  7) +
+> +			   (polarities[1] <<  6) + ((phy2log[1] - 1) <<  4) +
+> +			   (polarities[0] <<  3) +
+> +			   l_nb;
+> +	sensor->nb_of_lane = l_nb;
+> +
+> +	dev_dbg(&client->dev, "tx uses %d lanes", l_nb);
+> +	for (i = 0; i < 5; i++) {
+> +		dev_dbg(&client->dev, "log2phy[%d] = %d\n", i, log2phy[i]);
+> +		dev_dbg(&client->dev, "phy2log[%d] = %d\n", i, phy2log[i]);
+> +		dev_dbg(&client->dev, "polarity[%d] = %d\n", i, polarities[i]);
+> +	}
+> +	dev_dbg(&client->dev, "oif_ctrl = 0x%04x\n", sensor->oif_ctrl);
+> +
+> +	v4l2_fwnode_endpoint_free(&ep);
+> +
+> +	return 0;
+> +
+> +error_ep:
+> +	v4l2_fwnode_endpoint_free(&ep);
+> +error_alloc:
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static int vgxy61_configure(struct vgxy61_dev *sensor)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	int sensor_freq;
+> +	unsigned int prediv;
+> +	unsigned int mult;
+> +	int ret;
+> +
+> +	compute_pll_parameters_by_freq(sensor->clk_freq, &prediv, &mult);
+> +	sensor_freq = (mult * sensor->clk_freq) / prediv;
+> +	/* Frequency to data rate is 1:1 ratio for MIPI */
+> +	sensor->data_rate_in_mbps = sensor_freq;
+> +	/* Video timing ISP path (pixel clock)  requires 804/5 mhz = 160 mhz */
+> +	sensor->pclk = sensor_freq / 5;
+> +
+> +	/* Cache line_length value */
+> +	ret = vgxy61_read_reg16(sensor, DEVICE_LINE_LENGTH, &sensor->line_length);
+> +	if (ret)
+> +		return ret;
+> +	/* Configure clocks */
+> +	ret = vgxy61_write_reg32(sensor, DEVICE_EXT_CLOCK, sensor->clk_freq);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg(sensor, DEVICE_CLK_PLL_PREDIV, prediv);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg(sensor, DEVICE_CLK_SYS_PLL_MULT, mult);
+> +	if (ret)
+> +		return ret;
+> +	/* Configure interface */
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_OIF_CTRL, sensor->oif_ctrl);
+> +	if (ret)
+> +		return ret;
+> +	/* Disable pwm compression */
+> +	ret = vgxy61_write_reg(sensor, DEVICE_FRAME_CONTENT_CTRL, 0);
+> +	if (ret)
+> +		return ret;
+> +	/* Disable asil lines */
+> +	ret = vgxy61_write_reg(sensor, DEVICE_BYPASS_CTRL, 4);
+> +	if (ret)
+> +		return ret;
+> +	/* Set gpios polarity according to device tree value */
+> +	ret = vgxy61_update_gpios_strobe_polarity(sensor, sensor->gpios_polarity);
+> +	if (ret)
+> +		return ret;
+> +	/* Slave mode */
+> +	ret = vgxy61_write_reg(sensor, DEVICE_VT_CTRL, sensor->slave_mode);
+> +	if (ret)
+> +		return ret;
+> +	/* Set pattern generator solid to middle value */
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_PATGEN_LONG_DATA_GR, 0x800);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_PATGEN_LONG_DATA_R, 0x800);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_PATGEN_LONG_DATA_B, 0x800);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_PATGEN_LONG_DATA_GB, 0x800);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_PATGEN_SHORT_DATA_GR, 0x800);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_PATGEN_SHORT_DATA_R, 0x800);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_PATGEN_SHORT_DATA_B, 0x800);
+> +	if (ret)
+> +		return ret;
+> +	ret = vgxy61_write_reg16(sensor, DEVICE_PATGEN_SHORT_DATA_GB, 0x800);
+> +	if (ret)
+> +		return ret;
+> +
+> +	dev_dbg(&client->dev, "clock prediv = %d\n", prediv);
+> +	dev_dbg(&client->dev, "clock mult = %d\n", mult);
+> +	dev_dbg(&client->dev, "data rate = %d mbps\n",
+> +		sensor->data_rate_in_mbps);
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_patch(struct vgxy61_dev *sensor)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	u16 patch;
+> +	int ret;
+> +
+> +	ret = vgxy61_write_array(sensor, DEVICE_FWPATCH_START_ADDR, sizeof(patch_array),
+> +				 patch_array);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = vgxy61_write_reg(sensor, DEVICE_STBY, 0x10);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = vgxy61_poll_reg(sensor, DEVICE_STBY, 0, VGXY61_TIMEOUT_MS);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = vgxy61_read_reg16(sensor, DEVICE_FWPATCH_REVISION, &patch);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (patch != (DEVICE_FWPATCH_REVISION_MAJOR << 12) +
+> +		     (DEVICE_FWPATCH_REVISION_MINOR << 8) +
+> +		     DEVICE_FWPATCH_REVISION_MICRO) {
+> +		dev_err(&client->dev, "bad patch version expected %d.%d.%d got %d.%d.%d\n",
+> +			DEVICE_FWPATCH_REVISION_MAJOR,
+> +			DEVICE_FWPATCH_REVISION_MINOR,
+> +			DEVICE_FWPATCH_REVISION_MICRO,
+> +			patch >> 12, (patch >> 8) & 0x0f, patch & 0xff);
+> +		return -ENODEV;
+> +	}
+> +	dev_dbg(&client->dev, "patch %d.%d.%d applied\n",
+> +		patch >> 12, (patch >> 8) & 0x0f, patch & 0xff);
+> +
+> +	return 0;
+> +}
+> +
+> +static int vgxy61_detect_cut_version(struct vgxy61_dev *sensor)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	u16 device_rev;
+> +	int ret;
+> +
+> +	ret = vgxy61_read_reg16(sensor, DEVICE_REVISION, &device_rev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	switch (device_rev >> 8) {
+> +	case 0xA:
+> +		dev_dbg(&client->dev, "Cut1 detected\n");
+> +		dev_err(&client->dev, "Cut1 not supported by this driver\n");
+> +		return -ENODEV;
+> +	case 0xB:
+> +		dev_dbg(&client->dev, "Cut2 detected\n");
+> +		return 0;
+> +	case 0xC:
+> +		dev_dbg(&client->dev, "Cut3 detected\n");
+> +		return 0;
+> +	default:
+> +		dev_err(&client->dev, "Unable to detect cut version\n");
+> +		return -ENODEV;
+> +	}
+> +}
+> +
+> +static int vgxy61_detect(struct vgxy61_dev *sensor)
+> +{
+> +	struct i2c_client *client = sensor->i2c_client;
+> +	u16 id = 0;
+> +	int ret;
+> +	u8 st;
+> +
+> +	ret = vgxy61_read_reg16(sensor, DEVICE_MODEL_ID_REG, &id);
+> +	if (ret)
+> +		return ret;
+> +	if (id != VG5661_MODEL_ID && id != VG5761_MODEL_ID) {
+> +		dev_warn(&client->dev, "Unsupported sensor id %x\n", id);
+> +		return -ENODEV;
+> +	}
+> +	dev_dbg(&client->dev, "detected sensor id = 0x%04x\n", id);
+> +	sensor->id = id;
+> +
+> +	ret = vgxy61_wait_state(sensor, SW_STBY, VGXY61_TIMEOUT_MS);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = vgxy61_read_reg(sensor, DEVICE_NVM, &st);
+> +	if (ret)
+> +		return ret;
+> +	if (st != NVM_OK)
+> +		dev_warn(&client->dev, "Bad nvm state got %d\n", st);
+> +
+> +	/* Detect cut version */
+> +	ret = vgxy61_detect_cut_version(sensor);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +/* Power/clock management functions */
+> +static int vgxy61_power_on(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +	int ret;
+> +
+> +	ret = vgxy61_get_regulators(sensor);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to get regulators %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = regulator_bulk_enable(VGXY61_NUM_SUPPLIES, sensor->supplies);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to enable regulators %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = clk_prepare_enable(sensor->xclk);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to enable clock %d\n", ret);
+> +		goto disable_bulk;
+> +	}
+> +
+> +	/* Apply reset sequence */
+> +	if (sensor->reset_gpio) {
+> +		ret = vgxy61_apply_reset(sensor);
+> +		if (ret) {
+> +			dev_err(&client->dev, "sensor reset failed %d\n", ret);
+> +			goto disable_clock;
+> +		}
+> +	}
+> +
+> +	ret = vgxy61_detect(sensor);
+
+Do we really need to run detection every time the sensor is powered on ?
+
+> +	if (ret) {
+> +		dev_err(&client->dev, "sensor detect failed %d\n", ret);
+> +		goto disable_clock;
+> +	}
+> +
+> +	ret = vgxy61_patch(sensor);
+> +	if (ret) {
+> +		dev_err(&client->dev, "sensor patch failed %d\n", ret);
+> +		goto disable_clock;
+> +	}
+> +
+> +	ret = vgxy61_configure(sensor);
+> +	if (ret) {
+> +		dev_err(&client->dev, "sensor configuration failed %d\n", ret);
+> +		goto disable_clock;
+> +	}
+> +
+> +	return 0;
+> +
+> +disable_clock:
+> +	clk_disable_unprepare(sensor->xclk);
+> +disable_bulk:
+> +	regulator_bulk_disable(VGXY61_NUM_SUPPLIES, sensor->supplies);
+> +
+> +	return ret;
+> +}
+> +
+> +static int vgxy61_power_off(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +
+> +	clk_disable_unprepare(sensor->xclk);
+> +	regulator_bulk_disable(VGXY61_NUM_SUPPLIES, sensor->supplies);
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused vgxy61_suspend(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +
+> +	if (sensor->streaming)
+> +		vgxy61_stream_disable(sensor);
+
+This shoudn't happen. The sensor should be stopped by the driver on the
+receiver side during system suspend. Same for resume.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused vgxy61_resume(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +	int ret;
+> +
+> +	if (sensor->streaming) {
+> +		ret = vgxy61_stream_enable(sensor);
+> +		if (ret)
+> +			goto error;
+> +	}
+> +
+> +	return 0;
+> +
+> +error:
+> +	vgxy61_stream_disable(sensor);
+> +	sensor->streaming = false;
+> +
+> +	return ret;
+> +}
+> +
+> +static void vgxy61_set_default_format(struct vgxy61_dev *sensor)
+> +{
+> +	if (sensor->id == VG5761_MODEL_ID) {
+
+Would it make sense to have different compatible strings instead of
+detecting the version automatically ? Not only could it speed up probe
+if we could skip the detection, it would also allow not powering the
+sensor up at probe time, which may be required in some cases (for
+instance when a privacy LED is connected to the sensor power supply,
+flashing the LED at probe time can be very confusing for users).
+
+> +		sensor->sensor_width = VGX761_WIDTH;
+> +		sensor->sensor_height = VGX761_HEIGHT;
+> +		sensor->sensor_modes = vgx761_mode_data;
+> +		sensor->sensor_modes_nb = ARRAY_SIZE(vgx761_mode_data);
+> +		sensor->current_mode = &vgx761_mode_data[VGX761_DEFAULT_MODE];
+> +		sensor->rot_term = VGX761_SHORT_ROT_TERM;
+> +	} else if (sensor->id == VG5661_MODEL_ID) {
+> +		sensor->sensor_width = VGX661_WIDTH;
+> +		sensor->sensor_height = VGX661_HEIGHT;
+> +		sensor->sensor_modes = vgx661_mode_data;
+> +		sensor->sensor_modes_nb = ARRAY_SIZE(vgx661_mode_data);
+> +		sensor->current_mode = &vgx661_mode_data[VGX661_DEFAULT_MODE];
+> +		sensor->rot_term = VGX661_SHORT_ROT_TERM;
+> +	} else {
+> +		/* Should never happen */
+> +		WARN_ON(true);
+> +	}
+> +	sensor->fmt.width = sensor->current_mode->width;
+> +	sensor->fmt.height = sensor->current_mode->height;
+> +	sensor->vblank = sensor->frame_length - sensor->current_mode->crop.height;
+> +}
+> +
+> +static int vgxy61_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct fwnode_handle *endpoint;
+> +	struct vgxy61_dev *sensor;
+> +	int ret;
+> +
+> +	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
+> +	if (!sensor)
+> +		return -ENOMEM;
+> +
+> +	sensor->i2c_client = client;
+> +	sensor->streaming = false;
+> +	sensor->fmt.code = MEDIA_BUS_FMT_Y8_1X8;
+> +	sensor->fmt.colorspace = V4L2_COLORSPACE_RAW;
+> +	sensor->fmt.field = V4L2_FIELD_NONE;
+> +	sensor->fmt.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
+> +	sensor->fmt.quantization = V4L2_QUANTIZATION_DEFAULT;
+> +	sensor->fmt.xfer_func = V4L2_XFER_FUNC_DEFAULT;
+
+Please implement the subdev .init_cfg() operation, and call it here.
+There are several examples in existing drivers.
+
+> +	sensor->frame_interval.numerator = 1;
+> +	sensor->frame_interval.denominator = 60;
+> +	sensor->hdr = NO_HDR;
+> +	sensor->expo_long = 200;
+> +	sensor->expo_short = 0;
+> +	sensor->hflip = false;
+> +	sensor->vflip = false;
+> +	sensor->frame_length = VGXY61_FRAME_LENGTH_DEF;
+> +
+> +	endpoint = fwnode_graph_get_next_endpoint(of_fwnode_handle(dev->of_node), NULL);
+> +	if (!endpoint) {
+> +		dev_err(dev, "endpoint node not found\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = vgxy61_tx_from_ep(sensor, endpoint);
+> +	fwnode_handle_put(endpoint);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to parse endpoint %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	sensor->xclk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(sensor->xclk)) {
+> +		dev_err(dev, "failed to get xclk\n");
+> +		return PTR_ERR(sensor->xclk);
+> +	}
+> +	sensor->clk_freq = clk_get_rate(sensor->xclk);
+> +	if (sensor->clk_freq < 6 * HZ_PER_MHZ || sensor->clk_freq > 27 * HZ_PER_MHZ) {
+> +		dev_err(dev, "Only 6Mhz-27Mhz clock range supported. provide %lu MHz\n",
+> +			sensor->clk_freq / HZ_PER_MHZ);
+> +		return -EINVAL;
+> +	}
+> +	sensor->gpios_polarity = of_property_read_bool(dev->of_node, "invert-gpios-polarity");
+> +	sensor->slave_mode = of_property_read_bool(dev->of_node, "slave-mode");
+> +
+> +	v4l2_i2c_subdev_init(&sensor->sd, client, &vgxy61_subdev_ops);
+> +	sensor->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> +	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
+> +	sensor->sd.entity.ops = &vgxy61_subdev_entity_ops;
+> +	sensor->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+> +
+> +	/* Request optional reset pin */
+> +	sensor->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+> +
+> +	ret = vgxy61_power_on(dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	vgxy61_set_default_format(sensor);
+> +
+> +	/* HDR mode */
+> +	ret = vgxy61_update_hdr(sensor, sensor->hdr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = vgxy61_init_controls(sensor);
+> +	if (ret) {
+> +		dev_err(&client->dev, "controls initialization failed %d\n", ret);
+> +		goto error_power_off;
+> +	}
+> +
+> +	ret = media_entity_pads_init(&sensor->sd.entity, 1, &sensor->pad);
+> +	if (ret) {
+> +		dev_err(&client->dev, "pads init failed %d\n", ret);
+> +		goto error_handler_free;
+> +	}
+> +
+> +	ret = v4l2_async_register_subdev(&sensor->sd);
+> +	if (ret) {
+> +		dev_err(&client->dev, "async subdev register failed %d\n", ret);
+> +		goto error_media_entity;
+> +	}
+> +
+> +	/* Enable runtime PM and turn off the device */
+> +	pm_runtime_set_active(dev);
+> +	pm_runtime_enable(dev);
+> +	pm_runtime_idle(dev);
+
+You should do this before registering the subdev, as it can be accessed
+from userspace right after being registered.
+
+Please also use auto-suspend to avoid long delays when stopping and
+restarting streaming quickly.
+
+> +
+> +	dev_info(&client->dev, "vgxy61 probe successfully\n");
+
+I'd drop this, or turn it into a debug message.
+
+> +
+> +	return 0;
+> +
+> +error_media_entity:
+> +	media_entity_cleanup(&sensor->sd.entity);
+> +error_handler_free:
+> +	v4l2_ctrl_handler_free(sensor->sd.ctrl_handler);
+> +	mutex_destroy(&sensor->lock);
+> +error_power_off:
+> +	vgxy61_power_off(dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int vgxy61_remove(struct i2c_client *client)
+> +{
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +
+> +	v4l2_async_unregister_subdev(&sensor->sd);
+> +	mutex_destroy(&sensor->lock);
+> +	media_entity_cleanup(&sensor->sd.entity);
+> +
+> +	pm_runtime_disable(&client->dev);
+> +	if (!pm_runtime_status_suspended(&client->dev))
+> +		vgxy61_power_off(&client->dev);
+> +	pm_runtime_set_suspended(&client->dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id vgxy61_dt_ids[] = {
+> +	{ .compatible = "st,st-vgxy61" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, vgxy61_dt_ids);
+> +
+> +static const struct dev_pm_ops vgxy61_pm_ops = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(vgxy61_suspend, vgxy61_resume)
+> +	SET_RUNTIME_PM_OPS(vgxy61_power_off, vgxy61_power_on, NULL)
+> +};
+> +
+> +static struct i2c_driver vgxy61_i2c_driver = {
+> +	.driver = {
+> +		.name  = "st-vgxy61",
+> +		.of_match_table = vgxy61_dt_ids,
+> +		.pm = &vgxy61_pm_ops,
+> +	},
+> +	.probe_new = vgxy61_probe,
+> +	.remove = vgxy61_remove,
+> +};
+> +
+> +module_i2c_driver(vgxy61_i2c_driver);
+> +
+> +MODULE_AUTHOR("Benjamin Mugnier <benjamin.mugnier@foss.st.com>");
+> +MODULE_AUTHOR("Mickael Guene <mickael.guene@st.com>");
+> +MODULE_AUTHOR("Sylvain Petinot <sylvain.petinot@foss.st.com>");
+> +MODULE_DESCRIPTION("VGXY61 camera subdev driver");
+> +MODULE_LICENSE("GPL v2");
+
 -- 
-2.35.2
+Regards,
 
+Laurent Pinchart
