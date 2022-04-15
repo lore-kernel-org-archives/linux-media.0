@@ -2,224 +2,120 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A54FC433FE
-	for <linux-media@archiver.kernel.org>; Fri, 15 Apr 2022 15:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DBAFC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 15 Apr 2022 15:37:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355280AbiDOPef (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Apr 2022 11:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
+        id S237241AbiDOPkK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Apr 2022 11:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355369AbiDOPda (ORCPT
+        with ESMTP id S1355516AbiDOPkG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:33:30 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99597D8F49;
-        Fri, 15 Apr 2022 08:29:08 -0700 (PDT)
+        Fri, 15 Apr 2022 11:40:06 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D743C72F;
+        Fri, 15 Apr 2022 08:37:17 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AB7DBE000C;
-        Fri, 15 Apr 2022 15:29:05 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id ED909240006;
+        Fri, 15 Apr 2022 15:37:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650036546;
+        t=1650037035;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0aL1gd4kAuc3u2gUbOpzUUJFI/u1xg+hRYW41JoQJHA=;
-        b=VRNTWd0FbZN8S3b+Hi+l50A1iGwIWAHrLeGC31ZQySA6P7ZN/BQVyb5RssgQCR+Yidv141
-        j2cTq4A5YVPZnwL2T07cpNsLeYi48ivU17pPaUkiXIKxxoJ06MvEGxnx7IGgPiEg2nDSYc
-        p/dmigViuvELgIKaeR0qz0TnBRxT3yXAO8cEs2zNUGUiIj2ihOtuTNJp2R//YUgGVR1oQj
-        BeGu2IbV266z9VHGtPQFmpFyPlgOftQtZRn7B1/FlX8H4YxSiyFefL3xsnnfWuzAl++lUL
-        FULFB3sG7AK+PL1vYpjzLq70aE0ArmroI2VA/scr8jOr+h0zAM3z9oC6BNYM8A==
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kXBDK8xo31Siszz9mdQu0RpXYIzmlLJyUEJsWA4vLkA=;
+        b=JBhAze1ahVizW7R+goEcOR/IGfDIuv6Y3R8FisdEI09kZT8Tx81cDJIx9cUuiRpWdWc1eI
+        wynmFiji49Jmv+S6xfgFMhNJBF9l79sggXq2K40rl20ZKNLB2k2DYhvQPNwVw51/TJ7q/E
+        fagPCbQ+CplZz2d0FT9y/Fr/z3ioNZkPyXPnINbHJLkuf28n2ph6sSXvITgQIxn9tVhDP5
+        Ut/bQoDvp+J6vVY4gKE9pwFcWoPm681B3uTWhwktYK/wPzw+QkxbUUMTh6B6cYoD5uoIDG
+        oHlzA/RK36FlbXF4AbXwGoXm+ifYyg9LSIbkiz6f4lYPFCwKL7W2vnZ0z8YQ1g==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 40/45] media: sun6i-csi: Only configure capture when streaming
-Date:   Fri, 15 Apr 2022 17:28:06 +0200
-Message-Id: <20220415152811.636419-41-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v3 0/4] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / ISP Driver
+Date:   Fri, 15 Apr 2022 17:37:04 +0200
+Message-Id: <20220415153708.637804-1-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220415152811.636419-1-paul.kocialkowski@bootlin.com>
-References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a streaming element to the capture state structure to know if the
-capture device is used or not. Only configure things related to output
-when streaming, including the output format, irq, state (dma buffer)
-and window configuration registers.
+This new version is an offspring from the big "Allwinner A31/A83T
+MIPI CSI-2 Support and A31 ISP Support" series, which was split into
+individual series for better clarity and handling.
 
-After this change, it becomes possible to use the bridge without the
-capture device, which will be the case in the isp media flow.
+This part only concerns the introduction of the new ISP driver.
 
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
----
- .../sunxi/sun6i-csi/sun6i_csi_bridge.c        | 50 ++++++++++++-------
- .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 11 +++-
- .../sunxi/sun6i-csi/sun6i_csi_capture.h       |  1 +
- 3 files changed, 41 insertions(+), 21 deletions(-)
+Changes since all-in-one v2:
+- Updated Kconfig to follow the latest media-wide changes;
+- Reworked async subdev handling with a dedicated structure holding the
+  corresponding source to avoid matching in the driver;
+- Switched to clock-managed regmap mmio;
+- Used helper to get a single enabled link for an entity's pad, to replace
+  source selection at link_validate time and select the remote source at
+  stream on time instead;
+- Added mutex for mbus format serialization;
+- Used endpoint-base instead of video-interface for "internal" endpoints
+  in device-tree schema;
+- Added TODO with unstaging requirements;
+- Various cosmetic cleanups;
+- Updated copyright years;
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
-index 27289d904d5c..8e9eded0df28 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
-@@ -338,6 +338,7 @@ sun6i_csi_bridge_configure_mipi_csi2(struct sun6i_csi_device *csi_dev)
- static void sun6i_csi_bridge_configure_format(struct sun6i_csi_device *csi_dev)
- {
- 	struct regmap *regmap = csi_dev->regmap;
-+	bool capture_streaming = csi_dev->capture.state.streaming;
- 	const struct sun6i_csi_bridge_format *bridge_format;
- 	const struct sun6i_csi_capture_format *capture_format;
- 	u32 mbus_code, field, pixelformat;
-@@ -353,26 +354,29 @@ static void sun6i_csi_bridge_configure_format(struct sun6i_csi_device *csi_dev)
- 	input_format = bridge_format->input_format;
- 	input_yuv_seq = bridge_format->input_yuv_seq;
- 
--	sun6i_csi_capture_format(csi_dev, &pixelformat, NULL);
-+	if (capture_streaming) {
-+		sun6i_csi_capture_format(csi_dev, &pixelformat, NULL);
- 
--	capture_format = sun6i_csi_capture_format_find(pixelformat);
--	if (WARN_ON(!capture_format))
--		return;
-+		capture_format = sun6i_csi_capture_format_find(pixelformat);
-+		if (WARN_ON(!capture_format))
-+			return;
- 
--	if (capture_format->input_format_raw)
--		input_format = SUN6I_CSI_INPUT_FMT_RAW;
-+		if (capture_format->input_format_raw)
-+			input_format = SUN6I_CSI_INPUT_FMT_RAW;
- 
--	if (capture_format->input_yuv_seq_invert)
--		input_yuv_seq = bridge_format->input_yuv_seq_invert;
-+		if (capture_format->input_yuv_seq_invert)
-+			input_yuv_seq = bridge_format->input_yuv_seq_invert;
- 
--	if (field == V4L2_FIELD_INTERLACED ||
--	    field == V4L2_FIELD_INTERLACED_TB ||
--	    field == V4L2_FIELD_INTERLACED_BT)
--		output_format = capture_format->output_format_field;
--	else
--		output_format = capture_format->output_format_frame;
-+		if (field == V4L2_FIELD_INTERLACED ||
-+		    field == V4L2_FIELD_INTERLACED_TB ||
-+		    field == V4L2_FIELD_INTERLACED_BT)
-+			output_format = capture_format->output_format_field;
-+		else
-+			output_format = capture_format->output_format_frame;
-+
-+		value |= SUN6I_CSI_CH_CFG_OUTPUT_FMT(output_format);
-+	}
- 
--	value |= SUN6I_CSI_CH_CFG_OUTPUT_FMT(output_format);
- 	value |= SUN6I_CSI_CH_CFG_INPUT_FMT(input_format);
- 	value |= SUN6I_CSI_CH_CFG_INPUT_YUV_SEQ(input_yuv_seq);
- 
-@@ -406,6 +410,7 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
- 	struct sun6i_csi_device *csi_dev = v4l2_get_subdevdata(subdev);
- 	struct sun6i_csi_bridge *bridge = &csi_dev->bridge;
- 	struct media_entity *bridge_entity = &bridge->subdev.entity;
-+	bool capture_streaming = csi_dev->capture.state.streaming;
- 	struct device *dev = csi_dev->dev;
- 	struct sun6i_csi_bridge_source *source;
- 	struct v4l2_subdev *source_subdev;
-@@ -448,15 +453,20 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
- 	/* Configure */
- 
- 	sun6i_csi_bridge_configure(csi_dev, source);
--	sun6i_csi_capture_configure(csi_dev);
-+
-+	if (capture_streaming)
-+		sun6i_csi_capture_configure(csi_dev);
- 
- 	/* State Update */
- 
--	sun6i_csi_capture_state_update(csi_dev);
-+	if (capture_streaming)
-+		sun6i_csi_capture_state_update(csi_dev);
- 
- 	/* Enable */
- 
--	sun6i_csi_bridge_irq_enable(csi_dev);
-+	if (capture_streaming)
-+		sun6i_csi_bridge_irq_enable(csi_dev);
-+
- 	sun6i_csi_bridge_enable(csi_dev);
- 
- 	ret = v4l2_subdev_call(source_subdev, video, s_stream, 1);
-@@ -466,7 +476,9 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
- 	return 0;
- 
- disable:
--	sun6i_csi_bridge_irq_disable(csi_dev);
-+	if (capture_streaming)
-+		sun6i_csi_bridge_irq_disable(csi_dev);
-+
- 	sun6i_csi_bridge_disable(csi_dev);
- 
- 	pm_runtime_put(dev);
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-index f1581b877819..17145ce53395 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-@@ -616,13 +616,17 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- 	if (ret < 0)
- 		goto error_state;
- 
-+	state->streaming = true;
-+
- 	ret = v4l2_subdev_call(subdev, video, s_stream, 1);
- 	if (ret && ret != -ENOIOCTLCMD)
--		goto error_media_pipeline;
-+		goto error_streaming;
- 
- 	return 0;
- 
--error_media_pipeline:
-+error_streaming:
-+	state->streaming = false;
-+
- 	media_pipeline_stop(&video_dev->entity);
- 
- error_state:
-@@ -634,11 +638,14 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- static void sun6i_csi_capture_stop_streaming(struct vb2_queue *queue)
- {
- 	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(queue);
-+	struct sun6i_csi_capture_state *state = &csi_dev->capture.state;
- 	struct video_device *video_dev = &csi_dev->capture.video_dev;
- 	struct v4l2_subdev *subdev = &csi_dev->bridge.subdev;
- 
- 	v4l2_subdev_call(subdev, video, s_stream, 0);
- 
-+	state->streaming = false;
-+
- 	media_pipeline_stop(&video_dev->entity);
- 
- 	sun6i_csi_capture_state_cleanup(csi_dev, true);
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-index ceceb030aef6..29893cf96f6b 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-@@ -44,6 +44,7 @@ struct sun6i_csi_capture_state {
- 	struct sun6i_csi_buffer		*complete;
- 
- 	unsigned int			sequence;
-+	bool				streaming;
- };
- 
- struct sun6i_csi_capture {
+Paul Kocialkowski (4):
+  dt-bindings: media: Add Allwinner A31 ISP bindings documentation
+  dt-bindings: media: sun6i-a31-csi: Add ISP output port
+  staging: media: Add support for the Allwinner A31 ISP
+  MAINTAINERS: Add entry for the Allwinner A31 ISP driver
+
+ .../media/allwinner,sun6i-a31-csi.yaml        |  14 +
+ .../media/allwinner,sun6i-a31-isp.yaml        | 117 +++
+ MAINTAINERS                                   |   9 +
+ drivers/staging/media/sunxi/Kconfig           |   1 +
+ drivers/staging/media/sunxi/Makefile          |   1 +
+ drivers/staging/media/sunxi/sun6i-isp/Kconfig |  15 +
+ .../staging/media/sunxi/sun6i-isp/Makefile    |   4 +
+ .../staging/media/sunxi/sun6i-isp/TODO.txt    |   6 +
+ .../staging/media/sunxi/sun6i-isp/sun6i_isp.c | 556 +++++++++++++
+ .../staging/media/sunxi/sun6i-isp/sun6i_isp.h |  85 ++
+ .../media/sunxi/sun6i-isp/sun6i_isp_capture.c | 749 ++++++++++++++++++
+ .../media/sunxi/sun6i-isp/sun6i_isp_capture.h |  78 ++
+ .../media/sunxi/sun6i-isp/sun6i_isp_params.c  | 573 ++++++++++++++
+ .../media/sunxi/sun6i-isp/sun6i_isp_params.h  |  52 ++
+ .../media/sunxi/sun6i-isp/sun6i_isp_proc.c    | 578 ++++++++++++++
+ .../media/sunxi/sun6i-isp/sun6i_isp_proc.h    |  66 ++
+ .../media/sunxi/sun6i-isp/sun6i_isp_reg.h     | 275 +++++++
+ .../sunxi/sun6i-isp/uapi/sun6i-isp-config.h   |  43 +
+ 18 files changed, 3222 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Kconfig
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Makefile
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/TODO.txt
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.h
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.h
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg.h
+ create mode 100644 drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h
+
 -- 
 2.35.2
 
