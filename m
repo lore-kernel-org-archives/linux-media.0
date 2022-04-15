@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D4BBC433EF
-	for <linux-media@archiver.kernel.org>; Fri, 15 Apr 2022 15:37:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E9FCC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 15 Apr 2022 15:37:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355607AbiDOPkR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Apr 2022 11:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
+        id S1355562AbiDOPkT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Apr 2022 11:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355559AbiDOPkH (ORCPT
+        with ESMTP id S1355557AbiDOPkH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 15 Apr 2022 11:40:07 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57C84338E;
-        Fri, 15 Apr 2022 08:37:23 -0700 (PDT)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B263EBBD;
+        Fri, 15 Apr 2022 08:37:18 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DC31524001A;
-        Fri, 15 Apr 2022 15:37:20 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id E3968240002;
+        Fri, 15 Apr 2022 15:37:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650037042;
+        t=1650037037;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qu0NHgWQS0210AutnkjottmRueItVONvdA99L7CXOtE=;
-        b=C5tZVDarGUAQf2fNcwoaGhTIrKn5P7MZtedpxjq2oSHGHLGHcAqJof0WvY9U9KH65LXrz0
-        6cWVWbDPRXyaBC3zE6IcqUYJDiBh8v5v7OmVuaPxgQL2tT1FnKxAq5ZrOQ6ZJU5H22CNT2
-        7bkS82LfRqAiDx4chA8ydvbXjw0eBW9O+0qM2AhmLA4GgwU24wHBCwRemmrBN0nnUX3A4P
-        K3QZzyqLD0aK5fPDc6/hNMJ8ZqeHzF9+4dbp0yt3jEgYeK+4O8MhB4/bi4Gz9xUQozKav+
-        hUXi6ULvAijlUnzgUbaLEqZWlldnFP0zpEA8wSD4Xb8shkvHxE64OQK8FT106Q==
+        bh=2CL2yuVd3kigzfVSkE0/5mfrLXFod+JkAYraYwsI5yU=;
+        b=E0bCZnAtw7mEYIG9Lxb2FhuK+XOefo+1mlfdCuptDQfMS03GW3jhFQACfrs1xGkoZez/8f
+        o3g2gdR5OgGW0egF8rxwp9BzfaY4jRkwaWovaZBzHfZPkRZsP2hCAFvici5AlVasxFD2yk
+        jWnEdQAQEUxh8YwBIwqkhyae2/JqBgqWiFBZAgRfSuFCOnzr0DUUDo/K+X1+iSJ1koWTcZ
+        915RZebkKE/xIE9OTU6t+XHt5720HaecDc+Qzza9GwxcQxoRJvIb097pFovQs5uCkkwr7s
+        tBtje/ucy8P9BHQsckP+vcvame0ab5YqUfaaiSu10M4c0WvyZTlz6TAbHQyMvA==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
@@ -46,9 +46,9 @@ Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 4/4] MAINTAINERS: Add entry for the Allwinner A31 ISP driver
-Date:   Fri, 15 Apr 2022 17:37:08 +0200
-Message-Id: <20220415153708.637804-5-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v3 1/4] dt-bindings: media: Add Allwinner A31 ISP bindings documentation
+Date:   Fri, 15 Apr 2022 17:37:05 +0200
+Message-Id: <20220415153708.637804-2-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220415153708.637804-1-paul.kocialkowski@bootlin.com>
 References: <20220415153708.637804-1-paul.kocialkowski@bootlin.com>
@@ -58,33 +58,138 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add myself as maintainer of the Allwinner A31 ISP media driver.
+This introduces YAML bindings documentation for the Allwinner A31 Image
+Signal Processor (ISP).
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../media/allwinner,sun6i-a31-isp.yaml        | 117 ++++++++++++++++++
+ 1 file changed, 117 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 43f456982ecc..9a50c0019d4a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -770,6 +770,15 @@ T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
- F:	drivers/media/platform/sunxi/sun6i-csi/
- 
-+ALLWINNER A31 ISP DRIVER
-+M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-+F:	drivers/staging/media/sunxi/sun6i-isp/
-+F:	drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+new file mode 100644
+index 000000000000..ffca216b841f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+@@ -0,0 +1,117 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- ALLWINNER A31 MIPI CSI-2 BRIDGE DRIVER
- M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
- L:	linux-media@vger.kernel.org
++title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
++
++maintainers:
++  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
++
++properties:
++  compatible:
++    enum:
++      - allwinner,sun6i-a31-isp
++      - allwinner,sun8i-v3s-isp
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Bus Clock
++      - description: Module Clock
++      - description: DRAM Clock
++
++  clock-names:
++    items:
++      - const: bus
++      - const: mod
++      - const: ram
++
++  resets:
++    maxItems: 1
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        description: CSI0 input port
++
++        properties:
++          reg:
++            const: 0
++
++          endpoint:
++            $ref: /schemas/graph.yaml#/$defs/endpoint-base
++            unevaluatedProperties: false
++
++        additionalProperties: false
++
++      port@1:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        description: CSI1 input port
++
++        properties:
++          reg:
++            const: 0
++
++          endpoint:
++            $ref: /schemas/graph.yaml#/$defs/endpoint-base
++            unevaluatedProperties: false
++
++        additionalProperties: false
++
++    anyOf:
++      - required:
++        - port@0
++      - required:
++        - port@1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - resets
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
++    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
++
++    isp: isp@1cb8000 {
++        compatible = "allwinner,sun8i-v3s-isp";
++        reg = <0x01cb8000 0x1000>;
++        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&ccu CLK_BUS_CSI>,
++             <&ccu CLK_CSI1_SCLK>,
++             <&ccu CLK_DRAM_CSI>;
++        clock-names = "bus", "mod", "ram";
++        resets = <&ccu RST_BUS_CSI>;
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            port@0 {
++                reg = <0>;
++
++                isp_in_csi0: endpoint {
++                    remote-endpoint = <&csi0_out_isp>;
++                };
++            };
++        };
++    };
++
++...
 -- 
 2.35.2
 
