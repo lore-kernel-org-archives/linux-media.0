@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C236C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C046C433FE
 	for <linux-media@archiver.kernel.org>; Fri, 15 Apr 2022 15:30:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355267AbiDOPdI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 15 Apr 2022 11:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S1354701AbiDOPdK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 15 Apr 2022 11:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355329AbiDOPbv (ORCPT
+        with ESMTP id S1355301AbiDOPbj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:31:51 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CC5D64CD;
-        Fri, 15 Apr 2022 08:28:53 -0700 (PDT)
+        Fri, 15 Apr 2022 11:31:39 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8056ED5EB7;
+        Fri, 15 Apr 2022 08:28:52 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 37219E0016;
-        Fri, 15 Apr 2022 15:28:51 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0C94DE000E;
+        Fri, 15 Apr 2022 15:28:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650036532;
+        t=1650036531;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yn4DapW7B+b7/Jf58r8UQ+KQTPDQT2kt5oZznM1VWTc=;
-        b=D1P38lGnnMsc0gLE3jEivo9T1KTRnMpeNNK14W+s2nmxqSZvNw6D2+KuBZTNNsTImw/wvN
-        oA03mg3uEumnyjOCf5ps3r4+yZnnRS8Ri2/o6qLaiR5tA2Alu2BrNSmnkBdc3CeG8H4mV6
-        nxHGoNW4rQNvT4/2U4KnlKwQRs/ZhvONoiK32ZS/Z/IJqRmstICL99ZrxUhyrYAxWG+2Ad
-        jjaQSfG8LYObESBJHCjtD+kwgtY+9fcj1JNp+KfDVfGijXN/oOrB9iZ33dKvZR2ZsB70xq
-        NCFxJ6KgKnswiKJVf44RDitrliXidWqV/tnGxihI/77zkSHifzxJsU8OziLw3A==
+        bh=N9Ap9R8Xf7QreTWyG4D1iTf1/X33AGyrJspYSP6S+lI=;
+        b=Tx9c/13XW8tHwZzqAclVW4p0LyvC+TyFcnfIJ3WpIapVq4exOqWvmm11p8nliUONdk17cO
+        RUwbztmtZdDDliHHpqs8b1w3NqdREqo099YaaiUvabKDAFLVQ7ZZfnyN0UQ9FWBiPGcJBJ
+        ltXRGJ4D5/jPICWP9yWo5+yD/C58NaWCihF9lfGMzckWJhB2RVAqXHQDcAcfQ61bYclJbM
+        SE2h/LVoJDRq1dyKoGkORZKnGc28w0ONSBKyc8HSmzDaVevxovkja3uwLwjbpyXV2SShZS
+        3Y083iYIOIKSOjnxOm+m0xuROR1XN4d5r+bmHxMSO73zPnclUgZb6ImgmoAxVw==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -42,9 +42,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v4 28/45] media: sun6i-csi: Get mbus code from bridge instead of storing it
-Date:   Fri, 15 Apr 2022 17:27:54 +0200
-Message-Id: <20220415152811.636419-29-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v4 27/45] media: sun6i-csi: Add bridge dimensions and format helpers
+Date:   Fri, 15 Apr 2022 17:27:53 +0200
+Message-Id: <20220415152811.636419-28-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220415152811.636419-1-paul.kocialkowski@bootlin.com>
 References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com>
@@ -54,94 +54,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Another instance of removing a duplicated variable and using common
-helpers instead.
+Introduce new helpers to ease getting information about the bridge.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- .../sunxi/sun6i-csi/sun6i_csi_capture.c        | 18 +++++-------------
- .../sunxi/sun6i-csi/sun6i_csi_capture.h        |  1 -
- 2 files changed, 5 insertions(+), 14 deletions(-)
+ .../sunxi/sun6i-csi/sun6i_csi_bridge.c        | 20 +++++++++++++++++++
+ .../sunxi/sun6i-csi/sun6i_csi_bridge.h        |  7 +++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-index c4e803a38851..e2070353f93f 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-@@ -17,6 +17,7 @@
- #include <media/videobuf2-v4l2.h>
- 
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+index bba825db8322..0c1e159537a7 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+@@ -12,6 +12,26 @@
  #include "sun6i_csi.h"
-+#include "sun6i_csi_bridge.h"
- #include "sun6i_csi_capture.h"
- #include "sun6i_csi_reg.h"
+ #include "sun6i_csi_bridge.h"
  
-@@ -455,20 +456,20 @@ sun6i_csi_capture_configure_interface(struct sun6i_csi_device *csi_dev)
++/* Helpers */
++
++void sun6i_csi_bridge_dimensions(struct sun6i_csi_device *csi_dev,
++				 unsigned int *width, unsigned int *height)
++{
++	if (width)
++		*width = csi_dev->bridge.mbus_format.width;
++	if (height)
++		*height = csi_dev->bridge.mbus_format.height;
++}
++
++void sun6i_csi_bridge_format(struct sun6i_csi_device *csi_dev,
++			     u32 *mbus_code, u32 *field)
++{
++	if (mbus_code)
++		*mbus_code = csi_dev->bridge.mbus_format.code;
++	if (field)
++		*field = csi_dev->bridge.mbus_format.field;
++}
++
+ /* Format */
  
- static void sun6i_csi_capture_configure_format(struct sun6i_csi_device *csi_dev)
- {
--	struct sun6i_csi_capture *capture = &csi_dev->capture;
--	u32 pixelformat, field;
-+	u32 mbus_code, pixelformat, field;
- 	u32 cfg = 0;
- 	u32 val;
- 
- 	sun6i_csi_capture_format(csi_dev, &pixelformat, &field);
-+	sun6i_csi_bridge_format(csi_dev, &mbus_code, NULL);
- 
--	val = get_csi_input_format(csi_dev, capture->mbus_code, pixelformat);
-+	val = get_csi_input_format(csi_dev, mbus_code, pixelformat);
- 	cfg |= SUN6I_CSI_CH_CFG_INPUT_FMT(val);
- 
- 	val = get_csi_output_format(csi_dev, pixelformat, field);
- 	cfg |= SUN6I_CSI_CH_CFG_OUTPUT_FMT(val);
- 
--	val = get_csi_input_seq(csi_dev, capture->mbus_code, pixelformat);
-+	val = get_csi_input_seq(csi_dev, mbus_code, pixelformat);
- 	cfg |= SUN6I_CSI_CH_CFG_INPUT_YUV_SEQ(val);
- 
- 	if (field == V4L2_FIELD_TOP)
-@@ -739,11 +740,6 @@ static int sun6i_csi_capture_start_streaming(struct vb2_queue *queue,
- 	if (ret < 0)
- 		goto error_state;
- 
--	if (capture->mbus_code == 0) {
--		ret = -EINVAL;
--		goto error_media_pipeline;
--	}
--
- 	subdev = sun6i_csi_capture_remote_subdev(capture, NULL);
- 	if (!subdev) {
- 		ret = -EINVAL;
-@@ -1076,8 +1072,6 @@ static int sun6i_csi_capture_link_validate(struct media_link *link)
- 	struct v4l2_subdev_format source_fmt;
- 	int ret;
- 
--	capture->mbus_code = 0;
--
- 	if (!media_entity_remote_pad(link->sink->entity->pads)) {
- 		dev_info(csi_dev->dev, "capture node %s pad not connected\n",
- 			 vdev->name);
-@@ -1109,8 +1103,6 @@ static int sun6i_csi_capture_link_validate(struct media_link *link)
- 		return -EPIPE;
- 	}
- 
--	capture->mbus_code = source_fmt.format.code;
--
- 	return 0;
- }
- 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-index 02bdf45f7ca5..3b9759e1563d 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-@@ -39,7 +39,6 @@ struct sun6i_csi_capture {
- 	struct media_pad		pad;
- 
- 	struct v4l2_format		format;
--	u32				mbus_code;
+ static const u32 sun6i_csi_bridge_mbus_codes[] = {
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
+index f9bf87bf3667..5e6448aa522f 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
+@@ -41,6 +41,13 @@ struct sun6i_csi_bridge {
+ 	struct sun6i_csi_bridge_source	source_parallel;
  };
  
- void sun6i_csi_capture_dimensions(struct sun6i_csi_device *csi_dev,
++/* Helpers */
++
++void sun6i_csi_bridge_dimensions(struct sun6i_csi_device *csi_dev,
++				 unsigned int *width, unsigned int *height);
++void sun6i_csi_bridge_format(struct sun6i_csi_device *csi_dev,
++			     u32 *mbus_code, u32 *field);
++
+ /* Bridge */
+ 
+ int sun6i_csi_bridge_setup(struct sun6i_csi_device *csi_dev);
 -- 
 2.35.2
 
