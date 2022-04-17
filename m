@@ -2,100 +2,305 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E4AEC433FE
-	for <linux-media@archiver.kernel.org>; Sat, 16 Apr 2022 22:17:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE041C433F5
+	for <linux-media@archiver.kernel.org>; Sun, 17 Apr 2022 12:10:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiDPWUP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 16 Apr 2022 18:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
+        id S234020AbiDQMMv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 17 Apr 2022 08:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiDPWUO (ORCPT
+        with ESMTP id S234030AbiDQMMs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 16 Apr 2022 18:20:14 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2E9E6D;
-        Sat, 16 Apr 2022 15:17:41 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-e5bdd14b59so1531796fac.11;
-        Sat, 16 Apr 2022 15:17:41 -0700 (PDT)
+        Sun, 17 Apr 2022 08:12:48 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B143DF07;
+        Sun, 17 Apr 2022 05:10:13 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id n40-20020a05600c3ba800b0038ff1939b16so6252641wms.2;
+        Sun, 17 Apr 2022 05:10:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Du11iDI+Cu/JqtV2c54FHoNA7YFRAOPPpSo4RvNH1Hk=;
+        b=n+SmJjPD5f8c/UdOa7Bo6MoJFlzPss0CF+km0+vOVgiTmL2o7/WDk9TjIWSSQN6XFL
+         e5a4djYWEAIPpa2aWj1q53lOjXpSNtkDWnERICOj8QDCHoK3LsMds1uBa1Bb1jpKxwuT
+         SfhISzkd+LJZnQj52yY+PIF5pkd2g/LadfhCtvVbzd79D9RoLqTFxqaxQeGWMEHtZPix
+         ++YWcsoJsk7m2zb/S/KtJMnAmJ1mW08pbY7FlUiJ54u83zJjvfW5BUbOYbCrLdt/hDnT
+         /8XSCBObEgxmkbeY0xQTN9O99qqTXpyYHhFmSnsm2skJNRmyRU8sh30E0wkY7IpXOSE7
+         RG2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=7dPcFs565C9c1WFXikvbzN8qlHn8qJL0dUAk+7Q/+p0=;
-        b=TLa8UZ+sDlYr2yJBFVXvUBIghsB7i2bPqTGG1iR/sCGk4iZ2FkeCD+NfOv2EHeIJqZ
-         iQy25dTUbdizs7rTfsbnWCg1MqeR+MtYE1KQGh8NqsRFP4hb3+g/H7IyaKbdVUok6B74
-         vAA2IRQiCSSaY4ISdvhU0M48IK2EV6sRyT4KuZcGU+T9f/+XdjC5pTDoC+RiIQoO0KhX
-         iBKoBHkU5dZHStc1GcaOQkYKlY1tjaHcsAD/su3T49L3smtpEa10rRpfwnG1rkAqM5Xo
-         6KhPQ8bZw7/ayxE7eLA7RDpcw90s9AJa+lN8CgTNeG92Zp070zEi5nFCA2NS91k1mAaC
-         8fUw==
-X-Gm-Message-State: AOAM533j8tJmKmRHusEarV5p/Uj79+/Jtcf0fcX7fZfawBgc4wYjKxm6
-        Ozx//qzQPv2PJvI6Wdrl1w==
-X-Google-Smtp-Source: ABdhPJzcOBOFLYRBnjRkFKYm36bRA1+9aCycXC6AAhf5bxP7oOLONMn2t+h7bqsghdRFSNm7zPU0jg==
-X-Received: by 2002:a05:6871:58c:b0:e3:25e9:6792 with SMTP id u12-20020a056871058c00b000e325e96792mr3791936oan.147.1650147460477;
-        Sat, 16 Apr 2022 15:17:40 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id os2-20020a0568707d0200b000e42ef7cff2sm2727982oab.43.2022.04.16.15.17.39
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Du11iDI+Cu/JqtV2c54FHoNA7YFRAOPPpSo4RvNH1Hk=;
+        b=oqOGHDev3WYpUphfHZzkBaXgxGzz8WxBrCv0rjy0A5eEEGs6fF5A4fI5HGOoDY7s4B
+         xKIKftVdXP1Vkp1cNF8dlOlFjAbX0X4ptD0MWyNlCdzk7Pecg8oFC29N6vfp+Fv3xJul
+         mmCJa5tzrDFgiib2RY8HutNskMWPn2JzCTnNdZp9+Nqh0jRUdycBnu++PmMfsz0y2mrW
+         OLgqGm0OdBBxj4IP+2WKDRBap9gqP6PFohVqU4bkLreXU1uo4Pz9uXiSVhsOo2hNiNXN
+         SfHDSgWDy42AoVaQ+NlffTjpJeAaZecrDT2UpW6WEcXwP+ak1QCk91bxSoqSABtaYHzV
+         35Mg==
+X-Gm-Message-State: AOAM530bbz8+VY/maMLkj4i8PDZ+y3HX44O3EnHu7n3Pncw610tr+KAH
+        /WHJjr+AU7LPwt65a6931fW1hKsMJgU=
+X-Google-Smtp-Source: ABdhPJxSbcmRPNoxRY9Sfg0txvxHnvUiGYkFFVJqwE3NVviC/9TUdSOW7c+6EENDSsGxgofHXc/6yQ==
+X-Received: by 2002:a05:600c:2744:b0:38e:b6f7:d548 with SMTP id 4-20020a05600c274400b0038eb6f7d548mr11164904wmw.49.1650197411537;
+        Sun, 17 Apr 2022 05:10:11 -0700 (PDT)
+Received: from localhost.localdomain ([141.72.243.13])
+        by smtp.gmail.com with ESMTPSA id l22-20020a05600c4f1600b00392889d04c4sm4949393wmq.23.2022.04.17.05.10.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Apr 2022 15:17:40 -0700 (PDT)
-Received: (nullmailer pid 3544946 invoked by uid 1000);
-        Sat, 16 Apr 2022 22:17:39 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>
-In-Reply-To: <20220415153708.637804-2-paul.kocialkowski@bootlin.com>
-References: <20220415153708.637804-1-paul.kocialkowski@bootlin.com> <20220415153708.637804-2-paul.kocialkowski@bootlin.com>
-Subject: Re: [PATCH v3 1/4] dt-bindings: media: Add Allwinner A31 ISP bindings documentation
-Date:   Sat, 16 Apr 2022 17:17:39 -0500
-Message-Id: <1650147459.143664.3544945.nullmailer@robh.at.kernel.org>
+        Sun, 17 Apr 2022 05:10:11 -0700 (PDT)
+From:   Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+Subject: [PATCH] media: i2c: tw2804: Use ARRAY_SIZE instead of manual checking
+Date:   Sun, 17 Apr 2022 14:09:59 +0200
+Message-Id: <20220417120959.16977-1-mosescb.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, 15 Apr 2022 17:37:05 +0200, Paul Kocialkowski wrote:
-> This introduces YAML bindings documentation for the Allwinner A31 Image
-> Signal Processor (ISP).
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  .../media/allwinner,sun6i-a31-isp.yaml        | 117 ++++++++++++++++++
->  1 file changed, 117 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> 
+this driver currently uses a terminator(0xFF, 0xFF) to check for the
+end of a reg-val list, instead a struct array with ARRAY_SIZE macro
+from linux/kernel.h can be used to obtain the length of the array.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+---
+ drivers/media/i2c/tw2804.c | 177 +++++++++++++++++++------------------
+ 1 file changed, 91 insertions(+), 86 deletions(-)
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml:73:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-./Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml:75:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/drivers/media/i2c/tw2804.c b/drivers/media/i2c/tw2804.c
+index cd05f1ff504d..87842d178361 100644
+--- a/drivers/media/i2c/tw2804.c
++++ b/drivers/media/i2c/tw2804.c
+@@ -6,6 +6,7 @@
+ #include <linux/module.h>
+ #include <linux/init.h>
+ #include <linux/i2c.h>
++#include <linux/kernel.h>
+ #include <linux/videodev2.h>
+ #include <linux/ioctl.h>
+ #include <linux/slab.h>
+@@ -32,75 +33,77 @@ struct tw2804 {
+ 	int norm;
+ };
+ 
+-static const u8 global_registers[] = {
+-	0x39, 0x00,
+-	0x3a, 0xff,
+-	0x3b, 0x84,
+-	0x3c, 0x80,
+-	0x3d, 0x80,
+-	0x3e, 0x82,
+-	0x3f, 0x82,
+-	0x78, 0x00,
+-	0xff, 0xff, /* Terminator (reg 0xff does not exist) */
++struct reg_val  {
++	u8 reg;
++	u8 val;
++};
++static const struct reg_val global_registers[] = {
++	{0x39, 0x00},
++	{0x3a, 0xff},
++	{0x3b, 0x84},
++	{0x3c, 0x80},
++	{0x3d, 0x80},
++	{0x3e, 0x82},
++	{0x3f, 0x82},
++	{0x78, 0x00},
+ };
+ 
+-static const u8 channel_registers[] = {
+-	0x01, 0xc4,
+-	0x02, 0xa5,
+-	0x03, 0x20,
+-	0x04, 0xd0,
+-	0x05, 0x20,
+-	0x06, 0xd0,
+-	0x07, 0x88,
+-	0x08, 0x20,
+-	0x09, 0x07,
+-	0x0a, 0xf0,
+-	0x0b, 0x07,
+-	0x0c, 0xf0,
+-	0x0d, 0x40,
+-	0x0e, 0xd2,
+-	0x0f, 0x80,
+-	0x10, 0x80,
+-	0x11, 0x80,
+-	0x12, 0x80,
+-	0x13, 0x1f,
+-	0x14, 0x00,
+-	0x15, 0x00,
+-	0x16, 0x00,
+-	0x17, 0x00,
+-	0x18, 0xff,
+-	0x19, 0xff,
+-	0x1a, 0xff,
+-	0x1b, 0xff,
+-	0x1c, 0xff,
+-	0x1d, 0xff,
+-	0x1e, 0xff,
+-	0x1f, 0xff,
+-	0x20, 0x07,
+-	0x21, 0x07,
+-	0x22, 0x00,
+-	0x23, 0x91,
+-	0x24, 0x51,
+-	0x25, 0x03,
+-	0x26, 0x00,
+-	0x27, 0x00,
+-	0x28, 0x00,
+-	0x29, 0x00,
+-	0x2a, 0x00,
+-	0x2b, 0x00,
+-	0x2c, 0x00,
+-	0x2d, 0x00,
+-	0x2e, 0x00,
+-	0x2f, 0x00,
+-	0x30, 0x00,
+-	0x31, 0x00,
+-	0x32, 0x00,
+-	0x33, 0x00,
+-	0x34, 0x00,
+-	0x35, 0x00,
+-	0x36, 0x00,
+-	0x37, 0x00,
+-	0xff, 0xff, /* Terminator (reg 0xff does not exist) */
++static const struct reg_val channel_registers[] = {
++	{0x01, 0xc4},
++	{0x02, 0xa5},
++	{0x03, 0x20},
++	{0x04, 0xd0},
++	{0x05, 0x20},
++	{0x06, 0xd0},
++	{0x07, 0x88},
++	{0x08, 0x20},
++	{0x09, 0x07},
++	{0x0a, 0xf0},
++	{0x0b, 0x07},
++	{0x0c, 0xf0},
++	{0x0d, 0x40},
++	{0x0e, 0xd2},
++	{0x0f, 0x80},
++	{0x10, 0x80},
++	{0x11, 0x80},
++	{0x12, 0x80},
++	{0x13, 0x1f},
++	{0x14, 0x00},
++	{0x15, 0x00},
++	{0x16, 0x00},
++	{0x17, 0x00},
++	{0x18, 0xff},
++	{0x19, 0xff},
++	{0x1a, 0xff},
++	{0x1b, 0xff},
++	{0x1c, 0xff},
++	{0x1d, 0xff},
++	{0x1e, 0xff},
++	{0x1f, 0xff},
++	{0x20, 0x07},
++	{0x21, 0x07},
++	{0x22, 0x00},
++	{0x23, 0x91},
++	{0x24, 0x51},
++	{0x25, 0x03},
++	{0x26, 0x00},
++	{0x27, 0x00},
++	{0x28, 0x00},
++	{0x29, 0x00},
++	{0x2a, 0x00},
++	{0x2b, 0x00},
++	{0x2c, 0x00},
++	{0x2d, 0x00},
++	{0x2e, 0x00},
++	{0x2f, 0x00},
++	{0x30, 0x00},
++	{0x31, 0x00},
++	{0x32, 0x00},
++	{0x33, 0x00},
++	{0x34, 0x00},
++	{0x35, 0x00},
++	{0x36, 0x00},
++	{0x37, 0x00},
+ };
+ 
+ static int write_reg(struct i2c_client *client, u8 reg, u8 value, u8 channel)
+@@ -108,16 +111,17 @@ static int write_reg(struct i2c_client *client, u8 reg, u8 value, u8 channel)
+ 	return i2c_smbus_write_byte_data(client, reg | (channel << 6), value);
+ }
+ 
+-static int write_regs(struct i2c_client *client, const u8 *regs, u8 channel)
++static int write_regs(struct i2c_client *client, const struct reg_val *rv,
++		      int len, u8 channel)
+ {
+ 	int ret;
+-	int i;
+ 
+-	for (i = 0; regs[i] != 0xff; i += 2) {
++	while (--len >= 0) {
+ 		ret = i2c_smbus_write_byte_data(client,
+-				regs[i] | (channel << 6), regs[i + 1]);
++				rv->reg | (channel << 6), rv->val);
+ 		if (ret < 0)
+ 			return ret;
++		rv++;
+ 	}
+ 	return 0;
+ }
+@@ -252,21 +256,20 @@ static int tw2804_s_std(struct v4l2_subdev *sd, v4l2_std_id norm)
+ 	struct tw2804 *dec = to_state(sd);
+ 	struct i2c_client *client = v4l2_get_subdevdata(sd);
+ 	bool is_60hz = norm & V4L2_STD_525_60;
+-	u8 regs[] = {
+-		0x01, is_60hz ? 0xc4 : 0x84,
+-		0x09, is_60hz ? 0x07 : 0x04,
+-		0x0a, is_60hz ? 0xf0 : 0x20,
+-		0x0b, is_60hz ? 0x07 : 0x04,
+-		0x0c, is_60hz ? 0xf0 : 0x20,
+-		0x0d, is_60hz ? 0x40 : 0x4a,
+-		0x16, is_60hz ? 0x00 : 0x40,
+-		0x17, is_60hz ? 0x00 : 0x40,
+-		0x20, is_60hz ? 0x07 : 0x0f,
+-		0x21, is_60hz ? 0x07 : 0x0f,
+-		0xff, 0xff,
++	struct reg_val regs[] = {
++		{0x01, is_60hz ? 0xc4 : 0x84},
++		{0x09, is_60hz ? 0x07 : 0x04},
++		{0x0a, is_60hz ? 0xf0 : 0x20},
++		{0x0b, is_60hz ? 0x07 : 0x04},
++		{0x0c, is_60hz ? 0xf0 : 0x20},
++		{0x0d, is_60hz ? 0x40 : 0x4a},
++		{0x16, is_60hz ? 0x00 : 0x40},
++		{0x17, is_60hz ? 0x00 : 0x40},
++		{0x20, is_60hz ? 0x07 : 0x0f},
++		{0x21, is_60hz ? 0x07 : 0x0f},
+ 	};
+ 
+-	write_regs(client, regs, dec->channel);
++	write_regs(client, regs, ARRAY_SIZE(regs), dec->channel);
+ 	dec->norm = norm;
+ 	return 0;
+ }
+@@ -288,12 +291,14 @@ static int tw2804_s_video_routing(struct v4l2_subdev *sd, u32 input, u32 output,
+ 		dev_dbg(&client->dev, "initializing TW2804 channel %d\n",
+ 			dec->channel);
+ 		if (dec->channel == 0 &&
+-				write_regs(client, global_registers, 0) < 0) {
++				write_regs(client, global_registers,
++					   ARRAY_SIZE(global_registers), 0) < 0) {
+ 			dev_err(&client->dev,
+ 				"error initializing TW2804 global registers\n");
+ 			return -EIO;
+ 		}
+-		if (write_regs(client, channel_registers, dec->channel) < 0) {
++		if (write_regs(client, channel_registers,
++			       ARRAY_SIZE(channel_registers), dec->channel) < 0) {
+ 			dev_err(&client->dev,
+ 				"error initializing TW2804 channel %d\n",
+ 				dec->channel);
+-- 
+2.30.2
 
