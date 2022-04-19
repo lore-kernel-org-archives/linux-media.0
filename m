@@ -2,39 +2,39 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A582C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E90BAC4332F
 	for <linux-media@archiver.kernel.org>; Tue, 19 Apr 2022 13:36:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244740AbiDSNir (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Apr 2022 09:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S245118AbiDSNis (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Apr 2022 09:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244693AbiDSNiq (ORCPT
+        with ESMTP id S244565AbiDSNip (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:38:46 -0400
+        Tue, 19 Apr 2022 09:38:45 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B260C37A1A;
-        Tue, 19 Apr 2022 06:36:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC7E37A0A;
+        Tue, 19 Apr 2022 06:35:59 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 49A6C1F418A1
+        with ESMTPSA id 9B74A1F4187E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650375360;
-        bh=ocUjKBQRtS1wz0vGDv2AACyasED2cCrcmqG1Y3gxn9Q=;
+        s=mail; t=1650375358;
+        bh=vk7NPyGDSW72/CR4xSo5sVXXJXssU0zofQEVBf5A+AY=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ovZBUC+TjhSYlr3SJZPhoeAJGHEPCMNOCfvTxnh7nkSaZ0lFdYd92Xe9Hk/5R2737
-         ketAtfvETvX1Tpbx6Ht9EynGNgbe5JSmbZtfPDexpX+IduqggrhOlIJFqjYLqltUCV
-         Yz2air4Wr/Yr7fjhVhVU/IQnFUJiAqHM3QD4S1PdWiW41aBELzgap5Blu7Oo5oLVTq
-         +V537Qup6qp2XXNQsvnbo8P41LINm8cZFQpfJIxDH92sg2Aje1uBpRBNxOEAgUDmck
-         cUfqM/naWGJ/2G+h4+0+S8PQl5yjVVxk+HnWNsI5/J6TgMVVpjYNdhW2eNxd9fQg2F
-         o8O5rASOxoGlQ==
-Message-ID: <4743441e-b89d-966d-ef9a-d1c306416587@collabora.com>
-Date:   Tue, 19 Apr 2022 15:35:56 +0200
+        b=f01zmwqY3k7nWQyNOvc1+vVhsQbIghHhQj08MOKnUG9yApdtM80a/S5sNnJ0R44J3
+         1wGK04tXRdIGUxF4iP5LWyLxYDs3UnvymibKmO9Gb8w19iwwlHHRcJhhPe13K5Ms+h
+         rolUkI+krrLLzIyJ3CIg0ANPH2T8b7Rr/I12FqVI5A2f3xcCDrEn/hakRtcYdSe1ZS
+         Nbcs6OYtydQCKTGxtiYFr2xPwNFyLDzw1jfkn9EEr2BoS6RMwebpVVZwyXkSHlKq9H
+         OOc/QN3TegPbz8UBMJ7RXlNU135+hWlKHkTGQtfMhKLwTvb06vhN16wfRxGBEFBDoh
+         wKKHUroB6FRsw==
+Message-ID: <0c43ed35-db14-9578-16ff-f4c15347929e@collabora.com>
+Date:   Tue, 19 Apr 2022 15:35:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v16 3/6] dt-bindings: soc: mediatek: move out common
- module from display folder
+Subject: Re: [PATCH v16 6/6] soc: mediatek: mutex: add functions that operate
+ registers by CMDQ
 Content-Language: en-US
 To:     Moudy Ho <moudy.ho@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -58,10 +58,10 @@ Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         srv_heupstream@mediatek.com,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220418083018.1907-1-moudy.ho@mediatek.com>
- <20220418083018.1907-4-moudy.ho@mediatek.com>
+ <20220418083018.1907-7-moudy.ho@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220418083018.1907-4-moudy.ho@mediatek.com>
+In-Reply-To: <20220418083018.1907-7-moudy.ho@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -69,12 +69,14 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Il 18/04/22 10:30, Moudy Ho ha scritto:
-> In order to share the same hardware information with MDP3,
-> change the MUTEX dt-binding to the path "soc/mediatek".
+> Due to HW limitations, MDP3 is necessary to enable MUTEX in each frame
+> for SOF triggering and cooperate with CMDQ control to reduce the amount
+> of interrupts generated(also, reduce frame latency).
+> 
+> In response to the above situation, a new interface
+> "mtk_mutex_enable_by_cmdq" has been added to achieve the purpose.
 > 
 > Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> Acked-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
