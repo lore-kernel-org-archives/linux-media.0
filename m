@@ -2,27 +2,27 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CD63C433F5
-	for <linux-media@archiver.kernel.org>; Tue, 19 Apr 2022 07:26:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2EE8C433FE
+	for <linux-media@archiver.kernel.org>; Tue, 19 Apr 2022 07:26:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240255AbiDSH2o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1349322AbiDSH2o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 19 Apr 2022 03:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232480AbiDSH2m (ORCPT
+        with ESMTP id S233492AbiDSH2m (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 19 Apr 2022 03:28:42 -0400
-Received: from mo-csw.securemx.jp (mo-csw1514.securemx.jp [210.130.202.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8811FDEA7;
+Received: from mo-csw.securemx.jp (mo-csw1516.securemx.jp [210.130.202.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FFCBF4F;
         Tue, 19 Apr 2022 00:25:59 -0700 (PDT)
-Received: by mo-csw.securemx.jp (mx-mo-csw1514) id 23J7PetR020667; Tue, 19 Apr 2022 16:25:40 +0900
-X-Iguazu-Qid: 34truvr3U0nGBrJEnS
-X-Iguazu-QSIG: v=2; s=0; t=1650353139; q=34truvr3U0nGBrJEnS; m=VHOr+lIfuTPxHuWwftgQJu1GkFNqW53efyQxgRb/t9I=
+Received: by mo-csw.securemx.jp (mx-mo-csw1516) id 23J7PdWU030637; Tue, 19 Apr 2022 16:25:40 +0900
+X-Iguazu-Qid: 34trMBIs3Na1y4kWSk
+X-Iguazu-QSIG: v=2; s=0; t=1650353139; q=34trMBIs3Na1y4kWSk; m=uXFWnbtiQ23UePFHNF7vTD0gPGLu65yRjXE5K8HzdWY=
 Received: from imx12-a.toshiba.co.jp (imx12-a.toshiba.co.jp [61.202.160.135])
-        by relay.securemx.jp (mx-mr1511) id 23J7PcLh011506
+        by relay.securemx.jp (mx-mr1510) id 23J7Pcgu036787
         (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
         Tue, 19 Apr 2022 16:25:38 +0900
-X-SA-MID: 2667864
+X-SA-MID: 2667865
 From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
 To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         Sumit Semwal <sumit.semwal@linaro.org>,
@@ -30,42 +30,62 @@ To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org, yuji2.ishikawa@toshiba.co.jp
-Subject: [PATCH 4/4] MAINTAINERS: Add entries for Toshiba Visconti AFFINE image processing accelerator
-Date:   Tue, 19 Apr 2022 16:20:18 +0900
+Subject: [PATCH 0/4] Add Toshiba Visconti AFFINE image processing accelerator driver
+Date:   Tue, 19 Apr 2022 16:20:14 +0900
 X-TSB-HOP2: ON
-Message-Id: <20220419072018.30057-5-yuji2.ishikawa@toshiba.co.jp>
+Message-Id: <20220419072018.30057-1-yuji2.ishikawa@toshiba.co.jp>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220419072018.30057-1-yuji2.ishikawa@toshiba.co.jp>
-References: <20220419072018.30057-1-yuji2.ishikawa@toshiba.co.jp>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+This series is the AFFINE image processing accelerator driver for Toshiba's ARM SoC, Visconti[0].
+This provides DT binding documentation, device driver, MAINTAINER files.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dd36acc87..231b2c6f9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2796,12 +2796,14 @@ F:	Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
- F:	Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
- F:	Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/toshiba,visconti-pinctrl.yaml
-+F:  Documentation/devicetree/bindings/soc/visconti/
- F:	Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
- F:	arch/arm64/boot/dts/toshiba/
- F:	drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
- F:	drivers/gpio/gpio-visconti.c
- F:	drivers/pci/controller/dwc/pcie-visconti.c
- F:	drivers/pinctrl/visconti/
-+F:	drivers/soc/visconti/
- F:	drivers/watchdog/visconti_wdt.c
- N:	visconti
- 
+Best regards,
+Yuji
+
+[0]: https://toshiba.semicon-storage.com/ap-en/semiconductor/product/image-recognition-processors-visconti.html
+
+Yuji Ishikawa (4):
+  dt-bindings: soc: visconti: Add Toshiba Visconti AFFINE image
+    processing accelerator bindings
+  soc: visconti: Add Toshiba Visconti image processing accelerator
+    common source
+  soc: visconti: Add Toshiba Visconti AFFINE image processing
+    accelerator
+  MAINTAINERS: Add entries for Toshiba Visconti AFFINE image processing
+    accelerator
+
+ .../soc/visconti/toshiba,visconti-affine.yaml |  53 ++
+ MAINTAINERS                                   |   2 +
+ drivers/soc/Kconfig                           |   1 +
+ drivers/soc/Makefile                          |   1 +
+ drivers/soc/visconti/Kconfig                  |   7 +
+ drivers/soc/visconti/Makefile                 |   8 +
+ drivers/soc/visconti/affine/Makefile          |   6 +
+ drivers/soc/visconti/affine/affine.c          | 451 ++++++++++++++++++
+ drivers/soc/visconti/affine/hwd_affine.c      | 207 ++++++++
+ drivers/soc/visconti/affine/hwd_affine.h      |  83 ++++
+ drivers/soc/visconti/affine/hwd_affine_reg.h  |  45 ++
+ drivers/soc/visconti/ipa_common.c             |  55 +++
+ drivers/soc/visconti/ipa_common.h             |  19 +
+ drivers/soc/visconti/uapi/affine.h            |  87 ++++
+ drivers/soc/visconti/uapi/ipa.h               |  87 ++++
+ 15 files changed, 1112 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/visconti/toshiba,visconti-affine.yaml
+ create mode 100644 drivers/soc/visconti/Kconfig
+ create mode 100644 drivers/soc/visconti/Makefile
+ create mode 100644 drivers/soc/visconti/affine/Makefile
+ create mode 100644 drivers/soc/visconti/affine/affine.c
+ create mode 100644 drivers/soc/visconti/affine/hwd_affine.c
+ create mode 100644 drivers/soc/visconti/affine/hwd_affine.h
+ create mode 100644 drivers/soc/visconti/affine/hwd_affine_reg.h
+ create mode 100644 drivers/soc/visconti/ipa_common.c
+ create mode 100644 drivers/soc/visconti/ipa_common.h
+ create mode 100644 drivers/soc/visconti/uapi/affine.h
+ create mode 100644 drivers/soc/visconti/uapi/ipa.h
+
 -- 
 2.17.1
 
