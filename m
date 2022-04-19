@@ -2,39 +2,39 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F5C5C4321E
-	for <linux-media@archiver.kernel.org>; Tue, 19 Apr 2022 13:36:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A206CC433F5
+	for <linux-media@archiver.kernel.org>; Tue, 19 Apr 2022 13:36:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345485AbiDSNit (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Apr 2022 09:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
+        id S1348515AbiDSNiu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Apr 2022 09:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244605AbiDSNip (ORCPT
+        with ESMTP id S242586AbiDSNiq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:38:45 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2697437A03;
-        Tue, 19 Apr 2022 06:35:59 -0700 (PDT)
+        Tue, 19 Apr 2022 09:38:46 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D9B377C4;
+        Tue, 19 Apr 2022 06:36:03 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 04A051F4189B
+        with ESMTPSA id E9FB11F41949
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650375358;
-        bh=CLJk3c9oJ2tisq5+0Tred5vvArQwwllO49JGhi/m3Sc=;
+        s=mail; t=1650375362;
+        bh=kFgZwklCLt9uY71SZ4MBle/pcGaF0o432ETt0n7h+nI=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=e3vTQeFNEXXBsciJkPie7VuCezMNfw/AJ+iFMyOV2osU2gRMKb3YXHi7YV0XqzV1+
-         nVf7ocCj96E0VysaDA/xQVg6h4415Ut8uiKevzlPhGlYzjjQnmRl6ZJcWgkffPzXI6
-         BY/2hJReqN4qT6sAp8SflPrGAB3a7h4mEdTjeSokqshfKRqCEA9iUb76/mwLbe2coF
-         e8nq0w4siVmhC0MiHWU6RpkRDft9bpKKoCRp6YmSaZbmzt+seUpio3HNu2kWEuVsek
-         RfImnL28rFCk7szFsk21Fr3CREhjSdNG0SHlUoVMfVGiGgg+/Civ1BrFttyPovrns2
-         8CLBxs0gyF3Lw==
-Message-ID: <d821a326-7586-62eb-aba3-1df4d0ad20a5@collabora.com>
-Date:   Tue, 19 Apr 2022 15:35:54 +0200
+        b=HrjI+cYon1IK45n0Q9IlZPHlV6AwtIBuPD57SgOHXdsyyJPJiFd0TSX9TqUOQcIWz
+         1zgGk74CovGY743Fbb9PvdeenkW8d+bMcm4nowOlcFcNS2Sa7xp4q8udvEvwlf2/uQ
+         LPAzwT5fE/Fol/Aio4OeRypMBm0RD6Gs74UgdH76mc80UKgRPugXRoPQlOV69MK0IC
+         aVWredpPlLLvPCdWAVKCH1UjM6XMKkTrhnV0BShopwbY2rZlLIEk1qj9KsN6fFPR1O
+         33FAJ59c4qdDEPDshl4glCt8NclTnXClnM4Jwfo5dRpGNxTrGxqeNuHuJKmCmWtEe4
+         /0cv53df3hLGg==
+Message-ID: <6bd8dff2-1ed6-de6a-4759-5b2035ae7df5@collabora.com>
+Date:   Tue, 19 Apr 2022 15:35:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v16 5/6] dts: arm64: mt8183: add GCE client property for
- Mediatek MUTEX
+Subject: Re: [PATCH v16 2/6] soc: mediatek: mutex: add 8183 MUTEX MOD settings
+ for MDP
 Content-Language: en-US
 To:     Moudy Ho <moudy.ho@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -58,10 +58,10 @@ Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         srv_heupstream@mediatek.com,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220418083018.1907-1-moudy.ho@mediatek.com>
- <20220418083018.1907-6-moudy.ho@mediatek.com>
+ <20220418083018.1907-3-moudy.ho@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220418083018.1907-6-moudy.ho@mediatek.com>
+In-Reply-To: <20220418083018.1907-3-moudy.ho@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -69,8 +69,9 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Il 18/04/22 10:30, Moudy Ho ha scritto:
-> In order to allow modules with latency requirements such as MDP3
-> to set registers through CMDQ, add the relevant dts property.
+> For the purpose of module independence, related settings should be moved
+> from MDP to the corresponding driver.
+> This patch adds 8183 MUTEX MOD settings for MDP.
 > 
 > Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 
