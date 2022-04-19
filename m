@@ -2,139 +2,115 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A3C7C433F5
-	for <linux-media@archiver.kernel.org>; Tue, 19 Apr 2022 07:03:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4A3FC433EF
+	for <linux-media@archiver.kernel.org>; Tue, 19 Apr 2022 07:26:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239160AbiDSHGT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Apr 2022 03:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
+        id S1349315AbiDSH2n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Apr 2022 03:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237092AbiDSHGS (ORCPT
+        with ESMTP id S240255AbiDSH2m (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Apr 2022 03:06:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8B82AE07
-        for <linux-media@vger.kernel.org>; Tue, 19 Apr 2022 00:03:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B414DB8119F
-        for <linux-media@vger.kernel.org>; Tue, 19 Apr 2022 07:03:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE32C385A7;
-        Tue, 19 Apr 2022 07:03:30 +0000 (UTC)
-Message-ID: <f236221b-a1b7-8c13-c361-d7592603599c@xs4all.nl>
-Date:   Tue, 19 Apr 2022 09:03:29 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/5] media: v4l: ctrls: Add a control for temperature
-Content-Language: en-US
-To:     Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        linux-media@vger.kernel.org
-Cc:     alain.volmat@foss.st.com, hugues.fruchet@foss.st.com,
-        sylvain.petinot@foss.st.com, dave.stevenson@raspberrypi.com,
-        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
-        kieran.bingham@ideasonboard.com
-References: <20220415111845.27130-1-benjamin.mugnier@foss.st.com>
- <20220415111845.27130-3-benjamin.mugnier@foss.st.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220415111845.27130-3-benjamin.mugnier@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Tue, 19 Apr 2022 03:28:42 -0400
+Received: from mo-csw.securemx.jp (mo-csw1116.securemx.jp [210.130.202.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6ECBDEB9;
+        Tue, 19 Apr 2022 00:25:59 -0700 (PDT)
+Received: by mo-csw.securemx.jp (mx-mo-csw1116) id 23J7PcOm025490; Tue, 19 Apr 2022 16:25:38 +0900
+X-Iguazu-Qid: 2wHHhfqWLDxBrcVTZM
+X-Iguazu-QSIG: v=2; s=0; t=1650353137; q=2wHHhfqWLDxBrcVTZM; m=qld4KKnohk1Jeo9EqwachByRzp2OONvk4gUUuBo3O9M=
+Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
+        by relay.securemx.jp (mx-mr1111) id 23J7PaSC037990
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 19 Apr 2022 16:25:36 +0900
+X-SA-MID: 36308327
+From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, yuji2.ishikawa@toshiba.co.jp
+Subject: [PATCH 1/4] dt-bindings: soc: visconti: Add Toshiba Visconti AFFINE image processing accelerator bindings
+Date:   Tue, 19 Apr 2022 16:20:15 +0900
+X-TSB-HOP2: ON
+Message-Id: <20220419072018.30057-2-yuji2.ishikawa@toshiba.co.jp>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220419072018.30057-1-yuji2.ishikawa@toshiba.co.jp>
+References: <20220419072018.30057-1-yuji2.ishikawa@toshiba.co.jp>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 15/04/2022 13:18, Benjamin Mugnier wrote:
-> Add V4L2_CID_TEMPERATURE control to get temperature from sensor in
-> celsius as a volatile and read-only control, and its documentation.
+Adds the Device Tree binding documentation that allows to describe
+the AFFINE image processing accelerator found in Toshiba Visconti SoCs.
 
-celsius -> degrees Celsius
+Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+---
+ .../soc/visconti/toshiba,visconti-affine.yaml | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/visconti/toshiba,visconti-affine.yaml
 
-(see https://en.wikipedia.org/wiki/Celsius)
+diff --git a/Documentation/devicetree/bindings/soc/visconti/toshiba,visconti-affine.yaml b/Documentation/devicetree/bindings/soc/visconti/toshiba,visconti-affine.yaml
+new file mode 100644
+index 000000000..a446e1c4f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/visconti/toshiba,visconti-affine.yaml
+@@ -0,0 +1,53 @@
++# SPDX-LIcense-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/visconti/toshiba,visconti-affine.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Toshiba Visconti AFFINE image processing accelerator
++
++maintainers:
++  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
++
++description: |
++  Toshiba Visconti AFFINE image processing accelerator provides affine transform, lens undistortion and LUT transform.
++  Visconti5 have up to 2 AFFINE units.
++
++properties:
++  compatible:
++    items:
++      - const: toshiba,visconti-affine
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  index:
++    enum: [0, 1]
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - index
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++        affine0: affine@14000000 {
++            compatible = "toshiba,visconti-affine";
++            reg = <0 0x14000000 0 0x8000>;
++            interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
++            index = <0>;
++            status = "disabled";
++        };
++    };
+-- 
+2.17.1
 
-> Useful to monitor thermals from v4l controls for sensors that support
-> this.
-> 
-> Signed-off-by: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-> ---
->  Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst | 3 +++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c                  | 4 ++++
->  include/uapi/linux/v4l2-controls.h                         | 2 ++
->  3 files changed, 9 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> index 4c5061aa9cd4..26fa21f5c45a 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> @@ -661,3 +661,6 @@ enum v4l2_scene_mode -
->  .. [#f1]
->     This control may be changed to a menu control in the future, if more
->     options are required.
-> +
-> +``V4L2_CID_TEMPERATURE (integer)``
-> +    The temperature of the sensor in celsius. This is a read-only control.
-
-Ditto
-
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> index 54ca4e6b820b..45ad3edd59e0 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> @@ -1042,6 +1042,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->  	case V4L2_CID_UNIT_CELL_SIZE:		return "Unit Cell Size";
->  	case V4L2_CID_CAMERA_ORIENTATION:	return "Camera Orientation";
->  	case V4L2_CID_CAMERA_SENSOR_ROTATION:	return "Camera Sensor Rotation";
-> +	case V4L2_CID_TEMPERATURE:		return "Temperature in °C";
-
-I am not sure how well this ° symbol will work. The V4L2 spec says that this is an
-ASCII string, so that doesn't allow for this symbol.
-
-I would just call it "Temperature".
-
->  
->  	/* FM Radio Modulator controls */
->  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-> @@ -1597,6 +1598,9 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
->  	case V4L2_CID_RF_TUNER_PLL_LOCK:
->  		*flags |= V4L2_CTRL_FLAG_VOLATILE;
->  		break;
-> +	case V4L2_CID_TEMPERATURE:
-> +		*flags |= V4L2_CTRL_FLAG_READ_ONLY |
-> +			  V4L2_CTRL_FLAG_VOLATILE;
-
-Add a break!
-
->  	}
->  }
->  EXPORT_SYMBOL(v4l2_ctrl_fill);
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-> index bb40129446d4..705b4043c2de 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -1008,6 +1008,8 @@ enum v4l2_auto_focus_range {
->  
->  #define V4L2_CID_CAMERA_SENSOR_ROTATION		(V4L2_CID_CAMERA_CLASS_BASE+35)
->  
-> +#define V4L2_CID_TEMPERATURE			(V4L2_CID_CAMERA_CLASS_BASE+36)
-
-Does it make sense to add this to CAMERA_CLASS? Can't this be a generic temperature
-control? (i.e. in USER_BASE) Any device can have a temperature sensor.
-
-I also think that making this an array control would make sense as well in case there
-are multiple temperature sensors.
-
-Brainstorming some more: does this even belong here? Isn't this more a hwmon thing?
-E.g. compare this to drivers/nvme/host/hwmon.c.
-
-A hwmon implementation seems to be a more natural mechanism.
-
-Regards,
-
-	Hans
-
-> +
->  /* FM Modulator class control IDs */
->  
->  #define V4L2_CID_FM_TX_CLASS_BASE		(V4L2_CTRL_CLASS_FM_TX | 0x900)
 
