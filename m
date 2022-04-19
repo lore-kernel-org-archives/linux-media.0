@@ -2,158 +2,157 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4BEFC433F5
-	for <linux-media@archiver.kernel.org>; Tue, 19 Apr 2022 04:52:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC8C1C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 19 Apr 2022 05:07:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348501AbiDSEzK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Apr 2022 00:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
+        id S245508AbiDSFKD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Apr 2022 01:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346148AbiDSEyz (ORCPT
+        with ESMTP id S236113AbiDSFKB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 19 Apr 2022 00:54:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D20E65EA
-        for <linux-media@vger.kernel.org>; Mon, 18 Apr 2022 21:49:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2428611B5
-        for <linux-media@vger.kernel.org>; Tue, 19 Apr 2022 04:49:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9CCDC385A5
-        for <linux-media@vger.kernel.org>; Tue, 19 Apr 2022 04:49:51 +0000 (UTC)
-Date:   Tue, 19 Apr 2022 06:49:49 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-Message-Id: <20220419044951.E9CCDC385A5@smtp.kernel.org>
+        Tue, 19 Apr 2022 01:10:01 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E85165AB;
+        Mon, 18 Apr 2022 22:07:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650344840; x=1681880840;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=2FooNwxL6FD03xqTPoWADwlxnfJDakdWFI6BhQQqKoM=;
+  b=CmEYXE2M84Vw0lfLIVme967VxB1FBJISHJlTxKEoRnl0VgxnFb///q+0
+   Zodf2gLzXOckIzzZNXmzB1HZwoBi8M2dnu3da41A4zTiZkJBMNmL/v7RC
+   gB9N9V24ajU9J79qdB4OXbP3tH6y3UJRbZnnxecW5S1mVWO2bTk4nL6TX
+   w=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 18 Apr 2022 22:07:20 -0700
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 18 Apr 2022 22:07:17 -0700
+X-QCInternal: smtphost
+Received: from hu-dikshita-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.110.13])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 19 Apr 2022 10:37:09 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
+        id D35CE434D; Tue, 19 Apr 2022 10:37:07 +0530 (+0530)
+From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hverkuil-cisco@xs4all.nl
+Cc:     linux-arm-msm@vger.kernel.org, ezequiel@collabora.com,
+        stanimir.varbanov@linaro.org, quic_vgarodia@quicinc.com,
+        quic_majja@quicinc.com, quic_jdas@quicinc.com,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+Subject: [PATCH v5 1/2] media: v4l2-ctrls: Add intra-refresh type control
+Date:   Tue, 19 Apr 2022 10:36:42 +0530
+Message-Id: <1650344803-6884-2-git-send-email-quic_dikshita@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1650344803-6884-1-git-send-email-quic_dikshita@quicinc.com>
+References: <1650344803-6884-1-git-send-email-quic_dikshita@quicinc.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Add a control to set intra-refresh type.
 
-Results of the daily build of media_tree:
+Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 22 ++++++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  9 +++++++++
+ include/uapi/linux/v4l2-controls.h                 |  5 +++++
+ 3 files changed, 36 insertions(+)
 
-date:			Tue Apr 19 05:00:14 CEST 2022
-media-tree git hash:	3d59142ad94cf60b94b3dc94c19fdafa23aec8b1
-media_build git hash:	4e29721804ea4e824c776101214389642dccad98
-v4l-utils git hash:	6de743337007df7ed8161919d747bc0a397a60c5
-edid-decode git hash:	8a8d673d738ce010ca32a179032e8f6c0bb5dfb4
-gcc version:		i686-linux-gcc (GCC) 11.2.0
-sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
-sparse version:		v0.6.4-dirty
-smatch repo:            git://repo.or.cz/smatch.git
-smatch version:		v0.5.0-7885-gb67c6ed1-dirty
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: d0fc820c1f699f668ebea38361aebe1a1241fdfc
-host hardware:		x86_64
-host os:		5.16.0-6-amd64
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index 4cd7c54..c24977f 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -1180,6 +1180,28 @@ enum v4l2_mpeg_video_h264_entropy_mode -
+     is set to non zero value.
+     Applicable to H264, H263 and MPEG4 encoder.
+ 
++``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE (enum)``
++
++enum v4l2_mpeg_video_intra_refresh_period_type -
++    Sets the type of intra refresh. The period to refresh
++    the whole frame is specified by V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD.
++    Note that if this control is not present, then it is undefined what
++    refresh type is used and it is up to the driver to decide.
++    Applicable to H264 and HEVC encoders. Possible values are:
++
++.. tabularcolumns:: |p{9.6cm}|p{7.9cm}|
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM``
++      - The whole frame is completely refreshed randomly
++      after the specified period.
++    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC``
++      - The whole frame MBs are completely refreshed in cyclic order
++      after the specified period.
++
+ ``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD (integer)``
+     Intra macroblock refresh period. This sets the period to refresh
+     the whole frame. In other words, this defines the number of frames
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index 54ca4e6..16f42d2 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -572,6 +572,11 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+ 		"VBV/CPB Limit",
+ 		NULL,
+ 	};
++	static const char * const intra_refresh_period_type[] = {
++		"Random",
++		"Cyclic",
++		NULL,
++	};
+ 
+ 	switch (id) {
+ 	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
+@@ -705,6 +710,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+ 		return hevc_start_code;
+ 	case V4L2_CID_CAMERA_ORIENTATION:
+ 		return camera_orientation;
++	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
++		return intra_refresh_period_type;
+ 	default:
+ 		return NULL;
+ 	}
+@@ -834,6 +841,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:	return "Decoder Slice Interface";
+ 	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:	return "MPEG4 Loop Filter Enable";
+ 	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:	return "Number of Intra Refresh MBs";
++	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:	return "Intra Refresh Period Type";
+ 	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:		return "Intra Refresh Period";
+ 	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:		return "Frame Level Rate Control Enable";
+ 	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate Control";
+@@ -1360,6 +1368,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_STATELESS_H264_DECODE_MODE:
+ 	case V4L2_CID_STATELESS_H264_START_CODE:
+ 	case V4L2_CID_CAMERA_ORIENTATION:
++	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
+ 		*type = V4L2_CTRL_TYPE_MENU;
+ 		break;
+ 	case V4L2_CID_LINK_FREQ:
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index c8e0f84..e7df4c5 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -443,6 +443,11 @@ enum v4l2_mpeg_video_multi_slice_mode {
+ #define V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES		(V4L2_CID_CODEC_BASE+234)
+ #define V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR		(V4L2_CID_CODEC_BASE+235)
+ #define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD	(V4L2_CID_CODEC_BASE+236)
++#define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE	(V4L2_CID_CODEC_BASE+237)
++enum v4l2_mpeg_video_intra_refresh_period_type {
++	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM	= 0,
++	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC	= 1,
++};
+ 
+ /* CIDs for the MPEG-2 Part 2 (H.262) codec */
+ #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
+-- 
+2.7.4
 
-linux-git-sh: OK
-linux-git-arm-at91: OK
-linux-git-arm-stm32: OK
-linux-git-arm-davinci: OK
-linux-git-arm-pxa: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-arm-multi: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-4.4.283-i686: OK
-linux-4.4.283-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.308-i686: OK
-linux-4.9.308-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.275-i686: OK
-linux-4.14.275-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.237-i686: OK
-linux-4.19.237-x86_64: OK
-linux-4.20.17-i686: OK
-linux-4.20.17-x86_64: OK
-linux-5.0.21-i686: OK
-linux-5.0.21-x86_64: OK
-linux-5.1.21-i686: OK
-linux-5.1.21-x86_64: OK
-linux-5.2.21-i686: OK
-linux-5.2.21-x86_64: OK
-linux-5.3.18-i686: OK
-linux-5.3.18-x86_64: OK
-linux-5.5.19-i686: OK
-linux-5.5.19-x86_64: OK
-linux-5.6.19-i686: OK
-linux-5.6.19-x86_64: OK
-linux-5.7.19-i686: OK
-linux-5.7.19-x86_64: OK
-linux-5.8.18-i686: OK
-linux-5.8.18-x86_64: OK
-linux-5.9.16-i686: OK
-linux-5.9.16-x86_64: OK
-linux-5.10.109-i686: OK
-linux-5.10.109-x86_64: OK
-linux-5.11.22-i686: OK
-linux-5.11.22-x86_64: OK
-linux-5.12.19-i686: OK
-linux-5.12.19-x86_64: OK
-linux-5.14.21-i686: OK
-linux-5.14.21-x86_64: OK
-linux-5.15.32-i686: OK
-linux-5.15.32-x86_64: OK
-linux-5.16.9-i686: OK
-linux-5.16.9-x86_64: OK
-linux-5.17.1-i686: OK
-linux-5.17.1-x86_64: OK
-linux-5.18-rc1-i686: OK
-linux-5.18-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 0
-virtme-32: OK: Final Summary: 3100, Succeeded: 3100, Failed: 0, Warnings: 0
-sparse: OK
-smatch: WARNINGS
-kerneldoc: OK
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-32.log
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
