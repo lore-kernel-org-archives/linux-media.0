@@ -2,27 +2,27 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4A3FC433EF
-	for <linux-media@archiver.kernel.org>; Tue, 19 Apr 2022 07:26:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CD63C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 19 Apr 2022 07:26:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349315AbiDSH2n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 19 Apr 2022 03:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
+        id S240255AbiDSH2o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 19 Apr 2022 03:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240255AbiDSH2m (ORCPT
+        with ESMTP id S232480AbiDSH2m (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 19 Apr 2022 03:28:42 -0400
-Received: from mo-csw.securemx.jp (mo-csw1116.securemx.jp [210.130.202.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6ECBDEB9;
+Received: from mo-csw.securemx.jp (mo-csw1514.securemx.jp [210.130.202.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8811FDEA7;
         Tue, 19 Apr 2022 00:25:59 -0700 (PDT)
-Received: by mo-csw.securemx.jp (mx-mo-csw1116) id 23J7PcOm025490; Tue, 19 Apr 2022 16:25:38 +0900
-X-Iguazu-Qid: 2wHHhfqWLDxBrcVTZM
-X-Iguazu-QSIG: v=2; s=0; t=1650353137; q=2wHHhfqWLDxBrcVTZM; m=qld4KKnohk1Jeo9EqwachByRzp2OONvk4gUUuBo3O9M=
-Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
-        by relay.securemx.jp (mx-mr1111) id 23J7PaSC037990
+Received: by mo-csw.securemx.jp (mx-mo-csw1514) id 23J7PetR020667; Tue, 19 Apr 2022 16:25:40 +0900
+X-Iguazu-Qid: 34truvr3U0nGBrJEnS
+X-Iguazu-QSIG: v=2; s=0; t=1650353139; q=34truvr3U0nGBrJEnS; m=VHOr+lIfuTPxHuWwftgQJu1GkFNqW53efyQxgRb/t9I=
+Received: from imx12-a.toshiba.co.jp (imx12-a.toshiba.co.jp [61.202.160.135])
+        by relay.securemx.jp (mx-mr1511) id 23J7PcLh011506
         (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 19 Apr 2022 16:25:36 +0900
-X-SA-MID: 36308327
+        Tue, 19 Apr 2022 16:25:38 +0900
+X-SA-MID: 2667864
 From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
 To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         Sumit Semwal <sumit.semwal@linaro.org>,
@@ -30,10 +30,10 @@ To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org, yuji2.ishikawa@toshiba.co.jp
-Subject: [PATCH 1/4] dt-bindings: soc: visconti: Add Toshiba Visconti AFFINE image processing accelerator bindings
-Date:   Tue, 19 Apr 2022 16:20:15 +0900
+Subject: [PATCH 4/4] MAINTAINERS: Add entries for Toshiba Visconti AFFINE image processing accelerator
+Date:   Tue, 19 Apr 2022 16:20:18 +0900
 X-TSB-HOP2: ON
-Message-Id: <20220419072018.30057-2-yuji2.ishikawa@toshiba.co.jp>
+Message-Id: <20220419072018.30057-5-yuji2.ishikawa@toshiba.co.jp>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220419072018.30057-1-yuji2.ishikawa@toshiba.co.jp>
 References: <20220419072018.30057-1-yuji2.ishikawa@toshiba.co.jp>
@@ -41,75 +41,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds the Device Tree binding documentation that allows to describe
-the AFFINE image processing accelerator found in Toshiba Visconti SoCs.
-
 Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
 Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 ---
- .../soc/visconti/toshiba,visconti-affine.yaml | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/visconti/toshiba,visconti-affine.yaml
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/visconti/toshiba,visconti-affine.yaml b/Documentation/devicetree/bindings/soc/visconti/toshiba,visconti-affine.yaml
-new file mode 100644
-index 000000000..a446e1c4f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/visconti/toshiba,visconti-affine.yaml
-@@ -0,0 +1,53 @@
-+# SPDX-LIcense-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/visconti/toshiba,visconti-affine.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Toshiba Visconti AFFINE image processing accelerator
-+
-+maintainers:
-+  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-+
-+description: |
-+  Toshiba Visconti AFFINE image processing accelerator provides affine transform, lens undistortion and LUT transform.
-+  Visconti5 have up to 2 AFFINE units.
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: toshiba,visconti-affine
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  index:
-+    enum: [0, 1]
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - index
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+        affine0: affine@14000000 {
-+            compatible = "toshiba,visconti-affine";
-+            reg = <0 0x14000000 0 0x8000>;
-+            interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
-+            index = <0>;
-+            status = "disabled";
-+        };
-+    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index dd36acc87..231b2c6f9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2796,12 +2796,14 @@ F:	Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
+ F:	Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
+ F:	Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/toshiba,visconti-pinctrl.yaml
++F:  Documentation/devicetree/bindings/soc/visconti/
+ F:	Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
+ F:	arch/arm64/boot/dts/toshiba/
+ F:	drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
+ F:	drivers/gpio/gpio-visconti.c
+ F:	drivers/pci/controller/dwc/pcie-visconti.c
+ F:	drivers/pinctrl/visconti/
++F:	drivers/soc/visconti/
+ F:	drivers/watchdog/visconti_wdt.c
+ N:	visconti
+ 
 -- 
 2.17.1
 
