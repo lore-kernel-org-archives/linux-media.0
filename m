@@ -2,79 +2,57 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06828C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 20 Apr 2022 07:55:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 916FDC433EF
+	for <linux-media@archiver.kernel.org>; Wed, 20 Apr 2022 07:56:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376579AbiDTH57 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Apr 2022 03:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
+        id S1376550AbiDTH6o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Apr 2022 03:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376576AbiDTH55 (ORCPT
+        with ESMTP id S1376541AbiDTH6n (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Apr 2022 03:57:57 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DE026FA
-        for <linux-media@vger.kernel.org>; Wed, 20 Apr 2022 00:55:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650441312; x=1681977312;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WAPqXkrsUGPDb8IL8qK6eSoYio0dg73/vgFPIwZt4hc=;
-  b=ausvjBukFFWZSfMh005BoBLGkQumcVCQD6AXCJNaiLpzCxK5xd/wIp7o
-   OFF9dOO69dQre8gGBJ7A/wKy5yHg5DkMQcRZRQBMzyDlfBKKapD0LmsGa
-   4nIe163pcEci3Zig6ZT9Pizfun3uUzY4LqHXuTBSZdnMUyK1Zam+HQq/r
-   1ddVLwoYrT+Lb6vYcAhyt8eJpXHsBS8nf1h+NyR72dkR94kWzN/W5gXPC
-   xNrBCJWCge+hoAmJrX6kZmAqAlCE53JxlwNijeLL1S1iqmWqu0Bsc2LlO
-   XlH0rWpDJPGrMPOB1m52Ch9mEsrLCeYD9gnoC4wch+7ETZUFYSexEg/xA
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="324408578"
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="324408578"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 00:55:11 -0700
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="576471821"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 00:55:10 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 717092016F;
-        Wed, 20 Apr 2022 10:55:08 +0300 (EEST)
-Date:   Wed, 20 Apr 2022 10:55:08 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH 1/1] staging: media: ipu3-imgu: Request specific firmware
- binary
-Message-ID: <Yl+8XAD3WS0LKIEc@paasikivi.fi.intel.com>
-References: <20220413103739.622349-1-sakari.ailus@linux.intel.com>
- <Yl8e8Pw3rfJ+lhDZ@pendragon.ideasonboard.com>
+        Wed, 20 Apr 2022 03:58:43 -0400
+X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Apr 2022 00:55:58 PDT
+Received: from mail.fixingbiz.pl (mail.fixingbiz.pl [217.61.22.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF9A38A4
+        for <linux-media@vger.kernel.org>; Wed, 20 Apr 2022 00:55:57 -0700 (PDT)
+Received: by mail.fixingbiz.pl (Postfix, from userid 1001)
+        id 6900AA2D56; Wed, 20 Apr 2022 08:42:00 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fixingbiz.pl; s=mail;
+        t=1650440685; bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
+        h=Date:From:To:Subject:From;
+        b=Y0O4q4QzAFcffibEv1weLxrUd1KQynbBjqhlCp0jQ2VzWPG979E4jAxWEsxngIp11
+         aqO5HlDYqQphoWI/4XSpjbWxxi5UCSsTQeD2GFY0qXEOQrgpgeRuHgEpsXPz9qxw78
+         5rJwE+pvSuGnOjXmxwm1/7NteN5JxPWchjuB9sDv9lOvsPUsB3iDNQ2XC4hNrvLIRk
+         czx8ZRfmwct5C8O6Ch/0FiYtyLRz8NN0nPBcSeA1hUzDlO966vZHVE6W54oVTfLGrI
+         S2lpq0FTGv3uB5B3JRoNdUAuoomnPUynlJ56IvHjMWb3T37XGlcUsOe14DeKn1PdpP
+         tLIkVxjeO4qyg==
+Received: by mail.fixingbiz.pl for <linux-media@vger.kernel.org>; Wed, 20 Apr 2022 07:40:53 GMT
+Message-ID: <20220420074501-0.1.1x.6ucl.0.sk4h99zuwq@fixingbiz.pl>
+Date:   Wed, 20 Apr 2022 07:40:53 GMT
+From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
+        <przemyslaw.wroblewski@fixingbiz.pl>
+To:     <linux-media@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.fixingbiz.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yl8e8Pw3rfJ+lhDZ@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 11:43:28PM +0300, Laurent Pinchart wrote:
-> Hi Sakari,
-> 
-> Thank you for the patch.
-> 
-> On Wed, Apr 13, 2022 at 01:37:39PM +0300, Sakari Ailus wrote:
-> > Primarily request a specific revision of the IPU3 firmware that the driver
-> > is known to work with,
-> > irci_irci_ecr-master_20161208_0213_20170112_1500.bin. Some distros only
-> > ship this while others provide a symlink called ipu3-fw.bin, which the
-> > driver only requested previously.
-> 
-> Are there distros that ship ipu3-fw.bin but not
-> irci_irci_ecr-master_20161208_0213_20170112_1500.bin ? If not, w could
-> avoid the fallback to IMGU_FW_NAME.
+Dzie=C5=84 dobry,
 
-At least some systems will break if I remove the old name altogether. Some
-instructions (for MS Surface AFAIR) only include the shorter symlink name.
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
--- 
-Sakari Ailus
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Przemys=C5=82aw Wr=C3=B3blewski
