@@ -2,64 +2,65 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A09D9C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 20 Apr 2022 13:01:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 926ADC433FE
+	for <linux-media@archiver.kernel.org>; Wed, 20 Apr 2022 13:01:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378748AbiDTNET (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 20 Apr 2022 09:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
+        id S1378730AbiDTNEV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 20 Apr 2022 09:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378747AbiDTNEL (ORCPT
+        with ESMTP id S1378733AbiDTNEN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 20 Apr 2022 09:04:11 -0400
+        Wed, 20 Apr 2022 09:04:13 -0400
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B0B13EB8
-        for <linux-media@vger.kernel.org>; Wed, 20 Apr 2022 06:01:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CC113E1E
+        for <linux-media@vger.kernel.org>; Wed, 20 Apr 2022 06:01:27 -0700 (PDT)
 Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23KAITJh017328;
-        Wed, 20 Apr 2022 15:01:17 +0200
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23KAouwU015687;
+        Wed, 20 Apr 2022 15:01:22 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : subject : to
  : cc : references : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=selector1;
- bh=6qWHDUyjcPtco30+iyGTnnCm7LqZbrmttP6sDQ4N6O8=;
- b=sBbPD7lhT9YvaprjFLZG+/pqOgbejhwHfYG6ynwdnWwY+4+u4vEiEH5xHB7NNvxlGG7t
- X64/xeEeN9uT1DwYo1QXa4Trf/Ubkwcql+vpH6FyMJPDPS4Adzi+imAPeoBsUZkGuGGR
- QVlL1NSLWxExYn9FDv1XQ6l9t4hLuFyuDD+aAbV3yU23QlX1hTzFc7HN6FvGgh47wJRW
- kvZ1ndvZf6K8p8PrORdpvXGBXM8yBCMIwrVWfsu3vr2QzhsLqgDSYysQL/WwfcvsDasM
- /Q6UCMVyJcWvadbFClyboKU4TzWAjYFNVXba3AYjwD+f+iVa/b8GZuGc0JYGr7HU0gds lw== 
+ bh=CciNi1bjQP2QAY+vmwPre4BLDlihJ6Cw7uAID6HTymQ=;
+ b=6tZFgL9ta6e1w3qWaaQGV6GHxIL8mN8xN/Jlsoy9F3Uu2uat5c6wLVqwqBdrqTm6Gu67
+ FS2EdE2RQN8UXXVBs6RO7FFHjnwgSj77G7PtEmTsoz4V2hmIakIrdTP9nQ0xATwgxyt7
+ 2U6SOhHYp9JYJ704zdfnyyiCKp+8thG3nPi8zyF3Q1UOvxNzfJH8uAi5W1i8eqqLAA+L
+ 48X7RXvD0jt73uxJv5Zxif9adBMDz1nPqer0BNLaAKhA3jr/s7W+i0rBrhLCISzgyvlF
+ IG/6qEA681gLHh2kixvV9+GDmoqD80KpAUuOwgUBT5N0szKzTPlevQz7RLjuvgmBdSBN Pw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ffpqdw9f8-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ffpqdw9ft-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Apr 2022 15:01:17 +0200
+        Wed, 20 Apr 2022 15:01:22 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BCE55100034;
-        Wed, 20 Apr 2022 15:01:16 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0AA1E10002A;
+        Wed, 20 Apr 2022 15:01:22 +0200 (CEST)
 Received: from Webmail-eu.st.com (sfhdag2node1.st.com [10.75.127.4])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B6F6420FC96;
-        Wed, 20 Apr 2022 15:01:16 +0200 (CEST)
-Received: from [10.0.2.15] (10.75.127.48) by SFHDAG2NODE1.st.com (10.75.127.4)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 20 Apr 2022 15:01:16
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 02BFB20FC96;
+        Wed, 20 Apr 2022 15:01:22 +0200 (CEST)
+Received: from [10.0.2.15] (10.75.127.50) by SFHDAG2NODE1.st.com (10.75.127.4)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 20 Apr 2022 15:01:21
  +0200
 From:   Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-Subject: Re: [PATCH v2 2/5] media: v4l: ctrls: Add a control for temperature
+Subject: Re: [PATCH v2 4/5] media: dt-bindings: media: i2c: Add ST VGXY61
+ camera sensor binding
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 CC:     <linux-media@vger.kernel.org>, <alain.volmat@foss.st.com>,
         <hugues.fruchet@foss.st.com>, <sylvain.petinot@foss.st.com>,
         <dave.stevenson@raspberrypi.com>, <sakari.ailus@linux.intel.com>,
         <kieran.bingham@ideasonboard.com>
 References: <20220415111845.27130-1-benjamin.mugnier@foss.st.com>
- <20220415111845.27130-3-benjamin.mugnier@foss.st.com>
- <YlmDIHNQub7eqskK@pendragon.ideasonboard.com>
-Message-ID: <e9089441-6fea-d589-e930-28816405e485@foss.st.com>
-Date:   Wed, 20 Apr 2022 15:01:16 +0200
+ <20220415111845.27130-5-benjamin.mugnier@foss.st.com>
+ <YlmIZgabGuSjrBfR@pendragon.ideasonboard.com>
+Message-ID: <f3933776-70c1-8185-6b27-f3feb17bfe57@foss.st.com>
+Date:   Wed, 20 Apr 2022 15:01:21 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <YlmDIHNQub7eqskK@pendragon.ideasonboard.com>
+In-Reply-To: <YlmIZgabGuSjrBfR@pendragon.ideasonboard.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.48]
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.50]
 X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE1.st.com
  (10.75.127.4)
 X-Proofpoint-Virus-Version: vendor=baseguard
@@ -73,93 +74,202 @@ Hi Laurent,
 
 Thank you for your review.
 
-On 15/04/2022 16:37, Laurent Pinchart wrote:
+On 15/04/2022 16:59, Laurent Pinchart wrote:
 > Hi Benjamin,
 > 
 > Thank you for the patch.
 > 
-> On Fri, Apr 15, 2022 at 01:18:42PM +0200, Benjamin Mugnier wrote:
->> Add V4L2_CID_TEMPERATURE control to get temperature from sensor in
->> celsius as a volatile and read-only control, and its documentation.
->> Useful to monitor thermals from v4l controls for sensors that support
->> this.
+> On Fri, Apr 15, 2022 at 01:18:44PM +0200, Benjamin Mugnier wrote:
+>> Add device tree binding for the ST VGXY61 camera sensor, and update
+>> MAINTAINERS file.
 >>
 >> Signed-off-by: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
 >> ---
->>  Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst | 3 +++
->>  drivers/media/v4l2-core/v4l2-ctrls-defs.c                  | 4 ++++
->>  include/uapi/linux/v4l2-controls.h                         | 2 ++
->>  3 files changed, 9 insertions(+)
+>>  .../bindings/media/i2c/st,st-vgxy61.yaml      | 125 ++++++++++++++++++
+>>  MAINTAINERS                                   |   9 ++
+>>  2 files changed, 134 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
 >>
->> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
->> index 4c5061aa9cd4..26fa21f5c45a 100644
->> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
->> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
->> @@ -661,3 +661,6 @@ enum v4l2_scene_mode -
->>  .. [#f1]
->>     This control may be changed to a menu control in the future, if more
->>     options are required.
+>> diff --git a/Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml b/Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
+>> new file mode 100644
+>> index 000000000000..24bff161a661
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
+>> @@ -0,0 +1,125 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +# Copyright (c) 2022 STMicroelectronics SA.
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/media/i2c/st,st-vgxy61.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->> +``V4L2_CID_TEMPERATURE (integer)``
->> +    The temperature of the sensor in celsius. This is a read-only control.
-> 
-> I've seen sensors where the temperature sensor has a 1/10th degree
-> precision. Should we standardize on that ? Anything more precise is
-> likely overkill.
-> 
-
-This sensor also has a 1/10th degree precision, here I only display the integer part. Ok to standardize on that.
-
-> There are also sensors with multiple temperature sensors. If there are
-> too many of them I suppose the temperature would be reported in embedded
-> data, but perhaps not always. How can we prepare for this ?
-> 
-> There are also a few details that I think should be documented. Is the
-> temperature always read on-demand when reading the control, or updated
-> periodically ? I would assume most drivers would implement the former,
-> which means no control notification events will be generated. This
-> should be documented. Furthermore, do drivers need to support reading
-> the temperature when the sensor isn't streaming ? If not, when should a
-> control read ioctl return, the last value, or an error ?
-> 
-
-From what I see read on demand seems sufficient.
-This sensor supports reading the temperature read even if not streaming. I don't know for other sensors.
-See my comments on driver implementation on 5/5 for more.
-
->> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->> index 54ca4e6b820b..45ad3edd59e0 100644
->> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->> @@ -1042,6 +1042,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->>  	case V4L2_CID_UNIT_CELL_SIZE:		return "Unit Cell Size";
->>  	case V4L2_CID_CAMERA_ORIENTATION:	return "Camera Orientation";
->>  	case V4L2_CID_CAMERA_SENSOR_ROTATION:	return "Camera Sensor Rotation";
->> +	case V4L2_CID_TEMPERATURE:		return "Temperature in °C";
->>  
->>  	/* FM Radio Modulator controls */
->>  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
->> @@ -1597,6 +1598,9 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
->>  	case V4L2_CID_RF_TUNER_PLL_LOCK:
->>  		*flags |= V4L2_CTRL_FLAG_VOLATILE;
->>  		break;
->> +	case V4L2_CID_TEMPERATURE:
->> +		*flags |= V4L2_CTRL_FLAG_READ_ONLY |
->> +			  V4L2_CTRL_FLAG_VOLATILE;
->>  	}
->>  }
->>  EXPORT_SYMBOL(v4l2_ctrl_fill);
->> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
->> index bb40129446d4..705b4043c2de 100644
->> --- a/include/uapi/linux/v4l2-controls.h
->> +++ b/include/uapi/linux/v4l2-controls.h
->> @@ -1008,6 +1008,8 @@ enum v4l2_auto_focus_range {
->>  
->>  #define V4L2_CID_CAMERA_SENSOR_ROTATION		(V4L2_CID_CAMERA_CLASS_BASE+35)
->>  
->> +#define V4L2_CID_TEMPERATURE			(V4L2_CID_CAMERA_CLASS_BASE+36)
+>> +title: STMicroelectronics VGxy61 HDR Global Shutter Sensor Family Device Tree Bindings
 >> +
->>  /* FM Modulator class control IDs */
+>> +maintainers:
+>> +  - Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+>> +  - Sylvain Petinot <sylvain.petinot@foss.st.com>
+>> +
+>> +description: |-
+>> +  STMicroelectronics VGxy61 family has a CSI-2 output port. CSI-2 output is a
+>> +  quad lanes 800Mbps per lane.
+>> +  Supported formats are RAW8, RAW10, RAW12, RAW14 and RAW16.
+>> +  Following part number are supported
+>> +  - VG5661 and VG6661 are 1.6 Mpx (1464 x 1104) monochrome and color sensors.
+>> +  Maximum frame rate is 75 fps.
+>> +  - VG5761 and VG6761 are 2.3 Mpx (1944 x 1204) monochrome and color sensors.
+>> +  Maximum frame rate is 60 fps.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: st,st-vgxy61
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  clock-names:
+>> +    description:
+>> +      Input clock for the sensor.
+>> +    items:
+>> +      - const: xclk
+> 
+> If there's a single clock you can drop the clock name.
+> 
+
+Indeed, I forgot to remove it while refactoring. Thanks.
+
+>> +
+>> +  VCORE-supply:
+>> +    description:
+>> +      Sensor digital core supply. Must be 1.2 volts.
+>> +
+>> +  VDDIO-supply:
+>> +    description:
+>> +      Sensor digital IO supply. Must be 1.8 volts.
+>> +
+>> +  VANA-supply:
+>> +    description:
+>> +      Sensor analog supply. Must be 2.8 volts.
+>> +
+>> +  reset-gpios:
+>> +    description:
+>> +      Reference to the GPIO connected to the reset pin, if any.
+>> +      This is an active low signal to the vgxy61.
+>> +
+>> +  invert-gpios-polarity:
+> 
+> Vendor-specific properties should have a vendor prefix (e.g.
+> st,inver-gpios-polarity).
+> 
+>> +    description:
+>> +      If gpios polarity should be inversed
+> 
+> What is this though, what GPIOs does it invert ?
+> 
+
+This inverts every strobe GPIO polarity.
+I will rename it to st,strobe-gpios-polarity, so that it better reflects what it truly is, and add a better comment than the current one.
+I also renamed slave-mode to st,slave-mode as afaik this is specific to this sensor.
+
+>> +    type: boolean
+>> +
+>> +  slave-mode:
+>> +    description:
+>> +      If the sensor operates in slave mode
+>> +    type: boolean
+>> +
+>> +  port:
+>> +    $ref: /schemas/graph.yaml#/$defs/port-base
+>> +    additionalProperties: false
+>> +
+>> +    properties:
+>> +      endpoint:
+>> +        $ref: /schemas/media/video-interfaces.yaml#
+>> +        unevaluatedProperties: false
+>> +
+>> +        properties:
+>> +          data-lanes:
+>> +            description:
+>> +              CSI lanes to use
+>> +            items:
+>> +              - const: 1
+>> +              - const: 2
+>> +              - const: 3
+>> +              - const: 4
+>> +
+>> +          remote-endpoint: true
+>> +
+>> +        required:
+>> +          - clock-lane
+>> +          - data-lanes
+>> +
+>> +required:
+>> +  - compatible
+>> +  - clocks
+>> +  - clock-names
+>> +  - VCORE-supply
+>> +  - VDDIO-supply
+>> +  - VANA-supply
+> 
+> The port property should be required too.
+> 
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/gpio/gpio.h>
+>> +    i2c {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +        vgxy61: csi2tx@10 {
+>> +            compatible = "st,st-vgxy61";
+>> +            reg = <0x10>;
+>> +            status = "okay";
+> 
+> That's the default, it's not needed in DT examples.
+> 
+>> +            clocks = <&clk_ext_camera>;
+> 
+> There's no clock-names. Have you run DT bindings validation ? It should
+> have reported an error.
+> 
+
+I ran again the dt binding validation and it does pop an error. I must have missed it. Sorry about that.
+
+>> +            VCORE-supply = <&v1v2>;
+>> +            VDDIO-supply = <&v1v8>;
+>> +            VANA-supply = <&v2v8>;
+>> +            reset-gpios = <&mfxgpio 18 GPIO_ACTIVE_LOW>;
+>> +            port {
+>> +                ep0: endpoint {
+>> +                    data-lanes = <1 2 3 4>;
+>> +                    remote-endpoint = <&mipi_csi2_out>;
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> +...
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index fd768d43e048..6233e073da30 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -18664,6 +18664,15 @@ S:	Maintained
+>>  F:	Documentation/hwmon/stpddc60.rst
+>>  F:	drivers/hwmon/pmbus/stpddc60.c
 >>  
->>  #define V4L2_CID_FM_TX_CLASS_BASE		(V4L2_CTRL_CLASS_FM_TX | 0x900)
+>> +ST VGXY61 DRIVER
+>> +M:	Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+>> +M:	Sylvain Petinot <sylvain.petinot@foss.st.com>
+>> +L:	linux-media@vger.kernel.org
+>> +S:	Maintained
+>> +T:	git git://linuxtv.org/media_tree.git
+>> +F:	Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.txt
+>> +F:	drivers/media/i2c/st-vgxy61.c
+>> +
+>>  ST VL53L0X ToF RANGER(I2C) IIO DRIVER
+>>  M:	Song Qiang <songqiang1304521@gmail.com>
+>>  L:	linux-iio@vger.kernel.org
 > 
