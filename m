@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4C78C4167B
-	for <linux-media@archiver.kernel.org>; Thu, 21 Apr 2022 14:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92D52C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 21 Apr 2022 14:30:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389293AbiDUOdN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Apr 2022 10:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        id S1389322AbiDUOdO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Apr 2022 10:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389503AbiDUOcc (ORCPT
+        with ESMTP id S1389498AbiDUOcb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:32:32 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0B5403F8
-        for <linux-media@vger.kernel.org>; Thu, 21 Apr 2022 07:29:37 -0700 (PDT)
+        Thu, 21 Apr 2022 10:32:31 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B093FD82
+        for <linux-media@vger.kernel.org>; Thu, 21 Apr 2022 07:29:34 -0700 (PDT)
 Received: from deskari.lan (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9BF76501;
-        Thu, 21 Apr 2022 16:29:32 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C355E492;
+        Thu, 21 Apr 2022 16:29:30 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1650551373;
-        bh=yA2Tz0nLoqGWfk6Llss6oy1f/zOKDDTOFHM3Rm8CEmc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EMZDPeuuPjSJr1IUPBr3lJNs73nn6Bl4o3EylzRYwPOQuaowNblzaGB3I5ABhPJBj
-         56rUwtQ4Opj3MlbzOLlGeTeFdwBQkujMjMeSgfJq0+bIqNowJFrS3K9I4CQjM88nOA
-         R1lzTLollogilzrm2HZ00gnPJZawv/+00iGOZqHk=
+        s=mail; t=1650551371;
+        bh=iLdDoFzCKLupnJ5CR3+DKByALxPQ94Ygeka4t0WX1Ew=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EJEiB9u1uZjlm342eT2EiFwyqxxP9ZXL754YHfVvw3+QWw0ThwzvvCoH05KMGBDS2
+         gMhEoV9xFwynI2KDioD247rSwsnkmJcJBbvpKU2yLFVGxOvaxkYVGgBGALtkfye8hG
+         8a89vZG3HBfyeqvuPv0q8Qg0asGYGOXknJKihX7M=
 From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Jacopo Mondi <jacopo+renesas@jmondi.org>,
@@ -34,12 +34,10 @@ To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Pratyush Yadav <p.yadav@ti.com>, satish.nagireddy@getcruise.com
 Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH 2/3] media: Add CSI-2 bus configuration to frame descriptors
-Date:   Thu, 21 Apr 2022 17:29:05 +0300
-Message-Id: <20220421142906.527918-3-tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH 0/3] media: CSI-2 configuration to frame desc
+Date:   Thu, 21 Apr 2022 17:29:03 +0300
+Message-Id: <20220421142906.527918-1-tomi.valkeinen@ideasonboard.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220421142906.527918-1-tomi.valkeinen@ideasonboard.com>
-References: <20220421142906.527918-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -47,60 +45,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+Hi,
 
-Add CSI-2 bus specific configuration to the frame descriptors. This allows
-obtaining the virtual channel and data type information for each stream
-the transmitter is sending.
+I've carried these patches in my streams series, but I think they
+provide value also alone.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- include/media/v4l2-subdev.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+These improve the frame descriptors so that the drivers can fill in the
+CSI-2 datatype and virtual channel, and make the CAL driver use that
+data if available.
 
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 16d6559f81ed..e6b24bbdd6b6 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -312,6 +312,17 @@ struct v4l2_subdev_audio_ops {
- 	int (*s_stream)(struct v4l2_subdev *sd, int enable);
- };
- 
-+/**
-+ * struct v4l2_mbus_frame_desc_entry_csi2
-+ *
-+ * @vc: CSI-2 virtual channel
-+ * @dt: CSI-2 data type ID
-+ */
-+struct v4l2_mbus_frame_desc_entry_csi2 {
-+	u8 vc;
-+	u8 dt;
-+};
-+
- /**
-  * enum v4l2_mbus_frame_desc_flags - media bus frame description flags
-  *
-@@ -335,11 +346,16 @@ enum v4l2_mbus_frame_desc_flags {
-  *		%FRAME_DESC_FL_BLOB is not set.
-  * @length:	number of octets per frame, valid if @flags
-  *		%V4L2_MBUS_FRAME_DESC_FL_LEN_MAX is set.
-+ * @bus:	Bus-specific frame descriptor parameters
-+ * @bus.csi2:	CSI-2-specific bus configuration
-  */
- struct v4l2_mbus_frame_desc_entry {
- 	enum v4l2_mbus_frame_desc_flags flags;
- 	u32 pixelcode;
- 	u32 length;
-+	union {
-+		struct v4l2_mbus_frame_desc_entry_csi2 csi2;
-+	} bus;
- };
- 
- #define V4L2_FRAME_DESC_ENTRY_MAX	4
+ Tomi
+
+Sakari Ailus (2):
+  media: Add bus type to frame descriptors
+  media: Add CSI-2 bus configuration to frame descriptors
+
+Tomi Valkeinen (1):
+  media: ti: cal: use frame desc to get vc and dt
+
+ drivers/media/platform/ti/cal/cal-camerarx.c | 27 ++++++++++
+ drivers/media/platform/ti/cal/cal.c          | 52 +++++++++++++++++++-
+ drivers/media/platform/ti/cal/cal.h          |  2 +
+ include/media/v4l2-subdev.h                  | 36 ++++++++++++++
+ 4 files changed, 115 insertions(+), 2 deletions(-)
+
 -- 
 2.25.1
 
