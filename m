@@ -2,172 +2,104 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90863C433EF
-	for <linux-media@archiver.kernel.org>; Thu, 21 Apr 2022 14:27:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E570C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 21 Apr 2022 14:30:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389445AbiDUOaq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Apr 2022 10:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S1355980AbiDUOdL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Apr 2022 10:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389318AbiDUOad (ORCPT
+        with ESMTP id S1382167AbiDUOcY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:30:33 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C72D403D1
-        for <linux-media@vger.kernel.org>; Thu, 21 Apr 2022 07:27:38 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id s25so6712571edi.13
-        for <linux-media@vger.kernel.org>; Thu, 21 Apr 2022 07:27:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ALCyP2i1UbxZ7KCYJSxJM+jgx2i9XcgHldOg0Ow0n84=;
-        b=jWdNIcuojmoZOUtv0jyku7MINQjYc+4/szwHu9NAT/kgeyYt97t/S9pIGpOf6oWzNw
-         wK2zmGm70WuJjPJqxnyC0wYEnealRLvxIMUN5KVwPpxRiFOeov4a6KMbCyDXv2Kr0dS9
-         sDBSQwnA79Zce3DHeMJL6tCCriv5wD8HhXYp8osc+TRZWchei4fhjQXN8N5mIxNGYXI5
-         Ya1uCjn++94ipjSkxOhZQxrWIir7HEkvTTDtZKa98t204tJoENhv87FL738q1R27jO4O
-         aasNCT2MyOxbAqA1d6SwPuGQYR5LNOekt1r7F78D37JLXuP1KckCshIragbwa36ouoiv
-         Bl7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ALCyP2i1UbxZ7KCYJSxJM+jgx2i9XcgHldOg0Ow0n84=;
-        b=gaBkRo/lCKhGZ3Ai4hbTIG2yr2xKa2dRzHnW9dhK4Zj5Xu0q50Yyj9JnMmrpGdwLoa
-         I+PM7m2uAKm7XZUEeE+0sXGDDOcQ6rw8C2NCob01/kZvNDDNoxe9n7rJD3PpKxw/BFpW
-         jQGyf7aqa6tTu3qxZJKNrQIz/7eFUkUDI4c4mkZrYOeqEv3HVo+pwN731b68P8AUlbtQ
-         9M2lcbOQKTB3vtmqPnEdjCKhOYb1HLi+rSgNmgYwCwBEtDK/SL4+kOp8rTvqX+nl9akn
-         3lU1dgj0BN4P9xvxBjkzxOF3cfGFmjqofBQpa0z1sUGKcyLrvGZyrKVncgVwr/J1CdqJ
-         MjzQ==
-X-Gm-Message-State: AOAM531D6D8yNPOt2Ia1z/UuJ0YD+6QkKmVpgYkm9oFqwYOgM9HTBTh0
-        CWgs/anG6grXM2iC38o4OnbE+Mb4whIk9MUK2L0ffw==
-X-Google-Smtp-Source: ABdhPJyx06vp8Pqx1CoBJUbYqsFWvYiGUuYBPIRIRYJ9CBT4qbkMdv+3B0/ljghI9d0dUZDebawA6HxjuKqDTbXv+gQ=
-X-Received: by 2002:a05:6402:330c:b0:423:e13a:4bf with SMTP id
- e12-20020a056402330c00b00423e13a04bfmr23750718eda.235.1650551257110; Thu, 21
- Apr 2022 07:27:37 -0700 (PDT)
+        Thu, 21 Apr 2022 10:32:24 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FC63F8A1
+        for <linux-media@vger.kernel.org>; Thu, 21 Apr 2022 07:29:34 -0700 (PDT)
+Received: from deskari.lan (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id ADEDC4A8;
+        Thu, 21 Apr 2022 16:29:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1650551372;
+        bh=NjrphpGde3v6g01sLqWD2c5LnyLkyOscSOfICcS+mK8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZIswTXWqV3jpc97y21jVdPnXIdf7mtxMsr6FaxSwDh6e2AS8nkZi6GK/k0ELW+ca1
+         7wl2W4SxLCSAqHlsKdDJmBHPk37bmSfs+6DYCPe9LSq/LmuRFViA7h6V24Y5fd5P0Y
+         R8uA9fROacYOhC0mQIIY4hO6DbRauKSnEo9Bdgio=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        niklas.soderlund+renesas@ragnatech.se,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Pratyush Yadav <p.yadav@ti.com>, satish.nagireddy@getcruise.com
+Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH 1/3] media: Add bus type to frame descriptors
+Date:   Thu, 21 Apr 2022 17:29:04 +0300
+Message-Id: <20220421142906.527918-2-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220421142906.527918-1-tomi.valkeinen@ideasonboard.com>
+References: <20220421142906.527918-1-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-References: <CAPY8ntA06L1Xsph79sv9t7MiDSNeSO2vADevuXZdXQdhWpSmow@mail.gmail.com>
- <CAPY8ntD6GZJ0oCDe1fQ8Pf+X+nY3nB0RcrAX-JxTiO0QiTUVPg@mail.gmail.com> <YlVEOjiGZZSnvMU3@pendragon.ideasonboard.com>
-In-Reply-To: <YlVEOjiGZZSnvMU3@pendragon.ideasonboard.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Thu, 21 Apr 2022 15:27:20 +0100
-Message-ID: <CAPY8ntCAK4re-wsWc10Yywa+x+8JTrv4ZfnvvZHuH72-4pboBg@mail.gmail.com>
-Subject: Re: [libcamera-devel] Using the Selection API with image sensors for
- arbitrary cropping
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        libcamera devel <libcamera-devel@lists.libcamera.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Sorry for my late reply here - I've been off sick for the last week.
+Add the media bus type to the frame descriptor. CSI-2 specific
+information will be added in next patch to the frame descriptor.
 
-On Tue, 12 Apr 2022 at 10:20, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Dave,
->
-> (CC'ing Sakari)
->
-> Sorry for the late reply. This is the kind of topic where I always hope
-> someone will beat me to it and I won't have to reply :-)
->
-> On Tue, Apr 05, 2022 at 12:37:56PM +0100, Dave Stevenson via libcamera-devel wrote:
-> > On Thu, 17 Mar 2022 at 17:47, Dave Stevenson wrote:
-> > >
-> > > Hi All
-> > >
-> > > I'm trying to tally the selection API documentation for image sensors
-> > > with implementing it in practice, specifically over arbitrary cropping
-> > > on the sensor.
-> > >
-> > > I've had a downstream PR for IMX219 that adds support for the
-> > > selection API to allow arbitrary cropping and selection of binning
-> > > mode [1].
-> > >
-> > > The docs for "Writing camera sensor drivers" [2] lists the two options
-> > > as either freely configurable via multiple subdevices, or register
-> > > based. It doesn't apparently cover just cropping (there is no scaler
-> > > on IMX219), but there is the IMX274 driver that implements setting the
-> > > sensor cropping via the selection API [3].
-> > >
-> > > The current IMX219 register-based modes are
-> > > - 3280x2464 up to 15fps
-> > > - 1920x1080 up to 30fps as a crop of the 3280x2464 mode
-> > > - 1640x1232 up to 40fps, 2x2 binned
-> > > - 640x480 up to 200fps, "special" 2x2 binning and cropped.
-> > >
-> > > The main issue is that implementing the selection API reduces the
-> > > number of modes that can be selected directly via set_fmt to the base
-> > > 3280x2464 and 1640x1232. Surely that constitutes a regression as use
-> > > cases that did work now don't, and therefore it is not acceptable.
-> > > 3280x2464 can't run at 30fps, therefore we can't easily get a 1080p30
-> > > source without additional knowledge of modes and crop settings.
-> > >
-> > > So how should the selection API be implemented without introducing regressions?
-> > > Is it permitted to enumerate the extra modes as before and have them
-> > > update the crop rectangle? The docs [4] say not:
-> > > "Drivers shall set the active crop rectangle to the default when the
-> > > driver is first loaded, but not later."
-> > > which leaves a bit of a quandry.
-> > >
-> > > If we do drop the existing modes it just pushes the problem of which
-> > > modes to select onto the client. Most likely you end up with an
-> > > extended sensor specific helper in libcamera with a list of modes and
-> > > the framerates that each can achieve, pretty much identical to the
-> > > list of modes in the kernel at present.
-> > > Any other clients are forced to jump through similar hoops (unlikely
-> > > to happen), or we rename it to Video 4 Libcamera 2 ;-)
-> > >
-> > > Making that shift also means that selecting the special binning mode
-> > > has to be done via some other heuristics. AIUI it's optimised for high
-> > > frame rates so that's possible (but not nice).
-> > >
-> > > Guidance sought please.
->
-> Good description of a complex problem. I'm afraid I have no ready-made
-> answer that will solve all issues. If we were to forget about history
-> and API compatibility, I'm sure we could design a decent API to expose
-> the capabilities of camera sensors to userspace. Unfortunately, we
-> can't, but none of the options I can think of will preserve the API.
->
-> I'm tempted to design something decent going forward, and move older
-> drivers to the new API over time as needed, with backward-compatibility
-> handled as a module option or even by forking and duplicating drivers.
-> It's messy, but keeping the status quo is even worse, we have lots of
-> drivers that expose the same features in many different ways. It's
-> becoming impossible to handle in any decent way in userspace.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-That seems like a longer term proposition.
-It sounds like converting to use the selection API largely isn't
-possible at present, so I'll keep these as downstream patches, and
-allow S_FMT to update the crop.
+- Make the bus type a named enum
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ include/media/v4l2-subdev.h | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-Thanks
-  Dave
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 6c153b33bb04..16d6559f81ed 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -344,12 +344,32 @@ struct v4l2_mbus_frame_desc_entry {
+ 
+ #define V4L2_FRAME_DESC_ENTRY_MAX	4
+ 
++/**
++ * enum v4l2_mbus_frame_desc_type - media bus frame description type
++ *
++ * @V4L2_MBUS_FRAME_DESC_TYPE_UNDEFINED:
++ *	Undefined frame desc type. Drivers should not use this, it is
++ *	for backwards compatibility.
++ * @V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL:
++ *	Parallel media bus.
++ * @V4L2_MBUS_FRAME_DESC_TYPE_CSI2:
++ *	CSI-2 media bus. Frame desc parameters must be set in
++ *	&struct v4l2_mbus_frame_desc_entry->csi2.
++ */
++enum v4l2_mbus_frame_desc_type {
++	V4L2_MBUS_FRAME_DESC_TYPE_UNDEFINED = 0,
++	V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL,
++	V4L2_MBUS_FRAME_DESC_TYPE_CSI2,
++};
++
+ /**
+  * struct v4l2_mbus_frame_desc - media bus data frame description
++ * @type: type of the bus (enum v4l2_mbus_frame_desc_type)
+  * @entry: frame descriptors array
+  * @num_entries: number of entries in @entry array
+  */
+ struct v4l2_mbus_frame_desc {
++	enum v4l2_mbus_frame_desc_type type;
+ 	struct v4l2_mbus_frame_desc_entry entry[V4L2_FRAME_DESC_ENTRY_MAX];
+ 	unsigned short num_entries;
+ };
+-- 
+2.25.1
 
-> > A gentle ping on this.
-> >
-> > At present I'm going to ignore the spec and allow setting the format
-> > to update the crop. That way we retain the modes and avoid regression,
-> > but allow those who wish to set an arbitrary selection to do so.
-> >
-> >   Dave
-> >
-> > > Thanks
-> > >   Dave
-> > >
-> > > [1] https://github.com/raspberrypi/linux/pull/4935
-> > > [2] https://www.kernel.org/doc/html/latest/driver-api/media/camera-sensor.html#frame-size
-> > > [3] https://github.com/torvalds/linux/blob/master/drivers/media/i2c/imx274.c
-> > > [4] https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/selection-api-configuration.html#configuration-of-video-capture
->
-> --
-> Regards,
->
-> Laurent Pinchart
