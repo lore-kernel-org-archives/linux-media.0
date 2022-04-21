@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AC51C4167E
-	for <linux-media@archiver.kernel.org>; Thu, 21 Apr 2022 23:43:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4646DC433F5
+	for <linux-media@archiver.kernel.org>; Thu, 21 Apr 2022 23:43:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442667AbiDUXpu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 21 Apr 2022 19:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
+        id S1442649AbiDUXpv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 21 Apr 2022 19:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442643AbiDUXpp (ORCPT
+        with ESMTP id S1442659AbiDUXpt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 21 Apr 2022 19:45:45 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E6A3A71F
-        for <linux-media@vger.kernel.org>; Thu, 21 Apr 2022 16:42:53 -0700 (PDT)
+        Thu, 21 Apr 2022 19:45:49 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A78EDFE7
+        for <linux-media@vger.kernel.org>; Thu, 21 Apr 2022 16:42:57 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A32A3102E;
-        Fri, 22 Apr 2022 01:42:48 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BFF2F492;
+        Fri, 22 Apr 2022 01:42:50 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1650584569;
-        bh=F+9DRF9AWe93hVdpOSnUzdFckLzhPNACIF940WXBBsM=;
+        s=mail; t=1650584571;
+        bh=9N/wMnvCirb3A9eWIL8H5HndLpqEJbgR3pLeQn5zIjY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B8AwL0fEajtxU8SLg34I6mLViLgl/RmVdXKXoSg7qA52uou3uaHmHl+ZzmXGOXWQo
-         uCZ/pm/mH3btjsqSh7H7r2pof1KFka8cpYmqu+zepTetr3YSp23YodezIdl1oRj5rF
-         1AgpbmKXMrZFsSgzSYNSVliCog8mk9ZYYV4Va6Q8=
+        b=ezDVLGyk1Z74Bgh24TlBZhGjYQ219NQrwjTpK/ip4km3fLm8SVG+/ZCCbdXV8onx2
+         WBb6jpplWDIrix2319Tz2PiTe4mNbIyFCaEIGim+hbUsTqMTd6gKZWhrkR22GcP9eq
+         e3YUuDUU5hLKj5H1CL3L6k8aFvhQuu+1xYZC2MDM=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Dafna Hirschfeld <dafna@fastmail.com>,
@@ -32,9 +32,9 @@ Cc:     Dafna Hirschfeld <dafna@fastmail.com>,
         Paul Elder <paul.elder@ideasonboard.com>,
         Tomasz Figa <tfiga@google.com>,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH v4 08/21] media: rkisp1: regs: Don't use BIT() macro for multi-bit register fields
-Date:   Fri, 22 Apr 2022 02:42:27 +0300
-Message-Id: <20220421234240.1694-9-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v4 11/21] media: rkisp1: resizer: Simplify register access
+Date:   Fri, 22 Apr 2022 02:42:30 +0300
+Message-Id: <20220421234240.1694-12-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220421234240.1694-1-laurent.pinchart@ideasonboard.com>
 References: <20220421234240.1694-1-laurent.pinchart@ideasonboard.com>
@@ -44,192 +44,392 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The BIT() macro is meant to represent a single bit. It is incorrectly
-used for register field values that store the value 1 in a multi-bit
-field. Use the usual (1 << n) construct for those.
-
-While at it, move RKISP1_CIF_MI_DMA_CTRL_READ_FMT_PACKED where it
-belongs with the other READ_FMT values.
+The registers for the mainpath and selfpath resizers are located at the
+same offset from the instance-specific base. Use this to simplify
+register access, removing the need to store per-register offsets in the
+rkisp1_rsz_config structure.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
-Changes since v3:
+Changes since v1:
 
-- Move RKISP1_CIF_MI_DMA_CTRL_READ_FMT_PACKED where it belongs
+- Fix order of arguments to write function
 ---
- .../platform/rockchip/rkisp1/rkisp1-regs.h    | 54 +++++++++----------
- 1 file changed, 27 insertions(+), 27 deletions(-)
+ .../platform/rockchip/rkisp1/rkisp1-common.h  |   2 +
+ .../platform/rockchip/rkisp1/rkisp1-regs.h    |  67 +++-----
+ .../platform/rockchip/rkisp1/rkisp1-resizer.c | 161 ++++++------------
+ 3 files changed, 75 insertions(+), 155 deletions(-)
 
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+index 941580c9c4e0..3b36ab05ac34 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+@@ -313,6 +313,7 @@ struct rkisp1_params {
+  * struct rkisp1_resizer - Resizer subdev
+  *
+  * @sd:	       v4l2_subdev variable
++ * @regs_base: base register address offset
+  * @id:	       id of the resizer, one of RKISP1_SELFPATH, RKISP1_MAINPATH
+  * @rkisp1:    pointer to the rkisp1 device
+  * @pads:      media pads
+@@ -323,6 +324,7 @@ struct rkisp1_params {
+  */
+ struct rkisp1_resizer {
+ 	struct v4l2_subdev sd;
++	u32 regs_base;
+ 	enum rkisp1_stream_id id;
+ 	struct rkisp1_device *rkisp1;
+ 	struct media_pad pads[RKISP1_RSZ_PAD_MAX];
 diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
-index d326214c7e07..887f4768dc0a 100644
+index 0f6ea67b4d5a..a93d0127b813 100644
 --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
 +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
-@@ -11,7 +11,7 @@
- /* ISP_CTRL */
- #define RKISP1_CIF_ISP_CTRL_ISP_ENABLE			BIT(0)
- #define RKISP1_CIF_ISP_CTRL_ISP_MODE_RAW_PICT		(0 << 1)
--#define RKISP1_CIF_ISP_CTRL_ISP_MODE_ITU656		BIT(1)
-+#define RKISP1_CIF_ISP_CTRL_ISP_MODE_ITU656		(1 << 1)
- #define RKISP1_CIF_ISP_CTRL_ISP_MODE_ITU601		(2 << 1)
- #define RKISP1_CIF_ISP_CTRL_ISP_MODE_BAYER_ITU601	(3 << 1)
- #define RKISP1_CIF_ISP_CTRL_ISP_MODE_DATA_MODE		(4 << 1)
-@@ -33,37 +33,37 @@
- #define RKISP1_CIF_ISP_ACQ_PROP_HSYNC_LOW		BIT(1)
- #define RKISP1_CIF_ISP_ACQ_PROP_VSYNC_LOW		BIT(2)
- #define RKISP1_CIF_ISP_ACQ_PROP_BAYER_PAT_RGGB		(0 << 3)
--#define RKISP1_CIF_ISP_ACQ_PROP_BAYER_PAT_GRBG		BIT(3)
-+#define RKISP1_CIF_ISP_ACQ_PROP_BAYER_PAT_GRBG		(1 << 3)
- #define RKISP1_CIF_ISP_ACQ_PROP_BAYER_PAT_GBRG		(2 << 3)
- #define RKISP1_CIF_ISP_ACQ_PROP_BAYER_PAT_BGGR		(3 << 3)
- #define RKISP1_CIF_ISP_ACQ_PROP_BAYER_PAT(pat)		((pat) << 3)
- #define RKISP1_CIF_ISP_ACQ_PROP_YCBYCR			(0 << 7)
--#define RKISP1_CIF_ISP_ACQ_PROP_YCRYCB			BIT(7)
-+#define RKISP1_CIF_ISP_ACQ_PROP_YCRYCB			(1 << 7)
- #define RKISP1_CIF_ISP_ACQ_PROP_CBYCRY			(2 << 7)
- #define RKISP1_CIF_ISP_ACQ_PROP_CRYCBY			(3 << 7)
- #define RKISP1_CIF_ISP_ACQ_PROP_FIELD_SEL_ALL		(0 << 9)
--#define RKISP1_CIF_ISP_ACQ_PROP_FIELD_SEL_EVEN		BIT(9)
-+#define RKISP1_CIF_ISP_ACQ_PROP_FIELD_SEL_EVEN		(1 << 9)
- #define RKISP1_CIF_ISP_ACQ_PROP_FIELD_SEL_ODD		(2 << 9)
- #define RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_12B		(0 << 12)
--#define RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_10B_ZERO		BIT(12)
-+#define RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_10B_ZERO		(1 << 12)
- #define RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_10B_MSB		(2 << 12)
- #define RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_8B_ZERO		(3 << 12)
- #define RKISP1_CIF_ISP_ACQ_PROP_IN_SEL_8B_MSB		(4 << 12)
+@@ -905,52 +905,29 @@
+ #define RKISP1_CIF_DUAL_CROP_S_V_SIZE_SHD	(RKISP1_CIF_DUAL_CROP_BASE + 0x00000040)
  
- /* VI_DPCL */
- #define RKISP1_CIF_VI_DPCL_DMA_JPEG			(0 << 0)
--#define RKISP1_CIF_VI_DPCL_MP_MUX_MRSZ_MI		BIT(0)
-+#define RKISP1_CIF_VI_DPCL_MP_MUX_MRSZ_MI		(1 << 0)
- #define RKISP1_CIF_VI_DPCL_MP_MUX_MRSZ_JPEG		(2 << 0)
--#define RKISP1_CIF_VI_DPCL_CHAN_MODE_MP			BIT(2)
-+#define RKISP1_CIF_VI_DPCL_CHAN_MODE_MP			(1 << 2)
- #define RKISP1_CIF_VI_DPCL_CHAN_MODE_SP			(2 << 2)
- #define RKISP1_CIF_VI_DPCL_CHAN_MODE_MPSP		(3 << 2)
- #define RKISP1_CIF_VI_DPCL_DMA_SW_SPMUX			(0 << 4)
--#define RKISP1_CIF_VI_DPCL_DMA_SW_SI			BIT(4)
-+#define RKISP1_CIF_VI_DPCL_DMA_SW_SI			(1 << 4)
- #define RKISP1_CIF_VI_DPCL_DMA_SW_IE			(2 << 4)
- #define RKISP1_CIF_VI_DPCL_DMA_SW_JPEG			(3 << 4)
- #define RKISP1_CIF_VI_DPCL_DMA_SW_ISP			(4 << 4)
- #define RKISP1_CIF_VI_DPCL_IF_SEL_PARALLEL		(0 << 8)
--#define RKISP1_CIF_VI_DPCL_IF_SEL_SMIA			BIT(8)
-+#define RKISP1_CIF_VI_DPCL_IF_SEL_SMIA			(1 << 8)
- #define RKISP1_CIF_VI_DPCL_IF_SEL_MIPI			(2 << 8)
- #define RKISP1_CIF_VI_DPCL_DMA_IE_MUX_DMA		BIT(10)
- #define RKISP1_CIF_VI_DPCL_DMA_SP_MUX_DMA		BIT(11)
-@@ -112,26 +112,26 @@
- #define RKISP1_CIF_MI_SP_AUTOUPDATE_ENABLE		BIT(14)
- #define RKISP1_CIF_MI_LAST_PIXEL_SIG_ENABLE		BIT(15)
- #define RKISP1_CIF_MI_CTRL_BURST_LEN_LUM_16		(0 << 16)
--#define RKISP1_CIF_MI_CTRL_BURST_LEN_LUM_32		BIT(16)
-+#define RKISP1_CIF_MI_CTRL_BURST_LEN_LUM_32		(1 << 16)
- #define RKISP1_CIF_MI_CTRL_BURST_LEN_LUM_64		(2 << 16)
- #define RKISP1_CIF_MI_CTRL_BURST_LEN_CHROM_16		(0 << 18)
--#define RKISP1_CIF_MI_CTRL_BURST_LEN_CHROM_32		BIT(18)
-+#define RKISP1_CIF_MI_CTRL_BURST_LEN_CHROM_32		(1 << 18)
- #define RKISP1_CIF_MI_CTRL_BURST_LEN_CHROM_64		(2 << 18)
- #define RKISP1_CIF_MI_CTRL_INIT_BASE_EN			BIT(20)
- #define RKISP1_CIF_MI_CTRL_INIT_OFFSET_EN		BIT(21)
- #define RKISP1_MI_CTRL_MP_WRITE_YUV_PLA_OR_RAW8		(0 << 22)
--#define RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA		BIT(22)
-+#define RKISP1_MI_CTRL_MP_WRITE_YUV_SPLA		(1 << 22)
- #define RKISP1_MI_CTRL_MP_WRITE_YUVINT			(2 << 22)
- #define RKISP1_MI_CTRL_MP_WRITE_RAW12			(2 << 22)
- #define RKISP1_MI_CTRL_SP_WRITE_PLA			(0 << 24)
--#define RKISP1_MI_CTRL_SP_WRITE_SPLA			BIT(24)
-+#define RKISP1_MI_CTRL_SP_WRITE_SPLA			(1 << 24)
- #define RKISP1_MI_CTRL_SP_WRITE_INT			(2 << 24)
- #define RKISP1_MI_CTRL_SP_INPUT_YUV400			(0 << 26)
--#define RKISP1_MI_CTRL_SP_INPUT_YUV420			BIT(26)
-+#define RKISP1_MI_CTRL_SP_INPUT_YUV420			(1 << 26)
- #define RKISP1_MI_CTRL_SP_INPUT_YUV422			(2 << 26)
- #define RKISP1_MI_CTRL_SP_INPUT_YUV444			(3 << 26)
- #define RKISP1_MI_CTRL_SP_OUTPUT_YUV400			(0 << 28)
--#define RKISP1_MI_CTRL_SP_OUTPUT_YUV420			BIT(28)
-+#define RKISP1_MI_CTRL_SP_OUTPUT_YUV420			(1 << 28)
- #define RKISP1_MI_CTRL_SP_OUTPUT_YUV422			(2 << 28)
- #define RKISP1_MI_CTRL_SP_OUTPUT_YUV444			(3 << 28)
- #define RKISP1_MI_CTRL_SP_OUTPUT_RGB565			(4 << 28)
-@@ -186,22 +186,22 @@
+ #define RKISP1_CIF_MRSZ_BASE			0x00000C00
+-#define RKISP1_CIF_MRSZ_CTRL			(RKISP1_CIF_MRSZ_BASE + 0x00000000)
+-#define RKISP1_CIF_MRSZ_SCALE_HY		(RKISP1_CIF_MRSZ_BASE + 0x00000004)
+-#define RKISP1_CIF_MRSZ_SCALE_HCB		(RKISP1_CIF_MRSZ_BASE + 0x00000008)
+-#define RKISP1_CIF_MRSZ_SCALE_HCR		(RKISP1_CIF_MRSZ_BASE + 0x0000000C)
+-#define RKISP1_CIF_MRSZ_SCALE_VY		(RKISP1_CIF_MRSZ_BASE + 0x00000010)
+-#define RKISP1_CIF_MRSZ_SCALE_VC		(RKISP1_CIF_MRSZ_BASE + 0x00000014)
+-#define RKISP1_CIF_MRSZ_PHASE_HY		(RKISP1_CIF_MRSZ_BASE + 0x00000018)
+-#define RKISP1_CIF_MRSZ_PHASE_HC		(RKISP1_CIF_MRSZ_BASE + 0x0000001C)
+-#define RKISP1_CIF_MRSZ_PHASE_VY		(RKISP1_CIF_MRSZ_BASE + 0x00000020)
+-#define RKISP1_CIF_MRSZ_PHASE_VC		(RKISP1_CIF_MRSZ_BASE + 0x00000024)
+-#define RKISP1_CIF_MRSZ_SCALE_LUT_ADDR		(RKISP1_CIF_MRSZ_BASE + 0x00000028)
+-#define RKISP1_CIF_MRSZ_SCALE_LUT		(RKISP1_CIF_MRSZ_BASE + 0x0000002C)
+-#define RKISP1_CIF_MRSZ_CTRL_SHD		(RKISP1_CIF_MRSZ_BASE + 0x00000030)
+-#define RKISP1_CIF_MRSZ_SCALE_HY_SHD		(RKISP1_CIF_MRSZ_BASE + 0x00000034)
+-#define RKISP1_CIF_MRSZ_SCALE_HCB_SHD		(RKISP1_CIF_MRSZ_BASE + 0x00000038)
+-#define RKISP1_CIF_MRSZ_SCALE_HCR_SHD		(RKISP1_CIF_MRSZ_BASE + 0x0000003C)
+-#define RKISP1_CIF_MRSZ_SCALE_VY_SHD		(RKISP1_CIF_MRSZ_BASE + 0x00000040)
+-#define RKISP1_CIF_MRSZ_SCALE_VC_SHD		(RKISP1_CIF_MRSZ_BASE + 0x00000044)
+-#define RKISP1_CIF_MRSZ_PHASE_HY_SHD		(RKISP1_CIF_MRSZ_BASE + 0x00000048)
+-#define RKISP1_CIF_MRSZ_PHASE_HC_SHD		(RKISP1_CIF_MRSZ_BASE + 0x0000004C)
+-#define RKISP1_CIF_MRSZ_PHASE_VY_SHD		(RKISP1_CIF_MRSZ_BASE + 0x00000050)
+-#define RKISP1_CIF_MRSZ_PHASE_VC_SHD		(RKISP1_CIF_MRSZ_BASE + 0x00000054)
+-
+ #define RKISP1_CIF_SRSZ_BASE			0x00001000
+-#define RKISP1_CIF_SRSZ_CTRL			(RKISP1_CIF_SRSZ_BASE + 0x00000000)
+-#define RKISP1_CIF_SRSZ_SCALE_HY		(RKISP1_CIF_SRSZ_BASE + 0x00000004)
+-#define RKISP1_CIF_SRSZ_SCALE_HCB		(RKISP1_CIF_SRSZ_BASE + 0x00000008)
+-#define RKISP1_CIF_SRSZ_SCALE_HCR		(RKISP1_CIF_SRSZ_BASE + 0x0000000C)
+-#define RKISP1_CIF_SRSZ_SCALE_VY		(RKISP1_CIF_SRSZ_BASE + 0x00000010)
+-#define RKISP1_CIF_SRSZ_SCALE_VC		(RKISP1_CIF_SRSZ_BASE + 0x00000014)
+-#define RKISP1_CIF_SRSZ_PHASE_HY		(RKISP1_CIF_SRSZ_BASE + 0x00000018)
+-#define RKISP1_CIF_SRSZ_PHASE_HC		(RKISP1_CIF_SRSZ_BASE + 0x0000001C)
+-#define RKISP1_CIF_SRSZ_PHASE_VY		(RKISP1_CIF_SRSZ_BASE + 0x00000020)
+-#define RKISP1_CIF_SRSZ_PHASE_VC		(RKISP1_CIF_SRSZ_BASE + 0x00000024)
+-#define RKISP1_CIF_SRSZ_SCALE_LUT_ADDR		(RKISP1_CIF_SRSZ_BASE + 0x00000028)
+-#define RKISP1_CIF_SRSZ_SCALE_LUT		(RKISP1_CIF_SRSZ_BASE + 0x0000002C)
+-#define RKISP1_CIF_SRSZ_CTRL_SHD		(RKISP1_CIF_SRSZ_BASE + 0x00000030)
+-#define RKISP1_CIF_SRSZ_SCALE_HY_SHD		(RKISP1_CIF_SRSZ_BASE + 0x00000034)
+-#define RKISP1_CIF_SRSZ_SCALE_HCB_SHD		(RKISP1_CIF_SRSZ_BASE + 0x00000038)
+-#define RKISP1_CIF_SRSZ_SCALE_HCR_SHD		(RKISP1_CIF_SRSZ_BASE + 0x0000003C)
+-#define RKISP1_CIF_SRSZ_SCALE_VY_SHD		(RKISP1_CIF_SRSZ_BASE + 0x00000040)
+-#define RKISP1_CIF_SRSZ_SCALE_VC_SHD		(RKISP1_CIF_SRSZ_BASE + 0x00000044)
+-#define RKISP1_CIF_SRSZ_PHASE_HY_SHD		(RKISP1_CIF_SRSZ_BASE + 0x00000048)
+-#define RKISP1_CIF_SRSZ_PHASE_HC_SHD		(RKISP1_CIF_SRSZ_BASE + 0x0000004C)
+-#define RKISP1_CIF_SRSZ_PHASE_VY_SHD		(RKISP1_CIF_SRSZ_BASE + 0x00000050)
+-#define RKISP1_CIF_SRSZ_PHASE_VC_SHD		(RKISP1_CIF_SRSZ_BASE + 0x00000054)
++#define RKISP1_CIF_RSZ_CTRL			0x0000
++#define RKISP1_CIF_RSZ_SCALE_HY			0x0004
++#define RKISP1_CIF_RSZ_SCALE_HCB		0x0008
++#define RKISP1_CIF_RSZ_SCALE_HCR		0x000C
++#define RKISP1_CIF_RSZ_SCALE_VY			0x0010
++#define RKISP1_CIF_RSZ_SCALE_VC			0x0014
++#define RKISP1_CIF_RSZ_PHASE_HY			0x0018
++#define RKISP1_CIF_RSZ_PHASE_HC			0x001C
++#define RKISP1_CIF_RSZ_PHASE_VY			0x0020
++#define RKISP1_CIF_RSZ_PHASE_VC			0x0024
++#define RKISP1_CIF_RSZ_SCALE_LUT_ADDR		0x0028
++#define RKISP1_CIF_RSZ_SCALE_LUT		0x002C
++#define RKISP1_CIF_RSZ_CTRL_SHD			0x0030
++#define RKISP1_CIF_RSZ_SCALE_HY_SHD		0x0034
++#define RKISP1_CIF_RSZ_SCALE_HCB_SHD		0x0038
++#define RKISP1_CIF_RSZ_SCALE_HCR_SHD		0x003C
++#define RKISP1_CIF_RSZ_SCALE_VY_SHD		0x0040
++#define RKISP1_CIF_RSZ_SCALE_VC_SHD		0x0044
++#define RKISP1_CIF_RSZ_PHASE_HY_SHD		0x0048
++#define RKISP1_CIF_RSZ_PHASE_HC_SHD		0x004C
++#define RKISP1_CIF_RSZ_PHASE_VY_SHD		0x0050
++#define RKISP1_CIF_RSZ_PHASE_VC_SHD		0x0054
  
- /* MI_DMA_CTRL */
- #define RKISP1_CIF_MI_DMA_CTRL_BURST_LEN_LUM_16		(0 << 0)
--#define RKISP1_CIF_MI_DMA_CTRL_BURST_LEN_LUM_32		BIT(0)
-+#define RKISP1_CIF_MI_DMA_CTRL_BURST_LEN_LUM_32		(1 << 0)
- #define RKISP1_CIF_MI_DMA_CTRL_BURST_LEN_LUM_64		(2 << 0)
- #define RKISP1_CIF_MI_DMA_CTRL_BURST_LEN_CHROM_16	(0 << 2)
--#define RKISP1_CIF_MI_DMA_CTRL_BURST_LEN_CHROM_32	BIT(2)
-+#define RKISP1_CIF_MI_DMA_CTRL_BURST_LEN_CHROM_32	(1 << 2)
- #define RKISP1_CIF_MI_DMA_CTRL_BURST_LEN_CHROM_64	(2 << 2)
- #define RKISP1_CIF_MI_DMA_CTRL_READ_FMT_PLANAR		(0 << 4)
--#define RKISP1_CIF_MI_DMA_CTRL_READ_FMT_SPLANAR		BIT(4)
--#define RKISP1_CIF_MI_DMA_CTRL_FMT_YUV400		(0 << 6)
--#define RKISP1_CIF_MI_DMA_CTRL_FMT_YUV420		BIT(6)
-+#define RKISP1_CIF_MI_DMA_CTRL_READ_FMT_SPLANAR		(1 << 4)
- #define RKISP1_CIF_MI_DMA_CTRL_READ_FMT_PACKED		(2 << 4)
-+#define RKISP1_CIF_MI_DMA_CTRL_FMT_YUV400		(0 << 6)
-+#define RKISP1_CIF_MI_DMA_CTRL_FMT_YUV420		(1 << 6)
- #define RKISP1_CIF_MI_DMA_CTRL_FMT_YUV422		(2 << 6)
- #define RKISP1_CIF_MI_DMA_CTRL_FMT_YUV444		(3 << 6)
- #define RKISP1_CIF_MI_DMA_CTRL_BYTE_SWAP		BIT(8)
- #define RKISP1_CIF_MI_DMA_CTRL_CONTINUOUS_ENA		BIT(9)
- #define RKISP1_CIF_MI_DMA_CTRL_RGB_BAYER_NO		(0 << 12)
--#define RKISP1_CIF_MI_DMA_CTRL_RGB_BAYER_8BIT		BIT(12)
-+#define RKISP1_CIF_MI_DMA_CTRL_RGB_BAYER_8BIT		(1 << 12)
- #define RKISP1_CIF_MI_DMA_CTRL_RGB_BAYER_16BIT		(2 << 12)
- /* MI_DMA_START */
- #define RKISP1_CIF_MI_DMA_START_ENABLE			BIT(0)
-@@ -282,10 +282,10 @@
- #define RKISP1_CIF_C_PROC_TONE_RESERVED			0xF000
- /* DUAL_CROP_CTRL */
- #define RKISP1_CIF_DUAL_CROP_MP_MODE_BYPASS		(0 << 0)
--#define RKISP1_CIF_DUAL_CROP_MP_MODE_YUV		BIT(0)
-+#define RKISP1_CIF_DUAL_CROP_MP_MODE_YUV		(1 << 0)
- #define RKISP1_CIF_DUAL_CROP_MP_MODE_RAW		(2 << 0)
- #define RKISP1_CIF_DUAL_CROP_SP_MODE_BYPASS		(0 << 2)
--#define RKISP1_CIF_DUAL_CROP_SP_MODE_YUV		BIT(2)
-+#define RKISP1_CIF_DUAL_CROP_SP_MODE_YUV		(1 << 2)
- #define RKISP1_CIF_DUAL_CROP_SP_MODE_RAW		(2 << 2)
- #define RKISP1_CIF_DUAL_CROP_CFG_UPD_PERMANENT		BIT(4)
- #define RKISP1_CIF_DUAL_CROP_CFG_UPD			BIT(5)
-@@ -294,7 +294,7 @@
- /* IMG_EFF_CTRL */
- #define RKISP1_CIF_IMG_EFF_CTRL_ENABLE			BIT(0)
- #define RKISP1_CIF_IMG_EFF_CTRL_MODE_BLACKWHITE		(0 << 1)
--#define RKISP1_CIF_IMG_EFF_CTRL_MODE_NEGATIVE		BIT(1)
-+#define RKISP1_CIF_IMG_EFF_CTRL_MODE_NEGATIVE		(1 << 1)
- #define RKISP1_CIF_IMG_EFF_CTRL_MODE_SEPIA		(2 << 1)
- #define RKISP1_CIF_IMG_EFF_CTRL_MODE_COLOR_SEL		(3 << 1)
- #define RKISP1_CIF_IMG_EFF_CTRL_MODE_EMBOSS		(4 << 1)
-@@ -314,7 +314,7 @@
+ #define RKISP1_CIF_MI_BASE			0x00001400
+ #define RKISP1_CIF_MI_CTRL			(RKISP1_CIF_MI_BASE + 0x00000000)
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-resizer.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-resizer.c
+index b88d579a283c..ac1b357a2a3a 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-resizer.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-resizer.c
+@@ -59,30 +59,6 @@ struct rkisp1_rsz_config {
+ 	const int min_rsz_width;
+ 	const int min_rsz_height;
+ 	/* registers */
+-	struct {
+-		u32 ctrl;
+-		u32 ctrl_shd;
+-		u32 scale_hy;
+-		u32 scale_hcr;
+-		u32 scale_hcb;
+-		u32 scale_vy;
+-		u32 scale_vc;
+-		u32 scale_lut;
+-		u32 scale_lut_addr;
+-		u32 scale_hy_shd;
+-		u32 scale_hcr_shd;
+-		u32 scale_hcb_shd;
+-		u32 scale_vy_shd;
+-		u32 scale_vc_shd;
+-		u32 phase_hy;
+-		u32 phase_hc;
+-		u32 phase_vy;
+-		u32 phase_vc;
+-		u32 phase_hy_shd;
+-		u32 phase_hc_shd;
+-		u32 phase_vy_shd;
+-		u32 phase_vc_shd;
+-	} rsz;
+ 	struct {
+ 		u32 ctrl;
+ 		u32 yuvmode_mask;
+@@ -101,30 +77,6 @@ static const struct rkisp1_rsz_config rkisp1_rsz_config_mp = {
+ 	.min_rsz_width = RKISP1_RSZ_SRC_MIN_WIDTH,
+ 	.min_rsz_height = RKISP1_RSZ_SRC_MIN_HEIGHT,
+ 	/* registers */
+-	.rsz = {
+-		.ctrl =			RKISP1_CIF_MRSZ_CTRL,
+-		.scale_hy =		RKISP1_CIF_MRSZ_SCALE_HY,
+-		.scale_hcr =		RKISP1_CIF_MRSZ_SCALE_HCR,
+-		.scale_hcb =		RKISP1_CIF_MRSZ_SCALE_HCB,
+-		.scale_vy =		RKISP1_CIF_MRSZ_SCALE_VY,
+-		.scale_vc =		RKISP1_CIF_MRSZ_SCALE_VC,
+-		.scale_lut =		RKISP1_CIF_MRSZ_SCALE_LUT,
+-		.scale_lut_addr =	RKISP1_CIF_MRSZ_SCALE_LUT_ADDR,
+-		.scale_hy_shd =		RKISP1_CIF_MRSZ_SCALE_HY_SHD,
+-		.scale_hcr_shd =	RKISP1_CIF_MRSZ_SCALE_HCR_SHD,
+-		.scale_hcb_shd =	RKISP1_CIF_MRSZ_SCALE_HCB_SHD,
+-		.scale_vy_shd =		RKISP1_CIF_MRSZ_SCALE_VY_SHD,
+-		.scale_vc_shd =		RKISP1_CIF_MRSZ_SCALE_VC_SHD,
+-		.phase_hy =		RKISP1_CIF_MRSZ_PHASE_HY,
+-		.phase_hc =		RKISP1_CIF_MRSZ_PHASE_HC,
+-		.phase_vy =		RKISP1_CIF_MRSZ_PHASE_VY,
+-		.phase_vc =		RKISP1_CIF_MRSZ_PHASE_VC,
+-		.ctrl_shd =		RKISP1_CIF_MRSZ_CTRL_SHD,
+-		.phase_hy_shd =		RKISP1_CIF_MRSZ_PHASE_HY_SHD,
+-		.phase_hc_shd =		RKISP1_CIF_MRSZ_PHASE_HC_SHD,
+-		.phase_vy_shd =		RKISP1_CIF_MRSZ_PHASE_VY_SHD,
+-		.phase_vc_shd =		RKISP1_CIF_MRSZ_PHASE_VC_SHD,
+-	},
+ 	.dual_crop = {
+ 		.ctrl =			RKISP1_CIF_DUAL_CROP_CTRL,
+ 		.yuvmode_mask =		RKISP1_CIF_DUAL_CROP_MP_MODE_YUV,
+@@ -143,30 +95,6 @@ static const struct rkisp1_rsz_config rkisp1_rsz_config_sp = {
+ 	.min_rsz_width = RKISP1_RSZ_SRC_MIN_WIDTH,
+ 	.min_rsz_height = RKISP1_RSZ_SRC_MIN_HEIGHT,
+ 	/* registers */
+-	.rsz = {
+-		.ctrl =			RKISP1_CIF_SRSZ_CTRL,
+-		.scale_hy =		RKISP1_CIF_SRSZ_SCALE_HY,
+-		.scale_hcr =		RKISP1_CIF_SRSZ_SCALE_HCR,
+-		.scale_hcb =		RKISP1_CIF_SRSZ_SCALE_HCB,
+-		.scale_vy =		RKISP1_CIF_SRSZ_SCALE_VY,
+-		.scale_vc =		RKISP1_CIF_SRSZ_SCALE_VC,
+-		.scale_lut =		RKISP1_CIF_SRSZ_SCALE_LUT,
+-		.scale_lut_addr =	RKISP1_CIF_SRSZ_SCALE_LUT_ADDR,
+-		.scale_hy_shd =		RKISP1_CIF_SRSZ_SCALE_HY_SHD,
+-		.scale_hcr_shd =	RKISP1_CIF_SRSZ_SCALE_HCR_SHD,
+-		.scale_hcb_shd =	RKISP1_CIF_SRSZ_SCALE_HCB_SHD,
+-		.scale_vy_shd =		RKISP1_CIF_SRSZ_SCALE_VY_SHD,
+-		.scale_vc_shd =		RKISP1_CIF_SRSZ_SCALE_VC_SHD,
+-		.phase_hy =		RKISP1_CIF_SRSZ_PHASE_HY,
+-		.phase_hc =		RKISP1_CIF_SRSZ_PHASE_HC,
+-		.phase_vy =		RKISP1_CIF_SRSZ_PHASE_VY,
+-		.phase_vc =		RKISP1_CIF_SRSZ_PHASE_VC,
+-		.ctrl_shd =		RKISP1_CIF_SRSZ_CTRL_SHD,
+-		.phase_hy_shd =		RKISP1_CIF_SRSZ_PHASE_HY_SHD,
+-		.phase_hc_shd =		RKISP1_CIF_SRSZ_PHASE_HC_SHD,
+-		.phase_vy_shd =		RKISP1_CIF_SRSZ_PHASE_VY_SHD,
+-		.phase_vc_shd =		RKISP1_CIF_SRSZ_PHASE_VC_SHD,
+-	},
+ 	.dual_crop = {
+ 		.ctrl =			RKISP1_CIF_DUAL_CROP_CTRL,
+ 		.yuvmode_mask =		RKISP1_CIF_DUAL_CROP_SP_MODE_YUV,
+@@ -178,6 +106,17 @@ static const struct rkisp1_rsz_config rkisp1_rsz_config_sp = {
+ 	},
+ };
  
- /* IMG_EFF_COLOR_SEL */
- #define RKISP1_CIF_IMG_EFF_COLOR_RGB			0
--#define RKISP1_CIF_IMG_EFF_COLOR_B			BIT(0)
-+#define RKISP1_CIF_IMG_EFF_COLOR_B			(1 << 0)
- #define RKISP1_CIF_IMG_EFF_COLOR_G			(2 << 0)
- #define RKISP1_CIF_IMG_EFF_COLOR_GB			(3 << 0)
- #define RKISP1_CIF_IMG_EFF_COLOR_R			(4 << 0)
-@@ -376,7 +376,7 @@
++static inline u32 rkisp1_rsz_read(struct rkisp1_resizer *rsz, u32 offset)
++{
++	return rkisp1_read(rsz->rkisp1, rsz->regs_base + offset);
++}
++
++static inline void rkisp1_rsz_write(struct rkisp1_resizer *rsz, u32 offset,
++				    u32 value)
++{
++	rkisp1_write(rsz->rkisp1, rsz->regs_base + offset, value);
++}
++
+ static struct v4l2_mbus_framefmt *
+ rkisp1_rsz_get_pad_fmt(struct rkisp1_resizer *rsz,
+ 		       struct v4l2_subdev_state *sd_state,
+@@ -277,39 +216,39 @@ static void rkisp1_rsz_dump_regs(struct rkisp1_resizer *rsz)
+ 		"RSZ_PHASE_HC %d/%d\n"
+ 		"RSZ_PHASE_VY %d/%d\n"
+ 		"RSZ_PHASE_VC %d/%d\n",
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.ctrl),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.ctrl_shd),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.scale_hy),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.scale_hy_shd),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.scale_hcb),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.scale_hcb_shd),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.scale_hcr),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.scale_hcr_shd),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.scale_vy),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.scale_vy_shd),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.scale_vc),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.scale_vc_shd),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.phase_hy),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.phase_hy_shd),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.phase_hc),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.phase_hc_shd),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.phase_vy),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.phase_vy_shd),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.phase_vc),
+-		rkisp1_read(rsz->rkisp1, rsz->config->rsz.phase_vc_shd));
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_CTRL),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_CTRL_SHD),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_SCALE_HY),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_SCALE_HY_SHD),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_SCALE_HCB),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_SCALE_HCB_SHD),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_SCALE_HCR),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_SCALE_HCR_SHD),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_SCALE_VY),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_SCALE_VY_SHD),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_SCALE_VC),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_SCALE_VC_SHD),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_PHASE_HY),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_PHASE_HY_SHD),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_PHASE_HC),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_PHASE_HC_SHD),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_PHASE_VY),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_PHASE_VY_SHD),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_PHASE_VC),
++		rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_PHASE_VC_SHD));
+ }
  
- /* ISP HISTOGRAM CALCULATION : ISP_HIST_PROP */
- #define RKISP1_CIF_ISP_HIST_PROP_MODE_DIS_V10		(0 << 0)
--#define RKISP1_CIF_ISP_HIST_PROP_MODE_RGB_V10		BIT(0)
-+#define RKISP1_CIF_ISP_HIST_PROP_MODE_RGB_V10		(1 << 0)
- #define RKISP1_CIF_ISP_HIST_PROP_MODE_RED_V10		(2 << 0)
- #define RKISP1_CIF_ISP_HIST_PROP_MODE_GREEN_V10		(3 << 0)
- #define RKISP1_CIF_ISP_HIST_PROP_MODE_BLUE_V10		(4 << 0)
-@@ -639,7 +639,7 @@
- #define RKISP1_CIF_ISP_BLS_ENA				BIT(0)
- #define RKISP1_CIF_ISP_BLS_MODE_MEASURED		BIT(1)
- #define RKISP1_CIF_ISP_BLS_MODE_FIXED			0
--#define RKISP1_CIF_ISP_BLS_WINDOW_1			BIT(2)
-+#define RKISP1_CIF_ISP_BLS_WINDOW_1			(1 << 2)
- #define RKISP1_CIF_ISP_BLS_WINDOW_2			(2 << 2)
+ static void rkisp1_rsz_update_shadow(struct rkisp1_resizer *rsz,
+ 				     enum rkisp1_shadow_regs_when when)
+ {
+-	u32 ctrl_cfg = rkisp1_read(rsz->rkisp1, rsz->config->rsz.ctrl);
++	u32 ctrl_cfg = rkisp1_rsz_read(rsz, RKISP1_CIF_RSZ_CTRL);
  
- /* GAMMA-IN */
+ 	if (when == RKISP1_SHADOW_REGS_ASYNC)
+ 		ctrl_cfg |= RKISP1_CIF_RSZ_CTRL_CFG_UPD_AUTO;
+ 	else
+ 		ctrl_cfg |= RKISP1_CIF_RSZ_CTRL_CFG_UPD;
+ 
+-	rkisp1_write(rsz->rkisp1, rsz->config->rsz.ctrl, ctrl_cfg);
++	rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_CTRL, ctrl_cfg);
+ }
+ 
+ static u32 rkisp1_rsz_calc_ratio(u32 len_sink, u32 len_src)
+@@ -325,7 +264,7 @@ static u32 rkisp1_rsz_calc_ratio(u32 len_sink, u32 len_src)
+ static void rkisp1_rsz_disable(struct rkisp1_resizer *rsz,
+ 			       enum rkisp1_shadow_regs_when when)
+ {
+-	rkisp1_write(rsz->rkisp1, rsz->config->rsz.ctrl, 0);
++	rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_CTRL, 0);
+ 
+ 	if (when == RKISP1_SHADOW_REGS_SYNC)
+ 		rkisp1_rsz_update_shadow(rsz, when);
+@@ -338,20 +277,19 @@ static void rkisp1_rsz_config_regs(struct rkisp1_resizer *rsz,
+ 				   struct v4l2_rect *src_c,
+ 				   enum rkisp1_shadow_regs_when when)
+ {
+-	struct rkisp1_device *rkisp1 = rsz->rkisp1;
+ 	u32 ratio, rsz_ctrl = 0;
+ 	unsigned int i;
+ 
+ 	/* No phase offset */
+-	rkisp1_write(rkisp1, rsz->config->rsz.phase_hy, 0);
+-	rkisp1_write(rkisp1, rsz->config->rsz.phase_hc, 0);
+-	rkisp1_write(rkisp1, rsz->config->rsz.phase_vy, 0);
+-	rkisp1_write(rkisp1, rsz->config->rsz.phase_vc, 0);
++	rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_PHASE_HY, 0);
++	rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_PHASE_HC, 0);
++	rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_PHASE_VY, 0);
++	rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_PHASE_VC, 0);
+ 
+ 	/* Linear interpolation */
+ 	for (i = 0; i < 64; i++) {
+-		rkisp1_write(rkisp1, rsz->config->rsz.scale_lut_addr, i);
+-		rkisp1_write(rkisp1, rsz->config->rsz.scale_lut, i);
++		rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_SCALE_LUT_ADDR, i);
++		rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_SCALE_LUT, i);
+ 	}
+ 
+ 	if (sink_y->width != src_y->width) {
+@@ -359,7 +297,7 @@ static void rkisp1_rsz_config_regs(struct rkisp1_resizer *rsz,
+ 		if (sink_y->width < src_y->width)
+ 			rsz_ctrl |= RKISP1_CIF_RSZ_CTRL_SCALE_HY_UP;
+ 		ratio = rkisp1_rsz_calc_ratio(sink_y->width, src_y->width);
+-		rkisp1_write(rkisp1, rsz->config->rsz.scale_hy, ratio);
++		rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_SCALE_HY, ratio);
+ 	}
+ 
+ 	if (sink_c->width != src_c->width) {
+@@ -367,8 +305,8 @@ static void rkisp1_rsz_config_regs(struct rkisp1_resizer *rsz,
+ 		if (sink_c->width < src_c->width)
+ 			rsz_ctrl |= RKISP1_CIF_RSZ_CTRL_SCALE_HC_UP;
+ 		ratio = rkisp1_rsz_calc_ratio(sink_c->width, src_c->width);
+-		rkisp1_write(rkisp1, rsz->config->rsz.scale_hcb, ratio);
+-		rkisp1_write(rkisp1, rsz->config->rsz.scale_hcr, ratio);
++		rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_SCALE_HCB, ratio);
++		rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_SCALE_HCR, ratio);
+ 	}
+ 
+ 	if (sink_y->height != src_y->height) {
+@@ -376,7 +314,7 @@ static void rkisp1_rsz_config_regs(struct rkisp1_resizer *rsz,
+ 		if (sink_y->height < src_y->height)
+ 			rsz_ctrl |= RKISP1_CIF_RSZ_CTRL_SCALE_VY_UP;
+ 		ratio = rkisp1_rsz_calc_ratio(sink_y->height, src_y->height);
+-		rkisp1_write(rkisp1, rsz->config->rsz.scale_vy, ratio);
++		rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_SCALE_VY, ratio);
+ 	}
+ 
+ 	if (sink_c->height != src_c->height) {
+@@ -384,10 +322,10 @@ static void rkisp1_rsz_config_regs(struct rkisp1_resizer *rsz,
+ 		if (sink_c->height < src_c->height)
+ 			rsz_ctrl |= RKISP1_CIF_RSZ_CTRL_SCALE_VC_UP;
+ 		ratio = rkisp1_rsz_calc_ratio(sink_c->height, src_c->height);
+-		rkisp1_write(rkisp1, rsz->config->rsz.scale_vc, ratio);
++		rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_SCALE_VC, ratio);
+ 	}
+ 
+-	rkisp1_write(rkisp1, rsz->config->rsz.ctrl, rsz_ctrl);
++	rkisp1_rsz_write(rsz, RKISP1_CIF_RSZ_CTRL, rsz_ctrl);
+ 
+ 	rkisp1_rsz_update_shadow(rsz, when);
+ }
+@@ -803,10 +741,13 @@ static int rkisp1_rsz_register(struct rkisp1_resizer *rsz)
+ 	struct v4l2_subdev *sd = &rsz->sd;
+ 	int ret;
+ 
+-	if (rsz->id == RKISP1_SELFPATH)
++	if (rsz->id == RKISP1_SELFPATH) {
++		rsz->regs_base = RKISP1_CIF_SRSZ_BASE;
+ 		rsz->config = &rkisp1_rsz_config_sp;
+-	else
++	} else {
++		rsz->regs_base = RKISP1_CIF_MRSZ_BASE;
+ 		rsz->config = &rkisp1_rsz_config_mp;
++	}
+ 
+ 	v4l2_subdev_init(sd, &rkisp1_rsz_ops);
+ 	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
 -- 
 Regards,
 
