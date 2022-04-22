@@ -2,96 +2,104 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AB79C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 22 Apr 2022 16:54:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F0DAC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 22 Apr 2022 17:46:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359667AbiDVQ44 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 22 Apr 2022 12:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
+        id S232196AbiDVRs4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 22 Apr 2022 13:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352608AbiDVQ4z (ORCPT
+        with ESMTP id S232202AbiDVRsb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:56:55 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792D65FF21
-        for <linux-media@vger.kernel.org>; Fri, 22 Apr 2022 09:54:01 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0FA222F7;
-        Fri, 22 Apr 2022 18:53:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1650646439;
-        bh=0FcSijTsjj+cAuo1hmRA74AMfsMS728IukiaCybwuj8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e2o+NmgkehiBnfuHiABbDz1Lw3IpmEWazq/BMb2rcQHUwHz5DlTc9kMNxSJ7SCztt
-         jYk2IwFq9n6cfwnLvirGZtrmfk/0lENokvJhfxr/mYqnACmAVbPxS6e3EpqNtPCuV3
-         O5gk1MiP5yu9NgQ3P9bAJpLIKqndw9k+k+v1UL50=
-Date:   Fri, 22 Apr 2022 19:53:59 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        niklas.soderlund+renesas@ragnatech.se,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Pratyush Yadav <p.yadav@ti.com>
-Subject: Re: [PATCH 4/6] media: ti: cal: use CSI-2 frame number for seq number
-Message-ID: <YmLdpwLfxpcXzVC6@pendragon.ideasonboard.com>
-References: <20220421143449.552312-1-tomi.valkeinen@ideasonboard.com>
- <20220421143449.552312-5-tomi.valkeinen@ideasonboard.com>
- <YmHuQ6bmBgDgt5ke@pendragon.ideasonboard.com>
- <7a43e054-5e9d-2858-929b-874b7c6a0c86@ideasonboard.com>
+        Fri, 22 Apr 2022 13:48:31 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8C250E10
+        for <linux-media@vger.kernel.org>; Fri, 22 Apr 2022 10:45:17 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id v65so5102269oig.10
+        for <linux-media@vger.kernel.org>; Fri, 22 Apr 2022 10:45:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Nr2dHmWfiNPPrGPgPCaM1uOSlB4d/YNPDX461LAtgB8=;
+        b=LQaiOYQpAliM0d9+oDbPUjhZcr5YhYhYhJjLJzQqcDyc3/r8G4CoKBR2Cg0QE9I7mO
+         hat8Tg2yJPa7jo2Sv3+uwgiDIurI6pYh+1T0R8uTYc61ttH5Z6o4owOliAOaq0ciUHgi
+         JdLhFCcTci5eC3s/5LdfXhf9MbKvxiLYbPKp+hG1ba3wAhkXTQzjbQ/7Odq510IYNURx
+         iRK91dpBbsCeyt/zDj1BdElOESE/FxrK4eb4VDideQKoF57bf3Oh/DxzTUhkZ+1Y+OA2
+         AwErendhnh45Do8iHSD1YX6TDpnEQSO0Ec8o79h+Xm8nGlZRQRsKKIdkcFXCBcCIgxOy
+         eB3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Nr2dHmWfiNPPrGPgPCaM1uOSlB4d/YNPDX461LAtgB8=;
+        b=XrdMlocLPJ9kNMNLfYR1a0ylf2N/AVo7aUIfUyspuD+jaGbog91JEWJiTC/8l1XsG0
+         50Wi8qUeugrlXPNwm2omsxQ57YBGF2xW05KbtIsHcuFgYMVAzfFtMXFnZsb70AhlSgmR
+         BKGaqEs0Vm31Nl1S1aWvrh8V9q6YiNIXzDOcGi/TfdICPXRz03KhklemGHqUwlLbN7e3
+         Y5YVE9R+DBr9N+a8Evz+1Y/EORlq4J7vLMCqy1vVIErDEUm3FVgyhvgjCGDCHLRvzEla
+         beeBmpCw/E0+1Ybr4Bm/q0FovEc8v5Js577uMcpmt92ROkreI7mKm7lYOrK0SlbULS2C
+         tsTw==
+X-Gm-Message-State: AOAM533T3ycQwHutzHM38u2bJZ9gc71cDCcocS/LIJafaFyDauCG6vI3
+        lof48M3kiGjIWdApiHxaEUfK6Q==
+X-Google-Smtp-Source: ABdhPJwiTQjcOmeurwc6R+Gx9T5404cqLZmOEizI5ZBPUFKo8ZFoHVx4xFsOsrLwiWUvW9+vx5hOUw==
+X-Received: by 2002:a05:6808:17a3:b0:324:fcbf:3142 with SMTP id bg35-20020a05680817a300b00324fcbf3142mr523793oib.5.1650649370137;
+        Fri, 22 Apr 2022 10:42:50 -0700 (PDT)
+Received: from eze-laptop ([190.190.187.68])
+        by smtp.gmail.com with ESMTPSA id q11-20020a05683033cb00b005e686fd52d6sm965139ott.17.2022.04.22.10.42.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 10:42:48 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 14:42:43 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Christopher Obbard <chris.obbard@collabora.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Alex Bee <knaerzche@gmail.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 2/3] arm64: dts: rockchip: Rename vdec_mmu node for RK3328
+Message-ID: <YmLpE+AfZ4UYmn9O@eze-laptop>
+References: <20220422133803.989256-1-chris.obbard@collabora.com>
+ <20220422133803.989256-3-chris.obbard@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7a43e054-5e9d-2858-929b-874b7c6a0c86@ideasonboard.com>
+In-Reply-To: <20220422133803.989256-3-chris.obbard@collabora.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Tomi,
-
-On Fri, Apr 22, 2022 at 09:41:51AM +0300, Tomi Valkeinen wrote:
-> On 22/04/2022 02:52, Laurent Pinchart wrote:
-> > On Thu, Apr 21, 2022 at 05:34:47PM +0300, Tomi Valkeinen wrote:
-> >> The userspace needs a way to match received metadata buffers to pixel
-> >> data buffers. The obvious way to do this is to use the CSI-2 frame
-> >> number, as both the metadata and the pixel data have the same frame
-> >> number as they come from the same frame.
-> >>
-> >> However, we don't have means to convey the frame number to userspace. We
-> >> do have the 'sequence' field, which with a few tricks can be used for
-> >> this purpose.
-> >>
-> >> To achieve this, track the frame number for each virtual channel and
-> >> increase the sequence for each virtual channel by frame-number -
-> >> previous-frame-number, also taking into account the eventual wrap of the
-> >> CSI-2 frame number.
-> >>
-> >> This way we get a monotonically increasing sequence number which is
-> >> common to all streams using the same virtual channel.
-> > 
-> > I'd agree in principle, if it wasn't for the fact that sensors are not
-> > required to produce a frame number :-S
+On Fri, Apr 22, 2022 at 02:38:02PM +0100, Christopher Obbard wrote:
+> All other rockchip devices which have vdec nodes do not
+> have an rk prefix. Remove the prefix from the (currently
+> unused) rkvdec_mmu node for consistency with other
+> devices.
 > 
-> In that case the CAL hardware will increment the register every frame. 
->  From CAL doc:
+> Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
+
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3328.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Frame number.
-> Matches the frame number sent by the camera when the
-> camera transmits it.
-> Otherwise, incremented by one on every FS short packet
-> for this context.
-
-Is that only when the FS packet contains a frame number equal to 0 ? How
-about the extreme case where the frame number counts up to 2 and resets
-to 1, effectively toggling between 1 and 2 ? Does your patch support
-this correctly ?
-
-> Reset when the context is enabled.
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+> index b822533dc7f1..f8ef149fedad 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+> @@ -660,7 +660,7 @@ vpu_mmu: iommu@ff350800 {
+>  		power-domains = <&power RK3328_PD_VPU>;
+>  	};
+>  
+> -	rkvdec_mmu: iommu@ff360480 {
+> +	vdec_mmu: iommu@ff360480 {
+>  		compatible = "rockchip,iommu";
+>  		reg = <0x0 0xff360480 0x0 0x40>, <0x0 0xff3604c0 0x0 0x40>;
+>  		interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
+> -- 
+> 2.34.1
 > 
-> I'll add a note about that to the desc.
-
--- 
-Regards,
-
-Laurent Pinchart
