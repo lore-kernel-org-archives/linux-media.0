@@ -2,40 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40B34C433F5
-	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 12:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD852C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 12:58:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350430AbiDZNB4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Apr 2022 09:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46330 "EHLO
+        id S1350376AbiDZNB5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Apr 2022 09:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350320AbiDZNBZ (ORCPT
+        with ESMTP id S1350381AbiDZNBp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:01:25 -0400
+        Tue, 26 Apr 2022 09:01:45 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8504517B399;
-        Tue, 26 Apr 2022 05:58:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982D117B3BB;
+        Tue, 26 Apr 2022 05:58:37 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id AE6D01F4398F
+        with ESMTPSA id 498941F43992
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650977896;
-        bh=952H20dFKMDGDG2AyTcdBsEiBoEPkmvH/b/LrPIdq6E=;
+        s=mail; t=1650977916;
+        bh=rqMU1/6TJ46L9lH5r2+bP74ysDX3ywT+LO6k1I+k3Bg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ivwEH58V6mC1MYYJ4WS3Fo3nzVJjOsapx5RN+72kpIWPAA/9mJYTv9AvPV9SoCU7t
-         vbomIyuebGGZ7qsih9ITtUvNwe2/rUDE/BOeGdjS+pJfehE7S/ALAOB8bJUK0Gv7xo
-         9C6kenOhkDskpU48m3KexD7pQji4KmqfsOIPpmHe5BTJK40h1c4r8irPIQOwN30SAQ
-         b9/mJSD6FW73vkcPvfy+AhkzcdY28j43lVhlDIYmQM13LDyBvpeuJBN+lIsbPuF/JR
-         QW7jhCWN5Pe+sNbPaLDcfY/YILrMSWKP9HN5+1CJSC98Zxfj/MyuYWDrovf+ACb09c
-         AtvB0I6M706bw==
+        b=NN38d68dmHTqhw4X0vJpCFONROr///7o0gkQVxpcwDpQj8Jz3KwUV+lRZ6Gi7dbRj
+         gbmNVtVshNHarIw1F26EsLUgxGPzqHidqyagAW0FfA06AVfEwlcjDMef4Te3Kx/UDO
+         eh5Xc4y3fhdtPBW2jrxfjzpBJWAwoJcc8lSliupb+DA0kRPI9sYJMvmxUycl4sQJkl
+         ZnWY/7oUZxfN7qUeJYl5eBXwuZbozC0bufbyGQt6TaU8dAkNVTZ57fYuuL6gUsULQT
+         GpPwN9luugkjVokP+4YYhj0OYebaC7hMtmTrcfPw+qmIGzhtpShgaq34Xea3VHQEbN
+         hARecf+vWDilw==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     nicolas@ndufresne.ca, linux-media@vger.kernel.org,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 10/24] media: h264: Sort p/b reflist using frame_num
-Date:   Tue, 26 Apr 2022 08:57:36 -0400
-Message-Id: <20220426125751.108293-11-nicolas.dufresne@collabora.com>
+Subject: [PATCH v4 21/24] media: hantro: Stop using H.264 parameter pic_num
+Date:   Tue, 26 Apr 2022 08:57:47 -0400
+Message-Id: <20220426125751.108293-22-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
 References: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
@@ -45,104 +49,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In the reference list builder, frame_num refers to FrameNumWrap
-in the spec, which is the same as the pic_num for frame decoding.
-The same applies for long_term_pic_num and long_term_frame_idx.
+The hardware expects FrameNumWrap or long_term_frame_idx. Picture
+numbers are per field, and are mostly used during the memory
+management process, which is done in userland. This fixes two
+ITU conformance tests:
 
-Sort all type of references by frame_num so the sort can be reused
-for fields reflist were the sorting is done using frame_num instead.
-In short, pic_num is never actually used for building reference
-lists.
+  - MR6_BT_B
+  - MR8_BT_B
 
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-h264.c | 23 +++++++++++++----------
- include/media/v4l2-h264.h           |  2 --
- 2 files changed, 13 insertions(+), 12 deletions(-)
+ drivers/staging/media/hantro/hantro_h264.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
-index 853f54e0fe67..fe215035d9e8 100644
---- a/drivers/media/v4l2-core/v4l2-h264.c
-+++ b/drivers/media/v4l2-core/v4l2-h264.c
-@@ -56,7 +56,6 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
- 		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
- 			continue;
+diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
+index 0b4d2491be3b..228629fb3cdf 100644
+--- a/drivers/staging/media/hantro/hantro_h264.c
++++ b/drivers/staging/media/hantro/hantro_h264.c
+@@ -354,8 +354,6 @@ u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_idx)
  
--		b->refs[i].pic_num = dpb[i].pic_num;
- 		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
- 			b->refs[i].longterm = true;
- 
-@@ -145,15 +144,19 @@ static int v4l2_h264_p_ref_list_cmp(const void *ptra, const void *ptrb,
- 	}
- 
- 	/*
--	 * Short term pics in descending pic num order, long term ones in
--	 * ascending order.
-+	 * For frames, short term pics are in descending pic num order and long
-+	 * term ones in ascending order. For fields, the same direction is used
-+	 * but with frame_num (wrapped). For frames, the value of pic_num and
-+	 * frame_num are the same (see formula (8-28) and (8-29)). For this
-+	 * reason we can use frame_num only and share this function between
-+	 * frames and fields reflist.
- 	 */
- 	if (!builder->refs[idxa].longterm)
- 		return builder->refs[idxb].frame_num <
- 		       builder->refs[idxa].frame_num ?
- 		       -1 : 1;
- 
--	return builder->refs[idxa].pic_num < builder->refs[idxb].pic_num ?
-+	return builder->refs[idxa].frame_num < builder->refs[idxb].frame_num ?
- 	       -1 : 1;
+ 	if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+ 		return 0;
+-	if (dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
+-		return dpb->pic_num;
+ 	return dpb->frame_num;
  }
- 
-@@ -179,10 +182,10 @@ static int v4l2_h264_b0_ref_list_cmp(const void *ptra, const void *ptrb,
- 			return 1;
- 	}
- 
--	/* Long term pics in ascending pic num order. */
-+	/* Long term pics in ascending frame num order. */
- 	if (builder->refs[idxa].longterm)
--		return builder->refs[idxa].pic_num <
--		       builder->refs[idxb].pic_num ?
-+		return builder->refs[idxa].frame_num <
-+		       builder->refs[idxb].frame_num ?
- 		       -1 : 1;
- 
- 	poca = v4l2_h264_get_poc(builder, ptra);
-@@ -224,10 +227,10 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
- 			return 1;
- 	}
- 
--	/* Long term pics in ascending pic num order. */
-+	/* Long term pics in ascending frame num order. */
- 	if (builder->refs[idxa].longterm)
--		return builder->refs[idxa].pic_num <
--		       builder->refs[idxb].pic_num ?
-+		return builder->refs[idxa].frame_num <
-+		       builder->refs[idxb].frame_num ?
- 		       -1 : 1;
- 
- 	poca = v4l2_h264_get_poc(builder, ptra);
-diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
-index 4cef717b3f18..0d9eaa956123 100644
---- a/include/media/v4l2-h264.h
-+++ b/include/media/v4l2-h264.h
-@@ -18,7 +18,6 @@
-  * @refs.top_field_order_cnt: top field order count
-  * @refs.bottom_field_order_cnt: bottom field order count
-  * @refs.frame_num: reference frame number
-- * @refs.pic_num: reference picture number
-  * @refs.longterm: set to true for a long term reference
-  * @refs: array of references
-  * @cur_pic_order_count: picture order count of the frame being decoded
-@@ -36,7 +35,6 @@ struct v4l2_h264_reflist_builder {
- 		s32 top_field_order_cnt;
- 		s32 bottom_field_order_cnt;
- 		int frame_num;
--		u32 pic_num;
- 		u16 longterm : 1;
- 	} refs[V4L2_H264_NUM_DPB_ENTRIES];
  
 -- 
 2.34.1
