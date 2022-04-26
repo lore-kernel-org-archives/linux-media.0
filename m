@@ -2,240 +2,261 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82387C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 09:03:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6A9DC4321E
+	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 09:12:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244581AbiDZJG4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Apr 2022 05:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S231556AbiDZJPw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Apr 2022 05:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347828AbiDZJGO (ORCPT
+        with ESMTP id S1347372AbiDZJOJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:14 -0400
-X-Greylist: delayed 521 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 26 Apr 2022 01:46:08 PDT
-Received: from smtp1.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37AF163D2F;
-        Tue, 26 Apr 2022 01:46:06 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 26 Apr 2022 05:14:09 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2653184F89;
+        Tue, 26 Apr 2022 01:50:32 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:8ccc:428d:6d90:c434] (unknown [IPv6:2a01:e0a:120:3210:8ccc:428d:6d90:c434])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 569F83C04C0;
-        Tue, 26 Apr 2022 10:37:23 +0200 (CEST)
-Received: from localhost.localdomain (10.72.94.34) by hi2exch02.adit-jv.com
- (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Tue, 26 Apr
- 2022 10:37:22 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     <linux-media@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>
-CC:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Koji Matsuoka <koji.matsuoka.xm@renesas.com>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        Eugen Friedrich <efriedrich@de.adit-jv.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Eugeniu Rosca <rosca.eugeniu@gmail.com>
-Subject: [RFC] media: renesas: vsp1: Add VSPD underrun detection & tracing
-Date:   Tue, 26 Apr 2022 10:37:07 +0200
-Message-ID: <1650962227-14281-1-git-send-email-erosca@de.adit-jv.com>
-X-Mailer: git-send-email 2.7.4
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 5B6521F432A5;
+        Tue, 26 Apr 2022 09:50:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650963028;
+        bh=18a60e/DwgY4enKZwDEyBFnNVeOwXwEzJ1HC9CbWJlk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=joBJi5gC5PsBMnd80pUct5A2XyeH/CkWCHoEGTT3Zeiqgg0/4MstrlrVikCErKRd8
+         y1YQ6dlgFGmK7aJb9m+gBuJziQ37mSx4w9V/CdzPc/ZXQ3I2qXIIlAm7eg/9ZnQ8qK
+         2AO8QE3mPeRL7Fi6wspO4JAVR9hvr7jHxjUlxJelSRcMnAnx/hyL874Em0W5/4y+3/
+         M5aw0+jxmPJ34K6Z+nDV7nL6h87aJyeS+kWZxCx1GH7E986ZdZRab5ICZ++avl0Xnp
+         RSU9G4bRYqUkc64DuhdW2Zk0woeWKGOOWpcYQyO7ZydLQw2ex1m05zTFtqFirAedB4
+         Z+JQA7TRFg0WA==
+Message-ID: <8e6977ac-53bb-53f0-3fdc-75aa2643cb77@collabora.com>
+Date:   Tue, 26 Apr 2022 10:50:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.72.94.34]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 04/17] media: uapi: HEVC: Add missing fields in HEVC
+ controls
+Content-Language: en-US
+To:     Sebastian Fricke <sebastian.fricke@collabora.com>
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
+ <20220407152940.738159-5-benjamin.gaignard@collabora.com>
+ <20220425135449.oapsrqqyq34s2ii3@basti-XPS-13-9310>
+ <d1ba4e57-2f13-ab3b-f79a-dc812cd4c2bf@collabora.com>
+ <20220426075234.6gk72hzf2bgaxwqw@basti-XPS-13-9310>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <20220426075234.6gk72hzf2bgaxwqw@basti-XPS-13-9310>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A barely noticeable (especially if hardly reproducible) display flicker
-may not be the biggest concern in the development environment. However,
-an automotive OEM will not only notice it, but will also be haunted by
-its phenomenon/nature till it is understood in the greatest detail and
-ultimately eradicated, to avoid impairing user experience.
 
-Troubleshooting the above without the right tools becomes a nightmare.
+Le 26/04/2022 à 09:52, Sebastian Fricke a écrit :
+> Hey Benjamin,
+>
+> On 25.04.2022 18:16, Benjamin Gaignard wrote:
+>>
+>> Le 25/04/2022 à 15:54, Sebastian Fricke a écrit :
+>>> On 07.04.2022 17:29, Benjamin Gaignard wrote:
+>>>> Complete the HEVC controls with missing fields from H.265 
+>>>> specifications.
+>>>> Even if these fields aren't used by the current mainlined drivers
+>>>> they will be need for (at least) rkvdec driver.
+>>>
+>>> s/be need/be required/
+>>> or
+>>> s/be need/be needed/
+>>>
+>>> s/rkvdec/the rkvdec/
+>>>
+>>>>
+>>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>>> ---
+>>>> .../media/v4l/ext-ctrls-codec.rst             | 19 +++++++++++++++++++
+>>>> include/media/hevc-ctrls.h                    |  6 +++++-
+>>>> 2 files changed, 24 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git 
+>>>> a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst 
+>>>> b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>> index 4cd7c541fc30..dbb08603217b 100644
+>>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>> @@ -2661,6 +2661,16 @@ enum 
+>>>> v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>     :stub-columns: 0
+>>>>     :widths:       1 1 2
+>>>>
+>>>> +    * - __u8
+>>>> +      - ``video_parameter_set_id``
+>>>> +      - Specifies the value of the vps_video_parameter_set_id of 
+>>>> the active VPS
+>>>> +        as descibed in section "7.4.3.2.1 General sequence 
+>>>> parameter set RBSP semantics"
+>>>> +        of H.265 specifications.
+>>>> +    * - __u8
+>>>> +      - ``seq_parameter_set_id``
+>>>> +      - Provides an identifier for the SPS for reference by other 
+>>>> syntax elements
+>>>> +        as descibed in section "7.4.3.2.1 General sequence 
+>>>> parameter set RBSP semantics"
+>>>> +        of H.265 specifications.
+>>>>     * - __u16
+>>>>       - ``pic_width_in_luma_samples``
+>>>>       -
+>>>> @@ -2800,6 +2810,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>     :stub-columns: 0
+>>>>     :widths:       1 1 2
+>>>>
+>>>> +    * - __u8
+>>>> +      - ``pic_parameter_set_id``
+>>>> +      - Identifies the PPS for reference by other syntax elements.
+>>>>     * - __u8
+>>>>       - ``num_extra_slice_header_bits``
+>>>>       -
+>>>> @@ -3026,6 +3039,12 @@ enum 
+>>>> v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>     * - __u8
+>>>>       - ``ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>>>>       - The list of L1 reference elements as indices in the DPB.
+>>>> +    * - __u16
+>>>> +      - ``short_term_ref_pic_set_size``
+>>>> +      - Specifies the size of short-term reference pictures set 
+>>>> included in the SPS.
+>>>
+>>> s/size of/size of the/
+>>>
+>>> Section 7.4.8 depicts that the st_ref_pic_set syntax
+>>> structure can be part of the SPS or the slice header.
+>>>
+>>> I think we should mention that we talk about the size of the 
+>>> st_ref_pic_set
+>>> syntax structure from section 7.4.8 of the specification.
+>>>> +    * - __u16
+>>>> +      - ``long_term_ref_pic_set_size``
+>>>> +      - Specifies the size of long-term reference pictures set 
+>>>> include in the SPS.
+>>>
+>>> s/size of/size of the/
+>>>
+>>> Can we make this a bit more helpful? The specification doesn't contain
+>>> a similar structure to `st_ref_pic_set` for long term pictures. So, 
+>>> as a
+>>> programmer this leaves me guessing:
+>>> - Which syntax structure's size are we talking about?
+>>> - Does this correlate to any of the existing sections of the
+>>> specification?
+>>> Because in the end, I feel like this documentation should be able to
+>>> help a programmer to provide the correct data for the uABI.
+>>
+>> I will reword it like that:
+>>
+>>   * - __u16
+>>     - ``short_term_ref_pic_set_size``
+>>     - Specifies the size, in bits, of the short-term reference 
+>> pictures set, described as st_ref_pic_set()
+>
+> Just ...
+>
+> s/reference pictures set/reference picture set/
+>
+>>      in the specification, included in the slice header (section 
+>> 7.3.6.1).
+>
+> s/slice header/slice header or SPS/
+>
+>
+>>
+>> * - __u16
+>>    - ``long_term_ref_pic_set_size``
+>>    - Specifies the size, in bits, of the long-term reference pictures 
+>> set include in the slice header.
+>
+> s/reference pictures set/reference picture set/
+>
+> Looking at the documentation it looks like: s/slice header/slice 
+> header or SPS/
+> (For example in section 7.3.6.1:
+> ```
+> if( long_term_ref_pics_present_flag ) {
+>   if( num_long_term_ref_pics_sps > 0 )
+>     num_long_term_sps
+>   num_long_term_pics
+>   for( i = 0; i < num_long_term_sps + num_long_term_pics; i++ ) {
+>     ...
+> ```
+> )
+>
+> ... and then it looks very good!
 
-Since VSPD underruns may indeed cause [1] display flicker, we believe
-that having a minimal/lightweight support for detecting and logging
-such events would be extremely beneficial. Obviously, this only applies
-to VSP2 modules having an interface to DU (i.e. not mem2mem).
+I don't know the syntax to insert this kind of comment inside an array in the documentation
+so it will remain as before :-)
 
-This implementation is heavily inspired by Koji Matsuoka's work [2-3],
-but has been refactored to hopefully become production/mainline-friendly
-(the original feature is intended for the development environment only).
+Benjamin
 
-[1] https://lore.kernel.org/linux-renesas-soc/20220421161259.GA2660@lxhi-065
-[2] https://github.com/renesas-rcar/linux-bsp/commit/3469001c3098
-    ("v4l: vsp1: Add underrun hung-up workaround")
-[3] https://github.com/renesas-rcar/linux-bsp/commit/12ea79975a10
-    ("v4l: vsp1: Add underrun debug messege option")
-
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc: Koji Matsuoka <koji.matsuoka.xm@renesas.com>
-Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
----
-
-NOTES:
-
- - VSPD_MAX_NUM (4) is based on Table 32.4 in R-Car3 User's HW Manual.
-
- - The 'vspd_underrun' array is not fully populated, since plenty of
-   SoCs have less than 4 VSPDs (3M/V3H 1 VSPD, H3N/D3/M3N/E3 2 VSPD).
-   However, it is arguably the necessary trade-off to avoid:
-    * unnecessarily complicated data structures
-    * unnecessarily complicated user interfaces
-    * kmemleak-prone dynamic allocation
-
- - The /sys/module/vsp1/parameters/vspd_underrun interface is chosen
-   to avoid custom sysfs/debugfs interfaces (e.g. certain users may
-   disable debugfs to achieve smallest possible image size).
-
-   $ cat /sys/module/vsp1/parameters/vspd_underrun
-   0,0,0,0
-
- - The 'vspd_underrun' module parameter is chosen as RO, to prevent
-   users tampering with it and reporting inaccurate values to the
-   developers/maintainers.
-
-   $ ls -al /sys/module/vsp1/parameters/vspd_underrun
-   -r--r--r-- 1 root root 4096 Apr 25 18:00 /sys/module/vsp1/parameters/vspd_underrun
-
- - The actual order of the 'vspd_underrun' elements reflects the VSPD
-   order in 'renesas,vsps = <&vspdX 0>, <&vspdY 0>, <&vspdZ 0>';
-
- - dev_warn_ratelimited is chosen to prevent any potential printk storms
-   (hence pollution of dmesg) from the interrupt context. If this does
-   not address the concerns fully, dev_warn_once() could be used with
-   guaranteed minimal impact (but also minimal logging unfortunately).
-
- - 100 chars per line since v5.7 commit
-   bdc48fa11e46f8 ("checkpatch/coding-style: deprecate 80-column warning")
-
- - Any comments hugely appreciated. If possible, I kindly ask for some
-   testing on R-Car Gen2 since I do not own any Gen2 boards.
-   Alternatively, the feature could be easily disabled for Gen2 VSPDs.
----
- drivers/media/platform/renesas/vsp1/vsp1.h    |  1 +
- .../media/platform/renesas/vsp1/vsp1_drv.c    | 34 ++++++++++++++++++-
- .../media/platform/renesas/vsp1/vsp1_regs.h   |  2 ++
- .../media/platform/renesas/vsp1/vsp1_wpf.c    |  2 +-
- 4 files changed, 37 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1.h b/drivers/media/platform/renesas/vsp1/vsp1.h
-index 37cf33c7e6ca..df8154267e10 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1.h
-+++ b/drivers/media/platform/renesas/vsp1/vsp1.h
-@@ -75,6 +75,7 @@ struct vsp1_device {
- 	struct device *dev;
- 	const struct vsp1_device_info *info;
- 	u32 version;
-+	int vspd_id;
- 
- 	void __iomem *mmio;
- 	struct rcar_fcp_device *fcp;
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drv.c b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
-index 502c7d9d6890..0dba9c5437f8 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_drv.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
-@@ -38,13 +38,19 @@
- #include "vsp1_uif.h"
- #include "vsp1_video.h"
- 
-+#define VSPD_MAX_NUM	4
-+
-+static int vspd_underrun[VSPD_MAX_NUM];
-+module_param_array(vspd_underrun, int, NULL, 0444);
-+MODULE_PARM_DESC(vspd_underrun, "VSPD underrun counter");
-+
- /* -----------------------------------------------------------------------------
-  * Interrupt Handling
-  */
- 
- static irqreturn_t vsp1_irq_handler(int irq, void *data)
- {
--	u32 mask = VI6_WPF_IRQ_STA_DFE | VI6_WPF_IRQ_STA_FRE;
-+	u32 mask = VI6_WPF_IRQ_STA_DFE | VI6_WPF_IRQ_STA_FRE | VI6_WPF_IRQ_STA_UND;
- 	struct vsp1_device *vsp1 = data;
- 	irqreturn_t ret = IRQ_NONE;
- 	unsigned int i;
-@@ -63,6 +69,17 @@ static irqreturn_t vsp1_irq_handler(int irq, void *data)
- 			vsp1_pipeline_frame_end(wpf->entity.pipe);
- 			ret = IRQ_HANDLED;
- 		}
-+
-+		if (status & VI6_WPF_IRQ_STA_UND) {
-+			int id = vsp1->vspd_id;
-+
-+			if (id >= 0 && id < VSPD_MAX_NUM) {
-+				++vspd_underrun[id];
-+				dev_warn_ratelimited(vsp1->dev, "Underrun %d at VSPD%d LIF%d\n",
-+						     vspd_underrun[id], id, i);
-+			}
-+			ret = IRQ_HANDLED;
-+		}
- 	}
- 
- 	return ret;
-@@ -804,6 +821,7 @@ static int vsp1_probe(struct platform_device *pdev)
- {
- 	struct vsp1_device *vsp1;
- 	struct device_node *fcp_node;
-+	static int vspd_id;
- 	unsigned int i;
- 	int ret;
- 	int irq;
-@@ -900,6 +918,20 @@ static int vsp1_probe(struct platform_device *pdev)
- 		goto done;
- 	}
- 
-+	switch (vsp1->version & VI6_IP_VERSION_MODEL_MASK) {
-+	case VI6_IP_VERSION_MODEL_VSPD_GEN2:
-+	case VI6_IP_VERSION_MODEL_VSPD_V2H:
-+	case VI6_IP_VERSION_MODEL_VSPD_GEN3:
-+	case VI6_IP_VERSION_MODEL_VSPD_V3:
-+	case VI6_IP_VERSION_MODEL_VSPDL_GEN3:
-+	case VI6_IP_VERSION_MODEL_VSPD_V3U:
-+		vsp1->vspd_id = vspd_id++;
-+		break;
-+	default:
-+		vsp1->vspd_id = -1;
-+		break;
-+	}
-+
- done:
- 	if (ret) {
- 		pm_runtime_disable(&pdev->dev);
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_regs.h b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
-index fae7286eb01e..632c43bb4cbd 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_regs.h
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
-@@ -32,10 +32,12 @@
- #define VI6_STATUS_SYS_ACT(n)		BIT((n) + 8)
- 
- #define VI6_WPF_IRQ_ENB(n)		(0x0048 + (n) * 12)
-+#define VI6_WPF_IRQ_ENB_UNDE		BIT(16)
- #define VI6_WPF_IRQ_ENB_DFEE		BIT(1)
- #define VI6_WPF_IRQ_ENB_FREE		BIT(0)
- 
- #define VI6_WPF_IRQ_STA(n)		(0x004c + (n) * 12)
-+#define VI6_WPF_IRQ_STA_UND		BIT(16)
- #define VI6_WPF_IRQ_STA_DFE		BIT(1)
- #define VI6_WPF_IRQ_STA_FRE		BIT(0)
- 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_wpf.c b/drivers/media/platform/renesas/vsp1/vsp1_wpf.c
-index 94e91d7bb56c..28f01f98fd6b 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_wpf.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_wpf.c
-@@ -342,7 +342,7 @@ static void wpf_configure_stream(struct vsp1_entity *entity,
- 	/* Enable interrupts. */
- 	vsp1_dl_body_write(dlb, VI6_WPF_IRQ_STA(index), 0);
- 	vsp1_dl_body_write(dlb, VI6_WPF_IRQ_ENB(index),
--			   VI6_WPF_IRQ_ENB_DFEE);
-+			   VI6_WPF_IRQ_ENB_DFEE | VI6_WPF_IRQ_ENB_UNDE);
- 
- 	/*
- 	 * Configure writeback for display pipelines (the wpf writeback flag is
--- 
-2.36.0
-
+>
+> Greetings,
+> Sebastian
+>
+>>      It is the number of bits in the conditional block if( 
+>> long_term_ref_pics_present_flag ) {...}
+>>      in section 7.3.6.1 of the specification.
+>>
+>> Benjamin
+>>
+>>
+>>>
+>>> Greetings,
+>>> Sebastian
+>>>
+>>>>     * - __u8
+>>>>       - ``padding``
+>>>>       - Applications and drivers must set this to zero.
+>>>> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+>>>> index 01ccda48d8c5..a329e086a89a 100644
+>>>> --- a/include/media/hevc-ctrls.h
+>>>> +++ b/include/media/hevc-ctrls.h
+>>>> @@ -58,6 +58,8 @@ enum v4l2_mpeg_video_hevc_start_code {
+>>>> /* The controls are not stable at the moment and will likely be 
+>>>> reworked. */
+>>>> struct v4l2_ctrl_hevc_sps {
+>>>>     /* ISO/IEC 23008-2, ITU-T Rec. H.265: Sequence parameter set */
+>>>> +    __u8    video_parameter_set_id;
+>>>> +    __u8    seq_parameter_set_id;
+>>>>     __u16    pic_width_in_luma_samples;
+>>>>     __u16    pic_height_in_luma_samples;
+>>>>     __u8    bit_depth_luma_minus8;
+>>>> @@ -108,6 +110,7 @@ struct v4l2_ctrl_hevc_sps {
+>>>>
+>>>> struct v4l2_ctrl_hevc_pps {
+>>>>     /* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
+>>>> +    __u8    pic_parameter_set_id;
+>>>>     __u8    num_extra_slice_header_bits;
+>>>>     __u8    num_ref_idx_l0_default_active_minus1;
+>>>>     __u8    num_ref_idx_l1_default_active_minus1;
+>>>> @@ -199,7 +202,8 @@ struct v4l2_ctrl_hevc_slice_params {
+>>>>     __u32    slice_segment_addr;
+>>>>     __u8    ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>>>>     __u8    ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>>>> -
+>>>> +    __u16    short_term_ref_pic_set_size;
+>>>> +    __u16    long_term_ref_pic_set_size;
+>>>>     __u8    padding;
+>>>>
+>>>>     /* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction 
+>>>> parameter */
+>>>> -- 
+>>>> 2.32.0
+>>>>
