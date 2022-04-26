@@ -2,42 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E087BC433FE
-	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 12:58:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA202C4332F
+	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 12:58:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350413AbiDZNBw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Apr 2022 09:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
+        id S1350350AbiDZNBx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Apr 2022 09:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350388AbiDZNBg (ORCPT
+        with ESMTP id S1350383AbiDZNBg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 26 Apr 2022 09:01:36 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A044D17B39C;
-        Tue, 26 Apr 2022 05:58:28 -0700 (PDT)
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C21177D47;
+        Tue, 26 Apr 2022 05:58:25 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 67CE51F4398D
+        with ESMTPSA id 762DA1F43982
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650977907;
-        bh=0J+46psvSTuyS1wejcCrG3atoNuCwZAAyNkbTjDMFsU=;
+        s=mail; t=1650977904;
+        bh=FmxP3Of2pm4gkbqbbaer5qaBCfIvVbPhhE5DeBELz4c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aeiO2ufbvhFNYb7zVWgxzT+dtqF3tl7RyjAsaf8KVsW60NFm4QkISfL9a12zsEYle
-         jA5BgytAjoyMdKIVIBVxxaJCwyvW+Doi+iLHXdGa8ZOsDMwxLXq5Dw27QRO9EyRnCu
-         i6IPmh8a6W26TEeWalrLgOoVyFvNBD6Na9c+tWGE90XED+IfZGudpMYlKko4q1dVuw
-         TwKI2T194dTmEohVKjaaRS5uwYzF/3zpslBwroYj1IByMcEFDoidltpPOkXEV2wFgH
-         FqpjjuNIEWv4xLOOb2EcmI0gKiO7+Gg23oICPHN2qO5sv8vIjpnkJ5WaHUmnn9qt0j
-         poaAaDreu9YVQ==
+        b=hBcUdsG1vo3Ibv1T3PQzLkVRTO0BNO/MVGkjQjQwI+Cq1k4fW3YqyXc+hxVDtQf/o
+         MJuP+asy+HuX8zNfZEw/5amOnVG+lj3zPobSzVPtm7WuekupyjirBzpIGRu0Cq98GL
+         unLEetrzkGph3I6wU4USp8dMV6FRCHAqo9gjaEOKEuSHlDMgn9f17RAdUro6jJ1Wqu
+         uPEsQMUgSnXfrEjpk5ebf2GLQCIv418eOVG79hBN5E7Zv/6+6Asg/D3t2WXaURMCbn
+         8JaCNhHnsPh6AgM3V5WfTkzw1p2TWjl9L9muaea9yujNEXRbpLnSD2BpZQNgkLwFT1
+         bsPyAFMV8nknw==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Boris Brezillon <boris.brezillon@collabora.com>
 Cc:     nicolas@ndufresne.ca, Jonas Karlman <jonas@kwiboo.se>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 16/24] media: rkvdec: h264: Validate and use pic width and height in mbs
-Date:   Tue, 26 Apr 2022 08:57:42 -0400
-Message-Id: <20220426125751.108293-17-nicolas.dufresne@collabora.com>
+        linux-media@vger.kernel.org,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 14/24] media: rkvdec: h264: Fix bit depth wrap in pps packet
+Date:   Tue, 26 Apr 2022 08:57:40 -0400
+Message-Id: <20220426125751.108293-15-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
 References: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
@@ -49,139 +54,36 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Jonas Karlman <jonas@kwiboo.se>
 
-The width and height in macroblocks is currently configured based on OUTPUT
-buffer resolution, this works for frame pictures but can cause issues for
-field pictures.
+The luma and chroma bit depth fields in the pps packet are 3 bits wide.
+8 is wrongly added to the bit depth values written to these 3 bit fields.
+Because only the 3 LSB are written, the hardware was configured
+correctly.
 
-When frame_mbs_only_flag is 0 the height in mbs should be height of
-the field instead of height of frame.
+Correct this by not adding 8 to the luma and chroma bit depth value.
 
-Validate pic_width_in_mbs_minus1 and pic_height_in_map_units_minus1
-against OUTPUT buffer resolution and use these values to configure HW.
-The validation is happening in both try_ctrt() and start() since it is
-otherwise possible to trick the driver during initialization by changing
-the OUTPUT format after having set a valid control.
-
+Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
 Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/staging/media/rkvdec/rkvdec-h264.c | 81 +++++++++++++++++-----
- 1 file changed, 62 insertions(+), 19 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec-h264.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index 0dcbcb1bac80..d5ac0285f36f 100644
+index bcde37d72244..8d44a884a52e 100644
 --- a/drivers/staging/media/rkvdec/rkvdec-h264.c
 +++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -672,8 +672,17 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
- 		  LOG2_MAX_PIC_ORDER_CNT_LSB_MINUS4);
- 	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_DELTA_PIC_ORDER_ALWAYS_ZERO),
- 		  DELTA_PIC_ORDER_ALWAYS_ZERO_FLAG);
--	WRITE_PPS(DIV_ROUND_UP(ctx->coded_fmt.fmt.pix_mp.width, 16), PIC_WIDTH_IN_MBS);
--	WRITE_PPS(DIV_ROUND_UP(ctx->coded_fmt.fmt.pix_mp.height, 16), PIC_HEIGHT_IN_MBS);
-+
-+	/*
-+	 * Use the SPS values since they are already in macroblocks
-+	 * dimensions, height can be field height (halved) if
-+	 * V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY is not set and also it allows
-+	 * decoding smaller images into larger allocation which can be used
-+	 * to implementing SVC spatial layer support.
-+	 */
-+	WRITE_PPS(sps->pic_width_in_mbs_minus1 + 1, PIC_WIDTH_IN_MBS);
-+	WRITE_PPS(sps->pic_height_in_map_units_minus1 + 1, PIC_HEIGHT_IN_MBS);
-+
- 	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY),
- 		  FRAME_MBS_ONLY_FLAG);
- 	WRITE_PPS(!!(sps->flags & V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD),
-@@ -1035,13 +1044,61 @@ static int rkvdec_h264_adjust_fmt(struct rkvdec_ctx *ctx,
- 	return 0;
- }
- 
-+static int rkvdec_h264_validate_sps(struct rkvdec_ctx *ctx,
-+				    const struct v4l2_ctrl_h264_sps *sps)
-+{
-+	unsigned int width, height;
-+
-+	/*
-+	 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
-+	 * but it's currently broken in the driver.
-+	 * Reject them for now, until it's fixed.
-+	 */
-+	if (sps->chroma_format_idc > 1)
-+		/* Only 4:0:0 and 4:2:0 are supported */
-+		return -EINVAL;
-+	if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
-+		/* Luma and chroma bit depth mismatch */
-+		return -EINVAL;
-+	if (sps->bit_depth_luma_minus8 != 0)
-+		/* Only 8-bit is supported */
-+		return -EINVAL;
-+
-+	width = (sps->pic_width_in_mbs_minus1 + 1) * 16;
-+	height = (sps->pic_height_in_map_units_minus1 + 1) * 16;
-+
-+	/*
-+	 * when frame_mbs_only_flag is not set, this is field height,
-+	 * which is half the final height (see (7-18) in the
-+	 * specification)
-+	 */
-+	if (!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY))
-+		height *= 2;
-+
-+	if (width > ctx->coded_fmt.fmt.pix_mp.width ||
-+	    height > ctx->coded_fmt.fmt.pix_mp.height)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
- static int rkvdec_h264_start(struct rkvdec_ctx *ctx)
- {
- 	struct rkvdec_dev *rkvdec = ctx->dev;
- 	struct rkvdec_h264_priv_tbl *priv_tbl;
- 	struct rkvdec_h264_ctx *h264_ctx;
-+	struct v4l2_ctrl *ctrl;
- 	int ret;
- 
-+	ctrl = v4l2_ctrl_find(&ctx->ctrl_hdl,
-+			      V4L2_CID_STATELESS_H264_SPS);
-+	if (!ctrl)
-+		return -EINVAL;
-+
-+	ret = rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps);
-+	if (ret)
-+		return ret;
-+
- 	h264_ctx = kzalloc(sizeof(*h264_ctx), GFP_KERNEL);
- 	if (!h264_ctx)
- 		return -ENOMEM;
-@@ -1139,23 +1196,9 @@ static int rkvdec_h264_run(struct rkvdec_ctx *ctx)
- 
- static int rkvdec_h264_try_ctrl(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl)
- {
--	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
--		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
--		/*
--		 * TODO: The hardware supports 10-bit and 4:2:2 profiles,
--		 * but it's currently broken in the driver.
--		 * Reject them for now, until it's fixed.
--		 */
--		if (sps->chroma_format_idc > 1)
--			/* Only 4:0:0 and 4:2:0 are supported */
--			return -EINVAL;
--		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
--			/* Luma and chroma bit depth mismatch */
--			return -EINVAL;
--		if (sps->bit_depth_luma_minus8 != 0)
--			/* Only 8-bit is supported */
--			return -EINVAL;
--	}
-+	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS)
-+		return rkvdec_h264_validate_sps(ctx, ctrl->p_new.p_h264_sps);
-+
- 	return 0;
- }
- 
+@@ -662,8 +662,8 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
+ 	WRITE_PPS(0xff, PROFILE_IDC);
+ 	WRITE_PPS(1, CONSTRAINT_SET3_FLAG);
+ 	WRITE_PPS(sps->chroma_format_idc, CHROMA_FORMAT_IDC);
+-	WRITE_PPS(sps->bit_depth_luma_minus8 + 8, BIT_DEPTH_LUMA);
+-	WRITE_PPS(sps->bit_depth_chroma_minus8 + 8, BIT_DEPTH_CHROMA);
++	WRITE_PPS(sps->bit_depth_luma_minus8, BIT_DEPTH_LUMA);
++	WRITE_PPS(sps->bit_depth_chroma_minus8, BIT_DEPTH_CHROMA);
+ 	WRITE_PPS(0, QPPRIME_Y_ZERO_TRANSFORM_BYPASS_FLAG);
+ 	WRITE_PPS(sps->log2_max_frame_num_minus4, LOG2_MAX_FRAME_NUM_MINUS4);
+ 	WRITE_PPS(sps->max_num_ref_frames, MAX_NUM_REF_FRAMES);
 -- 
 2.34.1
 
