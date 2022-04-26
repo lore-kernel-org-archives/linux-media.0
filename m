@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58A8EC433FE
-	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 10:28:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF870C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 10:28:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348981AbiDZKbP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Apr 2022 06:31:15 -0400
+        id S1348961AbiDZKbW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Apr 2022 06:31:22 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348975AbiDZKbG (ORCPT
+        with ESMTP id S1348871AbiDZKbM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:31:06 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9FFFC503;
-        Tue, 26 Apr 2022 03:08:41 -0700 (PDT)
-X-UUID: 5abd074141d04a79ab97899cf3a559e3-20220426
+        Tue, 26 Apr 2022 06:31:12 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9581023D7;
+        Tue, 26 Apr 2022 03:08:56 -0700 (PDT)
+X-UUID: 113844da552444f59c1f754ea6cbf930-20220426
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:bfb4d472-d975-401f-afe5-1744c0a6d6f8,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:95
-X-CID-INFO: VERSION:1.1.4,REQID:bfb4d472-d975-401f-afe5-1744c0a6d6f8,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,ACT
-        ION:quarantine,TS:95
-X-CID-META: VersionHash:faefae9,CLOUDID:756887c6-85ee-4ac1-ac05-bd3f1e72e732,C
-        OID:0753cf520a59,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
+X-CID-O-INFO: VERSION:1.1.4,REQID:fc156296-9731-4b9f-8c80-8371b03a8420,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:75
+X-CID-INFO: VERSION:1.1.4,REQID:fc156296-9731-4b9f-8c80-8371b03a8420,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:75
+X-CID-META: VersionHash:faefae9,CLOUDID:1e6a87c6-85ee-4ac1-ac05-bd3f1e72e732,C
+        OID:2fe14de8a9b9,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
         le:nil,QS:0,BEC:nil
-X-UUID: 5abd074141d04a79ab97899cf3a559e3-20220426
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+X-UUID: 113844da552444f59c1f754ea6cbf930-20220426
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1884640325; Tue, 26 Apr 2022 18:08:35 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 193278352; Tue, 26 Apr 2022 18:08:50 +0800
 Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 26 Apr 2022 18:08:34 +0800
+ 15.2.792.15; Tue, 26 Apr 2022 18:08:49 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
  (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 26 Apr
- 2022 18:08:33 +0800
+ 2022 18:08:47 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 26 Apr 2022 18:08:31 +0800
+ Transport; Tue, 26 Apr 2022 18:08:45 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -67,9 +67,9 @@ CC:     George Sun <george.sun@mediatek.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v10, 01/17] media: mediatek: vcodec: Add vdec enable/disable hardware helpers
-Date:   Tue, 26 Apr 2022 18:08:12 +0800
-Message-ID: <20220426100828.13429-2-yunfei.dong@mediatek.com>
+Subject: [PATCH v10, 07/17] media: mediatek: vcodec: Refactor supported vdec formats and framesizes
+Date:   Tue, 26 Apr 2022 18:08:18 +0800
+Message-ID: <20220426100828.13429-8-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220426100828.13429-1-yunfei.dong@mediatek.com>
 References: <20220426100828.13429-1-yunfei.dong@mediatek.com>
@@ -81,343 +81,192 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Lock, power and clock are highly coupled operations. Adds vdec
-enable/disable hardware helpers and uses them.
+Supported output and capture format types for mt8192 are different
+with mt8183. Redefine parameters to store them.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: Tzung-Bi Shih<tzungbi@google.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   5 -
- .../mediatek/vcodec/mtk_vcodec_dec_pm.c       | 166 +++++++++++-------
- .../mediatek/vcodec/mtk_vcodec_dec_pm.h       |   6 +-
- .../platform/mediatek/vcodec/vdec_drv_if.c    |  20 +--
- .../platform/mediatek/vcodec/vdec_msg_queue.c |   2 +
- 5 files changed, 116 insertions(+), 83 deletions(-)
+ .../media/platform/mediatek/vcodec/mtk_vcodec_dec.c |  8 ++++----
+ .../mediatek/vcodec/mtk_vcodec_dec_stateful.c       | 13 ++++++++-----
+ .../mediatek/vcodec/mtk_vcodec_dec_stateless.c      | 13 +++++++------
+ .../media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 13 +++++++++++--
+ 4 files changed, 30 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-index df7b25e9cbc8..a84df6596aaa 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-@@ -193,9 +193,6 @@ static int fops_vcodec_open(struct file *file)
- 	mtk_vcodec_dec_set_default_params(ctx);
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+index c1c3f439d7d1..1fb49a779c5d 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+@@ -26,7 +26,7 @@ mtk_vdec_find_format(struct v4l2_format *f,
+ 	const struct mtk_video_fmt *fmt;
+ 	unsigned int k;
  
- 	if (v4l2_fh_is_singular(&ctx->fh)) {
--		ret = mtk_vcodec_dec_pw_on(dev, MTK_VDEC_LAT0);
--		if (ret < 0)
--			goto err_load_fw;
- 		/*
- 		 * Does nothing if firmware was already loaded.
- 		 */
-@@ -252,8 +249,6 @@ static int fops_vcodec_release(struct file *file)
- 	v4l2_m2m_ctx_release(ctx->m2m_ctx);
- 	mtk_vcodec_dec_release(ctx);
- 
--	if (v4l2_fh_is_singular(&ctx->fh))
--		mtk_vcodec_dec_pw_off(dev, MTK_VDEC_LAT0);
- 	v4l2_fh_del(&ctx->fh);
- 	v4l2_fh_exit(&ctx->fh);
- 	v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-index 7e0c2644bf7b..0fb7e5ba635b 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-@@ -57,74 +57,31 @@ int mtk_vcodec_init_dec_clk(struct platform_device *pdev, struct mtk_vcodec_pm *
- }
- EXPORT_SYMBOL_GPL(mtk_vcodec_init_dec_clk);
- 
--int mtk_vcodec_dec_pw_on(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
-+static int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
- {
--	struct mtk_vdec_hw_dev *subdev_dev;
--	struct mtk_vcodec_pm *pm;
- 	int ret;
- 
--	if (vdec_dev->vdec_pdata->is_subdev_supported) {
--		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, hw_idx);
--		if (!subdev_dev) {
--			mtk_v4l2_err("Failed to get hw dev\n");
--			return -EINVAL;
--		}
--		pm = &subdev_dev->pm;
--	} else {
--		pm = &vdec_dev->pm;
--	}
--
- 	ret = pm_runtime_resume_and_get(pm->dev);
- 	if (ret)
- 		mtk_v4l2_err("pm_runtime_resume_and_get fail %d", ret);
- 
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(mtk_vcodec_dec_pw_on);
- 
--void mtk_vcodec_dec_pw_off(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
-+static void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
- {
--	struct mtk_vdec_hw_dev *subdev_dev;
--	struct mtk_vcodec_pm *pm;
- 	int ret;
- 
--	if (vdec_dev->vdec_pdata->is_subdev_supported) {
--		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, hw_idx);
--		if (!subdev_dev) {
--			mtk_v4l2_err("Failed to get hw dev\n");
--			return;
--		}
--		pm = &subdev_dev->pm;
--	} else {
--		pm = &vdec_dev->pm;
--	}
--
- 	ret = pm_runtime_put_sync(pm->dev);
- 	if (ret)
- 		mtk_v4l2_err("pm_runtime_put_sync fail %d", ret);
- }
--EXPORT_SYMBOL_GPL(mtk_vcodec_dec_pw_off);
- 
--void mtk_vcodec_dec_clock_on(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
-+static void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
- {
--	struct mtk_vdec_hw_dev *subdev_dev;
--	struct mtk_vcodec_pm *pm;
- 	struct mtk_vcodec_clk *dec_clk;
- 	int ret, i;
- 
--	if (vdec_dev->vdec_pdata->is_subdev_supported) {
--		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, hw_idx);
--		if (!subdev_dev) {
--			mtk_v4l2_err("Failed to get hw dev\n");
--			return;
--		}
--		pm = &subdev_dev->pm;
--		enable_irq(subdev_dev->dec_irq);
--	} else {
--		pm = &vdec_dev->pm;
--		enable_irq(vdec_dev->dec_irq);
--	}
--
- 	dec_clk = &pm->vdec_clk;
- 	for (i = 0; i < dec_clk->clk_num; i++) {
- 		ret = clk_prepare_enable(dec_clk->clk_info[i].vcodec_clk);
-@@ -140,30 +97,119 @@ void mtk_vcodec_dec_clock_on(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
- 	for (i -= 1; i >= 0; i--)
- 		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
- }
--EXPORT_SYMBOL_GPL(mtk_vcodec_dec_clock_on);
- 
--void mtk_vcodec_dec_clock_off(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
-+static void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm)
- {
--	struct mtk_vdec_hw_dev *subdev_dev;
--	struct mtk_vcodec_pm *pm;
- 	struct mtk_vcodec_clk *dec_clk;
- 	int i;
- 
-+	dec_clk = &pm->vdec_clk;
-+	for (i = dec_clk->clk_num - 1; i >= 0; i--)
-+		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
-+}
-+
-+static void mtk_vcodec_dec_enable_irq(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
-+{
-+	struct mtk_vdec_hw_dev *subdev_dev;
-+
-+	if (!test_bit(hw_idx, vdec_dev->subdev_bitmap))
-+		return;
-+
- 	if (vdec_dev->vdec_pdata->is_subdev_supported) {
- 		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, hw_idx);
--		if (!subdev_dev) {
-+		if (subdev_dev)
-+			enable_irq(subdev_dev->dec_irq);
-+		else
-+			mtk_v4l2_err("Failed to get hw dev\n");
-+	} else {
-+		enable_irq(vdec_dev->dec_irq);
-+	}
-+}
-+
-+static void mtk_vcodec_dec_disable_irq(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
-+{
-+	struct mtk_vdec_hw_dev *subdev_dev;
-+
-+	if (!test_bit(hw_idx, vdec_dev->subdev_bitmap))
-+		return;
-+
-+	if (vdec_dev->vdec_pdata->is_subdev_supported) {
-+		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, hw_idx);
-+		if (subdev_dev)
-+			disable_irq(subdev_dev->dec_irq);
-+		else
- 			mtk_v4l2_err("Failed to get hw dev\n");
--			return;
--		}
--		pm = &subdev_dev->pm;
--		disable_irq(subdev_dev->dec_irq);
- 	} else {
--		pm = &vdec_dev->pm;
- 		disable_irq(vdec_dev->dec_irq);
- 	}
-+}
- 
--	dec_clk = &pm->vdec_clk;
--	for (i = dec_clk->clk_num - 1; i >= 0; i--)
--		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
-+static struct mtk_vcodec_pm *mtk_vcodec_dec_get_pm(struct mtk_vcodec_dev *vdec_dev,
-+						   int hw_idx)
-+{
-+	struct mtk_vdec_hw_dev *subdev_dev;
-+
-+	if (!test_bit(hw_idx, vdec_dev->subdev_bitmap))
-+		return NULL;
-+
-+	if (vdec_dev->vdec_pdata->is_subdev_supported) {
-+		subdev_dev = mtk_vcodec_get_hw_dev(vdec_dev, hw_idx);
-+		if (subdev_dev)
-+			return &subdev_dev->pm;
-+
-+		mtk_v4l2_err("Failed to get hw dev\n");
-+		return NULL;
-+	}
-+
-+	return &vdec_dev->pm;
-+}
-+
-+static void mtk_vcodec_dec_child_dev_on(struct mtk_vcodec_dev *vdec_dev,
-+					int hw_idx)
-+{
-+	struct mtk_vcodec_pm *pm;
-+
-+	pm = mtk_vcodec_dec_get_pm(vdec_dev, hw_idx);
-+	if (pm) {
-+		mtk_vcodec_dec_pw_on(pm);
-+		mtk_vcodec_dec_clock_on(pm);
-+	}
-+}
-+
-+static void mtk_vcodec_dec_child_dev_off(struct mtk_vcodec_dev *vdec_dev,
-+					 int hw_idx)
-+{
-+	struct mtk_vcodec_pm *pm;
-+
-+	pm = mtk_vcodec_dec_get_pm(vdec_dev, hw_idx);
-+	if (pm) {
-+		mtk_vcodec_dec_clock_off(pm);
-+		mtk_vcodec_dec_pw_off(pm);
-+	}
-+}
-+
-+void mtk_vcodec_dec_enable_hardware(struct mtk_vcodec_ctx *ctx, int hw_idx)
-+{
-+	mutex_lock(&ctx->dev->dec_mutex[hw_idx]);
-+
-+	if (IS_VDEC_LAT_ARCH(ctx->dev->vdec_pdata->hw_arch) &&
-+	    hw_idx == MTK_VDEC_CORE)
-+		mtk_vcodec_dec_child_dev_on(ctx->dev, MTK_VDEC_LAT0);
-+	mtk_vcodec_dec_child_dev_on(ctx->dev, hw_idx);
-+
-+	mtk_vcodec_dec_enable_irq(ctx->dev, hw_idx);
-+}
-+EXPORT_SYMBOL_GPL(mtk_vcodec_dec_enable_hardware);
-+
-+void mtk_vcodec_dec_disable_hardware(struct mtk_vcodec_ctx *ctx, int hw_idx)
-+{
-+	mtk_vcodec_dec_disable_irq(ctx->dev, hw_idx);
-+
-+	mtk_vcodec_dec_child_dev_off(ctx->dev, hw_idx);
-+	if (IS_VDEC_LAT_ARCH(ctx->dev->vdec_pdata->hw_arch) &&
-+	    hw_idx == MTK_VDEC_CORE)
-+		mtk_vcodec_dec_child_dev_off(ctx->dev, MTK_VDEC_LAT0);
-+
-+	mutex_unlock(&ctx->dev->dec_mutex[hw_idx]);
- }
--EXPORT_SYMBOL_GPL(mtk_vcodec_dec_clock_off);
-+EXPORT_SYMBOL_GPL(mtk_vcodec_dec_disable_hardware);
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.h
-index 3cc721bbfaf6..dbcf3cabe6f3 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.h
-@@ -11,9 +11,7 @@
- 
- int mtk_vcodec_init_dec_clk(struct platform_device *pdev, struct mtk_vcodec_pm *pm);
- 
--int mtk_vcodec_dec_pw_on(struct mtk_vcodec_dev *vdec_dev, int hw_idx);
--void mtk_vcodec_dec_pw_off(struct mtk_vcodec_dev *vdec_dev, int hw_idx);
--void mtk_vcodec_dec_clock_on(struct mtk_vcodec_dev *vdec_dev, int hw_idx);
--void mtk_vcodec_dec_clock_off(struct mtk_vcodec_dev *vdec_dev, int hw_idx);
-+void mtk_vcodec_dec_enable_hardware(struct mtk_vcodec_ctx *ctx, int hw_idx);
-+void mtk_vcodec_dec_disable_hardware(struct mtk_vcodec_ctx *ctx, int hw_idx);
- 
- #endif /* _MTK_VCODEC_DEC_PM_H_ */
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-index 05a5b240e906..c93dd0ea3537 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-@@ -38,11 +38,9 @@ int vdec_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
+-	for (k = 0; k < dec_pdata->num_formats; k++) {
++	for (k = 0; k < *dec_pdata->num_formats; k++) {
+ 		fmt = &dec_pdata->vdec_formats[k];
+ 		if (fmt->fourcc == f->fmt.pix_mp.pixelformat)
+ 			return fmt;
+@@ -531,7 +531,7 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
+ 	if (fsize->index != 0)
  		return -EINVAL;
+ 
+-	for (i = 0; i < dec_pdata->num_framesizes; ++i) {
++	for (i = 0; i < *dec_pdata->num_framesizes; ++i) {
+ 		if (fsize->pixel_format != dec_pdata->vdec_framesizes[i].fourcc)
+ 			continue;
+ 
+@@ -563,7 +563,7 @@ static int vidioc_enum_fmt(struct v4l2_fmtdesc *f, void *priv,
+ 	const struct mtk_video_fmt *fmt;
+ 	int i, j = 0;
+ 
+-	for (i = 0; i < dec_pdata->num_formats; i++) {
++	for (i = 0; i < *dec_pdata->num_formats; i++) {
+ 		if (output_queue &&
+ 		    dec_pdata->vdec_formats[i].type != MTK_FMT_DEC)
+ 			continue;
+@@ -576,7 +576,7 @@ static int vidioc_enum_fmt(struct v4l2_fmtdesc *f, void *priv,
+ 		++j;
  	}
  
--	mtk_vdec_lock(ctx);
--	mtk_vcodec_dec_clock_on(ctx->dev, ctx->hw_id);
-+	mtk_vcodec_dec_enable_hardware(ctx, ctx->hw_id);
- 	ret = ctx->dec_if->init(ctx);
--	mtk_vcodec_dec_clock_off(ctx->dev, ctx->hw_id);
--	mtk_vdec_unlock(ctx);
-+	mtk_vcodec_dec_disable_hardware(ctx, ctx->hw_id);
+-	if (i == dec_pdata->num_formats)
++	if (i == *dec_pdata->num_formats)
+ 		return -EINVAL;
  
- 	return ret;
- }
-@@ -70,15 +68,11 @@ int vdec_if_decode(struct mtk_vcodec_ctx *ctx, struct mtk_vcodec_mem *bs,
- 	if (!ctx->drv_handle)
- 		return -EIO;
+ 	fmt = &dec_pdata->vdec_formats[i];
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
+index e7fd39180123..9c7e6145cebb 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
+@@ -37,7 +37,9 @@ static const struct mtk_video_fmt mtk_video_formats[] = {
+ 	},
+ };
  
--	mtk_vdec_lock(ctx);
--
-+	mtk_vcodec_dec_enable_hardware(ctx, ctx->hw_id);
- 	mtk_vcodec_set_curr_ctx(ctx->dev, ctx, ctx->hw_id);
--	mtk_vcodec_dec_clock_on(ctx->dev, ctx->hw_id);
- 	ret = ctx->dec_if->decode(ctx->drv_handle, bs, fb, res_chg);
--	mtk_vcodec_dec_clock_off(ctx->dev, ctx->hw_id);
- 	mtk_vcodec_set_curr_ctx(ctx->dev, NULL, ctx->hw_id);
--
--	mtk_vdec_unlock(ctx);
-+	mtk_vcodec_dec_disable_hardware(ctx, ctx->hw_id);
+-#define NUM_FORMATS ARRAY_SIZE(mtk_video_formats)
++static const unsigned int num_supported_formats =
++	ARRAY_SIZE(mtk_video_formats);
++
+ #define DEFAULT_OUT_FMT_IDX 0
+ #define DEFAULT_CAP_FMT_IDX 3
  
- 	return ret;
- }
-@@ -103,11 +97,9 @@ void vdec_if_deinit(struct mtk_vcodec_ctx *ctx)
- 	if (!ctx->drv_handle)
- 		return;
+@@ -59,7 +61,8 @@ static const struct mtk_codec_framesizes mtk_vdec_framesizes[] = {
+ 	},
+ };
  
--	mtk_vdec_lock(ctx);
--	mtk_vcodec_dec_clock_on(ctx->dev, ctx->hw_id);
-+	mtk_vcodec_dec_enable_hardware(ctx, ctx->hw_id);
- 	ctx->dec_if->deinit(ctx->drv_handle);
--	mtk_vcodec_dec_clock_off(ctx->dev, ctx->hw_id);
--	mtk_vdec_unlock(ctx);
-+	mtk_vcodec_dec_disable_hardware(ctx, ctx->hw_id);
+-#define NUM_SUPPORTED_FRAMESIZE ARRAY_SIZE(mtk_vdec_framesizes)
++static const unsigned int num_supported_framesize =
++	ARRAY_SIZE(mtk_vdec_framesizes);
  
- 	ctx->drv_handle = NULL;
- }
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-index 4b062a8128b4..ae500980ad45 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-@@ -212,11 +212,13 @@ static void vdec_msg_queue_core_work(struct work_struct *work)
- 		return;
+ /*
+  * This function tries to clean all display buffers, the buffers will return
+@@ -230,7 +233,7 @@ static void mtk_vdec_update_fmt(struct mtk_vcodec_ctx *ctx,
+ 	unsigned int k;
  
- 	ctx = lat_buf->ctx;
-+	mtk_vcodec_dec_enable_hardware(ctx, MTK_VDEC_CORE);
- 	mtk_vcodec_set_curr_ctx(dev, ctx, MTK_VDEC_CORE);
+ 	dst_q_data = &ctx->q_data[MTK_Q_DATA_DST];
+-	for (k = 0; k < NUM_FORMATS; k++) {
++	for (k = 0; k < num_supported_formats; k++) {
+ 		fmt = &mtk_video_formats[k];
+ 		if (fmt->fourcc == pixelformat) {
+ 			mtk_v4l2_debug(1, "Update cap fourcc(%d -> %d)",
+@@ -612,11 +615,11 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8173_pdata = {
+ 	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
+ 	.vdec_vb2_ops = &mtk_vdec_frame_vb2_ops,
+ 	.vdec_formats = mtk_video_formats,
+-	.num_formats = NUM_FORMATS,
++	.num_formats = &num_supported_formats,
+ 	.default_out_fmt = &mtk_video_formats[DEFAULT_OUT_FMT_IDX],
+ 	.default_cap_fmt = &mtk_video_formats[DEFAULT_CAP_FMT_IDX],
+ 	.vdec_framesizes = mtk_vdec_framesizes,
+-	.num_framesizes = NUM_SUPPORTED_FRAMESIZE,
++	.num_framesizes = &num_supported_framesize,
+ 	.worker = mtk_vdec_worker,
+ 	.flush_decoder = mtk_vdec_flush_decoder,
+ 	.is_subdev_supported = false,
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+index c61df1f51185..0034b2ee9259 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+@@ -94,7 +94,8 @@ static const struct mtk_video_fmt mtk_video_formats[] = {
+ 	},
+ };
  
- 	lat_buf->core_decode(lat_buf);
+-#define NUM_FORMATS ARRAY_SIZE(mtk_video_formats)
++static const unsigned int num_supported_formats = ARRAY_SIZE(mtk_video_formats);
++
+ #define DEFAULT_OUT_FMT_IDX    0
+ #define DEFAULT_CAP_FMT_IDX    1
  
- 	mtk_vcodec_set_curr_ctx(dev, NULL, MTK_VDEC_CORE);
-+	mtk_vcodec_dec_disable_hardware(ctx, MTK_VDEC_CORE);
- 	vdec_msg_queue_qbuf(&ctx->msg_queue.lat_ctx, lat_buf);
+@@ -106,7 +107,7 @@ static const struct mtk_codec_framesizes mtk_vdec_framesizes[] = {
+ 	},
+ };
  
- 	if (!list_empty(&ctx->msg_queue.lat_ctx.ready_queue)) {
+-#define NUM_SUPPORTED_FRAMESIZE ARRAY_SIZE(mtk_vdec_framesizes)
++static const unsigned int num_supported_framesize = ARRAY_SIZE(mtk_vdec_framesizes);
+ 
+ static void mtk_vdec_stateless_cap_to_disp(struct mtk_vcodec_ctx *ctx, int error,
+ 					   struct media_request *src_buf_req)
+@@ -362,11 +363,11 @@ const struct mtk_vcodec_dec_pdata mtk_vdec_8183_pdata = {
+ 	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
+ 	.vdec_vb2_ops = &mtk_vdec_request_vb2_ops,
+ 	.vdec_formats = mtk_video_formats,
+-	.num_formats = NUM_FORMATS,
++	.num_formats = &num_supported_formats,
+ 	.default_out_fmt = &mtk_video_formats[DEFAULT_OUT_FMT_IDX],
+ 	.default_cap_fmt = &mtk_video_formats[DEFAULT_CAP_FMT_IDX],
+ 	.vdec_framesizes = mtk_vdec_framesizes,
+-	.num_framesizes = NUM_SUPPORTED_FRAMESIZE,
++	.num_framesizes = &num_supported_framesize,
+ 	.uses_stateless_api = true,
+ 	.worker = mtk_vdec_worker,
+ 	.flush_decoder = mtk_vdec_flush_decoder,
+@@ -382,11 +383,11 @@ const struct mtk_vcodec_dec_pdata mtk_lat_sig_core_pdata = {
+ 	.ctrls_setup = mtk_vcodec_dec_ctrls_setup,
+ 	.vdec_vb2_ops = &mtk_vdec_request_vb2_ops,
+ 	.vdec_formats = mtk_video_formats,
+-	.num_formats = NUM_FORMATS,
++	.num_formats = &num_supported_formats,
+ 	.default_out_fmt = &mtk_video_formats[DEFAULT_OUT_FMT_IDX],
+ 	.default_cap_fmt = &mtk_video_formats[DEFAULT_CAP_FMT_IDX],
+ 	.vdec_framesizes = mtk_vdec_framesizes,
+-	.num_framesizes = NUM_SUPPORTED_FRAMESIZE,
++	.num_framesizes = &num_supported_framesize,
+ 	.uses_stateless_api = true,
+ 	.worker = mtk_vdec_worker,
+ 	.flush_decoder = mtk_vdec_flush_decoder,
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+index c06463142182..d74a9e0e74fe 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+@@ -344,6 +344,15 @@ enum mtk_vdec_hw_arch {
+ 	MTK_VDEC_LAT_SINGLE_CORE,
+ };
+ 
++/*
++ * struct mtk_vdec_format_types - Structure used to get supported
++ *		  format types according to decoder capability
++ */
++enum mtk_vdec_format_types {
++	MTK_VDEC_FORMAT_MM21 = 0x20,
++	MTK_VDEC_FORMAT_H264_SLICE = 0x100,
++};
++
+ /**
+  * struct mtk_vcodec_dec_pdata - compatible data for each IC
+  * @init_vdec_params: init vdec params
+@@ -380,12 +389,12 @@ struct mtk_vcodec_dec_pdata {
+ 	struct vb2_ops *vdec_vb2_ops;
+ 
+ 	const struct mtk_video_fmt *vdec_formats;
+-	const int num_formats;
++	const int *num_formats;
+ 	const struct mtk_video_fmt *default_out_fmt;
+ 	const struct mtk_video_fmt *default_cap_fmt;
+ 
+ 	const struct mtk_codec_framesizes *vdec_framesizes;
+-	const int num_framesizes;
++	const int *num_framesizes;
+ 
+ 	enum mtk_vdec_hw_arch hw_arch;
+ 
 -- 
 2.18.0
 
