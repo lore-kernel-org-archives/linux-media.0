@@ -2,264 +2,108 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1F44C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 10:29:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ECE1C433FE
+	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 10:32:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349023AbiDZKcH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Apr 2022 06:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
+        id S1349170AbiDZKfW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Apr 2022 06:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348895AbiDZKbH (ORCPT
+        with ESMTP id S1349145AbiDZKfD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:31:07 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6746FFAF6E;
-        Tue, 26 Apr 2022 03:08:43 -0700 (PDT)
-X-UUID: 592441470e374f07a2e97ddb799aa089-20220426
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:33bebf30-0dfa-43d7-b8df-c24d9ea9ed25,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-12
-X-CID-META: VersionHash:faefae9,CLOUDID:dc6887c6-85ee-4ac1-ac05-bd3f1e72e732,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 592441470e374f07a2e97ddb799aa089-20220426
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1143823556; Tue, 26 Apr 2022 18:08:39 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 26 Apr 2022 18:08:38 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 26 Apr 2022 18:08:36 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
+        Tue, 26 Apr 2022 06:35:03 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F22212AC5;
+        Tue, 26 Apr 2022 03:14:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650968040; x=1682504040;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s3e2Mol8Q7Ae9bok6W3oQgnE6nys4q61z67ZOj7oV0U=;
+  b=RT02AiyiT1j3tEeCXpMRciNCpW9TzMErKMQqz+9xyUEqETnrvbLQhcbL
+   v7OnO8Ghr3xI8pnmAZSn9uXLWFJs2f7JTLxNlvPrLHd3lfeCe2X0EPR99
+   6hPoPS/SIlhuPxNywcPoOalXi6J1ELaOU+Qhs+GVotHCZkX3aI2MiUE23
+   x3wMV9NXnDpS8YUhXDo0/yHircDRjMFq7Kxfl1kqB04RFKAAEahDAcsg+
+   ZzgVbWCx06iWsRYl+6ev2rUSPELK3wUvdek4U+sy/UqxOKsfGARQClt54
+   e3X1AXdgiLBsbuTizpe9QVHY20WI3r13Vfpt+4t8bzDwzK2XcDsZndb7D
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="328471148"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="328471148"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 03:13:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="595693115"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Apr 2022 03:13:56 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njICh-0003Py-RN;
+        Tue, 26 Apr 2022 10:13:55 +0000
+Date:   Tue, 26 Apr 2022 18:12:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v10, 03/17] media: mediatek: vcodec: get capture queue buffer size from scp
-Date:   Tue, 26 Apr 2022 18:08:14 +0800
-Message-ID: <20220426100828.13429-4-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220426100828.13429-1-yunfei.dong@mediatek.com>
-References: <20220426100828.13429-1-yunfei.dong@mediatek.com>
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v2 4/4] drm/nvdla/uapi: Add UAPI of NVDLA driver
+Message-ID: <202204261827.CMHZCsOI-lkp@intel.com>
+References: <20220426060808.78225-5-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426060808.78225-5-cai.huoqing@linux.dev>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Different capture buffer format has different buffer size, need to get
-real buffer size according to buffer type from scp.
+Hi Cai,
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- .../platform/mediatek/vcodec/vdec_ipi_msg.h   | 36 ++++++++++++++
- .../platform/mediatek/vcodec/vdec_vpu_if.c    | 49 +++++++++++++++++++
- .../platform/mediatek/vcodec/vdec_vpu_if.h    | 13 +++++
- 3 files changed, 98 insertions(+)
+I love your patch! Yet something to improve:
 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_ipi_msg.h b/drivers/media/platform/mediatek/vcodec/vdec_ipi_msg.h
-index bf54d6d9a857..47070be2a991 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_ipi_msg.h
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_ipi_msg.h
-@@ -20,6 +20,7 @@ enum vdec_ipi_msgid {
- 	AP_IPIMSG_DEC_RESET = 0xA004,
- 	AP_IPIMSG_DEC_CORE = 0xA005,
- 	AP_IPIMSG_DEC_CORE_END = 0xA006,
-+	AP_IPIMSG_DEC_GET_PARAM = 0xA007,
- 
- 	VPU_IPIMSG_DEC_INIT_ACK = 0xB000,
- 	VPU_IPIMSG_DEC_START_ACK = 0xB001,
-@@ -28,6 +29,7 @@ enum vdec_ipi_msgid {
- 	VPU_IPIMSG_DEC_RESET_ACK = 0xB004,
- 	VPU_IPIMSG_DEC_CORE_ACK = 0xB005,
- 	VPU_IPIMSG_DEC_CORE_END_ACK = 0xB006,
-+	VPU_IPIMSG_DEC_GET_PARAM_ACK = 0xB007,
- };
- 
- /**
-@@ -114,4 +116,38 @@ struct vdec_vpu_ipi_init_ack {
- 	uint32_t inst_id;
- };
- 
-+/**
-+ * struct vdec_ap_ipi_get_param - for AP_IPIMSG_DEC_GET_PARAM
-+ * @msg_id	: AP_IPIMSG_DEC_GET_PARAM
-+ * @inst_id     : instance ID. Used if the ABI version >= 2.
-+ * @data	: picture information
-+ * @param_type	: get param type
-+ * @codec_type	: Codec fourcc
-+ */
-+struct vdec_ap_ipi_get_param {
-+	u32 msg_id;
-+	u32 inst_id;
-+	u32 data[4];
-+	u32 param_type;
-+	u32 codec_type;
-+};
-+
-+/**
-+ * struct vdec_vpu_ipi_get_param_ack - for VPU_IPIMSG_DEC_GET_PARAM_ACK
-+ * @msg_id	: VPU_IPIMSG_DEC_GET_PARAM_ACK
-+ * @status	: VPU execution result
-+ * @ap_inst_addr	: AP vcodec_vpu_inst instance address
-+ * @data     : picture information from SCP.
-+ * @param_type	: get param type
-+ * @reserved : reserved param
-+ */
-+struct vdec_vpu_ipi_get_param_ack {
-+	u32 msg_id;
-+	s32 status;
-+	u64 ap_inst_addr;
-+	u32 data[4];
-+	u32 param_type;
-+	u32 reserved;
-+};
-+
- #endif
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-index 7210061c772f..35f4d5583084 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-@@ -6,6 +6,7 @@
- 
- #include "mtk_vcodec_drv.h"
- #include "mtk_vcodec_util.h"
-+#include "vdec_drv_if.h"
- #include "vdec_ipi_msg.h"
- #include "vdec_vpu_if.h"
- #include "mtk_vcodec_fw.h"
-@@ -54,6 +55,26 @@ static void handle_init_ack_msg(const struct vdec_vpu_ipi_init_ack *msg)
- 	}
- }
- 
-+static void handle_get_param_msg_ack(const struct vdec_vpu_ipi_get_param_ack *msg)
-+{
-+	struct vdec_vpu_inst *vpu = (struct vdec_vpu_inst *)
-+					(unsigned long)msg->ap_inst_addr;
-+
-+	mtk_vcodec_debug(vpu, "+ ap_inst_addr = 0x%llx", msg->ap_inst_addr);
-+
-+	/* param_type is enum vdec_get_param_type */
-+	switch (msg->param_type) {
-+	case GET_PARAM_PIC_INFO:
-+		vpu->fb_sz[0] = msg->data[0];
-+		vpu->fb_sz[1] = msg->data[1];
-+		break;
-+	default:
-+		mtk_vcodec_err(vpu, "invalid get param type=%d", msg->param_type);
-+		vpu->failure = 1;
-+		break;
-+	}
-+}
-+
- /*
-  * vpu_dec_ipi_handler - Handler for VPU ipi message.
-  *
-@@ -89,6 +110,9 @@ static void vpu_dec_ipi_handler(void *data, unsigned int len, void *priv)
- 		case VPU_IPIMSG_DEC_CORE_END_ACK:
- 			break;
- 
-+		case VPU_IPIMSG_DEC_GET_PARAM_ACK:
-+			handle_get_param_msg_ack(data);
-+			break;
- 		default:
- 			mtk_vcodec_err(vpu, "invalid msg=%X", msg->msg_id);
- 			break;
-@@ -217,6 +241,31 @@ int vpu_dec_start(struct vdec_vpu_inst *vpu, uint32_t *data, unsigned int len)
- 	return err;
- }
- 
-+int vpu_dec_get_param(struct vdec_vpu_inst *vpu, uint32_t *data,
-+		      unsigned int len, unsigned int param_type)
-+{
-+	struct vdec_ap_ipi_get_param msg;
-+	int err;
-+
-+	mtk_vcodec_debug_enter(vpu);
-+
-+	if (len > ARRAY_SIZE(msg.data)) {
-+		mtk_vcodec_err(vpu, "invalid len = %d\n", len);
-+		return -EINVAL;
-+	}
-+
-+	memset(&msg, 0, sizeof(msg));
-+	msg.msg_id = AP_IPIMSG_DEC_GET_PARAM;
-+	msg.inst_id = vpu->inst_id;
-+	memcpy(msg.data, data, sizeof(unsigned int) * len);
-+	msg.param_type = param_type;
-+	msg.codec_type = vpu->codec_type;
-+
-+	err = vcodec_vpu_send_msg(vpu, (void *)&msg, sizeof(msg));
-+	mtk_vcodec_debug(vpu, "- ret=%d", err);
-+	return err;
-+}
-+
- int vpu_dec_core(struct vdec_vpu_inst *vpu)
- {
- 	return vcodec_send_ap_ipi(vpu, AP_IPIMSG_DEC_CORE);
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.h b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.h
-index 4cb3c7f5a3ad..fe6815d31e50 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.h
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.h
-@@ -28,6 +28,7 @@ struct mtk_vcodec_ctx;
-  * @wq          : wait queue to wait VPU message ack
-  * @handler     : ipi handler for each decoder
-  * @codec_type     : use codec type to separate different codecs
-+ * @fb_sz  : frame buffer size of each plane
-  */
- struct vdec_vpu_inst {
- 	int id;
-@@ -42,6 +43,7 @@ struct vdec_vpu_inst {
- 	wait_queue_head_t wq;
- 	mtk_vcodec_ipi_handler handler;
- 	unsigned int codec_type;
-+	unsigned int fb_sz[2];
- };
- 
- /**
-@@ -104,4 +106,15 @@ int vpu_dec_core(struct vdec_vpu_inst *vpu);
-  */
- int vpu_dec_core_end(struct vdec_vpu_inst *vpu);
- 
-+/**
-+ * vpu_dec_get_param - get param from scp
-+ *
-+ * @vpu : instance for vdec_vpu_inst
-+ * @data: meta data to pass bitstream info to VPU decoder
-+ * @len : meta data length
-+ * @param_type : get param type
-+ */
-+int vpu_dec_get_param(struct vdec_vpu_inst *vpu, uint32_t *data,
-+		      unsigned int len, unsigned int param_type);
-+
- #endif
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on linus/master linux/master v5.18-rc4 next-20220422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cai-Huoqing/drm-nvdla-Add-driver-support-for-NVDLA/20220426-141148
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: i386-randconfig-a003-20220425 (https://download.01.org/0day-ci/archive/20220426/202204261827.CMHZCsOI-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a54587f7637b8ee11ad624794af3b409e6306e07
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Cai-Huoqing/drm-nvdla-Add-driver-support-for-NVDLA/20220426-141148
+        git checkout a54587f7637b8ee11ad624794af3b409e6306e07
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> error: include/uapi/drm/nvdla_drm.h: missing "WITH Linux-syscall-note" for SPDX-License-Identifier
+   make[2]: *** [scripts/Makefile.headersinst:63: usr/include/drm/nvdla_drm.h] Error 1
+   make[2]: Target '__headers' not remade because of errors.
+   make[1]: *** [Makefile:1280: headers] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
 -- 
-2.18.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
