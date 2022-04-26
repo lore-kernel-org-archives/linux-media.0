@@ -2,47 +2,46 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA202C4332F
-	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 12:58:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B894C43217
+	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 12:58:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350350AbiDZNBx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Apr 2022 09:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
+        id S1350420AbiDZNBy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Apr 2022 09:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350383AbiDZNBg (ORCPT
+        with ESMTP id S1350380AbiDZNBc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:01:36 -0400
+        Tue, 26 Apr 2022 09:01:32 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C21177D47;
-        Tue, 26 Apr 2022 05:58:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F0E17F11B;
+        Tue, 26 Apr 2022 05:58:20 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 762DA1F43982
+        with ESMTPSA id 61F8F1F43992
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650977904;
-        bh=FmxP3Of2pm4gkbqbbaer5qaBCfIvVbPhhE5DeBELz4c=;
+        s=mail; t=1650977899;
+        bh=gu3hWa9l9RwIqYfPgXJTq2hXyJdb/X3UYi37Vl+bXOc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hBcUdsG1vo3Ibv1T3PQzLkVRTO0BNO/MVGkjQjQwI+Cq1k4fW3YqyXc+hxVDtQf/o
-         MJuP+asy+HuX8zNfZEw/5amOnVG+lj3zPobSzVPtm7WuekupyjirBzpIGRu0Cq98GL
-         unLEetrzkGph3I6wU4USp8dMV6FRCHAqo9gjaEOKEuSHlDMgn9f17RAdUro6jJ1Wqu
-         uPEsQMUgSnXfrEjpk5ebf2GLQCIv418eOVG79hBN5E7Zv/6+6Asg/D3t2WXaURMCbn
-         8JaCNhHnsPh6AgM3V5WfTkzw1p2TWjl9L9muaea9yujNEXRbpLnSD2BpZQNgkLwFT1
-         bsPyAFMV8nknw==
+        b=A9PPhaws+0UJKFGVd1hph8rKqPW0f16roDicNJFfCdGnt2qPN466cQ22WLaQfg4U5
+         +Jxnnc1YkNht2e50RoYOjFvb/wNAKG1eu+UGyCbR/EhBVNTOiBmGazcu+7DO0/G5ql
+         WnI0BtliPH3K5k0AyymLQZNm8otEZaMpTYQsCZo5HAI7ZBydI7UbBYsjEizKhU0c4c
+         JTiYZEDPyYpzkw2cpXNWb1S/C+OrHDHktRpzO2Or1om6MilkX5eHtIzxOxPweZ9ioC
+         WIyhM23PqBPJS0uf9kApXCI2runbW5D6iZ2Uyj/LxM4r2W/haPC6ILBcRTnprAIRMr
+         u0V8WQkrdXY/Q==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     nicolas@ndufresne.ca, Jonas Karlman <jonas@kwiboo.se>,
-        linux-media@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@collabora.com>,
+Cc:     nicolas@ndufresne.ca, linux-media@vger.kernel.org,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 14/24] media: rkvdec: h264: Fix bit depth wrap in pps packet
-Date:   Tue, 26 Apr 2022 08:57:40 -0400
-Message-Id: <20220426125751.108293-15-nicolas.dufresne@collabora.com>
+Subject: [PATCH v4 12/24] media: rkvdec: Stop overclocking the decoder
+Date:   Tue, 26 Apr 2022 08:57:38 -0400
+Message-Id: <20220426125751.108293-13-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
 References: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
@@ -52,38 +51,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jonas Karlman <jonas@kwiboo.se>
+While this overclock hack seems to work on some implementations
+(some ChromeBooks, RockPi4) it also causes instability on other
+implementations (notably LibreComputer Renegade, but there were more
+reports in the LibreELEC project, where this has been removed). While
+performance is indeed affected (tested with GStreamer), 4K playback
+still works as long as you don't operate in lock step and keep at
+least 1 frame ahead of time in the decode queue.
 
-The luma and chroma bit depth fields in the pps packet are 3 bits wide.
-8 is wrongly added to the bit depth values written to these 3 bit fields.
-Because only the 3 LSB are written, the hardware was configured
-correctly.
-
-Correct this by not adding 8 to the luma and chroma bit depth value.
+After discussion with ChromeOS members, it would seem that their
+implementation indeed used to synchronously decode each frame, so
+this hack was simply compensating for their code being less
+efficient. In my opinion, this hack should not have been included
+upstream.
 
 Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- drivers/staging/media/rkvdec/rkvdec-h264.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index bcde37d72244..8d44a884a52e 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -662,8 +662,8 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
- 	WRITE_PPS(0xff, PROFILE_IDC);
- 	WRITE_PPS(1, CONSTRAINT_SET3_FLAG);
- 	WRITE_PPS(sps->chroma_format_idc, CHROMA_FORMAT_IDC);
--	WRITE_PPS(sps->bit_depth_luma_minus8 + 8, BIT_DEPTH_LUMA);
--	WRITE_PPS(sps->bit_depth_chroma_minus8 + 8, BIT_DEPTH_CHROMA);
-+	WRITE_PPS(sps->bit_depth_luma_minus8, BIT_DEPTH_LUMA);
-+	WRITE_PPS(sps->bit_depth_chroma_minus8, BIT_DEPTH_CHROMA);
- 	WRITE_PPS(0, QPPRIME_Y_ZERO_TRANSFORM_BYPASS_FLAG);
- 	WRITE_PPS(sps->log2_max_frame_num_minus4, LOG2_MAX_FRAME_NUM_MINUS4);
- 	WRITE_PPS(sps->max_num_ref_frames, MAX_NUM_REF_FRAMES);
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index c0cf3488f970..2df8cf4883e2 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -1027,12 +1027,6 @@ static int rkvdec_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	/*
+-	 * Bump ACLK to max. possible freq. (500 MHz) to improve performance
+-	 * When 4k video playback.
+-	 */
+-	clk_set_rate(rkvdec->clocks[0].clk, 500 * 1000 * 1000);
+-
+ 	rkvdec->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(rkvdec->regs))
+ 		return PTR_ERR(rkvdec->regs);
 -- 
 2.34.1
 
