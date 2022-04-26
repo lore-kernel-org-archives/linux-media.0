@@ -2,43 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C4C0C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 12:59:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9E78C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 26 Apr 2022 12:59:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350459AbiDZNCI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 26 Apr 2022 09:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S1350441AbiDZNCP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 26 Apr 2022 09:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350410AbiDZNBq (ORCPT
+        with ESMTP id S1350446AbiDZNB5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:01:46 -0400
+        Tue, 26 Apr 2022 09:01:57 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE48177D42;
-        Tue, 26 Apr 2022 05:58:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3379617F130;
+        Tue, 26 Apr 2022 05:58:47 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id 1B85C1F43999
+        with ESMTPSA id DCF2E1F439A0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650977918;
-        bh=XEgENTYjCMT2Anghn2qsNUIMLssrmzXSWUAtGOk2EIY=;
+        s=mail; t=1650977922;
+        bh=OT93d1YFbCsPl7b/q8Q9Ng7KBwuAX7su/L0Pt2JnS6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WPDkJ3gJEAFrvwPz4kOJCVGDXM69w7LquNYCOmkDxy8hKiZhuHv8vwhLVFR32zL4a
-         GZFenh67Yc8514goV0s8OFXXMF1zLMrphjl9JlgC4cqg4k9HbcsCmO+q93q27VylJ9
-         MUPV1OyWv4X/5Ny9Xyn3EL9f13FZhfpDaMqdSGa69D7uGqlbGb0WWOIeZnaOihf6fN
-         GDHh0QjC6IsvTHlCUySvLox9sKEr2wUuqQq1jIGLQhgWnpuipLrCZXeNqCiAyCg+Ya
-         5yae5ut0kQN5j2mtL/wsZwKIzGRe7n6VgZuF/iNEkf5tmJ+G8/1O5A40i7E+yy1Jcu
-         ZqsQp8Dvl7YzA==
+        b=cBZN0vuWa0CQYiFTtznCmJ69cnWWpBJjUsOTglusEeiqSVayUvm4THtei/qrnz+XU
+         sxKfjpwT+fa/HTO2lmpV7wL724s3r+9mMdahR1qJH2P8t1iXck7NuGbaxaJly5vKqm
+         +CnjtVkTT3iaegGldibqCE7Vq/khasZDDfEUwlJxfHfFV8bcR5uN90Z9I3HPpzsrwr
+         H5DMc5649WTvQ9vq9OrnHgzL20sr2Z3Y9i6F2AjFq/IVQ6dGlbdqjLCg5i3ua4vQp1
+         94j5HRwXA2ySzWD6Zqm1P5Cu2nEMfyBeoAfYWvwy7OQ8HM7PJJY/Mr1lI+iWwHPo40
+         nEC1lF3RULBxw==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     nicolas@ndufresne.ca, Jonas Karlman <jonas@kwiboo.se>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 22/24] media: hantro: h264: Make dpb entry management more robust
-Date:   Tue, 26 Apr 2022 08:57:48 -0400
-Message-Id: <20220426125751.108293-23-nicolas.dufresne@collabora.com>
+Cc:     nicolas@ndufresne.ca, linux-media@vger.kernel.org,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 24/24] media: hantro: Enable HOLD_CAPTURE_BUF for H.264
+Date:   Tue, 26 Apr 2022 08:57:50 -0400
+Message-Id: <20220426125751.108293-25-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
 References: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
@@ -48,58 +49,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jonas Karlman <jonas@kwiboo.se>
+This is needed to optimize field decoding. Each field will be
+decoded into the same capture buffer. To be able to queue multiple
+buffers, we need to be able to ask the driver to hold the capture
+buffer.
 
-The driver maintains stable slot locations for reference pictures. This
-change makes the code more robust by using the reference_ts as key and
-by marking all entries invalid right from the start.
-
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 ---
- drivers/staging/media/hantro/hantro_h264.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/staging/media/hantro/hantro_v4l2.c | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
-index 228629fb3cdf..7377fc26f780 100644
---- a/drivers/staging/media/hantro/hantro_h264.c
-+++ b/drivers/staging/media/hantro/hantro_h264.c
-@@ -258,8 +258,7 @@ static void prepare_table(struct hantro_ctx *ctx)
- static bool dpb_entry_match(const struct v4l2_h264_dpb_entry *a,
- 			    const struct v4l2_h264_dpb_entry *b)
- {
--	return a->top_field_order_cnt == b->top_field_order_cnt &&
--	       a->bottom_field_order_cnt == b->bottom_field_order_cnt;
-+	return a->reference_ts == b->reference_ts;
+diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
+index 67148ba346f5..50d636678ff3 100644
+--- a/drivers/staging/media/hantro/hantro_v4l2.c
++++ b/drivers/staging/media/hantro/hantro_v4l2.c
+@@ -409,6 +409,30 @@ hantro_update_requires_request(struct hantro_ctx *ctx, u32 fourcc)
+ 	}
  }
  
- static void update_dpb(struct hantro_ctx *ctx)
-@@ -273,13 +272,13 @@ static void update_dpb(struct hantro_ctx *ctx)
++static void
++hantro_update_requires_hold_capture_buf(struct hantro_ctx *ctx, u32 fourcc)
++{
++	struct vb2_queue *vq;
++
++	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
++			     V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
++
++	switch (fourcc) {
++	case V4L2_PIX_FMT_JPEG:
++	case V4L2_PIX_FMT_MPEG2_SLICE:
++	case V4L2_PIX_FMT_VP8_FRAME:
++	case V4L2_PIX_FMT_HEVC_SLICE:
++	case V4L2_PIX_FMT_VP9_FRAME:
++		vq->subsystem_flags &= ~(VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF);
++		break;
++	case V4L2_PIX_FMT_H264_SLICE:
++		vq->subsystem_flags |= VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF;
++		break;
++	default:
++		break;
++	}
++}
++
+ static int hantro_set_fmt_out(struct hantro_ctx *ctx,
+ 			      struct v4l2_pix_format_mplane *pix_mp)
+ {
+@@ -472,6 +496,7 @@ static int hantro_set_fmt_out(struct hantro_ctx *ctx,
+ 	ctx->dst_fmt.quantization = pix_mp->quantization;
  
- 	/* Disable all entries by default. */
- 	for (i = 0; i < ARRAY_SIZE(ctx->h264_dec.dpb); i++)
--		ctx->h264_dec.dpb[i].flags &= ~V4L2_H264_DPB_ENTRY_FLAG_ACTIVE;
-+		ctx->h264_dec.dpb[i].flags = 0;
+ 	hantro_update_requires_request(ctx, pix_mp->pixelformat);
++	hantro_update_requires_hold_capture_buf(ctx, pix_mp->pixelformat);
  
- 	/* Try to match new DPB entries with existing ones by their POCs. */
- 	for (i = 0; i < ARRAY_SIZE(dec_param->dpb); i++) {
- 		const struct v4l2_h264_dpb_entry *ndpb = &dec_param->dpb[i];
- 
--		if (!(ndpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
-+		if (!(ndpb->flags & V4L2_H264_DPB_ENTRY_FLAG_VALID))
- 			continue;
- 
- 		/*
-@@ -290,8 +289,7 @@ static void update_dpb(struct hantro_ctx *ctx)
- 			struct v4l2_h264_dpb_entry *cdpb;
- 
- 			cdpb = &ctx->h264_dec.dpb[j];
--			if (cdpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE ||
--			    !dpb_entry_match(cdpb, ndpb))
-+			if (!dpb_entry_match(cdpb, ndpb))
- 				continue;
- 
- 			*cdpb = *ndpb;
+ 	vpu_debug(0, "OUTPUT codec mode: %d\n", ctx->vpu_src_fmt->codec_mode);
+ 	vpu_debug(0, "fmt - w: %d, h: %d\n",
 -- 
 2.34.1
 
