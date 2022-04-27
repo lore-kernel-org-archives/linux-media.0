@@ -2,58 +2,133 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1BDAC433F5
-	for <linux-media@archiver.kernel.org>; Wed, 27 Apr 2022 21:59:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD2E9C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 27 Apr 2022 22:04:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235346AbiD0WCm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Apr 2022 18:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
+        id S237951AbiD0WHL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Apr 2022 18:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237870AbiD0WCj (ORCPT
+        with ESMTP id S231234AbiD0WHK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:02:39 -0400
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004BE26FF
-        for <linux-media@vger.kernel.org>; Wed, 27 Apr 2022 14:59:25 -0700 (PDT)
-Message-ID: <5ba2bee6-5d00-6414-a30a-7f8be8596eb0@gentoo.org>
-Date:   Wed, 27 Apr 2022 17:59:23 -0400
+        Wed, 27 Apr 2022 18:07:10 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8986481FEB;
+        Wed, 27 Apr 2022 15:03:56 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0610A45F;
+        Thu, 28 Apr 2022 00:03:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1651097034;
+        bh=/2tkMx+1RN0GSTl1faiHvAjcdpMNmPvcQAcYBkTllXA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lJrU6O/5fSkddcNprynLQjZ3gpSV9chMFj79K3E5GujWHefdPG4K8pmT9S3KUKaCY
+         3J/PtjQOYGLGfvG0h53X5V1UvPSJe87AXYZv+rdnsfOvuarzWxx8NisBcYJs5V45mg
+         dHT0mzFrt2Imso6UWs7WNGIYdKVDm28QkxM1Y+uo=
+Date:   Thu, 28 Apr 2022 01:03:52 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v2 0/4] Add Toshiba Visconti AFFINE image processing
+ accelerator driver
+Message-ID: <Ymm9yOsIW4lTjckp@pendragon.ideasonboard.com>
+References: <20220427132345.27327-1-yuji2.ishikawa@toshiba.co.jp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-References: <90ec589b-7361-03aa-dab1-54ccd4116207@gentoo.org>
- <YmmthjPAJIboBCbk@valkosipuli.retiisi.eu>
- <7a3bfccf-743f-6c18-e221-9490c258a903@gentoo.org>
-From:   Mike Pagano <mpagano@gentoo.org>
-To:     linux-media@vger.kernel.org
-Subject: Re: [PATCH 1/1 v2] media: i2c: ov2640: Depend on V4L2_ASYNC
-In-Reply-To: <7a3bfccf-743f-6c18-e221-9490c258a903@gentoo.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220427132345.27327-1-yuji2.ishikawa@toshiba.co.jp>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add V4L2_ASYNC as a dependency to match other drivers and prevent failures when compile testing.
+Hi Yuji,
 
-Fixes: ff3cc65cadb5 ("media: v4l: async, fwnode: Improve module organisation")
+Thank you for the patch. It's nice to see contributions from Toshiba in
+the image acceleration domain :-)
 
-Signed-off-by: Mike Pagano <mpagano@gentoo.org>
----
-  drivers/media/i2c/Kconfig | 1 +
-  1 file changed, 1 insertion(+)
+I'll start with a high-level question before diving into detailed
+review. Why is this implemented in drivers/soc/ with a custom userspace
+API, and not as a V4L2 memory-to-memory driver ?
 
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index fae2baabb773..2b20aa6c37b1 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -372,6 +372,7 @@ config VIDEO_OV13B10
-  config VIDEO_OV2640
-  	tristate "OmniVision OV2640 sensor support"
-  	depends on VIDEO_DEV && I2C
-+	select V4L2_ASYNC
-  	help
-  	  This is a Video4Linux2 sensor driver for the OmniVision
-  	  OV2640 camera.
+On Wed, Apr 27, 2022 at 10:23:41PM +0900, Yuji Ishikawa wrote:
+> This series is the AFFINE image processing accelerator driver for Toshiba's ARM SoC, Visconti[0].
+> This provides DT binding documentation, device driver, MAINTAINER files.
+> 
+> The second patch "soc: visconti: Add Toshiba Visconti image processing accelerator common source"
+> is commonly used among acclerator drivers (affine, dnn, dspif, pyramid).
+> 
+> Best regards,
+> Yuji
+> 
+> [0]: https://toshiba.semicon-storage.com/ap-en/semiconductor/product/image-recognition-processors-visconti.html
+>   
+>   dt-bindings: soc: visconti: Add Toshiba Visconti AFFINE image
+>     v1 -> v2:
+>       - No update
+> 
+>   soc: visconti: Add Toshiba Visconti image processing accelerator common source
+>     v1 -> v2:
+>       - apply checkpatch.pl --strict
+>   
+>   soc: visconti: Add Toshiba Visconti AFFINE image processing accelerator
+>     v1 -> v2:
+>       - apply checkpatch.pl --strict
+>       - rename hwd_AFFINE_xxxx to hwd_affine_xxxx
+> 
+>   MAINTAINERS: Add entries for Toshiba Visconti AFFINE image processing accelerator
+>     v1 -> v2:
+>       - No update
+> 
+> Change in V2:
+>   - apply checkpatch.pl --strict
+>   - rename hwd_AFFINE_xxxx to hwd_affine_xxxx
+> 
+> Yuji Ishikawa (4):
+>   dt-bindings: soc: visconti: Add Toshiba Visconti AFFINE image
+>     processing accelerator bindings
+>   soc: visconti: Add Toshiba Visconti image processing accelerator
+>     common source
+>   soc: visconti: Add Toshiba Visconti AFFINE image processing
+>     accelerator
+>   MAINTAINERS: Add entries for Toshiba Visconti AFFINE image processing
+>     accelerator
+> 
+>  .../soc/visconti/toshiba,visconti-affine.yaml |  53 ++
+>  MAINTAINERS                                   |   2 +
+>  drivers/soc/Kconfig                           |   1 +
+>  drivers/soc/Makefile                          |   1 +
+>  drivers/soc/visconti/Kconfig                  |   7 +
+>  drivers/soc/visconti/Makefile                 |   8 +
+>  drivers/soc/visconti/affine/Makefile          |   6 +
+>  drivers/soc/visconti/affine/affine.c          | 451 ++++++++++++++++++
+>  drivers/soc/visconti/affine/hwd_affine.c      | 206 ++++++++
+>  drivers/soc/visconti/affine/hwd_affine.h      |  83 ++++
+>  drivers/soc/visconti/affine/hwd_affine_reg.h  |  45 ++
+>  drivers/soc/visconti/ipa_common.c             |  55 +++
+>  drivers/soc/visconti/ipa_common.h             |  18 +
+>  drivers/soc/visconti/uapi/affine.h            |  87 ++++
+>  drivers/soc/visconti/uapi/ipa.h               |  88 ++++
+>  15 files changed, 1111 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/visconti/toshiba,visconti-affine.yaml
+>  create mode 100644 drivers/soc/visconti/Kconfig
+>  create mode 100644 drivers/soc/visconti/Makefile
+>  create mode 100644 drivers/soc/visconti/affine/Makefile
+>  create mode 100644 drivers/soc/visconti/affine/affine.c
+>  create mode 100644 drivers/soc/visconti/affine/hwd_affine.c
+>  create mode 100644 drivers/soc/visconti/affine/hwd_affine.h
+>  create mode 100644 drivers/soc/visconti/affine/hwd_affine_reg.h
+>  create mode 100644 drivers/soc/visconti/ipa_common.c
+>  create mode 100644 drivers/soc/visconti/ipa_common.h
+>  create mode 100644 drivers/soc/visconti/uapi/affine.h
+>  create mode 100644 drivers/soc/visconti/uapi/ipa.h
+
 -- 
-2.35.1
+Regards,
+
+Laurent Pinchart
