@@ -2,412 +2,481 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1342C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 27 Apr 2022 11:47:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67C01C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 27 Apr 2022 11:47:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbiD0LuM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Apr 2022 07:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
+        id S233023AbiD0LuX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Apr 2022 07:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232984AbiD0LuL (ORCPT
+        with ESMTP id S232986AbiD0LuV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:50:11 -0400
-Received: from KOR01-SL2-obe.outbound.protection.outlook.com (mail-eopbgr1290109.outbound.protection.outlook.com [40.107.129.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3287884A28
-        for <linux-media@vger.kernel.org>; Wed, 27 Apr 2022 04:46:59 -0700 (PDT)
+        Wed, 27 Apr 2022 07:50:21 -0400
+Received: from KOR01-SL2-obe.outbound.protection.outlook.com (mail-eopbgr1290103.outbound.protection.outlook.com [40.107.129.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB603B57C
+        for <linux-media@vger.kernel.org>; Wed, 27 Apr 2022 04:47:09 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bCUc4Wu1Xu32d1CmooGevqWW4eiNPFFoLqEUxEdcMi2Lr1IDxYTTwvDFFBhDP2SwKdbdYVNTLdpWtMNWAqsP1D6jUTPNw9qNPdFvCK63Fw2lCZfJDgsoC/I5SbMfdNfjz2in2qbLsv3jMjeIlPD/CKkloI0FWZBDaA80IPaK5fpXbg6jYn8EvO7h29YWdxEBt8O8pn3RFxnO+8GRWM8GcpttktWDPdbNcjZvqsJRnUHdkrQRUUv1wN/WwXXGpyZZ/JFed13nkaJAkr3cHr8Y76mtNaGP1F736WiunQSdhNbIjMWQfx/Z2nf6z1/hc1eKSkgzOlI8yK0BtwkOOVvBEg==
+ b=UxSYrB+a7fZP+kvwMmZhQRvUHPH++sYahgrGzUD+rnBA3u7jkZDQ/UKHQpI8M+1MCVDmHglPe4zI7j8viyMXt9sjG7vkpnpV22Tj/bICau7OuXOFWhYMfAegLMcP5ka+mEgRS9ziOJjEWz5xTH/272YY3KWUR+shyYer1HmeP91bSsFVSrCdt06vDX/rG1JgROiJ/mkADXsoc5eJd3GDol2t5cWCQKR0wpcAtj56PW9BPv4kVrDQIDMxUdMs46b8dlEkQIFszoKsQBodKnaBoyLFJETKw/Z3LGV53qOyZFHw1RJ6voNtRxPFtsz3hk1IcpZcTvLeBQMBE6f2Yg0ssg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CHchYtvD2EsN9c9gO9IauNs6znvukIbMFexPUL9ULkg=;
- b=dSKe6niBe7TAAUYamqEtWf+hOvohrmy+Db6sUahCeJg5A0Z8tSUrd8ZLYfE6TrnWt8YKc6EXVYPZ/lbUbyNerTEzKJZ9FZBs1RabzaEtAiSG0QDfrKvI5bVdYskOIkonQUtrofXrA1R+dlK+h+QYhx/5LuGXX1oBj6bLv9ex596Od9Z3IjM01NFbNyL4R4yVzf42bu/a52ab6u9mFIBDEc579OH/Os8lwBtpAUteVBqW8/UjtXMslAMWAVXrgOKPMElY6FPaZm0Vh4O90i+Ick/XaJLpct84NM4jNT/m9sODE44xdcg4B3eJfpdte5NGzX/oyAENi5O3TjAG7JJAVw==
+ bh=Oc+DbhJOvEqkSsG3iaRhbGXehxwVWjylanIkoEI4XEc=;
+ b=KCDstkSGACr/Rn8uzUSN0pfm4NlVkNHQSPsFprsOjseB/Pacw7Wr9xZgXuAQVVU8WawifQJBi6/yBpORNorZ0mMDXKXHGGc2N0DDnDChqt/G1Yj2lEZ8L8u5Q77efFcsS4x3tmHVAgXs6lJCIf+RhNc60XubgNmzIXQu03SvMOSBzKrViybnIKWEgcTWepSciSy38CJjYOk23sV41LlgKSLPVTmpvTsKN2xkbqin50NPSzhcWdHaYdwi5eT3RdMT8JtQ2lDCA5DgMkWOw5zukOJ5kLZ9e5ZRsEz1Ox5Mpc1vlbUzYcjF6UdOd+L5CTbtj2XpLMzlylAnAa9onyYpPQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=chipsnmedia.com; dmarc=pass action=none
  header.from=chipsnmedia.com; dkim=pass header.d=chipsnmedia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=chipsnmedia.onmicrosoft.com; s=selector2-chipsnmedia-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CHchYtvD2EsN9c9gO9IauNs6znvukIbMFexPUL9ULkg=;
- b=AQdrp4GwULprJb4YgTd5ePDcthEjQdxLbVjVTWK26Eblmi31a0pUEwS6NwiSEzSJh57ZAUV2Kh+mc/dHvqoAzOhaEeEpxqiKheVJ1EQ4fulmAexz1coygaaKaSoumV94CqRF0E13olHwwoMXac7REgETo/iS8vzZEzLLxTpmEpQ=
+ bh=Oc+DbhJOvEqkSsG3iaRhbGXehxwVWjylanIkoEI4XEc=;
+ b=jCvRfS8ABd+8d+XbF+lwVZJCTDQEF1FbAPb5A8bjybgLiSmhFphSEe0nUpckimRkz5DbMWgM8rYcSThuNVHZWEtgHaVMO8Pu4ux7xZk64OmNm+wFP/r4A2XGX9XOv0wsROyCls2M2X1yS3r7eIX2RyUpRw/jR0ggj3+VFnVfPN4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=chipsnmedia.com;
 Received: from SL2P216MB1246.KORP216.PROD.OUTLOOK.COM (2603:1096:101:a::9) by
  PU4P216MB1502.KORP216.PROD.OUTLOOK.COM (2603:1096:301:cd::14) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5206.12; Wed, 27 Apr 2022 11:46:56 +0000
+ 15.20.5206.12; Wed, 27 Apr 2022 11:47:06 +0000
 Received: from SL2P216MB1246.KORP216.PROD.OUTLOOK.COM
  ([fe80::480d:52da:5403:281]) by SL2P216MB1246.KORP216.PROD.OUTLOOK.COM
  ([fe80::480d:52da:5403:281%9]) with mapi id 15.20.5206.013; Wed, 27 Apr 2022
- 11:46:56 +0000
+ 11:47:06 +0000
 From:   Nas Chung <nas.chung@chipsnmedia.com>
 To:     linux-media@vger.kernel.org
-Cc:     hverkuil@xs4all.nl, Nas Chung <nas.chung@chipsnmedia.com>
-Subject: [PATCH v8 0/6] staging: media: wave5: add wave5 codec driver
-Date:   Wed, 27 Apr 2022 20:46:32 +0900
-Message-Id: <20220427114638.1638-1-nas.chung@chipsnmedia.com>
+Cc:     hverkuil@xs4all.nl,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Robert Beckett <bob.beckett@collabora.com>
+Subject: [PATCH v8 2/6] staging: media: wave5: Add the vdi layer
+Date:   Wed, 27 Apr 2022 20:46:34 +0900
+Message-Id: <20220427114638.1638-3-nas.chung@chipsnmedia.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220427114638.1638-1-nas.chung@chipsnmedia.com>
+References: <20220427114638.1638-1-nas.chung@chipsnmedia.com>
 Content-Type: text/plain
 X-ClientProxiedBy: SL2P216CA0124.KORP216.PROD.OUTLOOK.COM (2603:1096:101::21)
  To SL2P216MB1246.KORP216.PROD.OUTLOOK.COM (2603:1096:101:a::9)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b036e8f6-c494-4b09-cf5d-08da2843a1ac
+X-MS-Office365-Filtering-Correlation-Id: c5647bab-b6e1-4deb-1fd6-08da2843a750
 X-MS-TrafficTypeDiagnostic: PU4P216MB1502:EE_
-X-Microsoft-Antispam-PRVS: <PU4P216MB150299C838A9ED849A903DA2FBFA9@PU4P216MB1502.KORP216.PROD.OUTLOOK.COM>
+X-Microsoft-Antispam-PRVS: <PU4P216MB1502F6D23D455D116090BAF2FBFA9@PU4P216MB1502.KORP216.PROD.OUTLOOK.COM>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tQM8tHIJhYF0jHXslWEjd5iILrRRvf2c5jP2AwSfsGJFN6CXcn/8ISgBya1PTekn0ICBM0HC7Pjq8s6b4A4ttCbVNjw4DnSeDpRcv0kjOCAyv8zeay+bIm2UEkGeKQAWIRnLLj0lxRxwv7ZxOA+0zFbChjAp93pAuGNIQmAvEHR+A/r45aXFlC7gbRBaNhGlHrDW4Y8PlXuJuPsId+MEcX7IbQ7LmFBBrdF8DrdF8dFIJPvb7KSqB6/nAr5/92LG8XhoFj451e2Pe1ZPnh9g32zhnqOCgN5WdWLPJX5rywJBtUAfDaRbwxLjxThjYddYONw8KPqQzr6QWU2EGLKTApHyT++4rQ1qC+vxwVnOMDxISRZFmFHtWNDbMlN5tnZ965eUUCGKQcnN/L+dEyWakFvGAaEaaOGmdyqAgzjLAtEl3wQUmsb8mH3DRebq05n5/abBIarS+iLBt3nTBGd7H8BZ3IqMT9rZWGMjlLKnnyoWxsEKmZSokBnKFsCCkdWhVSjkUSvBDAhBG6EKE4qWssu3WW7tZ5fcUwzTkpWlSsMq10/BMuiO6bHT1b68WvcHufhPIsqU2uGsa9GAiFtdLQUaGllPd9vUWqs/xV1c5zia2Uz/a7B/sx8eI8FempZHHiQYNyBSjhmenwHDvD8VFqLZTXvfXCSrWGt9vIB4vNC6BH5H0VNR0JQc8InMqCOOz40TWMiVpbkaJ08XaZMvsQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2P216MB1246.KORP216.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(39850400004)(396003)(136003)(346002)(366004)(376002)(1076003)(83380400001)(66946007)(44832011)(2616005)(107886003)(5660300002)(2906002)(38100700002)(6916009)(38350700002)(86362001)(508600001)(36756003)(6666004)(6486002)(6506007)(4326008)(316002)(8676002)(52116002)(6512007)(66556008)(66476007)(8936002)(26005)(186003);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: NW5ld0XiAjHTqhLCjrJCL2np9U9TPCop+2gaxUsmjr72fwllrHfw2spVU61kCCFz/zndNALzcCoBz6Synt94YTvwDo9/IclctFfFTgwO4F2XQeduCZkt8qjVbXqjYQWZrFjP75/NpR8irAiVtKK9Oz8arjI6Kqg8FDFpMYsmKvwzWTWI7wM1IVOBqtFN1oNz5Np8MeuB0QkVQ+5xpPqpDrXx+ORW1y4exXMWm+k2/iV8PFu6Bt6waPeoVwUkPFmSLAR4eZ8KMdMJLB3TmeztDZl2dZzozZYRIASXt5F5bl6AvMw6qaivDDgekmdab2PaJfxhHYdQVKXbo7R0AAAvqWqbMDEE/MEmq8hUjufpmf3/aRuiYjwPahb1YvpUTQ25LzDfD2NddAYckgniOZb8Hj3TbyiRtX3NHz47OQNNHIxUJljHH7eORoy+HC8Afnxb3ub/RV6rl/w1cXKwG/16r8GQK7gGROT/G4ACaL43N0MPthp5acCK8A69JaH332RLSXbV/RP3Lo7kt/ihWfppShB58nabzb5O44JTJM622166dlyvPvlPiJYFzj/C6wzZ1bPhGLGodqmcM+5voUgEemHs8zfNGTAVleF5Pb9MBBV5FOdJ3trP9W/us/AetspOw4LTNTokRACRqmWHmNEjHYqf+Nilsw7B3URhcGFIrD0Lcbzt5P7wb3XLh2mzplGVR1a63G5e2UiZjN4QY8kABg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2P216MB1246.KORP216.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(39850400004)(396003)(136003)(346002)(366004)(376002)(1076003)(83380400001)(66946007)(44832011)(2616005)(5660300002)(2906002)(54906003)(38100700002)(6916009)(38350700002)(86362001)(508600001)(36756003)(6666004)(6486002)(6506007)(4326008)(316002)(8676002)(52116002)(6512007)(66556008)(66476007)(8936002)(26005)(186003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?R0IgS48qlFvSpml0vuc4ZwuzoN+aiOxDpg7ZQHo1ZYXay1B0jpoH2m8Lyxll?=
- =?us-ascii?Q?l4EKXlmj6hwGMusbsY7RK6XaGOzOVr7c8Uutw6CyHL2/0yrth44G2TAz1XAy?=
- =?us-ascii?Q?rXct9GzG22HXH8wcztjULvjY4v34kfvqxOimwKRC/8+PgIDdIF8N8a20mMjC?=
- =?us-ascii?Q?Kvh0Olg75r4THkpThNdyAtKbvZOmt36o+i5uMPGMTJgd2g+wYHj/HIKLWWpQ?=
- =?us-ascii?Q?WY3zQqSSE4axuONiU+kPq1jeNCKxMWnNYykxYr0wu0HzLdh3Mhi/B1b4FGCT?=
- =?us-ascii?Q?IImtPdT4j4IuenLKs7yg/SN6OcI/IZAp7w9m510m2ZUuKcCTUPTgxmlpisC6?=
- =?us-ascii?Q?j3PDA7lM8u//jyOeyhl2asGBGXx3skFqM7EyKBXD8ZAy2fR2E1zyl3o8JoeU?=
- =?us-ascii?Q?CTgb5IOwKdxzyBzaGYDNhMfmqAvSxXmxNe1Xv3lysnhrYEAzZyBosr4seu7v?=
- =?us-ascii?Q?1m1whVfzZUHtiCCxSUlmBg4nAGdYuD8TLQnVQB+kFsH2+tSQQ6okCy3Q9VCd?=
- =?us-ascii?Q?zZH9DRYe7O9ClI1ggEh2LDuu24kZ+SlGplooYiCbh9W1OjZ2mCZwUk+DAnxC?=
- =?us-ascii?Q?BpseOJsckiytpu7FudJw8VVkALAiYFLmqfi9tZhvelmMlgbWZYijGgX1OA97?=
- =?us-ascii?Q?2Zu8L0KqZkRThjkO10c7/rCnEnF2vxey9FK1QKLAoaa3FQUQ9+wP+tdoZ2mf?=
- =?us-ascii?Q?tb475YauY2uKyRkIbUANJItSZpRGoyyL/Pr5b1uQOw7C38JRYuEccgpKb1uH?=
- =?us-ascii?Q?LPVAPvfh284E/7HjghpeDthCeRE/jb1LQiYl8vPnQylDjK+b4fSJZZAo+bhH?=
- =?us-ascii?Q?AGyzlzhjrzvQXs/0dEwQ6NAzD7ZhtaJG9013Qw7UXZjsNLUkQBfpnv5MpQOt?=
- =?us-ascii?Q?mz81xSQBYYb/u3kV87VtNaUrBQRaiqBL8tuMVicQqhgtzIoMr6W7EC6O7ZxL?=
- =?us-ascii?Q?/TjY0vZo3aWu7GMP+U2FGTADkc6zPOu70uFw/qFS8iVeobT+woXx2I+J0HiQ?=
- =?us-ascii?Q?6idf0q/g96ECNrM2XqDyGejJQrXEeipNkqdZRc+rronohIR0hebSAhrSgXyu?=
- =?us-ascii?Q?4sDVmDGAb9Gp8T0TsIJTodU5V2tJJM3IG3ZXh5vPAG1CwrmAEQZJNgVJBL0Z?=
- =?us-ascii?Q?AY34aeGAa7bltk1Je7HsH4R0EcZWIwx9cKn/KHt5iEp+Kw/DTKbfzbsQmEE+?=
- =?us-ascii?Q?i+QsSlRCdh/EG0mvUVKc0foFne1T9KGv1J9qMDWRr9Ce+hZPUAloWLtaQnVA?=
- =?us-ascii?Q?0OS1aJBLGQPWUMdDULMRJes3eRpi1a5va92pjMpLDB15EF9uuh3mzmQnWsm7?=
- =?us-ascii?Q?HLXkMtYNUgqQ6sM4LRB2CSC0vw4SCoE5tQxnz0R8+T2P1K7n/eStS8XE1fU3?=
- =?us-ascii?Q?hczRlZjJdt3ez5xPmWrPeO91iz4pG9B0Zx9IYfYmjUUfZO4vqeFFL9Z5niP+?=
- =?us-ascii?Q?mtPps6M7f772LRr09rfBK1x9tpU5YFnXU+yYIFMRdnNeKFgQSa3A6DmrTFkb?=
- =?us-ascii?Q?t+fo81gtJEm4dykaZoW0yoiF/NnM6c1pxA5oAilFgoQtntheAfKmNmKQt9hS?=
- =?us-ascii?Q?VwpvbaJxfRMsjHhb7up7ZypKPTiyTmYf/YeOPG4bveEFVByLpp3dGlkPGkH/?=
- =?us-ascii?Q?v0XPvNbBrRhWmOAzlsx4eZGf2QyblsgAvhyDfw6z2j0QsKij/C3QwADw6PSL?=
- =?us-ascii?Q?HwLUEGU9i9mMEuJvAjKJE/XVj7Rfrwl65i4XVH88Uk0mvL4cVJZyAxgXNoN9?=
- =?us-ascii?Q?VIS7eaze16VRGQmGUhXIJASH2wSMn28=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?y2N8HfvP/mfIUbstUNxNW/tqJBgpkVDzHG0uzEqXJTGyyi6luzuZ66rTWiKI?=
+ =?us-ascii?Q?HhIOhhedVDXG0tUKDDlMrXn/X9eNW9SGvhBEkgnBF08VEvLhAA4BNoVNQIdH?=
+ =?us-ascii?Q?drp2LExtKunxBt9vmnJxlO5VZEnZIXD2IDMFml+J6LEvVFqxJ6CMNxF71OQi?=
+ =?us-ascii?Q?IRTJkCHJG7PT+Us4u+0IaEo/VqeI+qYE4bmThqny08dipG4k2Msup48rYnTK?=
+ =?us-ascii?Q?/D1Ecn2WWe3Z4IBgkDCVFZZPa+hQSxmrEaIAbtvu6eI4i5/kaEYjmtMVOuq4?=
+ =?us-ascii?Q?z/r4ZlTVTllmKDnIiYP9mFugJElawjhrfiZEgcX28DVONPDLUIYpQWFxgzwo?=
+ =?us-ascii?Q?IMBYLeNAwR1tEHI9OWe8EtJUnaf6q9UCAtorPkZkyCgiSsWmccc+04HiBCeb?=
+ =?us-ascii?Q?ZCYNr454D+/BO0ODmdr/qBDyGF+Q9UETD5btJF18iL5jqVQLLaTscSzYM4yn?=
+ =?us-ascii?Q?Wq4jV1D3zBk+dzn0d8/Y0t0Q548OgzRNDWupuYBqL7qS7FdjdvPZm7DKaZpL?=
+ =?us-ascii?Q?Ej7XH+v/VKrgWqp5vC9Ot3PcMpiNZT/mU0+QO6M+9Qb5kWeS7aUP2WE5MRbq?=
+ =?us-ascii?Q?DK3lLacCGPEcsaB5zWFtb/l5ZIUTsjkp7LZyCowx2OahziNfZBY3CmNciL8P?=
+ =?us-ascii?Q?aeOVBMdIqDLqp8OZAmJYxBP8fFBsJHNLMuxTmMN5yrWDeyE3hnOcqykeUEnX?=
+ =?us-ascii?Q?u09DpjmDV7b5QzP8rA3P8c6Q/1fSzjOnFt/kOXUmeH1HNDERcqi0YpVBkBZ+?=
+ =?us-ascii?Q?LE4fsA77cLYN6rjdvStF35y355hxH10HTmjUwm1LO0ahURb9q4XjOUi704EN?=
+ =?us-ascii?Q?HrWWh5Y9YulJ5FS8tsxaglSyWY8kQ0+1yMEJMrCzqAuTmDhBoxsIuILlQvJX?=
+ =?us-ascii?Q?zhjhl/EBdlxlkofAm3zcv09ah37i7E14Bpiv0KY1rOKHd7U0lUjFqVX8klOq?=
+ =?us-ascii?Q?2xnb4rh9pVJFummorjDrzLn6nX24ofDVwozQ12B9GEkzpuxq6iHjbWDUa2Qn?=
+ =?us-ascii?Q?GB8d+nkLxyfb9rmBrVKTVF26YQBPPSFTn/Xu7Gt/FgPF7BRNV2QnHtz/0m74?=
+ =?us-ascii?Q?jC+zpS7N0vC+YiKeTkuhShDj6GbD3yIO+aknB7Z3KfsIB8XqxSjX5OO8vup6?=
+ =?us-ascii?Q?XNQwyV/HcgHHotJ8oOPgTCmxPq1UeKRMUbi1JcyfWQRBSFhsPR5+3zg81MnQ?=
+ =?us-ascii?Q?uUU8iXDb5JEFLXydXTtyZaYZ7ZhT5+PveEaKvuUq6ttBC+UFVYBQBB+Q8pAz?=
+ =?us-ascii?Q?YTvDzKTRFpJc45dHkP7S1f+w+bHL8SWwzQZZxoIyTJbFJTMkbwyiPpwopePC?=
+ =?us-ascii?Q?xeIoqsEWISJxTunB7Z3gdkJwknq7+4/3YHLaycXLF7HYSTdmBxklsna5gkSU?=
+ =?us-ascii?Q?Hrrt437ZFEpa2EAH/rCtRzzWm9Zh+VlzikHCJ0p8QbapcdF57hA3ssWD6G3N?=
+ =?us-ascii?Q?YYO2tYv/MLH6u+cXKRRthizXXmfauvWUGkO5Kv7qm+dCIU5SS2nXFo8P8Mm+?=
+ =?us-ascii?Q?2eLE8YKfOjdMEPkrS/UvftKCVNm4HtzPqPwDQHTR5cGu4fBwtPsR/C2lRUMO?=
+ =?us-ascii?Q?7ILvzeisTWF+v+Beu/jpVVmQa2UTJQxSrJsTMhe2Xm1bW8eXkNwhhFZSZJEO?=
+ =?us-ascii?Q?0i4Dm0Xnr8e6v0Aa1i8PiKluBKq521Gvcvyv332K84HaV93uq/0pzPcK7dSa?=
+ =?us-ascii?Q?2r0vbyLLEQNVzxWwwIt1Bxj8NF3fK+6N3+J7jPTZENHu9YM3OQlH+QfNePMZ?=
+ =?us-ascii?Q?kZvaZkJSXTPYx9aMKVkAwZNc4J11t5E=3D?=
 X-OriginatorOrg: chipsnmedia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b036e8f6-c494-4b09-cf5d-08da2843a1ac
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5647bab-b6e1-4deb-1fd6-08da2843a750
 X-MS-Exchange-CrossTenant-AuthSource: SL2P216MB1246.KORP216.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 11:46:56.7660
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 11:47:06.8654
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4d70c8e9-142b-4389-b7f2-fa8a3c68c467
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dX19UzjH2mFHSK7RvEcQH8Nv7Txr35n8u/0K1CiY2Xp6erDzXej3dFcQkmm9RqAeRbwOBkuTQ7kTrPvuyPeFbNTE7w6kaFHl90/s1Kphxxc=
+X-MS-Exchange-CrossTenant-UserPrincipalName: mLqY6BKoHOgH2oOaU+eGQpudjjTOhlZoxVqW7rNtDwx9yk4NrE0oaVW55wG19I7PWxi2Or8xycIIQ7w6meY4vsLzRRqzKOOyjP6N/MUPnVE=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PU4P216MB1502
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Wave5 codec driver is a stateful encoder/decoder.
-It is found on the J721S2 SoC, JH7100 SoC, ssd202d SoC. Etc.
-But current test report is based on J721S2 SoC and pre-silicon FPGA.
+From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 
-The driver currently supports V4L2_PIX_FMT_HEVC, V4L2_PIX_FMT_H264.
+Add the vdi part of the wave5 codec driver.
+The wave5-vdi.h header defines common helper functions such as writing/reading register and handling endianness.
 
-This driver has so far been tested on J721S2 EVM board and pre-silicon FPGA.
-
-Testing on J721S2 EVM board shows it working fine both decoder and encoder.
-The driver is successfully working with gstreamer v4l2 good-plugin
-without any modification.
-
-Testing on FPGA also shows it working fine, though the FPGA uses polled
-interrupts and copied buffers between the host and it's on board RAM.
-
-The wave5 driver will be updated to support various EXT_CTRL encoder
-interface.
-
-# v4l2-compliance -d0
-v4l2-compliance 1.23.0-4923, 64 bits, 64-bit time_t
-v4l2-compliance SHA: 163144712a46 2022-04-25 05:31:44
-
-Compliance test for vpu-dec device /dev/video0:
-
-Driver Info:
-	Driver name      : vpu-dec
-	Card type        : vpu-dec
-	Bus info         : platform:vpu-dec
-	Driver version   : 5.18.0
-	Capabilities     : 0x84204000
-		Video Memory-to-Memory Multiplanar
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x04204000
-		Video Memory-to-Memory Multiplanar
-		Streaming
-		Extended Pix Format
-	Detected Stateful Decoder
-
-Required ioctls:
-	test VIDIOC_QUERYCAP: OK
-	test invalid ioctls: OK
-
-Allow for multiple opens:
-	test second /dev/video0 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-	test VIDIOC_QUERYCTRL: OK
-	test VIDIOC_G/S_CTRL: OK
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 2 Private Controls: 1
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK (Not Supported)
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK
-	test Scaling: OK (Not Supported)
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Total for vpu-dec device /dev/video0: 45, Succeeded: 45, Failed: 0, Warnings: 0
-
-# v4l2-compliance -d1
-v4l2-compliance 1.23.0-4923, 64 bits, 64-bit time_t
-v4l2-compliance SHA: 163144712a46 2022-04-25 05:31:44
-
-Compliance test for vpu-enc device /dev/video1:
-
-Driver Info:
-	Driver name      : vpu-enc
-	Card type        : vpu-enc
-	Bus info         : platform:vpu-enc
-	Driver version   : 5.18.0
-	Capabilities     : 0x84204000
-		Video Memory-to-Memory Multiplanar
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x04204000
-		Video Memory-to-Memory Multiplanar
-		Streaming
-		Extended Pix Format
-	Detected Stateful Encoder
-
-Required ioctls:
-	test VIDIOC_QUERYCAP: OK
-	test invalid ioctls: OK
-
-Allow for multiple opens:
-	test second /dev/video1 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-	test VIDIOC_QUERYCTRL: OK
-	test VIDIOC_G/S_CTRL: OK
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 15 Private Controls: 0
-
-Format ioctls:
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls:
-	test VIDIOC_(TRY_)ENCODER_CMD: OK
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Total for vpu-enc device /dev/video1: 45, Succeeded: 45, Failed: 0, Warnings: 0
-
-changes since v7:
-
-* update v4l2-compliance test report
-* fix build error on linux-kernel 5.18.0-rc4
-
-changes since v6:
-
-* update TODO file
-* get sram info from device tree
-
-changes since v5:
-
-* support NV12/NV21 pixelformat for encoder and decoder
-* handle adnormal exit and EOS
-
-changes since v4:
-
-* refactor functions in wave5-hw and fix bug reported by Daniel Palmer
-* rename functions and variables to better names
-* change variable types such as replacing s32 with u32 and int with bool as appropriate
-
-changes since v3:
-
-* Fixing all issues commented by Dan Carpenter
-* Change file names to have wave5- prefix
-* In wave5_vpu_probe, enable the clocks before reading registers, as commented from Daniel Palmer
-* Add more to the TODO list,
-
-changes since v2:
-
-Main fixes includes:
-* change the yaml and dirver code to support up to 4 clks (instead of one)
-* fix Kconfig format
-* remove unneeded cast,
-* change var types
-* change var names, func names
-* checkpatch fixes
-
-changes since v1:
-
-Fix chanes due to comments from Ezequiel and Dan Carpenter. Main fixes inclueds:
-* move all files to one dir 'wave5'
-* replace private error codes with standart error codes
-* fix extra spaces
-* various checkpatch fixes
-* replace private 'DPRINTK' macro with standart 'dev_err/dbg ..'
-* fix error handling
-* add more possible fixes to the TODO file
-
-Dafna Hirschfeld (1):
-  staging: media: wave5: Add the vdi layer
-
-Nas Chung (3):
-  staging: media: wave5: Add vpuapi layer
-  staging: media: wave5: Add the v4l2 layer
-  staging: media: wave5: Add TODO file
-
-Robert Beckett (2):
-  dt-bindings: media: staging: wave5: add yaml devicetree bindings
-  media: wave5: Add wave5 driver to maintainers file
-
- .../bindings/staging/media/cnm,wave.yaml      |   73 +
- MAINTAINERS                                   |    9 +
- drivers/staging/media/Kconfig                 |    2 +
- drivers/staging/media/Makefile                |    1 +
- drivers/staging/media/wave5/Kconfig           |   12 +
- drivers/staging/media/wave5/Makefile          |   10 +
- drivers/staging/media/wave5/TODO              |   34 +
- drivers/staging/media/wave5/wave5-hw.c        | 3405 +++++++++++++++++
- drivers/staging/media/wave5/wave5-regdefine.h |  655 ++++
- drivers/staging/media/wave5/wave5-vdi.c       |  260 ++
- drivers/staging/media/wave5/wave5-vdi.h       |   81 +
- drivers/staging/media/wave5/wave5-vpu-dec.c   | 1385 +++++++
- drivers/staging/media/wave5/wave5-vpu-enc.c   | 1532 ++++++++
- drivers/staging/media/wave5/wave5-vpu.c       |  381 ++
- drivers/staging/media/wave5/wave5-vpu.h       |   73 +
- drivers/staging/media/wave5/wave5-vpuapi.c    | 1049 +++++
- drivers/staging/media/wave5/wave5-vpuapi.h    | 1144 ++++++
- drivers/staging/media/wave5/wave5-vpuconfig.h |   91 +
- drivers/staging/media/wave5/wave5-vpuerror.h  |  455 +++
- drivers/staging/media/wave5/wave5.h           |   82 +
- 20 files changed, 10734 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/staging/media/cnm,wave.yaml
- create mode 100644 drivers/staging/media/wave5/Kconfig
- create mode 100644 drivers/staging/media/wave5/Makefile
- create mode 100644 drivers/staging/media/wave5/TODO
- create mode 100644 drivers/staging/media/wave5/wave5-hw.c
- create mode 100644 drivers/staging/media/wave5/wave5-regdefine.h
+Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+---
+ drivers/staging/media/wave5/wave5-vdi.c | 260 ++++++++++++++++++++++++
+ drivers/staging/media/wave5/wave5-vdi.h |  81 ++++++++
+ 2 files changed, 341 insertions(+)
  create mode 100644 drivers/staging/media/wave5/wave5-vdi.c
  create mode 100644 drivers/staging/media/wave5/wave5-vdi.h
- create mode 100644 drivers/staging/media/wave5/wave5-vpu-dec.c
- create mode 100644 drivers/staging/media/wave5/wave5-vpu-enc.c
- create mode 100644 drivers/staging/media/wave5/wave5-vpu.c
- create mode 100644 drivers/staging/media/wave5/wave5-vpu.h
- create mode 100644 drivers/staging/media/wave5/wave5-vpuapi.c
- create mode 100644 drivers/staging/media/wave5/wave5-vpuapi.h
- create mode 100644 drivers/staging/media/wave5/wave5-vpuconfig.h
- create mode 100644 drivers/staging/media/wave5/wave5-vpuerror.h
- create mode 100644 drivers/staging/media/wave5/wave5.h
 
+diff --git a/drivers/staging/media/wave5/wave5-vdi.c b/drivers/staging/media/wave5/wave5-vdi.c
+new file mode 100644
+index 000000000000..bbde868de42e
+--- /dev/null
++++ b/drivers/staging/media/wave5/wave5-vdi.c
+@@ -0,0 +1,260 @@
++// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
++/*
++ * Wave5 series multi-standard codec IP - low level access functions
++ *
++ * Copyright (C) 2021 CHIPS&MEDIA INC
++ */
++
++#include <linux/bug.h>
++#include "wave5-vdi.h"
++#include "wave5-vpu.h"
++#include "wave5-regdefine.h"
++#include <linux/delay.h>
++
++#define VDI_SRAM_BASE_ADDR 0x00
++
++#define VDI_SYSTEM_ENDIAN VDI_LITTLE_ENDIAN
++#define VDI_128BIT_BUS_SYSTEM_ENDIAN VDI_128BIT_LITTLE_ENDIAN
++
++static int wave5_vdi_allocate_common_memory(struct device *dev)
++{
++	int ret;
++	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
++
++	if (!vpu_dev->common_mem.vaddr) {
++		vpu_dev->common_mem.size = SIZE_COMMON;
++		ret = wave5_vdi_allocate_dma_memory(vpu_dev, &vpu_dev->common_mem);
++		if (ret) {
++			dev_err(dev, "unable to allocate common buffer\n");
++			return ret;
++		}
++	}
++
++	dev_dbg(dev, "common_mem: daddr=%pad size=%zu vaddr=0x%p\n",
++		&vpu_dev->common_mem.daddr, vpu_dev->common_mem.size,
++			vpu_dev->common_mem.vaddr);
++
++	return 0;
++}
++
++int wave5_vdi_init(struct device *dev)
++{
++	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
++	int i;
++	int ret;
++
++	ret = wave5_vdi_allocate_common_memory(dev);
++	if (ret < 0) {
++		dev_err(dev, "[VDI] fail to get vpu common buffer from driver\n");
++		return ret;
++	}
++
++	if (PRODUCT_CODE_W_SERIES(vpu_dev->product_code)) {
++		// if BIT processor is not running.
++		if (wave5_vdi_readl(vpu_dev, W5_VCPU_CUR_PC) == 0) {
++			for (i = 0; i < 64; i++)
++				wave5_vdi_write_register(vpu_dev, (i * 4) + 0x100, 0x0);
++		}
++	} else {
++		WARN_ONCE(1, "unsupported product code 0x%x\n", vpu_dev->product_code);
++	}
++
++	dev_dbg(dev, "[VDI] success to init driver\n");
++
++	return 0;
++}
++
++int wave5_vdi_release(struct device *dev)
++{
++	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
++
++	vpu_dev->vdb_register = NULL;
++	wave5_vdi_free_dma_memory(vpu_dev, &vpu_dev->common_mem);
++
++	return 0;
++}
++
++void wave5_vdi_write_register(struct vpu_device *vpu_dev, unsigned int addr, unsigned int data)
++{
++	writel(data, vpu_dev->vdb_register + addr);
++}
++
++unsigned int wave5_vdi_readl(struct vpu_device *vpu_dev, u32 addr)
++{
++	return readl(vpu_dev->vdb_register + addr);
++}
++
++int wave5_vdi_clear_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb)
++{
++	if (!vb || !vb->vaddr) {
++		dev_err(vpu_dev->dev, "%s(): unable to clear unmapped buffer\n", __func__);
++		return -EINVAL;
++	}
++
++	memset(vb->vaddr, 0, vb->size);
++	return vb->size;
++}
++
++static void wave5_swap_endian(struct vpu_device *vpu_dev, u8 *data, int len, int endian);
++
++int wave5_vdi_write_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb, size_t offset,
++			   u8 *data, int len, int endian)
++{
++	if (!vb || !vb->vaddr) {
++		dev_err(vpu_dev->dev, "%s(): unable to write to unmapped buffer\n", __func__);
++		return -EINVAL;
++	}
++
++	if (offset > vb->size || len > vb->size || offset + len > vb->size) {
++		dev_err(vpu_dev->dev, "%s(): buffer too small\n", __func__);
++		return -ENOSPC;
++	}
++
++	wave5_swap_endian(vpu_dev, data, len, endian);
++	memcpy(vb->vaddr + offset, data, len);
++
++	return len;
++}
++
++int wave5_vdi_allocate_dma_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb)
++{
++	void *vaddr;
++	dma_addr_t daddr;
++
++	if (!vb->size) {
++		dev_err(vpu_dev->dev, "%s(): requested size==0\n", __func__);
++		return -EINVAL;
++	}
++
++	vaddr = dma_alloc_coherent(vpu_dev->dev, vb->size, &daddr, GFP_KERNEL);
++	if (!vaddr)
++		return -ENOMEM;
++	vb->vaddr = vaddr;
++	vb->daddr = daddr;
++
++	return 0;
++}
++
++void wave5_vdi_free_dma_memory(struct vpu_device *vpu_dev, struct vpu_buf *vb)
++{
++	if (vb->size == 0)
++		return;
++
++	if (!vb->vaddr)
++		dev_err(vpu_dev->dev, "%s(): requested free of unmapped buffer\n", __func__);
++	else
++		dma_free_coherent(vpu_dev->dev, vb->size, vb->vaddr, vb->daddr);
++
++	memset(vb, 0, sizeof(*vb));
++}
++
++int wave5_vdi_convert_endian(struct vpu_device *vpu_dev, unsigned int endian)
++{
++	if (PRODUCT_CODE_W_SERIES(vpu_dev->product_code)) {
++		switch (endian) {
++		case VDI_LITTLE_ENDIAN:
++			endian = 0x00;
++			break;
++		case VDI_BIG_ENDIAN:
++			endian = 0x0f;
++			break;
++		case VDI_32BIT_LITTLE_ENDIAN:
++			endian = 0x04;
++			break;
++		case VDI_32BIT_BIG_ENDIAN:
++			endian = 0x03;
++			break;
++		}
++	}
++
++	return (endian & 0x0f);
++}
++
++static void byte_swap(unsigned char *data, int len)
++{
++	u8 temp;
++	int i;
++
++	for (i = 0; i < len; i += 2) {
++		temp = data[i];
++		data[i] = data[i + 1];
++		data[i + 1] = temp;
++	}
++}
++
++static void word_swap(unsigned char *data, int len)
++{
++	u16 temp;
++	u16 *ptr = (u16 *)data;
++	int i;
++	s32 size = len / sizeof(uint16_t);
++
++	for (i = 0; i < size; i += 2) {
++		temp = ptr[i];
++		ptr[i] = ptr[i + 1];
++		ptr[i + 1] = temp;
++	}
++}
++
++static void dword_swap(unsigned char *data, int len)
++{
++	u32 temp;
++	u32 *ptr = (u32 *)data;
++	s32 size = len / sizeof(uint32_t);
++	int i;
++
++	for (i = 0; i < size; i += 2) {
++		temp = ptr[i];
++		ptr[i] = ptr[i + 1];
++		ptr[i + 1] = temp;
++	}
++}
++
++static void lword_swap(unsigned char *data, int len)
++{
++	u64 temp;
++	u64 *ptr = (u64 *)data;
++	s32 size = len / sizeof(uint64_t);
++	int i;
++
++	for (i = 0; i < size; i += 2) {
++		temp = ptr[i];
++		ptr[i] = ptr[i + 1];
++		ptr[i + 1] = temp;
++	}
++}
++
++static void wave5_swap_endian(struct vpu_device *vpu_dev, u8 *data, int len, int endian)
++{
++	int changes;
++	int sys_endian;
++	bool byte_change, word_change, dword_change, lword_change;
++
++	if (PRODUCT_CODE_W_SERIES(vpu_dev->product_code)) {
++		sys_endian = VDI_128BIT_BUS_SYSTEM_ENDIAN;
++	} else {
++		dev_err(vpu_dev->dev, "unknown product id : %08x\n", vpu_dev->product_code);
++		return;
++	}
++
++	endian = wave5_vdi_convert_endian(vpu_dev, endian);
++	sys_endian = wave5_vdi_convert_endian(vpu_dev, sys_endian);
++	if (endian == sys_endian)
++		return;
++
++	changes = endian ^ sys_endian;
++	byte_change = changes & 0x01;
++	word_change = ((changes & 0x02) == 0x02);
++	dword_change = ((changes & 0x04) == 0x04);
++	lword_change = ((changes & 0x08) == 0x08);
++
++	if (byte_change)
++		byte_swap(data, len);
++	if (word_change)
++		word_swap(data, len);
++	if (dword_change)
++		dword_swap(data, len);
++	if (lword_change)
++		lword_swap(data, len);
++}
++
+diff --git a/drivers/staging/media/wave5/wave5-vdi.h b/drivers/staging/media/wave5/wave5-vdi.h
+new file mode 100644
+index 000000000000..f26cab7ac845
+--- /dev/null
++++ b/drivers/staging/media/wave5/wave5-vdi.h
+@@ -0,0 +1,81 @@
++/* SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause) */
++/*
++ * Wave5 series multi-standard codec IP - low level access functions
++ *
++ * Copyright (C) 2021 CHIPS&MEDIA INC
++ */
++
++#ifndef _VDI_H_
++#define _VDI_H_
++
++#include "wave5-vpuconfig.h"
++#include <linux/string.h>
++#include <linux/slab.h>
++#include <linux/device.h>
++
++/************************************************************************/
++/* COMMON REGISTERS */
++/************************************************************************/
++#define VPU_PRODUCT_CODE_REGISTER 0x1044
++
++/* system register write */
++#define vpu_write_reg(VPU_INST, ADDR, DATA) wave5_vdi_write_register(VPU_INST, ADDR, DATA)
++// system register read
++#define vpu_read_reg(CORE, ADDR) wave5_vdi_readl(CORE, ADDR)
++
++struct vpu_buf {
++	size_t size;
++	dma_addr_t daddr;
++	void *vaddr;
++};
++
++struct dma_vpu_buf {
++	size_t size;
++	dma_addr_t daddr;
++};
++
++enum endian_mode {
++	VDI_LITTLE_ENDIAN = 0, /* 64bit LE */
++	VDI_BIG_ENDIAN, /* 64bit BE */
++	VDI_32BIT_LITTLE_ENDIAN,
++	VDI_32BIT_BIG_ENDIAN,
++	/* WAVE PRODUCTS */
++	VDI_128BIT_LITTLE_ENDIAN = 16,
++	VDI_128BIT_LE_BYTE_SWAP,
++	VDI_128BIT_LE_WORD_SWAP,
++	VDI_128BIT_LE_WORD_BYTE_SWAP,
++	VDI_128BIT_LE_DWORD_SWAP,
++	VDI_128BIT_LE_DWORD_BYTE_SWAP,
++	VDI_128BIT_LE_DWORD_WORD_SWAP,
++	VDI_128BIT_LE_DWORD_WORD_BYTE_SWAP,
++	VDI_128BIT_BE_DWORD_WORD_BYTE_SWAP,
++	VDI_128BIT_BE_DWORD_WORD_SWAP,
++	VDI_128BIT_BE_DWORD_BYTE_SWAP,
++	VDI_128BIT_BE_DWORD_SWAP,
++	VDI_128BIT_BE_WORD_BYTE_SWAP,
++	VDI_128BIT_BE_WORD_SWAP,
++	VDI_128BIT_BE_BYTE_SWAP,
++	VDI_128BIT_BIG_ENDIAN = 31,
++	VDI_ENDIAN_MAX
++};
++
++#define VDI_128BIT_ENDIAN_MASK 0xf
++
++int wave5_vdi_init(struct device *dev);
++int wave5_vdi_release(struct device *dev);	//this function may be called only at system off.
++
++/**
++ * @brief make clock stable before changing clock frequency
++ * @detail before invoking vdi_set_clock_freg caller MUST invoke vdi_ready_change_clock
++ *		function.
++ * after changing clock frequency caller also invoke wave5_vdi_done_change_clock() function.
++ * @return 0 failure
++ * 1 success
++ */
++int wave5_vdi_ready_change_clock(unsigned long core_idx);
++int wave5_vdi_set_change_clock(unsigned long core_idx, unsigned long clock_mask);
++int wave5_vdi_done_change_clock(unsigned long core_idx);
++int wave5_vdi_buffer_sync(struct device *dev, struct vpu_buf *vb, int dir);
++
++#endif //#ifndef _VDI_H_
++
 -- 
 2.30.2
 
