@@ -2,231 +2,103 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3275FC433F5
-	for <linux-media@archiver.kernel.org>; Wed, 27 Apr 2022 10:41:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EB61C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 27 Apr 2022 10:42:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiD0Kob (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Apr 2022 06:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S229927AbiD0KqB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Apr 2022 06:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiD0Ko3 (ORCPT
+        with ESMTP id S229874AbiD0Kpw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Apr 2022 06:44:29 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBD528B76D
-        for <linux-media@vger.kernel.org>; Wed, 27 Apr 2022 03:25:26 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkvn5pty0gzs3nltj987t-3.rev.dnainternet.fi [IPv6:2001:14ba:4457:9640:1e2d:1f75:a607:ef37])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 476811B00120;
-        Wed, 27 Apr 2022 12:57:23 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1651053443;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tgawboluo26f/XvecJ8vce6KYUKWyc0cis4y368vPWM=;
-        b=RL/A8+VfzMwq1XxQ9Glt5ZRdKBO/UaAbuIS1j9fl3cfeGIwTD/lfxaIs6CtnriDfz4jshm
-        3030hiOiw+R4oXObZ44E3d2zRxLvRHShFQM4Ca0XP9bjuyO12/k9rv7XIMCdQ0E97cksfA
-        WFX8m7BauMzfQ+KybAt01GrwHlSw2DuByGkys/9Aym6dr2Zd13FADyNkYXlkBADop+BvgH
-        x5Mrcg3eDfAAsB/xkfyXJTezDt2dviksivaAI0Tgf1Tqex4oD8J2nHizgpHxINc+oaWHUc
-        zrbOkMYl7IPXlguvQJHYcFscTOAyQNK/cN4dF/kyn9ZU9C8T01I8o5aqBlnepg==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id D7DD5634C91;
-        Wed, 27 Apr 2022 12:57:16 +0300 (EEST)
-Date:   Wed, 27 Apr 2022 12:57:16 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        krzysztof.kozlowski@canonical.com,
-        jeanmichel.hautbois@ideasonboard.com,
-        laurent.pinchart@ideasonboard.com, paul.kocialkowski@bootlin.com,
-        paul.elder@ideasonboard.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "open list:OMNIVISION OV5670 SENSOR DRIVER" 
-        <linux-media@vger.kernel.org>
-Subject: Re: [PATCH v3 6/8] media: i2c: ov5670: Add runtime_pm operations
-Message-ID: <YmkTfLMdtMQDBQFO@valkosipuli.retiisi.eu>
-References: <20220329090133.338073-1-jacopo@jmondi.org>
- <20220329090133.338073-7-jacopo@jmondi.org>
+        Wed, 27 Apr 2022 06:45:52 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77191395236
+        for <linux-media@vger.kernel.org>; Wed, 27 Apr 2022 03:29:21 -0700 (PDT)
+Received: from [10.10.2.52] (unknown [10.10.2.52])
+        by mail.ispras.ru (Postfix) with ESMTPSA id C4608407625B;
+        Wed, 27 Apr 2022 10:29:15 +0000 (UTC)
+Subject: Re: possible clash between 8ea0f2ba0fa3f and 4affafd7bec7c both
+ decrementing refcount
+To:     Oliver Neukum <oneukum@suse.com>, Yu Kuai <yukuai3@huawei.com>
+Cc:     linux-media@vger.kernel.org
+References: <ef931be9-51b0-6990-211b-b8450b395bf5@suse.com>
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
+ xsFNBFtq9eIBEACxmOIPDht+aZvO9DGi4TwnZ1WTDnyDVz3Nnh0rlQCK8IssaT6wE5a95VWo
+ iwOWalcL9bJMHQvw60JwZKFjt9oH2bov3xzx/JRCISQB4a4U1J/scWvPtabbB3t+VAodF5KZ
+ vZ2gu/Q/Wa5JZ9aBH0IvNpBAAThFg1rBXKh7wNqrhsQlMLg+zTSK6ZctddNl6RyaJvAmbaTS
+ sSeyUKXiabxHn3BR9jclXfmPLfWuayinBvW4J3vS+bOhbLxeu3MO0dUqeX/Nl8EAhvzo0I2d
+ A0vRu/Ze1wU3EQYT6M8z3i1b3pdLjr/i+MI8Rgijs+TFRAhxRw/+0vHGTg6Pn02t0XkycxQR
+ mhH3v0kVTvMyM7YSI7yXvd0QPxb1RX9AGmvbJu7eylzcq9Jla+/T3pOuWsJkbvbvuFKKmmYY
+ WnAOR7vu/VNVfiy4rM0bfO14cIuEG+yvogcPuMmQGYu6ZwS9IdgZIOAkO57M/6wR0jIyfxrG
+ FV3ietPtVcqeDVrcShKyziRLJ+Xcsg9BLdnImAqVQomYr27pyNMRL5ILuT7uOuAQPDKBksK+
+ l2Fws0d5iUifqnXSPuYxqgS4f8SQLS7ECxvCGVVbkEEng9vkkmyrF6wM86BZ9apPGDFbopiK
+ 7GRxQtSGszVv83abaVb8aDsAudJIp7lLaIuXLZAe1r+ycYpEtQARAQABzSpBbGV4ZXkgS2hv
+ cm9zaGlsb3YgPGtob3Jvc2hpbG92QGlzcHJhcy5ydT7CwX0EEwEIACcFAltq9eICGwMFCRLM
+ AwAFCwkIBwIGFQgJCgsCBBYCAwECHgECF4AACgkQ2B/JSzCwrEWLaA/+NFZfyhU0vJzFtYsk
+ yaqx8nWZLrAoUK7VcobH0lJH6lfGbarO5JpENaIiTP12YZ4xO+j3GGJtLy2gvnpypGnxmiAl
+ RqPt7WeAIj6oqPrUs2QF7i4SOiPtku/NrysI1zHzlA8yqUduBtam5rdQeLRNCJiEED1fU8sp
+ +DgJBN/OHEDyAag2hu1KFKWuPfQ+QGpXYZb+1NW/hKwvvwCNVyypELAfFnkketFXjIMwHnL8
+ ZPqJZlkvkpxuRXOaXPL9NFhZnC/WS+NJ81L3pr+w6eo3xTPYZvRW8glvqlEDgHqr3uMGIaes
+ nwfRXLHp+TC1ht6efCXzdPyMZ1E7HXQN9foKisI1V5iQFhN+CT3dbsguQI4e10F5ql0TZUJY
+ SMzvY0eObs6TWRdD/Ha7Y5rLmZ54R9sxumpZNcJzktfgm9f0XfeqVEJUn/40MRDD+l2W12Db
+ Jkko+sbtAEw+f+/j3uz8xOE+Uv4kwFC5a6JKgdX88oigHnpAs3FvffP594Loi3ibFrQUW5wH
+ bXh5Ni+l1GKEQ0PHMk+KQQT9L2r9s7C0Nh8XzwdpOshZWsrNSZqcG+01wrmUhyX2uSaoZ07I
+ /+KZURlMSqI71X6lkMWlB3SyThvYhHgnR0EGGTerwM1MaVjHN+Z6lPmsKNxG8lzCeWeZ6peA
+ c5oUHV4WQ8Ux9BM8saLOwU0EW2r14gEQAMz+5u+X7j1/dT4WLVRQaE1Shnd2dKBn2E7fgo/N
+ 4JIY6wHD/DJoWYQpCJjjvBYSonvQsHicvDW8lPh2EXgZ9Fi8AHKT2mVPitVy+uhfWa/0FtsC
+ e3hPfrjTcN7BUcXlIjmptxIoDbvQrNfIWUGdWiyDj4EDfABW/kagXqaBwF2HdcDaNDGggD1c
+ DglA0APjezIyTGnGMKsi5QSSlOLm8OZEJMj5t+JL6QXrruijNb5Asmz5mpRQrak7DpGOskjK
+ fClm/0oy2zDvWuoXJa+dm3YFr43V+c5EIMA4LpGk63Eg+5NltQ/gj0ycgD5o6reCbjLz4R9D
+ JzBezK/KOQuNG5qKUTMbOHWaApZnZ6BDdOVflkV1V+LMo5GvIzkATNLm/7Jj6DmYmXbKoSAY
+ BKZiJWqzNsL1AJtmJA1y5zbWX/W4CpNs8qYMYG8eTNOqunzopEhX7T0cOswcTGArZYygiwDW
+ BuIS83QRc7udMlQg79qyMA5WqS9g9g/iodlssR9weIVoZSjfjhm5NJ3FmaKnb56h6DSvFgsH
+ xCa4s1DGnZGSAtedj8E3ACOsEfu4J/WqXEmvMYNBdGos2YAc+g0hjuOB10BSD98d38xP1vPc
+ qNrztIF+TODAl1dNwU4rCSdGQymsrMVFuXnHMH4G+dHvMAwWauzDbnILHAGFyJtfxVefABEB
+ AAHCwWUEGAEIAA8FAltq9eICGwwFCRLMAwAACgkQ2B/JSzCwrEU3Rg//eFWHXqTQ5CKw4KrX
+ kTFxdXnYKJ5zZB0EzqU6m/FAV7snmygFLbOXYlcMW2Fh306ivj9NKJrlOaPbUzzyDf8dtDAg
+ nSbH156oNJ9NHkz0mrxFMpJA2E5AUemOFx57PUYt93pR2B7bF2zGua4gMC+vorDQZjX9kvrL
+ Kbenh3boFOe1tUaiRRvEltVFLOg+b+CMkKVbLIQe/HkyKJH5MFiHAF7QxnPHaxyO7QbWaUmF
+ 6BHVujxAGvNgkrYJb6dpiNNZSFNRodaSToU5oM+z1dCrNNtN3u4R7AYr6DDIDxoSzR4k0ZaG
+ uSeqh4xxQCD7vLT3JdZDyhYUJgy9mvSXdkXGdBIhVmeLch2gaWNf5UOutVJwdPbIaUDRjVoV
+ Iw6qjKq+mnK3ttuxW5Aeg9Y1OuKEvCVu+U/iEEJxx1JRmVAYq848YqtVPY9DkZdBT4E9dHqO
+ n8lr+XPVyMN6SBXkaR5tB6zSkSDrIw+9uv1LN7QIri43fLqhM950ltlveROEdLL1bI30lYO5
+ J07KmxgOjrvY8X9WOC3O0k/nFpBbbsM4zUrmF6F5wIYO99xafQOlfpUnVtbo3GnBR2LIcPYj
+ SyY3dW28JXo2cftxIOr1edJ+fhcRqYRrPzJrQBZcE2GZjRO8tz6IOMAsc+WMtVfj5grgVHCu
+ kK2E04Fb+Zk1eJvHYRc=
+Message-ID: <3db2b997-bba5-425e-e271-33ffec06b16f@ispras.ru>
+Date:   Wed, 27 Apr 2022 13:29:15 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329090133.338073-7-jacopo@jmondi.org>
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1651053443; a=rsa-sha256;
-        cv=none;
-        b=fWRkxASj+CdwSrz8BrtszyN2Jdf8dLlAoomYjTj2RgINeRSJ717EATexp0+4bczuvZMKXP
-        hEygNu9Htb10UNNgs165PvH1yQnF+vP5iOfVa65ED/nk+SgvFAcxz+RJfodsfy9z2NEIqN
-        ZB3APxVJCd3LuMffYtRQ+j5RSC3ozovX+oj0boGP/8KTOy8jZrLfLqgcJrIFZxSWgwvNvG
-        JKCNbXiUUozErj74bq/7l/MtniZTexcxzEmFcEPw9Fl/eakHyz+zc5/pOety0GF8NdKohO
-        tkM/l7s9ue8AXuS0wdF8o2Jqd6vROcHHgksusjXYnQyMc0l/WqJ3Azlhs/jc6w==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1651053443;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tgawboluo26f/XvecJ8vce6KYUKWyc0cis4y368vPWM=;
-        b=FeCXJIyi00r2MRLoZP+LoYQSb8qMnrttkk/MXx2mw0XAv1hdsAUyah9CN/TUk+6x6Bixi3
-        +OQQ9FmyUUfepJeIi2mG/yoO8cC4kjS3GTQTlZ3IwwbAX7mUwc9fZfWQuTSoRLW54n00yT
-        cGFSCF/BsOgYCKpPJf09oaudFUSFi2y7WwQz23ebmPmmfyvhdu3mGmJ3CYZsEDSuag8cCa
-        RmBEjBBnUu8jftyqxQKpP74rNJZoF07dCe662ifkDvR7H3zo/K+guDfRkjqaWrP4aYlouX
-        2GBA8qacp/+ntFeWbImxrTgeO+20xjjL04Z7WZxQmEP7BPh4VSnKA9kr0yRtSg==
+In-Reply-To: <ef931be9-51b0-6990-211b-b8450b395bf5@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: ru-RU
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
-
-On Tue, Mar 29, 2022 at 11:01:31AM +0200, Jacopo Mondi wrote:
-> Implement the power up and power down routines and install them as
-> runtime_pm handler for runtime_suspend and runtime_resume operations.
+On 27.04.2022 12:34, Oliver Neukum wrote:
+> Hi,
 > 
-> Rework the runtime_pm enablement and the chip power handling during
-> probe, as calling pm_runtime_idle() in a driver that registers no
-> idle callback is a nop.
+> I was looking at those two patches and I cannot help myself,
+> it looks to me like they are both fixing the same issue in two
+> different ways.
+> Could you clarify?
 
-The suspend callback is called by rpm_idle() in the absence of the
-idle callback.
+Hi!
 
-> 
-> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-> ---
->  drivers/media/i2c/ov5670.c | 58 ++++++++++++++++++++++++++++++++++----
->  1 file changed, 52 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/ov5670.c b/drivers/media/i2c/ov5670.c
-> index 9e69b4008917..b63b07d8ca2f 100644
-> --- a/drivers/media/i2c/ov5670.c
-> +++ b/drivers/media/i2c/ov5670.c
-> @@ -4,6 +4,7 @@
->  #include <linux/acpi.h>
->  #include <linux/clk.h>
->  #include <linux/gpio/consumer.h>
-> +#include <linux/delay.h>
->  #include <linux/i2c.h>
->  #include <linux/mod_devicetable.h>
->  #include <linux/module.h>
-> @@ -2424,6 +2425,39 @@ static int ov5670_set_stream(struct v4l2_subdev *sd, int enable)
->  	return ret;
->  }
->  
-> +static int __maybe_unused ov5670_runtime_resume(struct device *dev)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> +	struct ov5670 *ov5670 = to_ov5670(sd);
-> +	int ret;
-> +
-> +	ret = regulator_bulk_enable(OV5670_NUM_SUPPLIES, ov5670->supplies);
-> +	if (ret)
-> +		return ret;
-> +
-> +	gpiod_set_value_cansleep(ov5670->pwdn_gpio, 0);
-> +	gpiod_set_value_cansleep(ov5670->reset_gpio, 0);
-> +
-> +	/* 8192 * 2 clock pulses before the first SCCB transaction. */
-> +	usleep_range(1000, 1500);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused ov5670_runtime_suspend(struct device *dev)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> +	struct ov5670 *ov5670 = to_ov5670(sd);
-> +
-> +	gpiod_set_value_cansleep(ov5670->reset_gpio, 1);
-> +	gpiod_set_value_cansleep(ov5670->pwdn_gpio, 1);
-> +	regulator_bulk_disable(OV5670_NUM_SUPPLIES, ov5670->supplies);
-> +
-> +	return 0;
-> +}
-> +
->  static int __maybe_unused ov5670_suspend(struct device *dev)
->  {
->  	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> @@ -2564,14 +2598,25 @@ static int ov5670_probe(struct i2c_client *client)
->  		goto error_print;
->  	}
->  
-> +	pm_runtime_enable(&client->dev);
-> +
->  	full_power = acpi_dev_state_d0(&client->dev);
->  	if (full_power) {
-> +		ret = pm_runtime_resume_and_get(&client->dev);
+As far as I can see
 
-Please see how e.g. the CCS driver does this (no need for autosuspend
-though). E.g. don't use runtime PM to power the sensor on in probe, or off
-in remove.
+8ea0f2ba0fa3f
+adds of_node_put(node);
 
-> +		if (ret) {
-> +			err_msg = "Failed to power on";
-> +			goto error_print;
-> +		}
-> +
->  		/* Check module identity */
->  		ret = ov5670_identify_module(ov5670);
->  		if (ret) {
->  			err_msg = "ov5670_identify_module() error";
-> -			goto error_print;
-> +			goto error_power_off;
->  		}
-> +
-> +		/* Set the device's state to active if it's in D0 state. */
-> +		pm_runtime_set_active(&client->dev);
->  	}
->  
->  	mutex_init(&ov5670->mutex);
-> @@ -2608,11 +2653,7 @@ static int ov5670_probe(struct i2c_client *client)
->  
->  	ov5670->streaming = false;
->  
-> -	/* Set the device's state to active if it's in D0 state. */
-> -	if (full_power)
-> -		pm_runtime_set_active(&client->dev);
-> -	pm_runtime_enable(&client->dev);
-> -	pm_runtime_idle(&client->dev);
-> +	pm_runtime_suspend(&client->dev);
->  
->  	return 0;
->  
-> @@ -2625,6 +2666,9 @@ static int ov5670_probe(struct i2c_client *client)
->  error_mutex_destroy:
->  	mutex_destroy(&ov5670->mutex);
->  
-> +error_power_off:
-> +	pm_runtime_put(&client->dev);
-> +
->  error_print:
->  	dev_err(&client->dev, "%s: %s %d\n", __func__, err_msg, ret);
->  
-> @@ -2641,6 +2685,7 @@ static int ov5670_remove(struct i2c_client *client)
->  	v4l2_ctrl_handler_free(sd->ctrl_handler);
->  	mutex_destroy(&ov5670->mutex);
->  
-> +	pm_runtime_put(&client->dev);
->  	pm_runtime_disable(&client->dev);
->  
->  	return 0;
-> @@ -2648,6 +2693,7 @@ static int ov5670_remove(struct i2c_client *client)
->  
->  static const struct dev_pm_ops ov5670_pm_ops = {
->  	SET_SYSTEM_SLEEP_PM_OPS(ov5670_suspend, ov5670_resume)
-> +	SET_RUNTIME_PM_OPS(ov5670_runtime_suspend, ov5670_runtime_resume, NULL)
->  };
->  
->  #ifdef CONFIG_ACPI
+while 4affafd7bec7c
+adds put_device(pm->larbvenclt & pm->larbvenc);
 
--- 
-Kind regards,
+Which clash do you mean?
 
-Sakari Ailus
+Best regards,
+Alexey
