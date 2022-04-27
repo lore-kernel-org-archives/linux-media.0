@@ -2,135 +2,371 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80EC2C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 27 Apr 2022 10:56:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11C9DC433FE
+	for <linux-media@archiver.kernel.org>; Wed, 27 Apr 2022 11:06:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbiD0K6y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Apr 2022 06:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
+        id S231416AbiD0LKE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Apr 2022 07:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbiD0K6v (ORCPT
+        with ESMTP id S232750AbiD0LIM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Apr 2022 06:58:51 -0400
-Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.111.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8607C1E2711
-        for <linux-media@vger.kernel.org>; Wed, 27 Apr 2022 03:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1651056609;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=e5SioH9kFg+TUOjxJBDD486kqHi4eCH/OWKjykG4iW0=;
-        b=WzsHFCCS7vJH7HjGNw2iXwYYzZY4FI3Ep5+nVzsZy0yyPcdvMkOb/BZQ+0aHx3LvbS7Rq6
-        IQqOqmuMTRvtqjLryVwqC89SXhSm/EMKNP+VyYIbtt/bczTtYH28U0BtA2MM/TAYk7Wz0J
-        N1lb8rvMWyxkFlOkk1eEu37Ds9XZ0QE=
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com
- (mail-vi1eur05lp2171.outbound.protection.outlook.com [104.47.17.171]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-20-1rjqxti4OFKak0l0eVeJ_Q-1; Wed, 27 Apr 2022 11:34:29 +0200
-X-MC-Unique: 1rjqxti4OFKak0l0eVeJ_Q-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RMem+Zk2lNMm/p4CR+CqwGQud222RDur60IaisoKWsM3Bt3CjQ70QUr8/Xp6PNbuHqIpu0wubu6rOcu+cCZtieE+Vctid7a1WBiMif3l6DS8w8OABsw7ljqJCbnFrJ2PwmOPgceHBodLDurTnOQNwoCSC0OT9n2s2vXZN7coXKkNz6QhmOuf9Q5RqE4GS42bS8pFYWguPXWdF0c66rB9ll206tGXWM7eOwDw8PDty2bmEmn6C2mIDcvW7fRJFFOi3qZccAsn0u4hcVfv8/xy2h7PanDh77ZW9uaU9lTfhpFZdxdUvT5Qk4LC0jaBFXfn6E2VjROlnEb/VzW0EIhesg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z25+0OmV3Yra1Y4Rpl1/4oIjzYL7e7B2lbx9SQ9Pq8U=;
- b=hMEpS99AzMB4TBLYycA2HqH1r1UWCzcaJnrodR3la7XtsWkoVanQuVDkr/w+ncb5mLuuBirhEVya+ycXnw7+rmpAwSPjM6UtmfuxoTrcWAScylH20y14/eOvCH6G1EZnGS61W7BZecXVZ4pufyqf0dIsDA7dTsH5gGDugdJqo4HyceT/Xv+Hs5F2OwUvtln1mr7DiuNOPluR9HTzddGr/M6siP9/NS0M/l8jJYmrJkBMtVAR3Ej9n9urQKGolbW24Isvmt1+PrTOUVrRp80ULozolbDvnlawWICFq360l3d0ffZDYIOEgNRZ+EThc7zHPKnyeYqc/e6s2hqcT+ERXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16) by AM0PR04MB6818.eurprd04.prod.outlook.com
- (2603:10a6:208:186::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Wed, 27 Apr
- 2022 09:34:28 +0000
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::8c82:19c5:ce96:491b]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::8c82:19c5:ce96:491b%4]) with mapi id 15.20.5186.021; Wed, 27 Apr 2022
- 09:34:27 +0000
-Message-ID: <ef931be9-51b0-6990-211b-b8450b395bf5@suse.com>
-Date:   Wed, 27 Apr 2022 11:34:25 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Yu Kuai <yukuai3@huawei.com>
-CC:     linux-media@vger.kernel.org
-From:   Oliver Neukum <oneukum@suse.com>
-Subject: possible clash between 8ea0f2ba0fa3f and 4affafd7bec7c both
- decrementing refcount
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AM6PR10CA0096.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:209:8c::37) To VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16)
+        Wed, 27 Apr 2022 07:08:12 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C453C9D72
+        for <linux-media@vger.kernel.org>; Wed, 27 Apr 2022 04:03:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651057401; x=1682593401;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G8q+P5bhRM2Hz6Oe+FT+nn4qnr/b+AMdZklpGnivBRg=;
+  b=MEVWeOKd6AChuEuDDMJSIZDCfk6w8lexGsQtOR9PCrILKELfn6bURsOE
+   n57znShtIqOsp1rOTQw9TNIxwjDrLDs5GLgm3ZspwElfPr+vfe8xjaCa7
+   KiYSHvaG8aQ7hzJCKhQWVnD9wqt9fqpnGw3egcH5UmQg1158gjASnjMRt
+   /QMNai48UzuP5XeNLMYgT+lAFbl3LOkR43bYoC2BU4i/Ct9zFg+1Sa0w6
+   eCuc1mvlpzOYix36e9TzU70RdxweaXlsyITzs03p510ayZTaoMrKTuKwA
+   Fo+Avn9PMM7WsmTZBHuFyceOu0tPilnd8B2xYeiEXJowWBUCjgoasWV1L
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="328825545"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="328825545"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 03:06:06 -0700
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="539814253"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 03:06:02 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id B227E203C9;
+        Wed, 27 Apr 2022 13:06:00 +0300 (EEST)
+Date:   Wed, 27 Apr 2022 13:06:00 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Paul Elder <paul.elder@ideasonboard.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Paul J. Murphy" <paul.j.murphy@intel.com>,
+        Martina Krasteva <martinax.krasteva@intel.com>,
+        Shawn Tu <shawnx.tu@intel.com>, Arec Kao <arec.kao@intel.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jimmy Su <jimmy.su@intel.com>,
+        Martin Kepplinger <martink@posteo.de>,
+        Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v5] media: ov5640: Use runtime PM
+Message-ID: <YmkViDEEDxMx8S4S@paasikivi.fi.intel.com>
+References: <20220425061022.1569480-1-paul.elder@ideasonboard.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e8031a6a-44d7-4d44-28a4-08da28311fb9
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6818:EE_
-X-Microsoft-Antispam-PRVS: <AM0PR04MB68187DEE469D737BC3974044C7FA9@AM0PR04MB6818.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WVuhzrcyJQrr17qEV9cauGufyVK+fhUz+1HDWBSgk5PjuxEylfWzIwyLzeNFOUsw9M4g+UQ110YOyvaOxGDTAcOSlto2kacl17XVWbQWV0XTeD2CcXKYzb5sgP8TwDdsa6ZwqBmXgjfFh6GD3vRSZGOpo1tkEuXqyE7h46GorAVVl8OhyonnFeuhotHPuTCIFz2WBaZZjUKoxV9QK7etxIcig11g/82HJWXcfgqOmn2xA96DMp03wWW+yHM2/1sSCAi947/4Sbmxp7mLPpUMSSiQBmbHTHG00WDTGCTwxbvHlRK4SHd4Z0jLLJ45gXbfkolHhSwml9x+xZXCFT1dXTAecYXtXtsLSL6+1cmcfdXfcmZY6naG7Goj3zs0IwXO0k4XhFVKpNt0X7VH325KgiTU3vq5/sB3/O5AoTvsigEAU41KsswKBr1U8EjlSAJk/6Fxy7fkmp0AfJQJr57vsGY2n2E73AgqYwnmDJ3J17XPF/JVYABUCyCuOMJ+4a1V/Qq6akU6a/Y9JVKvYqHnRrjDCrT/eDpb6ERvKOALojNz3wrjECuvc29NGqdOrMBYYGUbElgBO3hYseE89fxBT9ZxfSCTbSBom2z5TacfPP1yJUamTx3cyy75IdosIpnjfSE+1J25132vtFAjhFpspY74ume6dEFdGxRss4P/JjBHrjEl9FUZ1NlGWSk6h26+0QQJOL7mZoAA7hJpqQNrrA910614QT3ANJLdsl+sZ+4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(36756003)(66476007)(316002)(186003)(66946007)(66556008)(2906002)(4326008)(8676002)(8936002)(558084003)(31686004)(110136005)(2616005)(31696002)(86362001)(6486002)(508600001)(38100700002)(6512007)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1uoZxdXMppktjYSFQIR2kKonwkZQASG29hV1HW00GLSSj3PqrIt3vwubEKYq?=
- =?us-ascii?Q?Nf+mSCzaFD3bl0RFvjH9a2TmthHSc9Vsx0uZRu+SfgoMui3oG00ufoZCDzX5?=
- =?us-ascii?Q?+XcCiI+zIh3VMu/p4o83duAu5cV5vz74KjxXawugQOFR8j147ShHkoOPYyj5?=
- =?us-ascii?Q?EiDBqWovbXHyZcWkd9HYoAFSl7AbwEuRPEzicYAjugovgs/HcUltSh0zve/e?=
- =?us-ascii?Q?Y73520jIHWJzFyWJdLQfkfnohZ9dMQoNuHBPb/QicPvo553lyZwqiooAFfb2?=
- =?us-ascii?Q?5OMRbIjoJ640p6n9dSUGgrySUrLlNXR576aztCauGm7ih5maotUC6YdnFaKF?=
- =?us-ascii?Q?B6JkRNCjxVtJP9lHnPurV+UfpHFlvEaZw510r5DwO6p1a4WPfzDmt0k1cDm7?=
- =?us-ascii?Q?4xL+iDCWs7KK+DTN1Uyt1+Ui1A4hs7WtUbypHx/5JWf6WLScNTAI4UJF8W2F?=
- =?us-ascii?Q?dkaVG8pu2vdf7nMKBG8OVfoB83hOe51BSvVR2i/mdP97D+v+MeInpKor9AAT?=
- =?us-ascii?Q?mNq5FsdLZ6AsbnJ5AezrzBKFbh8ZeBipo5UjWy8oQGVthpGRLQ5XchHAjHUH?=
- =?us-ascii?Q?WH1hX2nc8eaFG3SCOpTXJqWE8Att0xILBBmjSsc8f5AYwMFikLycsVaxqPWo?=
- =?us-ascii?Q?i1+KwCJqYEKlFdWa1w+wnrxuw0RwEHR5LWa+CrDGRuv/xH4/bi/8edRElmKY?=
- =?us-ascii?Q?m4FkJBNKUAZ93cW8sIe0Hh3mGDe+/+STnUMSARrOky9qiLte2JYGn2kvKtp8?=
- =?us-ascii?Q?bGVJOGoM/H9qkXkkevrGKFTwQbNFmPNnEe9NcS5in4MBxGFqmyw/MuwCoMip?=
- =?us-ascii?Q?0oZBnucWX3yUxGoHPyk27lUOMhervzI4ZOpVt/JgDXsFpfz7WOnPl7sOwxrU?=
- =?us-ascii?Q?8/ms9sbPRdUYwN7uzIp7RSPLHdk48PVfYoOOyB+T8B9QUtICYdv7Whv1WqbO?=
- =?us-ascii?Q?uwwoLGkl5SPNRu7Y04yjrbvLUkMIoORC97x6z+EJbhQzwWfdZ5EqKzoUMJ1W?=
- =?us-ascii?Q?u4df0nJitMw0EYPj5SOt2fqmNd68i44nUow02F9tuJWY+IZb3iiza3+KtsMD?=
- =?us-ascii?Q?ImOKvwARcgveCWsZ767eAye8vcxkXSkhF5P8RVvS0UAO4pwg02dLf3Z6SBIp?=
- =?us-ascii?Q?+4UVT5oxj9ee/4B2OScamUuBVn9r+A1PXW75xNpg6YnMogWZp3hvU8tSFpdl?=
- =?us-ascii?Q?M7Gf9jjHwcbqtkHyrPZ/coHO82qU0bJ0mu4erxewScJUfBuSN8p8DYaohAOd?=
- =?us-ascii?Q?fDS7Umdgj4HO5nWxpgCAbiksgEcNEaoITb3GrcQWbJuL7vKSgwXb5tkRUkjF?=
- =?us-ascii?Q?tHbO9HmQ08E3FHPlWVcGydALcNm9cqW1dgsV8eSPfUQtWM8hYP4mcXtUjSP+?=
- =?us-ascii?Q?u6/6i8ey65bqUShnmfOIl4ec1X5mfLOwBQ0nfLHHy8aFXZkcP6EaPkw4o9tg?=
- =?us-ascii?Q?mFCfLJmBDg21dNZVV+mimSpUewLv7xPlpEC9bpqJLnrxHpj4wJAU7O9BcAlq?=
- =?us-ascii?Q?ryrABgTuC0ESGJOWxHlvdyGsZG+tI+heHCQ0L6iugbQDmNvwY9sBuNNd3M3G?=
- =?us-ascii?Q?eofJNZctAswmqTuAepUE1buJPsuAOWuGZAU4Ul/ZuhIAqWZpGORwnD0X/mF1?=
- =?us-ascii?Q?BiBECxuE81GUP/UlvK+UeHKkecjUaOJo5sKfW+sIzcUEDw2Ad52H5d9TWsPn?=
- =?us-ascii?Q?/uwTTGPPM8b36tTDOErfI8AyFpMKKnNR4Dtmf68aNwFqYxUG3WSBg0EQJkaA?=
- =?us-ascii?Q?SyAIgpSaL+jK+jhVUbDiZ1b0FTBtJaR99AKL4+XpcoSPNBPdbkHMudsIlHhL?=
-X-MS-Exchange-AntiSpam-MessageData-1: RJFgDExpV+yxpQ==
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8031a6a-44d7-4d44-28a4-08da28311fb9
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 09:34:27.8801
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DIA2rW55hVrCvMZgvWAVh6S9/SSYo8j1Hssy/nFcazBau20NOJ4QMdcf7iF+HSbx864nuSf9nKGGArnv2dwKgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6818
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425061022.1569480-1-paul.elder@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Hi Paul,
 
-I was looking at those two patches and I cannot help myself,
-it looks to me like they are both fixing the same issue in two
-different ways.
-Could you clarify?
+On Mon, Apr 25, 2022 at 03:10:22PM +0900, Paul Elder wrote:
+> Switch to using runtime PM for power management.
+> 
+> Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> ---
+> Changes in v5:
+> - fix compilation warning
+> 
+> Changes in v4:
+> - replace pm_runtime_put* with pm_runtime_put_autosuspend
+> - remove the manual initial call to ov5640_set_power()
+> 
+> Changes in v3:
+> - Move v4l2_ctrl_handler_setup() from ov5640_sensor_resume to
+>   ov5640_s_stream()
+> 
+> Changes in v2:
+> - replace manual tracking of power status with pm_runtime_get_if_in_use
+> - power on the sensor before reading the checking the chip id
+> - add dependency on PM to Kconfig
+> ---
+>  drivers/media/i2c/Kconfig  |   1 +
+>  drivers/media/i2c/ov5640.c | 120 +++++++++++++++++++++----------------
+>  2 files changed, 71 insertions(+), 50 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index fae2baabb773..0bd53f8198f1 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -433,6 +433,7 @@ config VIDEO_OV5640
+>  	tristate "OmniVision OV5640 sensor support"
+>  	depends on OF
+>  	depends on GPIOLIB && VIDEO_DEV && I2C
+> +	depends on PM
+>  	select MEDIA_CONTROLLER
+>  	select VIDEO_V4L2_SUBDEV_API
+>  	select V4L2_FWNODE
+> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+> index db5a19babe67..e8e53e954db0 100644
+> --- a/drivers/media/i2c/ov5640.c
+> +++ b/drivers/media/i2c/ov5640.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/init.h>
+>  #include <linux/module.h>
+>  #include <linux/of_device.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+>  #include <linux/types.h>
+> @@ -240,8 +241,6 @@ struct ov5640_dev {
+>  	/* lock to protect all members below */
+>  	struct mutex lock;
+>  
+> -	int power_count;
+> -
+>  	struct v4l2_mbus_framefmt fmt;
+>  	bool pending_fmt_change;
+>  
+> @@ -2157,37 +2156,6 @@ static int ov5640_set_power(struct ov5640_dev *sensor, bool on)
+>  
+>  /* --------------- Subdev Operations --------------- */
+>  
+> -static int ov5640_s_power(struct v4l2_subdev *sd, int on)
+> -{
+> -	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+> -	int ret = 0;
+> -
+> -	mutex_lock(&sensor->lock);
+> -
+> -	/*
+> -	 * If the power count is modified from 0 to != 0 or from != 0 to 0,
+> -	 * update the power state.
+> -	 */
+> -	if (sensor->power_count == !on) {
+> -		ret = ov5640_set_power(sensor, !!on);
+> -		if (ret)
+> -			goto out;
+> -	}
+> -
+> -	/* Update the power count. */
+> -	sensor->power_count += on ? 1 : -1;
+> -	WARN_ON(sensor->power_count < 0);
+> -out:
+> -	mutex_unlock(&sensor->lock);
+> -
+> -	if (on && !ret && sensor->power_count == 1) {
+> -		/* restore controls */
+> -		ret = v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
+> -	}
+> -
+> -	return ret;
+> -}
+> -
+>  static int ov5640_try_frame_interval(struct ov5640_dev *sensor,
+>  				     struct v4l2_fract *fi,
+>  				     u32 width, u32 height)
+> @@ -2663,6 +2631,9 @@ static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+>  
+>  	/* v4l2_ctrl_lock() locks our own mutex */
+>  
+> +	if (!pm_runtime_get_if_in_use(&sensor->i2c_client->dev))
+> +		return 0;
+> +
+>  	switch (ctrl->id) {
+>  	case V4L2_CID_AUTOGAIN:
+>  		val = ov5640_get_gain(sensor);
+> @@ -2678,6 +2649,8 @@ static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+>  		break;
+>  	}
+>  
+> +	pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -2692,9 +2665,9 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
+>  	/*
+>  	 * If the device is not powered up by the host driver do
+>  	 * not apply any controls to H/W at this time. Instead
+> -	 * the controls will be restored right after power-up.
+> +	 * the controls will be restored at start streaming time.
+>  	 */
+> -	if (sensor->power_count == 0)
+> +	if (!pm_runtime_get_if_in_use(&sensor->i2c_client->dev))
+>  		return 0;
+>  
+>  	switch (ctrl->id) {
+> @@ -2733,6 +2706,8 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
+>  		break;
+>  	}
+>  
+> +	pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
+> +
+>  	return ret;
+>  }
+>  
+> @@ -2945,6 +2920,18 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
+>  	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+>  	int ret = 0;
+>  
+> +	if (enable) {
+> +		ret = pm_runtime_resume_and_get(&sensor->i2c_client->dev);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
+> +		if (ret) {
+> +			pm_runtime_put(&sensor->i2c_client->dev);
+> +			return ret;
+> +		}
+> +	}
+> +
+>  	mutex_lock(&sensor->lock);
+>  
+>  	if (sensor->streaming == !enable) {
+> @@ -2969,13 +2956,17 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
+>  		if (!ret)
+>  			sensor->streaming = enable;
+>  	}
+> +
+>  out:
+>  	mutex_unlock(&sensor->lock);
+> +
+> +	if (!enable || ret)
+> +		pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
+> +
+>  	return ret;
+>  }
+>  
+>  static const struct v4l2_subdev_core_ops ov5640_core_ops = {
+> -	.s_power = ov5640_s_power,
+>  	.log_status = v4l2_ctrl_subdev_log_status,
+>  	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
+>  	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
+> @@ -3019,26 +3010,20 @@ static int ov5640_check_chip_id(struct ov5640_dev *sensor)
+>  	int ret = 0;
+>  	u16 chip_id;
+>  
+> -	ret = ov5640_set_power_on(sensor);
+> -	if (ret)
+> -		return ret;
+> -
+>  	ret = ov5640_read_reg16(sensor, OV5640_REG_CHIP_ID, &chip_id);
+>  	if (ret) {
+>  		dev_err(&client->dev, "%s: failed to read chip identifier\n",
+>  			__func__);
+> -		goto power_off;
+> +		return ret;
+>  	}
+>  
+>  	if (chip_id != 0x5640) {
+>  		dev_err(&client->dev, "%s: wrong chip identifier, expected 0x5640, got 0x%x\n",
+>  			__func__, chip_id);
+> -		ret = -ENXIO;
+> +		return -ENXIO;
+>  	}
+>  
+> -power_off:
+> -	ov5640_set_power_off(sensor);
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  static int ov5640_probe(struct i2c_client *client)
+> @@ -3158,21 +3143,31 @@ static int ov5640_probe(struct i2c_client *client)
+>  
+>  	mutex_init(&sensor->lock);
+>  
+> -	ret = ov5640_check_chip_id(sensor);
+> +	ret = ov5640_init_controls(sensor);
+>  	if (ret)
+>  		goto entity_cleanup;
+>  
+> -	ret = ov5640_init_controls(sensor);
+> +	pm_runtime_set_active(dev);
+> +	pm_runtime_enable(dev);
+> +	pm_runtime_get(dev);
 
-=C2=A0=C2=A0=C2=A0 Regards
-=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
+You could on DT but the driver but the driver could be used on ACPI systems
+as well.
 
+Please see drivers/media/i2c/ccs/ccs-core.c for an example. You'll still
+need explicit callbacks powering on and off the sensor in probe and remove.
+
+> +
+> +	ret = ov5640_check_chip_id(sensor);
+>  	if (ret)
+> -		goto entity_cleanup;
+> +		goto err_pm_runtime;
+>  
+>  	ret = v4l2_async_register_subdev_sensor(&sensor->sd);
+>  	if (ret)
+> -		goto free_ctrls;
+> +		goto err_pm_runtime;
+> +
+> +	pm_runtime_set_autosuspend_delay(dev, 1000);
+> +	pm_runtime_use_autosuspend(dev);
+> +	pm_runtime_put_autosuspend(dev);
+>  
+>  	return 0;
+>  
+> -free_ctrls:
+> +err_pm_runtime:
+> +	pm_runtime_disable(dev);
+> +	pm_runtime_put_autosuspend(dev);
+>  	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
+>  entity_cleanup:
+>  	media_entity_cleanup(&sensor->sd.entity);
+> @@ -3184,6 +3179,10 @@ static int ov5640_remove(struct i2c_client *client)
+>  {
+>  	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+>  	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+> +	struct device *dev = &client->dev;
+> +
+> +	pm_runtime_disable(dev);
+> +	pm_runtime_put_autosuspend(dev);
+>  
+>  	v4l2_async_unregister_subdev(&sensor->sd);
+>  	media_entity_cleanup(&sensor->sd.entity);
+> @@ -3193,6 +3192,26 @@ static int ov5640_remove(struct i2c_client *client)
+>  	return 0;
+>  }
+>  
+> +static int __maybe_unused ov5640_sensor_suspend(struct device *dev)
+> +{
+> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> +	struct ov5640_dev *ov5640 = to_ov5640_dev(sd);
+> +
+> +	return ov5640_set_power(ov5640, false);
+> +}
+> +
+> +static int __maybe_unused ov5640_sensor_resume(struct device *dev)
+> +{
+> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> +	struct ov5640_dev *ov5640 = to_ov5640_dev(sd);
+> +
+> +	return ov5640_set_power(ov5640, true);
+> +}
+> +
+> +static const struct dev_pm_ops ov5640_pm_ops = {
+> +	SET_RUNTIME_PM_OPS(ov5640_sensor_suspend, ov5640_sensor_resume, NULL)
+> +};
+> +
+>  static const struct i2c_device_id ov5640_id[] = {
+>  	{"ov5640", 0},
+>  	{},
+> @@ -3209,6 +3228,7 @@ static struct i2c_driver ov5640_i2c_driver = {
+>  	.driver = {
+>  		.name  = "ov5640",
+>  		.of_match_table	= ov5640_dt_ids,
+> +		.pm = &ov5640_pm_ops,
+>  	},
+>  	.id_table = ov5640_id,
+>  	.probe_new = ov5640_probe,
+
+-- 
+Regards,
+
+Sakari Ailus
