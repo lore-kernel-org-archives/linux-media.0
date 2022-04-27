@@ -2,103 +2,98 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EB61C433F5
-	for <linux-media@archiver.kernel.org>; Wed, 27 Apr 2022 10:42:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78EBEC433F5
+	for <linux-media@archiver.kernel.org>; Wed, 27 Apr 2022 10:55:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbiD0KqB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Apr 2022 06:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
+        id S231196AbiD0K6p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Apr 2022 06:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiD0Kpw (ORCPT
+        with ESMTP id S231231AbiD0K6i (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Apr 2022 06:45:52 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77191395236
-        for <linux-media@vger.kernel.org>; Wed, 27 Apr 2022 03:29:21 -0700 (PDT)
-Received: from [10.10.2.52] (unknown [10.10.2.52])
-        by mail.ispras.ru (Postfix) with ESMTPSA id C4608407625B;
-        Wed, 27 Apr 2022 10:29:15 +0000 (UTC)
-Subject: Re: possible clash between 8ea0f2ba0fa3f and 4affafd7bec7c both
- decrementing refcount
-To:     Oliver Neukum <oneukum@suse.com>, Yu Kuai <yukuai3@huawei.com>
-Cc:     linux-media@vger.kernel.org
-References: <ef931be9-51b0-6990-211b-b8450b395bf5@suse.com>
-From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
-Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
- 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
- kK2E04Fb+Zk1eJvHYRc=
-Message-ID: <3db2b997-bba5-425e-e271-33ffec06b16f@ispras.ru>
-Date:   Wed, 27 Apr 2022 13:29:15 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 27 Apr 2022 06:58:38 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F983BC47C
+        for <linux-media@vger.kernel.org>; Wed, 27 Apr 2022 03:35:26 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 975D81B001CF;
+        Wed, 27 Apr 2022 12:59:24 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1651053564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=05nayfjvRmrnjC1Ib0jFuNTfGUagZSPJ5nsZdJaxzXI=;
+        b=b/v2M6hLkur4yD2aNgCMkygohT/UxpWA2xFj5/sw6EJoXMgmSbWCFvXXw7N6iJbnLnkF9H
+        UOmFGTVVY7jpjiHnoE6Wgk43BHJgWmWLyoEGqCWMjaksIGHhWyZQS/JQkbd8k2RgRUu/bx
+        qlLJNhll+HjNSMOxrBuuWNwtW8bHATkiTn1IF280VSqnWeWDUDJyoPA3GSPty+Oz9Y3T4H
+        r6nS5Ebjyli5LzS41juGOisKNfvRykJwgqUlMnHwZXcyhasHsy8CzNR+QwOcJJbKNonI/I
+        vRRe+I7JcB+TnLT/msdXUhfF6l6ojC6pOW1i6csZPozehNu2qCvL9oIrN27NTA==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 3AE4F634C91;
+        Wed, 27 Apr 2022 12:59:24 +0300 (EEST)
+Date:   Wed, 27 Apr 2022 12:59:24 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
+        krzysztof.kozlowski@canonical.com,
+        jeanmichel.hautbois@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com, paul.kocialkowski@bootlin.com,
+        paul.elder@ideasonboard.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "open list:OMNIVISION OV5670 SENSOR DRIVER" 
+        <linux-media@vger.kernel.org>
+Subject: Re: [PATCH v3 6/8] media: i2c: ov5670: Add runtime_pm operations
+Message-ID: <YmkT/I4yJ0ddawsx@valkosipuli.retiisi.eu>
+References: <20220329090133.338073-1-jacopo@jmondi.org>
+ <20220329090133.338073-7-jacopo@jmondi.org>
+ <YmkTfLMdtMQDBQFO@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
-In-Reply-To: <ef931be9-51b0-6990-211b-b8450b395bf5@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: ru-RU
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmkTfLMdtMQDBQFO@valkosipuli.retiisi.eu>
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1651053564; a=rsa-sha256;
+        cv=none;
+        b=G2BwVF4JK7IWW3OVzyNjxmMgFc3nscfndVHPmQO3h1yL750N2LCoB4CiT8PLxyMjOQq/vM
+        YVAYv6Mx/RhkutOGd62W+uH0u7MukD/Yia+Z+TIorhQxoYsIgrp10rgiBRfMM6Wguw9KN0
+        d/ylcCUCAl0rbXYPMPfx0x20NQLSlinAY7WoO+rj90zXC0V54Yc+M11DMSC6Z4f8ETx3F7
+        K/cAfSpxET4ZNylbKcfhTmpqn0A2hOwLIOq06pWwj69Yywnd3P77S+pR0l8Pamd48Poq4k
+        yFNwqTQ+M//zqN7R/Yg1UCMLQRXnuPaEPKnHSIf0x9rRoJUmFFngLR2oSyIi5g==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1651053564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=05nayfjvRmrnjC1Ib0jFuNTfGUagZSPJ5nsZdJaxzXI=;
+        b=ojbLSqMsoHEi1ku05VHytKy/4d5W82aHK3aCmxlNT1irQqRoFreXpQfsq1FlnWZOWExxIS
+        7XBbcWlisFsZfLp/o3l3iTvUEKl5iGplLeeU4u9B+NYFdOkwEAF4GPvhmNgXrl3D52/vGx
+        4XJHooVdItX1MJO82XLWjTeUUP3hExTqUAGSrPdgDfAm8/uH2N3I48jW+6moLy3I5nOKMD
+        CEWJT2A5jfIGMpzFUzlofqQ/lDONyv0RzOGAxxOCTbV1m4GCXtcHjNZicsvdlyCwjFZoec
+        AftLvDJ6PpymBwdUIkCFDp844voFx6LxoMN5HhvvHExArOlVqejOI0yVGauOfw==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 27.04.2022 12:34, Oliver Neukum wrote:
-> Hi,
+On Wed, Apr 27, 2022 at 12:57:16PM +0300, Sakari Ailus wrote:
+> > +		ret = pm_runtime_resume_and_get(&client->dev);
 > 
-> I was looking at those two patches and I cannot help myself,
-> it looks to me like they are both fixing the same issue in two
-> different ways.
-> Could you clarify?
+> Please see how e.g. the CCS driver does this (no need for autosuspend
+> though). E.g. don't use runtime PM to power the sensor on in probe, or off
+> in remove.
 
-Hi!
+What's actually needed in this driver would be explicit use of the resume
+and suspend callbacks for !CONFIG_PM as well as setting the callbacks in
+ov5670_pm_ops. No other changes should be needed.
 
-As far as I can see
-
-8ea0f2ba0fa3f
-adds of_node_put(node);
-
-while 4affafd7bec7c
-adds put_device(pm->larbvenclt & pm->larbvenc);
-
-Which clash do you mean?
-
-Best regards,
-Alexey
+-- 
+Sakari Ailus
