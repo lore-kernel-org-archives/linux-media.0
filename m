@@ -2,371 +2,412 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11C9DC433FE
-	for <linux-media@archiver.kernel.org>; Wed, 27 Apr 2022 11:06:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1342C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 27 Apr 2022 11:47:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbiD0LKE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 27 Apr 2022 07:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
+        id S232990AbiD0LuM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 27 Apr 2022 07:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbiD0LIM (ORCPT
+        with ESMTP id S232984AbiD0LuL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:08:12 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C453C9D72
-        for <linux-media@vger.kernel.org>; Wed, 27 Apr 2022 04:03:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651057401; x=1682593401;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=G8q+P5bhRM2Hz6Oe+FT+nn4qnr/b+AMdZklpGnivBRg=;
-  b=MEVWeOKd6AChuEuDDMJSIZDCfk6w8lexGsQtOR9PCrILKELfn6bURsOE
-   n57znShtIqOsp1rOTQw9TNIxwjDrLDs5GLgm3ZspwElfPr+vfe8xjaCa7
-   KiYSHvaG8aQ7hzJCKhQWVnD9wqt9fqpnGw3egcH5UmQg1158gjASnjMRt
-   /QMNai48UzuP5XeNLMYgT+lAFbl3LOkR43bYoC2BU4i/Ct9zFg+1Sa0w6
-   eCuc1mvlpzOYix36e9TzU70RdxweaXlsyITzs03p510ayZTaoMrKTuKwA
-   Fo+Avn9PMM7WsmTZBHuFyceOu0tPilnd8B2xYeiEXJowWBUCjgoasWV1L
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="328825545"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="328825545"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 03:06:06 -0700
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="539814253"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 03:06:02 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id B227E203C9;
-        Wed, 27 Apr 2022 13:06:00 +0300 (EEST)
-Date:   Wed, 27 Apr 2022 13:06:00 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Paul Elder <paul.elder@ideasonboard.com>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Paul J. Murphy" <paul.j.murphy@intel.com>,
-        Martina Krasteva <martinax.krasteva@intel.com>,
-        Shawn Tu <shawnx.tu@intel.com>, Arec Kao <arec.kao@intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jimmy Su <jimmy.su@intel.com>,
-        Martin Kepplinger <martink@posteo.de>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v5] media: ov5640: Use runtime PM
-Message-ID: <YmkViDEEDxMx8S4S@paasikivi.fi.intel.com>
-References: <20220425061022.1569480-1-paul.elder@ideasonboard.com>
+        Wed, 27 Apr 2022 07:50:11 -0400
+Received: from KOR01-SL2-obe.outbound.protection.outlook.com (mail-eopbgr1290109.outbound.protection.outlook.com [40.107.129.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3287884A28
+        for <linux-media@vger.kernel.org>; Wed, 27 Apr 2022 04:46:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bCUc4Wu1Xu32d1CmooGevqWW4eiNPFFoLqEUxEdcMi2Lr1IDxYTTwvDFFBhDP2SwKdbdYVNTLdpWtMNWAqsP1D6jUTPNw9qNPdFvCK63Fw2lCZfJDgsoC/I5SbMfdNfjz2in2qbLsv3jMjeIlPD/CKkloI0FWZBDaA80IPaK5fpXbg6jYn8EvO7h29YWdxEBt8O8pn3RFxnO+8GRWM8GcpttktWDPdbNcjZvqsJRnUHdkrQRUUv1wN/WwXXGpyZZ/JFed13nkaJAkr3cHr8Y76mtNaGP1F736WiunQSdhNbIjMWQfx/Z2nf6z1/hc1eKSkgzOlI8yK0BtwkOOVvBEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CHchYtvD2EsN9c9gO9IauNs6znvukIbMFexPUL9ULkg=;
+ b=dSKe6niBe7TAAUYamqEtWf+hOvohrmy+Db6sUahCeJg5A0Z8tSUrd8ZLYfE6TrnWt8YKc6EXVYPZ/lbUbyNerTEzKJZ9FZBs1RabzaEtAiSG0QDfrKvI5bVdYskOIkonQUtrofXrA1R+dlK+h+QYhx/5LuGXX1oBj6bLv9ex596Od9Z3IjM01NFbNyL4R4yVzf42bu/a52ab6u9mFIBDEc579OH/Os8lwBtpAUteVBqW8/UjtXMslAMWAVXrgOKPMElY6FPaZm0Vh4O90i+Ick/XaJLpct84NM4jNT/m9sODE44xdcg4B3eJfpdte5NGzX/oyAENi5O3TjAG7JJAVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=chipsnmedia.com; dmarc=pass action=none
+ header.from=chipsnmedia.com; dkim=pass header.d=chipsnmedia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=chipsnmedia.onmicrosoft.com; s=selector2-chipsnmedia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CHchYtvD2EsN9c9gO9IauNs6znvukIbMFexPUL9ULkg=;
+ b=AQdrp4GwULprJb4YgTd5ePDcthEjQdxLbVjVTWK26Eblmi31a0pUEwS6NwiSEzSJh57ZAUV2Kh+mc/dHvqoAzOhaEeEpxqiKheVJ1EQ4fulmAexz1coygaaKaSoumV94CqRF0E13olHwwoMXac7REgETo/iS8vzZEzLLxTpmEpQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=chipsnmedia.com;
+Received: from SL2P216MB1246.KORP216.PROD.OUTLOOK.COM (2603:1096:101:a::9) by
+ PU4P216MB1502.KORP216.PROD.OUTLOOK.COM (2603:1096:301:cd::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5206.12; Wed, 27 Apr 2022 11:46:56 +0000
+Received: from SL2P216MB1246.KORP216.PROD.OUTLOOK.COM
+ ([fe80::480d:52da:5403:281]) by SL2P216MB1246.KORP216.PROD.OUTLOOK.COM
+ ([fe80::480d:52da:5403:281%9]) with mapi id 15.20.5206.013; Wed, 27 Apr 2022
+ 11:46:56 +0000
+From:   Nas Chung <nas.chung@chipsnmedia.com>
+To:     linux-media@vger.kernel.org
+Cc:     hverkuil@xs4all.nl, Nas Chung <nas.chung@chipsnmedia.com>
+Subject: [PATCH v8 0/6] staging: media: wave5: add wave5 codec driver
+Date:   Wed, 27 Apr 2022 20:46:32 +0900
+Message-Id: <20220427114638.1638-1-nas.chung@chipsnmedia.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SL2P216CA0124.KORP216.PROD.OUTLOOK.COM (2603:1096:101::21)
+ To SL2P216MB1246.KORP216.PROD.OUTLOOK.COM (2603:1096:101:a::9)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425061022.1569480-1-paul.elder@ideasonboard.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b036e8f6-c494-4b09-cf5d-08da2843a1ac
+X-MS-TrafficTypeDiagnostic: PU4P216MB1502:EE_
+X-Microsoft-Antispam-PRVS: <PU4P216MB150299C838A9ED849A903DA2FBFA9@PU4P216MB1502.KORP216.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tQM8tHIJhYF0jHXslWEjd5iILrRRvf2c5jP2AwSfsGJFN6CXcn/8ISgBya1PTekn0ICBM0HC7Pjq8s6b4A4ttCbVNjw4DnSeDpRcv0kjOCAyv8zeay+bIm2UEkGeKQAWIRnLLj0lxRxwv7ZxOA+0zFbChjAp93pAuGNIQmAvEHR+A/r45aXFlC7gbRBaNhGlHrDW4Y8PlXuJuPsId+MEcX7IbQ7LmFBBrdF8DrdF8dFIJPvb7KSqB6/nAr5/92LG8XhoFj451e2Pe1ZPnh9g32zhnqOCgN5WdWLPJX5rywJBtUAfDaRbwxLjxThjYddYONw8KPqQzr6QWU2EGLKTApHyT++4rQ1qC+vxwVnOMDxISRZFmFHtWNDbMlN5tnZ965eUUCGKQcnN/L+dEyWakFvGAaEaaOGmdyqAgzjLAtEl3wQUmsb8mH3DRebq05n5/abBIarS+iLBt3nTBGd7H8BZ3IqMT9rZWGMjlLKnnyoWxsEKmZSokBnKFsCCkdWhVSjkUSvBDAhBG6EKE4qWssu3WW7tZ5fcUwzTkpWlSsMq10/BMuiO6bHT1b68WvcHufhPIsqU2uGsa9GAiFtdLQUaGllPd9vUWqs/xV1c5zia2Uz/a7B/sx8eI8FempZHHiQYNyBSjhmenwHDvD8VFqLZTXvfXCSrWGt9vIB4vNC6BH5H0VNR0JQc8InMqCOOz40TWMiVpbkaJ08XaZMvsQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2P216MB1246.KORP216.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(39850400004)(396003)(136003)(346002)(366004)(376002)(1076003)(83380400001)(66946007)(44832011)(2616005)(107886003)(5660300002)(2906002)(38100700002)(6916009)(38350700002)(86362001)(508600001)(36756003)(6666004)(6486002)(6506007)(4326008)(316002)(8676002)(52116002)(6512007)(66556008)(66476007)(8936002)(26005)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?R0IgS48qlFvSpml0vuc4ZwuzoN+aiOxDpg7ZQHo1ZYXay1B0jpoH2m8Lyxll?=
+ =?us-ascii?Q?l4EKXlmj6hwGMusbsY7RK6XaGOzOVr7c8Uutw6CyHL2/0yrth44G2TAz1XAy?=
+ =?us-ascii?Q?rXct9GzG22HXH8wcztjULvjY4v34kfvqxOimwKRC/8+PgIDdIF8N8a20mMjC?=
+ =?us-ascii?Q?Kvh0Olg75r4THkpThNdyAtKbvZOmt36o+i5uMPGMTJgd2g+wYHj/HIKLWWpQ?=
+ =?us-ascii?Q?WY3zQqSSE4axuONiU+kPq1jeNCKxMWnNYykxYr0wu0HzLdh3Mhi/B1b4FGCT?=
+ =?us-ascii?Q?IImtPdT4j4IuenLKs7yg/SN6OcI/IZAp7w9m510m2ZUuKcCTUPTgxmlpisC6?=
+ =?us-ascii?Q?j3PDA7lM8u//jyOeyhl2asGBGXx3skFqM7EyKBXD8ZAy2fR2E1zyl3o8JoeU?=
+ =?us-ascii?Q?CTgb5IOwKdxzyBzaGYDNhMfmqAvSxXmxNe1Xv3lysnhrYEAzZyBosr4seu7v?=
+ =?us-ascii?Q?1m1whVfzZUHtiCCxSUlmBg4nAGdYuD8TLQnVQB+kFsH2+tSQQ6okCy3Q9VCd?=
+ =?us-ascii?Q?zZH9DRYe7O9ClI1ggEh2LDuu24kZ+SlGplooYiCbh9W1OjZ2mCZwUk+DAnxC?=
+ =?us-ascii?Q?BpseOJsckiytpu7FudJw8VVkALAiYFLmqfi9tZhvelmMlgbWZYijGgX1OA97?=
+ =?us-ascii?Q?2Zu8L0KqZkRThjkO10c7/rCnEnF2vxey9FK1QKLAoaa3FQUQ9+wP+tdoZ2mf?=
+ =?us-ascii?Q?tb475YauY2uKyRkIbUANJItSZpRGoyyL/Pr5b1uQOw7C38JRYuEccgpKb1uH?=
+ =?us-ascii?Q?LPVAPvfh284E/7HjghpeDthCeRE/jb1LQiYl8vPnQylDjK+b4fSJZZAo+bhH?=
+ =?us-ascii?Q?AGyzlzhjrzvQXs/0dEwQ6NAzD7ZhtaJG9013Qw7UXZjsNLUkQBfpnv5MpQOt?=
+ =?us-ascii?Q?mz81xSQBYYb/u3kV87VtNaUrBQRaiqBL8tuMVicQqhgtzIoMr6W7EC6O7ZxL?=
+ =?us-ascii?Q?/TjY0vZo3aWu7GMP+U2FGTADkc6zPOu70uFw/qFS8iVeobT+woXx2I+J0HiQ?=
+ =?us-ascii?Q?6idf0q/g96ECNrM2XqDyGejJQrXEeipNkqdZRc+rronohIR0hebSAhrSgXyu?=
+ =?us-ascii?Q?4sDVmDGAb9Gp8T0TsIJTodU5V2tJJM3IG3ZXh5vPAG1CwrmAEQZJNgVJBL0Z?=
+ =?us-ascii?Q?AY34aeGAa7bltk1Je7HsH4R0EcZWIwx9cKn/KHt5iEp+Kw/DTKbfzbsQmEE+?=
+ =?us-ascii?Q?i+QsSlRCdh/EG0mvUVKc0foFne1T9KGv1J9qMDWRr9Ce+hZPUAloWLtaQnVA?=
+ =?us-ascii?Q?0OS1aJBLGQPWUMdDULMRJes3eRpi1a5va92pjMpLDB15EF9uuh3mzmQnWsm7?=
+ =?us-ascii?Q?HLXkMtYNUgqQ6sM4LRB2CSC0vw4SCoE5tQxnz0R8+T2P1K7n/eStS8XE1fU3?=
+ =?us-ascii?Q?hczRlZjJdt3ez5xPmWrPeO91iz4pG9B0Zx9IYfYmjUUfZO4vqeFFL9Z5niP+?=
+ =?us-ascii?Q?mtPps6M7f772LRr09rfBK1x9tpU5YFnXU+yYIFMRdnNeKFgQSa3A6DmrTFkb?=
+ =?us-ascii?Q?t+fo81gtJEm4dykaZoW0yoiF/NnM6c1pxA5oAilFgoQtntheAfKmNmKQt9hS?=
+ =?us-ascii?Q?VwpvbaJxfRMsjHhb7up7ZypKPTiyTmYf/YeOPG4bveEFVByLpp3dGlkPGkH/?=
+ =?us-ascii?Q?v0XPvNbBrRhWmOAzlsx4eZGf2QyblsgAvhyDfw6z2j0QsKij/C3QwADw6PSL?=
+ =?us-ascii?Q?HwLUEGU9i9mMEuJvAjKJE/XVj7Rfrwl65i4XVH88Uk0mvL4cVJZyAxgXNoN9?=
+ =?us-ascii?Q?VIS7eaze16VRGQmGUhXIJASH2wSMn28=3D?=
+X-OriginatorOrg: chipsnmedia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b036e8f6-c494-4b09-cf5d-08da2843a1ac
+X-MS-Exchange-CrossTenant-AuthSource: SL2P216MB1246.KORP216.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 11:46:56.7660
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4d70c8e9-142b-4389-b7f2-fa8a3c68c467
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dX19UzjH2mFHSK7RvEcQH8Nv7Txr35n8u/0K1CiY2Xp6erDzXej3dFcQkmm9RqAeRbwOBkuTQ7kTrPvuyPeFbNTE7w6kaFHl90/s1Kphxxc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PU4P216MB1502
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Paul,
+The Wave5 codec driver is a stateful encoder/decoder.
+It is found on the J721S2 SoC, JH7100 SoC, ssd202d SoC. Etc.
+But current test report is based on J721S2 SoC and pre-silicon FPGA.
 
-On Mon, Apr 25, 2022 at 03:10:22PM +0900, Paul Elder wrote:
-> Switch to using runtime PM for power management.
-> 
-> Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> ---
-> Changes in v5:
-> - fix compilation warning
-> 
-> Changes in v4:
-> - replace pm_runtime_put* with pm_runtime_put_autosuspend
-> - remove the manual initial call to ov5640_set_power()
-> 
-> Changes in v3:
-> - Move v4l2_ctrl_handler_setup() from ov5640_sensor_resume to
->   ov5640_s_stream()
-> 
-> Changes in v2:
-> - replace manual tracking of power status with pm_runtime_get_if_in_use
-> - power on the sensor before reading the checking the chip id
-> - add dependency on PM to Kconfig
-> ---
->  drivers/media/i2c/Kconfig  |   1 +
->  drivers/media/i2c/ov5640.c | 120 +++++++++++++++++++++----------------
->  2 files changed, 71 insertions(+), 50 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> index fae2baabb773..0bd53f8198f1 100644
-> --- a/drivers/media/i2c/Kconfig
-> +++ b/drivers/media/i2c/Kconfig
-> @@ -433,6 +433,7 @@ config VIDEO_OV5640
->  	tristate "OmniVision OV5640 sensor support"
->  	depends on OF
->  	depends on GPIOLIB && VIDEO_DEV && I2C
-> +	depends on PM
->  	select MEDIA_CONTROLLER
->  	select VIDEO_V4L2_SUBDEV_API
->  	select V4L2_FWNODE
-> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-> index db5a19babe67..e8e53e954db0 100644
-> --- a/drivers/media/i2c/ov5640.c
-> +++ b/drivers/media/i2c/ov5640.c
-> @@ -15,6 +15,7 @@
->  #include <linux/init.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/slab.h>
->  #include <linux/types.h>
-> @@ -240,8 +241,6 @@ struct ov5640_dev {
->  	/* lock to protect all members below */
->  	struct mutex lock;
->  
-> -	int power_count;
-> -
->  	struct v4l2_mbus_framefmt fmt;
->  	bool pending_fmt_change;
->  
-> @@ -2157,37 +2156,6 @@ static int ov5640_set_power(struct ov5640_dev *sensor, bool on)
->  
->  /* --------------- Subdev Operations --------------- */
->  
-> -static int ov5640_s_power(struct v4l2_subdev *sd, int on)
-> -{
-> -	struct ov5640_dev *sensor = to_ov5640_dev(sd);
-> -	int ret = 0;
-> -
-> -	mutex_lock(&sensor->lock);
-> -
-> -	/*
-> -	 * If the power count is modified from 0 to != 0 or from != 0 to 0,
-> -	 * update the power state.
-> -	 */
-> -	if (sensor->power_count == !on) {
-> -		ret = ov5640_set_power(sensor, !!on);
-> -		if (ret)
-> -			goto out;
-> -	}
-> -
-> -	/* Update the power count. */
-> -	sensor->power_count += on ? 1 : -1;
-> -	WARN_ON(sensor->power_count < 0);
-> -out:
-> -	mutex_unlock(&sensor->lock);
-> -
-> -	if (on && !ret && sensor->power_count == 1) {
-> -		/* restore controls */
-> -		ret = v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
-> -	}
-> -
-> -	return ret;
-> -}
-> -
->  static int ov5640_try_frame_interval(struct ov5640_dev *sensor,
->  				     struct v4l2_fract *fi,
->  				     u32 width, u32 height)
-> @@ -2663,6 +2631,9 @@ static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
->  
->  	/* v4l2_ctrl_lock() locks our own mutex */
->  
-> +	if (!pm_runtime_get_if_in_use(&sensor->i2c_client->dev))
-> +		return 0;
-> +
->  	switch (ctrl->id) {
->  	case V4L2_CID_AUTOGAIN:
->  		val = ov5640_get_gain(sensor);
-> @@ -2678,6 +2649,8 @@ static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
->  		break;
->  	}
->  
-> +	pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
-> +
->  	return 0;
->  }
->  
-> @@ -2692,9 +2665,9 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
->  	/*
->  	 * If the device is not powered up by the host driver do
->  	 * not apply any controls to H/W at this time. Instead
-> -	 * the controls will be restored right after power-up.
-> +	 * the controls will be restored at start streaming time.
->  	 */
-> -	if (sensor->power_count == 0)
-> +	if (!pm_runtime_get_if_in_use(&sensor->i2c_client->dev))
->  		return 0;
->  
->  	switch (ctrl->id) {
-> @@ -2733,6 +2706,8 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
->  		break;
->  	}
->  
-> +	pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
-> +
->  	return ret;
->  }
->  
-> @@ -2945,6 +2920,18 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
->  	struct ov5640_dev *sensor = to_ov5640_dev(sd);
->  	int ret = 0;
->  
-> +	if (enable) {
-> +		ret = pm_runtime_resume_and_get(&sensor->i2c_client->dev);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		ret = v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
-> +		if (ret) {
-> +			pm_runtime_put(&sensor->i2c_client->dev);
-> +			return ret;
-> +		}
-> +	}
-> +
->  	mutex_lock(&sensor->lock);
->  
->  	if (sensor->streaming == !enable) {
-> @@ -2969,13 +2956,17 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
->  		if (!ret)
->  			sensor->streaming = enable;
->  	}
-> +
->  out:
->  	mutex_unlock(&sensor->lock);
-> +
-> +	if (!enable || ret)
-> +		pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
-> +
->  	return ret;
->  }
->  
->  static const struct v4l2_subdev_core_ops ov5640_core_ops = {
-> -	.s_power = ov5640_s_power,
->  	.log_status = v4l2_ctrl_subdev_log_status,
->  	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
->  	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
-> @@ -3019,26 +3010,20 @@ static int ov5640_check_chip_id(struct ov5640_dev *sensor)
->  	int ret = 0;
->  	u16 chip_id;
->  
-> -	ret = ov5640_set_power_on(sensor);
-> -	if (ret)
-> -		return ret;
-> -
->  	ret = ov5640_read_reg16(sensor, OV5640_REG_CHIP_ID, &chip_id);
->  	if (ret) {
->  		dev_err(&client->dev, "%s: failed to read chip identifier\n",
->  			__func__);
-> -		goto power_off;
-> +		return ret;
->  	}
->  
->  	if (chip_id != 0x5640) {
->  		dev_err(&client->dev, "%s: wrong chip identifier, expected 0x5640, got 0x%x\n",
->  			__func__, chip_id);
-> -		ret = -ENXIO;
-> +		return -ENXIO;
->  	}
->  
-> -power_off:
-> -	ov5640_set_power_off(sensor);
-> -	return ret;
-> +	return 0;
->  }
->  
->  static int ov5640_probe(struct i2c_client *client)
-> @@ -3158,21 +3143,31 @@ static int ov5640_probe(struct i2c_client *client)
->  
->  	mutex_init(&sensor->lock);
->  
-> -	ret = ov5640_check_chip_id(sensor);
-> +	ret = ov5640_init_controls(sensor);
->  	if (ret)
->  		goto entity_cleanup;
->  
-> -	ret = ov5640_init_controls(sensor);
-> +	pm_runtime_set_active(dev);
-> +	pm_runtime_enable(dev);
-> +	pm_runtime_get(dev);
+The driver currently supports V4L2_PIX_FMT_HEVC, V4L2_PIX_FMT_H264.
 
-You could on DT but the driver but the driver could be used on ACPI systems
-as well.
+This driver has so far been tested on J721S2 EVM board and pre-silicon FPGA.
 
-Please see drivers/media/i2c/ccs/ccs-core.c for an example. You'll still
-need explicit callbacks powering on and off the sensor in probe and remove.
+Testing on J721S2 EVM board shows it working fine both decoder and encoder.
+The driver is successfully working with gstreamer v4l2 good-plugin
+without any modification.
 
-> +
-> +	ret = ov5640_check_chip_id(sensor);
->  	if (ret)
-> -		goto entity_cleanup;
-> +		goto err_pm_runtime;
->  
->  	ret = v4l2_async_register_subdev_sensor(&sensor->sd);
->  	if (ret)
-> -		goto free_ctrls;
-> +		goto err_pm_runtime;
-> +
-> +	pm_runtime_set_autosuspend_delay(dev, 1000);
-> +	pm_runtime_use_autosuspend(dev);
-> +	pm_runtime_put_autosuspend(dev);
->  
->  	return 0;
->  
-> -free_ctrls:
-> +err_pm_runtime:
-> +	pm_runtime_disable(dev);
-> +	pm_runtime_put_autosuspend(dev);
->  	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
->  entity_cleanup:
->  	media_entity_cleanup(&sensor->sd.entity);
-> @@ -3184,6 +3179,10 @@ static int ov5640_remove(struct i2c_client *client)
->  {
->  	struct v4l2_subdev *sd = i2c_get_clientdata(client);
->  	struct ov5640_dev *sensor = to_ov5640_dev(sd);
-> +	struct device *dev = &client->dev;
-> +
-> +	pm_runtime_disable(dev);
-> +	pm_runtime_put_autosuspend(dev);
->  
->  	v4l2_async_unregister_subdev(&sensor->sd);
->  	media_entity_cleanup(&sensor->sd.entity);
-> @@ -3193,6 +3192,26 @@ static int ov5640_remove(struct i2c_client *client)
->  	return 0;
->  }
->  
-> +static int __maybe_unused ov5640_sensor_suspend(struct device *dev)
-> +{
-> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> +	struct ov5640_dev *ov5640 = to_ov5640_dev(sd);
-> +
-> +	return ov5640_set_power(ov5640, false);
-> +}
-> +
-> +static int __maybe_unused ov5640_sensor_resume(struct device *dev)
-> +{
-> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> +	struct ov5640_dev *ov5640 = to_ov5640_dev(sd);
-> +
-> +	return ov5640_set_power(ov5640, true);
-> +}
-> +
-> +static const struct dev_pm_ops ov5640_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(ov5640_sensor_suspend, ov5640_sensor_resume, NULL)
-> +};
-> +
->  static const struct i2c_device_id ov5640_id[] = {
->  	{"ov5640", 0},
->  	{},
-> @@ -3209,6 +3228,7 @@ static struct i2c_driver ov5640_i2c_driver = {
->  	.driver = {
->  		.name  = "ov5640",
->  		.of_match_table	= ov5640_dt_ids,
-> +		.pm = &ov5640_pm_ops,
->  	},
->  	.id_table = ov5640_id,
->  	.probe_new = ov5640_probe,
+Testing on FPGA also shows it working fine, though the FPGA uses polled
+interrupts and copied buffers between the host and it's on board RAM.
+
+The wave5 driver will be updated to support various EXT_CTRL encoder
+interface.
+
+# v4l2-compliance -d0
+v4l2-compliance 1.23.0-4923, 64 bits, 64-bit time_t
+v4l2-compliance SHA: 163144712a46 2022-04-25 05:31:44
+
+Compliance test for vpu-dec device /dev/video0:
+
+Driver Info:
+	Driver name      : vpu-dec
+	Card type        : vpu-dec
+	Bus info         : platform:vpu-dec
+	Driver version   : 5.18.0
+	Capabilities     : 0x84204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+	Detected Stateful Decoder
+
+Required ioctls:
+	test VIDIOC_QUERYCAP: OK
+	test invalid ioctls: OK
+
+Allow for multiple opens:
+	test second /dev/video0 open: OK
+	test VIDIOC_QUERYCAP: OK
+	test VIDIOC_G/S_PRIORITY: OK
+	test for unlimited opens: OK
+
+Debug ioctls:
+	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+	test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 2 Private Controls: 1
+
+Format ioctls:
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+	test VIDIOC_G/S_PARM: OK (Not Supported)
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK
+	test VIDIOC_TRY_FMT: OK
+	test VIDIOC_S_FMT: OK
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+	test Cropping: OK (Not Supported)
+	test Composing: OK
+	test Scaling: OK (Not Supported)
+
+Codec ioctls:
+	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK
+
+Buffer ioctls:
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+	test VIDIOC_EXPBUF: OK
+	test Requests: OK (Not Supported)
+
+Total for vpu-dec device /dev/video0: 45, Succeeded: 45, Failed: 0, Warnings: 0
+
+# v4l2-compliance -d1
+v4l2-compliance 1.23.0-4923, 64 bits, 64-bit time_t
+v4l2-compliance SHA: 163144712a46 2022-04-25 05:31:44
+
+Compliance test for vpu-enc device /dev/video1:
+
+Driver Info:
+	Driver name      : vpu-enc
+	Card type        : vpu-enc
+	Bus info         : platform:vpu-enc
+	Driver version   : 5.18.0
+	Capabilities     : 0x84204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+	Detected Stateful Encoder
+
+Required ioctls:
+	test VIDIOC_QUERYCAP: OK
+	test invalid ioctls: OK
+
+Allow for multiple opens:
+	test second /dev/video1 open: OK
+	test VIDIOC_QUERYCAP: OK
+	test VIDIOC_G/S_PRIORITY: OK
+	test for unlimited opens: OK
+
+Debug ioctls:
+	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+	test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 15 Private Controls: 0
+
+Format ioctls:
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+	test VIDIOC_G/S_PARM: OK
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK
+	test VIDIOC_TRY_FMT: OK
+	test VIDIOC_S_FMT: OK
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+	test Cropping: OK
+	test Composing: OK (Not Supported)
+	test Scaling: OK (Not Supported)
+
+Codec ioctls:
+	test VIDIOC_(TRY_)ENCODER_CMD: OK
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls:
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+	test VIDIOC_EXPBUF: OK
+	test Requests: OK (Not Supported)
+
+Total for vpu-enc device /dev/video1: 45, Succeeded: 45, Failed: 0, Warnings: 0
+
+changes since v7:
+
+* update v4l2-compliance test report
+* fix build error on linux-kernel 5.18.0-rc4
+
+changes since v6:
+
+* update TODO file
+* get sram info from device tree
+
+changes since v5:
+
+* support NV12/NV21 pixelformat for encoder and decoder
+* handle adnormal exit and EOS
+
+changes since v4:
+
+* refactor functions in wave5-hw and fix bug reported by Daniel Palmer
+* rename functions and variables to better names
+* change variable types such as replacing s32 with u32 and int with bool as appropriate
+
+changes since v3:
+
+* Fixing all issues commented by Dan Carpenter
+* Change file names to have wave5- prefix
+* In wave5_vpu_probe, enable the clocks before reading registers, as commented from Daniel Palmer
+* Add more to the TODO list,
+
+changes since v2:
+
+Main fixes includes:
+* change the yaml and dirver code to support up to 4 clks (instead of one)
+* fix Kconfig format
+* remove unneeded cast,
+* change var types
+* change var names, func names
+* checkpatch fixes
+
+changes since v1:
+
+Fix chanes due to comments from Ezequiel and Dan Carpenter. Main fixes inclueds:
+* move all files to one dir 'wave5'
+* replace private error codes with standart error codes
+* fix extra spaces
+* various checkpatch fixes
+* replace private 'DPRINTK' macro with standart 'dev_err/dbg ..'
+* fix error handling
+* add more possible fixes to the TODO file
+
+Dafna Hirschfeld (1):
+  staging: media: wave5: Add the vdi layer
+
+Nas Chung (3):
+  staging: media: wave5: Add vpuapi layer
+  staging: media: wave5: Add the v4l2 layer
+  staging: media: wave5: Add TODO file
+
+Robert Beckett (2):
+  dt-bindings: media: staging: wave5: add yaml devicetree bindings
+  media: wave5: Add wave5 driver to maintainers file
+
+ .../bindings/staging/media/cnm,wave.yaml      |   73 +
+ MAINTAINERS                                   |    9 +
+ drivers/staging/media/Kconfig                 |    2 +
+ drivers/staging/media/Makefile                |    1 +
+ drivers/staging/media/wave5/Kconfig           |   12 +
+ drivers/staging/media/wave5/Makefile          |   10 +
+ drivers/staging/media/wave5/TODO              |   34 +
+ drivers/staging/media/wave5/wave5-hw.c        | 3405 +++++++++++++++++
+ drivers/staging/media/wave5/wave5-regdefine.h |  655 ++++
+ drivers/staging/media/wave5/wave5-vdi.c       |  260 ++
+ drivers/staging/media/wave5/wave5-vdi.h       |   81 +
+ drivers/staging/media/wave5/wave5-vpu-dec.c   | 1385 +++++++
+ drivers/staging/media/wave5/wave5-vpu-enc.c   | 1532 ++++++++
+ drivers/staging/media/wave5/wave5-vpu.c       |  381 ++
+ drivers/staging/media/wave5/wave5-vpu.h       |   73 +
+ drivers/staging/media/wave5/wave5-vpuapi.c    | 1049 +++++
+ drivers/staging/media/wave5/wave5-vpuapi.h    | 1144 ++++++
+ drivers/staging/media/wave5/wave5-vpuconfig.h |   91 +
+ drivers/staging/media/wave5/wave5-vpuerror.h  |  455 +++
+ drivers/staging/media/wave5/wave5.h           |   82 +
+ 20 files changed, 10734 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/staging/media/cnm,wave.yaml
+ create mode 100644 drivers/staging/media/wave5/Kconfig
+ create mode 100644 drivers/staging/media/wave5/Makefile
+ create mode 100644 drivers/staging/media/wave5/TODO
+ create mode 100644 drivers/staging/media/wave5/wave5-hw.c
+ create mode 100644 drivers/staging/media/wave5/wave5-regdefine.h
+ create mode 100644 drivers/staging/media/wave5/wave5-vdi.c
+ create mode 100644 drivers/staging/media/wave5/wave5-vdi.h
+ create mode 100644 drivers/staging/media/wave5/wave5-vpu-dec.c
+ create mode 100644 drivers/staging/media/wave5/wave5-vpu-enc.c
+ create mode 100644 drivers/staging/media/wave5/wave5-vpu.c
+ create mode 100644 drivers/staging/media/wave5/wave5-vpu.h
+ create mode 100644 drivers/staging/media/wave5/wave5-vpuapi.c
+ create mode 100644 drivers/staging/media/wave5/wave5-vpuapi.h
+ create mode 100644 drivers/staging/media/wave5/wave5-vpuconfig.h
+ create mode 100644 drivers/staging/media/wave5/wave5-vpuerror.h
+ create mode 100644 drivers/staging/media/wave5/wave5.h
 
 -- 
-Regards,
+2.30.2
 
-Sakari Ailus
