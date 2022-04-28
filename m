@@ -2,171 +2,93 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91D7FC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 28 Apr 2022 08:52:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2FF8C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 28 Apr 2022 08:53:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244019AbiD1I4C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Apr 2022 04:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
+        id S1344170AbiD1I4d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Apr 2022 04:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344512AbiD1I4A (ORCPT
+        with ESMTP id S236555AbiD1I4c (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:56:00 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BED723165;
-        Thu, 28 Apr 2022 01:52:46 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 44DADDF75A;
-        Thu, 28 Apr 2022 01:52:16 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 6X5VlkxIGCtY; Thu, 28 Apr 2022 01:52:15 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 10:52:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1651135935; bh=ohE/IebwBN77RT1W4hsybc9tmsQEIEDdP++Soon6lDM=;
-        h=Date:From:To:Subject:From;
-        b=ssm+Caqw19pEA+VIsRGzYk2wLUCbQo5MRYZIHPy1rv6p6INwzTyr43rnTISXq3iOA
-         bKTgUZrZEaw19MXRid5CqDKqK24IM/8iljdafA1wo68VKm3dkLIBbWsOkDqmTWGhuF
-         uGGoeCtmN9t5gLN72dmBtmDBCIY90uC4HfnXYEB2sAtyeAB/uPAB3XanpIGJucXx6X
-         5Syo4nYGCu1Y06t1OBpMGNarkRiAEyjhbnQXHYBhtT4vUQHYpMwVYq+xOeixJOjAWT
-         DrxJKseVSeOUBZnEl60XjfnKHjjMdVlfjHB7N8F8lL3DnLlOCjwFU0nhjUftDvDfh/
-         CFUKy3tVqnNPQ==
-From:   Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-Subject: [PATCHv2 1/2] doc/media api: Try to make enum usage clearer
-Message-ID: <20220428105211.7106ce6a.dorota.czaplejewicz@puri.sm>
-Organization: Purism
+        Thu, 28 Apr 2022 04:56:32 -0400
+Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE302E093
+        for <linux-media@vger.kernel.org>; Thu, 28 Apr 2022 01:53:17 -0700 (PDT)
+Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1njztk-005B52-6l; Thu, 28 Apr 2022 08:53:16 +0000
+Received: from ip6-localhost ([::1] helo=localhost.localdomain)
+        by slave0 with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1njzth-00A9rB-Mg; Thu, 28 Apr 2022 08:53:13 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL FOR v5.19] More fixes/enhancements (#82791)
+Date:   Thu, 28 Apr 2022 08:53:13 +0000
+Message-Id: <20220428085313.2421123-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <db9b2a4f-7074-b609-2e1f-717932067f95@xs4all.nl>
+References: 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e.DoWQfsDpUUtXTZemZU8Pq";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
---Sig_/e.DoWQfsDpUUtXTZemZU8Pq
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: builder@linuxtv.org
 
-Added: mbus codes must not repeat
-Added: no holes in the enumeration
-Added: enumerations per what?
-Added: who fills in what in calls
-Changed: "zero" -> "0"
-Changed: "given" -> "specified"
+Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/db9b2a4f-7074-b609-2e1f-717932067f95@xs4all.nl/
+Build log: https://builder.linuxtv.org/job/patchwork/202934/
+Build time: 00:21:10
+Link: https://lore.kernel.org/linux-media/db9b2a4f-7074-b609-2e1f-717932067f95@xs4all.nl
 
-Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
----
-Hello,
+gpg: Signature made Thu 28 Apr 2022 08:16:39 AM UTC
+gpg:                using EDDSA key 52ADCAAE8A4F70B99ACD8D726B425DF79B1C1E76
+gpg: Can't check signature: No public key
 
-this is the second attempt at updating the media documentation.
+Summary: got 4/17 patches with issues, being 1 at build time, plus one error when buinding PDF document
 
-Differences from previous: "selected" is now "specified", "array" is now "e=
-numeration", and "caller" is now "application".
+Error/warnings:
 
-No differences: I haven't used the frame intervals calls and haven't gather=
-ed practical knowledge about where docs may be insufficient, so I didn't to=
-uch its documentation.
+patches/0001-media-pvrusb2-fix-array-index-out-of-bounds-in-pvr2_.patch:
 
-Regards,
-Dorota
+    allyesconfig: return code #0:
+	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
 
- .../v4l/vidioc-subdev-enum-mbus-code.rst      | 39 +++++++++++++------
- 1 file changed, 27 insertions(+), 12 deletions(-)
+    allyesconfig: return code #0:
+	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:678 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 674)
+	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
+	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2894 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-=
-code.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-co=
-de.rst
-index 417f1a19bcc4..87572de0fd26 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-@@ -31,15 +31,29 @@ Arguments
- Description
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--To enumerate media bus formats available at a given sub-device pad
--applications initialize the ``pad``, ``which`` and ``index`` fields of
--struct
--:c:type:`v4l2_subdev_mbus_code_enum` and
--call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl with a pointer to this
--structure. Drivers fill the rest of the structure or return an ``EINVAL``
--error code if either the ``pad`` or ``index`` are invalid. All media bus
--formats are enumerable by beginning at index zero and incrementing by
--one until ``EINVAL`` is returned.
-+This call is used by the application to access the enumeration of bus form=
-ats
-+for the selected pad.
-+
-+The enumerations are defined by the driver, and indexed using the ``index`=
-` field
-+of struct :c:type:`v4l2_subdev_mbus_code_enum`.
-+Each value of ``pad`` corresponds to a separate enumeration.
-+Each enumeration starts with the ``index`` of 0, and
-+the lowest invalid index marks the end of enumeration.
-+
-+Therefore, to enumerate media bus formats available at a given sub-device =
-pad,
-+initialize the ``pad``, and ``which`` fields to desired values,
-+and set ``index`` to 0.
-+Then call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl
-+with a pointer to this structure.
-+
-+A successful call will return with the ``code`` field filled in
-+with a mbus format value.
-+Repeat with increasing ``index`` until ``EINVAL`` is received.
-+``EINVAL`` means that either ``pad`` is invalid,
-+or that there are no more codes available at this pad.
-+
-+The driver must not return the same value of ``code`` for different indices
-+at the same pad.
-=20
- Available media bus formats may depend on the current 'try' formats at
- other pads of the sub-device, as well as on the current active links.
-@@ -57,14 +71,15 @@ information about the try formats.
-=20
-     * - __u32
-       - ``pad``
--      - Pad number as reported by the media controller API.
-+      - Pad number as reported by the media controller API. Filled in by t=
-he application.
-     * - __u32
-       - ``index``
--      - Number of the format in the enumeration, set by the application.
-+      - Index of the mbus code in the enumeration belonging to the given p=
-ad.
-+    Filled in by the application.
-     * - __u32
-       - ``code``
-       - The media bus format code, as defined in
--	:ref:`v4l2-mbus-format`.
-+	:ref:`v4l2-mbus-format`. Filled in by the driver.
-     * - __u32
-       - ``which``
-       - Media bus format codes to be enumerated, from enum
---=20
-2.35.1
+   checkpatch.pl:
+	$ cat patches/0001-media-pvrusb2-fix-array-index-out-of-bounds-in-pvr2_.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:17: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+patches/0002-media-make-RADIO_ADAPTERS-tristate.patch:
+
+   checkpatch.pl:
+	$ cat patches/0002-media-make-RADIO_ADAPTERS-tristate.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:23: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+patches/0014-media-coda-fix-default-JPEG-colorimetry.patch:
+
+   checkpatch.pl:
+	$ cat patches/0014-media-coda-fix-default-JPEG-colorimetry.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:10: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+patches/0015-media-coda-limit-frame-interval-enumeration-to-suppo.patch:
+
+   checkpatch.pl:
+	$ cat patches/0015-media-coda-limit-frame-interval-enumeration-to-suppo.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
+	-:10: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
 
 
---Sig_/e.DoWQfsDpUUtXTZemZU8Pq
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Error #512 when building PDF docs
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmJqVbsACgkQADBpX4S8
-ZncNnQ/7BWFK+LkIIBRQefdCUmp2vcmXBtC+DohmJgX6hHPbZtO0BGhssjuSS6Cy
-b81Z7ujEyT9Lv2zOqEa+tHFR/zAjaqo5NxbiGhMdsFgDLEg7A5T+UZcRqNeruBNM
-zKU2SGvFauukf2+wTwctBni0mLUAnpQA9cxzKEww+XNMGIftnjR1eX4APZylBX+D
-ET5tR5iw8prcHzzuEQEM1cSNmzUhR49XcvJQXVSS+6kjjFViUeEaImxlfPbVvmvY
-nf3JwcvRpJkNrJyVHFkVaul/ezzG4Pq0l6A/swlmUXErgHrBoado1bhtDoZpy7Ez
-CuFRUioNk5yI7QrIX5tq+7bWMaVVxd9gbPqN1lvZU1MJ2V2PyqxbpmC+umXSTg1v
-cuXLDSkHqO6p9Gdum2bsPkEhOIpgzzirYaEyDpxLhxMrHXuatt+2v2GxkeK4xuw+
-Ghc6JczAYDcFYLjJpiZqMPr7oXBSGdIU6D8zlGX2jOfHTRVotzKEHT2tiCh17Hcq
-RA22RlXEjWAg92YWfz/Qv+r/5VW9EvG3lQ5Tr17m0RIaXo0N5ygK5CKvBxFvpDuT
-3fDs4J0wKnCjQ+00B4yzh2xF45JcHdOQ+T4IGgM0Mew61r8UCnJAlKzBWJsYLuap
-0CY+n4obCRZJTHm6GJr/0Qj04nDuWhBgPWLmFfMu8iT1ZZp3k7g=
-=AivM
------END PGP SIGNATURE-----
-
---Sig_/e.DoWQfsDpUUtXTZemZU8Pq--
