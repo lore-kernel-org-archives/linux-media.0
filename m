@@ -2,51 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 797E3C43217
-	for <linux-media@archiver.kernel.org>; Mon,  2 May 2022 16:38:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 354C8C433EF
+	for <linux-media@archiver.kernel.org>; Mon,  2 May 2022 16:38:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386305AbiEBQla (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1386321AbiEBQla (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 2 May 2022 12:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386321AbiEBQlR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 May 2022 12:41:17 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E671DEC3
-        for <linux-media@vger.kernel.org>; Mon,  2 May 2022 09:37:46 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id d5so20239707wrb.6
-        for <linux-media@vger.kernel.org>; Mon, 02 May 2022 09:37:46 -0700 (PDT)
+        with ESMTP id S1386332AbiEBQlQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 May 2022 12:41:16 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DB511A26
+        for <linux-media@vger.kernel.org>; Mon,  2 May 2022 09:37:39 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id p189so8550700wmp.3
+        for <linux-media@vger.kernel.org>; Mon, 02 May 2022 09:37:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ANagkIapfhSoILXgRSazGJNpDPTeoeZ/i/DcazZHEZQ=;
-        b=bTOuNbcCcpWCjHPdLC317BrGpkkTWG9yauH9kogTYDUS11gKUb/mgOriNiNu5FbMvh
-         LAemZaOirJJUTzK3l2TFLtT8rRLpJvT7BZfdmi8xJtNUvDM/vFRM8b5haRUFr6Y1+4MC
-         qCKqOvdTddBF7iTIx2hrrK3YFoDENFIjRM7SFF17g1uVfGU//XWTc8I0OyxhXUnfX96I
-         8uHIPUuJmFcLDSrWHLzz2KRoGB52or1JhX5W0KPckcLJO6LOVnmxfQCirdxkWAXiCOoS
-         b2OuUlzj4WKBC2Mr8e27FrWEEW5t0RhonknV7AExdcqkeJi7rBjBtbm8ey43b2ZNpyHP
-         lxGA==
+        bh=8ZMKLCUiF3qKPGX/LGoVOBpR7s+bcNprDSVbEKMvDkc=;
+        b=Jp7rT8vS95BqwTwX7NsyZ5WkldjBFw8Wz1EkLvh1Kl2SA7MHWkTMAB/rlyQ3KG3v4n
+         buaPRJHFD0KPGI8tMR5ZQmAJny9w7VO31u5URg4N9aYxcHt3yYR2stvowos66Dafzc2R
+         3vTOVGi+0LX1bRYlQACKn/Zv6gGPcd0zBwNjLgreQSpTZ1cJcFxMV1L2ezXr9Bp+hAbF
+         CYYeoR+j4rklzzf+0vktNuMIo08df2EbJ8QT/EMWxsB2gNQ1450/d8uKroUbIuTT72TR
+         GKK30kzV7V6ez2UkLqtwV66X4u7OoxdVRtBdcSmSgG25aLXPkCDOg4oINsKYw8CZSnQM
+         hWZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ANagkIapfhSoILXgRSazGJNpDPTeoeZ/i/DcazZHEZQ=;
-        b=oWgP0Sxk4Ul/m6mNTkBSY3y+Uszf781rASsvGSuQnANHCNdGA41a4x+A44aDGegmIc
-         wJAnJ5BmrgBTTLbJSNUSUlN13G7xiLJkFJVTf7xqbprhN12HKxLUmYqFPyCP4+LjMKyy
-         CIwUP7lRODqik6uURERoFJ3qKfWryeb2dApA7ty4BiO7UEDGynneeZKYxYJESmyB+ji0
-         c6vdg61ZJxII30syw3dOaqt9qE3yK3ygt9TjfqVYus0AYUbqj9FKwEVhV41Efg8nZSKA
-         DN2IgLLd4dBq/8wvC/UB7+q0VhfXg/0O5g5mNBb7jLdJMaLeCbMxVjqwhs3BfDJ/xoIf
-         OXfA==
-X-Gm-Message-State: AOAM532WRmQoObvnEJ1qwmIOI1zbBFXOxUKr8xHsmqIW84aTXLlllXgZ
-        eY1U4pDuksE6b1apRup+8qs=
-X-Google-Smtp-Source: ABdhPJxUDlk3kbTFRN1X2D1q1vvW3bPqNNYNXQ7eHBEpgoyEe35FHldqGH1tFKFmx0FwRPQczX4rgA==
-X-Received: by 2002:a5d:5749:0:b0:20a:ce36:b29 with SMTP id q9-20020a5d5749000000b0020ace360b29mr9849647wrw.559.1651509464807;
-        Mon, 02 May 2022 09:37:44 -0700 (PDT)
+        bh=8ZMKLCUiF3qKPGX/LGoVOBpR7s+bcNprDSVbEKMvDkc=;
+        b=foUqiy7u+2U9wpu4gHzRWXqIpVi86RptNj1shyZ+NdMsjk3edMmbx8L6Ij/1zvz2tV
+         xuI0nc+5O2grCIpSEwaiZzYZCoN057ARTUzs14LmiCJ6/q4LL6BdW416NJ3RFi2b5OBJ
+         8IWqKhVJ6cSCJ3sH/WXkBstpDfkmGpyKJBcFUXPi9/DsTvzST+pjjIf6aaU/5v24H/xq
+         TQaDu18pM+S72bbMpVxmxuquCWhZMAf18TRLWH/bfA6RNkG5ey3yie4tjq2pOGPZUhj3
+         nja7ommcp47zdLY00P6KL0jydaJAqxgwsjqIc7qhJGsw2uHp24vicWuebuuSb5YtqWOf
+         KY+w==
+X-Gm-Message-State: AOAM530J6b1sK6elMD7dHdKx4wAmOkA/2ZV9NNuos+IhiG5OhSJG9aUF
+        XMYZd17qgZ9GzZcZD8fTdrI=
+X-Google-Smtp-Source: ABdhPJxHqWm8EIEp8tsJmKMJ1X16WfhjsyQ0RVhMr8rBHA2/S+1qvIoC83uW/mXOKYOKnHyqwvoRpQ==
+X-Received: by 2002:a1c:5459:0:b0:394:1191:a1ff with SMTP id p25-20020a1c5459000000b003941191a1ffmr7038wmi.96.1651509457676;
+        Mon, 02 May 2022 09:37:37 -0700 (PDT)
 Received: from able.fritz.box (p57b0b9e1.dip0.t-ipconnect.de. [87.176.185.225])
-        by smtp.gmail.com with ESMTPSA id p14-20020adfaa0e000000b0020c5253d8f6sm7294694wrd.66.2022.05.02.09.37.43
+        by smtp.gmail.com with ESMTPSA id p14-20020adfaa0e000000b0020c5253d8f6sm7294694wrd.66.2022.05.02.09.37.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 09:37:44 -0700 (PDT)
+        Mon, 02 May 2022 09:37:37 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
@@ -58,9 +58,9 @@ To:     daniel@ffwll.ch, jason@jlekstrand.net, daniels@collabora.com,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org
 Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Subject: [PATCH 12/15] drm: add user fence support to drm_gem_plane_helper_prepare_fb
-Date:   Mon,  2 May 2022 18:37:19 +0200
-Message-Id: <20220502163722.3957-13-christian.koenig@amd.com>
+Subject: [PATCH 07/15] dma-buf: add user fence utility functions
+Date:   Mon,  2 May 2022 18:37:14 +0200
+Message-Id: <20220502163722.3957-8-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220502163722.3957-1-christian.koenig@amd.com>
 References: <20220502163722.3957-1-christian.koenig@amd.com>
@@ -71,119 +71,82 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Just handle them the same way as fences with the DMA_RESV_USAGE_WRITE
-flag when the DRIVER_USER_FENCE flag is set.
+Allows to filter user fences from a dma_fence_chain and wait for user
+fences in containers.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/gpu/drm/drm_gem_atomic_helper.c | 68 ++++++++++++++++---------
- 1 file changed, 45 insertions(+), 23 deletions(-)
+ drivers/dma-buf/dma-fence-unwrap.c | 47 ++++++++++++++++++++++++++++++
+ include/linux/dma-fence-unwrap.h   |  3 ++
+ 2 files changed, 50 insertions(+)
 
-diff --git a/drivers/gpu/drm/drm_gem_atomic_helper.c b/drivers/gpu/drm/drm_gem_atomic_helper.c
-index a5026f617739..75d04333ff2e 100644
---- a/drivers/gpu/drm/drm_gem_atomic_helper.c
-+++ b/drivers/gpu/drm/drm_gem_atomic_helper.c
-@@ -5,6 +5,7 @@
- 
- #include <drm/drm_atomic_state_helper.h>
- #include <drm/drm_atomic_uapi.h>
-+#include <drm/drm_drv.h>
- #include <drm/drm_gem.h>
- #include <drm/drm_gem_atomic_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
-@@ -121,6 +122,40 @@
-  * Plane Helpers
-  */
- 
-+static int chain_fb_fences(struct drm_framebuffer *fb,
-+			   enum dma_resv_usage usage,
-+			   struct dma_fence **fence)
+diff --git a/drivers/dma-buf/dma-fence-unwrap.c b/drivers/dma-buf/dma-fence-unwrap.c
+index dd3c43aba8f1..4e9eda0b65c5 100644
+--- a/drivers/dma-buf/dma-fence-unwrap.c
++++ b/drivers/dma-buf/dma-fence-unwrap.c
+@@ -157,3 +157,50 @@ struct dma_fence *__dma_fence_merge(unsigned int num_fences,
+ 	return tmp;
+ }
+ EXPORT_SYMBOL_GPL(__dma_fence_merge);
++
++/**
++ * dma_fence_filter_user - filter user fences
++ * @fence: entry point into the chain
++ *
++ * Check @fence and if it's a dma_fence_chain advance it until it doesn't depend
++ * on any user fence any more.
++ *
++ * Returns the advanced fence or NULL if no none user fence could be found.
++ */
++struct dma_fence *dma_fence_filter_user(struct dma_fence *fence)
 +{
-+	size_t i;
-+	int ret;
 +
-+	for (i = 0; i < fb->format->num_planes; ++i) {
-+		struct drm_gem_object *obj = drm_gem_fb_get_obj(fb, i);
-+		struct dma_fence *new;
++	while (fence && test_bit(DMA_FENCE_FLAG_USER, &fence->flags))
++		fence = dma_fence_chain_walk(fence);
 +
-+		if (WARN_ON_ONCE(!obj))
++	return fence;
++}
++EXPORT_SYMBOL(dma_fence_filter_user);
++
++/**
++ * dma_fence_wait_user - wait for all user fences to signal
++ * @fence: entry point
++ * @timeout: timeout for the wait
++ *
++ * Unwrap the potential container in @fence and wait for all the user fences to
++ * signal.
++ * Returns: Either negative error code or the remaining timeout.
++ */
++long dma_fence_wait_user(struct dma_fence *fence, unsigned long timeout)
++{
++	struct dma_fence_unwrap iter;
++	long res;
++
++	dma_fence_unwrap_for_each(fence, &iter, fence) {
++		if (!test_bit(DMA_FENCE_FLAG_USER, &fence->flags))
 +			continue;
 +
-+		ret = dma_resv_get_singleton(obj->resv, usage, &new);
-+		if (ret)
-+			return ret;
-+
-+		if (new && *fence) {
-+			struct dma_fence_chain *chain = dma_fence_chain_alloc();
-+
-+			if (!chain)
-+				return -ENOMEM;
-+
-+			dma_fence_chain_init(chain, *fence, new, 1);
-+			*fence = &chain->base;
-+
-+		} else if (new) {
-+			*fence = new;
-+		}
++		res = dma_fence_wait(fence, timeout);
++		if (res <= 0)
++			return res;
++		if (timeout)
++			timeout = res;
 +	}
-+	return 0;
++	return timeout;
 +}
++EXPORT_SYMBOL(dma_fence_wait_user);
+diff --git a/include/linux/dma-fence-unwrap.h b/include/linux/dma-fence-unwrap.h
+index 7c0fab318301..2a786f5a7819 100644
+--- a/include/linux/dma-fence-unwrap.h
++++ b/include/linux/dma-fence-unwrap.h
+@@ -72,4 +72,7 @@ struct dma_fence *__dma_fence_merge(unsigned int num_fences,
+ 		__dma_fence_merge(ARRAY_SIZE(__f), __f, __c);	\
+ 	})
+ 
++struct dma_fence *dma_fence_filter_user(struct dma_fence *fence);
++long dma_fence_wait_user(struct dma_fence *fence, unsigned long timeout);
 +
- /**
-  * drm_gem_plane_helper_prepare_fb() - Prepare a GEM backed framebuffer
-  * @plane: Plane
-@@ -143,8 +178,6 @@ int drm_gem_plane_helper_prepare_fb(struct drm_plane *plane,
- 				    struct drm_plane_state *state)
- {
- 	struct dma_fence *fence = dma_fence_get(state->fence);
--	enum dma_resv_usage usage;
--	size_t i;
- 	int ret;
- 
- 	if (!state->fb)
-@@ -163,32 +196,21 @@ int drm_gem_plane_helper_prepare_fb(struct drm_plane *plane,
- 	 * obeys both implicit and explicit fences for plane updates, then it
- 	 * will break all the benefits of explicit fencing.
- 	 */
--	usage = fence ? DMA_RESV_USAGE_KERNEL : DMA_RESV_USAGE_WRITE;
--
--	for (i = 0; i < state->fb->format->num_planes; ++i) {
--		struct drm_gem_object *obj = drm_gem_fb_get_obj(state->fb, i);
--		struct dma_fence *new;
--
--		if (WARN_ON_ONCE(!obj))
--			continue;
--
--		ret = dma_resv_get_singleton(obj->resv, usage, &new);
-+	if (fence) {
-+		ret = chain_fb_fences(state->fb, DMA_RESV_USAGE_KERNEL, &fence);
- 		if (ret)
- 			goto error;
- 
--		if (new && fence) {
--			struct dma_fence_chain *chain = dma_fence_chain_alloc();
-+	} else {
-+		ret = chain_fb_fences(state->fb, DMA_RESV_USAGE_WRITE, &fence);
-+		if (ret)
-+			goto error;
- 
--			if (!chain) {
--				ret = -ENOMEM;
-+		if (drm_core_check_feature(plane->dev, DRIVER_USER_FENCE)) {
-+			ret = chain_fb_fences(state->fb, DMA_RESV_USAGE_USER,
-+					      &fence);
-+			if (ret)
- 				goto error;
--			}
--
--			dma_fence_chain_init(chain, fence, new, 1);
--			fence = &chain->base;
--
--		} else if (new) {
--			fence = new;
- 		}
- 	}
- 
+ #endif
 -- 
 2.25.1
 
