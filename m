@@ -2,51 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98EFCC433FE
-	for <linux-media@archiver.kernel.org>; Mon,  2 May 2022 16:38:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0406C433F5
+	for <linux-media@archiver.kernel.org>; Mon,  2 May 2022 16:38:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386333AbiEBQlc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 May 2022 12:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
+        id S1386325AbiEBQld (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 May 2022 12:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381117AbiEBQlU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 May 2022 12:41:20 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2281DF9D
-        for <linux-media@vger.kernel.org>; Mon,  2 May 2022 09:37:50 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so1641701wme.4
-        for <linux-media@vger.kernel.org>; Mon, 02 May 2022 09:37:50 -0700 (PDT)
+        with ESMTP id S1386389AbiEBQlS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 May 2022 12:41:18 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B212EB86A
+        for <linux-media@vger.kernel.org>; Mon,  2 May 2022 09:37:47 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id r1-20020a1c2b01000000b00394398c5d51so1819352wmr.2
+        for <linux-media@vger.kernel.org>; Mon, 02 May 2022 09:37:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JaejlDfj0uy9dkJeeagJEWX0/Sis0ZiAGo/I1Cyla8w=;
-        b=WJ14jFIJZIdqObfgPXjsBsWmhqzPN5JNkavdyclcrjJvsiZMlKFrcxW82UKBOKg1Kt
-         +FyDEMWQJLDovDeCeOC7uNufANhJwlQ3HGaAmUM8PD8QWue6I5FD2dl2byPzAYnQlbZT
-         1cFPbuBXiU+xID11jsSFtSTxaemQaed+J9VZrU7HrUImIBhc0ZWXbAwlimB4YDWbYXAZ
-         BIqdUTzQvGbtjWRv1nOZTP8ZrA2jOBZt2ADK+xok8RzzOzmtHyvCAsgiYiOLK9IAOuex
-         G6KX9NjweCQ+WmEDsvJ3zeqmrC5ueLUwluvFRCmkoAhT411SV3lUfs3KI3mu03Opg0B4
-         du0w==
+        bh=JJ3syRLZRf5cDZllRXn7Ii6fAdy4TAhne+oUq4LR8JM=;
+        b=EJuFYyX/onL0HJ4JSG09ScoRSS3raya0MlgJRdQTgbH3rpOwp1ndohsJQHAJ6vQKFk
+         uJ/DryMLrBrEgbCEvYEL2tZvd1i2sCSFCUGQFW5CAyUM0bavc3zeOKOUnCQsvVGyUcO9
+         yWXrJmVXaxLV+Tqqg6PYxhaWB3inavH2X6ocugBjq/Vspv1DB+XzoV8vtJg7ZbcjBkLf
+         WnCHUyKoZVrkAR6WdIki9mb7GjswsNdFEa4m0612subrl2ukwHVtqP1Upjs87+NW5aUs
+         saU9wTuWvQjwqY6pVnlNsN0Q7jvICgBmsVa3FCWbHqSLvmfnFfJEIP2+9bKSZTfPwQii
+         1cTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JaejlDfj0uy9dkJeeagJEWX0/Sis0ZiAGo/I1Cyla8w=;
-        b=chZNj8D96bX1pZhZMdI/JqpsTL9iBH0/TiIlQQGCRKJiLTaufhBde8SRZOzBSb8i1i
-         p29LCa5/5sVRxNI+wq53C4RZVtwHXFWBzBv9bFhZFojDmEHNn/SQY5uEtSMJ249LN2Ss
-         5fOZc1/skcPjD/QL3S1pjRvJUyahI9/mD/YB+a49Z1ImQkdCYQE5OJ8XDaT6yjmY7V4q
-         sXnN23OkMojO7WsVbGhE2tIxzADhtO1J5yqDQ4ZrfHeZKX5Fe2Wq3ptmID9mg7IszBiZ
-         jadDk8hdVIBPi9t/rnpCTuN+6thxqnrqvASk0jnLofPUiY69U3tcuF05fVBcj+griNum
-         wn5w==
-X-Gm-Message-State: AOAM530ToOFjANFvRF0UBzhvJFVbQNce71Ari/TCmZvO4UbfxzJrQctV
-        E6JWMvJ+LAOotxtIctSPz/g=
-X-Google-Smtp-Source: ABdhPJynMfTwX3SfWHMTUt/qZtPV8EjvjXV8D1iGxBM93doCrtHO7arJvRfSWJC8eKAagR1WU/LPWA==
-X-Received: by 2002:a05:600c:25d2:b0:394:2db5:bc32 with SMTP id 18-20020a05600c25d200b003942db5bc32mr10549461wml.39.1651509469475;
-        Mon, 02 May 2022 09:37:49 -0700 (PDT)
+        bh=JJ3syRLZRf5cDZllRXn7Ii6fAdy4TAhne+oUq4LR8JM=;
+        b=qjt0e3vg+XomWYHhD4JZYISqH3S+PgFl6BjCLQBw/x+DnoZGU0DL4QohK2rcGZb7LV
+         HT+4WaAT9ziRCFFjXqqet9BqHs56uVQb6fxbgdIS1FE/EdCvNYOt++xUio+duIcm3f1A
+         fs1pswdZ45vtcvDsSba6jEVzcyrWqk2Q0cxk4nv5FJpzhVk+cyv4y+lJPwk8UWXD/fTl
+         easHUh2zOk1u+Iw0Yws5Dl6AHbFUaNr4tyjGhINzZbhUmLBUWuAouUTPATdH1as4Qgf5
+         7U02amwH/VEhl1NUIFABQBZFrqRA08M+pguQ2ZaHAhxDfrvFFQbpKQe10F7+BnlYonJr
+         8lCA==
+X-Gm-Message-State: AOAM5329yrdYe9Og6w20Hl3ol2gclrKv8WXq/0YzevvO0jnIsRVPZyJF
+        miMF59yGLiwQFBxSqW1yVmA=
+X-Google-Smtp-Source: ABdhPJxYRvcNEnBAIcm2IwUgbnbX3g7RWLKbs5dcfFuCkBVefhGVaJWd+oqaJeeDM2lCNNoP6SCyMg==
+X-Received: by 2002:a05:600c:190d:b0:393:ee55:5686 with SMTP id j13-20020a05600c190d00b00393ee555686mr2328wmq.126.1651509466306;
+        Mon, 02 May 2022 09:37:46 -0700 (PDT)
 Received: from able.fritz.box (p57b0b9e1.dip0.t-ipconnect.de. [87.176.185.225])
-        by smtp.gmail.com with ESMTPSA id p14-20020adfaa0e000000b0020c5253d8f6sm7294694wrd.66.2022.05.02.09.37.48
+        by smtp.gmail.com with ESMTPSA id p14-20020adfaa0e000000b0020c5253d8f6sm7294694wrd.66.2022.05.02.09.37.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 09:37:48 -0700 (PDT)
+        Mon, 02 May 2022 09:37:45 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
@@ -58,9 +58,9 @@ To:     daniel@ffwll.ch, jason@jlekstrand.net, daniels@collabora.com,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org
 Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Subject: [PATCH 15/15] drm/amdgpu: user fence proof of concept
-Date:   Mon,  2 May 2022 18:37:22 +0200
-Message-Id: <20220502163722.3957-16-christian.koenig@amd.com>
+Subject: [PATCH 13/15] drm: add user fence support to drm_syncobj
+Date:   Mon,  2 May 2022 18:37:20 +0200
+Message-Id: <20220502163722.3957-14-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220502163722.3957-1-christian.koenig@amd.com>
 References: <20220502163722.3957-1-christian.koenig@amd.com>
@@ -71,172 +71,107 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Just some hack to test the functionality, not a real implementation of
-the interface.
+For now just filter or wait for user fences.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/dma-buf/dma-resv.c                    |  3 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c        | 28 ++++++++++++++++---
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |  2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c        |  2 +-
- .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  9 ++++--
- 5 files changed, 34 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/drm_syncobj.c | 15 ++++++++++++---
+ include/drm/drm_syncobj.h     | 25 +++++++++++++++++++++----
+ 2 files changed, 33 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
-index da667c21ad55..e18efb21c452 100644
---- a/drivers/dma-buf/dma-resv.c
-+++ b/drivers/dma-buf/dma-resv.c
-@@ -286,7 +286,8 @@ void dma_resv_add_fence(struct dma_resv *obj, struct dma_fence *fence,
- 	/* Drivers should not add containers here, instead add each fence
- 	 * individually.
- 	 */
--	WARN_ON(dma_fence_is_container(fence));
-+	//WARN_ON(dma_fence_is_container(fence));
-+
+diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
+index 5a961ea90a35..8d25a2dd107b 100644
+--- a/drivers/gpu/drm/drm_syncobj.c
++++ b/drivers/gpu/drm/drm_syncobj.c
+@@ -386,7 +386,7 @@ int drm_syncobj_find_fence(struct drm_file *file_private,
+ 	struct drm_syncobj *syncobj = drm_syncobj_find(file_private, handle);
+ 	struct syncobj_wait_entry wait;
+ 	u64 timeout = nsecs_to_jiffies64(DRM_SYNCOBJ_WAIT_FOR_SUBMIT_TIMEOUT);
+-	int ret;
++	long ret;
  
- 	/* User fences must be added using DMA_RESV_USAGE_USER */
- 	WARN_ON(test_bit(DMA_FENCE_FLAG_USER, &fence->flags) !=
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-index 95eeab527ca9..299ab8e50c42 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-@@ -453,6 +453,7 @@ static int amdgpu_cs_parser_bos(struct amdgpu_cs_parser *p,
- 	struct amdgpu_vm *vm = &fpriv->vm;
- 	struct amdgpu_bo_list_entry *e;
- 	struct drm_gem_object *obj;
-+	long timeout = HZ / 10;
- 	struct amdgpu_bo *gds;
- 	struct amdgpu_bo *gws;
- 	struct amdgpu_bo *oa;
-@@ -476,6 +477,17 @@ static int amdgpu_cs_parser_bos(struct amdgpu_cs_parser *p,
- 			return r;
+ 	if (!syncobj)
+ 		return -ENOENT;
+@@ -398,10 +398,19 @@ int drm_syncobj_find_fence(struct drm_file *file_private,
+ 	if (flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT) {
+ 		might_sleep();
+ 		lockdep_assert_none_held_once();
++		*fence = drm_syncobj_user_fence_get(syncobj);
++		if (*fence) {
++			ret = dma_fence_wait_user(*fence, timeout);
++			if (ret < 0)
++				return ret;
++			if (ret == 0)
++				return -ETIME;
++			timeout = ret;
++		}
++	} else {
++		*fence = drm_syncobj_fence_get(syncobj);
  	}
  
-+	amdgpu_bo_list_for_each_entry(e, p->bo_list) {
-+		struct dma_resv *resv = e->bo->tbo.base.resv;
-+
-+		timeout = dma_resv_wait_timeout(resv, DMA_RESV_USAGE_USER,
-+						true, timeout);
-+		if (unlikely(timeout < 0))
-+			return timeout;
-+		if (unlikely(timeout == 0))
-+			return -ETIME;
-+	}
-+
- 	/* Get userptr backing pages. If pages are updated after registered
- 	 * in amdgpu_gem_userptr_ioctl(), amdgpu_cs_list_validate() will do
- 	 * amdgpu_ttm_backend_bind() to flush and invalidate new pages
-@@ -516,7 +528,7 @@ static int amdgpu_cs_parser_bos(struct amdgpu_cs_parser *p,
- 			return r;
+-	*fence = drm_syncobj_fence_get(syncobj);
+-
+ 	if (*fence) {
+ 		ret = dma_fence_chain_find_seqno(fence, point);
+ 		if (!ret) {
+diff --git a/include/drm/drm_syncobj.h b/include/drm/drm_syncobj.h
+index 6cf7243a1dc5..acc3979815eb 100644
+--- a/include/drm/drm_syncobj.h
++++ b/include/drm/drm_syncobj.h
+@@ -28,6 +28,7 @@
  
- 		amdgpu_bo_list_for_each_entry(e, p->bo_list) {
--			r = drm_exec_prepare_obj(&p->exec, &e->bo->tbo.base, 2);
-+			r = drm_exec_prepare_obj(&p->exec, &e->bo->tbo.base, 3);
- 			drm_exec_break_on_contention(&p->exec);
- 			if (unlikely(r))
- 				return r;
-@@ -527,7 +539,7 @@ static int amdgpu_cs_parser_bos(struct amdgpu_cs_parser *p,
+ #include <linux/dma-fence.h>
+ #include <linux/dma-fence-chain.h>
++#include <linux/dma-fence-unwrap.h>
  
- 		if (p->uf_bo) {
- 			r = drm_exec_prepare_obj(&p->exec, &p->uf_bo->tbo.base,
--						 2);
-+						 3);
- 			drm_exec_continue_on_contention(&p->exec);
- 			if (unlikely(r))
- 				return r;
-@@ -1160,6 +1172,7 @@ static int amdgpu_cs_submit(struct amdgpu_cs_parser *p,
- 	struct drm_sched_entity *entity = p->entity;
- 	struct amdgpu_bo_list_entry *e;
- 	struct drm_gem_object *gobj;
-+	struct dma_fence *dummy;
- 	struct amdgpu_job *job;
- 	unsigned long index;
- 	uint64_t seq;
-@@ -1191,6 +1204,11 @@ static int amdgpu_cs_submit(struct amdgpu_cs_parser *p,
- 	}
+ struct drm_file;
  
- 	p->fence = dma_fence_get(&job->base.s_fence->finished);
-+	dummy = dma_fence_merge(p->fence, dma_fence_get_stub(true));
-+	if (!dummy) {
-+		r = -ENOMEM;
-+		goto error_abort;
-+	}
- 
- 	amdgpu_ctx_add_fence(p->ctx, entity, p->fence, &seq);
- 	amdgpu_cs_post_dependencies(p);
-@@ -1214,11 +1232,13 @@ static int amdgpu_cs_submit(struct amdgpu_cs_parser *p,
- 
- 	drm_exec_for_each_duplicate_object(&p->exec, index, gobj) {
- 		ttm_bo_move_to_lru_tail_unlocked(&gem_to_amdgpu_bo(gobj)->tbo);
--		dma_resv_add_fence(gobj->resv, p->fence, DMA_RESV_USAGE_WRITE);
-+		dma_resv_add_fence(gobj->resv, p->fence, DMA_RESV_USAGE_KERNEL);
-+		dma_resv_add_fence(gobj->resv, dummy, DMA_RESV_USAGE_USER);
- 	}
- 	drm_exec_for_each_locked_object(&p->exec, index, gobj) {
- 		ttm_bo_move_to_lru_tail_unlocked(&gem_to_amdgpu_bo(gobj)->tbo);
--		dma_resv_add_fence(gobj->resv, p->fence, DMA_RESV_USAGE_WRITE);
-+		dma_resv_add_fence(gobj->resv, p->fence, DMA_RESV_USAGE_KERNEL);
-+		dma_resv_add_fence(gobj->resv, dummy, DMA_RESV_USAGE_USER);
- 	}
- 
- 	mutex_unlock(&p->adev->notifier_lock);
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index b03663f42cc9..bd334f5fd64f 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -2655,7 +2655,7 @@ static const struct drm_driver amdgpu_kms_driver = {
- 	    DRIVER_ATOMIC |
- 	    DRIVER_GEM |
- 	    DRIVER_RENDER | DRIVER_MODESET | DRIVER_SYNCOBJ |
--	    DRIVER_SYNCOBJ_TIMELINE,
-+	    DRIVER_SYNCOBJ_TIMELINE | DRIVER_USER_FENCE,
- 	.open = amdgpu_driver_open_kms,
- 	.postclose = amdgpu_driver_postclose_kms,
- 	.lastclose = amdgpu_driver_lastclose_kms,
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-index e5c8e72a9485..6705287887e9 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-@@ -628,7 +628,7 @@ static void amdgpu_vm_pt_next_dfs(struct amdgpu_device *adev,
-  */
- int amdgpu_vm_lock_pd(struct amdgpu_vm *vm, struct drm_exec *exec)
- {
--	return drm_exec_prepare_obj(exec, &vm->root.bo->tbo.base, 4);
-+	return drm_exec_prepare_obj(exec, &vm->root.bo->tbo.base, 5);
+@@ -89,18 +90,18 @@ drm_syncobj_put(struct drm_syncobj *obj)
  }
  
  /**
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index c5b2417adcc6..2e0f059b9d12 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -7627,12 +7627,11 @@ static int dm_plane_helper_prepare_fb(struct drm_plane *plane,
- 		DRM_ERROR("%p bind failed\n", rbo);
- 		goto error_unpin;
- 	}
-+	amdgpu_bo_unreserve(rbo);
+- * drm_syncobj_fence_get - get a reference to a fence in a sync object
++ * drm_syncobj_user_fence_get - get an user fence from a sync object
+  * @syncobj: sync object.
+  *
+  * This acquires additional reference to &drm_syncobj.fence contained in @obj,
+- * if not NULL. It is illegal to call this without already holding a reference.
+- * No locks required.
++ * if not NULL. It is illegal to call this without holding a reference to the
++ * syncobj. No locks required.
+  *
+  * Returns:
+  * Either the fence of @obj or NULL if there's none.
+  */
+ static inline struct dma_fence *
+-drm_syncobj_fence_get(struct drm_syncobj *syncobj)
++drm_syncobj_user_fence_get(struct drm_syncobj *syncobj)
+ {
+ 	struct dma_fence *fence;
  
- 	r = drm_gem_plane_helper_prepare_fb(plane, new_state);
- 	if (unlikely(r != 0))
--		goto error_unpin;
--
--	amdgpu_bo_unreserve(rbo);
-+		goto error_reserve;
+@@ -111,6 +112,22 @@ drm_syncobj_fence_get(struct drm_syncobj *syncobj)
+ 	return fence;
+ }
  
- 	afb->address = amdgpu_bo_gpu_offset(rbo);
- 
-@@ -7665,6 +7664,10 @@ static int dm_plane_helper_prepare_fb(struct drm_plane *plane,
- 
- 	return 0;
- 
-+error_reserve:
-+	if (WARN_ON(amdgpu_bo_reserve(rbo, true)))
-+		return r;
++/**
++ * drm_syncobj_fence_get - get a reference to a fence in a sync object
++ * @syncobj: sync object.
++ *
++ * Same functionality as drm_syncobj_user_fence_get(), but user fences are
++ * filtered out.
++ *
++ * Returns:
++ * Either the fence of @obj or NULL if there's none.
++ */
++static inline struct dma_fence *
++drm_syncobj_fence_get(struct drm_syncobj *syncobj)
++{
++	return dma_fence_filter_user(drm_syncobj_user_fence_get(syncobj));
++}
 +
- error_unpin:
- 	amdgpu_bo_unpin(rbo);
- 
+ struct drm_syncobj *drm_syncobj_find(struct drm_file *file_private,
+ 				     u32 handle);
+ void drm_syncobj_add_point(struct drm_syncobj *syncobj,
 -- 
 2.25.1
 
