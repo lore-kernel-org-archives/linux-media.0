@@ -2,51 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 924CFC433F5
-	for <linux-media@archiver.kernel.org>; Mon,  2 May 2022 16:37:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 131EDC433EF
+	for <linux-media@archiver.kernel.org>; Mon,  2 May 2022 16:38:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386324AbiEBQlZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 May 2022 12:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
+        id S245618AbiEBQl1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 May 2022 12:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386360AbiEBQlQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 May 2022 12:41:16 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC1911A1B
-        for <linux-media@vger.kernel.org>; Mon,  2 May 2022 09:37:37 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id p189so8550670wmp.3
-        for <linux-media@vger.kernel.org>; Mon, 02 May 2022 09:37:37 -0700 (PDT)
+        with ESMTP id S1386375AbiEBQlR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 May 2022 12:41:17 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE4811A3F
+        for <linux-media@vger.kernel.org>; Mon,  2 May 2022 09:37:43 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id k2so20242252wrd.5
+        for <linux-media@vger.kernel.org>; Mon, 02 May 2022 09:37:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PRrPoRHHMVUrb5lC6MPjlnCl9PCZ8HWYoNk/YFcFCiA=;
-        b=OFQtewjT9fUvoHtYhMh7ANDq7xj4P0vsSbip4Q75b1Jkvyrxh/SM6AfiC/QKQHlypQ
-         BX3BabqqMqdEzeYcj/nmpBY8Qxda0a9wsD8qsf2abkJ9mVB3r/rb+a7ICk3TaZcsRmnL
-         dQKrmgE86iyIPqEuj8wwM0OXSjKut2YO2B5QqjhlFueiv4aJPmMENk3j6XyH7ujbFMEv
-         OH81rUOKEhpDhUw+i9TE0Srq5nIIY6RYcRHGA9C9StT0gyacz6dqsNe0apbB5sffIyR1
-         fT64bVj5tN0+FlGD0PPb34H5aCF853+ixTuYl2rpgHw5gNGfz3AIPbSZ57U2W5UpWxFP
-         WBzg==
+        bh=RsppMnZlvpz/PS1/TtGolLScNmUL2porbiCTAL7nvFU=;
+        b=a8nOHOjENFk8Xqwt3xRBWqsEDbDkcxAnWu2DgN6ZDlTrGJ1q3k5MN1DjOQ2zViSQg4
+         /pvQDUerSXJhjlxEWeERMaolbCrzCoqr56pyfb2TEL7vg+B7hOdMEIVTyYgxNOqqRQiV
+         muLLlNRxADbcJZC0Xo7s+vNAzrLICHoUlxYFy64xxzxl8U7CmD+wchoGiqZyArMJGYyf
+         m6y8dFfXLwy6xUJ3j6HJ9GsJN24zFxv3tC2YmECdIRGZlHnwRRNeMCFzeycRNMjZc5Rd
+         FWhd8+2d5xbZspsYRjuRbwCa1ZanS8BMkagr654IsvWoWehrdkQCdAGIrfrQ0XnLSjlb
+         NjGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PRrPoRHHMVUrb5lC6MPjlnCl9PCZ8HWYoNk/YFcFCiA=;
-        b=R6gbaAPY70TUjnZPikKwv8Mfz0ExqYU40kZBSn798IklJUJvhJqB+zzjEYp+ken0PA
-         RaJ2qez9mPJmiIFJgQlaNlYMy0eSeweXssPtTxBZQcJYqfX8Mm03DURzbpGNiSSeDIOB
-         uzMTcPHec3TOOUj7R8zc/yBLTGSu3X+ib/4t/Ge7Z+HRBH1rD9HaitdgKaHH9Sb9GuZp
-         ZEgkO30qblmBcDkyMGyimv0vVxgvSIKkF20iU//CM1auNVLBp7oWOYEFRNh2+whjrGrr
-         elOHSAfGZSO3bR8yfLfzcSPAP7mzZ0dJ7rNjN0dVjpPOihR33flYsX5Lvh34A0nXFkTn
-         df2w==
-X-Gm-Message-State: AOAM5317d86akbGx6ggeusiqqOihbWIHZLCy413F/sgdMIs36nDP3Aad
-        k76CoD8+SI0JR7p7A7zvVLs=
-X-Google-Smtp-Source: ABdhPJyEr5vbAcRX0+Jtvnnc+Wf7OKzoanJfhrmTHwUjGX/+TujJY43ARrVlFK4RKL5kjt6QWDMlHQ==
-X-Received: by 2002:a05:600c:4eca:b0:394:1e7d:af41 with SMTP id g10-20020a05600c4eca00b003941e7daf41mr15271560wmq.151.1651509456178;
-        Mon, 02 May 2022 09:37:36 -0700 (PDT)
+        bh=RsppMnZlvpz/PS1/TtGolLScNmUL2porbiCTAL7nvFU=;
+        b=KxC/l1eFbPYwLoYkY8rsSy4EWw/JBUX4Szfs4SDa5EXOQMNkuMJFUD5DJy6rlprJsj
+         /pIotq5Kvb/HpD/k3rFuX9GxMRWV+Z7t40F4aqkkMBstEr/gA5CFfKUgtaQvSAwcYGPZ
+         2zM/2YhhrGpfskFpd/tjTl+zsIvobhuw0zal/Ac9SC3eglsaECVBVWVQP1C1ZKJCOvft
+         asd4hkbhb8K4ZVifx5Z11a1ON1ZenfGRi5EviqaTjq8E/3L0+Wprzns0mMfLUNEQDzxA
+         0go1UzUWJD6gBcSmKaSCQeRqpZrx0Go1+PjKW49etw3vme3cuOhRzS7Shhgsb8hXUrbV
+         EeLQ==
+X-Gm-Message-State: AOAM530vISCmZDPN5/6NSoOM09h/TvMbrxmE4kg3XxUiX9er0h8t8ZOB
+        jYmUBgqSaxmfj/Giq20gJAM=
+X-Google-Smtp-Source: ABdhPJyTPKUM05Y+tnsze0dzaZtqnYwBQZsZfdgYGdtgR2xVTDvcPZhlwnNrXn5ccgWpn6iPCc00wA==
+X-Received: by 2002:a5d:5228:0:b0:20a:d7e9:7ed8 with SMTP id i8-20020a5d5228000000b0020ad7e97ed8mr9472997wra.687.1651509462037;
+        Mon, 02 May 2022 09:37:42 -0700 (PDT)
 Received: from able.fritz.box (p57b0b9e1.dip0.t-ipconnect.de. [87.176.185.225])
-        by smtp.gmail.com with ESMTPSA id p14-20020adfaa0e000000b0020c5253d8f6sm7294694wrd.66.2022.05.02.09.37.34
+        by smtp.gmail.com with ESMTPSA id p14-20020adfaa0e000000b0020c5253d8f6sm7294694wrd.66.2022.05.02.09.37.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 09:37:35 -0700 (PDT)
+        Mon, 02 May 2022 09:37:41 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
@@ -58,9 +58,9 @@ To:     daniel@ffwll.ch, jason@jlekstrand.net, daniels@collabora.com,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org
 Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Subject: [PATCH 06/15] dma-buf: add user fence support to dma_fence_merge()
-Date:   Mon,  2 May 2022 18:37:13 +0200
-Message-Id: <20220502163722.3957-7-christian.koenig@amd.com>
+Subject: [PATCH 10/15] drm: add user fence support for atomic out fences
+Date:   Mon,  2 May 2022 18:37:17 +0200
+Message-Id: <20220502163722.3957-11-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220502163722.3957-1-christian.koenig@amd.com>
 References: <20220502163722.3957-1-christian.koenig@amd.com>
@@ -71,63 +71,75 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Just make sure that we forward the user fence status to the output
-whenever any of the inputs are an user fence.
+Add a new driver flag indicating support for user fences.
+
+This flag is then used when creating out fences for atomic mode setting,
+indicating that the mode set might depend on an user fence.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/dma-buf/dma-fence-unwrap.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/drm_atomic_uapi.c | 8 ++++++++
+ include/drm/drm_drv.h             | 7 +++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/drivers/dma-buf/dma-fence-unwrap.c b/drivers/dma-buf/dma-fence-unwrap.c
-index 87ee2efced10..dd3c43aba8f1 100644
---- a/drivers/dma-buf/dma-fence-unwrap.c
-+++ b/drivers/dma-buf/dma-fence-unwrap.c
-@@ -66,17 +66,19 @@ struct dma_fence *__dma_fence_merge(unsigned int num_fences,
+diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
+index 434f3d4cb8a2..e2112c10569b 100644
+--- a/drivers/gpu/drm/drm_atomic_uapi.c
++++ b/drivers/gpu/drm/drm_atomic_uapi.c
+@@ -1111,6 +1111,7 @@ static int prepare_signaling(struct drm_device *dev,
+ 				  struct drm_out_fence_state **fence_state,
+ 				  unsigned int *num_fences)
  {
- 	struct dma_fence_array *result;
- 	struct dma_fence *tmp, **array;
-+	bool user_fence = false;
- 	unsigned int i, count;
++	bool use_user_fence = drm_core_check_feature(dev, DRIVER_USER_FENCE);
+ 	struct drm_crtc *crtc;
+ 	struct drm_crtc_state *crtc_state;
+ 	struct drm_connector *conn;
+@@ -1120,6 +1121,7 @@ static int prepare_signaling(struct drm_device *dev,
+ 	if (arg->flags & DRM_MODE_ATOMIC_TEST_ONLY)
+ 		return 0;
  
- 	count = 0;
- 	for (i = 0; i < num_fences; ++i) {
-+		user_fence |= test_bit(DMA_FENCE_FLAG_USER, &fences[i]->flags);
- 		dma_fence_unwrap_for_each(tmp, &iter[i], fences[i])
- 			if (!dma_fence_is_signaled(tmp))
- 				++count;
- 	}
++
+ 	for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
+ 		s32 __user *fence_ptr;
  
- 	if (count == 0)
--		return dma_fence_get_stub(false);
-+		return dma_fence_get_stub(user_fence);
+@@ -1168,6 +1170,9 @@ static int prepare_signaling(struct drm_device *dev,
+ 			if (!fence)
+ 				return -ENOMEM;
  
- 	if (count > INT_MAX)
- 		return NULL;
-@@ -129,11 +131,12 @@ struct dma_fence *__dma_fence_merge(unsigned int num_fences,
- 	} while (tmp);
++			if (use_user_fence)
++				set_bit(DMA_FENCE_FLAG_USER, &fence->flags);
++
+ 			ret = setup_out_fence(&f[(*num_fences)++], fence);
+ 			if (ret) {
+ 				dma_fence_put(fence);
+@@ -1208,6 +1213,9 @@ static int prepare_signaling(struct drm_device *dev,
+ 		if (!fence)
+ 			return -ENOMEM;
  
- 	if (count == 0) {
--		tmp = dma_fence_get_stub(false);
-+		tmp = dma_fence_get_stub(user_fence);
- 		goto return_tmp;
- 	}
++		if (use_user_fence)
++			set_bit(DMA_FENCE_FLAG_USER, &fence->flags);
++
+ 		ret = setup_out_fence(&f[(*num_fences)++], fence);
+ 		if (ret) {
+ 			dma_fence_put(fence);
+diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
+index f6159acb8856..b2b8ea8d4a9e 100644
+--- a/include/drm/drm_drv.h
++++ b/include/drm/drm_drv.h
+@@ -94,6 +94,13 @@ enum drm_driver_feature {
+ 	 * synchronization of command submission.
+ 	 */
+ 	DRIVER_SYNCOBJ_TIMELINE         = BIT(6),
++	/**
++	 * @DRIVER_USER_FENCE:
++	 *
++	 * Drivers supports user fences and waiting for the before command
++	 * submission.
++	 */
++	DRIVER_USER_FENCE		= BIT(7),
  
--	if (count == 1) {
-+	if (count == 1 &&
-+	    test_bit(DMA_FENCE_FLAG_USER, &array[0]->flags) == user_fence) {
- 		tmp = array[0];
- 		goto return_tmp;
- 	}
-@@ -145,6 +148,8 @@ struct dma_fence *__dma_fence_merge(unsigned int num_fences,
- 		tmp = NULL;
- 		goto return_tmp;
- 	}
-+	if (user_fence)
-+		set_bit(DMA_FENCE_FLAG_USER, &result->base.flags);
- 	return &result->base;
+ 	/* IMPORTANT: Below are all the legacy flags, add new ones above. */
  
- return_tmp:
 -- 
 2.25.1
 
