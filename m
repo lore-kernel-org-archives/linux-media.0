@@ -2,51 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D2A6C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A54C6C433F5
 	for <linux-media@archiver.kernel.org>; Mon,  2 May 2022 16:38:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380588AbiEBQl2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 2 May 2022 12:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        id S1384381AbiEBQl3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 2 May 2022 12:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386380AbiEBQlR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 2 May 2022 12:41:17 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05F911C0B
-        for <linux-media@vger.kernel.org>; Mon,  2 May 2022 09:37:44 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id i5so20218853wrc.13
-        for <linux-media@vger.kernel.org>; Mon, 02 May 2022 09:37:44 -0700 (PDT)
+        with ESMTP id S1386367AbiEBQlQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 2 May 2022 12:41:16 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C540111A28
+        for <linux-media@vger.kernel.org>; Mon,  2 May 2022 09:37:40 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id x18so20291201wrc.0
+        for <linux-media@vger.kernel.org>; Mon, 02 May 2022 09:37:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KjkQ0JRQZyD+wsFR0t4oPn4rUlqhN8HCr5sJCzpjRmE=;
-        b=XRFyPBX826gX+6Sf6EdgjzVcDAEC57cWAnpTUJSiNbTAuYlcDJqotYTXcL4OCIZhKK
-         rGrruKwqySetpI5UYY3c8MrVsrYSkCQLOpxEzdboo9Q3r0Nlqe0Xu6KecryhvSGhaa53
-         /ALxzRnKwxCTsSUwi/t+VQAtFWy5YxseyD5HM/82srioDn+fYu6wEihksTJo4ja5Ahyt
-         5aTJtt+xiPZ1jQwB/Z137YFORgQkslcu+pdrKfbC5AEvSmvA5ShFJfsbwdOD6aix9GVg
-         9jwEfBxqiry31YlDKCDDNUjfPrZyXALr1nE9yv5ntYzzHvYbRz3QDLkMwnTv7gCUSx6V
-         q1+Q==
+        bh=DjepyRyvA6mLg/4EFB+VBQwNzCxlgFJd+rSnwBXcAo4=;
+        b=b9McOF0QAQ4Vl1Xixqh+MWtgKhqJVwn5xVup/ay+JwJWOdF4F9BUxMavHOaj/8S6Nh
+         SdIUTeOUydNZ784Hwl1hjbrRa1iqlF3EFIu4jhNFxYHXtpm5gsCt7Z0dmwrog09TcyS9
+         4D4sPCjynN1qp0m9VCtpp65oWPw1bE/QlKzw3oBmWsZyplJoEgktlSMI4ajRWnzURzVA
+         CTiCssh6TAoEfw8Iz5ncjHIrKdoor3k9KKkcKIP9Lj2NEwvU09NeDBsHTJbf9rDSsUQa
+         oZ+zLrz0fzr8Bc6PaKdaxIlWzjQtg5fEaVfv4ygePTgY8+nMUziiXz1JL3rb5oMuvpa5
+         qYJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KjkQ0JRQZyD+wsFR0t4oPn4rUlqhN8HCr5sJCzpjRmE=;
-        b=NYaovfUiABphkH57HY5D+nDx35mO+33K8pScAhzoL+29RWb+/Z4AtrIDg7GxAyIjwD
-         uR6+K3iCA7pRoebIp/6kF2acaGQXcRq0x4V54KHcK0TKYnXnZDSLcmU0tkesfmEQeV5k
-         135KUME04iGvg97qa+0R7CFKWYA4IV6AvdI/4xFefZnO6AXjtl+k5MHx4ign6mzsdaJn
-         Ga22n/TWf1ZLXanS/ZW7rcU5lZmeUCkc5gjyFln/+M8Bm0+M+c1JlGG9rm2r+FIu9PdR
-         HMqgPfjh5BGLMDOxSdvyRzF4SGJfGLxwvjffjdzMyo2xBmoity/HXXnu2figuepgad+g
-         qzQw==
-X-Gm-Message-State: AOAM533nkZfaSFOK/HiO8mMFz+xVyI/e2c+yR6HMvsB63XKwxU5Jz+1D
-        animEHEZ8bdJe8k2hvnVTL8=
-X-Google-Smtp-Source: ABdhPJwIO4JMf3a/FHinF4NCDxZum5bVjIfSGJInrAQPVDJEyndnzfd420zGEtBXfAqSUovvsyyOEg==
-X-Received: by 2002:a05:6000:2c9:b0:20c:64c9:4b7a with SMTP id o9-20020a05600002c900b0020c64c94b7amr3727596wry.325.1651509463426;
-        Mon, 02 May 2022 09:37:43 -0700 (PDT)
+        bh=DjepyRyvA6mLg/4EFB+VBQwNzCxlgFJd+rSnwBXcAo4=;
+        b=J1in8zqA3y0EH4DBdSKr5IE0jy/7UtoVneR2VdPIsrSD7EUpBFiAv3qaPweDKCT1sv
+         lPnZEe9Ps2Vh7KI9V+wEUoG0KQ+9IRpzkVhEDc+sEyg91O06oBMTg7EbFuPvE+GFBJ9S
+         5MCXqxNzCIkCzAp1qAlj+9gUjOxjmKic6++Rgkajzx0xcqHw3VUbvz/m6s6FHYFc01Nw
+         yyFkUQIrwHYm8aWQZs2Vn3qSGPsd47LJQ6m7Fxwv0L99qZjjqlT967l3SAW4qo2jjXhU
+         W9rSBniYhCV2C8qdMDXmUxpN8VYkrkbWfU7RP10+3sFo+TSbb6W23ab/VjC7RVB1+IOF
+         8iFg==
+X-Gm-Message-State: AOAM533X+UVq1ZRjV0wtzlXZwCXN6Ku+Sz8bVfKJxxdvDrr/0kQFc/eF
+        PAiPWQtEpoqa1Ksm9SPnvbo=
+X-Google-Smtp-Source: ABdhPJybrPRxtci7aY1OOebXO27jsS5DQk+XuP1Q+hwI5bUFAaGVwmOUHoqt5uQuXpdTVJ383HXw2A==
+X-Received: by 2002:a5d:4205:0:b0:20a:e23c:a7f4 with SMTP id n5-20020a5d4205000000b0020ae23ca7f4mr10196022wrq.576.1651509459141;
+        Mon, 02 May 2022 09:37:39 -0700 (PDT)
 Received: from able.fritz.box (p57b0b9e1.dip0.t-ipconnect.de. [87.176.185.225])
-        by smtp.gmail.com with ESMTPSA id p14-20020adfaa0e000000b0020c5253d8f6sm7294694wrd.66.2022.05.02.09.37.42
+        by smtp.gmail.com with ESMTPSA id p14-20020adfaa0e000000b0020c5253d8f6sm7294694wrd.66.2022.05.02.09.37.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 09:37:42 -0700 (PDT)
+        Mon, 02 May 2022 09:37:38 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
@@ -58,9 +58,9 @@ To:     daniel@ffwll.ch, jason@jlekstrand.net, daniels@collabora.com,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org
 Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Subject: [PATCH 11/15] drm: add user fence support for atomic in fences
-Date:   Mon,  2 May 2022 18:37:18 +0200
-Message-Id: <20220502163722.3957-12-christian.koenig@amd.com>
+Subject: [PATCH 08/15] dma-buf: add support for polling on user fences
+Date:   Mon,  2 May 2022 18:37:15 +0200
+Message-Id: <20220502163722.3957-9-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220502163722.3957-1-christian.koenig@amd.com>
 References: <20220502163722.3957-1-christian.koenig@amd.com>
@@ -71,29 +71,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When the DRIVER_USER_FENCE flag is set we grab the user fence from the
-sync file instead of the normal one.
+Just also wait for user fences to signal when we wait for write fences.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/gpu/drm/drm_atomic_uapi.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/dma-buf/dma-buf.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
-index e2112c10569b..d1b13657e2ae 100644
---- a/drivers/gpu/drm/drm_atomic_uapi.c
-+++ b/drivers/gpu/drm/drm_atomic_uapi.c
-@@ -517,7 +517,10 @@ static int drm_atomic_plane_set_property(struct drm_plane *plane,
- 		if (U642I64(val) == -1)
- 			return 0;
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index 79795857be3e..5558f4e555f8 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -225,6 +225,16 @@ static bool dma_buf_poll_add_cb(struct dma_resv *resv, bool write,
+ 		dma_fence_put(fence);
+ 	}
  
--		state->fence = sync_file_get_fence(val);
-+		if (drm_core_check_feature(dev, DRIVER_USER_FENCE))
-+			state->fence = sync_file_get_user_fence(val);
-+		else
-+			state->fence = sync_file_get_fence(val);
- 		if (!state->fence)
- 			return -EINVAL;
++	if (!write)
++		return false;
++
++	dma_resv_for_each_fence(&cursor, resv, DMA_RESV_USAGE_USER, fence) {
++		dma_fence_get(fence);
++		r = dma_fence_add_callback(fence, &dcb->cb, dma_buf_poll_cb);
++		if (!r)
++			return true;
++		dma_fence_put(fence);
++	}
+ 	return false;
+ }
  
 -- 
 2.25.1
