@@ -2,56 +2,55 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C79DBC433EF
-	for <linux-media@archiver.kernel.org>; Tue,  3 May 2022 09:40:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63413C433FE
+	for <linux-media@archiver.kernel.org>; Tue,  3 May 2022 09:40:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233583AbiECJoT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 May 2022 05:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
+        id S233658AbiECJoW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 May 2022 05:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbiECJn7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 May 2022 05:43:59 -0400
+        with ESMTP id S233697AbiECJns (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 May 2022 05:43:48 -0400
 Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80087.outbound.protection.outlook.com [40.107.8.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4A538BD6;
-        Tue,  3 May 2022 02:39:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0946B37A9A;
+        Tue,  3 May 2022 02:39:49 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NgvjGyWAQKqO//szeAzt9XzBGI6JfiS+DvlWMGf7E7oFiNMf6QsaYY7QLuvk4SSk36P0h6EVzPyN/J0GFARUNVsYLna2vZ9MQa1miNPe1wt96CFHkQbEuQ4RmySxXeZ8gEEJEjyERWnZ+Doh9Li9ABceingWLe6g4DeErYeZ7eA3r1u9WijCALLgcDkdly6cBwNEvUcP/3hlqniBLRWt53x9eLwiA/wdIzs0+Tk9Ul/aGfoB3XtFFYFSeXsKAbHlZrl9oLdZdg18J+EQUIHJdlaqes/Scnt30ikoDCNO1d4Oty6qH/Qmdl5Ew4En74BTvWORmJoUmKz/T7KDNdccFg==
+ b=YM15CSww23yycDtO2OmXsMM559Uh5WTJNqL/3KdEKhMCeWT5dqFrGa18LWTmoRZpMZvsyNW1vBi3gbPutDcQ8i9St6Tdi78aRfBZ6jG1dLDnKznqsdGSQBIqfqtKogEeOnHdwskiZY3tB6ZF6NBeIyc4itawhBT1NxhSHLGaFlmmYsf9UyK+eRR0oA1zo23SURcinO5bxdn5L8JXkyCUiL8rlS5ofWbRJxGUB+qMZiVZeQRrh0dfQCJQ6T/7km1y4WjvHe6s8rk9vnkcTcgsy/k5O15hVyDyl6XF5jHVoeXm9UEpbZADVbDqRfsp9A+C1h7HT3W+RGzBFLqBlT6VpA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cW4qrzOcNxgGKlKzqqlU2sNKw1Qe/UX6a7HAmeMO8xs=;
- b=Abqob/Hn1Ve7Of+mHbO2suUGfcf8wwOGpFSAbQJRY14owL3HBhGWVh3JodqJBpuxKAl6rNpxVZ14ZUzIh9kQt1AXBIrCFatG3IHXw6050lN+THpuwvXvjY+8VA/KLiK5N00I5aQ/xL8sX5Bs/iwiQSyEbcXJmup1TfxOx0iqEnfOkkdapc2hE3SB79bqLTpMNc/5Q1hIvlM7ldwenHeTY1QGbJW4zUu5Rnm9nid2Uv130wiUN/evpEKz9rtX2mYgHlw4Bv7mPcuBYRU7KRaJoyDziyFLULZmQJPod2e7MBgfWVi3wIYMG7xq7LvZQTKsrzuxCk+87aG5lPdLohT9Zg==
+ bh=93+whLTjdgPCjJ2StXnxUmseqsJ4557t0vb+ia9QmaU=;
+ b=Cf+Pl4RLlSSdX7LXoO/fMiVOKM3B+pJ9w4YeQbqBR9pJ4nuK43m4BsmBgj+DQ65sXdGy9fW7Dnpauy9QwRu4b+z3MyFxn3eMvedvDQrJA8ujlQziJuUMkjCayfEixiFXUz3sLlOxY4DqbpxCiLpJEdI5FyxgMBDlcAQpHiZ6e1z1dBbUQwYiRZRCVXmtVLusbw3fY6aqGhg6diTO5m925x9OCuu5W5/bjLPaEh0q1VRELfBgLPfMvVkatr/VQZWp4qvKqAOLVcHOINTNklDJ6Woh0q6TJzfqO6r7HFxSovVrNYFKYOCX9bgJJ7PtNKb5aKp9fwKsG2nVbHxpVZIJNg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cW4qrzOcNxgGKlKzqqlU2sNKw1Qe/UX6a7HAmeMO8xs=;
- b=EJRG1jzC3AYkN/zDI+4HCruqrNtBhZx+WuweK4Om9Ty+BneBgqm6LpzL63UyGqqYoyoOypmp6O2LO+tcUzuKgROuLOGan3aki/K3Rexe0pQA0Corq5/SUD7WXcRzFglqZd+E1A3xthigvcFhuekbaLSCISzfik/wo5fCKNSJBiQ=
+ bh=93+whLTjdgPCjJ2StXnxUmseqsJ4557t0vb+ia9QmaU=;
+ b=JBOBe9EZgxLymF5J/NsqplRHpcAG5LLyw4d+XpUYEiMpqNqiEe4oGJZsEneQ7BXLdldMM2LLMxx1HhhRVf0v9N8nKGw0MmD2Y1NCILY1CiDlezUcikX93RWdPeHIsI7x+xcJVU2kizcGT/nlgqdHpIpaNvg0aw8HBr91ZfwE7AA=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from AM9PR04MB8700.eurprd04.prod.outlook.com (2603:10a6:20b:43f::8)
  by VI1PR0401MB2559.eurprd04.prod.outlook.com (2603:10a6:800:57::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Tue, 3 May
- 2022 09:39:49 +0000
+ 2022 09:39:45 +0000
 Received: from AM9PR04MB8700.eurprd04.prod.outlook.com
  ([fe80::9120:6407:db5d:462c]) by AM9PR04MB8700.eurprd04.prod.outlook.com
  ([fe80::9120:6407:db5d:462c%7]) with mapi id 15.20.5206.014; Tue, 3 May 2022
- 09:39:49 +0000
+ 09:39:45 +0000
 From:   Xavier Roumegue <xavier.roumegue@oss.nxp.com>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         stanimir.varbanov@linaro.org, laurent.pinchart@ideasonboard.com,
         tomi.valkeinen@ideasonboard.com, robh+dt@kernel.org,
         nicolas@ndufresne.ca, alexander.stein@ew.tq-group.com
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v5 3/9] vivid: add dynamic array test control
-Date:   Tue,  3 May 2022 11:39:19 +0200
-Message-Id: <20220503093925.876640-4-xavier.roumegue@oss.nxp.com>
+Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v5 0/9] i.MX8MP DW100 dewarper driver
+Date:   Tue,  3 May 2022 11:39:16 +0200
+Message-Id: <20220503093925.876640-1-xavier.roumegue@oss.nxp.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220503093925.876640-1-xavier.roumegue@oss.nxp.com>
-References: <20220503093925.876640-1-xavier.roumegue@oss.nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: PR0P264CA0111.FRAP264.PROD.OUTLOOK.COM
@@ -60,112 +59,333 @@ X-ClientProxiedBy: PR0P264CA0111.FRAP264.PROD.OUTLOOK.COM
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ce5b8ae1-a822-435f-8a44-08da2ce8dd9b
+X-MS-Office365-Filtering-Correlation-Id: 2beaa04d-3707-4d01-43bf-08da2ce8dafd
 X-MS-TrafficTypeDiagnostic: VI1PR0401MB2559:EE_
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <VI1PR0401MB25591BD95719B005E6567F39BAC09@VI1PR0401MB2559.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <VI1PR0401MB25596DA00498031292073787BAC09@VI1PR0401MB2559.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BtR2/3Xq5M+yVj6lBMIDamK7O0PO9bVCc4WEtnnYu9LJ+2ZPC8vJ15J2y/WlB2swVNA1JCH9B+vXFIxfbiI0OfgxFhhNt6njr7FQnvisxKf68dmXM0v+KpZrsVafcX/Hy5QUJXCAr7EiQZtJchISmOpFGDI6PMwWmeD8EBrZFbnrO9ZGMinL5WL0fJTWKS4nzo3AKjZ+phNcp1cyMD0V0BCKGlEjup0oFUm6oevUs6sp9bqmmZo0hcjUjE3ZQv1KIkqVS+CATcR5Lcqlx4ZhlBkdMH10OLGD+VrP+6awpM2eq+O52WACCsOt9IlJmMvssxUwJwK543jpjAV8xyNCsDkV1dsXLpCE8/nBe4hTjTehy+eGxdJ8SFY1mdtLwuEJSGVgK/s/nbABa5coi16UusCoFh3iv4CrEUTIrxNr6HmFHIZfxCw0HzJPf3VdelcONLX21b+4c5f94vdRYGABGO6zMwLw7+mtAZJFAWQ+XIbQHyntcZTzoneXQ4KklAri88qXCKGMbb5yGjpiYMoU39XN8gdFasKnuda3qBerROKL4Zdpb80jKUZKQn/RoyAEZTgQq6Z7D4SCZhfzRSFNzH6tXsQI+ma1MibnhDsrE+3Nru9EHwyQL4ckbus5rQOCxhedMQ3s+dHgEzmvEVu+mw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8700.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(8936002)(508600001)(2906002)(316002)(66946007)(6486002)(2616005)(1076003)(5660300002)(7416002)(186003)(86362001)(44832011)(8676002)(4326008)(66556008)(66476007)(6506007)(6512007)(6666004)(38100700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: dVWPcgmgJBcxwvdroRqL272h9P3QpuN78aCgoFTi9NMbqWU/29h1OMxvAx0tErK1qc39VCSzR/N95hGbk0HlKCbbkGGGIsdNvSeJYlPSIBtbuNBcIr/wPRMPv9EEHm5/FRbdc8WzdoS9Gg7VrFPoyUzgg5kGzzWwspxI4VbL//POPvgCxkztwj4kpIUFYUM4UTByv3z8/MjeNNirR0lR8BIKMiKwn1Pgorrd80qKOULSc7n0k6UEzS/qGrtC7g+1HuYR5U10o4cvcYaDD6NoiK0wKty4L9FkDV3VaRQST8n+VB0go+FLrj0GjukR9Bc7CyOfLBP4Smbor7rSktqrilWg6sMPXINIrqIjpPZRLf/cImbyxYLLHfVUCbXsRXPLK0SuL0RbCvPEopLPiu4AFzoniN9Wm7fd4w3VkHRO4YphFtdi3a5H7nAc5x85/pFuW1Ye2dN9a7lH3WWYYA+XHw3qwr13LzNO3OxBn3QR3Dp/v5GUbr3BX4Po33Pfp360i+sYvqPMFbDTiT/Ibh7GNdqIq7fGYiNB1CMe9WZbwr9iEmNG6wiNtaPg2Fo5dMFN45TWP3LaudGlY5w/RzHASSTTHYi2rFaX1zKVYmhxKbknMjXw9x4Dff6Fm/oChXjjpru2Qhar4SFI391PUn4MCraaatxc4jRvLWprWSACpFjkxEgHeXLLLms92fhYMsBJxFcHjzcCvPm1SDGjhnZpft1eT0buJ0lvcEXfC1BgeLYl/D598nPoYLshgPrYiHqwXjnvit4DDLOvY+b+mFdkdw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8700.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(8936002)(83380400001)(508600001)(2906002)(316002)(66946007)(6486002)(2616005)(1076003)(5660300002)(966005)(7416002)(186003)(86362001)(44832011)(8676002)(4326008)(66556008)(66476007)(6506007)(6512007)(6666004)(38100700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IRW5e+nhydIHSwzpvKn4VkFZACZonnz11T2o5gLjchX7doRTxWdsTPSzuQ2P?=
- =?us-ascii?Q?j9wG/to+vmhcXZgYxSSoSRPbFRQTu5QaxGJkwt9VZsrv4SyvWyml/kktrwLR?=
- =?us-ascii?Q?o/D2cogJ0ePg7rncW0s8bdZa6Lq7Iu35yJMGRINzlufPuvBqYoEwgZihF1Lw?=
- =?us-ascii?Q?y9NjGdh/Rr5upABDcw8bVQVW3K4mnfY7PSfUgzwQ4/yq6MjJvx3/kZN+jFaw?=
- =?us-ascii?Q?1j7fi00Hq3EhSGzStRMwYFdcT890oLGqyJwrFedyKp52Fv1s8JOkI58w9OHO?=
- =?us-ascii?Q?jcjUf07r4Ol11dyrj3+sylDYBvr0UXmnNQe6IWVScyE0QndyMITvGL+DgR64?=
- =?us-ascii?Q?17h/5RnI5IZmW5DRGZarDOOoZvkz75hshltKyBq7xHoXOWAkFxY7MffZXy5U?=
- =?us-ascii?Q?BY9AeSATWj1SO9glc2vL0s2cn1VhKJLjlq+DCP9fTLk68R3JwjoN42c7/97i?=
- =?us-ascii?Q?VAv/ijUMsoHKpmAiYJkgiWYuf6QGUNCXLgglxDrCHOLZrnPQef6dmJCbeNpT?=
- =?us-ascii?Q?9eR0XeUxTKhCswtwXMYoikSjgvWDyCl43uBbu+aDmDWMS+e01hPTFVE83Aw2?=
- =?us-ascii?Q?R3PwXsiP6l43S32SD2/0lBLIm3qJzFAvlndUt3jlmNgvJvK2ZmoG11SbooLa?=
- =?us-ascii?Q?ixi/C/hLStfGsnq0lArfVBUMyYJRNQVHB+hu2yxSLTCZyTBetTNpLsBwLuXa?=
- =?us-ascii?Q?Y0HQBNRURscnzkvh7r/nDp4XryFd+QPguF17Cq31BAAtkGmHvQ/TdfY7XH2B?=
- =?us-ascii?Q?HEalNJ3jGVFGXngzoGTDSj8DjtA9R0OokbzM8dSwtRB5dvLm6zPEmCjKIDNn?=
- =?us-ascii?Q?ytj3oyVxXzIp2el/ayIg6mYN0T0Bw6t4vCirIbihz4RDzvj+dfggKWlpzNb4?=
- =?us-ascii?Q?hbo8CAl3QjEXhs69aqzuQd8bvYA5GKOiFyX0wcZqBuubInIQoiZeRQ+iq/P9?=
- =?us-ascii?Q?xHwNs45JbJesQen1POTkUPn4/Xtpoul59gITmjdD2eiDW160C5IwcqI4Vm3S?=
- =?us-ascii?Q?domS3EVbz1sAr+8Epy0lvV4TJzp9FuXtHXu14i6fI6uHgbWQMhRJFpfxnQoM?=
- =?us-ascii?Q?kpDD+gTkjFSjy8WvkDS7dNAKINx8iZi39Unj2nmTz8+IvCiQL7shh6BlU1qN?=
- =?us-ascii?Q?e+z6edqcpZgPCyDnFwBDbxdN5U+5l7FsgPrzju811VOoigMiGEdHqijikO/B?=
- =?us-ascii?Q?CnnsHKyyU0xulrJNAAcmOzYRLIG9ECJ5QFetW5Cn2w5tH9jtYVNAiWpuTxyN?=
- =?us-ascii?Q?nyZMxovlowyTQUl0xQOG6CcgBoTnDvrpp5FhSWn5XlItRzcSMn7matk9URvr?=
- =?us-ascii?Q?GEziDc06xnKbK3UpJXG/2HMrqa5kYyk26v4u5FeAUzJ5ksvaIe0Upcwk1+2H?=
- =?us-ascii?Q?MpJyBwDd1KQoOpWpYmLB3lOaw86ae2OGOlpoi9QQyahO4deqLs64h2ebA9wn?=
- =?us-ascii?Q?LKvh7qNf6YnJuACJ1TbvHusXQdwNfINzqm+f8nClxcsSrrnVjXnpR4xglZCB?=
- =?us-ascii?Q?pN/XrghCU4pNIvX8UmHOYd8lChCAi6z9Lxw8O0We1lte3EO+zHf/Sf1EScaL?=
- =?us-ascii?Q?gNAioR6S6rsvA/MbHYfEJvVh/y0upVajouF6d30tPXk8GFeeRf5O4COGQqvB?=
- =?us-ascii?Q?6NRhd9Sg3PWhj3O4ctO2wber5xAdSdTlOcyYle4RYKELKoDLyxZSMpOliYNy?=
- =?us-ascii?Q?2dbZAENlcg8t6gCVKQPqW48TeZEP6RMx46aQF0RrNirgcUjHemFMcC+QrFSA?=
- =?us-ascii?Q?Netx27TCEmSENnpknB7E5ovO5Metm6iIvE4d1LP5lBouHPsNHxJHopXRZVBZ?=
-X-MS-Exchange-AntiSpam-MessageData-1: qOMZ1hgsmO3ISglePpz/EQS4lacV4pztCAU=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?D/CAuzuyIu/c6JNhXfjxdVyxNptc2FZwk8R2/L9Sgqikk8OLnC07w5zeIA31?=
+ =?us-ascii?Q?hW+XrsoucfkyZ0phpO94EMW9Nw1pdjTnkq3lENiumlE+aeXlD3qyXx1BBlha?=
+ =?us-ascii?Q?fbOkmNF5psYx5BCy8PCkO2bOkQCFwiPLphkdPFYg+ef2fCFz8MKCl7vpK471?=
+ =?us-ascii?Q?g+6jwJPg7G8mGmzu7xCbhRFy7DuPrq9/5LkX+gjbBz+abwzj5fFGlbNIh/jd?=
+ =?us-ascii?Q?QdO4HcXoLtR0WpFQe3LIz9Xof+uccr8leQ28c1yn65Ud76IEnlVzS/NNpTxJ?=
+ =?us-ascii?Q?E0gjtVkOAOadIeRv/QBeMb/8tytNTQfZGJCxQ8OPDv5JLr9BrPX6VMJmiDNx?=
+ =?us-ascii?Q?NDRBoST/r1aFqmv/RbATFJzffkxbWkjMtYlby07yS4dpfX57UqZPiFFKNokm?=
+ =?us-ascii?Q?DCOQ4n3UoGF9CNgEubyNBA4eaBteFKBpTNJiGUI29tpOcIvM8+CsB/xfBTaI?=
+ =?us-ascii?Q?NkYgxRyEh7E18j36YlGYH1AqryaEXLG5fkxOxMa3HbT+kP7n0i0f+Lkw9NZC?=
+ =?us-ascii?Q?DKm86EwMxgGNuZfrx8M4F7nzGSWfHDGC7lK2nxmryfTDfm1mPMjPH59hadGR?=
+ =?us-ascii?Q?ToBDESjg0geHQ+UiabEErvqM2qz15SbVlmdtwSqzvSmUbqaIB9lfcUzAL1Di?=
+ =?us-ascii?Q?AMfedvIItTYuYKqbsK8VBTKY+p8CQRRDB7Lg1eoQsNB4G/ClvW+zOgqYyYVW?=
+ =?us-ascii?Q?KJP3zTm9hS9NJssnepKQuuIsXltGC3pdoDU22L3OjM7z5AwDaG/EVkS/npew?=
+ =?us-ascii?Q?+YJEkbUwXTB+oNIiAK8lN38XPN5Ud0vRw54PIwhGbwo0clQSeqUtngPR7qd/?=
+ =?us-ascii?Q?3lI1hzYduiOM8WnW1CGgxqopnAPiczNdyPllu/5t3oYtLRAN/B8hftSxFw53?=
+ =?us-ascii?Q?f46IAfGqorc9GJdTnDkUgAOfu1swrtWKTzlugT+F9xsCkIU8LqXJz9Q5elKd?=
+ =?us-ascii?Q?/u4Q5kJeC1eoVkT29Yc6+7rydQspY3+WrFku7DCc7QZld3J3eI+r2yYBI+D1?=
+ =?us-ascii?Q?i7vNEGpXB33++hsNOROFhW9cEJ0aG6NibKWsJMRCtx+h/TnvtA1DXeKEb4k7?=
+ =?us-ascii?Q?agxK1pFnM8ixP361tEM5lQusEJUFODB1ihWGkkDSahxRI8olMRJH1L7Fcd1p?=
+ =?us-ascii?Q?YSndcp3JUTOtItEkTvPxSZj14jojayCE/Dj5HfC8ryVbmuZbsK9KtgM980iZ?=
+ =?us-ascii?Q?QvuCSALHlbNP0yBZ8vE3iKsMObhk5eh9TA/F8/A5IdYVOEEtqG51vVsme0oj?=
+ =?us-ascii?Q?oozMGupc5PnGBoXsB2vH7u8pPnxKaTv7WpGdxW4gUgqoxWiXtgqYDxIhJpOb?=
+ =?us-ascii?Q?pMLmY+JLwNEwi/qdnY9DYdVx04q4Z4aprriZPuNj/JMBDCRE1unzNtHucdIF?=
+ =?us-ascii?Q?5YAN37+g4xho0/yFF6sMqJfiaDX7eX/BCfJ06iYkm0SOceXfnLxptgOsOTn8?=
+ =?us-ascii?Q?45T3S9fpEKAAryOn/fx5YFIe8BkCRegw4QkMXrOJhYbq8hPs4gKGTGLXBMd+?=
+ =?us-ascii?Q?rDIzAcbniyoLd/8+f06v4HBSYWVXvo2aN6GkWcz6ObbiSAqUeUcZmSaBR2jC?=
+ =?us-ascii?Q?f3s+lewBE/I1/CTdftWw9Pqt7FemN5rFgmhhfIkbvbzzOYPw0FPBmt427QNg?=
+ =?us-ascii?Q?HWsZAwS0H7g5A9Q0A4yeWHU3bX9QRwAT/wXieN4YbvQf0QDyKPINBzKDQ7CW?=
+ =?us-ascii?Q?wuItYJbeGE2fmrSIFofNT40qCXB4HlF98tbT2YG5gwhddEHnX81vfGeOa1Tq?=
+ =?us-ascii?Q?pjuC50NDLMe30dFGy0FoSGOHNGuoAKjzaxKEUPSGDnATTUXajDW1PqDQrVYj?=
+X-MS-Exchange-AntiSpam-MessageData-1: 9DSzq0YjFyQ2JxG95r7yGz2NYgvvak6LHpI=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce5b8ae1-a822-435f-8a44-08da2ce8dd9b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2beaa04d-3707-4d01-43bf-08da2ce8dafd
 X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8700.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2022 09:39:48.9589
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2022 09:39:45.0348
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DJ00N1o6uGW96ZQ4d+UuLh1xb9F0f2t4JUo8pf936hFuM35Vq7dzkOrFocFiGRe1z4a13f6kaXsvmuujd29bJg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: kuJKCnxSVPGqaGFJBqnZVdmGLYLY9FvQo6CBgoDfi9EaYfPTDBtckLWdH6TrOqxvcSIfV91j2kzwUPmaDPeeIQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0401MB2559
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+This patchset depends on the series "consolidated i.MX8MP HSIO/MEDIA/HDMI
+blk-ctrl series"[1] and "i.MX8MP GPC and blk-ctrl"[2] which provide the power
+driver infrastructure and associated dt-bindings.
 
-Add a dynamic array test control to help test support for this
-feature.
+Previous series can now be marked as superseded.
+v1:
+https://patchwork.linuxtv.org/project/linux-media/list/?series=7443
+v2:
+https://patchwork.linuxtv.org/project/linux-media/list/?series=7472
+v3:
+https://patchwork.linuxtv.org/project/linux-media/list/?series=7473
+v4:
+https://patchwork.linuxtv.org/project/linux-media/list/?series=7633
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Patches [1-3/9] add support for dynamic array control imported from the
+"Move HEVC stateless controls out of staging"[3] currently under review.
+
+Patches [4-7/9] document the driver interfaces, and export its v4l2 custom
+control to uapi headers.
+
+Patches [8/9] adds the v4l2 m2m driver.
+Patches [9/9] adds the driver to MAINTAINERS.
+
+The patchset baseline is v5.18-rc4.
+
+The Vivante DW100 Dewarp Engine, found on i.MX8MP SoC, provides high-performance
+dewarp processing for the correction of the distortion that is introduced in
+images produced by fisheye and wide angle lenses. The engine can be used for
+accelerating scaling, cropping and pixel format conversion operations
+independently of the dewarping feature.
+
+A script example [4] has been published to generate the dewarping blob from
+outgoing openCV 3d calibration process parameters. This scrict can generate
+identity map with h/v flip, dewarping and stereo rectification mappings.
+
+The driver has been tested with:
+- v4l2-ctl (from master with [6]) for testing pixel format conversion, scaling
+  and crop features using builtin driver identity map.
+- OpenCV stereo application using dedicated dw100 openCV module [5] to implement
+  stereo rectification stage.
+- GStreamer v4l2convert (patched to support dewarping blob map injection)
+- v4l2-compliance (test report added after changelog)
+
+[1] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=629586
+[2] https://lore.kernel.org/all/20220330104620.3600159-1-l.stach@pengutronix.de/
+[3] https://patchwork.linuxtv.org/project/linux-media/list/?series=7418
+[4] https://github.com/NXPmicro/vtec-cv/tree/main/bin
+[5] https://github.com/NXPmicro/vtec-opencv
+[6] https://patchwork.linuxtv.org/project/linux-media/list/?series=7595
+
 ---
- drivers/media/test-drivers/vivid/vivid-ctrls.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Changelog:
+v5:
+- Add enum_frame_size support
+- Fix checkpatch.pl --strict issues
+- Reword documentation and add ascii-art figures.
+- Strip v4l2 array controls size to 1 in driver state structure
+- Use strscpy instead of strncpy
+- Use min/max macro from minmax.h
+- Use kernel DIV_ROUND helpers.
+- s/0x[A-F]/0x[a-f]/
 
-diff --git a/drivers/media/test-drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
-index e7516dc1227b..7267892dc18a 100644
---- a/drivers/media/test-drivers/vivid/vivid-ctrls.c
-+++ b/drivers/media/test-drivers/vivid/vivid-ctrls.c
-@@ -34,6 +34,7 @@
- #define VIVID_CID_U8_4D_ARRAY		(VIVID_CID_CUSTOM_BASE + 10)
- #define VIVID_CID_AREA			(VIVID_CID_CUSTOM_BASE + 11)
- #define VIVID_CID_RO_INTEGER		(VIVID_CID_CUSTOM_BASE + 12)
-+#define VIVID_CID_U32_DYN_ARRAY		(VIVID_CID_CUSTOM_BASE + 13)
- 
- #define VIVID_CID_VIVID_BASE		(0x00f00000 | 0xf000)
- #define VIVID_CID_VIVID_CLASS		(0x00f00000 | 1)
-@@ -189,6 +190,19 @@ static const struct v4l2_ctrl_config vivid_ctrl_u32_array = {
- 	.dims = { 1 },
- };
- 
-+static const struct v4l2_ctrl_config vivid_ctrl_u32_dyn_array = {
-+	.ops = &vivid_user_gen_ctrl_ops,
-+	.id = VIVID_CID_U32_DYN_ARRAY,
-+	.name = "U32 Dynamic Array",
-+	.type = V4L2_CTRL_TYPE_U32,
-+	.flags = V4L2_CTRL_FLAG_DYNAMIC_ARRAY,
-+	.def = 50,
-+	.min = 10,
-+	.max = 90,
-+	.step = 1,
-+	.dims = { 100 },
-+};
-+
- static const struct v4l2_ctrl_config vivid_ctrl_u16_matrix = {
- 	.ops = &vivid_user_gen_ctrl_ops,
- 	.id = VIVID_CID_U16_MATRIX,
-@@ -1612,6 +1626,7 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
- 	dev->ro_int32 = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_ro_int32, NULL);
- 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_area, NULL);
- 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_array, NULL);
-+	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_dyn_array, NULL);
- 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u16_matrix, NULL);
- 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u8_4d_array, NULL);
- 
--- 
+v4:
+- Move dw100 driver to NXP platform media drivers folder
+- Change dt compatible string to "nxp,imx8mp-dw100"
+- Rename V4L2_CID_DW100_MAPPING to V4L2_CID_DW100_DEWARPING_16x16_VERTEX_MAP
+- Add more verbose description of V4L2_CID_DW100_DEWARPING_16x16_VERTEX_MAP
+- Handle v4l2 controls as an array in driver.
+
+v3:
+- Fix incorrect i.MX8MP Reference Manual link in documentation
+
+v2:
+- Fix yaml dt-bindings errors
+- Drop assigned-clocks properties from dt-bindings example
+- Add dw100 driver documentation
+- Rework V4L2 LUT assignment with v4l2 dynamic array control
+- Rename V4L2_CID_DW100_LUT to V4L2_CID_DW100_MAPPING
+- Export V4L2_CID_DW100_MAPPING to kernel headers
+
+Hans Verkuil (3):
+  videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+  v4l2-ctrls: add support for dynamically allocated arrays.
+  vivid: add dynamic array test control
+
+Xavier Roumegue (6):
+  media: Documentation: dw100: Add user documentation for the DW100
+    driver
+  media: v4l: uapi: Add user control base for DW100 controls
+  media: uapi: Add a control for DW100 driver
+  media: dt-bindings: media: Add i.MX8MP DW100 binding
+  media: dw100: Add i.MX8MP dw100 dewarper driver
+  media: MAINTAINERS: add entry for i.MX8MP DW100 v4l2 mem2mem driver
+
+ .../devicetree/bindings/media/nxp,dw100.yaml  |   69 +
+ .../userspace-api/media/drivers/dw100.rst     |  103 +
+ .../userspace-api/media/drivers/index.rst     |    3 +-
+ .../media/v4l/vidioc-queryctrl.rst            |    8 +
+ MAINTAINERS                                   |    9 +
+ drivers/media/platform/nxp/Kconfig            |    1 +
+ drivers/media/platform/nxp/Makefile           |    1 +
+ drivers/media/platform/nxp/dw100/Kconfig      |   16 +
+ drivers/media/platform/nxp/dw100/Makefile     |    3 +
+ drivers/media/platform/nxp/dw100/dw100.c      | 1782 +++++++++++++++++
+ drivers/media/platform/nxp/dw100/dw100_regs.h |  118 ++
+ .../media/test-drivers/vivid/vivid-ctrls.c    |   15 +
+ drivers/media/v4l2-core/v4l2-ctrls-api.c      |  103 +-
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     |  182 +-
+ drivers/media/v4l2-core/v4l2-ctrls-priv.h     |    3 +-
+ drivers/media/v4l2-core/v4l2-ctrls-request.c  |   13 +-
+ include/media/v4l2-ctrls.h                    |   42 +-
+ include/uapi/linux/dw100.h                    |   14 +
+ include/uapi/linux/v4l2-controls.h            |    6 +
+ include/uapi/linux/videodev2.h                |    1 +
+ 20 files changed, 2420 insertions(+), 72 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,dw100.yaml
+ create mode 100644 Documentation/userspace-api/media/drivers/dw100.rst
+ create mode 100644 drivers/media/platform/nxp/dw100/Kconfig
+ create mode 100644 drivers/media/platform/nxp/dw100/Makefile
+ create mode 100644 drivers/media/platform/nxp/dw100/dw100.c
+ create mode 100644 drivers/media/platform/nxp/dw100/dw100_regs.h
+ create mode 100644 include/uapi/linux/dw100.h
+
+==========
+Compliance
+==========
+# v4l2-compliance -d 1
+v4l2-compliance 1.23.0-4923, 64 bits, 64-bit time_t
+v4l2-compliance SHA: 163144712a46 2022-04-25 05:31:44
+
+Compliance test for dw100 device /dev/video1:
+
+Driver Info:
+	Driver name      : dw100
+	Card type        : DW100 dewarper
+	Bus info         : platform:dw100
+	Driver version   : 5.18.0
+	Capabilities     : 0x84208000
+		Video Memory-to-Memory
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04208000
+		Video Memory-to-Memory
+		Streaming
+		Extended Pix Format
+Media Driver Info:
+	Driver name      : dw100
+	Model            : dw100
+	Serial           :
+	Bus info         : platform:dw100
+	Media version    : 5.18.0
+	Hardware revision: 0x00000000 (0)
+	Driver version   : 5.18.0
+Interface Info:
+	ID               : 0x0300000c
+	Type             : V4L Video
+Entity Info:
+	ID               : 0x00000001 (1)
+	Name             : dw100-source
+	Function         : V4L2 I/O
+	Pad 0x01000002   : 0: Source
+	  Link 0x02000008: to remote pad 0x1000004 of entity 'dw100-proc' (Video Scaler): Data, Enabled, Immutable
+
+Required ioctls:
+	test MC information (see 'Media Driver Info' above): OK
+	test VIDIOC_QUERYCAP: OK
+	test invalid ioctls: OK
+
+Allow for multiple opens:
+	test second /dev/video1 open: OK
+	test VIDIOC_QUERYCAP: OK
+	test VIDIOC_G/S_PRIORITY: OK
+	test for unlimited opens: OK
+
+Debug ioctls:
+	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+	test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 0 Private Controls: 0
+	Standard Compound Controls: 0 Private Compound Controls: 1
+
+Format ioctls:
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+	test VIDIOC_G/S_PARM: OK (Not Supported)
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK
+	test VIDIOC_TRY_FMT: OK
+	test VIDIOC_S_FMT: OK
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+	test Cropping: OK
+	test Composing: OK
+	test Scaling: OK
+
+Codec ioctls:
+	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls:
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+	test VIDIOC_EXPBUF: OK
+	test Requests: OK (Not Supported)
+
+Total for dw100 device /dev/video1: 46, Succeeded: 46, Failed: 0, Warnings: 0
+
+================
+Media controller
+================
+# media-ctl -p
+Media controller API version 5.18.0
+
+Media device information
+------------------------
+driver          dw100
+model           dw100
+serial
+bus info        platform:dw100
+hw revision     0x0
+driver version  5.18.0
+
+Device topology
+- entity 1: dw100-source (1 pad, 1 link)
+            type Node subtype V4L flags 0
+            device node name /dev/video1
+	pad0: Source
+		-> "dw100-proc":0 [ENABLED,IMMUTABLE]
+
+- entity 3: dw100-proc (2 pads, 2 links)
+            type Node subtype Unknown flags 0
+	pad0: Sink
+		<- "dw100-source":0 [ENABLED,IMMUTABLE]
+	pad1: Source
+		-> "dw100-sink":0 [ENABLED,IMMUTABLE]
+
+- entity 6: dw100-sink (1 pad, 1 link)
+            type Node subtype V4L flags 0
+            device node name /dev/video1
+	pad0: Sink
+		<- "dw100-proc":1 [ENABLED,IMMUTABLE]
+
+--
 2.35.1
 
