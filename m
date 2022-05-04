@@ -2,60 +2,60 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5477EC433F5
-	for <linux-media@archiver.kernel.org>; Wed,  4 May 2022 12:23:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E23ACC4332F
+	for <linux-media@archiver.kernel.org>; Wed,  4 May 2022 12:23:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349399AbiEDM0i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 May 2022 08:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S1349400AbiEDM0k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 May 2022 08:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349394AbiEDM0h (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 May 2022 08:26:37 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4CE2F3A5
-        for <linux-media@vger.kernel.org>; Wed,  4 May 2022 05:23:01 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id d5so1778030wrb.6
-        for <linux-media@vger.kernel.org>; Wed, 04 May 2022 05:23:01 -0700 (PDT)
+        with ESMTP id S1349401AbiEDM0j (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 May 2022 08:26:39 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDEC2F3A5
+        for <linux-media@vger.kernel.org>; Wed,  4 May 2022 05:23:03 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id e24so1775578wrc.9
+        for <linux-media@vger.kernel.org>; Wed, 04 May 2022 05:23:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=smZ0gPWNwgVHNUbqNV9nPBAq01gHQFd4S8+q2+TY58s=;
-        b=JTj8tgy5CRpWboVU8mK1T6TSdxlr429iQ+B9CpuHuCPZqBUbqsZ2g6eoZA1M8cFXvc
-         oLCffs8PAbcSyFPI7WsWoSmkpFJu3oBVW/nS7VofEoKthNl1iYlYEny/FPNQObHo3Km5
-         mnZfC/mtDll7+9QWuZ370zTxHOrfaJiTfb4WDlx1WDfwA8PSJs1l/+7zkA6GKfxvEYH4
-         iOdHPMdFYrYrdFOazj5TgXJ+cmVjKm3GdIAnqYycX44iQYacKFqc+WYJM6ZJw8s+x6lw
-         FoQwFrvHSMXWmh/VwbnJbzz8aRsRrkQ7nq0fWl8CPHuUE9rmpDp7SovVzojnSe8mFgCc
-         uZXg==
+        bh=xVf0ouNzqYcmj9vzxVqNivW1b4yIyv0QPUJDmRo41CY=;
+        b=cnaRnMV7sVg7pNWlxjmJG4DXhnAkGth6VkW4qHR2+NeZjYcIVgzYm4EIKVITZ+qOIo
+         Kvy5RjLFyzQ2UnGYA6vtHAb/DocXrfzILOY+iHkQkDqGOwhKuiovwEPFba8EcDN4JRJX
+         HN4ewxKo0KaRna9MIfgIRuMzKhilOh4ZeNmJVz8AYzxsM2VqLgE/aF7Olu24RskfOikw
+         IcxEzWhEyBYG6F2crJ7OQhykiWEiyVJz6n6Sww3jHMGkFSXMyIjieiAcrtdghbQ07Xpo
+         Hch6h+yhiw2xE5tFnMg7zSBDRfiYueZkynesDJXoOcc/qupKWgp9Yljf3z2phLYUgOFZ
+         V4Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=smZ0gPWNwgVHNUbqNV9nPBAq01gHQFd4S8+q2+TY58s=;
-        b=wuqA1DSIbokIqq+M62ghfVu17Z3A+uovd/TqJ56OvYeXo2GysT5CV+zJJGu2xM9/By
-         BuIruVpx/sdiepwoxrjPd4LFIcOYkiQA2J2V36b/wn8AMK4OsJSaCKoVoEvPG8t6KCXp
-         625hjBnNZj+GMgixYOkgtvTJMtSPFDOdpI5W88O0QOyOyc1lowIp+XyYlm6R6BRKakat
-         tEgOrhoeCbDZH+426sVoQs7vcuN3GHx0vz1AejiwADUKjk6A2Qm8aJ8Qciri04Mzclz+
-         GM6qQJUmkDFERPn9MCR/wUFymwETRjhnBHvUFCUe1aoqhNSRjZZ9ZolpkzukUq/UiUhm
-         zNHQ==
-X-Gm-Message-State: AOAM531kJyw/B3wiXQBvYxc/JEmDKycc/cZq/E69POPkSBwkkP22l5m7
-        aUKDxcBjnhzb3pdkjbmU6TE=
-X-Google-Smtp-Source: ABdhPJzLsQZjFJcpUbgh8ffoMhaIOj98eLnhdS9WN3QPlPkOAOLEcagEhhOLkhmNl9emK5oICD4jlQ==
-X-Received: by 2002:a5d:6e90:0:b0:20a:ce36:48fb with SMTP id k16-20020a5d6e90000000b0020ace3648fbmr16160339wrz.628.1651666980017;
-        Wed, 04 May 2022 05:23:00 -0700 (PDT)
+        bh=xVf0ouNzqYcmj9vzxVqNivW1b4yIyv0QPUJDmRo41CY=;
+        b=ltNUOn9EIkGs8H0aH9wcQmFAIeGRMMqkfhOgqgO/MzU7XqtcINDyy236EDlNfFEK9J
+         k6peh1/apqnw+KgaIWpECNnM22MKbtwmmyv43061CYznDCOHrsufiiYYCSKqLcby4Ite
+         Cnk09aOYy4xkt2W46RnIe+jqPMjVUkPqtiAtP+pPocF6qQ36zGkHagLhftOQrxPz+6UV
+         UuWvu2F9T5QXEmn1kscdSVn+GTVIgRNFPEIpFiV4DHpN+XQHoNyYbUyK01VKUMMx8CDw
+         4xVXvcqB7AugsnJ+w8D0erj4k7zjTdUCZiGDQJhYZuCkuw/nAFQixmI9zVCKAumAMD6n
+         320Q==
+X-Gm-Message-State: AOAM533Gqp+uvWGlvCbjeRDS6JVn5N32nZlTubn8REEWcvReR7gFDf22
+        UwYD9CXFM5+S9PFCwhwN36U=
+X-Google-Smtp-Source: ABdhPJyA8j1ql7YtH3QnjRvNvAgCWa1faL1t7sZcwDC7aGuoOXqd2a8oYgG0bQwmuGU5DBqd4cdxCw==
+X-Received: by 2002:a5d:5681:0:b0:207:b2d2:aa4f with SMTP id f1-20020a5d5681000000b00207b2d2aa4fmr16464829wrv.170.1651666982035;
+        Wed, 04 May 2022 05:23:02 -0700 (PDT)
 Received: from able.fritz.box (p57b0b7c9.dip0.t-ipconnect.de. [87.176.183.201])
-        by smtp.gmail.com with ESMTPSA id l28-20020a05600c1d1c00b003942a244ed1sm1462119wms.22.2022.05.04.05.22.59
+        by smtp.gmail.com with ESMTPSA id l28-20020a05600c1d1c00b003942a244ed1sm1462119wms.22.2022.05.04.05.23.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 05:22:59 -0700 (PDT)
+        Wed, 04 May 2022 05:23:01 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
 Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Subject: [PATCH 3/5] dma-buf: return only unsignaled fences in dma_fence_unwrap_for_each
-Date:   Wed,  4 May 2022 14:22:54 +0200
-Message-Id: <20220504122256.1654-3-christian.koenig@amd.com>
+Subject: [PATCH 5/5] drm: use dma_fence_unwrap_merge() in drm_syncobj
+Date:   Wed,  4 May 2022 14:22:56 +0200
+Message-Id: <20220504122256.1654-5-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220504122256.1654-1-christian.koenig@amd.com>
 References: <20220504122256.1654-1-christian.koenig@amd.com>
@@ -66,72 +66,103 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-dma_fence_chain containers cleanup signaled fences automatically, so
-filter those out from arrays as well.
+The unwrap merge function is now intended for this use case.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/dma-buf/dma-fence-unwrap.c | 23 ++++++++++++++++-------
- include/linux/dma-fence-unwrap.h   |  4 ++--
- 2 files changed, 18 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/drm_syncobj.c | 57 +++++------------------------------
+ 1 file changed, 7 insertions(+), 50 deletions(-)
 
-diff --git a/drivers/dma-buf/dma-fence-unwrap.c b/drivers/dma-buf/dma-fence-unwrap.c
-index 711be125428c..7b0b91086ded 100644
---- a/drivers/dma-buf/dma-fence-unwrap.c
-+++ b/drivers/dma-buf/dma-fence-unwrap.c
-@@ -32,8 +32,13 @@ __dma_fence_unwrap_array(struct dma_fence_unwrap *cursor)
- struct dma_fence *dma_fence_unwrap_first(struct dma_fence *head,
- 					 struct dma_fence_unwrap *cursor)
- {
-+	struct dma_fence *tmp;
-+
- 	cursor->chain = dma_fence_get(head);
--	return __dma_fence_unwrap_array(cursor);
-+	tmp = __dma_fence_unwrap_array(cursor);
-+	if (tmp && dma_fence_is_signaled(tmp))
-+		tmp = dma_fence_unwrap_next(cursor);
-+	return tmp;
- }
- EXPORT_SYMBOL_GPL(dma_fence_unwrap_first);
- 
-@@ -48,12 +53,16 @@ struct dma_fence *dma_fence_unwrap_next(struct dma_fence_unwrap *cursor)
- {
- 	struct dma_fence *tmp;
- 
--	++cursor->index;
--	tmp = dma_fence_array_next(cursor->array, cursor->index);
--	if (tmp)
--		return tmp;
-+	do {
-+		++cursor->index;
-+		tmp = dma_fence_array_next(cursor->array, cursor->index);
-+		if (tmp && !dma_fence_is_signaled(tmp))
-+			return tmp;
-+
-+		cursor->chain = dma_fence_chain_walk(cursor->chain);
-+		tmp = __dma_fence_unwrap_array(cursor);
-+	} while (tmp && dma_fence_is_signaled(tmp));
- 
--	cursor->chain = dma_fence_chain_walk(cursor->chain);
--	return __dma_fence_unwrap_array(cursor);
-+	return tmp;
- }
- EXPORT_SYMBOL_GPL(dma_fence_unwrap_next);
-diff --git a/include/linux/dma-fence-unwrap.h b/include/linux/dma-fence-unwrap.h
-index e7c219da4ed7..e9d114637294 100644
---- a/include/linux/dma-fence-unwrap.h
-+++ b/include/linux/dma-fence-unwrap.h
-@@ -41,8 +41,8 @@ struct dma_fence *dma_fence_unwrap_next(struct dma_fence_unwrap *cursor);
-  * @head: starting point for the iterator
-  *
-  * Unwrap dma_fence_chain and dma_fence_array containers and deep dive into all
-- * potential fences in them. If @head is just a normal fence only that one is
-- * returned.
-+ * potential none signaled fences in them. If @head is just a normal fence only
-+ * that one is returned.
+diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
+index 7e48dcd1bee4..bbad9e4696e7 100644
+--- a/drivers/gpu/drm/drm_syncobj.c
++++ b/drivers/gpu/drm/drm_syncobj.c
+@@ -184,6 +184,7 @@
   */
- #define dma_fence_unwrap_for_each(fence, cursor, head)			\
- 	for (fence = dma_fence_unwrap_first(head, cursor); fence;	\
+ 
+ #include <linux/anon_inodes.h>
++#include <linux/dma-fence-unwrap.h>
+ #include <linux/file.h>
+ #include <linux/fs.h>
+ #include <linux/sched/signal.h>
+@@ -853,57 +854,12 @@ drm_syncobj_fd_to_handle_ioctl(struct drm_device *dev, void *data,
+ 					&args->handle);
+ }
+ 
+-
+-/*
+- * Try to flatten a dma_fence_chain into a dma_fence_array so that it can be
+- * added as timeline fence to a chain again.
+- */
+-static int drm_syncobj_flatten_chain(struct dma_fence **f)
+-{
+-	struct dma_fence_chain *chain = to_dma_fence_chain(*f);
+-	struct dma_fence *tmp, **fences;
+-	struct dma_fence_array *array;
+-	unsigned int count;
+-
+-	if (!chain)
+-		return 0;
+-
+-	count = 0;
+-	dma_fence_chain_for_each(tmp, &chain->base)
+-		++count;
+-
+-	fences = kmalloc_array(count, sizeof(*fences), GFP_KERNEL);
+-	if (!fences)
+-		return -ENOMEM;
+-
+-	count = 0;
+-	dma_fence_chain_for_each(tmp, &chain->base)
+-		fences[count++] = dma_fence_get(tmp);
+-
+-	array = dma_fence_array_create(count, fences,
+-				       dma_fence_context_alloc(1),
+-				       1, false);
+-	if (!array)
+-		goto free_fences;
+-
+-	dma_fence_put(*f);
+-	*f = &array->base;
+-	return 0;
+-
+-free_fences:
+-	while (count--)
+-		dma_fence_put(fences[count]);
+-
+-	kfree(fences);
+-	return -ENOMEM;
+-}
+-
+ static int drm_syncobj_transfer_to_timeline(struct drm_file *file_private,
+ 					    struct drm_syncobj_transfer *args)
+ {
+ 	struct drm_syncobj *timeline_syncobj = NULL;
++	struct dma_fence *fence, *tmp;
+ 	struct dma_fence_chain *chain;
+-	struct dma_fence *fence;
+ 	int ret;
+ 
+ 	timeline_syncobj = drm_syncobj_find(file_private, args->dst_handle);
+@@ -912,13 +868,14 @@ static int drm_syncobj_transfer_to_timeline(struct drm_file *file_private,
+ 	}
+ 	ret = drm_syncobj_find_fence(file_private, args->src_handle,
+ 				     args->src_point, args->flags,
+-				     &fence);
++				     &tmp);
+ 	if (ret)
+ 		goto err_put_timeline;
+ 
+-	ret = drm_syncobj_flatten_chain(&fence);
+-	if (ret)
+-		goto err_free_fence;
++	fence = dma_fence_unwrap_merge(tmp);
++	dma_fence_put(tmp);
++	if (!fence)
++		goto err_put_timeline;
+ 
+ 	chain = dma_fence_chain_alloc();
+ 	if (!chain) {
 -- 
 2.25.1
 
