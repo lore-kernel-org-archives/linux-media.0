@@ -2,59 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E6E6C433FE
-	for <linux-media@archiver.kernel.org>; Wed,  4 May 2022 22:31:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E11DC4332F
+	for <linux-media@archiver.kernel.org>; Wed,  4 May 2022 22:31:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379028AbiEDWei (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 May 2022 18:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S1379029AbiEDWej (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 May 2022 18:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378988AbiEDWea (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 May 2022 18:34:30 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1A22B257
-        for <linux-media@vger.kernel.org>; Wed,  4 May 2022 15:30:52 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v12so3784947wrv.10
-        for <linux-media@vger.kernel.org>; Wed, 04 May 2022 15:30:52 -0700 (PDT)
+        with ESMTP id S1379016AbiEDWec (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 May 2022 18:34:32 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69A22B1A9
+        for <linux-media@vger.kernel.org>; Wed,  4 May 2022 15:30:53 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id b19so3785968wrh.11
+        for <linux-media@vger.kernel.org>; Wed, 04 May 2022 15:30:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=f+hA5NbVCTe8pYlLM1ek8PpVaxlEFMTM89KxjFBt8xE=;
-        b=nu2qX6j5MqwcHp2+UxdFRQgqRkRJR1HvjBAMSlSGsZ1LCOAnhRaKClMLvQKzk+bLif
-         xmCx0KQnDp1EU0d8ZM5xyBUcmAAdlbuWEb98a3lriUrtNaKpyZ+W6KXt1gPF+2jjVzat
-         X+beI0BxRwe3CbAtyk0qjAK8TE9E1UTlx1J/CDW/E6lOa9dHAPU+qVw6g/f/403PI4gl
-         r6ISdMiy4j58cPY9aGLjSm3wWEhbpjHCme2aloeMPtZfIZDMPUezLHn4p/yF+PZ7YwCi
-         8ZDfNUrqD6bJZw9oqzwfCK9w9reWRoPBwr4E5dzndnl5soKDnLkpmZSHTWDuGA5cBkMm
-         +pGQ==
+        bh=2eDW0BkW1kWUmwBj+d757dRPQwwJ5Jr+wGnJbIglmFg=;
+        b=InoEXzoXVvu7ohM2j2+wJT8HuS+AQnwtelUDMJXdtwPo4rsaT2HwDPEpIPsA98xvgN
+         YG183eMB3JGFl25kN+yj652N3M1SEMgKkRX6LkZkjf9kAW0mZuEfKuGeg+VDLUS/0/cA
+         a+4YcQc26Dw0cj5SgjBLZmNLVp2GnYJK9dEIJHJv79azvMCj4/9ajsjokB4YY6iwbCsC
+         45H8g1mS/9m2KPcfm9D8DswxmkR5AcVSMYyaPOJu26h01t6+yfRcVLIxGtVx3BmK0nf4
+         HTywfu76dU5xTP0lu/q9xGXkQ4/SOsvHjGKcYX5AhUop+2+WG2o1S1w3EPQ9VcTTXGrV
+         kAnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=f+hA5NbVCTe8pYlLM1ek8PpVaxlEFMTM89KxjFBt8xE=;
-        b=zaaadr/EobtctXyEVv9woOLRlNEBRLWLbLa0bfOrUKYCckMptfhw9vL8DfcijR2ND+
-         9LXilNTwumJAHIK03VxFcTZOyoKemtCaPUjDLgnUBm6sCXFUN8DRwctiZO8rSTxWl24b
-         vWYwP/26Q2wei7MPacmgIOGkyqRez1ch6lVwmj4Cs6tXAa3SAv578x7BF8QAdzSpk51f
-         6n/YkrN6z+oudNn9rs/BWMCCLTk9cylnEhpRJVZQD1tCCQM+baGur7sap7nsoZyLXT8t
-         1MVwKsKHs6FKnQbp2cUSZIbbkguVyh9tHNqvd9U42Rr8hZpq2B0rVFgP3xOCie6nVLM4
-         3y+g==
-X-Gm-Message-State: AOAM5305VgNmA/OurbjlswYyYmXe1BFjeFtt+Wdihbcjwui1MquGgHqI
-        jm9e2Z3HfXg5g6qBVNz3PMjRiDjNa4o=
-X-Google-Smtp-Source: ABdhPJzsc+jpB25yjrFwaI98yNlnsg6um76AfygHK5EvO6AHjDEEF/pCxSb2OVr8ClwUlEwmxdEUrg==
-X-Received: by 2002:a5d:6da8:0:b0:20c:535e:2f61 with SMTP id u8-20020a5d6da8000000b0020c535e2f61mr18250219wrs.455.1651703451622;
-        Wed, 04 May 2022 15:30:51 -0700 (PDT)
+        bh=2eDW0BkW1kWUmwBj+d757dRPQwwJ5Jr+wGnJbIglmFg=;
+        b=EQxUbRSp1X/dfvtr4Po2+e1jWDd08hirruXNyn9hOMjiw2eWkhsg9Yj9Ql19oAl5B6
+         5RwGwyunovTvTM9f1F/ezebNC2oV3XAlrj9EEflt4XScQypNZ/YgiWpbNelQ+UfzfBWU
+         wIkxPSyXOgD6COQ/7jcUFTjMCqyFqauKaAro545vr7agWueuF6eL3mWu5NhAH4luFX/4
+         oTm6gQYIZi9PnT8gUma28OyocqZe4uaetJBiRpgTx+OyEq14OyG219DZ8fifUNHSXhBn
+         8w1bc3Z2qfqqrzD8zsXuLnf/NqHHyz+Q76Jn+5sZLmka/3bG+7Qjn7xvXpKtU/fN/WxF
+         3blw==
+X-Gm-Message-State: AOAM530Gpk6iDgOncPFgr+EZ5de0swgxHFp0KhDIqV4THb/baEyk4i5d
+        na7GeOP0P07o8u/FgZ+nSh1m74TWzKk=
+X-Google-Smtp-Source: ABdhPJx1e1vcc9pEHZm7rmVpoiyyVBt83QaVuvecgsh1f2nsh/1B+RBf5ZBvWFp8x1Y9K/2buQG9HA==
+X-Received: by 2002:a5d:60c3:0:b0:20c:4fa3:c63e with SMTP id x3-20020a5d60c3000000b0020c4fa3c63emr18371944wrt.191.1651703453398;
+        Wed, 04 May 2022 15:30:53 -0700 (PDT)
 Received: from localhost.localdomain (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id h29-20020adfaa9d000000b0020c5253d913sm12501442wrc.95.2022.05.04.15.30.50
+        by smtp.gmail.com with ESMTPSA id h29-20020adfaa9d000000b0020c5253d913sm12501442wrc.95.2022.05.04.15.30.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 15:30:51 -0700 (PDT)
+        Wed, 04 May 2022 15:30:53 -0700 (PDT)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
         bingbu.cao@intel.com, tian.shu.qiu@intel.com,
         andriy.shevchenko@linux.intel.com, hverkuil-cisco@xs4all.nl
-Subject: [PATCH v3 12/15] media: i2c: Extend .get_selection() for ov7251
-Date:   Wed,  4 May 2022 23:30:24 +0100
-Message-Id: <20220504223027.3480287-13-djrscally@gmail.com>
+Subject: [PATCH v3 14/15] media: i2c: Add hblank control to ov7251
+Date:   Wed,  4 May 2022 23:30:26 +0100
+Message-Id: <20220504223027.3480287-15-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220504223027.3480287-1-djrscally@gmail.com>
 References: <20220504223027.3480287-1-djrscally@gmail.com>
@@ -64,8 +64,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Extend the .get_selection() callback to support other values for
-sel->target, primarily to satisfy libcamera's requirements.
+Add a hblank control to the ov7251 driver. This necessitates setting
+a default mode, for which I am simply picking the first available.
 
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
@@ -73,63 +73,60 @@ Changes in v3:
 
 	- New patch
 
- drivers/media/i2c/ov7251.c | 35 +++++++++++++++++++++++++++++------
- 1 file changed, 29 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ov7251.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/media/i2c/ov7251.c b/drivers/media/i2c/ov7251.c
-index 4f8c797839f6..40e42d19cddd 100644
+index b7d89ad49887..003a7a5ae038 100644
 --- a/drivers/media/i2c/ov7251.c
 +++ b/drivers/media/i2c/ov7251.c
-@@ -54,6 +54,13 @@
- #define OV7251_PLL2_SYS_DIV_REG		0x309a
- #define OV7251_PLL2_ADC_DIV_REG		0x309b
+@@ -61,6 +61,8 @@
+ #define OV7251_ACTIVE_WIDTH		648
+ #define OV7251_ACTIVE_HEIGHT		488
  
-+#define OV7251_NATIVE_WIDTH		656
-+#define OV7251_NATIVE_HEIGHT		496
-+#define OV7251_ACTIVE_START_LEFT	4
-+#define OV7251_ACTIVE_START_TOP		4
-+#define OV7251_ACTIVE_WIDTH		648
-+#define OV7251_ACTIVE_HEIGHT		488
++#define OV7251_FIXED_PPL		928
 +
  struct reg_value {
  	u16 reg;
  	u8 val;
-@@ -1248,13 +1255,29 @@ static int ov7251_get_selection(struct v4l2_subdev *sd,
+@@ -139,6 +141,7 @@ struct ov7251 {
+ 	struct v4l2_ctrl *link_freq;
+ 	struct v4l2_ctrl *exposure;
+ 	struct v4l2_ctrl *gain;
++	struct v4l2_ctrl *hblank;
+ 
+ 	/* Cached register values */
+ 	u8 aec_pk_manual;
+@@ -1490,6 +1493,7 @@ static int ov7251_detect_chip(struct ov7251 *ov7251)
+ static int ov7251_init_ctrls(struct ov7251 *ov7251)
  {
- 	struct ov7251 *ov7251 = to_ov7251(sd);
+ 	s64 pixel_rate;
++	int hblank;
  
--	if (sel->target != V4L2_SEL_TGT_CROP)
--		return -EINVAL;
--
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+	case V4L2_SEL_TGT_CROP:
- 	mutex_lock(&ov7251->lock);
--	sel->r = *__ov7251_get_pad_crop(ov7251, sd_state, sel->pad,
--					sel->which);
--	mutex_unlock(&ov7251->lock);
-+		sel->r = *__ov7251_get_pad_crop(ov7251, sd_state, sel->pad,
-+						sel->which);
-+		mutex_unlock(&ov7251->lock);
-+		break;
-+	case V4L2_SEL_TGT_NATIVE_SIZE:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = OV7251_NATIVE_WIDTH;
-+		sel->r.height = OV7251_NATIVE_HEIGHT;
-+		break;
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = OV7251_ACTIVE_START_TOP;
-+		sel->r.left = OV7251_ACTIVE_START_LEFT;
-+		sel->r.width = OV7251_ACTIVE_WIDTH;
-+		sel->r.height = OV7251_ACTIVE_HEIGHT;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
+ 	v4l2_ctrl_handler_init(&ov7251->ctrls, 7);
+ 	ov7251->ctrls.lock = &ov7251->lock;
+@@ -1524,6 +1528,13 @@ static int ov7251_init_ctrls(struct ov7251 *ov7251)
+ 	if (ov7251->pixel_clock)
+ 		ov7251->pixel_clock->flags |= V4L2_CTRL_FLAG_READ_ONLY;
  
- 	return 0;
- }
++	hblank = OV7251_FIXED_PPL - ov7251->current_mode->width;
++	ov7251->hblank = v4l2_ctrl_new_std(&ov7251->ctrls, &ov7251_ctrl_ops,
++					   V4L2_CID_HBLANK, hblank, hblank, 1,
++					   hblank);
++	if (ov7251->hblank)
++		ov7251->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++
+ 	ov7251->sd.ctrl_handler = &ov7251->ctrls;
+ 
+ 	if (ov7251->ctrls.error) {
+@@ -1619,6 +1630,7 @@ static int ov7251_probe(struct i2c_client *client)
+ 
+ 	mutex_init(&ov7251->lock);
+ 
++	ov7251->current_mode = &ov7251_mode_info_data[0];
+ 	ret = ov7251_init_ctrls(ov7251);
+ 	if (ret) {
+ 		dev_err_probe(dev, ret, "error during v4l2 ctrl init\n");
 -- 
 2.25.1
 
