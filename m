@@ -2,34 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FC04C433EF
-	for <linux-media@archiver.kernel.org>; Wed,  4 May 2022 14:04:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C35DDC433FE
+	for <linux-media@archiver.kernel.org>; Wed,  4 May 2022 14:04:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351058AbiEDOHz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 May 2022 10:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
+        id S1351071AbiEDOH5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 May 2022 10:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350943AbiEDOHy (ORCPT
+        with ESMTP id S1351051AbiEDOHy (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Wed, 4 May 2022 10:07:54 -0400
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D081B28992;
-        Wed,  4 May 2022 07:04:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3A13BFBF;
+        Wed,  4 May 2022 07:04:18 -0700 (PDT)
 Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 4215EC3E91;
-        Wed,  4 May 2022 13:55:59 +0000 (UTC)
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 4AA4ECAB3F;
+        Wed,  4 May 2022 13:56:04 +0000 (UTC)
 Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 49D52E000B;
-        Wed,  4 May 2022 13:55:51 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 13B83E0008;
+        Wed,  4 May 2022 13:55:56 +0000 (UTC)
 From:   Quentin Schulz <foss+kernel@0leil.net>
 Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Quentin Schulz <quentin.schulz@theobroma-systems.com>,
         Quentin Schulz <foss+kernel@0leil.net>
-Subject: [PATCH v2 1/3] media: dt-bindings: ov5675: document YAML binding
-Date:   Wed,  4 May 2022 15:55:41 +0200
-Message-Id: <20220504135543.59522-1-foss+kernel@0leil.net>
+Subject: [PATCH v2 3/3] media: i2c: ov5675: parse and register V4L2 device tree properties
+Date:   Wed,  4 May 2022 15:55:43 +0200
+Message-Id: <20220504135543.59522-3-foss+kernel@0leil.net>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220504135543.59522-1-foss+kernel@0leil.net>
+References: <20220504135543.59522-1-foss+kernel@0leil.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
@@ -39,181 +41,58 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-This patch adds documentation of device tree in YAML schema for the
-OV5675 CMOS image sensor from Omnivision.
+Parse V4L2 device tree properties and register controls for them.
 
 Cc: Quentin Schulz <foss+kernel@0leil.net>
 Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 ---
+ drivers/media/i2c/ov5675.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-v2:
- - fixed incorrect id,
- - fixed device tree example by adding missing dt-bindings headers,
- - fixed device tree example by using vcc_1v2 for dvdd supply, as requested
- in datasheet,
-
- .../bindings/media/i2c/ovti,ov5675.yaml       | 139 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 140 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
-
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
-new file mode 100644
-index 000000000000..29df2f82c631
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
-@@ -0,0 +1,139 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (c) 2022 Theobroma Systems Design und Consulting GmbH
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/ovti,ov5675.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Omnivision OV5675 CMOS Sensor Device Tree Bindings
-+
-+maintainers:
-+  - Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+
-+description: |-
-+  The Omnivision OV5675 is a high performance, 1/5-inch, 5 megapixel, CMOS
-+  image sensor that delivers 2592x1944 at 30fps. It provides full-frame,
-+  sub-sampled, and windowed 10-bit MIPI images in various formats via the
-+  Serial Camera Control Bus (SCCB) interface. This chip is programmable
-+  through I2C and two-wire SCCB. The sensor output is available via CSI-2
-+  serial data output (up to 2-lane).
-+
-+properties:
-+  compatible:
-+    const: ovti,ov5675
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    description:
-+      Input clock for the sensor.
-+    items:
-+      - const: xvclk
-+
-+  clock-frequency:
-+    description:
-+      Frequency of the xvclk clock in Hertz.
-+
-+  dovdd-supply:
-+    description:
-+      Definition of the regulator used as interface power supply.
-+
-+  avdd-supply:
-+    description:
-+      Definition of the regulator used as analog power supply.
-+
-+  dvdd-supply:
-+    description:
-+      Definition of the regulator used as digital power supply.
-+
-+  reset-gpios:
-+    description:
-+      The phandle and specifier for the GPIO that controls sensor reset.
-+      This corresponds to the hardware pin XSHUTDOWN which is physically
-+      active low.
-+
-+  port:
-+    type: object
-+    additionalProperties: false
-+    description:
-+      A node containing an output port node with an endpoint definition
-+      as documented in
-+      Documentation/devicetree/bindings/media/video-interfaces.txt
-+
-+    properties:
-+      endpoint:
-+        type: object
-+
-+        properties:
-+          data-lanes:
-+            description: |-
-+              The driver only supports 2-lane operation.
-+            items:
-+              - const: 1
-+              - const: 2
-+
-+          link-frequencies:
-+            $ref: /schemas/types.yaml#/definitions/uint64-array
-+            description:
-+              Allowed data bus frequencies. 450000000Hz is supported by the driver.
-+
-+        required:
-+          - link-frequencies
-+
-+    required:
-+      - endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - clock-frequency
-+  - dovdd-supply
-+  - avdd-supply
-+  - dvdd-supply
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/px30-cru.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/pinctrl/rockchip.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        ov5675: camera@36 {
-+            compatible = "ovti,ov5675";
-+            reg = <0x36>;
-+
-+            reset-gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&cif_clkout_m0>;
-+
-+            clocks = <&cru SCLK_CIF_OUT>;
-+            clock-names = "xvclk";
-+            clock-frequency = <19200000>;
-+
-+            avdd-supply = <&vcc_1v8>;
-+            dvdd-supply = <&vcc_1v2>;
-+            dovdd-supply = <&vcc_2v8>;
-+
-+            port {
-+                ucam_out: endpoint {
-+                    remote-endpoint = <&mipi_in_ucam>;
-+                    data-lanes = <1 2>;
-+                    link-frequencies = /bits/ 64 <450000000>;
-+                };
-+            };
-+        };
-+    };
-+...
-+
-diff --git a/MAINTAINERS b/MAINTAINERS
-index edc96cdb85e8..94ff31268c3d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14550,6 +14550,7 @@ M:	Shawn Tu <shawnx.tu@intel.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
- F:	drivers/media/i2c/ov5675.c
+diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
+index ccbc8dc506ff..324992fca557 100644
+--- a/drivers/media/i2c/ov5675.c
++++ b/drivers/media/i2c/ov5675.c
+@@ -778,12 +778,14 @@ static const struct v4l2_ctrl_ops ov5675_ctrl_ops = {
  
- OMNIVISION OV5693 SENSOR DRIVER
+ static int ov5675_init_controls(struct ov5675 *ov5675)
+ {
++	struct i2c_client *client = v4l2_get_subdevdata(&ov5675->sd);
+ 	struct v4l2_ctrl_handler *ctrl_hdlr;
++	struct v4l2_fwnode_device_properties props;
+ 	s64 exposure_max, h_blank;
+ 	int ret;
+ 
+ 	ctrl_hdlr = &ov5675->ctrl_handler;
+-	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
++	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 10);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -837,9 +839,23 @@ static int ov5675_init_controls(struct ov5675 *ov5675)
+ 	if (ctrl_hdlr->error)
+ 		return ctrl_hdlr->error;
+ 
++	ret = v4l2_fwnode_device_parse(&client->dev, &props);
++	if (ret)
++		goto error;
++
++	ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &ov5675_ctrl_ops,
++					      &props);
++	if (ret)
++		goto error;
++
+ 	ov5675->sd.ctrl_handler = ctrl_hdlr;
+ 
+ 	return 0;
++
++error:
++	v4l2_ctrl_handler_free(ctrl_hdlr);
++
++	return ret;
+ }
+ 
+ static void ov5675_update_pad_format(const struct ov5675_mode *mode,
 -- 
 2.35.1
 
