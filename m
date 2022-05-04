@@ -2,59 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B3A7C433F5
-	for <linux-media@archiver.kernel.org>; Wed,  4 May 2022 22:30:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A1C0C4332F
+	for <linux-media@archiver.kernel.org>; Wed,  4 May 2022 22:30:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378997AbiEDWe2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 4 May 2022 18:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
+        id S1378998AbiEDWe3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 4 May 2022 18:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378995AbiEDWeU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 4 May 2022 18:34:20 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DD42B257
-        for <linux-media@vger.kernel.org>; Wed,  4 May 2022 15:30:43 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id b19so3785968wrh.11
-        for <linux-media@vger.kernel.org>; Wed, 04 May 2022 15:30:43 -0700 (PDT)
+        with ESMTP id S1378988AbiEDWe0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 4 May 2022 18:34:26 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ECB2D1F0
+        for <linux-media@vger.kernel.org>; Wed,  4 May 2022 15:30:46 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id i20-20020a05600c355400b0039456976dcaso1801345wmq.1
+        for <linux-media@vger.kernel.org>; Wed, 04 May 2022 15:30:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=eoK5uuV8CaIjwIm2BeR5bISh0jgDlo6Je4xDmxLzJLE=;
-        b=M3k2LVz+vEB3MxPkRSk/g+Kg6eqoDAYdi1u/botHo7/HWF4tbVACj4gUJMChN9RAOo
-         DjddXlPil+3evskJPoBG6TN1IpMDgbd/I/poTxnBGTj0RURHoeJ1rZdjAYY+o3VSraLn
-         0hZ5FaYoDzM4Sko3eBp8kcm8LldamzXPjGEodW212Bs3MsJRoaGO9YI+Hfzpwus7yyOV
-         w+/vINMaRXfPj5TaboZQPFPmsgw0xsYb07qx6V6klB4yeRa8mdCruixQ0W4OVNNIVxlf
-         lmu01/O4QM8L6EicjGCUAKzqXcXVUu0F0Rp2IW+EVm+mWRkzABfy4bV4FV47zwiBvP0W
-         b3yQ==
+        bh=P1QaVmRJwjnZ2MMq/nBSQV6D5HxzClMsYDbecLw36iM=;
+        b=XwL7y4wF5rduiDiOFUQEY+paA6pTmohOZ50RCWP1KL3jIEUXG3f0xfeZvRfE4uZNN2
+         z6h1PbqP8TX3fA+xxG8H8Pm1rKkP86ayKykQpEg24Cb1nwTHCJWQe92z+3nQ1Lo1QpM4
+         2cvtO2GoAy9qqTnksRIv7yzrtrkmwhLfFTphTC1cbVYDleEjNLy/9zoI2+TDIaubgsWg
+         YIKA/Wf7onD1WOCye7d/vxIkk8I5/nOpntHrbidLnNR8Px8Y1g6ysRmsKk/eKsrSbtvA
+         nA8A3hILCyWOYLeMj6StDDoZqc2IdpeJBWLEPNPcvIgfJtKNAK0Dac+fSdxQ+2BV/DR5
+         imEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=eoK5uuV8CaIjwIm2BeR5bISh0jgDlo6Je4xDmxLzJLE=;
-        b=MDOMLETSrNiN806d8sVrXPyRLUk38bwSRfWTPxCnSZTcW2fsbuyjnDrXHhCgwsnZ4K
-         9d3294RVHbz6f+Ccn63fgRaZ4Ui2qprbv++dySvW40JboYao4+hdvDrwlwEbfvB3sxjM
-         yoM26agWZ4LMnqXq5Ur0l1pt709fuxErHpfQWeFxUwC74bShXxbA8BXCVy7r6qBuV8t+
-         IQK4pYQsHvzXhPJEw8mQC9kl/KI6Sl4TeP72D1QP7kXi4HRH0Ws9ailvmzR/kMvoQzD1
-         mQTfeLOkbeFImaQUSniqfyUlADlTr6Ku58xVTG95oB+3gVfP6VBo8BBp/s+lkZXC7yOY
-         HQQw==
-X-Gm-Message-State: AOAM533sbKB7W/2AnxU1vzSvB0JBE+ilQSH7/caVGWBuL/X9wPrtN4/D
-        VyL5D0k6fY8hzL7TD0M+DCzsmz0Ms6E=
-X-Google-Smtp-Source: ABdhPJyM5tbYRLJeNhW4em9RlG9A0nDtxEI8+OX04ZIR0MsVOT3wTBcDQwnIcj+TvxzA8C9mOWQeRw==
-X-Received: by 2002:a5d:68c6:0:b0:20a:d654:6cae with SMTP id p6-20020a5d68c6000000b0020ad6546caemr17885279wrw.564.1651703441802;
-        Wed, 04 May 2022 15:30:41 -0700 (PDT)
+        bh=P1QaVmRJwjnZ2MMq/nBSQV6D5HxzClMsYDbecLw36iM=;
+        b=ZHpplxPqymPz3U7sw/LRMZHu9J5PQR2JEtN3SVY5A9hjtxz5E4Od0r4CqCuyDhyRL8
+         0gAVNwqMDixoP7H8wAjzaot54FT0cOI78icuH45M3mwMKMlMbAszoNi2fjjdCsS3OgAW
+         AGvCNFDE1UJf5OPMFsL1vxBibB47HVnhbyod8WS5RIRY0+3w7OkzQmqt5PqvZUlfWZ3c
+         2rizHdG3CPvcW5P6amiopO51j6Xf8d01zW/caGqR7o4ue2o2KS1fuytEacJOAma5bjeN
+         Qvjz3//m28fyWl9YEYdSU22JPTugM4kbwAG5x+hNLE2Eo76kRW0MY0iDgMnv7DqqfcIQ
+         G8aQ==
+X-Gm-Message-State: AOAM533j691O2IXoVZCxvlsgBFjhVLePFTtGqJY1AVH+yYRcfB3jiRzg
+        BvmT1Z+vgAvXUiBA/8Vmy1kQrYZfKS8=
+X-Google-Smtp-Source: ABdhPJxLPw2NId/q65eP1+zxSCCwhOYxHM9EE6rqHbpDkfmGSHhHy60xDfkB/4YXQV/jsNM/rU3K6w==
+X-Received: by 2002:a05:600c:3d96:b0:38f:fbc6:da44 with SMTP id bi22-20020a05600c3d9600b0038ffbc6da44mr1465171wmb.93.1651703445418;
+        Wed, 04 May 2022 15:30:45 -0700 (PDT)
 Received: from localhost.localdomain (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id h29-20020adfaa9d000000b0020c5253d913sm12501442wrc.95.2022.05.04.15.30.40
+        by smtp.gmail.com with ESMTPSA id h29-20020adfaa9d000000b0020c5253d913sm12501442wrc.95.2022.05.04.15.30.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 15:30:41 -0700 (PDT)
+        Wed, 04 May 2022 15:30:44 -0700 (PDT)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
         bingbu.cao@intel.com, tian.shu.qiu@intel.com,
         andriy.shevchenko@linux.intel.com, hverkuil-cisco@xs4all.nl
-Subject: [PATCH v3 01/15] media: uapi: Add IPU3 packed Y10 format
-Date:   Wed,  4 May 2022 23:30:13 +0100
-Message-Id: <20220504223027.3480287-2-djrscally@gmail.com>
+Subject: [PATCH v3 05/15] media: i2c: Remove per-mode frequencies from ov7251
+Date:   Wed,  4 May 2022 23:30:17 +0100
+Message-Id: <20220504223027.3480287-6-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220504223027.3480287-1-djrscally@gmail.com>
 References: <20220504223027.3480287-1-djrscally@gmail.com>
@@ -64,89 +64,137 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some platforms with an Intel IPU3 have an IR sensor producing 10 bit
-greyscale format data that is transmitted over a CSI-2 bus to a CIO2
-device - this packs the data into 32 bytes per 25 pixels. Add an entry
-to the uAPI header defining that format.
+Each of the defined modes in the ov7251 driver uses the same link
+frequency and pixel rate; just drop those members of the modes and
+set the controls to read only during initialisation. Add a new
+table defining the supported pixel rates to substitue for the values
+hardcoded in the modes.
 
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
 Changes in v3:
 
-     - None
+	- None
 
 Changes in v2:
 
-	- Switched away from using the fourcc in the explanatory note for
-	pixfmt-yuv-luma.rst (Nicolas)
+	- New patch
 
- .../userspace-api/media/v4l/pixfmt-yuv-luma.rst    | 14 +++++++++++++-
- drivers/media/v4l2-core/v4l2-ioctl.c               |  1 +
- include/uapi/linux/videodev2.h                     |  3 ++-
- 3 files changed, 16 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov7251.c | 43 +++++++++++++-------------------------
+ 1 file changed, 14 insertions(+), 29 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-index 8ebd58c3588f..6a387f9df3ba 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-@@ -48,6 +48,17 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
+diff --git a/drivers/media/i2c/ov7251.c b/drivers/media/i2c/ov7251.c
+index f1965c8adbd7..f21119064b2d 100644
+--- a/drivers/media/i2c/ov7251.c
++++ b/drivers/media/i2c/ov7251.c
+@@ -526,7 +526,11 @@ static const struct reg_value ov7251_setting_vga_90fps[] = {
+ };
  
-+    * .. _V4L2-PIX-FMT-IPU3-Y10:
+ static const s64 link_freq[] = {
+-	240000000,
++	[OV7251_LINK_FREQ_240_MHZ] = 240000000,
++};
 +
-+      - ``V4L2_PIX_FMT_IPU3_Y10``
-+      - 'ip3y'
++static const s64 pixel_rates[] = {
++	[OV7251_LINK_FREQ_240_MHZ] = 48000000,
+ };
+ 
+ static const struct ov7251_mode_info ov7251_mode_info_data[] = {
+@@ -535,8 +539,6 @@ static const struct ov7251_mode_info ov7251_mode_info_data[] = {
+ 		.height = 480,
+ 		.data = ov7251_setting_vga_30fps,
+ 		.data_size = ARRAY_SIZE(ov7251_setting_vga_30fps),
+-		.pixel_clock = 48000000,
+-		.link_freq = 0, /* an index in link_freq[] */
+ 		.exposure_max = 1704,
+ 		.exposure_def = 504,
+ 		.timeperframe = {
+@@ -549,8 +551,6 @@ static const struct ov7251_mode_info ov7251_mode_info_data[] = {
+ 		.height = 480,
+ 		.data = ov7251_setting_vga_60fps,
+ 		.data_size = ARRAY_SIZE(ov7251_setting_vga_60fps),
+-		.pixel_clock = 48000000,
+-		.link_freq = 0, /* an index in link_freq[] */
+ 		.exposure_max = 840,
+ 		.exposure_def = 504,
+ 		.timeperframe = {
+@@ -563,8 +563,6 @@ static const struct ov7251_mode_info ov7251_mode_info_data[] = {
+ 		.height = 480,
+ 		.data = ov7251_setting_vga_90fps,
+ 		.data_size = ARRAY_SIZE(ov7251_setting_vga_90fps),
+-		.pixel_clock = 48000000,
+-		.link_freq = 0, /* an index in link_freq[] */
+ 		.exposure_max = 552,
+ 		.exposure_def = 504,
+ 		.timeperframe = {
+@@ -1059,16 +1057,6 @@ static int ov7251_set_format(struct v4l2_subdev *sd,
+ 	__crop->height = new_mode->height;
+ 
+ 	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+-		ret = __v4l2_ctrl_s_ctrl_int64(ov7251->pixel_clock,
+-					       new_mode->pixel_clock);
+-		if (ret < 0)
+-			goto exit;
+-
+-		ret = __v4l2_ctrl_s_ctrl(ov7251->link_freq,
+-					 new_mode->link_freq);
+-		if (ret < 0)
+-			goto exit;
+-
+ 		ret = __v4l2_ctrl_modify_range(ov7251->exposure,
+ 					       1, new_mode->exposure_max,
+ 					       1, new_mode->exposure_def);
+@@ -1199,16 +1187,6 @@ static int ov7251_set_frame_interval(struct v4l2_subdev *subdev,
+ 	new_mode = ov7251_find_mode_by_ival(ov7251, &fi->interval);
+ 
+ 	if (new_mode != ov7251->current_mode) {
+-		ret = __v4l2_ctrl_s_ctrl_int64(ov7251->pixel_clock,
+-					       new_mode->pixel_clock);
+-		if (ret < 0)
+-			goto exit;
+-
+-		ret = __v4l2_ctrl_s_ctrl(ov7251->link_freq,
+-					 new_mode->link_freq);
+-		if (ret < 0)
+-			goto exit;
+-
+ 		ret = __v4l2_ctrl_modify_range(ov7251->exposure,
+ 					       1, new_mode->exposure_max,
+ 					       1, new_mode->exposure_def);
+@@ -1317,6 +1295,7 @@ static int ov7251_probe(struct i2c_client *client)
+ 	struct device *dev = &client->dev;
+ 	struct ov7251 *ov7251;
+ 	u8 chip_id_high, chip_id_low, chip_rev;
++	s64 pixel_rate;
+ 	int ret;
+ 
+ 	ov7251 = devm_kzalloc(dev, sizeof(struct ov7251), GFP_KERNEL);
+@@ -1398,17 +1377,23 @@ static int ov7251_probe(struct i2c_client *client)
+ 				     V4L2_CID_TEST_PATTERN,
+ 				     ARRAY_SIZE(ov7251_test_pattern_menu) - 1,
+ 				     0, 0, ov7251_test_pattern_menu);
 +
-+      - Y'\ :sub:`0`\ [7:0]
-+      - Y'\ :sub:`1`\ [5:0] Y'\ :sub:`0`\ [9:8]
-+      - Y'\ :sub:`2`\ [3:0] Y'\ :sub:`1`\ [9:6]
-+      - Y'\ :sub:`3`\ [1:0] Y'\ :sub:`2`\ [9:4]
-+      - Y'\ :sub:`3`\ [9:2]
-+
-     * .. _V4L2-PIX-FMT-Y10:
++	pixel_rate = pixel_rates[ov7251->link_freq_idx];
+ 	ov7251->pixel_clock = v4l2_ctrl_new_std(&ov7251->ctrls,
+ 						&ov7251_ctrl_ops,
+ 						V4L2_CID_PIXEL_RATE,
+-						1, INT_MAX, 1, 1);
++						pixel_rate, INT_MAX,
++						pixel_rate, pixel_rate);
+ 	ov7251->link_freq = v4l2_ctrl_new_int_menu(&ov7251->ctrls,
+ 						   &ov7251_ctrl_ops,
+ 						   V4L2_CID_LINK_FREQ,
+ 						   ARRAY_SIZE(link_freq) - 1,
+-						   0, link_freq);
++						   ov7251->link_freq_idx,
++						   link_freq);
+ 	if (ov7251->link_freq)
+ 		ov7251->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++	if (ov7251->pixel_clock)
++		ov7251->pixel_clock->flags |= V4L2_CTRL_FLAG_READ_ONLY;
  
-       - ``V4L2_PIX_FMT_Y10``
-@@ -133,4 +144,5 @@ are often referred to as greyscale formats.
+ 	ov7251->sd.ctrl_handler = &ov7251->ctrls;
  
-     For the Y16 and Y16_BE formats, the actual sampling precision may be lower
-     than 16 bits. For example, 10 bits per pixel uses values in the range 0 to
--    1023.
-+    1023. For the IPU3_Y10 format 25 pixels are packed into 32 bytes, which
-+    leaves the 6 most significant bits of the last byte padded with 0.
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 642cb90f457c..89691bbb372d 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1265,6 +1265,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_PIX_FMT_Y16_BE:	descr = "16-bit Greyscale BE"; break;
- 	case V4L2_PIX_FMT_Y10BPACK:	descr = "10-bit Greyscale (Packed)"; break;
- 	case V4L2_PIX_FMT_Y10P:		descr = "10-bit Greyscale (MIPI Packed)"; break;
-+	case V4L2_PIX_FMT_IPU3_Y10:	descr = "10-bit greyscale (IPU3 Packed)"; break;
- 	case V4L2_PIX_FMT_Y8I:		descr = "Interleaved 8-bit Greyscale"; break;
- 	case V4L2_PIX_FMT_Y12I:		descr = "Interleaved 12-bit Greyscale"; break;
- 	case V4L2_PIX_FMT_Z16:		descr = "16-bit Depth"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index df8b9c486ba1..34329f4655e0 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -569,6 +569,7 @@ struct v4l2_pix_format {
- /* Grey bit-packed formats */
- #define V4L2_PIX_FMT_Y10BPACK    v4l2_fourcc('Y', '1', '0', 'B') /* 10  Greyscale bit-packed */
- #define V4L2_PIX_FMT_Y10P    v4l2_fourcc('Y', '1', '0', 'P') /* 10  Greyscale, MIPI RAW10 packed */
-+#define V4L2_PIX_FMT_IPU3_Y10		v4l2_fourcc('i', 'p', '3', 'y') /* IPU3 packed 10-bit greyscale */
- 
- /* Palette formats */
- #define V4L2_PIX_FMT_PAL8    v4l2_fourcc('P', 'A', 'L', '8') /*  8  8-bit palette */
-@@ -745,7 +746,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_CNF4     v4l2_fourcc('C', 'N', 'F', '4') /* Intel 4-bit packed depth confidence information */
- #define V4L2_PIX_FMT_HI240    v4l2_fourcc('H', 'I', '2', '4') /* BTTV 8-bit dithered RGB */
- 
--/* 10bit raw bayer packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
-+/* 10bit raw packed, 32 bytes for every 25 pixels, last LSB 6 bits unused */
- #define V4L2_PIX_FMT_IPU3_SBGGR10	v4l2_fourcc('i', 'p', '3', 'b') /* IPU3 packed 10-bit BGGR bayer */
- #define V4L2_PIX_FMT_IPU3_SGBRG10	v4l2_fourcc('i', 'p', '3', 'g') /* IPU3 packed 10-bit GBRG bayer */
- #define V4L2_PIX_FMT_IPU3_SGRBG10	v4l2_fourcc('i', 'p', '3', 'G') /* IPU3 packed 10-bit GRBG bayer */
 -- 
 2.25.1
 
