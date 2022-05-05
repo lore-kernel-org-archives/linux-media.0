@@ -2,59 +2,59 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECDDBC433FE
-	for <linux-media@archiver.kernel.org>; Thu,  5 May 2022 23:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 035C9C433EF
+	for <linux-media@archiver.kernel.org>; Thu,  5 May 2022 23:04:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386554AbiEEXIJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 May 2022 19:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S1386566AbiEEXIK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 May 2022 19:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386556AbiEEXIC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 May 2022 19:08:02 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840B55EDC4
-        for <linux-media@vger.kernel.org>; Thu,  5 May 2022 16:04:21 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id i5so7855977wrc.13
-        for <linux-media@vger.kernel.org>; Thu, 05 May 2022 16:04:21 -0700 (PDT)
+        with ESMTP id S1386561AbiEEXIG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 May 2022 19:08:06 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055CB60070
+        for <linux-media@vger.kernel.org>; Thu,  5 May 2022 16:04:25 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id t6so7879670wra.4
+        for <linux-media@vger.kernel.org>; Thu, 05 May 2022 16:04:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=P/x5gHPCt1r6N6iyOGsSDffQ/m5QgUd4Lz8AY2HmEWM=;
-        b=fSbrniFUPHoVtOU92fkTc4wz0fERRvzOfCRjxVIECtpHHSo9z+TTRoeohMV81/sgPH
-         XeYWzPjXNNRHp+sSu7a6hOFLFygFm6mQ6Es2ONcAf4+YDuEhcWT2c3ZCaxsU9TbWGMyo
-         sEBW241n2i76+m9c1vqvH21tmlGiOi04E1pHGqjJmcS7nlVz6FThyREc4ISKgU7JXVXK
-         QNUnK8pnfsO/E6l+hx5qjMa7GXlka3/3/nai4F/7jEqpBvA+cAXXoqJfAbngQUFBnXwh
-         y2mthEFoqv0Wd0tAXKWnN+YWFbvIbpi/mH7PDo8YOojx46ayzW2L+8FIY/0x3+hNuKBi
-         sJhQ==
+        bh=1ODFWTPgqE1W4ZeXLlzmSDrqxPKsWiY7mz/SYbLjvDI=;
+        b=otOvwaiP0QaJLgJ7jOvwhlFrjV38w9IC8bMt/LIKjdeXOctCrWH7GHpuKKkl+qE5c8
+         8zQi+PJ/MVwXirMubdj2EKzLu0ynWWZheOME6irrrOMVotd9rXomyhGdrWPexuJupNQl
+         rI8kR7W0hLfmE/yz/jvn8veM+iFGTnkRXbSdcJbDX3fbHdlC3NWd9rs/NqgL4shXE/30
+         IxXawZaujOe1zYB7NTrD2mgbBZts/cGjWZFd+pDxm4mhG+sJkQwOYOoXJY5dgCaDfRk6
+         NMx/VZ4F60MTPhmljXz8U5NcUEonXz4b14En2OKGMLCyo+CNyHCeMtRs8oJPiyIokv9B
+         U39A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=P/x5gHPCt1r6N6iyOGsSDffQ/m5QgUd4Lz8AY2HmEWM=;
-        b=pfOn93YKDfo72VzNdUpK3l11JQ1OB1PjKKR14o1unhnN3/Ois03EErZ84/Dtw6HVA3
-         D/FZbwG6N/iMr1kiG10cy0YGF36fa6BbVMXtbK/I9goHbMJ+SuNHrBIQ4T6r6MEUitgC
-         1mHSxZnIPlrCNMutqbA3s/dbdRYrl6T63I0UZSopXQnzC/3Z26fKnLhZax8CsbGSCPPy
-         ZGqMcGrPOgWaeKHT+bGruASsfldVUJP7rYPgOdyg15Dy7ZpLzOZhC46ATH64P2YcDoLs
-         tq4XB5g7UvrPLC9fYoaDwoAyC8wQifdiazT1QTvIHw3rPAReDhOYp90fLcHDjP/N0mqF
-         DNOA==
-X-Gm-Message-State: AOAM530aFRJD2RQtuV9ZDwm/Lx0lu6ibkGRMfThf/FwiuBOlqgM/81XN
-        hkhw2ureQmN1E3EYfMnJSTrlg+dL85Y=
-X-Google-Smtp-Source: ABdhPJz+yHdAO1TIdt+C60KhfZ0eYwrm8K0Txqxhs0AA1K/1KHZG/FyAsWvtD9YPm5TbVp4xZWNnfA==
-X-Received: by 2002:a05:6000:156a:b0:20c:64e3:948f with SMTP id 10-20020a056000156a00b0020c64e3948fmr300296wrz.436.1651791861139;
-        Thu, 05 May 2022 16:04:21 -0700 (PDT)
+        bh=1ODFWTPgqE1W4ZeXLlzmSDrqxPKsWiY7mz/SYbLjvDI=;
+        b=EP5Y7kz49/2hYJGWWGjkA9d8m1EqeCsdS7GRAonJqixBh0ErLwB9Wes9chM9N/6Q8U
+         wpbngxDOBAhPNyIgIKcnqV65gj5VVeHX+BS9XVI5mlQ/3VSlNwuNnxlAf/5DOlV9uT2/
+         NQIF1EmsZG0uufaDo6DbOavBgj2kRyXBMGiUuHFkIoxmlBGe8hPSjQ0RuC5JsJuYyN9k
+         3lrrS2rFUy+XA4orAVYwGrkVwbLXvw0PfPd8i6QBlpbc/dvnqJngcm64XwG9WbnGiCLN
+         FNMcLyU+o3tZhs+nmMyuZKh8ApP8V3SZ/P9KSnIbUzBrwY41twhKqbwpYwKqUyQbNDj0
+         byrg==
+X-Gm-Message-State: AOAM530Age4+ipxeKyai/wGlHYTztxgDHbOHqACLqKCupZuF6MtEmJbX
+        d/XvM0XKVjIkSt1FXRnsEsO7bnR/qbA=
+X-Google-Smtp-Source: ABdhPJyrBg3CYhGteniO5KfTlLg6IaHhIJb0/JjFVC59n1XZfpM4zZJtViZonUzFTSdKnl0TG/9HlQ==
+X-Received: by 2002:a5d:6d8b:0:b0:20c:7022:7504 with SMTP id l11-20020a5d6d8b000000b0020c70227504mr288237wrs.183.1651791864573;
+        Thu, 05 May 2022 16:04:24 -0700 (PDT)
 Received: from localhost.localdomain (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id o20-20020a05600c339400b003942a244f33sm6782130wmp.12.2022.05.05.16.04.20
+        by smtp.gmail.com with ESMTPSA id o20-20020a05600c339400b003942a244f33sm6782130wmp.12.2022.05.05.16.04.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 16:04:20 -0700 (PDT)
+        Thu, 05 May 2022 16:04:24 -0700 (PDT)
 From:   Daniel Scally <djrscally@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
         bingbu.cao@intel.com, tian.shu.qiu@intel.com,
         andriy.shevchenko@linux.intel.com, hverkuil-cisco@xs4all.nl
-Subject: [PATCH v4 10/15] media: i2c: Remove .s_power() from ov7251
-Date:   Fri,  6 May 2022 00:03:57 +0100
-Message-Id: <20220505230402.449643-11-djrscally@gmail.com>
+Subject: [PATCH v4 14/15] media: i2c: Add hblank control to ov7251
+Date:   Fri,  6 May 2022 00:04:01 +0100
+Message-Id: <20220505230402.449643-15-djrscally@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220505230402.449643-1-djrscally@gmail.com>
 References: <20220505230402.449643-1-djrscally@gmail.com>
@@ -64,9 +64,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The .s_power() callback is deprecated, and now that we have pm_runtime
-functionality in the driver there's no further use for it. Delete the
-function.
+Add a hblank control to the ov7251 driver. This necessitates setting
+a default mode, for which I am simply picking the first available.
 
 Signed-off-by: Daniel Scally <djrscally@gmail.com>
 ---
@@ -76,100 +75,62 @@ Changes in v4:
 
 Changes in v3:
 
-	- None
+	- New patch
 
-Changes in v2:
-
-	- Set the global init registers as part of ov7251_set_power_on() (Sakari)
-
- drivers/media/i2c/ov7251.c | 53 +++++++-------------------------------
- 1 file changed, 10 insertions(+), 43 deletions(-)
+ drivers/media/i2c/ov7251.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/media/i2c/ov7251.c b/drivers/media/i2c/ov7251.c
-index 1713c6e22ccd..a1326d03bcdd 100644
+index e50514bbb345..20591d8227c9 100644
 --- a/drivers/media/i2c/ov7251.c
 +++ b/drivers/media/i2c/ov7251.c
-@@ -910,7 +910,16 @@ static int ov7251_set_power_on(struct device *dev)
- 			       DIV_ROUND_UP(ov7251->xclk_freq, 1000));
- 	usleep_range(wait_us, wait_us + 1000);
+@@ -61,6 +61,8 @@
+ #define OV7251_ACTIVE_WIDTH		648
+ #define OV7251_ACTIVE_HEIGHT		488
  
--	return 0;
-+	ret = ov7251_set_register_array(ov7251,
-+					ov7251_global_init_setting,
-+					ARRAY_SIZE(ov7251_global_init_setting));
-+	if (ret < 0) {
-+		dev_err(ov7251->dev, "error during global init\n");
-+		ov7251_regulators_disable(ov7251);
-+		return ret;
-+	}
++#define OV7251_FIXED_PPL		928
 +
-+	return ret;
- }
+ struct reg_value {
+ 	u16 reg;
+ 	u8 val;
+@@ -139,6 +141,7 @@ struct ov7251 {
+ 	struct v4l2_ctrl *link_freq;
+ 	struct v4l2_ctrl *exposure;
+ 	struct v4l2_ctrl *gain;
++	struct v4l2_ctrl *hblank;
  
- static int ov7251_set_power_off(struct device *dev)
-@@ -926,43 +935,6 @@ static int ov7251_set_power_off(struct device *dev)
- 	return 0;
- }
- 
--static int ov7251_s_power(struct v4l2_subdev *sd, int on)
--{
--	struct ov7251 *ov7251 = to_ov7251(sd);
--	int ret = 0;
--
--	mutex_lock(&ov7251->lock);
--
--	/* If the power state is not modified - no work to do. */
--	if (ov7251->power_on == !!on)
--		goto exit;
--
--	if (on) {
--		ret = ov7251_set_power_on(ov7251->dev);
--		if (ret < 0)
--			goto exit;
--
--		ret = ov7251_set_register_array(ov7251,
--					ov7251_global_init_setting,
--					ARRAY_SIZE(ov7251_global_init_setting));
--		if (ret < 0) {
--			dev_err(ov7251->dev, "could not set init registers\n");
--			ov7251_set_power_off(ov7251->dev);
--			goto exit;
--		}
--
--		ov7251->power_on = true;
--	} else {
--		ov7251_set_power_off(ov7251->dev);
--		ov7251->power_on = false;
--	}
--
--exit:
--	mutex_unlock(&ov7251->lock);
--
--	return ret;
--}
--
- static int ov7251_set_hflip(struct ov7251 *ov7251, s32 value)
+ 	/* Cached register values */
+ 	u8 aec_pk_manual;
+@@ -1488,6 +1491,7 @@ static int ov7251_detect_chip(struct ov7251 *ov7251)
+ static int ov7251_init_ctrls(struct ov7251 *ov7251)
  {
- 	u8 val = ov7251->timing_format2;
-@@ -1387,10 +1359,6 @@ static int ov7251_set_frame_interval(struct v4l2_subdev *subdev,
- 	return ret;
- }
+ 	s64 pixel_rate;
++	int hblank;
  
--static const struct v4l2_subdev_core_ops ov7251_core_ops = {
--	.s_power = ov7251_s_power,
--};
--
- static const struct v4l2_subdev_video_ops ov7251_video_ops = {
- 	.s_stream = ov7251_s_stream,
- 	.g_frame_interval = ov7251_get_frame_interval,
-@@ -1408,7 +1376,6 @@ static const struct v4l2_subdev_pad_ops ov7251_subdev_pad_ops = {
- };
+ 	v4l2_ctrl_handler_init(&ov7251->ctrls, 7);
+ 	ov7251->ctrls.lock = &ov7251->lock;
+@@ -1522,6 +1526,13 @@ static int ov7251_init_ctrls(struct ov7251 *ov7251)
+ 	if (ov7251->pixel_clock)
+ 		ov7251->pixel_clock->flags |= V4L2_CTRL_FLAG_READ_ONLY;
  
- static const struct v4l2_subdev_ops ov7251_subdev_ops = {
--	.core = &ov7251_core_ops,
- 	.video = &ov7251_video_ops,
- 	.pad = &ov7251_subdev_pad_ops,
- };
++	hblank = OV7251_FIXED_PPL - ov7251->current_mode->width;
++	ov7251->hblank = v4l2_ctrl_new_std(&ov7251->ctrls, &ov7251_ctrl_ops,
++					   V4L2_CID_HBLANK, hblank, hblank, 1,
++					   hblank);
++	if (ov7251->hblank)
++		ov7251->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++
+ 	ov7251->sd.ctrl_handler = &ov7251->ctrls;
+ 
+ 	if (ov7251->ctrls.error) {
+@@ -1617,6 +1628,7 @@ static int ov7251_probe(struct i2c_client *client)
+ 
+ 	mutex_init(&ov7251->lock);
+ 
++	ov7251->current_mode = &ov7251_mode_info_data[0];
+ 	ret = ov7251_init_ctrls(ov7251);
+ 	if (ret) {
+ 		dev_err_probe(dev, ret, "error during v4l2 ctrl init\n");
 -- 
 2.25.1
 
