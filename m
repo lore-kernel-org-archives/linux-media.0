@@ -2,76 +2,107 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D04E2C433EF
-	for <linux-media@archiver.kernel.org>; Thu,  5 May 2022 22:34:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BBF9C433F5
+	for <linux-media@archiver.kernel.org>; Thu,  5 May 2022 23:04:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386349AbiEEWhn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 May 2022 18:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
+        id S1386529AbiEEXHz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 May 2022 19:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386356AbiEEWhZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 May 2022 18:37:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD6553727;
-        Thu,  5 May 2022 15:33:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 583D961F47;
-        Thu,  5 May 2022 22:33:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BD30C385A4;
-        Thu,  5 May 2022 22:33:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651790023;
-        bh=hGR8u1po44PqRNRm8Caqu9lGQdERMV7VT79h9eSQ/mk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Fn8rvJpuvTE3iJlKWIq2UTeDe3TE37K+gw6Vm54Ic3M8t9BG7amKH+NzaviE2Nwd4
-         mzA0Pz/gQeAaDFX1qRqnhOgYtd/u4k/l3YZNUYirQRJTSsN8iKJQq4ptCCOeh86HT1
-         2e4IvWmPfKHXDd2KGWSCx1sdhI+fLFplrF+uWKRE=
-Date:   Thu, 5 May 2022 22:14:00 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        balbi@kernel.org, laurent.pinchart@ideasonboard.com,
-        paul.elder@ideasonboard.com, kernel@pengutronix.de,
-        nicolas@ndufresne.ca, kieran.bingham@ideasonboard.com
-Subject: Re: [RESEND v7 1/7] media: v4l: move helper functions for fractions
- from uvc to v4l2-common
-Message-ID: <YnQwCHKVLYcuTF7c@kroah.com>
-References: <20220421211427.3400834-1-m.grzeschik@pengutronix.de>
- <20220421211427.3400834-2-m.grzeschik@pengutronix.de>
+        with ESMTP id S232629AbiEEXHy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 May 2022 19:07:54 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449755EDC4
+        for <linux-media@vger.kernel.org>; Thu,  5 May 2022 16:04:13 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id i133-20020a1c3b8b000000b003946c466c17so586501wma.4
+        for <linux-media@vger.kernel.org>; Thu, 05 May 2022 16:04:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OEhPfnnG/uon8vIFgr8dhlIDYToz250Xuu1RG9oiPv8=;
+        b=kEh2N2jxgLuDTxWLyWUZw4B18gpSSbMWi+d4cMetmzSl60bBaNQ5oa6hfcGDhdNl+X
+         LX3WBIYs10kXvqlHfYNXReDjb8NKLJqIrPY3XAKe0FYmcNEbjBFkZmuHiRhZVHoxsyUw
+         1MxgPWfp4N/2lpfqK/i6/eIzoBI0jPW2yM2NnYzenwvioZ1ZzJAsaI+RWNeUDLhPYcuV
+         C3S5YozPHQeHDhZ56uKLA6/880hx4+ntBy8brFjciFCF67rsnS6nf0wg+F6OlSVPEUSW
+         Ez/ECVCmoEuIuHrcB3bv37QG7YN1bNoHWgRtph4tBgSU5hvCbCwKWJ4Py9fZDUoOARgw
+         pGDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OEhPfnnG/uon8vIFgr8dhlIDYToz250Xuu1RG9oiPv8=;
+        b=l2M/ImfbHsVGbQZQ4oc32jjGcqvSwPFFFqCoNczp2Z9VpkzMHkE0Jk7N5jz5VKnxNO
+         ZyxeCkOQt+xVK8SFgPogtrsyGcIKzbv1fwGnEhhrhUhoqpNfXn+zG+jaETLO8pPzldgY
+         VHsU8CqIS/Ky9Kyhn26kW4qkEnSVuuhYeypLc6Y5k01G1V2WtweFLzA/9eAoE7xpsRuh
+         /KZwGzQNgx7JQOUsQ8V3ISXyunVzzGauHWXK1peipfZ6W2t9QLU2Ci2d8L4awI9Z3RwY
+         PSy4fOPme1CRjfWmm+YbzDJmiREVSK9EHbQ9ltJhSpTo7PKYoc7E3FeoVdAJiWvV+tFo
+         UIFQ==
+X-Gm-Message-State: AOAM532mgTTbDmBUmXT8k9GQZdqeyHNFHlYlOJ4HR7y+CD6HPo4kcZSh
+        obdYC9o6fsUs2BWDg3bKr5PuWgNEVyQ=
+X-Google-Smtp-Source: ABdhPJzzOuq8PuqYurM4dPxFdvZQRc30Ah5xhekHiFDVqz01jvivqTMSwSWks43HAwAzb6LDUZ8+Xw==
+X-Received: by 2002:a05:600c:4ecb:b0:394:5be7:791d with SMTP id g11-20020a05600c4ecb00b003945be7791dmr6863520wmq.151.1651791851825;
+        Thu, 05 May 2022 16:04:11 -0700 (PDT)
+Received: from localhost.localdomain (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
+        by smtp.gmail.com with ESMTPSA id o20-20020a05600c339400b003942a244f33sm6782130wmp.12.2022.05.05.16.04.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 16:04:11 -0700 (PDT)
+From:   Daniel Scally <djrscally@gmail.com>
+To:     linux-media@vger.kernel.org
+Cc:     yong.zhi@intel.com, sakari.ailus@linux.intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com,
+        andriy.shevchenko@linux.intel.com, hverkuil-cisco@xs4all.nl
+Subject: [PATCH v4 00/15] Support OVTI7251 on Microsoft Surface line
+Date:   Fri,  6 May 2022 00:03:47 +0100
+Message-Id: <20220505230402.449643-1-djrscally@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421211427.3400834-2-m.grzeschik@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 11:14:21PM +0200, Michael Grzeschik wrote:
-> The functions uvc_simplify_fraction and uvc_fraction_to_interval are
-> generic helpers which are also useful for other v4l2 drivers. This patch
-> moves them to v4l2-common.
-> 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> 
-> ---
-> v1 -> v7: -
-> 
->  drivers/media/usb/uvc/uvc_driver.c    | 80 --------------------------
->  drivers/media/usb/uvc/uvc_v4l2.c      | 14 ++---
->  drivers/media/usb/uvc/uvcvideo.h      |  3 -
->  drivers/media/v4l2-core/v4l2-common.c | 82 +++++++++++++++++++++++++++
->  include/media/v4l2-common.h           |  4 ++
->  5 files changed, 93 insertions(+), 90 deletions(-)
+Hello all
 
-I need an ack from a media maintainer in order to be able to take this
-and patch 2/7.
+This series extends the OV7251 driver so it's functional on the
+Microsoft Surface line of laptops, where it's used as the IR
+camera for face login. The camera sensor is connected to a CIO2
+device which packs the 10-bit greyscale data into 25 pixels per 32
+bytes similar to the IPU3 formats for Bayer data, so I also added
+a new format to describe that and added it to the ipu3-cio2 driver's
+list of supported formats. 
 
-I have applied a few other that were independent of these first two, but
-the "real" changes in this series (the last 2), need these commits in
-order to build properly.
+Series-level changes:
 
-thanks,
+	- None
 
-greg k-h
+Thanks
+Dan
+Daniel Scally (15):
+  media: uapi: Add IPU3 packed Y10 format
+  media: ipu3-cio2: Add support for V4L2_PIX_FMT_IPU3_Y10
+  media: i2c: Add acpi support to ov7251
+  media: i2c: Provide ov7251_check_hwcfg()
+  media: i2c: Remove per-mode frequencies from ov7251
+  media: i2c: Add ov7251_pll_configure()
+  media: i2c: Add support for new frequencies to ov7251
+  media: i2c: Add ov7251_detect_chip()
+  media: i2c: Add pm_runtime support to ov7251
+  media: i2c: Remove .s_power() from ov7251
+  media: ipu3-cio2: Add INT347E to cio2-bridge
+  media: i2c: Extend .get_selection() for ov7251
+  media: i2c: add ov7251_init_ctrls()
+  media: i2c: Add hblank control to ov7251
+  media: i2c: Add vblank control to ov7251 driver
+
+ .../media/v4l/pixfmt-yuv-luma.rst             |  14 +-
+ drivers/media/i2c/ov7251.c                    | 749 +++++++++++++-----
+ drivers/media/pci/intel/ipu3/cio2-bridge.c    |   2 +
+ drivers/media/pci/intel/ipu3/ipu3-cio2-main.c |   5 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   1 +
+ include/uapi/linux/videodev2.h                |   3 +-
+ 6 files changed, 553 insertions(+), 221 deletions(-)
+
+-- 
+2.25.1
+
