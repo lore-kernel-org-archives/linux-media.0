@@ -2,98 +2,144 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E912C433FE
-	for <linux-media@archiver.kernel.org>; Fri,  6 May 2022 14:59:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B736C433EF
+	for <linux-media@archiver.kernel.org>; Fri,  6 May 2022 18:03:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442550AbiEFPCy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 May 2022 11:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
+        id S1355884AbiEFSHS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 May 2022 14:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347628AbiEFPCw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 May 2022 11:02:52 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC6A5D5CE;
-        Fri,  6 May 2022 07:59:08 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkvn5pty0gzs3nltj987t-3.rev.dnainternet.fi [IPv6:2001:14ba:4457:9640:1e2d:1f75:a607:ef37])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 84F631B00252;
-        Fri,  6 May 2022 17:59:06 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1651849146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LbT5IGtky0H4rQRh8Cp6duVvDTunMzK7mUfLU1XT12Q=;
-        b=ZA1zp990cio1fHuBQ9fC/CLwgqo25zcAH+WW22ifRC7j2nOx/mcU21o+2eFjFToBZl3YYB
-        Nnii/SpZz7WGRmRsj6Er3PDJhkAO8JZvXcUfgOp3bpj+V/V70v+0BnQO2EABlQiLVFvpYh
-        AMiL+3lXQhTZ/phFbaiOBqlQdl1wk2hAfCHF0PN9BRDpGgU705coS6iIIozI7GwddzxmMq
-        81KSAupC93VEwi9ga3b5E3onrsmvAjt0/5V/KaT8iSQ+9I06W8j4F7/Kaf9kT5ZRli25I5
-        XgMHNQMAjPaEPTB6rd7QsDWS/jJh0y1ZGOTtSTiG7psP/yWEYt9Zuv1iZCnyXw==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 293F8634C91;
-        Fri,  6 May 2022 17:59:06 +0300 (EEST)
-Date:   Fri, 6 May 2022 17:59:06 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Quentin Schulz <foss+kernel@0leil.net>, shawnx.tu@intel.com,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] media: ov5675: add device-tree support
-Message-ID: <YnU3umQnJxvYFmCg@valkosipuli.retiisi.eu>
-References: <20220504135543.59522-1-foss+kernel@0leil.net>
- <20220504135543.59522-2-foss+kernel@0leil.net>
- <20220505074725.4aabembd4uh4tt23@uno.localdomain>
- <YnOKuGqQ74rGUz6q@valkosipuli.retiisi.eu>
- <1344ed86-1505-a1af-1671-67106a4b9cf7@theobroma-systems.com>
- <20220506144300.nv3lqogpkir3i7fz@uno.localdomain>
+        with ESMTP id S1345265AbiEFSHQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 May 2022 14:07:16 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDE462BEB;
+        Fri,  6 May 2022 11:03:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651860212; x=1683396212;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8fFvGdzoG/rA8+1UZY/4PHel/cIyIvtKdIsOtXJKLw8=;
+  b=II6nW9dbL6gLFUl5di4Q+aQcHl4FMSc1ZIo1g35/zSzZFTjTMmM1RRXn
+   zJtLk6U25whU0Hm7oH4b3ASBPNNxUk0xKnytuDqVY3nJ7BAwwZOuB5oeE
+   0x2s+ciTdD218iB7Ejda8JC/i/orkaVxjShwdWCPGRX90N72vTGp9bNIf
+   Jk7a7NXn/ArBidNUi0EnzailEKBpWdzJha7O7i9K5YysATsL4dqV0qPdd
+   bcq0tJ1XHYpLILjTngz/3R6QMiogc66Dna2fyHGiE1ZvMiHNqR7PwoHT0
+   qMc2z4RuG0i3J7KFyQsaZSJPbc2eEqAZNAIaeA+ZbjQJGlemnzOTD4f3J
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="248443577"
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="248443577"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 11:03:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="735870259"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 06 May 2022 11:03:24 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nn2IV-000DjU-Ps;
+        Fri, 06 May 2022 18:03:23 +0000
+Date:   Sat, 7 May 2022 02:02:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        usama.anjum@collabora.com,
+        Collabora Kernel ML <kernel@collabora.com>,
+        groeck@chromium.org, dtor@chromium.org, gwendal@chromium.org,
+        vbendeb@chromium.org, andy@infradead.org,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
+        Darren Hart <dvhart@infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jeremy Soller <jeremy@system76.com>,
+        Mattias Jacobsson <2pi@mok.nu>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Rajat Jain <rajatja@google.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v9] platform/chrome: Add ChromeOS ACPI device driver
+Message-ID: <202205070117.SW4TyTN4-lkp@intel.com>
+References: <YnTw/iQ1Asjjmsb9@debian-BULLSEYE-live-builder-AMD64>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220506144300.nv3lqogpkir3i7fz@uno.localdomain>
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1651849146; a=rsa-sha256;
-        cv=none;
-        b=r7V0iWsvz7F/pm/x1tWejtH6MaAyyOlX+c5HeCcAurpqigfnSy10qXT4xmpbPSgxnlwXHf
-        oCOkN7+QeKuJaYq6DaNoYZmicXau/Hacmx8ZWwRaRQiTb3ieUteJQFnPoR+3dukvSiOUgI
-        TbOTjqqM8CkEnE9VcyTQ5n31OtBj6foObfTZhXAY/bV3IKFV1hqy15+b5QQXhmXy80EVzL
-        8uPCjrtaePG5t2x2t54BDCYfgZMNuw25IMWH/PNGXMvOTXrDhVRacD4sUJz4PzDifEKqH4
-        8BXeNBUAepkKf9/7rsIfxJson0JemVNXm6pjCfVOzQevFDGeyOTBPVmeUHSRHA==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1651849146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LbT5IGtky0H4rQRh8Cp6duVvDTunMzK7mUfLU1XT12Q=;
-        b=uAsp9WyJrf5qEO97HiEWR8T2oJNtC7D4sAJNl0JvL50ILDoY89whjuuZX4rAGUTRzvOJPY
-        FTTX9TAobCeRgLFzfLje3gSqr3JeXO92uYPucku+uNI+Jc3MSwEDzyLzVl5bR2f7/6cYfn
-        SFDByxt1OIQHwK9ReeIBYxnb6PMxcRULwvVd0vUTNw5GR0E5Vh0bXOvS4zDjJttcl3FtUy
-        Ch2t39+MUPGdIPCmP0SpCckbgdFU0v1p54uY5u212tBt+0QkV5W3ZPScVzJcezpF7QGazO
-        EcnaDMQwuJnItK74lXl7rcMB0Zn+KOj7oNvbAr+CoCGofwuhShw9AgphOwoAog==
+In-Reply-To: <YnTw/iQ1Asjjmsb9@debian-BULLSEYE-live-builder-AMD64>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+Hi Muhammad,
 
-On Fri, May 06, 2022 at 04:43:00PM +0200, Jacopo Mondi wrote:
-> My understanding is that "clock-frequency" is
-> an ACPI leftover that has been brought into some DT bindings as an
-> historical mistake. OF can work well with the common clock framework,
-> there's no need to introduce a property for the same purpose.
+I love your patch! Perhaps something to improve:
 
-The other way around actually. It was first used on DT but it's no longer
-the perferred way to set the frequency there. On ACPI it simply indicates
-the frequency without an ability to set it.
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on chrome-platform/for-next v5.18-rc5 next-20220506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/platform-chrome-Add-ChromeOS-ACPI-device-driver/20220506-175951
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220507/202205070117.SW4TyTN4-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4f6407962feddc57bc7c80e5b29d5d339a1dba6c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Muhammad-Usama-Anjum/platform-chrome-Add-ChromeOS-ACPI-device-driver/20220506-175951
+        git checkout 4f6407962feddc57bc7c80e5b29d5d339a1dba6c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/chrome/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/chrome/chromeos_acpi.c:254:5: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
+                            (ARRAY_SIZE(chromeos_acpi_all_groups) - 2), chromeos_acpi_gpio_groups);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   1 warning generated.
+
+
+vim +254 drivers/platform/chrome/chromeos_acpi.c
+
+   244	
+   245	static int chromeos_acpi_device_probe(struct platform_device *pdev)
+   246	{
+   247		chromeos_acpi_gpio_groups = get_gpio_pkg_num(&pdev->dev);
+   248	
+   249		/* If platform has more GPIO attribute groups than the number of
+   250		 * groups this driver supports, give out a warning message.
+   251		 */
+   252		if (chromeos_acpi_gpio_groups > (ARRAY_SIZE(chromeos_acpi_all_groups) - 2))
+   253			dev_warn(&(pdev->dev), "Only %ld GPIO attr groups supported by the driver out of total %d.\n",
+ > 254				 (ARRAY_SIZE(chromeos_acpi_all_groups) - 2), chromeos_acpi_gpio_groups);
+   255		return 0;
+   256	}
+   257	
 
 -- 
-Sakari Ailus
+0-DAY CI Kernel Test Service
+https://01.org/lkp
