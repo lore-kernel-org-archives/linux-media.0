@@ -2,508 +2,264 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71010C433EF
-	for <linux-media@archiver.kernel.org>; Fri,  6 May 2022 14:10:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B223FC433F5
+	for <linux-media@archiver.kernel.org>; Fri,  6 May 2022 14:11:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379325AbiEFOOX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 May 2022 10:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
+        id S1442080AbiEFOPX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 May 2022 10:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442065AbiEFOOJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 May 2022 10:14:09 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA81674D7
-        for <linux-media@vger.kernel.org>; Fri,  6 May 2022 07:10:16 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id k27so8859315edk.4
-        for <linux-media@vger.kernel.org>; Fri, 06 May 2022 07:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vefTnLmZ1hRjfFT+wM4LObjotAMbQOwWtxRJQRE0yXw=;
-        b=j8KVGH2GHcMJ1ywj+cjz7pamBQLXExx8mmlGN6PbeSlm/kg++H2qKPy19AUZrDjN0Z
-         o8FHJEp9fS1xdrFOQhSl9cXB2IJU4D7vQlMOewun/H7B6oHQ11No5Scm2xOpkcxDdT7H
-         1TECQagWPIl96unP5+2bTbHhUnBnRS8y3kLYliVxg05CyWXc1xqSMVIBefKaUQMGvI8B
-         4YYizgE1ioczKXABvNTntR0tKAty5FnafWl08Aw1pDKl3Wc6q3ZJjsBZHhA46HU8sflS
-         TMcKOlIP0TG4W2/GqjtjLxHsjwvXYlmG4ZhVmO/TKJjur5dp/UnDEv2B/+zc40e/yr4p
-         h7gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vefTnLmZ1hRjfFT+wM4LObjotAMbQOwWtxRJQRE0yXw=;
-        b=i3EOV8tNE8WNoNnKYg3hfWVmMSb4SxHvHS0BazVEcx2/q4Wk0FhJMII2V5Qc7tnddz
-         C+/wGw9mQVNz1/5kHs9R9HIFBUjBCIIHmfGa4uZRvGZfllRRuc8YkDpa1vJrZUORQFuc
-         eivXFf+MDa7mFzmRzxzc7DXW9m65xn1KB6X9b3eqgII7dweh+W5GdQO9wVcbkmRkaJ2m
-         AqFEsoXi3n5beDemUq9K4z3OY77altGQR8yhlam730yeoyQ47OOYFFoEvYiFiy8xNygO
-         YyNi/3Q8wBdtdJBsDFv1SmeXHDr8X2VWYMIMPgOvXf/wdiUlQWV8WUpHfFq3trGywSjF
-         TY9g==
-X-Gm-Message-State: AOAM533b7+F1sFp1Dcykp5tQxbYXfVPv1pgfC3c0NRw5jcM9mCdTphfv
-        V3ffMfuHzO0t21+EZZ8Wor4=
-X-Google-Smtp-Source: ABdhPJwxAnRnqAaKfldxjBs/gMSK370De63PnkL12J/y9NEBXjJENsVHF+C8jsEr0H/sNCoxeRjgGw==
-X-Received: by 2002:a50:ed13:0:b0:426:4939:45a9 with SMTP id j19-20020a50ed13000000b00426493945a9mr3701112eds.303.1651846214835;
-        Fri, 06 May 2022 07:10:14 -0700 (PDT)
-Received: from able.fritz.box (p57b0b3fd.dip0.t-ipconnect.de. [87.176.179.253])
-        by smtp.gmail.com with ESMTPSA id jx3-20020a170907760300b006f3ef214e22sm1915415ejc.136.2022.05.06.07.10.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 07:10:14 -0700 (PDT)
-From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
-        <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To:     daniel@ffwll.ch, linaro-mm-sig@lists.linaro.org,
+        with ESMTP id S1391428AbiEFOPU (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 May 2022 10:15:20 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2049.outbound.protection.outlook.com [40.107.94.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A815F68
+        for <linux-media@vger.kernel.org>; Fri,  6 May 2022 07:11:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YJ6YXhi8HeFoHS0Hquo2xRqrHXRKHWqVS3gCC4oi+eOZf3vD103HPheGE8vqejnyz3W7X415Euj4PXRUFfma1xc6prHHDEPXvggXzLroJVqg7I0vh/hjyoz1c2MFTyvGlAex9VFkzRFxu8vV5t7GRKZ5wlaFR1Lj1LO4XUNqw856mAISPpa8bFpQUewVFYsgxrEJGgT3Hk2xEUT6oERadDKH73BnICqrwFWwjzlKlma330zl2BOFkuA7QxNL7xtwGSSl3SCAk7WdZmj7chUSn0QkvZL9g5nsbHdPHkZoErPQkI0JvWM9rBiOKh7Y5PBwyeaAscJZREzqM6dFRWvPsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Wavymbw/CpU8mjw1nfB32XZpJqitOdfN/TV4KZysbPo=;
+ b=iYM6vT1ly80wyx0j6wlmkxiCBULUkKRRvDcwttX129o0JFx6Mikx3V0Hy15R/1RZEkzyUlTtHVKXgVvn/jGRRyVODiFKnvGXCsFvf+FDBjIauaktZB62090QmOoCYhfm8zGu3obj357+2Y/+4a2omYvtu5rMAIyiu1uiogULbKxtpi+9/GLGDUaCbXSYses2/PgFjbvQGikPmNWfT0geF9i7Gd/bCjcyvjI/K4lO8ul3Cmr3bBao+mfnN7R95mU1zLkYW9+Lrchws3IZwLonP4NNinPwWR/ODK14Q6ne0oT2op4KAU2I0/83uHvwN+twqcUSjGIn6Mc1N8+6cAf5VQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Wavymbw/CpU8mjw1nfB32XZpJqitOdfN/TV4KZysbPo=;
+ b=tvaNEhyS0T4EaoxrSTXozoAJyKQEUBePS79wVc6Tflm00kNbam1gWd7VODJJGgCZwQF+NKb03r2ZqD9ycveLT9+lBzzbdJvmVjHClSWh3xymnLK2o607sUSbP7/tZkfMUk4rXXvFjHfh+cPHKZ6waPLcjBHTUqkC0prnJ/kXNIM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM5PR12MB2518.namprd12.prod.outlook.com (2603:10b6:4:b0::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Fri, 6 May
+ 2022 14:11:35 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::fdba:2c6c:b9ab:38f]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::fdba:2c6c:b9ab:38f%4]) with mapi id 15.20.5206.025; Fri, 6 May 2022
+ 14:11:34 +0000
+Message-ID: <bd90027c-5158-0d53-9b05-97a9e62309b3@amd.com>
+Date:   Fri, 6 May 2022 16:11:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/5] dma-buf: cleanup dma_fence_unwrap selftest v2
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        daniel@ffwll.ch, linaro-mm-sig@lists.linaro.org,
         dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
-Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [PATCH 4/5] dma-buf: generalize dma_fence unwrap & merging v2
-Date:   Fri,  6 May 2022 16:10:08 +0200
-Message-Id: <20220506141009.18047-4-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220506141009.18047-1-christian.koenig@amd.com>
 References: <20220506141009.18047-1-christian.koenig@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220506141009.18047-1-christian.koenig@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM6PR10CA0052.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:209:80::29) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ef35e6df-f071-4fd4-b7f7-08da2f6a53af
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2518:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB2518BDBD9F001E3CFC5B95AD83C59@DM5PR12MB2518.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9WVm/kLNpHq3z2zVI2+OlzUODu6M9p0B9WPQZ8yNltPa9ylbw0tg+9cOZOZxpjebZpFCm40QJKOO8QuXT9Gjox6fyTxGHLUkAKVe3y9+zlob5XTkyw3AsGfmYJt4B+4kGY42j0D9fqkrxsf3Vr1CkSIQ6t/1DYMwC5h/BTsmseSZT0fzZJBNpKtRs2I/JTATDrpm9G98ZL7n20w1HYPc8L5Q5FeXo5fX2m1U1EK2bwTf/ZU/BfapgNWqe+0WJ4YXzLDr0MfQGfr//bbTiLj8ZsWGplydPLj3/rPFvxOTAqx30QRigp25JJ7G1qf6HJYJsevYMDJHnHisJXzWhIZw1Be/KiC6+5cLjNfM2zxNemdrPzRyQaG4aT5GyPRc7OqMg0WiBLx8zOOkVwt7CdIuU1sOjVPuaKb8vzGgRg8gk4/vaa+taL3gD6/cyXMzanUf8rqbdP0E0MFaHQX4YH3F/37JRMMuMWLAkQzjIpjHxVdCF00//MRz/XnYchmTl88A815ocWB/D+XEfAwWkduXnBnOLKkx/V/1kR4Oa3UPzYil+Kw6jsfc0DwEL2SPqLExd7Fc9oIVp8ThDRJLzCiPL7wPWonsChQ/9mOBMLKltp3UsT7c/z9V3QqilHMY8/V8WxrCbdSjxPOUr0uc++Li+hnm69FPY6LWhi638/DvVUQ0+gFdFTGy1NcGVvc/c+sJ3Pk26Q7YepdTMXcSyj+Fkhz2RuFaMCf6MqFsGBZdpLk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(6512007)(31686004)(6506007)(2616005)(83380400001)(5660300002)(8936002)(186003)(66574015)(2906002)(86362001)(66476007)(31696002)(66556008)(66946007)(8676002)(36756003)(6486002)(38100700002)(508600001)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWUzaDcvMmFOZlZRL001RDN6K1MybVZLbnJ6MzdtYUdUNTVQT0VCVjlKT05K?=
+ =?utf-8?B?V2IyWDBhR1NFQkc4SGRHOHFwM2FCSDNLVkx6aEpkOEcvL2NBcSt2ZDBJTUVq?=
+ =?utf-8?B?UkhHR3RwbVAzTFNsOWFQWHIzSUlHdVVtbWdCMFR4dGFVcGt1bGlxUjhYUkVK?=
+ =?utf-8?B?cXliY29OalVld1lscVNXWVpJRERicVZuYXVmeG40QjZxNXNWR2RRbG1xNkNr?=
+ =?utf-8?B?OW13a2hxVVFPRW9LYlV6R0VYWmpsNlEyRTFQWXJxajJMZ2tSb1JmMm9iTU5s?=
+ =?utf-8?B?aGxvc2NKK05CVDdRU0FIeVdLUDQ4ZVh2bEdqUzVkd2tIcnUxR2prZkJENFdF?=
+ =?utf-8?B?cDhzak1WVFJuVE1EZWhLUldBaVpwYm5EcEd0MjJPL3ptUzZqNy9aYTZ3Vjg2?=
+ =?utf-8?B?Mm04S0toQTZ2UU9Rb0FVVVBvTEVXZzllc0xaa2lWeUFmOHZzZ2xrTU90SUZh?=
+ =?utf-8?B?SVZYMGpoOGdyRkxtVkpVdlBDMUcvTlF1c3NSTURsZW42YWNIK0cyQTdYN2h5?=
+ =?utf-8?B?eXJ5RExjdXhxMWpEeGxMUlVabFRySi9PeFk1R0draE9laGpmZm92MTkrUXkz?=
+ =?utf-8?B?bWlDajRVM3NvanpTMTBnTlpNakJaei84ckxHYmwybFd6QWZlSEFxQVZ2Y2Jy?=
+ =?utf-8?B?SGNZL2FXMndIUWRkQUsrY2ZuWXhXSWpYakRNTGY0eGdabzc4aEI0SzBmM2p3?=
+ =?utf-8?B?NTR2ZkFZYlpwcUVab0NvSU1VWFZHcHE4QXU4cDVwdTJpN3lWOFFQV3gwKzFB?=
+ =?utf-8?B?K09yUGFqY1VYbmxtaWRTL1ZZLzZ4WTROdFUwbEtxc2pNdjdjZVg2OWd6ZVhu?=
+ =?utf-8?B?Z1Y4cFFUR2UxVVEvaEU4ZEhkRE0yUUZiSW1EOWVVYVBWY0NiazZxa3laeHdk?=
+ =?utf-8?B?VTE1Vk1PM1VidmtycTgydzJDWFdKNzQyVGhGTG0vUE9ydEoxZ25odEVDcEts?=
+ =?utf-8?B?dzBJaFQzUnJ2VlRXSFp6M2N4MHhJM3RHSnJyOWRWQThXUzRCQzJTSFplTG5r?=
+ =?utf-8?B?NldoMmk0YzgzTkJIRWZFWnJjUHE2TE1JNjgzZm9VU1FJMktJRkJTRFl5R3lh?=
+ =?utf-8?B?aS9HRjF1TTFOeFNKYmVYVU9wd3d3Qmw5d2FwUFVndUN4Y2R0eCsvOVgzRFQ3?=
+ =?utf-8?B?bVpIYWZpcXBRNHlEUGFlTzNwQkNXcUcxRWRHS0VGc05GOEt4b3NYMk05bTFP?=
+ =?utf-8?B?cGZIbStSQXJETnhLVGs4QmFMWUZ1UGkybVVyLzNsZVlmUmVaY055cUZPL2Ez?=
+ =?utf-8?B?eUhPVTBCMU41VUpqckNHczJsTVJwRUJUL3l1RGkxdDZ2bmJNVlJWRUk5UnVy?=
+ =?utf-8?B?eE1QelpzMDUrcWhXRGRzazFLR3MxSmxGVkNvbnhiQnhtUThKTHE3NmpQQVVS?=
+ =?utf-8?B?TEdoWnVmaE9HYTlCcXEzZ3FJeHZ1d0ZGcWVER3VJTENSNUc0MlNTblBvVTZS?=
+ =?utf-8?B?MEUvTXlzeXBEUzFUd3FjNGxrRUhZU0ZGb2FxKzZFdTluanFVUisxeUhiTmFJ?=
+ =?utf-8?B?RjJoQWlwMUFHeUczdXRJRzVnOWZ2RFU0Syt5ZUNBUTZBZWYyT2lad3BTK1ZV?=
+ =?utf-8?B?UUxLb0N3VzdndERWVzgxL3J0ZEVDK0R1MUdNWWRuTjV3bTQwWlRlamlQUHZr?=
+ =?utf-8?B?TjFGdHJsSFZBa3JUQ0NkU2QvaFU3QzVLRmdwMGdmSDdobEFxMFBFZEg1T0lr?=
+ =?utf-8?B?cVRuVjFROTNHNWtkVno2NTRHbUMwdkZZSjIvdG4wNi9kajg1eWpTZmNqMCtB?=
+ =?utf-8?B?djVYaEVaY3FpcEo3VmNJYVV1YU9vUXQwd05DaUpnem5rSTdDZXRvVFU5WnB6?=
+ =?utf-8?B?WVJZTEVaZjZsZWg0K1VTM28zYkFxcU5xbmUwRnZDRDlERDdNOVJldDN5QUlF?=
+ =?utf-8?B?eVpDWW1DNDNmQVcrU0EyeGF2aWlFQ1VPb1hwUXlISTYwMno1cFpxQldmTXgv?=
+ =?utf-8?B?RVBKaEY0aWlTeitTYWV1RzgzZThUVnI5K1Nhb3JsWlZ4VUw5WW42SEpwNjdU?=
+ =?utf-8?B?ZEdPaEhoaUxHNWMwa1VCazBmQ2xicm9xUTV2T1VnOXpzUWZWUTdvVVM3ZnYx?=
+ =?utf-8?B?UkRycXRnY09IN21sWmpwQ1lZTkhWeWwvTXNYYU1PWmtHUnVXbXZEcXAvWVNC?=
+ =?utf-8?B?aElCczFzaW1xSkFaM2tTTDNiUi96NWhHcHhDYUlCVitVc2RBaXg0ZXRwWVhZ?=
+ =?utf-8?B?RmRsK05YaWZZWUNXdTV5UzVXUG1xY2QxeDlxSzhDM0ZxRTJiaFRtV0FDempv?=
+ =?utf-8?B?RUNXWEVhajU3MmFGdHV2bjRtMTVqVU1BaG1ybXoxcENtYU12a3dFN3FSVGdh?=
+ =?utf-8?B?aGlHUEVJY3YzRWgwS3lWa09NczhBTnZQTk5hak1KUTFiR0k5eVRBYm1EUXRl?=
+ =?utf-8?Q?Hpl7pG7B6n1H3Cctj0pu1670GDL0agCDEsjRsg2olDdKq?=
+X-MS-Exchange-AntiSpam-MessageData-1: hnuqIS6akq/28w==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef35e6df-f071-4fd4-b7f7-08da2f6a53af
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2022 14:11:34.6222
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YEMgpYdQq3gWP/vbufWj6J23+LTb8YBLVB4WpPAuxgFDDRGPrQ0RJWfxcpJzW+cn
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2518
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Introduce a dma_fence_unwrap_merge() macro which allows to unwrap fences
-which potentially can be containers as well and then merge them back
-together into a flat dma_fence_array.
+I had to send this out once more.
 
-v2: rename the function, add some more comments about how the wrapper is
-    used, move filtering of signaled fences into the unwrap iterator,
-    add complex selftest which covers more cases.
+This time with the right mail addresses and a much simplified patch #3.
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
----
- drivers/dma-buf/dma-fence-unwrap.c    |  99 +++++++++++++++++++++
- drivers/dma-buf/st-dma-fence-unwrap.c | 109 +++++++++++++++++++++++
- drivers/dma-buf/sync_file.c           | 119 ++------------------------
- include/linux/dma-fence-unwrap.h      |  24 ++++++
- 4 files changed, 238 insertions(+), 113 deletions(-)
+Christian.
 
-diff --git a/drivers/dma-buf/dma-fence-unwrap.c b/drivers/dma-buf/dma-fence-unwrap.c
-index 711be125428c..0e51547bbabd 100644
---- a/drivers/dma-buf/dma-fence-unwrap.c
-+++ b/drivers/dma-buf/dma-fence-unwrap.c
-@@ -11,6 +11,7 @@
- #include <linux/dma-fence-array.h>
- #include <linux/dma-fence-chain.h>
- #include <linux/dma-fence-unwrap.h>
-+#include <linux/slab.h>
- 
- /* Internal helper to start new array iteration, don't use directly */
- static struct dma_fence *
-@@ -57,3 +58,101 @@ struct dma_fence *dma_fence_unwrap_next(struct dma_fence_unwrap *cursor)
- 	return __dma_fence_unwrap_array(cursor);
- }
- EXPORT_SYMBOL_GPL(dma_fence_unwrap_next);
-+
-+/* Implementation for the dma_fence_merge() marco, don't use directly */
-+struct dma_fence *__dma_fence_unwrap_merge(unsigned int num_fences,
-+					   struct dma_fence **fences,
-+					   struct dma_fence_unwrap *iter)
-+{
-+	struct dma_fence_array *result;
-+	struct dma_fence *tmp, **array;
-+	unsigned int i;
-+	size_t count;
-+
-+	count = 0;
-+	for (i = 0; i < num_fences; ++i) {
-+		dma_fence_unwrap_for_each(tmp, &iter[i], fences[i])
-+			++count;
-+	}
-+
-+	if (count == 0)
-+		return dma_fence_get_stub();
-+
-+	array = kmalloc_array(count, sizeof(*array), GFP_KERNEL);
-+	if (!array)
-+		return NULL;
-+
-+	/*
-+	 * This trashes the input fence array and uses it as position for the
-+	 * following merge loop. This works because the dma_fence_merge()
-+	 * wrapper macro is creating this temporary array on the stack together
-+	 * with the iterators.
-+	 */
-+	for (i = 0; i < num_fences; ++i)
-+		fences[i] = dma_fence_unwrap_first(fences[i], &iter[i]);
-+
-+	count = 0;
-+	do {
-+		unsigned int sel;
-+
-+restart:
-+		tmp = NULL;
-+		for (i = 0; i < num_fences; ++i) {
-+			struct dma_fence *next = fences[i];
-+
-+			if (!next)
-+				continue;
-+
-+			/*
-+			 * We can't guarantee that inpute fences are ordered by
-+			 * context, but it is still quite likely when this
-+			 * function is used multiple times. So attempt to order
-+			 * the fences by context as we pass over them and merge
-+			 * fences with the same context.
-+			 */
-+			if (!tmp || tmp->context > next->context) {
-+				tmp = next;
-+				sel = i;
-+
-+			} else if (tmp->context < next->context) {
-+				continue;
-+
-+			} else if (dma_fence_is_later(tmp, next)) {
-+				fences[i] = dma_fence_unwrap_next(&iter[i]);
-+				goto restart;
-+			} else {
-+				fences[sel] = dma_fence_unwrap_next(&iter[sel]);
-+				goto restart;
-+			}
-+		}
-+
-+		if (tmp) {
-+			array[count++] = dma_fence_get(tmp);
-+			fences[sel] = dma_fence_unwrap_next(&iter[sel]);
-+		}
-+	} while (tmp);
-+
-+	if (count == 0) {
-+		tmp = dma_fence_get_stub();
-+		goto return_tmp;
-+	}
-+
-+	if (count == 1) {
-+		tmp = array[0];
-+		goto return_tmp;
-+	}
-+
-+	result = dma_fence_array_create(count, array,
-+					dma_fence_context_alloc(1),
-+					1, false);
-+	if (!result) {
-+		tmp = NULL;
-+		goto return_tmp;
-+	}
-+	return &result->base;
-+
-+return_tmp:
-+	kfree(array);
-+	return tmp;
-+}
-+EXPORT_SYMBOL_GPL(__dma_fence_unwrap_merge);
-diff --git a/drivers/dma-buf/st-dma-fence-unwrap.c b/drivers/dma-buf/st-dma-fence-unwrap.c
-index e20c5a7dcfe4..4105d5ea8dde 100644
---- a/drivers/dma-buf/st-dma-fence-unwrap.c
-+++ b/drivers/dma-buf/st-dma-fence-unwrap.c
-@@ -238,6 +238,113 @@ static int unwrap_chain_array(void *arg)
- 	return err;
- }
- 
-+static int unwrap_merge(void *arg)
-+{
-+	struct dma_fence *fence, *f1, *f2, *f3;
-+	struct dma_fence_unwrap iter;
-+	int err = 0;
-+
-+	f1 = mock_fence();
-+	if (!f1)
-+		return -ENOMEM;
-+
-+	f2 = mock_fence();
-+	if (!f2) {
-+		err = -ENOMEM;
-+		goto error_put_f1;
-+	}
-+
-+	f3 = dma_fence_unwrap_merge(f1, f2);
-+	if (!f3) {
-+		err = -ENOMEM;
-+		goto error_put_f2;
-+	}
-+
-+	dma_fence_unwrap_for_each(fence, &iter, f3) {
-+		if (fence == f1) {
-+			dma_fence_put(f1);
-+			f1 = NULL;
-+		} else if (fence == f2) {
-+			dma_fence_put(f2);
-+			f2 = NULL;
-+		} else {
-+			pr_err("Unexpected fence!\n");
-+			err = -EINVAL;
-+		}
-+	}
-+
-+	if (f1 || f2) {
-+		pr_err("Not all fences seen!\n");
-+		err = -EINVAL;
-+	}
-+
-+	dma_fence_put(f3);
-+error_put_f2:
-+	dma_fence_put(f2);
-+error_put_f1:
-+	dma_fence_put(f1);
-+	return err;
-+}
-+
-+static int unwrap_merge_complex(void *arg)
-+{
-+	struct dma_fence *fence, *f1, *f2, *f3, *f4, *f5;
-+	struct dma_fence_unwrap iter;
-+	int err = -ENOMEM;
-+
-+	f1 = mock_fence();
-+	if (!f1)
-+		return -ENOMEM;
-+
-+	f2 = mock_fence();
-+	if (!f2)
-+		goto error_put_f1;
-+
-+	f3 = dma_fence_unwrap_merge(f1, f2);
-+	if (!f3)
-+		goto error_put_f2;
-+
-+	/* The resulting array has the fences in reverse */
-+	f4 = dma_fence_unwrap_merge(f2, f1);
-+	if (!f4)
-+		goto error_put_f3;
-+
-+	/* Signaled fences should be filtered, the two arrays merged. */
-+	f5 = dma_fence_unwrap_merge(f3, f4, dma_fence_get_stub());
-+	if (!f5)
-+		goto error_put_f4;
-+
-+	err = 0;
-+	dma_fence_unwrap_for_each(fence, &iter, f5) {
-+		if (fence == f1) {
-+			dma_fence_put(f1);
-+			f1 = NULL;
-+		} else if (fence == f2) {
-+			dma_fence_put(f2);
-+			f2 = NULL;
-+		} else {
-+			pr_err("Unexpected fence!\n");
-+			err = -EINVAL;
-+		}
-+	}
-+
-+	if (f1 || f2) {
-+		pr_err("Not all fences seen!\n");
-+		err = -EINVAL;
-+	}
-+
-+	dma_fence_put(f5);
-+error_put_f4:
-+	dma_fence_put(f4);
-+error_put_f3:
-+	dma_fence_put(f3);
-+error_put_f2:
-+	dma_fence_put(f2);
-+error_put_f1:
-+	dma_fence_put(f1);
-+	return err;
-+}
-+
- int dma_fence_unwrap(void)
- {
- 	static const struct subtest tests[] = {
-@@ -245,6 +352,8 @@ int dma_fence_unwrap(void)
- 		SUBTEST(unwrap_array),
- 		SUBTEST(unwrap_chain),
- 		SUBTEST(unwrap_chain_array),
-+		SUBTEST(unwrap_merge),
-+		SUBTEST(unwrap_merge_complex),
- 	};
- 
- 	return subtests(tests, NULL);
-diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
-index 0fe564539166..3ebec19a8e02 100644
---- a/drivers/dma-buf/sync_file.c
-+++ b/drivers/dma-buf/sync_file.c
-@@ -146,50 +146,6 @@ char *sync_file_get_name(struct sync_file *sync_file, char *buf, int len)
- 	return buf;
- }
- 
--static int sync_file_set_fence(struct sync_file *sync_file,
--			       struct dma_fence **fences, int num_fences)
--{
--	struct dma_fence_array *array;
--
--	/*
--	 * The reference for the fences in the new sync_file and held
--	 * in add_fence() during the merge procedure, so for num_fences == 1
--	 * we already own a new reference to the fence. For num_fence > 1
--	 * we own the reference of the dma_fence_array creation.
--	 */
--
--	if (num_fences == 0) {
--		sync_file->fence = dma_fence_get_stub();
--		kfree(fences);
--
--	} else if (num_fences == 1) {
--		sync_file->fence = fences[0];
--		kfree(fences);
--
--	} else {
--		array = dma_fence_array_create(num_fences, fences,
--					       dma_fence_context_alloc(1),
--					       1, false);
--		if (!array)
--			return -ENOMEM;
--
--		sync_file->fence = &array->base;
--	}
--
--	return 0;
--}
--
--static void add_fence(struct dma_fence **fences,
--		      int *i, struct dma_fence *fence)
--{
--	fences[*i] = fence;
--
--	if (!dma_fence_is_signaled(fence)) {
--		dma_fence_get(fence);
--		(*i)++;
--	}
--}
--
- /**
-  * sync_file_merge() - merge two sync_files
-  * @name:	name of new fence
-@@ -203,84 +159,21 @@ static void add_fence(struct dma_fence **fences,
- static struct sync_file *sync_file_merge(const char *name, struct sync_file *a,
- 					 struct sync_file *b)
- {
--	struct dma_fence *a_fence, *b_fence, **fences;
--	struct dma_fence_unwrap a_iter, b_iter;
--	unsigned int index, num_fences;
- 	struct sync_file *sync_file;
-+	struct dma_fence *fence;
- 
- 	sync_file = sync_file_alloc();
- 	if (!sync_file)
- 		return NULL;
- 
--	num_fences = 0;
--	dma_fence_unwrap_for_each(a_fence, &a_iter, a->fence)
--		++num_fences;
--	dma_fence_unwrap_for_each(b_fence, &b_iter, b->fence)
--		++num_fences;
--
--	if (num_fences > INT_MAX)
--		goto err_free_sync_file;
--
--	fences = kcalloc(num_fences, sizeof(*fences), GFP_KERNEL);
--	if (!fences)
--		goto err_free_sync_file;
--
--	/*
--	 * We can't guarantee that fences in both a and b are ordered, but it is
--	 * still quite likely.
--	 *
--	 * So attempt to order the fences as we pass over them and merge fences
--	 * with the same context.
--	 */
--
--	index = 0;
--	for (a_fence = dma_fence_unwrap_first(a->fence, &a_iter),
--	     b_fence = dma_fence_unwrap_first(b->fence, &b_iter);
--	     a_fence || b_fence; ) {
--
--		if (!b_fence) {
--			add_fence(fences, &index, a_fence);
--			a_fence = dma_fence_unwrap_next(&a_iter);
--
--		} else if (!a_fence) {
--			add_fence(fences, &index, b_fence);
--			b_fence = dma_fence_unwrap_next(&b_iter);
--
--		} else if (a_fence->context < b_fence->context) {
--			add_fence(fences, &index, a_fence);
--			a_fence = dma_fence_unwrap_next(&a_iter);
--
--		} else if (b_fence->context < a_fence->context) {
--			add_fence(fences, &index, b_fence);
--			b_fence = dma_fence_unwrap_next(&b_iter);
--
--		} else if (__dma_fence_is_later(a_fence->seqno, b_fence->seqno,
--						a_fence->ops)) {
--			add_fence(fences, &index, a_fence);
--			a_fence = dma_fence_unwrap_next(&a_iter);
--			b_fence = dma_fence_unwrap_next(&b_iter);
--
--		} else {
--			add_fence(fences, &index, b_fence);
--			a_fence = dma_fence_unwrap_next(&a_iter);
--			b_fence = dma_fence_unwrap_next(&b_iter);
--		}
-+	fence = dma_fence_unwrap_merge(a->fence, b->fence);
-+	if (!fence) {
-+		fput(sync_file->file);
-+		return NULL;
- 	}
--
--	if (sync_file_set_fence(sync_file, fences, index) < 0)
--		goto err_put_fences;
--
-+	sync_file->fence = fence;
- 	strlcpy(sync_file->user_name, name, sizeof(sync_file->user_name));
- 	return sync_file;
--
--err_put_fences:
--	while (index)
--		dma_fence_put(fences[--index]);
--	kfree(fences);
--
--err_free_sync_file:
--	fput(sync_file->file);
--	return NULL;
- }
- 
- static int sync_file_release(struct inode *inode, struct file *file)
-diff --git a/include/linux/dma-fence-unwrap.h b/include/linux/dma-fence-unwrap.h
-index a4d342fef8e0..390de1ee9d35 100644
---- a/include/linux/dma-fence-unwrap.h
-+++ b/include/linux/dma-fence-unwrap.h
-@@ -52,4 +52,28 @@ struct dma_fence *dma_fence_unwrap_next(struct dma_fence_unwrap *cursor);
- 	     fence = dma_fence_unwrap_next(cursor))			\
- 		if (!dma_fence_is_signaled(fence))
- 
-+struct dma_fence *__dma_fence_unwrap_merge(unsigned int num_fences,
-+					   struct dma_fence **fences,
-+					   struct dma_fence_unwrap *cursors);
-+
-+/**
-+ * dma_fence_unwrap_merge - unwrap and merge fences
-+ *
-+ * All fences given as parameters are unwrapped and merged back together as flat
-+ * dma_fence_array. Useful if multiple containers need to be merged together.
-+ *
-+ * Implemented as a macro to allocate the necessary arrays on the stack and
-+ * account the stack frame size to the caller.
-+ *
-+ * Returns NULL on memory allocation failure, a dma_fence object representing
-+ * all the given fences otherwise.
-+ */
-+#define dma_fence_unwrap_merge(...)					\
-+	({								\
-+		struct dma_fence *__f[] = { __VA_ARGS__ };		\
-+		struct dma_fence_unwrap __c[ARRAY_SIZE(__f)];		\
-+									\
-+		__dma_fence_unwrap_merge(ARRAY_SIZE(__f), __f, __c);	\
-+	})
-+
- #endif
--- 
-2.25.1
+Am 06.05.22 um 16:10 schrieb Christian König:
+> The selftests, fix the error handling, remove unused functions and stop
+> leaking memory in failed tests.
+>
+> v2: fix the memory leak correctly.
+>
+> Signed-off-by: Christian König <christian.koenig@amd.com>
+> ---
+>   drivers/dma-buf/st-dma-fence-unwrap.c | 48 +++++++++++----------------
+>   1 file changed, 19 insertions(+), 29 deletions(-)
+>
+> diff --git a/drivers/dma-buf/st-dma-fence-unwrap.c b/drivers/dma-buf/st-dma-fence-unwrap.c
+> index 039f016b57be..e20c5a7dcfe4 100644
+> --- a/drivers/dma-buf/st-dma-fence-unwrap.c
+> +++ b/drivers/dma-buf/st-dma-fence-unwrap.c
+> @@ -4,27 +4,19 @@
+>    * Copyright (C) 2022 Advanced Micro Devices, Inc.
+>    */
+>   
+> +#include <linux/dma-fence.h>
+> +#include <linux/dma-fence-array.h>
+> +#include <linux/dma-fence-chain.h>
+>   #include <linux/dma-fence-unwrap.h>
+> -#if 0
+> -#include <linux/kernel.h>
+> -#include <linux/kthread.h>
+> -#include <linux/mm.h>
+> -#include <linux/sched/signal.h>
+> -#include <linux/slab.h>
+> -#include <linux/spinlock.h>
+> -#include <linux/random.h>
+> -#endif
+>   
+>   #include "selftest.h"
+>   
+>   #define CHAIN_SZ (4 << 10)
+>   
+> -static inline struct mock_fence {
+> +struct mock_fence {
+>   	struct dma_fence base;
+>   	spinlock_t lock;
+> -} *to_mock_fence(struct dma_fence *f) {
+> -	return container_of(f, struct mock_fence, base);
+> -}
+> +};
+>   
+>   static const char *mock_name(struct dma_fence *f)
+>   {
+> @@ -45,7 +37,8 @@ static struct dma_fence *mock_fence(void)
+>   		return NULL;
+>   
+>   	spin_lock_init(&f->lock);
+> -	dma_fence_init(&f->base, &mock_ops, &f->lock, 0, 0);
+> +	dma_fence_init(&f->base, &mock_ops, &f->lock,
+> +		       dma_fence_context_alloc(1), 1);
+>   
+>   	return &f->base;
+>   }
+> @@ -59,7 +52,7 @@ static struct dma_fence *mock_array(unsigned int num_fences, ...)
+>   
+>   	fences = kcalloc(num_fences, sizeof(*fences), GFP_KERNEL);
+>   	if (!fences)
+> -		return NULL;
+> +		goto error_put;
+>   
+>   	va_start(valist, num_fences);
+>   	for (i = 0; i < num_fences; ++i)
+> @@ -70,13 +63,17 @@ static struct dma_fence *mock_array(unsigned int num_fences, ...)
+>   				       dma_fence_context_alloc(1),
+>   				       1, false);
+>   	if (!array)
+> -		goto cleanup;
+> +		goto error_free;
+>   	return &array->base;
+>   
+> -cleanup:
+> -	for (i = 0; i < num_fences; ++i)
+> -		dma_fence_put(fences[i]);
+> +error_free:
+>   	kfree(fences);
+> +
+> +error_put:
+> +	va_start(valist, num_fences);
+> +	for (i = 0; i < num_fences; ++i)
+> +		dma_fence_put(va_arg(valist, typeof(*fences)));
+> +	va_end(valist);
+>   	return NULL;
+>   }
+>   
+> @@ -113,7 +110,6 @@ static int sanitycheck(void *arg)
+>   	if (!chain)
+>   		return -ENOMEM;
+>   
+> -	dma_fence_signal(f);
+>   	dma_fence_put(chain);
+>   	return err;
+>   }
+> @@ -154,10 +150,8 @@ static int unwrap_array(void *arg)
+>   		err = -EINVAL;
+>   	}
+>   
+> -	dma_fence_signal(f1);
+> -	dma_fence_signal(f2);
+>   	dma_fence_put(array);
+> -	return 0;
+> +	return err;
+>   }
+>   
+>   static int unwrap_chain(void *arg)
+> @@ -196,10 +190,8 @@ static int unwrap_chain(void *arg)
+>   		err = -EINVAL;
+>   	}
+>   
+> -	dma_fence_signal(f1);
+> -	dma_fence_signal(f2);
+>   	dma_fence_put(chain);
+> -	return 0;
+> +	return err;
+>   }
+>   
+>   static int unwrap_chain_array(void *arg)
+> @@ -242,10 +234,8 @@ static int unwrap_chain_array(void *arg)
+>   		err = -EINVAL;
+>   	}
+>   
+> -	dma_fence_signal(f1);
+> -	dma_fence_signal(f2);
+>   	dma_fence_put(chain);
+> -	return 0;
+> +	return err;
+>   }
+>   
+>   int dma_fence_unwrap(void)
 
