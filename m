@@ -2,40 +2,40 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3025AC4332F
-	for <linux-media@archiver.kernel.org>; Mon,  9 May 2022 10:31:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13E80C433EF
+	for <linux-media@archiver.kernel.org>; Mon,  9 May 2022 10:31:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbiEIKe4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 May 2022 06:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
+        id S229695AbiEIKe6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 May 2022 06:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiEIKeh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 May 2022 06:34:37 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C487F24EA2C
-        for <linux-media@vger.kernel.org>; Mon,  9 May 2022 03:29:55 -0700 (PDT)
+        with ESMTP id S230359AbiEIKei (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 May 2022 06:34:38 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9B21F7E12
+        for <linux-media@vger.kernel.org>; Mon,  9 May 2022 03:29:59 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 449BE55A;
-        Mon,  9 May 2022 12:29:54 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 210FA484;
+        Mon,  9 May 2022 12:29:19 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1652092194;
-        bh=nm8ZfDBH9GeQL9RxwlQxtxtYI2Dv0JIWWH6rAl7iAfw=;
+        s=mail; t=1652092159;
+        bh=0o4uKUGoH0+2mStSf9ppR8fnsoNFbhReoOsFOZJCLzM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wjf3N1HjsATYwaies1nYg3+1ZyUUmSYb6RQOzjMN/FG0ZJ9wycgZ8tXh3OYwUWY8E
-         V9F2rMOy2Ga9Uf6p9VBelniVaYYbr0sVvTROndxPkApZrbz0R/oZcDygP7PsOkWY56
-         zkFAitqd/8gPnvLltUL9cCF9EGNqV+L4AnfbCUZI=
-Date:   Mon, 9 May 2022 13:29:50 +0300
+        b=uJT1xGrHo6XA7Fzy/A8/bvwIq9+gIz53yhv48IeiglHTsn0FfqSLAPcHLONapYEwk
+         IKcocuIMwdNBZEjssgCtBbfhVuROiqAFhy2w0/1tjdnGUKZXuS1WIdejnLXlQPhUDb
+         DUSdmP0l0qI7nXVzxdzAzZkpvqaIEtL5N5LE1XoU=
+Date:   Mon, 9 May 2022 13:29:15 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: [PATCH 3/7] videobuf2-dma-sg.c: kvmalloc_array -> kvcalloc
-Message-ID: <YnjtHipdmqf2fXwu@pendragon.ideasonboard.com>
+Subject: Re: [PATCH 1/7] v4l2-subdev.c: kvmalloc_array -> kvcalloc
+Message-ID: <Ynjs++Ejru2FyBiv@pendragon.ideasonboard.com>
 References: <20220509091553.2637089-1-hverkuil-cisco@xs4all.nl>
- <20220509091553.2637089-4-hverkuil-cisco@xs4all.nl>
+ <20220509091553.2637089-2-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220509091553.2637089-4-hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220509091553.2637089-2-hverkuil-cisco@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
@@ -44,33 +44,35 @@ Hi Hans,
 
 Thank you for the patch.
 
-On Mon, May 09, 2022 at 11:15:49AM +0200, Hans Verkuil wrote:
+On Mon, May 09, 2022 at 11:15:47AM +0200, Hans Verkuil wrote:
 > Fixes smatch warning:
 > 
-> drivers/media/common/videobuf2/videobuf2-dma-sg.c:129 vb2_dma_sg_alloc() warn: Please consider using kvcalloc instead
+> drivers/media/v4l2-core/v4l2-subdev.c:978 __v4l2_subdev_state_alloc() warn: Please consider using kvcalloc instead
 > 
 > Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 > ---
->  drivers/media/common/videobuf2/videobuf2-dma-sg.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  drivers/media/v4l2-core/v4l2-subdev.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> index f8a21c560ad2..fa69158a65b1 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> @@ -126,8 +126,7 @@ static void *vb2_dma_sg_alloc(struct vb2_buffer *vb, struct device *dev,
->  	 * there is no memory consistency guarantee, hence dma-sg ignores DMA
->  	 * attributes passed from the upper layer.
->  	 */
-> -	buf->pages = kvmalloc_array(buf->num_pages, sizeof(struct page *),
-> -				    GFP_KERNEL | __GFP_ZERO);
-> +	buf->pages = kvcalloc(buf->num_pages, sizeof(struct page *), GFP_KERNEL);
->  	if (!buf->pages)
->  		goto fail_pages_array_alloc;
+> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> index 3da200bb23dd..5c27bac772ea 100644
+> --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> @@ -975,9 +975,8 @@ __v4l2_subdev_state_alloc(struct v4l2_subdev *sd, const char *lock_name,
+>  		state->lock = &state->_lock;
 >  
+>  	if (sd->entity.num_pads) {
+> -		state->pads = kvmalloc_array(sd->entity.num_pads,
+> -					     sizeof(*state->pads),
+> -					     GFP_KERNEL | __GFP_ZERO);
+> +		state->pads = kvcalloc(sd->entity.num_pads,
+> +				       sizeof(*state->pads), GFP_KERNEL);
+>  		if (!state->pads) {
+>  			ret = -ENOMEM;
+>  			goto err;
 
 -- 
 Regards,
