@@ -2,315 +2,339 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D908BC433F5
-	for <linux-media@archiver.kernel.org>; Mon,  9 May 2022 14:11:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE313C43217
+	for <linux-media@archiver.kernel.org>; Mon,  9 May 2022 14:32:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236750AbiEIOPJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 May 2022 10:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        id S237322AbiEIOgo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 May 2022 10:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236764AbiEIOPA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 May 2022 10:15:00 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769FC10114D
-        for <linux-media@vger.kernel.org>; Mon,  9 May 2022 07:11:03 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id m20so27047417ejj.10
-        for <linux-media@vger.kernel.org>; Mon, 09 May 2022 07:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=YAoxFHFRM8IxH//rl2E1kRzGQfqjVgqislcI54PaMRE=;
-        b=NVM+IF4sAq0pa7DJ5guFchnH9ankeuEs4ibAokSj9n9jCVYFWiu9Z3P05XucwG8WuJ
-         G12ZT6+TeBycSRZCcRHqsGSg21awPboH317dXXstBoUiBg1u4nuJxc82I/2IzGe+PDIc
-         Zn2/vMc6O2/jz4dZ0hPSIrauotcRRaOqFeb8o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=YAoxFHFRM8IxH//rl2E1kRzGQfqjVgqislcI54PaMRE=;
-        b=puqDzkOh1szPOLvFm6y+0Yau7XR1dHvW9iishyi18nX6Dt7BpwmbM+e/8w9XSdndKN
-         W/f/fnankph1wH3EePkD4gxpTTttSUrGeWwdhnEVBewnvmzBCFhjMgzkjWdoIo5oNgf3
-         NmjF22WLBld3l9h9Jcr3BSy0a/MPTAkstcp/xJH2NJDxc8TcpWBRcZQVVvpiwK7fZcNe
-         RNNB0O7zBCjyiTufdwFd2jsh9XbX+udw4V3hneyhWg0V3PpplabrAPOOr42rAlVtNGnM
-         dYk17nh4SDnsKIZj334JmJKP4daVUVBZ2OJ3e9Jx8X1AOhpvsJKWhmV0b7b3BwOQ2bz6
-         42QQ==
-X-Gm-Message-State: AOAM531SvrgJ5NysGL1KmuDL3o6GOu14GfSnye2fDaBsAg7aI6g1bUkL
-        u2sGpbe6/4tdo14TXcepgxBWzA==
-X-Google-Smtp-Source: ABdhPJy3c8FTR+UJLWgJvIV2jp0CoaWmRyQ/dDVLC9/TpZNgwGriaa43NPahAaje5AnLQbly7HOA0w==
-X-Received: by 2002:a17:907:6e2a:b0:6f4:69bb:7ef6 with SMTP id sd42-20020a1709076e2a00b006f469bb7ef6mr14346018ejc.0.1652105461812;
-        Mon, 09 May 2022 07:11:01 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id e1-20020a1709062c0100b006f3ef214dafsm5081920ejh.21.2022.05.09.07.11.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 07:11:01 -0700 (PDT)
-Date:   Mon, 9 May 2022 16:10:59 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, jason@jlekstrand.net,
-        daniels@collabora.com, skhawaja@google.com, maad.aldabagh@amd.com,
-        sergemetral@google.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, Felix.Kuehling@amd.com,
-        alexander.deucher@amd.com, tzimmermann@suse.de,
-        tvrtko.ursulin@linux.intel.com, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: Tackling the indefinite/user DMA fence problem
-Message-ID: <Ynkg81p6ADyZBa/L@phenom.ffwll.local>
-References: <20220502163722.3957-1-christian.koenig@amd.com>
- <YnJQs1iusrBvpuMs@phenom.ffwll.local>
- <a01c7703-f7f7-f8ce-f80e-632a6fdcbbbe@gmail.com>
+        with ESMTP id S237251AbiEIOgm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 May 2022 10:36:42 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC161E3CB;
+        Mon,  9 May 2022 07:32:47 -0700 (PDT)
+Received: (Authenticated sender: foss@0leil.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5664124000C;
+        Mon,  9 May 2022 14:32:44 +0000 (UTC)
+From:   Quentin Schulz <foss+kernel@0leil.net>
+Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        foss+kernel@0leil.net,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Subject: [PATCH v3 2/4] media: ov5675: add device-tree support and support runtime PM
+Date:   Mon,  9 May 2022 16:32:24 +0200
+Message-Id: <20220509143226.531117-2-foss+kernel@0leil.net>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220509143226.531117-1-foss+kernel@0leil.net>
+References: <20220509143226.531117-1-foss+kernel@0leil.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a01c7703-f7f7-f8ce-f80e-632a6fdcbbbe@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, May 09, 2022 at 08:56:41AM +0200, Christian König wrote:
-> Am 04.05.22 um 12:08 schrieb Daniel Vetter:
-> > On Mon, May 02, 2022 at 06:37:07PM +0200, Christian König wrote:
-> > > Hello everyone,
-> > > 
-> > > it's a well known problem that the DMA-buf subsystem mixed
-> > > synchronization and memory management requirements into the same
-> > > dma_fence and dma_resv objects. Because of this dma_fence objects need
-> > > to guarantee that they complete within a finite amount of time or
-> > > otherwise the system can easily deadlock.
-> > > 
-> > > One of the few good things about this problem is that it is really good
-> > > understood by now.
-> > > 
-> > > Daniel and others came up with some documentation:
-> > > https://dri.freedesktop.org/docs/drm/driver-api/dma-buf.html?highlight=dma_buf#indefinite-dma-fences
-> > > 
-> > > And Jason did an excellent presentation about that problem on last years
-> > > LPC: https://lpc.events/event/11/contributions/1115/
-> > > 
-> > > Based on that we had been able to reject new implementations of
-> > > infinite/user DMA fences and mitigate the effect of the few existing
-> > > ones.
-> > > 
-> > > The still remaining down side is that we don't have a way of using user
-> > > fences as dependency in both the explicit (sync_file, drm_syncobj) as
-> > > well as the implicit (dma_resv) synchronization objects, resulting in
-> > > numerous problems and limitations for things like HMM, user queues
-> > > etc....
-> > > 
-> > > This patch set here now tries to tackle this problem by untangling the
-> > > synchronization from the memory management. What it does *not* try to do
-> > > is to fix the existing kernel fences, because I think we now can all
-> > > agree on that this isn't really possible.
-> > > 
-> > > To archive this goal what I do in this patch set is to add some parallel
-> > > infrastructure to cleanly separate normal kernel dma_fence objects from
-> > > indefinite/user fences:
-> > > 
-> > > 1. It introduce a DMA_FENCE_FLAG_USER define (after renaming some
-> > > existing driver defines). To note that a certain dma_fence is an user
-> > > fence and *must* be ignore by memory management and never used as
-> > > dependency for normal none user dma_fence objects.
-> > > 
-> > > 2. The dma_fence_array and dma_fence_chain containers are modified so
-> > > that they are marked as user fences whenever any of their contained
-> > > fences are an user fence.
-> > > 
-> > > 3. The dma_resv object gets a new DMA_RESV_USAGE_USER flag which must be
-> > > used with indefinite/user fences and separates those into it's own
-> > > synchronization domain.
-> > > 
-> > > 4. The existing dma_buf_poll_add_cb() function is modified so that
-> > > indefinite/user fences are included in the polling.
-> > > 
-> > > 5. The sync_file synchronization object is modified so that we
-> > > essentially have two fence streams instead of just one.
-> > > 
-> > > 6. The drm_syncobj is modified in a similar way. User fences are just
-> > > ignored unless the driver explicitly states support to wait for them.
-> > > 
-> > > 7. The DRM subsystem gains a new DRIVER_USER_FENCE flag which drivers
-> > > can use to indicate the need for user fences. If user fences are used
-> > > the atomic mode setting starts to support user fences as IN/OUT fences.
-> > > 
-> > > 8. Lockdep is used at various critical locations to ensure that nobody
-> > > ever tries to mix user fences with non user fences.
-> > > 
-> > > The general approach is to just ignore user fences unless a driver
-> > > stated explicitely support for them.
-> > > 
-> > > On top of all of this I've hacked amdgpu so that we add the resulting CS
-> > > fence only as kernel dependency to the dma_resv object and an additional
-> > > wrapped up with a dma_fence_array and a stub user fence.
-> > > 
-> > > The result is that the newly added atomic modeset functions now
-> > > correctly wait for the user fence to complete before doing the flip. And
-> > > dependent CS don't pipeline any more, but rather block on the CPU before
-> > > submitting work.
-> > > 
-> > > After tons of debugging and testing everything now seems to not go up in
-> > > flames immediately and even lockdep is happy with the annotations.
-> > > 
-> > > I'm perfectly aware that this is probably by far the most controversial
-> > > patch set I've ever created and I really wish we wouldn't need it. But
-> > > we certainly have the requirement for this and I don't see much other
-> > > chance to get that working in an UAPI compatible way.
-> > > 
-> > > Thoughts/comments?
-> > I think you need to type up the goal or exact problem statement you're
-> > trying to solve first. What you typed up is a solution along the lines of
-> > "try to stuff userspace memory fences into dma_fence and see how horrible
-> > it all is", and that's certainly an interesting experiment, but what are
-> > you trying to solve with it?
-> 
-> Well, good point. I explained to much how it works, but now why.
-> 
-> In general I would describe the goal as: Providing a standard kernel
-> infrastructure for user fences.
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-So on that goal the part I fully agree on is that drm_syncobj can (and
-should imo) be able to contain userspace memory fences. The uapi semantics
-and everything is already fully set up to support that, but maybe with
-reduced performance: Non-aware userspace (or when you don't trust the
-supplier of the umf) needs to block when looking up the fence, and the
-dma_fence returned will always be signalled already. But that's just a
-mild performance issue (and vk drivers paper over that already with
-threading) and not a correctness issue.
+Until now, this driver only supported ACPI. This adds support for
+Device Tree too while enabling clock and regulators in runtime PM.
 
-> > Like if the issue is to enable opencl or whatever, then that's no problem
-> > (rocm on amdkfd is a thing, same maybe without the kfd part can be done
-> > anywhere else). If the goal is to enable userspace memory fences for vk,
-> > then we really don't need these everywhere, but really only in drm_syncobj
-> > (and maybe sync_file).
-> 
-> Yes, having an in kernel representation for vk user space fences is one of
-> the goals.
-> 
-> And I was going back and forth if I should rather come up with a new
-> structure for this or use the existing dma_fence with a flag as well.
-> 
-> I've decided to go down the later router because we have quite a lot of
-> existing functionality which can be re-used. But if you have a good argument
-> that it would be more defensive to come up with something completely new,
-> I'm perfectly fine with that as well.
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+---
 
-Yeah so stuffing that into dma_fence already freaks me out a bit. It is
-quite fundamentally a different thing, and it would be really nice to make
-that very apparent at the type level too.
+v3:
+ - added linux/mod_devicetable.h include,
+ - moved delay for reset pulse right after the regulators are enabled,
+ - removed check on is_acpi_node in favor of checks on presence of OF
+ properties (e.g. devm_clk_get_optional returns NULL),
+ - moved power management out of system suspend/resume into runtime PM
+ callbacks,
+ - removed ACPI specific comment since it's not specific to this driver,
+ - changed devm_clk_get to devm_clk_get_optional,
+ - remove OF use of clock-frequency (handled by devm_clk_get_optional
+ directly),
+ - removed name of clock (only one, so no need for anything explicit)
+ when requesting a clock from OF,
+ - wrapped lines to 80 chars,
 
-E.g. to make sure you never ever end up with an umf fence in mmu notifier
-invalidate callback. You can enforce that with runtime checks too, but imo
-compile time fail is better than runtime fail.
+v2:
+ - fixed unused-const-variable warning by removing of_match_ptr in
+ of_match_table, reported by kernel test robot,
 
-> > If the goal is specifically atomic kms, then there's an entire can of
-> > worms there that I really don't want to think about, but it exists: We
-> > have dma_fence as out-fences from atomic commit, and that's already
-> > massively broken since most drivers allocate some memory or at least take
-> > locks which can allocate memory in their commit path. Like i2c. Putting a
-> > userspace memory fence as in-fence in there makes that problem
-> > substantially worse, since at least in theory you're just not allowed to
-> > might_faul in atomic_commit_tail.
-> 
-> Yes, that's unfortunately one of the goals as well and yes I completely
-> agree on the can of worms. But I think I've solved that.
-> 
-> What I do in the patch set is to enforce that the out fence is an user fence
-> when the driver supports user in fences as well.
-> 
-> Since user fences doesn't have the memory management dependency drivers can
-> actually allocate memory or call I2C functions which takes locks which have
-> memory allocation dependencies.
-> 
-> Or do I miss some other reason why you can't fault or allocate memory in
-> atomic_commit_tail? At least lockdep seems to be happy about that now.
+ drivers/media/i2c/ov5675.c | 143 +++++++++++++++++++++++++++++++------
+ 1 file changed, 122 insertions(+), 21 deletions(-)
 
-The problem is a bit that this breaks the uapi already. At least if the
-goal is to have this all be perfectly transparent for userspace - as you
-as you have multi-gpu setups going on at least.
-
-> > If the goal is to keep the uapi perfectly compatible then your patch set
-> > doesn't look like a solution, since as soon as another driver is involved
-> > which doesn't understand userspace memory fences it all falls apart. So
-> > works great for a quick demo with amd+amd sharing, but not much further.
-> > And I don't think it's feasible to just rev the entire ecosystem, since
-> > that kinda defeats the point of keeping uapi stable - if we rev everything
-> > we might as well also rev the uapi and make this a bit more incremental
-> > again :-)
-> 
-> Yes, unfortunately the uapi needs to stay compatible as well and yes that
-> means we need to deploy this to all drivers involved.
-> 
-> We at least need to be able to provide a stack on new hardware with (for
-> example) Ubuntu 18.04 without replacing all the userspace components.
-> 
-> What we can replace is the OpenGL stack and if necessary libdrm, but not
-> (for example) the X server and most likely not the DDX in some cases.
-> 
-> The same applies with surfaceflinger and to some extend Wayland as well.
-
-So for perfect uapi compat for existing compositor I really don't think
-stuffing umf into the kernel is the right approach. Too many little
-corners that break:
-
-- the in/out fence mismatch every
-- cross gpu with different userspace that doesn't understand umf and then
-  just ignores them
-- compositors which currently assume implicit sync finishes eventually,
-  and with umf that gets complicated at best
-- same with sync_file, the uapi atm does not have a concept of future
-  fence
-
-So you can kinda make this work, but it falls apart all over the place.
-And I also don't think smashing umf into all these old concepts helps us
-in any way to get towards a desktop which is umf-native.
-
-My take is still that for backwards compat the simplest way is if a
-umf-native driver simply provides dma-fence backwards compat as an opt-in,
-which userspace chooses when it's necessary. There's really only two
-things you need for that to work:
-
-- a timeout of some sort on the dma_fence, which might or might not kill
-  the entire context. This is entirey up to how your userspace does or
-  does not implement stuff like arb robustness or vk_error_device_lost
-
-- pre-pinned memory management to block out the all the inversions. This
-  is a bit more nasty, but since we do have all the code for this already
-  it really shouldn't be too tricky to make that happen for the fancy new
-  umf world.
-
-You do not need a kernel scheduler or anything like that at all, you can
-do full userspace direct submit to hw and all that fun. Maybe do a
-drm/sched frontend (and then your submit code does exactly what userspace
-would do too).
-
-Importantly the things you really don't need:
-
-- special hw support, even if the only mode your hw supports is with page
-  faults and all that: You can make sure all the pages are present
-  upfront, and then simply kill the entire context is a page fault
-  happens.
-
-- special fw scheduler support: Once the memory management inversions are
-  taken care of with pre-pinning under dma_fences, then the only other
-  thing you need is a timeout for the dma_fence to signal. And maybe some
-  kind of guaranteed ordering if you want to use a dma_fence timeline
-  since that one can't go backwards.
-
-Trying to shoehorn umf into all the old concepts like implicit sync or
-sync_file which really don't support umf works for a demo, but imo just
-isn't solid enough for shipping everywhere.
-
-And long term I really don't think we ever want umf anywhere else than
-drm_syncobj, at least for a 100% umf-native stack.
-
-So maybe this all goes back to the old discussion with had, where you
-argued for the need for special fw and hw and all that to make the old
-dma_fence stuff work. Why is that needed? I still don't get that part ...
--Daniel
+diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
+index 82ba9f56baec..cee380196774 100644
+--- a/drivers/media/i2c/ov5675.c
++++ b/drivers/media/i2c/ov5675.c
+@@ -3,10 +3,14 @@
+ 
+ #include <asm/unaligned.h>
+ #include <linux/acpi.h>
++#include <linux/clk.h>
+ #include <linux/delay.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/pm_runtime.h>
++#include <linux/regulator/consumer.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-fwnode.h>
+@@ -17,7 +21,7 @@
+ 
+ #define OV5675_LINK_FREQ_450MHZ		450000000ULL
+ #define OV5675_SCLK			90000000LL
+-#define OV5675_MCLK			19200000
++#define OV5675_XVCLK_19_2		19200000
+ #define OV5675_DATA_LANES		2
+ #define OV5675_RGB_DEPTH		10
+ 
+@@ -76,6 +80,14 @@
+ 
+ #define to_ov5675(_sd)			container_of(_sd, struct ov5675, sd)
+ 
++static const char * const ov5675_supply_names[] = {
++	"avdd",		/* Analog power */
++	"dovdd",	/* Digital I/O power */
++	"dvdd",		/* Digital core power */
++};
++
++#define OV5675_NUM_SUPPLIES	ARRAY_SIZE(ov5675_supply_names)
++
+ enum {
+ 	OV5675_LINK_FREQ_900MBPS,
+ };
+@@ -484,6 +496,9 @@ struct ov5675 {
+ 	struct v4l2_subdev sd;
+ 	struct media_pad pad;
+ 	struct v4l2_ctrl_handler ctrl_handler;
++	struct clk		*xvclk;
++	struct gpio_desc	*reset_gpio;
++	struct regulator_bulk_data supplies[OV5675_NUM_SUPPLIES];
+ 
+ 	/* V4L2 Controls */
+ 	struct v4l2_ctrl *link_freq;
+@@ -944,6 +959,50 @@ static int ov5675_set_stream(struct v4l2_subdev *sd, int enable)
+ 	return ret;
+ }
+ 
++static int ov5675_power_off(struct device *dev)
++{
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
++	struct ov5675 *ov5675 = to_ov5675(sd);
++
++	gpiod_set_value_cansleep(ov5675->reset_gpio, 1);
++	usleep_range(1000, 1200);
++
++	regulator_bulk_disable(OV5675_NUM_SUPPLIES, ov5675->supplies);
++	clk_disable_unprepare(ov5675->xvclk);
++
++	return 0;
++}
++
++static int ov5675_power_on(struct device *dev)
++{
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
++	struct ov5675 *ov5675 = to_ov5675(sd);
++	int ret;
++
++	ret = clk_prepare_enable(ov5675->xvclk);
++	if (ret < 0) {
++		dev_err(dev, "failed to enable xvclk: %d\n", ret);
++		return ret;
++	}
++
++	gpiod_set_value_cansleep(ov5675->reset_gpio, 1);
++
++	ret = regulator_bulk_enable(OV5675_NUM_SUPPLIES, ov5675->supplies);
++	if (ret) {
++		clk_disable_unprepare(ov5675->xvclk);
++		return ret;
++	}
++
++	/* Reset pulse should be at least 2ms */
++	usleep_range(2000, 2200);
++
++	gpiod_set_value_cansleep(ov5675->reset_gpio, 0);
++
++	usleep_range(1000, 1200);
++
++	return 0;
++}
++
+ static int __maybe_unused ov5675_suspend(struct device *dev)
+ {
+ 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+@@ -1106,32 +1165,60 @@ static const struct v4l2_subdev_internal_ops ov5675_internal_ops = {
+ 	.open = ov5675_open,
+ };
+ 
+-static int ov5675_check_hwcfg(struct device *dev)
++static int ov5675_get_hwcfg(struct ov5675 *ov5675, struct device *dev)
+ {
+ 	struct fwnode_handle *ep;
+ 	struct fwnode_handle *fwnode = dev_fwnode(dev);
+ 	struct v4l2_fwnode_endpoint bus_cfg = {
+ 		.bus_type = V4L2_MBUS_CSI2_DPHY
+ 	};
+-	u32 mclk;
++	u32 xvclk_rate;
+ 	int ret;
+ 	unsigned int i, j;
+ 
+ 	if (!fwnode)
+ 		return -ENXIO;
+ 
+-	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
++	ov5675->xvclk = devm_clk_get_optional(dev, NULL);
++	if (IS_ERR(ov5675->xvclk))
++		return dev_err_probe(dev, PTR_ERR(ov5675->xvclk),
++				     "failed to get xvclk: %ld\n",
++				     PTR_ERR(ov5675->xvclk));
+ 
+-	if (ret) {
+-		dev_err(dev, "can't get clock frequency");
+-		return ret;
++	if (ov5675->xvclk) {
++		xvclk_rate = clk_get_rate(ov5675->xvclk);
++	} else {
++		ret = fwnode_property_read_u32(fwnode, "clock-frequency",
++					       &xvclk_rate);
++
++		if (ret) {
++			dev_err(dev, "can't get clock frequency");
++			return ret;
++		}
+ 	}
+ 
+-	if (mclk != OV5675_MCLK) {
+-		dev_err(dev, "external clock %d is not supported", mclk);
++	if (xvclk_rate != OV5675_XVCLK_19_2) {
++		dev_err(dev, "external clock rate %u is unsupported",
++			xvclk_rate);
+ 		return -EINVAL;
+ 	}
+ 
++	ov5675->reset_gpio = devm_gpiod_get_optional(dev, "reset",
++						     GPIOD_OUT_HIGH);
++	if (IS_ERR(ov5675->reset_gpio)) {
++		ret = PTR_ERR(ov5675->reset_gpio);
++		dev_err(dev, "failed to get reset-gpios: %d\n", ret);
++		return ret;
++	}
++
++	for (i = 0; i < OV5675_NUM_SUPPLIES; i++)
++		ov5675->supplies[i].supply = ov5675_supply_names[i];
++
++	ret = devm_regulator_bulk_get(dev, OV5675_NUM_SUPPLIES,
++				      ov5675->supplies);
++	if (ret)
++		return ret;
++
+ 	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
+ 	if (!ep)
+ 		return -ENXIO;
+@@ -1186,6 +1273,9 @@ static int ov5675_remove(struct i2c_client *client)
+ 	pm_runtime_disable(&client->dev);
+ 	mutex_destroy(&ov5675->mutex);
+ 
++	if (!pm_runtime_status_suspended(&client->dev))
++		ov5675_power_off(&client->dev);
++
+ 	return 0;
+ }
+ 
+@@ -1195,25 +1285,31 @@ static int ov5675_probe(struct i2c_client *client)
+ 	bool full_power;
+ 	int ret;
+ 
+-	ret = ov5675_check_hwcfg(&client->dev);
++	ov5675 = devm_kzalloc(&client->dev, sizeof(*ov5675), GFP_KERNEL);
++	if (!ov5675)
++		return -ENOMEM;
++
++	ret = ov5675_get_hwcfg(ov5675, &client->dev);
+ 	if (ret) {
+-		dev_err(&client->dev, "failed to check HW configuration: %d",
++		dev_err(&client->dev, "failed to get HW configuration: %d",
+ 			ret);
+ 		return ret;
+ 	}
+ 
+-	ov5675 = devm_kzalloc(&client->dev, sizeof(*ov5675), GFP_KERNEL);
+-	if (!ov5675)
+-		return -ENOMEM;
+-
+ 	v4l2_i2c_subdev_init(&ov5675->sd, client, &ov5675_subdev_ops);
+ 
++	ret = ov5675_power_on(&client->dev);
++	if (ret) {
++		dev_err(&client->dev, "failed to power on: %d\n", ret);
++		return ret;
++	}
++
+ 	full_power = acpi_dev_state_d0(&client->dev);
+ 	if (full_power) {
+ 		ret = ov5675_identify_module(ov5675);
+ 		if (ret) {
+ 			dev_err(&client->dev, "failed to find sensor: %d", ret);
+-			return ret;
++			goto probe_power_off;
+ 		}
+ 	}
+ 
+@@ -1243,11 +1339,6 @@ static int ov5675_probe(struct i2c_client *client)
+ 		goto probe_error_media_entity_cleanup;
+ 	}
+ 
+-	/*
+-	 * Device is already turned on by i2c-core with ACPI domain PM.
+-	 * Enable runtime PM and turn off the device.
+-	 */
+-
+ 	/* Set the device's state to active if it's in D0 state. */
+ 	if (full_power)
+ 		pm_runtime_set_active(&client->dev);
+@@ -1262,12 +1353,15 @@ static int ov5675_probe(struct i2c_client *client)
+ probe_error_v4l2_ctrl_handler_free:
+ 	v4l2_ctrl_handler_free(ov5675->sd.ctrl_handler);
+ 	mutex_destroy(&ov5675->mutex);
++probe_power_off:
++	ov5675_power_off(&client->dev);
+ 
+ 	return ret;
+ }
+ 
+ static const struct dev_pm_ops ov5675_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(ov5675_suspend, ov5675_resume)
++	SET_RUNTIME_PM_OPS(ov5675_power_off, ov5675_power_on, NULL)
+ };
+ 
+ #ifdef CONFIG_ACPI
+@@ -1279,11 +1373,18 @@ static const struct acpi_device_id ov5675_acpi_ids[] = {
+ MODULE_DEVICE_TABLE(acpi, ov5675_acpi_ids);
+ #endif
+ 
++static const struct of_device_id ov5675_of_match[] = {
++	{ .compatible = "ovti,ov5675", },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(of, ov5675_of_match);
++
+ static struct i2c_driver ov5675_i2c_driver = {
+ 	.driver = {
+ 		.name = "ov5675",
+ 		.pm = &ov5675_pm_ops,
+ 		.acpi_match_table = ACPI_PTR(ov5675_acpi_ids),
++		.of_match_table = ov5675_of_match,
+ 	},
+ 	.probe_new = ov5675_probe,
+ 	.remove = ov5675_remove,
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.35.3
+
