@@ -2,191 +2,142 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7280FC4321E
-	for <linux-media@archiver.kernel.org>; Mon,  9 May 2022 09:49:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34E7BC43217
+	for <linux-media@archiver.kernel.org>; Mon,  9 May 2022 10:07:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231998AbiEIJvq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 May 2022 05:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S233351AbiEIKLh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 May 2022 06:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236152AbiEIJnc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 May 2022 05:43:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7AF1E6549;
-        Mon,  9 May 2022 02:39:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S234121AbiEIKL2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 May 2022 06:11:28 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B2C1498EF
+        for <linux-media@vger.kernel.org>; Mon,  9 May 2022 03:07:35 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3D7EB810B2;
-        Mon,  9 May 2022 09:38:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 739E3C385AB;
-        Mon,  9 May 2022 09:38:50 +0000 (UTC)
-Message-ID: <fa57eef5-19ee-4328-99b0-403571f59e56@xs4all.nl>
-Date:   Mon, 9 May 2022 11:38:48 +0200
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4B4731B000FB;
+        Mon,  9 May 2022 13:04:16 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1652090656;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k5zSIxPL0pXYut+HsrEjEM1ZtXOLxASy6QfohQG/iUs=;
+        b=Dr4rwUXfudNAIPN9SsGmSK4Sl5JknUYSYe4qKWKu+7p/+VvWgKHnKUVki3PGsZ91slyqXG
+        SEuTGXwLwLAd0sxb8rzbdxnrJ6AGfw+HJBLYvO8t8FCm0V80mQo4OTy+ByOfYr9wSgTMyK
+        unBD5k58NEO5rLMcE6nvBafuy8FL5y6lWYBMk4zQ29blWRExjt2FCvkF4Uf5eJCQyrdcJ1
+        w786UAvdtUalielCxxj9icQRNsmMiYsQqaC1iAtOTayMVXY0Ezi/Q1iSt3uvyzm+TqXQSf
+        wN+k6O4U+yTWhpPJ43bNdvtQt7PgjhOlnUXYSmn7oUtGHofKtFua8Eef0IPZ6w==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id B4FC9634C91;
+        Mon,  9 May 2022 13:04:15 +0300 (EEST)
+Date:   Mon, 9 May 2022 13:04:15 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH 7/7] uvc_v4l2.c: avoid using iterator used outside loop
+Message-ID: <YnjnH6TPVi1kV/Yv@valkosipuli.retiisi.eu>
+References: <20220509091553.2637089-1-hverkuil-cisco@xs4all.nl>
+ <20220509091553.2637089-8-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2] media: Add P010LE video format
-Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jernej.skrabec@gmail.com, p.zabel@pengutronix.de,
-        nicolas@ndufresne.ca, kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-References: <20220421124349.452404-1-benjamin.gaignard@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220421124349.452404-1-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509091553.2637089-8-hverkuil-cisco@xs4all.nl>
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1652090656; a=rsa-sha256;
+        cv=none;
+        b=btKumzueD8nZ4qkw5NH+nlqT9GJ+4RNI2Y2tO2ekXpZo8K6fOzDYluX7VytlRTLUR+FrXs
+        D6erEBMwrAdRyEAasnEW0kX6vS9RVahYPHv+elTzAmobh1onGVZ2atxxbdkE/x+slIX2iF
+        YDrLRv9sC24VvAL6H8Sf4otqkskaX2mltLAuE8mUVFrtKTMNAFxEKuWYqahcAQKY53zQXw
+        g/1EolH6zhqLqbCHIOz/fAnqkHovgdkgoyfe++tt/g0+UTPs/oozjAjkNixmgqiFrD3Tp1
+        lkh1vyReMenYCDF/w2cgpJwv3kCQNDw1TaM9kOJDR5tj/VP+r5B83RuaI+xQlg==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1652090656;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k5zSIxPL0pXYut+HsrEjEM1ZtXOLxASy6QfohQG/iUs=;
+        b=ksABDQZsX49b772uEWJQVlTBfwSPLSFm3qM1wcvwutSlQX644Uu57GPNCcRfWLm68qEuiA
+        dhtg4eXLlySN9un68BWvYG1I4hoGS3QGRJLAARfom3hboDXxk5G/UMkz/Ydp4EEOg9rvxH
+        b4kA11u2FChkPuXyGK9WR133Um2XqBmUCPnF3NLtIg5VBBfny5Ccyr53oUykwbYHIhP68/
+        M1nGari1149HxAbpMPOMmx+TmQ2MUFFLzyOU1XKENWpPhVLSMtpT0dRHw8npESMWsjBC16
+        7jR6QyBkZbI5NUjGSBxZTNrMn+44uI0v3exbiiKC2fXtb6ANnNI1JkFQi+E6Ag==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Benjamin,
+Hi Hans,
 
-On 4/21/22 14:43, Benjamin Gaignard wrote:
-> P010LE is a YUV format with 16-bits per pixel with interleaved UV.
+Thanks for the set.
+
+On Mon, May 09, 2022 at 11:15:53AM +0200, Hans Verkuil wrote:
+> Fixes these two smatch warnings:
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> drivers/media/usb/uvc/uvc_v4l2.c:885 uvc_ioctl_enum_input() warn: iterator used outside loop: 'iterm'
+> drivers/media/usb/uvc/uvc_v4l2.c:896 uvc_ioctl_enum_input() warn: iterator used outside loop: 'iterm'
+> 
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 > ---
-> version 2:
-> - Fix Hans's remarks
-> - Add 'LE' suffix to pixel name since P010BE can also exist
-
-I don't think you should do this. By default formats are little endian,
-unless explicitly stated otherwise. So big endian formats typically
-have a _BE suffix, and they use v4l2_fourcc_be() instead of v4l2_fourcc().
-
-This format is standard little endian, so I would just drop the LE bit.
-
+>  drivers/media/usb/uvc/uvc_v4l2.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
 > 
->  .../media/v4l/pixfmt-yuv-planar.rst           | 53 +++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-common.c         |  1 +
->  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
->  include/uapi/linux/videodev2.h                |  1 +
->  4 files changed, 56 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> index 8dff5906639b..b9dd4f376fe3 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> @@ -109,6 +109,13 @@ All components are stored with the same number of bits per component.
->        - Cb, Cr
->        - No
->        - 16x16 tiles
-> +    * - V4L2_PIX_FMT_P010LE
-> +      - 'P010'
-> +      - 16
-> +      - 4:2:0
-> +      - Cb, Cr
-> +      - No
-> +      - Linear
->      * - V4L2_PIX_FMT_NV16
->        - 'NV16'
->        - 8
-> @@ -171,6 +178,7 @@ horizontally.
->  .. _V4L2-PIX-FMT-NV21:
->  .. _V4L2-PIX-FMT-NV12M:
->  .. _V4L2-PIX-FMT-NV21M:
-> +.. _V4L2-PIX-FMT-P010LE:
->  
->  NV12, NV21, NV12M and NV21M
->  ---------------------------
-> @@ -519,6 +527,51 @@ number of lines as the luma plane.
->        - Cb\ :sub:`33`
->        - Cr\ :sub:`33`
->  
-> +.. _V4L2_PIX_FMT_P010LE:
-> +
-> +P010LE
-> +------
-> +
-> +Like NV12 with 16 bits per component, data in the 10 high bits, zeros in the 6 low bits, arranged in little endian order
+> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+> index 711556d13d03..ff3f04af4e21 100644
+> --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
 
-Here it is fine to mention little endian, it's just the fourcc name I have a problem with.
+...
 
-Regards,
-
-	Hans
-
-
-> +
-> +.. flat-table:: Sample 4x4 P010LE Image
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - start + 0:
-> +      - Y'\ :sub:`00`
-> +      - Y'\ :sub:`01`
-> +      - Y'\ :sub:`02`
-> +      - Y'\ :sub:`03`
-> +    * - start + 8:
-> +      - Y'\ :sub:`10`
-> +      - Y'\ :sub:`11`
-> +      - Y'\ :sub:`12`
-> +      - Y'\ :sub:`13`
-> +    * - start + 16:
-> +      - Y'\ :sub:`20`
-> +      - Y'\ :sub:`21`
-> +      - Y'\ :sub:`22`
-> +      - Y'\ :sub:`23`
-> +    * - start + 24:
-> +      - Y'\ :sub:`30`
-> +      - Y'\ :sub:`31`
-> +      - Y'\ :sub:`32`
-> +      - Y'\ :sub:`33`
-> +    * - start + 32:
-> +      - Cb\ :sub:`00`
-> +      - Cr\ :sub:`00`
-> +      - Cb\ :sub:`01`
-> +      - Cr\ :sub:`01`
-> +    * - start + 40:
-> +      - Cb\ :sub:`10`
-> +      - Cr\ :sub:`10`
-> +      - Cb\ :sub:`11`
-> +      - Cr\ :sub:`11`
-> +
-> +.. raw:: latex
-> +
-> +    \endgroup
+> @@ -879,21 +880,25 @@ static int uvc_ioctl_enum_input(struct file *file, void *fh,
+>  		if (index != 0)
+>  			return -EINVAL;
+>  		list_for_each_entry(iterm, &chain->entities, chain) {
+> -			if (UVC_ENTITY_IS_ITERM(iterm))
+> +			if (UVC_ENTITY_IS_ITERM(iterm)) {
+> +				pin = iterm->id;
+> +				found_pin = true;
+>  				break;
+> +			}
+>  		}
+> -		pin = iterm->id;
+>  	} else if (index < selector->bNrInPins) {
+>  		pin = selector->baSourceID[index];
+>  		list_for_each_entry(iterm, &chain->entities, chain) {
+>  			if (!UVC_ENTITY_IS_ITERM(iterm))
+>  				continue;
+> -			if (iterm->id == pin)
+> +			if (iterm->id == pin) {
+> +				found_pin = true;
+>  				break;
+> +			}
+>  		}
+>  	}
 >  
->  Fully Planar YUV Formats
->  ========================
-> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> index df34b2a283bc..bc73526c41b9 100644
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -266,6 +266,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
->  		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_P010LE,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> -	if (iterm == NULL || iterm->id != pin)
+> +	if (!found_pin)
+>  		return -EINVAL;
 >  
->  		{ .format = V4L2_PIX_FMT_YUV410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
->  		{ .format = V4L2_PIX_FMT_YVU410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> index 96e307fe3aab..2ba3440099d0 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1301,6 +1301,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
->  	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
->  	case V4L2_PIX_FMT_NV42:		descr = "Y/CrCb 4:4:4"; break;
-> +	case V4L2_PIX_FMT_P010LE:	descr = "16-bit Y/CrCb 4:2:0"; break;
->  	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/CbCr 4:2:0 (4x4 Linear)"; break;
->  	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/CbCr 4:2:0 (16x16 Linear)"; break;
->  	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/CbCr 4:2:0 (32x32 Linear)"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 4c09969e7112..92822a80a12e 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -601,6 +601,7 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
->  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
->  #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
-> +#define V4L2_PIX_FMT_P010LE  v4l2_fourcc('P', '0', '1', '0') /* 16  Y/CbCr 4:2:0 16-bit per pixel, little endian*/
->  
->  /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
->  #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/CbCr 4:2:0  */
+>  	memset(input, 0, sizeof(*input));
+
+iterm is used a few lines below, too, so this patch doesn't remove its use
+outside the loop. Which btw. I don't think is a problem at all. Doing that
+is relatively common IMO.
+
+For the rest of the set:
+
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+-- 
+Kind regards,
+
+Sakari Ailus
