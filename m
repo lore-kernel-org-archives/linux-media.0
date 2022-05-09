@@ -2,84 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74C1BC433F5
-	for <linux-media@archiver.kernel.org>; Mon,  9 May 2022 10:20:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4301C433F5
+	for <linux-media@archiver.kernel.org>; Mon,  9 May 2022 10:31:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbiEIKWl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 May 2022 06:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
+        id S232178AbiEIKey (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 May 2022 06:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234119AbiEIKWa (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 May 2022 06:22:30 -0400
-Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238241F2D70
-        for <linux-media@vger.kernel.org>; Mon,  9 May 2022 03:18:31 -0700 (PDT)
-Received: from builder.linuxtv.org ([140.211.167.10] helo=slave0)
-        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1no0TF-003p5R-Sd; Mon, 09 May 2022 10:18:29 +0000
-Received: from ip6-localhost ([::1] helo=localhost.localdomain)
-        by slave0 with esmtp (Exim 4.94.2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1no0TD-00BbBE-25; Mon, 09 May 2022 10:18:27 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.19] Various fixes/enhancements (#83007)
-Date:   Mon,  9 May 2022 10:18:26 +0000
-Message-Id: <20220509101826.2764482-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <24482012-ac76-0886-c5cb-c868c8ecec93@xs4all.nl>
-References: 
+        with ESMTP id S231331AbiEIKeN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 May 2022 06:34:13 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC30B24F232
+        for <linux-media@vger.kernel.org>; Mon,  9 May 2022 03:29:41 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DB85455A;
+        Mon,  9 May 2022 12:29:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1652092179;
+        bh=WZFD1HknoRyw8lgiLaD9nG8BZ4/HmZcYQSMXSZ/g9Pw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DF2Xz0cszePTgMpq34zMwI+k31SduUIJuGdvTfhhIURWP6H9CvHebuCzKPuX4Coia
+         b6OtMTrWcWvz8iHixH+7602y4z6rsX/7GA6VPnbwQmWbc5mNioOiLXfN3T1ysv2jhW
+         JC2R7o7xD6UQfTrn6CFleh3y9z961jPmMtxFl1Yw=
+Date:   Mon, 9 May 2022 13:29:34 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: [PATCH 2/7] v4l2-ctls-core.c: kvmalloc_array -> kvcalloc
+Message-ID: <YnjtDrbV25c1QUNe@pendragon.ideasonboard.com>
+References: <20220509091553.2637089-1-hverkuil-cisco@xs4all.nl>
+ <20220509091553.2637089-3-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220509091553.2637089-3-hverkuil-cisco@xs4all.nl>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Hi Hans,
 
-Pull request: https://patchwork.linuxtv.org/project/linux-media/patch/24482012-ac76-0886-c5cb-c868c8ecec93@xs4all.nl/
-Build log: https://builder.linuxtv.org/job/patchwork/206103/
-Build time: 00:24:19
-Link: https://lore.kernel.org/linux-media/24482012-ac76-0886-c5cb-c868c8ecec93@xs4all.nl
+Thank you for the patch.
 
-gpg: Signature made Mon 09 May 2022 09:41:37 AM UTC
-gpg:                using EDDSA key 52ADCAAE8A4F70B99ACD8D726B425DF79B1C1E76
-gpg: Can't check signature: No public key
+On Mon, May 09, 2022 at 11:15:48AM +0200, Hans Verkuil wrote:
+> Fixes smatch warning:
+> 
+> drivers/media/v4l2-core/v4l2-ctrls-core.c:1143 v4l2_ctrl_handler_init_class() warn: Please consider using kvcalloc instead
+> 
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Summary: got 3/16 patches with issues, being 1 at build time, plus one error when buinding PDF document
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Error/warnings:
+> ---
+>  drivers/media/v4l2-core/v4l2-ctrls-core.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> index 8968cec8454e..949c1884d9c1 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> @@ -1140,9 +1140,8 @@ int v4l2_ctrl_handler_init_class(struct v4l2_ctrl_handler *hdl,
+>  	INIT_LIST_HEAD(&hdl->ctrls);
+>  	INIT_LIST_HEAD(&hdl->ctrl_refs);
+>  	hdl->nr_of_buckets = 1 + nr_of_controls_hint / 8;
+> -	hdl->buckets = kvmalloc_array(hdl->nr_of_buckets,
+> -				      sizeof(hdl->buckets[0]),
+> -				      GFP_KERNEL | __GFP_ZERO);
+> +	hdl->buckets = kvcalloc(hdl->nr_of_buckets, sizeof(hdl->buckets[0]),
+> +				GFP_KERNEL);
+>  	hdl->error = hdl->buckets ? 0 : -ENOMEM;
+>  	v4l2_ctrl_handler_init_request(hdl);
+>  	return hdl->error;
 
-patches/0001-media-atmel-atmel-isc-base-use-streaming-status-when.patch:
+-- 
+Regards,
 
-    allyesconfig: return code #0:
-	../scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-	../scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-	../scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-
-    allyesconfig: return code #0:
-	SMATCH:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: :warning: array of flexible structures
-	SPARSE:../drivers/media/usb/siano/smsusb.c ../drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-	../drivers/media/platform/qcom/venus/helpers.c: ../drivers/media/platform/qcom/venus/helpers.c:678 venus_helper_get_bufreq() error: we previously assumed 'req' could be null (see line 674)
-	../drivers/media/test-drivers/vivid/vivid-core.c: ../drivers/media/test-drivers/vivid/vivid-core.c:1981 vivid_create_instance() parse error: turning off implications after 60 seconds
-	../drivers/media/pci/cx23885/cx23885-dvb.c: ../drivers/media/pci/cx23885/cx23885-dvb.c:2617 dvb_register() parse error: turning off implications after 60 seconds
-	../drivers/media/usb/em28xx/em28xx-video.c: ../drivers/media/usb/em28xx/em28xx-video.c:2894 em28xx_v4l2_init() parse error: turning off implications after 60 seconds
-
-patches/0003-media-atmel-atmel-isc-remove-redundant-comments.patch:
-
-   checkpatch.pl:
-	$ cat patches/0003-media-atmel-atmel-isc-remove-redundant-comments.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:36: CHECK: spinlock_t definition without comment
-
-patches/0005-media-atmel-atmel-isc-base-use-mutex-to-lock-awb-wor.patch:
-
-   checkpatch.pl:
-	$ cat patches/0005-media-atmel-atmel-isc-base-use-mutex-to-lock-awb-wor.patch | formail -c | ./scripts/checkpatch.pl --terse --mailback --no-summary --strict
-	-:145: CHECK: struct mutex definition without comment
-
-
-Error #512 when building PDF docs
-
+Laurent Pinchart
