@@ -2,171 +2,303 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32BBDC433EF
-	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 17:22:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 020D3C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 19:03:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347948AbiEJR0X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 May 2022 13:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
+        id S237906AbiEJTDl convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 May 2022 15:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348049AbiEJR0U (ORCPT
+        with ESMTP id S230456AbiEJTDk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 May 2022 13:26:20 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2040.outbound.protection.outlook.com [40.107.102.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A001D0FF;
-        Tue, 10 May 2022 10:22:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IyYqLUxLZXDx2EiJHPK8B+a7Yz3jzcyzSXilrTm7TA2Mai+blku5i6Ozsu4Ju3c21xS+lm/60VOV7MWytfWYnymXEh/AfwrqcjbaaZ9qTFjy6TcG88SxceugVJaZc1Ngd1/7tYCMvqU11tpUE2vGGb1pfTYS9vzspvkemsg+lBo+eeVsMswUNhYJoaZSP3BrWA9kWlw+gg+AT8FuO0te0vokJuJxj3ar2F1+0KbIgF9bAb2tTs9seI6lstg7qGOweS3XE+UsQYG7XlbNAMfQSHv8vxOf0tAj3I25rG2tQI0b3HuRZ59hzf0hxQUxDPwgm2wmoXmxTkOhMPWLzy80iw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AGYjx71YOIPqYQO2UTzNzsJ/4sCmtM2mGQxpEUNuNZI=;
- b=Mv4QPW7HUHmuRY/FtNGD7j6u5shN2BQhEmvl9bmehflE2AjPExZ3Gj7tRdJ8GwI0CiiHCNw4nADrGASY9W3OhYMv4QcJZoGTaSD2T/9EhCUyQ0EuwdeBi38SM07Mb/sCJhkPDY4Bzg0v0VKj9Jhrg3+SGhny0qkH3LMR1jDodWvTOZaIRBjndeuRiavn0kQisqWYf1AZSrJ8E7H9p4H5krWZ2oegbduXR2R+fmJbmNzQ4EGNR8VEkMSb7+JrS9FiyZ9InObDzbgXWMqWCnP4xTko4nt6QB1V52XsewvR5Wb6aUCVXw7ouqcVzkQ2fm1JOYCuiDsWQL5wvsNxVUi7Xw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AGYjx71YOIPqYQO2UTzNzsJ/4sCmtM2mGQxpEUNuNZI=;
- b=Q/t/atXxmpD+FS5N+gFV1q4atrIXnBgevMHAEFdHZ22NrpDqDU7Vlbm6gGw/rK6hszsSwbM/BbEiVuJ8+M0AkZg+A1qvS1FHtfedUrwVhX+PYT4wXMBqLQ2X5hGkrK/Lg/4HcNR1PCTkOmTUS+IAe50Ryb7h4uUxBbku3vT8I8w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by BN9PR12MB5100.namprd12.prod.outlook.com (2603:10b6:408:119::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Tue, 10 May
- 2022 17:22:20 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::fdba:2c6c:b9ab:38f]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::fdba:2c6c:b9ab:38f%4]) with mapi id 15.20.5227.023; Tue, 10 May 2022
- 17:22:20 +0000
-Message-ID: <2a0312d3-d576-b5be-c823-938b38096523@amd.com>
-Date:   Tue, 10 May 2022 19:22:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V2] dmabuf: ensure unique directory name for dmabuf stats
-Content-Language: en-US
-To:     Charan Teja Kalla <quic_charante@quicinc.com>,
-        gregkh@linuxfoundation.org, sumit.semwal@linaro.org,
-        hridya@google.com, daniel.vetter@ffwll.ch, tjmercier@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-References: <1652191562-18700-1-git-send-email-quic_charante@quicinc.com>
- <4ac55be2-7d55-2c3b-0d5e-f61c02c62792@amd.com>
- <6dc59fa7-5885-9ed1-54c3-f2d112786312@quicinc.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <6dc59fa7-5885-9ed1-54c3-f2d112786312@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM5PR0601CA0054.eurprd06.prod.outlook.com
- (2603:10a6:206::19) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Tue, 10 May 2022 15:03:40 -0400
+Received: from www.linuxtv.org (www.linuxtv.org [130.149.80.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E8025C59
+        for <linux-media@vger.kernel.org>; Tue, 10 May 2022 12:03:38 -0700 (PDT)
+Received: from builder.linuxtv.org ([140.211.167.10])
+        by www.linuxtv.org with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1noV8y-005izZ-GO; Tue, 10 May 2022 19:03:36 +0000
+Received: from localhost ([127.0.0.1] helo=builder.linuxtv.org)
+        by builder.linuxtv.org with esmtp (Exim 4.94.2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1noV8w-001b78-S6; Tue, 10 May 2022 19:03:34 +0000
+Date:   Tue, 10 May 2022 19:03:34 +0000 (UTC)
+From:   Jenkins Builder Robot <jenkins@linuxtv.org>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        libcamera-devel@lists.libcamera.org
+Message-ID: <513988346.2.1652209414367@builder.linuxtv.org>
+In-Reply-To: <363745425.1.1652191420856@builder.linuxtv.org>
+References: <363745425.1.1652191420856@builder.linuxtv.org>
+Subject: Build failed in Jenkins: libcamera #844
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2b544507-32e0-4132-35de-08da32a9a3a8
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5100:EE_
-X-Microsoft-Antispam-PRVS: <BN9PR12MB510064851B425C67DE6CC96883C99@BN9PR12MB5100.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XbgnFydIg+XeTV79otyBBEqF1APqBqAYCYdHqubmUWl9Imw22t8c92yNcOJHtMFeNl6D3b/qZa1iz5Ng+7xBiFCY0Kt5guNoF3HDREQcww5YHt6vemBuVfMjXlEEVtdiZTLhej2VwvG2ncDOe3f334Q6TjkGZlHF9r75QIv78Edpf8/RTMFL1waDAUeDbchnVZ++DC+1EP8P4qMLtdZk3gOuEw5jOEnFvLIQBPrGv3EzWPirK7Z+zBZ88dzWkSpf6T6ZMcALeyj5Xa40ZeM0LC/MMmYHYkL03LcxtFgaoNIUY5KSramhiSUzpvlc/0plbMDBnPDFU1+wMj4W5nCrJU5RKQHSJ+ySErZ5A1ShEVwPx3rxKaK8G/ZFFXpCKcagBxsjNQAf2jIFcGtLDBZmz0bRSf80/pwUazsiT9r0/xGA6m4qqyANCLp8ImTPd+1t8CE6CtNTh30j2K8COEqk0NCK8nCjwha+Lkt0PJ1xGb1pQVxwg/u8C69z7Ub/+VThuGn4PBNfkHCqlRyhFyq0HPhRg7MshPUFie65Vft3VHCWg6KVqlgk1K5DCJj2FPcNHjHRevtCe6CakXFgy29Sp+pNE1Kip+aprl73Apj55dcGOglt6CdL1Gw3w3JgATluDIbo2VpGaX71b49hcssq88EV1i03du1yxXhVul9JSQ3OUmNAkw0DpVPpUoYiOew11tlXKEY8nLi7SlVU0tMCNjfC6l6kTQVdEU1Ar93Z+uA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(31696002)(66556008)(2906002)(508600001)(38100700002)(5660300002)(36756003)(186003)(31686004)(7416002)(83380400001)(8936002)(4326008)(66476007)(66946007)(316002)(86362001)(2616005)(8676002)(6506007)(6666004)(53546011)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SWpzNy9lOW1vRTJpRWEzZTFGSnJOSVVqNm5SSmcyTTUvSFNUNCtDSk9tWDRn?=
- =?utf-8?B?NWZ0NnErQlpSeHRQcklldGRPaEF0bWdYWE9RS21LSmNQd1NEeHhrZDB4RnAw?=
- =?utf-8?B?VXRLZ1ozRnVNam94NWszblY1djR0WEZxcHplTzdXWUcxZ0FEd2o5aHNQT2JV?=
- =?utf-8?B?ck5TK2hMTWdUcXlKSkFkQThGTkFhUU1nYi9kait3Wi9ySFdVZmlQc2RjdWh1?=
- =?utf-8?B?QkNwRFFkNDVSaitFcHorV2w0UHdGQTVDdnc4NE14cE15aFErTm9kcXByM0JG?=
- =?utf-8?B?bUZqMXhXTzJTMjBxL3M2UjRnRWpSU3FMRWUxRWwxd28wNXRUOEVFRUd4ZlBh?=
- =?utf-8?B?bVhXdi9vRzNQQzhWM0FrNWpjeU8wMmRCSS9uc0l5VE1aVTZMby9EcVZocFlQ?=
- =?utf-8?B?V3RBajJTVTZ5Yk9CRXFlK0Q3bGcvMG1JTzh0bHJ1MkxaZHdPTmNtaFZUZGt5?=
- =?utf-8?B?bG9ITTBUQkVHSnZlQlJYbjNFL0Rrdk51WUhMbU4rNnpENmRYVnIwaG56R3pr?=
- =?utf-8?B?Wkludk9aNkpIMElwZkpyRGdzS21scFVDN29jZ053TWF1ZkJFUEVPTkxvS2VV?=
- =?utf-8?B?M2FDQzNFa2NnWS9HNzFzZXJPdXBoNlVRZXJBZ3pzZnB5ZFR6U1BsMlFNc3NO?=
- =?utf-8?B?YmkwVUxiVDdZVFY2ckZNWTJtTEUzMW5zdWcybm15clRCWTBuKzlRU0lYN1Vp?=
- =?utf-8?B?dldESTZCTUYxQVU5TlNJNEs1VC9QQjBEbmlHMUVRWGZxQ3JmOVo5OEl1UitZ?=
- =?utf-8?B?cjNMRjJMYW0zTXBWWTVpcGlwRHBGVjZQREdoak51QlFIcW5xdTRMTko5dkpC?=
- =?utf-8?B?NGE3MGdEQ3IxWTA3YmtpN2lWSTFzRmZCUTJOL0RXbFYrbktqOGczRXZCZDRp?=
- =?utf-8?B?NzVNSmJDcDVNUXhZTXBHS0svR01FREhySkFzb25jZWN6UGtVNDQ1dW5qKzlw?=
- =?utf-8?B?TmNEMEFNUFNYTHdoOEF6ZGFkai8zMWhrVWZocGNiV0J5dTN6eUpTa1gySTVI?=
- =?utf-8?B?ZUpsa0VjakJsQ25IbktLVFNOTjFMTkRIT1U4T0s2M0M1emI3UTBRUHdpQUpL?=
- =?utf-8?B?cFgxdkFTdnhhUnpqUmtIZlFmdXVpNW55bEw2MktUUUN6Vmk2c29Pcm9MRno4?=
- =?utf-8?B?bUlMYUQzQ1Y2Nnl2VDBXZzFsckNPVlQ5ZjJEZ1R2bjJhOHF2V254ZnhGeCtU?=
- =?utf-8?B?TFp1dk9SY0orT21uSlUvanJlOGxOSU9ieVZSNVR1UXkwbmhtKzJpQWtPRlQ3?=
- =?utf-8?B?amlybGhZV01sMTBvZEdtVkd5blN3ZGpVb1c0MFNLaUYvcmtOekVBSCtkYVlE?=
- =?utf-8?B?NWgzM1dMbEtZVTBqNzZYRXVhU0J0Z29OaVpmazJkNUp2RE9xa3Exb3BieVB5?=
- =?utf-8?B?VHlSZDVsbjZQWWdOSXl4ckhXNlIxT1NqYS8xTXhTUm9OWHdKQWdObzNIOEwv?=
- =?utf-8?B?Sm1wUDA5UjBQV2l3ZmkvSnZIbGs5T3pPNGdpajlRdXpGeFZJcjE2SVJ6S0Vn?=
- =?utf-8?B?ejlTaGFCcWFUN25Jd1hwak5teGtpOGhqVmR3Q1pRWWpEWUdRcU1PU0RzM25P?=
- =?utf-8?B?cCtkZ0VIVC9hVjExL1hBWFFWMlFjRUJ3azg3OURxZkRvVmpTeG9uQzFicnov?=
- =?utf-8?B?bE0zZkxybHgydmlDUWYwSXdUZjVWVk51L2VLR25zOHNVNmd6UzdCNnh5VXNj?=
- =?utf-8?B?VXBDaUtXWERCU0NDYXg3TjdZbC9tVWw4WjEwZVFJSDQ2Vkhid3RkU2NQc3ZV?=
- =?utf-8?B?T3Byc0dCaUVyeWx0eVM1NW9Dc29QR3RYRWpPL25QSTB0MGh3cXY3STlIS092?=
- =?utf-8?B?QVg5SFRhMHVKTkNqYnJWWGZMb2Z1b1JzU2xqRjR6dmNCcnMwUjdpaStKTHlW?=
- =?utf-8?B?Y2NHdG00TU9GZU00Nmx6bExaREQ4WkdJMEZiYSsxeFJyY1VaZTRqR1lBaUN0?=
- =?utf-8?B?VkRrdFArMHFqemgyd2JsOEc2Zm00U29JbkVSM3M5dWJpeWN4Q2tlTmdTMktV?=
- =?utf-8?B?WHlwQ1BTUHFnZU9sZXQvczRWdnV2OVNYQ2FEeUhmbUs2aEs5Q1M0QzhTZjB4?=
- =?utf-8?B?WXd6Zk9peTNGd0NsWWRqS3VxUHVodDNIVVVRRktIUGV5Nm9iNSs0R083V05M?=
- =?utf-8?B?ZVcrWEgySlpYQVpPOEJGZ2lJOVN6MWpXamNPQzhVT1dJWFRMdDBhWjVIajZJ?=
- =?utf-8?B?KzBjNUk0c0NybWtQKzJHOTZxbTUwb2Nkang4eDFGaVg3Zm9FakcrbEdtRlBr?=
- =?utf-8?B?bHk2SE80bG5nRlU1UEtsUmR4VjRsMEoxamdPYXFTbnZsUUY4NksrQlRyaE5a?=
- =?utf-8?B?bjVMNDRsUjVGWlhlV0hyQ3hhVENlanFRcnYzb2pMemNsRHpyeDcrNFhhNU5w?=
- =?utf-8?Q?CsPy7/M+ZY0/iUVQS6zV+Gpvyld2prsW/bJ5HQyoENMO8?=
-X-MS-Exchange-AntiSpam-MessageData-1: A/zJbmyMIvfhSg==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b544507-32e0-4132-35de-08da32a9a3a8
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 17:22:20.5105
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qt2xu/He98DdoyQ74L7xKEjK/WLtkIUEKlBt2N+SYrpYpsgAOvev9wKFHnFesL2E
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5100
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
+X-Jenkins-Job: libcamera
+X-Jenkins-Result: FAILURE
+Auto-submitted: auto-generated
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 10.05.22 um 19:14 schrieb Charan Teja Kalla:
-> On 5/10/2022 8:42 PM, Christian König wrote:
->>>     * The information in the interface can also be used to derive
->>> per-exporter
->>>     * statistics. The data from the interface can be gathered on error
->>> conditions
->>> @@ -172,6 +172,7 @@ int dma_buf_stats_setup(struct dma_buf *dmabuf)
->>>    {
->>>        struct dma_buf_sysfs_entry *sysfs_entry;
->>>        int ret;
->>> +    static atomic64_t unique_id = ATOMIC_INIT(0);
->> Please move that to the beginning of the declarations.
->>
-> Done. Any scripts I can run at my end to catch these type of trivial
-> changes? checkpatch.pl didn't report this coding style.
+See <https://builder.linuxtv.org/job/libcamera/844/display/redirect?page=changes>
 
-Not that I know of. It's also not a hard requirement, I let it mostly 
-slip in the drivers I maintain. But upstream people sometimes insist on 
-that, so I want to be clean at least in driver independent frameworks.
+Changes:
 
->>>          if (!dmabuf || !dmabuf->file)
->>>            return -EINVAL;
->>> @@ -192,7 +193,8 @@ int dma_buf_stats_setup(struct dma_buf *dmabuf)
->>>          /* create the directory for buffer stats */
->>>        ret = kobject_init_and_add(&sysfs_entry->kobj, &dma_buf_ktype,
->>> NULL,
->>> -                   "%lu", file_inode(dmabuf->file)->i_ino);
->>> +                   "%lu-%lu", file_inode(dmabuf->file)->i_ino,
->> Why not just use the unique value here? Or is the inode number necessary
->> for something?
-> This will ease the debugging a lot. Given the dump, I can easily map
-> which dmabuf buffer to the process. On the crashutilty I just have to
-> search for this inode in the files output, just one example.
+[kieran.bingham] v4l2_videodevice: Disable the watchdog timer when no buffers are queued
 
-T.J. Mercier just confirmed my suspicion that this would break the UAPI. 
-So that won't work.
 
-This needs to be a single number, preferable documented as such.
-
-Regards,
-Christian.
-
+------------------------------------------
+[...truncated 19.79 KB...]
+[114/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/sysfs.cpp.o
+[115/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/stream.cpp.o
+[116/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/v4l2_pixelformat.cpp.o
+[117/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/transform.cpp.o
+[118/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/yaml_parser.cpp.o
+[119/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_ipu3_frames.cpp.o
+[120/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_ipu3_cio2.cpp.o
+[121/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/v4l2_subdevice.cpp.o
+[122/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_ipu3_imgu.cpp.o
+[123/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/v4l2_device.cpp.o
+[124/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_raspberrypi_dma_heaps.cpp.o
+[125/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_rkisp1_rkisp1.cpp.o
+[126/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_raspberrypi_rpi_stream.cpp.o
+[127/539] Compiling C++ object test/object-invoke.p/object-invoke.cpp.o
+[128/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_rkisp1_rkisp1_path.cpp.o
+[129/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_simple_simple.cpp.o
+[130/539] Compiling C++ object src/ipa/rkisp1/ipa_rkisp1.so.p/algorithms_agc.cpp.o
+[131/539] Compiling C++ object src/android/libcamera-hal.so.p/camera_ops.cpp.o
+[132/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/tracepoints.cpp.o
+[133/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_raspberrypi_raspberrypi.cpp.o
+[134/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_ipu3_ipu3.cpp.o
+[135/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_simple_converter.cpp.o
+[136/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_vimc_vimc.cpp.o
+[137/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/pipeline_uvcvideo_uvcvideo.cpp.o
+[138/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/device_enumerator_udev.cpp.o
+[139/539] Compiling C++ object src/libcamera/proxy/worker/ipu3_ipa_proxy.p/meson-generated_.._ipu3_ipa_proxy_worker.cpp.o
+[140/539] Generating symbol file src/libcamera/base/libcamera-base.so.0.0.0.p/libcamera-base.so.0.0.0.symbols
+[141/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_dpc.cpp.o
+[142/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_ccm.cpp.o
+[143/539] Compiling C++ object src/libcamera/proxy/worker/raspberrypi_ipa_proxy.p/meson-generated_.._raspberrypi_ipa_proxy_worker.cpp.o
+[144/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_compare_win.cc.o
+[145/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_compare_neon.cc.o
+[146/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_compare_msa.cc.o
+[147/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_compare_mmi.cc.o
+[148/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_compare_neon64.cc.o
+[149/539] Compiling C++ object src/libcamera/proxy/worker/rkisp1_ipa_proxy.p/meson-generated_.._rkisp1_ipa_proxy_worker.cpp.o
+[150/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_convert_from.cc.o
+[151/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_convert_from_argb.cc.o
+[152/539] Compiling C++ object src/libcamera/proxy/worker/vimc_ipa_proxy.p/meson-generated_.._vimc_ipa_proxy_worker.cpp.o
+[153/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_convert.cc.o
+[154/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_convert_argb.cc.o
+[155/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_mjpeg_validate.cc.o
+[156/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_convert_jpeg.cc.o
+[157/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_convert_to_argb.cc.o
+[158/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_convert_to_i420.cc.o
+[159/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_rotate.cc.o
+[160/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_rotate_argb.cc.o
+[161/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_cpu_id.cc.o
+[162/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_mjpeg_decoder.cc.o
+[163/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_rotate_mmi.cc.o
+[164/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_rotate_common.cc.o
+[165/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_rotate_msa.cc.o
+[166/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_rotate_neon.cc.o
+[167/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_rotate_any.cc.o
+[168/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_row_any.cc.o
+[169/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_row_common.cc.o
+[170/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_rotate_gcc.cc.o
+[171/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_rotate_neon64.cc.o
+[172/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_row_msa.cc.o
+[173/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_rotate_win.cc.o
+[174/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_row_neon.cc.o
+[175/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_row_neon64.cc.o
+[176/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_row_win.cc.o
+[177/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_scale.cc.o
+[178/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_scale_argb.cc.o
+[179/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_row_gcc.cc.o
+[180/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_row_mmi.cc.o
+[181/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_scale_neon.cc.o
+[182/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_scale_msa.cc.o
+[183/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_scale_any.cc.o
+[184/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_scale_neon64.cc.o
+[185/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_scale_common.cc.o
+[186/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_scale_mmi.cc.o
+[187/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_video_common.cc.o
+[188/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_scale_uv.cc.o
+[189/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_scale_gcc.cc.o
+[190/539] Compiling C++ object subprojects/libyuv/libcm_yuv.a.p/source_scale_win.cc.o
+[191/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_compare_mmi.cc.o
+[192/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_compare.cc.o
+[193/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_compare_common.cc.o
+[194/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_compare_gcc.cc.o
+[195/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_compare_msa.cc.o
+[196/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_convert.cc.o
+[197/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_convert_argb.cc.o
+[198/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_compare_neon.cc.o
+[199/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_compare_neon64.cc.o
+[200/539] Linking static target subprojects/libyuv/libcm_yuv.a
+[201/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_compare_win.cc.o
+[202/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_convert_from.cc.o
+[203/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_convert_jpeg.cc.o
+[204/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_convert_from_argb.cc.o
+[205/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_convert_to_argb.cc.o
+[206/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_mjpeg_validate.cc.o
+[207/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_mjpeg_decoder.cc.o
+[208/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_convert_to_i420.cc.o
+[209/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_cpu_id.cc.o
+[210/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_rotate_common.cc.o
+[211/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_rotate_gcc.cc.o
+[212/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_rotate_any.cc.o
+[213/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_planar_functions.cc.o
+[214/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_rotate_argb.cc.o
+[215/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_rotate_neon64.cc.o
+[216/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_rotate.cc.o
+[217/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_rotate_mmi.cc.o
+[218/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_rotate_win.cc.o
+[219/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_row_any.cc.o
+[220/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_row_common.cc.o
+[221/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_rotate_neon.cc.o
+[222/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_row_msa.cc.o
+[223/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_row_mmi.cc.o
+[224/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_row_gcc.cc.o
+[225/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_row_neon64.cc.o
+[226/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_row_neon.cc.o
+[227/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_scale_any.cc.o
+[228/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_scale_argb.cc.o
+[229/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_scale_gcc.cc.o
+[230/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_scale_msa.cc.o
+[231/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_scale.cc.o
+[232/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_scale_mmi.cc.o
+[233/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_scale_common.cc.o
+[234/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_row_win.cc.o
+[235/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_scale_neon64.cc.o
+[236/539] Compiling C object src/android/libcamera_metadata.a.p/metadata_camera_metadata.c.o
+[237/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_scale_uv.cc.o
+[238/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_scale_neon.cc.o
+[239/539] Linking static target src/android/libcamera_metadata.a
+[240/539] Compiling C++ object src/android/libcamera-hal.so.p/camera3_hal.cpp.o
+[241/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_rotate_msa.cc.o
+[242/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_scale_win.cc.o
+[243/539] Compiling C++ object subprojects/libyuv/libcm_yuv_shared.so.p/source_video_common.cc.o
+[244/539] Compiling C++ object src/android/libcamera-hal.so.p/camera_device.cpp.o
+[245/539] Compiling C++ object src/android/libcamera-hal.so.p/camera_metadata.cpp.o
+[246/539] Compiling C++ object test/event-thread.p/event-thread.cpp.o
+[247/539] Compiling C++ object src/android/libcamera-hal.so.p/camera_hal_config.cpp.o
+[248/539] Compiling C++ object src/android/libcamera-hal.so.p/camera_stream.cpp.o
+[249/539] Compiling C++ object src/android/libcamera-hal.so.p/camera_hal_manager.cpp.o
+[250/539] Compiling C++ object src/android/libcamera-hal.so.p/jpeg_encoder_libjpeg.cpp.o
+[251/539] Compiling C++ object src/android/libcamera-hal.so.p/jpeg_thumbnailer.cpp.o
+[252/539] Compiling C++ object src/android/libcamera-hal.so.p/jpeg_post_processor_jpeg.cpp.o
+[253/539] Compiling C++ object src/android/libcamera-hal.so.p/mm_generic_camera_buffer.cpp.o
+[254/539] Compiling C++ object src/android/libcamera-hal.so.p/mm_generic_frame_buffer_allocator.cpp.o
+[255/539] Compiling C++ object src/ipa/libipa/libipa.a.p/camera_sensor_helper.cpp.o
+[256/539] Compiling C++ object src/ipa/libipa/libipa.a.p/libipa.cpp.o
+[257/539] Compiling C++ object src/android/libcamera-hal.so.p/yuv_post_processor_yuv.cpp.o
+[258/539] Compiling C++ object src/android/libcamera-hal.so.p/camera_capabilities.cpp.o
+[259/539] Compiling C++ object src/ipa/ipu3/ipa_ipu3.so.p/ipa_context.cpp.o
+[260/539] Compiling C++ object src/android/libcamera-hal.so.p/jpeg_exif.cpp.o
+[261/539] Compiling C++ object src/ipa/libipa/libipa.a.p/histogram.cpp.o
+[262/539] Compiling C++ object src/ipa/ipu3/ipa_ipu3.so.p/algorithms_af.cpp.o
+[263/539] Compiling C++ object src/ipa/ipu3/ipa_ipu3.so.p/ipu3.cpp.o
+[264/539] Linking static target src/ipa/libipa/libipa.a
+[265/539] Compiling C++ object src/ipa/ipu3/ipa_ipu3.so.p/algorithms_blc.cpp.o
+[266/539] Compiling C++ object src/ipa/ipu3/ipa_ipu3.so.p/algorithms_awb.cpp.o
+[267/539] Compiling C++ object src/android/libcamera-hal.so.p/camera_request.cpp.o
+[268/539] Compiling C++ object src/ipa/ipu3/ipa_ipu3.so.p/algorithms_agc.cpp.o
+[269/539] Compiling C++ object src/ipa/ipu3/ipa_ipu3.so.p/algorithms_tone_mapping.cpp.o
+[270/539] Linking target subprojects/libyuv/libcm_yuv_shared.so
+[271/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/md_parser_smia.cpp.o
+[272/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/cam_helper.cpp.o
+[273/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/cam_helper_ov5647.cpp.o
+[274/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/cam_helper_imx219.cpp.o
+[275/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/cam_helper_imx296.cpp.o
+[276/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/cam_helper_imx290.cpp.o
+[277/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/cam_helper_ov9281.cpp.o
+[278/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/cam_helper_imx477.cpp.o
+[279/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/cam_helper_imx519.cpp.o
+[280/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_histogram.cpp.o
+[281/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_alsc.cpp.o
+[282/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_controller.cpp.o
+In file included from /usr/include/boost/bind.hpp:30,
+                 from /usr/include/boost/property_tree/json_parser/detail/parser.hpp:7,
+                 from /usr/include/boost/property_tree/json_parser/detail/read.hpp:13,
+                 from /usr/include/boost/property_tree/json_parser.hpp:16,
+                 from ../src/ipa/raspberrypi/controller/controller.cpp:13:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[283/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_focus.cpp.o
+[284/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/raspberrypi.cpp.o
+[285/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_algorithm.cpp.o
+[286/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_awb.cpp.o
+[287/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_sharpen.cpp.o
+[288/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_black_level.cpp.o
+[289/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_noise.cpp.o
+[290/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_geq.cpp.o
+[291/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_contrast.cpp.o
+[292/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_pwl.cpp.o
+[293/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_lux.cpp.o
+[294/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_agc.cpp.o
+[295/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_rpi_sdn.cpp.o
+[296/539] Compiling C++ object src/ipa/raspberrypi/ipa_rpi.so.p/controller_device_status.cpp.o
+[297/539] Compiling C++ object src/ipa/rkisp1/ipa_rkisp1.so.p/algorithms_awb.cpp.o
+[298/539] Compiling C++ object test/shared-fd.p/shared-fd.cpp.o
+[299/539] Compiling C++ object test/pixel-format.p/pixel-format.cpp.o
+[300/539] Compiling C++ object src/lc-compliance/lc-compliance.p/.._cam_event_loop.cpp.o
+[301/539] Compiling C++ object src/ipa/rkisp1/ipa_rkisp1.so.p/algorithms_blc.cpp.o
+[302/539] Compiling C++ object src/ipa/rkisp1/ipa_rkisp1.so.p/ipa_context.cpp.o
+[303/539] Compiling C++ object src/lc-compliance/lc-compliance.p/environment.cpp.o
+[304/539] Compiling C++ object src/lc-compliance/lc-compliance.p/main.cpp.o
+[305/539] Compiling C++ object src/lc-compliance/lc-compliance.p/.._cam_options.cpp.o
+[306/539] Compiling C++ object src/ipa/rkisp1/ipa_rkisp1.so.p/rkisp1.cpp.o
+[307/539] Compiling C++ object src/ipa/vimc/ipa_vimc.so.p/vimc.cpp.o
+[308/539] Compiling C++ object src/cam/cam.p/camera_session.cpp.o
+[309/539] Compiling C++ object src/cam/cam.p/frame_sink.cpp.o
+[310/539] Compiling C++ object src/lc-compliance/lc-compliance.p/capture_test.cpp.o
+[311/539] Compiling C++ object src/cam/cam.p/event_loop.cpp.o
+[312/539] Compiling C++ object src/cam/cam.p/file_sink.cpp.o
+[313/539] Generating qt5-feathericons_qrc with a custom command
+[314/539] Compiling C++ object src/cam/cam.p/main.cpp.o
+[315/539] Generating qt5-shaders_qrc with a custom command
+[316/539] Compiling C++ object src/lc-compliance/lc-compliance.p/.._.._subprojects_googletest-release-1.11.0_googletest_src_gtest-all.cc.o
+[317/539] Generating 'src/qcam/qcam.p/moc_main_window.cpp'.
+[318/539] Generating 'src/qcam/qcam.p/moc_viewfinder_qt.cpp'.
+[319/539] Compiling C++ object src/cam/cam.p/image.cpp.o
+[320/539] Generating 'src/qcam/qcam.p/moc_viewfinder_gl.cpp'.
+[321/539] Compiling C++ object src/lc-compliance/lc-compliance.p/simple_capture.cpp.o
+[322/539] Compiling C++ object src/qcam/qcam.p/meson-generated_moc_main_window.cpp.o
+[323/539] Compiling C++ object src/qcam/qcam.p/meson-generated_moc_viewfinder_qt.cpp.o
+[324/539] Compiling C++ object src/cam/cam.p/options.cpp.o
+[325/539] Compiling C++ object src/qcam/qcam.p/.._cam_image.cpp.o
+[326/539] Compiling C++ object src/qcam/qcam.p/meson-generated_moc_viewfinder_gl.cpp.o
+[327/539] Compiling C++ object src/qcam/qcam.p/meson-generated_.._qt5-feathericons_qrc.cpp.o
+[328/539] Compiling C++ object src/qcam/qcam.p/.._cam_options.cpp.o
+[329/539] Compiling C++ object src/qcam/qcam.p/format_converter.cpp.o
+[330/539] Compiling C++ object src/qcam/qcam.p/message_handler.cpp.o
+[331/539] Compiling C++ object src/qcam/qcam.p/main.cpp.o
+[332/539] Compiling C++ object src/qcam/qcam.p/main_window.cpp.o
+[333/539] Compiling C++ object src/qcam/qcam.p/viewfinder_qt.cpp.o
+[334/539] Compiling C++ object src/qcam/qcam.p/viewfinder_gl.cpp.o
+[335/539] Compiling C++ object src/cam/cam.p/stream_options.cpp.o
+[336/539] Compiling C++ object src/qcam/qcam.p/meson-generated_.._qt5-shaders_qrc.cpp.o
+[337/539] Compiling C++ object src/qcam/qcam.p/.._cam_stream_options.cpp.o
+[338/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/meson-generated_.._ipa_pub_key.cpp.o
+[339/539] Compiling C++ object src/qcam/qcam.p/dng_writer.cpp.o
+[340/539] Generating py_gen_controls with a custom command
+FAILED: src/py/libcamera/pyenums_generated.cpp 
+gen-py-control-enums.py -o src/py/libcamera/pyenums_generated.cpp <https://builder.linuxtv.org/job/libcamera/ws/src/libcamera/control_ids.yaml> ../src/py/libcamera/pyenums_generated.cpp.in
+/bin/sh: 1: gen-py-control-enums.py: not found
+[341/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/meson-generated_.._version.cpp.o
+[342/539] Compiling C++ object src/gstreamer/libgstlibcamera.so.p/gstlibcamera-utils.cpp.o
+[343/539] Compiling C++ object src/gstreamer/libgstlibcamera.so.p/gstlibcameraallocator.cpp.o
+[344/539] Compiling C++ object src/gstreamer/libgstlibcamera.so.p/gstlibcameraprovider.cpp.o
+[345/539] Compiling C++ object src/gstreamer/libgstlibcamera.so.p/gstlibcamerapool.cpp.o
+[346/539] Compiling C++ object src/gstreamer/libgstlibcamera.so.p/gstlibcamera.cpp.o
+[347/539] Compiling C++ object src/gstreamer/libgstlibcamera.so.p/gstlibcamerasrc.cpp.o
+[348/539] Compiling C++ object src/gstreamer/libgstlibcamera.so.p/gstlibcamerapad.cpp.o
+[349/539] Compiling C++ object src/libcamera/libcamera.so.0.0.0.p/v4l2_videodevice.cpp.o
+ninja: build stopped: subcommand failed.
+Build step 'Execute shell' marked build as failure
