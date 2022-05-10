@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49CF1C433FE
-	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 11:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D608AC433EF
+	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 11:59:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241407AbiEJMDf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 May 2022 08:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
+        id S241421AbiEJMDh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 May 2022 08:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241415AbiEJMDc (ORCPT
+        with ESMTP id S241425AbiEJMDg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 May 2022 08:03:32 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB9D52E73
-        for <linux-media@vger.kernel.org>; Tue, 10 May 2022 04:59:35 -0700 (PDT)
+        Tue, 10 May 2022 08:03:36 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081255131E
+        for <linux-media@vger.kernel.org>; Tue, 10 May 2022 04:59:39 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 253DE1838;
-        Tue, 10 May 2022 13:59:24 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A0207BA9;
+        Tue, 10 May 2022 13:59:26 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1652183964;
-        bh=2nqqOrgtxjxD2pNMktw8yQmUenswVmx0ziFCRdrpaxQ=;
+        s=mail; t=1652183967;
+        bh=gm/2LW6ZHCvoGWF4lJlzBcDie/aSGoep0fsUMokwzPE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D8YuGBgnhA3VLZPbsY8Nag6Z8U1FygrbvhfhjAPtR8A28Q/FpIE2mTG5Ui37JWefQ
-         OPf34frcDHMab5E/ZicrA0KJpsMrm6O4/0AEguFt8RGfmN0cfRuvCJVj4UQWXKaX2I
-         Az+IbKO4fUsSCK/1OUJgy0WAGf/AXgVu+ItiBO/U=
+        b=J+jeN6fLShQnt8YjDbtSwxEZ2WShY5ohU5M8yMwkpfBfYCDc13KspQQtWa0qN6qid
+         GRGvIXz4CQcrZuULF6fRsjPipbUsieyCKV3k5J3gFKTxvEk386kzR01QBCKO5nIaUX
+         lsxCfsC4PpUvZ7oyvGgz+m5WaD3bm52JUGvCL/Qo=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
@@ -35,9 +35,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
         kernel@pengutronix.de
-Subject: [PATCH 17/50] staging: media: imx: imx7-media-csi: Don't set subdev group id
-Date:   Tue, 10 May 2022 14:58:26 +0300
-Message-Id: <20220510115859.19777-18-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 20/50] staging: media: imx: imx7-media-csi: Drop imx_media_add_video_device call
+Date:   Tue, 10 May 2022 14:58:29 +0300
+Message-Id: <20220510115859.19777-21-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
 References: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
@@ -47,32 +47,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The subdev group id isn't used by any of the remaining helpers used by
-this driver, don't set it.
+There's no need to call imx_media_add_video_device() anymore, as the
+video devices list it manages is only used by the control inheritance
+mechanism in the helpers, which this driver doesn't use.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-media-csi.c | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/staging/media/imx/imx7-media-csi.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 80d666416d47..bd1bdc09e701 100644
+index 891e939d7ea5..b6643952da25 100644
 --- a/drivers/staging/media/imx/imx7-media-csi.c
 +++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -1749,13 +1749,6 @@ static int imx7_csi_notify_bound(struct v4l2_async_notifier *notifier,
- 	struct imx7_csi *csi = imx7_csi_notifier_to_dev(notifier);
- 	struct media_pad *sink = &csi->sd.entity.pads[IMX7_CSI_PAD_SINK];
+@@ -1267,9 +1267,6 @@ static int imx7_csi_video_register(struct imx7_csi *csi)
+ 		return ret;
+ 	}
  
--	/*
--	 * If the subdev is a video mux, it must be one of the CSI
--	 * muxes. Mark it as such via its group id.
--	 */
--	if (sd->entity.function == MEDIA_ENT_F_VID_MUX)
--		sd->grp_id = IMX_MEDIA_GRP_ID_CSI_MUX;
+-	/* Add vdev to the video devices list. */
+-	imx_media_add_video_device(&csi->imxmd, &csi->vdev);
 -
- 	csi->src_sd = sd;
+ 	return 0;
+ }
  
- 	return v4l2_create_fwnode_links_to_pad(sd, sink, MEDIA_LNK_FL_ENABLED |
 -- 
 Regards,
 
