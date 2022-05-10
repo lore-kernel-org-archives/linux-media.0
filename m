@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D884C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 11:59:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A88B7C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 11:59:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241470AbiEJMDt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 May 2022 08:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
+        id S241475AbiEJMDv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 May 2022 08:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241469AbiEJMDs (ORCPT
+        with ESMTP id S241477AbiEJMDu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 May 2022 08:03:48 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B581052E73
-        for <linux-media@vger.kernel.org>; Tue, 10 May 2022 04:59:50 -0700 (PDT)
+        Tue, 10 May 2022 08:03:50 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706B353B52
+        for <linux-media@vger.kernel.org>; Tue, 10 May 2022 04:59:53 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 856F5D18;
-        Tue, 10 May 2022 13:59:35 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 310FF1A49;
+        Tue, 10 May 2022 13:59:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1652183976;
-        bh=ugFiXGKljdu4sLM/6x0wIcV2N3AEtbDAbQDr0izYfQg=;
+        s=mail; t=1652183977;
+        bh=uk7QSLv2qM0UlTKkUT4qWhdMuv+9FNoxBd4UtAMVX14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rLIgdHwEWJz9QaXVlzD+5yQO0t4RY1aN4JI17XZf7V3zy/j6vKn/8IVJE7zkS1ks+
-         ax1MkFb1siPQrcSiCZ7QT99tz1sA/JT1mbNDQivlTUBGBt+gH4EErcTgFvLGKwZboR
-         Ba9LZhkGt/TXqRIxWoMCBybVaBoeRHj+ldwhjepU=
+        b=ooWVWNX4AZouZLaGEJvdu9lAWJSs2gn6SYef0e52FVY33QHFIVoMuG+UmPAX8vLVg
+         X9VCgYd8e1uw/7CC6ar6nl/L+iJIrfk3yrK9Hm0c3MYOs1NBBHSx7wsM9Yi+E8UBs1
+         gzMD8TdsTMX3PwoOH3CkKfMIN5CvMLK4P708X2+M=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
@@ -35,9 +35,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
         kernel@pengutronix.de
-Subject: [PATCH 30/50] staging: media: imx: imx7-media-csi: Decouple from imx_media_dma_buf
-Date:   Tue, 10 May 2022 14:58:39 +0300
-Message-Id: <20220510115859.19777-31-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 32/50] staging: media: imx: imx7-media-csi: Drop error message on alloc failure
+Date:   Tue, 10 May 2022 14:58:41 +0300
+Message-Id: <20220510115859.19777-33-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
 References: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
@@ -47,91 +47,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Decouple from the imx_media_dma_buf structure defined in shared helpers
-by duplicating it in the imx7-media-csi driver, along with the two small
-alloc and free functions. No functional change intended.
+The kernel memory allocators already complain loudly to the log when
+allocation fails. There's no need for an additional message.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-media-csi.c | 40 +++++++++++++++++++---
- 1 file changed, 36 insertions(+), 4 deletions(-)
+ drivers/staging/media/imx/imx7-media-csi.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 5a5157d8b27b..05907d6257a8 100644
+index 2106a72ebe85..e5dc9525fa52 100644
 --- a/drivers/staging/media/imx/imx7-media-csi.c
 +++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -184,6 +184,12 @@ to_imx7_csi_vb2_buffer(struct vb2_buffer *vb)
- 	return container_of(vbuf, struct imx7_csi_vb2_buffer, vbuf);
+@@ -442,10 +442,8 @@ static int imx7_csi_alloc_dma_buf(struct imx7_csi *csi,
+ 	buf->len = PAGE_ALIGN(size);
+ 	buf->virt = dma_alloc_coherent(csi->dev, buf->len, &buf->phys,
+ 				       GFP_DMA | GFP_KERNEL);
+-	if (!buf->virt) {
+-		dev_err(csi->dev, "%s: failed\n", __func__);
++	if (!buf->virt)
+ 		return -ENOMEM;
+-	}
+ 
+ 	return 0;
  }
- 
-+struct imx7_csi_dma_buf {
-+	void *virt;
-+	dma_addr_t phys;
-+	unsigned long len;
-+};
-+
- struct imx7_csi {
- 	struct device *dev;
- 
-@@ -227,7 +233,7 @@ struct imx7_csi {
- 
- 	/* Buffers and streaming state */
- 	struct imx7_csi_vb2_buffer *active_vb2_buf[2];
--	struct imx_media_dma_buf underrun_buf;
-+	struct imx7_csi_dma_buf underrun_buf;
- 
- 	bool is_streaming;
- 	int buf_num;
-@@ -415,12 +421,38 @@ static void imx7_csi_dma_unsetup_vb2_buf(struct imx7_csi *csi,
- 	}
- }
- 
-+static void imx7_csi_free_dma_buf(struct imx7_csi *csi,
-+				  struct imx7_csi_dma_buf *buf)
-+{
-+	if (buf->virt)
-+		dma_free_coherent(csi->dev, buf->len, buf->virt, buf->phys);
-+
-+	buf->virt = NULL;
-+	buf->phys = 0;
-+}
-+
-+static int imx7_csi_alloc_dma_buf(struct imx7_csi *csi,
-+				  struct imx7_csi_dma_buf *buf, int size)
-+{
-+	imx7_csi_free_dma_buf(csi, buf);
-+
-+	buf->len = PAGE_ALIGN(size);
-+	buf->virt = dma_alloc_coherent(csi->dev, buf->len, &buf->phys,
-+				       GFP_DMA | GFP_KERNEL);
-+	if (!buf->virt) {
-+		dev_err(csi->dev, "%s: failed\n", __func__);
-+		return -ENOMEM;
-+	}
-+
-+	return 0;
-+}
-+
- static int imx7_csi_dma_setup(struct imx7_csi *csi)
- {
- 	int ret;
- 
--	ret = imx_media_alloc_dma_buf(csi->dev, &csi->underrun_buf,
--				      csi->vdev_fmt.sizeimage);
-+	ret = imx7_csi_alloc_dma_buf(csi, &csi->underrun_buf,
-+				     csi->vdev_fmt.sizeimage);
- 	if (ret < 0) {
- 		v4l2_warn(&csi->sd, "consider increasing the CMA area\n");
- 		return ret;
-@@ -439,7 +471,7 @@ static void imx7_csi_dma_cleanup(struct imx7_csi *csi,
- 				 enum vb2_buffer_state return_status)
- {
- 	imx7_csi_dma_unsetup_vb2_buf(csi, return_status);
--	imx_media_free_dma_buf(csi->dev, &csi->underrun_buf);
-+	imx7_csi_free_dma_buf(csi, &csi->underrun_buf);
- }
- 
- static void imx7_csi_dma_stop(struct imx7_csi *csi)
 -- 
 Regards,
 
