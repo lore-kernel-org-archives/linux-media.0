@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFE45C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 12:00:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ACC5C433FE
+	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 12:00:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241014AbiEJMEP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 May 2022 08:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
+        id S241517AbiEJMEQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 May 2022 08:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241514AbiEJMEL (ORCPT
+        with ESMTP id S241501AbiEJMEO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 May 2022 08:04:11 -0400
+        Tue, 10 May 2022 08:04:14 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F2D52E73
-        for <linux-media@vger.kernel.org>; Tue, 10 May 2022 05:00:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371D25131E
+        for <linux-media@vger.kernel.org>; Tue, 10 May 2022 05:00:17 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 99A7E12B9;
-        Tue, 10 May 2022 13:59:50 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 45BE121C4;
+        Tue, 10 May 2022 13:59:52 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1652183991;
-        bh=7n8of1MXRoPvO3JeUjedG56zxX0gutOm/D21RqQZXt4=;
+        s=mail; t=1652183992;
+        bh=rxA+S3Y9czX3f8Mgq5gZO4DV4tI/RPfGFDgMPXG/XaE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ENzGDGlY4MmHgWZSG0IsM7kwAMfyAy0f6pKWjtrS7tBcgx/4Sq6N6mx+1DNeSPIgS
-         5KGw1AGgzmUZQUrBJtwP9jyK/00p31RIXjzhVfd5Gw5OtF4DjsNaA3PloStOj6aZGB
-         pGKfMaK+sl0swgSnsNykPn9Oq6+ThjhC+77f5meQ=
+        b=ZalasY3xbDG1ppgyu+DS2j8l0Mhu2jM6T4eTze44zIbYJoRsaUr39vz9FRurFzFHd
+         WCn0edohwJntVff9bif6oY6ISobTELaXrKWts0yAkZK7jSVb5iX5kqGKpQGz8USruJ
+         WWqF4JoYNinYZz/ZFkzwy/iHn0P7eGWQ2Hc9gJ8s=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
@@ -35,9 +35,9 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
         kernel@pengutronix.de
-Subject: [PATCH 48/50] staging: media: imx: imx7-media-csi: Inline imx7_csi_enum_pixel_formats()
-Date:   Tue, 10 May 2022 14:58:57 +0300
-Message-Id: <20220510115859.19777-49-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 50/50] staging: media: imx: imx7-media-csi: Drop usage of shared helpers
+Date:   Tue, 10 May 2022 14:58:59 +0300
+Message-Id: <20220510115859.19777-51-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
 References: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
@@ -47,115 +47,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Inline the imx7_csi_enum_pixel_formats() function in its only caller.
+None of the shared helpers are used anymore. Make this official by
+dropping inclusion of imx-media.h.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-media-csi.c | 84 +++++++++-------------
- 1 file changed, 34 insertions(+), 50 deletions(-)
+ drivers/staging/media/imx/imx7-media-csi.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 8be6f40588af..0bf69933f1bd 100644
+index ae74256755f4..cf35a2a02d8d 100644
 --- a/drivers/staging/media/imx/imx7-media-csi.c
 +++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -954,54 +954,6 @@ static const struct imx7_csi_pixfmt *imx7_csi_find_mbus_format(u32 code)
- 	return NULL;
- }
+@@ -28,8 +28,6 @@
+ #include <media/v4l2-subdev.h>
+ #include <media/videobuf2-dma-contig.h>
  
--/*
-- * Enumerate entries in the pixel_formats[] array that match the
-- * requested selection criteria. Return the fourcc that matches the
-- * selection criteria at the requested match index.
-- *
-- * @fourcc: The returned fourcc that matches the search criteria at
-- *          the requested match index.
-- * @index: The requested match index.
-- * @code: If non-zero, only include in the enumeration entries matching this
-- *	media bus code.
-- */
--static int imx7_csi_enum_pixel_formats(u32 *fourcc, u32 index, u32 code)
--{
--	unsigned int i;
+-#include "imx-media.h"
 -
--	for (i = 0; i < ARRAY_SIZE(pixel_formats); i++) {
--		const struct imx7_csi_pixfmt *fmt = &pixel_formats[i];
--
--		/*
--		 * If a media bus code is specified, only consider formats that
--		 * match it.
--		 */
--		if (code) {
--			unsigned int j;
--
--			if (!fmt->codes)
--				continue;
--
--			for (j = 0; fmt->codes[j]; j++) {
--				if (code == fmt->codes[j])
--					break;
--			}
--
--			if (!fmt->codes[j])
--				continue;
--		}
--
--		if (index == 0) {
--			*fourcc = fmt->fourcc;
--			return 0;
--		}
--
--		index--;
--	}
--
--	return -EINVAL;
--}
--
- /*
-  * Enumerate entries in the pixel_formats[] array that match the
-  * requested search criteria. Return the media-bus code that matches
-@@ -1088,8 +1040,40 @@ static int imx7_csi_video_querycap(struct file *file, void *fh,
- static int imx7_csi_video_enum_fmt_vid_cap(struct file *file, void *fh,
- 					   struct v4l2_fmtdesc *f)
- {
--	return imx7_csi_enum_pixel_formats(&f->pixelformat, f->index,
--					   f->mbus_code);
-+	unsigned int index = f->index;
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(pixel_formats); i++) {
-+		const struct imx7_csi_pixfmt *fmt = &pixel_formats[i];
-+
-+		/*
-+		 * If a media bus code is specified, only consider formats that
-+		 * match it.
-+		 */
-+		if (f->mbus_code) {
-+			unsigned int j;
-+
-+			if (!fmt->codes)
-+				continue;
-+
-+			for (j = 0; fmt->codes[j]; j++) {
-+				if (f->mbus_code == fmt->codes[j])
-+					break;
-+			}
-+
-+			if (!fmt->codes[j])
-+				continue;
-+		}
-+
-+		if (index == 0) {
-+			f->pixelformat = fmt->fourcc;
-+			return 0;
-+		}
-+
-+		index--;
-+	}
-+
-+	return -EINVAL;
- }
- 
- static int imx7_csi_video_enum_framesizes(struct file *file, void *fh,
+ #define IMX7_CSI_PAD_SINK		0
+ #define IMX7_CSI_PAD_SRC		1
+ #define IMX7_CSI_PADS_NUM		2
 -- 
 Regards,
 
