@@ -2,109 +2,102 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC1C3C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 12:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB9DCC433EF
+	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 12:10:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241518AbiEJMES (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 May 2022 08:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
+        id S241558AbiEJMOv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 May 2022 08:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240882AbiEJMEO (ORCPT
+        with ESMTP id S241561AbiEJMOo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 May 2022 08:04:14 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03E046673
-        for <linux-media@vger.kernel.org>; Tue, 10 May 2022 05:00:16 -0700 (PDT)
-Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 705FF19AD;
-        Tue, 10 May 2022 13:59:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1652183992;
-        bh=7TZAvmLE3VyU/IP2y4JQZc51w8dX52N/5RgRLrzd8oU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CN5hc/77MmGC2QXy+NbdjEZSJjMcJxAFZwQWpo7cPdKR9MCrvXYpa0cbfqiYgHa5j
-         s1LOm2+jE4UQL8WsAeQr2wldiH+gODXTlF3afDlFweQe1aq4h7x1CP8gXTjMkjhdI4
-         bwazDQTqh5RYJAD7KEsUltIpivJXeqEy+j+T9GOI=
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
-        kernel@pengutronix.de
-Subject: [PATCH 49/50] staging: media: imx: imx7-media-csi: Drop V4L2 events support
-Date:   Tue, 10 May 2022 14:58:58 +0300
-Message-Id: <20220510115859.19777-50-laurent.pinchart@ideasonboard.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
-References: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
+        Tue, 10 May 2022 08:14:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF1C4B43C;
+        Tue, 10 May 2022 05:10:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A82AB81A0A;
+        Tue, 10 May 2022 12:10:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2A8C385A6;
+        Tue, 10 May 2022 12:10:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652184642;
+        bh=DpHjuqVa+SSlkOsM/Gej0YHbCu1wZMGTmd4rbhVUBqE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a6PjO9Ow4kq9o7cWrnq2GFU5qa9QpEuWuWHq1GreqkvmbEABkI24Doocn1CkwAc9t
+         bNAOVxVTY/DP5mjRphxpzPQjJenPUkiTIEgYWhRTkAukpn/pTwmJnj/IwEQo+EH7fk
+         0GanbfHet/iJ8P9I6jsZp4rvq9ZRWAykdEAYyX28=
+Date:   Tue, 10 May 2022 14:10:29 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Charan Teja Kalla <quic_charante@quicinc.com>,
+        sumit.semwal@linaro.org, daniel.vetter@ffwll.ch,
+        tjmercier@google.com, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dmabuf: ensure unique directory name for dmabuf stats
+Message-ID: <YnpWNSdAQzG80keQ@kroah.com>
+References: <1652178212-22383-1-git-send-email-quic_charante@quicinc.com>
+ <YnpF1XP1tH83uBlM@kroah.com>
+ <039e1acc-8688-2e06-1b2a-1acbe813b91e@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <039e1acc-8688-2e06-1b2a-1acbe813b91e@amd.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The only event that the driver allows subscribing to,
-V4L2_EVENT_IMX_FRAME_INTERVAL_ERROR, is never generated. Drop events
-support.
+On Tue, May 10, 2022 at 01:35:41PM +0200, Christian König wrote:
+> Am 10.05.22 um 13:00 schrieb Greg KH:
+> > On Tue, May 10, 2022 at 03:53:32PM +0530, Charan Teja Kalla wrote:
+> > > The dmabuf file uses get_next_ino()(through dma_buf_getfile() ->
+> > > alloc_anon_inode()) to get an inode number and uses the same as a
+> > > directory name under /sys/kernel/dmabuf/buffers/<ino>. This directory is
+> > > used to collect the dmabuf stats and it is created through
+> > > dma_buf_stats_setup(). At current, failure to create this directory
+> > > entry can make the dma_buf_export() to fail.
+> > > 
+> > > Now, as the get_next_ino() can definitely give a repetitive inode no
+> > > causing the directory entry creation to fail with -EEXIST. This is a
+> > > problem on the systems where dmabuf stats functionality is enabled on
+> > > the production builds can make the dma_buf_export(), though the dmabuf
+> > > memory is allocated successfully, to fail just because it couldn't
+> > > create stats entry.
+> > Then maybe we should not fail the creation path of the kobject fails to
+> > be created?  It's just for debugging, it should be fine if the creation
+> > of it isn't there.
+> 
+> Well if it's just for debugging then it should be under debugfs and not
+> sysfs.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/staging/media/imx/imx7-media-csi.c | 16 ----------------
- 1 file changed, 16 deletions(-)
+I'll note that the original patch series for this described why this was
+moved from debugfs to sysfs.
 
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 0bf69933f1bd..ae74256755f4 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -22,14 +22,12 @@
- #include <linux/types.h>
- 
- #include <media/v4l2-device.h>
--#include <media/v4l2-event.h>
- #include <media/v4l2-fwnode.h>
- #include <media/v4l2-ioctl.h>
- #include <media/v4l2-mc.h>
- #include <media/v4l2-subdev.h>
- #include <media/videobuf2-dma-contig.h>
- 
--#include <media/imx.h>
- #include "imx-media.h"
- 
- #define IMX7_CSI_PAD_SINK		0
-@@ -1212,17 +1210,6 @@ static int imx7_csi_video_g_selection(struct file *file, void *fh,
- 	return 0;
- }
- 
--static int imx7_csi_video_subscribe_event(struct v4l2_fh *fh,
--					  const struct v4l2_event_subscription *sub)
--{
--	switch (sub->type) {
--	case V4L2_EVENT_IMX_FRAME_INTERVAL_ERROR:
--		return v4l2_event_subscribe(fh, sub, 0, NULL);
--	default:
--		return -EINVAL;
--	}
--}
--
- static const struct v4l2_ioctl_ops imx7_csi_video_ioctl_ops = {
- 	.vidioc_querycap		= imx7_csi_video_querycap,
- 
-@@ -1244,9 +1231,6 @@ static const struct v4l2_ioctl_ops imx7_csi_video_ioctl_ops = {
- 	.vidioc_expbuf			= vb2_ioctl_expbuf,
- 	.vidioc_streamon		= vb2_ioctl_streamon,
- 	.vidioc_streamoff		= vb2_ioctl_streamoff,
--
--	.vidioc_subscribe_event		= imx7_csi_video_subscribe_event,
--	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
- };
- 
- /* -----------------------------------------------------------------------------
--- 
-Regards,
+> > > This issue we are able to see on the snapdragon system within 13 days
+> > > where there already exists a directory with inode no "122602" so
+> > > dma_buf_stats_setup() failed with -EEXIST as it is trying to create
+> > > the same directory entry.
+> > > 
+> > > To make the directory entry as unique, append the inode creation time to
+> > > the inode. With this change the stats directory entries will be in the
+> > > format of: /sys/kernel/dmabuf/buffers/<inode no>-<inode creation time in
+> > > secs>.
+> > As you are changing the format here, shouldn't the Documentation/ABI/
+> > entry for this also be changed?
+> 
+> As far as I can see that is even an UAPI break, not sure if we can allow
+> that.
 
-Laurent Pinchart
+Why?  Device names change all the time and should never be static.  A
+buffer name should just be a unique identifier in that directory, that's
+all.  No rules on the formatting of it unless for some reason the name
+being the inode number was somehow being used in userspace for that
+number?
 
+thanks,
+
+greg k-h
