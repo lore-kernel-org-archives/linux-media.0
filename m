@@ -2,126 +2,114 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5C9AC433F5
-	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 11:55:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A041C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 11:59:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241311AbiEJL7M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 May 2022 07:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
+        id S235785AbiEJMDL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 May 2022 08:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241299AbiEJL7L (ORCPT
+        with ESMTP id S233564AbiEJMDK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 May 2022 07:59:11 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C610928BDFB;
-        Tue, 10 May 2022 04:55:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652183714; x=1683719714;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Dm3X0ozVMRc4qPMKkmV0VxYC7We4StxOkXMsdvVYhuI=;
-  b=blyBUH/3gcyUJffTCUkvF3RGTRyMIuMScYpdEHK9vEY/ZmU073TQ9hRq
-   Of1rF2T1YM5e8vZd4+Zx952Lfa+F28CQ6MMG+gOPv5vXFvODjTXYgXC8M
-   sFDowY2CR9b+936AMrqYfFRcY15b8OTCDHadSVtJS+QPaEDeTOfbjSwF2
-   g=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 10 May 2022 04:55:13 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 04:55:10 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 10 May 2022 04:55:08 -0700
-Received: from [10.216.42.221] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 10 May
- 2022 04:55:04 -0700
-Message-ID: <c95bd5fb-0880-c98b-5f5c-b2b0bdd7b042@quicinc.com>
-Date:   Tue, 10 May 2022 17:25:00 +0530
+        Tue, 10 May 2022 08:03:10 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA91146163
+        for <linux-media@vger.kernel.org>; Tue, 10 May 2022 04:59:12 -0700 (PDT)
+Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 57F8DB60;
+        Tue, 10 May 2022 13:59:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1652183951;
+        bh=ID7KsvsOkIXuQ4cSOB4gIYwOWmaaua/BqNjfCaF7y3I=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Q1oe320a/YvZwL2x4zvkz6kY37pWyHxXrpdvkNZ8yX08ROY2vGP4JDxrSy9ufdHTA
+         mKpOBF9SnSTD/ak9OGgyy+sZewjPmdWShgLqxrBBy7vWY3KUQfWMxsgPxoxS2ziNzh
+         chv55gSvdm4vNaU5ojWAUECbKr8Yph3a9rMlC17o=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        kernel@pengutronix.de
+Subject: [PATCH 01/50] staging: media: imx: imx7-media-csi: Initialize locks early on
+Date:   Tue, 10 May 2022 14:58:10 +0300
+Message-Id: <20220510115859.19777-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
+References: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dmabuf: ensure unique directory name for dmabuf stats
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
-        <daniel.vetter@ffwll.ch>, <tjmercier@google.com>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>
-References: <1652178212-22383-1-git-send-email-quic_charante@quicinc.com>
- <YnpF1XP1tH83uBlM@kroah.com>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <YnpF1XP1tH83uBlM@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Thanks Greg for the inputs!!
+Group all the direct initialization of imx7_csi fields at the beginning
+of the imx7_csi_probe() function instead of spreading them around.
 
-On 5/10/2022 4:30 PM, Greg KH wrote:
->> The dmabuf file uses get_next_ino()(through dma_buf_getfile() ->
->> alloc_anon_inode()) to get an inode number and uses the same as a
->> directory name under /sys/kernel/dmabuf/buffers/<ino>. This directory is
->> used to collect the dmabuf stats and it is created through
->> dma_buf_stats_setup(). At current, failure to create this directory
->> entry can make the dma_buf_export() to fail.
->>
->> Now, as the get_next_ino() can definitely give a repetitive inode no
->> causing the directory entry creation to fail with -EEXIST. This is a
->> problem on the systems where dmabuf stats functionality is enabled on
->> the production builds can make the dma_buf_export(), though the dmabuf
->> memory is allocated successfully, to fail just because it couldn't
->> create stats entry.
-> Then maybe we should not fail the creation path of the kobject fails to
-> be created?  It's just for debugging, it should be fine if the creation
-> of it isn't there.
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/staging/media/imx/imx7-media-csi.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-Not creating the debug node under some special cases can make this
-interface not reliable if one wants to know info about the created
-dmabuf buffers. Please help in correcting me If my perspective is wrong
-here.
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index 8467a1491048..893620e8fc03 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -1188,27 +1188,32 @@ static int imx7_csi_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	csi->dev = dev;
++	platform_set_drvdata(pdev, &csi->sd);
++
++	spin_lock_init(&csi->irqlock);
++	mutex_init(&csi->lock);
+ 
+ 	csi->mclk = devm_clk_get(&pdev->dev, "mclk");
+ 	if (IS_ERR(csi->mclk)) {
+ 		ret = PTR_ERR(csi->mclk);
+ 		dev_err(dev, "Failed to get mclk: %d", ret);
+-		return ret;
++		goto destroy_mutex;
+ 	}
+ 
+ 	csi->irq = platform_get_irq(pdev, 0);
+-	if (csi->irq < 0)
+-		return csi->irq;
++	if (csi->irq < 0) {
++		ret = csi->irq;
++		goto destroy_mutex;
++	}
+ 
+ 	csi->regbase = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(csi->regbase))
+-		return PTR_ERR(csi->regbase);
++	if (IS_ERR(csi->regbase)) {
++		ret = PTR_ERR(csi->regbase);
++		goto destroy_mutex;
++	}
+ 
+ 	csi->model = (enum imx_csi_model)(uintptr_t)of_device_get_match_data(&pdev->dev);
+ 
+-	spin_lock_init(&csi->irqlock);
+-	mutex_init(&csi->lock);
+-
+ 	/* install interrupt handler */
+ 	ret = devm_request_irq(dev, csi->irq, imx7_csi_irq_handler, 0, "csi",
+ 			       (void *)csi);
+@@ -1223,7 +1228,6 @@ static int imx7_csi_probe(struct platform_device *pdev)
+ 		ret = PTR_ERR(imxmd);
+ 		goto destroy_mutex;
+ 	}
+-	platform_set_drvdata(pdev, &csi->sd);
+ 
+ 	ret = imx_media_of_add_csi(imxmd, node);
+ 	if (ret < 0 && ret != -ENODEV && ret != -EEXIST)
+-- 
+Regards,
 
-IIUC, except this -EEXIST condition, under the other conditions (-EINVAL
-and -ENOMEM) failure is fine. Since, we are going to fix the -EEXIST
-error in this patch, my opinion is failure in the kobject creation path
-is acceptable for the reasons: a) The user is expected to pass the valid
-dmabuf to create the stats node, b) The user can undefine the
-CONFIG_DMABUF_SYSFS_STATS if he don't want this stats.
+Laurent Pinchart
 
-> 
->> This issue we are able to see on the snapdragon system within 13 days
->> where there already exists a directory with inode no "122602" so
->> dma_buf_stats_setup() failed with -EEXIST as it is trying to create
->> the same directory entry.
->>
->> To make the directory entry as unique, append the inode creation time to
->> the inode. With this change the stats directory entries will be in the
->> format of: /sys/kernel/dmabuf/buffers/<inode no>-<inode creation time in
->> secs>.
-> As you are changing the format here, shouldn't the Documentation/ABI/
-> entry for this also be changed?
-> 
-> And what's to keep the seconds field from also being the same?
-
-get_next_ino() just increases the inode number monotonically and return
-to the caller and it is 'unsigned int' data type. Thus 2 successive
-calls always generate the different inode_number but can be the same
-secs value.  With inode-secs format, this will be still be a unique
-string.  Say it will be like ino1-sec1 and ino2-sec1.
-
-Now after the inode number overflow and wraps, we may get the ino1 again
-from the get_next_ino() but then secs will be different i.e. say it may
-be like ino1-secn and ion2-secn. So, it always be a unique string.
-
-IOW, with secs field added, to get the same inode-secs string, the uint
-should overflow in the same second which is impossible.
-
-Thanks for pointing out the changes to be done in ABI document. Will do
-it in the next spin.
