@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73B6FC433EF
-	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 11:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02CFEC433FE
+	for <linux-media@archiver.kernel.org>; Tue, 10 May 2022 11:59:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238928AbiEJMDM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 10 May 2022 08:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S239019AbiEJMDN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 10 May 2022 08:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbiEJMDK (ORCPT
+        with ESMTP id S233692AbiEJMDN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 10 May 2022 08:03:10 -0400
+        Tue, 10 May 2022 08:03:13 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75F3165AB
-        for <linux-media@vger.kernel.org>; Tue, 10 May 2022 04:59:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C354946163
+        for <linux-media@vger.kernel.org>; Tue, 10 May 2022 04:59:15 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7AB14824;
-        Tue, 10 May 2022 13:59:09 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2DE80B9A;
+        Tue, 10 May 2022 13:59:11 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1652183950;
-        bh=znKOnW5DcqLMT8bFMMoINNY9WM5rEJCjpMdpXf5v+rw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eeq7smbayk60Wfi6+KKDizZtI11nTitTH0JY2Xq35lDd5noFO/s4DgEwSDRb0ldMs
-         eIbQgGcpQ6CczUU2dSuLCrq5igQGP3TgbHwywBjGpT92Jbs8P8KtjPaFSCSQaJptiF
-         xfChI8SaZ7IyTt+7dHQfYrQbEEc7t5AfuK4huTUM=
+        s=mail; t=1652183951;
+        bh=biy0GTT1QoP72aKYu5WMI/a8pkSOFL+DXgOcxXmEqYk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WueZg0hlIKS7AeDL3TWQgrIv1gkJf1xyvpic8YxVulNS0oqBahamvGWfapbGXYh+R
+         lSRaPMOBbBthLvNPNuzmqpfWSJlKhybPDHgJnNTpu0LYKGgKerQbLEAZs0SFBh3Buq
+         DXuPgLWpZ1dnC38YG+cRodvPoxHdvA7QXJFs2r3s=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
@@ -35,124 +35,150 @@ Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
         kernel@pengutronix.de
-Subject: [PATCH 00/50] staging: media: imx: Prepare destaging of imx7-media-csi
-Date:   Tue, 10 May 2022 14:58:09 +0300
-Message-Id: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 02/50] staging: media: imx: imx7-media-csi: Split imx_media_dev from probe()
+Date:   Tue, 10 May 2022 14:58:11 +0300
+Message-Id: <20220510115859.19777-3-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
+References: <20220510115859.19777-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Prepare for the decoupling of the imx7-media-csi driver from the
+IPUv3-based drivers by moving the imx_media_dev handling from probe()
+function to separate functions.
 
-This patch series prepares the imx7-media-csi for destaging by
-decoupling it from the helpers shared with the i.MX6 IPUv3.
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/staging/media/imx/imx7-media-csi.c | 71 +++++++++++++---------
+ 1 file changed, 42 insertions(+), 29 deletions(-)
 
-The strategy Paul and I have followed is to import copies of helper code
-and, refactor it within the imx7-media-csi driver, and repeat until no
-more shared helpers are used. There is still room for refactoring and
-simplification of the imx7-media-csi driver, but I believe it is now in
-a state clean enough to be moved out of staging.
-
-The series also includes a few fixes or improvements in supported
-formats that are now made possible thanks to this refactoring. See
-patches 45/50 and 46/50 for details.
-
-The code size has grown as a result. This is partly offset by code in
-the shared helpers that can be removed or simplified, but I haven't
-starting working on that. The helpers are now used for the i.MX6 IPUv3
-only, so I will leave this exercise to anyone who would be interested in
-destaging that driver as well.
-
-Some of the items in the TODO file related to the imx7-media-csi driver
-have been addressed. The two remaining items are frame interval monitor
-support and restricting the list of supported formats to the SoC
-version. The former isn't a destaging blocker in my opinion, as the
-feature can be added later if desired (and frame interval monitoring
-should then be moved to the V4L2 core). I believe the latter could also
-be addressed after destaging the driver, but in any case, this is a
-discussion for a future destaging series (which may come as soon as this
-one is accepted).
-
-Alexander, this also could greatly simplify your "[PATCH v3 0/8]
-imx7/imx8mm media / csi patches" series.
-
-Laurent Pinchart (48):
-  staging: media: imx: imx7-media-csi: Initialize locks early on
-  staging: media: imx: imx7-media-csi: Split imx_media_dev from probe()
-  staging: media: imx: imx7-media-csi: Import notifier helpers
-  staging: media: imx: imx7-media-csi: Drop duplicate link creation
-  staging: media: imx: imx7-media-csi: Drop the imx_media notifier
-  staging: media: imx: imx7-media-csi: Don't populate vdev lists
-  staging: media: imx: imx7-media-csi: Drop unused frame_interval
-  staging: media: imx: imx7-media-csi: Move format init to probe time
-  staging: media: imx: imx7-media-csi: Import video device helpers
-  staging: media: imx: imx7-media-csi: Drop legacy video device support
-  staging: media: imx: imx7-media-csi: Drop unused controls support
-  staging: media: imx: imx7-media-csi: Reorganize imx7_csi structure
-  staging: media: imx: imx7-media-csi: Fold capture_priv into imx7_csi
-  staging: media: imx: imx7-media-csi: Ensure consistent function prefix
-  staging: media: imx: imx7-media-csi: Don't set subdev group id
-  staging: media: imx: imx7-media-csi: Import imx_media_dev_init()
-    helper
-  staging: media: imx: imx7-media-csi: Embed imx_media_dev in imx7_csi
-  staging: media: imx: imx7-media-csi: Drop imx_media_add_video_device
-    call
-  staging: media: imx: imx7-media-csi: Don't initialize unused fields
-  staging: media: imx: imx7-media-csi: Inline imx_media_pipeline_pad()
-  staging: media: imx: imx7-media-csi: Import
-    imx_media_pipeline_set_stream()
-  staging: media: imx: imx7-media-csi: Avoid unnecessary casts
-  staging: media: imx: imx7-media-csi: Inline pipeline start/stop
-  staging: media: imx: imx7-media-csi: Fold imx_media_dev into imx7_csi
-  staging: media: imx: imx7-media-csi: Decouple from imx_media_buffer
-  staging: media: imx: imx7-media-csi: Fold imx_media_video_dev into
-    imx7_csi
-  staging: media: imx: imx7-media-csi: Store imx7_csi in drv data
-  staging: media: imx: imx7-media-csi: Decouple from imx_media_dma_buf
-  staging: media: imx: imx7-media-csi: Decouple from shared macros
-  staging: media: imx: imx7-media-csi: Drop error message on alloc
-    failure
-  staging: media: imx: imx7-media-csi: Import format helpers
-  staging: media: imx: imx7-media-csi: Replace ipu_color_space with bool
-    yuv field
-  staging: media: imx: imx7-media-csi: Drop IC support from
-    imx7_csi_try_colorimetry()
-  staging: media: imx: imx7-media-csi: Drop IPU-only formats
-  staging: media: imx: imx7-media-csi: Drop unsupported YUV and RGB
-    formats
-  staging: media: imx: imx7-media-csi: Make default formats consistent
-  staging: media: imx: imx7-media-csi: Define macro for default mbus
-    code
-  staging: media: imx: imx7-media-csi: Simplify default mbus code in
-    try_fmt
-  staging: media: imx: imx7-media-csi: Drop YUV/RGB/BAYER format
-    selectors
-  staging: media: imx: imx7-media-csi: Drop unneeded imx7_csi_pixfmt
-    fields
-  staging: media: imx: imx7-media-csi: Inline imx7_csi_init_mbus_fmt()
-  staging: media: imx: imx7-media-csi: Simplify default format in
-    try_fmt
-  staging: media: imx: imx7-media-csi: Fix list of supported formats
-  staging: media: imx: imx7-media-csi: Add V4L2_PIX_FMT_Y14 support
-  staging: media: imx: imx7-media-csi: Drop unneeded pixel format
-    validation
-  staging: media: imx: imx7-media-csi: Inline
-    imx7_csi_enum_pixel_formats()
-  staging: media: imx: imx7-media-csi: Drop V4L2 events support
-  staging: media: imx: imx7-media-csi: Drop usage of shared helpers
-
-Paul Elder (2):
-  staging: media: imx: imx7-media-csi: Move misc init out of probe()
-  staging: media: imx: imx7-media-csi: Remove imx_media_of_add_csi
-
- drivers/staging/media/imx/imx7-media-csi.c | 1370 +++++++++++++++++---
- 1 file changed, 1172 insertions(+), 198 deletions(-)
-
-
-base-commit: c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index 893620e8fc03..d7c65b8bb3c9 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -1175,11 +1175,45 @@ static int imx7_csi_async_register(struct imx7_csi *csi)
+ 	return v4l2_async_register_subdev(&csi->sd);
+ }
+ 
++static void imx7_csi_media_cleanup(struct imx7_csi *csi)
++{
++	struct imx_media_dev *imxmd = csi->imxmd;
++
++	v4l2_device_unregister(&imxmd->v4l2_dev);
++	media_device_unregister(&imxmd->md);
++	media_device_cleanup(&imxmd->md);
++}
++
++static int imx7_csi_media_init(struct imx7_csi *csi)
++{
++	struct imx_media_dev *imxmd;
++	int ret;
++
++	/* add media device */
++	imxmd = imx_media_dev_init(csi->dev, NULL);
++	if (IS_ERR(imxmd))
++		return PTR_ERR(imxmd);
++
++	ret = imx_media_of_add_csi(imxmd, csi->dev->of_node);
++	if (ret < 0 && ret != -ENODEV && ret != -EEXIST) {
++		imx7_csi_media_cleanup(csi);
++		return ret;
++	}
++
++	ret = imx_media_dev_notifier_register(imxmd, NULL);
++	if (ret < 0) {
++		imx7_csi_media_cleanup(csi);
++		return ret;
++	}
++
++	csi->imxmd = imxmd;
++
++	return 0;
++}
++
+ static int imx7_csi_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct device_node *node = dev->of_node;
+-	struct imx_media_dev *imxmd;
+ 	struct imx7_csi *csi;
+ 	int i, ret;
+ 
+@@ -1193,6 +1227,7 @@ static int imx7_csi_probe(struct platform_device *pdev)
+ 	spin_lock_init(&csi->irqlock);
+ 	mutex_init(&csi->lock);
+ 
++	/* Acquire resources and install interrupt handler. */
+ 	csi->mclk = devm_clk_get(&pdev->dev, "mclk");
+ 	if (IS_ERR(csi->mclk)) {
+ 		ret = PTR_ERR(csi->mclk);
+@@ -1214,7 +1249,6 @@ static int imx7_csi_probe(struct platform_device *pdev)
+ 
+ 	csi->model = (enum imx_csi_model)(uintptr_t)of_device_get_match_data(&pdev->dev);
+ 
+-	/* install interrupt handler */
+ 	ret = devm_request_irq(dev, csi->irq, imx7_csi_irq_handler, 0, "csi",
+ 			       (void *)csi);
+ 	if (ret < 0) {
+@@ -1222,22 +1256,11 @@ static int imx7_csi_probe(struct platform_device *pdev)
+ 		goto destroy_mutex;
+ 	}
+ 
+-	/* add media device */
+-	imxmd = imx_media_dev_init(dev, NULL);
+-	if (IS_ERR(imxmd)) {
+-		ret = PTR_ERR(imxmd);
++	/* Initialize all the media device infrastructure. */
++	ret = imx7_csi_media_init(csi);
++	if (ret)
+ 		goto destroy_mutex;
+-	}
+ 
+-	ret = imx_media_of_add_csi(imxmd, node);
+-	if (ret < 0 && ret != -ENODEV && ret != -EEXIST)
+-		goto cleanup;
+-
+-	ret = imx_media_dev_notifier_register(imxmd, NULL);
+-	if (ret < 0)
+-		goto cleanup;
+-
+-	csi->imxmd = imxmd;
+ 	v4l2_subdev_init(&csi->sd, &imx7_csi_subdev_ops);
+ 	v4l2_set_subdevdata(&csi->sd, csi);
+ 	csi->sd.internal_ops = &imx7_csi_internal_ops;
+@@ -1269,11 +1292,7 @@ static int imx7_csi_probe(struct platform_device *pdev)
+ 	v4l2_async_nf_cleanup(&csi->notifier);
+ 
+ cleanup:
+-	v4l2_async_nf_unregister(&imxmd->notifier);
+-	v4l2_async_nf_cleanup(&imxmd->notifier);
+-	v4l2_device_unregister(&imxmd->v4l2_dev);
+-	media_device_unregister(&imxmd->md);
+-	media_device_cleanup(&imxmd->md);
++	imx7_csi_media_cleanup(csi);
+ 
+ destroy_mutex:
+ 	mutex_destroy(&csi->lock);
+@@ -1285,14 +1304,8 @@ static int imx7_csi_remove(struct platform_device *pdev)
+ {
+ 	struct v4l2_subdev *sd = platform_get_drvdata(pdev);
+ 	struct imx7_csi *csi = v4l2_get_subdevdata(sd);
+-	struct imx_media_dev *imxmd = csi->imxmd;
+ 
+-	v4l2_async_nf_unregister(&imxmd->notifier);
+-	v4l2_async_nf_cleanup(&imxmd->notifier);
+-
+-	media_device_unregister(&imxmd->md);
+-	v4l2_device_unregister(&imxmd->v4l2_dev);
+-	media_device_cleanup(&imxmd->md);
++	imx7_csi_media_cleanup(csi);
+ 
+ 	v4l2_async_nf_unregister(&csi->notifier);
+ 	v4l2_async_nf_cleanup(&csi->notifier);
 -- 
 Regards,
 
