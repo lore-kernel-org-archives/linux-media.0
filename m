@@ -2,43 +2,43 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C64FC433F5
-	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 07:42:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DAC7C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 07:42:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350644AbiELHm1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 May 2022 03:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S1351110AbiELHmi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 May 2022 03:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351108AbiELHm0 (ORCPT
+        with ESMTP id S1351108AbiELHmg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 May 2022 03:42:26 -0400
+        Thu, 12 May 2022 03:42:36 -0400
 Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A38197F66
-        for <linux-media@vger.kernel.org>; Thu, 12 May 2022 00:42:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421461A15D4
+        for <linux-media@vger.kernel.org>; Thu, 12 May 2022 00:42:34 -0700 (PDT)
 Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24C0nNvP010247;
-        Thu, 12 May 2022 09:42:20 +0200
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24C2ikl2028998;
+        Thu, 12 May 2022 09:42:30 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=aWEhwF64biWlgDFbzFms/QHNG13IyeLPA+Enhz/Np4M=;
- b=tRzCMbqwdh/RQJTMtSOSSzX7EKgoNJyd08E9GMY+/vVjuA1tsGZZudMfj1pXrksO/tT4
- /4J+zorb2N5pqwis/GMQJ5ybHcB1Vvn7wKjB8Xoy7DBp2/WHBjuUTUtYi0B44yjv1b4A
- 2K8xvjhV5GPIK4mdWqP8ibF95OblTFC/1IKiHkzxFcCMGHl3VyIhDz/1ULZN6lQtRQVW
- r0/f36nyHvDbRuGNz0PylGBgN6BvDOBPFXkSrW1kq4bHV3Yn/MY0ljSYjKmz4A2uY8qe
- CFnlv16KCILKfYJwn5u06XGoV7DzOmQaOXUilpOyOzZb6XTuDJB+fB7y4m5QyLxjhhxG aQ== 
+ bh=LhOFa8BIpRYyJ0slEBq/ckdYIiACZ4xz7MC5KcVFan8=;
+ b=70Ou8jOQaGYWZZe/60ZSNn1E1I+F4FxGteEPCLGYz2ImojNpyvdkTO7FYVcFlJEJcMSv
+ ITrI7Tb5/m0t63rPe2mCyWlaq7e367c+wlL7F3iOyPSIaKY7hFdTLUTtNMQPo2ya/sac
+ v99MbRiqvudou0GBGu6kBDkucLqcuKUaXA7cKDo50TW1tUwYmk0sOqeY1IpqwpcKFPQk
+ G8y8PIdn5/DSDk9nsXW1OPYTNhybW2dMNZfNsn5CNeay2ANXRs/dk3hRRn4I2EOPYOSK
+ VrhgroDbf1Bj/1KBbovI+4saQ8gw8hAG888XhLcToT+7QWmn+jLtfo2tLB5kb5wH35m1 3w== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fwdw9g4ha-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fwdw9g4ke-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 09:42:18 +0200
+        Thu, 12 May 2022 09:42:29 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 399F5100038;
-        Thu, 12 May 2022 09:42:04 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 722C110002A;
+        Thu, 12 May 2022 09:42:29 +0200 (CEST)
 Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 30307214D2B;
-        Thu, 12 May 2022 09:42:04 +0200 (CEST)
-Received: from localhost (10.75.127.49) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 12 May 2022 09:42:03
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6A0E8216840;
+        Thu, 12 May 2022 09:42:29 +0200 (CEST)
+Received: from localhost (10.75.127.50) by SFHDAG2NODE3.st.com (10.75.127.6)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 12 May 2022 09:42:29
  +0200
 From:   Benjamin Mugnier <benjamin.mugnier@foss.st.com>
 To:     <linux-media@vger.kernel.org>
@@ -48,16 +48,16 @@ CC:     <alain.volmat@foss.st.com>, <hugues.fruchet@foss.st.com>,
         <laurent.pinchart@ideasonboard.com>,
         <kieran.bingham@ideasonboard.com>,
         Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-Subject: [PATCH v3 2/5] media: v4l: ctrls: Add user control base for st-vgxy61 controls
-Date:   Thu, 12 May 2022 09:40:34 +0200
-Message-ID: <20220512074037.3829926-3-benjamin.mugnier@foss.st.com>
+Subject: [PATCH v3 4/5] media: dt-bindings: media: i2c: Add ST VGXY61 camera sensor binding
+Date:   Thu, 12 May 2022 09:40:36 +0200
+Message-ID: <20220512074037.3829926-5-benjamin.mugnier@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220512074037.3829926-1-benjamin.mugnier@foss.st.com>
 References: <20220512074037.3829926-1-benjamin.mugnier@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
+X-Originating-IP: [10.75.127.50]
 X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE3.st.com
  (10.75.127.6)
 X-Proofpoint-Virus-Version: vendor=baseguard
@@ -67,31 +67,159 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a control base for st-vgxy61 controls and reserve 16 controls.
-This is required for HDR mode user control on the st-vgxy61 camera
-sensor.
+Add device tree binding for the ST VGXY61 camera sensor, and update
+MAINTAINERS file.
 
 Signed-off-by: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
 ---
- include/uapi/linux/v4l2-controls.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../bindings/media/i2c/st,st-vgxy61.yaml      | 117 ++++++++++++++++++
+ MAINTAINERS                                   |   9 ++
+ 2 files changed, 126 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
 
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index dfff69ed88f7..f0ea2a0691f6 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -225,6 +225,11 @@ enum v4l2_colorfx {
-  */
- #define V4L2_CID_USER_ISL7998X_BASE		(V4L2_CID_USER_BASE + 0x1180)
- 
-+/* The base for the st-vgxy61 driver controls.
-+ * We reserve 16 controls for this driver.
-+ */
-+#define V4L2_CID_USER_STVGXY61_BASE		(V4L2_CID_USER_BASE + 0x1190)
+diff --git a/Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml b/Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
+new file mode 100644
+index 000000000000..4bc9a945b001
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
+@@ -0,0 +1,117 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (c) 2022 STMicroelectronics SA.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/st,st-vgxy61.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- /* MPEG-class control IDs */
- /* The MPEG controls are applicable to all codec controls
-  * and the 'MPEG' part of the define is historical */
++title: STMicroelectronics VGxy61 HDR Global Shutter Sensor Family Device Tree Bindings
++
++maintainers:
++  - Benjamin Mugnier <benjamin.mugnier@foss.st.com>
++  - Sylvain Petinot <sylvain.petinot@foss.st.com>
++
++description: |-
++  STMicroelectronics VGxy61 family has a CSI-2 output port. CSI-2 output is a
++  quad lanes 800Mbps per lane.
++  Supported formats are RAW8, RAW10, RAW12, RAW14 and RAW16.
++  Following part number are supported
++  - VG5661 and VG6661 are 1.6 Mpx (1464 x 1104) monochrome and color sensors.
++  Maximum frame rate is 75 fps.
++  - VG5761 and VG6761 are 2.3 Mpx (1944 x 1204) monochrome and color sensors.
++  Maximum frame rate is 60 fps.
++
++properties:
++  compatible:
++    const: st,st-vgxy61
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  VCORE-supply:
++    description:
++      Sensor digital core supply. Must be 1.2 volts.
++
++  VDDIO-supply:
++    description:
++      Sensor digital IO supply. Must be 1.8 volts.
++
++  VANA-supply:
++    description:
++      Sensor analog supply. Must be 2.8 volts.
++
++  reset-gpios:
++    description:
++      Reference to the GPIO connected to the reset pin, if any.
++      This is an active low signal to the vgxy61.
++
++  st,strobe-gpios-polarity:
++    description:
++      Invert polarity of strobe GPIOs.
++    type: boolean
++
++  st,slave-mode:
++    description:
++      If the sensor operates in slave mode
++    type: boolean
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    additionalProperties: false
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes:
++            description:
++              CSI lanes to use
++            items:
++              - const: 1
++              - const: 2
++              - const: 3
++              - const: 4
++
++          remote-endpoint: true
++
++        required:
++          - data-lanes
++
++required:
++  - compatible
++  - clocks
++  - VCORE-supply
++  - VDDIO-supply
++  - VANA-supply
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        vgxy61: csi2tx@10 {
++            compatible = "st,st-vgxy61";
++            reg = <0x10>;
++            clocks = <&clk_ext_camera>;
++            VCORE-supply = <&v1v2>;
++            VDDIO-supply = <&v1v8>;
++            VANA-supply = <&v2v8>;
++            reset-gpios = <&mfxgpio 18 GPIO_ACTIVE_LOW>;
++            port {
++                ep0: endpoint {
++                    data-lanes = <1 2 3 4>;
++                    remote-endpoint = <&mipi_csi2_out>;
++                };
++            };
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 40fa1955ca3f..f46f26863388 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18662,6 +18662,15 @@ S:	Maintained
+ F:	Documentation/hwmon/stpddc60.rst
+ F:	drivers/hwmon/pmbus/stpddc60.c
+ 
++ST VGXY61 DRIVER
++M:	Benjamin Mugnier <benjamin.mugnier@foss.st.com>
++M:	Sylvain Petinot <sylvain.petinot@foss.st.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.txt
++F:	drivers/media/i2c/st-vgxy61.c
++
+ ST VL53L0X ToF RANGER(I2C) IIO DRIVER
+ M:	Song Qiang <songqiang1304521@gmail.com>
+ L:	linux-iio@vger.kernel.org
 -- 
 2.25.1
 
