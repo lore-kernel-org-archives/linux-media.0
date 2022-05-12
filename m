@@ -2,45 +2,38 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24C1DC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 03:46:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50E33C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 03:46:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344940AbiELDqr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 May 2022 23:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
+        id S1344941AbiELDqv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 May 2022 23:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233136AbiELDqg (ORCPT
+        with ESMTP id S235557AbiELDqg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 11 May 2022 23:46:36 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F7C4CD69;
-        Wed, 11 May 2022 20:46:32 -0700 (PDT)
-X-UUID: 2a74f81aa7d44e9eb8667f101bc09bf9-20220512
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2708F4CD58;
+        Wed, 11 May 2022 20:46:30 -0700 (PDT)
+X-UUID: e0461275fb874a39a4565019260ace91-20220512
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:24891db6-126c-4e2f-a44f-a517952d25ae,OB:0,LO
-        B:10,IP:0,URL:0,TC:0,Content:-20,EDM:25,RT:0,SF:95,FILE:0,RULE:Release_Ham
-        ,ACTION:release,TS:100
-X-CID-INFO: VERSION:1.1.4,REQID:24891db6-126c-4e2f-a44f-a517952d25ae,OB:0,LOB:
-        10,IP:0,URL:0,TC:0,Content:-20,EDM:25,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D
-        ,ACTION:quarantine,TS:100
-X-CID-META: VersionHash:faefae9,CLOUDID:501a24f6-13a6-4067-b017-3b2864319134,C
-        OID:e76910a7eee7,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:5,File:nil,
-        QS:0,BEC:nil
-X-UUID: 2a74f81aa7d44e9eb8667f101bc09bf9-20220512
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.4,REQID:b219b1be-cc66-49f6-a9af-1ab19be213d4,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:faefae9,CLOUDID:bc1924f6-13a6-4067-b017-3b2864319134,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: e0461275fb874a39a4565019260ace91-20220512
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 159398772; Thu, 12 May 2022 11:46:29 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 12 May 2022 11:46:27 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 795297249; Thu, 12 May 2022 11:46:24 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 12 May 2022 11:46:27 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 12 May 2022 11:46:22 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 12 May 2022 11:46:25 +0800
+ Transport; Thu, 12 May 2022 11:46:20 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -67,12 +60,10 @@ CC:     George Sun <george.sun@mediatek.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v4, 3/3] media: mediatek: vcodec: add h264 decoder driver for mt8186
-Date:   Thu, 12 May 2022 11:46:20 +0800
-Message-ID: <20220512034620.30500-4-yunfei.dong@mediatek.com>
+Subject: [PATCH v4, 0/3] add h264 decoder driver for mt8186
+Date:   Thu, 12 May 2022 11:46:17 +0800
+Message-ID: <20220512034620.30500-1-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220512034620.30500-1-yunfei.dong@mediatek.com>
-References: <20220512034620.30500-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -81,230 +72,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add h264 decode driver to support mt8186. For the architecture
-is single core, need to add new interface to decode.
+Firstly, add mt8186 compatible and private data, then add document for
+compatible "mediatek,mt8186-vcodec-dec". For mt8186 is single core
+architecture, need to add new interface for h264 hardware decoder.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Patche 1 add mt8186 compatible and private data.
+Patche 2 add mt8186 compatible document.
+Patche 3 add h264 single core driver.
 ---
- .../vcodec/vdec/vdec_h264_req_multi_if.c      | 177 +++++++++++++++++-
- 1 file changed, 176 insertions(+), 1 deletion(-)
+This patch depends on "support for MT8192 decoder"[1]
 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-index a96f203b5d54..1d9e753cf894 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-@@ -140,6 +140,9 @@ struct vdec_h264_slice_share_info {
-  * @vsi:		vsi used for lat
-  * @vsi_core:		vsi used for core
-  *
-+ * @vsi_ctx:		Local VSI data for this decoding context
-+ * @h264_slice_param:	the parameters that hardware use to decode
-+ *
-  * @resolution_changed:resolution changed
-  * @realloc_mv_buf:	reallocate mv buffer
-  * @cap_num_planes:	number of capture queue plane
-@@ -157,6 +160,9 @@ struct vdec_h264_slice_inst {
- 	struct vdec_h264_slice_vsi *vsi;
- 	struct vdec_h264_slice_vsi *vsi_core;
- 
-+	struct vdec_h264_slice_vsi vsi_ctx;
-+	struct vdec_h264_slice_lat_dec_param h264_slice_param;
-+
- 	unsigned int resolution_changed;
- 	unsigned int realloc_mv_buf;
- 	unsigned int cap_num_planes;
-@@ -208,6 +214,61 @@ static int vdec_h264_slice_fill_decode_parameters(struct vdec_h264_slice_inst *i
- 	return 0;
- }
- 
-+static int get_vdec_sig_decode_parameters(struct vdec_h264_slice_inst *inst)
-+{
-+	const struct v4l2_ctrl_h264_decode_params *dec_params;
-+	const struct v4l2_ctrl_h264_sps *sps;
-+	const struct v4l2_ctrl_h264_pps *pps;
-+	const struct v4l2_ctrl_h264_scaling_matrix *scaling_matrix;
-+	struct vdec_h264_slice_lat_dec_param *slice_param = &inst->h264_slice_param;
-+	struct v4l2_h264_reflist_builder reflist_builder;
-+	u8 *p0_reflist = slice_param->decode_params.ref_pic_list_p0;
-+	u8 *b0_reflist = slice_param->decode_params.ref_pic_list_b0;
-+	u8 *b1_reflist = slice_param->decode_params.ref_pic_list_b1;
-+
-+	dec_params =
-+		mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_DECODE_PARAMS);
-+	if (IS_ERR(dec_params))
-+		return PTR_ERR(dec_params);
-+
-+	sps = mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_SPS);
-+	if (IS_ERR(sps))
-+		return PTR_ERR(sps);
-+
-+	pps = mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_PPS);
-+	if (IS_ERR(pps))
-+		return PTR_ERR(pps);
-+
-+	scaling_matrix =
-+		mtk_vdec_h264_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_H264_SCALING_MATRIX);
-+	if (IS_ERR(scaling_matrix))
-+		return PTR_ERR(scaling_matrix);
-+
-+	mtk_vdec_h264_update_dpb(dec_params, inst->dpb);
-+
-+	mtk_vdec_h264_copy_sps_params(&slice_param->sps, sps);
-+	mtk_vdec_h264_copy_pps_params(&slice_param->pps, pps);
-+	mtk_vdec_h264_copy_scaling_matrix(&slice_param->scaling_matrix, scaling_matrix);
-+
-+	mtk_vdec_h264_copy_decode_params(&slice_param->decode_params, dec_params, inst->dpb);
-+	mtk_vdec_h264_fill_dpb_info(inst->ctx, &slice_param->decode_params,
-+				    slice_param->h264_dpb_info);
-+
-+	/* Build the reference lists */
-+	v4l2_h264_init_reflist_builder(&reflist_builder, dec_params, sps, inst->dpb);
-+	v4l2_h264_build_p_ref_list(&reflist_builder, p0_reflist);
-+
-+	v4l2_h264_build_b_ref_lists(&reflist_builder, b0_reflist, b1_reflist);
-+	/* Adapt the built lists to the firmware's expectations */
-+	mtk_vdec_h264_fixup_ref_list(p0_reflist, reflist_builder.num_valid);
-+	mtk_vdec_h264_fixup_ref_list(b0_reflist, reflist_builder.num_valid);
-+	mtk_vdec_h264_fixup_ref_list(b1_reflist, reflist_builder.num_valid);
-+	memcpy(&inst->vsi_ctx.h264_slice_params, slice_param,
-+	       sizeof(inst->vsi_ctx.h264_slice_params));
-+
-+	return 0;
-+}
-+
- static void vdec_h264_slice_fill_decode_reflist(struct vdec_h264_slice_inst *inst,
- 						struct vdec_h264_slice_lat_dec_param *slice_param,
- 						struct vdec_h264_slice_share_info *share_info)
-@@ -596,6 +657,120 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	return err;
- }
- 
-+static int vdec_h264_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
-+					 struct vdec_fb *unused, bool *res_chg)
-+{
-+	struct vdec_h264_slice_inst *inst = h_vdec;
-+	struct vdec_vpu_inst *vpu = &inst->vpu;
-+	struct mtk_video_dec_buf *src_buf_info, *dst_buf_info;
-+	struct vdec_fb *fb;
-+	unsigned char *buf;
-+	unsigned int data[2], i;
-+	u64 y_fb_dma, c_fb_dma;
-+	struct mtk_vcodec_mem *mem;
-+	int err, nal_start_idx;
-+
-+	/* bs NULL means flush decoder */
-+	if (!bs)
-+		return vpu_dec_reset(vpu);
-+
-+	fb = inst->ctx->dev->vdec_pdata->get_cap_buffer(inst->ctx);
-+	src_buf_info = container_of(bs, struct mtk_video_dec_buf, bs_buffer);
-+	dst_buf_info = container_of(fb, struct mtk_video_dec_buf, frame_buffer);
-+
-+	y_fb_dma = fb ? (u64)fb->base_y.dma_addr : 0;
-+	c_fb_dma = fb ? (u64)fb->base_c.dma_addr : 0;
-+	mtk_vcodec_debug(inst, "[h264-dec] [%d] y_dma=%llx c_dma=%llx",
-+			 inst->ctx->decoded_frame_cnt, y_fb_dma, c_fb_dma);
-+
-+	inst->vsi_ctx.dec.bs_buf_addr = (u64)bs->dma_addr;
-+	inst->vsi_ctx.dec.bs_buf_size = bs->size;
-+	inst->vsi_ctx.dec.y_fb_dma = y_fb_dma;
-+	inst->vsi_ctx.dec.c_fb_dma = c_fb_dma;
-+	inst->vsi_ctx.dec.vdec_fb_va = (u64)(uintptr_t)fb;
-+
-+	v4l2_m2m_buf_copy_metadata(&src_buf_info->m2m_buf.vb,
-+				   &dst_buf_info->m2m_buf.vb, true);
-+	err = get_vdec_sig_decode_parameters(inst);
-+	if (err)
-+		goto err_free_fb_out;
-+
-+	buf = (unsigned char *)bs->va;
-+	nal_start_idx = mtk_vdec_h264_find_start_code(buf, bs->size);
-+	if (nal_start_idx < 0) {
-+		err = -EINVAL;
-+		goto err_free_fb_out;
-+	}
-+	inst->vsi_ctx.dec.nal_info = buf[nal_start_idx];
-+
-+	*res_chg = inst->resolution_changed;
-+	if (inst->resolution_changed) {
-+		mtk_vcodec_debug(inst, "- resolution changed -");
-+		if (inst->realloc_mv_buf) {
-+			err = vdec_h264_slice_alloc_mv_buf(inst, &inst->ctx->picinfo);
-+			inst->realloc_mv_buf = false;
-+			if (err)
-+				goto err_free_fb_out;
-+		}
-+		inst->resolution_changed = false;
-+
-+		for (i = 0; i < H264_MAX_MV_NUM; i++) {
-+			mem = &inst->mv_buf[i];
-+			inst->vsi_ctx.mv_buf_dma[i] = mem->dma_addr;
-+		}
-+	}
-+
-+	memcpy(inst->vpu.vsi, &inst->vsi_ctx, sizeof(inst->vsi_ctx));
-+	err = vpu_dec_start(vpu, data, 2);
-+	if (err)
-+		goto err_free_fb_out;
-+
-+	/* wait decoder done interrupt */
-+	err = mtk_vcodec_wait_for_done_ctx(inst->ctx, MTK_INST_IRQ_RECEIVED,
-+					   WAIT_INTR_TIMEOUT_MS, MTK_VDEC_CORE);
-+	if (err)
-+		mtk_vcodec_err(inst, "decode timeout: pic_%d",
-+			       inst->ctx->decoded_frame_cnt);
-+
-+	inst->vsi->dec.timeout = !!err;
-+	err = vpu_dec_end(vpu);
-+	if (err)
-+		goto err_free_fb_out;
-+
-+	memcpy(&inst->vsi_ctx, inst->vpu.vsi, sizeof(inst->vsi_ctx));
-+	mtk_vcodec_debug(inst, "pic[%d] crc: 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x",
-+			 inst->ctx->decoded_frame_cnt,
-+			 inst->vsi_ctx.dec.crc[0], inst->vsi_ctx.dec.crc[1],
-+			 inst->vsi_ctx.dec.crc[2], inst->vsi_ctx.dec.crc[3],
-+			 inst->vsi_ctx.dec.crc[4], inst->vsi_ctx.dec.crc[5],
-+			 inst->vsi_ctx.dec.crc[6], inst->vsi_ctx.dec.crc[7]);
-+
-+	inst->ctx->decoded_frame_cnt++;
-+	return 0;
-+
-+err_free_fb_out:
-+	mtk_vcodec_err(inst, "dec frame number: %d err: %d",
-+		       inst->ctx->decoded_frame_cnt, err);
-+	return err;
-+}
-+
-+static int vdec_h264_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
-+				  struct vdec_fb *unused, bool *res_chg)
-+{
-+	struct vdec_h264_slice_inst *inst = h_vdec;
-+	int ret;
-+
-+	if (!h_vdec)
-+		return -EINVAL;
-+
-+	if (inst->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_PURE_SINGLE_CORE)
-+		ret = vdec_h264_slice_single_decode(h_vdec, bs, unused, res_chg);
-+	else
-+		ret = vdec_h264_slice_lat_decode(h_vdec, bs, unused, res_chg);
-+
-+	return ret;
-+}
-+
- static int vdec_h264_slice_get_param(void *h_vdec, enum vdec_get_param_type type,
- 				     void *out)
- {
-@@ -620,7 +795,7 @@ static int vdec_h264_slice_get_param(void *h_vdec, enum vdec_get_param_type type
- 
- const struct vdec_common_if vdec_h264_slice_multi_if = {
- 	.init		= vdec_h264_slice_init,
--	.decode		= vdec_h264_slice_lat_decode,
-+	.decode		= vdec_h264_slice_decode,
- 	.get_param	= vdec_h264_slice_get_param,
- 	.deinit		= vdec_h264_slice_deinit,
- };
+[1]  https://patchwork.kernel.org/project/linux-mediatek/cover/20220512021950.29087-1-yunfei.dong@mediatek.com/
+---
+changed with v3:
+- fix __iomem not reasonable, align share memory to dram.
+changed with v2:
+- fix sparse and smatch check fail for patch 3
+changed with v1:
+- rebase driver to the latest media_stage.
+---
+Yunfei Dong (3):
+  dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings for
+    mt8186
+  media: mediatek: vcodec: Support MT8186
+  media: mediatek: vcodec: add h264 decoder driver for mt8186
+
+ .../media/mediatek,vcodec-subdev-decoder.yaml |   4 +-
+ .../platform/mediatek/vcodec/mtk_vcodec_dec.h |   1 +
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   4 +
+ .../vcodec/mtk_vcodec_dec_stateless.c         |  19 ++
+ .../vcodec/vdec/vdec_h264_req_multi_if.c      | 177 +++++++++++++++++-
+ 5 files changed, 203 insertions(+), 2 deletions(-)
+
 -- 
 2.18.0
 
