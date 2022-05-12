@@ -2,108 +2,101 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50E33C433F5
-	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 03:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7A03C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 07:27:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344941AbiELDqv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 May 2022 23:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
+        id S1350965AbiELH1k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 May 2022 03:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235557AbiELDqg (ORCPT
+        with ESMTP id S1349921AbiELH1i (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 May 2022 23:46:36 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2708F4CD58;
-        Wed, 11 May 2022 20:46:30 -0700 (PDT)
-X-UUID: e0461275fb874a39a4565019260ace91-20220512
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:b219b1be-cc66-49f6-a9af-1ab19be213d4,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-20
-X-CID-META: VersionHash:faefae9,CLOUDID:bc1924f6-13a6-4067-b017-3b2864319134,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: e0461275fb874a39a4565019260ace91-20220512
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 795297249; Thu, 12 May 2022 11:46:24 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 12 May 2022 11:46:22 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 12 May 2022 11:46:20 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v4, 0/3] add h264 decoder driver for mt8186
-Date:   Thu, 12 May 2022 11:46:17 +0800
-Message-ID: <20220512034620.30500-1-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+        Thu, 12 May 2022 03:27:38 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0748812E325;
+        Thu, 12 May 2022 00:27:37 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id a191so3854437pge.2;
+        Thu, 12 May 2022 00:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=VgtuSspPJrZl0jLVEiIkQ6TuZqE9Z2iilbMNeSQTMxI=;
+        b=P6pNllwbvdjsOPDvGlj6WiFYA2FBOGg18byFnZLrqjvxmqcGL1ouVMe5B7n0ld6Nxw
+         lGvbjJju+fwxbZjeK2a9zYJHmJ+8VvJfF715SHWREAXvri5JWg4fZH3HxVKxAquLMjRz
+         HI5JxydTEnbcggMP/2SsGwDpoooEUHrCuT73ZxcaFISGt5EHptHR+L074/8YLXPJxcEI
+         VhgPQg8CCUmE8nonBDehT2mg3QTE+I+JkG1Br/N/Gs7DzH2lLMsiMHwk1wIsE8Bim5iJ
+         U2s+4skU1/VRHJa21j3NKsvQxBQOvjYWzvqxHwHodoeUJXg7Ux5cNHXxd5dsntdvq32I
+         Pm+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=VgtuSspPJrZl0jLVEiIkQ6TuZqE9Z2iilbMNeSQTMxI=;
+        b=MGIkGVtZxlM5SD6jKKZwBuGi3Bj/atTUtI7TmKAlvohXS7Ndfz/grAQjDWVbLEEUTV
+         msl//R+vJiGz+HMp8KFVSmihRSSsSQAzUS49tahjOA6jla3xk8NTYcKyxbzukJ8+baE0
+         9Jwz2rZGcJhPV+Mxsv4e8+RemiCUgo76XmV759evHXKaVwY6yvEDplGQZTAxdlX3pVRs
+         FfNACXb4qM/NR77RSJ+GUrglc91NgWqjY26pDO2IcY03tm4LL2CDrF0h3oQRESQrwBV4
+         uMavJfQy22KWb+5cePwGv7wEPJXik/QGkUFDpFNd49GZKc3/bap+yB2kt7JYa90FB5BF
+         fptw==
+X-Gm-Message-State: AOAM5327xg3v8EZi4svNyACjv5S2fEM4z1QQMCFpTHaKpEVvMT+DHtQd
+        D62rHCUcN5HwWHIPidgFx0c=
+X-Google-Smtp-Source: ABdhPJxODcr5MqRHBIViamAPN40p1m+6snj1eKf+gSdwUTr2qMEIvN3b3sXB2xmnWCSOY52qHZIH7w==
+X-Received: by 2002:a65:6aa3:0:b0:3ab:23fb:adae with SMTP id x3-20020a656aa3000000b003ab23fbadaemr23973962pgu.278.1652340456354;
+        Thu, 12 May 2022 00:27:36 -0700 (PDT)
+Received: from localhost.localdomain (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id z9-20020aa79e49000000b0050dc762813csm3082779pfq.22.2022.05.12.00.27.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 00:27:35 -0700 (PDT)
+From:   Marvin Lin <milkfafa@gmail.com>
+X-Google-Original-From: Marvin Lin <kflin@nuvoton.com>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     openbmc@lists.ozlabs.org, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, kwliu@nuvoton.com,
+        kflin@nuvoton.com
+Subject: [PATCH v1 0/5] Support Nuvoton NPCM Video Capture/Encode Engine
+Date:   Thu, 12 May 2022 15:27:17 +0800
+Message-Id: <20220512072722.25005-1-kflin@nuvoton.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Firstly, add mt8186 compatible and private data, then add document for
-compatible "mediatek,mt8186-vcodec-dec". For mt8186 is single core
-architecture, need to add new interface for h264 hardware decoder.
+This patch series add DTS node, dt-bindings document and drivers for Video
+Capture/Differentiation Engine (VCD) and Encoding Compression Engine (ECE)
+present on Nuvoton NPCM SoCs.
 
-Patche 1 add mt8186 compatible and private data.
-Patche 2 add mt8186 compatible document.
-Patche 3 add h264 single core driver.
----
-This patch depends on "support for MT8192 decoder"[1]
+VCD can capture/differentiate video data from digital or analog sources,
+then ECE will compress the data into HEXTILE format.
 
-[1]  https://patchwork.kernel.org/project/linux-mediatek/cover/20220512021950.29087-1-yunfei.dong@mediatek.com/
----
-changed with v3:
-- fix __iomem not reasonable, align share memory to dram.
-changed with v2:
-- fix sparse and smatch check fail for patch 3
-changed with v1:
-- rebase driver to the latest media_stage.
----
-Yunfei Dong (3):
-  dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings for
-    mt8186
-  media: mediatek: vcodec: Support MT8186
-  media: mediatek: vcodec: add h264 decoder driver for mt8186
+HEXTILE compressed format is defined in Remote Framebuffer Protocol (RFC
+6143) and is used by VNC features, so we also add a patch to support it.
 
- .../media/mediatek,vcodec-subdev-decoder.yaml |   4 +-
- .../platform/mediatek/vcodec/mtk_vcodec_dec.h |   1 +
- .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   4 +
- .../vcodec/mtk_vcodec_dec_stateless.c         |  19 ++
- .../vcodec/vdec/vdec_h264_req_multi_if.c      | 177 +++++++++++++++++-
- 5 files changed, 203 insertions(+), 2 deletions(-)
+Marvin Lin (5):
+  arm: dts: Add node for NPCM Video Capture/Encode Engine
+  dt-bindings: media: Add dt-bindings for NPCM Video Capture/Encode
+    Engine
+  dt-bindings: arm/npcm: Add dt-bindings for Graphics Core Information
+  media: Add HEXTILE compressed format
+  drivers: media: platform: Add NPCM Video Capture/Encode Engine driver
+
+ .../bindings/arm/npcm/nuvoton,gfxi.yaml       |   41 +
+ .../bindings/media/nuvoton,npcm-video.yaml    |   87 +
+ MAINTAINERS                                   |    1 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   19 +
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/nuvoton/Kconfig        |   12 +
+ drivers/media/platform/nuvoton/Makefile       |    2 +
+ drivers/media/platform/nuvoton/npcm-video.c   | 2074 +++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+ include/uapi/linux/videodev2.h                |    1 +
+ 11 files changed, 2240 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/npcm/nuvoton,gfxi.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-video.yaml
+ create mode 100644 drivers/media/platform/nuvoton/Kconfig
+ create mode 100644 drivers/media/platform/nuvoton/Makefile
+ create mode 100644 drivers/media/platform/nuvoton/npcm-video.c
 
 -- 
-2.18.0
+2.17.1
 
