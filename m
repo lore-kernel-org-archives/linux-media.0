@@ -2,179 +2,157 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B75BCC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 08:23:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5640CC433EF
+	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 08:41:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348357AbiELIX1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 May 2022 04:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S1351557AbiELIl4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 May 2022 04:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350960AbiELIX0 (ORCPT
+        with ESMTP id S1351555AbiELIlu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 May 2022 04:23:26 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C7C6542D
-        for <linux-media@vger.kernel.org>; Thu, 12 May 2022 01:23:23 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id v4so5522062ljd.10
-        for <linux-media@vger.kernel.org>; Thu, 12 May 2022 01:23:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1Xns6lRKpgkcycuMDcfZVrb+jWK/u1DDFjVoHWPKvQQ=;
-        b=n5UWQmW63DSH5lrA/ll78g3pG9eepZB23V1YlOKJr4NxHGq28QZiY2P5W+NRnRaUGZ
-         SSxF/R/5DbHT+U2qUh3HR1s6NQuR0v0Hqbs5UFSm1h81uVGl66tXWKJBoRTdmzuhPh7e
-         Sn81FGUTdSMO3z5J8b3Gci+kwyYld9lsuuFZvovooFk7WWPqa0RnF9dUaHWUNU2ubFNZ
-         WmKZbc+XpfpuhEGrZMC15Sh1pOrZHiH+ZFX3M4XMIRMiXSfSGlzowLN6Gk8GTN69GCO6
-         nE4UxNrEmpYqVQoUYw8mmDnEIKq2TmTexz07/inyUOnB97Gk6TlTxDJhBg5Jtkvj73zE
-         1L1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1Xns6lRKpgkcycuMDcfZVrb+jWK/u1DDFjVoHWPKvQQ=;
-        b=Y/4UNJXiO2Pc6fLsg9kxjtp1+UZ4/DCwjc/VpX6ZNHPve1oNk/C3jsLDGCqCKkUGoM
-         yNsYq7ipGiEZhorMQ25Vj9nyMIkuiFwLfyqWMu14HMJov/uDXy8tDoBh+GcNT6NcIZ1q
-         nuf5eIgTcU24exPn2rbJx/AKDoVZwM6upZ/6GmF6ovNJNGhEiVuK4KkJ5eVy/jV2KNS2
-         TUb1Y+95DygaRyRG3/48PU89fKVdFCC8yTYz5a/O+TzzgvnnFxebG9sHH8UyQV0yT4NM
-         vyAX6JRcqdMi+jJShNHV4rqYEOoS/gwEh46TOf7BJkulKLFmCMJYA757sJ64SXLnsnvg
-         zdvw==
-X-Gm-Message-State: AOAM531lpbaGYmKxv2dQt796/JU6MVb+reW/NyAK37FXYGcJHtny2sMi
-        gpnkjSC41iKQ4Tgi1xbg3QQAqIyUk+mZzQ==
-X-Google-Smtp-Source: ABdhPJzDB9IYPxoxMhCG++TmqH9AwjWMv0O86sAt2fG/ia/CvRblYY5pAP4j+ESxUNznisjrbJJ6Nw==
-X-Received: by 2002:a2e:9917:0:b0:250:808a:f7c0 with SMTP id v23-20020a2e9917000000b00250808af7c0mr19959222lji.136.1652343802104;
-        Thu, 12 May 2022 01:23:22 -0700 (PDT)
-Received: from localhost.localdomain (mobile-access-b04827-69.dhcp.inet.fi. [176.72.39.69])
-        by smtp.gmail.com with ESMTPSA id k17-20020a056512331100b0047255d21116sm676882lfe.69.2022.05.12.01.23.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 01:23:21 -0700 (PDT)
-From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-To:     Robert Foss <robert.foss@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH] media: camss: Allocate power domain resources dynamically
-Date:   Thu, 12 May 2022 11:23:18 +0300
-Message-Id: <20220512082318.189398-1-vladimir.zapolskiy@linaro.org>
-X-Mailer: git-send-email 2.33.0
+        Thu, 12 May 2022 04:41:50 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28C53EA82;
+        Thu, 12 May 2022 01:41:48 -0700 (PDT)
+X-UUID: b4a60c24db8449c69279db81652bd99d-20220512
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:3ff82fa7-80b9-4f14-81e9-28c28d6d063e,OB:0,LO
+        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:95
+X-CID-INFO: VERSION:1.1.4,REQID:3ff82fa7-80b9-4f14-81e9-28c28d6d063e,OB:0,LOB:
+        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:95
+X-CID-META: VersionHash:faefae9,CLOUDID:7f300ba7-eab7-4b74-a74d-5359964535a9,C
+        OID:443780bdae59,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: b4a60c24db8449c69279db81652bd99d-20220512
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1594795318; Thu, 12 May 2022 16:41:42 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 12 May 2022 16:41:40 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 12 May 2022 16:41:40 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
+        <randy.wu@mediatek.com>, <moudy.ho@mediatek.com>,
+        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
+        <river.cheng@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <cellopoint.kai@gmail.com>
+Subject: [PATCH v18 2/6] soc: mediatek: mutex: add 8183 MUTEX MOD settings for MDP
+Date:   Thu, 12 May 2022 16:41:35 +0800
+Message-ID: <20220512084139.15086-3-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220512084139.15086-1-moudy.ho@mediatek.com>
+References: <20220512084139.15086-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To simplify the driver's maintenance it makes sense to escape from
-hardcoded numbers of power domain resources per platform and statical
-allocation of the resources. For instance on a QCOM SM8450 platform
-the number of CAMSS power domains shall be bumped up to 6, also notably
-CAMSS on MSM8916 has only one power domain, however it expects to get 2,
-and thus it should result in a runtime error on driver probe.
+For the purpose of module independence, related settings should be moved
+from MDP to the corresponding driver.
+This patch adds 8183 MUTEX MOD settings for MDP.
 
-The change fixes an issue mentioned above and gives more flexibility
-to support more platforms in future.
-
-Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/media/platform/qcom/camss/camss.c | 38 +++++++++++++----------
- drivers/media/platform/qcom/camss/camss.h |  7 ++---
- 2 files changed, 24 insertions(+), 21 deletions(-)
+ drivers/soc/mediatek/mtk-mutex.c | 33 ++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-index 79ad82e233cb..32d72b4f947b 100644
---- a/drivers/media/platform/qcom/camss/camss.c
-+++ b/drivers/media/platform/qcom/camss/camss.c
-@@ -1452,19 +1452,31 @@ static const struct media_device_ops camss_media_ops = {
+diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+index a62ac1811419..92afdee14d43 100644
+--- a/drivers/soc/mediatek/mtk-mutex.c
++++ b/drivers/soc/mediatek/mtk-mutex.c
+@@ -80,6 +80,15 @@
+ #define MT8183_MUTEX_MOD_DISP_GAMMA0		16
+ #define MT8183_MUTEX_MOD_DISP_DITHER0		17
  
- static int camss_configure_pd(struct camss *camss)
- {
--	int nbr_pm_domains = 0;
-+	struct device *dev = camss->dev;
- 	int last_pm_domain = 0;
- 	int i;
- 	int ret;
- 
--	if (camss->version == CAMSS_8x96 ||
--	    camss->version == CAMSS_660)
--		nbr_pm_domains = PM_DOMAIN_GEN1_COUNT;
--	else if (camss->version == CAMSS_845 ||
--		 camss->version == CAMSS_8250)
--		nbr_pm_domains = PM_DOMAIN_GEN2_COUNT;
-+	camss->genpd_num = of_count_phandle_with_args(dev->of_node,
-+						      "power-domains",
-+						      "#power-domain-cells");
-+	if (camss->genpd_num < 0) {
-+		dev_err(dev, "Power domains are not defined for camss\n");
-+		return camss->genpd_num;
-+	}
++#define MT8183_MUTEX_MOD_MDP_RDMA0		2
++#define MT8183_MUTEX_MOD_MDP_RSZ0		4
++#define MT8183_MUTEX_MOD_MDP_RSZ1		5
++#define MT8183_MUTEX_MOD_MDP_TDSHP0		6
++#define MT8183_MUTEX_MOD_MDP_WROT0		7
++#define MT8183_MUTEX_MOD_MDP_WDMA		8
++#define MT8183_MUTEX_MOD_MDP_AAL0		23
++#define MT8183_MUTEX_MOD_MDP_CCORR0		24
 +
-+	camss->genpd = devm_kmalloc_array(dev, camss->genpd_num,
-+					  sizeof(*camss->genpd), GFP_KERNEL);
-+	if (!camss->genpd)
-+		return -ENOMEM;
- 
--	for (i = 0; i < nbr_pm_domains; i++) {
-+	camss->genpd_link = devm_kmalloc_array(dev, camss->genpd_num,
-+					       sizeof(*camss->genpd_link),
-+					       GFP_KERNEL);
-+	if (!camss->genpd_link)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < camss->genpd_num; i++) {
- 		camss->genpd[i] = dev_pm_domain_attach_by_id(camss->dev, i);
- 		if (IS_ERR(camss->genpd[i])) {
- 			ret = PTR_ERR(camss->genpd[i]);
-@@ -1689,7 +1701,6 @@ static int camss_probe(struct platform_device *pdev)
- 
- void camss_delete(struct camss *camss)
- {
--	int nbr_pm_domains = 0;
- 	int i;
- 
- 	v4l2_device_unregister(&camss->v4l2_dev);
-@@ -1698,14 +1709,7 @@ void camss_delete(struct camss *camss)
- 
- 	pm_runtime_disable(camss->dev);
- 
--	if (camss->version == CAMSS_8x96 ||
--	    camss->version == CAMSS_660)
--		nbr_pm_domains = PM_DOMAIN_GEN1_COUNT;
--	else if (camss->version == CAMSS_845 ||
--		 camss->version == CAMSS_8250)
--		nbr_pm_domains = PM_DOMAIN_GEN2_COUNT;
--
--	for (i = 0; i < nbr_pm_domains; i++) {
-+	for (i = 0; i < camss->genpd_num; i++) {
- 		device_link_del(camss->genpd_link[i]);
- 		dev_pm_domain_detach(camss->genpd[i], true);
- 	}
-diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-index c9b3e0df5be8..0db80cadbbaa 100644
---- a/drivers/media/platform/qcom/camss/camss.h
-+++ b/drivers/media/platform/qcom/camss/camss.h
-@@ -69,9 +69,7 @@ struct resources_icc {
- enum pm_domain {
- 	PM_DOMAIN_VFE0 = 0,
- 	PM_DOMAIN_VFE1 = 1,
--	PM_DOMAIN_GEN1_COUNT = 2,	/* CAMSS series of ISPs */
- 	PM_DOMAIN_VFELITE = 2,		/* VFELITE / TOP GDSC */
--	PM_DOMAIN_GEN2_COUNT = 3,	/* Titan series of ISPs */
+ #define MT8173_MUTEX_MOD_DISP_OVL0		11
+ #define MT8173_MUTEX_MOD_DISP_OVL1		12
+ #define MT8173_MUTEX_MOD_DISP_RDMA0		13
+@@ -245,6 +254,17 @@ static const unsigned int mt8183_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+ 	[DDP_COMPONENT_WDMA0] = MT8183_MUTEX_MOD_DISP_WDMA0,
  };
  
- enum camss_version {
-@@ -101,8 +99,9 @@ struct camss {
- 	int vfe_num;
- 	struct vfe_device *vfe;
- 	atomic_t ref_count;
--	struct device *genpd[PM_DOMAIN_GEN2_COUNT];
--	struct device_link *genpd_link[PM_DOMAIN_GEN2_COUNT];
-+	int genpd_num;
-+	struct device **genpd;
-+	struct device_link **genpd_link;
- 	struct icc_path *icc_path[ICC_SM8250_COUNT];
- 	struct icc_bw_tbl icc_bw_tbl[ICC_SM8250_COUNT];
++static const unsigned int mt8183_mutex_table_mod[MUTEX_TABLE_IDX_MAX] = {
++	[MUTEX_TABLE_IDX_MDP_RDMA0] = MT8183_MUTEX_MOD_MDP_RDMA0,
++	[MUTEX_TABLE_IDX_MDP_RSZ0] = MT8183_MUTEX_MOD_MDP_RSZ0,
++	[MUTEX_TABLE_IDX_MDP_RSZ1] = MT8183_MUTEX_MOD_MDP_RSZ1,
++	[MUTEX_TABLE_IDX_MDP_TDSHP0] = MT8183_MUTEX_MOD_MDP_TDSHP0,
++	[MUTEX_TABLE_IDX_MDP_WROT0] = MT8183_MUTEX_MOD_MDP_WROT0,
++	[MUTEX_TABLE_IDX_MDP_WDMA] = MT8183_MUTEX_MOD_MDP_WDMA,
++	[MUTEX_TABLE_IDX_MDP_AAL0] = MT8183_MUTEX_MOD_MDP_AAL0,
++	[MUTEX_TABLE_IDX_MDP_CCORR0] = MT8183_MUTEX_MOD_MDP_CCORR0,
++};
++
+ static const unsigned int mt8186_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+ 	[DDP_COMPONENT_AAL0] = MT8186_MUTEX_MOD_DISP_AAL0,
+ 	[DDP_COMPONENT_CCORR] = MT8186_MUTEX_MOD_DISP_CCORR0,
+@@ -296,6 +316,17 @@ static const unsigned int mt8183_mutex_sof[MUTEX_SOF_DSI3 + 1] = {
+ 	[MUTEX_SOF_DPI0] = MT8183_MUTEX_SOF_DPI0 | MT8183_MUTEX_EOF_DPI0,
  };
+ 
++static const unsigned int mt8183_mutex_table_sof[MUTEX_TABLE_IDX_MAX] = {
++	[MUTEX_TABLE_IDX_MDP_RDMA0] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_RSZ0] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_RSZ1] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_TDSHP0] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_WROT0] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_WDMA] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_AAL0] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_CCORR0] = MUTEX_SOF_SINGLE_MODE,
++};
++
+ static const unsigned int mt8186_mutex_sof[MUTEX_SOF_DSI3 + 1] = {
+ 	[MUTEX_SOF_SINGLE_MODE] = MUTEX_SOF_SINGLE_MODE,
+ 	[MUTEX_SOF_DSI0] = MT8186_MUTEX_SOF_DSI0 | MT8186_MUTEX_EOF_DSI0,
+@@ -336,6 +367,8 @@ static const struct mtk_mutex_data mt8183_mutex_driver_data = {
+ 	.mutex_sof = mt8183_mutex_sof,
+ 	.mutex_mod_reg = MT8183_MUTEX0_MOD0,
+ 	.mutex_sof_reg = MT8183_MUTEX0_SOF0,
++	.mutex_table_mod = mt8183_mutex_table_mod,
++	.mutex_table_sof = mt8183_mutex_table_sof,
+ 	.no_clk = true,
+ };
+ 
 -- 
-2.33.0
+2.18.0
 
