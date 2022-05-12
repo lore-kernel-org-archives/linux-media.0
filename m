@@ -2,45 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 212D4C433EF
-	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 10:31:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E68E1C433FE
+	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 10:33:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352639AbiELKbv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 May 2022 06:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
+        id S1352655AbiELKdL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 May 2022 06:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352638AbiELKbp (ORCPT
+        with ESMTP id S1347390AbiELKdI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 May 2022 06:31:45 -0400
+        Thu, 12 May 2022 06:33:08 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483214D612;
-        Thu, 12 May 2022 03:31:40 -0700 (PDT)
-X-UUID: 01437242befd49d7a4d00e207afc4c70-20220512
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE04222C35;
+        Thu, 12 May 2022 03:33:06 -0700 (PDT)
+X-UUID: fbd15ee8f20048ea9271c7ff174e2153-20220512
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:4cad2d59-18ab-4720-b397-b3de20fb5a71,OB:20,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:4cad2d59-18ab-4720-b397-b3de20fb5a71,OB:20,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:4c7bf9f1-ab23-4aed-a67b-f96514452486,C
-        OID:1347ce9edb3e,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 01437242befd49d7a4d00e207afc4c70-20220512
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.4,REQID:91f8f3b0-30df-4b49-a7cb-444f92dec6f7,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:8685f9f1-ab23-4aed-a67b-f96514452486,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: fbd15ee8f20048ea9271c7ff174e2153-20220512
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <rex-bc.chen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1306276664; Thu, 12 May 2022 18:31:37 +0800
+        with ESMTP id 695125433; Thu, 12 May 2022 18:32:59 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 12 May 2022 18:31:36 +0800
+ Thu, 12 May 2022 18:32:58 +0800
 Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 12 May 2022 18:31:36 +0800
-Message-ID: <ceb508aeb66c42bf9d3dd7659cd64496621c27f8.camel@mediatek.com>
-Subject: Re: [PATCH v18 2/6] soc: mediatek: mutex: add 8183 MUTEX MOD
- settings for MDP
+ Transport; Thu, 12 May 2022 18:32:58 +0800
+Message-ID: <e99b73e850780a104cf053e5e76bfd19256fc2a4.camel@mediatek.com>
+Subject: Re: [PATCH v18 6/6] soc: mediatek: mutex: add functions that
+ operate registers by CMDQ
 From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
 To:     Moudy Ho <moudy.ho@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -68,10 +64,10 @@ CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         <cellopoint.kai@gmail.com>
-Date:   Thu, 12 May 2022 18:31:36 +0800
-In-Reply-To: <20220512084139.15086-3-moudy.ho@mediatek.com>
+Date:   Thu, 12 May 2022 18:32:58 +0800
+In-Reply-To: <20220512084139.15086-7-moudy.ho@mediatek.com>
 References: <20220512084139.15086-1-moudy.ho@mediatek.com>
-         <20220512084139.15086-3-moudy.ho@mediatek.com>
+         <20220512084139.15086-7-moudy.ho@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
@@ -82,10 +78,14 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 On Thu, 2022-05-12 at 16:41 +0800, Moudy Ho wrote:
-> For the purpose of module independence, related settings should be
-> moved
-> from MDP to the corresponding driver.
-> This patch adds 8183 MUTEX MOD settings for MDP.
+> Due to HW limitations, MDP3 is necessary to enable MUTEX in each
+> frame
+> for SOF triggering and cooperate with CMDQ control to reduce the
+> amount
+> of interrupts generated(also, reduce frame latency).
+> 
+> In response to the above situation, a new interface
+> "mtk_mutex_enable_by_cmdq" has been added to achieve the purpose.
 > 
 > Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 > Reviewed-by: AngeloGioacchino Del Regno <
