@@ -2,48 +2,48 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8E78C43219
-	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 12:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E548AC433EF
+	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 12:37:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353812AbiELMeG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 May 2022 08:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
+        id S1353862AbiELMh2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 May 2022 08:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353805AbiELMeB (ORCPT
+        with ESMTP id S1349758AbiELMh1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 May 2022 08:34:01 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910BC644C1
-        for <linux-media@vger.kernel.org>; Thu, 12 May 2022 05:33:59 -0700 (PDT)
+        Thu, 12 May 2022 08:37:27 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533F26212B
+        for <linux-media@vger.kernel.org>; Thu, 12 May 2022 05:37:26 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0A84421C82;
-        Thu, 12 May 2022 12:33:58 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 141441F88F;
+        Thu, 12 May 2022 12:37:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652358838; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1652359045; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=BNJI+u1QPL4iKmQOgR9HOOU515MZvyu/0IWN9/HT5Jw=;
-        b=Dg3vstJ0lKsW7i9xNb+gw+90ec8sXPQk1eyHiLaUIKaWoCqAptmUTYKQph8CWn43uCjs29
-        pEKa6jklPyMC6GjaAxAwMXOOqPoSbUGRknbIcIsXCw9WlDAn1xoN8h8S5GAdRpyPsLsxTc
-        xqA5XbaXjMeTn8voUhwFuiG0BJq7vCE=
+        bh=P9lhJMO5oZS2g47UJKj/tR2sGhDq+1Yr7qCMhH7/RDo=;
+        b=Igu+hegJtWvM1nyX1ODL9u8tToH5KGnYvCdUGqDeD/3olK5CdKX2a5f8jIfhLwqRBC7tZR
+        1su8f8UpA1yFcUyPs9vYpudA9jzJ5mgEsl+m9KElP8fRj3p9GTKmOaZnA6COIlFoLOf4SH
+        xEzkvKhYVKPgPsi+pvHNCEfHxBjHCq4=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C685C13ABE;
-        Thu, 12 May 2022 12:33:57 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DA34B13ABE;
+        Thu, 12 May 2022 12:37:24 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9orWLrX+fGL+GAAAMHmgww
-        (envelope-from <oneukum@suse.com>); Thu, 12 May 2022 12:33:57 +0000
+        id hplyMoT/fGL/GgAAMHmgww
+        (envelope-from <oneukum@suse.com>); Thu, 12 May 2022 12:37:24 +0000
 From:   Oliver Neukum <oneukum@suse.com>
 To:     linux-media@vger.kernel.org, mchehab@kernel.org, sean@mess.org
 Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH 1/3] igorplugusb: prevent use after free in probe error
-Date:   Thu, 12 May 2022 14:33:52 +0200
-Message-Id: <20220512123354.25766-1-oneukum@suse.com>
+Subject: [PATCHv2 1/4] igorplugusb: respect DMA coherency
+Date:   Thu, 12 May 2022 14:37:20 +0200
+Message-Id: <20220512123723.25815-1-oneukum@suse.com>
 X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,30 +51,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The timer uses the URB. Free it only after the timer
-has been stopped.
+The coherency rules mean that you cannot embed
+a buffer inside a descriptor. kmalloc() separately.
+
+v2: Resending series due to omitting this patch
 
 Signed-off-by: Oliver Neukum <oneukum@suse.com>
 ---
- drivers/media/rc/igorplugusb.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/rc/igorplugusb.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/rc/igorplugusb.c b/drivers/media/rc/igorplugusb.c
-index b46362da8623..1afba95409ff 100644
+index b40dbf500186..b46362da8623 100644
 --- a/drivers/media/rc/igorplugusb.c
 +++ b/drivers/media/rc/igorplugusb.c
-@@ -223,9 +223,9 @@ static int igorplugusb_probe(struct usb_interface *intf,
+@@ -38,7 +38,7 @@ struct igorplugusb {
  
- 	return 0;
- fail:
--	rc_free_device(ir->rc);
--	usb_free_urb(ir->urb);
+ 	struct timer_list timer;
+ 
+-	uint8_t buf_in[MAX_PACKET];
++	u8 *buf_in;
+ 
+ 	char phys[64];
+ };
+@@ -177,6 +177,9 @@ static int igorplugusb_probe(struct usb_interface *intf,
+ 	if (!ir->urb)
+ 		goto fail;
+ 
++	ir->buf_in = kmalloc(MAX_PACKET, GFP_KERNEL);
++	if (!ir->buf_in)
++		goto fail;
+ 	usb_fill_control_urb(ir->urb, udev,
+ 		usb_rcvctrlpipe(udev, 0), (uint8_t *)&ir->request,
+ 		ir->buf_in, sizeof(ir->buf_in), igorplugusb_callback, ir);
+@@ -223,6 +226,7 @@ static int igorplugusb_probe(struct usb_interface *intf,
+ 	rc_free_device(ir->rc);
+ 	usb_free_urb(ir->urb);
  	del_timer(&ir->timer);
-+	usb_free_urb(ir->urb);
-+	rc_free_device(ir->rc);
- 	kfree(ir->buf_in);
++	kfree(ir->buf_in);
  
  	return ret;
+ }
+@@ -236,6 +240,7 @@ static void igorplugusb_disconnect(struct usb_interface *intf)
+ 	usb_set_intfdata(intf, NULL);
+ 	usb_kill_urb(ir->urb);
+ 	usb_free_urb(ir->urb);
++	kfree(ir->buf_in);
+ }
+ 
+ static const struct usb_device_id igorplugusb_table[] = {
 -- 
 2.35.3
 
