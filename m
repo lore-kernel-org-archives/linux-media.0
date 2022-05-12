@@ -2,132 +2,77 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B97AC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 07:43:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CD34C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 08:09:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351122AbiELHnD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 May 2022 03:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        id S233612AbiELIJQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 May 2022 04:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351119AbiELHnB (ORCPT
+        with ESMTP id S230017AbiELIJP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 May 2022 03:43:01 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690181A15D7
-        for <linux-media@vger.kernel.org>; Thu, 12 May 2022 00:43:00 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24C1bPNh016797;
-        Thu, 12 May 2022 09:42:55 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=Dk4jB0qOiGtssuTmZb1vAWn4iphmwptwfFSFrB7k0a4=;
- b=H6JU/BnKFEYNqnpM4UvO0jTZOuVSwxK2a8/7HElVDI4Q7yzpfrTXEvGt2jg+eWkRhSkG
- nB6pKA6JPoJCznTJ94ki6pTf7nqNYI1pr+h3Tp9nY8fy4r0pev+hLgwd8xvq9cZgdUHD
- 6GtRdPkWywvqOb3WqiyDR3lM4NZ+cg7Z60VRS2ljkFzntmlpOpUcm9s984I7Oe4O4FQi
- bLvZNnJC3CtIo4eccQUXDAciKiiojmTUIQkXMH5CBgK3GnMAr6t4ZjJWmBVZsRCVqpaP
- HiR/nV+91xkuWk4hGc+JnZ9At+Zzw+3Ihe/7KZPzOtsHX6/gIwaXpM9HWG5l23Ephh/v kw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g083hyy6p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 09:42:55 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id ACB6010003A;
-        Thu, 12 May 2022 09:42:14 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A60C721683D;
-        Thu, 12 May 2022 09:42:14 +0200 (CEST)
-Received: from localhost (10.75.127.51) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 12 May 2022 09:42:14
- +0200
-From:   Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-To:     <linux-media@vger.kernel.org>
-CC:     <alain.volmat@foss.st.com>, <hugues.fruchet@foss.st.com>,
-        <sylvain.petinot@foss.st.com>, <dave.stevenson@raspberrypi.com>,
-        <sakari.ailus@linux.intel.com>,
-        <laurent.pinchart@ideasonboard.com>,
-        <kieran.bingham@ideasonboard.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-Subject: [PATCH v3 3/5] media: uapi: Add ST VGXY61 header file
-Date:   Thu, 12 May 2022 09:40:35 +0200
-Message-ID: <20220512074037.3829926-4-benjamin.mugnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220512074037.3829926-1-benjamin.mugnier@foss.st.com>
-References: <20220512074037.3829926-1-benjamin.mugnier@foss.st.com>
+        Thu, 12 May 2022 04:09:15 -0400
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D0E6B086
+        for <linux-media@vger.kernel.org>; Thu, 12 May 2022 01:09:13 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so2510414wme.3
+        for <linux-media@vger.kernel.org>; Thu, 12 May 2022 01:09:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h0SOY4SK/fX0R/bWyQCkYZVboGTqoYMzEOZZpYyuhHc=;
+        b=WKaQ78wBQVtGV6USZ7oQ7+Jj77r+NQ7mdx1crOz5JjEURyi2TAjxoskzDHvXEOnTbU
+         bbHGsDRzCIwB9fMDQdncPF8fI9HGhuvMG7Atsga7lPeRVBuPamtzsCll5eCmiKOZ72B1
+         vTrl0qKn1jHR+dWAukSalVQWrSU6+L2hYGQjow8RpFnz3tijzvLu+JlSzU8RRqgvBFHA
+         njiTdr2J2cPAAwnXOnq0ArJZQPaC8nAXJn8OXFxA3xUNzY2mzl6G3FjNaH41LexD7jqj
+         7xSlt0x5v6dk/6C5Emu8V4O93nH0nCOy23WKe3iV/flo1STWT9upNQuL0E0GvOoQKblx
+         GvYA==
+X-Gm-Message-State: AOAM530d5KHOYdjx2Z2vHlR87aqQqZtu0ec2QsPo1xYRh6Je8YyIY1pu
+        eACGF2paBpSutg2T6tuxaov6OOTrfrg=
+X-Google-Smtp-Source: ABdhPJzTcb6RJrMRMe9NPV/UBKZ+Y9dNrkwCjJnH6VRoGCoAnmQhZsXYk5TBycqggDJ3rUeWKJuOEQ==
+X-Received: by 2002:a05:600c:21c8:b0:394:7796:49c0 with SMTP id x8-20020a05600c21c800b00394779649c0mr8970696wmj.191.1652342951905;
+        Thu, 12 May 2022 01:09:11 -0700 (PDT)
+Received: from localhost.localdomain ([2001:470:26:14d:2383:a80b:b4b0:e183])
+        by smtp.gmail.com with ESMTPSA id 4-20020a05600c02c400b003942a244edasm1842474wmn.31.2022.05.12.01.09.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 01:09:11 -0700 (PDT)
+From:   Benjamin Marty <info@benjaminmarty.ch>
+To:     linux-media@vger.kernel.org
+Cc:     Benjamin Marty <info@benjaminmarty.ch>
+Subject: [PATCH] media: i2c: adv7180: fix reserved bit in Video Selection 2
+Date:   Thu, 12 May 2022 10:08:59 +0200
+Message-Id: <20220512080859.9923-1-info@benjaminmarty.ch>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-11_07,2022-05-12_01,2022-02-23_01
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Define an HDR control in it, and adds its documentation in st-vgxy61.rst
-file.
+This bit is marked as reserved in the ADV Hardware Reference Manual.
 
-Signed-off-by: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+Resetting this bit seems to cause increased video noise. Setting this bit according to the Hardware Reference Manual reduces the video noise immediately.
+
+Signed-off-by: Benjamin Marty <info@benjaminmarty.ch>
 ---
- .../userspace-api/media/drivers/st-vgxy61.rst | 23 +++++++++++++++++++
- include/uapi/linux/st-vgxy61.h                | 15 ++++++++++++
- 2 files changed, 38 insertions(+)
- create mode 100644 Documentation/userspace-api/media/drivers/st-vgxy61.rst
- create mode 100644 include/uapi/linux/st-vgxy61.h
+ drivers/media/i2c/adv7180.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/drivers/st-vgxy61.rst b/Documentation/userspace-api/media/drivers/st-vgxy61.rst
-new file mode 100644
-index 000000000000..7a11adbb558f
---- /dev/null
-+++ b/Documentation/userspace-api/media/drivers/st-vgxy61.rst
-@@ -0,0 +1,23 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+ST VGXY61 camera sensor driver
-+==============================
-+
-+The ST VGXY61 driver implements the following driver-specific controls:
-+
-+``V4L2_CID_STVGXY61_HDR``
-+-------------------------------
-+    Change the sensor HDR mode. A HDR picture is obtained by merging two captures of the same scene
-+    using two different exposure periods.
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 4
-+
-+    * - HDR linearize
-+      - The merger outputs a long exposure capture as long as it is not saturated.
-+    * - HDR substraction
-+      - This involves subtracting the short exposure frame from the long exposure frame.
-+    * - "no HDR"
-+      - This mode is used for standard dynamic range (SDR) exposures.
-diff --git a/include/uapi/linux/st-vgxy61.h b/include/uapi/linux/st-vgxy61.h
-new file mode 100644
-index 000000000000..fbabe2cb64ac
---- /dev/null
-+++ b/include/uapi/linux/st-vgxy61.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2022 STMicroelectronics SA
-+ *
-+ */
-+
-+#ifndef __UAPI_STVGXY61_H_
-+#define __UAPI_STVGXY61_H_
-+
-+#include <linux/v4l2-controls.h>
-+
-+/* Control HDR mode */
-+#define V4L2_CID_STVGXY61_HDR	(V4L2_CID_USER_STVGXY61_BASE + 0)
-+
-+#endif /* __UAPI_STVGXY61_H_ */
+diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
+index 4f5db195e66d..d99b22286b74 100644
+--- a/drivers/media/i2c/adv7180.c
++++ b/drivers/media/i2c/adv7180.c
+@@ -1014,7 +1014,8 @@ static int adv7182_init(struct adv7180_state *state)
+ 
+ static int adv7182_set_std(struct adv7180_state *state, unsigned int std)
+ {
+-	return adv7180_write(state, ADV7182_REG_INPUT_VIDSEL, std << 4);
++	return adv7180_write(state, ADV7182_REG_INPUT_VIDSEL,
++			     (std << 4) | (0x01 << 2));
+ }
+ 
+ enum adv7182_input_type {
 -- 
-2.25.1
+2.36.1
 
