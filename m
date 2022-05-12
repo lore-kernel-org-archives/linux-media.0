@@ -2,143 +2,119 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BE9BC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 10:33:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7D10C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 12 May 2022 11:15:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352693AbiELKdZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 May 2022 06:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S1353037AbiELLPp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 May 2022 07:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352682AbiELKdP (ORCPT
+        with ESMTP id S1353146AbiELLPJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 May 2022 06:33:15 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93969223857
-        for <linux-media@vger.kernel.org>; Thu, 12 May 2022 03:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652351594; x=1683887594;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W/GoR8pk4B2FM2U4cKx+SmFCGBJQo4VFNIgQHBmLMUo=;
-  b=SsHXY1Ko1JIKUGH0HJdGr9Tyj34/m6AKBiJPr2rF2wrBEx6oZ7yfqzPp
-   RtaF+c3LLPGs9zRXP4e+M/nbNnx1XxKsi3BJ9W0k3SpMR3r7i6Kq5hwTF
-   nRCZixbD3PkNu7Blsz6vNNtly4kiGSX2MyhcNhN0gNOrB7VRgi01GHlWQ
-   +2jaNSv5qMabiyopFjt3e3U/+V6ZkwFTMzSkhdp1tI+wDn2cLUH8Zr4u6
-   bCv3pfQH9B/S8/X5ySjNIfnnojnA+iWvmot58SH7C8lvtJ7ut77/VJURi
-   OaP7vo1FrNqUDCh+KYJzCJ0iVXIse3N2sIXidCv58tXDxacDO3CGHPZAb
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="249858712"
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="249858712"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2022 03:33:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,219,1647327600"; 
-   d="scan'208";a="572472277"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 12 May 2022 03:33:11 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1np686-000KIP-UD;
-        Thu, 12 May 2022 10:33:10 +0000
-Date:   Thu, 12 May 2022 18:32:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        linux-media@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, alain.volmat@foss.st.com,
-        hugues.fruchet@foss.st.com, sylvain.petinot@foss.st.com,
-        dave.stevenson@raspberrypi.com, sakari.ailus@linux.intel.com,
-        laurent.pinchart@ideasonboard.com, kieran.bingham@ideasonboard.com,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-Subject: Re: [PATCH v3 3/5] media: uapi: Add ST VGXY61 header file
-Message-ID: <202205121843.Y5ufdQpc-lkp@intel.com>
-References: <20220512074037.3829926-4-benjamin.mugnier@foss.st.com>
+        Thu, 12 May 2022 07:15:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DE213C35E;
+        Thu, 12 May 2022 04:14:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9D3E61E4B;
+        Thu, 12 May 2022 11:14:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27528C385B8;
+        Thu, 12 May 2022 11:14:36 +0000 (UTC)
+Message-ID: <b5e35985-c159-6b11-8752-d6dd29fc6a64@xs4all.nl>
+Date:   Thu, 12 May 2022 13:14:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512074037.3829926-4-benjamin.mugnier@foss.st.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 0/4] Add Toshiba Visconti DNN image processing accelerator
+ driver
+Content-Language: en-US
+To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+References: <20220428131128.5053-1-yuji2.ishikawa@toshiba.co.jp>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220428131128.5053-1-yuji2.ishikawa@toshiba.co.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Benjamin,
+Hi Yuji,
 
-I love your patch! Yet something to improve:
+On 4/28/22 15:11, Yuji Ishikawa wrote:
+> This series is the DNN image processing accelerator driver for Toshiba's ARM SoC, Visconti[0].
+> This provides DT binding documentation, device driver, MAINTAINER files.
+> 
+> The second patch "soc: visconti: Add Toshiba Visconti image processing accelerator common source"
+> and the fourth patch "MAINTAINERS: ..." are the same as the ones in the preceding post for affine driver.
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on linus/master v5.18-rc6 next-20220511]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+There appears to be no documentation whatsoever, unless I am missing something.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Mugnier/media-Add-ST-VGXY61-camera-sensor-driver/20220512-154318
-base:   git://linuxtv.org/media_tree.git master
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220512/202205121843.Y5ufdQpc-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/47c49a5b0ade9511ba79fbe14a0d2231975757e5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Benjamin-Mugnier/media-Add-ST-VGXY61-camera-sensor-driver/20220512-154318
-        git checkout 47c49a5b0ade9511ba79fbe14a0d2231975757e5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips prepare
+How is the uAPI supposed to be used? What does it do? What formats does it accept
+or produce?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+If this processes images, then (as Laurent mentioned) this is more suitable as a
+V4L2 mem2mem driver.
 
-All errors (new ones prefixed by >>):
+See https://linuxtv.org/downloads/v4l-dvb-apis-new/userspace-api/v4l/dev-mem2mem.html
+and the many drivers in drivers/media that use it (git grep v4l2-mem2mem.h).
 
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
->> error: include/uapi/linux/st-vgxy61.h: missing "WITH Linux-syscall-note" for SPDX-License-Identifier
-   make[2]: *** [scripts/Makefile.headersinst:63: usr/include/linux/st-vgxy61.h] Error 1
-   make[2]: Target '__headers' not remade because of errors.
-   make[1]: *** [Makefile:1280: headers] Error 2
-   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
-      26 | void output_ptreg_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
-      78 | void output_task_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
-      92 | void output_thread_info_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
-     108 | void output_thread_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:136:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
-     136 | void output_thread_fpu_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
-     179 | void output_mm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:218:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
-     218 | void output_sc_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:253:6: warning: no previous prototype for 'output_signal_defined' [-Wmissing-prototypes]
-     253 | void output_signal_defined(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:320:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
-     320 | void output_pbe_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:332:6: warning: no previous prototype for 'output_pm_defines' [-Wmissing-prototypes]
-     332 | void output_pm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:346:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
-     346 | void output_kvm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:390:6: warning: no previous prototype for 'output_cps_defines' [-Wmissing-prototypes]
-     390 | void output_cps_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+But without any explanation whatsoever I have no idea what does or does not make sense.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+
+	Hans
+
+> 
+> Best regards,
+> Yuji
+> 
+> [0]: https://toshiba.semicon-storage.com/ap-en/semiconductor/product/image-recognition-processors-visconti.html
+> 
+> Yuji Ishikawa (4):
+>   dt-bindings: soc: visconti: Add Toshiba Visconti DNN image processing
+>     accelerator bindings
+>   soc: visconti: Add Toshiba Visconti image processing accelerator
+>     common source
+>   soc: visconti: Add Toshiba Visconti DNN image processing accelerator
+>   MAINTAINERS: Add entries for Toshiba Visconti DNN image processing
+>     accelerator
+> 
+>  .../soc/visconti/toshiba,visconti-dnn.yaml    |  54 ++
+>  MAINTAINERS                                   |   2 +
+>  drivers/soc/Kconfig                           |   1 +
+>  drivers/soc/Makefile                          |   1 +
+>  drivers/soc/visconti/Kconfig                  |   7 +
+>  drivers/soc/visconti/Makefile                 |   8 +
+>  drivers/soc/visconti/dnn/Makefile             |   6 +
+>  drivers/soc/visconti/dnn/dnn.c                | 533 ++++++++++++++++++
+>  drivers/soc/visconti/dnn/hwd_dnn.c            | 183 ++++++
+>  drivers/soc/visconti/dnn/hwd_dnn.h            |  68 +++
+>  drivers/soc/visconti/dnn/hwd_dnn_reg.h        | 228 ++++++++
+>  drivers/soc/visconti/ipa_common.c             |  55 ++
+>  drivers/soc/visconti/ipa_common.h             |  18 +
+>  drivers/soc/visconti/uapi/dnn.h               |  77 +++
+>  drivers/soc/visconti/uapi/ipa.h               |  88 +++
+>  15 files changed, 1329 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/visconti/toshiba,visconti-dnn.yaml
+>  create mode 100644 drivers/soc/visconti/Kconfig
+>  create mode 100644 drivers/soc/visconti/Makefile
+>  create mode 100644 drivers/soc/visconti/dnn/Makefile
+>  create mode 100644 drivers/soc/visconti/dnn/dnn.c
+>  create mode 100644 drivers/soc/visconti/dnn/hwd_dnn.c
+>  create mode 100644 drivers/soc/visconti/dnn/hwd_dnn.h
+>  create mode 100644 drivers/soc/visconti/dnn/hwd_dnn_reg.h
+>  create mode 100644 drivers/soc/visconti/ipa_common.c
+>  create mode 100644 drivers/soc/visconti/ipa_common.h
+>  create mode 100644 drivers/soc/visconti/uapi/dnn.h
+>  create mode 100644 drivers/soc/visconti/uapi/ipa.h
+> 
+
