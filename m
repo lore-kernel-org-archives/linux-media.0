@@ -2,212 +2,132 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7205EC433F5
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 10:33:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6702FC433EF
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 10:38:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379486AbiEMKdO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 06:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38550 "EHLO
+        id S1379519AbiEMKi2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 06:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379475AbiEMKdN (ORCPT
+        with ESMTP id S237341AbiEMKi1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 May 2022 06:33:13 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91CA10F7F6;
-        Fri, 13 May 2022 03:33:11 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id ACAD4100007;
-        Fri, 13 May 2022 10:33:08 +0000 (UTC)
-Date:   Fri, 13 May 2022 12:33:01 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] media: dt-bindings: media: i2c: Add MT9M114
- camera sensor binding
-Message-ID: <20220513103301.ocj56zyvl4ls5cmz@uno.localdomain>
-References: <20220207012055.15158-1-laurent.pinchart@ideasonboard.com>
- <20220207012055.15158-2-laurent.pinchart@ideasonboard.com>
- <YgKfdR72TNavj68v@paasikivi.fi.intel.com>
- <YgK6xAgAVHUSsQND@pendragon.ideasonboard.com>
+        Fri, 13 May 2022 06:38:27 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B540160ABD
+        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 03:38:26 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 580FB1B003E5
+        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 13:38:24 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1652438304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=V/udHH2BKb7Dvj5W/aaJo3o1xcu+TJygPOPY8VAycjk=;
+        b=YovPGmhZbjd91wzra6BEueUvocTmnVkELgK2Gjr59RpRATpAmOWU5+9Bb/94jpgrcAO2Qj
+        wiq6n4AiW7hFWzccpyaki4mwbW2PHRnNNyFk9VEtSbDWSj56POvms5Pa3bQ++/IXQkVZT/
+        6eGQjNCRZCihUuSj9jB6v7bn4nLbyTuqBw+axm58eCdruqSZQh+7Oo70ZzkaDVcwp5hrrZ
+        FPkaOQ8eyiZtw+eYiK9epMcm9+5AoybG2rRfBvEtrtxTC9tt3bfb+xdedFykfy0q/s+OC3
+        n16nrxBaKbIRZe260ow752E/ON7i2/JZ+3vnsNor7RlQqVtTcoFilGUfefbyBg==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id EB057634C91
+        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 13:38:23 +0300 (EEST)
+Date:   Fri, 13 May 2022 13:38:23 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     linux-media@vger.kernel.org
+Subject: [GIT PULL FOR 5.19] Ov5640 driver improvements
+Message-ID: <Yn41HyGCOJyZU98T@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgK6xAgAVHUSsQND@pendragon.ideasonboard.com>
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1652438304; a=rsa-sha256;
+        cv=none;
+        b=londcs+g22EMkQ2i29TFuvfI/OXR+hrz6AGYGkzg/O1X+IBB1mKD2eTBUCsGXtu6O286ck
+        vrK8oyJmXUs8/7mkgXEqxZNhkzzuwWa63vtcHRqaiNeHbFFmn6h9t63nLR7+BfJKhdgv4Q
+        uSfy/5ruSs5Da0fu+NHbrt95H5B3qdABClCr2fKbzRGKL2B0szdVcGNORg2NjPckC84zZd
+        gvB9ZO+tSPCYIuJAV5Y0ps64kmE5oFmM/08Hqt75ext5bK56VbGVXak3e4sSeU0y9Ieva0
+        wB/sFhAZIy9cr+e7K6ERgs9j4pZuegyR1KdjjTu3js8GXRKNR3r/kQe5GfRSMw==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1652438304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=V/udHH2BKb7Dvj5W/aaJo3o1xcu+TJygPOPY8VAycjk=;
+        b=hPcqJyQ+ErVlTbljTJi7KL7LtsSb4KVv0/NjuPM/BgSUDY3ptsJdjHKXxjSfJFKrfYdHVn
+        nCtFTvFjYXXEqgx7665bpVNlksgLYOfT5DgrTP5LyOa7FQx2aCJrf0epjmcuJl5qc1WfH4
+        Z2xkZIaYIxQe7LJ+N5hehdw4XMQ/+0lKS/Nj7MGQ5FyILPPl1tJMwwW2SlzswWxz7OW/eW
+        yAgZv9swaQg8GmnKCBK8wLp2r31HIwjusBTNWKe9sUe5gEKd83U012DOtuOCHZ2rE+uWBx
+        mgk2IL4ggUEDfv15RSdTt6Mexuqrd8VaCN9OoKoYksXS58ZDVeKZy4O7EXqoHg==
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent
+Hi Mauro,
 
-On Tue, Feb 08, 2022 at 08:47:32PM +0200, Laurent Pinchart wrote:
-> Hi Sakari,
->
-> On Tue, Feb 08, 2022 at 06:51:01PM +0200, Sakari Ailus wrote:
-> > On Mon, Feb 07, 2022 at 03:20:54AM +0200, Laurent Pinchart wrote:
-> > > Add device tree binding for the onsemi MT9M114 CMOS camera sensor.
-> > >
-> > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > ---
-> > > Changes since v1:
-> > >
-> > > - Use graph schema
-> > > - Drop unneeded properties
-> > > - Rename ON Semiconductor to onsemi
-> > > ---
-> > >  .../bindings/media/i2c/onnn,mt9m114.yaml      | 110 ++++++++++++++++++
-> > >  MAINTAINERS                                   |   7 ++
-> > >  2 files changed, 117 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml b/Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml
-> > > new file mode 100644
-> > > index 000000000000..55b67833f9a1
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/media/i2c/onnn,mt9m114.yaml
-> > > @@ -0,0 +1,110 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/media/i2c/onnn,mt9m114.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: onsemi 1/6-inch 720p CMOS Digital Image Sensor
-> > > +
-> > > +maintainers:
-> > > +  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > +
-> > > +description: |-
-> > > +  The onsemi MT9M114 is a 1/6-inch 720p (1.26 Mp) CMOS digital image sensor
-> > > +  with an active pixel-array size of 1296H x 976V. It is programmable through
-> > > +  an I2C interface and outputs image data over a 8-bit parallel or 1-lane MIPI
-> > > +  CSI-2 connection.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: onnn,mt9m114
-> > > +
-> > > +  reg:
-> > > +    description: I2C device address
-> > > +    enum:
-> > > +      - 0x48
-> > > +      - 0x5d
-> > > +
-> > > +  clocks:
-> > > +    description: EXTCLK clock signal
-> > > +    maxItems: 1
-> > > +
-> > > +  vdd-supply:
-> > > +    description:
-> > > +      Core digital voltage supply, 1.8V
-> > > +
-> > > +  vddio-supply:
-> > > +    description:
-> > > +      I/O digital voltage supply, 1.8V or 2.8V
-> > > +
-> > > +  vaa-supply:
-> > > +    description:
-> > > +      Analog voltage supply, 2.8V
-> > > +
-> > > +  reset-gpios:
-> > > +    description: |-
-> > > +      Reference to the GPIO connected to the RESET_BAR pin, if any (active
-> > > +      low).
-> > > +
-> > > +  port:
-> > > +    $ref: /schemas/graph.yaml#/$defs/port-base
-> > > +    additionalProperties: false
-> > > +
-> > > +    properties:
-> > > +      endpoint:
-> > > +        $ref: /schemas/media/video-interfaces.yaml#
-> > > +        additionalProperties: false
-> > > +
-> > > +        properties:
-> > > +          bus-type:
-> > > +            enum: [4, 5, 6]
-> >
-> > With bus-type 5, shouldn't you have the parallel interface sync signal
-> > polarity properties? Possibly also others if the hardware supports them.
->
-> As far as I can tell, the hardware has fixed polarities for all signals.
-> Both hsync and vsync (called LINE_VALID and FRAME_VALID here) are active
-> high.
->
+One more pull request. This contains the ov5640 driver improvements Jacopo
+has been working on for quite some time.
 
-Although it seems the pixel clock polarity can be controlled ?
+Please pull.
 
-> > > +
-> > > +          remote-endpoint: true
-> > > +
-> > > +          # The number and mapping of lanes (for CSI-2), and the bus width and
-> > > +          # signal polarities (for parallel and BT.656) are fixed and must not
-> > > +          # be specified.
-> > > +
-> > > +        required:
-> > > +          - bus-type
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - clocks
-> > > +  - vdd-supply
-> > > +  - vddio-supply
-> > > +  - vaa-supply
-> > > +  - port
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/gpio/gpio.h>
-> > > +
-> > > +    i2c0 {
-> > > +        #address-cells = <1>;
-> > > +        #size-cells = <0>;
-> > > +
-> > > +        sensor@48 {
-> > > +            compatible = "onnn,mt9m114";
-> > > +            reg = <0x48>;
-> > > +
-> > > +            clocks = <&clk24m 0>;
-> > > +
-> > > +            reset-gpios = <&gpio5 21 GPIO_ACTIVE_LOW>;
-> > > +
-> > > +            vddio-supply = <&reg_cam_1v8>;
-> > > +            vdd-supply = <&reg_cam_1v8>;
-> > > +            vaa-supply = <&reg_2p8v>;
-> > > +
-> > > +            port {
-> > > +                endpoint {
-> > > +                    bus-type = <4>;
-> > > +                    remote-endpoint = <&mipi_csi_in>;
-> > > +                };
-> > > +            };
-> > > +        };
-> > > +    };
-> > > +...
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index f41088418aae..e9919a359c12 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -13096,6 +13096,13 @@ T:	git git://linuxtv.org/media_tree.git
-> > >  F:	drivers/media/i2c/mt9m032.c
-> > >  F:	include/media/i2c/mt9m032.h
-> > >
-> > > +MT9M114 ONSEMI SENSOR DRIVER
-> > > +M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > +L:	linux-media@vger.kernel.org
-> > > +S:	Maintained
-> > > +T:	git git://linuxtv.org/media_tree.git
-> > > +F:	Documentation/devicetree/bindings/media/i2c.onnn,mt9m114.yaml
-> > > +
-> > >  MT9P031 APTINA CAMERA SENSOR
-> > >  M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > >  L:	linux-media@vger.kernel.org
->
-> --
-> Regards,
->
-> Laurent Pinchart
+
+The following changes since commit 6c1c1eb8c87de221051b9198d40971640060842f:
+
+  media: ext-ctrls-codec.rst: fix indentation (2022-04-25 23:55:02 +0100)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/sailus/media_tree.git tags/for-5.19-3-signed
+
+for you to fetch changes up to 8dd4316b66ace25bfd31c943f146b665ff48dd0e:
+
+  media: ov5640: Move format mux config in format (2022-05-13 12:29:17 +0300)
+
+----------------------------------------------------------------
+ov5640 driver improvements for 5.19
+
+----------------------------------------------------------------
+Hugues Fruchet (1):
+      media: ov5640: Adjust vblank with s_frame_interval
+
+Jacopo Mondi (27):
+      media: ov5640: Add pixel rate to modes
+      media: ov5640: Re-arrange modes definition
+      media: ov5640: Add ov5640_is_csi2() function
+      media: ov5640: Associate bpp with formats
+      media: ov5640: Add LINK_FREQ control
+      media: ov5640: Update pixel_rate and link_freq
+      media: ov5640: Rework CSI-2 clock tree
+      media: ov5640: Rework timings programming
+      media: ov5640: Fix 720x480 in RGB888 mode
+      media: ov5640: Split DVP and CSI-2 timings
+      media: ov5640: Provide timings accessor
+      media: ov5640: Re-sort per-mode register tables
+      media: ov5640: Remove duplicated mode settings
+      media: ov5640: Remove ov5640_mode_init_data
+      media: ov5640: Add HBLANK control
+      media: ov5640: Add VBLANK control
+      media: ov5640: Remove frame rate check from find_mode()
+      media: ov5640: Change CSI-2 timings to comply with FPS
+      media: ov5640: Implement init_cfg
+      media: ov5640: Implement get_selection
+      media: ov5640: Register device properties
+      media: ov5640: Add RGB565_1X16 format
+      media: ov5640: Add BGR888 format
+      media: ov5640: Restrict sizes to mbus code
+      media: ov5640: Adjust format to bpp in s_fmt
+      media: ov5640: Split DVP and CSI-2 formats
+      media: ov5640: Move format mux config in format
+
+ drivers/media/i2c/ov5640.c | 1650 +++++++++++++++++++++++++++++++-------------
+ 1 file changed, 1188 insertions(+), 462 deletions(-)
+
+-- 
+Sakari Ailus
