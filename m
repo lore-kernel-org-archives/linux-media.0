@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1118CC433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7E44C433FE
 	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350516AbiEMOQa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 10:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        id S1346894AbiEMOQc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 10:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346894AbiEMOQQ (ORCPT
+        with ESMTP id S1346893AbiEMOQQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 13 May 2022 10:16:16 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAC5119917
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D925D674
         for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:16:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1652451370; x=1683987370;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=fy3C2KJlkT7RZsD/v94mq0M26/Q1s4lpRqIutwAE4yM=;
-  b=JMmKuWBowKbIY0UoGBwbNY4CZrcDGQjRnrEuaajm/AcVKrvH6GzfoVRw
-   gMNwBKobvQ5GIFOXiCBpLmw6XHvb59f+6pLAm+oLc+N8ZmUBQfF9zSBf0
-   x0nYiIX6SZK9aOFOGlX4JgMNOtM2EEniKLsI1S+p28NHOlEO2Ei4cRhDp
-   zjtzTJAL6edoPky4DHgWBuC0hYF25/hoCXX2p/PZQGFE8Y9N+q+Gx3Y1A
-   7c1M8G1oFV1RGHOMtWc+iIbBREgV2p4jY8TArf5bvBEr3tlXhXRXitMTj
-   GHe6NCziWv8O2idbEb2IxSj1Bx9140MX0LD2G8rOW4/P99w7OzDolr7ME
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250212542"
+  bh=uKbZDoMIg+X++ODyX2OUt371zueN8BRmWVAZCdaotNc=;
+  b=IlWNJwQvHET+7FsEGAAm6+zlzMVzsBJ8C5iWWOmRECBLpAjiQWb71vhJ
+   jkRVJ8Jbpqx3RlL08K6Eet1hr9WuC5rB+hLdaNKlT01YjhoaiFciuDdC/
+   R2Yftwm0vHHLhrt/oASoV73gLSbl2hKmt7iHIQXkjopFjXpWwoUrokXeL
+   zy7WKjR1AELlFJ8f/aw8KdmVDPHnbLA3APSfNK8Y+ClyF2YT7313q72XW
+   2CmfAeIUJBeRTlswB/uemYVkbnCKdxNmXmWmjuuASLq+yWutYIJmwEiKA
+   iXlpLrhVVTh/bLOATsAqtk2p4AuSkTQUD+wVvg5J0HCzfQYtNyNrUKFNF
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="333348193"
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="250212542"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:10 -0700
+   d="scan'208";a="333348193"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:08 -0700
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="637301603"
+   d="scan'208";a="567212572"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:04 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:04 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 313422172C;
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id BB0DB21B1E;
         Fri, 13 May 2022 17:15:51 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1npW58-0001gi-GP; Fri, 13 May 2022 17:15:50 +0300
+        id 1npW58-0001gz-Ux; Fri, 13 May 2022 17:15:50 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
@@ -55,9 +55,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         jbrunet@baylibre.com, paul.elder@ideasonboard.com,
         eddy.khan@vergesense.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v7 19/28] media: ov5640: Change CSI-2 timings to comply with FPS
-Date:   Fri, 13 May 2022 17:15:39 +0300
-Message-Id: <20220513141548.6344-20-sakari.ailus@linux.intel.com>
+Subject: [PATCH v7 23/28] media: ov5640: Add RGB565_1X16 format
+Date:   Fri, 13 May 2022 17:15:43 +0300
+Message-Id: <20220513141548.6344-24-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
 References: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
@@ -69,14 +69,12 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Jacopo Mondi <jacopo@jmondi.org>
 
-Now that the frame duration can be controlled by tuning the VBLANK
-duration in CSI-2 mode, fix all modes definitions to comply with the
-reported FPS.
+The driver already supports the 2X8_[LE|BE] variants of RGB565
+formats.
 
-All modes run at 30 FPS except for full-resolution mode 2592x1944
-which runs at 15FPS.
-
-Tested on a 2 data lanes setup in UYVY and RGB565 modes in CSI-2 mode.
+As for CSI-2 the 2X8 variants do not apply, add RGB565_1X16 variant
+with little-endian ordering of components as required by the CSI-2
+specifications.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
@@ -84,106 +82,32 @@ Tested-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ov5640.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/media/i2c/ov5640.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 63d435ccde559..e565f3534c33d 100644
+index b3159375d34b4..c4c2afb64811b 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -598,8 +598,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 160,
- 				.height	= 120,
- 			},
--			.htot		= 1896,
--			.vblank_def	= 864,
-+			.htot		= 1600,
-+			.vblank_def	= 878,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -643,8 +643,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 176,
- 				.height	= 144,
- 			},
--			.htot		= 1896,
--			.vblank_def	= 840,
-+			.htot		= 1600,
-+			.vblank_def	= 854,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -688,8 +688,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 320,
- 				.height	= 240,
- 			},
--			.htot		= 1896,
--			.vblank_def	= 744,
-+			.htot		= 1600,
-+			.vblank_def	= 760,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -733,8 +733,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 640,
- 				.height	= 480,
- 			},
--			.htot		= 1896,
--			.vblank_def	= 600,
-+			.htot		= 1600,
-+			.vblank_def	= 520,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -778,7 +778,7 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.height	= 480,
- 			},
- 			.htot		= 1896,
--			.vblank_def	= 504,
-+			.vblank_def	= 1206,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -822,7 +822,7 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.height	= 576,
- 			},
- 			.htot		= 1896,
--			.vblank_def	= 408,
-+			.vblank_def	= 1110,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -865,7 +865,7 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.height	= 768,
- 			},
- 			.htot		= 1896,
--			.vblank_def	= 312,
-+			.vblank_def	= 918,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -907,8 +907,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 1280,
- 				.height	= 720,
- 			},
--			.htot		= 1892,
--			.vblank_def	= 20,
-+			.htot		= 1600,
-+			.vblank_def	= 560,
- 		},
- 		.reg_data	= ov5640_setting_720P_1280_720,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_720P_1280_720),
-@@ -952,8 +952,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 1920,
- 				.height	= 1080,
- 			},
--			.htot		= 2500,
--			.vblank_def	= 40,
-+			.htot		= 2234,
-+			.vblank_def	= 24,
- 		},
- 		.reg_data	= ov5640_setting_1080P_1920_1080,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_1080P_1920_1080),
+@@ -221,6 +221,10 @@ static const struct ov5640_pixfmt {
+ 		.code = MEDIA_BUS_FMT_RGB565_2X8_BE,
+ 		.colorspace = V4L2_COLORSPACE_SRGB,
+ 		.bpp = 16,
++	}, {
++		.code = MEDIA_BUS_FMT_RGB565_1X16,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 16,
+ 	}, {
+ 		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
+ 		.colorspace = V4L2_COLORSPACE_SRGB,
+@@ -2926,6 +2930,7 @@ static int ov5640_set_framefmt(struct ov5640_dev *sensor,
+ 		mux = OV5640_FMT_MUX_YUV422;
+ 		break;
+ 	case MEDIA_BUS_FMT_RGB565_2X8_LE:
++	case MEDIA_BUS_FMT_RGB565_1X16:
+ 		/* RGB565 {g[2:0],b[4:0]},{r[4:0],g[5:3]} */
+ 		fmt = 0x6F;
+ 		mux = OV5640_FMT_MUX_RGB;
 -- 
 2.30.2
 
