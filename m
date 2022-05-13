@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2DBBC43217
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 776A1C433EF
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240043AbiEMOQE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1345013AbiEMOQE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 13 May 2022 10:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245421AbiEMOP5 (ORCPT
+        with ESMTP id S245555AbiEMOP6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 May 2022 10:15:57 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3A558E72
+        Fri, 13 May 2022 10:15:58 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAB25D674
         for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:15:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1652451356; x=1683987356;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=HWw51dYe2oti+v2e5gxk1379tCXu181MW9f9yt/6uis=;
-  b=P2tOMdPwlNtzLT1Qo58doN5fZ6XqDtKHnFeZBQvaSkw8E9peOpk8zaQe
-   hcPUjtilQLRcRiqsl3f15VVPZm1+U+05vgNu2h3hVLqbiHR+VXnRjDdWf
-   JZqf2jew9R65oRY7ubEsK1sLgWOIlm79uJNtQB/1VxnI4speSivATmgUI
-   cCAN6mk3wS4xB8kFThj2Bon4f06vpS3i2izSaMSkjYlz1J2fcoJvbZdXC
-   uoapHyqKL3h1yS1Q0sQIdRrD8fFDCdO2vAzcDil5HaUtfCoyuWCPyrhtV
-   cQ4841jljNlH0zNG8Fb/DQSsFymHWJNzcEDhtywsLB4oom9F1ubKGQV0Q
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="270247761"
+  bh=juFTw9GaQLQ7wEp26nQzuX8T2KLWFEJc/dvT7nhNU1Y=;
+  b=JLsEeCN1pE4HIyesQ9ZsV4u9c8Il3XP9z5VxfiBZAije/G6OeeJD4HkV
+   4ZoAvidj5B2jsibRF7x4T9hORupibKbpeHi+43AG4+XfT50/w6BLWUdPK
+   BGkj07OAbPoN84H/dkexy0eOCURUiD8BKqGpikOAuMMcZbXUMT/jAF083
+   5xrhrdkaKQQtZSRDQyphpWF46ioDH7oMS7S9buoDCsyc7ewEx8kCA/A3t
+   Me8oKdWCNfPdBA7Xszf2n7Zbc+mHHFe/lW5fJ7tZKtIqnyQKoMM7k4I2U
+   Dqp61TxKCsvI4aGi7XOdGOCYkuG+a3e3zzqRPnQ6gpgWpUpQbMH4jfDx3
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="250212478"
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="270247761"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:15:55 -0700
+   d="scan'208";a="250212478"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:15:56 -0700
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="624879214"
+   d="scan'208";a="698498627"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:15:51 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:15:51 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 77FBD21064;
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 98CA5210C1;
         Fri, 13 May 2022 17:15:49 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1npW56-0001fb-RI; Fri, 13 May 2022 17:15:48 +0300
+        id 1npW56-0001fi-VS; Fri, 13 May 2022 17:15:48 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
@@ -55,9 +55,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         jbrunet@baylibre.com, paul.elder@ideasonboard.com,
         eddy.khan@vergesense.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v7 01/28] media: ov5640: Add pixel rate to modes
-Date:   Fri, 13 May 2022 17:15:21 +0300
-Message-Id: <20220513141548.6344-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH v7 03/28] media: ov5640: Add ov5640_is_csi2() function
+Date:   Fri, 13 May 2022 17:15:23 +0300
+Message-Id: <20220513141548.6344-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
 References: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
@@ -69,156 +69,63 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Jacopo Mondi <jacopo@jmondi.org>
 
-Add to each mode supported by the sensor the ideal pixel rate, as
-defined by Table 2.1 in the chip manual.
+Checking if the sensor is used in DVP or MIPI CSI-2 mode is a repeated
+pattern which is about to be repeated more often.
 
-The ideal pixel rate will be used to compute the MIPI CSI-2 clock tree.
+Provide an inline function to shortcut that.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 Tested-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Tested-by: Adam Ford <aford173@gmail.com> #imx8mm-beacon-kit
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ov5640.c | 44 +++++++++++++++++++++++++++++++++++---
- 1 file changed, 41 insertions(+), 3 deletions(-)
+ drivers/media/i2c/ov5640.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index db5a19babe67d..504700984fa01 100644
+index 1f3cb84c284eb..0697c9bf03ed9 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -118,6 +118,29 @@ enum ov5640_frame_rate {
- 	OV5640_NUM_FRAMERATES,
- };
+@@ -294,6 +294,11 @@ static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
+ 			     ctrls.handler)->sd;
+ }
  
-+enum ov5640_pixel_rate_id {
-+	OV5640_PIXEL_RATE_168M,
-+	OV5640_PIXEL_RATE_148M,
-+	OV5640_PIXEL_RATE_124M,
-+	OV5640_PIXEL_RATE_96M,
-+	OV5640_PIXEL_RATE_48M,
-+	OV5640_NUM_PIXEL_RATES,
-+};
++static inline bool ov5640_is_csi2(const struct ov5640_dev *sensor)
++{
++	return sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY;
++}
 +
-+/*
-+ * The chip manual suggests 24/48/96/192 MHz pixel clocks.
-+ *
-+ * 192MHz exceeds the sysclk limits; use 168MHz as maximum pixel rate for
-+ * full resolution mode @15 FPS.
-+ */
-+static const u32 ov5640_pixel_rates[] = {
-+	[OV5640_PIXEL_RATE_168M] = 168000000,
-+	[OV5640_PIXEL_RATE_148M] = 148000000,
-+	[OV5640_PIXEL_RATE_124M] = 124000000,
-+	[OV5640_PIXEL_RATE_96M] = 96000000,
-+	[OV5640_PIXEL_RATE_48M] = 48000000,
-+};
-+
- enum ov5640_format_mux {
- 	OV5640_FMT_MUX_YUV422 = 0,
- 	OV5640_FMT_MUX_RGB,
-@@ -189,6 +212,7 @@ struct reg_value {
- struct ov5640_mode_info {
- 	enum ov5640_mode_id id;
- 	enum ov5640_downsize_mode dn_mode;
-+	enum ov5640_pixel_rate_id pixel_rate;
- 	u32 hact;
- 	u32 htot;
- 	u32 vact;
-@@ -565,7 +589,9 @@ static const struct reg_value ov5640_setting_QSXGA_2592_1944[] = {
+ /*
+  * FIXME: all of these register tables are likely filled with
+  * entries that set the register to their power-on default values,
+@@ -1208,7 +1213,7 @@ static int ov5640_load_regs(struct ov5640_dev *sensor,
+ 		/* remain in power down mode for DVP */
+ 		if (regs->reg_addr == OV5640_REG_SYS_CTRL0 &&
+ 		    val == OV5640_REG_SYS_CTRL0_SW_PWUP &&
+-		    sensor->ep.bus_type != V4L2_MBUS_CSI2_DPHY)
++		    !ov5640_is_csi2(sensor))
+ 			continue;
  
- /* power-on sensor init reg table */
- static const struct ov5640_mode_info ov5640_mode_init_data = {
--	0, SUBSAMPLING, 640, 1896, 480, 984,
-+	0, SUBSAMPLING,
-+	OV5640_PIXEL_RATE_96M,
-+	640, 1896, 480, 984,
- 	ov5640_init_setting_30fps_VGA,
- 	ARRAY_SIZE(ov5640_init_setting_30fps_VGA),
- 	OV5640_30_FPS,
-@@ -574,51 +600,61 @@ static const struct ov5640_mode_info ov5640_mode_init_data = {
- static const struct ov5640_mode_info
- ov5640_mode_data[OV5640_NUM_MODES] = {
- 	{OV5640_MODE_QQVGA_160_120, SUBSAMPLING,
-+	 OV5640_PIXEL_RATE_48M,
- 	 160, 1896, 120, 984,
- 	 ov5640_setting_QQVGA_160_120,
- 	 ARRAY_SIZE(ov5640_setting_QQVGA_160_120),
- 	 OV5640_30_FPS},
- 	{OV5640_MODE_QCIF_176_144, SUBSAMPLING,
-+	 OV5640_PIXEL_RATE_48M,
- 	 176, 1896, 144, 984,
- 	 ov5640_setting_QCIF_176_144,
- 	 ARRAY_SIZE(ov5640_setting_QCIF_176_144),
- 	 OV5640_30_FPS},
- 	{OV5640_MODE_QVGA_320_240, SUBSAMPLING,
-+	 OV5640_PIXEL_RATE_48M,
- 	 320, 1896, 240, 984,
- 	 ov5640_setting_QVGA_320_240,
- 	 ARRAY_SIZE(ov5640_setting_QVGA_320_240),
- 	 OV5640_30_FPS},
- 	{OV5640_MODE_VGA_640_480, SUBSAMPLING,
-+	 OV5640_PIXEL_RATE_48M,
- 	 640, 1896, 480, 1080,
- 	 ov5640_setting_VGA_640_480,
- 	 ARRAY_SIZE(ov5640_setting_VGA_640_480),
- 	 OV5640_60_FPS},
- 	{OV5640_MODE_NTSC_720_480, SUBSAMPLING,
-+	 OV5640_PIXEL_RATE_96M,
- 	 720, 1896, 480, 984,
- 	 ov5640_setting_NTSC_720_480,
- 	 ARRAY_SIZE(ov5640_setting_NTSC_720_480),
- 	OV5640_30_FPS},
- 	{OV5640_MODE_PAL_720_576, SUBSAMPLING,
-+	 OV5640_PIXEL_RATE_96M,
- 	 720, 1896, 576, 984,
- 	 ov5640_setting_PAL_720_576,
- 	 ARRAY_SIZE(ov5640_setting_PAL_720_576),
- 	 OV5640_30_FPS},
- 	{OV5640_MODE_XGA_1024_768, SUBSAMPLING,
-+	 OV5640_PIXEL_RATE_96M,
- 	 1024, 1896, 768, 1080,
- 	 ov5640_setting_XGA_1024_768,
- 	 ARRAY_SIZE(ov5640_setting_XGA_1024_768),
- 	 OV5640_30_FPS},
- 	{OV5640_MODE_720P_1280_720, SUBSAMPLING,
-+	 OV5640_PIXEL_RATE_124M,
- 	 1280, 1892, 720, 740,
- 	 ov5640_setting_720P_1280_720,
- 	 ARRAY_SIZE(ov5640_setting_720P_1280_720),
- 	 OV5640_30_FPS},
- 	{OV5640_MODE_1080P_1920_1080, SCALING,
-+	 OV5640_PIXEL_RATE_148M,
- 	 1920, 2500, 1080, 1120,
- 	 ov5640_setting_1080P_1920_1080,
- 	 ARRAY_SIZE(ov5640_setting_1080P_1920_1080),
- 	 OV5640_30_FPS},
- 	{OV5640_MODE_QSXGA_2592_1944, SCALING,
-+	 OV5640_PIXEL_RATE_168M,
- 	 2592, 2844, 1944, 1968,
- 	 ov5640_setting_QSXGA_2592_1944,
- 	 ARRAY_SIZE(ov5640_setting_QSXGA_2592_1944),
-@@ -2743,6 +2779,7 @@ static const struct v4l2_ctrl_ops ov5640_ctrl_ops = {
+ 		if (mask)
+@@ -1843,7 +1848,7 @@ static int ov5640_set_mode(struct ov5640_dev *sensor)
+ 	 * the same rate than YUV, so we can just use 16 bpp all the time.
+ 	 */
+ 	rate = ov5640_calc_pixel_rate(sensor) * 16;
+-	if (sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY) {
++	if (ov5640_is_csi2(sensor)) {
+ 		rate = rate / sensor->ep.bus.mipi_csi2.num_data_lanes;
+ 		ret = ov5640_set_mipi_pclk(sensor, rate);
+ 	} else {
+@@ -3020,7 +3025,7 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
+ 			sensor->pending_fmt_change = false;
+ 		}
  
- static int ov5640_init_controls(struct ov5640_dev *sensor)
- {
-+	const struct ov5640_mode_info *mode = sensor->current_mode;
- 	const struct v4l2_ctrl_ops *ops = &ov5640_ctrl_ops;
- 	struct ov5640_ctrls *ctrls = &sensor->ctrls;
- 	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
-@@ -2755,8 +2792,9 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
- 
- 	/* Clock related controls */
- 	ctrls->pixel_rate = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_PIXEL_RATE,
--					      0, INT_MAX, 1,
--					      ov5640_calc_pixel_rate(sensor));
-+			      ov5640_pixel_rates[OV5640_NUM_PIXEL_RATES - 1],
-+			      ov5640_pixel_rates[0], 1,
-+			      ov5640_pixel_rates[mode->pixel_rate]);
- 
- 	/* Auto/manual white balance */
- 	ctrls->auto_wb = v4l2_ctrl_new_std(hdl, ops,
+-		if (sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY)
++		if (ov5640_is_csi2(sensor))
+ 			ret = ov5640_set_stream_mipi(sensor, enable);
+ 		else
+ 			ret = ov5640_set_stream_dvp(sensor, enable);
 -- 
 2.30.2
 
