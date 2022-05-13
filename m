@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93BA7C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB36DC433EF
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245219AbiEMOQA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 10:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
+        id S1344144AbiEMOQB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 10:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343542AbiEMOP7 (ORCPT
+        with ESMTP id S245701AbiEMOP6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 May 2022 10:15:59 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA9D87234
+        Fri, 13 May 2022 10:15:58 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2A260D86
         for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:15:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1652451357; x=1683987357;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=g+ult+zNx39H8c9qTbQbdmPczkMeinfKHv2MfKPjnzM=;
-  b=DPf/im1v/+NHa9yXc1o65oxfBm8NaxN0uY2OsDmuEti93DG5WvZQZlxc
-   fHi6fOfp0bVHInclWXOaq5T19OUkjjpyakPyXEY8BSWCLhY3DOidPEcZ2
-   ra1Gizub/H3Lpn2I9wjiJn+FEzPBtRea1OwP1l2bZbPeKsCqZ0dGUBqCa
-   OT/r4rXREAtqEbqHbym6POIpzJrwZBkHHeN/4FfxDlwDHe/de0LfZyOWP
-   pXAvTS9y6PLpsvh/VQ2OpMsoZ08nH/NgtjMRi0mwMj89a091Rv8BHZZEs
-   CJ6bqGFovo64ABPV6dcc1LZ+Idr355JGTpQnGBp+jq6ZouM/1Zc5mXW7w
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="333348104"
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=tSsPHIfBGms9O6gbUej0L9WY/b381WUU7eDZVkDfFSI=;
+  b=TCMHAnZRqsSVyDM9Aa3783ncoRjcAzHVlZ5yDKb+afgfHEVxgkhv4sjv
+   7AgfACXyPWPpCDVjS8LOkeCedvI9BzP04pA5jG9NBR80vnH5HXJwE7Rla
+   L/XE+PNYv/PzjS1FjxTPUR3iFhPNrB20LxOXhUwZM3/hrIHAYv7Rh6tXy
+   grNTTyQ9hm23ijrdfAH+OBnONjTRDO4rVuppDD2pFj8KdqxLGQMyIQxdp
+   TnKhkYGAiGpvlmnPbeTcCaEiWRnLqmV+7TX62VSUh3ALYJNS/J+GeZ44l
+   eciD9fRhCNk3WW0ZRHO0X2mEs5HNPD3fDPyHfaetIfUbNjE1K7uhGfJC+
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="269984479"
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="333348104"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:15:56 -0700
+   d="scan'208";a="269984479"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:15:56 -0700
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="740169526"
+   d="scan'208";a="543273775"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:15:51 -0700
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:15:51 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 6AECD20FA1;
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id A3E5C210D0;
         Fri, 13 May 2022 17:15:49 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1npW56-0001fZ-PE; Fri, 13 May 2022 17:15:48 +0300
+        id 1npW57-0001fk-0g; Fri, 13 May 2022 17:15:49 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
@@ -55,65 +55,109 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         jbrunet@baylibre.com, paul.elder@ideasonboard.com,
         eddy.khan@vergesense.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v7 00/28] media: ov5640: Rework the clock tree programming for MIPI
-Date:   Fri, 13 May 2022 17:15:20 +0300
-Message-Id: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
+Subject: [PATCH v7 04/28] media: ov5640: Associate bpp with formats
+Date:   Fri, 13 May 2022 17:15:24 +0300
+Message-Id: <20220513141548.6344-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
+References: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi folks,
+From: Jacopo Mondi <jacopo@jmondi.org>
 
-Reworked the internals a little so that no compile warnings are produced
-for intermediate patches. In the past we've allowed them but now with
-warnings considered as errors, this is a problem.
+Associate the bit depth to each format supported by the sensor.
 
-The end result is unchanged. Still testing for compilation.
+The bpp will be used to calculate the line length.
 
-I'm still sending this all to list as several patches got changed:
+Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Tested-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/i2c/ov5640.c | 63 +++++++++++++++++++++++++++++---------
+ 1 file changed, 48 insertions(+), 15 deletions(-)
 
-	media: ov5640: Associate bpp with formats
-	media: ov5640: Rework CSI-2 clock tree
-	media: ov5640: Split DVP and CSI-2 formats
-
-Hugues Fruchet (1):
-  media: ov5640: Adjust vblank with s_frame_interval
-
-Jacopo Mondi (27):
-  media: ov5640: Add pixel rate to modes
-  media: ov5640: Re-arrange modes definition
-  media: ov5640: Add ov5640_is_csi2() function
-  media: ov5640: Associate bpp with formats
-  media: ov5640: Add LINK_FREQ control
-  media: ov5640: Update pixel_rate and link_freq
-  media: ov5640: Rework CSI-2 clock tree
-  media: ov5640: Rework timings programming
-  media: ov5640: Fix 720x480 in RGB888 mode
-  media: ov5640: Split DVP and CSI-2 timings
-  media: ov5640: Provide timings accessor
-  media: ov5640: Re-sort per-mode register tables
-  media: ov5640: Remove duplicated mode settings
-  media: ov5640: Remove ov5640_mode_init_data
-  media: ov5640: Add HBLANK control
-  media: ov5640: Add VBLANK control
-  media: ov5640: Remove frame rate check from find_mode()
-  media: ov5640: Change CSI-2 timings to comply with FPS
-  media: ov5640: Implement init_cfg
-  media: ov5640: Implement get_selection
-  media: ov5640: Register device properties
-  media: ov5640: Add RGB565_1X16 format
-  media: ov5640: Add BGR888 format
-  media: ov5640: Restrict sizes to mbus code
-  media: ov5640: Adjust format to bpp in s_fmt
-  media: ov5640: Split DVP and CSI-2 formats
-  media: ov5640: Move format mux config in format
-
- drivers/media/i2c/ov5640.c | 1650 ++++++++++++++++++++++++++----------
- 1 file changed, 1188 insertions(+), 462 deletions(-)
-
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index 0697c9bf03ed9..297ed135c4768 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -150,23 +150,56 @@ enum ov5640_format_mux {
+ 	OV5640_FMT_MUX_RAW_CIP,
+ };
+ 
+-struct ov5640_pixfmt {
++static const struct ov5640_pixfmt {
+ 	u32 code;
+ 	u32 colorspace;
+-};
+-
+-static const struct ov5640_pixfmt ov5640_formats[] = {
+-	{ MEDIA_BUS_FMT_JPEG_1X8, V4L2_COLORSPACE_JPEG, },
+-	{ MEDIA_BUS_FMT_UYVY8_2X8, V4L2_COLORSPACE_SRGB, },
+-	{ MEDIA_BUS_FMT_UYVY8_1X16, V4L2_COLORSPACE_SRGB, },
+-	{ MEDIA_BUS_FMT_YUYV8_2X8, V4L2_COLORSPACE_SRGB, },
+-	{ MEDIA_BUS_FMT_YUYV8_1X16, V4L2_COLORSPACE_SRGB, },
+-	{ MEDIA_BUS_FMT_RGB565_2X8_LE, V4L2_COLORSPACE_SRGB, },
+-	{ MEDIA_BUS_FMT_RGB565_2X8_BE, V4L2_COLORSPACE_SRGB, },
+-	{ MEDIA_BUS_FMT_SBGGR8_1X8, V4L2_COLORSPACE_SRGB, },
+-	{ MEDIA_BUS_FMT_SGBRG8_1X8, V4L2_COLORSPACE_SRGB, },
+-	{ MEDIA_BUS_FMT_SGRBG8_1X8, V4L2_COLORSPACE_SRGB, },
+-	{ MEDIA_BUS_FMT_SRGGB8_1X8, V4L2_COLORSPACE_SRGB, },
++	u8 bpp;
++} ov5640_formats[] = {
++	{
++		.code = MEDIA_BUS_FMT_JPEG_1X8,
++		.colorspace = V4L2_COLORSPACE_JPEG,
++		.bpp = 16,
++	}, {
++		.code = MEDIA_BUS_FMT_UYVY8_2X8,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 16,
++	}, {
++		.code = MEDIA_BUS_FMT_UYVY8_1X16,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 16,
++	}, {
++		.code = MEDIA_BUS_FMT_YUYV8_2X8,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 16,
++	}, {
++		.code = MEDIA_BUS_FMT_YUYV8_1X16,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 16,
++	}, {
++		.code = MEDIA_BUS_FMT_RGB565_2X8_LE,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 16,
++	}, {
++		.code = MEDIA_BUS_FMT_RGB565_2X8_BE,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 16,
++	}, {
++		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 8,
++	}, {
++		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 8
++	}, {
++		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 8,
++	}, {
++		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 8,
++	},
+ };
+ 
+ /*
 -- 
 2.30.2
 
