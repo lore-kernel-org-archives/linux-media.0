@@ -2,88 +2,102 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7F11C433FE
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 20:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23201C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 21:26:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384440AbiEMUcH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 16:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
+        id S232968AbiEMV0A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 17:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384461AbiEMUas (ORCPT
+        with ESMTP id S1384670AbiEMVZ4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 May 2022 16:30:48 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBD37355B;
-        Fri, 13 May 2022 13:30:07 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 7FC571F46483
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652473795;
-        bh=HEETDTFaV8Jr4FyaHgjigxD+fRrzRsYiKM7mEOGoNmg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DRcfnh3oM2e+iY5OVgfBPViyB1R8HzRN7EGwmsv0HiWeiKn8/prlTyovriPq6aAGi
-         YelkJEHGWZzlu8MFXOSCTG+7/BkAjSe4JxuTh7oqVNvOG+WguOdn7SRa+eNFe9loh7
-         C9TlKiLRKEjVZgR7D6mqqyxBOQOlWBcZ49QucyW8xAet+9K4cCJfTmgKWC26E32uoN
-         S7QrSxgu3duuuaGPweLKsq9EJqjEKT/g0BY98q5IKNH75Ka2UPQ///34Z222qALPg2
-         HhyODvB2NtFiJ/ratDO2d5/qXSl8JFIWZXZjgahYXcnvlEqD6mpgFmnfh4pPCmVEYB
-         kQnmBKFOn7gHw==
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     nicolas@ndufresne.ca, Jonas Karlman <jonas@kwiboo.se>,
-        linux-media@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 13/20] media: rkvdec: h264: Fix reference frame_num wrap for second field
-Date:   Fri, 13 May 2022 16:29:15 -0400
-Message-Id: <20220513202922.13846-14-nicolas.dufresne@collabora.com>
-X-Mailer: git-send-email 2.34.3
-In-Reply-To: <20220513202922.13846-1-nicolas.dufresne@collabora.com>
-References: <20220513202922.13846-1-nicolas.dufresne@collabora.com>
+        Fri, 13 May 2022 17:25:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA71FE3
+        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 14:25:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF9E1B831D8
+        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 21:25:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD1AAC34100;
+        Fri, 13 May 2022 21:25:49 +0000 (UTC)
+Message-ID: <52f2537f-2151-f2cf-dcf4-949849812f8a@xs4all.nl>
+Date:   Fri, 13 May 2022 23:25:47 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: en-US
+To:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>, jonas@kwiboo.se
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.19] H.264 Field Decoding Support for Frame-based
+ Decoders
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jonas Karlman <jonas@kwiboo.se>
+This PR is of the v5 patch series "H.264 Field Decoding Support for Frame-based Decoders"
 
-When decoding the second field in a complementary field pair the second
-field is sharing the same frame_num with the first field.
+Regards,
 
-Currently the frame_num for the first field is wrapped when it matches the
-field being decoded, this caused issues decoding the second field in a
-complementary field pair.
+	Hans
 
-Fix this by using inclusive comparison: 'less than or equal'.
+The following changes since commit 4a18d21649f4f34e79a16c635e5df48cebb82e1f:
 
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/staging/media/rkvdec/rkvdec-h264.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  media: h264: Avoid wrapping long_term_frame_idx (2022-05-13 14:59:54 +0200)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
-index fb41e2fd8359..57821ee3b213 100644
---- a/drivers/staging/media/rkvdec/rkvdec-h264.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
-@@ -782,7 +782,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
- 			continue;
- 
- 		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM ||
--		    dpb[i].frame_num < dec_params->frame_num) {
-+		    dpb[i].frame_num <= dec_params->frame_num) {
- 			p[i] = dpb[i].frame_num;
- 			continue;
- 		}
--- 
-2.34.3
+are available in the Git repository at:
 
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.19f
+
+for you to fetch changes up to fcd1effef6706fd66e2400601ecb52899d5f51e9:
+
+  media: hantro: Enable HOLD_CAPTURE_BUF for H.264 (2022-05-13 22:57:27 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Jonas Karlman (5):
+      media: rkvdec: h264: Fix bit depth wrap in pps packet
+      media: rkvdec: h264: Validate and use pic width and height in mbs
+      media: rkvdec: h264: Fix reference frame_num wrap for second field
+      media: rkvdec: Ensure decoded resolution fit coded resolution
+      media: hantro: h264: Make dpb entry management more robust
+
+Nicolas Dufresne (15):
+      media: h264: Use v4l2_h264_reference for reflist
+      media: h264: Increase reference lists size to 32
+      media: h264: Store current picture fields
+      media: h264: Store all fields into the unordered list
+      media: v4l2: Trace calculated p/b0/b1 initial reflist
+      media: h264: Sort p/b reflist using frame_num
+      media: v4l2: Reorder field reflist
+      media: rkvdec: Stop overclocking the decoder
+      media: rkvdec: h264: Fix dpb_valid implementation
+      media: rkvdec: Move H264 SPS validation in rkvdec-h264
+      media: rkvdec-h264: Add field decoding support
+      media: rkvdec: Enable capture buffer holding for H264
+      media: hantro: Stop using H.264 parameter pic_num
+      media: hantro: Add H.264 field decoding support
+      media: hantro: Enable HOLD_CAPTURE_BUF for H.264
+
+ drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c   |  21 +++-
+ drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.h   |  11 +-
+ drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c       |  15 ++-
+ drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c |  27 +++--
+ drivers/media/platform/nvidia/tegra-vde/h264.c                       |  19 ++--
+ drivers/media/v4l2-core/v4l2-h264.c                                  | 271 ++++++++++++++++++++++++++++++++++++--------
+ drivers/staging/media/hantro/hantro_g1_h264_dec.c                    |  38 +++----
+ drivers/staging/media/hantro/hantro_h264.c                           | 134 ++++++++++++++++++----
+ drivers/staging/media/hantro/hantro_hw.h                             |   8 +-
+ drivers/staging/media/hantro/hantro_v4l2.c                           |  25 ++++
+ drivers/staging/media/hantro/rockchip_vpu2_hw_h264_dec.c             |  98 ++++++++--------
+ drivers/staging/media/rkvdec/rkvdec-h264.c                           | 157 ++++++++++++++++++-------
+ drivers/staging/media/rkvdec/rkvdec.c                                |  35 ++----
+ drivers/staging/media/rkvdec/rkvdec.h                                |   2 +
+ include/media/v4l2-h264.h                                            |  31 ++---
+ 15 files changed, 646 insertions(+), 246 deletions(-)
