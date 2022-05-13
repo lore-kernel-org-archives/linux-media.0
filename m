@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB36DC433EF
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08814C4332F
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344144AbiEMOQB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 10:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
+        id S1344588AbiEMOQC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 10:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245701AbiEMOP6 (ORCPT
+        with ESMTP id S245372AbiEMOP5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 May 2022 10:15:58 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2A260D86
-        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:15:57 -0700 (PDT)
+        Fri, 13 May 2022 10:15:57 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935175AEC1
+        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:15:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652451357; x=1683987357;
+  t=1652451356; x=1683987356;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tSsPHIfBGms9O6gbUej0L9WY/b381WUU7eDZVkDfFSI=;
-  b=TCMHAnZRqsSVyDM9Aa3783ncoRjcAzHVlZ5yDKb+afgfHEVxgkhv4sjv
-   7AgfACXyPWPpCDVjS8LOkeCedvI9BzP04pA5jG9NBR80vnH5HXJwE7Rla
-   L/XE+PNYv/PzjS1FjxTPUR3iFhPNrB20LxOXhUwZM3/hrIHAYv7Rh6tXy
-   grNTTyQ9hm23ijrdfAH+OBnONjTRDO4rVuppDD2pFj8KdqxLGQMyIQxdp
-   TnKhkYGAiGpvlmnPbeTcCaEiWRnLqmV+7TX62VSUh3ALYJNS/J+GeZ44l
-   eciD9fRhCNk3WW0ZRHO0X2mEs5HNPD3fDPyHfaetIfUbNjE1K7uhGfJC+
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="269984479"
+  bh=y87xKlF2bGZR3JgANR5fGCvkuS04m4TzwdN4ZJm/8eM=;
+  b=Bhabd684vbdnfZcuK3WQPOHCtxRTPHmc7+putuJ3zlQ0Sh2LqFC3MKRD
+   iewh6N3RClzfOD5PptqZd1MgWfau2DtgVvrq9jKYdrEZgI1tmK8HCCgJP
+   2t+kzoWhlZPnpmsUKx+Ru1hL/QMy174LU6ItuB+t0hX3P4nmRkdVWHy1Z
+   5Hq5J0Bb4Jy/8tR7LKoPVhdeMr+ZL9TISAzhbVvaw67Z8t1T0cfEykEVD
+   fw4w4hvpnuYfr+bLWYsC9ZOYYoQP2xghha1hhb8S1IF/ytkqNBkuuILZN
+   /izHzYZH0wfE2J1Yh0rOQa0g5JOgHEH6+9ds/2BI2Xau+Dxk3WQumasZs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="333348103"
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="269984479"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:15:56 -0700
+   d="scan'208";a="333348103"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:15:56 -0700
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="543273775"
+   d="scan'208";a="521432006"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:15:51 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:15:51 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id A3E5C210D0;
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 859F4210B0;
         Fri, 13 May 2022 17:15:49 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1npW57-0001fk-0g; Fri, 13 May 2022 17:15:49 +0300
+        id 1npW56-0001fe-Sk; Fri, 13 May 2022 17:15:48 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
@@ -55,9 +55,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         jbrunet@baylibre.com, paul.elder@ideasonboard.com,
         eddy.khan@vergesense.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v7 04/28] media: ov5640: Associate bpp with formats
-Date:   Fri, 13 May 2022 17:15:24 +0300
-Message-Id: <20220513141548.6344-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH v7 02/28] media: ov5640: Re-arrange modes definition
+Date:   Fri, 13 May 2022 17:15:22 +0300
+Message-Id: <20220513141548.6344-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
 References: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
@@ -69,95 +69,173 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Jacopo Mondi <jacopo@jmondi.org>
 
-Associate the bit depth to each format supported by the sensor.
+The array of supported modes is close to unreadable.
+Re-arrange it giving it some room to breath.
 
-The bpp will be used to calculate the line length.
+Cosmetic change only.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 Tested-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+[Sakari Ailus: Fixed subject]
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ov5640.c | 63 +++++++++++++++++++++++++++++---------
- 1 file changed, 48 insertions(+), 15 deletions(-)
+ drivers/media/i2c/ov5640.c | 141 +++++++++++++++++++++----------------
+ 1 file changed, 81 insertions(+), 60 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 0697c9bf03ed9..297ed135c4768 100644
+index 504700984fa01..1f3cb84c284eb 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -150,23 +150,56 @@ enum ov5640_format_mux {
- 	OV5640_FMT_MUX_RAW_CIP,
- };
+@@ -599,66 +599,87 @@ static const struct ov5640_mode_info ov5640_mode_init_data = {
  
--struct ov5640_pixfmt {
-+static const struct ov5640_pixfmt {
- 	u32 code;
- 	u32 colorspace;
--};
--
--static const struct ov5640_pixfmt ov5640_formats[] = {
--	{ MEDIA_BUS_FMT_JPEG_1X8, V4L2_COLORSPACE_JPEG, },
--	{ MEDIA_BUS_FMT_UYVY8_2X8, V4L2_COLORSPACE_SRGB, },
--	{ MEDIA_BUS_FMT_UYVY8_1X16, V4L2_COLORSPACE_SRGB, },
--	{ MEDIA_BUS_FMT_YUYV8_2X8, V4L2_COLORSPACE_SRGB, },
--	{ MEDIA_BUS_FMT_YUYV8_1X16, V4L2_COLORSPACE_SRGB, },
--	{ MEDIA_BUS_FMT_RGB565_2X8_LE, V4L2_COLORSPACE_SRGB, },
--	{ MEDIA_BUS_FMT_RGB565_2X8_BE, V4L2_COLORSPACE_SRGB, },
--	{ MEDIA_BUS_FMT_SBGGR8_1X8, V4L2_COLORSPACE_SRGB, },
--	{ MEDIA_BUS_FMT_SGBRG8_1X8, V4L2_COLORSPACE_SRGB, },
--	{ MEDIA_BUS_FMT_SGRBG8_1X8, V4L2_COLORSPACE_SRGB, },
--	{ MEDIA_BUS_FMT_SRGGB8_1X8, V4L2_COLORSPACE_SRGB, },
-+	u8 bpp;
-+} ov5640_formats[] = {
+ static const struct ov5640_mode_info
+ ov5640_mode_data[OV5640_NUM_MODES] = {
+-	{OV5640_MODE_QQVGA_160_120, SUBSAMPLING,
+-	 OV5640_PIXEL_RATE_48M,
+-	 160, 1896, 120, 984,
+-	 ov5640_setting_QQVGA_160_120,
+-	 ARRAY_SIZE(ov5640_setting_QQVGA_160_120),
+-	 OV5640_30_FPS},
+-	{OV5640_MODE_QCIF_176_144, SUBSAMPLING,
+-	 OV5640_PIXEL_RATE_48M,
+-	 176, 1896, 144, 984,
+-	 ov5640_setting_QCIF_176_144,
+-	 ARRAY_SIZE(ov5640_setting_QCIF_176_144),
+-	 OV5640_30_FPS},
+-	{OV5640_MODE_QVGA_320_240, SUBSAMPLING,
+-	 OV5640_PIXEL_RATE_48M,
+-	 320, 1896, 240, 984,
+-	 ov5640_setting_QVGA_320_240,
+-	 ARRAY_SIZE(ov5640_setting_QVGA_320_240),
+-	 OV5640_30_FPS},
+-	{OV5640_MODE_VGA_640_480, SUBSAMPLING,
+-	 OV5640_PIXEL_RATE_48M,
+-	 640, 1896, 480, 1080,
+-	 ov5640_setting_VGA_640_480,
+-	 ARRAY_SIZE(ov5640_setting_VGA_640_480),
+-	 OV5640_60_FPS},
+-	{OV5640_MODE_NTSC_720_480, SUBSAMPLING,
+-	 OV5640_PIXEL_RATE_96M,
+-	 720, 1896, 480, 984,
+-	 ov5640_setting_NTSC_720_480,
+-	 ARRAY_SIZE(ov5640_setting_NTSC_720_480),
+-	OV5640_30_FPS},
+-	{OV5640_MODE_PAL_720_576, SUBSAMPLING,
+-	 OV5640_PIXEL_RATE_96M,
+-	 720, 1896, 576, 984,
+-	 ov5640_setting_PAL_720_576,
+-	 ARRAY_SIZE(ov5640_setting_PAL_720_576),
+-	 OV5640_30_FPS},
+-	{OV5640_MODE_XGA_1024_768, SUBSAMPLING,
+-	 OV5640_PIXEL_RATE_96M,
+-	 1024, 1896, 768, 1080,
+-	 ov5640_setting_XGA_1024_768,
+-	 ARRAY_SIZE(ov5640_setting_XGA_1024_768),
+-	 OV5640_30_FPS},
+-	{OV5640_MODE_720P_1280_720, SUBSAMPLING,
+-	 OV5640_PIXEL_RATE_124M,
+-	 1280, 1892, 720, 740,
+-	 ov5640_setting_720P_1280_720,
+-	 ARRAY_SIZE(ov5640_setting_720P_1280_720),
+-	 OV5640_30_FPS},
+-	{OV5640_MODE_1080P_1920_1080, SCALING,
+-	 OV5640_PIXEL_RATE_148M,
+-	 1920, 2500, 1080, 1120,
+-	 ov5640_setting_1080P_1920_1080,
+-	 ARRAY_SIZE(ov5640_setting_1080P_1920_1080),
+-	 OV5640_30_FPS},
+-	{OV5640_MODE_QSXGA_2592_1944, SCALING,
+-	 OV5640_PIXEL_RATE_168M,
+-	 2592, 2844, 1944, 1968,
+-	 ov5640_setting_QSXGA_2592_1944,
+-	 ARRAY_SIZE(ov5640_setting_QSXGA_2592_1944),
+-	 OV5640_15_FPS},
 +	{
-+		.code = MEDIA_BUS_FMT_JPEG_1X8,
-+		.colorspace = V4L2_COLORSPACE_JPEG,
-+		.bpp = 16,
++		/* 160x120 */
++		OV5640_MODE_QQVGA_160_120, SUBSAMPLING,
++		OV5640_PIXEL_RATE_48M,
++		160, 1896, 120, 984,
++		ov5640_setting_QQVGA_160_120,
++		ARRAY_SIZE(ov5640_setting_QQVGA_160_120),
++		OV5640_30_FPS
 +	}, {
-+		.code = MEDIA_BUS_FMT_UYVY8_2X8,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+		.bpp = 16,
++		/* 176x144 */
++		OV5640_MODE_QCIF_176_144, SUBSAMPLING,
++		OV5640_PIXEL_RATE_48M,
++		176, 1896, 144, 984,
++		ov5640_setting_QCIF_176_144,
++		ARRAY_SIZE(ov5640_setting_QCIF_176_144),
++		OV5640_30_FPS
 +	}, {
-+		.code = MEDIA_BUS_FMT_UYVY8_1X16,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+		.bpp = 16,
++		/* 320x240 */
++		OV5640_MODE_QVGA_320_240, SUBSAMPLING,
++		OV5640_PIXEL_RATE_48M,
++		320, 1896, 240, 984,
++		ov5640_setting_QVGA_320_240,
++		ARRAY_SIZE(ov5640_setting_QVGA_320_240),
++		OV5640_30_FPS
 +	}, {
-+		.code = MEDIA_BUS_FMT_YUYV8_2X8,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+		.bpp = 16,
++		/* 640x480 */
++		OV5640_MODE_VGA_640_480, SUBSAMPLING,
++		OV5640_PIXEL_RATE_48M,
++		640, 1896, 480, 1080,
++		ov5640_setting_VGA_640_480,
++		ARRAY_SIZE(ov5640_setting_VGA_640_480),
++		OV5640_60_FPS
 +	}, {
-+		.code = MEDIA_BUS_FMT_YUYV8_1X16,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+		.bpp = 16,
++		/* 720x480 */
++		OV5640_MODE_NTSC_720_480, SUBSAMPLING,
++		OV5640_PIXEL_RATE_96M,
++		720, 1896, 480, 984,
++		ov5640_setting_NTSC_720_480,
++		ARRAY_SIZE(ov5640_setting_NTSC_720_480),
++		OV5640_30_FPS
 +	}, {
-+		.code = MEDIA_BUS_FMT_RGB565_2X8_LE,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+		.bpp = 16,
++		/* 720x576 */
++		OV5640_MODE_PAL_720_576, SUBSAMPLING,
++		OV5640_PIXEL_RATE_96M,
++		720, 1896, 576, 984,
++		ov5640_setting_PAL_720_576,
++		ARRAY_SIZE(ov5640_setting_PAL_720_576),
++		OV5640_30_FPS
 +	}, {
-+		.code = MEDIA_BUS_FMT_RGB565_2X8_BE,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+		.bpp = 16,
++		/* 1024x768 */
++		OV5640_MODE_XGA_1024_768, SUBSAMPLING,
++		OV5640_PIXEL_RATE_96M,
++		1024, 1896, 768, 1080,
++		ov5640_setting_XGA_1024_768,
++		ARRAY_SIZE(ov5640_setting_XGA_1024_768),
++		OV5640_30_FPS
 +	}, {
-+		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+		.bpp = 8,
++		/* 1280x720 */
++		OV5640_MODE_720P_1280_720, SUBSAMPLING,
++		OV5640_PIXEL_RATE_124M,
++		1280, 1892, 720, 740,
++		ov5640_setting_720P_1280_720,
++		ARRAY_SIZE(ov5640_setting_720P_1280_720),
++		OV5640_30_FPS
 +	}, {
-+		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+		.bpp = 8
++		/* 1920x1080 */
++		OV5640_MODE_1080P_1920_1080, SCALING,
++		OV5640_PIXEL_RATE_148M,
++		1920, 2500, 1080, 1120,
++		ov5640_setting_1080P_1920_1080,
++		ARRAY_SIZE(ov5640_setting_1080P_1920_1080),
++		OV5640_30_FPS
 +	}, {
-+		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+		.bpp = 8,
-+	}, {
-+		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+		.bpp = 8,
++		/* 2592x1944 */
++		OV5640_MODE_QSXGA_2592_1944, SCALING,
++		OV5640_PIXEL_RATE_168M,
++		2592, 2844, 1944, 1968,
++		ov5640_setting_QSXGA_2592_1944,
++		ARRAY_SIZE(ov5640_setting_QSXGA_2592_1944),
++		OV5640_15_FPS
 +	},
  };
  
- /*
+ static int ov5640_init_slave_id(struct ov5640_dev *sensor)
 -- 
 2.30.2
 
