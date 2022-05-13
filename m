@@ -2,41 +2,46 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FA56C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 20:30:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B65FCC433EF
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 20:30:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384492AbiEMUav (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 16:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
+        id S1384506AbiEMUay (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 16:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384421AbiEMUab (ORCPT
+        with ESMTP id S1384338AbiEMUaq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 May 2022 16:30:31 -0400
+        Fri, 13 May 2022 16:30:46 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BCED90;
-        Fri, 13 May 2022 13:29:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931FE77F3B;
+        Fri, 13 May 2022 13:29:54 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id CFA201F46480
+        with ESMTPSA id A58E51F46488
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652473782;
-        bh=tXo3Paam8CGdkIwbogEikERx9TE3LC/tz67H0npGqGM=;
+        s=mail; t=1652473786;
+        bh=1LAjnriWsrClpu2BgpAHhARrkeNr44Bjsa5xlaJTDIY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TaPp+REA2++CtiLsq7gpfbs2LtRDeSV4+/jRSV6ELKHsB1TmsE/8u88f9262bEPvZ
-         mJblGCQr45p3P2Vb0kQ0/q+3tuHwo7QfscquSVaRTxDIedZb4BQvK0b1dQYAp8DQiA
-         JSTcTzhF5r5EVPro1KZG3DiRFV0iQioMxiJwRkArFHhgMbpA6oW4FhWcXBS9o1fNAn
-         FtOdKv+TkIL5vNBf7mRK4mc/MVCJWPb2n2+BNiUCptTNV/mYH/C78VZoHWoa23Nkwm
-         83Ks3T/ZaT0wD//eH2kje/rO04r6vPXAlP+m8ktKT66eTw3ktTYviOkjmoGrjABdzk
-         bcwq2D28rAdPQ==
+        b=S9GVx/CinlhOPZTJhlPPqc9iQ3pJ3w1oZzG7vPL/qiObuNyYBcK7jqoDSiHOmgEMv
+         X4tKhkxSloNyDOnCwVSQcb2c47QQAMKo3K3PTTc/2Vqn/gCZty4Aj0dUkPP9P27YFB
+         4Lymgjfmjflj16uU7bzI1HCoCi5SWlpMaFsmExGaCwd8sRANSke7ugB521OvZcdKi8
+         +6K95qbX7G6Msxfan7hcIuxdSf/sD4JEw/5MO8sRcTkOPUaiYZ3IdV8MOOWhcFFQBT
+         IsOp/nSI/alhfJu0uxQI1v2zK0gORVX4IqlRn1A0p0ZgFUYUX2wiixlUI0UEG7DMsE
+         6u9EGtMgdFemg==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Boris Brezillon <boris.brezillon@collabora.com>
 Cc:     nicolas@ndufresne.ca, linux-media@vger.kernel.org,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 06/20] media: h264: Sort p/b reflist using frame_num
-Date:   Fri, 13 May 2022 16:29:08 -0400
-Message-Id: <20220513202922.13846-7-nicolas.dufresne@collabora.com>
+Subject: [PATCH v5 08/20] media: rkvdec: Stop overclocking the decoder
+Date:   Fri, 13 May 2022 16:29:10 -0400
+Message-Id: <20220513202922.13846-9-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.3
 In-Reply-To: <20220513202922.13846-1-nicolas.dufresne@collabora.com>
 References: <20220513202922.13846-1-nicolas.dufresne@collabora.com>
@@ -46,106 +51,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In the reference list builder, frame_num refers to FrameNumWrap
-in the spec, which is the same as the pic_num for frame decoding.
-The same applies for long_term_pic_num and long_term_frame_idx.
+While this overclock hack seems to work on some implementations
+(some ChromeBooks, RockPi4) it also causes instability on other
+implementations (notably LibreComputer Renegade, but there were more
+reports in the LibreELEC project, where this has been removed). While
+performance is indeed affected (tested with GStreamer), 4K playback
+still works as long as you don't operate in lock step and keep at
+least 1 frame ahead of time in the decode queue.
 
-Sort all type of references by frame_num so the sort can be reused
-for fields reflist were the sorting is done using frame_num instead.
-In short, pic_num is never actually used for building reference
-lists.
+After discussion with ChromeOS members, it would seem that their
+implementation indeed used to synchronously decode each frame, so
+this hack was simply compensating for their code being less
+efficient. In my opinion, this hack should not have been included
+upstream.
 
+Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/v4l2-core/v4l2-h264.c | 23 +++++++++++++----------
- include/media/v4l2-h264.h           |  2 --
- 2 files changed, 13 insertions(+), 12 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-h264.c b/drivers/media/v4l2-core/v4l2-h264.c
-index 853f54e0fe67..fe215035d9e8 100644
---- a/drivers/media/v4l2-core/v4l2-h264.c
-+++ b/drivers/media/v4l2-core/v4l2-h264.c
-@@ -56,7 +56,6 @@ v4l2_h264_init_reflist_builder(struct v4l2_h264_reflist_builder *b,
- 		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
- 			continue;
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index c0cf3488f970..2df8cf4883e2 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -1027,12 +1027,6 @@ static int rkvdec_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
  
--		b->refs[i].pic_num = dpb[i].pic_num;
- 		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
- 			b->refs[i].longterm = true;
- 
-@@ -145,15 +144,19 @@ static int v4l2_h264_p_ref_list_cmp(const void *ptra, const void *ptrb,
- 	}
- 
- 	/*
--	 * Short term pics in descending pic num order, long term ones in
--	 * ascending order.
-+	 * For frames, short term pics are in descending pic num order and long
-+	 * term ones in ascending order. For fields, the same direction is used
-+	 * but with frame_num (wrapped). For frames, the value of pic_num and
-+	 * frame_num are the same (see formula (8-28) and (8-29)). For this
-+	 * reason we can use frame_num only and share this function between
-+	 * frames and fields reflist.
- 	 */
- 	if (!builder->refs[idxa].longterm)
- 		return builder->refs[idxb].frame_num <
- 		       builder->refs[idxa].frame_num ?
- 		       -1 : 1;
- 
--	return builder->refs[idxa].pic_num < builder->refs[idxb].pic_num ?
-+	return builder->refs[idxa].frame_num < builder->refs[idxb].frame_num ?
- 	       -1 : 1;
- }
- 
-@@ -179,10 +182,10 @@ static int v4l2_h264_b0_ref_list_cmp(const void *ptra, const void *ptrb,
- 			return 1;
- 	}
- 
--	/* Long term pics in ascending pic num order. */
-+	/* Long term pics in ascending frame num order. */
- 	if (builder->refs[idxa].longterm)
--		return builder->refs[idxa].pic_num <
--		       builder->refs[idxb].pic_num ?
-+		return builder->refs[idxa].frame_num <
-+		       builder->refs[idxb].frame_num ?
- 		       -1 : 1;
- 
- 	poca = v4l2_h264_get_poc(builder, ptra);
-@@ -224,10 +227,10 @@ static int v4l2_h264_b1_ref_list_cmp(const void *ptra, const void *ptrb,
- 			return 1;
- 	}
- 
--	/* Long term pics in ascending pic num order. */
-+	/* Long term pics in ascending frame num order. */
- 	if (builder->refs[idxa].longterm)
--		return builder->refs[idxa].pic_num <
--		       builder->refs[idxb].pic_num ?
-+		return builder->refs[idxa].frame_num <
-+		       builder->refs[idxb].frame_num ?
- 		       -1 : 1;
- 
- 	poca = v4l2_h264_get_poc(builder, ptra);
-diff --git a/include/media/v4l2-h264.h b/include/media/v4l2-h264.h
-index 4cef717b3f18..0d9eaa956123 100644
---- a/include/media/v4l2-h264.h
-+++ b/include/media/v4l2-h264.h
-@@ -18,7 +18,6 @@
-  * @refs.top_field_order_cnt: top field order count
-  * @refs.bottom_field_order_cnt: bottom field order count
-  * @refs.frame_num: reference frame number
-- * @refs.pic_num: reference picture number
-  * @refs.longterm: set to true for a long term reference
-  * @refs: array of references
-  * @cur_pic_order_count: picture order count of the frame being decoded
-@@ -36,7 +35,6 @@ struct v4l2_h264_reflist_builder {
- 		s32 top_field_order_cnt;
- 		s32 bottom_field_order_cnt;
- 		int frame_num;
--		u32 pic_num;
- 		u16 longterm : 1;
- 	} refs[V4L2_H264_NUM_DPB_ENTRIES];
- 
+-	/*
+-	 * Bump ACLK to max. possible freq. (500 MHz) to improve performance
+-	 * When 4k video playback.
+-	 */
+-	clk_set_rate(rkvdec->clocks[0].clk, 500 * 1000 * 1000);
+-
+ 	rkvdec->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(rkvdec->regs))
+ 		return PTR_ERR(rkvdec->regs);
 -- 
 2.34.3
 
