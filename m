@@ -2,147 +2,184 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92DA8C4332F
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 13:49:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41CECC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:14:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233524AbiEMNjH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 09:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
+        id S238781AbiEMOO3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 10:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380940AbiEMNd1 (ORCPT
+        with ESMTP id S233434AbiEMOO0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 May 2022 09:33:27 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2100.outbound.protection.outlook.com [40.107.117.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA3BFD1C;
-        Fri, 13 May 2022 06:33:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fbBQu4XcMN2/hRr7n8hnq8wKXgainasfy/V0Tj6POtXEjN8lVWCxo3Wd36N4fRXxe6y7B8gtGawvSBBXy9bt1tAwV5pfQuRmcTxMkEKrI8AuiTyPsSro7Wae1uTGM4lB6f2Er2ETgovxRDCyoms2mGu4XyJvWvxib4aC5icuqi0ZkWvFx+eGU/St1o9xxTlZEiyqKTPDs0PIjPZE4Pd8BoNoaunoXLbaaQneDM9ene2BQHQjMSmLoAkP7Yc8zXhd/q6r/ODNRALkQKYTfkXmPzOrUTU/L9zSLdrQtyuuDBR2rrWNoSvqu0Svzm50hf+/bsp1aDN2s92Ol/qjhuMsNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5O0tp7OZ3IOWiKP4vvKe0eOdrrh7OQcaxCHu7wZpPOA=;
- b=UnR72GFOU4nJ0QU6iMSsx3aHBg2WOu8kPelMfbxx/Q1KsKZ6G8qsr06EFcKt0z7CiWFyuJO6wnec4pV055XJci12sYXKT+pcncj8DzXL2N6uQaQ696cs9moxyKqJa+3gDIF8X8y7ZXuMxzYRacyZZFPtLJO6Lp1aFN7M0o0es2V9h1+KFQXzPSD2YAmjHc33vdlsGM1/OiohZEKmS46ZVW77TUNVtP5AQRo7kzaLrP/dCVWYtSZ5CRS2c+KrUE4siqnPNAh8HWA32Apxp3FhK5XJT5Kbsul+St1aW5cMimrkgZQRiv2pCmrcIQwG25KX6R53tuCuqPZ5+TbyBpYDgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5O0tp7OZ3IOWiKP4vvKe0eOdrrh7OQcaxCHu7wZpPOA=;
- b=XKEzqnmPuNPA8042snDOcJIhr1hLlySSWlErAdyJvnFlSF70W6AGXqtz8GiEzdqzCkETklhpwGLJnPNlXVSzNAiYJFR/UBB5z2E+P6s8rSfybpHcwHHpAHKXJUORt8MOA5bxcpRBRb6mWDzLGA6P4SYpJGHTGZ94smML/HfJ+oQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
- by HK0PR06MB2290.apcprd06.prod.outlook.com (2603:1096:203:4f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21; Fri, 13 May
- 2022 13:33:21 +0000
-Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
- ([fe80::88e1:dc04:6851:ad08]) by HK2PR06MB3492.apcprd06.prod.outlook.com
- ([fe80::88e1:dc04:6851:ad08%7]) with mapi id 15.20.5227.027; Fri, 13 May 2022
- 13:33:21 +0000
-From:   Guo Zhengkui <guozhengkui@vivo.com>
-To:     Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S5P
-        SERIES JPEG CODEC SUPPORT),
-        linux-media@vger.kernel.org (open list:ARM/SAMSUNG S5P SERIES JPEG
-        CODEC SUPPORT), linux-kernel@vger.kernel.org (open list)
-Cc:     zhengkui_guo@outlook.com, Guo Zhengkui <guozhengkui@vivo.com>
-Subject: [PATCH] media: platform: replace ternary operator with max()
-Date:   Fri, 13 May 2022 21:32:55 +0800
-Message-Id: <20220513133255.58600-1-guozhengkui@vivo.com>
-X-Mailer: git-send-email 2.20.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0025.apcprd02.prod.outlook.com
- (2603:1096:3:18::13) To HK2PR06MB3492.apcprd06.prod.outlook.com
- (2603:1096:202:2f::10)
+        Fri, 13 May 2022 10:14:26 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4269FDFAE
+        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:14:25 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4A48F10000A;
+        Fri, 13 May 2022 14:14:23 +0000 (UTC)
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     sakari.ailus@iki.fi, mchehab@kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v7 01/28] media: ov5640: Add pixel rate to modes
+Date:   Fri, 13 May 2022 16:13:49 +0200
+Message-Id: <20220513141416.120552-2-jacopo@jmondi.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220513141416.120552-1-jacopo@jmondi.org>
+References: <20220513141416.120552-1-jacopo@jmondi.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9f8086c4-2b7e-4a29-a8c8-08da34e5256f
-X-MS-TrafficTypeDiagnostic: HK0PR06MB2290:EE_
-X-Microsoft-Antispam-PRVS: <HK0PR06MB2290D2481DB2BD175A148E0BC7CA9@HK0PR06MB2290.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WKDqrGb1BrVzPbAkSr09mVhTX3DtrOuqCRafTGnRS6ts3koV+A+tXX1P27MpnNF04HzgmmLCo21VGAw7WyyuFCuOOl8tq6ElHXX0iZiuRGHsDN1uFMgrCBim7c6mbuIXtguB3VDHyP+tRmg/MXbqKY566grLpmAah5Tf5XzdddQMO+xiiYHTq4yWztSs51OeRZ6e8SOwi6byosuW8nZv+nw8UazRcCpO8kycxd885M5HtKsJk7tVIalwHSe76+7QEM0K7rW0B8X41U+GvF7BnaXSy6IGNoQzEiBU7bGxO86laSwYKxfrzTBYCsw0yaxKdnhjyyKBETcZ7wICXu6hnlUuiumxEbgAC+Wts78FLe/NtWnXbhdhpPCEIvRh7h8xMXactT/EM8qiia/j+jytx0RPOmgCwb5zb4t0Pu3Hag5qDi2v6waBYOMSq8r7AjODZR0yGEdINF7pUr3y+JdgLW6Mjrgb3Sot49pY0z+cvoSCCgkIY/+UnlGVYeMmp/lv8vup3hOIrHKGQNQjU+mbflZQYiWri4g0GsZ137lj6f7PpmtEb9nsWmpKmDC71akJgKhVuFJ4PtQ5NNfpSbj2Y5enQOJ/ONXqKcCHsc2rKtS0JLM50+xPlCpyZBnVzv+ragoAHHPd36m5w9l694Bh5CaplCq2IIAjl1DRHnAuxpU7VVz9aA4cv005DFuJT3NmuwISicpfK7ZPG1XEopSsPg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(316002)(6666004)(6512007)(110136005)(66476007)(508600001)(66556008)(186003)(2906002)(86362001)(52116002)(4326008)(8676002)(6486002)(26005)(38350700002)(38100700002)(2616005)(83380400001)(8936002)(6506007)(1076003)(107886003)(5660300002)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RqIGWKGG1f7oNk0u42IAbzoIb4m8RQ9QEbr1JzC7Y7PTFBBRMd2blpLjNFM6?=
- =?us-ascii?Q?/PHoIMIrHNeBfnk3YZcg/kTqN8YTr/Ah4mVAcdJrRdnH1SLA5NsJIZiftIu7?=
- =?us-ascii?Q?1vwv/o82VPy0E/HD9pQDUj+DQiWvx+oya5Zuagam9YFCJIqwGRKnoHTCaU5m?=
- =?us-ascii?Q?zY3bs/IoA5SKuQkhyWFPssQa/AlJpCQX5KHodDbbMLTdgw9Bj5hcjCQmHoX7?=
- =?us-ascii?Q?bOOSdRZzhXSH+zqbfTn7JfskadfyuwjXtFtTNEodcmzAUndh+7SIvlao5hC8?=
- =?us-ascii?Q?ZpuI/6fvcAc45EnHl4DvJEgEkTWSHNSaacZY9BbODccnwMa72/iz0eHLiWqM?=
- =?us-ascii?Q?tWiJ+NpCQh+k1ao3jayOktyH50HZvs2n0dW5YWUtNTDgaTmicH/u6T/QtL7J?=
- =?us-ascii?Q?ugouzEc9DLSJg/zgX6j3xw7lFVrJ7EDnQ1QjRI9yisCDgugAzbbWQjBwF70t?=
- =?us-ascii?Q?N8Kw+3OLhkCubP3KSyU1nFY2YFeRp9bAseA5XzQ/zjVDN0FYLxlMb3z72V4p?=
- =?us-ascii?Q?d4+qDgZOLSN9cxwDjAoYSYVeEnSnIcLPyzH8/6QrCSB1TuJ1Lfcr7AnN5Xxy?=
- =?us-ascii?Q?qTweQk2075NqDAbZrjf7JKtLsc9lF23DftYmxd08w1V+HHaVgnWhkzxF7qBa?=
- =?us-ascii?Q?IktwO6Opi6kOXg5o5PQGNQy+2DDSpN8TTWuRm1ztfuyqBwf3cASRfP3VD45f?=
- =?us-ascii?Q?sjrL1e38F8ux9zOQVwKeF9SF67cV4LKtH1LklFzCMv6BKIoxR6d5N5T0mCH5?=
- =?us-ascii?Q?w6/eD/hjRUk62wwKCtq3R/KlvjrUtsuocMTYNF9sSOgH3g+On5/1lyrvs83z?=
- =?us-ascii?Q?StHZhFdJSIRUIvLzJ0OR4iM2kplgnbPqdnR/3jDAxGpmf5k6gjK/od0J416V?=
- =?us-ascii?Q?4wInmkBJZpCpjqt97P7yt/BYeiVwRycFaqk9K0mHtXvnnL2LqvJwi0mSBYkm?=
- =?us-ascii?Q?cU99Qe4yQ57WxbFO3kZHGInqp2SBAuCEvqETK+yZp6sxB3Dmy1fc7PU3o4Iw?=
- =?us-ascii?Q?rsOetEjQM78if6tkqsEQiIEZJptU/mvedAWR151atwtkd2WjGe+kCsEPqUDE?=
- =?us-ascii?Q?QmNlxFoNBPbqIqVXYHgAqcGnDtyU3Bc9txmIpbnUQnj6DIzG5JaKJoSEWTpo?=
- =?us-ascii?Q?PZ/uGJmiXcLTOa5I4zWFunmeQDwaog0eehY/eqoTvYYwSzmSkO7GCuac9Wtn?=
- =?us-ascii?Q?LzWg52nK1zXoqw0LXwPnfr5bnV5kwRH/i3iOtU1Cex2HBYg77ydy9XJ5PYEZ?=
- =?us-ascii?Q?BFJ8fHuwDw+sdhQn3Fk44/Z5iZu4oW4DYVEFdoF9w3V6xHhOPDui39Cnrv7s?=
- =?us-ascii?Q?OrmY5SJAuHE8TV2XF7iQe3p3JgWyySqP80FwE5WEdNwpA6WR4VU2GuN2ZC3t?=
- =?us-ascii?Q?TUtPOiLVSXt74XGdXG3eBhohPYf+278lf0XmXNkHW/YKaZDg77lihgOMdQcQ?=
- =?us-ascii?Q?mIGXjgUGwA61JAPONPe2SJU50Jt8dsmEDTc3EbJ+UNqhaZX5ahUG90aCCFus?=
- =?us-ascii?Q?iZObMMh2G+a7aJnd+jefG7srPb14IGP+q2mQjXj/T9tqGQyO+l/Go5Sk25YW?=
- =?us-ascii?Q?Y4jD/G43wZ7HqydpwQtSGalmhYk9wwOraE8Nz1CjpmF37JeFo1DE8WJwjCBB?=
- =?us-ascii?Q?FzqdavwbGVJYtf7yiFLy2PjrQjmNPs46wmavtuh5k3l0OzuKdx3pgWMEh2hk?=
- =?us-ascii?Q?wbX3c+muO72lxXRDVfRsJ6Hcq9UOSEqLfqijS94NlKKthCwQo6H1vqwDmFBx?=
- =?us-ascii?Q?Z07hISyUEA=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f8086c4-2b7e-4a29-a8c8-08da34e5256f
-X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2022 13:33:20.9076
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +rxroBcqKoBroGq1Rr5tAW5K4xCEX/tC+JNsjqFjsrV7K2Ml9GltPe0zSnEGQXSysHh/kS01Nl5HKCcEDb6qQA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2290
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix the following coccicheck warning:
+Add to each mode supported by the sensor the ideal pixel rate, as
+defined by Table 2.1 in the chip manual.
 
-drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:1712:24-25:
-WARNING opportunity for max()
+The ideal pixel rate will be used to compute the MIPI CSI-2 clock tree.
 
-max() macro is defined in include/linux/minmax.h. It avoids multiple
-evaluations of the arguments when non-constant and performs strict
-type-checking.
-
-Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Tested-by: Adam Ford <aford173@gmail.com> #imx8mm-beacon-kit
 ---
- drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/ov5640.c | 44 +++++++++++++++++++++++++++++++++++---
+ 1 file changed, 41 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-index 456287186ad8..55814041b8d8 100644
---- a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-+++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-@@ -1709,7 +1709,7 @@ static int exynos3250_jpeg_try_downscale(struct s5p_jpeg_ctx *ctx,
- 	w_ratio = ctx->out_q.w / r->width;
- 	h_ratio = ctx->out_q.h / r->height;
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index db5a19babe67..504700984fa0 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -118,6 +118,29 @@ enum ov5640_frame_rate {
+ 	OV5640_NUM_FRAMERATES,
+ };
  
--	scale_factor = w_ratio > h_ratio ? w_ratio : h_ratio;
-+	scale_factor = max(w_ratio, h_ratio);
- 	scale_factor = clamp_val(scale_factor, 1, 8);
++enum ov5640_pixel_rate_id {
++	OV5640_PIXEL_RATE_168M,
++	OV5640_PIXEL_RATE_148M,
++	OV5640_PIXEL_RATE_124M,
++	OV5640_PIXEL_RATE_96M,
++	OV5640_PIXEL_RATE_48M,
++	OV5640_NUM_PIXEL_RATES,
++};
++
++/*
++ * The chip manual suggests 24/48/96/192 MHz pixel clocks.
++ *
++ * 192MHz exceeds the sysclk limits; use 168MHz as maximum pixel rate for
++ * full resolution mode @15 FPS.
++ */
++static const u32 ov5640_pixel_rates[] = {
++	[OV5640_PIXEL_RATE_168M] = 168000000,
++	[OV5640_PIXEL_RATE_148M] = 148000000,
++	[OV5640_PIXEL_RATE_124M] = 124000000,
++	[OV5640_PIXEL_RATE_96M] = 96000000,
++	[OV5640_PIXEL_RATE_48M] = 48000000,
++};
++
+ enum ov5640_format_mux {
+ 	OV5640_FMT_MUX_YUV422 = 0,
+ 	OV5640_FMT_MUX_RGB,
+@@ -189,6 +212,7 @@ struct reg_value {
+ struct ov5640_mode_info {
+ 	enum ov5640_mode_id id;
+ 	enum ov5640_downsize_mode dn_mode;
++	enum ov5640_pixel_rate_id pixel_rate;
+ 	u32 hact;
+ 	u32 htot;
+ 	u32 vact;
+@@ -565,7 +589,9 @@ static const struct reg_value ov5640_setting_QSXGA_2592_1944[] = {
  
- 	/* Align scale ratio to the nearest power of 2 */
+ /* power-on sensor init reg table */
+ static const struct ov5640_mode_info ov5640_mode_init_data = {
+-	0, SUBSAMPLING, 640, 1896, 480, 984,
++	0, SUBSAMPLING,
++	OV5640_PIXEL_RATE_96M,
++	640, 1896, 480, 984,
+ 	ov5640_init_setting_30fps_VGA,
+ 	ARRAY_SIZE(ov5640_init_setting_30fps_VGA),
+ 	OV5640_30_FPS,
+@@ -574,51 +600,61 @@ static const struct ov5640_mode_info ov5640_mode_init_data = {
+ static const struct ov5640_mode_info
+ ov5640_mode_data[OV5640_NUM_MODES] = {
+ 	{OV5640_MODE_QQVGA_160_120, SUBSAMPLING,
++	 OV5640_PIXEL_RATE_48M,
+ 	 160, 1896, 120, 984,
+ 	 ov5640_setting_QQVGA_160_120,
+ 	 ARRAY_SIZE(ov5640_setting_QQVGA_160_120),
+ 	 OV5640_30_FPS},
+ 	{OV5640_MODE_QCIF_176_144, SUBSAMPLING,
++	 OV5640_PIXEL_RATE_48M,
+ 	 176, 1896, 144, 984,
+ 	 ov5640_setting_QCIF_176_144,
+ 	 ARRAY_SIZE(ov5640_setting_QCIF_176_144),
+ 	 OV5640_30_FPS},
+ 	{OV5640_MODE_QVGA_320_240, SUBSAMPLING,
++	 OV5640_PIXEL_RATE_48M,
+ 	 320, 1896, 240, 984,
+ 	 ov5640_setting_QVGA_320_240,
+ 	 ARRAY_SIZE(ov5640_setting_QVGA_320_240),
+ 	 OV5640_30_FPS},
+ 	{OV5640_MODE_VGA_640_480, SUBSAMPLING,
++	 OV5640_PIXEL_RATE_48M,
+ 	 640, 1896, 480, 1080,
+ 	 ov5640_setting_VGA_640_480,
+ 	 ARRAY_SIZE(ov5640_setting_VGA_640_480),
+ 	 OV5640_60_FPS},
+ 	{OV5640_MODE_NTSC_720_480, SUBSAMPLING,
++	 OV5640_PIXEL_RATE_96M,
+ 	 720, 1896, 480, 984,
+ 	 ov5640_setting_NTSC_720_480,
+ 	 ARRAY_SIZE(ov5640_setting_NTSC_720_480),
+ 	OV5640_30_FPS},
+ 	{OV5640_MODE_PAL_720_576, SUBSAMPLING,
++	 OV5640_PIXEL_RATE_96M,
+ 	 720, 1896, 576, 984,
+ 	 ov5640_setting_PAL_720_576,
+ 	 ARRAY_SIZE(ov5640_setting_PAL_720_576),
+ 	 OV5640_30_FPS},
+ 	{OV5640_MODE_XGA_1024_768, SUBSAMPLING,
++	 OV5640_PIXEL_RATE_96M,
+ 	 1024, 1896, 768, 1080,
+ 	 ov5640_setting_XGA_1024_768,
+ 	 ARRAY_SIZE(ov5640_setting_XGA_1024_768),
+ 	 OV5640_30_FPS},
+ 	{OV5640_MODE_720P_1280_720, SUBSAMPLING,
++	 OV5640_PIXEL_RATE_124M,
+ 	 1280, 1892, 720, 740,
+ 	 ov5640_setting_720P_1280_720,
+ 	 ARRAY_SIZE(ov5640_setting_720P_1280_720),
+ 	 OV5640_30_FPS},
+ 	{OV5640_MODE_1080P_1920_1080, SCALING,
++	 OV5640_PIXEL_RATE_148M,
+ 	 1920, 2500, 1080, 1120,
+ 	 ov5640_setting_1080P_1920_1080,
+ 	 ARRAY_SIZE(ov5640_setting_1080P_1920_1080),
+ 	 OV5640_30_FPS},
+ 	{OV5640_MODE_QSXGA_2592_1944, SCALING,
++	 OV5640_PIXEL_RATE_168M,
+ 	 2592, 2844, 1944, 1968,
+ 	 ov5640_setting_QSXGA_2592_1944,
+ 	 ARRAY_SIZE(ov5640_setting_QSXGA_2592_1944),
+@@ -2743,6 +2779,7 @@ static const struct v4l2_ctrl_ops ov5640_ctrl_ops = {
+ 
+ static int ov5640_init_controls(struct ov5640_dev *sensor)
+ {
++	const struct ov5640_mode_info *mode = sensor->current_mode;
+ 	const struct v4l2_ctrl_ops *ops = &ov5640_ctrl_ops;
+ 	struct ov5640_ctrls *ctrls = &sensor->ctrls;
+ 	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
+@@ -2755,8 +2792,9 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+ 
+ 	/* Clock related controls */
+ 	ctrls->pixel_rate = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_PIXEL_RATE,
+-					      0, INT_MAX, 1,
+-					      ov5640_calc_pixel_rate(sensor));
++			      ov5640_pixel_rates[OV5640_NUM_PIXEL_RATES - 1],
++			      ov5640_pixel_rates[0], 1,
++			      ov5640_pixel_rates[mode->pixel_rate]);
+ 
+ 	/* Auto/manual white balance */
+ 	ctrls->auto_wb = v4l2_ctrl_new_std(hdl, ops,
 -- 
-2.20.1
+2.35.1
 
