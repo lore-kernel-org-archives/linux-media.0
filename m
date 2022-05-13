@@ -2,335 +2,116 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0E10C433FE
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:19:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3CCDC433EF
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:24:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354725AbiEMOTK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 10:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50016 "EHLO
+        id S1345226AbiEMOYN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 10:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354225AbiEMOTF (ORCPT
+        with ESMTP id S244638AbiEMOYM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 May 2022 10:19:05 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94A614CA24
-        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:19:03 -0700 (PDT)
+        Fri, 13 May 2022 10:24:12 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421A25047F
+        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:24:11 -0700 (PDT)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 51CB524001A;
-        Fri, 13 May 2022 14:19:01 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id D727220005;
+        Fri, 13 May 2022 14:24:05 +0000 (UTC)
+Date:   Fri, 13 May 2022 16:24:04 +0200
 From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     sakari.ailus@iki.fi, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v7 28/28] media: ov5640: Move format mux config in format
-Date:   Fri, 13 May 2022 16:14:16 +0200
-Message-Id: <20220513141416.120552-29-jacopo@jmondi.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220513141416.120552-1-jacopo@jmondi.org>
-References: <20220513141416.120552-1-jacopo@jmondi.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        laurent.pinchart@ideasonboard.com, hverkuil-cisco@xs4all.nl,
+        mirela.rabulea@nxp.com, xavier.roumegue@oss.nxp.com,
+        tomi.valkeinen@ideasonboard.com, hugues.fruchet@st.com,
+        prabhakar.mahadev-lad.rj@bp.renesas.com, aford173@gmail.com,
+        festevam@gmail.com, Eugen.Hristev@microchip.com,
+        jbrunet@baylibre.com, paul.elder@ideasonboard.com,
+        eddy.khan@vergesense.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v7 00/28] media: ov5640: Rework the clock tree
+ programming for MIPI
+Message-ID: <20220513142404.7obbuidmc42wn3sf@uno.localdomain>
+References: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The image format produced by the sensor is controlled by two registers,
-whose values computation is open coded in ov5640_set_framefmt().
+Hi Sakari,
 
-As we have a list of formats already, move the OV5640_REG_FORMAT_CONTROL00
-and OV5640_REG_ISP_FORMAT_MUX_CTRL register values to the static list
-of formats instead of open coding it.
+  I -litterally- just sent a v7 to you and Mauro (and list) to fix the
+warning. Feel free to ignore it then
 
-Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/i2c/ov5640.c | 233 +++++++++++++++++++------------------
- 1 file changed, 117 insertions(+), 116 deletions(-)
+On Fri, May 13, 2022 at 05:15:20PM +0300, Sakari Ailus wrote:
+> Hi folks,
+>
+> Reworked the internals a little so that no compile warnings are produced
+> for intermediate patches. In the past we've allowed them but now with
+> warnings considered as errors, this is a problem.
+>
+> The end result is unchanged. Still testing for compilation.
+>
+> I'm still sending this all to list as several patches got changed:
+>
+> 	media: ov5640: Associate bpp with formats
+> 	media: ov5640: Rework CSI-2 clock tree
+> 	media: ov5640: Split DVP and CSI-2 formats
 
-diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 44f26d5cf029..502f0b62e950 100644
---- a/drivers/media/i2c/ov5640.c
-+++ b/drivers/media/i2c/ov5640.c
-@@ -192,86 +192,142 @@ struct ov5640_pixfmt {
- 	u32 code;
- 	u32 colorspace;
- 	u8 bpp;
-+	u8 ctrl00;
-+	enum ov5640_format_mux mux;
- };
- 
- static const struct ov5640_pixfmt ov5640_dvp_formats[] = {
- 	{
--		.code = MEDIA_BUS_FMT_JPEG_1X8,
--		.colorspace = V4L2_COLORSPACE_JPEG,
--		.bpp = 16,
-+		/* YUV422, YUYV */
-+		.code		= MEDIA_BUS_FMT_JPEG_1X8,
-+		.colorspace	= V4L2_COLORSPACE_JPEG,
-+		.bpp		= 16,
-+		.ctrl00		= 0x30,
-+		.mux		= OV5640_FMT_MUX_YUV422,
- 	}, {
--		.code = MEDIA_BUS_FMT_UYVY8_2X8,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 16,
-+		/* YUV422, UYVY */
-+		.code		= MEDIA_BUS_FMT_UYVY8_2X8,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 16,
-+		.ctrl00		= 0x3f,
-+		.mux		= OV5640_FMT_MUX_YUV422,
- 	}, {
--		.code = MEDIA_BUS_FMT_YUYV8_2X8,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 16,
-+		/* YUV422, YUYV */
-+		.code		= MEDIA_BUS_FMT_YUYV8_2X8,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 16,
-+		.ctrl00		= 0x30,
-+		.mux		= OV5640_FMT_MUX_YUV422,
- 	}, {
--		.code = MEDIA_BUS_FMT_RGB565_2X8_LE,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 16,
-+		/* RGB565 {g[2:0],b[4:0]},{r[4:0],g[5:3]} */
-+		.code		= MEDIA_BUS_FMT_RGB565_2X8_LE,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 16,
-+		.ctrl00		= 0x6f,
-+		.mux		= OV5640_FMT_MUX_RGB,
- 	}, {
--		.code = MEDIA_BUS_FMT_RGB565_2X8_BE,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 16,
-+		/* RGB565 {r[4:0],g[5:3]},{g[2:0],b[4:0]} */
-+		.code		= MEDIA_BUS_FMT_RGB565_2X8_BE,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 16,
-+		.ctrl00		= 0x61,
-+		.mux		= OV5640_FMT_MUX_RGB,
- 	}, {
--		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 8,
-+		/* Raw, BGBG... / GRGR... */
-+		.code		= MEDIA_BUS_FMT_SBGGR8_1X8,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 8,
-+		.ctrl00		= 0x00,
-+		.mux		= OV5640_FMT_MUX_RAW_DPC,
- 	}, {
--		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 8
-+		/* Raw bayer, GBGB... / RGRG... */
-+		.code		= MEDIA_BUS_FMT_SGBRG8_1X8,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 8,
-+		.ctrl00		= 0x01,
-+		.mux		= OV5640_FMT_MUX_RAW_DPC,
- 	}, {
--		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 8,
-+		/* Raw bayer, GRGR... / BGBG... */
-+		.code		= MEDIA_BUS_FMT_SGRBG8_1X8,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 8,
-+		.ctrl00		= 0x02,
-+		.mux		= OV5640_FMT_MUX_RAW_DPC,
- 	}, {
--		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 8,
-+		/* Raw bayer, RGRG... / GBGB... */
-+		.code		= MEDIA_BUS_FMT_SRGGB8_1X8,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 8,
-+		.ctrl00		= 0x03,
-+		.mux		= OV5640_FMT_MUX_RAW_DPC,
- 	},
- 	{ /* sentinel */ }
- };
- 
- static const struct ov5640_pixfmt ov5640_csi2_formats[] = {
- 	{
--		.code = MEDIA_BUS_FMT_JPEG_1X8,
--		.colorspace = V4L2_COLORSPACE_JPEG,
--		.bpp = 16,
-+		/* YUV422, YUYV */
-+		.code		= MEDIA_BUS_FMT_JPEG_1X8,
-+		.colorspace	= V4L2_COLORSPACE_JPEG,
-+		.bpp		= 16,
-+		.ctrl00		= 0x30,
-+		.mux		= OV5640_FMT_MUX_YUV422,
- 	}, {
--		.code = MEDIA_BUS_FMT_UYVY8_1X16,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 16,
-+		/* YUV422, UYVY */
-+		.code		= MEDIA_BUS_FMT_UYVY8_1X16,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 16,
-+		.ctrl00		= 0x3f,
-+		.mux		= OV5640_FMT_MUX_YUV422,
- 	}, {
--		.code = MEDIA_BUS_FMT_YUYV8_1X16,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 16,
-+		/* YUV422, YUYV */
-+		.code		= MEDIA_BUS_FMT_YUYV8_1X16,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 16,
-+		.ctrl00		= 0x30,
-+		.mux		= OV5640_FMT_MUX_YUV422,
- 	}, {
--		.code = MEDIA_BUS_FMT_RGB565_1X16,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 16,
-+		/* RGB565 {g[2:0],b[4:0]},{r[4:0],g[5:3]} */
-+		.code		= MEDIA_BUS_FMT_RGB565_1X16,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 16,
-+		.ctrl00		= 0x6f,
-+		.mux		= OV5640_FMT_MUX_RGB,
- 	}, {
--		.code = MEDIA_BUS_FMT_BGR888_1X24,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 24,
-+		/* BGR888: RGB */
-+		.code		= MEDIA_BUS_FMT_BGR888_1X24,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 24,
-+		.ctrl00		= 0x23,
-+		.mux		= OV5640_FMT_MUX_RGB,
- 	}, {
--		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 8,
-+		/* Raw, BGBG... / GRGR... */
-+		.code		= MEDIA_BUS_FMT_SBGGR8_1X8,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 8,
-+		.ctrl00		= 0x00,
-+		.mux		= OV5640_FMT_MUX_RAW_DPC,
- 	}, {
--		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 8
-+		/* Raw bayer, GBGB... / RGRG... */
-+		.code		= MEDIA_BUS_FMT_SGBRG8_1X8,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 8,
-+		.ctrl00		= 0x01,
-+		.mux		= OV5640_FMT_MUX_RAW_DPC,
- 	}, {
--		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 8,
-+		/* Raw bayer, GRGR... / BGBG... */
-+		.code		= MEDIA_BUS_FMT_SGRBG8_1X8,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 8,
-+		.ctrl00		= 0x02,
-+		.mux		= OV5640_FMT_MUX_RAW_DPC,
- 	}, {
--		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
--		.colorspace = V4L2_COLORSPACE_SRGB,
--		.bpp = 8,
-+		/* Raw bayer, RGRG... / GBGB... */
-+		.code		= MEDIA_BUS_FMT_SRGGB8_1X8,
-+		.colorspace	= V4L2_COLORSPACE_SRGB,
-+		.bpp		= 8,
-+		.ctrl00		= 0x03,
-+		.mux		= OV5640_FMT_MUX_RAW_DPC,
- 	},
- 	{ /* sentinel */ }
- };
-@@ -2970,76 +3026,21 @@ static int ov5640_get_selection(struct v4l2_subdev *sd,
- static int ov5640_set_framefmt(struct ov5640_dev *sensor,
- 			       struct v4l2_mbus_framefmt *format)
- {
-+	bool is_jpeg = format->code == MEDIA_BUS_FMT_JPEG_1X8;
-+	const struct ov5640_pixfmt *pixfmt;
- 	int ret = 0;
--	bool is_jpeg = false;
--	u8 fmt, mux;
- 
--	switch (format->code) {
--	case MEDIA_BUS_FMT_UYVY8_1X16:
--	case MEDIA_BUS_FMT_UYVY8_2X8:
--		/* YUV422, UYVY */
--		fmt = 0x3f;
--		mux = OV5640_FMT_MUX_YUV422;
--		break;
--	case MEDIA_BUS_FMT_YUYV8_1X16:
--	case MEDIA_BUS_FMT_YUYV8_2X8:
--		/* YUV422, YUYV */
--		fmt = 0x30;
--		mux = OV5640_FMT_MUX_YUV422;
--		break;
--	case MEDIA_BUS_FMT_RGB565_2X8_LE:
--	case MEDIA_BUS_FMT_RGB565_1X16:
--		/* RGB565 {g[2:0],b[4:0]},{r[4:0],g[5:3]} */
--		fmt = 0x6F;
--		mux = OV5640_FMT_MUX_RGB;
--		break;
--	case MEDIA_BUS_FMT_RGB565_2X8_BE:
--		/* RGB565 {r[4:0],g[5:3]},{g[2:0],b[4:0]} */
--		fmt = 0x61;
--		mux = OV5640_FMT_MUX_RGB;
--		break;
--	case MEDIA_BUS_FMT_BGR888_1X24:
--		/* BGR888: RGB */
--		fmt = 0x23;
--		mux = OV5640_FMT_MUX_RGB;
--		break;
--	case MEDIA_BUS_FMT_JPEG_1X8:
--		/* YUV422, YUYV */
--		fmt = 0x30;
--		mux = OV5640_FMT_MUX_YUV422;
--		is_jpeg = true;
--		break;
--	case MEDIA_BUS_FMT_SBGGR8_1X8:
--		/* Raw, BGBG... / GRGR... */
--		fmt = 0x00;
--		mux = OV5640_FMT_MUX_RAW_DPC;
--		break;
--	case MEDIA_BUS_FMT_SGBRG8_1X8:
--		/* Raw bayer, GBGB... / RGRG... */
--		fmt = 0x01;
--		mux = OV5640_FMT_MUX_RAW_DPC;
--		break;
--	case MEDIA_BUS_FMT_SGRBG8_1X8:
--		/* Raw bayer, GRGR... / BGBG... */
--		fmt = 0x02;
--		mux = OV5640_FMT_MUX_RAW_DPC;
--		break;
--	case MEDIA_BUS_FMT_SRGGB8_1X8:
--		/* Raw bayer, RGRG... / GBGB... */
--		fmt = 0x03;
--		mux = OV5640_FMT_MUX_RAW_DPC;
--		break;
--	default:
--		return -EINVAL;
--	}
-+	pixfmt = ov5640_code_to_pixfmt(sensor, format->code);
- 
- 	/* FORMAT CONTROL00: YUV and RGB formatting */
--	ret = ov5640_write_reg(sensor, OV5640_REG_FORMAT_CONTROL00, fmt);
-+	ret = ov5640_write_reg(sensor, OV5640_REG_FORMAT_CONTROL00,
-+			       pixfmt->ctrl00);
- 	if (ret)
- 		return ret;
- 
- 	/* FORMAT MUX CONTROL: ISP YUV or RGB */
--	ret = ov5640_write_reg(sensor, OV5640_REG_ISP_FORMAT_MUX_CTRL, mux);
-+	ret = ov5640_write_reg(sensor, OV5640_REG_ISP_FORMAT_MUX_CTRL,
-+			       pixfmt->mux);
- 	if (ret)
- 		return ret;
- 
--- 
-2.35.1
+In my v7 I have only moved ov5640_code_to_bpp() from [4/28] to
+[6/28] where it is actually used.
 
+Hence the changed patches for me are:
+
+        media: ov5640: Associate bpp with formats       [4/28]
+        media: ov5640: Update pixel_rate and link_freq  [6/28]
+
+Are there other warnings to fix which I have missed ?
+
+Thanks
+   j
+
+>
+> Hugues Fruchet (1):
+>   media: ov5640: Adjust vblank with s_frame_interval
+>
+> Jacopo Mondi (27):
+>   media: ov5640: Add pixel rate to modes
+>   media: ov5640: Re-arrange modes definition
+>   media: ov5640: Add ov5640_is_csi2() function
+>   media: ov5640: Associate bpp with formats
+>   media: ov5640: Add LINK_FREQ control
+>   media: ov5640: Update pixel_rate and link_freq
+>   media: ov5640: Rework CSI-2 clock tree
+>   media: ov5640: Rework timings programming
+>   media: ov5640: Fix 720x480 in RGB888 mode
+>   media: ov5640: Split DVP and CSI-2 timings
+>   media: ov5640: Provide timings accessor
+>   media: ov5640: Re-sort per-mode register tables
+>   media: ov5640: Remove duplicated mode settings
+>   media: ov5640: Remove ov5640_mode_init_data
+>   media: ov5640: Add HBLANK control
+>   media: ov5640: Add VBLANK control
+>   media: ov5640: Remove frame rate check from find_mode()
+>   media: ov5640: Change CSI-2 timings to comply with FPS
+>   media: ov5640: Implement init_cfg
+>   media: ov5640: Implement get_selection
+>   media: ov5640: Register device properties
+>   media: ov5640: Add RGB565_1X16 format
+>   media: ov5640: Add BGR888 format
+>   media: ov5640: Restrict sizes to mbus code
+>   media: ov5640: Adjust format to bpp in s_fmt
+>   media: ov5640: Split DVP and CSI-2 formats
+>   media: ov5640: Move format mux config in format
+>
+>  drivers/media/i2c/ov5640.c | 1650 ++++++++++++++++++++++++++----------
+>  1 file changed, 1188 insertions(+), 462 deletions(-)
+>
+> --
+> 2.30.2
+>
