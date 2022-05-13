@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99C65C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 117E7C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348958AbiEMOQe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 10:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
+        id S1350758AbiEMOQh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 10:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346735AbiEMOQP (ORCPT
+        with ESMTP id S1346668AbiEMOQP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 13 May 2022 10:16:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7160060D86
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444FB1194AC
         for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:16:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1652451370; x=1683987370;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=qGB4VisawTwrC25fVLyYRGKwJ40kg1jm13optah+IX4=;
-  b=PhmPdeiDY3F0yUwtMa0Gvsin32oujW0LgjDw15A4CPljHlfVpwIlH6J7
-   fomy3wmcF+LyBhQ/gADp8254/gufhcGc5y9PJtljT/v2RvNQZSNjOeLKq
-   mYnZ5BO3iVaHNTAAbDcVtal8oJ9+VuiOpmdZ8jUHSc4z/ITivLtIrJzrQ
-   092kkjV+6VGLNAu1gaeieRVkeAjClZXp5bMd8B5d3V3hpdt29vjx19Aiv
-   jIgs1x/toyGABRVA05SzI4d6isESLjmlr6OeR5E49fDF1nMvV7ZumgpP1
-   50ZfpYNDWjAlZHHrByaTmsULK+fvvFkHfotm3J/kwq76mpng8U1N2nwku
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="269147677"
+  bh=CJg8M0MK68zJnQWBEOwXPXBhXbcLF9nzWgXdqyJs6zg=;
+  b=g9YzljbwymJX6Ajr/PYNf2jfcv9AoqSnyM36ihssEBmBVbf6NW9x72Ii
+   gJl7P0qzlCHhPQkQdaTGtbJ8f+H5FBl/Li58vOO51n1dM35nvjZy724Ck
+   pX7xMA0+fBRq+cPow9ErruRlGXdM80ZrdLrrLsEZBvzsx9a93AKkQZQFJ
+   5L1J7uoCHVZdSfaTaRtjosnXDhmeqVkdAHrAi4yb6r1GNz+hx4u0I3WJt
+   GShTiwBg443F8WUQA76UpxkOZfxCSU12fqfZHeuXWAiIRw1lLygvryH07
+   JKqr3G11lLRHLiHywp/PO/mHyLgk6rdbYvksBCkw17QjVv27/Qfygyf/W
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="252360910"
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="269147677"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:10 -0700
+   d="scan'208";a="252360910"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:08 -0700
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="595240560"
+   d="scan'208";a="815393377"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:04 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:04 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id D9E3721B56;
-        Fri, 13 May 2022 17:15:51 +0300 (EEST)
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 1D33121C0D;
+        Fri, 13 May 2022 17:15:52 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1npW59-0001h7-8F; Fri, 13 May 2022 17:15:51 +0300
+        id 1npW59-0001hH-DB; Fri, 13 May 2022 17:15:51 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
@@ -55,9 +55,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         jbrunet@baylibre.com, paul.elder@ideasonboard.com,
         eddy.khan@vergesense.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v7 25/28] media: ov5640: Restrict sizes to mbus code
-Date:   Fri, 13 May 2022 17:15:45 +0300
-Message-Id: <20220513141548.6344-26-sakari.ailus@linux.intel.com>
+Subject: [PATCH v7 28/28] media: ov5640: Move format mux config in format
+Date:   Fri, 13 May 2022 17:15:48 +0300
+Message-Id: <20220513141548.6344-29-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
 References: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
@@ -69,17 +69,12 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Jacopo Mondi <jacopo@jmondi.org>
 
-The ov5640 driver supports different sizes for different mbus_codes.
-In particular:
+The image format produced by the sensor is controlled by two registers,
+whose values computation is open coded in ov5640_set_framefmt().
 
-- 8bpp modes: high resolution sizes (>= 1280x720)
-- 16bpp modes: all sizes
-- 24bpp modes: low resolutions sizes (< 1280x720)
-
-Restrict the frame sizes enumerations to the above constraints.
-
-While at it, make sure the fse->mbus_code parameter is valid, and return
--EINVAL if it's not.
+As we have a list of formats already, move the OV5640_REG_FORMAT_CONTROL00
+and OV5640_REG_ISP_FORMAT_MUX_CTRL register values to the static list
+of formats instead of open coding it.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
@@ -87,45 +82,294 @@ Tested-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ov5640.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+ drivers/media/i2c/ov5640.c | 233 +++++++++++++++++++------------------
+ 1 file changed, 117 insertions(+), 116 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 4219e19441ae9..240976a6cb972 100644
+index 44f26d5cf029c..502f0b62e9505 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -3474,14 +3474,28 @@ static int ov5640_enum_frame_size(struct v4l2_subdev *sd,
- 				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
+@@ -192,86 +192,142 @@ struct ov5640_pixfmt {
+ 	u32 code;
+ 	u32 colorspace;
+ 	u8 bpp;
++	u8 ctrl00;
++	enum ov5640_format_mux mux;
+ };
+ 
+ static const struct ov5640_pixfmt ov5640_dvp_formats[] = {
+ 	{
+-		.code = MEDIA_BUS_FMT_JPEG_1X8,
+-		.colorspace = V4L2_COLORSPACE_JPEG,
+-		.bpp = 16,
++		/* YUV422, YUYV */
++		.code		= MEDIA_BUS_FMT_JPEG_1X8,
++		.colorspace	= V4L2_COLORSPACE_JPEG,
++		.bpp		= 16,
++		.ctrl00		= 0x30,
++		.mux		= OV5640_FMT_MUX_YUV422,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_UYVY8_2X8,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 16,
++		/* YUV422, UYVY */
++		.code		= MEDIA_BUS_FMT_UYVY8_2X8,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 16,
++		.ctrl00		= 0x3f,
++		.mux		= OV5640_FMT_MUX_YUV422,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_YUYV8_2X8,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 16,
++		/* YUV422, YUYV */
++		.code		= MEDIA_BUS_FMT_YUYV8_2X8,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 16,
++		.ctrl00		= 0x30,
++		.mux		= OV5640_FMT_MUX_YUV422,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_RGB565_2X8_LE,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 16,
++		/* RGB565 {g[2:0],b[4:0]},{r[4:0],g[5:3]} */
++		.code		= MEDIA_BUS_FMT_RGB565_2X8_LE,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 16,
++		.ctrl00		= 0x6f,
++		.mux		= OV5640_FMT_MUX_RGB,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_RGB565_2X8_BE,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 16,
++		/* RGB565 {r[4:0],g[5:3]},{g[2:0],b[4:0]} */
++		.code		= MEDIA_BUS_FMT_RGB565_2X8_BE,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 16,
++		.ctrl00		= 0x61,
++		.mux		= OV5640_FMT_MUX_RGB,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 8,
++		/* Raw, BGBG... / GRGR... */
++		.code		= MEDIA_BUS_FMT_SBGGR8_1X8,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 8,
++		.ctrl00		= 0x00,
++		.mux		= OV5640_FMT_MUX_RAW_DPC,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 8
++		/* Raw bayer, GBGB... / RGRG... */
++		.code		= MEDIA_BUS_FMT_SGBRG8_1X8,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 8,
++		.ctrl00		= 0x01,
++		.mux		= OV5640_FMT_MUX_RAW_DPC,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 8,
++		/* Raw bayer, GRGR... / BGBG... */
++		.code		= MEDIA_BUS_FMT_SGRBG8_1X8,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 8,
++		.ctrl00		= 0x02,
++		.mux		= OV5640_FMT_MUX_RAW_DPC,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 8,
++		/* Raw bayer, RGRG... / GBGB... */
++		.code		= MEDIA_BUS_FMT_SRGGB8_1X8,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 8,
++		.ctrl00		= 0x03,
++		.mux		= OV5640_FMT_MUX_RAW_DPC,
+ 	},
+ 	{ /* sentinel */ }
+ };
+ 
+ static const struct ov5640_pixfmt ov5640_csi2_formats[] = {
+ 	{
+-		.code = MEDIA_BUS_FMT_JPEG_1X8,
+-		.colorspace = V4L2_COLORSPACE_JPEG,
+-		.bpp = 16,
++		/* YUV422, YUYV */
++		.code		= MEDIA_BUS_FMT_JPEG_1X8,
++		.colorspace	= V4L2_COLORSPACE_JPEG,
++		.bpp		= 16,
++		.ctrl00		= 0x30,
++		.mux		= OV5640_FMT_MUX_YUV422,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_UYVY8_1X16,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 16,
++		/* YUV422, UYVY */
++		.code		= MEDIA_BUS_FMT_UYVY8_1X16,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 16,
++		.ctrl00		= 0x3f,
++		.mux		= OV5640_FMT_MUX_YUV422,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_YUYV8_1X16,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 16,
++		/* YUV422, YUYV */
++		.code		= MEDIA_BUS_FMT_YUYV8_1X16,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 16,
++		.ctrl00		= 0x30,
++		.mux		= OV5640_FMT_MUX_YUV422,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_RGB565_1X16,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 16,
++		/* RGB565 {g[2:0],b[4:0]},{r[4:0],g[5:3]} */
++		.code		= MEDIA_BUS_FMT_RGB565_1X16,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 16,
++		.ctrl00		= 0x6f,
++		.mux		= OV5640_FMT_MUX_RGB,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_BGR888_1X24,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 24,
++		/* BGR888: RGB */
++		.code		= MEDIA_BUS_FMT_BGR888_1X24,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 24,
++		.ctrl00		= 0x23,
++		.mux		= OV5640_FMT_MUX_RGB,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 8,
++		/* Raw, BGBG... / GRGR... */
++		.code		= MEDIA_BUS_FMT_SBGGR8_1X8,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 8,
++		.ctrl00		= 0x00,
++		.mux		= OV5640_FMT_MUX_RAW_DPC,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 8
++		/* Raw bayer, GBGB... / RGRG... */
++		.code		= MEDIA_BUS_FMT_SGBRG8_1X8,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 8,
++		.ctrl00		= 0x01,
++		.mux		= OV5640_FMT_MUX_RAW_DPC,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 8,
++		/* Raw bayer, GRGR... / BGBG... */
++		.code		= MEDIA_BUS_FMT_SGRBG8_1X8,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 8,
++		.ctrl00		= 0x02,
++		.mux		= OV5640_FMT_MUX_RAW_DPC,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
+-		.colorspace = V4L2_COLORSPACE_SRGB,
+-		.bpp = 8,
++		/* Raw bayer, RGRG... / GBGB... */
++		.code		= MEDIA_BUS_FMT_SRGGB8_1X8,
++		.colorspace	= V4L2_COLORSPACE_SRGB,
++		.bpp		= 8,
++		.ctrl00		= 0x03,
++		.mux		= OV5640_FMT_MUX_RAW_DPC,
+ 	},
+ 	{ /* sentinel */ }
+ };
+@@ -2970,76 +3026,21 @@ static int ov5640_get_selection(struct v4l2_subdev *sd,
+ static int ov5640_set_framefmt(struct ov5640_dev *sensor,
+ 			       struct v4l2_mbus_framefmt *format)
  {
-+	u32 bpp = ov5640_code_to_bpp(fse->code);
-+	unsigned int index = fse->index;
-+
- 	if (fse->pad != 0)
- 		return -EINVAL;
--	if (fse->index >= OV5640_NUM_MODES)
-+	if (!bpp)
-+		return -EINVAL;
-+
-+	/* Only low-resolution modes are supported for 24bpp formats. */
-+	if (bpp == 24 && index >= OV5640_MODE_720P_1280_720)
-+		return -EINVAL;
-+
-+	/* FIXME: Low resolution modes don't work in 8bpp formats. */
-+	if (bpp == 8)
-+		index += OV5640_MODE_720P_1280_720;
-+
-+	if (index >= OV5640_NUM_MODES)
- 		return -EINVAL;
++	bool is_jpeg = format->code == MEDIA_BUS_FMT_JPEG_1X8;
++	const struct ov5640_pixfmt *pixfmt;
+ 	int ret = 0;
+-	bool is_jpeg = false;
+-	u8 fmt, mux;
  
--	fse->min_width = ov5640_mode_data[fse->index].width;
-+	fse->min_width = ov5640_mode_data[index].width;
- 	fse->max_width = fse->min_width;
--	fse->min_height = ov5640_mode_data[fse->index].height;
-+	fse->min_height = ov5640_mode_data[index].height;
- 	fse->max_height = fse->min_height;
+-	switch (format->code) {
+-	case MEDIA_BUS_FMT_UYVY8_1X16:
+-	case MEDIA_BUS_FMT_UYVY8_2X8:
+-		/* YUV422, UYVY */
+-		fmt = 0x3f;
+-		mux = OV5640_FMT_MUX_YUV422;
+-		break;
+-	case MEDIA_BUS_FMT_YUYV8_1X16:
+-	case MEDIA_BUS_FMT_YUYV8_2X8:
+-		/* YUV422, YUYV */
+-		fmt = 0x30;
+-		mux = OV5640_FMT_MUX_YUV422;
+-		break;
+-	case MEDIA_BUS_FMT_RGB565_2X8_LE:
+-	case MEDIA_BUS_FMT_RGB565_1X16:
+-		/* RGB565 {g[2:0],b[4:0]},{r[4:0],g[5:3]} */
+-		fmt = 0x6F;
+-		mux = OV5640_FMT_MUX_RGB;
+-		break;
+-	case MEDIA_BUS_FMT_RGB565_2X8_BE:
+-		/* RGB565 {r[4:0],g[5:3]},{g[2:0],b[4:0]} */
+-		fmt = 0x61;
+-		mux = OV5640_FMT_MUX_RGB;
+-		break;
+-	case MEDIA_BUS_FMT_BGR888_1X24:
+-		/* BGR888: RGB */
+-		fmt = 0x23;
+-		mux = OV5640_FMT_MUX_RGB;
+-		break;
+-	case MEDIA_BUS_FMT_JPEG_1X8:
+-		/* YUV422, YUYV */
+-		fmt = 0x30;
+-		mux = OV5640_FMT_MUX_YUV422;
+-		is_jpeg = true;
+-		break;
+-	case MEDIA_BUS_FMT_SBGGR8_1X8:
+-		/* Raw, BGBG... / GRGR... */
+-		fmt = 0x00;
+-		mux = OV5640_FMT_MUX_RAW_DPC;
+-		break;
+-	case MEDIA_BUS_FMT_SGBRG8_1X8:
+-		/* Raw bayer, GBGB... / RGRG... */
+-		fmt = 0x01;
+-		mux = OV5640_FMT_MUX_RAW_DPC;
+-		break;
+-	case MEDIA_BUS_FMT_SGRBG8_1X8:
+-		/* Raw bayer, GRGR... / BGBG... */
+-		fmt = 0x02;
+-		mux = OV5640_FMT_MUX_RAW_DPC;
+-		break;
+-	case MEDIA_BUS_FMT_SRGGB8_1X8:
+-		/* Raw bayer, RGRG... / GBGB... */
+-		fmt = 0x03;
+-		mux = OV5640_FMT_MUX_RAW_DPC;
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
++	pixfmt = ov5640_code_to_pixfmt(sensor, format->code);
  
- 	return 0;
+ 	/* FORMAT CONTROL00: YUV and RGB formatting */
+-	ret = ov5640_write_reg(sensor, OV5640_REG_FORMAT_CONTROL00, fmt);
++	ret = ov5640_write_reg(sensor, OV5640_REG_FORMAT_CONTROL00,
++			       pixfmt->ctrl00);
+ 	if (ret)
+ 		return ret;
+ 
+ 	/* FORMAT MUX CONTROL: ISP YUV or RGB */
+-	ret = ov5640_write_reg(sensor, OV5640_REG_ISP_FORMAT_MUX_CTRL, mux);
++	ret = ov5640_write_reg(sensor, OV5640_REG_ISP_FORMAT_MUX_CTRL,
++			       pixfmt->mux);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.30.2
 
