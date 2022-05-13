@@ -2,180 +2,149 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEF97C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:17:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7714AC433FE
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:17:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352770AbiEMOQ6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 10:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        id S1354007AbiEMORA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 10:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239902AbiEMOQs (ORCPT
+        with ESMTP id S1350746AbiEMOQs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 13 May 2022 10:16:48 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418C31238B9
-        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:16:44 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id E68B92001A;
-        Fri, 13 May 2022 14:16:42 +0000 (UTC)
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     sakari.ailus@iki.fi, mchehab@kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v7 14/28] media: ov5640: Remove ov5640_mode_init_data
-Date:   Fri, 13 May 2022 16:14:02 +0200
-Message-Id: <20220513141416.120552-15-jacopo@jmondi.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220513141416.120552-1-jacopo@jmondi.org>
-References: <20220513141416.120552-1-jacopo@jmondi.org>
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C0412463B
+        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652451405; x=1683987405;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=vEMlo/SgpNN/+xV5dMppXNYq9KNsUHPSnH3M46a4lO0=;
+  b=S4hhku+dQd8Mw5Hc5OZhWiPUuIghGcr4il6D9Osd/SknhYzDQ6JLVS3b
+   YaCCs8rRcSDRsgvzySGqFD7DP3YMLXm6NpcG80JSOrIoLnESx8RUr8syD
+   MHqBUM+/XyX2JC+qdzPuq2+OE90cc/uWFc9mmWb6VRkX/dFE6vR3PFOVj
+   NW4ppmeFTTOnYSNsQZ6SNNdZnf0IDEIGoSfSM/59vd26lNu+WVUzHgTbo
+   U8tm5HXyeUVzRzwwfRGO8V80MCki68Zhe3D9jyfrB3l8J2Z22mepeg0Yq
+   +lXtuNDt6Q/sXTXIomPEPqiiMEvdbL1bP9Pc6DiDqg7614QM0lDZt8O4b
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="330912100"
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="330912100"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:38 -0700
+X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
+   d="scan'208";a="624879509"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:34 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 888AA21AD8;
+        Fri, 13 May 2022 17:15:51 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
+        (envelope-from <sakari.ailus@linux.intel.com>)
+        id 1npW58-0001gv-RU; Fri, 13 May 2022 17:15:50 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     Jacopo Mondi <jacopo@jmondi.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        laurent.pinchart@ideasonboard.com, hverkuil-cisco@xs4all.nl,
+        mirela.rabulea@nxp.com, xavier.roumegue@oss.nxp.com,
+        tomi.valkeinen@ideasonboard.com, hugues.fruchet@st.com,
+        prabhakar.mahadev-lad.rj@bp.renesas.com, aford173@gmail.com,
+        festevam@gmail.com, Eugen.Hristev@microchip.com,
+        jbrunet@baylibre.com, paul.elder@ideasonboard.com,
+        eddy.khan@vergesense.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH v7 22/28] media: ov5640: Register device properties
+Date:   Fri, 13 May 2022 17:15:42 +0300
+Message-Id: <20220513141548.6344-23-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
+References: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The ov5640_mode_init_data is a fictional sensor more which is used to
-program the initial sensor settings.
+From: Jacopo Mondi <jacopo@jmondi.org>
 
-It is only used to initialize the sensor and can be replaced
-it with a throw-away mode which just wraps the register table.
+Parse the device properties and register the rotation and orientation
+V4L2 controls using v4l2_ctrl_new_fwnode_properties().
 
-Also rename the register table to drop the format from the name to make
-it clear an actual sensor mode has to be applied after the initial
-programming.
+Remove the open-coded parsing of the rotation property and assume the
+DTS is correct is providing either <0> or <180> as possible rotations.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Tested-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ov5640.c | 67 ++++++--------------------------------
- 1 file changed, 10 insertions(+), 57 deletions(-)
+ drivers/media/i2c/ov5640.c | 29 ++++++++++++-----------------
+ 1 file changed, 12 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 0cab0f83c223..6edd38d6fb63 100644
+index 2c3c49bbaaa54..b3159375d34b4 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -404,7 +404,7 @@ static inline bool ov5640_is_csi2(const struct ov5640_dev *sensor)
-  * over i2c.
-  */
- /* YUV422 UYVY VGA@30fps */
--static const struct reg_value ov5640_init_setting_30fps_VGA[] = {
-+static const struct reg_value ov5640_init_setting[] = {
- 	{0x3103, 0x11, 0, 0}, {0x3008, 0x82, 0, 5}, {0x3008, 0x42, 0, 0},
- 	{0x3103, 0x03, 0, 0}, {0x3630, 0x36, 0, 0},
- 	{0x3631, 0x0e, 0, 0}, {0x3632, 0xe2, 0, 0}, {0x3633, 0x12, 0, 0},
-@@ -552,50 +552,6 @@ static const struct reg_value ov5640_setting_QSXGA_2592_1944[] = {
- 	{0x3824, 0x02, 0, 0}, {0x5001, 0x83, 0, 70},
- };
- 
--/* power-on sensor init reg table */
--static const struct ov5640_mode_info ov5640_mode_init_data = {
--		.id		= 0,
--		.dn_mode	= SUBSAMPLING,
--		.pixel_rate	= OV5640_PIXEL_RATE_96M,
--		.width	= 640,
--		.height	= 480,
--		.dvp_timings = {
--			.analog_crop = {
--				.left	= 0,
--				.top	= 4,
--				.width	= 2624,
--				.height	= 1944,
--			},
--			.crop = {
--				.left	= 16,
--				.top	= 6,
--				.width	= 640,
--				.height	= 480,
--			},
--			.htot		= 1896,
--			.vblank_def	= 504,
--		},
--		.csi2_timings = {
--			.analog_crop = {
--				.left	= OV5640_PIXEL_ARRAY_LEFT,
--				.top	= OV5640_PIXEL_ARRAY_TOP,
--				.width	= OV5640_PIXEL_ARRAY_WIDTH,
--				.height	= OV5640_PIXEL_ARRAY_HEIGHT,
--			},
--			.crop = {
--				.left	= 2,
--				.top	= 4,
--				.width	= 640,
--				.height	= 480,
--			},
--			.htot		= 1896,
--			.vblank_def	= 504,
--		},
--		.reg_data	= ov5640_init_setting_30fps_VGA,
--		.reg_data_size	= ARRAY_SIZE(ov5640_init_setting_30fps_VGA),
--		.max_fps	= OV5640_30_FPS
--};
--
- static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 	{
- 		/* 160x120 */
-@@ -1607,17 +1563,16 @@ static int ov5640_set_timings(struct ov5640_dev *sensor,
- 	return 0;
- }
- 
--static int ov5640_load_regs(struct ov5640_dev *sensor,
--			    const struct ov5640_mode_info *mode)
-+static void ov5640_load_regs(struct ov5640_dev *sensor,
-+			     const struct reg_value *regs, unsigned int regnum)
- {
--	const struct reg_value *regs = mode->reg_data;
- 	unsigned int i;
- 	u32 delay_ms;
- 	u16 reg_addr;
- 	u8 mask, val;
- 	int ret = 0;
- 
--	for (i = 0; i < mode->reg_data_size; ++i, ++regs) {
-+	for (i = 0; i < regnum; ++i, ++regs) {
- 		delay_ms = regs->delay_ms;
- 		reg_addr = regs->reg_addr;
- 		val = regs->val;
-@@ -1639,8 +1594,6 @@ static int ov5640_load_regs(struct ov5640_dev *sensor,
- 		if (delay_ms)
- 			usleep_range(1000 * delay_ms, 1000 * delay_ms + 100);
+@@ -3347,6 +3347,7 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+ 	const struct v4l2_ctrl_ops *ops = &ov5640_ctrl_ops;
+ 	struct ov5640_ctrls *ctrls = &sensor->ctrls;
+ 	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
++	struct v4l2_fwnode_device_properties props;
+ 	const struct ov5640_timings *timings;
+ 	unsigned int max_vblank;
+ 	unsigned int hblank;
+@@ -3426,6 +3427,17 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+ 		goto free_ctrls;
  	}
--
--	return ov5640_set_timings(sensor, mode);
- }
  
- static int ov5640_set_autoexposure(struct ov5640_dev *sensor, bool on)
-@@ -2093,7 +2046,8 @@ static int ov5640_set_mode_exposure_calc(struct ov5640_dev *sensor,
- 		return ret;
- 
- 	/* Write capture setting */
--	ret = ov5640_load_regs(sensor, mode);
-+	ov5640_load_regs(sensor, mode->reg_data, mode->reg_data_size);
-+	ret = ov5640_set_timings(sensor, mode);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -2217,7 +2171,8 @@ static int ov5640_set_mode_direct(struct ov5640_dev *sensor,
- 		return -EINVAL;
- 
- 	/* Write capture setting */
--	return ov5640_load_regs(sensor, mode);
-+	ov5640_load_regs(sensor, mode->reg_data, mode->reg_data_size);
-+	return ov5640_set_timings(sensor, mode);
- }
- 
- static int ov5640_set_mode(struct ov5640_dev *sensor)
-@@ -2315,10 +2270,8 @@ static int ov5640_restore_mode(struct ov5640_dev *sensor)
++	ret = v4l2_fwnode_device_parse(&sensor->i2c_client->dev, &props);
++	if (ret)
++		goto free_ctrls;
++
++	if (props.rotation == 180)
++		sensor->upside_down = true;
++
++	ret = v4l2_ctrl_new_fwnode_properties(hdl, ops, &props);
++	if (ret)
++		goto free_ctrls;
++
+ 	ctrls->pixel_rate->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 	ctrls->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 	ctrls->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+@@ -3690,7 +3702,6 @@ static int ov5640_probe(struct i2c_client *client)
+ 	struct device *dev = &client->dev;
+ 	struct fwnode_handle *endpoint;
+ 	struct ov5640_dev *sensor;
+-	u32 rotation;
  	int ret;
  
- 	/* first load the initial register values */
--	ret = ov5640_load_regs(sensor, &ov5640_mode_init_data);
--	if (ret < 0)
--		return ret;
--	sensor->last_mode = &ov5640_mode_init_data;
-+	ov5640_load_regs(sensor, ov5640_init_setting,
-+			 ARRAY_SIZE(ov5640_init_setting));
+ 	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
+@@ -3714,22 +3725,6 @@ static int ov5640_probe(struct i2c_client *client)
  
- 	ret = ov5640_mod_reg(sensor, OV5640_REG_SYS_ROOT_DIVIDER, 0x3f,
- 			     (ilog2(OV5640_SCLK2X_ROOT_DIV) << 2) |
+ 	sensor->ae_target = 52;
+ 
+-	/* optional indication of physical rotation of sensor */
+-	ret = fwnode_property_read_u32(dev_fwnode(&client->dev), "rotation",
+-				       &rotation);
+-	if (!ret) {
+-		switch (rotation) {
+-		case 180:
+-			sensor->upside_down = true;
+-			fallthrough;
+-		case 0:
+-			break;
+-		default:
+-			dev_warn(dev, "%u degrees rotation is not supported, ignoring...\n",
+-				 rotation);
+-		}
+-	}
+-
+ 	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(&client->dev),
+ 						  NULL);
+ 	if (!endpoint) {
 -- 
-2.35.1
+2.30.2
 
