@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF8FBC433EF
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2DB7C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350764AbiEMOQj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 10:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S1351546AbiEMOQk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 10:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346193AbiEMOQO (ORCPT
+        with ESMTP id S244046AbiEMOQO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 13 May 2022 10:16:14 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE12118006
-        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:16:10 -0700 (PDT)
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7D35AEC1
+        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:16:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652451370; x=1683987370;
+  t=1652451369; x=1683987369;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tTeUZP9kOQuNzZgt+uy7MojjF9QMxM2i9tYrHJc4fgc=;
-  b=G2+hgTVZO5kSmXd2wxS9+oCnE92jdN2thoMhTSADQgwD8MsPWFBqLE5U
-   gMi192etE6Y1nP0meamlMcRKh7+iUnBmH1kEluXb9wW08Bbip6fDjfeKT
-   NTsRWvWWJ6p60N08KGodzdpwJs7RoDreBNvRBNvUZzJJjLnsyKwWVptN2
-   Negj8HzMjWZPjGQtxKG3LWC2T7CZTjhgRXiAktjEcVZuqBN/Avw43Je4x
-   G+nKg9qAsqnW9XkR08ryUTUnK0HzLiCBf2C4poev18oUYa2cYuSOoM7j9
-   1jE9/rBWptopmtn5KW2Un/SxspNmyn6mdnez1KUwFN9uaH2wAp/gAppDR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="252360907"
+  bh=a1RqfDzCk31jTTocMVEtA+hosRoNogSksdk2ZvgGwrg=;
+  b=kNANk3B2/7LZpj/2rMFd0MUK5aQ9zjD/1Ji9zFcyVH9NsmUwP8hz8hCG
+   xVIuHa1qvrc04UrCxGhXlahFlW+GU4gcvOZ2coL9ECRdjjXb5ExgEybwc
+   /ePj40F7l1lcTT2nnGGktfeq2PfVgxhIdH8jeAAY9pDozhvIGrOd7ZE07
+   kZOfr2a3j3kaL8AHhfQtTIh3yq4JPGOofvqMvUi2Fswi7Ame3HPOezzsq
+   UBlUK+ZgMk1acX0HtxIxPAI3v+k6ssG92JzkPfEBQJfQ+jfgZmajY1iaX
+   fR/d/SioVJZAFwNvwdGTz8pEyqWR4pmbdY3ximax41U2kDg+YRzX6pUR7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="267907055"
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="252360907"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:08 -0700
+   d="scan'208";a="267907055"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:09 -0700
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="554232214"
+   d="scan'208";a="572984937"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:04 -0700
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:04 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 56F7321AB6;
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id E568A21B96;
         Fri, 13 May 2022 17:15:51 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1npW58-0001gl-JH; Fri, 13 May 2022 17:15:50 +0300
+        id 1npW59-0001hB-9s; Fri, 13 May 2022 17:15:51 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
@@ -55,9 +55,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         jbrunet@baylibre.com, paul.elder@ideasonboard.com,
         eddy.khan@vergesense.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v7 20/28] media: ov5640: Implement init_cfg
-Date:   Fri, 13 May 2022 17:15:40 +0300
-Message-Id: <20220513141548.6344-21-sakari.ailus@linux.intel.com>
+Subject: [PATCH v7 26/28] media: ov5640: Adjust format to bpp in s_fmt
+Date:   Fri, 13 May 2022 17:15:46 +0300
+Message-Id: <20220513141548.6344-27-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
 References: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
@@ -69,8 +69,14 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Jacopo Mondi <jacopo@jmondi.org>
 
-Implement the init_cfg pad operation to initialize the subdev state
-format to the default one.
+The ov5640 driver supports different sizes for different mbus_codes.
+In particular:
+
+- 8bpp modes: high resolution sizes (>= 1280x720)
+- 16bpp modes: all sizes
+- 24bpp modes: low resolutions sizes (< 1280x720)
+
+Adjust the image sizes according to the above constraints.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
@@ -78,83 +84,39 @@ Tested-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ov5640.c | 35 +++++++++++++++++++++++++----------
- 1 file changed, 25 insertions(+), 10 deletions(-)
+ drivers/media/i2c/ov5640.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index e565f3534c33d..1981436f40177 100644
+index 240976a6cb972..3186727457bde 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -411,6 +411,18 @@ static u32 ov5640_code_to_bpp(u32 code)
-  * over i2c.
-  */
- /* YUV422 UYVY VGA@30fps */
+@@ -2698,6 +2698,7 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
+ 				   enum ov5640_frame_rate fr,
+ 				   const struct ov5640_mode_info **new_mode)
+ {
++	unsigned int bpp = ov5640_code_to_bpp(fmt->code);
+ 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+ 	const struct ov5640_mode_info *mode;
+ 	int i;
+@@ -2705,6 +2706,17 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
+ 	mode = ov5640_find_mode(sensor, fmt->width, fmt->height, true);
+ 	if (!mode)
+ 		return -EINVAL;
 +
-+static const struct v4l2_mbus_framefmt ov5640_default_fmt = {
-+	.code = MEDIA_BUS_FMT_UYVY8_2X8,
-+	.width = 640,
-+	.height = 480,
-+	.colorspace = V4L2_COLORSPACE_SRGB,
-+	.ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(V4L2_COLORSPACE_SRGB),
-+	.quantization = V4L2_QUANTIZATION_FULL_RANGE,
-+	.xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(V4L2_COLORSPACE_SRGB),
-+	.field = V4L2_FIELD_NONE,
-+};
++	/*
++	 * Adjust mode according to bpp:
++	 * - 8bpp modes work for resolution >= 1280x720
++	 * - 24bpp modes work resolution < 1280x720
++	 */
++	if (bpp == 8 && mode->width < 1280)
++		mode = &ov5640_mode_data[OV5640_MODE_720P_1280_720];
++	else if (bpp == 24 && mode->width > 1024)
++		mode = &ov5640_mode_data[OV5640_MODE_XGA_1024_768];
 +
- static const struct reg_value ov5640_init_setting[] = {
- 	{0x3103, 0x11, 0, 0}, {0x3008, 0x82, 0, 5}, {0x3008, 0x42, 0, 0},
- 	{0x3103, 0x03, 0, 0}, {0x3630, 0x36, 0, 0},
-@@ -3548,6 +3560,17 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
- 	return ret;
- }
+ 	fmt->width = mode->width;
+ 	fmt->height = mode->height;
  
-+static int ov5640_init_cfg(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_state *state)
-+{
-+	struct v4l2_mbus_framefmt *fmt =
-+				v4l2_subdev_get_try_format(sd, state, 0);
-+
-+	*fmt = ov5640_default_fmt;
-+
-+	return 0;
-+}
-+
- static const struct v4l2_subdev_core_ops ov5640_core_ops = {
- 	.s_power = ov5640_s_power,
- 	.log_status = v4l2_ctrl_subdev_log_status,
-@@ -3562,6 +3585,7 @@ static const struct v4l2_subdev_video_ops ov5640_video_ops = {
- };
- 
- static const struct v4l2_subdev_pad_ops ov5640_pad_ops = {
-+	.init_cfg = ov5640_init_cfg,
- 	.enum_mbus_code = ov5640_enum_mbus_code,
- 	.get_fmt = ov5640_get_fmt,
- 	.set_fmt = ov5640_set_fmt,
-@@ -3620,7 +3644,6 @@ static int ov5640_probe(struct i2c_client *client)
- 	struct device *dev = &client->dev;
- 	struct fwnode_handle *endpoint;
- 	struct ov5640_dev *sensor;
--	struct v4l2_mbus_framefmt *fmt;
- 	u32 rotation;
- 	int ret;
- 
-@@ -3634,15 +3657,7 @@ static int ov5640_probe(struct i2c_client *client)
- 	 * default init sequence initialize sensor to
- 	 * YUV422 UYVY VGA@30fps
- 	 */
--	fmt = &sensor->fmt;
--	fmt->code = MEDIA_BUS_FMT_UYVY8_2X8;
--	fmt->colorspace = V4L2_COLORSPACE_SRGB;
--	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
--	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
--	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
--	fmt->width = 640;
--	fmt->height = 480;
--	fmt->field = V4L2_FIELD_NONE;
-+	sensor->fmt = ov5640_default_fmt;
- 	sensor->frame_interval.numerator = 1;
- 	sensor->frame_interval.denominator = ov5640_framerates[OV5640_30_FPS];
- 	sensor->current_fr = OV5640_30_FPS;
 -- 
 2.30.2
 
