@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D4B5C4332F
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8A17C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348935AbiEMOQ0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 10:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        id S244447AbiEMOQ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 10:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233554AbiEMOQJ (ORCPT
+        with ESMTP id S245607AbiEMOQJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 13 May 2022 10:16:09 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499A9A309F
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEAE1116F1
         for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:16:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1652451368; x=1683987368;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=q3n8K/hx0XDgB3DIGJPVTbO9XMHQEc9teptegvUD6mA=;
-  b=O0BDzloLJ8pQc4R3Po2GWnwyYHRnaMZH3qPu5WsAV7F/vijsYNp4223G
-   +HY6/vQ+rU9eHQ6X5/5Y13prIvUPpZ5Lvzqrb0MCdItEpPzINkvyJcLRq
-   nhwfTkvlN8/a4LgoN9mgOb8n7LQwzG9uH9IbyXRXBh8HBOvdYq/fPcF+o
-   1NhrMcVFbuyJrWuisPKNaC/88kgCU9d7xRIzkHPvC7SYUquHKIWrlbgNf
-   GS5QgaZ7LbYX65TFC+PSEpEXqCDxE9+TS1OfBYn2eJiUEuzGF+ZiSHFAQ
-   Hb+0+XgwcGDm6kj9RTtRex6y/nxzLjcQ0QGPBv9kxkeSA+PIqM//Rtag5
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="356740963"
+  bh=rh8nWKQJjqs9OgSMo3yWC19FNQhJwpB5pfTtAiwNs0Y=;
+  b=OzsAKGcumb8GXA8kPdOc/W1M4alXynAAK73s9rTdMpBinJIYmkrowKwS
+   q96gS/6ZvoKKsOg3fDIIISnm3WDCYsu/urD8sOm702pwqdbxd+t11Hl9G
+   Uyyj3xN5J8UzE6u7l99yNf7sfyVtwVa6dzhh/z/PT4loIZ65hy9FCumKW
+   ANfkmep2WjL88Wzcl7uqLEzguEf6+biNixVRd//F0+tzlvUC+BSMjUyOW
+   SPW/Who+hIigjPwTOB73SejBssV35Lv5d4WhoBr5PCS7XhB2iWkzxjI7C
+   JhCFClIhU2WZZ8+WDY65Y2ZOWtMrnVdsRvehFvGXGsLJbP7mIRRFlDRV7
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="252360899"
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="356740963"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:08 -0700
+   d="scan'208";a="252360899"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:08 -0700
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="624879383"
+   d="scan'208";a="554232206"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:03 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:03 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 1C86021707;
-        Fri, 13 May 2022 17:15:51 +0300 (EEST)
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id E39A921697;
+        Fri, 13 May 2022 17:15:50 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1npW58-0001gd-Dv; Fri, 13 May 2022 17:15:50 +0300
+        id 1npW58-0001gW-99; Fri, 13 May 2022 17:15:50 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
@@ -55,9 +55,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         jbrunet@baylibre.com, paul.elder@ideasonboard.com,
         eddy.khan@vergesense.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v7 18/28] media: ov5640: Remove frame rate check from find_mode()
-Date:   Fri, 13 May 2022 17:15:38 +0300
-Message-Id: <20220513141548.6344-19-sakari.ailus@linux.intel.com>
+Subject: [PATCH v7 16/28] media: ov5640: Add VBLANK control
+Date:   Fri, 13 May 2022 17:15:36 +0300
+Message-Id: <20220513141548.6344-17-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
 References: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
@@ -69,91 +69,144 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Jacopo Mondi <jacopo@jmondi.org>
 
-The current implementation of ov5640_find_mode() fails if the
-frame rate programmed with s_frame_interval doesn't match the
-maximum frame rate for the current mode.
+Add the VBLANK control which allows to select the duration of the
+frame vertical blankings and allows to control the framerate.
 
-This causes issues when moving from one mode with higher FPS to another
-one which only supports a lower FPS range with tools like media-ctl.
-
-It also forces users that do not use s_frame_interval(), but rather
-configure blankings explicitly, to adjust the programmed FPS range to
-avoid failures.
-
-For this reason, remove the FPS check from ov5640_find_mode() and only
-perform it at s_frame_interval() time.
+The VBLANK control also modifies the exposure time range, which cannot
+exceed the maximum frame length.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 Tested-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ov5640.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ drivers/media/i2c/ov5640.c | 52 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 63d43bddb8386..63d435ccde559 100644
+index aa93cc980c410..4534821f4af0f 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -1995,8 +1995,7 @@ static int ov5640_set_virtual_channel(struct ov5640_dev *sensor)
+@@ -36,6 +36,10 @@
+ #define OV5640_PIXEL_ARRAY_WIDTH	2592
+ #define OV5640_PIXEL_ARRAY_HEIGHT	1944
+ 
++/* FIXME: not documented. */
++#define OV5640_MIN_VBLANK	24
++#define OV5640_MAX_VTS		3375
++
+ #define OV5640_DEFAULT_SLAVE_ID 0x3c
+ 
+ #define OV5640_LINK_RATE_MAX		490000000U
+@@ -310,6 +314,7 @@ struct ov5640_ctrls {
+ 	struct v4l2_ctrl *pixel_rate;
+ 	struct v4l2_ctrl *link_freq;
+ 	struct v4l2_ctrl *hblank;
++	struct v4l2_ctrl *vblank;
+ 	struct {
+ 		struct v4l2_ctrl *auto_exp;
+ 		struct v4l2_ctrl *exposure;
+@@ -2701,6 +2706,7 @@ static int ov5640_update_pixel_rate(struct ov5640_dev *sensor)
+ 	enum ov5640_pixel_rate_id pixel_rate_id = mode->pixel_rate;
+ 	struct v4l2_mbus_framefmt *fmt = &sensor->fmt;
+ 	const struct ov5640_timings *timings;
++	s32 exposure_val, exposure_max;
+ 	unsigned int hblank;
+ 	unsigned int i = 0;
+ 	u32 pixel_rate;
+@@ -2764,6 +2770,19 @@ static int ov5640_update_pixel_rate(struct ov5640_dev *sensor)
+ 	__v4l2_ctrl_modify_range(sensor->ctrls.hblank,
+ 				 hblank, hblank, 1, hblank);
+ 
++	__v4l2_ctrl_modify_range(sensor->ctrls.vblank, OV5640_MIN_VBLANK,
++				 OV5640_MAX_VTS - mode->height, 1,
++				 timings->vblank_def);
++	__v4l2_ctrl_s_ctrl(sensor->ctrls.vblank, timings->vblank_def);
++
++	exposure_max = timings->crop.height + timings->vblank_def - 4;
++	exposure_val = clamp_t(s32, sensor->ctrls.exposure->val,
++			       sensor->ctrls.exposure->minimum,
++			       exposure_max);
++	__v4l2_ctrl_modify_range(sensor->ctrls.exposure,
++				 sensor->ctrls.exposure->minimum,
++				 exposure_max, 1, exposure_val);
++
+ 	return 0;
  }
  
- static const struct ov5640_mode_info *
--ov5640_find_mode(struct ov5640_dev *sensor, enum ov5640_frame_rate fr,
--		 int width, int height, bool nearest)
-+ov5640_find_mode(struct ov5640_dev *sensor, int width, int height, bool nearest)
+@@ -3136,6 +3155,15 @@ static int ov5640_set_ctrl_vflip(struct ov5640_dev *sensor, int value)
+ 			      (BIT(2) | BIT(1)) : 0);
+ }
+ 
++static int ov5640_set_ctrl_vblank(struct ov5640_dev *sensor, int value)
++{
++	const struct ov5640_mode_info *mode = sensor->current_mode;
++
++	/* Update the VTOT timing register value. */
++	return ov5640_write_reg16(sensor, OV5640_REG_TIMING_VTS,
++				  mode->height + value);
++}
++
+ static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
  {
- 	const struct ov5640_mode_info *mode;
+ 	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
+@@ -3166,10 +3194,25 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct v4l2_subdev *sd = ctrl_to_sd(ctrl);
+ 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
++	const struct ov5640_mode_info *mode = sensor->current_mode;
++	const struct ov5640_timings *timings;
++	unsigned int exp_max;
+ 	int ret;
  
-@@ -2009,10 +2008,6 @@ ov5640_find_mode(struct ov5640_dev *sensor, enum ov5640_frame_rate fr,
- 	     (mode->width != width || mode->height != height)))
- 		return NULL;
+ 	/* v4l2_ctrl_lock() locks our own mutex */
  
--	/* Check to see if the current mode exceeds the max frame rate */
--	if (ov5640_framerates[fr] > ov5640_framerates[mode->max_fps])
--		return NULL;
--
- 	return mode;
- }
- 
-@@ -2649,7 +2644,7 @@ static int ov5640_try_frame_interval(struct ov5640_dev *sensor,
- 	fi->denominator = best_fps;
- 
- find_mode:
--	mode = ov5640_find_mode(sensor, rate, width, height, false);
-+	mode = ov5640_find_mode(sensor, width, height, false);
- 	return mode ? rate : -EINVAL;
- }
- 
-@@ -2687,7 +2682,7 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
- 	const struct ov5640_mode_info *mode;
- 	int i;
- 
--	mode = ov5640_find_mode(sensor, fr, fmt->width, fmt->height, true);
-+	mode = ov5640_find_mode(sensor, fmt->width, fmt->height, true);
- 	if (!mode)
- 		return -EINVAL;
- 	fmt->width = mode->width;
-@@ -3481,13 +3476,17 @@ static int ov5640_s_frame_interval(struct v4l2_subdev *sd,
- 		goto out;
- 	}
- 
--	mode = ov5640_find_mode(sensor, frame_rate, mode->width,
--				mode->height, true);
-+	mode = ov5640_find_mode(sensor, mode->width, mode->height, true);
- 	if (!mode) {
- 		ret = -EINVAL;
- 		goto out;
- 	}
- 
-+	if (ov5640_framerates[frame_rate] > ov5640_framerates[mode->max_fps]) {
-+		ret = -EINVAL;
-+		goto out;
++	switch (ctrl->id) {
++	case V4L2_CID_VBLANK:
++		/* Update the exposure range to the newly programmed vblank. */
++		timings = ov5640_timings(sensor, mode);
++		exp_max = mode->height + ctrl->val - 4;
++		__v4l2_ctrl_modify_range(sensor->ctrls.exposure,
++					 sensor->ctrls.exposure->minimum,
++					 exp_max, sensor->ctrls.exposure->step,
++					 timings->vblank_def);
++		break;
 +	}
 +
- 	if (mode != sensor->current_mode ||
- 	    frame_rate != sensor->current_fr) {
- 		sensor->current_fr = frame_rate;
+ 	/*
+ 	 * If the device is not powered up by the host driver do
+ 	 * not apply any controls to H/W at this time. Instead
+@@ -3209,6 +3252,9 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_VFLIP:
+ 		ret = ov5640_set_ctrl_vflip(sensor, ctrl->val);
+ 		break;
++	case V4L2_CID_VBLANK:
++		ret = ov5640_set_ctrl_vblank(sensor, ctrl->val);
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
+@@ -3229,6 +3275,7 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+ 	struct ov5640_ctrls *ctrls = &sensor->ctrls;
+ 	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
+ 	const struct ov5640_timings *timings;
++	unsigned int max_vblank;
+ 	unsigned int hblank;
+ 	int ret;
+ 
+@@ -3254,6 +3301,11 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+ 	ctrls->hblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HBLANK, hblank,
+ 					  hblank, 1, hblank);
+ 
++	max_vblank = OV5640_MAX_VTS - mode->height;
++	ctrls->vblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VBLANK,
++					  OV5640_MIN_VBLANK, max_vblank,
++					  1, timings->vblank_def);
++
+ 	/* Auto/manual white balance */
+ 	ctrls->auto_wb = v4l2_ctrl_new_std(hdl, ops,
+ 					   V4L2_CID_AUTO_WHITE_BALANCE,
 -- 
 2.30.2
 
