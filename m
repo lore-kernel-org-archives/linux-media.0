@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDE94C433F5
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34813C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:17:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241746AbiEMORJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 10:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
+        id S1353072AbiEMORL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 10:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352636AbiEMOQ6 (ORCPT
+        with ESMTP id S1352340AbiEMOQx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 May 2022 10:16:58 -0400
+        Fri, 13 May 2022 10:16:53 -0400
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D16129ECE
-        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:16:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28F912698F
+        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:16:45 -0700 (PDT)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 00C202000B;
-        Fri, 13 May 2022 14:16:46 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id CC2B520010;
+        Fri, 13 May 2022 14:16:43 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     sakari.ailus@iki.fi, mchehab@kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH v7 19/28] media: ov5640: Change CSI-2 timings to comply with FPS
-Date:   Fri, 13 May 2022 16:14:07 +0200
-Message-Id: <20220513141416.120552-20-jacopo@jmondi.org>
+Subject: [PATCH v7 15/28] media: ov5640: Add HBLANK control
+Date:   Fri, 13 May 2022 16:14:03 +0200
+Message-Id: <20220513141416.120552-16-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220513141416.120552-1-jacopo@jmondi.org>
 References: <20220513141416.120552-1-jacopo@jmondi.org>
@@ -33,118 +33,79 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that the frame duration can be controlled by tuning the VBLANK
-duration in CSI-2 mode, fix all modes definitions to comply with the
-reported FPS.
+Add the HBLANK control as read-only.
 
-All modes run at 30 FPS except for full-resolution mode 2592x1944
-which runs at 15FPS.
-
-Tested on a 2 data lanes setup in UYVY and RGB565 modes in CSI-2 mode.
+The hblank value is fixed in the mode definition and is updated
+everytime a new format is applied.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ov5640.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/media/i2c/ov5640.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index a17fcb39410d..8391e920ef79 100644
+index 6edd38d6fb63..86a489d8963b 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -598,8 +598,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 160,
- 				.height	= 120,
- 			},
--			.htot		= 1896,
--			.vblank_def	= 864,
-+			.htot		= 1600,
-+			.vblank_def	= 878,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -643,8 +643,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 176,
- 				.height	= 144,
- 			},
--			.htot		= 1896,
--			.vblank_def	= 840,
-+			.htot		= 1600,
-+			.vblank_def	= 854,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -688,8 +688,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 320,
- 				.height	= 240,
- 			},
--			.htot		= 1896,
--			.vblank_def	= 744,
-+			.htot		= 1600,
-+			.vblank_def	= 760,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -733,8 +733,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 640,
- 				.height	= 480,
- 			},
--			.htot		= 1896,
--			.vblank_def	= 600,
-+			.htot		= 1600,
-+			.vblank_def	= 520,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -778,7 +778,7 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.height	= 480,
- 			},
- 			.htot		= 1896,
--			.vblank_def	= 504,
-+			.vblank_def	= 1206,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -822,7 +822,7 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.height	= 576,
- 			},
- 			.htot		= 1896,
--			.vblank_def	= 408,
-+			.vblank_def	= 1110,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -865,7 +865,7 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.height	= 768,
- 			},
- 			.htot		= 1896,
--			.vblank_def	= 312,
-+			.vblank_def	= 918,
- 		},
- 		.reg_data	= ov5640_setting_low_res,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_low_res),
-@@ -907,8 +907,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 1280,
- 				.height	= 720,
- 			},
--			.htot		= 1892,
--			.vblank_def	= 20,
-+			.htot		= 1600,
-+			.vblank_def	= 560,
- 		},
- 		.reg_data	= ov5640_setting_720P_1280_720,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_720P_1280_720),
-@@ -952,8 +952,8 @@ static const struct ov5640_mode_info ov5640_mode_data[OV5640_NUM_MODES] = {
- 				.width	= 1920,
- 				.height	= 1080,
- 			},
--			.htot		= 2500,
--			.vblank_def	= 40,
-+			.htot		= 2234,
-+			.vblank_def	= 24,
- 		},
- 		.reg_data	= ov5640_setting_1080P_1920_1080,
- 		.reg_data_size	= ARRAY_SIZE(ov5640_setting_1080P_1920_1080),
+@@ -321,6 +321,7 @@ struct ov5640_ctrls {
+ 	struct v4l2_ctrl_handler handler;
+ 	struct v4l2_ctrl *pixel_rate;
+ 	struct v4l2_ctrl *link_freq;
++	struct v4l2_ctrl *hblank;
+ 	struct {
+ 		struct v4l2_ctrl *auto_exp;
+ 		struct v4l2_ctrl *exposure;
+@@ -2699,6 +2700,8 @@ static int ov5640_update_pixel_rate(struct ov5640_dev *sensor)
+ 	const struct ov5640_mode_info *mode = sensor->current_mode;
+ 	enum ov5640_pixel_rate_id pixel_rate_id = mode->pixel_rate;
+ 	struct v4l2_mbus_framefmt *fmt = &sensor->fmt;
++	const struct ov5640_timings *timings;
++	unsigned int hblank;
+ 	unsigned int i = 0;
+ 	u32 pixel_rate;
+ 	s64 link_freq;
+@@ -2756,6 +2759,11 @@ static int ov5640_update_pixel_rate(struct ov5640_dev *sensor)
+ 	__v4l2_ctrl_s_ctrl_int64(sensor->ctrls.pixel_rate, pixel_rate);
+ 	__v4l2_ctrl_s_ctrl(sensor->ctrls.link_freq, i);
+ 
++	timings = ov5640_timings(sensor, mode);
++	hblank = timings->htot - mode->width;
++	__v4l2_ctrl_modify_range(sensor->ctrls.hblank,
++				 hblank, hblank, 1, hblank);
++
+ 	return 0;
+ }
+ 
+@@ -3220,6 +3228,8 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+ 	const struct v4l2_ctrl_ops *ops = &ov5640_ctrl_ops;
+ 	struct ov5640_ctrls *ctrls = &sensor->ctrls;
+ 	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
++	const struct ov5640_timings *timings;
++	unsigned int hblank;
+ 	int ret;
+ 
+ 	v4l2_ctrl_handler_init(hdl, 32);
+@@ -3239,6 +3249,11 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+ 					OV5640_DEFAULT_LINK_FREQ,
+ 					ov5640_csi2_link_freqs);
+ 
++	timings = ov5640_timings(sensor, mode);
++	hblank = timings->htot - mode->width;
++	ctrls->hblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HBLANK, hblank,
++					  hblank, 1, hblank);
++
+ 	/* Auto/manual white balance */
+ 	ctrls->auto_wb = v4l2_ctrl_new_std(hdl, ops,
+ 					   V4L2_CID_AUTO_WHITE_BALANCE,
+@@ -3288,6 +3303,7 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+ 
+ 	ctrls->pixel_rate->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 	ctrls->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++	ctrls->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 	ctrls->gain->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 	ctrls->exposure->flags |= V4L2_CTRL_FLAG_VOLATILE;
+ 
 -- 
 2.35.1
 
