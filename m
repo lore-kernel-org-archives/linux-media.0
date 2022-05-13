@@ -2,28 +2,28 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F4BCC4332F
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:19:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C04BC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:19:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353946AbiEMOTH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 10:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
+        id S1354381AbiEMOTI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 10:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354381AbiEMOTD (ORCPT
+        with ESMTP id S1353228AbiEMOTC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 May 2022 10:19:03 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC01C14AC82
+        Fri, 13 May 2022 10:19:02 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3012614B676
         for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:19:01 -0700 (PDT)
 Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id D5D96240017;
-        Fri, 13 May 2022 14:18:59 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2C48D240006;
+        Fri, 13 May 2022 14:18:58 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     sakari.ailus@iki.fi, mchehab@kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH v7 26/28] media: ov5640: Adjust format to bpp in s_fmt
-Date:   Fri, 13 May 2022 16:14:14 +0200
-Message-Id: <20220513141416.120552-27-jacopo@jmondi.org>
+Subject: [PATCH v7 25/28] media: ov5640: Restrict sizes to mbus code
+Date:   Fri, 13 May 2022 16:14:13 +0200
+Message-Id: <20220513141416.120552-26-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220513141416.120552-1-jacopo@jmondi.org>
 References: <20220513141416.120552-1-jacopo@jmondi.org>
@@ -40,44 +40,53 @@ In particular:
 - 16bpp modes: all sizes
 - 24bpp modes: low resolutions sizes (< 1280x720)
 
-Adjust the image sizes according to the above constraints.
+Restrict the frame sizes enumerations to the above constraints.
+
+While at it, make sure the fse->mbus_code parameter is valid, and return
+-EINVAL if it's not.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ov5640.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/media/i2c/ov5640.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 125ada9ae5fc..096e2ee924aa 100644
+index a1c00e7781d5..125ada9ae5fc 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -2698,6 +2698,7 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
- 				   enum ov5640_frame_rate fr,
- 				   const struct ov5640_mode_info **new_mode)
+@@ -3474,14 +3474,28 @@ static int ov5640_enum_frame_size(struct v4l2_subdev *sd,
+ 				  struct v4l2_subdev_state *sd_state,
+ 				  struct v4l2_subdev_frame_size_enum *fse)
  {
-+	unsigned int bpp = ov5640_code_to_bpp(fmt->code);
- 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
- 	const struct ov5640_mode_info *mode;
- 	int i;
-@@ -2705,6 +2706,17 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
- 	mode = ov5640_find_mode(sensor, fmt->width, fmt->height, true);
- 	if (!mode)
++	u32 bpp = ov5640_code_to_bpp(fse->code);
++	unsigned int index = fse->index;
++
+ 	if (fse->pad != 0)
  		return -EINVAL;
+-	if (fse->index >= OV5640_NUM_MODES)
++	if (!bpp)
++		return -EINVAL;
 +
-+	/*
-+	 * Adjust mode according to bpp:
-+	 * - 8bpp modes work for resolution >= 1280x720
-+	 * - 24bpp modes work resolution < 1280x720
-+	 */
-+	if (bpp == 8 && mode->width < 1280)
-+		mode = &ov5640_mode_data[OV5640_MODE_720P_1280_720];
-+	else if (bpp == 24 && mode->width > 1024)
-+		mode = &ov5640_mode_data[OV5640_MODE_XGA_1024_768];
++	/* Only low-resolution modes are supported for 24bpp formats. */
++	if (bpp == 24 && index >= OV5640_MODE_720P_1280_720)
++		return -EINVAL;
 +
- 	fmt->width = mode->width;
- 	fmt->height = mode->height;
++	/* FIXME: Low resolution modes don't work in 8bpp formats. */
++	if (bpp == 8)
++		index += OV5640_MODE_720P_1280_720;
++
++	if (index >= OV5640_NUM_MODES)
+ 		return -EINVAL;
  
+-	fse->min_width = ov5640_mode_data[fse->index].width;
++	fse->min_width = ov5640_mode_data[index].width;
+ 	fse->max_width = fse->min_width;
+-	fse->min_height = ov5640_mode_data[fse->index].height;
++	fse->min_height = ov5640_mode_data[index].height;
+ 	fse->max_height = fse->min_height;
+ 
+ 	return 0;
 -- 
 2.35.1
 
