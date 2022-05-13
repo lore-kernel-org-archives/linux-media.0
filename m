@@ -2,47 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E16BC433F5
-	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 055F7C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 13 May 2022 14:16:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346893AbiEMOQc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 May 2022 10:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S1350311AbiEMOQd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 May 2022 10:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347753AbiEMOQQ (ORCPT
+        with ESMTP id S1347989AbiEMOQQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 13 May 2022 10:16:16 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03DF11B407
-        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:16:10 -0700 (PDT)
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD6811E498
+        for <linux-media@vger.kernel.org>; Fri, 13 May 2022 07:16:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652451370; x=1683987370;
+  t=1652451371; x=1683987371;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=6ofoCKuWCsMr3gx7rodnJeAFifES6yzInam8PQ80aJk=;
-  b=bLDUZkMSGB6sOFmVkCE98JOz2kaqS7zWAcuO0sllbJpdXJLeEiWllLyV
-   eNJiDh9HKaIxmOtvuRxpGZ1WyNplHDtj5sm1mRoT6EY2V/tidm3l4cGLz
-   NE/4Z9dwkuF1AckYTiwsEWUnV20toiVeWWo46o5VgkiOoeqXakI7aiQHd
-   1vi5QXxtYDcP6/LuHPnf4Ih4l1g+X41ZYxvR+wsHw2tJnWz0Z5t+7eNUV
-   OQeGIAbylk7i8b60r3B9bFVxhx81CPHO14h7jjyfvW3pOnTxfNidg/5v/
-   w/dUIfrbIdzOood2rJTRXDRWaftPDedWE3FUT/mUYj0sOw89DfhW4x9iw
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="252360911"
+  bh=QRAfltDLa6jHwEu9P61HpRCqzmL9eRzEeQzI3VnV0y8=;
+  b=lc/TezW7F++ljK/eyxstw+X56SLlAbI7pqXH3svYmhnq+C6xF/YhwUqZ
+   IpHV5JOyAjB3EXJCo+Fsr8sXpYvQVPaQeAbDvk0JUExTRJtr/2KaYRWHc
+   07CIvBuThMVH8IEwLasFBygwt9m8E+YK5SjKV3UCDfNUa4dGT2RYwDqeY
+   7k/a8eHCV522RM44iTZLjcV+oFQ40OJYyIlv4CR0RkhBL83H4XCbCt/RC
+   KFcjVKQL5KwEelhwYZMG2AUf9dGUHx9UrsKNXVxCYubZGrAT7MLVPUgS0
+   vwJEHWq8X0YikE69/0ho4/K6Pa6aqOcfVB338504CBjL0LZHvdoOdPn4t
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10345"; a="269147679"
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="252360911"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:08 -0700
+   d="scan'208";a="269147679"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:10 -0700
 X-IronPort-AV: E=Sophos;i="5.91,223,1647327600"; 
-   d="scan'208";a="815393376"
+   d="scan'208";a="595240565"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:04 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2022 07:16:05 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 722BA21ABD;
-        Fri, 13 May 2022 17:15:51 +0300 (EEST)
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 05C7C21BC4;
+        Fri, 13 May 2022 17:15:52 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.94.2)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1npW58-0001gq-Nb; Fri, 13 May 2022 17:15:50 +0300
+        id 1npW59-0001hE-BO; Fri, 13 May 2022 17:15:51 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
@@ -55,9 +55,9 @@ Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         jbrunet@baylibre.com, paul.elder@ideasonboard.com,
         eddy.khan@vergesense.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v7 21/28] media: ov5640: Implement get_selection
-Date:   Fri, 13 May 2022 17:15:41 +0300
-Message-Id: <20220513141548.6344-22-sakari.ailus@linux.intel.com>
+Subject: [PATCH v7 27/28] media: ov5640: Split DVP and CSI-2 formats
+Date:   Fri, 13 May 2022 17:15:47 +0300
+Message-Id: <20220513141548.6344-28-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
 References: <20220513141548.6344-1-sakari.ailus@linux.intel.com>
@@ -69,11 +69,12 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Jacopo Mondi <jacopo@jmondi.org>
 
-Implement the get_selection pad operation for the OV5640 sensor driver.
+The format enumeration list is shared between CSI-2 and DVP modes.
+This lead to the enumeration of unsupported format variants in both
+modes.
 
-The supported targets report the sensor's native size, the active pixel
-array size and the analog crop rectangle from which the image is
-produced.
+Separate the list of DVP and CSI-2 formats and create helpers to access
+the correct one.
 
 Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
@@ -81,83 +82,224 @@ Tested-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ov5640.c | 46 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ drivers/media/i2c/ov5640.c | 112 +++++++++++++++++++++++++++----------
+ 1 file changed, 83 insertions(+), 29 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 1981436f40177..2c3c49bbaaa54 100644
+index 3186727457bde..44f26d5cf029c 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -2866,6 +2866,45 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
- 	return ret;
+@@ -188,11 +188,13 @@ enum ov5640_format_mux {
+ 	OV5640_FMT_MUX_RAW_CIP,
+ };
+ 
+-static const struct ov5640_pixfmt {
++struct ov5640_pixfmt {
+ 	u32 code;
+ 	u32 colorspace;
+ 	u8 bpp;
+-} ov5640_formats[] = {
++};
++
++static const struct ov5640_pixfmt ov5640_dvp_formats[] = {
+ 	{
+ 		.code = MEDIA_BUS_FMT_JPEG_1X8,
+ 		.colorspace = V4L2_COLORSPACE_JPEG,
+@@ -202,23 +204,48 @@ static const struct ov5640_pixfmt {
+ 		.colorspace = V4L2_COLORSPACE_SRGB,
+ 		.bpp = 16,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_UYVY8_1X16,
++		.code = MEDIA_BUS_FMT_YUYV8_2X8,
+ 		.colorspace = V4L2_COLORSPACE_SRGB,
+ 		.bpp = 16,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_YUYV8_2X8,
++		.code = MEDIA_BUS_FMT_RGB565_2X8_LE,
+ 		.colorspace = V4L2_COLORSPACE_SRGB,
+ 		.bpp = 16,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_YUYV8_1X16,
++		.code = MEDIA_BUS_FMT_RGB565_2X8_BE,
+ 		.colorspace = V4L2_COLORSPACE_SRGB,
+ 		.bpp = 16,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_RGB565_2X8_LE,
++		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
+ 		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 8,
++	}, {
++		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 8
++	}, {
++		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 8,
++	}, {
++		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 8,
++	},
++	{ /* sentinel */ }
++};
++
++static const struct ov5640_pixfmt ov5640_csi2_formats[] = {
++	{
++		.code = MEDIA_BUS_FMT_JPEG_1X8,
++		.colorspace = V4L2_COLORSPACE_JPEG,
+ 		.bpp = 16,
+ 	}, {
+-		.code = MEDIA_BUS_FMT_RGB565_2X8_BE,
++		.code = MEDIA_BUS_FMT_UYVY8_1X16,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.bpp = 16,
++	}, {
++		.code = MEDIA_BUS_FMT_YUYV8_1X16,
+ 		.colorspace = V4L2_COLORSPACE_SRGB,
+ 		.bpp = 16,
+ 	}, {
+@@ -246,6 +273,7 @@ static const struct ov5640_pixfmt {
+ 		.colorspace = V4L2_COLORSPACE_SRGB,
+ 		.bpp = 8,
+ 	},
++	{ /* sentinel */ }
+ };
+ 
+ /*
+@@ -399,16 +427,33 @@ static inline bool ov5640_is_csi2(const struct ov5640_dev *sensor)
+ 	return sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY;
  }
  
-+static int ov5640_get_selection(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_state *sd_state,
-+				struct v4l2_subdev_selection *sel)
+-static u32 ov5640_code_to_bpp(u32 code)
++static inline const struct ov5640_pixfmt *
++ov5640_formats(struct ov5640_dev *sensor)
 +{
-+	struct ov5640_dev *sensor = to_ov5640_dev(sd);
-+	const struct ov5640_mode_info *mode = sensor->current_mode;
-+	const struct ov5640_timings *timings;
-+
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP: {
-+		mutex_lock(&sensor->lock);
-+		timings = ov5640_timings(sensor, mode);
-+		sel->r = timings->analog_crop;
-+		mutex_unlock(&sensor->lock);
-+
-+		return 0;
-+	}
-+
-+	case V4L2_SEL_TGT_NATIVE_SIZE:
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = OV5640_NATIVE_WIDTH;
-+		sel->r.height = OV5640_NATIVE_HEIGHT;
-+
-+		return 0;
-+
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+		sel->r.top = OV5640_PIXEL_ARRAY_TOP;
-+		sel->r.left = OV5640_PIXEL_ARRAY_LEFT;
-+		sel->r.width = OV5640_PIXEL_ARRAY_WIDTH;
-+		sel->r.height = OV5640_PIXEL_ARRAY_HEIGHT;
-+
-+		return 0;
-+	}
-+
-+	return -EINVAL;
++	return ov5640_is_csi2(sensor) ? ov5640_csi2_formats
++				      : ov5640_dvp_formats;
 +}
 +
- static int ov5640_set_framefmt(struct ov5640_dev *sensor,
- 			       struct v4l2_mbus_framefmt *format)
++static const struct ov5640_pixfmt *
++ov5640_code_to_pixfmt(struct ov5640_dev *sensor, u32 code)
  {
-@@ -3565,9 +3604,15 @@ static int ov5640_init_cfg(struct v4l2_subdev *sd,
++	const struct ov5640_pixfmt *formats = ov5640_formats(sensor);
+ 	unsigned int i;
+ 
+-	for (i = 0; i < ARRAY_SIZE(ov5640_formats); ++i) {
+-		if (ov5640_formats[i].code == code)
+-			return ov5640_formats[i].bpp;
++	for (i = 0; formats[i].code; ++i) {
++		if (formats[i].code == code)
++			return &formats[i];
+ 	}
+ 
+-	return 0;
++	return &formats[0];
++}
++
++static u32 ov5640_code_to_bpp(struct ov5640_dev *sensor, u32 code)
++{
++	const struct ov5640_pixfmt *format = ov5640_code_to_pixfmt(sensor,
++								   code);
++
++	return format->bpp;
+ }
+ 
+ /*
+@@ -1472,7 +1517,7 @@ static int ov5640_set_dvp_pclk(struct ov5640_dev *sensor)
+ 	int ret;
+ 
+ 	rate = ov5640_calc_pixel_rate(sensor);
+-	rate *= ov5640_code_to_bpp(sensor->fmt.code);
++	rate *= ov5640_code_to_bpp(sensor, sensor->fmt.code);
+ 	rate /= sensor->ep.bus.parallel.bus_width;
+ 
+ 	ov5640_calc_pclk(sensor, rate, &prediv, &mult, &sysdiv, &pll_rdiv,
+@@ -2698,15 +2743,18 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
+ 				   enum ov5640_frame_rate fr,
+ 				   const struct ov5640_mode_info **new_mode)
  {
- 	struct v4l2_mbus_framefmt *fmt =
- 				v4l2_subdev_get_try_format(sd, state, 0);
-+	struct v4l2_rect *crop = v4l2_subdev_get_try_crop(sd, state, 0);
+-	unsigned int bpp = ov5640_code_to_bpp(fmt->code);
+ 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+ 	const struct ov5640_mode_info *mode;
+-	int i;
++	const struct ov5640_pixfmt *pixfmt;
++	unsigned int bpp;
  
- 	*fmt = ov5640_default_fmt;
+ 	mode = ov5640_find_mode(sensor, fmt->width, fmt->height, true);
+ 	if (!mode)
+ 		return -EINVAL;
  
-+	crop->left = OV5640_PIXEL_ARRAY_LEFT;
-+	crop->top = OV5640_PIXEL_ARRAY_TOP;
-+	crop->width = OV5640_PIXEL_ARRAY_WIDTH;
-+	crop->height = OV5640_PIXEL_ARRAY_HEIGHT;
++	pixfmt = ov5640_code_to_pixfmt(sensor, fmt->code);
++	bpp = pixfmt->bpp;
++
+ 	/*
+ 	 * Adjust mode according to bpp:
+ 	 * - 8bpp modes work for resolution >= 1280x720
+@@ -2723,14 +2771,8 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
+ 	if (new_mode)
+ 		*new_mode = mode;
+ 
+-	for (i = 0; i < ARRAY_SIZE(ov5640_formats); i++)
+-		if (ov5640_formats[i].code == fmt->code)
+-			break;
+-	if (i >= ARRAY_SIZE(ov5640_formats))
+-		i = 0;
+-
+-	fmt->code = ov5640_formats[i].code;
+-	fmt->colorspace = ov5640_formats[i].colorspace;
++	fmt->code = pixfmt->code;
++	fmt->colorspace = pixfmt->colorspace;
+ 	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
+ 	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+ 	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
+@@ -2773,7 +2815,7 @@ static int ov5640_update_pixel_rate(struct ov5640_dev *sensor)
+ 	 * progressively slow it down if it exceeds 1GHz.
+ 	 */
+ 	num_lanes = sensor->ep.bus.mipi_csi2.num_data_lanes;
+-	bpp = ov5640_code_to_bpp(fmt->code);
++	bpp = ov5640_code_to_bpp(sensor, fmt->code);
+ 	do {
+ 		pixel_rate = ov5640_pixel_rates[pixel_rate_id];
+ 		link_freq = pixel_rate * bpp / (2 * num_lanes);
+@@ -3486,7 +3528,8 @@ static int ov5640_enum_frame_size(struct v4l2_subdev *sd,
+ 				  struct v4l2_subdev_state *sd_state,
+ 				  struct v4l2_subdev_frame_size_enum *fse)
+ {
+-	u32 bpp = ov5640_code_to_bpp(fse->code);
++	struct ov5640_dev *sensor = to_ov5640_dev(sd);
++	u32 bpp = ov5640_code_to_bpp(sensor, fse->code);
+ 	unsigned int index = fse->index;
+ 
+ 	if (fse->pad != 0)
+@@ -3608,12 +3651,23 @@ static int ov5640_enum_mbus_code(struct v4l2_subdev *sd,
+ 				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_mbus_code_enum *code)
+ {
+-	if (code->pad != 0)
+-		return -EINVAL;
+-	if (code->index >= ARRAY_SIZE(ov5640_formats))
++	struct ov5640_dev *sensor = to_ov5640_dev(sd);
++	const struct ov5640_pixfmt *formats;
++	unsigned int num_formats;
++
++	if (ov5640_is_csi2(sensor)) {
++		formats = ov5640_csi2_formats;
++		num_formats = ARRAY_SIZE(ov5640_csi2_formats) - 1;
++	} else {
++		formats = ov5640_dvp_formats;
++		num_formats = ARRAY_SIZE(ov5640_dvp_formats) - 1;
++	}
++
++	if (code->index >= num_formats)
+ 		return -EINVAL;
+ 
+-	code->code = ov5640_formats[code->index].code;
++	code->code = formats[code->index].code;
 +
  	return 0;
  }
  
-@@ -3589,6 +3634,7 @@ static const struct v4l2_subdev_pad_ops ov5640_pad_ops = {
- 	.enum_mbus_code = ov5640_enum_mbus_code,
- 	.get_fmt = ov5640_get_fmt,
- 	.set_fmt = ov5640_set_fmt,
-+	.get_selection = ov5640_get_selection,
- 	.enum_frame_size = ov5640_enum_frame_size,
- 	.enum_frame_interval = ov5640_enum_frame_interval,
- };
 -- 
 2.30.2
 
