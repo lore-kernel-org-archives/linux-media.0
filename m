@@ -2,126 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F8EFC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 16 May 2022 09:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1838DC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 16 May 2022 09:22:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242226AbiEPJVo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 May 2022 05:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
+        id S238117AbiEPJWa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 May 2022 05:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242129AbiEPJVe (ORCPT
+        with ESMTP id S234290AbiEPJW3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 May 2022 05:21:34 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED7D26100;
-        Mon, 16 May 2022 02:21:24 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24G8E5W1005786;
-        Mon, 16 May 2022 11:21:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=Q4W3Tjig+WlwJ7hKJLTi8rI/emUqtqXFj0FeCqRaQ3Q=;
- b=qsI4yD4DpV+Z45Pez3UNwySlSjWcJ/PvPbwCIRwr0Dd1WZGmEwouNqMRfB16+DQ0tZQM
- xtDh1Fn8SNIoUC1WHCD3bAsETNyoJ2+5FGJa4qye8plxHejH1SFwolBCwq3xJDpPDh51
- EI75uhr/lMRpEoxoygHz/hPZ5TfXe+HNbtrytXiH72IMfVJpTO+zGxOFUxbgIlLxBqv5
- 4rRzUt29spMX2U9kaMsDVgUuFipAG4/8OXQHiASpM566vCDw1glg0VbmF+Fyu14qykQk
- da7T6RQArxsFzrar7zt3rrzpksHW9QPw1ZM4c/4vW6CuT7yZzW8uEB4gQUW0rWEEWmmQ hA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g21j8hxph-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 May 2022 11:21:09 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EDCF810002A;
-        Mon, 16 May 2022 11:21:06 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E753F2171DB;
-        Mon, 16 May 2022 11:21:06 +0200 (CEST)
-Received: from localhost (10.75.127.45) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 16 May 2022 11:21:06
- +0200
-From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
-To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe CORNU <philippe.cornu@foss.st.com>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>
-Subject: [PATCH] media: stm32-dcmi: add support of 1X16 serial pixel formats variant
-Date:   Mon, 16 May 2022 11:20:48 +0200
-Message-ID: <20220516092048.264036-1-hugues.fruchet@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-16_05,2022-05-13_01,2022-02-23_01
+        Mon, 16 May 2022 05:22:29 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E4725EB0
+        for <linux-media@vger.kernel.org>; Mon, 16 May 2022 02:22:27 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id j11-20020a05690212cb00b006454988d225so12528680ybu.10
+        for <linux-media@vger.kernel.org>; Mon, 16 May 2022 02:22:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=MAh7Ju2NrIJj6iXnBziiVDF0qkSYhZwtRrrSWnf+1Kc=;
+        b=dab0ULoFCCuIN1lTj5BGLSnELZPZqAXIOuAn3xu0SEysC8lO5/DoOMqthb0wNjh6vG
+         GlHX9bFk3o0Tv0my3rct3VfZG6afhJoFObl468oxQb1LSlF3nLu8ZX7OOYD+OmPlTT8t
+         2IgnGO00+DudpG5TTWASYtbvLLnPH6JxgxrJe/vD5X2JN+8bUWthUihFawxWCkT8Q/MY
+         QZl9jJlg7engwVuOrggs4BnldIhte3hrLmjkv3olaoqrx7emsueMta0KF6KhivLwWLnV
+         Lg2ZubPjvMHXy/oIZtZ38qwQyl9AA5ehKxfcIRQIawpPF4dvt3ZTrpnFwn8vshMUILCB
+         xDiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=MAh7Ju2NrIJj6iXnBziiVDF0qkSYhZwtRrrSWnf+1Kc=;
+        b=S6A1bPCStxnLkazVB2zo+wCnElRQXm4T/gx2UgNdDlgYm9PoPq78BWA8IdlCeDrysx
+         iqNfUA6rRup1OQIGaHdDaWJKRH7h7eJ4xOetrTOLarDgVtHtrMb5d9TuRmQfjOU4GtQ1
+         VT1w9I9k0RVP6iaOQpiJiTyTsSypssnPqt7LfXUY7AzfdChHl6op7hTL3H4eZD57kBV8
+         xSwh+ZFSpPvMbfuRxF03iR8eMewO5LZnqQvQ35ZALyjWdkBzz5YfiTeutCL6aBjJy3hg
+         NobZuVTcaBjfsKGehx5SNKQjKUqInlsQVt7Mm/LzepHPhstVqRxAwCsqsxZqlPuOTvfo
+         mjSQ==
+X-Gm-Message-State: AOAM533DVby/gtIz//eyDimuZp/KlzpBbhJ8NUoyH0WFxpEoKBtBMSOU
+        EUll43wcT/DMeAI5mfYr3BkpYTJNC/c=
+X-Google-Smtp-Source: ABdhPJz/FG43eWgzl6/eu6+bDSRgDcYFrfhGPaOYALnBSmZv2JQYJk2gxYvXrsLIruzSxou9b/4/9NgwbBs=
+X-Received: from yunkec1.tok.corp.google.com ([2401:fa00:8f:203:2bd1:4151:d530:8b73])
+ (user=yunkec job=sendgmr) by 2002:a81:2008:0:b0:2f8:3968:e70a with SMTP id
+ g8-20020a812008000000b002f83968e70amr19187093ywg.321.1652692946763; Mon, 16
+ May 2022 02:22:26 -0700 (PDT)
+Date:   Mon, 16 May 2022 18:22:03 +0900
+Message-Id: <20220516092209.1801656-1-yunkec@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH v1 0/6] media: Implement UVC v1.5 ROI
+From:   Yunke Cao <yunkec@google.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org, Yunke Cao <yunkec@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hugues Fruchet <hugues.fruchet@st.com>
+This patch set implements UVC v1.5 regioin of interest using V4L2
+control API.
 
-Add support of 1X16 serial pixel formats in order to support
-CSI-2 camera sensor exposing 1x16 pixel formats only.
+ROI control is consisted an auto control with type bitmask and a
+rectangle control with a newly added type V4L2_CTRL_TYPE_RECT.
 
-Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
----
- drivers/media/platform/st/stm32/stm32-dcmi.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+V4L2_CTRL_WHICH_MIN/MAX_VAL is added to support the rectangle control.
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 09a743cd7004..b2ba4d95bfa3 100644
---- a/drivers/media/platform/st/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
-@@ -1592,25 +1592,31 @@ static int dcmi_set_default_fmt(struct stm32_dcmi *dcmi)
- 	return 0;
- }
- 
--/*
-- * FIXME: For the time being we only support subdevices
-- * which expose RGB & YUV "parallel form" mbus code (_2X8).
-- * Nevertheless, this allows to support serial source subdevices
-- * and serial to parallel bridges which conform to this.
-- */
- static const struct dcmi_format dcmi_formats[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_RGB565,
- 		.mbus_code = MEDIA_BUS_FMT_RGB565_2X8_LE,
- 		.bpp = 2,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_RGB565,
-+		.mbus_code = MEDIA_BUS_FMT_RGB565_1X16,
-+		.bpp = 2,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_YUYV,
- 		.mbus_code = MEDIA_BUS_FMT_YUYV8_2X8,
- 		.bpp = 2,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_YUYV,
-+		.mbus_code = MEDIA_BUS_FMT_YUYV8_1X16,
-+		.bpp = 2,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_UYVY,
- 		.mbus_code = MEDIA_BUS_FMT_UYVY8_2X8,
- 		.bpp = 2,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_UYVY,
-+		.mbus_code = MEDIA_BUS_FMT_UYVY8_1X16,
-+		.bpp = 2,
- 	}, {
- 		.fourcc = V4L2_PIX_FMT_JPEG,
- 		.mbus_code = MEDIA_BUS_FMT_JPEG_1X8,
+A rectangle control is also added to the vivid test driver.
+
+Tested on two different usb cameras using v4l2-ctl and calling ioctls.
+
+Yunke Cao (6):
+  media: v4l2_ctrl: Add region of interest rectangle control
+  media: v4l2_ctrl: Add region of interest auto control
+  media: v4l2_ctrl: Add V4L2_CTRL_WHICH_MIN/MAX_VAL
+  media: uvcvideo: implement UVC v1.5 ROI
+  media: uvcvideo: Initialize roi to default value
+  media: vivid: Add a roi rectangle control
+
+ .../userspace-api/media/drivers/uvcvideo.rst  |   1 +
+ .../media/v4l/ext-ctrls-camera.rst            |  29 +++
+ .../media/v4l/vidioc-g-ext-ctrls.rst          |  14 +-
+ .../media/videodev2.h.rst.exceptions          |   3 +
+ drivers/media/i2c/imx214.c                    |   4 +-
+ .../media/test-drivers/vivid/vivid-ctrls.c    |  34 +++
+ drivers/media/usb/uvc/uvc_ctrl.c              | 212 ++++++++++++++++--
+ drivers/media/usb/uvc/uvc_v4l2.c              |  12 +-
+ drivers/media/usb/uvc/uvcvideo.h              |  10 +-
+ drivers/media/v4l2-core/v4l2-ctrls-api.c      |  51 ++++-
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     | 155 ++++++++++++-
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |   6 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   4 +-
+ include/media/v4l2-ctrls.h                    |  32 ++-
+ include/uapi/linux/usb/video.h                |   1 +
+ include/uapi/linux/uvcvideo.h                 |   1 +
+ include/uapi/linux/v4l2-controls.h            |  11 +
+ include/uapi/linux/videodev2.h                |   4 +
+ 18 files changed, 531 insertions(+), 53 deletions(-)
+
 -- 
-2.25.1
+2.36.0.550.gb090851708-goog
 
