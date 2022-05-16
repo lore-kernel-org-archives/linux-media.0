@@ -2,91 +2,82 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07355C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 16 May 2022 09:21:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F053C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 16 May 2022 09:21:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241982AbiEPJVI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 May 2022 05:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S239666AbiEPJVQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 16 May 2022 05:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiEPJVA (ORCPT
+        with ESMTP id S231919AbiEPJVN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 May 2022 05:21:00 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1E726107;
-        Mon, 16 May 2022 02:20:56 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id m1so19615130wrb.8;
-        Mon, 16 May 2022 02:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2TczeHyUCAhehbHrGoveNks21qc/tTNmqgsMN+aZWG4=;
-        b=Qjz1eE1KFzUh9W6px5cIXQbJoqPPvCAp9uDpVBqSCswj4RhfvGneySnDgjvcwJTW7i
-         CH4fdFAtMZJizD2xZs4XVUefKfKUp4uwQYndg1se6xALCAXaAo8/VQqQk3qN0sPt0nu0
-         MQIkkcY3JbruyLrL5OeBeZTdUn+Z4xpMriaeWnTlDdX9ko2fl0o0QDpmefkljNBIRN/T
-         1jwqlz0xGs+2sEu50Y/uYmFrUPwKaSJAF11D2Bos1z95n2UfLuHBvjMsH+YGuBKMywg+
-         7xa51Jspop5WC2gq+E3cN7PlUs2B9rU1h6S4lD6RDuhq09qF+eQ/chC2BikHyX+gKIFx
-         dhFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2TczeHyUCAhehbHrGoveNks21qc/tTNmqgsMN+aZWG4=;
-        b=WNLSAxRtxdktU+Wd7br6pMv4fzqE5SzYMn1sQ2/tELEtz800+25bKIH3J/Nkre1VUB
-         F0ng6uH04cQ1sUl/gXA+p2RpjtOy5jGmhO4xaurH4AOtoDjynKvXPYjMTao6QDFBgOww
-         uLSqVnzOFPx5AgmZ7jXduxw/sb1W+bgF/p+1wTBEItx/Jx5ZytmWMxP+tz4e7qLIl9UM
-         jMR2aC20xpOPwBHYtWENXwm+VWpfARjexwFKXfjLinGUu5wD2MkqKMGSORHeVIsVb6tB
-         uSD+knpAzGToe3YUUgm0ob+JtN9ZYFRI6/adKYOW9uBOXJwuUp5mNv4zkiMc2ellisam
-         tarA==
-X-Gm-Message-State: AOAM5329rTXExjIM4z8znUAsz6hKuut58OxxjFLZer9/oCziNDDLuDX+
-        +hqMQKISss4TfL7lAz4+WzU1btoR2UE=
-X-Google-Smtp-Source: ABdhPJxxQuxBgrM/yM5YgvZaqXBz1UeUoUQt0t32Kdiox/VQ+Nl9pMKZfmdRj8DUNwaBXEiSLTsmTw==
-X-Received: by 2002:adf:d1ef:0:b0:20c:7595:4d68 with SMTP id g15-20020adfd1ef000000b0020c75954d68mr13075955wrd.155.1652692854735;
-        Mon, 16 May 2022 02:20:54 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id s20-20020adf9794000000b0020c5253d902sm8950335wrb.78.2022.05.16.02.20.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 02:20:54 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Michael Tretter <m.tretter@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: i2c: isl7998x: make const array isl7998x_video_in_chan_map static
-Date:   Mon, 16 May 2022 10:20:53 +0100
-Message-Id: <20220516092053.27619-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 16 May 2022 05:21:13 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A5625EA0;
+        Mon, 16 May 2022 02:21:08 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24G8ShAG001102;
+        Mon, 16 May 2022 11:19:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=ZkSx5Jhr6ckyxGj+pRYyb9jpx5gL1o2mb7prPSQ2dNM=;
+ b=C7hSCTglXqCmazYBepvIQgMmN2svWpJvS1fMMp3gjsCuJ5UmjLQ07Hn2cKzMJFDSwvkN
+ IdKG5WvjsS/ncVPzHsZFXAtXgsBRpoPuBG9KtuVJFTCdOoeUCQ1L+UW4b8qN8mBVzf6I
+ AXGGO77cTsf1LW6DKp2lr8uVBwKbqRCR/JOAxZYId3lX1fSfODmvieW0vP3bdx/Ul8ZK
+ 22B6Nqwxg9PxWBXXv9kkM7s7gFxy3z8z7JR1td8VYV/8ODBXLfHLVYiIv+0SXgujzPWk
+ +BNvpihloUZs+F281m4J+trEHNsmoSEaIROTFYnAgCG4x+AYFgz9c4d3ino9Hr2fnrTZ gw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g23ah9k0a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 May 2022 11:19:59 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DF1E110002A;
+        Mon, 16 May 2022 11:19:57 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D5E182171DB;
+        Mon, 16 May 2022 11:19:57 +0200 (CEST)
+Received: from localhost (10.75.127.51) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 16 May 2022 11:19:57
+ +0200
+From:   Hugues Fruchet <hugues.fruchet@foss.st.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Sylvain Petinot <sylvain.petinot@foss.st.com>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>
+Subject: [PATCH 0/3] MIPID02 pixel clk polarity & serial pixel formats
+Date:   Mon, 16 May 2022 11:19:31 +0200
+Message-ID: <20220516091934.263141-1-hugues.fruchet@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-16_05,2022-05-13_01,2022-02-23_01
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Don't populate the read-only array isl7998x_video_in_chan_map on the
-stack but instead make it static. Also makes the object code a little
-smaller.
+Enhance MIPID02 CSI-2 to parallel bridge with pixel clock polarity
+support and support of 1X16 CSI-2 serial pixel formats.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/media/i2c/isl7998x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Alain Volmat (1):
+  media: st-mipid02: add support for YVYU and VYUY formats
 
-diff --git a/drivers/media/i2c/isl7998x.c b/drivers/media/i2c/isl7998x.c
-index dc3068549dfa..94e60aa2786a 100644
---- a/drivers/media/i2c/isl7998x.c
-+++ b/drivers/media/i2c/isl7998x.c
-@@ -665,7 +665,7 @@ static int isl7998x_set_standard(struct isl7998x *isl7998x, v4l2_std_id norm)
- static int isl7998x_init(struct isl7998x *isl7998x)
- {
- 	const unsigned int lanes = isl7998x->nr_mipi_lanes;
--	const u32 isl7998x_video_in_chan_map[] = { 0x00, 0x11, 0x02, 0x02 };
-+	static const u32 isl7998x_video_in_chan_map[] = { 0x00, 0x11, 0x02, 0x02 };
- 	const struct reg_sequence isl7998x_init_seq_custom[] = {
- 		{ ISL7998X_REG_P0_VIDEO_IN_CHAN_CTL,
- 		  isl7998x_video_in_chan_map[isl7998x->nr_inputs - 1] },
+Hugues Fruchet (2):
+  media: st-mipid02: add support of pixel clock polarity
+  media: st-mipid02: expose 1X16 serial pixel format
+
+ drivers/media/i2c/st-mipid02.c | 30 ++++++++++++++++++++++++++++--
+ 1 file changed, 28 insertions(+), 2 deletions(-)
+
 -- 
-2.35.1
+2.25.1
 
