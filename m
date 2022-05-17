@@ -2,56 +2,56 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB302C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 17 May 2022 13:00:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3BA8C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 17 May 2022 13:00:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346842AbiEQNA0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 May 2022 09:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        id S1346623AbiEQNAd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 May 2022 09:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347090AbiEQM7o (ORCPT
+        with ESMTP id S1346899AbiEQM7X (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 May 2022 08:59:44 -0400
+        Tue, 17 May 2022 08:59:23 -0400
 Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCA44EF57
-        for <linux-media@vger.kernel.org>; Tue, 17 May 2022 05:58:43 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220517125836epoutp020519b68dc7f3a906d820ff2bd61282be~v5drUa7DD1344513445epoutp02R
-        for <linux-media@vger.kernel.org>; Tue, 17 May 2022 12:58:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220517125836epoutp020519b68dc7f3a906d820ff2bd61282be~v5drUa7DD1344513445epoutp02R
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795744ECE6
+        for <linux-media@vger.kernel.org>; Tue, 17 May 2022 05:58:26 -0700 (PDT)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220517125822epoutp026f429a90b8955bac93a8d3794002919d~v5de3B4Kd1207812078epoutp02D
+        for <linux-media@vger.kernel.org>; Tue, 17 May 2022 12:58:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220517125822epoutp026f429a90b8955bac93a8d3794002919d~v5de3B4Kd1207812078epoutp02D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652792316;
-        bh=wksUEOOixEoJf+qUS9NTctY/uVgxqstDTAlEr0YTLg8=;
+        s=mail20170921; t=1652792302;
+        bh=9iq+mLgOWPSj2EdBDaSGOQv03zpF6lh9YWwwNyuwaU8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QSLIMPgrjWwgbsfIimaHdQjztEXgYbFna6Vy7Lxbmuw895ZtmiNCVhmIMekOxhaN7
-         FUXw6fzS2iQIz/Tcv3qAcLBCZbUgbfZAlXQJjTaD9PsmZcndOQ1+/DN5N5dYi+6B/j
-         XB8gSfrcvjT3n6K3JwPCqt8SjZ7r9QcCd/Tyk70k=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220517125834epcas5p1e93a035cefd90fe02a76421c084b7769~v5dqBgx1u1659716597epcas5p16;
-        Tue, 17 May 2022 12:58:34 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4L2blW20FFz4x9Pt; Tue, 17 May
-        2022 12:58:31 +0000 (GMT)
+        b=aHbC2lCwdro2rDAOqfKiHT/YnawjQhJNQgLrfFMvMREDoRD5wVqRrT40L0Cj/B1oL
+         IUzfluZ0WfRFwag0vVk+q4BBdqFLOGg0Tct2V3tED9giNHGqggErcO/uGST7/wxeCh
+         yK4GKAL5b+V4UdxZsjZ8J9SIrZJFxaugC8u/XvZc=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220517125822epcas5p4c4a80e5ba36bdf5ec4b61927ae941b4a~v5deB_p7O2388723887epcas5p4K;
+        Tue, 17 May 2022 12:58:22 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4L2blG069nz4x9Px; Tue, 17 May
+        2022 12:58:18 +0000 (GMT)
 Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C7.3C.09762.7FB93826; Tue, 17 May 2022 21:58:31 +0900 (KST)
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7A.3F.10063.9EB93826; Tue, 17 May 2022 21:58:17 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220517125629epcas5p4c99993ea5e464b296ff6dfec85b4c441~v5b0zi5Qn1555515555epcas5p4G;
-        Tue, 17 May 2022 12:56:29 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220517125622epcas5p324e57e1a7d76f77898d54eb01686945a~v5buZUfw70745207452epcas5p3E;
+        Tue, 17 May 2022 12:56:22 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220517125629epsmtrp1808d294c8a1c859dd031f084186f6da6~v5b0yYx2r3276532765epsmtrp1f;
-        Tue, 17 May 2022 12:56:29 +0000 (GMT)
-X-AuditID: b6c32a4b-213ff70000002622-00-62839bf78b1c
+        20220517125622epsmtrp1be2fc9a23b6fc847c86b5406f6a41693~v5buYOrB33276532765epsmtrp1d;
+        Tue, 17 May 2022 12:56:22 +0000 (GMT)
+X-AuditID: b6c32a49-4cbff7000000274f-ca-62839be9f0af
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8F.36.08924.C7B93826; Tue, 17 May 2022 21:56:28 +0900 (KST)
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        63.AA.11276.67B93826; Tue, 17 May 2022 21:56:22 +0900 (KST)
 Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
         [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220517125625epsmtip15dfdf361e5a98fcfcd651138a8597f84~v5bxp9J0t1799817998epsmtip1Q;
-        Tue, 17 May 2022 12:56:25 +0000 (GMT)
+        20220517125618epsmtip11b875d2dd7ae8e925fdc6d73f490bc34~v5brXePFF2352323523epsmtip1g;
+        Tue, 17 May 2022 12:56:18 +0000 (GMT)
 From:   Smitha T Murthy <smitha.t@samsung.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
@@ -64,140 +64,117 @@ Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
         andi@etezian.org, alim.akhtar@samsung.com,
         aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
         Smitha T Murthy <smitha.t@samsung.com>, linux-fsd@tesla.com
-Subject: [PATCH 12/20] media: s5p-mfc: Add support for DMABUF for encoder
-Date:   Tue, 17 May 2022 18:25:40 +0530
-Message-Id: <20220517125548.14746-13-smitha.t@samsung.com>
+Subject: [PATCH 10/20] media: s5p-mfc: Add support for rate controls in
+ MFCv12
+Date:   Tue, 17 May 2022 18:25:38 +0530
+Message-Id: <20220517125548.14746-11-smitha.t@samsung.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220517125548.14746-1-smitha.t@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WTf0xbVRTHve/157TkBVDuGD9fhgYi0EIpFwLzB2CeYSaYxSwRFAu8FaS0
-        XV/BOafrBmzQDIdzSEaBNYBWESeUn+taBdYJ25QMQdDJr1EnYz+UUAYbkM3WFv3vc77ne+45
-        OfdeHu59nePPK1BoaLVCKic521g9F8Ofi1zTl+YIy+1cNNfYw0HNDxYwNNvsYKHBzm4u6hrX
-        48g41M9GZ20jbNQ7MM9CHbec2dEz0yy0cPYcQIt1Mxxksk+w0Y3be9GYuZ6DTrR3s9E3tmku
-        +nxyFENfmDYx1NS9wkXlVhsXTVt6ACo7ZsNe9KPaGtsA1TfdAqjJlmWcOl83zaWaLYsYZWqt
-        5FBTExYO1dlymCq/tM6iPu5qBdSjow1cSmeb5FAOUxB15b6Dm+H1ZmFSPi3No9UhtCJXmVeg
-        kCWT6XuyU7LjJEJRpCgBxZMhCmkRnUym7s6IfKVA7twAGVIilRc7pQwpw5DRu5LUymINHZKv
-        ZDTJJK3Kk6vEqihGWsQUK2RRClqTKBIKY+KcxncK8+dmJzHVNXjgvNHA1oLTvjrA50FCDNse
-        jnB0YBvPm7gAYM2IEbiDZQCrOzpxd+AAsLf7Ar5VMmr8wZMwA3i//idPUIbBnusNmMvFIZ6H
-        q39f5bjYlzgCoL1C42Kc2MDhmfEgF/sQr8LOWovTz+OxiDBYa4txyQIiEVYt3+G6mwXDr9v7
-        cZeF79QbHr3lagWJxzzY/JWd7fakwi+Pz7Dc7ANvD3V5av3h4sljHpbBWUcpcLMKNmi7MDe/
-        APvH61mu83EiHH5rjnbLgbDmyjnMPbEXrNr4w2MXwL7GLSZh04/DnuMh/OVet2ccCrZUNGHu
-        lVQBOKTTs6tBUN3/LQwAtILttIopktFMnCpWQb/336XlKotM4N9HHpHeB+bnlqIGAcYDgwDy
-        cNJXIDygzfEW5EnfP0irldnqYjnNDII45/o+wf2fzlU6f4lCky0SJwjFEolEnBArEZF+AuLx
-        kRxvQibV0IU0raLVW3UYj++vxbKMlSWbjZej99cH6HoTwp6tXbvR3hE/T3qNPqHJ1HmF96/m
-        C6JkrKV9h3U0ih8WBX+4a70qVx/5snl7k/XuyAo11PVu8wlrTtn8KS5/p+DnqQczh0L3Zjqy
-        WIaNlB0Ro6LQYOa7PzP3RYfe8w+4+uS1ipXMmPGXjHue8rl11MFu+K00DcZLIkdW/pr5QF65
-        IylqNeRgKZ3yjGC3JTCz6fjd14PtjcyE3/efLVkH9Fr1hjW2JgWrZgepfdYNeWEfWcjsizdX
-        Ty1slvATx6xZm5eGXxubXej/3Z5qUj38dYMxl7592Xxn/2mQHk+LxwPS+J8GqnYOhEnXbqZp
-        9FOGQ28YSBaTLxVF4GpG+g9/PQ3gbQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWRW1CMYRzGe79z22w+q5leMqmdQZKlWN7UYFzwhQsX5DATNn2KdtfaTRSR
-        KMq5KZ0UKdLqwGYTs6JaORRTw7Qju2pVFlFNK0NRWo2753l+v5n/xZ/BRReJacxuZQyvVsrk
-        YkpAVDeIPecdzjsevqDnUwDqLKimUNFPG4Y6iuwEqq/S0+jumzwclTx9TKIrxlckulf3gUB3
-        Po3T1hwLgWxXKgD6nPueQrquNhJZv2xCrx9cptCZ23oSlRstNLpuasXQDd1vDF3Tf6dR8kMj
-        jSyGaoBOpBixFe5cWUEZ4GosxYAzFQ/i3P1cC80VGT5jnE6bSnHmNgPFVRUf5ZKfDBPcubta
-        wI0m5dNcmtFEcXadJ/diyE6vd90qCI7g5btjefX8ZTsEUZ0dJkzVAg/eL7lKJoIMtzTgzEB2
-        EWwtacTTgIARsTUADtdlkRMAwtKRdDCRp8DSURs9ISVh8EZvE+YAFOsHf/Q3UQ7gxiYDaCpN
-        xRwFZy8SMMM0jDusKWwIrMoyjAOGIdiZMMsY4JiF7FJ4drCXnrgwA966/Rh3KM7je/5omCOK
-        2EDY8whdAK5XgZMWTOVVGkWkQuOvClDyByQamUKzXxkp2blXoQP/vubrWwMM2gFJPcAYUA8g
-        g4vdhAsOJoaLhBGyuHhevXe7er+c19QDD4YQuwtb0p5vF7GRshg+mudVvPo/xRjnaYlY4+nV
-        SzzI5XREenS/30ks2Gz9/ZX8ssod71tYMBZUK27PKRRsOXxMsz700XTJmkztjEOlLuVhrxNu
-        Kr1tRc4KuVdTi3ho5J2P1Eva4lM5+USH9xwpv0FOftu1r/AXXvKRDrT3T/9z/hJm9X5Qkb+4
-        IcfsReS4fTzrUnkhPOjZkYaYMa88Qe3GyFfCSbxt6Usqvsd9stNQxts5538eCjJ3v9j2NsHc
-        bEvd4KHAjy/rk2RbPaOTrMv9LhUP6OedCgxt/i5QZ9bZmc1O3enRlYJ9/m3mk7H+K4/deVM1
-        qyt7NATN/QCb9TNrY1WDs9tTGuOkUWuP7gEhqnVxe9qloVpTnpjQRMn8fXG1RvYXtHuRiSQD
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WTe0xTVxzHPb19XGQlN8DCoYusu5MsEB7tBnhKKIpTdhlEyJaFhMywAneU
+        tbRdH8rcMpEqKoxNZ0TeMIHBAJmUloGAVIbigMAMCImhoyJG24yxgSgDhmtt2f77/L6/5/md
+        c3DM+x6bh+cotLRaIZGT7J3Mrp+D3gi1VeozBH8VRCNrTRcb1a89YqC5+hUmGuw0cZBxqhJD
+        TcNmFqodGmehn27MM1HHY4f3TrmFiR7VtgNkq/iNjQwPplnovj0VTV6rYqOvrppY6MqQhYMa
+        Z+4w0PeGTQa6bHrCQaf6hzjI0tcF0MnCIcY+P6qtpg1Q3ZYGQM00LGNUT4WFQ9X32RiUoeUs
+        m5qd7mNTnQ3HqVM315nU18YWQG0VVHOooqEZNrViCKBGVlc4KV5pshgpLcmi1XxakanMylFk
+        i8nE99PfTo+MEghDhSK0h+QrJLm0mDyQlBIanyN3bIDkH5HIdQ4pRaLRkOGxMWqlTkvzpUqN
+        VkzSqiy5KkIVppHkanSK7DAFrY0WCgRvRjoCP5JJ6zb7mCozkdcw+jfIB1ZuEfDAIREB50u7
+        2UVgJ+5N9AJYWNcEXMYygGdr29zGUwDPn/kFbKdMFI25Hf0AjpraMZdxkgEfb7UznVFsIgQ+
+        XRplO9mXOAHggzNaJ2PEBgbLpwKc7EOkwJ7CXpaTmUQgvH6h5AVziWg4M38ac3V7FbZeNTsY
+        xz0cevXWYZf8HIeXHiIXH4CVo2MsF/tA+7CR42IetH1T6OZsOLeidx9ABavzjQwX74XmqSqm
+        szxGBMEfr4W75F3w4kg7wzWxFyzZWHCHc2F3zTaT8PLYbXd5CO8umtwjUHB28iLHtZISAK36
+        FnAOBFT836IOgBbgT6s0udm0JlIlVNBH/7u0TGWuAbx45MEJ3cBi/TNsEDBwMAggjpG+XEFe
+        foY3N0vy2TFarUxX6+S0ZhBEOtZ3HuO9nKl0/BKFNl0YIRJEREVFRYjeihKSflzi+YkMbyJb
+        oqVlNK2i1dt5DNyDl88QYa2itJ7rp3Ufeu7+dkeZt3ZrpLLxtnlt4FnRkQ/2+beurpQ03wsp
+        sO9fFywdtDwRTJSNfQnxOF2qNuggKW1qPGb4Z2GZYA5YCwLy+e++puTs8UqqG+7hvpT1ir7j
+        7q5PzTHNvKO/i2/tTvr15o28aZnfdyFfVHZ4re3wWuya0NKpvSX+/Z5lS6uRU6HvvB4v9zz3
+        efm470PW/h/kCYnx9tb3ktWBWnvteuzxycWFReNg4hV+YLNuObZYtDkQn3wovrS4whB8QRDH
+        TR63Hu4Ubxh5tk/ygvEk/q16mW3vePglmenjzVhxX8KccNYK9WlVf3Ds9w9h0tzhZz7F+jj/
+        UpKpkUqEwZhaI/kXOVfY2m0EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWRe0hTYRjG+87OzjlTJqdl9Gn3QYVi6iroK8oSik4GtihXWaIzD1q6tTbt
+        ZpHlJZyX0pLMe86STRNdXmuZzaWkUdnFlblKY60tMlELsxi5pP9+z/N74P3jpTiCPNybOixP
+        ZJVyaYKQcMObO4WLVh4vTo0OHCjgoo9lzQTSTNow9EEzjiPjnSYSNb4q5qDq7g4uKjc95aKW
+        h8M4avgybfuuW3BkK68DyF70nkD6T/1cNOTYi17eLSFQdn0TF902WUh009yHoVv6PxiqbJog
+        Ufp9E4kshmaA0jJM2OZ5TG1ZLWBaLVWAMVeNcZi2IgvJaAx2jNHrMglmsN9AMHeqzjHpj6Zw
+        JrdRBxjnhVKSUZvMBDOuX8T0/BgnxR7hbhti2ITDx1llQFCUW1zFHwOu6KBPVvX+AingI18N
+        eBSk18Bn6ifAxQL6HoDG8u0zPYTa3/lghudArdNGqoHb9OYCBhsmRzkuQdB+8Of3XsIlPOl0
+        AM3aTMwVOHQeDq+ap/6t5tChMPtWIe5inF4G26/kcF3Mp9dD8/BFzsyJxbCmvmOaKYo33Zc6
+        I1wooNdB6wN0GXhUgFk64MUqVLJYmUqkEMnZE/4qqUyVJI/1P3RUpgf/vubr0wpadKP+RoBR
+        wAggxRF68gNPpkQL+DHSU6dZ5dFIZVICqzKC+RQunMd/rn4cKaBjpYlsPMsqWOV/i1E87xQs
+        bUARH1Pm0Hjn2w86iid9CXKt9VvwkLtulxyVbNVah4/sXtHu9yMvZK5YLtZ4bq58kUS/rrNJ
+        t8D7o56yzqj+zznV/Je9he5heGBGafLbswkhAtu1M6t3JkXkKEtsS8f69vhtut7j19Uxuyz4
+        UkFM4IKsFNtjempLavQ2stXZZXFIBpLDisTCybM3jr0olGzkc6O+ROxw2r1UBl4PIJaEZsmy
+        dgWIwZlVdS2/85Nrgo0fHCN6ET9Pd3tk8dp7J3iNWp/i58PnQx1IFLQ87lRypL00l/EZsa68
+        ufrNV9/B7k7Juvh9EndD+Luw/v2zHh1QtNXhE7KphRGZRc2SNiGuipOKfDlKlfQvlPK6/yQD
         AAA=
-X-CMS-MailID: 20220517125629epcas5p4c99993ea5e464b296ff6dfec85b4c441
+X-CMS-MailID: 20220517125622epcas5p324e57e1a7d76f77898d54eb01686945a
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220517125629epcas5p4c99993ea5e464b296ff6dfec85b4c441
+X-CMS-RootMailID: 20220517125622epcas5p324e57e1a7d76f77898d54eb01686945a
 References: <20220517125548.14746-1-smitha.t@samsung.com>
-        <CGME20220517125629epcas5p4c99993ea5e464b296ff6dfec85b4c441@epcas5p4.samsung.com>
+        <CGME20220517125622epcas5p324e57e1a7d76f77898d54eb01686945a@epcas5p3.samsung.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add dmabuf support for mfc encoder
+In MFCv12, the rc configs are changed with support for
+CBR loose, CBR tight and Variable Bitrate (VBR) added.
 
 Cc: linux-fsd@tesla.com
 Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
 ---
- .../media/platform/samsung/s5p-mfc/s5p_mfc.c  |  4 ++--
- .../platform/samsung/s5p-mfc/s5p_mfc_enc.c    | 21 +++++++++++--------
- 2 files changed, 14 insertions(+), 11 deletions(-)
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c | 22 +++++++++++++++----
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h |  1 +
+ 2 files changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-index a4e3df24b4ae..a6e50981bdd6 100644
---- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
-@@ -850,7 +850,7 @@ static int s5p_mfc_open(struct file *file)
- 		q->io_modes = VB2_MMAP;
- 		q->ops = get_dec_queue_ops();
- 	} else if (vdev == dev->vfd_enc) {
--		q->io_modes = VB2_MMAP | VB2_USERPTR;
-+		q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
- 		q->ops = get_enc_queue_ops();
- 	} else {
- 		ret = -ENOENT;
-@@ -877,7 +877,7 @@ static int s5p_mfc_open(struct file *file)
- 		q->io_modes = VB2_MMAP;
- 		q->ops = get_dec_queue_ops();
- 	} else if (vdev == dev->vfd_enc) {
--		q->io_modes = VB2_MMAP | VB2_USERPTR;
-+		q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
- 		q->ops = get_enc_queue_ops();
- 	} else {
- 		ret = -ENOENT;
-diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-index 9b624f17e32b..57b4397f2b03 100644
---- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-+++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-@@ -1703,9 +1703,10 @@ static int vidioc_reqbufs(struct file *file, void *priv,
- 	struct s5p_mfc_ctx *ctx = fh_to_ctx(priv);
- 	int ret = 0;
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
+index 425c708eddcc..7db7945ea80f 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
+@@ -1048,10 +1048,24 @@ static int s5p_mfc_set_enc_params(struct s5p_mfc_ctx *ctx)
  
--	/* if memory is not mmp or userptr return error */
-+	/* if memory is not mmp or userptr or dmabuf return error */
- 	if ((reqbufs->memory != V4L2_MEMORY_MMAP) &&
--		(reqbufs->memory != V4L2_MEMORY_USERPTR))
-+		(reqbufs->memory != V4L2_MEMORY_USERPTR) &&
-+		(reqbufs->memory != V4L2_MEMORY_DMABUF))
- 		return -EINVAL;
- 	if (reqbufs->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
- 		if (reqbufs->count == 0) {
-@@ -1782,9 +1783,10 @@ static int vidioc_querybuf(struct file *file, void *priv,
- 	struct s5p_mfc_ctx *ctx = fh_to_ctx(priv);
- 	int ret = 0;
- 
--	/* if memory is not mmp or userptr return error */
-+	/* if memory is not mmp or userptr or dmabuf return error */
- 	if ((buf->memory != V4L2_MEMORY_MMAP) &&
--		(buf->memory != V4L2_MEMORY_USERPTR))
-+		(buf->memory != V4L2_MEMORY_USERPTR) &&
-+		(buf->memory != V4L2_MEMORY_DMABUF))
- 		return -EINVAL;
- 	if (buf->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
- 		if (ctx->state != MFCINST_GOT_INST) {
-@@ -2840,11 +2842,12 @@ static int s5p_mfc_start_streaming(struct vb2_queue *q, unsigned int count)
- 						S5P_MFC_R2H_CMD_SEQ_DONE_RET,
- 						0);
- 		}
--
--		if (ctx->src_bufs_cnt < ctx->pb_count) {
--			mfc_err("Need minimum %d OUTPUT buffers\n",
--					ctx->pb_count);
--			return -ENOBUFS;
-+		if (q->memory != V4L2_MEMORY_DMABUF) {
-+			if (ctx->src_bufs_cnt < ctx->pb_count) {
-+				mfc_err("Need minimum %d OUTPUT buffers\n",
-+						ctx->pb_count);
-+				return -ENOBUFS;
-+			}
- 		}
+ 	/* reaction coefficient */
+ 	if (p->rc_frame) {
+-		if (p->rc_reaction_coeff < TIGHT_CBR_MAX) /* tight CBR */
+-			writel(1, mfc_regs->e_rc_mode);
+-		else					  /* loose CBR */
+-			writel(2, mfc_regs->e_rc_mode);
++		if (IS_MFCV12(dev)) {
++			/* loose CBR */
++			if (p->rc_reaction_coeff < LOOSE_CBR_MAX)
++				writel(1, mfc_regs->e_rc_mode);
++			/* tight CBR */
++			else if (p->rc_reaction_coeff < TIGHT_CBR_MAX)
++				writel(0, mfc_regs->e_rc_mode);
++			/* VBR */
++			else
++				writel(2, mfc_regs->e_rc_mode);
++		} else {
++			/* tight CBR */
++			if (p->rc_reaction_coeff < TIGHT_CBR_MAX)
++				writel(1, mfc_regs->e_rc_mode);
++			/* loose CBR */
++			else
++				writel(2, mfc_regs->e_rc_mode);
++		}
  	}
  
+ 	/* seq header ctrl */
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h
+index ee2018ee95cc..f09499ba153d 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h
+@@ -44,6 +44,7 @@
+ #define ENC_H264_LEVEL_MAX		42
+ #define ENC_MPEG4_VOP_TIME_RES_MAX	((1 << 16) - 1)
+ #define FRAME_DELTA_H264_H263		1
++#define LOOSE_CBR_MAX			5
+ #define TIGHT_CBR_MAX			10
+ #define ENC_HEVC_RC_FRAME_RATE_MAX	((1 << 16) - 1)
+ #define ENC_HEVC_QP_INDEX_MIN		-12
 -- 
 2.17.1
 
