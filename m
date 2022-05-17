@@ -2,26 +2,26 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12017C433F5
-	for <linux-media@archiver.kernel.org>; Tue, 17 May 2022 08:28:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C22DC433F5
+	for <linux-media@archiver.kernel.org>; Tue, 17 May 2022 08:28:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243500AbiEQI2c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 May 2022 04:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S243470AbiEQI2h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 May 2022 04:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243470AbiEQI1s (ORCPT
+        with ESMTP id S243087AbiEQI1r (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 May 2022 04:27:48 -0400
+        Tue, 17 May 2022 04:27:47 -0400
 Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A8C4888D;
-        Tue, 17 May 2022 01:27:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E9345AF3;
+        Tue, 17 May 2022 01:27:24 -0700 (PDT)
 Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 24H8CQVW039692;
-        Tue, 17 May 2022 16:12:26 +0800 (GMT-8)
+        by twspam01.aspeedtech.com with ESMTP id 24H8CR7W039693;
+        Tue, 17 May 2022 16:12:27 +0800 (GMT-8)
         (envelope-from neal_liu@aspeedtech.com)
 Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
  (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 17 May
- 2022 16:26:04 +0800
+ 2022 16:26:05 +0800
 From:   Neal Liu <neal_liu@aspeedtech.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -39,10 +39,12 @@ CC:     Neal Liu <neal_liu@aspeedtech.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>
-Subject: [PATCH v2 0/3] add Aspeed udc driver for ast2600
-Date:   Tue, 17 May 2022 16:25:55 +0800
-Message-ID: <20220517082558.3534161-1-neal_liu@aspeedtech.com>
+Subject: [PATCH v2 3/3] dt-bindings: usb: add documentation for aspeed udc
+Date:   Tue, 17 May 2022 16:25:58 +0800
+Message-ID: <20220517082558.3534161-4-neal_liu@aspeedtech.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220517082558.3534161-1-neal_liu@aspeedtech.com>
+References: <20220517082558.3534161-1-neal_liu@aspeedtech.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -50,35 +52,78 @@ X-Originating-IP: [192.168.10.10]
 X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
  (192.168.0.24)
 X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 24H8CQVW039692
+X-MAIL: twspam01.aspeedtech.com 24H8CR7W039693
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series aim to add Aspeed USB 2.0 Device Controller (udc)
-driver, including driver itself, device tree node and documentation.
+Add device tree binding documentation for the Aspeed USB2.0 Device
+Controller.
 
-Change since v1:
-- Fix build test warning reported by kernel test robot.
-- Rename proper name for dt-bindings document.
-
-*** BLURB HERE ***
-
-Neal Liu (3):
-  usb: gadget: add Aspeed ast2600 udc driver
-  ARM: dts: aspeed: Add USB2.0 device controller node
-  dt-bindings: usb: add documentation for aspeed udc
-
- .../bindings/usb/aspeed,ast2600-udc.yaml      |   52 +
- MAINTAINERS                                   |    7 +
- arch/arm/boot/dts/aspeed-g6.dtsi              |   10 +
- drivers/usb/gadget/udc/Kconfig                |   13 +
- drivers/usb/gadget/udc/Makefile               |    1 +
- drivers/usb/gadget/udc/aspeed_udc.c           | 1601 +++++++++++++++++
- 6 files changed, 1684 insertions(+)
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+---
+ .../bindings/usb/aspeed,ast2600-udc.yaml      | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml
- create mode 100644 drivers/usb/gadget/udc/aspeed_udc.c
 
+diff --git a/Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml b/Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml
+new file mode 100644
+index 000000000000..2e91d5179359
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (c) 2020 Facebook Inc.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/aspeed,ast2600-udc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ASPEED USB 2.0 Device Controller
++
++maintainers:
++  - Neal Liu <neal_liu@aspeedtech.com>
++
++description: |+
++  The ASPEED USB 2.0 Device Controller implements 1 control endpoint and
++  4 generic endpoints for AST260x.
++
++  Supports independent DMA channel for each generic endpoint.
++  Supports 32/256 stages descriptor mode for all generic endpoints.
++
++properties:
++  compatible:
++    enum:
++      - aspeed,ast2600-udc
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/aspeed-clock.h>
++    usb: usb@1e6a2000 {
++            compatible = "aspeed,ast2600-udc";
++            reg = <0x1e6a2000 0x300>;
++            interrupts = <9>;
++            clocks = <&syscon ASPEED_CLK_GATE_USBPORT2CLK>;
++            pinctrl-names = "default";
++            pinctrl-0 = <&pinctrl_usb2bd_default>;
++    };
 -- 
 2.25.1
 
