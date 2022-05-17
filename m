@@ -2,56 +2,56 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64626C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 17 May 2022 12:58:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A6FAC433FE
+	for <linux-media@archiver.kernel.org>; Tue, 17 May 2022 12:59:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236705AbiEQM6S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 May 2022 08:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
+        id S1346625AbiEQM7C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 May 2022 08:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347093AbiEQM6B (ORCPT
+        with ESMTP id S1347232AbiEQM6E (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 May 2022 08:58:01 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE464D265
-        for <linux-media@vger.kernel.org>; Tue, 17 May 2022 05:57:46 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220517125745epoutp04b7244a10bfdf940c4b46a55967054d4a~v5c7pLAA91434314343epoutp04X
-        for <linux-media@vger.kernel.org>; Tue, 17 May 2022 12:57:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220517125745epoutp04b7244a10bfdf940c4b46a55967054d4a~v5c7pLAA91434314343epoutp04X
+        Tue, 17 May 2022 08:58:04 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815DB4DF47
+        for <linux-media@vger.kernel.org>; Tue, 17 May 2022 05:57:55 -0700 (PDT)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220517125753epoutp032929283daf970f42bd24a6fcddec723c~v5dDqHMIj0491904919epoutp03u
+        for <linux-media@vger.kernel.org>; Tue, 17 May 2022 12:57:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220517125753epoutp032929283daf970f42bd24a6fcddec723c~v5dDqHMIj0491904919epoutp03u
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652792265;
-        bh=+LuFjZ47M4iyPMAd4HutYcuH5OmT3P0Nw+AtWPJ5ZsY=;
+        s=mail20170921; t=1652792273;
+        bh=iyrNms+qcdKhc8ovREJxsoI43jh/BUr5xeiyr3fzr+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eRoqvmswFvKs78NkmUEjCt+Ppy1fuW6/k1zlKj9wUde2iK8iWwiooYC75u8DeKqbb
-         GMCN67vQ/wvOmA5MaQpGltL4hDdckreJSbyMsZm4S9TSmudvpE9bUWJouIzqPlnao+
-         OkfWZeygYJ2A0Xkx1kpN2Xxq6NlOTmubLa7B42jk=
+        b=K7Y0l3eInckFgC1K59rUOsAUn43+OAoEF5/i9MvJTDTsve9rgeUGX1oqcVQtI2aY+
+         YdPMSB78M10YMNZaBTq7UW1V0g2yKSfSuiX/3FjP9/oXl0dREeXtPVTtSTo3CZdXxX
+         FN9ckxGIDHuZ8QKnE0gLIZjO59iHfAF6pNZCQnsY=
 Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220517125744epcas5p1e62bd4e068f18010e635939916a2882f~v5c64qTW33158631586epcas5p1u;
-        Tue, 17 May 2022 12:57:44 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.180]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4L2bkX59TLz4x9Pp; Tue, 17 May
-        2022 12:57:40 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F1.1C.09762.1CB93826; Tue, 17 May 2022 21:57:37 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220517125558epcas5p228cdf5f665468d3fd065d88a5d0ad157~v5bX98dSJ2182421824epcas5p2M;
-        Tue, 17 May 2022 12:55:58 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220517125558epsmtrp1bd21605f5741ba1f8eb98f0478b0b45d~v5bX8vR1T3276532765epsmtrp1K;
-        Tue, 17 May 2022 12:55:58 +0000 (GMT)
-X-AuditID: b6c32a4b-213ff70000002622-8a-62839bc1d604
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220517125753epcas5p3b1ffb20bf2402d8630a95d76b83f6d20~v5dDCF0Fx0547205472epcas5p3k;
+        Tue, 17 May 2022 12:57:53 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4L2bkh2JN4z4x9Ps; Tue, 17 May
+        2022 12:57:48 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2D.CE.09827.CCB93826; Tue, 17 May 2022 21:57:48 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220517125605epcas5p44cbb77e6bc15ceb32a934e326fc777ef~v5bephFxT2591625916epcas5p4z;
+        Tue, 17 May 2022 12:56:05 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220517125605epsmtrp2965331815c4ee528e6921e252d75c2d2~v5beocCdL0914309143epsmtrp2I;
+        Tue, 17 May 2022 12:56:05 +0000 (GMT)
+X-AuditID: b6c32a4a-b3bff70000002663-c8-62839bcc00ec
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D3.36.08924.D5B93826; Tue, 17 May 2022 21:55:57 +0900 (KST)
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        01.AA.11276.56B93826; Tue, 17 May 2022 21:56:05 +0900 (KST)
 Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
         [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220517125554epsmtip1ea09529dd8a0dcabd6efa91352936b85~v5bU45N-M2352323523epsmtip1e;
-        Tue, 17 May 2022 12:55:54 +0000 (GMT)
+        20220517125601epsmtip10938db560ea2547dba032f3cb9c85afa~v5bbbK1Qo1799717997epsmtip1M;
+        Tue, 17 May 2022 12:56:01 +0000 (GMT)
 From:   Smitha T Murthy <smitha.t@samsung.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
@@ -64,82 +64,475 @@ Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
         andi@etezian.org, alim.akhtar@samsung.com,
         aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
         Smitha T Murthy <smitha.t@samsung.com>, linux-fsd@tesla.com
-Subject: [PATCH 03/20] dt-bindings: media: s5p-mfc: Add mfcv12 variant
-Date:   Tue, 17 May 2022 18:25:31 +0530
-Message-Id: <20220517125548.14746-4-smitha.t@samsung.com>
+Subject: [PATCH 05/20] media: s5p-mfc: Add initial support for MFCv12
+Date:   Tue, 17 May 2022 18:25:33 +0530
+Message-Id: <20220517125548.14746-6-smitha.t@samsung.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220517125548.14746-1-smitha.t@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WTe0xTVxzHd+5tby8klZvixhkLjF1HFoxgy6NeiGxT0FyGc2wjE7eZroVL
-        IZT2rrcgc2NWhY7xVBcMIA8HCAGUR3lYgS28DAYcQqwQFhiICEM0oh2TiJO1tmz/ffI73+/v
-        98v3nIOjoknMHU9U6xitWq4iMWdeR7+Pj2/v+VMKcU3mW9RseQdGVa0tItRMlYVH9bW2C6g2
-        83mUqh3s4VMVAyN86krvHI9q+dN6OlY8zaMWKxoBtVTyB0YZ747zqTv3D1G3OksxKre5nU9d
-        HpgWUBcnxhCqxvgcoSrb/xJQmb8MCKjp7g5AZRgGkPfd6EvllwBtmq4G9ET1E5S+WjItoKu6
-        lxDaWP8jRk+Nd2N0a/VxOvPaMx6d31YP6BcnywR09sAERluMnvTQqkUQteXzpN0JjDyO0Xox
-        6lhNXKJaGUpGfioLkwVJxRJfSTC1i/RSy5OZUDL8QJTv/kSVNQHSK1WuSrGWouQcR+58d7dW
-        k6JjvBI0nC6UZNg4FRvI+nHyZC5FrfRTM7oQiVjsH2QVfpWUMLyYj7GDWFqVYR7TAwM/Gzjh
-        kAiEOWujWDZwxkVEF4DD+qs824GIeALgTzk+drYAuHSB3TS09j8FdkMngK1zzQ53BgIXlqsQ
-        mwojdsC/Hw1jNt5KnADwbpbOxiixjsJis6eNXYn9sHixEbUxj/CGjVmLL1cSEsHQPJuH2qe9
-        CRuae6yM405ECCx7ccQ2CxIbOJxpMfHsmnC43pfl0LvC+4NtAju7w6UCg4OVcMZyCtiZhWX6
-        NsTO78EecynP1h8lfGBT50572QMWDjUi9pW3wLz1eYdcCE3lm0zCyhvXHe0hvP2w3ZEoDduK
-        ann2TPIAHLlSyD8NPEv+H3EBgHrwOsNyyUqGC2ID1MzR/+4sVpNsBC/f+PZIE5ibXfHrAwgO
-        +gDEUXKrUJymV4iEcfJvjjFajUybomK4PhBkze8M6v5qrMb6SdQ6mSQwWBwolUoDgwOkEtJN
-        SGycUIgIpVzHJDEMy2g3fQju5K5Hth1aZ2MeZ34xeu3LYVEo7mfip+5z2VVfqTiKeh+8ERTx
-        /Fz/G7ra+d9lue1FhZ8VpOlvHu/xP5divLjHM34q67C6+Zllga0Je2fiAw+ICAOGP1qPSF+I
-        bvIS5/7QcivjH/OkTiGZvdnY9fH19LNLPi7z4nvRAKvYQG4bmlZyQqbMe+vOpDq7nh1Xme68
-        lqd48MqvYSVozMEdX9ctu7qcXHNRxLgUzDRHe3wb/vi71e/9DZ0fNjiPp8dHa5cDHqxo947u
-        GWLxEq7wE2XRMfenvfvivfM7L0fIxpZXW123cV35D0MPpE1KK1SPiCM/l9YN0fGH3ZrGI7ve
-        XmgQ+o8l3Isf+Y3kcQlyyXZUy8n/BVhNmQhsBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEIsWRmVeSWpSXmKPExsWy7bCSnG7s7OYkgy9PLC0ezNvGZrH4x3Mm
-        i/uLP7NYHNq8ld1iy5XZzBbLjx9gtZh/5ByrxfaDj1gsNr4Ayl6ceZfF4vn8dYwWL2fdY7PY
-        9Pgaq8XDV+EWl3fNYbPo2bCV1WLtkbvsFkuvX2SyWLbpD5PFoq1f2C1a9x5ht7i7ZxujRUvb
-        ESYHcY8189Yweuy4u4TR4/qST8weO2fdZfdYvOclk8emVZ1sHneu7WHz2Lyk3qP16C8Wj74t
-        qxg9/jXNZffoOnKdzePzJjmPU18/swfwRXHZpKTmZJalFunbJXBlnH7ex1ZwnK1icdsTtgbG
-        NtYuRk4OCQETic2HvzN2MXJxCAnsYJR48nM1I0RCQmLl70lQtrDEyn/P2SGKmpgkdt9qZAFJ
-        sAnoSHx7f5oNJCEi0MoocX1lJxOIwywwkUViyvVfzCBVwgJuEjOfrwOzWQRUJdZ1PAfbzStg
-        KXHlQS8zxAp5idUbDgDZHBycAlYSc//FgphCQCVP91tMYORbwMiwilEytaA4Nz232LDAKC+1
-        XK84Mbe4NC9dLzk/dxMjONq0tHYw7ln1Qe8QIxMH4yFGCQ5mJRFeg4qGJCHelMTKqtSi/Pii
-        0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqYpI8KvN548OuEtWK8y2Ze2evN
-        vWYRx9Ktqs5d/65ttvs1/VuQ+RQZhgv8HE94ryxMsCn8/cFYM+m8ttDRX782Otf2zbxbesRJ
-        WUL57b3lHL179PPjlF4uWvPjuuGy/6nvlKa6rVVQtN26QW3PrJ1/wrQmHw44cmn54sv7a2tm
-        PmVsLbnQYdKjkxNdWnunqW5eJuOJl2bTrYsPzhZeuEL++kzZ/T9uCTLrO5Yks0gfkHM8wbnz
-        stlnFT3/Dp+Axxb5mfb5fmKS9Xr/0/d9fPJOuZ6nujl/9WP7c33nglZybtKe9vD55sScX5vf
-        p/FJpl3bI1/4wH1r73SlyB3uqicEhQ/5sG5LPQFMBnZ7635XKLEUZyQaajEXFScCAO5IFLwl
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WTf1DTZRzH7/nuu+/GrtEXJHmCg7ivx114/NhgjGcG/kjyvpIQmVF5FQ74
+        tu0Y29x3BFY6UNYZAtF5MwH5kRAWosL4mY47nBg0pc4TJMr5A70jSclYEKBAWxv13+vzft7v
+        5/Pc53kePsd/nAjiqzQGRq+RqylCgHdfingx6mrNoSzRjP0ZdKeum0CN85MYut3oxJGto4uH
+        OkdqOOjUYD8X1Q/8yEU9Fydw1P6ba/ValQNHk/VnAXpQfYtAlns3uOju1Fvo+vkTBCpr6+Ki
+        MwMOHvp67BqGmi1PMXSy6y8eMvUN8JDD2g1QyacD2OZAurWuFdC9jiZAjzXNcOjvqh08utH6
+        AKMtLZ8R9M0bVoLuaDLSpsuLOF3R2QLo5YO1PLp0YIygnZZQ2j7r5KX77s5NVDLyHEYfxmiy
+        tTkqjSKJevWNzK2Z8VKROEosQwlUmEaexyRRyTvSo7ap1K4JUGEfytX5LildzrJUzMZEvTbf
+        wIQptawhiWJ0OWqdRBfNyvPYfI0iWsMYNohFoth4l3FPrrKp4gegazMWPjVfJIrA56pS4MOH
+        pAS2n7uPlQIB35+8AODEV3/yPMUMgKNTS8BTzAHY3HUMX410FLd6I30AlixYvJESDNrnKjC3
+        iyAj4dwfVwg3B5DFAN47bHAzh3zCgVUjoW5eQ74Cf2464vLz+TgZDs8cE7llISmD9vkyzNPs
+        BXi6rZ/jtviQG2Dt8nseeYUP+4bTPJwMG3puEh5eA6cGO3keDoLO6T6vroC3nYeAh3WwtqjT
+        u/0m2D9yAndvzyEj4LnzMR45BJrtZzHPgX1h+ZP7XrsQ9tatMgVPXh3ytoJw9FEX18M0NB+t
+        846nHMCqcQdeCUKr/2/RAEALeJ7RsXkKho3XxWqYgv/uLFubZwH/vvH1Kb3g7p3H0TaA8YEN
+        QD6HChCKCouy/IU58n0fMXptpj5fzbA2EO+a3hecoOeyta5PojFkiiUykUQqlUpkcVIxFSgk
+        V4qz/EmF3MDkMoyO0a/mML5PUBFWsJfXrEUhCSbhurS+8qjYXW+qrFy9IPf0qZ0JKxkFfrL4
+        4d2BpktlhEZavyXSN1hrFhlSJaPmdRnBPy0cDpfM1cbtTxosKNlnfN1y4PK4RCG3KYIVmCAo
+        XGcqTiEDsHbQMPzJ1m8axt9xzpo2SZUT/ZMLeMza/exLx+M4D21v123bOFS4Y4UKuzI9z/tV
+        LFq74IjcUrmzKPVL4x6jINkcAJcyKpbxRcK68HDvlGEePl7M/H3w5U71u5tz3scsE1Zl5fVd
+        36Zayg7IBDU9jtes2K2/W59VzbLbRx9ZfvFTqIY/9ksZSgyJ3S49Wj/2wfTxC9OFs2lLkfbq
+        79sP4hEUzirl4vUcPSv/B9MnWh1sBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWRe0hTYRyG/c7OzjlKk9OyPBkaDDKMWi4sv27eqDwJgVEhWLGOelJRp22m
+        JVG2Utq6eOnmXXOz2JxL521eKl2ToZkphStwlpXZzZLM8k5O6b+X3/Pwe/94CQ4/B3UjYiXJ
+        rFTCxAswJ7ThqcBjE1t4KcLbosXgu5IGDKomRxD4VjWOQlNtPQ7rXhVy4ANLGxeWmnu4sLH9
+        PQprPi/QvnwbCkdK9QB+KRjEoOFDPxcOfQ2DL5uLMHitup4Lq8w2HFZY+xB43zCLwPL63zjM
+        eGTGoa21AcDLmWYkwJXWlegAbbSpAW1V/+LQTQU2nFa1fkFog1aB0QP9rRhdq75AZ3RMo/SN
+        Oi2g5+XFOK00WzF63OBBd02M46HO4U67otj42BRWutnvhFOM+kYnSKq+cGb2djuWDrJilcCR
+        oEgfqvaiDlECJ4JPtgDqtbaTuwQoSjOTC5byCkozP4IvSXKE+padtQgwciP15+czzA5cyAxA
+        WTWKxVccMgelblmnOXZrBbmXeq2+ugAIAiXXUVV3vO1nHrmd6pq8hiw1rKUqq9s4dsWR3EEV
+        zx+3R/6CMvwEZgPnMuCgBavZJFlCdIJMlCSSsKlCGZMgOy2JFkYmJhjA4mobvIygUTsmNAGE
+        ACZAERyBC8/7THoEnxfFnE1jpYli6el4VmYCawhU4MrrVXaK+WQ0k8zGsWwSK/1PEcLRLR3R
+        ZZ2XX9cUzBqGgjKPlnaMTW8rm473VDDZK7239t1s1kddrfdkpgzc4iPMREv+3BaH3v2S94Py
+        dEV+mDlZn1e+Ly/0s+hW8c89bUJd+C9P/WM/WzMI8ZhpOyzC8/ipQ1O7g3py9ClxrgMhzslX
+        lj+wxP3wOpVbJhAvi4G9B4tITHtgNHuup1boLywhS9Ok0Zbl3e1x2ib3+SLxd7eP7sPBuz5V
+        qg7lRo713FXf23tyuMJzp0Z+McD3Ie+7ThXoem6ff7AywvnY/lUpFV5wVORT8mN9WnDRX2Of
+        pfuNQpyp7L/tu25K8Vd3qmlirtL2fMKI14ym+r44FPjBwZhpahSgshhGtIEjlTH/AFTWF64k
         AwAA
-X-CMS-MailID: 20220517125558epcas5p228cdf5f665468d3fd065d88a5d0ad157
+X-CMS-MailID: 20220517125605epcas5p44cbb77e6bc15ceb32a934e326fc777ef
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220517125558epcas5p228cdf5f665468d3fd065d88a5d0ad157
+X-CMS-RootMailID: 20220517125605epcas5p44cbb77e6bc15ceb32a934e326fc777ef
 References: <20220517125548.14746-1-smitha.t@samsung.com>
-        <CGME20220517125558epcas5p228cdf5f665468d3fd065d88a5d0ad157@epcas5p2.samsung.com>
+        <CGME20220517125605epcas5p44cbb77e6bc15ceb32a934e326fc777ef@epcas5p4.samsung.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds DT schema for s5p-mfc with a new compatible
-string for mfcv12 variant.
+Add support for MFCv12, with a new register file and
+necessary hw control, decoder, encoder and structural changes.
+Add luma dbp, chroma dpb and mv sizes for each codec as per the
+UM for MFCv12, along with appropriate alignment.
 
 Cc: linux-fsd@tesla.com
 Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
 ---
- Documentation/devicetree/bindings/media/s5p-mfc.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ .../platform/samsung/s5p-mfc/regs-mfc-v12.h   | 49 +++++++++++
+ .../media/platform/samsung/s5p-mfc/s5p_mfc.c  | 30 +++++++
+ .../platform/samsung/s5p-mfc/s5p_mfc_common.h | 13 ++-
+ .../platform/samsung/s5p-mfc/s5p_mfc_ctrl.c   |  2 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_dec.c    |  6 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_enc.c    |  5 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr.h    |  8 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c | 84 +++++++++++++++++--
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h |  2 +
+ 9 files changed, 178 insertions(+), 21 deletions(-)
+ create mode 100644 drivers/media/platform/samsung/s5p-mfc/regs-mfc-v12.h
 
-diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.yaml b/Documentation/devicetree/bindings/media/s5p-mfc.yaml
-index fff7c7e0d575..209da53f3582 100644
---- a/Documentation/devicetree/bindings/media/s5p-mfc.yaml
-+++ b/Documentation/devicetree/bindings/media/s5p-mfc.yaml
-@@ -21,6 +21,7 @@ properties:
-       - samsung,mfc-v8                  # Exynos5800
-       - samsung,exynos5433-mfc          # Exynos5433
-       - samsung,mfc-v10                 # Exynos7880
-+      - samsung,mfc-v12                 # Tesla FSD
+diff --git a/drivers/media/platform/samsung/s5p-mfc/regs-mfc-v12.h b/drivers/media/platform/samsung/s5p-mfc/regs-mfc-v12.h
+new file mode 100644
+index 000000000000..efb77c2bf913
+--- /dev/null
++++ b/drivers/media/platform/samsung/s5p-mfc/regs-mfc-v12.h
+@@ -0,0 +1,49 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Register definition file for Samsung MFC V12.x Interface (FIMV) driver
++ *
++ * Copyright (c) 2020 Samsung Electronics Co., Ltd.
++ *     http://www.samsung.com/
++ */
++
++#ifndef _REGS_MFC_V12_H
++#define _REGS_MFC_V12_H
++
++#include <linux/sizes.h>
++#include "regs-mfc-v10.h"
++
++/* MFCv12 Context buffer sizes */
++#define MFC_CTX_BUF_SIZE_V12		(30 * SZ_1K)
++#define MFC_H264_DEC_CTX_BUF_SIZE_V12   (2 * SZ_1M)
++#define MFC_OTHER_DEC_CTX_BUF_SIZE_V12  (30 * SZ_1K)
++#define MFC_H264_ENC_CTX_BUF_SIZE_V12   (100 * SZ_1K)
++#define MFC_HEVC_ENC_CTX_BUF_SIZE_V12	(40 * SZ_1K)
++#define MFC_OTHER_ENC_CTX_BUF_SIZE_V12  (25 * SZ_1K)
++
++/* MFCv12 variant defines */
++#define MAX_FW_SIZE_V12			(SZ_1M)
++#define MAX_CPB_SIZE_V12		(7 * SZ_1M)
++#define MFC_VERSION_V12			0xC0
++#define MFC_NUM_PORTS_V12		1
++
++/* Encoder buffer size for MFCv12 */
++#define ENC_V120_BASE_SIZE(x, y) \
++	(((x + 3) * (y + 3) * 8) \
++	+ (((y * 64) + 2304) * (x + 7) / 8))
++
++#define ENC_V120_H264_ME_SIZE(x, y) \
++	(ENC_V120_BASE_SIZE(x, y) \
++	+ (DIV_ROUND_UP(x * y, 64) * 32))
++
++#define ENC_V120_MPEG4_ME_SIZE(x, y) \
++	(ENC_V120_BASE_SIZE(x, y) \
++	+ (DIV_ROUND_UP(x * y, 128) * 16))
++
++#define ENC_V120_VP8_ME_SIZE(x, y) \
++	ENC_V120_BASE_SIZE(x, y)
++
++#define ENC_V120_HEVC_ME_SIZE(x, y)     \
++	(((x + 3) * (y + 3) * 32)       \
++	+ (((y * 128) + 2304) * (x + 3) / 4))
++
++#endif /*_REGS_MFC_V12_H*/
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
+index 761341934925..a4e3df24b4ae 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
+@@ -775,6 +775,8 @@ static int s5p_mfc_open(struct file *file)
+ 	INIT_LIST_HEAD(&ctx->dst_queue);
+ 	ctx->src_queue_cnt = 0;
+ 	ctx->dst_queue_cnt = 0;
++	ctx->is_422 = 0;
++	ctx->is_10bit = 0;
+ 	/* Get context number */
+ 	ctx->num = 0;
+ 	while (dev->ctx[ctx->num]) {
+@@ -1638,6 +1640,31 @@ static struct s5p_mfc_variant mfc_drvdata_v10 = {
+ 	.fw_name[0]     = "s5p-mfc-v10.fw",
+ };
  
-   reg:
-     maxItems: 1
++static struct s5p_mfc_buf_size_v6 mfc_buf_size_v12 = {
++	.dev_ctx        = MFC_CTX_BUF_SIZE_V12,
++	.h264_dec_ctx   = MFC_H264_DEC_CTX_BUF_SIZE_V12,
++	.other_dec_ctx  = MFC_OTHER_DEC_CTX_BUF_SIZE_V12,
++	.h264_enc_ctx   = MFC_H264_ENC_CTX_BUF_SIZE_V12,
++	.hevc_enc_ctx   = MFC_HEVC_ENC_CTX_BUF_SIZE_V12,
++	.other_enc_ctx  = MFC_OTHER_ENC_CTX_BUF_SIZE_V12,
++};
++
++static struct s5p_mfc_buf_size buf_size_v12 = {
++	.fw     = MAX_FW_SIZE_V12,
++	.cpb    = MAX_CPB_SIZE_V12,
++	.priv   = &mfc_buf_size_v12,
++};
++
++static struct s5p_mfc_variant mfc_drvdata_v12 = {
++	.version        = MFC_VERSION_V12,
++	.version_bit    = MFC_V12_BIT,
++	.port_num       = MFC_NUM_PORTS_V12,
++	.buf_size       = &buf_size_v12,
++	.fw_name[0]     = "s5p-mfc-v12.fw",
++	.clk_names	= {"mfc"},
++	.num_clocks	= 1,
++};
++
+ static const struct of_device_id exynos_mfc_match[] = {
+ 	{
+ 		.compatible = "samsung,mfc-v5",
+@@ -1657,6 +1684,9 @@ static const struct of_device_id exynos_mfc_match[] = {
+ 	}, {
+ 		.compatible = "samsung,mfc-v10",
+ 		.data = &mfc_drvdata_v10,
++	}, {
++		.compatible = "samsung,mfc-v12",
++		.data = &mfc_drvdata_v12,
+ 	},
+ 	{},
+ };
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_common.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_common.h
+index ae266d8518d1..eed4d8f71a3a 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_common.h
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_common.h
+@@ -19,7 +19,7 @@
+ #include <media/v4l2-ioctl.h>
+ #include <media/videobuf2-v4l2.h>
+ #include "regs-mfc.h"
+-#include "regs-mfc-v10.h"
++#include "regs-mfc-v12.h"
+ 
+ #define S5P_MFC_NAME		"s5p-mfc"
+ 
+@@ -720,6 +720,8 @@ struct s5p_mfc_ctx {
+ 	struct v4l2_ctrl *ctrls[MFC_MAX_CTRLS];
+ 	struct v4l2_ctrl_handler ctrl_handler;
+ 	size_t scratch_buf_size;
++	int is_10bit;
++	int is_422;
+ };
+ 
+ /*
+@@ -775,6 +777,7 @@ void s5p_mfc_cleanup_queue(struct list_head *lh, struct vb2_queue *vq);
+ #define IS_MFCV7_PLUS(dev)	(dev->variant->version >= 0x70 ? 1 : 0)
+ #define IS_MFCV8_PLUS(dev)	(dev->variant->version >= 0x80 ? 1 : 0)
+ #define IS_MFCV10_PLUS(dev)	(dev->variant->version >= 0xA0 ? 1 : 0)
++#define IS_MFCV12(dev)		(dev->variant->version >= 0xC0 ? 1 : 0)
+ #define FW_HAS_E_MIN_SCRATCH_BUF(dev) (IS_MFCV10_PLUS(dev))
+ 
+ #define MFC_V5_BIT	BIT(0)
+@@ -782,11 +785,13 @@ void s5p_mfc_cleanup_queue(struct list_head *lh, struct vb2_queue *vq);
+ #define MFC_V7_BIT	BIT(2)
+ #define MFC_V8_BIT	BIT(3)
+ #define MFC_V10_BIT	BIT(5)
++#define MFC_V12_BIT	BIT(7)
+ 
+ #define MFC_V5PLUS_BITS		(MFC_V5_BIT | MFC_V6_BIT | MFC_V7_BIT | \
+-					MFC_V8_BIT | MFC_V10_BIT)
++					MFC_V8_BIT | MFC_V10_BIT | MFC_V12_BIT)
+ #define MFC_V6PLUS_BITS		(MFC_V6_BIT | MFC_V7_BIT | MFC_V8_BIT | \
+-					MFC_V10_BIT)
+-#define MFC_V7PLUS_BITS		(MFC_V7_BIT | MFC_V8_BIT | MFC_V10_BIT)
++					MFC_V10_BIT | MFC_V12_BIT)
++#define MFC_V7PLUS_BITS		(MFC_V7_BIT | MFC_V8_BIT | MFC_V10_BIT | \
++					MFC_V12_BIT)
+ 
+ #endif /* S5P_MFC_COMMON_H_ */
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.c
+index ffe9f7e79eca..877e5bceb75b 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.c
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.c
+@@ -130,7 +130,7 @@ int s5p_mfc_reset(struct s5p_mfc_dev *dev)
+ 			mfc_write(dev, 0, S5P_FIMV_REG_CLEAR_BEGIN_V6 + (i*4));
+ 
+ 		/* check bus reset control before reset */
+-		if (dev->risc_on)
++		if (dev->risc_on && !IS_MFCV12(dev))
+ 			if (s5p_mfc_bus_reset(dev))
+ 				return -EIO;
+ 		/* Reset
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.c
+index 4b89df8bfd18..37f6c8a80871 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.c
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_dec.c
+@@ -146,7 +146,7 @@ static struct s5p_mfc_fmt formats[] = {
+ 		.codec_mode	= S5P_FIMV_CODEC_HEVC_DEC,
+ 		.type		= MFC_FMT_DEC,
+ 		.num_planes	= 1,
+-		.versions	= MFC_V10_BIT,
++		.versions	= MFC_V10_BIT | MFC_V12_BIT,
+ 		.flags		= V4L2_FMT_FLAG_DYN_RESOLUTION |
+ 				  V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM,
+ 	},
+@@ -155,7 +155,7 @@ static struct s5p_mfc_fmt formats[] = {
+ 		.codec_mode	= S5P_FIMV_CODEC_VP9_DEC,
+ 		.type		= MFC_FMT_DEC,
+ 		.num_planes	= 1,
+-		.versions	= MFC_V10_BIT,
++		.versions	= MFC_V10_BIT | MFC_V12_BIT,
+ 		.flags		= V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	},
+ };
+@@ -357,7 +357,7 @@ static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
+ 		pix_mp->width = ctx->buf_width;
+ 		pix_mp->height = ctx->buf_height;
+ 		pix_mp->field = V4L2_FIELD_NONE;
+-		pix_mp->num_planes = 2;
++		pix_mp->num_planes = ctx->dst_fmt->num_planes;
+ 		/* Set pixelformat to the format in which MFC
+ 		   outputs the decoded frame */
+ 		pix_mp->pixelformat = ctx->dst_fmt->fourcc;
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
+index a8877d805b29..ae2c0977b24e 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
+@@ -92,7 +92,7 @@ static struct s5p_mfc_fmt formats[] = {
+ 		.codec_mode	= S5P_FIMV_CODEC_HEVC_ENC,
+ 		.type		= MFC_FMT_ENC,
+ 		.num_planes	= 1,
+-		.versions	= MFC_V10_BIT,
++		.versions	= MFC_V10_BIT | MFC_V12_BIT,
+ 	},
+ };
+ 
+@@ -1179,7 +1179,8 @@ static int enc_post_seq_start(struct s5p_mfc_ctx *ctx)
+ 		if (FW_HAS_E_MIN_SCRATCH_BUF(dev)) {
+ 			ctx->scratch_buf_size = s5p_mfc_hw_call(dev->mfc_ops,
+ 					get_e_min_scratch_buf_size, dev);
+-			ctx->bank1.size += ctx->scratch_buf_size;
++			if (!IS_MFCV12(dev))
++				ctx->bank1.size += ctx->scratch_buf_size;
+ 		}
+ 		ctx->state = MFCINST_HEAD_PRODUCED;
+ 	}
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr.h
+index b9831275f3ab..87ac56756a16 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr.h
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr.h
+@@ -166,9 +166,9 @@ struct s5p_mfc_regs {
+ 	void __iomem *d_decoded_third_addr;/* only v7 */
+ 	void __iomem *d_used_dpb_flag_upper;/* v7 and v8 */
+ 	void __iomem *d_used_dpb_flag_lower;/* v7 and v8 */
+-	void __iomem *d_min_scratch_buffer_size; /* v10 */
+-	void __iomem *d_static_buffer_addr; /* v10 */
+-	void __iomem *d_static_buffer_size; /* v10 */
++	void __iomem *d_min_scratch_buffer_size; /* v10 and v12 */
++	void __iomem *d_static_buffer_addr; /* v10 and v12 */
++	void __iomem *d_static_buffer_size; /* v10 and v12 */
+ 
+ 	/* encoder registers */
+ 	void __iomem *e_frame_width;
+@@ -268,7 +268,7 @@ struct s5p_mfc_regs {
+ 	void __iomem *e_vp8_hierarchical_qp_layer0;/* v7 and v8 */
+ 	void __iomem *e_vp8_hierarchical_qp_layer1;/* v7 and v8 */
+ 	void __iomem *e_vp8_hierarchical_qp_layer2;/* v7 and v8 */
+-	void __iomem *e_min_scratch_buffer_size; /* v10 */
++	void __iomem *e_min_scratch_buffer_size; /* v10 and v12 */
+ 	void __iomem *e_num_t_layer; /* v10 */
+ 	void __iomem *e_hier_qp_layer0; /* v10 */
+ 	void __iomem *e_hier_bit_rate_layer0; /* v10 */
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
+index 728d255e65fc..98c524688b45 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
+@@ -82,7 +82,53 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+ 			ctx->tmv_buffer_size = S5P_FIMV_NUM_TMV_BUFFERS_V6 *
+ 			ALIGN(S5P_FIMV_TMV_BUFFER_SIZE_V6(mb_width, mb_height),
+ 			S5P_FIMV_TMV_BUFFER_ALIGN_V6);
+-		if (IS_MFCV10_PLUS(dev)) {
++		if (IS_MFCV12(dev)) {
++			lcu_width = S5P_MFC_LCU_WIDTH(ctx->img_width);
++			lcu_height = S5P_MFC_LCU_HEIGHT(ctx->img_height);
++			if (ctx->codec_mode == S5P_FIMV_CODEC_HEVC_ENC &&
++								ctx->is_10bit) {
++				ctx->luma_dpb_size =
++					ALIGN(ctx->img_width, 64) *
++					ALIGN(ctx->img_height, 32) +
++					ALIGN(DIV_ROUND_UP(lcu_width * 32, 4),
++					16) * ALIGN(ctx->img_height, 32) + 128;
++				if (ctx->is_422) {
++					ctx->chroma_dpb_size =
++						ctx->luma_dpb_size;
++				} else {
++					ctx->chroma_dpb_size =
++						ALIGN(ctx->img_width, 64) *
++						ALIGN(ctx->img_height, 32) / 2 +
++						ALIGN(DIV_ROUND_UP(lcu_width *
++						32, 4), 16) *
++						ALIGN(ctx->img_height, 32) / 2 +
++						128;
++				}
++			} else if (ctx->codec_mode == S5P_FIMV_CODEC_VP9_ENC &&
++					ctx->is_10bit) {
++				ctx->luma_dpb_size =
++					ALIGN(ctx->img_width * 2, 128) *
++					ALIGN(ctx->img_height, 32) + 64;
++				ctx->chroma_dpb_size =
++					ALIGN(ctx->img_width * 2, 128) *
++					(ALIGN(ctx->img_height, 32) / 2) + 64;
++			} else {
++				ctx->luma_dpb_size =
++					ALIGN(ctx->img_width, 64) *
++					ALIGN(ctx->img_height, 32) + 64;
++				if (ctx->is_422) {
++					ctx->chroma_dpb_size =
++						ctx->luma_dpb_size;
++				} else {
++					ctx->chroma_dpb_size =
++						ALIGN(ctx->img_width, 64) *
++						(ALIGN(ctx->img_height, 32) / 2)
++						+ 64;
++				}
++			}
++			ctx->luma_dpb_size = ALIGN(ctx->luma_dpb_size + 256, SZ_2K);
++			ctx->chroma_dpb_size = ALIGN(ctx->chroma_dpb_size + 256, SZ_2K);
++		} else if (IS_MFCV10_PLUS(dev)) {
+ 			lcu_width = S5P_MFC_LCU_WIDTH(ctx->img_width);
+ 			lcu_height = S5P_MFC_LCU_HEIGHT(ctx->img_height);
+ 			if (ctx->codec_mode != S5P_FIMV_CODEC_HEVC_ENC) {
+@@ -230,7 +276,12 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+ 			DEC_VP9_STATIC_BUFFER_SIZE;
+ 		break;
+ 	case S5P_MFC_CODEC_H264_ENC:
+-		if (IS_MFCV10_PLUS(dev)) {
++		if (IS_MFCV12(dev)) {
++			mfc_debug(2, "Use min scratch buffer size\n");
++			ctx->me_buffer_size =
++				ALIGN(ENC_V120_H264_ME_SIZE(mb_width,
++							mb_height), 256);
++		} else if (IS_MFCV10_PLUS(dev)) {
+ 			mfc_debug(2, "Use min scratch buffer size\n");
+ 			ctx->me_buffer_size =
+ 			ALIGN(ENC_V100_H264_ME_SIZE(mb_width, mb_height), 16);
+@@ -254,7 +305,12 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+ 		break;
+ 	case S5P_MFC_CODEC_MPEG4_ENC:
+ 	case S5P_MFC_CODEC_H263_ENC:
+-		if (IS_MFCV10_PLUS(dev)) {
++		if (IS_MFCV12(dev)) {
++			mfc_debug(2, "Use min scratch buffer size\n");
++			ctx->me_buffer_size =
++				ALIGN(ENC_V120_MPEG4_ME_SIZE(mb_width,
++							mb_height), 256);
++		} else if (IS_MFCV10_PLUS(dev)) {
+ 			mfc_debug(2, "Use min scratch buffer size\n");
+ 			ctx->me_buffer_size =
+ 				ALIGN(ENC_V100_MPEG4_ME_SIZE(mb_width,
+@@ -273,7 +329,12 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+ 		ctx->bank2.size = 0;
+ 		break;
+ 	case S5P_MFC_CODEC_VP8_ENC:
+-		if (IS_MFCV10_PLUS(dev)) {
++		if (IS_MFCV12(dev)) {
++			mfc_debug(2, "Use min scratch buffer size\n");
++			ctx->me_buffer_size =
++				ALIGN(ENC_V120_VP8_ME_SIZE(mb_width, mb_height),
++						256);
++		} else if (IS_MFCV10_PLUS(dev)) {
+ 			mfc_debug(2, "Use min scratch buffer size\n");
+ 			ctx->me_buffer_size =
+ 				ALIGN(ENC_V100_VP8_ME_SIZE(mb_width, mb_height),
+@@ -297,9 +358,15 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+ 		ctx->bank2.size = 0;
+ 		break;
+ 	case S5P_MFC_CODEC_HEVC_ENC:
++		if (IS_MFCV12(dev))
++			ctx->me_buffer_size =
++				ALIGN(ENC_V120_HEVC_ME_SIZE(lcu_width,
++							lcu_height), 256);
++		else
++			ctx->me_buffer_size =
++				ALIGN(ENC_V100_HEVC_ME_SIZE(lcu_width,
++							lcu_height), 16);
+ 		mfc_debug(2, "Use min scratch buffer size\n");
+-		ctx->me_buffer_size =
+-			ALIGN(ENC_V100_HEVC_ME_SIZE(lcu_width, lcu_height), 16);
+ 		ctx->scratch_buf_size = ALIGN(ctx->scratch_buf_size, 256);
+ 		ctx->bank1.size =
+ 			ctx->scratch_buf_size + ctx->tmv_buffer_size +
+@@ -452,7 +519,10 @@ static void s5p_mfc_dec_calc_dpb_size_v6(struct s5p_mfc_ctx *ctx)
+ 
+ 	if (ctx->codec_mode == S5P_MFC_CODEC_H264_DEC ||
+ 			ctx->codec_mode == S5P_MFC_CODEC_H264_MVC_DEC) {
+-		if (IS_MFCV10_PLUS(dev)) {
++		if (IS_MFCV12(dev)) {
++			ctx->mv_size = S5P_MFC_DEC_MV_SIZE_V12(ctx->img_width,
++					ctx->img_height);
++		} else if (IS_MFCV10_PLUS(dev)) {
+ 			ctx->mv_size = S5P_MFC_DEC_MV_SIZE_V10(ctx->img_width,
+ 					ctx->img_height);
+ 		} else {
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h
+index e4dd03c5454c..ee2018ee95cc 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h
+@@ -23,6 +23,8 @@
+ 					(((MB_HEIGHT(y)+1)/2)*2) * 64 + 128)
+ #define S5P_MFC_DEC_MV_SIZE_V10(x, y)	(MB_WIDTH(x) * \
+ 					(((MB_HEIGHT(y)+1)/2)*2) * 64 + 512)
++#define S5P_MFC_DEC_MV_SIZE_V12(x, y)	(MB_WIDTH(x) * \
++					(((MB_HEIGHT(y)+1)/2)*2) * 64 + 1024)
+ #define S5P_MFC_LCU_WIDTH(x_size)	DIV_ROUND_UP(x_size, 32)
+ #define S5P_MFC_LCU_HEIGHT(y_size)	DIV_ROUND_UP(y_size, 32)
+ 
 -- 
 2.17.1
 
