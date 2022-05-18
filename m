@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25B42C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 18 May 2022 12:35:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F3D5C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 18 May 2022 12:35:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237410AbiERMfa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 May 2022 08:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
+        id S236971AbiERMfd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 May 2022 08:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237131AbiERMeu (ORCPT
+        with ESMTP id S237231AbiERMeu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 18 May 2022 08:34:50 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C46EAD2F;
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32561197F4E;
         Wed, 18 May 2022 05:30:20 -0700 (PDT)
-X-UUID: 8d0ec952504e43848ea46abf4e3e92c1-20220518
+X-UUID: c2b6f90a227f4b16803f52429bb89bb1-20220518
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:e13a5ad8-5068-4329-b4bd-e3476e734275,OB:0,LO
+X-CID-O-INFO: VERSION:1.1.5,REQID:9257ad56-13f0-4e01-b558-259c11f21b04,OB:0,LO
         B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
         ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:ae4ba7e2-edbf-4bd4-8a34-dfc5f7bb086d,C
+X-CID-META: VersionHash:2a19b09,CLOUDID:0d4ca7e2-edbf-4bd4-8a34-dfc5f7bb086d,C
         OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
         ,QS:0,BEC:nil
-X-UUID: 8d0ec952504e43848ea46abf4e3e92c1-20220518
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+X-UUID: c2b6f90a227f4b16803f52429bb89bb1-20220518
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1675448661; Wed, 18 May 2022 20:30:12 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1904075948; Wed, 18 May 2022 20:30:15 +0800
 Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 18 May 2022 20:30:11 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 18 May 2022 20:30:14 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 18 May 2022 20:30:11 +0800
+ 15.0.1497.2; Wed, 18 May 2022 20:30:14 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 18 May 2022 20:30:09 +0800
+ Transport; Wed, 18 May 2022 20:30:12 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -64,9 +64,9 @@ CC:     George Sun <george.sun@mediatek.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v7, 3/7] dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings for mt8195
-Date:   Wed, 18 May 2022 20:30:00 +0800
-Message-ID: <20220518123004.18286-4-yunfei.dong@mediatek.com>
+Subject: [PATCH v7, 5/7] media: mediatek: vcodec: Different codec using different capture format
+Date:   Wed, 18 May 2022 20:30:02 +0800
+Message-ID: <20220518123004.18286-6-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220518123004.18286-1-yunfei.dong@mediatek.com>
 References: <20220518123004.18286-1-yunfei.dong@mediatek.com>
@@ -78,27 +78,73 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds decoder dt-bindings for mt8195.
+Vp8 need to use MM21, but vp9 and h264 need to use HyFbc mode
+for mt8195. Vp8/vp9/h264 use the same MM21 format for mt8192.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/media/mediatek,vcodec-subdev-decoder.yaml           | 1 +
- 1 file changed, 1 insertion(+)
+ .../platform/mediatek/vcodec/mtk_vcodec_dec.c | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-index 6854e7f2ce9f..ca6a00be815a 100644
---- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-+++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-@@ -57,6 +57,7 @@ properties:
-     enum:
-       - mediatek,mt8192-vcodec-dec
-       - mediatek,mt8186-vcodec-dec
-+      - mediatek,mt8195-vcodec-dec
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+index 52e5d36aa912..254649240b34 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+@@ -35,6 +35,44 @@ mtk_vdec_find_format(struct v4l2_format *f,
+ 	return NULL;
+ }
  
-   reg:
-     maxItems: 1
++static bool mtk_vdec_get_cap_fmt(struct mtk_vcodec_ctx *ctx, int format_index)
++{
++	const struct mtk_vcodec_dec_pdata *dec_pdata = ctx->dev->vdec_pdata;
++	const struct mtk_video_fmt *fmt;
++	struct mtk_q_data *q_data;
++	int num_frame_count = 0, i;
++	bool ret = true;
++
++	for (i = 0; i < *dec_pdata->num_formats; i++) {
++		if (dec_pdata->vdec_formats[i].type != MTK_FMT_FRAME)
++			continue;
++
++		num_frame_count++;
++	}
++
++	if (num_frame_count == 1)
++		return true;
++
++	fmt = &dec_pdata->vdec_formats[format_index];
++	q_data = &ctx->q_data[MTK_Q_DATA_SRC];
++	switch (q_data->fmt->fourcc) {
++	case V4L2_PIX_FMT_VP8_FRAME:
++		if (fmt->fourcc == V4L2_PIX_FMT_MM21)
++			ret = true;
++		break;
++	case V4L2_PIX_FMT_H264_SLICE:
++	case V4L2_PIX_FMT_VP9_FRAME:
++		if (fmt->fourcc == V4L2_PIX_FMT_MM21)
++			ret = false;
++		break;
++	default:
++		ret = true;
++		break;
++	};
++
++	return ret;
++}
++
+ static struct mtk_q_data *mtk_vdec_get_q_data(struct mtk_vcodec_ctx *ctx,
+ 					      enum v4l2_buf_type type)
+ {
+@@ -566,6 +604,9 @@ static int vidioc_enum_fmt(struct v4l2_fmtdesc *f, void *priv,
+ 		    dec_pdata->vdec_formats[i].type != MTK_FMT_FRAME)
+ 			continue;
+ 
++		if (!output_queue && !mtk_vdec_get_cap_fmt(ctx, i))
++			continue;
++
+ 		if (j == f->index)
+ 			break;
+ 		++j;
 -- 
 2.18.0
 
