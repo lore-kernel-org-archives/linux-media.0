@@ -2,110 +2,130 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33F67C4167D
-	for <linux-media@archiver.kernel.org>; Wed, 18 May 2022 12:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72AE9C433FE
+	for <linux-media@archiver.kernel.org>; Wed, 18 May 2022 12:35:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236310AbiERML1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 May 2022 08:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S237311AbiERMfU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 May 2022 08:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236297AbiERMLN (ORCPT
+        with ESMTP id S236509AbiERMem (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 May 2022 08:11:13 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115383631C
-        for <linux-media@vger.kernel.org>; Wed, 18 May 2022 05:11:12 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id p22so3225832lfo.10
-        for <linux-media@vger.kernel.org>; Wed, 18 May 2022 05:11:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GOInhyfsC6sIN9hcrOqb0a8P6F2/CkmUss06/noERuY=;
-        b=VYGK5u933RHPx2BUiRp5mb8jNDwYoLYcpUzXhCeyVKo/M6CuqScEHqmPqyc/eezfjW
-         TB834tscuxm31x9kne9NCDwk2wDkdO18r4lTQyeAPZmZCyQN4qi+Gv38mtoXW4FhHwK2
-         CEIgfptS+cmieKbTJ5VCP4AEc4/5H4gmYW8pVtbYBe8XLtu88oivDeztiSnIrFCxsz8k
-         hW1rtqDgeqMejwxL9qk/ZvW4BwheSVcUYZkTtVpmzfb4ZW04p+bDa8PHlKDwYlVUlEzJ
-         ZAp7FIOXPpzp3aI4mmf9Xzmra1gUsCtnaS410eFGp+aJD9nqYGs4YfOf4a4uXNUZgMPy
-         Af/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GOInhyfsC6sIN9hcrOqb0a8P6F2/CkmUss06/noERuY=;
-        b=GhoBY9bsrqHs03nnxiD+fjTu5+GdQ/C1giiIJQb0AMgGK1IaMZzCEfMdSq1ZFe+yms
-         yZrYk/UsTbKwzSSwenkVoVq47R2Xsbb5m5wrWSPeY3BW3i+G4SECTYo8xfVaYdkTscvL
-         zdu32rylX/0CiF+lxzX6eC/uVw/6E7TkTWMsBHpiBzddR4OLR/2URS6frPdCaJR9UIG4
-         dQl0O5Td8OKMPtMj/zOKewHK8UTAEPaYltG73oR05NsKOPP5fhXE+498eGnLEZ3bRZmb
-         6RhxSOjmxI10VBruIWFqlP6xMTh6KalY23YTc9xEH5WXqEVONZrfHX+FtMvYfAJezkWl
-         YMGg==
-X-Gm-Message-State: AOAM532f9t9if9LgmYQR8cozft/Sk/p529tMwPMaA0gbTwzu8xrH3Yff
-        Y9ICmqCjhoNTF/tPGOGsGKjpnw==
-X-Google-Smtp-Source: ABdhPJz7ho5AdODaorhSqg28iJSR4CC+51r6pEFeF484oI+RRK9d40Qsv0St1llA/16sYwcIuAu5dg==
-X-Received: by 2002:a05:6512:2350:b0:472:6182:955c with SMTP id p16-20020a056512235000b004726182955cmr20028215lfu.214.1652875870411;
-        Wed, 18 May 2022 05:11:10 -0700 (PDT)
-Received: from localhost.localdomain (mobile-access-b04822-211.dhcp.inet.fi. [176.72.34.211])
-        by smtp.gmail.com with ESMTPSA id o8-20020a2ebd88000000b0024f3d1daeccsm194460ljq.84.2022.05.18.05.11.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 05:11:10 -0700 (PDT)
-From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-To:     Robert Foss <robert.foss@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wed, 18 May 2022 08:34:42 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE6B13F1C4;
+        Wed, 18 May 2022 05:30:16 -0700 (PDT)
+X-UUID: cfb92021c2cb4b5889b5e09063b42fca-20220518
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:5c997898-8337-4b40-9819-78c3c6782b49,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:90
+X-CID-INFO: VERSION:1.1.5,REQID:5c997898-8337-4b40-9819-78c3c6782b49,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:90
+X-CID-META: VersionHash:2a19b09,CLOUDID:fe5ab779-5ef6-470b-96c9-bdb8ced32786,C
+        OID:0defb325eb7f,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: cfb92021c2cb4b5889b5e09063b42fca-20220518
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2034958229; Wed, 18 May 2022 20:30:08 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 18 May 2022 20:30:07 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 18 May 2022 20:30:05 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH 1/2] media: dt-bindings: media: sm8250-camss: Add power-domain-names property
-Date:   Wed, 18 May 2022 15:11:03 +0300
-Message-Id: <20220518121104.951621-2-vladimir.zapolskiy@linaro.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220518121104.951621-1-vladimir.zapolskiy@linaro.org>
-References: <20220518121104.951621-1-vladimir.zapolskiy@linaro.org>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v7, 0/7] support mt8195 decoder
+Date:   Wed, 18 May 2022 20:29:57 +0800
+Message-ID: <20220518123004.18286-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-QCOM SM8250 camera subsystem depends on three power domains, at the moment
-all of them are not differentiated one from another, however the power
-domains compose a hierarchical structure with vfe0 and vfe1 as subdomains
-of titan_top, also managing vfe0 and vfe1 separately allows to get more
-fine-grained power control in runtime.
+Firstly, add mt8195 soc lat hardware and compatible, then add documents.
+For vp8 only support MM21 mode, H264/vp9 support MT21C, need to separate
+them. Lastly, enable H264 inner racing mode to reduce hardware latency.
 
-Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Patch 1~4 add mt8195 soc lat hardware and compatible, then add documents.
+Patch 5 using different format for different codecs.
+Patch 6 prevent kernel crash when scp reboot.
+Patch 7 enable H264 inner racing mode to reduce hardware latency.
 ---
- .../devicetree/bindings/media/qcom,sm8250-camss.yaml       | 7 +++++++
- 1 file changed, 7 insertions(+)
+This patch depends on "add h264 decoder driver for mt8186"[1]
 
-diff --git a/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
-index 07a2af12f37d..1ef7ea985ce2 100644
---- a/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
-@@ -103,6 +103,12 @@ properties:
-       - description: IFE1 GDSC - Image Front End, Global Distributed Switch Controller.
-       - description: Titan GDSC - Titan ISP Block, Global Distributed Switch Controller.
- 
-+  power-domain-names:
-+    items:
-+      - const: vfe0
-+      - const: vfe1
-+      - const: titan_top
-+
-   ports:
-     $ref: /schemas/graph.yaml#/properties/ports
- 
-@@ -361,6 +367,7 @@ examples:
-             power-domains = <&camcc IFE_0_GDSC>,
-                             <&camcc IFE_1_GDSC>,
-                             <&camcc TITAN_TOP_GDSC>;
-+            power-domain-names = "vfe0", "vfe1", "titan_top";
- 
-             clocks = <&gcc GCC_CAMERA_AHB_CLK>,
-                      <&gcc GCC_CAMERA_HF_AXI_CLK>,
+[1]  https://patchwork.kernel.org/project/linux-mediatek/cover/20220512034620.30500-1-yunfei.dong@mediatek.com/
+---
+changed with v6:
+- add detail error message in patch 6.
+changed with v5:
+- fix __iomem not reasonable, align share memory to dram.
+changed with v4:
+- fix sparse and smatch check fail for patch 7.
+changed with v3:
+- rebase driver to the latest media_stage.
+changed with v2:
+- add detail explanation for lat soc hardware for patch 1.
+changed with v1:
+- separate "Init VP9 stateless decode params" patch and remove it to another one.
+- add reviewed-by in patch v3/v4/v6
+---
+Yunfei Dong (7):
+  dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings for lat
+    soc
+  media: mediatek: vcodec: Add to support lat soc hardware
+  dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings for
+    mt8195
+  media: mediatek: vcodec: Adds compatible for mt8195
+  media: mediatek: vcodec: Different codec using different capture
+    format
+  media: mediatek: vcodec: prevent kernel crash when scp ipi timeout
+  media: mediatek: vcodec: Add to support H264 inner racing mode
+
+ .../media/mediatek,vcodec-subdev-decoder.yaml | 52 +++++++++++++------
+ .../platform/mediatek/vcodec/mtk_vcodec_dec.c | 41 +++++++++++++++
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |  8 +++
+ .../mediatek/vcodec/mtk_vcodec_dec_hw.c       | 12 +++--
+ .../mediatek/vcodec/mtk_vcodec_dec_hw.h       |  2 +
+ .../mediatek/vcodec/mtk_vcodec_dec_pm.c       | 50 ++++++++++++++++++
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h | 12 +++++
+ .../vcodec/vdec/vdec_h264_req_multi_if.c      | 25 +++++++--
+ .../platform/mediatek/vcodec/vdec_vpu_if.c    |  5 ++
+ 9 files changed, 183 insertions(+), 24 deletions(-)
+
 -- 
-2.33.0
+2.18.0
 
