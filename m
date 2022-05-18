@@ -2,52 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBC8EC4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ADC3C4332F
 	for <linux-media@archiver.kernel.org>; Wed, 18 May 2022 12:11:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236293AbiERML0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 May 2022 08:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        id S236222AbiERMLZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 May 2022 08:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236298AbiERMLN (ORCPT
+        with ESMTP id S236308AbiERMLP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 May 2022 08:11:13 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C4F35DCB
-        for <linux-media@vger.kernel.org>; Wed, 18 May 2022 05:11:11 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id d15so3260494lfk.5
-        for <linux-media@vger.kernel.org>; Wed, 18 May 2022 05:11:10 -0700 (PDT)
+        Wed, 18 May 2022 08:11:15 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1365A3BA61
+        for <linux-media@vger.kernel.org>; Wed, 18 May 2022 05:11:13 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id v8so1325548lfd.8
+        for <linux-media@vger.kernel.org>; Wed, 18 May 2022 05:11:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nUFvXB8NXMFcyU7UqQtHGu+yWvXe5nBkItYTmYIGtoU=;
-        b=MZncvBXNIASuguQoyC0dPlNo13lla4FLlCdQfqMPgXDOWl7K3C2kzKve6FJd2VIDAe
-         kiYnDNFqDIRcs5R7W2ELHMoZlZ7oxCTX4Qc+uHTnhK+xgfZ+5I+xLyqr38V0jlyGbNiu
-         g6VWxLp6wpUC5vuGZzR1n5FpZhwQa7lqLGoBTIYqXQJmSxxbuvd7FM/oD0MmKfufD0Qu
-         ykfkRT6wRT4+aFJBwuu/IWXXIfphzFJCUaWwSxICOTHhUiBaBa9o0zFgjI2/HkXC7Eja
-         uigOojG9GGZdnkQ4D+lGRR9xiH5VnTRW6bBlS52qummqcHrvcuPgnDWh6JOjoxucUWS6
-         74OA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/ENvXu+nmn3kyb9H+0ZeCKYYHHyXbkqj1LHdwtAGdSg=;
+        b=whGvaDFXtPjWJjERWS3MYYHUgg39F7kI65IjOQv09J4z265YWLvU27qa6tdsTR7Eln
+         nT3Oq2UZF7zHS96hgzVIgjzMoZtwWlE2sHQGq7QJSJstqXXrHUKSOxK5o35iqc4X1qm/
+         BdmY6W23p3ZVWpbcgdp4lSZ4L4c2JeJCVF+W55wRnoIX7iHTUGW8/9xr4TYCw2g0d971
+         +B0qTyFdV7itCadyuD1K5LYVLv4uzeie/Y3SBzVhJqGR1UGtVUlVF3/4ayGLdgYyGcQQ
+         J9BWPUAxtYvWVaXbTi6aB730Y3rHRMo2pQ41/Q2SezRzYsbvI9gj54eteYOpZJj/bVt+
+         33Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nUFvXB8NXMFcyU7UqQtHGu+yWvXe5nBkItYTmYIGtoU=;
-        b=p5oH/SpJRma1W5Fm9//VbfVBEEjUJQdV//SPh6SfIurs50K9p9bxANzmklPum4waSJ
-         kvPGJsn/XQzo8JIysUsu/ETbHLlZaUeTbaaO1tD3Fv9KFYl4hFdWi6W8Bf10G7ajiwvf
-         nMS7NdcZHdBjGpbn+8xPPWvsXDmY4PW1nZfY6s0vgg7xEBkk9kttHzN7rdmIhbGb3ThJ
-         8x9bhWy4lcbo28FMSqyuP6j6O6kaZn2nPNeO5hbQYOKNWKzYWX2cG9e94hRx20GBVB8n
-         tCPwIhQ+VWtgKAutNnn9J4TAnzm/BIymqvF2zsmgku+FuvSuYDyDxAUHc1WLdB+c/c1W
-         9e4w==
-X-Gm-Message-State: AOAM532Ve6MuMPCOnlgARpuDJTIzo3UfjVhEzo5lUecVdlA5Gp51wD8B
-        amzGdxCfSLqZSLhoIuYgM3dEsQ==
-X-Google-Smtp-Source: ABdhPJydAp5C4QR31PB6tNqxtPVxmkq1XR/QpCAPPE05LbQTnj16rSElfQrK1y+UDah+wKvJgYaRaA==
-X-Received: by 2002:a05:6512:39c1:b0:44a:e25d:47fd with SMTP id k1-20020a05651239c100b0044ae25d47fdmr19960149lfu.580.1652875869362;
-        Wed, 18 May 2022 05:11:09 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/ENvXu+nmn3kyb9H+0ZeCKYYHHyXbkqj1LHdwtAGdSg=;
+        b=TYaX2yo6BZNH2ff8RE0ONkCXCJKKcDjwoAinZHcEiC2aMzFpR6nkL0OfX0KAiNYmd/
+         jVsMjI1933YNWzAH45S0+9a8QjmduwvtCoPRY/lijU9WI0+2OfV4up19gY0KxThiWISD
+         VfHW4lwMzwnrlD4ETVtNbbcl8PIzH6hbJ+6DlvoVpb369Lz2d+qhGKO9YuACwigO4xF9
+         fHPBUyzWoFEaaYRYG50ebFd/xRrr8+fOzuwLC8vT9CIWBHMVV/dMSu23RfcTev9ufFtZ
+         3QxbpgDBSDf2xI395h8kEcqPJOqT8pTHShYgkabuyy3tak5JPMlrbSeZkueii16kEoay
+         SL6A==
+X-Gm-Message-State: AOAM532njm/neQkA2q2Bz3J4zgc1J3cjnTB5rWS92+bqg0bPWAWZSsty
+        oj77kX+RMvGStAtzvHUZ8uiXPg==
+X-Google-Smtp-Source: ABdhPJxeHTzzDWGQYLcuzUk6Jc2MaylhGO874SauCO4XaqINd6x6qsTPHrJq4q/KH4b8aHCf8iT4pg==
+X-Received: by 2002:a05:6512:6d2:b0:473:a7cb:8f06 with SMTP id u18-20020a05651206d200b00473a7cb8f06mr20341004lff.267.1652875871450;
+        Wed, 18 May 2022 05:11:11 -0700 (PDT)
 Received: from localhost.localdomain (mobile-access-b04822-211.dhcp.inet.fi. [176.72.34.211])
-        by smtp.gmail.com with ESMTPSA id o8-20020a2ebd88000000b0024f3d1daeccsm194460ljq.84.2022.05.18.05.11.07
+        by smtp.gmail.com with ESMTPSA id o8-20020a2ebd88000000b0024f3d1daeccsm194460ljq.84.2022.05.18.05.11.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 05:11:08 -0700 (PDT)
+        Wed, 18 May 2022 05:11:11 -0700 (PDT)
 From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 To:     Robert Foss <robert.foss@linaro.org>,
         Todor Tomov <todor.too@gmail.com>,
@@ -58,10 +58,12 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH 0/2] media: dt-bindings: media: sm8250-camss: Add power-domain-names property
-Date:   Wed, 18 May 2022 15:11:02 +0300
-Message-Id: <20220518121104.951621-1-vladimir.zapolskiy@linaro.org>
+Subject: [PATCH 2/2] arm64: dts: qcom: sm8250: camss: Add power-domain-names property
+Date:   Wed, 18 May 2022 15:11:04 +0300
+Message-Id: <20220518121104.951621-3-vladimir.zapolskiy@linaro.org>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220518121104.951621-1-vladimir.zapolskiy@linaro.org>
+References: <20220518121104.951621-1-vladimir.zapolskiy@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -74,35 +76,26 @@ domains compose a hierarchical structure with vfe0 and vfe1 as subdomains
 of titan_top, also managing vfe0 and vfe1 separately allows to get more
 fine-grained power control in runtime.
 
-The change relates to my review comment for v2 of CAMSS on SM8250 submission:
-
-   https://lore.kernel.org/all/13ad033e-cd5d-3a8c-b036-50a3ac4245c0@linaro.org/
-
-Apparently it becomes important to manage CAMSS power domains much better for
-newer platforms, this referes to platforms with Titan GDSC, for instance CAMSS
-on SM8450 has 6 power domains, and dealing with them in bulk is not an option.
-
-There was a note in commit 2f6f8af67203 ("media: camss: Refactor VFE power
-domain toggling") about problems with power VFE domains on/off, but perhaps
-it's related to the fact that Titan GDSC is a special power domain and VFE
-are subdomains, the latter shall not be enabled earlier than the Titan, but
-the driver did not construct a proper hierarchy and leaves a room for races.
-
 The change should have no implications on any SM8250 CAMSS users, since
-none of the supported in upstream boards enables the camss device tree node.
-The correspondent changes in the driver will follow this dt specific series.
+none of the boards supported in upstream enables the camss device tree node.
 
-Most likely a similar change is required for SDM845 platform, but it would
-need additional investigation and testing.
+Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-Vladimir Zapolskiy (2):
-  media: dt-bindings: media: sm8250-camss: Add power-domain-names property
-  arm64: dts: qcom: sm8250: camss: Add power-domain-names property
-
- .../devicetree/bindings/media/qcom,sm8250-camss.yaml       | 7 +++++++
- arch/arm64/boot/dts/qcom/sm8250.dtsi                       | 1 +
- 2 files changed, 8 insertions(+)
-
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index 26afaa4f98fe..d7bd20412f06 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -3289,6 +3289,7 @@ camss: camss@ac6a000 {
+ 			power-domains = <&camcc IFE_0_GDSC>,
+ 					<&camcc IFE_1_GDSC>,
+ 					<&camcc TITAN_TOP_GDSC>;
++			power-domain-names = "vfe0", "vfe1", "titan_top";
+ 
+ 			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
+ 				 <&gcc GCC_CAMERA_HF_AXI_CLK>,
 -- 
 2.33.0
 
