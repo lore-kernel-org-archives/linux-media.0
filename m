@@ -2,126 +2,97 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 450A6C433EF
-	for <linux-media@archiver.kernel.org>; Thu, 19 May 2022 18:29:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12BAFC433F5
+	for <linux-media@archiver.kernel.org>; Thu, 19 May 2022 20:00:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240572AbiESS3T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 May 2022 14:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
+        id S244321AbiESUAV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 May 2022 16:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232883AbiESS3R (ORCPT
+        with ESMTP id S231778AbiESUAT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 May 2022 14:29:17 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6BDC03A5
-        for <linux-media@vger.kernel.org>; Thu, 19 May 2022 11:29:16 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id v6so2395037qtx.12
-        for <linux-media@vger.kernel.org>; Thu, 19 May 2022 11:29:16 -0700 (PDT)
+        Thu, 19 May 2022 16:00:19 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047426221A;
+        Thu, 19 May 2022 13:00:19 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id c2so5698741plh.2;
+        Thu, 19 May 2022 13:00:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=qa+gghhVNCJdZIwbzWGr4GVzYXOjM0pg+gkd3cQYMhU=;
-        b=2roEZo1YO0+jn3Pip8lbNZmP4kOVm8BA1bfM+lmAUIWQCDRa6xoA1pOZLW03k2XFSj
-         i5scKMJMEXffrjo78//0MrLR89hty6rhQ7Nm8HtC6CnNFl5x+VINlpaTvMsExFZAMkAL
-         Y5Zw9sBIDcW8x0Id3hQsZvmKMdlS/1RPZoWnutGyG7kFvAzLhr0cHgYGmNRozElNX2y4
-         blmYYKf5VE655EI2I0gqQ2GkuqXGipdWdcpzjLRCrcgAFH/1mAB5rz3ju16ng07s+wtr
-         ot1JM1ul/LfbLz9V8Xxvpo5FAFYt1za3rPgJgP7y6/yJHy99iBTCZ2AFIxh6F23P/sHc
-         lpBA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r+JBYr/YBgGXuX47erfmD8xS+ac8EQgaMka1WHtaqB4=;
+        b=LPsUDlU3loCxhBQvblYbW66lDJFR18zfe2nlAm+4rDrUENsZuLNk1Wsi/M4rO70IcD
+         7rHDm/fc9uYPIghOCMqaw0TE4lmFbkJiByMMuRCL+NgGj79JurByaVWvxOqIZxbqT65G
+         L2yQ3gAek2NOyFIGKq//Zust4e49BF7hNPmpZbpUkP8i6efDAoaQzPBJ129vyrFBclgM
+         aEuhlIEtwBLhYOdjiD9Kiru7VubgwTqHHcPC2CLobv54iZbOFQ9fMRQQP5hhtvCBcsYn
+         mVo7+vJyp9pOFMvx2EmavhzMQ/ilheYfbhXKbpXwu+8Iee+aqcuG11mMmI41bL0rqqGK
+         qR9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=qa+gghhVNCJdZIwbzWGr4GVzYXOjM0pg+gkd3cQYMhU=;
-        b=0BVoh0HFy+JEkR2zV22cYj3551hVb9KjRGHH7yzmeMGzBrUhxsZ2w1L5P8LoOLFgBl
-         HEu7GumAeSwi9SV/tVK2MlzHmoEEP8L7d2Uz3/idQyHmfeB/uoyqzV24ygTPQ14oCrvM
-         72Xw4lY3C+yHVEZy997kPDhrNcpqPMFnQIQdPWEc0A3GeZVqo5/FJtbg1sSLvwBVq1ij
-         YVpGYJdH0yHVaLUcsl1JrwVabMGtIoWFX+akk6VBV4bILzqjoxt9RF6QfgKulpvfRaji
-         UQzcBBD+1yT8T0NmH6kLMU76dXH+wP6BFZYNEXCaBpY25LoHCO2e1+FSqPNF22nCeqrV
-         YUYQ==
-X-Gm-Message-State: AOAM530Bcs8KB5kfaBR0WJL8g5lvTmxKavtFQEHTIm9IqfIaRtm5toqP
-        ngENC6UsfUBLtYIzaXXqUhzsYA==
-X-Google-Smtp-Source: ABdhPJxBVuxWrA1raXR1ZTVEMYBsN5Bcu1dprDyxZNpHWsMlwF05H4KExruJS+lGwKW0pKlmhXhiVQ==
-X-Received: by 2002:ac8:5896:0:b0:2f3:d231:58a9 with SMTP id t22-20020ac85896000000b002f3d23158a9mr5052909qta.131.1652984955844;
-        Thu, 19 May 2022 11:29:15 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id h22-20020ac85496000000b002f917b670a2sm676447qtq.74.2022.05.19.11.29.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r+JBYr/YBgGXuX47erfmD8xS+ac8EQgaMka1WHtaqB4=;
+        b=1cSITMUZtuCwdf6/g2JzF8JcmCPsgPG2XteYFeyBUNkjCh5duHPQ6K81OnFWuW8sMy
+         7jyONiA/P6TjMeKStZsFttWMVNM/3DfA8JpSAg61crKP6hEy38xBVudcT02erXevcE+L
+         tlEJxGl731PfoZfILS1fmAlL0uZu9G8Nm8aRimYazr9aMkBJfvAStKmG0WzGAO/th6+Y
+         XzC9HTRrBcUuTKTy/7KVD5LJ7WlIHWbog/UpQ+cyRaGrl1tawEPPRseuxj2GRg8fLUrT
+         1yjQFAQfOnHcuOJbs83HA6l0ksvwaTqPXhptS4H0qatCdyfThfrWOUS8maNQK/xJNGWX
+         GbvQ==
+X-Gm-Message-State: AOAM530+Lvxv03zLqyTNd8mH0GRrvOxm6bllgLEX8GOtOLATr98k8dZm
+        6IgBK7h/6PAch+D5S/DdJhQ=
+X-Google-Smtp-Source: ABdhPJwJMOd7ydAiGD+9PmRxBJQiyykFNT3FGPiA3YebQjvdKTelVfAjhA3VE1luVEdMSXLijY3eSQ==
+X-Received: by 2002:a17:90a:ba11:b0:1df:2d09:1308 with SMTP id s17-20020a17090aba1100b001df2d091308mr6704251pjr.184.1652990418629;
+        Thu, 19 May 2022 13:00:18 -0700 (PDT)
+Received: from ubuntu.localdomain ([103.230.148.187])
+        by smtp.gmail.com with ESMTPSA id j17-20020a170903025100b001618644d8b5sm4073863plh.154.2022.05.19.13.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 11:29:15 -0700 (PDT)
-Message-ID: <5a372aa8296c1141a0da5f3eb240e6ca675a3a87.camel@ndufresne.ca>
-Subject: Re: [PATCH v3 0/6] media: Implement UVC v1.5 ROI
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Yunke Cao <yunkec@google.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-media@vger.kernel.org
-Date:   Thu, 19 May 2022 14:29:14 -0400
-In-Reply-To: <20220518062412.2375586-1-yunkec@google.com>
-References: <20220518062412.2375586-1-yunkec@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+        Thu, 19 May 2022 13:00:18 -0700 (PDT)
+From:   Gautam Menghani <gautam.linuxkernel@gmail.com>
+To:     sudipm.mukherjee@gmail.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com
+Cc:     Gautam Menghani <gautam.linuxkernel@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH] drivers/parport: Remove unused variable 'ret'
+Date:   Thu, 19 May 2022 13:00:12 -0700
+Message-Id: <20220519200012.59253-1-gautam.linuxkernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Yunke Cao,
+Remove the unused variable 'ret' as suggested by clang scan
+warning: Value stored to 'ret' is never read [deadcode.DeadStores]
+                        ret = 0;
 
-Le mercredi 18 mai 2022 =C3=A0 15:24 +0900, Yunke Cao a =C3=A9crit=C2=A0:
-> This patch set implements UVC v1.5 regioin of interest using V4L2
-> control API.
->=20
-> ROI control is consisted an auto control with type bitmask and a
-> rectangle control with a newly added type V4L2_CTRL_TYPE_RECT.
->=20
-> V4L2_CTRL_WHICH_MIN/MAX_VAL is added to support the rectangle control.
->=20
-> A rectangle control is also added to the vivid test driver.
->=20
-> Tested on two different usb cameras using v4l2-ctl and calling ioctls.
->=20
-> Yunke Cao (6):
->   media: v4l2_ctrl: Add region of interest rectangle control
->   media: v4l2_ctrl: Add region of interest auto control
->   media: v4l2_ctrl: Add V4L2_CTRL_WHICH_MIN/MAX_VAL
->   media: uvcvideo: implement UVC v1.5 ROI
->   media: uvcvideo: Initialize roi to default value
->   media: vivid: Add a roi rectangle control
 
-A little about best practices, consider adding a change log in your revisio=
-ns,
-so we know what you have changed (or document what you decided not to chang=
-e).
-Its also nice to wait for the review comment to settle before posting a new=
- set,
-it may appear rude otherwise.
+Signed-off-by: Gautam Menghani <gautam.linuxkernel@gmail.com>
+---
+ drivers/parport/parport_pc.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-kind regards,
-Nicolas
-
->=20
->  .../userspace-api/media/drivers/uvcvideo.rst  |   1 +
->  .../media/v4l/ext-ctrls-camera.rst            |  49 ++++
->  .../media/v4l/vidioc-g-ext-ctrls.rst          |  12 +-
->  .../media/videodev2.h.rst.exceptions          |   3 +
->  drivers/media/i2c/imx214.c                    |   4 +-
->  .../media/test-drivers/vivid/vivid-ctrls.c    |  34 +++
->  drivers/media/usb/uvc/uvc_ctrl.c              | 214 ++++++++++++++++--
->  drivers/media/usb/uvc/uvc_v4l2.c              |  12 +-
->  drivers/media/usb/uvc/uvcvideo.h              |  10 +-
->  drivers/media/v4l2-core/v4l2-ctrls-api.c      |  51 ++++-
->  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 155 ++++++++++++-
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c     |   7 +
->  drivers/media/v4l2-core/v4l2-ioctl.c          |   4 +-
->  include/media/v4l2-ctrls.h                    |  32 ++-
->  include/uapi/linux/usb/video.h                |   1 +
->  include/uapi/linux/uvcvideo.h                 |   1 +
->  include/uapi/linux/v4l2-controls.h            |  11 +
->  include/uapi/linux/videodev2.h                |   4 +
->  18 files changed, 553 insertions(+), 52 deletions(-)
->=20
+diff --git a/drivers/parport/parport_pc.c b/drivers/parport/parport_pc.c
+index eda4ded4d5e5..3d9fcbe758d7 100644
+--- a/drivers/parport/parport_pc.c
++++ b/drivers/parport/parport_pc.c
+@@ -507,7 +507,6 @@ static size_t parport_pc_fifo_write_block_pio(struct parport *port,
+ 			ret = parport_wait_event(port, HZ);
+ 			if (ret < 0)
+ 				break;
+-			ret = 0;
+ 			if (!time_before(jiffies, expire)) {
+ 				/* Timed out. */
+ 				printk(KERN_DEBUG "FIFO write timed out\n");
+@@ -636,7 +635,6 @@ static size_t parport_pc_fifo_write_block_dma(struct parport *port,
+ 		ret = parport_wait_event(port, HZ);
+ 		if (ret < 0)
+ 			break;
+-		ret = 0;
+ 		if (!time_before(jiffies, expire)) {
+ 			/* Timed out. */
+ 			printk(KERN_DEBUG "DMA write timed out\n");
+-- 
+2.25.1
 
