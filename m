@@ -2,52 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B21C6C433FE
-	for <linux-media@archiver.kernel.org>; Thu, 19 May 2022 16:30:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93996C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 19 May 2022 16:30:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242051AbiESQaD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 May 2022 12:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
+        id S242041AbiESQaE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 May 2022 12:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242025AbiESQ35 (ORCPT
+        with ESMTP id S242055AbiESQ37 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 May 2022 12:29:57 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F071D809B;
-        Thu, 19 May 2022 09:29:56 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id i66so7050818oia.11;
-        Thu, 19 May 2022 09:29:56 -0700 (PDT)
+        Thu, 19 May 2022 12:29:59 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B814AD809D;
+        Thu, 19 May 2022 09:29:58 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id v65so7057121oig.10;
+        Thu, 19 May 2022 09:29:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AX9/X1WhGwP2sW6zC/gqprghPkVPPG9iN/vljmKSmiY=;
-        b=nLnb8w0IzSBYnMFzS1IhicdSlHzUYxbCMFGJqvuo3m0qXA3QcbrkQSeM7hM/8rK4jx
-         mOx0UMUO9KnSM6hNGlqxJASOqn1tgaXLJ7vbQK8PwHUEUZLZmkjoaCM0UFTwjf78AcEf
-         kfyiz35sSW2yKYyJSx++g+0D/1OZ2DuGobKmGDEx/tMPpqwO89kffjyvEcMxC1jc46ME
-         T4qySg2xC1Y6M7+0dvElqsgGg9ZAJoJbG3Sbcinz0FaBx36RjsfPrPJN3aWjyFzJ0bJc
-         cIOYzng97MKpxDSJAKHga30m357aP2nrP/NuGO6V0nNFVI+4WpT7OGJmBzAyXn/cWUfq
-         3uGA==
+        bh=eDj9YtrL+ME/X2nogJu52e1JjwHXOpFB8AWWGPpN1JI=;
+        b=GopHsktLl1FQHiOTG2Rcl7tq6cJcuAMLUPz/tIktAVi4pFMYnsHSyGZ/yNj18WFDUC
+         qVvLfkJjJBsrQ9FK3hKmBv/G2kWYIIGctov/JcnxBJpj6Fo2Dq5vH+K+7J1L7e3ChsVa
+         oAlXRfBGdaapF58zbqZnvfDY2J/15YRO/sx91miCOxpNhbrH1aACE9iUw3kp/XAd/jXG
+         ofWGsCWs9xkx9zdWP8X82Sp5A10NP+d+jfb8DWv6t59TgMlOZBxPdhYxOKuSVmklg2NU
+         v+UThHdaGO4a2MCA1BahEdkdwuOOSV8jATDUHhwsurxzLnXZY8qRsUj4SWzrHpMK2+LW
+         wt6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AX9/X1WhGwP2sW6zC/gqprghPkVPPG9iN/vljmKSmiY=;
-        b=haNbwxGg7/C5uBPY34otSIQkgfwkyrkCb5h9V4HW1jQ67/9bTbUIfqsnd9AhWA44G2
-         eum54bobXDGjPIwQmYxHRR7TowuS+XEjVuVY6xVs5vdZQU9vqOh3RoN3ApM3ACS+jKkK
-         RiBKTP6tPSPWuwJ/dhs1BNeZeXE6RWO+mAU2jonV72NQyfSRNERN7v6VqkUORxmjGRB/
-         Jx+Ixc/L5PPlNpQ5cxZqCRwqFZP8gB5ex510n9ouXeucP8cgfR+D5rAsNMTRK045efl8
-         pzXX7JXDllwYmcQlKhB1iB71VUs5PD/l16DK+RF0L9bG1b6KK58wKOvqjD5NKSWazkvi
-         ny0g==
-X-Gm-Message-State: AOAM532qOU1zPhPHetXVnYKT01Bz03ehP2+/kwt4oM9gkgtOLEIy2v4z
-        cpMqCmIp3e74EMloJn+Y5eM=
-X-Google-Smtp-Source: ABdhPJwc6e4QT4kM6B3yl+F2WyUKXDcuVoQUxVTEAxOVOcdgzYKTKKLYDQK8HOqGTWd10+5x83QWrg==
-X-Received: by 2002:a05:6808:bcf:b0:329:867:a994 with SMTP id o15-20020a0568080bcf00b003290867a994mr2791869oik.249.1652977794485;
-        Thu, 19 May 2022 09:29:54 -0700 (PDT)
+        bh=eDj9YtrL+ME/X2nogJu52e1JjwHXOpFB8AWWGPpN1JI=;
+        b=T8RUsbMGELUCmtmzg8T8jFGnwT0tVYkCkm5CFVN2bqyHlDLG2b8e9p4eOEXAQaFkpw
+         VZCxo8MGClQhVKLPveD0buAnKt/bH8wwSJJWNcHl5SWck2wDaxmJrzNtiPcShrRbrt1P
+         6RSybmr3VMwZiknDbujUU5AXom8D/eS67QY3U6eKfebHhKeuddYSVKr6lgjMNP234U1V
+         aw7HbOi6lUxXAGRSRTuPsTHyJftq8XZCeJXfUQkS7OUO8GWF8cih0H94HuFRgq5xa/z5
+         dz7h2af4BNmjo9h0NYtEWNF+3VkhSjTgC0DGCo6ixbgfC3awEW6TTKPAyFTIOeSIxpXJ
+         TnAQ==
+X-Gm-Message-State: AOAM531crKHeDg9fhJT/Ptm6DtUqjuaJZz1IRDA3YC8NVUuRaih0VKIr
+        6OXCRZxk1eIaUhnUjk43JfA=
+X-Google-Smtp-Source: ABdhPJyRSED3NYB6g3npUapZBROIw+TePvZdH0R/K6jTKuECnoY/NSeSywuMIYCDp1g99Vxzp2Wo5Q==
+X-Received: by 2002:a05:6808:ec7:b0:322:2bcc:42c2 with SMTP id q7-20020a0568080ec700b003222bcc42c2mr3283588oiv.168.1652977796926;
+        Thu, 19 May 2022 09:29:56 -0700 (PDT)
 Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id n4-20020a056870844400b000e92295f8acsm36562oak.2.2022.05.19.09.29.53
+        by smtp.gmail.com with ESMTPSA id n4-20020a056870844400b000e92295f8acsm36562oak.2.2022.05.19.09.29.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 09:29:54 -0700 (PDT)
+        Thu, 19 May 2022 09:29:56 -0700 (PDT)
 From:   Chris Morgan <macroalpha82@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
@@ -55,10 +55,11 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         daniel@ffwll.ch, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, mchehab@kernel.org,
         emma@anholt.net, mripard@kernel.org,
-        Chris Morgan <macromorgan@hotmail.com>
-Subject: [RESEND 4/6 v2] dt-bindings: display: simple: add Geekworm MZP280 Panel
-Date:   Thu, 19 May 2022 11:29:33 -0500
-Message-Id: <20220519162935.1585-5-macroalpha82@gmail.com>
+        Chris Morgan <macromorgan@hotmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: [RESEND 6/6 v2] drm/vc4: dpi: Support DPI interface in mode3 for RGB565
+Date:   Thu, 19 May 2022 11:29:35 -0500
+Message-Id: <20220519162935.1585-7-macroalpha82@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220519162935.1585-1-macroalpha82@gmail.com>
 References: <20220519162935.1585-1-macroalpha82@gmail.com>
@@ -70,36 +71,33 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-The Geekworm MZP280 panel is a 480x640 (portrait) panel with a
-capacitive touch interface and a 40 pin header meant to interface
-directly with the Raspberry Pi. The screen is 2.8 inches diagonally,
-and there appear to be at least 4 distinct versions all with the same
-panel timings.
+Add support for the VC4 DPI driver to utilize DPI mode 3. This is
+defined here as xxxRRRRRxxGGGGGGxxxBBBBB:
+https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#parallel-display-interface-dpi
 
-Timings were derived from drivers posted on the github located here:
-https://github.com/tianyoujian/MZDPI/tree/master/vga
-
-Additional details about this panel family can be found here:
-https://wiki.geekworm.com/2.8_inch_Touch_Screen_for_Pi_zero
+This mode is required to use the Geekworm MZP280 DPI display.
 
 Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
- .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/vc4/vc4_dpi.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-index 62f5f050c..3d03d8276 100644
---- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-@@ -148,6 +148,8 @@ properties:
-       - frida,frd350h54004
-         # FriendlyELEC HD702E 800x1280 LCD panel
-       - friendlyarm,hd702e
-+        # Geekworm MZP280 2.8" 480x640 LCD panel with capacitive touch
-+      - geekworm,mzp280
-         # GiantPlus GPG48273QS5 4.3" (480x272) WQVGA TFT LCD panel
-       - giantplus,gpg48273qs5
-         # GiantPlus GPM940B0 3.0" QVGA TFT LCD panel
+diff --git a/drivers/gpu/drm/vc4/vc4_dpi.c b/drivers/gpu/drm/vc4/vc4_dpi.c
+index c180eb60b..3c58ade25 100644
+--- a/drivers/gpu/drm/vc4/vc4_dpi.c
++++ b/drivers/gpu/drm/vc4/vc4_dpi.c
+@@ -173,6 +173,10 @@ static void vc4_dpi_encoder_enable(struct drm_encoder *encoder)
+ 			dpi_c |= VC4_SET_FIELD(DPI_FORMAT_16BIT_565_RGB_3,
+ 					       DPI_FORMAT);
+ 			break;
++		case MEDIA_BUS_FMT_RGB565_1X24_CPADHI:
++			dpi_c |= VC4_SET_FIELD(DPI_FORMAT_16BIT_565_RGB_2,
++					       DPI_FORMAT);
++			break;
+ 		default:
+ 			DRM_ERROR("Unknown media bus format %d\n", bus_format);
+ 			break;
 -- 
 2.25.1
 
