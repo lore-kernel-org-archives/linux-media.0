@@ -2,108 +2,160 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6F5AC433F5
-	for <linux-media@archiver.kernel.org>; Thu, 19 May 2022 21:41:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A435C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 19 May 2022 21:47:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235218AbiESVlQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 May 2022 17:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
+        id S245238AbiESVrP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 May 2022 17:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiESVlN (ORCPT
+        with ESMTP id S229738AbiESVrO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 May 2022 17:41:13 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D831540A26
-        for <linux-media@vger.kernel.org>; Thu, 19 May 2022 14:41:11 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id h29so11312212lfj.2
-        for <linux-media@vger.kernel.org>; Thu, 19 May 2022 14:41:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=o94h8sLCLt40fqauZuVGoEfwWwXX9O/1g0eQp3K1XUw=;
-        b=kebtpC8lhyx9L95G2pbKL9Dy4EqGRttIr7lOZVYXlvLJ0Q8UfY5foo63C/c07VCZcs
-         00LLcyMi5UveJLyl7o5U+EBshPXOH1fYcZXFGwQAyRLqIyvBy+94f8O40S03kw7Ze9zb
-         B305nvt521pfYAmuIHfhkE1zvkl7RHKVHkDo0/QVJv59WBu+OvsgeEYdTrFzglpiTXbH
-         jZwXZB2Jvg3FKiGVUQOASstP04okX9eBrsHJB3iQPv2BMo5VchNUnajm9ZQnsXoPnKTR
-         YC9JKJWXwZKGOWqa9GD/k/6hD3uZcnCc1IUl7P+ZqhcSKyNBb6xtWuQGkZdWXmH2/lU3
-         cM0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=o94h8sLCLt40fqauZuVGoEfwWwXX9O/1g0eQp3K1XUw=;
-        b=0ZkCPPhibd6wu8EhfKor80L0GH4vzkH93c7cd6sN4eFmUCqoJa61+tRxVRB2kqs2wp
-         TVcdsQ1PJl81arydy2WzNIBhZSWMM1Z2xH5hUGjuO8i+fUwejpbYHR1VFn/NfoeU6PoS
-         Qth2+mYbOL1Gf7RLzCmlXueGzZffaj5lP9H6NIHVFvDiGIAeZzdR4cmrLfVjDt9iNMNG
-         YSz2m7fhsK0qK0orrHOM42IlutX8K69Sz5ZLDlK7Wa9O0Y+FSLB6mHCh/lpb2Ls/7KyL
-         6dxtzJBandIO1iO3gEZjknWwrLX0w+vijUBYoLbnsTq1ZFnNQfGJvzBwWdmXJ6eXWoaq
-         eclQ==
-X-Gm-Message-State: AOAM533Mrim8cpHLwflQ8Seft6uEs4IlZ4mGPW6c6uG/YSHlEO+UmEVI
-        1Hjtt18NpB5Y5MfdWh05mRARdg==
-X-Google-Smtp-Source: ABdhPJw2eHBzh3n6N23GZYh5QcYsY/4DEr80bXBXSwAP91zY4xnwBvqdagfKGM9ggIn56UpmkpQ0TQ==
-X-Received: by 2002:a05:6512:1509:b0:443:e7fa:1c68 with SMTP id bq9-20020a056512150900b00443e7fa1c68mr4560368lfb.58.1652996470272;
-        Thu, 19 May 2022 14:41:10 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id o6-20020ac24346000000b00477a8c6b08dsm410221lfl.100.2022.05.19.14.41.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 14:41:09 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
-        Archit Taneja <architt@codeaurora.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>
-Subject: [PATCH] media: platform: omap: Pass a pointer to virt_to_page()
-Date:   Thu, 19 May 2022 23:39:06 +0200
-Message-Id: <20220519213906.779610-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Thu, 19 May 2022 17:47:14 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DB1972AE;
+        Thu, 19 May 2022 14:47:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=kTddhtx7FQlXKvG8iI5sagS7X5egDOVIA77mbT4W6bA=; b=oMaSk+Uu2RoMnHq5DGwlyqG2Xe
+        E4kWL9Gmeh5HBYegQnrYD8SoQBpxcIZstIvLeERvMwCevBHlzUi+NCA14TbscbWqIDtB95VBtDqZt
+        hT3zM8lFz4qAossLjEzSG8icKJXESPuVbtGoZ7PKVQx8JMmzizOiUxnX6wzXe1kQowXwzIADQulh9
+        tt02U1ClXGfONZjyuY2+HnYbha7f/j2KfyKnU4peXdXFtYpUN3pWJeC7CMMaiN6LauQS/MiIgDv90
+        xD4ReAlBTvEqyetUqtx5f50XAxGOWufktAP9ufITPlC/ngRVfObRHOoaEPg4IJHhcMZ/jIMwvQTVs
+        wc1L47Bw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrnz0-00D7iA-0T; Thu, 19 May 2022 21:46:58 +0000
+Message-ID: <01c1e280-eec4-4f04-553b-670ae1376c33@infradead.org>
+Date:   Thu, 19 May 2022 14:46:51 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH] procfs: Add file path and size to /proc/<pid>/fdinfo
+Content-Language: en-US
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     ilkos@google.com, tjmercier@google.com, surenb@google.com,
+        kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Colin Cross <ccross@google.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+References: <20220519214021.3572840-1-kaleshsingh@google.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220519214021.3572840-1-kaleshsingh@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A pointer into virtual memory is represented by a (void *)
-not an u32, so the compiler warns:
+Hi--
 
-drivers/media/platform/ti/omap/omap_voutlib.c:317:54: warning:
-  passing argument 1 of 'virt_to_pfn' makes pointer from integer
-  without a cast [-Wint-conversion]
+On 5/19/22 14:40, Kalesh Singh wrote:
+> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+> index 061744c436d9..ad66d78aca51 100644
+> --- a/Documentation/filesystems/proc.rst
+> +++ b/Documentation/filesystems/proc.rst
+> @@ -1922,13 +1922,16 @@ if precise results are needed.
+>  3.8	/proc/<pid>/fdinfo/<fd> - Information about opened file
+>  ---------------------------------------------------------------
+>  This file provides information associated with an opened file. The regular
+> -files have at least four fields -- 'pos', 'flags', 'mnt_id' and 'ino'.
+> +files have at least six fields -- 'pos', 'flags', 'mnt_id', 'ino', 'size',
+> +and 'path'.
+> +
+>  The 'pos' represents the current offset of the opened file in decimal
+>  form [see lseek(2) for details], 'flags' denotes the octal O_xxx mask the
+>  file has been created with [see open(2) for details] and 'mnt_id' represents
+>  mount ID of the file system containing the opened file [see 3.5
+>  /proc/<pid>/mountinfo for details]. 'ino' represents the inode number of
+> -the file.
+> +the file, 'size' represents the size of the file in bytes, and 'path'
+> +represents the file path.
+>  
+>  A typical output is::
+>  
+> @@ -1936,6 +1939,8 @@ A typical output is::
+>  	flags:	0100002
+>  	mnt_id:	19
+>  	ino:	63107
+> +        size:   0
+> +        path:   /dev/null
+>  
+>  All locks associated with a file descriptor are shown in its fdinfo too::
+>  
+> @@ -1953,6 +1958,8 @@ Eventfd files
+>  	flags:	04002
+>  	mnt_id:	9
+>  	ino:	63107
+> +        size:   0
+> +        path:   anon_inode:[eventfd]
+>  	eventfd-count:	5a
+>  
+>  where 'eventfd-count' is hex value of a counter.
+> @@ -1966,6 +1973,8 @@ Signalfd files
+>  	flags:	04002
+>  	mnt_id:	9
+>  	ino:	63107
+> +        size:   0
+> +        path:   anon_inode:[signalfd]
+>  	sigmask:	0000000000000200
+>  
+>  where 'sigmask' is hex value of the signal mask associated
+> @@ -1980,6 +1989,8 @@ Epoll files
+>  	flags:	02
+>  	mnt_id:	9
+>  	ino:	63107
+> +        size:   0
+> +        path:   anon_inode:[eventpoll]
+>  	tfd:        5 events:       1d data: ffffffffffffffff pos:0 ino:61af sdev:7
+>  
+>  where 'tfd' is a target file descriptor number in decimal form,
+> @@ -1998,6 +2009,8 @@ For inotify files the format is the following::
+>  	flags:	02000000
+>  	mnt_id:	9
+>  	ino:	63107
+> +        size:   0
+> +        path:   anon_inode:inotify
+>  	inotify wd:3 ino:9e7e sdev:800013 mask:800afce ignored_mask:0 fhandle-bytes:8 fhandle-type:1 f_handle:7e9e0000640d1b6d
+>  
+>  where 'wd' is a watch descriptor in decimal form, i.e. a target file
+> @@ -2021,6 +2034,8 @@ For fanotify files the format is::
+>  	flags:	02
+>  	mnt_id:	9
+>  	ino:	63107
+> +        size:   0
+> +        path:   anon_inode:[fanotify]
+>  	fanotify flags:10 event-flags:0
+>  	fanotify mnt_id:12 mflags:40 mask:38 ignored_mask:40000003
+>  	fanotify ino:4f969 sdev:800013 mflags:0 mask:3b ignored_mask:40000000 fhandle-bytes:8 fhandle-type:1 f_handle:69f90400c275b5b4
+> @@ -2046,6 +2061,8 @@ Timerfd files
+>  	flags:	02
+>  	mnt_id:	9
+>  	ino:	63107
+> +        size:   0
+> +        path:   anon_inode:[timerfd]
+>  	clockid: 0
+>  	ticks: 0
+>  	settime flags: 01
+> @@ -2070,6 +2087,7 @@ DMA Buffer files
+>  	mnt_id:	9
+>  	ino:	63107
+>  	size:   32768
+> +        path:   /dmabuf:
+>  	count:  2
+>  	exp_name:  system-heap
 
-Fix this with an explicit cast.
+All of these added lines should be indented with a tab instead of spaces.
 
-Cc: Vaibhav Hiremath <hvaibhav.linux@gmail.com>
-Cc: Archit Taneja <architt@codeaurora.org>
-Cc: Tomi Valkeinen <tomi.valkeinen@ti.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/media/platform/ti/omap/omap_voutlib.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/platform/ti/omap/omap_voutlib.c b/drivers/media/platform/ti/omap/omap_voutlib.c
-index 480a7e95533d..fdea2309ee37 100644
---- a/drivers/media/platform/ti/omap/omap_voutlib.c
-+++ b/drivers/media/platform/ti/omap/omap_voutlib.c
-@@ -314,7 +314,7 @@ unsigned long omap_vout_alloc_buffer(u32 buf_size, u32 *phys_addr)
- 
- 	if (virt_addr) {
- 		while (size > 0) {
--			SetPageReserved(virt_to_page(addr));
-+			SetPageReserved(virt_to_page((void *)addr));
- 			addr += PAGE_SIZE;
- 			size -= PAGE_SIZE;
- 		}
-@@ -335,7 +335,7 @@ void omap_vout_free_buffer(unsigned long virtaddr, u32 buf_size)
- 	order = get_order(size);
- 
- 	while (size > 0) {
--		ClearPageReserved(virt_to_page(addr));
-+		ClearPageReserved(virt_to_page((void *)addr));
- 		addr += PAGE_SIZE;
- 		size -= PAGE_SIZE;
- 	}
+thanks.
 -- 
-2.35.1
-
+~Randy
