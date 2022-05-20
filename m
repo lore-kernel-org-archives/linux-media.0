@@ -2,45 +2,39 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F9EDC43217
-	for <linux-media@archiver.kernel.org>; Fri, 20 May 2022 08:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19245C433EF
+	for <linux-media@archiver.kernel.org>; Fri, 20 May 2022 08:59:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347487AbiETI7j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 May 2022 04:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
+        id S1347508AbiETI7t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 May 2022 04:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347479AbiETI7j (ORCPT
+        with ESMTP id S1347507AbiETI7r (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 May 2022 04:59:39 -0400
+        Fri, 20 May 2022 04:59:47 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685BEED788;
-        Fri, 20 May 2022 01:59:37 -0700 (PDT)
-X-UUID: 87d57f74101146819529a785207544f3-20220520
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0DAEBA9F;
+        Fri, 20 May 2022 01:59:42 -0700 (PDT)
+X-UUID: fa7cf42dcd3848d5873ad30c94f6eb8e-20220520
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:e9ae5c7c-50c8-4a83-8236-15f36d86ee95,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:100
-X-CID-INFO: VERSION:1.1.5,REQID:e9ae5c7c-50c8-4a83-8236-15f36d86ee95,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
-        TION:quarantine,TS:100
-X-CID-META: VersionHash:2a19b09,CLOUDID:78d2eee2-edbf-4bd4-8a34-dfc5f7bb086d,C
-        OID:ea121551492e,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: 87d57f74101146819529a785207544f3-20220520
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.5,REQID:1dc7eb93-6f53-4d82-918b-2d609cc4c2be,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:2a19b09,CLOUDID:42d6fe79-5ef6-470b-96c9-bdb8ced32786,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: fa7cf42dcd3848d5873ad30c94f6eb8e-20220520
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1830089941; Fri, 20 May 2022 16:59:29 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 472486731; Fri, 20 May 2022 16:59:35 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
  mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 20 May 2022 16:59:28 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 20 May 2022 16:59:27 +0800
+ Fri, 20 May 2022 16:59:33 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 20 May 2022 16:59:26 +0800
+ Transport; Fri, 20 May 2022 16:59:32 +0800
 From:   Irui Wang <irui.wang@mediatek.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -56,10 +50,12 @@ CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
         <maoguang.meng@mediatek.com>, kyrie wu <kyrie.wu@mediatek.com>,
         <srv_heupstream@mediatek.com>
-Subject: [RESEND V1,0/2] Enable hardware jpeg encoder for MT8186
-Date:   Fri, 20 May 2022 16:59:08 +0800
-Message-ID: <20220520085910.28839-1-irui.wang@mediatek.com>
+Subject: [RESEND V1,2/2] media: media: jpegenc: set bit mask for jpegenc
+Date:   Fri, 20 May 2022 16:59:10 +0800
+Message-ID: <20220520085910.28839-3-irui.wang@mediatek.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220520085910.28839-1-irui.wang@mediatek.com>
+References: <20220520085910.28839-1-irui.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -70,24 +66,31 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: kyrie wu <kyrie.wu@mediatek.com>
 
-This series adds support for MT8186 hardware jpeg encoding.
+set jpeg encode DMA bit mask to support 34bits
+iova space(16GB) that the mt8186 iommu HW support.
+Whole the iova range separate to 0~4G/4G~8G/8G~12G/12G~16G,
+regarding which iova range jpgenc actually locate, it
+depends on the dma-ranges property of vdec dtsi node.
 
-This series has been tested with both MT8186.
-Encoding worked for this chip.
+Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+---
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Patches 1 Adds jpeg encoder dt-bindings for mt8186
-
-Patches 2 set bit mask for jpegenc to support 34bits iova space,
-	which means iova rangement from 0 to 16GB.
-
-kyrie wu (2):
-  media: media: jpegenc: add mediatek,mt8186-jpgenc compatible
-  media: media: jpegenc: set bit mask for jpegenc
-
- .../devicetree/bindings/media/mediatek-jpeg-encoder.yaml       | 1 +
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c           | 3 +++
- 2 files changed, 4 insertions(+)
-
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index bc5b0a0168ec..87685a62a5c2 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -1369,6 +1369,9 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
+ 	jpeg->vdev->device_caps = V4L2_CAP_STREAMING |
+ 				  V4L2_CAP_VIDEO_M2M_MPLANE;
+ 
++	if (of_get_property(pdev->dev.of_node, "dma-ranges", NULL))
++		dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(34));
++
+ 	ret = video_register_device(jpeg->vdev, VFL_TYPE_VIDEO, -1);
+ 	if (ret) {
+ 		v4l2_err(&jpeg->v4l2_dev, "Failed to register video device\n");
 -- 
 2.18.0
 
