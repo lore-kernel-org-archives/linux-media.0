@@ -2,115 +2,190 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA07EC433F5
-	for <linux-media@archiver.kernel.org>; Fri, 20 May 2022 08:22:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50FBAC4332F
+	for <linux-media@archiver.kernel.org>; Fri, 20 May 2022 08:30:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346933AbiETIW6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 May 2022 04:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
+        id S1347079AbiETIa4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 May 2022 04:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346912AbiETIW4 (ORCPT
+        with ESMTP id S1347154AbiETIao (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 May 2022 04:22:56 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EE2140423
-        for <linux-media@vger.kernel.org>; Fri, 20 May 2022 01:22:54 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 81D176000B;
-        Fri, 20 May 2022 08:22:51 +0000 (UTC)
-Date:   Fri, 20 May 2022 10:22:48 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.org>,
+        Fri, 20 May 2022 04:30:44 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A887158940;
+        Fri, 20 May 2022 01:30:12 -0700 (PDT)
+X-UUID: 964866f1dd8e4b9e9395ce76b12d73ca-20220520
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:6bafdaf3-8e8d-45b6-b40e-7d85d9a05af8,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:7076ede2-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 964866f1dd8e4b9e9395ce76b12d73ca-20220520
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1466797144; Fri, 20 May 2022 16:30:09 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 20 May 2022 16:30:08 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 20 May 2022 16:30:08 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [ANN] Media Summit at ELCE Dublin: Request for Topics
-Message-ID: <20220520082248.o6gzekapndo4lhgb@uno.localdomain>
-References: <325cc388-6f65-0727-92ab-d9b87e7ade1c@xs4all.nl>
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
+        <randy.wu@mediatek.com>, <moudy.ho@mediatek.com>,
+        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
+        <river.cheng@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <cellopoint.kai@gmail.com>
+Subject: [PATCH v16 3/4] dts: arm64: mt8183: add Mediatek MDP3 nodes
+Date:   Fri, 20 May 2022 16:30:05 +0800
+Message-ID: <20220520083006.27789-4-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220520083006.27789-1-moudy.ho@mediatek.com>
+References: <20220520083006.27789-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <325cc388-6f65-0727-92ab-d9b87e7ade1c@xs4all.nl>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Hans,
+Add device nodes for Media Data Path 3 (MDP3) modules.
 
-On Fri, May 06, 2022 at 03:20:09PM +0200, Hans Verkuil wrote:
-> Hi all,
->
-> Since countries are opening up again and travel is (at least for now!) a lot easier,
-> I am considering a media summit during the ELCE in Dublin (Sep 13-16).
->
-> See here for more details about the conference:
->
-> https://events.linuxfoundation.org/open-source-summit-europe/
->
-> Of course, this only makes sense if there is something to talk about. So please reply
-> with any suggestions for topics!
->
-> Also please let me know if you would expect to be at such a media summit in person.
-> If only a few people would be there, then there isn't much point to this.
->
->
-> I have two topics:
->
-> 1) Discussion of the media subsystem development process: any bottlenecks, any ideas
->    for improvements?
->
-> 2) I can give a presentation on the work I've done in the CTA-861 standard (used by
->    HDMI) and the edid-decode utility.
->
-> I'd like to make a decision on whether or not it is worthwhile to do this in a week
-> or two. If we wait too long it might be difficult to get a room for the summit.
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+---
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 79 +++++++++++++++++++++++-
+ 1 file changed, 78 insertions(+), 1 deletion(-)
 
-There are a few topics around image sensor support, especially
-relevant for RAW sensor drivers
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index fc6ac2a46324..5b6c18f51787 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1389,6 +1389,50 @@
+ 			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
+ 		};
+ 
++		mdp3_rdma0: mdp3-rdma0@14001000 {
++			compatible = "mediatek,mt8183-mdp3-rdma";
++			reg = <0 0x14001000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x1000 0x1000>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_MDP_RDMA0>,
++				 <&mmsys CLK_MM_MDP_RSZ1>;
++			iommus = <&iommu M4U_PORT_MDP_RDMA0>;
++			mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
++				 <&gce 21 CMDQ_THR_PRIO_LOWEST 0>;
++		};
++
++		mdp3_rsz0: mdp3-rsz0@14003000 {
++			compatible = "mediatek,mt8183-mdp3-rsz";
++			reg = <0 0x14003000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x3000 0x1000>;
++			clocks = <&mmsys CLK_MM_MDP_RSZ0>;
++		};
++
++		mdp3_rsz1: mdp3-rsz1@14004000 {
++			compatible = "mediatek,mt8183-mdp3-rsz";
++			reg = <0 0x14004000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x4000 0x1000>;
++			clocks = <&mmsys CLK_MM_MDP_RSZ1>;
++		};
++
++		mdp3_wrot0: mdp3-wrot0@14005000 {
++			compatible = "mediatek,mt8183-mdp3-wrot";
++			reg = <0 0x14005000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x5000 0x1000>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_MDP_WROT0>;
++			iommus = <&iommu M4U_PORT_MDP_WROT0>;
++		};
++
++		mdp3_wdma: mdp3-wdma@14006000 {
++			compatible = "mediatek,mt8183-mdp3-wdma";
++			reg = <0 0x14006000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x6000 0x1000>;
++			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
++			clocks = <&mmsys CLK_MM_MDP_WDMA0>;
++			iommus = <&iommu M4U_PORT_MDP_WDMA0>;
++		};
++
+ 		ovl0: ovl@14008000 {
+ 			compatible = "mediatek,mt8183-disp-ovl";
+ 			reg = <0 0x14008000 0 0x1000>;
+@@ -1513,7 +1557,33 @@
+ 			interrupts = <GIC_SPI 217 IRQ_TYPE_LEVEL_LOW>;
+ 			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+ 			mediatek,gce-events = <CMDQ_EVENT_MUTEX_STREAM_DONE0>,
+-					      <CMDQ_EVENT_MUTEX_STREAM_DONE1>;
++					      <CMDQ_EVENT_MUTEX_STREAM_DONE1>,
++					      <CMDQ_EVENT_MDP_RDMA0_SOF>,
++					      <CMDQ_EVENT_MDP_RDMA0_EOF>,
++					      <CMDQ_EVENT_MDP_RSZ0_SOF>,
++					      <CMDQ_EVENT_MDP_RSZ1_SOF>,
++					      <CMDQ_EVENT_MDP_TDSHP_SOF>,
++					      <CMDQ_EVENT_MDP_WROT0_SOF>,
++					      <CMDQ_EVENT_MDP_WROT0_EOF>,
++					      <CMDQ_EVENT_MDP_WDMA0_SOF>,
++					      <CMDQ_EVENT_MDP_WDMA0_EOF>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_0>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_1>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_2>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_3>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_4>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_5>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_6>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_7>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_8>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_9>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_10>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_11>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_12>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_13>,
++					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_14>,
++					      <CMDQ_EVENT_WPE_A_DONE>,
++					      <CMDQ_EVENT_SPE_B_DONE>;
+ 			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0x6000 0x1000>;
+ 		};
+ 
+@@ -1538,6 +1608,13 @@
+ 			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+ 		};
+ 
++		mdp3_ccorr: mdp3-ccorr@1401c000 {
++			compatible = "mediatek,mt8183-mdp3-ccorr";
++			reg = <0 0x1401c000 0 0x1000>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0xc000 0x1000>;
++			clocks = <&mmsys CLK_MM_MDP_CCORR>;
++		};
++
+ 		imgsys: syscon@15020000 {
+ 			compatible = "mediatek,mt8183-imgsys", "syscon";
+ 			reg = <0 0x15020000 0 0x1000>;
+-- 
+2.18.0
 
-- Recently Dave posted an question about how to represent additional
-  processing stages that happens on the sensor side, mostly
-  additional subsampling/cropping that happen between the analogue cropping
-  on the full pixel array and the final image sent on the wire.
-
-  https://lore.kernel.org/linux-media/CAPY8ntA06L1Xsph79sv9t7MiDSNeSO2vADevuXZdXQdhWpSmow@mail.gmail.com/
-
-  Dave made a good introduction of the issue his email which got
-  largely unanswered.
-
-  The issue is particularly relevant for RAW sensors, where applying
-  subsampling has an impact on the sensor's sensitivity and requires
-  to adjust the gains and exposure accordingly.
-
-  The V4L2 selection API falls short on this and the only other
-  solution I am aware of is registering additional subdevices as the
-  CCS driver does.
-
-- Probably less relevant for a media summit, but we recently got a few
-  series trying to reconcile handling of regulators, gpios and clocks
-  on OF and ACPI platforms all of them doing the usual "similar but
-  slightly different" thing:
-
-  https://lore.kernel.org/linux-media/20220425061022.1569480-1-paul.elder@ideasonboard.com/
-  https://lore.kernel.org/linux-media/20220329090133.338073-1-jacopo@jmondi.org/
-  https://lore.kernel.org/linux-media/20220509143226.531117-1-foss+kernel@0leil.net/
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0c2c7a1e0d69221b9d489bfd8cf53262d6f82446
-
-  ACPI and OF handles clocks slightly differently, and it is not clear
-  to me if ACPI based platform need explicit handling of
-  clocks/regulator or ACPI does "the right thing" by itself (I'm
-  afraid the answer is actually "it depends"). I'm ACPI illiterate
-  so I cannot propose anything meaningful but if anyone is interested
-  in discussing this further this might be a good time to do so ?
-
-Let me know if those points might be of any interest and I can try to
-prepare something about them.
-
-Thanks
-   j
-
->
-> Regards,
->
-> 	Hans
