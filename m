@@ -2,1739 +2,207 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BC5BC433EF
-	for <linux-media@archiver.kernel.org>; Fri, 20 May 2022 09:08:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48E86C433EF
+	for <linux-media@archiver.kernel.org>; Fri, 20 May 2022 09:54:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347576AbiETJIC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 May 2022 05:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
+        id S1347998AbiETJyh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 May 2022 05:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347571AbiETJH7 (ORCPT
+        with ESMTP id S1348013AbiETJye (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 May 2022 05:07:59 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1855C673;
-        Fri, 20 May 2022 02:07:53 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 24K8qZVd003709;
-        Fri, 20 May 2022 16:52:35 +0800 (GMT-8)
-        (envelope-from neal_liu@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 20 May
- 2022 17:06:21 +0800
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        "Andrew Jeffery" <andrew@aj.id.au>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Li Yang" <leoyang.li@nxp.com>
-CC:     Neal Liu <neal_liu@aspeedtech.com>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
+        Fri, 20 May 2022 05:54:34 -0400
+Received: from mo-csw.securemx.jp (mo-csw1114.securemx.jp [210.130.202.156])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD61414CA03;
+        Fri, 20 May 2022 02:54:30 -0700 (PDT)
+Received: by mo-csw.securemx.jp (mx-mo-csw1114) id 24K9rcXv004878; Fri, 20 May 2022 18:53:38 +0900
+X-Iguazu-Qid: 2wHHdmOs2sV2XLGzYW
+X-Iguazu-QSIG: v=2; s=0; t=1653040417; q=2wHHdmOs2sV2XLGzYW; m=VRdjLF34/bev9VrhO1a1MxlrfctvsZ2TC/m3R1GYhk0=
+Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
+        by relay.securemx.jp (mx-mr1111) id 24K9raN7004708
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 20 May 2022 18:53:36 +0900
+X-SA-MID: 38232197
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T0Tr9Unj8hy8AAAx6zuh7qafhL5cXXeuJIKxL5ouAbkcSqBhhPnICZUD7EHjfuQpt+KGcfmEefLVr8gNGRTvxafTH2S/leEIIlFzQ9ElvUnAk1G1WxryheY/qWPW2FVgc6fGvXwZfA19/aI/7WzFrFXjNmVaCIfhwpQAdHjHCBuy+y99JAdlHoYsxzTXtzFlMwC/VXKHrNvCstHEryrHBBLPfnIXGgCjXuOiN6JvZ+bjanBTzI+gXFiz58m+fof+45QhvuvUZEVut37NW4RH3l61kZmzqpW9zjQGfVFyBRlU4pfFVAlpwxnikbzqtekPCYYEQTw07Xnoq1hUK5T9dA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BT8HrPoOzSVlEV2P2z0CpkR8AJh6aBtMd1eeKCPHSMQ=;
+ b=W0YgyaW0K+jDqit08OS2hSXNgnCoLWvN0zAWOUtTaaAZB4QX2E4AyGCMWW42/eZnJzNmiCuabOZ9+2TqWvzyDNTbqesJr2oF5joLu2WHDH3XhNnAkF7CqABcJUG6v+sQEPzEwyhjByFn7FiudhSSFQBoNHIvBDwN3T6Xlzdl2l8s4domJarjDLtMqF1se7fYQeY055NLEH3n3KrkJTltofFh/7pvgBHVNPhJ2LGqXfKsn8U+Xj2lcfqifSykGLw1H2/P+mohqDR2vYqQz7g4bWSnMedSwSM/0WVUqoHhfCtraHF2GamLhVMMst7ms6bPc+8371wRjofCZfDrD84bnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=toshiba.co.jp; dmarc=pass action=none
+ header.from=toshiba.co.jp; dkim=pass header.d=toshiba.co.jp; arc=none
+From:   <yuji2.ishikawa@toshiba.co.jp>
+To:     <hverkuil@xs4all.nl>, <robh+dt@kernel.org>,
+        <nobuhiro1.iwamatsu@toshiba.co.jp>, <sumit.semwal@linaro.org>,
+        <christian.koenig@amd.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>
-Subject: [PATCH v4 1/3] usb: gadget: add Aspeed ast2600 udc driver
-Date:   Fri, 20 May 2022 17:06:15 +0800
-Message-ID: <20220520090617.2225080-2-neal_liu@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220520090617.2225080-1-neal_liu@aspeedtech.com>
-References: <20220520090617.2225080-1-neal_liu@aspeedtech.com>
+Subject: RE: [PATCH 0/4] Add Toshiba Visconti DNN image processing accelerator
+ driver
+Thread-Topic: [PATCH 0/4] Add Toshiba Visconti DNN image processing
+ accelerator driver
+Thread-Index: AQHYWwF7uwVWGREvfEWf5eEr1gqNuq0bLOmAgAx4NhA=
+Date:   Fri, 20 May 2022 09:48:31 +0000
+X-TSB-HOP2: ON
+Message-ID: <TYAPR01MB62015F4029956F009EC03FBE92D39@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+References: <20220428131128.5053-1-yuji2.ishikawa@toshiba.co.jp>
+ <b5e35985-c159-6b11-8752-d6dd29fc6a64@xs4all.nl>
+In-Reply-To: <b5e35985-c159-6b11-8752-d6dd29fc6a64@xs4all.nl>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=toshiba.co.jp;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d3c561bd-5bf8-423d-8254-08da3a45e632
+x-ms-traffictypediagnostic: OSBPR01MB3607:EE_
+x-ld-processed: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f,ExtAddr,ExtFwd
+x-microsoft-antispam-prvs: <OSBPR01MB36073222EC23A30D686B636C92D39@OSBPR01MB3607.jpnprd01.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: uDTKQPqUAj/Ui8D7ogQEiS7PusmNPfs0PO286sLjS/AVpFzqO0ggphSK8P4CB3NfFtKFSjneQMYrhFFF9Wv/heRw25lO2/OQ7Mu6rBFlJCYZepewX70L0zV+J1tgKQEcbA+IbzO9opRSET1HEcGmEeF0L+/fFR0u9ytNb5EmRpchvJNGCCNef3mYO/Kv32HGweRrGjPARbmorFRol8Ffninm79VxO13z0oGv3koBqYZJpww5hxrOdjhmRqPK5SNg8O5xI15z+GBFbPGfEGActJzElZz+CvZHxL8DBgUqzJ5RO315DYVnAnFD8kDwRKA/iXha2Q8EWlS2YsCFc9c+TUxz3aXkkCMy3l6efnWiVDjl1PHBMdP23yH2Iuuobb60pTQqySEZ/NisFepORWkCDo58ta4hCEOlumV179QVEah4OZ5N8xmPoNlXkFDOH7olx5zNlmDzRVNJTbBwByw67pfHsTQZdiRoVcFzSU9h4gJy5b42XgRYPkR8IFM/Uf0OaPMQ4rc9ddmaKUUVtRxLSJFQ4fAcr0ydgORLaRfpx88OHQ8FsHSp6MleTMnyBJeDwS/sujnB19eXFnW1O56xUcxK4iXOQQe/y4nMxoz1w77g25frHzFeskRp+119XXgCF03UXxZL/eF2pdN4Ao6ZJP/Zp7Y0OMhzFm8Yf3VhD4SzUtcGadmot/u5iGQHtAv77Vcm9DTbgVQvf/nnrwQvJabuBOVFPzl827ioETxR6rEFAzUg4U1TlbmRVzHi1UmP11/mopoMM3og2bln8RSMPLofan370atlHQjng8bMX5o=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6201.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38070700005)(8936002)(71200400001)(316002)(38100700002)(122000001)(9686003)(54906003)(86362001)(508600001)(55016003)(66574015)(7416002)(110136005)(5660300002)(26005)(966005)(52536014)(83380400001)(55236004)(4326008)(33656002)(53546011)(66476007)(66446008)(8676002)(66556008)(2906002)(64756008)(7696005)(186003)(66946007)(6506007)(76116006);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?elY1dVlWWENSWVBpR2VPVmw3SERDUVZ2UXBJL3U0VnJBQllVcm5FbXRkNTNP?=
+ =?utf-8?B?M0I4aGxXZVJlTEdSR2NlbzN2TEh4bGVCRjFjSUxIcGdra0ppOFlvUU9XNy83?=
+ =?utf-8?B?a0FFOWZqbzZNbHdOME8zMUNmUnppb3FhVGp0NDBDNk8xbkJ4cXNncEptWmkr?=
+ =?utf-8?B?TFZCK3lCbWZLem1VQ0pQd3ZhL01BQUFJUkJveC9Sd042aFFVMjZIcllXaUpI?=
+ =?utf-8?B?TENFS3JJQkgyWjdPcTJ2Z3FGZlc1VktVQTR4NXZvMFRnWkxRZGY0M1FuVTdY?=
+ =?utf-8?B?blVQNHNReGtNOFlvSGZlQm0vSytMNkZPS2F3TThwTExDT0h6UE84RENiMm1n?=
+ =?utf-8?B?TklISEh6dEFFQSttU3VrMm9vTnJpYkliQ2s1YWNjYWJIdnlrTHdxZVZIMnEr?=
+ =?utf-8?B?N2pycVc3OEpuTTZjNTIvSEVCbm1rSktST3JtbGR6cnMyb0xTU0RHUmFOaUZz?=
+ =?utf-8?B?ZkRTMUQ3V0pFbHZudFdvajh3NnpETFlpSmkxWnZJdEZGQXVrTGUwcWFsUE50?=
+ =?utf-8?B?QVAxMXhPZmNiQjRrdWl3cVJwWmRoK1JGVnRDQlhSTG94cEdqeEtmaWNjeGly?=
+ =?utf-8?B?NE5LSUFWSDBqRmxyTzJtYUVycWJSUlpKY2JsMlh3R1lIUmxiZmQvZDFHeXFw?=
+ =?utf-8?B?Lyt5N3k2RjB6SE41bUJ1dGxHNG9rbkFzUEdJZVBLVkg2OHN2Zjg0dDFBTnNP?=
+ =?utf-8?B?RHlSTW9RRlYraUdNSVluRUIrblprNm0yeGFZdUNDblc2N3FFTmZUbHVZWVJj?=
+ =?utf-8?B?Z3I2UVV2N0lZbjE5VjYvR0oyU0dsSzF2Q2s3MEhyL2lmUDY1L09tbEl0OU8v?=
+ =?utf-8?B?N043K3dEYXYya3NLWWNmMnpCVDgva3NZM1g5SmdhWkFtWi9jY2hhaUdPWjJJ?=
+ =?utf-8?B?UEh1K3czeU9oV2xPOG5kdnlkOEZsb2thSHVqdUhtZ04ycUREK3VSVE9SRUND?=
+ =?utf-8?B?VGlIOHN0MjVpVXRIWXNiQVh3NXdGWnRJclFLK3pqY1ZmaXoyV2g2QnRTa2J4?=
+ =?utf-8?B?SnNTTUsyL0JaeTlXVVpaUVc3VU4xS0RlQm5XUVpSY2RQaVRMTWkyeGx2M1hq?=
+ =?utf-8?B?NTUvVUR5ZGU1cFdhcUZiTUVHOVFhQ0RDR3JOT3FXWEc4ZWk3S2xURzR6MmFE?=
+ =?utf-8?B?NWJON2Z0UWk0dUR2b3U2NXlEdWxtVnhuRS9KTGZZVkNhMmVXSDNMd2RzTE50?=
+ =?utf-8?B?dmg1SkxuWEV5YzgwM0FSR2J1bllyZkpaVE1XVDJTQllMS29vRHlPNTVESm1D?=
+ =?utf-8?B?Ymp4ZWhBdFB3ZjNsTGVoQkYyVDN0aEtyaUhPSWtUTEhqbjVQK1RjcXE5RDlB?=
+ =?utf-8?B?MmlHMmpnSG0yYVhzbXA2SkhycWR3UHlwNUk0c0NKVktqaWlGUEVIdWpMOWRz?=
+ =?utf-8?B?dG1YMGxtN2o2a2MzNTg5VzB6SWxIMTR3bnRsK1A2Vm5SVk1waGZ2dFpHZVNY?=
+ =?utf-8?B?d2YyRkRPWTNZaXRvbTB2UFpQL1BJTUVCbkFFVjRzUW04aXRuV2RITGxqL0Y0?=
+ =?utf-8?B?RWQxeFoveFpCdG1USW41dHhRWXAwRmNrT0FKZzQ4MDNydXNrWjJybFRkMVps?=
+ =?utf-8?B?QVlsa24vNFNXaVR6Q3VkYjdlNnJ2QUhGV0xqOE9wSkZXS3Q3cnUvWTBkZnhB?=
+ =?utf-8?B?SUhUWW55NDJXNFhGZUlHS1l3SURtcm9tMDBNVHFWSGRjYUVoc0o2emJTbEN0?=
+ =?utf-8?B?MDhidmoremxPL212b3hLRzYvbVlyTVhTbklzc280U0FuY1Z1ZHhETVJBendx?=
+ =?utf-8?B?R1phK25xV1hlQU9XalBSNGRieWo2UDNKbkFSY24xZGRjQkQrdGF5aUhWaVRZ?=
+ =?utf-8?B?ejFtL2FNZjUyN0Z4ckxaQXFWOUNwOFJ6czEvUktDWnBPMUtjdGJldkQ1M1Bp?=
+ =?utf-8?B?NFNTWWhJS2RSL3VHL3k3akV2Z0JFQ1JQN25NUEJwNm42MEdDdDc1MnNNZ3d6?=
+ =?utf-8?B?aEJpTHhHd3dOUjBXZWh5a1pZWGxBVU4vMDljbnZMY25qaUVqMlNBNE9uOG0y?=
+ =?utf-8?B?b2RhQjFzMW9DQkxsdkFVcW9QWkdsaXdGMlcvMDNWUkY5Q1RmbVJrS1RYcGNn?=
+ =?utf-8?B?eWR0MEx3VDNEZFNCZlMvZzJzZHhGaFo2NnBWUk9zWXo2QzlGeE5wTmlOejhv?=
+ =?utf-8?B?V1NKdTdnT2MvS2F6bUM0V2tMS3ZibmJ3KzU1OEVMOWtYUzBoRWZ2K1dqL0xy?=
+ =?utf-8?B?a3IyOGR2bHYyQXZESWNXYm95UjBLbUx6ZFRIYTliUmlkLzlkRFI3ZjNjRnND?=
+ =?utf-8?B?NUV1OGFqdXpxNE1GOTFDbDhhcSs0YTVmd2JtUFFxM2oxQ3dqQlNNck5hU2Yz?=
+ =?utf-8?B?ZVNHSlpRV1lSRXBmU1EzN0Z3WUNicUJJZ3VYeHBIcDRMUVFQSldFSm9VV2l0?=
+ =?utf-8?Q?QPCeUCYZYRnAkxXE=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.10.10]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 24K8qZVd003709
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6201.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3c561bd-5bf8-423d-8254-08da3a45e632
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2022 09:48:31.5258
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: klgfHVCe8NpTAl7aALsr+47pvKrq35ut9HI1LuR6Mks3cNwtSuKXijXSH7rLu0sb3lcQ5GCriJFnA4amp1xoaV5VA599U0b+ze+BIyyydK4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB3607
+X-OriginatorOrg: toshiba.co.jp
+MSSCP.TransferMailToMossAgent: 103
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Aspeed udc is compliant with USB2.0, supports USB High Speed
-and Full Speed, backward compatible with USB1.1.
-
-Supports independent DMA channel for each generic endpoint.
-Supports 32/256 stages descriptor mode for all generic endpoints.
-
-This driver supports full functionality including single/multiple
-stages descriptor mode, and exposes 1 UDC gadget driver.
-
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
----
- MAINTAINERS                         |    7 +
- drivers/usb/gadget/udc/Kconfig      |   13 +
- drivers/usb/gadget/udc/Makefile     |    1 +
- drivers/usb/gadget/udc/aspeed_udc.c | 1601 +++++++++++++++++++++++++++
- 4 files changed, 1622 insertions(+)
- create mode 100644 drivers/usb/gadget/udc/aspeed_udc.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e8c52d0192a6..784d8d8e7b22 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3109,6 +3109,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/media/aspeed-video.txt
- F:	drivers/media/platform/aspeed/
- 
-+ASPEED USB UDC DRIVER
-+M:	Neal Liu <neal_liu@aspeedtech.com>
-+L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/usb/aspeed,udc.yaml
-+F:	drivers/usb/gadget/udc/aspeed_udc.c
-+
- ASUS NOTEBOOKS AND EEEPC ACPI/WMI EXTRAS DRIVERS
- M:	Corentin Chary <corentin.chary@gmail.com>
- L:	acpi4asus-user@lists.sourceforge.net
-diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-index 69394dc1cdfb..03535f33511b 100644
---- a/drivers/usb/gadget/udc/Kconfig
-+++ b/drivers/usb/gadget/udc/Kconfig
-@@ -463,6 +463,19 @@ config USB_TEGRA_XUDC
- 	 dynamically linked module called "tegra_xudc" and force all
- 	 gadget drivers to also be dynamically linked.
- 
-+config USB_ASPEED_UDC
-+	tristate "Aspeed UDC driver support"
-+	depends on ARCH_ASPEED || COMPILE_TEST
-+	depends on USB_LIBCOMPOSITE
-+	help
-+	  Enables Aspeed USB2.0 Device Controller driver for AST260x
-+	  family SoCs. The controller supports 1 control endpoint and
-+	  4 programmable endpoints.
-+
-+	  Say "y" to link the driver statically, or "m" to build a
-+	  dynamically linked module called "aspeed_udc" and force all
-+	  gadget drivers to also be dynamically linked.
-+
- source "drivers/usb/gadget/udc/aspeed-vhub/Kconfig"
- 
- #
-diff --git a/drivers/usb/gadget/udc/Makefile b/drivers/usb/gadget/udc/Makefile
-index a21f2224e7eb..12f9e4c9eb0c 100644
---- a/drivers/usb/gadget/udc/Makefile
-+++ b/drivers/usb/gadget/udc/Makefile
-@@ -40,5 +40,6 @@ obj-$(CONFIG_USB_GR_UDC)	+= gr_udc.o
- obj-$(CONFIG_USB_GADGET_XILINX)	+= udc-xilinx.o
- obj-$(CONFIG_USB_SNP_UDC_PLAT) += snps_udc_plat.o
- obj-$(CONFIG_USB_ASPEED_VHUB)	+= aspeed-vhub/
-+obj-$(CONFIG_USB_ASPEED_UDC)	+= aspeed_udc.o
- obj-$(CONFIG_USB_BDC_UDC)	+= bdc/
- obj-$(CONFIG_USB_MAX3420_UDC)	+= max3420_udc.o
-diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
-new file mode 100644
-index 000000000000..271015142210
---- /dev/null
-+++ b/drivers/usb/gadget/udc/aspeed_udc.c
-@@ -0,0 +1,1601 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (c) 2021 Aspeed Technology Inc.
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/prefetch.h>
-+#include <linux/usb/ch9.h>
-+#include <linux/usb/gadget.h>
-+#include <linux/slab.h>
-+
-+#define AST_UDC_NUM_ENDPOINTS		(1 + 4)
-+#define AST_UDC_EP0_MAX_PACKET		64	/* EP0's max packet size */
-+#define AST_UDC_EPn_MAX_PACKET		1024	/* Generic EPs max packet size */
-+#define AST_UDC_DESCS_COUNT		256	/* Use 256 stages descriptor mode (32/256) */
-+#define AST_UDC_DESC_MODE		1	/* Single/Multiple Stage(s) Descriptor Mode */
-+
-+#define AST_UDC_EP_DMA_SIZE		(AST_UDC_EPn_MAX_PACKET + 8 * AST_UDC_DESCS_COUNT)
-+
-+/*****************************
-+ *                           *
-+ * UDC register definitions  *
-+ *                           *
-+ *****************************/
-+
-+#define AST_UDC_FUNC_CTRL		0x00	/* Root Function Control & Status Register */
-+#define AST_UDC_CONFIG			0x04	/* Root Configuration Setting Register */
-+#define AST_UDC_IER			0x08	/* Interrupt Control Register */
-+#define AST_UDC_ISR			0x0C	/* Interrupt Status Register */
-+#define AST_UDC_EP_ACK_IER		0x10	/* Programmable ep Pool ACK Interrupt Enable Reg */
-+#define AST_UDC_EP_NAK_IER		0x14	/* Programmable ep Pool NAK Interrupt Enable Reg */
-+#define AST_UDC_EP_ACK_ISR		0x18	/* Programmable ep Pool ACK Interrupt Status Reg */
-+#define AST_UDC_EP_NAK_ISR		0x1C	/* Programmable ep Pool NAK Interrupt Status Reg */
-+#define AST_UDC_DEV_RESET		0x20	/* Device Controller Soft Reset Enable Register */
-+#define AST_UDC_STS			0x24	/* USB Status Register */
-+#define AST_VHUB_EP_DATA		0x28	/* Programmable ep Pool Data Toggle Value Set */
-+#define AST_VHUB_ISO_TX_FAIL		0x2C	/* Isochronous Transaction Fail Accumulator */
-+#define AST_UDC_EP0_CTRL		0x30	/* Endpoint 0 Control/Status Register */
-+#define AST_UDC_EP0_DATA_BUFF		0x34	/* Base Address of ep0 IN/OUT Data Buffer Reg */
-+#define AST_UDC_SETUP0			0x80    /* Root Device Setup Data Buffer0 */
-+#define AST_UDC_SETUP1			0x84    /* Root Device Setup Data Buffer1 */
-+
-+
-+/* Main control reg */
-+#define USB_PHY_CLK_EN			BIT(31)
-+#define USB_FIFO_DYN_PWRD_EN		BIT(19)
-+#define USB_EP_LONG_DESC		BIT(18)
-+#define USB_BIST_TEST_PASS		BIT(13)
-+#define USB_BIST_TURN_ON		BIT(12)
-+#define USB_PHY_RESET_DIS		BIT(11)
-+#define USB_TEST_MODE(x)		((x) << 8)
-+#define USB_FORCE_TIMER_HS		BIT(7)
-+#define USB_FORCE_HS			BIT(6)
-+#define USB_REMOTE_WAKEUP_12MS		BIT(5)
-+#define USB_REMOTE_WAKEUP_EN		BIT(4)
-+#define USB_AUTO_REMOTE_WAKEUP_EN	BIT(3)
-+#define USB_STOP_CLK_IN_SUPEND		BIT(2)
-+#define USB_UPSTREAM_FS			BIT(1)
-+#define USB_UPSTREAM_EN			BIT(0)
-+
-+/* Main config reg */
-+#define UDC_CFG_SET_ADDR(x)		((x) & 0x3f)
-+#define UDC_CFG_ADDR_MASK		(0x3f)
-+
-+/* Interrupt ctrl & status reg */
-+#define UDC_IRQ_EP_POOL_NAK		BIT(17)
-+#define UDC_IRQ_EP_POOL_ACK_STALL	BIT(16)
-+#define UDC_IRQ_BUS_RESUME		BIT(8)
-+#define UDC_IRQ_BUS_SUSPEND		BIT(7)
-+#define UDC_IRQ_BUS_RESET		BIT(6)
-+#define UDC_IRQ_EP0_IN_DATA_NAK		BIT(4)
-+#define UDC_IRQ_EP0_IN_ACK_STALL	BIT(3)
-+#define UDC_IRQ_EP0_OUT_NAK		BIT(2)
-+#define UDC_IRQ_EP0_OUT_ACK_STALL	BIT(1)
-+#define UDC_IRQ_EP0_SETUP		BIT(0)
-+#define UDC_IRQ_ACK_ALL			(0x1ff)
-+
-+/* EP isr reg */
-+#define USB_EP3_ISR			BIT(3)
-+#define USB_EP2_ISR			BIT(2)
-+#define USB_EP1_ISR			BIT(1)
-+#define USB_EP0_ISR			BIT(0)
-+#define UDC_IRQ_EP_ACK_ALL		(0xf)
-+
-+/*Soft reset reg */
-+#define ROOT_UDC_SOFT_RESET		BIT(0)
-+
-+/* USB status reg */
-+#define UDC_STS_HIGHSPEED		BIT(27)
-+
-+/* Programmable EP data toggle */
-+#define EP_TOGGLE_SET_EPNUM(x)		((x) & 0x3)
-+
-+/* EP0 ctrl reg */
-+#define EP0_GET_RX_LEN(x)		((x >> 16) & 0x7f)
-+#define EP0_TX_LEN(x)			((x & 0x7f) << 8)
-+#define EP0_RX_BUFF_RDY			BIT(2)
-+#define EP0_TX_BUFF_RDY			BIT(1)
-+#define EP0_STALL			BIT(0)
-+
-+/*************************************
-+ *                                   *
-+ * per-endpoint register definitions *
-+ *                                   *
-+ *************************************/
-+
-+#define AST_UDC_EP_CONFIG		0x00	/* Endpoint Configuration Register */
-+#define AST_UDC_EP_DMA_CTRL		0x04	/* DMA Descriptor List Control/Status Register */
-+#define AST_UDC_EP_DMA_BUFF		0x08	/* DMA Descriptor/Buffer Base Address */
-+#define AST_UDC_EP_DMA_STS		0x0C	/* DMA Descriptor List R/W Pointer and Status */
-+
-+#define AST_UDC_EP_BASE			0x200
-+#define AST_UDC_EP_OFFSET		0x10
-+
-+/* EP config reg */
-+#define EP_SET_MAX_PKT(x)		((x & 0x3ff) << 16)
-+#define EP_DATA_FETCH_CTRL(x)		((x & 0x3) << 14)
-+#define EP_AUTO_DATA_DISABLE		(0x1 << 13)
-+#define EP_SET_EP_STALL			(0x1 << 12)
-+#define EP_SET_EP_NUM(x)		((x & 0xf) << 8)
-+#define EP_SET_TYPE_MASK(x)		((x) << 5)
-+#define EP_TYPE_BULK			(0x1)
-+#define EP_TYPE_INT			(0x2)
-+#define EP_TYPE_ISO			(0x3)
-+#define EP_DIR_OUT			(0x1 << 4)
-+#define EP_ALLOCATED_MASK		(0x7 << 1)
-+#define EP_ENABLE			BIT(0)
-+
-+/* EP DMA ctrl reg */
-+#define EP_DMA_CTRL_GET_PROC_STS(x)	((x >> 4) & 0xf)
-+#define EP_DMA_CTRL_STS_RX_IDLE		0x0
-+#define EP_DMA_CTRL_STS_TX_IDLE		0x8
-+#define EP_DMA_CTRL_IN_LONG_MODE	(0x1 << 3)
-+#define EP_DMA_CTRL_RESET		(0x1 << 2)
-+#define EP_DMA_SINGLE_STAGE		(0x1 << 1)
-+#define EP_DMA_DESC_MODE		(0x1 << 0)
-+
-+/* EP DMA status reg */
-+#define EP_DMA_SET_TX_SIZE(x)		((x & 0x7ff) << 16)
-+#define EP_DMA_GET_TX_SIZE(x)		(((x) >> 16) & 0x7ff)
-+#define EP_DMA_GET_RPTR(x)		(((x) >> 8) & 0xff)
-+#define EP_DMA_GET_WPTR(x)		((x) & 0xff)
-+#define EP_DMA_SINGLE_KICK		(1 << 0) /* WPTR = 1 for single mode */
-+
-+/* EP desc reg */
-+#define AST_EP_DMA_DESC_INTR_ENABLE	BIT(31)
-+#define AST_EP_DMA_DESC_PID_DATA0	(0 << 14)
-+#define AST_EP_DMA_DESC_PID_DATA2	BIT(14)
-+#define AST_EP_DMA_DESC_PID_DATA1	(2 << 14)
-+#define AST_EP_DMA_DESC_PID_MDATA	(3 << 14)
-+#define EP_DESC1_IN_LEN(x)		((x) & 0x1fff)
-+#define AST_EP_DMA_DESC_MAX_LEN		(7680) /* Max packet length for trasmit in 1 desc */
-+
-+struct ast_udc_request {
-+	struct usb_request	req;
-+	struct list_head	queue;
-+	unsigned		mapped:1;
-+	unsigned int		actual_dma_length;
-+	u32			saved_dma_wptr;
-+};
-+
-+#define to_ast_req(__req) container_of(__req, struct ast_udc_request, req)
-+
-+struct ast_dma_desc {
-+	u32	des_0;
-+	u32	des_1;
-+};
-+
-+struct ast_udc_ep {
-+	struct usb_ep			ep;
-+
-+	/* Request queue */
-+	struct list_head		queue;
-+
-+	struct ast_udc_dev		*udc;
-+	void __iomem			*ep_reg;
-+	void				*epn_buf;
-+	dma_addr_t			epn_buf_dma;
-+	const struct usb_endpoint_descriptor	*desc;
-+
-+	/* DMA Descriptors */
-+	struct ast_dma_desc		*descs;
-+	dma_addr_t			descs_dma;
-+	u32				descs_wptr;
-+	u32				chunk_max;
-+
-+	bool				dir_in:1;
-+	unsigned			stopped:1;
-+	bool				desc_mode:1;
-+};
-+
-+#define to_ast_ep(__ep) container_of(__ep, struct ast_udc_ep, ep)
-+
-+struct ast_udc_dev {
-+	struct platform_device		*pdev;
-+	void __iomem			*reg;
-+	int				irq;
-+	spinlock_t			lock;
-+	struct clk			*clk;
-+	struct work_struct		wake_work;
-+
-+	/* EP0 DMA buffers allocated in one chunk */
-+	void				*ep0_buf;
-+	dma_addr_t			ep0_buf_dma;
-+	struct ast_udc_ep		ep[AST_UDC_NUM_ENDPOINTS];
-+
-+	struct usb_gadget		gadget;
-+	struct usb_gadget_driver	*driver;
-+	void __iomem			*creq;
-+	enum usb_device_state		suspended_from;
-+	int				desc_mode;
-+
-+	/* Force full speed only */
-+	bool				force_usb1:1;
-+	unsigned			is_control_tx:1;
-+	bool				wakeup_en:1;
-+};
-+
-+#define to_ast_dev(__g) container_of(__g, struct ast_udc_dev, gadget)
-+
-+static const char * const ast_ep_name[] = {
-+	"ep0", "ep1", "ep2", "ep3", "ep4"
-+};
-+
-+#ifdef AST_UDC_DEBUG_ALL
-+#define AST_UDC_DEBUG
-+#define AST_SETUP_DEBUG
-+#define AST_EP_DEBUG
-+#define AST_ISR_DEBUG
-+#endif
-+
-+#ifdef AST_SETUP_DEBUG
-+#define SETUP_DBG(u, fmt, ...)	\
-+	dev_dbg(&(u)->pdev->dev, "%s() " fmt, __func__, ##__VA_ARGS__)
-+#else
-+#define SETUP_DBG(u, fmt, ...)
-+#endif
-+
-+#ifdef AST_EP_DEBUG
-+#define EP_DBG(e, fmt, ...)	\
-+	dev_dbg(&(e)->udc->pdev->dev, "%s():%s " fmt, __func__,	\
-+		 (e)->ep.name, ##__VA_ARGS__)
-+#else
-+#define EP_DBG(ep, fmt, ...)	((void)(ep))
-+#endif
-+
-+#ifdef AST_UDC_DEBUG
-+#define UDC_DBG(u, fmt, ...)	\
-+	dev_dbg(&(u)->pdev->dev, "%s() " fmt, __func__, ##__VA_ARGS__)
-+#else
-+#define UDC_DBG(u, fmt, ...)
-+#endif
-+
-+#ifdef AST_ISR_DEBUG
-+#define ISR_DBG(u, fmt, ...)	\
-+	dev_dbg(&(u)->pdev->dev, "%s() " fmt, __func__, ##__VA_ARGS__)
-+#else
-+#define ISR_DBG(u, fmt, ...)
-+#endif
-+
-+/*-------------------------------------------------------------------------*/
-+#define ast_udc_read(udc, offset) \
-+	readl((udc)->reg + (offset))
-+#define ast_udc_write(udc, val, offset) \
-+	writel((val), (udc)->reg + (offset))
-+
-+#define ast_ep_read(ep, reg) \
-+	readl((ep)->ep_reg + (reg))
-+#define ast_ep_write(ep, val, reg) \
-+	writel((val), (ep)->ep_reg + (reg))
-+
-+/*-------------------------------------------------------------------------*/
-+
-+static void ast_udc_done(struct ast_udc_ep *ep, struct ast_udc_request *req,
-+			 int status)
-+{
-+	struct ast_udc_dev *udc = ep->udc;
-+
-+	EP_DBG(ep, "req @%p, len (%d/%d), buf:0x%x, dir:0x%x\n",
-+	       req, req->req.actual, req->req.length,
-+	       (u32)req->req.buf, ep->dir_in);
-+
-+	list_del(&req->queue);
-+
-+	if (req->req.status == -EINPROGRESS)
-+		req->req.status = status;
-+	else
-+		status = req->req.status;
-+
-+	if (status && status != -ESHUTDOWN)
-+		EP_DBG(ep, "done req:%p, status:%d\n", req, status);
-+
-+	spin_unlock(&udc->lock);
-+	usb_gadget_giveback_request(&ep->ep, &req->req);
-+	spin_lock(&udc->lock);
-+}
-+
-+static void ast_udc_nuke(struct ast_udc_ep *ep, int status)
-+{
-+	int count = 0;
-+
-+	/* Sanity check */
-+	if (&ep->queue == NULL)
-+		return;
-+
-+	while (!list_empty(&ep->queue)) {
-+		struct ast_udc_request *req;
-+
-+		req = list_entry(ep->queue.next, struct ast_udc_request,
-+				 queue);
-+		ast_udc_done(ep, req, status);
-+		count++;
-+	}
-+
-+	if (count)
-+		EP_DBG(ep, "Nuked %d request(s)\n", count);
-+}
-+
-+/*
-+ * Stop activity on all endpoints.
-+ * Device controller for which EP activity is to be stopped.
-+ *
-+ * All the endpoints are stopped and any pending transfer requests if any on
-+ * the endpoint are terminated.
-+ */
-+static void ast_udc_stop_activity(struct ast_udc_dev *udc)
-+{
-+	struct ast_udc_ep *ep;
-+	int i;
-+
-+	for (i = 0; i < AST_UDC_NUM_ENDPOINTS; i++) {
-+		ep = &udc->ep[i];
-+		ep->stopped = 1;
-+		ast_udc_nuke(ep, -ESHUTDOWN);
-+	}
-+}
-+
-+static int ast_udc_ep_enable(struct usb_ep *_ep,
-+			     const struct usb_endpoint_descriptor *desc)
-+{
-+	u16 maxpacket = usb_endpoint_maxp(desc);
-+	struct ast_udc_ep *ep = to_ast_ep(_ep);
-+	struct ast_udc_dev *udc = ep->udc;
-+	u8 epnum = usb_endpoint_num(desc);
-+	unsigned long flags;
-+	u32 ep_conf = 0;
-+	u8 dir_in;
-+	u8 type;
-+
-+	if (!_ep || !ep || !desc || desc->bDescriptorType != USB_DT_ENDPOINT ||
-+	    maxpacket == 0 || maxpacket > ep->ep.maxpacket) {
-+		EP_DBG(ep, "Failed, invalid EP enable param\n");
-+		return -EINVAL;
-+	}
-+
-+	if (!udc->driver) {
-+		EP_DBG(ep, "bogus device state\n");
-+		return -ESHUTDOWN;
-+	}
-+
-+	EP_DBG(ep, "maxpacket:0x%x\n", maxpacket);
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	ep->desc = desc;
-+	ep->stopped = 0;
-+	ep->ep.maxpacket = maxpacket;
-+	ep->chunk_max = AST_EP_DMA_DESC_MAX_LEN;
-+
-+	if (maxpacket < AST_UDC_EPn_MAX_PACKET)
-+		ep_conf = EP_SET_MAX_PKT(maxpacket);
-+
-+	ep_conf |= EP_SET_EP_NUM(epnum);
-+
-+	type = usb_endpoint_type(desc);
-+	dir_in = usb_endpoint_dir_in(desc);
-+	ep->dir_in = dir_in;
-+	if (!ep->dir_in)
-+		ep_conf |= EP_DIR_OUT;
-+
-+	EP_DBG(ep, "type %d, dir_in %d\n", type, dir_in);
-+	switch (type) {
-+	case USB_ENDPOINT_XFER_ISOC:
-+		ep_conf |= EP_SET_TYPE_MASK(EP_TYPE_ISO);
-+		break;
-+
-+	case USB_ENDPOINT_XFER_BULK:
-+		ep_conf |= EP_SET_TYPE_MASK(EP_TYPE_BULK);
-+		break;
-+
-+	case USB_ENDPOINT_XFER_INT:
-+		ep_conf |= EP_SET_TYPE_MASK(EP_TYPE_INT);
-+		break;
-+	}
-+
-+	ep->desc_mode = udc->desc_mode && ep->descs_dma && ep->dir_in;
-+	if (ep->desc_mode) {
-+		ast_ep_write(ep, EP_DMA_CTRL_RESET, AST_UDC_EP_DMA_CTRL);
-+		ast_ep_write(ep, 0, AST_UDC_EP_DMA_STS);
-+		ast_ep_write(ep, ep->descs_dma, AST_UDC_EP_DMA_BUFF);
-+
-+		/* Enable Long Descriptor Mode */
-+		ast_ep_write(ep, EP_DMA_CTRL_IN_LONG_MODE | EP_DMA_DESC_MODE,
-+			     AST_UDC_EP_DMA_CTRL);
-+
-+		ep->descs_wptr = 0;
-+
-+	} else {
-+		ast_ep_write(ep, EP_DMA_CTRL_RESET, AST_UDC_EP_DMA_CTRL);
-+		ast_ep_write(ep, EP_DMA_SINGLE_STAGE, AST_UDC_EP_DMA_CTRL);
-+		ast_ep_write(ep, 0, AST_UDC_EP_DMA_STS);
-+	}
-+
-+	/* Cleanup data toggle just in case */
-+	ast_udc_write(udc, EP_TOGGLE_SET_EPNUM(epnum), AST_VHUB_EP_DATA);
-+
-+	/* Enable EP */
-+	ast_ep_write(ep, ep_conf | EP_ENABLE, AST_UDC_EP_CONFIG);
-+
-+	EP_DBG(ep, "ep_config: 0x%x\n", ast_ep_read(ep, AST_UDC_EP_CONFIG));
-+
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+
-+	return 0;
-+}
-+
-+static int ast_udc_ep_disable(struct usb_ep *_ep)
-+{
-+	struct ast_udc_ep *ep = to_ast_ep(_ep);
-+	struct ast_udc_dev *udc = ep->udc;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	ep->ep.desc = NULL;
-+	ep->stopped = 1;
-+
-+	ast_udc_nuke(ep, -ESHUTDOWN);
-+	ast_ep_write(ep, 0, AST_UDC_EP_CONFIG);
-+
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+
-+	return 0;
-+}
-+
-+static struct usb_request *ast_udc_ep_alloc_request(struct usb_ep *_ep,
-+						    gfp_t gfp_flags)
-+{
-+	struct ast_udc_ep *ep = to_ast_ep(_ep);
-+	struct ast_udc_request *req;
-+
-+	req = kzalloc(sizeof(struct ast_udc_request), gfp_flags);
-+	if (!req) {
-+		EP_DBG(ep, "request allocation failed\n");
-+		return NULL;
-+	}
-+
-+	INIT_LIST_HEAD(&req->queue);
-+
-+	return &req->req;
-+}
-+
-+static void ast_udc_ep_free_request(struct usb_ep *_ep,
-+				    struct usb_request *_req)
-+{
-+	struct ast_udc_request *req = to_ast_req(_req);
-+
-+	kfree(req);
-+}
-+
-+static int ast_dma_descriptor_setup(struct ast_udc_ep *ep, u32 dma_buf,
-+				    u16 tx_len, struct ast_udc_request *req)
-+{
-+	struct ast_udc_dev *udc = ep->udc;
-+	struct device *dev = &udc->pdev->dev;
-+	u32 offset, chunk;
-+	int count, last;
-+
-+	if (!ep->descs) {
-+		dev_warn(dev, "%s: Empty DMA descs list failure\n",
-+			 ep->ep.name);
-+		return -EINVAL;
-+	}
-+
-+	chunk = tx_len;
-+	offset = count = last = 0;
-+
-+	EP_DBG(ep, "req @%p, %s:%d, %s:0x%x, %s:0x%x\n", req,
-+	       "wptr", ep->descs_wptr, "dma_buf", dma_buf,
-+	       "tx_len", tx_len);
-+
-+	/* Create Descriptor Lists */
-+	while (chunk >= 0 && !last && count < AST_UDC_DESCS_COUNT) {
-+
-+		ep->descs[ep->descs_wptr].des_0 = dma_buf + offset;
-+
-+		if (chunk <= ep->chunk_max) {
-+			ep->descs[ep->descs_wptr].des_1 = chunk;
-+			last = 1;
-+		} else {
-+			ep->descs[ep->descs_wptr].des_1 = ep->chunk_max;
-+			chunk -= ep->chunk_max;
-+		}
-+
-+		EP_DBG(ep, "descs[%d]: 0x%x 0x%x, last:%d\n",
-+		       ep->descs_wptr,
-+		       ep->descs[ep->descs_wptr].des_0,
-+		       ep->descs[ep->descs_wptr].des_1,
-+		       last);
-+
-+		if (count == 0)
-+			req->saved_dma_wptr = ep->descs_wptr;
-+
-+		ep->descs_wptr++;
-+		count++;
-+
-+		if (ep->descs_wptr >= AST_UDC_DESCS_COUNT)
-+			ep->descs_wptr = 0;
-+
-+		offset = ep->chunk_max * count;
-+	}
-+
-+	return 0;
-+}
-+
-+static void ast_udc_epn_kick(struct ast_udc_ep *ep, struct ast_udc_request *req)
-+{
-+	u32 tx_len;
-+	u32 last;
-+
-+	last = req->req.length - req->req.actual;
-+	tx_len = last > ep->ep.maxpacket ? ep->ep.maxpacket : last;
-+
-+	EP_DBG(ep, "kick req @%p, len:%d, dir:%d\n",
-+	       req, tx_len, ep->dir_in);
-+
-+	ast_ep_write(ep, req->req.dma + req->req.actual, AST_UDC_EP_DMA_BUFF);
-+
-+	/* Start DMA */
-+	ast_ep_write(ep, EP_DMA_SET_TX_SIZE(tx_len), AST_UDC_EP_DMA_STS);
-+	ast_ep_write(ep, EP_DMA_SET_TX_SIZE(tx_len) | EP_DMA_SINGLE_KICK,
-+		     AST_UDC_EP_DMA_STS);
-+}
-+
-+static void ast_udc_epn_kick_desc(struct ast_udc_ep *ep,
-+				  struct ast_udc_request *req)
-+{
-+	u32 descs_max_size;
-+	u32 tx_len;
-+	u32 last;
-+
-+	descs_max_size = AST_EP_DMA_DESC_MAX_LEN * AST_UDC_DESCS_COUNT;
-+
-+	last = req->req.length - req->req.actual;
-+	tx_len = last > descs_max_size ? descs_max_size : last;
-+
-+	EP_DBG(ep, "kick req @%p, %s:%d, %s:0x%x, %s:0x%x (%d/%d), %s:0x%x\n",
-+	       req, "tx_len", tx_len, "dir_in", ep->dir_in,
-+	       "dma", req->req.dma + req->req.actual,
-+	       req->req.actual, req->req.length,
-+	       "descs_max_size", descs_max_size);
-+
-+	if (!ast_dma_descriptor_setup(ep, req->req.dma + req->req.actual,
-+				      tx_len, req))
-+		req->actual_dma_length += tx_len;
-+
-+	/* make sure CPU done everything before triggering DMA */
-+	mb();
-+
-+	ast_ep_write(ep, ep->descs_wptr, AST_UDC_EP_DMA_STS);
-+
-+	EP_DBG(ep, "descs_wptr:%d, dstat:0x%x, dctrl:0x%x\n",
-+	       ep->descs_wptr,
-+	       ast_ep_read(ep, AST_UDC_EP_DMA_STS),
-+	       ast_ep_read(ep, AST_UDC_EP_DMA_CTRL));
-+}
-+
-+static void ast_udc_ep0_queue(struct ast_udc_ep *ep,
-+			      struct ast_udc_request *req)
-+{
-+	struct ast_udc_dev *udc = ep->udc;
-+	u32 tx_len;
-+	u32 last;
-+
-+	last = req->req.length - req->req.actual;
-+	tx_len = last > ep->ep.maxpacket ? ep->ep.maxpacket : last;
-+
-+	ast_udc_write(udc, req->req.dma + req->req.actual,
-+		      AST_UDC_EP0_DATA_BUFF);
-+
-+	if (ep->dir_in) {
-+		/* IN requests, send data */
-+		SETUP_DBG(udc, "IN: %s:0x%x, %s:0x%x, %s:%d (%d/%d), %s:%d\n",
-+			  "buf", (u32)req->req.buf,
-+			  "dma", req->req.dma + req->req.actual,
-+			  "tx_len", tx_len,
-+			  req->req.actual, req->req.length,
-+			  "dir_in", ep->dir_in);
-+
-+		req->req.actual += tx_len;
-+		ast_udc_write(udc, EP0_TX_LEN(tx_len), AST_UDC_EP0_CTRL);
-+		ast_udc_write(udc, EP0_TX_LEN(tx_len) | EP0_TX_BUFF_RDY,
-+			      AST_UDC_EP0_CTRL);
-+
-+	} else {
-+		/* OUT requests, receive data */
-+		SETUP_DBG(udc, "OUT: %s:%x, %s:%x, %s:(%d/%d), %s:%d\n",
-+			  "buf", (u32)req->req.buf,
-+			  "dma", req->req.dma + req->req.actual,
-+			  "len", req->req.actual, req->req.length,
-+			  "dir_in", ep->dir_in);
-+
-+		if (!req->req.length) {
-+			/* 0 len request, send tx as completion */
-+			ast_udc_write(udc, EP0_TX_BUFF_RDY, AST_UDC_EP0_CTRL);
-+			ep->dir_in = 0x1;
-+		} else
-+			ast_udc_write(udc, EP0_RX_BUFF_RDY, AST_UDC_EP0_CTRL);
-+	}
-+}
-+
-+static int ast_udc_ep_queue(struct usb_ep *_ep, struct usb_request *_req,
-+			    gfp_t gfp_flags)
-+{
-+	struct ast_udc_request *req = to_ast_req(_req);
-+	struct ast_udc_ep *ep = to_ast_ep(_ep);
-+	struct ast_udc_dev *udc = ep->udc;
-+	struct device *dev = &udc->pdev->dev;
-+	unsigned long flags;
-+	int rc;
-+
-+	if (unlikely(!_req || !_req->complete || !_req->buf || !_ep)) {
-+		dev_warn(dev, "Invalid EP request !\n");
-+		return -EINVAL;
-+	}
-+
-+	if (ep->stopped) {
-+		dev_warn(dev, "%s is already stopped !\n", _ep->name);
-+		return -ESHUTDOWN;
-+	}
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	list_add_tail(&req->queue, &ep->queue);
-+
-+	req->req.actual = 0;
-+	req->req.status = -EINPROGRESS;
-+	req->actual_dma_length = 0;
-+
-+	rc = usb_gadget_map_request(&udc->gadget, &req->req, ep->dir_in);
-+	if (rc) {
-+		EP_DBG(ep, "Request mapping failure %d\n", rc);
-+		dev_warn(dev, "Request mapping failure %d\n", rc);
-+		goto end;
-+	}
-+
-+	EP_DBG(ep, "enqueue req @%p\n", req);
-+	EP_DBG(ep, "l=%d, dma:0x%x, zero:%d, is_in:%d\n",
-+		_req->length, _req->dma, _req->zero, ep->dir_in);
-+
-+	/* EP0 request enqueue */
-+	if (ep->ep.desc == NULL) {
-+		if ((req->req.dma % 4) != 0) {
-+			dev_warn(dev, "EP0 req dma alignment error\n");
-+			return -ESHUTDOWN;
-+		}
-+
-+		ast_udc_ep0_queue(ep, req);
-+		goto end;
-+	}
-+
-+	/* EPn request enqueue */
-+	if (list_is_singular(&ep->queue)) {
-+		if (ep->desc_mode)
-+			ast_udc_epn_kick_desc(ep, req);
-+		else
-+			ast_udc_epn_kick(ep, req);
-+	}
-+
-+end:
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+
-+	return rc;
-+}
-+
-+static int ast_udc_ep_dequeue(struct usb_ep *_ep, struct usb_request *_req)
-+{
-+	struct ast_udc_ep *ep = to_ast_ep(_ep);
-+	struct ast_udc_dev *udc = ep->udc;
-+	struct ast_udc_request *req;
-+	unsigned long flags;
-+	int rc = 0;
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	/* make sure it's actually queued on this endpoint */
-+	list_for_each_entry(req, &ep->queue, queue) {
-+		if (&req->req == _req) {
-+			list_del_init(&req->queue);
-+			ast_udc_done(ep, req, -ESHUTDOWN);
-+			_req->status = -ECONNRESET;
-+			break;
-+		}
-+	}
-+
-+	/* dequeue request not found */
-+	if (&req->req != _req)
-+		rc = -EINVAL;
-+
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+
-+	return rc;
-+}
-+
-+static int ast_udc_ep_set_halt(struct usb_ep *_ep, int value)
-+{
-+	struct ast_udc_ep *ep = to_ast_ep(_ep);
-+	struct ast_udc_dev *udc = ep->udc;
-+	unsigned long flags;
-+	int epnum;
-+	u32 ctrl;
-+
-+	EP_DBG(ep, "val:%d\n", value);
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	epnum = usb_endpoint_num(ep->desc);
-+
-+	/* EP0 */
-+	if (epnum == 0) {
-+		ctrl = ast_udc_read(udc, AST_UDC_EP0_CTRL);
-+		if (value)
-+			ctrl |= EP0_STALL;
-+		else
-+			ctrl &= ~EP0_STALL;
-+
-+		ast_udc_write(udc, ctrl, AST_UDC_EP0_CTRL);
-+
-+	} else {
-+	/* EPn */
-+		ctrl = ast_udc_read(udc, AST_UDC_EP_CONFIG);
-+		if (value)
-+			ctrl |= EP_SET_EP_STALL;
-+		else
-+			ctrl &= ~EP_SET_EP_STALL;
-+
-+		ast_ep_write(ep, ctrl, AST_UDC_EP_CONFIG);
-+
-+		/* only epn is stopped and waits for clear */
-+		ep->stopped = value ? 1 : 0;
-+	}
-+
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+
-+	return 0;
-+}
-+
-+static const struct usb_ep_ops ast_udc_ep_ops = {
-+	.enable		= ast_udc_ep_enable,
-+	.disable	= ast_udc_ep_disable,
-+	.alloc_request	= ast_udc_ep_alloc_request,
-+	.free_request	= ast_udc_ep_free_request,
-+	.queue		= ast_udc_ep_queue,
-+	.dequeue	= ast_udc_ep_dequeue,
-+	.set_halt	= ast_udc_ep_set_halt,
-+	/* there's only imprecise fifo status reporting */
-+};
-+
-+static void ast_udc_ep0_rx(struct ast_udc_dev *udc)
-+{
-+	ast_udc_write(udc, udc->ep0_buf_dma, AST_UDC_EP0_DATA_BUFF);
-+	ast_udc_write(udc, EP0_RX_BUFF_RDY, AST_UDC_EP0_CTRL);
-+}
-+
-+static void ast_udc_ep0_tx(struct ast_udc_dev *udc)
-+{
-+	ast_udc_write(udc, udc->ep0_buf_dma, AST_UDC_EP0_DATA_BUFF);
-+	ast_udc_write(udc, EP0_TX_BUFF_RDY, AST_UDC_EP0_CTRL);
-+}
-+
-+static void ast_udc_ep0_out(struct ast_udc_dev *udc)
-+{
-+	struct device *dev = &udc->pdev->dev;
-+	struct ast_udc_ep *ep = &udc->ep[0];
-+	struct ast_udc_request *req;
-+	u16 rx_len;
-+
-+	if (list_empty(&ep->queue))
-+		return;
-+
-+	req = list_entry(ep->queue.next, struct ast_udc_request, queue);
-+
-+	rx_len = EP0_GET_RX_LEN(ast_udc_read(udc, AST_UDC_EP0_CTRL));
-+	req->req.actual += rx_len;
-+
-+	SETUP_DBG(udc, "req %p (%d/%d)\n", req,
-+		  req->req.actual, req->req.length);
-+
-+	if ((rx_len < ep->ep.maxpacket) ||
-+	    (req->req.actual == req->req.length)) {
-+		ast_udc_ep0_tx(udc);
-+		if (!ep->dir_in)
-+			ast_udc_done(ep, req, 0);
-+
-+	} else {
-+		if (rx_len > req->req.length) {
-+			// Issue Fix
-+			dev_warn(dev, "Something wrong (%d/%d)\n",
-+				 req->req.actual, req->req.length);
-+			ast_udc_ep0_tx(udc);
-+			ast_udc_done(ep, req, 0);
-+			return;
-+		}
-+
-+		ep->dir_in = 0;
-+
-+		/* More works */
-+		ast_udc_ep0_queue(ep, req);
-+	}
-+}
-+
-+static void ast_udc_ep0_in(struct ast_udc_dev *udc)
-+{
-+	struct ast_udc_ep *ep = &udc->ep[0];
-+	struct ast_udc_request *req;
-+
-+	if (list_empty(&ep->queue)) {
-+		if (udc->is_control_tx) {
-+			ast_udc_ep0_rx(udc);
-+			udc->is_control_tx = 0;
-+		}
-+
-+		return;
-+	}
-+
-+	req = list_entry(ep->queue.next, struct ast_udc_request, queue);
-+
-+	SETUP_DBG(udc, "req %p (%d/%d)\n", req,
-+		  req->req.actual, req->req.length);
-+
-+	if (req->req.length == req->req.actual) {
-+		if (req->req.length)
-+			ast_udc_ep0_rx(udc);
-+
-+		if (ep->dir_in)
-+			ast_udc_done(ep, req, 0);
-+
-+	} else {
-+		/* More works */
-+		ast_udc_ep0_queue(ep, req);
-+	}
-+}
-+
-+static void ast_udc_epn_handle(struct ast_udc_dev *udc, u16 ep_num)
-+{
-+	struct ast_udc_ep *ep = &udc->ep[ep_num];
-+	struct ast_udc_request *req;
-+	u16 len = 0;
-+
-+	if (list_empty(&ep->queue))
-+		return;
-+
-+	req = list_first_entry(&ep->queue, struct ast_udc_request, queue);
-+
-+	len = EP_DMA_GET_TX_SIZE(ast_ep_read(ep, AST_UDC_EP_DMA_STS));
-+	req->req.actual += len;
-+
-+	EP_DBG(ep, "req @%p, length:(%d/%d), %s:0x%x\n", req,
-+		req->req.actual, req->req.length, "len", len);
-+
-+	/* Done this request */
-+	if (req->req.length == req->req.actual) {
-+		ast_udc_done(ep, req, 0);
-+		req = list_first_entry_or_null(&ep->queue,
-+					       struct ast_udc_request,
-+					       queue);
-+
-+	} else {
-+		/* Check for short packet */
-+		if (len < ep->ep.maxpacket) {
-+			ast_udc_done(ep, req, 0);
-+			req = list_first_entry_or_null(&ep->queue,
-+						       struct ast_udc_request,
-+						       queue);
-+		}
-+	}
-+
-+	/* More requests */
-+	if (req)
-+		ast_udc_epn_kick(ep, req);
-+}
-+
-+static void ast_udc_epn_handle_desc(struct ast_udc_dev *udc, u16 ep_num)
-+{
-+	struct ast_udc_ep *ep = &udc->ep[ep_num];
-+	struct device *dev = &udc->pdev->dev;
-+	struct ast_udc_request *req;
-+	u32 proc_sts, wr_ptr, rd_ptr;
-+	u32 len_in_desc, ctrl;
-+	u16 total_len = 0;
-+	u16 len;
-+	int i;
-+
-+	if (list_empty(&ep->queue)) {
-+		dev_warn(dev, "%s reqest queue empty !\n", ep->ep.name);
-+		return;
-+	}
-+
-+	req = list_first_entry(&ep->queue, struct ast_udc_request, queue);
-+
-+	ctrl = ast_ep_read(ep, AST_UDC_EP_DMA_CTRL);
-+	proc_sts = EP_DMA_CTRL_GET_PROC_STS(ctrl);
-+
-+	/* Check processing status is idle */
-+	if (proc_sts != EP_DMA_CTRL_STS_RX_IDLE &&
-+	    proc_sts != EP_DMA_CTRL_STS_TX_IDLE) {
-+		dev_warn(dev, "EP DMA CTRL: 0x%x, PS:0x%x\n",
-+			 ast_ep_read(ep, AST_UDC_EP_DMA_CTRL),
-+			 proc_sts);
-+		return;
-+	}
-+
-+	ctrl = ast_ep_read(ep, AST_UDC_EP_DMA_STS);
-+	rd_ptr = EP_DMA_GET_RPTR(ctrl);
-+	wr_ptr = EP_DMA_GET_WPTR(ctrl);
-+
-+	if (rd_ptr != wr_ptr) {
-+		dev_warn(dev, "desc list is not empty ! %s:%d, %s:%d\n",
-+		"rptr", rd_ptr, "wptr", wr_ptr);
-+		return;
-+	}
-+
-+	EP_DBG(ep, "rd_ptr:%d, wr_ptr:%d\n", rd_ptr, wr_ptr);
-+	i = req->saved_dma_wptr;
-+
-+	do {
-+		len_in_desc = EP_DESC1_IN_LEN(ep->descs[i].des_1);
-+		EP_DBG(ep, "desc[%d] len: %d\n", i, len_in_desc);
-+		total_len += len_in_desc;
-+		i++;
-+		if (i >= AST_UDC_DESCS_COUNT)
-+			i = 0;
-+
-+	} while (i != wr_ptr);
-+
-+	req->req.actual += total_len;
-+
-+	EP_DBG(ep, "req @%p, length:(%d/%d), %s:0x%x\n", req,
-+		req->req.actual, req->req.length, "len", total_len);
-+
-+	/* Done this request */
-+	if (req->req.length == req->req.actual) {
-+		ast_udc_done(ep, req, 0);
-+		req = list_first_entry_or_null(&ep->queue,
-+					       struct ast_udc_request,
-+					       queue);
-+
-+	} else {
-+		/* Check for short packet */
-+		if (len < ep->ep.maxpacket) {
-+			ast_udc_done(ep, req, 0);
-+			req = list_first_entry_or_null(&ep->queue,
-+						       struct ast_udc_request,
-+						       queue);
-+		}
-+	}
-+
-+	/* More requests & dma descs not setup yet */
-+	if (req && (req->actual_dma_length == req->req.actual)) {
-+		EP_DBG(ep, "More requests\n");
-+		ast_udc_epn_kick_desc(ep, req);
-+	}
-+}
-+
-+static void ast_udc_ep0_data_tx(struct ast_udc_dev *udc, u8 *tx_data, u32 len)
-+{
-+	if (len) {
-+		memcpy(udc->ep0_buf, tx_data, len);
-+
-+		ast_udc_write(udc, udc->ep0_buf_dma, AST_UDC_EP0_DATA_BUFF);
-+		ast_udc_write(udc, EP0_TX_LEN(len), AST_UDC_EP0_CTRL);
-+		ast_udc_write(udc, EP0_TX_LEN(len) | EP0_TX_BUFF_RDY,
-+			      AST_UDC_EP0_CTRL);
-+		udc->is_control_tx = 1;
-+
-+	} else
-+		ast_udc_write(udc, EP0_TX_BUFF_RDY, AST_UDC_EP0_CTRL);
-+}
-+
-+static void ast_udc_getstatus(struct ast_udc_dev *udc)
-+{
-+	struct usb_ctrlrequest crq;
-+	struct ast_udc_ep *ep;
-+	u16 status = 0;
-+	u16 epnum;
-+
-+	memcpy_fromio(&crq, udc->creq, sizeof(crq));
-+
-+	switch (crq.bRequestType & USB_RECIP_MASK) {
-+	case USB_RECIP_DEVICE:
-+		/* Get device status */
-+		status = 1 << USB_DEVICE_SELF_POWERED;
-+		break;
-+	case USB_RECIP_INTERFACE:
-+		break;
-+	case USB_RECIP_ENDPOINT:
-+		epnum = crq.wIndex & USB_ENDPOINT_NUMBER_MASK;
-+		status = udc->ep[epnum].stopped;
-+		break;
-+	default:
-+		goto stall;
-+	}
-+
-+	ep = &udc->ep[epnum];
-+	EP_DBG(ep, "status: 0x%x\n", status);
-+	ast_udc_ep0_data_tx(udc, (u8 *)&status, sizeof(status));
-+
-+	return;
-+
-+stall:
-+	EP_DBG(ep, "Can't respond request\n");
-+	ast_udc_write(udc, ast_udc_read(udc, AST_UDC_EP0_CTRL) | EP0_STALL,
-+		      AST_UDC_EP0_CTRL);
-+}
-+
-+static void ast_udc_ep0_handle_setup(struct ast_udc_dev *udc)
-+{
-+	struct ast_udc_ep *ep = &udc->ep[0];
-+	struct ast_udc_request *req;
-+	struct usb_ctrlrequest crq;
-+	int req_num = 0;
-+	int rc;
-+	u32 reg;
-+
-+	memcpy_fromio(&crq, udc->creq, sizeof(crq));
-+
-+	SETUP_DBG(udc, "SETEUP packet: %02x/%02x/%04x/%04x/%04x\n",
-+		  crq.bRequestType, crq.bRequest, le16_to_cpu(crq.wValue),
-+		  le16_to_cpu(crq.wIndex), le16_to_cpu(crq.wLength));
-+
-+	/*
-+	 * Cleanup ep0 request(s) in queue because
-+	 * there is a new control setup comes.
-+	 */
-+	list_for_each_entry(req, &udc->ep[0].queue, queue) {
-+		req_num++;
-+		EP_DBG(ep, "there is req %p in ep0 queue !\n", req);
-+	}
-+
-+	if (req_num)
-+		ast_udc_nuke(&udc->ep[0], -ETIMEDOUT);
-+
-+	udc->ep[0].dir_in = crq.bRequestType & USB_DIR_IN;
-+
-+	if ((crq.bRequestType & USB_TYPE_MASK) == USB_TYPE_STANDARD) {
-+		switch (crq.bRequest) {
-+		case USB_REQ_SET_ADDRESS:
-+			if (ast_udc_read(udc, AST_UDC_STS) & UDC_STS_HIGHSPEED)
-+				udc->gadget.speed = USB_SPEED_HIGH;
-+			else
-+				udc->gadget.speed = USB_SPEED_FULL;
-+
-+			SETUP_DBG(udc, "set addr: 0x%x\n", crq.wValue);
-+			reg = ast_udc_read(udc, AST_UDC_CONFIG);
-+			reg &= ~UDC_CFG_ADDR_MASK;
-+			reg |= UDC_CFG_SET_ADDR(crq.wValue);
-+			ast_udc_write(udc, reg, AST_UDC_CONFIG);
-+			goto req_complete;
-+
-+		case USB_REQ_CLEAR_FEATURE:
-+			SETUP_DBG(udc, "ep0: CLEAR FEATURE\n");
-+			goto req_driver;
-+
-+		case USB_REQ_SET_FEATURE:
-+			SETUP_DBG(udc, "ep0: SET FEATURE\n");
-+			goto req_driver;
-+
-+		case USB_REQ_GET_STATUS:
-+			ast_udc_getstatus(udc);
-+			return;
-+
-+		default:
-+			goto req_driver;
-+		}
-+
-+	}
-+
-+req_driver:
-+	if (udc->driver) {
-+		SETUP_DBG(udc, "Forwarding %s to gadget...\n",
-+			  udc->gadget.name);
-+
-+		spin_unlock(&udc->lock);
-+		rc = udc->driver->setup(&udc->gadget, &crq);
-+		spin_lock(&udc->lock);
-+
-+	} else {
-+		SETUP_DBG(udc, "No gadget for request !\n");
-+	}
-+
-+	if (rc >= 0)
-+		return;
-+
-+	/* Stall if gadget failed */
-+	SETUP_DBG(udc, "Stalling, rc:0x%x\n", rc);
-+	ast_udc_write(udc, ast_udc_read(udc, AST_UDC_EP0_CTRL) | EP0_STALL,
-+		      AST_UDC_EP0_CTRL);
-+	return;
-+
-+req_complete:
-+	SETUP_DBG(udc, "ep0: Sending IN status without data\n");
-+	ast_udc_write(udc, EP0_TX_BUFF_RDY, AST_UDC_EP0_CTRL);
-+}
-+
-+static irqreturn_t ast_udc_isr(int irq, void *data)
-+{
-+	struct ast_udc_dev *udc = (struct ast_udc_dev *)data;
-+	struct ast_udc_ep *ep;
-+	u32 isr, ep_isr;
-+	int i;
-+
-+	spin_lock(&udc->lock);
-+
-+	isr = ast_udc_read(udc, AST_UDC_ISR);
-+	if (!isr)
-+		goto done;
-+
-+	/* Ack interrupts */
-+	ast_udc_write(udc, isr, AST_UDC_ISR);
-+
-+	if (isr & UDC_IRQ_BUS_RESET) {
-+		ISR_DBG(udc, "UDC_IRQ_BUS_RESET\n");
-+		udc->gadget.speed = USB_SPEED_UNKNOWN;
-+
-+		ep = &udc->ep[1];
-+		EP_DBG(ep, "dctrl:0x%x\n",
-+		       ast_ep_read(ep, AST_UDC_EP_DMA_CTRL));
-+
-+		if (udc->driver && udc->driver->reset) {
-+			spin_unlock(&udc->lock);
-+			udc->driver->reset(&udc->gadget);
-+			spin_lock(&udc->lock);
-+		}
-+	}
-+
-+	if (isr & UDC_IRQ_BUS_SUSPEND) {
-+		ISR_DBG(udc, "UDC_IRQ_BUS_SUSPEND\n");
-+		udc->suspended_from = udc->gadget.state;
-+		usb_gadget_set_state(&udc->gadget, USB_STATE_SUSPENDED);
-+
-+		if (udc->driver && udc->driver->suspend) {
-+			spin_unlock(&udc->lock);
-+			udc->driver->suspend(&udc->gadget);
-+			spin_lock(&udc->lock);
-+		}
-+	}
-+
-+	if (isr & UDC_IRQ_BUS_RESUME) {
-+		ISR_DBG(udc, "UDC_IRQ_BUS_RESUME\n");
-+		usb_gadget_set_state(&udc->gadget, udc->suspended_from);
-+
-+		if (udc->driver && udc->driver->resume) {
-+			spin_unlock(&udc->lock);
-+			udc->driver->resume(&udc->gadget);
-+			spin_lock(&udc->lock);
-+		}
-+	}
-+
-+	if (isr & UDC_IRQ_EP0_IN_ACK_STALL) {
-+		ISR_DBG(udc, "UDC_IRQ_EP0_IN_ACK_STALL\n");
-+		ast_udc_ep0_in(udc);
-+	}
-+
-+	if (isr & UDC_IRQ_EP0_OUT_ACK_STALL) {
-+		ISR_DBG(udc, "UDC_IRQ_EP0_OUT_ACK_STALL\n");
-+		ast_udc_ep0_out(udc);
-+	}
-+
-+	if (isr & UDC_IRQ_EP0_SETUP) {
-+		ISR_DBG(udc, "UDC_IRQ_EP0_SETUP\n");
-+		ast_udc_ep0_handle_setup(udc);
-+	}
-+
-+	if (isr & UDC_IRQ_EP_POOL_ACK_STALL) {
-+		ISR_DBG(udc, "UDC_IRQ_EP_POOL_ACK_STALL\n");
-+		ep_isr = ast_udc_read(udc, AST_UDC_EP_ACK_ISR);
-+
-+		/* Ack EP interrupts */
-+		ast_udc_write(udc, ep_isr, AST_UDC_EP_ACK_ISR);
-+
-+		/* Handle each EP */
-+		for (i = 0; i < AST_UDC_NUM_ENDPOINTS - 1; i++) {
-+			if (ep_isr & (0x1 << i)) {
-+				ep = &udc->ep[i + 1];
-+				if (ep->desc_mode)
-+					ast_udc_epn_handle_desc(udc, i + 1);
-+				else
-+					ast_udc_epn_handle(udc, i + 1);
-+			}
-+		}
-+	}
-+
-+done:
-+	spin_unlock(&udc->lock);
-+	return IRQ_HANDLED;
-+}
-+
-+static int ast_udc_gadget_getframe(struct usb_gadget *gadget)
-+{
-+	struct ast_udc_dev *udc = to_ast_dev(gadget);
-+
-+	return (ast_udc_read(udc, AST_UDC_STS) >> 16) & 0x7ff;
-+}
-+
-+static void ast_udc_wake_work(struct work_struct *work)
-+{
-+	struct ast_udc_dev *udc = container_of(work, struct ast_udc_dev,
-+					       wake_work);
-+	unsigned long flags;
-+	u32 ctrl;
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	UDC_DBG(udc, "Wakeup Host !\n");
-+	ctrl = ast_udc_read(udc, AST_UDC_FUNC_CTRL);
-+	ast_udc_write(udc, ctrl | USB_REMOTE_WAKEUP_EN, AST_UDC_FUNC_CTRL);
-+
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+}
-+
-+static void ast_udc_wakeup_all(struct ast_udc_dev *udc)
-+{
-+	/*
-+	 * A device is trying to wake the world, because this
-+	 * can recurse into the device, we break the call chain
-+	 * using a work queue
-+	 */
-+	schedule_work(&udc->wake_work);
-+}
-+
-+static int ast_udc_wakeup(struct usb_gadget *gadget)
-+{
-+	struct ast_udc_dev *udc = to_ast_dev(gadget);
-+	unsigned long flags;
-+	int rc = 0;
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	if (!udc->wakeup_en) {
-+		UDC_DBG(udc, "Remote Wakeup is disabled\n");
-+		rc = -EINVAL;
-+		goto err;
-+	}
-+
-+	UDC_DBG(udc, "Device initiated wakeup\n");
-+	ast_udc_wakeup_all(udc);
-+
-+err:
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+	return rc;
-+}
-+
-+/*
-+ * Activate/Deactivate link with host
-+ */
-+static int ast_udc_pullup(struct usb_gadget *gadget, int is_on)
-+{
-+	struct ast_udc_dev *udc = to_ast_dev(gadget);
-+	unsigned long flags;
-+	u32 ctrl;
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	UDC_DBG(udc, "is_on: %d\n", is_on);
-+	if (is_on)
-+		ctrl = ast_udc_read(udc, AST_UDC_FUNC_CTRL) | USB_UPSTREAM_EN;
-+	else
-+		ctrl = ast_udc_read(udc, AST_UDC_FUNC_CTRL) & ~USB_UPSTREAM_EN;
-+
-+	ast_udc_write(udc, ctrl, AST_UDC_FUNC_CTRL);
-+
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+
-+	return 0;
-+}
-+
-+static int ast_udc_start(struct usb_gadget *gadget,
-+			 struct usb_gadget_driver *driver)
-+{
-+	struct ast_udc_dev *udc = to_ast_dev(gadget);
-+	struct ast_udc_ep *ep;
-+	unsigned long flags;
-+	int i;
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	UDC_DBG(udc, "\n");
-+	udc->driver = driver;
-+	udc->gadget.dev.of_node = udc->pdev->dev.of_node;
-+
-+	for (i = 0; i < AST_UDC_NUM_ENDPOINTS; i++) {
-+		ep = &udc->ep[i];
-+		ep->stopped = 0;
-+	}
-+
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+
-+	return 0;
-+}
-+
-+static int ast_udc_stop(struct usb_gadget *gadget)
-+{
-+	struct ast_udc_dev *udc = to_ast_dev(gadget);
-+	unsigned long flags;
-+	u32 ctrl;
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	UDC_DBG(udc, "\n");
-+	ctrl = ast_udc_read(udc, AST_UDC_FUNC_CTRL) & ~USB_UPSTREAM_EN;
-+	ast_udc_write(udc, ctrl, AST_UDC_FUNC_CTRL);
-+
-+	udc->gadget.speed = USB_SPEED_UNKNOWN;
-+	udc->driver = NULL;
-+
-+	ast_udc_stop_activity(udc);
-+	usb_gadget_set_state(&udc->gadget, USB_STATE_NOTATTACHED);
-+
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+
-+	return 0;
-+}
-+
-+static const struct usb_gadget_ops ast_udc_ops = {
-+	.get_frame		= ast_udc_gadget_getframe,
-+	.wakeup			= ast_udc_wakeup,
-+	.pullup			= ast_udc_pullup,
-+	.udc_start		= ast_udc_start,
-+	.udc_stop		= ast_udc_stop,
-+};
-+
-+/*
-+ * Support 1 Control Endpoint.
-+ * Support multiple programmable endpoints that can be configured to
-+ * Bulk IN/OUT, Interrupt IN/OUT, and Isochronous IN/OUT type endpoint.
-+ */
-+static void ast_udc_init_ep(struct ast_udc_dev *udc)
-+{
-+	struct ast_udc_ep *ep;
-+	int i;
-+
-+	for (i = 0; i < AST_UDC_NUM_ENDPOINTS; i++) {
-+		ep = &udc->ep[i];
-+		ep->ep.name = ast_ep_name[i];
-+		if (i == 0) {
-+			ep->ep.caps.type_control = true;
-+		} else {
-+			ep->ep.caps.type_iso = true;
-+			ep->ep.caps.type_bulk = true;
-+			ep->ep.caps.type_int = true;
-+		}
-+		ep->ep.caps.dir_in = true;
-+		ep->ep.caps.dir_out = true;
-+
-+		ep->ep.ops = &ast_udc_ep_ops;
-+		ep->udc = udc;
-+
-+		INIT_LIST_HEAD(&ep->queue);
-+
-+		if (i == 0) {
-+			usb_ep_set_maxpacket_limit(&ep->ep,
-+						   AST_UDC_EP0_MAX_PACKET);
-+			continue;
-+		}
-+
-+		ep->ep_reg = udc->reg + AST_UDC_EP_BASE +
-+				(AST_UDC_EP_OFFSET * (i - 1));
-+
-+		ep->epn_buf = udc->ep0_buf + (i * AST_UDC_EP_DMA_SIZE);
-+		ep->epn_buf_dma = udc->ep0_buf_dma + (i * AST_UDC_EP_DMA_SIZE);
-+		usb_ep_set_maxpacket_limit(&ep->ep, AST_UDC_EPn_MAX_PACKET);
-+
-+		ep->descs = ep->epn_buf + AST_UDC_EPn_MAX_PACKET;
-+		ep->descs_dma = ep->epn_buf_dma + AST_UDC_EPn_MAX_PACKET;
-+		ep->descs_wptr = 0;
-+
-+		list_add_tail(&ep->ep.ep_list, &udc->gadget.ep_list);
-+	}
-+}
-+
-+static void ast_udc_init_dev(struct ast_udc_dev *udc)
-+{
-+	INIT_WORK(&udc->wake_work, ast_udc_wake_work);
-+}
-+
-+static void ast_udc_init_hw(struct ast_udc_dev *udc)
-+{
-+	u32 ctrl;
-+
-+	/* Enable PHY */
-+	ctrl = USB_PHY_CLK_EN | USB_PHY_RESET_DIS;
-+	ast_udc_write(udc, ctrl, AST_UDC_FUNC_CTRL);
-+
-+	udelay(1);
-+	ast_udc_write(udc, 0, AST_UDC_DEV_RESET);
-+
-+	/* Set descriptor ring size */
-+	if (AST_UDC_DESCS_COUNT == 256) {
-+		ctrl |= USB_EP_LONG_DESC;
-+		ast_udc_write(udc, ctrl, AST_UDC_FUNC_CTRL);
-+	}
-+
-+	/* Mask & ack all interrupts before installing the handler */
-+	ast_udc_write(udc, 0, AST_UDC_IER);
-+	ast_udc_write(udc, UDC_IRQ_ACK_ALL, AST_UDC_ISR);
-+
-+	/* Enable some interrupts */
-+	ctrl = UDC_IRQ_EP_POOL_ACK_STALL | UDC_IRQ_BUS_RESUME |
-+	       UDC_IRQ_BUS_SUSPEND | UDC_IRQ_BUS_RESET |
-+	       UDC_IRQ_EP0_IN_ACK_STALL | UDC_IRQ_EP0_OUT_ACK_STALL |
-+	       UDC_IRQ_EP0_SETUP;
-+	ast_udc_write(udc, ctrl, AST_UDC_IER);
-+
-+	/* Cleanup and enable ep ACK interrupts */
-+	ast_udc_write(udc, UDC_IRQ_EP_ACK_ALL, AST_UDC_EP_ACK_IER);
-+	ast_udc_write(udc, UDC_IRQ_EP_ACK_ALL, AST_UDC_EP_ACK_ISR);
-+
-+	ast_udc_write(udc, 0, AST_UDC_EP0_CTRL);
-+}
-+
-+static int ast_udc_remove(struct platform_device *pdev)
-+{
-+	struct ast_udc_dev *udc = platform_get_drvdata(pdev);
-+	unsigned long flags;
-+	u32 ctrl;
-+
-+	usb_del_gadget_udc(&udc->gadget);
-+	if (udc->driver)
-+		return -EBUSY;
-+
-+	spin_lock_irqsave(&udc->lock, flags);
-+
-+	/* Disable upstream port connection */
-+	ctrl = ast_udc_read(udc, AST_UDC_FUNC_CTRL) & ~USB_UPSTREAM_EN;
-+	ast_udc_write(udc, ctrl, AST_UDC_FUNC_CTRL);
-+
-+	clk_disable_unprepare(udc->clk);
-+
-+	spin_unlock_irqrestore(&udc->lock, flags);
-+
-+	if (udc->ep0_buf)
-+		dma_free_coherent(&pdev->dev,
-+				  AST_UDC_EP_DMA_SIZE * AST_UDC_NUM_ENDPOINTS,
-+				  udc->ep0_buf,
-+				  udc->ep0_buf_dma);
-+
-+	udc->ep0_buf = NULL;
-+
-+	return 0;
-+}
-+
-+static int ast_udc_probe(struct platform_device *pdev)
-+{
-+	enum usb_device_speed max_speed;
-+	struct device *dev = &pdev->dev;
-+	struct ast_udc_dev *udc;
-+	struct resource *res;
-+	int rc;
-+
-+	udc = devm_kzalloc(&pdev->dev, sizeof(struct ast_udc_dev), GFP_KERNEL);
-+	if (!udc)
-+		return -ENOMEM;
-+
-+	udc->gadget.dev.parent = dev;
-+	udc->pdev = pdev;
-+	spin_lock_init(&udc->lock);
-+
-+	udc->gadget.ops = &ast_udc_ops;
-+	udc->gadget.ep0 = &udc->ep[0].ep;
-+	udc->gadget.name = "aspeed-udc";
-+	udc->gadget.dev.init_name = "gadget";
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	udc->reg = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(udc->reg)) {
-+		dev_err(&pdev->dev, "Failed to map resources\n");
-+		return PTR_ERR(udc->reg);
-+	}
-+
-+	platform_set_drvdata(pdev, udc);
-+
-+	udc->clk = devm_clk_get(&pdev->dev, NULL);
-+	if (IS_ERR(udc->clk)) {
-+		rc = PTR_ERR(udc->clk);
-+		goto err;
-+	}
-+	rc = clk_prepare_enable(udc->clk);
-+	if (rc) {
-+		dev_err(&pdev->dev, "Failed to enable clock (0x%x)\n", rc);
-+		goto err;
-+	}
-+
-+	/* Check if we need to limit the HW to USB1 */
-+	max_speed = usb_get_maximum_speed(&pdev->dev);
-+	if (max_speed != USB_SPEED_UNKNOWN && max_speed < USB_SPEED_HIGH)
-+		udc->force_usb1 = true;
-+
-+	/*
-+	 * Allocate DMA buffers for all EPs in one chunk
-+	 */
-+	udc->ep0_buf = dma_alloc_coherent(&pdev->dev,
-+					  AST_UDC_EP_DMA_SIZE *
-+					  AST_UDC_NUM_ENDPOINTS,
-+					  &udc->ep0_buf_dma, GFP_KERNEL);
-+
-+	udc->gadget.speed = USB_SPEED_UNKNOWN;
-+	udc->gadget.max_speed = USB_SPEED_HIGH;
-+	udc->creq = udc->reg + AST_UDC_SETUP0;
-+
-+	/*
-+	 * Support single stage mode or 32/256 stages descriptor mode.
-+	 * Set default as Descriptor Mode.
-+	 */
-+	udc->desc_mode = AST_UDC_DESC_MODE;
-+
-+	dev_info(&pdev->dev, "DMA %s\n", udc->desc_mode ?
-+		 "descriptor mode" : "single mode");
-+
-+	INIT_LIST_HEAD(&udc->gadget.ep_list);
-+	INIT_LIST_HEAD(&udc->gadget.ep0->ep_list);
-+
-+	/* Initialized udc ep */
-+	ast_udc_init_ep(udc);
-+
-+	/* Initialized udc device */
-+	ast_udc_init_dev(udc);
-+
-+	/* Initialized udc hardware */
-+	ast_udc_init_hw(udc);
-+
-+	/* Find interrupt and install handler */
-+	udc->irq = platform_get_irq(pdev, 0);
-+	if (udc->irq < 0) {
-+		dev_err(&pdev->dev, "Failed to get interrupt\n");
-+		rc = udc->irq;
-+		goto err;
-+	}
-+
-+	rc = devm_request_irq(&pdev->dev, udc->irq, ast_udc_isr, 0,
-+			      KBUILD_MODNAME, udc);
-+	if (rc) {
-+		dev_err(&pdev->dev, "Failed to request interrupt\n");
-+		goto err;
-+	}
-+
-+	rc = usb_add_gadget_udc(&pdev->dev, &udc->gadget);
-+	if (rc) {
-+		dev_err(&pdev->dev, "Failed to add gadget udc\n");
-+		goto err;
-+	}
-+
-+	dev_info(&pdev->dev, "Initialized udc in USB%s mode\n",
-+		 udc->force_usb1 ? "1" : "2");
-+
-+	return 0;
-+
-+err:
-+	dev_err(&pdev->dev, "Failed to udc probe, rc:0x%x\n", rc);
-+	ast_udc_remove(pdev);
-+
-+	return rc;
-+}
-+
-+static const struct of_device_id ast_udc_of_dt_ids[] = {
-+	{ .compatible = "aspeed,ast2600-udc", },
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(of, ast_udc_of_dt_ids);
-+
-+static struct platform_driver ast_udc_driver = {
-+	.probe			= ast_udc_probe,
-+	.remove			= ast_udc_remove,
-+	.driver			= {
-+		.name			= KBUILD_MODNAME,
-+		.of_match_table		= ast_udc_of_dt_ids,
-+	},
-+};
-+
-+module_platform_driver(ast_udc_driver);
-+
-+MODULE_DESCRIPTION("ASPEED UDC driver");
-+MODULE_AUTHOR("Neal Liu <neal_liu@aspeedtech.com>");
-+MODULE_LICENSE("GPL");
--- 
-2.25.1
+SGkgSGFucywNCg0KVGhhbmsgeW91IGZvciB5b3VyIGNvbW1lbnQuDQpJIGFncmVlIHRoYXQgdGhp
+cyBzdWJtaXNzaW9uIGxhY2tzIGRvY3VtZW50cyBzaGFyaW5nIGJhc2ljIGlkZWEgb2YgdGhlIGFj
+Y2VsZXJhdG9yczsgd2hhdCBkbyB0aGV5IGFjY2VwdCBhbmQgd2hhdCBkbyB0aGV5IHlpZWxkLg0K
+V2hlcmUgY2FuIEkgcHV0IGEgbmV3IGRvY3VtZW50PyBDYW4gSSBwdXQgaXQgYXMgYSBjb21tZW50
+IGluIGEgc291cmNlPyBDYW4gSSBhZGQgYSBmaWxlIHVuZGVyIERvY3VtZW50YXRpb24vbWlzYy1k
+ZXZpY2VzIGRpcmVjdG9yeT8NCg0KVGhhbmtzLA0KWXVqaSBJc2hpa2F3YQ0KDQo+IC0tLS0tT3Jp
+Z2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEhhbnMgVmVya3VpbCA8aHZlcmt1aWxAeHM0YWxs
+Lm5sPg0KPiBTZW50OiBUaHVyc2RheSwgTWF5IDEyLCAyMDIyIDg6MTUgUE0NCj4gVG86IGlzaGlr
+YXdhIHl1amko55+z5bedIOaCoOWPuCDil4vvvLLvvKTvvKPilqHvvKHvvKnvvLTvvKPil4vvvKXv
+vKHplospDQo+IDx5dWppMi5pc2hpa2F3YUB0b3NoaWJhLmNvLmpwPjsgUm9iIEhlcnJpbmcgPHJv
+YmgrZHRAa2VybmVsLm9yZz47DQo+IGl3YW1hdHN1IG5vYnVoaXJvKOWyqeadviDkv6HmtIsg4pah
+77yz77y377yj4pev77yh77yj77y0KQ0KPiA8bm9idWhpcm8xLml3YW1hdHN1QHRvc2hpYmEuY28u
+anA+OyBTdW1pdCBTZW13YWwNCj4gPHN1bWl0LnNlbXdhbEBsaW5hcm8ub3JnPjsgQ2hyaXN0aWFu
+IEvDtm5pZyA8Y2hyaXN0aWFuLmtvZW5pZ0BhbWQuY29tPg0KPiBDYzogbGludXgtYXJtLWtlcm5l
+bEBsaXN0cy5pbmZyYWRlYWQub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOw0KPiBs
+aW51eC1tZWRpYUB2Z2VyLmtlcm5lbC5vcmc7IGRyaS1kZXZlbEBsaXN0cy5mcmVlZGVza3RvcC5v
+cmc7DQo+IGxpbmFyby1tbS1zaWdAbGlzdHMubGluYXJvLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BB
+VENIIDAvNF0gQWRkIFRvc2hpYmEgVmlzY29udGkgRE5OIGltYWdlIHByb2Nlc3NpbmcNCj4gYWNj
+ZWxlcmF0b3IgZHJpdmVyDQo+IA0KPiBIaSBZdWppLA0KPiANCj4gT24gNC8yOC8yMiAxNToxMSwg
+WXVqaSBJc2hpa2F3YSB3cm90ZToNCj4gPiBUaGlzIHNlcmllcyBpcyB0aGUgRE5OIGltYWdlIHBy
+b2Nlc3NpbmcgYWNjZWxlcmF0b3IgZHJpdmVyIGZvciBUb3NoaWJhJ3MgQVJNDQo+IFNvQywgVmlz
+Y29udGlbMF0uDQo+ID4gVGhpcyBwcm92aWRlcyBEVCBiaW5kaW5nIGRvY3VtZW50YXRpb24sIGRl
+dmljZSBkcml2ZXIsIE1BSU5UQUlORVIgZmlsZXMuDQo+ID4NCj4gPiBUaGUgc2Vjb25kIHBhdGNo
+ICJzb2M6IHZpc2NvbnRpOiBBZGQgVG9zaGliYSBWaXNjb250aSBpbWFnZSBwcm9jZXNzaW5nDQo+
+IGFjY2VsZXJhdG9yIGNvbW1vbiBzb3VyY2UiDQo+ID4gYW5kIHRoZSBmb3VydGggcGF0Y2ggIk1B
+SU5UQUlORVJTOiAuLi4iIGFyZSB0aGUgc2FtZSBhcyB0aGUgb25lcyBpbiB0aGUNCj4gcHJlY2Vk
+aW5nIHBvc3QgZm9yIGFmZmluZSBkcml2ZXIuDQo+IA0KPiBUaGVyZSBhcHBlYXJzIHRvIGJlIG5v
+IGRvY3VtZW50YXRpb24gd2hhdHNvZXZlciwgdW5sZXNzIEkgYW0gbWlzc2luZw0KPiBzb21ldGhp
+bmcuDQo+IA0KPiBIb3cgaXMgdGhlIHVBUEkgc3VwcG9zZWQgdG8gYmUgdXNlZD8gV2hhdCBkb2Vz
+IGl0IGRvPyBXaGF0IGZvcm1hdHMgZG9lcyBpdA0KPiBhY2NlcHQgb3IgcHJvZHVjZT8NCj4gDQo+
+IElmIHRoaXMgcHJvY2Vzc2VzIGltYWdlcywgdGhlbiAoYXMgTGF1cmVudCBtZW50aW9uZWQpIHRo
+aXMgaXMgbW9yZSBzdWl0YWJsZSBhcyBhDQo+IFY0TDIgbWVtMm1lbSBkcml2ZXIuDQo+IA0KPiBT
+ZWUNCj4gaHR0cHM6Ly9saW51eHR2Lm9yZy9kb3dubG9hZHMvdjRsLWR2Yi1hcGlzLW5ldy91c2Vy
+c3BhY2UtYXBpL3Y0bC9kZXYtbWUNCj4gbTJtZW0uaHRtbA0KPiBhbmQgdGhlIG1hbnkgZHJpdmVy
+cyBpbiBkcml2ZXJzL21lZGlhIHRoYXQgdXNlIGl0IChnaXQgZ3JlcCB2NGwyLW1lbTJtZW0uaCku
+DQo+IA0KPiBCdXQgd2l0aG91dCBhbnkgZXhwbGFuYXRpb24gd2hhdHNvZXZlciBJIGhhdmUgbm8g
+aWRlYSB3aGF0IGRvZXMgb3IgZG9lcyBub3QNCj4gbWFrZSBzZW5zZS4NCj4gDQo+IFJlZ2FyZHMs
+DQo+IA0KPiAJSGFucw0KPiANCj4gPg0KPiA+IEJlc3QgcmVnYXJkcywNCj4gPiBZdWppDQo+ID4N
+Cj4gPiBbMF06DQo+ID4NCj4gaHR0cHM6Ly90b3NoaWJhLnNlbWljb24tc3RvcmFnZS5jb20vYXAt
+ZW4vc2VtaWNvbmR1Y3Rvci9wcm9kdWN0L2ltYWdlLQ0KPiA+IHJlY29nbml0aW9uLXByb2Nlc3Nv
+cnMtdmlzY29udGkuaHRtbA0KPiA+DQo+ID4gWXVqaSBJc2hpa2F3YSAoNCk6DQo+ID4gICBkdC1i
+aW5kaW5nczogc29jOiB2aXNjb250aTogQWRkIFRvc2hpYmEgVmlzY29udGkgRE5OIGltYWdlIHBy
+b2Nlc3NpbmcNCj4gPiAgICAgYWNjZWxlcmF0b3IgYmluZGluZ3MNCj4gPiAgIHNvYzogdmlzY29u
+dGk6IEFkZCBUb3NoaWJhIFZpc2NvbnRpIGltYWdlIHByb2Nlc3NpbmcgYWNjZWxlcmF0b3INCj4g
+PiAgICAgY29tbW9uIHNvdXJjZQ0KPiA+ICAgc29jOiB2aXNjb250aTogQWRkIFRvc2hpYmEgVmlz
+Y29udGkgRE5OIGltYWdlIHByb2Nlc3NpbmcgYWNjZWxlcmF0b3INCj4gPiAgIE1BSU5UQUlORVJT
+OiBBZGQgZW50cmllcyBmb3IgVG9zaGliYSBWaXNjb250aSBETk4gaW1hZ2UgcHJvY2Vzc2luZw0K
+PiA+ICAgICBhY2NlbGVyYXRvcg0KPiA+DQo+ID4gIC4uLi9zb2MvdmlzY29udGkvdG9zaGliYSx2
+aXNjb250aS1kbm4ueWFtbCAgICB8ICA1NCArKw0KPiA+ICBNQUlOVEFJTkVSUyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDIgKw0KPiA+ICBkcml2ZXJzL3NvYy9LY29uZmln
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDEgKw0KPiA+ICBkcml2ZXJzL3NvYy9NYWtl
+ZmlsZSAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDEgKw0KPiA+ICBkcml2ZXJzL3NvYy92
+aXNjb250aS9LY29uZmlnICAgICAgICAgICAgICAgICAgfCAgIDcgKw0KPiA+ICBkcml2ZXJzL3Nv
+Yy92aXNjb250aS9NYWtlZmlsZSAgICAgICAgICAgICAgICAgfCAgIDggKw0KPiA+ICBkcml2ZXJz
+L3NvYy92aXNjb250aS9kbm4vTWFrZWZpbGUgICAgICAgICAgICAgfCAgIDYgKw0KPiA+ICBkcml2
+ZXJzL3NvYy92aXNjb250aS9kbm4vZG5uLmMgICAgICAgICAgICAgICAgfCA1MzMNCj4gKysrKysr
+KysrKysrKysrKysrDQo+ID4gIGRyaXZlcnMvc29jL3Zpc2NvbnRpL2Rubi9od2RfZG5uLmMgICAg
+ICAgICAgICB8IDE4MyArKysrKysNCj4gPiAgZHJpdmVycy9zb2MvdmlzY29udGkvZG5uL2h3ZF9k
+bm4uaCAgICAgICAgICAgIHwgIDY4ICsrKw0KPiA+ICBkcml2ZXJzL3NvYy92aXNjb250aS9kbm4v
+aHdkX2Rubl9yZWcuaCAgICAgICAgfCAyMjggKysrKysrKysNCj4gPiAgZHJpdmVycy9zb2Mvdmlz
+Y29udGkvaXBhX2NvbW1vbi5jICAgICAgICAgICAgIHwgIDU1ICsrDQo+ID4gIGRyaXZlcnMvc29j
+L3Zpc2NvbnRpL2lwYV9jb21tb24uaCAgICAgICAgICAgICB8ICAxOCArDQo+ID4gIGRyaXZlcnMv
+c29jL3Zpc2NvbnRpL3VhcGkvZG5uLmggICAgICAgICAgICAgICB8ICA3NyArKysNCj4gPiAgZHJp
+dmVycy9zb2MvdmlzY29udGkvdWFwaS9pcGEuaCAgICAgICAgICAgICAgIHwgIDg4ICsrKw0KPiA+
+ICAxNSBmaWxlcyBjaGFuZ2VkLCAxMzI5IGluc2VydGlvbnMoKykNCj4gPiAgY3JlYXRlIG1vZGUg
+MTAwNjQ0DQo+ID4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NvYy92aXNjb250
+aS90b3NoaWJhLHZpc2NvbnRpLWRubi55YQ0KPiA+IG1sICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJp
+dmVycy9zb2MvdmlzY29udGkvS2NvbmZpZyAgY3JlYXRlIG1vZGUNCj4gPiAxMDA2NDQgZHJpdmVy
+cy9zb2MvdmlzY29udGkvTWFrZWZpbGUgIGNyZWF0ZSBtb2RlIDEwMDY0NA0KPiA+IGRyaXZlcnMv
+c29jL3Zpc2NvbnRpL2Rubi9NYWtlZmlsZSAgY3JlYXRlIG1vZGUgMTAwNjQ0DQo+ID4gZHJpdmVy
+cy9zb2MvdmlzY29udGkvZG5uL2Rubi5jICBjcmVhdGUgbW9kZSAxMDA2NDQNCj4gPiBkcml2ZXJz
+L3NvYy92aXNjb250aS9kbm4vaHdkX2Rubi5jDQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2
+ZXJzL3NvYy92aXNjb250aS9kbm4vaHdkX2Rubi5oDQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBk
+cml2ZXJzL3NvYy92aXNjb250aS9kbm4vaHdkX2Rubl9yZWcuaA0KPiA+ICBjcmVhdGUgbW9kZSAx
+MDA2NDQgZHJpdmVycy9zb2MvdmlzY29udGkvaXBhX2NvbW1vbi5jICBjcmVhdGUgbW9kZQ0KPiA+
+IDEwMDY0NCBkcml2ZXJzL3NvYy92aXNjb250aS9pcGFfY29tbW9uLmggIGNyZWF0ZSBtb2RlIDEw
+MDY0NA0KPiA+IGRyaXZlcnMvc29jL3Zpc2NvbnRpL3VhcGkvZG5uLmggIGNyZWF0ZSBtb2RlIDEw
+MDY0NA0KPiA+IGRyaXZlcnMvc29jL3Zpc2NvbnRpL3VhcGkvaXBhLmgNCj4gPg0K
 
