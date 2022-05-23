@@ -2,114 +2,95 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 820C3C433F5
-	for <linux-media@archiver.kernel.org>; Mon, 23 May 2022 14:17:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAC61C433F5
+	for <linux-media@archiver.kernel.org>; Mon, 23 May 2022 15:30:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237056AbiEWORZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 May 2022 10:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S237866AbiEWPa0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 May 2022 11:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236939AbiEWORZ (ORCPT
+        with ESMTP id S237879AbiEWPaS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 May 2022 10:17:25 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B938359BA0;
-        Mon, 23 May 2022 07:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1653315443; x=1684851443;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JI0lcN9SHVIzgJehontYp/EcHZi0BmK64pGfGXgA72E=;
-  b=Zj9miZlRKkO1Gr6cHEAKTFiWI0+4eIOsyjdcAgTnv6eHdOZHqYRyYS9F
-   tNp2E2rLrEby161sVsFzPqvElXrDeOMg8dCmAN2hShwSqUrqRTRBQSy6c
-   3/rPvoRYFx+KZ4s0wUrsGa6gO3vALgo7S5Pj8nXy3TZVkpWHgBFHS5mzx
-   6GnSZ+wOSUXTAx+vH8Y1/+Wp9gTHkIYoB+ygy2mQKrFXMYFZomQpW0Ybq
-   SKyE5o0j6upL4YDf5yxjupbYyFx226FtTZ/71EZNrec46g5aAXy7uqvSk
-   jsaf90S8GvRW4y0mkZDFxa1DGmt2U4hjouEKSyoxKextTvIiAiz48J5NO
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="96932993"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 May 2022 07:17:13 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 23 May 2022 07:17:13 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 23 May 2022 07:17:12 -0700
-From:   Eugen Hristev <eugen.hristev@microchip.com>
-To:     <linux-media@vger.kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH] media: atmel: atmel-isc-base: move cropping settings outside start_dma
-Date:   Mon, 23 May 2022 17:17:05 +0300
-Message-ID: <20220523141705.98121-1-eugen.hristev@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 23 May 2022 11:30:18 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380F45FF17
+        for <linux-media@vger.kernel.org>; Mon, 23 May 2022 08:30:14 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id k30so21898344wrd.5
+        for <linux-media@vger.kernel.org>; Mon, 23 May 2022 08:30:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Ki3nds2SQ94u+QBYsM2M4nRb9kIMl7mDNBezsS/vkEM=;
+        b=rO9GbfvfUDpR9XSGaMJqCDjRuDT9PA5XwA39wI3I3qGonALuDWn/2a4bfMlKjQq2p0
+         Mux1YrI+RbwOYPtyOz5SaKGnHtPYTIvIIFRrEISd8mrBfNCYVb1364u8X0D1LxnJRwL4
+         gVJQ/rGnnimhnnhY+gSKEnr6SQxblnz8WLXciIeVsIKg3/ZEODkbkJbV77QDTIZDwjF4
+         it8hegHYVjDsHANXb3P8XH5TU04PpJAEgxEJR9lRCOsmURJatQEng/dHfZ8VsBa6nil9
+         fJNlr1sj8RAZYXFihHC7uaZUoMmvg+udvBeOR2yxXsyRW2vP+qYEE01X/io87as3sQU3
+         H0aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ki3nds2SQ94u+QBYsM2M4nRb9kIMl7mDNBezsS/vkEM=;
+        b=6/Z+vVpozC3USCTNMk1NxWnghqouRJ0xUFEpFQzgjywQKtyuH5XvBERbioblkHEVfP
+         iGUCzZfVIsBKF9XhtOPZJ2giFRsF38WatseoSm618nR7rmPpYITCIgbfOkBrm+/IhWhb
+         XgDn2Mi5Cs5ImNkKZs/7Zp4mNNAZ7DE26JqBjewXx/upjxYuYHbA2IaxAJ/cOIHRJri7
+         QQKzOtrTNbjFFz7k+YSUAPHlOeuVt3ATaaCSmCRH233Nb7lM7Eo/XNlJmob01fFHLLuL
+         GLCuF+KD+lF7VYfb1kyKlZRVkOVxhXxUhP96l2C4wOR8yr3t22nHFlP3Cf44oWYERBvN
+         jntA==
+X-Gm-Message-State: AOAM5326Z2W4XesTFZzq+7qqCSbkKOT96wEPO4GA4O8lnjq93JRxCR7u
+        7GQvs5DCdAnsRvtvNKFk5HNP5Q==
+X-Google-Smtp-Source: ABdhPJwAJmOXRtRNxDFU4DMCZoOjdk2vta2oozn3g6xqMgmjEBCafG5oHJTXYfnCa7somrhPoe6ccw==
+X-Received: by 2002:a5d:4f08:0:b0:20f:c7dc:8477 with SMTP id c8-20020a5d4f08000000b0020fc7dc8477mr9794083wru.713.1653319812641;
+        Mon, 23 May 2022 08:30:12 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id l24-20020adfa398000000b0020fcaba73bcsm7125690wrb.104.2022.05.23.08.30.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 08:30:11 -0700 (PDT)
+Message-ID: <625094db-a1e7-b62c-9862-6e5b20420c97@linaro.org>
+Date:   Mon, 23 May 2022 16:30:10 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/1] arm64: dts: qcom: qrb5165-rb5: Enable the IMX577 on
+ cam1
+Content-Language: en-US
+To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        robert.foss@linaro.org, todor.too@gmail.com, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     mchehab@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, mmitkov@quicinc.com, jgrahsl@snap.com,
+        hfink@snap.com
+References: <20220518133004.342775-1-bryan.odonoghue@linaro.org>
+ <20220518133004.342775-2-bryan.odonoghue@linaro.org>
+ <33abcc93-13f1-d6f5-36a3-6ab796f124f9@linaro.org>
+ <19c92f9d-fa1c-fbe8-50ef-324da3e00695@linaro.org>
+ <e7bbe076-a1d1-a005-8110-5d35bc0d80de@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <e7bbe076-a1d1-a005-8110-5d35bc0d80de@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The cropping configuration of the Parallel Front Engine (PFE) can be done
-just once when the streaming starts. The ISC configuration is in place and
-will not be changed while streaming.
-It is not effective to keep rewriting the crop registers configuration
-everytime start_dma is called, as this can be called for each queued
-buffer.
-Thus we can configure the cropping at start_streaming time.
-This change moves the code to a dedicated function.
+On 23/05/2022 14:50, Vladimir Zapolskiy wrote:
+> it's some kind of a race related to probes of CAMSS, CCI and IMX412 
+> drivers.
+> 
+> Since I'm able to reproduce it, I'll take the analysis on myself, and it 
+> does not
+> interfere with your patch series.
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Ah, I think I have it pretty much narrowed down now. Needed to switch 
+off modules entirely.
+
+First probe fails, second probe succeeds.
+
+Thanks anyway, I think I'm close to fix.
+
 ---
- drivers/media/platform/atmel/atmel-isc-base.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index 894c22081397..01a2e7f626d0 100644
---- a/drivers/media/platform/atmel/atmel-isc-base.c
-+++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -127,12 +127,9 @@ static int isc_buffer_prepare(struct vb2_buffer *vb)
- 	return 0;
- }
- 
--static void isc_start_dma(struct isc_device *isc)
-+static void isc_crop_pfe(struct isc_device *isc)
- {
- 	struct regmap *regmap = isc->regmap;
--	u32 sizeimage = isc->fmt.fmt.pix.sizeimage;
--	u32 dctrl_dview;
--	dma_addr_t addr0;
- 	u32 h, w;
- 
- 	h = isc->fmt.fmt.pix.height;
-@@ -167,6 +164,14 @@ static void isc_start_dma(struct isc_device *isc)
- 	regmap_update_bits(regmap, ISC_PFE_CFG0,
- 			   ISC_PFE_CFG0_COLEN | ISC_PFE_CFG0_ROWEN,
- 			   ISC_PFE_CFG0_COLEN | ISC_PFE_CFG0_ROWEN);
-+}
-+
-+static void isc_start_dma(struct isc_device *isc)
-+{
-+	struct regmap *regmap = isc->regmap;
-+	u32 sizeimage = isc->fmt.fmt.pix.sizeimage;
-+	u32 dctrl_dview;
-+	dma_addr_t addr0;
- 
- 	addr0 = vb2_dma_contig_plane_dma_addr(&isc->cur_frm->vb.vb2_buf, 0);
- 	regmap_write(regmap, ISC_DAD0 + isc->offsets.dma, addr0);
-@@ -371,6 +376,7 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
- 					struct isc_buffer, list);
- 	list_del(&isc->cur_frm->list);
- 
-+	isc_crop_pfe(isc);
- 	isc_start_dma(isc);
- 
- 	spin_unlock_irqrestore(&isc->dma_queue_lock, flags);
--- 
-2.25.1
-
+bod
