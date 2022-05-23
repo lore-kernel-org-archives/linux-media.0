@@ -2,118 +2,149 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43E27C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 23 May 2022 18:47:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00204C433EF
+	for <linux-media@archiver.kernel.org>; Mon, 23 May 2022 23:07:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242928AbiEWSrq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 May 2022 14:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S229493AbiEWXHb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 May 2022 19:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242413AbiEWSrj (ORCPT
+        with ESMTP id S229441AbiEWXH2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 May 2022 14:47:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F6C026129
-        for <linux-media@vger.kernel.org>; Mon, 23 May 2022 11:31:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653330624;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+GHDu8bX018Pj56HhIIQXnjcT5ZvQ3bky+5co5y7CGo=;
-        b=Chd/Jg/Z67qHhl1LW5EKKXSHKz/iGGD4lPDI+VCtSc2+lYeVG4wQKbZT7o42GbHF1xKJgQ
-        wHOZSaFc5kbYuzeqheUzBDJWsXWifprGWP5yiFg4b2xUdPwDZOwUVf6DDntBjIy+7RqIlI
-        5D1GddaDGebGOtPrZlTfNen6ASr0cZU=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-357-hbGYtWfONoahafdiRLDOsw-1; Mon, 23 May 2022 14:30:21 -0400
-X-MC-Unique: hbGYtWfONoahafdiRLDOsw-1
-Received: by mail-qt1-f199.google.com with SMTP id m5-20020a05622a118500b002f92201d3fbso6113945qtk.18
-        for <linux-media@vger.kernel.org>; Mon, 23 May 2022 11:30:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+GHDu8bX018Pj56HhIIQXnjcT5ZvQ3bky+5co5y7CGo=;
-        b=QBxYUVo6SNO14sytdZ2YH3lIHjE8iFXBzg1t6CgW1HYhrcMvgVp4PTpffbeuCkROWB
-         Rr08gP6c5FQZpYFrKnIgZqb3qSetWIfQPFMNwBQWumBmbyaNCteaUcW88RPfmyTkiepL
-         yJBDC8u9mH3KqRHdQO4W2rXz3nKOtndwGH6YWvybnk/kWfcFss6XpfjKP0XShKRoyFm4
-         QfDfByCtBGw38Dd1jCrG0ErXvZvfJdJzxMTWmGKZFzsmEEH6tlqdHnzcwe/RaVA2ZJBb
-         lpQLgIMvkmR30DMb1tKV/9da5iI+nkilyrDhwhF8vlfRRHEsD01p5SZeZZGXie+AkqYV
-         fgDw==
-X-Gm-Message-State: AOAM533SnPXi+bNNHHQ+hcwrEdDLgHhOkhgpDCKNmIxKS0iJmfuhClr8
-        SM7Wo8ix2WgaOkXi33vNtRsdePdFVqUWAqw755cOpH+Zw/xksWZ+Kl2sRl/yutWGvv4bPGqLMne
-        msJDxTRRXFgau18JVCjuSaCQ=
-X-Received: by 2002:a05:620a:29ce:b0:6a0:e9a:f7a2 with SMTP id s14-20020a05620a29ce00b006a00e9af7a2mr14909661qkp.479.1653330620340;
-        Mon, 23 May 2022 11:30:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyiHkoWHUvw+vM4ygrqlFJMksFa2jJVr/bYTmHbbZwPGQtQuPfxdNSMdEAKmnGv/bC5IUBo3Q==
-X-Received: by 2002:a05:620a:29ce:b0:6a0:e9a:f7a2 with SMTP id s14-20020a05620a29ce00b006a00e9af7a2mr14909649qkp.479.1653330620095;
-        Mon, 23 May 2022 11:30:20 -0700 (PDT)
-Received: from xps13 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
-        by smtp.gmail.com with ESMTPSA id m201-20020a37a3d2000000b006a34f6a7840sm4630388qke.57.2022.05.23.11.30.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 11:30:19 -0700 (PDT)
-Date:   Mon, 23 May 2022 14:30:18 -0400
-From:   Brian Masney <bmasney@redhat.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        matti.lehtimaki@gmail.com
-Subject: Re: [RFC PATCH 00/14] CAMSS support for MSM8974
-Message-ID: <YovSurcGlyPW7v9s@xps13>
-References: <20220522162802.208275-1-luca@z3ntu.xyz>
- <638d6986-616f-4a1c-f1d0-82835b000b2a@linaro.org>
+        Mon, 23 May 2022 19:07:28 -0400
+X-Greylist: delayed 1859 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 May 2022 16:07:26 PDT
+Received: from knet-dmarc.kensnet.org (knetgate.kensnet.org [80.168.136.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817D370369
+        for <linux-media@vger.kernel.org>; Mon, 23 May 2022 16:07:26 -0700 (PDT)
+Received: from knetgate.kensnet.org ([192.168.122.1])
+        by knet-dmarc.kensnet.org (8.14.4/8.14.4) with ESMTP id 24NMaKLO023507
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 23 May 2022 23:36:20 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 knet-dmarc.kensnet.org 24NMaKLO023507
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kensnet.org;
+        s=default; t=1653345380;
+        bh=FCDUANuU593h0QNOlQu15RGuHO5k4a9KkIJXLACBPYY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=NK8Vgcd73I1WuvMAGhkQtxekW1GGAusyEegRzQws9zlXwRtLgYs59Sa5P7re6PfZq
+         Pt6VnziGT+fJJm5XwXtzPJeoVHyZ9KVTB2bNBJShcbIzVq5ICRmNiIMmwWhL8x9aSp
+         jikLHtEPNkyYqEGsJVTdKTjZH4o/HEcWYGBhVu7E=
+Received: from [172.16.0.178] (kenslt3-fcore.kensnet [172.16.0.178])
+        (authenticated bits=0)
+        by knetgate.kensnet.org (8.14.4/8.14.4) with ESMTP id 24NMaGok009229
+        (version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NO);
+        Mon, 23 May 2022 23:36:18 +0100
+Subject: Re: HauppaugeTV-quadHD DVB-T & HVR5525 mpeg risc op code error
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Brad Love <brad@nextdimension.cc>
+References: <20200423155908.GA22613@gofer.mess.org>
+ <bc0644cd-3438-6505-d438-8f3f71347ccb@mindspring.com>
+ <20200423163559.GB23006@gofer.mess.org>
+ <0cd2436c-0a39-0f85-929e-5d8f333b5027@burnicki.net>
+ <20200425114147.GA3037@gofer.mess.org>
+ <4aa38e2a-6b98-6530-69d9-d945a467bf0b@burnicki.net>
+ <1a2d9e15-55e2-88a7-d197-208a8ce99218@burnicki.net>
+ <20200427080751.GA5925@gofer.mess.org>
+ <e7d8aeb8-124a-f7b3-d469-4c47f182f067@burnicki.net>
+ <0fc5d43f-7928-1649-220b-45916b189d8f@burnicki.net>
+ <20200430164934.GA16730@gofer.mess.org>
+From:   Ken Smith <kens@kensnet.org>
+Organization: K-Net Technology
+Message-ID: <49697978-c4ef-66fe-94ac-17117540c111@kensnet.org>
+Date:   Mon, 23 May 2022 23:36:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <638d6986-616f-4a1c-f1d0-82835b000b2a@linaro.org>
-User-Agent: Mutt/2.2.1 (2022-02-19)
+In-Reply-To: <20200430164934.GA16730@gofer.mess.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-kensnet-MailScanner-Information: Please contact the ISP for more information
+X-kensnet-MailScanner-ID: 24NMaGok009229
+X-kensnet-MailScanner: Found to be clean
+X-kensnet-MailScanner-From: kens@kensnet.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, May 23, 2022 at 03:39:53PM +0300, Dmitry Baryshkov wrote:
-> On 22/05/2022 19:27, Luca Weiss wrote:
-> > This RFC series adds support for CAMSS and CCI that are found on
-> > msm8974, including the OV8865 found on the FP2.
-> > 
-> > The only reason it's marked RFC is that CAMSS doesn't behave properly on
-> > this SoC without the last commit which is obviously not upstreamable.
-> > Not sure if this should be a blocker for including most of the other
-> > patches because other than that it seems to work fine and I can get a
-> > picture from the camera sensor. When/if msm8974 gets IOMMU support I
-> > hope this should be resolved and it works without this hack.
-> > 
-> > I think at least the CCI patches could get applied as they're not
-> > dependent on the CAMSS hack?
-> 
-> I'd also vote for the camcc patches to be applied.
-> 
-> As for the camss, I'd suggest to get them verified to work properly with a
-> hacked/non-upstreamable/etc. IOMMU driver if one exists. Otherwise we can
-> easily get into a situation where we merge up code that contains bugs
-> itself.
 
-Last I checked, there's no IOMMU driver for msm8974 that works with an
-upstream kernel at the moment. About 2 years ago, I took a stab at
-attempting to enable IOMMU for the display and ran into some issues that
-I documented at:
+Sean Young wrote:
+> On Tue, Apr 28, 2020 at 08:24:20PM +0200, Martin Burnicki wrote:
+>> Hi,
+>>
+>> Am 27.04.20 um 10:59 schrieb Martin Burnicki:
+>>> Sean Young wrote:
+>>>> Would you mind testing this patch please?
+>>> I'm going to try it this evening.
+>>>
+>>> I'll have to find out how to do an out-of-tree build for a copy of the
+>>> cx module that includes the patch.
+>>>
+>>> My own kernel driver is always and only built out-of-tree, but for the
+>>> cx driver I need to see which files I need to copy to a local directory,
+>>> and if there is anything else that needs to be done to build a copy of
+>>> it out-of-tree.
+>> Sorry, I haven't managed to test the patch, yet.
+>>
+>> Currently I have the driver loaded with
+>>
+>> options cx23885 dma_reset_workaround=2
+>>
+>> but today there were 3 occurrences of the risc opcode error:
+>>
+>>
+> Drats.
+>
+>> So the workaround doesn't seem to fix the problem anyway, and the patch
+>> would just enable the workaround with out the specific option, right?
+> Yes, that's right.
+>
+>> The effect of the workaround looks just like debug levels lower than 7,
+>> it just seems to reduce the probability that the bug occurs, but doesn't
+>> really fix it.
+>>
+>> So my conclusion is still that that this smells like a missing memory
+>> barrier or so in the driver.
+>>
+>> Since the driver seems to work properly with older mainboards/CPU types,
+>> this doesn't sound like a problem in the CX chip, IMO.
+> I would agree with that. I would suspect same issue was being papered over
+> by the patch; now what that issue is, I don't know. Certainly some ordering
+> or barrier issue seems likely.
+>
+> Actually I suspected this all along, but the workaround is the best we have.
+>
+> I think, some time spent hunting down the issue would really be helpful
+> here. Hopefully that doesn't mean too many aborted recordings..
+>
+> Thanks,
+>
+> Sean
+>
 
-https://lore.kernel.org/lkml/20200109002606.35653-1-masneyb@onstation.org/
+Hi, I'd like to resurrect this thread (copied below). I have a system 
+showing this error. Its a HP ML350 server with 2x Xeon 5675 running 
+Rocky Linux 8.5. It has a Hauppauge HVR5525 card that uses the same 
+cx23885 kernel module as the quadHD card discussed above. The HVR5525 is 
+a dual DVB-T2/DVB-S2 card.
 
-I'm not familiar with this part of the hardware and haven't had time
-since then to look into this further.
+In other threads I read about the dma_reset_workaround option. That 
+option did not appear to be in the version included in standard kernel 
+in Rocky 8.5. I have loaded a 5.4 kernel and compiled the DVB media 
+modules from .git source and set dma_reset_workaround=2 in a file in 
+modprobe.d. The built module shows version 0.0.4
 
-Brian
+Sadly the error remains. The system runs MythTV v.31. The main symptom 
+is occasional aborted recordings. Although the card does appear to 
+recover, not requiring a reboot/cold restart.
+
+I'd appreciate some assistance with this. What information can I provide 
+to help to trace this.
+
+Many thanks
+
+Ken
+
+-- 
+This message has been scanned for viruses and
+dangerous content by MailScanner, and is
+believed to be clean.
 
