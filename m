@@ -2,70 +2,62 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DA3EC433F5
-	for <linux-media@archiver.kernel.org>; Tue, 24 May 2022 10:04:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1EEEC433EF
+	for <linux-media@archiver.kernel.org>; Tue, 24 May 2022 10:14:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236015AbiEXKD7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 May 2022 06:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S233627AbiEXKO1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 May 2022 06:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236008AbiEXKD4 (ORCPT
+        with ESMTP id S231917AbiEXKOY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 May 2022 06:03:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E48573546
-        for <linux-media@vger.kernel.org>; Tue, 24 May 2022 03:03:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 24 May 2022 06:14:24 -0400
+X-Greylist: delayed 2141 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 May 2022 03:14:22 PDT
+Received: from box.indicandustries.com (hwsrv-970840.hostwindsdns.com [104.168.149.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0B87E1D1
+        for <linux-media@vger.kernel.org>; Tue, 24 May 2022 03:14:22 -0700 (PDT)
+Received: from authenticated-user (box.indicandustries.com [104.168.149.109])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C2A360BAA
-        for <linux-media@vger.kernel.org>; Tue, 24 May 2022 10:03:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F093C34100
-        for <linux-media@vger.kernel.org>; Tue, 24 May 2022 10:03:53 +0000 (UTC)
-Message-ID: <32288c08-3220-25ce-36e2-7c98ff81a264@xs4all.nl>
-Date:   Tue, 24 May 2022 12:03:51 +0200
+        by box.indicandustries.com (Postfix) with ESMTPSA id 5EEF5107C47
+        for <linux-media@vger.kernel.org>; Tue, 24 May 2022 03:24:58 -0600 (MDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=box.indicandustries.com; s=mail; t=1653384298;
+        bh=V6VCn7WEbqHjVVQ20/+SYu6rwS1WmTHcxX88g+j430s=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=ZdIKcka492HG0hYJUBypQFyIlMnHY5DLFrto4KMcOfdN4d+e/+tKrus4SdlddVroE
+         Rr+9IkRKHy3+vtyV6FOdgENlGOUgYho+uTOtwCtpR3lxG7NvDgcRYmnIuAmv+Ix9e7
+         Rok4Mc2lZ6q+SXBENJ3rw4/d6AIXMWoUYcsehkNbfeRbYnwe+Phrk0bI5yv9As5Afu
+         /2LPYu/pzfhyyXkLwMpvi63xPqZiI15jLAwrhwnlGmYvwxjNgQ3iM7QR7i/fDBYbZz
+         rfFqGZPfwBMtoZaXCDO8vhwJncUhHiJVOPP1D77wdcdpPqaUx3e9OU7M6eU3lHQ0PT
+         37llNHkoy8wZg==
+Reply-To: amjalia90@gmail.com
+From:   amjad.ali@box.indicandustries.com
+To:     linux-media@vger.kernel.org
+Subject: Hello Sir, I seek your urgent consideration.
+Date:   24 May 2022 11:24:58 +0200
+Message-ID: <20220524112457.0761034BD6161503@box.indicandustries.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [ANN] media_build git repo no longer maintained
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+Hello,
 
-This is to announce that I stopped maintaining media_build.git
-(https://git.linuxtv.org/media_build.git/). I made the last fixes
-for this compatibility build system today, and verified that it
-compiles for both the current staging tree (commit 340ce50f75a6)
-and the v5.18 kernel release. I have tagged the last media_build
-version with the label 'for-v5.18'.
+Greetings? I am Amjad. I work with a leading Bio Firm.  Due to=20
+the setbacks of the pandemic, my company has opened a bid in=20
+search of new suppliers for basic raw materials needed in=20
+production.
 
-It is able to make compatibility builds for kernels 4.4 to 5.17,
-although all I can guarantee is that it compiles, if it actually
-works is a very different matter. Some recent reports suggest that
-it might not actually work for old kernels anymore.
+I am seeking a representative=C2=A0as I am a staff, I can not be=20
+involved directly. It may not be your area of work but the=20
+profits are great and I will guide you through. I have already=20
+sourced a local supplier for this. I only need a reliable=20
+representative.
 
-The need for compatibility builds has greatly diminished since it
-was means for regular amd64/i686 distros where newer USB and PCI
-drivers were missing support in the distro's kernel. But new USB and
-PCI media drivers are rarely added these days, and distros tend to
-be a lot closer to mainline than was common many years ago.
+Please get back to me so I can explain this in full.
 
-Maintaining media_build became too time consuming, and since it is
-rarely used these days I decided to stop working on this.
-
-The daily build will also stop building this. Which should reduce my
-electricity bill as well :-)
-
-If someone wants to continue maintaining this for some reason, then
-please contact me.
-
-Regards,
-
-	Hans
+Amjad
