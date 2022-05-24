@@ -2,154 +2,229 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E34EBC433EF
-	for <linux-media@archiver.kernel.org>; Tue, 24 May 2022 08:36:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A19ECC433F5
+	for <linux-media@archiver.kernel.org>; Tue, 24 May 2022 09:31:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiEXIg7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 May 2022 04:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
+        id S234864AbiEXJbl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 May 2022 05:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232731AbiEXIgz (ORCPT
+        with ESMTP id S231778AbiEXJbj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 May 2022 04:36:55 -0400
-Received: from knet-dmarc.kensnet.org (knetgate.kensnet.org [80.168.136.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E791AD90
-        for <linux-media@vger.kernel.org>; Tue, 24 May 2022 01:36:52 -0700 (PDT)
-Received: from knetgate.kensnet.org ([192.168.122.1])
-        by knet-dmarc.kensnet.org (8.14.4/8.14.4) with ESMTP id 24O8akTL024904
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 24 May 2022 09:36:46 +0100
-DKIM-Filter: OpenDKIM Filter v2.11.0 knet-dmarc.kensnet.org 24O8akTL024904
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kensnet.org;
-        s=default; t=1653381406;
-        bh=E+piG+4PCMC/8FbkZLT6SKmFJdwuPLmrMMDshCrXEAU=;
-        h=From:Subject:To:Cc:References:Date:In-Reply-To:From;
-        b=DGhI8W5vwDzv04vsyFtXb0cjYZHg0YKikKizkDLu3TKZ62MmxiB79p7vKLy9hvvaL
-         /OKwfFQEue8S7SKIvfZMDnOfl3wlmdVLYQglMdNy87oGfhjE57YxKa+LsZlFotUdzk
-         qydKOpCPxPJ/MtgmSrlmkMRbHdE8SjBWQ2r7Lxak=
-Received: from localhost.localdomain ([172.16.0.45])
-        (authenticated bits=0)
-        by knetgate.kensnet.org (8.14.4/8.14.4) with ESMTP id 24O8ahRr002125
-        (version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NO);
-        Tue, 24 May 2022 09:36:44 +0100
-From:   Ken Smith <kens@kensnet.org>
-Subject: Re: HauppaugeTV-quadHD DVB-T & HVR5525 mpeg risc op code error
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Brad Love <brad@nextdimension.cc>
-References: <20200423155908.GA22613@gofer.mess.org>
- <bc0644cd-3438-6505-d438-8f3f71347ccb@mindspring.com>
- <20200423163559.GB23006@gofer.mess.org>
- <0cd2436c-0a39-0f85-929e-5d8f333b5027@burnicki.net>
- <20200425114147.GA3037@gofer.mess.org>
- <4aa38e2a-6b98-6530-69d9-d945a467bf0b@burnicki.net>
- <1a2d9e15-55e2-88a7-d197-208a8ce99218@burnicki.net>
- <20200427080751.GA5925@gofer.mess.org>
- <e7d8aeb8-124a-f7b3-d469-4c47f182f067@burnicki.net>
- <0fc5d43f-7928-1649-220b-45916b189d8f@burnicki.net>
- <20200430164934.GA16730@gofer.mess.org>
-X-Priority: 1 (Highest)
-Organization: K-Net Technology
-Message-ID: <90a0213a-a01a-79ef-cfa2-5bae8b89d8f9@kensnet.org>
-Date:   Tue, 24 May 2022 09:36:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.0
+        Tue, 24 May 2022 05:31:39 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FDB4D63F
+        for <linux-media@vger.kernel.org>; Tue, 24 May 2022 02:31:38 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id e11-20020a9d6e0b000000b0060afcbafa80so6301139otr.3
+        for <linux-media@vger.kernel.org>; Tue, 24 May 2022 02:31:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lUwNw4LiW86B6M2JmEPdNVrCG28aZNFkgFFRApLjQhc=;
+        b=FhnySy76ImCjGowM4ExSXOF81PObKuPXhGtkObJfh9AjkLK0W7jzlwDeE52prTNy4P
+         9/zR/l24X7myCj/6kdiuA9/GfPxegeJARCe95v4CLhgXR54TciLo4cdd50ignFi3PMxB
+         Reddlq9arxdj9hjdk72eVUIdiLXUrnETEFz2Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lUwNw4LiW86B6M2JmEPdNVrCG28aZNFkgFFRApLjQhc=;
+        b=3oAe1M7rQ0dZjAiNPES4w29RjBobFtbeuM2NdDC7RS2CN4IG7Sw7r3ynGfvStY8a5y
+         l9uHX1LZcVnPwkRzE1KmP1fByuibBTuXlG57Rg645D/jerYRtERsV5iuXgRsM3gkua90
+         a0tLGtq+JeU6/NvMiryn3DXC6rQpt1kLAo3z2doA4iSLC5roBnuQdN5rFvg8QGgRiJQR
+         w1aL2gSXWde9MVS7AeloDTX/EpXtXI9Z5X80dyRzu47ZvCvg5eNjkMXNt23A+vFMELQ4
+         bErsQNGylIF5E086c4jg/HPvnl7REJs7p4cvQsUyF+kp2u478GFJOvXv/3y8+E9X/QXc
+         7jTw==
+X-Gm-Message-State: AOAM530WKlnvCRV1/xLIrw9uuQiRLgK3ofwuAvCTtO00HVaa+jgB68kR
+        KSuxC/nKsgVBsK9+udqq3YhIbvvqihL7Eg==
+X-Google-Smtp-Source: ABdhPJxvfFSmSp6MWmZXrTRN+yJCDy0a7iBsqpm8gv+yiePmgvGMyOLHHNsDE9DISLKvVxosmEAZ4Q==
+X-Received: by 2002:a9d:730c:0:b0:60b:1bea:9916 with SMTP id e12-20020a9d730c000000b0060b1bea9916mr2416480otk.303.1653384697447;
+        Tue, 24 May 2022 02:31:37 -0700 (PDT)
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com. [209.85.167.176])
+        by smtp.gmail.com with ESMTPSA id n7-20020a05687001c700b000e932746d33sm103539oad.28.2022.05.24.02.31.36
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 02:31:36 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id q10so20761356oia.9
+        for <linux-media@vger.kernel.org>; Tue, 24 May 2022 02:31:36 -0700 (PDT)
+X-Received: by 2002:a05:6808:e88:b0:2fa:72da:55d4 with SMTP id
+ k8-20020a0568080e8800b002fa72da55d4mr1737904oil.66.1653384695459; Tue, 24 May
+ 2022 02:31:35 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200430164934.GA16730@gofer.mess.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-kensnet-MailScanner-Information: Please contact the ISP for more information
-X-kensnet-MailScanner-ID: 24O8ahRr002125
-X-kensnet-MailScanner: Found to be clean
-X-kensnet-MailScanner-From: kens@kensnet.org
+References: <20220524044507.1696012-1-yunkec@google.com> <20220524044507.1696012-2-yunkec@google.com>
+In-Reply-To: <20220524044507.1696012-2-yunkec@google.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 24 May 2022 11:31:24 +0200
+X-Gmail-Original-Message-ID: <CANiDSCux+Bjanm9E4_KQbDcYWy27WDaT=MGyqKeGB419Ym7k5Q@mail.gmail.com>
+Message-ID: <CANiDSCux+Bjanm9E4_KQbDcYWy27WDaT=MGyqKeGB419Ym7k5Q@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] media: v4l2_ctrl: Add V4L2_CTRL_TYPE_RECT
+To:     Yunke Cao <yunkec@google.com>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-(Resend - first send did not reach the list  )
+Hi Yunke
 
+Thanks for your patch.
 
-Ian Young wrote:
-> On Tue, Apr 28, 2020 at 08:24:20PM +0200, Martin Burnicki wrote:
->> Hi,
->>
->> Am 27.04.20 um 10:59 schrieb Martin Burnicki:
->>> Sean Young wrote:
->>>> Would you mind testing this patch please?
->>> I'm going to try it this evening.
->>>
->>> I'll have to find out how to do an out-of-tree build for a copy of the
->>> cx module that includes the patch.
->>>
->>> My own kernel driver is always and only built out-of-tree, but for the
->>> cx driver I need to see which files I need to copy to a local directory,
->>> and if there is anything else that needs to be done to build a copy of
->>> it out-of-tree.
->> Sorry, I haven't managed to test the patch, yet.
->>
->> Currently I have the driver loaded with
->>
->> options cx23885 dma_reset_workaround=2
->>
->> but today there were 3 occurrences of the risc opcode error:
->>
->>
-> Drats.
+Just a minor comment
+
+On Tue, 24 May 2022 at 06:45, Yunke Cao <yunkec@google.com> wrote:
 >
->> So the workaround doesn't seem to fix the problem anyway, and the patch
->> would just enable the workaround with out the specific option, right?
-> Yes, that's right.
+> Add p_rect to struct v4l2_ext_control with basic support in
+> v4l2-ctrls.
 >
->> The effect of the workaround looks just like debug levels lower than 7,
->> it just seems to reduce the probability that the bug occurs, but doesn't
->> really fix it.
->>
->> So my conclusion is still that that this smells like a missing memory
->> barrier or so in the driver.
->>
->> Since the driver seems to work properly with older mainboards/CPU types,
->> this doesn't sound like a problem in the CX chip, IMO.
-> I would agree with that. I would suspect same issue was being papered over
-> by the patch; now what that issue is, I don't know. Certainly some 
-> ordering
-> or barrier issue seems likely.
+> Signed-off-by: Yunke Cao <yunkec@google.com>
+Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  .../media/v4l/vidioc-g-ext-ctrls.rst          |  4 ++++
+>  .../media/videodev2.h.rst.exceptions          |  1 +
+>  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 20 +++++++++++++++++++
+>  include/media/v4l2-ctrls.h                    |  2 ++
+>  include/uapi/linux/videodev2.h                |  2 ++
+>  5 files changed, 29 insertions(+)
 >
-> Actually I suspected this all along, but the workaround is the best we 
-> have.
+> diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
+> index 29971a45a2d4..f4e205ead0a2 100644
+> --- a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
+> +++ b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
+> @@ -189,6 +189,10 @@ still cause this situation.
+>        - ``p_area``
+>        - A pointer to a struct :c:type:`v4l2_area`. Valid if this control is
+>          of type ``V4L2_CTRL_TYPE_AREA``.
+> +    * - struct :c:type:`v4l2_rect` *
+> +      - ``p_area``
+
+I guess you mean: p_rect
+
+> +      - A pointer to a struct :c:type:`v4l2_rect`. Valid if this control is
+> +        of type ``V4L2_CTRL_TYPE_RECT``.
+>      * - struct :c:type:`v4l2_ctrl_h264_sps` *
+>        - ``p_h264_sps``
+>        - A pointer to a struct :c:type:`v4l2_ctrl_h264_sps`. Valid if this control is
+> diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> index 9cbb7a0c354a..7b423475281d 100644
+> --- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> +++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+> @@ -147,6 +147,7 @@ replace symbol V4L2_CTRL_TYPE_HEVC_SPS :c:type:`v4l2_ctrl_type`
+>  replace symbol V4L2_CTRL_TYPE_HEVC_PPS :c:type:`v4l2_ctrl_type`
+>  replace symbol V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS :c:type:`v4l2_ctrl_type`
+>  replace symbol V4L2_CTRL_TYPE_AREA :c:type:`v4l2_ctrl_type`
+> +replace symbol V4L2_CTRL_TYPE_RECT :c:type:`v4l2_ctrl_type`
+>  replace symbol V4L2_CTRL_TYPE_FWHT_PARAMS :c:type:`v4l2_ctrl_type`
+>  replace symbol V4L2_CTRL_TYPE_VP8_FRAME :c:type:`v4l2_ctrl_type`
+>  replace symbol V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR :c:type:`v4l2_ctrl_type`
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> index 8968cec8454e..384d12a9638b 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> @@ -84,6 +84,11 @@ static bool std_equal(const struct v4l2_ctrl *ctrl, u32 idx,
+>                 return ptr1.p_u16[idx] == ptr2.p_u16[idx];
+>         case V4L2_CTRL_TYPE_U32:
+>                 return ptr1.p_u32[idx] == ptr2.p_u32[idx];
+> +       case V4L2_CTRL_TYPE_RECT:
+> +               return ptr1.p_rect->top == ptr2.p_rect->top &&
+> +                      ptr1.p_rect->left == ptr2.p_rect->left &&
+> +                      ptr1.p_rect->height == ptr2.p_rect->height &&
+> +                      ptr1.p_rect->width == ptr2.p_rect->width;
+>         default:
+>                 if (ctrl->is_int)
+>                         return ptr1.p_s32[idx] == ptr2.p_s32[idx];
+> @@ -307,6 +312,11 @@ static void std_log(const struct v4l2_ctrl *ctrl)
+>         case V4L2_CTRL_TYPE_VP9_FRAME:
+>                 pr_cont("VP9_FRAME");
+>                 break;
+> +       case V4L2_CTRL_TYPE_RECT:
+> +               pr_cont("%ux%u@%dx%d",
+> +                       ptr.p_rect->width, ptr.p_rect->height,
+> +                       ptr.p_rect->left, ptr.p_rect->top);
+> +               break;
+>         default:
+>                 pr_cont("unknown type %d", ctrl->type);
+>                 break;
+> @@ -525,6 +535,7 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+>         struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
+>         struct v4l2_ctrl_hevc_decode_params *p_hevc_decode_params;
+>         struct v4l2_area *area;
+> +       struct v4l2_rect *rect;
+>         void *p = ptr.p + idx * ctrl->elem_size;
+>         unsigned int i;
 >
-> I think, some time spent hunting down the issue would really be helpful
-> here. Hopefully that doesn't mean too many aborted recordings..
+> @@ -888,6 +899,12 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+>                         return -EINVAL;
+>                 break;
 >
-> Thanks,
+> +       case V4L2_CTRL_TYPE_RECT:
+> +               rect = p;
+> +               if (!rect->width || !rect->height)
+> +                       return -EINVAL;
+> +               break;
+> +
+>         default:
+>                 return -EINVAL;
+>         }
+> @@ -1456,6 +1473,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
+>         case V4L2_CTRL_TYPE_AREA:
+>                 elem_size = sizeof(struct v4l2_area);
+>                 break;
+> +       case V4L2_CTRL_TYPE_RECT:
+> +               elem_size = sizeof(struct v4l2_rect);
+> +               break;
+>         default:
+>                 if (type < V4L2_CTRL_COMPOUND_TYPES)
+>                         elem_size = sizeof(s32);
+> diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
+> index b3ce438f1329..919e104de50b 100644
+> --- a/include/media/v4l2-ctrls.h
+> +++ b/include/media/v4l2-ctrls.h
+> @@ -58,6 +58,7 @@ struct video_device;
+>   * @p_hdr10_cll:               Pointer to an HDR10 Content Light Level structure.
+>   * @p_hdr10_mastering:         Pointer to an HDR10 Mastering Display structure.
+>   * @p_area:                    Pointer to an area.
+> + * @p_rect:                    Pointer to a rectangle.
+>   * @p:                         Pointer to a compound value.
+>   * @p_const:                   Pointer to a constant compound value.
+>   */
+> @@ -87,6 +88,7 @@ union v4l2_ctrl_ptr {
+>         struct v4l2_ctrl_hdr10_cll_info *p_hdr10_cll;
+>         struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
+>         struct v4l2_area *p_area;
+> +       struct v4l2_rect *p_rect;
+>         void *p;
+>         const void *p_const;
+>  };
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 3768a0a80830..b712412cf763 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -1751,6 +1751,7 @@ struct v4l2_ext_control {
+>                 __u16 __user *p_u16;
+>                 __u32 __user *p_u32;
+>                 struct v4l2_area __user *p_area;
+> +               struct v4l2_rect __user *p_rect;
+>                 struct v4l2_ctrl_h264_sps __user *p_h264_sps;
+>                 struct v4l2_ctrl_h264_pps *p_h264_pps;
+>                 struct v4l2_ctrl_h264_scaling_matrix __user *p_h264_scaling_matrix;
+> @@ -1810,6 +1811,7 @@ enum v4l2_ctrl_type {
+>         V4L2_CTRL_TYPE_U16           = 0x0101,
+>         V4L2_CTRL_TYPE_U32           = 0x0102,
+>         V4L2_CTRL_TYPE_AREA          = 0x0106,
+> +       V4L2_CTRL_TYPE_RECT          = 0x0107,
 >
-> Sean
+>         V4L2_CTRL_TYPE_HDR10_CLL_INFO           = 0x0110,
+>         V4L2_CTRL_TYPE_HDR10_MASTERING_DISPLAY  = 0x0111,
+> --
+> 2.36.1.124.g0e6072fb45-goog
 >
-
-Hi, I'd like to resurrect this thread (copied above). I have a system 
-showing this error. Its a HP ML350 server with 2x Xeon 5675 running 
-Rocky Linux 8.5. It has a Hauppauge HVR5525 card that uses the same 
-cx23885 kernel module as the quadHD card discussed above. The HVR5525 is 
-a dual DVB-T2/DVB-S2 card.
-
-In other threads I read about the dma_reset_workaround option. That 
-option did not appear to be in the version included in standard kernel 
-in Rocky 8.5. I have loaded a 5.4 kernel and compiled the DVB media 
-modules from .git source and set dma_reset_workaround=2 in a file in 
-modprobe.d. The built module shows version 0.0.4
-
-Sadly the error remains. The system runs MythTV v.31. The main symptom 
-is occasional aborted recordings. Although the card does appear to 
-recover, not requiring a reboot/cold restart.
-
-I'd appreciate some assistance with this. What information can I provide 
-to help to trace this.
-
-Many thanks
-
-Ken
 
 
 -- 
-This message has been scanned for viruses and
-dangerous content by MailScanner, and is
-believed to be clean.
-
+Ricardo Ribalda
