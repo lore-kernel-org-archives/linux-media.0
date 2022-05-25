@@ -2,32 +2,31 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F649C433FE
-	for <linux-media@archiver.kernel.org>; Wed, 25 May 2022 14:59:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B1B7C433F5
+	for <linux-media@archiver.kernel.org>; Wed, 25 May 2022 14:59:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244909AbiEYO7I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 May 2022 10:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
+        id S244854AbiEYO7c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 May 2022 10:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242610AbiEYO7B (ORCPT
+        with ESMTP id S244959AbiEYO7Q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 May 2022 10:59:01 -0400
+        Wed, 25 May 2022 10:59:16 -0400
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CA5AF1C7;
-        Wed, 25 May 2022 07:58:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DFFAF1F3;
+        Wed, 25 May 2022 07:59:04 -0700 (PDT)
 Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2660F1BF216;
-        Wed, 25 May 2022 14:58:54 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3DB591BF207;
+        Wed, 25 May 2022 14:58:58 +0000 (UTC)
 From:   Quentin Schulz <foss+kernel@0leil.net>
 Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         foss+kernel@0leil.net,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v5 3/4] media: i2c: ov5675: parse and register V4L2 device tree properties
-Date:   Wed, 25 May 2022 16:58:32 +0200
-Message-Id: <20220525145833.1165437-3-foss+kernel@0leil.net>
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Subject: [PATCH v5 4/4] media: i2c: ov5675: add .get_selection support
+Date:   Wed, 25 May 2022 16:58:33 +0200
+Message-Id: <20220525145833.1165437-4-foss+kernel@0leil.net>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220525145833.1165437-1-foss+kernel@0leil.net>
 References: <20220525145833.1165437-1-foss+kernel@0leil.net>
@@ -40,62 +39,93 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-Parse V4L2 device tree properties and register controls for them.
+The sensor has 2592*1944 active pixels, surrounded by 16 active dummy
+pixels and there are an additional 24 black rows "at the bottom".
 
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+                     [2624]
+        +-----+------------------+-----+
+        |     |     16 dummy     |     |
+        +-----+------------------+-----+
+        |     |                  |     |
+        |     |     [2592]       |     |
+        |     |                  |     |
+        |16   |      valid       | 16  |[2000]
+        |dummy|                  |dummy|
+        |     |            [1944]|     |
+        |     |                  |     |
+        +-----+------------------+-----+
+        |     |     16 dummy     |     |
+        +-----+------------------+-----+
+        |     |  24 black lines  |     |
+        +-----+------------------+-----+
+
+The top-left coordinate is gotten from the registers specified in the
+modes which are identical for both currently supported modes.
+
 Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 ---
 
-v3:
- - reverse-xmas-tree-ordered in ov5675_init_controls,
+v4:
+ - explicit a bit more the commit log,
+ - added drawing in the commit log,
+ - fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
 
- drivers/media/i2c/ov5675.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+added in v3
+
+ drivers/media/i2c/ov5675.c | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
 diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-index ea801edb8e408..c1f3c387afde0 100644
+index c1f3c387afde0..384a9ea2372c3 100644
 --- a/drivers/media/i2c/ov5675.c
 +++ b/drivers/media/i2c/ov5675.c
-@@ -779,12 +779,14 @@ static const struct v4l2_ctrl_ops ov5675_ctrl_ops = {
- 
- static int ov5675_init_controls(struct ov5675 *ov5675)
- {
-+	struct i2c_client *client = v4l2_get_subdevdata(&ov5675->sd);
-+	struct v4l2_fwnode_device_properties props;
- 	struct v4l2_ctrl_handler *ctrl_hdlr;
- 	s64 exposure_max, h_blank;
- 	int ret;
- 
- 	ctrl_hdlr = &ov5675->ctrl_handler;
--	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
-+	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 10);
- 	if (ret)
- 		return ret;
- 
-@@ -838,9 +840,23 @@ static int ov5675_init_controls(struct ov5675 *ov5675)
- 	if (ctrl_hdlr->error)
- 		return ctrl_hdlr->error;
- 
-+	ret = v4l2_fwnode_device_parse(&client->dev, &props);
-+	if (ret)
-+		goto error;
-+
-+	ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &ov5675_ctrl_ops,
-+					      &props);
-+	if (ret)
-+		goto error;
-+
- 	ov5675->sd.ctrl_handler = ctrl_hdlr;
- 
+@@ -1121,6 +1121,38 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
  	return 0;
-+
-+error:
-+	v4l2_ctrl_handler_free(ctrl_hdlr);
-+
-+	return ret;
  }
  
- static void ov5675_update_pad_format(const struct ov5675_mode *mode,
++static int ov5675_get_selection(struct v4l2_subdev *sd,
++				struct v4l2_subdev_state *state,
++				struct v4l2_subdev_selection *sel)
++{
++	struct ov5675 *ov5675 = to_ov5675(sd);
++
++	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
++		return -EINVAL;
++
++	switch (sel->target) {
++	case V4L2_SEL_TGT_CROP_BOUNDS:
++		sel->r.top = 0;
++		sel->r.left = 0;
++		sel->r.width = 2624;
++		sel->r.height = 2000;
++		return 0;
++	case V4L2_SEL_TGT_CROP:
++		sel->r.top = 16;
++		sel->r.left = 16;
++		sel->r.width = ov5675->cur_mode->width;
++		sel->r.height = ov5675->cur_mode->height;
++		return 0;
++	case V4L2_SEL_TGT_CROP_DEFAULT:
++		sel->r.top = 16;
++		sel->r.left = 16;
++		sel->r.width = supported_modes[0].width;
++		sel->r.height = supported_modes[0].height;
++		return 0;
++	}
++	return -EINVAL;
++}
++
+ static int ov5675_enum_mbus_code(struct v4l2_subdev *sd,
+ 				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_mbus_code_enum *code)
+@@ -1170,6 +1202,7 @@ static const struct v4l2_subdev_video_ops ov5675_video_ops = {
+ static const struct v4l2_subdev_pad_ops ov5675_pad_ops = {
+ 	.set_fmt = ov5675_set_format,
+ 	.get_fmt = ov5675_get_format,
++	.get_selection = ov5675_get_selection,
+ 	.enum_mbus_code = ov5675_enum_mbus_code,
+ 	.enum_frame_size = ov5675_enum_frame_size,
+ };
 -- 
 2.36.1
 
