@@ -2,136 +2,118 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F8F1C4332F
-	for <linux-media@archiver.kernel.org>; Wed, 25 May 2022 08:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03B59C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 25 May 2022 08:49:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbiEYI1s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 May 2022 04:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
+        id S235596AbiEYItk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 May 2022 04:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233543AbiEYI1p (ORCPT
+        with ESMTP id S230024AbiEYItj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 May 2022 04:27:45 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDBE546B3;
-        Wed, 25 May 2022 01:27:43 -0700 (PDT)
-X-UUID: 7da760e4220a4839b849f4b8838a50f7-20220525
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:955eeae6-8869-47c0-b4a8-2aa237d82673,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:51f82bb8-3c45-407b-8f66-25095432a27a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 7da760e4220a4839b849f4b8838a50f7-20220525
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <mark-pk.tsai@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 844525860; Wed, 25 May 2022 16:27:37 +0800
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 25 May 2022 16:27:36 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 25 May 2022 16:27:35 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 25 May 2022 16:27:35 +0800
-From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-To:     <stable@vger.kernel.org>
-CC:     <mchehab@kernel.org>, <matthias.bgg@gmail.com>,
-        <hverkuil-cisco@xs4all.nl>, <mark-pk.tsai@mediatek.com>,
-        <sakari.ailus@linux.intel.com>, <linux-media@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <yj.chiang@mediatek.com>,
-        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>
-Subject: [PATCH 5.4 1/2] media: vim2m: Register video device after setting up internals
-Date:   Wed, 25 May 2022 16:27:30 +0800
-Message-ID: <20220525082731.28235-2-mark-pk.tsai@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220525082731.28235-1-mark-pk.tsai@mediatek.com>
-References: <20220525082731.28235-1-mark-pk.tsai@mediatek.com>
+        Wed, 25 May 2022 04:49:39 -0400
+X-Greylist: delayed 4138 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 May 2022 01:49:38 PDT
+Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1828753B6C;
+        Wed, 25 May 2022 01:49:38 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 8478A101CCD; Wed, 25 May 2022 09:49:36 +0100 (BST)
+Date:   Wed, 25 May 2022 09:49:36 +0100
+From:   Sean Young <sean@mess.org>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL for v5.18-rc1] media updates
+Message-ID: <Yo3toKslhxi24w3p@gofer.mess.org>
+References: <20220322101406.459e2950@coco.lan>
+ <a0470450-ecfd-2918-e04a-7b57c1fd7694@kernel.org>
+ <Yo3ddVHgBBlvJEdh@gofer.mess.org>
+ <8093277c-5098-e5e3-f606-486de5b2f67b@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: multipart/mixed; boundary="h3J3ZAFSc2DcqDuO"
+Content-Disposition: inline
+In-Reply-To: <8093277c-5098-e5e3-f606-486de5b2f67b@kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-commit 	cf7f34777a5b4100a3a44ff95f3d949c62892bdd upstream.
 
-Prevent NULL (or close to NULL) pointer dereference in various places by
-registering the video device only when the V4L2 m2m framework has been set
-up.
+--h3J3ZAFSc2DcqDuO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fixes: commit 96d8eab5d0a1 ("V4L/DVB: [v5,2/2] v4l: Add a mem-to-mem videobuf framework test device")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-[ backport to 5.4 LTS ]
-CC: stable@vger.kernel.org
-Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
----
- drivers/media/platform/vim2m.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+On Wed, May 25, 2022 at 10:09:38AM +0200, Jiri Slaby wrote:
+> Be it umaintained or not, it's still in distributions (the above is from
+> opensuse build system) and it is broken now. Every single distributor now
+> would have to go and fix this.
 
-diff --git a/drivers/media/platform/vim2m.c b/drivers/media/platform/vim2m.c
-index 8d6b09623d88..02f5bc82ba46 100644
---- a/drivers/media/platform/vim2m.c
-+++ b/drivers/media/platform/vim2m.c
-@@ -1333,12 +1333,6 @@ static int vim2m_probe(struct platform_device *pdev)
- 	vfd->lock = &dev->dev_mutex;
- 	vfd->v4l2_dev = &dev->v4l2_dev;
+I am happy to help out with this issue, since lircd upstream does not accept
+patches. I've attached a patch for your perusal. 
+
+
+Sean
+
+--h3J3ZAFSc2DcqDuO
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment; filename="lirc.patch"
+
+diff --git a/daemons/lircd.cpp b/daemons/lircd.cpp
+index 4cceab7e..9f4ee0cc 100644
+--- a/daemons/lircd.cpp
++++ b/daemons/lircd.cpp
+@@ -488,9 +488,8 @@ static int setup_hardware(void)
  
--	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
--	if (ret) {
--		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
--		goto error_v4l2;
--	}
--
- 	video_set_drvdata(vfd, dev);
- 	v4l2_info(&dev->v4l2_dev,
- 		  "Device registered as /dev/video%d\n", vfd->num);
-@@ -1353,6 +1347,12 @@ static int vim2m_probe(struct platform_device *pdev)
- 		goto error_dev;
+ 	if (curr_driver->fd != -1 && curr_driver->drvctl_func) {
+ 		if ((curr_driver->features & LIRC_CAN_SET_REC_CARRIER)
+-		    || (curr_driver->features & LIRC_CAN_SET_REC_TIMEOUT)
+-		    || (curr_driver->features & LIRC_CAN_SET_REC_FILTER)) {
+-				ret = setup_frequency() && setup_timeout();
++		    || (curr_driver->features & LIRC_CAN_SET_REC_TIMEOUT)) {
++			ret = setup_frequency() && setup_timeout();
+ 		}
  	}
- 
-+	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
-+	if (ret) {
-+		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
-+		goto error_m2m;
-+	}
-+
- #ifdef CONFIG_MEDIA_CONTROLLER
- 	dev->mdev.dev = &pdev->dev;
- 	strscpy(dev->mdev.model, "vim2m", sizeof(dev->mdev.model));
-@@ -1366,7 +1366,7 @@ static int vim2m_probe(struct platform_device *pdev)
- 						 MEDIA_ENT_F_PROC_VIDEO_SCALER);
- 	if (ret) {
- 		v4l2_err(&dev->v4l2_dev, "Failed to init mem2mem media controller\n");
--		goto error_dev;
-+		goto error_v4l2;
- 	}
- 
- 	ret = media_device_register(&dev->mdev);
-@@ -1381,11 +1381,13 @@ static int vim2m_probe(struct platform_device *pdev)
- error_m2m_mc:
- 	v4l2_m2m_unregister_media_controller(dev->m2m_dev);
- #endif
--error_dev:
-+error_v4l2:
- 	video_unregister_device(&dev->vfd);
- 	/* vim2m_device_release called by video_unregister_device to release various objects */
  	return ret;
--error_v4l2:
-+error_m2m:
-+	v4l2_m2m_release(dev->m2m_dev);
-+error_dev:
- 	v4l2_device_unregister(&dev->v4l2_dev);
- error_free:
- 	kfree(dev);
--- 
-2.18.0
+@@ -2180,13 +2177,6 @@ void loop(void)
+ 			const char* button_name;
+ 			int reps;
+ 
+-			if (curr_driver->drvctl_func
+-			    && (curr_driver->features & LIRC_CAN_NOTIFY_DECODE)
+-			) {
+-				curr_driver->drvctl_func(DRVCTL_NOTIFY_DECODE,
+-							 NULL);
+-			}
+-
+ 			get_release_data(&remote_name, &button_name, &reps);
+ 
+ 			input_message(message, remote_name, button_name, reps);
+diff --git a/tools/lirc-lsplugins.cpp b/tools/lirc-lsplugins.cpp
+index ba67a3cb..6251ac65 100644
+--- a/tools/lirc-lsplugins.cpp
++++ b/tools/lirc-lsplugins.cpp
+@@ -57,8 +57,7 @@
+ 	"#    c: LIRC_CAN_SET_SEND_CARRIER\n" \
+ 	"#    d: LIRC_CAN_SET_SEND_DUTY_CYCLE\n" \
+ 	"#    t: LIRC_CAN_SET_TRANSMITTER_MASK\n" \
+-	"#    C: LIRC_CAN_MEASURE_CARRIER\n" \
+-	"#    D: LIRC_CAN_NOTIFY_DECODE\n"
++	"#    C: LIRC_CAN_MEASURE_CARRIER\n"
+ 
+ const struct option options[] = {
+ 	{ "plugindir",	  required_argument, NULL, 'U' },
+@@ -303,8 +302,7 @@ static void format_features(struct driver* hw, line_t* line)
+ 		 get(LIRC_CAN_SET_SEND_CARRIER, 'c', hw),
+ 		 get(LIRC_CAN_SET_SEND_DUTY_CYCLE, 'd', hw),
+ 		 get(LIRC_CAN_SET_TRANSMITTER_MASK, 't', hw),
+-		 get(LIRC_CAN_MEASURE_CARRIER, 'C', hw),
+-		 get(LIRC_CAN_NOTIFY_DECODE, 'D', hw)
++		 get(LIRC_CAN_MEASURE_CARRIER, 'C', hw)
+ 		 );
+ 	line->features = strdup(buff);
+ }
 
+--h3J3ZAFSc2DcqDuO--
