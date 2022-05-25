@@ -2,60 +2,73 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E0D9C4332F
-	for <linux-media@archiver.kernel.org>; Wed, 25 May 2022 09:13:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E48EC433F5
+	for <linux-media@archiver.kernel.org>; Wed, 25 May 2022 09:21:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240670AbiEYJNs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 May 2022 05:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
+        id S231776AbiEYJVJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 May 2022 05:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbiEYJNT (ORCPT
+        with ESMTP id S229773AbiEYJVI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 May 2022 05:13:19 -0400
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC77975209;
-        Wed, 25 May 2022 02:10:21 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 8A1D0101CCD; Wed, 25 May 2022 10:10:20 +0100 (BST)
-Date:   Wed, 25 May 2022 10:10:20 +0100
-From:   Sean Young <sean@mess.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL for v5.18-rc1] media updates
-Message-ID: <Yo3yfIim58IWf64z@gofer.mess.org>
-References: <20220322101406.459e2950@coco.lan>
- <a0470450-ecfd-2918-e04a-7b57c1fd7694@kernel.org>
- <Yo3ddVHgBBlvJEdh@gofer.mess.org>
- <8093277c-5098-e5e3-f606-486de5b2f67b@kernel.org>
+        Wed, 25 May 2022 05:21:08 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBD078930;
+        Wed, 25 May 2022 02:21:03 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (unknown [141.113.67.45])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4096F59D;
+        Wed, 25 May 2022 11:21:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1653470461;
+        bh=4ppQi6Q+8jKdd9MisM65iV4SXHNyv2SAU9tmCGb/LzU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rhkX8Aq//vKrvhAUwvuoiN+n6P9B0cdgr/0qslXarOy5kXCoRSdHm6nNBmcUEu9Q7
+         HlWlZYUKuy53xxIaSL9NcXV9y5svPhU5h6kPFZLCoW+XgBJejam9HzpXKnKk8EqeHy
+         hs3bQSdeeAwpLP5K5eLSjTVBvlAQR8Oq+DAHFpjg=
+From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Subject: [PATCH] media: renesas: rcar_drif: Drop of_match_ptr()
+Date:   Wed, 25 May 2022 12:20:54 +0300
+Message-Id: <20220525092054.26089-1-laurent.pinchart+renesas@ideasonboard.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8093277c-5098-e5e3-f606-486de5b2f67b@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, May 25, 2022 at 10:09:38AM +0200, Jiri Slaby wrote:
-> I don't understand how inability to build software is not an uapi breakage
-> -- care to elaborate?
+The device_driver structure's of_match_table field exists
+unconditionally, so there's no need for of_match_ptr(). This fixes a
+compiler warning when test-compiling on non-OF platforms:
 
-So here is a good compromise suggested by Mauro. 
+drivers/media/platform/renesas/rcar_drif.c:1470:34: warning: unused variable 'rcar_drif_of_table' [-Wunused-const-variable]
+static const struct of_device_id rcar_drif_of_table[] = {
+                                 ^
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+---
+ drivers/media/platform/renesas/rcar_drif.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-1. We add the following to the lirc.h uapi header.
+diff --git a/drivers/media/platform/renesas/rcar_drif.c b/drivers/media/platform/renesas/rcar_drif.c
+index 9a0982fa5c6b..5167960781bf 100644
+--- a/drivers/media/platform/renesas/rcar_drif.c
++++ b/drivers/media/platform/renesas/rcar_drif.c
+@@ -1477,7 +1477,7 @@ MODULE_DEVICE_TABLE(of, rcar_drif_of_table);
+ static struct platform_driver rcar_drif_driver = {
+ 	.driver = {
+ 		.name = RCAR_DRIF_DRV_NAME,
+-		.of_match_table = of_match_ptr(rcar_drif_of_table),
++		.of_match_table = rcar_drif_of_table,
+ 		.pm = &rcar_drif_pm_ops,
+ 		},
+ 	.probe = rcar_drif_probe,
 
-#define LIRC_CAN_NOTIFY_DECODE 0 
-#define LIRC_CAN_SET_REC_FILTER 0 
+base-commit: 6c1c1eb8c87de221051b9198d40971640060842f
+-- 
+Regards,
 
-2. Since lirc daemon is unmaintained, I am happy to take on maintainership.
+Laurent Pinchart
 
-This may require forking, depending on what the maintainer says.
-
-How does that sound?
-
-
-Sean
