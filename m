@@ -2,34 +2,34 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB39EC433EF
-	for <linux-media@archiver.kernel.org>; Wed, 25 May 2022 19:06:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BE37C4332F
+	for <linux-media@archiver.kernel.org>; Wed, 25 May 2022 19:07:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344076AbiEYTG6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 May 2022 15:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S240888AbiEYTG7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 May 2022 15:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344032AbiEYTGq (ORCPT
+        with ESMTP id S1344035AbiEYTGp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 May 2022 15:06:46 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8115F9C;
-        Wed, 25 May 2022 12:06:43 -0700 (PDT)
+        Wed, 25 May 2022 15:06:45 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3B51181B;
+        Wed, 25 May 2022 12:06:41 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7E06E1C0010;
-        Wed, 25 May 2022 19:06:41 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1D8531C0011;
+        Wed, 25 May 2022 19:06:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1653505602;
+        t=1653505600;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w5IfG9ptveYiTpI6QTEcwlqfXGi+j1kqUaqBGVDq584=;
-        b=AdUc3E3QFVXxFSxeWhLgsVHT09JYy/AOMMtBNd1arGtIo6WZWcJ3AGlUG7e2qCPfqa9Hkg
-        CLOVaTm3QZtfdp4yz0+e9MSsMjwDiZ9i8UeApFFuyp3oZmhW96tccOt+KV4IvNrB/GUABC
-        QQbcsB985GmHfT0x6UgMGS5yRBCmvynN7fyEUL4DpwuUf92io9z3S0b6B6DWbqYoXekb+j
-        LlXs6QRff6NL9d3i8RPgk5bGKCxbRqgyAcGWoFDaei8Iwar9lwJ+h9hfsL0tV3ohtWV1uR
-        zydF5vw+g9MhrZJ2yDKtbC+K+Ie7zJZ0tlqXG5OJFtsX9Q7kRWs8uhlya0AmPA==
+        bh=zaur4kh7K2rPNgHrmEKXXhNKOmp1XFlY0+XVhK6uTtQ=;
+        b=JhLe4PXUmO5vh9spIFmtrW9smVT9OQpILMEtuF+Z4Y/d0VJPIhn3s8dVil1qzxkVgVYw2D
+        BHhrzyd07cEEsm7PDeYXdv2AiSmiQLBjMNiUZ+qd82ILleCw1q+UbeFmot41E7NNVUGsYe
+        CXzoLIzEnc0cD+VjiuptMZauzTxlIGgBgQhfDMu6keTUK3r8rQfp64BPuGsQKN0E+ZN6pn
+        r9tAS807nhv9Up8XeM7fLrjs/H+jkl5cThfHMTHmr5oFrVspcV/xuaagNO8N9+K55ZuD5w
+        7DbObTkUK6HnOet6FetKIWHoLaum1XBPtEb1uiqeFQ5ZuGXpCR0/W23Jp+rHYQ==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -42,9 +42,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v5 14/44] media: sun6i-csi: Introduce and use video helper functions
-Date:   Wed, 25 May 2022 21:05:47 +0200
-Message-Id: <20220525190617.696344-15-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v5 12/44] media: sun6i-csi: Remove controls handler from the driver
+Date:   Wed, 25 May 2022 21:05:45 +0200
+Message-Id: <20220525190617.696344-13-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220525190617.696344-1-paul.kocialkowski@bootlin.com>
 References: <20220525190617.696344-1-paul.kocialkowski@bootlin.com>
@@ -54,111 +54,103 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Introduce some helpers for buffer and general video configuration.
+The driver does not expose controls directly and thus does not need
+a controls handler for its own use.
+
+Controls attached to subdevs used to be exposed that way, however this
+can easily lead to issue when multiple subdevs attached to the same
+v4l2 device expose the same controls. Subdev controls should be set
+through each individual subdev node instead.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_video.c    | 46 +++++++++++--------
- 1 file changed, 28 insertions(+), 18 deletions(-)
+ .../media/platform/sunxi/sun6i-csi/sun6i_csi.c    | 15 +--------------
+ .../media/platform/sunxi/sun6i-csi/sun6i_csi.h    |  2 --
+ .../media/platform/sunxi/sun6i-csi/sun6i_video.c  |  4 ----
+ 3 files changed, 1 insertion(+), 20 deletions(-)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-index 06e55ee40e24..9e0f8a478bef 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-@@ -92,6 +92,29 @@ static bool sun6i_video_format_check(u32 format)
- 	return false;
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+index e3d60b647cb2..d74eaa3132d6 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+@@ -691,23 +691,14 @@ static int sun6i_csi_v4l2_setup(struct sun6i_csi_device *csi_dev)
+ 		goto error_media;
+ 	}
+ 
+-	/* V4L2 Control Handler */
+-
+-	ret = v4l2_ctrl_handler_init(&v4l2->ctrl_handler, 0);
+-	if (ret) {
+-		dev_err(dev, "failed to init v4l2 control handler: %d\n", ret);
+-		goto error_media;
+-	}
+-
+ 	/* V4L2 Device */
+ 
+ 	v4l2_dev->mdev = media_dev;
+-	v4l2_dev->ctrl_handler = &v4l2->ctrl_handler;
+ 
+ 	ret = v4l2_device_register(dev, v4l2_dev);
+ 	if (ret) {
+ 		dev_err(dev, "failed to register v4l2 device: %d\n", ret);
+-		goto error_v4l2_ctrl;
++		goto error_media;
+ 	}
+ 
+ 	/* Video */
+@@ -746,9 +737,6 @@ static int sun6i_csi_v4l2_setup(struct sun6i_csi_device *csi_dev)
+ error_v4l2_device:
+ 	v4l2_device_unregister(&v4l2->v4l2_dev);
+ 
+-error_v4l2_ctrl:
+-	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
+-
+ error_media:
+ 	media_device_unregister(media_dev);
+ 	media_device_cleanup(media_dev);
+@@ -765,7 +753,6 @@ static void sun6i_csi_v4l2_cleanup(struct sun6i_csi_device *csi_dev)
+ 	v4l2_async_nf_cleanup(&v4l2->notifier);
+ 	sun6i_video_cleanup(csi_dev);
+ 	v4l2_device_unregister(&v4l2->v4l2_dev);
+-	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
+ 	media_device_cleanup(&v4l2->media_dev);
  }
  
-+/* Video */
-+
-+static void sun6i_video_buffer_configure(struct sun6i_csi_device *csi_dev,
-+					 struct sun6i_csi_buffer *csi_buffer)
-+{
-+	csi_buffer->queued_to_csi = true;
-+	sun6i_csi_update_buf_addr(csi_dev, csi_buffer->dma_addr);
-+}
-+
-+static void sun6i_video_configure(struct sun6i_csi_device *csi_dev)
-+{
-+	struct sun6i_video *video = &csi_dev->video;
-+	struct sun6i_csi_config config = { 0 };
-+
-+	config.pixelformat = video->format.fmt.pix.pixelformat;
-+	config.code = video->mbus_code;
-+	config.field = video->format.fmt.pix.field;
-+	config.width = video->format.fmt.pix.width;
-+	config.height = video->format.fmt.pix.height;
-+
-+	sun6i_csi_update_config(csi_dev, &config);
-+}
-+
- /* Queue */
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+index a76b545f2aa4..1edc3e91ba6f 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+@@ -8,7 +8,6 @@
+ #ifndef __SUN6I_CSI_H__
+ #define __SUN6I_CSI_H__
  
- static int sun6i_video_queue_setup(struct vb2_queue *queue,
-@@ -160,7 +183,6 @@ static int sun6i_video_start_streaming(struct vb2_queue *queue,
- 	struct video_device *video_dev = &video->video_dev;
- 	struct sun6i_csi_buffer *buf;
- 	struct sun6i_csi_buffer *next_buf;
--	struct sun6i_csi_config config;
- 	struct v4l2_subdev *subdev;
- 	unsigned long flags;
- 	int ret;
-@@ -182,22 +204,13 @@ static int sun6i_video_start_streaming(struct vb2_queue *queue,
- 		goto error_media_pipeline;
- 	}
+-#include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-fwnode.h>
  
--	config.pixelformat = video->format.fmt.pix.pixelformat;
--	config.code = video->mbus_code;
--	config.field = video->format.fmt.pix.field;
--	config.width = video->format.fmt.pix.width;
--	config.height = video->format.fmt.pix.height;
+@@ -35,7 +34,6 @@ struct sun6i_csi_config {
+ 
+ struct sun6i_csi_v4l2 {
+ 	struct v4l2_device		v4l2_dev;
+-	struct v4l2_ctrl_handler	ctrl_handler;
+ 	struct media_device		media_dev;
+ 
+ 	struct v4l2_async_notifier	notifier;
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
+index 134f35b8820d..06e55ee40e24 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
+@@ -486,10 +486,6 @@ static const struct v4l2_ioctl_ops sun6i_video_ioctl_ops = {
+ 	.vidioc_dqbuf			= vb2_ioctl_dqbuf,
+ 	.vidioc_streamon		= vb2_ioctl_streamon,
+ 	.vidioc_streamoff		= vb2_ioctl_streamoff,
 -
--	ret = sun6i_csi_update_config(csi_dev, &config);
--	if (ret < 0)
--		goto error_media_pipeline;
-+	sun6i_video_configure(csi_dev);
+-	.vidioc_log_status		= v4l2_ctrl_log_status,
+-	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
+-	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
+ };
  
- 	spin_lock_irqsave(&video->dma_queue_lock, flags);
- 
- 	buf = list_first_entry(&video->dma_queue,
- 			       struct sun6i_csi_buffer, list);
--	buf->queued_to_csi = true;
--	sun6i_csi_update_buf_addr(csi_dev, buf->dma_addr);
-+	sun6i_video_buffer_configure(csi_dev, buf);
- 
- 	sun6i_csi_set_stream(csi_dev, true);
- 
-@@ -219,8 +232,7 @@ static int sun6i_video_start_streaming(struct vb2_queue *queue,
- 	 * would also drop frame when lacking of queued buffer.
- 	 */
- 	next_buf = list_next_entry(buf, list);
--	next_buf->queued_to_csi = true;
--	sun6i_csi_update_buf_addr(csi_dev, next_buf->dma_addr);
-+	sun6i_video_buffer_configure(csi_dev, next_buf);
- 
- 	spin_unlock_irqrestore(&video->dma_queue_lock, flags);
- 
-@@ -294,8 +306,7 @@ void sun6i_video_frame_done(struct sun6i_csi_device *csi_dev)
- 	 * for next ISR call.
- 	 */
- 	if (!next_buf->queued_to_csi) {
--		next_buf->queued_to_csi = true;
--		sun6i_csi_update_buf_addr(csi_dev, next_buf->dma_addr);
-+		sun6i_video_buffer_configure(csi_dev, next_buf);
- 		dev_dbg(csi_dev->dev, "Frame dropped!\n");
- 		goto complete;
- 	}
-@@ -309,8 +320,7 @@ void sun6i_video_frame_done(struct sun6i_csi_device *csi_dev)
- 	/* Prepare buffer for next frame but one.  */
- 	if (!list_is_last(&next_buf->list, &video->dma_queue)) {
- 		next_buf = list_next_entry(next_buf, list);
--		next_buf->queued_to_csi = true;
--		sun6i_csi_update_buf_addr(csi_dev, next_buf->dma_addr);
-+		sun6i_video_buffer_configure(csi_dev, next_buf);
- 	} else {
- 		dev_dbg(csi_dev->dev, "Next frame will be dropped!\n");
- 	}
+ /* V4L2 File */
 -- 
 2.36.1
 
