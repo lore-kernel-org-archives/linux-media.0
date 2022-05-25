@@ -2,106 +2,92 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60582C433EF
-	for <linux-media@archiver.kernel.org>; Wed, 25 May 2022 19:09:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7B50C433FE
+	for <linux-media@archiver.kernel.org>; Wed, 25 May 2022 19:12:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236068AbiEYTJD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 May 2022 15:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
+        id S1344381AbiEYTMj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 May 2022 15:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344284AbiEYTIQ (ORCPT
+        with ESMTP id S1344452AbiEYTMc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 May 2022 15:08:16 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F6A11C27;
-        Wed, 25 May 2022 12:07:31 -0700 (PDT)
+        Wed, 25 May 2022 15:12:32 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B6DC6E7C;
+        Wed, 25 May 2022 12:10:43 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A55911C0008;
-        Wed, 25 May 2022 19:07:17 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2D63AFF808;
+        Wed, 25 May 2022 19:10:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1653505638;
+        t=1653505837;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uDkUjTjqhHI3NerTWBUE4+y5JKxofLdZ2JtbZ9qu4JM=;
-        b=Yzvr8idJWgSOlI+pr2jR9U0KsHJvr7OBgEglG5KyFfY3C290oIVNyYL4RtCreXDQXPan9W
-        AYjyfiYe8y5+GRZ+m09ZOmEInt9H+R81SLgwizsY3rNtwbWfl+2E6DZPzJr4nl/aQbvdgP
-        altIMuQ12M5EKp0SK/yAMYXDHGg+8M6tmD2pCci5XChm8YcNqQkw0MAa0Oo3a1A+GvjRKB
-        AtZcXhOKZ/HkZ73YExGJNIFWV2jeB2/odLZ2NAAGcLItHcZq92n6m6fmJYuE/loPfHjdsn
-        +kxFw5GFDSjIcRu6PoCcve5uDvmWvGU0sDxqlvqfMKdKI3OvDWoLNT0ZUXMmDg==
+        bh=DIgZtkvccsLXsMN8UO3+9DFmHNkKzDJVDrinkhB+3Tw=;
+        b=B5VZZkU6EgqpmHCi3F4QkuyU+Azm1IxmCKGZbwIRarSZjQSv7lX554CyFMq4srCZl+lpqa
+        +GQfyw3l38uv9e9AmGZAmj9VUu2EaxfeLoLyhW0W8ILh8Fs2j6fee/EjRQRRJxHOiqbFBy
+        BLq4Iot2QwU42JvYaJxz45nTC39IQTWoIBwOEymySKimFLF2T86ihHG13TAHAI3SoR2LgX
+        p2SUjLkWX220pTPkb4gb5HcAVvAhzSdIMuAhS4Ji4Ph6PnuJ0RaC8Wzf0xrlk6rAt0AtNd
+        dHlyA/1DE4xLlu7/dBjSP65LvXo2GV2mHS6HLDJoLMkLs8cN7TQy0tTTe+K+qA==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v5 44/44] MAINTAINERS: Add myself as sun6i-csi maintainer and rename/move entry
-Date:   Wed, 25 May 2022 21:06:17 +0200
-Message-Id: <20220525190617.696344-45-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v4 2/6] dt-bindings: media: sun6i-a31-csi: Add ISP output port
+Date:   Wed, 25 May 2022 21:10:22 +0200
+Message-Id: <20220525191026.696636-3-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220525190617.696344-1-paul.kocialkowski@bootlin.com>
-References: <20220525190617.696344-1-paul.kocialkowski@bootlin.com>
+In-Reply-To: <20220525191026.696636-1-paul.kocialkowski@bootlin.com>
+References: <20220525191026.696636-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Given the substantial rework of the driver that I carried out and the
-knowledge acquired about the hardware along the way, make myself a
-maintainer of the sun6i-csi driver.
+Some Allwinner devices come with an Image Signal Processor (ISP) that
+allows processing camera data to produce good-looking images,
+especially from raw bayer representations.
 
-Also rename and move the entry while at it since the driver is not
-specific to the V3s.
+The ISP does not have a dedicated capture path: it is fed directly by
+one of the CSI controllers, which can be selected at run-time.
+
+Represent this possibility as a graph connection between the CSI
+controller and the ISP in the device-tree bindings.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- MAINTAINERS | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ .../devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml    | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 484f47690ea2..d18e671f2516 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -762,6 +762,15 @@ T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
- F:	drivers/media/platform/sunxi/sun4i-csi/
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
+index 8551c4a711dc..54eb80e517e3 100644
+--- a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
++++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
+@@ -73,6 +73,10 @@ properties:
+         $ref: /schemas/graph.yaml#/properties/port
+         description: MIPI CSI-2 bridge input port
  
-+ALLWINNER A31 CSI DRIVER
-+M:	Yong Deng <yong.deng@magewell.com>
-+M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
-+F:	drivers/media/platform/sunxi/sun6i-csi/
++      port@2:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: ISP output port
 +
- ALLWINNER A31 MIPI CSI-2 BRIDGE DRIVER
- M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
- L:	linux-media@vger.kernel.org
-@@ -5234,14 +5243,6 @@ M:	Jaya Kumar <jayakumar.alsa@gmail.com>
- S:	Maintained
- F:	sound/pci/cs5535audio/
- 
--CSI DRIVERS FOR ALLWINNER V3s
--M:	Yong Deng <yong.deng@magewell.com>
--L:	linux-media@vger.kernel.org
--S:	Maintained
--T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
--F:	drivers/media/platform/sunxi/sun6i-csi/
--
- CW1200 WLAN driver
- M:	Solomon Peachy <pizza@shaftnet.org>
- S:	Maintained
+     anyOf:
+       - required:
+           - port@0
 -- 
 2.36.1
 
