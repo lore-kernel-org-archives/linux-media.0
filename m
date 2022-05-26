@@ -2,102 +2,117 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CB06C4332F
-	for <linux-media@archiver.kernel.org>; Thu, 26 May 2022 09:58:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BB20C433FE
+	for <linux-media@archiver.kernel.org>; Thu, 26 May 2022 10:17:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346930AbiEZJ6H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 May 2022 05:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
+        id S1346630AbiEZKRM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 May 2022 06:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346915AbiEZJ55 (ORCPT
+        with ESMTP id S1346959AbiEZKRG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 May 2022 05:57:57 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3248EC9EDC;
-        Thu, 26 May 2022 02:57:56 -0700 (PDT)
-X-UUID: f18e6221418f4355bf3e521dc244e1bb-20220526
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:9e2a7ff7-ef95-4b4b-afd1-d2d16a9a469c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:2a19b09,CLOUDID:2d9757b8-3c45-407b-8f66-25095432a27a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: f18e6221418f4355bf3e521dc244e1bb-20220526
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1470932293; Thu, 26 May 2022 17:57:44 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 26 May 2022 17:57:42 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 26 May 2022 17:57:41 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Thu, 26 May 2022 06:17:06 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E64211176;
+        Thu, 26 May 2022 03:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653560224; x=1685096224;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/06/+LdbOWOmFUaiCyNfRy9awv3wYK5GdEyH2WSXjYw=;
+  b=LTCpkSzEBi1H/FBUbrKQf+IprxdbAkgMJWJBX8zeHgGs205SJwAaI01t
+   moxVexSe0ZVrszg5wf7z8SrNq8fN1OJNBVLEHql5WdxN7v0zFqqRSKJRI
+   p1IYS40DsP/S1f8zAlBCuxOgyQRHcI2y7Y6lJ7Y7QNsjrK/fc2/myJtn1
+   ARLk52qbjWvz4Cq6Wtd0e5foNqbrvSsFJazm61d5dpgAZh/pKLuUDHwVM
+   6iT/bL24fg4hkeKgWGNDUo8/odVI3BJkEL9w1UFlrLqYIrpF1mUNq+zSV
+   9snA1w/Zm5k/otNc3ut80N+RG/zOO1RaZm73Ivzvnfy3kTlA9ZIglw7Ol
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="261721629"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="261721629"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 03:17:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="677402458"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 26 May 2022 03:16:58 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nuAY5-0003mO-1G;
+        Thu, 26 May 2022 10:16:57 +0000
+Date:   Thu, 26 May 2022 18:16:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        kbuild-all@lists.01.org, Yong Deng <yong.deng@magewell.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 2/4] media: mediatek: vcodec: Change decoder v4l2 capability value
-Date:   Thu, 26 May 2022 17:57:35 +0800
-Message-ID: <20220526095737.21118-2-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220526095737.21118-1-yunfei.dong@mediatek.com>
-References: <20220526095737.21118-1-yunfei.dong@mediatek.com>
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v5 3/6] media: sunxi: Add support for the A31 MIPI CSI-2
+ controller
+Message-ID: <202205261808.Ob6yfFnu-lkp@intel.com>
+References: <20220525190300.696269-4-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220525190300.696269-4-paul.kocialkowski@bootlin.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Change the value of v4l2 capability parameters: driver and card.
+Hi Paul,
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I love your patch! Perhaps something to improve:
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-index ccfa426a34ab..d4880737ea81 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-@@ -209,9 +209,9 @@ static int vidioc_vdec_querycap(struct file *file, void *priv,
- {
- 	int platform_name = mtk_vcodec_dec_get_chip_name(priv);
- 
--	strscpy(cap->driver, MTK_VCODEC_DEC_NAME, sizeof(cap->driver));
-+	strscpy(cap->driver, MTK_VCODEC_DRV_NAME, sizeof(cap->driver));
-+	strscpy(cap->card, MTK_VCODEC_DEC_NAME, sizeof(cap->card));
- 	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:mt%d", platform_name);
--	strscpy(cap->card, MTK_PLATFORM_STR, sizeof(cap->card));
- 
- 	return 0;
- }
+[auto build test WARNING on sunxi/sunxi/for-next]
+[also build test WARNING on media-tree/master clk/clk-next soc/for-next linus/master v5.18 next-20220525]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Kocialkowski/Allwinner-A31-A83T-MIPI-CSI-2-and-A31-ISP-MIPI-CSI-2-Support/20220526-030637
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git sunxi/for-next
+config: (https://download.01.org/0day-ci/archive/20220526/202205261808.Ob6yfFnu-lkp@intel.com/config)
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/497abc0e446f164e23be70628dbd44be8b5c789f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Paul-Kocialkowski/Allwinner-A31-A83T-MIPI-CSI-2-and-A31-ISP-MIPI-CSI-2-Support/20220526-030637
+        git checkout 497abc0e446f164e23be70628dbd44be8b5c789f
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_PHY_SUN6I_MIPI_DPHY --selectors CONFIG_VIDEO_SUN6I_MIPI_CSI2 -a=arm64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=arm64 olddefconfig
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for PHY_SUN6I_MIPI_DPHY when selected by VIDEO_SUN6I_MIPI_CSI2
+   
+   WARNING: unmet direct dependencies detected for PHY_SUN6I_MIPI_DPHY
+     Depends on [n]: (ARCH_SUNXI [=n] || COMPILE_TEST [=y]) && HAS_IOMEM [=y] && COMMON_CLK [=y] && RESET_CONTROLLER [=n]
+     Selected by [y]:
+     - VIDEO_SUN6I_MIPI_CSI2 [=y] && MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && V4L_PLATFORM_DRIVERS [=y] && VIDEO_DEV [=y] && (ARCH_SUNXI [=n] || COMPILE_TEST [=y]) && PM [=y] && COMMON_CLK [=y]
+
 -- 
-2.18.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
