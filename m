@@ -2,50 +2,44 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF3E2C43217
-	for <linux-media@archiver.kernel.org>; Thu, 26 May 2022 09:57:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A15DC433EF
+	for <linux-media@archiver.kernel.org>; Thu, 26 May 2022 09:57:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345836AbiEZJ5x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 May 2022 05:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S243836AbiEZJ5v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 May 2022 05:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344703AbiEZJ5w (ORCPT
+        with ESMTP id S236591AbiEZJ5u (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 May 2022 05:57:52 -0400
+        Thu, 26 May 2022 05:57:50 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF0BC967F;
-        Thu, 26 May 2022 02:57:50 -0700 (PDT)
-X-UUID: a4eab63d2ff046e2bea7a3e9ff2a5e94-20220526
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33133C9EC2;
+        Thu, 26 May 2022 02:57:49 -0700 (PDT)
+X-UUID: 9cfcbfe08d67426299a85be40aba57d0-20220526
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:272e1aa1-cd5a-4d31-9715-0a34bda81cf8,OB:10,L
-        OB:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:95
-X-CID-INFO: VERSION:1.1.5,REQID:272e1aa1-cd5a-4d31-9715-0a34bda81cf8,OB:10,LOB
-        :10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:95
-X-CID-META: VersionHash:2a19b09,CLOUDID:939657b8-3c45-407b-8f66-25095432a27a,C
-        OID:c4d81cfbf3df,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: a4eab63d2ff046e2bea7a3e9ff2a5e94-20220526
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.5,REQID:4059dd73-19e1-456c-b523-9f6315660ae0,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:dec09347-4fb1-496b-8f1d-39e733fed1ea,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 9cfcbfe08d67426299a85be40aba57d0-20220526
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 484470111; Thu, 26 May 2022 17:57:46 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 26 May 2022 17:57:45 +0800
+        with ESMTP id 1865388074; Thu, 26 May 2022 17:57:42 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 26 May 2022 17:57:44 +0800
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 26 May 2022 17:57:41 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 26 May 2022 17:57:42 +0800
+ Transport; Thu, 26 May 2022 17:57:39 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
@@ -62,17 +56,16 @@ CC:     George Sun <george.sun@mediatek.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 3/4] media: mediatek: vcodec: Fix encoder v4l2 bus_info not correctly
-Date:   Thu, 26 May 2022 17:57:36 +0800
-Message-ID: <20220526095737.21118-3-yunfei.dong@mediatek.com>
+Subject: [PATCH 1/4] media: mediatek: vcodec: Fix decoder v4l2 bus_info not correctly
+Date:   Thu, 26 May 2022 17:57:34 +0800
+Message-ID: <20220526095737.21118-1-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220526095737.21118-1-yunfei.dong@mediatek.com>
-References: <20220526095737.21118-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -85,40 +78,42 @@ Fix v4l2 capability bus_info value with correct chip name according to compatibl
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- .../platform/mediatek/vcodec/mtk_vcodec_enc.c | 21 ++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+ .../platform/mediatek/vcodec/mtk_vcodec_dec.c | 23 ++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-index c21367038c34..8ece3596081a 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-@@ -204,11 +204,30 @@ static int vidioc_enum_fmt_vid_out(struct file *file, void *priv,
- 			       pdata->num_output_formats);
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+index 52e5d36aa912..ccfa426a34ab 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+@@ -185,11 +185,32 @@ static int vidioc_vdec_dqbuf(struct file *file, void *priv,
+ 	return v4l2_m2m_dqbuf(file, ctx->m2m_ctx, buf);
  }
  
-+static int mtk_vcodec_enc_get_chip_name(void *priv)
++static int mtk_vcodec_dec_get_chip_name(void *priv)
 +{
 +	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
 +	struct device *dev = &ctx->dev->plat_dev->dev;
 +
-+	if (of_device_is_compatible(dev->of_node, "mediatek,mt8173-vcodec-enc"))
++	if (of_device_is_compatible(dev->of_node, "mediatek,mt8173-vcodec-dec"))
 +		return 8173;
-+	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8183-vcodec-enc"))
++	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8183-vcodec-dec"))
 +		return 8183;
-+	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8192-vcodec-enc"))
++	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8192-vcodec-dec"))
 +		return 8192;
-+	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8195-vcodec-enc"))
++	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8195-vcodec-dec"))
 +		return 8195;
++	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8186-vcodec-dec"))
++		return 8186;
 +	else
 +		return 8173;
 +}
 +
- static int vidioc_venc_querycap(struct file *file, void *priv,
+ static int vidioc_vdec_querycap(struct file *file, void *priv,
  				struct v4l2_capability *cap)
  {
-+	int platform_name = mtk_vcodec_enc_get_chip_name(priv);
++	int platform_name = mtk_vcodec_dec_get_chip_name(priv);
 +
- 	strscpy(cap->driver, MTK_VCODEC_ENC_NAME, sizeof(cap->driver));
+ 	strscpy(cap->driver, MTK_VCODEC_DEC_NAME, sizeof(cap->driver));
 -	strscpy(cap->bus_info, MTK_PLATFORM_STR, sizeof(cap->bus_info));
 +	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:mt%d", platform_name);
  	strscpy(cap->card, MTK_PLATFORM_STR, sizeof(cap->card));
