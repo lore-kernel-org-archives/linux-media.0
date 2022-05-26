@@ -2,62 +2,79 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52FCEC433FE
-	for <linux-media@archiver.kernel.org>; Thu, 26 May 2022 07:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADAA5C433F5
+	for <linux-media@archiver.kernel.org>; Thu, 26 May 2022 09:01:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346514AbiEZH7p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 May 2022 03:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        id S242123AbiEZJBk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 May 2022 05:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232951AbiEZH7n (ORCPT
+        with ESMTP id S245386AbiEZJBi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 May 2022 03:59:43 -0400
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3883153F;
-        Thu, 26 May 2022 00:59:42 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 8C044101CFB; Thu, 26 May 2022 08:59:40 +0100 (BST)
-Date:   Thu, 26 May 2022 08:59:40 +0100
-From:   Sean Young <sean@mess.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-media@vger.kernel.org
-Subject: [PATCH] media: lirc: add missing exceptions for lirc uapi header file
-Message-ID: <Yo8zbIJuceliqWfi@gofer.mess.org>
-References: <20220526172154.23853e1c@canb.auug.org.au>
+        Thu, 26 May 2022 05:01:38 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D71D91;
+        Thu, 26 May 2022 02:01:24 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id q21so1836309ejm.1;
+        Thu, 26 May 2022 02:01:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8QDaO4aB7hVic6zw+bEVhFdtYbIuED8UQISkuSXvfx8=;
+        b=RDxJcPs6PmagRPzAOPPfXKWVSfpykxw7RbKNYX+tiBVATB6uPtuVL8gVMs7+iFoVtK
+         EDnVwsTDtlEHap1iPGZMnjwm27vJ5Ypn63kbjiumUC/VMhWmrYWeJwMHr9U3t5saYCLb
+         eRi7rfVtvmru737tpscAj6sLiH155qouxQvNH+pXxE/iyzWQWiSGkcvqaYUxnUtaWmz5
+         YizqW6LRVQghJDwtG76vl4nW4X4Ndf05jpk3XuK/wjOMCCUrAB9xNJiURajHYEv/G9JI
+         i0xwgbhgFEN8alAhljKcHzsBeF6f2HzCZPUqIjL4l6sWZFErQ3w8DkW7T2gPnzjQ6dbv
+         +D4g==
+X-Gm-Message-State: AOAM532xr3Edc4yo2M99TIBmJK61WOCccgeAnuPEGhcfU4wB+cQXf+pn
+        zz6iTwo47dQ/Rg/NkSQN8EE=
+X-Google-Smtp-Source: ABdhPJw060DUPL2/XBk854PqFJCU+r3TaXXexkgaJC6/wtCx6sdXUSvnVrJ72RvFze4HZl0ICUAFUA==
+X-Received: by 2002:a17:906:5d06:b0:6fe:94f7:b187 with SMTP id g6-20020a1709065d0600b006fe94f7b187mr33770241ejt.591.1653555682841;
+        Thu, 26 May 2022 02:01:22 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id s19-20020a170906501300b006fed85c1a8fsm317838ejj.202.2022.05.26.02.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 May 2022 02:01:22 -0700 (PDT)
+Message-ID: <e74e2b70-5628-7ed2-76ee-56b663fc3abf@kernel.org>
+Date:   Thu, 26 May 2022 11:01:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220526172154.23853e1c@canb.auug.org.au>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] media: lirc: revert removal of unused feature flags
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Sean Young <sean@mess.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <Yo4qTnYYT+55vlQ9@gofer.mess.org>
+ <CAADWXX-rcvHAXEn1PVScSmDf9kZRVf=Z2R3nyEuNdsqL+z3pEw@mail.gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <CAADWXX-rcvHAXEn1PVScSmDf9kZRVf=Z2R3nyEuNdsqL+z3pEw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-commit e5499dd7253c ("media: lirc: revert removal of unused feature flags")
-reintroduced unused feature flags in the lirc uapi header, but failed to
-reintroduce the necessary exceptions for the docs.
+On 25. 05. 22, 18:53, Linus Torvalds wrote:
+> On Wed, May 25, 2022 at 6:08 AM Sean Young <sean@mess.org> wrote:
+>>
+>> commit b2a90f4fcb14 ("media: lirc: remove unused lirc features") removed
+>> feature flags which were never implemented, but they are still used by
+>> the lirc daemon went built from source.
+>>
+>> Reinstate these symbols in order not to break the lirc build.
+> 
+> Applied directly to my tree. Thanks,
 
-Fixes: e5499dd7253c ("media: lirc: revert removal of unused feature flags")
-Signed-off-by: Sean Young <sean@mess.org>
----
- Documentation/userspace-api/media/lirc.h.rst.exceptions | 2 ++
- 1 file changed, 2 insertions(+)
+Works for me, thanks.
 
-diff --git a/Documentation/userspace-api/media/lirc.h.rst.exceptions b/Documentation/userspace-api/media/lirc.h.rst.exceptions
-index 913d17b49831..1aeb7d7afe13 100644
---- a/Documentation/userspace-api/media/lirc.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/lirc.h.rst.exceptions
-@@ -30,6 +30,8 @@ ignore define LIRC_CAN_REC
- 
- ignore define LIRC_CAN_SEND_MASK
- ignore define LIRC_CAN_REC_MASK
-+ignore define LIRC_CAN_SET_REC_FILTER
-+ignore define LIRC_CAN_NOTIFY_DECODE
- 
- # Obsolete ioctls
- 
 -- 
-2.36.1
-
+js
+suse labs
