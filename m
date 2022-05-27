@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EA66C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 27 May 2022 14:32:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACD60C433F5
+	for <linux-media@archiver.kernel.org>; Fri, 27 May 2022 14:32:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344384AbiE0OcB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 May 2022 10:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
+        id S240916AbiE0OcG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 May 2022 10:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353256AbiE0Ob4 (ORCPT
+        with ESMTP id S1353277AbiE0Ob6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 May 2022 10:31:56 -0400
+        Fri, 27 May 2022 10:31:58 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FA9377EF;
-        Fri, 27 May 2022 07:31:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697793AA67;
+        Fri, 27 May 2022 07:31:57 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id 9E99F1F462B4
+        with ESMTPSA id BC1391F462C6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653661914;
-        bh=R1RD9/NdT1+j3nmnRHTjtmU1Cs+J8VBHdXjBv2QWTxU=;
+        s=mail; t=1653661916;
+        bh=FwhT4M0q3zGdY3rD+uqFFz/Zp2aSoJb8cPSYnbFG4fE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eVj/gy3sQYM4xdS2PUE5DR30ElA2OwwBxWdXUljYJjK6k0WkPqxo3hlSQNQOgO5dR
-         EV9lwTv77cnftA0MFN33ZU0fk3qe5H8MBuGBu2DTbRGku8vAZhfwZQCdplcRIkSOde
-         vuVu3xGWnxB6FBs8sTgxNCVR2cJQnvqsjJ/YQuxsslRuqEmX4WGRfqA9DP2nETOeSE
-         a39Br9j4JbWgf43n9T+2IRWFLrx0j2FK+6qzDNBGqQ3p+24YvVsGCfYRWmUCFymIvX
-         fukSoA78tHllEuTmIst2xqUMquYWuxPY0EvUnUFguPz2VV5kv5j1RiWyNs1CDZU4lN
-         dFZ8uOV6yOIBQ==
+        b=TWyDzzcWRwim0u6sOzFlcR1FUgECuXBm0UEEJtJ30uuByeWFsgL6g/A8iNm6W4KjB
+         09LTrVyiSJ86kpoGNlVjD0vX84Gt4jqlXa53yrxSEzOtDhlouC8AoN/9zht1nEHR9b
+         4HWF8V8XTNq6la9eKzpMkZ8TUeB6RpBcbbrtwxcXPCcEydQm6G1j/6wH0HY0FMKTIe
+         WZKIOz6zw4svCb/GGqi387M6k7BESq/ckh05cBU/cw/YVLaJ5FvgY3wcK13Mbgv9q9
+         /LD8KHl7zOYCz04fl1UCqSOyvyVCE4uUAgSv8wv968XBeps8E+9lK5lFoO98cjINgZ
+         xz5SfAT1oxfdw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -40,154 +40,81 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v6 06/17] media: uapi: HEVC: Change pic_order_cnt definition in v4l2_hevc_dpb_entry
-Date:   Fri, 27 May 2022 16:31:23 +0200
-Message-Id: <20220527143134.3360174-7-benjamin.gaignard@collabora.com>
+Subject: [PATCH v6 09/17] media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a dynamic array
+Date:   Fri, 27 May 2022 16:31:26 +0200
+Message-Id: <20220527143134.3360174-10-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220527143134.3360174-1-benjamin.gaignard@collabora.com>
 References: <20220527143134.3360174-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The HEVC specification describes the following:
-"PicOrderCntVal is derived as follows:
-PicOrderCntVal = PicOrderCntMsb + slice_pic_order_cnt_lsb
-The value of PicOrderCntVal shall be in the range of −2^31 to 2^31 − 1, inclusive."
+Make explicit that V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control is
+a dynamic array control type.
+Some drivers may be able to receive multiple slices in one control
+to improve decoding performance.
 
-To match with these definitions change __u16 pic_order_cnt[2]
-into __s32 pic_order_cnt_val.
-Change v4l2_ctrl_hevc_slice_params->slice_pic_order_cnt to __s32 too.
+Define the max size of the dynamic that can driver can set in .dims = {}.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
 version 6:
-- Also change slice_pic_order_cnt type to s32
-- Fix comment in Hantro driver
+- Set V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag automatically when using
+  V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control.
+- Add a define for max slices count
 
- Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 2 +-
- drivers/staging/media/hantro/hantro_g2_hevc_dec.c         | 7 +++----
- drivers/staging/media/hantro/hantro_hevc.c                | 2 +-
- drivers/staging/media/hantro/hantro_hw.h                  | 4 ++--
- drivers/staging/media/sunxi/cedrus/cedrus_h265.c          | 4 ++--
- include/media/hevc-ctrls.h                                | 4 ++--
- 6 files changed, 11 insertions(+), 12 deletions(-)
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 2 ++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c                 | 1 +
+ include/media/hevc-ctrls.h                                | 5 +++++
+ 3 files changed, 8 insertions(+)
 
 diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 160b91537c09..a7803b241612 100644
+index 06b967de140c..0796b1563daa 100644
 --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
 +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -3010,7 +3010,7 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-     * - __u8
-       - ``colour_plane_id``
-       -
--    * - __u16
-+    * - __s32
-       - ``slice_pic_order_cnt``
-       -
-     * - __u8
-diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-index 5df6f08e26f5..d28653d04d20 100644
---- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-@@ -390,11 +390,10 @@ static int set_ref(struct hantro_ctx *ctx)
- 			 !!(pps->flags & V4L2_HEVC_PPS_FLAG_LOOP_FILTER_ACROSS_TILES_ENABLED));
+@@ -2986,6 +2986,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     These bitstream parameters are defined according to :ref:`hevc`.
+     They are described in section 7.4.7 "General slice segment header
+     semantics" of the specification.
++    This control is a dynamically sized 1-dimensional array,
++    V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
  
- 	/*
--	 * Write POC count diff from current pic. For frame decoding only compute
--	 * pic_order_cnt[0] and ignore pic_order_cnt[1] used in field-coding.
-+	 * Write POC count diff from current pic.
- 	 */
- 	for (i = 0; i < decode_params->num_active_dpb_entries && i < ARRAY_SIZE(cur_poc); i++) {
--		char poc_diff = decode_params->pic_order_cnt_val - dpb[i].pic_order_cnt[0];
-+		char poc_diff = decode_params->pic_order_cnt_val - dpb[i].pic_order_cnt_val;
+ .. c:type:: v4l2_ctrl_hevc_slice_params
  
- 		hantro_reg_write(vpu, &cur_poc[i], poc_diff);
- 	}
-@@ -421,7 +420,7 @@ static int set_ref(struct hantro_ctx *ctx)
- 	dpb_longterm_e = 0;
- 	for (i = 0; i < decode_params->num_active_dpb_entries &&
- 	     i < (V4L2_HEVC_DPB_ENTRIES_NUM_MAX - 1); i++) {
--		luma_addr = hantro_hevc_get_ref_buf(ctx, dpb[i].pic_order_cnt[0]);
-+		luma_addr = hantro_hevc_get_ref_buf(ctx, dpb[i].pic_order_cnt_val);
- 		if (!luma_addr)
- 			return -ENOMEM;
- 
-diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
-index f0b19d8017ba..59152a3e9576 100644
---- a/drivers/staging/media/hantro/hantro_hevc.c
-+++ b/drivers/staging/media/hantro/hantro_hevc.c
-@@ -33,7 +33,7 @@ void hantro_hevc_ref_init(struct hantro_ctx *ctx)
- }
- 
- dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx,
--				   int poc)
-+				   s32 poc)
- {
- 	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
- 	int i;
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 52a960f6fa4a..24943c579c79 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -133,7 +133,7 @@ struct hantro_hevc_dec_hw_ctx {
- 	struct hantro_aux_buf tile_bsd;
- 	struct hantro_aux_buf ref_bufs[NUM_REF_PICTURES];
- 	struct hantro_aux_buf scaling_lists;
--	int ref_bufs_poc[NUM_REF_PICTURES];
-+	s32 ref_bufs_poc[NUM_REF_PICTURES];
- 	u32 ref_bufs_used;
- 	struct hantro_hevc_dec_ctrls ctrls;
- 	unsigned int num_tile_cols_allocated;
-@@ -345,7 +345,7 @@ void hantro_hevc_dec_exit(struct hantro_ctx *ctx);
- int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx);
- int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
- void hantro_hevc_ref_init(struct hantro_ctx *ctx);
--dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, int poc);
-+dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, s32 poc);
- int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
- 
- static inline unsigned short hantro_vp9_num_sbs(unsigned short dimension)
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-index 44f385be9f6c..411601975124 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-@@ -143,8 +143,8 @@ static void cedrus_h265_frame_info_write_dpb(struct cedrus_ctx *ctx,
- 	for (i = 0; i < num_active_dpb_entries; i++) {
- 		int buffer_index = vb2_find_timestamp(vq, dpb[i].timestamp, 0);
- 		u32 pic_order_cnt[2] = {
--			dpb[i].pic_order_cnt[0],
--			dpb[i].pic_order_cnt[1]
-+			dpb[i].pic_order_cnt_val,
-+			dpb[i].pic_order_cnt_val
- 		};
- 
- 		cedrus_h265_frame_info_write_single(ctx, i, dpb[i].field_pic,
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index 9f55503cd3d6..d594efbcbb93 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1510,6 +1510,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 		break;
+ 	case V4L2_CID_STATELESS_HEVC_SLICE_PARAMS:
+ 		*type = V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS;
++		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
+ 		break;
+ 	case V4L2_CID_STATELESS_HEVC_SCALING_MATRIX:
+ 		*type = V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX;
 diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 45734bd8fdfc..01c1795c57a9 100644
+index 0dbd5d681c28..140151609c96 100644
 --- a/include/media/hevc-ctrls.h
 +++ b/include/media/hevc-ctrls.h
-@@ -138,7 +138,7 @@ struct v4l2_hevc_dpb_entry {
- 	__u64	timestamp;
- 	__u8	flags;
- 	__u8	field_pic;
--	__u16	pic_order_cnt[2];
-+	__s32	pic_order_cnt_val;
- 	__u8	padding[2];
- };
+@@ -311,9 +311,14 @@ struct v4l2_hevc_pred_weight_table {
+ #define V4L2_HEVC_SLICE_PARAMS_FLAG_SLICE_LOOP_FILTER_ACROSS_SLICES_ENABLED (1ULL << 8)
+ #define V4L2_HEVC_SLICE_PARAMS_FLAG_DEPENDENT_SLICE_SEGMENT	(1ULL << 9)
  
-@@ -181,7 +181,7 @@ struct v4l2_ctrl_hevc_slice_params {
- 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header */
- 	__u8	slice_type;
- 	__u8	colour_plane_id;
--	__u16	slice_pic_order_cnt;
-+	__s32	slice_pic_order_cnt;
- 	__u8	num_ref_idx_l0_active_minus1;
- 	__u8	num_ref_idx_l1_active_minus1;
- 	__u8	collocated_ref_idx;
++#define V4L2_HEVC_SLICE_MAX_COUNT	600
++
+ /**
+  * v4l2_ctrl_hevc_slice_params - HEVC slice parameters
+  *
++ * This control is a dynamically sized 1-dimensional array,
++ * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
++ *
+  * @bit_size: size (in bits) of the current slice data
+  * @data_bit_offset: offset (in bits) to the video data in the current slice data
+  * @nal_unit_type: specifies the coding type of the slice (B, P or I)
 -- 
 2.32.0
 
