@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA1FFC4332F
-	for <linux-media@archiver.kernel.org>; Fri, 27 May 2022 14:32:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DE88C433FE
+	for <linux-media@archiver.kernel.org>; Fri, 27 May 2022 14:32:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353368AbiE0OcM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 May 2022 10:32:12 -0400
+        id S1353338AbiE0OcN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 May 2022 10:32:13 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353316AbiE0OcB (ORCPT
+        with ESMTP id S1353285AbiE0OcG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 May 2022 10:32:01 -0400
+        Fri, 27 May 2022 10:32:06 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EB737A16;
-        Fri, 27 May 2022 07:31:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D2C38BD0;
+        Fri, 27 May 2022 07:32:00 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id 681D51F462D2
+        with ESMTPSA id B94681F462CB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653661917;
-        bh=SzxOOtr+7skGYpIQjWGLYLdEvChiAFV4FuuYZNx0NRw=;
+        s=mail; t=1653661919;
+        bh=i4pIB3wtTE3UKgF4OYr5mvLHbEmiDbEUxKOWdftiRKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lat7gH+YeaTnFv2giE3/YBKJs09/Y4kE1U/ajM7Zd5I2sxNQPs4NnNH82hoFk4ljw
-         JzgrmQ7rHMFwvCXvAMp3m9MK+8dBLzekDlp7G5kFl7BQ49ovOfYMZTIwpu2yNDgvgq
-         FM/uhbE52Mwc1JNk5bDJqg62e2n6iaPtV3wNhCFDxq9zsmCMnmKZRZSR7J7vdrUG58
-         g26jKWAuSE0apuw7lhrR82zqfwQZASXjlyqAh2x+Wyi/mWsQm5849WFc+MbVk0Rsj0
-         NmUbxFkBddW8nrpvjHXBoWo3an6QBqOFP/+wrj9s7XhCHSObHjBWRlMGGGq+e4agjX
-         X13ha08VshXaQ==
+        b=l4PauH2vFINw06J4V++s71prfzd1mrKjl3JPf5Up48X/Qn3hcLtIM7g28hOaS9UZ2
+         8KfzYHM/fpc5xguXIQK2i0wa3Al0Se5nLW4PSZAXZw6tsOEXvYRkRsl7Nx1Qp9VwmD
+         uJc6nZ2S0/AUZrPh08s5s6Lk6fqQooyVa+JTNStHAxr24EXv/MxnvILt8OFgl/NHgL
+         pzZRhMoFkziuVVjq/YXnTR7lo6cwla28zDZD4QT1yuhDgCBWl/+3J8kqps0UckOIKb
+         oS4m53mPsg6+XOzVlNxJkHvWkx5+yu0YWjZa3MijqLpDMhIEnrP81jRqyKSifhTYCR
+         6wL8Id/j3VT0A==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -40,9 +40,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v6 10/17] media: uapi: Move parsed HEVC pixel format out of staging
-Date:   Fri, 27 May 2022 16:31:27 +0200
-Message-Id: <20220527143134.3360174-11-benjamin.gaignard@collabora.com>
+Subject: [PATCH v6 13/17] media: controls: Log HEVC stateless control in .std_log
+Date:   Fri, 27 May 2022 16:31:30 +0200
+Message-Id: <20220527143134.3360174-14-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220527143134.3360174-1-benjamin.gaignard@collabora.com>
 References: <20220527143134.3360174-1-benjamin.gaignard@collabora.com>
@@ -52,57 +52,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move HEVC pixel format since we are ready to stabilize the uAPI
+Simply print the type of the control.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- Documentation/userspace-api/media/v4l/pixfmt-compressed.rst | 5 -----
- include/media/hevc-ctrls.h                                  | 3 ---
- include/uapi/linux/videodev2.h                              | 1 +
- 3 files changed, 1 insertion(+), 8 deletions(-)
+ drivers/media/v4l2-core/v4l2-ctrls-core.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-index 967fc803ef94..c352d91a73d8 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-@@ -215,11 +215,6 @@ Compressed Formats
- 	See the :ref:`associated Codec Control IDs <v4l2-mpeg-hevc>`.
- 	Buffers associated with this pixel format must contain the appropriate
- 	number of macroblocks to decode a full corresponding frame.
--
--	.. note::
--
--	   This format is not yet part of the public kernel API and it
--	   is expected to change.
-     * .. _V4L2-PIX-FMT-FWHT:
- 
-       - ``V4L2_PIX_FMT_FWHT``
-diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 140151609c96..a3c829ef531a 100644
---- a/include/media/hevc-ctrls.h
-+++ b/include/media/hevc-ctrls.h
-@@ -13,9 +13,6 @@
- 
- #include <linux/videodev2.h>
- 
--/* The pixel format isn't stable at the moment and will likely be renamed. */
--#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
--
- #define V4L2_CID_STATELESS_HEVC_SPS		(V4L2_CID_CODEC_BASE + 1008)
- #define V4L2_CID_STATELESS_HEVC_PPS		(V4L2_CID_CODEC_BASE + 1009)
- #define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS	(V4L2_CID_CODEC_BASE + 1010)
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 9018aa984db3..37f9f23a67fe 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -712,6 +712,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_FWHT     v4l2_fourcc('F', 'W', 'H', 'T') /* Fast Walsh Hadamard Transform (vicodec) */
- #define V4L2_PIX_FMT_FWHT_STATELESS     v4l2_fourcc('S', 'F', 'W', 'H') /* Stateless FWHT (vicodec) */
- #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
-+#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
- 
- /*  Vendor-specific formats   */
- #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 YUV */
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+index ff8a61f24d0a..c5c5407584ff 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+@@ -307,6 +307,21 @@ static void std_log(const struct v4l2_ctrl *ctrl)
+ 	case V4L2_CTRL_TYPE_VP9_FRAME:
+ 		pr_cont("VP9_FRAME");
+ 		break;
++	case V4L2_CTRL_TYPE_HEVC_SPS:
++		pr_cont("HEVC_SPS");
++		break;
++	case V4L2_CTRL_TYPE_HEVC_PPS:
++		pr_cont("HEVC_PPS");
++		break;
++	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
++		pr_cont("HEVC_SLICE_PARAMS");
++		break;
++	case V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX:
++		pr_cont("HEVC_SCALING_MATRIX");
++		break;
++	case V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS:
++		pr_cont("HEVC_DECODE_PARAMS");
++		break;
+ 	default:
+ 		pr_cont("unknown type %d", ctrl->type);
+ 		break;
 -- 
 2.32.0
 
