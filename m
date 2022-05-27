@@ -2,32 +2,32 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69A41C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 27 May 2022 14:31:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2A2BC433F5
+	for <linux-media@archiver.kernel.org>; Fri, 27 May 2022 14:31:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353243AbiE0Obz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 May 2022 10:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S1353254AbiE0Ob4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 May 2022 10:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344291AbiE0Obx (ORCPT
+        with ESMTP id S1346211AbiE0Oby (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 May 2022 10:31:53 -0400
+        Fri, 27 May 2022 10:31:54 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C8F3701C;
-        Fri, 27 May 2022 07:31:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527A5377EF;
+        Fri, 27 May 2022 07:31:53 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id 027051F462A3
+        with ESMTPSA id 6B0E21F462AE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653661910;
-        bh=v/Qj9dkCpC1sNaB07KNbLhoqv0M/1payaJLdzsZJWFE=;
+        s=mail; t=1653661912;
+        bh=bowMSxciKZ4e4jd3aI13NZ259r8hIcdS0hJZN8hF4F0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hSpzQTUD7GbDWhQ6P3w12aJJD7KjeJqgWVor4wHAMScUfmdnxTJZRp7EJnM2qo1nF
-         wblXUcXOst5PNXkDovVWjntaxNFS22DhHU1G0BTGqnz/uWJ6hN5VhUCT7nEGaKkaTi
-         X4SxlIW+LCyiDbpzdDQITZmMDTpk5makhhCfTv0Z9D4ZNdYy1eaiV1N/ilsyrI99LU
-         1ify4NevfXs571caels53uzg/tcd1oQe81kgXY9QjwSnQrjk72S00q6qsQDzjyRof2
-         +7Gs88cAukuBuCw1r2n4CY6pOBx3Jzyim03l+50KIZygOSMESZjzZxQlX2dlfdAOSm
-         IY1tM2llGsvRA==
+        b=fFGmBusYkfISnmY3rDlqKs7ejJJJYrRuXbUPYpJbVIXMh0d0s9Tch3qHhZVdFIzkH
+         Potj61J5ld67T/XyadnVfygQjFhgtShZtMtGJsVNb1n7YIgiIaw5od6+HFE7G1JBV2
+         tsrf+zU1K3swoKoGZW37OtX5uq8ntddG7y5dBdOqKzl0FYFkPnjZ7wii4fblwAs2RT
+         YX1rVlShRUBXfOBtc/oJl9OwT+P+4d9qU+UJQdnRj8K2v69VfMg4tBeoj+MSEhXJ/h
+         0UrNrh6b+qtc6LJvFlTj4eBFdew9ozP/YyOZT9cpGasuNnjE/q5cwK/W2qCA/TOtD3
+         pPm56Ov+oRN3A==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -39,9 +39,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com, Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH v6 01/17] videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
-Date:   Fri, 27 May 2022 16:31:18 +0200
-Message-Id: <20220527143134.3360174-2-benjamin.gaignard@collabora.com>
+Subject: [PATCH v6 03/17] vivid: add dynamic array test control
+Date:   Fri, 27 May 2022 16:31:20 +0200
+Message-Id: <20220527143134.3360174-4-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220527143134.3360174-1-benjamin.gaignard@collabora.com>
 References: <20220527143134.3360174-1-benjamin.gaignard@collabora.com>
@@ -53,56 +53,54 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Add a new flag that indicates that this control is a dynamically sized
-array. Also document this flag.
-
-Currently dynamically sized arrays are limited to one dimensional arrays,
-but that might change in the future if there is a need for it.
-
-The initial use-case of dynamic arrays are stateless codecs. A frame
-can be divided in many slices, so you want to provide an array containing
-slice information for each slice. Typically the number of slices is small,
-but the standard allow for hundreds or thousands of slices. Dynamic arrays
-are a good solution since sizing the array for the worst case would waste
-substantial amounts of memory.
+Add a dynamic array test control to help test support for this
+feature.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../userspace-api/media/v4l/vidioc-queryctrl.rst          | 8 ++++++++
- include/uapi/linux/videodev2.h                            | 1 +
- 2 files changed, 9 insertions(+)
+ drivers/media/test-drivers/vivid/vivid-ctrls.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-index 88f630252d98..a20dfa2a933b 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-@@ -625,6 +625,14 @@ See also the examples in :ref:`control`.
- 	``V4L2_CTRL_FLAG_GRABBED`` flag when buffers are allocated or
- 	streaming is in progress since most drivers do not support changing
- 	the format in that case.
-+    * - ``V4L2_CTRL_FLAG_DYNAMIC_ARRAY``
-+      - 0x0800
-+      - This control is a dynamically sized 1-dimensional array. It
-+        behaves the same as a regular array, except that the number
-+	of elements as reported by the ``elems`` field is between 1 and
-+	``dims[0]``. So setting the control with a differently sized
-+	array will change the ``elems`` field when the control is
-+	queried afterwards.
+diff --git a/drivers/media/test-drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+index e7516dc1227b..7267892dc18a 100644
+--- a/drivers/media/test-drivers/vivid/vivid-ctrls.c
++++ b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+@@ -34,6 +34,7 @@
+ #define VIVID_CID_U8_4D_ARRAY		(VIVID_CID_CUSTOM_BASE + 10)
+ #define VIVID_CID_AREA			(VIVID_CID_CUSTOM_BASE + 11)
+ #define VIVID_CID_RO_INTEGER		(VIVID_CID_CUSTOM_BASE + 12)
++#define VIVID_CID_U32_DYN_ARRAY		(VIVID_CID_CUSTOM_BASE + 13)
  
- Return Value
- ============
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 5311ac4fde35..9018aa984db3 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1890,6 +1890,7 @@ struct v4l2_querymenu {
- #define V4L2_CTRL_FLAG_HAS_PAYLOAD	0x0100
- #define V4L2_CTRL_FLAG_EXECUTE_ON_WRITE	0x0200
- #define V4L2_CTRL_FLAG_MODIFY_LAYOUT	0x0400
-+#define V4L2_CTRL_FLAG_DYNAMIC_ARRAY	0x0800
+ #define VIVID_CID_VIVID_BASE		(0x00f00000 | 0xf000)
+ #define VIVID_CID_VIVID_CLASS		(0x00f00000 | 1)
+@@ -189,6 +190,19 @@ static const struct v4l2_ctrl_config vivid_ctrl_u32_array = {
+ 	.dims = { 1 },
+ };
  
- /*  Query flags, to be ORed with the control ID */
- #define V4L2_CTRL_FLAG_NEXT_CTRL	0x80000000
++static const struct v4l2_ctrl_config vivid_ctrl_u32_dyn_array = {
++	.ops = &vivid_user_gen_ctrl_ops,
++	.id = VIVID_CID_U32_DYN_ARRAY,
++	.name = "U32 Dynamic Array",
++	.type = V4L2_CTRL_TYPE_U32,
++	.flags = V4L2_CTRL_FLAG_DYNAMIC_ARRAY,
++	.def = 50,
++	.min = 10,
++	.max = 90,
++	.step = 1,
++	.dims = { 100 },
++};
++
+ static const struct v4l2_ctrl_config vivid_ctrl_u16_matrix = {
+ 	.ops = &vivid_user_gen_ctrl_ops,
+ 	.id = VIVID_CID_U16_MATRIX,
+@@ -1612,6 +1626,7 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
+ 	dev->ro_int32 = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_ro_int32, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_area, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_array, NULL);
++	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_dyn_array, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u16_matrix, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u8_4d_array, NULL);
+ 
 -- 
 2.32.0
 
