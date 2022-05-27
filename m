@@ -2,198 +2,120 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D812C433EF
-	for <linux-media@archiver.kernel.org>; Fri, 27 May 2022 10:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A805CC433FE
+	for <linux-media@archiver.kernel.org>; Fri, 27 May 2022 10:08:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350936AbiE0KGQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 May 2022 06:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
+        id S1350827AbiE0KI4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 May 2022 06:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350868AbiE0KGB (ORCPT
+        with ESMTP id S1350833AbiE0KIw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 May 2022 06:06:01 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABD411CB42
-        for <linux-media@vger.kernel.org>; Fri, 27 May 2022 03:05:58 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id u20so4807389edd.6
-        for <linux-media@vger.kernel.org>; Fri, 27 May 2022 03:05:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=XO2hMhBNxgx/7TUo7q5hJUYtHpkBHllPRW2Qz6ze9MU=;
-        b=Ynb2zIxQqTfUQ31nIcmQHvLnuM4+B56fwXc8Nqk5ai6IHMUwW0SkxXsX7b+apjVzMl
-         lb6Gvk5FBxU+Hceep9vWqUwdaBmQVHKw4UHfu5F4dG+rBqJ/6I9cZaglEhysfenrPFTS
-         l35X19h1cSa9p9HEu/gmJVF3gZl57awP3VUNI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=XO2hMhBNxgx/7TUo7q5hJUYtHpkBHllPRW2Qz6ze9MU=;
-        b=4EmNTNAvA4fi50GwnL+54pbw5wnKRnYXonoXBppinGzc1e+a2IgPmyW6gByT4OE8id
-         U6AtvEYgHj/WP6XE79mvyEa38Axip3wblhPi4wv07O1FMDa/2shdGh4vZ9/xJMef3wgc
-         5EBUnaFATuCeOlTWJ8w5vE1Dv2wqT/BwstyEkFI1gt0szcUKYpT687gdDnxSiC342FMs
-         PSPXfynAl2MkQDX3E29/OOyBV+dSQxRlWbIZP/WH4OhgUzj19Zr6OROLJ9VTlrLyJH1k
-         5G4wvIgGNuR9aoKoAWmsjdGqJU9ETrPT82RfxW9S+dFawcGYMqxaR9Tclm6itK7JeuA9
-         f7iA==
-X-Gm-Message-State: AOAM532xz2qefXSOToWO+rlhQ3FDOc9BGCN5iLQyhp1oJySNexodI8Ia
-        qbilj4yjVtihMfISiEFN5Cf3MQ==
-X-Google-Smtp-Source: ABdhPJzjEUgEnwu83xVICmetJe6KIo2pNhiM9LyPqQWtChwb56MNYN056FGAeAfU5VJ2yRExyZqCbQ==
-X-Received: by 2002:a05:6402:320f:b0:42b:c876:4e34 with SMTP id g15-20020a056402320f00b0042bc8764e34mr13061196eda.201.1653645956312;
-        Fri, 27 May 2022 03:05:56 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-53-154.cust.vodafonedsl.it. [188.217.53.154])
-        by smtp.gmail.com with ESMTPSA id e4-20020a170906c00400b006fec8e8eff6sm1320036ejz.176.2022.05.27.03.05.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 03:05:55 -0700 (PDT)
-Date:   Fri, 27 May 2022 12:05:53 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Ming Qian <ming.qian@nxp.com>
-Cc:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [EXT] Re: [PATCH] media: imx-jpeg: Leave a blank space before
- the configuration data
-Message-ID: <20220527100553.GA25548@tom-ThinkPad-T14s-Gen-2i>
-References: <20220527075437.16882-1-ming.qian@nxp.com>
- <20220527075437.16882-3-ming.qian@nxp.com>
- <20220527093824.GF11217@tom-ThinkPad-T14s-Gen-2i>
- <AM6PR04MB634165DE21CEE8B6780CB817E7D89@AM6PR04MB6341.eurprd04.prod.outlook.com>
+        Fri, 27 May 2022 06:08:52 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3DC1271B6;
+        Fri, 27 May 2022 03:08:51 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L8gTJ13c2zgYFH;
+        Fri, 27 May 2022 18:07:16 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 18:08:49 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 18:08:49 +0800
+From:   keliu <liuke94@huawei.com>
+To:     <sean@mess.org>, <mchehab@kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     keliu <liuke94@huawei.com>
+Subject: [PATCH] media: rc: Directly use ida_free()
+Date:   Fri, 27 May 2022 10:30:17 +0000
+Message-ID: <20220527103017.3374446-1-liuke94@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AM6PR04MB634165DE21CEE8B6780CB817E7D89@AM6PR04MB6341.eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, May 27, 2022 at 09:52:48AM +0000, Ming Qian wrote:
-> > From: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > Sent: 2022年5月27日 17:38
-> > To: Ming Qian <ming.qian@nxp.com>
-> > Cc: mchehab@kernel.org; Mirela Rabulea (OSS)
-> > <mirela.rabulea@oss.nxp.com>; hverkuil-cisco@xs4all.nl;
-> > shawnguo@kernel.org; s.hauer@pengutronix.de; kernel@pengutronix.de;
-> > festevam@gmail.com; dl-linux-imx <linux-imx@nxp.com>;
-> > linux-media@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org
-> > Subject: [EXT] Re: [PATCH] media: imx-jpeg: Leave a blank space before the
-> > configuration data
-> > 
-> > Caution: EXT Email
-> > 
-> > Hi Ming,
-> > I think have some comments on the code for this would be nice for the future
-> > 
-> > On Fri, May 27, 2022 at 03:54:35PM +0800, Ming Qian wrote:
-> > > There is a hardware bug that it will load the first 128 bytes of
-> > > configuration data twice, it will led to some configure error.
-> > > so shift the configuration data 128 bytes, and make the first 128
-> > > bytes all zero, then hardware will load the 128 zero twice,
-> > 
-> > From what I've understood you initialize cfg_stm with zeros then you start to
-> > write the configuration from 0x80 (128 bytes), avoiding the hw issue right?
-> > 
-> 
+Use ida_alloc()/ida_free() instead of deprecated
+ida_simple_get()/ida_simple_remove() .
 
-Hi Ming,
+Signed-off-by: keliu <liuke94@huawei.com>
+---
+ drivers/media/rc/lirc_dev.c | 6 +++---
+ drivers/media/rc/rc-main.c  | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-> HI Tommaso,
->     Yes, you're right, there is a hardware bug.
-> I want to write the configuration data from the offset 0x80,
-> And set the first 128 bytes to zero.
-> Then the hardware bug can be avoided.
-
-Thanks for your clarification!
-Unfortunately I can't test this on a real board but the implementation looks
-good to me. Only thing is missing I think we need some notes to keep
-track of this known issue (for the sake of clarity just a note on why we
-start to write from 0x80)
-
-Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-
-Thanks,
-Tommaso
-
-> 
-> Ming.
-> 
-> 
-> > > and ignore them as garbage.
-> > > then the configuration data can be loaded correctly
-> > >
-> > > Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> > > Reviewed-by: Mirela Rabulea <mirela.rabulea@nxp.com>
-> > > ---
-> > >  drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-> > > b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-> > > index 734e1b65fbc7..ad4213e020f3 100644
-> > > --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-> > > +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-> > > @@ -519,6 +519,7 @@ static bool mxc_jpeg_alloc_slot_data(struct
-> > mxc_jpeg_dev *jpeg,
-> > >                                    GFP_ATOMIC);
-> > >       if (!cfg_stm)
-> > >               goto err;
-> > > +     memset(cfg_stm, 0, MXC_JPEG_MAX_CFG_STREAM);
-> > >       jpeg->slot_data[slot].cfg_stream_vaddr = cfg_stm;
-> > >
-> > >  skip_alloc:
-> > > @@ -755,7 +756,7 @@ static unsigned int mxc_jpeg_setup_cfg_stream(void
-> > *cfg_stream_vaddr,
-> > >                                             u32 fourcc,
-> > >                                             u16 w, u16 h)  {
-> > > -     unsigned int offset = 0;
-> > > +     unsigned int offset = 0x80;
-> > >       u8 *cfg = (u8 *)cfg_stream_vaddr;
-> > >       struct mxc_jpeg_sof *sof;
-> > >       struct mxc_jpeg_sos *sos;
-> > > --
-> > > 2.36.1
-> > >
-> > 
-> > Thanks,
-> > Tommaso
-> > 
-> > --
-> > Tommaso Merciai
-> > Embedded Linux Engineer
-> > tommaso.merciai@amarulasolutions.com
-> > __________________________________
-> > 
-> > Amarula Solutions SRL
-> > Via Le Canevare 30, 31100 Treviso, Veneto, IT T. +39 042 243 5310
-> > info@amarulasolutions.com
-> > https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.am
-> > arulasolutions.com%2F&amp;data=05%7C01%7Cming.qian%40nxp.com%7C1
-> > d15c3ca5ba248ae53bc08da3fc4a75b%7C686ea1d3bc2b4c6fa92cd99c5c3016
-> > 35%7C0%7C0%7C637892411093606090%7CUnknown%7CTWFpbGZsb3d8eyJ
-> > WIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7
-> > C3000%7C%7C%7C&amp;sdata=2%2FZlmaidIXmpurQBNW56roQgaWnY7IElP
-> > OJzhFaZlow%3D&amp;reserved=0
-
+diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
+index 765375bda0c6..6cc8c14cf855 100644
+--- a/drivers/media/rc/lirc_dev.c
++++ b/drivers/media/rc/lirc_dev.c
+@@ -715,7 +715,7 @@ int lirc_register(struct rc_dev *dev)
+ 	const char *rx_type, *tx_type;
+ 	int err, minor;
+ 
+-	minor = ida_simple_get(&lirc_ida, 0, RC_DEV_MAX, GFP_KERNEL);
++	minor = ida_alloc_max(&lirc_ida, RC_DEV_MAX-1, GFP_KERNEL);
+ 	if (minor < 0)
+ 		return minor;
+ 
+@@ -760,7 +760,7 @@ int lirc_register(struct rc_dev *dev)
+ 	return 0;
+ 
+ out_ida:
+-	ida_simple_remove(&lirc_ida, minor);
++	ida_free(&lirc_ida, minor);
+ 	return err;
+ }
+ 
+@@ -778,7 +778,7 @@ void lirc_unregister(struct rc_dev *dev)
+ 	spin_unlock_irqrestore(&dev->lirc_fh_lock, flags);
+ 
+ 	cdev_device_del(&dev->lirc_cdev, &dev->lirc_dev);
+-	ida_simple_remove(&lirc_ida, MINOR(dev->lirc_dev.devt));
++	ida_free(&lirc_ida, MINOR(dev->lirc_dev.devt));
+ }
+ 
+ int __init lirc_dev_init(void)
+diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
+index b90438a71c80..aff7c8da1e2f 100644
+--- a/drivers/media/rc/rc-main.c
++++ b/drivers/media/rc/rc-main.c
+@@ -1897,7 +1897,7 @@ int rc_register_device(struct rc_dev *dev)
+ 	if (!dev)
+ 		return -EINVAL;
+ 
+-	minor = ida_simple_get(&rc_ida, 0, RC_DEV_MAX, GFP_KERNEL);
++	minor = ida_alloc_max(&rc_ida, RC_DEV_MAX-1, GFP_KERNEL);
+ 	if (minor < 0)
+ 		return minor;
+ 
+@@ -1980,7 +1980,7 @@ int rc_register_device(struct rc_dev *dev)
+ out_raw:
+ 	ir_raw_event_free(dev);
+ out_minor:
+-	ida_simple_remove(&rc_ida, minor);
++	ida_free(&rc_ida, minor);
+ 	return rc;
+ }
+ EXPORT_SYMBOL_GPL(rc_register_device);
+@@ -2040,7 +2040,7 @@ void rc_unregister_device(struct rc_dev *dev)
+ 
+ 	device_del(&dev->dev);
+ 
+-	ida_simple_remove(&rc_ida, dev->minor);
++	ida_free(&rc_ida, dev->minor);
+ 
+ 	if (!dev->managed_alloc)
+ 		rc_free_device(dev);
 -- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
+2.25.1
 
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
