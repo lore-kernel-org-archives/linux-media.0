@@ -2,50 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30CCDC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 14:28:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82FE2C43217
+	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 14:28:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238224AbiE3O2c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 May 2022 10:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        id S238640AbiE3O2g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 May 2022 10:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241220AbiE3ORW (ORCPT
+        with ESMTP id S242006AbiE3OSS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 May 2022 10:17:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8B9118037;
-        Mon, 30 May 2022 06:44:54 -0700 (PDT)
+        Mon, 30 May 2022 10:18:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6E19D07A;
+        Mon, 30 May 2022 06:48:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B56BB80D83;
-        Mon, 30 May 2022 13:44:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB235C385B8;
-        Mon, 30 May 2022 13:44:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A8FD60EC3;
+        Mon, 30 May 2022 13:48:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBECFC36AE5;
+        Mon, 30 May 2022 13:48:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918292;
-        bh=IditYZuL5cO1NhdK+/B1QlSFhu7Q8kTz3Xx9VY+eUhI=;
+        s=k20201202; t=1653918529;
+        bh=LwQYWt8RcYawY9dcDrj6e1/FgVm0e/k1MIM239Db11s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IbQvUN7iqw6yDxAVajyDIbR8gYd0WLXmGFhDQAD6UjF9Fo/VylH9hd/meHGD4qpwX
-         PKPaAVIHc0PuXuRp9Z3HQpjEPnWOQQ45kqfSWGVe8W/6v1agbGmv7ETZwzRDV/1B/B
-         wwvHq6hYBa307UHRwIV3QPoNQv5qcMdjN26r9c+uy0S5jgWqrbg5MqnvEEZEIsAi0E
-         XY8TFHVNcwrMBpJA4KgfKIZITNlIctzQu1kARGz4U6xXAEZxdfw/Hmgpa0y3YWgvpw
-         K5gu/jPsQQq/NhfNaDcSM083zMEwUUH8/6lR6MZOlQl9MEgsPo9+dHcD2ku3Il6qwI
-         RqGCkM1Xp/H2Q==
+        b=FWXn7kJW6G+TW3X6dhuLrPkJGcWjm+W/x8ULVRhzuPnAPzHRTTNHHR72hYt20M8TE
+         84C30Ms1HyZlrjCTLrfRseOe+6O1vUVwYOJnGcAEpfn/NqvLwPnWZGjnCqsG2vI3S3
+         wMgQOacex0VRNP/c/MB5+3OI2PsdQrjsDALtxU81yQzamsif7Qsu4o3sCj2LXvtdkI
+         68/ZMmUEvO0VIRCmQmKdaDQeJvb1zSotSBc4MLCqpvw/e5Tov4kWqr5qMkUj/vHvCn
+         0drEMEcadg2w9DPuUsnLH3ETbKdk/DnZNfhW6FhJ+SMy0U/NQiILYl/yfzYo4I4bCm
+         F5o8eNQnRLusA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Luca Weiss <luca.weiss@fairphone.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 21/76] media: venus: hfi: avoid null dereference in deinit
-Date:   Mon, 30 May 2022 09:43:11 -0400
-Message-Id: <20220530134406.1934928-21-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 43/55] media: cec-adap.c: fix is_configuring state
+Date:   Mon, 30 May 2022 09:46:49 -0400
+Message-Id: <20220530134701.1935933-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
-References: <20220530134406.1934928-1-sashal@kernel.org>
+In-Reply-To: <20220530134701.1935933-1-sashal@kernel.org>
+References: <20220530134701.1935933-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -54,39 +51,69 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Luca Weiss <luca.weiss@fairphone.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 86594f6af867b5165d2ba7b5a71fae3a5961e56c ]
+[ Upstream commit 59267fc34f4900dcd2ec3295f6be04b79aee2186 ]
 
-If venus_probe fails at pm_runtime_put_sync the error handling first
-calls hfi_destroy and afterwards hfi_core_deinit. As hfi_destroy sets
-core->ops to NULL, hfi_core_deinit cannot call the core_deinit function
-anymore.
+If an adapter is trying to claim a free logical address then it is
+in the 'is_configuring' state. If during that process the cable is
+disconnected (HPD goes low, which in turn invalidates the physical
+address), then cec_adap_unconfigure() is called, and that set the
+is_configuring boolean to false, even though the thread that's
+trying to claim an LA is still running.
 
-Avoid this null pointer derefence by skipping the call when necessary.
+Don't touch the is_configuring bool in cec_adap_unconfigure(), it
+will eventually be cleared by the thread. By making that change
+the cec_config_log_addr() function also had to change: it was
+aborting if is_configuring became false (since that is what
+cec_adap_unconfigure() did), but that no longer works. Instead
+check if the physical address is invalid. That is a much
+more appropriate check anyway.
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+This fixes a bug where the the adapter could be disabled even
+though the device was still configuring. This could cause POLL
+transmits to time out.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/venus/hfi.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/cec/cec-adap.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi.c b/drivers/media/platform/qcom/venus/hfi.c
-index a59022adb14c..966b4d9b57a9 100644
---- a/drivers/media/platform/qcom/venus/hfi.c
-+++ b/drivers/media/platform/qcom/venus/hfi.c
-@@ -104,6 +104,9 @@ int hfi_core_deinit(struct venus_core *core, bool blocking)
- 		mutex_lock(&core->lock);
- 	}
+diff --git a/drivers/media/cec/cec-adap.c b/drivers/media/cec/cec-adap.c
+index 56857ac0a0be..c665f7d20c44 100644
+--- a/drivers/media/cec/cec-adap.c
++++ b/drivers/media/cec/cec-adap.c
+@@ -1263,7 +1263,7 @@ static int cec_config_log_addr(struct cec_adapter *adap,
+ 		 * While trying to poll the physical address was reset
+ 		 * and the adapter was unconfigured, so bail out.
+ 		 */
+-		if (!adap->is_configuring)
++		if (adap->phys_addr == CEC_PHYS_ADDR_INVALID)
+ 			return -EINTR;
  
-+	if (!core->ops)
-+		goto unlock;
-+
- 	ret = core->ops->core_deinit(core);
+ 		if (err)
+@@ -1321,7 +1321,6 @@ static void cec_adap_unconfigure(struct cec_adapter *adap)
+ 	    adap->phys_addr != CEC_PHYS_ADDR_INVALID)
+ 		WARN_ON(adap->ops->adap_log_addr(adap, CEC_LOG_ADDR_INVALID));
+ 	adap->log_addrs.log_addr_mask = 0;
+-	adap->is_configuring = false;
+ 	adap->is_configured = false;
+ 	memset(adap->phys_addrs, 0xff, sizeof(adap->phys_addrs));
+ 	cec_flush(adap);
+@@ -1514,9 +1513,10 @@ static int cec_config_thread_func(void *arg)
+ 	for (i = 0; i < las->num_log_addrs; i++)
+ 		las->log_addr[i] = CEC_LOG_ADDR_INVALID;
+ 	cec_adap_unconfigure(adap);
++	adap->is_configuring = false;
+ 	adap->kthread_config = NULL;
+-	mutex_unlock(&adap->lock);
+ 	complete(&adap->config_completion);
++	mutex_unlock(&adap->lock);
+ 	return 0;
+ }
  
- 	if (!ret)
 -- 
 2.35.1
 
