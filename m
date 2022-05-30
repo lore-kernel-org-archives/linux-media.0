@@ -2,126 +2,105 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AFB1C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 12:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7C2FC433EF
+	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 13:31:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236184AbiE3MsV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 May 2022 08:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        id S234177AbiE3NbB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 May 2022 09:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235764AbiE3MsV (ORCPT
+        with ESMTP id S237185AbiE3NaK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 May 2022 08:48:21 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1563A61613
-        for <linux-media@vger.kernel.org>; Mon, 30 May 2022 05:48:20 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id a11-20020a6b660b000000b0066577bb520dso5455489ioc.8
-        for <linux-media@vger.kernel.org>; Mon, 30 May 2022 05:48:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=fviMwFuCOHUegEvnIFsjn2njt9ZqkztQPMv6YKuPdAA=;
-        b=spq4yfDX5VzejpHhcjVy5+PoOpxgC/lU9Gizl6fTJUGMnJZMvxQ3nxSgtpxsyfgCeT
-         z5wSkuVj9NrchJ+GBAQkSqQo8JhPDogwNejwMYUTj1jEI8Bhs9uXeg4cI6fljx9wCiCB
-         TBp5F2MZUyOJvhSH+UIiXTPj7S4LuGah5RrH2nkacyInPTQH3+yf4/ntip2qOW7ChirV
-         ehAWuJdhByo89geDmtvgHyxzYIPxdIcEfytUCh6Y/tSMQllpy40uJb0OGkxRS4YB2EEK
-         fKlCZfrqAOiAab32gUStR5EU/hiujbuwBWF/JbSfK9G++vIwwtBiCq3YSaE+G8n8l+wT
-         dEvw==
-X-Gm-Message-State: AOAM530zhbgaYzQKqCzy8/HxElqkLSmmLqAG1dkulQyNWHji3SBbx/U4
-        wp4QmJA5iKRJnJt1WrDNWC9dH++uk3iRbQY7EnVOpiUWb9o9
-X-Google-Smtp-Source: ABdhPJycnqRf6X1SBHFUkROsgHjQtpBF8Dm7PO+qwNPyD6tzwCY/b/l83ev4fZbc8+AUU6TRX9qmxx5ZaxRAKtUZFRfbJ4Z8oofl
+        Mon, 30 May 2022 09:30:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A1612A99;
+        Mon, 30 May 2022 06:26:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF14A60E2D;
+        Mon, 30 May 2022 13:26:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72660C36AE3;
+        Mon, 30 May 2022 13:26:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653917200;
+        bh=pzKUd4jQDp6QbQLB8zB3/ApUbmtrmJ5ypu5nhg1Sbac=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IxgSnY85ZCicpptIlin6yHMS+6YOUIOzTHRGX2r4xd1t2A/X9KiWpq3ittlgoYvt5
+         5/9JoU/Q23gIxNRdpBKkWslpr1ZGhVLKc22LgwZZdAHbABDcGAElqdlEdfed+3oecs
+         vqPBf4MnOWQgpW3XfCnlKP2odhwuHCyzEhXQh9OR6+Z/6rfNgwTmdY+zTEe4bDEl7i
+         jg93i2coOZw5Fx36pj/R8cLhhnl/dcQFXu98KZbH3Ac/2IJHD3DTQ/G/CkleIxqYYu
+         l05cEOC6MgoQvNsM0J6wW/f38eKpW+IG+ms3ZOOs6cZ4JZDoe3YKdhsDTTd1KoBKSf
+         oZ1zdEz/cn4/A==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Zheyu Ma <zheyuma97@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 053/159] media: cx25821: Fix the warning when removing the module
+Date:   Mon, 30 May 2022 09:22:38 -0400
+Message-Id: <20220530132425.1929512-53-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
+References: <20220530132425.1929512-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:218b:b0:2d1:1d0c:2e28 with SMTP id
- j11-20020a056e02218b00b002d11d0c2e28mr28257557ila.216.1653914899437; Mon, 30
- May 2022 05:48:19 -0700 (PDT)
-Date:   Mon, 30 May 2022 05:48:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000011e14605e03a125d@google.com>
-Subject: [syzbot] WARNING in dma_map_sgtable (2)
-From:   syzbot <syzbot+3ba551855046ba3b3806@syzkaller.appspotmail.com>
-To:     christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
-        hch@lst.de, iommu@lists.linux-foundation.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, sumit.semwal@linaro.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-syzbot found the following issue on:
+[ Upstream commit 2203436a4d24302871617373a7eb21bc17e38762 ]
 
-HEAD commit:    7e062cda7d90 Merge tag 'net-next-5.19' of git://git.kernel..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=172151d3f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e9d71d3c07c36588
-dashboard link: https://syzkaller.appspot.com/bug?extid=3ba551855046ba3b3806
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12918503f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1386fa39f00000
+When removing the module, we will get the following warning:
 
-Bisection is inconclusive: the issue happens on the oldest tested release.
+[   14.746697] remove_proc_entry: removing non-empty directory 'irq/21', leaking at least 'cx25821[1]'
+[   14.747449] WARNING: CPU: 4 PID: 368 at fs/proc/generic.c:717 remove_proc_entry+0x389/0x3f0
+[   14.751611] RIP: 0010:remove_proc_entry+0x389/0x3f0
+[   14.759589] Call Trace:
+[   14.759792]  <TASK>
+[   14.759975]  unregister_irq_proc+0x14c/0x170
+[   14.760340]  irq_free_descs+0x94/0xe0
+[   14.760640]  mp_unmap_irq+0xb6/0x100
+[   14.760937]  acpi_unregister_gsi_ioapic+0x27/0x40
+[   14.761334]  acpi_pci_irq_disable+0x1d3/0x320
+[   14.761688]  pci_disable_device+0x1ad/0x380
+[   14.762027]  ? _raw_spin_unlock_irqrestore+0x2d/0x60
+[   14.762442]  ? cx25821_shutdown+0x20/0x9f0 [cx25821]
+[   14.762848]  cx25821_finidev+0x48/0xc0 [cx25821]
+[   14.763242]  pci_device_remove+0x92/0x240
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14107ee5f00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=16107ee5f00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=12107ee5f00000
+Fix this by freeing the irq before call pci_disable_device().
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3ba551855046ba3b3806@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3610 at kernel/dma/mapping.c:188 dma_map_sgtable+0x203/0x260 kernel/dma/mapping.c:264
-Modules linked in:
-CPU: 0 PID: 3610 Comm: syz-executor162 Not tainted 5.18.0-syzkaller-04943-g7e062cda7d90 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__dma_map_sg_attrs kernel/dma/mapping.c:188 [inline]
-RIP: 0010:dma_map_sgtable+0x203/0x260 kernel/dma/mapping.c:264
-Code: 75 15 e8 50 5f 14 00 eb cb e8 49 5f 14 00 eb c4 e8 42 5f 14 00 eb bd e8 3b 5f 14 00 0f 0b bd fb ff ff ff eb af e8 2d 5f 14 00 <0f> 0b 31 ed 48 bb 00 00 00 00 00 fc ff df e9 7b ff ff ff 89 e9 80
-RSP: 0018:ffffc9000305fd40 EFLAGS: 00010293
-RAX: ffffffff81723873 RBX: dffffc0000000000 RCX: ffff88801fbb8000
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000002
-RBP: ffff8881487e5408 R08: ffffffff81723743 R09: ffffed1003592c9e
-R10: ffffed1003592c9e R11: 1ffff11003592c9c R12: ffff8881487e5000
-R13: ffff88801ac964e0 R14: 0000000000000000 R15: 0000000000000001
-FS:  0000555556c2a300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000005d84c8 CR3: 000000001f1ef000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- get_sg_table+0xf9/0x150 drivers/dma-buf/udmabuf.c:72
- begin_cpu_udmabuf+0xf5/0x160 drivers/dma-buf/udmabuf.c:126
- dma_buf_begin_cpu_access+0xd8/0x170 drivers/dma-buf/dma-buf.c:1172
- dma_buf_ioctl+0x2a0/0x2f0 drivers/dma-buf/dma-buf.c:363
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f8bf9c6dc19
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd7cfae1d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f8bf9c6dc19
-RDX: 0000000020000100 RSI: 0000000040086200 RDI: 0000000000000006
-RBP: 00007f8bf9c31dc0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f8bf9c31e50
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/media/pci/cx25821/cx25821-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
+index 3078a39f0b95..6627fa9166d3 100644
+--- a/drivers/media/pci/cx25821/cx25821-core.c
++++ b/drivers/media/pci/cx25821/cx25821-core.c
+@@ -1332,11 +1332,11 @@ static void cx25821_finidev(struct pci_dev *pci_dev)
+ 	struct cx25821_dev *dev = get_cx25821(v4l2_dev);
+ 
+ 	cx25821_shutdown(dev);
+-	pci_disable_device(pci_dev);
+ 
+ 	/* unregister stuff */
+ 	if (pci_dev->irq)
+ 		free_irq(pci_dev->irq, dev);
++	pci_disable_device(pci_dev);
+ 
+ 	cx25821_dev_unregister(dev);
+ 	v4l2_device_unregister(v4l2_dev);
+-- 
+2.35.1
+
