@@ -2,45 +2,49 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BEC9C4321E
-	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 14:21:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 856BBC433F5
+	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 14:21:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240686AbiE3OUL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 May 2022 10:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
+        id S240579AbiE3OTz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 May 2022 10:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241240AbiE3ORX (ORCPT
+        with ESMTP id S241405AbiE3ORe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 May 2022 10:17:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8F09B18A;
-        Mon, 30 May 2022 06:45:00 -0700 (PDT)
+        Mon, 30 May 2022 10:17:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DA79C2DB;
+        Mon, 30 May 2022 06:46:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BEDB60F24;
-        Mon, 30 May 2022 13:45:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E892BC385B8;
-        Mon, 30 May 2022 13:44:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5385560EC3;
+        Mon, 30 May 2022 13:46:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E00C385B8;
+        Mon, 30 May 2022 13:46:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918299;
-        bh=ugnEVQkrWoGa9gsUsWHCqnSwM+7baB/jOEkY17+HwqE=;
+        s=k20201202; t=1653918388;
+        bh=CTn9HCUjXYHSwA99rQmy+i5tCftAg7PvxJaOxRnYJjo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qoKiuZEk/K91nSvt3OxNK+sWR1c7fliMTabL3zAbOg+gua60EXYUZ2p4J9HrtrN9p
-         D/HlwTfBu1z3YuH1u1HwIlDb9+zjm2yp+Mnl/BvTXZ4Lnic+hNH5XmTUZnCpS4ZF9S
-         ohh5ryLxIgH/ubec+6gAKpTu0x+L2okYeBKcLVyj/OJe0NxhWk5Ve90JAjCkUfv5ET
-         D5v8a1leJTf0z/77Xh7nhJ1gSZlPSMbYC0KcMlUkVWd0TlGu0apregQScDcHSNfEJt
-         2ktrcw0gRogzPD1VybYqJQdZePujVsWpze8Nr20HgyowJJPMPuyknNDP9OBPIuooDG
-         MzDG7v9gaiWUQ==
+        b=uTHMoz7HU13xEHD2CgNB/6Rs68PX2q8FhJhl2DH6HmMyWalNclQhC9tHABoEnw9Ch
+         sGFhT54cItGLM6dqKO0cfIqybjZclY+YdfzkD+4s/R7I8rxgg/CqTIQ7hOc8gY/ysG
+         fKkBWQqjx+m3O+AKbe7WFZ73/uTsC9s1tGx96LbqibqZDa4GTsmERiMK4ZAXpbKSF7
+         I3iRRAtJ/RpbyZ/GoVu75BykKDiAM2FI/s6w1jRszqYTp+cvdD2+mIm+sWCQbdEVXg
+         iTS0X4pfgkKG4KAfeZt9to0r4GUO6x63sRsb/Y7qGEGK9oqyxXppjBSsCYU0S0apUt
+         l5QNworoJYAoA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zheyu Ma <zheyuma97@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Kwanghoon Son <k.son@samsung.com>,
+        kernel test robot <lkp@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 23/76] media: cx25821: Fix the warning when removing the module
-Date:   Mon, 30 May 2022 09:43:13 -0400
-Message-Id: <20220530134406.1934928-23-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        krzysztof.kozlowski@linaro.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 64/76] media: exynos4-is: Fix compile warning
+Date:   Mon, 30 May 2022 09:43:54 -0400
+Message-Id: <20220530134406.1934928-64-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
 References: <20220530134406.1934928-1-sashal@kernel.org>
@@ -52,55 +56,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Kwanghoon Son <k.son@samsung.com>
 
-[ Upstream commit 2203436a4d24302871617373a7eb21bc17e38762 ]
+[ Upstream commit e080f5c1f2b6d02c02ee5d674e0e392ccf63bbaf ]
 
-When removing the module, we will get the following warning:
+Declare static on function 'fimc_isp_video_device_unregister'.
 
-[   14.746697] remove_proc_entry: removing non-empty directory 'irq/21', leaking at least 'cx25821[1]'
-[   14.747449] WARNING: CPU: 4 PID: 368 at fs/proc/generic.c:717 remove_proc_entry+0x389/0x3f0
-[   14.751611] RIP: 0010:remove_proc_entry+0x389/0x3f0
-[   14.759589] Call Trace:
-[   14.759792]  <TASK>
-[   14.759975]  unregister_irq_proc+0x14c/0x170
-[   14.760340]  irq_free_descs+0x94/0xe0
-[   14.760640]  mp_unmap_irq+0xb6/0x100
-[   14.760937]  acpi_unregister_gsi_ioapic+0x27/0x40
-[   14.761334]  acpi_pci_irq_disable+0x1d3/0x320
-[   14.761688]  pci_disable_device+0x1ad/0x380
-[   14.762027]  ? _raw_spin_unlock_irqrestore+0x2d/0x60
-[   14.762442]  ? cx25821_shutdown+0x20/0x9f0 [cx25821]
-[   14.762848]  cx25821_finidev+0x48/0xc0 [cx25821]
-[   14.763242]  pci_device_remove+0x92/0x240
+When VIDEO_EXYNOS4_ISP_DMA_CAPTURE=n, compiler warns about
+warning: no previous prototype for function [-Wmissing-prototypes]
 
-Fix this by freeing the irq before call pci_disable_device().
-
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Kwanghoon Son <k.son@samsung.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx25821/cx25821-core.c | 2 +-
+ drivers/media/platform/exynos4-is/fimc-isp-video.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
-index 285047b32c44..a3d45287a534 100644
---- a/drivers/media/pci/cx25821/cx25821-core.c
-+++ b/drivers/media/pci/cx25821/cx25821-core.c
-@@ -1340,11 +1340,11 @@ static void cx25821_finidev(struct pci_dev *pci_dev)
- 	struct cx25821_dev *dev = get_cx25821(v4l2_dev);
+diff --git a/drivers/media/platform/exynos4-is/fimc-isp-video.h b/drivers/media/platform/exynos4-is/fimc-isp-video.h
+index edcb3a5e3cb9..2dd4ddbc748a 100644
+--- a/drivers/media/platform/exynos4-is/fimc-isp-video.h
++++ b/drivers/media/platform/exynos4-is/fimc-isp-video.h
+@@ -32,7 +32,7 @@ static inline int fimc_isp_video_device_register(struct fimc_isp *isp,
+ 	return 0;
+ }
  
- 	cx25821_shutdown(dev);
--	pci_disable_device(pci_dev);
- 
- 	/* unregister stuff */
- 	if (pci_dev->irq)
- 		free_irq(pci_dev->irq, dev);
-+	pci_disable_device(pci_dev);
- 
- 	cx25821_dev_unregister(dev);
- 	v4l2_device_unregister(v4l2_dev);
+-void fimc_isp_video_device_unregister(struct fimc_isp *isp,
++static inline void fimc_isp_video_device_unregister(struct fimc_isp *isp,
+ 				enum v4l2_buf_type type)
+ {
+ }
 -- 
 2.35.1
 
