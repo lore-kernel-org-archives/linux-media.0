@@ -2,50 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 611D0C43219
-	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 14:19:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 763D9C4332F
+	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 14:21:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240474AbiE3OTr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 May 2022 10:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
+        id S237412AbiE3OTw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 May 2022 10:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241399AbiE3ORe (ORCPT
+        with ESMTP id S240174AbiE3OPu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 May 2022 10:17:34 -0400
+        Mon, 30 May 2022 10:15:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFED690CCD;
-        Mon, 30 May 2022 06:46:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B85DEBA95;
+        Mon, 30 May 2022 06:43:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71235B80D6B;
-        Mon, 30 May 2022 13:46:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A2E5C3411C;
-        Mon, 30 May 2022 13:46:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADA96B80DB7;
+        Mon, 30 May 2022 13:43:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F08FEC385B8;
+        Mon, 30 May 2022 13:43:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918369;
-        bh=B5GNaQpb3YP1aqvByEDzMbFq8eopAP8XA9OqX5EGz9A=;
+        s=k20201202; t=1653918200;
+        bh=lyG/J14veE4PPv7P93S7wmHZ8PtfDwL4ePf9On8nxYM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BqtmBHzN2GXcL63Bakr/cXoudkiC1/NNtfIV7LL7Bxh772A3GvpmGxP3hWlhWYCSU
-         em0uU5w/BHluTPrU/XD3W9Ipb5GgjIfa8AYfHYrXHuM91p8GJm/xPJlCOR1e5xtKQ4
-         pPc2COGCfnyG82IVXc2/mxggxz0nTGPV/tGoDitHgHp0i662chGiutZm2CE8XXn0Oi
-         tfBiThSIW8fmsRbvBgf9b0Qag7+rXNNAtmlhqPKkxxKOka6tF1mVuC0Nne8MuQ+euH
-         ITvStH1+lQbYsJDaSTMehKjyfhRX0Ui1Vb5V94LNwtndL763Ruf8FWb03zz+cVPEyv
-         +ExJ5UiXFhF1A==
+        b=qpxDLNSZad9C5mn4P1PtLw/PYrQHhq8s3bhU93V8DK8A4nnUCa8BNRjcMbSZq1P2T
+         hnkdDjwlsMRcZwXHxBkgTTc/YRt/63Iri9MaJhI5PgvWhtXeOLKNVv7u/pZ9MFT45d
+         a5/qFahL4Cx2hL0G9U03L49lkrWToOqTJ5IbOGiK6ff2z78D858Giqo5JTUMtlowS/
+         8N8z9plMbHIzL9uxdl2K26FMIQexxo5whrueklP4Gg0Th+GEuY/R72ZIakMrifqcL9
+         vymjhd6jPqqes0sLJnCjy1/EFDMVRRAHTsvn7d6U3oHXi6WsEyi+0MsAQoZPa2uQch
+         7DR/9ad1y2FsQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+Cc:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linmq006@gmail.com,
-        martin.weber@br-automation.com, wsa+renesas@sang-engineering.com,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 56/76] media: coda: limit frame interval enumeration to supported encoder frame sizes
-Date:   Mon, 30 May 2022 09:43:46 -0400
-Message-Id: <20220530134406.1934928-56-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.15 092/109] media: hantro: Stop using H.264 parameter pic_num
+Date:   Mon, 30 May 2022 09:38:08 -0400
+Message-Id: <20220530133825.1933431-92-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
-References: <20220530134406.1934928-1-sashal@kernel.org>
+In-Reply-To: <20220530133825.1933431-1-sashal@kernel.org>
+References: <20220530133825.1933431-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -54,67 +56,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Philipp Zabel <p.zabel@pengutronix.de>
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-[ Upstream commit 67e33dd957880879e785cfea83a3aa24bd5c5577 ]
+[ Upstream commit 831410700909f4e29d5af1ef26b8c59fc2d1988e ]
 
-Let VIDIOC_ENUM_FRAMEINTERVALS return -EINVAL if userspace queries
-frame intervals for frame sizes unsupported by the encoder. Fixes the
-following v4l2-compliance failure:
+The hardware expects FrameNumWrap or long_term_frame_idx. Picture
+numbers are per field, and are mostly used during the memory
+management process, which is done in userland. This fixes two
+ITU conformance tests:
 
-		fail: v4l2-test-formats.cpp(123): found frame intervals for invalid size 47x16
-		fail: v4l2-test-formats.cpp(282): node->codec_mask & STATEFUL_ENCODER
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: FAIL
+  - MR6_BT_B
+  - MR8_BT_B
 
-[hverkuil: drop incorrect 'For decoder devices, return -ENOTTY.' in the commit log]
-
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/coda/coda-common.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ drivers/staging/media/hantro/hantro_h264.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index 2333079a83c7..99f6d22e0c3c 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -1318,7 +1318,8 @@ static int coda_enum_frameintervals(struct file *file, void *fh,
- 				    struct v4l2_frmivalenum *f)
- {
- 	struct coda_ctx *ctx = fh_to_ctx(fh);
--	int i;
-+	struct coda_q_data *q_data;
-+	const struct coda_codec *codec;
+diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
+index 0b4d2491be3b..228629fb3cdf 100644
+--- a/drivers/staging/media/hantro/hantro_h264.c
++++ b/drivers/staging/media/hantro/hantro_h264.c
+@@ -354,8 +354,6 @@ u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_idx)
  
- 	if (f->index)
- 		return -EINVAL;
-@@ -1327,12 +1328,19 @@ static int coda_enum_frameintervals(struct file *file, void *fh,
- 	if (!ctx->vdoa && f->pixel_format == V4L2_PIX_FMT_YUYV)
- 		return -EINVAL;
+ 	if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+ 		return 0;
+-	if (dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
+-		return dpb->pic_num;
+ 	return dpb->frame_num;
+ }
  
--	for (i = 0; i < CODA_MAX_FORMATS; i++) {
--		if (f->pixel_format == ctx->cvd->src_formats[i] ||
--		    f->pixel_format == ctx->cvd->dst_formats[i])
--			break;
-+	if (coda_format_normalize_yuv(f->pixel_format) == V4L2_PIX_FMT_YUV420) {
-+		q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+		codec = coda_find_codec(ctx->dev, f->pixel_format,
-+					q_data->fourcc);
-+	} else {
-+		codec = coda_find_codec(ctx->dev, V4L2_PIX_FMT_YUV420,
-+					f->pixel_format);
- 	}
--	if (i == CODA_MAX_FORMATS)
-+	if (!codec)
-+		return -EINVAL;
-+
-+	if (f->width < MIN_W || f->width > codec->max_w ||
-+	    f->height < MIN_H || f->height > codec->max_h)
- 		return -EINVAL;
- 
- 	f->type = V4L2_FRMIVAL_TYPE_CONTINUOUS;
 -- 
 2.35.1
 
