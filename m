@@ -2,48 +2,48 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EFA4C4332F
-	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 14:31:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 459E3C352AA
+	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 14:31:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240838AbiE3O37 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 May 2022 10:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
+        id S239913AbiE3Obs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 May 2022 10:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242252AbiE3O2C (ORCPT
+        with ESMTP id S242492AbiE3ObO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 May 2022 10:28:02 -0400
+        Mon, 30 May 2022 10:31:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9147482150;
-        Mon, 30 May 2022 06:51:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A76106552;
+        Mon, 30 May 2022 06:53:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D359B80DE8;
-        Mon, 30 May 2022 13:51:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09C09C385B8;
-        Mon, 30 May 2022 13:51:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47C32B80DBB;
+        Mon, 30 May 2022 13:52:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34895C36AE3;
+        Mon, 30 May 2022 13:52:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918688;
-        bh=Bt/WrTe7+aWZR4Wot7rroLcEUoIRwN1SXt9PKv0HDJI=;
+        s=k20201202; t=1653918759;
+        bh=Pc6AH3aNje77UUx9oth6RMHG9z01vE/DhvECuLUn6TE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kMe6hbs98eIWiKi6H96yBXhExVphhQ9XakFaYWhENV1ZrUD3T4YJZ7rlk+QC9kK4T
-         JXur58ysEkdLVaqERgXwlpZnNE3+5aKs1swM8yqJ4MkkhDnIUe4G47ALGJ71u119jc
-         h/ds2DM0AFnPP0rvMogf/zYPegUxy0myuVgWSpGKpbyLKYZhxhy1ns4p/Yw/7L2cf8
-         rdF3BiDFZe0MJOaSc69f8Bgwn9XTBvmM49cSD3JShdkui4IanejGzJ1D622MHQKXys
-         b3Cyotgx38Nx9pPA+IBg38OG2pgoZsEj5hRAR7Ghl/59n1lfe8frdd3BYF3gW3aWO4
-         Ah05XhvU8LJYw==
+        b=N9DhURA6rgch2TVmXdlhwhqZ5JgR71x7fCoK5qI4Shz9gUqGOt9ypcwlVFr9zcqr0
+         kO5eBco+cTnhNRztU0BRaAM7abtot5YOHJsKVom95NN90bQVzsMDHJcjGEhgYfZRfT
+         XE3YuSA1cX2h0vbrk5BeSVDJvMU851BGe9ukGVXTBErVufzOgxsHXrNAnPmoqOUmU8
+         SwnUsHLyDrrMk3qpVEXwitmK33+kvbYHUVhITwqgwF3JRpXn/sBEbeAL8t1vVe0+HE
+         R1v54+uGdvs+ZV1qHLzc7reowOALP/YeRssT84kHAQrAZlBcEGngSZh+qsZyD8bDt+
+         m1vn0vMqG/Rog==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zheyu Ma <zheyuma97@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 12/29] media: cx25821: Fix the warning when removing the module
-Date:   Mon, 30 May 2022 09:50:39 -0400
-Message-Id: <20220530135057.1937286-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 10/24] media: cx25821: Fix the warning when removing the module
+Date:   Mon, 30 May 2022 09:51:57 -0400
+Message-Id: <20220530135211.1937674-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530135057.1937286-1-sashal@kernel.org>
-References: <20220530135057.1937286-1-sashal@kernel.org>
+In-Reply-To: <20220530135211.1937674-1-sashal@kernel.org>
+References: <20220530135211.1937674-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -85,10 +85,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
-index 79582071f139..c5e0fa447e4d 100644
+index d58c58e61bde..acd896ca1339 100644
 --- a/drivers/media/pci/cx25821/cx25821-core.c
 +++ b/drivers/media/pci/cx25821/cx25821-core.c
-@@ -1350,11 +1350,11 @@ static void cx25821_finidev(struct pci_dev *pci_dev)
+@@ -1354,11 +1354,11 @@ static void cx25821_finidev(struct pci_dev *pci_dev)
  	struct cx25821_dev *dev = get_cx25821(v4l2_dev);
  
  	cx25821_shutdown(dev);
