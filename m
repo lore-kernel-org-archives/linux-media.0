@@ -2,52 +2,47 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 763D9C4332F
-	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 14:21:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36957C4167E
+	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 14:21:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237412AbiE3OTw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 May 2022 10:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
+        id S240630AbiE3OUA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 May 2022 10:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240174AbiE3OPu (ORCPT
+        with ESMTP id S241401AbiE3ORe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 May 2022 10:15:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B85DEBA95;
-        Mon, 30 May 2022 06:43:23 -0700 (PDT)
+        Mon, 30 May 2022 10:17:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DF491571;
+        Mon, 30 May 2022 06:46:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADA96B80DB7;
-        Mon, 30 May 2022 13:43:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F08FEC385B8;
-        Mon, 30 May 2022 13:43:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59C4460F14;
+        Mon, 30 May 2022 13:46:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13741C385B8;
+        Mon, 30 May 2022 13:46:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918200;
-        bh=lyG/J14veE4PPv7P93S7wmHZ8PtfDwL4ePf9On8nxYM=;
+        s=k20201202; t=1653918373;
+        bh=mQu+7jJPIF9TEi1yf1eSXdv0q/LGMuG0jvAGx/7bRBQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qpxDLNSZad9C5mn4P1PtLw/PYrQHhq8s3bhU93V8DK8A4nnUCa8BNRjcMbSZq1P2T
-         hnkdDjwlsMRcZwXHxBkgTTc/YRt/63Iri9MaJhI5PgvWhtXeOLKNVv7u/pZ9MFT45d
-         a5/qFahL4Cx2hL0G9U03L49lkrWToOqTJ5IbOGiK6ff2z78D858Giqo5JTUMtlowS/
-         8N8z9plMbHIzL9uxdl2K26FMIQexxo5whrueklP4Gg0Th+GEuY/R72ZIakMrifqcL9
-         vymjhd6jPqqes0sLJnCjy1/EFDMVRRAHTsvn7d6U3oHXi6WsEyi+0MsAQoZPa2uQch
-         7DR/9ad1y2FsQ==
+        b=ZUJGTClpjoJsDH43AbXBC2deuMwHSl4gxKsXn67XM2QOiYUWQKuN+Vhpj02Np25CF
+         vT0bArC/u2n6aWXIULD5rW1BL0GPVM36EGeUs7T+r5ltDaccL1JCZXAF90tY9Iobjg
+         bYHFYsTYrczXOSx5hPpozn+Y5o6Iu9st3Wu8jOCNuxIV5cyG/GcnQTIfQ+9vhMet4/
+         ElwXjE+s1+Lb0PA+4NNbw5DB8ZF6S4Q43PxbxRhlP0h3CxsYbu8j/Yo2sCCz8CChF1
+         A8ZDtGwAz88hkQtNAUnrp1NubnkP9FFLg7uiKDFlqi/vnX9Jw3jodrFhLjq8QDNjX7
+         9ZEyLJaKZfT/Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 092/109] media: hantro: Stop using H.264 parameter pic_num
-Date:   Mon, 30 May 2022 09:38:08 -0400
-Message-Id: <20220530133825.1933431-92-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 58/76] media: cec-adap.c: fix is_configuring state
+Date:   Mon, 30 May 2022 09:43:48 -0400
+Message-Id: <20220530134406.1934928-58-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530133825.1933431-1-sashal@kernel.org>
-References: <20220530133825.1933431-1-sashal@kernel.org>
+In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
+References: <20220530134406.1934928-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,38 +51,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 831410700909f4e29d5af1ef26b8c59fc2d1988e ]
+[ Upstream commit 59267fc34f4900dcd2ec3295f6be04b79aee2186 ]
 
-The hardware expects FrameNumWrap or long_term_frame_idx. Picture
-numbers are per field, and are mostly used during the memory
-management process, which is done in userland. This fixes two
-ITU conformance tests:
+If an adapter is trying to claim a free logical address then it is
+in the 'is_configuring' state. If during that process the cable is
+disconnected (HPD goes low, which in turn invalidates the physical
+address), then cec_adap_unconfigure() is called, and that set the
+is_configuring boolean to false, even though the thread that's
+trying to claim an LA is still running.
 
-  - MR6_BT_B
-  - MR8_BT_B
+Don't touch the is_configuring bool in cec_adap_unconfigure(), it
+will eventually be cleared by the thread. By making that change
+the cec_config_log_addr() function also had to change: it was
+aborting if is_configuring became false (since that is what
+cec_adap_unconfigure() did), but that no longer works. Instead
+check if the physical address is invalid. That is a much
+more appropriate check anyway.
 
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+This fixes a bug where the the adapter could be disabled even
+though the device was still configuring. This could cause POLL
+transmits to time out.
+
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/hantro/hantro_h264.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/cec/core/cec-adap.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
-index 0b4d2491be3b..228629fb3cdf 100644
---- a/drivers/staging/media/hantro/hantro_h264.c
-+++ b/drivers/staging/media/hantro/hantro_h264.c
-@@ -354,8 +354,6 @@ u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_idx)
+diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
+index 2e5698fbc3a8..e23aa608f66f 100644
+--- a/drivers/media/cec/core/cec-adap.c
++++ b/drivers/media/cec/core/cec-adap.c
+@@ -1271,7 +1271,7 @@ static int cec_config_log_addr(struct cec_adapter *adap,
+ 		 * While trying to poll the physical address was reset
+ 		 * and the adapter was unconfigured, so bail out.
+ 		 */
+-		if (!adap->is_configuring)
++		if (adap->phys_addr == CEC_PHYS_ADDR_INVALID)
+ 			return -EINTR;
  
- 	if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
- 		return 0;
--	if (dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
--		return dpb->pic_num;
- 	return dpb->frame_num;
+ 		if (err)
+@@ -1328,7 +1328,6 @@ static void cec_adap_unconfigure(struct cec_adapter *adap)
+ 	    adap->phys_addr != CEC_PHYS_ADDR_INVALID)
+ 		WARN_ON(adap->ops->adap_log_addr(adap, CEC_LOG_ADDR_INVALID));
+ 	adap->log_addrs.log_addr_mask = 0;
+-	adap->is_configuring = false;
+ 	adap->is_configured = false;
+ 	cec_flush(adap);
+ 	wake_up_interruptible(&adap->kthread_waitq);
+@@ -1520,9 +1519,10 @@ static int cec_config_thread_func(void *arg)
+ 	for (i = 0; i < las->num_log_addrs; i++)
+ 		las->log_addr[i] = CEC_LOG_ADDR_INVALID;
+ 	cec_adap_unconfigure(adap);
++	adap->is_configuring = false;
+ 	adap->kthread_config = NULL;
+-	mutex_unlock(&adap->lock);
+ 	complete(&adap->config_completion);
++	mutex_unlock(&adap->lock);
+ 	return 0;
  }
  
 -- 
