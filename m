@@ -2,47 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15776C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 13:48:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92BDDC433EF
+	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 13:48:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238169AbiE3NsV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 May 2022 09:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
+        id S238176AbiE3NsY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 May 2022 09:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238773AbiE3Np4 (ORCPT
+        with ESMTP id S238825AbiE3Np6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 May 2022 09:45:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CE8A006E;
-        Mon, 30 May 2022 06:33:33 -0700 (PDT)
+        Mon, 30 May 2022 09:45:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EA7A0D26;
+        Mon, 30 May 2022 06:33:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C179BB80DB0;
-        Mon, 30 May 2022 13:33:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A0E5C385B8;
-        Mon, 30 May 2022 13:33:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5D6E60F37;
+        Mon, 30 May 2022 13:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D92C3411A;
+        Mon, 30 May 2022 13:33:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917609;
-        bh=CHObYO3QTAakNe5T3Fe914iXUbpSy1aT88lWYZtUQ/Y=;
+        s=k20201202; t=1653917617;
+        bh=dnVq8A+QaRcFBuWkdXsDnNqK0ZQ2F6cv/bJXs+evh2Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S3q611tMgYLwVVLXnM9npCzgnB+kWTRnFanJRgz5EzTXHwcCnbdDRD0Y76jxezlmR
-         bdy9Fwj4euCd2j+L0Ho+znBLPTFSU+8q/dp4QTAoDIegI4IQTKcbaq8+CUbIp+/bN8
-         9p1KQNOdxwoChcpVBAF6iJ/C9xBo1iwynFQ/6gMuazoG+oFOO5lvjqjbyIT0fmINZZ
-         oSZ6yRZv3aFyKgvhqm6C79m0mj4AYRUDhfYxCv0vqFlPxxSNTDN1xMVavvzrK4NiBY
-         JW3msTpLk9OxdGDjn6U9l1yAPFGPo6Rtji9NpuF0iBkWE2gBN1KYqmi+o1f4sde7Lv
-         V40I5vBR8AetQ==
+        b=Q9aSRzWzfyfMX2k018OrisoMfJtXEyFDeWGkOd24xMy3DBztPk1A68LNzpNC17cmO
+         3R2EA6K/sTs8nc1T1fRMUSyOeTmMwWjTC8f/jJFbW/7Nxq6MawPDE5sqKH1l8KCjS3
+         /8edRW3TZjFvd+xBvZGD42uzItLSXfWvnJ4QDBo/g8wtiMth9J4jXDod3aGyBfIuFx
+         jKQF6Kg+HuX6Qg4EMCEDE9vGEoDT50A5XpKF6DQh0+YPS0SUODJktfSVF+V0AF1p/v
+         WnsKrINXbXXdSDwKgN57NNMWk0aFtEq0HMGrdCLDgVFE2NYMovwSYP08gWSjWkpOMo
+         nvhgmpydtJJ3Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Bingbu Cao <bingbu.cao@intel.com>,
+Cc:     Zheyu Ma <zheyuma97@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, dongchun.zhu@mediatek.com,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 039/135] media: Revert "media: dw9768: activate runtime PM and turn off device"
-Date:   Mon, 30 May 2022 09:29:57 -0400
-Message-Id: <20220530133133.1931716-39-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 042/135] media: pci: cx23885: Fix the error handling in cx23885_initdev()
+Date:   Mon, 30 May 2022 09:30:00 -0400
+Message-Id: <20220530133133.1931716-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530133133.1931716-1-sashal@kernel.org>
 References: <20220530133133.1931716-1-sashal@kernel.org>
@@ -54,48 +52,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 7dd0f93a31af03cba81c684c4c361bba510ffe71 ]
+[ Upstream commit e8123311cf06d7dae71e8c5fe78e0510d20cd30b ]
 
-This reverts commit c09d776eaa060534a1663e3b89d842db3e1d9076.
+When the driver fails to call the dma_set_mask(), the driver will get
+the following splat:
 
-Revert the commit as it breaks runtime PM support on OF based systems.
-More fixes to the driver are needed.
+[   55.853884] BUG: KASAN: use-after-free in __process_removed_driver+0x3c/0x240
+[   55.854486] Read of size 8 at addr ffff88810de60408 by task modprobe/590
+[   55.856822] Call Trace:
+[   55.860327]  __process_removed_driver+0x3c/0x240
+[   55.861347]  bus_for_each_dev+0x102/0x160
+[   55.861681]  i2c_del_driver+0x2f/0x50
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
+This is because the driver has initialized the i2c related resources
+in cx23885_dev_setup() but not released them in error handling, fix this
+bug by modifying the error path that jumps after failing to call the
+dma_set_mask().
+
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/dw9768.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/media/pci/cx23885/cx23885-core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/dw9768.c b/drivers/media/i2c/dw9768.c
-index 65c6acf3ced9..c086580efac7 100644
---- a/drivers/media/i2c/dw9768.c
-+++ b/drivers/media/i2c/dw9768.c
-@@ -469,11 +469,6 @@ static int dw9768_probe(struct i2c_client *client)
- 
- 	dw9768->sd.entity.function = MEDIA_ENT_F_LENS;
- 
--	/*
--	 * Device is already turned on by i2c-core with ACPI domain PM.
--	 * Attempt to turn off the device to satisfy the privacy LED concerns.
--	 */
--	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
- 	if (!pm_runtime_enabled(dev)) {
- 		ret = dw9768_runtime_resume(dev);
-@@ -488,7 +483,6 @@ static int dw9768_probe(struct i2c_client *client)
- 		dev_err(dev, "failed to register V4L2 subdev: %d", ret);
- 		goto err_power_off;
+diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/cx23885/cx23885-core.c
+index f8f2ff3b00c3..a07b18f2034e 100644
+--- a/drivers/media/pci/cx23885/cx23885-core.c
++++ b/drivers/media/pci/cx23885/cx23885-core.c
+@@ -2165,7 +2165,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
+ 	err = dma_set_mask(&pci_dev->dev, 0xffffffff);
+ 	if (err) {
+ 		pr_err("%s/0: Oops: no 32bit PCI DMA ???\n", dev->name);
+-		goto fail_ctrl;
++		goto fail_dma_set_mask;
  	}
--	pm_runtime_idle(dev);
+ 
+ 	err = request_irq(pci_dev->irq, cx23885_irq,
+@@ -2173,7 +2173,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
+ 	if (err < 0) {
+ 		pr_err("%s: can't get IRQ %d\n",
+ 		       dev->name, pci_dev->irq);
+-		goto fail_irq;
++		goto fail_dma_set_mask;
+ 	}
+ 
+ 	switch (dev->board) {
+@@ -2195,7 +2195,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
  
  	return 0;
  
+-fail_irq:
++fail_dma_set_mask:
+ 	cx23885_dev_unregister(dev);
+ fail_ctrl:
+ 	v4l2_ctrl_handler_free(hdl);
 -- 
 2.35.1
 
