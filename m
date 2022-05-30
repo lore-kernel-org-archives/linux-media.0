@@ -2,45 +2,45 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7C2FC433EF
-	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 13:31:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81C8DC4332F
+	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 13:31:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234177AbiE3NbB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 May 2022 09:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
+        id S236939AbiE3NbE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 May 2022 09:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237185AbiE3NaK (ORCPT
+        with ESMTP id S237115AbiE3NaG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 May 2022 09:30:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A1612A99;
-        Mon, 30 May 2022 06:26:41 -0700 (PDT)
+        Mon, 30 May 2022 09:30:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EFDBC86;
+        Mon, 30 May 2022 06:26:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF14A60E2D;
-        Mon, 30 May 2022 13:26:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72660C36AE3;
-        Mon, 30 May 2022 13:26:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CE6060E2D;
+        Mon, 30 May 2022 13:26:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F57C3411C;
+        Mon, 30 May 2022 13:26:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917200;
-        bh=pzKUd4jQDp6QbQLB8zB3/ApUbmtrmJ5ypu5nhg1Sbac=;
+        s=k20201202; t=1653917190;
+        bh=cnzevXgz+waa72ojOU4KwgyU+p6nulyrqLCnlw984fs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IxgSnY85ZCicpptIlin6yHMS+6YOUIOzTHRGX2r4xd1t2A/X9KiWpq3ittlgoYvt5
-         5/9JoU/Q23gIxNRdpBKkWslpr1ZGhVLKc22LgwZZdAHbABDcGAElqdlEdfed+3oecs
-         vqPBf4MnOWQgpW3XfCnlKP2odhwuHCyzEhXQh9OR6+Z/6rfNgwTmdY+zTEe4bDEl7i
-         jg93i2coOZw5Fx36pj/R8cLhhnl/dcQFXu98KZbH3Ac/2IJHD3DTQ/G/CkleIxqYYu
-         l05cEOC6MgoQvNsM0J6wW/f38eKpW+IG+ms3ZOOs6cZ4JZDoe3YKdhsDTTd1KoBKSf
-         oZ1zdEz/cn4/A==
+        b=ng+ResfkkVGLko3kl/PtGZZJnpfidk2LUwDcTry9/UDJjg+XMMB4fdgqSTVk677Tu
+         cvaDeinZWgmQTY1ZAzy2j+umP59ifcaILkM6LcD/UbKkOxgKPCRIu0BbivgIQ+H+k5
+         /GG+Vxh/+e1ezq0z3VckZMu7XToOW/2cGXsig2glvc6d1m0wURMfI0R0ZqrY8TeG3B
+         gVx3hP9yo/sT9+X2mWLE/OIs7KHHzPUDVaz0RtkxezM65DjE/QWXemZcYw9dz4ITWy
+         kFEVVcgTCBzauSZetGpHid/t4H1zQByM6Q/U2DvNzJMa9q1LZtOuSYnt/NvQCJ+Ato
+         2fo8PO2L523qQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zheyu Ma <zheyuma97@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 053/159] media: cx25821: Fix the warning when removing the module
-Date:   Mon, 30 May 2022 09:22:38 -0400
-Message-Id: <20220530132425.1929512-53-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.18 049/159] media: i2c: dw9714: Disable the regulator when the driver fails to probe
+Date:   Mon, 30 May 2022 09:22:34 -0400
+Message-Id: <20220530132425.1929512-49-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
 References: <20220530132425.1929512-1-sashal@kernel.org>
@@ -54,53 +54,41 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 2203436a4d24302871617373a7eb21bc17e38762 ]
+[ Upstream commit 02276e18defa2fccf16413b44440277d98c2b1ea ]
 
-When removing the module, we will get the following warning:
+When the driver fails to probe, we will get the following splat:
 
-[   14.746697] remove_proc_entry: removing non-empty directory 'irq/21', leaking at least 'cx25821[1]'
-[   14.747449] WARNING: CPU: 4 PID: 368 at fs/proc/generic.c:717 remove_proc_entry+0x389/0x3f0
-[   14.751611] RIP: 0010:remove_proc_entry+0x389/0x3f0
-[   14.759589] Call Trace:
-[   14.759792]  <TASK>
-[   14.759975]  unregister_irq_proc+0x14c/0x170
-[   14.760340]  irq_free_descs+0x94/0xe0
-[   14.760640]  mp_unmap_irq+0xb6/0x100
-[   14.760937]  acpi_unregister_gsi_ioapic+0x27/0x40
-[   14.761334]  acpi_pci_irq_disable+0x1d3/0x320
-[   14.761688]  pci_disable_device+0x1ad/0x380
-[   14.762027]  ? _raw_spin_unlock_irqrestore+0x2d/0x60
-[   14.762442]  ? cx25821_shutdown+0x20/0x9f0 [cx25821]
-[   14.762848]  cx25821_finidev+0x48/0xc0 [cx25821]
-[   14.763242]  pci_device_remove+0x92/0x240
+[   59.305988] ------------[ cut here ]------------
+[   59.306417] WARNING: CPU: 2 PID: 395 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
+[   59.310345] RIP: 0010:_regulator_put+0x3ec/0x4e0
+[   59.318362] Call Trace:
+[   59.318582]  <TASK>
+[   59.318765]  regulator_put+0x1f/0x30
+[   59.319058]  devres_release_group+0x319/0x3d0
+[   59.319420]  i2c_device_probe+0x766/0x940
 
-Fix this by freeing the irq before call pci_disable_device().
+Fix this by disabling the regulator in error handling.
 
 Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx25821/cx25821-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/dw9714.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
-index 3078a39f0b95..6627fa9166d3 100644
---- a/drivers/media/pci/cx25821/cx25821-core.c
-+++ b/drivers/media/pci/cx25821/cx25821-core.c
-@@ -1332,11 +1332,11 @@ static void cx25821_finidev(struct pci_dev *pci_dev)
- 	struct cx25821_dev *dev = get_cx25821(v4l2_dev);
+diff --git a/drivers/media/i2c/dw9714.c b/drivers/media/i2c/dw9714.c
+index cd7008ad8f2f..8c5797ba57d4 100644
+--- a/drivers/media/i2c/dw9714.c
++++ b/drivers/media/i2c/dw9714.c
+@@ -183,6 +183,7 @@ static int dw9714_probe(struct i2c_client *client)
+ 	return 0;
  
- 	cx25821_shutdown(dev);
--	pci_disable_device(pci_dev);
+ err_cleanup:
++	regulator_disable(dw9714_dev->vcc);
+ 	v4l2_ctrl_handler_free(&dw9714_dev->ctrls_vcm);
+ 	media_entity_cleanup(&dw9714_dev->sd.entity);
  
- 	/* unregister stuff */
- 	if (pci_dev->irq)
- 		free_irq(pci_dev->irq, dev);
-+	pci_disable_device(pci_dev);
- 
- 	cx25821_dev_unregister(dev);
- 	v4l2_device_unregister(v4l2_dev);
 -- 
 2.35.1
 
