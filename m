@@ -2,52 +2,48 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32B21C433FE
-	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 14:24:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F860C43217
+	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 14:24:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237347AbiE3OYF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 May 2022 10:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
+        id S237734AbiE3OYP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 May 2022 10:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240733AbiE3OVL (ORCPT
+        with ESMTP id S237534AbiE3OVV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 May 2022 10:21:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E3CA7757;
-        Mon, 30 May 2022 06:50:13 -0700 (PDT)
+        Mon, 30 May 2022 10:21:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F147891572;
+        Mon, 30 May 2022 06:50:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0EFAB80DAB;
-        Mon, 30 May 2022 13:49:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B9E0C3411C;
-        Mon, 30 May 2022 13:49:04 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E938ECE1027;
+        Mon, 30 May 2022 13:50:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ED89C385B8;
+        Mon, 30 May 2022 13:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918545;
-        bh=CTn9HCUjXYHSwA99rQmy+i5tCftAg7PvxJaOxRnYJjo=;
+        s=k20201202; t=1653918600;
+        bh=w9LKfzLwAKYB46T3ecIm/GsN+H5j9J7Oa1HOgAq0IV0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cY5E+OAOPG7UskD4aGGpktgGlTqyvDpkYdM7Wf851TE15/P7/dfeRVzvAGjf+AgtA
-         xzaFlqbvAQgIHJcRlFYpGS7L3YydSsAMTtk/HqvOaDJCNEPqKhpO4GDjK0CsY8zfKd
-         ZNhM5455LZS6yZjjYOL9rkJdzjFnfHh8ZEKy7X+0lk4aYrmLD3SZH9qyJmaqfrQLB6
-         4x6QQi1vnZjPKikz7u2x9xojfVp1gDpd6LH3pHRYApkceTmGKdIabgvkd50Ifpp6tk
-         Sv5NcCR26XmI2k+Og4/K0uodikbydaSzAtFCbodK8IjJ1IRAiewVC+Y7qpK879/Ecq
-         UbiHz6/RZtWmQ==
+        b=A+gJX+dR1Z1CkLeDn2heWqUxUir3pFn67FtLuAD0ila3HbOyhzH0F4OZNH1hD00Gq
+         mXMLCh1uhQ9GxdMc6hvk9aYwEE+PEZESQV3RO9QlKWVR4IKwIPObkUmcYFGKaRsDNO
+         U8ZcfpKoSKA3koTidcJUoddfjF0SWJVTDOvkLgpQxogZJMonrpgKo97r0Ujo/hhnLZ
+         xN7iSXtmIBX3HQEAywd0HerCvLX8YCLWYPTN9M5bcnFD+04JFOmhVsjfDXIuL6f0lf
+         O2BS4uH8BoKYxUtyIK4kay8tkOwel8R5kBKf7nTksfeV7CGzRs5VDO71nkQmyEkcbX
+         u0Jy5+O7DsrZQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kwanghoon Son <k.son@samsung.com>,
-        kernel test robot <lkp@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Zheyu Ma <zheyuma97@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        krzysztof.kozlowski@linaro.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 49/55] media: exynos4-is: Fix compile warning
-Date:   Mon, 30 May 2022 09:46:55 -0400
-Message-Id: <20220530134701.1935933-49-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 13/38] media: pci: cx23885: Fix the error handling in cx23885_initdev()
+Date:   Mon, 30 May 2022 09:48:59 -0400
+Message-Id: <20220530134924.1936816-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530134701.1935933-1-sashal@kernel.org>
-References: <20220530134701.1935933-1-sashal@kernel.org>
+In-Reply-To: <20220530134924.1936816-1-sashal@kernel.org>
+References: <20220530134924.1936816-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,37 +52,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Kwanghoon Son <k.son@samsung.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit e080f5c1f2b6d02c02ee5d674e0e392ccf63bbaf ]
+[ Upstream commit e8123311cf06d7dae71e8c5fe78e0510d20cd30b ]
 
-Declare static on function 'fimc_isp_video_device_unregister'.
+When the driver fails to call the dma_set_mask(), the driver will get
+the following splat:
 
-When VIDEO_EXYNOS4_ISP_DMA_CAPTURE=n, compiler warns about
-warning: no previous prototype for function [-Wmissing-prototypes]
+[   55.853884] BUG: KASAN: use-after-free in __process_removed_driver+0x3c/0x240
+[   55.854486] Read of size 8 at addr ffff88810de60408 by task modprobe/590
+[   55.856822] Call Trace:
+[   55.860327]  __process_removed_driver+0x3c/0x240
+[   55.861347]  bus_for_each_dev+0x102/0x160
+[   55.861681]  i2c_del_driver+0x2f/0x50
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Kwanghoon Son <k.son@samsung.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+This is because the driver has initialized the i2c related resources
+in cx23885_dev_setup() but not released them in error handling, fix this
+bug by modifying the error path that jumps after failing to call the
+dma_set_mask().
+
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/exynos4-is/fimc-isp-video.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/pci/cx23885/cx23885-core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/exynos4-is/fimc-isp-video.h b/drivers/media/platform/exynos4-is/fimc-isp-video.h
-index edcb3a5e3cb9..2dd4ddbc748a 100644
---- a/drivers/media/platform/exynos4-is/fimc-isp-video.h
-+++ b/drivers/media/platform/exynos4-is/fimc-isp-video.h
-@@ -32,7 +32,7 @@ static inline int fimc_isp_video_device_register(struct fimc_isp *isp,
- 	return 0;
- }
+diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/cx23885/cx23885-core.c
+index a1d738969d7b..06e4e1df125c 100644
+--- a/drivers/media/pci/cx23885/cx23885-core.c
++++ b/drivers/media/pci/cx23885/cx23885-core.c
+@@ -2164,7 +2164,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
+ 	err = pci_set_dma_mask(pci_dev, 0xffffffff);
+ 	if (err) {
+ 		pr_err("%s/0: Oops: no 32bit PCI DMA ???\n", dev->name);
+-		goto fail_ctrl;
++		goto fail_dma_set_mask;
+ 	}
  
--void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-+static inline void fimc_isp_video_device_unregister(struct fimc_isp *isp,
- 				enum v4l2_buf_type type)
- {
- }
+ 	err = request_irq(pci_dev->irq, cx23885_irq,
+@@ -2172,7 +2172,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
+ 	if (err < 0) {
+ 		pr_err("%s: can't get IRQ %d\n",
+ 		       dev->name, pci_dev->irq);
+-		goto fail_irq;
++		goto fail_dma_set_mask;
+ 	}
+ 
+ 	switch (dev->board) {
+@@ -2194,7 +2194,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
+ 
+ 	return 0;
+ 
+-fail_irq:
++fail_dma_set_mask:
+ 	cx23885_dev_unregister(dev);
+ fail_ctrl:
+ 	v4l2_ctrl_handler_free(hdl);
 -- 
 2.35.1
 
