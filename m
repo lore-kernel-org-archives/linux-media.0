@@ -2,44 +2,48 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E14DCC41535
-	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 13:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA048C38162
+	for <linux-media@archiver.kernel.org>; Mon, 30 May 2022 13:36:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237587AbiE3Ngw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 May 2022 09:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
+        id S237638AbiE3Ngx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 May 2022 09:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238109AbiE3NgG (ORCPT
+        with ESMTP id S238044AbiE3NgC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 May 2022 09:36:06 -0400
+        Mon, 30 May 2022 09:36:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AA59858A;
-        Mon, 30 May 2022 06:29:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5527C9809C;
+        Mon, 30 May 2022 06:29:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 669D460DD4;
-        Mon, 30 May 2022 13:29:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F766C385B8;
-        Mon, 30 May 2022 13:29:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A92B60DD5;
+        Mon, 30 May 2022 13:29:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD64C36AE9;
+        Mon, 30 May 2022 13:29:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917386;
-        bh=1QCkvUVKkSssoNrecKUlG97xKfGrKuMFunKfeuff/Ao=;
+        s=k20201202; t=1653917380;
+        bh=1IhMAlmpFLnSmrF7JaiDJvASdMM846kQitQkMmoRy58=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DfyRzyjP1IJoMV4xzEcEUB1yQnZD5FaL5qjX7jaqcxhNO+B6B4NqAhEGuNqo82sRK
-         doVR+q0lP03Ck8YnkOR2wM3ia0qmIAIHBBQVh/Tg2i3ITZwsAKfD7Kw3sQo9x02Jb1
-         vNZN///9fFK8L1Nj57ush/SZQih5/ZCsPRKaVE9GIdgmsna4eGL2xISNum6pxNo+V+
-         0BbQvmbsJE2hsorXP69CLmHcIBI95PwWl34CNAwiJUj22G6SAZ5+vznISs6WNyP7iy
-         X+DNAzCl6uE4EcArX6f/njThKL0OrpJFm0LsIcrafUOtY7yc9jw2us9RXbAnXcKB/u
-         mKItZMJKKWaCw==
+        b=lXXCCXlPc+3itHLjAZFu6I+SIfjiVAH618tt5tUd7hr61PFqIG6wWXgLim+UclCRh
+         Utu8oG3ca2U9PytPMwcnxB2rG7fBom1VczEplfTE38ZwxQRh1ZQtToM64UHWkdMpZr
+         jbJp2UUpzNwMDbjg5pSaq0LjE57yCnQ7rF40fCh4KD6yhSV20tdFZ4hWQPT6BO/iMA
+         a+jI0i53NuzUvbEY7RtXpAcu8yhJ+HrDa1iqgfK7aZq91RaNDLPFbTtx0YW/UNVFxY
+         5xT0L90WRplME7J1Xu21GgTChrr2UpvwZcGCaQLRLEiTE2KF6qgfWcVohY5TJNzA0P
+         YGlLBUqoraZ9Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 117/159] media: cec-adap.c: fix is_configuring state
-Date:   Mon, 30 May 2022 09:23:42 -0400
-Message-Id: <20220530132425.1929512-117-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.18 114/159] media: hantro: HEVC: unconditionnaly set pps_{cb/cr}_qp_offset values
+Date:   Mon, 30 May 2022 09:23:39 -0400
+Message-Id: <20220530132425.1929512-114-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
 References: <20220530132425.1929512-1-sashal@kernel.org>
@@ -51,69 +55,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
-[ Upstream commit 59267fc34f4900dcd2ec3295f6be04b79aee2186 ]
+[ Upstream commit 46c836569196f377f87a3657b330cffaf94bd727 ]
 
-If an adapter is trying to claim a free logical address then it is
-in the 'is_configuring' state. If during that process the cable is
-disconnected (HPD goes low, which in turn invalidates the physical
-address), then cec_adap_unconfigure() is called, and that set the
-is_configuring boolean to false, even though the thread that's
-trying to claim an LA is still running.
+Always set pps_cb_qp_offset and pps_cr_qp_offset values in Hantro/G2
+register whatever is V4L2_HEVC_PPS_FLAG_PPS_SLICE_CHROMA_QP_OFFSETS_PRESENT
+flag value.
+The vendor code does the same to set these values.
+This fixes conformance test CAINIT_G_SHARP_3.
 
-Don't touch the is_configuring bool in cec_adap_unconfigure(), it
-will eventually be cleared by the thread. By making that change
-the cec_config_log_addr() function also had to change: it was
-aborting if is_configuring became false (since that is what
-cec_adap_unconfigure() did), but that no longer works. Instead
-check if the physical address is invalid. That is a much
-more appropriate check anyway.
+Fluster HEVC score is increase by one with this patch.
 
-This fixes a bug where the the adapter could be disabled even
-though the device was still configuring. This could cause POLL
-transmits to time out.
-
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/cec/core/cec-adap.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
-index 2e12331c12a9..01766e744772 100644
---- a/drivers/media/cec/core/cec-adap.c
-+++ b/drivers/media/cec/core/cec-adap.c
-@@ -1278,7 +1278,7 @@ static int cec_config_log_addr(struct cec_adapter *adap,
- 		 * While trying to poll the physical address was reset
- 		 * and the adapter was unconfigured, so bail out.
- 		 */
--		if (!adap->is_configuring)
-+		if (adap->phys_addr == CEC_PHYS_ADDR_INVALID)
- 			return -EINTR;
+diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+index c524af41baf5..2e7eec0372cd 100644
+--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
++++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+@@ -180,13 +180,8 @@ static void set_params(struct hantro_ctx *ctx)
+ 		hantro_reg_write(vpu, &g2_max_cu_qpd_depth, 0);
+ 	}
  
- 		if (err)
-@@ -1335,7 +1335,6 @@ static void cec_adap_unconfigure(struct cec_adapter *adap)
- 	    adap->phys_addr != CEC_PHYS_ADDR_INVALID)
- 		WARN_ON(adap->ops->adap_log_addr(adap, CEC_LOG_ADDR_INVALID));
- 	adap->log_addrs.log_addr_mask = 0;
--	adap->is_configuring = false;
- 	adap->is_configured = false;
- 	cec_flush(adap);
- 	wake_up_interruptible(&adap->kthread_waitq);
-@@ -1527,9 +1526,10 @@ static int cec_config_thread_func(void *arg)
- 	for (i = 0; i < las->num_log_addrs; i++)
- 		las->log_addr[i] = CEC_LOG_ADDR_INVALID;
- 	cec_adap_unconfigure(adap);
-+	adap->is_configuring = false;
- 	adap->kthread_config = NULL;
--	mutex_unlock(&adap->lock);
- 	complete(&adap->config_completion);
-+	mutex_unlock(&adap->lock);
- 	return 0;
- }
+-	if (pps->flags & V4L2_HEVC_PPS_FLAG_PPS_SLICE_CHROMA_QP_OFFSETS_PRESENT) {
+-		hantro_reg_write(vpu, &g2_cb_qp_offset, pps->pps_cb_qp_offset);
+-		hantro_reg_write(vpu, &g2_cr_qp_offset, pps->pps_cr_qp_offset);
+-	} else {
+-		hantro_reg_write(vpu, &g2_cb_qp_offset, 0);
+-		hantro_reg_write(vpu, &g2_cr_qp_offset, 0);
+-	}
++	hantro_reg_write(vpu, &g2_cb_qp_offset, pps->pps_cb_qp_offset);
++	hantro_reg_write(vpu, &g2_cr_qp_offset, pps->pps_cr_qp_offset);
  
+ 	hantro_reg_write(vpu, &g2_filt_offset_beta, pps->pps_beta_offset_div2);
+ 	hantro_reg_write(vpu, &g2_filt_offset_tc, pps->pps_tc_offset_div2);
 -- 
 2.35.1
 
