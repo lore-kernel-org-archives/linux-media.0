@@ -2,191 +2,204 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27746C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 31 May 2022 14:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C03BCC433EF
+	for <linux-media@archiver.kernel.org>; Tue, 31 May 2022 15:40:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345208AbiEaOU1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 May 2022 10:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
+        id S1345811AbiEaPks (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 May 2022 11:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345197AbiEaOU0 (ORCPT
+        with ESMTP id S234357AbiEaPkr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 May 2022 10:20:26 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D8E7703CD;
-        Tue, 31 May 2022 07:20:25 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.91,265,1647270000"; 
-   d="scan'208";a="121464469"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 31 May 2022 23:20:24 +0900
-Received: from localhost.localdomain (unknown [10.226.92.53])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 04A434004BBF;
-        Tue, 31 May 2022 23:20:20 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v11 5/5] media: renesas: vsp1: Add support for RZ/G2L VSPD
-Date:   Tue, 31 May 2022 15:19:58 +0100
-Message-Id: <20220531141958.575616-6-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220531141958.575616-1-biju.das.jz@bp.renesas.com>
-References: <20220531141958.575616-1-biju.das.jz@bp.renesas.com>
+        Tue, 31 May 2022 11:40:47 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FE08BD1A
+        for <linux-media@vger.kernel.org>; Tue, 31 May 2022 08:40:44 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id rs12so27355667ejb.13
+        for <linux-media@vger.kernel.org>; Tue, 31 May 2022 08:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MwvjllhCYascr6Hu+WLB+f7zYDp3qacylj14TBpSNcY=;
+        b=cohW93SEB8Duxo+iA/QYyTE3a/S1mBlVzcraVB6XGvOneZBqeefJGxAFZvJMSWA3Wc
+         Kbd4z6uKQmVMsuakgqo6nnad9lo20WHoxn0z009peFNypcs9YDaTXW2koPwIuhhhDhfL
+         w5dWgum5XKj/ZL8zxxDtkVtmYgSAxCNLAuto8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MwvjllhCYascr6Hu+WLB+f7zYDp3qacylj14TBpSNcY=;
+        b=Q+s60ZVUtXlJILFk559W0k3FMa+M6G7mOmAtQBWECbq+eXcMOZMeLFQj9BDszrgGUg
+         OrMk7WH1fYgCjtFaUgh8+E1G5n1Mpa+dJpTQahI1zRcS7NjzKLQ+xG7dtP52JUN1wTWO
+         tnZUPCFmuyPTV7+kNDwNj0nICWJWoecjQoLWbz+VvuCZTcdrUkzXy7McwBwILKYVsenb
+         vG+DxYlQsDWky4p15MZETvd1xCDIhgGlMWUYfSN2Mcg/+wUvePmrRZSDkN/a7Ktgs2Uf
+         oRnV5KLb7Xkap66PFi0MBwv01YN2EXBVCaYkE1JWDqPGC7JtWWWdWhdlk1tCZJJCCjj8
+         jb3A==
+X-Gm-Message-State: AOAM533p9q6QdhOd77j5HcMXSZ4wLRre4vGqTq0N+Pai/ulXBXcV4O3X
+        mWAmH5wSErqPNDzNSElBSZMOJjwQIy+lRQ==
+X-Google-Smtp-Source: ABdhPJytcQXARTMhdrsy3jhsiXyFDGyJGYhoA1vAMQK6sGSiJCu30h+NtMneYZYMmAGdN/q7q9geqg==
+X-Received: by 2002:a17:907:94ca:b0:6fe:c28b:7cb2 with SMTP id dn10-20020a17090794ca00b006fec28b7cb2mr42977102ejc.625.1654011643071;
+        Tue, 31 May 2022 08:40:43 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-2-39-143-183.cust.vodafonedsl.it. [2.39.143.183])
+        by smtp.gmail.com with ESMTPSA id q14-20020a170906144e00b006feb047502bsm5116675ejc.151.2022.05.31.08.40.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 08:40:42 -0700 (PDT)
+Date:   Tue, 31 May 2022 17:40:40 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
+        michael@amarulasolutions.com,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] media: i2c: ov5695: use
+ regulator_bulk_enable/regulator_bulk disable instead of for loop
+Message-ID: <20220531154040.GA1331064@tom-ThinkPad-T14s-Gen-2i>
+References: <20220519075117.1003520-1-tommaso.merciai@amarulasolutions.com>
+ <20220519075117.1003520-2-tommaso.merciai@amarulasolutions.com>
+ <20220531131409.f54znvogejkwqqkf@uno.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531131409.f54znvogejkwqqkf@uno.localdomain>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The RZ/G2L VSPD provides a single VSPD instance. It has the following
-sub modules MAU, CTU, RPF, DPR, LUT, BRS, WPF and LIF.
+Hi Jacopo,
+On Tue, May 31, 2022 at 03:14:09PM +0200, Jacopo Mondi wrote:
+> Hi Tommaso,
+> 
+> On Thu, May 19, 2022 at 09:51:14AM +0200, Tommaso Merciai wrote:
+> > Enable regulator using regulator_bulk_enable/regulatore_bulk_disable
+> > function in __ov5695_power_on/__ov5695_power_off function instead of for loop.
+> > This reduce code size and make things more clear
+> >
+> > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> > Co-Developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+> > ---
+> >  drivers/media/i2c/ov5695.c | 25 +++++++------------------
+> >  1 file changed, 7 insertions(+), 18 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
+> > index 439385938a51..880b586e55fe 100644
+> > --- a/drivers/media/i2c/ov5695.c
+> > +++ b/drivers/media/i2c/ov5695.c
+> > @@ -972,7 +972,7 @@ static int ov5695_s_stream(struct v4l2_subdev *sd, int on)
+> >
+> >  static int __ov5695_power_on(struct ov5695 *ov5695)
+> >  {
+> > -	int i, ret;
+> > +	int ret;
+> >  	struct device *dev = &ov5695->client->dev;
+> >
+> >  	ret = clk_prepare_enable(ov5695->xvclk);
+> > @@ -987,13 +987,10 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
+> >  	 * The hardware requires the regulators to be powered on in order,
+> >  	 * so enable them one by one.
+> >  	 */
+> 
+> The comment says that the hardware requires regulators to be enabled
+> in precise order
+> 
+> > -	for (i = 0; i < OV5695_NUM_SUPPLIES; i++) {
+> > -		ret = regulator_enable(ov5695->supplies[i].consumer);
+> > -		if (ret) {
+> > -			dev_err(dev, "Failed to enable %s: %d\n",
+> > -				ov5695->supplies[i].supply, ret);
+> > -			goto disable_reg_clk;
+> > -		}
+> > +	ret = regulator_bulk_enable(ARRAY_SIZE(ov5695->supplies), ov5695->supplies);
+> 
+> bulk_enable() uses the async API (async_schedule_domain() in
+> particular) which by the name makes me think such ordering guarantee
+> cannot be respected.
+> 
+> However most sensors require some kind of ordering when enabling
+> regulators, and most of the use the bulk API anyhow. The fact this
+> driver uses the bulk API to get an release the regulators but not for
+> enabling them and the above comment, makes me think it has been done
+> on purpose ? Could you check with the driver author maybe ?
 
-The VSPD block on RZ/G2L SoCs does not have a version register, so
-added a new compatible string "renesas,r9a07g044-vsp2" with a data
-pointer containing the info structure. Also the reset line is shared
-with the DU module.
+Thanks for suggestion, good question.
+I see also ov5693 driver use bulk_enable/bulk_disable
+on ov5693_sensor_powerdown and ov5693_sensor_powerup functions, I take
+this as reference (and I'm wrong)
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
----
-v10->v11:
- * No change.
-v9->v10:
- * No change.
-v8->v9:
- * Replaced the code comments RZ/G2L {SoC's,SoC} with RZ/G2L SoCs.
-v7->v8:
- * Split the patch for adding s/w version, feature bit and RZ/G2L support
- * Added feature bit VSP1_HAS_NON_ZERO_LBA to device_info
- * Added .soc for RZ/G2L
- * Replaced the compatible "renesas,rzg2l-vsp2" -> "renesas,r9a07g044-vsp2"
-v6->v7:
- * Added Rb tag from Kieran
- * Added a quirk to handle LIF0 buffer attribute related
-   changes for V3M and G2L.
- * Removed the macro for VSP HW version
-v5->v6:
- * Rebased to media_staging and updated commit header
- * Removed the extra tab from rzg2l_vsp2_device_info
- * Changed the function vsp1_lookup->vsp1_lookup_info and
-   all info match related code moved here.
- * Add VI6_IP_VERSION_VSP and VI6_IP_VERSION_VSP_SW macros to
-   distinguish HW & SW IP_VSP_Version.
- * Used 0x80 for RZG2L VSPD model and SoC identification
- * Updated Switch() for LIF0 buffer attribute handling.
-v4->v5:
- * Fixed typo VI6_IP_VERSION_MODEL_MASK->VI6_IP_VERSION_MASK
- * To be consistent with other SoC's, introduced VI6_IP_VERSION_SOC_G2L
-   for RZ/G2L SoC's.
-v3->v4:
- * Added Rb tag from Geert
- * Add switch() for LIF0 buffer attribute handling for RZ/G2L and V3M
-v2->v3:
- * Fixed version comparison in vsp1_lookup()
-v1->v2:
- * Changed the compatible from vsp2-rzg2l->rzg2l-vsp2
- * Added standalone device info for rzg2l-vsp2.
- * Added vsp1_lookup helper function.
- * Updated comments for LIF0 buffer attribute register
- * Used last ID for rzg2l-vsp2.
-RFC->v1:
- * Used data pointer containing info structure to retrieve version information
-RFC:
- * https://patchwork.kernel.org/project/linux-renesas-soc/patch/20220112174612.10773-21-biju.das.jz@bp.renesas.com/
----
- drivers/media/platform/renesas/vsp1/vsp1_drv.c  | 13 +++++++++++++
- drivers/media/platform/renesas/vsp1/vsp1_lif.c  |  9 +++++----
- drivers/media/platform/renesas/vsp1/vsp1_regs.h |  4 ++++
- 3 files changed, 22 insertions(+), 4 deletions(-)
+In a functional test on PX30_Mini_evb_v11_20190507, after this series 
+I'm able to see the correct chip id during probe and do some capture.
 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drv.c b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
-index 256794c67e63..dd37fe81c4c5 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_drv.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
-@@ -833,6 +833,18 @@ static const struct vsp1_device_info vsp1_device_infos[] = {
- 	},
- };
- 
-+static const struct vsp1_device_info rzg2l_vsp2_device_info = {
-+	.version = VI6_IP_VERSION_MODEL_VSPD_RZG2L,
-+	.model = "VSP2-D",
-+	.soc = VI6_IP_VERSION_SOC_RZG2L,
-+	.gen = 3,
-+	.features = VSP1_HAS_BRS | VSP1_HAS_WPF_VFLIP | VSP1_HAS_EXT_DL
-+		  | VSP1_HAS_NON_ZERO_LBA,
-+	.lif_count = 1,
-+	.rpf_count = 2,
-+	.wpf_count = 1,
-+};
-+
- static const struct vsp1_device_info *vsp1_lookup_info(struct vsp1_device *vsp1)
- {
- 	const struct vsp1_device_info *info;
-@@ -983,6 +995,7 @@ static int vsp1_remove(struct platform_device *pdev)
- static const struct of_device_id vsp1_of_match[] = {
- 	{ .compatible = "renesas,vsp1" },
- 	{ .compatible = "renesas,vsp2" },
-+	{ .compatible = "renesas,r9a07g044-vsp2", .data = &rzg2l_vsp2_device_info },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, vsp1_of_match);
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_lif.c b/drivers/media/platform/renesas/vsp1/vsp1_lif.c
-index 9adb892edcdc..186a5730e1e3 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_lif.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_lif.c
-@@ -107,6 +107,7 @@ static void lif_configure_stream(struct vsp1_entity *entity,
- 
- 	case VI6_IP_VERSION_MODEL_VSPDL_GEN3:
- 	case VI6_IP_VERSION_MODEL_VSPD_V3:
-+	case VI6_IP_VERSION_MODEL_VSPD_RZG2L:
- 		hbth = 0;
- 		obth = 1500;
- 		lbth = 0;
-@@ -130,10 +131,10 @@ static void lif_configure_stream(struct vsp1_entity *entity,
- 			VI6_LIF_CTRL_REQSEL | VI6_LIF_CTRL_LIF_EN);
- 
- 	/*
--	 * On R-Car V3M the LIF0 buffer attribute register has to be set to a
--	 * non-default value to guarantee proper operation (otherwise artifacts
--	 * may appear on the output). The value required by the manual is not
--	 * explained but is likely a buffer size or threshold.
-+	 * On R-Car V3M and RZ/G2L the LIF0 buffer attribute register has to be
-+	 * set to a non-default value to guarantee proper operation (otherwise
-+	 * artifacts may appear on the output). The value required by the
-+	 * manual is not explained but is likely a buffer size or threshold.
- 	 */
- 	if (vsp1_feature(entity->vsp1, VSP1_HAS_NON_ZERO_LBA))
- 		vsp1_lif_write(lif, dlb, VI6_LIF_LBA,
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_regs.h b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
-index 4286d13eca32..8928f4c6bb55 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_regs.h
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
-@@ -767,6 +767,8 @@
- #define VI6_IP_VERSION_MODEL_VSPDL_GEN3	(0x19 << 8)
- #define VI6_IP_VERSION_MODEL_VSPBS_GEN3	(0x1a << 8)
- #define VI6_IP_VERSION_MODEL_VSPD_V3U	(0x1c << 8)
-+/* RZ/G2L SoCs have no version register, So use 0x80 as the model version */
-+#define VI6_IP_VERSION_MODEL_VSPD_RZG2L	(0x80 << 8)
- 
- #define VI6_IP_VERSION_SOC_MASK		(0xff << 0)
- #define VI6_IP_VERSION_SOC_H2		(0x01 << 0)
-@@ -780,6 +782,8 @@
- #define VI6_IP_VERSION_SOC_M3N		(0x04 << 0)
- #define VI6_IP_VERSION_SOC_E3		(0x04 << 0)
- #define VI6_IP_VERSION_SOC_V3U		(0x05 << 0)
-+/* RZ/G2L SoCs have no version register, So use 0x80 for SoC Identification */
-+#define VI6_IP_VERSION_SOC_RZG2L	(0x80 << 0)
- 
- #define VI6_IP_VERSION_VSP_SW		(0xfffe << 16) /* SW VSP version */
- 
+I think you are right Jacopo, we can drop off this [PATCH 1/4]
+On the following link I found the issue that you describe: [1]
+
+> 
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to enable regulators %d\n", ret);
+> > +		goto disable_reg_clk;
+> >  	}
+> >
+> >  	gpiod_set_value_cansleep(ov5695->reset_gpio, 0);
+> > @@ -1003,8 +1000,7 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
+> >  	return 0;
+> >
+> >  disable_reg_clk:
+> > -	for (--i; i >= 0; i--)
+> > -		regulator_disable(ov5695->supplies[i].consumer);
+> > +	regulator_bulk_disable(ARRAY_SIZE(ov5695->supplies), ov5695->supplies);
+> 
+> FYI the bulk API does this for you if enabling any of the regulators fails.
+> Hence this should not be necessary.
+
+Thanks for sharing! This is new to me.
+I'll update the series on v2 removing this patch.
+
+Regards,
+Tommaso
+
+[1]: https://mailweb.openeuler.org/hyperkitty/list/kernel@openeuler.org/message/4X54QYJDRRE4K5BW4FTDZUGRAL4GRQWY/
+
+> Thanks
+>    j
+> 
+> >  	clk_disable_unprepare(ov5695->xvclk);
+> >
+> >  	return ret;
+> > @@ -1012,8 +1008,6 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
+> >
+> >  static void __ov5695_power_off(struct ov5695 *ov5695)
+> >  {
+> > -	struct device *dev = &ov5695->client->dev;
+> > -	int i, ret;
+> >
+> >  	clk_disable_unprepare(ov5695->xvclk);
+> >  	gpiod_set_value_cansleep(ov5695->reset_gpio, 1);
+> > @@ -1022,12 +1016,7 @@ static void __ov5695_power_off(struct ov5695 *ov5695)
+> >  	 * The hardware requires the regulators to be powered off in order,
+> >  	 * so disable them one by one.
+> >  	 */
+> > -	for (i = OV5695_NUM_SUPPLIES - 1; i >= 0; i--) {
+> > -		ret = regulator_disable(ov5695->supplies[i].consumer);
+> > -		if (ret)
+> > -			dev_err(dev, "Failed to disable %s: %d\n",
+> > -				ov5695->supplies[i].supply, ret);
+> > -	}
+> > +	regulator_bulk_disable(ARRAY_SIZE(ov5695->supplies), ov5695->supplies);
+> >  }
+> >
+> >  static int __maybe_unused ov5695_runtime_resume(struct device *dev)
+> > --
+> > 2.25.1
+> >
+
 -- 
-2.25.1
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
 
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
