@@ -2,52 +2,52 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8325CC35296
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C678C4167D
 	for <linux-media@archiver.kernel.org>; Tue, 31 May 2022 10:00:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245463AbiEaKA3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 May 2022 06:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
+        id S245485AbiEaKAd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 May 2022 06:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245419AbiEaKAT (ORCPT
+        with ESMTP id S245440AbiEaKA2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 May 2022 06:00:19 -0400
+        Tue, 31 May 2022 06:00:28 -0400
 Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9170282172;
-        Tue, 31 May 2022 03:00:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E256F84A23;
+        Tue, 31 May 2022 03:00:20 -0700 (PDT)
 Received: by mail-ej1-x630.google.com with SMTP id n10so25580324ejk.5;
-        Tue, 31 May 2022 03:00:17 -0700 (PDT)
+        Tue, 31 May 2022 03:00:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Nne0qJckA/hMuSOr0O9+SBShBUR9gCrIksc3pugIfaw=;
-        b=O04QHlDY6DBBsKrGQS2x+dxNPUvaLGwatBhA9Ypf6fUvXeQn4u2iZyLs+G4Gopi2gn
-         lMPnA9p2Gz45t7ICtHVl6tg1eE8albLaPc/BmmQBPg3ZJxqBikRQy57f7Gd//Yisj1mq
-         76jYCx/vPIdNy0UXH2etO7PDMMWd1OqeisBEgyFTI9zNlOQxBgL6irhDuYoGR91FeUzH
-         EGqVWW4gL9+MALPxEAxgJkeLA1KAldYG/7fZPitSHzltfhEhG1K7I0p/7oGL1xaLWwU1
-         IWCc36zCKbmVtfqPjeE1k5dNjDQMnB1bXMwDXVEhisX6bguza7GDvQPXMaO9uEGf9zR/
-         OIgw==
+        bh=RT3RFL0VBSkluM1f3vm/WSgrGA2Qjw/08Ja0Fnc8nAM=;
+        b=pn14iMQ9n0FDWwmArA4Jf35k//oaml9s3mxFl2ky/DMcmh2eS5QQUAfVDrFOHrWe0F
+         KMtAdL2ItYXoMBH38/cM7Y5adUTzh6hcJoR+bDw3M9kaX7/WIFSLDyC89uegMORBvy8a
+         BHKTy4vuZTReGoejbiTSY6UKILNxobjAL1xvmGcoXh1D/U10MyxWoiEN1o6YdrZUfevt
+         sj80RQonfCLZAawaQ34qBTRrlatRa3mUKNi0wDk1pC3/0cWVa8FNjNAuvChUXdFusk2T
+         xG3+L8wayhRfjE/jFGd2K1s01WQzFRlhAG5nSv/aQI6SJBaKFuP7a15DEZJ3u2J3fVab
+         1s1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Nne0qJckA/hMuSOr0O9+SBShBUR9gCrIksc3pugIfaw=;
-        b=YKY4kc4K9h88N6xlb2ExBoxaxveasYRFz+2xrYsGxYV+Xgck5RLQL3HMbf02oopUlu
-         9c4OsC862N9XSoU7+rcvEik7eGyTqELi6YsDG2UFC859tZ98evKBlQXD5qXyNLHN6+8X
-         ZAUka2voptF66lrtZFpfD0yWS5rgT4ZOdy81KqJuSNS/46vIo4mXUjSYYRd3Kjeya//f
-         tY29+u/8OTxPY1RYPRL+Br29ixVdZ9FZmqqKlZjR5TTCvDVEJpjbiotjTnDGMxZJHZ8I
-         FkCvT3IeI4cOSJXllHvxedRguAtKARthjiw7mR82QdnpxWUt9o0+8ulDg8mMaY+gcuGr
-         73Ig==
-X-Gm-Message-State: AOAM531x4513CxI1N2RoS6rnHlA32wTcCHxZ9O6sdcWzTuuKwlmWdBQD
-        MCs/5Mhdk8OYPNY8wcrh3IGMiOjNPMdcFA==
-X-Google-Smtp-Source: ABdhPJxmWnOcxxDaVC0tQGNbj0CSrxLQR0xy8ghD6daeqEn1NVbnq/aFqlXxIqVHd6RNxE0nHnKb2Q==
-X-Received: by 2002:a17:907:3f13:b0:6ff:18ad:6936 with SMTP id hq19-20020a1709073f1300b006ff18ad6936mr25394163ejc.158.1653991216188;
-        Tue, 31 May 2022 03:00:16 -0700 (PDT)
+        bh=RT3RFL0VBSkluM1f3vm/WSgrGA2Qjw/08Ja0Fnc8nAM=;
+        b=q2ME/bkkJkPttlsZqtSfGSsS5zhcgdEyFuRmvifmCiSQSAxKYEz8i1Tt0kFdtt+1tV
+         1ssEcJBQGVTW9WFux8iGS4CyJjPGrtKbdAOEMWzU05tmJ97kOuyRzFL986nW8ZRaFG03
+         cKe0EM/txjDUS+VwYJBAYE8xslChF8wIoDvqIGPMcR0QBjdz1FkSzKv57Ui+2gQg2S73
+         ISUwPEceYxu0o/93+T7ja8SGuyurF21mirGfapRxuBTzYCLZCnunSc3TQAG9On//yV5k
+         4MsZfi7roksrGIKccOnmzhXDwTkN9gcYfctW9YU6DB+SjCQd6n32cOygTuJUodF76cr1
+         EWmA==
+X-Gm-Message-State: AOAM532BEbfgnndLaYTN7RJwfAmWblS9orofu5uRdbNGaIWzV6xIVOOA
+        vcCOGtGr08UzRJpaOIx4CNwMqkCbIm/orw==
+X-Google-Smtp-Source: ABdhPJw2HPaoRajF+IeqkgNAoVDs/MgxP3po1idYa4R4fWsq47S5BbJXHf6FD6GIdoI/D1SZlKNRiA==
+X-Received: by 2002:a17:907:2cc4:b0:6fe:2100:de21 with SMTP id hg4-20020a1709072cc400b006fe2100de21mr52095547ejc.462.1653991220342;
+        Tue, 31 May 2022 03:00:20 -0700 (PDT)
 Received: from able.fritz.box (p5b0ea02f.dip0.t-ipconnect.de. [91.14.160.47])
-        by smtp.gmail.com with ESMTPSA id r13-20020a056402018d00b0042617ba6389sm582062edv.19.2022.05.31.03.00.14
+        by smtp.gmail.com with ESMTPSA id r13-20020a056402018d00b0042617ba6389sm582062edv.19.2022.05.31.03.00.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 03:00:15 -0700 (PDT)
+        Tue, 31 May 2022 03:00:19 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
@@ -59,53 +59,42 @@ Cc:     christian.koenig@amd.com, alexander.deucher@amd.com,
         daniel@ffwll.ch, viro@zeniv.linux.org.uk,
         akpm@linux-foundation.org, hughd@google.com,
         andrey.grodzovsky@amd.com
-Subject: [PATCH 04/13] dma-buf: provide oom badness for DMA-buf files
-Date:   Tue, 31 May 2022 11:59:58 +0200
-Message-Id: <20220531100007.174649-5-christian.koenig@amd.com>
+Subject: [PATCH 07/13] drm/amdgpu: Use drm_oom_badness for amdgpu
+Date:   Tue, 31 May 2022 12:00:01 +0200
+Message-Id: <20220531100007.174649-8-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220531100007.174649-1-christian.koenig@amd.com>
 References: <20220531100007.174649-1-christian.koenig@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For now just return the size of the DMA-buf in pages as badness in the
-OOM situation. That should probably be extended to be in control of the
-exporter in the future.
+From: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
+This allows the OOM killer to make a better decision which process to reap.
+
+Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
 ---
- drivers/dma-buf/dma-buf.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index a2f9a1815e38..bdd4e8767cd3 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -388,6 +388,12 @@ static void dma_buf_show_fdinfo(struct seq_file *m, struct file *file)
- 	spin_unlock(&dmabuf->name_lock);
- }
- 
-+static long dma_buf_oom_badness(struct file *file)
-+{
-+	/* TODO: This should probably be controlled by a flag */
-+	return i_size_read(file_inode(file)) >> PAGE_SHIFT;
-+}
-+
- static const struct file_operations dma_buf_fops = {
- 	.release	= dma_buf_file_release,
- 	.mmap		= dma_buf_mmap_internal,
-@@ -396,6 +402,7 @@ static const struct file_operations dma_buf_fops = {
- 	.unlocked_ioctl	= dma_buf_ioctl,
- 	.compat_ioctl	= compat_ptr_ioctl,
- 	.show_fdinfo	= dma_buf_show_fdinfo,
-+	.oom_badness	= dma_buf_oom_badness,
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+index ebd37fb19cdb..9d6e57c93d3e 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+@@ -2651,8 +2651,9 @@ static const struct file_operations amdgpu_driver_kms_fops = {
+ 	.compat_ioctl = amdgpu_kms_compat_ioctl,
+ #endif
+ #ifdef CONFIG_PROC_FS
+-	.show_fdinfo = amdgpu_show_fdinfo
++	.show_fdinfo = amdgpu_show_fdinfo,
+ #endif
++	.oom_badness = drm_oom_badness,
  };
  
- /*
+ int amdgpu_file_to_fpriv(struct file *filp, struct amdgpu_fpriv **fpriv)
 -- 
 2.25.1
 
