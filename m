@@ -2,83 +2,100 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEFA3C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 31 May 2022 02:51:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C1C8C433FE
+	for <linux-media@archiver.kernel.org>; Tue, 31 May 2022 05:52:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233590AbiEaCvw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 May 2022 22:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        id S244096AbiEaFwe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 May 2022 01:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232597AbiEaCvu (ORCPT
+        with ESMTP id S237081AbiEaFwc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 May 2022 22:51:50 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B4B12AFC
-        for <linux-media@vger.kernel.org>; Mon, 30 May 2022 19:51:48 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so934169pjb.3
-        for <linux-media@vger.kernel.org>; Mon, 30 May 2022 19:51:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=xcpbx9Lt9Owdlm64rePa6qexHLWiyypbRMgxN1JLv/M=;
-        b=CyYXFkxhZiXQiu14RxVExNHuXRW0mFlO3k3+vtcoaKX56jC5Ba1StMa8qKRpw1gBRQ
-         m2pdXOpOXP5yoNapy24x4BR7MDFAg/xRghRxTbuu49cw3iyj+gWoa8iNtf8UAns32Wob
-         fQmMqbHWuHhV5B4vVeGxYjmDjsojaHhPcIBeQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=xcpbx9Lt9Owdlm64rePa6qexHLWiyypbRMgxN1JLv/M=;
-        b=MizVd+qQTq7dzchobiT4TiN6i7UBzYgbYjhZXR8awvCQ+0GZmvwQm9PN+9hWut35Xf
-         rKiokbyGxCyRIwL6asC3GCXt+jZJJNI4BjmM5dg4rRlSWIToKvkDkkk8fbQ/+dyseh+X
-         BYzuUNM7VIILHp/AZvfN1B60e+bqRtw+eN74+rsiRDpW1sLwHGMChBPNpSFUzi7ajpwp
-         aakkG2W4d9Q1iovmaKUdYDG148dkovNRnQrd0KQcWbk+48GHV0tvlsbn701OXFtuioWE
-         SRWN9MTEjibtH3Q0OKFXzuWPqByAKjiiizuLPd7yoKD+3KpTyCYbPwa2DlrLJozk9QCh
-         IZ5A==
-X-Gm-Message-State: AOAM530J+DLx0hvrWQ9FbbTTux3sCZNsv/S5soEqLENdMRV9OvqxB/Iw
-        TJ/rskN3lNGAGbZpHC7qE1NOwQ==
-X-Google-Smtp-Source: ABdhPJylou6Lhk/REVZIpM88w/Cw5uS6g71yGFXefOXkdi3IddUox11VUsoNOmO40/Smst1WUN/3KA==
-X-Received: by 2002:a17:90a:de01:b0:1df:cda5:8332 with SMTP id m1-20020a17090ade0100b001dfcda58332mr26157122pjv.123.1653965508382;
-        Mon, 30 May 2022 19:51:48 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:7d2a:ad1f:afa1:7770])
-        by smtp.gmail.com with ESMTPSA id i16-20020a056a00005000b00518382bceaesm9479310pfk.57.2022.05.30.19.51.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 19:51:47 -0700 (PDT)
-Date:   Tue, 31 May 2022 11:51:42 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dma-fence: allow dma fence to have their own lock
-Message-ID: <YpWCvniLzJfcp684@google.com>
-References: <20220530142232.2871634-1-senozhatsky@chromium.org>
- <7eee4274-bd69-df8d-9067-771366217804@amd.com>
+        Tue, 31 May 2022 01:52:32 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7364819FAF;
+        Mon, 30 May 2022 22:52:31 -0700 (PDT)
+X-UUID: 98ad6cb4bf084c0691b4adf3ec684984-20220531
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:9a6835e6-41ef-4f7d-8306-4c3fd376c8bf,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:15c55714-f88c-475e-badf-d9ee54230b8f,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 98ad6cb4bf084c0691b4adf3ec684984-20220531
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 612045878; Tue, 31 May 2022 13:52:27 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 31 May 2022 13:52:26 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Tue, 31 May 2022 13:52:26 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
+        <randy.wu@mediatek.com>, <moudy.ho@mediatek.com>,
+        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
+        <river.cheng@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <cellopoint.kai@gmail.com>
+Subject: [PATCH v19 5/6] dts: arm64: mt8183: add GCE client property for Mediatek MUTEX
+Date:   Tue, 31 May 2022 13:52:23 +0800
+Message-ID: <20220531055224.19280-6-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220531055224.19280-1-moudy.ho@mediatek.com>
+References: <20220531055224.19280-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7eee4274-bd69-df8d-9067-771366217804@amd.com>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On (22/05/30 16:55), Christian König wrote:
-> Am 30.05.22 um 16:22 schrieb Sergey Senozhatsky:
-> > [SNIP]
-> > So the `lock` should have at least same lifespan as the DMA fence
-> > that borrows it, which is impossible to guarantee in our case.
-> 
-> Nope, that's not correct. The lock should have at least same lifespan as the
-> context of the DMA fence.
+In order to allow modules with latency requirements such as MDP3
+to set registers through CMDQ, add the relevant dts property.
 
-How does one know when it's safe to release the context? DMA fence
-objects are still transparently refcount-ed and "live their own lives",
-how does one synchronize lifespans?
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 01e650251928..e74fd253478b 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1508,6 +1508,7 @@
+ 			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+ 			mediatek,gce-events = <CMDQ_EVENT_MUTEX_STREAM_DONE0>,
+ 					      <CMDQ_EVENT_MUTEX_STREAM_DONE1>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0x6000 0x1000>;
+ 		};
+ 
+ 		larb0: larb@14017000 {
+-- 
+2.18.0
+
