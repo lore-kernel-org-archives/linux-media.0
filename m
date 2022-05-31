@@ -2,95 +2,200 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0670AC433F5
-	for <linux-media@archiver.kernel.org>; Tue, 31 May 2022 10:02:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84495C433FE
+	for <linux-media@archiver.kernel.org>; Tue, 31 May 2022 10:50:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234201AbiEaKCC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 May 2022 06:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
+        id S244781AbiEaKuX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 May 2022 06:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245461AbiEaKA3 (ORCPT
+        with ESMTP id S233804AbiEaKuU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 May 2022 06:00:29 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632C0880C7;
-        Tue, 31 May 2022 03:00:27 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id er5so16782195edb.12;
-        Tue, 31 May 2022 03:00:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JruBtp3H6AJykO9OR/eL1GiHC7q7udWmPGM/sruwocU=;
-        b=gblxCfTt5pOw7A9YHZEJV+r2VG2ChUPoOQENqtkp2cD9u6jNXJgjxv2GFFFMsM/j1v
-         Q2bAWtuYoHVtOWqHe7hjKmrV3TsMB+pNFCxXxg98Hxoy145vOkyrtRBbQ1b4zZpA+A1+
-         m3vrIpLanU3qXFTpv1WHgWerwCM08gLxzMyuLrfLY2BLdTpWmtpZZCIA8VnGVxQPJSGw
-         xqv5Ii2BDXG3LKm7eR73P/dCNDyy1at1PARvuyUQJ4QUTBg+DKyDnVUw6Iop+kGwRAzR
-         hJvsA8R/+LW94eBMAMh3wccqPVIx8QKXEc5XbXbso3UNdF0HbknOCrBEyS28rXYGBpJ4
-         wTKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JruBtp3H6AJykO9OR/eL1GiHC7q7udWmPGM/sruwocU=;
-        b=FU0CaP1yyNOiUsROoOGnE/GK2s/hqKZMFHlJhUAgsLPCB3qEYItB6R7D1Kjm6v/T+E
-         zum1YSidMEMbK6cZNH3ty8eorbktpCQgiKuW/OVLXoOMiInins7NoI7NkrYleizQ698c
-         hh5WHfAKgRvF9UoXkNb13D2Hr+9ZHmBj1iNWjIE7oy0VNYWNq5j0hbk3JjtV5iReUeLy
-         Ixfw14MhPg7Jy16I5LVvCseQ66sN69+upFxOXsfu/yNpIV0EJ0Rlo9A8labBjO9etHJL
-         thNlelDrwvI8R8RgXk7FyMFOCpFl8abmH9UpNKMSkr1lxCfbETxsaOGIP9Vfmcjecciz
-         aG1w==
-X-Gm-Message-State: AOAM532yIh4+RSgwwzUBRLyNrCcqzR3QF4foOkP/J1Jozk4tGazrYyAN
-        aWkSk1gOICm39QkHUH+Hz/Rby0HZmUrofw==
-X-Google-Smtp-Source: ABdhPJxrLNkOBCK22JKPARmcl5BjmY6TUTpFvEk9uA+1n3mHpJJ9+WrPqf1O6PJKP4JfkZxzMsKPKw==
-X-Received: by 2002:a05:6402:350b:b0:42d:d565:a62a with SMTP id b11-20020a056402350b00b0042dd565a62amr7607557edd.172.1653991225974;
-        Tue, 31 May 2022 03:00:25 -0700 (PDT)
-Received: from able.fritz.box (p5b0ea02f.dip0.t-ipconnect.de. [91.14.160.47])
-        by smtp.gmail.com with ESMTPSA id r13-20020a056402018d00b0042617ba6389sm582062edv.19.2022.05.31.03.00.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 03:00:25 -0700 (PDT)
-From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
-        <ckoenig.leichtzumerken@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Cc:     christian.koenig@amd.com, alexander.deucher@amd.com,
-        daniel@ffwll.ch, viro@zeniv.linux.org.uk,
-        akpm@linux-foundation.org, hughd@google.com,
-        andrey.grodzovsky@amd.com
-Subject: [PATCH 11/13] drm/omap: use drm_oom_badness
-Date:   Tue, 31 May 2022 12:00:05 +0200
-Message-Id: <20220531100007.174649-12-christian.koenig@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220531100007.174649-1-christian.koenig@amd.com>
-References: <20220531100007.174649-1-christian.koenig@amd.com>
+        Tue, 31 May 2022 06:50:20 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BC190CC8;
+        Tue, 31 May 2022 03:50:18 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2186B1C0006;
+        Tue, 31 May 2022 10:50:13 +0000 (UTC)
+Date:   Tue, 31 May 2022 12:50:11 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Quentin Schulz <foss+kernel@0leil.net>
+Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Subject: Re: [PATCH v5 4/4] media: i2c: ov5675: add .get_selection support
+Message-ID: <20220531105011.yxrosmwtw3mpaomb@uno.localdomain>
+References: <20220525145833.1165437-1-foss+kernel@0leil.net>
+ <20220525145833.1165437-4-foss+kernel@0leil.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220525145833.1165437-4-foss+kernel@0leil.net>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This allows the OOM killer to make a better decision which process to reap.
+Hi Quentin
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
----
- drivers/gpu/drm/omapdrm/omap_drv.c | 1 +
- 1 file changed, 1 insertion(+)
+On Wed, May 25, 2022 at 04:58:33PM +0200, Quentin Schulz wrote:
+> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+>
+> The sensor has 2592*1944 active pixels, surrounded by 16 active dummy
+> pixels and there are an additional 24 black rows "at the bottom".
+>
+>                      [2624]
+>         +-----+------------------+-----+
+>         |     |     16 dummy     |     |
+>         +-----+------------------+-----+
+>         |     |                  |     |
+>         |     |     [2592]       |     |
+>         |     |                  |     |
+>         |16   |      valid       | 16  |[2000]
+>         |dummy|                  |dummy|
+>         |     |            [1944]|     |
+>         |     |                  |     |
+>         +-----+------------------+-----+
+>         |     |     16 dummy     |     |
+>         +-----+------------------+-----+
+>         |     |  24 black lines  |     |
+>         +-----+------------------+-----+
+>
+> The top-left coordinate is gotten from the registers specified in the
+> modes which are identical for both currently supported modes.
+>
+> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> ---
+>
+> v4:
+>  - explicit a bit more the commit log,
+>  - added drawing in the commit log,
+>  - fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
+>
+> added in v3
+>
+>  drivers/media/i2c/ov5675.c | 33 +++++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>
+> diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
+> index c1f3c387afde0..384a9ea2372c3 100644
+> --- a/drivers/media/i2c/ov5675.c
+> +++ b/drivers/media/i2c/ov5675.c
+> @@ -1121,6 +1121,38 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
+>  	return 0;
+>  }
+>
+> +static int ov5675_get_selection(struct v4l2_subdev *sd,
+> +				struct v4l2_subdev_state *state,
+> +				struct v4l2_subdev_selection *sel)
+> +{
+> +	struct ov5675 *ov5675 = to_ov5675(sd);
+> +
+> +	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
+> +		return -EINVAL;
+> +
+> +	switch (sel->target) {
+> +	case V4L2_SEL_TGT_CROP_BOUNDS:
+> +		sel->r.top = 0;
+> +		sel->r.left = 0;
+> +		sel->r.width = 2624;
+> +		sel->r.height = 2000;
+> +		return 0;
+> +	case V4L2_SEL_TGT_CROP:
+> +		sel->r.top = 16;
+> +		sel->r.left = 16;
+> +		sel->r.width = ov5675->cur_mode->width;
+> +		sel->r.height = ov5675->cur_mode->height;
+> +		return 0;
 
-diff --git a/drivers/gpu/drm/omapdrm/omap_drv.c b/drivers/gpu/drm/omapdrm/omap_drv.c
-index eaf67b9e5f12..ca2c484f48ca 100644
---- a/drivers/gpu/drm/omapdrm/omap_drv.c
-+++ b/drivers/gpu/drm/omapdrm/omap_drv.c
-@@ -684,6 +684,7 @@ static const struct file_operations omapdriver_fops = {
- 	.poll = drm_poll,
- 	.read = drm_read,
- 	.llseek = noop_llseek,
-+	.oom_badness = drm_oom_badness,
- };
- 
- static const struct drm_driver omap_drm_driver = {
--- 
-2.25.1
+I'm afraid this doesn't match exactly my understanding of the
+discussion we had.
 
+The driver defines the following modes
+
+/*
+ * OV5670 sensor supports following resolutions with full FOV:
+ * 4:3  ==> {2592x1944, 1296x972, 648x486}
+ * 16:9 ==> {2560x1440, 1280x720, 640x360}
+ */
+static const struct ov5670_mode supported_modes[] = {
+	{
+		.width = 2592,
+		.height = 1944,
+	},
+	{
+		.width = 1296,
+		.height = 972,
+	},
+	{
+		.width = 648,
+		.height = 486,
+	},
+	{
+		.width = 2560,
+		.height = 1440,
+	},
+	{
+		.width = 1280,
+		.height = 720,
+	},
+	{
+		.width = 640,
+		.height = 360,
+	}
+};
+
+The comment says all modes retain the "full FOV", which I assume it
+implies they are obtained by sub-sampling and not cropping.
+
+The first three modes (4:3) are indeed obtained by subsampling the
+full active pixel array:
+
+        (2592,1944) / 2 = (1296,972) / 2 = (648,486)
+
+The last three are obtained by subsampling a slightly cropped portion
+of the pixel array
+
+        (2560,1440) / 2 = (1280,720) / 2 = (640,360)
+
+If you set CROP = cur_mode->[width/height] you will instead report the
+visible width/height, which as said it's obtained by subsampling (of a
+slightly cropped portion of the pixel array for the last three ones)
+
+The CROP rectangle is then (2592, 1944) for the first three and (2560,
+1440) for the last three.
+
+I would add a v4l2_rect to struct ov5670_mode where to record that and
+report it here.
+
+> +	case V4L2_SEL_TGT_CROP_DEFAULT:
+> +		sel->r.top = 16;
+> +		sel->r.left = 16;
+> +		sel->r.width = supported_modes[0].width;
+> +		sel->r.height = supported_modes[0].height;
+> +		return 0;
+
+You could also define these values instead of fishing in the
+supported_modes array, to protect against future changes to the array
+itself. Up to you.
+
+
+> +	}
+> +	return -EINVAL;
+> +}
+> +
+>  static int ov5675_enum_mbus_code(struct v4l2_subdev *sd,
+>  				 struct v4l2_subdev_state *sd_state,
+>  				 struct v4l2_subdev_mbus_code_enum *code)
+> @@ -1170,6 +1202,7 @@ static const struct v4l2_subdev_video_ops ov5675_video_ops = {
+>  static const struct v4l2_subdev_pad_ops ov5675_pad_ops = {
+>  	.set_fmt = ov5675_set_format,
+>  	.get_fmt = ov5675_get_format,
+> +	.get_selection = ov5675_get_selection,
+>  	.enum_mbus_code = ov5675_enum_mbus_code,
+>  	.enum_frame_size = ov5675_enum_frame_size,
+>  };
+> --
+> 2.36.1
+>
