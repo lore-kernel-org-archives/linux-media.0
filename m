@@ -2,291 +2,262 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84982C433FE
-	for <linux-media@archiver.kernel.org>; Tue, 31 May 2022 06:14:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 087E4C433F5
+	for <linux-media@archiver.kernel.org>; Tue, 31 May 2022 06:58:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244205AbiEaGOJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 31 May 2022 02:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
+        id S244396AbiEaG6y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 31 May 2022 02:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244238AbiEaGOF (ORCPT
+        with ESMTP id S232460AbiEaG6x (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 31 May 2022 02:14:05 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2909419F;
-        Mon, 30 May 2022 23:13:59 -0700 (PDT)
-X-UUID: 60099e8cd388426a92367700fb9da891-20220531
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:829b1772-2879-45ab-b004-01ac7523182a,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:2a19b09,CLOUDID:8eebef89-32d7-4fc0-b2ef-8776ac194f8f,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 60099e8cd388426a92367700fb9da891-20220531
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1649625973; Tue, 31 May 2022 14:13:53 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 31 May 2022 14:13:39 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Tue, 31 May 2022 14:13:39 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
-        <randy.wu@mediatek.com>, <moudy.ho@mediatek.com>,
-        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
-        <river.cheng@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <cellopoint.kai@gmail.com>
-Subject: [PATCH v17 0/4] media: mediatek: support mdp3 on mt8183 platform
-Date:   Tue, 31 May 2022 14:13:34 +0800
-Message-ID: <20220531061338.19555-1-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Tue, 31 May 2022 02:58:53 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8E170931;
+        Mon, 30 May 2022 23:58:51 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: benjamin.gaignard)
+        with ESMTPSA id 20D641F434F5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653980329;
+        bh=/YdiAxkbFFsJPIbUNtx17mCUZumnLJTtjHWjlaPVPpA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fOihRgNRYJpayg+EAICytygYOQ5MRP2tdgwYWmHMyoZ1pdood/Y6r6wtpvBCuXRHY
+         Q0UpPtUk65r63U5/V7viFwdlAW1D9gyKNLvgsfeXncx2zGFbjwl7YfGWJ3/rTZDlTb
+         dPo62pJsxSQ1E8+UMrl7PPGkMT9yPtYAm0NHe4ya0f/MjqZOC5mk0RjmJHgYjgT+1F
+         ZpG9k0zP8aLKu75wy2NcXtivZXEe8BFyn6jXv2XJsfZ5aUWAmL0+bJD+M6G5KptwXr
+         b7G+bLg2fj5aKOm31YRtwZ+bcWYWZQkVAMWr9fpD6F1pWYfxDSArYcj/kyGiP64jhU
+         NNgBeFFjc+akA==
+Message-ID: <b398272b-daf8-7499-b4fd-8a6f2af30053@collabora.com>
+Date:   Tue, 31 May 2022 08:58:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6 11/17] media: uapi: Add
+ V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+Content-Language: en-US
+To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        samuel@sholland.org, nicolas.dufresne@collabora.com,
+        andrzej.p@collabora.com, Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+References: <20220527143134.3360174-1-benjamin.gaignard@collabora.com>
+ <c639efc2-2089-359d-44c6-e9d92e8fd22e@xs4all.nl>
+ <c47b3218-069b-790e-8781-7b6d195ac8a7@xs4all.nl> <5824953.lOV4Wx5bFT@kista>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <5824953.lOV4Wx5bFT@kista>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Change since v16:
-- Rebased on v5.19-rc1
-- Depend on:
-  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=646131
-- In response to MUTEX changes, adjust API naming and parameters when
-  used in function "mdp_path_subfrm_require".
-- Remove unnecessary MDP3 phandle in 8183 dts.
 
-Change since v15:
-- Depend on:
-  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=640926
-- Split the bindings under ./soc/mediatek into a separate patch.
-- Fix data abort in "mdp_auto_release_work"
-- Adjust the steps in the function "mdp_cmdq_send" to make the error handling
-  more reasonable
+Le 30/05/2022 à 23:24, Jernej Škrabec a écrit :
+> Dne ponedeljek, 30. maj 2022 ob 15:49:57 CEST je Hans Verkuil napisal(a):
+>> On 30/05/2022 11:18, Hans Verkuil wrote:
+>>> On 29/05/2022 08:40, Jernej Škrabec wrote:
+>>>> Hi!
+>>>>
+>>>> This series looks very good and I plan to test it shortly on Cedrus, but
+> I
+>>>> have one major concern below.
+>>>>
+>>>> Dne petek, 27. maj 2022 ob 16:31:28 CEST je Benjamin Gaignard napisal(a):
+>>>>> The number of 'entry point offset' can be very variable.
+>>>>> Instead of using a large static array define a v4l2 dynamic array
+>>>>> of U32 (V4L2_CTRL_TYPE_U32).
+>>>>> The number of entry point offsets is reported by the elems field
+>>>>> and in struct v4l2_ctrl_hevc_slice_params.num_entry_point_offsets
+>>>>> field.
+>>>> Slice control by itself is variable length array, so you would actually
+> need
+>>>> 2D variable array for entry points which is not supported. However, easy
+>>>> workaround for that is to flatten 2D array to 1D and either have another
+> slice
+>>>> control field which would tell first entry point index for convenience or
+> let
+>>>> driver calculate it by adding up all num_entry_point_offsets of previous
+>>>> slices.
+>>>>
+>>>> Hans, what do you think?
+>>> If I would support 2D variable array sizes, wouldn't that be more elegant?
+>>>
+>>> The current implementation doesn't support that, but as the commit log for
+>>> patch 1/17 says:
+>>>
+>>> "Currently dynamically sized arrays are limited to one dimensional arrays,
+>>> but that might change in the future if there is a need for it."
+>>>
+>>> Let me know if you agree, and I'll try to implement this. It's been a
+> while
+>>> since I last looked at this, so I'm not sure how much work it is, but it
+> is
+>>> probably worth a shot.
+>> Digging more into this made me realize that this doesn't actually help for
+> this
+>> particular case.
+>>
+>> I would lean towards your second suggestion of adding up all
+> num_entry_point_offsets
+>> of previous slices.
+> Just one question/clarification about dynamic arrays - does driver need to
+> reserve maximum amount of memory for dynamic array control at initialization
+> time? If so, this would still be problematic, since there cound be a huge
+> amount of entry points in theory.
 
-Change since v14:
-- Rebase on v5.18-rc6
-- Depend on:
-  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=640926
-- In response to CMDQ API change, replace the function "cmdq_pkt_flush_async"
-  with the standard APIs of mbox
-- Fix the description of "mediatek,gce-client-reg" property in MDP3-related
-  bindings
+When adding the control the driver could set .dims field to specify
+the max number of accepted slices.
+I have added '#define V4L2_HEVC_SLICE_MAX_COUNT 600' that you could use
+for this field. It is the value we have found when using slices with RKVDEC
+driver.
 
-Change since v13:
-- Rebase on v5.18-rc4
-- Depend on:
-  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=636041
-- Remove advanced functionality about ISP settings for direct link cases.
-- Remove the software designation in the mt8183 dts and
-  revise corresponding bindings.
+Regards,
+Benjamin
 
-Change since v12:
-- Rebase on linux-next
-- Depend on:
-  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=630948
-- Remove messages related to routing information in MDP3, and leave the related
-  settings in MMSYS.
-- Remove unnecessary phandle and redundant property in RDMA dt-binding and
-  adjust the corresponding driver.
-- Revise MDP3 node name in dts. 
-- Removed unnecessary functions, mutex and work queue in MDP3 driver
-- Fixed format mapping error for V4L2_PIX_FMT_RGB565X
-
-Change since v11:
-- Rebase on linux-next tag:next-20220316
-- Depend on:
-  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=624281
-- Remove redundant hardware index in data-binding suggested by Rob Herring.
-- Referring to Rob Herring's suggestion to improve some descriptions in the
-  RDMA dt-binding
-- Move MDP3 file folder from "./drive/media/platform/mtk-mdp3" to
-  "./driver/media/platform/mediatek/mdp3"
-- Fixed the V4L2 and MDP color format mapping error in RGB565 which
-  checked by Benjamin Gaignard
-
-Change since v10:
-- The routing table needs to be discarded, and the calculation result
-  on the SCP side is used to write a suitable mux setting for
-  1 input port and 2 output ports.
-- Adjust dts parsing flow to remove redundant HW IDs.
-- Fix memory leak caused by no free path information in function "mdp_cmdq_send".
-
-Change since v9:
-- Keep only the MDP3 driver patches and split the remaining mmsys and
-  mutex patches into another mail.
-- Move mutex mod settings to corresponding driver and make relevant adjustments
-  for this in MDP3 driver.
-- Fix compile warning reported by kernel test robot.
-
-Change since v8:
-- Rebase on v5.16-rc2.
-- Refer to Angelo's suggestion, adjust the register writing format to increase
-  readability and significance.
-- Refer to Angelo's suggestion, adjust or reduce inappropriate debugging
-  messages.
-- Refer to Rob Herring's suggestion to correct the the binding file
-  to make it with the specification.
-- Fix compile warning reported by kernel test robot.
-
-Change since v7:
-- Rebase on v5.15-rc6.
-- Revise several V4L2 M2M settings to pass v4l2-compliance test.
-- Integrate those same component dt-binding documents of DRM and MDP, and
-  move them under the MMSYS domain.
-- Split MMSYS and MUTEX into two different files according to
-  their functional properties.
-
-Changes since v6:
-- Refactor GCE event to corresponding node.
-- Fix dt_binding_check fail.
-- Fix compilation errors.
-
-Changes since v5:
-- Rebase on v5.14-rc6.
-- Move MMSYS/Mutex settings to corresponding driver.
-- Revise the software license description and copyright.
-- Remove unnecessary enum. or definitions.
-- Optimize platform/chip definition conditions.
-- Use general printing functions instead of MDP3 private ones.
-- Fix compile warning.
-
-Changes since v4:
-- Rebase on v5.13-rc1.
-- Remove the CMDQ flush flow to match the CMDQ API change.
-- Integrate four of MDP's direct-link subcomponents into MDP controller node
-  from syscon node to avoid illegal clock usage.
-- Rewrite dt-binding in a JSON compatible subset of YAML
-- Fix a bit of macro argument precedence.
-
-Changes since v3:
-- Rebase on v5.9-rc1.
-- modify code for review comment from Rob Herring, cancel multiple nodes using
-  same register base situation.
-- control IOMMU port through pm runtime get/put to DMA components' device.
-- SCP(VPU) driver revision.
-- stop queuing jobs(remove flush_workqueue()) after mdp_m2m_release().
-- add computation of plane address with data_offset.
-- fix scale ratio check issue.
-- add default v4l2_format setting.
-
-Changes since v2:
-- modify code for review comment from Tomasz Figa & Alexandre Courbot
-- review comment from Rob Herring will offer code revision in v4, due to
-  it's related to device node modification, will need to modify code
-  architecture
-
-Changes since v1:
-- modify code for CMDQ v3 API support
-- EC ipi cmd migration
-- fix compliance test fail item (m2m cmd with -f) due to there is two problem in runing all format(-f) cmd:
-1. out of memory before test complete
-        Due to capture buffer mmap (refcount + 1) after reqbuf but seems
-        no corresponding munmap called before device close.
-        There are total 12XX items(formats) in format test and each format
-        alloc 8 capture/output buffers.
-2. unceasingly captureBufs() (randomly)
-        Seems the break statement didn't catch the count == 0 situation:
-        In v4l2-test-buffers.cpp, function: captureBufs()
-                        ...
-                        count--;
-                        if (!node->is_m2m && !count)
-                                break;
-        Log is as attachment
-
-Hi,
-
-This patch is used to present Media Data Path 3 (MDP3)
-which provided scaling and color format conversion.
-support using GCE to write register in critical time limitation.
-support V4L2 m2m device control.
-
-Moudy Ho (4):
-  dt-binding: mediatek: add bindings for MediaTek MDP3 components
-  dt-binding: mediatek: add bindings for MediaTek CCORR and WDMA
-  dts: arm64: mt8183: add Mediatek MDP3 nodes
-  media: platform: mtk-mdp3: add Mediatek MDP3 driver
-
- .../bindings/media/mediatek,mdp3-rdma.yaml    |  85 ++
- .../bindings/media/mediatek,mdp3-rsz.yaml     |  65 ++
- .../bindings/media/mediatek,mdp3-wrot.yaml    |  70 ++
- .../bindings/soc/mediatek/mediatek,ccorr.yaml |  58 +
- .../bindings/soc/mediatek/mediatek,wdma.yaml  |  71 ++
- arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  79 +-
- drivers/media/platform/mediatek/Kconfig       |   1 +
- drivers/media/platform/mediatek/Makefile      |   1 +
- drivers/media/platform/mediatek/mdp3/Kconfig  |  20 +
- drivers/media/platform/mediatek/mdp3/Makefile |   6 +
- .../platform/mediatek/mdp3/mdp_reg_ccorr.h    |  19 +
- .../platform/mediatek/mdp3/mdp_reg_rdma.h     |  65 ++
- .../platform/mediatek/mdp3/mdp_reg_rsz.h      |  39 +
- .../platform/mediatek/mdp3/mdp_reg_wdma.h     |  47 +
- .../platform/mediatek/mdp3/mdp_reg_wrot.h     |  55 +
- .../platform/mediatek/mdp3/mtk-img-ipi.h      | 290 +++++
- .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    | 488 +++++++++
- .../platform/mediatek/mdp3/mtk-mdp3-cmdq.h    |  47 +
- .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 987 ++++++++++++++++++
- .../platform/mediatek/mdp3/mtk-mdp3-comp.h    | 185 ++++
- .../platform/mediatek/mdp3/mtk-mdp3-core.c    | 378 +++++++
- .../platform/mediatek/mdp3/mtk-mdp3-core.h    |  95 ++
- .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     | 772 ++++++++++++++
- .../platform/mediatek/mdp3/mtk-mdp3-m2m.h     |  48 +
- .../platform/mediatek/mdp3/mtk-mdp3-regs.c    | 736 +++++++++++++
- .../platform/mediatek/mdp3/mtk-mdp3-regs.h    | 370 +++++++
- .../platform/mediatek/mdp3/mtk-mdp3-vpu.c     | 312 ++++++
- .../platform/mediatek/mdp3/mtk-mdp3-vpu.h     |  78 ++
- 28 files changed, 5466 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,ccorr.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mediatek,wdma.yaml
- create mode 100644 drivers/media/platform/mediatek/mdp3/Kconfig
- create mode 100644 drivers/media/platform/mediatek/mdp3/Makefile
- create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_ccorr.h
- create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_rdma.h
- create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_rsz.h
- create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_wdma.h
- create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_wrot.h
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.h
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.h
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.c
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.c
- create mode 100644 drivers/media/platform/mediatek/mdp3/mtk-mdp3-vpu.h
-
--- 
-2.18.0
-
+>
+> Best regards,
+> Jernej
+>
+>> Regards,
+>>
+>> 	Hans
+>>
+>>> Regards,
+>>>
+>>> 	Hans
+>>>
+>>>> Note, it seems that H265 decoding on Cedrus still works without entry
+> points,
+>>>> so this problem can be solved later. I'm not sure what we lose with that
+> but
+>>>> it was suggested that this could influence speed or error resilience or
+> both.
+>>>> However, I think we're close to solve it, so I'd like to do that now.
+>>>>
+>>>> Best regards,
+>>>> Jernej
+>>>>
+>>>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>>>> ---
+>>>>>   .../userspace-api/media/v4l/ext-ctrls-codec.rst       | 11 +++++++++++
+>>>>>   drivers/media/v4l2-core/v4l2-ctrls-defs.c             |  5 +++++
+>>>>>   include/media/hevc-ctrls.h                            |  5 ++++-
+>>>>>   3 files changed, 20 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/
+>>>> Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>>> index 0796b1563daa..05228e280f66 100644
+>>>>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>>>>> @@ -3010,6 +3010,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>>       * - __u32
+>>>>>         - ``data_bit_offset``
+>>>>>         - Offset (in bits) to the video data in the current slice data.
+>>>>> +    * - __u32
+>>>>> +      - ``num_entry_point_offsets``
+>>>>> +      - Specifies the number of entry point offset syntax elements in the
+>>>> slice header.
+>>>>>       * - __u8
+>>>>>         - ``nal_unit_type``
+>>>>>         - Specifies the coding type of the slice (B, P or I).
+>>>>> @@ -3150,6 +3153,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>>>>   
+>>>>>       \normalsize
+>>>>>   
+>>>>> +``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
+>>>>> +    Specifies entry point offsets in bytes.
+>>>>> +    This control is a dynamically sized array. The number of entry
+> point
+>>>>> +    offsets is reported by the ``elems`` field.
+>>>>> +    This bitstream parameter is defined according to :ref:`hevc`.
+>>>>> +    They are described in section 7.4.7.1 "General slice segment header
+>>>>> +    semantics" of the specification.
+>>>>> +
+>>>>>   ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
+>>>>>       Specifies the HEVC scaling matrix parameters used for the scaling
+>>>> process
+>>>>>       for transform coefficients.
+>>>>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/
+> v4l2-
+>>>> core/v4l2-ctrls-defs.c
+>>>>> index d594efbcbb93..e22921e7ea61 100644
+>>>>> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>>>>> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+>>>>> @@ -1188,6 +1188,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+>>>>>   	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:		return
+>>>> "HEVC Decode Parameters";
+>>>>>   	case V4L2_CID_STATELESS_HEVC_DECODE_MODE:		return
+>>>> "HEVC Decode Mode";
+>>>>>   	case V4L2_CID_STATELESS_HEVC_START_CODE:		return
+>>>> "HEVC Start Code";
+>>>>> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:	return
+>>>> "HEVC Entry Point Offsets";
+>>>>>   
+>>>>>   	/* Colorimetry controls */
+>>>>>   	/* Keep the order of the 'case's the same as in v4l2-controls.h!
+>>>> */
+>>>>> @@ -1518,6 +1519,10 @@ void v4l2_ctrl_fill(u32 id, const char **name,
+> enum
+>>>> v4l2_ctrl_type *type,
+>>>>>   	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:
+>>>>>   		*type = V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
+>>>>>   		break;
+>>>>> +	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:
+>>>>> +		*type = V4L2_CTRL_TYPE_U32;
+>>>>> +		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
+>>>>> +		break;
+>>>>>   	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR:
+>>>>>   		*type = V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR;
+>>>>>   		break;
+>>>>> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+>>>>> index a3c829ef531a..1319cb99ae3f 100644
+>>>>> --- a/include/media/hevc-ctrls.h
+>>>>> +++ b/include/media/hevc-ctrls.h
+>>>>> @@ -20,6 +20,7 @@
+>>>>>   #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	(V4L2_CID_CODEC_BASE
+>>>> + 1012)
+>>>>>   #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE
+> + 1015)
+>>>>>   #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
+>>>>> +#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (V4L2_CID_CODEC_BASE
+> +
+>>>> 1017)
+>>>>>   
+>>>>>   /* enum v4l2_ctrl_type type values */
+>>>>>   #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
+>>>>> @@ -318,6 +319,8 @@ struct v4l2_hevc_pred_weight_table {
+>>>>>    *
+>>>>>    * @bit_size: size (in bits) of the current slice data
+>>>>>    * @data_bit_offset: offset (in bits) to the video data in the current
+> slice
+>>>> data
+>>>>> + * @num_entry_point_offsets: specifies the number of entry point offset
+> syntax
+>>>>> + *			     elements in the slice header.
+>>>>>    * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+>>>>>    * @nuh_temporal_id_plus1: minus 1 specifies a temporal identifier for
+> the
+>>>> NAL unit
+>>>>>    * @slice_type: see V4L2_HEVC_SLICE_TYPE_{}
+>>>>> @@ -360,7 +363,7 @@ struct v4l2_hevc_pred_weight_table {
+>>>>>   struct v4l2_ctrl_hevc_slice_params {
+>>>>>   	__u32	bit_size;
+>>>>>   	__u32	data_bit_offset;
+>>>>> -
+>>>>> +	__u32	num_entry_point_offsets;
+>>>>>   	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
+>>>>>   	__u8	nal_unit_type;
+>>>>>   	__u8	nuh_temporal_id_plus1;
+>>>>> -- 
+>>>>> 2.32.0
+>>>>>
+>>>>>
+>>>>
+>>
+>
