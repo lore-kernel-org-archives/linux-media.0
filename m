@@ -2,130 +2,117 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E549C433F5
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jun 2022 13:22:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17FB7CCA46F
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jun 2022 13:50:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353210AbiFANWi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Jun 2022 09:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
+        id S1353330AbiFANu3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Jun 2022 09:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353206AbiFANWg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jun 2022 09:22:36 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460B35000E
-        for <linux-media@vger.kernel.org>; Wed,  1 Jun 2022 06:22:32 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id k16so2346086wrg.7
-        for <linux-media@vger.kernel.org>; Wed, 01 Jun 2022 06:22:32 -0700 (PDT)
+        with ESMTP id S1347009AbiFANu1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jun 2022 09:50:27 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4796EC68;
+        Wed,  1 Jun 2022 06:50:26 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id r9-20020a1c4409000000b00397345f2c6fso3071234wma.4;
+        Wed, 01 Jun 2022 06:50:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=grujjgVk78/kTeNAsYLCQutjse2S4qIjwux8s5I8vnE=;
-        b=lbp9nbUHl8ofN+dxS0sdOLugDeZaytx+OeJ/NUuXNjLXcor8DTOBLfkafd9Ko2hYX8
-         495GS2cLePb2F5knyThcbWf3wiId5H9lTMY9NZabHJK5EZ3R9hCa++G7oLq2EYPVKmNI
-         +UytFWz/nCngyWhhtdQW0HcQWOK9ikTgTBhTk=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8js3BmhqDmlsACbALLq5e90PLEF4lborosfHSvoWOKM=;
+        b=YTm8+7dPHONlBsZR4SMEitCaBrfkbRXNUYC3ZuJKHQrTTGF4FMpWDkHvPvAUKxe/7W
+         vdWoMgFNonHPdtNFLs8dJ0eKIrl3TVQfXZJ1W0tL8u1KraHZ3D4SYSONkggVAD+CYTXc
+         vmgHav8NPKJ04dRy1E1KYZ6JMM3uN6Mbr1xauaHZ7Yu5PzCs6IOS9W3k8KXkoAtGZ+Kj
+         3WTmHnwAlXIAlgL8PwWAtd6lN4A7aT+ryvS5oVzEY7RSSG+IjEpqmsMSZk4Zg8mHPLnn
+         iayVlAoBzt92WTZsmg6sguCvUgZ2C7pPg2hJF3Jn/ExC9EtV0aaEwYCXejT3Wp+8zJqK
+         u0SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=grujjgVk78/kTeNAsYLCQutjse2S4qIjwux8s5I8vnE=;
-        b=TXEpWCv6tE2fdjcCAgq2/hQy+aNxvqJdYGDVtRshtlgEK22mrh6+9TngisDmQhCkGJ
-         /EGSaQT3mhFayF2Hn3kuCxoecqt4hr8PehUCHCsOxGHTfbPmSskQT3qsVMzdHNK6Fj9u
-         tUzrv+J7Xjbwij0+La9YGHVyF2ED5jDkRD9RBv64V7zgAHjU5vEEOMYubuG9rh+5F8Xk
-         bU1Q9xSUyZj9zEKBubAgTFaT2hBHbnDLu1Ptd/tKc/FjfSQH+ajiTcXfQjLTE5zaK8Og
-         okjmR1cQNZf7fcsSajBqh0vYTGVJovpOmIcMxMJwL/OHPppHRhc05MIi7PU+8yKWvzuo
-         SQ1A==
-X-Gm-Message-State: AOAM532gArpuwuG/mejW0Rvin4JpKBx3XHRud/JqQy3nu0EQBgInrLcS
-        uGHf+KZz8xRWp2NewANQKWwK/Q==
-X-Google-Smtp-Source: ABdhPJwoJDsjkQSbDgWTJ7sUm3syg4hR/7CZJ/cx7MS5hpu1nj4Bt5HyEIhy7EmDZ7ZNnjRnexBFog==
-X-Received: by 2002:a5d:4646:0:b0:210:3e3c:86dc with SMTP id j6-20020a5d4646000000b002103e3c86dcmr2982159wrs.277.1654089751161;
-        Wed, 01 Jun 2022 06:22:31 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id d13-20020adfef8d000000b0020fc40d006bsm1609106wro.17.2022.06.01.06.22.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 06:22:30 -0700 (PDT)
-Date:   Wed, 1 Jun 2022 15:22:27 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8js3BmhqDmlsACbALLq5e90PLEF4lborosfHSvoWOKM=;
+        b=elYrwZtsBAYxu9scsnYvzWSwodOPXNRNFSW0S8/fVXt2QSx7+i7+NrA0cWRrfacdts
+         VBzsEvFbj4BG28krlEpmCzhIyQ78iuiMT6zwO4TinNGn5xMtXtXKrWuptuh6Hf+Or3nt
+         /sYJsgVGHCdWDTejpQ2ZIi89FosyzwOg95LfPUlOsXJH1StxHNJ2SkpWcRnBrPla0N0n
+         aBMd/fWLmLWxaHI7Oa0s8HN1PSlKqj+TFx5qs+7asBeSwGA5vwChy+eXSjkPwJzX832n
+         j2bL5KSDYdUIVZLBk03n6YCJ1BtvyV28Ed4uulmDNDTBWKr82lzH9CJolZJ4/R7MsWpX
+         L5tw==
+X-Gm-Message-State: AOAM532X1mS4Sfm12kjPClP/SXUzqlYV4JlFL/K3fi7F257WCQj2cKjW
+        GMlxvyvDkoPXNscL6EGcymY=
+X-Google-Smtp-Source: ABdhPJwrKHJfq73KfKlhy8VE3p9Xdk0H07fsnJbZrGsy5keEhwCnMaJoppLUFggoAw0VxEGq5FlEhQ==
+X-Received: by 2002:a7b:c1d9:0:b0:397:335d:4d9f with SMTP id a25-20020a7bc1d9000000b00397335d4d9fmr29006967wmj.55.1654091425051;
+        Wed, 01 Jun 2022 06:50:25 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1256:79a0:d1fb:e1e4:e193:e55f? ([2a02:908:1256:79a0:d1fb:e1e4:e193:e55f])
+        by smtp.gmail.com with ESMTPSA id n13-20020a5d400d000000b0020ff7246934sm1664650wrp.95.2022.06.01.06.50.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 06:50:24 -0700 (PDT)
+Message-ID: <87724f19-7976-3a2c-96bc-8652a1cec9e8@gmail.com>
+Date:   Wed, 1 Jun 2022 15:50:22 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-fence: allow dma fence to have
+ their own lock
+Content-Language: en-US
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
         Gustavo Padovan <gustavo@padovan.org>,
         Tomasz Figa <tfiga@chromium.org>,
         Ricardo Ribalda <ribalda@chromium.org>,
         Christoph Hellwig <hch@infradead.org>,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-fence: allow dma fence to have
- their own lock
-Message-ID: <YpdoEzLmlBfJks3q@phenom.ffwll.local>
-Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Christoph Hellwig <hch@infradead.org>, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org
 References: <20220530142232.2871634-1-senozhatsky@chromium.org>
- <7eee4274-bd69-df8d-9067-771366217804@amd.com>
- <YpWCvniLzJfcp684@google.com>
- <33aba213-b6ad-4a15-9272-c62f5dfb1fb7@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+ <7eee4274-bd69-df8d-9067-771366217804@amd.com> <YpTmhixkV7+yh6wo@google.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <YpTmhixkV7+yh6wo@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <33aba213-b6ad-4a15-9272-c62f5dfb1fb7@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 02:45:42PM +0200, Christian K�nig wrote:
-> Am 31.05.22 um 04:51 schrieb Sergey Senozhatsky:
-> > On (22/05/30 16:55), Christian K�nig wrote:
-> > > Am 30.05.22 um 16:22 schrieb Sergey Senozhatsky:
-> > > > [SNIP]
-> > > > So the `lock` should have at least same lifespan as the DMA fence
-> > > > that borrows it, which is impossible to guarantee in our case.
-> > > Nope, that's not correct. The lock should have at least same lifespan as the
-> > > context of the DMA fence.
-> > How does one know when it's safe to release the context? DMA fence
-> > objects are still transparently refcount-ed and "live their own lives",
-> > how does one synchronize lifespans?
-> 
-> Well, you don't.
-> 
-> If you have a dynamic context structure you need to reference count that as
-> well. In other words every time you create a fence in your context you need
-> to increment the reference count and every time a fence is release you
-> decrement it.
-> 
-> If you have a static context structure like most drivers have then you must
-> make sure that all fences at least signal before you unload your driver. We
-> still somewhat have a race when you try to unload a driver and the fence_ops
-> structure suddenly disappear, but we currently live with that.
-> 
-> Apart from that you are right, fences can live forever and we need to deal
-> with that.
 
-Yeah this entire thing is a bit an "oops we might have screwed up" moment.
-I think the cleanest way is to essentially do what the drm/sched codes
-does, which is split the gpu job into the public dma_fence (which can live
-forever) and the internal job fence (which has to deal with all the
-resource refcounting issues). And then make sure that only ever the public
-fence escapes to places where the fence can live forever (dma_resv,
-drm_syncobj, sync_file as our uapi container objects are the prominent
-cases really).
 
-It sucks a bit.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Am 30.05.22 um 17:45 schrieb Sergey Senozhatsky:
+> On (22/05/30 16:55), Christian König wrote:
+>> If you just want to create a single dma_fence which is also only bound to a
+>> single context you can embed the lock into the fence without much problem.
+>>
+>> See how the dma_fence_array does that for example: https://elixir.bootlin.com/linux/latest/source/include/linux/dma-fence-array.h#L37
+> Christian, I'm not sure I'm following you on the "embed the lock into the
+> fence without much problem" part. If I understand it correctly this should
+> be something like:
+>
+> 	fences = kmalloc_array(1, sizeof(*fences), GFP_KERNEL);
+> 	for_each_fence(...) {
+>
+> 		// what spinlock should I use here?
+>
+> 		dma_fence_init(&fences[i], .. &lock ..);
+> 		dma_fence_get(&fences[i]);
+> 	}
+> 	fence_array = dma_fence_array_create(1, fences, ....);
+> 	sync_file_create(&fence_array->base);
+
+Well no, that's the high level usage of the dma_fence_array.
+
+What I meant was this here:
+
+struct dma_fence_array {
+     struct dma_fence base;
+
+     spinlock_t lock;
+...
+};
+
+Regards,
+Christian.
+
+> _______________________________________________
+> Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
+> To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
+
