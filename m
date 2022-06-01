@@ -2,352 +2,284 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64A7BC4332F
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jun 2022 09:41:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EFCEC433F5
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jun 2022 12:24:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351376AbiFAJlk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Jun 2022 05:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
+        id S1343814AbiFAMYh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Jun 2022 08:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351305AbiFAJlJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jun 2022 05:41:09 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33976B006
-        for <linux-media@vger.kernel.org>; Wed,  1 Jun 2022 02:41:05 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id g12so1368359lja.3
-        for <linux-media@vger.kernel.org>; Wed, 01 Jun 2022 02:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oHKKCaNYlE93mVz7hPlzmEt32kASVIgxmXhc8uwzOx8=;
-        b=Hia8crFSnjZ4tMW9eah4UT5c4kkZU2GM0SGferqExWDI9bO6eYHi+CN6Z418mv/wo9
-         MaQPfvNi2fYxXzsFCjFfgYZ5916XEjOgT+bp2H5Ml8gcc6yVQUi5h4PYJjJFpxJmNmcH
-         wvL31wFh0dep4cCOtvhGG5iF/HsqOyJshCya3Ec5RIPeCfQisvex70JSmBpvIpnx5SBW
-         7kzH8T+mMctA4eNxgFDiYwVbS9pYln36szvsNMnLSHgcVqmFC0gtapH+6Aw6w+nuKpPU
-         TIsZvtKtAfCiyqln8ukZdHX5h9daw0MZHQHxPVXANqGSeXkYzxLbVkaw87LyAEQliPCa
-         Qfdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oHKKCaNYlE93mVz7hPlzmEt32kASVIgxmXhc8uwzOx8=;
-        b=U+JkZdeajV/fxfJikHsyAXfbMdrhTnO4aPdzuPSNR1jdz3AlYRLsJ+J1x+rxXkwsNN
-         etjHo0CZlE9CtXTq2a0qplEPdNS7jh2p7RyECsOMrg7HooYOnkZ+HR+78PV8pRN7qjMQ
-         CmbUpcqHg2iAcSfPTWFa9pPM7m1XfpodN++GqW+aa6jHt4polW7RklEsQcRru2lrfMk9
-         xG84hut3DiTVgf8BtRH9GeZ3vCJm5IjDjag7Ozkq0DuD8Fac1FnZeoz5Rmfp2cek24aY
-         ihSbV13CZ4QLvhTjAyjUBJSfPfY8RYocXDWa19aCbSETZu+mC12bjeChS805kf2OoEW7
-         IJmw==
-X-Gm-Message-State: AOAM531qPq0N3aBDlLvw8D0nynXxb9CAFGYSBC1V699ChjkBeVETWOqY
-        DPGA1Buu4wYXJJqzTDF5Zhw+aA==
-X-Google-Smtp-Source: ABdhPJx9d/xCbFQjM/83nrjQ0sWESdywFbR4cIahUExILjRckDR5a++S5e9AavqRgGLmH6NeWg4i0A==
-X-Received: by 2002:a2e:bd0c:0:b0:253:e3b9:36cc with SMTP id n12-20020a2ebd0c000000b00253e3b936ccmr30927267ljq.435.1654076463957;
-        Wed, 01 Jun 2022 02:41:03 -0700 (PDT)
-Received: from fedora.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id h11-20020a0565123c8b00b00477cae4880fsm249634lfv.260.2022.06.01.02.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 02:41:03 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        with ESMTP id S1352901AbiFAMY0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jun 2022 08:24:26 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6459A80201
+        for <linux-media@vger.kernel.org>; Wed,  1 Jun 2022 05:24:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654086250; x=1685622250;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PrQDsGlYut5N5u5rWs8P/yPx85AZGxE98etCbLfpanM=;
+  b=kXc88qvNT0aEN7gb4aEBtOpy2HD1gjxMYAoOgM/I+K8eFuwqyuNd6Ukp
+   1HIvQxU1GKVEqIUHTzXtlPPD8JyhsA3lkH1qRkcrfE7kF8SWxF70pYUXb
+   pIwfLVaFb3+Zh8tLnVBQeIjDqcO8YkmtwukFnaNvZd/jDcVQiWrWkdaON
+   cMN+73Pw2tUYctw3NPVirairru2oq4MtU9Bo3goFbOEREhd55NUOhHHYa
+   ZQdwf1bc/WuQfJclaYu1b2G8369acND5KLSvOJE/lr6JFtWWDwIGfL/jP
+   HAM6gKFpW4SilCnRlB1YfMwoU+thZo3qZ4pCYSyJx3ng/9dlE76jrjMXE
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="263204894"
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="263204894"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 05:24:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="581557602"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Jun 2022 05:24:00 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwNOK-0003x6-0d;
+        Wed, 01 Jun 2022 12:24:00 +0000
+Date:   Wed, 1 Jun 2022 20:23:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-media@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sylwester Nawrocki <s.nawrocki@samsung.com>,
         Andrzej Hajda <andrzej.hajda@intel.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH v2] media: s5k4ecgx: Switch to GPIO descriptors
-Date:   Wed,  1 Jun 2022 11:41:00 +0200
-Message-Id: <20220601094100.4928-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.36.1
+Subject: Re: [PATCH v2] media: s5k4ecgx: Switch to GPIO descriptors
+Message-ID: <202206012037.EwUL1zSZ-lkp@intel.com>
+References: <20220601094100.4928-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601094100.4928-1-linus.walleij@linaro.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The driver has an option to pass in GPIO numbers from platform
-data but this is not used in the kernel so delete this and the
-whole platform data mechanism.
+Hi Linus,
 
-Get GPIO descriptors using the standard API and simplify the code,
-gpiolib will handle any inversions.
+I love your patch! Yet something to improve:
 
-Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v1->v2:
-- Fix compile bug by sending out the patch actually in my
-  git tree.
----
- drivers/media/i2c/s5k4ecgx.c | 132 ++++++++---------------------------
- include/media/i2c/s5k4ecgx.h |  33 ---------
- 2 files changed, 31 insertions(+), 134 deletions(-)
- delete mode 100644 include/media/i2c/s5k4ecgx.h
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on v5.18 next-20220601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/drivers/media/i2c/s5k4ecgx.c b/drivers/media/i2c/s5k4ecgx.c
-index af9a305242cd..73162a48799f 100644
---- a/drivers/media/i2c/s5k4ecgx.c
-+++ b/drivers/media/i2c/s5k4ecgx.c
-@@ -15,7 +15,7 @@
- #include <linux/ctype.h>
- #include <linux/delay.h>
- #include <linux/firmware.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/module.h>
- #include <linux/regulator/consumer.h>
-@@ -23,7 +23,6 @@
- #include <asm/unaligned.h>
- 
- #include <media/media-entity.h>
--#include <media/i2c/s5k4ecgx.h>
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-mediabus.h>
-@@ -171,12 +170,6 @@ static const char * const s5k4ecgx_supply_names[] = {
- 
- #define S5K4ECGX_NUM_SUPPLIES ARRAY_SIZE(s5k4ecgx_supply_names)
- 
--enum s5k4ecgx_gpio_id {
--	STBY,
--	RSET,
--	GPIO_NUM,
--};
--
- struct s5k4ecgx {
- 	struct v4l2_subdev sd;
- 	struct media_pad pad;
-@@ -190,7 +183,8 @@ struct s5k4ecgx {
- 	u8 set_params;
- 
- 	struct regulator_bulk_data supplies[S5K4ECGX_NUM_SUPPLIES];
--	struct s5k4ecgx_gpio gpio[GPIO_NUM];
-+	struct gpio_desc *stby;
-+	struct gpio_desc *reset;
- };
- 
- static inline struct s5k4ecgx *to_s5k4ecgx(struct v4l2_subdev *sd)
-@@ -454,15 +448,6 @@ static int s5k4ecgx_init_sensor(struct v4l2_subdev *sd)
- 	return ret;
- }
- 
--static int s5k4ecgx_gpio_set_value(struct s5k4ecgx *priv, int id, u32 val)
--{
--	if (!gpio_is_valid(priv->gpio[id].gpio))
--		return 0;
--	gpio_set_value(priv->gpio[id].gpio, val);
--
--	return 1;
--}
--
- static int __s5k4ecgx_power_on(struct s5k4ecgx *priv)
- {
- 	int ret;
-@@ -472,23 +457,22 @@ static int __s5k4ecgx_power_on(struct s5k4ecgx *priv)
- 		return ret;
- 	usleep_range(30, 50);
- 
--	/* The polarity of STBY is controlled by TSP */
--	if (s5k4ecgx_gpio_set_value(priv, STBY, priv->gpio[STBY].level))
--		usleep_range(30, 50);
--
--	if (s5k4ecgx_gpio_set_value(priv, RSET, priv->gpio[RSET].level))
--		usleep_range(30, 50);
-+	/* De-assert standby and reset */
-+	gpiod_set_value(priv->stby, 0);
-+	usleep_range(30, 50);
-+	gpiod_set_value(priv->reset, 0);
-+	usleep_range(30, 50);
- 
- 	return 0;
- }
- 
- static int __s5k4ecgx_power_off(struct s5k4ecgx *priv)
- {
--	if (s5k4ecgx_gpio_set_value(priv, RSET, !priv->gpio[RSET].level))
--		usleep_range(30, 50);
--
--	if (s5k4ecgx_gpio_set_value(priv, STBY, !priv->gpio[STBY].level))
--		usleep_range(30, 50);
-+	/* Assert reset and standby */
-+	gpiod_set_value(priv->reset, 1);
-+	usleep_range(30, 50);
-+	gpiod_set_value(priv->stby, 1);
-+	usleep_range(30, 50);
- 
- 	priv->streaming = 0;
- 
-@@ -840,68 +824,6 @@ static const struct v4l2_subdev_ops s5k4ecgx_ops = {
- 	.video = &s5k4ecgx_video_ops,
- };
- 
--/*
-- * GPIO setup
-- */
--static int s5k4ecgx_config_gpio(int nr, int val, const char *name)
--{
--	unsigned long flags = val ? GPIOF_OUT_INIT_HIGH : GPIOF_OUT_INIT_LOW;
--	int ret;
--
--	if (!gpio_is_valid(nr))
--		return 0;
--	ret = gpio_request_one(nr, flags, name);
--	if (!ret)
--		gpio_export(nr, 0);
--
--	return ret;
--}
--
--static void s5k4ecgx_free_gpios(struct s5k4ecgx *priv)
--{
--	int i;
--
--	for (i = 0; i < ARRAY_SIZE(priv->gpio); i++) {
--		if (!gpio_is_valid(priv->gpio[i].gpio))
--			continue;
--		gpio_free(priv->gpio[i].gpio);
--		priv->gpio[i].gpio = -EINVAL;
--	}
--}
--
--static int s5k4ecgx_config_gpios(struct s5k4ecgx *priv,
--				  const struct s5k4ecgx_platform_data *pdata)
--{
--	const struct s5k4ecgx_gpio *gpio = &pdata->gpio_stby;
--	int ret;
--
--	priv->gpio[STBY].gpio = -EINVAL;
--	priv->gpio[RSET].gpio  = -EINVAL;
--
--	ret = s5k4ecgx_config_gpio(gpio->gpio, gpio->level, "S5K4ECGX_STBY");
--
--	if (ret) {
--		s5k4ecgx_free_gpios(priv);
--		return ret;
--	}
--	priv->gpio[STBY] = *gpio;
--	if (gpio_is_valid(gpio->gpio))
--		gpio_set_value(gpio->gpio, 0);
--
--	gpio = &pdata->gpio_reset;
--
--	ret = s5k4ecgx_config_gpio(gpio->gpio, gpio->level, "S5K4ECGX_RST");
--	if (ret) {
--		s5k4ecgx_free_gpios(priv);
--		return ret;
--	}
--	priv->gpio[RSET] = *gpio;
--	if (gpio_is_valid(gpio->gpio))
--		gpio_set_value(gpio->gpio, 0);
--
--	return 0;
--}
--
- static int s5k4ecgx_init_v4l2_ctrls(struct s5k4ecgx *priv)
- {
- 	const struct v4l2_ctrl_ops *ops = &s5k4ecgx_ctrl_ops;
-@@ -965,11 +887,22 @@ static int s5k4ecgx_probe(struct i2c_client *client,
- 	if (ret)
- 		return ret;
- 
--	ret = s5k4ecgx_config_gpios(priv, pdata);
--	if (ret) {
--		dev_err(&client->dev, "Failed to set gpios\n");
--		goto out_err1;
-+	/* Request GPIO lines asserted */
-+	priv->stby = devm_gpiod_get(&client->dev, "standby", GPIOD_OUT_HIGH);
-+	if (IS_ERR(priv->stby)) {
-+		v4l2_err(sd, "failed to request gpio S5K4ECGX_STBY");
-+		ret = PTR_ERR(priv->stby);
-+		goto out_err;
-+	}
-+	gpiod_set_consumer_name(priv->stby, "S5K4ECGX_STBY);
-+	priv->reset = devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_HIGH);
-+	if (IS_ERR(priv->reset)) {
-+		v4l2_err(sd, "failed to request gpio S5K4ECGX_RST");
-+		ret = PTR_ERR(priv->reset);
-+		goto out_err;
- 	}
-+	gpiod_set_consumer_name(priv->reset, "S5K4ECGX_RST");
-+
- 	for (i = 0; i < S5K4ECGX_NUM_SUPPLIES; i++)
- 		priv->supplies[i].supply = s5k4ecgx_supply_names[i];
- 
-@@ -977,20 +910,18 @@ static int s5k4ecgx_probe(struct i2c_client *client,
- 				 priv->supplies);
- 	if (ret) {
- 		dev_err(&client->dev, "Failed to get regulators\n");
--		goto out_err2;
-+		goto out_err;
- 	}
- 	ret = s5k4ecgx_init_v4l2_ctrls(priv);
- 	if (ret)
--		goto out_err2;
-+		goto out_err;
- 
- 	priv->curr_pixfmt = &s5k4ecgx_formats[0];
- 	priv->curr_frmsize = &s5k4ecgx_prev_sizes[0];
- 
- 	return 0;
- 
--out_err2:
--	s5k4ecgx_free_gpios(priv);
--out_err1:
-+out_err:
- 	media_entity_cleanup(&priv->sd.entity);
- 
- 	return ret;
-@@ -1002,7 +933,6 @@ static int s5k4ecgx_remove(struct i2c_client *client)
- 	struct s5k4ecgx *priv = to_s5k4ecgx(sd);
- 
- 	mutex_destroy(&priv->lock);
--	s5k4ecgx_free_gpios(priv);
- 	v4l2_device_unregister_subdev(sd);
- 	v4l2_ctrl_handler_free(&priv->handler);
- 	media_entity_cleanup(&sd->entity);
-diff --git a/include/media/i2c/s5k4ecgx.h b/include/media/i2c/s5k4ecgx.h
-deleted file mode 100644
-index 92202eb35249..000000000000
---- a/include/media/i2c/s5k4ecgx.h
-+++ /dev/null
-@@ -1,33 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * S5K4ECGX image sensor header file
-- *
-- * Copyright (C) 2012, Linaro
-- * Copyright (C) 2012, Samsung Electronics Co., Ltd.
-- */
--
--#ifndef S5K4ECGX_H
--#define S5K4ECGX_H
--
--/**
-- * struct s5k4ecgx_gpio - data structure describing a GPIO
-- * @gpio: GPIO number
-- * @level: indicates active state of the @gpio
-- */
--struct s5k4ecgx_gpio {
--	int gpio;
--	int level;
--};
--
--/**
-- * struct s5k4ecgx_platform_data - s5k4ecgx driver platform data
-- * @gpio_reset:	 GPIO driving RESET pin
-- * @gpio_stby:	 GPIO driving STBY pin
-- */
--
--struct s5k4ecgx_platform_data {
--	struct s5k4ecgx_gpio gpio_reset;
--	struct s5k4ecgx_gpio gpio_stby;
--};
--
--#endif /* S5K4ECGX_H */
+url:    https://github.com/intel-lab-lkp/linux/commits/Linus-Walleij/media-s5k4ecgx-Switch-to-GPIO-descriptors/20220601-174300
+base:   git://linuxtv.org/media_tree.git master
+config: hexagon-randconfig-r041-20220531 (https://download.01.org/0day-ci/archive/20220601/202206012037.EwUL1zSZ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3814f4960184762bff97b188607a2b0042f3d6ba
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Linus-Walleij/media-s5k4ecgx-Switch-to-GPIO-descriptors/20220601-174300
+        git checkout 3814f4960184762bff97b188607a2b0042f3d6ba
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/i2c/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/media/i2c/s5k4ecgx.c:897:38: warning: missing terminating '"' character [-Winvalid-pp-token]
+           gpiod_set_consumer_name(priv->stby, "S5K4ECGX_STBY);
+                                               ^
+>> drivers/media/i2c/s5k4ecgx.c:897:38: error: expected expression
+>> drivers/media/i2c/s5k4ecgx.c:947:26: error: use of undeclared identifier 's5k4ecgx_id'
+   MODULE_DEVICE_TABLE(i2c, s5k4ecgx_id);
+                            ^
+>> drivers/media/i2c/s5k4ecgx.c:954:12: error: use of undeclared identifier 's5k4ecgx_remove'
+           .remove = s5k4ecgx_remove,
+                     ^
+   drivers/media/i2c/s5k4ecgx.c:955:14: error: use of undeclared identifier 's5k4ecgx_id'
+           .id_table = s5k4ecgx_id,
+                       ^
+>> drivers/media/i2c/s5k4ecgx.c:958:1: error: function definition is not allowed here
+   module_i2c_driver(v4l2_i2c_driver);
+   ^
+   include/linux/i2c.h:950:2: note: expanded from macro 'module_i2c_driver'
+           module_driver(__i2c_driver, i2c_add_driver, \
+           ^
+   include/linux/device/driver.h:260:41: note: expanded from macro 'module_driver'
+   static int __init __driver##_init(void) \
+                                           ^
+>> drivers/media/i2c/s5k4ecgx.c:958:1: error: function definition is not allowed here
+   include/linux/i2c.h:950:2: note: expanded from macro 'module_i2c_driver'
+           module_driver(__i2c_driver, i2c_add_driver, \
+           ^
+   include/linux/device/driver.h:263:3: note: expanded from macro 'module_driver'
+   } \
+     ^
+   include/linux/module.h:132:2: note: expanded from macro '\
+   module_init'
+           { return initfn; }                                      \
+           ^
+>> drivers/media/i2c/s5k4ecgx.c:958:1: error: function definition is not allowed here
+   include/linux/i2c.h:950:2: note: expanded from macro 'module_i2c_driver'
+           module_driver(__i2c_driver, i2c_add_driver, \
+           ^
+   include/linux/device/driver.h:265:42: note: expanded from macro 'module_driver'
+   static void __exit __driver##_exit(void) \
+                                            ^
+>> drivers/media/i2c/s5k4ecgx.c:958:1: error: function definition is not allowed here
+   include/linux/i2c.h:950:2: note: expanded from macro 'module_i2c_driver'
+           module_driver(__i2c_driver, i2c_add_driver, \
+           ^
+   include/linux/device/driver.h:268:3: note: expanded from macro 'module_driver'
+   } \
+     ^
+   include/linux/module.h:140:2: note: expanded from macro '\
+   module_exit'
+           { return exitfn; }                                      \
+           ^
+>> drivers/media/i2c/s5k4ecgx.c:964:36: error: expected '}'
+   MODULE_FIRMWARE(S5K4ECGX_FIRMWARE);
+                                      ^
+   drivers/media/i2c/s5k4ecgx.c:856:1: note: to match this '{'
+   {
+   ^
+   drivers/media/i2c/s5k4ecgx.c:947:1: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+   MODULE_DEVICE_TABLE(i2c, s5k4ecgx_id);
+   ^
+   include/linux/module.h:244:21: note: expanded from macro 'MODULE_DEVICE_TABLE'
+   extern typeof(name) __mod_##type##__##name##_device_table               \
+                       ^
+   <scratch space>:94:1: note: expanded from here
+   __mod_i2c__s5k4ecgx_id_device_table
+   ^
+>> drivers/media/i2c/s5k4ecgx.c:895:8: error: use of undeclared label 'out_err'
+                   goto out_err;
+                        ^
+   2 warnings and 10 errors generated.
+
+
+vim +897 drivers/media/i2c/s5k4ecgx.c
+
+   853	
+   854	static int s5k4ecgx_probe(struct i2c_client *client,
+   855				  const struct i2c_device_id *id)
+   856	{
+   857		struct s5k4ecgx_platform_data *pdata = client->dev.platform_data;
+   858		struct v4l2_subdev *sd;
+   859		struct s5k4ecgx *priv;
+   860		int ret, i;
+   861	
+   862		if (pdata == NULL) {
+   863			dev_err(&client->dev, "platform data is missing!\n");
+   864			return -EINVAL;
+   865		}
+   866	
+   867		priv = devm_kzalloc(&client->dev, sizeof(struct s5k4ecgx), GFP_KERNEL);
+   868		if (!priv)
+   869			return -ENOMEM;
+   870	
+   871		mutex_init(&priv->lock);
+   872		priv->streaming = 0;
+   873	
+   874		sd = &priv->sd;
+   875		/* Registering subdev */
+   876		v4l2_i2c_subdev_init(sd, client, &s5k4ecgx_ops);
+   877		/* Static name; NEVER use in new drivers! */
+   878		strscpy(sd->name, S5K4ECGX_DRIVER_NAME, sizeof(sd->name));
+   879	
+   880		sd->internal_ops = &s5k4ecgx_subdev_internal_ops;
+   881		/* Support v4l2 sub-device user space API */
+   882		sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+   883	
+   884		priv->pad.flags = MEDIA_PAD_FL_SOURCE;
+   885		sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
+   886		ret = media_entity_pads_init(&sd->entity, 1, &priv->pad);
+   887		if (ret)
+   888			return ret;
+   889	
+   890		/* Request GPIO lines asserted */
+   891		priv->stby = devm_gpiod_get(&client->dev, "standby", GPIOD_OUT_HIGH);
+   892		if (IS_ERR(priv->stby)) {
+   893			v4l2_err(sd, "failed to request gpio S5K4ECGX_STBY");
+   894			ret = PTR_ERR(priv->stby);
+ > 895			goto out_err;
+   896		}
+ > 897		gpiod_set_consumer_name(priv->stby, "S5K4ECGX_STBY);
+   898		priv->reset = devm_gpiod_get(&client->dev, "reset", GPIOD_OUT_HIGH);
+   899		if (IS_ERR(priv->reset)) {
+   900			v4l2_err(sd, "failed to request gpio S5K4ECGX_RST");
+   901			ret = PTR_ERR(priv->reset);
+   902			goto out_err;
+   903		}
+   904		gpiod_set_consumer_name(priv->reset, "S5K4ECGX_RST");
+   905	
+   906		for (i = 0; i < S5K4ECGX_NUM_SUPPLIES; i++)
+   907			priv->supplies[i].supply = s5k4ecgx_supply_names[i];
+   908	
+   909		ret = devm_regulator_bulk_get(&client->dev, S5K4ECGX_NUM_SUPPLIES,
+   910					 priv->supplies);
+   911		if (ret) {
+   912			dev_err(&client->dev, "Failed to get regulators\n");
+   913			goto out_err;
+   914		}
+   915		ret = s5k4ecgx_init_v4l2_ctrls(priv);
+   916		if (ret)
+   917			goto out_err;
+   918	
+   919		priv->curr_pixfmt = &s5k4ecgx_formats[0];
+   920		priv->curr_frmsize = &s5k4ecgx_prev_sizes[0];
+   921	
+   922		return 0;
+   923	
+   924	out_err:
+   925		media_entity_cleanup(&priv->sd.entity);
+   926	
+   927		return ret;
+   928	}
+   929	
+   930	static int s5k4ecgx_remove(struct i2c_client *client)
+   931	{
+   932		struct v4l2_subdev *sd = i2c_get_clientdata(client);
+   933		struct s5k4ecgx *priv = to_s5k4ecgx(sd);
+   934	
+   935		mutex_destroy(&priv->lock);
+   936		v4l2_device_unregister_subdev(sd);
+   937		v4l2_ctrl_handler_free(&priv->handler);
+   938		media_entity_cleanup(&sd->entity);
+   939	
+   940		return 0;
+   941	}
+   942	
+   943	static const struct i2c_device_id s5k4ecgx_id[] = {
+   944		{ S5K4ECGX_DRIVER_NAME, 0 },
+   945		{}
+   946	};
+ > 947	MODULE_DEVICE_TABLE(i2c, s5k4ecgx_id);
+   948	
+   949	static struct i2c_driver v4l2_i2c_driver = {
+   950		.driver = {
+   951			.name = S5K4ECGX_DRIVER_NAME,
+   952		},
+   953		.probe = s5k4ecgx_probe,
+ > 954		.remove = s5k4ecgx_remove,
+   955		.id_table = s5k4ecgx_id,
+   956	};
+   957	
+ > 958	module_i2c_driver(v4l2_i2c_driver);
+   959	
+   960	MODULE_DESCRIPTION("Samsung S5K4ECGX 5MP SOC camera");
+   961	MODULE_AUTHOR("Sangwook Lee <sangwook.lee@linaro.org>");
+   962	MODULE_AUTHOR("Seok-Young Jang <quartz.jang@samsung.com>");
+   963	MODULE_LICENSE("GPL");
+ > 964	MODULE_FIRMWARE(S5K4ECGX_FIRMWARE);
+
 -- 
-2.36.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
