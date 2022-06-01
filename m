@@ -2,92 +2,168 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 809DEC433FE
-	for <linux-media@archiver.kernel.org>; Wed,  1 Jun 2022 04:45:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44B89C433FE
+	for <linux-media@archiver.kernel.org>; Wed,  1 Jun 2022 07:21:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349548AbiFAEpG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 1 Jun 2022 00:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
+        id S1343615AbiFAHVA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 1 Jun 2022 03:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349551AbiFAEpC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jun 2022 00:45:02 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736549E9E8;
-        Tue, 31 May 2022 21:45:01 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id r129so285405wmr.3;
-        Tue, 31 May 2022 21:45:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=UxpRbsB4fW9Es2lqL888yJ7QXf4l6YrZ20jfoXVDxLw=;
-        b=q4b8Tjk8UpQ2TXQp9YxJBSMKTh3uotCktHoVhjGzV/CodlyiLmqmQ1pGuw00XOiq3K
-         4FpmUFoWVmEtOuQkfqcWxzRaeT8ZTzXsa9WPZ5G9iyc4ySa6oUrfRxRkl0aohhcgrbzQ
-         kgZi4ft8/ZEeGo9b4I9p6n7MXFrlPwMBoBDK3N3PlCJnj00MfpGPg5jBj0LgglYvIJnd
-         DJ6+pbP1ELdopkCtifkoXaJvl5gYwrbyCeidF9mJ3kdN/wQ2hgNFRPv9YDJMwKu4QHrA
-         LGUD2mSGjcQBr43d7E3nQzGvt4CO20TJm2K+GNj+DPE8DWbEe16LG5WYvEmCOykU7aul
-         VqIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=UxpRbsB4fW9Es2lqL888yJ7QXf4l6YrZ20jfoXVDxLw=;
-        b=4SlTKumCDjnSgt5M9qHPEvsCjeO1OWixtr1yJSE3WwnooycUhOF+cYUgqmW6E9PUDC
-         RuirEf3/nKjXWd8jIGumFHpBdtK50hNi3T6BbVWAFE2NDqEjibI5GpFSmFGhCR3NOPyM
-         iC417+BSRBBb5tliL/iFY59RvF22noBA01R//dXcILkTVoZ2/XNGTHJQbxjye61SlUkM
-         RLQsFO2xawFyIjztt9AYG4OdDefYTdozaaSlz7dOLufZcyxNeEK3QrPuRxx23eQQliMM
-         eSdSk9NHRhWBvbcHlZ246Tiooe4vttKxsgg7KBpIl/h01cSghEdsjR65BFRux3EF+OM1
-         ketQ==
-X-Gm-Message-State: AOAM533TTQ9kKdBttGNjIuw8AeHTml7O4k+uOiPPG+mbB25FQyjh3uyO
-        qL3QcDKlIAHyCw+7Bc3OIr0=
-X-Google-Smtp-Source: ABdhPJzpHyayVSJDL7wlT5GxcWKpvoD+twBMaZRJ+1JROIQ2naE3mChhbKYDbvR++VsJb9EI8hi6fA==
-X-Received: by 2002:a05:600c:3d8e:b0:397:73e3:8c83 with SMTP id bi14-20020a05600c3d8e00b0039773e38c83mr26213646wmb.29.1654058699805;
-        Tue, 31 May 2022 21:44:59 -0700 (PDT)
-Received: from felia.fritz.box (200116b82620c00028af88788fa7d286.dip.versatel-1u1.de. [2001:16b8:2620:c000:28af:8878:8fa7:d286])
-        by smtp.gmail.com with ESMTPSA id a5-20020adffac5000000b0021023877ac5sm390427wrs.107.2022.05.31.21.44.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 21:44:59 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] media: MAINTAINERS: rectify entry for DONGWOON DW9807 LENS VOICE COIL DRIVER
-Date:   Wed,  1 Jun 2022 06:44:45 +0200
-Message-Id: <20220601044445.11943-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S1349983AbiFAHUr (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 1 Jun 2022 03:20:47 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83082129
+        for <linux-media@vger.kernel.org>; Wed,  1 Jun 2022 00:20:45 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2516eurp020302;
+        Wed, 1 Jun 2022 09:20:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=5QFgJIeDNexyjPMCvKwFWU/L1y5hjb/fmbl3AIdXAhE=;
+ b=y2bl3HPwT2fYdwjAnZnmJYQNo+udAwPTy+ZKOI3tZU0fjT3+huilm7ZAqZ2NAqJkJvkV
+ EAIRBIUt3kb8Y6kqethBkONuHNl2fVhG/uioXiMCd65l8iXR9YXwRS8gI168f9IkSkV+
+ xOvckBlP683sEpfChY2h2tX4XjsSk3Z61DhxZ0kWsXUSfEmr2hWOV5zvWnnkx5D7FQM4
+ Ssf+O3Y5/yZF9dFMmbrGzycXLft74XPWJB55H6vze9RCvej3Boc3pDbegwaYJe5hkrmq
+ BcaI2O+2jqH4xR0wycpKbqC/rlKxUNoJNL588uMrsYdNjwFuNzkBeg52wgZhQS//+bOC DA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gbc93p8cv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Jun 2022 09:20:39 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C5D0110002A;
+        Wed,  1 Jun 2022 09:20:37 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B36E62138C5;
+        Wed,  1 Jun 2022 09:20:37 +0200 (CEST)
+Received: from [10.0.2.15] (10.75.127.45) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 1 Jun
+ 2022 09:20:37 +0200
+Subject: Re: [PATCH v3 0/5] media: Add ST VGXY61 camera sensor driver
+To:     <linux-media@vger.kernel.org>
+CC:     <alain.volmat@foss.st.com>, <hugues.fruchet@foss.st.com>,
+        <sylvain.petinot@foss.st.com>, <dave.stevenson@raspberrypi.com>,
+        <sakari.ailus@linux.intel.com>,
+        <laurent.pinchart@ideasonboard.com>,
+        <kieran.bingham@ideasonboard.com>
+References: <20220512074037.3829926-1-benjamin.mugnier@foss.st.com>
+From:   Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+Message-ID: <e920c5e2-dba1-bcf7-7d83-ee797ca51b49@foss.st.com>
+Date:   Wed, 1 Jun 2022 09:20:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20220512074037.3829926-1-benjamin.mugnier@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-01_02,2022-05-30_03,2022-02-23_01
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit a1f4626b282d ("media: dt-bindings: Convert Dongwoon dw9807-vcm
-bindings to json-schema") converts dongwoon,dw9807-vcm.txt to yaml, but
-misses to adjust its reference in MAINTAINERS.
+Hey,
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+Gentle ping, so that you don't forget about me ;)
 
-Repair this file reference in DONGWOON DW9807 LENS VOICE COIL DRIVER.
+Benjamin
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Mauro, please pick this minor non-urgent clean-up patch for media-next.
-
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e0f5895feb6b..88fdf39e6bb4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6078,7 +6078,7 @@ M:	Sakari Ailus <sakari.ailus@linux.intel.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/i2c/dongwoon,dw9807-vcm.txt
-+F:	Documentation/devicetree/bindings/media/i2c/dongwoon,dw9807-vcm.yaml
- F:	drivers/media/i2c/dw9807-vcm.c
- 
- DOUBLETALK DRIVER
--- 
-2.17.1
-
+On 12/05/2022 09:40, Benjamin Mugnier wrote:
+> Hey,
+> 
+> This series adds a driver for the ST VGXY61 camera sensor. This camera sensor is using the i2c bus
+> for control and the csi-2 bus for data.
+> These commits introduce the MEDIA_BUS_FMT_Y16_1X16 as a media bus format (1/5), reserve 16 user
+> controls for the driver (2/5), add a uapi header file to declare a control for the hdr mode (3/5),
+> dt bindings (3/5), and finally the driver (5/5).
+> Tested on DragonBoard 410c and on Raspberry Pi 4.
+> 
+> Unfortunately, I was not able to do the freely configurable frame size as advised by Laurent, and
+> I'm stuck. I tried to mimic the ov5693 driver as it seems to work mostly the same but was not
+> successful.
+> I managed to implement the get_selection to set the sensor crop, and set the set_format call to the
+> same frame size. By doing that my captured frame has black lines appearing if I don't use the sensor
+> native resolution, and seem to have issues with matching the sensor internal frame size and the one
+> I want to display (as lines appear wider than they should be).
+> If anyone has an example driver for this please tell me. Any help is appreciated.
+> I hope this fixed frame sizes will be ok, and I could come back to it later once I figure it out.
+> 
+> Thanks,
+> 
+> Benjamin
+> 
+> v2->v3:
+> - Fix errors in dt bindings
+> - Use alphabetical order where applicable
+> - Remove US_PER_MS macro
+> - Rename device specific macros
+> - Fix some control grabs not releasing
+> - Move user controls to public header and add documentation
+> - Rename set_framerate to set_framelength
+> - Rework i2c access
+> - Remove branchings that should never happen
+> - Rework pattern generator setting
+> - Update information on sensor rules of thumb
+> - Remove temperature control
+> - Remove suspend and resume
+> - Move mutex init to probe
+> - Move detect to probe
+> - Fix async_subdev_register order
+> - Support autosuspend
+> - Add init_cfg
+> - Fix controls not updating when sensor was off
+> - Various cleaning
+> - Rebase on master
+> 
+> v1->v2:
+> - Move temperature control to v4l2-controls.h as a standard control
+> - Reserve controls in v4l2-controls.h for HDR control
+> - Remove GPIO strobbing controls
+> - Remove references to unused controls in sensor struct
+> - Use v4l2_find_nearest_size
+> - Use V4L2_COLORSPACE_RAW instead of V4L2_COLORSPACE_SRGB
+> - Fill ycbcr_enc, quantization, and xfer_func in v4l2_mbus_framefmt
+> - Change gain from formula to a register RAW write
+> - Change temperature control value directly
+> - Remove clock-name and clock-lanes from device tree bindings
+> - Declare crop zones in mode_info structure
+> - Remove frame_interval functions and add hblank and vblank instead
+> - Update controls dependencies on change
+> - Fix first exposure rule of thumb being too restrictive
+> - Disable hflip and vflip controls while streaming
+> - Change RGB media bus code to Y as the sensor is monochrome
+> - Add Y16 format to v4l2 media bus formats
+> - Add get_selection API
+> - Fix timeout errors while disabling streaming on high framerates
+> - Support pm_runtime
+> - Rebase on master
+> 
+> Benjamin Mugnier (5):
+>   media: v4l: Add 1X16 16-bit greyscale media bus code definition
+>   media: v4l: ctrls: Add user control base for st-vgxy61 controls
+>   media: uapi: Add ST VGXY61 header file
+>   media: dt-bindings: media: i2c: Add ST VGXY61 camera sensor binding
+>   media: i2c: Add driver for ST VGXY61 camera sensor
+> 
+>  .../bindings/media/i2c/st,st-vgxy61.yaml      |  117 +
+>  .../userspace-api/media/drivers/st-vgxy61.rst |   23 +
+>  .../media/v4l/subdev-formats.rst              |   37 +
+>  MAINTAINERS                                   |    9 +
+>  drivers/media/i2c/Kconfig                     |   10 +
+>  drivers/media/i2c/Makefile                    |    1 +
+>  drivers/media/i2c/st-vgxy61.c                 | 1940 +++++++++++++++++
+>  include/uapi/linux/media-bus-format.h         |    3 +-
+>  include/uapi/linux/st-vgxy61.h                |   15 +
+>  include/uapi/linux/v4l2-controls.h            |    5 +
+>  10 files changed, 2159 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
+>  create mode 100644 Documentation/userspace-api/media/drivers/st-vgxy61.rst
+>  create mode 100644 drivers/media/i2c/st-vgxy61.c
+>  create mode 100644 include/uapi/linux/st-vgxy61.h
+> 
