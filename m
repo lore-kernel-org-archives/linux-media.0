@@ -2,94 +2,113 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86703C433EF
-	for <linux-media@archiver.kernel.org>; Thu,  2 Jun 2022 06:45:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F27EC433EF
+	for <linux-media@archiver.kernel.org>; Thu,  2 Jun 2022 11:34:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbiFBGpf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Jun 2022 02:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
+        id S233316AbiFBLeG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 2 Jun 2022 07:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbiFBGpe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Jun 2022 02:45:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78E29A988;
-        Wed,  1 Jun 2022 23:45:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6207F61780;
-        Thu,  2 Jun 2022 06:45:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B67DAC385A5;
-        Thu,  2 Jun 2022 06:45:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654152332;
-        bh=2zv03libTPFBXLeHn+11rPpU3Zh5JwBccfACN55f9jQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QVbAFtL+vUBULTxSlQRQdvG8oNQErHcxDMOc+co1dGehg6d7O1EXH2e1QDYl57s04
-         wfsUhEMPJsBKv0MDk4oUKkJBVRNKLj7hWKnXFK51Mg6I8hPNkRi21fuSlUDcB7GL7D
-         Kux6E4Q59CvhIazpXoW820XYZ2b3p2N3rq5IEFIHvwvmUJdpfTLqxIOQmgoEirbm9g
-         qnbIpyGlhh/41uuy0fK8uN4TxodQSUeRNy8Ooo2A6v7lo8ffEIP3eY8eo3Bn4vuihB
-         8XMG4my/syN+ug52SCYsCcE7uAZp73uBpmBeGXg35oezdC8Oej6ho4tBrPKONCBSfY
-         XBYrNbnniAD7Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nweaG-0003AY-JA; Thu, 02 Jun 2022 08:45:28 +0200
-Date:   Thu, 2 Jun 2022 08:45:28 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        gushengxian <gushengxian@yulong.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Oliver Neukum <oneukum@suse.com>, Sean Young <sean@mess.org>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: flexcop-usb: fix sanity check of bNumEndpoints
-Message-ID: <YphciEToNtxIUrzU@hovoldconsulting.com>
-References: <20220602055027.849014-1-dzm91@hust.edu.cn>
+        with ESMTP id S231533AbiFBLeG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Jun 2022 07:34:06 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E13167FB
+        for <linux-media@vger.kernel.org>; Thu,  2 Jun 2022 04:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654169644; x=1685705644;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p7/TA1laRSuWcDz5d06Vv03+bPeFnXUnBRBZD4+wAYM=;
+  b=MuimK9AFNo45RNDd5BC1fYHU3pKbxuGckJyl/mF0ZRJPTqD7f4uiB5kp
+   lC7gkTzz6s0mTdK/7iEUjlJPstwXzsIBpO/zPPExjhunxp7h33/5ukcgC
+   LAZr24jDxMOGDmvPy54PW3sJBKAP2GzNwh+9Xx5Y5tB9wggBDPVXH+2x6
+   zp47/Yxyx3XcrdNW7FLo5DCGUIpOFqAjHJRmTBTpjt0I51in1rBuKFBhM
+   ZscsMscuCxwLhIc9zQJ8jmSu1xHI1bxYgcZX8XbdUW+W85Vy6MM+sQmds
+   XTehPRCScxTaYOhXYjvBYSjxJw1ta7zg7W33dmkHIXh2EfTem2mJw+gtL
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="273486828"
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="273486828"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 04:34:04 -0700
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="612784362"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 04:34:02 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nwj5T-000Rbi-6w;
+        Thu, 02 Jun 2022 14:33:59 +0300
+Date:   Thu, 2 Jun 2022 14:33:58 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, yong.zhi@intel.com,
+        bingbu.cao@intel.com, tian.shu.qiu@intel.com,
+        hverkuil-cisco@xs4all.nl, Daniel Scally <djrscally@gmail.com>
+Subject: Re: [PATCH v2 1/1] ov7251: Fix multiple problems in s_stream callback
+Message-ID: <YpigJom+FwVPLPXB@smile.fi.intel.com>
+References: <20220518155408.12843-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220602055027.849014-1-dzm91@hust.edu.cn>
+In-Reply-To: <20220518155408.12843-1-sakari.ailus@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 01:50:24PM +0800, Dongliang Mu wrote:
-> From: Dongliang Mu <mudongliangabcd@gmail.com>
+On Wed, May 18, 2022 at 06:54:08PM +0300, Sakari Ailus wrote:
+> The s_stream callback had several issues:
 > 
-> Commit d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint type
-> ") adds a sanity check for endpoint[1], but fails to modify the sanity
-> check of bNumEndpoints.
+> - If pm_runtime_get_sync() fails, the usage_count is not put.
 > 
-> Fix this by modifying the sanity check of bNumEndpoints to 2.
+> - The sensor wasn't suspended if s_stream(subdev, 1) failed.
+> 
+> Fix this.
 
-Are you sure that d725d20e81c2 ("media: flexcop-usb: sanity checking of
-endpoint type) was correct?
+Perhaps late, but nevertheless
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> Fixes: d725d20e81c2 ("media: flexcop-usb: sanity checking of endpoint type")
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> Fixes: ("media: i2c: Add pm_runtime support to ov7251")
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > ---
->  drivers/media/usb/b2c2/flexcop-usb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/media/i2c/ov7251.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/media/usb/b2c2/flexcop-usb.c b/drivers/media/usb/b2c2/flexcop-usb.c
-> index 7835bb0f32fc..eb54bfdda01f 100644
-> --- a/drivers/media/usb/b2c2/flexcop-usb.c
-> +++ b/drivers/media/usb/b2c2/flexcop-usb.c
-> @@ -509,7 +509,7 @@ static int flexcop_usb_init(struct flexcop_usb *fc_usb)
->  		return ret;
+> diff --git a/drivers/media/i2c/ov7251.c b/drivers/media/i2c/ov7251.c
+> index 0e7be15bc20a7..603a4c7049e69 100644
+> --- a/drivers/media/i2c/ov7251.c
+> +++ b/drivers/media/i2c/ov7251.c
+> @@ -1340,7 +1340,7 @@ static int ov7251_s_stream(struct v4l2_subdev *subdev, int enable)
+>  	if (enable) {
+>  		ret = pm_runtime_get_sync(ov7251->dev);
+>  		if (ret < 0)
+> -			goto unlock_out;
+> +			goto err_power_down;
+>  
+>  		ret = ov7251_pll_configure(ov7251);
+>  		if (ret) {
+> @@ -1372,12 +1372,11 @@ static int ov7251_s_stream(struct v4l2_subdev *subdev, int enable)
+>  		pm_runtime_put(ov7251->dev);
 >  	}
 >  
-> -	if (fc_usb->uintf->cur_altsetting->desc.bNumEndpoints < 1)
-> +	if (fc_usb->uintf->cur_altsetting->desc.bNumEndpoints < 2)
->  		return -ENODEV;
->  	if (!usb_endpoint_is_isoc_in(&fc_usb->uintf->cur_altsetting->endpoint[1].desc))
->  		return -ENODEV;
+> -unlock_out:
+>  	mutex_unlock(&ov7251->lock);
+>  	return ret;
+>  
+>  err_power_down:
+> -	pm_runtime_put_noidle(ov7251->dev);
+> +	pm_runtime_put(ov7251->dev);
+>  	mutex_unlock(&ov7251->lock);
+>  	return ret;
+>  }
+> -- 
+> 2.30.2
+> 
 
-It looks like it should have verified the type of endpoint[0] here
-instead.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Oliver?
 
-Johan
