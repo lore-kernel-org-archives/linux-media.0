@@ -2,81 +2,120 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE0EC43334
-	for <linux-media@archiver.kernel.org>; Thu,  2 Jun 2022 14:51:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BE8DCCA480
+	for <linux-media@archiver.kernel.org>; Fri,  3 Jun 2022 16:22:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbiFBOvL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 2 Jun 2022 10:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
+        id S1343857AbiFCQWo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 Jun 2022 12:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235013AbiFBOvJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 2 Jun 2022 10:51:09 -0400
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211DF2ACB52;
-        Thu,  2 Jun 2022 07:51:08 -0700 (PDT)
-Received: by mail-oo1-f50.google.com with SMTP id s4-20020a4ac804000000b0040e93a35508so943839ooq.8;
-        Thu, 02 Jun 2022 07:51:08 -0700 (PDT)
+        with ESMTP id S1343813AbiFCQWm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Jun 2022 12:22:42 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF9122519;
+        Fri,  3 Jun 2022 09:22:41 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e93bbb54f9so11162648fac.12;
+        Fri, 03 Jun 2022 09:22:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MG4fB5L16PJOB6eygIdqZV5Ksttsv4vvkIROtuQ0QKg=;
+        b=joqdIXgCTJQK6rmOLq9hEzhW5hwG3cLQXUjb+cboAdPNERXpcXFUz62Yn33raBmc3o
+         blplY+PffT0s0Ma3Gjv1Dfji90dnBCQ0JR2M8adnSDl9hJoyKJqgg3aWFvyFxeB5RM+K
+         YoAkXQ88H8i9uUo9rKmbeuT/ZimhUj19/+ld6yWtzKNq1afkr3t3eiBm7Wso6leCedKO
+         cuYkfF5vxJ3xYJodra8xm2bhjpd+/hhXjeu6V0/G4NB9CrRPaFaXSDKbCX7KZsCwi2wh
+         jgjHN74aQl6bGwmJ2pDkbljmkUhKU6f8aC4TFk5T5u6RrZj1ScAJgyYyVZMHyM/ekVkJ
+         64vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1E/3KWBubmd3TEa7PIO3GoA5fzjc3dGvE7ZiPQxDE7c=;
-        b=vOL+7uqhWMR0krL/ctUnR2jXSDCWmY1sie+ZyI8dvKCVDE2/NXkeGxRWRRgcsQ52Vi
-         GVz3Eml3La6DqIjXKaXpylQC+Ag19iuiBR1C7LES+eG1Hr92gnZo5yFNH+XhdsjVi64t
-         m3+oQeCaFqvVvBHicT2qsBeiSDDGBWgwwexVOoluQpXzQfmifpTkTwu4fdExoagkc/jH
-         IQIRM31CFBqIbwgHI86WdCKp5ZItk9MSRikPjnxMjxkIrGG09PdLo4mKYzzSOLgj6lhz
-         V/0OiJj+WUNbk+mkbwzMS67gwqwOmXR41cAi4JkAhQIww72XJSdeSWF62tHCOQqh9NSl
-         QTgA==
-X-Gm-Message-State: AOAM5316Yn84lqPNQZVCIk1Fmo2nEF8ilka1D4EWwiVU8hsCbfBwjQL0
-        ojGukbb/Llq8pWfN0mj4Xg==
-X-Google-Smtp-Source: ABdhPJx/W2nQKKhkMKZ/abujq/Z3ImQBTqczfZI8YQDqn9Fpzc1f8SxvzBCup7RNWtudJZXcjiRXyg==
-X-Received: by 2002:a4a:97c3:0:b0:35b:29f9:a212 with SMTP id x3-20020a4a97c3000000b0035b29f9a212mr2200527ooi.50.1654181467373;
-        Thu, 02 Jun 2022 07:51:07 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l3-20020a4a94c3000000b0040e5ff4a737sm2325045ooi.26.2022.06.02.07.51.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 07:51:06 -0700 (PDT)
-Received: (nullmailer pid 2299234 invoked by uid 1000);
-        Thu, 02 Jun 2022 14:51:05 -0000
-Date:   Thu, 2 Jun 2022 09:51:05 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 1/6] dt-bindings: media: Add Allwinner A31 ISP
- bindings documentation
-Message-ID: <20220602145105.GA2298322-robh@kernel.org>
-References: <20220525191026.696636-1-paul.kocialkowski@bootlin.com>
- <20220525191026.696636-2-paul.kocialkowski@bootlin.com>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MG4fB5L16PJOB6eygIdqZV5Ksttsv4vvkIROtuQ0QKg=;
+        b=q4VDddI+QV9bvDivCISA403lqF09R7dQMCssj1lIxbg0tfAg6ncGIVWR33DuCgEoj+
+         0Fa/gc+QI7TQO8SGg+vTZUOrbRA1fNWY3RgQ9WCLSUmJk6LZnN7JX7V46USJNxpJ5UIw
+         7Y/a5e8P+qqkMt6Kg2fPUCG2XYnubceSRHjPkWBkT+g6rasYjFv4zA7Z1HVo+RhMg1CI
+         Y2VlGY6XiktwGC9b2Vlj9H8K8vdbFyiK4XF7qZCT1JEZya9QZPlX99FyMlXllMZPOAjt
+         VkKkerHrydYk7UlogzRMqNnNv+Bf1fDLyMFxpZN+Fr0rpM9cwtaBr3/VcxjjvwvGs8A9
+         MsMg==
+X-Gm-Message-State: AOAM533nIMgvlWy9pSnN3rfYWOyG1ozmMcevcUKoueKdq974HJFzogZ1
+        lRpK1uBW3A/AWJvgNkrv5gBga8wVlcU=
+X-Google-Smtp-Source: ABdhPJx2XtRXI3hkPrfqrFyv7zA3+CCZ1oBRo6S2VY+rDVqlMJ2cFUadZ8sCGk08GLh4x3pQ99KDyw==
+X-Received: by 2002:a05:6870:891f:b0:e1:ec98:3c59 with SMTP id i31-20020a056870891f00b000e1ec983c59mr6325967oao.295.1654273361054;
+        Fri, 03 Jun 2022 09:22:41 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j9-20020a056870530900b000f33b23a030sm3412594oan.57.2022.06.03.09.22.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jun 2022 09:22:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4ef87536-7a71-0d1b-3121-94e763041562@roeck-us.net>
+Date:   Fri, 3 Jun 2022 09:22:37 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525191026.696636-2-paul.kocialkowski@bootlin.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 6/6] watchdog: max77620: update Luca Ceresoli's e-mail
+ address
+Content-Language: en-US
+To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-kernel@vger.kernel.org
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Leon Luo <leonl@leopardimaging.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>
+References: <20220603155727.1232061-1-luca@lucaceresoli.net>
+ <20220603155727.1232061-6-luca@lucaceresoli.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220603155727.1232061-6-luca@lucaceresoli.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, May 25, 2022 at 09:10:21PM +0200, Paul Kocialkowski wrote:
-> This introduces YAML bindings documentation for the Allwinner A31 Image
-> Signal Processor (ISP).
+On 6/3/22 08:57, Luca Ceresoli wrote:
+> My Bootlin address is preferred from now on.
 > 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+An entry in .mailmap might be easier, though.
+
+Guenter
+
 > ---
->  .../media/allwinner,sun6i-a31-isp.yaml        | 97 +++++++++++++++++++
->  1 file changed, 97 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+>   drivers/watchdog/max77620_wdt.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/max77620_wdt.c b/drivers/watchdog/max77620_wdt.c
+> index b76ad6ba0915..33835c0b06de 100644
+> --- a/drivers/watchdog/max77620_wdt.c
+> +++ b/drivers/watchdog/max77620_wdt.c
+> @@ -6,7 +6,7 @@
+>    * Copyright (C) 2022 Luca Ceresoli
+>    *
+>    * Author: Laxman Dewangan <ldewangan@nvidia.com>
+> - * Author: Luca Ceresoli <luca@lucaceresoli.net>
+> + * Author: Luca Ceresoli <luca.ceresoli@bootlin.com>
+>    */
+>   
+>   #include <linux/err.h>
+> @@ -260,5 +260,5 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started "
+>   	"(default=" __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+>   
+>   MODULE_AUTHOR("Laxman Dewangan <ldewangan@nvidia.com>");
+> -MODULE_AUTHOR("Luca Ceresoli <luca@lucaceresoli.net>");
+> +MODULE_AUTHOR("Luca Ceresoli <luca.ceresoli@bootlin.com>");
+>   MODULE_LICENSE("GPL v2");
 
-With the indentation fixed,
-
-Reviewed-by: Rob Herring <robh@kernel.org>
