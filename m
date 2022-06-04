@@ -2,110 +2,89 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9584C43334
-	for <linux-media@archiver.kernel.org>; Fri,  3 Jun 2022 17:22:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09A02C43334
+	for <linux-media@archiver.kernel.org>; Sat,  4 Jun 2022 04:41:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344369AbiFCRWf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 Jun 2022 13:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
+        id S1349477AbiFDElM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 4 Jun 2022 00:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344365AbiFCRWd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 Jun 2022 13:22:33 -0400
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8169D6396;
-        Fri,  3 Jun 2022 10:22:31 -0700 (PDT)
-Received: from [77.244.183.192] (port=64530 helo=melee.fritz.box)
-        by hostingweb31.netsons.net with esmtpa (Exim 4.95)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1nx9hv-0009cb-DZ;
-        Fri, 03 Jun 2022 17:59:27 +0200
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Leon Luo <leonl@leopardimaging.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>
-Subject: [PATCH 2/6] dt-bindings: update Luca Ceresoli's e-mail address
-Date:   Fri,  3 Jun 2022 17:57:23 +0200
-Message-Id: <20220603155727.1232061-2-luca@lucaceresoli.net>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220603155727.1232061-1-luca@lucaceresoli.net>
-References: <20220603155727.1232061-1-luca@lucaceresoli.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+        with ESMTP id S232402AbiFDElL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 4 Jun 2022 00:41:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37CB56C20
+        for <linux-media@vger.kernel.org>; Fri,  3 Jun 2022 21:41:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AEA3B82536
+        for <linux-media@vger.kernel.org>; Sat,  4 Jun 2022 04:41:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6E2C34114
+        for <linux-media@vger.kernel.org>; Sat,  4 Jun 2022 04:41:04 +0000 (UTC)
+Date:   Sat, 04 Jun 2022 06:41:02 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: OK
+Message-Id: <20220604044104.EF6E2C34114@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-My Bootlin address is preferred from now on.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
----
- Documentation/devicetree/bindings/clock/idt,versaclock5.yaml    | 2 +-
- Documentation/devicetree/bindings/mfd/maxim,max77714.yaml       | 2 +-
- .../devicetree/bindings/power/supply/maxim,max77976.yaml        | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Results of the daily build of media_tree:
 
-diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-index be66f1e8b547..7c331bfbe370 100644
---- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-+++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-@@ -45,7 +45,7 @@ description: |
-   The case where SH and SP are both 1 is likely not very interesting.
- 
- maintainers:
--  - Luca Ceresoli <luca@lucaceresoli.net>
-+  - Luca Ceresoli <luca.ceresoli@bootlin.com>
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
-index 74a6867d3c82..edac14af101e 100644
---- a/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
-+++ b/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: MAX77714 PMIC with GPIO, RTC and watchdog from Maxim Integrated.
- 
- maintainers:
--  - Luca Ceresoli <luca@lucaceresoli.net>
-+  - Luca Ceresoli <luca.ceresoli@bootlin.com>
- 
- description: |
-   MAX77714 is a Power Management IC with 4 buck regulators, 9
-diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml
-index 675b9b26d233..f23dcc50793e 100644
---- a/Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Maxim Integrated MAX77976 Battery charger
- 
- maintainers:
--  - Luca Ceresoli <luca@lucaceresoli.net>
-+  - Luca Ceresoli <luca.ceresoli@bootlin.com>
- 
- description: |
-   The Maxim MAX77976 is a 19Vin / 5.5A, 1-Cell Li+ battery charger
--- 
-2.25.1
+date:			Sat Jun  4 05:00:10 CEST 2022
+media-tree git hash:	340ce50f75a6bdfe6d1850ca49ef37a8e2765dd1
+media_build git hash:	0fe857b86addf382f6fd383948bd7736a3201403
+v4l-utils git hash:	163144712a46229f3476b04f6c0037c4b7f00299
+edid-decode git hash:	cc1aeb00500d1ac725577354af9cd2637f47ef71
+gcc version:		i686-linux-gcc (GCC) 11.2.0
+sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
+sparse version:		v0.6.4-14-g5a0004b5-dirty
+smatch repo:            git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-7985-g10181ff8-dirty
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 9cab4a480ab6918fca528dd05f2ab6cc66cb668f
+host hardware:		x86_64
+host os:		5.17.0-1-amd64
 
+linux-git-sh: OK
+linux-git-mips: OK
+linux-git-arm-stm32: OK
+linux-git-arm-pxa: OK
+linux-git-arm-multi: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 0
+virtme-32: OK: Final Summary: 3100, Succeeded: 3100, Failed: 0, Warnings: 0
+sparse: OK
+smatch: OK
+kerneldoc: OK
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-32.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
