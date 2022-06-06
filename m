@@ -2,51 +2,51 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE402C43334
-	for <linux-media@archiver.kernel.org>; Mon,  6 Jun 2022 13:20:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94FE6C43334
+	for <linux-media@archiver.kernel.org>; Mon,  6 Jun 2022 13:20:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238752AbiFFNUm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 Jun 2022 09:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S238768AbiFFNUp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 Jun 2022 09:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238755AbiFFNUl (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jun 2022 09:20:41 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC3A2CDB14
-        for <linux-media@vger.kernel.org>; Mon,  6 Jun 2022 06:20:38 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id t13so19844823wrg.9
-        for <linux-media@vger.kernel.org>; Mon, 06 Jun 2022 06:20:38 -0700 (PDT)
+        with ESMTP id S238769AbiFFNUo (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 Jun 2022 09:20:44 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F409A2DCB3D
+        for <linux-media@vger.kernel.org>; Mon,  6 Jun 2022 06:20:40 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id u8so15507934wrm.13
+        for <linux-media@vger.kernel.org>; Mon, 06 Jun 2022 06:20:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FQwiRH8SbyYIRHOU4lVjXun0soxJoAIDMcmiGn/Jje0=;
-        b=xx5cq5muegsEvF4gpDl5OHz5d4sNa48M2bl7tgeif9GPubNXfOqT39T6RuX6+b/xZr
-         CKiJnPz8tdmu3vyUnZLol4SF46dWOBT7A3MdnsV/4zxLR3pffMnKxNkYC3iAiBEZCJcV
-         weAiD/Q4iQmOxcAZkfUiKHZHj3TUx+oKbCWqW5o3k894KHg4MkVnQ0AEh6MzZ1MatoxQ
-         ewxGgLyJg8x99oGYunr7UmGfKQyBFEwe8hFwqTVr5TUWsgLrHC+YlgfKE+XMQzMoPtJ1
-         aECJaYv4zJLcgDYU3d2iW9UnIxEOml3DScKjk9gRB9cI/6B5FS0iG5snrEeSqQfRfsWC
-         5cgg==
+        bh=r2R9jG8Kr9X9kmtbyt2WFDnM8NcZdvgcAwzUcSJYgjw=;
+        b=qzJbkgoAry6y5ooent4QLmsA0cRCNFEoLRGjDr98rD999MqAsUN6QjVZpNJXZyo+hK
+         C6uN3cBDa1i+8ZtIhzwcOa7zLsYP/HsK0OQlEK9fBtuEYe3SVb++Cq6OWVDyJS4I1kQC
+         ch2ojPl4WGIvQXB2UlSjDPFGoXfWiw/kq6DExOEbJkI5y4PU6bQU8rkehsmiSkicKqal
+         9hy3xDwP3skiJHYRGIhTAKQM0z8g6kTVZaEZkXmLoCl6na3/adiZRqHR+pOnZGbufR1t
+         ARq0dzV39wxuKVMLcEDG69thomCWRIR3ZAre7w7Swd5lAGAq3ZaKq4tJZwiP4EUeyKTl
+         rFiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FQwiRH8SbyYIRHOU4lVjXun0soxJoAIDMcmiGn/Jje0=;
-        b=JgZFwzcLR+1nAYRIsaHcM9I+WOVyGyVq9Rk2xXBeuJwOH6p1dyQ/ok5xR1pcnK1Vhc
-         oj28r1VbaO3+2A7ppqbvWdsTbdG838cmLL9Ne/aNJ41fvjCBeJxMk9HIn7IYI+ld2bAG
-         eqB0GTntgYXRZ+qQYr7IAo7xur1pjJFQCcikgqP09a5u7kpo8UNlcedaifwBe12vvqdk
-         0x4QJYUkOjESM0h061RYscO2xb1K3aKXXX19FX0dLmIev7tidmmYFCr4G0OKXslINgAx
-         91ONsu9S0TpMKxwdz+CMYquaM64UWl9aVdXZpP/czp2G9HiUhLW1jJWkw2ujKSze/d5i
-         3sdQ==
-X-Gm-Message-State: AOAM531KJwIrDuaeVsN3wLlakMvsMQc4c5gRXTAn512abXhKyGKr74K8
-        o3FN/6F9GaFemMsCadg1EYYQS0rnIJZkh4U2
-X-Google-Smtp-Source: ABdhPJwX8u4hl1HTjoDuEvZm7k82rQox3NkVffQFGprdrtuacznOZElYZq5En1vC3jUfzD4vSmRNRA==
-X-Received: by 2002:adf:d1ef:0:b0:215:89b0:9add with SMTP id g15-20020adfd1ef000000b0021589b09addmr14215792wrd.279.1654521636893;
-        Mon, 06 Jun 2022 06:20:36 -0700 (PDT)
+        bh=r2R9jG8Kr9X9kmtbyt2WFDnM8NcZdvgcAwzUcSJYgjw=;
+        b=egAhZZwnb5EAeuZcTimH3BAs9+faVtRQHVlxlb7KSAywu71JOXC2kci0giUnlj/Cz2
+         7g0TQ2xCG6cMAwbKSwRZLUXomMdwmG3m4UiI29Q9N32NYkAKt1KcVNgfiRoOaEAASbYt
+         QtqnfOhIk7JaQT4n3zX+purCw9wqsAyEov02dTY/rDfXfjU1kJ+OMmvVWUg7YzY8nhub
+         bKOKwQors9drkJRDYoTcMITGxjheBp5bsBzU2LP2Jy8q0n/EZLMJ3RE7EeXKbCCJX8CA
+         mex2pSj7vGqh60/djcyF+U2n7FO8lD2FV2uHJAhq2AnHRV6yQyg5iHXk43hD7T72evvk
+         r0GQ==
+X-Gm-Message-State: AOAM530jLs2Y875HOdVBi0cICbjDx15L5CIB9SsHhPlom7eBku+P3Zr/
+        ZQGJstlXL2M4nf2hQ7L3ngNROm3b9KSJeA1K
+X-Google-Smtp-Source: ABdhPJzWoxTMK/JV0TvFWOsbiyvdmQ5ev4T6j/uZCIl+bI0dO66TkLxqsbDT345zmVf/uJBC+xcnXQ==
+X-Received: by 2002:a5d:5952:0:b0:217:a419:c417 with SMTP id e18-20020a5d5952000000b00217a419c417mr7367967wri.641.1654521639416;
+        Mon, 06 Jun 2022 06:20:39 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id i12-20020a05600c354c00b0039765a7add4sm21077810wmq.29.2022.06.06.06.20.35
+        by smtp.gmail.com with ESMTPSA id i12-20020a05600c354c00b0039765a7add4sm21077810wmq.29.2022.06.06.06.20.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 06:20:36 -0700 (PDT)
+        Mon, 06 Jun 2022 06:20:38 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
         mchehab@kernel.org, hverkuil@xs4all.nl, robert.foss@linaro.org
@@ -55,9 +55,9 @@ Cc:     jonathan@marek.ca, andrey.konovalov@linaro.org,
         jgrahsl@snap.com, hfink@snap.com, vladimir.zapolskiy@linaro.org,
         dmitry.baryshkov@linaro.org, konrad.dybcio@somainline.org,
         bryan.odonoghue@linaro.org
-Subject: [PATCH v3 3/5] arm64: dts: qcom: sm8250: camss: Define ports address/size cells
-Date:   Mon,  6 Jun 2022 14:20:27 +0100
-Message-Id: <20220606132029.2221257-4-bryan.odonoghue@linaro.org>
+Subject: [PATCH v3 5/5] arm64: dts: qcom: sdm845-db845c-navigation-mezzanine: Add navigation mezzanine dts
+Date:   Mon,  6 Jun 2022 14:20:29 +0100
+Message-Id: <20220606132029.2221257-6-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220606132029.2221257-1-bryan.odonoghue@linaro.org>
 References: <20220606132029.2221257-1-bryan.odonoghue@linaro.org>
@@ -67,32 +67,267 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The ports {} address and size cells definition is the same for every
-derived 8250 board so, we should define it in the core sm8250.dtsi.
+Move the dts data for the rb3 navigation mezzanine into its own dts file.
 
-Suggested-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../sdm845-db845c-navigation-mezzanine.dts    | 115 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts    | 106 ----------------
+ 3 files changed, 116 insertions(+), 106 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm845-db845c-navigation-mezzanine.dts
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index 2bc11cad3a44..aa9a13364865 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -3395,6 +3395,11 @@ camss: camss@ac6a000 {
- 					     "cam_hf_0_mnoc",
- 					     "cam_sf_0_mnoc",
- 					     "cam_sf_icp_mnoc";
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index 86e6801a9c29..2561c419f3ef 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -101,6 +101,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r1.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r2.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r3.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-db845c.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-db845c-navigation-mezzanine.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-mtp.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-oneplus-enchilada.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-oneplus-fajita.dtb
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c-navigation-mezzanine.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c-navigation-mezzanine.dts
+new file mode 100644
+index 000000000000..565675d644c5
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sdm845-db845c-navigation-mezzanine.dts
+@@ -0,0 +1,115 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2022, Linaro Ltd.
++ */
 +
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
++/dts-v1/;
++
++#include "sdm845-db845c.dts"
++
++&cci {
++	status = "okay";
++};
++
++&camss {
++	vdda-supply = <&vreg_l1a_0p875>;
++
++	status = "ok";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		port@0 {
++			reg = <0>;
++			csiphy0_ep: endpoint {
++				data-lanes = <0 1 2 3>;
++				remote-endpoint = <&ov8856_ep>;
 +			};
- 		};
++		};
++	};
++};
++
++&cci_i2c0 {
++	camera@10 {
++		compatible = "ovti,ov8856";
++		reg = <0x10>;
++
++		// CAM0_RST_N
++		reset-gpios = <&tlmm 9 GPIO_ACTIVE_LOW>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&cam0_default>;
++		gpios = <&tlmm 13 0>,
++			<&tlmm 9 GPIO_ACTIVE_LOW>;
++
++		clocks = <&clock_camcc CAM_CC_MCLK0_CLK>;
++		clock-names = "xvclk";
++		clock-frequency = <19200000>;
++
++		/* The &vreg_s4a_1p8 trace is powered on as a,
++		 * so it is represented by a fixed regulator.
++		 *
++		 * The 2.8V vdda-supply and 1.2V vddd-supply regulators
++		 * both have to be enabled through the power management
++		 * gpios.
++		 */
++		power-domains = <&clock_camcc TITAN_TOP_GDSC>;
++
++		dovdd-supply = <&vreg_lvs1a_1p8>;
++		avdd-supply = <&cam0_avdd_2v8>;
++		dvdd-supply = <&cam0_dvdd_1v2>;
++
++		status = "ok";
++
++		port {
++			ov8856_ep: endpoint {
++				link-frequencies = /bits/ 64
++					<360000000 180000000>;
++				data-lanes = <1 2 3 4>;
++				remote-endpoint = <&csiphy0_ep>;
++			};
++		};
++	};
++};
++
++&cci_i2c1 {
++	camera@60 {
++		compatible = "ovti,ov7251";
++
++		// I2C address as per ov7251.txt linux documentation
++		reg = <0x60>;
++
++		// CAM3_RST_N
++		enable-gpios = <&tlmm 21 0>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&cam3_default>;
++		gpios = <&tlmm 16 0>,
++			<&tlmm 21 0>;
++
++		clocks = <&clock_camcc CAM_CC_MCLK3_CLK>;
++		clock-names = "xclk";
++		clock-frequency = <24000000>;
++
++		/* The &vreg_s4a_1p8 trace always powered on.
++		 *
++		 * The 2.8V vdda-supply regulator is enabled when the
++		 * vreg_s4a_1p8 trace is pulled high.
++		 * It too is represented by a fixed regulator.
++		 *
++		 * No 1.2V vddd-supply regulator is used.
++		 */
++		power-domains = <&clock_camcc TITAN_TOP_GDSC>;
++
++		vdddo-supply = <&vreg_lvs1a_1p8>;
++		vdda-supply = <&cam3_avdd_2v8>;
++
++		status = "disable";
++
++		port {
++			ov7251_ep: endpoint {
++				data-lanes = <0 1>;
++//				remote-endpoint = <&csiphy3_ep>;
++			};
++		};
++	};
++};
++
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+index 194ebeb3259c..faf1e9c7f24b 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+@@ -1139,112 +1139,6 @@ &pm8998_gpio {
  
- 		camcc: clock-controller@ad00000 {
+ };
+ 
+-&cci {
+-	status = "okay";
+-};
+-
+-&camss {
+-	vdda-supply = <&vreg_l1a_0p875>;
+-
+-	status = "ok";
+-
+-	ports {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		port@0 {
+-			reg = <0>;
+-			csiphy0_ep: endpoint {
+-				data-lanes = <0 1 2 3>;
+-				remote-endpoint = <&ov8856_ep>;
+-			};
+-		};
+-	};
+-};
+-
+-&cci_i2c0 {
+-	camera@10 {
+-		compatible = "ovti,ov8856";
+-		reg = <0x10>;
+-
+-		// CAM0_RST_N
+-		reset-gpios = <&tlmm 9 GPIO_ACTIVE_LOW>;
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&cam0_default>;
+-		gpios = <&tlmm 13 0>,
+-			<&tlmm 9 GPIO_ACTIVE_LOW>;
+-
+-		clocks = <&clock_camcc CAM_CC_MCLK0_CLK>;
+-		clock-names = "xvclk";
+-		clock-frequency = <19200000>;
+-
+-		/* The &vreg_s4a_1p8 trace is powered on as a,
+-		 * so it is represented by a fixed regulator.
+-		 *
+-		 * The 2.8V vdda-supply and 1.2V vddd-supply regulators
+-		 * both have to be enabled through the power management
+-		 * gpios.
+-		 */
+-		power-domains = <&clock_camcc TITAN_TOP_GDSC>;
+-
+-		dovdd-supply = <&vreg_lvs1a_1p8>;
+-		avdd-supply = <&cam0_avdd_2v8>;
+-		dvdd-supply = <&cam0_dvdd_1v2>;
+-
+-		status = "ok";
+-
+-		port {
+-			ov8856_ep: endpoint {
+-				link-frequencies = /bits/ 64
+-					<360000000 180000000>;
+-				data-lanes = <1 2 3 4>;
+-				remote-endpoint = <&csiphy0_ep>;
+-			};
+-		};
+-	};
+-};
+-
+-&cci_i2c1 {
+-	camera@60 {
+-		compatible = "ovti,ov7251";
+-
+-		// I2C address as per ov7251.txt linux documentation
+-		reg = <0x60>;
+-
+-		// CAM3_RST_N
+-		enable-gpios = <&tlmm 21 0>;
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&cam3_default>;
+-		gpios = <&tlmm 16 0>,
+-			<&tlmm 21 0>;
+-
+-		clocks = <&clock_camcc CAM_CC_MCLK3_CLK>;
+-		clock-names = "xclk";
+-		clock-frequency = <24000000>;
+-
+-		/* The &vreg_s4a_1p8 trace always powered on.
+-		 *
+-		 * The 2.8V vdda-supply regulator is enabled when the
+-		 * vreg_s4a_1p8 trace is pulled high.
+-		 * It too is represented by a fixed regulator.
+-		 *
+-		 * No 1.2V vddd-supply regulator is used.
+-		 */
+-		power-domains = <&clock_camcc TITAN_TOP_GDSC>;
+-
+-		vdddo-supply = <&vreg_lvs1a_1p8>;
+-		vdda-supply = <&cam3_avdd_2v8>;
+-
+-		status = "disable";
+-
+-		port {
+-			ov7251_ep: endpoint {
+-				data-lanes = <0 1>;
+-//				remote-endpoint = <&csiphy3_ep>;
+-			};
+-		};
+-	};
+-};
+-
+ /* PINCTRL - additions to nodes defined in sdm845.dtsi */
+ &qup_spi0_default {
+ 	config {
 -- 
 2.36.1
 
