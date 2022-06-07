@@ -2,205 +2,65 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CF29C43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22795CCA490
 	for <linux-media@archiver.kernel.org>; Wed,  8 Jun 2022 01:08:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378401AbiFHBD4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Jun 2022 21:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        id S1380345AbiFHBEC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Jun 2022 21:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1582835AbiFGXpp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jun 2022 19:45:45 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB02441606
-        for <linux-media@vger.kernel.org>; Tue,  7 Jun 2022 15:04:20 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id s12so30648047ejx.3
-        for <linux-media@vger.kernel.org>; Tue, 07 Jun 2022 15:04:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mv0VwaBbJj5t97Zb21xM6IYXGG5Qm9K6yXJwCzABay4=;
-        b=M5PMNwLa8MyWdKLku4+ic9U3z6Gzqi2oHEIJzOSX0fOBoSLwESMbYf3VdzSDsY0HRU
-         KXU7Z6vAgsqRCgttm4N21Lmp4UlmYr1l7ab/UZXTLAAG0Ot2yVbF1r2HkjVTmDGn0wBe
-         1Wi8eQRzbPu0npYC3f1+J+mfKv1U+Pw8KTE6E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mv0VwaBbJj5t97Zb21xM6IYXGG5Qm9K6yXJwCzABay4=;
-        b=NoF1Wsomr5dLIIejMuKplXVi/JscQWQzcqg2N8TkY15AdE1xi3lJ09k+cqSGIVyNLf
-         PvvoNYfpbxv/OAw+t4DsItRECkBSYP35FugA9osgYyB2BwHaBTZ/kNlg7lfG49ZOyhFI
-         kQz8RcFE57sFkDtP0iyU7zvqj/1CZhoTnRMf7Cu5jEKqPD89DiOo7SBjbkUCXHPAW6MY
-         bEBuYv8HK58LkVzo4pTbLkRzI/dnTtNSYuRinRtpQ68ZtULAt/uHjGbEHkowaBlqfAGK
-         I2iU3ibg6mZz4kRoizVDG+43nTvxdUg6FHGj6JNtJbc3sx4vYe5Xr5hSlLYZ2RqYeItP
-         lfPw==
-X-Gm-Message-State: AOAM5333pnWjZ1lKe3jZcao0a2mNQ/x4fAd9f5zfDgyjm64J9jCYzt5l
-        7nG2rFgrYR8l5dyrWERlwgZx0uAreZIo2g==
-X-Google-Smtp-Source: ABdhPJySmOlt1DiJL18YR0Iqm0CEb1p42z/gKFMZ23iiK2MQtRnEUG+beEIRNfSYdLOPqnK6H0FZ1g==
-X-Received: by 2002:a17:907:608f:b0:6f6:1155:99ab with SMTP id ht15-20020a170907608f00b006f6115599abmr27960400ejc.306.1654639448414;
-        Tue, 07 Jun 2022 15:04:08 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-2-39-143-183.cust.vodafonedsl.it. [2.39.143.183])
-        by smtp.gmail.com with ESMTPSA id h24-20020a170906829800b0070f7d1c5a18sm5660359ejx.55.2022.06.07.15.04.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 15:04:07 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 00:04:05 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Quentin Schulz <foss+kernel@0leil.net>, shawnx.tu@intel.com,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Subject: Re: [PATCH v6 4/4] media: i2c: ov5675: add .get_selection support
-Message-ID: <20220607220405.GB821506@tom-ThinkPad-T14s-Gen-2i>
-References: <20220607153335.875956-1-foss+kernel@0leil.net>
- <20220607153335.875956-4-foss+kernel@0leil.net>
- <20220607165136.bmriu2n7yorc7fx6@uno.localdomain>
+        with ESMTP id S1579017AbiFGXjL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jun 2022 19:39:11 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4061842E1
+        for <linux-media@vger.kernel.org>; Tue,  7 Jun 2022 14:36:47 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2016087B;
+        Tue,  7 Jun 2022 23:36:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1654637805;
+        bh=5Jy6BguBDATv2Poy9zDg7UAXFJ0KLqZulWuxawdvaAg=;
+        h=In-Reply-To:References:Subject:From:To:Date:From;
+        b=oK0kfA2wpslM7Mki/bIz5BtCyXoWstWaUIQbjOWZrsUxCp3RTuvhQVI2gCqq616LL
+         sTqge8UbAOnlWFjM7U2WCDRKU3WVOY5MOFPPmEe8qsY9Khewz6u9E8JPb6VBRlh6Jq
+         cRJoeVX34FGwXjbsZ3fIClSvv/9/41NAL4bSsQ+M=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607165136.bmriu2n7yorc7fx6@uno.localdomain>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAFP0Ok_DvJo7KM4YSsT2s3SAzDQdSy-8HrQoky6zH5YE4sGypw@mail.gmail.com>
+References: <CAFP0Ok_DvJo7KM4YSsT2s3SAzDQdSy-8HrQoky6zH5YE4sGypw@mail.gmail.com>
+Subject: Re: Attaching an I2C VCM subdev (media entity) to media pipeline
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
+To:     Karthik Poduval <karthik.poduval@gmail.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Date:   Tue, 07 Jun 2022 22:36:42 +0100
+Message-ID: <165463780248.186364.12552426317591956823@Monstersaurus>
+User-Agent: alot/0.10
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Quentin/Jacopo,
+Hi Karthik,
 
-On Tue, Jun 07, 2022 at 06:51:36PM +0200, Jacopo Mondi wrote:
-> Hi Quentin,
-> 
-> On Tue, Jun 07, 2022 at 05:33:35PM +0200, Quentin Schulz wrote:
-> > From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> >
-> > The sensor has 2592*1944 active pixels, surrounded by 16 active dummy
-> > pixels and there are an additional 24 black rows "at the bottom".
-> >
-> >                      [2624]
-> >         +-----+------------------+-----+
-> >         |     |     16 dummy     |     |
-> >         +-----+------------------+-----+
-> >         |     |                  |     |
-> >         |     |     [2592]       |     |
-> >         |     |                  |     |
-> >         |16   |      valid       | 16  |[2000]
-> >         |dummy|                  |dummy|
-> >         |     |            [1944]|     |
-> >         |     |                  |     |
-> >         +-----+------------------+-----+
-> >         |     |     16 dummy     |     |
-> >         +-----+------------------+-----+
-> >         |     |  24 black lines  |     |
-> >         +-----+------------------+-----+
-> >
-> > The top-left coordinate is gotten from the registers specified in the
-> > modes which are identical for both currently supported modes.
-> >
-> > There are currently two modes supported by this driver: 2592*1944 and
-> > 1296*972. The second mode is obtained thanks to subsampling while
-> > keeping the same field of view (FoV). No cropping involved, hence the
-> > harcoded values.
-> >
-> > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> > ---
-> >
-> > v6:
-> >  - explicit a bit more the commit log around subsampling for lower
-> >  resolution modes,
-> >  - (again) fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
-> >
-> > v4:
-> >  - explicit a bit more the commit log,
-> >  - added drawing in the commit log,
-> >  - fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
-> >
-> > added in v3
-> >
-> >  drivers/media/i2c/ov5675.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> >
-> > diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-> > index 80840ad7bbb0..2230ff47ef49 100644
-> > --- a/drivers/media/i2c/ov5675.c
-> > +++ b/drivers/media/i2c/ov5675.c
-> > @@ -1121,6 +1121,26 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
-> >  	return 0;
-> >  }
-> >
-> > +static int ov5675_get_selection(struct v4l2_subdev *sd,
-> > +				struct v4l2_subdev_state *state,
-> > +				struct v4l2_subdev_selection *sel)
-> > +{
-> > +	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
-> > +		return -EINVAL;
-> > +
-> > +	switch (sel->target) {
-> > +	case V4L2_SEL_TGT_CROP:
-> > +	case V4L2_SEL_TGT_CROP_BOUNDS:
-> 
-> Seem like we have trouble understanding each other, or better, I have
-> troubles explaining myself most probably :)
-> 
-> If the dummy/black area is readable, this should just be (0, 0, 2624,
-> 2000) like it was in your previous version. What has changed that I
-> have missed ?
+Quoting Karthik Poduval (2022-06-07 18:29:23)
+> Hi All,
+>=20
+> I had a question about VCM subdev (media entity). The  example VCM
+> drivers have no pads. How do we attach them to the image sensor subdev
+> in the pipeline ?
 
-Taking as reference drivers/media/i2c/ov5693.c and others,
-seems ok what Quentin have done from my side.
+This requires a bit of support that was added fairly recently for
+managing non-data links between subdevices. This was added through the
+use of 'ancillary links' which can connect a sensor and a VCM.
 
-Just one thing: maybe is better to avoid magic numbers with more
-explicit defines like:
+It should be handled automatically if you're on the latest kernel
+version, but if not you would perhaps need to back-port the
+implementation. I believe it's handled automatically through the async
+subdevice notifier systems.
 
- + case V4L2_SEL_TGT_CROP_DEFAULT:
- +           sel->r.top = OV5675_ACTIVE_START_TOP;
- +           sel->r.left = OV5693_ACTIVE_START_LEFT;
- +           sel->r.width = OV5693_ACTIVE_WIDTH;
- +           sel->r.height = OV5693_ACTIVE_HEIGHT;
- 
-What do you think about?
+> --=20
+> Regards,
+> Karthik Poduval
 
-Thanks,
-Tommaso
-
-
-> 
-> Thanks
->   j
-> 
-> 
-> > +	case V4L2_SEL_TGT_CROP_DEFAULT:
-> > +		sel->r.top = 16;
-> > +		sel->r.left = 16;
-> > +		sel->r.width = 2592;
-> > +		sel->r.height = 1944;
-> > +		return 0;
-> > +	}
-> > +	return -EINVAL;
-> > +}
-> > +
-> >  static int ov5675_enum_mbus_code(struct v4l2_subdev *sd,
-> >  				 struct v4l2_subdev_state *sd_state,
-> >  				 struct v4l2_subdev_mbus_code_enum *code)
-> > @@ -1170,6 +1190,7 @@ static const struct v4l2_subdev_video_ops ov5675_video_ops = {
-> >  static const struct v4l2_subdev_pad_ops ov5675_pad_ops = {
-> >  	.set_fmt = ov5675_set_format,
-> >  	.get_fmt = ov5675_get_format,
-> > +	.get_selection = ov5675_get_selection,
-> >  	.enum_mbus_code = ov5675_enum_mbus_code,
-> >  	.enum_frame_size = ov5675_enum_frame_size,
-> >  };
-> > --
-> > 2.36.1
-> >
-
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+--
+Kieran
