@@ -2,127 +2,81 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB2F5CCA47C
-	for <linux-media@archiver.kernel.org>; Tue,  7 Jun 2022 15:34:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 293D1C43334
+	for <linux-media@archiver.kernel.org>; Tue,  7 Jun 2022 16:41:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344210AbiFGPeI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Jun 2022 11:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        id S245690AbiFGQld (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Jun 2022 12:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344196AbiFGPeE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jun 2022 11:34:04 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F91C1EF6;
-        Tue,  7 Jun 2022 08:34:02 -0700 (PDT)
-Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 20724E0007;
-        Tue,  7 Jun 2022 15:33:56 +0000 (UTC)
-From:   Quentin Schulz <foss+kernel@0leil.net>
-Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        foss+kernel@0leil.net,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Subject: [PATCH v6 4/4] media: i2c: ov5675: add .get_selection support
-Date:   Tue,  7 Jun 2022 17:33:35 +0200
-Message-Id: <20220607153335.875956-4-foss+kernel@0leil.net>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607153335.875956-1-foss+kernel@0leil.net>
-References: <20220607153335.875956-1-foss+kernel@0leil.net>
+        with ESMTP id S1344075AbiFGQlb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jun 2022 12:41:31 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A45C9644
+        for <linux-media@vger.kernel.org>; Tue,  7 Jun 2022 09:41:30 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6C931E0004;
+        Tue,  7 Jun 2022 16:41:27 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 18:41:25 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Daniel Scally <djrscally@gmail.com>
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        dafna@fastmail.com, heiko@sntech.de, foss+kernel@0leil.net
+Subject: Re: [PATCH] media: rkisp1: Don't create data links for non-sensor
+ subdevs
+Message-ID: <20220607164125.oabtqz6kh5bo6k6v@uno.localdomain>
+References: <20220606225149.2941160-1-djrscally@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220606225149.2941160-1-djrscally@gmail.com>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Hi Dan
 
-The sensor has 2592*1944 active pixels, surrounded by 16 active dummy
-pixels and there are an additional 24 black rows "at the bottom".
+On Mon, Jun 06, 2022 at 11:51:49PM +0100, Daniel Scally wrote:
+> With the introduction of ancillary links, not all subdevs linked to
+> the ISP's v4l2_dev necessarily represent sensors / bridges. Check the
+> function for the subdevs and skip any that represent lens or flash
+> controllers before creating data links.
+>
+> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+> ---
+>
+> This should fix the issues that have been noticed, but perhaps a new flag like
+> MEDIA_ENT_FL_HAS_SOURCE or something would be a better way to denote subdevs
+> that need data links?
+>
 
-                     [2624]
-        +-----+------------------+-----+
-        |     |     16 dummy     |     |
-        +-----+------------------+-----+
-        |     |                  |     |
-        |     |     [2592]       |     |
-        |     |                  |     |
-        |16   |      valid       | 16  |[2000]
-        |dummy|                  |dummy|
-        |     |            [1944]|     |
-        |     |                  |     |
-        +-----+------------------+-----+
-        |     |     16 dummy     |     |
-        +-----+------------------+-----+
-        |     |  24 black lines  |     |
-        +-----+------------------+-----+
+I agree this a bit fragile...
 
-The top-left coordinate is gotten from the registers specified in the
-modes which are identical for both currently supported modes.
+I noticed ancillary links are only created for subdev notifiers,
+which have a populated 'sd' and consequentially an entity. Could an
+helper that walks the links of the notifier's subdev links and checks
+if the subdev at hand is already linked, help ? Maybe with an optional
+set of link flags to match on ?
 
-There are currently two modes supported by this driver: 2592*1944 and
-1296*972. The second mode is obtained thanks to subsampling while
-keeping the same field of view (FoV). No cropping involved, hence the
-harcoded values.
 
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
----
-
-v6:
- - explicit a bit more the commit log around subsampling for lower
- resolution modes,
- - (again) fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
-
-v4:
- - explicit a bit more the commit log,
- - added drawing in the commit log,
- - fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
-
-added in v3
-
- drivers/media/i2c/ov5675.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
-
-diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-index 80840ad7bbb0..2230ff47ef49 100644
---- a/drivers/media/i2c/ov5675.c
-+++ b/drivers/media/i2c/ov5675.c
-@@ -1121,6 +1121,26 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
- 	return 0;
- }
- 
-+static int ov5675_get_selection(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_state *state,
-+				struct v4l2_subdev_selection *sel)
-+{
-+	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
-+		return -EINVAL;
-+
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP:
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+		sel->r.top = 16;
-+		sel->r.left = 16;
-+		sel->r.width = 2592;
-+		sel->r.height = 1944;
-+		return 0;
-+	}
-+	return -EINVAL;
-+}
-+
- static int ov5675_enum_mbus_code(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
-@@ -1170,6 +1190,7 @@ static const struct v4l2_subdev_video_ops ov5675_video_ops = {
- static const struct v4l2_subdev_pad_ops ov5675_pad_ops = {
- 	.set_fmt = ov5675_set_format,
- 	.get_fmt = ov5675_get_format,
-+	.get_selection = ov5675_get_selection,
- 	.enum_mbus_code = ov5675_enum_mbus_code,
- 	.enum_frame_size = ov5675_enum_frame_size,
- };
--- 
-2.36.1
-
+>  drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> index 3f5cfa7eb937..e90f0216cb06 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> @@ -134,6 +134,10 @@ static int rkisp1_create_links(struct rkisp1_device *rkisp1)
+>  		    sd == &rkisp1->resizer_devs[RKISP1_SELFPATH].sd)
+>  			continue;
+>
+> +		if (sd->entity.function == MEDIA_ENT_F_LENS ||
+> +		    sd->entity.function == MEDIA_ENT_F_FLASH)
+> +			continue;
+> +
+>  		ret = media_entity_get_fwnode_pad(&sd->entity, sd->fwnode,
+>  						  MEDIA_PAD_FL_SOURCE);
+>  		if (ret < 0) {
+> --
+> 2.25.1
+>
