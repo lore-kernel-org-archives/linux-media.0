@@ -2,221 +2,130 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE385CCA481
-	for <linux-media@archiver.kernel.org>; Tue,  7 Jun 2022 15:34:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3211C433EF
+	for <linux-media@archiver.kernel.org>; Tue,  7 Jun 2022 15:34:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344171AbiFGPeC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Jun 2022 11:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S1344166AbiFGPeF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 Jun 2022 11:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344170AbiFGPd6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jun 2022 11:33:58 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B750BE177;
-        Tue,  7 Jun 2022 08:33:57 -0700 (PDT)
-Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id C8159E0008;
-        Tue,  7 Jun 2022 15:33:47 +0000 (UTC)
-From:   Quentin Schulz <foss+kernel@0leil.net>
-Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        foss+kernel@0leil.net,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v6 1/4] media: dt-bindings: ov5675: document YAML binding
-Date:   Tue,  7 Jun 2022 17:33:32 +0200
-Message-Id: <20220607153335.875956-1-foss+kernel@0leil.net>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S1344150AbiFGPeD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jun 2022 11:34:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A135C038E;
+        Tue,  7 Jun 2022 08:34:02 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-138-163.dynamic.spd-mgts.ru [109.252.138.163])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D1DF06601A26;
+        Tue,  7 Jun 2022 16:33:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654616040;
+        bh=1OHF6wl6ehs/wRC7M/8ORoOFTl8MMQfJ9asXXd+gmRE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aEIUXUrg6wlcmhJWW9Dpq0CD51JiB4Gk+im588kYV1D7mO9ub6yKFVwNOXpZVJ2wM
+         opGS/8b5tqT6A+Qs0IOWZkFwx79fas7g7J+6UFuPd62KDBH4Udp9hStEJ+Rda/cqwS
+         /URMw8PUaP1oUBVHs2Yv4T39A3FIsYQBzAsp8bo0QFJ3mZ0J+ykNSYh0VcCXFnvq3G
+         IOXQEb+tEfv6oiz2y9m8bvih3N0zkAqVp0jlIZFmtAilcr0aTfPA8jEpZx7IeH9ey7
+         VUWWcHduvM3mB3xQmqfjKAk9sBAsGQj/TYmOnhe4+/BKszV79pAEu3Vi5r8hO/X1HA
+         L4he4Zd+PxFGA==
+Message-ID: <382d50a2-8e47-5e0f-726b-f077be5b8bc6@collabora.com>
+Date:   Tue, 7 Jun 2022 18:33:55 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v6 17/22] drm/shmem-helper: Add generic memory shrinker
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     David Airlie <airlied@linux.ie>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Rob Herring <robh@kernel.org>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Steven Price <steven.price@arm.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        virtualization@lists.linux-foundation.org,
+        Chia-I Wu <olvaffe@gmail.com>, linux-media@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        linaro-mm-sig@lists.linaro.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        linux-tegra@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        amd-gfx@lists.freedesktop.org,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
+        Rob Clark <robdclark@gmail.com>, Qiang Yu <yuq825@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20220526235040.678984-1-dmitry.osipenko@collabora.com>
+ <20220526235040.678984-18-dmitry.osipenko@collabora.com>
+ <CAKMK7uHQ+iMkXtrsCWiJL9X1AM9Xkq-wNmj=hhfnenf0r9717g@mail.gmail.com>
+ <2aedbd68-cb4b-157c-1ddb-dbdb9348d2fe@gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <2aedbd68-cb4b-157c-1ddb-dbdb9348d2fe@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+On 6/6/22 13:57, Christian König wrote:
+> Am 05.06.22 um 18:47 schrieb Daniel Vetter:
+>> On Fri, 27 May 2022 at 01:55, Dmitry Osipenko
+>> <dmitry.osipenko@collabora.com> wrote:
+>>> Introduce a common DRM SHMEM shrinker framework that allows to reduce
+>>> code duplication among DRM drivers by replacing theirs custom shrinker
+>>> implementations with the generic shrinker.
+>>>
+>>> In order to start using DRM SHMEM shrinker drivers should:
+>>>
+>>> 1. Implement new evict() shmem object callback.
+>>> 2. Register shrinker using drm_gem_shmem_shrinker_register(drm_device).
+>>> 3. Use drm_gem_shmem_set_purgeable(shmem) and alike API functions to
+>>>     activate shrinking of shmem GEMs.
+>>>
+>>> This patch is based on a ideas borrowed from Rob's Clark MSM shrinker,
+>>> Thomas' Zimmermann variant of SHMEM shrinker and Intel's i915 shrinker.
+>>>
+>>> Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
+>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>> So I guess I get a price for being blind since forever, because this
+>> thing existed since at least 2013. I just stumbled over
+>> llist_lru.[hc], a purpose built list helper for shrinkers. I think we
+>> should try to adopt that so that our gpu shrinkers look more like
+>> shrinkers for everything else.
+> 
+> What the heck are you talking about?
+> 
+> I can't find any llist_lru.[hc] in the linux kernel sources.
 
-This patch adds documentation of device tree in YAML schema for the
-OV5675 CMOS image sensor from Omnivision.
+I think Daniel meant this:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
----
+https://elixir.bootlin.com/linux/v5.19-rc1/source/include/linux/list_lru.h
 
-v4:
- - added Reviewed-by,
+https://elixir.bootlin.com/linux/v5.19-rc1/source/mm/list_lru.c
 
-v3:
- - removed clock-names,
- - removed clock-frequency,
- - added all-of of video-interface-devices schema,
- - added clock frequency range in description,
- - rephrased definition of supplies,
- - fixed name of reset gpio,
- - used schema ref for port and port->endpoint,
- - removed mentions to driver,
- - added HW data transfer speed limitation in comment for
- link-frequencies,
- - changed root additionalProperties to unevaluatedProperties to not
- have to list all properties from video-interface-devices schema, such as
- orientation or rotation,
- - added maxItems to reset-gpios,
- - updated example to use assigned-clocks and assigned-clock-rates
- instead of clock-frequency and clock-names,
 
-v2:
- - fixed incorrect id,
- - fixed device tree example by adding missing dt-bindings headers,
- - fixed device tree example by using vcc_1v2 for dvdd supply, as requested
- in datasheet,
-
- .../bindings/media/i2c/ovti,ov5675.yaml       | 123 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 124 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
-
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
-new file mode 100644
-index 000000000000..f0a48707bed7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
-@@ -0,0 +1,123 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (c) 2022 Theobroma Systems Design und Consulting GmbH
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/ovti,ov5675.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Omnivision OV5675 CMOS Sensor
-+
-+maintainers:
-+  - Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+
-+allOf:
-+  - $ref: /schemas/media/video-interface-devices.yaml#
-+
-+description: |
-+  The Omnivision OV5675 is a high performance, 1/5-inch, 5 megapixel, CMOS
-+  image sensor that delivers 2592x1944 at 30fps. It provides full-frame,
-+  sub-sampled, and windowed 10-bit MIPI images in various formats via the
-+  Serial Camera Control Bus (SCCB) interface.
-+
-+  This chip is programmable through I2C and two-wire SCCB. The sensor output
-+  is available via CSI-2 serial data output (up to 2-lane).
-+
-+properties:
-+  compatible:
-+    const: ovti,ov5675
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    description:
-+      System input clock (aka XVCLK). From 6 to 27 MHz.
-+    maxItems: 1
-+
-+  dovdd-supply:
-+    description:
-+      Digital I/O voltage supply, 1.8 volts.
-+
-+  avdd-supply:
-+    description:
-+      Analog voltage supply, 2.8 volts.
-+
-+  dvdd-supply:
-+    description:
-+      Digital core voltage supply, 1.2 volts.
-+
-+  reset-gpios:
-+    description:
-+      The phandle and specifier for the GPIO that controls sensor reset.
-+      This corresponds to the hardware pin XSHUTDN which is physically
-+      active low.
-+    maxItems: 1
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+    additionalProperties: false
-+
-+    properties:
-+      endpoint:
-+        $ref: /schemas/media/video-interfaces.yaml#
-+        unevaluatedProperties: false
-+
-+        properties:
-+          data-lanes:
-+            minItems: 1
-+            maxItems: 2
-+
-+          # Supports max data transfer of 900 Mbps per lane
-+          link-frequencies: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - dovdd-supply
-+  - avdd-supply
-+  - dvdd-supply
-+  - port
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/px30-cru.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/pinctrl/rockchip.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        ov5675: camera@36 {
-+            compatible = "ovti,ov5675";
-+            reg = <0x36>;
-+
-+            reset-gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&cif_clkout_m0>;
-+
-+            clocks = <&cru SCLK_CIF_OUT>;
-+            assigned-clocks = <&cru SCLK_CIF_OUT>;
-+            assigned-clock-rates = <19200000>;
-+
-+            avdd-supply = <&vcc_1v8>;
-+            dvdd-supply = <&vcc_1v2>;
-+            dovdd-supply = <&vcc_2v8>;
-+
-+            rotation = <90>;
-+            orientation = <0>;
-+
-+            port {
-+                ucam_out: endpoint {
-+                    remote-endpoint = <&mipi_in_ucam>;
-+                    data-lanes = <1 2>;
-+                    link-frequencies = /bits/ 64 <450000000>;
-+                };
-+            };
-+        };
-+    };
-+...
-+
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a6d3bd9d2a8d..302983893831 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14703,6 +14703,7 @@ M:	Shawn Tu <shawnx.tu@intel.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
- F:	drivers/media/i2c/ov5675.c
- 
- OMNIVISION OV5693 SENSOR DRIVER
 -- 
-2.36.1
-
+Best regards,
+Dmitry
