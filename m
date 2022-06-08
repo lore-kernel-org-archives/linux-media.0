@@ -2,39 +2,39 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D191CCA47F
-	for <linux-media@archiver.kernel.org>; Wed,  8 Jun 2022 11:04:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F582C433EF
+	for <linux-media@archiver.kernel.org>; Wed,  8 Jun 2022 11:04:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237633AbiFHLED (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Jun 2022 07:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S237664AbiFHLEE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Jun 2022 07:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237630AbiFHLEB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Jun 2022 07:04:01 -0400
+        with ESMTP id S237649AbiFHLEC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Jun 2022 07:04:02 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4366B1F5C69
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435031F5771
         for <linux-media@vger.kernel.org>; Wed,  8 Jun 2022 04:03:54 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mgr@pengutronix.de>)
-        id 1nytTc-0003yq-FF; Wed, 08 Jun 2022 13:03:52 +0200
+        id 1nytTc-0003xw-Ef; Wed, 08 Jun 2022 13:03:52 +0200
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <mgr@pengutronix.de>)
-        id 1nytTd-007ApT-10; Wed, 08 Jun 2022 13:03:51 +0200
+        id 1nytTc-007ApL-4e; Wed, 08 Jun 2022 13:03:50 +0200
 Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <mgr@pengutronix.de>)
-        id 1nytTb-000ai9-21; Wed, 08 Jun 2022 13:03:51 +0200
+        id 1nytTZ-000ai1-TP; Wed, 08 Jun 2022 13:03:49 +0200
 From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
 To:     linux-usb@vger.kernel.org
 Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
         paul.elder@ideasonboard.com, kieran.bingham@ideasonboard.com,
         nicolas@ndufresne.ca, laurent.pinchart@ideasonboard.com,
-        kernel@pengutronix.de
-Subject: [RESEND v2 3/3] usb: gadget: uvc: call uvc uvcg_warn on completed status instead of uvcg_info
-Date:   Wed,  8 Jun 2022 13:03:39 +0200
-Message-Id: <20220608110339.141036-4-m.grzeschik@pengutronix.de>
+        kernel@pengutronix.de, Dan Vacura <w36195@motorola.com>
+Subject: [RESEND v2 1/3] usb: gadget: uvc: calculate the number of request depending on framesize
+Date:   Wed,  8 Jun 2022 13:03:37 +0200
+Message-Id: <20220608110339.141036-2-m.grzeschik@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220608110339.141036-1-m.grzeschik@pengutronix.de>
 References: <20220608110339.141036-1-m.grzeschik@pengutronix.de>
@@ -48,32 +48,66 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Likewise to the uvcvideo hostside driver, this patch is changing the
-usb_request message of an non zero completion handler call from dev_info
-to dev_warn.
+The current limitation of possible number of requests being handled is
+dependent on the gadget speed. It makes more sense to depend on the
+typical frame size when calculating the number of requests. This patch
+is changing this and is using the previous limits as boundaries for
+reasonable minimum and maximum number of requests.
+
+For a 1080p jpeg encoded video stream with a maximum imagesize of
+e.g. 800kB with a maxburst of 8 and an multiplier of 1 the resulting
+number of requests is calculated to 49.
+
+        800768         1
+nreqs = ------ * -------------- ~= 49
+          2      (1024 * 8 * 1)
 
 Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Tested-by: Dan Vacura <w36195@motorola.com>
 
 ---
-v1 -> v2: - no changes
+v1 -> v2: - using clamp instead of min/max
+          - added calculation example to description
+	  - commented the additional division by two in the code
 
- drivers/usb/gadget/function/uvc_video.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/function/uvc_queue.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index 9a9101851bc1e8..1a3d39fd140f15 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -261,7 +261,7 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 		break;
+diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
+index d25edc3d2174e1..eb9bd9d32cd056 100644
+--- a/drivers/usb/gadget/function/uvc_queue.c
++++ b/drivers/usb/gadget/function/uvc_queue.c
+@@ -44,7 +44,8 @@ static int uvc_queue_setup(struct vb2_queue *vq,
+ {
+ 	struct uvc_video_queue *queue = vb2_get_drv_priv(vq);
+ 	struct uvc_video *video = container_of(queue, struct uvc_video, queue);
+-	struct usb_composite_dev *cdev = video->uvc->func.config->cdev;
++	unsigned int req_size;
++	unsigned int nreq;
  
- 	default:
--		uvcg_info(&video->uvc->func,
-+		uvcg_warn(&video->uvc->func,
- 			  "VS request completed with status %d.\n",
- 			  req->status);
- 		uvcg_queue_cancel(queue, 0);
+ 	if (*nbuffers > UVC_MAX_VIDEO_BUFFERS)
+ 		*nbuffers = UVC_MAX_VIDEO_BUFFERS;
+@@ -53,10 +54,16 @@ static int uvc_queue_setup(struct vb2_queue *vq,
+ 
+ 	sizes[0] = video->imagesize;
+ 
+-	if (cdev->gadget->speed < USB_SPEED_SUPER)
+-		video->uvc_num_requests = 4;
+-	else
+-		video->uvc_num_requests = 64;
++	req_size = video->ep->maxpacket
++		 * max_t(unsigned int, video->ep->maxburst, 1)
++		 * (video->ep->mult);
++
++	/* We divide by two, to increase the chance to run
++	 * into fewer requests for smaller framesizes.
++	 */
++	nreq = DIV_ROUND_UP(DIV_ROUND_UP(sizes[0], 2), req_size);
++	nreq = clamp(nreq, 4U, 64U);
++	video->uvc_num_requests = nreq;
+ 
+ 	return 0;
+ }
 -- 
 2.30.2
 
