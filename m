@@ -2,255 +2,122 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0597C433EF
-	for <linux-media@archiver.kernel.org>; Wed,  8 Jun 2022 07:02:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3834CC43334
+	for <linux-media@archiver.kernel.org>; Wed,  8 Jun 2022 07:45:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234277AbiFHG6R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Jun 2022 02:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
+        id S233641AbiFHHpJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Jun 2022 03:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242843AbiFHGvH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Jun 2022 02:51:07 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5E7BA556;
-        Tue,  7 Jun 2022 23:42:14 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 78CB1FF80C;
-        Wed,  8 Jun 2022 06:42:11 +0000 (UTC)
-Date:   Wed, 8 Jun 2022 08:42:09 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     Quentin Schulz <foss+kernel@0leil.net>, shawnx.tu@intel.com,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Subject: Re: [PATCH v6 4/4] media: i2c: ov5675: add .get_selection support
-Message-ID: <20220608064209.roub7uk7kx4k4muf@uno.localdomain>
-References: <20220607153335.875956-1-foss+kernel@0leil.net>
- <20220607153335.875956-4-foss+kernel@0leil.net>
- <20220607165136.bmriu2n7yorc7fx6@uno.localdomain>
- <20220607220405.GB821506@tom-ThinkPad-T14s-Gen-2i>
+        with ESMTP id S237160AbiFHHGR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Jun 2022 03:06:17 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F145FD359
+        for <linux-media@vger.kernel.org>; Tue,  7 Jun 2022 23:50:20 -0700 (PDT)
+Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 12468B91;
+        Wed,  8 Jun 2022 08:50:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1654671014;
+        bh=6uD8KrWxYsNhO6/A4RcpRZfGGdjuorBthV+vdtk7Bww=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=huZ6WlRTxfxaUisHq8bdSisHA/H6iQweaQ5UcJKLubFxvFXI/eeTmYt3rAr6DNWqG
+         h9CxLd042Cz3apWH/R1JZUmykvuI8XpnNU0WTM12rOPbwjdon6WiUel4tlE9+iQ5AF
+         0QDOC6e6EjA5kdaGvG1btJwUJY/j4KFTNzublBV4=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Yunke Cao <yunkec@google.com>
+Subject: [RFC PATCH v4 2/7] media: uvcvideo: Add support for per-device control mapping overrides
+Date:   Wed,  8 Jun 2022 09:50:00 +0300
+Message-Id: <20220608065005.23014-3-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220608065005.23014-1-laurent.pinchart@ideasonboard.com>
+References: <20220608065005.23014-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220607220405.GB821506@tom-ThinkPad-T14s-Gen-2i>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi
+From: Ricardo Ribalda <ribalda@chromium.org>
 
-On Wed, Jun 08, 2022 at 12:04:05AM +0200, Tommaso Merciai wrote:
-> Hi Quentin/Jacopo,
->
-> On Tue, Jun 07, 2022 at 06:51:36PM +0200, Jacopo Mondi wrote:
-> > Hi Quentin,
-> >
-> > On Tue, Jun 07, 2022 at 05:33:35PM +0200, Quentin Schulz wrote:
-> > > From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> > >
-> > > The sensor has 2592*1944 active pixels, surrounded by 16 active dummy
-> > > pixels and there are an additional 24 black rows "at the bottom".
-> > >
-> > >                      [2624]
-> > >         +-----+------------------+-----+
-> > >         |     |     16 dummy     |     |
-> > >         +-----+------------------+-----+
-> > >         |     |                  |     |
-> > >         |     |     [2592]       |     |
-> > >         |     |                  |     |
-> > >         |16   |      valid       | 16  |[2000]
-> > >         |dummy|                  |dummy|
-> > >         |     |            [1944]|     |
-> > >         |     |                  |     |
-> > >         +-----+------------------+-----+
-> > >         |     |     16 dummy     |     |
-> > >         +-----+------------------+-----+
-> > >         |     |  24 black lines  |     |
-> > >         +-----+------------------+-----+
-> > >
-> > > The top-left coordinate is gotten from the registers specified in the
-> > > modes which are identical for both currently supported modes.
-> > >
-> > > There are currently two modes supported by this driver: 2592*1944 and
-> > > 1296*972. The second mode is obtained thanks to subsampling while
-> > > keeping the same field of view (FoV). No cropping involved, hence the
-> > > harcoded values.
-> > >
-> > > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> > > ---
-> > >
-> > > v6:
-> > >  - explicit a bit more the commit log around subsampling for lower
-> > >  resolution modes,
-> > >  - (again) fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
-> > >
-> > > v4:
-> > >  - explicit a bit more the commit log,
-> > >  - added drawing in the commit log,
-> > >  - fixed reporting for V4L2_SEL_TGT_CROP_* thanks to Jacopo's help,
-> > >
-> > > added in v3
-> > >
-> > >  drivers/media/i2c/ov5675.c | 21 +++++++++++++++++++++
-> > >  1 file changed, 21 insertions(+)
-> > >
-> > > diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-> > > index 80840ad7bbb0..2230ff47ef49 100644
-> > > --- a/drivers/media/i2c/ov5675.c
-> > > +++ b/drivers/media/i2c/ov5675.c
-> > > @@ -1121,6 +1121,26 @@ static int ov5675_get_format(struct v4l2_subdev *sd,
-> > >  	return 0;
-> > >  }
-> > >
-> > > +static int ov5675_get_selection(struct v4l2_subdev *sd,
-> > > +				struct v4l2_subdev_state *state,
-> > > +				struct v4l2_subdev_selection *sel)
-> > > +{
-> > > +	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
-> > > +		return -EINVAL;
-> > > +
-> > > +	switch (sel->target) {
-> > > +	case V4L2_SEL_TGT_CROP:
-> > > +	case V4L2_SEL_TGT_CROP_BOUNDS:
-> >
-> > Seem like we have trouble understanding each other, or better, I have
-> > troubles explaining myself most probably :)
-> >
-> > If the dummy/black area is readable, this should just be (0, 0, 2624,
-> > 2000) like it was in your previous version. What has changed that I
-> > have missed ?
->
-> Taking as reference drivers/media/i2c/ov5693.c and others,
-> seems ok what Quentin have done from my side.
->
-> Just one thing: maybe is better to avoid magic numbers with more
-> explicit defines like:
->
->  + case V4L2_SEL_TGT_CROP_DEFAULT:
->  +           sel->r.top = OV5675_ACTIVE_START_TOP;
->  +           sel->r.left = OV5693_ACTIVE_START_LEFT;
->  +           sel->r.width = OV5693_ACTIVE_WIDTH;
->  +           sel->r.height = OV5693_ACTIVE_HEIGHT;
->
-> What do you think about?
->
-> Thanks,
-> Tommaso
->
->
+Some devices do not implement all their controls in a way that complies
+with the UVC specification. This is for instance the case for several
+devices that do not support the disabled mode for the power line
+frequency control. Add a mechanism to allow per-device control mapping
+overrides to avoid errors when accessing non-compliant controls.
 
-We have extensively discussed this:
-https://patchwork.linuxtv.org/project/linux-media/patch/20220509143226.531117-4-foss+kernel@0leil.net/
-https://patchwork.linuxtv.org/project/linux-media/patch/20220525145833.1165437-4-foss+kernel@0leil.net/
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+Changes since v3:
 
-From the CROP_BOUNDS definition:
-Bounds of the crop rectangle. All valid crop rectangles fit inside the
-crop bounds rectangle.
+- Turn the power line quirk into a control mapping overrides array
+---
+ drivers/media/usb/uvc/uvc_ctrl.c | 27 +++++++++++++++++++++++++--
+ drivers/media/usb/uvc/uvcvideo.h |  1 +
+ 2 files changed, 26 insertions(+), 2 deletions(-)
 
-From CROP_DEFAULT:
-Suggested cropping rectangle that covers the “whole picture”. This
-includes only active pixels and excludes other non-active pixels such
-as black pixels.
-
-If (and only if) dummy/inactive pixels can be read out, the BOUNDS
-rectangle should contain them. In this case, as the analog crop
-rectangle is defined with a 16x16 top-left corner (and with a visible
-size of 2592x1944) from a larger rectangle, I presume it means
-dummy/invalid pixls can be read (IOW you can give to the ISP a rectangle
-that includes them).
-
-Anyway, we're discussing details really. I think v5 was almost there
-
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = 2624;
-+		sel->r.height = 2000;
-+		return 0;
-+	case V4L2_SEL_TGT_CROP:
-+		sel->r.top = 16;
-+		sel->r.left = 16;
-+		sel->r.width = ov5675->cur_mode->width;
-+		sel->r.height = ov5675->cur_mode->height;
-+		return 0;
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+		sel->r.top = 16;
-+		sel->r.left = 16;
-+		sel->r.width = supported_modes[0].width;
-+		sel->r.height = supported_modes[0].height;
-+		return 0;
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index a709ebbb4d69..7ea352c0e97e 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -2433,14 +2433,37 @@ static void uvc_ctrl_init_ctrl(struct uvc_video_chain *chain,
+ 	if (!ctrl->initialized)
+ 		return;
+ 
+-	/* Process common mappings first. */
++	/*
++	 * First check if the device provides a custom mapping for this control,
++	 * used to override standard mappings for non-conformant devices. Don't
++	 * process standard mappings if a custom mapping is found. This
++	 * mechanism doesn't support combining standard and custom mappings for
++	 * a single control.
++	 */
++	if (chain->dev->info->mappings) {
++		bool custom = false;
++		unsigned int i;
++
++		for (i = 0; (mapping = chain->dev->info->mappings[i]); ++i) {
++			if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
++			    ctrl->info.selector == mapping->selector) {
++				__uvc_ctrl_add_mapping(chain, ctrl, mapping);
++				custom = true;
++			}
++		}
++
++		if (custom)
++			return;
 +	}
++
++	/* Process common mappings next. */
+ 	for (; mapping < mend; ++mapping) {
+ 		if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
+ 		    ctrl->info.selector == mapping->selector)
+ 			__uvc_ctrl_add_mapping(chain, ctrl, mapping);
+ 	}
+ 
+-	/* And then version-specific mappings. */
++	/* Finally process version-specific mappings. */
+ 	if (chain->dev->uvc_version < 0x0150) {
+ 		mapping = uvc_ctrl_mappings_uvc11;
+ 		mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings_uvc11);
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index c5b4febd2d94..fff5c5c99a3d 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -667,6 +667,7 @@ struct uvc_device_info {
+ 	u32	quirks;
+ 	u32	meta_format;
+ 	u16	uvc_version;
++	const struct uvc_control_mapping **mappings;
+ };
+ 
+ struct uvc_device {
+-- 
+Regards,
 
-Apart from the fact that TGT_CROP should not report the final image
-size (after binning/digital crop) but the size of the pixel array
-portion processed to obtain the final image.
+Laurent Pinchart
 
-
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = 2624;
-+		sel->r.height = 2000;
-+		return 0;
-+	case V4L2_SEL_TGT_CROP:
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+		sel->r.top = 16;
-+		sel->r.left = 16;
-+		sel->r.width = 2592;
-+		sel->r.height = 1944;
-+		return 0;
-+	}
-
-Let me remind that (in the context of pleasing libcamera requirements
-as Quentin is doing) all targets apart TGT_CROP are only useful to
-report static properties of the camera, which are of no real use
-unless you start actually looking into reading out black pixels etc
-etc.
-
-
-> >
-> > Thanks
-> >   j
-> >
-> >
-> > > +	case V4L2_SEL_TGT_CROP_DEFAULT:
-> > > +		sel->r.top = 16;
-> > > +		sel->r.left = 16;
-> > > +		sel->r.width = 2592;
-> > > +		sel->r.height = 1944;
-> > > +		return 0;
-> > > +	}
-> > > +	return -EINVAL;
-> > > +}
-> > > +
-> > >  static int ov5675_enum_mbus_code(struct v4l2_subdev *sd,
-> > >  				 struct v4l2_subdev_state *sd_state,
-> > >  				 struct v4l2_subdev_mbus_code_enum *code)
-> > > @@ -1170,6 +1190,7 @@ static const struct v4l2_subdev_video_ops ov5675_video_ops = {
-> > >  static const struct v4l2_subdev_pad_ops ov5675_pad_ops = {
-> > >  	.set_fmt = ov5675_set_format,
-> > >  	.get_fmt = ov5675_get_format,
-> > > +	.get_selection = ov5675_get_selection,
-> > >  	.enum_mbus_code = ov5675_enum_mbus_code,
-> > >  	.enum_frame_size = ov5675_enum_frame_size,
-> > >  };
-> > > --
-> > > 2.36.1
-> > >
->
-> --
-> Tommaso Merciai
-> Embedded Linux Engineer
-> tommaso.merciai@amarulasolutions.com
-> __________________________________
->
-> Amarula Solutions SRL
-> Via Le Canevare 30, 31100 Treviso, Veneto, IT
-> T. +39 042 243 5310
-> info@amarulasolutions.com
-> www.amarulasolutions.com
