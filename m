@@ -2,86 +2,85 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 929BBC43334
-	for <linux-media@archiver.kernel.org>; Wed,  8 Jun 2022 02:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF222CCA47B
+	for <linux-media@archiver.kernel.org>; Wed,  8 Jun 2022 06:01:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356333AbiFHCRD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 Jun 2022 22:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S234539AbiFHGBQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Jun 2022 02:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445595AbiFHCMv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 7 Jun 2022 22:12:51 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBBE1E288F
-        for <linux-media@vger.kernel.org>; Tue,  7 Jun 2022 13:32:27 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id a15so17145824wrh.2
-        for <linux-media@vger.kernel.org>; Tue, 07 Jun 2022 13:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=+4Ntdp7pJmBmtDfe7mX/uE/xQNUen+uhfAxXK8rlZaE=;
-        b=lwSSrft6uaVVcJQfE6rRxWsVxZMvvKCnrVM9jSfpofNUj+Bc4c6ks0Sj6belVPb4HL
-         wD/EQMJJzo5/vHbB3SgQlSRSUFl0Vouem3IHI3FXmgWliSehjiKhFCTIeHRrjDNnjtec
-         6P4NuFNP47IZ57+QuIGaSFektV42HF80jdinYRryqka4mKa69/nm11PtfiDfJAKlzZ4c
-         kp1iuf5BDzVAENeRNGoA5vhnApIa5g/1RWo1MgP5tZxz8ZYktAYHpk2eAEf7XYUqQt+l
-         lEMFwKEeQVE00FNcOCMv4H7GQC46CLrYhj2hM93rWd8hCDA5lfypKfdM3NcSXoS+/pWV
-         3cmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+4Ntdp7pJmBmtDfe7mX/uE/xQNUen+uhfAxXK8rlZaE=;
-        b=d1l09hQe+rRepSm4+2RKOEhqV65XxyOxPJAjnKq/V0/kaDfwnw0Cxp2uhTJru7dm37
-         nT8WaZI1yW7kzlXN0svUZV1rs9pKztq2k/Sq3rzT84UuaLZJ6X5fIQbJcgCDJb47xBQW
-         LhQapGt0sITDSrdAbIvQlEfJxZClqfeaHFCKWwsdTWPlk1ZHGV7aCe5XOw3fNv0m/d57
-         qIKEz59tAKJllCE8MqYjt5dJ8+SZSgDE5eJeAhKjb8EMUcPUEi9qTmGWlMHDtqRYLPqx
-         b+mHDdz7/9m+fHjsF0uTEyddIWp6USU4UdxfHz9F08vEawvkW0ryOmc3W55HjMtG11ft
-         vFTA==
-X-Gm-Message-State: AOAM530BiwPIXWzcrSleQK6DyoF30GfIXLVLdIDVqSWkx1w2IdTNkwTD
-        oaQPvhdh5zYu28Hz7eyEAv+VhRHWzq4=
-X-Google-Smtp-Source: ABdhPJysMals7H2L2jMzFT9UR4iApm74sbkNfQYKVQjlNHFq83yRh6fQJZAtxoLNN1EoldhZRuLonA==
-X-Received: by 2002:adf:d84b:0:b0:212:1c7c:5790 with SMTP id k11-20020adfd84b000000b002121c7c5790mr28207774wrl.366.1654633946057;
-        Tue, 07 Jun 2022 13:32:26 -0700 (PDT)
-Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id n187-20020a1c27c4000000b0039c151298b7sm25023455wmn.10.2022.06.07.13.32.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 13:32:25 -0700 (PDT)
-Message-ID: <4bb369e7-dfce-49b4-755d-d3b6e2d4d196@gmail.com>
-Date:   Tue, 7 Jun 2022 21:32:24 +0100
+        with ESMTP id S238717AbiFHFwB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Jun 2022 01:52:01 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E750AFAED;
+        Tue,  7 Jun 2022 20:35:49 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 257NfeKx014363;
+        Wed, 8 Jun 2022 02:28:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=tzFAQqmTFkqGsbHjDHQsRsNbCV384tWaHO9lvOcIrVs=;
+ b=Ye+YGeenYcBmScBViqtGQxdm8aYdrLc1wFf4SWxFxyM9LDqk7CgodqnhhtPMD8AGjrBP
+ ZOyb10NoJv1+xYfcVuhBBfIuPl18rTGGpRrZNwbOJoeHXK+Lt+R7pOqjie+yXcmmAbjF
+ s/JNFhHDkaSqfY446cIx2gs5DrmtM+QRAcprkntZZti3vYGorY+8NQlI/93/Apx0DmJc
+ qZczfSQlOacWc7e4w3xarGhw9uFKFxcdKJc2/8eQSogzOWZl/JFUVkVFRCU67qdyz4Oh
+ H0ZugGbLmfu1Hd3aTo9JhrhAXrIbxa8OZuND3cDzv3qLvrE6OPgPg68VbtLaUc5TCXoN Kg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ggvxmwff6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 08 Jun 2022 02:28:00 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2582ATYg037917;
+        Wed, 8 Jun 2022 02:28:00 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gfwu3349h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 08 Jun 2022 02:27:59 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2582RxlP032073;
+        Wed, 8 Jun 2022 02:27:59 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gfwu33499-1;
+        Wed, 08 Jun 2022 02:27:59 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     linux-staging@lists.linux.dev, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Chengguang Xu <cgxu519@mykernel.net>,
+        linux-media@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH 0/6] fix a common error of while loop condition in error path
+Date:   Tue,  7 Jun 2022 22:27:53 -0400
+Message-Id: <165465514543.8982.16992682001018007600.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <20220529153456.4183738-1-cgxu519@mykernel.net>
+References: <20220529153456.4183738-1-cgxu519@mykernel.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: Attaching an I2C VCM subdev (media entity) to media pipeline
-Content-Language: en-US
-To:     Karthik Poduval <karthik.poduval@gmail.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-References: <CAFP0Ok_DvJo7KM4YSsT2s3SAzDQdSy-8HrQoky6zH5YE4sGypw@mail.gmail.com>
-From:   Daniel Scally <djrscally@gmail.com>
-In-Reply-To: <CAFP0Ok_DvJo7KM4YSsT2s3SAzDQdSy-8HrQoky6zH5YE4sGypw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: 41BhbBr77pfcU9Yr9dVAy-63i_lQGxSG
+X-Proofpoint-ORIG-GUID: 41BhbBr77pfcU9Yr9dVAy-63i_lQGxSG
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Karthik
+On Sun, 29 May 2022 23:34:50 +0800, Chengguang Xu wrote:
 
-On 07/06/2022 18:29, Karthik Poduval wrote:
-> Hi All,
->
-> I had a question about VCM subdev (media entity). The  example VCM
-> drivers have no pads. How do we attach them to the image sensor subdev
-> in the pipeline ?
->
-This is somewhat in its infancy so you'll need to be running v5.19-rc1,
-but assuming you're describing the device with DT you should be able to
-link them by providing a lens-focus property with a phandle pointing to
-the node for the lens controller. No pad-to-pad links will or should be
-created though, the connection is represented by an "ancillary link"
-which should be created by v4l2-core. The VCM drivers won't be in the
-image pipeline as such but their connection to the sensor subdev is
-discoverable to user space when parsing links, for example in
-libcamera's implementation:
-https://git.linuxtv.org/libcamera.git/tree/src/libcamera/media_device.cpp#n732
+> There is a common error of while loop condition which misses
+> the case '(--i) == 0' in error path. This patch series just
+> tries to fix it in several driver's code.
+> 
+> Note: I'm not specialist of specific drivers so just compile tested
+> for the fixes.
+> 
+> [...]
+
+Applied to 5.19/scsi-fixes, thanks!
+
+[3/6] scsi: ipr: fix missing/incorrect resource cleanup in error case
+      https://git.kernel.org/mkp/scsi/c/d64c49191132
+[5/6] scsi: pmcraid: fix missing resource cleanup in error case
+      https://git.kernel.org/mkp/scsi/c/ec1e8adcbdf6
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
