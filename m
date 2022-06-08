@@ -2,266 +2,333 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D072CCA47E
-	for <linux-media@archiver.kernel.org>; Wed,  8 Jun 2022 10:28:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8A2EC43334
+	for <linux-media@archiver.kernel.org>; Wed,  8 Jun 2022 10:57:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236569AbiFHK2K convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Jun 2022 06:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S237706AbiFHK55 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Jun 2022 06:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236159AbiFHK1k (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Jun 2022 06:27:40 -0400
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DD4FC836;
-        Wed,  8 Jun 2022 03:17:01 -0700 (PDT)
-Received: by mail-qv1-f51.google.com with SMTP id i19so14132190qvu.13;
-        Wed, 08 Jun 2022 03:17:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7RY3tqteIBx/wEp16WxUeRFbGQghh41I15j3qCfl9Ng=;
-        b=azJ/m3Ac8a/l3dJ9rKBrCqujYOfmMWFgGoUvI1eJcSWhFt+umWa/z0U3yiZo9tiQfe
-         jlSfD6CtxOozvOz3BmXJT7KomFWfm7dif9WQmFGEdcCcPH5+MXd24joktOFaBddVk1Yi
-         uyXZkdJgGpHZbgxJjGiz6jq7f//ce4QRMX7+3HXlNd0BmOHkZs1mJ6kohVXfr9rJvTM1
-         SS53IQ7cHiti63tNh79WpwcpkUrWGJXyL9cxxJ9wxCibWQmgxn2Dmyg7Wg0XOBgelUEi
-         S8mS/ZZ0UNZ0+d1nW5CdPprv4S3ohf4Ce1HifBXl09wXeYWO2RQk9usYHhGZDeTFi224
-         RW9Q==
-X-Gm-Message-State: AOAM5338XnID1miNL8Ps4QZ86L4niboA0BXPmaXy/d6CcGlfztG1HGRj
-        AMA6V/XadnpxeiZXooDeMfXSuPvi17nX/w==
-X-Google-Smtp-Source: ABdhPJzYeKkvl1ypiLISIP8RluIZUZ2bSUL/+GGAj9iEg+vTkXKpeg66SdM7tYMOJFUqTaFVu9Gd4w==
-X-Received: by 2002:a05:6214:628:b0:46b:188b:b8ac with SMTP id a8-20020a056214062800b0046b188bb8acmr14717570qvx.28.1654683420004;
-        Wed, 08 Jun 2022 03:17:00 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id h2-20020a05620a244200b006a6d3fa430csm4701615qkn.58.2022.06.08.03.16.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 03:16:59 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id i39so7681310ybj.9;
-        Wed, 08 Jun 2022 03:16:59 -0700 (PDT)
-X-Received: by 2002:a25:d748:0:b0:65c:6b00:55af with SMTP id
- o69-20020a25d748000000b0065c6b0055afmr33184713ybg.365.1654683419337; Wed, 08
- Jun 2022 03:16:59 -0700 (PDT)
+        with ESMTP id S237009AbiFHK54 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Jun 2022 06:57:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC16119936
+        for <linux-media@vger.kernel.org>; Wed,  8 Jun 2022 03:57:54 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nytNo-0002yp-KX; Wed, 08 Jun 2022 12:57:52 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nytNp-007AQ7-8B; Wed, 08 Jun 2022 12:57:51 +0200
+Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nytNm-000aQW-O4; Wed, 08 Jun 2022 12:57:50 +0200
+From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, balbi@kernel.org,
+        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
+        kernel@pengutronix.de, nicolas@ndufresne.ca,
+        kieran.bingham@ideasonboard.com
+Subject: [RESEND v7 1/4] media: v4l: move helper functions for fractions from uvc to v4l2-common
+Date:   Wed,  8 Jun 2022 12:57:45 +0200
+Message-Id: <20220608105748.139922-2-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220608105748.139922-1-m.grzeschik@pengutronix.de>
+References: <20220608105748.139922-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
-References: <20220124124858.571363-1-niklas.soderlund+renesas@ragnatech.se> <20220124124858.571363-4-niklas.soderlund+renesas@ragnatech.se>
-In-Reply-To: <20220124124858.571363-4-niklas.soderlund+renesas@ragnatech.se>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 8 Jun 2022 12:16:48 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUvtGKnL=bzty4wYoCJ3vqm0PYunJV1jwyYUwB84mQusQ@mail.gmail.com>
-Message-ID: <CAMuHMdUvtGKnL=bzty4wYoCJ3vqm0PYunJV1jwyYUwB84mQusQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] media: rcar-{csi2,vin}: Move to full Virtual
- Channel routing per CSI-2 IP
-To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Niklas,
+The functions uvc_simplify_fraction and uvc_fraction_to_interval are
+generic helpers which are also useful for other v4l2 drivers. This patch
+moves them to v4l2-common.
 
-On Mon, Jan 24, 2022 at 8:13 PM Niklas Söderlund
-<niklas.soderlund+renesas@ragnatech.se> wrote:
-> When Gen3 support was first added to this R-Car VIN and CSI-2 driver the
-> routing was centred around the CHSEL register which multiplexes the
-> different parallel buses that sit between the CSI-2 receivers source
-> side and the VIN dma engines. This was a bad design as the multiplexing
-> do allow for only a few combinations and do not play nice with many
-> video streams in the system.
->
-> For example it's only possible for CSI-2 Virtual Channels 0 and 1 of any
-> given CSI-2 receiver to be used together with the scaler.
->
-> Later datasheets have expanded the documentation and it is now possible
-> to improve on this design by allowing any Virtual Channel to be routed
-> to any R-Car VIN instance, provided that there exists a parallel bus
-> between them. This increases the flexibility as all Virtual Channels can
-> now be used together with the scaler for example.
->
-> The redesign is not however perfect. While the new design allows for
-> many more routes, two constrains limit a small portion of routes that
-> was possible in the old design but are no more.
->
-> - It is no longer possible to route the same CSI-2 and VC to more then
->   one VIN at a time. This was theoretically possible before if the
->   specific SoC allowed for the same CSI-2 and VC to be routed to two
->   different VIN capture groups.
->
-> - It is no longer possible to simultaneously mix links from two CSI-2 IP
->   blocks to the same VIN capture group.
->
->   For example if VIN2 is capturing from CSI40 then VIN{0,1,3} must also
->   capture from CSI40. While VIN{4,5,6,7} is still free to capture from
->   any other CSI-2 IP in the system. Once all VIN{0,1,2,3} links to CSI40
->   are disabled that VIN capture group is free again to capture from any
->   other CSI-2 IP it is connected to.
->
-> At the core of the redesign is greater cooperator of the R-Car VIN and
-> CSI-2 drivers in configuring the routing. The VIN driver is after this
-> change only responsible to configure the full VIN capture groups
-> parallel buses to be to a particular CSI-2 IP. While the configuration
-> of which CSI-2 Virtual Channel is outputted on which of the R-Car CSI-2
-> IP output ports is handled by the CSI-2 driver.
->
-> Before this change the CSI-2 Virtual Channel to output port was static
-> in the CSI-2 driver and the different links only manipulated the VIN
-> capture groups CHSEL register. With this change both the CHSEl register
-> and the CSI-2 routing VCDT registers are modified for greater
-> flexibility.
->
-> This change touches both the R-Car VIN and R-Car CSI-2 drivers in the
-> same commit as both drivers cooperate closely and one change without the
-> other would more or less break video capture.
->
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> Tested-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-Thanks for your patch, which is now commit 3e52419ec04f9769 ("media:
-rcar-{csi2,vin}: Move to full Virtual Channel routing per CSI-2 IP")
-in v5.18-rc1.
+---
+v1 -> v7: -
 
-This patch causes, depending on probe order, either one of the two
-failures below (with some debug info added) on Ebisu-4D (but not
-on Salvator-X(S)):
+ drivers/media/usb/uvc/uvc_driver.c    | 80 --------------------------
+ drivers/media/usb/uvc/uvc_v4l2.c      | 14 ++---
+ drivers/media/usb/uvc/uvcvideo.h      |  3 -
+ drivers/media/v4l2-core/v4l2-common.c | 82 +++++++++++++++++++++++++++
+ include/media/v4l2-common.h           |  4 ++
+ 5 files changed, 93 insertions(+), 90 deletions(-)
 
-  1. rcar-vin: probe of e6ef5000.video failed with error -22
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 6c86faecbea21e..2bf7f524e130bc 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -329,86 +329,6 @@ static enum v4l2_ycbcr_encoding uvc_ycbcr_enc(const u8 matrix_coefficients)
+ 	return V4L2_YCBCR_ENC_DEFAULT;  /* Reserved */
+ }
+ 
+-/* Simplify a fraction using a simple continued fraction decomposition. The
+- * idea here is to convert fractions such as 333333/10000000 to 1/30 using
+- * 32 bit arithmetic only. The algorithm is not perfect and relies upon two
+- * arbitrary parameters to remove non-significative terms from the simple
+- * continued fraction decomposition. Using 8 and 333 for n_terms and threshold
+- * respectively seems to give nice results.
+- */
+-void uvc_simplify_fraction(u32 *numerator, u32 *denominator,
+-		unsigned int n_terms, unsigned int threshold)
+-{
+-	u32 *an;
+-	u32 x, y, r;
+-	unsigned int i, n;
+-
+-	an = kmalloc_array(n_terms, sizeof(*an), GFP_KERNEL);
+-	if (an == NULL)
+-		return;
+-
+-	/* Convert the fraction to a simple continued fraction. See
+-	 * https://mathforum.org/dr.math/faq/faq.fractions.html
+-	 * Stop if the current term is bigger than or equal to the given
+-	 * threshold.
+-	 */
+-	x = *numerator;
+-	y = *denominator;
+-
+-	for (n = 0; n < n_terms && y != 0; ++n) {
+-		an[n] = x / y;
+-		if (an[n] >= threshold) {
+-			if (n < 2)
+-				n++;
+-			break;
+-		}
+-
+-		r = x - an[n] * y;
+-		x = y;
+-		y = r;
+-	}
+-
+-	/* Expand the simple continued fraction back to an integer fraction. */
+-	x = 0;
+-	y = 1;
+-
+-	for (i = n; i > 0; --i) {
+-		r = y;
+-		y = an[i-1] * y + x;
+-		x = r;
+-	}
+-
+-	*numerator = y;
+-	*denominator = x;
+-	kfree(an);
+-}
+-
+-/* Convert a fraction to a frame interval in 100ns multiples. The idea here is
+- * to compute numerator / denominator * 10000000 using 32 bit fixed point
+- * arithmetic only.
+- */
+-u32 uvc_fraction_to_interval(u32 numerator, u32 denominator)
+-{
+-	u32 multiplier;
+-
+-	/* Saturate the result if the operation would overflow. */
+-	if (denominator == 0 ||
+-	    numerator/denominator >= ((u32)-1)/10000000)
+-		return (u32)-1;
+-
+-	/* Divide both the denominator and the multiplier by two until
+-	 * numerator * multiplier doesn't overflow. If anyone knows a better
+-	 * algorithm please let me know.
+-	 */
+-	multiplier = 10000000;
+-	while (numerator > ((u32)-1)/multiplier) {
+-		multiplier /= 2;
+-		denominator /= 2;
+-	}
+-
+-	return denominator ? numerator * multiplier / denominator : 0;
+-}
+-
+ /* ------------------------------------------------------------------------
+  * Terminal and unit management
+  */
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 648dcd579e8155..26cf0517e36195 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -382,7 +382,7 @@ static int uvc_v4l2_get_streamparm(struct uvc_streaming *stream,
+ 	mutex_unlock(&stream->mutex);
+ 
+ 	denominator = 10000000;
+-	uvc_simplify_fraction(&numerator, &denominator, 8, 333);
++	v4l2_simplify_fraction(&numerator, &denominator, 8, 333);
+ 
+ 	memset(parm, 0, sizeof(*parm));
+ 	parm->type = stream->type;
+@@ -423,7 +423,7 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+ 	else
+ 		timeperframe = parm->parm.output.timeperframe;
+ 
+-	interval = uvc_fraction_to_interval(timeperframe.numerator,
++	interval = v4l2_fraction_to_interval(timeperframe.numerator,
+ 		timeperframe.denominator);
+ 	uvc_dbg(stream->dev, FORMAT, "Setting frame interval to %u/%u (%u)\n",
+ 		timeperframe.numerator, timeperframe.denominator, interval);
+@@ -477,7 +477,7 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+ 	/* Return the actual frame period. */
+ 	timeperframe.numerator = probe.dwFrameInterval;
+ 	timeperframe.denominator = 10000000;
+-	uvc_simplify_fraction(&timeperframe.numerator,
++	v4l2_simplify_fraction(&timeperframe.numerator,
+ 		&timeperframe.denominator, 8, 333);
+ 
+ 	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
+@@ -1271,7 +1271,7 @@ static int uvc_ioctl_enum_frameintervals(struct file *file, void *fh,
+ 		fival->discrete.numerator =
+ 			frame->dwFrameInterval[index];
+ 		fival->discrete.denominator = 10000000;
+-		uvc_simplify_fraction(&fival->discrete.numerator,
++		v4l2_simplify_fraction(&fival->discrete.numerator,
+ 			&fival->discrete.denominator, 8, 333);
+ 	} else {
+ 		fival->type = V4L2_FRMIVAL_TYPE_STEPWISE;
+@@ -1281,11 +1281,11 @@ static int uvc_ioctl_enum_frameintervals(struct file *file, void *fh,
+ 		fival->stepwise.max.denominator = 10000000;
+ 		fival->stepwise.step.numerator = frame->dwFrameInterval[2];
+ 		fival->stepwise.step.denominator = 10000000;
+-		uvc_simplify_fraction(&fival->stepwise.min.numerator,
++		v4l2_simplify_fraction(&fival->stepwise.min.numerator,
+ 			&fival->stepwise.min.denominator, 8, 333);
+-		uvc_simplify_fraction(&fival->stepwise.max.numerator,
++		v4l2_simplify_fraction(&fival->stepwise.max.numerator,
+ 			&fival->stepwise.max.denominator, 8, 333);
+-		uvc_simplify_fraction(&fival->stepwise.step.numerator,
++		v4l2_simplify_fraction(&fival->stepwise.step.numerator,
+ 			&fival->stepwise.step.denominator, 8, 333);
+ 	}
+ 
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index c5b4febd2d94b6..ec3f8ec0e25ca3 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -909,9 +909,6 @@ int uvc_xu_ctrl_query(struct uvc_video_chain *chain,
+ 		      struct uvc_xu_control_query *xqry);
+ 
+ /* Utility functions */
+-void uvc_simplify_fraction(u32 *numerator, u32 *denominator,
+-			   unsigned int n_terms, unsigned int threshold);
+-u32 uvc_fraction_to_interval(u32 numerator, u32 denominator);
+ struct usb_host_endpoint *uvc_find_endpoint(struct usb_host_interface *alts,
+ 					    u8 epaddr);
+ u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep);
+diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+index df34b2a283bc29..1d0b56249ca0e1 100644
+--- a/drivers/media/v4l2-core/v4l2-common.c
++++ b/drivers/media/v4l2-core/v4l2-common.c
+@@ -482,3 +482,85 @@ s64 v4l2_get_link_freq(struct v4l2_ctrl_handler *handler, unsigned int mul,
+ 	return freq > 0 ? freq : -EINVAL;
+ }
+ EXPORT_SYMBOL_GPL(v4l2_get_link_freq);
++
++/* Simplify a fraction using a simple continued fraction decomposition. The
++ * idea here is to convert fractions such as 333333/10000000 to 1/30 using
++ * 32 bit arithmetic only. The algorithm is not perfect and relies upon two
++ * arbitrary parameters to remove non-significative terms from the simple
++ * continued fraction decomposition. Using 8 and 333 for n_terms and threshold
++ * respectively seems to give nice results.
++ */
++void v4l2_simplify_fraction(u32 *numerator, u32 *denominator,
++		unsigned int n_terms, unsigned int threshold)
++{
++	u32 *an;
++	u32 x, y, r;
++	unsigned int i, n;
++
++	an = kmalloc_array(n_terms, sizeof(*an), GFP_KERNEL);
++	if (an == NULL)
++		return;
++
++	/* Convert the fraction to a simple continued fraction. See
++	 * https://mathforum.org/dr.math/faq/faq.fractions.html
++	 * Stop if the current term is bigger than or equal to the given
++	 * threshold.
++	 */
++	x = *numerator;
++	y = *denominator;
++
++	for (n = 0; n < n_terms && y != 0; ++n) {
++		an[n] = x / y;
++		if (an[n] >= threshold) {
++			if (n < 2)
++				n++;
++			break;
++		}
++
++		r = x - an[n] * y;
++		x = y;
++		y = r;
++	}
++
++	/* Expand the simple continued fraction back to an integer fraction. */
++	x = 0;
++	y = 1;
++
++	for (i = n; i > 0; --i) {
++		r = y;
++		y = an[i-1] * y + x;
++		x = r;
++	}
++
++	*numerator = y;
++	*denominator = x;
++	kfree(an);
++}
++EXPORT_SYMBOL_GPL(v4l2_simplify_fraction);
++
++/* Convert a fraction to a frame interval in 100ns multiples. The idea here is
++ * to compute numerator / denominator * 10000000 using 32 bit fixed point
++ * arithmetic only.
++ */
++u32 v4l2_fraction_to_interval(u32 numerator, u32 denominator)
++{
++	u32 multiplier;
++
++	/* Saturate the result if the operation would overflow. */
++	if (denominator == 0 ||
++	    numerator/denominator >= ((u32)-1)/10000000)
++		return (u32)-1;
++
++	/* Divide both the denominator and the multiplier by two until
++	 * numerator * multiplier doesn't overflow. If anyone knows a better
++	 * algorithm please let me know.
++	 */
++	multiplier = 10000000;
++	while (numerator > ((u32)-1)/multiplier) {
++		multiplier /= 2;
++		denominator /= 2;
++	}
++
++	return denominator ? numerator * multiplier / denominator : 0;
++}
++EXPORT_SYMBOL_GPL(v4l2_fraction_to_interval);
+diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
+index 3eb202259e8ccd..df4ad81251195e 100644
+--- a/include/media/v4l2-common.h
++++ b/include/media/v4l2-common.h
+@@ -540,6 +540,10 @@ int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt, u32 pixelformat,
+ s64 v4l2_get_link_freq(struct v4l2_ctrl_handler *handler, unsigned int mul,
+ 		       unsigned int div);
+ 
++void v4l2_simplify_fraction(u32 *numerator, u32 *denominator,
++		unsigned int n_terms, unsigned int threshold);
++u32 v4l2_fraction_to_interval(u32 numerator, u32 denominator);
++
+ static inline u64 v4l2_buffer_get_timestamp(const struct v4l2_buffer *buf)
+ {
+ 	/*
+-- 
+2.30.2
 
-     Probing e6500000.i2c
-     Probing adv748x
-       adv748x 0-0070: Endpoint
-/soc/i2c@e6500000/video-receiver@70/ports/port@7/endpoint on port 7
-       adv748x 0-0070: Endpoint
-/soc/i2c@e6500000/video-receiver@70/ports/port@8/endpoint on port 8
-       adv748x 0-0070: Endpoint
-/soc/i2c@e6500000/video-receiver@70/ports/port@a/endpoint on port 10
-     Probing feaa0000.csi2
-       Probing e6ef4000.video
-         rcar-csi2 feaa0000.csi2: Consider updating driver rcar-csi2
-to match on endpoints
-         rcar-vin e6ef4000.video: Device registered as video0
-       Probing e6ef5000.video
-         rcar-vin e6ef5000.video: Device registered as video1
-         rcar-vin e6ef4000.video: Removing video0
-         rcar-vin e6ef5000.video: Removing video1
-         rcar-vin e6ef5000.video: Notifier registration failed
-         rcar-vin e6ef5000.video: rcar_vin_probe: rvin_csi2_init()
-returned -EINVAL
-         rcar-vin: probe of e6ef5000.video failed with error -22
-
-     This is seen with v5.18-rc1 and later, but somehow I never noticed before.
-
-  2. rcar-csi2: probe of feaa0000.csi2 failed with error -22
-
-     Probing e6500000.i2c
-     Probing adv748x
-       adv748x 0-0070: Endpoint
-/soc/i2c@e6500000/video-receiver@70/ports/port@7/endpoint on port 7
-       adv748x 0-0070: Endpoint
-/soc/i2c@e6500000/video-receiver@70/ports/port@8/endpoint on port 8
-       adv748x 0-0070: Endpoint
-/soc/i2c@e6500000/video-receiver@70/ports/port@a/endpoint on port 10
-     Probing feaa0000.csi2
-       rcar-csi2 feaa0000.csi2: Consider updating driver rcar-csi2 to
-match on endpoints
-         Probing e6ef4000
-           rcar-vin e6ef4000.video: Device registered as video0
-         Probing e6ef5000
-           rcar-vin e6ef5000.video: Device registered as video1
-       rcar-vin e6ef4000.video: Removing video0
-       rcar-vin e6ef5000.video: Removing video1
-       rcar-csi2 feaa0000.csi2: rcsi2_probe:
-v4l2_async_register_subdev() returned -EINVAL
-       rcar-csi2: probe of feaa0000.csi2 failed with error -22
-
-     This is seen with[1], and did draw my attention, as it causes
-     a big splat later:
-
-         [  OK  ] Started D-Bus System Message Bus.
-         Unable to handle kernel NULL pointer dereference at virtual
-address 0000000000000000
-         Unable to handle kernel NULL pointer dereference at virtual
-address 0000000000000000
-         Mem abort info:
-           ESR = 0x0000000096000004
-         Mem abort info:
-           ESR = 0x0000000096000004
-           EC = 0x25: DABT (current EL), IL = 32 bits
-           SET = 0, FnV = 0
-           EC = 0x25: DABT (current EL), IL = 32 bits
-           EA = 0, S1PTW = 0
-           FSC = 0x04: level 0 translation fault
-           SET = 0, FnV = 0
-         Data abort info:
-           ISV = 0, ISS = 0x00000004
-           EA = 0, S1PTW = 0
-           FSC = 0x04: level 0 translation fault
-           CM = 0, WnR = 0
-         user pgtable: 4k pages, 48-bit VAs, pgdp=000000004ec45000
-         [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-         Data abort info:
-         Internal error: Oops: 96000004 [#1] PREEMPT SMP
-         CPU: 0 PID: 374 Comm: v4l_id Tainted: G        W
-5.19.0-rc1-arm64-renesas-00799-gc13c3e49e8bd #1660
-           ISV = 0, ISS = 0x00000004
-         Hardware name: Renesas Ebisu-4D board based on r8a77990 (DT)
-         pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-           CM = 0, WnR = 0
-         pc : subdev_open+0x8c/0x128
-         lr : subdev_open+0x78/0x128
-         sp : ffff80000aadba60
-         x29: ffff80000aadba60 x28: 0000000000000000 x27: ffff80000aadbc58
-         x26: 0000000000020000 x25: ffff00000b3aaf00 x24: 0000000000000000
-         x23: ffff00000c331c00 x22: ffff000009aa61b8 x21: ffff000009aa6000
-         x20: ffff000008bae3e8 x19: ffff00000c3fe200 x18: 0000000000000000
-         x17: ffff800076945000 x16: ffff800008004000 x15: 00008cc6bf550c7c
-         x14: 000000000000038f x13: 000000000000001a x12: ffff00007fba8618
-         x11: 0000000000000001 x10: 0000000000000000 x9 : ffff800009253954
-         x8 : ffff00000b3aaf00 x7 : 0000000000000004 x6 : 000000000000001a
-         x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000001
-         x2 : 0000000100000001 x1 : 0000000000000000 x0 : 0000000000000000
-         Call trace:
-          subdev_open+0x8c/0x128
-          v4l2_open+0xa4/0x120
-          chrdev_open+0x78/0x178
-          do_dentry_open+0xfc/0x398
-          vfs_open+0x28/0x30
-          path_openat+0x584/0x9c8
-          do_filp_open+0x80/0x108
-          do_sys_openat2+0x20c/0x2d8
-          user pgtable: 4k pages, 48-bit VAs, pgdp=000000004ec53000
-          do_sys_open+0x54/0xa0
-          __arm64_sys_openat+0x20/0x28
-          invoke_syscall+0x40/0xf8
-          el0_svc_common.constprop.0+0xf0/0x110
-          do_el0_svc+0x20/0x78
-          el0_svc+0x48/0xd0
-          el0t_64_sync_handler+0xb0/0xb8
-          el0t_64_sync+0x148/0x14c
-         Code: f9405280 f9400400 b40000e0 f9400280 (f9400000)
-         ---[ end trace 0000000000000000 ]---
-
-     Adding debug prints to subdev_open() shows the opened files are
-     v4l-subdev1 and v4l-subdev2, which correspond to subdevs on
-     /soc/e6500000.i2c/i2c-0/0-0070.
-
-Reverting this commit fixes the issue.
-
-[1] "[PATCH v2 0/9] deferred_probe_timeout logic clean up"
-    https://lore.kernel.org/r/20220601070707.3946847-1-saravanak@google.com
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
