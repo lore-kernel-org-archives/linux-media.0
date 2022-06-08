@@ -2,105 +2,101 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CF24C43334
-	for <linux-media@archiver.kernel.org>; Wed,  8 Jun 2022 06:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F023C433EF
+	for <linux-media@archiver.kernel.org>; Wed,  8 Jun 2022 06:57:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbiFHG5Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 8 Jun 2022 02:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S229715AbiFHG5f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 8 Jun 2022 02:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354250AbiFHGT3 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Jun 2022 02:19:29 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9C8DE1;
-        Tue,  7 Jun 2022 23:08:06 -0700 (PDT)
-X-UUID: 0084f9c2ca414a3a959b14f369d2d3b3-20220608
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:5b54c150-ffe8-485f-a08f-d28329a3ab5c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:2000987e-c8dc-403a-96e8-6237210dceee,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 0084f9c2ca414a3a959b14f369d2d3b3-20220608
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1360473414; Wed, 08 Jun 2022 14:08:02 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 8 Jun 2022 14:08:01 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 8 Jun 2022 14:08:00 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>, kyrie wu <kyrie.wu@mediatek.com>,
-        <srv_heupstream@mediatek.com>
-Subject: [V2,1/2] media: media: jpegenc: add mediatek,mt8186-jpgenc compatible
-Date:   Wed, 8 Jun 2022 14:07:54 +0800
-Message-ID: <20220608060755.2213-2-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220608060755.2213-1-irui.wang@mediatek.com>
-References: <20220608060755.2213-1-irui.wang@mediatek.com>
+        with ESMTP id S241162AbiFHGIA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 8 Jun 2022 02:08:00 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F217027D0DC
+        for <linux-media@vger.kernel.org>; Tue,  7 Jun 2022 22:14:37 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id b12so10480134ljq.3
+        for <linux-media@vger.kernel.org>; Tue, 07 Jun 2022 22:14:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bI3pjUX61HIjlE9EDKtVn/+ZY8Oklzx5uYfG3j54Ctg=;
+        b=ItlQHtgo1SPZEOV4fqq5W8b1pJHAtEDecG56LCE0fym70JGTPzhHkbFG5drGmTBxh0
+         MNj372egP66sz2Zwbfya70bN0TQLuLnVZn0u9YArGzbGUeFEyJ8NY9+5VLRQPjNKTv0c
+         DcIBMWG0iBfhIyve7OUbXIIpykIr2Uy6eI/07voNYdTvlwcGxI1yO7qeq+7FAoYDvZkM
+         jq7PXUR+B85+xdu5H03gqheBFSOZnOau4+8McVEY4K2YKYjBElFBVlR9YuksboJYpEpt
+         zE2nprxPsk0wXD5OBDcUN5jjw616B8sekTJo7eyT7mIdAEwz704r28YkhqD58jMQRFzp
+         0ttg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bI3pjUX61HIjlE9EDKtVn/+ZY8Oklzx5uYfG3j54Ctg=;
+        b=oqGq1CutvNbSp6BetCyTZoQesadNY3hUCmhpUs7Q+NU3kQ55ZV01U/76/M2m+SXWFP
+         2qoQZB4y6pM6HQ9ZmH5+iiwLX/oE8hC56TXey99xCeYY4f2SpXWBjKz7QxmZeDdik3zx
+         W+3lnFs1KTE8DyETtKb+9YE7R2V/wHqJSJoXLiQ/4vNGpx3+LT8VHVz/m5NlZ0xRHCg3
+         9QHaEx0JeSrhguLq1kgYaJZqkLdU408tYkdviq1zyQVRoiBBc9Uo9ms/IuVoxTUrCfPK
+         S7pJmPpbsWblz/z9PZDam5R6338uotVtzciu5ZzylagIv0c/EvujoH2zmmAhvTKTmVDi
+         ONew==
+X-Gm-Message-State: AOAM532lfz2ODrIrKamsutk/q7GMH/93+GTWwPoP2wQwvZPc7GWgDjo1
+        YwfcKyeeqVeqhx/cokXhn5MeppuJpW+8yXdRmGBwEjiw9OQ=
+X-Google-Smtp-Source: ABdhPJxRjLrZtDO9tRhj33sNJzbpOmkLibb0G/BjKuQ8ReF7qPpvq5Ual/jLdeCA4WoXFwDDQTSkm/etSOp8mPFpNEM=
+X-Received: by 2002:a2e:86c3:0:b0:255:ad78:5359 with SMTP id
+ n3-20020a2e86c3000000b00255ad785359mr3571534ljj.116.1654665136173; Tue, 07
+ Jun 2022 22:12:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+References: <CAFP0Ok_DvJo7KM4YSsT2s3SAzDQdSy-8HrQoky6zH5YE4sGypw@mail.gmail.com>
+ <165463780248.186364.12552426317591956823@Monstersaurus>
+In-Reply-To: <165463780248.186364.12552426317591956823@Monstersaurus>
+From:   Karthik Poduval <karthik.poduval@gmail.com>
+Date:   Tue, 7 Jun 2022 22:12:04 -0700
+Message-ID: <CAFP0Ok9hJ3x4xUXJSm1iZGzfHcjDWcvrOpkAoLy+bhXQNK-EPg@mail.gmail.com>
+Subject: Re: Attaching an I2C VCM subdev (media entity) to media pipeline
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
+Thank you Daniel and Kieran,
 
-Add mediatek,mt8186-jpgenc compatible to binding document.
+Will take a look at the ancillary links and try to backport.
 
-MT8186 iommu support 0~16GB iova. We separate it to four banks:
-0~4G; 4G~8G; 8G~12G; 12G~16G.
+--
+Regards,
+Karthik Poduval
 
-The "dma-ranges" could be used to adjust the bank we locate.
-If we don't set this property. The default range always is 0~4G.
+On Tue, Jun 7, 2022 at 2:36 PM Kieran Bingham
+<kieran.bingham@ideasonboard.com> wrote:
+>
+> Hi Karthik,
+>
+> Quoting Karthik Poduval (2022-06-07 18:29:23)
+> > Hi All,
+> >
+> > I had a question about VCM subdev (media entity). The  example VCM
+> > drivers have no pads. How do we attach them to the image sensor subdev
+> > in the pipeline ?
+>
+> This requires a bit of support that was added fairly recently for
+> managing non-data links between subdevices. This was added through the
+> use of 'ancillary links' which can connect a sensor and a VCM.
+>
+> It should be handled automatically if you're on the latest kernel
+> version, but if not you would perhaps need to back-port the
+> implementation. I believe it's handled automatically through the async
+> subdevice notifier systems.
+>
+> > --
+> > Regards,
+> > Karthik Poduval
+>
+> --
+> Kieran
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
----
- .../devicetree/bindings/media/mediatek-jpeg-encoder.yaml    | 6 ++++++
- 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml
-index 8bfdfdfaba59..4fd390c042a9 100644
---- a/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml
-+++ b/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml
-@@ -18,6 +18,7 @@ properties:
-       - enum:
-           - mediatek,mt2701-jpgenc
-           - mediatek,mt8183-jpgenc
-+          - mediatek,mt8186-jpgenc
-       - const: mediatek,mtk-jpgenc
-   reg:
-     maxItems: 1
-@@ -42,6 +43,11 @@ properties:
-       Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
-       Ports are according to the HW.
- 
-+  dma-ranges:
-+    maxItems: 1
-+    description: |
-+      Describes the physical address space of IOMMU maps to memory.
-+
- required:
-   - compatible
-   - reg
+
 -- 
-2.18.0
-
+Regards,
+Karthik Poduval
