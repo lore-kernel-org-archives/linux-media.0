@@ -2,107 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E30ABCCA47B
-	for <linux-media@archiver.kernel.org>; Fri, 10 Jun 2022 20:38:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C16B4C433EF
+	for <linux-media@archiver.kernel.org>; Sat, 11 Jun 2022 04:42:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348453AbiFJUie (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 Jun 2022 16:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
+        id S1346769AbiFKEmK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 11 Jun 2022 00:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350621AbiFJUi3 (ORCPT
+        with ESMTP id S229498AbiFKEmJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 Jun 2022 16:38:29 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13CC30F6FD
-        for <linux-media@vger.kernel.org>; Fri, 10 Jun 2022 13:38:23 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-fe51318ccfso705255fac.0
-        for <linux-media@vger.kernel.org>; Fri, 10 Jun 2022 13:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=OmNB8Tcgddvh+DStPNDRj/l3PH4AXfXE+UIaJzFaKDU=;
-        b=PeEQYbTqlBNmQVeOneHYbMQ2SNrnE9oRTTJBeeItlAIoqfZ+jTsaeM3pXbv4byuW2/
-         AfTroOiJeqAqHgr6g/W5/8NxXUIGHdQ7BxUq1EEr3ZV/U/uQjrGlxVpcIR3cc5hcxYdl
-         QtdINxF1F92WAg6BPLRNtQNPQFQiMlm1VhshM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=OmNB8Tcgddvh+DStPNDRj/l3PH4AXfXE+UIaJzFaKDU=;
-        b=WBN5kmnZGBIvdlmPYA0t3xZ6VwANPJrQOxtzZ5qm953EBs5jifNXz3p7di+7CTsCN7
-         9WGo3fPldmIkcW8BN47sq91vn1sv1VhbcUaFanER+KqNEotojoBZ3LOXnUpMv6i7rAhy
-         98hmyXos34Cq/3N7RI3dFpAzBSKri2NoXedCWQkPoiE5L4FbSQzbsB7ZmjVhrnDl0tyX
-         CILbep2ILEQNoaGLggvVVJ/rlYSN9meIANiZXFTLE4P084kD9En1Wzb1oLLJ2pwojZxW
-         B5EIgelMryZcPd/rKiAC51QglZh4m3fADqmdHsCwus5tY7cWjG/QJd8P7/N5zQR1Qa1P
-         tDdg==
-X-Gm-Message-State: AOAM533kkRTQ5FYyN9n2f+pSuptJQhq3eUe16KcP1Fc9FtoQAZMpIZHW
-        z95Zz8TndUTVUwgTDLQZI5jClwSFVXyQRcStgoEobg==
-X-Google-Smtp-Source: ABdhPJxrnMCKEY4AraCYzAprPhmiQ1YNHjc36TBp1WRgX1iN4BwAyAiw6GjZRAmfjgdlO1edLxRj4Tmv7M7qh5o0Mgk=
-X-Received: by 2002:a05:6870:b381:b0:fe:2004:b3b5 with SMTP id
- w1-20020a056870b38100b000fe2004b3b5mr922317oap.63.1654893502377; Fri, 10 Jun
- 2022 13:38:22 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 10 Jun 2022 13:38:21 -0700
-MIME-Version: 1.0
-In-Reply-To: <1654775566-21953-1-git-send-email-quic_dikshita@quicinc.com>
-References: <1654775566-21953-1-git-send-email-quic_dikshita@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 10 Jun 2022 13:38:21 -0700
-Message-ID: <CAE-0n50q5GJ_q9Pojjrh+34W+i6BXhxSDCS6M_6NLP0pyZYuQg@mail.gmail.com>
-Subject: Re: [PATCH] venus: Add support for SSR trigger using fault injection
-To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, stanimir.varbanov@linaro.org,
-        quic_vgarodia@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 11 Jun 2022 00:42:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A10929F
+        for <linux-media@vger.kernel.org>; Fri, 10 Jun 2022 21:42:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F37FB83277
+        for <linux-media@vger.kernel.org>; Sat, 11 Jun 2022 04:42:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D46C34116
+        for <linux-media@vger.kernel.org>; Sat, 11 Jun 2022 04:42:04 +0000 (UTC)
+Date:   Sat, 11 Jun 2022 06:42:02 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: OK
+Message-Id: <20220611044204.A0D46C34116@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Quoting Dikshita Agarwal (2022-06-09 04:52:46)
-> diff --git a/drivers/media/platform/qcom/venus/dbgfs.c b/drivers/media/platform/qcom/venus/dbgfs.c
-> index 52de47f..a0bfb9e 100644
-> --- a/drivers/media/platform/qcom/venus/dbgfs.c
-> +++ b/drivers/media/platform/qcom/venus/dbgfs.c
-> @@ -4,13 +4,31 @@
->   */
->
->  #include <linux/debugfs.h>
-> +#include <linux/fault-inject.h>
->
->  #include "core.h"
->
-> +#ifdef CONFIG_FAULT_INJECTION
-> +static DECLARE_FAULT_ATTR(venus_ssr_attr);
-> +#endif
-> +
-> +bool venus_fault_inject_ssr(void)
-> +{
-> +#ifdef CONFIG_FAULT_INJECTION
-> +       return should_fail(&venus_ssr_attr, 1);
-> +#else
-> +       return false;
-> +#endif
-> +}
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-It would be better to remove the ifdef in this function and define a
-static inline version that returns false when CONFIG_FAULT_INJECTION is
-disabled so that the compiler doesn't have to insert a function call to
-venus_fault_inject_ssr() when the config is disabled. It may also be
-good to avoid the jump when enabled by exporting the attribute to the
-irq handler file.
+Results of the daily build of media_tree:
 
-> +
->  void venus_dbgfs_init(struct venus_core *core)
->  {
->         core->root = debugfs_create_dir("venus", NULL);
->         debugfs_create_x32("fw_level", 0644, core->root, &venus_fw_debug);
-> +
-> +#ifdef CONFIG_FAULT_INJECTION
-> +       fault_create_debugfs_attr("fail_ssr", core->root, &venus_ssr_attr);
-> +#endif
->  }
->
->  void venus_dbgfs_deinit(struct venus_core *core)
+date:			Sat Jun 11 05:00:14 CEST 2022
+media-tree git hash:	83916ec5a8c7faaeb8209f2d0763ce2e08f61f65
+media_build git hash:	0fe857b86addf382f6fd383948bd7736a3201403
+v4l-utils git hash:	163144712a46229f3476b04f6c0037c4b7f00299
+edid-decode git hash:	cc1aeb00500d1ac725577354af9cd2637f47ef71
+gcc version:		i686-linux-gcc (GCC) 11.2.0
+sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
+sparse version:		v0.6.4-30-g92122700-dirty
+smatch repo:            git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8015-g1a0af070-dirty
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: b5e106a4cc94b2ea761f829eeaf8d3473bbbac27
+host hardware:		x86_64
+host os:		5.16.0-1-amd64
+
+linux-git-sh: OK
+linux-git-arm-stm32: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-mips: OK
+linux-git-arm-pxa: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 0
+virtme-32: OK: Final Summary: 3100, Succeeded: 3100, Failed: 0, Warnings: 0
+sparse: OK
+smatch: OK
+kerneldoc: OK
+
+Detailed results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Saturday.log
+
+Detailed regression test results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Saturday-test-media.log
+https://hverkuil.home.xs4all.nl/logs/Saturday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Saturday-test-media-dmesg.log
+
+Full logs are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Saturday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+https://hverkuil.home.xs4all.nl/spec/index.html
