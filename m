@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4839CCA483
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3C99CCA487
 	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 20:45:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346139AbiFMUpJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jun 2022 16:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
+        id S1346782AbiFMUpM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jun 2022 16:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351483AbiFMUoM (ORCPT
+        with ESMTP id S238106AbiFMUo1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:44:12 -0400
+        Mon, 13 Jun 2022 16:44:27 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 655B3B8D
-        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 12:51:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B385A6252
+        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 12:52:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655149915;
+        s=mimecast20190719; t=1655149920;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7WjbX67jOOqktZoDgh6cVkYAJUhz2Kr6yIotCYGhj3w=;
-        b=CEPxRp3ZhCONMZzXb0YB4f5///5BZo2XeDvlW8LwFGyNypRE7hBWeYfDd3M/X69YKug4pe
-        CK7o8FRSzDSftRfBiAZ5wSNn80W49waC6eVAPUbcjggxUVC756/pYPy81G3UOsA20D3MJV
-        bSuPVRPz4XWGdWwj3e30mVmloreyWMQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=NhqcL20ATpkNnWN0t51j/5ixk5yZJtiAjUQlYSVOb6s=;
+        b=NArrGgAtloiYIEy+tY/RExu6IlVX9cKW7zoHwRmqVFfF0sT923sePqIX5bj6kmfk5VaiuP
+        FmL/jh92R9CC1lrfOoWXX5UM7pmCo8008PFqs5p8Lemok5njGo4pxlcz5jHOwA2buFCst1
+        4nEu+d6KdaOBQ61nmIjgkp9iD0FpGXI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-642-CZT9LDEYMC-bo9k6AgPQ-Q-1; Mon, 13 Jun 2022 15:51:52 -0400
-X-MC-Unique: CZT9LDEYMC-bo9k6AgPQ-Q-1
+ us-mta-206-Zn7QIQzVN9-Mxpk9X6Qtbg-1; Mon, 13 Jun 2022 15:51:57 -0400
+X-MC-Unique: Zn7QIQzVN9-Mxpk9X6Qtbg-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2F16801755;
-        Mon, 13 Jun 2022 19:51:51 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC14F3C1014B;
+        Mon, 13 Jun 2022 19:51:56 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3F89D2166B26;
-        Mon, 13 Jun 2022 19:51:50 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 610FD2166B26;
+        Mon, 13 Jun 2022 19:51:55 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 07/40] media: atomisp: drop contiguous flag from struct ia_css_frame
-Date:   Mon, 13 Jun 2022 21:51:04 +0200
-Message-Id: <20220613195137.8117-8-hdegoede@redhat.com>
+Subject: [PATCH 10/40] media: atomisp: remove hmm_pool_[un]register()
+Date:   Mon, 13 Jun 2022 21:51:07 +0200
+Message-Id: <20220613195137.8117-11-hdegoede@redhat.com>
 In-Reply-To: <20220613195137.8117-1-hdegoede@redhat.com>
 References: <20220613195137.8117-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,110 +60,152 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Drop the contiguous flag from struct ia_css_frame, it is always false /
-not used.
+These are no-ops, so lets remove them.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/pci/ia_css_frame_public.h     | 1 -
- .../media/atomisp/pci/runtime/debug/src/ia_css_debug.c      | 2 --
- drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c | 6 +-----
- drivers/staging/media/atomisp/pci/sh_css.c                  | 5 -----
- 4 files changed, 1 insertion(+), 13 deletions(-)
+ .../staging/media/atomisp/include/hmm/hmm.h   |  3 --
+ .../staging/media/atomisp/pci/atomisp_fops.c  |  9 ----
+ .../staging/media/atomisp/pci/atomisp_v4l2.c  | 10 -----
+ drivers/staging/media/atomisp/pci/hmm/hmm.c   | 42 -------------------
+ 4 files changed, 64 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/ia_css_frame_public.h b/drivers/staging/media/atomisp/pci/ia_css_frame_public.h
-index 9c4d466ebfb9..8f05af6d4cc9 100644
---- a/drivers/staging/media/atomisp/pci/ia_css_frame_public.h
-+++ b/drivers/staging/media/atomisp/pci/ia_css_frame_public.h
-@@ -169,7 +169,6 @@ struct ia_css_frame {
- 	/** exposure id, see ia_css_event_public.h for more detail */
- 	u32 isp_config_id; /** Unique ID to track which config was actually applied to a particular frame */
- 	bool valid; /** First video output frame is not valid */
--	bool contiguous; /** memory is allocated physically contiguously */
- 	union {
- 		unsigned int	_initialisation_dummy;
- 		struct ia_css_frame_plane raw;
-diff --git a/drivers/staging/media/atomisp/pci/runtime/debug/src/ia_css_debug.c b/drivers/staging/media/atomisp/pci/runtime/debug/src/ia_css_debug.c
-index f46238725eea..3d269bd23207 100644
---- a/drivers/staging/media/atomisp/pci/runtime/debug/src/ia_css_debug.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/debug/src/ia_css_debug.c
-@@ -1305,8 +1305,6 @@ void ia_css_debug_frame_print(const struct ia_css_frame *frame,
- 	ia_css_debug_dtrace(2, "  padded width  = %d\n",
- 			    frame->info.padded_width);
- 	ia_css_debug_dtrace(2, "  format        = %d\n", frame->info.format);
--	ia_css_debug_dtrace(2, "  is contiguous = %s\n",
--			    frame->contiguous ? "yes" : "no");
- 	switch (frame->info.format) {
- 	case IA_CSS_FRAME_FORMAT_NV12:
- 	case IA_CSS_FRAME_FORMAT_NV16:
-diff --git a/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c b/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c
-index cb0b579fbadf..b748b133f01e 100644
---- a/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c
-@@ -732,10 +732,7 @@ static int frame_allocate_buffer_data(struct ia_css_frame *frame)
- 	IA_CSS_ENTER_LEAVE_PRIVATE("frame->data_bytes=%d\n", frame->data_bytes);
- #endif
- 	frame->data = hmm_alloc(frame->data_bytes,
--				HMM_BO_PRIVATE, 0, NULL,
--				frame->contiguous ?
--				ATOMISP_MAP_FLAG_CONTIGUOUS : 0);
+diff --git a/drivers/staging/media/atomisp/include/hmm/hmm.h b/drivers/staging/media/atomisp/include/hmm/hmm.h
+index b48bdf5c274c..067e0310d02b 100644
+--- a/drivers/staging/media/atomisp/include/hmm/hmm.h
++++ b/drivers/staging/media/atomisp/include/hmm/hmm.h
+@@ -32,9 +32,6 @@
+ #define mmgr_NULL              ((ia_css_ptr)0)
+ #define mmgr_EXCEPTION         ((ia_css_ptr) - 1)
+ 
+-int hmm_pool_register(unsigned int pool_size, enum hmm_pool_type pool_type);
+-void hmm_pool_unregister(enum hmm_pool_type pool_type);
 -
-+				HMM_BO_PRIVATE, 0, NULL, 0);
- 	if (frame->data == mmgr_NULL)
- 		return -ENOMEM;
- 	return 0;
-@@ -796,7 +793,6 @@ static struct ia_css_frame *frame_create(unsigned int width,
- 	me->info.format = format;
- 	me->info.padded_width = padded_width;
- 	me->info.raw_bit_depth = raw_bit_depth;
--	me->contiguous = false;
- 	me->valid = valid;
- 	me->data_bytes = 0;
- 	me->data = mmgr_NULL;
-diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index 1d605e533e29..8ddf29e88804 100644
---- a/drivers/staging/media/atomisp/pci/sh_css.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -3061,7 +3061,6 @@ init_vf_frameinfo_defaults(struct ia_css_pipe *pipe,
- 	assert(vf_frame);
+ int hmm_init(void);
+ void hmm_cleanup(void);
  
- 	sh_css_pipe_get_viewfinder_frame_info(pipe, &vf_frame->info, idx);
--	vf_frame->contiguous = false;
- 	vf_frame->flash_state = IA_CSS_FRAME_FLASH_STATE_NONE;
- 	ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
- 	ia_css_query_internal_queue_id(IA_CSS_BUFFER_TYPE_VF_OUTPUT_FRAME + idx, thread_id, &queue_id);
-@@ -3243,7 +3242,6 @@ init_in_frameinfo_memory_defaults(struct ia_css_pipe *pipe,
- 	in_frame->info.raw_bit_depth =
- 	ia_css_pipe_util_pipe_input_format_bpp(pipe);
- 	ia_css_frame_info_set_width(&in_frame->info, pipe->stream->config.input_config.input_res.width, 0);
--	in_frame->contiguous = false;
- 	in_frame->flash_state = IA_CSS_FRAME_FLASH_STATE_NONE;
- 	ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
- 	ia_css_query_internal_queue_id(IA_CSS_BUFFER_TYPE_INPUT_FRAME, thread_id, &queue_id);
-@@ -3271,7 +3269,6 @@ init_out_frameinfo_defaults(struct ia_css_pipe *pipe,
- 	assert(out_frame);
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_fops.c b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+index be6a74d5ac19..e78d9364feb7 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_fops.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_fops.c
+@@ -865,12 +865,6 @@ static int atomisp_open(struct file *file)
+ 		goto error;
+ 	}
  
- 	sh_css_pipe_get_output_frame_info(pipe, &out_frame->info, idx);
--	out_frame->contiguous = false;
- 	out_frame->flash_state = IA_CSS_FRAME_FLASH_STATE_NONE;
- 	ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
- 	ia_css_query_internal_queue_id(IA_CSS_BUFFER_TYPE_OUTPUT_FRAME + idx, thread_id, &queue_id);
-@@ -7158,7 +7155,6 @@ create_host_copy_pipeline(struct ia_css_pipe *pipe,
- 	ia_css_pipeline_clean(me);
+-	if (dypool_enable) {
+-		ret = hmm_pool_register(dypool_pgnr, HMM_POOL_TYPE_DYNAMIC);
+-		if (ret)
+-			dev_err(isp->dev, "Failed to register dynamic memory pool.\n");
+-	}
+-
+ 	/* Init ISP */
+ 	if (atomisp_css_init(isp)) {
+ 		ret = -EINVAL;
+@@ -910,7 +904,6 @@ static int atomisp_open(struct file *file)
+ 	atomisp_css_uninit(isp);
+ 	pm_runtime_put(vdev->v4l2_dev->dev);
+ error:
+-	hmm_pool_unregister(HMM_POOL_TYPE_DYNAMIC);
+ 	rt_mutex_unlock(&isp->mutex);
+ 	return ret;
+ }
+@@ -1032,8 +1025,6 @@ static int atomisp_release(struct file *file)
+ 		isp->css_env.isp_css_fw.bytes = 0;
+ 	}
  
- 	/* Construct out_frame info */
--	out_frame->contiguous = false;
- 	out_frame->flash_state = IA_CSS_FRAME_FLASH_STATE_NONE;
+-	hmm_pool_unregister(HMM_POOL_TYPE_DYNAMIC);
+-
+ 	ret = v4l2_subdev_call(isp->flash, core, s_power, 0);
+ 	if (ret < 0 && ret != -ENODEV && ret != -ENOIOCTLCMD)
+ 		dev_warn(isp->dev, "Failed to power-off flash\n");
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+index 49ccfb1646da..3fd0c526193f 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_v4l2.c
+@@ -1771,12 +1771,6 @@ static int atomisp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
+ 	pm_runtime_allow(&pdev->dev);
  
- 	if (copy_on_sp(pipe) &&
-@@ -7208,7 +7204,6 @@ create_host_isyscopy_capture_pipeline(struct ia_css_pipe *pipe)
- 	err = sh_css_pipe_get_output_frame_info(pipe, &out_frame->info, 0);
- 	if (err)
- 		return err;
--	out_frame->contiguous = false;
- 	out_frame->flash_state = IA_CSS_FRAME_FLASH_STATE_NONE;
- 	ia_css_pipeline_get_sp_thread_id(ia_css_pipe_get_pipe_num(pipe), &thread_id);
- 	ia_css_query_internal_queue_id(IA_CSS_BUFFER_TYPE_OUTPUT_FRAME, thread_id, &queue_id);
+ 	hmm_init_mem_stat(repool_pgnr, dypool_enable, dypool_pgnr);
+-	err = hmm_pool_register(repool_pgnr, HMM_POOL_TYPE_RESERVED);
+-	if (err) {
+-		dev_err(&pdev->dev, "Failed to register reserved memory pool.\n");
+-		goto hmm_pool_fail;
+-	}
+-
+ 	/* Init ISP memory management */
+ 	hmm_init();
+ 
+@@ -1813,8 +1807,6 @@ static int atomisp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
+ 	devm_free_irq(&pdev->dev, pdev->irq, isp);
+ request_irq_fail:
+ 	hmm_cleanup();
+-	hmm_pool_unregister(HMM_POOL_TYPE_RESERVED);
+-hmm_pool_fail:
+ 	pm_runtime_get_noresume(&pdev->dev);
+ 	destroy_workqueue(isp->wdt_work_queue);
+ wdt_work_queue_fail:
+@@ -1885,8 +1877,6 @@ static void atomisp_pci_remove(struct pci_dev *pdev)
+ 	atomisp_file_input_cleanup(isp);
+ 
+ 	release_firmware(isp->firmware);
+-
+-	hmm_pool_unregister(HMM_POOL_TYPE_RESERVED);
+ }
+ 
+ static const struct pci_device_id atomisp_pci_tbl[] = {
+diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+index a4722155ddef..f609e154d788 100644
+--- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
++++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+@@ -660,48 +660,6 @@ void hmm_vunmap(ia_css_ptr virt)
+ 	hmm_bo_vunmap(bo);
+ }
+ 
+-int hmm_pool_register(unsigned int pool_size, enum hmm_pool_type pool_type)
+-{
+-#if 0	// Just use the "normal" pool
+-	switch (pool_type) {
+-	case HMM_POOL_TYPE_RESERVED:
+-		reserved_pool.pops = &reserved_pops;
+-		return reserved_pool.pops->pool_init(&reserved_pool.pool_info,
+-						     pool_size);
+-	case HMM_POOL_TYPE_DYNAMIC:
+-		dynamic_pool.pops = &dynamic_pops;
+-		return dynamic_pool.pops->pool_init(&dynamic_pool.pool_info,
+-						    pool_size);
+-	default:
+-		dev_err(atomisp_dev, "invalid pool type.\n");
+-		return -EINVAL;
+-	}
+-#else
+-	return 0;
+-#endif
+-}
+-
+-void hmm_pool_unregister(enum hmm_pool_type pool_type)
+-{
+-#if 0	// Just use the "normal" pool
+-	switch (pool_type) {
+-	case HMM_POOL_TYPE_RESERVED:
+-		if (reserved_pool.pops && reserved_pool.pops->pool_exit)
+-			reserved_pool.pops->pool_exit(&reserved_pool.pool_info);
+-		break;
+-	case HMM_POOL_TYPE_DYNAMIC:
+-		if (dynamic_pool.pops && dynamic_pool.pops->pool_exit)
+-			dynamic_pool.pops->pool_exit(&dynamic_pool.pool_info);
+-		break;
+-	default:
+-		dev_err(atomisp_dev, "invalid pool type.\n");
+-		break;
+-	}
+-#endif
+-
+-	return;
+-}
+-
+ void *hmm_isp_vaddr_to_host_vaddr(ia_css_ptr ptr, bool cached)
+ {
+ 	return hmm_vmap(ptr, cached);
 -- 
 2.36.0
 
