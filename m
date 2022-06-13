@@ -2,39 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 574E6C43334
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 03:24:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CCD8C43334
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 03:24:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239139AbiFMDYQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 12 Jun 2022 23:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
+        id S238839AbiFMDYW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 12 Jun 2022 23:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238828AbiFMDX3 (ORCPT
+        with ESMTP id S235440AbiFMDXk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 12 Jun 2022 23:23:29 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B5911C1A;
-        Sun, 12 Jun 2022 20:23:21 -0700 (PDT)
-X-UUID: e3ebf41011e5486c992c98b2596e57e0-20220613
+        Sun, 12 Jun 2022 23:23:40 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505B71B7A2;
+        Sun, 12 Jun 2022 20:23:24 -0700 (PDT)
+X-UUID: 07499003370c4984ab98981996188cd4-20220613
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:1521db8f-ec6c-4b9b-9888-800e7845ee95,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:6c6652c6-12ba-4305-bfdf-9aefbdc32516,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: e3ebf41011e5486c992c98b2596e57e0-20220613
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.5,REQID:ea6dfc09-e91a-437c-922f-48cc35650997,OB:50,L
+        OB:10,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham
+        ,ACTION:release,TS:95
+X-CID-INFO: VERSION:1.1.5,REQID:ea6dfc09-e91a-437c-922f-48cc35650997,OB:50,LOB
+        :10,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D
+        ,ACTION:quarantine,TS:95
+X-CID-META: VersionHash:2a19b09,CLOUDID:ab597837-84c0-4f9a-9fbd-acd4a0e9ad0f,C
+        OID:5c7b1f35a894,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:0,BEC:nil
+X-UUID: 07499003370c4984ab98981996188cd4-20220613
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
         (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 924195792; Mon, 13 Jun 2022 11:23:13 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 256403134; Mon, 13 Jun 2022 11:23:18 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 13 Jun 2022 11:23:11 +0800
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 13 Jun 2022 11:23:17 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 13 Jun 2022 11:23:10 +0800
+ Transport; Mon, 13 Jun 2022 11:23:15 +0800
 From:   Irui Wang <irui.wang@mediatek.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -51,9 +54,9 @@ CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
         <maoguang.meng@mediatek.com>, kyrie wu <kyrie.wu@mediatek.com>,
         <srv_heupstream@mediatek.com>
-Subject: [V9,2/7] mtk-jpegenc: export jpeg encoder functions
-Date:   Mon, 13 Jun 2022 11:23:01 +0800
-Message-ID: <20220613032306.23237-3-irui.wang@mediatek.com>
+Subject: [V9,7/7] mtk-jpegenc: add stop cmd interface for jpgenc
+Date:   Mon, 13 Jun 2022 11:23:06 +0800
+Message-ID: <20220613032306.23237-8-irui.wang@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220613032306.23237-1-irui.wang@mediatek.com>
 References: <20220613032306.23237-1-irui.wang@mediatek.com>
@@ -67,63 +70,35 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: kyrie wu <kyrie.wu@mediatek.com>
 
-mtk jpeg encoder is built as a module, export some functions to make them
-visible by other modules.
+Add stop cmd interface for jpgenc to stop stream
 
 Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
 ---
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-index 1cf037bf72dd..a2b6e1f85c2d 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-@@ -36,12 +36,14 @@ void mtk_jpeg_enc_reset(void __iomem *base)
- 	writel(JPEG_ENC_RESET_BIT, base + JPEG_ENC_RSTB);
- 	writel(0, base + JPEG_ENC_CODEC_SEL);
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_enc_reset);
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 43a0008939b4..028e89dba546 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -612,6 +612,9 @@ static const struct v4l2_ioctl_ops mtk_jpeg_enc_ioctl_ops = {
+ 	.vidioc_streamoff               = v4l2_m2m_ioctl_streamoff,
  
- u32 mtk_jpeg_enc_get_file_size(void __iomem *base)
- {
- 	return readl(base + JPEG_ENC_DMA_ADDR0) -
- 	       readl(base + JPEG_ENC_DST_ADDR0);
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_enc_get_file_size);
- 
- void mtk_jpeg_enc_start(void __iomem *base)
- {
-@@ -51,6 +53,7 @@ void mtk_jpeg_enc_start(void __iomem *base)
- 	value |= JPEG_ENC_CTRL_INT_EN_BIT | JPEG_ENC_CTRL_ENABLE_BIT;
- 	writel(value, base + JPEG_ENC_CTRL);
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_enc_start);
- 
- void mtk_jpeg_set_enc_src(struct mtk_jpeg_ctx *ctx,  void __iomem *base,
- 			  struct vb2_buffer *src_buf)
-@@ -67,6 +70,7 @@ void mtk_jpeg_set_enc_src(struct mtk_jpeg_ctx *ctx,  void __iomem *base,
- 			writel(dma_addr, base + JPEG_ENC_SRC_CHROMA_ADDR);
- 	}
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_set_enc_src);
- 
- void mtk_jpeg_set_enc_dst(struct mtk_jpeg_ctx *ctx, void __iomem *base,
- 			  struct vb2_buffer *dst_buf)
-@@ -86,6 +90,7 @@ void mtk_jpeg_set_enc_dst(struct mtk_jpeg_ctx *ctx, void __iomem *base,
- 	writel(dma_addr & ~0xf, base + JPEG_ENC_DST_ADDR0);
- 	writel((dma_addr + size) & ~0xf, base + JPEG_ENC_STALL_ADDR0);
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_set_enc_dst);
- 
- void mtk_jpeg_set_enc_params(struct mtk_jpeg_ctx *ctx,  void __iomem *base)
- {
-@@ -152,3 +157,5 @@ void mtk_jpeg_set_enc_params(struct mtk_jpeg_ctx *ctx,  void __iomem *base)
- 
- 	writel(ctx->restart_interval, base + JPEG_ENC_RST_MCU_NUM);
- }
-+EXPORT_SYMBOL_GPL(mtk_jpeg_set_enc_params);
+ 	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
 +
++	.vidioc_encoder_cmd		= v4l2_m2m_ioctl_encoder_cmd,
++	.vidioc_try_encoder_cmd		= v4l2_m2m_ioctl_try_encoder_cmd,
+ };
+ 
+ static const struct v4l2_ioctl_ops mtk_jpeg_dec_ioctl_ops = {
+@@ -1389,6 +1392,7 @@ static int mtk_jpeg_open(struct file *file)
+ 	} else {
+ 		v4l2_ctrl_handler_init(&ctx->ctrl_hdl, 0);
+ 	}
++
+ 	mtk_jpeg_set_default_params(ctx);
+ 	mutex_unlock(&jpeg->lock);
+ 	return 0;
 -- 
 2.18.0
 
