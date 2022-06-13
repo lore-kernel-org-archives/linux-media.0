@@ -2,105 +2,80 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD5B7C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 09:44:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E0E8CCA47B
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 12:06:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239699AbiFMJoH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jun 2022 05:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
+        id S1358409AbiFMMGV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jun 2022 08:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240973AbiFMJoE (ORCPT
+        with ESMTP id S1359304AbiFMMFi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:44:04 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0624012D2D
-        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 02:44:02 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h5so6429666wrb.0
-        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 02:44:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=u5xXrnLk8hPXTTCgmE1G5BVTn8vjO1QNkaM0LsIMZ/M=;
-        b=RnT9p3BnlZcKJ+9k77nktxR/mJdxoTKVTVzhRpnkeIPreRviuXH/pJvtT/tkYSSeTG
-         2kqdGIWDkK33N/EnIu8qFX4zCH97K1WVrgzY3D5cFiMZ690o1Gjt8UZ4AlSNUO3AAJCP
-         oHpD36BMy81sPCjqu4ZGYnY/0FNWgSN9FwTdzpUdkXc+zJfvcyn8keKpliZITc/sRCy3
-         ncyHaYf4uX1Crdh2N52HC1EiAKtzcta2dTpGbcTJS/jj1sW4XMTqb0aWxgTqKG2Txcm5
-         Zz7pAvKrNGsjnEZbdcqhQ/X/Geb4TBYjxZF6Tmf+rh4ax9jbo5smw9C3twR4SaA6G0aW
-         bFdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=u5xXrnLk8hPXTTCgmE1G5BVTn8vjO1QNkaM0LsIMZ/M=;
-        b=X6BwatpSipFLL9nYxKSX+JvryWlY3RwzTVdxSurN6RlSVVKvfg5rL7cPJwFUF0qHw9
-         JLJ3qA4caIqrPE7zGJt/RWTY0BE2mPTZMqhwbVK0U+6CfZPr0pBfQSsm1Zw8xbp/mUwO
-         GJbopnQst2qWIaeqIsOGLDGOiSdktd8ICi7VBIcpkk/lM6tXKpGytISyY373aJrmS4gP
-         ZTNLkUZbhj403vJ182Y28bBPKB2/ISHWvKUfuZkeotwh94sisUS5HvsSC41akhmLTINu
-         i1RGtiqsA/SrgqVvRba7rzFxqnHcO8Etl/Uu9vGlc3stfkroSyOWpiH/HnXN2ARwSal/
-         p6aw==
-X-Gm-Message-State: AOAM532CFmiMavXnQG3ES0Bhhuv0nz13VUrrZ9qljxwWAJ1qy34TdjZs
-        S/+cDJsIE60zSpUIJRFg7e/U8w==
-X-Google-Smtp-Source: ABdhPJzoBeEFaoVtayPoYOl8lsPHAw5X904LIdYL9UKaIUafLUSDbNfAQiWgXvz8QJEfh/DA+IizhQ==
-X-Received: by 2002:a05:6000:15c1:b0:218:468b:4c01 with SMTP id y1-20020a05600015c100b00218468b4c01mr36804058wry.60.1655113440581;
-        Mon, 13 Jun 2022 02:44:00 -0700 (PDT)
-Received: from [10.227.148.193] (80-254-69-65.dynamic.monzoon.net. [80.254.69.65])
-        by smtp.gmail.com with ESMTPSA id m185-20020a1c26c2000000b003974d0d981dsm12823357wmm.35.2022.06.13.02.43.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 02:44:00 -0700 (PDT)
-Message-ID: <4ee7e805-d4ed-a765-6b5f-c78183a64fe7@linaro.org>
-Date:   Mon, 13 Jun 2022 11:43:58 +0200
+        Mon, 13 Jun 2022 08:05:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B407127169;
+        Mon, 13 Jun 2022 03:59:56 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C575A6601668;
+        Mon, 13 Jun 2022 11:59:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655117995;
+        bh=SL7kBZsKi8cfowZu11mX4C6u+yfbALkOkOrY3sg1/m4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=N7lJBxk5oRQl32dnAZL7WlZ349h3f7sVa4Pt0rqM4HPOnbCE1sO2TrxzgpaoCqYP8
+         y1emnx9HTaEcC6nx0gjEotmDvSaW10SpZRjV9MmeSACIeWaHPCl3qVA4UerOQxjIxk
+         G24kUO0wwX57taOva4+sfbb5gJDH0w1M4tnqsmR7hUijxqR0YGlkpc3k7nIyGYREKb
+         v+WlDIY7A0zE39k1+qf8/1OAQipOZblftdsHvpVDkdWtEQ8NMCWOvZHWzAGLlDQ5A8
+         5oNY4HaPvnJ1Dx08bqdIybmpcp80jyX2HWAilXnMWd3tlfNIUkTuaGrLOi0yPDGpFv
+         hznKLqaa4UTXg==
+Message-ID: <4fb6af60-9997-2505-7d75-f09b376f027e@collabora.com>
+Date:   Mon, 13 Jun 2022 12:59:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v4 1/3] media: dt-binding: media: Add rockchip-vepu
- binding
+Subject: Re: [PATCH v18 3/4] dts: arm64: mt8183: add Mediatek MDP3 nodes
 Content-Language: en-US
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+To:     Moudy Ho <moudy.ho@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220514133604.174905-1-frattaroli.nicolas@gmail.com>
- <20220514133604.174905-2-frattaroli.nicolas@gmail.com>
- <440a7dc6-7ec4-d7a9-0c56-3b3dc15b79d0@linaro.org>
- <1885873.U9Vi27CkfU@archbook>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1885873.U9Vi27CkfU@archbook>
-Content-Type: text/plain; charset=UTF-8
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        allen-kh.cheng@mediatek.com, xiandong.wang@mediatek.com,
+        randy.wu@mediatek.com, jason-jh.lin@mediatek.com,
+        roy-cw.yeh@mediatek.com, river.cheng@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        cellopoint.kai@gmail.com
+References: <20220610064504.8302-1-moudy.ho@mediatek.com>
+ <20220610064504.8302-4-moudy.ho@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220610064504.8302-4-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 12/06/2022 17:05, Nicolas Frattaroli wrote:
-
->>> +
->>> +  clock-names:
->>> +    items:
->>> +      - const: aclk
->>> +      - const: hclk
->>
->> Since these are new bindings, it would be good to follow DT convention
->> and not add common "clk" prefix to clocks. Just like DMA is "tx" not
->> "txdma". However clock names "a" and "h" are also not good and maybe
->> this is already shared implementation?
+Il 10/06/22 08:45, Moudy Ho ha scritto:
+> Add device nodes for Media Data Path 3 (MDP3) modules.
 > 
-> This is indeed a shared implementation. Theoretically I could change
-> the driver for this one case but that seems pointless, especially
-> since "aclk" and "hclk" are the usual clk names for AXI and AHB on
-> ARM as far as I understand. I think I've been told before that those
-> two clocks should always be called aclk and hclk.
-> 
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 
-ok
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-
-Best regards,
-Krzysztof
