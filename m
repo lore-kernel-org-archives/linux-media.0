@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65014CCA47B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F287C43334
 	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 20:46:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244777AbiFMUpv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jun 2022 16:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
+        id S242428AbiFMUpu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jun 2022 16:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242821AbiFMUob (ORCPT
+        with ESMTP id S244902AbiFMUod (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:44:31 -0400
+        Mon, 13 Jun 2022 16:44:33 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC87117E1D
-        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 12:52:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7193A21E03
+        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 12:52:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655149944;
+        s=mimecast20190719; t=1655149951;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fWw8SdHuZ2LXCO9Fh9Kuq3IJ6S020mmRixqNYtYJ8EQ=;
-        b=d2f8+WJashNIJ/kOZWgmbEg2y2z3b0miNmMsVtw8Ym64ml0bfNWf+Wd1i8cPJFNFwVpZZS
-        Gf38NQGQeQfmXI9xLqMG7+qsrK6SmJRK0sDiIs8Nkg7I98swR7Q2o4NmZYDSgVl4kxIgjS
-        k3hxmCTl1FEhjXqL0pYa0NTa0yb65pk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=iXzF8c+G74R5pxjyKZKrh+13qimr9LWSmV/o7SjUfNo=;
+        b=BF6NbUNvzuiLF/FsXv9nSray2PCbxXAX3eg34lLsccjAhbO65Sow9RdGRgzw6OeH+/QyIg
+        xHEyy5z174yXU4F9i4LFqSXBNGPUHjXo+x+r1C5eGGmJdd1oqvkO5E0768Kt4EaCtIgwXp
+        +x6f6BgRjn1LrgYFmxBF0t+o9KwifKg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-410-9eOp9qEGMPmJgxhk4TYoAQ-1; Mon, 13 Jun 2022 15:52:19 -0400
-X-MC-Unique: 9eOp9qEGMPmJgxhk4TYoAQ-1
+ us-mta-296-P1ekgWAFPlC5UdZswKM15A-1; Mon, 13 Jun 2022 15:52:28 -0400
+X-MC-Unique: P1ekgWAFPlC5UdZswKM15A-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EE6A7801E6B;
-        Mon, 13 Jun 2022 19:52:18 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E76943801F4A;
+        Mon, 13 Jun 2022 19:52:27 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 711262166B26;
-        Mon, 13 Jun 2022 19:52:17 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6F0A42166B26;
+        Mon, 13 Jun 2022 19:52:26 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 22/40] media: atomisp: remove no longer used atomisp_css_acc_done() function
-Date:   Mon, 13 Jun 2022 21:51:19 +0200
-Message-Id: <20220613195137.8117-23-hdegoede@redhat.com>
+Subject: [PATCH 27/40] media: atomisp: remove unused hmm address translation functions
+Date:   Mon, 13 Jun 2022 21:51:24 +0200
+Message-Id: <20220613195137.8117-28-hdegoede@redhat.com>
 In-Reply-To: <20220613195137.8117-1-hdegoede@redhat.com>
 References: <20220613195137.8117-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,59 +60,65 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-atomisp_css_acc_done() is no longer used anywhere, remove it.
+hmm_isp_vaddr_to_host_vaddr() and hmm_host_vaddr_to_hrt_vaddr()
+are unused, remove them.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/pci/atomisp_compat.h       | 2 --
- drivers/staging/media/atomisp/pci/atomisp_compat_css20.c | 5 -----
- drivers/staging/media/atomisp/pci/atomisp_subdev.h       | 4 ----
- 3 files changed, 11 deletions(-)
+ .../staging/media/atomisp/include/hmm/hmm.h   | 11 ----------
+ drivers/staging/media/atomisp/pci/hmm/hmm.c   | 20 -------------------
+ 2 files changed, 31 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat.h b/drivers/staging/media/atomisp/pci/atomisp_compat.h
-index 07569f47498d..809f1a8c9974 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_compat.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_compat.h
-@@ -442,8 +442,6 @@ int atomisp_css_get_dis_stat(struct atomisp_sub_device *asd,
+diff --git a/drivers/staging/media/atomisp/include/hmm/hmm.h b/drivers/staging/media/atomisp/include/hmm/hmm.h
+index 37366e333744..99bf7d01f9ef 100644
+--- a/drivers/staging/media/atomisp/include/hmm/hmm.h
++++ b/drivers/staging/media/atomisp/include/hmm/hmm.h
+@@ -66,17 +66,6 @@ void hmm_vunmap(ia_css_ptr virt);
+  */
+ void hmm_flush_vmap(ia_css_ptr virt);
  
- int atomisp_css_update_stream(struct atomisp_sub_device *asd);
- 
--void atomisp_css_acc_done(struct atomisp_sub_device *asd);
+-/*
+- * Address translation from ISP shared memory address to kernel virtual address
+- * if the memory is not vmmaped,  then do it.
+- */
+-void *hmm_isp_vaddr_to_host_vaddr(ia_css_ptr ptr, bool cached);
 -
- struct atomisp_acc_fw;
- int atomisp_css_set_acc_parameters(struct atomisp_acc_fw *acc_fw);
+-/*
+- * Address translation from kernel virtual address to ISP shared memory address
+- */
+-ia_css_ptr hmm_host_vaddr_to_hrt_vaddr(const void *ptr);
+-
+ /*
+  * map ISP memory starts with virt to specific vma.
+  *
+diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+index 7de941d2c40a..1652b8b7ecec 100644
+--- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
++++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+@@ -598,23 +598,3 @@ void hmm_vunmap(ia_css_ptr virt)
  
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-index 646404a71d18..6e91654ce5da 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
-@@ -3823,11 +3823,6 @@ void atomisp_css_set_cont_prev_start_time(struct atomisp_device *isp,
- 	return;
+ 	hmm_bo_vunmap(bo);
  }
- 
--void atomisp_css_acc_done(struct atomisp_sub_device *asd)
+-
+-void *hmm_isp_vaddr_to_host_vaddr(ia_css_ptr ptr, bool cached)
 -{
--	complete(&asd->acc.acc_done);
+-	return hmm_vmap(ptr, cached);
+-	/* vmunmap will be done in hmm_bo_release() */
 -}
 -
- /* Set the ACC binary arguments */
- int atomisp_css_set_acc_parameters(struct atomisp_acc_fw *acc_fw)
- {
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.h b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-index f611fd47b85d..798a93793a9a 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-+++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
-@@ -322,10 +322,6 @@ struct atomisp_sub_device {
- 
- 	struct v4l2_ctrl *disable_dz;
- 
--	struct {
--		struct completion acc_done;
--	} acc;
+-ia_css_ptr hmm_host_vaddr_to_hrt_vaddr(const void *ptr)
+-{
+-	struct hmm_buffer_object *bo;
 -
- 	struct atomisp_subdev_params params;
- 
- 	struct atomisp_stream_env stream_env[ATOMISP_INPUT_STREAM_NUM];
+-	bo = hmm_bo_device_search_vmap_start(&bo_device, ptr);
+-	if (bo)
+-		return bo->start;
+-
+-	dev_err(atomisp_dev,
+-		"can not find buffer object whose kernel virtual address is %p\n",
+-		ptr);
+-	return 0;
+-}
 -- 
 2.36.0
 
