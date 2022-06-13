@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83DDDCCA482
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8F9CCCA483
 	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 20:46:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349306AbiFMUp4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jun 2022 16:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S1350021AbiFMUp7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jun 2022 16:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346159AbiFMUpK (ORCPT
+        with ESMTP id S1346465AbiFMUpK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 13 Jun 2022 16:45:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3DC811A30
-        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 12:52:41 -0700 (PDT)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9364A23175
+        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 12:52:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655149960;
+        s=mimecast20190719; t=1655149963;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FDm5ICZf6NUtXvhwZt4lzgCuJObtW9AyS3wAzSUPmPM=;
-        b=evotuhSALoeADTFgcLVwDHBrPZhSwXJDl1mw23Ww6u8mwwxMiemxPqcWbXcBzYmvaoD52X
-        TmaVZ9YUsAvpCwPoGrxzxT4Bg0n6OB1Mk7DH5SW4S7/2i0mb4Tm+p3JBtAdsdK1hpIwBuW
-        Uh8NVvKxceR9ByMWu4RHSLctDdRztr4=
+        bh=GVCUuAPx13J/edY6RlmG+VcE5YVud1g2ONG3F/9qLtg=;
+        b=cHycO1ab0bX6jEgHRVCEONWFJnxsI43if56NfeWtdyHcm6scqSgRhkJ3VDxvEu4PQsJP7W
+        hPfXaC7TggYhtLaht83dMHE/6J+mSdPAAjmHTvlx0UXDPEi8RaTGQYbmPzAco19njGTNzZ
+        ujxWZfFIJtNqspTomdVD3P+d9g/mUQQ=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-21-JHzKI5-MOt-VHVsgSKlq8A-1; Mon, 13 Jun 2022 15:52:37 -0400
-X-MC-Unique: JHzKI5-MOt-VHVsgSKlq8A-1
+ us-mta-588-O79ukws1OQKpz9BLp9f_7w-1; Mon, 13 Jun 2022 15:52:42 -0400
+X-MC-Unique: O79ukws1OQKpz9BLp9f_7w-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B38B43C021AD;
-        Mon, 13 Jun 2022 19:52:36 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F21DD299E746;
+        Mon, 13 Jun 2022 19:52:41 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 363F42166B26;
-        Mon, 13 Jun 2022 19:52:35 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6805F2166B26;
+        Mon, 13 Jun 2022 19:52:40 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 32/40] media: atomisp: remove hmm_page_object
-Date:   Mon, 13 Jun 2022 21:51:29 +0200
-Message-Id: <20220613195137.8117-33-hdegoede@redhat.com>
+Subject: [PATCH 35/40] media: atomisp: add error logging to atomisp_destroy_pipes_stream_force()
+Date:   Mon, 13 Jun 2022 21:51:32 +0200
+Message-Id: <20220613195137.8117-36-hdegoede@redhat.com>
 In-Reply-To: <20220613195137.8117-1-hdegoede@redhat.com>
 References: <20220613195137.8117-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,305 +60,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-hmm_page_object only stores a struct page pointer, so we can just use
-the hmm_bo.pages page pointer array everywhere.
+__destroy_streams() and __destroy_pipes() may return an error.
+Log a warning when either of them fails.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../media/atomisp/include/hmm/hmm_bo.h        |  5 --
- drivers/staging/media/atomisp/pci/hmm/hmm.c   |  8 +-
- .../staging/media/atomisp/pci/hmm/hmm_bo.c    | 79 +++++--------------
- 3 files changed, 22 insertions(+), 70 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_compat_css20.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/include/hmm/hmm_bo.h b/drivers/staging/media/atomisp/include/hmm/hmm_bo.h
-index 7110a040f50a..654dfd1f2de3 100644
---- a/drivers/staging/media/atomisp/include/hmm/hmm_bo.h
-+++ b/drivers/staging/media/atomisp/include/hmm/hmm_bo.h
-@@ -114,10 +114,6 @@ struct hmm_bo_device {
- 	struct kmem_cache *bo_cache;
- };
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+index 6375cfb839d4..358ef29f27ba 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_compat_css20.c
+@@ -581,8 +581,11 @@ static int __destroy_pipes(struct atomisp_sub_device *asd, bool force)
  
--struct hmm_page_object {
--	struct page		*page;
--};
--
- struct hmm_buffer_object {
- 	struct hmm_bo_device	*bdev;
- 	struct list_head	list;
-@@ -128,7 +124,6 @@ struct hmm_buffer_object {
- 	/* mutex protecting this BO */
- 	struct mutex		mutex;
- 	enum hmm_bo_type	type;
--	struct hmm_page_object	*page_obj;	/* physical pages */
- 	int		mmap_count;
- 	int		status;
- 	int		mem_type;
-diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
-index 11c79ee3089a..fc6cfe9f7744 100644
---- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
-+++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
-@@ -295,7 +295,7 @@ static int load_and_flush_by_kmap(ia_css_ptr virt, void *data,
- 		idx = (virt - bo->start) >> PAGE_SHIFT;
- 		offset = (virt - bo->start) - (idx << PAGE_SHIFT);
- 
--		src = (char *)kmap_local_page(bo->page_obj[idx].page) + offset;
-+		src = (char *)kmap_local_page(bo->pages[idx]) + offset;
- 
- 		if ((bytes + offset) >= PAGE_SIZE) {
- 			len = PAGE_SIZE - offset;
-@@ -427,7 +427,7 @@ int hmm_store(ia_css_ptr virt, const void *data, unsigned int bytes)
- 		idx = (virt - bo->start) >> PAGE_SHIFT;
- 		offset = (virt - bo->start) - (idx << PAGE_SHIFT);
- 
--		des = (char *)kmap_local_page(bo->page_obj[idx].page);
-+		des = (char *)kmap_local_page(bo->pages[idx]);
- 
- 		if (!des) {
- 			dev_err(atomisp_dev,
-@@ -498,7 +498,7 @@ int hmm_set(ia_css_ptr virt, int c, unsigned int bytes)
- 		idx = (virt - bo->start) >> PAGE_SHIFT;
- 		offset = (virt - bo->start) - (idx << PAGE_SHIFT);
- 
--		des = (char *)kmap_local_page(bo->page_obj[idx].page) + offset;
-+		des = (char *)kmap_local_page(bo->pages[idx]) + offset;
- 
- 		if ((bytes + offset) >= PAGE_SIZE) {
- 			len = PAGE_SIZE - offset;
-@@ -537,7 +537,7 @@ phys_addr_t hmm_virt_to_phys(ia_css_ptr virt)
- 	idx = (virt - bo->start) >> PAGE_SHIFT;
- 	offset = (virt - bo->start) - (idx << PAGE_SHIFT);
- 
--	return page_to_phys(bo->page_obj[idx].page) + offset;
-+	return page_to_phys(bo->pages[idx]) + offset;
- }
- 
- int hmm_mmap(struct vm_area_struct *vma, ia_css_ptr virt)
-diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c b/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c
-index bcd96aa00529..50e7f4827d6c 100644
---- a/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c
-+++ b/drivers/staging/media/atomisp/pci/hmm/hmm_bo.c
-@@ -631,7 +631,7 @@ static void free_private_bo_pages(struct hmm_buffer_object *bo,
- 	int i, ret;
- 
- 	for (i = 0; i < free_pgnr; i++) {
--		ret = set_pages_wb(bo->page_obj[i].page, 1);
-+		ret = set_pages_wb(bo->pages[i], 1);
- 		if (ret)
- 			dev_err(atomisp_dev,
- 				"set page to WB err ...ret = %d\n",
-@@ -644,7 +644,7 @@ static void free_private_bo_pages(struct hmm_buffer_object *bo,
- 		address be valid,it maybe memory corruption by lowmemory
- 		*/
- 		if (!ret) {
--			__free_pages(bo->page_obj[i].page, 0);
-+			__free_pages(bo->pages[i], 0);
- 		}
- 	}
- }
-@@ -663,11 +663,6 @@ static int alloc_private_pages(struct hmm_buffer_object *bo)
- 
- 	pgnr = bo->pgnr;
- 
--	bo->page_obj = kmalloc_array(pgnr, sizeof(struct hmm_page_object),
--				     GFP_KERNEL);
--	if (unlikely(!bo->page_obj))
--		return -ENOMEM;
--
- 	i = 0;
- 	alloc_pgnr = 0;
- 
-@@ -739,7 +734,7 @@ static int alloc_private_pages(struct hmm_buffer_object *bo)
- 			}
- 
- 			for (j = 0; j < blk_pgnr; j++, i++) {
--				bo->page_obj[i].page = pages + j;
-+				bo->pages[i] = pages + j;
- 			}
- 
- 			pgnr -= blk_pgnr;
-@@ -759,18 +754,9 @@ static int alloc_private_pages(struct hmm_buffer_object *bo)
- cleanup:
- 	alloc_pgnr = i;
- 	free_private_bo_pages(bo, alloc_pgnr);
--
--	kfree(bo->page_obj);
--
- 	return -ENOMEM;
- }
- 
--static void free_private_pages(struct hmm_buffer_object *bo)
--{
--	free_private_bo_pages(bo, bo->pgnr);
--	kfree(bo->page_obj);
--}
--
- static void free_user_pages(struct hmm_buffer_object *bo,
- 			    unsigned int page_nr)
+ void atomisp_destroy_pipes_stream_force(struct atomisp_sub_device *asd)
  {
-@@ -782,8 +768,6 @@ static void free_user_pages(struct hmm_buffer_object *bo,
- 		for (i = 0; i < page_nr; i++)
- 			put_page(bo->pages[i]);
- 	}
--	kfree(bo->pages);
--	kfree(bo->page_obj);
- }
- 
- /*
-@@ -793,20 +777,7 @@ static int alloc_user_pages(struct hmm_buffer_object *bo,
- 			    const void __user *userptr)
- {
- 	int page_nr;
--	int i;
- 	struct vm_area_struct *vma;
--	struct page **pages;
--
--	pages = kmalloc_array(bo->pgnr, sizeof(struct page *), GFP_KERNEL);
--	if (unlikely(!pages))
--		return -ENOMEM;
--
--	bo->page_obj = kmalloc_array(bo->pgnr, sizeof(struct hmm_page_object),
--				     GFP_KERNEL);
--	if (unlikely(!bo->page_obj)) {
--		kfree(pages);
--		return -ENOMEM;
--	}
- 
- 	mutex_unlock(&bo->mutex);
- 	mmap_read_lock(current->mm);
-@@ -814,8 +785,6 @@ static int alloc_user_pages(struct hmm_buffer_object *bo,
- 	mmap_read_unlock(current->mm);
- 	if (!vma) {
- 		dev_err(atomisp_dev, "find_vma failed\n");
--		kfree(bo->page_obj);
--		kfree(pages);
- 		mutex_lock(&bo->mutex);
- 		return -EFAULT;
- 	}
-@@ -827,18 +796,16 @@ static int alloc_user_pages(struct hmm_buffer_object *bo,
- 
- 	userptr = untagged_addr(userptr);
- 
--	bo->pages = pages;
--
- 	if (vma->vm_flags & (VM_IO | VM_PFNMAP)) {
- 		page_nr = pin_user_pages((unsigned long)userptr, bo->pgnr,
- 					 FOLL_LONGTERM | FOLL_WRITE,
--					 pages, NULL);
-+					 bo->pages, NULL);
- 		bo->mem_type = HMM_BO_MEM_TYPE_PFN;
- 	} else {
- 		/*Handle frame buffer allocated in user space*/
- 		mutex_unlock(&bo->mutex);
- 		page_nr = get_user_pages_fast((unsigned long)userptr,
--					      (int)(bo->pgnr), 1, pages);
-+					      (int)(bo->pgnr), 1, bo->pages);
- 		mutex_lock(&bo->mutex);
- 		bo->mem_type = HMM_BO_MEM_TYPE_USER;
- 	}
-@@ -858,10 +825,6 @@ static int alloc_user_pages(struct hmm_buffer_object *bo,
- 		goto out_of_mem;
- 	}
- 
--	for (i = 0; i < bo->pgnr; i++) {
--		bo->page_obj[i].page = pages[i];
--	}
--
- 	return 0;
- 
- out_of_mem:
-@@ -891,6 +854,12 @@ int hmm_bo_alloc_pages(struct hmm_buffer_object *bo,
- 	mutex_lock(&bo->mutex);
- 	check_bo_status_no_goto(bo, HMM_BO_PAGE_ALLOCED, status_err);
- 
-+	bo->pages = kmalloc_array(bo->pgnr, sizeof(struct page *), GFP_KERNEL);
-+	if (unlikely(!bo->pages)) {
-+		ret = -ENOMEM;
-+		goto alloc_err;
-+	}
+-	__destroy_streams(asd, true);
+-	__destroy_pipes(asd, true);
++	if (__destroy_streams(asd, true))
++		dev_warn(asd->isp->dev, "destroy stream failed.\n");
 +
- 	/*
- 	 * TO DO:
- 	 * add HMM_BO_USER type
-@@ -915,6 +884,7 @@ int hmm_bo_alloc_pages(struct hmm_buffer_object *bo,
- 	return 0;
- 
- alloc_err:
-+	kfree(bo->pages);
- 	mutex_unlock(&bo->mutex);
- 	dev_err(atomisp_dev, "alloc pages err...\n");
- 	return ret;
-@@ -940,11 +910,13 @@ void hmm_bo_free_pages(struct hmm_buffer_object *bo)
- 	bo->status &= (~HMM_BO_PAGE_ALLOCED);
- 
- 	if (bo->type == HMM_BO_PRIVATE)
--		free_private_pages(bo);
-+		free_private_bo_pages(bo, bo->pgnr);
- 	else if (bo->type == HMM_BO_USER)
- 		free_user_pages(bo, bo->pgnr);
- 	else
- 		dev_err(atomisp_dev, "invalid buffer type.\n");
-+
-+	kfree(bo->pages);
- 	mutex_unlock(&bo->mutex);
- 
- 	return;
-@@ -989,7 +961,7 @@ int hmm_bo_bind(struct hmm_buffer_object *bo)
- 	for (i = 0; i < bo->pgnr; i++) {
- 		ret =
- 		    isp_mmu_map(&bdev->mmu, virt,
--				page_to_phys(bo->page_obj[i].page), 1);
-+				page_to_phys(bo->pages[i]), 1);
- 		if (ret)
- 			goto map_err;
- 		virt += (1 << PAGE_SHIFT);
-@@ -1103,9 +1075,6 @@ int hmm_bo_binded(struct hmm_buffer_object *bo)
- 
- void *hmm_bo_vmap(struct hmm_buffer_object *bo, bool cached)
- {
--	struct page **pages;
--	int i;
--
- 	check_bo_null_return(bo, NULL);
- 
- 	mutex_lock(&bo->mutex);
-@@ -1122,27 +1091,15 @@ void *hmm_bo_vmap(struct hmm_buffer_object *bo, bool cached)
- 		bo->status &= ~(HMM_BO_VMAPED | HMM_BO_VMAPED_CACHED);
- 	}
- 
--	pages = kmalloc_array(bo->pgnr, sizeof(*pages), GFP_KERNEL);
--	if (unlikely(!pages)) {
--		mutex_unlock(&bo->mutex);
--		return NULL;
--	}
--
--	for (i = 0; i < bo->pgnr; i++)
--		pages[i] = bo->page_obj[i].page;
--
--	bo->vmap_addr = vmap(pages, bo->pgnr, VM_MAP,
-+	bo->vmap_addr = vmap(bo->pages, bo->pgnr, VM_MAP,
- 			     cached ? PAGE_KERNEL : PAGE_KERNEL_NOCACHE);
- 	if (unlikely(!bo->vmap_addr)) {
--		kfree(pages);
- 		mutex_unlock(&bo->mutex);
- 		dev_err(atomisp_dev, "vmap failed...\n");
- 		return NULL;
- 	}
- 	bo->status |= (cached ? HMM_BO_VMAPED_CACHED : HMM_BO_VMAPED);
- 
--	kfree(pages);
--
- 	mutex_unlock(&bo->mutex);
- 	return bo->vmap_addr;
++	if (__destroy_pipes(asd, true))
++		dev_warn(asd->isp->dev, "destroy pipe failed.\n");
  }
-@@ -1272,7 +1229,7 @@ int hmm_bo_mmap(struct vm_area_struct *vma, struct hmm_buffer_object *bo)
  
- 	virt = vma->vm_start;
- 	for (i = 0; i < pgnr; i++) {
--		pfn = page_to_pfn(bo->page_obj[i].page);
-+		pfn = page_to_pfn(bo->pages[i]);
- 		if (remap_pfn_range(vma, virt, pfn, PAGE_SIZE, PAGE_SHARED)) {
- 			dev_warn(atomisp_dev,
- 				 "remap_pfn_range failed: virt = 0x%x, pfn = 0x%x, mapped_pgnr = %d\n",
+ static void __apply_additional_pipe_config(
 -- 
 2.36.0
 
