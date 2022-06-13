@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B733C43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D164BCCA480
 	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 20:45:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348588AbiFMUpR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jun 2022 16:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
+        id S241940AbiFMUp3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jun 2022 16:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351506AbiFMUoO (ORCPT
+        with ESMTP id S242073AbiFMUob (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:44:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 064FD13F45
-        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 12:52:00 -0700 (PDT)
+        Mon, 13 Jun 2022 16:44:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F01B15730
+        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 12:52:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655149919;
+        s=mimecast20190719; t=1655149935;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yYqjFzSGWXpbR9qLBmQD6O8oaicfA5w2+N//+uHKlCc=;
-        b=ZJEZSB8uQFrS1MUUNbGSv0CHQ1NoB2IfuWJbTW1CYvT4neV9XuPRksuxBxUQQwqoAKiaDD
-        m3gT6cPUom3hZveH8dhOJfpQ+75Dm4Z/OMw6jFcit+UaGyQ2LysS0vwUyBSPu5CzXhziVB
-        p8cU9ZNm6PxaBsUscliPAjrS6LCTkUE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=bxfozDPT5gRKbPz1zPXOxZwZt0GpJCKAlQtpWApaH8o=;
+        b=SG96NYodp15ViVNhL7DRSZ8eIP2iMem5vhm/74Ra3VXKsrvLEU24vszDURk5gQlD4eUkIy
+        +/udztP2Pp4wWmNssSJhBO9ijKnYfzSthW1Yhnq1rblJrBB1OUs0Gxh4mcwz6SiWPPjzxH
+        NAnq5bJZiiFRVVBhOEkdOoI970+2nQM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-391-pA0CfAXJNkyqz4sbVPbj6A-1; Mon, 13 Jun 2022 15:51:54 -0400
-X-MC-Unique: pA0CfAXJNkyqz4sbVPbj6A-1
+ us-mta-618-M0hSq-BWMfaMRzE9CmU1oA-1; Mon, 13 Jun 2022 15:52:10 -0400
+X-MC-Unique: M0hSq-BWMfaMRzE9CmU1oA-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6CB2B3801F4A;
-        Mon, 13 Jun 2022 19:51:53 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 27C10101A54E;
+        Mon, 13 Jun 2022 19:52:10 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E8F442166B26;
-        Mon, 13 Jun 2022 19:51:51 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 93E2C2166B29;
+        Mon, 13 Jun 2022 19:52:08 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 08/40] media: atomisp: drop ATOMISP_MAP_FLAG_CONTIGUOUS
-Date:   Mon, 13 Jun 2022 21:51:05 +0200
-Message-Id: <20220613195137.8117-9-hdegoede@redhat.com>
+Subject: [PATCH 17/40] media: atomisp: remove bogus comment above hmm_bo_allocated() prototype
+Date:   Mon, 13 Jun 2022 21:51:14 +0200
+Message-Id: <20220613195137.8117-18-hdegoede@redhat.com>
 In-Reply-To: <20220613195137.8117-1-hdegoede@redhat.com>
 References: <20220613195137.8117-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,45 +60,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Drop the ATOMISP_MAP_FLAG_CONTIGUOUS hmm_alloc flag. After the contiguous
-flag removal done in previous patches in this series it is never set.
+The comment documenting hmm_bo_allocated() was copied (and not modified)
+from the comment documenting hmm_bo_alloc(), so there are 2 copies
+of the hmm_bo_alloc() documentation.
 
-And hmm_alloc already did a WARN_ON on the flag and otherwise ignored it,
-proving that contiguous support was already never used.
+Remove the copy of the comment above the hmm_bo_allocated() prototype.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/include/linux/atomisp.h | 3 +--
- drivers/staging/media/atomisp/pci/hmm/hmm.c           | 2 --
- 2 files changed, 1 insertion(+), 4 deletions(-)
+ drivers/staging/media/atomisp/include/hmm/hmm_bo.h | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/include/linux/atomisp.h b/drivers/staging/media/atomisp/include/linux/atomisp.h
-index 22c4103b0385..a6ec9691afb2 100644
---- a/drivers/staging/media/atomisp/include/linux/atomisp.h
-+++ b/drivers/staging/media/atomisp/include/linux/atomisp.h
-@@ -915,8 +915,7 @@ struct atomisp_acc_map {
+diff --git a/drivers/staging/media/atomisp/include/hmm/hmm_bo.h b/drivers/staging/media/atomisp/include/hmm/hmm_bo.h
+index eba1ddcb7e64..654e329b7a6b 100644
+--- a/drivers/staging/media/atomisp/include/hmm/hmm_bo.h
++++ b/drivers/staging/media/atomisp/include/hmm/hmm_bo.h
+@@ -211,13 +211,6 @@ void hmm_bo_ref(struct hmm_buffer_object *bo);
+  */
+ void hmm_bo_unref(struct hmm_buffer_object *bo);
  
- #define ATOMISP_MAP_FLAG_NOFLUSH	0x0001	/* Do not flush cache */
- #define ATOMISP_MAP_FLAG_CACHED		0x0002	/* Enable cache */
--#define ATOMISP_MAP_FLAG_CONTIGUOUS	0x0004
--#define ATOMISP_MAP_FLAG_CLEARED	0x0008
-+#define ATOMISP_MAP_FLAG_CLEARED	0x0004
- 
- struct atomisp_acc_state {
- 	__u32 flags;			/* Flags, see list below */
-diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
-index 54188197c3dc..a4722155ddef 100644
---- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
-+++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
-@@ -230,8 +230,6 @@ ia_css_ptr hmm_alloc(size_t bytes, enum hmm_bo_type type,
- 	bool cached = attrs & ATOMISP_MAP_FLAG_CACHED;
- 	int ret;
- 
--	WARN_ON(attrs & ATOMISP_MAP_FLAG_CONTIGUOUS);
+-/*
+- * allocate/free physical pages for the bo. will try to alloc mem
+- * from highmem if from_highmem is set, and type indicate that the
+- * pages will be allocated by using video driver (for share buffer)
+- * or by ISP driver itself.
+- */
 -
- 	/*
- 	 * Check if we are initialized. In the ideal world we wouldn't need
- 	 * this but we can tackle it once the driver is a lot cleaner
+ int hmm_bo_allocated(struct hmm_buffer_object *bo);
+ 
+ /*
 -- 
 2.36.0
 
