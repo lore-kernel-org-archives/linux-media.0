@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45DF3C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B733C43334
 	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 20:45:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347936AbiFMUpP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jun 2022 16:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
+        id S1348588AbiFMUpR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jun 2022 16:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351484AbiFMUoN (ORCPT
+        with ESMTP id S1351506AbiFMUoO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:44:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9163CDECB
-        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 12:51:56 -0700 (PDT)
+        Mon, 13 Jun 2022 16:44:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 064FD13F45
+        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 12:52:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655149915;
+        s=mimecast20190719; t=1655149919;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7HvMLRoTK6rxSlVUrDF+p0yNYtkvPQrEiYM+HRir/9c=;
-        b=fQ/hUMgw0AothUrEVTtroiiHhZTfjzRwDg8obhOPI4+w38eYH0Z1ZEAG/dlKkWCBc7RX2y
-        RJDwgbQRRSpjyN41m2UonmFkplFlSjz6iwMNlt2i1EB79a092J6WKn/O4eFAJ9r1X2ClK4
-        yz5xCVHtbM4MRyatOGonvS8R4AcUy8Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=yYqjFzSGWXpbR9qLBmQD6O8oaicfA5w2+N//+uHKlCc=;
+        b=ZJEZSB8uQFrS1MUUNbGSv0CHQ1NoB2IfuWJbTW1CYvT4neV9XuPRksuxBxUQQwqoAKiaDD
+        m3gT6cPUom3hZveH8dhOJfpQ+75Dm4Z/OMw6jFcit+UaGyQ2LysS0vwUyBSPu5CzXhziVB
+        p8cU9ZNm6PxaBsUscliPAjrS6LCTkUE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-86-NbigGoTfNNW_FJsHhVoLfQ-1; Mon, 13 Jun 2022 15:51:50 -0400
-X-MC-Unique: NbigGoTfNNW_FJsHhVoLfQ-1
+ us-mta-391-pA0CfAXJNkyqz4sbVPbj6A-1; Mon, 13 Jun 2022 15:51:54 -0400
+X-MC-Unique: pA0CfAXJNkyqz4sbVPbj6A-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A61E801755;
-        Mon, 13 Jun 2022 19:51:50 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6CB2B3801F4A;
+        Mon, 13 Jun 2022 19:51:53 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 753F42166B26;
-        Mon, 13 Jun 2022 19:51:48 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E8F442166B26;
+        Mon, 13 Jun 2022 19:51:51 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -48,9 +48,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Nable <nable.maininbox@googlemail.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 06/40] media: atomisp: drop IA_CSS_FRAME_FORMAT_MIPI support from ia_css_frame_init_planes()
-Date:   Mon, 13 Jun 2022 21:51:03 +0200
-Message-Id: <20220613195137.8117-7-hdegoede@redhat.com>
+Subject: [PATCH 08/40] media: atomisp: drop ATOMISP_MAP_FLAG_CONTIGUOUS
+Date:   Mon, 13 Jun 2022 21:51:05 +0200
+Message-Id: <20220613195137.8117-9-hdegoede@redhat.com>
 In-Reply-To: <20220613195137.8117-1-hdegoede@redhat.com>
 References: <20220613195137.8117-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -60,73 +60,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Nothing ever sets the format to IA_CSS_FRAME_FORMAT_MIPI and
-frame_init_mipi_plane() is the only code-path which ever sets
-frame->contiguous to true.
+Drop the ATOMISP_MAP_FLAG_CONTIGUOUS hmm_alloc flag. After the contiguous
+flag removal done in previous patches in this series it is never set.
 
-Drop A_CSS_FRAME_FORMAT_MIPI support from ia_css_frame_init_planes()
-as part of the removal of contiguous alloc support from the frame code.
+And hmm_alloc already did a WARN_ON on the flag and otherwise ignored it,
+proving that contiguous support was already never used.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../atomisp/pci/runtime/frame/src/frame.c     | 30 ++-----------------
- 1 file changed, 3 insertions(+), 27 deletions(-)
+ drivers/staging/media/atomisp/include/linux/atomisp.h | 3 +--
+ drivers/staging/media/atomisp/pci/hmm/hmm.c           | 2 --
+ 2 files changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c b/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c
-index af23fbb831d6..cb0b579fbadf 100644
---- a/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c
-@@ -48,12 +48,6 @@ static void frame_init_raw_single_plane(
-     unsigned int subpixels_per_line,
-     unsigned int bits_per_pixel);
+diff --git a/drivers/staging/media/atomisp/include/linux/atomisp.h b/drivers/staging/media/atomisp/include/linux/atomisp.h
+index 22c4103b0385..a6ec9691afb2 100644
+--- a/drivers/staging/media/atomisp/include/linux/atomisp.h
++++ b/drivers/staging/media/atomisp/include/linux/atomisp.h
+@@ -915,8 +915,7 @@ struct atomisp_acc_map {
  
--static void frame_init_mipi_plane(struct ia_css_frame *frame,
--				  struct ia_css_frame_plane *plane,
--				  unsigned int height,
--				  unsigned int subpixels_per_line,
--				  unsigned int bytes_per_pixel);
--
- static void frame_init_nv_planes(struct ia_css_frame *frame,
- 				 unsigned int horizontal_decimation,
- 				 unsigned int vertical_decimation,
-@@ -297,11 +291,9 @@ int ia_css_frame_init_planes(struct ia_css_frame *frame)
+ #define ATOMISP_MAP_FLAG_NOFLUSH	0x0001	/* Do not flush cache */
+ #define ATOMISP_MAP_FLAG_CACHED		0x0002	/* Enable cache */
+-#define ATOMISP_MAP_FLAG_CONTIGUOUS	0x0004
+-#define ATOMISP_MAP_FLAG_CLEARED	0x0008
++#define ATOMISP_MAP_FLAG_CLEARED	0x0004
  
- 	switch (frame->info.format) {
- 	case IA_CSS_FRAME_FORMAT_MIPI:
--		frame_init_mipi_plane(frame, &frame->planes.raw,
--				      frame->info.res.height,
--				      frame->info.padded_width,
--				      frame->info.raw_bit_depth <= 8 ? 1 : 2);
--		break;
-+		dev_err(atomisp_dev,
-+			"%s: unexpected use of IA_CSS_FRAME_FORMAT_MIPI\n", __func__);
-+		return -EINVAL;
- 	case IA_CSS_FRAME_FORMAT_RAW_PACKED:
- 		frame_init_raw_single_plane(frame, &frame->planes.raw,
- 					    frame->info.res.height,
-@@ -622,22 +614,6 @@ static void frame_init_raw_single_plane(
- 	return;
- }
+ struct atomisp_acc_state {
+ 	__u32 flags;			/* Flags, see list below */
+diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+index 54188197c3dc..a4722155ddef 100644
+--- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
++++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+@@ -230,8 +230,6 @@ ia_css_ptr hmm_alloc(size_t bytes, enum hmm_bo_type type,
+ 	bool cached = attrs & ATOMISP_MAP_FLAG_CACHED;
+ 	int ret;
  
--static void frame_init_mipi_plane(struct ia_css_frame *frame,
--				  struct ia_css_frame_plane *plane,
--				  unsigned int height,
--				  unsigned int subpixels_per_line,
--				  unsigned int bytes_per_pixel)
--{
--	unsigned int stride;
+-	WARN_ON(attrs & ATOMISP_MAP_FLAG_CONTIGUOUS);
 -
--	stride = subpixels_per_line * bytes_per_pixel;
--	frame->data_bytes = 8388608; /* 8*1024*1024 */
--	frame->valid = false;
--	frame->contiguous = true;
--	frame_init_plane(plane, subpixels_per_line, stride, height, 0);
--	return;
--}
--
- static void frame_init_nv_planes(struct ia_css_frame *frame,
- 				 unsigned int horizontal_decimation,
- 				 unsigned int vertical_decimation,
+ 	/*
+ 	 * Check if we are initialized. In the ideal world we wouldn't need
+ 	 * this but we can tackle it once the driver is a lot cleaner
 -- 
 2.36.0
 
