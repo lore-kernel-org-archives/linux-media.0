@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09EBDCCA473
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 03:23:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D95E5CCA473
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 03:24:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233064AbiFMDXQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 12 Jun 2022 23:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        id S238365AbiFMDYH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 12 Jun 2022 23:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238416AbiFMDW5 (ORCPT
+        with ESMTP id S238775AbiFMDX1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 12 Jun 2022 23:22:57 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B35BFD38;
-        Sun, 12 Jun 2022 20:22:53 -0700 (PDT)
-X-UUID: 2fcdf95a1bea4299839c0797a1f9e58f-20220613
+        Sun, 12 Jun 2022 23:23:27 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABDB2182A;
+        Sun, 12 Jun 2022 20:23:17 -0700 (PDT)
+X-UUID: 7f4626399ea74b70b7c170f803be46aa-20220613
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:0197a17f-c52f-4fe9-bc03-33e3b4deb187,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:95
-X-CID-INFO: VERSION:1.1.5,REQID:0197a17f-c52f-4fe9-bc03-33e3b4deb187,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:95
-X-CID-META: VersionHash:2a19b09,CLOUDID:d3537837-84c0-4f9a-9fbd-acd4a0e9ad0f,C
-        OID:da724335cd3d,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: 2fcdf95a1bea4299839c0797a1f9e58f-20220613
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.5,REQID:6ad8822b-e4bb-4bd5-998c-62f298263778,OB:20,L
+        OB:20,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham
+        ,ACTION:release,TS:95
+X-CID-INFO: VERSION:1.1.5,REQID:6ad8822b-e4bb-4bd5-998c-62f298263778,OB:20,LOB
+        :20,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D
+        ,ACTION:quarantine,TS:95
+X-CID-META: VersionHash:2a19b09,CLOUDID:13587837-84c0-4f9a-9fbd-acd4a0e9ad0f,C
+        OID:5c7b1f35a894,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: 7f4626399ea74b70b7c170f803be46aa-20220613
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
         (envelope-from <irui.wang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1375074326; Mon, 13 Jun 2022 11:22:50 +0800
+        with ESMTP id 1834297100; Mon, 13 Jun 2022 11:23:10 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 13 Jun 2022 11:22:49 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 13 Jun 2022 11:23:09 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 13 Jun 2022 11:22:48 +0800
+ Transport; Mon, 13 Jun 2022 11:23:07 +0800
 From:   Irui Wang <irui.wang@mediatek.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -54,12 +54,10 @@ CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
         <maoguang.meng@mediatek.com>, kyrie wu <kyrie.wu@mediatek.com>,
         <srv_heupstream@mediatek.com>
-Subject: [V3,6/8] media: mtk-jpegdec: add output pic reorder interface
-Date:   Mon, 13 Jun 2022 11:22:30 +0800
-Message-ID: <20220613032232.23187-7-irui.wang@mediatek.com>
+Subject: [V9,0/7] Enable two hardware jpeg encoder for MT8195
+Date:   Mon, 13 Jun 2022 11:22:59 +0800
+Message-ID: <20220613032306.23237-1-irui.wang@mediatek.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220613032232.23187-1-irui.wang@mediatek.com>
-References: <20220613032232.23187-1-irui.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -70,88 +68,96 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: kyrie wu <kyrie.wu@mediatek.com>
 
-add output reorder func to reorder the output images
-to ensure the output pic is consistent with the input images.
+This series adds support for multi hardware jpeg encoding, by first
+adding use of_platform_populate to manage each hardware information:
+interrupt, clock, register bases and power. Secondly add encoding
+work queue to deal with the encoding requestsof multi-hardware
+at the same time. Lastly, add output picture reorder function
+interface to eliminate the out of order images.
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+This series has been tested with MT8195 Gstreamer.
+Encoding worked for this chip.
+
+Patches 1 Adds jpeg encoder dt-bindings for mt8195
+
+Patches 2 jpeg encoder builds two module for using Multi-HW,
+export some functions to make them visible by other modules.
+
+Patches 3 use devm_of_platform_populate to manage multi-hardware.
+
+Patch 4 add jpeg encoding timeout function to judge hardware timeout.
+
+Patch 5 add encoding work queue to deal with multi-hardware encoding
+at the same time.
+
+Patch 6 add output picture reorder function to order images.
+
+Patch 7 add stop cmd function to deal with EOS operation.
 ---
- .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 49 ++++++++++++++++++-
- 1 file changed, 47 insertions(+), 2 deletions(-)
+This series patches dependent on:
+media_stage tree:
+[1]
+https://git.linuxtv.org/media_stage.git/commit/?id=b3627647f9ea7473d10fb08a95fd7c4133a17ca4
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-index c502a65b2c93..71cbf1e6e0de 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-@@ -440,6 +440,51 @@ void mtk_jpeg_dec_set_config(void __iomem *base,
- }
- EXPORT_SYMBOL_GPL(mtk_jpeg_dec_set_config);
- 
-+static void mtk_jpegdec_put_buf(struct mtk_jpegdec_comp_dev *jpeg)
-+{
-+	struct mtk_jpeg_src_buf *dst_done_buf, *tmp_dst_done_buf;
-+	struct vb2_v4l2_buffer *dst_buffer;
-+	struct list_head *temp_entry;
-+	struct list_head *pos = NULL;
-+	struct mtk_jpeg_ctx *ctx;
-+	unsigned long flags;
-+
-+	ctx = jpeg->hw_param.curr_ctx;
-+	if (unlikely(!ctx)) {
-+		dev_err(jpeg->dev, "comp_jpeg ctx fail !!!\n");
-+		return;
-+	}
-+
-+	dst_buffer = jpeg->hw_param.dst_buffer;
-+	if (!dst_buffer) {
-+		dev_err(jpeg->dev, "comp_jpeg dst_buffer fail !!!\n");
-+		return;
-+	}
-+
-+	dst_done_buf = container_of(dst_buffer, struct mtk_jpeg_src_buf, b);
-+
-+	spin_lock_irqsave(&ctx->done_queue_lock, flags);
-+	list_add_tail(&dst_done_buf->list, &ctx->dst_done_queue);
-+	while (!list_empty(&ctx->dst_done_queue) &&
-+	       (pos != &ctx->dst_done_queue)) {
-+		list_for_each_prev_safe(pos,
-+					temp_entry,
-+					(&ctx->dst_done_queue)) {
-+			tmp_dst_done_buf = list_entry(pos,
-+						      struct mtk_jpeg_src_buf,
-+						      list);
-+			if (tmp_dst_done_buf->frame_num ==
-+				ctx->last_done_frame_num) {
-+				list_del(&tmp_dst_done_buf->list);
-+				v4l2_m2m_buf_done(&tmp_dst_done_buf->b,
-+						  VB2_BUF_STATE_DONE);
-+				ctx->last_done_frame_num++;
-+			}
-+		}
-+	}
-+	spin_unlock_irqrestore(&ctx->done_queue_lock, flags);
-+}
-+
- static void mtk_jpegdec_timeout_work(struct work_struct *work)
- {
- 	enum vb2_buffer_state buf_state = VB2_BUF_STATE_ERROR;
-@@ -460,7 +505,7 @@ static void mtk_jpegdec_timeout_work(struct work_struct *work)
- 	atomic_inc(&cjpeg->hw_rdy);
- 	wake_up(&master_jpeg->dec_hw_wq);
- 	v4l2_m2m_buf_done(src_buf, buf_state);
--	v4l2_m2m_buf_done(dst_buf, buf_state);
-+	mtk_jpegdec_put_buf(cjpeg);
- }
- 
- static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
-@@ -502,7 +547,7 @@ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
- irq_handled:
- 	buf_state = VB2_BUF_STATE_DONE;
- 	v4l2_m2m_buf_done(src_buf, buf_state);
--	v4l2_m2m_buf_done(dst_buf, buf_state);
-+	mtk_jpegdec_put_buf(jpeg);
- 	pm_runtime_put(ctx->jpeg->dev);
- 	clk_disable_unprepare(jpeg->jdec_clk.clks->clk);
- 
+patch1 new jpegenc dt-bindings included files
+[2] MM IOMMU binding:
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220217113453.13658-2-yong.wu@mediatek.com/
+
+[3] MT8195 power domain:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=580579
+
+Changes compared with v8:
+- some modifications for patch v8's review comments.
+- add stop cmd function.
+
+Changes compared with v7:
+- some modifications for patch v6's review comments.
+
+Changes compared with v6:
+- new yaml file for mt8195 jpeg encoder.
+- some modifications for patch v5's review comments.
+
+Changes compared with v5:
+- use of_platform_populate to replace component framework to
+  manage multi-hardware in patch 2.
+
+Changes compared with v4:
+- No change compaered with v4
+
+Changes compared with v3:
+- Structure patches for consistency, non-backward
+  compatible and do not break any existing functionality
+
+Changes compared with v2:
+- Split the last two patches into several patches
+  to enhance readability
+- Correct some syntax errors
+- Explain why the component framework is used
+
+Changes compared with v1:
+- Add jpeg encoder dt-bindings for MT8195
+- Use component framework to manage jpegenc HW
+- Add jpegenc output pic reorder function interface
+
+kyrie wu (7):
+  dt-bindings: mediatek: Add mediatek, mt8195-jpgenc compatible
+  mtk-jpegenc: export jpeg encoder functions
+  mtk-jpegenc: manage jpegenc multi-hardware
+  mtk-jpegenc: add jpegenc timeout func interface
+  mtk-jpegenc: add jpeg encode worker interface
+  mtk-jpegenc: add output pic reorder interface
+  mtk-jpegenc: add stop cmd interface for jpgenc
+
+ .../media/mediatek,mt8195-jpegenc.yaml        | 155 +++++++++
+ drivers/media/platform/mediatek/jpeg/Makefile |  11 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 299 +++++++++++++++---
+ .../platform/mediatek/jpeg/mtk_jpeg_core.h    |  82 ++++-
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  |   1 +
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.h  |   3 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_enc_hw.c  | 254 +++++++++++++++
+ 7 files changed, 753 insertions(+), 52 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
+
 -- 
 2.18.0
 
