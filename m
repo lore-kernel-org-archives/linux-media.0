@@ -2,124 +2,99 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7B94C433EF
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 17:51:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22B1AC433EF
+	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 18:37:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237897AbiFMRu7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jun 2022 13:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
+        id S245055AbiFMSh6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 Jun 2022 14:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242362AbiFMRuf (ORCPT
+        with ESMTP id S245712AbiFMShi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:50:35 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00D46EB3E;
-        Mon, 13 Jun 2022 06:33:20 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id p69so6111002iod.0;
-        Mon, 13 Jun 2022 06:33:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=vyoJ85txEp3wcFTSeMW6nKhdwOlY3JedEaCIumOgJX0=;
-        b=otzJfOUwHCkOtcKoB+GqdbhFFpPSSm1AmwqloLzwx32osBGOFYzUbLkEpWK6Oa5V0q
-         retP9HK66JWnNhLtdaquDt3d9M5Q7CjwxfDh7Q0zVjBJJRkV4DAa6rjuWbxQXeaXKIis
-         HG4asCk5ZBT6cb8K2A/XGoc4LCHKKNtrTXme/PiVShYUiu4AiifGzWalPz4N0MS7cKt4
-         jbrRaRKC8BJRRFmGHAJ3cu1mvepMq/iZOUKYVi/WAgdZhvegzW3igb6ZwHhP4g8bfVV/
-         Bz1/2vjbcnU2+5JESO/uCAfaTqtRcF+YGC/MHg8CqU9DSd/jkWfLhNE4deQ+4YVCyCrx
-         ne4Q==
-X-Gm-Message-State: AOAM533gaA8O0s4lMVijjQ5n9gYXBdQ0wkdSxpfHDXVWpPCiQ8z5WvJA
-        Y+PbIlr7kNYfw4mOpRitXw==
-X-Google-Smtp-Source: ABdhPJwOoiPPMXAQ3HpzpzSM0BQ0OOEN1wDLDCLjfQX27FZnwuzSrw5lgyXQOpUCBVuEPG4qAKKUYw==
-X-Received: by 2002:a05:6602:2cd1:b0:66a:6f0:5867 with SMTP id j17-20020a0566022cd100b0066a06f05867mr540059iow.143.1655127199851;
-        Mon, 13 Jun 2022 06:33:19 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id b14-20020a92c84e000000b002d1df239846sm3901175ilq.79.2022.06.13.06.33.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 06:33:19 -0700 (PDT)
-Received: (nullmailer pid 3564130 invoked by uid 1000);
-        Mon, 13 Jun 2022 13:33:17 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Irui Wang <irui.wang@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, maoguang.meng@mediatek.com,
-        xia.jiang@mediatek.com, srv_heupstream@mediatek.com,
+        Mon, 13 Jun 2022 14:37:38 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E85660A80
+        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 08:39:47 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="364650974"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="364650974"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 08:39:26 -0700
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="568079409"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 08:39:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1o0m9w-000b8d-0y;
+        Mon, 13 Jun 2022 18:39:20 +0300
+Date:   Mon, 13 Jun 2022 18:39:19 +0300
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        kyrie wu <kyrie.wu@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        nicolas.dufresne@collabora.com,
-        angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org
-In-Reply-To: <20220613032232.23187-2-irui.wang@mediatek.com>
-References: <20220613032232.23187-1-irui.wang@mediatek.com> <20220613032232.23187-2-irui.wang@mediatek.com>
-Subject: Re: [V3,1/8] dt-bindings: mediatek: Add mediatek,mt8195-jpgdec compatible
-Date:   Mon, 13 Jun 2022 07:33:17 -0600
-Message-Id: <1655127197.543108.3564129.nullmailer@robh.at.kernel.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Yury Luneff <yury.lunev@gmail.com>,
+        Nable <nable.maininbox@googlemail.com>,
+        "andrey.i.trufanov" <andrey.i.trufanov@gmail.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH 1/3] media: atomisp: revert "don't pass a pointer to a
+ local variable"
+Message-ID: <YqdaJ6fzEzeWpIGz@smile.fi.intel.com>
+References: <20220612160556.108264-1-hdegoede@redhat.com>
+ <20220612160556.108264-2-hdegoede@redhat.com>
+ <CAHp75VcNjQ+0=LcMdi=64U5qvO2f3PeZCPAf9AKbrGLx4PdKmg@mail.gmail.com>
+ <20220613145820.GF2146@kadam>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220613145820.GF2146@kadam>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, 13 Jun 2022 11:22:25 +0800, Irui Wang wrote:
-> From: kyrie wu <kyrie.wu@mediatek.com>
+On Mon, Jun 13, 2022 at 05:58:20PM +0300, Dan Carpenter wrote:
+> On Sun, Jun 12, 2022 at 09:22:55PM +0200, Andy Shevchenko wrote:
+> > > Note there is another patch in this series, which fixes the warning
+> > > in another way.
+> > 
+> > > Fixes: fa1451374ebf ("media: atomisp: don't pass a pointer to a local variable")
+> > 
+> > Dunno for media subsystem, but for ones that Greg is maintain, the
+> > point is that revert itself is already kinda fix and no need to have a
+> > Fixes tag, instead the commit message should clearly have the
+> > automatically generated line of revert (with the rest of the
+> > explanation why that is needed). Just sharing my experience.
 > 
-> Add mediatek,mt8195-jpgdec compatible to binding document.
+> How would that work in this case?  We don't have a reference to the git
+> hash.
+
+What do you mean? `git revert` adds the hash of the commit being reverted.
+
+> The `git revert` command came from early days of git and I always
+> feel like it hasn't keep up with how git is used these days.  The
+> subject doesn't have the subsystem prefix.  The commit message is wrong.
+> It uses the full git hash instead of the 12 char hash.  It doesn't have
+> a fixes tag.  Hans's commit is only correct because he re-wrote
+> basically everything.
 > 
-> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-> ---
->  .../media/mediatek,mt8195-jpegdec.yaml        | 177 ++++++++++++++++++
->  1 file changed, 177 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
-> 
+> Do a `git --grep=revert`.  Some of them you can grep for "This reverts
+> commit 8bdc2a190105e862dfe7a4033f2fd385b7e58ae8." but there are a lot
+> which are not machine parsable
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Why not? The format of the string hasn't been changed, no difference from other
+patterns.
 
-yamllint warnings/errors:
+P.S. I have told this as my experience and what Greg told me, feel free to
+discuss with him or others, I'm pretty much okay if Hans' patch goes as is.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml: patternProperties:^jpgdec@[0-9a-f]+$:properties:mediatek,hw-id:minItems: 0 is less than the minimum of 1
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml: patternProperties:^jpgdec@[0-9a-f]+$:properties:mediatek,hw-id: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('maxItems', 'minItems' were unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml: patternProperties:^jpgdec@[0-9a-f]+$:properties:mediatek,hw-id: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml: patternProperties:^jpgdec@[0-9a-f]+$:properties:mediatek,hw-id: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml: ignoring, error in schema: patternProperties: ^jpgdec@[0-9a-f]+$: properties: mediatek,hw-id: minItems
-Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.example.dtb:0:0: /example-0/soc/jpgdec_master: failed to match any schema with compatible: ['mediatek,mt8195-jpgdec']
-Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.example.dtb:0:0: /example-0/soc/jpgdec_master/jpgdec@1a040000: failed to match any schema with compatible: ['mediatek,mt8195-jpgdec-hw']
-Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.example.dtb:0:0: /example-0/soc/jpgdec_master/jpgdec@1a050000: failed to match any schema with compatible: ['mediatek,mt8195-jpgdec-hw']
-Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.example.dtb:0:0: /example-0/soc/jpgdec_master/jpgdec@1b040000: failed to match any schema with compatible: ['mediatek,mt8195-jpgdec-hw']
+-- 
+With Best Regards,
+Andy Shevchenko
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
 
