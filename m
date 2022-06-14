@@ -2,29 +2,29 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1749C43334
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jun 2022 19:13:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86C91CCA47A
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jun 2022 19:13:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351461AbiFNTM6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Jun 2022 15:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S1353089AbiFNTNA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Jun 2022 15:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347305AbiFNTMu (ORCPT
+        with ESMTP id S1348261AbiFNTMz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Jun 2022 15:12:50 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C79AE5F
-        for <linux-media@vger.kernel.org>; Tue, 14 Jun 2022 12:12:46 -0700 (PDT)
+        Tue, 14 Jun 2022 15:12:55 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E2E11C0F
+        for <linux-media@vger.kernel.org>; Tue, 14 Jun 2022 12:12:54 -0700 (PDT)
 Received: from pyrite.rasen.tech (softbank036240126034.bbtec.net [36.240.126.34])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 068AA825;
-        Tue, 14 Jun 2022 21:12:41 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D39CC825;
+        Tue, 14 Jun 2022 21:12:49 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1655233965;
-        bh=JZYZDIgU+Gckh67qts/TBvqvAJZkut3JlM+0PM/Pgo0=;
+        s=mail; t=1655233973;
+        bh=OTnYQuvlSCEpGxJsQky+B7kiN2Ypy9jL3LZYyc2briI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NHwHkPRKW3sgYSC+3woTshC56JAcUFX2y7GMWVkSMH/sh1DkO3j/IZTCGdRm4kTVs
-         GM2nfCV88U5aXEETZrGfG5gWpbjOpsoptbWQnQP72KnPyw1Q7bTQCqBeK0J/9r+X62
-         ayJXJdTrixaKk/hxplvZBAVUMK7hr8AoeFXJAUD0=
+        b=CK5oen+KeOy3ybrgXRPXrGAYOZNbIo4OvJCLFOlXJeXppllcvk/57qnx8mKWaThna
+         Pqy/51ShQoN07wIWX3YzwwbWPMETB9C8LHIxQJ4wNy1HcIM/LlGlym/tMuG8n4eDFm
+         CPqG0la1MEYpkl9HFv3NGnxp4n8X4K+cqL4Y8nJY=
 From:   Paul Elder <paul.elder@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -32,9 +32,9 @@ Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         jeanmichel.hautbois@ideasonboard.com, jacopo@jmondi.org,
         djrscally@gmail.com, helen.koike@collabora.com,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH 14/55] media: rkisp1: Create internal links at probe time
-Date:   Wed, 15 Jun 2022 04:10:46 +0900
-Message-Id: <20220614191127.3420492-15-paul.elder@ideasonboard.com>
+Subject: [PATCH 16/55] media: v4l2-async: Add notifier operation to destroy asd instances
+Date:   Wed, 15 Jun 2022 04:10:48 +0900
+Message-Id: <20220614191127.3420492-17-paul.elder@ideasonboard.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220614191127.3420492-1-paul.elder@ideasonboard.com>
 References: <20220614191127.3420492-1-paul.elder@ideasonboard.com>
@@ -46,152 +46,90 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-There's no need to wait until all async subdevs are bound before
-creating internal links. Create them at probe time.
+Drivers typically extend the v4l2_async_subdev structure by embedding it
+in a driver-specific structure, to store per-subdev custom data. The
+v4l2_async_subdev instances are freed by the v4l2-async framework, which
+makes this mechanism cumbersome to use safely when custom data needs
+special treatment to be destroyed (such as freeing additional memory, or
+releasing references to kernel objects).
+
+To ease this, add a .destroy() operation to the
+v4l2_async_notifier_operations structure. The operation is called right
+before the v4l2_async_subdev is freed, giving drivers a chance to
+destroy data if needed.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../platform/rockchip/rkisp1/rkisp1-dev.c     | 105 ++++++++----------
- 1 file changed, 49 insertions(+), 56 deletions(-)
+ Documentation/driver-api/media/v4l2-subdev.rst |  6 ++++++
+ drivers/media/v4l2-core/v4l2-async.c           | 10 ++++++++++
+ include/media/v4l2-async.h                     |  2 ++
+ 3 files changed, 18 insertions(+)
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-index 4501aea265cb..7bb1235cddea 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-@@ -109,50 +109,6 @@ struct rkisp1_isr_data {
-  * Sensor DT bindings
-  */
+diff --git a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
+index cf3b52bdbfb9..6f8d79926aa5 100644
+--- a/Documentation/driver-api/media/v4l2-subdev.rst
++++ b/Documentation/driver-api/media/v4l2-subdev.rst
+@@ -243,6 +243,12 @@ notifier callback is called. After all subdevices have been located the
+ .complete() callback is called. When a subdevice is removed from the
+ system the .unbind() method is called. All three callbacks are optional.
  
--static int rkisp1_create_links(struct rkisp1_device *rkisp1)
--{
--	unsigned int i;
--	int ret;
--
--	/* create ISP->RSZ->CAP links */
--	for (i = 0; i < 2; i++) {
--		struct media_entity *resizer =
--			&rkisp1->resizer_devs[i].sd.entity;
--		struct media_entity *capture =
--			&rkisp1->capture_devs[i].vnode.vdev.entity;;
--
--		ret = media_create_pad_link(&rkisp1->isp.sd.entity,
--					    RKISP1_ISP_PAD_SOURCE_VIDEO,
--					    resizer, RKISP1_RSZ_PAD_SINK,
--					    MEDIA_LNK_FL_ENABLED);
--		if (ret)
--			return ret;
--
--		ret = media_create_pad_link(resizer, RKISP1_RSZ_PAD_SRC,
--					    capture, 0,
--					    MEDIA_LNK_FL_ENABLED |
--					    MEDIA_LNK_FL_IMMUTABLE);
--		if (ret)
--			return ret;
--	}
--
--	/* params links */
--	ret = media_create_pad_link(&rkisp1->params.vnode.vdev.entity, 0,
--				    &rkisp1->isp.sd.entity,
--				    RKISP1_ISP_PAD_SINK_PARAMS,
--				    MEDIA_LNK_FL_ENABLED |
--				    MEDIA_LNK_FL_IMMUTABLE);
--	if (ret)
--		return ret;
--
--	/* 3A stats links */
--	return media_create_pad_link(&rkisp1->isp.sd.entity,
--				     RKISP1_ISP_PAD_SOURCE_STATS,
--				     &rkisp1->stats.vnode.vdev.entity, 0,
--				     MEDIA_LNK_FL_ENABLED |
--				     MEDIA_LNK_FL_IMMUTABLE);
--}
--
- static int rkisp1_subdev_notifier_bound(struct v4l2_async_notifier *notifier,
- 					struct v4l2_subdev *sd,
- 					struct v4l2_async_subdev *asd)
-@@ -210,19 +166,8 @@ static int rkisp1_subdev_notifier_complete(struct v4l2_async_notifier *notifier)
- {
- 	struct rkisp1_device *rkisp1 =
- 		container_of(notifier, struct rkisp1_device, notifier);
--	int ret;
--
--	ret = rkisp1_create_links(rkisp1);
--	if (ret)
--		return ret;
--
--	ret = v4l2_device_register_subdev_nodes(&rkisp1->v4l2_dev);
--	if (ret)
--		return ret;
--
--	dev_dbg(rkisp1->dev, "Async subdev notifier completed\n");
++Drivers can store any type of custom data in their driver-specific
++:c:type:`v4l2_async_subdev` wrapper. If any of that data requires special
++handling when the structure is freed, drivers must implement the ``.destroy()``
++notifier callback. The framework will call it right before freeing the
++:c:type:`v4l2_async_subdev`.
++
+ Calling subdev operations
+ ~~~~~~~~~~~~~~~~~~~~~~~~~
  
--	return 0;
-+	return v4l2_device_register_subdev_nodes(&rkisp1->v4l2_dev);
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index c6995718237a..735dede624b8 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -52,6 +52,15 @@ static int v4l2_async_nf_call_complete(struct v4l2_async_notifier *n)
+ 	return n->ops->complete(n);
  }
  
- static const struct v4l2_async_notifier_operations rkisp1_subdev_notifier_ops = {
-@@ -332,6 +277,50 @@ static const struct dev_pm_ops rkisp1_pm_ops = {
-  * Core
-  */
- 
-+static int rkisp1_create_links(struct rkisp1_device *rkisp1)
++static void v4l2_async_nf_call_destroy(struct v4l2_async_notifier *n,
++				       struct v4l2_async_subdev *asd)
 +{
-+	unsigned int i;
-+	int ret;
++	if (!n->ops || !n->ops->destroy)
++		return;
 +
-+	/* create ISP->RSZ->CAP links */
-+	for (i = 0; i < 2; i++) {
-+		struct media_entity *resizer =
-+			&rkisp1->resizer_devs[i].sd.entity;
-+		struct media_entity *capture =
-+			&rkisp1->capture_devs[i].vnode.vdev.entity;;
-+
-+		ret = media_create_pad_link(&rkisp1->isp.sd.entity,
-+					    RKISP1_ISP_PAD_SOURCE_VIDEO,
-+					    resizer, RKISP1_RSZ_PAD_SINK,
-+					    MEDIA_LNK_FL_ENABLED);
-+		if (ret)
-+			return ret;
-+
-+		ret = media_create_pad_link(resizer, RKISP1_RSZ_PAD_SRC,
-+					    capture, 0,
-+					    MEDIA_LNK_FL_ENABLED |
-+					    MEDIA_LNK_FL_IMMUTABLE);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* params links */
-+	ret = media_create_pad_link(&rkisp1->params.vnode.vdev.entity, 0,
-+				    &rkisp1->isp.sd.entity,
-+				    RKISP1_ISP_PAD_SINK_PARAMS,
-+				    MEDIA_LNK_FL_ENABLED |
-+				    MEDIA_LNK_FL_IMMUTABLE);
-+	if (ret)
-+		return ret;
-+
-+	/* 3A stats links */
-+	return media_create_pad_link(&rkisp1->isp.sd.entity,
-+				     RKISP1_ISP_PAD_SOURCE_STATS,
-+				     &rkisp1->stats.vnode.vdev.entity, 0,
-+				     MEDIA_LNK_FL_ENABLED |
-+				     MEDIA_LNK_FL_IMMUTABLE);
++	n->ops->destroy(asd);
 +}
 +
- static void rkisp1_entities_unregister(struct rkisp1_device *rkisp1)
+ static bool match_i2c(struct v4l2_async_notifier *notifier,
+ 		      struct v4l2_subdev *sd, struct v4l2_async_subdev *asd)
  {
- 	rkisp1_params_unregister(rkisp1);
-@@ -365,6 +354,10 @@ static int rkisp1_entities_register(struct rkisp1_device *rkisp1)
- 	if (ret)
- 		goto error;
+@@ -626,6 +635,7 @@ static void __v4l2_async_nf_cleanup(struct v4l2_async_notifier *notifier)
+ 		}
  
-+	ret = rkisp1_create_links(rkisp1);
-+	if (ret)
-+		goto error;
-+
- 	ret = rkisp1_subdev_notifier(rkisp1);
- 	if (ret) {
- 		dev_err(rkisp1->dev,
+ 		list_del(&asd->asd_list);
++		v4l2_async_nf_call_destroy(notifier, asd);
+ 		kfree(asd);
+ 	}
+ }
+diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
+index 13ff3ad948f4..25eb1d138c06 100644
+--- a/include/media/v4l2-async.h
++++ b/include/media/v4l2-async.h
+@@ -81,6 +81,7 @@ struct v4l2_async_subdev {
+  * @complete:	All subdevices have been probed successfully. The complete
+  *		callback is only executed for the root notifier.
+  * @unbind:	a subdevice is leaving
++ * @destroy:	the asd is about to be freed
+  */
+ struct v4l2_async_notifier_operations {
+ 	int (*bound)(struct v4l2_async_notifier *notifier,
+@@ -90,6 +91,7 @@ struct v4l2_async_notifier_operations {
+ 	void (*unbind)(struct v4l2_async_notifier *notifier,
+ 		       struct v4l2_subdev *subdev,
+ 		       struct v4l2_async_subdev *asd);
++	void (*destroy)(struct v4l2_async_subdev *asd);
+ };
+ 
+ /**
 -- 
 2.30.2
 
