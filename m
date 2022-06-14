@@ -2,36 +2,36 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A377C433EF
-	for <linux-media@archiver.kernel.org>; Tue, 14 Jun 2022 08:37:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB159C433EF
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jun 2022 08:37:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355009AbiFNIg6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 Jun 2022 04:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
+        id S1355102AbiFNIhB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Jun 2022 04:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354351AbiFNIgn (ORCPT
+        with ESMTP id S1354047AbiFNIgl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 Jun 2022 04:36:43 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC493FD98;
-        Tue, 14 Jun 2022 01:36:43 -0700 (PDT)
+        Tue, 14 Jun 2022 04:36:41 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C22D41FB9;
+        Tue, 14 Jun 2022 01:36:41 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4a7b:8d3a:acaa:ec46])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5DFCA66016E5;
-        Tue, 14 Jun 2022 09:36:41 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5E32266016DB;
+        Tue, 14 Jun 2022 09:36:39 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655195801;
-        bh=foMCKM0HcDBii6A+qPIk9svG81J6/ASfNN6IIllYc2U=;
+        s=mail; t=1655195799;
+        bh=i4pIB3wtTE3UKgF4OYr5mvLHbEmiDbEUxKOWdftiRKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GR6+UiovOS0Hgra9tqGI92u3dJaaPoyxO3vZSzFZByawW3tc3NBxoWW+RUOqYGI4b
-         yvuNXyJnE6JCzLit06BwOK7+xNyxMlXi9MiLi8vLVzYiTm1S5Ci38/2O2YBJrOQhiJ
-         BVD+GPbDJvvGRcbk1fAGp/njHjMJi7vYoXgEeXOF1PjCX+zM+uSf+BnHr43f3z4WuQ
-         tKfegppYLqkjFvFwj+vdYnIhZ0pr5XN5wY/Z9YOIB0Fv8ppUEkBXJ/3FG2If3PxMAG
-         eP3X2wDjf2Ok6wGFR9SnLwVrZPztwI4YKHsTz/ZYVEyPSfCiRZJn+vAC0uclkVIuzw
-         3BuRuNNGzPZ3w==
+        b=KUetNPpgVYhS4Uj1WiwTNd8DDtzoko+Tn28YFXawTJfgNl6WAM34Lxf2bZ4RriGuB
+         0L61gHJpQ2VKd5/OikKpJ0/cpYBeI3iaA3KQRUkngjW3hj61ApPxNADxXh23oz4isG
+         ot+PanyquJLA/1rpS0XgUkPgKSGrIzcwRTWy9ObW/zdU2CPziYnqR1AqgIJoLRfHG1
+         dZyLybS1CUAIb1++892cGxKYd9R2rIKkjevsuGnS+AbvHH+w93Pjp42vogev37/V71
+         GPkadm1F9VE65HGe2bQFnt+sn79aP7i7P1Yaa0VPuX9RokSAYWCyaFx8KM4ulE9jOk
+         MUCmdkPLwfYgw==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -44,9 +44,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v8 16/17] media: uapi: Change data_bit_offset definition
-Date:   Tue, 14 Jun 2022 10:36:13 +0200
-Message-Id: <20220614083614.240641-17-benjamin.gaignard@collabora.com>
+Subject: [PATCH v8 13/17] media: controls: Log HEVC stateless control in .std_log
+Date:   Tue, 14 Jun 2022 10:36:10 +0200
+Message-Id: <20220614083614.240641-14-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
 References: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
@@ -56,107 +56,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-'F.7.3.6.1 General slice segment header syntax' section of HEVC
-specification describes that a slice header always end aligned on
-byte boundary, therefore we only need to provide the data offset in bytes.
+Simply print the type of the control.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
-version 7:
-- Apply Jernej patches for Cedrus
+ drivers/media/v4l2-core/v4l2-ctrls-core.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
- .../media/v4l/ext-ctrls-codec.rst             |  4 ++--
- .../staging/media/sunxi/cedrus/cedrus_h265.c  | 19 ++++++++++++++++++-
- .../staging/media/sunxi/cedrus/cedrus_video.c |  1 -
- include/media/hevc-ctrls.h                    |  4 ++--
- 4 files changed, 22 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 48a8825a001b..37079581c661 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -3008,8 +3008,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
-       - ``bit_size``
-       - Size (in bits) of the current slice data.
-     * - __u32
--      - ``data_bit_offset``
--      - Offset (in bits) to the video data in the current slice data.
-+      - ``data_byte_offset``
-+      - Offset (in bytes) to the video data in the current slice data.
-     * - __u32
-       - ``num_entry_point_offsets``
-       - Specifies the number of entry point offset syntax elements in the slice header.
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-index 411601975124..7b67cb4621cf 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-@@ -317,6 +317,8 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
- 	u32 chroma_log2_weight_denom;
- 	u32 output_pic_list_index;
- 	u32 pic_order_cnt[2];
-+	u8 *padding;
-+	int count;
- 	u32 reg;
- 
- 	sps = run->h265.sps;
-@@ -405,7 +407,22 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
- 	/* Initialize bitstream access. */
- 	cedrus_write(dev, VE_DEC_H265_TRIGGER, VE_DEC_H265_TRIGGER_INIT_SWDEC);
- 
--	cedrus_h265_skip_bits(dev, slice_params->data_bit_offset);
-+	/*
-+	 * Cedrus expects that bitstream pointer is actually at the end of the slice header
-+	 * instead of start of slice data. Padding is 8 bits at most (one bit set to 1 and
-+	 * at most seven bits set to 0), so we have to inspect only one byte before slice data.
-+	 */
-+	padding = (u8 *)vb2_plane_vaddr(&run->src->vb2_buf, 0) +
-+		slice_params->data_byte_offset - 1;
-+
-+	for (count = 0; count < 8; count++)
-+		if (*padding & (1 << count))
-+			break;
-+
-+	/* Include the one bit. */
-+	count++;
-+
-+	cedrus_h265_skip_bits(dev, slice_params->data_byte_offset * 8 - count);
- 
- 	/* Bitstream parameters. */
- 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-index 33726175d980..66714609b577 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-@@ -568,7 +568,6 @@ int cedrus_queue_init(void *priv, struct vb2_queue *src_vq,
- 
- 	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
- 	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
--	src_vq->dma_attrs = DMA_ATTR_NO_KERNEL_MAPPING;
- 	src_vq->drv_priv = ctx;
- 	src_vq->buf_struct_size = sizeof(struct cedrus_buffer);
- 	src_vq->ops = &cedrus_qops;
-diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 9abca1a75bd4..936ff693967b 100644
---- a/include/media/hevc-ctrls.h
-+++ b/include/media/hevc-ctrls.h
-@@ -312,7 +312,7 @@ struct v4l2_hevc_pred_weight_table {
-  * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
-  *
-  * @bit_size: size (in bits) of the current slice data
-- * @data_bit_offset: offset (in bits) to the video data in the current slice data
-+ * @data_byte_offset: offset (in bytes) to the video data in the current slice data
-  * @num_entry_point_offsets: specifies the number of entry point offset syntax
-  *			     elements in the slice header.
-  * @nal_unit_type: specifies the coding type of the slice (B, P or I)
-@@ -356,7 +356,7 @@ struct v4l2_hevc_pred_weight_table {
-  */
- struct v4l2_ctrl_hevc_slice_params {
- 	__u32	bit_size;
--	__u32	data_bit_offset;
-+	__u32	data_byte_offset;
- 	__u32	num_entry_point_offsets;
- 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
- 	__u8	nal_unit_type;
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+index ff8a61f24d0a..c5c5407584ff 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+@@ -307,6 +307,21 @@ static void std_log(const struct v4l2_ctrl *ctrl)
+ 	case V4L2_CTRL_TYPE_VP9_FRAME:
+ 		pr_cont("VP9_FRAME");
+ 		break;
++	case V4L2_CTRL_TYPE_HEVC_SPS:
++		pr_cont("HEVC_SPS");
++		break;
++	case V4L2_CTRL_TYPE_HEVC_PPS:
++		pr_cont("HEVC_PPS");
++		break;
++	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
++		pr_cont("HEVC_SLICE_PARAMS");
++		break;
++	case V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX:
++		pr_cont("HEVC_SCALING_MATRIX");
++		break;
++	case V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS:
++		pr_cont("HEVC_DECODE_PARAMS");
++		break;
+ 	default:
+ 		pr_cont("unknown type %d", ctrl->type);
+ 		break;
 -- 
 2.32.0
 
