@@ -2,129 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51240C43334
-	for <linux-media@archiver.kernel.org>; Mon, 13 Jun 2022 20:52:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90F31C43334
+	for <linux-media@archiver.kernel.org>; Tue, 14 Jun 2022 04:45:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239479AbiFMUwm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 Jun 2022 16:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S229671AbiFNEpE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 Jun 2022 00:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233863AbiFMUwL (ORCPT
+        with ESMTP id S238375AbiFNEo4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:52:11 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AC5DF50
-        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 13:10:08 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id n197so4908425qke.1
-        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 13:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=v7I9W+KWz8qCcwRO9hK+FauPyteN/yVzDhLqH8wmqRU=;
-        b=qUfbsn7KlSJMoOLXI6w6yy7TrJ1t3GV0eaUVEpVlSmhhSGPrIysNUeydu8ibydKY2p
-         1zMc9WXdAnvTmzm/lrM27CFeS6jhwcwhiZx2Ch+XXMkguFXByWQ1/3m9I+9pp8etU2CF
-         wrkQRVC0U5MG0ta45bpCFNsfYcLbmavJSAPP3NEu/pDmPwFapsEotpifbzYcKQ5wkiL4
-         dAYl9wue9Te1yAbLZJE0fxDNbbZKuu1H0mwbDD3ztzuhlxwL2jF0RXF9WlqjiHKqlmm8
-         +eZ7tSpup8IssWLJOtSXTNAsUlDpf5nuAlDTqiciGANTlc+VgbcwYDZbXTeCqb3jVEOo
-         vXRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=v7I9W+KWz8qCcwRO9hK+FauPyteN/yVzDhLqH8wmqRU=;
-        b=IbOjT8CGytcAww6C3l3/ziNxzFW8G75lJafEiCr6Ea9Ox0O0weU4eap6Sa57sYMCwd
-         5ZYX/irzNWoRcMoKcFl4B6/s4YKXZo+tmTeG8O+TE+qXQZ85n05T9W5yxDEbKhVInrmt
-         R3bVs3P4KLmyEu1LbjUbMrOoV1ob0Hyd/qdQQ492Eq9iODm1hUDEwbd2JdioDcpGblvM
-         jCVB5uu9SVGAe6k2wTENKH2rMhn/FNbAj9To3f2R/dWOaCa3Zn2YlCzXanMPIA+SVN9b
-         cJ/bIbl9BFlFZpC0TEeaCzdXIw3HryxbPev09xLRWrnyi6YJdqCBW144UF25JIXtchrR
-         j4tA==
-X-Gm-Message-State: AOAM533viqIHqEAXpsuGastQuovdOZPPWMEfr39cCBFzXIhh6JuXdQRJ
-        FxGGxv9KlTOwnMQ1fCUeIzU/fw==
-X-Google-Smtp-Source: ABdhPJypEb0jxGKtk5VfHQekdsoaNysCZ3OatxB9gwkAI+QgXupZeQPtmwZAmNKNz+Dgb1z5OMMIwQ==
-X-Received: by 2002:a05:620a:4e9:b0:6a7:8357:303d with SMTP id b9-20020a05620a04e900b006a78357303dmr1407957qkh.105.1655151007308;
-        Mon, 13 Jun 2022 13:10:07 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id r13-20020a05620a298d00b006a6d60a39d0sm8268202qkp.5.2022.06.13.13.10.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 13:10:06 -0700 (PDT)
-Message-ID: <edbb4605c9e30329d2f5a4ff738571acb6b91f1f.camel@ndufresne.ca>
-Subject: Re: [PATCH v4, 0/3] add h264 decoder driver for mt8186
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-Cc:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Date:   Mon, 13 Jun 2022 16:10:05 -0400
-In-Reply-To: <20220512034620.30500-1-yunfei.dong@mediatek.com>
-References: <20220512034620.30500-1-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
-MIME-Version: 1.0
+        Tue, 14 Jun 2022 00:44:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199892F384
+        for <linux-media@vger.kernel.org>; Mon, 13 Jun 2022 21:44:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 745A3B81785
+        for <linux-media@vger.kernel.org>; Tue, 14 Jun 2022 04:44:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDA55C341C7
+        for <linux-media@vger.kernel.org>; Tue, 14 Jun 2022 04:44:44 +0000 (UTC)
+Date:   Tue, 14 Jun 2022 06:44:43 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: OK
+Message-Id: <20220614044444.DDA55C341C7@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le jeudi 12 mai 2022 =C3=A0 11:46 +0800, Yunfei Dong a =C3=A9crit=C2=A0:
-> Firstly, add mt8186 compatible and private data, then add document for
-> compatible "mediatek,mt8186-vcodec-dec". For mt8186 is single core
-> architecture, need to add new interface for h264 hardware decoder.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Would be nice to take the habit of sharing fluster score for this new HW, I
-would expect no less then what the numbers you'd get from running over MT81=
-95 or
-92, remains nice to demonstrate that this was tested and document any oops =
-along
-the way.
->=20
-> Patche 1 add mt8186 compatible and private data.
-> Patche 2 add mt8186 compatible document.
-> Patche 3 add h264 single core driver.
-> ---
-> This patch depends on "support for MT8192 decoder"[1]
->=20
-> [1]  https://patchwork.kernel.org/project/linux-mediatek/cover/2022051202=
-1950.29087-1-yunfei.dong@mediatek.com/
-> ---
-> changed with v3:
-> - fix __iomem not reasonable, align share memory to dram.
-> changed with v2:
-> - fix sparse and smatch check fail for patch 3
-> changed with v1:
-> - rebase driver to the latest media_stage.
-> ---
-> Yunfei Dong (3):
->   dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings for
->     mt8186
->   media: mediatek: vcodec: Support MT8186
->   media: mediatek: vcodec: add h264 decoder driver for mt8186
->=20
->  .../media/mediatek,vcodec-subdev-decoder.yaml |   4 +-
->  .../platform/mediatek/vcodec/mtk_vcodec_dec.h |   1 +
->  .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   4 +
->  .../vcodec/mtk_vcodec_dec_stateless.c         |  19 ++
->  .../vcodec/vdec/vdec_h264_req_multi_if.c      | 177 +++++++++++++++++-
->  5 files changed, 203 insertions(+), 2 deletions(-)
->=20
+Results of the daily build of media_tree:
 
+date:			Tue Jun 14 05:00:11 CEST 2022
+media-tree git hash:	83916ec5a8c7faaeb8209f2d0763ce2e08f61f65
+media_build git hash:	0fe857b86addf382f6fd383948bd7736a3201403
+v4l-utils git hash:	163144712a46229f3476b04f6c0037c4b7f00299
+edid-decode git hash:	cc1aeb00500d1ac725577354af9cd2637f47ef71
+gcc version:		i686-linux-gcc (GCC) 11.2.0
+sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
+sparse version:		v0.6.4-30-g92122700-dirty
+smatch repo:            git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8015-g1a0af070-dirty
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: b5e106a4cc94b2ea761f829eeaf8d3473bbbac27
+host hardware:		x86_64
+host os:		5.17.0-1-rt-amd64
+
+linux-git-sh: OK
+linux-git-arm-at91: OK
+linux-git-arm-stm32: OK
+linux-git-arm-davinci: OK
+linux-git-arm-pxa: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-arm-multi: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 0
+virtme-32: OK: Final Summary: 3100, Succeeded: 3100, Failed: 0, Warnings: 0
+sparse: OK
+smatch: OK
+kerneldoc: OK
+
+Detailed results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Tuesday.log
+
+Detailed regression test results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media.log
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Tuesday-test-media-dmesg.log
+
+Full logs are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Tuesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+https://hverkuil.home.xs4all.nl/spec/index.html
