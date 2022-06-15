@@ -2,142 +2,75 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84810C43334
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jun 2022 11:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FADBCCA473
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jun 2022 11:49:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345234AbiFOLn4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Jun 2022 07:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
+        id S1343705AbiFOLts (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Jun 2022 07:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345347AbiFOLnf (ORCPT
+        with ESMTP id S237723AbiFOLtr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:43:35 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9875B22BDF;
-        Wed, 15 Jun 2022 04:43:33 -0700 (PDT)
-X-UUID: 9c29b81c6b584b1c85b8406c888a4a2c-20220615
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:d05bd642-51b7-4179-969c-359d3066bf4a,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:fba955f6-e099-41ba-a32c-13b8bfe63214,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 9c29b81c6b584b1c85b8406c888a4a2c-20220615
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1633028829; Wed, 15 Jun 2022 19:43:27 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 15 Jun 2022 19:43:26 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 15 Jun 2022 19:43:25 +0800
-Message-ID: <3e084cf745e1425084186368c867f54b54c91ce6.camel@mediatek.com>
-Subject: Re: [PATCH v4, 0/3] add h264 decoder driver for mt8186
-From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Fritz Koenig" <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 15 Jun 2022 19:43:25 +0800
-In-Reply-To: <5316234cef174e49110f949991ef71c578a3478e.camel@ndufresne.ca>
-References: <20220512034620.30500-1-yunfei.dong@mediatek.com>
-         <edbb4605c9e30329d2f5a4ff738571acb6b91f1f.camel@ndufresne.ca>
-         <5316234cef174e49110f949991ef71c578a3478e.camel@ndufresne.ca>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 15 Jun 2022 07:49:47 -0400
+X-Greylist: delayed 1877 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jun 2022 04:49:45 PDT
+Received: from m15111.mail.126.com (m15111.mail.126.com [220.181.15.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D03248331;
+        Wed, 15 Jun 2022 04:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=QqKPV
+        BGfow1c4ZMlx0YSYTPT8kkKDZgzEU0kwf4SuA4=; b=iU8zznYKuLyz1drshpTqO
+        UeX4dBnETWilJ5oDPVg0IeQWmZAK+TVvp30JV3ZVerG0n6Zoeu5AmWPz1U9zy5pb
+        Qg3zT4bGYEhCYL9FDGlt1No38v/GeusGfJMRkDlqjwTRaDvN58dOr2r7tSni71L2
+        a+8ilkCnwIJdhU8q9+6h1M=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp1 (Coremail) with SMTP id C8mowAD3Jifbv6liZhOoEQ--.58335S2;
+        Wed, 15 Jun 2022 19:17:47 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     ldewangan@nvidia.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, p.zabel@pengutronix.de,
+        sumit.semwal@linaro.org, christian.koenig@amd.com
+Cc:     linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, windhl@126.com
+Subject: [PATCH] drivers: tty: serial: Add missing of_node_put() in serial-tegra.c
+Date:   Wed, 15 Jun 2022 19:17:47 +0800
+Message-Id: <20220615111747.3963930-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-MTK:  N
+X-CM-TRANSID: C8mowAD3Jifbv6liZhOoEQ--.58335S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrurW3KFyUCryDCw13JFWrZrb_yoW3CFb_Ww
+        nrW3s7Zr4j9FsYqanavry3ur9IvFn8WFnYqF92qas7W345ZF4DJrWqqrn7A3sF93y7CrW3
+        CrsrWFsrAr1DXjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRimhFDUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizhwhF18RPTCjAAAAsE
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Nicolas,
+In tegra_uart_init(), of_find_matching_node() will return a node
+pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
 
-Thanks for your comments.
-On Tue, 2022-06-14 at 13:46 -0400, Nicolas Dufresne wrote:
-> Le lundi 13 juin 2022 à 16:10 -0400, Nicolas Dufresne a écrit :
-> > Le jeudi 12 mai 2022 à 11:46 +0800, Yunfei Dong a écrit :
-> > > Firstly, add mt8186 compatible and private data, then add
-> > > document for
-> > > compatible "mediatek,mt8186-vcodec-dec". For mt8186 is single
-> > > core
-> > > architecture, need to add new interface for h264 hardware
-> > > decoder.
-> > 
-> > Would be nice to take the habit of sharing fluster score for this
-> > new HW, I
-> > would expect no less then what the numbers you'd get from running
-> > over MT8195 or
-> > 92, remains nice to demonstrate that this was tested and document
-> > any oops along
-> > the way.
-> > > 
-> > > Patche 1 add mt8186 compatible and private data.
-> > > Patche 2 add mt8186 compatible document.
-> > > Patche 3 add h264 single core driver.
-> > > ---
-> > > This patch depends on "support for MT8192 decoder"[1]
-> > > 
-> > > [1]  
-> > > https://patchwork.kernel.org/project/linux-mediatek/cover/20220512021950.29087-1-yunfei.dong@mediatek.com/
-> 
-> I forgot earlier, but I suppose this will also depends on an scp.img
-> firmware ?
-> If so, any linux-firmware submission to link to ?
-> 
-For the tast/cts/gts test are coming to the end, after all ec patches
-are merged, I will upstream scp.img
+Signed-off-by: Liang He <windhl@126.com>
+---
+ drivers/tty/serial/serial-tegra.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best Regards,
-Yunfei Dong
-> > > ---
-> > > changed with v3:
-> > > - fix __iomem not reasonable, align share memory to dram.
-> > > changed with v2:
-> > > - fix sparse and smatch check fail for patch 3
-> > > changed with v1:
-> > > - rebase driver to the latest media_stage.
-> > > ---
-> > > Yunfei Dong (3):
-> > >   dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings
-> > > for
-> > >     mt8186
-> > >   media: mediatek: vcodec: Support MT8186
-> > >   media: mediatek: vcodec: add h264 decoder driver for mt8186
-> > > 
-> > >  .../media/mediatek,vcodec-subdev-decoder.yaml |   4 +-
-> > >  .../platform/mediatek/vcodec/mtk_vcodec_dec.h |   1 +
-> > >  .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   4 +
-> > >  .../vcodec/mtk_vcodec_dec_stateless.c         |  19 ++
-> > >  .../vcodec/vdec/vdec_h264_req_multi_if.c      | 177
-> > > +++++++++++++++++-
-> > >  5 files changed, 203 insertions(+), 2 deletions(-)
-> > > 
-> 
-> 
+diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
+index d942ab152f5a..5c4850a3762c 100644
+--- a/drivers/tty/serial/serial-tegra.c
++++ b/drivers/tty/serial/serial-tegra.c
+@@ -1667,6 +1667,7 @@ static int __init tegra_uart_init(void)
+ 	node = of_find_matching_node(NULL, tegra_uart_of_match);
+ 	if (node)
+ 		match = of_match_node(tegra_uart_of_match, node);
++	of_node_put(node);
+ 	if (match)
+ 		cdata = match->data;
+ 	if (cdata)
+-- 
+2.25.1
 
