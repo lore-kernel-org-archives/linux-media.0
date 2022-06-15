@@ -2,38 +2,40 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B777C43334
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jun 2022 19:26:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEE54C433EF
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jun 2022 19:26:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346446AbiFOT01 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Jun 2022 15:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56976 "EHLO
+        id S1346636AbiFOT0e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Jun 2022 15:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346274AbiFOT00 (ORCPT
+        with ESMTP id S1346482AbiFOT0a (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:26:26 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D704C42E
-        for <linux-media@vger.kernel.org>; Wed, 15 Jun 2022 12:26:25 -0700 (PDT)
+        Wed, 15 Jun 2022 15:26:30 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88DA4EA17;
+        Wed, 15 Jun 2022 12:26:27 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 415F36BE;
-        Wed, 15 Jun 2022 21:26:22 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9217A6C8;
+        Wed, 15 Jun 2022 21:26:23 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1655321182;
-        bh=X6Bpa83mlbM05Ahsn9pbAKy7J8VGVgVBir46V1Ef+S0=;
+        s=mail; t=1655321184;
+        bh=GAluR8jVnzV6oeYRzWKhXCUT6LqQoGs18k2HP3X8emE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OW6XAVWj1WSqfHwKC68ip1N/zVnim2U/Q0IHTqfxpcqNPchx206lAFBgFn4D9HFlB
-         6MP8Wdsxn66Aeo9x8ESmcOV0VrcJ7fAHZybS+ZE4i84ujESfnCQ7QjReBztge9lkWd
-         LEqNrrP0xglbsXAHcopSX7OIzxtTsZ3fm4GS9Ol4=
+        b=m/26DK+oofwHPiIvIQCFiOWrG5mp1UgTy4j8Cbqwi3FBisASt6wyBEGwRYeLPDKtL
+         Jmffy2xfPKPWWBmMg6VNVPRjPupk1IOIg3iwsO81ttGNxm5gIJbdzZAF/k2+gpKGh0
+         UfRt9V1PHqcshSZUG2kU8zc5BTgqxx4Xc5CaSVpk=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         Paul Elder <paul.elder@ideasonboard.com>,
         Rui Miguel Silva <rmfrfs@gmail.com>, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Subject: [PATCH 2/4] media: imx: imx-mipi-csis: Add version register
-Date:   Wed, 15 Jun 2022 22:26:00 +0300
-Message-Id: <20220615192602.25472-3-laurent.pinchart@ideasonboard.com>
+        linux-imx@nxp.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH 4/4] dt-bindings: media: nxp,imx-mipi-csi2: i.MX8MP support
+Date:   Wed, 15 Jun 2022 22:26:02 +0300
+Message-Id: <20220615192602.25472-5-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220615192602.25472-1-laurent.pinchart@ideasonboard.com>
 References: <20220615192602.25472-1-laurent.pinchart@ideasonboard.com>
@@ -43,37 +45,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Register at offset 0x00 isn't documented, but the NXP BSP
-imx8-mipi-csi2-sam driver defines it as a version register. Tests on
-i.MX7D and i.MX8MP have confirmed this, with values matching the version
-of the IP core specified in the respective reference manuals.
-
-This commit doesn't make use of the version register at runtime as the
-compatible strings are enough to identify the IP core version.
-Nonetheless, capturing the information in register definitions that
-don't affect the code negatively is useful for future development.
+The CSIS CSI-2 receiver in the i.MX8MP seems to be identical to the
+version present in the i.MX8MM. Add a device-specific compatible string,
+with a fallback to the i.MX8MM compatible.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/nxp/imx-mipi-csis.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../devicetree/bindings/media/nxp,imx-mipi-csi2.yaml  | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
-index 09a220c1bfe8..8674aaad5fa0 100644
---- a/drivers/media/platform/nxp/imx-mipi-csis.c
-+++ b/drivers/media/platform/nxp/imx-mipi-csis.c
-@@ -46,6 +46,11 @@
+diff --git a/Documentation/devicetree/bindings/media/nxp,imx-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx-mipi-csi2.yaml
+index 36b135bf9f2a..03a23a26c4f3 100644
+--- a/Documentation/devicetree/bindings/media/nxp,imx-mipi-csi2.yaml
++++ b/Documentation/devicetree/bindings/media/nxp,imx-mipi-csi2.yaml
+@@ -22,9 +22,14 @@ description: |-
  
- /* Register map definition */
+ properties:
+   compatible:
+-    enum:
+-      - fsl,imx7-mipi-csi2
+-      - fsl,imx8mm-mipi-csi2
++    oneOf:
++      - enum:
++          - fsl,imx7-mipi-csi2
++          - fsl,imx8mm-mipi-csi2
++      - items:
++          - enum:
++              - fsl,imx8mp-mipi-csi2
++          - const: fsl,imx8mm-mipi-csi2
  
-+/* CSIS version */
-+#define MIPI_CSIS_VERSION			0x00
-+#define MIPI_CSIS_VERSION_IMX7D			0x03030505
-+#define MIPI_CSIS_VERSION_IMX8MP		0x03060301
-+
- /* CSIS common control */
- #define MIPI_CSIS_CMN_CTRL			0x04
- #define MIPI_CSIS_CMN_CTRL_UPDATE_SHADOW	BIT(16)
+   reg:
+     maxItems: 1
 -- 
 Regards,
 
