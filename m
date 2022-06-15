@@ -2,42 +2,42 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27F80CCA47D
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jun 2022 20:50:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57F54C43334
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jun 2022 20:50:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiFOUu4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Jun 2022 16:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
+        id S1346733AbiFOUu5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Jun 2022 16:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346775AbiFOUux (ORCPT
+        with ESMTP id S1346713AbiFOUu4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Jun 2022 16:50:53 -0400
+        Wed, 15 Jun 2022 16:50:56 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B09F55221
-        for <linux-media@vger.kernel.org>; Wed, 15 Jun 2022 13:50:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4294C55224
+        for <linux-media@vger.kernel.org>; Wed, 15 Jun 2022 13:50:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655326251;
+        s=mimecast20190719; t=1655326254;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MIQFu6I1dofWUD7d2EklJVphvIcdfjM/LHVC73cQ+e4=;
-        b=hq9/tek7OFz5xp4zPnbhTk4Jon1+RLgQl3Maay6LtYS/ZYMQQLivQhHfBaNaKk/jJZYtet
-        FQp/Q5W1mKy+WsBSxURbcUkI20E14BG9wNvkXzdU8fXxQscz09bwRpISvvPwl5bVrZoQal
-        sak4GHYXRLSzrSoXj6AbLj4wrLU0nTs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=7p/P2bQQfH1zgoyYXQSlPh0wVlGRhMeYBRnxk52h43g=;
+        b=i+t6HR4+5LfUSpennfGdyxstlMXREHps2lzcBOuGWnjedu7uB7qJlKLxA6UTzlBO66y0Ur
+        UWQ6KBhLbvySqAIFKKu5L6IwDAfh/XYzfYC5aV+IzVxoxJjcTaKA91iLCwkJ1iMGN8aGjm
+        /pYpSJnQfhl9YqynG1jtFHkzE+g6GCU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-398-PkKvREYPPIi8ZJIyZHvfVA-1; Wed, 15 Jun 2022 16:50:48 -0400
-X-MC-Unique: PkKvREYPPIi8ZJIyZHvfVA-1
+ us-mta-308-ObhwjchFNHysrz5yt6kmOA-1; Wed, 15 Jun 2022 16:50:51 -0400
+X-MC-Unique: ObhwjchFNHysrz5yt6kmOA-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 72848185A79C;
-        Wed, 15 Jun 2022 20:50:47 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 17E32382ECC7;
+        Wed, 15 Jun 2022 20:50:51 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.39.192.27])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D34C1111F5;
-        Wed, 15 Jun 2022 20:50:45 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7B9BD18EA9;
+        Wed, 15 Jun 2022 20:50:49 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -49,9 +49,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>,
         linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v2 04/40] media: atomisp: drop contiguous argument from frame_allocate_with_data()
-Date:   Wed, 15 Jun 2022 22:50:01 +0200
-Message-Id: <20220615205037.16549-5-hdegoede@redhat.com>
+Subject: [PATCH v2 06/40] media: atomisp: drop IA_CSS_FRAME_FORMAT_MIPI support from ia_css_frame_init_planes()
+Date:   Wed, 15 Jun 2022 22:50:03 +0200
+Message-Id: <20220615205037.16549-7-hdegoede@redhat.com>
 In-Reply-To: <20220615205037.16549-1-hdegoede@redhat.com>
 References: <20220615205037.16549-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -61,57 +61,74 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Drop the contiguous argument from frame_allocate_with_data()
-its only caller always passes false.
+Nothing ever sets the format to IA_CSS_FRAME_FORMAT_MIPI and
+frame_init_mipi_plane() is the only code-path which ever sets
+frame->contiguous to true.
+
+Drop A_CSS_FRAME_FORMAT_MIPI support from ia_css_frame_init_planes()
+as part of the removal of contiguous alloc support from the frame code.
 
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../media/atomisp/pci/runtime/frame/src/frame.c        | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ .../atomisp/pci/runtime/frame/src/frame.c     | 30 ++-----------------
+ 1 file changed, 3 insertions(+), 27 deletions(-)
 
 diff --git a/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c b/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c
-index 7a119d2c9256..4f9c8b839da2 100644
+index af23fbb831d6..cb0b579fbadf 100644
 --- a/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c
 +++ b/drivers/staging/media/atomisp/pci/runtime/frame/src/frame.c
-@@ -77,8 +77,7 @@ static int frame_allocate_with_data(struct ia_css_frame **frame,
- 	unsigned int height,
- 	enum ia_css_frame_format format,
- 	unsigned int padded_width,
--	unsigned int raw_bit_depth,
--	bool contiguous);
-+	unsigned int raw_bit_depth);
+@@ -48,12 +48,6 @@ static void frame_init_raw_single_plane(
+     unsigned int subpixels_per_line,
+     unsigned int bits_per_pixel);
  
- static struct ia_css_frame *frame_create(unsigned int width,
- 	unsigned int height,
-@@ -137,7 +136,7 @@ int ia_css_frame_allocate(struct ia_css_frame **frame,
- 			    width, height, format, padded_width, raw_bit_depth);
+-static void frame_init_mipi_plane(struct ia_css_frame *frame,
+-				  struct ia_css_frame_plane *plane,
+-				  unsigned int height,
+-				  unsigned int subpixels_per_line,
+-				  unsigned int bytes_per_pixel);
+-
+ static void frame_init_nv_planes(struct ia_css_frame *frame,
+ 				 unsigned int horizontal_decimation,
+ 				 unsigned int vertical_decimation,
+@@ -297,11 +291,9 @@ int ia_css_frame_init_planes(struct ia_css_frame *frame)
  
- 	err = frame_allocate_with_data(frame, width, height, format,
--				       padded_width, raw_bit_depth, false);
-+				       padded_width, raw_bit_depth);
+ 	switch (frame->info.format) {
+ 	case IA_CSS_FRAME_FORMAT_MIPI:
+-		frame_init_mipi_plane(frame, &frame->planes.raw,
+-				      frame->info.res.height,
+-				      frame->info.padded_width,
+-				      frame->info.raw_bit_depth <= 8 ? 1 : 2);
+-		break;
++		dev_err(atomisp_dev,
++			"%s: unexpected use of IA_CSS_FRAME_FORMAT_MIPI\n", __func__);
++		return -EINVAL;
+ 	case IA_CSS_FRAME_FORMAT_RAW_PACKED:
+ 		frame_init_raw_single_plane(frame, &frame->planes.raw,
+ 					    frame->info.res.height,
+@@ -622,22 +614,6 @@ static void frame_init_raw_single_plane(
+ 	return;
+ }
  
- 	if ((*frame) && err == 0)
- 		ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE,
-@@ -773,8 +772,7 @@ static int frame_allocate_with_data(struct ia_css_frame **frame,
- 	unsigned int height,
- 	enum ia_css_frame_format format,
- 	unsigned int padded_width,
--	unsigned int raw_bit_depth,
--	bool contiguous)
-+	unsigned int raw_bit_depth)
- {
- 	int err;
- 	struct ia_css_frame *me = frame_create(width,
-@@ -782,7 +780,7 @@ static int frame_allocate_with_data(struct ia_css_frame **frame,
- 					       format,
- 					       padded_width,
- 					       raw_bit_depth,
--					       contiguous,
-+					       false,
- 					       true);
- 
- 	if (!me)
+-static void frame_init_mipi_plane(struct ia_css_frame *frame,
+-				  struct ia_css_frame_plane *plane,
+-				  unsigned int height,
+-				  unsigned int subpixels_per_line,
+-				  unsigned int bytes_per_pixel)
+-{
+-	unsigned int stride;
+-
+-	stride = subpixels_per_line * bytes_per_pixel;
+-	frame->data_bytes = 8388608; /* 8*1024*1024 */
+-	frame->valid = false;
+-	frame->contiguous = true;
+-	frame_init_plane(plane, subpixels_per_line, stride, height, 0);
+-	return;
+-}
+-
+ static void frame_init_nv_planes(struct ia_css_frame *frame,
+ 				 unsigned int horizontal_decimation,
+ 				 unsigned int vertical_decimation,
 -- 
 2.36.0
 
