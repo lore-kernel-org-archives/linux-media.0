@@ -2,58 +2,58 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26FEBCCA47E
-	for <linux-media@archiver.kernel.org>; Wed, 15 Jun 2022 15:13:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3943DC43334
+	for <linux-media@archiver.kernel.org>; Wed, 15 Jun 2022 15:13:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343626AbiFOPNP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Jun 2022 11:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S245139AbiFOPNR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 Jun 2022 11:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242520AbiFOPNI (ORCPT
+        with ESMTP id S231835AbiFOPNJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:13:08 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40A1DEC7
-        for <linux-media@vger.kernel.org>; Wed, 15 Jun 2022 08:13:03 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id v1so23814857ejg.13
-        for <linux-media@vger.kernel.org>; Wed, 15 Jun 2022 08:13:03 -0700 (PDT)
+        Wed, 15 Jun 2022 11:13:09 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51C413F56
+        for <linux-media@vger.kernel.org>; Wed, 15 Jun 2022 08:13:07 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id o10so16643833edi.1
+        for <linux-media@vger.kernel.org>; Wed, 15 Jun 2022 08:13:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OWXOrfm/9NlVmpLfpsXcZqYVwwJxQb+7BpdjaEQ5k6g=;
-        b=ILBT80z1mB8y3KmFDHu42InPyMxTsikDuFOoymGYG4+NI6AT9uYgeYqeMiDZwatAn+
-         PI6lswksIKinPKFuB8pZ1+l/17POaRw4DP3g+x4ikG+iJKRiofwtME4fB1g5/+Xgqm6J
-         EDofovu/rfj3dRCnrKMCL5QlyvEgBDV95n64I=
+        bh=eknO20DpjREAR8olUhraC51K66eHn6x17UHnd3DEaa8=;
+        b=AmMAjCkL1NHC4Kgh2d7Ej68VIr0rqKewUVWM1k4pz9MCWHVvzDnSfmCWRw4HPaZ0sB
+         WGK8K7ozPSLZP2MWzS2qcGJQDo9MpwwY41nsO5SI0wxJQ+IFLbApNy2V+dhqtCou//Vc
+         xnZaSg8coYHOjt2eRuRO26FMmUADPmWwxhivA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OWXOrfm/9NlVmpLfpsXcZqYVwwJxQb+7BpdjaEQ5k6g=;
-        b=tq5bSRNLHqxDIdZOmgC/n+rzDSPE5/oig1vsoPJSWy6XNlI1Z7hPCl5wFnfaAw50P1
-         f61ddx7OXJBXAMkb9oRl0Iyti9VFFrgovryL2PbC9e3ZpsaY4CotoEzFsvjkMfbAZh25
-         tklB8Jy0zcXTVJ4Gavz9wvwbxMmDqj1hNNQhpggObI9kUcaoYflMU0Sc3hr46cr+rCRK
-         Stv5T1byLabibSY4FTCxbb3f6b4u+x3hP5MURF1NfgzaMUQcr/uVfcpo+8fm5cbniN1f
-         9snOO0SPT78TNl76JJiPwjJEGXk1j31wXqKa8yhNAXApzuadN1NrKPCOj3SGAuOI2xJR
-         ieQw==
-X-Gm-Message-State: AJIora+GCxsUELfIikBmscMblXqa5qmgXv1aUHnCe+JTjDhaFRMLXylP
-        WlQZjKHCC/zX+F8OunZsgQNlcA==
-X-Google-Smtp-Source: AGRyM1vqLSOsRPEcy844ki1yzvDOJaFpB5hdo9SNFjWteElJ8mjE8VRODEQvn9hJSdFfrU56w0Qimw==
-X-Received: by 2002:a17:907:6e13:b0:711:c722:4fc with SMTP id sd19-20020a1709076e1300b00711c72204fcmr251107ejc.253.1655305982591;
-        Wed, 15 Jun 2022 08:13:02 -0700 (PDT)
+        bh=eknO20DpjREAR8olUhraC51K66eHn6x17UHnd3DEaa8=;
+        b=npUGsf0yXaBCaILLq9C1m5djM8LBxTl3h3AqhdS8XS6Q84qouf4eDEOOFkjOLNZgaR
+         nppknAB74A+fn6+o0XoT7z1oTmEMrQhLNj2wsb5VSHIo6k75A1Eios5F+dQwfpy4VbAe
+         9YWo8necE1br4lFyHmEofMG4pHhQoDL6u4yF5IrKUt6A6mCBe3egU5TQ8ZnW3HRwdlqb
+         9vlQcpuFNIe7DaaUgyld454gBecS+bwvtJqZzUZZiOr4ehoKBTfpGqcy650NoReoLrw3
+         Uz3SFbyfNiiy/WSjGDNufAJxE65VI5LwThItJQuenW6Lsve6qApOibHUNwf3GpNa3+JH
+         yAIQ==
+X-Gm-Message-State: AJIora/PXOIehtecImE+jrA2rYaszEDyO/u1H69ZQCVpYq24PkK6zhHZ
+        0l8nDOTGq8uWYujO5J6qGCJVC4YYFzIGoZaK
+X-Google-Smtp-Source: AGRyM1sCvqatdCAaqkPCaRz7lvvlNc/f7+EpXvbuKThokACKe8fUo2IjbEVrnuuB0mlVFrX+98cmQQ==
+X-Received: by 2002:a05:6402:e81:b0:432:7f12:1878 with SMTP id h1-20020a0564020e8100b004327f121878mr219454eda.179.1655305986455;
+        Wed, 15 Jun 2022 08:13:06 -0700 (PDT)
 Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id b25-20020aa7cd19000000b0042bd2012196sm9610264edw.85.2022.06.15.08.13.02
+        by smtp.gmail.com with ESMTPSA id b25-20020aa7cd19000000b0042bd2012196sm9610264edw.85.2022.06.15.08.13.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 08:13:02 -0700 (PDT)
+        Wed, 15 Jun 2022 08:13:06 -0700 (PDT)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         tfiga@chromium.org, senozhatsky@chromium.org, yunkec@google.com
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v6 1/8] media: uvcvideo: Add missing value for power_line_frequency
-Date:   Wed, 15 Jun 2022 17:12:52 +0200
-Message-Id: <20220615151259.77825-2-ribalda@chromium.org>
+Subject: [PATCH v6 6/8] media: uvcvideo: Limit power line control for Chicony Easycamera
+Date:   Wed, 15 Jun 2022 17:12:57 +0200
+Message-Id: <20220615151259.77825-7-ribalda@chromium.org>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 In-Reply-To: <20220615151259.77825-1-ribalda@chromium.org>
 References: <20220615151259.77825-1-ribalda@chromium.org>
@@ -63,105 +63,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-UVC 1.5 class defines 4 values for this control on:
-4.2.2.3.6 Power Line Frequency Control
+Another Chicony camera device does not implement the power line control
+correctly. Add a corresponding control mapping override.
 
-Add the missing value when the UVC version is 1.5.
+Bus 001 Device 003: ID 04f2:b5eb Chicony Electronics Co., Ltd EasyCamera
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x04f2 Chicony Electronics Co., Ltd
+  idProduct          0xb5eb
+  bcdDevice           90.45
+  iManufacturer           3 Chicony Electronics Co.,Ltd.
+  iProduct                1 EasyCamera
+  iSerial                 2 0001
+  bNumConfigurations      1
 
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/usb/uvc/uvc_ctrl.c | 56 +++++++++++++++++++++++++-------
- 1 file changed, 45 insertions(+), 11 deletions(-)
+ drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index 0e78233fc8a0..a709ebbb4d69 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -366,6 +366,7 @@ static const struct uvc_menu_info power_line_frequency_controls[] = {
- 	{ 0, "Disabled" },
- 	{ 1, "50 Hz" },
- 	{ 2, "60 Hz" },
-+	{ 3, "Auto" },
- };
- 
- static const struct uvc_menu_info exposure_auto_controls[] = {
-@@ -504,17 +505,6 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 		.v4l2_type	= V4L2_CTRL_TYPE_INTEGER,
- 		.data_type	= UVC_CTRL_DATA_TYPE_UNSIGNED,
- 	},
--	{
--		.id		= V4L2_CID_POWER_LINE_FREQUENCY,
--		.entity		= UVC_GUID_UVC_PROCESSING,
--		.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
--		.size		= 2,
--		.offset		= 0,
--		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
--		.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
--		.menu_info	= power_line_frequency_controls,
--		.menu_count	= ARRAY_SIZE(power_line_frequency_controls),
--	},
- 	{
- 		.id		= V4L2_CID_HUE_AUTO,
- 		.entity		= UVC_GUID_UVC_PROCESSING,
-@@ -730,6 +720,34 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
- 	},
- };
- 
-+static const struct uvc_control_mapping uvc_ctrl_mappings_uvc11[] = {
-+	{
-+		.id		= V4L2_CID_POWER_LINE_FREQUENCY,
-+		.entity		= UVC_GUID_UVC_PROCESSING,
-+		.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
-+		.size		= 2,
-+		.offset		= 0,
-+		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
-+		.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
-+		.menu_info	= power_line_frequency_controls,
-+		.menu_count	= ARRAY_SIZE(power_line_frequency_controls) - 1,
-+	},
-+};
-+
-+static const struct uvc_control_mapping uvc_ctrl_mappings_uvc15[] = {
-+	{
-+		.id		= V4L2_CID_POWER_LINE_FREQUENCY,
-+		.entity		= UVC_GUID_UVC_PROCESSING,
-+		.selector	= UVC_PU_POWER_LINE_FREQUENCY_CONTROL,
-+		.size		= 2,
-+		.offset		= 0,
-+		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
-+		.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
-+		.menu_info	= power_line_frequency_controls,
-+		.menu_count	= ARRAY_SIZE(power_line_frequency_controls),
-+	},
-+};
-+
- /* ------------------------------------------------------------------------
-  * Utility functions
-  */
-@@ -2415,6 +2433,22 @@ static void uvc_ctrl_init_ctrl(struct uvc_video_chain *chain,
- 	if (!ctrl->initialized)
- 		return;
- 
-+	/* Process common mappings first. */
-+	for (; mapping < mend; ++mapping) {
-+		if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
-+		    ctrl->info.selector == mapping->selector)
-+			__uvc_ctrl_add_mapping(chain, ctrl, mapping);
-+	}
-+
-+	/* And then version-specific mappings. */
-+	if (chain->dev->uvc_version < 0x0150) {
-+		mapping = uvc_ctrl_mappings_uvc11;
-+		mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings_uvc11);
-+	} else {
-+		mapping = uvc_ctrl_mappings_uvc15;
-+		mend = mapping + ARRAY_SIZE(uvc_ctrl_mappings_uvc15);
-+	}
-+
- 	for (; mapping < mend; ++mapping) {
- 		if (uvc_entity_match_guid(ctrl->entity, mapping->entity) &&
- 		    ctrl->info.selector == mapping->selector)
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 5b8a71a9edfb..d21de83021f5 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2820,6 +2820,15 @@ static const struct usb_device_id uvc_ids[] = {
+ 	  .bInterfaceProtocol	= 0,
+ 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_RESTRICT_FRAME_RATE) },
+ 	/* Chicony EasyCamera */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x04f2,
++	  .idProduct		= 0xb5eb,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= 0,
++	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
++	/* Chicony EasyCamera */
+ 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+ 				| USB_DEVICE_ID_MATCH_INT_INFO,
+ 	  .idVendor		= 0x04f2,
 -- 
 2.36.1.476.g0c4daa206d-goog
 
