@@ -2,133 +2,90 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCA0EC433EF
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jun 2022 03:34:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E5A1C43334
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jun 2022 04:43:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244611AbiFPDes (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 Jun 2022 23:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
+        id S1350231AbiFPEnn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jun 2022 00:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236391AbiFPDer (ORCPT
+        with ESMTP id S229756AbiFPEnm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 Jun 2022 23:34:47 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2BA41FA8
-        for <linux-media@vger.kernel.org>; Wed, 15 Jun 2022 20:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655350486; x=1686886486;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TRr64EG4nKVH/aEtT3L6cGMY6VX4dcy419dyf4COqFY=;
-  b=ULLZLl+UGXHyfcaFSxce3SYiTuBhe4hd5nBQDMAVnLehDz925MuQcEpC
-   qaCzW1DEuZktL2PIsC5331HhhDSsAgyYj0Nfne6cBhtS52vNDbrfj3P30
-   1bWLGx+PYEVZyWkOgOzFH/D6H1MuElU9v81pMCSCs7ZJ/CY+xWyr7VpFR
-   f468M3N4aCBAMKND+rGVxa1iqoqrvasLa/Q6aRspDWQrwxqC0GDzf85xl
-   K2p0VKjAnEHHr1AGdDi8bTM3y4GUbST4ZrvTPKF48rPER1qZgDkLJEVDf
-   d1XPb1pq0dcJ4FeqizEQnevEsg7cdbbBbOUqwA/5/R59iLKcY1n4Oh9QI
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="304596514"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="304596514"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 20:34:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="652976508"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Jun 2022 20:34:45 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1gHM-000O0T-ST;
-        Thu, 16 Jun 2022 03:34:44 +0000
-Date:   Thu, 16 Jun 2022 11:34:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org
-Subject: [BUILD SUCCESS] LAST PATCH: [Intel-gfx] [PATCH 6/6] drm/i915/gt:
- Serialize TLB invalidates with GT resets
-Message-ID: <62aaa4d3.mLYelBhe8/BWXkrQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        Thu, 16 Jun 2022 00:43:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3153969A
+        for <linux-media@vger.kernel.org>; Wed, 15 Jun 2022 21:43:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87FDEB82183
+        for <linux-media@vger.kernel.org>; Thu, 16 Jun 2022 04:43:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5FCDC34114
+        for <linux-media@vger.kernel.org>; Thu, 16 Jun 2022 04:43:37 +0000 (UTC)
+Date:   Thu, 16 Jun 2022 06:43:36 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: OK
+Message-Id: <20220616044337.D5FCDC34114@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mauro-Carvalho-Chehab/Fix-TLB-invalidate-issues-with-Broadwell/20220615-232905
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Results of the daily build of media_tree:
 
-elapsed time: 718m
+date:			Thu Jun 16 05:00:11 CEST 2022
+media-tree git hash:	83916ec5a8c7faaeb8209f2d0763ce2e08f61f65
+media_build git hash:	0fe857b86addf382f6fd383948bd7736a3201403
+v4l-utils git hash:	990a063db70341db5b342b74be24c5193fc5782a
+edid-decode git hash:	89cdc98a8eb77ae6a56bb3f2dc20e29ca05be703
+gcc version:		i686-linux-gcc (GCC) 11.2.0
+sparse repo:            git://git.kernel.org/pub/scm/devel/sparse/sparse.git
+sparse version:		v0.6.4-30-g92122700-dirty
+smatch repo:            git://repo.or.cz/smatch.git
+smatch version:		v0.5.0-8015-g1a0af070-dirty
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: b5e106a4cc94b2ea761f829eeaf8d3473bbbac27
+host hardware:		x86_64
+host os:		5.17.0-1-rt-amd64
 
-configs tested: 55
-configs skipped: 3
+linux-git-sh: OK
+linux-git-mips: OK
+linux-git-arm-stm32: OK
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-powerpc64: OK
+linux-git-arm-pxa: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2989, Succeeded: 2989, Failed: 0, Warnings: 0
+virtme-32: OK: Final Summary: 3100, Succeeded: 3100, Failed: 0, Warnings: 0
+sparse: OK
+smatch: OK
+kerneldoc: OK
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Detailed results are available here:
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-alpha                               defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
+https://hverkuil.home.xs4all.nl/logs/Thursday.log
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Detailed regression test results are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media.log
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-32.log
+https://hverkuil.home.xs4all.nl/logs/Thursday-test-media-dmesg.log
+
+Full logs are available here:
+
+https://hverkuil.home.xs4all.nl/logs/Thursday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+https://hverkuil.home.xs4all.nl/spec/index.html
