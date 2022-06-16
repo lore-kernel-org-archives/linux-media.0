@@ -2,111 +2,88 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0796CCA47E
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jun 2022 14:43:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 013CAC43334
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jun 2022 16:05:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233844AbiFPOng (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jun 2022 10:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        id S1378051AbiFPQFT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jun 2022 12:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239233AbiFPOnV (ORCPT
+        with ESMTP id S1378017AbiFPQFS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jun 2022 10:43:21 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9559A1F2FB;
-        Thu, 16 Jun 2022 07:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1655390597; x=1686926597;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rWVbM8rJZf/kGgg+MoVGSQyw47/ojhqYjjLSMGPkWq8=;
-  b=Qp07RPqofw67tZXEz96gS6g8tEeiazAwkaQqFFa63e8ww2PUwjz+8o+A
-   mcgNv2l+9FGQPWwuMGHRdthChifidjU9R6A2uhwEZi2xJ3wmYyJ6H50S8
-   kbmpI41JVpVkm4Jd6pWu/ePdTlKefsGoz2VSiTEGySl8L68wNMufSthXv
-   peSUcUEZO2o791ZMk1+/oOqV1dzDnMhCCAzYWqEDiCHD2hLIfgwrO/WvS
-   azmOdmggMiXUzr2jXu9MAlitbeuaRPESCt9gkSOtgHg91eJQ1ez/8ghxK
-   XSAqeyDHRk1DMqZ0NeuZkIcag93SYXNJWx4fiAJqHoyVG+RTthIPH5aNi
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,305,1650956400"; 
-   d="scan'208";a="160662022"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2022 07:43:17 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 16 Jun 2022 07:43:15 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 16 Jun 2022 07:43:13 -0700
-From:   Eugen Hristev <eugen.hristev@microchip.com>
-To:     <linux-media@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH] media: atmel: atmel-isc-base: allow wb ctrls to be changed when isc is not configured
-Date:   Thu, 16 Jun 2022 17:42:59 +0300
-Message-ID: <20220616144259.226837-1-eugen.hristev@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 16 Jun 2022 12:05:18 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3058C483A5
+        for <linux-media@vger.kernel.org>; Thu, 16 Jun 2022 09:05:14 -0700 (PDT)
+Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D38B2898;
+        Thu, 16 Jun 2022 18:05:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1655395512;
+        bh=kX38/TBN5PynJkSOE6Mnkyb9J7QIpHmpEZAAzRwBL0c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pZNCkeIGgCTJ5V+cxCIHMF7ylq4YdLdCMNtWKST+TxVtMmcskXGwjfcQi80bYVGEq
+         aT4PGvs7+lAfz3PVaueKcU69hD8UPKCY1H/k+RXE5agka/POJzYjYExMiiQvVi4a7B
+         F73NIlkaTm3LkcruyNTDRqf4Zs+HriSAqahh5g+w=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Florian Sylvestre <fsylvestre@baylibre.com>
+Subject: [PATCH 1/3] media: rockchip: rkisp1: Set DPCC methods enable bits inside loop
+Date:   Thu, 16 Jun 2022 19:04:54 +0300
+Message-Id: <20220616160456.21549-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220616160456.21549-1-laurent.pinchart@ideasonboard.com>
+References: <20220616160456.21549-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When attempting to change the white balance (WB) ctrls before starting
-streaming, e.g.:
+The rkisp1_dpcc_config() function looks over methods sets to configure
+them, but sets the RKISP1_CIF_ISP_DPCC_METHODS_SET_* registers outside
+of the loop with hand-unrolled code. Move this to the loop to simplify
+the code.
 
- # v4l2-ctl -L
-
-User Controls
-..
-            blue_component_gain 0x009819c1 (int)    : min=0 max=8191 step=1 default=512 value=512 flags=slider
-..
- # v4l2-ctl --set-ctrl=blue_component_gain=500
- # v4l2-ctl -L
-..
-            blue_component_gain 0x009819c1 (int)    : min=0 max=8191 step=1 default=512 value=500 flags=slider
-..
-
-These will not be written to the internal data struct and will not be
-written to the WB hardware module.
-Thus, after starting streaming, they will be reset to default:
-
- # v4l2-ctl -L
-..
-            blue_component_gain 0x009819c1 (int)    : min=0 max=8191 step=1 default=512 value=512 flags=slider
-..
-
-It does not make much sense to not be able to configure the WB controls
-at all times. Even if the sensor would not be RAW Bayer (and in this case the
-WB module is unavailable), the user could configure the ISC itself, as the
-ISC should not care about the sensor format.
-Thus, when WB module is available (if the sensor changes format e.g.) it will
-be already configured as be user's desires.
-In consequence, remove the check in isc_s_awb_ctrl that will return if ISC
-does not know the sensor format.
-
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/atmel/atmel-isc-base.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/media/platform/rockchip/rkisp1/rkisp1-params.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index afefd15c3326..72a27a5c0c1e 100644
---- a/drivers/media/platform/atmel/atmel-isc-base.c
-+++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -1527,10 +1527,6 @@ static int isc_s_awb_ctrl(struct v4l2_ctrl *ctrl)
- 		else
- 			ctrls->awb = ISC_WB_NONE;
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+index c88a9c0fa86e..140012fa18f0 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+@@ -18,6 +18,8 @@
+ #define RKISP1_ISP_PARAMS_REQ_BUFS_MIN	2
+ #define RKISP1_ISP_PARAMS_REQ_BUFS_MAX	8
  
--		/* we did not configure ISC yet */
--		if (!isc->config.sd_format)
--			break;
--
- 		/* configure the controls with new values from v4l2 */
- 		if (ctrl->cluster[ISC_CTRL_R_GAIN]->is_new)
- 			ctrls->gain[ISC_HIS_CFG_MODE_R] = isc->r_gain_ctrl->val;
++#define RKISP1_ISP_DPCC_METHODS_SET(n) \
++			(RKISP1_CIF_ISP_DPCC_METHODS_SET_1 + 0x4 * (n))
+ #define RKISP1_ISP_DPCC_LINE_THRESH(n) \
+ 			(RKISP1_CIF_ISP_DPCC_LINE_THRESH_1 + 0x14 * (n))
+ #define RKISP1_ISP_DPCC_LINE_MAD_FAC(n) \
+@@ -66,13 +68,9 @@ static void rkisp1_dpcc_config(struct rkisp1_params *params,
+ 	rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_DPCC_SET_USE,
+ 		     arg->set_use);
+ 
+-	rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_DPCC_METHODS_SET_1,
+-		     arg->methods[0].method);
+-	rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_DPCC_METHODS_SET_2,
+-		     arg->methods[1].method);
+-	rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_DPCC_METHODS_SET_3,
+-		     arg->methods[2].method);
+ 	for (i = 0; i < RKISP1_CIF_ISP_DPCC_METHODS_MAX; i++) {
++		rkisp1_write(params->rkisp1, RKISP1_ISP_DPCC_METHODS_SET(i),
++			     arg->methods[i].method);
+ 		rkisp1_write(params->rkisp1, RKISP1_ISP_DPCC_LINE_THRESH(i),
+ 			     arg->methods[i].line_thresh);
+ 		rkisp1_write(params->rkisp1, RKISP1_ISP_DPCC_LINE_MAD_FAC(i),
 -- 
-2.25.1
+Regards,
+
+Laurent Pinchart
 
