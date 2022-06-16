@@ -2,39 +2,41 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CC76CCA481
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jun 2022 18:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 387E3C433EF
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jun 2022 18:37:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377733AbiFPSh0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jun 2022 14:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
+        id S234114AbiFPSh1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jun 2022 14:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347908AbiFPShV (ORCPT
+        with ESMTP id S1347806AbiFPShY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jun 2022 14:37:21 -0400
+        Thu, 16 Jun 2022 14:37:24 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2689544F0
-        for <linux-media@vger.kernel.org>; Thu, 16 Jun 2022 11:37:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D0D53E2F;
+        Thu, 16 Jun 2022 11:37:23 -0700 (PDT)
 Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4D4E58AF;
-        Thu, 16 Jun 2022 20:37:14 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D09F3BC0;
+        Thu, 16 Jun 2022 20:37:15 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1655404634;
-        bh=4oraDFQGac7iP6sqkblu/Ky4ylMjLz5Y9aGH+ReEdXc=;
+        s=mail; t=1655404636;
+        bh=6zhorOMHMcApn1JCVBnoz1jaHDN+7f/JdyrBu4DYqwk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mfvPvt7WkeUfFXFMR2zv4BSjNzZEQcIIAWCeVgEqXVka+lq1+bo9O9TtjAV78lvG7
-         avBPB0UHbHwhPnZ4+dZh1spT47zn/M3QyMwCILsWziPJ2YWRm63/aeWkOhcu8RzLdG
-         wT/63VV6hYWn2gjlQYq/pSfNICFflRqWwp5qUCiY=
+        b=NO8oPlRMQNSNGRdWmSlx5vb1Dawh9CRALtrGySRAQTJSdcrQaXMwGsc7Ffx3eu7ex
+         JT4ctUJrQ66xftEOGK9afBp90RMIfuXHig7WBcUa9wscR6JwOAi9eMG/lGId2ZMF7O
+         kbjxc7/zp+YlJZfDtlIt91Bi0Oxe+L7UVo+Sxz8Y=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
-        linux-imx@nxp.com, kernel@pengutronix.de
-Subject: [PATCH 4/7] media: v4l2: Make colorspace validity checks more future-proof
-Date:   Thu, 16 Jun 2022 21:36:53 +0300
-Message-Id: <20220616183656.19089-5-laurent.pinchart@ideasonboard.com>
+        linux-imx@nxp.com, kernel@pengutronix.de,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: [PATCH 6/7] dt-bindings: media: Add i.MX8 ISI DT bindings
+Date:   Thu, 16 Jun 2022 21:36:55 +0300
+Message-Id: <20220616183656.19089-7-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220616183656.19089-1-laurent.pinchart@ideasonboard.com>
 References: <20220616183656.19089-1-laurent.pinchart@ideasonboard.com>
@@ -44,122 +46,170 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The helper functions that test validity of colorspace-related fields
-use the last value of the corresponding enums. This isn't very
-future-proof, as there's a high chance someone adding a new value may
-forget to update the helpers. Add new "LAST" entries to the enumerations
-to improve this, and keep them private to the kernel.
+The Image Sensing Interface (ISI) combines image processing pipelines
+with DMA engines to process and capture frames originating from a
+variety of sources. The inputs to the ISI go through Pixel Link
+interfaces, and their number and nature is SoC-dependent. They cover
+both capture interfaces (MIPI CSI-2 RX, HDMI RX) and memory inputs.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
-Changes since v1:
+ .../bindings/media/nxp,imx8-isi.yaml          | 146 ++++++++++++++++++
+ 1 file changed, 146 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
 
-- Let the compiler assign a value to the *_LAST enum entries
----
- include/media/v4l2-common.h    | 10 +++++-----
- include/uapi/linux/videodev2.h | 29 +++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+), 5 deletions(-)
-
-diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
-index 3eb202259e8c..ccc138a9104d 100644
---- a/include/media/v4l2-common.h
-+++ b/include/media/v4l2-common.h
-@@ -563,19 +563,19 @@ static inline void v4l2_buffer_set_timestamp(struct v4l2_buffer *buf,
- static inline bool v4l2_is_colorspace_valid(__u32 colorspace)
- {
- 	return colorspace > V4L2_COLORSPACE_DEFAULT &&
--	       colorspace <= V4L2_COLORSPACE_DCI_P3;
-+	       colorspace < V4L2_COLORSPACE_LAST;
- }
- 
- static inline bool v4l2_is_xfer_func_valid(__u32 xfer_func)
- {
- 	return xfer_func > V4L2_XFER_FUNC_DEFAULT &&
--	       xfer_func <= V4L2_XFER_FUNC_SMPTE2084;
-+	       xfer_func < V4L2_XFER_FUNC_LAST;
- }
- 
- static inline bool v4l2_is_ycbcr_enc_valid(__u8 ycbcr_enc)
- {
- 	return ycbcr_enc > V4L2_YCBCR_ENC_DEFAULT &&
--	       ycbcr_enc <= V4L2_YCBCR_ENC_SMPTE240M;
-+	       ycbcr_enc < V4L2_YCBCR_ENC_LAST;
- }
- 
- static inline bool v4l2_is_hsv_enc_valid(__u8 hsv_enc)
-@@ -585,8 +585,8 @@ static inline bool v4l2_is_hsv_enc_valid(__u8 hsv_enc)
- 
- static inline bool v4l2_is_quant_valid(__u8 quantization)
- {
--	return quantization == V4L2_QUANTIZATION_FULL_RANGE ||
--	       quantization == V4L2_QUANTIZATION_LIM_RANGE;
-+	return quantization > V4L2_QUANTIZATION_DEFAULT &&
-+	       quantization < V4L2_QUANTIZATION_LAST;
- }
- 
- #endif /* V4L2_COMMON_H_ */
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index f6f9a690971e..7b7d852dc74b 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -245,6 +245,14 @@ enum v4l2_colorspace {
- 
- 	/* DCI-P3 colorspace, used by cinema projectors */
- 	V4L2_COLORSPACE_DCI_P3        = 12,
+diff --git a/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+new file mode 100644
+index 000000000000..6812c66fa49d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+@@ -0,0 +1,146 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/nxp,imx8-isi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#ifdef __KERNEL__
-+	/*
-+	 * Largest supported colorspace value, assigned by the compiler, used
-+	 * by the framework to check for invalid values.
-+	 */
-+	V4L2_COLORSPACE_LAST,
-+#endif
- };
- 
- /*
-@@ -283,6 +291,13 @@ enum v4l2_xfer_func {
- 	V4L2_XFER_FUNC_NONE        = 5,
- 	V4L2_XFER_FUNC_DCI_P3      = 6,
- 	V4L2_XFER_FUNC_SMPTE2084   = 7,
-+#ifdef __KERNEL__
-+	/*
-+	 * Largest supported transfer function value, assigned by the compiler,
-+	 * used by the framework to check for invalid values.
-+	 */
-+	V4L2_XFER_FUNC_LAST,
-+#endif
- };
- 
- /*
-@@ -343,6 +358,13 @@ enum v4l2_ycbcr_encoding {
- 
- 	/* SMPTE 240M -- Obsolete HDTV */
- 	V4L2_YCBCR_ENC_SMPTE240M      = 8,
-+#ifdef __KERNEL__
-+	/*
-+	 * Largest supported encoding value, assigned by the compiler, used by
-+	 * the framework to check for invalid values.
-+	 */
-+	V4L2_YCBCR_ENC_LAST,
-+#endif
- };
- 
- /*
-@@ -378,6 +400,13 @@ enum v4l2_quantization {
- 	V4L2_QUANTIZATION_DEFAULT     = 0,
- 	V4L2_QUANTIZATION_FULL_RANGE  = 1,
- 	V4L2_QUANTIZATION_LIM_RANGE   = 2,
-+#ifdef __KERNEL__
-+	/*
-+	 * Largest supported quantization value, assigned by the compiler, used
-+	 * by the framework to check for invalid values.
-+	 */
-+	V4L2_QUANTIZATION_LAST,
-+#endif
- };
- 
- /*
++title: i.MX8 Image Sensing Interface
++
++maintainers:
++  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
++
++description: |
++  The Image Sensing Interface (ISI) combines image processing pipelines with
++  DMA engines to process and capture frames originating from a variety of
++  sources. The inputs to the ISI go through Pixel Link interfaces, and their
++  number and nature is SoC-dependent. They cover both capture interfaces (MIPI
++  CSI-2 RX, HDMI RX, ...) and display engine outputs for writeback support.
++
++properties:
++  compatible:
++    enum:
++      - fsl,imx8mn-isi
++      - fsl,imx8mp-isi
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: The AXI clock
++      - description: The APB clock
++      # TODO: Check if the per-channel ipg_proc_clk clocks need to be specified
++      # as well, in case some SoCs have the ability to control them separately.
++      # This may be the case of the i.MX8[DQ]X(P)
++
++  clock-names:
++    items:
++      - const: axi
++      - const: apb
++
++  fsl,blk-ctrl:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      A phandle referencing the block control that contains the CSIS to ISI
++      gasket.
++
++  power-domains: true
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++    description: |
++      Ports represent the Pixel Link inputs to the ISI. Their number and
++      assignment are model-dependent. Each port shall have a single endpoint.
++
++    patternProperties:
++      "^port@[0-9]$":
++        $ref: /schemas/graph.yaml#/properties/port
++        unevaluatedProperties: false
++
++    unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - fsl,blk-ctrl
++  - ports
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: nxp,imx8mn-isi
++    then:
++      properties:
++        interrupts:
++          maxItems: 1
++        ports:
++          properties:
++            port@0:
++              description: MIPI CSI-2 RX
++          required:
++            - port@0
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: nxp,imx8mp-isi
++    then:
++      properties:
++        interrupts:
++          maxItems: 2
++        ports:
++          properties:
++            port@0:
++              description: MIPI CSI-2 RX 0
++            port@1:
++              description: MIPI CSI-2 RX 1
++          required:
++            - port@0
++            - port@1
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/imx8mp-clock.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    isi@32e00000 {
++        compatible = "fsl,imx8mp-isi";
++        reg = <0x32e00000 0x4000>;
++        interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&clk IMX8MP_CLK_MEDIA_AXI_ROOT>,
++                 <&clk IMX8MP_CLK_MEDIA_APB_ROOT>;
++        clock-names = "axi", "apb";
++        fsl,blk-ctrl = <&media_blk_ctrl>;
++        power-domains = <&mediamix_pd>;
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            port@0 {
++                reg = <0>;
++                isi_in_0: endpoint {
++                    remote-endpoint = <&mipi_csi_0_out>;
++                };
++            };
++
++            port@1 {
++                reg = <1>;
++                isi_in_1: endpoint {
++                    remote-endpoint = <&mipi_csi_1_out>;
++                };
++            };
++        };
++    };
++
++...
 -- 
 Regards,
 
