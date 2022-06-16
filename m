@@ -2,75 +2,119 @@ Return-Path: <linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0B58C43334
-	for <linux-media@archiver.kernel.org>; Thu, 16 Jun 2022 18:10:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C006C43334
+	for <linux-media@archiver.kernel.org>; Thu, 16 Jun 2022 18:37:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377439AbiFPSKq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 Jun 2022 14:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
+        id S1359622AbiFPShW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 Jun 2022 14:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233838AbiFPSKp (ORCPT
+        with ESMTP id S1351929AbiFPShT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 Jun 2022 14:10:45 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1244D681
-        for <linux-media@vger.kernel.org>; Thu, 16 Jun 2022 11:10:43 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 00D212A5;
-        Thu, 16 Jun 2022 20:10:41 +0200 (CEST)
+        Thu, 16 Jun 2022 14:37:19 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230CD5400A
+        for <linux-media@vger.kernel.org>; Thu, 16 Jun 2022 11:37:14 -0700 (PDT)
+Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 99B6B415;
+        Thu, 16 Jun 2022 20:37:11 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1655403042;
-        bh=2ohg3tJuGn7TIcc6Qj8GcJBXLiXfGUXfeggrLQxXlNk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qYDWqNPYGLhGTAV0FouAG0CijZZGBJAQ/cYTxp6SoBSths9yPieO3S0/DOviyItKH
-         DIb2hYl9iRrucfQnwuu/qDPtZzVr5WMJhLACjCnErKyfEMO16Uq+K6Ct/snsgQugqy
-         WVPCuk+hVo0HtILavtf+4Uc2V/UHOepULcCE7OL0=
-Date:   Thu, 16 Jun 2022 21:10:31 +0300
+        s=mail; t=1655404632;
+        bh=ztBi00rSKDcSgkfJv3UH/XLkdSemXx4Zgh7eNV0uouA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pOQBsi5RzCiGtNkCXzo72gFP/3WNlJjwJvy4KjyhdeoQCDue0zPA1mcAteQR6S1Ot
+         GakOxdxv6ITzruK2qoSBbdQJfewfpaDB7I53ud4KRupa/f6XEFGywrgx05ycXhGpqz
+         CaIAKNoBdrqJwAUvZ1u/UU8aQLtX2J8aWflk8ut4=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [ANN] Media Summit at ELCE Dublin: Request for Topics
-Message-ID: <YqtyF8gQKU0QYlJ+@pendragon.ideasonboard.com>
-References: <325cc388-6f65-0727-92ab-d9b87e7ade1c@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Sakari Ailus <sakari.ailus@iki.fi>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        linux-imx@nxp.com, kernel@pengutronix.de
+Subject: [PATCH 1/7] media: v4l: Add packed YUV 4:4:4 YUVA and YUVX pixel formats
+Date:   Thu, 16 Jun 2022 21:36:50 +0300
+Message-Id: <20220616183656.19089-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220616183656.19089-1-laurent.pinchart@ideasonboard.com>
+References: <20220616183656.19089-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <325cc388-6f65-0727-92ab-d9b87e7ade1c@xs4all.nl>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, May 06, 2022 at 03:20:09PM +0200, Hans Verkuil wrote:
-> Hi all,
-> 
-> Since countries are opening up again and travel is (at least for now!) a lot easier,
-> I am considering a media summit during the ELCE in Dublin (Sep 13-16).
-> 
-> See here for more details about the conference:
-> 
-> https://events.linuxfoundation.org/open-source-summit-europe/
-> 
-> Of course, this only makes sense if there is something to talk about. So please reply
-> with any suggestions for topics!
-> 
-> Also please let me know if you would expect to be at such a media summit in person.
-> If only a few people would be there, then there isn't much point to this.
-> 
-> 
-> I have two topics:
-> 
-> 1) Discussion of the media subsystem development process: any bottlenecks, any ideas
->    for improvements?
-> 
-> 2) I can give a presentation on the work I've done in the CTA-861 standard (used by
->    HDMI) and the edid-decode utility.
+The new YUVA and YUVX are permutations of the existing AYUV and XYUV
+formats. They are use by the NXP i.MX8 ISI hardware.
 
-Another topic: how can we finalize conversion of v4l-utils to meson ?
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+---
+ .../media/v4l/pixfmt-packed-yuv.rst           | 20 +++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  2 ++
+ include/uapi/linux/videodev2.h                |  2 ++
+ 3 files changed, 24 insertions(+)
 
-> I'd like to make a decision on whether or not it is worthwhile to do this in a week
-> or two. If we wait too long it might be difficult to get a room for the summit.
-
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst b/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
+index 65520c3af7cf..bf283a1b5581 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
+@@ -220,6 +220,26 @@ the second byte and Y'\ :sub:`7-0` in the third byte.
+       - Y'\ :sub:`7-0`
+       - X\ :sub:`7-0`
+ 
++    * .. _V4L2-PIX-FMT-YUVA32:
++
++      - ``V4L2_PIX_FMT_YUVA32``
++      - 'YUVA'
++
++      - Y'\ :sub:`7-0`
++      - Cb\ :sub:`7-0`
++      - Cr\ :sub:`7-0`
++      - A\ :sub:`7-0`
++
++    * .. _V4L2-PIX-FMT-YUVX32:
++
++      - ``V4L2_PIX_FMT_YUVX32``
++      - 'YUVX'
++
++      - Y'\ :sub:`7-0`
++      - Cb\ :sub:`7-0`
++      - Cr\ :sub:`7-0`
++      - X\ :sub:`7-0`
++
+     * .. _V4L2-PIX-FMT-YUV24:
+ 
+       - ``V4L2_PIX_FMT_YUV24``
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index f42f7ffcc247..18ed2227255a 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1297,6 +1297,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_XYUV32:	descr = "32-bit XYUV 8-8-8-8"; break;
+ 	case V4L2_PIX_FMT_VUYA32:	descr = "32-bit VUYA 8-8-8-8"; break;
+ 	case V4L2_PIX_FMT_VUYX32:	descr = "32-bit VUYX 8-8-8-8"; break;
++	case V4L2_PIX_FMT_YUVA32:	descr = "32-bit YUVA 8-8-8-8"; break;
++	case V4L2_PIX_FMT_YUVX32:	descr = "32-bit YUVX 8-8-8-8"; break;
+ 	case V4L2_PIX_FMT_YUV410:	descr = "Planar YUV 4:1:0"; break;
+ 	case V4L2_PIX_FMT_YUV420:	descr = "Planar YUV 4:2:0"; break;
+ 	case V4L2_PIX_FMT_HI240:	descr = "8-bit Dithered RGB (BTTV)"; break;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 343b95107fce..f6f9a690971e 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -593,6 +593,8 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_XYUV32  v4l2_fourcc('X', 'Y', 'U', 'V') /* 32  XYUV-8-8-8-8  */
+ #define V4L2_PIX_FMT_VUYA32  v4l2_fourcc('V', 'U', 'Y', 'A') /* 32  VUYA-8-8-8-8  */
+ #define V4L2_PIX_FMT_VUYX32  v4l2_fourcc('V', 'U', 'Y', 'X') /* 32  VUYX-8-8-8-8  */
++#define V4L2_PIX_FMT_YUVA32  v4l2_fourcc('Y', 'U', 'V', 'A') /* 32  YUVA-8-8-8-8  */
++#define V4L2_PIX_FMT_YUVX32  v4l2_fourcc('Y', 'U', 'V', 'X') /* 32  YUVX-8-8-8-8  */
+ #define V4L2_PIX_FMT_M420    v4l2_fourcc('M', '4', '2', '0') /* 12  YUV 4:2:0 2 lines y, 1 line uv interleaved */
+ 
+ /* two planes -- one Y, one Cr + Cb interleaved  */
 -- 
 Regards,
 
 Laurent Pinchart
+
